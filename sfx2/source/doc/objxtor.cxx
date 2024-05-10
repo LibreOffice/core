@@ -114,7 +114,7 @@ OUString lclGetVBAGlobalConstName( const Reference< XInterface >& rxComponent )
     if( xProps.is() ) try
     {
         OUString aConstName;
-        xProps->getPropertyValue("VBAGlobalConstantName") >>= aConstName;
+        xProps->getPropertyValue(u"VBAGlobalConstantName"_ustr) >>= aConstName;
         return aConstName;
     }
     catch (const uno::Exception&) // not supported
@@ -922,7 +922,7 @@ void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComp
         return;
 
     // set "ThisComponent" for Basic
-    pAppMgr->SetGlobalUNOConstant( "ThisComponent", Any( _rxComponent ) );
+    pAppMgr->SetGlobalUNOConstant( u"ThisComponent"_ustr, Any( _rxComponent ) );
 
     // set new current component for VBA compatibility
     if ( _rxComponent.is() )
@@ -957,7 +957,7 @@ OUString SfxObjectShell::GetServiceNameFromFactory( const OUString& rFact )
 {
     //! Remove everything behind name!
     OUString aFact( rFact );
-    OUString aPrefix("private:factory/");
+    OUString aPrefix(u"private:factory/"_ustr);
     if ( aFact.startsWith( aPrefix ) )
         aFact = aFact.copy( aPrefix.getLength() );
     sal_Int32 nPos = aFact.indexOf( '?' );
@@ -1050,7 +1050,7 @@ Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxIte
     const SfxStringItem* pFileNameItem = rSet.GetItem<SfxStringItem>(SID_FILE_NAME, false);
     const SfxStringItem* pTargetItem = rSet.GetItem<SfxStringItem>(SID_TARGETNAME, false);
     OUString aURL;
-    OUString aTarget("_blank");
+    OUString aTarget(u"_blank"_ustr);
     if ( pFileNameItem )
         aURL = pFileNameItem->GetValue();
     if ( pTargetItem )

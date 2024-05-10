@@ -227,21 +227,21 @@ sal_uInt16  SfxNewFileDialog::GetSelectedTemplatePos() const
 }
 
 SfxNewFileDialog::SfxNewFileDialog(weld::Window *pParent, SfxNewFileDialogMode nFlags)
-    : SfxDialogController(pParent, "sfx/ui/loadtemplatedialog.ui", "LoadTemplateDialog")
+    : SfxDialogController(pParent, u"sfx/ui/loadtemplatedialog.ui"_ustr, u"LoadTemplateDialog"_ustr)
     , m_aPrevIdle("SfxNewFileDialog m_aPrevIdle")
     , m_nFlags(nFlags)
     , m_xPreviewController(new SfxPreviewWin_Impl)
-    , m_xRegionLb(m_xBuilder->weld_tree_view("categories"))
-    , m_xTemplateLb(m_xBuilder->weld_tree_view("templates"))
-    , m_xTextStyleCB(m_xBuilder->weld_check_button("text"))
-    , m_xFrameStyleCB(m_xBuilder->weld_check_button("frame"))
-    , m_xPageStyleCB(m_xBuilder->weld_check_button("pages"))
-    , m_xNumStyleCB(m_xBuilder->weld_check_button("numbering"))
-    , m_xMergeStyleCB(m_xBuilder->weld_check_button("overwrite"))
-    , m_xLoadFilePB(m_xBuilder->weld_button("fromfile"))
-    , m_xMoreBt(m_xBuilder->weld_expander("expander"))
-    , m_xPreviewWin(new weld::CustomWeld(*m_xBuilder, "image", *m_xPreviewController))
-    , m_xAltTitleFt(m_xBuilder->weld_label("alttitle"))
+    , m_xRegionLb(m_xBuilder->weld_tree_view(u"categories"_ustr))
+    , m_xTemplateLb(m_xBuilder->weld_tree_view(u"templates"_ustr))
+    , m_xTextStyleCB(m_xBuilder->weld_check_button(u"text"_ustr))
+    , m_xFrameStyleCB(m_xBuilder->weld_check_button(u"frame"_ustr))
+    , m_xPageStyleCB(m_xBuilder->weld_check_button(u"pages"_ustr))
+    , m_xNumStyleCB(m_xBuilder->weld_check_button(u"numbering"_ustr))
+    , m_xMergeStyleCB(m_xBuilder->weld_check_button(u"overwrite"_ustr))
+    , m_xLoadFilePB(m_xBuilder->weld_button(u"fromfile"_ustr))
+    , m_xMoreBt(m_xBuilder->weld_expander(u"expander"_ustr))
+    , m_xPreviewWin(new weld::CustomWeld(*m_xBuilder, u"image"_ustr, *m_xPreviewController))
+    , m_xAltTitleFt(m_xBuilder->weld_label(u"alttitle"_ustr))
 {
     const int nWidth = m_xRegionLb->get_approximate_digit_width() * 32;
     const int nHeight = m_xRegionLb->get_height_rows(8);
@@ -273,7 +273,7 @@ SfxNewFileDialog::SfxNewFileDialog(weld::Window *pParent, SfxNewFileDialogMode n
     SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
     if (aDlgOpt.Exists())
     {
-        css::uno::Any aUserItem = aDlgOpt.GetUserItem("UserItem");
+        css::uno::Any aUserItem = aDlgOpt.GetUserItem(u"UserItem"_ustr);
         aUserItem >>= sExtraData;
     }
 
@@ -307,7 +307,7 @@ SfxNewFileDialog::SfxNewFileDialog(weld::Window *pParent, SfxNewFileDialogMode n
 SfxNewFileDialog::~SfxNewFileDialog()
 {
     SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
-    aDlgOpt.SetUserItem("UserItem", css::uno::Any(m_xMoreBt->get_expanded() ? OUString("Y") : OUString("N")));
+    aDlgOpt.SetUserItem(u"UserItem"_ustr, css::uno::Any(m_xMoreBt->get_expanded() ? u"Y"_ustr : u"N"_ustr));
 }
 
 bool SfxNewFileDialog::IsTemplate() const

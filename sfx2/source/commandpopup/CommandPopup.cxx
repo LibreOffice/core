@@ -43,7 +43,8 @@ MenuContentHandler::MenuContentHandler(uno::Reference<frame::XFrame> const& xFra
     xConfigurationManager = xModuleConfigSupplier->getUIConfigurationManager(m_sModuleLongName);
 
     uno::Reference<container::XIndexAccess> xConfigData;
-    xConfigData = xConfigurationManager->getSettings("private:resource/menubar/menubar", false);
+    xConfigData
+        = xConfigurationManager->getSettings(u"private:resource/menubar/menubar"_ustr, false);
 
     gatherMenuContent(xConfigData, m_aMenuContent);
 }
@@ -187,10 +188,10 @@ OUString MenuContentHandler::toLower(OUString const& rString)
 }
 
 CommandListBox::CommandListBox(weld::Window* pParent, uno::Reference<frame::XFrame> const& xFrame)
-    : mxBuilder(Application::CreateBuilder(pParent, "sfx/ui/commandpopup.ui"))
-    , mxPopover(mxBuilder->weld_popover("CommandPopup"))
-    , mpEntry(mxBuilder->weld_entry("command_entry"))
-    , mpCommandTreeView(mxBuilder->weld_tree_view("command_treeview"))
+    : mxBuilder(Application::CreateBuilder(pParent, u"sfx/ui/commandpopup.ui"_ustr))
+    , mxPopover(mxBuilder->weld_popover(u"CommandPopup"_ustr))
+    , mpEntry(mxBuilder->weld_entry(u"command_entry"_ustr))
+    , mpCommandTreeView(mxBuilder->weld_tree_view(u"command_treeview"_ustr))
     , mpMenuContentHandler(std::make_unique<MenuContentHandler>(xFrame))
 {
     mpEntry->connect_changed(LINK(this, CommandListBox, ModifyHdl));

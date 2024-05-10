@@ -93,7 +93,7 @@ static ItemInfoPackage& getItemInfoPackageNoChaos()
 CntItemPool* CntItemPool::_pThePool = nullptr;
 
 CntItemPool::CntItemPool()
-: SfxItemPool("chaos")
+: SfxItemPool(u"chaos"_ustr)
 , _nRefs(0)
 {
     registerItemInfoPackage(getItemInfoPackageNoChaos());

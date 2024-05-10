@@ -182,28 +182,28 @@ void StyleList::CreateContextMenu()
         m_bBindingUpdate = false;
     }
     mxMenu.reset();
-    mxMenuBuilder = Application::CreateBuilder(nullptr, "sfx/ui/stylecontextmenu.ui");
-    mxMenu = mxMenuBuilder->weld_menu("menu");
-    mxMenu->set_sensitive("edit", m_bCanEdit);
-    mxMenu->set_sensitive("delete", m_bCanDel);
-    mxMenu->set_sensitive("new", m_bCanNew);
-    mxMenu->set_sensitive("hide", m_bCanHide);
-    mxMenu->set_sensitive("show", m_bCanShow);
+    mxMenuBuilder = Application::CreateBuilder(nullptr, u"sfx/ui/stylecontextmenu.ui"_ustr);
+    mxMenu = mxMenuBuilder->weld_menu(u"menu"_ustr);
+    mxMenu->set_sensitive(u"edit"_ustr, m_bCanEdit);
+    mxMenu->set_sensitive(u"delete"_ustr, m_bCanDel);
+    mxMenu->set_sensitive(u"new"_ustr, m_bCanNew);
+    mxMenu->set_sensitive(u"hide"_ustr, m_bCanHide);
+    mxMenu->set_sensitive(u"show"_ustr, m_bCanShow);
 
     const SfxStyleFamilyItem* pItem = GetFamilyItem();
     if (pItem && pItem->GetFamily() == SfxStyleFamily::Table) //tdf#101648, no ui for this yet
     {
-        mxMenu->set_sensitive("edit", false);
-        mxMenu->set_sensitive("new", false);
+        mxMenu->set_sensitive(u"edit"_ustr, false);
+        mxMenu->set_sensitive(u"new"_ustr, false);
     }
     if (pItem && pItem->GetFamily() == SfxStyleFamily::Pseudo)
     {
         const OUString aTemplName(GetSelectedEntry());
         if (aTemplName == "No List")
         {
-            mxMenu->set_sensitive("edit", false);
-            mxMenu->set_sensitive("new", false);
-            mxMenu->set_sensitive("hide", false);
+            mxMenu->set_sensitive(u"edit"_ustr, false);
+            mxMenu->set_sensitive(u"new"_ustr, false);
+            mxMenu->set_sensitive(u"hide"_ustr, false);
         }
     }
 }
@@ -568,7 +568,7 @@ IMPL_LINK_NOARG(StyleList, NewMenuExecuteAction, void*, void)
     if (nResult == RET_OK)
     {
         const OUString aTemplName(aDlg.GetName());
-        m_pParentDialog->Execute_Impl(SID_STYLE_NEW_BY_EXAMPLE, aTemplName, "",
+        m_pParentDialog->Execute_Impl(SID_STYLE_NEW_BY_EXAMPLE, aTemplName, u""_ustr,
                                       static_cast<sal_uInt16>(GetFamilyItem()->GetFamily()), *this,
                                       nFilter);
         UpdateFamily();
@@ -1061,7 +1061,7 @@ void StyleList::FillTreeBox(SfxStyleFamily eFam)
 
     m_xTreeBox->columns_autosize();
 
-    m_pParentDialog->EnableItem("watercan", false);
+    m_pParentDialog->EnableItem(u"watercan"_ustr, false);
 
     SfxTemplateItem* pState = m_pFamilyState[m_nActFamily - 1].get();
 
@@ -1096,15 +1096,15 @@ void StyleList::FillTreeBox(SfxStyleFamily eFam)
 static OUString lcl_GetStyleFamilyName(SfxStyleFamily nFamily)
 {
     if (nFamily == SfxStyleFamily::Char)
-        return "CharacterStyles";
+        return u"CharacterStyles"_ustr;
     if (nFamily == SfxStyleFamily::Para)
-        return "ParagraphStyles";
+        return u"ParagraphStyles"_ustr;
     if (nFamily == SfxStyleFamily::Page)
-        return "PageStyles";
+        return u"PageStyles"_ustr;
     if (nFamily == SfxStyleFamily::Table)
-        return "TableStyles";
+        return u"TableStyles"_ustr;
     if (nFamily == SfxStyleFamily::Pseudo)
-        return "NumberingStyles";
+        return u"NumberingStyles"_ustr;
     return OUString();
 }
 
@@ -1128,7 +1128,7 @@ OUString StyleList::getDefaultStyleName(const SfxStyleFamily eFam)
         xCont->getByName(aFamilyName) >>= xStyles;
         uno::Reference<beans::XPropertySet> xInfo;
         xStyles->getByName(sDefaultStyle) >>= xInfo;
-        xInfo->getPropertyValue("DisplayName") >>= aUIName;
+        xInfo->getPropertyValue(u"DisplayName"_ustr) >>= aUIName;
     }
     catch (const uno::Exception&)
     {
@@ -1154,12 +1154,12 @@ IMPL_LINK_NOARG(StyleList, HasSelectedStyle, void*, bool)
 IMPL_LINK_NOARG(StyleList, UpdateStyleDependents, void*, void)
 {
     // Trigger Help PI. Only when the watercan is on
-    if (m_nActFamily != 0xffff && m_pParentDialog->IsCheckedItem("watercan") &&
+    if (m_nActFamily != 0xffff && m_pParentDialog->IsCheckedItem(u"watercan"_ustr) &&
         // only if that region is allowed
         nullptr != m_pFamilyState[m_nActFamily - 1] && IsSafeForWaterCan(nullptr))
     {
-        m_pParentDialog->Execute_Impl(SID_STYLE_WATERCAN, "", "", 0, *this);
-        m_pParentDialog->Execute_Impl(SID_STYLE_WATERCAN, GetSelectedEntry(), "",
+        m_pParentDialog->Execute_Impl(SID_STYLE_WATERCAN, u""_ustr, u""_ustr, 0, *this);
+        m_pParentDialog->Execute_Impl(SID_STYLE_WATERCAN, GetSelectedEntry(), u""_ustr,
                                       static_cast<sal_uInt16>(GetFamilyItem()->GetFamily()), *this);
     }
 }
@@ -1325,7 +1325,7 @@ void StyleList::NewHdl()
     if (nMask == SfxStyleSearchBits::Auto) // automatic
         nMask = m_nAppFilter;
 
-    m_pParentDialog->Execute_Impl(SID_STYLE_NEW, "", GetSelectedEntry(),
+    m_pParentDialog->Execute_Impl(SID_STYLE_NEW, u""_ustr, GetSelectedEntry(),
                                   static_cast<sal_uInt16>(eFam), *this, nMask);
 }
 
@@ -1515,7 +1515,7 @@ void StyleList::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
             SfxViewFrame* pViewFrame = m_pBindings->GetDispatcher_Impl()->GetFrame();
             SfxObjectShell* pDocShell = pViewFrame->GetObjectShell();
             if (m_pParentDialog->GetNotifyUpdate()
-                && (!m_pParentDialog->IsCheckedItem("watercan")
+                && (!m_pParentDialog->IsCheckedItem(u"watercan"_ustr)
                     || (pDocShell && pDocShell->GetStyleSheetPool() != m_pStyleSheetPool)))
             {
                 m_pParentDialog->SetNotifyupdate(false);

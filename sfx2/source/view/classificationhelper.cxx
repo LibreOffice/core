@@ -179,10 +179,10 @@ void SAL_CALL SfxClassificationParser::startElement(const OUString& rName, const
     }
     else if (rName == "baf:BusinessAuthorizationCategory")
     {
-        const OUString aName = xAttribs->getValueByName("Name");
+        const OUString aName = xAttribs->getValueByName(u"Name"_ustr);
         if (!m_pCategory && !aName.isEmpty())
         {
-            OUString aIdentifier = xAttribs->getValueByName("Identifier");
+            OUString aIdentifier = xAttribs->getValueByName(u"Identifier"_ustr);
 
             // Create a new category and initialize it with the data that's true for all categories.
             m_aCategories.emplace_back();
@@ -190,59 +190,59 @@ void SAL_CALL SfxClassificationParser::startElement(const OUString& rName, const
 
             rCategory.m_aName = aName;
             // Set the abbreviated name, if any, otherwise fallback on the full name.
-            const OUString aAbbreviatedName = xAttribs->getValueByName("loextAbbreviatedName");
+            const OUString aAbbreviatedName = xAttribs->getValueByName(u"loextAbbreviatedName"_ustr);
             rCategory.m_aAbbreviatedName = !aAbbreviatedName.isEmpty() ? aAbbreviatedName : aName;
             rCategory.m_aIdentifier = aIdentifier;
 
-            rCategory.m_aLabels["PolicyAuthority:Name"] = m_aPolicyAuthorityName;
-            rCategory.m_aLabels["Policy:Name"] = m_aPolicyName;
-            rCategory.m_aLabels["BusinessAuthorization:Identifier"] = m_aProgramID;
-            rCategory.m_aLabels["BusinessAuthorizationCategory:Identifier"] = aIdentifier;
+            rCategory.m_aLabels[u"PolicyAuthority:Name"_ustr] = m_aPolicyAuthorityName;
+            rCategory.m_aLabels[u"Policy:Name"_ustr] = m_aPolicyName;
+            rCategory.m_aLabels[u"BusinessAuthorization:Identifier"_ustr] = m_aProgramID;
+            rCategory.m_aLabels[u"BusinessAuthorizationCategory:Identifier"_ustr] = aIdentifier;
 
             // Also initialize defaults.
-            rCategory.m_aLabels["PolicyAuthority:Identifier"] = PROP_NONE();
-            rCategory.m_aLabels["PolicyAuthority:Country"] = PROP_NONE();
-            rCategory.m_aLabels["Policy:Identifier"] = PROP_NONE();
-            rCategory.m_aLabels["BusinessAuthorization:Name"] = PROP_NONE();
-            rCategory.m_aLabels["BusinessAuthorization:Locator"] = PROP_NONE();
-            rCategory.m_aLabels["BusinessAuthorizationCategory:Identifier:OID"] = PROP_NONE();
-            rCategory.m_aLabels["BusinessAuthorizationCategory:Locator"] = PROP_NONE();
-            rCategory.m_aLabels["BusinessAuthorization:Locator"] = PROP_NONE();
-            rCategory.m_aLabels["MarkingPrecedence"] = PROP_NONE();
-            rCategory.m_aLabels["Marking:general-summary"].clear();
-            rCategory.m_aLabels["Marking:general-warning-statement"].clear();
-            rCategory.m_aLabels["Marking:general-warning-statement:ext:2"].clear();
-            rCategory.m_aLabels["Marking:general-warning-statement:ext:3"].clear();
-            rCategory.m_aLabels["Marking:general-warning-statement:ext:4"].clear();
-            rCategory.m_aLabels["Marking:general-distribution-statement"].clear();
-            rCategory.m_aLabels["Marking:general-distribution-statement:ext:2"].clear();
-            rCategory.m_aLabels["Marking:general-distribution-statement:ext:3"].clear();
-            rCategory.m_aLabels["Marking:general-distribution-statement:ext:4"].clear();
+            rCategory.m_aLabels[u"PolicyAuthority:Identifier"_ustr] = PROP_NONE();
+            rCategory.m_aLabels[u"PolicyAuthority:Country"_ustr] = PROP_NONE();
+            rCategory.m_aLabels[u"Policy:Identifier"_ustr] = PROP_NONE();
+            rCategory.m_aLabels[u"BusinessAuthorization:Name"_ustr] = PROP_NONE();
+            rCategory.m_aLabels[u"BusinessAuthorization:Locator"_ustr] = PROP_NONE();
+            rCategory.m_aLabels[u"BusinessAuthorizationCategory:Identifier:OID"_ustr] = PROP_NONE();
+            rCategory.m_aLabels[u"BusinessAuthorizationCategory:Locator"_ustr] = PROP_NONE();
+            rCategory.m_aLabels[u"BusinessAuthorization:Locator"_ustr] = PROP_NONE();
+            rCategory.m_aLabels[u"MarkingPrecedence"_ustr] = PROP_NONE();
+            rCategory.m_aLabels[u"Marking:general-summary"_ustr].clear();
+            rCategory.m_aLabels[u"Marking:general-warning-statement"_ustr].clear();
+            rCategory.m_aLabels[u"Marking:general-warning-statement:ext:2"_ustr].clear();
+            rCategory.m_aLabels[u"Marking:general-warning-statement:ext:3"_ustr].clear();
+            rCategory.m_aLabels[u"Marking:general-warning-statement:ext:4"_ustr].clear();
+            rCategory.m_aLabels[u"Marking:general-distribution-statement"_ustr].clear();
+            rCategory.m_aLabels[u"Marking:general-distribution-statement:ext:2"_ustr].clear();
+            rCategory.m_aLabels[u"Marking:general-distribution-statement:ext:3"_ustr].clear();
+            rCategory.m_aLabels[u"Marking:general-distribution-statement:ext:4"_ustr].clear();
             rCategory.m_aLabels[SfxClassificationHelper::PROP_DOCHEADER()].clear();
             rCategory.m_aLabels[SfxClassificationHelper::PROP_DOCFOOTER()].clear();
             rCategory.m_aLabels[SfxClassificationHelper::PROP_DOCWATERMARK()].clear();
-            rCategory.m_aLabels["Marking:email-first-line-of-text"].clear();
-            rCategory.m_aLabels["Marking:email-last-line-of-text"].clear();
-            rCategory.m_aLabels["Marking:email-subject-prefix"].clear();
-            rCategory.m_aLabels["Marking:email-subject-suffix"].clear();
+            rCategory.m_aLabels[u"Marking:email-first-line-of-text"_ustr].clear();
+            rCategory.m_aLabels[u"Marking:email-last-line-of-text"_ustr].clear();
+            rCategory.m_aLabels[u"Marking:email-subject-prefix"_ustr].clear();
+            rCategory.m_aLabels[u"Marking:email-subject-suffix"_ustr].clear();
             rCategory.m_aLabels[PROP_STARTVALIDITY()] = PROP_NONE();
-            rCategory.m_aLabels["Authorization:StopValidity"] = PROP_NONE();
+            rCategory.m_aLabels[u"Authorization:StopValidity"_ustr] = PROP_NONE();
             m_pCategory = &rCategory;
         }
     }
     else if (rName == "loext:Marking")
     {
-        OUString aName = xAttribs->getValueByName("Name");
+        OUString aName = xAttribs->getValueByName(u"Name"_ustr);
         m_aMarkings.push_back(aName);
     }
     else if (rName == "loext:IntellectualPropertyPart")
     {
-        OUString aName = xAttribs->getValueByName("Name");
+        OUString aName = xAttribs->getValueByName(u"Name"_ustr);
         m_aIPParts.push_back(aName);
     }
     else if (rName == "loext:IntellectualPropertyPartNumber")
     {
-        OUString aName = xAttribs->getValueByName("Name");
+        OUString aName = xAttribs->getValueByName(u"Name"_ustr);
         m_aIPPartNumbers.push_back(aName);
     }
     else if (rName == "baf:Scale")
@@ -293,8 +293,8 @@ void SAL_CALL SfxClassificationParser::endElement(const OUString& rName)
             m_pCategory->m_nConfidentiality = m_aConfidentalityValue.toInt32(); // 0-based class sensitivity; 0 is lowest.
             // Set the two other type of levels as well, if they're not set
             // yet: they're optional in BAF, but not in BAILS.
-            rLabels.try_emplace("Impact:Level:Integrity", m_aConfidentalityValue);
-            rLabels.try_emplace("Impact:Level:Availability", m_aConfidentalityValue);
+            rLabels.try_emplace(u"Impact:Level:Integrity"_ustr, m_aConfidentalityValue);
+            rLabels.try_emplace(u"Impact:Level:Availability"_ustr, m_aConfidentalityValue);
         }
     }
     else if (rName == "baf:Identifier")
@@ -383,7 +383,7 @@ void SfxClassificationHelper::Impl::parsePolicy()
     OUString aPath = aOptions.GetClassificationPath();
 
     // See if there is a localized variant next to the configured XML.
-    OUString aExtension(".xml");
+    OUString aExtension(u".xml"_ustr);
     if (aPath.endsWith(aExtension) && m_bUseLocalized)
     {
         std::u16string_view aBase = aPath.subView(0, aPath.getLength() - aExtension.getLength());
@@ -625,7 +625,7 @@ const OUString& SfxClassificationHelper::GetAbbreviatedBACName(const OUString& s
 OUString SfxClassificationHelper::GetBACNameForIdentifier(std::u16string_view sIdentifier)
 {
     if (sIdentifier.empty())
-        return "";
+        return u""_ustr;
 
     for (const auto& category : m_pImpl->m_aCategories)
     {
@@ -633,7 +633,7 @@ OUString SfxClassificationHelper::GetBACNameForIdentifier(std::u16string_view sI
             return category.m_aName;
     }
 
-    return "";
+    return u""_ustr;
 }
 
 OUString SfxClassificationHelper::GetHigherClass(const OUString& first, const OUString& second)
@@ -885,7 +885,7 @@ void SfxClassificationHelper::UpdateInfobar(SfxViewFrame& rViewFrame)
         aMessage = aMessage.replaceFirst("%1", aBACName);
 
         rViewFrame.RemoveInfoBar(u"classification");
-        rViewFrame.AppendInfoBar("classification", "", aMessage, GetImpactLevelType());
+        rViewFrame.AppendInfoBar(u"classification"_ustr, u""_ustr, aMessage, GetImpactLevelType());
     }
 }
 

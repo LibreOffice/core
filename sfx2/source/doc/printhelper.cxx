@@ -269,14 +269,14 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter()
 
     return
     {
-        comphelper::makePropertyValue("Name", pPrinter->GetName()),
-        comphelper::makePropertyValue("PaperOrientation", static_cast<view::PaperOrientation>(pPrinter->GetOrientation())),
-        comphelper::makePropertyValue("PaperFormat", convertToPaperFormat(pPrinter->GetPaper())),
-        comphelper::makePropertyValue("PaperSize", impl_Size_Object2Struct(pPrinter->GetPaperSize() )),
-        comphelper::makePropertyValue("IsBusy", pPrinter->IsPrinting()),
-        comphelper::makePropertyValue("CanSetPaperOrientation", pPrinter->HasSupport( PrinterSupport::SetOrientation )),
-        comphelper::makePropertyValue("CanSetPaperFormat", pPrinter->HasSupport( PrinterSupport::SetPaper )),
-        comphelper::makePropertyValue("CanSetPaperSize", pPrinter->HasSupport( PrinterSupport::SetPaperSize ))
+        comphelper::makePropertyValue(u"Name"_ustr, pPrinter->GetName()),
+        comphelper::makePropertyValue(u"PaperOrientation"_ustr, static_cast<view::PaperOrientation>(pPrinter->GetOrientation())),
+        comphelper::makePropertyValue(u"PaperFormat"_ustr, convertToPaperFormat(pPrinter->GetPaper())),
+        comphelper::makePropertyValue(u"PaperSize"_ustr, impl_Size_Object2Struct(pPrinter->GetPaperSize() )),
+        comphelper::makePropertyValue(u"IsBusy"_ustr, pPrinter->IsPrinting()),
+        comphelper::makePropertyValue(u"CanSetPaperOrientation"_ustr, pPrinter->HasSupport( PrinterSupport::SetOrientation )),
+        comphelper::makePropertyValue(u"CanSetPaperFormat"_ustr, pPrinter->HasSupport( PrinterSupport::SetPaper )),
+        comphelper::makePropertyValue(u"CanSetPaperSize"_ustr, pPrinter->HasSupport( PrinterSupport::SetPaperSize ))
     };
 }
 

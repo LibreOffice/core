@@ -13,8 +13,8 @@
 
 SfxWatermarkItem::SfxWatermarkItem()
 : SfxPoolItem( SID_WATERMARK )
-, m_aText( "" )
-, m_aFont( "Liberation Sans" )
+, m_aText( u""_ustr )
+, m_aFont( u"Liberation Sans"_ustr )
 , m_nAngle( 45 )
 , m_nTransparency( 50 )
 , m_nColor( 0xc0c0c0 )

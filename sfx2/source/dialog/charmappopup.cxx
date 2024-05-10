@@ -55,12 +55,12 @@ VclPtr<vcl::Window> CharmapPopup::createVclPopupWindow(vcl::Window* pParent)
 
 OUString CharmapPopup::getImplementationName()
 {
-    return "com.sun.star.comp.sfx2.InsertSymbolToolBoxControl";
+    return u"com.sun.star.comp.sfx2.InsertSymbolToolBoxControl"_ustr;
 }
 
 css::uno::Sequence<OUString> CharmapPopup::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

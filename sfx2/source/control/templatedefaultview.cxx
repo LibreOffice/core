@@ -74,8 +74,8 @@ bool TemplateDefaultView::MouseButtonDown( const MouseEvent& rMEvt )
 void TemplateDefaultView::createContextMenu()
 {
     mxContextMenu->clear();
-    mxContextMenu->append("open",SfxResId(STR_OPEN));
-    mxContextMenu->append("edit",SfxResId(STR_EDIT_TEMPLATE));
+    mxContextMenu->append(u"open"_ustr,SfxResId(STR_OPEN));
+    mxContextMenu->append(u"edit"_ustr,SfxResId(STR_EDIT_TEMPLATE));
     deselectItems();
     maSelectedItem->setSelection(true);
     maItemStateHdl.Call(maSelectedItem);

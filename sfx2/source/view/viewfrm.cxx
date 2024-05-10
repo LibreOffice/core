@@ -167,8 +167,8 @@ public:
 };
 
 SfxEditDocumentDialog::SfxEditDocumentDialog(weld::Widget* pParent)
-    : MessageDialogController(pParent, "sfx/ui/editdocumentdialog.ui",
-            "EditDocumentDialog")
+    : MessageDialogController(pParent, u"sfx/ui/editdocumentdialog.ui"_ustr,
+            u"EditDocumentDialog"_ustr)
 {
 }
 
@@ -179,7 +179,7 @@ private:
 public:
     SfxQueryOpenAsTemplate(weld::Window* pParent, bool bAllowIgnoreLock, LockFileEntry& rLockData)
         : m_xQueryBox(Application::CreateMessageDialog(pParent, VclMessageType::Question,
-                                                       VclButtonsType::NONE, ""))
+                                                       VclButtonsType::NONE, u""_ustr))
     {
         m_xQueryBox->add_button(SfxResId(STR_QUERY_OPENASTEMPLATE_OPENCOPY_BTN), RET_YES);
         bAllowIgnoreLock
@@ -335,7 +335,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 SfxAllItemSet aSet( pApp->GetPool() );
                 aSet.Put( SfxStringItem( SID_FILE_NAME, pMed->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::NONE) ) );
                 aSet.Put( SfxBoolItem( SID_TEMPLATE, true ) );
-                aSet.Put( SfxStringItem( SID_TARGETNAME, "_blank" ) );
+                aSet.Put( SfxStringItem( SID_TARGETNAME, u"_blank"_ustr ) );
                 const SfxStringItem* pReferer = pMed->GetItemSet().GetItem(SID_REFERER, false);
                 if ( pReferer )
                     aSet.Put( *pReferer );
@@ -1273,7 +1273,7 @@ void SfxViewFrame::AppendReadOnlyInfobar()
         bSignWithCert = xCertificate.is();
     }
 
-    auto pInfoBar = AppendInfoBar("readonly", "",
+    auto pInfoBar = AppendInfoBar(u"readonly"_ustr, u""_ustr,
                                   SfxResId(bSignPDF ? STR_READONLY_PDF : STR_READONLY_DOCUMENT),
                                   InfobarType::INFO);
     if (!pInfoBar)
@@ -1315,7 +1315,7 @@ void SfxViewFrame::HandleSecurityInfobar(const OUString& sSecondaryMessage)
         // new info bar
         if (!sSecondaryMessage.isEmpty())
         {
-            auto pInfoBar = AppendInfoBar("securitywarn", SfxResId(STR_HIDDENINFO_CONTAINS).replaceAll("\n\n", " "),
+            auto pInfoBar = AppendInfoBar(u"securitywarn"_ustr, SfxResId(STR_HIDDENINFO_CONTAINS).replaceAll("\n\n", " "),
                 sSecondaryMessage, InfobarType::WARNING);
             if (!pInfoBar)
                 return;
@@ -1351,7 +1351,7 @@ void SfxViewFrame::AppendContainsMacrosInfobar()
         aResId = STR_MACROS_DISABLED_CONTENT_UNSIGNED;
     // The idea here is to always present an infobar is there was some
     // macro/script related potential hazard disabled in the source document
-    auto pInfoBar = AppendInfoBar("macro", SfxResId(STR_MACROS_DISABLED_TITLE),
+    auto pInfoBar = AppendInfoBar(u"macro"_ustr, SfxResId(STR_MACROS_DISABLED_TITLE),
                                   SfxResId(aResId), InfobarType::WARNING);
     if (!pInfoBar)
         return;
@@ -1392,7 +1392,7 @@ void SfxViewFrame::AppendContainsMacrosInfobar()
                 if (aAny >>= props)
                 {
                     ::comphelper::NamedValueCollection aProps(props);
-                    url = aProps.getOrDefault("Script", url);
+                    url = aProps.getOrDefault(u"Script"_ustr, url);
                 }
             }
             catch (const Exception&)
@@ -1432,7 +1432,7 @@ css::uno::Reference<css::frame::XLayoutManager> getLayoutManager(const SfxFrame&
     {
         try
         {
-            xLayoutManager.set(xPropSet->getPropertyValue("LayoutManager"), uno::UNO_QUERY);
+            xLayoutManager.set(xPropSet->getPropertyValue(u"LayoutManager"_ustr), uno::UNO_QUERY);
         }
         catch (const Exception& e)
         {
@@ -1513,7 +1513,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 {
                     // master password stored in deprecated format
                     VclPtr<SfxInfoBarWindow> pOldMasterPasswordInfoBar =
-                        AppendInfoBar("oldmasterpassword", "",
+                        AppendInfoBar(u"oldmasterpassword"_ustr, u""_ustr,
                                       SfxResId(STR_REFRESH_MASTER_PASSWORD), InfobarType::DANGER, false);
                     bIsInfobarShown = true;
                     if (pOldMasterPasswordInfoBar)
@@ -1699,7 +1699,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 {
                     bUpdateLastTimeGetInvolvedShown = true;
 
-                    VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("getinvolved", "", SfxResId(STR_GET_INVOLVED_TEXT), InfobarType::INFO);
+                    VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar(u"getinvolved"_ustr, u""_ustr, SfxResId(STR_GET_INVOLVED_TEXT), InfobarType::INFO);
                     bIsInfobarShown = true;
                     if (pInfoBar)
                     {
@@ -1727,7 +1727,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 {
                     bUpdateLastTimeDonateShown = true;
 
-                    VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("donate", "", SfxResId(STR_DONATE_TEXT), InfobarType::INFO);
+                    VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar(u"donate"_ustr, u""_ustr, SfxResId(STR_DONATE_TEXT), InfobarType::INFO);
                     if (pInfoBar)
                     {
                         weld::Button& rDonateButton = pInfoBar->addButton();
@@ -1935,7 +1935,7 @@ IMPL_LINK_NOARG(SfxViewFrame, RefreshMasterPasswordHdl, weld::Button&, void)
 IMPL_STATIC_LINK_NOARG(SfxViewFrame, HelpMasterPasswordHdl, weld::Button&, void)
 {
     if (Help* pHelp = Application::GetHelp())
-        pHelp->Start("cui/ui/optsecuritypage/savepassword");
+        pHelp->Start(u"cui/ui/optsecuritypage/savepassword"_ustr);
 }
 
 void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
@@ -2347,7 +2347,7 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
             }
 
             if ( !xFrame.is() )
-                xFrame.set( xDesktop->findFrame( "_blank", 0 ), UNO_SET_THROW );
+                xFrame.set( xDesktop->findFrame( u"_blank"_ustr, 0 ), UNO_SET_THROW );
 
             bOwnFrame = true;
         }
@@ -2397,16 +2397,16 @@ SfxViewShell* SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc
     Reference< XModel > xDocument( i_rDoc.GetModel(), UNO_SET_THROW );
 
     ::comphelper::NamedValueCollection aTransformLoadArgs( i_rLoadArgs.hasElements() ? i_rLoadArgs : xDocument->getArgs() );
-    aTransformLoadArgs.put( "Model", xDocument );
+    aTransformLoadArgs.put( u"Model"_ustr, xDocument );
     if ( i_nViewId )
-        aTransformLoadArgs.put( "ViewId", sal_uInt16( i_nViewId ) );
+        aTransformLoadArgs.put( u"ViewId"_ustr, sal_uInt16( i_nViewId ) );
     if ( i_bHidden )
-        aTransformLoadArgs.put( "Hidden", i_bHidden );
+        aTransformLoadArgs.put( u"Hidden"_ustr, i_bHidden );
     else
-        aTransformLoadArgs.remove( "Hidden" );
+        aTransformLoadArgs.remove( u"Hidden"_ustr );
 
     Reference< XComponentLoader > xLoader( i_rFrame, UNO_QUERY_THROW );
-    xLoader->loadComponentFromURL( "private:object", "_self", 0,
+    xLoader->loadComponentFromURL( u"private:object"_ustr, u"_self"_ustr, 0,
         aTransformLoadArgs.getPropertyValues() );
 
     SfxViewShell* pViewShell = SfxViewShell::Get( i_rFrame->getController() );
@@ -2520,7 +2520,7 @@ void SfxViewFrame::SaveCurrentViewData_Impl( const SfxInterfaceId i_nNewViewId )
         for ( sal_Int32 i=0; i<nCount; ++i )
         {
             const ::comphelper::NamedValueCollection aCurViewData( xViewData->getByIndex(i) );
-            const OUString sViewId( aCurViewData.getOrDefault( "ViewId", OUString() ) );
+            const OUString sViewId( aCurViewData.getOrDefault( u"ViewId"_ustr, OUString() ) );
             if ( sViewId.isEmpty() )
                 continue;
 
@@ -3051,7 +3051,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
                 aMacroName = aName.getToken( 0, cTok, nIndex );
 
             // get location
-            aLocation = xUrl->getParameter( "location" );
+            aLocation = xUrl->getParameter( u"location"_ustr );
         }
 
         BasicManager* pBasMgr = nullptr;
@@ -3313,7 +3313,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                             try
                             {
                                 xLMPropSet->setPropertyValue(
-                                    "HideCurrentUI",
+                                    u"HideCurrentUI"_ustr,
                                     Any( bNewFullScreenMode ));
                             }
                             catch ( css::beans::UnknownPropertyException& )
@@ -3373,7 +3373,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                             GetFrame().GetFrameInterface(),
                             css::uno::UNO_QUERY);
 
-                    css::uno::Any aProp = xSet->getPropertyValue("DispatchRecorderSupplier");
+                    css::uno::Any aProp = xSet->getPropertyValue(u"DispatchRecorderSupplier"_ustr);
                     css::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
                     if ( aProp >>= xSupplier )
                         rSet.Put( SfxBoolItem( nWhich, xSupplier.is() ) );
@@ -3396,7 +3396,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                             GetFrame().GetFrameInterface(),
                             css::uno::UNO_QUERY);
 
-                    css::uno::Any aProp = xSet->getPropertyValue("DispatchRecorderSupplier");
+                    css::uno::Any aProp = xSet->getPropertyValue(u"DispatchRecorderSupplier"_ustr);
                     css::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
                     if ( !(aProp >>= xSupplier) || !xSupplier.is() )
                         rSet.DisableItem( nWhich );
@@ -3409,13 +3409,13 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                     css::uno::Reference< css::beans::XPropertySet > xSet(
                             GetFrame().GetFrameInterface(),
                             css::uno::UNO_QUERY);
-                    css::uno::Any aProp = xSet->getPropertyValue( "LayoutManager" );
+                    css::uno::Any aProp = xSet->getPropertyValue( u"LayoutManager"_ustr );
 
                     if ( !( aProp >>= xLayoutManager ))
                         rSet.Put( SfxBoolItem( nWhich, false ));
                     else
                     {
-                        bool bShow = xLayoutManager->isElementVisible( "private:resource/statusbar/statusbar" );
+                        bool bShow = xLayoutManager->isElementVisible( u"private:resource/statusbar/statusbar"_ustr );
                         rSet.Put( SfxBoolItem( nWhich, bShow ));
                     }
                     break;
@@ -3480,7 +3480,7 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
         if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::DATABASE))
             return;
         Reference < XFrame > xFrame = GetFrame().GetFrameInterface();
-        Reference < XFrame > xBeamer( xFrame->findFrame( "_beamer", FrameSearchFlag::CHILDREN ) );
+        Reference < XFrame > xBeamer( xFrame->findFrame( u"_beamer"_ustr, FrameSearchFlag::CHILDREN ) );
         bool bHasChild = xBeamer.is();
         bool bShow = pShowItem ? pShowItem->GetValue() : !bHasChild;
         if ( pShowItem )
@@ -3507,13 +3507,13 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
             Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
             Reference < css::frame::XDispatch > xDisp;
             if ( xProv.is() )
-                xDisp = xProv->queryDispatch( aTargetURL, "_beamer", 31 );
+                xDisp = xProv->queryDispatch( aTargetURL, u"_beamer"_ustr, 31 );
             if ( xDisp.is() )
             {
                 Sequence < css::beans::PropertyValue > aArgs(1);
                 css::beans::PropertyValue* pArg = aArgs.getArray();
                 pArg[0].Name = "Referer";
-                pArg[0].Value <<= OUString("private:user");
+                pArg[0].Value <<= u"private:user"_ustr;
                 xDisp->dispatch( aTargetURL, aArgs );
             }
         }
@@ -3597,7 +3597,7 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
         else if ( nSID == SID_BROWSER )
         {
             Reference < XFrame > xFrame = GetFrame().GetFrameInterface()->
-                            findFrame( "_beamer", FrameSearchFlag::CHILDREN );
+                            findFrame( u"_beamer"_ustr, FrameSearchFlag::CHILDREN );
             if ( !xFrame.is() )
                 rState.DisableItem( nSID );
             else if ( KnowsChildWindow(nSID) )

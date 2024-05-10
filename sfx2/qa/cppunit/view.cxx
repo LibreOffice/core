@@ -27,7 +27,7 @@ class Sfx2ViewTest : public UnoApiTest
 {
 public:
     Sfx2ViewTest()
-        : UnoApiTest("/sfx2/qa/cppunit/data/")
+        : UnoApiTest(u"/sfx2/qa/cppunit/data/"_ustr)
     {
     }
 };
@@ -50,7 +50,7 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testReloadPage)
     uno::Reference<drawing::XDrawView> xController(xModel->getCurrentController(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPage(xController->getCurrentPage(), uno::UNO_QUERY);
     sal_Int32 nPage{};
-    xPage->getPropertyValue("Number") >>= nPage;
+    xPage->getPropertyValue(u"Number"_ustr) >>= nPage;
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2

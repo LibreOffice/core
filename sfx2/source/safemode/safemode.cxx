@@ -20,7 +20,7 @@ namespace sfx2
 {
 bool SafeMode::putFlag()
 {
-    File safeModeFile(getFilePath("safemode"));
+    File safeModeFile(getFilePath(u"safemode"_ustr));
     if (safeModeFile.open(osl_File_OpenFlag_Create) == FileBase::E_None)
     {
         safeModeFile.close();
@@ -30,7 +30,7 @@ bool SafeMode::putFlag()
 }
 bool SafeMode::hasFlag()
 {
-    File safeModeFile(getFilePath("safemode"));
+    File safeModeFile(getFilePath(u"safemode"_ustr));
     if (safeModeFile.open(osl_File_OpenFlag_Read) == FileBase::E_None)
     {
         safeModeFile.close();
@@ -38,11 +38,14 @@ bool SafeMode::hasFlag()
     }
     return false;
 }
-bool SafeMode::removeFlag() { return File::remove(getFilePath("safemode")) == FileBase::E_None; }
+bool SafeMode::removeFlag()
+{
+    return File::remove(getFilePath(u"safemode"_ustr)) == FileBase::E_None;
+}
 
 bool SafeMode::putRestartFlag()
 {
-    File restartFile(getFilePath("safemode_restart"));
+    File restartFile(getFilePath(u"safemode_restart"_ustr));
     if (restartFile.open(osl_File_OpenFlag_Create) == FileBase::E_None)
     {
         restartFile.close();
@@ -52,7 +55,7 @@ bool SafeMode::putRestartFlag()
 }
 bool SafeMode::hasRestartFlag()
 {
-    File restartFile(getFilePath("safemode_restart"));
+    File restartFile(getFilePath(u"safemode_restart"_ustr));
     if (restartFile.open(osl_File_OpenFlag_Read) == FileBase::E_None)
     {
         restartFile.close();
@@ -62,13 +65,13 @@ bool SafeMode::hasRestartFlag()
 }
 bool SafeMode::removeRestartFlag()
 {
-    return File::remove(getFilePath("safemode_restart")) == FileBase::E_None;
+    return File::remove(getFilePath(u"safemode_restart"_ustr)) == FileBase::E_None;
 }
 
 OUString SafeMode::getFilePath(const OUString& sFilename)
 {
-    OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER
-                 "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/");
+    OUString url(u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER
+                 "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/"_ustr);
     rtl::Bootstrap::expandMacros(url);
 
     OUString aProfilePath;

@@ -105,8 +105,8 @@ private:
 
 public:
     SfxSingleTabDialogController(weld::Widget* pParent, const SfxItemSet* pOptionsSet,
-        const OUString& rUIXMLDescription = OUString("sfx/ui/singletabdialog.ui"),
-        const OUString& rID = OUString("SingleTabDialog"));
+        const OUString& rUIXMLDescription = u"sfx/ui/singletabdialog.ui"_ustr,
+        const OUString& rID = u"SingleTabDialog"_ustr);
 
     SfxSingleTabDialogController(weld::Widget* pParent, const SfxItemSet* pOptionsSet,
         const OUString& rContainerId, const OUString& rUIXMLDescription,

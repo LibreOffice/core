@@ -33,37 +33,37 @@ static bool     bOutputForPrinter = true;
 #define DPI_COUNT SAL_N_ELEMENTS(aDPIArray)
 
 SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "sfx/ui/optprintpage.ui", "OptPrintPage", &rSet)
-    , m_xPrinterOutputRB(m_xBuilder->weld_radio_button("printer"))
-    , m_xPrintFileOutputRB(m_xBuilder->weld_radio_button("file"))
-    , m_xReduceTransparencyCB(m_xBuilder->weld_check_button("reducetrans"))
-    , m_xReduceTransparencyImg(m_xBuilder->weld_widget("lockreducetrans"))
-    , m_xReduceTransparencyAutoRB(m_xBuilder->weld_radio_button("reducetransauto"))
-    , m_xReduceTransparencyNoneRB(m_xBuilder->weld_radio_button("reducetransnone"))
-    , m_xReduceTransparencyModeImg(m_xBuilder->weld_widget("lockreducetransmode"))
-    , m_xReduceGradientsCB(m_xBuilder->weld_check_button("reducegrad"))
-    , m_xReduceGradientsImg(m_xBuilder->weld_widget("lockreducegrad"))
-    , m_xReduceGradientsStripesRB(m_xBuilder->weld_radio_button("reducegradstripes"))
-    , m_xReduceGradientsColorRB(m_xBuilder->weld_radio_button("reducegradcolor"))
-    , m_xReduceGradientsModeImg(m_xBuilder->weld_widget("lockreducegradmode"))
-    , m_xReduceGradientsStepCountNF(m_xBuilder->weld_spin_button("reducegradstep"))
-    , m_xReduceBitmapsCB(m_xBuilder->weld_check_button("reducebitmap"))
-    , m_xReduceBitmapsImg(m_xBuilder->weld_widget("lockreducebitmap"))
-    , m_xReduceBitmapsOptimalRB(m_xBuilder->weld_radio_button("reducebitmapoptimal"))
-    , m_xReduceBitmapsNormalRB(m_xBuilder->weld_radio_button("reducebitmapnormal"))
-    , m_xReduceBitmapsResolutionRB(m_xBuilder->weld_radio_button("reducebitmapresol"))
-    , m_xReduceBitmapsModeImg(m_xBuilder->weld_widget("lockreducebitmapmode"))
-    , m_xReduceBitmapsResolutionLB(m_xBuilder->weld_combo_box("reducebitmapdpi"))
-    , m_xReduceBitmapsTransparencyCB(m_xBuilder->weld_check_button("reducebitmaptrans"))
-    , m_xReduceBitmapsTransparencyImg(m_xBuilder->weld_widget("lockreducebitmaptrans"))
-    , m_xConvertToGreyscalesCB(m_xBuilder->weld_check_button("converttogray"))
-    , m_xConvertToGreyscalesImg(m_xBuilder->weld_widget("lockconverttogray"))
-    , m_xPaperSizeCB(m_xBuilder->weld_check_button("papersize"))
-    , m_xPaperSizeImg(m_xBuilder->weld_widget("lockpapersize"))
-    , m_xPaperOrientationCB(m_xBuilder->weld_check_button("paperorient"))
-    , m_xPaperOrientationImg(m_xBuilder->weld_widget("lockpaperorient"))
-    , m_xTransparencyCB(m_xBuilder->weld_check_button("trans"))
-    , m_xTransparencyImg(m_xBuilder->weld_widget("locktrans"))
+    : SfxTabPage(pPage, pController, u"sfx/ui/optprintpage.ui"_ustr, u"OptPrintPage"_ustr, &rSet)
+    , m_xPrinterOutputRB(m_xBuilder->weld_radio_button(u"printer"_ustr))
+    , m_xPrintFileOutputRB(m_xBuilder->weld_radio_button(u"file"_ustr))
+    , m_xReduceTransparencyCB(m_xBuilder->weld_check_button(u"reducetrans"_ustr))
+    , m_xReduceTransparencyImg(m_xBuilder->weld_widget(u"lockreducetrans"_ustr))
+    , m_xReduceTransparencyAutoRB(m_xBuilder->weld_radio_button(u"reducetransauto"_ustr))
+    , m_xReduceTransparencyNoneRB(m_xBuilder->weld_radio_button(u"reducetransnone"_ustr))
+    , m_xReduceTransparencyModeImg(m_xBuilder->weld_widget(u"lockreducetransmode"_ustr))
+    , m_xReduceGradientsCB(m_xBuilder->weld_check_button(u"reducegrad"_ustr))
+    , m_xReduceGradientsImg(m_xBuilder->weld_widget(u"lockreducegrad"_ustr))
+    , m_xReduceGradientsStripesRB(m_xBuilder->weld_radio_button(u"reducegradstripes"_ustr))
+    , m_xReduceGradientsColorRB(m_xBuilder->weld_radio_button(u"reducegradcolor"_ustr))
+    , m_xReduceGradientsModeImg(m_xBuilder->weld_widget(u"lockreducegradmode"_ustr))
+    , m_xReduceGradientsStepCountNF(m_xBuilder->weld_spin_button(u"reducegradstep"_ustr))
+    , m_xReduceBitmapsCB(m_xBuilder->weld_check_button(u"reducebitmap"_ustr))
+    , m_xReduceBitmapsImg(m_xBuilder->weld_widget(u"lockreducebitmap"_ustr))
+    , m_xReduceBitmapsOptimalRB(m_xBuilder->weld_radio_button(u"reducebitmapoptimal"_ustr))
+    , m_xReduceBitmapsNormalRB(m_xBuilder->weld_radio_button(u"reducebitmapnormal"_ustr))
+    , m_xReduceBitmapsResolutionRB(m_xBuilder->weld_radio_button(u"reducebitmapresol"_ustr))
+    , m_xReduceBitmapsModeImg(m_xBuilder->weld_widget(u"lockreducebitmapmode"_ustr))
+    , m_xReduceBitmapsResolutionLB(m_xBuilder->weld_combo_box(u"reducebitmapdpi"_ustr))
+    , m_xReduceBitmapsTransparencyCB(m_xBuilder->weld_check_button(u"reducebitmaptrans"_ustr))
+    , m_xReduceBitmapsTransparencyImg(m_xBuilder->weld_widget(u"lockreducebitmaptrans"_ustr))
+    , m_xConvertToGreyscalesCB(m_xBuilder->weld_check_button(u"converttogray"_ustr))
+    , m_xConvertToGreyscalesImg(m_xBuilder->weld_widget(u"lockconverttogray"_ustr))
+    , m_xPaperSizeCB(m_xBuilder->weld_check_button(u"papersize"_ustr))
+    , m_xPaperSizeImg(m_xBuilder->weld_widget(u"lockpapersize"_ustr))
+    , m_xPaperOrientationCB(m_xBuilder->weld_check_button(u"paperorient"_ustr))
+    , m_xPaperOrientationImg(m_xBuilder->weld_widget(u"lockpaperorient"_ustr))
+    , m_xTransparencyCB(m_xBuilder->weld_check_button(u"trans"_ustr))
+    , m_xTransparencyImg(m_xBuilder->weld_widget(u"locktrans"_ustr))
 {
     if (bOutputForPrinter)
         m_xPrinterOutputRB->set_active(true);
@@ -93,7 +93,7 @@ std::unique_ptr<SfxTabPage> SfxCommonPrintOptionsTabPage::Create(weld::Container
 OUString SfxCommonPrintOptionsTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label4", "label6", "label2", "label3", "label1", "label5" };
+    OUString labels[] = { u"label4"_ustr, u"label6"_ustr, u"label2"_ustr, u"label3"_ustr, u"label1"_ustr, u"label5"_ustr };
 
     for (const auto& label : labels)
     {
@@ -101,8 +101,8 @@ OUString SfxCommonPrintOptionsTabPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString checkButton[] = { "converttogray", "reducebitmaptrans", "reducebitmap", "reducetrans",
-                               "papersize",     "paperorient",       "trans",        "reducegrad" };
+    OUString checkButton[] = { u"converttogray"_ustr, u"reducebitmaptrans"_ustr, u"reducebitmap"_ustr, u"reducetrans"_ustr,
+                               u"papersize"_ustr,     u"paperorient"_ustr,       u"trans"_ustr,        u"reducegrad"_ustr };
 
     for (const auto& check : checkButton)
     {
@@ -110,15 +110,15 @@ OUString SfxCommonPrintOptionsTabPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString radioButton[] = { "printer",
-                               "file",
-                               "reducebitmapresol",
-                               "reducebitmapnormal",
-                               "reducebitmapoptimal",
-                               "reducetransauto",
-                               "reducetransnone",
-                               "reducegradstripes",
-                               "reducegradcolor" };
+    OUString radioButton[] = { u"printer"_ustr,
+                               u"file"_ustr,
+                               u"reducebitmapresol"_ustr,
+                               u"reducebitmapnormal"_ustr,
+                               u"reducebitmapoptimal"_ustr,
+                               u"reducetransauto"_ustr,
+                               u"reducetransnone"_ustr,
+                               u"reducegradstripes"_ustr,
+                               u"reducegradcolor"_ustr };
 
     for (const auto& radio : radioButton)
     {

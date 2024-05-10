@@ -105,7 +105,7 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
 
 OUString SAL_CALL SfxTerminateListener_Impl::getImplementationName()
 {
-    return "com.sun.star.comp.sfx2.SfxTerminateListener";
+    return u"com.sun.star.comp.sfx2.SfxTerminateListener"_ustr;
 }
 
 sal_Bool SAL_CALL SfxTerminateListener_Impl::supportsService( const OUString& sServiceName )
@@ -121,7 +121,7 @@ Sequence< OUString > SAL_CALL SfxTerminateListener_Impl::getSupportedServiceName
     // The desktop must know, which listener will terminate the SfxApplication in real !
     // It must call this special listener as last one ... otherwise we shutdown the SfxApplication BEFORE other listener
     // can react ...
-    return { "com.sun.star.frame.TerminateListener" };
+    return { u"com.sun.star.frame.TerminateListener"_ustr };
 }
 
 

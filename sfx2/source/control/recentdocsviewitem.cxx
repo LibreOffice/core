@@ -56,7 +56,7 @@ bool IsDocEncrypted(const OUString& rURL)
         {
             try
             {
-                xStorageProps->getPropertyValue("HasEncryptedEntries") >>= bIsEncrypted;
+                xStorageProps->getPropertyValue(u"HasEncryptedEntries"_ustr) >>= bIsEncrypted;
             }
             catch (uno::Exception&)
             {
@@ -367,16 +367,16 @@ void RecentDocsViewItem::OpenDocument()
     Reference<util::XURLTransformer> xTrans(util::URLTransformer::create(::comphelper::getProcessComponentContext()));
     xTrans->parseStrict(aTargetURL);
 
-    aArgsList = { comphelper::makePropertyValue("Referer", OUString("private:user")),
+    aArgsList = { comphelper::makePropertyValue(u"Referer"_ustr, u"private:user"_ustr),
                   // documents will never be opened as templates
-                  comphelper::makePropertyValue("AsTemplate", false) };
+                  comphelper::makePropertyValue(u"AsTemplate"_ustr, false) };
     if (m_isReadOnly) // tdf#149170 only add if true
     {
         aArgsList.realloc(aArgsList.size()+1);
-        aArgsList.getArray()[aArgsList.size()-1] = comphelper::makePropertyValue("ReadOnly", true);
+        aArgsList.getArray()[aArgsList.size()-1] = comphelper::makePropertyValue(u"ReadOnly"_ustr, true);
     }
 
-    xDispatch = xDesktop->queryDispatch(aTargetURL, "_default", 0);
+    xDispatch = xDesktop->queryDispatch(aTargetURL, u"_default"_ustr, 0);
 
     if (!xDispatch.is())
         return;

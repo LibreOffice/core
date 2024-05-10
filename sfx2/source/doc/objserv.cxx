@@ -432,13 +432,13 @@ uno::Reference<security::XCertificate> SfxObjectShell::GetSignPDFCertificate() c
         return uno::Reference<security::XCertificate>();
     }
 
-    if (!xShapeProps->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
+    if (!xShapeProps->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
     {
         return uno::Reference<security::XCertificate>();
     }
 
-    comphelper::SequenceAsHashMap aMap(xShapeProps->getPropertyValue("InteropGrabBag"));
-    auto it = aMap.find("SignatureCertificate");
+    comphelper::SequenceAsHashMap aMap(xShapeProps->getPropertyValue(u"InteropGrabBag"_ustr));
+    auto it = aMap.find(u"SignatureCertificate"_ustr);
     if (it == aMap.end())
     {
         return uno::Reference<security::XCertificate>();
@@ -478,14 +478,14 @@ void SetDocProperties(const uno::Reference<document::XDocumentProperties>& xDP,
 {
     comphelper::SequenceAsHashMap aMap(rUpdatedProperties);
     OUString aNamePrefix;
-    auto it = aMap.find("NamePrefix");
+    auto it = aMap.find(u"NamePrefix"_ustr);
     if (it != aMap.end())
     {
         it->second >>= aNamePrefix;
     }
 
     uno::Sequence<beans::PropertyValue> aUserDefinedProperties;
-    it = aMap.find("UserDefinedProperties");
+    it = aMap.find(u"UserDefinedProperties"_ustr);
     if (it != aMap.end())
     {
         it->second >>= aUserDefinedProperties;
@@ -562,7 +562,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     uno::Reference<beans::XPropertySet> xPage(xController->getCurrentPage(),
                                                               uno::UNO_QUERY);
                     sal_Int32 nPage{};
-                    xPage->getPropertyValue("Number") >>= nPage;
+                    xPage->getPropertyValue(u"Number"_ustr) >>= nPage;
                     if (nPage > 0)
                     {
                         // nPage is 1-based.
@@ -801,7 +801,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             // Create an empty Draw component.
             uno::Reference<frame::XDesktop2> xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
-            uno::Reference<lang::XComponent> xComponent = xDesktop->loadComponentFromURL("private:factory/sdraw", "_default", 0, {});
+            uno::Reference<lang::XComponent> xComponent = xDesktop->loadComponentFromURL(u"private:factory/sdraw"_ustr, u"_default"_ustr, 0, {});
 
             if (!xComponent.is())
             {
@@ -832,7 +832,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             uno::Reference< lang::XServiceInfo > xServiceInfo( xComponent, uno::UNO_QUERY);
 
             // Redaction finalization takes place in Draw
-            if ( xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument")
+            if ( xServiceInfo.is() && xServiceInfo->supportsService(u"com.sun.star.drawing.DrawingDocument"_ustr)
                  && SfxRedactionHelper::isRedactMode(rReq) )
             {
                 OUString sRedactionStyle(SfxRedactionHelper::getStringParam(rReq, SID_REDACTION_STYLE));
@@ -867,9 +867,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                             continue;
 
                         OUString sShapeName;
-                        if (xInfo->hasPropertyByName("Name"))
+                        if (xInfo->hasPropertyByName(u"Name"_ustr))
                         {
-                            uno::Any aAnyShapeName = xPropSet->getPropertyValue("Name");
+                            uno::Any aAnyShapeName = xPropSet->getPropertyValue(u"Name"_ustr);
                             aAnyShapeName >>= sShapeName;
                         }
                         else
@@ -877,34 +877,34 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                         // Rectangle redaction
                         if (sShapeName == "RectangleRedactionShape"
-                                && xInfo->hasPropertyByName("FillTransparence") && xInfo->hasPropertyByName("FillColor"))
+                                && xInfo->hasPropertyByName(u"FillTransparence"_ustr) && xInfo->hasPropertyByName(u"FillColor"_ustr))
                         {
-                            xPropSet->setPropertyValue("FillTransparence", css::uno::Any(static_cast<sal_Int16>(0)));
+                            xPropSet->setPropertyValue(u"FillTransparence"_ustr, css::uno::Any(static_cast<sal_Int16>(0)));
                             if (sRedactionStyle == "White")
                             {
-                                xPropSet->setPropertyValue("FillColor", css::uno::Any(COL_WHITE));
-                                xPropSet->setPropertyValue("LineStyle", css::uno::Any(css::drawing::LineStyle::LineStyle_SOLID));
-                                xPropSet->setPropertyValue("LineColor", css::uno::Any(COL_BLACK));
+                                xPropSet->setPropertyValue(u"FillColor"_ustr, css::uno::Any(COL_WHITE));
+                                xPropSet->setPropertyValue(u"LineStyle"_ustr, css::uno::Any(css::drawing::LineStyle::LineStyle_SOLID));
+                                xPropSet->setPropertyValue(u"LineColor"_ustr, css::uno::Any(COL_BLACK));
                             }
                             else
                             {
-                                xPropSet->setPropertyValue("FillColor", css::uno::Any(COL_BLACK));
-                                xPropSet->setPropertyValue("LineStyle", css::uno::Any(css::drawing::LineStyle::LineStyle_NONE));
+                                xPropSet->setPropertyValue(u"FillColor"_ustr, css::uno::Any(COL_BLACK));
+                                xPropSet->setPropertyValue(u"LineStyle"_ustr, css::uno::Any(css::drawing::LineStyle::LineStyle_NONE));
                             }
                         }
                         // Freeform redaction
                         else if (sShapeName == "FreeformRedactionShape"
-                                 && xInfo->hasPropertyByName("LineTransparence") && xInfo->hasPropertyByName("LineColor"))
+                                 && xInfo->hasPropertyByName(u"LineTransparence"_ustr) && xInfo->hasPropertyByName(u"LineColor"_ustr))
                         {
-                            xPropSet->setPropertyValue("LineTransparence", css::uno::Any(static_cast<sal_Int16>(0)));
+                            xPropSet->setPropertyValue(u"LineTransparence"_ustr, css::uno::Any(static_cast<sal_Int16>(0)));
 
                             if (sRedactionStyle == "White")
                             {
-                                xPropSet->setPropertyValue("LineColor", css::uno::Any(COL_WHITE));
+                                xPropSet->setPropertyValue(u"LineColor"_ustr, css::uno::Any(COL_WHITE));
                             }
                             else
                             {
-                                xPropSet->setPropertyValue("LineColor", css::uno::Any(COL_BLACK));
+                                xPropSet->setPropertyValue(u"LineColor"_ustr, css::uno::Any(COL_BLACK));
                             }
                         }
                     }
@@ -1060,13 +1060,13 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     // to avoid confusion with exporting for file download purpose
 
                     throw task::ErrorCodeIOException(
-                        "SfxObjectShell::ExecFile_Impl: ERRCODE_IO_CANTWRITE",
+                        u"SfxObjectShell::ExecFile_Impl: ERRCODE_IO_CANTWRITE"_ustr,
                         uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_IO_CANTWRITE));
                 }
 
                 const SfxSlot* pSlot = GetModule()->GetSlotPool()->GetSlot( bForceSaveAs ? SID_SAVEASDOC : nId );
                 if ( !pSlot )
-                    throw uno::Exception("no slot", nullptr);
+                    throw uno::Exception(u"no slot"_ustr, nullptr);
 
                 std::shared_ptr<SfxStoringHelper> xHelper = std::make_shared<SfxStoringHelper>();
                 if (bIsAsync && SfxViewShell::Current())
@@ -1165,7 +1165,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 uno::Reference< lang::XServiceInfo > xServiceInfo( xComponent, uno::UNO_QUERY);
 
                 // Redaction finalization takes place in Draw
-                if ( xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument") )
+                if ( xServiceInfo.is() && xServiceInfo->supportsService(u"com.sun.star.drawing.DrawingDocument"_ustr) )
                 {
                     // Access the draw pages
                     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);
@@ -1197,13 +1197,13 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                                 continue;
 
                             // Not a shape we converted?
-                            if (!xInfo->hasPropertyByName("Name"))
+                            if (!xInfo->hasPropertyByName(u"Name"_ustr))
                                 continue;
 
                             OUString sShapeName;
-                            if (xInfo->hasPropertyByName("Name"))
+                            if (xInfo->hasPropertyByName(u"Name"_ustr))
                             {
-                                uno::Any aAnyShapeName = xPropSet->getPropertyValue("Name");
+                                uno::Any aAnyShapeName = xPropSet->getPropertyValue(u"Name"_ustr);
                                 aAnyShapeName >>= sShapeName;
                             }
                             else
@@ -1211,18 +1211,18 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                             // Rectangle redaction
                             if (sShapeName == "RectangleRedactionShape"
-                                    && xInfo->hasPropertyByName("FillTransparence") && xInfo->hasPropertyByName("FillColor"))
+                                    && xInfo->hasPropertyByName(u"FillTransparence"_ustr) && xInfo->hasPropertyByName(u"FillColor"_ustr))
                             {
-                                xPropSet->setPropertyValue("FillTransparence", css::uno::Any(static_cast<sal_Int16>(50)));
-                                xPropSet->setPropertyValue("FillColor", css::uno::Any(COL_GRAY7));
-                                xPropSet->setPropertyValue("LineStyle", css::uno::Any(css::drawing::LineStyle::LineStyle_NONE));
+                                xPropSet->setPropertyValue(u"FillTransparence"_ustr, css::uno::Any(static_cast<sal_Int16>(50)));
+                                xPropSet->setPropertyValue(u"FillColor"_ustr, css::uno::Any(COL_GRAY7));
+                                xPropSet->setPropertyValue(u"LineStyle"_ustr, css::uno::Any(css::drawing::LineStyle::LineStyle_NONE));
 
                             }
                             // Freeform redaction
                             else if (sShapeName == "FreeformRedactionShape")
                             {
-                                xPropSet->setPropertyValue("LineTransparence", css::uno::Any(static_cast<sal_Int16>(50)));
-                                xPropSet->setPropertyValue("LineColor", css::uno::Any(COL_GRAY7));
+                                xPropSet->setPropertyValue(u"LineTransparence"_ustr, css::uno::Any(static_cast<sal_Int16>(50)));
+                                xPropSet->setPropertyValue(u"LineColor"_ustr, css::uno::Any(COL_GRAY7));
                             }
                         }
                     }
@@ -1565,7 +1565,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 {
                     SignatureState eState = GetDocumentSignatureState();
                     InfobarType aInfobarType(InfobarType::INFO);
-                    OUString sMessage("");
+                    OUString sMessage(u""_ustr);
 
                     switch (eState)
                     {
@@ -1605,7 +1605,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                     {
                         if ( !sMessage.isEmpty() )
                         {
-                            auto pInfoBar = pFrame->AppendInfoBar("signature", "", sMessage, aInfobarType);
+                            auto pInfoBar = pFrame->AppendInfoBar(u"signature"_ustr, u""_ustr, sMessage, aInfobarType);
                             if (pInfoBar == nullptr || pInfoBar->isDisposed())
                                 return;
                             weld::Button& rBtn = pInfoBar->addButton();
@@ -1618,7 +1618,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                         if ( eState == SignatureState::NOSIGNATURES )
                             pFrame->RemoveInfoBar(u"signature");
                         else
-                            pFrame->UpdateInfoBar(u"signature", "", sMessage, aInfobarType);
+                            pFrame->UpdateInfoBar(u"signature", u""_ustr, sMessage, aInfobarType);
                     }
                 }
 
@@ -1797,18 +1797,18 @@ static bool HasSignatureStream(const uno::Reference<embed::XStorage>& xStorage)
     if (!xStorage.is())
         return false;
 
-    if (xStorage->hasByName("META-INF"))
+    if (xStorage->hasByName(u"META-INF"_ustr))
     {
         // ODF case.
         try
         {
             uno::Reference<embed::XStorage> xMetaInf
-                = xStorage->openStorageElement("META-INF", embed::ElementModes::READ);
+                = xStorage->openStorageElement(u"META-INF"_ustr, embed::ElementModes::READ);
             if (xMetaInf.is())
             {
-                return xMetaInf->hasByName("documentsignatures.xml")
-                       || xMetaInf->hasByName("macrosignatures.xml")
-                       || xMetaInf->hasByName("packagesignatures.xml");
+                return xMetaInf->hasByName(u"documentsignatures.xml"_ustr)
+                       || xMetaInf->hasByName(u"macrosignatures.xml"_ustr)
+                       || xMetaInf->hasByName(u"packagesignatures.xml"_ustr);
             }
         }
         catch (const css::io::IOException&)
@@ -1818,7 +1818,7 @@ static bool HasSignatureStream(const uno::Reference<embed::XStorage>& xStorage)
     }
 
     // OOXML case.
-    return xStorage->hasByName("_xmlsignatures");
+    return xStorage->hasByName(u"_xmlsignatures"_ustr);
 }
 
 uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::GetDocumentSignatureInformation( bool bScriptingContent, const uno::Reference< security::XDocumentDigitalSignatures >& xSigner )
@@ -1837,7 +1837,7 @@ uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::GetDocum
                 try
                 {
                     uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY_THROW );
-                    xPropSet->getPropertyValue("Version") >>= aVersion;
+                    xPropSet->getPropertyValue(u"Version"_ustr) >>= aVersion;
                 }
                 catch( uno::Exception& )
                 {

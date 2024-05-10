@@ -45,7 +45,7 @@ public:
 
     virtual void StyleUpdated() override
     {
-        maGrip = BitmapEx("sfx2/res/grip.png");
+        maGrip = BitmapEx(u"sfx2/res/grip.png"_ustr);
         Size aGripSize(maGrip.GetSizePixel());
         set_size_request(aGripSize.Width(), aGripSize.Height());
         weld::CustomWidgetController::StyleUpdated();
@@ -65,8 +65,8 @@ DeckTitleBar::DeckTitleBar (const OUString& rsTitle,
                             std::function<void()> aCloserAction)
     : TitleBar(rBuilder, Theme::Color_DeckTitleBarBackground)
     , mxGripWidget(new GripWidget)
-    , mxGripWeld(new weld::CustomWeld(rBuilder, "grip", *mxGripWidget))
-    , mxLabel(rBuilder.weld_label("label"))
+    , mxGripWeld(new weld::CustomWeld(rBuilder, u"grip"_ustr, *mxGripWidget))
+    , mxLabel(rBuilder.weld_label(u"label"_ustr))
     , msHelpId(rsHelpId)
     , maCloserAction(std::move(aCloserAction))
     , mbIsCloserVisible(false)
@@ -128,7 +128,7 @@ void DeckTitleBar::HandleToolBoxItemClick()
 
 void DeckTitleBar::DataChanged()
 {
-    mxToolBox->set_item_icon_name("button", "sfx2/res/closedoc.png");
+    mxToolBox->set_item_icon_name(u"button"_ustr, u"sfx2/res/closedoc.png"_ustr);
     TitleBar::DataChanged();
 }
 

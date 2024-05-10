@@ -234,7 +234,7 @@ const ResourceManager::PanelContextDescriptorContainer& ResourceManager::GetMatc
 const OUString& ResourceManager::GetLastActiveDeck( const Context& rContext )
 {
     if( maLastActiveDecks.find( rContext.msApplication ) == maLastActiveDecks.end())
-        return maLastActiveDecks["any"];
+        return maLastActiveDecks[u"any"_ustr];
     else
         return maLastActiveDecks[rContext.msApplication];
 }
@@ -248,7 +248,7 @@ void ResourceManager::ReadDeckList()
 {
     const utl::OConfigurationTreeRoot aDeckRootNode(
                                         comphelper::getProcessComponentContext(),
-                                        "org.openoffice.Office.UI.Sidebar/Content/DeckList",
+                                        u"org.openoffice.Office.UI.Sidebar/Content/DeckList"_ustr,
                                         false);
     if (!aDeckRootNode.isValid())
         return;
@@ -311,7 +311,7 @@ void ResourceManager::SaveDeckSettings(const DeckDescriptor* pDeckDesc)
 {
     const utl::OConfigurationTreeRoot aDeckRootNode(
                                     comphelper::getProcessComponentContext(),
-                                    "org.openoffice.Office.UI.Sidebar/Content/DeckList",
+                                    u"org.openoffice.Office.UI.Sidebar/Content/DeckList"_ustr,
                                     true);
     if (!aDeckRootNode.isValid())
         return;
@@ -350,7 +350,7 @@ void ResourceManager::SaveDeckSettings(const DeckDescriptor* pDeckDesc)
 
     const utl::OConfigurationTreeRoot aPanelRootNode(
                                     comphelper::getProcessComponentContext(),
-                                    "org.openoffice.Office.UI.Sidebar/Content/PanelList",
+                                    u"org.openoffice.Office.UI.Sidebar/Content/PanelList"_ustr,
                                     true);
 
     if (!aPanelRootNode.isValid())
@@ -415,7 +415,7 @@ void ResourceManager::ReadPanelList()
 {
     const utl::OConfigurationTreeRoot aPanelRootNode(
                                         comphelper::getProcessComponentContext(),
-                                        "org.openoffice.Office.UI.Sidebar/Content/PanelList",
+                                        u"org.openoffice.Office.UI.Sidebar/Content/PanelList"_ustr,
                                         false);
     if (!aPanelRootNode.isValid())
         return;
@@ -685,7 +685,7 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XController>& rxC
         rDeckDescriptor.msHelpText = rDeckDescriptor.msTitle;
         rDeckDescriptor.mbIsEnabled = true;
         rDeckDescriptor.mnOrderIndex = 100000 + nReadIndex;
-        rDeckDescriptor.maContextList.AddContextDescription(Context(sModuleName, "any"), true, OUString());
+        rDeckDescriptor.maContextList.AddContextDescription(Context(sModuleName, u"any"_ustr), true, OUString());
 
         maPanels.push_back(std::make_shared<PanelDescriptor>());
         PanelDescriptor& rPanelDescriptor(*maPanels.back());
@@ -700,7 +700,7 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XController>& rxC
         rPanelDescriptor.mbShowForReadOnlyDocuments = false;
         rPanelDescriptor.mbWantsCanvas = false;
         rPanelDescriptor.mbWantsAWT = true;
-        rPanelDescriptor.maContextList.AddContextDescription(Context(sModuleName, "any"), true, OUString());
+        rPanelDescriptor.maContextList.AddContextDescription(Context(sModuleName, u"any"_ustr), true, OUString());
     }
 }
 
@@ -728,7 +728,7 @@ utl::OConfigurationTreeRoot ResourceManager::GetLegacyAddonRootNode (const OUStr
         const Reference<frame::XModuleManager2> xModuleAccess = frame::ModuleManager::create(xContext);
         const comphelper::NamedValueCollection aModuleProperties(xModuleAccess->getByName(rsModuleName));
         const OUString sWindowStateRef(aModuleProperties.getOrDefault(
-                                       "ooSetupFactoryWindowStateConfigRef",
+                                       u"ooSetupFactoryWindowStateConfigRef"_ustr,
                                        OUString()));
 
         OUString aPathComposer = "org.openoffice.Office.UI." + sWindowStateRef +

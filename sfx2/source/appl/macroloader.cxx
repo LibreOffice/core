@@ -55,7 +55,7 @@ SfxMacroLoader::SfxMacroLoader(const css::uno::Sequence< css::uno::Any >& aArgum
 
 OUString SAL_CALL SfxMacroLoader::getImplementationName()
 {
-    return "com.sun.star.comp.sfx2.SfxMacroLoader";
+    return u"com.sun.star.comp.sfx2.SfxMacroLoader"_ustr;
 }
 
 sal_Bool SAL_CALL SfxMacroLoader::supportsService(OUString const & ServiceName)
@@ -65,7 +65,7 @@ sal_Bool SAL_CALL SfxMacroLoader::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> SAL_CALL SfxMacroLoader::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ProtocolHandler" };
+    return { u"com.sun.star.frame.ProtocolHandler"_ustr };
 }
 
 SfxObjectShell* SfxMacroLoader::GetObjectShell(const Reference <XFrame>& xFrame)
@@ -280,7 +280,7 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, css::uno::Any& rRetval,
                 if ( bSetGlobalThisComponent )
                 {
                     // document is executed via AppBASIC, adjust ThisComponent variable
-                    pAppMgr->SetGlobalUNOConstant( "ThisComponent", Any( pDoc->GetModel() ), &aOldThisComponent );
+                    pAppMgr->SetGlobalUNOConstant( u"ThisComponent"_ustr, Any( pDoc->GetModel() ), &aOldThisComponent );
                 }
 
                 // just to let the shell be alive
@@ -301,7 +301,7 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, css::uno::Any& rRetval,
 
                 if ( bSetGlobalThisComponent )
                 {
-                    pAppMgr->SetGlobalUNOConstant( "ThisComponent", aOldThisComponent );
+                    pAppMgr->SetGlobalUNOConstant( u"ThisComponent"_ustr, aOldThisComponent );
                 }
 
                 if ( bSetDocMacroMode )

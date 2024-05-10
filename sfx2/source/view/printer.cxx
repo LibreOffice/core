@@ -149,9 +149,9 @@ void SfxPrinter::SetOptions( const SfxItemSet &rNewOptions )
 SfxPrintOptionsDialog::SfxPrintOptionsDialog(weld::Window *pParent,
                                              SfxViewShell *pViewShell,
                                              const SfxItemSet *pSet)
-    : GenericDialogController(pParent, "sfx/ui/printeroptionsdialog.ui", "PrinterOptionsDialog")
+    : GenericDialogController(pParent, u"sfx/ui/printeroptionsdialog.ui"_ustr, u"PrinterOptionsDialog"_ustr)
     , pOptions(pSet->Clone())
-    , m_xHelpBtn(m_xBuilder->weld_widget("help"))
+    , m_xHelpBtn(m_xBuilder->weld_widget(u"help"_ustr))
     , m_xContainer(m_xDialog->weld_content_area())
     , m_xPage(pViewShell->CreatePrintOptionsPage(m_xContainer.get(), this, *pOptions)) // Insert TabPage
 {

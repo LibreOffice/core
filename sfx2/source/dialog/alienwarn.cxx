@@ -24,12 +24,13 @@ SfxAlienWarningDialog::SfxAlienWarningDialog(weld::Window* pParent,
                                              std::u16string_view _rFormatName,
                                              const OUString& _rDefaultExtension,
                                              bool rDefaultIsAlien)
-    : MessageDialogController(pParent, "sfx/ui/alienwarndialog.ui", "AlienWarnDialog", "ask")
-    , m_xKeepCurrentBtn(m_xBuilder->weld_button("save"))
-    , m_xUseDefaultFormatBtn(m_xBuilder->weld_button("cancel"))
-    , m_xWarningOnBox(m_xBuilder->weld_check_button("ask"))
+    : MessageDialogController(pParent, u"sfx/ui/alienwarndialog.ui"_ustr, u"AlienWarnDialog"_ustr,
+                              u"ask"_ustr)
+    , m_xKeepCurrentBtn(m_xBuilder->weld_button(u"save"_ustr))
+    , m_xUseDefaultFormatBtn(m_xBuilder->weld_button(u"cancel"_ustr))
+    , m_xWarningOnBox(m_xBuilder->weld_check_button(u"ask"_ustr))
 {
-    OUString aExtension = "ODF";
+    OUString aExtension = u"ODF"_ustr;
 
     // replace formatname (text)
     OUString sInfoText = m_xDialog->get_primary_text();

@@ -50,17 +50,17 @@ TabBar::TabBar(vcl::Window* pParentWindow,
                PopupMenuProvider  aPopupMenuProvider,
                SidebarController* rParentSidebarController
               )
-    : InterimItemWindow(pParentWindow, "sfx/ui/tabbar.ui", "TabBar")
+    : InterimItemWindow(pParentWindow, u"sfx/ui/tabbar.ui"_ustr, u"TabBar"_ustr)
     , mxFrame(rxFrame)
-    , mxAuxBuilder(Application::CreateBuilder(m_xContainer.get(), "sfx/ui/tabbarcontents.ui"))
-    , mxTempToplevel(mxAuxBuilder->weld_box("toplevel"))
-    , mxContents(mxAuxBuilder->weld_widget("TabBarContents"))
-    , mxMeasureBox(mxAuxBuilder->weld_widget("measure"))
+    , mxAuxBuilder(Application::CreateBuilder(m_xContainer.get(), u"sfx/ui/tabbarcontents.ui"_ustr))
+    , mxTempToplevel(mxAuxBuilder->weld_box(u"toplevel"_ustr))
+    , mxContents(mxAuxBuilder->weld_widget(u"TabBarContents"_ustr))
+    , mxMeasureBox(mxAuxBuilder->weld_widget(u"measure"_ustr))
     , maDeckActivationFunctor(std::move(aDeckActivationFunctor))
     , maPopupMenuProvider(std::move(aPopupMenuProvider))
     , pParentSidebarController(rParentSidebarController)
 {
-    set_id("TabBar"); // for uitest
+    set_id(u"TabBar"_ustr); // for uitest
 
     InitControlBase(mxMenuButton.get());
 
@@ -69,9 +69,9 @@ TabBar::TabBar(vcl::Window* pParentWindow,
     // For Gtk4 defer menu_button until after the contents have been
     // transferred to its final home (where the old parent is a GtkWindow to
     // support loading the accelerators in the menu for Gtk3)
-    mxMenuButton = mxAuxBuilder->weld_menu_button("menubutton");
-    mxMainMenu = mxAuxBuilder->weld_menu("mainmenu");
-    mxSubMenu = mxAuxBuilder->weld_menu("submenu");
+    mxMenuButton = mxAuxBuilder->weld_menu_button(u"menubutton"_ustr);
+    mxMainMenu = mxAuxBuilder->weld_menu(u"mainmenu"_ustr);
+    mxSubMenu = mxAuxBuilder->weld_menu(u"submenu"_ustr);
 
     gDefaultWidth = m_xContainer->get_preferred_size().Width();
 
@@ -110,8 +110,8 @@ sal_Int32 TabBar::GetDefaultWidth()
 {
     if (!gDefaultWidth)
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "sfx/ui/tabbarcontents.ui"));
-        std::unique_ptr<weld::Widget> xContainer(xBuilder->weld_widget("TabBarContents"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, u"sfx/ui/tabbarcontents.ui"_ustr));
+        std::unique_ptr<weld::Widget> xContainer(xBuilder->weld_widget(u"TabBarContents"_ustr));
         gDefaultWidth = xContainer->get_preferred_size().Width();
     }
     return gDefaultWidth;
@@ -156,20 +156,20 @@ void TabBar::UpdateButtonIcons()
         std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(item->msDeckId);
         if (!xDeckDescriptor)
             continue;
-        item->mxButton->set_item_image("toggle", GetItemImage(*xDeckDescriptor));
+        item->mxButton->set_item_image(u"toggle"_ustr, GetItemImage(*xDeckDescriptor));
     }
 }
 
 void TabBar::HighlightDeck(std::u16string_view rsDeckId)
 {
     for (auto const& item : maItems)
-        item->mxButton->set_item_active("toggle", item->msDeckId == rsDeckId);
+        item->mxButton->set_item_active(u"toggle"_ustr, item->msDeckId == rsDeckId);
 }
 
 void TabBar::RemoveDeckHighlight()
 {
     for (auto const& item : maItems)
-        item->mxButton->set_item_active("toggle", false);
+        item->mxButton->set_item_active(u"toggle"_ustr, false);
 }
 
 void TabBar::DataChanged(const DataChangedEvent& rDataChangedEvent)
@@ -232,7 +232,7 @@ void TabBar::CreateTabItem(weld::Toolbar& rItem, const DeckDescriptor& rDeckDesc
     OUString sShortcut = vcl::CommandInfoProvider::GetCommandShortcut(sCommand, mxFrame);
     if (!sShortcut.isEmpty())
         sShortcut = u" (" + sShortcut + u")";
-    rItem.set_item_tooltip_text("toggle", rDeckDescriptor.msHelpText + sShortcut);
+    rItem.set_item_tooltip_text(u"toggle"_ustr, rDeckDescriptor.msHelpText + sShortcut);
 }
 
 css::uno::Reference<css::graphic::XGraphic> TabBar::GetItemImage(const DeckDescriptor& rDeckDescriptor) const
@@ -245,8 +245,8 @@ css::uno::Reference<css::graphic::XGraphic> TabBar::GetItemImage(const DeckDescr
 
 TabBar::Item::Item(TabBar& rTabBar)
     : mrTabBar(rTabBar)
-    , mxBuilder(Application::CreateBuilder(rTabBar.GetContainer(), "sfx/ui/tabbutton.ui"))
-    , mxButton(mxBuilder->weld_toolbar("button"))
+    , mxBuilder(Application::CreateBuilder(rTabBar.GetContainer(), u"sfx/ui/tabbutton.ui"_ustr))
+    , mxButton(mxBuilder->weld_toolbar(u"button"_ustr))
     , mbIsHidden(false)
     , mbIsHiddenByDefault(false)
 {
@@ -345,7 +345,7 @@ IMPL_LINK_NOARG(TabBar, OnToolboxClicked, weld::Toggleable&, void)
 
         DeckMenuData aData;
         aData.msDisplayName = xDeckDescriptor->msTitle;
-        aData.mbIsCurrentDeck = item->mxButton->get_item_active("toggle");
+        aData.mbIsCurrentDeck = item->mxButton->get_item_active(u"toggle"_ustr);
         aData.mbIsActive = !item->mbIsHidden;
         aData.mbIsEnabled = item->mxButton->get_sensitive();
         aMenuData.push_back(aData);

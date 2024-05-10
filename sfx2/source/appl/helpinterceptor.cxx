@@ -167,7 +167,7 @@ void SAL_CALL HelpInterceptor_Impl::setMasterDispatchProvider( const Reference< 
 Sequence< OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
 
 {
-    Sequence<OUString> aURLList { "vnd.sun.star.help://*" };
+    Sequence<OUString> aURLList { u"vnd.sun.star.help://*"_ustr };
     return aURLList;
 }
 

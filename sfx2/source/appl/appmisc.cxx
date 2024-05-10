@@ -113,7 +113,7 @@ static bool FileExists( const INetURLObject& rURL )
             ::ucbhelper::Content  aCnt( rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
             OUString aTitle;
 
-            aCnt.getPropertyValue("Title") >>= aTitle;
+            aCnt.getPropertyValue(u"Title"_ustr) >>= aTitle;
             bRet = ( !aTitle.isEmpty() );
         }
         catch(const Exception&)

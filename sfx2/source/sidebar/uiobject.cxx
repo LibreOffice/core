@@ -24,14 +24,14 @@ StringMap TabBarUIObject::get_state()
     OUString rsHighlightedTabsIds;
     for (auto const& item : mxTabBar->maItems)
     {
-        if (item->mxButton->get_item_active("toggle"))
+        if (item->mxButton->get_item_active(u"toggle"_ustr))
         {
             if (!rsHighlightedTabsIds.isEmpty())
                 rsHighlightedTabsIds += ",";
             rsHighlightedTabsIds += item->msDeckId;
         }
     }
-    aMap["HighlightedTabsIds"] = rsHighlightedTabsIds;
+    aMap[u"HighlightedTabsIds"_ustr] = rsHighlightedTabsIds;
     return aMap;
 }
 
@@ -39,9 +39,9 @@ void TabBarUIObject::execute(const OUString& rAction, const StringMap& rParamete
 {
     if (rAction == "CLICK")
     {
-        if (rParameters.find("POS") != rParameters.end())
+        if (rParameters.find(u"POS"_ustr) != rParameters.end())
             mxTabBar->pParentSidebarController->OpenThenToggleDeck(
-                mxTabBar->GetDeckIdForIndex(rParameters.find("POS")->second.toInt32()));
+                mxTabBar->GetDeckIdForIndex(rParameters.find(u"POS"_ustr)->second.toInt32()));
     }
     else
         WindowUIObject::execute(rAction, rParameters);
@@ -54,7 +54,7 @@ std::unique_ptr<UIObject> TabBarUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new TabBarUIObject(pTabBar));
 }
 
-OUString TabBarUIObject::get_name() const { return "TabBarUIObject"; }
+OUString TabBarUIObject::get_name() const { return u"TabBarUIObject"_ustr; }
 
 } // namespace sidebar
 

@@ -121,26 +121,26 @@ std::shared_ptr<const SfxFilter> SfxFilter::GetFilterByName( const OUString& rNa
 OUString SfxFilter::GetTypeFromStorage( const SotStorage& rStg )
 {
     const char* pType=nullptr;
-    if ( rStg.IsStream( "WordDocument" ) )
+    if ( rStg.IsStream( u"WordDocument"_ustr ) )
     {
-        if ( rStg.IsStream( "0Table" ) || rStg.IsStream( "1Table" ) )
+        if ( rStg.IsStream( u"0Table"_ustr ) || rStg.IsStream( u"1Table"_ustr ) )
             pType = "writer_MS_Word_97";
         else
             pType = "writer_MS_Word_95";
     }
-    else if ( rStg.IsStream( "Book" ) )
+    else if ( rStg.IsStream( u"Book"_ustr ) )
     {
         pType = "calc_MS_Excel_95";
     }
-    else if ( rStg.IsStream( "Workbook" ) )
+    else if ( rStg.IsStream( u"Workbook"_ustr ) )
     {
         pType = "calc_MS_Excel_97";
     }
-    else if ( rStg.IsStream( "PowerPoint Document" ) )
+    else if ( rStg.IsStream( u"PowerPoint Document"_ustr ) )
     {
         pType = "impress_MS_PowerPoint_97";
     }
-    else if ( rStg.IsStream( "Equation Native" ) )
+    else if ( rStg.IsStream( u"Equation Native"_ustr ) )
     {
         pType = "math_MathType_3x";
     }
@@ -167,7 +167,7 @@ OUString SfxFilter::GetTypeFromStorage(
     if ( xProps.is() )
     {
         OUString aMediaType;
-        xProps->getPropertyValue("MediaType") >>= aMediaType;
+        xProps->getPropertyValue(u"MediaType"_ustr) >>= aMediaType;
         if ( !aMediaType.isEmpty() )
         {
             css::datatransfer::DataFlavor aDataFlavor;

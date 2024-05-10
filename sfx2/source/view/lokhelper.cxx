@@ -81,8 +81,8 @@ int DisableCallbacks::m_nDisabled = 0;
 
 namespace
 {
-LanguageTag g_defaultLanguageTag("en-US", true);
-LanguageTag g_loadLanguageTag("en-US", true); //< The language used to load.
+LanguageTag g_defaultLanguageTag(u"en-US"_ustr, true);
+LanguageTag g_loadLanguageTag(u"en-US"_ustr, true); //< The language used to load.
 LOKDeviceFormFactor g_deviceFormFactor = LOKDeviceFormFactor::UNKNOWN;
 bool g_isDefaultTimezoneSet = false;
 OUString g_DefaultTimezone;
@@ -612,7 +612,7 @@ namespace {
             }
         }
 
-        return "";
+        return u""_ustr;
     }
 }
 

@@ -11,15 +11,15 @@
 #include <sfx2/devtools/ObjectInspectorWidgets.hxx>
 
 ObjectInspectorWidgets::ObjectInspectorWidgets(const std::unique_ptr<weld::Builder>& rxBuilder)
-    : mpClassNameLabel(rxBuilder->weld_label("class_name_value_id"))
-    , mpInterfacesTreeView(rxBuilder->weld_tree_view("interfaces_treeview_id"))
-    , mpServicesTreeView(rxBuilder->weld_tree_view("services_treeview_id"))
-    , mpPropertiesTreeView(rxBuilder->weld_tree_view("properties_treeview_id"))
-    , mpMethodsTreeView(rxBuilder->weld_tree_view("methods_treeview_id"))
-    , mpToolbar(rxBuilder->weld_toolbar("object_inspector_toolbar"))
-    , mpNotebook(rxBuilder->weld_notebook("object_inspector_notebookbar"))
-    , mpTextView(rxBuilder->weld_text_view("object_inspector_text_view"))
-    , mpPaned(rxBuilder->weld_paned("object_inspector_paned"))
+    : mpClassNameLabel(rxBuilder->weld_label(u"class_name_value_id"_ustr))
+    , mpInterfacesTreeView(rxBuilder->weld_tree_view(u"interfaces_treeview_id"_ustr))
+    , mpServicesTreeView(rxBuilder->weld_tree_view(u"services_treeview_id"_ustr))
+    , mpPropertiesTreeView(rxBuilder->weld_tree_view(u"properties_treeview_id"_ustr))
+    , mpMethodsTreeView(rxBuilder->weld_tree_view(u"methods_treeview_id"_ustr))
+    , mpToolbar(rxBuilder->weld_toolbar(u"object_inspector_toolbar"_ustr))
+    , mpNotebook(rxBuilder->weld_notebook(u"object_inspector_notebookbar"_ustr))
+    , mpTextView(rxBuilder->weld_text_view(u"object_inspector_text_view"_ustr))
+    , mpPaned(rxBuilder->weld_paned(u"object_inspector_paned"_ustr))
 {
 }
 

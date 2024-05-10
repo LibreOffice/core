@@ -185,7 +185,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.sfx2.DocumentTemplates";
+        return u"com.sun.star.comp.sfx2.DocumentTemplates"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -195,7 +195,7 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        css::uno::Sequence< OUString > aSeq { "com.sun.star.frame.DocumentTemplates" };
+        css::uno::Sequence< OUString > aSeq { u"com.sun.star.frame.DocumentTemplates"_ustr };
         return aSeq;
     }
 
@@ -584,7 +584,7 @@ void SfxDocTplService::getDirList()
         css::util::thePathSettings::get(mxContext);
 
     // load internal paths
-    Any aAny = xPathSettings->getPropertyValue( "Template_internal" );
+    Any aAny = xPathSettings->getPropertyValue( u"Template_internal"_ustr );
     aAny >>= maInternalTemplateDirs;
 
     for (auto& rInternalTemplateDir : asNonConstRange(maInternalTemplateDirs))
@@ -677,7 +677,7 @@ void SfxDocTplService::getTitleFromURL( const OUString& rURL, OUString& aTitle, 
                 uno::Reference< container::XNameAccess > xTypeDetection( mxType, uno::UNO_QUERY_THROW );
                 SequenceAsHashMap aTypeProps( xTypeDetection->getByName( aDocType ) );
                 aType = aTypeProps.getUnpackedValueOrDefault(
-                            "MediaType",
+                            u"MediaType"_ustr,
                             OUString() );
             }
             catch( uno::Exception& )
@@ -1302,9 +1302,9 @@ bool SfxDocTplService::WriteUINamesForTemplateDir_Impl( std::u16string_view aUse
         Content aSourceContent( xTempFile->getUri(), maCmdEnv, comphelper::getProcessComponentContext() );
         aTargetContent.transferContent( aSourceContent,
                                         InsertOperation::Copy,
-                                        "groupuinames.xml",
+                                        u"groupuinames.xml"_ustr,
                                         ucb::NameClash::OVERWRITE,
-                                        "text/xml" );
+                                        u"text/xml"_ustr );
 
         bResult = true;
     }
@@ -1336,7 +1336,7 @@ OUString SfxDocTplService::CreateNewGroupFsys( const OUString& rGroupName, Conte
                                                 aResultURL,
                                                 aNewFolder )
           && !CreateNewUniqueFolderWithPrefix( aTargetPath,
-                                                "UserGroup",
+                                                u"UserGroup"_ustr,
                                                 aNewFolderName,
                                                 aResultURL,
                                                 aNewFolder ) )
@@ -1416,7 +1416,7 @@ sal_Bool SfxDocTplService::addGroup( const OUString& rGroupName )
                                             aNewFolderURL,
                                             aNewFolder )
       && !CreateNewUniqueFolderWithPrefix( aUserPath,
-                                            "UserGroup",
+                                            u"UserGroup"_ustr,
                                             aNewFolderName,
                                             aNewFolderURL,
                                             aNewFolder ) )
@@ -1630,7 +1630,7 @@ sal_Bool SfxDocTplService::renameGroup( const OUString& rOldName,
             while ( xResultSet->next() )
             {
                 if ( !::utl::UCBContentHelper::IsSubPath( aGroupTargetURL, xRow->getString( 1 ) ) )
-                    throw uno::Exception("not sub path", nullptr);
+                    throw uno::Exception(u"not sub path"_ustr, nullptr);
             }
 
             bCanBeRenamed = true;
@@ -1728,11 +1728,11 @@ sal_Bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
 
         uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", uno::Any(OUString( "/org.openoffice.Setup/Office/Factories/" ))}
+            {"nodepath", uno::Any(u"/org.openoffice.Setup/Office/Factories/"_ustr)}
         }));
         uno::Reference< container::XNameAccess > xSOFConfig(
             xConfigProvider->createInstanceWithArguments(
-                                    "com.sun.star.configuration.ConfigurationAccess",
+                                    u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                                     aArgs ),
             uno::UNO_QUERY_THROW );
 
@@ -1742,13 +1742,13 @@ sal_Bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
             throw uno::RuntimeException();
 
         OUString aFilterName;
-        xApplConfig->getByName("ooSetupFactoryActualTemplateFilter") >>= aFilterName;
+        xApplConfig->getByName(u"ooSetupFactoryActualTemplateFilter"_ustr) >>= aFilterName;
         if ( aFilterName.isEmpty() )
             throw uno::RuntimeException();
 
         // find the related type name
         uno::Reference< container::XNameAccess > xFilterFactory(
-            mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", mxContext),
+            mxContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.FilterFactory"_ustr, mxContext),
             uno::UNO_QUERY_THROW );
 
         uno::Sequence< beans::PropertyValue > aFilterData;
@@ -1766,16 +1766,16 @@ sal_Bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
             mxType.is() ?
                 uno::Reference< container::XNameAccess >( mxType, uno::UNO_QUERY_THROW ) :
                 uno::Reference< container::XNameAccess >(
-                    mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", mxContext),
+                    mxContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.TypeDetection"_ustr, mxContext),
                     uno::UNO_QUERY_THROW );
 
         SequenceAsHashMap aTypeProps( xTypeDetection->getByName( aTypeName ) );
         uno::Sequence< OUString > aAllExt =
-            aTypeProps.getUnpackedValueOrDefault("Extensions", Sequence< OUString >() );
+            aTypeProps.getUnpackedValueOrDefault(u"Extensions"_ustr, Sequence< OUString >() );
         if ( !aAllExt.hasElements() )
             throw uno::RuntimeException();
 
-        const OUString aMediaType {aTypeProps.getUnpackedValueOrDefault("MediaType", OUString() )};
+        const OUString aMediaType {aTypeProps.getUnpackedValueOrDefault(u"MediaType"_ustr, OUString() )};
         const OUString aExt {aAllExt[0]};
 
         if ( aMediaType.isEmpty() || aExt.isEmpty() )
@@ -1793,7 +1793,7 @@ sal_Bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
         OUString aNewTemplateTargetURL = CreateNewUniqueFileWithPrefix( aGroupTargetURL, rTemplateName, aExt );
         if ( aNewTemplateTargetURL.isEmpty() )
         {
-            aNewTemplateTargetURL = CreateNewUniqueFileWithPrefix( aGroupTargetURL, "UserTemplate", aExt );
+            aNewTemplateTargetURL = CreateNewUniqueFileWithPrefix( aGroupTargetURL, u"UserTemplate"_ustr, aExt );
 
             if ( aNewTemplateTargetURL.isEmpty() )
                 throw uno::RuntimeException();
@@ -1801,8 +1801,8 @@ sal_Bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
 
         // store template
         uno::Sequence< PropertyValue > aStoreArgs{
-            comphelper::makePropertyValue("FilterName", aFilterName),
-            comphelper::makePropertyValue("DocumentTitle", rTemplateName)
+            comphelper::makePropertyValue(u"FilterName"_ustr, aFilterName),
+            comphelper::makePropertyValue(u"DocumentTitle"_ustr, rTemplateName)
         };
 
         if( !::utl::UCBContentHelper::EqualURLs( aNewTemplateTargetURL, rStorable->getLocation() ))

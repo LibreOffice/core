@@ -54,7 +54,7 @@ std::vector<OUString> SfxContentHelper::GetResultSet( const OUString& rURL )
 
         try
         {
-            xDynResultSet = aCnt.createDynamicCursor( { "Title", "ContentType", "IsFolder" } );
+            xDynResultSet = aCnt.createDynamicCursor( { u"Title"_ustr, u"ContentType"_ustr, u"IsFolder"_ustr } );
             if ( xDynResultSet.is() )
                 xResultSet = xDynResultSet->getStaticResultSet();
         }
@@ -112,7 +112,7 @@ std::vector< OUString > SfxContentHelper::GetHelpTreeViewContents( const OUStrin
 
         try
         {
-            uno::Reference< ucb::XDynamicResultSet > xDynResultSet = aCnt.createDynamicCursor( { "Title", "IsFolder" } );
+            uno::Reference< ucb::XDynamicResultSet > xDynResultSet = aCnt.createDynamicCursor( { u"Title"_ustr, u"IsFolder"_ustr } );
             if ( xDynResultSet.is() )
                 xResultSet = xDynResultSet->getStaticResultSet();
         }
@@ -195,7 +195,7 @@ bool SfxContentHelper::IsHelpErrorDocument( std::u16string_view rURL )
         ::ucbhelper::Content aCnt( INetURLObject( rURL ).GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                       uno::Reference< ucb::XCommandEnvironment >(),
                       comphelper::getProcessComponentContext() );
-        if ( !( aCnt.getPropertyValue( "IsErrorDocument" ) >>= bRet ) )
+        if ( !( aCnt.getPropertyValue( u"IsErrorDocument"_ustr ) >>= bRet ) )
         {
             SAL_WARN( "sfx.bastyp", "Property 'IsErrorDocument' is missing" );
         }
@@ -216,7 +216,7 @@ sal_Int64 SfxContentHelper::GetSize( std::u16string_view rContent )
     try
     {
         ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-        aCnt.getPropertyValue( "Size" ) >>= nSize;
+        aCnt.getPropertyValue( u"Size"_ustr ) >>= nSize;
     }
     catch( const uno::Exception& )
     {

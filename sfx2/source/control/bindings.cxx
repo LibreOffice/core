@@ -1517,7 +1517,7 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, std::unique_ptr<SfxPoolI
             return SfxItemState::DISABLED;
 
         css::util::URL aURL;
-        OUString aCmd( ".uno:" );
+        OUString aCmd( u".uno:"_ustr );
         aURL.Protocol = aCmd;
         aURL.Path = pSlot->GetUnoName();
         aCmd += aURL.Path;

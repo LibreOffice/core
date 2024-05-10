@@ -131,7 +131,7 @@ OUString const & getCategoryType()
 } // end anonymous namespace
 
 ClassificationPropertyListener::ClassificationPropertyListener(const rtl::Reference<comphelper::ConfigurationListener>& xListener, ClassificationCategoriesController& rController)
-    : ClassificationPropertyListenerBase(xListener, "WritePath")
+    : ClassificationPropertyListenerBase(xListener, u"WritePath"_ustr)
     , m_rController(rController)
 {
 }
@@ -143,9 +143,9 @@ void ClassificationPropertyListener::setProperty(const uno::Any& /*rProperty*/)
 }
 
 ClassificationCategoriesController::ClassificationCategoriesController(const uno::Reference<uno::XComponentContext>& rContext)
-    : ClassificationCategoriesControllerBase(rContext, uno::Reference<frame::XFrame>(), OUString(".uno:ClassificationApply"))
+    : ClassificationCategoriesControllerBase(rContext, uno::Reference<frame::XFrame>(), u".uno:ClassificationApply"_ustr)
     , m_pClassification(nullptr)
-    , m_xListener(new comphelper::ConfigurationListener("/org.openoffice.Office.Paths/Paths/Classification"))
+    , m_xListener(new comphelper::ConfigurationListener(u"/org.openoffice.Office.Paths/Paths/Classification"_ustr))
     , m_aPropertyListener(m_xListener, *this)
 {
 
@@ -153,7 +153,7 @@ ClassificationCategoriesController::ClassificationCategoriesController(const uno
 
 OUString ClassificationCategoriesController::getImplementationName()
 {
-    return "com.sun.star.comp.sfx2.ClassificationCategoriesController";
+    return u"com.sun.star.comp.sfx2.ClassificationCategoriesController"_ustr;
 }
 
 sal_Bool ClassificationCategoriesController::supportsService(const OUString& rServiceName)
@@ -163,7 +163,7 @@ sal_Bool ClassificationCategoriesController::supportsService(const OUString& rSe
 
 uno::Sequence<OUString> ClassificationCategoriesController::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 void ClassificationCategoriesController::dispose()
@@ -211,7 +211,7 @@ IMPL_LINK(ClassificationCategoriesController, SelectHdl, weld::ComboBox&, rCateg
             {"Name", uno::Any(aEntry)},
             {"Type", uno::Any(aType)},
         }));
-        comphelper::dispatchCommand(".uno:ClassificationApply", aPropertyValues);
+        comphelper::dispatchCommand(u".uno:ClassificationApply"_ustr, aPropertyValues);
     }
 }
 
@@ -252,9 +252,9 @@ void ClassificationCategoriesController::removeEntries()
 }
 
 ClassificationControl::ClassificationControl(vcl::Window* pParent)
-    : InterimItemWindow(pParent, "sfx/ui/classificationbox.ui", "ClassificationBox")
-    , m_xLabel(m_xBuilder->weld_label("label"))
-    , m_xCategory(m_xBuilder->weld_combo_box("combobox"))
+    : InterimItemWindow(pParent, u"sfx/ui/classificationbox.ui"_ustr, u"ClassificationBox"_ustr)
+    , m_xLabel(m_xBuilder->weld_label(u"label"_ustr))
+    , m_xCategory(m_xBuilder->weld_combo_box(u"combobox"_ustr))
 {
     InitControlBase(m_xCategory.get());
 

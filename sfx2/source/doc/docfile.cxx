@@ -583,7 +583,7 @@ util::DateTime const & SfxMedium::GetInitFileDate( bool bIgnoreOldValue )
                                            utl::UCBContentHelper::getDefaultCommandEnvironment(),
                                            comphelper::getProcessComponentContext() );
 
-            aContent.getPropertyValue("DateModified") >>= pImpl->m_aDateTime;
+            aContent.getPropertyValue(u"DateModified"_ustr) >>= pImpl->m_aDateTime;
             pImpl->m_bGotDateTime = true;
         }
         catch ( const css::uno::Exception& )
@@ -657,7 +657,7 @@ OUString SfxMedium::GetBaseURL( bool bForSaving )
     {
         try
         {
-            Any aAny = pImpl->aContent.getPropertyValue("BaseURI");
+            Any aAny = pImpl->aContent.getPropertyValue(u"BaseURI"_ustr);
             aAny >>= aBaseURL;
         }
         catch ( const css::uno::Exception& )
@@ -1385,7 +1385,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
 
                                 uno::Sequence<css::ucb::Lock> aLocks;
                                 // getting the property, send a PROPFIND to the server over the net
-                                if ((aContentToLock.getPropertyValue("DAV:lockdiscovery") >>= aLocks) && aLocks.hasElements())
+                                if ((aContentToLock.getPropertyValue(u"DAV:lockdiscovery"_ustr) >>= aLocks) && aLocks.hasElements())
                                 {
                                     // got at least a lock, show the owner of the first lock returned
                                     css::ucb::Lock aLock = aLocks[0];
@@ -1498,7 +1498,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
                     // MediaDescriptor does this check also, the duplication should be avoided in future
                     Reference< css::ucb::XCommandEnvironment > xDummyEnv;
                     ::ucbhelper::Content aContent( GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ), xDummyEnv, comphelper::getProcessComponentContext() );
-                    aContent.getPropertyValue("IsReadOnly") >>= bContentReadonly;
+                    aContent.getPropertyValue(u"IsReadOnly"_ustr) >>= bContentReadonly;
                 }
                 catch( const uno::Exception& ) {}
             }
@@ -1715,11 +1715,11 @@ uno::Reference<embed::XStorage>
 SfxMedium::TryEncryptedInnerPackage(uno::Reference<embed::XStorage> const xStorage)
 {
     uno::Reference<embed::XStorage> xRet;
-    if (xStorage->hasByName("encrypted-package"))
+    if (xStorage->hasByName(u"encrypted-package"_ustr))
     {
         uno::Reference<io::XStream> const
             xDecryptedInnerPackage = xStorage->openStreamElement(
-                "encrypted-package",
+                u"encrypted-package"_ustr,
                 embed::ElementModes::READ | embed::ElementModes::NOCREATE);
         // either this throws due to wrong password or IO error, or returns stream
         assert(xDecryptedInnerPackage.is());
@@ -1727,7 +1727,7 @@ SfxMedium::TryEncryptedInnerPackage(uno::Reference<embed::XStorage> const xStora
         Reference<uno::XComponentContext> const xContext(::comphelper::getProcessComponentContext());
         uno::Reference<io::XStream> const xDecryptedInnerPackageStream(
             xContext->getServiceManager()->createInstanceWithContext(
-                "com.sun.star.comp.MemoryStream", xContext),
+                u"com.sun.star.comp.MemoryStream"_ustr, xContext),
             UNO_QUERY_THROW);
         comphelper::OStorageHelper::CopyInputToOutput(xDecryptedInnerPackage->getInputStream(), xDecryptedInnerPackageStream->getOutputStream());
         xDecryptedInnerPackageStream->getOutputStream()->closeOutput();
@@ -1748,12 +1748,12 @@ SfxMedium::TryEncryptedInnerPackage(uno::Reference<embed::XStorage> const xStora
         assert(xRet.is());
         // consistency check: outer and inner package must have same mimetype
         OUString const outerMediaType(uno::Reference<beans::XPropertySet>(pImpl->xStorage,
-            uno::UNO_QUERY_THROW)->getPropertyValue("MediaType").get<OUString>());
+            uno::UNO_QUERY_THROW)->getPropertyValue(u"MediaType"_ustr).get<OUString>());
         OUString const innerMediaType(uno::Reference<beans::XPropertySet>(xRet,
-            uno::UNO_QUERY_THROW)->getPropertyValue("MediaType").get<OUString>());
+            uno::UNO_QUERY_THROW)->getPropertyValue(u"MediaType"_ustr).get<OUString>());
         if (outerMediaType.isEmpty() || outerMediaType != innerMediaType)
         {
-            throw io::WrongFormatException("MediaType inconsistent in encrypted ODF package");
+            throw io::WrongFormatException(u"MediaType inconsistent in encrypted ODF package"_ustr);
         }
         // success:
         pImpl->m_bODFWholesomeEncryption = true;
@@ -1804,8 +1804,8 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
             xProgressHandler.set( new utl::ProgressHandlerWrap( xStatusIndicator ) );
 
         uno::Sequence< beans::PropertyValue > aAddProps{
-            comphelper::makePropertyValue("RepairPackage", true),
-            comphelper::makePropertyValue("StatusIndicator", xProgressHandler)
+            comphelper::makePropertyValue(u"RepairPackage"_ustr, true),
+            comphelper::makePropertyValue(u"StatusIndicator"_ustr, xProgressHandler)
         };
 
         // the first arguments will be filled later
@@ -1915,7 +1915,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
             const util::RevisionTag& rTag = pImpl->aVersions[nVersion];
             {
                 // Open SubStorage for all versions
-                uno::Reference < embed::XStorage > xSub = pImpl->xStorage->openStorageElement( "Versions",
+                uno::Reference < embed::XStorage > xSub = pImpl->xStorage->openStorageElement( u"Versions"_ustr,
                         embed::ElementModes::READ );
 
                 DBG_ASSERT( xSub.is(), "Version list, but no Versions!" );
@@ -2279,7 +2279,7 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                     {
                         Reference< XInputStream > aTempInput = aTempCont.openStream();
                         bTransactStarted = true;
-                        aOriginalContent.setPropertyValue( "Size", uno::Any( sal_Int64(0) ) );
+                        aOriginalContent.setPropertyValue( u"Size"_ustr, uno::Any( sal_Int64(0) ) );
                         aOriginalContent.writeStream( aTempInput, bOverWrite );
                         bResult = true;
                     }
@@ -2385,7 +2385,7 @@ bool SfxMedium::TryDirectTransfer( const OUString& aURL, SfxItemSet const & aTar
 
                     Any aCmdArg;
                     aCmdArg <<= aInsertArg;
-                    aTargetContent.executeCommand( "insert",
+                    aTargetContent.executeCommand( u"insert"_ustr,
                                                     aCmdArg );
 
                     if ( xSeek.is() )
@@ -2563,9 +2563,9 @@ void SfxMedium::Transfer_Impl()
         OUString sObjectId;
         try
         {
-            Any aAny = aDestContent.getPropertyValue("Title");
+            Any aAny = aDestContent.getPropertyValue(u"Title"_ustr);
             aAny >>= aFileName;
-            aAny = aDestContent.getPropertyValue("ObjectId");
+            aAny = aDestContent.getPropertyValue(u"ObjectId"_ustr);
             aAny >>= sObjectId;
         }
         catch (uno::Exception const&)
@@ -2808,7 +2808,7 @@ void SfxMedium::DoBackup_Impl(bool bForceUsingBackupPath)
             INetURLObject aDest( aBakDir );
             aDest.insertName( aSource.getName() );
             const OUString sExt
-                = aSource.hasExtension() ? aSource.getExtension() + ".bak" : OUString("bak");
+                = aSource.hasExtension() ? aSource.getExtension() + ".bak" : u"bak"_ustr;
             aDest.setExtension(sExt);
             OUString aFileName = aDest.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
 
@@ -3796,11 +3796,11 @@ SvKeyValueIterator* SfxMedium::GetHeaderAttributes_Impl()
         {
             try
             {
-                Any aAny = pImpl->aContent.getPropertyValue("MediaType");
+                Any aAny = pImpl->aContent.getPropertyValue(u"MediaType"_ustr);
                 OUString aContentType;
                 aAny >>= aContentType;
 
-                pImpl->xAttributes->Append( SvKeyValue( "content-type", aContentType ) );
+                pImpl->xAttributes->Append( SvKeyValue( u"content-type"_ustr, aContentType ) );
             }
             catch ( const css::uno::Exception& )
             {
@@ -4202,10 +4202,10 @@ bool SfxMedium::SignDocumentContentUsingCertificate(
             throw uno::RuntimeException();
 
         uno::Reference< embed::XStorage > xMetaInf;
-        if (xWriteableZipStor.is() && xWriteableZipStor->hasByName("META-INF"))
+        if (xWriteableZipStor.is() && xWriteableZipStor->hasByName(u"META-INF"_ustr))
         {
             xMetaInf = xWriteableZipStor->openStorageElement(
-                                            "META-INF",
+                                            u"META-INF"_ustr,
                                             embed::ElementModes::READWRITE );
             if ( !xMetaInf.is() )
                 throw uno::RuntimeException();
@@ -4342,10 +4342,10 @@ bool SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
             throw uno::RuntimeException();
 
         uno::Reference< embed::XStorage > xMetaInf;
-        if (xWriteableZipStor.is() && xWriteableZipStor->hasByName("META-INF"))
+        if (xWriteableZipStor.is() && xWriteableZipStor->hasByName(u"META-INF"_ustr))
         {
             xMetaInf = xWriteableZipStor->openStorageElement(
-                                            "META-INF",
+                                            u"META-INF"_ustr,
                                             embed::ElementModes::READWRITE );
             if ( !xMetaInf.is() )
                 throw uno::RuntimeException();
@@ -4381,7 +4381,7 @@ bool SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
                     uno::Reference<io::XSeekable>(pImpl->m_xODFDecryptedInnerPackageStream, uno::UNO_QUERY_THROW)->seek(0);
                     uno::Reference<io::XStream> const xEncryptedPackage =
                         pImpl->m_xODFEncryptedOuterStorage->openStreamElement(
-                            "encrypted-package",
+                            u"encrypted-package"_ustr,
                             embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE);
                     comphelper::OStorageHelper::CopyInputToOutput(pImpl->m_xODFDecryptedInnerPackageStream->getInputStream(), xEncryptedPackage->getOutputStream());
                     xTransact.set(pImpl->m_xODFEncryptedOuterStorage, uno::UNO_QUERY_THROW);

@@ -198,16 +198,16 @@ std::shared_ptr<const SfxFilter> SfxFrameLoader_Impl::impl_detectFilterForURL( c
             return nullptr;
 
         Reference< XTypeDetection > xDetect(
-            m_aContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", m_aContext),
+            m_aContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.TypeDetection"_ustr, m_aContext),
             UNO_QUERY_THROW);
 
         ::comphelper::NamedValueCollection aNewArgs;
-        aNewArgs.put( "URL", sURL );
+        aNewArgs.put( u"URL"_ustr, sURL );
 
-        if ( i_rDescriptor.has( "InteractionHandler" ) )
-            aNewArgs.put( "InteractionHandler", i_rDescriptor.get( "InteractionHandler" ) );
-        if ( i_rDescriptor.has( "StatusIndicator" ) )
-            aNewArgs.put( "StatusIndicator", i_rDescriptor.get( "StatusIndicator" ) );
+        if ( i_rDescriptor.has( u"InteractionHandler"_ustr ) )
+            aNewArgs.put( u"InteractionHandler"_ustr, i_rDescriptor.get( u"InteractionHandler"_ustr ) );
+        if ( i_rDescriptor.has( u"StatusIndicator"_ustr ) )
+            aNewArgs.put( u"StatusIndicator"_ustr, i_rDescriptor.get( u"StatusIndicator"_ustr ) );
 
         Sequence< PropertyValue > aQueryArgs( aNewArgs.getPropertyValues() );
         OUString sType = xDetect->queryTypeByDescriptor( aQueryArgs, true );
@@ -240,10 +240,10 @@ std::shared_ptr<const SfxFilter> SfxFrameLoader_Impl::impl_getFilterFromServiceN
     try
     {
         ::comphelper::NamedValueCollection aQuery;
-        aQuery.put( "DocumentService", i_rServiceName );
+        aQuery.put( u"DocumentService"_ustr, i_rServiceName );
 
         const Reference< XContainerQuery > xQuery(
-            m_aContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", m_aContext),
+            m_aContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.FilterFactory"_ustr, m_aContext),
             UNO_QUERY_THROW );
 
         const SfxFilterMatcher& rMatcher = SfxGetpApp()->GetFilterMatcher();
@@ -255,7 +255,7 @@ std::shared_ptr<const SfxFilter> SfxFrameLoader_Impl::impl_getFilterFromServiceN
         while ( xEnum->hasMoreElements() )
         {
             ::comphelper::NamedValueCollection aType( xEnum->nextElement() );
-            OUString sFilterName = aType.getOrDefault( "Name", OUString() );
+            OUString sFilterName = aType.getOrDefault( u"Name"_ustr, OUString() );
             if ( sFilterName.isEmpty() )
                 continue;
 
@@ -332,12 +332,12 @@ bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const sal_uInt16 _nSlo
 
 void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollection& io_rDescriptor ) const
 {
-    const OUString     sURL         = io_rDescriptor.getOrDefault( "URL",                OUString() );
-    const OUString     sTypeName    = io_rDescriptor.getOrDefault( "TypeName",           OUString() );
-    const OUString     sFilterName  = io_rDescriptor.getOrDefault( "FilterName",         OUString() );
-    const OUString     sServiceName = io_rDescriptor.getOrDefault( "DocumentService",    OUString() );
+    const OUString     sURL         = io_rDescriptor.getOrDefault( u"URL"_ustr,                OUString() );
+    const OUString     sTypeName    = io_rDescriptor.getOrDefault( u"TypeName"_ustr,           OUString() );
+    const OUString     sFilterName  = io_rDescriptor.getOrDefault( u"FilterName"_ustr,         OUString() );
+    const OUString     sServiceName = io_rDescriptor.getOrDefault( u"DocumentService"_ustr,    OUString() );
     const Reference< XInteractionHandler >
-                              xInteraction = io_rDescriptor.getOrDefault( "InteractionHandler", Reference< XInteractionHandler >() );
+                              xInteraction = io_rDescriptor.getOrDefault( u"InteractionHandler"_ustr, Reference< XInteractionHandler >() );
 
     const SfxFilterMatcher& rMatcher = SfxGetpApp()->GetFilterMatcher();
     std::shared_ptr<const SfxFilter> pFilter;
@@ -365,17 +365,17 @@ void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollecti
     if ( !pFilter )
         return;
 
-    io_rDescriptor.put( "FilterName", pFilter->GetFilterName() );
+    io_rDescriptor.put( u"FilterName"_ustr, pFilter->GetFilterName() );
 
     // If detected filter indicates using of an own template format
     // add property "AsTemplate" to descriptor. But suppress this step
     // if such property already exists.
-    if ( pFilter->IsOwnTemplateFormat() && !io_rDescriptor.has( "AsTemplate" ) )
-        io_rDescriptor.put( "AsTemplate", true );
+    if ( pFilter->IsOwnTemplateFormat() && !io_rDescriptor.has( u"AsTemplate"_ustr ) )
+        io_rDescriptor.put( u"AsTemplate"_ustr, true );
 
     // The DocumentService property will finally be used to determine the document type to create, so
     // override it with the service name as indicated by the found filter.
-    io_rDescriptor.put( "DocumentService", pFilter->GetServiceName() );
+    io_rDescriptor.put( u"DocumentService"_ustr, pFilter->GetServiceName() );
 }
 
 
@@ -399,10 +399,10 @@ bool SfxFrameLoader_Impl::impl_determineTemplateDocument( ::comphelper::NamedVal
 {
     try
     {
-        const OUString sTemplateRegioName = io_rDescriptor.getOrDefault( "TemplateRegionName", OUString() );
-        const OUString sTemplateName      = io_rDescriptor.getOrDefault( "TemplateName",       OUString() );
-        const OUString sServiceName       = io_rDescriptor.getOrDefault( "DocumentService",    OUString() );
-        const OUString sURL               = io_rDescriptor.getOrDefault( "URL",                OUString() );
+        const OUString sTemplateRegioName = io_rDescriptor.getOrDefault( u"TemplateRegionName"_ustr, OUString() );
+        const OUString sTemplateName      = io_rDescriptor.getOrDefault( u"TemplateName"_ustr,       OUString() );
+        const OUString sServiceName       = io_rDescriptor.getOrDefault( u"DocumentService"_ustr,    OUString() );
+        const OUString sURL               = io_rDescriptor.getOrDefault( u"URL"_ustr,                OUString() );
 
         // determine the full URL of the template to use, if any
         OUString sTemplateURL;
@@ -427,14 +427,14 @@ bool SfxFrameLoader_Impl::impl_determineTemplateDocument( ::comphelper::NamedVal
             if ( pTemplateFilter )
             {
                 // load the template document, but, well, "as template"
-                io_rDescriptor.put( "FilterName", pTemplateFilter->GetName() );
-                io_rDescriptor.put( "FileName", sTemplateURL );
-                io_rDescriptor.put( "AsTemplate", true );
+                io_rDescriptor.put( u"FilterName"_ustr, pTemplateFilter->GetName() );
+                io_rDescriptor.put( u"FileName"_ustr, sTemplateURL );
+                io_rDescriptor.put( u"AsTemplate"_ustr, true );
 
                 // #i21583#
                 // the DocumentService property will finally be used to create the document. Thus, override any possibly
                 // present value with the document service of the template.
-                io_rDescriptor.put( "DocumentService", pTemplateFilter->GetServiceName() );
+                io_rDescriptor.put( u"DocumentService"_ustr, pTemplateFilter->GetServiceName() );
                 return true;
             }
         }
@@ -470,7 +470,7 @@ void SfxFrameLoader_Impl::impl_handleCaughtError_nothrow( const Any& i_rCaughtEr
     try
     {
         const Reference< XInteractionHandler > xInteraction =
-            i_rDescriptor.getOrDefault( "InteractionHandler", Reference< XInteractionHandler >() );
+            i_rDescriptor.getOrDefault( u"InteractionHandler"_ustr, Reference< XInteractionHandler >() );
         if ( !xInteraction.is() )
             return;
         ::rtl::Reference< ::comphelper::OInteractionRequest > pRequest( new ::comphelper::OInteractionRequest( i_rCaughtError ) );
@@ -500,8 +500,8 @@ void SfxFrameLoader_Impl::impl_handleCaughtError_nothrow( const Any& i_rCaughtEr
 void SfxFrameLoader_Impl::impl_removeLoaderArguments( ::comphelper::NamedValueCollection& io_rDescriptor )
 {
     // remove the arguments which are for the loader only, and not for a call to attachResource
-    io_rDescriptor.remove( "StatusIndicator" );
-    io_rDescriptor.remove( "Model" );
+    io_rDescriptor.remove( u"StatusIndicator"_ustr );
+    io_rDescriptor.remove( u"Model"_ustr );
 }
 
 
@@ -525,7 +525,7 @@ void SfxFrameLoader_Impl::impl_removeLoaderArguments( ::comphelper::NamedValueCo
 
 SfxInterfaceId SfxFrameLoader_Impl::impl_determineEffectiveViewId_nothrow( const SfxObjectShell& i_rDocument, const ::comphelper::NamedValueCollection& i_rDescriptor )
 {
-    SfxInterfaceId nViewId(i_rDescriptor.getOrDefault( "ViewId", sal_Int16( 0 ) ));
+    SfxInterfaceId nViewId(i_rDescriptor.getOrDefault( u"ViewId"_ustr, sal_Int16( 0 ) ));
     try
     {
         if ( nViewId == SFX_INTERFACE_NONE )
@@ -616,21 +616,21 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     ::comphelper::NamedValueCollection aDescriptor( rArgs );
 
     // ensure the descriptor contains a referrer
-    if ( !aDescriptor.has( "Referer" ) )
-        aDescriptor.put( "Referer", OUString() );
+    if ( !aDescriptor.has( u"Referer"_ustr ) )
+        aDescriptor.put( u"Referer"_ustr, OUString() );
 
     // did the caller already pass a model?
-    Reference< XModel2 > xModel = aDescriptor.getOrDefault( "Model", Reference< XModel2 >() );
+    Reference< XModel2 > xModel = aDescriptor.getOrDefault( u"Model"_ustr, Reference< XModel2 >() );
     const bool bExternalModel = xModel.is();
 
     // check for factory URLs to create a new doc, instead of loading one
-    const OUString sURL = aDescriptor.getOrDefault( "URL", OUString() );
+    const OUString sURL = aDescriptor.getOrDefault( u"URL"_ustr, OUString() );
     const bool bIsFactoryURL = sURL.startsWith( "private:factory/" );
     std::shared_ptr<const SfxFilter> pEmptyURLFilter;
     bool bInitNewModel = bIsFactoryURL;
     const bool bIsDefault = bIsFactoryURL && !bExternalModel;
-    if (!aDescriptor.has("Replaceable"))
-        aDescriptor.put("Replaceable", bIsDefault);
+    if (!aDescriptor.has(u"Replaceable"_ustr))
+        aDescriptor.put(u"Replaceable"_ustr, bIsDefault);
     if (bIsDefault)
     {
         const OUString sFactory = sURL.copy( sizeof( "private:factory/" ) -1 );
@@ -638,7 +638,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         const sal_uInt16 nSlotParam = impl_findSlotParam( sFactory );
         if ( nSlotParam != 0 )
         {
-            return impl_createNewDocWithSlotParam( nSlotParam, _rTargetFrame, aDescriptor.getOrDefault( "Hidden", false ) );
+            return impl_createNewDocWithSlotParam( nSlotParam, _rTargetFrame, aDescriptor.getOrDefault( u"Hidden"_ustr, false ) );
         }
 
         const bool bDescribesValidTemplate = impl_determineTemplateDocument( aDescriptor );
@@ -652,20 +652,20 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         else
         {
             const OUString sServiceName = SfxObjectShell::GetServiceNameFromFactory( sFactory );
-            aDescriptor.put( "DocumentService", sServiceName );
+            aDescriptor.put( u"DocumentService"_ustr, sServiceName );
         }
     }
     else
     {
         // compatibility
-        aDescriptor.put( "FileName", aDescriptor.get( "URL" ) );
+        aDescriptor.put( u"FileName"_ustr, aDescriptor.get( u"URL"_ustr ) );
 
         if (!bIsFactoryURL && !bExternalModel && tools::isEmptyFileUrl(sURL))
         {
             pEmptyURLFilter = getEmptyURLFilter(sURL);
             if (pEmptyURLFilter)
             {
-                aDescriptor.put("DocumentService", pEmptyURLFilter->GetServiceName());
+                aDescriptor.put(u"DocumentService"_ustr, pEmptyURLFilter->GetServiceName());
                 if (impl_determineTemplateDocument(aDescriptor))
                 {
                     // if the media descriptor allowed us to determine a template document
@@ -673,7 +673,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
                     // from scratch (below), but instead load the template document
                     bInitNewModel = false;
                     // Do not try to load from empty UCB content
-                    aDescriptor.remove("UCBContent");
+                    aDescriptor.remove(u"UCBContent"_ustr);
                 }
                 else
                 {
@@ -692,7 +692,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         // no model passed from outside? => create one from scratch
         if ( !bExternalModel )
         {
-            bool bInternalFilter = aDescriptor.getOrDefault<OUString>("FilterProvider", OUString()).isEmpty();
+            bool bInternalFilter = aDescriptor.getOrDefault<OUString>(u"FilterProvider"_ustr, OUString()).isEmpty();
 
             if (bInternalFilter && !bInitNewModel)
             {
@@ -703,7 +703,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
             }
 
             // create the new doc
-            const OUString sServiceName = aDescriptor.getOrDefault( "DocumentService", OUString() );
+            const OUString sServiceName = aDescriptor.getOrDefault( u"DocumentService"_ustr, OUString() );
             xModel.set( m_aContext->getServiceManager()->createInstanceWithContext(sServiceName, m_aContext), UNO_QUERY_THROW );
 
             // load resp. init it
@@ -770,7 +770,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     catch ( Exception& )
     {
         const Any aError( ::cppu::getCaughtException() );
-        if ( !aDescriptor.getOrDefault( "Silent", false ) )
+        if ( !aDescriptor.getOrDefault( u"Silent"_ustr, false ) )
             impl_handleCaughtError_nothrow( aError, aDescriptor );
     }
 
@@ -798,7 +798,7 @@ void SfxFrameLoader_Impl::cancel()
 /* XServiceInfo */
 OUString SAL_CALL SfxFrameLoader_Impl::getImplementationName()
 {
-    return "com.sun.star.comp.office.FrameLoader";
+    return u"com.sun.star.comp.office.FrameLoader"_ustr;
 }
 
 /* XServiceInfo */
@@ -810,7 +810,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::supportsService( const OUString& sService
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL SfxFrameLoader_Impl::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.SynchronousFrameLoader", "com.sun.star.frame.OfficeFrameLoader" };
+    return { u"com.sun.star.frame.SynchronousFrameLoader"_ustr, u"com.sun.star.frame.OfficeFrameLoader"_ustr };
 }
 
 }

@@ -113,7 +113,7 @@ static uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
             beans::PropertyValue *pValues = aProperties.getArray();
 
             pValues[ 0 ].Name = PROP_EVENT_TYPE;
-            pValues[ 0 ].Value <<= OUString("STAR_BASIC");
+            pValues[ 0 ].Value <<= u"STAR_BASIC"_ustr;
 
             pValues[ 1 ].Name = PROP_LIBRARY;
             pValues[ 1 ].Value <<= pMacro->GetLibName();

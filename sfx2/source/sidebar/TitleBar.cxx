@@ -25,11 +25,11 @@ namespace sfx2::sidebar {
 
 TitleBar::TitleBar(weld::Builder& rBuilder, Theme::ThemeItem eThemeItem)
     : mrBuilder(rBuilder)
-    , mxTitlebar(rBuilder.weld_box("titlebar"))
-    , mxAddonImage(rBuilder.weld_image("addonimage"))
-    , mxToolBox(rBuilder.weld_toolbar("toolbar"))
+    , mxTitlebar(rBuilder.weld_box(u"titlebar"_ustr))
+    , mxAddonImage(rBuilder.weld_image(u"addonimage"_ustr))
+    , mxToolBox(rBuilder.weld_toolbar(u"toolbar"_ustr))
     , meThemeItem(eThemeItem)
-    , msToolBoxRId("")
+    , msToolBoxRId(u""_ustr)
 {
     SetBackground();
 

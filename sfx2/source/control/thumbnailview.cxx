@@ -82,12 +82,12 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
             {
                 uno::Reference<embed::XStorage> xStorage (
                     xDocStorage->openStorageElement(
-                        "Thumbnails",
+                        u"Thumbnails"_ustr,
                         embed::ElementModes::READ));
                 if (xStorage.is())
                 {
                     uno::Reference<io::XStream> xThumbnailCopy (
-                        xStorage->cloneStreamElement("thumbnail.png"));
+                        xStorage->cloneStreamElement(u"thumbnail.png"_ustr));
                     if (xThumbnailCopy.is())
                         xIStream = xThumbnailCopy->getInputStream();
                 }
@@ -108,12 +108,12 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
             if ( ! xIStream.is())
             {
                 uno::Reference<embed::XStorage> xStorage (
-                    xDocStorage->openStorageElement( "Thumbnail",
+                    xDocStorage->openStorageElement( u"Thumbnail"_ustr,
                         embed::ElementModes::READ));
                 if (xStorage.is())
                 {
                     uno::Reference<io::XStream> xThumbnailCopy (
-                        xStorage->cloneStreamElement("thumbnail.png"));
+                        xStorage->cloneStreamElement(u"thumbnail.png"_ustr));
                     if (xThumbnailCopy.is())
                         xIStream = xThumbnailCopy->getInputStream();
                 }

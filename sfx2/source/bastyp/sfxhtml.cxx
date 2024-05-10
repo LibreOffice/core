@@ -161,7 +161,7 @@ IMAPOBJ_SETEVENT:
                 if( !sTmp.isEmpty() )
                 {
                     sTmp = convertLineEnd(sTmp, GetSystemLineEnd());
-                    aMacroTbl.Insert( nEvent, SvxMacro( sTmp, "", eScrpType ));
+                    aMacroTbl.Insert( nEvent, SvxMacro( sTmp, u""_ustr, eScrpType ));
                 }
             }
             break;

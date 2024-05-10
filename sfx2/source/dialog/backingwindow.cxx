@@ -149,34 +149,34 @@ public:
 float const g_fMultiplier = 1.2f;
 
 BackingWindow::BackingWindow(vcl::Window* i_pParent)
-    : InterimItemWindow(i_pParent, "sfx/ui/startcenter.ui", "StartCenter", false)
-    , mxOpenButton(m_xBuilder->weld_button("open_all"))
-    , mxRecentButton(m_xBuilder->weld_toggle_button("open_recent"))
-    , mxRemoteButton(m_xBuilder->weld_button("open_remote"))
-    , mxTemplateButton(m_xBuilder->weld_toggle_button("templates_all"))
-    , mxCreateLabel(m_xBuilder->weld_label("create_label"))
-    , mxAltHelpLabel(m_xBuilder->weld_label("althelplabel"))
-    , mxFilter(m_xBuilder->weld_combo_box("cbFilter"))
-    , mxActions(m_xBuilder->weld_menu_button("mbActions"))
-    , mxWriterAllButton(m_xBuilder->weld_button("writer_all"))
-    , mxCalcAllButton(m_xBuilder->weld_button("calc_all"))
-    , mxImpressAllButton(m_xBuilder->weld_button("impress_all"))
-    , mxDrawAllButton(m_xBuilder->weld_button("draw_all"))
-    , mxDBAllButton(m_xBuilder->weld_button("database_all"))
-    , mxMathAllButton(m_xBuilder->weld_button("math_all"))
+    : InterimItemWindow(i_pParent, u"sfx/ui/startcenter.ui"_ustr, u"StartCenter"_ustr, false)
+    , mxOpenButton(m_xBuilder->weld_button(u"open_all"_ustr))
+    , mxRecentButton(m_xBuilder->weld_toggle_button(u"open_recent"_ustr))
+    , mxRemoteButton(m_xBuilder->weld_button(u"open_remote"_ustr))
+    , mxTemplateButton(m_xBuilder->weld_toggle_button(u"templates_all"_ustr))
+    , mxCreateLabel(m_xBuilder->weld_label(u"create_label"_ustr))
+    , mxAltHelpLabel(m_xBuilder->weld_label(u"althelplabel"_ustr))
+    , mxFilter(m_xBuilder->weld_combo_box(u"cbFilter"_ustr))
+    , mxActions(m_xBuilder->weld_menu_button(u"mbActions"_ustr))
+    , mxWriterAllButton(m_xBuilder->weld_button(u"writer_all"_ustr))
+    , mxCalcAllButton(m_xBuilder->weld_button(u"calc_all"_ustr))
+    , mxImpressAllButton(m_xBuilder->weld_button(u"impress_all"_ustr))
+    , mxDrawAllButton(m_xBuilder->weld_button(u"draw_all"_ustr))
+    , mxDBAllButton(m_xBuilder->weld_button(u"database_all"_ustr))
+    , mxMathAllButton(m_xBuilder->weld_button(u"math_all"_ustr))
     , mxBrandImage(new BrandImage)
-    , mxBrandImageWeld(new weld::CustomWeld(*m_xBuilder, "daBrand", *mxBrandImage))
-    , mxHelpButton(m_xBuilder->weld_button("help"))
-    , mxExtensionsButton(m_xBuilder->weld_button("extensions"))
-    , mxAllButtonsBox(m_xBuilder->weld_container("all_buttons_box"))
-    , mxButtonsBox(m_xBuilder->weld_container("buttons_box"))
-    , mxSmallButtonsBox(m_xBuilder->weld_container("small_buttons_box"))
-    , mxAllRecentThumbnails(new sfx2::RecentDocsView(m_xBuilder->weld_scrolled_window("scrollrecent", true),
-                                                     m_xBuilder->weld_menu("recentmenu")))
-    , mxAllRecentThumbnailsWin(new weld::CustomWeld(*m_xBuilder, "all_recent", *mxAllRecentThumbnails))
-    , mxLocalView(new TemplateDefaultView(m_xBuilder->weld_scrolled_window("scrolllocal", true),
-                                          m_xBuilder->weld_menu("localmenu")))
-    , mxLocalViewWin(new weld::CustomWeld(*m_xBuilder, "local_view", *mxLocalView))
+    , mxBrandImageWeld(new weld::CustomWeld(*m_xBuilder, u"daBrand"_ustr, *mxBrandImage))
+    , mxHelpButton(m_xBuilder->weld_button(u"help"_ustr))
+    , mxExtensionsButton(m_xBuilder->weld_button(u"extensions"_ustr))
+    , mxAllButtonsBox(m_xBuilder->weld_container(u"all_buttons_box"_ustr))
+    , mxButtonsBox(m_xBuilder->weld_container(u"buttons_box"_ustr))
+    , mxSmallButtonsBox(m_xBuilder->weld_container(u"small_buttons_box"_ustr))
+    , mxAllRecentThumbnails(new sfx2::RecentDocsView(m_xBuilder->weld_scrolled_window(u"scrollrecent"_ustr, true),
+                                                     m_xBuilder->weld_menu(u"recentmenu"_ustr)))
+    , mxAllRecentThumbnailsWin(new weld::CustomWeld(*m_xBuilder, u"all_recent"_ustr, *mxAllRecentThumbnails))
+    , mxLocalView(new TemplateDefaultView(m_xBuilder->weld_scrolled_window(u"scrolllocal"_ustr, true),
+                                          m_xBuilder->weld_menu(u"localmenu"_ustr)))
+    , mxLocalViewWin(new weld::CustomWeld(*m_xBuilder, u"local_view"_ustr, *mxLocalView))
     , mbLocalViewInitialized(false)
     , mbInitControls(false)
 {
@@ -311,7 +311,7 @@ void BackingWindow::initControls()
 
     // Hide OpenRemote button on startpage if the OpenRemote uno command is not available
     SvtCommandOptions aCmdOptions;
-    if (SvtCommandOptions().HasEntriesDisabled() && aCmdOptions.LookupDisabled("OpenRemote"))
+    if (SvtCommandOptions().HasEntriesDisabled() && aCmdOptions.LookupDisabled(u"OpenRemote"_ustr))
         mxRemoteButton->set_visible(false);
     else
         mxRemoteButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
@@ -537,7 +537,7 @@ IMPL_LINK(BackingWindow, ExtLinkClickHdl, weld::Button&, rButton,void)
     {
         uno::Sequence<uno::Any> args(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", uno::Any(OUString("/org.openoffice.Office.Common/Help/StartCenter"))}
+            {"nodepath", uno::Any(u"/org.openoffice.Office.Common/Help/StartCenter"_ustr)}
         }));
 
         Reference<lang::XMultiServiceFactory> xConfig = configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
@@ -620,28 +620,28 @@ IMPL_LINK( BackingWindow, ClickHdl, weld::Button&, rButton, void )
 {
     // dispatch the appropriate URL and end the dialog
     if( &rButton == mxWriterAllButton.get() )
-        dispatchURL( "private:factory/swriter" );
+        dispatchURL( u"private:factory/swriter"_ustr );
     else if( &rButton == mxCalcAllButton.get() )
-        dispatchURL( "private:factory/scalc" );
+        dispatchURL( u"private:factory/scalc"_ustr );
     else if( &rButton == mxImpressAllButton.get() )
-        dispatchURL( "private:factory/simpress?slot=6686" );
+        dispatchURL( u"private:factory/simpress?slot=6686"_ustr );
     else if( &rButton == mxDrawAllButton.get() )
-        dispatchURL( "private:factory/sdraw" );
+        dispatchURL( u"private:factory/sdraw"_ustr );
     else if( &rButton == mxDBAllButton.get() )
-        dispatchURL( "private:factory/sdatabase?Interactive" );
+        dispatchURL( u"private:factory/sdatabase?Interactive"_ustr );
     else if( &rButton == mxMathAllButton.get() )
-        dispatchURL( "private:factory/smath" );
+        dispatchURL( u"private:factory/smath"_ustr );
     else if( &rButton == mxOpenButton.get() )
     {
         Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
-        dispatchURL( ".uno:Open", OUString(), xFrame, { comphelper::makePropertyValue("Referer", OUString("private:user")) } );
+        dispatchURL( u".uno:Open"_ustr, OUString(), xFrame, { comphelper::makePropertyValue(u"Referer"_ustr, u"private:user"_ustr) } );
     }
     else if( &rButton == mxRemoteButton.get() )
     {
         Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
-        dispatchURL( ".uno:OpenRemote", OUString(), xFrame, {} );
+        dispatchURL( u".uno:OpenRemote"_ustr, OUString(), xFrame, {} );
     }
 }
 
@@ -670,10 +670,10 @@ IMPL_LINK(BackingWindow, CreateContextMenuHdl, ThumbnailViewItem*, pItem, void)
 IMPL_LINK(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
     uno::Sequence< PropertyValue > aArgs{
-        comphelper::makePropertyValue("AsTemplate", true),
-        comphelper::makePropertyValue("MacroExecutionMode", MacroExecMode::USE_CONFIG),
-        comphelper::makePropertyValue("UpdateDocMode", UpdateDocMode::ACCORDING_TO_CONFIG),
-        comphelper::makePropertyValue("InteractionHandler", task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr ))
+        comphelper::makePropertyValue(u"AsTemplate"_ustr, true),
+        comphelper::makePropertyValue(u"MacroExecutionMode"_ustr, MacroExecMode::USE_CONFIG),
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr, UpdateDocMode::ACCORDING_TO_CONFIG),
+        comphelper::makePropertyValue(u"InteractionHandler"_ustr, task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr ))
     };
 
     TemplateViewItem *pTemplateItem = static_cast<TemplateViewItem*>(pItem);
@@ -682,7 +682,7 @@ IMPL_LINK(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
 
     try
     {
-        dispatchURL( pTemplateItem->getPath(), "_default", xFrame, aArgs );
+        dispatchURL( pTemplateItem->getPath(), u"_default"_ustr, xFrame, aArgs );
     }
     catch( const uno::Exception& )
     {
@@ -692,9 +692,9 @@ IMPL_LINK(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
 IMPL_LINK(BackingWindow, EditTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
     uno::Sequence< PropertyValue > aArgs{
-        comphelper::makePropertyValue("AsTemplate", false),
-        comphelper::makePropertyValue("MacroExecutionMode", MacroExecMode::USE_CONFIG),
-        comphelper::makePropertyValue("UpdateDocMode", UpdateDocMode::ACCORDING_TO_CONFIG),
+        comphelper::makePropertyValue(u"AsTemplate"_ustr, false),
+        comphelper::makePropertyValue(u"MacroExecutionMode"_ustr, MacroExecMode::USE_CONFIG),
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr, UpdateDocMode::ACCORDING_TO_CONFIG),
     };
 
     TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(pItem);
@@ -703,7 +703,7 @@ IMPL_LINK(BackingWindow, EditTemplateHdl, ThumbnailViewItem*, pItem, void)
 
     try
     {
-        dispatchURL( pViewItem->getPath(), "_default", xFrame, aArgs );
+        dispatchURL( pViewItem->getPath(), u"_default"_ustr, xFrame, aArgs );
     }
     catch( const uno::Exception& )
     {

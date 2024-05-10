@@ -214,7 +214,7 @@ struct ContentEntry_Impl
 void ContentTabPage_Impl::InitRoot()
 {
     std::vector< OUString > aList =
-        SfxContentHelper::GetHelpTreeViewContents( "vnd.sun.star.hier://com.sun.star.help.TreeView/" );
+        SfxContentHelper::GetHelpTreeViewContents( u"vnd.sun.star.hier://com.sun.star.help.TreeView/"_ustr );
 
     for (const OUString & aRow : aList)
     {
@@ -270,7 +270,7 @@ IMPL_LINK(ContentTabPage_Impl, ExpandingHdl, const weld::TreeIter&, rIter, bool)
                     }
                     else
                     {
-                        Any aAny( ::utl::UCBContentHelper::GetProperty( aURL, "TargetURL" ) );
+                        Any aAny( ::utl::UCBContentHelper::GetProperty( aURL, u"TargetURL"_ustr ) );
                         OUString sId;
                         OUString aTargetURL;
                         if ( aAny >>= aTargetURL )
@@ -325,9 +325,9 @@ HelpTabPage_Impl::~HelpTabPage_Impl()
 
 // class ContentTabPage_Impl ---------------------------------------------
 ContentTabPage_Impl::ContentTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_Impl* pIdxWin)
-    : HelpTabPage_Impl(pParent, pIdxWin, "HelpContentPage",
-        "sfx/ui/helpcontentpage.ui")
-    , m_xContentBox(m_xBuilder->weld_tree_view("content"))
+    : HelpTabPage_Impl(pParent, pIdxWin, u"HelpContentPage"_ustr,
+        u"sfx/ui/helpcontentpage.ui"_ustr)
+    , m_xContentBox(m_xBuilder->weld_tree_view(u"content"_ustr))
     , m_xScratchIter(m_xContentBox->make_iterator())
     , aOpenBookImage(BMP_HELP_CONTENT_BOOK_OPEN)
     , aClosedBookImage(BMP_HELP_CONTENT_BOOK_CLOSED)
@@ -387,10 +387,10 @@ void IndexTabPage_Impl::SelectExecutableEntry()
 
 // class IndexTabPage_Impl -----------------------------------------------
 IndexTabPage_Impl::IndexTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_Impl* pIdxWin)
-    : HelpTabPage_Impl(pParent, pIdxWin, "HelpIndexPage", "sfx/ui/helpindexpage.ui")
-    , m_xIndexEntry(m_xBuilder->weld_entry("termentry"))
-    , m_xIndexList(m_xBuilder->weld_tree_view("termlist"))
-    , m_xOpenBtn(m_xBuilder->weld_button("display"))
+    : HelpTabPage_Impl(pParent, pIdxWin, u"HelpIndexPage"_ustr, u"sfx/ui/helpindexpage.ui"_ustr)
+    , m_xIndexEntry(m_xBuilder->weld_entry(u"termentry"_ustr))
+    , m_xIndexList(m_xBuilder->weld_tree_view(u"termlist"_ustr))
+    , m_xOpenBtn(m_xBuilder->weld_button(u"display"_ustr))
     , aFactoryIdle("sfx2 appl IndexTabPage_Impl Factory")
     , aAutoCompleteIdle("sfx2 appl IndexTabPage_Impl AutoComplete")
     , aKeywordTimer("sfx2::IndexTabPage_Impl aKeywordTimer")
@@ -894,14 +894,14 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, ActivateHdl, weld::ComboBox&, bool)
 // class SearchTabPage_Impl ----------------------------------------------
 
 SearchTabPage_Impl::SearchTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_Impl* pIdxWin)
-    : HelpTabPage_Impl(pParent, pIdxWin, "HelpSearchPage",
-        "sfx/ui/helpsearchpage.ui")
-    , m_xSearchED(m_xBuilder->weld_combo_box("search"))
-    , m_xSearchBtn(m_xBuilder->weld_button("find"))
-    , m_xFullWordsCB(m_xBuilder->weld_check_button("completewords"))
-    , m_xScopeCB(m_xBuilder->weld_check_button("headings"))
-    , m_xResultsLB(m_xBuilder->weld_tree_view("results"))
-    , m_xOpenBtn(m_xBuilder->weld_button("display"))
+    : HelpTabPage_Impl(pParent, pIdxWin, u"HelpSearchPage"_ustr,
+        u"sfx/ui/helpsearchpage.ui"_ustr)
+    , m_xSearchED(m_xBuilder->weld_combo_box(u"search"_ustr))
+    , m_xSearchBtn(m_xBuilder->weld_button(u"find"_ustr))
+    , m_xFullWordsCB(m_xBuilder->weld_check_button(u"completewords"_ustr))
+    , m_xScopeCB(m_xBuilder->weld_check_button(u"headings"_ustr))
+    , m_xResultsLB(m_xBuilder->weld_tree_view(u"results"_ustr))
+    , m_xOpenBtn(m_xBuilder->weld_button(u"display"_ustr))
     , xBreakIterator(vcl::unohelper::CreateBreakIterator())
 {
     m_xResultsLB->set_size_request(m_xResultsLB->get_approximate_digit_width() * 30,
@@ -1122,8 +1122,8 @@ IMPL_LINK(BookmarksTabPage_Impl, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
         return false;
 
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xBookmarksBox.get(), "sfx/ui/bookmarkmenu.ui"));
-    std::unique_ptr<weld::Menu> xMenu = xBuilder->weld_menu("menu");
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xBookmarksBox.get(), u"sfx/ui/bookmarkmenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xMenu = xBuilder->weld_menu(u"menu"_ustr);
 
     OUString sIdent = xMenu->popup_at_rect(m_xBookmarksBox.get(), ::tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
     if (!sIdent.isEmpty())
@@ -1145,10 +1145,10 @@ IMPL_LINK(BookmarksTabPage_Impl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 
 // class BookmarksTabPage_Impl -------------------------------------------
 BookmarksTabPage_Impl::BookmarksTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
-    : HelpTabPage_Impl(pParent, _pIdxWin, "HelpBookmarkPage",
-        "sfx/ui/helpbookmarkpage.ui")
-    , m_xBookmarksBox(m_xBuilder->weld_tree_view("bookmarks"))
-    , m_xBookmarksPB(m_xBuilder->weld_button("display"))
+    : HelpTabPage_Impl(pParent, _pIdxWin, u"HelpBookmarkPage"_ustr,
+        u"sfx/ui/helpbookmarkpage.ui"_ustr)
+    , m_xBookmarksBox(m_xBuilder->weld_tree_view(u"bookmarks"_ustr))
+    , m_xBookmarksPB(m_xBuilder->weld_button(u"display"_ustr))
 {
     m_xBookmarksBox->set_size_request(m_xBookmarksBox->get_approximate_digit_width() * 30,
                                       m_xBookmarksBox->get_height_rows(20));
@@ -1173,7 +1173,7 @@ BookmarksTabPage_Impl::~BookmarksTabPage_Impl()
     const sal_Int32 nCount = m_xBookmarksBox->n_children();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        SvtHistoryOptions::AppendItem(EHistoryType::HelpBookmarks, m_xBookmarksBox->get_id(i), "",
+        SvtHistoryOptions::AppendItem(EHistoryType::HelpBookmarks, m_xBookmarksBox->get_id(i), u""_ustr,
                                       m_xBookmarksBox->get_text(i), std::nullopt, std::nullopt);
     }
 
@@ -1248,7 +1248,7 @@ void SfxHelpWindow_Impl::loadHelpContent(const OUString& sHelpURL, bool bAddToHi
     {
         try
         {
-            Reference< XComponent > xContent = xLoader->loadComponentFromURL(sHelpURL, "_self", 0, Sequence< PropertyValue >());
+            Reference< XComponent > xContent = xLoader->loadComponentFromURL(sHelpURL, u"_self"_ustr, 0, Sequence< PropertyValue >());
             if (xContent.is())
             {
                 bSuccess = true;
@@ -1274,10 +1274,10 @@ IMPL_LINK(SfxHelpIndexWindow_Impl, ActivatePageHdl, const OUString&, rPage, void
 }
 
 SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl(SfxHelpWindow_Impl* _pParent, weld::Container* pContainer)
-    : m_xBuilder(Application::CreateBuilder(pContainer, "sfx/ui/helpcontrol.ui"))
-    , m_xContainer(m_xBuilder->weld_container("HelpControl"))
-    , m_xActiveLB(m_xBuilder->weld_combo_box("active"))
-    , m_xTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
+    : m_xBuilder(Application::CreateBuilder(pContainer, u"sfx/ui/helpcontrol.ui"_ustr))
+    , m_xContainer(m_xBuilder->weld_container(u"HelpControl"_ustr))
+    , m_xActiveLB(m_xBuilder->weld_combo_box(u"active"_ustr))
+    , m_xTabCtrl(m_xBuilder->weld_notebook(u"tabcontrol"_ustr))
     , aIdle("sfx2 appl SfxHelpIndexWindow_Impl")
     , aIndexKeywordLink(LINK(this, SfxHelpIndexWindow_Impl, KeywordHdl))
     , pParentWin(_pParent)
@@ -1289,7 +1289,7 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl(SfxHelpWindow_Impl* _pParent, w
     GetSearchPage();
     GetBookmarksPage();
 
-    OUString sPageId("index");
+    OUString sPageId(u"index"_ustr);
     SvtViewOptions aViewOpt( EViewType::TabDialog, CONFIGNAME_INDEXWIN );
     if ( aViewOpt.Exists() )
     {
@@ -1414,7 +1414,7 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, KeywordHdl, IndexTabPage_Impl&, void)
     if( !bIndex)
         bIndex = xIPage->HasKeywordIgnoreCase();
     // then set index or search page as current.
-    OUString sPageId = bIndex ? OUString("index") : OUString("find");
+    OUString sPageId = bIndex ? u"index"_ustr : u"find"_ustr;
     if (sPageId != m_xTabCtrl->get_current_page_ident())
         m_xTabCtrl->set_current_page(sPageId);
 
@@ -1598,9 +1598,9 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl(SfxHelpWindow_Impl* pHelpWin, wel
 
     Window( pParent, WB_CLIPCHILDREN | WB_TABSTOP | WB_DIALOGCONTROL ),
 
-    xToolBox            ( rBuilder.weld_toolbar("toolbar") ),
-    xOnStartupCB        ( rBuilder.weld_check_button("checkbutton") ),
-    xMenu               ( rBuilder.weld_menu("menu") ),
+    xToolBox            ( rBuilder.weld_toolbar(u"toolbar"_ustr) ),
+    xOnStartupCB        ( rBuilder.weld_check_button(u"checkbutton"_ustr) ),
+    xMenu               ( rBuilder.weld_menu(u"menu"_ustr) ),
     aSelectIdle         ( "sfx2 appl SfxHelpTextWindow_Impl Select" ),
     aIndexOnImage       ( BMP_HELP_TOOLBOX_INDEX_ON ),
     aIndexOffImage      ( BMP_HELP_TOOLBOX_INDEX_OFF ),
@@ -1616,19 +1616,19 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl(SfxHelpWindow_Impl* pHelpWin, wel
 {
     xFrame = Frame::create( ::comphelper::getProcessComponentContext() );
     xFrame->initialize( VCLUnoHelper::GetInterface ( pTextWin ) );
-    xFrame->setName( "OFFICE_HELP" );
+    xFrame->setName( u"OFFICE_HELP"_ustr );
     lcl_disableLayoutOfFrame(xFrame);
 
     xToolBox->set_help_id(HID_HELP_TOOLBOX);
 
-    xToolBox->set_item_tooltip_text("index", aIndexOffText );
-    xToolBox->set_item_help_id("index", HID_HELP_TOOLBOXITEM_INDEX);
-    xToolBox->set_item_help_id("backward", HID_HELP_TOOLBOXITEM_BACKWARD);
-    xToolBox->set_item_help_id("forward", HID_HELP_TOOLBOXITEM_FORWARD);
-    xToolBox->set_item_help_id("start", HID_HELP_TOOLBOXITEM_START);
-    xToolBox->set_item_help_id("print", HID_HELP_TOOLBOXITEM_PRINT);
-    xToolBox->set_item_help_id("bookmarks", HID_HELP_TOOLBOXITEM_BOOKMARKS );
-    xToolBox->set_item_help_id("searchdialog", HID_HELP_TOOLBOXITEM_SEARCHDIALOG);
+    xToolBox->set_item_tooltip_text(u"index"_ustr, aIndexOffText );
+    xToolBox->set_item_help_id(u"index"_ustr, HID_HELP_TOOLBOXITEM_INDEX);
+    xToolBox->set_item_help_id(u"backward"_ustr, HID_HELP_TOOLBOXITEM_BACKWARD);
+    xToolBox->set_item_help_id(u"forward"_ustr, HID_HELP_TOOLBOXITEM_FORWARD);
+    xToolBox->set_item_help_id(u"start"_ustr, HID_HELP_TOOLBOXITEM_START);
+    xToolBox->set_item_help_id(u"print"_ustr, HID_HELP_TOOLBOXITEM_PRINT);
+    xToolBox->set_item_help_id(u"bookmarks"_ustr, HID_HELP_TOOLBOXITEM_BOOKMARKS );
+    xToolBox->set_item_help_id(u"searchdialog"_ustr, HID_HELP_TOOLBOXITEM_SEARCHDIALOG);
 
     InitToolBoxImages();
     InitOnStartupBox();
@@ -1678,7 +1678,7 @@ bool SfxHelpTextWindow_Impl::HasSelection() const
 
 void SfxHelpTextWindow_Impl::InitToolBoxImages()
 {
-    xToolBox->set_item_icon_name("index", bIsIndexOn ? aIndexOffImage : aIndexOnImage);
+    xToolBox->set_item_icon_name(u"index"_ustr, bIsIndexOn ? aIndexOffImage : aIndexOnImage);
 }
 
 void SfxHelpTextWindow_Impl::InitOnStartupBox()
@@ -1819,9 +1819,9 @@ IMPL_LINK_NOARG(SfxHelpTextWindow_Impl, SelectHdl, Timer *, void)
             {
                 // create descriptor, set string and find all words
                 Reference < XSearchDescriptor > xSrchDesc = xSearchable->createSearchDescriptor();
-                xSrchDesc->setPropertyValue( "SearchRegularExpression", Any( true ) );
+                xSrchDesc->setPropertyValue( u"SearchRegularExpression"_ustr, Any( true ) );
                 if ( bIsFullWordSearch )
-                    xSrchDesc->setPropertyValue( "SearchWords", Any( true ) );
+                    xSrchDesc->setPropertyValue( u"SearchWords"_ustr, Any( true ) );
 
                 xSrchDesc->setSearchString( sfx2::PrepareSearchString( aSearchText, GetBreakIterator(), false ) );
                 Reference< XIndexAccess > xSelection = xSearchable->findAll( xSrchDesc );
@@ -1871,9 +1871,9 @@ void SfxHelpTextWindow_Impl::FindHdl(sfx2::SearchDialog* pDlg)
 
                 // create descriptor, set string and find all words
                 Reference < XSearchDescriptor > xSrchDesc = xSearchable->createSearchDescriptor();
-                xSrchDesc->setPropertyValue( "SearchWords", Any(pDlg->IsOnlyWholeWords()) );
-                xSrchDesc->setPropertyValue( "SearchCaseSensitive", Any(pDlg->IsMarchCase()) );
-                xSrchDesc->setPropertyValue( "SearchBackwards", Any(pDlg->IsSearchBackwards()) );
+                xSrchDesc->setPropertyValue( u"SearchWords"_ustr, Any(pDlg->IsOnlyWholeWords()) );
+                xSrchDesc->setPropertyValue( u"SearchCaseSensitive"_ustr, Any(pDlg->IsMarchCase()) );
+                xSrchDesc->setPropertyValue( u"SearchBackwards"_ustr, Any(pDlg->IsSearchBackwards()) );
                 xSrchDesc->setSearchString( pDlg->GetSearchText() );
                 Reference< XInterface > xSelection;
                 Reference< XTextRange > xCursor = getCursor();
@@ -1980,22 +1980,22 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             xMenu->clear();
 
             if (bIsIndexOn)
-                xMenu->append("index", aIndexOffText, BMP_HELP_TOOLBOX_INDEX_OFF);
+                xMenu->append(u"index"_ustr, aIndexOffText, BMP_HELP_TOOLBOX_INDEX_OFF);
             else
-                xMenu->append("index", aIndexOnText, BMP_HELP_TOOLBOX_INDEX_ON);
+                xMenu->append(u"index"_ustr, aIndexOnText, BMP_HELP_TOOLBOX_INDEX_ON);
 
-            xMenu->append_separator("separator1");
-            xMenu->append("backward", SfxResId(STR_HELP_BUTTON_PREV), BMP_HELP_TOOLBOX_PREV);
-            xMenu->set_sensitive("backward", xHelpWin->HasHistoryPredecessor());
-            xMenu->append("forward", SfxResId(STR_HELP_BUTTON_NEXT), BMP_HELP_TOOLBOX_NEXT);
-            xMenu->set_sensitive("forward", xHelpWin->HasHistorySuccessor());
-            xMenu->append("start", SfxResId(STR_HELP_BUTTON_START), BMP_HELP_TOOLBOX_START);
-            xMenu->append_separator("separator2");
-            xMenu->append("print", SfxResId(STR_HELP_BUTTON_PRINT), BMP_HELP_TOOLBOX_PRINT);
-            xMenu->append("bookmarks", SfxResId(STR_HELP_BUTTON_ADDBOOKMARK), BMP_HELP_TOOLBOX_BOOKMARKS);
-            xMenu->append("searchdialog", SfxResId(STR_HELP_BUTTON_SEARCHDIALOG), BMP_HELP_TOOLBOX_SEARCHDIALOG);
-            xMenu->append_separator("separator3");
-            xMenu->append_check("selectionmode", SfxResId(STR_HELP_MENU_TEXT_SELECTION_MODE));
+            xMenu->append_separator(u"separator1"_ustr);
+            xMenu->append(u"backward"_ustr, SfxResId(STR_HELP_BUTTON_PREV), BMP_HELP_TOOLBOX_PREV);
+            xMenu->set_sensitive(u"backward"_ustr, xHelpWin->HasHistoryPredecessor());
+            xMenu->append(u"forward"_ustr, SfxResId(STR_HELP_BUTTON_NEXT), BMP_HELP_TOOLBOX_NEXT);
+            xMenu->set_sensitive(u"forward"_ustr, xHelpWin->HasHistorySuccessor());
+            xMenu->append(u"start"_ustr, SfxResId(STR_HELP_BUTTON_START), BMP_HELP_TOOLBOX_START);
+            xMenu->append_separator(u"separator2"_ustr);
+            xMenu->append(u"print"_ustr, SfxResId(STR_HELP_BUTTON_PRINT), BMP_HELP_TOOLBOX_PRINT);
+            xMenu->append(u"bookmarks"_ustr, SfxResId(STR_HELP_BUTTON_ADDBOOKMARK), BMP_HELP_TOOLBOX_BOOKMARKS);
+            xMenu->append(u"searchdialog"_ustr, SfxResId(STR_HELP_BUTTON_SEARCHDIALOG), BMP_HELP_TOOLBOX_SEARCHDIALOG);
+            xMenu->append_separator(u"separator3"_ustr);
+            xMenu->append_check(u"selectionmode"_ustr, SfxResId(STR_HELP_MENU_TEXT_SELECTION_MODE));
             URL aURL;
             aURL.Complete = ".uno:SelectTextMode";
             Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
@@ -2008,16 +2008,16 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 FeatureStateEvent rEvent = pStateListener->GetStateEvent();
                 bool bCheck = false;
                 rEvent.State >>= bCheck;
-                xMenu->set_active("selectionmode", bCheck);
+                xMenu->set_active(u"selectionmode"_ustr, bCheck);
             }
-            xMenu->append_separator("separator4");
-            xMenu->append("copy", SfxResId(STR_HELP_MENU_TEXT_COPY), BMP_HELP_TOOLBOX_COPY);
-            xMenu->set_sensitive("copy", HasSelection());
+            xMenu->append_separator(u"separator4"_ustr);
+            xMenu->append(u"copy"_ustr, SfxResId(STR_HELP_MENU_TEXT_COPY), BMP_HELP_TOOLBOX_COPY);
+            xMenu->set_sensitive(u"copy"_ustr, HasSelection());
 
             if ( bIsDebug )
             {
-                xMenu->append_separator("separator5");
-                xMenu->append("sourceview", SfxResId(STR_HELP_BUTTON_SOURCEVIEW));
+                xMenu->append_separator(u"separator5"_ustr);
+                xMenu->append(u"sourceview"_ustr, SfxResId(STR_HELP_BUTTON_SOURCEVIEW));
             }
 
             int x, y, width, height;
@@ -2097,13 +2097,13 @@ void SfxHelpTextWindow_Impl::ToggleIndex( bool bOn )
     bIsIndexOn = bOn;
     if ( bIsIndexOn )
     {
-        xToolBox->set_item_icon_name("index", aIndexOffImage);
-        xToolBox->set_item_tooltip_text("index", aIndexOffText);
+        xToolBox->set_item_icon_name(u"index"_ustr, aIndexOffImage);
+        xToolBox->set_item_tooltip_text(u"index"_ustr, aIndexOffText);
     }
     else
     {
-        xToolBox->set_item_icon_name("index", aIndexOnImage);
-        xToolBox->set_item_tooltip_text("index", aIndexOnText);
+        xToolBox->set_item_icon_name(u"index"_ustr, aIndexOnImage);
+        xToolBox->set_item_tooltip_text(u"index"_ustr, aIndexOnText);
     }
 }
 
@@ -2134,18 +2134,18 @@ void SfxHelpTextWindow_Impl::SetPageStyleHeaderOff() const
                     Reference < XText > xText = xRange->getText();
                     Reference < XPropertySet > xProps( xText->createTextCursorByRange( xRange ), UNO_QUERY );
                     OUString sStyleName;
-                    if ( xProps->getPropertyValue( "PageStyleName" ) >>= sStyleName )
+                    if ( xProps->getPropertyValue( u"PageStyleName"_ustr ) >>= sStyleName )
                     {
                         Reference < XStyleFamiliesSupplier > xStyles( xController->getModel(), UNO_QUERY );
                         Reference < XNameContainer > xContainer;
-                        if ( xStyles->getStyleFamilies()->getByName( "PageStyles" )
+                        if ( xStyles->getStyleFamilies()->getByName( u"PageStyles"_ustr )
                              >>= xContainer )
                         {
                             Reference < XStyle > xStyle;
                             if ( xContainer->getByName( sStyleName ) >>= xStyle )
                             {
                                 Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
-                                xPropSet->setPropertyValue( "HeaderIsOn",  Any( false ) );
+                                xPropSet->setPropertyValue( u"HeaderIsOn"_ustr,  Any( false ) );
 
                                 Reference< XModifiable > xReset(xStyles, UNO_QUERY);
                                 xReset->setModified(false);
@@ -2381,11 +2381,11 @@ void SfxHelpWindow_Impl::openDone(std::u16string_view sURL    ,
             Reference < XViewSettingsSupplier > xSettings( xController, UNO_QUERY );
             Reference < XPropertySet > xViewProps = xSettings->getViewSettings();
             Reference< XPropertySetInfo > xInfo = xViewProps->getPropertySetInfo();
-            xViewProps->setPropertyValue( "ShowContentTips", Any( false ) );
-            xViewProps->setPropertyValue( "ShowGraphics", Any( true ) );
-            xViewProps->setPropertyValue( "ShowTables", Any( true ) );
-            xViewProps->setPropertyValue( "HelpURL", Any( OUString("HID:SFX2_HID_HELP_ONHELP") ) );
-            OUString sProperty( "IsExecuteHyperlinks" );
+            xViewProps->setPropertyValue( u"ShowContentTips"_ustr, Any( false ) );
+            xViewProps->setPropertyValue( u"ShowGraphics"_ustr, Any( true ) );
+            xViewProps->setPropertyValue( u"ShowTables"_ustr, Any( true ) );
+            xViewProps->setPropertyValue( u"HelpURL"_ustr, Any( u"HID:SFX2_HID_HELP_ONHELP"_ustr ) );
+            OUString sProperty( u"IsExecuteHyperlinks"_ustr );
             if ( xInfo->hasPropertyByName( sProperty ) )
                 xViewProps->setPropertyValue( sProperty, Any( true ) );
             xController->restoreViewData(Any());
@@ -2429,11 +2429,11 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
 
     SetHelpId( HID_HELP_WINDOW );
 
-    m_xBuilder = Application::CreateInterimBuilder(m_xBox.get(), "sfx/ui/helpwindow.ui", false);
-    m_xContainer = m_xBuilder->weld_paned("HelpWindow");
+    m_xBuilder = Application::CreateInterimBuilder(m_xBox.get(), u"sfx/ui/helpwindow.ui"_ustr, false);
+    m_xContainer = m_xBuilder->weld_paned(u"HelpWindow"_ustr);
     m_xContainer->connect_size_allocate(LINK(this, SfxHelpWindow_Impl, ResizeHdl));
-    m_xHelpPaneWindow = m_xBuilder->weld_container("helppanewindow");
-    m_xHelpTextWindow = m_xBuilder->weld_container("helptextwindow");
+    m_xHelpPaneWindow = m_xBuilder->weld_container(u"helppanewindow"_ustr);
+    m_xHelpTextWindow = m_xBuilder->weld_container(u"helptextwindow"_ustr);
     m_xHelpTextXWindow = m_xHelpTextWindow->CreateChildFrame();
 
     pHelpInterceptor->InitWaiter( this );
@@ -2630,8 +2630,8 @@ void SfxHelpWindow_Impl::CloseWindow()
 
 void SfxHelpWindow_Impl::UpdateToolbox()
 {
-    pTextWin->GetToolBox().set_item_sensitive("backward", pHelpInterceptor->HasHistoryPred());
-    pTextWin->GetToolBox().set_item_sensitive("forward", pHelpInterceptor->HasHistorySucc());
+    pTextWin->GetToolBox().set_item_sensitive(u"backward"_ustr, pHelpInterceptor->HasHistoryPred());
+    pTextWin->GetToolBox().set_item_sensitive(u"forward"_ustr, pHelpInterceptor->HasHistorySucc());
 }
 
 
@@ -2649,9 +2649,9 @@ bool SfxHelpWindow_Impl::HasHistorySuccessor() const
 // class SfxAddHelpBookmarkDialog_Impl -----------------------------------
 
 SfxAddHelpBookmarkDialog_Impl::SfxAddHelpBookmarkDialog_Impl(weld::Widget* pParent, bool bRename)
-    : GenericDialogController(pParent, "sfx/ui/bookmarkdialog.ui", "BookmarkDialog")
-    , m_xTitleED(m_xBuilder->weld_entry("entry"))
-    , m_xAltTitle(m_xBuilder->weld_label("alttitle"))
+    : GenericDialogController(pParent, u"sfx/ui/bookmarkdialog.ui"_ustr, u"BookmarkDialog"_ustr)
+    , m_xTitleED(m_xBuilder->weld_entry(u"entry"_ustr))
+    , m_xAltTitle(m_xBuilder->weld_label(u"alttitle"_ustr))
 {
     if (bRename)
         m_xDialog->set_title(m_xAltTitle->get_label());

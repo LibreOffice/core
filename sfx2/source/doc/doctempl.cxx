@@ -833,7 +833,7 @@ bool SfxDocumentTemplates::CopyFrom
     {
         uno::Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
 
-        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("Hidden", true) };
+        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(u"Hidden"_ustr, true) };
 
         INetURLObject   aTemplURL( rName );
         uno::Reference< XDocumentPropertiesSupplier > xDocPropsSupplier;
@@ -842,7 +842,7 @@ bool SfxDocumentTemplates::CopyFrom
         {
             xStorable.set(
                 xDesktop->loadComponentFromURL( aTemplURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),
-                                                "_blank",
+                                                u"_blank"_ustr,
                                                 0,
                                                 aArgs ),
                 UNO_QUERY );
@@ -1066,7 +1066,7 @@ bool SfxDocumentTemplates::SetName( const OUString& rName, sal_uInt16 nRegion, s
         if ( xTemplates->renameGroup( pRegion->GetTitle(), rName ) )
         {
             pRegion->SetTitle( rName );
-            pRegion->SetHierarchyURL( "" );
+            pRegion->SetHierarchyURL( u""_ustr );
             return true;
         }
     }
@@ -1085,8 +1085,8 @@ bool SfxDocumentTemplates::SetName( const OUString& rName, sal_uInt16 nRegion, s
                                          rName ) )
         {
             pEntry->SetTitle( rName );
-            pEntry->SetTargetURL( "" );
-            pEntry->SetHierarchyURL( "" );
+            pEntry->SetTargetURL( u""_ustr );
+            pEntry->SetHierarchyURL( u""_ustr );
             return true;
         }
     }

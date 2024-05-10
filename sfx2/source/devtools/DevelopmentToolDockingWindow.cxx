@@ -27,11 +27,11 @@ using namespace css;
 DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBindings,
                                                            SfxChildWindow* pChildWindow,
                                                            vcl::Window* pParent)
-    : SfxDockingWindow(pInputBindings, pChildWindow, pParent, "DevelopmentTool",
-                       "sfx/ui/developmenttool.ui")
+    : SfxDockingWindow(pInputBindings, pChildWindow, pParent, u"DevelopmentTool"_ustr,
+                       u"sfx/ui/developmenttool.ui"_ustr)
     , mpObjectInspectorWidgets(new ObjectInspectorWidgets(m_xBuilder))
-    , mpDocumentModelTreeView(m_xBuilder->weld_tree_view("leftside_treeview_id"))
-    , mpDomToolbar(m_xBuilder->weld_toolbar("dom_toolbar"))
+    , mpDocumentModelTreeView(m_xBuilder->weld_tree_view(u"leftside_treeview_id"_ustr))
+    , mpDomToolbar(m_xBuilder->weld_toolbar(u"dom_toolbar"_ustr))
     , maDocumentModelTreeHandler(
           mpDocumentModelTreeView,
           pInputBindings->GetDispatcher()->GetFrame()->GetObjectShell()->GetBaseModel())
@@ -60,7 +60,7 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
 IMPL_LINK(DevelopmentToolDockingWindow, DocumentModelTreeViewSelectionHandler, weld::TreeView&,
           rView, void)
 {
-    if (mpDomToolbar->get_item_active("dom_current_selection_toggle"))
+    if (mpDomToolbar->get_item_active(u"dom_current_selection_toggle"_ustr))
         return;
 
     OUString sID = rView.get_selected_id();
@@ -108,7 +108,7 @@ void DevelopmentToolDockingWindow::dispose()
 
 void DevelopmentToolDockingWindow::updateSelection()
 {
-    bool bActive = mpDomToolbar->get_item_active("dom_current_selection_toggle");
+    bool bActive = mpDomToolbar->get_item_active(u"dom_current_selection_toggle"_ustr);
     if (bActive)
     {
         maObjectInspectorTreeHandler.introspect(mxCurrentSelection);
@@ -148,12 +148,12 @@ void DevelopmentToolDockingWindow::changeToCurrentSelection()
             if (xInterface.is())
             {
                 maObjectInspectorTreeHandler.introspect(xInterface);
-                mpDomToolbar->set_item_active("dom_current_selection_toggle", true);
+                mpDomToolbar->set_item_active(u"dom_current_selection_toggle"_ustr, true);
                 return;
             }
         }
     }
-    mpDomToolbar->set_item_active("dom_current_selection_toggle", false);
+    mpDomToolbar->set_item_active(u"dom_current_selection_toggle"_ustr, false);
     maObjectInspectorTreeHandler.introspect(mxRoot);
 }
 

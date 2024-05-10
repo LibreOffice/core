@@ -156,7 +156,7 @@ rtl::Reference<SidebarController> SidebarController::create(SidebarDockingWindow
     // Listen for theme property changes.
     instance->mxThemePropertySet = Theme::GetPropertySet();
     instance->mxThemePropertySet->addPropertyChangeListener(
-        "",
+        u""_ustr,
         static_cast<css::beans::XPropertyChangeListener*>(instance.get()));
 
     // Get the dispatch object as preparation to listen for changes of
@@ -256,8 +256,8 @@ namespace
     {
     public:
         CloseIndicator(vcl::Window* pParent)
-            : InterimItemWindow(pParent, "svt/ui/fixedimagecontrol.ui", "FixedImageControl")
-            , m_xWidget(m_xBuilder->weld_image("image"))
+            : InterimItemWindow(pParent, u"svt/ui/fixedimagecontrol.ui"_ustr, u"FixedImageControl"_ustr)
+            , m_xWidget(m_xBuilder->weld_image(u"image"_ustr))
         {
             InitControlBase(m_xWidget.get());
 
@@ -320,7 +320,7 @@ void SidebarController::disposing(std::unique_lock<std::mutex>&)
 
     if (mxThemePropertySet.is())
         mxThemePropertySet->removePropertyChangeListener(
-            "",
+            u""_ustr,
             static_cast<css::beans::XPropertyChangeListener*>(this));
 
     if (mpParentWindow != nullptr)
@@ -1012,17 +1012,17 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
 
        // Create the XUIElement.
         ::comphelper::NamedValueCollection aCreationArguments;
-        aCreationArguments.put("Frame", Any(mxFrame));
-        aCreationArguments.put("ParentWindow", Any(rxWindow));
+        aCreationArguments.put(u"Frame"_ustr, Any(mxFrame));
+        aCreationArguments.put(u"ParentWindow"_ustr, Any(rxWindow));
         SidebarDockingWindow* pSfxDockingWindow = mpParentWindow.get();
         if (pSfxDockingWindow != nullptr)
-            aCreationArguments.put("SfxBindings", Any(reinterpret_cast<sal_uInt64>(&pSfxDockingWindow->GetBindings())));
-        aCreationArguments.put("Theme", Theme::GetPropertySet());
-        aCreationArguments.put("Sidebar", Any(Reference<ui::XSidebar>(static_cast<ui::XSidebar*>(this))));
+            aCreationArguments.put(u"SfxBindings"_ustr, Any(reinterpret_cast<sal_uInt64>(&pSfxDockingWindow->GetBindings())));
+        aCreationArguments.put(u"Theme"_ustr, Theme::GetPropertySet());
+        aCreationArguments.put(u"Sidebar"_ustr, Any(Reference<ui::XSidebar>(static_cast<ui::XSidebar*>(this))));
         if (bWantsCanvas)
         {
             Reference<rendering::XSpriteCanvas> xCanvas (VCLUnoHelper::GetWindow(rxWindow)->GetOutDev()->GetSpriteCanvas());
-            aCreationArguments.put("Canvas", Any(xCanvas));
+            aCreationArguments.put(u"Canvas"_ustr, Any(xCanvas));
         }
 
         if (mxCurrentController.is())
@@ -1030,13 +1030,13 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
             OUString aModule = Tools::GetModuleName(mxCurrentController);
             if (!aModule.isEmpty())
             {
-                aCreationArguments.put("Module", Any(aModule));
+                aCreationArguments.put(u"Module"_ustr, Any(aModule));
             }
-            aCreationArguments.put("Controller", Any(mxCurrentController));
+            aCreationArguments.put(u"Controller"_ustr, Any(mxCurrentController));
         }
 
-        aCreationArguments.put("ApplicationName", Any(rContext.msApplication));
-        aCreationArguments.put("ContextName", Any(rContext.msContext));
+        aCreationArguments.put(u"ApplicationName"_ustr, Any(rContext.msApplication));
+        aCreationArguments.put(u"ContextName"_ustr, Any(rContext.msContext));
 
         Reference<ui::XUIElement> xUIElement(
             xUIElementFactory->createUIElement(
@@ -1165,11 +1165,11 @@ void SidebarController::PopulatePopupMenus(weld::Menu& rMenu, weld::Menu& rCusto
         else
             bHideUnLock = false;
     }
-    rMenu.set_visible("locktaskpanel", !bHideLock);
-    rMenu.set_visible("unlocktaskpanel", !bHideUnLock);
+    rMenu.set_visible(u"locktaskpanel"_ustr, !bHideLock);
+    rMenu.set_visible(u"unlocktaskpanel"_ustr, !bHideUnLock);
 
     // No Restore or Customize options for LoKit.
-    rMenu.set_visible("customization", !comphelper::LibreOfficeKit::isActive());
+    rMenu.set_visible(u"customization"_ustr, !comphelper::LibreOfficeKit::isActive());
 }
 
 IMPL_LINK(SidebarController, OnMenuItemSelected, const OUString&, rCurItemId, void)
@@ -1188,7 +1188,7 @@ IMPL_LINK(SidebarController, OnMenuItemSelected, const OUString&, rCurItemId, vo
     {
         if (!comphelper::LibreOfficeKit::isActive())
         {
-            const util::URL aURL(Tools::GetURL(".uno:Sidebar"));
+            const util::URL aURL(Tools::GetURL(u".uno:Sidebar"_ustr));
             Reference<frame::XDispatch> xDispatch(Tools::GetDispatch(mxFrame, aURL));
             if (xDispatch.is())
                 xDispatch->dispatch(aURL, Sequence<beans::PropertyValue>());

@@ -154,17 +154,17 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
     {
         uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
         uno::Reference< uno::XInterface > xConfig = ::comphelper::ConfigurationHelper::openConfig(
-            ::comphelper::getProcessComponentContext(), "/org.openoffice.Setup", ::comphelper::EConfigurationModes::Standard );
+            ::comphelper::getProcessComponentContext(), u"/org.openoffice.Setup"_ustr, ::comphelper::EConfigurationModes::Standard );
 
         OUString aActualFilter;
-        ::comphelper::ConfigurationHelper::readRelativeKey( xConfig, sConfPath, "ooSetupFactoryActualFilter" ) >>= aActualFilter;
+        ::comphelper::ConfigurationHelper::readRelativeKey( xConfig, sConfPath, u"ooSetupFactoryActualFilter"_ustr ) >>= aActualFilter;
         bool bChanged(false);
         ::comphelper::ConfigurationHelper::readRelativeKey( xConfig, sConfPath, PROP_DEF_TEMPL_CHANGED ) >>= bChanged;
 
         uno::Reference< container::XNameAccess > xFilterFactory(
-            xFactory->createInstance( "com.sun.star.document.FilterFactory" ), uno::UNO_QUERY_THROW );
+            xFactory->createInstance( u"com.sun.star.document.FilterFactory"_ustr ), uno::UNO_QUERY_THROW );
         uno::Reference< container::XNameAccess > xTypeDetection(
-            xFactory->createInstance( "com.sun.star.document.TypeDetection" ), uno::UNO_QUERY_THROW );
+            xFactory->createInstance( u"com.sun.star.document.TypeDetection"_ustr ), uno::UNO_QUERY_THROW );
 
         OUString aActualFilterTypeName;
         uno::Sequence< beans::PropertyValue > aActuralFilterData;
@@ -174,7 +174,7 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
                 rProp.Value >>= aActualFilterTypeName;
         ::comphelper::SequenceAsHashMap aProps1( xTypeDetection->getByName( aActualFilterTypeName ) );
         uno::Sequence< OUString > aAllExt =
-            aProps1.getUnpackedValueOrDefault("Extensions", uno::Sequence< OUString >() );
+            aProps1.getUnpackedValueOrDefault(u"Extensions"_ustr, uno::Sequence< OUString >() );
         //To-do: check if aAllExt is empty first
         const OUString aExt = DEF_TPL_STR + aAllExt[0];
 
@@ -200,12 +200,12 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
             uno::Reference< document::XTypeDetection > xTypeDetector( xTypeDetection, uno::UNO_QUERY );
             ::comphelper::SequenceAsHashMap aProps2( xTypeDetection->getByName( xTypeDetector->queryTypeByURL( rTemplateName ) ) );
             OUString aFilterName =
-                aProps2.getUnpackedValueOrDefault("PreferredFilter", OUString() );
+                aProps2.getUnpackedValueOrDefault(u"PreferredFilter"_ustr, OUString() );
 
             uno::Sequence< beans::PropertyValue > aArgs{
-                comphelper::makePropertyValue("FilterName", aFilterName),
-                comphelper::makePropertyValue("AsTemplate", true),
-                comphelper::makePropertyValue("URL", rTemplateName)
+                comphelper::makePropertyValue(u"FilterName"_ustr, aFilterName),
+                comphelper::makePropertyValue(u"AsTemplate"_ustr, true),
+                comphelper::makePropertyValue(u"URL"_ustr, rTemplateName)
             };
 
             uno::Reference< frame::XLoadable > xLoadable( xFactory->createInstance( rServiceName ), uno::UNO_QUERY );
@@ -311,7 +311,7 @@ OUString SfxObjectFactory::GetModuleName() const
             css::frame::ModuleManager::create(xContext));
 
         ::comphelper::SequenceAsHashMap aPropSet( xModuleManager->getByName(GetDocumentServiceName()) );
-        return aPropSet.getUnpackedValueOrDefault("ooSetupFactoryUIName", OUString());
+        return aPropSet.getUnpackedValueOrDefault(u"ooSetupFactoryUIName"_ustr, OUString());
     }
     catch(const css::uno::RuntimeException&)
     {

@@ -50,7 +50,7 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
              Deck* pDeck,
              std::function<Context()> aContextAccess,
              const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : mxBuilder(Application::CreateBuilder(pParentWindow, "sfx/ui/panel.ui", false, reinterpret_cast<sal_uInt64>(SfxViewShell::Current())))
+    : mxBuilder(Application::CreateBuilder(pParentWindow, u"sfx/ui/panel.ui"_ustr, false, reinterpret_cast<sal_uInt64>(SfxViewShell::Current())))
     , msPanelId(rPanelDescriptor.msId)
     , msTitle(rPanelDescriptor.msTitle)
     , mbIsTitleBarOptional(rPanelDescriptor.mbIsTitleBarOptional)
@@ -61,9 +61,9 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
     , mxFrame(rxFrame)
     , mpParentWindow(pParentWindow)
     , mxDeck(pDeck)
-    , mxContainer(mxBuilder->weld_box("Panel"))
+    , mxContainer(mxBuilder->weld_box(u"Panel"_ustr))
     , mxTitleBar(new PanelTitleBar(rPanelDescriptor.msTitle, *mxBuilder, this))
-    , mxContents(mxBuilder->weld_box("contents"))
+    , mxContents(mxBuilder->weld_box(u"contents"_ustr))
 {
     mxContents->set_visible(mbIsExpanded);
     mxContainer->connect_get_property_tree(LINK(this, Panel, DumpAsPropertyTreeHdl));

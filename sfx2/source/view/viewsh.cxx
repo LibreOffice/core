@@ -310,13 +310,13 @@ OUString selectionEventTypeToString(sal_Int16 nEventId)
     switch(nEventId)
     {
         case AccessibleEventId::SELECTION_CHANGED:
-            return "create";
+            return u"create"_ustr;
         case AccessibleEventId::SELECTION_CHANGED_ADD:
-            return "add";
+            return u"add"_ustr;
         case AccessibleEventId::SELECTION_CHANGED_REMOVE:
-            return "remove";
+            return u"remove"_ustr;
         default:
-            return "";
+            return u""_ustr;
     }
 }
 
@@ -621,7 +621,7 @@ void aboutTextFormatting(std::string msg, const uno::Reference<css::accessibilit
         if (nSize)
         {
             OUString sValue;
-            OUString sAttributes = "{ ";
+            OUString sAttributes = u"{ "_ustr;
             for (const auto& attribute: aRunAttributeList)
             {
                 if (attribute.Name.isEmpty())
@@ -1766,7 +1766,7 @@ void LOKDocumentFocusListener::attachRecursive(
                 selectionHasToBeNotified(xContext))
             {
                 uno::Reference< accessibility::XAccessible > xAccObj(xContext, uno::UNO_QUERY);
-                onShapeSelectionChanged(xAccObj, "create");
+                onShapeSelectionChanged(xAccObj, u"create"_ustr);
             }
 
             sal_Int64 nmax = xContext->getAccessibleChildCount();
@@ -1873,7 +1873,7 @@ void LOKDocumentFocusListener::detachRecursive(
             selectionHasToBeNotified(xContext))
         {
             uno::Reference< accessibility::XAccessible > xAccObj(xContext, uno::UNO_QUERY);
-            onShapeSelectionChanged(xAccObj, "delete");
+            onShapeSelectionChanged(xAccObj, u"delete"_ustr);
         }
 
         if (bForce || !(nStateSet & accessibility::AccessibleStateType::MANAGES_DESCENDANTS))
@@ -1930,8 +1930,8 @@ static OUString impl_retrieveFilterNameFromTypeAndModule(
 {
     // Retrieve filter from type
     css::uno::Sequence< css::beans::NamedValue > aQuery {
-        { "Type", css::uno::Any( rType ) },
-        { "DocumentService", css::uno::Any( rModuleIdentifier ) }
+        { u"Type"_ustr, css::uno::Any( rType ) },
+        { u"DocumentService"_ustr, css::uno::Any( rModuleIdentifier ) }
     };
 
     css::uno::Reference< css::container::XEnumeration > xEnumeration =
@@ -1942,12 +1942,12 @@ static OUString impl_retrieveFilterNameFromTypeAndModule(
     {
         ::comphelper::SequenceAsHashMap aFilterPropsHM( xEnumeration->nextElement() );
         sal_Int32 nFilterFlags = aFilterPropsHM.getUnpackedValueOrDefault(
-            "Flags",
+            u"Flags"_ustr,
             sal_Int32( 0 ) );
 
         if ( nFilterFlags & nFlags )
         {
-            aFoundFilterName = aFilterPropsHM.getUnpackedValueOrDefault("Name", OUString());
+            aFoundFilterName = aFilterPropsHM.getUnpackedValueOrDefault(u"Name"_ustr, OUString());
             break;
         }
     }
@@ -2064,18 +2064,18 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             {
                 try
                 {
-                    Any aValue = xPropSet->getPropertyValue("LayoutManager");
+                    Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
                     aValue >>= xLayoutManager;
                     if ( xLayoutManager.is() )
                     {
-                        uno::Reference< ui::XUIElement > xElement = xLayoutManager->getElement( "private:resource/toolbar/textobjectbar" );
+                        uno::Reference< ui::XUIElement > xElement = xLayoutManager->getElement( u"private:resource/toolbar/textobjectbar"_ustr );
                         if(!xElement.is())
                         {
-                            xElement = xLayoutManager->getElement( "private:resource/toolbar/frameobjectbar" );
+                            xElement = xLayoutManager->getElement( u"private:resource/toolbar/frameobjectbar"_ustr );
                         }
                         if(!xElement.is())
                         {
-                            xElement = xLayoutManager->getElement( "private:resource/toolbar/oleobjectbar" );
+                            xElement = xLayoutManager->getElement( u"private:resource/toolbar/oleobjectbar"_ustr );
                         }
                         if(xElement.is())
                         {
@@ -2126,7 +2126,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             if ( pMailRecipient )
             {
                 OUString aRecipient( pMailRecipient->GetValue() );
-                OUString aMailToStr("mailto:");
+                OUString aMailToStr(u"mailto:"_ustr);
 
                 if ( aRecipient.startsWith( aMailToStr ) )
                     aRecipient = aRecipient.copy( aMailToStr.getLength() );
@@ -2142,7 +2142,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             if ( nId == SID_MAIL_SENDDOC )
                 eResult = aModel.SaveAndSend( xFrame, OUString() );
             else if ( nId == SID_MAIL_SENDDOCASPDF )
-                eResult = aModel.SaveAndSend( xFrame, "pdf_Portable_Document_Format");
+                eResult = aModel.SaveAndSend( xFrame, u"pdf_Portable_Document_Format"_ustr);
             else if ( nId == SID_MAIL_SENDDOCASMS )
             {
                 aDocType = impl_searchFormatTypeForApp(xFrame, E_MS_DOC);
@@ -2228,7 +2228,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             if ( xModel.is() && xStorable.is() )
             {
                 OUString aFilterName;
-                OUString aTypeName( "generic_HTML" );
+                OUString aTypeName( u"generic_HTML"_ustr );
                 OUString aFileName;
 
                 OUString aLocation = xStorable->getLocation();
@@ -2238,7 +2238,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 bool bHasLocation = !aLocation.isEmpty() && !bPrivateProtocol;
 
                 css::uno::Reference< css::container::XContainerQuery > xContainerQuery(
-                    xSMGR->createInstance( "com.sun.star.document.FilterFactory" ),
+                    xSMGR->createInstance( u"com.sun.star.document.FilterFactory"_ustr ),
                     css::uno::UNO_QUERY_THROW );
 
                 // Retrieve filter from type
@@ -2249,7 +2249,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 {
                     // Draw/Impress uses a different type. 2nd chance try to use alternative type name
                     aFilterName = impl_retrieveFilterNameFromTypeAndModule(
-                        xContainerQuery, "graphic_HTML", aModule, nFilterFlags );
+                        xContainerQuery, u"graphic_HTML"_ustr, aModule, nFilterFlags );
                 }
 
                 // No filter found => error
@@ -2292,7 +2292,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 OUString aFileURL = aFilePathObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
                 css::uno::Sequence< css::beans::PropertyValue > aArgs{
-                    comphelper::makePropertyValue("FilterName", aFilterName)
+                    comphelper::makePropertyValue(u"FilterName"_ustr, aFilterName)
                 };
 
                 // Store document in the html format
@@ -2392,7 +2392,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                     {
                         uno::Reference < frame::XFrame > xFrame( rFrame.GetFrame().GetFrameInterface() );
 
-                        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:PrintDefault",
+                        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(u".uno:PrintDefault"_ustr,
                             vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
                         OUString val = vcl::CommandInfoProvider::GetLabelForCommand(aProperties) +
                                         " (" + aPrinterName + ")";

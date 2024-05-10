@@ -158,19 +158,20 @@ void SvxCharView::InsertCharToDoc()
     if (GetText().isEmpty())
         return;
 
-    uno::Sequence<beans::PropertyValue> aArgs{ comphelper::makePropertyValue("Symbols", GetText()),
-                                               comphelper::makePropertyValue(
-                                                   "FontName", maFont.GetFamilyName()) };
+    uno::Sequence<beans::PropertyValue> aArgs{
+        comphelper::makePropertyValue(u"Symbols"_ustr, GetText()),
+        comphelper::makePropertyValue(u"FontName"_ustr, maFont.GetFamilyName())
+    };
 
-    comphelper::dispatchCommand(".uno:InsertSymbol", aArgs);
+    comphelper::dispatchCommand(u".uno:InsertSymbol"_ustr, aArgs);
 }
 
 void SvxCharView::createContextMenu(const Point& rPosition)
 {
     weld::DrawingArea* pDrawingArea = GetDrawingArea();
     std::unique_ptr<weld::Builder> xBuilder(
-        Application::CreateBuilder(pDrawingArea, "sfx/ui/charviewmenu.ui"));
-    std::unique_ptr<weld::Menu> xItemMenu(xBuilder->weld_menu("charviewmenu"));
+        Application::CreateBuilder(pDrawingArea, u"sfx/ui/charviewmenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xItemMenu(xBuilder->weld_menu(u"charviewmenu"_ustr));
     ContextMenuSelect(
         xItemMenu->popup_at_rect(pDrawingArea, tools::Rectangle(rPosition, Size(1, 1))));
     Invalidate();

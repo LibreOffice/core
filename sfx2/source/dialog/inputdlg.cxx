@@ -10,11 +10,11 @@
 #include <sfx2/inputdlg.hxx>
 
 InputDialog::InputDialog(weld::Widget* pParent, const OUString& rLabelText)
-    : GenericDialogController(pParent, "sfx/ui/inputdialog.ui", "InputDialog")
-    , m_xEntry(m_xBuilder->weld_entry("entry"))
-    , m_xLabel(m_xBuilder->weld_label("label"))
-    , m_xHelp(m_xBuilder->weld_button("help"))
-    , m_xOk(m_xBuilder->weld_button("ok"))
+    : GenericDialogController(pParent, u"sfx/ui/inputdialog.ui"_ustr, u"InputDialog"_ustr)
+    , m_xEntry(m_xBuilder->weld_entry(u"entry"_ustr))
+    , m_xLabel(m_xBuilder->weld_label(u"label"_ustr))
+    , m_xHelp(m_xBuilder->weld_button(u"help"_ustr))
+    , m_xOk(m_xBuilder->weld_button(u"ok"_ustr))
 {
     m_xLabel->set_label(rLabelText);
 }
@@ -41,7 +41,7 @@ void InputDialog::SetEntryMessageType(weld::EntryMessageType aType)
     else
     {
         m_xOk->set_sensitive(true);
-        SetTooltip("");
+        SetTooltip(u""_ustr);
     }
 }
 

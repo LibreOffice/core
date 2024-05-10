@@ -61,7 +61,7 @@ css::uno::Reference<css::graphic::XGraphic> Tools::GetImage(
              Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
              Reference<graphic::XGraphicProvider> xProvider(graphic::GraphicProvider::create(xContext));
              ::comphelper::NamedValueCollection aMediaProperties;
-             aMediaProperties.put("URL", rsURL);
+             aMediaProperties.put(u"URL"_ustr, rsURL);
              return xProvider->queryGraphic(aMediaProperties.getPropertyValues());
         }
     }

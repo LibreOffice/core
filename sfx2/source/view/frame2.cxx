@@ -210,7 +210,7 @@ Reference < XFrame > SfxFrame::CreateBlankFrame()
     try
     {
         Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
-        xFrame.set( xDesktop->findFrame( "_blank", 0 ), UNO_SET_THROW );
+        xFrame.set( xDesktop->findFrame( u"_blank"_ustr, 0 ), UNO_SET_THROW );
     }
     catch( const Exception& )
     {
@@ -241,18 +241,18 @@ SfxFrame* SfxFrame::CreateHidden( SfxObjectShell const & rDoc, vcl::Window& rWin
         TransformItems( SID_OPENDOC, rDoc.GetMedium()->GetItemSet(), aLoadArgs );
 
         ::comphelper::NamedValueCollection aArgs( aLoadArgs );
-        aArgs.put( "Model", rDoc.GetModel() );
-        aArgs.put( "Hidden", true );
+        aArgs.put( u"Model"_ustr, rDoc.GetModel() );
+        aArgs.put( u"Hidden"_ustr, true );
         if ( nViewId != SFX_INTERFACE_NONE )
-            aArgs.put( "ViewId", static_cast<sal_uInt16>(nViewId) );
+            aArgs.put( u"ViewId"_ustr, static_cast<sal_uInt16>(nViewId) );
 
         aLoadArgs = aArgs.getPropertyValues();
 
         // load the doc into that frame
         Reference< XComponentLoader > xLoader( xFrame, UNO_QUERY_THROW );
         xLoader->loadComponentFromURL(
-            "private:object",
-            "_self",
+            u"private:object"_ustr,
+            u"_self"_ustr,
             0,
             aLoadArgs
         );
@@ -317,7 +317,7 @@ void SfxFrame::SetPresentationMode( bool bSet )
 
     if ( xPropSet.is() )
     {
-        Any aValue = xPropSet->getPropertyValue("LayoutManager");
+        Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
         aValue >>= xLayoutManager;
     }
 
@@ -359,13 +359,13 @@ void SfxFrame::SetMenuBarOn_Impl( bool bOn )
 
     if ( xPropSet.is() )
     {
-        Any aValue = xPropSet->getPropertyValue("LayoutManager");
+        Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
         aValue >>= xLayoutManager;
     }
 
     if ( xLayoutManager.is() )
     {
-        OUString aMenuBarURL( "private:resource/menubar/menubar" );
+        OUString aMenuBarURL( u"private:resource/menubar/menubar"_ustr );
 
         if ( bOn )
             xLayoutManager->showElement( aMenuBarURL );
@@ -381,17 +381,17 @@ bool SfxFrame::IsMenuBarOn_Impl() const
 
 void SfxFrame::PrepareForDoc_Impl( const SfxObjectShell& i_rDoc )
 {
-    const ::comphelper::NamedValueCollection aDocumentArgs( i_rDoc.GetModel()->getArgs2( { "Hidden", "PluginMode" } ) );
+    const ::comphelper::NamedValueCollection aDocumentArgs( i_rDoc.GetModel()->getArgs2( { u"Hidden"_ustr, u"PluginMode"_ustr } ) );
 
     // hidden?
     OSL_ENSURE( !m_pImpl->bHidden, "when does this happen?" );
-    m_pImpl->bHidden = aDocumentArgs.getOrDefault( "Hidden", m_pImpl->bHidden );
+    m_pImpl->bHidden = aDocumentArgs.getOrDefault( u"Hidden"_ustr, m_pImpl->bHidden );
 
     // update our descriptor
     UpdateDescriptor( &i_rDoc );
 
     // plugin mode
-    sal_Int16 nPluginMode = aDocumentArgs.getOrDefault( "PluginMode", sal_Int16( 0 ) );
+    sal_Int16 nPluginMode = aDocumentArgs.getOrDefault( u"PluginMode"_ustr, sal_Int16( 0 ) );
     if ( nPluginMode && ( nPluginMode != 2 ) )
         m_pImpl->bInPlace = true;
 }

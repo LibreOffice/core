@@ -76,7 +76,7 @@ OUString getTypeName(RedactionTargetType nType)
 /// Returns TypeID to be used in the add/edit target dialog
 OUString getTypeID(RedactionTargetType nType)
 {
-    OUString sTypeID("unknown");
+    OUString sTypeID(u"unknown"_ustr);
 
     switch (nType)
     {
@@ -522,15 +522,15 @@ void SfxAutoRedactDialog::clearTargets()
 }
 
 SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
-    : SfxDialogController(pParent, "sfx/ui/autoredactdialog.ui", "AutoRedactDialog")
+    : SfxDialogController(pParent, u"sfx/ui/autoredactdialog.ui"_ustr, u"AutoRedactDialog"_ustr)
     , m_bIsValidState(true)
     , m_bTargetsCopied(false)
-    , m_aTargetsBox(m_xBuilder->weld_tree_view("targets"))
-    , m_xLoadBtn(m_xBuilder->weld_button("btnLoadTargets"))
-    , m_xSaveBtn(m_xBuilder->weld_button("btnSaveTargets"))
-    , m_xAddBtn(m_xBuilder->weld_button("add"))
-    , m_xEditBtn(m_xBuilder->weld_button("edit"))
-    , m_xDeleteBtn(m_xBuilder->weld_button("delete"))
+    , m_aTargetsBox(m_xBuilder->weld_tree_view(u"targets"_ustr))
+    , m_xLoadBtn(m_xBuilder->weld_button(u"btnLoadTargets"_ustr))
+    , m_xSaveBtn(m_xBuilder->weld_button(u"btnSaveTargets"_ustr))
+    , m_xAddBtn(m_xBuilder->weld_button(u"add"_ustr))
+    , m_xEditBtn(m_xBuilder->weld_button(u"edit"_ustr))
+    , m_xDeleteBtn(m_xBuilder->weld_button(u"delete"_ustr))
 {
     // Can be used to remember the last set of redaction targets?
     OUString sExtraData;
@@ -538,7 +538,7 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
 
     if (aDlgOpt.Exists())
     {
-        css::uno::Any aUserItem = aDlgOpt.GetUserItem("UserItem");
+        css::uno::Any aUserItem = aDlgOpt.GetUserItem(u"UserItem"_ustr);
         aUserItem >>= sExtraData;
     }
 
@@ -611,7 +611,7 @@ SfxAutoRedactDialog::~SfxAutoRedactDialog()
 
         // Store the dialog data
         SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
-        aDlgOpt.SetUserItem("UserItem", css::uno::Any(sUserDataStr));
+        aDlgOpt.SetUserItem(u"UserItem"_ustr, css::uno::Any(sUserDataStr));
 
         if (!m_bTargetsCopied)
             clearTargets();
@@ -686,15 +686,15 @@ IMPL_LINK_NOARG(SfxAddTargetDialog, SelectTypeHdl, weld::ComboBox&, void)
 }
 
 SfxAddTargetDialog::SfxAddTargetDialog(weld::Window* pParent, const OUString& rName)
-    : GenericDialogController(pParent, "sfx/ui/addtargetdialog.ui", "AddTargetDialog")
-    , m_xName(m_xBuilder->weld_entry("name"))
-    , m_xType(m_xBuilder->weld_combo_box("type"))
-    , m_xLabelContent(m_xBuilder->weld_label("label_content"))
-    , m_xContent(m_xBuilder->weld_entry("content"))
-    , m_xLabelPredefContent(m_xBuilder->weld_label("label_content_predef"))
-    , m_xPredefContent(m_xBuilder->weld_combo_box("content_predef"))
-    , m_xCaseSensitive(m_xBuilder->weld_check_button("checkboxCaseSensitive"))
-    , m_xWholeWords(m_xBuilder->weld_check_button("checkboxWholeWords"))
+    : GenericDialogController(pParent, u"sfx/ui/addtargetdialog.ui"_ustr, u"AddTargetDialog"_ustr)
+    , m_xName(m_xBuilder->weld_entry(u"name"_ustr))
+    , m_xType(m_xBuilder->weld_combo_box(u"type"_ustr))
+    , m_xLabelContent(m_xBuilder->weld_label(u"label_content"_ustr))
+    , m_xContent(m_xBuilder->weld_entry(u"content"_ustr))
+    , m_xLabelPredefContent(m_xBuilder->weld_label(u"label_content_predef"_ustr))
+    , m_xPredefContent(m_xBuilder->weld_combo_box(u"content_predef"_ustr))
+    , m_xCaseSensitive(m_xBuilder->weld_check_button(u"checkboxCaseSensitive"_ustr))
+    , m_xWholeWords(m_xBuilder->weld_check_button(u"checkboxWholeWords"_ustr))
 {
     m_xName->set_text(rName);
     m_xName->select_region(0, rName.getLength());
@@ -706,15 +706,15 @@ SfxAddTargetDialog::SfxAddTargetDialog(weld::Window* pParent, const OUString& sN
                                        const RedactionTargetType& eTargetType,
                                        const OUString& sContent, bool bCaseSensitive,
                                        bool bWholeWords)
-    : GenericDialogController(pParent, "sfx/ui/addtargetdialog.ui", "AddTargetDialog")
-    , m_xName(m_xBuilder->weld_entry("name"))
-    , m_xType(m_xBuilder->weld_combo_box("type"))
-    , m_xLabelContent(m_xBuilder->weld_label("label_content"))
-    , m_xContent(m_xBuilder->weld_entry("content"))
-    , m_xLabelPredefContent(m_xBuilder->weld_label("label_content_predef"))
-    , m_xPredefContent(m_xBuilder->weld_combo_box("content_predef"))
-    , m_xCaseSensitive(m_xBuilder->weld_check_button("checkboxCaseSensitive"))
-    , m_xWholeWords(m_xBuilder->weld_check_button("checkboxWholeWords"))
+    : GenericDialogController(pParent, u"sfx/ui/addtargetdialog.ui"_ustr, u"AddTargetDialog"_ustr)
+    , m_xName(m_xBuilder->weld_entry(u"name"_ustr))
+    , m_xType(m_xBuilder->weld_combo_box(u"type"_ustr))
+    , m_xLabelContent(m_xBuilder->weld_label(u"label_content"_ustr))
+    , m_xContent(m_xBuilder->weld_entry(u"content"_ustr))
+    , m_xLabelPredefContent(m_xBuilder->weld_label(u"label_content_predef"_ustr))
+    , m_xPredefContent(m_xBuilder->weld_combo_box(u"content_predef"_ustr))
+    , m_xCaseSensitive(m_xBuilder->weld_check_button(u"checkboxCaseSensitive"_ustr))
+    , m_xWholeWords(m_xBuilder->weld_check_button(u"checkboxWholeWords"_ustr))
 {
     m_xName->set_text(sName);
     m_xName->select_region(0, sName.getLength());

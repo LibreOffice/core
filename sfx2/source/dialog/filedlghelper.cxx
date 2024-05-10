@@ -797,7 +797,7 @@ static bool lcl_isSystemFilePicker( const uno::Reference< XExecutableDialog >& _
         uno::Reference< XServiceInfo > xSI( _rxFP, UNO_QUERY );
         if ( !xSI.is() )
             return true;
-        return xSI->supportsService( "com.sun.star.ui.dialogs.SystemFilePicker" );
+        return xSI->supportsService( u"com.sun.star.ui.dialogs.SystemFilePicker"_ustr );
     }
     catch( const Exception& )
     {
@@ -970,7 +970,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 if( xFactory.is() )
                 {
                     mxFilterCFG.set(
-                        xFactory->createInstance( "com.sun.star.document.FilterFactory" ),
+                        xFactory->createInstance( u"com.sun.star.document.FilterFactory"_ustr ),
                         UNO_QUERY );
                 }
 
@@ -986,7 +986,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 if ( mbExport && !mxFilterCFG.is() && xFactory.is() )
                 {
                     mxFilterCFG.set(
-                        xFactory->createInstance( "com.sun.star.document.FilterFactory" ),
+                        xFactory->createInstance( u"com.sun.star.document.FilterFactory"_ustr ),
                         UNO_QUERY );
                 }
                 break;
@@ -1066,23 +1066,23 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
         else
         {
             pInitArguments[0] <<= NamedValue(
-                                    "TemplateDescription",
+                                    u"TemplateDescription"_ustr,
                                     Any( nTemplateDescription )
                                 );
 
             pInitArguments[1] <<= NamedValue(
-                                    "StandardDir",
+                                    u"StandardDir"_ustr,
                                     Any( sStandardDir )
                                 );
 
             pInitArguments[2] <<= NamedValue(
-                                    "DenyList",
+                                    u"DenyList"_ustr,
                                     Any( rDenyList )
                                 );
 
 
             if (xWindow.is())
-                pInitArguments[3] <<= NamedValue("ParentWindow", Any(xWindow));
+                pInitArguments[3] <<= NamedValue(u"ParentWindow"_ustr, Any(xWindow));
         }
 
         try
@@ -1795,7 +1795,7 @@ void FileDialogHelper_Impl::addFilters( const OUString& rFactory,
 
     uno::Reference< XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
     uno::Reference< XContainerQuery > xFilterCont(
-        xSMGR->createInstance("com.sun.star.document.FilterFactory"),
+        xSMGR->createInstance(u"com.sun.star.document.FilterFactory"_ustr),
         UNO_QUERY);
     if ( ! xFilterCont.is() )
         return;
@@ -2011,14 +2011,14 @@ void SaveLastDirectory(OUString const& sContext, OUString const& sDirectory)
     if (found)
     {
         Reference<XPropertySet> el(v.get<Reference<XPropertySet>>(), UNO_SET_THROW);
-        el->setPropertyValue("LastPath", Any(sDirectory));
+        el->setPropertyValue(u"LastPath"_ustr, Any(sDirectory));
     }
     else
     {
         Reference<XPropertySet> el(
             (Reference<lang::XSingleServiceFactory>(set, UNO_QUERY_THROW)->createInstance()),
             UNO_QUERY_THROW);
-        el->setPropertyValue("LastPath", Any(sDirectory));
+        el->setPropertyValue(u"LastPath"_ustr, Any(sDirectory));
         Any v2(el);
         set->insertByName(sContext, v2);
     }
@@ -2141,7 +2141,7 @@ OUString FileDialogHelper_Impl::getInitPath(std::u16string_view _rFallback,
         {
             v = set->getByName(sContext);
             Reference<XPropertySet> el(v.get<Reference<XPropertySet>>(), UNO_SET_THROW);
-            sPath = el->getPropertyValue("LastPath").get<OUString>();
+            sPath = el->getPropertyValue(u"LastPath"_ustr).get<OUString>();
         }
         catch (NoSuchElementException&)
         {
@@ -2451,118 +2451,118 @@ OUString FileDialogHelper::contextToString(Context context)
     // Please don't change them.
     switch(context) {
         case AcceleratorConfig:
-            return "AcceleratorConfig";
+            return u"AcceleratorConfig"_ustr;
         case AutoRedact:
-            return "AutoRedact";
+            return u"AutoRedact"_ustr;
         case BaseDataSource:
-            return "BaseDataSource";
+            return u"BaseDataSource"_ustr;
         case BaseSaveAs:
-            return "BaseSaveAs";
+            return u"BaseSaveAs"_ustr;
         case BasicExportDialog:
-            return "BasicExportDialog";
+            return u"BasicExportDialog"_ustr;
         case BasicExportPackage:
-            return "BasicExportPackage";
+            return u"BasicExportPackage"_ustr;
         case BasicExportSource:
-            return "BasicExportSource";
+            return u"BasicExportSource"_ustr;
         case BasicImportDialog:
-            return "BasicImportDialog";
+            return u"BasicImportDialog"_ustr;
         case BasicImportSource:
-            return "BasicImportSource";
+            return u"BasicImportSource"_ustr;
         case BasicInsertLib:
-            return "BasicInsertLib";
+            return u"BasicInsertLib"_ustr;
         case BulletsAddImage:
-            return "BulletsAddImage";
+            return u"BulletsAddImage"_ustr;
         case CalcDataProvider:
-            return "CalcDataProvider";
+            return u"CalcDataProvider"_ustr;
         case CalcDataStream:
-            return "CalcDataStream";
+            return u"CalcDataStream"_ustr;
         case CalcExport:
-            return "CalcExport";
+            return u"CalcExport"_ustr;
         case CalcSaveAs:
-            return "CalcSaveAs";
+            return u"CalcSaveAs"_ustr;
         case CalcXMLSource:
-            return "CalcXMLSource";
+            return u"CalcXMLSource"_ustr;
         case ExportImage:
-            return "ExportImage";
+            return u"ExportImage"_ustr;
         case ExtensionManager:
-            return "ExtensionManager";
+            return u"ExtensionManager"_ustr;
         case FormsAddInstance:
-            return "FormsAddInstance";
+            return u"FormsAddInstance"_ustr;
         case FormsInsertImage:
-            return "FormsInsertImage";
+            return u"FormsInsertImage"_ustr;
         case LinkClientOLE:
-            return "LinkClientOLE";
+            return u"LinkClientOLE"_ustr;
         case LinkClientFile:
-            return "LinkClientFile";
+            return u"LinkClientFile"_ustr;
         case DrawImpressInsertFile:
-            return "DrawImpressInsertFile";
+            return u"DrawImpressInsertFile"_ustr;
         case DrawImpressOpenSound:
-            return "DrawImpressOpenSound";
+            return u"DrawImpressOpenSound"_ustr;
         case DrawExport:
-            return "DrawExport";
+            return u"DrawExport"_ustr;
         case DrawSaveAs:
-            return "DrawSaveAs";
+            return u"DrawSaveAs"_ustr;
         case IconImport:
-            return "IconImport";
+            return u"IconImport"_ustr;
         case ImpressClickAction:
-            return "ImpressClickAction";
+            return u"ImpressClickAction"_ustr;
         case ImpressExport:
-            return "ImpressExport";
+            return u"ImpressExport"_ustr;
         case ImpressPhotoDialog:
-            return "ImpressPhotoDialog";
+            return u"ImpressPhotoDialog"_ustr;
         case ImpressSaveAs:
-            return "ImpressSaveAs";
+            return u"ImpressSaveAs"_ustr;
         case ImageMap:
-            return "ImageMap";
+            return u"ImageMap"_ustr;
         case InsertDoc:
-            return "InsertDoc";
+            return u"InsertDoc"_ustr;
         case InsertImage:
-            return "InsertImage";
+            return u"InsertImage"_ustr;
         case InsertOLE:
-            return "InsertOLE";
+            return u"InsertOLE"_ustr;
         case InsertMedia:
-            return "InsertMedia";
+            return u"InsertMedia"_ustr;
         case JavaClassPath:
-            return "JavaClassPath";
+            return u"JavaClassPath"_ustr;
         case ReportInsertImage:
-            return "ReportInsertImage";
+            return u"ReportInsertImage"_ustr;
         case ScreenshotAnnotation:
-            return "ScreenshotAnnotation";
+            return u"ScreenshotAnnotation"_ustr;
         case SignatureLine:
-            return "SignatureLine";
+            return u"SignatureLine"_ustr;
         case TemplateImport:
-            return "TemplateImport";
+            return u"TemplateImport"_ustr;
         case WriterCreateAddressList:
-            return "WriterCreateAddressList";
+            return u"WriterCreateAddressList"_ustr;
         case WriterExport:
-            return "WriterExport";
+            return u"WriterExport"_ustr;
         case WriterImportAutotext:
-            return "WriterImportAutotext";
+            return u"WriterImportAutotext"_ustr;
         case WriterInsertHyperlink:
-            return "WriterInsertHyperlink";
+            return u"WriterInsertHyperlink"_ustr;
         case WriterInsertImage:
-            return "WriterInsertImage";
+            return u"WriterInsertImage"_ustr;
         case WriterInsertScript:
-            return "WriterInsertScript";
+            return u"WriterInsertScript"_ustr;
         case WriterLoadTemplate:
-            return "WriterLoadTemplate";
+            return u"WriterLoadTemplate"_ustr;
         case WriterMailMerge:
-            return "WriterMailMerge";
+            return u"WriterMailMerge"_ustr;
         case WriterMailMergeSaveAs:
-            return "WriterMailMergeSaveAs";
+            return u"WriterMailMergeSaveAs"_ustr;
         case WriterNewHTMLGlobalDoc:
-            return "WriterNewHTMLGlobalDoc";
+            return u"WriterNewHTMLGlobalDoc"_ustr;
         case WriterRegisterDataSource:
-            return "WriterRegisterDataSource";
+            return u"WriterRegisterDataSource"_ustr;
         case WriterSaveAs:
-            return "WriterSaveAs";
+            return u"WriterSaveAs"_ustr;
         case WriterSaveHTML:
-            return "WriterSaveHTML";
+            return u"WriterSaveHTML"_ustr;
         case XMLFilterSettings:
-            return "XMLFilterSettings";
+            return u"XMLFilterSettings"_ustr;
         case UnknownContext:
         default:
-            return "";
+            return u""_ustr;
     }
 }
 
@@ -2894,8 +2894,8 @@ ErrCode SetPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, SfxI
             if (bOOXML)
             {
                 ::comphelper::SequenceAsHashMap aHashData;
-                aHashData[ OUString( "OOXPassword" ) ] <<= rPasswordToOpen;
-                aHashData[ OUString( "CryptoType" ) ] <<= OUString( "Standard" );
+                aHashData[ u"OOXPassword"_ustr ] <<= rPasswordToOpen;
+                aHashData[ u"CryptoType"_ustr ] <<= u"Standard"_ustr;
                 aEncryptionData = aHashData.getAsConstNamedValueList();
             }
             else
@@ -2906,8 +2906,8 @@ ErrCode SetPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, SfxI
                 if ( aEncryptionKey.hasElements() )
                 {
                     ::comphelper::SequenceAsHashMap aHashData;
-                    aHashData[ OUString( "STD97EncryptionKey"  ) ] <<= aEncryptionKey;
-                    aHashData[ OUString( "STD97UniqueID"  ) ] <<= aUniqueID;
+                    aHashData[ u"STD97EncryptionKey"_ustr ] <<= aEncryptionKey;
+                    aHashData[ u"STD97UniqueID"_ustr ] <<= aUniqueID;
 
                     aEncryptionData = aHashData.getAsConstNamedValueList();
                 }

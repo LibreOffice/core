@@ -41,13 +41,13 @@ void Deck::LOKSendSidebarFullUpdate()
     if (comphelper::LibreOfficeKit::isActive())
     {
         sal_uInt64 nShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
-        jsdialog::SendFullUpdate(OUString::number(nShellId) + "sidebar", "Panel");
+        jsdialog::SendFullUpdate(OUString::number(nShellId) + "sidebar", u"Panel"_ustr);
     }
 }
 
 Deck::Deck(const DeckDescriptor& rDeckDescriptor, SidebarDockingWindow* pParentWindow,
            const std::function<void()>& rCloserAction)
-    : InterimItemWindow(pParentWindow, "sfx/ui/deck.ui", "Deck")
+    : InterimItemWindow(pParentWindow, u"sfx/ui/deck.ui"_ustr, u"Deck"_ustr)
     , msId(rDeckDescriptor.msId)
     , mnMinimalWidth(0)
     , mnScrolledWindowExtraWidth(0)
@@ -56,8 +56,8 @@ Deck::Deck(const DeckDescriptor& rDeckDescriptor, SidebarDockingWindow* pParentW
     , mxParentWindow(pParentWindow)
     , mxTitleBar(new DeckTitleBar(rDeckDescriptor.msTitle, *m_xBuilder,
                  rDeckDescriptor.msHelpId, rCloserAction))
-    , mxVerticalScrollBar(m_xBuilder->weld_scrolled_window("scrolledwindow"))
-    , mxContents(m_xBuilder->weld_box("contents"))
+    , mxVerticalScrollBar(m_xBuilder->weld_scrolled_window(u"scrolledwindow"_ustr))
+    , mxContents(m_xBuilder->weld_box(u"contents"_ustr))
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
 

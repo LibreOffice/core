@@ -75,7 +75,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.sfx2.IFrameObject";
+        return u"com.sun.star.comp.sfx2.IFrameObject"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -85,7 +85,7 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        css::uno::Sequence< OUString > aSeq { "com.sun.star.frame.SpecialEmbeddedObject" };
+        css::uno::Sequence< OUString > aSeq { u"com.sun.star.frame.SpecialEmbeddedObject"_ustr };
         return aSeq;
     }
 
@@ -223,12 +223,12 @@ sal_Bool SAL_CALL IFrameObject::load(
 
         uno::Reference<task::XInteractionHandler> xInteractionHandler(task::InteractionHandler::createWithParent(mxContext, xParentWindow));
         uno::Sequence < beans::PropertyValue > aProps{
-            comphelper::makePropertyValue("PluginMode", sal_Int16(2)),
-            comphelper::makePropertyValue("ReadOnly", true),
-            comphelper::makePropertyValue("InteractionHandler", xInteractionHandler),
-            comphelper::makePropertyValue("Referer", sReferer)
+            comphelper::makePropertyValue(u"PluginMode"_ustr, sal_Int16(2)),
+            comphelper::makePropertyValue(u"ReadOnly"_ustr, true),
+            comphelper::makePropertyValue(u"InteractionHandler"_ustr, xInteractionHandler),
+            comphelper::makePropertyValue(u"Referer"_ustr, sReferer)
         };
-        uno::Reference < frame::XDispatch > xDisp = mxFrame->queryDispatch( aTargetURL, "_self", 0 );
+        uno::Reference < frame::XDispatch > xDisp = mxFrame->queryDispatch( aTargetURL, u"_self"_ustr, 0 );
         if ( xDisp.is() )
             xDisp->dispatch( aTargetURL, aProps );
 
@@ -432,7 +432,7 @@ void SAL_CALL IFrameObject::removeVetoableChangeListener(const OUString&, const 
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     //we really should set a parent here
-    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateEditObjectDialog(nullptr, ".uno:InsertObjectFloatingFrame", mxObj));
+    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateEditObjectDialog(nullptr, u".uno:InsertObjectFloatingFrame"_ustr, mxObj));
     pDlg->Execute();
     return 0;
 }

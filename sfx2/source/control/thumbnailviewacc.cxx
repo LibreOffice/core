@@ -129,7 +129,7 @@ sal_Int16 SAL_CALL ThumbnailViewAcc::getAccessibleRole()
 OUString SAL_CALL ThumbnailViewAcc::getAccessibleDescription()
 {
     ThrowIfDisposed();
-    return "ThumbnailView";
+    return u"ThumbnailView"_ustr;
 }
 
 OUString SAL_CALL ThumbnailViewAcc::getAccessibleName()
@@ -173,7 +173,7 @@ lang::Locale SAL_CALL ThumbnailViewAcc::getLocale()
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
     uno::Reference< accessibility::XAccessible >    xParent( getAccessibleParent() );
-    lang::Locale                                    aRet( "", "", "" );
+    lang::Locale                                    aRet( u""_ustr, u""_ustr, u""_ustr );
 
     if( xParent.is() )
     {
@@ -483,7 +483,7 @@ void ThumbnailViewAcc::ThrowIfDisposed()
     {
         SAL_WARN("sfx", "Calling disposed object. Throwing exception:");
         throw lang::DisposedException (
-            "object has been already disposed",
+            u"object has been already disposed"_ustr,
             getXWeak());
     }
     else
@@ -684,7 +684,7 @@ lang::Locale SAL_CALL ThumbnailViewItemAcc::getLocale()
 {
     const SolarMutexGuard aSolarGuard;
     uno::Reference< accessibility::XAccessible >    xParent( getAccessibleParent() );
-    lang::Locale                                    aRet( "", "", "" );
+    lang::Locale                                    aRet( u""_ustr, u""_ustr, u""_ustr );
 
     if( xParent.is() )
     {

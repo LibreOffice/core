@@ -228,7 +228,7 @@ void SfxDispatcher::Call_Impl(SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
 
         if ( xSet.is() )
         {
-            css::uno::Any aProp = xSet->getPropertyValue("DispatchRecorderSupplier");
+            css::uno::Any aProp = xSet->getPropertyValue(u"DispatchRecorderSupplier"_ustr);
             css::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
             css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
             aProp >>= xSupplier;
@@ -1024,11 +1024,11 @@ void SfxDispatcher::SetMenu_Impl()
     if ( xPropSet.is() )
     {
         css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-        css::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
+        css::uno::Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
         aValue >>= xLayoutManager;
         if ( xLayoutManager.is() )
         {
-            OUString aMenuBarURL( "private:resource/menubar/menubar" );
+            OUString aMenuBarURL( u"private:resource/menubar/menubar"_ustr );
             if ( !xLayoutManager->isElementVisible( aMenuBarURL ) )
                 xLayoutManager->createElement( aMenuBarURL );
         }
@@ -1081,7 +1081,7 @@ void SfxDispatcher::Update_Impl( bool bForce )
     {
         try
         {
-            css::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
+            css::uno::Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
             aValue >>= xLayoutManager;
         }
         catch (const css::uno::Exception&)
@@ -1875,15 +1875,15 @@ boost::property_tree::ptree SfxDispatcher::fillPopupMenu(const rtl::Reference<VC
 void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, const Point* pPos )
 {
     css::uno::Sequence< css::uno::Any > aArgs{
-        css::uno::Any(comphelper::makePropertyValue( "Value", rResName )),
-        css::uno::Any(comphelper::makePropertyValue( "Frame", GetFrame()->GetFrame().GetFrameInterface() )),
-        css::uno::Any(comphelper::makePropertyValue( "IsContextMenu", true ))
+        css::uno::Any(comphelper::makePropertyValue( u"Value"_ustr, rResName )),
+        css::uno::Any(comphelper::makePropertyValue( u"Frame"_ustr, GetFrame()->GetFrame().GetFrameInterface() )),
+        css::uno::Any(comphelper::makePropertyValue( u"IsContextMenu"_ustr, true ))
     };
 
     css::uno::Reference< css::uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
     css::uno::Reference< css::frame::XPopupMenuController > xPopupController(
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-        "com.sun.star.comp.framework.ResourceMenuController", aArgs, xContext ), css::uno::UNO_QUERY );
+        u"com.sun.star.comp.framework.ResourceMenuController"_ustr, aArgs, xContext ), css::uno::UNO_QUERY );
 
     rtl::Reference< VCLXPopupMenu > xPopupMenu = new VCLXPopupMenu();
 
@@ -1970,7 +1970,7 @@ void SfxDispatcher::HideUI( bool bHide )
                 if ( xPropSet.is() )
                 {
                     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-                    css::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
+                    css::uno::Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
                     aValue >>= xLayoutManager;
                     if ( xLayoutManager.is() )
                         xLayoutManager->setVisible( !bHide );

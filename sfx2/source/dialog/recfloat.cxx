@@ -98,9 +98,9 @@ bool SfxRecordingFloatWrapper_Impl::QueryClose()
 
 SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(SfxBindings* pBind, SfxChildWindow* pChildWin,
                                                weld::Window* pParent)
-    : SfxModelessDialogController(pBind, pChildWin, pParent, "sfx/ui/floatingrecord.ui",
-                                  "FloatingRecord")
-    , m_xToolbar(m_xBuilder->weld_toolbar("toolbar"))
+    : SfxModelessDialogController(pBind, pChildWin, pParent, u"sfx/ui/floatingrecord.ui"_ustr,
+                                  u"FloatingRecord"_ustr)
+    , m_xToolbar(m_xBuilder->weld_toolbar(u"toolbar"_ustr))
     , m_xDispatcher(new ToolbarUnoDispatcher(*m_xToolbar, *m_xBuilder, pBind->GetActiveFrame()))
     , mnPostUserEventId(nullptr)
     , m_bFirstActivate(true)

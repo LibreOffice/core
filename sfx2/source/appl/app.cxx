@@ -129,7 +129,7 @@ SfxApplication* SfxApplication::GetOrCreate()
 SfxApplication::SfxApplication()
     : pImpl( new SfxAppData_Impl )
 {
-    SetName( "StarOffice" );
+    SetName( u"StarOffice"_ustr );
 
     SAL_INFO( "sfx.appl", "{ initialize DDE" );
 

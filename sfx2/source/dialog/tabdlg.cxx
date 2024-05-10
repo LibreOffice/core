@@ -335,13 +335,13 @@ SfxTabDialogController::SfxTabDialogController
     bool bEditFmt                 // when yes -> additional Button for standard
 )
     : SfxOkDialogController(pParent, rUIXMLDescription, rID)
-    , m_xTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
-    , m_xOKBtn(m_xBuilder->weld_button("ok"))
-    , m_xApplyBtn(m_xBuilder->weld_button("apply"))
-    , m_xUserBtn(m_xBuilder->weld_button("user"))
-    , m_xCancelBtn(m_xBuilder->weld_button("cancel"))
-    , m_xResetBtn(m_xBuilder->weld_button("reset"))
-    , m_xBaseFmtBtn(m_xBuilder->weld_button("standard"))
+    , m_xTabCtrl(m_xBuilder->weld_notebook(u"tabcontrol"_ustr))
+    , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xApplyBtn(m_xBuilder->weld_button(u"apply"_ustr))
+    , m_xUserBtn(m_xBuilder->weld_button(u"user"_ustr))
+    , m_xCancelBtn(m_xBuilder->weld_button(u"cancel"_ustr))
+    , m_xResetBtn(m_xBuilder->weld_button(u"reset"_ustr))
+    , m_xBaseFmtBtn(m_xBuilder->weld_button(u"standard"_ustr))
     , m_pSet(pItemSet ? new SfxItemSet(*pItemSet) : nullptr)
     , m_bStandardPushed(false)
 {
@@ -946,7 +946,7 @@ void SfxTabDialogController::setPreviewsToSamePlace()
             continue;
         if (!pDataObject->xTabPage->m_xBuilder)
             continue;
-        std::unique_ptr<weld::Widget> pGrid = pDataObject->xTabPage->m_xBuilder->weld_widget("maingrid");
+        std::unique_ptr<weld::Widget> pGrid = pDataObject->xTabPage->m_xBuilder->weld_widget(u"maingrid"_ustr);
         if (!pGrid)
             continue;
         aGrids.emplace_back(std::move(pGrid));

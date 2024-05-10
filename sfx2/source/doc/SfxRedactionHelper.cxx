@@ -119,10 +119,10 @@ void setPageMargins(const uno::Reference<beans::XPropertySet>& xPageProperySet,
         || aPageMargins.nRight < 0)
         return;
 
-    xPageProperySet->setPropertyValue("BorderTop", css::uno::Any(aPageMargins.nTop));
-    xPageProperySet->setPropertyValue("BorderBottom", css::uno::Any(aPageMargins.nBottom));
-    xPageProperySet->setPropertyValue("BorderLeft", css::uno::Any(aPageMargins.nLeft));
-    xPageProperySet->setPropertyValue("BorderRight", css::uno::Any(aPageMargins.nRight));
+    xPageProperySet->setPropertyValue(u"BorderTop"_ustr, css::uno::Any(aPageMargins.nTop));
+    xPageProperySet->setPropertyValue(u"BorderBottom"_ustr, css::uno::Any(aPageMargins.nBottom));
+    xPageProperySet->setPropertyValue(u"BorderLeft"_ustr, css::uno::Any(aPageMargins.nLeft));
+    xPageProperySet->setPropertyValue(u"BorderRight"_ustr, css::uno::Any(aPageMargins.nRight));
 }
 
 // #i10613# Extracted from ImplCheckRect::ImplCreate
@@ -235,18 +235,19 @@ void SfxRedactionHelper::addPagesToDraw(
 
         // Set page size & margins
         uno::Reference<beans::XPropertySet> xPageProperySet(xPage, uno::UNO_QUERY);
-        xPageProperySet->setPropertyValue("Height", css::uno::Any(nPageHeight));
-        xPageProperySet->setPropertyValue("Width", css::uno::Any(nPageWidth));
+        xPageProperySet->setPropertyValue(u"Height"_ustr, css::uno::Any(nPageHeight));
+        xPageProperySet->setPropertyValue(u"Width"_ustr, css::uno::Any(nPageWidth));
 
         setPageMargins(xPageProperySet, aPageMargins);
 
         // Create and insert the shape
         uno::Reference<drawing::XShape> xShape(
-            xFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
+            xFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr),
+            uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xShapeProperySet(xShape, uno::UNO_QUERY);
-        xShapeProperySet->setPropertyValue("Graphic", uno::Any(xGraph));
-        xShapeProperySet->setPropertyValue("MoveProtect", uno::Any(true));
-        xShapeProperySet->setPropertyValue("SizeProtect", uno::Any(true));
+        xShapeProperySet->setPropertyValue(u"Graphic"_ustr, uno::Any(xGraph));
+        xShapeProperySet->setPropertyValue(u"MoveProtect"_ustr, uno::Any(true));
+        xShapeProperySet->setPropertyValue(u"SizeProtect"_ustr, uno::Any(true));
 
         // Set size
         xShape->setSize(
@@ -282,10 +283,10 @@ void SfxRedactionHelper::showRedactionToolbar(const SfxViewFrame* pViewFrame)
 
     try
     {
-        Any aValue = xPropSet->getPropertyValue("LayoutManager");
+        Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
         aValue >>= xLayoutManager;
-        xLayoutManager->createElement("private:resource/toolbar/redactionbar");
-        xLayoutManager->showElement("private:resource/toolbar/redactionbar");
+        xLayoutManager->createElement(u"private:resource/toolbar/redactionbar"_ustr);
+        xLayoutManager->showElement(u"private:resource/toolbar/redactionbar"_ustr);
     }
     catch (const css::uno::RuntimeException&)
     {
@@ -314,7 +315,7 @@ SfxRedactionHelper::getPageMarginsForWriter(const css::uno::Reference<css::frame
 
     uno::Reference<beans::XPropertySet> xPageProperySet(xCursor, UNO_QUERY);
     OUString sPageStyleName;
-    Any aValue = xPageProperySet->getPropertyValue("PageStyleName");
+    Any aValue = xPageProperySet->getPropertyValue(u"PageStyleName"_ustr);
     aValue >>= sPageStyleName;
 
     Reference<css::style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, UNO_QUERY);
@@ -329,8 +330,8 @@ SfxRedactionHelper::getPageMarginsForWriter(const css::uno::Reference<css::frame
     if (!xStyleFamilies.is())
         return aPageMargins;
 
-    uno::Reference<container::XNameAccess> xPageStyles(xStyleFamilies->getByName("PageStyles"),
-                                                       UNO_QUERY);
+    uno::Reference<container::XNameAccess> xPageStyles(
+        xStyleFamilies->getByName(u"PageStyles"_ustr), UNO_QUERY);
 
     if (!xPageStyles.is())
         return aPageMargins;
@@ -346,10 +347,10 @@ SfxRedactionHelper::getPageMarginsForWriter(const css::uno::Reference<css::frame
     if (!xPageProperties.is())
         return aPageMargins;
 
-    xPageProperties->getPropertyValue("LeftMargin") >>= aPageMargins.nLeft;
-    xPageProperties->getPropertyValue("RightMargin") >>= aPageMargins.nRight;
-    xPageProperties->getPropertyValue("TopMargin") >>= aPageMargins.nTop;
-    xPageProperties->getPropertyValue("BottomMargin") >>= aPageMargins.nBottom;
+    xPageProperties->getPropertyValue(u"LeftMargin"_ustr) >>= aPageMargins.nLeft;
+    xPageProperties->getPropertyValue(u"RightMargin"_ustr) >>= aPageMargins.nRight;
+    xPageProperties->getPropertyValue(u"TopMargin"_ustr) >>= aPageMargins.nTop;
+    xPageProperties->getPropertyValue(u"BottomMargin"_ustr) >>= aPageMargins.nBottom;
 
     return aPageMargins;
 }
@@ -358,7 +359,7 @@ PageMargins
 SfxRedactionHelper::getPageMarginsForCalc(const css::uno::Reference<css::frame::XModel>& xModel)
 {
     PageMargins aPageMargins = { -1, -1, -1, -1 };
-    OUString sPageStyleName("Default");
+    OUString sPageStyleName(u"Default"_ustr);
 
     css::uno::Reference<css::sheet::XSpreadsheetView> xSpreadsheetView(
         xModel->getCurrentController(), UNO_QUERY);
@@ -372,7 +373,7 @@ SfxRedactionHelper::getPageMarginsForCalc(const css::uno::Reference<css::frame::
     uno::Reference<beans::XPropertySet> xSheetProperties(xSpreadsheetView->getActiveSheet(),
                                                          UNO_QUERY);
 
-    xSheetProperties->getPropertyValue("PageStyle") >>= sPageStyleName;
+    xSheetProperties->getPropertyValue(u"PageStyle"_ustr) >>= sPageStyleName;
 
     Reference<css::style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, UNO_QUERY);
     if (!xStyleFamiliesSupplier.is())
@@ -386,8 +387,8 @@ SfxRedactionHelper::getPageMarginsForCalc(const css::uno::Reference<css::frame::
     if (!xStyleFamilies.is())
         return aPageMargins;
 
-    uno::Reference<container::XNameAccess> xPageStyles(xStyleFamilies->getByName("PageStyles"),
-                                                       UNO_QUERY);
+    uno::Reference<container::XNameAccess> xPageStyles(
+        xStyleFamilies->getByName(u"PageStyles"_ustr), UNO_QUERY);
 
     if (!xPageStyles.is())
         return aPageMargins;
@@ -403,10 +404,10 @@ SfxRedactionHelper::getPageMarginsForCalc(const css::uno::Reference<css::frame::
     if (!xPageProperties.is())
         return aPageMargins;
 
-    xPageProperties->getPropertyValue("LeftMargin") >>= aPageMargins.nLeft;
-    xPageProperties->getPropertyValue("RightMargin") >>= aPageMargins.nRight;
-    xPageProperties->getPropertyValue("TopMargin") >>= aPageMargins.nTop;
-    xPageProperties->getPropertyValue("BottomMargin") >>= aPageMargins.nBottom;
+    xPageProperties->getPropertyValue(u"LeftMargin"_ustr) >>= aPageMargins.nLeft;
+    xPageProperties->getPropertyValue(u"RightMargin"_ustr) >>= aPageMargins.nRight;
+    xPageProperties->getPropertyValue(u"TopMargin"_ustr) >>= aPageMargins.nTop;
+    xPageProperties->getPropertyValue(u"BottomMargin"_ustr) >>= aPageMargins.nBottom;
 
     return aPageMargins;
 }
@@ -487,16 +488,16 @@ void SfxRedactionHelper::addRedactionRectToPage(
     for (auto const& aNewRectangle : aNewRectangles)
     {
         uno::Reference<drawing::XShape> xRectShape(
-            xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+            xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xRectShapeProperySet(xRectShape, uno::UNO_QUERY);
 
-        xRectShapeProperySet->setPropertyValue("Name",
-                                               uno::Any(OUString("RectangleRedactionShape")));
-        xRectShapeProperySet->setPropertyValue("FillTransparence",
+        xRectShapeProperySet->setPropertyValue(u"Name"_ustr,
+                                               uno::Any(u"RectangleRedactionShape"_ustr));
+        xRectShapeProperySet->setPropertyValue(u"FillTransparence"_ustr,
                                                css::uno::Any(static_cast<sal_Int16>(50)));
-        xRectShapeProperySet->setPropertyValue("FillColor", css::uno::Any(COL_GRAY7));
+        xRectShapeProperySet->setPropertyValue(u"FillColor"_ustr, css::uno::Any(COL_GRAY7));
         xRectShapeProperySet->setPropertyValue(
-            "LineStyle", css::uno::Any(css::drawing::LineStyle::LineStyle_NONE));
+            u"LineStyle"_ustr, css::uno::Any(css::drawing::LineStyle::LineStyle_NONE));
 
         xRectShape->setSize(awt::Size(aNewRectangle.GetWidth(), aNewRectangle.GetHeight()));
         xRectShape->setPosition(awt::Point(aNewRectangle.Left(), aNewRectangle.Top()));

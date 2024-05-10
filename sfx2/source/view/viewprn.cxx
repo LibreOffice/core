@@ -133,9 +133,9 @@ SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
             setValue( rProp.Name, rProp.Value );
 
         Sequence< beans::PropertyValue > aRenderOptions{
-            comphelper::makePropertyValue("ExtraPrintUIOptions", Any{}),
-            comphelper::makePropertyValue("View", i_rViewProp),
-            comphelper::makePropertyValue("IsPrinter", true)
+            comphelper::makePropertyValue(u"ExtraPrintUIOptions"_ustr, Any{}),
+            comphelper::makePropertyValue(u"View"_ustr, i_rViewProp),
+            comphelper::makePropertyValue(u"IsPrinter"_ustr, true)
         };
         try
         {
@@ -162,10 +162,10 @@ SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
     }
 
     // set some job parameters
-    setValue( "IsApi", Any( i_bApi ) );
-    setValue( "IsDirect", Any( i_bDirect ) );
-    setValue( "IsPrinter", Any( true ) );
-    setValue( "View", i_rViewProp );
+    setValue( u"IsApi"_ustr, Any( i_bApi ) );
+    setValue( u"IsDirect"_ustr, Any( i_bDirect ) );
+    setValue( u"IsPrinter"_ustr, Any( true ) );
+    setValue( u"View"_ustr, i_rViewProp );
 }
 
 void SfxPrinterController::Notify( SfxBroadcaster& , const SfxHint& rHint )
@@ -182,7 +182,7 @@ void SfxPrinterController::Notify( SfxBroadcaster& , const SfxHint& rHint )
 
 const Any& SfxPrinterController::getSelectionObject() const
 {
-    const beans::PropertyValue* pVal = getValue( OUString( "PrintSelectionOnly"  ) );
+    const beans::PropertyValue* pVal = getValue( u"PrintSelectionOnly"_ustr );
     if( pVal )
     {
         bool bSel = false;
@@ -191,7 +191,7 @@ const Any& SfxPrinterController::getSelectionObject() const
     }
 
     sal_Int32 nChoice = 0;
-    pVal = getValue( OUString( "PrintContent" ) );
+    pVal = getValue( u"PrintContent"_ustr );
     if( pVal )
         pVal->Value >>= nChoice;
 
@@ -210,7 +210,7 @@ Sequence< beans::PropertyValue > SfxPrinterController::getMergedOptions() const
     }
 
     Sequence< beans::PropertyValue > aRenderOptions{ comphelper::makePropertyValue(
-        "RenderDevice", mxDevice) };
+        u"RenderDevice"_ustr, mxDevice) };
 
     aRenderOptions = getJobProperties( aRenderOptions );
     return aRenderOptions;
@@ -606,12 +606,12 @@ void SfxViewShell::StartPrint( const uno::Sequence < beans::PropertyValue >& rPr
 
     // When no JobName was specified via com::sun::star::view::PrintOptions::JobName ,
     // use the document title as default job name
-    css::beans::PropertyValue* pJobNameVal = xNewController->getValue("JobName");
+    css::beans::PropertyValue* pJobNameVal = xNewController->getValue(u"JobName"_ustr);
     if (!pJobNameVal)
     {
         if (SfxObjectShell* pDoc = GetObjectShell())
         {
-            xNewController->setValue("JobName", Any(pDoc->GetTitle(1)));
+            xNewController->setValue(u"JobName"_ustr, Any(pDoc->GetTitle(1)));
             xNewController->setPrinterModified(mbPrinterSettingsModified);
         }
     }

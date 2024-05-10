@@ -124,7 +124,7 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
     {
         uno::Sequence < beans::PropertyValue > aProps;
         css::uno::Reference< css::container::XNameAccess > xFilterCFG(
-                    xSMGR->createInstance( "com.sun.star.document.FilterFactory" ), uno::UNO_QUERY );
+                    xSMGR->createInstance( u"com.sun.star.document.FilterFactory"_ustr ), uno::UNO_QUERY );
         css::uno::Reference< css::util::XModifiable > xModifiable( xModel, css::uno::UNO_QUERY );
 
         if ( !xFilterCFG.is() )
@@ -157,13 +157,13 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
                                 //string for the ok button
                                 //used in filter/source/pdf/impdialog.cxx
                                 uno::Sequence< beans::PropertyValue > aFilterDataValue{
-                                    comphelper::makePropertyValue("_OkButtonString",
+                                    comphelper::makePropertyValue(u"_OkButtonString"_ustr,
                                                                   SfxResId(STR_PDF_EXPORT_SEND ))
                                 };
 
                                 //add to the filterdata property, the only one the PDF export filter dialog will care for
                                 uno::Sequence< beans::PropertyValue > aPropsForDialog{
-                                    comphelper::makePropertyValue("FilterData", aFilterDataValue)
+                                    comphelper::makePropertyValue(u"FilterData"_ustr, aFilterDataValue)
                                 };
 
                                 //when executing the dialog will merge the persistent FilterData properties
@@ -303,7 +303,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             OUString aExtension;
 
             css::uno::Reference< css::container::XContainerQuery > xContainerQuery(
-                xSMGR->createInstance( "com.sun.star.document.FilterFactory" ),
+                xSMGR->createInstance( u"com.sun.star.document.FilterFactory"_ustr ),
                 css::uno::UNO_QUERY );
 
             if ( bStoreTo )
@@ -333,7 +333,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 {
                     ::comphelper::SequenceAsHashMap aFilterPropsHM( xEnumeration->nextElement() );
                     aFilterName = aFilterPropsHM.getUnpackedValueOrDefault(
-                                                "Name",
+                                                u"Name"_ustr,
                                                 OUString() );
                 }
 
@@ -342,7 +342,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     // Retrieve filter from media descriptor
                     ::comphelper::SequenceAsHashMap aMediaDescrPropsHM( xModel->getArgs() );
                     OUString aOrgFilterName = aMediaDescrPropsHM.getUnpackedValueOrDefault(
-                                    "FilterName",
+                                    u"FilterName"_ustr,
                                     OUString() );
                     if ( aOrgFilterName == aFilterName )
                     {
@@ -360,7 +360,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     // Retrieve filter from media descriptor
                     ::comphelper::SequenceAsHashMap aMediaDescrPropsHM( xModel->getArgs() );
                     aFilterName = aMediaDescrPropsHM.getUnpackedValueOrDefault(
-                                    "FilterName",
+                                    u"FilterName"_ustr,
                                     OUString() );
                 }
 
@@ -371,7 +371,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     {
                         ::comphelper::SequenceAsHashMap aFilterPropsHM( xModuleManager->getByName( aModule ) );
                         aFilterName = aFilterPropsHM.getUnpackedValueOrDefault(
-                                                    "ooSetupFactoryDefaultFilter",
+                                                    u"ooSetupFactoryDefaultFilter"_ustr,
                                                     OUString() );
                         css::uno::Reference< css::container::XNameAccess > xNameAccess(
                             xContainerQuery, css::uno::UNO_QUERY );
@@ -379,7 +379,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                         {
                             ::comphelper::SequenceAsHashMap aFilterPropsHM2( xNameAccess->getByName( aFilterName ) );
                             aTypeName = aFilterPropsHM2.getUnpackedValueOrDefault(
-                                                        "Type",
+                                                        u"Type"_ustr,
                                                         OUString() );
                         }
                     }
@@ -407,7 +407,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             else
             {
                 css::uno::Reference< container::XNameAccess > xTypeDetection(
-                    xSMGR->createInstance( "com.sun.star.document.TypeDetection" ),
+                    xSMGR->createInstance( u"com.sun.star.document.TypeDetection"_ustr ),
                     css::uno::UNO_QUERY );
 
 
@@ -417,7 +417,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     {
                         ::comphelper::SequenceAsHashMap aTypeNamePropsHM( xTypeDetection->getByName( aTypeName ) );
                         uno::Sequence< OUString > aExtensions = aTypeNamePropsHM.getUnpackedValueOrDefault(
-                                                        "Extensions",
+                                                        u"Extensions"_ustr,
                                                         ::uno::Sequence< OUString >() );
                         if ( aExtensions.hasElements() )
                             aExtension = aExtensions[0];
@@ -465,7 +465,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             sal_Int32 nNumArgs(1);
             static constexpr OUString aPasswordPropName( u"Password"_ustr );
             css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
-                "FilterName", aFilterName) };
+                u"FilterName"_ustr, aFilterName) };
 
             ::comphelper::SequenceAsHashMap aMediaDescrPropsHM( xModel->getArgs() );
             OUString aPassword = aMediaDescrPropsHM.getUnpackedValueOrDefault(
@@ -759,8 +759,8 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
 
                     SolarMutexGuard aGuard;
 
-                    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(Application::GetFrameWeld(xParentWindow), "sfx/ui/errorfindemaildialog.ui"));
-                    std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("ErrorFindEmailDialog"));
+                    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(Application::GetFrameWeld(xParentWindow), u"sfx/ui/errorfindemaildialog.ui"_ustr));
+                    std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog(u"ErrorFindEmailDialog"_ustr));
                     xBox->run();
                     eResult = SEND_MAIL_CANCELLED;
                 }

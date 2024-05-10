@@ -512,7 +512,7 @@ SotClipboardFormatId LinkManager::RegisterStatusInfoId()
     if( nFormat == SotClipboardFormatId::NONE )
     {
         nFormat = SotExchange::RegisterFormatName(
-                    "StatusInfo from SvxInternalLink");
+                    u"StatusInfo from SvxInternalLink"_ustr);
     }
     return nFormat;
 }
@@ -685,7 +685,7 @@ bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             SfxStringItem aName( SID_FILE_NAME, sTopic );
             SfxBoolItem aMinimized(SID_MINIMIZED, true);
             SfxBoolItem aHidden(SID_HIDDEN, true);
-            SfxStringItem aTarget( SID_TARGETNAME, "_blank" );
+            SfxStringItem aTarget( SID_TARGETNAME, u"_blank"_ustr );
             SfxStringItem aReferer( SID_REFERER, sReferer );
             SfxUInt16Item aUpdate( SID_UPDATEDOCMODE, nUpdateMode );
             SfxBoolItem aReadOnly(SID_DOC_READONLY, false);

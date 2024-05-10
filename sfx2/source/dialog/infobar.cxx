@@ -149,7 +149,7 @@ void SfxInfoBarWindow::SetCloseButtonImage()
 
     pProcessor->process(aSeq);
 
-    m_xCloseBtn->set_item_image("close", xDevice);
+    m_xCloseBtn->set_item_image(u"close"_ustr, xDevice);
 }
 
 class ExtraButton
@@ -166,9 +166,9 @@ private:
 
 public:
     ExtraButton(weld::Container* pContainer, const OUString* pCommand)
-        : m_xBuilder(Application::CreateBuilder(pContainer, "sfx/ui/extrabutton.ui"))
-        , m_xContainer(m_xBuilder->weld_container("ExtraButton"))
-        , m_xButton(m_xBuilder->weld_button("button"))
+        : m_xBuilder(Application::CreateBuilder(pContainer, u"sfx/ui/extrabutton.ui"_ustr))
+        , m_xContainer(m_xBuilder->weld_container(u"ExtraButton"_ustr))
+        , m_xButton(m_xBuilder->weld_button(u"button"_ustr))
     {
         if (pCommand)
         {
@@ -197,15 +197,15 @@ SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, OUString sId,
                                    const OUString& sPrimaryMessage,
                                    const OUString& sSecondaryMessage, InfobarType ibType,
                                    bool bShowCloseButton)
-    : InterimItemWindow(pParent, "sfx/ui/infobar.ui", "InfoBar")
+    : InterimItemWindow(pParent, u"sfx/ui/infobar.ui"_ustr, u"InfoBar"_ustr)
     , m_sId(std::move(sId))
     , m_eType(ibType)
     , m_bLayingOut(false)
-    , m_xImage(m_xBuilder->weld_image("image"))
-    , m_xPrimaryMessage(m_xBuilder->weld_label("primary"))
-    , m_xSecondaryMessage(m_xBuilder->weld_text_view("secondary"))
-    , m_xButtonBox(m_xBuilder->weld_container("buttonbox"))
-    , m_xCloseBtn(m_xBuilder->weld_toolbar("closebar"))
+    , m_xImage(m_xBuilder->weld_image(u"image"_ustr))
+    , m_xPrimaryMessage(m_xBuilder->weld_label(u"primary"_ustr))
+    , m_xSecondaryMessage(m_xBuilder->weld_text_view(u"secondary"_ustr))
+    , m_xButtonBox(m_xBuilder->weld_container(u"buttonbox"_ustr))
+    , m_xCloseBtn(m_xBuilder->weld_toolbar(u"closebar"_ustr))
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
 

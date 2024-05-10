@@ -70,9 +70,9 @@ namespace sfx2
         std::function<css::uno::Reference<css::uno::XInterface>(SfxModelFlags)> creationFunc)
     {
         ::comphelper::NamedValueCollection aArgs( _rArguments );
-        const bool bEmbeddedObject = aArgs.getOrDefault( "EmbeddedObject", false );
-        const bool bScriptSupport = aArgs.getOrDefault( "EmbeddedScriptSupport", true );
-        const bool bDocRecoverySupport = aArgs.getOrDefault( "DocumentRecoverySupport", true );
+        const bool bEmbeddedObject = aArgs.getOrDefault( u"EmbeddedObject"_ustr, false );
+        const bool bScriptSupport = aArgs.getOrDefault( u"EmbeddedScriptSupport"_ustr, true );
+        const bool bDocRecoverySupport = aArgs.getOrDefault( u"DocumentRecoverySupport"_ustr, true );
 
         SfxModelFlags nCreationFlags =
                 ( bEmbeddedObject ? SfxModelFlags::EMBEDDED_OBJECT : SfxModelFlags::NONE )

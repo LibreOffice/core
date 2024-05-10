@@ -258,7 +258,7 @@ bool SaveOlePropertySet(
         const sal_Int32 nPropId = rCustomSect.GetFreePropertyId();
         rCustomSect.SetBlobValue( nPropId, *i_pGuid );
         rCustomSect.SetPropertyName( nPropId,
-            "_PID_GUID" );
+            u"_PID_GUID"_ustr );
     }
 
     // write hyperlinks
@@ -266,7 +266,7 @@ bool SaveOlePropertySet(
         const sal_Int32 nPropId = rCustomSect.GetFreePropertyId();
         rCustomSect.SetBlobValue( nPropId, *i_pHyperlinks );
         rCustomSect.SetPropertyName( nPropId,
-            "_PID_HLINKS" );
+            u"_PID_HLINKS"_ustr );
     }
 
     uno::Reference<beans::XPropertySet> xUserDefinedProps(

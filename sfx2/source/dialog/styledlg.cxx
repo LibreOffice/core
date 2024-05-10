@@ -43,11 +43,11 @@ SfxStyleDialogController::SfxStyleDialogController
     if (!rStyle.HasParentSupport())
         RemoveStandardButton();
 
-    AddTabPage("organizer", SfxManageStyleSheetPage::Create, nullptr);
+    AddTabPage(u"organizer"_ustr, SfxManageStyleSheetPage::Create, nullptr);
 
     // With new template always set the management page as the current page
     if (rStyle.GetName().isEmpty())
-        SetCurPageId("organizer");
+        SetCurPageId(u"organizer"_ustr);
     else
     {
         OUString sTxt = m_xDialog->get_title() + ": " + rStyle.GetName();

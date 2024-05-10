@@ -145,17 +145,17 @@ namespace
 }
 
 SfxVersionDialog::SfxVersionDialog(weld::Window* pParent, SfxViewFrame* pVwFrame, bool bIsSaveVersionOnClose)
-    : SfxDialogController(pParent, "sfx/ui/versionsofdialog.ui", "VersionsOfDialog")
+    : SfxDialogController(pParent, u"sfx/ui/versionsofdialog.ui"_ustr, u"VersionsOfDialog"_ustr)
     , m_pViewFrame(pVwFrame)
     , m_bIsSaveVersionOnClose(bIsSaveVersionOnClose)
-    , m_xSaveButton(m_xBuilder->weld_button("save"))
-    , m_xSaveCheckBox(m_xBuilder->weld_check_button("always"))
-    , m_xOpenButton(m_xBuilder->weld_button("open"))
-    , m_xViewButton(m_xBuilder->weld_button("show"))
-    , m_xDeleteButton(m_xBuilder->weld_button("delete"))
-    , m_xCompareButton(m_xBuilder->weld_button("compare"))
-    , m_xCmisButton(m_xBuilder->weld_button("cmis"))
-    , m_xVersionBox(m_xBuilder->weld_tree_view("versions"))
+    , m_xSaveButton(m_xBuilder->weld_button(u"save"_ustr))
+    , m_xSaveCheckBox(m_xBuilder->weld_check_button(u"always"_ustr))
+    , m_xOpenButton(m_xBuilder->weld_button(u"open"_ustr))
+    , m_xViewButton(m_xBuilder->weld_button(u"show"_ustr))
+    , m_xDeleteButton(m_xBuilder->weld_button(u"delete"_ustr))
+    , m_xCompareButton(m_xBuilder->weld_button(u"compare"_ustr))
+    , m_xCmisButton(m_xBuilder->weld_button(u"cmis"_ustr))
+    , m_xVersionBox(m_xBuilder->weld_tree_view(u"versions"_ustr))
 {
     m_xVersionBox->set_size_request(m_xVersionBox->get_approximate_digit_width() * 90,
                                     m_xVersionBox->get_height_rows(15));
@@ -260,8 +260,8 @@ void SfxVersionDialog::Open_Impl()
 
     auto nPos = m_xVersionBox->get_selected_index();
     SfxInt16Item aItem( SID_VERSION, nPos + 1);
-    SfxStringItem aTarget( SID_TARGETNAME, "_blank" );
-    SfxStringItem aReferer( SID_REFERER, "private:user" );
+    SfxStringItem aTarget( SID_TARGETNAME, u"_blank"_ustr );
+    SfxStringItem aReferer( SID_REFERER, u"private:user"_ustr );
     SfxStringItem aFile( SID_FILE_NAME, pObjShell->GetMedium()->GetName() );
 
     uno::Sequence< beans::NamedValue > aEncryptionData;
@@ -382,14 +382,14 @@ IMPL_LINK(SfxVersionDialog, ToggleHdl_Impl, weld::Toggleable&, rButton, void)
 }
 
 SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl(weld::Window *pParent, SfxVersionInfo& rInfo, bool bEdit)
-    : SfxDialogController(pParent, "sfx/ui/versioncommentdialog.ui", "VersionCommentDialog")
+    : SfxDialogController(pParent, u"sfx/ui/versioncommentdialog.ui"_ustr, u"VersionCommentDialog"_ustr)
     , m_rInfo(rInfo)
-    , m_xDateTimeText(m_xBuilder->weld_label("timestamp"))
-    , m_xSavedByText(m_xBuilder->weld_label("author"))
-    , m_xEdit(m_xBuilder->weld_text_view("textview"))
-    , m_xOKButton(m_xBuilder->weld_button("ok"))
-    , m_xCancelButton(m_xBuilder->weld_button("cancel"))
-    , m_xCloseButton(m_xBuilder->weld_button("close"))
+    , m_xDateTimeText(m_xBuilder->weld_label(u"timestamp"_ustr))
+    , m_xSavedByText(m_xBuilder->weld_label(u"author"_ustr))
+    , m_xEdit(m_xBuilder->weld_text_view(u"textview"_ustr))
+    , m_xOKButton(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xCancelButton(m_xBuilder->weld_button(u"cancel"_ustr))
+    , m_xCloseButton(m_xBuilder->weld_button(u"close"_ustr))
 {
     OUString sAuthor = rInfo.aAuthor.isEmpty() ? SfxResId(STR_NO_NAME_SET) : rInfo.aAuthor;
 
@@ -426,9 +426,9 @@ IMPL_LINK(SfxViewVersionDialog_Impl, ButtonHdl, weld::Button&, rButton, void)
 }
 
 SfxCmisVersionsDialog::SfxCmisVersionsDialog(weld::Window* pParent, SfxViewFrame* pVwFrame)
-    : SfxDialogController(pParent, "sfx/ui/versionscmis.ui", "VersionsCmisDialog")
+    : SfxDialogController(pParent, u"sfx/ui/versionscmis.ui"_ustr, u"VersionsCmisDialog"_ustr)
     , m_pViewFrame(pVwFrame)
-    , m_xVersionBox(m_xBuilder->weld_tree_view("versions"))
+    , m_xVersionBox(m_xBuilder->weld_tree_view(u"versions"_ustr))
 {
     m_xVersionBox->set_size_request(m_xVersionBox->get_approximate_digit_width() * 90,
                                     m_xVersionBox->get_height_rows(15));

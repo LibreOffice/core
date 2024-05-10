@@ -84,7 +84,7 @@ class BackingWindow : public InterimItemWindow
     bool mbInitControls;
     std::unique_ptr<svt::AcceleratorExecute> mpAccExec;
 
-    void dispatchURL(const OUString& i_rURL, const OUString& i_rTarget = OUString("_default"),
+    void dispatchURL(const OUString& i_rURL, const OUString& i_rTarget = u"_default"_ustr,
                      const css::uno::Reference<css::frame::XDispatchProvider>& i_xProv
                      = css::uno::Reference<css::frame::XDispatchProvider>(),
                      const css::uno::Sequence<css::beans::PropertyValue>& = css::uno::Sequence<

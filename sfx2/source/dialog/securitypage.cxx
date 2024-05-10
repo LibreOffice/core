@@ -182,10 +182,10 @@ SfxSecurityPage_Impl::SfxSecurityPage_Impl(SfxSecurityPage &rTabPage)
     , m_bNewPasswordIsValid(false)
     , m_aEndRedliningWarning(SfxResId(RID_SVXSTR_END_REDLINING_WARNING))
     , m_bEndRedliningWarningDone(false)
-    , m_xOpenReadonlyCB(rTabPage.GetBuilder().weld_check_button("readonly"))
-    , m_xRecordChangesCB(rTabPage.GetBuilder().weld_check_button("recordchanges"))
-    , m_xProtectPB(rTabPage.GetBuilder().weld_button("protect"))
-    , m_xUnProtectPB(rTabPage.GetBuilder().weld_button("unprotect"))
+    , m_xOpenReadonlyCB(rTabPage.GetBuilder().weld_check_button(u"readonly"_ustr))
+    , m_xRecordChangesCB(rTabPage.GetBuilder().weld_check_button(u"recordchanges"_ustr))
+    , m_xProtectPB(rTabPage.GetBuilder().weld_button(u"protect"_ustr))
+    , m_xUnProtectPB(rTabPage.GetBuilder().weld_button(u"unprotect"_ustr))
 {
     m_xProtectPB->show();
     m_xUnProtectPB->hide();
@@ -427,7 +427,7 @@ std::unique_ptr<SfxTabPage> SfxSecurityPage::Create(weld::Container* pPage, weld
 }
 
 SfxSecurityPage::SfxSecurityPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rItemSet)
-    : SfxTabPage(pPage, pController, "sfx/ui/securityinfopage.ui", "SecurityInfoPage", &rItemSet)
+    : SfxTabPage(pPage, pController, u"sfx/ui/securityinfopage.ui"_ustr, u"SecurityInfoPage"_ustr, &rItemSet)
 {
     m_pImpl.reset(new SfxSecurityPage_Impl( *this ));
 }

@@ -254,7 +254,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
 
             // create the dispatch URL from the slot data
             css::util::URL aURL;
-            OUString aCmd = ".uno:";
+            OUString aCmd = u".uno:"_ustr;
             aURL.Protocol = aCmd;
             aURL.Path = pSlot->GetUnoName();
             aCmd += aURL.Path;

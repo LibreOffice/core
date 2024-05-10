@@ -223,7 +223,7 @@ static OUString const & HelpLocaleString()
     {
         sLang = sLang.copy( 0, nSepPos );
     }
-    OUString sHelpPath("");
+    OUString sHelpPath(u""_ustr);
     sHelpPath = getHelpRootURL() + "/" + utl::ConfigManager::getProductVersion() + "/" + aLocaleStr;
     if (impl_checkHelpLocalePath(sHelpPath))
     {
@@ -294,7 +294,7 @@ static bool GetHelpAnchor_Impl( std::u16string_view _rURL, OUString& _rAnchor )
                              Reference< css::ucb::XCommandEnvironment >(),
                              comphelper::getProcessComponentContext() );
         OUString sAnchor;
-        if ( aCnt.getPropertyValue("AnchorName") >>= sAnchor )
+        if ( aCnt.getPropertyValue(u"AnchorName"_ustr) >>= sAnchor )
         {
 
             if ( !sAnchor.isEmpty() )
@@ -345,7 +345,7 @@ SfxHelp::SfxHelp()
     // read the environment variable "HELP_DEBUG"
     // if it's set, you will see debug output on active help
     OUString sHelpDebug;
-    OUString sEnvVarName( "HELP_DEBUG"  );
+    OUString sEnvVarName( u"HELP_DEBUG"_ustr  );
     osl_getEnvironment( sEnvVarName.pData, &sHelpDebug.pData );
     bIsDebug = !sHelpDebug.isEmpty();
 }
@@ -535,7 +535,7 @@ static SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
 
     // otherwise - create new help task
     Reference< XFrame2 > xHelpTask(
-        xDesktop->findFrame(  "OFFICE_HELP_TASK", FrameSearchFlag::TASKS | FrameSearchFlag::CREATE),
+        xDesktop->findFrame(  u"OFFICE_HELP_TASK"_ustr, FrameSearchFlag::TASKS | FrameSearchFlag::CREATE),
         UNO_QUERY);
     if (!xHelpTask.is())
         return nullptr;
@@ -550,12 +550,12 @@ static SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
     if (xHelpTask->setComponent( xHelpWindow, Reference< XController >() ))
     {
         // Customize UI ...
-        xHelpTask->setName("OFFICE_HELP_TASK");
+        xHelpTask->setName(u"OFFICE_HELP_TASK"_ustr);
 
         Reference< XPropertySet > xProps(xHelpTask, UNO_QUERY);
         if (xProps.is())
             xProps->setPropertyValue(
-                "Title",
+                u"Title"_ustr,
                 Any(SfxResId(STR_HELP_WINDOW_TITLE)));
 
         pHelpWindow->setContainerWindow( xParentWindow );
@@ -564,7 +564,7 @@ static SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
 
         // This sub frame is created internally (if we called new SfxHelpWindow_Impl() ...)
         // It should exist :-)
-        xHelpContent = xHelpTask->findFrame("OFFICE_HELP", FrameSearchFlag::CHILDREN);
+        xHelpContent = xHelpTask->findFrame(u"OFFICE_HELP"_ustr, FrameSearchFlag::CHILDREN);
     }
 
     if (!xHelpContent.is())
@@ -573,7 +573,7 @@ static SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
         return nullptr;
     }
 
-    xHelpContent->setName("OFFICE_HELP");
+    xHelpContent->setName(u"OFFICE_HELP"_ustr);
 
     rHelpTask    = xHelpTask;
     rHelpContent = xHelpContent;
@@ -775,7 +775,7 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
             //   app-path=<path>
             //   app-extensions=...;org.libreoffice.LibreOffice.Help=<sha>;...
             // lines:
-            osl::File ini("file:///.flatpak-info");
+            osl::File ini(u"file:///.flatpak-info"_ustr);
             auto err = ini.open(osl_File_OpenFlag_Read);
             if (err != osl::FileBase::E_None) {
                 SAL_WARN("sfx.appl", "LIBO_FLATPAK mode failure opening /.flatpak-info: " << err);
@@ -1020,9 +1020,9 @@ private:
     DECL_LINK(DownloadClickHdl, weld::LinkButton&, bool);
 public:
     HelpManualMessage(weld::Widget* pParent)
-        : MessageDialogController(pParent, "sfx/ui/helpmanual.ui", "onlinehelpmanual", "box")
-        , m_xDownloadInfo(m_xBuilder->weld_link_button("downloadinfo"))
-        , m_xHideOfflineHelpCB(m_xBuilder->weld_check_button("hidedialog"))
+        : MessageDialogController(pParent, u"sfx/ui/helpmanual.ui"_ustr, u"onlinehelpmanual"_ustr, u"box"_ustr)
+        , m_xDownloadInfo(m_xBuilder->weld_link_button(u"downloadinfo"_ustr))
+        , m_xHideOfflineHelpCB(m_xBuilder->weld_check_button(u"hidedialog"_ustr))
     {
         LanguageType aLangType = Application::GetSettings().GetUILanguageTag().getLanguageType();
         OUString sLocaleString = SvtLanguageTable::GetLanguageString(aLangType);
@@ -1179,7 +1179,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow)
                 else
                 {
                     // Opens the help page that explains how to install offline help
-                    OUString aOfflineHelpURL(CreateHelpURL_Impl(HID_HELPMANUAL_OFFLINE, "shared"));
+                    OUString aOfflineHelpURL(CreateHelpURL_Impl(HID_HELPMANUAL_OFFLINE, u"shared"_ustr));
                     impl_showOnlineHelp(aOfflineHelpURL, pWeldWindow);
                     bTopicExists = true;
                 }
@@ -1211,10 +1211,10 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow)
     // If not, create a new one and return access directly to the internal sub frame showing the help content
     // search must be done here; search one desktop level could return an arbitrary frame
     Reference< XFrame2 > xHelp(
-        xDesktop->findFrame( "OFFICE_HELP_TASK", FrameSearchFlag::CHILDREN),
+        xDesktop->findFrame( u"OFFICE_HELP_TASK"_ustr, FrameSearchFlag::CHILDREN),
                                UNO_QUERY);
     Reference< XFrame > xHelpContent = xDesktop->findFrame(
-        "OFFICE_HELP",
+        u"OFFICE_HELP"_ustr,
         FrameSearchFlag::CHILDREN);
 
     SfxHelpWindow_Impl* pHelpWindow = nullptr;
@@ -1366,7 +1366,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
                 else
                 {
                     // Opens the help page that explains how to install offline help
-                    OUString aOfflineHelpURL(CreateHelpURL_Impl(HID_HELPMANUAL_OFFLINE, "shared"));
+                    OUString aOfflineHelpURL(CreateHelpURL_Impl(HID_HELPMANUAL_OFFLINE, u"shared"_ustr));
                     impl_showOnlineHelp(aOfflineHelpURL, pWidget);
                     bTopicExists = true;
                 }
@@ -1398,10 +1398,10 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
     // If not, create a new one and return access directly to the internal sub frame showing the help content
     // search must be done here; search one desktop level could return an arbitrary frame
     Reference< XFrame2 > xHelp(
-        xDesktop->findFrame( "OFFICE_HELP_TASK", FrameSearchFlag::CHILDREN),
+        xDesktop->findFrame( u"OFFICE_HELP_TASK"_ustr, FrameSearchFlag::CHILDREN),
                                UNO_QUERY);
     Reference< XFrame > xHelpContent = xDesktop->findFrame(
-        "OFFICE_HELP",
+        u"OFFICE_HELP"_ustr,
         FrameSearchFlag::CHILDREN);
 
     SfxHelpWindow_Impl* pHelpWindow = nullptr;

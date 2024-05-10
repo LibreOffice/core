@@ -151,35 +151,35 @@ static bool cmpSelectionItems (const ThumbnailViewItem *pItem1, const ThumbnailV
 }
 
 SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
-    : GenericDialogController(pParent, "sfx/ui/templatedlg.ui", "TemplateDialog")
+    : GenericDialogController(pParent, u"sfx/ui/templatedlg.ui"_ustr, u"TemplateDialog"_ustr)
     , maSelTemplates(cmpSelectionItems)
     , mxDesktop(Desktop::create(comphelper::getProcessComponentContext()))
     , m_aUpdateDataTimer( "SfxTemplateManagerDlg UpdateDataTimer" )
-    , mxSearchFilter(m_xBuilder->weld_entry("search_filter"))
-    , mxCBApp(m_xBuilder->weld_combo_box("filter_application"))
-    , mxCBFolder(m_xBuilder->weld_combo_box("filter_folder"))
-    , mxOKButton(m_xBuilder->weld_button("ok"))
-    , mxCBXHideDlg(m_xBuilder->weld_check_button("hidedialogcb"))
-    , mxActionBar(m_xBuilder->weld_menu_button("action_menu"))
-    , mxLocalView(new TemplateDlgLocalView(m_xBuilder->weld_scrolled_window("scrolllocal", true),
-                                           m_xBuilder->weld_menu("contextmenu"),
-                                           m_xBuilder->weld_tree_view("tree_list")))
-    , mxLocalViewWeld(new weld::CustomWeld(*m_xBuilder, "template_view", *mxLocalView))
-    , mxListViewButton(m_xBuilder->weld_toggle_button("list_view_btn"))
-    , mxThumbnailViewButton(m_xBuilder->weld_toggle_button("thumbnail_view_btn"))
+    , mxSearchFilter(m_xBuilder->weld_entry(u"search_filter"_ustr))
+    , mxCBApp(m_xBuilder->weld_combo_box(u"filter_application"_ustr))
+    , mxCBFolder(m_xBuilder->weld_combo_box(u"filter_folder"_ustr))
+    , mxOKButton(m_xBuilder->weld_button(u"ok"_ustr))
+    , mxCBXHideDlg(m_xBuilder->weld_check_button(u"hidedialogcb"_ustr))
+    , mxActionBar(m_xBuilder->weld_menu_button(u"action_menu"_ustr))
+    , mxLocalView(new TemplateDlgLocalView(m_xBuilder->weld_scrolled_window(u"scrolllocal"_ustr, true),
+                                           m_xBuilder->weld_menu(u"contextmenu"_ustr),
+                                           m_xBuilder->weld_tree_view(u"tree_list"_ustr)))
+    , mxLocalViewWeld(new weld::CustomWeld(*m_xBuilder, u"template_view"_ustr, *mxLocalView))
+    , mxListViewButton(m_xBuilder->weld_toggle_button(u"list_view_btn"_ustr))
+    , mxThumbnailViewButton(m_xBuilder->weld_toggle_button(u"thumbnail_view_btn"_ustr))
     , mViewMode(TemplateViewMode::eThumbnailView)
 {
     // Create popup menus
     mxActionBar->append_item(MNI_ACTION_NEW_FOLDER, SfxResId(STR_CATEGORY_NEW), BMP_ACTION_NEW_CATEGORY);
     mxActionBar->append_item(MNI_ACTION_RENAME_FOLDER, SfxResId(STR_CATEGORY_RENAME), BMP_ACTION_RENAME);
     mxActionBar->append_item(MNI_ACTION_DELETE_FOLDER, SfxResId(STR_CATEGORY_DELETE), BMP_ACTION_DELETE_CATEGORY);
-    mxActionBar->append_separator("separator");
+    mxActionBar->append_separator(u"separator"_ustr);
     mxActionBar->append_item(MNI_ACTION_DEFAULT, SfxResId(STR_ACTION_RESET_ALL_DEFAULT_TEMPLATES));
     mxActionBar->append_item(MNI_ACTION_DEFAULT_WRITER, SfxResId(STR_ACTION_RESET_WRITER_TEMPLATE), BMP_ACTION_DEFAULT_WRITER);
     mxActionBar->append_item(MNI_ACTION_DEFAULT_CALC, SfxResId(STR_ACTION_RESET_CALC_TEMPLATE), BMP_ACTION_DEFAULT_CALC);
     mxActionBar->append_item(MNI_ACTION_DEFAULT_IMPRESS, SfxResId(STR_ACTION_RESET_IMPRESS_TEMPLATE), BMP_ACTION_DEFAULT_IMPRESS);
     mxActionBar->append_item(MNI_ACTION_DEFAULT_DRAW, SfxResId(STR_ACTION_RESET_DRAW_TEMPLATE), BMP_ACTION_DEFAULT_DRAW);
-    mxActionBar->append_separator("separator2");
+    mxActionBar->append_separator(u"separator2"_ustr);
     mxActionBar->append_item(MNI_ACTION_IMPORT, SfxResId(STR_ACTION_IMPORT), BMP_ACTION_IMPORT);
     mxActionBar->append_item(MNI_ACTION_EXTENSIONS, SfxResId(STR_ACTION_EXTENSIONS), BMP_ACTION_EXTENSIONS);
 
@@ -274,7 +274,7 @@ IMPL_LINK(SfxTemplateManagerDlg, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
 
         if ( nKeyCode == KEY_ESCAPE )
         {
-            mxSearchFilter->set_text("");
+            mxSearchFilter->set_text(u""_ustr);
             SearchUpdateHdl(*mxSearchFilter);
             return true;
         }
@@ -647,8 +647,8 @@ void SfxTemplateManagerDlg::ImportActionHdl()
 void SfxTemplateManagerDlg::ExtensionsActionHdl()
 {
     uno::Sequence<beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
-        "AdditionsTag", OUString("Templates")) };
-    comphelper::dispatchCommand(".uno:AdditionsDialog", aArgs);
+        u"AdditionsTag"_ustr, u"Templates"_ustr) };
+    comphelper::dispatchCommand(u".uno:AdditionsDialog"_ustr, aArgs);
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg, OpenRegionHdl, void*, void)
@@ -702,18 +702,18 @@ IMPL_LINK(SfxTemplateManagerDlg, CreateContextMenuHdl, ThumbnailViewItem*, pItem
 IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
     uno::Sequence< PropertyValue > aArgs{
-        comphelper::makePropertyValue("AsTemplate", true),
-        comphelper::makePropertyValue("MacroExecutionMode", MacroExecMode::USE_CONFIG),
-        comphelper::makePropertyValue("UpdateDocMode", UpdateDocMode::ACCORDING_TO_CONFIG),
-        comphelper::makePropertyValue("InteractionHandler", task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr )),
-        comphelper::makePropertyValue("ReadOnly", true)
+        comphelper::makePropertyValue(u"AsTemplate"_ustr, true),
+        comphelper::makePropertyValue(u"MacroExecutionMode"_ustr, MacroExecMode::USE_CONFIG),
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr, UpdateDocMode::ACCORDING_TO_CONFIG),
+        comphelper::makePropertyValue(u"InteractionHandler"_ustr, task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr )),
+        comphelper::makePropertyValue(u"ReadOnly"_ustr, true)
     };
 
     TemplateViewItem *pTemplateItem = static_cast<TemplateViewItem*>(pItem);
 
     try
     {
-        mxDesktop->loadComponentFromURL(pTemplateItem->getPath(),"_default", 0, aArgs );
+        mxDesktop->loadComponentFromURL(pTemplateItem->getPath(),u"_default"_ustr, 0, aArgs );
     }
     catch( const uno::Exception& )
     {
@@ -725,9 +725,9 @@ IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem, voi
 IMPL_LINK(SfxTemplateManagerDlg, EditTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
     uno::Sequence< PropertyValue > aArgs{
-        comphelper::makePropertyValue("AsTemplate", false),
-        comphelper::makePropertyValue("MacroExecutionMode", MacroExecMode::USE_CONFIG),
-        comphelper::makePropertyValue("UpdateDocMode", UpdateDocMode::ACCORDING_TO_CONFIG)
+        comphelper::makePropertyValue(u"AsTemplate"_ustr, false),
+        comphelper::makePropertyValue(u"MacroExecutionMode"_ustr, MacroExecMode::USE_CONFIG),
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr, UpdateDocMode::ACCORDING_TO_CONFIG)
     };
 
     uno::Reference< XStorable > xStorable;
@@ -735,7 +735,7 @@ IMPL_LINK(SfxTemplateManagerDlg, EditTemplateHdl, ThumbnailViewItem*, pItem, voi
 
     try
     {
-        xStorable.set( mxDesktop->loadComponentFromURL(pViewItem->getPath(),"_default", 0, aArgs ),
+        xStorable.set( mxDesktop->loadComponentFromURL(pViewItem->getPath(),u"_default"_ustr, 0, aArgs ),
                        uno::UNO_QUERY );
     }
     catch( const uno::Exception& )
@@ -1261,11 +1261,11 @@ static std::vector<OUString> lcl_getAllFactoryURLs ()
 //   Class SfxTemplateCategoryDialog --------------------------------------------------
 
 SfxTemplateCategoryDialog::SfxTemplateCategoryDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "sfx/ui/templatecategorydlg.ui", "TemplatesCategoryDialog")
+    : GenericDialogController(pParent, u"sfx/ui/templatecategorydlg.ui"_ustr, u"TemplatesCategoryDialog"_ustr)
     , mbIsNewCategory(false)
-    , mxLBCategory(m_xBuilder->weld_tree_view("categorylb"))
-    , mxNewCategoryEdit(m_xBuilder->weld_entry("category_entry"))
-    , mxOKButton(m_xBuilder->weld_button("ok"))
+    , mxLBCategory(m_xBuilder->weld_tree_view(u"categorylb"_ustr))
+    , mxNewCategoryEdit(m_xBuilder->weld_entry(u"category_entry"_ustr))
+    , mxOKButton(m_xBuilder->weld_button(u"ok"_ustr))
 {
     mxLBCategory->append_text(SfxResId(STR_CATEGORY_NONE));
     mxNewCategoryEdit->connect_changed(LINK(this, SfxTemplateCategoryDialog, NewCategoryEditHdl));

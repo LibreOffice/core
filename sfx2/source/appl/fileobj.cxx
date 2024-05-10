@@ -207,7 +207,7 @@ static OUString impl_getFilter( const OUString& _rURL )
     try
     {
         css::uno::Reference< css::document::XTypeDetection > xTypeDetection(
-            ::comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.document.TypeDetection" ),
+            ::comphelper::getProcessServiceFactory()->createInstance( u"com.sun.star.document.TypeDetection"_ustr ),
             css::uno::UNO_QUERY );
         if ( xTypeDetection.is() )
         {
@@ -238,7 +238,7 @@ static OUString impl_getFilter( const OUString& _rURL )
                          * property value (since? expected?) */
                         ::comphelper::SequenceAsHashMap lTypeProps( xTypeCont->getByName( sType ) );
                         sFilter = lTypeProps.getUnpackedValueOrDefault(
-                                "PreferredFilter", OUString() );
+                                u"PreferredFilter"_ustr, OUString() );
                     }
                 }
             }

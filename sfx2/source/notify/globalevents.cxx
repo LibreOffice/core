@@ -74,7 +74,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.sfx2.GlobalEventBroadcaster";
+        return u"com.sun.star.comp.sfx2.GlobalEventBroadcaster"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -84,7 +84,7 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        css::uno::Sequence< OUString > aSeq { "com.sun.star.frame.GlobalEventBroadcaster" };
+        css::uno::Sequence< OUString > aSeq { u"com.sun.star.frame.GlobalEventBroadcaster"_ustr };
         return aSeq;
     }
 
@@ -270,7 +270,7 @@ void SfxGlobalEvents_Impl::addEventListener(
     css::uno::Reference<css::lang::XEventListener> const & xListener)
 {
     if (!xListener.is()) {
-        throw css::uno::RuntimeException("null listener");
+        throw css::uno::RuntimeException(u"null listener"_ustr);
     }
     {
         std::scoped_lock g(m_aLock);
@@ -321,7 +321,7 @@ void SAL_CALL SfxGlobalEvents_Impl::insert( const uno::Any& aElement )
     aElement >>= xDoc;
     if (!xDoc.is())
         throw lang::IllegalArgumentException(
-                "Can not locate at least the model parameter.",
+                u"Can not locate at least the model parameter."_ustr,
                 static_cast< container::XSet* >(this),
                 0);
 
@@ -359,7 +359,7 @@ void SAL_CALL SfxGlobalEvents_Impl::remove( const uno::Any& aElement )
     aElement >>= xDoc;
     if (!xDoc.is())
         throw lang::IllegalArgumentException(
-                "Can not locate at least the model parameter.",
+                u"Can not locate at least the model parameter."_ustr,
                 static_cast< container::XSet* >(this),
                 0);
 

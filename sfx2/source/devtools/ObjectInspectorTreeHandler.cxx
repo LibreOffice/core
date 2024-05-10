@@ -201,9 +201,9 @@ OUString getInterfaceName(uno::Reference<uno::XInterface> const& xInterface,
     if (xInvocationInterface.is())
     {
         uno::Reference<script::XInvocation2> xInvocation(xInvocationInterface, uno::UNO_QUERY);
-        if (xInvocation.is() && xInvocation->hasProperty("Name"))
+        if (xInvocation.is() && xInvocation->hasProperty(u"Name"_ustr))
         {
-            uno::Any aAny = xInvocation->getValue("Name");
+            uno::Any aAny = xInvocation->getValue(u"Name"_ustr);
             if (aAny.hasValue() && aAny.getValueTypeClass() == uno::TypeClass_STRING)
                 return aAny.get<OUString>();
         }
@@ -644,7 +644,7 @@ public:
             uno::Any aArrayValue = mxIdlArray->get(maAny, i);
 
             auto* pObjectInspectorNode
-                = createNodeObjectForAny(OUString::number(i), aArrayValue, "");
+                = createNodeObjectForAny(OUString::number(i), aArrayValue, u""_ustr);
             if (pObjectInspectorNode)
                 lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
         }
@@ -863,7 +863,7 @@ void StructNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree, const weld
         OUString aFieldName = xField->getName();
         uno::Any aFieldValue = xField->get(maAny);
 
-        auto* pObjectInspectorNode = createNodeObjectForAny(aFieldName, aFieldValue, "");
+        auto* pObjectInspectorNode = createNodeObjectForAny(aFieldName, aFieldValue, u""_ustr);
         if (pObjectInspectorNode)
         {
             lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
@@ -976,8 +976,8 @@ ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
 
     mpObjectInspectorWidgets->mpToolbar->connect_clicked(
         LINK(this, ObjectInspectorTreeHandler, ToolbarButtonClicked));
-    mpObjectInspectorWidgets->mpToolbar->set_item_sensitive("inspect", false);
-    mpObjectInspectorWidgets->mpToolbar->set_item_sensitive("back", false);
+    mpObjectInspectorWidgets->mpToolbar->set_item_sensitive(u"inspect"_ustr, false);
+    mpObjectInspectorWidgets->mpToolbar->set_item_sensitive(u"back"_ustr, false);
 
     mpObjectInspectorWidgets->mpNotebook->connect_leave_page(
         LINK(this, ObjectInspectorTreeHandler, NotebookLeavePage));
@@ -1062,7 +1062,7 @@ IMPL_LINK(ObjectInspectorTreeHandler, ExpandingHandlerMethods, weld::TreeIter co
 IMPL_LINK(ObjectInspectorTreeHandler, SelectionChanged, weld::TreeView&, rTreeView, void)
 {
     bool bHaveNodeWithObject = false;
-    mpObjectInspectorWidgets->mpTextView->set_text("");
+    mpObjectInspectorWidgets->mpTextView->set_text(u""_ustr);
     if (mpObjectInspectorWidgets->mpPropertiesTreeView.get() == &rTreeView)
     {
         auto* pNode = getSelectedNode(rTreeView);
@@ -1075,7 +1075,7 @@ IMPL_LINK(ObjectInspectorTreeHandler, SelectionChanged, weld::TreeView&, rTreeVi
         }
     }
 
-    mpObjectInspectorWidgets->mpToolbar->set_item_sensitive("inspect", bHaveNodeWithObject);
+    mpObjectInspectorWidgets->mpToolbar->set_item_sensitive(u"inspect"_ustr, bHaveNodeWithObject);
 }
 
 static void updateOrder(const std::unique_ptr<weld::TreeView>& pTreeView, sal_Int32 nColumn)
@@ -1110,8 +1110,8 @@ IMPL_LINK(ObjectInspectorTreeHandler, PopupMenuHandler, const CommandEvent&, rCo
     if (xInterface.is())
     {
         std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(
-            mpObjectInspectorWidgets->mpPropertiesTreeView.get(), "sfx/ui/devtoolsmenu.ui"));
-        std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("inspect_menu"));
+            mpObjectInspectorWidgets->mpPropertiesTreeView.get(), u"sfx/ui/devtoolsmenu.ui"_ustr));
+        std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu(u"inspect_menu"_ustr));
 
         OUString sCommand(
             xMenu->popup_at_rect(mpObjectInspectorWidgets->mpPropertiesTreeView.get(),
@@ -1293,7 +1293,7 @@ void ObjectInspectorTreeHandler::appendProperties(uno::Reference<uno::XInterface
 {
     if (!xInterface.is())
         return;
-    GenericPropertiesNode aNode("", uno::Any(xInterface), "", mxContext);
+    GenericPropertiesNode aNode(u""_ustr, uno::Any(xInterface), u""_ustr, mxContext);
     aNode.fillChildren(mpObjectInspectorWidgets->mpPropertiesTreeView, nullptr);
 }
 
@@ -1316,7 +1316,8 @@ void ObjectInspectorTreeHandler::appendMethods(uno::Reference<uno::XInterface> c
 // Update the back button state depending if there are objects in the stack
 void ObjectInspectorTreeHandler::updateBackButtonState()
 {
-    mpObjectInspectorWidgets->mpToolbar->set_item_sensitive("back", maInspectionStack.size() > 1);
+    mpObjectInspectorWidgets->mpToolbar->set_item_sensitive(u"back"_ustr,
+                                                            maInspectionStack.size() > 1);
 }
 
 // Clears all the objects from the stack

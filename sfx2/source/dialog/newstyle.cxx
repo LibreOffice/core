@@ -61,11 +61,11 @@ IMPL_LINK(SfxNewStyleDlg, ModifyHdl, weld::ComboBox&, rBox, void)
 }
 
 SfxNewStyleDlg::SfxNewStyleDlg(weld::Widget* pParent, SfxStyleSheetBasePool& rInPool, SfxStyleFamily eFam)
-    : GenericDialogController(pParent, "sfx/ui/newstyle.ui", "CreateStyleDialog")
+    : GenericDialogController(pParent, u"sfx/ui/newstyle.ui"_ustr, u"CreateStyleDialog"_ustr)
     , m_rPool(rInPool)
     , m_eSearchFamily(eFam)
-    , m_xColBox(m_xBuilder->weld_entry_tree_view("stylegrid", "stylename", "styles"))
-    , m_xOKBtn(m_xBuilder->weld_button("ok"))
+    , m_xColBox(m_xBuilder->weld_entry_tree_view(u"stylegrid"_ustr, u"stylename"_ustr, u"styles"_ustr))
+    , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
     , m_xQueryOverwriteBox(Application::CreateMessageDialog(m_xDialog.get(), VclMessageType::Question, VclButtonsType::YesNo,
                                                                            SfxResId(STR_QUERY_OVERWRITE)))
 {

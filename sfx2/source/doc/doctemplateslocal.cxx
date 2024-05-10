@@ -44,7 +44,7 @@ constexpr OUString g_sUINameAttr(u"groupuinames:default-ui-name"_ustr);
 
 std::vector< beans::StringPair > DocTemplLocaleHelper::ReadGroupLocalizationSequence( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< uno::XComponentContext >& xContext )
 {
-    return ReadLocalizationSequence_Impl( xInStream, "groupuinames.xml", xContext );
+    return ReadLocalizationSequence_Impl( xInStream, u"groupuinames.xml"_ustr, xContext );
 }
 
 
@@ -63,8 +63,8 @@ void DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::Reference<
     // write the namespace
     rtl::Reference<::comphelper::AttributeList> pRootAttrList = new ::comphelper::AttributeList;
     pRootAttrList->AddAttribute(
-        "xmlns:groupuinames",
-        "http://openoffice.org/2006/groupuinames" );
+        u"xmlns:groupuinames"_ustr,
+        u"http://openoffice.org/2006/groupuinames"_ustr );
 
     xWriterHandler->startDocument();
     xWriterHandler->startElement( g_sGroupListElement, pRootAttrList );
@@ -118,7 +118,7 @@ DocTemplLocaleHelper::~DocTemplLocaleHelper()
 std::vector< beans::StringPair > const & DocTemplLocaleHelper::GetParsingResult() const
 {
     if ( !m_aElementsSeq.empty() )
-        throw uno::RuntimeException("The parsing has still not finished!");
+        throw uno::RuntimeException(u"The parsing has still not finished!"_ustr);
 
     return m_aResultSeq;
 }

@@ -45,7 +45,7 @@ class MiscTest
 {
 public:
     MiscTest()
-        : UnoApiXmlTest("/sfx2/qa/cppunit/misc/")
+        : UnoApiXmlTest(u"/sfx2/qa/cppunit/misc/"_ustr)
     {
     }
 
@@ -68,19 +68,19 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testODFCustomMetadata)
 
     OUString const url(m_directories.getURLFromSrc(u"/sfx2/qa/complex/sfx2/testdocuments/CUSTOM.odt"));
     xProps->loadFromMedium(url, uno::Sequence<beans::PropertyValue>());
-    CPPUNIT_ASSERT_EQUAL(OUString(""), xProps->getAuthor());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, xProps->getAuthor());
     uno::Sequence<beans::PropertyValue> mimeArgs({
-        beans::PropertyValue("MediaType", -1, uno::Any(OUString("application/vnd.oasis.opendocument.text")), beans::PropertyState_DIRECT_VALUE)
+        beans::PropertyValue(u"MediaType"_ustr, -1, uno::Any(u"application/vnd.oasis.opendocument.text"_ustr), beans::PropertyState_DIRECT_VALUE)
         });
     xProps->storeToMedium(maTempFile.GetURL(), mimeArgs);
 
     // check that custom metadata is preserved
-    xmlDocUniquePtr pXmlDoc = parseExport("meta.xml");
-    assertXPathContent(pXmlDoc, "/office:document-meta/office:meta/bork"_ostr, "bork");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"meta.xml"_ustr);
+    assertXPathContent(pXmlDoc, "/office:document-meta/office:meta/bork"_ostr, u"bork"_ustr);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/foo:bar"_ostr, 1);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/foo:bar/baz:foo"_ostr, 1);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/foo:bar/baz:foo[@baz:bar='foo']"_ostr);
-    assertXPathContent(pXmlDoc, "/office:document-meta/office:meta/foo:bar/foo:baz"_ostr, "bar");
+    assertXPathContent(pXmlDoc, "/office:document-meta/office:meta/foo:bar/foo:baz"_ostr, u"bar"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(MiscTest, testNoThumbnail)
@@ -100,7 +100,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testNoThumbnail)
     xStorable->storeToURL(maTempFile.GetURL(), aProperties);
     uno::Reference<packages::zip::XZipFileAccess2> xZipFile
         = packages::zip::ZipFileAccess::createWithURL(m_xContext, maTempFile.GetURL());
-    CPPUNIT_ASSERT(!xZipFile->hasByName("Thumbnails/thumbnail.png"));
+    CPPUNIT_ASSERT(!xZipFile->hasByName(u"Thumbnails/thumbnail.png"_ustr));
 
 #ifndef _WIN32
     // Check permissions of the URL after store.
@@ -141,7 +141,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testHardLinks)
     int nRet = link(aOld.getStr(), aNew.getStr());
     CPPUNIT_ASSERT_EQUAL(0, nRet);
 
-    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument");
+    mxComponent = loadFromDesktop(aURL, u"com.sun.star.text.TextDocument"_ustr);
 
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     xStorable->store();
@@ -170,7 +170,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testOverwrite)
 {
     // tdf#60237 - try to overwrite an existing file using the different settings of the Overwrite option
     mxComponent
-        = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument");
+        = loadFromDesktop(maTempFile.GetURL(), u"com.sun.star.text.TextDocument"_ustr);
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xStorable.is());
 

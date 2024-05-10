@@ -343,7 +343,7 @@ public:
 // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override
     {
-        return "CompatWriterDocPropsImpl";
+        return u"CompatWriterDocPropsImpl"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override
@@ -353,7 +353,7 @@ public:
 
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override
     {
-        css::uno::Sequence<OUString> aServiceNames { "com.sun.star.writer.DocumentProperties" };
+        css::uno::Sequence<OUString> aServiceNames { u"com.sun.star.writer.DocumentProperties"_ustr };
         return aServiceNames;
     }
 };
@@ -623,17 +623,17 @@ SfxDocumentMetaData::getURLProperties(
                 }
             } else if (rProp.Name == "HierarchicalDocumentName") {
                 xPropArg->addProperty(
-                    "StreamRelPath",
+                    u"StreamRelPath"_ustr,
                     css::beans::PropertyAttribute::MAYBEVOID,
                     rProp.Value);
             }
         }
         if (baseUri.hasValue()) {
             xPropArg->addProperty(
-                "BaseURI", css::beans::PropertyAttribute::MAYBEVOID,
+                u"BaseURI"_ustr, css::beans::PropertyAttribute::MAYBEVOID,
                 baseUri);
         }
-        xPropArg->addProperty("StreamName",
+        xPropArg->addProperty(u"StreamName"_ustr,
                 css::beans::PropertyAttribute::MAYBEVOID,
                 css::uno::Any(s_meta));
     } catch (const css::uno::Exception &) {
@@ -650,7 +650,7 @@ OUString
 getNodeText(const css::uno::Reference<css::xml::dom::XNode>& i_xNode)
 {
     if (!i_xNode.is())
-        throw css::uno::RuntimeException("SfxDocumentMetaData::getNodeText: argument is null", i_xNode);
+        throw css::uno::RuntimeException(u"SfxDocumentMetaData::getNodeText: argument is null"_ustr, i_xNode);
     for (css::uno::Reference<css::xml::dom::XNode> c = i_xNode->getFirstChild();
             c.is();
             c = c->getNextSibling()) {
@@ -726,7 +726,7 @@ SfxDocumentMetaData::setMetaText(std::unique_lock<std::mutex>& rGuard, const OUS
     } catch (const css::xml::dom::DOMException &) {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
-                "SfxDocumentMetaData::setMetaText: DOM exception",
+                u"SfxDocumentMetaData::setMetaText: DOM exception"_ustr,
                 css::uno::Reference<css::uno::XInterface>(*this), anyEx);
     }
 }
@@ -853,7 +853,7 @@ SfxDocumentMetaData::setMetaList(std::unique_lock<std::mutex>& rGuard, const OUS
     } catch (const css::xml::dom::DOMException &) {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
-                "SfxDocumentMetaData::setMetaList: DOM exception",
+                u"SfxDocumentMetaData::setMetaList: DOM exception"_ustr,
                 css::uno::Reference<css::uno::XInterface>(*this), anyEx);
     }
 }
@@ -892,7 +892,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
             OUStringBuffer buf;
             ::sax::Converter::convertBool(buf, b);
             values.push_back(buf.makeStringAndClear());
-            as.emplace_back(vt, OUString("boolean"));
+            as.emplace_back(vt, u"boolean"_ustr);
         } else if (type == ::cppu::UnoType< OUString>::get()) {
             OUString s;
             any >>= s;
@@ -903,28 +903,28 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
 // => best backward compatibility: first 4 without @value-type, rest with
             if (4 <= i)
             {
-                as.emplace_back(vt, OUString("string"));
+                as.emplace_back(vt, u"string"_ustr);
             }
         } else if (type == ::cppu::UnoType<css::util::DateTime>::get()) {
             css::util::DateTime dt;
             any >>= dt;
             values.push_back(dateTimeToText(dt));
-            as.emplace_back(vt, OUString("date"));
+            as.emplace_back(vt, u"date"_ustr);
         } else if (type == ::cppu::UnoType<css::util::Date>::get()) {
             css::util::Date d;
             any >>= d;
             values.push_back(dateToText(d, nullptr));
-            as.emplace_back(vt,OUString("date"));
+            as.emplace_back(vt,u"date"_ustr);
         } else if (type == ::cppu::UnoType<css::util::DateTimeWithTimezone>::get()) {
             css::util::DateTimeWithTimezone dttz;
             any >>= dttz;
             values.push_back(dateTimeToText(dttz.DateTimeInTZ, &dttz.Timezone));
-            as.emplace_back(vt, OUString("date"));
+            as.emplace_back(vt, u"date"_ustr);
         } else if (type == ::cppu::UnoType<css::util::DateWithTimezone>::get()) {
             css::util::DateWithTimezone dtz;
             any >>= dtz;
             values.push_back(dateToText(dtz.DateInTZ, &dtz.Timezone));
-            as.emplace_back(vt, OUString("date"));
+            as.emplace_back(vt, u"date"_ustr);
         } else if (type == ::cppu::UnoType<css::util::Time>::get()) {
             // #i97029#: replaced by Duration
             // Time is supported for backward compatibility with OOo 3.x, x<=2
@@ -936,12 +936,12 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
             ud.Seconds = ut.Seconds;
             ud.NanoSeconds = ut.NanoSeconds;
             values.push_back(durationToText(ud));
-            as.emplace_back(vt, OUString("time"));
+            as.emplace_back(vt, u"time"_ustr);
         } else if (type == ::cppu::UnoType<css::util::Duration>::get()) {
             css::util::Duration ud;
             any >>= ud;
             values.push_back(durationToText(ud));
-            as.emplace_back(vt, OUString("time"));
+            as.emplace_back(vt, u"time"_ustr);
         } else if (::cppu::UnoType<double>::get().isAssignableFrom(type)) {
             // support not just double, but anything that can be converted
             double d = 0;
@@ -949,7 +949,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
             OUStringBuffer buf;
             ::sax::Converter::convertDouble(buf, d);
             values.push_back(buf.makeStringAndClear());
-            as.emplace_back(vt, OUString("float"));
+            as.emplace_back(vt, u"float"_ustr);
         } else {
             SAL_WARN("sfx.doc", "Unsupported property type: " << any.getValueTypeName() );
             continue;
@@ -991,7 +991,7 @@ SfxDocumentMetaData::updateElement(std::unique_lock<std::mutex>& /*rGuard*/, con
     } catch (const css::xml::dom::DOMException &) {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
-                "SfxDocumentMetaData::updateElement: DOM exception",
+                u"SfxDocumentMetaData::updateElement: DOM exception"_ustr,
                 css::uno::Reference<css::uno::XInterface>(*this), anyEx);
     }
 }
@@ -1004,24 +1004,24 @@ void SfxDocumentMetaData::updateUserDefinedAndAttributes(std::unique_lock<std::m
             css::uno::UNO_QUERY_THROW);
     const std::pair<css::uno::Sequence< OUString>, AttrVector>
         udStringsAttrs( propsToStrings(xPSet) );
-    (void) setMetaList(g, "meta:user-defined", udStringsAttrs.first,
+    (void) setMetaList(g, u"meta:user-defined"_ustr, udStringsAttrs.first,
             &udStringsAttrs.second);
 
     // update elements with attributes
     std::vector<std::pair<OUString, OUString> > attributes;
     if (!m_TemplateName.isEmpty() || !m_TemplateURL.isEmpty()
             || isValidDateTime(m_TemplateDate)) {
-        attributes.emplace_back("xlink:type", OUString("simple"));
-        attributes.emplace_back("xlink:actuate", OUString("onRequest"));
+        attributes.emplace_back("xlink:type", u"simple"_ustr);
+        attributes.emplace_back("xlink:actuate", u"onRequest"_ustr);
         attributes.emplace_back("xlink:title", m_TemplateName);
         attributes.emplace_back("xlink:href", m_TemplateURL );
         if (isValidDateTime(m_TemplateDate)) {
             attributes.emplace_back(
                 "meta:date", dateTimeToText(m_TemplateDate));
         }
-        updateElement(g, "meta:template", &attributes);
+        updateElement(g, u"meta:template"_ustr, &attributes);
     } else {
-        updateElement(g, "meta:template");
+        updateElement(g, u"meta:template"_ustr);
     }
     attributes.clear();
 
@@ -1029,9 +1029,9 @@ void SfxDocumentMetaData::updateUserDefinedAndAttributes(std::unique_lock<std::m
         attributes.emplace_back("xlink:href", m_AutoloadURL );
         attributes.emplace_back("meta:delay",
                 durationToText(m_AutoloadSecs));
-        updateElement(g, "meta:auto-reload", &attributes);
+        updateElement(g, u"meta:auto-reload"_ustr, &attributes);
     } else {
-        updateElement(g, "meta:auto-reload");
+        updateElement(g, u"meta:auto-reload"_ustr);
     }
     attributes.clear();
 
@@ -1044,9 +1044,9 @@ void SfxDocumentMetaData::updateUserDefinedAndAttributes(std::unique_lock<std::m
         attributes.emplace_back(
                 "xlink:show",
                 OUString::createFromAscii(show));
-        updateElement(g, "meta:hyperlink-behaviour", &attributes);
+        updateElement(g, u"meta:hyperlink-behaviour"_ustr, &attributes);
     } else {
-        updateElement(g, "meta:hyperlink-behaviour");
+        updateElement(g, u"meta:hyperlink-behaviour"_ustr);
     }
     attributes.clear();
 }
@@ -1059,7 +1059,7 @@ SfxDocumentMetaData::createDOM() const // throw (css::uno::RuntimeException)
     css::uno::Reference<css::xml::dom::XDocument> xDoc = xBuilder->newDocument();
     if (!xDoc.is())
         throw css::uno::RuntimeException(
-                "SfxDocumentMetaData::createDOM: cannot create new document",
+                u"SfxDocumentMetaData::createDOM: cannot create new document"_ustr,
                 *const_cast<SfxDocumentMetaData*>(this));
     return xDoc;
 }
@@ -1069,7 +1069,7 @@ SfxDocumentMetaData::checkInit(std::unique_lock<std::mutex>& /*rGuard*/) const /
 {
     if (!m_isInitialized) {
         throw css::uno::RuntimeException(
-                "SfxDocumentMetaData::checkInit: not initialized",
+                u"SfxDocumentMetaData::checkInit: not initialized"_ustr,
                 *const_cast<SfxDocumentMetaData*>(this));
     }
     assert(m_xDoc.is() && m_xParent.is());
@@ -1140,7 +1140,7 @@ void SfxDocumentMetaData::init(
         const css::uno::Reference<css::xml::dom::XDocument>& i_xDoc)
 {
     if (!i_xDoc.is())
-        throw css::uno::RuntimeException("SfxDocumentMetaData::init: no DOM tree given", *this);
+        throw css::uno::RuntimeException(u"SfxDocumentMetaData::init: no DOM tree given"_ustr, *this);
 
     m_isInitialized = false;
     m_xDoc = i_xDoc;
@@ -1194,7 +1194,7 @@ void SfxDocumentMetaData::init(
                 i_xDoc->appendChild(xRNode);
             }
             static constexpr OUStringLiteral sOfficeVersion = u"office:version";
-            xRElem->setAttributeNS(s_nsODF, sOfficeVersion, "1.0");
+            xRElem->setAttributeNS(s_nsODF, sOfficeVersion, u"1.0"_ustr);
             // does not exist, otherwise m_xParent would not be null
             static constexpr OUStringLiteral sOfficeMeta = u"office:meta";
             css::uno::Reference<css::xml::dom::XNode> xParent (
@@ -1205,7 +1205,7 @@ void SfxDocumentMetaData::init(
         } catch (const css::xml::dom::DOMException &) {
             css::uno::Any anyEx = cppu::getCaughtException();
             throw css::lang::WrappedTargetRuntimeException(
-                    "SfxDocumentMetaData::init: DOM exception",
+                    u"SfxDocumentMetaData::init: DOM exception"_ustr,
                     css::uno::Reference<css::uno::XInterface>(*this), anyEx);
         }
     }
@@ -1238,19 +1238,19 @@ void SfxDocumentMetaData::init(
     static constexpr OUString sMetaTemplate = u"meta:template"_ustr;
     static constexpr OUString sMetaAutoReload = u"meta:auto-reload"_ustr;
     static constexpr OUStringLiteral sMetaHyperlinkBehaviour = u"meta:hyperlink-behaviour";
-    m_TemplateName  = getMetaAttr(g, sMetaTemplate, "xlink:title");
-    m_TemplateURL   = getMetaAttr(g, sMetaTemplate, "xlink:href");
+    m_TemplateName  = getMetaAttr(g, sMetaTemplate, u"xlink:title"_ustr);
+    m_TemplateURL   = getMetaAttr(g, sMetaTemplate, u"xlink:href"_ustr);
     m_TemplateDate  =
-        textToDateTimeDefault(getMetaAttr(g, sMetaTemplate, "meta:date"));
-    m_AutoloadURL   = getMetaAttr(g, sMetaAutoReload, "xlink:href");
+        textToDateTimeDefault(getMetaAttr(g, sMetaTemplate, u"meta:date"_ustr));
+    m_AutoloadURL   = getMetaAttr(g, sMetaAutoReload, u"xlink:href"_ustr);
     m_AutoloadSecs  =
-        textToDuration(getMetaAttr(g, sMetaAutoReload, "meta:delay"));
+        textToDuration(getMetaAttr(g, sMetaAutoReload, u"meta:delay"_ustr));
     m_DefaultTarget =
-        getMetaAttr(g, sMetaHyperlinkBehaviour, "office:target-frame-name");
+        getMetaAttr(g, sMetaHyperlinkBehaviour, u"office:target-frame-name"_ustr);
 
 
     std::vector<css::uno::Reference<css::xml::dom::XNode> > & vec =
-        m_metaList[OUString("meta:user-defined")];
+        m_metaList[u"meta:user-defined"_ustr];
     m_xUserDefined.clear(); // #i105826#: reset (may be re-initialization)
     if ( !vec.empty() )
     {
@@ -1263,8 +1263,8 @@ void SfxDocumentMetaData::init(
         css::uno::Reference<css::xml::dom::XElement> xElem(elem,
             css::uno::UNO_QUERY_THROW);
         css::uno::Any any;
-        OUString name = xElem->getAttributeNS(s_nsODFMeta, "name");
-        OUString type = xElem->getAttributeNS(s_nsODFMeta, "value-type");
+        OUString name = xElem->getAttributeNS(s_nsODFMeta, u"name"_ustr);
+        OUString type = xElem->getAttributeNS(s_nsODFMeta, u"value-type"_ustr);
         OUString text = getNodeText(elem);
         if ( type == "float" ) {
             double d;
@@ -1352,7 +1352,7 @@ SfxDocumentMetaData::SfxDocumentMetaData(
 OUString SAL_CALL
 SfxDocumentMetaData::getImplementationName()
 {
-    return "SfxDocumentMetaData";
+    return u"SfxDocumentMetaData"_ustr;
 }
 
 sal_Bool SAL_CALL
@@ -1364,7 +1364,7 @@ SfxDocumentMetaData::supportsService(OUString const & serviceName)
 css::uno::Sequence< OUString > SAL_CALL
 SfxDocumentMetaData::getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > s { "com.sun.star.document.DocumentProperties" };
+    css::uno::Sequence< OUString > s { u"com.sun.star.document.DocumentProperties"_ustr };
     return s;
 }
 
@@ -1393,7 +1393,7 @@ SfxDocumentMetaData::getAuthor()
 
 void SAL_CALL SfxDocumentMetaData::setAuthor(const OUString & the_value)
 {
-    setMetaTextAndNotify("meta:initial-creator", the_value);
+    setMetaTextAndNotify(u"meta:initial-creator"_ustr, the_value);
 }
 
 
@@ -1407,7 +1407,7 @@ SfxDocumentMetaData::getGenerator()
 void SAL_CALL
 SfxDocumentMetaData::setGenerator(const OUString & the_value)
 {
-    setMetaTextAndNotify("meta:generator", the_value);
+    setMetaTextAndNotify(u"meta:generator"_ustr, the_value);
 }
 
 css::util::DateTime SAL_CALL
@@ -1420,7 +1420,7 @@ SfxDocumentMetaData::getCreationDate()
 void SAL_CALL
 SfxDocumentMetaData::setCreationDate(const css::util::DateTime & the_value)
 {
-    setMetaTextAndNotify("meta:creation-date", dateTimeToText(the_value));
+    setMetaTextAndNotify(u"meta:creation-date"_ustr, dateTimeToText(the_value));
 }
 
 OUString SAL_CALL
@@ -1432,7 +1432,7 @@ SfxDocumentMetaData::getTitle()
 
 void SAL_CALL SfxDocumentMetaData::setTitle(const OUString & the_value)
 {
-    setMetaTextAndNotify("dc:title", the_value);
+    setMetaTextAndNotify(u"dc:title"_ustr, the_value);
 }
 
 OUString SAL_CALL
@@ -1445,7 +1445,7 @@ SfxDocumentMetaData::getSubject()
 void SAL_CALL
 SfxDocumentMetaData::setSubject(const OUString & the_value)
 {
-    setMetaTextAndNotify("dc:subject", the_value);
+    setMetaTextAndNotify(u"dc:subject"_ustr, the_value);
 }
 
 OUString SAL_CALL
@@ -1458,7 +1458,7 @@ SfxDocumentMetaData::getDescription()
 void SAL_CALL
 SfxDocumentMetaData::setDescription(const OUString & the_value)
 {
-    setMetaTextAndNotify("dc:description", the_value);
+    setMetaTextAndNotify(u"dc:description"_ustr, the_value);
 }
 
 css::uno::Sequence< OUString >
@@ -1473,7 +1473,7 @@ SfxDocumentMetaData::setKeywords(
         const css::uno::Sequence< OUString > & the_value)
 {
     std::unique_lock g(m_aMutex);
-    if (setMetaList(g, "meta:keyword", the_value, nullptr)) {
+    if (setMetaList(g, u"meta:keyword"_ustr, the_value, nullptr)) {
         g.unlock();
         setModified(true);
     }
@@ -1489,7 +1489,7 @@ css::uno::Sequence<OUString> SAL_CALL SfxDocumentMetaData::getContributor()
 void SAL_CALL SfxDocumentMetaData::setContributor(const css::uno::Sequence<OUString>& the_value)
 {
     std::unique_lock g(m_aMutex);
-    if (setMetaList(g, "dc:contributor", the_value, nullptr))
+    if (setMetaList(g, u"dc:contributor"_ustr, the_value, nullptr))
     {
         g.unlock();
         setModified(true);
@@ -1504,7 +1504,7 @@ OUString SAL_CALL SfxDocumentMetaData::getCoverage()
 
 void SAL_CALL SfxDocumentMetaData::setCoverage(const OUString& the_value)
 {
-    setMetaTextAndNotify("dc:coverage", the_value);
+    setMetaTextAndNotify(u"dc:coverage"_ustr, the_value);
 }
 
 OUString SAL_CALL SfxDocumentMetaData::getIdentifier()
@@ -1515,7 +1515,7 @@ OUString SAL_CALL SfxDocumentMetaData::getIdentifier()
 
 void SAL_CALL SfxDocumentMetaData::setIdentifier(const OUString& the_value)
 {
-    setMetaTextAndNotify("dc:identifier", the_value);
+    setMetaTextAndNotify(u"dc:identifier"_ustr, the_value);
 }
 
 css::uno::Sequence<OUString> SAL_CALL SfxDocumentMetaData::getPublisher()
@@ -1527,7 +1527,7 @@ css::uno::Sequence<OUString> SAL_CALL SfxDocumentMetaData::getPublisher()
 void SAL_CALL SfxDocumentMetaData::setPublisher(const css::uno::Sequence<OUString>& the_value)
 {
     std::unique_lock g(m_aMutex);
-    if (setMetaList(g, "dc:publisher", the_value, nullptr))
+    if (setMetaList(g, u"dc:publisher"_ustr, the_value, nullptr))
     {
         g.unlock();
         setModified(true);
@@ -1543,7 +1543,7 @@ css::uno::Sequence<OUString> SAL_CALL SfxDocumentMetaData::getRelation()
 void SAL_CALL SfxDocumentMetaData::setRelation(const css::uno::Sequence<OUString>& the_value)
 {
     std::unique_lock g(m_aMutex);
-    if (setMetaList(g, "dc:relation", the_value, nullptr))
+    if (setMetaList(g, u"dc:relation"_ustr, the_value, nullptr))
     {
         g.unlock();
         setModified(true);
@@ -1558,7 +1558,7 @@ OUString SAL_CALL SfxDocumentMetaData::getRights()
 
 void SAL_CALL SfxDocumentMetaData::setRights(const OUString& the_value)
 {
-    setMetaTextAndNotify("dc:rights", the_value);
+    setMetaTextAndNotify(u"dc:rights"_ustr, the_value);
 }
 
 OUString SAL_CALL SfxDocumentMetaData::getSource()
@@ -1569,7 +1569,7 @@ OUString SAL_CALL SfxDocumentMetaData::getSource()
 
 void SAL_CALL SfxDocumentMetaData::setSource(const OUString& the_value)
 {
-    setMetaTextAndNotify("dc:source", the_value);
+    setMetaTextAndNotify(u"dc:source"_ustr, the_value);
 }
 
 OUString SAL_CALL SfxDocumentMetaData::getType()
@@ -1580,7 +1580,7 @@ OUString SAL_CALL SfxDocumentMetaData::getType()
 
 void SAL_CALL SfxDocumentMetaData::setType(const OUString& the_value)
 {
-    setMetaTextAndNotify("dc:type", the_value);
+    setMetaTextAndNotify(u"dc:type"_ustr, the_value);
 }
 
 css::lang::Locale SAL_CALL
@@ -1595,7 +1595,7 @@ void SAL_CALL
 SfxDocumentMetaData::setLanguage(const css::lang::Locale & the_value)
 {
     OUString text( LanguageTag::convertToBcp47( the_value, false));
-    setMetaTextAndNotify("dc:language", text);
+    setMetaTextAndNotify(u"dc:language"_ustr, text);
 }
 
 OUString SAL_CALL
@@ -1608,7 +1608,7 @@ SfxDocumentMetaData::getModifiedBy()
 void SAL_CALL
 SfxDocumentMetaData::setModifiedBy(const OUString & the_value)
 {
-    setMetaTextAndNotify("dc:creator", the_value);
+    setMetaTextAndNotify(u"dc:creator"_ustr, the_value);
 }
 
 css::util::DateTime SAL_CALL
@@ -1621,7 +1621,7 @@ SfxDocumentMetaData::getModificationDate()
 void SAL_CALL
 SfxDocumentMetaData::setModificationDate(const css::util::DateTime & the_value)
 {
-    setMetaTextAndNotify("dc:date", dateTimeToText(the_value));
+    setMetaTextAndNotify(u"dc:date"_ustr, dateTimeToText(the_value));
 }
 
 OUString SAL_CALL
@@ -1634,7 +1634,7 @@ SfxDocumentMetaData::getPrintedBy()
 void SAL_CALL
 SfxDocumentMetaData::setPrintedBy(const OUString & the_value)
 {
-    setMetaTextAndNotify("meta:printed-by", the_value);
+    setMetaTextAndNotify(u"meta:printed-by"_ustr, the_value);
 }
 
 css::util::DateTime SAL_CALL
@@ -1647,7 +1647,7 @@ SfxDocumentMetaData::getPrintDate()
 void SAL_CALL
 SfxDocumentMetaData::setPrintDate(const css::util::DateTime & the_value)
 {
-    setMetaTextAndNotify("meta:print-date", dateTimeToText(the_value));
+    setMetaTextAndNotify(u"meta:print-date"_ustr, dateTimeToText(the_value));
 }
 
 OUString SAL_CALL
@@ -1743,7 +1743,7 @@ SfxDocumentMetaData::setAutoloadSecs(::sal_Int32 the_value)
 {
     if (the_value < 0)
         throw css::lang::IllegalArgumentException(
-            "SfxDocumentMetaData::setAutoloadSecs: argument is negative",
+            u"SfxDocumentMetaData::setAutoloadSecs: argument is negative"_ustr,
             *this, 0);
     std::unique_lock g(m_aMutex);
     checkInit(g);
@@ -1781,7 +1781,7 @@ SfxDocumentMetaData::getDocumentStatistics()
     checkInit(g);
     ::std::vector<css::beans::NamedValue> stats;
     for (size_t i = 0; s_stdStats[i] != nullptr; ++i) {
-        OUString text = getMetaAttr(g, "meta:document-statistic", s_stdStatAttrs[i]);
+        OUString text = getMetaAttr(g, u"meta:document-statistic"_ustr, s_stdStatAttrs[i]);
         if (text.isEmpty()) continue;
         css::beans::NamedValue stat;
         stat.Name = OUString::createFromAscii(s_stdStats[i]);
@@ -1825,7 +1825,7 @@ SfxDocumentMetaData::setDocumentStatistics(
                 }
             }
         }
-        updateElement(g, "meta:document-statistic", &attributes);
+        updateElement(g, u"meta:document-statistic"_ustr, &attributes);
     }
     setModified(true);
 }
@@ -1849,9 +1849,9 @@ SfxDocumentMetaData::setEditingCycles(::sal_Int16 the_value)
 {
     if (the_value < 0)
         throw css::lang::IllegalArgumentException(
-            "SfxDocumentMetaData::setEditingCycles: argument is negative",
+            u"SfxDocumentMetaData::setEditingCycles: argument is negative"_ustr,
             *this, 0);
-    setMetaTextAndNotify("meta:editing-cycles", OUString::number(the_value));
+    setMetaTextAndNotify(u"meta:editing-cycles"_ustr, OUString::number(the_value));
 }
 
 ::sal_Int32 SAL_CALL
@@ -1866,9 +1866,9 @@ SfxDocumentMetaData::setEditingDuration(::sal_Int32 the_value)
 {
     if (the_value < 0)
         throw css::lang::IllegalArgumentException(
-            "SfxDocumentMetaData::setEditingDuration: argument is negative",
+            u"SfxDocumentMetaData::setEditingDuration: argument is negative"_ustr,
             *this, 0);
-    setMetaTextAndNotify("meta:editing-duration", durationToText(the_value));
+    setMetaTextAndNotify(u"meta:editing-duration"_ustr, durationToText(the_value));
 }
 
 void SAL_CALL
@@ -1877,18 +1877,18 @@ SfxDocumentMetaData::resetUserData(const OUString & the_value)
     std::unique_lock g(m_aMutex);
 
     bool bModified( false );
-    bModified |= setMetaText(g, "meta:initial-creator", the_value);
+    bModified |= setMetaText(g, u"meta:initial-creator"_ustr, the_value);
     ::DateTime now( ::DateTime::SYSTEM );
     css::util::DateTime uDT(now.GetUNODateTime());
-    bModified |= setMetaText(g, "meta:creation-date", dateTimeToText(uDT));
-    bModified |= setMetaText(g, "dc:creator", OUString());
-    bModified |= setMetaText(g, "meta:printed-by", OUString());
-    bModified |= setMetaText(g, "dc:date", dateTimeToText(css::util::DateTime()));
-    bModified |= setMetaText(g, "meta:print-date",
+    bModified |= setMetaText(g, u"meta:creation-date"_ustr, dateTimeToText(uDT));
+    bModified |= setMetaText(g, u"dc:creator"_ustr, OUString());
+    bModified |= setMetaText(g, u"meta:printed-by"_ustr, OUString());
+    bModified |= setMetaText(g, u"dc:date"_ustr, dateTimeToText(css::util::DateTime()));
+    bModified |= setMetaText(g, u"meta:print-date"_ustr,
         dateTimeToText(css::util::DateTime()));
-    bModified |= setMetaText(g, "meta:editing-duration", durationToText(0));
-    bModified |= setMetaText(g, "meta:editing-cycles",
-        "1");
+    bModified |= setMetaText(g, u"meta:editing-duration"_ustr, durationToText(0));
+    bModified |= setMetaText(g, u"meta:editing-cycles"_ustr,
+        u"1"_ustr);
 
     if (bModified) {
         g.unlock();
@@ -1913,7 +1913,7 @@ SfxDocumentMetaData::loadFromStorage(
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
 {
     if (!xStorage.is())
-        throw css::lang::IllegalArgumentException("SfxDocumentMetaData::loadFromStorage: argument is null", *this, 0);
+        throw css::lang::IllegalArgumentException(u"SfxDocumentMetaData::loadFromStorage: argument is null"_ustr, *this, 0);
     std::unique_lock g(m_aMutex);
 
     // open meta data file
@@ -1943,7 +1943,7 @@ SfxDocumentMetaData::loadFromStorage(
     css::uno::Reference<css::beans::XPropertySet> xPropArg =
         getURLProperties(g, Medium);
     try {
-        xPropArg->getPropertyValue("BaseURI")
+        xPropArg->getPropertyValue(u"BaseURI"_ustr)
             >>= input.sSystemId;
         input.sSystemId += OUString::Concat("/") + s_meta;
     } catch (const css::uno::Exception &) {
@@ -1972,8 +1972,8 @@ SfxDocumentMetaData::loadFromStorage(
         }
     } catch (const css::xml::sax::SAXException &) {
         throw css::io::WrongFormatException(
-                "SfxDocumentMetaData::loadFromStorage:"
-                " XML parsing exception", *this);
+                u"SfxDocumentMetaData::loadFromStorage:"
+                " XML parsing exception"_ustr, *this);
     }
     g.lock();
     // NB: the implementation of XMLOasisMetaImporter calls initialize
@@ -1987,7 +1987,7 @@ SfxDocumentMetaData::storeToStorage(
 {
     if (!xStorage.is())
         throw css::lang::IllegalArgumentException(
-            "SfxDocumentMetaData::storeToStorage: argument is null", *this, 0);
+            u"SfxDocumentMetaData::storeToStorage: argument is null"_ustr, *this, 0);
     std::unique_lock g(m_aMutex);
     checkInit(g);
 
@@ -2003,13 +2003,13 @@ SfxDocumentMetaData::storeToStorage(
     css::uno::Reference< css::beans::XPropertySet > xStreamProps(xStream,
         css::uno::UNO_QUERY_THROW);
     xStreamProps->setPropertyValue(
-        "MediaType",
-        css::uno::Any(OUString("text/xml")));
+        u"MediaType"_ustr,
+        css::uno::Any(u"text/xml"_ustr));
     xStreamProps->setPropertyValue(
-        "Compressed",
+        u"Compressed"_ustr,
         css::uno::Any(false));
     xStreamProps->setPropertyValue(
-        "UseCommonStoragePasswordEncryption",
+        u"UseCommonStoragePasswordEncryption"_ustr,
         css::uno::Any(false));
     css::uno::Reference<css::io::XOutputStream> xOutStream =
         xStream->getOutputStream();
@@ -2042,7 +2042,7 @@ SfxDocumentMetaData::storeToStorage(
     g.unlock(); // filter calls back into this
     if (!xFilter->filter(css::uno::Sequence< css::beans::PropertyValue >())) {
         throw css::io::IOException(
-                "SfxDocumentMetaData::storeToStorage: cannot filter", *this);
+                u"SfxDocumentMetaData::storeToStorage: cannot filter"_ustr, *this);
     }
     css::uno::Reference<css::embed::XTransactedObject> xTransaction(
         xStorage, css::uno::UNO_QUERY);
@@ -2081,13 +2081,13 @@ SfxDocumentMetaData::loadFromMedium(const OUString & URL,
     } catch (const css::uno::Exception &) {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetException(
-                "SfxDocumentMetaData::loadFromMedium: exception",
+                u"SfxDocumentMetaData::loadFromMedium: exception"_ustr,
                 css::uno::Reference<css::uno::XInterface>(*this),
                 anyEx);
     }
     if (!xStorage.is()) {
         throw css::uno::RuntimeException(
-                "SfxDocumentMetaData::loadFromMedium: cannot get Storage",
+                u"SfxDocumentMetaData::loadFromMedium: cannot get Storage"_ustr,
                 *this);
     }
     loadFromStorage(xStorage, md.getAsConstPropertyValueList());
@@ -2108,7 +2108,7 @@ SfxDocumentMetaData::storeToMedium(const OUString & URL,
 
     if (!xStorage.is()) {
         throw css::uno::RuntimeException(
-                "SfxDocumentMetaData::storeToMedium: cannot get Storage",
+                u"SfxDocumentMetaData::storeToMedium: cannot get Storage"_ustr,
                 *this);
     }
     // set MIME type of the storage
@@ -2154,12 +2154,12 @@ void SAL_CALL SfxDocumentMetaData::initialize( const css::uno::Sequence< css::un
         const css::uno::Any any = aArguments[i];
         if (!(any >>= xDoc)) {
             throw css::lang::IllegalArgumentException(
-                "SfxDocumentMetaData::initialize: argument must be XDocument",
+                u"SfxDocumentMetaData::initialize: argument must be XDocument"_ustr,
                 *this, static_cast<sal_Int16>(i));
         }
         if (!xDoc.is()) {
             throw css::lang::IllegalArgumentException(
-                "SfxDocumentMetaData::initialize: argument is null",
+                u"SfxDocumentMetaData::initialize: argument is null"_ustr,
                 *this, static_cast<sal_Int16>(i));
         }
     }
@@ -2199,7 +2199,7 @@ SfxDocumentMetaData::createClone()
     } catch (const css::uno::Exception &) {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
-                "SfxDocumentMetaData::createClone: exception",
+                u"SfxDocumentMetaData::createClone: exception"_ustr,
                 css::uno::Reference<css::uno::XInterface>(*this), anyEx);
     }
     return css::uno::Reference<css::util::XCloneable> (pNew);

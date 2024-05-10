@@ -205,15 +205,15 @@ bool GraphicHelper::getThumbnailReplacement_Impl(std::u16string_view rResID, con
             uno::Reference< graphic::XGraphicProvider > xGraphProvider(graphic::GraphicProvider::create(xContext));
             const OUString aURL{OUString::Concat("private:graphicrepository/") + rResID};
 
-            uno::Sequence< beans::PropertyValue > aMediaProps{ comphelper::makePropertyValue("URL",
+            uno::Sequence< beans::PropertyValue > aMediaProps{ comphelper::makePropertyValue(u"URL"_ustr,
                                                                                              aURL) };
 
             uno::Reference< graphic::XGraphic > xGraphic = xGraphProvider->queryGraphic( aMediaProps );
             if ( xGraphic.is() )
             {
                 uno::Sequence< beans::PropertyValue > aStoreProps{
-                    comphelper::makePropertyValue("OutputStream", xStream),
-                    comphelper::makePropertyValue("MimeType", OUString("image/png"))
+                    comphelper::makePropertyValue(u"OutputStream"_ustr, xStream),
+                    comphelper::makePropertyValue(u"MimeType"_ustr, u"image/png"_ustr)
                 };
 
                 xGraphProvider->storeGraphic( xGraphic, aStoreProps );

@@ -88,7 +88,7 @@ void SAL_CALL SfxNotificationListener_Impl::disposing( const EventObject& )
 
 OUString SAL_CALL ShutdownIcon::getImplementationName()
 {
-    return "com.sun.star.comp.desktop.QuickstartWrapper";
+    return u"com.sun.star.comp.desktop.QuickstartWrapper"_ustr;
 }
 
 sal_Bool SAL_CALL ShutdownIcon::supportsService(OUString const & ServiceName)
@@ -98,7 +98,7 @@ sal_Bool SAL_CALL ShutdownIcon::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> SAL_CALL ShutdownIcon::getSupportedServiceNames()
 {
-    return { "com.sun.star.office.Quickstart" };
+    return { u"com.sun.star.office.Quickstart"_ustr };
 }
 
 bool ShutdownIcon::bModalMode = false;
@@ -220,12 +220,12 @@ void ShutdownIcon::FromTemplate()
     css::uno::Reference < css::frame::XDispatch > xDisp;
     if ( xProv.is() )
     {
-        xDisp = xProv->queryDispatch( aTargetURL, "_self", 0 );
+        xDisp = xProv->queryDispatch( aTargetURL, u"_self"_ustr, 0 );
     }
     if ( !xDisp.is() )
         return;
 
-    Sequence<PropertyValue> aArgs { comphelper::makePropertyValue("Referer", OUString("private:user")) };
+    Sequence<PropertyValue> aArgs { comphelper::makePropertyValue(u"Referer"_ustr, u"private:user"_ustr) };
     css::uno::Reference< css::frame::XNotifyingDispatch > xNotifier(xDisp, UNO_QUERY);
     if (xNotifier.is())
     {
@@ -286,9 +286,9 @@ IMPL_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused*/, vo
 
                 int                         nArgs=3;
                 Sequence< PropertyValue >   aArgs{
-                    comphelper::makePropertyValue("InteractionHandler", xInteraction),
-                    comphelper::makePropertyValue("MacroExecutionMode", sal_Int16(css::document::MacroExecMode::USE_CONFIG)),
-                    comphelper::makePropertyValue("UpdateDocMode", sal_Int16(css::document::UpdateDocMode::ACCORDING_TO_CONFIG))
+                    comphelper::makePropertyValue(u"InteractionHandler"_ustr, xInteraction),
+                    comphelper::makePropertyValue(u"MacroExecutionMode"_ustr, sal_Int16(css::document::MacroExecMode::USE_CONFIG)),
+                    comphelper::makePropertyValue(u"UpdateDocMode"_ustr, sal_Int16(css::document::UpdateDocMode::ACCORDING_TO_CONFIG))
                 };
 
                 // use the filedlghelper to get the current filter name,
@@ -360,7 +360,7 @@ IMPL_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused*/, vo
                 }
 
                 if ( 1 == nFiles )
-                    OpenURL( sFiles[0], "_default", aArgs );
+                    OpenURL( sFiles[0], u"_default"_ustr, aArgs );
                 else
                 {
                     OUString    aBaseDirURL = sFiles[0];
@@ -371,7 +371,7 @@ IMPL_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused*/, vo
                     for ( iFiles = 1; iFiles < nFiles; iFiles++ )
                     {
                         OUString aURL = aBaseDirURL + sFiles[iFiles];
-                        OpenURL( aURL, "_default", aArgs );
+                        OpenURL( aURL, u"_default"_ustr, aArgs );
                     }
                 }
             }

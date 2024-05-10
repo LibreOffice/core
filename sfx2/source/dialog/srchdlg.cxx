@@ -38,14 +38,14 @@ namespace sfx2 {
 
 
 SearchDialog::SearchDialog(weld::Window* pWindow, OUString aConfigName)
-    : GenericDialogController(pWindow, "sfx/ui/searchdialog.ui", "SearchDialog")
+    : GenericDialogController(pWindow, u"sfx/ui/searchdialog.ui"_ustr, u"SearchDialog"_ustr)
     , m_sConfigName(std::move(aConfigName))
-    , m_xSearchEdit(m_xBuilder->weld_combo_box("searchterm"))
-    , m_xWholeWordsBox(m_xBuilder->weld_check_button("wholewords"))
-    , m_xMatchCaseBox(m_xBuilder->weld_check_button("matchcase"))
-    , m_xWrapAroundBox(m_xBuilder->weld_check_button("wrap"))
-    , m_xBackwardsBox(m_xBuilder->weld_check_button("backwards"))
-    , m_xFindBtn(m_xBuilder->weld_button("ok"))
+    , m_xSearchEdit(m_xBuilder->weld_combo_box(u"searchterm"_ustr))
+    , m_xWholeWordsBox(m_xBuilder->weld_check_button(u"wholewords"_ustr))
+    , m_xMatchCaseBox(m_xBuilder->weld_check_button(u"matchcase"_ustr))
+    , m_xWrapAroundBox(m_xBuilder->weld_check_button(u"wrap"_ustr))
+    , m_xBackwardsBox(m_xBuilder->weld_check_button(u"backwards"_ustr))
+    , m_xFindBtn(m_xBuilder->weld_button(u"ok"_ustr))
 {
     // set handler
     m_xFindBtn->connect_clicked(LINK(this, SearchDialog, FindHdl));
@@ -65,7 +65,7 @@ void SearchDialog::LoadConfig()
     SvtViewOptions aViewOpt( EViewType::Dialog, m_sConfigName );
     if ( aViewOpt.Exists() )
     {
-        Any aUserItem = aViewOpt.GetUserItem( "UserItem" );
+        Any aUserItem = aViewOpt.GetUserItem( u"UserItem"_ustr );
         OUString sUserData;
         if ( aUserItem >>= sUserData )
         {
@@ -103,7 +103,7 @@ void SearchDialog::SaveConfig()
         OUString::number( m_xBackwardsBox->get_active() ? 1 : 0 );
 
     Any aUserItem( sUserData );
-    aViewOpt.SetUserItem( "UserItem", aUserItem );
+    aViewOpt.SetUserItem( u"UserItem"_ustr, aUserItem );
 }
 
 IMPL_LINK_NOARG(SearchDialog, FindHdl, weld::Button&, void)

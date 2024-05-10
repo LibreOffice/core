@@ -256,7 +256,7 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
             try
             {
                 xStatusIndicator = xStatusIndicatorFactory->createStatusIndicator();
-                xPropSet->setPropertyValue( "IndicatorInterception" , uno::Any( xStatusIndicator ));
+                xPropSet->setPropertyValue( u"IndicatorInterception"_ustr , uno::Any( xStatusIndicator ));
             }
             catch ( const uno::RuntimeException& )
             {
@@ -285,7 +285,7 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
         if ( xPropSet.is() )
         {
             xStatusIndicator.clear();
-            xPropSet->setPropertyValue( "IndicatorInterception" , uno::Any( xStatusIndicator ));
+            xPropSet->setPropertyValue( u"IndicatorInterception"_ustr , uno::Any( xStatusIndicator ));
         }
     }
     catch ( const uno::RuntimeException& )
@@ -407,7 +407,7 @@ uno::Reference< css::frame::XLayoutManager > SAL_CALL SfxInPlaceClient_Impl::get
     uno::Reference< css::frame::XLayoutManager > xMan;
     try
     {
-        uno::Any aAny = xFrame->getPropertyValue( "LayoutManager" );
+        uno::Any aAny = xFrame->getPropertyValue( u"LayoutManager"_ustr );
         aAny >>= xMan;
     }
     catch ( uno::Exception& ex )
@@ -915,7 +915,7 @@ ErrCodeMsg SfxInPlaceClient::DoVerb(sal_Int32 nVerb)
                 {
                     SfxStoringHelper aHelper;
                     uno::Sequence< beans::PropertyValue > aDispatchArgs{
-                        comphelper::makePropertyValue("SaveTo", true)
+                        comphelper::makePropertyValue(u"SaveTo"_ustr, true)
                     };
 
                     aHelper.GUIStoreModel( xEmbModel,

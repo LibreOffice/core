@@ -233,7 +233,7 @@ void SAL_CALL SfxOfficeDispatch::dispatch( const css::util::URL& aURL, const css
         std::unique_ptr< css::uno::ContextLayer > layer(EnsureJavaContext());
 #endif
         utl::MediaDescriptor aDescriptor(aArgs);
-        bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault("OnMainThread", false);
+        bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault(u"OnMainThread"_ustr, false);
         if (bOnMainThread)
         {
             // Make sure that we own the solar mutex, otherwise later

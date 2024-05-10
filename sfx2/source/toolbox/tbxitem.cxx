@@ -356,7 +356,7 @@ void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent 
                 if (tmpState != SfxItemState::UNKNOWN && tmpState != SfxItemState::DISABLED &&
                     tmpState != SfxItemState::INVALID &&
                     tmpState != SfxItemState::DEFAULT && tmpState != SfxItemState::SET)
-                    throw css::uno::RuntimeException("unknown status");
+                    throw css::uno::RuntimeException(u"unknown status"_ustr);
                 eState = tmpState;
                 pItem.reset(new SfxVoidItem( nSlotId ));
             }

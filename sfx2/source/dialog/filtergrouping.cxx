@@ -315,7 +315,7 @@ namespace sfx2
         // open our config node
         OConfigurationTreeRoot aFilterClassification = OConfigurationTreeRoot::createWithComponentContext(
             ::comphelper::getProcessComponentContext(),
-            "org.openoffice.Office.UI/FilterClassification",
+            u"org.openoffice.Office.UI/FilterClassification"_ustr,
             -1,
             OConfigurationTreeRoot::CM_READONLY
         );
@@ -857,7 +857,7 @@ namespace sfx2
         {
             ::comphelper::SequenceAsHashMap lFilterProps (xFilterList->nextElement());
             OUString                 sFilterName  = lFilterProps.getUnpackedValueOrDefault(
-                                                             "Name",
+                                                             u"Name"_ustr,
                                                              OUString());
             if (!sFilterName.isEmpty())
                 m_lFilters.push_back(sFilterName);

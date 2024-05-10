@@ -10,10 +10,10 @@
 #include <checkin.hxx>
 
 SfxCheckinDialog::SfxCheckinDialog(weld::Window* pParent)
-    : GenericDialogController( pParent, "sfx/ui/checkin.ui", "CheckinDialog")
-    , m_xCommentED(m_xBuilder->weld_text_view("VersionComment"))
-    , m_xMajorCB(m_xBuilder->weld_check_button("MajorVersion"))
-    , m_xOKBtn(m_xBuilder->weld_button("ok"))
+    : GenericDialogController( pParent, u"sfx/ui/checkin.ui"_ustr, u"CheckinDialog"_ustr)
+    , m_xCommentED(m_xBuilder->weld_text_view(u"VersionComment"_ustr))
+    , m_xMajorCB(m_xBuilder->weld_check_button(u"MajorVersion"_ustr))
+    , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
 {
     m_xOKBtn->connect_clicked(LINK(this, SfxCheckinDialog, OKHdl));
 }

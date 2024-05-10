@@ -295,7 +295,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             const Reference<frame::
                 XTransientDocumentsDocumentContentFactory> xTDDCF(
                     xMsf->createInstanceWithContext(
-                        "com.sun.star.frame.TransientDocumentsDocumentContentFactory",
+                        u"com.sun.star.frame.TransientDocumentsDocumentContentFactory"_ustr,
                     xContext),
                 UNO_QUERY_THROW);
             const Reference<ucb::XContent> xContent(
@@ -498,7 +498,7 @@ SfxSaveGuard::SfxSaveGuard(const Reference< frame::XModel >&             xModel 
     , m_pData      ( pData )
 {
     if ( m_pData->m_bClosed )
-        throw lang::DisposedException("Object already disposed.");
+        throw lang::DisposedException(u"Object already disposed."_ustr);
 
     m_pData->m_bSaving = true;
     m_pFramesLock.reset(new SfxOwnFramesLocker( m_pData->m_pObjectShell.get() ));
@@ -1113,7 +1113,7 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
     if (!pMedium)
     {
         throw util::InvalidStateException(
-            "Medium could not be retrieved, unable to execute setArgs");
+            u"Medium could not be retrieved, unable to execute setArgs"_ustr);
     }
 
     for (const auto& rArg : aArgs)
@@ -1500,7 +1500,7 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership )
         if (bDeliverOwnership)
             m_pData->m_bSuicide = true;
         throw util::CloseVetoException(
-                "Can not close while saving.",
+                u"Can not close while saving."_ustr,
                 static_cast< util::XCloseable* >(this));
     }
 
@@ -1759,7 +1759,7 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUString&                   rURL
     SfxSaveGuard aSaveGuard(this, m_pData.get());
 
     utl::MediaDescriptor aDescriptor(rArgs);
-    bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault("OnMainThread", false);
+    bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault(u"OnMainThread"_ustr, false);
     if (bOnMainThread)
     {
         vcl::solarthread::syncExecute([this, rURL, rArgs]() { impl_store(rURL, rArgs, false); });
@@ -1808,7 +1808,7 @@ void SAL_CALL SfxBaseModel::storeToURL( const   OUString&                   rURL
     SfxSaveGuard aSaveGuard(this, m_pData.get());
     try {
         utl::MediaDescriptor aDescriptor(rArgs);
-        bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault("OnMainThread", false);
+        bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault(u"OnMainThread"_ustr, false);
         if (bOnMainThread)
             vcl::solarthread::syncExecute([this, rURL, rArgs]() { impl_store(rURL, rArgs, true); });
         else
@@ -1859,14 +1859,14 @@ void SAL_CALL SfxBaseModel::recoverFromFile( const OUString& i_SourceLocation, c
     ::comphelper::NamedValueCollection aMediaDescriptor( i_MediaDescriptor );
 
     // our load implementation expects the SalvagedFile to be in the media descriptor
-    OSL_ENSURE( !aMediaDescriptor.has( "SalvagedFile" ) || ( aMediaDescriptor.getOrDefault( "SalvagedFile", OUString() ) == i_SalvagedFile ),
+    OSL_ENSURE( !aMediaDescriptor.has( u"SalvagedFile"_ustr ) || ( aMediaDescriptor.getOrDefault( u"SalvagedFile"_ustr, OUString() ) == i_SalvagedFile ),
         "SfxBaseModel::recoverFromFile: inconsistent information!" );
-    aMediaDescriptor.put( "SalvagedFile", i_SalvagedFile );
+    aMediaDescriptor.put( u"SalvagedFile"_ustr, i_SalvagedFile );
 
     // similar for the to-be-loaded file
-    OSL_ENSURE( !aMediaDescriptor.has( "URL" ) || ( aMediaDescriptor.getOrDefault( "URL", OUString() ) == i_SourceLocation ),
+    OSL_ENSURE( !aMediaDescriptor.has( u"URL"_ustr ) || ( aMediaDescriptor.getOrDefault( u"URL"_ustr, OUString() ) == i_SourceLocation ),
         "SfxBaseModel::recoverFromFile: inconsistent information!" );
-    aMediaDescriptor.put( "URL", i_SourceLocation );
+    aMediaDescriptor.put( u"URL"_ustr, i_SourceLocation );
 
     load( aMediaDescriptor.getPropertyValues() );
 
@@ -2594,7 +2594,7 @@ void SAL_CALL SfxBaseModel::removeDocumentEventListener( const Reference< docume
 
 void SAL_CALL SfxBaseModel::notifyDocumentEvent( const OUString&, const Reference< frame::XController2 >&, const Any& )
 {
-    throw lang::NoSupportException("SfxBaseModel controls all the sent notifications itself!" );
+    throw lang::NoSupportException(u"SfxBaseModel controls all the sent notifications itself!"_ustr );
 }
 
 Sequence<document::CmisProperty> SAL_CALL SfxBaseModel::getCmisProperties()
@@ -2621,7 +2621,7 @@ void SAL_CALL SfxBaseModel::updateCmisProperties( const Sequence< document::Cmis
             Reference<ucb::XCommandEnvironment>(),
             comphelper::getProcessComponentContext() );
 
-        aContent.executeCommand( "updateProperties", uno::Any( aProperties ) );
+        aContent.executeCommand( u"updateProperties"_ustr, uno::Any( aProperties ) );
         loadCmisProperties( );
     }
     catch (const Exception & e)
@@ -2645,7 +2645,7 @@ void SAL_CALL SfxBaseModel::checkOut(  )
             Reference<ucb::XCommandEnvironment>(),
             comphelper::getProcessComponentContext() );
 
-        Any aResult = aContent.executeCommand( "checkout", Any( ) );
+        Any aResult = aContent.executeCommand( u"checkout"_ustr, Any( ) );
         OUString sURL;
         aResult >>= sURL;
 
@@ -2679,7 +2679,7 @@ void SAL_CALL SfxBaseModel::cancelCheckOut(  )
             Reference<ucb::XCommandEnvironment>(),
             comphelper::getProcessComponentContext() );
 
-        Any aResult = aContent.executeCommand( "cancelCheckout", Any( ) );
+        Any aResult = aContent.executeCommand( u"cancelCheckout"_ustr, Any( ) );
         OUString sURL;
         aResult >>= sURL;
 
@@ -2702,9 +2702,9 @@ void SAL_CALL SfxBaseModel::checkIn( sal_Bool bIsMajor, const OUString& rMessage
     try
     {
         Sequence< beans::PropertyValue > aProps{
-            comphelper::makePropertyValue("VersionMajor", bIsMajor),
-            comphelper::makePropertyValue("VersionComment", rMessage),
-            comphelper::makePropertyValue("CheckIn", true)
+            comphelper::makePropertyValue(u"VersionMajor"_ustr, bIsMajor),
+            comphelper::makePropertyValue(u"VersionComment"_ustr, rMessage),
+            comphelper::makePropertyValue(u"CheckIn"_ustr, true)
         };
 
         const OUString sName( pMedium->GetName( ) );
@@ -2748,7 +2748,7 @@ uno::Sequence< document::CmisVersion > SAL_CALL SfxBaseModel::getAllVersions( )
                 Reference<ucb::XCommandEnvironment>(),
                 comphelper::getProcessComponentContext() );
 
-            Any aResult = aContent.executeCommand( "getAllVersions", Any( ) );
+            Any aResult = aContent.executeCommand( u"getAllVersions"_ustr, Any( ) );
             aResult >>= aVersions;
         }
         catch ( const Exception & e )
@@ -2792,22 +2792,22 @@ bool SfxBaseModel::getBoolPropertyValue( const OUString& rName )
 
 sal_Bool SAL_CALL SfxBaseModel::isVersionable( )
 {
-    return getBoolPropertyValue( "IsVersionable" );
+    return getBoolPropertyValue( u"IsVersionable"_ustr );
 }
 
 sal_Bool SAL_CALL SfxBaseModel::canCheckOut( )
 {
-    return getBoolPropertyValue( "CanCheckOut" );
+    return getBoolPropertyValue( u"CanCheckOut"_ustr );
 }
 
 sal_Bool SAL_CALL SfxBaseModel::canCancelCheckOut( )
 {
-    return getBoolPropertyValue( "CanCancelCheckOut" );
+    return getBoolPropertyValue( u"CanCancelCheckOut"_ustr );
 }
 
 sal_Bool SAL_CALL SfxBaseModel::canCheckIn( )
 {
-    return getBoolPropertyValue( "CanCheckIn" );
+    return getBoolPropertyValue( u"CanCheckIn"_ustr );
 }
 
 void SfxBaseModel::loadCmisProperties( )
@@ -3122,7 +3122,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                     if ( !bFormerPassword )
                     {
                         aArgHash.erase( aFilterString );
-                        aArgHash.erase( "URL" );
+                        aArgHash.erase( u"URL"_ustr );
 
                         try
                         {
@@ -3138,10 +3138,10 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                             // TODO/LATER: need a new interaction for this case
                             if ( m_pData->m_pObjectShell->IsDocShared() )
                             {
-                                uno::Sequence< beans::NamedValue > aNewEncryptionData = aArgHash.getUnpackedValueOrDefault("EncryptionData", uno::Sequence< beans::NamedValue >() );
+                                uno::Sequence< beans::NamedValue > aNewEncryptionData = aArgHash.getUnpackedValueOrDefault(u"EncryptionData"_ustr, uno::Sequence< beans::NamedValue >() );
                                 if ( !aNewEncryptionData.hasElements() )
                                 {
-                                    aNewEncryptionData = ::comphelper::OStorageHelper::CreatePackageEncryptionData( aArgHash.getUnpackedValueOrDefault("Password", OUString()) );
+                                    aNewEncryptionData = ::comphelper::OStorageHelper::CreatePackageEncryptionData( aArgHash.getUnpackedValueOrDefault(u"Password"_ustr, OUString()) );
                                 }
 
                                 uno::Sequence< beans::NamedValue > aOldEncryptionData;
@@ -3152,7 +3152,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                                 else
                                 {
                                     // if the password is changed a special error should be used in case of shared document
-                                    throw task::ErrorCodeIOException("Can not change password for shared document.", uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_SFX_SHARED_NOPASSWORDCHANGE) );
+                                    throw task::ErrorCodeIOException(u"Can not change password for shared document."_ustr, uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_SFX_SHARED_NOPASSWORDCHANGE) );
                                 }
                             }
 #endif
@@ -3166,16 +3166,16 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
     SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SfxEventHintId::SaveToDoc : SfxEventHintId::SaveAsDoc, GlobalEventConfig::GetEventName( bSaveTo ? GlobalEventId::SAVETODOC : GlobalEventId::SAVEASDOC ),
                                             m_pData->m_pObjectShell.get() ) );
 
-    const OUString aFilterName(aArgHash.getUnpackedValueOrDefault("FilterName", OUString()));
+    const OUString aFilterName(aArgHash.getUnpackedValueOrDefault(u"FilterName"_ustr, OUString()));
     OUString aPassword, aPasswordToModify;
-    if (!aArgHash.getUnpackedValueOrDefault("EncryptionData", Sequence<beans::NamedValue>())
+    if (!aArgHash.getUnpackedValueOrDefault(u"EncryptionData"_ustr, Sequence<beans::NamedValue>())
              .hasElements())
-        aPassword = aArgHash.getUnpackedValueOrDefault("Password", OUString());
-    if (!aArgHash.getUnpackedValueOrDefault("ModifyPasswordInfo", Sequence<beans::PropertyValue>())
+        aPassword = aArgHash.getUnpackedValueOrDefault(u"Password"_ustr, OUString());
+    if (!aArgHash.getUnpackedValueOrDefault(u"ModifyPasswordInfo"_ustr, Sequence<beans::PropertyValue>())
              .hasElements()
-        && aArgHash.getUnpackedValueOrDefault("ModifyPasswordInfo", static_cast<sal_Int32>(0)) == 0)
-        aPasswordToModify = aArgHash.getUnpackedValueOrDefault("PasswordToModify", OUString());
-    aArgHash.erase("PasswordToModify");
+        && aArgHash.getUnpackedValueOrDefault(u"ModifyPasswordInfo"_ustr, static_cast<sal_Int32>(0)) == 0)
+        aPasswordToModify = aArgHash.getUnpackedValueOrDefault(u"PasswordToModify"_ustr, OUString());
+    aArgHash.erase(u"PasswordToModify"_ustr);
 
     std::optional<SfxAllItemSet> pItemSet(SfxGetpApp()->GetPool());
     pItemSet->Put(SfxStringItem(SID_FILE_NAME, sURL));
@@ -3193,7 +3193,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
     if ( pCopyStreamItem && pCopyStreamItem->GetValue() && !bSaveTo )
     {
         throw frame::IllegalArgumentIOException(
-                "CopyStreamIfPossible parameter is not acceptable for storeAsURL() call!" );
+                u"CopyStreamIfPossible parameter is not acceptable for storeAsURL() call!"_ustr );
     }
 
     sal_uInt32 nModifyPasswordHash = 0;
@@ -3689,7 +3689,7 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
 
         Reference< embed::XStorage > xConfigStorage;
 
-        OUString aUIConfigFolderName( "Configurations2" );
+        OUString aUIConfigFolderName( u"Configurations2"_ustr );
         // First try to open with READWRITE and then READ
         xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, embed::ElementModes::READWRITE );
         if ( xConfigStorage.is() )
@@ -3700,7 +3700,7 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
             Any a = xPropSet->getPropertyValue( aMediaTypeProp );
             if ( !( a >>= aMediaType ) ||  aMediaType.isEmpty())
             {
-                xPropSet->setPropertyValue( aMediaTypeProp, Any(OUString("application/vnd.sun.xml.ui.configuration")) );
+                xPropSet->setPropertyValue( aMediaTypeProp, Any(u"application/vnd.sun.xml.ui.configuration"_ustr) );
             }
         }
         else
@@ -3716,7 +3716,7 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
             // Import old UI configuration from OOo 1.x
 
             // Try to open with READ
-            Reference< embed::XStorage > xOOo1ConfigStorage = getDocumentSubStorage( "Configurations", embed::ElementModes::READ );
+            Reference< embed::XStorage > xOOo1ConfigStorage = getDocumentSubStorage( u"Configurations"_ustr, embed::ElementModes::READ );
             if ( xOOo1ConfigStorage.is() )
             {
                 Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
@@ -3743,7 +3743,7 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
                             {
                                 try
                                 {
-                                    xPropSet->setPropertyValue( "UIName", Any( "Toolbar " + sId ) );
+                                    xPropSet->setPropertyValue( u"UIName"_ustr, Any( "Toolbar " + sId ) );
                                 }
                                 catch ( beans::UnknownPropertyException& )
                                 {
@@ -3773,7 +3773,7 @@ void SAL_CALL SfxBaseModel::setVisualAreaSize( sal_Int64 nAspect, const awt::Siz
     SfxModelGuard aGuard( *this );
 
     if ( !m_pData->m_pObjectShell.is() )
-        throw Exception("no object shell", nullptr); // TODO: error handling
+        throw Exception(u"no object shell"_ustr, nullptr); // TODO: error handling
 
     SfxViewFrame* pViewFrm = SfxViewFrame::GetFirst( m_pData->m_pObjectShell.get(), false );
     if ( pViewFrm && m_pData->m_pObjectShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED && !pViewFrm->GetFrame().IsInPlace() )
@@ -3800,7 +3800,7 @@ awt::Size SAL_CALL SfxBaseModel::getVisualAreaSize( sal_Int64 /*nAspect*/ )
     SfxModelGuard aGuard( *this );
 
     if ( !m_pData->m_pObjectShell.is() )
-        throw Exception("no object shell", nullptr); // TODO: error handling
+        throw Exception(u"no object shell"_ustr, nullptr); // TODO: error handling
 
     tools::Rectangle aTmpRect = m_pData->m_pObjectShell->GetVisArea( ASPECT_CONTENT );
 
@@ -3813,7 +3813,7 @@ sal_Int32 SAL_CALL SfxBaseModel::getMapUnit( sal_Int64 /*nAspect*/ )
     SfxModelGuard aGuard( *this );
 
     if ( !m_pData->m_pObjectShell.is() )
-        throw Exception("no object shell", nullptr); // TODO: error handling
+        throw Exception(u"no object shell"_ustr, nullptr); // TODO: error handling
 
     return VCLUnoHelper::VCL2UnoEmbedMapUnit( m_pData->m_pObjectShell->GetMapUnit() );
 }
@@ -3823,8 +3823,8 @@ embed::VisualRepresentation SAL_CALL SfxBaseModel::getPreferredVisualRepresentat
     SfxModelGuard aGuard( *this );
 
     datatransfer::DataFlavor aDataFlavor(
-            "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"",
-            "GDIMetaFile",
+            u"application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\""_ustr,
+            u"GDIMetaFile"_ustr,
             cppu::UnoType<Sequence< sal_Int8 >>::get() );
 
     embed::VisualRepresentation aVisualRepresentation;
@@ -4041,7 +4041,7 @@ Reference< frame::XUntitledNumbers > SfxBaseModel::impl_getUntitledHelper ()
         rtl::Reference<::comphelper::NumberedCollection> pHelper = new ::comphelper::NumberedCollection();
         m_pData->m_xNumberedControllers = pHelper;
         pHelper->setOwner          (Reference< frame::XModel >(this));
-        pHelper->setUntitledPrefix (" : ");
+        pHelper->setUntitledPrefix (u" : "_ustr);
     }
 
     return m_pData->m_xNumberedControllers;
@@ -4359,11 +4359,11 @@ Reference< frame::XController2 > SAL_CALL SfxBaseModel::createViewController(
     pBaseController->SetCreationArguments_Impl( i_rArguments );
 
     // some initial view settings, coming from our most recent attachResource call
-    ::comphelper::NamedValueCollection aDocumentLoadArgs( getArgs2( { "ViewOnly", "PluginMode" } ) );
-    if ( aDocumentLoadArgs.getOrDefault( "ViewOnly", false ) )
+    ::comphelper::NamedValueCollection aDocumentLoadArgs( getArgs2( { u"ViewOnly"_ustr, u"PluginMode"_ustr } ) );
+    if ( aDocumentLoadArgs.getOrDefault( u"ViewOnly"_ustr, false ) )
         pViewFrame->GetFrame().SetMenuBarOn_Impl( false );
 
-    const sal_Int16 nPluginMode = aDocumentLoadArgs.getOrDefault( "PluginMode", sal_Int16( 0 ) );
+    const sal_Int16 nPluginMode = aDocumentLoadArgs.getOrDefault( u"PluginMode"_ustr, sal_Int16( 0 ) );
     if ( nPluginMode == 1 )
     {
         pViewFrame->ForceOuterResize_Impl();
@@ -4396,7 +4396,7 @@ SfxBaseModel::getRDFRepository()
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( "model has no document metadata", *this );
+        throw RuntimeException( u"model has no document metadata"_ustr, *this );
     }
 
     return xDMA->getRDFRepository();
@@ -4410,7 +4410,7 @@ SfxBaseModel::getStringValue()
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( "model has no document metadata", *this );
+        throw RuntimeException( u"model has no document metadata"_ustr, *this );
     }
 
     return xDMA->getStringValue();
@@ -4424,7 +4424,7 @@ SfxBaseModel::getNamespace()
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( "model has no document metadata", *this );
+        throw RuntimeException( u"model has no document metadata"_ustr, *this );
     }
 
     return xDMA->getNamespace();
@@ -4437,7 +4437,7 @@ SfxBaseModel::getLocalName()
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( "model has no document metadata", *this );
+        throw RuntimeException( u"model has no document metadata"_ustr, *this );
     }
 
     return xDMA->getLocalName();
@@ -4452,7 +4452,7 @@ SfxBaseModel::getElementByMetadataReference(
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( "model has no document metadata", *this );
+        throw RuntimeException( u"model has no document metadata"_ustr, *this );
     }
 
     return xDMA->getElementByMetadataReference(i_rReference);
@@ -4465,7 +4465,7 @@ SfxBaseModel::getElementByURI(const Reference< rdf::XURI > & i_xURI)
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( "model has no document metadata", *this );
+        throw RuntimeException( u"model has no document metadata"_ustr, *this );
     }
 
     return xDMA->getElementByURI(i_xURI);
@@ -4479,7 +4479,7 @@ SfxBaseModel::getMetadataGraphsWithType(
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( "model has no document metadata", *this );
+        throw RuntimeException( u"model has no document metadata"_ustr, *this );
     }
 
     return xDMA->getMetadataGraphsWithType(i_xType);
@@ -4493,7 +4493,7 @@ SfxBaseModel::addMetadataFile(const OUString & i_rFileName,
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( "model has no document metadata", *this );
+        throw RuntimeException( u"model has no document metadata"_ustr, *this );
     }
 
     return xDMA->addMetadataFile(i_rFileName, i_rTypes);
@@ -4510,7 +4510,7 @@ SfxBaseModel::importMetadataFile(::sal_Int16 i_Format,
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( "model has no document metadata", *this );
+        throw RuntimeException( u"model has no document metadata"_ustr, *this );
     }
 
     return xDMA->importMetadataFile(i_Format,
@@ -4525,7 +4525,7 @@ SfxBaseModel::removeMetadataFile(
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( "model has no document metadata", *this );
+        throw RuntimeException( u"model has no document metadata"_ustr, *this );
     }
 
     return xDMA->removeMetadataFile(i_xGraphName);
@@ -4538,7 +4538,7 @@ SfxBaseModel::addContentOrStylesFile(const OUString & i_rFileName)
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( "model has no document metadata", *this );
+        throw RuntimeException( u"model has no document metadata"_ustr, *this );
     }
 
     return xDMA->addContentOrStylesFile(i_rFileName);
@@ -4551,7 +4551,7 @@ SfxBaseModel::removeContentOrStylesFile(const OUString & i_rFileName)
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( "model has no document metadata", *this );
+        throw RuntimeException( u"model has no document metadata"_ustr, *this );
     }
 
     return xDMA->removeContentOrStylesFile(i_rFileName);
@@ -4568,7 +4568,7 @@ SfxBaseModel::loadMetadataFromStorage(
     const Reference<rdf::XDocumentMetadataAccess> xDMA(
         m_pData->CreateDMAUninitialized());
     if (!xDMA.is()) {
-        throw RuntimeException( "model has no document metadata", *this );
+        throw RuntimeException( u"model has no document metadata"_ustr, *this );
     }
 
     try {
@@ -4592,7 +4592,7 @@ SfxBaseModel::storeMetadataToStorage(
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( "model has no document metadata", *this );
+        throw RuntimeException( u"model has no document metadata"_ustr, *this );
     }
 
     return xDMA->storeMetadataToStorage(i_xStorage);
@@ -4607,7 +4607,7 @@ SfxBaseModel::loadMetadataFromMedium(
     const Reference<rdf::XDocumentMetadataAccess> xDMA(
         m_pData->CreateDMAUninitialized());
     if (!xDMA.is()) {
-        throw RuntimeException( "model has no document metadata", *this );
+        throw RuntimeException( u"model has no document metadata"_ustr, *this );
     }
 
     try {
@@ -4630,7 +4630,7 @@ SfxBaseModel::storeMetadataToMedium(
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( "model has no document metadata", *this );
+        throw RuntimeException( u"model has no document metadata"_ustr, *this );
     }
 
     return xDMA->storeMetadataToMedium(i_rMedium);

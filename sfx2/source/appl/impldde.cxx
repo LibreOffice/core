@@ -61,11 +61,11 @@ public:
 }
 
 SvDDELinkEditDialog::SvDDELinkEditDialog(weld::Window* pParent, SvBaseLink const * pLink)
-    : GenericDialogController(pParent, "sfx/ui/linkeditdialog.ui", "LinkEditDialog")
-    , m_xEdDdeApp(m_xBuilder->weld_entry("app"))
-    , m_xEdDdeTopic(m_xBuilder->weld_entry("file"))
-    , m_xEdDdeItem(m_xBuilder->weld_entry("category"))
-    , m_xOKButton(m_xBuilder->weld_button("ok"))
+    : GenericDialogController(pParent, u"sfx/ui/linkeditdialog.ui"_ustr, u"LinkEditDialog"_ustr)
+    , m_xEdDdeApp(m_xBuilder->weld_entry(u"app"_ustr))
+    , m_xEdDdeTopic(m_xBuilder->weld_entry(u"file"_ustr))
+    , m_xEdDdeItem(m_xBuilder->weld_entry(u"category"_ustr))
+    , m_xOKButton(m_xBuilder->weld_button(u"ok"_ustr))
 {
     OUString sServer, sTopic, sItem;
     sfx2::LinkManager::GetDisplayNames( pLink, &sServer, &sTopic, &sItem );
@@ -195,7 +195,7 @@ bool SvDDEObject::Connect( SvBaseLink * pSvLink )
         bool bSysTopic = false;
         if (!sTopic.equalsIgnoreAsciiCase("SYSTEM"))
         {
-            DdeConnection aTmp(sServer, "SYSTEM");
+            DdeConnection aTmp(sServer, u"SYSTEM"_ustr);
             bSysTopic = !aTmp.GetError();
         }
 

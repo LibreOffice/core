@@ -99,41 +99,41 @@ void TemplateDlgLocalView::createContextMenu(const bool bIsDefault, const bool b
                                              const bool bIsSingleSel, const OUString& rDefaultImg)
 {
     mxContextMenu->clear();
-    mxContextMenu->append("open", SfxResId(STR_OPEN), BMP_MENU_OPEN);
-    mxContextMenu->append("edit", SfxResId(STR_EDIT_TEMPLATE), BMP_MENU_EDIT);
+    mxContextMenu->append(u"open"_ustr, SfxResId(STR_OPEN), BMP_MENU_OPEN);
+    mxContextMenu->append(u"edit"_ustr, SfxResId(STR_EDIT_TEMPLATE), BMP_MENU_EDIT);
 
     if (!bIsDefault)
-        mxContextMenu->append("default", SfxResId(STR_DEFAULT_TEMPLATE), rDefaultImg);
+        mxContextMenu->append(u"default"_ustr, SfxResId(STR_DEFAULT_TEMPLATE), rDefaultImg);
     else
-        mxContextMenu->append("default", SfxResId(STR_RESET_DEFAULT), rDefaultImg);
+        mxContextMenu->append(u"default"_ustr, SfxResId(STR_RESET_DEFAULT), rDefaultImg);
 
-    mxContextMenu->append_separator("separator1");
-    mxContextMenu->append("rename", SfxResId(STR_SFX_RENAME), BMP_MENU_RENAME);
-    mxContextMenu->append("delete", SfxResId(STR_DELETE_TEMPLATE), BMP_MENU_DELETE);
-    mxContextMenu->append_separator("separator2");
-    mxContextMenu->append("move", SfxResId(STR_MOVE), BMP_MENU_MOVE);
-    mxContextMenu->append("export", SfxResId(STR_EXPORT), BMP_MENU_EXPORT);
+    mxContextMenu->append_separator(u"separator1"_ustr);
+    mxContextMenu->append(u"rename"_ustr, SfxResId(STR_SFX_RENAME), BMP_MENU_RENAME);
+    mxContextMenu->append(u"delete"_ustr, SfxResId(STR_DELETE_TEMPLATE), BMP_MENU_DELETE);
+    mxContextMenu->append_separator(u"separator2"_ustr);
+    mxContextMenu->append(u"move"_ustr, SfxResId(STR_MOVE), BMP_MENU_MOVE);
+    mxContextMenu->append(u"export"_ustr, SfxResId(STR_EXPORT), BMP_MENU_EXPORT);
 
     // Set the help IDs of all context menu entries
-    mxContextMenu->set_item_help_id("open", HID_TEMPLATEDLG_OPEN);
-    mxContextMenu->set_item_help_id("edit", HID_TEMPLATEDLG_EDIT);
-    mxContextMenu->set_item_help_id("default", HID_TEMPLATEDLG_DEFAULT);
-    mxContextMenu->set_item_help_id("rename", HID_TEMPLATEDLG_RENAME);
-    mxContextMenu->set_item_help_id("delete", HID_TEMPLATEDLG_DELETE);
-    mxContextMenu->set_item_help_id("move", HID_TEMPLATEDLG_MOVE);
-    mxContextMenu->set_item_help_id("export", HID_TEMPLATEDLG_EXPORT);
+    mxContextMenu->set_item_help_id(u"open"_ustr, HID_TEMPLATEDLG_OPEN);
+    mxContextMenu->set_item_help_id(u"edit"_ustr, HID_TEMPLATEDLG_EDIT);
+    mxContextMenu->set_item_help_id(u"default"_ustr, HID_TEMPLATEDLG_DEFAULT);
+    mxContextMenu->set_item_help_id(u"rename"_ustr, HID_TEMPLATEDLG_RENAME);
+    mxContextMenu->set_item_help_id(u"delete"_ustr, HID_TEMPLATEDLG_DELETE);
+    mxContextMenu->set_item_help_id(u"move"_ustr, HID_TEMPLATEDLG_MOVE);
+    mxContextMenu->set_item_help_id(u"export"_ustr, HID_TEMPLATEDLG_EXPORT);
 
     if (!bIsSingleSel)
     {
-        mxContextMenu->set_sensitive("open", false);
-        mxContextMenu->set_sensitive("edit", false);
-        mxContextMenu->set_sensitive("default", false);
-        mxContextMenu->set_sensitive("rename", false);
+        mxContextMenu->set_sensitive(u"open"_ustr, false);
+        mxContextMenu->set_sensitive(u"edit"_ustr, false);
+        mxContextMenu->set_sensitive(u"default"_ustr, false);
+        mxContextMenu->set_sensitive(u"rename"_ustr, false);
     }
     if (bIsBuiltIn)
     {
-        mxContextMenu->set_sensitive("rename", false);
-        mxContextMenu->set_sensitive("delete", false);
+        mxContextMenu->set_sensitive(u"rename"_ustr, false);
+        mxContextMenu->set_sensitive(u"delete"_ustr, false);
     }
     if (mViewMode == TemplateViewMode::eThumbnailView)
     {

@@ -335,13 +335,13 @@ IMPL_LINK(NotebookbarTabControl, OpenNotebookbarPopupMenu, NotebookBar*, pNotebo
         return;
 
     Sequence<Any> aArgs {
-        Any(comphelper::makePropertyValue("Value", OUString("notebookbar"))),
-        Any(comphelper::makePropertyValue("Frame", m_xFrame)) };
+        Any(comphelper::makePropertyValue(u"Value"_ustr, u"notebookbar"_ustr)),
+        Any(comphelper::makePropertyValue(u"Frame"_ustr, m_xFrame)) };
 
     Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
     Reference<XPopupMenuController> xPopupController(
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-        "com.sun.star.comp.framework.ResourceMenuController", aArgs, xContext), UNO_QUERY);
+        u"com.sun.star.comp.framework.ResourceMenuController"_ustr, aArgs, xContext), UNO_QUERY);
 
     rtl::Reference<VCLXPopupMenu> xPopupMenu = new VCLXPopupMenu();
 

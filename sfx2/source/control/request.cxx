@@ -690,7 +690,7 @@ css::uno::Reference< css::frame::XDispatchRecorder > SfxRequest::GetMacroRecorde
 
     if(xSet.is())
     {
-        css::uno::Any aProp = xSet->getPropertyValue("DispatchRecorderSupplier");
+        css::uno::Any aProp = xSet->getPropertyValue(u"DispatchRecorderSupplier"_ustr);
         css::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
         aProp >>= xSupplier;
         if(xSupplier.is())

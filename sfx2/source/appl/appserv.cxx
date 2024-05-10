@@ -129,17 +129,17 @@ namespace
         switch ( eApp )
         {
             case vcl::EnumContext::Application::Writer:
-                return "Writer";
+                return u"Writer"_ustr;
             case vcl::EnumContext::Application::Calc:
-                return "Calc";
+                return u"Calc"_ustr;
             case vcl::EnumContext::Application::Impress:
-                return "Impress";
+                return u"Impress"_ustr;
             case vcl::EnumContext::Application::Draw:
-                return "Draw";
+                return u"Draw"_ustr;
             case vcl::EnumContext::Application::Formula:
-                return "Formula";
+                return u"Formula"_ustr;
             case vcl::EnumContext::Application::Base:
-                return "Base";
+                return u"Base"_ustr;
             default:
                 return OUString();
         }
@@ -173,7 +173,7 @@ namespace
                     using namespace org::freedesktop::PackageKit;
                     using namespace svtools;
                     Reference< XSyncDbusSessionHelper > xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
-                    Sequence< OUString > vPackages { "libreoffice-base" };
+                    Sequence< OUString > vPackages { u"libreoffice-base"_ustr };
                     xSyncDbusSessionHelper->InstallPackageNames(vPackages, OUString());
                     // I'll be back (hopefully)!
                     SolarMutexGuard aGuard;
@@ -189,9 +189,9 @@ namespace
 
         try // fdo#48775
         {
-            SfxStringItem aURL(SID_FILE_NAME, ".component:Bibliography/View1");
-            SfxStringItem aRef(SID_REFERER, "private:user");
-            SfxStringItem aTarget(SID_TARGETNAME, "_blank");
+            SfxStringItem aURL(SID_FILE_NAME, u".component:Bibliography/View1"_ustr);
+            SfxStringItem aRef(SID_REFERER, u"private:user"_ustr);
+            SfxStringItem aTarget(SID_TARGETNAME, u"_blank"_ustr);
             if (const SfxViewFrame* pViewFrame = SfxViewFrame::Current())
             {
                 pViewFrame->GetDispatcher()->ExecuteList(SID_OPENDOC,
@@ -269,7 +269,7 @@ static void showDocument( const char* pBaseName )
         if ( checkURL ( pBaseName, ".fodt", aURL ) ||
              checkURL ( pBaseName, ".html", aURL ) ||
              checkURL ( pBaseName, "", aURL ) ) {
-            xDesktop->loadComponentFromURL( aURL, "_blank", 0, args );
+            xDesktop->loadComponentFromURL( aURL, u"_blank"_ustr, 0, args );
         }
     } catch (const css::uno::Exception &) {
     }
@@ -300,7 +300,7 @@ namespace
     {
     public:
         LicenseDialog(weld::Window* pParent)
-            : GenericDialogController(pParent, "sfx/ui/licensedialog.ui",  "LicenseDialog")
+            : GenericDialogController(pParent, u"sfx/ui/licensedialog.ui"_ustr,  u"LicenseDialog"_ustr)
         {
         }
 
@@ -317,7 +317,7 @@ namespace
     {
     public:
         SafeModeQueryDialog(weld::Window* pParent)
-            : MessageDialogController(pParent, "sfx/ui/safemodequerydialog.ui", "SafeModeQueryDialog")
+            : MessageDialogController(pParent, u"sfx/ui/safemodequerydialog.ui"_ustr, u"SafeModeQueryDialog"_ustr)
         {
         }
 
@@ -396,8 +396,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                         return;
                 }
 
-                SfxStringItem aNameItem( SID_FILE_NAME, "vnd.sun.star.cmd:logout" );
-                SfxStringItem aReferer( SID_REFERER, "private/user" );
+                SfxStringItem aNameItem( SID_FILE_NAME, u"vnd.sun.star.cmd:logout"_ustr );
+                SfxStringItem aReferer( SID_REFERER, u"private/user"_ustr );
                 pImpl->pAppDispat->ExecuteList(SID_OPENDOC,
                         SfxCallMode::SLOT, { &aNameItem, &aReferer });
                 return;
@@ -456,12 +456,12 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             else if (rReq.GetSlot() == SID_CONFIGEVENT)
             {
                 aSet.Put( SfxStringItem(
-                    SID_CONFIG, "private:resource/event/" ) );
+                    SID_CONFIG, u"private:resource/event/"_ustr ) );
             }
             else if (rReq.GetSlot() == SID_TOOLBOXOPTIONS)
             {
                 aSet.Put( SfxStringItem(
-                    SID_CONFIG, "private:resource/toolbar/" ) );
+                    SID_CONFIG, u"private:resource/toolbar/"_ustr ) );
             }
 
 #if HAVE_FEATURE_SCRIPTING
@@ -621,7 +621,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         {
             const SfxStringItem* pNewThemeArg = rReq.GetArg<SfxStringItem>(FN_PARAM_NEW_THEME);
             OUString sSchemeName
-                = pNewThemeArg ? pNewThemeArg->GetValue() : "COLOR_SCHEME_LIBREOFFICE_AUTOMATIC";
+                = pNewThemeArg ? pNewThemeArg->GetValue() : u"COLOR_SCHEME_LIBREOFFICE_AUTOMATIC"_ustr;
             if (!pNewThemeArg)
             {
                 // toggle between light and dark mode
@@ -680,7 +680,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
-                pHelp->Start(".uno:HelpIndex", rReq.GetFrameWeld()); // show start page
+                pHelp->Start(u".uno:HelpIndex"_ustr, rReq.GetFrameWeld()); // show start page
                 bDone = true;
             }
             break;
@@ -938,7 +938,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 {
                     try
                     {
-                        Any aValue = xPropSet->getPropertyValue( "LayoutManager" );
+                        Any aValue = xPropSet->getPropertyValue( u"LayoutManager"_ustr );
                         aValue >>= xLayoutManager;
                     }
                     catch ( const css::uno::RuntimeException& )
@@ -1002,8 +1002,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                             {
                                 OUString aResName;
                                 sal_Int16 nType( -1 );
-                                xPropertySet->getPropertyValue( "Type" ) >>= nType;
-                                xPropertySet->getPropertyValue( "ResourceURL" ) >>= aResName;
+                                xPropertySet->getPropertyValue( u"Type"_ustr ) >>= nType;
+                                xPropertySet->getPropertyValue( u"ResourceURL"_ustr ) >>= aResName;
 
                                 if (( nType == css::ui::UIElementType::TOOLBAR ) &&
                                     !aResName.isEmpty() )
@@ -1120,7 +1120,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 {
                     try
                     {
-                        Any aValue = xPropSet->getPropertyValue("LayoutManager");
+                        Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
                         aValue >>= xLayoutManager;
                     }
                     catch ( const css::uno::RuntimeException& )
@@ -1206,7 +1206,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 const Reference<frame::XModuleManager> xModuleManager
                     = frame::ModuleManager::create(xContext);
                 const utl::OConfigurationTreeRoot aAppNode(
-                    xContext, "org.openoffice.Office.UI.GlobalSettings/Toolbars/States", true);
+                    xContext, u"org.openoffice.Office.UI.GlobalSettings/Toolbars/States"_ustr, true);
                 if (aAppNode.isValid())
                 {
                     bool isLocked = comphelper::getBOOL(aAppNode.getNodeValue("Locked"));
@@ -1362,7 +1362,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                     {
                         try
                         {
-                            Any aValue = xPropSet->getPropertyValue("LayoutManager");
+                            Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
                             aValue >>= xLayoutManager;
                         }
                         catch ( const css::uno::RuntimeException& )
@@ -1377,9 +1377,9 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                     if ( xLayoutManager.is() )
                     {
                         const bool bState
-                            = xLayoutManager->getElement("private:resource/menubar/menubar").is()
+                            = xLayoutManager->getElement(u"private:resource/menubar/menubar"_ustr).is()
                               && xLayoutManager->isElementVisible(
-                                     "private:resource/menubar/menubar");
+                                     u"private:resource/menubar/menubar"_ustr);
 
                         SfxBoolItem aItem( SID_MENUBAR, bState );
                         rSet.Put( aItem );
@@ -1597,8 +1597,8 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         case SID_MORE_DICTIONARIES:
         {
             uno::Sequence<beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
-                "AdditionsTag", OUString("Dictionary")) };
-            comphelper::dispatchCommand(".uno:AdditionsDialog", aArgs);
+                u"AdditionsTag"_ustr, u"Dictionary"_ustr) };
+            comphelper::dispatchCommand(u".uno:AdditionsDialog"_ustr, aArgs);
             break;
         }
 #if HAVE_FEATURE_SCRIPTING
@@ -1607,7 +1607,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             SfxViewFrame* pView = lcl_getBasicIDEViewFrame( nullptr );
             if ( !pView )
             {
-                SfxObjectShell* pBasicIDE = SfxObjectShell::CreateObject( "com.sun.star.script.BasicIDE" );
+                SfxObjectShell* pBasicIDE = SfxObjectShell::CreateObject( u"com.sun.star.script.BasicIDE"_ustr );
                 pBasicIDE->DoInitNew();
                 pBasicIDE->SetModified( false );
                 try
@@ -1620,11 +1620,11 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     // mechanism, and the type detection (which doesn't know about the Basic IDE).
                     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
                     Reference< XSynchronousFrameLoader > xLoader(
-                        xContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.office.FrameLoader", xContext),
+                        xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.comp.office.FrameLoader"_ustr, xContext),
                         UNO_QUERY_THROW );
                     ::comphelper::NamedValueCollection aLoadArgs;
-                    aLoadArgs.put( "Model", pBasicIDE->GetModel() );
-                    aLoadArgs.put( "URL", OUString( "private:factory/sbasic"  ) );
+                    aLoadArgs.put( u"Model"_ustr, pBasicIDE->GetModel() );
+                    aLoadArgs.put( u"URL"_ustr, u"private:factory/sbasic"_ustr );
 
                     Reference< XFrame > xTargetFrame( lcl_findStartModuleFrame( xContext ) );
                     if ( !xTargetFrame.is() )
@@ -1640,7 +1640,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
                 pView = lcl_getBasicIDEViewFrame( pBasicIDE );
                 if ( pView )
-                    pView->SetName( "BASIC:1" );
+                    pView->SetName( u"BASIC:1"_ustr );
             }
 
             if ( pView )

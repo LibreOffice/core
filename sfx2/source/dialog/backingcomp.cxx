@@ -253,7 +253,7 @@ css::uno::Sequence< sal_Int8 > SAL_CALL BackingComp::getImplementationId()
 
 OUString SAL_CALL BackingComp::getImplementationName()
 {
-    return "com.sun.star.comp.sfx2.BackingComp";
+    return u"com.sun.star.comp.sfx2.BackingComp"_ustr;
 }
 
 sal_Bool SAL_CALL BackingComp::supportsService( /*IN*/ const OUString& sServiceName )
@@ -263,7 +263,7 @@ sal_Bool SAL_CALL BackingComp::supportsService( /*IN*/ const OUString& sServiceN
 
 css::uno::Sequence< OUString > SAL_CALL BackingComp::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.StartModule", "com.sun.star.frame.ProtocolHandler" };
+    return { u"com.sun.star.frame.StartModule"_ustr, u"com.sun.star.frame.ProtocolHandler"_ustr };
 }
 
 
@@ -328,12 +328,12 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     // check some required states
     if (m_xFrame.is())
         throw css::uno::RuntimeException(
-                "already attached",
+                u"already attached"_ustr,
                 getXWeak());
 
     if (!xFrame.is())
         throw css::uno::RuntimeException(
-                "invalid frame reference",
+                u"invalid frame reference"_ustr,
                 getXWeak());
 
     if (!m_xWindow.is())
@@ -357,18 +357,18 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     // create the menu bar for the backing component
     css::uno::Reference< css::beans::XPropertySet > xPropSet(m_xFrame, css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-    xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
+    xPropSet->getPropertyValue(u"LayoutManager"_ustr) >>= xLayoutManager;
     if (xLayoutManager.is())
     {
         xLayoutManager->lock();
-        xLayoutManager->createElement("private:resource/menubar/menubar");
+        xLayoutManager->createElement(u"private:resource/menubar/menubar"_ustr);
         xLayoutManager->unlock();
     }
 
     if (pWindow)
     {
         // set help ID for our canvas
-        pWindow->SetHelpId("FWK_HID_BACKINGWINDOW");
+        pWindow->SetHelpId(u"FWK_HID_BACKINGWINDOW"_ustr);
     }
 
     // inform BackingWindow about frame
@@ -512,7 +512,7 @@ void SAL_CALL BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEven
 
     if (!aEvent.Source.is() || aEvent.Source!=m_xWindow || !m_xWindow.is())
         throw css::uno::RuntimeException(
-                "unexpected source or called twice",
+                u"unexpected source or called twice"_ustr,
                 getXWeak());
 
     m_xWindow.clear();
@@ -574,7 +574,7 @@ void SAL_CALL BackingComp::dispose()
 void SAL_CALL BackingComp::addEventListener( /*IN*/ const css::uno::Reference< css::lang::XEventListener >& )
 {
     throw css::uno::RuntimeException(
-            "not supported",
+            u"not supported"_ustr,
             getXWeak());
 }
 
@@ -617,7 +617,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
 
     if (m_xWindow.is())
         throw css::uno::Exception(
-                "already initialized",
+                u"already initialized"_ustr,
                 getXWeak());
 
     css::uno::Reference< css::awt::XWindow > xParentWindow;
@@ -628,7 +628,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
        )
     {
         throw css::uno::Exception(
-                "wrong or corrupt argument list",
+                u"wrong or corrupt argument list"_ustr,
                 getXWeak());
     }
 
@@ -639,7 +639,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
 
     if (!m_xWindow.is())
         throw css::uno::RuntimeException(
-                "couldn't create component window",
+                u"couldn't create component window"_ustr,
                 getXWeak());
 
     // start listening for window disposing

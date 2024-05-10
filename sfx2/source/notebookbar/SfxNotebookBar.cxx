@@ -148,7 +148,7 @@ static Reference<frame::XLayoutManager> lcl_getLayoutManager( const Reference<fr
 
         if (xPropSet.is())
         {
-            Any aValue = xPropSet->getPropertyValue("LayoutManager");
+            Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
             aValue >>= xLayoutManager;
         }
     }
@@ -161,15 +161,15 @@ static OUString lcl_getAppName( vcl::EnumContext::Application eApp )
     switch ( eApp )
     {
         case vcl::EnumContext::Application::Writer:
-            return "Writer";
+            return u"Writer"_ustr;
         case vcl::EnumContext::Application::Calc:
-            return "Calc";
+            return u"Calc"_ustr;
         case vcl::EnumContext::Application::Impress:
-            return "Impress";
+            return u"Impress"_ustr;
         case vcl::EnumContext::Application::Draw:
-            return "Draw";
+            return u"Draw"_ustr;
         case vcl::EnumContext::Application::Formula:
-            return "Formula";
+            return u"Formula"_ustr;
         default:
             return OUString();
     }
@@ -221,7 +221,7 @@ static OUString lcl_getNotebookbarFileName( vcl::EnumContext::Application eApp )
 static utl::OConfigurationTreeRoot lcl_getCurrentImplConfigRoot()
 {
     return utl::OConfigurationTreeRoot(::comphelper::getProcessComponentContext(),
-                                       "org.openoffice.Office.UI.ToolbarMode/",
+                                       u"org.openoffice.Office.UI.ToolbarMode/"_ustr,
                                        true);
 }
 
@@ -389,7 +389,7 @@ void SfxNotebookBar::ResetActiveToolbarModeToDefault(vcl::EnumContext::Applicati
     if ( !aAppNode.isValid() )
         return;
 
-    aAppNode.setNodeValue( "Active", Any( OUString( "Default" ) ) );
+    aAppNode.setNodeValue( "Active", Any( u"Default"_ustr ) );
     aAppNode.commit();
 }
 

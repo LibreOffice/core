@@ -89,7 +89,7 @@ void SAL_CALL OwnSubFilterService::cancel()
 
 OUString SAL_CALL OwnSubFilterService::getImplementationName()
 {
-    return "com.sun.star.comp.document.OwnSubFilter";
+    return u"com.sun.star.comp.document.OwnSubFilter"_ustr;
 }
 
 sal_Bool SAL_CALL OwnSubFilterService::supportsService( const OUString& ServiceName )
@@ -99,7 +99,7 @@ sal_Bool SAL_CALL OwnSubFilterService::supportsService( const OUString& ServiceN
 
 uno::Sequence< OUString > SAL_CALL OwnSubFilterService::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.OwnSubFilter", "com.sun.star.comp.document.OwnSubFilter" };
+    return { u"com.sun.star.document.OwnSubFilter"_ustr, u"com.sun.star.comp.document.OwnSubFilter"_ustr };
 }
 
 }

@@ -99,7 +99,7 @@ public:
     {
         SolarMutexGuard aSolarGuard;
         m_xWin = VclPtr<WorkWindow>::Create(nullptr, WB_STDWORK);
-        m_xWin->SetText("dialog parent for warning dialogs during load");
+        m_xWin->SetText(u"dialog parent for warning dialogs during load"_ustr);
         m_xInterface = VCLUnoHelper::GetInterface(m_xWin);
     }
 

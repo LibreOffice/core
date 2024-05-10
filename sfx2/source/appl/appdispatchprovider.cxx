@@ -80,7 +80,7 @@ void SfxAppDispatchProvider::initialize(
     css::uno::Reference<css::frame::XFrame> f;
     if (aArguments.getLength() != 1 || !(aArguments[0] >>= f)) {
         throw css::lang::IllegalArgumentException(
-            "SfxAppDispatchProvider::initialize expects one XFrame argument",
+            u"SfxAppDispatchProvider::initialize expects one XFrame argument"_ustr,
             getXWeak(), 0);
     }
     m_xFrame = f;
@@ -88,7 +88,7 @@ void SfxAppDispatchProvider::initialize(
 
 OUString SAL_CALL SfxAppDispatchProvider::getImplementationName()
 {
-    return "com.sun.star.comp.sfx2.AppDispatchProvider";
+    return u"com.sun.star.comp.sfx2.AppDispatchProvider"_ustr;
 }
 
 sal_Bool SAL_CALL SfxAppDispatchProvider::supportsService( const OUString& sServiceName )
@@ -98,7 +98,7 @@ sal_Bool SAL_CALL SfxAppDispatchProvider::supportsService( const OUString& sServ
 
 css::uno::Sequence< OUString > SAL_CALL SfxAppDispatchProvider::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ProtocolHandler", "com.sun.star.frame.AppDispatchProvider" };
+    return { u"com.sun.star.frame.ProtocolHandler"_ustr, u"com.sun.star.frame.AppDispatchProvider"_ustr };
 }
 
 Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(

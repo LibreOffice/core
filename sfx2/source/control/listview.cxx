@@ -84,7 +84,7 @@ void ListView::AppendItem(const OUString& rId, const OUString& rTitle, const OUS
     pItem->maDisplaySize = getDisplayFileSize(rPath);
     pItem->maDisplayPath = aUrl.getFSysPath(FSysStyle::Detect);
 
-    OUString sImage("");
+    OUString sImage(u""_ustr);
     if (pItem->mbDefault)
         sImage = BMP_DEFAULT;
 
@@ -128,7 +128,7 @@ void ListView::ReloadRows()
     mxTreeView->clear();
     for (const auto& pItem : mListViewItems)
     {
-        OUString sImage("");
+        OUString sImage(u""_ustr);
         if (pItem->mbDefault)
             sImage = BMP_DEFAULT;
         AppendRow(sImage, pItem->maTitle, pItem->maSubtitle, pItem->maApplication,
@@ -150,7 +150,7 @@ bool ListView::UpdateRows()
     int nIndex = 0;
     for (const auto& pItem : mListViewItems)
     {
-        OUString sImage("");
+        OUString sImage(u""_ustr);
         if (pItem->mbDefault)
             sImage = BMP_DEFAULT;
         UpdateRow(nIndex, sImage, pItem->maTitle, pItem->maSubtitle, pItem->maApplication,
@@ -260,7 +260,7 @@ void ListView::refreshDefaultColumn()
         if (pItem->mbDefault != bDefault)
         {
             pItem->mbDefault = bDefault;
-            OUString sImage("");
+            OUString sImage(u""_ustr);
             if (bDefault)
                 sImage = BMP_DEFAULT;
             mxTreeView->set_image(mxTreeView->find_id(pItem->maId), sImage, COLUMN_IMG_ISDEFAULT);

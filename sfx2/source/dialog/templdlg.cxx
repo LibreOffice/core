@@ -105,7 +105,7 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, OnAsyncExecuteDrop, void*, pStyleList, v
 {
     StyleList* pStyle = static_cast<StyleList*>(pStyleList);
     if (pStyle == &m_aStyleList)
-        ActionSelect("new", m_aStyleList);
+        ActionSelect(u"new"_ustr, m_aStyleList);
 }
 
 namespace SfxTemplate
@@ -148,7 +148,7 @@ namespace SfxTemplate
 }
 
 SfxTemplatePanelControl::SfxTemplatePanelControl(SfxBindings* pBindings, weld::Widget* pParent)
-    : PanelLayout(pParent, "TemplatePanel", "sfx/ui/templatepanel.ui")
+    : PanelLayout(pParent, u"TemplatePanel"_ustr, u"sfx/ui/templatepanel.ui"_ustr)
     , m_aSpotlightParaStyles(SID_SPOTLIGHT_PARASTYLES, *pBindings, *this)
     , m_aSpotlightCharStyles(SID_SPOTLIGHT_CHARSTYLES, *pBindings, *this)
     , pImpl(new SfxTemplateDialog_Impl(pBindings, this))
@@ -240,10 +240,10 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld
     : pBindings(pB)
     , xModuleManager(frame::ModuleManager::create(::comphelper::getProcessComponentContext()))
     , m_pDeletionWatcher(nullptr)
-    , m_aStyleList(pBuilder, pB, this, pC, "treeview", "flatview")
-    , mxPreviewCheckbox(pBuilder->weld_check_button("showpreview"))
-    , mxHighlightCheckbox(pBuilder->weld_check_button("highlightstyles"))
-    , mxFilterLb(pBuilder->weld_combo_box("filter"))
+    , m_aStyleList(pBuilder, pB, this, pC, u"treeview"_ustr, u"flatview"_ustr)
+    , mxPreviewCheckbox(pBuilder->weld_check_button(u"showpreview"_ustr))
+    , mxHighlightCheckbox(pBuilder->weld_check_button(u"highlightstyles"_ustr))
+    , mxFilterLb(pBuilder->weld_combo_box(u"filter"_ustr))
     , nActFamily(0xffff)
     , nActFilter(0)
     , bIsWater(false)
@@ -262,7 +262,7 @@ void SfxTemplateDialog_Impl::EnableEdit(bool bEnable, StyleList* rStyleList)
     if(rStyleList == &m_aStyleList || rStyleList == nullptr)
         SfxCommonTemplateDialog_Impl::EnableEdit( bEnable, &m_aStyleList );
     if( !bEnable || !bUpdateByExampleDisabled )
-        EnableItem("update", bEnable);
+        EnableItem(u"update"_ustr, bEnable);
 }
 
 IMPL_LINK(SfxCommonTemplateDialog_Impl, ReadResource_Hdl, StyleList&, rStyleList, void)
@@ -388,7 +388,7 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, UpdateStyles_Hdl, StyleFlags, nFlags, vo
     if (!(nFlags & StyleFlags::UpdateFamilyList))
         return;
 
-    EnableItem("watercan", false);
+    EnableItem(u"watercan"_ustr, false);
 }
 
 SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
@@ -409,7 +409,7 @@ SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
     }
 
     if ( bIsWater )
-        Execute_Impl(SID_STYLE_WATERCAN, "", "", 0, m_aStyleList);
+        Execute_Impl(SID_STYLE_WATERCAN, u""_ustr, u""_ustr, 0, m_aStyleList);
     m_aStyleListClear.Call(nullptr);
     m_aStyleListCleanup.Call(nullptr);
     if ( m_pDeletionWatcher )
@@ -455,15 +455,15 @@ void SfxCommonTemplateDialog_Impl::SetWaterCanState(const SfxBoolItem *pItem)
 
     if(pItem && !bWaterDisabled)
     {
-        CheckItem("watercan", pItem->GetValue());
-        EnableItem("watercan");
+        CheckItem(u"watercan"_ustr, pItem->GetValue());
+        EnableItem(u"watercan"_ustr);
     }
     else
     {
         if(!bWaterDisabled)
-            EnableItem("watercan");
+            EnableItem(u"watercan"_ustr);
         else
-            EnableItem("watercan", false);
+            EnableItem(u"watercan"_ustr, false);
     }
 
 // Ignore while in watercan mode statusupdates
@@ -639,13 +639,13 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(const OUString& rEntry, StyleLis
         if (!bOldState && m_aStyleListHasSelectedStyle.Call(nullptr))
         {
             const OUString aTemplName(rStyleList.GetSelectedEntry());
-            Execute_Impl(SID_STYLE_WATERCAN, aTemplName, "",
+            Execute_Impl(SID_STYLE_WATERCAN, aTemplName, u""_ustr,
                          static_cast<sal_uInt16>(m_aStyleList.GetFamilyItem()->GetFamily()), rStyleList);
             bCheck = true;
         }
         else
         {
-            Execute_Impl(SID_STYLE_WATERCAN, "", "", 0, rStyleList);
+            Execute_Impl(SID_STYLE_WATERCAN, u""_ustr, u""_ustr, 0, rStyleList);
             bCheck = false;
         }
         CheckItem(rEntry, bCheck);
@@ -659,7 +659,7 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(const OUString& rEntry, StyleLis
     else if (rEntry == "update")
     {
         Execute_Impl(SID_STYLE_UPDATE_BY_EXAMPLE,
-                "", "",
+                u""_ustr, u""_ustr,
                 static_cast<sal_uInt16>(m_aStyleList.GetFamilyItem()->GetFamily()), rStyleList);
     }
     else if (rEntry == "load")
@@ -697,7 +697,7 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, LoadFactoryStyleFilter_Hdl, SfxObjectShe
 
     ::comphelper::SequenceAsHashMap aFactoryProps(
         xModuleManager->getByName( getModuleIdentifier( xModuleManager, i_pObjSh ) ) );
-    sal_Int32 nFilter = aFactoryProps.getUnpackedValueOrDefault( "ooSetupFactoryStyleFilter", sal_Int32(-1) );
+    sal_Int32 nFilter = aFactoryProps.getUnpackedValueOrDefault( u"ooSetupFactoryStyleFilter"_ustr, sal_Int32(-1) );
 
     m_bWantHierarchical = (nFilter & 0x1000) != 0;
     nFilter &= ~0x1000; // clear it
@@ -709,7 +709,7 @@ void SfxCommonTemplateDialog_Impl::SaveFactoryStyleFilter( SfxObjectShell const 
 {
     OSL_ENSURE( i_pObjSh, "SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter(): no ObjectShell" );
     Sequence< PropertyValue > lProps{ comphelper::makePropertyValue(
-        "ooSetupFactoryStyleFilter", i_nFilter | (m_bWantHierarchical ? 0x1000 : 0)) };
+        u"ooSetupFactoryStyleFilter"_ustr, i_nFilter | (m_bWantHierarchical ? 0x1000 : 0)) };
     xModuleManager->replaceByName( getModuleIdentifier( xModuleManager, i_pObjSh ), Any( lProps ) );
 }
 
@@ -748,7 +748,7 @@ IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, HighlightHdl, weld::Toggleable&, v
 IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, UpdateStyleDependents_Hdl, void*, void)
 {
     m_aStyleListUpdateStyleDependents.Call(nullptr);
-    EnableItem("watercan", !bWaterDisabled);
+    EnableItem(u"watercan"_ustr, !bWaterDisabled);
     m_aStyleListEnableDelete.Call(nullptr);
 }
 
@@ -759,13 +759,13 @@ void SfxCommonTemplateDialog_Impl::EnableExample_Impl(sal_uInt16 nId, bool bEnab
     {
         bNewByExampleDisabled = bDisable;
         m_aStyleList.EnableNewByExample(bNewByExampleDisabled);
-        EnableItem("new", bEnable);
-        EnableItem("newmenu", bEnable);
+        EnableItem(u"new"_ustr, bEnable);
+        EnableItem(u"newmenu"_ustr, bEnable);
     }
     else if( nId == SID_STYLE_UPDATE_BY_EXAMPLE )
     {
         bUpdateByExampleDisabled = bDisable;
-        EnableItem("update", bEnable);
+        EnableItem(u"update"_ustr, bEnable);
     }
 }
 
@@ -794,18 +794,18 @@ public:
 
 SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(SfxBindings* pB, SfxTemplatePanelControl* pDlgWindow)
     : SfxCommonTemplateDialog_Impl(pB, pDlgWindow->get_container(), pDlgWindow->get_builder())
-    , m_xActionTbL(pDlgWindow->get_builder()->weld_toolbar("left"))
-    , m_xActionTbR(pDlgWindow->get_builder()->weld_toolbar("right"))
-    , m_xToolMenu(pDlgWindow->get_builder()->weld_menu("toolmenu"))
+    , m_xActionTbL(pDlgWindow->get_builder()->weld_toolbar(u"left"_ustr))
+    , m_xActionTbR(pDlgWindow->get_builder()->weld_toolbar(u"right"_ustr))
+    , m_xToolMenu(pDlgWindow->get_builder()->weld_menu(u"toolmenu"_ustr))
     , m_nActionTbLVisible(0)
 {
-    m_xActionTbR->set_item_help_id("watercan", HID_TEMPLDLG_WATERCAN);
+    m_xActionTbR->set_item_help_id(u"watercan"_ustr, HID_TEMPLDLG_WATERCAN);
     // shown/hidden in SfxTemplateDialog_Impl::ReplaceUpdateButtonByMenu()
-    m_xActionTbR->set_item_help_id("new", HID_TEMPLDLG_NEWBYEXAMPLE);
-    m_xActionTbR->set_item_help_id("newmenu", HID_TEMPLDLG_NEWBYEXAMPLE);
-    m_xActionTbR->set_item_menu("newmenu", m_xToolMenu.get());
+    m_xActionTbR->set_item_help_id(u"new"_ustr, HID_TEMPLDLG_NEWBYEXAMPLE);
+    m_xActionTbR->set_item_help_id(u"newmenu"_ustr, HID_TEMPLDLG_NEWBYEXAMPLE);
+    m_xActionTbR->set_item_menu(u"newmenu"_ustr, m_xToolMenu.get());
     m_xToolMenu->connect_activate(LINK(this, SfxTemplateDialog_Impl, ToolMenuSelectHdl));
-    m_xActionTbR->set_item_help_id("update", HID_TEMPLDLG_UPDATEBYEXAMPLE);
+    m_xActionTbR->set_item_help_id(u"update"_ustr, HID_TEMPLDLG_UPDATEBYEXAMPLE);
 
     Initialize();
 }
@@ -851,9 +851,9 @@ void SfxTemplateDialog_Impl::InsertFamilyItem(sal_uInt16 nId, const SfxStyleFami
 
 void SfxTemplateDialog_Impl::ReplaceUpdateButtonByMenu()
 {
-    m_xActionTbR->set_item_visible("update", false);
-    m_xActionTbR->set_item_visible("new", false);
-    m_xActionTbR->set_item_visible("newmenu", true);
+    m_xActionTbR->set_item_visible(u"update"_ustr, false);
+    m_xActionTbR->set_item_visible(u"new"_ustr, false);
+    m_xActionTbR->set_item_visible(u"newmenu"_ustr, true);
     FillToolMenu();
 }
 
@@ -873,8 +873,8 @@ SfxTemplateDialog_Impl::~SfxTemplateDialog_Impl()
 
 void SfxTemplateDialog_Impl::EnableItem(const OUString& rMesId, bool bCheck)
 {
-    if (rMesId == "watercan" && !bCheck && IsCheckedItem("watercan"))
-        Execute_Impl(SID_STYLE_WATERCAN, "", "", 0, m_aStyleList);
+    if (rMesId == "watercan" && !bCheck && IsCheckedItem(u"watercan"_ustr))
+        Execute_Impl(SID_STYLE_WATERCAN, u""_ustr, u""_ustr, 0, m_aStyleList);
     m_xActionTbR->set_item_sensitive(rMesId, bCheck);
 }
 
@@ -883,7 +883,7 @@ void SfxTemplateDialog_Impl::CheckItem(const OUString &rMesId, bool bCheck)
     if (rMesId == "watercan")
     {
         bIsWater=bCheck;
-        m_xActionTbR->set_item_active("watercan", bCheck);
+        m_xActionTbR->set_item_active(u"watercan"_ustr, bCheck);
     }
     else
         m_xActionTbL->set_item_active(rMesId, bCheck);
@@ -892,7 +892,7 @@ void SfxTemplateDialog_Impl::CheckItem(const OUString &rMesId, bool bCheck)
 bool SfxTemplateDialog_Impl::IsCheckedItem(const OUString& rMesId)
 {
     if (rMesId == "watercan")
-        return m_xActionTbR->get_item_active("watercan");
+        return m_xActionTbR->get_item_active(u"watercan"_ustr);
     return m_xActionTbL->get_item_active(rMesId);
 }
 
@@ -912,19 +912,19 @@ IMPL_LINK(SfxTemplateDialog_Impl, ToolBoxRSelect, const OUString&, rEntry, void)
 void SfxTemplateDialog_Impl::FillToolMenu()
 {
     //create a popup menu in Writer
-    OUString sTextDoc("com.sun.star.text.TextDocument");
+    OUString sTextDoc(u"com.sun.star.text.TextDocument"_ustr);
 
-    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:StyleNewByExample", sTextDoc);
+    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(u".uno:StyleNewByExample"_ustr, sTextDoc);
     OUString sLabel = vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties);
-    m_xToolMenu->append("new", sLabel);
-    aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:StyleUpdateByExample", sTextDoc);
+    m_xToolMenu->append(u"new"_ustr, sLabel);
+    aProperties = vcl::CommandInfoProvider::GetCommandProperties(u".uno:StyleUpdateByExample"_ustr, sTextDoc);
     sLabel = vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties);
-    m_xToolMenu->append("update", sLabel);
-    m_xToolMenu->append_separator("separator");
+    m_xToolMenu->append(u"update"_ustr, sLabel);
+    m_xToolMenu->append_separator(u"separator"_ustr);
 
-    aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:LoadStyles", sTextDoc);
+    aProperties = vcl::CommandInfoProvider::GetCommandProperties(u".uno:LoadStyles"_ustr, sTextDoc);
     sLabel = vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties);
-    m_xToolMenu->append("load", sLabel);
+    m_xToolMenu->append(u"load"_ustr, sLabel);
 }
 
 IMPL_LINK(SfxTemplateDialog_Impl, ToolMenuSelectHdl, const OUString&, rMenuId, void)
@@ -950,7 +950,7 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, UpdateFamily_Hdl, StyleList&, rStyleList
     bWaterDisabled = false;
     bUpdateByExampleDisabled = false;
 
-    if (IsCheckedItem("watercan") &&
+    if (IsCheckedItem(u"watercan"_ustr) &&
         // only if that area is allowed
         rStyleList.CurrentFamilyHasState())
     {

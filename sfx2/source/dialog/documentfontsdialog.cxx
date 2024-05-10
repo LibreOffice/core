@@ -33,12 +33,12 @@ std::unique_ptr<SfxTabPage> SfxDocumentFontsPage::Create(weld::Container* pPage,
 }
 
 SfxDocumentFontsPage::SfxDocumentFontsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& set)
-    : SfxTabPage(pPage, pController, "sfx/ui/documentfontspage.ui", "DocumentFontsPage", &set)
-    , embedFontsCheckbox(m_xBuilder->weld_check_button("embedFonts"))
-    , embedUsedFontsCheckbox(m_xBuilder->weld_check_button("embedUsedFonts"))
-    , embedLatinScriptFontsCheckbox(m_xBuilder->weld_check_button("embedLatinScriptFonts"))
-    , embedAsianScriptFontsCheckbox(m_xBuilder->weld_check_button("embedAsianScriptFonts"))
-    , embedComplexScriptFontsCheckbox(m_xBuilder->weld_check_button("embedComplexScriptFonts"))
+    : SfxTabPage(pPage, pController, u"sfx/ui/documentfontspage.ui"_ustr, u"DocumentFontsPage"_ustr, &set)
+    , embedFontsCheckbox(m_xBuilder->weld_check_button(u"embedFonts"_ustr))
+    , embedUsedFontsCheckbox(m_xBuilder->weld_check_button(u"embedUsedFonts"_ustr))
+    , embedLatinScriptFontsCheckbox(m_xBuilder->weld_check_button(u"embedLatinScriptFonts"_ustr))
+    , embedAsianScriptFontsCheckbox(m_xBuilder->weld_check_button(u"embedAsianScriptFonts"_ustr))
+    , embedComplexScriptFontsCheckbox(m_xBuilder->weld_check_button(u"embedComplexScriptFonts"_ustr))
 {
 }
 
@@ -61,13 +61,13 @@ void SfxDocumentFontsPage::Reset( const SfxItemSet* )
         try
         {
             uno::Reference< lang::XMultiServiceFactory > xFac( pDocSh->GetModel(), uno::UNO_QUERY_THROW );
-            uno::Reference< beans::XPropertySet > xProps( xFac->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY_THROW );
+            uno::Reference< beans::XPropertySet > xProps( xFac->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW );
 
-            xProps->getPropertyValue("EmbedFonts") >>= bEmbedFonts;
-            xProps->getPropertyValue("EmbedOnlyUsedFonts") >>= bEmbedUsedFonts;
-            xProps->getPropertyValue("EmbedLatinScriptFonts") >>= bEmbedLatinScriptFonts;
-            xProps->getPropertyValue("EmbedAsianScriptFonts") >>= bEmbedAsianScriptFonts;
-            xProps->getPropertyValue("EmbedComplexScriptFonts") >>= bEmbedComplexScriptFonts;
+            xProps->getPropertyValue(u"EmbedFonts"_ustr) >>= bEmbedFonts;
+            xProps->getPropertyValue(u"EmbedOnlyUsedFonts"_ustr) >>= bEmbedUsedFonts;
+            xProps->getPropertyValue(u"EmbedLatinScriptFonts"_ustr) >>= bEmbedLatinScriptFonts;
+            xProps->getPropertyValue(u"EmbedAsianScriptFonts"_ustr) >>= bEmbedAsianScriptFonts;
+            xProps->getPropertyValue(u"EmbedComplexScriptFonts"_ustr) >>= bEmbedComplexScriptFonts;
         }
         catch( uno::Exception& )
         {
@@ -96,12 +96,12 @@ bool SfxDocumentFontsPage::FillItemSet( SfxItemSet* )
         try
         {
             uno::Reference< lang::XMultiServiceFactory > xFac( pDocSh->GetModel(), uno::UNO_QUERY_THROW );
-            uno::Reference< beans::XPropertySet > xProps( xFac->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY_THROW );
-            xProps->setPropertyValue("EmbedFonts", uno::Any(bEmbedFonts));
-            xProps->setPropertyValue("EmbedOnlyUsedFonts", uno::Any(bEmbedUsedFonts));
-            xProps->setPropertyValue("EmbedLatinScriptFonts", uno::Any(bEmbedLatinScriptFonts));
-            xProps->setPropertyValue("EmbedAsianScriptFonts", uno::Any(bEmbedAsianScriptFonts));
-            xProps->setPropertyValue("EmbedComplexScriptFonts", uno::Any(bEmbedComplexScriptFonts));
+            uno::Reference< beans::XPropertySet > xProps( xFac->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW );
+            xProps->setPropertyValue(u"EmbedFonts"_ustr, uno::Any(bEmbedFonts));
+            xProps->setPropertyValue(u"EmbedOnlyUsedFonts"_ustr, uno::Any(bEmbedUsedFonts));
+            xProps->setPropertyValue(u"EmbedLatinScriptFonts"_ustr, uno::Any(bEmbedLatinScriptFonts));
+            xProps->setPropertyValue(u"EmbedAsianScriptFonts"_ustr, uno::Any(bEmbedAsianScriptFonts));
+            xProps->setPropertyValue(u"EmbedComplexScriptFonts"_ustr, uno::Any(bEmbedComplexScriptFonts));
         }
         catch( uno::Exception& )
         {

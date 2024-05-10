@@ -29,7 +29,7 @@ class ClassificationTest : public UnoApiTest
 
 public:
     ClassificationTest()
-        : UnoApiTest("/sfx2/qa/cppunit/data/")
+        : UnoApiTest(u"/sfx2/qa/cppunit/data/"_ustr)
     {
     }
 
@@ -48,41 +48,41 @@ void ClassificationTest::testClassification()
 {
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"Name", uno::Any(OUString("Non-Business"))},
-        {"Type", uno::Any(OUString("urn:bails:ExportControl:"))},
+        {"Name", uno::Any(u"Non-Business"_ustr)},
+        {"Type", uno::Any(u"urn:bails:ExportControl:"_ustr)},
     }));
-    dispatchCommand(mxComponent, ".uno:ClassificationApply", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:ClassificationApply"_ustr, aPropertyValues);
 
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDocumentPropertiesSupplier.is());
     uno::Reference<document::XDocumentProperties> xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
     uno::Reference<beans::XPropertySet> xPropertySet(xDocumentProperties->getUserDefinedProperties(), uno::UNO_QUERY);
-    uno::Any aAny = xPropertySet->getPropertyValue("urn:bails:ExportControl:BusinessAuthorizationCategory:Identifier");
-    CPPUNIT_ASSERT_EQUAL(OUString("urn:example:tscp:1:non-business"), aAny.get<OUString>());
+    uno::Any aAny = xPropertySet->getPropertyValue(u"urn:bails:ExportControl:BusinessAuthorizationCategory:Identifier"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"urn:example:tscp:1:non-business"_ustr, aAny.get<OUString>());
 
     aPropertyValues = comphelper::InitPropertySequence(
     {
-        {"Name", uno::Any(OUString("Confidential"))},
-        {"Type", uno::Any(OUString("urn:bails:NationalSecurity:"))},
+        {"Name", uno::Any(u"Confidential"_ustr)},
+        {"Type", uno::Any(u"urn:bails:NationalSecurity:"_ustr)},
     });
-    dispatchCommand(mxComponent, ".uno:ClassificationApply", aPropertyValues);
-    aAny = xPropertySet->getPropertyValue("urn:bails:NationalSecurity:BusinessAuthorizationCategory:Identifier");
-    CPPUNIT_ASSERT_EQUAL(OUString("urn:example:tscp:1:confidential"), aAny.get<OUString>());
+    dispatchCommand(mxComponent, u".uno:ClassificationApply"_ustr, aPropertyValues);
+    aAny = xPropertySet->getPropertyValue(u"urn:bails:NationalSecurity:BusinessAuthorizationCategory:Identifier"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"urn:example:tscp:1:confidential"_ustr, aAny.get<OUString>());
 
     aPropertyValues = comphelper::InitPropertySequence(
     {
-        {"Name", uno::Any(OUString("Internal Only"))},
-        {"Type", uno::Any(OUString("urn:bails:IntellectualProperty:"))},
+        {"Name", uno::Any(u"Internal Only"_ustr)},
+        {"Type", uno::Any(u"urn:bails:IntellectualProperty:"_ustr)},
     });
-    dispatchCommand(mxComponent, ".uno:ClassificationApply", aPropertyValues);
-    aAny = xPropertySet->getPropertyValue("urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Identifier");
-    CPPUNIT_ASSERT_EQUAL(OUString("urn:example:tscp:1:internal-only"), aAny.get<OUString>());
+    dispatchCommand(mxComponent, u".uno:ClassificationApply"_ustr, aPropertyValues);
+    aAny = xPropertySet->getPropertyValue(u"urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Identifier"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"urn:example:tscp:1:internal-only"_ustr, aAny.get<OUString>());
 }
 
 void ClassificationTest::testWriter()
 {
     // Test SID_CLASSIFICATION_APPLY handling in SwDocShell::Execute().
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
     // This resulted in a beans::UnknownPropertyException when the request wasn't handled.
     testClassification();
 }
@@ -90,7 +90,7 @@ void ClassificationTest::testWriter()
 void ClassificationTest::testCalc()
 {
     // Test SID_CLASSIFICATION_APPLY handling in ScFormatShell::ExecuteStyle().
-    mxComponent = loadFromDesktop("private:factory/scalc", "com.sun.star.sheet.SpreadsheetDocument");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr, u"com.sun.star.sheet.SpreadsheetDocument"_ustr);
     // This resulted in a beans::UnknownPropertyException when the request wasn't handled.
     testClassification();
 }
@@ -98,7 +98,7 @@ void ClassificationTest::testCalc()
 void ClassificationTest::testImpress()
 {
     // Test SID_CLASSIFICATION_APPLY handling in sd::DrawViewShell::FuTemporary().
-    mxComponent = loadFromDesktop("private:factory/simpress", "com.sun.star.presentation.PresentationDocument");
+    mxComponent = loadFromDesktop(u"private:factory/simpress"_ustr, u"com.sun.star.presentation.PresentationDocument"_ustr);
     // This resulted in a beans::UnknownPropertyException when the request wasn't handled.
     testClassification();
 }

@@ -34,7 +34,7 @@ public:
     SfxTemplateItem();
     SfxTemplateItem( sal_uInt16 nWhich,
                      OUString aStyle,
-                     OUString aStyleIdentifier = "" );
+                     OUString aStyleIdentifier = u""_ustr );
 
     const OUString&         GetStyleName() const { return aStyle; }
     const OUString&         GetStyleIdentifier() const { return aStyleIdentifier; }

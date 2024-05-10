@@ -203,7 +203,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
             const OUString aFact("private:factory/" + aFactName);
             aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aFact ) );
             aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, &GetFrame() ) );
-            aReq.AppendItem( SfxStringItem( SID_TARGETNAME, "_blank" ) );
+            aReq.AppendItem( SfxStringItem( SID_TARGETNAME, u"_blank"_ustr ) );
             SfxGetpApp()->ExecuteSlot( aReq );
 
             const SfxViewFrameItem* pItem(dynamic_cast<const SfxViewFrameItem*>(aReq.GetReturnValue().getItem()));

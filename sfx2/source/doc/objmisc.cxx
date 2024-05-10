@@ -580,7 +580,7 @@ bool SfxObjectShell::SwitchToShared( bool bShared, bool bSave )
         bResult = false; // the second switch to the same mode
 
     if ( bResult )
-        SetTitle( "" );
+        SetTitle( u""_ustr );
 
     return bResult;
 }
@@ -733,7 +733,7 @@ OUString SfxObjectShell::GetTitle( sal_uInt16  nMaxLength ) const
     {
         static bool bRecur = false;
         if ( bRecur )
-            return "-not available-";
+            return u"-not available-"_ustr;
         bRecur = true;
 
         OUString aTitle;
@@ -1007,9 +1007,9 @@ void SfxObjectShell::CheckEncryption_Impl( const uno::Reference< task::XInteract
     try
     {
         uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY_THROW );
-        xPropSet->getPropertyValue("Version") >>= aVersion;
-        xPropSet->getPropertyValue("HasEncryptedEntries") >>= bIsEncrypted;
-        xPropSet->getPropertyValue("HasNonEncryptedEntries") >>= bHasNonEncrypted;
+        xPropSet->getPropertyValue(u"Version"_ustr) >>= aVersion;
+        xPropSet->getPropertyValue(u"HasEncryptedEntries"_ustr) >>= bIsEncrypted;
+        xPropSet->getPropertyValue(u"HasNonEncryptedEntries"_ustr) >>= bHasNonEncrypted;
     }
     catch( uno::Exception& )
     {
@@ -1518,7 +1518,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
             if ( xProps.is() )
             {
                 Sequence< uno::Any > aArgs{ *pCaller };
-                xProps->setPropertyValue("Caller", uno::Any( aArgs ) );
+                xProps->setPropertyValue(u"Caller"_ustr, uno::Any( aArgs ) );
             }
         }
         aRet = xScript->invoke( aParams, aOutParamIndex, aOutParam );
@@ -1898,7 +1898,7 @@ bool SfxObjectShell_Impl::hasTrustedScriptingSignature(
             try
             {
                 uno::Reference < beans::XPropertySet > xPropSet( rDocShell.GetStorage(), uno::UNO_QUERY_THROW );
-                xPropSet->getPropertyValue("Version") >>= aVersion;
+                xPropSet->getPropertyValue(u"Version"_ustr) >>= aVersion;
             }
             catch( uno::Exception& )
             {
@@ -1951,7 +1951,7 @@ bool SfxObjectShell::IsContinueImportOnFilterExceptions()
         }
 
         if (utl::MediaDescriptor desc(pMedium->GetArgs());
-            !desc.getUnpackedValueOrDefault("RepairAllowed", true))
+            !desc.getUnpackedValueOrDefault(u"RepairAllowed"_ustr, true))
         {
             mbContinueImportOnFilterExceptions = no;
             return false;
@@ -1997,7 +1997,7 @@ bool SfxObjectShell::isEditDocLocked() const
         return false;
     if (!officecfg::Office::Common::Misc::AllowEditReadonlyDocs::get())
         return true;
-    return comphelper::NamedValueCollection::getOrDefault(xModel->getArgs2( { "LockEditDoc" } ), u"LockEditDoc", false);
+    return comphelper::NamedValueCollection::getOrDefault(xModel->getArgs2( { u"LockEditDoc"_ustr } ), u"LockEditDoc", false);
 }
 
 bool SfxObjectShell::isContentExtractionLocked() const
@@ -2005,7 +2005,7 @@ bool SfxObjectShell::isContentExtractionLocked() const
     Reference<XModel3> xModel = GetModel();
     if (!xModel.is())
         return false;
-    return comphelper::NamedValueCollection::getOrDefault(xModel->getArgs2( { "LockContentExtraction" } ), u"LockContentExtraction", false);
+    return comphelper::NamedValueCollection::getOrDefault(xModel->getArgs2( { u"LockContentExtraction"_ustr } ), u"LockContentExtraction", false);
 }
 
 bool SfxObjectShell::isExportLocked() const
@@ -2013,7 +2013,7 @@ bool SfxObjectShell::isExportLocked() const
     Reference<XModel3> xModel = GetModel();
     if (!xModel.is())
         return false;
-    return comphelper::NamedValueCollection::getOrDefault(xModel->getArgs2( { "LockExport" } ), u"LockExport", false);
+    return comphelper::NamedValueCollection::getOrDefault(xModel->getArgs2( { u"LockExport"_ustr } ), u"LockExport", false);
 }
 
 bool SfxObjectShell::isPrintLocked() const
@@ -2021,7 +2021,7 @@ bool SfxObjectShell::isPrintLocked() const
     Reference<XModel3> xModel = GetModel();
     if (!xModel.is())
         return false;
-    return comphelper::NamedValueCollection::getOrDefault(xModel->getArgs2( { "LockPrint" } ), u"LockPrint", false);
+    return comphelper::NamedValueCollection::getOrDefault(xModel->getArgs2( { u"LockPrint"_ustr } ), u"LockPrint", false);
 }
 
 bool SfxObjectShell::isSaveLocked() const
@@ -2029,7 +2029,7 @@ bool SfxObjectShell::isSaveLocked() const
     Reference<XModel3> xModel = GetModel();
     if (!xModel.is())
         return false;
-    return comphelper::NamedValueCollection::getOrDefault(xModel->getArgs2( { "LockSave" } ), u"LockSave", false);
+    return comphelper::NamedValueCollection::getOrDefault(xModel->getArgs2( { u"LockSave"_ustr } ), u"LockSave", false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,7 +42,7 @@ SfxNavigator::SfxNavigator(SfxBindings* pBind ,
                         : SfxDockingWindow(pBind ,
                                            pChildWin ,
                                            pParent ,
-                                           "Navigator", "sfx/ui/navigator.ui")
+                                           u"Navigator"_ustr, u"sfx/ui/navigator.ui"_ustr)
 {
     SetText(SfxResId(STR_SID_NAVIGATOR));
     SetHelpId(HID_NAVIGATOR_WINDOW);
