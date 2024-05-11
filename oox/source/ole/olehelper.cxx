@@ -526,7 +526,7 @@ bool MSConvertOCXControls::WriteOCXExcelKludgeStream( const css::uno::Reference<
         return false;
     rName = exportHelper.getTypeName();
     SvGlobalName aName;
-    aName.MakeId(exportHelper.getGUID());
+    (void)aName.MakeId(exportHelper.getGUID());
     BinaryXOutputStream aOut( xOutStrm, false );
     OleHelper::exportGuid( aOut, aName );
     exportHelper.exportControl( xOutStrm, rSize );
