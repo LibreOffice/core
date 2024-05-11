@@ -162,6 +162,7 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
 
 void WinSalGraphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
 {
+    assert(&rSalBitmap && "msvc -analyze gets confused here");
     if (dynamic_cast<const WinSalBitmap*>(&rSalBitmap) == nullptr
 #if HAVE_FEATURE_SKIA
         && dynamic_cast<WinSkiaSalGraphicsImpl*>(mpImpl.get()) == nullptr
@@ -183,6 +184,7 @@ void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
                               const SalBitmap& rSSalBitmap,
                               const SalBitmap& rSTransparentBitmap )
 {
+    assert(&rSSalBitmap && "msvc -analyze gets confused here");
     if (dynamic_cast<const WinSalBitmap*>(&rSSalBitmap) == nullptr
 #if HAVE_FEATURE_SKIA
         && dynamic_cast<WinSkiaSalGraphicsImpl*>(mpImpl.get()) == nullptr

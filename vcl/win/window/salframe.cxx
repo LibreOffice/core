@@ -4896,20 +4896,22 @@ static LRESULT ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
 
             if( hDrawDIB )
             {
-                PBITMAPINFO         pBI = static_cast<PBITMAPINFO>(GlobalLock( hDrawDIB ));
-                PBYTE               pBits = reinterpret_cast<PBYTE>(pBI) + pBI->bmiHeader.biSize +
-                                            WinSalBitmap::ImplGetDIBColorCount( hDrawDIB ) * sizeof( RGBQUAD );
+                if (PBITMAPINFO pBI = static_cast<PBITMAPINFO>(GlobalLock( hDrawDIB )))
+                {
+                    PBYTE               pBits = reinterpret_cast<PBYTE>(pBI) + pBI->bmiHeader.biSize +
+                                                WinSalBitmap::ImplGetDIBColorCount( hDrawDIB ) * sizeof( RGBQUAD );
 
-                HBITMAP hBmp = CreateDIBitmap( pDI->hDC, &pBI->bmiHeader, CBM_INIT, pBits, pBI, DIB_RGB_COLORS );
-                GlobalUnlock( hDrawDIB );
+                    HBITMAP hBmp = CreateDIBitmap( pDI->hDC, &pBI->bmiHeader, CBM_INIT, pBits, pBI, DIB_RGB_COLORS );
+                    GlobalUnlock( hDrawDIB );
 
-                HBRUSH hbrIcon = CreateSolidBrush( GetSysColor( COLOR_GRAYTEXT ) );
-                DrawStateW( pDI->hDC, hbrIcon, nullptr, reinterpret_cast<LPARAM>(hBmp), WPARAM(0),
-                    x, y+(lineHeight-bmpSize.Height())/2, bmpSize.Width(), bmpSize.Height(),
-                     DST_BITMAP | (fDisabled ? (fSelected ? DSS_MONO : DSS_DISABLED) : DSS_NORMAL) );
+                    HBRUSH hbrIcon = CreateSolidBrush( GetSysColor( COLOR_GRAYTEXT ) );
+                    DrawStateW( pDI->hDC, hbrIcon, nullptr, reinterpret_cast<LPARAM>(hBmp), WPARAM(0),
+                        x, y+(lineHeight-bmpSize.Height())/2, bmpSize.Width(), bmpSize.Height(),
+                         DST_BITMAP | (fDisabled ? (fSelected ? DSS_MONO : DSS_DISABLED) : DSS_NORMAL) );
 
-                DeleteObject( hbrIcon );
-                DeleteObject( hBmp );
+                    DeleteObject( hbrIcon );
+                    DeleteObject( hBmp );
+                }
             }
 
         }
