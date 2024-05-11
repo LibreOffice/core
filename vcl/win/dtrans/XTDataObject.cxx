@@ -108,7 +108,7 @@ public:
 
 void validateFormatEtc( LPFORMATETC lpFormatEtc )
 {
-    OSL_ASSERT( lpFormatEtc );
+    assert(lpFormatEtc);
 
     if ( lpFormatEtc->lindex != -1 )
         throw CInvalidFormatEtcException( DV_E_LINDEX );

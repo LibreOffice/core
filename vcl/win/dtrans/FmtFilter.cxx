@@ -149,20 +149,22 @@ Sequence< sal_Int8 > WinENHMFPictToOOMFPict( HENHMETAFILE hEnhMetaFile )
 
 HMETAFILEPICT OOMFPictToWinMFPict( Sequence< sal_Int8 > const & aOOMetaFilePict )
 {
-    HMETAFILEPICT   hPict = nullptr;
     HMETAFILE       hMtf = SetMetaFileBitsEx( aOOMetaFilePict.getLength(), reinterpret_cast<unsigned char const *>(aOOMetaFilePict.getConstArray()) );
 
-    if( hMtf )
-    {
-        METAFILEPICT* pPict = static_cast<METAFILEPICT*>(GlobalLock( hPict = GlobalAlloc( GHND, sizeof( METAFILEPICT ) ) ));
+    if (!hMtf)
+        return nullptr;
 
-        pPict->mm = 8;
-        pPict->xExt = 0;
-        pPict->yExt = 0;
-        pPict->hMF = hMtf;
+    HMETAFILEPICT hPict = nullptr;
+    METAFILEPICT* pPict = static_cast<METAFILEPICT*>(GlobalLock( hPict = GlobalAlloc( GHND, sizeof( METAFILEPICT ) ) ));
+    if (!pPict)
+        return nullptr;
 
-        GlobalUnlock( hPict );
-    }
+    pPict->mm = 8;
+    pPict->xExt = 0;
+    pPict->yExt = 0;
+    pPict->hMF = hMtf;
+
+    GlobalUnlock( hPict );
 
     return hPict;
 }

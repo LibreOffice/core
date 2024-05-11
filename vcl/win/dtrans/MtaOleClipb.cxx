@@ -147,7 +147,7 @@ CMtaOleClipboard* CMtaOleClipboard::s_theMtaOleClipboardInst = nullptr;
 static HRESULT MarshalIDataObjectInStream( IDataObject* pIDataObject, LPSTREAM* ppStream )
 {
     OSL_ASSERT( nullptr != pIDataObject );
-    OSL_ASSERT( nullptr != ppStream );
+    assert(nullptr != ppStream);
 
     *ppStream = nullptr;
     return CoMarshalInterThreadInterfaceInStream(
@@ -163,7 +163,7 @@ static HRESULT MarshalIDataObjectInStream( IDataObject* pIDataObject, LPSTREAM* 
 static HRESULT UnmarshalIDataObjectAndReleaseStream( LPSTREAM lpStream, IDataObject** ppIDataObject )
 {
     OSL_ASSERT( nullptr != lpStream );
-    OSL_ASSERT( nullptr != ppIDataObject );
+    assert(nullptr != ppIDataObject);
 
     *ppIDataObject = nullptr;
     return CoGetInterfaceAndReleaseStream(
@@ -335,7 +335,7 @@ HRESULT CMtaOleClipboard::flushClipboard( )
 
 HRESULT CMtaOleClipboard::getClipboard( IDataObject** ppIDataObject )
 {
-    OSL_PRECOND( nullptr != ppIDataObject, "invalid parameter" );
+    assert(ppIDataObject && "invalid parameter");
     OSL_PRECOND( GetCurrentThreadId( ) != m_uOleThreadId, "getClipboard from within clipboard sta thread called" );
 
     if ( !WaitForThreadReady( ) )
@@ -555,7 +555,7 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
     case MSG_GETCLIPBOARD:
         {
             MsgCtx* aMsgCtx = reinterpret_cast< MsgCtx* >( lParam );
-            OSL_ASSERT( aMsgCtx );
+            assert(aMsgCtx);
 
             aMsgCtx->hr = CMtaOleClipboard::onGetClipboard( reinterpret_cast< LPSTREAM* >(wParam) );
             aMsgCtx->aCondition.set( );
@@ -565,7 +565,7 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
     case MSG_FLUSHCLIPBOARD:
         {
             MsgCtx* aMsgCtx = reinterpret_cast< MsgCtx* >( lParam );
-            OSL_ASSERT( aMsgCtx );
+            assert(aMsgCtx);
 
             aMsgCtx->hr = CMtaOleClipboard::onFlushClipboard( );
             aMsgCtx->aCondition.set( );
@@ -575,7 +575,7 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
     case MSG_REGCLIPVIEWER:
         {
             MsgCtx* pMsgCtx = reinterpret_cast<MsgCtx*>(lParam);
-            SAL_WARN_IF(!pMsgCtx, "vcl.win.dtrans", "pMsgCtx is nullptr");
+            assert(pMsgCtx && "pMsgCtx is nullptr");
 
             pImpl->onRegisterClipViewer(
                 reinterpret_cast<CMtaOleClipboard::LPFNC_CLIPVIEWER_CALLBACK_t>(wParam));

@@ -19,8 +19,8 @@
 
 #include "APNDataObject.hxx"
 #include <osl/diagnose.h>
-
 #include <systools/win32/comtools.hxx>
+#include <assert.h>
 
 #define FREE_HGLOB_ON_RELEASE   TRUE
 #define KEEP_HGLOB_ON_RELEASE   FALSE
@@ -296,7 +296,7 @@ STDMETHODIMP CAPNDataObject::EnumDAdvise( IEnumSTATDATA ** ppenumAdvise )
 
 HRESULT CAPNDataObject::MarshalIDataObjectIntoCurrentApartment( IDataObject** ppIDataObj )
 {
-    OSL_ASSERT(nullptr != ppIDataObj);
+    assert(nullptr && ppIDataObj);
 
     *ppIDataObj = nullptr;
     HRESULT hr = E_FAIL;

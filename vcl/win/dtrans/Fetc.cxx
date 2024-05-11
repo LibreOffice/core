@@ -20,6 +20,7 @@
 #include <osl/diagnose.h>
 #include "Fetc.hxx"
 #include "ImplHelper.hxx"
+#include <assert.h>
 
 CFormatEtc::CFormatEtc(  )
 {
@@ -106,7 +107,7 @@ DWORD CFormatEtc::getTymed( ) const
 
 void CFormatEtc::getTargetDevice( DVTARGETDEVICE** lpDvTargetDevice ) const
 {
-    OSL_ASSERT( lpDvTargetDevice );
+    assert(lpDvTargetDevice);
     OSL_ASSERT( !IsBadWritePtr( lpDvTargetDevice, sizeof( DVTARGETDEVICE ) ) );
 
     *lpDvTargetDevice = nullptr;

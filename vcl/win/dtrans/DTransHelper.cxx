@@ -20,6 +20,7 @@
 #include <rtl/ustring.h>
 #include <osl/diagnose.h>
 #include "DTransHelper.hxx"
+#include <assert.h>
 
 // implementation
 
@@ -99,7 +100,7 @@ HGLOBAL CStgTransferHelper::getHGlobal( ) const
 
 void CStgTransferHelper::getIStream( LPSTREAM* ppStream )
 {
-    OSL_ASSERT( ppStream );
+    assert(ppStream);
     *ppStream = m_lpStream;
     if ( *ppStream )
         static_cast< LPUNKNOWN >( *ppStream )->AddRef( );
