@@ -1,0 +1,25 @@
+--- skia/include/private/base/SkAssert.h.orig
++++ skia/include/private/base/SkAssert.h
+@@ -43,6 +43,13 @@
+     } while (false)
+ #endif
+ 
++// when building with msvc and only when using these headers outside the skia build
++#if defined(_MSC_VER) && !defined(SKIA_IMPLEMENTATION)
++#    define SkANALYSIS_ASSUME(condition) __analysis_assume(condition)
++#else
++#    define SkANALYSIS_ASSUME(condition) static_cast<void>(0)
++#endif
++
+ // SkASSERT, SkASSERTF and SkASSERT_RELEASE can be used as stand alone assertion expressions, e.g.
+ //    uint32_t foo(int x) {
+ //        SkASSERT(x > 4);
+@@ -54,7 +60,7 @@
+ //               x - 4;
+ //    }
+ #define SkASSERT_RELEASE(cond) \
+-        static_cast<void>( (cond) ? (void)0 : []{ SK_ABORT("assert(%s)", #cond); }() )
++        static_cast<void>( (cond) ? (void)0 : [&]{ SK_ABORT("assert(%s)", #cond); SkANALYSIS_ASSUME(cond); }() )
+ 
+ #if defined(SK_DEBUG)
+     #define SkASSERT(cond) SkASSERT_RELEASE(cond)

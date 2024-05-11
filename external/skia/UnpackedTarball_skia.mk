@@ -42,6 +42,7 @@ skia_patches := \
     incomplete-type-SkImageGenerator.patch.1 \
     0001-AvoidCombiningExtrememelyLargeMeshes.patch.1 \
     sort-comparison-assumption.patch.0 \
+    help-msvc-analyzer.patch \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
