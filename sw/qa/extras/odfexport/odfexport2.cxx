@@ -249,7 +249,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_table)
     CPPUNIT_ASSERT_EQUAL(3, getPages());
 
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
-    assertXPath(pXmlDoc, "//style:style[@style:family='paragraph']/style:paragraph-properties[@loext:hyphenation-keep-type='always']"_ostr, 1);
+    assertXPath(pXmlDoc, "//style:style[@style:family='paragraph']/style:paragraph-properties[@loext:hyphenation-keep-type='page']"_ostr, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf158885_compound_remain)
