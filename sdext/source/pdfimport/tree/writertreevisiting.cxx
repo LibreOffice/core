@@ -707,6 +707,7 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< std::unique_
         if( ! pCurPara ) // new paragraph, insert one
         {
             pCurPara = ElementFactory::createParagraphElement( nullptr );
+            assert(pCurPara);
             // set parent
             pCurPara->Parent = &elem;
             //insert new paragraph before current element

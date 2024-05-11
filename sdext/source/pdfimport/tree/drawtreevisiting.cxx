@@ -628,6 +628,7 @@ void DrawXmlOptimizer::visit( PageElement& elem, const std::list< std::unique_pt
         if (! pCurPara )  // new paragraph, insert one
         {
             pCurPara = ElementFactory::createParagraphElement( nullptr );
+            assert(pCurPara);
             // set parent
             pCurPara->Parent = &elem;
             //insert new paragraph before current element

@@ -265,7 +265,7 @@ public:
     }
     #endif
 
-    static void parseError( const char* pMessage, const iteratorT& pLocation )
+    [[noreturn]] static void parseError( const char* pMessage, const iteratorT& pLocation )
     {
         throw_( pLocation, pMessage );
     }

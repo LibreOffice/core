@@ -858,7 +858,7 @@ void Parser::parseLine( std::string_view aLine )
     const std::string_view rCmd = lp.readNextToken();
     const hash_entry* pEntry = PdfKeywordHash::in_word_set( rCmd.data(),
                                                             rCmd.size() );
-    OSL_ASSERT(pEntry);
+    assert(pEntry);
     switch( pEntry->eKey )
     {
         case CLIPPATH:
