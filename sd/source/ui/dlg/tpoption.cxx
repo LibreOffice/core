@@ -73,6 +73,7 @@ bool SdTpOptionsSnap::FillItemSet( SfxItemSet* rAttrs )
         officecfg::Office::Draw::Snap::Position::ExtendEdges::set( m_xCbxBigOrtho->get_active(), batch );
         officecfg::Office::Draw::Snap::Position::Rotating::set( m_xCbxRotate->get_active(), batch );
         officecfg::Office::Draw::Snap::Object::Range::set( static_cast<sal_Int16>(m_xMtrFldSnapArea->get_value(FieldUnit::PIXEL)), batch );
+        officecfg::Office::Draw::Snap::Position::RotatingValue::set( static_cast<sal_Int32>(Degree100(m_xMtrFldAngle->get_value(FieldUnit::DEGREE))), batch );
     }
     else
     {
@@ -84,9 +85,9 @@ bool SdTpOptionsSnap::FillItemSet( SfxItemSet* rAttrs )
         officecfg::Office::Impress::Snap::Position::ExtendEdges::set( m_xCbxBigOrtho->get_active(), batch );
         officecfg::Office::Impress::Snap::Position::Rotating::set( m_xCbxRotate->get_active(), batch );
         officecfg::Office::Impress::Snap::Object::Range::set( static_cast<sal_Int16>(m_xMtrFldSnapArea->get_value(FieldUnit::PIXEL)), batch );
+        officecfg::Office::Impress::Snap::Position::RotatingValue::set( static_cast<sal_Int32>(Degree100(m_xMtrFldAngle->get_value(FieldUnit::DEGREE))), batch );
     }
 
-    aOptsItem.GetOptionsSnap().SetAngle(Degree100(m_xMtrFldAngle->get_value(FieldUnit::DEGREE)));
     aOptsItem.GetOptionsSnap().SetEliminatePolyPointLimitAngle(Degree100(m_xMtrFldBezAngle->get_value(FieldUnit::DEGREE)));
 
     rAttrs->Put( aOptsItem );
@@ -113,7 +114,7 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
         m_xCbxOrtho->set_active( officecfg::Office::Draw::Snap::Position::CreatingMoving::get() );
         m_xCbxBigOrtho->set_active( officecfg::Office::Draw::Snap::Position::ExtendEdges::get() );
         m_xCbxRotate->set_active( officecfg::Office::Draw::Snap::Position::Rotating::get() );
-
+        m_xMtrFldAngle->set_value( officecfg::Office::Draw::Snap::Position::RotatingValue::get(), FieldUnit::DEGREE);
     }
     else
     {
@@ -125,6 +126,7 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
         m_xCbxBigOrtho->set_active( officecfg::Office::Impress::Snap::Position::ExtendEdges::get() );
         m_xCbxRotate->set_active( officecfg::Office::Impress::Snap::Position::Rotating::get() );
         m_xMtrFldSnapArea->set_value( officecfg::Office::Impress::Snap::Object::Range::get(), FieldUnit::PIXEL);
+        m_xMtrFldAngle->set_value( officecfg::Office::Impress::Snap::Position::RotatingValue::get(), FieldUnit::DEGREE);
     }
 
     bool bReadOnly = bDrawMode ? officecfg::Office::Draw::Snap::Object::SnapLine::isReadOnly() :
@@ -169,7 +171,6 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
 
     bReadOnly = bDrawMode ? officecfg::Office::Draw::Snap::Position::RotatingValue::isReadOnly() :
         officecfg::Office::Impress::Snap::Position::RotatingValue::isReadOnly();
-    m_xMtrFldAngle->set_value(aOptsItem.GetOptionsSnap().GetAngle().get(), FieldUnit::DEGREE);
     m_xMtrFldAngle->set_sensitive(!bReadOnly);
 
     bReadOnly = bDrawMode ? officecfg::Office::Draw::Snap::Position::PointReduction::isReadOnly() :
