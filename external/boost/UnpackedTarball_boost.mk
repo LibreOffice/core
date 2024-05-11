@@ -34,6 +34,8 @@ boost_patches += boost.file_iterator.sharing_win.patch
 
 boost_patches += Wundef.patch.0
 
+boost_patches += boost.spirit.noreturn.patch
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,boost,$(BOOST_TARBALL)))
