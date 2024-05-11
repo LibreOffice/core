@@ -664,7 +664,7 @@ void ScFormulaResult::HandleStuffAfterParallelCalculation()
     // If ScInterpreter::CreateFormulaDoubleToken tokens make it into a result
     if (mbToken && mpToken)
     {
-        // temp check to look for this
+        // I don't see any evidence that this can happen, but assert if it arises
         assert(mpToken->GetRefCntPolicy() == formula::RefCntPolicy::ThreadSafe);
         const_cast<formula::FormulaToken*>(mpToken)->SetRefCntPolicy(formula::RefCntPolicy::ThreadSafe);
     }
