@@ -28,7 +28,7 @@ namespace test
 {
 bool getArgument(std::u16string_view name, OUString* value)
 {
-    OSL_ASSERT(value != nullptr);
+    assert(value);
     return rtl::Bootstrap::get(OUString::Concat("arg-") + name, *value);
 }
 }
