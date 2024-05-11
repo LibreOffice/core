@@ -190,6 +190,7 @@ void WinSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
         if( nBytes )
         {
             PRINTER_INFO_2W* pWinInfo2 = static_cast<PRINTER_INFO_2W*>(std::malloc(nBytes));
+            assert(pWinInfo2 && "Don't handle OOM conditions");
             if( GetPrinterW( hPrinter, 2, reinterpret_cast<LPBYTE>(pWinInfo2), nBytes, &nBytes ) )
             {
                 if( pWinInfo2->pDriverName )
@@ -305,7 +306,7 @@ static bool ImplTestSalJobSetup( WinSalInfoPrinter const * pPrinter,
         }
         SalDriverData const * pSetupDriverData = reinterpret_cast<SalDriverData const *>(pSetupData->GetDriverData());
         if ( (pSetupData->GetSystem() == JOBSETUP_SYSTEM_WINDOWS) &&
-             (pPrinter->maDriverName == pSetupData->GetDriver()) &&
+             (pPrinter && pPrinter->maDriverName == pSetupData->GetDriver()) &&
              (pSetupData->GetDriverDataLen() > sizeof( SalDriverData )) &&
              static_cast<tools::Long>(pSetupData->GetDriverDataLen() - pSetupDriverData->mnDriverOffset) == nSysJobSize &&
              pSetupDriverData->mnSysSignature == SAL_DRIVERDATA_SYSSIGN )

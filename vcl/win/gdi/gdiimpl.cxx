@@ -545,20 +545,22 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
 
         if( hDrawDIB )
         {
-            PBITMAPINFO         pBI = static_cast<PBITMAPINFO>(GlobalLock( hDrawDIB ));
-            PBYTE               pBits = reinterpret_cast<PBYTE>(pBI) + pBI->bmiHeader.biSize +
-                                        WinSalBitmap::ImplGetDIBColorCount( hDrawDIB ) * sizeof( RGBQUAD );
-            const int           nOldStretchMode = SetStretchBltMode( hDC, STRETCH_DELETESCANS );
+            if (PBITMAPINFO pBI = static_cast<PBITMAPINFO>(GlobalLock( hDrawDIB )))
+            {
+                PBYTE               pBits = reinterpret_cast<PBYTE>(pBI) + pBI->bmiHeader.biSize +
+                                            WinSalBitmap::ImplGetDIBColorCount( hDrawDIB ) * sizeof( RGBQUAD );
+                const int           nOldStretchMode = SetStretchBltMode( hDC, STRETCH_DELETESCANS );
 
-            StretchDIBits( hDC,
-                           static_cast<int>(rPosAry.mnDestX), static_cast<int>(rPosAry.mnDestY),
-                           static_cast<int>(rPosAry.mnDestWidth), static_cast<int>(rPosAry.mnDestHeight),
-                           static_cast<int>(rPosAry.mnSrcX), static_cast<int>(pBI->bmiHeader.biHeight - rPosAry.mnSrcHeight - rPosAry.mnSrcY),
-                           static_cast<int>(rPosAry.mnSrcWidth), static_cast<int>(rPosAry.mnSrcHeight),
-                           pBits, pBI, DIB_RGB_COLORS, nDrawMode );
+                StretchDIBits( hDC,
+                               static_cast<int>(rPosAry.mnDestX), static_cast<int>(rPosAry.mnDestY),
+                               static_cast<int>(rPosAry.mnDestWidth), static_cast<int>(rPosAry.mnDestHeight),
+                               static_cast<int>(rPosAry.mnSrcX), static_cast<int>(pBI->bmiHeader.biHeight - rPosAry.mnSrcHeight - rPosAry.mnSrcY),
+                               static_cast<int>(rPosAry.mnSrcWidth), static_cast<int>(rPosAry.mnSrcHeight),
+                               pBits, pBI, DIB_RGB_COLORS, nDrawMode );
 
-            GlobalUnlock( hDrawDIB );
-            SetStretchBltMode( hDC, nOldStretchMode );
+                GlobalUnlock( hDrawDIB );
+                SetStretchBltMode( hDC, nOldStretchMode );
+            }
         }
         else if( hDrawDDB && !bPrintDDB )
         {
