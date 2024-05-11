@@ -928,7 +928,7 @@ Assembly ^ TypeEmitter::type_resolve(
                     xReturnStruct->getTypeArguments();
                 if (seq_type_args.getLength() != 0)
                 {
-                    //get th ctor of the attribute
+                    //get the ctor of the attribute
                     array< ::System::Type^>^ arCtor = {::System::Type::GetType("System.Type[]")};
                     //Get the arguments for the attribute's ctor
                     int numTypes = seq_type_args.getLength();

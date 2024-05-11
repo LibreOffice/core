@@ -62,14 +62,14 @@ void SAL_CALL Mapping_cli2uno(
     uno_Interface ** ppUnoI = (uno_Interface **)ppOut;
     intptr_t  cliI = (intptr_t)pIn;
 
-    OSL_ENSURE( ppUnoI && td, "### null ptr!" );
+    assert(ppUnoI && td && "### null ptr!");
 
-     if (0 != *ppUnoI)
-     {
-         uno_Interface * pUnoI = *(uno_Interface **)ppUnoI;
-         (*pUnoI->release)( pUnoI );
-         *ppUnoI = 0;
-     }
+    if (0 != *ppUnoI)
+    {
+        uno_Interface * pUnoI = *(uno_Interface **)ppUnoI;
+        (*pUnoI->release)( pUnoI );
+        *ppUnoI = 0;
+    }
     try
     {
         Mapping const * that = static_cast< Mapping const * >( mapping );
@@ -95,7 +95,7 @@ void SAL_CALL Mapping_uno2cli(
 {
     try
     {
-        OSL_ENSURE( td && ppOut, "### null ptr!" );
+        assert(td && ppOut && "### null ptr!");
         OSL_ENSURE( (sizeof(System::Char) == sizeof(sal_Unicode))
                     && (sizeof(System::Boolean) == sizeof(sal_Bool))
                     && (sizeof(System::SByte) == sizeof(sal_Int8))
@@ -204,7 +204,7 @@ Bridge::Bridge(
       m_uno_cli_env( uno_cli_env ),
       m_registered_cli2uno( registered_cli2uno )
 {
-    OSL_ASSERT( 0 != m_uno_cli_env && 0 != m_uno_env );
+    assert(m_uno_cli_env && m_uno_env);
     (*((uno_Environment *)m_uno_env)->acquire)( (uno_Environment *)m_uno_env );
     (*m_uno_cli_env->acquire)( m_uno_cli_env );
 
@@ -276,7 +276,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ASSERT( 0 != ppMapping && 0 != pFrom && 0 != pTo );
+    assert(ppMapping && pFrom && pTo);
     if (*ppMapping)
     {
         (*(*ppMapping)->release)( *ppMapping );

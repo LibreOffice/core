@@ -708,7 +708,7 @@ OUString mapCliTypeName(System::String^ typeName)
  */
 inline System::String^ mapUnoString( rtl_uString const * data)
 {
-    OSL_ASSERT(data);
+    assert(data);
     return gcnew System::String((__wchar_t*) data->buffer, 0, data->length);
 }
 
@@ -1593,6 +1593,7 @@ void Bridge::map_to_cli(
                     ctorInfo = arCtorInfo[i];
                     break;
                 }
+                assert(arParamInfo);
                 OSL_ASSERT(arParamInfo[0]->ParameterType->Equals(System::String::typeid)
                     && arParamInfo[1]->ParameterType->Equals(System::Object::typeid)
                     && arParamInfo[0]->Position == 0

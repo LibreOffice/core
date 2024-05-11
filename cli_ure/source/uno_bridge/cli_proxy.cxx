@@ -419,7 +419,7 @@ srrm::IMessage^ UnoInterfaceProxy::Invoke(srrm::IMessage^ callmsg)
 
         System::Type^ typeBeingCalled = loadCliType(sTypeName);
         UnoInterfaceInfo^ info = findInfo( typeBeingCalled );
-        OSL_ASSERT( nullptr != info );
+        assert(info);
 
         // ToDo do without string conversion, an OUString is not needed here
         // get the type description of the call
