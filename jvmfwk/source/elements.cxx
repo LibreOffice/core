@@ -784,7 +784,7 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
                                 xmlNode* pJavaInfoNode) const
 
 {
-    OSL_ASSERT(pJavaInfoNode && pDoc);
+    assert(pJavaInfoNode && pDoc);
     //write the attribute vendorSettings
 
     //javaInfo@vendorUpdate
