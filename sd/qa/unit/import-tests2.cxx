@@ -2006,6 +2006,58 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testMasterSlides)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(7), xMasterPages->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf161023)
+{
+    // Given a shape with three paragraphs (18pt), all directly assigned a smaller font (10pt)
+    createSdImpressDoc("odp/tdf161023.fodp");
+    auto shape = getShapeFromPage(0, 0);
+
+    // 1st paragraph, not empty
+    {
+        auto paragraph(getParagraphFromShape(0, shape));
+        CPPUNIT_ASSERT_EQUAL(u"a"_ustr, paragraph->getString());
+        auto run(getRunFromParagraph(0, paragraph));
+        CPPUNIT_ASSERT_EQUAL(u"a"_ustr, run->getString());
+        uno::Reference<beans::XPropertySet> xPropSet(run, uno::UNO_QUERY_THROW);
+        double fCharHeight = 0;
+        xPropSet->getPropertyValue("CharHeight") >>= fCharHeight;
+        CPPUNIT_ASSERT_EQUAL(10.0, fCharHeight);
+        // No more runs
+        CPPUNIT_ASSERT_THROW(getRunFromParagraph(1, paragraph), container::NoSuchElementException);
+    }
+
+    // Empty 2nd paragraph, consisting of a single span: this span was treated as "paragraph mark"
+    {
+        auto paragraph(getParagraphFromShape(1, shape));
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, paragraph->getString());
+        auto run(getRunFromParagraph(0, paragraph));
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, run->getString());
+        uno::Reference<beans::XPropertySet> xPropSet(run, uno::UNO_QUERY_THROW);
+        double fCharHeight = 0;
+        xPropSet->getPropertyValue("CharHeight") >>= fCharHeight;
+        // Without the fix, this would fail with
+        // - Expected: 10
+        // - Actual  : 18
+        CPPUNIT_ASSERT_EQUAL(10.0, fCharHeight);
+        // No more runs
+        CPPUNIT_ASSERT_THROW(getRunFromParagraph(1, paragraph), container::NoSuchElementException);
+    }
+
+    // 3rd paragraph, not empty
+    {
+        auto paragraph(getParagraphFromShape(2, shape));
+        CPPUNIT_ASSERT_EQUAL(u"c"_ustr, paragraph->getString());
+        auto run(getRunFromParagraph(0, paragraph));
+        CPPUNIT_ASSERT_EQUAL(u"c"_ustr, run->getString());
+        uno::Reference<beans::XPropertySet> xPropSet(run, uno::UNO_QUERY_THROW);
+        double fCharHeight = 0;
+        xPropSet->getPropertyValue("CharHeight") >>= fCharHeight;
+        CPPUNIT_ASSERT_EQUAL(10.0, fCharHeight);
+        // No more runs
+        CPPUNIT_ASSERT_THROW(getRunFromParagraph(1, paragraph), container::NoSuchElementException);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

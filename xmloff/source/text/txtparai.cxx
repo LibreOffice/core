@@ -33,6 +33,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -1796,6 +1797,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
         uno::Reference<text::XTextRangeCompare> xCompare(xTxtImport->GetText(), uno::UNO_QUERY);
         if (xCompare.is())
         {
+            bool bTextDocument = GetImport().GetModel().query<XTextDocument>().is();
             try
             {
                 for (const auto& pHint : m_xHints->GetHints())
@@ -1809,7 +1811,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
                         // created between commits 6249858a8972aef077e0249bd93cfe8f01bce4d6 and
                         // 1a88efa8e02a6d765dab13c7110443bb9e6acecf, where the trailing empty spans
                         // were used to store the marker formatting
-                        if (pHint->GetType() == XMLHintType::XML_HINT_STYLE
+                        if (bTextDocument && pHint->GetType() == XMLHintType::XML_HINT_STYLE
                             && !m_aMarkerStyleName.hasValue()
                             && xCompare->compareRegionStarts(pHint->GetStart(), xEnd) == 0)
                         {
