@@ -99,7 +99,7 @@ class GIFReader : public GraphicReader
     sal_uInt8           nGCDisposalMethod;      // 'Disposal Method' (see GIF docs)
     sal_uInt8           cTransIndex1;
     sal_uInt8           cNonTransIndex1;
-    bool                bEnhance;
+    sal_uLong           nPaletteSize;
 
     void                ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount );
     void                ClearImageExtensions();
@@ -157,7 +157,7 @@ GIFReader::GIFReader( SvStream& rStm )
     , nGCTransparentIndex ( 0 )
     , cTransIndex1 ( 0 )
     , cNonTransIndex1 ( 0 )
-    , bEnhance( false )
+    , nPaletteSize( 0 )
 {
     maUpperName = "SVIGIF";
     aSrcBuf.resize(256);    // Memory buffer for ReadNextBlock
@@ -328,12 +328,7 @@ void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
             (*pPal)[ 254UL ] = COL_BLACK;
     }
 
-    // tdf#157793 limit tdf#157635 fix to only larger palettes
-    // I don't know why, but the fix for tdf#157635 causes
-    // images with a palette of 16 entries to be inverted.
-    // Also, fix tdf#158047 by allowing the tdf#157635 fix for
-    // palettes with 64 entries.
-    bEnhance = (nCount > 16);
+    nPaletteSize = nCount;
 }
 
 bool GIFReader::ReadExtension()
@@ -674,16 +669,25 @@ void GIFReader::CreateNewBitmaps()
         aAlphaMask.Invert(); // convert from transparency to alpha
         aAnimationFrame.maBitmapEx = BitmapEx( aBmp8, aAlphaMask );
     }
+    else if( nPaletteSize > 2 )
+    {
+        // tdf#160690 set an opaque alpha mask for non-transparent frames
+        // Due to the switch from transparency to alpha in commit
+        // 81994cb2b8b32453a92bcb011830fcb884f22ff3, an empty alpha mask
+        // is treated as a completely transparent bitmap. So revert all
+        // of the previous commits for tdf#157576, tdf#157635, and tdf#157793
+        // and create a completely opaque bitmap instead.
+        // Note: this fix also fixes tdf#157576, tdf#157635, and tdf#157793.
+        AlphaMask aAlphaMask(aBmp8.GetSizePixel());
+        aAnimationFrame.maBitmapEx = BitmapEx( aBmp8, aAlphaMask );
+    }
     else
     {
-        // tdf#157576 and tdf#157635 mask out black pixels
-        // Due to the switch from transparency to alpha in commit
-        // 81994cb2b8b32453a92bcb011830fcb884f22ff3, mask out black
-        // pixels in bitmap.
-        if (bEnhance)
-            aAnimationFrame.maBitmapEx = BitmapEx( aBmp8, aBmp8 );
-        else
-            aAnimationFrame.maBitmapEx = BitmapEx( aBmp8 );
+        // Don't apply the fix for tdf#160690 as it will cause 1 bit bitmaps
+        // in Word documents like the following test document to fail to be
+        // parsed correctly:
+        // sw/qa/extras/tiledrendering/data/tdf159626_yellowPatternFill.docx
+        aAnimationFrame.maBitmapEx = BitmapEx( aBmp8 );
     }
 
     aAnimationFrame.maPositionPixel = Point( nImagePosX, nImagePosY );
