@@ -92,6 +92,7 @@ OUString XmlTestTools::getXPath(const xmlDocUniquePtr& pXmlDoc, const OString& r
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
     CPPUNIT_ASSERT(pXmlObj);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    CPPUNIT_ASSERT(pXmlNodes);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
                                  1, xmlXPathNodeSetGetLength(pXmlNodes));
     CPPUNIT_ASSERT(!rAttribute.isEmpty());
@@ -240,6 +241,7 @@ void XmlTestTools::assertXPathChildren(const xmlDocUniquePtr& pXmlDoc, const OSt
 #if LIBXML_VERSION >= 20703 /* xmlChildElementCount is only available in libxml2 >= 2.7.3 */
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    CPPUNIT_ASSERT(pXmlNodes);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
                                  1, xmlXPathNodeSetGetLength(pXmlNodes));
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
@@ -257,6 +259,7 @@ void XmlTestTools::assertXPathNoAttribute(const xmlDocUniquePtr& pXmlDoc, const 
 {
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    CPPUNIT_ASSERT(pXmlNodes);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
                                  1, xmlXPathNodeSetGetLength(pXmlNodes));
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
@@ -269,6 +272,7 @@ int XmlTestTools::getXPathPosition(const xmlDocUniquePtr& pXmlDoc, const OString
 {
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    CPPUNIT_ASSERT(pXmlNodes);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
                                  1,
                                  xmlXPathNodeSetGetLength(pXmlNodes));
@@ -296,7 +300,9 @@ void XmlTestTools::assertXPathNodeName(const xmlDocUniquePtr& pXmlDoc, const OSt
                                           const OString& rExpectedName)
 {
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
+    CPPUNIT_ASSERT(pXmlObj);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    CPPUNIT_ASSERT(pXmlNodes);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
                                  1,
                                  xmlXPathNodeSetGetLength(pXmlNodes));

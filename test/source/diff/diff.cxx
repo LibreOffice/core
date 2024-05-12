@@ -284,6 +284,8 @@ bool compareValuesWithTolerance(double val1, double val2, double tolerance, bool
 
 bool XMLDiff::compareAttributes(xmlNodePtr node1, xmlNodePtr node2)
 {
+    CPPUNIT_ASSERT(node1);
+    CPPUNIT_ASSERT(node2);
     xmlAttrPtr attr1 = nullptr;
     xmlAttrPtr attr2 = nullptr;
     for(attr1 = node1->properties, attr2 = node2->properties; attr1 != nullptr && attr2 != nullptr; attr1 = attr1->next, attr2 = attr2->next)
