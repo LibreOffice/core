@@ -536,25 +536,21 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157793)
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
     Bitmap aBMP = aBMPEx.GetBitmap();
     BitmapScopedReadAccess pReadAccess(aBMP);
-    int nLightGrayCount = 0;
+    int nWhiteCount = 0;
     for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
     {
         for (tools::Long nY = 1; nY < aSize.Height() - 1; ++nY)
         {
             const Color aColor = pReadAccess->GetColor(nY, nX);
-            if (aColor == 0xfefefe)
-                ++nLightGrayCount;
+            if (aColor == 0xffffff)
+                ++nWhiteCount;
         }
     }
-
-    // FIXME this still has some issues with skia
-    if (SkiaHelper::isVCLSkiaEnabled())
-        return;
 
     // Without the fix in place, this test would have failed with
     // - Expected greater than: 7800
     // - Actual  : 0
-    CPPUNIT_ASSERT_GREATER(7800, nLightGrayCount);
+    CPPUNIT_ASSERT_GREATER(7800, nWhiteCount);
 }
 
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157635)
