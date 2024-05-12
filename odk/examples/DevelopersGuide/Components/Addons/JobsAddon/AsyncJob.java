@@ -198,7 +198,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
             ++c;
             aDeactivation       = new com.sun.star.beans.NamedValue();
             aDeactivation.Name  = "Deactivate";
-            aDeactivation.Value = java.lang.Boolean.TRUE;
+            aDeactivation.Value = Boolean.TRUE;
         }
 
         // Sending of result events is useful inside DISPATCH environment only
@@ -284,7 +284,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
             xInfoBox.setMessageText(sMessage);
             xInfoBox.execute();
         }
-        catch(java.lang.Throwable exIgnore)
+        catch(Throwable exIgnore)
         {
             // ignore any problem, which can occur here.
             // It's not really a bug for this example job, if

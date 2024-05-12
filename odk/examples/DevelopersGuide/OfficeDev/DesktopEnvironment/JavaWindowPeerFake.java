@@ -53,7 +53,7 @@ class JavaWindowPeerFake implements com.sun.star.awt.XSystemDependentWindowPeer,
      * Implementation of XSystemDependentWindowPeer (that's all we really need).
      * This method is called back from the Office toolkit to retrieve the system data.
      */
-    public java.lang.Object getWindowHandle(byte[] aProcessId, short aSystem)
+    public Object getWindowHandle(byte[] aProcessId, short aSystem)
         throws com.sun.star.uno.RuntimeException
     {
         Object aReturn = null;

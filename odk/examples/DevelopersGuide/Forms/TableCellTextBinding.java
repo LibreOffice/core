@@ -37,7 +37,7 @@ import com.sun.star.text.XTextRange;
     content to other interested parties.
 */
 public class TableCellTextBinding
-                extends     java.lang.Thread
+                extends     Thread
                 implements  com.sun.star.form.binding.XValueBinding,
                             com.sun.star.util.XModifyBroadcaster
 {
@@ -95,7 +95,7 @@ public class TableCellTextBinding
         {
             text = (String)obj;
         }
-        catch( java.lang.ClassCastException e )
+        catch( ClassCastException e )
         {
             throw new com.sun.star.form.binding.IncompatibleTypesException();
         }

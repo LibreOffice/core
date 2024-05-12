@@ -58,7 +58,7 @@ public class RowSet implements XRowSet, XRow
         catch ( Exception e )
         {
             e.printStackTrace(System.err);
-            throw new java.lang.InstantiationError();
+            throw new InstantiationError();
         }
     }
 
