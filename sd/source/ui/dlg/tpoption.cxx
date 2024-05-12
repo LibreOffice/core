@@ -57,7 +57,6 @@ SdTpOptionsSnap::~SdTpOptionsSnap()
 bool SdTpOptionsSnap::FillItemSet( SfxItemSet* rAttrs )
 {
     SvxGridTabPage::FillItemSet(rAttrs);
-    SdOptionsSnapItem aOptsItem;
     bool bDrawMode = SvxGridTabPage::IsDrawMode();
 
     std::shared_ptr<comphelper::ConfigurationChanges> batch(
@@ -74,6 +73,7 @@ bool SdTpOptionsSnap::FillItemSet( SfxItemSet* rAttrs )
         officecfg::Office::Draw::Snap::Position::Rotating::set( m_xCbxRotate->get_active(), batch );
         officecfg::Office::Draw::Snap::Object::Range::set( static_cast<sal_Int16>(m_xMtrFldSnapArea->get_value(FieldUnit::PIXEL)), batch );
         officecfg::Office::Draw::Snap::Position::RotatingValue::set( static_cast<sal_Int32>(Degree100(m_xMtrFldAngle->get_value(FieldUnit::DEGREE))), batch );
+        officecfg::Office::Draw::Snap::Position::PointReduction::set ( static_cast<sal_Int32>(Degree100(m_xMtrFldBezAngle->get_value(FieldUnit::DEGREE))), batch );
     }
     else
     {
@@ -86,11 +86,9 @@ bool SdTpOptionsSnap::FillItemSet( SfxItemSet* rAttrs )
         officecfg::Office::Impress::Snap::Position::Rotating::set( m_xCbxRotate->get_active(), batch );
         officecfg::Office::Impress::Snap::Object::Range::set( static_cast<sal_Int16>(m_xMtrFldSnapArea->get_value(FieldUnit::PIXEL)), batch );
         officecfg::Office::Impress::Snap::Position::RotatingValue::set( static_cast<sal_Int32>(Degree100(m_xMtrFldAngle->get_value(FieldUnit::DEGREE))), batch );
+        officecfg::Office::Impress::Snap::Position::PointReduction::set ( static_cast<sal_Int32>(Degree100(m_xMtrFldBezAngle->get_value(FieldUnit::DEGREE))), batch );
     }
 
-    aOptsItem.GetOptionsSnap().SetEliminatePolyPointLimitAngle(Degree100(m_xMtrFldBezAngle->get_value(FieldUnit::DEGREE)));
-
-    rAttrs->Put( aOptsItem );
     batch->commit();
 
     // we get a possible existing GridItem, this ensures that we do not set
@@ -101,8 +99,6 @@ bool SdTpOptionsSnap::FillItemSet( SfxItemSet* rAttrs )
 void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
 {
     SvxGridTabPage::Reset(rAttrs);
-
-    SdOptionsSnapItem aOptsItem( rAttrs->Get( ATTR_OPTIONS_SNAP ) );
 
     bool bDrawMode = SvxGridTabPage::IsDrawMode();
     if (bDrawMode)
@@ -116,6 +112,7 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
         m_xCbxRotate->set_active( officecfg::Office::Draw::Snap::Position::Rotating::get() );
         m_xMtrFldSnapArea->set_value( officecfg::Office::Draw::Snap::Object::Range::get(), FieldUnit::PIXEL);
         m_xMtrFldAngle->set_value( officecfg::Office::Draw::Snap::Position::RotatingValue::get(), FieldUnit::DEGREE);
+        m_xMtrFldBezAngle->set_value( officecfg::Office::Draw::Snap::Position::PointReduction::get(), FieldUnit::DEGREE);
     }
     else
     {
@@ -128,6 +125,7 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
         m_xCbxRotate->set_active( officecfg::Office::Impress::Snap::Position::Rotating::get() );
         m_xMtrFldSnapArea->set_value( officecfg::Office::Impress::Snap::Object::Range::get(), FieldUnit::PIXEL);
         m_xMtrFldAngle->set_value( officecfg::Office::Impress::Snap::Position::RotatingValue::get(), FieldUnit::DEGREE);
+        m_xMtrFldBezAngle->set_value( officecfg::Office::Impress::Snap::Position::PointReduction::get(), FieldUnit::DEGREE);
     }
 
     bool bReadOnly = bDrawMode ? officecfg::Office::Draw::Snap::Object::SnapLine::isReadOnly() :
@@ -176,7 +174,6 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
 
     bReadOnly = bDrawMode ? officecfg::Office::Draw::Snap::Position::PointReduction::isReadOnly() :
         officecfg::Office::Impress::Snap::Position::PointReduction::isReadOnly();
-    m_xMtrFldBezAngle->set_value(aOptsItem.GetOptionsSnap().GetEliminatePolyPointLimitAngle().get(), FieldUnit::DEGREE);
     m_xMtrFldBezAngle->set_sensitive(!bReadOnly);
     m_xMtrFldBezAngleImg->set_visible(bReadOnly);
 
@@ -248,20 +245,20 @@ bool SdTpOptionsContents::FillItemSet( SfxItemSet* )
 
         if (m_bDrawMode)
         {
-            officecfg::Office::Draw::Layout::Display::Ruler::set( m_xCbxRuler->get_active(), batch );
-            officecfg::Office::Draw::Layout::Display::Contour::set( m_xCbxMoveOutline->get_active(), batch );
-            officecfg::Office::Draw::Layout::Display::Guide::set( m_xCbxDragStripes->get_active(), batch );
-            officecfg::Office::Draw::Layout::Display::Bezier::set( m_xCbxHandlesBezier->get_active(), batch );
+            officecfg::Office::Draw::Layout::Display::Ruler::set(m_xCbxRuler->get_active(), batch);
+            officecfg::Office::Draw::Layout::Display::Contour::set(m_xCbxMoveOutline->get_active(), batch);
+            officecfg::Office::Draw::Layout::Display::Guide::set(m_xCbxDragStripes->get_active(), batch);
+            officecfg::Office::Draw::Layout::Display::Bezier::set(m_xCbxHandlesBezier->get_active(), batch);
+            batch->commit();
         }
         else
         {
-            officecfg::Office::Impress::Layout::Display::Ruler::set( m_xCbxRuler->get_active(), batch );
-            officecfg::Office::Impress::Layout::Display::Contour::set( m_xCbxMoveOutline->get_active(), batch );
-            officecfg::Office::Impress::Layout::Display::Guide::set( m_xCbxDragStripes->get_active(), batch );
-            officecfg::Office::Impress::Layout::Display::Bezier::set( m_xCbxHandlesBezier->get_active(), batch );
+            officecfg::Office::Impress::Layout::Display::Ruler::set(m_xCbxRuler->get_active(), batch);
+            officecfg::Office::Impress::Layout::Display::Contour::set(m_xCbxMoveOutline->get_active(), batch);
+            officecfg::Office::Impress::Layout::Display::Guide::set(m_xCbxDragStripes->get_active(), batch);
+            officecfg::Office::Impress::Layout::Display::Bezier::set(m_xCbxHandlesBezier->get_active(), batch);
+            batch->commit();
         }
-
-        batch->commit();
         bModified = true;
     }
     return bModified;
@@ -271,17 +268,17 @@ void SdTpOptionsContents::Reset( const SfxItemSet* )
 {
     if (m_bDrawMode)
     {
-        m_xCbxRuler->set_active( officecfg::Office::Draw::Layout::Display::Ruler::get() );
-        m_xCbxMoveOutline->set_active( officecfg::Office::Draw::Layout::Display::Contour::get() );
-        m_xCbxDragStripes->set_active( officecfg::Office::Draw::Layout::Display::Guide::get() );
-        m_xCbxHandlesBezier->set_active( officecfg::Office::Draw::Layout::Display::Bezier::get() );
+        m_xCbxRuler->set_active(officecfg::Office::Draw::Layout::Display::Ruler::get());
+        m_xCbxMoveOutline->set_active(officecfg::Office::Draw::Layout::Display::Contour::get());
+        m_xCbxDragStripes->set_active(officecfg::Office::Draw::Layout::Display::Guide::get());
+        m_xCbxHandlesBezier->set_active(officecfg::Office::Draw::Layout::Display::Bezier::get());
     }
     else
     {
-        m_xCbxRuler->set_active(officecfg::Office::Impress::Layout::Display::Ruler::get() );
-        m_xCbxMoveOutline->set_active(officecfg::Office::Impress::Layout::Display::Contour::get() );
-        m_xCbxDragStripes->set_active(officecfg::Office::Impress::Layout::Display::Guide::get() );
-        m_xCbxHandlesBezier->set_active(officecfg::Office::Impress::Layout::Display::Bezier::get() );
+        m_xCbxRuler->set_active(officecfg::Office::Impress::Layout::Display::Ruler::get());
+        m_xCbxMoveOutline->set_active(officecfg::Office::Impress::Layout::Display::Contour::get());
+        m_xCbxDragStripes->set_active(officecfg::Office::Impress::Layout::Display::Guide::get());
+        m_xCbxHandlesBezier->set_active(officecfg::Office::Impress::Layout::Display::Bezier::get());
     }
 
     bool bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Layout::Display::Ruler::isReadOnly() :
@@ -419,7 +416,7 @@ SdTpOptionsMisc::SdTpOptionsMisc(weld::Container* pPage, weld::DialogController*
 
     // determine PoolUnit
     SfxItemPool* pPool = rInAttrs.GetPool();
-    assert(pPool && "Where is the Pool?");
+    DBG_ASSERT( pPool, "Where is the Pool?" );
     ePoolUnit = pPool->GetMetric( SID_ATTR_FILL_HATCH );
 
     // Fill the CB
