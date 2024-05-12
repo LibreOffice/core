@@ -281,7 +281,7 @@ void SfxShell::HandleOpenXmlFilterSettings(SfxRequest & rReq)
     try
     {
         uno::Reference < ui::dialogs::XExecutableDialog > xDialog = ui::dialogs::XSLTFilterDialog::create( ::comphelper::getProcessComponentContext() );
-        xDialog->execute();
+        (void)xDialog->execute();
     }
     catch (const uno::Exception&)
     {

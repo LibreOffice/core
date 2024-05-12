@@ -65,7 +65,7 @@ namespace dbaui
     {
         try
         {
-            m_xDialog->execute();
+            (void)m_xDialog->execute();
         }
         catch( const Exception& )
         {

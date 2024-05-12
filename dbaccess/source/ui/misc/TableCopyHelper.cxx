@@ -107,7 +107,7 @@ void OTableCopyHelper::insertTable( std::u16string_view i_rSourceDataSource, con
         bool bAppendToExisting = !sTableNameForAppend.isEmpty();
         xWizard->setOperation( bAppendToExisting ? CopyTableOperation::AppendData : CopyTableOperation::CopyDefinitionAndData );
 
-        xWizard->execute();
+        (void)xWizard->execute();
     }
     catch( const SQLException& )
     {

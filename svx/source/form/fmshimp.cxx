@@ -1391,7 +1391,7 @@ void FmXFormShell::ExecuteTabOrderDialog_Lock(const Reference<XTabControllerMode
                 _rxForForm, getControlContainerForView_Lock(), xParentWindow
             );
 
-        xDialog->execute();
+        (void)xDialog->execute();
     }
     catch( const Exception& )
     {
