@@ -625,6 +625,7 @@ void SAXEventKeeperImpl::releaseElementMarkBuffer()
                  * Delete the TH from the buffer node.
                  */
                 BufferNode *pBufferNode = pElementMark->getBufferNode();
+                assert(pBufferNode);
                 pBufferNode->setBlocker(nullptr);
 
                 /*
