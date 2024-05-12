@@ -514,9 +514,6 @@ std::optional<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
     }
     aRet.Put( aSdOptionsMiscItem );
 
-    // TP_OPTIONS_SNAP:
-    aRet.Put( SdOptionsSnapItem( pOptions, pFrameView ) );
-
     // TP_SCALE:
     sal_uInt32 nW = 10;
     sal_uInt32 nH = 10;
@@ -675,13 +672,6 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     {
         pMiscItem->SetOptions( pOptions );
         bMiscOptions = true;
-    }
-
-    // Snap
-    const SdOptionsSnapItem* pSnapItem = rSet.GetItemIfSet( ATTR_OPTIONS_SNAP, false );
-    if( pSnapItem )
-    {
-        pSnapItem->SetOptions( pOptions );
     }
 
     SfxItemSetFixed<SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,

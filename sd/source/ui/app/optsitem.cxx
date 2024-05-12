@@ -517,171 +517,6 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
 
 /*************************************************************************
 |*
-|* SdOptionsSnap
-|*
-\************************************************************************/
-
-SdOptionsSnap::SdOptionsSnap( bool bImpress, bool bUseConfig ) :
-    SdOptionsGeneric( bImpress, bUseConfig ?
-                      ( bImpress ?
-                        OUString( "Office.Impress/Snap" ) :
-                        OUString( "Office.Draw/Snap" ) ) :
-                      OUString() ),
-    bSnapHelplines( true ),
-    bSnapBorder( true ),
-    bSnapFrame( false ),
-    bSnapPoints( false ),
-    bOrtho( false ),
-    bBigOrtho( true ),
-    bRotate( false ),
-    nSnapArea( 5 ),
-    nAngle( 1500 ),
-    nBezAngle( 1500 )
-
-{
-    EnableModify( true );
-}
-
-bool SdOptionsSnap::operator==( const SdOptionsSnap& rOpt ) const
-{
-    return( IsSnapHelplines() == rOpt.IsSnapHelplines() &&
-            IsSnapBorder() == rOpt.IsSnapBorder() &&
-            IsSnapFrame() == rOpt.IsSnapFrame() &&
-            IsSnapPoints() == rOpt.IsSnapPoints() &&
-            IsOrtho() == rOpt.IsOrtho() &&
-            IsBigOrtho() == rOpt.IsBigOrtho() &&
-            IsRotate() == rOpt.IsRotate() &&
-            GetSnapArea() == rOpt.GetSnapArea() &&
-            GetAngle() == rOpt.GetAngle() &&
-            GetEliminatePolyPointLimitAngle() == rOpt.GetEliminatePolyPointLimitAngle() );
-}
-
-void SdOptionsSnap::GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const
-{
-    static const char* aPropNames[] =
-    {
-        "Object/SnapLine",
-        "Object/PageMargin",
-        "Object/ObjectFrame",
-        "Object/ObjectPoint",
-        "Position/CreatingMoving",
-        "Position/ExtendEdges",
-        "Position/Rotating",
-        "Object/Range",
-        "Position/RotatingValue",
-        "Position/PointReduction"
-    };
-
-    rCount = SAL_N_ELEMENTS(aPropNames);
-    ppNames = aPropNames;
-}
-
-bool SdOptionsSnap::ReadData( const Any* pValues )
-{
-    if( pValues[0].hasValue() ) SetSnapHelplines( *o3tl::doAccess<bool>(pValues[ 0 ]) );
-    if( pValues[1].hasValue() ) SetSnapBorder( *o3tl::doAccess<bool>(pValues[ 1 ]) );
-    if( pValues[2].hasValue() ) SetSnapFrame( *o3tl::doAccess<bool>(pValues[ 2 ]) );
-    if( pValues[3].hasValue() ) SetSnapPoints( *o3tl::doAccess<bool>(pValues[ 3 ]) );
-    if( pValues[4].hasValue() ) SetOrtho( *o3tl::doAccess<bool>(pValues[ 4 ]) );
-    if( pValues[5].hasValue() ) SetBigOrtho( *o3tl::doAccess<bool>(pValues[ 5 ]) );
-    if( pValues[6].hasValue() ) SetRotate( *o3tl::doAccess<bool>(pValues[ 6 ]) );
-    if( pValues[7].hasValue() ) SetSnapArea( static_cast<sal_Int16>(*o3tl::doAccess<sal_Int32>(pValues[ 7 ])) );
-    if( pValues[8].hasValue() ) SetAngle( Degree100(*o3tl::doAccess<sal_Int32>(pValues[ 8 ])) );
-    if( pValues[9].hasValue() ) SetEliminatePolyPointLimitAngle( Degree100(*o3tl::doAccess<sal_Int32>(pValues[ 9 ])) );
-
-    return true;
-}
-
-bool SdOptionsSnap::WriteData( Any* pValues ) const
-{
-    pValues[ 0 ] <<= IsSnapHelplines();
-    pValues[ 1 ] <<= IsSnapBorder();
-    pValues[ 2 ] <<= IsSnapFrame();
-    pValues[ 3 ] <<= IsSnapPoints();
-    pValues[ 4 ] <<= IsOrtho();
-    pValues[ 5 ] <<= IsBigOrtho();
-    pValues[ 6 ] <<= IsRotate();
-    pValues[ 7 ] <<= static_cast<sal_Int32>(GetSnapArea());
-    pValues[ 8 ] <<= static_cast<sal_Int32>(GetAngle().get());
-    pValues[ 9 ] <<= static_cast<sal_Int32>(GetEliminatePolyPointLimitAngle().get());
-
-    return true;
-}
-
-/*************************************************************************
-|*
-|* SdOptionsSnapItem
-|*
-\************************************************************************/
-
-SdOptionsSnapItem::SdOptionsSnapItem()
-:   SfxPoolItem     ( ATTR_OPTIONS_SNAP )
-,   maOptionsSnap   ( false, false )
-{
-}
-
-SdOptionsSnapItem::SdOptionsSnapItem( SdOptions const * pOpts, ::sd::FrameView const * pView )
-:   SfxPoolItem     ( ATTR_OPTIONS_SNAP )
-,   maOptionsSnap   ( false, false )
-{
-    if( pView )
-    {
-        maOptionsSnap.SetSnapHelplines( pView->IsHlplSnap() );
-        maOptionsSnap.SetSnapBorder( pView->IsBordSnap() );
-        maOptionsSnap.SetSnapFrame( pView->IsOFrmSnap() );
-        maOptionsSnap.SetSnapPoints( pView->IsOPntSnap() );
-        maOptionsSnap.SetOrtho( pView->IsOrtho() );
-        maOptionsSnap.SetBigOrtho( pView->IsBigOrtho() );
-        maOptionsSnap.SetRotate( pView->IsAngleSnapEnabled() );
-        maOptionsSnap.SetSnapArea( pView->GetSnapMagneticPixel() );
-        maOptionsSnap.SetAngle( pView->GetSnapAngle() );
-        maOptionsSnap.SetEliminatePolyPointLimitAngle( pView->GetEliminatePolyPointLimitAngle() );
-    }
-    else if( pOpts )
-    {
-        maOptionsSnap.SetSnapHelplines( pOpts->IsSnapHelplines() );
-        maOptionsSnap.SetSnapBorder( pOpts->IsSnapBorder() );
-        maOptionsSnap.SetSnapFrame( pOpts->IsSnapFrame() );
-        maOptionsSnap.SetSnapPoints( pOpts->IsSnapPoints() );
-        maOptionsSnap.SetOrtho( pOpts->IsOrtho() );
-        maOptionsSnap.SetBigOrtho( pOpts->IsBigOrtho() );
-        maOptionsSnap.SetRotate( pOpts->IsRotate() );
-        maOptionsSnap.SetSnapArea( pOpts->GetSnapArea() );
-        maOptionsSnap.SetAngle( pOpts->GetAngle() );
-        maOptionsSnap.SetEliminatePolyPointLimitAngle( pOpts->GetEliminatePolyPointLimitAngle() );
-    }
-}
-
-SdOptionsSnapItem* SdOptionsSnapItem::Clone( SfxItemPool* ) const
-{
-    return new SdOptionsSnapItem( *this );
-}
-
-bool SdOptionsSnapItem::operator==( const SfxPoolItem& rAttr ) const
-{
-    assert(SfxPoolItem::operator==(rAttr));
-    return maOptionsSnap == static_cast<const SdOptionsSnapItem&>(rAttr).maOptionsSnap;
-}
-
-void SdOptionsSnapItem::SetOptions( SdOptions* pOpts ) const
-{
-    if( !pOpts )
-        return;
-
-    pOpts->SetSnapHelplines( maOptionsSnap.IsSnapHelplines() );
-    pOpts->SetSnapBorder( maOptionsSnap.IsSnapBorder() );
-    pOpts->SetSnapFrame( maOptionsSnap.IsSnapFrame() );
-    pOpts->SetSnapPoints( maOptionsSnap.IsSnapPoints() );
-    pOpts->SetOrtho( maOptionsSnap.IsOrtho() );
-    pOpts->SetBigOrtho( maOptionsSnap.IsBigOrtho() );
-    pOpts->SetRotate( maOptionsSnap.IsRotate() );
-    pOpts->SetSnapArea( maOptionsSnap.GetSnapArea() );
-    pOpts->SetAngle( maOptionsSnap.GetAngle() );
-    pOpts->SetEliminatePolyPointLimitAngle( maOptionsSnap.GetEliminatePolyPointLimitAngle() );
-}
-
-/*************************************************************************
-|*
 |* SdOptionsGrid
 |*
 \************************************************************************/
@@ -1082,7 +917,6 @@ void SdOptionsPrintItem::SetOptions( SdOptions* pOpts ) const
 
 SdOptions::SdOptions(bool bImpress) :
     SdOptionsMisc( bImpress, true ),
-    SdOptionsSnap( bImpress, true ),
     SdOptionsGrid( bImpress ),
     SdOptionsPrint( bImpress, true )
 {
@@ -1095,7 +929,6 @@ SdOptions::~SdOptions()
 void SdOptions::StoreConfig()
 {
     SdOptionsMisc::Store();
-    SdOptionsSnap::Store();
     SdOptionsGrid::Store();
     SdOptionsPrint::Store();
 }

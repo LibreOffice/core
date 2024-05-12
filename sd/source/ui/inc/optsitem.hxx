@@ -254,73 +254,6 @@ private:
     SdOptionsMisc           maOptionsMisc;
 };
 
-class SD_DLLPUBLIC SdOptionsSnap : public SdOptionsGeneric
-{
-private:
-
-    bool    bSnapHelplines  : 1;    // Snap/Object/SnapLine
-    bool    bSnapBorder     : 1;    // Snap/Object/PageMargin
-    bool    bSnapFrame      : 1;    // Snap/Object/ObjectFrame
-    bool    bSnapPoints     : 1;    // Snap/Object/ObjectPoint
-    bool    bOrtho          : 1;    // Snap/Position/CreatingMoving
-    bool    bBigOrtho       : 1;    // Snap/Position/ExtendEdges
-    bool    bRotate         : 1;    // Snap/Position/Rotating
-    sal_Int16   nSnapArea;              // Snap/Object/Range
-    Degree100   nAngle;                 // Snap/Position/RotatingValue
-    Degree100   nBezAngle;              // Snap/Position/PointReduction
-
-protected:
-
-    virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const override;
-    virtual bool ReadData( const css::uno::Any* pValues ) override;
-    virtual bool WriteData( css::uno::Any* pValues ) const override;
-
-public:
-
-            SdOptionsSnap(bool bImpress, bool bUseConfig);
-
-    bool    operator==( const SdOptionsSnap& rOpt ) const;
-
-    bool    IsSnapHelplines() const { Init(); return bSnapHelplines; }
-    bool    IsSnapBorder() const { Init(); return bSnapBorder; }
-    bool    IsSnapFrame() const { Init(); return bSnapFrame; }
-    bool    IsSnapPoints() const { Init(); return bSnapPoints; }
-    bool    IsOrtho() const { Init(); return bOrtho; }
-    bool    IsBigOrtho() const { Init(); return bBigOrtho; }
-    bool    IsRotate() const { Init(); return bRotate; }
-    sal_Int16   GetSnapArea() const { Init(); return nSnapArea; }
-    Degree100   GetAngle() const { Init(); return nAngle; }
-    Degree100   GetEliminatePolyPointLimitAngle() const { Init(); return nBezAngle; }
-
-    void    SetSnapHelplines( bool bOn ) { if( bSnapHelplines != bOn ) { OptionsChanged(); bSnapHelplines = bOn; } }
-    void    SetSnapBorder( bool bOn ) { if( bSnapBorder != bOn ) { OptionsChanged(); bSnapBorder = bOn; } }
-    void    SetSnapFrame( bool bOn ) { if( bSnapFrame != bOn ) { OptionsChanged(); bSnapFrame = bOn; } }
-    void    SetSnapPoints( bool bOn ) { if( bSnapPoints != bOn ) { OptionsChanged(); bSnapPoints = bOn; } }
-    void    SetOrtho( bool bOn ) { if( bOrtho != bOn ) { OptionsChanged(); bOrtho = bOn; } }
-    void    SetBigOrtho( bool bOn ) { if( bBigOrtho != bOn ) { OptionsChanged(); bBigOrtho = bOn; } }
-    void    SetRotate( bool bOn ) { if( bRotate != bOn ) { OptionsChanged(); bRotate = bOn; } }
-    void    SetSnapArea( sal_Int16 nIn ) { if( nSnapArea != nIn ) { OptionsChanged(); nSnapArea = nIn; } }
-    void    SetAngle( Degree100 nIn ) { if( nAngle != nIn ) { OptionsChanged(); nAngle = nIn; } }
-    void    SetEliminatePolyPointLimitAngle( Degree100 nIn ) { if( nBezAngle != nIn ) { OptionsChanged(); nBezAngle = nIn; } }
-};
-
-class SD_DLLPUBLIC SdOptionsSnapItem final : public SfxPoolItem
-{
-public:
-
-                            explicit SdOptionsSnapItem();
-                            SdOptionsSnapItem( SdOptions const * pOpts, ::sd::FrameView const * pView );
-
-    virtual SdOptionsSnapItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual bool            operator==( const SfxPoolItem& ) const override;
-
-    void                    SetOptions( SdOptions* pOpts ) const;
-
-    SdOptionsSnap&          GetOptionsSnap() { return maOptionsSnap; }
-private:
-    SdOptionsSnap           maOptionsSnap;
-};
-
 class SdOptionsGrid : public SdOptionsGeneric, public SvxOptionsGrid
 {
 protected:
@@ -466,7 +399,7 @@ private:
 };
 
 class SdOptions final :
-                  public SdOptionsMisc, public SdOptionsSnap,
+                  public SdOptionsMisc,
                   public SdOptionsGrid,
                   public SdOptionsPrint
 {
