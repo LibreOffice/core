@@ -539,6 +539,7 @@ static bool getJavaInfoFromRegistry(const wchar_t* szRegKey,
                 if( RegQueryValueExW(hKey, L"JavaHome", nullptr, &dwType, nullptr, &dwTmpPathLen)== ERROR_SUCCESS)
                 {
                     unsigned char* szTmpPath= static_cast<unsigned char *>(malloc(dwTmpPathLen+sizeof(sal_Unicode)));
+                    assert(szTmpPath && "Don't handle OOM conditions");
                     // According to https://msdn.microsoft.com/en-us/ms724911, the application should ensure
                     // that the string is properly terminated before using it
                     for (DWORD i = 0; i < sizeof(sal_Unicode); ++i)

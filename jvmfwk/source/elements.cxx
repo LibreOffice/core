@@ -683,7 +683,7 @@ void CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInfo)
     OString sExcMsg("[Java framework] Error in function NodeJavaInfo::loadFromNode "
                          "(elements.cxx)."_ostr);
 
-    OSL_ASSERT(pJavaInfo && pDoc);
+    assert(pJavaInfo && pDoc);
     if (pJavaInfo->children == nullptr)
         return;
     //Get the xsi:nil attribute;
