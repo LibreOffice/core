@@ -31,6 +31,7 @@
 #include <comphelper/windowserrorstring.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <o3tl/temporary.hxx>
 
 #include <dndhelper.hxx>
 #include <vcl/inputtypes.hxx>
@@ -948,110 +949,202 @@ typedef LONG NTSTATUS;
 typedef NTSTATUS(WINAPI* RtlGetVersion_t)(PRTL_OSVERSIONINFOW);
 constexpr NTSTATUS STATUS_SUCCESS = 0x00000000;
 
-static OUString getWinBits()
+static OUString getWinArch()
 {
+    USHORT nNativeMachine = IMAGE_FILE_MACHINE_UNKNOWN;
+
+    using LPFN_ISWOW64PROCESS2 = BOOL(WINAPI*)(HANDLE, USHORT*, USHORT*);
+    auto fnIsWow64Process2 = reinterpret_cast<LPFN_ISWOW64PROCESS2>(
+        GetProcAddress(GetModuleHandleW(L"kernel32.dll"), "IsWow64Process2"));
+    if (fnIsWow64Process2)
+        fnIsWow64Process2(GetCurrentProcess(), &o3tl::temporary(USHORT()), &nNativeMachine);
+
+    if (nNativeMachine == IMAGE_FILE_MACHINE_UNKNOWN)
+    {
 #if _WIN64
 
-    return " X86_64";
+        nNativeMachine = IMAGE_FILE_MACHINE_AMD64;
 
 #else
 
-    BOOL isWow64 = FALSE;
+        BOOL isWow64 = FALSE;
 
-    IsWow64Process(GetCurrentProcess(), &isWow64);
+        IsWow64Process(GetCurrentProcess(), &isWow64);
 
-    if (isWow64)
-        return " X86_64"; //32-bit process on 64-bit Windows.
-    else
-        return " X86_32";
+        if (isWow64)
+            nNativeMachine = IMAGE_FILE_MACHINE_AMD64; // 32-bit process on 64-bit Windows
+        else
+            nNativeMachine = IMAGE_FILE_MACHINE_I386;
 
 #endif
+    }
+
+    switch (nNativeMachine)
+    {
+        case IMAGE_FILE_MACHINE_I386:
+            return u" X86_32"_ustr;
+        case IMAGE_FILE_MACHINE_R3000:
+            return u" R3000"_ustr;
+        case IMAGE_FILE_MACHINE_R4000:
+            return u" R4000"_ustr;
+        case IMAGE_FILE_MACHINE_R10000:
+            return u" R10000"_ustr;
+        case IMAGE_FILE_MACHINE_WCEMIPSV2:
+            return u" WCEMIPSV2"_ustr;
+        case IMAGE_FILE_MACHINE_ALPHA:
+            return u" ALPHA"_ustr;
+        case IMAGE_FILE_MACHINE_SH3:
+            return u" SH3"_ustr;
+        case IMAGE_FILE_MACHINE_SH3DSP:
+            return u" SH3DSP"_ustr;
+        case IMAGE_FILE_MACHINE_SH3E:
+            return u" SH3E"_ustr;
+        case IMAGE_FILE_MACHINE_SH4:
+            return u" SH4"_ustr;
+        case IMAGE_FILE_MACHINE_SH5:
+            return u" SH5"_ustr;
+        case IMAGE_FILE_MACHINE_ARM:
+            return u" ARM"_ustr;
+        case IMAGE_FILE_MACHINE_THUMB:
+            return u" THUMB"_ustr;
+        case IMAGE_FILE_MACHINE_ARMNT:
+            return u" ARMNT"_ustr;
+        case IMAGE_FILE_MACHINE_AM33:
+            return u" AM33"_ustr;
+        case IMAGE_FILE_MACHINE_POWERPC:
+            return u" POWERPC"_ustr;
+        case IMAGE_FILE_MACHINE_POWERPCFP:
+            return u" POWERPCFP"_ustr;
+        case IMAGE_FILE_MACHINE_IA64:
+            return u" IA64"_ustr;
+        case IMAGE_FILE_MACHINE_MIPS16:
+            return u" MIPS16"_ustr;
+        case IMAGE_FILE_MACHINE_ALPHA64:
+            return u" ALPHA64"_ustr;
+        case IMAGE_FILE_MACHINE_MIPSFPU:
+            return u" MIPSFPU"_ustr;
+        case IMAGE_FILE_MACHINE_MIPSFPU16:
+            return u" MIPSFPU16"_ustr;
+        case IMAGE_FILE_MACHINE_TRICORE:
+            return u" TRICORE"_ustr;
+        case IMAGE_FILE_MACHINE_CEF:
+            return u" CEF"_ustr;
+        case IMAGE_FILE_MACHINE_EBC:
+            return u" EBC"_ustr;
+        case IMAGE_FILE_MACHINE_AMD64:
+            return u" X86_64"_ustr;
+        case IMAGE_FILE_MACHINE_M32R:
+            return u" M32R"_ustr;
+        case IMAGE_FILE_MACHINE_ARM64:
+            return u" ARM64"_ustr;
+        case IMAGE_FILE_MACHINE_CEE:
+            return u" CEE"_ustr;
+        default:
+            assert(!"Yet unhandled case");
+            return OUString();
+    }
 }
 
 static OUString getOSVersionString(const OUString& aNtVersionString, DWORD nBuildNumber)
 {
-    OUString winArch = getWinBits();
-    OUString aVersionPlusBuild
-        = winArch + " (" + aNtVersionString + " build " + OUString::number(nBuildNumber) + ")";
-
+    OUStringBuffer result = u"Windows";
     if (aNtVersionString == "6.1")
-        return "Windows 7 Service Pack 1" + aVersionPlusBuild;
+        result.append(" 7 Service Pack 1");
     else if (aNtVersionString == "6.2")
-        return "Windows 8" + aVersionPlusBuild;
+        result.append(" 8");
     else if (aNtVersionString == "6.3")
-        return "Windows 8.1" + aVersionPlusBuild;
+        result.append(" 8.1");
     else if (aNtVersionString == "10.0")
     {
         if (nBuildNumber >= 22000)
-            return "Windows 11" + aVersionPlusBuild;
+            result.append(" 11");
         else
-            return "Windows 10" + aVersionPlusBuild;
+            result.append(" 10");
     }
-    else if (aNtVersionString.isEmpty()) // We don't know what Windows it is
-        return u"Windows unknown"_ustr;
-    else if (nBuildNumber == 0) // We don't know the build number
-        return "Windows (" + aNtVersionString + ")";
-    else // return Windows NtVersion and build number - we don't know this release
-        return "Windows" + aVersionPlusBuild;
+    else // We don't know what Windows it is
+        result.append(" unknown");
+
+    result.append(getWinArch());
+
+    if (!aNtVersionString.isEmpty() || nBuildNumber)
+    {
+        result.append(" (");
+        if (!aNtVersionString.isEmpty())
+        {
+            result.append(aNtVersionString);
+            if (nBuildNumber)
+                result.append(" ");
+        }
+        if (nBuildNumber)
+            result.append("build " + OUString::number(nBuildNumber));
+        result.append(")");
+    }
+
+    return result.makeStringAndClear();
 }
 
 OUString WinSalInstance::getOSVersion()
 {
-    // GetVersion(Ex) and VersionHelpers (based on VerifyVersionInfo) API are
-    // subject to manifest-based behavior since Windows 8.1, so give wrong results.
-    // Another approach would be to use NetWkstaGetInfo, but that has some small
-    // reported delays (some milliseconds), and might get slower in domains with
-    // poor network connections.
-    // So go with a solution described at https://msdn.microsoft.com/en-us/library/ms724429
-    bool bHaveVerFromKernel32 = false;
-    OUString aNtVersion;
-    if (HMODULE h_kernel32 = GetModuleHandleW(L"kernel32.dll"))
+    static const OUString result = []
     {
-        wchar_t szPath[MAX_PATH];
-        DWORD dwCount = GetModuleFileNameW(h_kernel32, szPath, SAL_N_ELEMENTS(szPath));
-        if (dwCount != 0 && dwCount < SAL_N_ELEMENTS(szPath))
+        // GetVersion(Ex) and VersionHelpers (based on VerifyVersionInfo) API are
+        // subject to manifest-based behavior since Windows 8.1, so give wrong results.
+        // Another approach would be to use NetWkstaGetInfo, but that has some small
+        // reported delays (some milliseconds), and might get slower in domains with
+        // poor network connections.
+        // So go with a solution described at https://msdn.microsoft.com/en-us/library/ms724429
+        bool bHaveVerFromKernel32 = false;
+        OUString aNtVersion;
+        if (HMODULE h_kernel32 = GetModuleHandleW(L"kernel32.dll"))
         {
-            dwCount = GetFileVersionInfoSizeW(szPath, nullptr);
-            if (dwCount != 0)
+            wchar_t szPath[MAX_PATH];
+            DWORD dwCount = GetModuleFileNameW(h_kernel32, szPath, SAL_N_ELEMENTS(szPath));
+            if (dwCount != 0 && dwCount < SAL_N_ELEMENTS(szPath))
             {
-                std::unique_ptr<char[]> ver(new char[dwCount]);
-                if (GetFileVersionInfoW(szPath, 0, dwCount, ver.get()) != FALSE)
+                dwCount = GetFileVersionInfoSizeW(szPath, nullptr);
+                if (dwCount != 0)
                 {
-                    void* pBlock = nullptr;
-                    UINT dwBlockSz = 0;
-                    if (VerQueryValueW(ver.get(), L"\\", &pBlock, &dwBlockSz) != FALSE && dwBlockSz >= sizeof(VS_FIXEDFILEINFO))
+                    std::unique_ptr<char[]> ver(new char[dwCount]);
+                    if (GetFileVersionInfoW(szPath, 0, dwCount, ver.get()) != FALSE)
                     {
-                        VS_FIXEDFILEINFO* vi1 = static_cast<VS_FIXEDFILEINFO*>(pBlock);
-                        aNtVersion = (OUString::number(HIWORD(vi1->dwProductVersionMS)) + "."
-                                    + OUString::number(LOWORD(vi1->dwProductVersionMS)));
-                        bHaveVerFromKernel32 = true;
+                        void* pBlock = nullptr;
+                        UINT dwBlockSz = 0;
+                        if (VerQueryValueW(ver.get(), L"\\", &pBlock, &dwBlockSz) != FALSE
+                            && dwBlockSz >= sizeof(VS_FIXEDFILEINFO))
+                        {
+                            VS_FIXEDFILEINFO* vi1 = static_cast<VS_FIXEDFILEINFO*>(pBlock);
+                            aNtVersion = (OUString::number(HIWORD(vi1->dwProductVersionMS)) + "."
+                                          + OUString::number(LOWORD(vi1->dwProductVersionMS)));
+                            bHaveVerFromKernel32 = true;
+                        }
                     }
                 }
             }
         }
-    }
-    // Now use RtlGetVersion (which is not subject to deprecation for GetVersion(Ex) API)
-    // to get build number and SP info
-    bool bHaveVerFromRtlGetVersion = false;
-    DWORD nBuildNumber = 0;
-    if (HMODULE h_ntdll = GetModuleHandleW(L"ntdll.dll"))
-    {
-        if (auto RtlGetVersion
-            = reinterpret_cast<RtlGetVersion_t>(GetProcAddress(h_ntdll, "RtlGetVersion")))
+        // Now use RtlGetVersion (which is not subject to deprecation for GetVersion(Ex) API)
+        // to get build number and SP info
+        bool bHaveVerFromRtlGetVersion = false;
+        DWORD nBuildNumber = 0;
+        if (HMODULE h_ntdll = GetModuleHandleW(L"ntdll.dll"))
         {
-            RTL_OSVERSIONINFOW vi2{}; // initialize with zeroes - a better alternative to memset
-            vi2.dwOSVersionInfoSize = sizeof(vi2);
-            if (STATUS_SUCCESS == RtlGetVersion(&vi2))
+            if (auto RtlGetVersion
+                = reinterpret_cast<RtlGetVersion_t>(GetProcAddress(h_ntdll, "RtlGetVersion")))
             {
-                if (!bHaveVerFromKernel32) // we failed above; let's hope this would be useful
-                    aNtVersion = (OUString::number(vi2.dwMajorVersion) + "."
-                                + OUString::number(vi2.dwMinorVersion));
-                nBuildNumber = vi2.dwBuildNumber;
-                bHaveVerFromRtlGetVersion = true;
+                RTL_OSVERSIONINFOW vi2{}; // initialize with zeroes - a better alternative to memset
+                vi2.dwOSVersionInfoSize = sizeof(vi2);
+                if (STATUS_SUCCESS == RtlGetVersion(&vi2))
+                {
+                    if (!bHaveVerFromKernel32) // we failed above; let's hope this would be useful
+                        aNtVersion = (OUString::number(vi2.dwMajorVersion) + "."
+                                      + OUString::number(vi2.dwMinorVersion));
+                    nBuildNumber = vi2.dwBuildNumber;
+                    bHaveVerFromRtlGetVersion = true;
+                }
             }
         }
-    }
-    return getOSVersionString(aNtVersion, nBuildNumber);
+        return getOSVersionString(aNtVersion, nBuildNumber);
+    }();
+    return result;
 }
 
 void WinSalInstance::BeforeAbort(const OUString&, bool)
