@@ -508,6 +508,13 @@ static OUString lcl_GetAreaName( ScDocument* pDoc, const ScArea* pArea )
     return aName;
 }
 
+static ScDBData* getUndoData(ScDBData* pDestData)
+{
+    if (!pDestData)
+        return nullptr;
+    return new ScDBData(*pDestData);
+}
+
 void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
 {
     ScConsData aData;
@@ -568,7 +575,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
     aData.GetSize( nColSize, nRowSize );
     if (bRecord && nColSize > 0 && nRowSize > 0)
     {
-        std::unique_ptr<ScDBData> pUndoData(pDestData ? new ScDBData(*pDestData) : nullptr);
+        std::unique_ptr<ScDBData> pUndoData(getUndoData(pDestData));
 
         SCTAB nDestTab = rParam.nTab;
         ScArea aDestArea( rParam.nTab, rParam.nCol, rParam.nRow,

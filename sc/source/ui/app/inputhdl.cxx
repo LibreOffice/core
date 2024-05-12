@@ -4227,6 +4227,13 @@ void ScInputHandler::InputCommand( const CommandEvent& rCEvt )
     }
 }
 
+static ScInputHdlState* getLastState(const ScInputHdlState* pState)
+{
+    if (!pState)
+        return nullptr;
+    return new ScInputHdlState(*pState);
+}
+
 void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                                    bool bForce, ScTabViewShell* pSourceSh,
                                    bool bStopEditing)
@@ -4260,7 +4267,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
 
     if ( pState != pLastState.get() )
     {
-        pLastState.reset( pState ? new ScInputHdlState( *pState ) : nullptr);
+        pLastState.reset(getLastState(pState));
     }
 
     if ( pState && pActiveViewSh )
