@@ -7136,43 +7136,40 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
         sStarName = OUString::createFromAscii( pName );
     else if ( nConvertFlags )
     {
-        static struct ObjImpType
+        static constexpr struct ObjImpType
         {
             sal_uInt32 nFlag;
-            const char* pFactoryNm;
+            OUString aFactoryNm;
             // GlobalNameId
             sal_uInt32 n1;
             sal_uInt16 n2, n3;
             sal_uInt8 b8, b9, b10, b11, b12, b13, b14, b15;
-        } const aArr[] = {
-            { OLE_MATHTYPE_2_STARMATH, "smath", MSO_EQUATION3_CLASSID },
-            { OLE_MATHTYPE_2_STARMATH, "smath", MSO_EQUATION2_CLASSID },
-            { OLE_WINWORD_2_STARWRITER, "swriter", MSO_WW8_CLASSID },
+        } aArr[] {
+            { OLE_MATHTYPE_2_STARMATH, u"smath"_ustr, MSO_EQUATION3_CLASSID },
+            { OLE_MATHTYPE_2_STARMATH, u"smath"_ustr, MSO_EQUATION2_CLASSID },
+            { OLE_WINWORD_2_STARWRITER, u"swriter"_ustr, MSO_WW8_CLASSID },
             // Excel table
-            { OLE_EXCEL_2_STARCALC, "scalc", MSO_EXCEL5_CLASSID },
-            { OLE_EXCEL_2_STARCALC, "scalc", MSO_EXCEL8_CLASSID },
+            { OLE_EXCEL_2_STARCALC, u"scalc"_ustr, MSO_EXCEL5_CLASSID },
+            { OLE_EXCEL_2_STARCALC, u"scalc"_ustr, MSO_EXCEL8_CLASSID },
             // 114465: additional Excel OLE chart classId to above.
-            { OLE_EXCEL_2_STARCALC, "scalc", MSO_EXCEL8_CHART_CLASSID },
+            { OLE_EXCEL_2_STARCALC, u"scalc"_ustr, MSO_EXCEL8_CHART_CLASSID },
             // PowerPoint presentation
-            { OLE_POWERPOINT_2_STARIMPRESS, "simpress", MSO_PPT8_CLASSID },
+            { OLE_POWERPOINT_2_STARIMPRESS, u"simpress"_ustr, MSO_PPT8_CLASSID },
             // PowerPoint slide
-            { OLE_POWERPOINT_2_STARIMPRESS, "simpress", MSO_PPT8_SLIDE_CLASSID },
-            { 0, nullptr,
-              0, 0, 0,
-              0, 0, 0, 0, 0, 0, 0, 0 }
+            { OLE_POWERPOINT_2_STARIMPRESS, u"simpress"_ustr, MSO_PPT8_SLIDE_CLASSID }
         };
 
-        for( const ObjImpType* pArr = aArr; pArr->nFlag; ++pArr )
+        for( const ObjImpType & rArr : aArr )
         {
-            if( nConvertFlags & pArr->nFlag )
+            if( nConvertFlags & rArr.nFlag )
             {
-                SvGlobalName aTypeName( pArr->n1, pArr->n2, pArr->n3,
-                                pArr->b8, pArr->b9, pArr->b10, pArr->b11,
-                                pArr->b12, pArr->b13, pArr->b14, pArr->b15 );
+                SvGlobalName aTypeName( rArr.n1, rArr.n2, rArr.n3,
+                                rArr.b8, rArr.b9, rArr.b10, rArr.b11,
+                                rArr.b12, rArr.b13, rArr.b14, rArr.b15 );
 
                 if ( aStgNm == aTypeName )
                 {
-                    sStarName = OUString::createFromAscii( pArr->pFactoryNm );
+                    sStarName = rArr.aFactoryNm;
                     break;
                 }
             }
