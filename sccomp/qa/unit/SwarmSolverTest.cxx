@@ -30,7 +30,7 @@ class SwarmSolverTest : public UnoApiTest
 
 public:
     SwarmSolverTest()
-        : UnoApiTest("sccomp/qa/unit/data")
+        : UnoApiTest(u"sccomp/qa/unit/data"_ustr)
     {
     }
 
@@ -54,7 +54,7 @@ void SwarmSolverTest::testUnconstrained()
     uno::Reference<sheet::XSolver> xSolver;
 
     xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
-                    "com.sun.star.comp.Calc.SwarmSolver", m_xContext),
+                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
                 uno::UNO_QUERY_THROW);
 
     table::CellAddress aObjective(0, 1, 1);
@@ -97,7 +97,7 @@ void SwarmSolverTest::testVariableBounded()
     uno::Reference<sheet::XSolver> xSolver;
 
     xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
-                    "com.sun.star.comp.Calc.SwarmSolver", m_xContext),
+                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
                 uno::UNO_QUERY_THROW);
 
     table::CellAddress aObjective(0, 1, 1);
@@ -142,7 +142,7 @@ void SwarmSolverTest::testVariableConstrained()
     uno::Reference<sheet::XSolver> xSolver;
 
     xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
-                    "com.sun.star.comp.Calc.SwarmSolver", m_xContext),
+                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
                 uno::UNO_QUERY_THROW);
 
     table::CellAddress aObjective(0, 1, 1);
@@ -190,7 +190,7 @@ void SwarmSolverTest::testTwoVariables()
     uno::Reference<sheet::XSolver> xSolver;
 
     xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
-                    "com.sun.star.comp.Calc.SwarmSolver", m_xContext),
+                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
                 uno::UNO_QUERY_THROW);
 
     table::CellAddress aObjective(0, 1, 5);
@@ -242,11 +242,11 @@ void SwarmSolverTest::testMultipleVariables()
     uno::Reference<sheet::XSolver> xSolver;
 
     xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
-                    "com.sun.star.comp.Calc.SwarmSolver", m_xContext),
+                    u"com.sun.star.comp.Calc.SwarmSolver"_ustr, m_xContext),
                 uno::UNO_QUERY_THROW);
 
     uno::Reference<beans::XPropertySet> xPropSet(xSolver, uno::UNO_QUERY_THROW);
-    xPropSet->setPropertyValue("Integer", uno::Any(true));
+    xPropSet->setPropertyValue(u"Integer"_ustr, uno::Any(true));
 
     table::CellAddress aObjective(0, 5, 7);
 

@@ -76,7 +76,7 @@ private:
     virtual void SAL_CALL solve() override;
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.Calc.LpsolveSolver";
+        return u"com.sun.star.comp.Calc.LpsolveSolver"_ustr;
     }
     virtual OUString SAL_CALL getComponentDescription() override
     {

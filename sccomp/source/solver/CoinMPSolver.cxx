@@ -46,7 +46,7 @@ private:
     virtual void SAL_CALL solve() override;
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.Calc.CoinMPSolver";
+        return u"com.sun.star.comp.Calc.CoinMPSolver"_ustr;
     }
     virtual OUString SAL_CALL getComponentDescription() override
     {

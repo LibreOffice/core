@@ -52,7 +52,7 @@ void LpSolverTest::setUp()
     test::BootstrapFixture::setUp();
     uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(m_xContext);
     uno::Reference<lang::XComponent> xComponent(xComponentLoader->loadComponentFromURL(
-            "private:factory/scalc", "_blank", 0,
+            u"private:factory/scalc"_ustr, u"_blank"_ustr, 0,
             uno::Sequence < css::beans::PropertyValue >()));
     m_xDocument.set(xComponent, uno::UNO_QUERY_THROW);
 }
@@ -67,14 +67,14 @@ void LpSolverTest::tearDown()
 #ifdef ENABLE_LPSOLVE
 void LpSolverTest::testLpSolver()
 {
-    testSolver("com.sun.star.comp.Calc.LpsolveSolver");
+    testSolver(u"com.sun.star.comp.Calc.LpsolveSolver"_ustr);
 }
 #endif
 
 #ifdef ENABLE_COINMP
 void LpSolverTest::testCoinMPSolver()
 {
-    testSolver("com.sun.star.comp.Calc.CoinMPSolver");
+    testSolver(u"com.sun.star.comp.Calc.CoinMPSolver"_ustr);
 }
 #endif
 

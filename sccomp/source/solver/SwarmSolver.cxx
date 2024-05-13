@@ -145,13 +145,13 @@ public:
         , mbSuccess(false)
         , mfResultValue(0.0)
     {
-        registerProperty("NonNegative", PROP_NONNEGATIVE, 0, &mbNonNegative,
+        registerProperty(u"NonNegative"_ustr, PROP_NONNEGATIVE, 0, &mbNonNegative,
                          cppu::UnoType<decltype(mbNonNegative)>::get());
-        registerProperty("Integer", PROP_INTEGER, 0, &mbInteger,
+        registerProperty(u"Integer"_ustr, PROP_INTEGER, 0, &mbInteger,
                          cppu::UnoType<decltype(mbInteger)>::get());
-        registerProperty("Timeout", PROP_TIMEOUT, 0, &mnTimeout,
+        registerProperty(u"Timeout"_ustr, PROP_TIMEOUT, 0, &mnTimeout,
                          cppu::UnoType<decltype(mnTimeout)>::get());
-        registerProperty("Algorithm", PROP_ALGORITHM, 0, &mnAlgorithm,
+        registerProperty(u"Algorithm"_ustr, PROP_ALGORITHM, 0, &mnAlgorithm,
                          cppu::UnoType<decltype(mnAlgorithm)>::get());
     }
 
@@ -252,7 +252,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.Calc.SwarmSolver";
+        return u"com.sun.star.comp.Calc.SwarmSolver"_ustr;
     }
 
     sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override
@@ -262,7 +262,7 @@ public:
 
     uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return { "com.sun.star.sheet.Solver" };
+        return { u"com.sun.star.sheet.Solver"_ustr };
     }
 
 private:
