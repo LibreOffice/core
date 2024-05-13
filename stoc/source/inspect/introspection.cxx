@@ -1535,7 +1535,7 @@ private:
     }
 
     virtual OUString SAL_CALL getImplementationName() override
-    { return "com.sun.star.comp.stoc.Introspection"; }
+    { return u"com.sun.star.comp.stoc.Introspection"_ustr; }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
@@ -1543,7 +1543,7 @@ private:
     virtual css::uno::Sequence<OUString> SAL_CALL
     getSupportedServiceNames() override
     {
-        Sequence<OUString> s { "com.sun.star.beans.Introspection" };
+        Sequence<OUString> s { u"com.sun.star.beans.Introspection"_ustr };
         return s;
     }
 

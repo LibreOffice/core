@@ -105,7 +105,7 @@ public:
     explicit Dump(css::uno::Reference<css::uno::XComponentContext> const& context)
         : WeakComponentImplHelper(m_aMutex)
         , manager_(context->getValueByName(
-                       "/singletons/com.sun.star.reflection.theTypeDescriptionManager"),
+                       u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
                    css::uno::UNO_QUERY_THROW)
     {
     }
@@ -121,7 +121,7 @@ public:
         switch (value.getValueTypeClass())
         {
             case css::uno::TypeClass_VOID:
-                return "void";
+                return u"void"_ustr;
             case css::uno::TypeClass_BOOLEAN:
                 return OUString::boolean(value.get<bool>());
             case css::uno::TypeClass_BYTE:
@@ -218,7 +218,7 @@ public:
             case css::uno::TypeClass_INTERFACE:
             {
                 auto const p = *static_cast<void* const*>(value.getValue());
-                return p == nullptr ? OUString("null")
+                return p == nullptr ? u"null"_ustr
                                     : OUString("0x"
                                                + hex(reinterpret_cast<sal_uIntPtr>(p),
                                                      SAL_TYPES_SIZEOFPOINTER * 2));
@@ -241,7 +241,7 @@ public:
             osl::MutexGuard g(m_aMutex);
             if (rBHelper.bDisposed)
             {
-                throw css::lang::DisposedException("css.reflection.Dumper");
+                throw css::lang::DisposedException(u"css.reflection.Dumper"_ustr);
             }
             manager = manager_;
         }

@@ -127,7 +127,7 @@ OUString UrlReference::expand(
     css::uno::Reference< css::util::XMacroExpander > const & expander)
 {
     if (!expander.is()) {
-        throw css::uno::RuntimeException("null expander passed to XVndSunStarExpandUrl.expand");
+        throw css::uno::RuntimeException(u"null expander passed to XVndSunStarExpandUrl.expand"_ustr);
     }
     return expander->expandMacros(
         ::rtl::Uri::decode(
@@ -163,7 +163,7 @@ private:
 
 OUString Parser::getImplementationName()
 {
-    return "com.sun.star.comp.uri.UriSchemeParser_vndDOTsunDOTstarDOTexpand";
+    return u"com.sun.star.comp.uri.UriSchemeParser_vndDOTsunDOTstarDOTexpand"_ustr;
 }
 
 sal_Bool Parser::supportsService(OUString const & serviceName)
@@ -173,7 +173,7 @@ sal_Bool Parser::supportsService(OUString const & serviceName)
 
 css::uno::Sequence< OUString > Parser::getSupportedServiceNames()
 {
-    return { "com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTexpand" };
+    return { u"com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTexpand"_ustr };
 }
 
 css::uno::Reference< css::uri::XUriReference > Parser::parse(

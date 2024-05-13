@@ -70,7 +70,7 @@ private:
 
 OUString Factory::getImplementationName()
 {
-    return "com.sun.star.comp.uri.VndSunStarPkgUrlReferenceFactory";
+    return u"com.sun.star.comp.uri.VndSunStarPkgUrlReferenceFactory"_ustr;
 }
 
 sal_Bool Factory::supportsService(OUString const & serviceName)
@@ -80,7 +80,7 @@ sal_Bool Factory::supportsService(OUString const & serviceName)
 
 css::uno::Sequence< OUString > Factory::getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > s { "com.sun.star.uri.VndSunStarPkgUrlReferenceFactory" };
+    css::uno::Sequence< OUString > s { u"com.sun.star.uri.VndSunStarPkgUrlReferenceFactory"_ustr };
     return s;
 }
 
@@ -90,8 +90,8 @@ Factory::createVndSunStarPkgUrlReference(
 {
     if (!authority.is()) {
         throw css::uno::RuntimeException(
-            "null authority passed to"
-            " XVndSunStarPkgUrlReferenceFactory.createVndSunStarPkgUrlReference");
+            u"null authority passed to"
+            " XVndSunStarPkgUrlReferenceFactory.createVndSunStarPkgUrlReference"_ustr);
     }
     if (authority->isAbsolute() && !authority->hasFragment()) {
         OUString buf =

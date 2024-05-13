@@ -68,7 +68,7 @@ private:
 
 OUString Translator::getImplementationName()
 {
-    return "com.sun.star.comp.uri.ExternalUriReferenceTranslator";
+    return u"com.sun.star.comp.uri.ExternalUriReferenceTranslator"_ustr;
 }
 
 sal_Bool Translator::supportsService(OUString const & serviceName)
@@ -78,7 +78,7 @@ sal_Bool Translator::supportsService(OUString const & serviceName)
 
 css::uno::Sequence< OUString > Translator::getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > s { "com.sun.star.uri.ExternalUriReferenceTranslator" };
+    css::uno::Sequence< OUString > s { u"com.sun.star.uri.ExternalUriReferenceTranslator"_ustr };
     return s;
 }
 

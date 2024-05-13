@@ -335,7 +335,7 @@ PolicyReader::PolicyReader( OUString fileName, AccessControl & ac )
     , m_pos( 1 ) // force readline
     , m_back( '\0' )
 {
-    ac.checkFilePermission( m_fileName, "read" );
+    ac.checkFilePermission( m_fileName, u"read"_ustr );
     if (osl_File_E_None != ::osl_openFile( m_fileName.pData, &m_file, osl_File_OpenFlag_Read ))
     {
         throw RuntimeException( "cannot open file \"" + m_fileName + "\"!" );
@@ -373,7 +373,7 @@ void FilePolicy::refresh()
     if ( fileName.isEmpty() )
     {
         throw RuntimeException(
-            "name of policy file unknown!",
+            u"name of policy file unknown!"_ustr,
             getXWeak() );
     }
 
@@ -478,7 +478,7 @@ sal_Bool FilePolicy::supportsService( OUString const & serviceName )
 
 Sequence< OUString > FilePolicy::getSupportedServiceNames()
 {
-    return { "com.sun.star.security.Policy" };
+    return { u"com.sun.star.security.Policy"_ustr };
 }
 
 } // namespace

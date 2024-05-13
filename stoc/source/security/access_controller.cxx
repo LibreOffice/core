@@ -413,14 +413,14 @@ void AccessController::initialize(
     if (Mode::SingleUser != m_mode) // only if in single-user mode
     {
         throw RuntimeException(
-            "invalid call: ac must be in \"single-user\" mode!", getXWeak() );
+            u"invalid call: ac must be in \"single-user\" mode!"_ustr, getXWeak() );
     }
     OUString userId;
     arguments[ 0 ] >>= userId;
     if ( userId.isEmpty() )
     {
         throw RuntimeException(
-            "expected a user-id as first argument!", getXWeak() );
+            u"expected a user-id as first argument!"_ustr, getXWeak() );
     }
     // assured that no sync is necessary: no check happens at this forking time
     m_singleUserId = userId;
@@ -435,11 +435,11 @@ Reference< security::XPolicy > const & AccessController::getPolicy()
     {
         Reference< security::XPolicy > xPolicy;
         m_xComponentContext->getValueByName(
-            "/singletons/com.sun.star.security.thePolicy" ) >>= xPolicy;
+            u"/singletons/com.sun.star.security.thePolicy"_ustr ) >>= xPolicy;
         if (!xPolicy.is())
         {
             throw SecurityException(
-                "cannot get policy singleton!", getXWeak() );
+                u"cannot get policy singleton!"_ustr, getXWeak() );
         }
 
         MutexGuard guard( m_aMutex );
@@ -576,7 +576,7 @@ PermissionCollection AccessController::getEffectivePermissions(
         if ( userId.isEmpty() )
         {
             throw SecurityException(
-                "cannot determine current user in multi-user ac!", getXWeak() );
+                u"cannot determine current user in multi-user ac!"_ustr, getXWeak() );
         }
 
         // lookup policy for user
@@ -721,7 +721,7 @@ void AccessController::checkPermission(
     if (rBHelper.bDisposed)
     {
         throw lang::DisposedException(
-            "checkPermission() call on disposed AccessController!", getXWeak() );
+            u"checkPermission() call on disposed AccessController!"_ustr, getXWeak() );
     }
 
     if (Mode::Off == m_mode)
@@ -750,7 +750,7 @@ Any AccessController::doRestricted(
     if (rBHelper.bDisposed)
     {
         throw lang::DisposedException(
-            "doRestricted() call on disposed AccessController!", getXWeak() );
+            u"doRestricted() call on disposed AccessController!"_ustr, getXWeak() );
     }
 
     if (Mode::Off == m_mode) // optimize this way, because no dynamic check will be performed
@@ -782,7 +782,7 @@ Any AccessController::doPrivileged(
     if (rBHelper.bDisposed)
     {
         throw lang::DisposedException(
-            "doPrivileged() call on disposed AccessController!", getXWeak() );
+            u"doPrivileged() call on disposed AccessController!"_ustr, getXWeak() );
     }
 
     if (Mode::Off == m_mode) // no dynamic check will be performed
@@ -816,7 +816,7 @@ Reference< security::XAccessControlContext > AccessController::getContext()
     if (rBHelper.bDisposed)
     {
         throw lang::DisposedException(
-            "getContext() call on disposed AccessController!", getXWeak() );
+            u"getContext() call on disposed AccessController!"_ustr, getXWeak() );
     }
 
     if (Mode::Off == m_mode) // optimize this way, because no dynamic check will be performed
@@ -836,7 +836,7 @@ Reference< security::XAccessControlContext > AccessController::getContext()
 
 OUString AccessController::getImplementationName()
 {
-    return "com.sun.star.security.comp.stoc.AccessController";
+    return u"com.sun.star.security.comp.stoc.AccessController"_ustr;
 }
 
 sal_Bool AccessController::supportsService( OUString const & serviceName )

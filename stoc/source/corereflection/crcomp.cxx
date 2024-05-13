@@ -160,7 +160,7 @@ void IdlCompFieldImpl::set( const Any & rObj, const Any & rValue )
             if (!coerce_assign( const_cast<char *>(static_cast<char const *>(rObj.getValue()) + _nOffset), getTypeDescr(), rValue, getReflection() ))
             {
                 throw IllegalArgumentException(
-                    "cannot assign value to destination",
+                    u"cannot assign value to destination"_ustr,
                     getXWeak(), 1 );
             }
             return;
@@ -193,7 +193,7 @@ void IdlCompFieldImpl::set( Any & rObj, const Any & rValue )
             if (!coerce_assign( const_cast<char *>(static_cast<char const *>(rObj.getValue()) + _nOffset), getTypeDescr(), rValue, getReflection() ))
             {
                 throw IllegalArgumentException(
-                    "cannot assign to destination",
+                    u"cannot assign to destination"_ustr,
                     getXWeak(), 1 );
             }
             return;

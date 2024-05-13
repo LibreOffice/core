@@ -93,7 +93,7 @@ OUString generateRandomPipeId()
     sal_uInt8 bytes[ 32 ];
     if (rtl_random_getBytes(
             nullptr, bytes, SAL_N_ELEMENTS(bytes) ) != rtl_Random_E_None) {
-        throw RuntimeException( "random pool error!?", nullptr );
+        throw RuntimeException( u"random pool error!?"_ustr, nullptr );
     }
     OUStringBuffer buf;
     for (unsigned char byte : bytes) {
@@ -141,16 +141,16 @@ oslProcess raiseProcess(
     case osl_Process_E_None:
         break;
     case osl_Process_E_NotFound:
-        throw RuntimeException( "image not found!", nullptr );
+        throw RuntimeException( u"image not found!"_ustr, nullptr );
     case osl_Process_E_TimedOut:
-        throw RuntimeException( "timeout occurred!", nullptr );
+        throw RuntimeException( u"timeout occurred!"_ustr, nullptr );
     case osl_Process_E_NoPermission:
-        throw RuntimeException( "permission denied!", nullptr );
+        throw RuntimeException( u"permission denied!"_ustr, nullptr );
     case osl_Process_E_Unknown:
-        throw RuntimeException( "unknown error!", nullptr );
+        throw RuntimeException( u"unknown error!"_ustr, nullptr );
     case osl_Process_E_InvalidError:
     default:
-        throw RuntimeException( "unmapped error!", nullptr );
+        throw RuntimeException( u"unmapped error!"_ustr, nullptr );
     }
 
     return hProcess;
@@ -162,7 +162,7 @@ Reference<XComponentContext> raise_uno_process(
 {
     OSL_ASSERT( xContext.is() );
 
-    OUString const url(css::util::theMacroExpander::get(xContext)->expandMacros("$URE_BIN_DIR/uno"));
+    OUString const url(css::util::theMacroExpander::get(xContext)->expandMacros(u"$URE_BIN_DIR/uno"_ustr));
 
     const OUString connectStr = "uno:pipe,name=" + generateRandomPipeId() + ";urp;uno.ComponentContext";
 
@@ -174,11 +174,11 @@ Reference<XComponentContext> raise_uno_process(
 #if OSL_DEBUG_LEVEL == 0
         "--quiet",
 #endif
-        "--singleaccept",
-        "-u",
+        u"--singleaccept"_ustr,
+        u"-u"_ustr,
         connectStr,
         // don't inherit from unorc:
-        "-env:INIFILENAME=" };
+        u"-env:INIFILENAME="_ustr };
 
     //now add the bootstrap variables which were supplied on the command line
     std::vector<OUString> bootvars = getCmdBootstrapVariables();
@@ -306,15 +306,15 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
         if (!m_xRemoteComponentContext.is()) {
             Reference<css::container::XHierarchicalNameAccess> const xConf(
                 m_xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    "com.sun.star.configuration.ReadOnlyAccess",
-                    { Any(OUString("*")) }, // locale isn't relevant here
+                    u"com.sun.star.configuration.ReadOnlyAccess"_ustr,
+                    { Any(u"*"_ustr) }, // locale isn't relevant here
                     m_xComponentContext),
                 UNO_QUERY);
 
             // configmgr is not part of URE, so may not exist!
             if (xConf.is()) {
                 Any const value(xConf->getByHierarchicalName(
-                    "org.openoffice.Office.Java/VirtualMachine/RunUnoComponentsOutOfProcess"));
+                    u"org.openoffice.Office.Java/VirtualMachine/RunUnoComponentsOutOfProcess"_ustr));
                 bool b;
                 if ((value >>= b) && b) {
                     SAL_INFO("stoc.java", "JavaComponentLoader: starting uno process");
@@ -327,7 +327,7 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
             // create JVM service in remote uno.bin process
             Reference<XImplementationLoader> const xLoader(
                 m_xRemoteComponentContext->getServiceManager()->createInstanceWithContext(
-                    "com.sun.star.loader.Java2", m_xRemoteComponentContext),
+                    u"com.sun.star.loader.Java2"_ustr, m_xRemoteComponentContext),
                 UNO_QUERY_THROW);
             assert(xLoader.is());
             m_javaLoader = xLoader;
@@ -345,8 +345,8 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
         // get a java vm, where we can create a loader
         css::uno::Reference<XJavaVM> javaVM_xJavaVM(
             m_xComponentContext->getValueByName(
-                             ("/singletons/"
-                              "com.sun.star.java.theJavaVirtualMachine")),
+                             (u"/singletons/"
+                              "com.sun.star.java.theJavaVirtualMachine"_ustr)),
             UNO_QUERY_THROW);
 
         // Use the special protocol of XJavaVM.getJavaVM:  If the passed in
@@ -391,54 +391,54 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
             jclass jcClassLoader = pJNIEnv->FindClass("java/lang/ClassLoader");
             if(pJNIEnv->ExceptionOccurred())
                 throw RuntimeException(
-                    "javaloader error - could not find class java/lang/ClassLoader");
+                    u"javaloader error - could not find class java/lang/ClassLoader"_ustr);
             jmethodID jmLoadClass = pJNIEnv->GetMethodID(
                 jcClassLoader, "loadClass",
                 "(Ljava/lang/String;)Ljava/lang/Class;");
             if(pJNIEnv->ExceptionOccurred())
                 throw RuntimeException(
-                    "javaloader error - could not find method java/lang/ClassLoader.loadClass");
+                    u"javaloader error - could not find method java/lang/ClassLoader.loadClass"_ustr);
             jvalue arg;
             arg.l = pJNIEnv->NewStringUTF(
                 "com.sun.star.comp.loader.JavaLoader");
             if(pJNIEnv->ExceptionOccurred())
                 throw RuntimeException(
-                    "javaloader error - could not create string");
+                    u"javaloader error - could not create string"_ustr);
             jclass jcJavaLoader = static_cast< jclass >(
                 pJNIEnv->CallObjectMethodA(
                     static_cast< jobject >(xVirtualMachine->getClassLoader()),
                     jmLoadClass, &arg));
             if(pJNIEnv->ExceptionOccurred())
                 throw RuntimeException(
-                    "javaloader error - could not find class com/sun/star/comp/loader/JavaLoader");
+                    u"javaloader error - could not find class com/sun/star/comp/loader/JavaLoader"_ustr);
             jmethodID jmJavaLoader_init = pJNIEnv->GetMethodID(jcJavaLoader, "<init>", "()V");
             if(pJNIEnv->ExceptionOccurred())
                 throw RuntimeException(
-                    "javaloader error - instantiation of com.sun.star.comp.loader.JavaLoader failed");
+                    u"javaloader error - instantiation of com.sun.star.comp.loader.JavaLoader failed"_ustr);
             jobject joJavaLoader = pJNIEnv->NewObject(jcJavaLoader, jmJavaLoader_init);
             if(pJNIEnv->ExceptionOccurred())
                 throw RuntimeException(
-                    "javaloader error - instantiation of com.sun.star.comp.loader.JavaLoader failed");
+                    u"javaloader error - instantiation of com.sun.star.comp.loader.JavaLoader failed"_ustr);
 
             // map the java JavaLoader to this environment
-            OUString sJava("java");
+            OUString sJava(u"java"_ustr);
             uno_getEnvironment(&pJava_environment, sJava.pData,
                                 xVirtualMachine.get());
             if(!pJava_environment)
                 throw RuntimeException(
-                    "javaloader error - no Java environment available");
+                    u"javaloader error - no Java environment available"_ustr);
 
             // why is there no convenient constructor?
             OUString sCppu_current_lb_name(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
             uno_getEnvironment(&pUno_environment, sCppu_current_lb_name.pData, nullptr);
             if(!pUno_environment)
                 throw RuntimeException(
-                    "javaloader error - no C++ environment available");
+                    u"javaloader error - no C++ environment available"_ustr);
 
             Mapping java_curr(pJava_environment, pUno_environment);
             if(!java_curr.is())
                 throw RuntimeException(
-                    "javaloader error - no mapping from java to C++ ");
+                    u"javaloader error - no mapping from java to C++ "_ustr);
 
             // release java environment
             pJava_environment->release(pJava_environment);
@@ -452,13 +452,13 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
                 getDescription(reinterpret_cast<typelib_TypeDescription **>(&pType_XImplementationLoader));
             if(!pType_XImplementationLoader)
                 throw RuntimeException(
-                    "javaloader error - no type information for XImplementationLoader");
+                    u"javaloader error - no type information for XImplementationLoader"_ustr);
 
             m_javaLoader.set(static_cast<XImplementationLoader *>(java_curr.mapInterface(joJavaLoader, pType_XImplementationLoader)));
             pJNIEnv->DeleteLocalRef( joJavaLoader );
             if(!m_javaLoader.is())
                 throw RuntimeException(
-                    "javaloader error - mapping of java XImplementationLoader to c++ failed");
+                    u"javaloader error - mapping of java XImplementationLoader to c++ failed"_ustr);
 
             typelib_typedescription_release(reinterpret_cast<typelib_TypeDescription *>(pType_XImplementationLoader));
             pType_XImplementationLoader = nullptr;
@@ -467,7 +467,7 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
         {
             css::uno::Any anyEx = cppu::getCaughtException();
             throw css::lang::WrappedTargetRuntimeException(
-                "jvmaccess::VirtualMachine::AttachGuard::CreationException",
+                u"jvmaccess::VirtualMachine::AttachGuard::CreationException"_ustr,
                 getXWeak(), anyEx );
         }
 
@@ -505,7 +505,7 @@ JavaComponentLoader::JavaComponentLoader(css::uno::Reference<XComponentContext> 
 // XServiceInfo
 OUString SAL_CALL JavaComponentLoader::getImplementationName()
 {
-    return "com.sun.star.comp.stoc.JavaComponentLoader";
+    return u"com.sun.star.comp.stoc.JavaComponentLoader"_ustr;
 }
 
 sal_Bool SAL_CALL JavaComponentLoader::supportsService(const OUString & ServiceName)
@@ -515,7 +515,7 @@ sal_Bool SAL_CALL JavaComponentLoader::supportsService(const OUString & ServiceN
 
 Sequence<OUString> SAL_CALL JavaComponentLoader::getSupportedServiceNames()
 {
-    return { "com.sun.star.loader.Java", "com.sun.star.loader.Java2" };
+    return { u"com.sun.star.loader.Java"_ustr, u"com.sun.star.loader.Java2"_ustr };
 }
 
 
@@ -527,7 +527,7 @@ sal_Bool SAL_CALL JavaComponentLoader::writeRegistryInfo(
     OUString remoteArg(blabla);
     const css::uno::Reference<XImplementationLoader> & loader = getJavaLoader(remoteArg);
     if (!loader.is())
-        throw CannotRegisterImplementationException("Could not create Java implementation loader");
+        throw CannotRegisterImplementationException(u"Could not create Java implementation loader"_ustr);
     return loader->writeRegistryInfo(xKey, remoteArg, rLibName);
 }
 
@@ -545,7 +545,7 @@ css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader::activate(
 
     const css::uno::Reference<XImplementationLoader> & loader = getJavaLoader(remoteArg);
     if (!loader.is())
-        throw CannotActivateFactoryException("Could not create Java implementation loader");
+        throw CannotActivateFactoryException(u"Could not create Java implementation loader"_ustr);
     return loader->activate(rImplName, remoteArg, rLibName, xKey);
 }
 

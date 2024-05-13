@@ -59,11 +59,11 @@ static void mergeKeys(
 {
     if (!xSource.is() || !xSource->isValid()) {
         throw registry::InvalidRegistryException(
-            "source key is null or invalid!" );
+            u"source key is null or invalid!"_ustr );
     }
     if (!xDest.is() || !xDest->isValid()) {
         throw registry::InvalidRegistryException(
-            "destination key is null or invalid!" );
+            u"destination key is null or invalid!"_ustr );
     }
 
     // write value
@@ -151,12 +151,12 @@ void mergeKeys(
 {
     if (!xDest.is() || !xDest->isValid()) {
         throw registry::InvalidRegistryException(
-            "destination key is null or invalid!" );
+            u"destination key is null or invalid!"_ustr );
     }
     if (xDest->isReadOnly())
     {
         throw registry::InvalidRegistryException(
-            "destination registry is read-only!  cannot merge!" );
+            u"destination registry is read-only!  cannot merge!"_ustr );
     }
 
     t_links links;

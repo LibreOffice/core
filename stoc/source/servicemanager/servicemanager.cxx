@@ -155,7 +155,7 @@ Any ServiceEnumeration_Impl::nextElement()
 {
     std::scoped_lock aGuard( aMutex );
     if( nIt == aFactories.getLength() )
-        throw NoSuchElementException("no more elements");
+        throw NoSuchElementException(u"no more elements"_ustr);
 
     return Any( &aFactories[nIt++], cppu::UnoType<XInterface>::get());
 }
@@ -232,7 +232,7 @@ Any ImplementationEnumeration_Impl::nextElement()
 {
     std::scoped_lock aGuard( aMutex );
     if( aIt == aImplementationMap.end() )
-        throw NoSuchElementException("no more elements");
+        throw NoSuchElementException(u"no more elements"_ustr);
 
     Any ret( &(*aIt), cppu::UnoType<XInterface>::get());
     ++aIt;
@@ -411,7 +411,7 @@ void OServiceManager::check_undisposed() const
     if (is_disposed())
     {
         throw lang::DisposedException(
-            "service manager instance has already been disposed!",
+            u"service manager instance has already been disposed!"_ustr,
             const_cast<OServiceManager *>(this)->getXWeak() );
     }
 }
@@ -431,7 +431,7 @@ class OServiceManagerWrapper : public cppu::BaseMutex, public t_OServiceManagerW
         if (! m_root.is())
         {
             throw lang::DisposedException(
-                "service manager instance has already been disposed!" );
+                u"service manager instance has already been disposed!"_ustr );
         }
         return m_root;
     }
@@ -520,7 +520,7 @@ void SAL_CALL OServiceManagerWrapper::setPropertyValue(
         if (!(aValue >>= xContext))
         {
             throw IllegalArgumentException(
-                "no XComponentContext given!",
+                u"no XComponentContext given!"_ustr,
                 getXWeak(), 1 );
         }
 
@@ -568,7 +568,7 @@ OServiceManagerWrapper::OServiceManagerWrapper(
     if (! m_root.is())
     {
         throw RuntimeException(
-            "no service manager to wrap" );
+            u"no service manager to wrap"_ustr );
     }
 }
 
@@ -638,7 +638,7 @@ Reference<XPropertySetInfo > OServiceManager::getPropertySetInfo()
     if (! m_xPropertyInfo.is())
     {
         Sequence< beans::Property > seq{ beans::Property(
-            "DefaultContext", -1, cppu::UnoType<decltype(m_xContext)>::get(), 0 ) };
+            u"DefaultContext"_ustr, -1, cppu::UnoType<decltype(m_xContext)>::get(), 0 ) };
         Reference< beans::XPropertySetInfo > xInfo( new PropertySetInfo_Impl( seq ) );
 
         MutexGuard aGuard( m_aMutex );
@@ -665,7 +665,7 @@ void OServiceManager::setPropertyValue(
     if (!(aValue >>= xContext))
     {
         throw IllegalArgumentException(
-            "no XComponentContext given!",
+            u"no XComponentContext given!"_ustr,
             getXWeak(), 1 );
     }
 
@@ -695,28 +695,28 @@ void OServiceManager::addPropertyChangeListener(
     const OUString&, const Reference<XPropertyChangeListener >&)
 {
     check_undisposed();
-    throw UnknownPropertyException("unsupported");
+    throw UnknownPropertyException(u"unsupported"_ustr);
 }
 
 void OServiceManager::removePropertyChangeListener(
     const OUString&, const Reference<XPropertyChangeListener >&)
 {
     check_undisposed();
-    throw UnknownPropertyException("unsupported");
+    throw UnknownPropertyException(u"unsupported"_ustr);
 }
 
 void OServiceManager::addVetoableChangeListener(
     const OUString&, const Reference<XVetoableChangeListener >&)
 {
     check_undisposed();
-    throw UnknownPropertyException("unsupported");
+    throw UnknownPropertyException(u"unsupported"_ustr);
 }
 
 void OServiceManager::removeVetoableChangeListener(
     const OUString&, const Reference<XVetoableChangeListener >&)
 {
     check_undisposed();
-    throw UnknownPropertyException("unsupported");
+    throw UnknownPropertyException(u"unsupported"_ustr);
 }
 
 // OServiceManager
@@ -760,7 +760,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
     if (xProps.is())
     {
         Reference< XComponentContext > xDefContext;
-        xProps->getPropertyValue( "DefaultContext" ) >>= xDefContext;
+        xProps->getPropertyValue( u"DefaultContext"_ustr ) >>= xDefContext;
         OSL_ENSURE(
             xContext == xDefContext,
             "### default context of service manager singleton differs from context holding it!" );
@@ -812,7 +812,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
     if (xProps.is())
     {
         Reference< XComponentContext > xDefContext;
-        xProps->getPropertyValue( "DefaultContext" ) >>= xDefContext;
+        xProps->getPropertyValue( u"DefaultContext"_ustr ) >>= xDefContext;
         OSL_ENSURE(
             xContext == xDefContext,
             "### default context of service manager singleton differs from context holding it!" );
@@ -888,7 +888,7 @@ void OServiceManager::initialize( Sequence< Any > const & )
 // XServiceInfo
 OUString OServiceManager::getImplementationName()
 {
-    return "com.sun.star.comp.stoc.OServiceManager";
+    return u"com.sun.star.comp.stoc.OServiceManager"_ustr;
 }
 
 // XServiceInfo
@@ -900,7 +900,7 @@ sal_Bool OServiceManager::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > OServiceManager::getSupportedServiceNames()
 {
-    return { "com.sun.star.lang.MultiServiceFactory", "com.sun.star.lang.ServiceManager" };
+    return { u"com.sun.star.lang.MultiServiceFactory"_ustr, u"com.sun.star.lang.ServiceManager"_ustr };
 }
 
 
@@ -1014,7 +1014,7 @@ void OServiceManager::insert( const Any & Element )
     HashSet_Ref::iterator aIt = m_ImplementationMap.find( xEle );
     if( aIt != m_ImplementationMap.end() )
     {
-        throw ElementExistException( "element already exists!" );
+        throw ElementExistException( u"element already exists!"_ustr );
     }
 
     // put into the implementation hashmap
@@ -1090,7 +1090,7 @@ void OServiceManager::remove( const Any & Element )
     if( aIt == m_ImplementationMap.end() )
     {
         throw NoSuchElementException(
-            "element not found",
+            u"element not found"_ustr,
             getXWeak() );
     }
     //First remove all factories which have been loaded by ORegistryServiceManager.
@@ -1144,7 +1144,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override
-        { return "com.sun.star.comp.stoc.ORegistryServiceManager"; }
+        { return u"com.sun.star.comp.stoc.ORegistryServiceManager"_ustr; }
 
     Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
@@ -1228,7 +1228,7 @@ Reference<XRegistryKey > ORegistryServiceManager::getRootKey()
 
             m_xRegistry.set(
                 createInstanceWithContext(
-                    "com.sun.star.registry.DefaultRegistry",
+                    u"com.sun.star.registry.DefaultRegistry"_ustr,
                     m_xContext ),
                 UNO_QUERY );
         }
@@ -1316,7 +1316,7 @@ void ORegistryServiceManager::fillAllNamesFromRegistry( HashSet_OWString & rSet 
 
     try
     {
-        Reference<XRegistryKey > xServicesKey = xRootKey->openKey( "SERVICES" );
+        Reference<XRegistryKey > xServicesKey = xRootKey->openKey( u"SERVICES"_ustr );
         // root + /Services + /
         if( xServicesKey.is() )
         {
@@ -1366,7 +1366,7 @@ Sequence< OUString > ORegistryServiceManager::getAvailableServiceNames()
 // XServiceInfo
 Sequence< OUString > ORegistryServiceManager::getSupportedServiceNames()
 {
-    return { "com.sun.star.lang.MultiServiceFactory", "com.sun.star.lang.RegistryServiceManager" };
+    return { u"com.sun.star.lang.MultiServiceFactory"_ustr, u"com.sun.star.lang.RegistryServiceManager"_ustr };
 }
 
 
@@ -1417,8 +1417,8 @@ Reference<XPropertySetInfo > ORegistryServiceManager::getPropertySetInfo()
     if (! m_xPropertyInfo.is())
     {
         Sequence< beans::Property > seq{
-            beans::Property("DefaultContext", -1, cppu::UnoType<decltype(m_xContext)>::get(), 0),
-            beans::Property("Registry", -1, cppu::UnoType<decltype(m_xRegistry)>::get(),
+            beans::Property(u"DefaultContext"_ustr, -1, cppu::UnoType<decltype(m_xContext)>::get(), 0),
+            beans::Property(u"Registry"_ustr, -1, cppu::UnoType<decltype(m_xRegistry)>::get(),
                             beans::PropertyAttribute::READONLY)
         };
         Reference< beans::XPropertySetInfo > xInfo( new PropertySetInfo_Impl( seq ) );

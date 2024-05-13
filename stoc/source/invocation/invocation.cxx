@@ -529,7 +529,7 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
                 _xPropertySet->setPropertyValue(
                     PropertyName, xTypeConverter->convertTo( Value, aProp.Type ) );
             else
-                throw RuntimeException( "no type converter service!" );
+                throw RuntimeException( u"no type converter service!"_ustr );
         }
         // NameContainer
         else if( _xNameContainer.is() )
@@ -544,7 +544,7 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
             else if( xTypeConverter.is() )
                 aConv = xTypeConverter->convertTo( Value, _xNameContainer->getElementType() );
             else
-                throw RuntimeException( "no type converter service!" );
+                throw RuntimeException( u"no type converter service!"_ustr );
 
             // Replace if present, otherwise insert
             if (_xNameContainer->hasByName( PropertyName ))
@@ -553,7 +553,7 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
                 _xNameContainer->insertByName( PropertyName, aConv );
         }
         else
-            throw UnknownPropertyException( "no introspection nor name container!" );
+            throw UnknownPropertyException( u"no introspection nor name container!"_ustr );
     }
     catch (UnknownPropertyException &)
     {
@@ -638,7 +638,7 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
                     }
                     else
                     {
-                        throw CannotConvertException("invocation type mismatch!", *this, {}, 0, 0);
+                        throw CannotConvertException(u"invocation type mismatch!"_ustr, *this, {}, 0, 0);
                     }
                 }
 
@@ -671,7 +671,7 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
         return aRet;
     }
 
-    throw RuntimeException("invocation lacking of introspection access!", *this);
+    throw RuntimeException(u"invocation lacking of introspection access!"_ustr, *this);
 }
 
 namespace {
@@ -1019,7 +1019,7 @@ InvocationService::InvocationService( const Reference<XComponentContext> & xCtx 
     , xCoreReflection( css::reflection::theCoreReflection::get(mxCtx) )
 {
     xTypeConverter.set(
-        mxSMgr->createInstanceWithContext( "com.sun.star.script.Converter", xCtx ),
+        mxSMgr->createInstanceWithContext( u"com.sun.star.script.Converter"_ustr, xCtx ),
         UNO_QUERY );
     xIntrospection = theIntrospection::get(xCtx);
 }
@@ -1027,7 +1027,7 @@ InvocationService::InvocationService( const Reference<XComponentContext> & xCtx 
 // XServiceInfo
 OUString InvocationService::getImplementationName()
 {
-    return "com.sun.star.comp.stoc.Invocation";
+    return u"com.sun.star.comp.stoc.Invocation"_ustr;
 }
 
 // XServiceInfo
@@ -1039,7 +1039,7 @@ sal_Bool InvocationService::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > InvocationService::getSupportedServiceNames()
 {
-    return { "com.sun.star.script.Invocation" };
+    return { u"com.sun.star.script.Invocation"_ustr };
 }
 
 

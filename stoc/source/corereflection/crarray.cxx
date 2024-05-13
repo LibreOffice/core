@@ -45,7 +45,7 @@ void ArrayIdlClassImpl::realloc( Any & rArray, sal_Int32 nLen )
     if (nLen < 0)
     {
         throw IllegalArgumentException(
-            "negative length given!",
+            u"negative length given!"_ustr,
             getXWeak(), 1 );
     }
 
@@ -134,7 +134,7 @@ void ArrayIdlClassImpl::set( Any & rArray, sal_Int32 nIndex, const Any & rNewVal
     {
         TYPELIB_DANGER_RELEASE( pElemTypeDescr );
         throw IllegalArgumentException(
-            "sequence element is not assignable by given value!",
+            u"sequence element is not assignable by given value!"_ustr,
             getXWeak(), 2 );
     }
     TYPELIB_DANGER_RELEASE( pElemTypeDescr );

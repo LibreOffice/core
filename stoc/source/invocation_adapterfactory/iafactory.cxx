@@ -282,8 +282,8 @@ bool AdapterImpl::coerce_assign(
                 // set runtime exception
                 constructRuntimeException(
                     pOutExc,
-                    "type coercion failed: "
-                    "conversion succeeded, but assignment failed?!" );
+                    u"type coercion failed: "
+                    "conversion succeeded, but assignment failed?!"_ustr );
             }
             return succ;
         }
@@ -333,7 +333,7 @@ static void handleInvokExc( uno_Any * pDest, uno_Any * pSource )
         else
         {
             constructRuntimeException(
-                pDest, "no exception has been thrown via invocation?!" );
+                pDest, u"no exception has been thrown via invocation?!"_ustr );
         }
     }
 }
@@ -526,7 +526,7 @@ void AdapterImpl::invoke(
             // set runtime exception
             constructRuntimeException(
                 *ppException,
-                "out params lengths differ after invocation call!" );
+                u"out params lengths differ after invocation call!"_ustr );
         }
         // cleanup invok out params
         ::uno_destructData( &pOutIndices, m_pFactory->m_pShortSeqTD, nullptr );
@@ -645,7 +645,7 @@ AdapterImpl::AdapterImpl(
                     &m_vInterfaces[ n ].m_pTypeDescr->aBase );
             }
             throw RuntimeException(
-                "cannot retrieve all interface type infos!" );
+                u"cannot retrieve all interface type infos!"_ustr );
         }
     }
 
@@ -655,7 +655,7 @@ AdapterImpl::AdapterImpl(
     OSL_ASSERT( nullptr != m_pReceiver );
     if (! m_pReceiver)
     {
-        throw RuntimeException( "cannot map receiver!" );
+        throw RuntimeException( u"cannot map receiver!"_ustr );
     }
 
     m_pFactory->acquire();
@@ -663,8 +663,8 @@ AdapterImpl::AdapterImpl(
 
 
 FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
-    : m_aUno2Cpp(Mapping( UNO_LB_UNO, CPPU_CURRENT_LANGUAGE_BINDING_NAME )),
-      m_aCpp2Uno(Mapping( CPPU_CURRENT_LANGUAGE_BINDING_NAME, UNO_LB_UNO)),
+    : m_aUno2Cpp(Mapping( u"" UNO_LB_UNO ""_ustr, CPPU_CURRENT_LANGUAGE_BINDING_NAME )),
+      m_aCpp2Uno(Mapping( CPPU_CURRENT_LANGUAGE_BINDING_NAME, u"" UNO_LB_UNO ""_ustr)),
       m_pInvokMethodTD( nullptr ),
       m_pSetValueTD( nullptr ),
       m_pGetValueTD( nullptr ),
@@ -679,7 +679,7 @@ FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
     // type converter
     Reference< script::XTypeConverter > xConverter(
         xContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.script.Converter",
+            u"com.sun.star.script.Converter"_ustr,
             xContext ),
         UNO_QUERY_THROW );
     m_pConverter = static_cast<uno_Interface *>(m_aCpp2Uno.mapInterface(
@@ -721,7 +721,7 @@ FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
         !m_pConvertToTD ||
         !m_pAnySeqTD || !m_pShortSeqTD)
     {
-        throw RuntimeException( "missing type descriptions!" );
+        throw RuntimeException( u"missing type descriptions!"_ustr );
     }
 }
 
@@ -836,7 +836,7 @@ Reference< XInterface > FactoryImpl::createAdapter(
         OSL_ASSERT( xRet.is() );
         if (! xRet.is())
         {
-            throw RuntimeException( "mapping UNO to C++ failed!" );
+            throw RuntimeException( u"mapping UNO to C++ failed!"_ustr );
         }
     }
     return xRet;
@@ -853,7 +853,7 @@ Reference< XInterface > FactoryImpl::createAdapter(
 
 OUString FactoryImpl::getImplementationName()
 {
-    return "com.sun.star.comp.stoc.InvocationAdapterFactory";
+    return u"com.sun.star.comp.stoc.InvocationAdapterFactory"_ustr;
 }
 
 sal_Bool FactoryImpl::supportsService( const OUString & rServiceName )
@@ -863,7 +863,7 @@ sal_Bool FactoryImpl::supportsService( const OUString & rServiceName )
 
 Sequence< OUString > FactoryImpl::getSupportedServiceNames()
 {
-    return { "com.sun.star.script.InvocationAdapterFactory" };
+    return { u"com.sun.star.script.InvocationAdapterFactory"_ustr };
 }
 
 }

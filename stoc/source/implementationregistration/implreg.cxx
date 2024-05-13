@@ -660,7 +660,7 @@ void delete_all_singleton_entries(
     {
         Reference<registry::XRegistryKey> const& xSingleton = singletons[nPos];
         Reference< registry::XRegistryKey > xRegisteredImplNames(
-            xSingleton->openKey( "REGISTERED_BY" ) );
+            xSingleton->openKey( u"REGISTERED_BY"_ustr ) );
         if (xRegisteredImplNames.is() && xRegisteredImplNames->isValid())
         {
             Sequence< OUString > registered_implnames;
@@ -694,7 +694,7 @@ void delete_all_singleton_entries(
                 {
                     // remove whole entry
                     xRegisteredImplNames->closeKey();
-                    xSingleton->deleteKey( "REGISTERED_BY" );
+                    xSingleton->deleteKey( u"REGISTERED_BY"_ustr );
                     // registry key cannot provide its relative name, only absolute :(
                     OUString abs( xSingleton->getKeyName() );
                     xSingletons_section->deleteKey( abs.copy( abs.lastIndexOf( '/' ) +1 ) );
@@ -793,7 +793,7 @@ void insert_singletons(
     // throw( registry::InvalidRegistryException, registry::CannotRegisterImplementationException, RuntimeException )
 {
     // singletons
-    Reference< registry::XRegistryKey > xKey( xImplKey->openKey( "UNO/SINGLETONS" ) );
+    Reference< registry::XRegistryKey > xKey( xImplKey->openKey( u"UNO/SINGLETONS"_ustr ) );
     if (!(xKey.is() && xKey->isValid()))
         return;
 
@@ -819,7 +819,7 @@ void insert_singletons(
                 {
                     Reference< container::XHierarchicalNameAccess > xTDMgr;
                     OUString the_tdmgr =
-                        "/singletons/com.sun.star.reflection.theTypeDescriptionManager";
+                        u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr;
                     xContext->getValueByName( the_tdmgr ) >>= xTDMgr;
                     if (! xTDMgr.is())
                     {
@@ -866,11 +866,11 @@ void insert_singletons(
         }
 
         Reference< registry::XRegistryKey > xRegisteredImplNames(
-            xKey2->openKey( "REGISTERED_BY" ) );
+            xKey2->openKey( u"REGISTERED_BY"_ustr ) );
         if (!xRegisteredImplNames.is() || !xRegisteredImplNames->isValid())
         {
             // create
-            xRegisteredImplNames = xKey2->createKey( "REGISTERED_BY" );
+            xRegisteredImplNames = xKey2->createKey( u"REGISTERED_BY"_ustr );
         }
 
         Sequence< OUString > implnames;
@@ -908,7 +908,7 @@ void prepareRegistry(
     if (!subKeys.hasElements())
     {
         throw InvalidRegistryException(
-            "prepareRegistry(): source registry is empty" );
+            u"prepareRegistry(): source registry is empty"_ustr );
     }
 
     for (const Reference < XRegistryKey >& xImplKey : subKeys)
@@ -1116,7 +1116,7 @@ ImplementationRegistration::ImplementationRegistration( const Reference < XCompo
 // XServiceInfo
 OUString ImplementationRegistration::getImplementationName()
 {
-    return "com.sun.star.comp.stoc.ImplementationRegistration";
+    return u"com.sun.star.comp.stoc.ImplementationRegistration"_ustr;
 }
 
 // XServiceInfo
@@ -1128,7 +1128,7 @@ sal_Bool ImplementationRegistration::supportsService(const OUString& ServiceName
 // XServiceInfo
 Sequence< OUString > ImplementationRegistration::getSupportedServiceNames()
 {
-    return { "com.sun.star.registry.ImplementationRegistration" };
+    return { u"com.sun.star.registry.ImplementationRegistration"_ustr };
 }
 
 Reference< XSimpleRegistry > ImplementationRegistration::getRegistryFromServiceManager() const
@@ -1259,8 +1259,8 @@ void ImplementationRegistration::prepareRegister(
 
     if( !m_xSMgr.is() )    {
         throw CannotRegisterImplementationException(
-                "ImplementationRegistration::registerImplementation() "
-                "no componentcontext available to instantiate loader" );
+                u"ImplementationRegistration::registerImplementation() "
+                "no componentcontext available to instantiate loader"_ustr );
     }
 
     try
@@ -1479,7 +1479,7 @@ void ImplementationRegistration::doRevoke(
         }
     }
 
-    xKey = xRootKey->openKey( "/SINGLETONS" );
+    xKey = xRootKey->openKey( u"/SINGLETONS"_ustr );
     if (xKey.is() && xKey->isValid())
     {
         delete_all_singleton_entries( xKey, aNames );
@@ -1523,7 +1523,7 @@ void ImplementationRegistration::doRegister(
         if ( !bSuccess )
         {
             throw CannotRegisterImplementationException(
-                "ImplementationRegistration::doRegistration() component registration signaled failure" );
+                u"ImplementationRegistration::doRegistration() component registration signaled failure"_ustr );
         }
 
         prepareRegistry(xDest, xSourceKey, implementationLoaderUrl, registeredLocationUrl, xCtx);

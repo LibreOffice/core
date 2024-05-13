@@ -150,7 +150,7 @@ Any IdlAttributeFieldImpl::get( const Any & rObj )
         return aRet;
     }
     throw IllegalArgumentException(
-        "illegal object given!",
+        u"illegal object given!"_ustr,
         getXWeak(), 0 );
 }
 
@@ -159,7 +159,7 @@ void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
     if (getAttributeTypeDescr()->bReadOnly)
     {
         throw IllegalAccessException(
-            "cannot set readonly attribute!",
+            u"cannot set readonly attribute!"_ustr,
             getXWeak() );
     }
 
@@ -232,11 +232,11 @@ void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
         (*pUnoI->release)( pUnoI );
 
         throw IllegalArgumentException(
-            "illegal value given!",
+            u"illegal value given!"_ustr,
             *o3tl::doAccess<Reference<XInterface>>(rObj), 1 );
     }
     throw IllegalArgumentException(
-        "illegal destination object given!",
+        u"illegal destination object given!"_ustr,
         getXWeak(), 0 );
 }
 
@@ -261,8 +261,8 @@ void IdlAttributeFieldImpl::checkException(
             cppu::UnoType<RuntimeException>::get()))
     {
         throw WrappedTargetRuntimeException(
-            "non-RuntimeException occurred when accessing an"
-            " interface type attribute",
+            u"non-RuntimeException occurred when accessing an"
+            " interface type attribute"_ustr,
             context, e);
     }
     cppu::throwException(e);
@@ -609,7 +609,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
             uno_type_copyAndConvertData(&aRet, pUnoExc, cppu::UnoType<Any>::get().getTypeLibType(),
                 getReflection()->getUno2Cpp().get() );
             uno_any_destruct( pUnoExc, nullptr );
-            throw InvocationTargetException("exception occurred during invocation!",
+            throw InvocationTargetException(u"exception occurred during invocation!"_ustr,
                                             *o3tl::doAccess<Reference<XInterface>>(rObj), aRet);
         }
         else
@@ -640,7 +640,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
         return aRet;
     }
     throw IllegalArgumentException(
-        "illegal destination object given!",
+        u"illegal destination object given!"_ustr,
         getXWeak(), 0 );
 }
 

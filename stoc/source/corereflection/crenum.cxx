@@ -91,14 +91,14 @@ Any IdlEnumFieldImpl::get( const Any & )
 void IdlEnumFieldImpl::set( const Any &, const Any & )
 {
     throw IllegalAccessException(
-        "cannot set enum field, it is constant",
+        u"cannot set enum field, it is constant"_ustr,
         getXWeak() );
 }
 
 void IdlEnumFieldImpl::set( Any &, const Any & )
 {
     throw IllegalAccessException(
-        "cannot set enum field, it is constant",
+        u"cannot set enum field, it is constant"_ustr,
         getXWeak() );
 }
 

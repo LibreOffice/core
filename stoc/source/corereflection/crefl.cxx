@@ -45,7 +45,7 @@ IdlReflectionServiceImpl::IdlReflectionServiceImpl(
     : WeakComponentImplHelper( _aComponentMutex )
 {
     xContext->getValueByName(
-        "/singletons/com.sun.star.reflection.theTypeDescriptionManager" ) >>= _xTDMgr;
+        u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr ) >>= _xTDMgr;
     OSL_ENSURE( _xTDMgr.is(), "### cannot get singleton \"TypeDescriptionManager\" from context!" );
 }
 
@@ -70,7 +70,7 @@ void IdlReflectionServiceImpl::disposing()
 
 OUString IdlReflectionServiceImpl::getImplementationName()
 {
-    return "com.sun.star.comp.stoc.CoreReflection";
+    return u"com.sun.star.comp.stoc.CoreReflection"_ustr;
 }
 
 sal_Bool IdlReflectionServiceImpl::supportsService( const OUString & rServiceName )
@@ -80,7 +80,7 @@ sal_Bool IdlReflectionServiceImpl::supportsService( const OUString & rServiceNam
 
 Sequence< OUString > IdlReflectionServiceImpl::getSupportedServiceNames()
 {
-    Sequence< OUString > seqNames { "com.sun.star.reflection.CoreReflection" };
+    Sequence< OUString > seqNames { u"com.sun.star.reflection.CoreReflection"_ustr };
     return seqNames;
 }
 
@@ -260,7 +260,7 @@ Reference< XIdlClass > IdlReflectionServiceImpl::forType( typelib_TypeDescriptio
         return xRet;
     }
     throw RuntimeException(
-        "IdlReflectionServiceImpl::forType() failed!",
+        u"IdlReflectionServiceImpl::forType() failed!"_ustr,
         getXWeak() );
 }
 
@@ -272,12 +272,12 @@ const Mapping & IdlReflectionServiceImpl::getCpp2Uno()
         MutexGuard aGuard( getMutexAccess() );
         if (! _aCpp2Uno.is())
         {
-            _aCpp2Uno = Mapping( CPPU_CURRENT_LANGUAGE_BINDING_NAME, UNO_LB_UNO );
+            _aCpp2Uno = Mapping( CPPU_CURRENT_LANGUAGE_BINDING_NAME, u"" UNO_LB_UNO ""_ustr );
             OSL_ENSURE( _aCpp2Uno.is(), "### cannot get c++ to uno mapping!" );
             if (! _aCpp2Uno.is())
             {
                 throw RuntimeException(
-                    "cannot get c++ to uno mapping!",
+                    u"cannot get c++ to uno mapping!"_ustr,
                     getXWeak() );
             }
         }
@@ -292,12 +292,12 @@ const Mapping & IdlReflectionServiceImpl::getUno2Cpp()
         MutexGuard aGuard( getMutexAccess() );
         if (! _aUno2Cpp.is())
         {
-            _aUno2Cpp = Mapping( UNO_LB_UNO, CPPU_CURRENT_LANGUAGE_BINDING_NAME );
+            _aUno2Cpp = Mapping( u"" UNO_LB_UNO ""_ustr, CPPU_CURRENT_LANGUAGE_BINDING_NAME );
             OSL_ENSURE( _aUno2Cpp.is(), "### cannot get uno to c++ mapping!" );
             if (! _aUno2Cpp.is())
             {
                 throw RuntimeException(
-                    "cannot get uno to c++ mapping!",
+                    u"cannot get uno to c++ mapping!"_ustr,
                     getXWeak() );
             }
         }
@@ -313,7 +313,7 @@ uno_Interface * IdlReflectionServiceImpl::mapToUno(
         return static_cast<uno_Interface *>(getCpp2Uno().mapInterface( xObj.get(), pTo ));
 
     throw RuntimeException(
-        "illegal object given!",
+        u"illegal object given!"_ustr,
         getXWeak() );
 }
 

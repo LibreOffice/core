@@ -75,7 +75,7 @@ DllComponentLoader::DllComponentLoader( const Reference<XComponentContext> & xCt
 
 OUString SAL_CALL DllComponentLoader::getImplementationName(  )
 {
-    return "com.sun.star.comp.stoc.DLLComponentLoader";
+    return u"com.sun.star.comp.stoc.DLLComponentLoader"_ustr;
 }
 
 sal_Bool SAL_CALL DllComponentLoader::supportsService( const OUString& ServiceName )
@@ -85,7 +85,7 @@ sal_Bool SAL_CALL DllComponentLoader::supportsService( const OUString& ServiceNa
 
 Sequence<OUString> SAL_CALL DllComponentLoader::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.loader.SharedLibrary" };
+    return { u"com.sun.star.loader.SharedLibrary"_ustr };
 }
 
 

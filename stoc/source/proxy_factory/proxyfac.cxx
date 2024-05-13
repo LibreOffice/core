@@ -351,7 +351,7 @@ Any ProxyRoot::queryAggregation( Type const & rType )
 
 FactoryImpl::FactoryImpl()
 {
-    OUString uno = UNO_LB_UNO;
+    OUString uno = u"" UNO_LB_UNO ""_ustr;
     OUString cpp = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 
     uno_getEnvironment(
@@ -385,7 +385,7 @@ Reference< XAggregation > FactoryImpl::createProxy(
 
 OUString FactoryImpl::getImplementationName()
 {
-    return "com.sun.star.comp.reflection.ProxyFactory";
+    return u"com.sun.star.comp.reflection.ProxyFactory"_ustr;
 }
 
 sal_Bool FactoryImpl::supportsService( const OUString & rServiceName )
@@ -395,7 +395,7 @@ sal_Bool FactoryImpl::supportsService( const OUString & rServiceName )
 
 Sequence< OUString > FactoryImpl::getSupportedServiceNames()
 {
-    return { "com.sun.star.reflection.ProxyFactory" };
+    return { u"com.sun.star.reflection.ProxyFactory"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

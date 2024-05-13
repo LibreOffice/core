@@ -241,7 +241,7 @@ TypeConverter_Impl::TypeConverter_Impl() {}
 // XServiceInfo
 OUString TypeConverter_Impl::getImplementationName()
 {
-    return "com.sun.star.comp.stoc.TypeConverter";
+    return u"com.sun.star.comp.stoc.TypeConverter"_ustr;
 }
 
 // XServiceInfo
@@ -253,7 +253,7 @@ sal_Bool TypeConverter_Impl::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > TypeConverter_Impl::getSupportedServiceNames()
 {
-    return { "com.sun.star.script.Converter" };
+    return { u"com.sun.star.script.Converter"_ustr };
 }
 
 
@@ -309,7 +309,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
             return static_cast<sal_Int64>(n);
         }
         throw CannotConvertException(
-            "UNSIGNED HYPER out of range!",
+            u"UNSIGNED HYPER out of range!"_ustr,
             Reference<XInterface>(), aDestinationClass, FailReason::OUT_OF_RANGE, 0 );
     }
 
@@ -323,7 +323,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
             return nRet;
         }
         throw CannotConvertException(
-            "FLOAT out of range!",
+            u"FLOAT out of range!"_ustr,
             Reference<XInterface>(), aDestinationClass, FailReason::OUT_OF_RANGE, 0 );
     }
     case TypeClass_DOUBLE:
@@ -335,7 +335,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
             return nRet;
         }
         throw CannotConvertException(
-            "DOUBLE out of range!",
+            u"DOUBLE out of range!"_ustr,
             Reference<XInterface>(), aDestinationClass, FailReason::OUT_OF_RANGE, 0 );
     }
 
@@ -346,14 +346,14 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
         if (! getHyperValue( nVal, *o3tl::forceAccess<OUString>(rAny) ))
         {
             throw CannotConvertException(
-                "invalid STRING value!",
+                u"invalid STRING value!"_ustr,
                 Reference<XInterface>(), aDestinationClass, FailReason::IS_NOT_NUMBER, 0 );
         }
         nRet = nVal;
         if (nVal >= min && (nVal < 0 || o3tl::make_unsigned(nVal) <= max))
             return nRet;
         throw CannotConvertException(
-            "STRING value out of range!",
+            u"STRING value out of range!"_ustr,
             Reference<XInterface>(), aDestinationClass, FailReason::OUT_OF_RANGE, 0 );
     }
 
@@ -366,7 +366,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
     if (nRet >= min && (nRet < 0 || o3tl::make_unsigned(nRet) <= max))
         return nRet;
     throw CannotConvertException(
-        "VALUE is out of range!",
+        u"VALUE is out of range!"_ustr,
         Reference<XInterface>(), aDestinationClass, FailReason::OUT_OF_RANGE, 0 );
 }
 
@@ -431,7 +431,7 @@ double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max )
         if (! getNumericValue( fRet, *o3tl::forceAccess<OUString>(rAny) ))
         {
             throw CannotConvertException(
-                "invalid STRING value!",
+                u"invalid STRING value!"_ustr,
                 Reference<XInterface>(), aDestinationClass, FailReason::IS_NOT_NUMBER, 0 );
         }
         break;
@@ -446,7 +446,7 @@ double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max )
     if (fRet >= min && fRet <= max)
         return fRet;
     throw CannotConvertException(
-        "VALUE is out of range!",
+        u"VALUE is out of range!"_ustr,
         Reference< XInterface >(), aDestinationClass, FailReason::OUT_OF_RANGE, 0 );
 }
 
@@ -482,7 +482,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         if (!typelib_typedescription_isAssignableFrom( aDestTD.get(), aSourceTD.get() ))
         {
             throw CannotConvertException(
-                "value is not of same or derived type!",
+                u"value is not of same or derived type!"_ustr,
                 Reference< XInterface >(), aDestinationClass,
                 FailReason::SOURCE_IS_NO_DERIVED_TYPE, 0 );
         }
@@ -506,7 +506,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         if (!ifc || !ifc->is())
         {
             throw CannotConvertException(
-                "value is not interface",
+                u"value is not interface"_ustr,
                 Reference< XInterface >(), aDestinationClass, FailReason::NO_SUCH_INTERFACE, 0 );
         }
         aRet = (*ifc)->queryInterface(aDestType );
@@ -621,7 +621,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         if (nPos < 0)
         {
             throw CannotConvertException(
-                "value cannot be converted to demanded ENUM!",
+                u"value cannot be converted to demanded ENUM!"_ustr,
                 Reference< XInterface >(), aDestinationClass, FailReason::IS_NOT_ENUM, 0 );
         }
 
@@ -648,7 +648,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         return aRet;
 
     throw CannotConvertException(
-        "conversion not possible!",
+        u"conversion not possible!"_ustr,
         Reference< XInterface >(), aDestinationClass, FailReason::INVALID, 0 );
 }
 
@@ -676,7 +676,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
 
     default:
         throw IllegalArgumentException(
-            "destination type is not simple!",
+            u"destination type is not simple!"_ustr,
             Reference< XInterface >(), sal_Int16(1) );
     }
 
@@ -799,7 +799,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
             if (nPos < 0)
             {
                 throw CannotConvertException(
-                    "value is not ENUM!",
+                    u"value is not ENUM!"_ustr,
                     Reference< XInterface >(), aDestinationClass, FailReason::IS_NOT_ENUM, 0 );
             }
 
@@ -811,8 +811,8 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
 
         case TypeClass_BOOLEAN:
             aRet <<= *o3tl::forceAccess<bool>(rVal) ?
-                OUString("true") :
-                OUString("false");
+                u"true"_ustr :
+                u"false"_ustr;
             break;
         case TypeClass_CHAR:
             aRet <<= OUString(*o3tl::forceAccess<sal_Unicode>(rVal));
@@ -855,7 +855,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         return aRet;
 
     throw CannotConvertException(
-        "conversion not possible!",
+        u"conversion not possible!"_ustr,
         Reference< XInterface >(), aDestinationClass, FailReason::INVALID, 0 );
 }
 

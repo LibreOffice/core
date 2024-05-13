@@ -1009,7 +1009,7 @@ Any RegistryEnumueration::nextElement(  )
     }
     else
     {
-        throw NoSuchElementException( "NestedRegistry: no nextElement() !" );
+        throw NoSuchElementException( u"NestedRegistry: no nextElement() !"_ustr );
     }
     return a;
 }
@@ -1035,7 +1035,7 @@ sal_Bool SAL_CALL NestedRegistryImpl::hasElements(  )
 
 OUString SAL_CALL NestedRegistryImpl::getImplementationName(  )
 {
-    return "com.sun.star.comp.stoc.NestedRegistry";
+    return u"com.sun.star.comp.stoc.NestedRegistry"_ustr;
 }
 
 sal_Bool SAL_CALL NestedRegistryImpl::supportsService( const OUString& ServiceName )
@@ -1045,7 +1045,7 @@ sal_Bool SAL_CALL NestedRegistryImpl::supportsService( const OUString& ServiceNa
 
 Sequence<OUString> SAL_CALL NestedRegistryImpl::getSupportedServiceNames(  )
 {
-    Sequence< OUString > seqNames { "com.sun.star.registry.NestedRegistry" };
+    Sequence< OUString > seqNames { u"com.sun.star.registry.NestedRegistry"_ustr };
     return seqNames;
 }
 
@@ -1084,7 +1084,7 @@ OUString SAL_CALL NestedRegistryImpl::getURL()
 void SAL_CALL NestedRegistryImpl::open( const OUString&, sal_Bool, sal_Bool )
 {
     throw InvalidRegistryException(
-            "the 'open' method is not specified for a nested registry" );
+            u"the 'open' method is not specified for a nested registry"_ustr );
 }
 
 
@@ -1122,7 +1122,7 @@ void SAL_CALL NestedRegistryImpl::close(  )
 void SAL_CALL NestedRegistryImpl::destroy(  )
 {
     throw InvalidRegistryException(
-            "the 'destroy' method is not specified for a nested registry" );
+            u"the 'destroy' method is not specified for a nested registry"_ustr );
 }
 
 
@@ -1170,7 +1170,7 @@ sal_Bool SAL_CALL NestedRegistryImpl::isReadOnly(  )
 
 void SAL_CALL NestedRegistryImpl::mergeKey( const OUString&, const OUString& )
 {
-    throw css::uno::RuntimeException("css.registry.NestedRegistry::mergeKey: not implemented");
+    throw css::uno::RuntimeException(u"css.registry.NestedRegistry::mergeKey: not implemented"_ustr);
 }
 
 } // namespace
