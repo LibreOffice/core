@@ -62,8 +62,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::document;
 
-constexpr OUStringLiteral SERVICENAME_CFGREADACCESS = u"com.sun.star.configuration.ConfigurationAccess";
-
 class BrandImage final : public weld::CustomWidgetController
 {
 private:
@@ -535,26 +533,16 @@ IMPL_LINK(BackingWindow, ExtLinkClickHdl, weld::Button&, rButton,void)
 
     try
     {
-        uno::Sequence<uno::Any> args(comphelper::InitAnyPropertySequence(
-        {
-            {"nodepath", uno::Any(u"/org.openoffice.Office.Common/Help/StartCenter"_ustr)}
-        }));
+        OUString sURL(officecfg::Office::Common::Menus::ExtensionsURL::get() +
+            "?LOvers=" + utl::ConfigManager::getProductVersion() +
+            "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47() );
 
-        Reference<lang::XMultiServiceFactory> xConfig = configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
-        Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments(SERVICENAME_CFGREADACCESS, args), UNO_QUERY);
-        if (xNameAccess.is())
-        {
-            OUString sURL(officecfg::Office::Common::Menus::ExtensionsURL::get() +
-                "?LOvers=" + utl::ConfigManager::getProductVersion() +
-                "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47() );
-
-            Reference<css::system::XSystemShellExecute> const
-                xSystemShellExecute(
-                    css::system::SystemShellExecute::create(
-                        ::comphelper::getProcessComponentContext()));
-            xSystemShellExecute->execute(sURL, OUString(),
-                css::system::SystemShellExecuteFlags::URIS_ONLY);
-        }
+        Reference<css::system::XSystemShellExecute> const
+            xSystemShellExecute(
+                css::system::SystemShellExecute::create(
+                    ::comphelper::getProcessComponentContext()));
+        xSystemShellExecute->execute(sURL, OUString(),
+            css::system::SystemShellExecuteFlags::URIS_ONLY);
     }
     catch (const Exception&)
     {
