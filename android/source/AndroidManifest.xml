@@ -6,7 +6,6 @@
     <uses-feature android:glEsVersion="0x00020000" android:required="true" />
     <!-- App wants to know if device supports USB host capability(not mandatory) -->
     <uses-feature android:name="android.hardware.usb.host" android:required="false"/>
-    <uses-feature android:name="android.hardware.camera.any" android:required="false"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
