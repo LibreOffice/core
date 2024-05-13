@@ -1047,7 +1047,10 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
 void SfxFilterContainer::ReadFilters_Impl( bool bUpdate )
 {
     if ( !pFilterArr )
+    {
         CreateFilterArr();
+        assert(pFilterArr);
+    }
 
     bFirstRead = false;
     SfxFilterList_Impl& rList = *pFilterArr;

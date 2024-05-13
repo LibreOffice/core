@@ -190,6 +190,7 @@ void SfxLokHelper::setView(int nId)
         return;
 
     const SfxViewShell* pViewShell = *itViewShell;
+    assert(pViewShell);
     DisableCallbacks dc;
 
     bool bIsCurrShell = (pViewShell == SfxViewShell::Current());
