@@ -250,9 +250,9 @@ void SdrUndoAttrObj::ensureStyleSheetInStyleSheetPool(SfxStyleSheetBasePool& rSt
 
 SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSaveText)
     : SdrUndoObj(rNewObj)
-    , bHaveToTakeRedoSet(true)
+    , m_bHaveToTakeRedoSet(true)
 {
-    bStyleSheet = bStyleSheet1;
+    m_bStyleSheet = bStyleSheet1;
 
     SdrObjList* pOL = rNewObj.GetSubList();
     bool bIsGroup(pOL!=nullptr && pOL->GetObjCount());
@@ -261,11 +261,11 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSave
     if(bIsGroup)
     {
         // it's a group object!
-        pUndoGroup.reset(new SdrUndoGroup(mxObj->getSdrModelFromSdrObject()));
+        m_pUndoGroup.reset(new SdrUndoGroup(mxObj->getSdrModelFromSdrObject()));
 
         for (const rtl::Reference<SdrObject>& pObj : *pOL)
         {
-            pUndoGroup->AddAction(
+            m_pUndoGroup->AddAction(
                 std::make_unique<SdrUndoAttrObj>(*pObj, bStyleSheet1));
         }
     }
@@ -275,14 +275,14 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSave
 
     moUndoSet.emplace( mxObj->GetMergedItemSet() );
 
-    if(bStyleSheet)
+    if(m_bStyleSheet)
         mxUndoStyleSheet = mxObj->GetStyleSheet();
 
     if(bSaveText)
     {
         auto p = mxObj->GetOutlinerParaObject();
         if(p)
-            pTextUndo = *p;
+            m_pTextUndo = *p;
     }
 }
 
@@ -290,9 +290,9 @@ SdrUndoAttrObj::~SdrUndoAttrObj()
 {
     moUndoSet.reset();
     moRedoSet.reset();
-    pUndoGroup.reset();
-    pTextUndo.reset();
-    pTextRedo.reset();
+    m_pUndoGroup.reset();
+    m_pTextUndo.reset();
+    m_pTextRedo.reset();
 }
 
 void SdrUndoAttrObj::Undo()
@@ -303,27 +303,27 @@ void SdrUndoAttrObj::Undo()
     // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 
-    if(!pUndoGroup || bIs3DScene)
+    if(!m_pUndoGroup || bIs3DScene)
     {
-        if(bHaveToTakeRedoSet)
+        if(m_bHaveToTakeRedoSet)
         {
-            bHaveToTakeRedoSet = false;
+            m_bHaveToTakeRedoSet = false;
 
             moRedoSet.emplace( mxObj->GetMergedItemSet() );
 
-            if(bStyleSheet)
+            if(m_bStyleSheet)
                 mxRedoStyleSheet = mxObj->GetStyleSheet();
 
-            if(pTextUndo)
+            if(m_pTextUndo)
             {
                 // #i8508#
                 auto p = mxObj->GetOutlinerParaObject();
                 if(p)
-                    pTextRedo = *p;
+                    m_pTextRedo = *p;
             }
         }
 
-        if(bStyleSheet)
+        if(m_bStyleSheet)
         {
             mxRedoStyleSheet = mxObj->GetStyleSheet();
             SfxStyleSheet* pSheet = mxUndoStyleSheet.get();
@@ -392,15 +392,15 @@ void SdrUndoAttrObj::Undo()
 
         mxObj->GetProperties().BroadcastItemChange(aItemChange);
 
-        if(pTextUndo)
+        if(m_pTextUndo)
         {
-            mxObj->SetOutlinerParaObject(*pTextUndo);
+            mxObj->SetOutlinerParaObject(*m_pTextUndo);
         }
     }
 
-    if(pUndoGroup)
+    if(m_pUndoGroup)
     {
-        pUndoGroup->Undo();
+        m_pUndoGroup->Undo();
     }
 }
 
@@ -409,9 +409,9 @@ void SdrUndoAttrObj::Redo()
     E3DModifySceneSnapRectUpdater aUpdater(mxObj.get());
     bool bIs3DScene(DynCastE3dScene(mxObj.get()));
 
-    if(!pUndoGroup || bIs3DScene)
+    if(!m_pUndoGroup || bIs3DScene)
     {
-        if(bStyleSheet)
+        if(m_bStyleSheet)
         {
             mxUndoStyleSheet = mxObj->GetStyleSheet();
             SfxStyleSheet* pSheet = mxRedoStyleSheet.get();
@@ -474,15 +474,15 @@ void SdrUndoAttrObj::Redo()
         mxObj->GetProperties().BroadcastItemChange(aItemChange);
 
         // #i8508#
-        if(pTextRedo)
+        if(m_pTextRedo)
         {
-            mxObj->SetOutlinerParaObject(*pTextRedo);
+            mxObj->SetOutlinerParaObject(*m_pTextRedo);
         }
     }
 
-    if(pUndoGroup)
+    if(m_pUndoGroup)
     {
-        pUndoGroup->Redo();
+        m_pUndoGroup->Redo();
     }
 
     // Trigger PageChangeCall
@@ -491,7 +491,7 @@ void SdrUndoAttrObj::Redo()
 
 OUString SdrUndoAttrObj::GetComment() const
 {
-    if(bStyleSheet)
+    if(m_bStyleSheet)
     {
         return ImpGetDescriptionStr(STR_EditSetStylesheet);
     }
@@ -503,7 +503,7 @@ OUString SdrUndoAttrObj::GetComment() const
 
 OUString SdrUndoAttrObj::GetSdrRepeatComment() const
 {
-    if(bStyleSheet)
+    if(m_bStyleSheet)
     {
         return ImpGetDescriptionStr(STR_EditSetStylesheet, true);
     }

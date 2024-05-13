@@ -155,17 +155,17 @@ class SVXCORE_DLLPUBLIC SdrUndoAttrObj : public SdrUndoObj
     // FIXME: Or should we better remember the StyleSheetNames?
     rtl::Reference< SfxStyleSheet > mxUndoStyleSheet;
     rtl::Reference< SfxStyleSheet > mxRedoStyleSheet;
-    bool bStyleSheet;
-    bool bHaveToTakeRedoSet;
+    bool m_bStyleSheet;
+    bool m_bHaveToTakeRedoSet;
 
     // When assigning TextItems to a drawing object with text:
-    std::optional<OutlinerParaObject> pTextUndo;
+    std::optional<OutlinerParaObject> m_pTextUndo;
     // #i8508#
     // The text rescue mechanism needs also to be implemented for redo actions.
-    std::optional<OutlinerParaObject> pTextRedo;
+    std::optional<OutlinerParaObject> m_pTextRedo;
 
     // If we have a group object:
-    std::unique_ptr<SdrUndoGroup> pUndoGroup;
+    std::unique_ptr<SdrUndoGroup> m_pUndoGroup;
 
 protected:
     // Helper to ensure StyleSheet is in pool (provided by SdrModel from SdrObject)
