@@ -77,6 +77,10 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, RowActivatedHdl, weld::TreeView&, bool)
 
 IMPL_LINK(ScCheckListMenuControl, MenuKeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
+    // Assume that once the keyboard is used that focus should restore to this menu
+    // on dismissing a submenu
+    SetRestoreFocus(ScCheckListMenuControl::RestoreFocus::Menu);
+
     const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
 
     switch (rKeyCode.GetCode())
@@ -328,17 +332,65 @@ void ScCheckListMenuControl::launchSubMenu()
     if (!mxMenu->get_selected(mxScratchIter.get()))
         return;
 
+    meRestoreFocus = DetermineRestoreFocus();
+
     tools::Rectangle aRect = GetSubMenuParentRect();
     pSubMenu->StartPopupMode(mxMenu.get(), aRect);
 
     mxMenu->select(*mxScratchIter);
+
     pSubMenu->GrabFocus();
+}
+
+ScCheckListMenuControl::RestoreFocus ScCheckListMenuControl::DetermineRestoreFocus() const
+{
+    if (mxEdSearch->has_focus())
+        return RestoreFocus::EdSearch;
+    if (mpChecks->has_focus())
+        return RestoreFocus::Checks;
+    if (mxChkToggleAll->has_focus())
+        return RestoreFocus::ChkToggleAll;
+    if (mxChkLockChecked->has_focus())
+        return RestoreFocus::ChkLockChecked;
+    if (mxBtnSelectSingle->has_focus())
+        return RestoreFocus::BtnSelectSingle;
+    if (mxBtnUnselectSingle->has_focus())
+        return RestoreFocus::BtnUnselectSingle;
+    return RestoreFocus::Menu;
+}
+
+void ScCheckListMenuControl::RestorePreviousFocus()
+{
+    switch (meRestoreFocus)
+    {
+        case RestoreFocus::EdSearch:
+            mxEdSearch->grab_focus();
+            break;
+        case RestoreFocus::Checks:
+            mpChecks->grab_focus();
+            break;
+        case RestoreFocus::ChkToggleAll:
+            mxChkToggleAll->grab_focus();
+            break;
+        case RestoreFocus::ChkLockChecked:
+            mxChkLockChecked->grab_focus();
+            break;
+        case RestoreFocus::BtnSelectSingle:
+            mxBtnSelectSingle->grab_focus();
+            break;
+        case RestoreFocus::BtnUnselectSingle:
+            mxBtnUnselectSingle->grab_focus();
+            break;
+        default:
+            mxMenu->grab_focus();
+            break;
+    }
 }
 
 IMPL_LINK_NOARG(ScCheckListMenuControl, PostPopdownHdl, void*, void)
 {
     mnAsyncPostPopdownId = nullptr;
-    mxMenu->grab_focus();
+    RestorePreviousFocus();
 }
 
 IMPL_LINK(ScCheckListMenuControl, MouseEnterHdl, const MouseEvent&, rMEvt, bool)
@@ -522,6 +574,7 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData
     , mrViewData(rViewData)
     , mnAsyncPostPopdownId(nullptr)
     , mnAsyncSetDropdownPosId(nullptr)
+    , meRestoreFocus(RestoreFocus::Menu)
     , mbHasDates(bHasDates)
     , mbIsPoppedUp(false)
     , maOpenTimer(this)
@@ -1815,8 +1868,14 @@ IMPL_LINK(ScListSubMenuControl, MenuKeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
     bool bConsumed = false;
     const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
+    const sal_uInt16 eKeyCode = rKeyCode.GetCode();
 
-    switch (rKeyCode.GetCode())
+    // Assume that once the keyboard is used that focus should restore to the
+    // parent menu
+    if (eKeyCode != KEY_ESCAPE)
+        mrParentControl.SetRestoreFocus(ScCheckListMenuControl::RestoreFocus::Menu);
+
+    switch (eKeyCode)
     {
         case KEY_ESCAPE:
         case KEY_LEFT:

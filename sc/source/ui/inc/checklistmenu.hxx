@@ -96,6 +96,18 @@ public:
     };
     typedef std::set<ResultEntry> ResultType;
 
+
+    enum RestoreFocus
+    {
+        Menu,
+        EdSearch,
+        Checks,
+        ChkToggleAll,
+        ChkLockChecked,
+        BtnSelectSingle,
+        BtnUnselectSingle
+    };
+
     struct MenuItemData
     {
         bool     mbEnabled:1;
@@ -190,6 +202,11 @@ public:
 
     void addFields(const std::vector<OUString>& aFields);
     tools::Long getField();
+
+    void SetRestoreFocus(RestoreFocus eFocus)
+    {
+        meRestoreFocus = eFocus;
+    }
 private:
 
     std::vector<MenuItemData>         maMenuItems;
@@ -266,6 +283,9 @@ private:
 
     void DropPendingEvents();
 
+    RestoreFocus DetermineRestoreFocus() const;
+    void RestorePreviousFocus();
+
 private:
     std::unique_ptr<weld::Builder> mxBuilder;
     std::unique_ptr<weld::Popover> mxPopover;
@@ -315,6 +335,8 @@ private:
 
     ImplSVEvent* mnAsyncPostPopdownId;
     ImplSVEvent* mnAsyncSetDropdownPosId;
+
+    RestoreFocus meRestoreFocus;
 
     bool mbHasDates;
     bool mbIsPoppedUp;
