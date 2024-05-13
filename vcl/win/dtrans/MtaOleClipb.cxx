@@ -531,7 +531,7 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
 
     // get a connection to the class-instance via the static member
     CMtaOleClipboard* pImpl = CMtaOleClipboard::s_theMtaOleClipboardInst;
-    OSL_ASSERT( nullptr != pImpl );
+    assert(pImpl);
 
     switch( uMsg )
     {
