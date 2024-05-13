@@ -23,8 +23,8 @@ namespace svt
 {
     //= ComboBoxControl
     ComboBoxControl::ComboBoxControl(BrowserDataWin* pParent)
-        : ControlBase(pParent, "svt/ui/combocontrol.ui", "ComboControl")
-        , m_xWidget(m_xBuilder->weld_combo_box("combobox"))
+        : ControlBase(pParent, u"svt/ui/combocontrol.ui"_ustr, u"ComboControl"_ustr)
+        , m_xWidget(m_xBuilder->weld_combo_box(u"combobox"_ustr))
     {
         InitControlBase(m_xWidget.get());
         m_xWidget->set_entry_width_chars(1); // so a smaller than default width can be used
@@ -119,8 +119,8 @@ namespace svt
 
     //= ListBoxControl
     ListBoxControl::ListBoxControl(BrowserDataWin* pParent)
-        : ControlBase(pParent, "svt/ui/listcontrol.ui", "ListControl")
-        , m_xWidget(m_xBuilder->weld_combo_box("listbox"))
+        : ControlBase(pParent, u"svt/ui/listcontrol.ui"_ustr, u"ListControl"_ustr)
+        , m_xWidget(m_xBuilder->weld_combo_box(u"listbox"_ustr))
     {
         InitControlBase(m_xWidget.get());
         m_xWidget->set_size_request(42, -1); // so a later narrow size request can stick
@@ -199,8 +199,8 @@ namespace svt
 
     //= CheckBoxControl
     CheckBoxControl::CheckBoxControl(BrowserDataWin* pParent)
-        : ControlBase(pParent, "svt/ui/checkboxcontrol.ui", "CheckBoxControl")
-        , m_xBox(m_xBuilder->weld_check_button("checkbox"))
+        : ControlBase(pParent, u"svt/ui/checkboxcontrol.ui"_ustr, u"CheckBoxControl"_ustr)
+        , m_xBox(m_xBuilder->weld_check_button(u"checkbox"_ustr))
     {
         m_aModeState.bTriStateEnabled = true;
         InitControlBase(m_xBox.get());
@@ -354,7 +354,7 @@ namespace svt
     }
 
     EditControlBase::EditControlBase(BrowserDataWin* pParent)
-        : ControlBase(pParent, "svt/ui/thineditcontrol.ui", "EditControl") // *thin*editcontrol has no frame/border
+        : ControlBase(pParent, u"svt/ui/thineditcontrol.ui"_ustr, u"EditControl"_ustr) // *thin*editcontrol has no frame/border
         , m_pEntry(nullptr) // inheritors are expected to call InitEditControlBase
     {
     }
@@ -429,7 +429,7 @@ namespace svt
 
     EditControl::EditControl(BrowserDataWin* pParent)
         : EditControlBase(pParent)
-        , m_xWidget(m_xBuilder->weld_entry("entry"))
+        , m_xWidget(m_xBuilder->weld_entry(u"entry"_ustr))
     {
         InitEditControlBase(m_xWidget.get());
     }
@@ -443,8 +443,8 @@ namespace svt
     FormattedControlBase::FormattedControlBase(BrowserDataWin* pParent, bool bSpinVariant)
         : EditControlBase(pParent)
         , m_bSpinVariant(bSpinVariant)
-        , m_xEntry(m_xBuilder->weld_entry("entry"))
-        , m_xSpinButton(m_xBuilder->weld_formatted_spin_button("spinbutton"))
+        , m_xEntry(m_xBuilder->weld_entry(u"entry"_ustr))
+        , m_xSpinButton(m_xBuilder->weld_formatted_spin_button(u"spinbutton"_ustr))
     {
     }
 
@@ -528,13 +528,13 @@ namespace svt
 
     DateControl::DateControl(BrowserDataWin* pParent, bool bDropDown)
         : FormattedControlBase(pParent, false)
-        , m_xMenuButton(m_xBuilder->weld_menu_button("button"))
-        , m_xCalendarBuilder(Application::CreateBuilder(m_xMenuButton.get(), "svt/ui/datewindow.ui"))
-        , m_xTopLevel(m_xCalendarBuilder->weld_widget("date_popup_window"))
-        , m_xCalendar(m_xCalendarBuilder->weld_calendar("date_picker"))
-        , m_xExtras(m_xCalendarBuilder->weld_widget("extras"))
-        , m_xTodayBtn(m_xCalendarBuilder->weld_button("today"))
-        , m_xNoneBtn(m_xCalendarBuilder->weld_button("none"))
+        , m_xMenuButton(m_xBuilder->weld_menu_button(u"button"_ustr))
+        , m_xCalendarBuilder(Application::CreateBuilder(m_xMenuButton.get(), u"svt/ui/datewindow.ui"_ustr))
+        , m_xTopLevel(m_xCalendarBuilder->weld_widget(u"date_popup_window"_ustr))
+        , m_xCalendar(m_xCalendarBuilder->weld_calendar(u"date_picker"_ustr))
+        , m_xExtras(m_xCalendarBuilder->weld_widget(u"extras"_ustr))
+        , m_xTodayBtn(m_xCalendarBuilder->weld_button(u"today"_ustr))
+        , m_xNoneBtn(m_xCalendarBuilder->weld_button(u"none"_ustr))
     {
         m_xEntryFormatter.reset(new weld::DateFormatter(*m_xEntry));
         InitFormattedControlBase();
@@ -600,7 +600,7 @@ namespace svt
 
     PatternControl::PatternControl(BrowserDataWin* pParent)
         : EditControlBase(pParent)
-        , m_xWidget(m_xBuilder->weld_entry("entry"))
+        , m_xWidget(m_xBuilder->weld_entry(u"entry"_ustr))
     {
         m_xEntryFormatter.reset(new weld::PatternFormatter(*m_xWidget));
         InitEditControlBase(m_xWidget.get());
@@ -709,8 +709,8 @@ namespace svt
     }
 
     MultiLineTextCell::MultiLineTextCell(BrowserDataWin* pParent)
-        : ControlBase(pParent, "svt/ui/textviewcontrol.ui", "TextViewControl")
-        , m_xWidget(m_xBuilder->weld_text_view("textview"))
+        : ControlBase(pParent, u"svt/ui/textviewcontrol.ui"_ustr, u"TextViewControl"_ustr)
+        , m_xWidget(m_xBuilder->weld_text_view(u"textview"_ustr))
     {
         InitControlBase(m_xWidget.get());
         m_xWidget->connect_key_press(LINK(this, ControlBase, KeyInputHdl));

@@ -20,9 +20,8 @@
 #include <svtools/scrolladaptor.hxx>
 
 ScrollAdaptor::ScrollAdaptor(vcl::Window* pWin, bool bHoriz)
-    : InterimItemWindow(pWin, "svt/ui/scrollbars.ui", "ScrollBars")
-    , m_xScrollBar(
-          m_xBuilder->weld_scrollbar(bHoriz ? OUString("horizontal") : OUString("vertical")))
+    : InterimItemWindow(pWin, u"svt/ui/scrollbars.ui"_ustr, u"ScrollBars"_ustr)
+    , m_xScrollBar(m_xBuilder->weld_scrollbar(bHoriz ? u"horizontal"_ustr : u"vertical"_ustr))
     , m_bHori(bHoriz)
 {
     m_xScrollBar->show();

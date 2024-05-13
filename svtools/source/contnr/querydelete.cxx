@@ -22,8 +22,9 @@
 namespace svtools
 {
 QueryDeleteDlg_Impl::QueryDeleteDlg_Impl(weld::Widget* pParent, std::u16string_view rName)
-    : MessageDialogController(pParent, "svt/ui/querydeletedialog.ui", "QueryDeleteDialog")
-    , m_xAllButton(m_xBuilder->weld_button("all"))
+    : MessageDialogController(pParent, u"svt/ui/querydeletedialog.ui"_ustr,
+                              u"QueryDeleteDialog"_ustr)
+    , m_xAllButton(m_xBuilder->weld_button(u"all"_ustr))
 {
     // display specified texts
     m_xDialog->set_secondary_text(m_xDialog->get_secondary_text().replaceFirst("%s", rName));

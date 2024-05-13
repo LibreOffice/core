@@ -472,7 +472,7 @@ void FontNameBox::LoadMRUEntries( const OUString& aFontMRUEntriesFile )
 
 void FontNameBox::InitFontMRUEntriesFile()
 {
-    OUString sUserConfigDir("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}");
+    OUString sUserConfigDir(u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}"_ustr);
     rtl::Bootstrap::expandMacros(sUserConfigDir);
 
     maFontMRUEntriesFile = sUserConfigDir;
@@ -1466,11 +1466,11 @@ void SvtLineListBox::ImpGetLine( tools::Long nLine1, tools::Long nLine2, tools::
 }
 
 SvtLineListBox::SvtLineListBox(std::unique_ptr<weld::MenuButton> pControl)
-    : WeldToolbarPopup(css::uno::Reference<css::frame::XFrame>(), pControl.get(), "svt/ui/linewindow.ui", "line_popup_window")
+    : WeldToolbarPopup(css::uno::Reference<css::frame::XFrame>(), pControl.get(), u"svt/ui/linewindow.ui"_ustr, u"line_popup_window"_ustr)
     , m_xControl(std::move(pControl))
-    , m_xNoneButton(m_xBuilder->weld_button("none_line_button"))
+    , m_xNoneButton(m_xBuilder->weld_button(u"none_line_button"_ustr))
     , m_xLineSet(new ValueSet(nullptr))
-    , m_xLineSetWin(new weld::CustomWeld(*m_xBuilder, "lineset", *m_xLineSet))
+    , m_xLineSetWin(new weld::CustomWeld(*m_xBuilder, u"lineset"_ustr, *m_xLineSet))
     , m_nWidth( 5 )
     , aVirDev(VclPtr<VirtualDevice>::Create())
     , aColor(COL_BLACK)
@@ -1490,7 +1490,7 @@ SvtLineListBox::SvtLineListBox(std::unique_ptr<weld::MenuButton> pControl)
     // lock size to these maxes height/width so it doesn't jump around in size
     m_xControl->set_label(GetLineStyleName(SvxBorderLineStyle::NONE));
     Size aNonePrefSize = m_xControl->get_preferred_size();
-    m_xControl->set_label("");
+    m_xControl->set_label(u""_ustr);
     aVirDev->SetOutputSizePixel(getPreviewSize(*m_xControl));
     m_xControl->set_image(aVirDev);
     Size aSolidPrefSize = m_xControl->get_preferred_size();
@@ -1626,7 +1626,7 @@ void SvtLineListBox::UpdatePreview()
     else
     {
         Image aImage(m_xLineSet->GetItemImage(m_xLineSet->GetSelectedItemId()));
-        m_xControl->set_label("");
+        m_xControl->set_label(u""_ustr);
         const auto nPos = (aVirDev->GetOutputSizePixel().Height() - aImage.GetSizePixel().Height()) / 2;
         aVirDev->Push(vcl::PushFlags::MAPMODE);
         aVirDev->SetMapMode(MapMode(MapUnit::MapPixel));
@@ -1642,9 +1642,9 @@ void SvtLineListBox::UpdatePreview()
 SvtCalendarBox::SvtCalendarBox(std::unique_ptr<weld::MenuButton> pControl, bool bUseLabel)
     : m_bUseLabel(bUseLabel)
     , m_xControl(std::move(pControl))
-    , m_xBuilder(Application::CreateBuilder(m_xControl.get(), "svt/ui/datewindow.ui"))
-    , m_xTopLevel(m_xBuilder->weld_popover("date_popup_window"))
-    , m_xCalendar(m_xBuilder->weld_calendar("date_picker"))
+    , m_xBuilder(Application::CreateBuilder(m_xControl.get(), u"svt/ui/datewindow.ui"_ustr))
+    , m_xTopLevel(m_xBuilder->weld_popover(u"date_popup_window"_ustr))
+    , m_xCalendar(m_xBuilder->weld_calendar(u"date_picker"_ustr))
 {
     m_xControl->set_popover(m_xTopLevel.get());
     m_xCalendar->connect_selected(LINK(this, SvtCalendarBox, SelectHdl));

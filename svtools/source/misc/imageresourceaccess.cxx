@@ -129,7 +129,7 @@ std::unique_ptr<SvStream> getImageStream(uno::Reference<uno::XComponentContext> 
 
         // let it create a graphic from the given URL
         uno::Sequence<beans::PropertyValue> aMediaProperties{ comphelper::makePropertyValue(
-            "URL", rImageResourceURL) };
+            u"URL"_ustr, rImageResourceURL) };
         uno::Reference<graphic::XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
 
         OSL_ENSURE(xGraphic.is(), "GraphicAccess::getImageStream: the provider did not give us a graphic object!");
@@ -142,8 +142,8 @@ std::unique_ptr<SvStream> getImageStream(uno::Reference<uno::XComponentContext> 
             new OSeekableInputStreamWrapper(*pMemBuffer),
             new OSeekableOutputStreamWrapper(*pMemBuffer));
 
-        aMediaProperties = { comphelper::makePropertyValue("OutputStream", xBufferAccess),
-                             comphelper::makePropertyValue("MimeType", OUString("image/png")) };
+        aMediaProperties = { comphelper::makePropertyValue(u"OutputStream"_ustr, xBufferAccess),
+                             comphelper::makePropertyValue(u"MimeType"_ustr, u"image/png"_ustr) };
         xProvider->storeGraphic(xGraphic, aMediaProperties);
 
         pMemBuffer->Seek(0);

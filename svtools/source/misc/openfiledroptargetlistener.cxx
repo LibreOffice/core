@@ -201,7 +201,7 @@ void OpenFileDropTargetListener::implts_OpenFile( const OUString& rFilePath )
 
         css::uno::Reference < css::frame::XDispatchProvider > xProvider( xTargetFrame, css::uno::UNO_QUERY );
         // Create a new task or recycle an existing one
-        css::uno::Reference< css::frame::XDispatch > xDispatcher = xProvider->queryDispatch( aURL, "_default", 0 );
+        css::uno::Reference< css::frame::XDispatch > xDispatcher = xProvider->queryDispatch( aURL, u"_default"_ustr, 0 );
         if ( xDispatcher.is() )
             xDispatcher->dispatch( aURL, css::uno::Sequence < css::beans::PropertyValue >() );
     }

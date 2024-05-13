@@ -22,9 +22,9 @@ void ValueSetUIObject::execute(const OUString& rAction, const StringMap& rParame
 {
     if (rAction == "CHOOSE")
     {
-        if (rParameters.find("POS") != rParameters.end())
+        if (rParameters.find(u"POS"_ustr) != rParameters.end())
         {
-            OUString aIndexStr = rParameters.find("POS")->second;
+            OUString aIndexStr = rParameters.find(u"POS"_ustr)->second;
 
             sal_Int32 nIndex = aIndexStr.toInt32();
             mpSet->SelectItem(nIndex);
@@ -40,14 +40,14 @@ std::unique_ptr<UIObject> ValueSetUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new ValueSetUIObject(pWindow));
 }
 
-OUString ValueSetUIObject::get_name() const { return "ValueSetUIObject"; }
+OUString ValueSetUIObject::get_name() const { return u"ValueSetUIObject"_ustr; }
 
 StringMap ValueSetUIObject::get_state()
 {
     StringMap aMap = DrawingAreaUIObject::get_state();
-    aMap["SelectedItemId"] = OUString::number(mpSet->GetSelectedItemId());
-    aMap["SelectedItemPos"] = OUString::number(mpSet->GetSelectItemPos());
-    aMap["ItemsCount"] = OUString::number(mpSet->GetItemCount());
+    aMap[u"SelectedItemId"_ustr] = OUString::number(mpSet->GetSelectedItemId());
+    aMap[u"SelectedItemPos"_ustr] = OUString::number(mpSet->GetSelectItemPos());
+    aMap[u"ItemsCount"_ustr] = OUString::number(mpSet->GetItemCount());
     return aMap;
 }
 

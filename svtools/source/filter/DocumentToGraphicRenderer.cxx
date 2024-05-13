@@ -59,11 +59,11 @@ DocumentToGraphicRenderer::DocumentToGraphicRenderer( const Reference<XComponent
         uno::Reference< lang::XServiceInfo > xServiceInfo( mxDocument, uno::UNO_QUERY);
         if (xServiceInfo.is())
         {
-            if (xServiceInfo->supportsService("com.sun.star.text.TextDocument"))
+            if (xServiceInfo->supportsService(u"com.sun.star.text.TextDocument"_ustr))
                 meDocType = WRITER;
-            else if (xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
+            else if (xServiceInfo->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr))
                 meDocType = CALC;
-            else if (xServiceInfo->supportsService("com.sun.star.presentation.PresentationDocument"))
+            else if (xServiceInfo->supportsService(u"com.sun.star.presentation.PresentationDocument"_ustr))
                 meDocType = IMPRESS;
             else
                 meDocType = UNKNOWN;
@@ -131,10 +131,10 @@ Size DocumentToGraphicRenderer::getDocumentSizeIn100mm(sal_Int32 nCurrentPage,
 
     uno::Any selection( getSelection());
 
-    PropertyValues renderProperties{ comphelper::makePropertyValue("IsPrinter", true),
-                                     comphelper::makePropertyValue("RenderDevice", xDevice),
-                                     comphelper::makePropertyValue("View", mxController),
-                                     comphelper::makePropertyValue("RenderToGraphic", true) };
+    PropertyValues renderProperties{ comphelper::makePropertyValue(u"IsPrinter"_ustr, true),
+                                     comphelper::makePropertyValue(u"RenderDevice"_ustr, xDevice),
+                                     comphelper::makePropertyValue(u"View"_ustr, mxController),
+                                     comphelper::makePropertyValue(u"RenderToGraphic"_ustr, true) };
 
     awt::Size aSize;
     awt::Size aCalcPageSize;
@@ -203,12 +203,12 @@ Graphic DocumentToGraphicRenderer::renderToGraphic(
     double fScaleY = aTargetSizePixel.Height() / static_cast<double>(aDocumentSizePixel.Height());
 
     PropertyValues renderProps{
-        comphelper::makePropertyValue("IsPrinter", true),
-        comphelper::makePropertyValue("RenderDevice", xDevice),
-        comphelper::makePropertyValue("View", mxController),
-        comphelper::makePropertyValue("RenderToGraphic", true),
-        comphelper::makePropertyValue("HasPDFExtOutDevData", bExtOutDevData),
-        comphelper::makePropertyValue("PageRange", OUString::number(nCurrentPage))
+        comphelper::makePropertyValue(u"IsPrinter"_ustr, true),
+        comphelper::makePropertyValue(u"RenderDevice"_ustr, xDevice),
+        comphelper::makePropertyValue(u"View"_ustr, mxController),
+        comphelper::makePropertyValue(u"RenderToGraphic"_ustr, true),
+        comphelper::makePropertyValue(u"HasPDFExtOutDevData"_ustr, bExtOutDevData),
+        comphelper::makePropertyValue(u"PageRange"_ustr, OUString::number(nCurrentPage))
     };
 
     GDIMetaFile aMtf;
@@ -272,10 +272,10 @@ sal_Int32 DocumentToGraphicRenderer::getPageCount()
 
     uno::Any selection( getSelection() );
 
-    PropertyValues renderProperties{ comphelper::makePropertyValue("IsPrinter", true),
-                                     comphelper::makePropertyValue("RenderDevice", xDevice),
-                                     comphelper::makePropertyValue("View", mxController),
-                                     comphelper::makePropertyValue("RenderToGraphic", true) };
+    PropertyValues renderProperties{ comphelper::makePropertyValue(u"IsPrinter"_ustr, true),
+                                     comphelper::makePropertyValue(u"RenderDevice"_ustr, xDevice),
+                                     comphelper::makePropertyValue(u"View"_ustr, mxController),
+                                     comphelper::makePropertyValue(u"RenderToGraphic"_ustr, true) };
 
     sal_Int32 nPages = mxRenderable->getRendererCount( selection, renderProperties );
 

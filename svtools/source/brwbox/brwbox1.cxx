@@ -121,11 +121,11 @@ private:
     std::unique_ptr<weld::Label> m_xRecordCount;
 public:
     MeasureStatusBar(vcl::Window *pParent)
-        : InterimItemWindow(pParent, "svx/ui/navigationbar.ui", "NavigationBar")
-        , m_xRecordText(m_xBuilder->weld_label("recordtext"))
-        , m_xAbsolute(m_xBuilder->weld_entry("entry-noframe"))
-        , m_xRecordOf(m_xBuilder->weld_label("recordof"))
-        , m_xRecordCount(m_xBuilder->weld_label("recordcount"))
+        : InterimItemWindow(pParent, u"svx/ui/navigationbar.ui"_ustr, u"NavigationBar"_ustr)
+        , m_xRecordText(m_xBuilder->weld_label(u"recordtext"_ustr))
+        , m_xAbsolute(m_xBuilder->weld_entry(u"entry-noframe"_ustr))
+        , m_xRecordOf(m_xBuilder->weld_label(u"recordof"_ustr))
+        , m_xRecordCount(m_xBuilder->weld_label(u"recordcount"_ustr))
     {
         vcl::Font aApplFont(Application::GetSettings().GetStyleSettings().GetToolFont());
         m_xAbsolute->set_font(aApplFont);

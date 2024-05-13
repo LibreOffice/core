@@ -215,14 +215,14 @@ OUString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
 }
 
 PrinterSetupDialog::PrinterSetupDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "svt/ui/printersetupdialog.ui", "PrinterSetupDialog")
-    , m_xLbName(m_xBuilder->weld_combo_box("name"))
-    , m_xBtnProperties(m_xBuilder->weld_button("properties"))
-    , m_xBtnOptions(m_xBuilder->weld_button("options"))
-    , m_xFiStatus(m_xBuilder->weld_label("status"))
-    , m_xFiType(m_xBuilder->weld_label("type"))
-    , m_xFiLocation(m_xBuilder->weld_label("location"))
-    , m_xFiComment(m_xBuilder->weld_label("comment"))
+    : GenericDialogController(pParent, u"svt/ui/printersetupdialog.ui"_ustr, u"PrinterSetupDialog"_ustr)
+    , m_xLbName(m_xBuilder->weld_combo_box(u"name"_ustr))
+    , m_xBtnProperties(m_xBuilder->weld_button(u"properties"_ustr))
+    , m_xBtnOptions(m_xBuilder->weld_button(u"options"_ustr))
+    , m_xFiStatus(m_xBuilder->weld_label(u"status"_ustr))
+    , m_xFiType(m_xBuilder->weld_label(u"type"_ustr))
+    , m_xFiLocation(m_xBuilder->weld_label(u"location"_ustr))
+    , m_xFiComment(m_xBuilder->weld_label(u"comment"_ustr))
     , maStatusTimer("PrinterSetupDialog maStatusTimer")
 {
     m_xLbName->make_sorted();

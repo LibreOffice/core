@@ -108,7 +108,7 @@ WeldToolbarPopup::WeldToolbarPopup(css::uno::Reference<css::frame::XFrame> xFram
                                    const OUString& rId)
     : m_xBuilder(Application::CreateBuilder(pParent, rUIFile))
     , m_xTopLevel(m_xBuilder->weld_popover(rId))
-    , m_xContainer(m_xBuilder->weld_container("container"))
+    , m_xContainer(m_xBuilder->weld_container(u"container"_ustr))
     , m_xFrame(std::move(xFrame))
 {
     m_xTopLevel->connect_focus_in(LINK(this, WeldToolbarPopup, FocusHdl));
@@ -126,9 +126,9 @@ IMPL_LINK_NOARG(WeldToolbarPopup, FocusHdl, weld::Widget&, void)
 }
 
 ToolbarPopupContainer::ToolbarPopupContainer(weld::Widget* pParent)
-    : m_xBuilder(Application::CreateBuilder(pParent, "svx/ui/toolbarpopover.ui"))
-    , m_xTopLevel(m_xBuilder->weld_container("ToolbarPopover"))
-    , m_xContainer(m_xBuilder->weld_container("container"))
+    : m_xBuilder(Application::CreateBuilder(pParent, u"svx/ui/toolbarpopover.ui"_ustr))
+    , m_xTopLevel(m_xBuilder->weld_container(u"ToolbarPopover"_ustr))
+    , m_xContainer(m_xBuilder->weld_container(u"container"_ustr))
 {
     m_xTopLevel->connect_focus_in(LINK(this, ToolbarPopupContainer, FocusHdl));
 }
@@ -169,8 +169,8 @@ InterimToolbarPopup::InterimToolbarPopup(const css::uno::Reference<css::frame::X
                                          std::unique_ptr<WeldToolbarPopup> xPopup, bool bTearable)
     : DropdownDockingWindow(pParent, rFrame, bTearable)
     , m_xFrame(rFrame)
-    , m_xBuilder(Application::CreateInterimBuilder(m_xBox.get(), "svt/ui/interimparent.ui", false))
-    , m_xContainer(m_xBuilder->weld_container("container"))
+    , m_xBuilder(Application::CreateInterimBuilder(m_xBox.get(), u"svt/ui/interimparent.ui"_ustr, false))
+    , m_xContainer(m_xBuilder->weld_container(u"container"_ustr))
     , m_xPopup(std::move(xPopup))
 {
     if (SystemWindow* pWindow = GetTopMostParentSystemWindow(*this))

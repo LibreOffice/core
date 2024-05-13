@@ -191,7 +191,7 @@ OUString ExtendedColorConfig_Impl::GetComponentName(sal_uInt32 _nPos) const
 bool ExtendedColorConfig_Impl::m_bLockBroadcast = false;
 bool ExtendedColorConfig_Impl::m_bBroadcastWhenUnlocked = false;
 ExtendedColorConfig_Impl::ExtendedColorConfig_Impl() :
-    ConfigItem("Office.ExtendedColorScheme"),
+    ConfigItem(u"Office.ExtendedColorScheme"_ustr),
     m_bIsBroadcastEnabled(true)
 {
     //try to register on the root node - if possible
@@ -234,8 +234,8 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
 
     // fill display names
     TDisplayNames aDisplayNameMap;
-    uno::Sequence < OUString > aComponentNames = GetPropertyNames("EntryNames");
-    OUString sDisplayName("/DisplayName");
+    uno::Sequence < OUString > aComponentNames = GetPropertyNames(u"EntryNames"_ustr);
+    OUString sDisplayName(u"/DisplayName"_ustr);
     for(OUString & componentName : asNonConstRange(aComponentNames))
     {
         uno::Sequence< uno::Any > aComponentDisplayNamesValue = GetProperties( { componentName + sDisplayName } );
@@ -271,7 +271,7 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
     if(sScheme.isEmpty())
     {
         //detect current scheme name
-        uno::Sequence < OUString > aCurrent { "ExtendedColorScheme/CurrentColorScheme" };
+        uno::Sequence < OUString > aCurrent { u"ExtendedColorScheme/CurrentColorScheme"_ustr };
         uno::Sequence< uno::Any > aCurrentVal = GetProperties( aCurrent );
         aCurrentVal.getConstArray()[0] >>= sScheme;
     } // if(!sScheme.getLength())
@@ -294,7 +294,7 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
     {
         if ( ExistsScheme(u"default") )
         {
-            aComponentNames = GetPropertyNames("ExtendedColorScheme/ColorSchemes/default");
+            aComponentNames = GetPropertyNames(u"ExtendedColorScheme/ColorSchemes/default"_ustr);
             FillComponentColors(aComponentNames,aDisplayNameMap);
         }
     }
@@ -412,7 +412,7 @@ void ExtendedColorConfig_Impl::ImplCommit()
                 // the default color will never be changed
                 ++pPropValues;
             }
-            SetSetProperties("ExtendedColorScheme/ColorSchemes", aPropValues);
+            SetSetProperties(u"ExtendedColorScheme/ColorSchemes"_ustr, aPropValues);
         }
     }
 
@@ -422,7 +422,7 @@ void ExtendedColorConfig_Impl::ImplCommit()
 void ExtendedColorConfig_Impl::CommitCurrentSchemeName()
 {
     //save current scheme name
-    uno::Sequence < OUString > aCurrent { "ExtendedColorScheme/CurrentColorScheme" };
+    uno::Sequence < OUString > aCurrent { u"ExtendedColorScheme/CurrentColorScheme"_ustr };
     uno::Sequence< uno::Any > aCurrentVal(1);
     aCurrentVal.getArray()[0] <<= m_sLoadedScheme;
     PutProperties(aCurrent, aCurrentVal);
@@ -430,7 +430,7 @@ void ExtendedColorConfig_Impl::CommitCurrentSchemeName()
 
 bool ExtendedColorConfig_Impl::ExistsScheme(std::u16string_view _sSchemeName)
 {
-    OUString sBase("ExtendedColorScheme/ColorSchemes");
+    OUString sBase(u"ExtendedColorScheme/ColorSchemes"_ustr);
 
     uno::Sequence < OUString > aComponentNames = GetPropertyNames(sBase);
     sBase += OUString::Concat("/") + _sSchemeName;
@@ -451,7 +451,7 @@ void ExtendedColorConfig_Impl::SetColorConfigValue(const OUString& _sName, const
 
 void ExtendedColorConfig_Impl::AddScheme(const OUString& rScheme)
 {
-    if(ConfigItem::AddNode("ExtendedColorScheme/ColorSchemes", rScheme))
+    if(ConfigItem::AddNode(u"ExtendedColorScheme/ColorSchemes"_ustr, rScheme))
     {
         m_sLoadedScheme = rScheme;
         Commit();
@@ -461,7 +461,7 @@ void ExtendedColorConfig_Impl::AddScheme(const OUString& rScheme)
 void ExtendedColorConfig_Impl::RemoveScheme(const OUString& rScheme)
 {
     uno::Sequence< OUString > aElements { rScheme };
-    ClearNodeElements("ExtendedColorScheme/ColorSchemes", aElements);
+    ClearNodeElements(u"ExtendedColorScheme/ColorSchemes"_ustr, aElements);
 }
 
 void ExtendedColorConfig_Impl::SettingsChanged()

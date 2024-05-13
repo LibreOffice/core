@@ -203,8 +203,8 @@ SvtLanguageTableImpl::SvtLanguageTableImpl()
         sal_Int32 nType = 0;
         uno::Reference <container::XNameAccess> xNB;
         xNA->getByName(rBcp47) >>= xNB;
-        bool bSuccess = (xNB->getByName("Name") >>= aName) &&
-                        (xNB->getByName("ScriptType") >>= nType);
+        bool bSuccess = (xNB->getByName(u"Name"_ustr) >>= aName) &&
+                        (xNB->getByName(u"ScriptType"_ustr) >>= nType);
         if (bSuccess)
         {
             LanguageTag aLang(rBcp47);

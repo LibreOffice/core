@@ -94,13 +94,13 @@ constexpr OUStringLiteral UNODIALOG_PROPERTY_ALIASES = u"FieldMapping";
 
     OUString SAL_CALL OAddressBookSourceDialogUno::getImplementationName()
     {
-        return "com.sun.star.comp.svtools.OAddressBookSourceDialogUno";
+        return u"com.sun.star.comp.svtools.OAddressBookSourceDialogUno"_ustr;
     }
 
 
     css::uno::Sequence<OUString> SAL_CALL OAddressBookSourceDialogUno::getSupportedServiceNames()
     {
-        return { "com.sun.star.ui.AddressBookSourceDialog" };
+        return { u"com.sun.star.ui.AddressBookSourceDialog"_ustr };
     }
 
 

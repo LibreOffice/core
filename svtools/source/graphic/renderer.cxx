@@ -129,7 +129,7 @@ void SAL_CALL GraphicRendererVCL::release()
 
 OUString SAL_CALL GraphicRendererVCL::getImplementationName()
 {
-    return "com.sun.star.comp.graphic.GraphicRendererVCL";
+    return u"com.sun.star.comp.graphic.GraphicRendererVCL"_ustr;
 }
 
 sal_Bool SAL_CALL GraphicRendererVCL::supportsService( const OUString& ServiceName )
@@ -140,7 +140,7 @@ sal_Bool SAL_CALL GraphicRendererVCL::supportsService( const OUString& ServiceNa
 
 uno::Sequence< OUString > SAL_CALL GraphicRendererVCL::getSupportedServiceNames()
 {
-    return { "com.sun.star.graphic.GraphicRendererVCL" };
+    return { u"com.sun.star.graphic.GraphicRendererVCL"_ustr };
 }
 
 
@@ -166,9 +166,9 @@ rtl::Reference<::comphelper::PropertySetInfo> GraphicRendererVCL::createProperty
 {
     static ::comphelper::PropertyMapEntry const aEntries[] =
     {
-        { OUString("Device"), UNOGRAPHIC_DEVICE, cppu::UnoType<uno::Any>::get(), 0, 0 },
-        { OUString("DestinationRect"), UNOGRAPHIC_DESTINATIONRECT, cppu::UnoType<awt::Rectangle>::get(), 0, 0 },
-        { OUString("RenderData"), UNOGRAPHIC_RENDERDATA, cppu::UnoType<uno::Any>::get(), 0, 0 },
+        { u"Device"_ustr, UNOGRAPHIC_DEVICE, cppu::UnoType<uno::Any>::get(), 0, 0 },
+        { u"DestinationRect"_ustr, UNOGRAPHIC_DESTINATIONRECT, cppu::UnoType<awt::Rectangle>::get(), 0, 0 },
+        { u"RenderData"_ustr, UNOGRAPHIC_RENDERDATA, cppu::UnoType<uno::Any>::get(), 0, 0 },
     };
 
     return rtl::Reference<::comphelper::PropertySetInfo>( new ::comphelper::PropertySetInfo(aEntries) );

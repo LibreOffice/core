@@ -291,7 +291,7 @@ struct EmbeddedObjectRef_Impl
             mxObj->getComponent(), css::uno::UNO_QUERY);
         if (pComponent.is())
         {
-            auto const s = pComponent->dump("");
+            auto const s = pComponent->dump(u""_ustr);
             auto const s1 = OUStringToOString(s, RTL_TEXTENCODING_ISO_8859_1); //TODO
             (void)xmlTextWriterWriteRawLen(
                 pWriter, reinterpret_cast<xmlChar const *>(s1.getStr()), s1.getLength());
@@ -742,7 +742,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const tools::Rectangle &rRect, con
 {
     MapMode aMM( MapUnit::MapAppFont );
     Size aAppFontSz = pOut->LogicToLogic( Size( 0, 8 ), &aMM, nullptr );
-    vcl::Font aFnt( "Noto Sans", aAppFontSz );
+    vcl::Font aFnt( u"Noto Sans"_ustr, aAppFontSz );
     aFnt.SetTransparent( true );
     aFnt.SetColor( COL_LIGHTRED );
     aFnt.SetWeight( WEIGHT_BOLD );
@@ -1022,7 +1022,7 @@ OUString EmbeddedObjectRef::GetChartType()
                                 if( xProp.is())
                                 {
                                     bool bCurrent = false;
-                                    if( xProp->getPropertyValue( "SwapXAndYAxis" ) >>= bCurrent )
+                                    if( xProp->getPropertyValue( u"SwapXAndYAxis"_ustr ) >>= bCurrent )
                                     {
                                         if (bCurrent)
                                             Style += "Bars";

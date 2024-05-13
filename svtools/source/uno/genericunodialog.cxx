@@ -190,7 +190,7 @@ sal_Int16 SAL_CALL OGenericUnoDialog::execute()
 
         if (m_bExecuting)
             throw RuntimeException(
-                    "already executing the dialog (recursive call)",
+                    u"already executing the dialog (recursive call)"_ustr,
                     *this
                   );
 

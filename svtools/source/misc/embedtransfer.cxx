@@ -106,7 +106,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                         if ( xPers.is() )
                         {
                             uno::Reference < embed::XStorage > xStg = comphelper::OStorageHelper::GetTemporaryStorage();
-                            OUString aName( "Dummy" );
+                            OUString aName( u"Dummy"_ustr );
                             SvStream* pStream = nullptr;
                             bool bDeleteStream = false;
                             uno::Sequence < beans::PropertyValue > aEmpty;

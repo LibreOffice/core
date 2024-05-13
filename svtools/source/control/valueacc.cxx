@@ -231,7 +231,7 @@ lang::Locale SAL_CALL ValueItemAcc::getLocale()
 {
     const SolarMutexGuard aSolarGuard;
     uno::Reference< accessibility::XAccessible >    xParent( getAccessibleParent() );
-    lang::Locale                                    aRet( "", "", "" );
+    lang::Locale                                    aRet( u""_ustr, u""_ustr, u""_ustr );
 
     if( xParent.is() )
     {
@@ -609,7 +609,7 @@ lang::Locale SAL_CALL ValueSetAcc::getLocale()
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
     uno::Reference< accessibility::XAccessible >    xParent( getAccessibleParent() );
-    lang::Locale                                    aRet( "", "", "" );
+    lang::Locale                                    aRet( u""_ustr, u""_ustr, u""_ustr );
 
     if( xParent.is() )
     {
@@ -947,14 +947,14 @@ void ValueSetAcc::ThrowIfDisposed(bool bCheckParent)
     {
         SAL_WARN("svx", "Calling disposed object. Throwing exception:");
         throw lang::DisposedException (
-            "object has been already disposed",
+            u"object has been already disposed"_ustr,
             getXWeak());
     }
 
     if (bCheckParent && !mpParent)
     {
         assert(false && "ValueSetAcc not disposed but mpParent == NULL");
-        throw css::uno::RuntimeException("ValueSetAcc not disposed but mpParent == NULL");
+        throw css::uno::RuntimeException(u"ValueSetAcc not disposed but mpParent == NULL"_ustr);
     }
 }
 

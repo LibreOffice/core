@@ -158,7 +158,7 @@ OUString getInstalledLocaleForSystemUILanguage(const css::uno::Sequence<OUString
         }
     }
     if (locale.isEmpty())
-        locale = getInstalledLocaleForLanguage(rLocaleElementNames, "en-US");
+        locale = getInstalledLocaleForLanguage(rLocaleElementNames, u"en-US"_ustr);
     if (locale.isEmpty() && rLocaleElementNames.hasElements())
         locale = rLocaleElementNames[0];
     return locale;

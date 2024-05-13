@@ -345,8 +345,8 @@ public:
 }
 
 TabBarEdit::TabBarEdit(TabBar* pParent)
-    : InterimItemWindow(pParent, "svt/ui/tabbaredit.ui", "TabBarEdit")
-    , m_xEntry(m_xBuilder->weld_entry("entry"))
+    : InterimItemWindow(pParent, u"svt/ui/tabbaredit.ui"_ustr, u"TabBarEdit"_ustr)
+    , m_xEntry(m_xBuilder->weld_entry(u"entry"_ustr))
     , maLoseFocusIdle( "svtools::TabBarEdit maLoseFocusIdle" )
 {
     InitControlBase(m_xEntry.get());
@@ -447,14 +447,14 @@ public:
 
     TabButtons(TabBar* pParent, bool bSheets)
         : InterimItemWindow(pParent,
-                            pParent->IsMirrored() ? OUString("svt/ui/tabbuttonsmirrored.ui")
-                                                  : OUString("svt/ui/tabbuttons.ui"),
-                            "TabButtons")
-        , m_xFirstButton(m_xBuilder->weld_button("first"))
-        , m_xPrevButton(m_xBuilder->weld_button("prev"))
-        , m_xNextButton(m_xBuilder->weld_button("next"))
-        , m_xLastButton(m_xBuilder->weld_button("last"))
-        , m_xAddButton(m_xBuilder->weld_button("add"))
+                            pParent->IsMirrored() ? u"svt/ui/tabbuttonsmirrored.ui"_ustr
+                                                  : u"svt/ui/tabbuttons.ui"_ustr,
+                            u"TabButtons"_ustr)
+        , m_xFirstButton(m_xBuilder->weld_button(u"first"_ustr))
+        , m_xPrevButton(m_xBuilder->weld_button(u"prev"_ustr))
+        , m_xNextButton(m_xBuilder->weld_button(u"next"_ustr))
+        , m_xLastButton(m_xBuilder->weld_button(u"last"_ustr))
+        , m_xAddButton(m_xBuilder->weld_button(u"add"_ustr))
     {
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
         SetPaintTransparent(false);

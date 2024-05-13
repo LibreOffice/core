@@ -312,65 +312,65 @@ OUString AcceleratorExecute::impl_ts_findCommand(const css::awt::KeyEvent& aKey)
         switch( aKey.KeyCode )
         {
         case css::awt::Key::DELETE_TO_BEGIN_OF_LINE:
-            return ".uno:DelToStartOfLine";
+            return u".uno:DelToStartOfLine"_ustr;
         case css::awt::Key::DELETE_TO_END_OF_LINE:
-            return ".uno:DelToEndOfLine";
+            return u".uno:DelToEndOfLine"_ustr;
         case css::awt::Key::DELETE_TO_BEGIN_OF_PARAGRAPH:
-            return ".uno:DelToStartOfPara";
+            return u".uno:DelToStartOfPara"_ustr;
         case css::awt::Key::DELETE_TO_END_OF_PARAGRAPH:
-            return ".uno:DelToEndOfPara";
+            return u".uno:DelToEndOfPara"_ustr;
         case css::awt::Key::DELETE_WORD_BACKWARD:
-            return ".uno:DelToStartOfWord";
+            return u".uno:DelToStartOfWord"_ustr;
         case css::awt::Key::DELETE_WORD_FORWARD:
-            return ".uno:DelToEndOfWord";
+            return u".uno:DelToEndOfWord"_ustr;
         case css::awt::Key::INSERT_LINEBREAK:
-            return ".uno:InsertLinebreak";
+            return u".uno:InsertLinebreak"_ustr;
         case css::awt::Key::INSERT_PARAGRAPH:
-            return ".uno:InsertPara";
+            return u".uno:InsertPara"_ustr;
         case css::awt::Key::MOVE_WORD_BACKWARD:
-            return ".uno:GoToPrevWord";
+            return u".uno:GoToPrevWord"_ustr;
         case css::awt::Key::MOVE_WORD_FORWARD:
-            return ".uno:GoToNextWord";
+            return u".uno:GoToNextWord"_ustr;
         case css::awt::Key::MOVE_TO_BEGIN_OF_LINE:
-            return ".uno:GoToStartOfLine";
+            return u".uno:GoToStartOfLine"_ustr;
         case css::awt::Key::MOVE_TO_END_OF_LINE:
-            return ".uno:GoToEndOfLine";
+            return u".uno:GoToEndOfLine"_ustr;
         case css::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
-            return ".uno:GoToStartOfPara";
+            return u".uno:GoToStartOfPara"_ustr;
         case css::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
-            return ".uno:GoToEndOfPara";
+            return u".uno:GoToEndOfPara"_ustr;
         case css::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
-            return ".uno:GoToStartOfDoc";
+            return u".uno:GoToStartOfDoc"_ustr;
         case css::awt::Key::MOVE_TO_END_OF_DOCUMENT:
-            return ".uno:GoToEndOfDoc";
+            return u".uno:GoToEndOfDoc"_ustr;
         case css::awt::Key::SELECT_BACKWARD:
-            return ".uno:CharLeftSel";
+            return u".uno:CharLeftSel"_ustr;
         case css::awt::Key::SELECT_FORWARD:
-            return ".uno:CharRightSel";
+            return u".uno:CharRightSel"_ustr;
         case css::awt::Key::SELECT_WORD_BACKWARD:
-            return ".uno:WordLeftSel";
+            return u".uno:WordLeftSel"_ustr;
         case css::awt::Key::SELECT_WORD_FORWARD:
-            return ".uno:WordRightSel";
+            return u".uno:WordRightSel"_ustr;
         case css::awt::Key::SELECT_WORD:
-            return ".uno:SelectWord";
+            return u".uno:SelectWord"_ustr;
         case css::awt::Key::SELECT_LINE:
             return OUString();
         case css::awt::Key::SELECT_PARAGRAPH:
-            return ".uno:SelectText";
+            return u".uno:SelectText"_ustr;
         case css::awt::Key::SELECT_TO_BEGIN_OF_LINE:
-            return ".uno:StartOfLineSel";
+            return u".uno:StartOfLineSel"_ustr;
         case css::awt::Key::SELECT_TO_END_OF_LINE:
-            return ".uno:EndOfLineSel";
+            return u".uno:EndOfLineSel"_ustr;
         case css::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
-            return ".uno:StartOfParaSel";
+            return u".uno:StartOfParaSel"_ustr;
         case css::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
-            return ".uno:EndOfParaSel";
+            return u".uno:EndOfParaSel"_ustr;
         case css::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
-            return ".uno:StartOfDocumentSel";
+            return u".uno:StartOfDocumentSel"_ustr;
         case css::awt::Key::SELECT_TO_END_OF_DOCUMENT:
-            return ".uno:EndOfDocumentSel";
+            return u".uno:EndOfDocumentSel"_ustr;
         case css::awt::Key::SELECT_ALL:
-            return ".uno:SelectAll";
+            return u".uno:SelectAll"_ustr;
         default:
             break;
         }

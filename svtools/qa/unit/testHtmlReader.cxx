@@ -62,7 +62,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf114428)
 
     // This was '<?xml version="1.0" encoding="utf-8"?> hello', XML declaration
     // was not ignored.
-    CPPUNIT_ASSERT_EQUAL(OUString("hello"), xParser->m_aDocument.trim());
+    CPPUNIT_ASSERT_EQUAL(u"hello"_ustr, xParser->m_aDocument.trim());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testLineBreak)
@@ -97,7 +97,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCdata)
     // - Expected: B &uuml; &lt;
     // - Actual  :
     // i.e. the content inside CDATA was lost.
-    CPPUNIT_ASSERT_EQUAL(OUString("B &uuml; &lt;"), xParser->m_aCdata);
+    CPPUNIT_ASSERT_EQUAL(u"B &uuml; &lt;"_ustr, xParser->m_aCdata);
 }
 }
 

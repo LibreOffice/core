@@ -532,8 +532,8 @@ namespace svt
         {
             // create a content for the current folder root
             Reference< XResultSet > xResultSet;
-            Sequence< OUString > aContentProperties{ "Title", "DateModified", "DateCreated",
-                                                     "IsFolder" };
+            Sequence< OUString > aContentProperties{ u"Title"_ustr, u"DateModified"_ustr, u"DateCreated"_ustr,
+                                                     u"IsFolder"_ustr };
 
             // get the set of sub contents in the folder
             try

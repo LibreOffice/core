@@ -291,7 +291,7 @@ sal_Int32 SvtRulerAccessible::getBackground(  )
 // XServiceInfo
 OUString SAL_CALL SvtRulerAccessible::getImplementationName()
 {
-    return "com.sun.star.comp.ui.SvtRulerAccessible";
+    return u"com.sun.star.comp.ui.SvtRulerAccessible"_ustr;
 }
 
 sal_Bool SAL_CALL SvtRulerAccessible::supportsService( const OUString& sServiceName )
@@ -301,7 +301,7 @@ sal_Bool SAL_CALL SvtRulerAccessible::supportsService( const OUString& sServiceN
 
 Sequence< OUString > SAL_CALL SvtRulerAccessible::getSupportedServiceNames()
 {
-    return { "com.sun.star.accessibility.AccessibleContext" };
+    return { u"com.sun.star.accessibility.AccessibleContext"_ustr };
 }
 
 //=====  XTypeProvider  =======================================================

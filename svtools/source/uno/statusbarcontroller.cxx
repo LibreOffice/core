@@ -276,7 +276,7 @@ void SAL_CALL StatusbarController::statusChanged( const FeatureStateEvent& Event
         if ( Event.State >>= aStrValue )
             pStatusBar->SetItemText( m_nID, aStrValue );
         else if ( !Event.State.hasValue() )
-            pStatusBar->SetItemText( m_nID, "" );
+            pStatusBar->SetItemText( m_nID, u""_ustr );
     }
 }
 

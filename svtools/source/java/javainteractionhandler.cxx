@@ -184,8 +184,8 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
         {
             g_JavaEvents.bDisabledHandled = true;
             // Java disabled. Give user a chance to enable Java inside Office.
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "svt/ui/javadisableddialog.ui"));
-            std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("JavaDisabledDialog"));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, u"svt/ui/javadisableddialog.ui"_ustr));
+            std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog(u"JavaDisabledDialog"_ustr));
             nResult = xQueryBox->run();
             if ( nResult == RET_YES )
             {

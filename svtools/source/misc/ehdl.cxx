@@ -62,7 +62,7 @@ static DialogMask aWndFunc(
     else if ( (nFlags & DialogMask::ButtonsYesNo) == DialogMask::ButtonsYesNo )
         eButtonsType = VclButtonsType::YesNo;
 
-    OUString aErr("$(ACTION)$(ERROR)");
+    OUString aErr(u"$(ACTION)$(ERROR)"_ustr);
     OUString aAction(rAction);
     if ( !aAction.isEmpty() )
         aAction += ":\n";

@@ -189,7 +189,7 @@ uno::Sequence< OUString> GetPropertyNames(std::u16string_view rScheme)
 }
 
 ColorConfig_Impl::ColorConfig_Impl() :
-    ConfigItem("Office.UI/ColorScheme")
+    ConfigItem(u"Office.UI/ColorScheme"_ustr)
 {
     //try to register on the root node - if possible
     uno::Sequence < OUString > aNames(1);
@@ -213,7 +213,7 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
     if(sScheme.isEmpty())
     {
         //detect current scheme name
-        uno::Sequence < OUString > aCurrent { "CurrentColorScheme" };
+        uno::Sequence < OUString > aCurrent { u"CurrentColorScheme"_ustr };
         uno::Sequence< uno::Any > aCurrentVal = GetProperties( aCurrent );
         aCurrentVal.getConstArray()[0] >>= sScheme;
     }
@@ -292,7 +292,7 @@ void ColorConfig_Impl::ImplCommit()
              nIndex++;
         }
     }
-    SetSetProperties("ColorSchemes", aPropValues);
+    SetSetProperties(u"ColorSchemes"_ustr, aPropValues);
 
     CommitCurrentSchemeName();
 }
@@ -300,7 +300,7 @@ void ColorConfig_Impl::ImplCommit()
 void ColorConfig_Impl::CommitCurrentSchemeName()
 {
     //save current scheme name
-    uno::Sequence < OUString > aCurrent { "CurrentColorScheme" };
+    uno::Sequence < OUString > aCurrent { u"CurrentColorScheme"_ustr };
     uno::Sequence< uno::Any > aCurrentVal(1);
     aCurrentVal.getArray()[0] <<= m_sLoadedScheme;
     PutProperties(aCurrent, aCurrentVal);
@@ -317,12 +317,12 @@ void ColorConfig_Impl::SetColorConfigValue(ColorConfigEntry eValue, const ColorC
 
 uno::Sequence< OUString> ColorConfig_Impl::GetSchemeNames()
 {
-    return GetNodeNames("ColorSchemes");
+    return GetNodeNames(u"ColorSchemes"_ustr);
 }
 
 void ColorConfig_Impl::AddScheme(const OUString& rScheme)
 {
-    if(ConfigItem::AddNode("ColorSchemes", rScheme))
+    if(ConfigItem::AddNode(u"ColorSchemes"_ustr, rScheme))
     {
         m_sLoadedScheme = rScheme;
         Commit();
@@ -332,7 +332,7 @@ void ColorConfig_Impl::AddScheme(const OUString& rScheme)
 void ColorConfig_Impl::RemoveScheme(const OUString& rScheme)
 {
     uno::Sequence< OUString > aElements { rScheme };
-    ClearNodeElements("ColorSchemes", aElements);
+    ClearNodeElements(u"ColorSchemes"_ustr, aElements);
 }
 
 void ColorConfig_Impl::SettingsChanged()

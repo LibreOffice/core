@@ -229,7 +229,7 @@ void Ruler::ImplInit( WinBits nWinBits )
 
     // Setup the default size
     tools::Rectangle aRect;
-    GetOutDev()->GetTextBoundRect( aRect, "0123456789" );
+    GetOutDev()->GetTextBoundRect( aRect, u"0123456789"_ustr );
     tools::Long nDefHeight = aRect.GetHeight() + RULER_OFF * 2 + ruler_tab.textoff * 2 + mnBorderWidth;
 
     Size aDefSize;

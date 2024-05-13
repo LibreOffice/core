@@ -1184,10 +1184,10 @@ namespace
 
 const std::map<UScriptCode, std::vector<OUString>> distCjkMap =
 {
-    { USCRIPT_KOREAN,  { " KR", "Korean"} },   // Korean
-    { USCRIPT_JAPANESE, {" JP", "Japanese"} } , // Japanese
-    { USCRIPT_SIMPLIFIED_HAN, {" SC", " GB", "S Chinese"} }, // Simplified Chinese Family
-    { USCRIPT_TRADITIONAL_HAN, {" TC", " HC", " TW", " HK", " MO", "T Chinese"} }// Traditional Chinese Family
+    { USCRIPT_KOREAN,  { u" KR"_ustr, u"Korean"_ustr} },   // Korean
+    { USCRIPT_JAPANESE, {u" JP"_ustr, u"Japanese"_ustr} } , // Japanese
+    { USCRIPT_SIMPLIFIED_HAN, {u" SC"_ustr, u" GB"_ustr, u"S Chinese"_ustr} }, // Simplified Chinese Family
+    { USCRIPT_TRADITIONAL_HAN, {u" TC"_ustr, u" HC"_ustr, u" TW"_ustr, u" HK"_ustr, u" MO"_ustr, u"T Chinese"_ustr} }// Traditional Chinese Family
 };
 namespace
 {

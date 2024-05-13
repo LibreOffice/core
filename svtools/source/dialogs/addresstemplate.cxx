@@ -286,9 +286,9 @@ void AssignmentPersistentData::ImplCommit()
 
 
     AssignmentPersistentData::AssignmentPersistentData()
-        :ConfigItem("Office.DataAccess/AddressBook")
+        :ConfigItem(u"Office.DataAccess/AddressBook"_ustr)
     {
-        const Sequence< OUString > aStoredNames = GetNodeNames("Fields");
+        const Sequence< OUString > aStoredNames = GetNodeNames(u"Fields"_ustr);
         m_aStoredFields.insert(aStoredNames.begin(), aStoredNames.end());
     }
 
@@ -348,7 +348,7 @@ void AssignmentPersistentData::ImplCommit()
         }
 
         // Fields
-        OUString sDescriptionNodePath("Fields");
+        OUString sDescriptionNodePath(u"Fields"_ustr);
 
         // Fields/<field>
         OUString sFieldElementNodePath = sDescriptionNodePath + "/" + _rLogicalName;
@@ -376,7 +376,7 @@ void AssignmentPersistentData::ImplCommit()
             return;
 
         Sequence< OUString > aNames(&_rLogicalName, 1);
-        ClearNodeElements("Fields", aNames);
+        ClearNodeElements(u"Fields"_ustr, aNames);
     }
 
 
@@ -461,7 +461,7 @@ void AssignmentPersistentData::ImplCommit()
     // = AddressBookSourceDialog
     AddressBookSourceDialog::AddressBookSourceDialog(weld::Window* pParent,
             const Reference< XComponentContext >& _rxORB )
-        : GenericDialogController(pParent, "svt/ui/addresstemplatedialog.ui", "AddressTemplateDialog")
+        : GenericDialogController(pParent, u"svt/ui/addresstemplatedialog.ui"_ustr, u"AddressTemplateDialog"_ustr)
         , m_sNoFieldSelection(SvtResId(STR_NO_FIELD_SELECTION))
         , m_xORB(_rxORB)
         , m_pImpl( new AddressBookSourceDialogData )
@@ -472,7 +472,7 @@ void AssignmentPersistentData::ImplCommit()
     AddressBookSourceDialog::AddressBookSourceDialog(weld::Window* pParent, const Reference< XComponentContext >& _rxORB,
         const Reference< XDataSource >& _rxTransientDS, const OUString& _rDataSourceName,
         const OUString& _rTable, const Sequence< AliasProgrammaticPair >& _rMapping )
-        : GenericDialogController(pParent, "svt/ui/addresstemplatedialog.ui", "AddressTemplateDialog")
+        : GenericDialogController(pParent, u"svt/ui/addresstemplatedialog.ui"_ustr, u"AddressTemplateDialog"_ustr)
         , m_sNoFieldSelection(SvtResId(STR_NO_FIELD_SELECTION))
         , m_xORB(_rxORB)
         , m_pImpl( new AddressBookSourceDialogData( _rxTransientDS, _rDataSourceName, _rTable, _rMapping ) )
@@ -482,12 +482,12 @@ void AssignmentPersistentData::ImplCommit()
 
     void AddressBookSourceDialog::implConstruct()
     {
-        m_xOKButton = m_xBuilder->weld_button("ok");
-        m_xDatasource = m_xBuilder->weld_combo_box("datasource");
-        m_xAdministrateDatasources = m_xBuilder->weld_button("admin");
-        m_xTable = m_xBuilder->weld_combo_box("datatable");
-        m_xFieldScroller = m_xBuilder->weld_scrolled_window("scrollwindow", true);
-        m_xGrid = m_xBuilder->weld_widget("grid");
+        m_xOKButton = m_xBuilder->weld_button(u"ok"_ustr);
+        m_xDatasource = m_xBuilder->weld_combo_box(u"datasource"_ustr);
+        m_xAdministrateDatasources = m_xBuilder->weld_button(u"admin"_ustr);
+        m_xTable = m_xBuilder->weld_combo_box(u"datatable"_ustr);
+        m_xFieldScroller = m_xBuilder->weld_scrolled_window(u"scrollwindow"_ustr, true);
+        m_xGrid = m_xBuilder->weld_widget(u"grid"_ustr);
 
         for (sal_Int32 row=0; row<FIELD_PAIRS_VISIBLE; ++row)
         {
@@ -1080,7 +1080,7 @@ void AssignmentPersistentData::ImplCommit()
                 if ( xProp.is() )
                 {
                     OUString sName;
-                    xProp->getPropertyValue("DataSourceName") >>= sName;
+                    xProp->getPropertyValue(u"DataSourceName"_ustr) >>= sName;
 
                     INetURLObject aURL( sName );
                     if( aURL.GetProtocol() != INetProtocol::NotValid )

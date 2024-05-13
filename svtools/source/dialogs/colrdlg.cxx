@@ -74,7 +74,7 @@ short SvColorDialog::Execute(weld::Window* pParent)
 
         Sequence< PropertyValue > props{
             comphelper::makePropertyValue(sColor, maColor),
-            comphelper::makePropertyValue("Mode", static_cast<sal_Int16>(meMode))
+            comphelper::makePropertyValue(u"Mode"_ustr, static_cast<sal_Int16>(meMode))
         };
 
         xPropertyAccess->setPropertyValues( props );
@@ -118,7 +118,7 @@ void SvColorDialog::ExecuteAsync(weld::Window* pParent, const std::function<void
 
         Sequence< PropertyValue > props{
             comphelper::makePropertyValue(sColor, maColor),
-            comphelper::makePropertyValue("Mode", static_cast<sal_Int16>(meMode))
+            comphelper::makePropertyValue(u"Mode"_ustr, static_cast<sal_Int16>(meMode))
         };
 
         xPropertyAccess->setPropertyValues( props );

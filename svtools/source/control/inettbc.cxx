@@ -314,7 +314,7 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
             ResultSetInclude eInclude = INCLUDE_FOLDERS_AND_DOCUMENTS;
             if ( bOnlyDirectories )
                 eInclude = INCLUDE_FOLDERS_ONLY;
-            uno::Reference< XDynamicResultSet > xDynResultSet = aCnt.createDynamicCursor( { "Title", "IsFolder" }, eInclude );
+            uno::Reference< XDynamicResultSet > xDynResultSet = aCnt.createDynamicCursor( { u"Title"_ustr, u"IsFolder"_ustr }, eInclude );
 
             uno::Reference < XAnyCompareFactory > xCompare;
             uno::Reference < XSortedDynamicResultSetFactory > xSRSFac =
@@ -466,7 +466,7 @@ void SvtMatchContext_Impl::doExecute()
                                     css::ucb::UniversalContentBroker::create(
                                         ctx));
                             css::uno::Sequence< css::beans::Property > prop{
-                                { /* Name       */ "IsFolder",
+                                { /* Name       */ u"IsFolder"_ustr,
                                   /* Handle     */ -1,
                                   /* Type       */ cppu::UnoType< bool >::get(),
                                   /* Attributes */ {} }
@@ -488,7 +488,7 @@ void SvtMatchContext_Impl::doExecute()
                                 }
                                 res = proc->execute(
                                     css::ucb::Command(
-                                        "getPropertyValues", -1,
+                                        u"getPropertyValues"_ustr, -1,
                                         css::uno::Any(prop)),
                                     id,
                                     css::uno::Reference<
@@ -1038,7 +1038,7 @@ OUString SvtURLBox::GetURL()
         {
             OUString aFileURL;
 
-            Any aAny = UCBContentHelper::GetProperty(aURL, "CasePreservingURL");
+            Any aAny = UCBContentHelper::GetProperty(aURL, u"CasePreservingURL"_ustr);
             bool success = (aAny >>= aFileURL);
             OUString aTitle;
             if(success)

@@ -232,7 +232,7 @@ static OUString GetImageExtensionByFactory_Impl( const OUString& rURL )
         // get the TypeDetection service to access all registered types
         css::uno::Reference < css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         css::uno::Reference < css::document::XTypeDetection > xTypeDetector(
-            xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", xContext),
+            xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.TypeDetection"_ustr, xContext),
             css::uno::UNO_QUERY );
 
         OUString aInternalType = xTypeDetector->queryTypeByURL( rURL );
@@ -309,11 +309,11 @@ static bool GetVolumeProperties_Impl( ::ucbhelper::Content& rContent, svtools::V
 
     try
     {
-        bRet = ( ( rContent.getPropertyValue( "IsVolume" ) >>= rVolumeInfo.m_bIsVolume ) &&
-                 ( rContent.getPropertyValue( "IsRemote" ) >>= rVolumeInfo.m_bIsRemote ) &&
-                 ( rContent.getPropertyValue( "IsRemoveable" ) >>= rVolumeInfo.m_bIsRemoveable ) &&
-                 ( rContent.getPropertyValue( "IsFloppy" ) >>= rVolumeInfo.m_bIsFloppy ) &&
-                 ( rContent.getPropertyValue( "IsCompactDisc" ) >>= rVolumeInfo.m_bIsCompactDisc ) );
+        bRet = ( ( rContent.getPropertyValue( u"IsVolume"_ustr ) >>= rVolumeInfo.m_bIsVolume ) &&
+                 ( rContent.getPropertyValue( u"IsRemote"_ustr ) >>= rVolumeInfo.m_bIsRemote ) &&
+                 ( rContent.getPropertyValue( u"IsRemoveable"_ustr ) >>= rVolumeInfo.m_bIsRemoveable ) &&
+                 ( rContent.getPropertyValue( u"IsFloppy"_ustr ) >>= rVolumeInfo.m_bIsFloppy ) &&
+                 ( rContent.getPropertyValue( u"IsCompactDisc"_ustr ) >>= rVolumeInfo.m_bIsCompactDisc ) );
     }
     catch( const css::uno::RuntimeException& )
     {

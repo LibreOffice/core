@@ -33,8 +33,8 @@ RecordItemWindowBase::RecordItemWindowBase(std::unique_ptr<weld::Entry> xEntry)
 RecordItemWindowBase::~RecordItemWindowBase() {}
 
 RecordItemWindow::RecordItemWindow(vcl::Window* pParent)
-    : InterimItemWindow(pParent, "svx/ui/absrecbox.ui", "AbsRecBox")
-    , RecordItemWindowBase(m_xBuilder->weld_entry("entry-frame"))
+    : InterimItemWindow(pParent, u"svx/ui/absrecbox.ui"_ustr, u"AbsRecBox"_ustr)
+    , RecordItemWindowBase(m_xBuilder->weld_entry(u"entry-frame"_ustr))
 {
     InitControlBase(m_xWidget.get());
 

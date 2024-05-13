@@ -115,10 +115,10 @@ void SvObjectServerList::FillInsertObjects()
 
         uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", uno::Any(OUString( "/org.openoffice.Office.Embedding/ObjectNames" ))}
+            {"nodepath", uno::Any(u"/org.openoffice.Office.Embedding/ObjectNames"_ustr)}
         }));
         uno::Reference< container::XNameAccess > xNameAccess(
-            sProviderMSFactory->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess", aArguments ),
+            sProviderMSFactory->createInstanceWithArguments( u"com.sun.star.configuration.ConfigurationAccess"_ustr, aArguments ),
             uno::UNO_QUERY );
 
         if( xNameAccess.is())
@@ -133,8 +133,8 @@ void SvObjectServerList::FillInsertObjects()
                 {
                     OUString aUIName;
                     OUString aClassID;
-                    xEntry->getByName("ObjectUIName") >>= aUIName;
-                    xEntry->getByName("ClassID") >>= aClassID;
+                    xEntry->getByName(u"ObjectUIName"_ustr) >>= aUIName;
+                    xEntry->getByName(u"ClassID"_ustr) >>= aClassID;
 
                     if ( !aUIName.isEmpty() )
                     {

@@ -24,49 +24,49 @@ namespace {
 class RestartDialog : public weld::GenericDialogController{
 public:
     RestartDialog(weld::Window* parent, svtools::RestartReason reason)
-        : GenericDialogController(parent, "svt/ui/restartdialog.ui", "RestartDialog")
-        , btnYes_(m_xBuilder->weld_button("yes"))
-        , btnNo_(m_xBuilder->weld_button("no"))
+        : GenericDialogController(parent, u"svt/ui/restartdialog.ui"_ustr, u"RestartDialog"_ustr)
+        , btnYes_(m_xBuilder->weld_button(u"yes"_ustr))
+        , btnNo_(m_xBuilder->weld_button(u"no"_ustr))
     {
         switch (reason) {
         case svtools::RESTART_REASON_JAVA:
-            reason_ = m_xBuilder->weld_widget("reason_java");
+            reason_ = m_xBuilder->weld_widget(u"reason_java"_ustr);
             break;
         case svtools::RESTART_REASON_BIBLIOGRAPHY_INSTALL:
-            reason_ = m_xBuilder->weld_widget("reason_bibliography_install");
+            reason_ = m_xBuilder->weld_widget(u"reason_bibliography_install"_ustr);
             break;
         case svtools::RESTART_REASON_MAILMERGE_INSTALL:
-            reason_ = m_xBuilder->weld_widget("reason_mailmerge_install");
+            reason_ = m_xBuilder->weld_widget(u"reason_mailmerge_install"_ustr);
             break;
         case svtools::RESTART_REASON_LANGUAGE_CHANGE:
-            reason_ = m_xBuilder->weld_widget("reason_language_change");
+            reason_ = m_xBuilder->weld_widget(u"reason_language_change"_ustr);
             break;
         case svtools::RESTART_REASON_ADDING_PATH:
-            reason_ = m_xBuilder->weld_widget("reason_adding_path");
+            reason_ = m_xBuilder->weld_widget(u"reason_adding_path"_ustr);
             break;
         case svtools::RESTART_REASON_ASSIGNING_JAVAPARAMETERS:
-            reason_ = m_xBuilder->weld_widget("reason_assigning_javaparameters");
+            reason_ = m_xBuilder->weld_widget(u"reason_assigning_javaparameters"_ustr);
             break;
         case svtools::RESTART_REASON_ASSIGNING_FOLDERS:
-            reason_ = m_xBuilder->weld_widget("reason_assigning_folders");
+            reason_ = m_xBuilder->weld_widget(u"reason_assigning_folders"_ustr);
             break;
         case svtools::RESTART_REASON_EXP_FEATURES:
-            reason_ = m_xBuilder->weld_widget("reason_exp_features");
+            reason_ = m_xBuilder->weld_widget(u"reason_exp_features"_ustr);
             break;
         case svtools::RESTART_REASON_EXTENSION_INSTALL:
-            reason_ = m_xBuilder->weld_widget("reason_extension_install");
+            reason_ = m_xBuilder->weld_widget(u"reason_extension_install"_ustr);
             break;
         case svtools::RESTART_REASON_SKIA:
-            reason_ = m_xBuilder->weld_widget("reason_skia");
+            reason_ = m_xBuilder->weld_widget(u"reason_skia"_ustr);
             break;
         case svtools::RESTART_REASON_OPENCL:
-            reason_ = m_xBuilder->weld_widget("reason_opencl");
+            reason_ = m_xBuilder->weld_widget(u"reason_opencl"_ustr);
             break;
         case svtools::RESTART_REASON_THREADING:
-            reason_ = m_xBuilder->weld_widget("reason_threading");
+            reason_ = m_xBuilder->weld_widget(u"reason_threading"_ustr);
             break;
         case svtools::RESTART_REASON_UI_CHANGE:
-            reason_ = m_xBuilder->weld_widget("reason_uichange");
+            reason_ = m_xBuilder->weld_widget(u"reason_uichange"_ustr);
             break;
         default:
             assert(false); // this cannot happen

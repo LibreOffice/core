@@ -135,7 +135,7 @@ void SAL_CALL SvFilterOptionsDialog::initialize(const uno::Sequence<uno::Any>& r
 // XServiceInfo
 OUString SAL_CALL SvFilterOptionsDialog::getImplementationName()
 {
-    return "com.sun.star.svtools.SvFilterOptionsDialog";
+    return u"com.sun.star.svtools.SvFilterOptionsDialog"_ustr;
 }
 sal_Bool SAL_CALL SvFilterOptionsDialog::supportsService( const OUString& rServiceName )
 {
@@ -143,7 +143,7 @@ sal_Bool SAL_CALL SvFilterOptionsDialog::supportsService( const OUString& rServi
 }
 uno::Sequence< OUString > SAL_CALL SvFilterOptionsDialog::getSupportedServiceNames()
 {
-    return { "com.sun.star.ui.dialogs.FilterOptionsDialog" };
+    return { u"com.sun.star.ui.dialogs.FilterOptionsDialog"_ustr };
 }
 
 // XPropertyAccess
@@ -252,16 +252,16 @@ void SvFilterOptionsDialog::setSourceDocument( const uno::Reference< lang::XComp
     if ( !xServiceInfo.is() )
         return;
 
-    if ( xServiceInfo->supportsService("com.sun.star.presentation.PresentationDocument") )
+    if ( xServiceInfo->supportsService(u"com.sun.star.presentation.PresentationDocument"_ustr) )
         aConfigPath = "Office.Impress/Layout/Other/MeasureUnit";
-    else if ( xServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument") )
+    else if ( xServiceInfo->supportsService(u"com.sun.star.drawing.DrawingDocument"_ustr) )
         aConfigPath = "Office.Draw/Layout/Other/MeasureUnit";
     else
     {
         mbGraphicsSource = false;
-        if ( xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument") )
+        if ( xServiceInfo->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr) )
             aConfigPath = "Office.Calc/Layout/Other/MeasureUnit";
-        else if ( xServiceInfo->supportsService("com.sun.star.text.TextDocument") )
+        else if ( xServiceInfo->supportsService(u"com.sun.star.text.TextDocument"_ustr) )
             aConfigPath = "Office.Writer/Layout/Other/MeasureUnit";
     }
     if ( !aConfigPath.isEmpty() )

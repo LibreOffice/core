@@ -166,7 +166,7 @@ void getMacroFromAny(
     if (bNone)
     {
         // return empty macro
-        rMacro = SvxMacro( "", "" );
+        rMacro = SvxMacro( u""_ustr, u""_ustr );
     }
     else
     {
@@ -221,7 +221,7 @@ void SvBaseEventDescriptor::replaceByName(
     rElement >>= aSequence;
 
     // perform replace (in subclass)
-    SvxMacro aMacro("","");
+    SvxMacro aMacro(u""_ustr,u""_ustr);
     getMacroFromAny(aMacro, rElement);
     replaceByName(nMacroID, aMacro);
 }
@@ -237,7 +237,7 @@ Any SvBaseEventDescriptor::getByName(
 
     // perform get (in subclass)
     Any aAny;
-    SvxMacro aMacro( "", "" );
+    SvxMacro aMacro( u""_ustr, u""_ustr );
     getByName(aMacro, nMacroID);
     getAnyFromMacro(aAny, aMacro);
     return aAny;
@@ -335,7 +335,7 @@ void SvEventDescriptor::getByName(
     if (rItem.HasMacro(nEvent))
         rMacro = rItem.GetMacro(nEvent);
     else
-        rMacro = SvxMacro("", "");
+        rMacro = SvxMacro(u""_ustr, u""_ustr);
 }
 
 SvDetachedEventDescriptor::SvDetachedEventDescriptor(
@@ -363,7 +363,7 @@ sal_Int16 SvDetachedEventDescriptor::getIndex(const SvMacroItemId nID) const
 
 OUString SvDetachedEventDescriptor::getImplementationName()
 {
-    return "SvDetachedEventDescriptor";
+    return u"SvDetachedEventDescriptor"_ustr;
 }
 
 
@@ -435,7 +435,7 @@ void SvMacroTableEventDescriptor::copyMacrosIntoTable(
         const SvMacroItemId nEvent = mpSupportedMacroItems[i].mnEvent;
         if (hasById(nEvent))
         {
-            SvxMacro& rMacro = rMacroTable.Insert(nEvent, SvxMacro("", ""));
+            SvxMacro& rMacro = rMacroTable.Insert(nEvent, SvxMacro(u""_ustr, u""_ustr));
             getByName(rMacro, nEvent);
         }
     }

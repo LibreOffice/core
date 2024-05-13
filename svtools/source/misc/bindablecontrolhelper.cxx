@@ -46,7 +46,7 @@ static bool lcl_isNamedRange( const OUString& sAddress, const uno::Reference< fr
     try
     {
         uno::Reference< beans::XPropertySet > xPropSet( xModel, uno::UNO_QUERY_THROW );
-        uno::Reference< container::XNameAccess > xNamed( xPropSet->getPropertyValue( "NamedRanges" ), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xNamed( xPropSet->getPropertyValue( u"NamedRanges"_ustr ), uno::UNO_QUERY_THROW );
         xReferrer.set ( xNamed->getByName( sAddress ), uno::UNO_QUERY );
     }
     catch( uno::Exception& /*e*/ )
@@ -81,15 +81,15 @@ BindableControlHelper::ApplyListSourceAndBindableData( const css::uno::Reference
          // RefCell - convert from XL
          // pretend we converted the imported string address into the
          // appropriate address structure
-         uno::Reference< beans::XPropertySet > xConvertor( xFac->createInstance( "com.sun.star.table.CellAddressConversion"), uno::UNO_QUERY );
+         uno::Reference< beans::XPropertySet > xConvertor( xFac->createInstance( u"com.sun.star.table.CellAddressConversion"_ustr), uno::UNO_QUERY );
          css::table::CellAddress aAddress;
          if ( xConvertor.is() )
          {
              // we need this service to properly convert XL notation also
              // Should be easy to extend
-             xConvertor->setPropertyValue( "ReferenceSheet", uno::Any( nRefTab ) );
-             xConvertor->setPropertyValue( "XLA1Representation", uno::Any( rsCtrlSource ) );
-             xConvertor->getPropertyValue( "Address" ) >>= aAddress;
+             xConvertor->setPropertyValue( u"ReferenceSheet"_ustr, uno::Any( nRefTab ) );
+             xConvertor->setPropertyValue( u"XLA1Representation"_ustr, uno::Any( rsCtrlSource ) );
+             xConvertor->getPropertyValue( u"Address"_ustr ) >>= aAddress;
          }
 
          beans::NamedValue aArg1;
@@ -97,7 +97,7 @@ BindableControlHelper::ApplyListSourceAndBindableData( const css::uno::Reference
          aArg1.Value <<= aAddress;
 
          uno::Sequence< uno::Any > aArgs{ uno::Any(aArg1) };
-         uno::Reference< form::binding::XValueBinding > xBinding( xFac->createInstanceWithArguments( "com.sun.star.table.CellValueBinding", aArgs ), uno::UNO_QUERY );
+         uno::Reference< form::binding::XValueBinding > xBinding( xFac->createInstanceWithArguments( u"com.sun.star.table.CellValueBinding"_ustr, aArgs ), uno::UNO_QUERY );
          xBindable->setValueBinding( xBinding );
     }
     else if ( xBindable.is() ) // reset it
@@ -110,7 +110,7 @@ BindableControlHelper::ApplyListSourceAndBindableData( const css::uno::Reference
          // RefCell - convert from XL
          // pretend we converted the imported string address into the
          // appropriate address structure
-         uno::Reference< beans::XPropertySet > xConvertor( xFac->createInstance( "com.sun.star.table.CellRangeAddressConversion"), uno::UNO_QUERY );
+         uno::Reference< beans::XPropertySet > xConvertor( xFac->createInstance( u"com.sun.star.table.CellRangeAddressConversion"_ustr), uno::UNO_QUERY );
          css::table::CellRangeAddress aAddress;
          if ( xConvertor.is() )
          {
@@ -118,9 +118,9 @@ BindableControlHelper::ApplyListSourceAndBindableData( const css::uno::Reference
              {
                  // we need this service to properly convert XL notation also
                  // Should be easy to extend
-                 xConvertor->setPropertyValue( "ReferenceSheet", uno::Any( nRefTab ) );
-                 xConvertor->setPropertyValue( "XLA1Representation", uno::Any( rsRowSource ) );
-                 xConvertor->getPropertyValue( "Address" ) >>= aAddress;
+                 xConvertor->setPropertyValue( u"ReferenceSheet"_ustr, uno::Any( nRefTab ) );
+                 xConvertor->setPropertyValue( u"XLA1Representation"_ustr, uno::Any( rsRowSource ) );
+                 xConvertor->getPropertyValue( u"Address"_ustr ) >>= aAddress;
              }
          }
 
@@ -129,7 +129,7 @@ BindableControlHelper::ApplyListSourceAndBindableData( const css::uno::Reference
          aArg1.Value <<= aAddress;
 
          uno::Sequence< uno::Any > aArgs{ uno::Any(aArg1) };
-         uno::Reference< form::binding::XListEntrySource > xSource( xFac->createInstanceWithArguments( "com.sun.star.table.CellRangeListSource", aArgs ), uno::UNO_QUERY );
+         uno::Reference< form::binding::XListEntrySource > xSource( xFac->createInstanceWithArguments( u"com.sun.star.table.CellRangeListSource"_ustr, aArgs ), uno::UNO_QUERY );
          xListEntrySink->setListEntrySource( xSource );
     }
     else if (  xListEntrySink.is() ) // reset

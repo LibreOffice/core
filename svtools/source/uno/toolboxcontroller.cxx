@@ -128,7 +128,7 @@ Reference< XLayoutManager > ToolboxController::getLayoutManager() const
     {
         try
         {
-            xLayoutManager.set(xPropSet->getPropertyValue("LayoutManager"),UNO_QUERY);
+            xLayoutManager.set(xPropSet->getPropertyValue(u"LayoutManager"_ustr),UNO_QUERY);
         }
         catch ( Exception& )
         {
@@ -344,7 +344,7 @@ void SAL_CALL ToolboxController::execute( sal_Int16 KeyModifier )
         css::util::URL aTargetURL;
 
         // Provide key modifier information to dispatch function
-        Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue("KeyModifier", KeyModifier) };
+        Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue(u"KeyModifier"_ustr, KeyModifier) };
 
         aTargetURL.Complete = aCommandURL;
         if ( m_xUrlTransformer.is() )

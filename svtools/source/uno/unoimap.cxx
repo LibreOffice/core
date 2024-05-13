@@ -126,13 +126,13 @@ rtl::Reference<PropertySetInfo> SvUnoImageMapObject::createPropertySetInfo( IMap
         {
             static PropertyMapEntry const aPolygonObj_Impl[] =
             {
-                { OUString("URL"),         HANDLE_URL,         cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("Title"),       HANDLE_TITLE,       cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("Description"), HANDLE_DESCRIPTION, cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("Target"),      HANDLE_TARGET,      cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("Name"),        HANDLE_NAME,        cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("IsActive"),    HANDLE_ISACTIVE,    cppu::UnoType<bool>::get(),                0, 0 },
-                { OUString("Polygon"),     HANDLE_POLYGON,     cppu::UnoType<PointSequence>::get(),    0, 0 },
+                { u"URL"_ustr,         HANDLE_URL,         cppu::UnoType<OUString>::get(),     0, 0 },
+                { u"Title"_ustr,       HANDLE_TITLE,       cppu::UnoType<OUString>::get(),     0, 0 },
+                { u"Description"_ustr, HANDLE_DESCRIPTION, cppu::UnoType<OUString>::get(),     0, 0 },
+                { u"Target"_ustr,      HANDLE_TARGET,      cppu::UnoType<OUString>::get(),     0, 0 },
+                { u"Name"_ustr,        HANDLE_NAME,        cppu::UnoType<OUString>::get(),     0, 0 },
+                { u"IsActive"_ustr,    HANDLE_ISACTIVE,    cppu::UnoType<bool>::get(),                0, 0 },
+                { u"Polygon"_ustr,     HANDLE_POLYGON,     cppu::UnoType<PointSequence>::get(),    0, 0 },
             };
 
             return rtl::Reference<PropertySetInfo>(new PropertySetInfo( aPolygonObj_Impl ));
@@ -141,14 +141,14 @@ rtl::Reference<PropertySetInfo> SvUnoImageMapObject::createPropertySetInfo( IMap
         {
             static PropertyMapEntry const aCircleObj_Impl[] =
             {
-                { OUString("URL"),         HANDLE_URL,         cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("Title"),       HANDLE_TITLE,       cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("Description"), HANDLE_DESCRIPTION, cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("Target"),      HANDLE_TARGET,      cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("Name"),        HANDLE_NAME,        cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("IsActive"),    HANDLE_ISACTIVE,    cppu::UnoType<bool>::get(),                0, 0 },
-                { OUString("Center"),      HANDLE_CENTER,      cppu::UnoType<awt::Point>::get(),   0, 0 },
-                { OUString("Radius"),      HANDLE_RADIUS,      cppu::UnoType<sal_Int32>::get(),    0, 0 },
+                { u"URL"_ustr,         HANDLE_URL,         cppu::UnoType<OUString>::get(),     0, 0 },
+                { u"Title"_ustr,       HANDLE_TITLE,       cppu::UnoType<OUString>::get(),     0, 0 },
+                { u"Description"_ustr, HANDLE_DESCRIPTION, cppu::UnoType<OUString>::get(),     0, 0 },
+                { u"Target"_ustr,      HANDLE_TARGET,      cppu::UnoType<OUString>::get(),     0, 0 },
+                { u"Name"_ustr,        HANDLE_NAME,        cppu::UnoType<OUString>::get(),     0, 0 },
+                { u"IsActive"_ustr,    HANDLE_ISACTIVE,    cppu::UnoType<bool>::get(),                0, 0 },
+                { u"Center"_ustr,      HANDLE_CENTER,      cppu::UnoType<awt::Point>::get(),   0, 0 },
+                { u"Radius"_ustr,      HANDLE_RADIUS,      cppu::UnoType<sal_Int32>::get(),    0, 0 },
             };
 
             return rtl::Reference<PropertySetInfo>(new PropertySetInfo( aCircleObj_Impl ));
@@ -158,13 +158,13 @@ rtl::Reference<PropertySetInfo> SvUnoImageMapObject::createPropertySetInfo( IMap
         {
             static PropertyMapEntry const aRectangleObj_Impl[] =
             {
-                { OUString("URL"),         HANDLE_URL,         cppu::UnoType<OUString>::get(), 0, 0 },
-                { OUString("Title"),       HANDLE_TITLE,       cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("Description"), HANDLE_DESCRIPTION, cppu::UnoType<OUString>::get(), 0, 0 },
-                { OUString("Target"),      HANDLE_TARGET,      cppu::UnoType<OUString>::get(), 0, 0 },
-                { OUString("Name"),        HANDLE_NAME,        cppu::UnoType<OUString>::get(), 0, 0 },
-                { OUString("IsActive"),    HANDLE_ISACTIVE,    cppu::UnoType<bool>::get(),            0, 0 },
-                { OUString("Boundary"),    HANDLE_BOUNDARY,    cppu::UnoType<awt::Rectangle>::get(),   0, 0 },
+                { u"URL"_ustr,         HANDLE_URL,         cppu::UnoType<OUString>::get(), 0, 0 },
+                { u"Title"_ustr,       HANDLE_TITLE,       cppu::UnoType<OUString>::get(),     0, 0 },
+                { u"Description"_ustr, HANDLE_DESCRIPTION, cppu::UnoType<OUString>::get(), 0, 0 },
+                { u"Target"_ustr,      HANDLE_TARGET,      cppu::UnoType<OUString>::get(), 0, 0 },
+                { u"Name"_ustr,        HANDLE_NAME,        cppu::UnoType<OUString>::get(), 0, 0 },
+                { u"IsActive"_ustr,    HANDLE_ISACTIVE,    cppu::UnoType<bool>::get(),            0, 0 },
+                { u"Boundary"_ustr,    HANDLE_BOUNDARY,    cppu::UnoType<awt::Rectangle>::get(),   0, 0 },
             };
 
             return rtl::Reference<PropertySetInfo>(new PropertySetInfo( aRectangleObj_Impl ));
@@ -368,11 +368,11 @@ OUString SAL_CALL SvUnoImageMapObject::getImplementationName()
     {
     case IMapObjectType::Polygon:
     default:
-        return "org.openoffice.comp.svt.ImageMapPolygonObject";
+        return u"org.openoffice.comp.svt.ImageMapPolygonObject"_ustr;
     case IMapObjectType::Circle:
-        return "org.openoffice.comp.svt.ImageMapCircleObject";
+        return u"org.openoffice.comp.svt.ImageMapCircleObject"_ustr;
     case IMapObjectType::Rectangle:
-        return "org.openoffice.comp.svt.ImageMapRectangleObject";
+        return u"org.openoffice.comp.svt.ImageMapRectangleObject"_ustr;
     }
 }
 
@@ -631,7 +631,7 @@ sal_Bool SAL_CALL SvUnoImageMap::hasElements(  )
 // XServiceInfo
 OUString SAL_CALL SvUnoImageMap::getImplementationName(  )
 {
-    return "org.openoffice.comp.svt.SvUnoImageMap";
+    return u"org.openoffice.comp.svt.SvUnoImageMap"_ustr;
 }
 
 sal_Bool SAL_CALL SvUnoImageMap::supportsService( const OUString& ServiceName )
@@ -641,7 +641,7 @@ sal_Bool SAL_CALL SvUnoImageMap::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL SvUnoImageMap::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.image.ImageMap" };
+    return { u"com.sun.star.image.ImageMap"_ustr };
 }
 
 void SvUnoImageMap::fillImageMap( ImageMap& rMap ) const

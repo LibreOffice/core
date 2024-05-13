@@ -275,7 +275,7 @@ void SAL_CALL PopupMenuControllerBase::removeStatusListener(
 OUString PopupMenuControllerBase::determineBaseURL( std::u16string_view aURL )
 {
     // Just use the main part of the URL for popup menu controllers
-    OUString aMainURL( "vnd.sun.star.popup:" );
+    OUString aMainURL( u"vnd.sun.star.popup:"_ustr );
 
     size_t nSchemePart = aURL.find( ':' );
     if (( nSchemePart != std::u16string_view::npos && nSchemePart > 0 ) &&

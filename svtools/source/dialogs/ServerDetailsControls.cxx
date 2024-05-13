@@ -149,7 +149,7 @@ bool HostDetailsContainer::verifyScheme( const OUString& sScheme )
 }
 
 DavDetailsContainer::DavDetailsContainer(PlaceEditDialog* pBuilder)
-    : HostDetailsContainer(pBuilder, 80, "http")
+    : HostDetailsContainer(pBuilder, 80, u"http"_ustr)
 {
     m_pDialog->m_xCBDavs->connect_toggled(LINK(this, DavDetailsContainer, ToggledDavsHdl));
 
@@ -193,7 +193,7 @@ IMPL_LINK( DavDetailsContainer, ToggledDavsHdl, weld::Toggleable&, rCheckBox, vo
     else if ( m_pDialog->m_xEDPort->get_value() == 443 && !bCheckedDavs )
         m_pDialog->m_xEDPort->set_value( 80 );
 
-    OUString sScheme( "http" );
+    OUString sScheme( u"http"_ustr );
     if ( bCheckedDavs )
         sScheme = "https";
     setScheme( sScheme );
@@ -400,7 +400,7 @@ IMPL_LINK_NOARG( CmisDetailsContainer, RefreshReposHdl, weld::Button&, void  )
 
     OUString sBindingUrl = m_pDialog->m_xEDHost->get_text().trim( );
 
-    OUString sEncodedUsername = "";
+    OUString sEncodedUsername = u""_ustr;
 
     if ( !m_sUsername.isEmpty( ) )
     {
@@ -448,7 +448,7 @@ IMPL_LINK_NOARG( CmisDetailsContainer, RefreshReposHdl, weld::Button&, void  )
     {
         // Get the Content
         ::ucbhelper::Content aCnt( sUrl, m_xCmdEnv, comphelper::getProcessComponentContext() );
-        Sequence<OUString> aProps { "Title" };
+        Sequence<OUString> aProps { u"Title"_ustr };
         Reference< XResultSet > xResultSet( aCnt.createCursor( aProps ), UNO_SET_THROW );
         Reference< XContentAccess > xAccess( xResultSet, UNO_QUERY_THROW );
         while ( xResultSet->next() )
