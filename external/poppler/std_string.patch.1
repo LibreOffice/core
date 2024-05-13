@@ -1,0 +1,77 @@
+remove C++20 starts_with
+
+--- poppler/goo/GooString.h.orig	2025-01-09 11:15:13.174300578 +0100
++++ poppler/goo/GooString.h	2025-01-09 11:17:39.568825610 +0100
+@@ -237,11 +237,16 @@
+     int cmp(const char *sA) const { return compare(sA); }
+     int cmpN(const char *sA, int n) const { return compare(0, n, sA); }
+ 
+-    // Return true if strings starts with prefix
+-    using std::string::starts_with;
+-
+-    // Return true if string ends with suffix
+-    using std::string::ends_with;
++    bool starts_with(const char *prefix) const
++    {
++        return startsWith(toStr(), prefix);
++    }
++    bool ends_with(const char *suffix) const
++    {
++        return endsWith(toStr(), suffix);
++    }
++    static bool startsWith(std::string_view str, std::string_view prefix) { return str.size() >= prefix.size() && 0 == str.compare(0, prefix.size(), prefix); }
++    static bool endsWith(std::string_view str, std::string_view suffix) { return str.size() >= suffix.size() && 0 == str.compare(str.size() - suffix.size(), suffix.size(), suffix); }
+ };
+ 
+ #endif
+--- poppler/poppler/UTF.h.orig	2025-01-09 11:25:36.593385806 +0100
++++ poppler/poppler/UTF.h	2025-01-09 11:25:30.852367770 +0100
+@@ -54,13 +54,13 @@
+ // check whether string starts with Big-Endian byte order mark
+ inline bool hasUnicodeByteOrderMark(const std::string &s)
+ {
+-    return s.starts_with(unicodeByteOrderMark);
++    return s.size() >= unicodeByteOrderMark.size() && 0 == s.compare(0, unicodeByteOrderMark.size(), unicodeByteOrderMark);
+ }
+ 
+ // check whether string starts with Little-Endian byte order mark
+ inline bool hasUnicodeByteOrderMarkLE(const std::string &s)
+ {
+-    return s.starts_with(unicodeByteOrderMarkLE);
++    return s.size() >= unicodeByteOrderMarkLE.size() && 0 == s.compare(0, unicodeByteOrderMarkLE.size(), unicodeByteOrderMarkLE);
+ }
+ 
+ // put big-endian unicode byte order mark at the beginning of a string
+--- poppler/poppler/GlobalParams.cc.orig	2025-01-09 11:26:46.850606552 +0100
++++ poppler/poppler/GlobalParams.cc	2025-01-09 11:29:28.030112935 +0100
+@@ -903,7 +903,7 @@
+ 
+ static bool supportedFontForEmbedding(Unicode uChar, const char *filepath, int faceIndex)
+ {
+-    if (!std::string_view(filepath).ends_with(".ttf") && !std::string_view(filepath).ends_with(".ttc") && !std::string_view(filepath).ends_with(".otf")) {
++    if (!GooString::endsWith(std::string_view(filepath), ".ttf") && !GooString::endsWith(std::string_view(filepath), ".ttc") && !GooString::endsWith(std::string_view(filepath), ".otf")) {
+         // for now we only support ttf, ttc, otf fonts
+         return false;
+     }
+--- poppler/poppler/GfxFont.cc.orig	2025-01-09 11:26:07.863484064 +0100
++++ poppler/poppler/GfxFont.cc	2025-01-09 11:31:47.164550059 +0100
+@@ -1252,7 +1252,7 @@
+ 
+     // pass 1: use the name-to-Unicode mapping table
+     missing = hex = false;
+-    bool isZapfDingbats = name && name->ends_with("ZapfDingbats");
++    bool isZapfDingbats = name && GooString::endsWith(*name, "ZapfDingbats");
+     for (int code = 0; code < 256; ++code) {
+         if ((charName = enc[code])) {
+             if (isZapfDingbats) {
+--- poppler/poppler/Form.cc.orig2	2025-01-09 11:33:42.284911742 +0100
++++ poppler/poppler/Form.cc	2025-01-09 11:34:46.013111945 +0100
+@@ -2818,7 +2818,7 @@
+     const Dict *fontDict = fontDictObj.getDict();
+     for (int i = 0; i < fontDict->getLength(); ++i) {
+         const char *key = fontDict->getKey(i);
+-        if (std::string_view(key).starts_with(kOurDictFontNamePrefix)) {
++        if (GooString::startsWith(std::string_view(key), kOurDictFontNamePrefix)) {
+             const Object fontObj = fontDict->getVal(i);
+             if (fontObj.isDict() && fontObj.dictIs("Font")) {
+                 const Object fontBaseFontObj = fontObj.dictLookup("BaseFont");
