@@ -39,7 +39,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstance()
 {
     OUString aTempURL = ::utl::CreateTempURL( nullptr, true );
     if ( aTempURL.isEmpty() )
-        throw uno::RuntimeException("Cannot create tempfile.");
+        throw uno::RuntimeException(u"Cannot create tempfile."_ustr);
 
     ::ucbhelper::Content aResultContent(
         aTempURL, uno::Reference< ucb::XCommandEnvironment >(),
@@ -74,9 +74,9 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
         if( !( aArguments[1] >>= nStorageMode ) )
         {
             throw lang::IllegalArgumentException(
-                ("second argument to css.embed.FileSystemStorageFactory."
+                (u"second argument to css.embed.FileSystemStorageFactory."
                  "createInstanceWithArguments must be a"
-                 " css.embed.ElementModes"),
+                 " css.embed.ElementModes"_ustr),
                 getXWeak(), -1);
         }
         // it's always possible to read written storage in this implementation
@@ -89,9 +89,9 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
     if ( !( aArguments[0] >>= aURL ) || aURL.isEmpty() )
     {
         throw lang::IllegalArgumentException(
-            ("first argument to"
+            (u"first argument to"
              " css.embed.FileSystemStorageFactory.createInstanceWithArguments"
-             " must be a (non-empty) URL"),
+             " must be a (non-empty) URL"_ustr),
             getXWeak(), -1);
     }
 
@@ -129,7 +129,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
 
 OUString SAL_CALL FSStorageFactory::getImplementationName()
 {
-    return "com.sun.star.comp.embed.FileSystemStorageFactory";
+    return u"com.sun.star.comp.embed.FileSystemStorageFactory"_ustr;
 }
 
 sal_Bool SAL_CALL FSStorageFactory::supportsService( const OUString& ServiceName )
@@ -139,8 +139,8 @@ sal_Bool SAL_CALL FSStorageFactory::supportsService( const OUString& ServiceName
 
 uno::Sequence< OUString > SAL_CALL FSStorageFactory::getSupportedServiceNames()
 {
-    return { "com.sun.star.embed.FileSystemStorageFactory",
-                "com.sun.star.comp.embed.FileSystemStorageFactory" };
+    return { u"com.sun.star.embed.FileSystemStorageFactory"_ustr,
+                u"com.sun.star.comp.embed.FileSystemStorageFactory"_ustr };
 }
 
 

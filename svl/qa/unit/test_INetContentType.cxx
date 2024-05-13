@@ -37,7 +37,7 @@ public:
 };
 
 void Test::testBad() {
-    OUString in("foo=bar");
+    OUString in(u"foo=bar"_ustr);
     CPPUNIT_ASSERT_EQUAL(
         static_cast<void const *>(nullptr),
         static_cast<void const *>(INetMIME::scanContentType(in)));
@@ -51,7 +51,7 @@ void Test::testBad() {
 }
 
 void Test::testFull() {
-    OUString in("foo/bar;baz=boz");
+    OUString in(u"foo/bar;baz=boz"_ustr);
     CPPUNIT_ASSERT_EQUAL(
         static_cast<void const *>(in.getStr() + in.getLength()),
         static_cast<void const *>(INetMIME::scanContentType(in)));
@@ -59,15 +59,15 @@ void Test::testFull() {
     OUString s;
     INetContentTypeParameterList ps;
     CPPUNIT_ASSERT(INetContentTypes::parse(in, t, s, &ps));
-    CPPUNIT_ASSERT_EQUAL(OUString("foo"), t);
-    CPPUNIT_ASSERT_EQUAL(OUString("bar"), s);
+    CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, t);
+    CPPUNIT_ASSERT_EQUAL(u"bar"_ustr, s);
     auto iter = ps.find("baz"_ostr);
     CPPUNIT_ASSERT(iter != ps.end());
-    CPPUNIT_ASSERT_EQUAL(OUString("boz"), iter->second.m_sValue);
+    CPPUNIT_ASSERT_EQUAL(u"boz"_ustr, iter->second.m_sValue);
 }
 
 void Test::testFollow() {
-    OUString in("foo/bar;baz=boz;base64,");
+    OUString in(u"foo/bar;baz=boz;base64,"_ustr);
     CPPUNIT_ASSERT_EQUAL(
         static_cast<void const *>(in.getStr() + std::strlen("foo/bar;baz=boz")),
         static_cast<void const *>(INetMIME::scanContentType(in)));

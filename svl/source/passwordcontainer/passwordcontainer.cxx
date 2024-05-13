@@ -183,7 +183,7 @@ PasswordMap StorageItem::getInfo()
 {
     PasswordMap aResult;
 
-    const Sequence< OUString > aNodeNames     = ConfigItem::GetNodeNames( "Store" );
+    const Sequence< OUString > aNodeNames     = ConfigItem::GetNodeNames( u"Store"_ustr );
     sal_Int32 aNodeCount = aNodeNames.getLength();
     Sequence< OUString > aPropNames( aNodeCount * 2);
 
@@ -238,13 +238,13 @@ PasswordMap StorageItem::getInfo()
 void StorageItem::setUseStorage( bool bUse )
 {
     ConfigItem::SetModified();
-    ConfigItem::PutProperties( { "UseStorage" }, { uno::Any(bUse) } );
+    ConfigItem::PutProperties( { u"UseStorage"_ustr }, { uno::Any(bUse) } );
 }
 
 
 bool StorageItem::useStorage()
 {
-    Sequence<OUString> aNodeNames { "UseStorage" };
+    Sequence<OUString> aNodeNames { u"UseStorage"_ustr };
 
     Sequence< Any > aPropertyValues = ConfigItem::GetProperties( aNodeNames );
 
@@ -263,7 +263,7 @@ bool StorageItem::useStorage()
 
 sal_Int32 StorageItem::getStorageVersion()
 {
-    Sequence<OUString> aNodeNames { "StorageVersion" };
+    Sequence<OUString> aNodeNames { u"StorageVersion"_ustr };
 
     Sequence< Any > aPropertyValues = ConfigItem::GetProperties( aNodeNames );
 
@@ -288,7 +288,7 @@ bool StorageItem::getEncodedMasterPassword( OUString& aResult, OUString& aResult
         return true;
     }
 
-    Sequence< OUString > aNodeNames{ "HasMaster", "Master", "MasterInitializationVector" };
+    Sequence< OUString > aNodeNames{ u"HasMaster"_ustr, u"Master"_ustr, u"MasterInitializationVector"_ustr };
 
     Sequence< Any > aPropertyValues = ConfigItem::GetProperties( aNodeNames );
 
@@ -314,7 +314,7 @@ void StorageItem::setEncodedMasterPassword( const OUString& aEncoded, const OUSt
     bool bHasMaster = ( !aEncoded.isEmpty() || bAcceptEmpty );
 
     ConfigItem::SetModified();
-    ConfigItem::PutProperties( { "HasMaster", "Master", "MasterInitializationVector", "StorageVersion" },
+    ConfigItem::PutProperties( { u"HasMaster"_ustr, u"Master"_ustr, u"MasterInitializationVector"_ustr, u"StorageVersion"_ustr },
                                { uno::Any(bHasMaster), uno::Any(aEncoded),
                                  uno::Any(aEncodedIV), uno::Any(nCurrentStorageVersion) } );
 
@@ -328,13 +328,13 @@ void StorageItem::remove( const OUString& aURL, const OUString& aName )
 {
     Sequence< OUString > sendSeq { createIndex( { aURL, aName } ) };
 
-    ConfigItem::ClearNodeElements( "Store", sendSeq );
+    ConfigItem::ClearNodeElements( u"Store"_ustr, sendSeq );
 }
 
 
 void StorageItem::clear()
 {
-    ConfigItem::ClearNodeSet( "Store" );
+    ConfigItem::ClearNodeSet( u"Store"_ustr );
 }
 
 
@@ -353,7 +353,7 @@ void StorageItem::update( const OUString& aURL, const NamePasswordRecord& aRecor
         aRecord.GetPersistentPasswords()) };
 
     ConfigItem::SetModified();
-    ConfigItem::SetSetProperties( "Store", sendSeq );
+    ConfigItem::SetSetProperties( u"Store"_ustr, sendSeq );
 }
 
 
@@ -468,7 +468,7 @@ std::vector< OUString > PasswordContainer::DecodePasswords( std::u16string_view 
     // problems with decoding
     OSL_FAIL( "Problem with decoding" );
     throw css::task::NoMasterException(
-        "Can't decode!", css::uno::Reference<css::uno::XInterface>(), mode);
+        u"Can't decode!"_ustr, css::uno::Reference<css::uno::XInterface>(), mode);
 }
 
 OUString PasswordContainer::EncodePasswords(const std::vector< OUString >& lines, std::u16string_view aIV, std::u16string_view aMasterPasswd)
@@ -555,7 +555,7 @@ OUString PasswordContainer::EncodePasswords(const std::vector< OUString >& lines
 
     // problems with encoding
     OSL_FAIL( "Problem with encoding" );
-    throw RuntimeException("Can't encode!" );
+    throw RuntimeException(u"Can't encode!"_ustr );
 }
 
 void PasswordContainer::UpdateVector( const OUString& aURL, std::vector< NamePasswordRecord >& toUpdate, NamePasswordRecord const & aRecord, bool writeFile )
@@ -653,7 +653,7 @@ OUString PasswordContainer::createIV()
     unsigned char iv[RTL_DIGEST_LENGTH_MD5];
     if (rtl_random_getBytes(nullptr, iv, RTL_DIGEST_LENGTH_MD5) != rtl_Random_E_None)
     {
-        throw uno::RuntimeException("rtl_random_getBytes failed");
+        throw uno::RuntimeException(u"rtl_random_getBytes failed"_ustr);
     }
     OUStringBuffer aBuffer;
     for (sal_uInt8 i : iv)
@@ -860,7 +860,7 @@ OUString const & PasswordContainer::GetMasterPassword( const Reference< XInterac
 {
     PasswordRequestMode aRMode = PasswordRequestMode_PASSWORD_ENTER;
     if( !m_xStorageFile || !m_xStorageFile->useStorage() )
-        throw NoMasterException("Password storing is not active!", Reference< XInterface >(), aRMode );
+        throw NoMasterException(u"Password storing is not active!"_ustr, Reference< XInterface >(), aRMode );
 
     if( m_aMasterPassword.isEmpty() && aHandler.is() )
     {
@@ -913,7 +913,7 @@ OUString const & PasswordContainer::GetMasterPassword( const Reference< XInterac
     }
 
     if ( m_aMasterPassword.isEmpty() )
-        throw NoMasterException("No master password!", Reference< XInterface >(), aRMode );
+        throw NoMasterException(u"No master password!"_ustr, Reference< XInterface >(), aRMode );
 
     return m_aMasterPassword;
 }
@@ -1219,7 +1219,7 @@ sal_Bool SAL_CALL PasswordContainer::hasMasterPassword(  )
     std::unique_lock aGuard( mMutex );
 
     if ( !m_xStorageFile )
-        throw uno::RuntimeException("storage file not set");
+        throw uno::RuntimeException(u"storage file not set"_ustr);
 
     OUString aEncodedMP, aEncodedMPIV;
     return ( m_xStorageFile->useStorage() && m_xStorageFile->getEncodedMasterPassword( aEncodedMP, aEncodedMPIV ) );
@@ -1230,7 +1230,7 @@ sal_Bool SAL_CALL PasswordContainer::allowPersistentStoring( sal_Bool bAllow )
     std::unique_lock aGuard( mMutex );
 
     if ( !m_xStorageFile )
-        throw uno::RuntimeException("storage file not set");
+        throw uno::RuntimeException(u"storage file not set"_ustr);
 
     if ( !bAllow )
         removeMasterPassword(aGuard);
@@ -1247,7 +1247,7 @@ sal_Bool SAL_CALL PasswordContainer::isPersistentStoringAllowed()
     std::unique_lock aGuard( mMutex );
 
     if ( !m_xStorageFile )
-        throw uno::RuntimeException("storage file not set");
+        throw uno::RuntimeException(u"storage file not set"_ustr);
 
     return m_xStorageFile->useStorage();
 }
@@ -1309,7 +1309,7 @@ sal_Bool SAL_CALL PasswordContainer::isDefaultMasterPasswordUsed()
     std::unique_lock aGuard( mMutex );
 
     if ( !m_xStorageFile )
-        throw uno::RuntimeException("storage file not set");
+        throw uno::RuntimeException(u"storage file not set"_ustr);
 
     OUString aEncodedMP, aEncodedMPIV;
     return ( m_xStorageFile->useStorage() && m_xStorageFile->getEncodedMasterPassword( aEncodedMP, aEncodedMPIV ) && aEncodedMP.isEmpty() );
@@ -1380,7 +1380,7 @@ void PasswordContainer::Notify()
 
 OUString SAL_CALL PasswordContainer::getImplementationName(  )
 {
-    return "stardiv.svl.PasswordContainer";
+    return u"stardiv.svl.PasswordContainer"_ustr;
 }
 
 sal_Bool SAL_CALL PasswordContainer::supportsService( const OUString& ServiceName )
@@ -1390,7 +1390,7 @@ sal_Bool SAL_CALL PasswordContainer::supportsService( const OUString& ServiceNam
 
 Sequence< OUString > SAL_CALL PasswordContainer::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.task.PasswordContainer" };
+    return { u"com.sun.star.task.PasswordContainer"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

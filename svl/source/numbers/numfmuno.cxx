@@ -331,7 +331,7 @@ sal_Int32 SAL_CALL SvNumberFormatterServiceObj::queryPreviewColorForNumber( cons
 
 OUString SAL_CALL SvNumberFormatterServiceObj::getImplementationName()
 {
-    return "com.sun.star.uno.util.numbers.SvNumberFormatterServiceObject";
+    return u"com.sun.star.uno.util.numbers.SvNumberFormatterServiceObject"_ustr;
 }
 
 sal_Bool SAL_CALL SvNumberFormatterServiceObj::supportsService( const OUString& ServiceName )
@@ -341,7 +341,7 @@ sal_Bool SAL_CALL SvNumberFormatterServiceObj::supportsService( const OUString& 
 
 uno::Sequence<OUString> SAL_CALL SvNumberFormatterServiceObj::getSupportedServiceNames()
 {
-    return { "com.sun.star.util.NumberFormatter" };
+    return { u"com.sun.star.util.NumberFormatter"_ustr };
 }
 
 SvNumberFormatsObj::SvNumberFormatsObj( SvNumberFormatsSupplierObj& _rParent, ::comphelper::SharedMutex  _aMutex )
@@ -626,7 +626,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::getFormatForLocale( sal_Int32 nKey, const
 
 OUString SAL_CALL SvNumberFormatsObj::getImplementationName()
 {
-    return "SvNumberFormatsObj";
+    return u"SvNumberFormatsObj"_ustr;
 }
 
 sal_Bool SAL_CALL SvNumberFormatsObj::supportsService( const OUString& ServiceName )
@@ -636,7 +636,7 @@ sal_Bool SAL_CALL SvNumberFormatsObj::supportsService( const OUString& ServiceNa
 
 uno::Sequence<OUString> SAL_CALL SvNumberFormatsObj::getSupportedServiceNames()
 {
-    return { "com.sun.star.util.NumberFormats" };
+    return { u"com.sun.star.util.NumberFormats"_ustr };
 }
 
 SvNumberFormatObj::SvNumberFormatObj( SvNumberFormatsSupplierObj& rParent, sal_Int32 nK, ::comphelper::SharedMutex _aMutex )
@@ -836,7 +836,7 @@ void SAL_CALL SvNumberFormatObj::setPropertyValues( const uno::Sequence<beans::P
 
 OUString SAL_CALL SvNumberFormatObj::getImplementationName()
 {
-    return "SvNumberFormatObj";
+    return u"SvNumberFormatObj"_ustr;
 }
 
 sal_Bool SAL_CALL SvNumberFormatObj::supportsService( const OUString& ServiceName )
@@ -846,7 +846,7 @@ sal_Bool SAL_CALL SvNumberFormatObj::supportsService( const OUString& ServiceNam
 
 uno::Sequence<OUString> SAL_CALL SvNumberFormatObj::getSupportedServiceNames()
 {
-    return { "com.sun.star.util.NumberFormatProperties" };
+    return { u"com.sun.star.util.NumberFormatProperties"_ustr };
 }
 
 SvNumberFormatSettingsObj::SvNumberFormatSettingsObj( SvNumberFormatsSupplierObj& rParent, ::comphelper::SharedMutex _aMutex )
@@ -962,7 +962,7 @@ void SAL_CALL SvNumberFormatSettingsObj::removeVetoableChangeListener( const OUS
 
 OUString SAL_CALL SvNumberFormatSettingsObj::getImplementationName()
 {
-    return "SvNumberFormatSettingsObj";
+    return u"SvNumberFormatSettingsObj"_ustr;
 }
 
 sal_Bool SAL_CALL SvNumberFormatSettingsObj::supportsService( const OUString& ServiceName )
@@ -972,7 +972,7 @@ sal_Bool SAL_CALL SvNumberFormatSettingsObj::supportsService( const OUString& Se
 
 uno::Sequence<OUString> SAL_CALL SvNumberFormatSettingsObj::getSupportedServiceNames()
 {
-    return { "com.sun.star.util.NumberFormatSettings" };
+    return { u"com.sun.star.util.NumberFormatSettings"_ustr };
 }
 
 

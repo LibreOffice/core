@@ -2620,7 +2620,7 @@ OUString SvNFFormatData::GetCalcCellReturn(sal_uInt32 nFormat) const
 {
     const SvNumberformat* pFormat = GetFormatEntry(nFormat);
     if (!pFormat)
-        return "G";
+        return u"G"_ustr;
 
     OUString    aStr;
     bool        bAppendPrec = true;
@@ -3278,7 +3278,7 @@ void SvNFFormatData::ImpGenerateFormats(SvNFLanguageData& rCurrentLanguage, cons
     pFormat = ImpInsertFormat(rCurrentLanguage, rNatNum, aSingleFormatCode,
                      CLOffset + ZF_STANDARD_DATETIME+5 /* NF_DATETIME_ISO_YYYYMMDDTHHMMSS */ );
     assert(pFormat);
-    pFormat->SetComment("ISO 8601");    // not to be localized
+    pFormat->SetComment(u"ISO 8601"_ustr);    // not to be localized
 
     // YYYY-MM-DD"T"HH:MM:SS,000   ISO with milliseconds and ',' or '.' decimal separator
     aSingleFormatCode.Code =
@@ -3292,7 +3292,7 @@ void SvNFFormatData::ImpGenerateFormats(SvNFLanguageData& rCurrentLanguage, cons
     pFormat = ImpInsertFormat(rCurrentLanguage, rNatNum, aSingleFormatCode,
                      CLOffset + ZF_STANDARD_DATETIME+6 /* NF_DATETIME_ISO_YYYYMMDDTHHMMSS000 */ );
     assert(pFormat);
-    pFormat->SetComment("ISO 8601");    // not to be localized
+    pFormat->SetComment(u"ISO 8601"_ustr);    // not to be localized
 
 
     // Scientific number
@@ -3573,12 +3573,12 @@ OUString SvNFEngine::GenerateFormat(SvNFLanguageData& rCurrentLanguage,
     }
 
     // Native Number
-    const OUString sPosNatNumModifier = pFormat ? pFormat->GetNatNumModifierString( 0 ) : "";
+    const OUString sPosNatNumModifier = pFormat ? pFormat->GetNatNumModifierString( 0 ) : u""_ustr;
     const OUString sNegNatNumModifier = pFormat ?
             // if a negative format already exists, use its NatNum modifier
             // else use NatNum modifier of positive format
             ( pFormat->GetNumForString( 1, 0 )  ? pFormat->GetNatNumModifierString( 1 ) : sPosNatNumModifier )
-            : "";
+            : u""_ustr;
 
     if (eType == SvNumFormatType::PERCENT)
     {

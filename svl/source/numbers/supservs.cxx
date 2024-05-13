@@ -99,7 +99,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
 
 OUString SAL_CALL SvNumberFormatsSupplierServiceObject::getImplementationName(  )
 {
-    return "com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject";
+    return u"com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject"_ustr;
 }
 
 sal_Bool SAL_CALL SvNumberFormatsSupplierServiceObject::supportsService( const OUString& _rServiceName )
@@ -109,7 +109,7 @@ sal_Bool SAL_CALL SvNumberFormatsSupplierServiceObject::supportsService( const O
 
 Sequence< OUString > SAL_CALL SvNumberFormatsSupplierServiceObject::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.util.NumberFormatsSupplier" };
+    return { u"com.sun.star.util.NumberFormatsSupplier"_ustr };
 }
 
 Reference< XPropertySet > SAL_CALL SvNumberFormatsSupplierServiceObject::getNumberFormatSettings()

@@ -130,7 +130,7 @@ void SfxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry& rEntry
     else if(0 == (rEntry.nFlags & PropertyAttribute::MAYBEVOID))
     {
         throw RuntimeException(
-            "Property not found in ItemSet but not MAYBEVOID?", nullptr);
+            u"Property not found in ItemSet but not MAYBEVOID?"_ustr, nullptr);
     }
 
     // convert general SfxEnumItem values to specific values

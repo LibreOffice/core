@@ -325,9 +325,9 @@ void Test::testNumberFormat()
 void Test::testSharedString()
 {
     // Use shared string as normal, non-shared string, which is allowed.
-    SharedString aSS1("Test"), aSS2("Test");
+    SharedString aSS1(u"Test"_ustr), aSS2(u"Test"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Equality check should return true.", bool(aSS1 == aSS2));
-    SharedString aSS3("test");
+    SharedString aSS3(u"test"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Equality check is case sensitive.", aSS1 != aSS3);
 }
 
@@ -337,15 +337,15 @@ void Test::testSharedStringPool()
     svl::SharedStringPool aPool(aSysLocale.GetCharClass());
 
     svl::SharedString p1, p2;
-    p1 = aPool.intern("Andy");
-    p2 = aPool.intern("Andy");
+    p1 = aPool.intern(u"Andy"_ustr);
+    p2 = aPool.intern(u"Andy"_ustr);
     CPPUNIT_ASSERT_EQUAL(p1.getData(), p2.getData());
 
-    p2 = aPool.intern("Bruce");
+    p2 = aPool.intern(u"Bruce"_ustr);
     CPPUNIT_ASSERT_MESSAGE("They must differ.", p1.getData() != p2.getData());
 
-    OUString aAndy("Andy");
-    p1 = aPool.intern("Andy");
+    OUString aAndy(u"Andy"_ustr);
+    p1 = aPool.intern(u"Andy"_ustr);
     p2 = aPool.intern(aAndy);
     CPPUNIT_ASSERT_MESSAGE("Identifier shouldn't be NULL.", p1.getData());
     CPPUNIT_ASSERT_MESSAGE("Identifier shouldn't be NULL.", p2.getData());
@@ -353,12 +353,12 @@ void Test::testSharedStringPool()
 
     // Test case insensitive string ID's.
     p1 = aPool.intern(aAndy);
-    p2 = aPool.intern("andy");
+    p2 = aPool.intern(u"andy"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Failed to intern strings.", p1.getData());
     CPPUNIT_ASSERT_MESSAGE("Failed to intern strings.", p2.getData());
     CPPUNIT_ASSERT_MESSAGE("These two ID's should differ.", p1.getData() != p2.getData());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("These two ID's should be equal.", p2.getDataIgnoreCase(), p1.getDataIgnoreCase());
-    p2 = aPool.intern("ANDY");
+    p2 = aPool.intern(u"ANDY"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Failed to intern string.", p2.getData());
     CPPUNIT_ASSERT_MESSAGE("These two ID's should differ.", p1.getData() != p2.getData());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("These two ID's should be equal.", p2.getDataIgnoreCase(), p1.getDataIgnoreCase());
@@ -443,8 +443,8 @@ void Test::testSharedStringPoolEmptyString()
     // Make sure SharedString::getEmptyString() is in the pool and matches empty strings.
     SvtSysLocale aSysLocale;
     svl::SharedStringPool aPool(aSysLocale.GetCharClass());
-    aPool.intern("");
-    CPPUNIT_ASSERT_EQUAL(SharedString::getEmptyString(), aPool.intern(""));
+    aPool.intern(u""_ustr);
+    CPPUNIT_ASSERT_EQUAL(SharedString::getEmptyString(), aPool.intern(u""_ustr));
     CPPUNIT_ASSERT_EQUAL(SharedString::getEmptyString(), aPool.intern(SharedString::EMPTY_STRING));
     // And it should still work even after purging.
     aPool.purge();
@@ -1836,58 +1836,58 @@ void Test::testNfEnglishKeywordsIntegrity()
         CPPUNIT_ASSERT_EQUAL( sKeywords[i], rEnglishKeywords[i] );
     }
     // Check the order of sEnglishKeyword
-    CPPUNIT_ASSERT_EQUAL( OUString("E"),     rEnglishKeywords[NF_KEY_E] );
-    CPPUNIT_ASSERT_EQUAL( OUString("AM/PM"), rEnglishKeywords[NF_KEY_AMPM] );
-    CPPUNIT_ASSERT_EQUAL( OUString("A/P"),   rEnglishKeywords[NF_KEY_AP] );
-    CPPUNIT_ASSERT_EQUAL( OUString("M"),     rEnglishKeywords[NF_KEY_MI]  );
-    CPPUNIT_ASSERT_EQUAL( OUString("MM"),    rEnglishKeywords[NF_KEY_MMI] );
-    CPPUNIT_ASSERT_EQUAL( OUString("M"),     rEnglishKeywords[NF_KEY_M] );
-    CPPUNIT_ASSERT_EQUAL( OUString("MM"),    rEnglishKeywords[NF_KEY_MM] );
-    CPPUNIT_ASSERT_EQUAL( OUString("MMM"),   rEnglishKeywords[NF_KEY_MMM] );
-    CPPUNIT_ASSERT_EQUAL( OUString("MMMM"),  rEnglishKeywords[NF_KEY_MMMM] );
-    CPPUNIT_ASSERT_EQUAL( OUString("H"),     rEnglishKeywords[NF_KEY_H] );
-    CPPUNIT_ASSERT_EQUAL( OUString("HH"),    rEnglishKeywords[NF_KEY_HH] );
-    CPPUNIT_ASSERT_EQUAL( OUString("S"),     rEnglishKeywords[NF_KEY_S] );
-    CPPUNIT_ASSERT_EQUAL( OUString("SS"),    rEnglishKeywords[NF_KEY_SS] );
-    CPPUNIT_ASSERT_EQUAL( OUString("Q"),     rEnglishKeywords[NF_KEY_Q] );
-    CPPUNIT_ASSERT_EQUAL( OUString("QQ"),    rEnglishKeywords[NF_KEY_QQ] );
-    CPPUNIT_ASSERT_EQUAL( OUString("D"),     rEnglishKeywords[NF_KEY_D] );
-    CPPUNIT_ASSERT_EQUAL( OUString("DD"),    rEnglishKeywords[NF_KEY_DD] );
-    CPPUNIT_ASSERT_EQUAL( OUString("DDD"),   rEnglishKeywords[NF_KEY_DDD] );
-    CPPUNIT_ASSERT_EQUAL( OUString("DDDD"),  rEnglishKeywords[NF_KEY_DDDD] );
-    CPPUNIT_ASSERT_EQUAL( OUString("YY"),    rEnglishKeywords[NF_KEY_YY] );
-    CPPUNIT_ASSERT_EQUAL( OUString("YYYY"),  rEnglishKeywords[NF_KEY_YYYY] );
-    CPPUNIT_ASSERT_EQUAL( OUString("NN"),    rEnglishKeywords[NF_KEY_NN] );
-    CPPUNIT_ASSERT_EQUAL( OUString("NNNN"),  rEnglishKeywords[NF_KEY_NNNN] );
-    CPPUNIT_ASSERT_EQUAL( OUString("CCC"),   rEnglishKeywords[NF_KEY_CCC] );
-    CPPUNIT_ASSERT_EQUAL( OUString("GENERAL"), rEnglishKeywords[NF_KEY_GENERAL] );
-    CPPUNIT_ASSERT_EQUAL( OUString("NNN"),     rEnglishKeywords[NF_KEY_NNN] );
-    CPPUNIT_ASSERT_EQUAL( OUString("WW"),      rEnglishKeywords[NF_KEY_WW] );
-    CPPUNIT_ASSERT_EQUAL( OUString("MMMMM"),   rEnglishKeywords[NF_KEY_MMMMM] );
-    CPPUNIT_ASSERT_EQUAL( OUString("TRUE"),    rEnglishKeywords[NF_KEY_TRUE] );
-    CPPUNIT_ASSERT_EQUAL( OUString("FALSE"),   rEnglishKeywords[NF_KEY_FALSE] );
-    CPPUNIT_ASSERT_EQUAL( OUString("BOOLEAN"), rEnglishKeywords[NF_KEY_BOOLEAN] );
-    CPPUNIT_ASSERT_EQUAL( OUString("COLOR"),   rEnglishKeywords[NF_KEY_COLOR] );
-    CPPUNIT_ASSERT_EQUAL( OUString("BLACK"),   rEnglishKeywords[NF_KEY_BLACK] );
-    CPPUNIT_ASSERT_EQUAL( OUString("BLUE"),    rEnglishKeywords[NF_KEY_BLUE] );
-    CPPUNIT_ASSERT_EQUAL( OUString("GREEN"),   rEnglishKeywords[NF_KEY_GREEN] );
-    CPPUNIT_ASSERT_EQUAL( OUString("CYAN"),    rEnglishKeywords[NF_KEY_CYAN] );
-    CPPUNIT_ASSERT_EQUAL( OUString("RED"),     rEnglishKeywords[NF_KEY_RED] );
-    CPPUNIT_ASSERT_EQUAL( OUString("MAGENTA"), rEnglishKeywords[NF_KEY_MAGENTA] );
-    CPPUNIT_ASSERT_EQUAL( OUString("BROWN"),   rEnglishKeywords[NF_KEY_BROWN] );
-    CPPUNIT_ASSERT_EQUAL( OUString("GREY"),    rEnglishKeywords[NF_KEY_GREY] );
-    CPPUNIT_ASSERT_EQUAL( OUString("YELLOW"),  rEnglishKeywords[NF_KEY_YELLOW] );
-    CPPUNIT_ASSERT_EQUAL( OUString("WHITE"),   rEnglishKeywords[NF_KEY_WHITE] );
-    CPPUNIT_ASSERT_EQUAL( OUString("AAA"),   rEnglishKeywords[NF_KEY_AAA]);
-    CPPUNIT_ASSERT_EQUAL( OUString("AAAA"),  rEnglishKeywords[NF_KEY_AAAA] );
-    CPPUNIT_ASSERT_EQUAL( OUString("E"),     rEnglishKeywords[NF_KEY_EC] );
-    CPPUNIT_ASSERT_EQUAL( OUString("EE"),    rEnglishKeywords[NF_KEY_EEC] );
-    CPPUNIT_ASSERT_EQUAL( OUString("G"),     rEnglishKeywords[NF_KEY_G] );
-    CPPUNIT_ASSERT_EQUAL( OUString("GG"),    rEnglishKeywords[NF_KEY_GG] );
-    CPPUNIT_ASSERT_EQUAL( OUString("GGG"),   rEnglishKeywords[NF_KEY_GGG] );
-    CPPUNIT_ASSERT_EQUAL( OUString("R"),     rEnglishKeywords[NF_KEY_R]  );
-    CPPUNIT_ASSERT_EQUAL( OUString("RR"),    rEnglishKeywords[NF_KEY_RR]  );
-    CPPUNIT_ASSERT_EQUAL( OUString("t"),     rEnglishKeywords[NF_KEY_THAI_T] );
+    CPPUNIT_ASSERT_EQUAL( u"E"_ustr,     rEnglishKeywords[NF_KEY_E] );
+    CPPUNIT_ASSERT_EQUAL( u"AM/PM"_ustr, rEnglishKeywords[NF_KEY_AMPM] );
+    CPPUNIT_ASSERT_EQUAL( u"A/P"_ustr,   rEnglishKeywords[NF_KEY_AP] );
+    CPPUNIT_ASSERT_EQUAL( u"M"_ustr,     rEnglishKeywords[NF_KEY_MI]  );
+    CPPUNIT_ASSERT_EQUAL( u"MM"_ustr,    rEnglishKeywords[NF_KEY_MMI] );
+    CPPUNIT_ASSERT_EQUAL( u"M"_ustr,     rEnglishKeywords[NF_KEY_M] );
+    CPPUNIT_ASSERT_EQUAL( u"MM"_ustr,    rEnglishKeywords[NF_KEY_MM] );
+    CPPUNIT_ASSERT_EQUAL( u"MMM"_ustr,   rEnglishKeywords[NF_KEY_MMM] );
+    CPPUNIT_ASSERT_EQUAL( u"MMMM"_ustr,  rEnglishKeywords[NF_KEY_MMMM] );
+    CPPUNIT_ASSERT_EQUAL( u"H"_ustr,     rEnglishKeywords[NF_KEY_H] );
+    CPPUNIT_ASSERT_EQUAL( u"HH"_ustr,    rEnglishKeywords[NF_KEY_HH] );
+    CPPUNIT_ASSERT_EQUAL( u"S"_ustr,     rEnglishKeywords[NF_KEY_S] );
+    CPPUNIT_ASSERT_EQUAL( u"SS"_ustr,    rEnglishKeywords[NF_KEY_SS] );
+    CPPUNIT_ASSERT_EQUAL( u"Q"_ustr,     rEnglishKeywords[NF_KEY_Q] );
+    CPPUNIT_ASSERT_EQUAL( u"QQ"_ustr,    rEnglishKeywords[NF_KEY_QQ] );
+    CPPUNIT_ASSERT_EQUAL( u"D"_ustr,     rEnglishKeywords[NF_KEY_D] );
+    CPPUNIT_ASSERT_EQUAL( u"DD"_ustr,    rEnglishKeywords[NF_KEY_DD] );
+    CPPUNIT_ASSERT_EQUAL( u"DDD"_ustr,   rEnglishKeywords[NF_KEY_DDD] );
+    CPPUNIT_ASSERT_EQUAL( u"DDDD"_ustr,  rEnglishKeywords[NF_KEY_DDDD] );
+    CPPUNIT_ASSERT_EQUAL( u"YY"_ustr,    rEnglishKeywords[NF_KEY_YY] );
+    CPPUNIT_ASSERT_EQUAL( u"YYYY"_ustr,  rEnglishKeywords[NF_KEY_YYYY] );
+    CPPUNIT_ASSERT_EQUAL( u"NN"_ustr,    rEnglishKeywords[NF_KEY_NN] );
+    CPPUNIT_ASSERT_EQUAL( u"NNNN"_ustr,  rEnglishKeywords[NF_KEY_NNNN] );
+    CPPUNIT_ASSERT_EQUAL( u"CCC"_ustr,   rEnglishKeywords[NF_KEY_CCC] );
+    CPPUNIT_ASSERT_EQUAL( u"GENERAL"_ustr, rEnglishKeywords[NF_KEY_GENERAL] );
+    CPPUNIT_ASSERT_EQUAL( u"NNN"_ustr,     rEnglishKeywords[NF_KEY_NNN] );
+    CPPUNIT_ASSERT_EQUAL( u"WW"_ustr,      rEnglishKeywords[NF_KEY_WW] );
+    CPPUNIT_ASSERT_EQUAL( u"MMMMM"_ustr,   rEnglishKeywords[NF_KEY_MMMMM] );
+    CPPUNIT_ASSERT_EQUAL( u"TRUE"_ustr,    rEnglishKeywords[NF_KEY_TRUE] );
+    CPPUNIT_ASSERT_EQUAL( u"FALSE"_ustr,   rEnglishKeywords[NF_KEY_FALSE] );
+    CPPUNIT_ASSERT_EQUAL( u"BOOLEAN"_ustr, rEnglishKeywords[NF_KEY_BOOLEAN] );
+    CPPUNIT_ASSERT_EQUAL( u"COLOR"_ustr,   rEnglishKeywords[NF_KEY_COLOR] );
+    CPPUNIT_ASSERT_EQUAL( u"BLACK"_ustr,   rEnglishKeywords[NF_KEY_BLACK] );
+    CPPUNIT_ASSERT_EQUAL( u"BLUE"_ustr,    rEnglishKeywords[NF_KEY_BLUE] );
+    CPPUNIT_ASSERT_EQUAL( u"GREEN"_ustr,   rEnglishKeywords[NF_KEY_GREEN] );
+    CPPUNIT_ASSERT_EQUAL( u"CYAN"_ustr,    rEnglishKeywords[NF_KEY_CYAN] );
+    CPPUNIT_ASSERT_EQUAL( u"RED"_ustr,     rEnglishKeywords[NF_KEY_RED] );
+    CPPUNIT_ASSERT_EQUAL( u"MAGENTA"_ustr, rEnglishKeywords[NF_KEY_MAGENTA] );
+    CPPUNIT_ASSERT_EQUAL( u"BROWN"_ustr,   rEnglishKeywords[NF_KEY_BROWN] );
+    CPPUNIT_ASSERT_EQUAL( u"GREY"_ustr,    rEnglishKeywords[NF_KEY_GREY] );
+    CPPUNIT_ASSERT_EQUAL( u"YELLOW"_ustr,  rEnglishKeywords[NF_KEY_YELLOW] );
+    CPPUNIT_ASSERT_EQUAL( u"WHITE"_ustr,   rEnglishKeywords[NF_KEY_WHITE] );
+    CPPUNIT_ASSERT_EQUAL( u"AAA"_ustr,   rEnglishKeywords[NF_KEY_AAA]);
+    CPPUNIT_ASSERT_EQUAL( u"AAAA"_ustr,  rEnglishKeywords[NF_KEY_AAAA] );
+    CPPUNIT_ASSERT_EQUAL( u"E"_ustr,     rEnglishKeywords[NF_KEY_EC] );
+    CPPUNIT_ASSERT_EQUAL( u"EE"_ustr,    rEnglishKeywords[NF_KEY_EEC] );
+    CPPUNIT_ASSERT_EQUAL( u"G"_ustr,     rEnglishKeywords[NF_KEY_G] );
+    CPPUNIT_ASSERT_EQUAL( u"GG"_ustr,    rEnglishKeywords[NF_KEY_GG] );
+    CPPUNIT_ASSERT_EQUAL( u"GGG"_ustr,   rEnglishKeywords[NF_KEY_GGG] );
+    CPPUNIT_ASSERT_EQUAL( u"R"_ustr,     rEnglishKeywords[NF_KEY_R]  );
+    CPPUNIT_ASSERT_EQUAL( u"RR"_ustr,    rEnglishKeywords[NF_KEY_RR]  );
+    CPPUNIT_ASSERT_EQUAL( u"t"_ustr,     rEnglishKeywords[NF_KEY_THAI_T] );
 }
 
 void Test::testStandardColorIntegrity()
@@ -1923,8 +1923,8 @@ void Test::testColorNamesConversion()
         aGermanKeywords[i] = rKeywords[i];
 
     // Check that we actually have German and English keywords.
-    CPPUNIT_ASSERT_EQUAL( OUString("FARBE"), aGermanKeywords[NF_KEY_COLOR]);
-    CPPUNIT_ASSERT_EQUAL( OUString("COLOR"), rEnglishKeywords[NF_KEY_COLOR]);
+    CPPUNIT_ASSERT_EQUAL( u"FARBE"_ustr, aGermanKeywords[NF_KEY_COLOR]);
+    CPPUNIT_ASSERT_EQUAL( u"COLOR"_ustr, rEnglishKeywords[NF_KEY_COLOR]);
 
     // Test each color conversion.
     // [FARBE1] -> [COLOR1] can't be tested because we have no color table link
@@ -1976,11 +1976,11 @@ void Test::testExcelExportFormats()
 
     aCode = aFormatter.GetFormatStringForExcel( nKey1, aKeywords, aTempFormatter);
     // Test that LCID is prepended.
-    CPPUNIT_ASSERT_EQUAL( OUString("[$-1C09]00.00"), aCode);
+    CPPUNIT_ASSERT_EQUAL( u"[$-1C09]00.00"_ustr, aCode);
 
     aCode = aFormatter.GetFormatStringForExcel( nKey2, aKeywords, aTempFormatter);
     // Test that LCID is not prepended. Note that literal characters are escaped.
-    CPPUNIT_ASSERT_EQUAL( OUString("[$R-1C09]\\ #,##0.0;[$R-1C09]\\-#,##0.0"), aCode);
+    CPPUNIT_ASSERT_EQUAL( u"[$R-1C09]\\ #,##0.0;[$R-1C09]\\-#,##0.0"_ustr, aCode);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testLanguageNone)
@@ -1988,12 +1988,12 @@ CPPUNIT_TEST_FIXTURE(Test, testLanguageNone)
     SvNumberFormatter aFormatter(m_xContext, LANGUAGE_ENGLISH_US);
     NfKeywordTable keywords;
     aFormatter.FillKeywordTableForExcel(keywords);
-    OUString code("TT.MM.JJJJ");
+    OUString code(u"TT.MM.JJJJ"_ustr);
     sal_uInt32 nKey = aFormatter.GetEntryKey(code, LANGUAGE_GERMAN);
     CPPUNIT_ASSERT(nKey != NUMBERFORMAT_ENTRY_NOT_FOUND);
     SvNumberformat const*const pFormat = aFormatter.GetEntry(nKey);
     LocaleDataWrapper ldw(m_xContext, LanguageTag(pFormat->GetLanguage()));
-    CPPUNIT_ASSERT_EQUAL(OUString("dd.mm.yyyy"), pFormat->GetMappedFormatstring(keywords, ldw));
+    CPPUNIT_ASSERT_EQUAL(u"dd.mm.yyyy"_ustr, pFormat->GetMappedFormatstring(keywords, ldw));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf160306)

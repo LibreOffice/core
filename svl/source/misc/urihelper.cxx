@@ -148,7 +148,7 @@ Result normalizePrefix( css::uno::Reference< css::ucb::XUniversalContentBroker >
         bool ok =
             (css::uno::Reference< css::ucb::XCommandProcessor >(
                    content, css::uno::UNO_QUERY_THROW)->execute(
-                       css::ucb::Command("getCasePreservingURL",
+                       css::ucb::Command(u"getCasePreservingURL"_ustr,
                            -1, css::uno::Any()),
                        0,
                        css::uno::Reference< css::ucb::XCommandEnvironment >())

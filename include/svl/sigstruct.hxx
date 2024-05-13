@@ -53,9 +53,7 @@ struct SignatureReferenceInformation
 
     SignatureReferenceInformation() :
         nType(SignatureReferenceType::SAMEDOCUMENT),
-        ouURI(""),
-        nDigestID(css::xml::crypto::DigestID::SHA1),
-        ouDigestValue("")
+        nDigestID(css::xml::crypto::DigestID::SHA1)
     {
     }
 

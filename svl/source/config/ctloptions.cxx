@@ -100,7 +100,7 @@ bool SvtCTLOptions_Impl::IsReadOnly(SvtCTLOptions::EOption eOption) const
 }
 SvtCTLOptions_Impl::SvtCTLOptions_Impl() :
 
-    utl::ConfigItem("Office.Common/I18N/CTL"),
+    utl::ConfigItem(u"Office.Common/I18N/CTL"_ustr),
 
     m_bIsLoaded             ( false ),
     m_bCTLFontEnabled       ( true ),
@@ -225,12 +225,12 @@ void SvtCTLOptions_Impl::Load()
     if ( !rPropertyNames.hasElements() )
     {
         rPropertyNames = {
-            "CTLFont",
-            "CTLSequenceChecking",
-            "CTLCursorMovement",
-            "CTLTextNumerals",
-            "CTLSequenceCheckingRestricted",
-            "CTLSequenceCheckingTypeAndReplace" };
+            u"CTLFont"_ustr,
+            u"CTLSequenceChecking"_ustr,
+            u"CTLCursorMovement"_ustr,
+            u"CTLTextNumerals"_ustr,
+            u"CTLSequenceCheckingRestricted"_ustr,
+            u"CTLSequenceCheckingTypeAndReplace"_ustr };
         EnableNotification( rPropertyNames );
     }
     Sequence< Any > aValues = GetProperties( rPropertyNames );

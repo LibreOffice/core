@@ -234,7 +234,7 @@ SfxBoolItem* SfxBoolItem::Clone(SfxItemPool *) const
 // virtual
 OUString SfxBoolItem::GetValueTextByVal(bool bTheValue) const
 {
-    return bTheValue ?  OUString("TRUE") : OUString("FALSE");
+    return bTheValue ?  u"TRUE"_ustr : u"FALSE"_ustr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

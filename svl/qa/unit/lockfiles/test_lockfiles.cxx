@@ -107,7 +107,7 @@ void LockfileTest::testLOLockFileURL()
     OUString aTestODT = generateTestURL(u"testLOLockFileURL.odt");
 
     svt::DocumentLockFile aLockFile(aTestODT);
-    CPPUNIT_ASSERT_EQUAL(OUString(".~lock.testLOLockFileURL.odt%23"), GetLockFileName(aLockFile));
+    CPPUNIT_ASSERT_EQUAL(u".~lock.testLOLockFileURL.odt%23"_ustr, GetLockFileName(aLockFile));
 }
 
 void LockfileTest::testLOLockFileContent()
@@ -117,8 +117,8 @@ void LockfileTest::testLOLockFileContent()
 
     // Set user name
     SvtUserOptions aUserOpt;
-    aUserOpt.SetToken(UserOptToken::FirstName, "LockFile");
-    aUserOpt.SetToken(UserOptToken::LastName, "Test");
+    aUserOpt.SetToken(UserOptToken::FirstName, u"LockFile"_ustr);
+    aUserOpt.SetToken(UserOptToken::LastName, u"Test"_ustr);
 
     // Write the lock file and check the content
     svt::DocumentLockFile aLockFile(aTestODT);
@@ -166,8 +166,8 @@ void LockfileTest::testLOLockFileRT()
 
     // Set user name
     SvtUserOptions aUserOpt;
-    aUserOpt.SetToken(UserOptToken::FirstName, "LockFile");
-    aUserOpt.SetToken(UserOptToken::LastName, "Test");
+    aUserOpt.SetToken(UserOptToken::FirstName, u"LockFile"_ustr);
+    aUserOpt.SetToken(UserOptToken::LastName, u"Test"_ustr);
 
     // Write the lock file and read it back
     svt::DocumentLockFile aLockFile(aTestODT);
@@ -222,16 +222,16 @@ void LockfileTest::testLOLockFileOverwrite()
 
     // Set user name
     SvtUserOptions aUserOpt;
-    aUserOpt.SetToken(UserOptToken::FirstName, "LockFile");
-    aUserOpt.SetToken(UserOptToken::LastName, "Test");
+    aUserOpt.SetToken(UserOptToken::FirstName, u"LockFile"_ustr);
+    aUserOpt.SetToken(UserOptToken::LastName, u"Test"_ustr);
 
     // Write the lock file and read it back
     svt::DocumentLockFile aLockFile(aTestODT);
     aLockFile.CreateOwnLockFile();
 
     // Change user name
-    aUserOpt.SetToken(UserOptToken::FirstName, "LockFile2");
-    aUserOpt.SetToken(UserOptToken::LastName, "Test");
+    aUserOpt.SetToken(UserOptToken::FirstName, u"LockFile2"_ustr);
+    aUserOpt.SetToken(UserOptToken::LastName, u"Test"_ustr);
 
     // Overwrite lockfile
     svt::DocumentLockFile aLockFile2(aTestODT);
@@ -261,56 +261,56 @@ void LockfileTest::testWordLockFileURL()
     {
         OUString aTestFile = generateTestURL(u"testWordLockFileURL.docx");
         svt::MSODocumentLockFile aLockFile(aTestFile);
-        CPPUNIT_ASSERT_EQUAL(OUString("~$stWordLockFileURL.docx"), GetLockFileName(aLockFile));
+        CPPUNIT_ASSERT_EQUAL(u"~$stWordLockFileURL.docx"_ustr, GetLockFileName(aLockFile));
     }
 
     // Eight character file name (cuts two characters)
     {
         OUString aTestFile = generateTestURL(u"12345678.docx");
         svt::MSODocumentLockFile aLockFile(aTestFile);
-        CPPUNIT_ASSERT_EQUAL(OUString("~$345678.docx"), GetLockFileName(aLockFile));
+        CPPUNIT_ASSERT_EQUAL(u"~$345678.docx"_ustr, GetLockFileName(aLockFile));
     }
 
     // Seven character file name (cuts one character)
     {
         OUString aTestFile = generateTestURL(u"1234567.docx");
         svt::MSODocumentLockFile aLockFile(aTestFile);
-        CPPUNIT_ASSERT_EQUAL(OUString("~$234567.docx"), GetLockFileName(aLockFile));
+        CPPUNIT_ASSERT_EQUAL(u"~$234567.docx"_ustr, GetLockFileName(aLockFile));
     }
 
     // Six character file name (cuts no character)
     {
         OUString aTestFile = generateTestURL(u"123456.docx");
         svt::MSODocumentLockFile aLockFile(aTestFile);
-        CPPUNIT_ASSERT_EQUAL(OUString("~$123456.docx"), GetLockFileName(aLockFile));
+        CPPUNIT_ASSERT_EQUAL(u"~$123456.docx"_ustr, GetLockFileName(aLockFile));
     }
 
     // One character file name
     {
         OUString aTestFile = generateTestURL(u"1.docx");
         svt::MSODocumentLockFile aLockFile(aTestFile);
-        CPPUNIT_ASSERT_EQUAL(OUString("~$1.docx"), GetLockFileName(aLockFile));
+        CPPUNIT_ASSERT_EQUAL(u"~$1.docx"_ustr, GetLockFileName(aLockFile));
     }
 
     // Test for ODT format
     {
         OUString aTestFile = generateTestURL(u"12345678.odt");
         svt::MSODocumentLockFile aLockFile(aTestFile);
-        CPPUNIT_ASSERT_EQUAL(OUString("~$345678.odt"), GetLockFileName(aLockFile));
+        CPPUNIT_ASSERT_EQUAL(u"~$345678.odt"_ustr, GetLockFileName(aLockFile));
     }
 
     // Test for DOC format
     {
         OUString aTestFile = generateTestURL(u"12345678.doc");
         svt::MSODocumentLockFile aLockFile(aTestFile);
-        CPPUNIT_ASSERT_EQUAL(OUString("~$345678.doc"), GetLockFileName(aLockFile));
+        CPPUNIT_ASSERT_EQUAL(u"~$345678.doc"_ustr, GetLockFileName(aLockFile));
     }
 
     // Test for RTF format
     {
         OUString aTestFile = generateTestURL(u"12345678.rtf");
         svt::MSODocumentLockFile aLockFile(aTestFile);
-        CPPUNIT_ASSERT_EQUAL(OUString("~$345678.rtf"), GetLockFileName(aLockFile));
+        CPPUNIT_ASSERT_EQUAL(u"~$345678.rtf"_ustr, GetLockFileName(aLockFile));
     }
 }
 
@@ -320,28 +320,28 @@ void LockfileTest::testExcelLockFileURL()
     {
         OUString aTestFile = generateTestURL(u"testExcelLockFileURL.xlsx");
         svt::MSODocumentLockFile aLockFile(aTestFile);
-        CPPUNIT_ASSERT_EQUAL(OUString("~$testExcelLockFileURL.xlsx"), GetLockFileName(aLockFile));
+        CPPUNIT_ASSERT_EQUAL(u"~$testExcelLockFileURL.xlsx"_ustr, GetLockFileName(aLockFile));
     }
 
     // Eight character file name
     {
         OUString aTestFile = generateTestURL(u"12345678.xlsx");
         svt::MSODocumentLockFile aLockFile(aTestFile);
-        CPPUNIT_ASSERT_EQUAL(OUString("~$12345678.xlsx"), GetLockFileName(aLockFile));
+        CPPUNIT_ASSERT_EQUAL(u"~$12345678.xlsx"_ustr, GetLockFileName(aLockFile));
     }
 
     // One character file name
     {
         OUString aTestFile = generateTestURL(u"1.xlsx");
         svt::MSODocumentLockFile aLockFile(aTestFile);
-        CPPUNIT_ASSERT_EQUAL(OUString("~$1.xlsx"), GetLockFileName(aLockFile));
+        CPPUNIT_ASSERT_EQUAL(u"~$1.xlsx"_ustr, GetLockFileName(aLockFile));
     }
 
     // Test for ODS format
     {
         OUString aTestFile = generateTestURL(u"12345678.ods");
         svt::MSODocumentLockFile aLockFile(aTestFile);
-        CPPUNIT_ASSERT_EQUAL(OUString("~$12345678.ods"), GetLockFileName(aLockFile));
+        CPPUNIT_ASSERT_EQUAL(u"~$12345678.ods"_ustr, GetLockFileName(aLockFile));
     }
 }
 
@@ -351,36 +351,35 @@ void LockfileTest::testPowerPointLockFileURL()
     {
         OUString aTestFile = generateTestURL(u"testPowerPointLockFileURL.pptx");
         svt::MSODocumentLockFile aLockFile(aTestFile);
-        CPPUNIT_ASSERT_EQUAL(OUString("~$testPowerPointLockFileURL.pptx"),
-                             GetLockFileName(aLockFile));
+        CPPUNIT_ASSERT_EQUAL(u"~$testPowerPointLockFileURL.pptx"_ustr, GetLockFileName(aLockFile));
     }
 
     // Eight character file name
     {
         OUString aTestFile = generateTestURL(u"12345678.pptx");
         svt::MSODocumentLockFile aLockFile(aTestFile);
-        CPPUNIT_ASSERT_EQUAL(OUString("~$12345678.pptx"), GetLockFileName(aLockFile));
+        CPPUNIT_ASSERT_EQUAL(u"~$12345678.pptx"_ustr, GetLockFileName(aLockFile));
     }
 
     // One character file name
     {
         OUString aTestFile = generateTestURL(u"1.pptx");
         svt::MSODocumentLockFile aLockFile(aTestFile);
-        CPPUNIT_ASSERT_EQUAL(OUString("~$1.pptx"), GetLockFileName(aLockFile));
+        CPPUNIT_ASSERT_EQUAL(u"~$1.pptx"_ustr, GetLockFileName(aLockFile));
     }
 
     // Test for PPT format
     {
         OUString aTestFile = generateTestURL(u"12345678.ppt");
         svt::MSODocumentLockFile aLockFile(aTestFile);
-        CPPUNIT_ASSERT_EQUAL(OUString("~$12345678.ppt"), GetLockFileName(aLockFile));
+        CPPUNIT_ASSERT_EQUAL(u"~$12345678.ppt"_ustr, GetLockFileName(aLockFile));
     }
 
     // Test for ODP format
     {
         OUString aTestFile = generateTestURL(u"/12345678.odp");
         svt::MSODocumentLockFile aLockFile(aTestFile);
-        CPPUNIT_ASSERT_EQUAL(OUString("~$12345678.odp"), GetLockFileName(aLockFile));
+        CPPUNIT_ASSERT_EQUAL(u"~$12345678.odp"_ustr, GetLockFileName(aLockFile));
     }
 }
 
@@ -391,8 +390,8 @@ void LockfileTest::testWordLockFileContent()
 
     // Set user name
     SvtUserOptions aUserOpt;
-    aUserOpt.SetToken(UserOptToken::FirstName, "LockFile");
-    aUserOpt.SetToken(UserOptToken::LastName, "Test");
+    aUserOpt.SetToken(UserOptToken::FirstName, u"LockFile"_ustr);
+    aUserOpt.SetToken(UserOptToken::LastName, u"Test"_ustr);
 
     // Write the lock file and check the content
     svt::MSODocumentLockFile aLockFile(aTestFile);
@@ -443,8 +442,8 @@ void LockfileTest::testExcelLockFileContent()
 
     // Set user name
     SvtUserOptions aUserOpt;
-    aUserOpt.SetToken(UserOptToken::FirstName, "LockFile");
-    aUserOpt.SetToken(UserOptToken::LastName, "Test");
+    aUserOpt.SetToken(UserOptToken::FirstName, u"LockFile"_ustr);
+    aUserOpt.SetToken(UserOptToken::LastName, u"Test"_ustr);
 
     // Write the lock file and check the content
     svt::MSODocumentLockFile aLockFile(aTestFile);
@@ -500,8 +499,8 @@ void LockfileTest::testPowerPointLockFileContent()
 
     // Set user name
     SvtUserOptions aUserOpt;
-    aUserOpt.SetToken(UserOptToken::FirstName, "LockFile");
-    aUserOpt.SetToken(UserOptToken::LastName, "Test");
+    aUserOpt.SetToken(UserOptToken::FirstName, u"LockFile"_ustr);
+    aUserOpt.SetToken(UserOptToken::LastName, u"Test"_ustr);
 
     // Write the lock file and check the content
     svt::MSODocumentLockFile aLockFile(aTestFile);
@@ -558,8 +557,8 @@ void LockfileTest::testWordLockFileRT()
 
     // Set user name
     SvtUserOptions aUserOpt;
-    aUserOpt.SetToken(UserOptToken::FirstName, "LockFile");
-    aUserOpt.SetToken(UserOptToken::LastName, "Test");
+    aUserOpt.SetToken(UserOptToken::FirstName, u"LockFile"_ustr);
+    aUserOpt.SetToken(UserOptToken::LastName, u"Test"_ustr);
 
     // Write the lock file and read it back
     svt::MSODocumentLockFile aLockFile(aTestODT);
@@ -579,8 +578,8 @@ void LockfileTest::testExcelLockFileRT()
 
     // Set user name
     SvtUserOptions aUserOpt;
-    aUserOpt.SetToken(UserOptToken::FirstName, "LockFile");
-    aUserOpt.SetToken(UserOptToken::LastName, "Test");
+    aUserOpt.SetToken(UserOptToken::FirstName, u"LockFile"_ustr);
+    aUserOpt.SetToken(UserOptToken::LastName, u"Test"_ustr);
 
     // Write the lock file and read it back
     svt::MSODocumentLockFile aLockFile(aTestODT);
@@ -600,8 +599,8 @@ void LockfileTest::testPowerPointLockFileRT()
 
     // Set user name
     SvtUserOptions aUserOpt;
-    aUserOpt.SetToken(UserOptToken::FirstName, "LockFile");
-    aUserOpt.SetToken(UserOptToken::LastName, "Test");
+    aUserOpt.SetToken(UserOptToken::FirstName, u"LockFile"_ustr);
+    aUserOpt.SetToken(UserOptToken::LastName, u"Test"_ustr);
 
     // Write the lock file and read it back
     svt::MSODocumentLockFile aLockFile(aTestODT);
@@ -622,9 +621,9 @@ void LockfileTest::testMSOLockFileLongUserName()
     // Set user name
     SvtUserOptions aUserOpt;
     aUserOpt.SetToken(UserOptToken::FirstName,
-                      "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+                      u"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"_ustr);
     aUserOpt.SetToken(UserOptToken::LastName,
-                      "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+                      u"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"_ustr);
 
     // Write the lock file and read it back
     svt::MSODocumentLockFile aLockFile(aTestODT);
@@ -673,16 +672,16 @@ void LockfileTest::testMSOLockFileOverwrite()
 
     // Set user name
     SvtUserOptions aUserOpt;
-    aUserOpt.SetToken(UserOptToken::FirstName, "LockFile");
-    aUserOpt.SetToken(UserOptToken::LastName, "Test");
+    aUserOpt.SetToken(UserOptToken::FirstName, u"LockFile"_ustr);
+    aUserOpt.SetToken(UserOptToken::LastName, u"Test"_ustr);
 
     // Write the lock file and read it back
     svt::MSODocumentLockFile aLockFile(aTestODT);
     aLockFile.CreateOwnLockFile();
 
     // Change user name
-    aUserOpt.SetToken(UserOptToken::FirstName, "LockFile2");
-    aUserOpt.SetToken(UserOptToken::LastName, "Test");
+    aUserOpt.SetToken(UserOptToken::FirstName, u"LockFile2"_ustr);
+    aUserOpt.SetToken(UserOptToken::LastName, u"Test"_ustr);
 
     // Overwrite lockfile
     svt::MSODocumentLockFile aLockFile2(aTestODT);

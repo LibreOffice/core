@@ -121,8 +121,8 @@ bool SvxAsianConfig::GetStartEndChars(
     css::uno::Reference< css::beans::XPropertySet > el(
         v.get< css::uno::Reference< css::beans::XPropertySet > >(),
         css::uno::UNO_SET_THROW);
-    startChars = el->getPropertyValue("StartCharacters").get< OUString >();
-    endChars = el->getPropertyValue("EndCharacters").get< OUString >();
+    startChars = el->getPropertyValue(u"StartCharacters"_ustr).get< OUString >();
+    endChars = el->getPropertyValue(u"EndCharacters"_ustr).get< OUString >();
     return true;
 }
 
@@ -152,16 +152,16 @@ void SvxAsianConfig::SetStartEndChars(
             css::uno::Reference< css::beans::XPropertySet > el(
                 v.get< css::uno::Reference< css::beans::XPropertySet > >(),
                 css::uno::UNO_SET_THROW);
-            el->setPropertyValue("StartCharacters", css::uno::Any(*startChars));
-            el->setPropertyValue("EndCharacters", css::uno::Any(*endChars));
+            el->setPropertyValue(u"StartCharacters"_ustr, css::uno::Any(*startChars));
+            el->setPropertyValue(u"EndCharacters"_ustr, css::uno::Any(*endChars));
         } else {
             css::uno::Reference< css::beans::XPropertySet > el(
                 (css::uno::Reference< css::lang::XSingleServiceFactory >(
                     set, css::uno::UNO_QUERY_THROW)->
                  createInstance()),
                 css::uno::UNO_QUERY_THROW);
-            el->setPropertyValue("StartCharacters", css::uno::Any(*startChars));
-            el->setPropertyValue("EndCharacters", css::uno::Any(*endChars));
+            el->setPropertyValue(u"StartCharacters"_ustr, css::uno::Any(*startChars));
+            el->setPropertyValue(u"EndCharacters"_ustr, css::uno::Any(*endChars));
             css::uno::Any v2(el);
             try {
                 set->insertByName(name, v2);

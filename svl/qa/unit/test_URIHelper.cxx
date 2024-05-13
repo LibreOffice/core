@@ -214,13 +214,13 @@ void Test::finish() {
 
 void Test::testNormalizedMakeRelative() {
     auto ucb(css::ucb::UniversalContentBroker::create(m_context));
-    ucb->registerContentProvider(new Provider, "test", true);
+    ucb->registerContentProvider(new Provider, u"test"_ustr, true);
     ucb->registerContentProvider(
         css::uno::Reference<css::ucb::XContentProvider>(
             m_context->getServiceManager()->createInstanceWithContext(
-                "com.sun.star.comp.ucb.FileProvider", m_context),
+                u"com.sun.star.comp.ucb.FileProvider"_ustr, m_context),
             css::uno::UNO_QUERY_THROW),
-        "file", true);
+        u"file"_ustr, true);
     struct Data {
         char const * base;
         char const * absolute;
@@ -369,7 +369,7 @@ void Test::testFindFirstURLInText() {
         { "generic:path", nullptr, 0, 0 },
         { "wfs:", nullptr, 0, 0 }
     };
-    CharClass charClass( m_context, LanguageTag( css::lang::Locale("en", "US", "")));
+    CharClass charClass( m_context, LanguageTag( css::lang::Locale(u"en"_ustr, u"US"_ustr, u""_ustr)));
     for (auto const[pInput, pResult, nBegin, nEnd] : tests)
     {
         OUString input(OUString::createFromAscii(pInput));
@@ -420,7 +420,7 @@ void Test::testFindFirstDOIInText() {
         { "doi:10.1093", nullptr, 0, 0 }, // no slash
         { "doi:11.1093/ajae/aaq063", nullptr, 0, 0 }, // doesn't begin with doi:10.
     };
-    CharClass charClass( m_context, LanguageTag( css::lang::Locale("en", "US", "")));
+    CharClass charClass( m_context, LanguageTag( css::lang::Locale(u"en"_ustr, u"US"_ustr, u""_ustr)));
     for (auto const[pInput, pResult, nBegin, nEnd] : tests)
     {
         OUString input(OUString::createFromAscii(pInput));
@@ -492,28 +492,28 @@ void Test::testResolveIdnaHost() {
         URIHelper::resolveIdnaHost(u"foo://M\u00FCnchen@M\u00FCnchen.de"_ustr));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString("foo://xn--mnchen-3ya.de."),
+        u"foo://xn--mnchen-3ya.de."_ustr,
         URIHelper::resolveIdnaHost(u"foo://M\u00FCnchen.de."_ustr));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString("Foo://bar@xn--mnchen-3ya.de:123/?bar#baz"),
+        u"Foo://bar@xn--mnchen-3ya.de:123/?bar#baz"_ustr,
         URIHelper::resolveIdnaHost(u"Foo://bar@M\u00FCnchen.de:123/?bar#baz"_ustr));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString("foo://xn--mnchen-3ya.de"),
+        u"foo://xn--mnchen-3ya.de"_ustr,
         URIHelper::resolveIdnaHost(u"foo://Mu\u0308nchen.de"_ustr));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString("foo://example.xn--m-eha"), URIHelper::resolveIdnaHost(u"foo://example.mü"_ustr));
+        u"foo://example.xn--m-eha"_ustr, URIHelper::resolveIdnaHost(u"foo://example.mü"_ustr));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString("foo://example.xn--m-eha:0"), URIHelper::resolveIdnaHost(u"foo://example.mü:0"_ustr));
+        u"foo://example.xn--m-eha:0"_ustr, URIHelper::resolveIdnaHost(u"foo://example.mü:0"_ustr));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString("foo://xn--e1afmkfd.xn--p1ai"), URIHelper::resolveIdnaHost(u"foo://пример.рф"_ustr));
+        u"foo://xn--e1afmkfd.xn--p1ai"_ustr, URIHelper::resolveIdnaHost(u"foo://пример.рф"_ustr));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString("foo://xn--e1afmkfd.xn--p1ai:0"),
+        u"foo://xn--e1afmkfd.xn--p1ai:0"_ustr,
         URIHelper::resolveIdnaHost(u"foo://пример.рф:0"_ustr));
 }
 

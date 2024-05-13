@@ -650,7 +650,7 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
             }
             else if (i == 2 && mrCurrentLanguageData.GetLanguageTag().getLanguage() == "de")
             {
-                if (pUpperAbbrevMonthText[i] == u"M\u00C4R" && StringContainsWord( "MRZ", rString, nPos))
+                if (pUpperAbbrevMonthText[i] == u"M\u00C4R" && StringContainsWord( u"MRZ"_ustr, rString, nPos))
                 {   // Accept MRZ for MÄR
                     nPos = nPos + 3;
                     res = sal::static_int_cast< short >(-(i+1)); // negative
@@ -667,14 +667,14 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
             {
                 // This assumes the weirdness is applicable to all locales.
                 // It is the case for at least en-* and de-* locales.
-                if (pUpperAbbrevMonthText[i] == "SEPT" && StringContainsWord( "SEP", rString, nPos))
+                if (pUpperAbbrevMonthText[i] == "SEPT" && StringContainsWord( u"SEP"_ustr, rString, nPos))
                 {   // #102136# The correct English form of month September abbreviated is
                     // SEPT, but almost every data contains SEP instead.
                     nPos = nPos + 3;
                     res = sal::static_int_cast< short >(-(i+1)); // negative
                     break;  // for
                 }
-                else if (pUpperAbbrevMonthText[i] == "SEP" && StringContainsWord( "SEPT", rString, nPos))
+                else if (pUpperAbbrevMonthText[i] == "SEP" && StringContainsWord( u"SEPT"_ustr, rString, nPos))
                 {   // And vice versa, accept SEPT for SEP
                     nPos = nPos + 4;
                     res = sal::static_int_cast< short >(-(i+1)); // negative
@@ -694,12 +694,12 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
                 {
                     // Locale data has Jänner/Jän
                     assert(pUpperMonthText[0] == u"J\u00C4NNER");
-                    if (StringContainsWord( "JANUAR", rString, nPos))
+                    if (StringContainsWord( u"JANUAR"_ustr, rString, nPos))
                     {
                         nPos += 6;
                         res = 1;
                     }
-                    else if (StringContainsWord( "JAN", rString, nPos))
+                    else if (StringContainsWord( u"JAN"_ustr, rString, nPos))
                     {
                         nPos += 3;
                         res = -1;

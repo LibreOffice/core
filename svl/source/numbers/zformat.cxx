@@ -5821,10 +5821,10 @@ void SvNumberformat::GetNatNumXml( css::i18n::NativeNumberXmlAttributes2& rAttr,
 OUString SvNumberformat::GetNatNumModifierString( sal_uInt16 nNumFor ) const
 {
     if ( nNumFor > 3 )
-        return "";
+        return u""_ustr;
     const SvNumberNatNum& rNum = NumFor[nNumFor].GetNatNum();
     if ( !rNum.IsSet() )
-        return "";
+        return u""_ustr;
     const sal_Int32 nNum = rNum.GetNatNum();
     OUStringBuffer sNatNumModifier = "[NatNum" + OUString::number( nNum );
     if ( NatNumTakesParameters( nNum ) )

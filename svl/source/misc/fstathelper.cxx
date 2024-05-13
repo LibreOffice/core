@@ -40,7 +40,7 @@ bool FStatHelper::GetModifiedDateTimeOfFile( const OUString& rURL,
                                 uno::Reference< XCommandEnvironment > (),
                                 comphelper::getProcessComponentContext());
         uno::Any aAny = aTestContent.getPropertyValue(
-            "DateModified" );
+            u"DateModified"_ustr );
         if( aAny.hasValue() )
         {
             bRet = true;

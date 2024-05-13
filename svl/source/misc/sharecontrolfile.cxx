@@ -75,11 +75,11 @@ ShareControlFile::ShareControlFile( std::u16string_view aOrigURL )
                 SvMemoryStream aStream(0,0);
                 aInsertArg.Data.set(new ::utl::OInputStreamWrapper(aStream));
                 aInsertArg.ReplaceExisting = false;
-                aContent.executeCommand( "insert", uno::Any( aInsertArg ) );
+                aContent.executeCommand( u"insert"_ustr, uno::Any( aInsertArg ) );
 
                 // try to let the file be hidden if possible
                 try {
-                    aContent.setPropertyValue("IsHidden", uno::Any( true ) );
+                    aContent.setPropertyValue(u"IsHidden"_ustr, uno::Any( true ) );
                 } catch( uno::Exception& ) {}
 
                 // Try to open one more time

@@ -42,13 +42,13 @@ private:
 
 void LngMiscTest::testRemoveHyphens()
 {
-    OUString str1("");
-    OUString str2("a-b--c---");
+    OUString str1(u""_ustr);
+    OUString str2(u"a-b--c---"_ustr);
 
     OUString str3 = OUStringChar(SVT_SOFT_HYPHEN) + OUStringChar(SVT_HARD_HYPHEN)
                     + OUStringChar(SVT_HARD_HYPHEN);
 
-    OUString str4("asdf");
+    OUString str4(u"asdf"_ustr);
 
     bool bModified = linguistic::RemoveHyphens(str1);
     CPPUNIT_ASSERT(!bModified);
@@ -57,7 +57,7 @@ void LngMiscTest::testRemoveHyphens()
     // Note that '-' isn't a hyphen to RemoveHyphens.
     bModified = linguistic::RemoveHyphens(str2);
     CPPUNIT_ASSERT(!bModified);
-    CPPUNIT_ASSERT_EQUAL(OUString("a-b--c---"), str2);
+    CPPUNIT_ASSERT_EQUAL(u"a-b--c---"_ustr, str2);
 
     bModified = linguistic::RemoveHyphens(str3);
     CPPUNIT_ASSERT(bModified);
@@ -65,14 +65,14 @@ void LngMiscTest::testRemoveHyphens()
 
     bModified = linguistic::RemoveHyphens(str4);
     CPPUNIT_ASSERT(!bModified);
-    CPPUNIT_ASSERT_EQUAL(OUString("asdf"), str4);
+    CPPUNIT_ASSERT_EQUAL(u"asdf"_ustr, str4);
 }
 
 void LngMiscTest::testRemoveControlChars()
 {
-    OUString str1("");
-    OUString str2("asdf");
-    OUString str3("asdf\nasdf");
+    OUString str1(u""_ustr);
+    OUString str2(u"asdf"_ustr);
+    OUString str3(u"asdf\nasdf"_ustr);
 
     OUStringBuffer str4Buf(33);
     str4Buf.setLength(33);
@@ -88,22 +88,22 @@ void LngMiscTest::testRemoveControlChars()
 
     bModified = linguistic::RemoveControlChars(str2);
     CPPUNIT_ASSERT(!bModified);
-    CPPUNIT_ASSERT_EQUAL(OUString("asdf"), str2);
+    CPPUNIT_ASSERT_EQUAL(u"asdf"_ustr, str2);
 
     bModified = linguistic::RemoveControlChars(str3);
     CPPUNIT_ASSERT(bModified);
-    CPPUNIT_ASSERT_EQUAL(OUString("asdfasdf"), str3);
+    CPPUNIT_ASSERT_EQUAL(u"asdfasdf"_ustr, str3);
 
     bModified = linguistic::RemoveControlChars(str4);
     CPPUNIT_ASSERT(bModified);
-    CPPUNIT_ASSERT_EQUAL(OUString(" "), str4);
+    CPPUNIT_ASSERT_EQUAL(u" "_ustr, str4);
 }
 
 void LngMiscTest::testReplaceControlChars()
 {
-    OUString str1("");
-    OUString str2("asdf");
-    OUString str3("asdf\nasdf");
+    OUString str1(u""_ustr);
+    OUString str2(u"asdf"_ustr);
+    OUString str3(u"asdf\nasdf"_ustr);
 
     OUStringBuffer str4Buf(33);
     str4Buf.setLength(33);
@@ -119,11 +119,11 @@ void LngMiscTest::testReplaceControlChars()
 
     bModified = linguistic::ReplaceControlChars(str2);
     CPPUNIT_ASSERT(!bModified);
-    CPPUNIT_ASSERT_EQUAL(OUString("asdf"), str2);
+    CPPUNIT_ASSERT_EQUAL(u"asdf"_ustr, str2);
 
     bModified = linguistic::ReplaceControlChars(str3);
     CPPUNIT_ASSERT(bModified);
-    CPPUNIT_ASSERT_EQUAL(OUString("asdf asdf"), str3);
+    CPPUNIT_ASSERT_EQUAL(u"asdf asdf"_ustr, str3);
 
     bModified = linguistic::ReplaceControlChars(str4);
     CPPUNIT_ASSERT(bModified);
@@ -136,28 +136,28 @@ void LngMiscTest::testGetThesaurusReplaceText()
 {
     constexpr OUString str2(u"asdf"_ustr);
 
-    OUString r = linguistic::GetThesaurusReplaceText("");
+    OUString r = linguistic::GetThesaurusReplaceText(u""_ustr);
     CPPUNIT_ASSERT(r.isEmpty());
 
     r = linguistic::GetThesaurusReplaceText(str2);
     CPPUNIT_ASSERT_EQUAL(str2, r);
 
-    r = linguistic::GetThesaurusReplaceText("asdf (abc)");
+    r = linguistic::GetThesaurusReplaceText(u"asdf (abc)"_ustr);
     CPPUNIT_ASSERT_EQUAL(str2, r);
 
-    r = linguistic::GetThesaurusReplaceText("asdf*");
+    r = linguistic::GetThesaurusReplaceText(u"asdf*"_ustr);
     CPPUNIT_ASSERT_EQUAL(str2, r);
 
-    r = linguistic::GetThesaurusReplaceText("asdf * ");
+    r = linguistic::GetThesaurusReplaceText(u"asdf * "_ustr);
     CPPUNIT_ASSERT_EQUAL(str2, r);
 
-    r = linguistic::GetThesaurusReplaceText("asdf (abc) *");
+    r = linguistic::GetThesaurusReplaceText(u"asdf (abc) *"_ustr);
     CPPUNIT_ASSERT_EQUAL(str2, r);
 
-    r = linguistic::GetThesaurusReplaceText("asdf asdf * (abc)");
-    CPPUNIT_ASSERT_EQUAL(OUString("asdf asdf"), r);
+    r = linguistic::GetThesaurusReplaceText(u"asdf asdf * (abc)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"asdf asdf"_ustr, r);
 
-    r = linguistic::GetThesaurusReplaceText(" * (abc) asdf *");
+    r = linguistic::GetThesaurusReplaceText(u" * (abc) asdf *"_ustr);
     CPPUNIT_ASSERT(r.isEmpty());
 }
 

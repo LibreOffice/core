@@ -349,19 +349,19 @@ OUString PKIStatusToString(int n)
 {
     switch (n)
     {
-    case 0: return "granted";
-    case 1: return "grantedWithMods";
-    case 2: return "rejection";
-    case 3: return "waiting";
-    case 4: return "revocationWarning";
-    case 5: return "revocationNotification";
+    case 0: return u"granted"_ustr;
+    case 1: return u"grantedWithMods"_ustr;
+    case 2: return u"rejection"_ustr;
+    case 3: return u"waiting"_ustr;
+    case 4: return u"revocationWarning"_ustr;
+    case 5: return u"revocationNotification"_ustr;
     default: return "unknown (" + OUString::number(n) + ")";
     }
 }
 
 OUString PKIStatusInfoToString(const PKIStatusInfo& rStatusInfo)
 {
-    OUString result = "{status=";
+    OUString result = u"{status="_ustr;
     if (rStatusInfo.status.len == 1)
         result += PKIStatusToString(rStatusInfo.status.data[0]);
     else

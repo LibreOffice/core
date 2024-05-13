@@ -45,64 +45,64 @@ const int MaxCntPost = 20; //max dec places allow by rtl_math_round
 const NfKeywordTable ImpSvNumberformatScan::sEnglishKeyword =
 {             // Syntax keywords in English (USA)
     //! All keywords MUST be UPPERCASE! In same order as NfKeywordIndex
-    "",        // NF_KEY_NONE 0
-    "E",       // NF_KEY_E Exponent
-    "AM/PM",   // NF_KEY_AMPM AM/PM
-    "A/P",     // NF_KEY_AP AM/PM short
-    "M",       // NF_KEY_MI Minute
-    "MM",      // NF_KEY_MMI Minute 02
-    "M",       // NF_KEY_M month        (!)
-    "MM",      // NF_KEY_MM month 02     (!)
-    "MMM",     // NF_KEY_MMM month short name
-    "MMMM",    // NF_KEY_MMMM month long name
-    "MMMMM",   // NF_KEY_MMMMM first letter of month name
-    "H",       // NF_KEY_H hour
-    "HH",      // NF_KEY_HH hour 02
-    "S",       // NF_KEY_S Second
-    "SS",      // NF_KEY_SS Second 02
-    "Q",       // NF_KEY_Q Quarter short 'Q'
-    "QQ",      // NF_KEY_QQ Quarter long
-    "D",       // NF_KEY_D day of month
-    "DD",      // NF_KEY_DD day of month 02
-    "DDD",     // NF_KEY_DDD day of week short
-    "DDDD",    // NF_KEY_DDDD day of week long
-    "YY",      // NF_KEY_YY year two digits
-    "YYYY",    // NF_KEY_YYYY year four digits
-    "NN",      // NF_KEY_NN Day of week short
-    "NNN",     // NF_KEY_NNN Day of week long
-    "NNNN",    // NF_KEY_NNNN Day of week long incl. separator
-    "AAA",     // NF_KEY_AAA
-    "AAAA",    // NF_KEY_AAAA
-    "E",       // NF_KEY_EC
-    "EE",      // NF_KEY_EEC
-    "G",       // NF_KEY_G
-    "GG",      // NF_KEY_GG
-    "GGG",     // NF_KEY_GGG
-    "R",       // NF_KEY_R
-    "RR",      // NF_KEY_RR
-    "WW",      // NF_KEY_WW Week of year
-    "t",       // NF_KEY_THAI_T Thai T modifier, speciality of Thai Excel, only
+    u""_ustr,        // NF_KEY_NONE 0
+    u"E"_ustr,       // NF_KEY_E Exponent
+    u"AM/PM"_ustr,   // NF_KEY_AMPM AM/PM
+    u"A/P"_ustr,     // NF_KEY_AP AM/PM short
+    u"M"_ustr,       // NF_KEY_MI Minute
+    u"MM"_ustr,      // NF_KEY_MMI Minute 02
+    u"M"_ustr,       // NF_KEY_M month        (!)
+    u"MM"_ustr,      // NF_KEY_MM month 02     (!)
+    u"MMM"_ustr,     // NF_KEY_MMM month short name
+    u"MMMM"_ustr,    // NF_KEY_MMMM month long name
+    u"MMMMM"_ustr,   // NF_KEY_MMMMM first letter of month name
+    u"H"_ustr,       // NF_KEY_H hour
+    u"HH"_ustr,      // NF_KEY_HH hour 02
+    u"S"_ustr,       // NF_KEY_S Second
+    u"SS"_ustr,      // NF_KEY_SS Second 02
+    u"Q"_ustr,       // NF_KEY_Q Quarter short 'Q'
+    u"QQ"_ustr,      // NF_KEY_QQ Quarter long
+    u"D"_ustr,       // NF_KEY_D day of month
+    u"DD"_ustr,      // NF_KEY_DD day of month 02
+    u"DDD"_ustr,     // NF_KEY_DDD day of week short
+    u"DDDD"_ustr,    // NF_KEY_DDDD day of week long
+    u"YY"_ustr,      // NF_KEY_YY year two digits
+    u"YYYY"_ustr,    // NF_KEY_YYYY year four digits
+    u"NN"_ustr,      // NF_KEY_NN Day of week short
+    u"NNN"_ustr,     // NF_KEY_NNN Day of week long
+    u"NNNN"_ustr,    // NF_KEY_NNNN Day of week long incl. separator
+    u"AAA"_ustr,     // NF_KEY_AAA
+    u"AAAA"_ustr,    // NF_KEY_AAAA
+    u"E"_ustr,       // NF_KEY_EC
+    u"EE"_ustr,      // NF_KEY_EEC
+    u"G"_ustr,       // NF_KEY_G
+    u"GG"_ustr,      // NF_KEY_GG
+    u"GGG"_ustr,     // NF_KEY_GGG
+    u"R"_ustr,       // NF_KEY_R
+    u"RR"_ustr,      // NF_KEY_RR
+    u"WW"_ustr,      // NF_KEY_WW Week of year
+    u"t"_ustr,       // NF_KEY_THAI_T Thai T modifier, speciality of Thai Excel, only
                 // used with Thai locale and converted to [NatNum1], only
                 // exception as lowercase
-    "CCC",     // NF_KEY_CCC Currency abbreviation
-    "BOOLEAN", // NF_KEY_BOOLEAN boolean
-    "GENERAL", // NF_KEY_GENERAL General / Standard
+    u"CCC"_ustr,     // NF_KEY_CCC Currency abbreviation
+    u"BOOLEAN"_ustr, // NF_KEY_BOOLEAN boolean
+    u"GENERAL"_ustr, // NF_KEY_GENERAL General / Standard
 
     // Reserved words translated and color names follow:
-    "TRUE",    // NF_KEY_TRUE boolean true
-    "FALSE",   // NF_KEY_FALSE boolean false
-    "COLOR",   // NF_KEY_COLOR color
+    u"TRUE"_ustr,    // NF_KEY_TRUE boolean true
+    u"FALSE"_ustr,   // NF_KEY_FALSE boolean false
+    u"COLOR"_ustr,   // NF_KEY_COLOR color
         // colours
-    "BLACK",   // NF_KEY_BLACK
-    "BLUE",    // NF_KEY_BLUE
-    "GREEN",   // NF_KEY_GREEN
-    "CYAN",    // NF_KEY_CYAN
-    "RED",     // NF_KEY_RED
-    "MAGENTA", // NF_KEY_MAGENTA
-    "BROWN",   // NF_KEY_BROWN
-    "GREY",    // NF_KEY_GREY
-    "YELLOW",  // NF_KEY_YELLOW
-    "WHITE"    // NF_KEY_WHITE
+    u"BLACK"_ustr,   // NF_KEY_BLACK
+    u"BLUE"_ustr,    // NF_KEY_BLUE
+    u"GREEN"_ustr,   // NF_KEY_GREEN
+    u"CYAN"_ustr,    // NF_KEY_CYAN
+    u"RED"_ustr,     // NF_KEY_RED
+    u"MAGENTA"_ustr, // NF_KEY_MAGENTA
+    u"BROWN"_ustr,   // NF_KEY_BROWN
+    u"GREY"_ustr,    // NF_KEY_GREY
+    u"YELLOW"_ustr,  // NF_KEY_YELLOW
+    u"WHITE"_ustr    // NF_KEY_WHITE
 };
 
 const ::std::vector<Color> ImpSvNumberformatScan::StandardColor{

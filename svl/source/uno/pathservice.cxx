@@ -42,7 +42,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
         {
-            return "com.sun.star.comp.svl.PathService";
+            return u"com.sun.star.comp.svl.PathService"_ustr;
         }
 
     virtual sal_Bool SAL_CALL supportsService (
@@ -53,7 +53,7 @@ public:
 
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
         {
-            css::uno::Sequence< OUString > aRet { "com.sun.star.config.SpecialConfigManager" };
+            css::uno::Sequence< OUString > aRet { u"com.sun.star.config.SpecialConfigManager"_ustr };
             return aRet;
         }
 

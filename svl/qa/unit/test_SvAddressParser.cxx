@@ -27,40 +27,40 @@ class Test : public CppUnit::TestFixture
         // <https://tools.ietf.org/html/rfc822> "Standard for the Format of ARPA Internet Text
         // Messages":
         {
-            SvAddressParser p("Alfred Neuman <Neuman@BBN-TENEXA>");
+            SvAddressParser p(u"Alfred Neuman <Neuman@BBN-TENEXA>"_ustr);
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), p.Count());
-            CPPUNIT_ASSERT_EQUAL(OUString("Neuman@BBN-TENEXA"), p.GetEmailAddress(0));
+            CPPUNIT_ASSERT_EQUAL(u"Neuman@BBN-TENEXA"_ustr, p.GetEmailAddress(0));
         }
         {
-            SvAddressParser p("Neuman@BBN-TENEXA");
+            SvAddressParser p(u"Neuman@BBN-TENEXA"_ustr);
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), p.Count());
-            CPPUNIT_ASSERT_EQUAL(OUString("Neuman@BBN-TENEXA"), p.GetEmailAddress(0));
+            CPPUNIT_ASSERT_EQUAL(u"Neuman@BBN-TENEXA"_ustr, p.GetEmailAddress(0));
         }
         {
-            SvAddressParser p("\"George, Ted\" <Shared@Group.Arpanet>");
+            SvAddressParser p(u"\"George, Ted\" <Shared@Group.Arpanet>"_ustr);
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), p.Count());
-            CPPUNIT_ASSERT_EQUAL(OUString("Shared@Group.Arpanet"), p.GetEmailAddress(0));
+            CPPUNIT_ASSERT_EQUAL(u"Shared@Group.Arpanet"_ustr, p.GetEmailAddress(0));
         }
         {
-            SvAddressParser p("Wilt . (the  Stilt) Chamberlain@NBA.US");
+            SvAddressParser p(u"Wilt . (the  Stilt) Chamberlain@NBA.US"_ustr);
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), p.Count());
-            CPPUNIT_ASSERT_EQUAL(OUString("Wilt.Chamberlain@NBA.US"), p.GetEmailAddress(0));
+            CPPUNIT_ASSERT_EQUAL(u"Wilt.Chamberlain@NBA.US"_ustr, p.GetEmailAddress(0));
         }
         {
-            SvAddressParser p("Gourmets:  Pompous Person <WhoZiWhatZit@Cordon-Bleu>,\n"
+            SvAddressParser p(u"Gourmets:  Pompous Person <WhoZiWhatZit@Cordon-Bleu>,\n"
                               "           Childs@WGBH.Boston, Galloping Gourmet@\n"
                               "           ANT.Down-Under (Australian National Television),\n"
                               "           Cheapie@Discount-Liquors;,\n"
                               "  Cruisers:  Port@Portugal, Jones@SEA;,\n"
-                              "    Another@Somewhere.SomeOrg");
+                              "    Another@Somewhere.SomeOrg"_ustr);
             CPPUNIT_ASSERT_EQUAL(sal_Int32(7), p.Count());
-            CPPUNIT_ASSERT_EQUAL(OUString("WhoZiWhatZit@Cordon-Bleu"), p.GetEmailAddress(0));
-            CPPUNIT_ASSERT_EQUAL(OUString("Childs@WGBH.Boston"), p.GetEmailAddress(1));
-            CPPUNIT_ASSERT_EQUAL(OUString("Gourmet@ANT.Down-Under"), p.GetEmailAddress(2));
-            CPPUNIT_ASSERT_EQUAL(OUString("Cheapie@Discount-Liquors"), p.GetEmailAddress(3));
-            CPPUNIT_ASSERT_EQUAL(OUString("Port@Portugal"), p.GetEmailAddress(4));
-            CPPUNIT_ASSERT_EQUAL(OUString("Jones@SEA"), p.GetEmailAddress(5));
-            CPPUNIT_ASSERT_EQUAL(OUString("Another@Somewhere.SomeOrg"), p.GetEmailAddress(6));
+            CPPUNIT_ASSERT_EQUAL(u"WhoZiWhatZit@Cordon-Bleu"_ustr, p.GetEmailAddress(0));
+            CPPUNIT_ASSERT_EQUAL(u"Childs@WGBH.Boston"_ustr, p.GetEmailAddress(1));
+            CPPUNIT_ASSERT_EQUAL(u"Gourmet@ANT.Down-Under"_ustr, p.GetEmailAddress(2));
+            CPPUNIT_ASSERT_EQUAL(u"Cheapie@Discount-Liquors"_ustr, p.GetEmailAddress(3));
+            CPPUNIT_ASSERT_EQUAL(u"Port@Portugal"_ustr, p.GetEmailAddress(4));
+            CPPUNIT_ASSERT_EQUAL(u"Jones@SEA"_ustr, p.GetEmailAddress(5));
+            CPPUNIT_ASSERT_EQUAL(u"Another@Somewhere.SomeOrg"_ustr, p.GetEmailAddress(6));
         }
     }
 

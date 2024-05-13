@@ -51,59 +51,59 @@ ItemInfoPackage& getItemInfoPackageTest()
 CPPUNIT_TEST_FIXTURE(StylePoolTest, testIterationOrder)
 {
     // Set up a style pool with multiple parents.
-    rtl::Reference<SfxItemPool> pPool = new SfxItemPool("test");
+    rtl::Reference<SfxItemPool> pPool = new SfxItemPool(u"test"_ustr);
     pPool->registerItemInfoPackage(getItemInfoPackageTest());
     {
         // Set up parents in mixed order to make sure we do not sort by pointer address.
         SfxItemSet aParent1(*pPool, svl::Items<1, 1>);
         SfxItemSet aChild1(*pPool, svl::Items<1, 1>);
         aChild1.SetParent(&aParent1);
-        SfxStringItem aItem1(1, "Item1");
+        SfxStringItem aItem1(1, u"Item1"_ustr);
         aChild1.Put(aItem1);
 
         SfxItemSet aParent3(*pPool, svl::Items<1, 1>);
         SfxItemSet aChild3(*pPool, svl::Items<1, 1>);
         aChild3.SetParent(&aParent3);
-        SfxStringItem aItem3(1, "Item3");
+        SfxStringItem aItem3(1, u"Item3"_ustr);
         aChild3.Put(aItem3);
 
         SfxItemSet aParent2(*pPool, svl::Items<1, 1>);
         SfxItemSet aChild2(*pPool, svl::Items<1, 1>);
         aChild2.SetParent(&aParent2);
-        SfxStringItem aItem2(1, "Item2");
+        SfxStringItem aItem2(1, u"Item2"_ustr);
         aChild2.Put(aItem2);
 
         // Insert item sets in alphabetical order.
         StylePool aStylePool;
-        OUString aChild1Name("Child1");
+        OUString aChild1Name(u"Child1"_ustr);
         aStylePool.insertItemSet(aChild1, &aChild1Name);
-        OUString aChild3Name("Child3");
+        OUString aChild3Name(u"Child3"_ustr);
         aStylePool.insertItemSet(aChild3, &aChild3Name);
-        OUString aChild2Name("Child2");
+        OUString aChild2Name(u"Child2"_ustr);
         aStylePool.insertItemSet(aChild2, &aChild2Name);
         std::unique_ptr<IStylePoolIteratorAccess> pIter = aStylePool.createIterator();
         std::shared_ptr<SfxItemSet> pStyle1 = pIter->getNext();
         CPPUNIT_ASSERT(pStyle1);
         const SfxStringItem* pItem1 = static_cast<const SfxStringItem*>(pStyle1->GetItem(1));
-        CPPUNIT_ASSERT_EQUAL(OUString("Item1"), pItem1->GetValue());
+        CPPUNIT_ASSERT_EQUAL(u"Item1"_ustr, pItem1->GetValue());
         std::shared_ptr<SfxItemSet> pStyle2 = pIter->getNext();
         CPPUNIT_ASSERT(pStyle2);
         const SfxStringItem* pItem2 = static_cast<const SfxStringItem*>(pStyle2->GetItem(1));
         // Without the accompanying fix in place, this test would have failed with 'Expected: Item2;
         // Actual: Item3'. The iteration order depended on the pointer address on the pointer
         // address of the parents.
-        CPPUNIT_ASSERT_EQUAL(OUString("Item2"), pItem2->GetValue());
+        CPPUNIT_ASSERT_EQUAL(u"Item2"_ustr, pItem2->GetValue());
         std::shared_ptr<SfxItemSet> pStyle3 = pIter->getNext();
         CPPUNIT_ASSERT(pStyle3);
         const SfxStringItem* pItem3 = static_cast<const SfxStringItem*>(pStyle3->GetItem(1));
-        CPPUNIT_ASSERT_EQUAL(OUString("Item3"), pItem3->GetValue());
+        CPPUNIT_ASSERT_EQUAL(u"Item3"_ustr, pItem3->GetValue());
         CPPUNIT_ASSERT(!pIter->getNext());
     }
 }
 
 CPPUNIT_TEST_FIXTURE(StylePoolTest, testFixedItemSet)
 {
-    rtl::Reference<SfxItemPool> pPool = new SfxItemPool("test");
+    rtl::Reference<SfxItemPool> pPool = new SfxItemPool(u"test"_ustr);
     pPool->registerItemInfoPackage(getItemInfoPackageTest());
 
     SfxItemSetFixed<1, 2> aItemSet1(*pPool);
