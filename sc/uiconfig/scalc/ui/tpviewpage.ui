@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.40.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkBox" id="TpViewPage">
@@ -72,6 +72,11 @@
                     <property name="receives-default">False</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="annot-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|annot">Specifies that a small rectangle in the top right corner of the cell indicates that a comment exists.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -86,6 +91,11 @@
                     <property name="receives-default">False</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="formulamark-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|formulamark">Draws a blue triangle in the bottom-left corner of a cell that contains a formula. When pointing over the blue triangle, the formula is shown in a tool tip even if a different cell is selected.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -311,6 +321,11 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="cbNoteAuthor-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|cbNoteAuthor">Specifies whether the author of the comment is displayed above the comment.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -465,6 +480,11 @@
                     <property name="use-underline">True</property>
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="cbSummary-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|cbSummary">If this box is checked, a Search Results window appears when you choose Find All in the Find Box, which summarizes the search results.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -693,6 +713,11 @@
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">grid</property>
                     <property name="xalign">0</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="grid_label-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|_Grid lines:">Specifies when grid lines will be displayed. </property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -744,6 +769,11 @@
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">rbSystemCursor</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="rbThemedCursor-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|T_hemed">Shows the pointer as defined by the icon theme, typically as a fat cross.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -760,6 +790,11 @@
                     <property name="use-underline">True</property>
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="rbSystemCursor-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|rbSystemCursor">Shows the pointer as the system default, typically as an arrow.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">3</property>
@@ -859,6 +894,11 @@
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">objgrf</property>
                     <property name="xalign">0</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="objgrf_label-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|Ob_jects/Images:">Defines if objects and graphics are shown or hidden.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -873,6 +913,11 @@
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">diagram</property>
                     <property name="xalign">0</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="diagram_label-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|Char_ts:">Defines if charts in your document are shown or hidden.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -887,6 +932,11 @@
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">draw</property>
                     <property name="xalign">0</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="draw_label-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|_Drawing objects:">Defines if drawing objects in your document are shown or hidden.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
