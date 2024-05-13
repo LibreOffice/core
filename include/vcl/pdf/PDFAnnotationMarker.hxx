@@ -17,16 +17,14 @@
 
 namespace vcl::pdf
 {
+/** PDF Annotation marker
+ *
+ * All units in 100th mm.
+ */
 struct VCL_DLLPUBLIC PDFAnnotationMarker
 {
-    PDFAnnotationMarker()
-        : mnWidth(0.0f)
-        , maFillColor(COL_TRANSPARENT)
-    {
-    }
-
-    float mnWidth;
-    Color maFillColor;
+    float mnWidth = 0.0;
+    Color maFillColor = COL_TRANSPARENT;
 };
 
 struct VCL_DLLPUBLIC PDFAnnotationMarkerCircle : public PDFAnnotationMarker
