@@ -633,8 +633,8 @@ rtl::Reference<SotStorage> SotStorage::OpenOLEStorage( const css::uno::Reference
         if ( nMode & StreamMode::WRITE )
         {
             uno::Reference < beans::XPropertySet > xStreamProps( xStream, uno::UNO_QUERY_THROW );
-            xStreamProps->setPropertyValue( "MediaType",
-                                            uno::Any( OUString(  "application/vnd.sun.star.oleobject"  ) ) );
+            xStreamProps->setPropertyValue( u"MediaType"_ustr,
+                                            uno::Any( u"application/vnd.sun.star.oleobject"_ustr ) );
         }
 
         pStream = utl::UcbStreamHelper::CreateStream( xStream );
@@ -658,7 +658,7 @@ SotClipboardFormatId SotStorage::GetFormatID( const css::uno::Reference < css::e
     OUString aMediaType;
     try
     {
-        xProps->getPropertyValue("MediaType") >>= aMediaType;
+        xProps->getPropertyValue(u"MediaType"_ustr) >>= aMediaType;
     }
     catch (uno::Exception const&)
     {

@@ -1051,7 +1051,7 @@ sal_Int16 UCBStorageStream_Impl::Commit()
                 // create wrapper to stream that is only used while reading inside package component
                 aArg.Data.set(new FileStreamWrapper_Impl(m_aTempURL));
                 aArg.ReplaceExisting = true;
-                m_pContent->executeCommand( "insert", Any(aArg) );
+                m_pContent->executeCommand( u"insert"_ustr, Any(aArg) );
 
                 // wrapper now controls lifetime of temporary file
                 m_aTempURL.clear();
@@ -1600,7 +1600,7 @@ void UCBStorage_Impl::Init()
         {
             // get the manifest information from the package
             try {
-                Any aAny = m_oContent->getPropertyValue("MediaType");
+                Any aAny = m_oContent->getPropertyValue(u"MediaType"_ustr);
                 OUString aTmp;
                 if ( ( aAny >>= aTmp ) && !aTmp.isEmpty() )
                     m_aContentType = m_aOriginalContentType = aTmp;
@@ -1676,7 +1676,7 @@ void UCBStorage_Impl::ReadContent()
             return;
 
         // create cursor for access to children
-        Reference< XResultSet > xResultSet = m_oContent->createCursor( { "Title", "IsFolder", "MediaType", "Size" }, ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS );
+        Reference< XResultSet > xResultSet = m_oContent->createCursor( { u"Title"_ustr, u"IsFolder"_ustr, u"MediaType"_ustr, u"Size"_ustr }, ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS );
         Reference< XRow > xRow( xResultSet, UNO_QUERY );
         if ( xResultSet.is() )
         {
@@ -1720,7 +1720,7 @@ void UCBStorage_Impl::ReadContent()
                     ::ucbhelper::Content aContent( aName, xComEnv, comphelper::getProcessComponentContext() );
 
                     OUString aMediaType;
-                    Any aAny = aContent.getPropertyValue("MediaType");
+                    Any aAny = aContent.getPropertyValue(u"MediaType"_ustr);
                     if ( ( aAny >>= aMediaType ) && ( aMediaType == "application/vnd.sun.star.oleobject" ) )
                         pElement->m_bIsStorage = true;
                     else if ( aMediaType.isEmpty() )
@@ -1875,8 +1875,8 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
     if ( !m_bIsRoot )
         aPath += m_aName;
     aPath += "/";
-    Sequence < PropertyValue > aProps{ comphelper::makePropertyValue("MediaType", m_aContentType),
-                                       comphelper::makePropertyValue("FullPath", aPath) };
+    Sequence < PropertyValue > aProps{ comphelper::makePropertyValue(u"MediaType"_ustr, m_aContentType),
+                                       comphelper::makePropertyValue(u"FullPath"_ustr, aPath) };
     pSequence[nProps++] = aProps;
 
     if ( m_bIsRoot )
@@ -1894,8 +1894,8 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
         {
             // properties of streams
             OUString aElementPath = aPath + pElement->m_aName;
-            aProps = { comphelper::makePropertyValue("MediaType", pElement->GetContentType()),
-                       comphelper::makePropertyValue("FullPath", aElementPath) };
+            aProps = { comphelper::makePropertyValue(u"MediaType"_ustr, pElement->GetContentType()),
+                       comphelper::makePropertyValue(u"FullPath"_ustr, aElementPath) };
             pSequence[ nProps++ ] = aProps;
         }
     }
@@ -1935,7 +1935,7 @@ bool UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
                     continue;
 
                 Content aNewFolder;
-                if ( !pContent->insertNewContent( rCurr.Type, { "Title" }, { Any(m_aName) }, aNewFolder ) )
+                if ( !pContent->insertNewContent( rCurr.Type, { u"Title"_ustr }, { Any(m_aName) }, aNewFolder ) )
                     continue;
 
                 // remove old content, create an "empty" new one and initialize it with the new inserted
@@ -1996,7 +1996,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         // first remove all open stream handles
                         if (pContent && (!pElement->m_xStream.is() || pElement->m_xStream->Clear()))
                         {
-                            pContent->executeCommand( "delete", Any( true ) );
+                            pContent->executeCommand( u"delete"_ustr, Any( true ) );
                             nRet = COMMIT_RESULT_SUCCESS;
                         }
                         else
@@ -2031,7 +2031,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                             pElement->m_xStream->m_aContentType = "application/vnd.sun.star.oleobject";
                             Any aValue;
                             aValue <<= true;
-                            pElement->m_xStream->m_pContent->setPropertyValue("Encrypted", aValue );
+                            pElement->m_xStream->m_pContent->setPropertyValue(u"Encrypted"_ustr, aValue );
                         }
 
                         pContent = pElement->GetContent();
@@ -2041,14 +2041,14 @@ sal_Int16 UCBStorage_Impl::Commit()
                     {
                         // name ( title ) of the element was changed
                         nLocalRet = COMMIT_RESULT_SUCCESS;
-                        pContent->setPropertyValue("Title", Any(pElement->m_aName) );
+                        pContent->setPropertyValue(u"Title"_ustr, Any(pElement->m_aName) );
                     }
 
                     if (pContent && pElement->IsLoaded() && pElement->GetContentType() != pElement->GetOriginalContentType())
                     {
                         // mediatype of the element was changed
                         nLocalRet = COMMIT_RESULT_SUCCESS;
-                        pContent->setPropertyValue("MediaType", Any(pElement->GetContentType()) );
+                        pContent->setPropertyValue(u"MediaType"_ustr, Any(pElement->GetContentType()) );
                     }
 
                     if ( nLocalRet != COMMIT_RESULT_NOTHING_TO_DO )
@@ -2095,14 +2095,14 @@ sal_Int16 UCBStorage_Impl::Commit()
                     // clipboard format and ClassId will be retrieved from the media type when the file is loaded again
                     Any aType;
                     aType <<= m_aContentType;
-                    m_oContent->setPropertyValue("MediaType", aType );
+                    m_oContent->setPropertyValue(u"MediaType"_ustr, aType );
 
                     if (  m_bIsLinked )
                     {
                         // write a manifest file
                         // first create a subfolder "META-inf"
                         Content aNewSubFolder;
-                        bool bRet = ::utl::UCBContentHelper::MakeFolder( *m_oContent, "META-INF", aNewSubFolder );
+                        bool bRet = ::utl::UCBContentHelper::MakeFolder( *m_oContent, u"META-INF"_ustr, aNewSubFolder );
                         if ( bRet )
                         {
                             // create a stream to write the manifest file - use a temp file
@@ -2128,7 +2128,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                             xWriter = nullptr;
                             xOutputStream = nullptr;
                             pTempFile.reset();
-                            aNewSubFolder.transferContent( aSource, InsertOperation::Move, "manifest.xml", NameClash::OVERWRITE );
+                            aNewSubFolder.transferContent( aSource, InsertOperation::Move, u"manifest.xml"_ustr, NameClash::OVERWRITE );
                         }
                     }
                     else
@@ -2139,7 +2139,7 @@ sal_Int16 UCBStorage_Impl::Commit()
 #endif
                         // force writing
                         Any aAny;
-                        m_oContent->executeCommand( "flush", aAny );
+                        m_oContent->executeCommand( u"flush"_ustr, aAny );
                         if ( m_pSource != nullptr )
                         {
                             std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), StreamMode::STD_READ ));

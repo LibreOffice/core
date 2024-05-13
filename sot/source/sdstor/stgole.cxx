@@ -91,7 +91,7 @@ void StgInternalStream::Commit()
 ///////////////////////// class StgCompObjStream
 
 StgCompObjStream::StgCompObjStream( BaseStorage& rStg, bool bWr )
-    : StgInternalStream( rStg, "\1CompObj", bWr )
+    : StgInternalStream( rStg, u"\1CompObj"_ustr, bWr )
 {
 }
 
@@ -158,7 +158,7 @@ bool StgCompObjStream::Store()
 /////////////////////////// class StgOleStream
 
 StgOleStream::StgOleStream( BaseStorage& rStg )
-    : StgInternalStream( rStg, "\1Ole", true )
+    : StgInternalStream( rStg, u"\1Ole"_ustr, true )
 {
 }
 

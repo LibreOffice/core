@@ -137,7 +137,7 @@ namespace
                                xObjStor.is());
         CPPUNIT_ASSERT_MESSAGE("sot storage failed to open",
                                !xObjStor->GetError());
-        rtl::Reference<SotStorageStream> xStream = xObjStor->OpenSotStream("Book");
+        rtl::Reference<SotStorageStream> xStream = xObjStor->OpenSotStream(u"Book"_ustr);
         CPPUNIT_ASSERT_MESSAGE("stream failed to open",
                                xStream.is());
         CPPUNIT_ASSERT_MESSAGE("stream failed to open",

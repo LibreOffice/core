@@ -308,7 +308,7 @@ void StgEntry::Init()
 static OUString ToUpperUnicode( const OUString & rStr )
 {
     // I don't know the locale, so en_US is hopefully fine
-    static CharClass aCC( LanguageTag( css::lang::Locale( "en", "US", "" )) );
+    static CharClass aCC( LanguageTag( css::lang::Locale( u"en"_ustr, u"US"_ustr, u""_ustr )) );
     return aCC.uppercase( rStr );
 }
 

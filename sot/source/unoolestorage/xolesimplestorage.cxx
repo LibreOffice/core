@@ -296,7 +296,7 @@ void SAL_CALL OLESimpleStorage::insertByName( const OUString& aName, const uno::
     catch( const uno::Exception& )
     {
         css::uno::Any anyEx = cppu::getCaughtException();
-        throw lang::WrappedTargetException("Insert has failed!",
+        throw lang::WrappedTargetException(u"Insert has failed!"_ustr,
                                             uno::Reference< uno::XInterface >(),
                                             anyEx );
     }
@@ -346,7 +346,7 @@ void SAL_CALL OLESimpleStorage::replaceByName( const OUString& aName, const uno:
     {
         uno::Any aCaught( ::cppu::getCaughtException() );
 
-        throw lang::WrappedTargetException("Can't copy raw stream",
+        throw lang::WrappedTargetException(u"Can't copy raw stream"_ustr,
                                             uno::Reference< uno::XInterface >(),
                                             aCaught );
     }
@@ -667,7 +667,7 @@ void SAL_CALL OLESimpleStorage::setClassInfo( const uno::Sequence< sal_Int8 >& /
 //  XServiceInfo
 OUString SAL_CALL OLESimpleStorage::getImplementationName()
 {
-    return "com.sun.star.comp.embed.OLESimpleStorage";
+    return u"com.sun.star.comp.embed.OLESimpleStorage"_ustr;
 }
 
 sal_Bool SAL_CALL OLESimpleStorage::supportsService( const OUString& ServiceName )
@@ -677,7 +677,7 @@ sal_Bool SAL_CALL OLESimpleStorage::supportsService( const OUString& ServiceName
 
 uno::Sequence< OUString > SAL_CALL OLESimpleStorage::getSupportedServiceNames()
 {
-    return { "com.sun.star.embed.OLESimpleStorage" };
+    return { u"com.sun.star.embed.OLESimpleStorage"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
