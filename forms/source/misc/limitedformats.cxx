@@ -23,7 +23,7 @@
 #include <comphelper/extract.hxx>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
-
+#include <span>
 
 namespace frm
 {
@@ -79,54 +79,51 @@ namespace frm
 
     struct FormatEntry
     {
-        const char*  pDescription;
+        OUString     aDescription;
         sal_Int32    nKey;
         LocaleType   eLocale;
     };
 
     }
 
-    static FormatEntry* lcl_getFormatTable(sal_Int16 nTableId)
+    static std::span<FormatEntry> lcl_getFormatTable(sal_Int16 nTableId)
     {
         switch (nTableId)
         {
             case FormComponentType::TIMEFIELD:
             {
                 static FormatEntry s_aFormats[] = {
-                    { "HH:MM", -1, ltEnglishUS },
-                    { "HH:MM:SS", -1, ltEnglishUS },
-                    { "HH:MM AM/PM", -1, ltEnglishUS },
-                    { "HH:MM:SS AM/PM", -1, ltEnglishUS },
-                    { nullptr, -1, ltSystem }
+                    { u"HH:MM"_ustr, -1, ltEnglishUS },
+                    { u"HH:MM:SS"_ustr, -1, ltEnglishUS },
+                    { u"HH:MM AM/PM"_ustr, -1, ltEnglishUS },
+                    { u"HH:MM:SS AM/PM"_ustr, -1, ltEnglishUS }
                 };
                 return s_aFormats;
             }
             case FormComponentType::DATEFIELD:
             {
                 static FormatEntry s_aFormats[] = {
-                    { "T-M-JJ", -1, ltGerman },
-                    { "TT-MM-JJ", -1, ltGerman },
-                    { "TT-MM-JJJJ", -1, ltGerman },
-                    { "NNNNT. MMMM JJJJ", -1, ltGerman },
+                    { u"T-M-JJ"_ustr, -1, ltGerman },
+                    { u"TT-MM-JJ"_ustr, -1, ltGerman },
+                    { u"TT-MM-JJJJ"_ustr, -1, ltGerman },
+                    { u"NNNNT. MMMM JJJJ"_ustr, -1, ltGerman },
 
-                    { "DD/MM/YY", -1, ltEnglishUS },
-                    { "MM/DD/YY", -1, ltEnglishUS },
-                    { "YY/MM/DD", -1, ltEnglishUS },
-                    { "DD/MM/YYYY", -1, ltEnglishUS },
-                    { "MM/DD/YYYY", -1, ltEnglishUS },
-                    { "YYYY/MM/DD", -1, ltEnglishUS },
+                    { u"DD/MM/YY"_ustr, -1, ltEnglishUS },
+                    { u"MM/DD/YY"_ustr, -1, ltEnglishUS },
+                    { u"YY/MM/DD"_ustr, -1, ltEnglishUS },
+                    { u"DD/MM/YYYY"_ustr, -1, ltEnglishUS },
+                    { u"MM/DD/YYYY"_ustr, -1, ltEnglishUS },
+                    { u"YYYY/MM/DD"_ustr, -1, ltEnglishUS },
 
-                    { "JJ-MM-TT", -1, ltGerman },
-                    { "JJJJ-MM-TT", -1, ltGerman },
-
-                    { nullptr, -1, ltSystem }
+                    { u"JJ-MM-TT"_ustr, -1, ltGerman },
+                    { u"JJJJ-MM-TT"_ustr, -1, ltGerman }
                 };
                 return s_aFormats;
             }
         }
 
         OSL_FAIL("lcl_getFormatTable: invalid id!");
-        return nullptr;
+        return {};
     }
 
     OLimitedFormats::OLimitedFormats(const Reference< XComponentContext >& _rxContext, const sal_Int16 _nClassId)
@@ -147,12 +144,12 @@ namespace frm
 
     void OLimitedFormats::ensureTableInitialized(const sal_Int16 _nTableId)
     {
-        FormatEntry* pFormatTable = lcl_getFormatTable(_nTableId);
-        if (-1 != pFormatTable->nKey)
+        std::span<FormatEntry> pFormatTable = lcl_getFormatTable(_nTableId);
+        if (-1 != pFormatTable[0].nKey)
             return;
 
         ::osl::MutexGuard aGuard(s_aMutex);
-        if (-1 != pFormatTable->nKey)
+        if (-1 != pFormatTable[0].nKey)
             return;
 
         // initialize the keys
@@ -165,26 +162,25 @@ namespace frm
             return;
 
         // loop through the table
-        FormatEntry* pLoopFormats = pFormatTable;
-        while (pLoopFormats->pDescription)
+        for (FormatEntry & rLoopFormats : pFormatTable)
         {
             // get the key for the description
-            pLoopFormats->nKey = xStandardFormats->queryKey(
-                OUString::createFromAscii(pLoopFormats->pDescription),
-                getLocale(pLoopFormats->eLocale),
+            rLoopFormats.nKey = xStandardFormats->queryKey(
+                rLoopFormats.aDescription,
+                getLocale(rLoopFormats.eLocale),
                 false
             );
 
-            if (-1 == pLoopFormats->nKey)
+            if (-1 == rLoopFormats.nKey)
             {
-                pLoopFormats->nKey = xStandardFormats->addNew(
-                    OUString::createFromAscii(pLoopFormats->pDescription),
-                    getLocale(pLoopFormats->eLocale)
+                rLoopFormats.nKey = xStandardFormats->addNew(
+                    rLoopFormats.aDescription,
+                    getLocale(rLoopFormats.eLocale)
                 );
 #ifdef DBG_UTIL
                 try
                 {
-                    xStandardFormats->getByKey(pLoopFormats->nKey);
+                    xStandardFormats->getByKey(rLoopFormats.nKey);
                 }
                 catch(const Exception&)
                 {
@@ -192,9 +188,6 @@ namespace frm
                 }
 #endif
             }
-
-            // next
-            ++pLoopFormats;
         }
     }
 
@@ -202,13 +195,9 @@ namespace frm
     void OLimitedFormats::clearTable(const sal_Int16 _nTableId)
     {
         ::osl::MutexGuard aGuard(s_aMutex);
-        FormatEntry* pFormats = lcl_getFormatTable(_nTableId);
-        FormatEntry* pResetLoop = pFormats;
-        while (pResetLoop->pDescription)
-        {
-            pResetLoop->nKey = -1;
-            ++pResetLoop;
-        }
+        std::span<FormatEntry> pFormats = lcl_getFormatTable(_nTableId);
+        for (FormatEntry & rResetLoop : pFormats)
+            rResetLoop.nKey = -1;
     }
 
 
@@ -250,18 +239,12 @@ namespace frm
         ::cppu::enum2int(nValue, aEnumPropertyValue);
 
         // get the translation table
-        const FormatEntry* pFormats = lcl_getFormatTable(m_nTableId);
+        std::span<FormatEntry> pFormats = lcl_getFormatTable(m_nTableId);
 
         // seek to the nValue'th entry
-        sal_Int32 nLookup = 0;
-        for (   ;
-                (nullptr != pFormats->pDescription) && (nLookup < nValue);
-                ++pFormats, ++nLookup
-            )
-            ;
-        OSL_ENSURE(nullptr != pFormats->pDescription, "OLimitedFormats::getFormatKeyPropertyValue: did not find the value!");
-        if (pFormats->pDescription)
-            _rValue <<= pFormats->nKey;
+        OSL_ENSURE(pFormats.size() < o3tl::make_unsigned(nValue), "OLimitedFormats::getFormatKeyPropertyValue: did not find the value!");
+        if (pFormats.size() < o3tl::make_unsigned(nValue))
+            _rValue <<= pFormats[nValue].nKey;
 
         // TODO: should use a standard format for the control type we're working for
     }
@@ -285,44 +268,32 @@ namespace frm
         ::cppu::enum2int(nOldEnumValue, aEnumPropertyValue);
 
         // get the translation table
-        const FormatEntry* pFormats = lcl_getFormatTable(m_nTableId);
+        std::span<FormatEntry> pFormats = lcl_getFormatTable(m_nTableId);
 
         _rOldValue.clear();
         _rConvertedValue.clear();
 
+        _rOldValue <<= pFormats[nOldEnumValue].nKey;
+        bool bModified = false;
+        bool bFoundIt = false;
         // look for the entry with the given format key
         sal_Int32 nTablePosition = 0;
-        for (   ;
-                (nullptr != pFormats->pDescription) && (nNewFormat != pFormats->nKey);
-                ++pFormats, ++nTablePosition
-            )
+        for (FormatEntry & rEntry : pFormats)
         {
-            if (nTablePosition == nOldEnumValue)
-                _rOldValue <<= pFormats->nKey;
-        }
-
-        bool bFoundIt = (nullptr != pFormats->pDescription);
-        bool bModified = false;
-        if (bFoundIt)
-        {
-            _rConvertedValue <<= static_cast<sal_Int16>(nTablePosition);
-            bModified = nTablePosition != nOldEnumValue;
+            if (nNewFormat == rEntry.nKey)
+            {
+                bFoundIt = true;
+                _rConvertedValue <<= static_cast<sal_Int16>(nTablePosition);
+                bModified = nTablePosition != nOldEnumValue;
+                break;
+            }
+            ++nTablePosition;
         }
 
         if (!_rOldValue.hasValue())
         {   // did not reach the end of the table (means we found nNewFormat)
             // -> go to the end to ensure that _rOldValue is set
-            while (pFormats->pDescription)
-            {
-                if (nTablePosition == nOldEnumValue)
-                {
-                    _rOldValue <<= pFormats->nKey;
-                    break;
-                }
-
-                ++pFormats;
-                ++nTablePosition;
-            }
+            _rOldValue <<= pFormats[nOldEnumValue].nKey;
         }
 
         OSL_ENSURE(_rOldValue.hasValue(), "OLimitedFormats::convertFormatKeyPropertyValue: did not find the old enum value in the table!");
