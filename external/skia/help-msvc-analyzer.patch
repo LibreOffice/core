@@ -5,7 +5,7 @@
  #endif
  
 +// when building with msvc and only when using these headers outside the skia build
-+#if defined(_MSC_VER) && !defined(SKIA_IMPLEMENTATION)
++#if defined(_MSC_VER) && !SKIA_IMPLEMENTATION
 +#    define SkANALYSIS_ASSUME(condition) __analysis_assume(condition)
 +#else
 +#    define SkANALYSIS_ASSUME(condition) static_cast<void>(0)
