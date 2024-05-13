@@ -492,7 +492,7 @@ MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement )
     {
         if ( !m_xMSPPkg.is() )
         {
-            throw RuntimeException( u"PackageMasterScriptProvider is unitialised"_ustr );
+            throw RuntimeException( u"PackageMasterScriptProvider is uninitialised"_ustr );
         }
 
         Reference< container::XNameContainer > xCont( m_xMSPPkg, UNO_QUERY_THROW );
@@ -537,7 +537,7 @@ MasterScriptProvider::removeByName( const OUString& Name )
     {
         if ( !m_xMSPPkg.is() )
         {
-            throw RuntimeException( u"PackageMasterScriptProvider is unitialised"_ustr );
+            throw RuntimeException( u"PackageMasterScriptProvider is uninitialised"_ustr );
         }
 
         Reference< container::XNameContainer > xCont( m_xMSPPkg, UNO_QUERY_THROW );
@@ -598,7 +598,7 @@ MasterScriptProvider::hasByName( const OUString& aName )
         // have a PackageProvider
         else if (!m_xModel.is())
         {
-            throw RuntimeException( u"PackageMasterScriptProvider is unitialised"_ustr );
+            throw RuntimeException( u"PackageMasterScriptProvider is uninitialised"_ustr );
         }
 
     }
