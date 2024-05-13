@@ -11,9 +11,9 @@ disable NSS/GPGMEPP dependent code.
  #include "SignatureInfo.h"
  #include "CertificateInfo.h"
  #include "XRef.h"
-@@ -578,7 +578,7 @@
+@@ -584,7 +584,7 @@
  {
-     return static_cast<FormFieldSignature *>(field)->validateSignature(doVerifyCert, forceRevalidation, validationTime, ocspRevocationCheck, enableAIA);
+     return static_cast<FormFieldSignature *>(field)->validateSignatureResult();
  }
 -
 +#if 0
@@ -60,19 +60,44 @@ disable NSS/GPGMEPP dependent code.
  }
 
  FormSignatureType FormWidgetSignature::signatureType() const
-@@ -2388,6 +2392,7 @@
-
- SignatureInfo *FormFieldSignature::validateSignature(bool doVerifyCert, bool forceRevalidation, time_t validationTime, bool ocspRevocationCheck, bool enableAIA)
+@@ -2395,6 +2399,7 @@
+ 
+ SignatureInfo *FormFieldSignature::validateSignatureAsync(bool doVerifyCert, bool forceRevalidation, time_t validationTime, bool ocspRevocationCheck, bool enableAIA, const std::function<void()> &doneCallback)
  {
 +#if 0
      auto backend = CryptoSign::Factory::createActive();
      if (!backend) {
-         return signature_info;
-@@ -2464,6 +2469,7 @@
-     const CertificateValidationStatus cert_val_state = signature_handler->validateCertificate(std::chrono::system_clock::from_time_t(validationTime), ocspRevocationCheck, enableAIA);
-     signature_info->setCertificateValStatus(cert_val_state);
-
+         if (doneCallback) {
+@@ -2497,6 +2502,7 @@
+ 
+     signature_handler->validateCertificateAsync(std::chrono::system_clock::from_time_t(validationTime), ocspRevocationCheck, enableAIA, doneCallback);
+ 
 +#endif
      return signature_info;
  }
 
+@@ -2508,10 +2508,13 @@
+ 
+ CertificateValidationStatus FormFieldSignature::validateSignatureResult()
+ {
++#if 0
+     if (!signature_handler) {
+         return CERTIFICATE_GENERIC_ERROR;
+     }
+     return signature_handler->validateCertificateResult();
++#endif
++    return CERTIFICATE_GENERIC_ERROR;
+ }
+ 
+ std::vector<Goffset> FormFieldSignature::getSignedRangeBounds() const
+
+--- poppler/poppler/Form.h	2024-05-13 10:18:04.303912457 +0200
++++ poppler/poppler/Form.h	2024-05-13 11:41:51.547002511 +0200
+@@ -669,7 +669,6 @@
+     double customAppearanceLeftFontSize = 20;
+     Ref imageResource = Ref::INVALID();
+     std::unique_ptr<X509CertificateInfo> certificate_info;
+-    std::unique_ptr<CryptoSign::VerificationInterface> signature_handler;
+ 
+     void print(int indent) override;
+ };
