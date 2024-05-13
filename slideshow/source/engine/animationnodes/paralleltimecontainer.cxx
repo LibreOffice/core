@@ -40,7 +40,7 @@ void ParallelTimeContainer::activate_st()
         auto self(getSelf());
         scheduleDeactivationEvent(
             makeEvent( [self=std::move(self)] () { self->deactivate(); },
-                       "ParallelTimeContainer::deactivate") );
+                       u"ParallelTimeContainer::deactivate"_ustr) );
     }
     else { // use default
         scheduleDeactivationEvent();

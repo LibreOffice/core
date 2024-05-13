@@ -121,7 +121,7 @@ namespace slideshow::internal
                                                                 uno::UNO_QUERY_THROW );
 
                 uno::Reference< awt::XWindow2 > xParentWindow(
-                    xPropSet->getPropertyValue("Window"),
+                    xPropSet->getPropertyValue(u"Window"_ustr),
                     uno::UNO_QUERY_THROW );
 
                 uno::Reference<lang::XMultiComponentFactory> xFactory(

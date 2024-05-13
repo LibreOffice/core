@@ -102,7 +102,7 @@ namespace slideshow::internal
                 }
                 const INetURLObject aURL( mpMediaTempFile ? mpMediaTempFile->m_TempFileURL : rSoundURL );
                 mxPlayer = avmedia::MediaWindow::createPlayer(
-                                aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), ""/*TODO!*/ );
+                                aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), u""_ustr/*TODO!*/ );
             }
             catch( uno::RuntimeException& )
             {

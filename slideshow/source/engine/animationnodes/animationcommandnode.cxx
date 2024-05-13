@@ -41,7 +41,7 @@ bool IsTimingRootNode(const uno::Reference<animations::XAnimationNode>& xNode)
 {
     uno::Sequence<beans::NamedValue> aUserData = xNode->getUserData();
     comphelper::SequenceAsHashMap aMap(aUserData);
-    auto it = aMap.find("node-type");
+    auto it = aMap.find(u"node-type"_ustr);
     if (it == aMap.end())
     {
         return false;
@@ -201,7 +201,7 @@ void AnimationCommandNode::activate_st()
     std::shared_ptr<BaseNode> self(getSelf());
     scheduleDeactivationEvent(
         makeEvent( [self=std::move(self)] () { self->deactivate(); },
-                   "AnimationCommandNode::deactivate" ) );
+                   u"AnimationCommandNode::deactivate"_ustr ) );
 }
 
 bool AnimationCommandNode::hasPendingAnimation() const

@@ -393,7 +393,7 @@ void SAL_CALL EventMultiplexerListener::mousePressed(
             makeEvent( std::bind( &EventMultiplexerImpl::mousePressed,
                                     mpEventMultiplexer,
                                     e ),
-                       "EventMultiplexerImpl::mousePressed") );
+                       u"EventMultiplexerImpl::mousePressed"_ustr) );
 }
 
 void SAL_CALL EventMultiplexerListener::mouseReleased(
@@ -408,7 +408,7 @@ void SAL_CALL EventMultiplexerListener::mouseReleased(
             makeEvent( std::bind( &EventMultiplexerImpl::mouseReleased,
                                     mpEventMultiplexer,
                                     e ),
-                       "EventMultiplexerImpl::mouseReleased") );
+                       u"EventMultiplexerImpl::mouseReleased"_ustr) );
 }
 
 void SAL_CALL EventMultiplexerListener::mouseEntered(
@@ -436,7 +436,7 @@ void SAL_CALL EventMultiplexerListener::mouseDragged(
             makeEvent( std::bind( &EventMultiplexerImpl::mouseDragged,
                                     mpEventMultiplexer,
                                     e ),
-                       "EventMultiplexerImpl::mouseDragged") );
+                       u"EventMultiplexerImpl::mouseDragged"_ustr) );
 }
 
 void SAL_CALL EventMultiplexerListener::mouseMoved(
@@ -451,7 +451,7 @@ void SAL_CALL EventMultiplexerListener::mouseMoved(
             makeEvent( std::bind( &EventMultiplexerImpl::mouseMoved,
                                     mpEventMultiplexer,
                                     e ),
-                       "EventMultiplexerImpl::mouseMoved") );
+                       u"EventMultiplexerImpl::mouseMoved"_ustr) );
 }
 
 
@@ -550,7 +550,7 @@ void EventMultiplexerImpl::scheduleTick()
     EventSharedPtr pEvent(
         makeDelay( [this] () { this->tick(); },
                    mnTimeout,
-                   "EventMultiplexerImpl::tick with delay"));
+                   u"EventMultiplexerImpl::tick with delay"_ustr));
 
     // store weak reference to generated event, to notice when
     // the event queue gets cleansed (we then have to

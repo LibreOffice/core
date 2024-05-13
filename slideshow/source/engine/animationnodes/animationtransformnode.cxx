@@ -46,8 +46,8 @@ AnimationActivitySharedPtr AnimationTransformNode::createActivity() const
     {
     default:
         throw css::uno::RuntimeException(
-            "AnimationTransformNode::createTransformActivity(): "
-            "Unknown transform type" );
+            u"AnimationTransformNode::createTransformActivity(): "
+            "Unknown transform type"_ustr );
 
     case animations::AnimationTransformType::TRANSLATE:
     case animations::AnimationTransformType::SCALE:
@@ -64,7 +64,7 @@ AnimationActivitySharedPtr AnimationTransformNode::createActivity() const
         return ActivitiesFactory::createAnimateActivity(
             aParms,
             AnimationFactory::createNumberPropertyAnimation(
-                "Rotate",
+                u"Rotate"_ustr,
                 rShape,
                 getContext().mpSubsettableShapeManager,
                 getSlideSize(),
@@ -75,7 +75,7 @@ AnimationActivitySharedPtr AnimationTransformNode::createActivity() const
         return ActivitiesFactory::createAnimateActivity(
             aParms,
             AnimationFactory::createNumberPropertyAnimation(
-                "SkewX",
+                u"SkewX"_ustr,
                 rShape,
                 getContext().mpSubsettableShapeManager,
                 getSlideSize(),
@@ -86,7 +86,7 @@ AnimationActivitySharedPtr AnimationTransformNode::createActivity() const
         return ActivitiesFactory::createAnimateActivity(
             aParms,
             AnimationFactory::createNumberPropertyAnimation(
-                "SkewY",
+                u"SkewY"_ustr,
                 rShape,
                 getContext().mpSubsettableShapeManager,
                 getSlideSize(),

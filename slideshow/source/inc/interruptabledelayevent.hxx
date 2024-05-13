@@ -38,7 +38,7 @@ namespace slideshow::internal
         public:
             DelayFacade( EventSharedPtr         xEvent,
                          double                 nTimeout    ) :
-                Event("DelayFacade"),
+                Event(u"DelayFacade"_ustr),
                 mpEvent(std::move( xEvent )),
                 mnTimeout( nTimeout )
             {

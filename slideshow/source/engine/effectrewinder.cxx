@@ -165,7 +165,7 @@ void EffectRewinder::setCurrentSlide (
     sal_Int32 nChange(0);
 
     if( xPropSet.is())
-        getPropertyValue( nChange, xPropSet, "Change");
+        getPropertyValue( nChange, xPropSet, u"Change"_ustr);
 
     mbHasAdvancedTimeSetting = nChange;
 }
@@ -206,7 +206,7 @@ bool EffectRewinder::rewind (
                 &EffectRewinder::asynchronousRewindToPreviousSlide,
                 this,
                 rPreviousSlideFunctor),
-            "EffectRewinder::asynchronousRewindToPreviousSlide");
+            u"EffectRewinder::asynchronousRewindToPreviousSlide"_ustr);
     }
     else
     {
@@ -219,7 +219,7 @@ bool EffectRewinder::rewind (
                 nSkipCount,
                 true,
                 rSlideRewindFunctor),
-            "EffectRewinder::asynchronousRewind");
+            u"EffectRewinder::asynchronousRewind"_ustr);
     }
 
     if (mpAsynchronousRewindEvent)
@@ -246,7 +246,7 @@ void EffectRewinder::skipAllMainSequenceEffects()
             nTotalMainSequenceEffectCount,
             false,
             ::std::function<void ()>()),
-        "EffectRewinder::asynchronousRewind");
+        u"EffectRewinder::asynchronousRewind"_ustr);
     mrEventQueue.addEvent(mpAsynchronousRewindEvent);
 }
 
@@ -363,7 +363,7 @@ void EffectRewinder::asynchronousRewind (
                 nEffectCount,
                 false,
                 rSlideRewindFunctor),
-            "EffectRewinder::asynchronousRewind");
+            u"EffectRewinder::asynchronousRewind"_ustr);
         mrEventQueue.addEvent(mpAsynchronousRewindEvent);
     }
     else

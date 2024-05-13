@@ -24,7 +24,7 @@ class Test : public UnoApiTest
 {
 public:
     Test()
-        : UnoApiTest("slideshow/qa/engine/data/")
+        : UnoApiTest(u"slideshow/qa/engine/data/"_ustr)
     {
     }
 };

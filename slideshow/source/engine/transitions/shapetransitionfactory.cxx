@@ -321,7 +321,7 @@ AnimationActivitySharedPtr createShapeTransitionByType(
                         pGeneratedActivity = ActivitiesFactory::createSimpleActivity(
                             rParms,
                             AnimationFactory::createNumberPropertyAnimation(
-                                "Opacity",
+                                u"Opacity"_ustr,
                                 rShape,
                                 rShapeManager,
                                 rSlideSize,

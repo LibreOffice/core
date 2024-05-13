@@ -44,7 +44,7 @@ void SequentialTimeContainer::activate_st()
         auto self(getSelf());
         scheduleDeactivationEvent(
             makeEvent( [self=std::move(self)] () { self->deactivate(); },
-                 "SequentialTimeContainer::deactivate") );
+                 u"SequentialTimeContainer::deactivate"_ustr) );
     }
     else // use default
         scheduleDeactivationEvent();
@@ -67,7 +67,7 @@ void SequentialTimeContainer::skipEffect(
         getContext().mrEventQueue.forceEmpty();
         getContext().mrEventQueue.addEvent(
             makeEvent( [pChildNode] () { pChildNode->deactivate(); },
-                "SequentialTimeContainer::deactivate, skipEffect with delay") );
+                u"SequentialTimeContainer::deactivate, skipEffect with delay"_ustr) );
     }
     else
         OSL_FAIL( "unknown notifier!" );
@@ -87,7 +87,7 @@ bool SequentialTimeContainer::resolveChild(
             std::bind( &SequentialTimeContainer::skipEffect,
                          std::dynamic_pointer_cast<SequentialTimeContainer>( getSelf() ),
                          pChildNode ),
-            "SequentialTimeContainer::skipEffect, resolveChild");
+            u"SequentialTimeContainer::skipEffect, resolveChild"_ustr);
 
         // deactivate child node when skip event occurs:
         getContext().mrUserEventQueue.registerSkipEffectEvent(

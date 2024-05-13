@@ -525,7 +525,7 @@ struct SlideShowImpl::SeparateListenerImpl : public EventHandler,
         // shape), which would cause a flicker.
         mrEventQueue.addEventForNextRound(
             makeEvent( [this] () { this->mrShow.notifySlideAnimationsEnded(); },
-                "SlideShowImpl::notifySlideAnimationsEnded"));
+                u"SlideShowImpl::notifySlideAnimationsEnded"_ustr));
         return true;
     }
 
@@ -610,7 +610,7 @@ SlideShowImpl::SlideShowImpl(
             // #i82460# try to retrieve special transition factory
             mxOptionalTransitionFactory.set(
                 xFactory->createInstanceWithContext(
-                    "com.sun.star.presentation.TransitionFactory",
+                    u"com.sun.star.presentation.TransitionFactory"_ustr,
                     mxComponentContext ),
                 uno::UNO_QUERY );
         }
@@ -692,12 +692,12 @@ void SlideShowImpl::disposing()
 
 uno::Sequence< OUString > SAL_CALL SlideShowImpl::getSupportedServiceNames()
 {
-    return { "com.sun.star.presentation.SlideShow" };
+    return { u"com.sun.star.presentation.SlideShow"_ustr };
 }
 
 OUString SAL_CALL SlideShowImpl::getImplementationName()
 {
-    return "com.sun.star.comp.presentation.SlideShow";
+    return u"com.sun.star.comp.presentation.SlideShow"_ustr;
 }
 
 sal_Bool SAL_CALL SlideShowImpl::supportsService(const OUString& aServiceName)
@@ -779,7 +779,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
     sal_Int16 nTransitionType(0);
     if( !getPropertyValue( nTransitionType,
                            xPropSet,
-                           "TransitionType") )
+                           u"TransitionType"_ustr) )
     {
         SAL_INFO("slideshow", "createSlideTransition(): "
                    "Could not extract slide transition type from XDrawPage - assuming no transition" );
@@ -789,7 +789,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
     sal_Int16 nTransitionSubType(0);
     if( !getPropertyValue( nTransitionSubType,
                            xPropSet,
-                           "TransitionSubtype") )
+                           u"TransitionSubtype"_ustr) )
     {
         SAL_INFO("slideshow", "createSlideTransition(): "
                    "Could not extract slide transition subtype from XDrawPage - assuming no transition" );
@@ -799,7 +799,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
     bool bTransitionDirection(false);
     if( !getPropertyValue( bTransitionDirection,
                            xPropSet,
-                           "TransitionDirection") )
+                           u"TransitionDirection"_ustr) )
     {
         SAL_INFO("slideshow", "createSlideTransition(): "
                    "Could not extract slide transition direction from XDrawPage - assuming default direction" );
@@ -808,7 +808,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
     sal_Int32 aUnoColor(0);
     if( !getPropertyValue( aUnoColor,
                            xPropSet,
-                           "TransitionFadeColor") )
+                           u"TransitionFadeColor"_ustr) )
     {
         SAL_INFO("slideshow", "createSlideTransition(): "
                    "Could not extract slide transition fade color from XDrawPage - assuming black" );
@@ -819,10 +819,10 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
     uno::Any aSound;
     bool bLoopSound = false;
 
-    if( !getPropertyValue( aSound, xPropSet, "Sound") )
+    if( !getPropertyValue( aSound, xPropSet, u"Sound"_ustr) )
         SAL_INFO("slideshow", "createSlideTransition(): Could not determine transition sound effect URL from XDrawPage - using no sound" );
 
-    if( !getPropertyValue( bLoopSound, xPropSet, "LoopSound" ) )
+    if( !getPropertyValue( bLoopSound, xPropSet, u"LoopSound"_ustr ) )
         SAL_INFO("slideshow", "createSlideTransition(): Could not get slide property 'LoopSound' - using no sound" );
 
     NumberAnimationSharedPtr pTransition(
@@ -848,7 +848,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
     double nTransitionDuration(0.0);
     if( !getPropertyValue( nTransitionDuration,
                            xPropSet,
-                           "TransitionDuration") )
+                           u"TransitionDuration"_ustr) )
     {
         SAL_INFO("slideshow", "createSlideTransition(): "
                    "Could not extract slide transition duration from XDrawPage - assuming no transition" );
@@ -858,7 +858,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
     sal_Int32 nMinFrames(5);
     if( !getPropertyValue( nMinFrames,
                            xPropSet,
-                           "MinimalFrameNumber") )
+                           u"MinimalFrameNumber"_ustr) )
     {
         SAL_INFO("slideshow", "createSlideTransition(): "
                    "No minimal number of frames given - assuming 5" );
@@ -870,7 +870,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
     maEventQueue.addEvent(
         makeEvent( [pTransition] () {
                         pTransition->prefetch(); },
-            "Animation::prefetch"));
+            u"Animation::prefetch"_ustr));
 
     return ActivitySharedPtr(
         ActivitiesFactory::createSimpleActivity(
@@ -1147,7 +1147,7 @@ void SlideShowImpl::displaySlide(
                     mpCurrentSlide,
                     makeEvent(
                         [this] () { this->notifySlideTransitionEnded(false); },
-                        "SlideShowImpl::notifySlideTransitionEnded")));
+                        u"SlideShowImpl::notifySlideTransitionEnded"_ustr)));
 
             if (bSkipSlideTransition)
             {
@@ -1170,7 +1170,7 @@ void SlideShowImpl::displaySlide(
                 maEventQueue.addEvent(
                     makeEvent(
                         [this] () { this->notifySlideTransitionEnded(true); },
-                        "SlideShowImpl::notifySlideTransitionEnded"));
+                        u"SlideShowImpl::notifySlideTransitionEnded"_ustr));
             }
         }
     } // finally
@@ -1207,7 +1207,7 @@ void SlideShowImpl::redisplayCurrentSlide()
     // effect start event right away.
     maEventQueue.addEvent(
         makeEvent( [this] () { this->notifySlideTransitionEnded(true); },
-            "SlideShowImpl::notifySlideTransitionEnded"));
+            u"SlideShowImpl::notifySlideTransitionEnded"_ustr));
 
     maListenerContainer.forEach(
         [](uno::Reference<presentation::XSlideShowListener> const& xListener)
@@ -1433,30 +1433,30 @@ void lcl_setPropertiesToShape(const drawing::PointSequenceSequence& rPoints,
     //Give the built PointSequenceSequence.
     uno::Any aParam;
     aParam <<= rPoints;
-    aXPropSet->setPropertyValue("PolyPolygon", aParam);
+    aXPropSet->setPropertyValue(u"PolyPolygon"_ustr, aParam);
 
     //LineStyle : SOLID by default
     drawing::LineStyle eLS;
     eLS = drawing::LineStyle_SOLID;
-    aXPropSet->setPropertyValue("LineStyle", uno::Any(eLS));
+    aXPropSet->setPropertyValue(u"LineStyle"_ustr, uno::Any(eLS));
 
     //LineCap : ROUND by default, same as in show mode
     drawing::LineCap eLC;
     eLC = drawing::LineCap_ROUND;
-    aXPropSet->setPropertyValue("LineCap", uno::Any(eLC));
+    aXPropSet->setPropertyValue(u"LineCap"_ustr, uno::Any(eLC));
 
     //LineColor
     sal_uInt32 nLineColor = 0;
     if (pCanvasPolyPoly)
         nLineColor = pCanvasPolyPoly->getRGBALineColor();
     //Transform polygon color from RRGGBBAA to AARRGGBB
-    aXPropSet->setPropertyValue("LineColor", uno::Any(RGBAColor2UnoColor(nLineColor)));
+    aXPropSet->setPropertyValue(u"LineColor"_ustr, uno::Any(RGBAColor2UnoColor(nLineColor)));
 
     //LineWidth
     double  fLineWidth = 0;
     if (pCanvasPolyPoly)
         fLineWidth = pCanvasPolyPoly->getStrokeWidth();
-    aXPropSet->setPropertyValue("LineWidth", uno::Any(static_cast<sal_Int32>(fLineWidth)));
+    aXPropSet->setPropertyValue(u"LineWidth"_ustr, uno::Any(static_cast<sal_Int32>(fLineWidth)));
 }
 
 void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMultiServiceFactory >& xDocFactory )
@@ -1479,7 +1479,7 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
     // create layer
     uno::Reference< drawing::XLayer > xDrawnInSlideshow;
     uno::Any aPropLayer;
-    OUString sLayerName = "DrawnInSlideshow";
+    OUString sLayerName = u"DrawnInSlideshow"_ustr;
     if (xNameAccess->hasByName(sLayerName))
     {
         xNameAccess->getByName(sLayerName) >>= xDrawnInSlideshow;
@@ -1488,16 +1488,16 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
     {
         xDrawnInSlideshow = xLayerManager->insertNewByIndex(xLayerManager->getCount());
         aPropLayer <<= sLayerName;
-        xDrawnInSlideshow->setPropertyValue("Name", aPropLayer);
+        xDrawnInSlideshow->setPropertyValue(u"Name"_ustr, aPropLayer);
     }
 
     // ODF defaults from ctor of SdrLayer are not automatically set on the here
     // created XLayer. Need to be done explicitly here.
     aPropLayer <<= true;
-    xDrawnInSlideshow->setPropertyValue("IsVisible", aPropLayer);
-    xDrawnInSlideshow->setPropertyValue("IsPrintable", aPropLayer);
+    xDrawnInSlideshow->setPropertyValue(u"IsVisible"_ustr, aPropLayer);
+    xDrawnInSlideshow->setPropertyValue(u"IsPrintable"_ustr, aPropLayer);
     aPropLayer <<= false;
-    xDrawnInSlideshow->setPropertyValue("IsLocked", aPropLayer);
+    xDrawnInSlideshow->setPropertyValue(u"IsLocked"_ustr, aPropLayer);
 
     //Register polygons for each slide
     // The polygons are simplified using the Ramer-Douglas-Peucker algorithm.
@@ -1550,7 +1550,7 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
                     // Put what we have collected to the slide and then start a new pen drawing object
                     //create the PolyLineShape. The points will be in its PolyPolygon property.
                     uno::Reference<uno::XInterface> polyshape(
-                        xDocFactory->createInstance("com.sun.star.drawing.PolyLineShape"));
+                        xDocFactory->createInstance(u"com.sun.star.drawing.PolyLineShape"_ustr));
                     uno::Reference<drawing::XShape> rPolyShape(polyshape, uno::UNO_QUERY);
                     //Add the shape to the slide
                     Shapes->add(rPolyShape);
@@ -1575,7 +1575,7 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
         {
             //create the PolyLineShape. The points will be in its PolyPolygon property.
             uno::Reference<uno::XInterface> polyshape(
-                xDocFactory->createInstance("com.sun.star.drawing.PolyLineShape"));
+                xDocFactory->createInstance(u"com.sun.star.drawing.PolyLineShape"_ustr));
             uno::Reference<drawing::XShape> rPolyShape(polyshape, uno::UNO_QUERY);
             //Add the shape to the slide
             Shapes->add(rPolyShape);
@@ -2278,7 +2278,7 @@ void queryAutomaticSlideTransition( uno::Reference<drawing::XDrawPage> const& xD
     if( !xPropSet.is() ||
         !getPropertyValue( nChange,
                            xPropSet,
-                           "Change") )
+                           u"Change"_ustr) )
     {
         SAL_INFO("slideshow",
             "queryAutomaticSlideTransition(): "
@@ -2290,7 +2290,7 @@ void queryAutomaticSlideTransition( uno::Reference<drawing::XDrawPage> const& xD
     if( !xPropSet.is() ||
         !getPropertyValue( nAutomaticNextSlideTimeout,
                            xPropSet,
-                           "HighResDuration") )
+                           u"HighResDuration"_ustr) )
     {
         SAL_INFO("slideshow",
             "queryAutomaticSlideTransition(): "
@@ -2363,7 +2363,7 @@ void SlideShowImpl::notifySlideAnimationsEnded()
             // timeout involved.
             aNotificationEvents.mpImmediateEvent =
                 makeEvent( [this] () { this->notifySlideEnded(false); },
-                    "SlideShowImpl::notifySlideEnded");
+                    u"SlideShowImpl::notifySlideEnded"_ustr);
         }
     }
 
@@ -2427,10 +2427,10 @@ void SlideShowImpl::notifySlideEnded (const bool bReverse)
             if (xPropSet.is())
             {
                 xPropSet->setPropertyValue(
-                    "Change",
+                    u"Change"_ustr,
                     uno::Any( static_cast<sal_Int32>(1) ) );
                 xPropSet->setPropertyValue(
-                    "Duration",
+                    u"Duration"_ustr,
                     uno::Any( static_cast<sal_Int32>(time) ) );
             }
         }

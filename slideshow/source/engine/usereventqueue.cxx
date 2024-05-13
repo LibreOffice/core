@@ -257,7 +257,7 @@ private:
                 return mrEventQueue.addEventWhenQueueIsEmpty(
                     makeEvent( [this] () {
                             this->mrEventMultiplexer.notifyNextEffect();
-                        }, "EventMultiplexer::notifyNextEffect") );
+                        }, u"EventMultiplexer::notifyNextEffect"_ustr) );
             }
             else
                 return true;

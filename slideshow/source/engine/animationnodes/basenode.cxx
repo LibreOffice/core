@@ -245,7 +245,7 @@ bool isMainSequenceRootNode_(
     // detect main sequence root node (need that for
     // end-of-mainsequence signalling below)
     beans::NamedValue const aSearchKey(
-        "node-type",
+        u"node-type"_ustr,
         uno::Any( presentation::EffectNodeType::MAIN_SEQUENCE ) );
 
     uno::Sequence<beans::NamedValue> const userData(xNode->getUserData());
@@ -476,7 +476,7 @@ bool BaseNode::resolve()
             mpCurrentEvent = makeDelay(
                 [self=std::move(self)] () { self->activate(); },
                 mnStartDelay,
-                "AnimationNode::activate with delay");
+                u"AnimationNode::activate with delay"_ustr);
             maContext.mrEventQueue.addEvent( mpCurrentEvent );
         }
 
@@ -730,7 +730,7 @@ void BaseNode::showState() const
 
     // read shape name
     OUString aName;
-    if( xPropSet->getPropertyValue("Name") >>= aName )
+    if( xPropSet->getPropertyValue(u"Name"_ustr) >>= aName )
     {
         SAL_INFO("slideshow.verbose", "Node info: n" <<
                  debugGetNodeName(this) <<

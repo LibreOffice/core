@@ -1084,7 +1084,7 @@ void SlideView::modified( const lang::EventObject& /*aEvent*/ )
     mrEventQueue.addEvent(
         makeEvent( WeakRefWrapper(*this,
             [] (SlideView & rThis) { rThis.mrEventMultiplexer.notifyViewChanged(rThis.mxView); }),
-                   "EventMultiplexer::notifyViewChanged"));
+                   u"EventMultiplexer::notifyViewChanged"_ustr));
 }
 
 // XPaintListener
@@ -1099,7 +1099,7 @@ void SlideView::windowPaint( const awt::PaintEvent& /*e*/ )
     mrEventQueue.addEvent(
         makeEvent( WeakRefWrapper(*this,
             [] (SlideView & rThis) { rThis.mrEventMultiplexer.notifyViewClobbered(rThis.mxView); }),
-                   "EventMultiplexer::notifyViewClobbered") );
+                   u"EventMultiplexer::notifyViewClobbered"_ustr) );
 }
 
 void SlideView::updateCanvas()

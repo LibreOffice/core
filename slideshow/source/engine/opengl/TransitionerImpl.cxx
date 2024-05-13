@@ -301,7 +301,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
         return false;
 
 #if OSL_DEBUG_LEVEL > 0
-    TimerContext aTimerContext("initWindowFromSlideShowView");
+    TimerContext aTimerContext(u"initWindowFromSlideShowView"_ustr);
 #endif
 
     /// take the XSlideShowView and extract the parent window from it. see viewmediashape.cxx
@@ -984,7 +984,7 @@ void OGLTransitionerImpl::GLInitSlides()
         return;
 
 #if OSL_DEBUG_LEVEL > 0
-    TimerContext aTimerContext("texture creation");
+    TimerContext aTimerContext(u"texture creation"_ustr);
 #endif
 
     mpContext->makeCurrent();
@@ -1167,11 +1167,11 @@ public:
     // XServiceInfo
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override
     {
-        return { "com.sun.star.presentation.TransitionFactory" };
+        return { u"com.sun.star.presentation.TransitionFactory"_ustr };
     }
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.presentation.OGLTransitionFactory";
+        return u"com.sun.star.comp.presentation.OGLTransitionFactory"_ustr;
     }
     virtual sal_Bool SAL_CALL supportsService(const OUString& aServiceName) override
     {

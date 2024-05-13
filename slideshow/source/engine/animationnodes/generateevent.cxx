@@ -101,7 +101,7 @@ EventSharedPtr generateEvent(
             if (aEvent.Source >>= xNode) {
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,
-                                    "generateEvent, BEGIN_EVENT");
+                                    u"generateEvent, BEGIN_EVENT"_ustr);
                 rContext.mrUserEventQueue.registerAnimationStartEvent(
                     pEvent, xNode );
             }
@@ -115,7 +115,7 @@ EventSharedPtr generateEvent(
             if (aEvent.Source >>= xNode) {
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,
-                                    "generateEvent, END_EVENT");
+                                    u"generateEvent, END_EVENT"_ustr);
                 rContext.mrUserEventQueue.registerAnimationEndEvent(
                     pEvent, xNode );
             }
@@ -131,7 +131,7 @@ EventSharedPtr generateEvent(
             {
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,
-                                    "generateEvent, ON_CLICK");
+                                    u"generateEvent, ON_CLICK"_ustr);
                 rContext.mrUserEventQueue.registerShapeClickEvent(
                     pEvent, pShape );
             }
@@ -147,7 +147,7 @@ EventSharedPtr generateEvent(
             {
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,
-                                    "generateEvent, ON_DBL_CLICK");
+                                    u"generateEvent, ON_DBL_CLICK"_ustr);
                 rContext.mrUserEventQueue.registerShapeDoubleClickEvent(
                     pEvent, pShape );
             }
@@ -163,7 +163,7 @@ EventSharedPtr generateEvent(
             {
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,
-                                    "generateEvent, ON_MOUSE_ENTER");
+                                    u"generateEvent, ON_MOUSE_ENTER"_ustr);
                 rContext.mrUserEventQueue.registerMouseEnterEvent(
                     pEvent, pShape );
             }
@@ -179,7 +179,7 @@ EventSharedPtr generateEvent(
             {
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,
-                                    "generateEvent, ON_MOUSE_LEAVE");
+                                    u"generateEvent, ON_MOUSE_LEAVE"_ustr);
                 rContext.mrUserEventQueue.registerMouseLeaveEvent(
                     pEvent, pShape );
             }
@@ -195,7 +195,7 @@ EventSharedPtr generateEvent(
         case animations::EventTrigger::ON_NEXT:
             pEvent = makeDelay( rFunctor,
                                 nDelay2 + nAdditionalDelay,
-                                "generateEvent, ON_NEXT");
+                                u"generateEvent, ON_NEXT"_ustr);
             rContext.mrUserEventQueue.registerNextEffectEvent( pEvent );
             break;
         case animations::EventTrigger::ON_STOP_AUDIO:
@@ -203,7 +203,7 @@ EventSharedPtr generateEvent(
             if (aEvent.Source >>= xNode) {
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,
-                                    "generateEvent, ON_STOP_AUDIO");
+                                    u"generateEvent, ON_STOP_AUDIO"_ustr);
                 rContext.mrUserEventQueue.registerAudioStoppedEvent(
                     pEvent, xNode );
             }
@@ -224,7 +224,7 @@ EventSharedPtr generateEvent(
     else if (rEventDescription >>= nDelay1) {
         pEvent = makeDelay( rFunctor,
                             nDelay1 + nAdditionalDelay,
-                            "generateEvent with delay");
+                            u"generateEvent with delay"_ustr);
         // schedule delay event
         rContext.mrEventQueue.addEvent( pEvent );
     }

@@ -458,7 +458,7 @@ AnimationBaseNode::fillCommonParameters() const
     EventSharedPtr pEndEvent;
     if (pSelf) {
         pEndEvent = makeEvent( [pSelf] () {pSelf->deactivate(); },
-            "AnimationBaseNode::deactivate");
+            u"AnimationBaseNode::deactivate"_ustr);
     }
 
     // Calculate the minimum frame count that depends on the duration and

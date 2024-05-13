@@ -56,7 +56,7 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
             pSelf, "cannot cast getSelf() to my type!" );
         aParms.mpEndEvent = makeEvent(
             [pSelf] () { pSelf->scheduleDeactivationEvent(); },
-            "AnimationSetNode::scheduleDeactivationEvent");
+            u"AnimationSetNode::scheduleDeactivationEvent"_ustr);
     }
 
     switch (AnimationFactory::classifyAttributeName( attrName )) {

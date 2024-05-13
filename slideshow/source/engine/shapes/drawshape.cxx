@@ -380,7 +380,7 @@ namespace slideshow::internal
                                                           uno::UNO_QUERY );
             if( xPropSet.is() )
                 getPropertyValue( eKind, xPropSet,
-                                  "TextAnimationKind" );
+                                  u"TextAnimationKind"_ustr );
             mbDrawingLayerAnim = (eKind != drawing::TextAnimationKind_NONE);
 
             // must NOT be called from within initializer list, uses

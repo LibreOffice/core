@@ -56,7 +56,7 @@ public:
     WakeupEvent( std::shared_ptr< ::canvas::tools::ElapsedTime > const& pTimeBase,
                  ActivitySharedPtr const&                                 rActivity,
                  ActivitiesQueue &                                        rActivityQueue ) :
-        Event("WakeupEvent"),
+        Event(u"WakeupEvent"_ustr),
         maTimer(pTimeBase),
         mnNextTime(0.0),
         mpActivity(rActivity),
@@ -162,7 +162,7 @@ RehearseTimingsActivity::RehearseTimingsActivity( const SlideShowContext& rConte
     blackHole->SetMapMode(MapMode(MapUnit::MapPixel));
     tools::Rectangle rect;
     const FontMetric metric( blackHole->GetFontMetric() );
-    blackHole->GetTextBoundRect( rect, "XX:XX:XX" );
+    blackHole->GetTextBoundRect( rect, u"XX:XX:XX"_ustr );
     maSpriteSizePixel.setX( rect.getOpenWidth() * 12 / 10 );
     maSpriteSizePixel.setY( metric.GetLineHeight() * 11 / 10 );
     mnYOffset = (metric.GetAscent() + (metric.GetLineHeight() / 20));

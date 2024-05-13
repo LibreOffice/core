@@ -81,7 +81,7 @@ void AnimationAudioNode::activate_st()
             scheduleDeactivationEvent(
                 makeDelay( [this] () { this->checkPlayingStatus(); },
                            mpPlayer->getDuration(),
-                           "AnimationAudioNode::check if still playing with delay") );
+                           u"AnimationAudioNode::check if still playing with delay"_ustr) );
         }
     }
     else
@@ -90,7 +90,7 @@ void AnimationAudioNode::activate_st()
         auto self(getSelf());
         scheduleDeactivationEvent(
             makeEvent( [self=std::move(self)] () { self->deactivate(); },
-                                    "AnimationAudioNode::deactivate without delay") );
+                                    u"AnimationAudioNode::deactivate without delay"_ustr) );
     }
 }
 
@@ -136,7 +136,7 @@ void AnimationAudioNode::deactivate_st( NodeState /*eDestState*/ )
     // notify _after_ state change:
     getContext().mrEventQueue.addEvent(
         makeEvent( NotifyAudioStopped(getContext().mrEventMultiplexer, getSelf()),
-                   "AnimationAudioNode::notifyAudioStopped") );
+                   u"AnimationAudioNode::notifyAudioStopped"_ustr) );
 }
 
 bool AnimationAudioNode::hasPendingAnimation() const
@@ -196,7 +196,7 @@ void AnimationAudioNode::checkPlayingStatus()
     scheduleDeactivationEvent(
         makeDelay( [xSelf=std::move(xSelf)] () { xSelf->deactivate(); },
             nDuration,
-            "AnimationAudioNode::deactivate with delay") );
+            u"AnimationAudioNode::deactivate with delay"_ustr) );
 }
 
 } // namespace slideshow::internal

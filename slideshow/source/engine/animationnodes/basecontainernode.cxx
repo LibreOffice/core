@@ -172,7 +172,7 @@ bool BaseContainerNode::notifyDeactivatedChild(
             EventSharedPtr aRepetitionEvent =
                     makeDelay( [this] () { this->repeat(); },
                                0.0,
-                               "BaseContainerNode::repeat");
+                               u"BaseContainerNode::repeat"_ustr);
             getContext().mrEventQueue.addEvent( aRepetitionEvent );
         }
         else if (isDurationIndefinite())

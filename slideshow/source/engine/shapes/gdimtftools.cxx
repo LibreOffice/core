@@ -177,20 +177,20 @@ GDIMetaFileSharedPtr getMetaFile( const uno::Reference< lang::XComponent >&     
         drawing::GraphicExportFilter::create(rxContext);
 
     uno::Sequence< beans::PropertyValue > aFilterData{
-        comphelper::makePropertyValue("ScrollText",
+        comphelper::makePropertyValue(u"ScrollText"_ustr,
                                       ((mtfLoadFlags & MTF_LOAD_SCROLL_TEXT_MTF) != 0)),
-        comphelper::makePropertyValue("ExportOnlyBackground",
+        comphelper::makePropertyValue(u"ExportOnlyBackground"_ustr,
                                       ((mtfLoadFlags & MTF_LOAD_BACKGROUND_ONLY) != 0)),
-        comphelper::makePropertyValue("Version", static_cast<sal_Int32>( SOFFICE_FILEFORMAT_50 )),
+        comphelper::makePropertyValue(u"Version"_ustr, static_cast<sal_Int32>( SOFFICE_FILEFORMAT_50 )),
         comphelper::makePropertyValue(
-            "CurrentPage", uno::Reference< uno::XInterface >( xContainingPage,
+            u"CurrentPage"_ustr, uno::Reference< uno::XInterface >( xContainingPage,
                                                               uno::UNO_QUERY_THROW ))
     };
 
     uno::Sequence< beans::PropertyValue > aProps{
-        comphelper::makePropertyValue("FilterName", OUString("SVM")),
-        comphelper::makePropertyValue("GraphicRenderer", uno::Reference< graphic::XGraphicRenderer >(xRenderer)),
-        comphelper::makePropertyValue("FilterData", aFilterData)
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"SVM"_ustr),
+        comphelper::makePropertyValue(u"GraphicRenderer"_ustr, uno::Reference< graphic::XGraphicRenderer >(xRenderer)),
+        comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
     };
 
     xExporter->setSourceDocument( xSource );

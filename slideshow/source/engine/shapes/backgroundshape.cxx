@@ -142,8 +142,8 @@ namespace slideshow::internal
 
             sal_Int32 nDocWidth=0;
             sal_Int32 nDocHeight=0;
-            xPropSet->getPropertyValue("Width") >>= nDocWidth;
-            xPropSet->getPropertyValue("Height") >>= nDocHeight;
+            xPropSet->getPropertyValue(u"Width"_ustr) >>= nDocWidth;
+            xPropSet->getPropertyValue(u"Height"_ustr) >>= nDocHeight;
 
             mpMtf = xMtf;
             maBounds = ::basegfx::B2DRectangle( 0,0,nDocWidth, nDocHeight );

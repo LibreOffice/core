@@ -300,7 +300,7 @@ namespace slideshow::internal
                                             1,
                                             beans::NamedValue(
                                                 //xAnimateNode->getAttributeName(),
-                                                "visibility",
+                                                u"visibility"_ustr,
                                                 uno::Any( bVisible ) ) ) );
                         break;
                     }
