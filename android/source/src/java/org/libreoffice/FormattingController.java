@@ -360,7 +360,7 @@ class FormattingController implements View.OnClickListener {
     }
 
     private void dispatchTakePictureIntent() {
-        if (!mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+        if (!mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
             Snackbar.make(mContext.findViewById(R.id.button_insert_picture),
                     mContext.getResources().getString(R.string.no_camera_found), Snackbar.LENGTH_SHORT).show();
             return;
