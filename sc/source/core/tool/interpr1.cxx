@@ -5239,8 +5239,16 @@ void ScInterpreter::ScXMatch()
     // get search value
     if (nGlobalError == FormulaError::NONE)
     {
-        switch (GetStackType())
+        switch (GetRawStackType())
         {
+            case svMissing:
+            case svEmptyCell:
+            {
+                vsa.isEmptySearch = true;
+                vsa.isStringSearch = false;
+                vsa.sSearchStr = GetString();
+            }
+            break;
             case svDouble:
             {
                 vsa.isStringSearch = false;
@@ -11574,6 +11582,12 @@ bool ScInterpreter::SearchVectorForValue( VectorSearchArguments& vsa )
     }
 
     ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+    // allow to match empty cells as result if we are looking for the next smaller
+    // or larger values in case of the new lookup functions
+    if (rEntry.eOp != SC_EQUAL && (vsa.nSearchOpCode == SC_OPCODE_X_LOOKUP ||
+        vsa.nSearchOpCode == SC_OPCODE_X_MATCH))
+        rItem.mbMatchEmpty = true;
+
     if ( vsa.isStringSearch )
     {
         rItem.meType   = ScQueryEntry::ByString;
@@ -11586,7 +11600,8 @@ bool ScInterpreter::SearchVectorForValue( VectorSearchArguments& vsa )
                 rParam.eSearchType = DetectSearchType(rEntry.GetQueryItem().maString.getString(), mrDoc);
         }
     }
-    else if ( vsa.nSearchOpCode == SC_OPCODE_X_LOOKUP && vsa.isEmptySearch )
+    else if ( vsa.isEmptySearch && (vsa.nSearchOpCode == SC_OPCODE_X_LOOKUP ||
+        vsa.nSearchOpCode == SC_OPCODE_X_MATCH) )
     {
         rEntry.SetQueryByEmpty();
         rItem.mbMatchEmpty = true;
