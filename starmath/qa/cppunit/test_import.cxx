@@ -23,7 +23,7 @@ class Test : public UnoApiTest
 {
 public:
     Test()
-        : UnoApiTest("starmath/qa/cppunit/data/")
+        : UnoApiTest(u"starmath/qa/cppunit/data/"_ustr)
     {
     }
 

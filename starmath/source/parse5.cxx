@@ -432,13 +432,13 @@ void SmParser5::NextToken() //Central part of the parser
         // See https://bz.apache.org/ooo/show_bug.cgi?id=45779
         aRes
             = m_aNumCC.parsePredefinedToken(KParseType::ASC_NUMBER, m_aBufferString, m_nBufferIndex,
-                                            coNumStartFlags, "", coNumContFlags, "");
+                                            coNumStartFlags, u""_ustr, coNumContFlags, u""_ustr);
 
         if (aRes.TokenType == 0)
         {
             // Try again with the default token parsing.
-            aRes = m_pSysCC->parseAnyToken(m_aBufferString, m_nBufferIndex, coStartFlags, "",
-                                           coContFlags, "");
+            aRes = m_pSysCC->parseAnyToken(m_aBufferString, m_nBufferIndex, coStartFlags, u""_ustr,
+                                           coContFlags, u""_ustr);
         }
 
         nRealStart = m_nBufferIndex + aRes.LeadingWhiteSpace;
@@ -668,9 +668,9 @@ void SmParser5::NextToken() //Central part of the parser
                                "unexpected comment start");
 
                     // get identifier of user-defined character
-                    ParseResult aTmpRes = m_pSysCC->parseAnyToken(m_aBufferString, rnEndPos,
-                                                                  KParseTokens::ANY_LETTER, "",
-                                                                  coUserDefinedCharContFlags, "");
+                    ParseResult aTmpRes = m_pSysCC->parseAnyToken(
+                        m_aBufferString, rnEndPos, KParseTokens::ANY_LETTER, u""_ustr,
+                        coUserDefinedCharContFlags, u""_ustr);
 
                     sal_Int32 nTmpStart = rnEndPos + aTmpRes.LeadingWhiteSpace;
 
@@ -984,8 +984,8 @@ void SmParser5::NextTokenColor(SmTokenType dvipload)
         while (UnicodeType::SPACE_SEPARATOR == m_pSysCC->getType(m_aBufferString, m_nBufferIndex))
             ++m_nBufferIndex;
         //parse, there are few options, so less strict.
-        aRes = m_pSysCC->parseAnyToken(m_aBufferString, m_nBufferIndex, coStartFlags, "",
-                                       coContFlags, "");
+        aRes = m_pSysCC->parseAnyToken(m_aBufferString, m_nBufferIndex, coStartFlags, u""_ustr,
+                                       coContFlags, u""_ustr);
         nRealStart = m_nBufferIndex + aRes.LeadingWhiteSpace;
         m_nBufferIndex = nRealStart;
         bCont = false;
@@ -1066,13 +1066,13 @@ void SmParser5::NextTokenFontSize()
         while (UnicodeType::SPACE_SEPARATOR == m_pSysCC->getType(m_aBufferString, m_nBufferIndex))
             ++m_nBufferIndex;
         //hexadecimal parser
-        aRes = m_pSysCC->parseAnyToken(m_aBufferString, m_nBufferIndex, coNum16StartFlags, ".",
-                                       coNum16ContFlags, ".,");
+        aRes = m_pSysCC->parseAnyToken(m_aBufferString, m_nBufferIndex, coNum16StartFlags,
+                                       u"."_ustr, coNum16ContFlags, u".,"_ustr);
         if (aRes.TokenType == 0)
         {
             // Try again with the default token parsing.
-            aRes = m_pSysCC->parseAnyToken(m_aBufferString, m_nBufferIndex, coStartFlags, "",
-                                           coContFlags, "");
+            aRes = m_pSysCC->parseAnyToken(m_aBufferString, m_nBufferIndex, coStartFlags, u""_ustr,
+                                           coContFlags, u""_ustr);
         }
         else
             hex = true;
@@ -2495,12 +2495,12 @@ std::unique_ptr<SmNode> SmParser5::DoEvaluate()
     // Create node
     std::unique_ptr<SmStructureNode> xSNode(new SmBraceNode(m_aCurToken));
     xSNode->SetSelection(m_aCurESelection);
-    SmToken aToken(TRLINE, MS_VERTLINE, "evaluate", TG::RBrace, 5);
+    SmToken aToken(TRLINE, MS_VERTLINE, u"evaluate"_ustr, TG::RBrace, 5);
 
     // Parse body && left none
     NextToken();
     std::unique_ptr<SmNode> pBody = DoPower();
-    SmToken bToken(TNONE, '\0', "", TG::LBrace, 5);
+    SmToken bToken(TNONE, '\0', u""_ustr, TG::LBrace, 5);
     std::unique_ptr<SmNode> pLeft;
     pLeft.reset(new SmMathSymbolNode(bToken));
 

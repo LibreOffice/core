@@ -643,7 +643,7 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     pSelectedNodesList.reset();
 
     //Create SmBraceNode
-    SmToken aTok(TLEFT, '\0', "left", TG::NONE, 5);
+    SmToken aTok(TLEFT, '\0', u"left"_ustr, TG::NONE, 5);
     SmBraceNode *pBrace = new SmBraceNode(aTok);
     pBrace->SetScaleMode(SmScaleMode::Height);
     std::unique_ptr<SmNode> pLeft( CreateBracket(eBracketType, true) ),
@@ -669,25 +669,25 @@ SmNode *SmCursor::CreateBracket(SmBracketType eBracketType, bool bIsLeft) {
     if(bIsLeft){
         switch(eBracketType){
             case SmBracketType::Round:
-                aTok = SmToken(TLPARENT, MS_LPARENT, "(", TG::LBrace, 5);
+                aTok = SmToken(TLPARENT, MS_LPARENT, u"("_ustr, TG::LBrace, 5);
                 break;
             case SmBracketType::Square:
-                aTok = SmToken(TLBRACKET, MS_LBRACKET, "[", TG::LBrace, 5);
+                aTok = SmToken(TLBRACKET, MS_LBRACKET, u"["_ustr, TG::LBrace, 5);
                 break;
             case SmBracketType::Curly:
-                aTok = SmToken(TLBRACE, MS_LBRACE, "lbrace", TG::LBrace, 5);
+                aTok = SmToken(TLBRACE, MS_LBRACE, u"lbrace"_ustr, TG::LBrace, 5);
                 break;
         }
     } else {
         switch(eBracketType) {
             case SmBracketType::Round:
-                aTok = SmToken(TRPARENT, MS_RPARENT, ")", TG::RBrace, 5);
+                aTok = SmToken(TRPARENT, MS_RPARENT, u")"_ustr, TG::RBrace, 5);
                 break;
             case SmBracketType::Square:
-                aTok = SmToken(TRBRACKET, MS_RBRACKET, "]", TG::RBrace, 5);
+                aTok = SmToken(TRBRACKET, MS_RBRACKET, u"]"_ustr, TG::RBrace, 5);
                 break;
             case SmBracketType::Curly:
-                aTok = SmToken(TRBRACE, MS_RBRACE, "rbrace", TG::RBrace, 5);
+                aTok = SmToken(TRBRACE, MS_RBRACE, u"rbrace"_ustr, TG::RBrace, 5);
                 break;
         }
     }
@@ -770,7 +770,7 @@ bool SmCursor::InsertRow() {
         pNewLineList.reset();
         //Wrap pNewLine in SmLineNode if needed
         if(pLineParent->GetType() == SmNodeType::Line) {
-            std::unique_ptr<SmLineNode> pNewLineNode(new SmLineNode(SmToken(TNEWLINE, '\0', "newline")));
+            std::unique_ptr<SmLineNode> pNewLineNode(new SmLineNode(SmToken(TNEWLINE, '\0', u"newline"_ustr)));
             pNewLineNode->SetSubNodes(std::move(pNewLine), nullptr);
             pNewLine = std::move(pNewLineNode);
         }
@@ -858,7 +858,7 @@ void SmCursor::InsertFraction() {
     pSelectedNodesList.reset();
 
     //Create new fraction
-    SmBinVerNode *pFrac = new SmBinVerNode(SmToken(TOVER, '\0', "over", TG::Product, 0));
+    SmBinVerNode *pFrac = new SmBinVerNode(SmToken(TOVER, '\0', u"over"_ustr, TG::Product, 0));
     std::unique_ptr<SmNode> pRect(new SmRectangleNode(SmToken()));
     pFrac->SetSubNodes(std::move(pNum), std::move(pRect), std::move(pDenom));
 
@@ -917,7 +917,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
         }break;
         case FactorialElement:
         {
-            SmToken token(TFACT, MS_FACT, "fact", TG::UnOper, 5);
+            SmToken token(TFACT, MS_FACT, u"fact"_ustr, TG::UnOper, 5);
             pNewNode = new SmMathSymbolNode(token);
         }break;
         case PlusElement:
@@ -1269,7 +1269,7 @@ void SmCursor::FinishEdit(std::unique_ptr<SmNodeList> pLineList,
        nParentIndex == 0 &&
        entries > 1) {
         //Wrap pLine in scalable round brackets
-        SmToken aTok(TLEFT, '\0', "left", TG::NONE, 5);
+        SmToken aTok(TLEFT, '\0', u"left"_ustr, TG::NONE, 5);
         std::unique_ptr<SmBraceNode> pBrace(new SmBraceNode(aTok));
         pBrace->SetScaleMode(SmScaleMode::Height);
         std::unique_ptr<SmNode> pLeft(  CreateBracket(SmBracketType::Round, true) ),

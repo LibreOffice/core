@@ -106,14 +106,14 @@ using namespace css::accessibility;
 using namespace css::uno;
 
 SmGraphicWindow::SmGraphicWindow(SmViewShell& rShell)
-    : InterimItemWindow(&rShell.GetViewFrame().GetWindow(), "modules/smath/ui/mathwindow.ui", "MathWindow")
+    : InterimItemWindow(&rShell.GetViewFrame().GetWindow(), u"modules/smath/ui/mathwindow.ui"_ustr, u"MathWindow"_ustr)
     , nLinePixH(GetSettings().GetStyleSettings().GetScrollBarSize())
     , nColumnPixW(nLinePixH)
     , nZoom(100)
     // continue to use user-scrolling to make this work equivalent to how it 'always' worked
-    , mxScrolledWindow(m_xBuilder->weld_scrolled_window("scrolledwindow", true))
+    , mxScrolledWindow(m_xBuilder->weld_scrolled_window(u"scrolledwindow"_ustr, true))
     , mxGraphic(new SmGraphicWidget(rShell, *this))
-    , mxGraphicWin(new weld::CustomWeld(*m_xBuilder, "mathview", *mxGraphic))
+    , mxGraphicWin(new weld::CustomWeld(*m_xBuilder, u"mathview"_ustr, *mxGraphic))
 {
     InitControlBase(mxGraphic->GetDrawingArea());
 
@@ -940,13 +940,13 @@ void SmEditController::StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemStat
 /**************************************************************************/
 SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings_, SfxChildWindow *pChildWindow,
                                vcl::Window *pParent)
-    : SfxDockingWindow(pBindings_, pChildWindow, pParent, "EditWindow", "modules/smath/ui/editwindow.ui")
+    : SfxDockingWindow(pBindings_, pChildWindow, pParent, u"EditWindow"_ustr, u"modules/smath/ui/editwindow.ui"_ustr)
     , m_xEdit(new SmEditWindow(*this, *m_xBuilder))
     , aController(*m_xEdit, SID_TEXT, *pBindings_)
     , bExiting(false)
     , aInitialFocusTimer("SmCmdBoxWindow aInitialFocusTimer")
 {
-    set_id("math_edit");
+    set_id(u"math_edit"_ustr);
 
     SetHelpId( HID_SMA_COMMAND_WIN );
     SetSizePixel(LogicToPixel(Size(292 , 94), MapMode(MapUnit::MapAppFont)));
@@ -977,7 +977,7 @@ void SmCmdBoxWindow::ShowContextMenu(const Point& rPos)
     ToTop();
     SmViewShell *pViewSh = GetView();
     if (pViewSh)
-        pViewSh->GetViewFrame().GetDispatcher()->ExecutePopup("edit", this, &rPos);
+        pViewSh->GetViewFrame().GetDispatcher()->ExecutePopup(u"edit"_ustr, this, &rPos);
 }
 
 void SmCmdBoxWindow::Command(const CommandEvent& rCEvt)
@@ -1298,7 +1298,7 @@ void SmViewShell::Insert( SfxMedium& rMedium )
     uno::Reference <embed::XStorage> xStorage = rMedium.GetStorage();
     if (xStorage.is() && xStorage->getElementNames().hasElements())
     {
-        if (xStorage->hasByName("content.xml"))
+        if (xStorage->hasByName(u"content.xml"_ustr))
         {
             // is this a fabulous math package ?
             rtl::Reference<SmModel> xModel(dynamic_cast<SmModel*>(pDoc->GetModel().get()));
@@ -1590,7 +1590,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     SotClipboardFormatId nId = SotClipboardFormatId::MATHML;
                     if (aDataHelper.HasFormat(nId))
                     {
-                        xStrm = aDataHelper.GetInputStream(nId, "");
+                        xStrm = aDataHelper.GetInputStream(nId, u""_ustr);
                         if (xStrm.is())
                         {
                             SfxMedium aClipboardMedium;
@@ -2017,7 +2017,7 @@ public:
     }
 
 private:
-    static OUString GetContextName() { return "Math"; } // Static constant for now
+    static OUString GetContextName() { return u"Math"_ustr; } // Static constant for now
 
     rtl::Reference<svx::sidebar::SelectionChangeHandler> mpSelectionChangeHandler;
 };
@@ -2031,7 +2031,7 @@ SmViewShell::SmViewShell(SfxViewFrame& rFrame_, SfxViewShell *)
 {
     SetStatusText(OUString());
     SetWindow(mxGraphicWindow.get());
-    SfxShell::SetName("SmView");
+    SfxShell::SetName(u"SmView"_ustr);
     SfxShell::SetUndoManager( &GetDoc()->GetEditEngine().GetUndoManager() );
     SetController(new SmController(*this));
 }

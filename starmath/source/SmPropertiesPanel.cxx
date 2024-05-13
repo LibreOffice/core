@@ -41,12 +41,13 @@ SmPropertiesPanel::Create(weld::Widget& rParent,
 
 SmPropertiesPanel::SmPropertiesPanel(weld::Widget& rParent,
                                      const css::uno::Reference<css::frame::XFrame>& xFrame)
-    : PanelLayout(&rParent, "MathPropertiesPanel", "modules/smath/ui/sidebarproperties_math.ui")
+    : PanelLayout(&rParent, u"MathPropertiesPanel"_ustr,
+                  u"modules/smath/ui/sidebarproperties_math.ui"_ustr)
     , mxFrame(xFrame)
-    , mpFormatFontsButton(m_xBuilder->weld_button("btnFormatFonts"))
-    , mpFormatFontSizeButton(m_xBuilder->weld_button("btnFormatFontSize"))
-    , mpFormatSpacingButton(m_xBuilder->weld_button("btnFormatSpacing"))
-    , mpFormatAlignmentButton(m_xBuilder->weld_button("btnFormatAlignment"))
+    , mpFormatFontsButton(m_xBuilder->weld_button(u"btnFormatFonts"_ustr))
+    , mpFormatFontSizeButton(m_xBuilder->weld_button(u"btnFormatFontSize"_ustr))
+    , mpFormatSpacingButton(m_xBuilder->weld_button(u"btnFormatSpacing"_ustr))
+    , mpFormatAlignmentButton(m_xBuilder->weld_button(u"btnFormatAlignment"_ustr))
     , maButtonCommands{ { mpFormatFontsButton.get(), ".uno:ChangeFont" },
                         { mpFormatFontSizeButton.get(), ".uno:ChangeFontSize" },
                         { mpFormatSpacingButton.get(), ".uno:ChangeDistance" },
@@ -56,12 +57,13 @@ SmPropertiesPanel::SmPropertiesPanel(weld::Widget& rParent,
     auto xConfs
         = css::frame::theUICommandDescription::get(comphelper::getProcessComponentContext());
     if (css::uno::Reference<css::container::XNameAccess> xConf{
-            xConfs->getByName("com.sun.star.formula.FormulaProperties"), css::uno::UNO_QUERY })
+            xConfs->getByName(u"com.sun.star.formula.FormulaProperties"_ustr),
+            css::uno::UNO_QUERY })
     {
         for (const auto & [ button, command ] : maButtonCommands)
         {
             comphelper::SequenceAsHashMap props(xConf->getByName(command));
-            button->set_label(props.getUnpackedValueOrDefault("Name", button->get_label()));
+            button->set_label(props.getUnpackedValueOrDefault(u"Name"_ustr, button->get_label()));
         }
     }
 

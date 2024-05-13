@@ -55,7 +55,7 @@ namespace
         SmModule* pModule = pUniqueModule.get();
         SfxApplication::SetModule(SfxToolsModule::Math, std::move(pUniqueModule));
 
-        rFactory.SetDocumentServiceName( "com.sun.star.formula.FormulaProperties" );
+        rFactory.SetDocumentServiceName( u"com.sun.star.formula.FormulaProperties"_ustr );
 
         SmModule::RegisterInterface(pModule);
         SmDocShell::RegisterInterface(pModule);

@@ -62,10 +62,12 @@ css::uno::Reference<css::ui::XUIElement> SAL_CALL SmPanelFactory::createUIElemen
     try
     {
         const comphelper::NamedValueCollection aArguments(Arguments);
-        auto xFrame(aArguments.getOrDefault("Frame", css::uno::Reference<css::frame::XFrame>()));
-        auto xParentWindow(
-            aArguments.getOrDefault("ParentWindow", css::uno::Reference<css::awt::XWindow>()));
-        const sal_uInt64 nBindingsValue(aArguments.getOrDefault("SfxBindings", sal_uInt64(0)));
+        auto xFrame(
+            aArguments.getOrDefault(u"Frame"_ustr, css::uno::Reference<css::frame::XFrame>()));
+        auto xParentWindow(aArguments.getOrDefault(u"ParentWindow"_ustr,
+                                                   css::uno::Reference<css::awt::XWindow>()));
+        const sal_uInt64 nBindingsValue(
+            aArguments.getOrDefault(u"SfxBindings"_ustr, sal_uInt64(0)));
         SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
 
         weld::Widget* pParent(nullptr);
@@ -73,11 +75,13 @@ css::uno::Reference<css::ui::XUIElement> SAL_CALL SmPanelFactory::createUIElemen
             pParent = pTunnel->getWidget();
 
         if (!pParent)
-            throw css::uno::RuntimeException("SmPanelFactory::createUIElement: no ParentWindow");
+            throw css::uno::RuntimeException(
+                u"SmPanelFactory::createUIElement: no ParentWindow"_ustr);
         if (!xFrame)
-            throw css::uno::RuntimeException("SmPanelFactory::createUIElement: no Frame");
+            throw css::uno::RuntimeException(u"SmPanelFactory::createUIElement: no Frame"_ustr);
         if (!pBindings)
-            throw css::uno::RuntimeException("SmPanelFactory::createUIElement: no SfxBindings");
+            throw css::uno::RuntimeException(
+                u"SmPanelFactory::createUIElement: no SfxBindings"_ustr);
 
         std::unique_ptr<PanelLayout> pPanel;
         css::ui::LayoutSize aLayoutSize{ -1, -1, -1 };
@@ -102,8 +106,8 @@ css::uno::Reference<css::ui::XUIElement> SAL_CALL SmPanelFactory::createUIElemen
     catch (const css::uno::Exception&)
     {
         css::uno::Any anyEx = cppu::getCaughtException();
-        throw css::lang::WrappedTargetRuntimeException("SmPanelFactory::createUIElement exception",
-                                                       nullptr, anyEx);
+        throw css::lang::WrappedTargetRuntimeException(
+            u"SmPanelFactory::createUIElement exception"_ustr, nullptr, anyEx);
     }
 
     return {};
@@ -111,7 +115,7 @@ css::uno::Reference<css::ui::XUIElement> SAL_CALL SmPanelFactory::createUIElemen
 
 OUString SmPanelFactory::getImplementationName()
 {
-    return "org.libreoffice.comp.Math.sidebar.SmPanelFactory";
+    return u"org.libreoffice.comp.Math.sidebar.SmPanelFactory"_ustr;
 }
 
 sal_Bool SmPanelFactory::supportsService(OUString const& ServiceName)
@@ -121,7 +125,7 @@ sal_Bool SmPanelFactory::supportsService(OUString const& ServiceName)
 
 css::uno::Sequence<OUString> SmPanelFactory::getSupportedServiceNames()
 {
-    return { "com.sun.star.ui.UIElementFactory" };
+    return { u"com.sun.star.ui.UIElementFactory"_ustr };
 }
 
 } // end of unnamed namespace

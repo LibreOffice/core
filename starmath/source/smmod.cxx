@@ -120,7 +120,7 @@ void SmModule::InitInterface_Impl()
 SmModule::SmModule(SfxObjectFactory* pObjFact)
     : SfxModule("sm"_ostr, {pObjFact})
 {
-    SetName("StarMath");
+    SetName(u"StarMath"_ustr);
 
     SvxModifyControl::RegisterControl(SID_DOC_MODIFIED, this);
 }

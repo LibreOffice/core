@@ -36,7 +36,7 @@ SmEditEngine::SmEditEngine(SfxItemPool* pItemPool)
     EnableUndo(true);
 
     // Length in pixel of a tabulation
-    SetDefTab(sal_uInt16(Application::GetDefaultDevice()->GetTextWidth("XXXX")));
+    SetDefTab(sal_uInt16(Application::GetDefaultDevice()->GetTextWidth(u"XXXX"_ustr)));
 
     // Set default background color by theme
     SetBackgroundColor(
@@ -48,7 +48,7 @@ SmEditEngine::SmEditEngine(SfxItemPool* pItemPool)
                    & EEControlBits(~EEControlBits::PASTESPECIAL));
 
     // Word delimiters for auto word selection by double click
-    SetWordDelimiters(" .=+-*/(){}[];\"");
+    SetWordDelimiters(u" .=+-*/(){}[];\""_ustr);
 
     // Default mapping mode
     SetRefMapMode(MapMode(MapUnit::MapPixel));

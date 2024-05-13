@@ -178,28 +178,28 @@ IMPL_LINK_NOARG(SmPrintOptionsTabPage, SizeButtonClickHdl, weld::Toggleable&, vo
 }
 
 SmPrintOptionsTabPage::SmPrintOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rOptions)
-    : SfxTabPage(pPage, pController, "modules/smath/ui/smathsettings.ui", "SmathSettings", &rOptions)
-    , m_xTitle(m_xBuilder->weld_check_button("title"))
-    , m_xTitleImg(m_xBuilder->weld_widget("locktitle"))
-    , m_xText(m_xBuilder->weld_check_button("text"))
-    , m_xTextImg(m_xBuilder->weld_widget("locktext"))
-    , m_xFrame(m_xBuilder->weld_check_button("frame"))
-    , m_xFrameImg(m_xBuilder->weld_widget("lockframe"))
-    , m_xSizeNormal(m_xBuilder->weld_radio_button("sizenormal"))
-    , m_xSizeScaled(m_xBuilder->weld_radio_button("sizescaled"))
-    , m_xSizeZoomed(m_xBuilder->weld_radio_button("sizezoomed"))
-    , m_xLockPrintImg(m_xBuilder->weld_widget("lockprintformat"))
-    , m_xZoom(m_xBuilder->weld_metric_spin_button("zoom", FieldUnit::PERCENT))
-    , m_xEnableInlineEdit(m_xBuilder->weld_check_button("enableinlineedit"))
-    , m_xEnableInlineEditImg(m_xBuilder->weld_widget("lockenableinlineedit"))
-    , m_xNoRightSpaces(m_xBuilder->weld_check_button("norightspaces"))
-    , m_xNoRightSpacesImg(m_xBuilder->weld_widget("locknorightspaces"))
-    , m_xSaveOnlyUsedSymbols(m_xBuilder->weld_check_button("saveonlyusedsymbols"))
-    , m_xSaveOnlyUsedSymbolsImg(m_xBuilder->weld_widget("locksaveonlyusedsymbols"))
-    , m_xAutoCloseBrackets(m_xBuilder->weld_check_button("autoclosebrackets"))
-    , m_xAutoCloseBracketsImg(m_xBuilder->weld_widget("lockautoclosebrackets"))
-    , m_xSmZoom(m_xBuilder->weld_metric_spin_button("smzoom", FieldUnit::PERCENT))
-    , m_xSmZoomImg(m_xBuilder->weld_widget("locksmzoom"))
+    : SfxTabPage(pPage, pController, u"modules/smath/ui/smathsettings.ui"_ustr, u"SmathSettings"_ustr, &rOptions)
+    , m_xTitle(m_xBuilder->weld_check_button(u"title"_ustr))
+    , m_xTitleImg(m_xBuilder->weld_widget(u"locktitle"_ustr))
+    , m_xText(m_xBuilder->weld_check_button(u"text"_ustr))
+    , m_xTextImg(m_xBuilder->weld_widget(u"locktext"_ustr))
+    , m_xFrame(m_xBuilder->weld_check_button(u"frame"_ustr))
+    , m_xFrameImg(m_xBuilder->weld_widget(u"lockframe"_ustr))
+    , m_xSizeNormal(m_xBuilder->weld_radio_button(u"sizenormal"_ustr))
+    , m_xSizeScaled(m_xBuilder->weld_radio_button(u"sizescaled"_ustr))
+    , m_xSizeZoomed(m_xBuilder->weld_radio_button(u"sizezoomed"_ustr))
+    , m_xLockPrintImg(m_xBuilder->weld_widget(u"lockprintformat"_ustr))
+    , m_xZoom(m_xBuilder->weld_metric_spin_button(u"zoom"_ustr, FieldUnit::PERCENT))
+    , m_xEnableInlineEdit(m_xBuilder->weld_check_button(u"enableinlineedit"_ustr))
+    , m_xEnableInlineEditImg(m_xBuilder->weld_widget(u"lockenableinlineedit"_ustr))
+    , m_xNoRightSpaces(m_xBuilder->weld_check_button(u"norightspaces"_ustr))
+    , m_xNoRightSpacesImg(m_xBuilder->weld_widget(u"locknorightspaces"_ustr))
+    , m_xSaveOnlyUsedSymbols(m_xBuilder->weld_check_button(u"saveonlyusedsymbols"_ustr))
+    , m_xSaveOnlyUsedSymbolsImg(m_xBuilder->weld_widget(u"locksaveonlyusedsymbols"_ustr))
+    , m_xAutoCloseBrackets(m_xBuilder->weld_check_button(u"autoclosebrackets"_ustr))
+    , m_xAutoCloseBracketsImg(m_xBuilder->weld_widget(u"lockautoclosebrackets"_ustr))
+    , m_xSmZoom(m_xBuilder->weld_metric_spin_button(u"smzoom"_ustr, FieldUnit::PERCENT))
+    , m_xSmZoomImg(m_xBuilder->weld_widget(u"locksmzoom"_ustr))
 {
     m_xSizeNormal->connect_toggled(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
     m_xSizeScaled->connect_toggled(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
@@ -218,7 +218,7 @@ SmPrintOptionsTabPage::~SmPrintOptionsTabPage()
 OUString SmPrintOptionsTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label4", "label5", "label1", "label6" };
+    OUString labels[] = { u"label4"_ustr, u"label5"_ustr, u"label1"_ustr, u"label6"_ustr };
 
     for (const auto& label : labels)
     {
@@ -227,7 +227,7 @@ OUString SmPrintOptionsTabPage::GetAllStrings()
     }
 
     OUString checkButton[]
-        = { "title", "text", "frame", "norightspaces", "saveonlyusedsymbols", "autoclosebrackets" };
+        = { u"title"_ustr, u"text"_ustr, u"frame"_ustr, u"norightspaces"_ustr, u"saveonlyusedsymbols"_ustr, u"autoclosebrackets"_ustr };
 
     for (const auto& check : checkButton)
     {
@@ -235,7 +235,7 @@ OUString SmPrintOptionsTabPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString radioButton[] = { "sizenormal", "sizescaled", "sizezoomed" };
+    OUString radioButton[] = { u"sizenormal"_ustr, u"sizescaled"_ustr, u"sizezoomed"_ustr };
 
     for (const auto& radio : radioButton)
     {
@@ -406,12 +406,12 @@ void SmFontDialog::SetFont(const vcl::Font &rFont)
 }
 
 SmFontDialog::SmFontDialog(weld::Window * pParent, OutputDevice *pFntListDevice, bool bHideCheckboxes)
-    : GenericDialogController(pParent, "modules/smath/ui/fontdialog.ui", "FontDialog")
-    , m_xFontBox(m_xBuilder->weld_entry_tree_view("fontgrid", "font", "fonts"))
-    , m_xAttrFrame(m_xBuilder->weld_widget("attrframe"))
-    , m_xBoldCheckBox(m_xBuilder->weld_check_button("bold"))
-    , m_xItalicCheckBox(m_xBuilder->weld_check_button("italic"))
-    , m_xShowFont(new weld::CustomWeld(*m_xBuilder, "preview", m_aShowFont))
+    : GenericDialogController(pParent, u"modules/smath/ui/fontdialog.ui"_ustr, u"FontDialog"_ustr)
+    , m_xFontBox(m_xBuilder->weld_entry_tree_view(u"fontgrid"_ustr, u"font"_ustr, u"fonts"_ustr))
+    , m_xAttrFrame(m_xBuilder->weld_widget(u"attrframe"_ustr))
+    , m_xBoldCheckBox(m_xBuilder->weld_check_button(u"bold"_ustr))
+    , m_xItalicCheckBox(m_xBuilder->weld_check_button(u"italic"_ustr))
+    , m_xShowFont(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aShowFont))
 {
     m_xFontBox->set_height_request_by_rows(8);
 
@@ -458,8 +458,8 @@ class SaveDefaultsQuery : public weld::MessageDialogController
 {
 public:
     explicit SaveDefaultsQuery(weld::Widget* pParent)
-        : MessageDialogController(pParent, "modules/smath/ui/savedefaultsdialog.ui",
-                "SaveDefaultsDialog")
+        : MessageDialogController(pParent, u"modules/smath/ui/savedefaultsdialog.ui"_ustr,
+                u"SaveDefaultsDialog"_ustr)
     {
     }
 };
@@ -479,14 +479,14 @@ IMPL_LINK_NOARG( SmFontSizeDialog, DefaultButtonClickHdl, weld::Button&, void )
 }
 
 SmFontSizeDialog::SmFontSizeDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "modules/smath/ui/fontsizedialog.ui", "FontSizeDialog")
-    , m_xBaseSize(m_xBuilder->weld_metric_spin_button("spinB_baseSize", FieldUnit::POINT))
-    , m_xTextSize(m_xBuilder->weld_metric_spin_button("spinB_text", FieldUnit::PERCENT))
-    , m_xIndexSize(m_xBuilder->weld_metric_spin_button("spinB_index", FieldUnit::PERCENT))
-    , m_xFunctionSize(m_xBuilder->weld_metric_spin_button("spinB_function", FieldUnit::PERCENT))
-    , m_xOperatorSize(m_xBuilder->weld_metric_spin_button("spinB_operator", FieldUnit::PERCENT))
-    , m_xBorderSize(m_xBuilder->weld_metric_spin_button("spinB_limit", FieldUnit::PERCENT))
-    , m_xDefaultButton(m_xBuilder->weld_button("default"))
+    : GenericDialogController(pParent, u"modules/smath/ui/fontsizedialog.ui"_ustr, u"FontSizeDialog"_ustr)
+    , m_xBaseSize(m_xBuilder->weld_metric_spin_button(u"spinB_baseSize"_ustr, FieldUnit::POINT))
+    , m_xTextSize(m_xBuilder->weld_metric_spin_button(u"spinB_text"_ustr, FieldUnit::PERCENT))
+    , m_xIndexSize(m_xBuilder->weld_metric_spin_button(u"spinB_index"_ustr, FieldUnit::PERCENT))
+    , m_xFunctionSize(m_xBuilder->weld_metric_spin_button(u"spinB_function"_ustr, FieldUnit::PERCENT))
+    , m_xOperatorSize(m_xBuilder->weld_metric_spin_button(u"spinB_operator"_ustr, FieldUnit::PERCENT))
+    , m_xBorderSize(m_xBuilder->weld_metric_spin_button(u"spinB_limit"_ustr, FieldUnit::PERCENT))
+    , m_xDefaultButton(m_xBuilder->weld_button(u"default"_ustr))
 {
     m_xDefaultButton->connect_clicked(LINK(this, SmFontSizeDialog, DefaultButtonClickHdl));
 }
@@ -582,18 +582,18 @@ IMPL_LINK_NOARG(SmFontTypeDialog, DefaultButtonClickHdl, weld::Button&, void)
 }
 
 SmFontTypeDialog::SmFontTypeDialog(weld::Window* pParent, OutputDevice *pFntListDevice)
-    : GenericDialogController(pParent, "modules/smath/ui/fonttypedialog.ui", "FontsDialog")
+    : GenericDialogController(pParent, u"modules/smath/ui/fonttypedialog.ui"_ustr, u"FontsDialog"_ustr)
     , pFontListDev(pFntListDevice)
-    , m_xMathFont(new SmFontPickListBox(m_xBuilder->weld_combo_box("mathCB")))
-    , m_xVariableFont(new SmFontPickListBox(m_xBuilder->weld_combo_box("variableCB")))
-    , m_xFunctionFont(new SmFontPickListBox(m_xBuilder->weld_combo_box("functionCB")))
-    , m_xNumberFont(new SmFontPickListBox(m_xBuilder->weld_combo_box("numberCB")))
-    , m_xTextFont(new SmFontPickListBox(m_xBuilder->weld_combo_box("textCB")))
-    , m_xSerifFont(new SmFontPickListBox(m_xBuilder->weld_combo_box("serifCB")))
-    , m_xSansFont(new SmFontPickListBox(m_xBuilder->weld_combo_box("sansCB")))
-    , m_xFixedFont(new SmFontPickListBox(m_xBuilder->weld_combo_box("fixedCB")))
-    , m_xMenuButton(m_xBuilder->weld_menu_button("modify"))
-    , m_xDefaultButton(m_xBuilder->weld_button("default"))
+    , m_xMathFont(new SmFontPickListBox(m_xBuilder->weld_combo_box(u"mathCB"_ustr)))
+    , m_xVariableFont(new SmFontPickListBox(m_xBuilder->weld_combo_box(u"variableCB"_ustr)))
+    , m_xFunctionFont(new SmFontPickListBox(m_xBuilder->weld_combo_box(u"functionCB"_ustr)))
+    , m_xNumberFont(new SmFontPickListBox(m_xBuilder->weld_combo_box(u"numberCB"_ustr)))
+    , m_xTextFont(new SmFontPickListBox(m_xBuilder->weld_combo_box(u"textCB"_ustr)))
+    , m_xSerifFont(new SmFontPickListBox(m_xBuilder->weld_combo_box(u"serifCB"_ustr)))
+    , m_xSansFont(new SmFontPickListBox(m_xBuilder->weld_combo_box(u"sansCB"_ustr)))
+    , m_xFixedFont(new SmFontPickListBox(m_xBuilder->weld_combo_box(u"fixedCB"_ustr)))
+    , m_xMenuButton(m_xBuilder->weld_menu_button(u"modify"_ustr))
+    , m_xDefaultButton(m_xBuilder->weld_button(u"default"_ustr))
 {
     m_xDefaultButton->connect_clicked(LINK(this, SmFontTypeDialog, DefaultButtonClickHdl));
     m_xMenuButton->connect_selected(LINK(this, SmFontTypeDialog, MenuSelectHdl));
@@ -889,20 +889,20 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
 }
 
 SmDistanceDialog::SmDistanceDialog(weld::Window *pParent)
-    : GenericDialogController(pParent, "modules/smath/ui/spacingdialog.ui", "SpacingDialog")
-    , m_xFrame(m_xBuilder->weld_frame("template"))
-    , m_xFixedText1(m_xBuilder->weld_label("label1"))
-    , m_xMetricField1(m_xBuilder->weld_metric_spin_button("spinbutton1", FieldUnit::CM))
-    , m_xFixedText2(m_xBuilder->weld_label("label2"))
-    , m_xMetricField2(m_xBuilder->weld_metric_spin_button("spinbutton2", FieldUnit::CM))
-    , m_xFixedText3(m_xBuilder->weld_label("label3"))
-    , m_xMetricField3(m_xBuilder->weld_metric_spin_button("spinbutton3", FieldUnit::CM))
-    , m_xCheckBox1(m_xBuilder->weld_check_button("checkbutton"))
-    , m_xFixedText4(m_xBuilder->weld_label("label4"))
-    , m_xMetricField4(m_xBuilder->weld_metric_spin_button("spinbutton4", FieldUnit::CM))
-    , m_xMenuButton(m_xBuilder->weld_menu_button("category"))
-    , m_xDefaultButton(m_xBuilder->weld_button("default"))
-    , m_xBitmap(m_xBuilder->weld_widget("image"))
+    : GenericDialogController(pParent, u"modules/smath/ui/spacingdialog.ui"_ustr, u"SpacingDialog"_ustr)
+    , m_xFrame(m_xBuilder->weld_frame(u"template"_ustr))
+    , m_xFixedText1(m_xBuilder->weld_label(u"label1"_ustr))
+    , m_xMetricField1(m_xBuilder->weld_metric_spin_button(u"spinbutton1"_ustr, FieldUnit::CM))
+    , m_xFixedText2(m_xBuilder->weld_label(u"label2"_ustr))
+    , m_xMetricField2(m_xBuilder->weld_metric_spin_button(u"spinbutton2"_ustr, FieldUnit::CM))
+    , m_xFixedText3(m_xBuilder->weld_label(u"label3"_ustr))
+    , m_xMetricField3(m_xBuilder->weld_metric_spin_button(u"spinbutton3"_ustr, FieldUnit::CM))
+    , m_xCheckBox1(m_xBuilder->weld_check_button(u"checkbutton"_ustr))
+    , m_xFixedText4(m_xBuilder->weld_label(u"label4"_ustr))
+    , m_xMetricField4(m_xBuilder->weld_metric_spin_button(u"spinbutton4"_ustr, FieldUnit::CM))
+    , m_xMenuButton(m_xBuilder->weld_menu_button(u"category"_ustr))
+    , m_xDefaultButton(m_xBuilder->weld_button(u"default"_ustr))
+    , m_xBitmap(m_xBuilder->weld_widget(u"image"_ustr))
     , m_pCurrentImage(m_xBitmap.get())
 {
     for (sal_uInt16 i = 0; i < NOCATEGORIES; ++i)
@@ -1011,11 +1011,11 @@ IMPL_LINK_NOARG( SmAlignDialog, DefaultButtonClickHdl, weld::Button&, void )
 }
 
 SmAlignDialog::SmAlignDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "modules/smath/ui/alignmentdialog.ui", "AlignmentDialog")
-    , m_xLeft(m_xBuilder->weld_radio_button("left"))
-    , m_xCenter(m_xBuilder->weld_radio_button("center"))
-    , m_xRight(m_xBuilder->weld_radio_button("right"))
-    , m_xDefaultButton(m_xBuilder->weld_button("default"))
+    : GenericDialogController(pParent, u"modules/smath/ui/alignmentdialog.ui"_ustr, u"AlignmentDialog"_ustr)
+    , m_xLeft(m_xBuilder->weld_radio_button(u"left"_ustr))
+    , m_xCenter(m_xBuilder->weld_radio_button(u"center"_ustr))
+    , m_xRight(m_xBuilder->weld_radio_button(u"right"_ustr))
+    , m_xDefaultButton(m_xBuilder->weld_button(u"default"_ustr))
 {
     m_xDefaultButton->connect_clicked(LINK(this, SmAlignDialog, DefaultButtonClickHdl));
 }
@@ -1413,18 +1413,18 @@ IMPL_LINK_NOARG(SmSymbolDialog, GetClickHdl, weld::Button&, void)
 
 SmSymbolDialog::SmSymbolDialog(weld::Window *pParent, OutputDevice *pFntListDevice,
                                SmSymbolManager &rMgr, SmViewShell &rViewShell)
-    : GenericDialogController(pParent, "modules/smath/ui/catalogdialog.ui", "CatalogDialog")
+    : GenericDialogController(pParent, u"modules/smath/ui/catalogdialog.ui"_ustr, u"CatalogDialog"_ustr)
     , rViewSh(rViewShell)
     , rSymbolMgr(rMgr)
     , pFontListDev(pFntListDevice)
     , m_aSymbolDisplay(rViewShell)
-    , m_xSymbolSets(m_xBuilder->weld_combo_box("symbolset"))
-    , m_xSymbolSetDisplay(new SmShowSymbolSet(m_xBuilder->weld_scrolled_window("scrolledwindow", true), rViewShell))
-    , m_xSymbolSetDisplayArea(new weld::CustomWeld(*m_xBuilder, "symbolsetdisplay", *m_xSymbolSetDisplay))
-    , m_xSymbolName(m_xBuilder->weld_label("symbolname"))
-    , m_xSymbolDisplay(new weld::CustomWeld(*m_xBuilder, "preview", m_aSymbolDisplay))
-    , m_xGetBtn(m_xBuilder->weld_button("ok"))
-    , m_xEditBtn(m_xBuilder->weld_button("edit"))
+    , m_xSymbolSets(m_xBuilder->weld_combo_box(u"symbolset"_ustr))
+    , m_xSymbolSetDisplay(new SmShowSymbolSet(m_xBuilder->weld_scrolled_window(u"scrolledwindow"_ustr, true), rViewShell))
+    , m_xSymbolSetDisplayArea(new weld::CustomWeld(*m_xBuilder, u"symbolsetdisplay"_ustr, *m_xSymbolSetDisplay))
+    , m_xSymbolName(m_xBuilder->weld_label(u"symbolname"_ustr))
+    , m_xSymbolDisplay(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aSymbolDisplay))
+    , m_xGetBtn(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xEditBtn(m_xBuilder->weld_button(u"edit"_ustr))
 {
     m_xSymbolSets->make_sorted();
 
@@ -1715,7 +1715,7 @@ IMPL_LINK_NOARG(SmSymDefineDialog, CharHighlightHdl, SvxShowCharSet*, void)
 
     // display Unicode position as symbol name while iterating over characters
     const OUString aHex(OUString::number(cChar, 16).toAsciiUpperCase());
-    const OUString aPattern( (aHex.getLength() > 4) ? OUString("Ux000000") : OUString("Ux0000") );
+    const OUString aPattern( (aHex.getLength() > 4) ? u"Ux000000"_ustr : u"Ux0000"_ustr );
     OUString aUnicodePos = aPattern.subView( 0, aPattern.getLength() - aHex.getLength() ) +
         aHex;
     m_xSymbols->set_entry_text(aUnicodePos);
@@ -1844,28 +1844,28 @@ void SmSymDefineDialog::UpdateButtons()
 }
 
 SmSymDefineDialog::SmSymDefineDialog(weld::Window* pParent, OutputDevice *pFntListDevice, SmSymbolManager &rMgr)
-    : GenericDialogController(pParent, "modules/smath/ui/symdefinedialog.ui", "EditSymbols")
+    : GenericDialogController(pParent, u"modules/smath/ui/symdefinedialog.ui"_ustr, u"EditSymbols"_ustr)
     , m_xVirDev(VclPtr<VirtualDevice>::Create())
     , m_rSymbolMgr(rMgr)
     , m_xFontList(new FontList(pFntListDevice))
-    , m_xOldSymbols(m_xBuilder->weld_combo_box("oldSymbols"))
-    , m_xOldSymbolSets(m_xBuilder->weld_combo_box("oldSymbolSets"))
-    , m_xSymbols(m_xBuilder->weld_combo_box("symbols"))
-    , m_xSymbolSets(m_xBuilder->weld_combo_box("symbolSets"))
-    , m_xFonts(m_xBuilder->weld_combo_box("fonts"))
-    , m_xFontsSubsetLB(m_xBuilder->weld_combo_box("fontsSubsetLB"))
-    , m_xStyles(m_xBuilder->weld_combo_box("styles"))
-    , m_xOldSymbolName(m_xBuilder->weld_label("oldSymbolName"))
-    , m_xOldSymbolSetName(m_xBuilder->weld_label("oldSymbolSetName"))
-    , m_xSymbolName(m_xBuilder->weld_label("symbolName"))
-    , m_xSymbolSetName(m_xBuilder->weld_label("symbolSetName"))
-    , m_xAddBtn(m_xBuilder->weld_button("add"))
-    , m_xChangeBtn(m_xBuilder->weld_button("modify"))
-    , m_xDeleteBtn(m_xBuilder->weld_button("delete"))
-    , m_xOldSymbolDisplay(new weld::CustomWeld(*m_xBuilder, "oldSymbolDisplay", m_aOldSymbolDisplay))
-    , m_xSymbolDisplay(new weld::CustomWeld(*m_xBuilder, "symbolDisplay", m_aSymbolDisplay))
-    , m_xCharsetDisplay(new SvxShowCharSet(m_xBuilder->weld_scrolled_window("showscroll", true), m_xVirDev))
-    , m_xCharsetDisplayArea(new weld::CustomWeld(*m_xBuilder, "charsetDisplay", *m_xCharsetDisplay))
+    , m_xOldSymbols(m_xBuilder->weld_combo_box(u"oldSymbols"_ustr))
+    , m_xOldSymbolSets(m_xBuilder->weld_combo_box(u"oldSymbolSets"_ustr))
+    , m_xSymbols(m_xBuilder->weld_combo_box(u"symbols"_ustr))
+    , m_xSymbolSets(m_xBuilder->weld_combo_box(u"symbolSets"_ustr))
+    , m_xFonts(m_xBuilder->weld_combo_box(u"fonts"_ustr))
+    , m_xFontsSubsetLB(m_xBuilder->weld_combo_box(u"fontsSubsetLB"_ustr))
+    , m_xStyles(m_xBuilder->weld_combo_box(u"styles"_ustr))
+    , m_xOldSymbolName(m_xBuilder->weld_label(u"oldSymbolName"_ustr))
+    , m_xOldSymbolSetName(m_xBuilder->weld_label(u"oldSymbolSetName"_ustr))
+    , m_xSymbolName(m_xBuilder->weld_label(u"symbolName"_ustr))
+    , m_xSymbolSetName(m_xBuilder->weld_label(u"symbolSetName"_ustr))
+    , m_xAddBtn(m_xBuilder->weld_button(u"add"_ustr))
+    , m_xChangeBtn(m_xBuilder->weld_button(u"modify"_ustr))
+    , m_xDeleteBtn(m_xBuilder->weld_button(u"delete"_ustr))
+    , m_xOldSymbolDisplay(new weld::CustomWeld(*m_xBuilder, u"oldSymbolDisplay"_ustr, m_aOldSymbolDisplay))
+    , m_xSymbolDisplay(new weld::CustomWeld(*m_xBuilder, u"symbolDisplay"_ustr, m_aSymbolDisplay))
+    , m_xCharsetDisplay(new SvxShowCharSet(m_xBuilder->weld_scrolled_window(u"showscroll"_ustr, true), m_xVirDev))
+    , m_xCharsetDisplayArea(new weld::CustomWeld(*m_xBuilder, u"charsetDisplay"_ustr, *m_xCharsetDisplay))
 {
     // auto completion is troublesome since that symbols character also gets automatically selected in the
     // display and if the user previously selected a character to define/redefine that one this is bad

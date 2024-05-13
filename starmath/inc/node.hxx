@@ -1055,7 +1055,7 @@ class SmPlaceNode final : public SmMathSymbolNode
 public:
     explicit SmPlaceNode(const SmToken &rNodeToken)
         : SmMathSymbolNode(SmNodeType::Place, rNodeToken) { }
-    SmPlaceNode() : SmMathSymbolNode(SmNodeType::Place, SmToken(TPLACE, MS_PLACE, "<?>")) { };
+    SmPlaceNode() : SmMathSymbolNode(SmNodeType::Place, SmToken(TPLACE, MS_PLACE, u"<?>"_ustr)) { };
 
     /**
      * Prepare preliminary settings about font and text

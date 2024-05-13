@@ -121,20 +121,20 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
 
     // create XPropertySet with three properties for status indicator
     static const comphelper::PropertyMapEntry aInfoMap[]{
-        { OUString("UsePrettyPrinting"), 0, cppu::UnoType<bool>::get(),
+        { u"UsePrettyPrinting"_ustr, 0, cppu::UnoType<bool>::get(),
           beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(),
+        { u"BaseURI"_ustr, 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID,
+          0 },
+        { u"StreamRelPath"_ustr, 0, ::cppu::UnoType<OUString>::get(),
           beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamRelPath"), 0, ::cppu::UnoType<OUString>::get(),
-          beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamName"), 0, ::cppu::UnoType<OUString>::get(),
+        { u"StreamName"_ustr, 0, ::cppu::UnoType<OUString>::get(),
           beans::PropertyAttribute::MAYBEVOID, 0 }
     };
     uno::Reference<beans::XPropertySet> xInfoSet(
         comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(aInfoMap)));
 
     // Always print pretty
-    xInfoSet->setPropertyValue("UsePrettyPrinting", Any(true));
+    xInfoSet->setPropertyValue(u"UsePrettyPrinting"_ustr, Any(true));
 
     // Set base URI
     xInfoSet->setPropertyValue(u"BaseURI"_ustr, Any(rMedium.GetBaseURL(true)));
@@ -158,7 +158,7 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
             {
                 OUString aName = pDocHierarchItem->GetValue();
                 if (!aName.isEmpty())
-                    xInfoSet->setPropertyValue("StreamRelPath", Any(aName));
+                    xInfoSet->setPropertyValue(u"StreamRelPath"_ustr, Any(aName));
             }
         }
         else
@@ -256,20 +256,20 @@ OUString SmMLExportWrapper::Export(SmMlElement* pElementTree)
 
     // create XPropertySet with three properties for status indicator
     static const comphelper::PropertyMapEntry aInfoMap[]{
-        { OUString("UsePrettyPrinting"), 0, cppu::UnoType<bool>::get(),
+        { u"UsePrettyPrinting"_ustr, 0, cppu::UnoType<bool>::get(),
           beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(),
+        { u"BaseURI"_ustr, 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID,
+          0 },
+        { u"StreamRelPath"_ustr, 0, ::cppu::UnoType<OUString>::get(),
           beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamRelPath"), 0, ::cppu::UnoType<OUString>::get(),
-          beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamName"), 0, ::cppu::UnoType<OUString>::get(),
+        { u"StreamName"_ustr, 0, ::cppu::UnoType<OUString>::get(),
           beans::PropertyAttribute::MAYBEVOID, 0 }
     };
     uno::Reference<beans::XPropertySet> xInfoSet(
         comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(aInfoMap)));
 
     // Always print pretty
-    xInfoSet->setPropertyValue("UsePrettyPrinting", Any(true));
+    xInfoSet->setPropertyValue(u"UsePrettyPrinting"_ustr, Any(true));
 
     // Fetch mathml tree
     m_pElementTree = pElementTree;
@@ -382,13 +382,13 @@ bool SmMLExportWrapper::WriteThroughComponentS(const Reference<embed::XStorage>&
 
     // Set stream as text / xml
     uno::Reference<beans::XPropertySet> xSet(xStream, uno::UNO_QUERY);
-    xSet->setPropertyValue("MediaType", Any(u"text/xml"_ustr));
+    xSet->setPropertyValue(u"MediaType"_ustr, Any(u"text/xml"_ustr));
 
     // all streams must be encrypted in encrypted document
-    xSet->setPropertyValue("UseCommonStoragePasswordEncryption", Any(true));
+    xSet->setPropertyValue(u"UseCommonStoragePasswordEncryption"_ustr, Any(true));
 
     // set Base URL
-    rPropSet->setPropertyValue("StreamName", Any(OUString(pStreamName)));
+    rPropSet->setPropertyValue(u"StreamName"_ustr, Any(OUString(pStreamName)));
 
     // write the stuff
     // Note: export through an XML exporter component (output stream version)
@@ -412,7 +412,7 @@ SmMLExportWrapper::WriteThroughComponentMS(const Reference<XComponent>& xCompone
 
     // Set the stream as text
     uno::Reference<beans::XPropertySet> xSet(xStream, uno::UNO_QUERY);
-    xSet->setPropertyValue("MediaType", Any(OUString("text/xml")));
+    xSet->setPropertyValue(u"MediaType"_ustr, Any(u"text/xml"_ustr));
 
     // write the stuff
     // Note: export through an XML exporter component (output stream version)
@@ -436,7 +436,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_MLExporter_get_implementation(css::uno::XComponentContext* context,
                                    css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmMLExport(context, "com.sun.star.comp.Math.XMLExporter",
+    return cppu::acquire(new SmMLExport(context, u"com.sun.star.comp.Math.XMLExporter"_ustr,
                                         SvXMLExportFlags::OASIS | SvXMLExportFlags::ALL));
 }
 
@@ -444,7 +444,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_MLOasisMetaExporter_get_implementation(css::uno::XComponentContext* context,
                                             css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmMLExport(context, "com.sun.star.comp.Math.XMLOasisMetaExporter",
+    return cppu::acquire(new SmMLExport(context,
+                                        u"com.sun.star.comp.Math.XMLOasisMetaExporter"_ustr,
                                         SvXMLExportFlags::OASIS | SvXMLExportFlags::META));
 }
 
@@ -452,7 +453,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_MLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* context,
                                                 css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmMLExport(context, "com.sun.star.comp.Math.XMLOasisSettingsExporter",
+    return cppu::acquire(new SmMLExport(context,
+                                        u"com.sun.star.comp.Math.XMLOasisSettingsExporter"_ustr,
                                         SvXMLExportFlags::OASIS | SvXMLExportFlags::SETTINGS));
 }
 
@@ -460,7 +462,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_MLContentExporter_get_implementation(css::uno::XComponentContext* context,
                                           css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmMLExport(context, "com.sun.star.comp.Math.XMLContentExporter",
+    return cppu::acquire(new SmMLExport(context, u"com.sun.star.comp.Math.XMLContentExporter"_ustr,
                                         SvXMLExportFlags::OASIS | SvXMLExportFlags::CONTENT));
 }
 
@@ -762,7 +764,7 @@ void SmMLExport::exportMlAttributes(const SmMlElement* pMlElement)
                 switch (aAttributeValue->m_aMathbackground)
                 {
                     case SmMlAttributeValueMathbackground::MlTransparent:
-                        addAttribute(XML_MATHBACKGROUND, "transparent");
+                        addAttribute(XML_MATHBACKGROUND, u"transparent"_ustr);
                         break;
                     case SmMlAttributeValueMathbackground::MlRgb:
                     {
@@ -812,58 +814,58 @@ void SmMLExport::exportMlAttributes(const SmMlElement* pMlElement)
                 switch (aAttributeValue->m_aMathvariant)
                 {
                     case SmMlAttributeValueMathvariant::normal:
-                        addAttribute(XML_MATHVARIANT, "normal");
+                        addAttribute(XML_MATHVARIANT, u"normal"_ustr);
                         break;
                     case SmMlAttributeValueMathvariant::bold:
-                        addAttribute(XML_MATHVARIANT, "bold");
+                        addAttribute(XML_MATHVARIANT, u"bold"_ustr);
                         break;
                     case SmMlAttributeValueMathvariant::italic:
-                        addAttribute(XML_MATHVARIANT, "italic");
+                        addAttribute(XML_MATHVARIANT, u"italic"_ustr);
                         break;
                     case SmMlAttributeValueMathvariant::double_struck:
-                        addAttribute(XML_MATHVARIANT, "double-struck");
+                        addAttribute(XML_MATHVARIANT, u"double-struck"_ustr);
                         break;
                     case SmMlAttributeValueMathvariant::script:
-                        addAttribute(XML_MATHVARIANT, "script");
+                        addAttribute(XML_MATHVARIANT, u"script"_ustr);
                         break;
                     case SmMlAttributeValueMathvariant::fraktur:
-                        addAttribute(XML_MATHVARIANT, "fraktur");
+                        addAttribute(XML_MATHVARIANT, u"fraktur"_ustr);
                         break;
                     case SmMlAttributeValueMathvariant::sans_serif:
-                        addAttribute(XML_MATHVARIANT, "sans-serif");
+                        addAttribute(XML_MATHVARIANT, u"sans-serif"_ustr);
                         break;
                     case SmMlAttributeValueMathvariant::monospace:
-                        addAttribute(XML_MATHVARIANT, "monospace");
+                        addAttribute(XML_MATHVARIANT, u"monospace"_ustr);
                         break;
                     case SmMlAttributeValueMathvariant::bold_italic:
-                        addAttribute(XML_MATHVARIANT, "bold-italic");
+                        addAttribute(XML_MATHVARIANT, u"bold-italic"_ustr);
                         break;
                     case SmMlAttributeValueMathvariant::bold_fraktur:
-                        addAttribute(XML_MATHVARIANT, "bold-fracktur");
+                        addAttribute(XML_MATHVARIANT, u"bold-fracktur"_ustr);
                         break;
                     case SmMlAttributeValueMathvariant::bold_script:
-                        addAttribute(XML_MATHVARIANT, "bold-script");
+                        addAttribute(XML_MATHVARIANT, u"bold-script"_ustr);
                         break;
                     case SmMlAttributeValueMathvariant::bold_sans_serif:
-                        addAttribute(XML_MATHVARIANT, "bold-sans-serif");
+                        addAttribute(XML_MATHVARIANT, u"bold-sans-serif"_ustr);
                         break;
                     case SmMlAttributeValueMathvariant::sans_serif_italic:
-                        addAttribute(XML_MATHVARIANT, "sans-serif-italic");
+                        addAttribute(XML_MATHVARIANT, u"sans-serif-italic"_ustr);
                         break;
                     case SmMlAttributeValueMathvariant::sans_serif_bold_italic:
-                        addAttribute(XML_MATHVARIANT, "sans-serif-bold-italic");
+                        addAttribute(XML_MATHVARIANT, u"sans-serif-bold-italic"_ustr);
                         break;
                     case SmMlAttributeValueMathvariant::initial:
-                        addAttribute(XML_MATHVARIANT, "initial");
+                        addAttribute(XML_MATHVARIANT, u"initial"_ustr);
                         break;
                     case SmMlAttributeValueMathvariant::tailed:
-                        addAttribute(XML_MATHVARIANT, "tailed");
+                        addAttribute(XML_MATHVARIANT, u"tailed"_ustr);
                         break;
                     case SmMlAttributeValueMathvariant::looped:
-                        addAttribute(XML_MATHVARIANT, "looped");
+                        addAttribute(XML_MATHVARIANT, u"looped"_ustr);
                         break;
                     case SmMlAttributeValueMathvariant::stretched:
-                        addAttribute(XML_MATHVARIANT, "stretched");
+                        addAttribute(XML_MATHVARIANT, u"stretched"_ustr);
                         break;
                     default:
                         declareMlError();

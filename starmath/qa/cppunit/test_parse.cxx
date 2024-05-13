@@ -63,7 +63,7 @@ void ParseTest::tearDown()
  */
 void ParseTest::testMinus()
 {
-    auto pNode = SmParser5().Parse("-1.2");
+    auto pNode = SmParser5().Parse(u"-1.2"_ustr);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pNode->GetNumSubNodes());
     const SmNode *pNode0 = pNode->GetSubNode(0);
     CPPUNIT_ASSERT(pNode0);
@@ -79,14 +79,14 @@ void ParseTest::testMinus()
     // GetText() vs GetToken().aText
     CPPUNIT_ASSERT_EQUAL(OUString(MS_MINUS),
                          static_cast<const SmMathSymbolNode *>(pNode000)->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("-"),
+    CPPUNIT_ASSERT_EQUAL(u"-"_ustr,
                          static_cast<const SmMathSymbolNode *>(pNode000)->GetToken().aText);
     const SmNode *pNode001 = pNode00->GetSubNode(1);
     CPPUNIT_ASSERT(pNode001);
     CPPUNIT_ASSERT_EQUAL(SmNodeType::Text, pNode001->GetType());
     // GetText() vs GetToken().aText
     CPPUNIT_ASSERT(static_cast<const SmTextNode *>(pNode001)->GetText().isEmpty());
-    CPPUNIT_ASSERT_EQUAL(OUString("1.2"),
+    CPPUNIT_ASSERT_EQUAL(u"1.2"_ustr,
                          static_cast<const SmTextNode *>(pNode001)->GetToken().aText);
 }
 
@@ -96,7 +96,7 @@ void ParseTest::testMinus()
  */
 void ParseTest::testNospace()
 {
-    auto pNode = SmParser5().Parse("nospace{ nitalic d {F(x) G(x)} }");
+    auto pNode = SmParser5().Parse(u"nospace{ nitalic d {F(x) G(x)} }"_ustr);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pNode->GetNumSubNodes());
     const SmNode *pNode0 = pNode->GetSubNode(0);
     CPPUNIT_ASSERT(pNode0);
@@ -110,7 +110,7 @@ void ParseTest::testNospace()
     const SmNode *pNode000 = pNode00->GetSubNode(0);
     CPPUNIT_ASSERT(pNode000);
     CPPUNIT_ASSERT_EQUAL(SmNodeType::Font, pNode000->GetType());
-    CPPUNIT_ASSERT_EQUAL(OUString("nitalic"),
+    CPPUNIT_ASSERT_EQUAL(u"nitalic"_ustr,
                          static_cast<const SmFontNode *>(pNode000)->GetToken().aText);
     const SmNode *pNode001 = pNode00->GetSubNode(1);
     CPPUNIT_ASSERT(pNode001);

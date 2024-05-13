@@ -68,10 +68,10 @@ void NodeTest::testTdf47813()
 {
     SmParser5 aParser;
 #define MATRIX "matrix {-2#33##4#-5##6,0#7}"
-    auto pNodeA = aParser.Parse(MATRIX);
-    auto pNodeC = aParser.Parse("alignc " MATRIX);
-    auto pNodeL = aParser.Parse("alignl " MATRIX);
-    auto pNodeR = aParser.Parse("alignr " MATRIX);
+    auto pNodeA = aParser.Parse(u"" MATRIX ""_ustr);
+    auto pNodeC = aParser.Parse(u"alignc " MATRIX ""_ustr);
+    auto pNodeL = aParser.Parse(u"alignl " MATRIX ""_ustr);
+    auto pNodeR = aParser.Parse(u"alignr " MATRIX ""_ustr);
 #undef MATRIX
     ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
     SmFormat aFmt;
@@ -115,26 +115,26 @@ void NodeTest::testTdf52225()
 {
     SmFormat aFormat = mxDocShell->GetFormat();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), aFormat.GetGreekCharStyle()); // default format = 2
-    CHECK_GREEK_SYMBOL("%ALPHA", u'\x0391', false);
-    CHECK_GREEK_SYMBOL("%iALPHA", u'\x0391', true);
-    CHECK_GREEK_SYMBOL("%alpha", u'\x03b1', true);
-    CHECK_GREEK_SYMBOL("%ialpha", u'\x03b1', true);
+    CHECK_GREEK_SYMBOL(u"%ALPHA"_ustr, u'\x0391', false);
+    CHECK_GREEK_SYMBOL(u"%iALPHA"_ustr, u'\x0391', true);
+    CHECK_GREEK_SYMBOL(u"%alpha"_ustr, u'\x03b1', true);
+    CHECK_GREEK_SYMBOL(u"%ialpha"_ustr, u'\x03b1', true);
 
     // mode 1
     aFormat.SetGreekCharStyle(1);
     mxDocShell->SetFormat(aFormat);
-    CHECK_GREEK_SYMBOL("%BETA", u'\x0392', true);
-    CHECK_GREEK_SYMBOL("%iBETA", u'\x0392', true);
-    CHECK_GREEK_SYMBOL("%beta", u'\x03b2', true);
-    CHECK_GREEK_SYMBOL("%ibeta", u'\x03b2', true);
+    CHECK_GREEK_SYMBOL(u"%BETA"_ustr, u'\x0392', true);
+    CHECK_GREEK_SYMBOL(u"%iBETA"_ustr, u'\x0392', true);
+    CHECK_GREEK_SYMBOL(u"%beta"_ustr, u'\x03b2', true);
+    CHECK_GREEK_SYMBOL(u"%ibeta"_ustr, u'\x03b2', true);
 
     // mode 0
     aFormat.SetGreekCharStyle(0);
     mxDocShell->SetFormat(aFormat);
-    CHECK_GREEK_SYMBOL("%GAMMA", u'\x0393', false);
-    CHECK_GREEK_SYMBOL("%iGAMMA", u'\x0393', true);
-    CHECK_GREEK_SYMBOL("%gamma", u'\x03b3', false);
-    CHECK_GREEK_SYMBOL("%igamma", u'\x03b3', true);
+    CHECK_GREEK_SYMBOL(u"%GAMMA"_ustr, u'\x0393', false);
+    CHECK_GREEK_SYMBOL(u"%iGAMMA"_ustr, u'\x0393', true);
+    CHECK_GREEK_SYMBOL(u"%gamma"_ustr, u'\x03b3', false);
+    CHECK_GREEK_SYMBOL(u"%igamma"_ustr, u'\x03b3', true);
 
 #undef CHECK_GREEK_SYMBOL
 }

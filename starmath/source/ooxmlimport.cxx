@@ -298,9 +298,9 @@ OUString SmOoxmlImport::handleBorderBox()
 OUString SmOoxmlImport::handleD()
 {
     m_rStream.ensureOpeningTag( M_TOKEN( d ));
-    OUString opening = "(";
-    OUString closing = ")";
-    OUString separator = "|";
+    OUString opening = u"("_ustr;
+    OUString closing = u")"_ustr;
+    OUString separator = u"|"_ustr;
     if( XmlStream::Tag dPr = m_rStream.checkOpeningTag( M_TOKEN( dPr )))
     {
         if( XmlStream::Tag begChr = m_rStream.checkOpeningTag( M_TOKEN( begChr )))
@@ -461,7 +461,7 @@ OUString SmOoxmlImport::handleGroupChr()
         }
         if( XmlStream::Tag posTag = m_rStream.checkOpeningTag( M_TOKEN( pos )))
         {
-            if( posTag.attribute( M_TOKEN( val ), OUString( "bot" )) == "top" )
+            if( posTag.attribute( M_TOKEN( val ), u"bot"_ustr) == "top" )
                 pos = top;
             m_rStream.ensureClosingTag( M_TOKEN( pos ));
         }

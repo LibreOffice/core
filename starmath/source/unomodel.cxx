@@ -80,36 +80,36 @@ SmPrintUIOptions::SmPrintUIOptions()
 
     // load the math PrinterOptions into the custom tab
     m_aUIProperties[nIdx].Name = "OptionsUIFile";
-    m_aUIProperties[nIdx++].Value <<= OUString("modules/smath/ui/printeroptions.ui");
+    m_aUIProperties[nIdx++].Value <<= u"modules/smath/ui/printeroptions.ui"_ustr;
 
     // create Section for formula (results in an extra tab page in dialog)
     SvtModuleOptions aOpt;
     OUString aAppGroupname(
         SmResId( RID_PRINTUIOPT_PRODNAME ).
             replaceFirst( "%s", aOpt.GetModuleName( SvtModuleOptions::EModule::MATH ) ) );
-    m_aUIProperties[nIdx++].Value = setGroupControlOpt("tabcontrol-page2", aAppGroupname, ".HelpID:vcl:PrintDialog:TabPage:AppPage");
+    m_aUIProperties[nIdx++].Value = setGroupControlOpt(u"tabcontrol-page2"_ustr, aAppGroupname, u".HelpID:vcl:PrintDialog:TabPage:AppPage"_ustr);
 
     // create subgroup for print options
-    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("contents", SmResId( RID_PRINTUIOPT_CONTENTS ), OUString());
+    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt(u"contents"_ustr, SmResId( RID_PRINTUIOPT_CONTENTS ), OUString());
 
     // create a bool option for title row (matches to SID_PRINTTITLE)
-    m_aUIProperties[nIdx++].Value = setBoolControlOpt("title", SmResId( RID_PRINTUIOPT_TITLE ),
-                                                  ".HelpID:vcl:PrintDialog:TitleRow:CheckBox",
+    m_aUIProperties[nIdx++].Value = setBoolControlOpt(u"title"_ustr, SmResId( RID_PRINTUIOPT_TITLE ),
+                                                  u".HelpID:vcl:PrintDialog:TitleRow:CheckBox"_ustr,
                                                   PRTUIOPT_TITLE_ROW,
                                                   pConfig->IsPrintTitle());
     // create a bool option for formula text (matches to SID_PRINTTEXT)
-    m_aUIProperties[nIdx++].Value = setBoolControlOpt("formulatext", SmResId( RID_PRINTUIOPT_FRMLTXT ),
-                                                  ".HelpID:vcl:PrintDialog:FormulaText:CheckBox",
+    m_aUIProperties[nIdx++].Value = setBoolControlOpt(u"formulatext"_ustr, SmResId( RID_PRINTUIOPT_FRMLTXT ),
+                                                  u".HelpID:vcl:PrintDialog:FormulaText:CheckBox"_ustr,
                                                   PRTUIOPT_FORMULA_TEXT,
                                                   pConfig->IsPrintFormulaText());
     // create a bool option for border (matches to SID_PRINTFRAME)
-    m_aUIProperties[nIdx++].Value = setBoolControlOpt("borders", SmResId( RID_PRINTUIOPT_BORDERS ),
-                                                  ".HelpID:vcl:PrintDialog:Border:CheckBox",
+    m_aUIProperties[nIdx++].Value = setBoolControlOpt(u"borders"_ustr, SmResId( RID_PRINTUIOPT_BORDERS ),
+                                                  u".HelpID:vcl:PrintDialog:Border:CheckBox"_ustr,
                                                   PRTUIOPT_BORDER,
                                                   pConfig->IsPrintFrame());
 
     // create subgroup for print format
-    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("size", SmResId( RID_PRINTUIOPT_SIZE ), OUString());
+    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt(u"size"_ustr, SmResId( RID_PRINTUIOPT_SIZE ), OUString());
 
     // create a radio button group for print format (matches to SID_PRINTSIZE)
     Sequence< OUString > aChoices{
@@ -118,14 +118,14 @@ SmPrintUIOptions::SmPrintUIOptions()
         SmResId( RID_PRINTUIOPT_SCALING )
     };
     Sequence< OUString > aHelpIds{
-        ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:0",
-        ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:1",
-        ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:2"
+        u".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:0"_ustr,
+        u".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:1"_ustr,
+        u".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:2"_ustr
     };
     Sequence< OUString > aWidgetIds{
-        "originalsize",
-        "fittopage",
-        "scaling"
+        u"originalsize"_ustr,
+        u"fittopage"_ustr,
+        u"scaling"_ustr
     };
     OUString aPrintFormatProp( PRTUIOPT_PRINT_FORMAT );
     m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
@@ -136,15 +136,15 @@ SmPrintUIOptions::SmPrintUIOptions()
 
     // create a numeric box for scale dependent on PrintFormat = "Scaling" (matches to SID_PRINTZOOM)
     vcl::PrinterOptionsHelper::UIControlOptions aRangeOpt( aPrintFormatProp, 2, true );
-    m_aUIProperties[nIdx++].Value = setRangeControlOpt("scalingspin", OUString(),
-                                                     ".HelpID:vcl:PrintDialog:PrintScale:NumericField",
+    m_aUIProperties[nIdx++].Value = setRangeControlOpt(u"scalingspin"_ustr, OUString(),
+                                                     u".HelpID:vcl:PrintDialog:PrintScale:NumericField"_ustr,
                                                      PRTUIOPT_PRINT_SCALE,
                                                      pConfig->GetPrintZoomFactor(),    // initial value
                                                      10,     // min value
                                                      1000,   // max value
                                                      aRangeOpt);
 
-    Sequence aHintNoLayoutPage{ comphelper::makePropertyValue("HintNoLayoutPage", true) };
+    Sequence aHintNoLayoutPage{ comphelper::makePropertyValue(u"HintNoLayoutPage"_ustr, true) };
     m_aUIProperties[nIdx++].Value <<= aHintNoLayoutPage;
 
     assert(nIdx == nNumProps);
@@ -236,80 +236,80 @@ static const rtl::Reference<PropertySetInfo> & lcl_createModelPropertyInfo ()
 {
     static const PropertyMapEntry aModelPropertyInfoMap[] =
     {
-        { OUString("Alignment")                        , HANDLE_ALIGNMENT                          ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  0                     },
-        { OUString("BaseFontHeight")                   , HANDLE_BASE_FONT_HEIGHT                   ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  0                     },
-        { OUString("BasicLibraries")                   , HANDLE_BASIC_LIBRARIES                    ,  cppu::UnoType<script::XLibraryContainer>::get(),  PropertyAttribute::READONLY,  0       },
-        { OUString("BottomMargin")                     , HANDLE_BOTTOM_MARGIN                      ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_BOTTOMSPACE       },
-        { OUString("CustomFontNameFixed")              , HANDLE_CUSTOM_FONT_NAME_FIXED             ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_FIXED             },
-        { OUString("CustomFontNameSans")               , HANDLE_CUSTOM_FONT_NAME_SANS              ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_SANS              },
-        { OUString("CustomFontNameSerif")              , HANDLE_CUSTOM_FONT_NAME_SERIF             ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_SERIF             },
-        { OUString("DialogLibraries")                  , HANDLE_DIALOG_LIBRARIES                   ,  cppu::UnoType<script::XLibraryContainer>::get(),  PropertyAttribute::READONLY,  0       },
-        { OUString("FontFixedIsBold")                  , HANDLE_CUSTOM_FONT_FIXED_WEIGHT           ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_FIXED             },
-        { OUString("FontFixedIsItalic")                , HANDLE_CUSTOM_FONT_FIXED_POSTURE          ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_FIXED             },
-        { OUString("FontFunctionsIsBold")              , HANDLE_FONT_FUNCTIONS_WEIGHT              ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_FUNCTION          },
-        { OUString("FontFunctionsIsItalic")            , HANDLE_FONT_FUNCTIONS_POSTURE             ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_FUNCTION          },
-        { OUString("FontMathIsBold")                   , HANDLE_FONT_MATH_WEIGHT                   ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_MATH              },
-        { OUString("FontMathIsItalic")                 , HANDLE_FONT_MATH_POSTURE                  ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_MATH              },
-        { OUString("FontNameFunctions")                , HANDLE_FONT_NAME_FUNCTIONS                ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_FUNCTION          },
-        { OUString("FontNameMath")                     , HANDLE_FONT_NAME_MATH                     ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_MATH              },
-        { OUString("FontNameNumbers")                  , HANDLE_FONT_NAME_NUMBERS                  ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_NUMBER            },
-        { OUString("FontNameText")                     , HANDLE_FONT_NAME_TEXT                     ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_TEXT              },
-        { OUString("FontNameVariables")                , HANDLE_FONT_NAME_VARIABLES                ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_VARIABLE          },
-        { OUString("FontNumbersIsBold")                , HANDLE_FONT_NUMBERS_WEIGHT                ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_NUMBER            },
-        { OUString("FontNumbersIsItalic")              , HANDLE_FONT_NUMBERS_POSTURE               ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_NUMBER            },
-        { OUString("FontSansIsBold")                   , HANDLE_CUSTOM_FONT_SANS_WEIGHT            ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_SANS              },
-        { OUString("FontSansIsItalic")                 , HANDLE_CUSTOM_FONT_SANS_POSTURE           ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_SANS              },
-        { OUString("FontSerifIsBold")                  , HANDLE_CUSTOM_FONT_SERIF_WEIGHT           ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_SERIF             },
-        { OUString("FontSerifIsItalic")                , HANDLE_CUSTOM_FONT_SERIF_POSTURE          ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_SERIF             },
-        { OUString("FontTextIsBold")                   , HANDLE_FONT_TEXT_WEIGHT                   ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_TEXT              },
-        { OUString("FontTextIsItalic")                 , HANDLE_FONT_TEXT_POSTURE                  ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_TEXT              },
-        { OUString("FontVariablesIsBold")              , HANDLE_FONT_VARIABLES_WEIGHT              ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_VARIABLE          },
-        { OUString("FontVariablesIsItalic")            , HANDLE_FONT_VARIABLES_POSTURE             ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_VARIABLE          },
-        { OUString("Formula")                          , HANDLE_FORMULA                            ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  0                     },
-        { OUString("IsScaleAllBrackets")               , HANDLE_IS_SCALE_ALL_BRACKETS              ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  0                     },
-        { OUString("IsTextMode")                       , HANDLE_IS_TEXT_MODE                       ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  0                     },
-        { OUString("IsRightToLeft")                    , HANDLE_IS_RIGHT_TO_LEFT                   ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  0                     },
-        { OUString("GreekCharStyle")                   , HANDLE_GREEK_CHAR_STYLE                   ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  0                     },
-        { OUString("LeftMargin")                       , HANDLE_LEFT_MARGIN                        ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_LEFTSPACE         },
-        { OUString("PrinterName")                      , HANDLE_PRINTER_NAME                       ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  0                     },
-        { OUString("PrinterSetup")                     , HANDLE_PRINTER_SETUP                      ,  cppu::UnoType<const Sequence < sal_Int8 >>::get(),                         PROPERTY_NONE,  0                     },
-        { OUString("RelativeBracketDistance")          , HANDLE_RELATIVE_BRACKET_DISTANCE          ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_BRACKETSPACE      },
-        { OUString("RelativeBracketExcessSize")        , HANDLE_RELATIVE_BRACKET_EXCESS_SIZE       ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_BRACKETSIZE       },
-        { OUString("RelativeFontHeightFunctions")      , HANDLE_RELATIVE_FONT_HEIGHT_FUNCTIONS     ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  SIZ_FUNCTION          },
-        { OUString("RelativeFontHeightIndices")        , HANDLE_RELATIVE_FONT_HEIGHT_INDICES       ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  SIZ_INDEX             },
-        { OUString("RelativeFontHeightLimits")         , HANDLE_RELATIVE_FONT_HEIGHT_LIMITS        ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  SIZ_LIMITS            },
-        { OUString("RelativeFontHeightOperators")      , HANDLE_RELATIVE_FONT_HEIGHT_OPERATORS     ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  SIZ_OPERATOR          },
-        { OUString("RelativeFontHeightText")           , HANDLE_RELATIVE_FONT_HEIGHT_TEXT          ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  SIZ_TEXT              },
-        { OUString("RelativeFractionBarExcessLength")  , HANDLE_RELATIVE_FRACTION_BAR_EXCESS_LENGTH,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_FRACTION          },
-        { OUString("RelativeFractionBarLineWeight")    , HANDLE_RELATIVE_FRACTION_BAR_LINE_WEIGHT  ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_STROKEWIDTH       },
-        { OUString("RelativeFractionDenominatorDepth") , HANDLE_RELATIVE_FRACTION_DENOMINATOR_DEPTH,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_DENOMINATOR       },
-        { OUString("RelativeFractionNumeratorHeight")  , HANDLE_RELATIVE_FRACTION_NUMERATOR_HEIGHT ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_NUMERATOR         },
-        { OUString("RelativeIndexSubscript")           , HANDLE_RELATIVE_INDEX_SUBSCRIPT           ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_SUBSCRIPT         },
-        { OUString("RelativeIndexSuperscript")         , HANDLE_RELATIVE_INDEX_SUPERSCRIPT         ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_SUPERSCRIPT       },
-        { OUString("RelativeLineSpacing")              , HANDLE_RELATIVE_LINE_SPACING              ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_VERTICAL          },
-        { OUString("RelativeLowerLimitDistance")       , HANDLE_RELATIVE_LOWER_LIMIT_DISTANCE      ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_LOWERLIMIT        },
-        { OUString("RelativeMatrixColumnSpacing")      , HANDLE_RELATIVE_MATRIX_COLUMN_SPACING     ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_MATRIXCOL         },
-        { OUString("RelativeMatrixLineSpacing")        , HANDLE_RELATIVE_MATRIX_LINE_SPACING       ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_MATRIXROW         },
-        { OUString("RelativeOperatorExcessSize")       , HANDLE_RELATIVE_OPERATOR_EXCESS_SIZE      ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_OPERATORSIZE      },
-        { OUString("RelativeOperatorSpacing")          , HANDLE_RELATIVE_OPERATOR_SPACING          ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_OPERATORSPACE     },
-        { OUString("RelativeRootSpacing")              , HANDLE_RELATIVE_ROOT_SPACING              ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_ROOT              },
-        { OUString("RelativeScaleBracketExcessSize")   , HANDLE_RELATIVE_SCALE_BRACKET_EXCESS_SIZE ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_NORMALBRACKETSIZE },
-        { OUString("RelativeSpacing")                  , HANDLE_RELATIVE_SPACING                   ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_HORIZONTAL        },
-        { OUString("RelativeSymbolMinimumHeight")      , HANDLE_RELATIVE_SYMBOL_MINIMUM_HEIGHT     ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_ORNAMENTSPACE     },
-        { OUString("RelativeSymbolPrimaryHeight")      , HANDLE_RELATIVE_SYMBOL_PRIMARY_HEIGHT     ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_ORNAMENTSIZE      },
-        { OUString("RelativeUpperLimitDistance")       , HANDLE_RELATIVE_UPPER_LIMIT_DISTANCE      ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_UPPERLIMIT        },
-        { OUString("RightMargin")                      , HANDLE_RIGHT_MARGIN                       ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_RIGHTSPACE        },
-        { OUString("RuntimeUID")                       , HANDLE_RUNTIME_UID                        ,  cppu::UnoType<OUString>::get(),                                        PropertyAttribute::READONLY,  0       },
-        { OUString("SaveThumbnail")                    , HANDLE_SAVE_THUMBNAIL                     ,  cppu::UnoType<bool>::get(),                                            PROPERTY_NONE,  0                     },
-        { OUString("Symbols")                          , HANDLE_SYMBOLS                            ,  cppu::UnoType<Sequence < SymbolDescriptor >>::get(),                   PROPERTY_NONE,  0                     },
-        { OUString("UserDefinedSymbolsInUse")          , HANDLE_USED_SYMBOLS                       ,  cppu::UnoType<Sequence < SymbolDescriptor >>::get(),                   PropertyAttribute::READONLY,  0       },
-        { OUString("TopMargin")                        , HANDLE_TOP_MARGIN                         ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_TOPSPACE          },
+        { u"Alignment"_ustr                        , HANDLE_ALIGNMENT                          ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  0                     },
+        { u"BaseFontHeight"_ustr                   , HANDLE_BASE_FONT_HEIGHT                   ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  0                     },
+        { u"BasicLibraries"_ustr                   , HANDLE_BASIC_LIBRARIES                    ,  cppu::UnoType<script::XLibraryContainer>::get(),  PropertyAttribute::READONLY,  0       },
+        { u"BottomMargin"_ustr                     , HANDLE_BOTTOM_MARGIN                      ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_BOTTOMSPACE       },
+        { u"CustomFontNameFixed"_ustr              , HANDLE_CUSTOM_FONT_NAME_FIXED             ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_FIXED             },
+        { u"CustomFontNameSans"_ustr               , HANDLE_CUSTOM_FONT_NAME_SANS              ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_SANS              },
+        { u"CustomFontNameSerif"_ustr              , HANDLE_CUSTOM_FONT_NAME_SERIF             ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_SERIF             },
+        { u"DialogLibraries"_ustr                  , HANDLE_DIALOG_LIBRARIES                   ,  cppu::UnoType<script::XLibraryContainer>::get(),  PropertyAttribute::READONLY,  0       },
+        { u"FontFixedIsBold"_ustr                  , HANDLE_CUSTOM_FONT_FIXED_WEIGHT           ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_FIXED             },
+        { u"FontFixedIsItalic"_ustr                , HANDLE_CUSTOM_FONT_FIXED_POSTURE          ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_FIXED             },
+        { u"FontFunctionsIsBold"_ustr              , HANDLE_FONT_FUNCTIONS_WEIGHT              ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_FUNCTION          },
+        { u"FontFunctionsIsItalic"_ustr            , HANDLE_FONT_FUNCTIONS_POSTURE             ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_FUNCTION          },
+        { u"FontMathIsBold"_ustr                   , HANDLE_FONT_MATH_WEIGHT                   ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_MATH              },
+        { u"FontMathIsItalic"_ustr                 , HANDLE_FONT_MATH_POSTURE                  ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_MATH              },
+        { u"FontNameFunctions"_ustr                , HANDLE_FONT_NAME_FUNCTIONS                ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_FUNCTION          },
+        { u"FontNameMath"_ustr                     , HANDLE_FONT_NAME_MATH                     ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_MATH              },
+        { u"FontNameNumbers"_ustr                  , HANDLE_FONT_NAME_NUMBERS                  ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_NUMBER            },
+        { u"FontNameText"_ustr                     , HANDLE_FONT_NAME_TEXT                     ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_TEXT              },
+        { u"FontNameVariables"_ustr                , HANDLE_FONT_NAME_VARIABLES                ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_VARIABLE          },
+        { u"FontNumbersIsBold"_ustr                , HANDLE_FONT_NUMBERS_WEIGHT                ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_NUMBER            },
+        { u"FontNumbersIsItalic"_ustr              , HANDLE_FONT_NUMBERS_POSTURE               ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_NUMBER            },
+        { u"FontSansIsBold"_ustr                   , HANDLE_CUSTOM_FONT_SANS_WEIGHT            ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_SANS              },
+        { u"FontSansIsItalic"_ustr                 , HANDLE_CUSTOM_FONT_SANS_POSTURE           ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_SANS              },
+        { u"FontSerifIsBold"_ustr                  , HANDLE_CUSTOM_FONT_SERIF_WEIGHT           ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_SERIF             },
+        { u"FontSerifIsItalic"_ustr                , HANDLE_CUSTOM_FONT_SERIF_POSTURE          ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_SERIF             },
+        { u"FontTextIsBold"_ustr                   , HANDLE_FONT_TEXT_WEIGHT                   ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_TEXT              },
+        { u"FontTextIsItalic"_ustr                 , HANDLE_FONT_TEXT_POSTURE                  ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_TEXT              },
+        { u"FontVariablesIsBold"_ustr              , HANDLE_FONT_VARIABLES_WEIGHT              ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_VARIABLE          },
+        { u"FontVariablesIsItalic"_ustr            , HANDLE_FONT_VARIABLES_POSTURE             ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_VARIABLE          },
+        { u"Formula"_ustr                          , HANDLE_FORMULA                            ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  0                     },
+        { u"IsScaleAllBrackets"_ustr               , HANDLE_IS_SCALE_ALL_BRACKETS              ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  0                     },
+        { u"IsTextMode"_ustr                       , HANDLE_IS_TEXT_MODE                       ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  0                     },
+        { u"IsRightToLeft"_ustr                    , HANDLE_IS_RIGHT_TO_LEFT                   ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  0                     },
+        { u"GreekCharStyle"_ustr                   , HANDLE_GREEK_CHAR_STYLE                   ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  0                     },
+        { u"LeftMargin"_ustr                       , HANDLE_LEFT_MARGIN                        ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_LEFTSPACE         },
+        { u"PrinterName"_ustr                      , HANDLE_PRINTER_NAME                       ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  0                     },
+        { u"PrinterSetup"_ustr                     , HANDLE_PRINTER_SETUP                      ,  cppu::UnoType<const Sequence < sal_Int8 >>::get(),                         PROPERTY_NONE,  0                     },
+        { u"RelativeBracketDistance"_ustr          , HANDLE_RELATIVE_BRACKET_DISTANCE          ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_BRACKETSPACE      },
+        { u"RelativeBracketExcessSize"_ustr        , HANDLE_RELATIVE_BRACKET_EXCESS_SIZE       ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_BRACKETSIZE       },
+        { u"RelativeFontHeightFunctions"_ustr      , HANDLE_RELATIVE_FONT_HEIGHT_FUNCTIONS     ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  SIZ_FUNCTION          },
+        { u"RelativeFontHeightIndices"_ustr        , HANDLE_RELATIVE_FONT_HEIGHT_INDICES       ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  SIZ_INDEX             },
+        { u"RelativeFontHeightLimits"_ustr         , HANDLE_RELATIVE_FONT_HEIGHT_LIMITS        ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  SIZ_LIMITS            },
+        { u"RelativeFontHeightOperators"_ustr      , HANDLE_RELATIVE_FONT_HEIGHT_OPERATORS     ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  SIZ_OPERATOR          },
+        { u"RelativeFontHeightText"_ustr           , HANDLE_RELATIVE_FONT_HEIGHT_TEXT          ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  SIZ_TEXT              },
+        { u"RelativeFractionBarExcessLength"_ustr  , HANDLE_RELATIVE_FRACTION_BAR_EXCESS_LENGTH,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_FRACTION          },
+        { u"RelativeFractionBarLineWeight"_ustr    , HANDLE_RELATIVE_FRACTION_BAR_LINE_WEIGHT  ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_STROKEWIDTH       },
+        { u"RelativeFractionDenominatorDepth"_ustr , HANDLE_RELATIVE_FRACTION_DENOMINATOR_DEPTH,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_DENOMINATOR       },
+        { u"RelativeFractionNumeratorHeight"_ustr  , HANDLE_RELATIVE_FRACTION_NUMERATOR_HEIGHT ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_NUMERATOR         },
+        { u"RelativeIndexSubscript"_ustr           , HANDLE_RELATIVE_INDEX_SUBSCRIPT           ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_SUBSCRIPT         },
+        { u"RelativeIndexSuperscript"_ustr         , HANDLE_RELATIVE_INDEX_SUPERSCRIPT         ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_SUPERSCRIPT       },
+        { u"RelativeLineSpacing"_ustr              , HANDLE_RELATIVE_LINE_SPACING              ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_VERTICAL          },
+        { u"RelativeLowerLimitDistance"_ustr       , HANDLE_RELATIVE_LOWER_LIMIT_DISTANCE      ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_LOWERLIMIT        },
+        { u"RelativeMatrixColumnSpacing"_ustr      , HANDLE_RELATIVE_MATRIX_COLUMN_SPACING     ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_MATRIXCOL         },
+        { u"RelativeMatrixLineSpacing"_ustr        , HANDLE_RELATIVE_MATRIX_LINE_SPACING       ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_MATRIXROW         },
+        { u"RelativeOperatorExcessSize"_ustr       , HANDLE_RELATIVE_OPERATOR_EXCESS_SIZE      ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_OPERATORSIZE      },
+        { u"RelativeOperatorSpacing"_ustr          , HANDLE_RELATIVE_OPERATOR_SPACING          ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_OPERATORSPACE     },
+        { u"RelativeRootSpacing"_ustr              , HANDLE_RELATIVE_ROOT_SPACING              ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_ROOT              },
+        { u"RelativeScaleBracketExcessSize"_ustr   , HANDLE_RELATIVE_SCALE_BRACKET_EXCESS_SIZE ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_NORMALBRACKETSIZE },
+        { u"RelativeSpacing"_ustr                  , HANDLE_RELATIVE_SPACING                   ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_HORIZONTAL        },
+        { u"RelativeSymbolMinimumHeight"_ustr      , HANDLE_RELATIVE_SYMBOL_MINIMUM_HEIGHT     ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_ORNAMENTSPACE     },
+        { u"RelativeSymbolPrimaryHeight"_ustr      , HANDLE_RELATIVE_SYMBOL_PRIMARY_HEIGHT     ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_ORNAMENTSIZE      },
+        { u"RelativeUpperLimitDistance"_ustr       , HANDLE_RELATIVE_UPPER_LIMIT_DISTANCE      ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_UPPERLIMIT        },
+        { u"RightMargin"_ustr                      , HANDLE_RIGHT_MARGIN                       ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_RIGHTSPACE        },
+        { u"RuntimeUID"_ustr                       , HANDLE_RUNTIME_UID                        ,  cppu::UnoType<OUString>::get(),                                        PropertyAttribute::READONLY,  0       },
+        { u"SaveThumbnail"_ustr                    , HANDLE_SAVE_THUMBNAIL                     ,  cppu::UnoType<bool>::get(),                                            PROPERTY_NONE,  0                     },
+        { u"Symbols"_ustr                          , HANDLE_SYMBOLS                            ,  cppu::UnoType<Sequence < SymbolDescriptor >>::get(),                   PROPERTY_NONE,  0                     },
+        { u"UserDefinedSymbolsInUse"_ustr          , HANDLE_USED_SYMBOLS                       ,  cppu::UnoType<Sequence < SymbolDescriptor >>::get(),                   PropertyAttribute::READONLY,  0       },
+        { u"TopMargin"_ustr                        , HANDLE_TOP_MARGIN                         ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_TOPSPACE          },
         // #i33095# Security Options
-        { OUString("LoadReadonly")                     , HANDLE_LOAD_READONLY                      ,  cppu::UnoType<bool>::get(),                                            PROPERTY_NONE,  0                     },
+        { u"LoadReadonly"_ustr                     , HANDLE_LOAD_READONLY                      ,  cppu::UnoType<bool>::get(),                                            PROPERTY_NONE,  0                     },
         // #i972#
-        { OUString("BaseLine")                         , HANDLE_BASELINE                           ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  0                     },
-        { OUString("InteropGrabBag")                   , HANDLE_INTEROP_GRAB_BAG                   ,  cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),           PROPERTY_NONE,  0                     },
-        { OUString("SyntaxVersion")                    , HANDLE_STARMATH_VERSION                   ,  ::cppu::UnoType<sal_Int16>::get(),                             PROPERTY_NONE,  0                     },
+        { u"BaseLine"_ustr                         , HANDLE_BASELINE                           ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  0                     },
+        { u"InteropGrabBag"_ustr                   , HANDLE_INTEROP_GRAB_BAG                   ,  cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),           PROPERTY_NONE,  0                     },
+        { u"SyntaxVersion"_ustr                    , HANDLE_STARMATH_VERSION                   ,  ::cppu::UnoType<sal_Int16>::get(),                             PROPERTY_NONE,  0                     },
     };
     static const rtl::Reference<PropertySetInfo> PROPS_INFO = new PropertySetInfo ( aModelPropertyInfoMap );
     return PROPS_INFO;
@@ -385,7 +385,7 @@ static sal_Int16 lcl_AnyToINT16(const uno::Any& rAny)
 
 OUString SmModel::getImplementationName()
 {
-    return "com.sun.star.comp.Math.FormulaDocument";
+    return u"com.sun.star.comp.Math.FormulaDocument"_ustr;
 }
 
 sal_Bool SmModel::supportsService(const OUString& rServiceName)

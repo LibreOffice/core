@@ -27,8 +27,8 @@
 
 
 SmSym::SmSym() :
-    m_aUiName(OUString("unknown")),
-    m_aSetName(OUString("unknown")),
+    m_aUiName(u"unknown"_ustr),
+    m_aSetName(u"unknown"_ustr),
     m_cChar('\0'),
     m_bPredefined(false)
 {

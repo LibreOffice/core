@@ -21,7 +21,7 @@ class Test : public UnoApiTest
 {
 public:
     Test()
-        : UnoApiTest("starmath/qa/extras/data/")
+        : UnoApiTest(u"starmath/qa/extras/data/"_ustr)
     {
     }
 
@@ -61,26 +61,26 @@ void Test::testColor()
     loadFromFile(u"color.mml");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
-    CPPUNIT_ASSERT_EQUAL(OUString("{ color black b"
-                                  " color white w"
-                                  " color red r"
-                                  " color green g"
-                                  " color blue b"
-                                  " color yellow y"
-                                  " color silver s"
-                                  " color gray g"
-                                  " color maroon m"
-                                  " color purple p"
-                                  " color lime l"
-                                  " color olive o"
-                                  " color navy n"
-                                  " color teal t"
-                                  " color aqua a"
-                                  " color fuchsia f"
-                                  " color crimson c"
-                                  " color dvip apricot"
-                                  " a color yellow y"
-                                  " color rgb 220 20 61 x }"),
+    CPPUNIT_ASSERT_EQUAL(u"{ color black b"
+                         " color white w"
+                         " color red r"
+                         " color green g"
+                         " color blue b"
+                         " color yellow y"
+                         " color silver s"
+                         " color gray g"
+                         " color maroon m"
+                         " color purple p"
+                         " color lime l"
+                         " color olive o"
+                         " color navy n"
+                         " color teal t"
+                         " color aqua a"
+                         " color fuchsia f"
+                         " color crimson c"
+                         " color dvip apricot"
+                         " a color yellow y"
+                         " color rgb 220 20 61 x }"_ustr,
                          pDocShell->GetText());
 }
 
@@ -89,7 +89,7 @@ void Test::testSimple()
     loadFromFile(u"simple.mml");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("left ( { a + b } right ) ^ 2"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", u"left ( { a + b } right ) ^ 2"_ustr,
                                  pDocShell->GetText());
 }
 
@@ -98,7 +98,7 @@ void Test::testNsPrefixMath()
     loadFromFile(u"ns-prefix-math.mml");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("left ( { a + b } right ) ^ 2"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", u"left ( { a + b } right ) ^ 2"_ustr,
                                  pDocShell->GetText());
 }
 
@@ -107,7 +107,7 @@ void Test::testMaction()
     loadFromFile(u"maction.mml");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("matrix{ 1 ## 2 ## 3 }"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", u"matrix{ 1 ## 2 ## 3 }"_ustr,
                                  pDocShell->GetText());
 }
 
@@ -116,7 +116,7 @@ void Test::testMspace()
     loadFromFile(u"mspace.mml");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
-    CPPUNIT_ASSERT_EQUAL(OUString("{ a b ~ c ~~``` d }"), pDocShell->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"{ a b ~ c ~~``` d }"_ustr, pDocShell->GetText());
 }
 
 void Test::testtdf99556()
@@ -124,7 +124,7 @@ void Test::testtdf99556()
     loadFromFile(u"tdf99556-1.mml");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("sqrt { }"), pDocShell->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", u"sqrt { }"_ustr, pDocShell->GetText());
 }
 
 void Test::testTdf103430()
@@ -132,10 +132,9 @@ void Test::testTdf103430()
     loadFromFile(u"tdf103430.mml");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
-    CPPUNIT_ASSERT_EQUAL(
-        OUString("{ frac { { nitalic d ^ 2 nitalic color blue y } } { { color dvip "
-                 "apricot nitalic d font sans bold italic color red x } } }"),
-        pDocShell->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"{ frac { { nitalic d ^ 2 nitalic color blue y } } { { color dvip "
+                         "apricot nitalic d font sans bold italic color red x } } }"_ustr,
+                         pDocShell->GetText());
 }
 
 void Test::testTdf103500()
@@ -143,10 +142,9 @@ void Test::testTdf103500()
     loadFromFile(u"tdf103500.mml");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
-    CPPUNIT_ASSERT_EQUAL(
-        OUString("{ { int csup b csub a { { frac { 1 } { x } } ` nitalic d x } } = { "
-                 "intd csup b csub a { { frac { 1 } { y } } ` nitalic d y } } }"),
-        pDocShell->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"{ { int csup b csub a { { frac { 1 } { x } } ` nitalic d x } } = { "
+                         "intd csup b csub a { { frac { 1 } { y } } ` nitalic d y } } }"_ustr,
+                         pDocShell->GetText());
 }
 
 void Test::testTdf137008()
@@ -155,7 +153,7 @@ void Test::testTdf137008()
     loadFromFile(u"tdf137008.mml");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
-    CPPUNIT_ASSERT_EQUAL(OUString("matrix{ { } # ## # }"), pDocShell->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"matrix{ { } # ## # }"_ustr, pDocShell->GetText());
 }
 
 void Test::testTdf151842()
@@ -164,7 +162,7 @@ void Test::testTdf151842()
     loadFromFile(u"tdf151842.odf");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
-    CPPUNIT_ASSERT_EQUAL(OUString("test"), pDocShell->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"test"_ustr, pDocShell->GetText());
     SmFormat aFormat = pDocShell->GetFormat();
 
     // Without the fix in place, this test would have failed with

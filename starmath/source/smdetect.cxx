@@ -75,11 +75,11 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
         bStorageOk = !aStorage->GetError();
         if (bStorageOk)
         {
-            if ( aStorage->IsStream("Equation Native") )
+            if ( aStorage->IsStream(u"Equation Native"_ustr) )
             {
                 sal_uInt8 nVersion;
                 if ( GetMathTypeVersion( aStorage.get(), nVersion ) && nVersion <=3 )
-                    return "math_MathType_3x";
+                    return u"math_MathType_3x"_ustr;
             }
         }
     }
@@ -113,7 +113,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                                0 == strncmp( "<math:math> ", aBuffer, 12));
 
             if ( bIsMathType )
-                return "math_MathML_XML_Math";
+                return u"math_MathML_XML_Math"_ustr;
         }
     }
 
@@ -123,7 +123,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 /* XServiceInfo */
 OUString SAL_CALL SmFilterDetect::getImplementationName()
 {
-    return "com.sun.star.comp.math.FormatDetector";
+    return u"com.sun.star.comp.math.FormatDetector"_ustr;
 }
 
 /* XServiceInfo */
@@ -135,7 +135,7 @@ sal_Bool SAL_CALL SmFilterDetect::supportsService( const OUString& sServiceName 
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL SmFilterDetect::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ExtendedTypeDetection" };
+    return { u"com.sun.star.frame.ExtendedTypeDetection"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*

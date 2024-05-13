@@ -62,7 +62,7 @@ sal_Bool MathTypeFilter::filter(const uno::Sequence<beans::PropertyValue>& rDesc
             {
                 rtl::Reference<SotStorage> aStorage(new SotStorage(pStream.get(), false));
                 // Is this a MathType Storage?
-                if (aStorage->IsStream("Equation Native"))
+                if (aStorage->IsStream(u"Equation Native"_ustr))
                 {
                     if (auto pModel = dynamic_cast<SmModel*>(m_xDstDoc.get()))
                     {
@@ -94,7 +94,10 @@ void MathTypeFilter::setTargetDocument(const uno::Reference<lang::XComponent>& x
     m_xDstDoc = xDoc;
 }
 
-OUString MathTypeFilter::getImplementationName() { return "com.sun.star.comp.Math.MathTypeFilter"; }
+OUString MathTypeFilter::getImplementationName()
+{
+    return u"com.sun.star.comp.Math.MathTypeFilter"_ustr;
+}
 
 sal_Bool MathTypeFilter::supportsService(const OUString& rServiceName)
 {
@@ -103,7 +106,7 @@ sal_Bool MathTypeFilter::supportsService(const OUString& rServiceName)
 
 uno::Sequence<OUString> MathTypeFilter::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ImportFilter" };
+    return { u"com.sun.star.document.ImportFilter"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*

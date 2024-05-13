@@ -550,7 +550,7 @@ void MathType::TypeFaceToString(OUString &rTxt,sal_uInt8 nFace)
 bool MathType::Parse(SotStorage *pStor)
 {
     rtl::Reference<SotStorageStream> xSrc = pStor->OpenSotStream(
-        "Equation Native",
+        u"Equation Native"_ustr,
         StreamMode::STD_READ);
     if ( (!xSrc.is()) || (ERRCODE_NONE != xSrc->GetError()))
         return false;
@@ -1872,7 +1872,7 @@ bool MathType::ConvertFromStarMath( SfxMedium& rMedium )
         rtl::Reference<SotStorage> pStor = new SotStorage(pStream, false);
 
         SvGlobalName aGName(MSO_EQUATION3_CLASSID);
-        pStor->SetClass( aGName, SotClipboardFormatId::NONE, "Microsoft Equation 3.0");
+        pStor->SetClass( aGName, SotClipboardFormatId::NONE, u"Microsoft Equation 3.0"_ustr);
 
         static sal_uInt8 const aCompObj[] = {
             0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
@@ -1889,7 +1889,7 @@ bool MathType::ConvertFromStarMath( SfxMedium& rMedium )
             0xB2, 0x71, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00
         };
-        rtl::Reference<SotStorageStream> xStor(pStor->OpenSotStream("\1CompObj"));
+        rtl::Reference<SotStorageStream> xStor(pStor->OpenSotStream(u"\1CompObj"_ustr));
         xStor->WriteBytes(aCompObj, sizeof(aCompObj));
 
         static sal_uInt8 const aOle[] = {
@@ -1897,12 +1897,12 @@ bool MathType::ConvertFromStarMath( SfxMedium& rMedium )
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00
             };
-        rtl::Reference<SotStorageStream> xStor2(pStor->OpenSotStream("\1Ole"));
+        rtl::Reference<SotStorageStream> xStor2(pStor->OpenSotStream(u"\1Ole"_ustr));
         xStor2->WriteBytes(aOle, sizeof(aOle));
         xStor.clear();
         xStor2.clear();
 
-        rtl::Reference<SotStorageStream> xSrc = pStor->OpenSotStream("Equation Native");
+        rtl::Reference<SotStorageStream> xSrc = pStor->OpenSotStream(u"Equation Native"_ustr);
         if ( (!xSrc.is()) || (ERRCODE_NONE != xSrc->GetError()))
             return false;
 

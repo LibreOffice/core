@@ -148,7 +148,7 @@ void Test::testSmTmpDeviceRestoreFont()
 {
     ScopedVclPtrInstance<Printer> pPrinter;
 
-    OUString aFontName("Linux Libertine G");
+    OUString aFontName(u"Linux Libertine G"_ustr);
     CPPUNIT_ASSERT(pPrinter->IsFontAvailable(aFontName));
 
     vcl::Font aOriginalFont = pPrinter->GetFont();
@@ -178,7 +178,7 @@ void Test::editMarker()
 {
     SmEditWindow& rEditWindow = m_pSmCmdBoxWindow->GetEditWindow();
     {
-        OUString sMarkedText("<?> under <?> under <?>");
+        OUString sMarkedText(u"<?> under <?> under <?>"_ustr);
         rEditWindow.SetText(sMarkedText);
         rEditWindow.Flush();
         OUString sFinalText = rEditWindow.GetText();
@@ -190,12 +190,12 @@ void Test::editMarker()
 
         rEditWindow.SelNextMark();
         rEditWindow.Delete();
-        rEditWindow.InsertText("a");
+        rEditWindow.InsertText(u"a"_ustr);
 
         rEditWindow.SelNextMark();
         rEditWindow.SelNextMark();
         rEditWindow.Delete();
-        rEditWindow.InsertText("c");
+        rEditWindow.InsertText(u"c"_ustr);
 
         // should be safe i.e. do nothing
         rEditWindow.SelNextMark();
@@ -207,7 +207,7 @@ void Test::editMarker()
 
         rEditWindow.SelPrevMark();
         rEditWindow.Delete();
-        rEditWindow.InsertText("b");
+        rEditWindow.InsertText(u"b"_ustr);
 
         // tdf#106116: should be safe i.e. do nothing
         rEditWindow.SelPrevMark();
@@ -219,7 +219,7 @@ void Test::editMarker()
 
         rEditWindow.Flush();
         OUString sFinalText = rEditWindow.GetText();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be a under b under c", OUString("a under b under c"), sFinalText);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be a under b under c", u"a under b under c"_ustr, sFinalText);
     }
 
     {
@@ -230,7 +230,7 @@ void Test::editMarker()
 
 void Test::editFailure()
 {
-    m_xDocShRef->SetText("color a b over {a/}");
+    m_xDocShRef->SetText(u"color a b over {a/}"_ustr);
 
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser()->NextError();
 
@@ -263,7 +263,7 @@ void Test::editFailure()
 
 void Test::ParseErrorUnexpectedToken()
 {
-    m_xDocShRef->SetText("\\foo");
+    m_xDocShRef->SetText(u"\\foo"_ustr);
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser()->NextError();
     CPPUNIT_ASSERT(pErrorDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::UnexpectedToken expected",
@@ -272,7 +272,7 @@ void Test::ParseErrorUnexpectedToken()
 
 void Test::ParseErrorPoundExpected()
 {
-    m_xDocShRef->SetText("matrix {1#2##a##b#c}");
+    m_xDocShRef->SetText(u"matrix {1#2##a##b#c}"_ustr);
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser()->NextError();
     CPPUNIT_ASSERT(pErrorDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::PoundExpected expected",
@@ -281,7 +281,7 @@ void Test::ParseErrorPoundExpected()
 
 void Test::ParseErrorColorExpected()
 {
-    m_xDocShRef->SetText("color 42 x");
+    m_xDocShRef->SetText(u"color 42 x"_ustr);
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser()->NextError();
     CPPUNIT_ASSERT(pErrorDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::ColorExpected expected",
@@ -290,7 +290,7 @@ void Test::ParseErrorColorExpected()
 
 void Test::ParseErrorLgroupExpected()
 {
-    m_xDocShRef->SetText("stack 42");
+    m_xDocShRef->SetText(u"stack 42"_ustr);
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser()->NextError();
     CPPUNIT_ASSERT(pErrorDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::LgroupExpected expected",
@@ -299,7 +299,7 @@ void Test::ParseErrorLgroupExpected()
 
 void Test::ParseErrorRgroupExpected()
 {
-    m_xDocShRef->SetText("stack {a#b#c)");
+    m_xDocShRef->SetText(u"stack {a#b#c)"_ustr);
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser()->NextError();
     CPPUNIT_ASSERT(pErrorDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::RgroupExpected expected",
@@ -308,7 +308,7 @@ void Test::ParseErrorRgroupExpected()
 
 void Test::ParseErrorLbraceExpected()
 {
-    m_xDocShRef->SetText("left 42");
+    m_xDocShRef->SetText(u"left 42"_ustr);
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser()->NextError();
     CPPUNIT_ASSERT(pErrorDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::LbraceExpected expected",
@@ -317,7 +317,7 @@ void Test::ParseErrorLbraceExpected()
 
 void Test::ParseErrorRbraceExpected()
 {
-    m_xDocShRef->SetText("left ( foo right x");
+    m_xDocShRef->SetText(u"left ( foo right x"_ustr);
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser()->NextError();
     CPPUNIT_ASSERT(pErrorDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::RbraceExpected expected",
@@ -326,7 +326,7 @@ void Test::ParseErrorRbraceExpected()
 
 void Test::ParseErrorParentMismatch()
 {
-    m_xDocShRef->SetText("lbrace foo rceil");
+    m_xDocShRef->SetText(u"lbrace foo rceil"_ustr);
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser()->NextError();
     CPPUNIT_ASSERT(pErrorDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::ParentMismatch expected",
@@ -335,7 +335,7 @@ void Test::ParseErrorParentMismatch()
 
 void Test::ParseErrorRightExpected()
 {
-    m_xDocShRef->SetText("left ( x mline y )");
+    m_xDocShRef->SetText(u"left ( x mline y )"_ustr);
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser()->NextError();
     CPPUNIT_ASSERT(pErrorDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::RightExpected expected",
@@ -344,7 +344,7 @@ void Test::ParseErrorRightExpected()
 
 void Test::ParseErrorFontExpected()
 {
-    m_xDocShRef->SetText("font small bar");
+    m_xDocShRef->SetText(u"font small bar"_ustr);
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser()->NextError();
     CPPUNIT_ASSERT(pErrorDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::FontExpected expected",
@@ -353,7 +353,7 @@ void Test::ParseErrorFontExpected()
 
 void Test::ParseErrorSizeExpected()
 {
-    m_xDocShRef->SetText("size small baz");
+    m_xDocShRef->SetText(u"size small baz"_ustr);
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser()->NextError();
     CPPUNIT_ASSERT(pErrorDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::SizeExpected expected",
@@ -362,7 +362,7 @@ void Test::ParseErrorSizeExpected()
 
 void Test::ParseErrorDoubleAlign()
 {
-    m_xDocShRef->SetText("alignl alignc x");
+    m_xDocShRef->SetText(u"alignl alignc x"_ustr);
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser()->NextError();
     CPPUNIT_ASSERT(pErrorDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::DoubleAlign expected",
@@ -371,7 +371,7 @@ void Test::ParseErrorDoubleAlign()
 
 void Test::ParseErrorDoubleSubsupscript()
 {
-    m_xDocShRef->SetText("x_y_z");
+    m_xDocShRef->SetText(u"x_y_z"_ustr);
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser()->NextError();
     CPPUNIT_ASSERT(pErrorDesc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::DoubleSubsupscript expected",
@@ -382,7 +382,7 @@ void Test::editUndoRedo()
 {
     EditEngine &rEditEngine = m_xDocShRef->GetEditEngine();
 
-    OUString sStringOne("a under b");
+    OUString sStringOne(u"a under b"_ustr);
     {
         rEditEngine.SetText(0, sStringOne);
         m_xDocShRef->UpdateText();
@@ -391,7 +391,7 @@ void Test::editUndoRedo()
     }
 
     {
-        OUString sStringTwo("a over b");
+        OUString sStringTwo(u"a over b"_ustr);
         rEditEngine.SetText(0, sStringTwo);
         m_xDocShRef->UpdateText();
         OUString sFinalText = m_xDocShRef->GetText();
@@ -437,11 +437,11 @@ void Test::replacePlaceholder()
     SmEditWindow& rEditWindow = m_pSmCmdBoxWindow->GetEditWindow();
     // Test the placeholder replacement. In this case, testing 'a + b', it
     // should return '+a + b' when selecting '+<?>' in ElementsDock
-    rEditWindow.SetText("a + b");
+    rEditWindow.SetText(u"a + b"_ustr);
     rEditWindow.SelectAll();
-    rEditWindow.InsertText("+<?>");
+    rEditWindow.InsertText(u"+<?>"_ustr);
     OUString sFinalText = rEditWindow.GetText();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be '+a + b'", OUString("+a + b"), sFinalText);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be '+a + b'", u"+a + b"_ustr, sFinalText);
 }
 
 void Test::viewZoom()
@@ -451,7 +451,7 @@ void Test::viewZoom()
     EditEngine &rEditEngine = m_xDocShRef->GetEditEngine();
 
     {
-        OUString sStringOne("a under b");
+        OUString sStringOne(u"a under b"_ustr);
         rEditEngine.SetText(0, sStringOne);
         m_xDocShRef->UpdateText();
         OUString sFinalText = m_xDocShRef->GetText();

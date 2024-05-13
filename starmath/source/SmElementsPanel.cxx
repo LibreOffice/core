@@ -41,10 +41,12 @@ std::unique_ptr<PanelLayout> SmElementsPanel::Create(weld::Widget& rParent,
 }
 
 SmElementsPanel::SmElementsPanel(weld::Widget& rParent, const SfxBindings& rBindings)
-    : PanelLayout(&rParent, "MathElementsPanel", "modules/smath/ui/sidebarelements_math.ui")
+    : PanelLayout(&rParent, u"MathElementsPanel"_ustr,
+                  u"modules/smath/ui/sidebarelements_math.ui"_ustr)
     , mrBindings(rBindings)
-    , mxCategoryList(m_xBuilder->weld_combo_box("categorylist"))
-    , mxElementsControl(std::make_unique<SmElementsControl>(m_xBuilder->weld_icon_view("elements")))
+    , mxCategoryList(m_xBuilder->weld_combo_box(u"categorylist"_ustr))
+    , mxElementsControl(
+          std::make_unique<SmElementsControl>(m_xBuilder->weld_icon_view(u"elements"_ustr)))
 {
     for (const auto& rCategoryId : SmElementsControl::categories())
         mxCategoryList->append_text(SmResId(rCategoryId));

@@ -134,7 +134,7 @@ void SmEditTextWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
 SmEditWindow::SmEditWindow(SmCmdBoxWindow &rMyCmdBoxWin, weld::Builder& rBuilder)
     : rCmdBox(rMyCmdBoxWin)
-    , mxScrolledWindow(rBuilder.weld_scrolled_window("scrolledwindow", true))
+    , mxScrolledWindow(rBuilder.weld_scrolled_window(u"scrolledwindow"_ustr, true))
 {
     mxScrolledWindow->connect_vadjustment_changed(LINK(this, SmEditWindow, ScrollHdl));
 
@@ -201,7 +201,7 @@ void SmEditTextWindow::StyleUpdated()
 
         pDoc->UpdateEditEngineDefaultFonts();
         pEditEngine->SetBackgroundColor(rStyleSettings.GetFieldColor());
-        pEditEngine->SetDefTab(sal_uInt16(GetTextWidth("XXXX")));
+        pEditEngine->SetDefTab(sal_uInt16(GetTextWidth(u"XXXX"_ustr)));
 
         // forces new settings to be used
         // unfortunately this resets the whole edit engine
@@ -424,7 +424,7 @@ void SmEditWindow::CreateEditView(weld::Builder& rBuilder)
         return;
 
     mxTextControl.reset(new SmEditTextWindow(*this));
-    mxTextControlWin.reset(new weld::CustomWeld(rBuilder, "editview", *mxTextControl));
+    mxTextControlWin.reset(new weld::CustomWeld(rBuilder, u"editview"_ustr, *mxTextControl));
 
     SetScrollBarRanges();
 }

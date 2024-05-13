@@ -723,7 +723,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::scrollSubstringTo( sal_Int32, sal_Int32, 
 
 OUString SAL_CALL SmGraphicAccessible::getImplementationName()
 {
-    return "SmGraphicAccessible";
+    return u"SmGraphicAccessible"_ustr;
 }
 
 sal_Bool SAL_CALL SmGraphicAccessible::supportsService(
@@ -735,10 +735,10 @@ sal_Bool SAL_CALL SmGraphicAccessible::supportsService(
 Sequence< OUString > SAL_CALL SmGraphicAccessible::getSupportedServiceNames()
 {
     return {
-        "css::accessibility::Accessible",
-        "css::accessibility::AccessibleComponent",
-        "css::accessibility::AccessibleContext",
-        "css::accessibility::AccessibleText"
+        u"css::accessibility::Accessible"_ustr,
+        u"css::accessibility::AccessibleComponent"_ustr,
+        u"css::accessibility::AccessibleContext"_ustr,
+        u"css::accessibility::AccessibleText"_ustr
     };
 }
 

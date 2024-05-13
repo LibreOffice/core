@@ -97,7 +97,7 @@ SFX_IMPL_SUPERCLASS_INTERFACE(SmDocShell, SfxObjectShell)
 
 void SmDocShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("view");
+    GetStaticInterface()->RegisterPopupMenu(u"view"_ustr);
 }
 
 void SmDocShell::SetSmSyntaxVersion(sal_Int16 nSmSyntaxVersion)
@@ -106,7 +106,7 @@ void SmDocShell::SetSmSyntaxVersion(sal_Int16 nSmSyntaxVersion)
     maParser.reset(starmathdatabase::GetVersionSmParser(mnSmSyntaxVersion));
 }
 
-SFX_IMPL_OBJECTFACTORY(SmDocShell, SvGlobalName(SO3_SM_CLASSID), "smath" )
+SFX_IMPL_OBJECTFACTORY(SmDocShell, SvGlobalName(SO3_SM_CLASSID), u"smath"_ustr )
 
 void SmDocShell::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
@@ -639,7 +639,7 @@ bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
             if ( SotStorage::IsStorageFile( pStream ) )
             {
                 rtl::Reference<SotStorage> aStorage = new SotStorage(pStream, false);
-                if ( aStorage->IsStream("Equation Native") )
+                if ( aStorage->IsStream(u"Equation Native"_ustr) )
                 {
                     // is this a MathType Storage?
                     OUStringBuffer aBuffer;
@@ -684,7 +684,7 @@ bool SmDocShell::Load( SfxMedium& rMedium )
     if( SfxObjectShell::Load( rMedium ))
     {
         uno::Reference < embed::XStorage > xStorage = GetMedium()->GetStorage();
-        if (xStorage->hasByName("content.xml") && xStorage->isStreamElement("content.xml"))
+        if (xStorage->hasByName(u"content.xml"_ustr) && xStorage->isStreamElement(u"content.xml"_ustr))
         {
             // is this a fabulous math package ?
             rtl::Reference<SmModel> xModel(dynamic_cast<SmModel*>(GetModel().get()));

@@ -298,7 +298,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(const Reference<embed::XStorage>&
     // set Base URL
     if (rPropSet.is())
     {
-        rPropSet->setPropertyValue("StreamName", Any(sStreamName));
+        rPropSet->setPropertyValue(u"StreamName"_ustr, Any(sStreamName));
     }
 
     // write the stuff
@@ -320,7 +320,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_XMLExporter_get_implementation(css::uno::XComponentContext* context,
                                     css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmXMLExport(context, "com.sun.star.comp.Math.XMLExporter",
+    return cppu::acquire(new SmXMLExport(context, u"com.sun.star.comp.Math.XMLExporter"_ustr,
                                          SvXMLExportFlags::OASIS | SvXMLExportFlags::ALL));
 }
 
@@ -328,15 +328,16 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_XMLMetaExporter_get_implementation(css::uno::XComponentContext* context,
                                         css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(
-        new SmXMLExport(context, "com.sun.star.comp.Math.XMLMetaExporter", SvXMLExportFlags::META));
+    return cppu::acquire(new SmXMLExport(context, u"com.sun.star.comp.Math.XMLMetaExporter"_ustr,
+                                         SvXMLExportFlags::META));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_XMLOasisMetaExporter_get_implementation(css::uno::XComponentContext* context,
                                              css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmXMLExport(context, "com.sun.star.comp.Math.XMLOasisMetaExporter",
+    return cppu::acquire(new SmXMLExport(context,
+                                         u"com.sun.star.comp.Math.XMLOasisMetaExporter"_ustr,
                                          SvXMLExportFlags::OASIS | SvXMLExportFlags::META));
 }
 
@@ -344,15 +345,16 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_XMLSettingsExporter_get_implementation(css::uno::XComponentContext* context,
                                             css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmXMLExport(context, "com.sun.star.comp.Math.XMLSettingsExporter",
-                                         SvXMLExportFlags::SETTINGS));
+    return cppu::acquire(new SmXMLExport(
+        context, u"com.sun.star.comp.Math.XMLSettingsExporter"_ustr, SvXMLExportFlags::SETTINGS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_XMLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* context,
                                                  css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmXMLExport(context, "com.sun.star.comp.Math.XMLOasisSettingsExporter",
+    return cppu::acquire(new SmXMLExport(context,
+                                         u"com.sun.star.comp.Math.XMLOasisSettingsExporter"_ustr,
                                          SvXMLExportFlags::OASIS | SvXMLExportFlags::SETTINGS));
 }
 
@@ -360,7 +362,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_XMLContentExporter_get_implementation(css::uno::XComponentContext* context,
                                            css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmXMLExport(context, "com.sun.star.comp.Math.XMLContentExporter",
+    return cppu::acquire(new SmXMLExport(context, u"com.sun.star.comp.Math.XMLContentExporter"_ustr,
                                          SvXMLExportFlags::OASIS | SvXMLExportFlags::CONTENT));
 }
 

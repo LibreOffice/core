@@ -142,7 +142,7 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
     // Set base URI
     // needed for relative URLs; but it's OK to import e.g. MathML from the clipboard without one
     SAL_INFO_IF(rMedium.GetBaseURL().isEmpty(), "starmath", "SmMLImportWrapper: no base URL");
-    xInfoSet->setPropertyValue("BaseURI", Any(rMedium.GetBaseURL()));
+    xInfoSet->setPropertyValue(u"BaseURI"_ustr, Any(rMedium.GetBaseURL()));
 
     // Fetch progress range
     sal_Int32 nProgressRange(rMedium.IsStorage() ? 3 : 1);
@@ -165,7 +165,7 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
                 aName = pDocHierarchItem->GetValue();
 
             if (!aName.isEmpty())
-                xInfoSet->setPropertyValue("StreamRelPath", Any(aName));
+                xInfoSet->setPropertyValue(u"StreamRelPath"_ustr, Any(aName));
         }
 
         // Check if use OASIS ( new document format )
@@ -513,12 +513,12 @@ ErrCode SmMLImportWrapper::ReadThroughComponentS(const uno::Reference<embed::XSt
 
         // Determine if stream is encrypted or not
         uno::Reference<beans::XPropertySet> xProps(xEventsStream, uno::UNO_QUERY);
-        Any aAny = xProps->getPropertyValue("Encrypted");
+        Any aAny = xProps->getPropertyValue(u"Encrypted"_ustr);
         bool bEncrypted = false;
         aAny >>= bEncrypted;
 
         // Set base URL and open stream
-        rPropSet->setPropertyValue("StreamName", Any(OUString(pStreamName)));
+        rPropSet->setPropertyValue(u"StreamName"_ustr, Any(OUString(pStreamName)));
         Reference<io::XInputStream> xStream = xEventsStream->getInputStream();
 
         // Execute read
@@ -592,14 +592,14 @@ Math_MLImporter_get_implementation(uno::XComponentContext* pCtx,
                                    uno::Sequence<uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(
-        new SmMLImport(pCtx, "com.sun.star.comp.Math.XMLImporter", SvXMLImportFlags::ALL));
+        new SmMLImport(pCtx, u"com.sun.star.comp.Math.XMLImporter"_ustr, SvXMLImportFlags::ALL));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 Math_MLOasisMetaImporter_get_implementation(uno::XComponentContext* pCtx,
                                             uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return cppu::acquire(new SmMLImport(pCtx, "com.sun.star.comp.Math.XMLOasisMetaImporter",
+    return cppu::acquire(new SmMLImport(pCtx, u"com.sun.star.comp.Math.XMLOasisMetaImporter"_ustr,
                                         SvXMLImportFlags::META));
 }
 
@@ -607,8 +607,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 Math_MLOasisSettingsImporter_get_implementation(uno::XComponentContext* pCtx,
                                                 uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return cppu::acquire(new SmMLImport(pCtx, "com.sun.star.comp.Math.XMLOasisSettingsImporter",
-                                        SvXMLImportFlags::SETTINGS));
+    return cppu::acquire(new SmMLImport(
+        pCtx, u"com.sun.star.comp.Math.XMLOasisSettingsImporter"_ustr, SvXMLImportFlags::SETTINGS));
 }
 
 // SmMLImportContext

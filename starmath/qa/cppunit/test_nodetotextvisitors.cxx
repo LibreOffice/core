@@ -524,7 +524,7 @@ void Test::testBinomInBinHor()
 
     // tack +d on the end, which will put the binom into an SmBinHorNode
     aCursor.InsertElement(PlusElement);
-    aCursor.InsertText("d");
+    aCursor.InsertText(u"d"_ustr);
 
     sExpected += "{ { binom a { b + c } } + d }";
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Binom Node in BinHor Node", sExpected, xDocShRef->GetText());
@@ -552,7 +552,7 @@ void Test::testBinVerInUnary()
     // set up a fraction
     aCursor.InsertFraction();
     aCursor.Move(pOutputDevice, MoveDown);
-    aCursor.InsertText("2");
+    aCursor.InsertText(u"2"_ustr);
 
     sExpected += "- { 1 over 2 }";
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Binary Vertical in Unary Operator", sExpected,
@@ -569,25 +569,25 @@ void Test::testBinHorInSubSup()
     ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
 
     // Insert an RSup expression with a BinHor for the exponent
-    aCursor.InsertText("a");
+    aCursor.InsertText(u"a"_ustr);
     aCursor.InsertSubSup(RSUP);
-    aCursor.InsertText("b");
+    aCursor.InsertText(u"b"_ustr);
     aCursor.InsertElement(PlusElement);
-    aCursor.InsertText("c");
+    aCursor.InsertText(u"c"_ustr);
 
     // Move to the end and add d to the expression
     aCursor.Move(pOutputDevice, MoveRight);
     aCursor.InsertElement(PlusElement);
-    aCursor.InsertText("d");
+    aCursor.InsertText(u"d"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("BinHor in SubSup", OUString("{ a ^ { b + c } + d }"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("BinHor in SubSup", u"{ a ^ { b + c } + d }"_ustr,
                                  xDocShRef->GetText());
 }
 
 void Test::testUnaryInMixedNumberAsNumerator()
 {
     // set up a unary operator
-    auto pTree = SmParser5().Parse("- 1");
+    auto pTree = SmParser5().Parse(u"- 1"_ustr);
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
 
     SmCursor aCursor(pTree.get(), xDocShRef.get());
@@ -604,13 +604,13 @@ void Test::testUnaryInMixedNumberAsNumerator()
     // Set up a fraction
     aCursor.InsertFraction();
     aCursor.Move(pOutputDevice, MoveDown);
-    aCursor.InsertText("2");
+    aCursor.InsertText(u"2"_ustr);
 
     // Move left and turn this into a mixed number
     // (bad form, but this could happen right?)
     aCursor.Move(pOutputDevice, MoveLeft);
     aCursor.Move(pOutputDevice, MoveLeft);
-    aCursor.InsertText("2");
+    aCursor.InsertText(u"2"_ustr);
 
     // move forward (more than) enough places to be at the end
     for (size_t i = 0; i < 8; ++i)
@@ -618,10 +618,10 @@ void Test::testUnaryInMixedNumberAsNumerator()
 
     // add 4 to the end
     aCursor.InsertElement(PlusElement);
-    aCursor.InsertText("4");
+    aCursor.InsertText(u"4"_ustr);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unary in mixed number as Numerator",
-                                 OUString("{ 2 { { - 1 over 2 } + 4 } }"), xDocShRef->GetText());
+                                 u"{ 2 { { - 1 over 2 } + 4 } }"_ustr, xDocShRef->GetText());
 }
 
 void Test::testMiscEquivalent()
