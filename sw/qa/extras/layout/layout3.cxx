@@ -1315,7 +1315,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf124601)
     // i.e. there was a separate endnote page, even when the ContinuousEndnotes compat option was
     // on.
     assertXPath(pXmlDoc, "/root/page"_ostr, 2);
-    assertXPath(pXmlDoc, "/root/page[2]/ftncont"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[2]//ftncont"_ostr, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf124601b)
@@ -1425,7 +1425,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testContinuousEndnotesInsertPageAtStart)
     // - Expected: 1
     // - Actual  : 0
     // i.e. the footnote container remained on page 2.
-    assertXPath(pXmlDoc, "/root/page[3]/ftncont"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[3]//ftncont"_ostr, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testContinuousEndnotesDeletePageAtStart)
@@ -1452,7 +1452,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testContinuousEndnotesDeletePageAtStart)
     // - Actual  : 2
     // i.e. the endnote remained on an (otherwise) empty 2nd page.
     assertXPath(pXmlDoc, "/root/page"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[1]/ftncont"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[1]//ftncont"_ostr, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf128399)
