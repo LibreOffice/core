@@ -543,9 +543,18 @@ bool SpinField::EventNotify(NotifyEvent& rNEvt)
     {
         if ((rNEvt.GetCommandEvent()->GetCommand() == CommandEventId::Wheel) && !IsReadOnly())
         {
+            const Point& rMousePos = rNEvt.GetCommandEvent()->GetMousePosPixel();
+            bool bMouseHovered = maUpperRect.Contains(rMousePos) || maLowerRect.Contains(rMousePos);
+            if (!bMouseHovered && mpEdit)
+            {
+                const tools::Rectangle aEditRect(mpEdit->GetPosPixel(), mpEdit->GetSizePixel());
+                bMouseHovered = aEditRect.Contains(rMousePos);
+            }
+
             MouseWheelBehaviour nWheelBehavior(GetSettings().GetMouseSettings().GetWheelBehavior());
-            if (nWheelBehavior == MouseWheelBehaviour::ALWAYS
-               || (nWheelBehavior == MouseWheelBehaviour::FocusOnly && HasChildPathFocus()))
+            if (bMouseHovered
+                && (nWheelBehavior == MouseWheelBehaviour::ALWAYS
+                    || (nWheelBehavior == MouseWheelBehaviour::FocusOnly && HasChildPathFocus())))
             {
                 const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
                 if (pData->GetMode() == CommandWheelMode::SCROLL)
