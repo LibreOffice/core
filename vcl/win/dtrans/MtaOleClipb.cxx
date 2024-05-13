@@ -689,7 +689,7 @@ unsigned __stdcall CMtaOleClipboard::clipboardChangedNotifierThreadProc(void* pP
 {
     osl_setThreadName("CMtaOleClipboard::clipboardChangedNotifierThreadProc()");
     CMtaOleClipboard* pInst = static_cast< CMtaOleClipboard* >( pParam );
-    OSL_ASSERT( nullptr != pInst );
+    assert(pInst);
 
     sal::systools::CoInitializeGuard aGuard(COINIT_APARTMENTTHREADED, false,
                                             sal::systools::CoInitializeGuard::WhenFailed::NoThrow);
