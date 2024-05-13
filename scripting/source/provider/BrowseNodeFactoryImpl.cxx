@@ -266,8 +266,8 @@ std::vector< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Referen
     {
         xFac = provider::theMasterScriptProviderFactory::get( xCtx );
 
-        locnBNs[ mspIndex++ ].set( xFac->createScriptProvider( Any( OUString("user") ) ), UNO_QUERY_THROW );
-        locnBNs[ mspIndex++ ].set( xFac->createScriptProvider( Any( OUString("share") ) ), UNO_QUERY_THROW );
+        locnBNs[ mspIndex++ ].set( xFac->createScriptProvider( Any( u"user"_ustr ) ), UNO_QUERY_THROW );
+        locnBNs[ mspIndex++ ].set( xFac->createScriptProvider( Any( u"share"_ustr ) ), UNO_QUERY_THROW );
     }
     // TODO proper exception handling, should throw
     catch( const Exception& )
@@ -545,7 +545,7 @@ public:
 
     virtual OUString SAL_CALL getName() override
     {
-        return "Root";
+        return u"Root"_ustr;
     }
 
     virtual Sequence< Reference< browse::XBrowseNode > > SAL_CALL
@@ -607,7 +607,7 @@ BrowseNodeFactoryImpl::createView( sal_Int16 viewType )
         case browse::BrowseNodeFactoryViewTypes::MACROORGANIZER:
             return getOrganizerHierarchy();
         default:
-            throw RuntimeException( "Unknown view type" );
+            throw RuntimeException( u"Unknown view type"_ustr );
     }
 }
 
@@ -624,13 +624,13 @@ BrowseNodeFactoryImpl::getOrganizerHierarchy() const
 OUString SAL_CALL
 BrowseNodeFactoryImpl::getImplementationName()
 {
-    return "com.sun.star.script.browse.BrowseNodeFactory";
+    return u"com.sun.star.script.browse.BrowseNodeFactory"_ustr;
 }
 
 Sequence< OUString > SAL_CALL
 BrowseNodeFactoryImpl::getSupportedServiceNames()
 {
-    return { "com.sun.star.script.browse.BrowseNodeFactory" };
+    return { u"com.sun.star.script.browse.BrowseNodeFactory"_ustr };
 }
 
 sal_Bool BrowseNodeFactoryImpl::supportsService(OUString const & serviceName )

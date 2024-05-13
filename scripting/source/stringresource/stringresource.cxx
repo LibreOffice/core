@@ -85,7 +85,7 @@ StringResourceImpl::~StringResourceImpl()
 
 OUString StringResourceImpl::getImplementationName(  )
 {
-    return "com.sun.star.comp.scripting.StringResource";
+    return u"com.sun.star.comp.scripting.StringResource"_ustr;
 }
 
 sal_Bool StringResourceImpl::supportsService( const OUString& rServiceName )
@@ -95,7 +95,7 @@ sal_Bool StringResourceImpl::supportsService( const OUString& rServiceName )
 
 Sequence< OUString > StringResourceImpl::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.resource.StringResource" };
+    return { u"com.sun.star.resource.StringResource"_ustr };
 }
 
 
@@ -392,7 +392,7 @@ void StringResourceImpl::newLocale( const Locale& locale )
 
     if( getItemForLocale( locale, false ) != nullptr )
     {
-        throw ElementExistException( "StringResourceImpl: locale already exists" );
+        throw ElementExistException( u"StringResourceImpl: locale already exists"_ustr );
     }
 
     // TODO?: Check if locale is valid? How?
@@ -538,7 +538,7 @@ sal_Int32 StringResourceImpl::getUniqueNumericId(  )
 
     if( m_nNextUniqueNumericId < UNIQUE_NUMBER_NEEDS_INITIALISATION )
     {
-        throw NoSupportException( "getUniqueNumericId: Extended sal_Int32 range" );
+        throw NoSupportException( u"getUniqueNumericId: Extended sal_Int32 range"_ustr );
     }
     return m_nNextUniqueNumericId;
 }
@@ -569,7 +569,7 @@ LocaleItem* StringResourceImpl::getItemForLocale
 
     if( pRetItem == nullptr && bException )
     {
-        throw IllegalArgumentException( "StringResourceImpl: Invalid locale", Reference< XInterface >(), 0 );
+        throw IllegalArgumentException( u"StringResourceImpl: Invalid locale"_ustr, Reference< XInterface >(), 0 );
     }
     return pRetItem;
 }
@@ -646,7 +646,7 @@ StringResourcePersistenceImpl::~StringResourcePersistenceImpl()
 
 OUString StringResourcePersistenceImpl::getImplementationName(  )
 {
-    return "com.sun.star.comp.scripting.StringResource";
+    return u"com.sun.star.comp.scripting.StringResource"_ustr;
 }
 
 
@@ -673,20 +673,20 @@ void StringResourcePersistenceImpl::implInitializeCommonParameters
     bool bReadOnlyOk = (aArguments[1] >>= m_bReadOnly);
     if( !bReadOnlyOk )
     {
-        throw IllegalArgumentException( "XInitialization::initialize: Expected ReadOnly flag", Reference< XInterface >(), 1 );
+        throw IllegalArgumentException( u"XInitialization::initialize: Expected ReadOnly flag"_ustr, Reference< XInterface >(), 1 );
     }
 
     css::lang::Locale aCurrentLocale;
     bool bLocaleOk = (aArguments[2] >>= aCurrentLocale);
     if( !bLocaleOk )
     {
-        throw IllegalArgumentException( "XInitialization::initialize: Expected Locale", Reference< XInterface >(), 2 );
+        throw IllegalArgumentException( u"XInitialization::initialize: Expected Locale"_ustr, Reference< XInterface >(), 2 );
     }
 
     bool bNameBaseOk = (aArguments[3] >>= m_aNameBase);
     if( !bNameBaseOk )
     {
-        throw IllegalArgumentException( "XInitialization::initialize: Expected NameBase string", Reference< XInterface >(), 3 );
+        throw IllegalArgumentException( u"XInitialization::initialize: Expected NameBase string"_ustr, Reference< XInterface >(), 3 );
     }
     if( m_aNameBase.isEmpty() )
         m_aNameBase = aNameBaseDefaultStr;
@@ -694,7 +694,7 @@ void StringResourcePersistenceImpl::implInitializeCommonParameters
     bool bCommentOk = (aArguments[4] >>= m_aComment);
     if( !bCommentOk )
     {
-        throw IllegalArgumentException( "XInitialization::initialize: Expected Comment string", Reference< XInterface >(), 4 );
+        throw IllegalArgumentException( u"XInitialization::initialize: Expected Comment string"_ustr, Reference< XInterface >(), 4 );
     }
 
     implScanLocales();
@@ -870,8 +870,8 @@ void StringResourcePersistenceImpl::implStoreAtStorage
             OSL_ENSURE( xProps.is(), "The StorageStream must implement XPropertySet interface!" );
             if ( xProps.is() )
             {
-                OUString aPropName("MediaType");
-                xProps->setPropertyValue( aPropName, uno::Any( OUString("text/plain") ) );
+                OUString aPropName(u"MediaType"_ustr);
+                xProps->setPropertyValue( aPropName, uno::Any( u"text/plain"_ustr ) );
 
                 aPropName = "UseCommonStoragePasswordEncryption";
                 xProps->setPropertyValue( aPropName, uno::Any( true ) );
@@ -1946,7 +1946,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem const * 
     xTextOutputStream->setEncoding( aEncodingStr );
 
     xTextOutputStream->writeString( aComment );
-    xTextOutputStream->writeString( "\n" );
+    xTextOutputStream->writeString( u"\n"_ustr );
 
     const IdToStringMap& rHashMap = pLocaleItem->m_aIdToStringMap;
     if( !rHashMap.empty() )
@@ -1982,7 +1982,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem const * 
                 if( it != rHashMap.end() )
                 {
                     implWriteStringWithEncoding( aResourceID, xTextOutputStream, true );
-                    xTextOutputStream->writeString( "=" );
+                    xTextOutputStream->writeString( u"="_ustr );
                     OUString aValStr = (*it).second;
                     implWriteStringWithEncoding( aValStr, xTextOutputStream, false );
                 }
@@ -2023,7 +2023,7 @@ StringResourceWithStorageImpl::~StringResourceWithStorageImpl()
 
 OUString StringResourceWithStorageImpl::getImplementationName(  )
 {
-    return "com.sun.star.comp.scripting.StringResourceWithStorage";
+    return u"com.sun.star.comp.scripting.StringResourceWithStorage"_ustr;
 }
 
 sal_Bool StringResourceWithStorageImpl::supportsService( const OUString& rServiceName )
@@ -2033,7 +2033,7 @@ sal_Bool StringResourceWithStorageImpl::supportsService( const OUString& rServic
 
 Sequence< OUString > StringResourceWithStorageImpl::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.resource.StringResourceWithStorage" };
+    return { u"com.sun.star.resource.StringResourceWithStorage"_ustr };
 }
 
 
@@ -2047,7 +2047,7 @@ void StringResourceWithStorageImpl::initialize( const Sequence< Any >& aArgument
     if ( aArguments.getLength() != 5 )
     {
         throw RuntimeException(
-            "StringResourceWithStorageImpl::initialize: invalid number of arguments!" );
+            u"StringResourceWithStorageImpl::initialize: invalid number of arguments!"_ustr );
     }
 
     bool bOk = (aArguments[0] >>= m_xStorage);
@@ -2056,7 +2056,7 @@ void StringResourceWithStorageImpl::initialize( const Sequence< Any >& aArgument
 
     if( !bOk )
     {
-        throw IllegalArgumentException( "StringResourceWithStorageImpl::initialize: invalid storage", Reference< XInterface >(), 0 );
+        throw IllegalArgumentException( u"StringResourceWithStorageImpl::initialize: invalid storage"_ustr, Reference< XInterface >(), 0 );
     }
 
     implInitializeCommonParameters( aGuard, aArguments );
@@ -2216,7 +2216,7 @@ void StringResourceWithStorageImpl::setStorage( const Reference< XStorage >& Sto
 
     if( !Storage.is() )
     {
-        throw IllegalArgumentException( "StringResourceWithStorageImpl::setStorage: invalid storage", Reference< XInterface >(), 0 );
+        throw IllegalArgumentException( u"StringResourceWithStorageImpl::setStorage: invalid storage"_ustr, Reference< XInterface >(), 0 );
     }
 
     implLoadAllLocales();
@@ -2298,7 +2298,7 @@ StringResourceWithLocationImpl::~StringResourceWithLocationImpl()
 
 OUString StringResourceWithLocationImpl::getImplementationName(  )
 {
-    return "com.sun.star.comp.scripting.StringResourceWithLocation";
+    return u"com.sun.star.comp.scripting.StringResourceWithLocation"_ustr;
 }
 
 sal_Bool StringResourceWithLocationImpl::supportsService( const OUString& rServiceName )
@@ -2308,7 +2308,7 @@ sal_Bool StringResourceWithLocationImpl::supportsService( const OUString& rServi
 
 Sequence< OUString > StringResourceWithLocationImpl::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.resource.StringResourceWithLocation" };
+    return { u"com.sun.star.resource.StringResourceWithLocation"_ustr };
 }
 
 
@@ -2322,7 +2322,7 @@ void StringResourceWithLocationImpl::initialize( const Sequence< Any >& aArgumen
     if ( aArguments.getLength() != 6 )
     {
         throw RuntimeException(
-            "XInitialization::initialize: invalid number of arguments!" );
+            u"XInitialization::initialize: invalid number of arguments!"_ustr );
     }
 
     bool bOk = (aArguments[0] >>= m_aLocation);
@@ -2339,14 +2339,14 @@ void StringResourceWithLocationImpl::initialize( const Sequence< Any >& aArgumen
 
     if( !bOk )
     {
-        throw IllegalArgumentException( "XInitialization::initialize: invalid URL", Reference< XInterface >(), 0 );
+        throw IllegalArgumentException( u"XInitialization::initialize: invalid URL"_ustr, Reference< XInterface >(), 0 );
     }
 
 
     bOk = (aArguments[5] >>= m_xInteractionHandler);
     if( !bOk )
     {
-        throw IllegalArgumentException( "StringResourceWithStorageImpl::initialize: invalid type", Reference< XInterface >(), 5 );
+        throw IllegalArgumentException( u"StringResourceWithStorageImpl::initialize: invalid type"_ustr, Reference< XInterface >(), 5 );
     }
 
     implInitializeCommonParameters( aGuard, aArguments );
@@ -2511,7 +2511,7 @@ void StringResourceWithLocationImpl::setURL( const OUString& URL )
     sal_Int32 nLen = URL.getLength();
     if( nLen == 0 )
     {
-        throw IllegalArgumentException( "StringResourceWithLocationImpl::setURL: invalid URL", Reference< XInterface >(), 0 );
+        throw IllegalArgumentException( u"StringResourceWithLocationImpl::setURL: invalid URL"_ustr, Reference< XInterface >(), 0 );
     }
 
     implLoadAllLocales();

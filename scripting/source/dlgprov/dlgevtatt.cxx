@@ -115,7 +115,7 @@ namespace dlgprov
         if ( xSMgr.is() )
         {
             args.getArray()[0] <<= xModel;
-            mxListener.set( xSMgr->createInstanceWithArgumentsAndContext( "ooo.vba.EventListener", args, m_xContext ), UNO_QUERY );
+            mxListener.set( xSMgr->createInstanceWithArgumentsAndContext( u"ooo.vba.EventListener"_ustr, args, m_xContext ), UNO_QUERY );
         }
         if ( !rxControl.is() )
             return;
@@ -123,9 +123,9 @@ namespace dlgprov
         try
         {
             Reference< XPropertySet > xProps( rxControl->getModel(), UNO_QUERY_THROW );
-            xProps->getPropertyValue("Name") >>= msDialogCodeName;
+            xProps->getPropertyValue(u"Name"_ustr) >>= msDialogCodeName;
             xProps.set( mxListener, UNO_QUERY_THROW );
-            xProps->setPropertyValue("Model", args[ 0 ] );
+            xProps->setPropertyValue(u"Model"_ustr, args[ 0 ] );
         }
         catch( const Exception& )
         {
@@ -161,26 +161,26 @@ namespace dlgprov
         // key listeners by protocol when ScriptType = 'Script'
         // otherwise key is the ScriptType e.g. StarBasic
         if ( rxRTLListener.is() ) // set up handler for RTL_BASIC
-            listenersForTypes[ OUString("StarBasic") ] = rxRTLListener;
+            listenersForTypes[ u"StarBasic"_ustr ] = rxRTLListener;
         else
-            listenersForTypes[ OUString("StarBasic") ] = new DialogLegacyScriptListenerImpl( rxContext, rxModel );
+            listenersForTypes[ u"StarBasic"_ustr ] = new DialogLegacyScriptListenerImpl( rxContext, rxModel );
         // handler for Script & OUString("vnd.sun.star.UNO:")
-        listenersForTypes[ OUString("vnd.sun.star.UNO") ] = new DialogUnoScriptListenerImpl( rxContext, rxModel, rxControl, rxHandler, rxIntrospect, bProviderMode );
-        listenersForTypes[ OUString("vnd.sun.star.script") ] = new DialogSFScriptListenerImpl( rxContext, rxModel );
+        listenersForTypes[ u"vnd.sun.star.UNO"_ustr ] = new DialogUnoScriptListenerImpl( rxContext, rxModel, rxControl, rxHandler, rxIntrospect, bProviderMode );
+        listenersForTypes[ u"vnd.sun.star.script"_ustr ] = new DialogSFScriptListenerImpl( rxContext, rxModel );
 
         // determine the VBA compatibility mode from the Basic library container
         try
         {
             uno::Reference< beans::XPropertySet > xModelProps( rxModel, uno::UNO_QUERY_THROW );
             uno::Reference< script::vba::XVBACompatibility > xVBACompat(
-                xModelProps->getPropertyValue("BasicLibraries"), uno::UNO_QUERY_THROW );
+                xModelProps->getPropertyValue(u"BasicLibraries"_ustr), uno::UNO_QUERY_THROW );
             mbUseFakeVBAEvents = xVBACompat->getVBACompatibilityMode();
         }
         catch( uno::Exception& )
         {
         }
         if ( mbUseFakeVBAEvents )
-            listenersForTypes[ OUString("VBAInterop") ] = new DialogVBAScriptListenerImpl( rxContext, rxControl, rxModel, sDialogLibName );
+            listenersForTypes[ u"VBAInterop"_ustr ] = new DialogVBAScriptListenerImpl( rxContext, rxControl, rxModel, sDialogLibName );
     }
 
 
@@ -203,7 +203,7 @@ namespace dlgprov
         Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );
         if ( xSMgr.is() )
         {
-            Reference< ooo::vba::XVBAToOOEventDescGen > xVBAToOOEvtDesc( xSMgr->createInstanceWithContext("ooo.vba.VBAToOOEventDesc", m_xContext ), UNO_QUERY );
+            Reference< ooo::vba::XVBAToOOEventDescGen > xVBAToOOEvtDesc( xSMgr->createInstanceWithContext(u"ooo.vba.VBAToOOEventDesc"_ustr, m_xContext ), UNO_QUERY );
             if ( xVBAToOOEvtDesc.is() )
                 xEventsSupplier = xVBAToOOEvtDesc->getEventSupplier( xControl, sControlName );
 
@@ -330,7 +330,7 @@ namespace dlgprov
                     throw RuntimeException();
 
                 m_xEventAttacher.set( xSMgr->createInstanceWithContext(
-                    "com.sun.star.script.EventAttacher", m_xContext ), UNO_QUERY );
+                    u"com.sun.star.script.EventAttacher"_ustr, m_xContext ), UNO_QUERY );
 
                 if ( !m_xEventAttacher.is() )
                     throw ServiceNotRegisteredException();
@@ -344,7 +344,7 @@ namespace dlgprov
             Reference< XPropertySet > xProps( xDlgControl->getModel(), UNO_QUERY );
             try
             {
-                xProps->getPropertyValue("Name") >>= sDialogCodeName;
+                xProps->getPropertyValue(u"Name"_ustr) >>= sDialogCodeName;
             }
             catch( Exception& ){}
         }
@@ -464,7 +464,7 @@ namespace dlgprov
                         provider::theMasterScriptProviderFactory::get( m_xContext );
 
                     Any aCtx;
-                    aCtx <<= OUString("user");
+                    aCtx <<= u"user"_ustr;
                     xScriptProvider = xFactory->createScriptProvider( aCtx );
                 }
             }
@@ -603,7 +603,7 @@ namespace dlgprov
         else
         {
             OUString aRes(SfxResId(STR_ERRUNOEVENTBINDUNG));
-            OUString aQuoteChar( "\"" );
+            OUString aQuoteChar( u"\""_ustr );
 
             sal_Int32 nIndex = aRes.indexOf( '%' );
 

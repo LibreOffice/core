@@ -83,7 +83,7 @@ namespace dlgprov
         Reference< XMultiComponentFactory > xSMgr_( i_xContext->getServiceManager(), UNO_SET_THROW );
         // TODO: Ctor
         Reference< resource::XStringResourceManager > xStringResourceManager( xSMgr_->createInstanceWithContext
-            ( "com.sun.star.resource.StringResourceWithLocation",
+            ( u"com.sun.star.resource.StringResourceWithLocation"_ustr,
                 i_xContext ), UNO_QUERY );
         if( xStringResourceManager.is() )
         {
@@ -96,7 +96,7 @@ namespace dlgprov
     Reference< container::XNameContainer > lcl_createControlModel(const Reference< XComponentContext >& i_xContext)
     {
         Reference< XMultiComponentFactory > xSMgr_( i_xContext->getServiceManager(), UNO_SET_THROW );
-        Reference< container::XNameContainer > xControlModel( xSMgr_->createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", i_xContext ), UNO_QUERY_THROW );
+        Reference< container::XNameContainer > xControlModel( xSMgr_->createInstanceWithContext(u"com.sun.star.awt.UnoControlDialogModel"_ustr, i_xContext ), UNO_QUERY_THROW );
         return xControlModel;
     }
     Reference< container::XNameContainer > lcl_createDialogModel( const Reference< XComponentContext >& i_xContext,
@@ -108,7 +108,7 @@ namespace dlgprov
         Reference< container::XNameContainer > xDialogModel(  lcl_createControlModel(i_xContext) );
 
         Reference< beans::XPropertySet > xDlgPropSet( xDialogModel, UNO_QUERY );
-        xDlgPropSet->setPropertyValue( "DialogSourceURL", aDialogSourceURL );
+        xDlgPropSet->setPropertyValue( u"DialogSourceURL"_ustr, aDialogSourceURL );
 
         // #TODO we really need to detect the source of the Dialog, is it
         // the dialog. E.g. if the dialog was created from basic ( then we just
@@ -125,7 +125,7 @@ namespace dlgprov
             Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
             Any aStringResourceManagerAny;
             aStringResourceManagerAny <<= xStringResourceManager;
-            xDlgPSet->setPropertyValue( "ResourceResolver", aStringResourceManagerAny );
+            xDlgPSet->setPropertyValue( u"ResourceResolver"_ustr, aStringResourceManagerAny );
         }
 
         return xDialogModel;
@@ -187,7 +187,7 @@ namespace dlgprov
     {
         if (!m_BasicInfo)
             // shouldn't get here
-            throw RuntimeException("No information to create dialog" );
+            throw RuntimeException(u"No information to create dialog"_ustr );
         Reference< resource::XStringResourceManager > xStringResourceManager = getStringResourceFromDialogLibrary( m_BasicInfo->mxDlgLib );
 
         Any aDialogSourceURL((OUString()));
@@ -258,7 +258,7 @@ namespace dlgprov
             if ( nIndex != -1 )
                 sDlgName = sDescription.getToken( 0, '.', nIndex );
 
-            OUString sLocation = sfUri->getParameter( "location" );
+            OUString sLocation = sfUri->getParameter( u"location"_ustr );
 
 
             // get dialog library container
@@ -313,7 +313,7 @@ namespace dlgprov
             if ( !xLibContainer.is() )
             {
                 throw IllegalArgumentException(
-                    "DialogProviderImpl::getDialog: library container not found!",
+                    u"DialogProviderImpl::getDialog: library container not found!"_ustr,
                     Reference< XInterface >(), 1 );
             }
 
@@ -331,7 +331,7 @@ namespace dlgprov
             if ( !xDialogLib.is() )
             {
                 throw IllegalArgumentException(
-                    "DialogProviderImpl::getDialogModel: library not found!",
+                    u"DialogProviderImpl::getDialogModel: library not found!"_ustr,
                     Reference< XInterface >(), 1 );
             }
 
@@ -345,7 +345,7 @@ namespace dlgprov
             if ( !xISP.is() )
             {
                 throw IllegalArgumentException(
-                    "DialogProviderImpl::getDialogModel: dialog not found!",
+                    u"DialogProviderImpl::getDialogModel: dialog not found!"_ustr,
                     Reference< XInterface >(), 1 );
             }
 
@@ -494,7 +494,7 @@ namespace dlgprov
 
     OUString DialogProviderImpl::getImplementationName(  )
     {
-        return "com.sun.star.comp.scripting.DialogProvider";
+        return u"com.sun.star.comp.scripting.DialogProvider"_ustr;
     }
 
     sal_Bool DialogProviderImpl::supportsService( const OUString& rServiceName )
@@ -504,9 +504,9 @@ namespace dlgprov
 
     Sequence< OUString > DialogProviderImpl::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.awt.DialogProvider",
-                 "com.sun.star.awt.DialogProvider2",
-                 "com.sun.star.awt.ContainerWindowProvider" };
+        return { u"com.sun.star.awt.DialogProvider"_ustr,
+                 u"com.sun.star.awt.DialogProvider2"_ustr,
+                 u"com.sun.star.awt.ContainerWindowProvider"_ustr };
     }
 
 
@@ -523,7 +523,7 @@ namespace dlgprov
 
             if ( !m_xModel.is() )
             {
-                throw RuntimeException( "DialogProviderImpl::initialize: invalid argument format!" );
+                throw RuntimeException( u"DialogProviderImpl::initialize: invalid argument format!"_ustr );
             }
         }
         else if ( aArguments.getLength() == 4 )
@@ -543,7 +543,7 @@ namespace dlgprov
         }
         else if ( aArguments.getLength() > 4 )
         {
-            throw RuntimeException( "DialogProviderImpl::initialize: invalid number of arguments!" );
+            throw RuntimeException( u"DialogProviderImpl::initialize: invalid number of arguments!"_ustr );
         }
     }
 
@@ -600,7 +600,7 @@ namespace dlgprov
                         if( !bDecoration )
                         {
                             xDlgModPropSet->setPropertyValue( aDecorationPropName, Any( true ) );
-                            xDlgModPropSet->setPropertyValue( "Title", Any( OUString() ) );
+                            xDlgModPropSet->setPropertyValue( u"Title"_ustr, Any( OUString() ) );
                         }
                     }
                     catch( UnknownPropertyException& )
@@ -634,7 +634,7 @@ namespace dlgprov
         if( !xHandler.is() )
         {
             throw IllegalArgumentException(
-                "DialogProviderImpl::createDialogWithHandler: Invalid xHandler!",
+                u"DialogProviderImpl::createDialogWithHandler: Invalid xHandler!"_ustr,
                 Reference< XInterface >(), 1 );
         }
         Reference< XWindowPeer > xDummyPeer;
@@ -649,9 +649,9 @@ namespace dlgprov
         ::comphelper::NamedValueCollection aArguments( Arguments );
 
         Reference< XWindowPeer > xParentPeer;
-        if ( aArguments.has( "ParentWindow" ) )
+        if ( aArguments.has( u"ParentWindow"_ustr ) )
         {
-            const Any& aParentWindow( aArguments.get( "ParentWindow" ) );
+            const Any& aParentWindow( aArguments.get( u"ParentWindow"_ustr ) );
             if ( !( aParentWindow >>= xParentPeer ) )
             {
                 const Reference< XControl > xParentControl( aParentWindow, UNO_QUERY );
@@ -660,7 +660,7 @@ namespace dlgprov
             }
         }
 
-        const Reference< XInterface > xHandler( aArguments.get( "EventHandler" ), UNO_QUERY );
+        const Reference< XInterface > xHandler( aArguments.get( u"EventHandler"_ustr ), UNO_QUERY );
 
         Reference < XControl > xControl = DialogProviderImpl::createDialogImpl( URL, xHandler, xParentPeer, true );
         Reference< XDialog > xDialog( xControl, UNO_QUERY );
@@ -674,7 +674,7 @@ namespace dlgprov
         if( !xParent.is() )
         {
             throw IllegalArgumentException(
-                "DialogProviderImpl::createContainerWindow: Invalid xParent!",
+                u"DialogProviderImpl::createContainerWindow: Invalid xParent!"_ustr,
                 Reference< XInterface >(), 1 );
         }
         Reference < XControl > xControl = DialogProviderImpl::createDialogImpl( URL, xHandler, xParent, false );

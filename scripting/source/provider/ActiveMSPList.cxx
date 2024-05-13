@@ -52,7 +52,7 @@ ActiveMSPList::createNewMSP( const uno::Any& context )
 
     Reference< provider::XScriptProvider > msp(
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            "com.sun.star.script.provider.MasterScriptProvider", args, m_xContext ), UNO_QUERY );
+            u"com.sun.star.script.provider.MasterScriptProvider"_ustr, args, m_xContext ), UNO_QUERY );
     return msp;
 }
 
@@ -128,8 +128,8 @@ Reference< provider::XScriptProvider >
     if ( !xScripts.is() )
     {
         throw lang::IllegalArgumentException(
-            "Failed to create MasterScriptProvider for ScriptInvocationContext: "
-            "Component supporting XEmbeddScripts interface not found.",
+            u"Failed to create MasterScriptProvider for ScriptInvocationContext: "
+            "Component supporting XEmbeddScripts interface not found."_ustr,
             nullptr, 1 );
     }
 
@@ -272,7 +272,7 @@ void
 ActiveMSPList::createNonDocMSPs()
 {
     // do creation of user and share MSPs here
-    OUString serviceName("com.sun.star.script.provider.MasterScriptProvider");
+    OUString serviceName(u"com.sun.star.script.provider.MasterScriptProvider"_ustr);
 
     Sequence< Any > args{ Any(userDirString) };
     // should check if provider reference is valid

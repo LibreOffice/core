@@ -80,19 +80,19 @@ ScriptingFrameworkURIHelper::initialize(
          args[0].getValueType() != ::cppu::UnoType<OUString>::get() ||
          args[1].getValueType() != ::cppu::UnoType<OUString>::get() )
     {
-        throw uno::RuntimeException( "ScriptingFrameworkURIHelper got invalid argument list" );
+        throw uno::RuntimeException( u"ScriptingFrameworkURIHelper got invalid argument list"_ustr );
     }
 
     if ( !(args[0] >>= m_sLanguage) || !(args[1] >>= m_sLocation) )
     {
-        throw uno::RuntimeException( "ScriptingFrameworkURIHelper error parsing args" );
+        throw uno::RuntimeException( u"ScriptingFrameworkURIHelper error parsing args"_ustr );
     }
 
     SCRIPTS_PART = "/Scripts/" + m_sLanguage.toAsciiLowerCase();
 
     if ( !initBaseURI() )
     {
-        throw uno::RuntimeException( "ScriptingFrameworkURIHelper cannot find script directory" );
+        throw uno::RuntimeException( u"ScriptingFrameworkURIHelper cannot find script directory"_ustr );
     }
 }
 
@@ -211,7 +211,7 @@ ScriptingFrameworkURIHelper::getStorageURI(const OUString& rScriptURI)
     catch ( uno::Exception& )
     {
         throw lang::IllegalArgumentException(
-            "Script URI not valid",
+            u"Script URI not valid"_ustr,
             uno::Reference< uno::XInterface >(), 1 );
     }
 
@@ -228,7 +228,7 @@ OUString SAL_CALL
 ScriptingFrameworkURIHelper::getImplementationName()
 {
     return
-        "com.sun.star.script.provider.ScriptURIHelper";
+        u"com.sun.star.script.provider.ScriptURIHelper"_ustr;
 }
 
 sal_Bool SAL_CALL
@@ -240,7 +240,7 @@ ScriptingFrameworkURIHelper::supportsService( const OUString& serviceName )
 uno::Sequence< OUString > SAL_CALL
 ScriptingFrameworkURIHelper::getSupportedServiceNames()
 {
-    return { "com.sun.star.script.provider.ScriptURIHelper" };
+    return { u"com.sun.star.script.provider.ScriptURIHelper"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

@@ -202,49 +202,49 @@ TypeList const listBoxList = {&typeXListBox, 1};
 //this array stores the OO event to VBA event translation info
 static TranslatePropMap aTranslatePropMap_Impl[] =
 {
-    { OUString("actionPerformed"), { OUString("_Change"), nullptr, DenyType, static_cast<void const *>(&radioButtonList) } },
+    { u"actionPerformed"_ustr, { u"_Change"_ustr, nullptr, DenyType, static_cast<void const *>(&radioButtonList) } },
     // actionPerformed ooo event
-    { OUString("actionPerformed"), { OUString("_Click"), nullptr, ApproveAll, nullptr } },
-    { OUString("itemStateChanged"), { OUString("_Change"), nullptr, ApproveType, static_cast<void const *>(&radioButtonList) } },
+    { u"actionPerformed"_ustr, { u"_Click"_ustr, nullptr, ApproveAll, nullptr } },
+    { u"itemStateChanged"_ustr, { u"_Change"_ustr, nullptr, ApproveType, static_cast<void const *>(&radioButtonList) } },
     // itemStateChanged ooo event
-    { OUString("itemStateChanged"), { OUString("_Click"), nullptr, ApproveType, static_cast<void const *>(&comboBoxList) } },
+    { u"itemStateChanged"_ustr, { u"_Click"_ustr, nullptr, ApproveType, static_cast<void const *>(&comboBoxList) } },
 
-    { OUString("itemStateChanged"), { OUString("_Click"), nullptr, ApproveType, static_cast<void const *>(&listBoxList) } },
+    { u"itemStateChanged"_ustr, { u"_Click"_ustr, nullptr, ApproveType, static_cast<void const *>(&listBoxList) } },
     // changed ooo event
-    { OUString("changed"), { OUString("_Change"), nullptr, ApproveAll, nullptr } },
+    { u"changed"_ustr, { u"_Change"_ustr, nullptr, ApproveAll, nullptr } },
 
     // focusGained ooo event
-    { OUString("focusGained"), { OUString("_GotFocus"), nullptr, ApproveAll, nullptr } },
+    { u"focusGained"_ustr, { u"_GotFocus"_ustr, nullptr, ApproveAll, nullptr } },
 
     // focusLost ooo event
-    { OUString("focusLost"), { OUString("_LostFocus"), nullptr, ApproveAll, nullptr } },
-    { OUString("focusLost"), { OUString("_Exit"), nullptr, ApproveType, static_cast<void const *>(&textCompList) } }, // support VBA TextBox_Exit event
+    { u"focusLost"_ustr, { u"_LostFocus"_ustr, nullptr, ApproveAll, nullptr } },
+    { u"focusLost"_ustr, { u"_Exit"_ustr, nullptr, ApproveType, static_cast<void const *>(&textCompList) } }, // support VBA TextBox_Exit event
 
     // adjustmentValueChanged ooo event
-    { OUString("adjustmentValueChanged"), { OUString("_Scroll"), nullptr, ApproveAll, nullptr } },
-    { OUString("adjustmentValueChanged"), { OUString("_Change"), nullptr, ApproveAll, nullptr } },
+    { u"adjustmentValueChanged"_ustr, { u"_Scroll"_ustr, nullptr, ApproveAll, nullptr } },
+    { u"adjustmentValueChanged"_ustr, { u"_Change"_ustr, nullptr, ApproveAll, nullptr } },
 
     // textChanged ooo event
-    { OUString("textChanged"), { OUString("_Change"), nullptr, ApproveAll, nullptr } },
+    { u"textChanged"_ustr, { u"_Change"_ustr, nullptr, ApproveAll, nullptr } },
 
     // keyReleased ooo event
-    { OUString("keyReleased"), { OUString("_KeyUp"), ooKeyPressedToVBAKeyUpDown, ApproveAll, nullptr } },
+    { u"keyReleased"_ustr, { u"_KeyUp"_ustr, ooKeyPressedToVBAKeyUpDown, ApproveAll, nullptr } },
 
     // mouseReleased ooo event
-    { OUString("mouseReleased"), { OUString("_Click"), ooMouseEvtToVBAMouseEvt, ApproveType, static_cast<void const *>(&fixedTextList) } },
-    { OUString("mouseReleased"), { OUString("_MouseUp"), ooMouseEvtToVBAMouseEvt, ApproveAll, nullptr } },
+    { u"mouseReleased"_ustr, { u"_Click"_ustr, ooMouseEvtToVBAMouseEvt, ApproveType, static_cast<void const *>(&fixedTextList) } },
+    { u"mouseReleased"_ustr, { u"_MouseUp"_ustr, ooMouseEvtToVBAMouseEvt, ApproveAll, nullptr } },
 
     // mousePressed ooo event
-    { OUString("mousePressed"), { OUString("_MouseDown"), ooMouseEvtToVBAMouseEvt, ApproveAll, nullptr } },
-    { OUString("mousePressed"), { OUString("_DblClick"), ooMouseEvtToVBADblClick, ApproveAll, nullptr } },
+    { u"mousePressed"_ustr, { u"_MouseDown"_ustr, ooMouseEvtToVBAMouseEvt, ApproveAll, nullptr } },
+    { u"mousePressed"_ustr, { u"_DblClick"_ustr, ooMouseEvtToVBADblClick, ApproveAll, nullptr } },
 
     // mouseMoved ooo event
-    { OUString("mouseMoved"), { OUString("_MouseMove"), ooMouseEvtToVBAMouseEvt, ApproveAll, nullptr } },
-    { OUString("mouseDragged"), { OUString("_MouseMove"), ooMouseEvtToVBAMouseEvt, DenyMouseDrag, nullptr } },
+    { u"mouseMoved"_ustr, { u"_MouseMove"_ustr, ooMouseEvtToVBAMouseEvt, ApproveAll, nullptr } },
+    { u"mouseDragged"_ustr, { u"_MouseMove"_ustr, ooMouseEvtToVBAMouseEvt, DenyMouseDrag, nullptr } },
 
     // keyPressed ooo event
-    { OUString("keyPressed"), { OUString("_KeyDown"), ooKeyPressedToVBAKeyUpDown, ApproveAll, nullptr } },
-    { OUString("keyPressed"), { OUString("_KeyPress"), ooKeyPressedToVBAKeyPressed, ApproveAll, nullptr } }
+    { u"keyPressed"_ustr, { u"_KeyDown"_ustr, ooKeyPressedToVBAKeyUpDown, ApproveAll, nullptr } },
+    { u"keyPressed"_ustr, { u"_KeyPress"_ustr, ooKeyPressedToVBAKeyPressed, ApproveAll, nullptr } }
 };
 
 static EventInfoHash& getEventTransInfo()
@@ -432,18 +432,18 @@ public:
 
     virtual void SAL_CALL insertByName( const OUString&, const Any& ) override
     {
-        throw RuntimeException("ReadOnly container" );
+        throw RuntimeException(u"ReadOnly container"_ustr );
 
     }
     virtual void SAL_CALL removeByName( const OUString& ) override
     {
-        throw RuntimeException("ReadOnly container" );
+        throw RuntimeException(u"ReadOnly container"_ustr );
     }
 
     // XNameReplace
     virtual void SAL_CALL replaceByName( const OUString&, const Any& ) override
     {
-        throw RuntimeException("ReadOnly container" );
+        throw RuntimeException(u"ReadOnly container"_ustr );
 
     }
 
@@ -580,7 +580,7 @@ public:
 
     OUString SAL_CALL getImplementationName() override
     {
-        return "ooo.vba.EventListener";
+        return u"ooo.vba.EventListener"_ustr;
     }
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
@@ -784,7 +784,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet )
         return;
     lang::EventObject aEvent;
     evt.Arguments[ 0 ] >>= aEvent;
-    OUString sName = "UserForm";
+    OUString sName = u"UserForm"_ustr;
 
     uno::Reference< awt::XDialog > xDlg( aEvent.Source, uno::UNO_QUERY );
     if ( !xDlg.is() )
@@ -811,7 +811,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet )
             // Userform control ( fired from the api or from event manager )
             uno::Reference< beans::XPropertySet > xProps;
             xProps.set( xControl->getModel(), uno::UNO_QUERY_THROW );
-            xProps->getPropertyValue("Name") >>= sName;
+            xProps->getPropertyValue(u"Name"_ustr) >>= sName;
         }
     }
     //dumpEvent( evt );
@@ -895,7 +895,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet )
                 OUString url = aMacroResolvedInfo.msResolvedMacro;
                 try
                 {
-                    uno::Any aDummyCaller( OUString("Error") );
+                    uno::Any aDummyCaller( u"Error"_ustr );
                     if ( pRet )
                     {
                         ooo::vba::executeMacro( mpShell, url, aArguments, *pRet, aDummyCaller );
@@ -928,7 +928,7 @@ public:
 
     OUString SAL_CALL getImplementationName() override
     {
-        return "ooo.vba.VBAToOOEventDesc";
+        return u"ooo.vba.VBAToOOEventDesc"_ustr;
     }
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override

@@ -146,7 +146,7 @@ namespace basprov
     // XServiceInfo
     OUString BasicProviderImpl::getImplementationName(  )
     {
-        return "com.sun.star.comp.scripting.ScriptProviderForBasic";
+        return u"com.sun.star.comp.scripting.ScriptProviderForBasic"_ustr;
     }
 
     sal_Bool BasicProviderImpl::supportsService( const OUString& rServiceName )
@@ -157,10 +157,10 @@ namespace basprov
     Sequence< OUString > BasicProviderImpl::getSupportedServiceNames(  )
     {
         return {
-            "com.sun.star.script.provider.ScriptProviderForBasic",
-            "com.sun.star.script.provider.LanguageScriptProvider",
-            "com.sun.star.script.provider.ScriptProvider",
-            "com.sun.star.script.browse.BrowseNode"};
+            u"com.sun.star.script.provider.ScriptProviderForBasic"_ustr,
+            u"com.sun.star.script.provider.LanguageScriptProvider"_ustr,
+            u"com.sun.star.script.provider.ScriptProvider"_ustr,
+            u"com.sun.star.script.browse.BrowseNode"_ustr};
     }
 
 
@@ -176,7 +176,7 @@ namespace basprov
         if ( aArguments.getLength() != 1 )
         {
             throw IllegalArgumentException(
-                "BasicProviderImpl::initialize: incorrect argument count.",
+                u"BasicProviderImpl::initialize: incorrect argument count."_ustr,
                 *this,
                 1
             );
@@ -191,7 +191,7 @@ namespace basprov
             if ( !xModel.is() )
             {
                 throw IllegalArgumentException(
-                    "BasicProviderImpl::initialize: unable to determine the document model from the script invocation context.",
+                    u"BasicProviderImpl::initialize: unable to determine the document model from the script invocation context."_ustr,
                     *this,
                     1
                 );
@@ -277,13 +277,13 @@ namespace basprov
             throw provider::ScriptFrameworkErrorException(
                 "BasicProviderImpl::getScript: failed to parse URI: " + scriptURI,
                 Reference< XInterface >(),
-                scriptURI, "Basic",
+                scriptURI, u"Basic"_ustr,
                 provider::ScriptFrameworkErrorType::MALFORMED_URL );
         }
 
 
         OUString aDescription = sfUri->getName();
-        OUString aLocation = sfUri->getParameter( "location" );
+        OUString aLocation = sfUri->getParameter( u"location"_ustr );
 
         sal_Int32 nIndex = 0;
         // In some strange circumstances the Library name can have an
@@ -360,7 +360,7 @@ namespace basprov
                 "method: '" + aMethod + "'\n"
                 "location: '" + aLocation + "'\n",
                 Reference< XInterface >(),
-                scriptURI, "Basic",
+                scriptURI, u"Basic"_ustr,
                 provider::ScriptFrameworkErrorType::NO_SUCH_SCRIPT );
         }
 
@@ -373,7 +373,7 @@ namespace basprov
 
     OUString BasicProviderImpl::getName(  )
     {
-        return "Basic";
+        return u"Basic"_ustr;
     }
 
 

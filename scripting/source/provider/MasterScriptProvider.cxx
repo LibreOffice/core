@@ -90,7 +90,7 @@ void SAL_CALL MasterScriptProvider::initialize( const Sequence < Any >& args )
     if ( len > 1  )
     {
         throw RuntimeException(
-            "MasterScriptProvider::initialize: invalid number of arguments" );
+            u"MasterScriptProvider::initialize: invalid number of arguments"_ustr );
     }
 
     Sequence< Any > invokeArgs( len );
@@ -128,7 +128,7 @@ void SAL_CALL MasterScriptProvider::initialize( const Sequence < Any >& args )
             if ( !xScripts.is() )
             {
                 throw lang::IllegalArgumentException(
-                    "The given document does not support embedding scripts into it, and cannot be associated with such a document.",
+                    u"The given document does not support embedding scripts into it, and cannot be associated with such a document."_ustr,
                     *this,
                     1
                 );
@@ -158,7 +158,7 @@ void SAL_CALL MasterScriptProvider::initialize( const Sequence < Any >& args )
                 pinvokeArgs[ 0 ] <<= m_sCtxString;
         }
 
-        OUString pkgSpec = "uno_packages";
+        OUString pkgSpec = u"uno_packages"_ustr;
         sal_Int32 indexOfPkgSpec = m_sCtxString.lastIndexOf( pkgSpec );
 
         // if context string ends with "uno_packages"
@@ -216,8 +216,8 @@ MasterScriptProvider::getScript( const OUString& scriptURI )
     if ( !m_bIsValid )
     {
         throw provider::ScriptFrameworkErrorException(
-            "MasterScriptProvider not initialised", Reference< XInterface >(),
-            scriptURI, "",
+            u"MasterScriptProvider not initialised"_ustr, Reference< XInterface >(),
+            scriptURI, u""_ustr,
             provider::ScriptFrameworkErrorType::UNKNOWN );
     }
 
@@ -234,12 +234,12 @@ MasterScriptProvider::getScript( const OUString& scriptURI )
         throw provider::ScriptFrameworkErrorException(
             "Incorrect format for Script URI: " + scriptURI,
             Reference< XInterface >(),
-            scriptURI, "",
+            scriptURI, u""_ustr,
             provider::ScriptFrameworkErrorType::UNKNOWN );
     }
 
-    OUString langKey("language");
-    OUString locKey("location");
+    OUString langKey(u"language"_ustr);
+    OUString locKey(u"location"_ustr);
 
     if ( !sfUri->hasParameter( langKey ) ||
          !sfUri->hasParameter( locKey ) ||
@@ -248,7 +248,7 @@ MasterScriptProvider::getScript( const OUString& scriptURI )
         throw provider::ScriptFrameworkErrorException(
             "Incorrect format for Script URI: " + scriptURI,
             Reference< XInterface >(),
-            scriptURI, "",
+            scriptURI, u""_ustr,
             provider::ScriptFrameworkErrorType::UNKNOWN );
     }
 
@@ -257,7 +257,7 @@ MasterScriptProvider::getScript( const OUString& scriptURI )
 
     // if script us located in uno pkg
     sal_Int32 index = -1;
-    OUString pkgTag(":uno_packages");
+    OUString pkgTag(u":uno_packages"_ustr);
     // for languages other than basic,  scripts located in uno packages
     // are merged into the user/share location context.
     // For other languages the location attribute in script url has the form
@@ -295,7 +295,7 @@ MasterScriptProvider::getScript( const OUString& scriptURI )
         if ( !providerCache() )
         {
             throw provider::ScriptFrameworkErrorException(
-                "No LanguageProviders detected",
+                u"No LanguageProviders detected"_ustr,
                 Reference< XInterface >(),
                 sfUri->getName(), language,
                 provider::ScriptFrameworkErrorType::NOTSUPPORTED );
@@ -339,7 +339,7 @@ MasterScriptProvider::providerCache()
         std::scoped_lock aGuard( m_mutex );
         if ( !m_pPCache )
         {
-            Sequence<OUString> denylist { "com.sun.star.script.provider.ScriptProviderForBasic" };
+            Sequence<OUString> denylist { u"com.sun.star.script.provider.ScriptProviderForBasic"_ustr };
 
             if ( !m_bIsPkgMSP )
             {
@@ -492,7 +492,7 @@ MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement )
     {
         if ( !m_xMSPPkg.is() )
         {
-            throw RuntimeException( "PackageMasterScriptProvider is unitialised" );
+            throw RuntimeException( u"PackageMasterScriptProvider is unitialised"_ustr );
         }
 
         Reference< container::XNameContainer > xCont( m_xMSPPkg, UNO_QUERY_THROW );
@@ -503,12 +503,12 @@ MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement )
         Reference< deployment::XPackage > xPkg( aElement, UNO_QUERY );
         if ( !xPkg.is() )
         {
-            throw lang::IllegalArgumentException( "Couldn't convert to XPackage",
+            throw lang::IllegalArgumentException( u"Couldn't convert to XPackage"_ustr,
                                                       Reference < XInterface > (), 2 );
         }
         if ( aName.isEmpty() )
         {
-            throw lang::IllegalArgumentException( "Name not set!!",
+            throw lang::IllegalArgumentException( u"Name not set!!"_ustr,
                                                       Reference < XInterface > (), 1 );
         }
         // TODO for library package parse the language, for the moment will try
@@ -537,7 +537,7 @@ MasterScriptProvider::removeByName( const OUString& Name )
     {
         if ( !m_xMSPPkg.is() )
         {
-            throw RuntimeException( "PackageMasterScriptProvider is unitialised" );
+            throw RuntimeException( u"PackageMasterScriptProvider is unitialised"_ustr );
         }
 
         Reference< container::XNameContainer > xCont( m_xMSPPkg, UNO_QUERY_THROW );
@@ -547,7 +547,7 @@ MasterScriptProvider::removeByName( const OUString& Name )
     {
         if ( Name.isEmpty() )
         {
-            throw lang::IllegalArgumentException( "Name not set!!",
+            throw lang::IllegalArgumentException( u"Name not set!!"_ustr,
                                                       Reference < XInterface > (), 1 );
         }
         // TODO for Script library package url parse the language,
@@ -573,14 +573,14 @@ void SAL_CALL
 MasterScriptProvider::replaceByName( const OUString& /*aName*/, const Any& /*aElement*/ )
 {
     // TODO needs implementing
-     throw RuntimeException( "replaceByName not implemented!!!!" );
+     throw RuntimeException( u"replaceByName not implemented!!!!"_ustr );
 }
 
 Any SAL_CALL
 MasterScriptProvider::getByName( const OUString& /*aName*/ )
 {
     // TODO needs to be implemented
-    throw RuntimeException( "getByName not implemented!!!!" );
+    throw RuntimeException( u"getByName not implemented!!!!"_ustr );
 }
 
 sal_Bool SAL_CALL
@@ -598,7 +598,7 @@ MasterScriptProvider::hasByName( const OUString& aName )
         // have a PackageProvider
         else if (!m_xModel.is())
         {
-            throw RuntimeException( "PackageMasterScriptProvider is unitialised" );
+            throw RuntimeException( u"PackageMasterScriptProvider is unitialised"_ustr );
         }
 
     }
@@ -606,7 +606,7 @@ MasterScriptProvider::hasByName( const OUString& aName )
     {
         if ( aName.isEmpty() )
         {
-            throw lang::IllegalArgumentException( "Name not set!!",
+            throw lang::IllegalArgumentException( u"Name not set!!"_ustr,
                                                       Reference < XInterface > (), 1 );
         }
         // TODO for Script library package url parse the language,
@@ -626,7 +626,7 @@ Sequence< OUString > SAL_CALL
 MasterScriptProvider::getElementNames(  )
 {
     // TODO needs implementing
-    throw RuntimeException( "getElementNames not implemented!!!!" );
+    throw RuntimeException( u"getElementNames not implemented!!!!"_ustr );
 }
 
 Type SAL_CALL
@@ -640,13 +640,13 @@ MasterScriptProvider::getElementType(  )
 sal_Bool SAL_CALL MasterScriptProvider::hasElements(  )
 {
     // TODO needs implementing
-    throw RuntimeException( "hasElements not implemented!!!!" );
+    throw RuntimeException( u"hasElements not implemented!!!!"_ustr );
 }
 
 
 OUString SAL_CALL MasterScriptProvider::getImplementationName( )
 {
-    return "com.sun.star.script.provider.MasterScriptProvider";
+    return u"com.sun.star.script.provider.MasterScriptProvider"_ustr;
 }
 
 sal_Bool SAL_CALL MasterScriptProvider::supportsService( const OUString& serviceName )
@@ -658,9 +658,9 @@ sal_Bool SAL_CALL MasterScriptProvider::supportsService( const OUString& service
 Sequence< OUString > SAL_CALL MasterScriptProvider::getSupportedServiceNames( )
 {
     return {
-        "com.sun.star.script.provider.MasterScriptProvider",
-        "com.sun.star.script.browse.BrowseNode",
-        "com.sun.star.script.provider.ScriptProvider" };
+        u"com.sun.star.script.provider.MasterScriptProvider"_ustr,
+        u"com.sun.star.script.browse.BrowseNode"_ustr,
+        u"com.sun.star.script.provider.ScriptProvider"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

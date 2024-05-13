@@ -75,7 +75,7 @@ void SAL_CALL ScriptProtocolHandler::initialize(
     // but usually it's a "real" frame)
     if ( aArguments.hasElements() && !( aArguments[ 0 ] >>= m_xFrame ) )
     {
-        throw RuntimeException( "ScriptProtocolHandler::initialize: could not extract reference to the frame" );
+        throw RuntimeException( u"ScriptProtocolHandler::initialize: could not extract reference to the frame"_ustr );
     }
 
     ENSURE_OR_THROW( m_xContext.is(), "ScriptProtocolHandler::initialize: No Service Manager available" );
@@ -133,7 +133,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                 css::uri::UriReferenceFactory::create(m_xContext));
             css::uno::Reference<css::uri::XVndSunStarScriptUrlReference> uri(
                 urifac->parse(aURL.Complete), css::uno::UNO_QUERY_THROW);
-            auto const loc = uri->getParameter("location");
+            auto const loc = uri->getParameter(u"location"_ustr);
             bool bIsDocumentScript = loc == "document";
 
             if ( bIsDocumentScript )
@@ -247,9 +247,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     }
     else
     {
-        invokeResult <<= OUString(
-            "ScriptProtocolHandler::dispatchWithNotification failed, ScriptProtocolHandler not initialised"
-        );
+        invokeResult <<= u"ScriptProtocolHandler::dispatchWithNotification failed, ScriptProtocolHandler not initialised"_ustr;
     }
 
     if ( bCaughtException )
@@ -408,7 +406,7 @@ ScriptProtocolHandler::~ScriptProtocolHandler()
 /* XServiceInfo */
 OUString SAL_CALL ScriptProtocolHandler::getImplementationName( )
 {
-    return "com.sun.star.comp.ScriptProtocolHandler";
+    return u"com.sun.star.comp.ScriptProtocolHandler"_ustr;
 }
 
 /* XServiceInfo */
@@ -420,7 +418,7 @@ sal_Bool SAL_CALL ScriptProtocolHandler::supportsService(const OUString& sServic
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL ScriptProtocolHandler::getSupportedServiceNames()
 {
-    return {"com.sun.star.frame.ProtocolHandler"};
+    return {u"com.sun.star.frame.ProtocolHandler"_ustr};
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

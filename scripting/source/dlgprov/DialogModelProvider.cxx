@@ -139,7 +139,7 @@ void SAL_CALL DialogModelProvider::removeVetoableChangeListener( const OUString&
 // com.sun.star.uno.XServiceInfo:
 OUString SAL_CALL DialogModelProvider::getImplementationName()
 {
-    return "com.sun.star.comp.scripting.DialogModelProvider";
+    return u"com.sun.star.comp.scripting.DialogModelProvider"_ustr;
 }
 
 sal_Bool SAL_CALL DialogModelProvider::supportsService(OUString const & serviceName)
@@ -149,7 +149,7 @@ sal_Bool SAL_CALL DialogModelProvider::supportsService(OUString const & serviceN
 
 css::uno::Sequence< OUString > SAL_CALL DialogModelProvider::getSupportedServiceNames()
 {
-    return { "com.sun.star.awt.UnoControlDialogModelProvider" };
+    return { u"com.sun.star.awt.UnoControlDialogModelProvider"_ustr };
 }
 
 } // closing anonymous implementation namespace

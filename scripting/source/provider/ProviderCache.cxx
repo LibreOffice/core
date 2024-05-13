@@ -137,7 +137,7 @@ ProviderCache::populateCache()
     try
     {
         Reference< container::XContentEnumerationAccess > xEnumAccess( m_xMgr, UNO_QUERY_THROW );
-        Reference< container::XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( "com.sun.star.script.provider.LanguageScriptProvider" );
+        Reference< container::XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( u"com.sun.star.script.provider.LanguageScriptProvider"_ustr );
 
         while ( xEnum->hasMoreElements() )
         {

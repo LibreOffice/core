@@ -194,10 +194,10 @@ constexpr OUString BASSCRIPT_PROPERTY_CALLER = u"Caller"_ustr;
                 if ( nParamsCount < nSbxCount - nSbxOptional )
                 {
                     throw provider::ScriptFrameworkErrorException(
-                         "wrong number of parameters!",
+                         u"wrong number of parameters!"_ustr,
                          Reference< XInterface >(),
                          m_funcName,
-                         "Basic",
+                         u"Basic"_ustr,
                          provider::ScriptFrameworkErrorType::NO_SUCH_SCRIPT  );
                 }
             }
@@ -250,7 +250,7 @@ constexpr OUString BASSCRIPT_PROPERTY_CALLER = u"Caller"_ustr;
             // if it's a document-based script, temporarily reset ThisComponent to the script invocation context
             Any aOldThisComponent;
             if ( m_documentBasicManager && m_xDocumentScriptContext.is() )
-                m_documentBasicManager->SetGlobalUNOConstant( "ThisComponent", Any( m_xDocumentScriptContext ), &aOldThisComponent );
+                m_documentBasicManager->SetGlobalUNOConstant( u"ThisComponent"_ustr, Any( m_xDocumentScriptContext ), &aOldThisComponent );
 
             if ( m_caller.hasElements() && m_caller[ 0 ].hasValue()  )
             {
@@ -262,7 +262,7 @@ constexpr OUString BASSCRIPT_PROPERTY_CALLER = u"Caller"_ustr;
                 nErr = m_xMethod->Call( xReturn.get() );
 
             if ( m_documentBasicManager && m_xDocumentScriptContext.is() )
-                m_documentBasicManager->SetGlobalUNOConstant( "ThisComponent", aOldThisComponent );
+                m_documentBasicManager->SetGlobalUNOConstant( u"ThisComponent"_ustr, aOldThisComponent );
 
             if ( nErr != ERRCODE_NONE )
             {

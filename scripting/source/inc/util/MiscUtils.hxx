@@ -49,7 +49,7 @@ static css::uno::Sequence< OUString > allOpenTDocUrls( const  css::uno::Referenc
             return result;
         }
         css::uno::Reference < css::ucb::XSimpleFileAccess3 > xSFA( css::ucb::SimpleFileAccess::create(xCtx) );
-        result = xSFA->getFolderContents( "vnd.sun.star.tdoc:/", true );
+        result = xSFA->getFolderContents( u"vnd.sun.star.tdoc:/"_ustr, true );
     }
     catch ( css::uno::Exception& )
     {
@@ -67,7 +67,7 @@ static OUString xModelToTdocUrl( const css::uno::Reference< css::frame::XModel >
     try
     {
         xDocFac.set(xMCF->createInstanceWithContext(
-                        "com.sun.star.frame.TransientDocumentsDocumentContentFactory",
+                        u"com.sun.star.frame.TransientDocumentsDocumentContentFactory"_ustr,
                         xContext ),
                     css::uno::UNO_QUERY );
     }
@@ -101,7 +101,7 @@ static css::uno::Reference< css::frame::XModel > tDocUrlToModel( const OUString&
     try
     {
         ::ucbhelper::Content root( url, nullptr, comphelper::getProcessComponentContext() );
-        result = getUCBProperty( root, "DocumentModel" );
+        result = getUCBProperty( root, u"DocumentModel"_ustr );
     }
     catch ( css::ucb::ContentCreationException& )
     {

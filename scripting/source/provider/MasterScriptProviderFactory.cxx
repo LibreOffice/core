@@ -59,12 +59,12 @@ MasterScriptProviderFactory::getActiveMSPList() const
 
 OUString SAL_CALL MasterScriptProviderFactory::getImplementationName()
 {
-    return "com.sun.star.script.provider.MasterScriptProviderFactory";
+    return u"com.sun.star.script.provider.MasterScriptProviderFactory"_ustr;
 }
 
 Sequence< OUString > SAL_CALL MasterScriptProviderFactory::getSupportedServiceNames()
 {
-    return { "com.sun.star.script.provider.MasterScriptProviderFactory" };
+    return { u"com.sun.star.script.provider.MasterScriptProviderFactory"_ustr };
 }
 
 sal_Bool MasterScriptProviderFactory::supportsService(
