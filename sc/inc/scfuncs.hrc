@@ -4224,7 +4224,7 @@ const TranslateId SC_OPCODE_SORTBY_ARY[] =
 // -=*# Resource for function SEQUENCE #*=-
 const TranslateId SC_OPCODE_MAT_SEQUENCE_ARY[] =
 {
-    NC_("SC_OPCODE_MAT_SEQUENCE", "Allows you to generate a list of sequential numbers in an array, such as 1, 2, 3, 4."),
+    NC_("SC_OPCODE_MAT_SEQUENCE", "Generates a list of sequential numbers in an array, such as 1, 2, 3, 4."),
     NC_("SC_OPCODE_MAT_SEQUENCE", "Rows"),
     NC_("SC_OPCODE_MAT_SEQUENCE", "The number of rows to return."),
     NC_("SC_OPCODE_MAT_SEQUENCE", "Columns"),
@@ -4238,17 +4238,17 @@ const TranslateId SC_OPCODE_MAT_SEQUENCE_ARY[] =
 // -=*# Resource for function RANDARRAY #*=-
 const TranslateId SC_OPCODE_RANDARRAY_ARY[] =
 {
-    NC_("SC_OPCODE_RANDARRAY", "RANDARRAY function generates an array of random numbers between two values."),
+    NC_("SC_OPCODE_RANDARRAY", "Generates an array of random numbers between two limit values."),
     NC_("SC_OPCODE_RANDARRAY", "Rows"),
     NC_("SC_OPCODE_RANDARRAY", "The number of rows to return."),
     NC_("SC_OPCODE_RANDARRAY", "Columns"),
     NC_("SC_OPCODE_RANDARRAY", "The number of columns to return."),
     NC_("SC_OPCODE_RANDARRAY", "Min"),
-    NC_("SC_OPCODE_RANDARRAY", "The minimum number you would like returned."),
+    NC_("SC_OPCODE_RANDARRAY", "The lower limit of the generated numbers."),
     NC_("SC_OPCODE_RANDARRAY", "Max"),
-    NC_("SC_OPCODE_RANDARRAY", "The maximum number you would like returned."),
-    NC_("SC_OPCODE_RANDARRAY", "Whole number"),
-    NC_("SC_OPCODE_RANDARRAY", "Return a whole number or a decimal value.")
+    NC_("SC_OPCODE_RANDARRAY", "The upper limit of the generated numbers."),
+    NC_("SC_OPCODE_RANDARRAY", "Integers"),
+    NC_("SC_OPCODE_RANDARRAY", "Return whole numbers (TRUE) or decimal values (FALSE).")
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
