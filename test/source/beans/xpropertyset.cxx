@@ -288,9 +288,9 @@ void XPropertySet::fillPropsToTest(const uno::Reference<beans::XPropertySetInfo>
     // TODO: Maybe we should mark these properties read-only, instead of
     // giving them a special treatment here?
     std::set<OUString> aSkip;
-    aSkip.insert("PrinterName");
-    aSkip.insert("CharRelief");
-    aSkip.insert("IsLayerMode");
+    aSkip.insert(u"PrinterName"_ustr);
+    aSkip.insert(u"CharRelief"_ustr);
+    aSkip.insert(u"IsLayerMode"_ustr);
 
     for (const beans::Property& aProp : aProps)
     {

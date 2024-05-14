@@ -30,12 +30,12 @@ void XMultipleOperation::testSetTableOperation()
     uno::Reference<sheet::XMultipleOperation> xMultipleOperation(init(), UNO_QUERY_THROW);
 
     uno::Reference<sheet::XSpreadsheet> xSheet(getXSpreadsheet(), UNO_QUERY_THROW);
-    uno::Reference<table::XCellRange> xCellRange(xSheet->getCellRangeByName("$A$20:$A$20"),
+    uno::Reference<table::XCellRange> xCellRange(xSheet->getCellRangeByName(u"$A$20:$A$20"_ustr),
                                                  UNO_SET_THROW);
     uno::Reference<sheet::XCellRangeAddressable> xCellRangeAddr(xCellRange, UNO_QUERY_THROW);
 
     uno::Reference<table::XCell> xCell = xSheet->getCellByPosition(0, 19);
-    xCell->setFormula("=a18+a19");
+    xCell->setFormula(u"=a18+a19"_ustr);
 
     uno::Reference<table::XCell> xCell1 = xSheet->getCellByPosition(0, 17);
     uno::Reference<sheet::XCellAddressable> xCellAddr1(xCell1, UNO_QUERY_THROW);

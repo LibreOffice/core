@@ -39,44 +39,44 @@ void Shape::testShapePropertiesAnchor()
     // Shape should be anchored to sheet by default
     uno::Reference<sheet::XSpreadsheet> xSheetGet;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue Anchor (XSpreadsheet)",
-                           xShape->getPropertyValue("Anchor") >>= xSheetGet);
+                           xShape->getPropertyValue(u"Anchor"_ustr) >>= xSheetGet);
 
     // Anchor the shape to a cell
     aNewValue <<= xCell;
-    xShape->setPropertyValue("Anchor", aNewValue);
+    xShape->setPropertyValue(u"Anchor"_ustr, aNewValue);
     uno::Reference<table::XCell> xCellGet;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue Anchor (XCell)",
-                           xShape->getPropertyValue("Anchor") >>= xCellGet);
+                           xShape->getPropertyValue(u"Anchor"_ustr) >>= xCellGet);
 
     // Shape should not resize with cell by default
     bool bIsResizeWithCell = {};
-    CPPUNIT_ASSERT(xShape->getPropertyValue("ResizeWithCell") >>= bIsResizeWithCell);
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"ResizeWithCell"_ustr) >>= bIsResizeWithCell);
     CPPUNIT_ASSERT_MESSAGE("Shape should not resize with the cell", !bIsResizeWithCell);
 
-    xShape->setPropertyValue("ResizeWithCell", uno::Any(true));
-    CPPUNIT_ASSERT(xShape->getPropertyValue("ResizeWithCell") >>= bIsResizeWithCell);
+    xShape->setPropertyValue(u"ResizeWithCell"_ustr, uno::Any(true));
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"ResizeWithCell"_ustr) >>= bIsResizeWithCell);
     CPPUNIT_ASSERT_MESSAGE("Shape should resize with the cell", bIsResizeWithCell);
 
     // Anchoring to a different cell should keep the "ResizeWithCell" attribute
     uno::Reference<table::XCell> xCell2(xSheet->getCellByPosition(1, 2), UNO_SET_THROW);
     aNewValue <<= xCell2;
-    xShape->setPropertyValue("Anchor", aNewValue);
-    CPPUNIT_ASSERT(xShape->getPropertyValue("ResizeWithCell") >>= bIsResizeWithCell);
+    xShape->setPropertyValue(u"Anchor"_ustr, aNewValue);
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"ResizeWithCell"_ustr) >>= bIsResizeWithCell);
     CPPUNIT_ASSERT_MESSAGE("ResizeWithCell should still be set", bIsResizeWithCell);
 
     // Now anchor to sheet again
     aNewValue <<= xSheet;
-    xShape->setPropertyValue("Anchor", aNewValue);
-    CPPUNIT_ASSERT(xShape->getPropertyValue("Anchor") >>= xSheetGet);
+    xShape->setPropertyValue(u"Anchor"_ustr, aNewValue);
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"Anchor"_ustr) >>= xSheetGet);
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue Anchor (XSpreadsheet)",
-                           xShape->getPropertyValue("Anchor") >>= xSheetGet);
+                           xShape->getPropertyValue(u"Anchor"_ustr) >>= xSheetGet);
 
     // Setting ResizeWithCell while anchored to page should not have any effect
-    CPPUNIT_ASSERT(xShape->getPropertyValue("ResizeWithCell") >>= bIsResizeWithCell);
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"ResizeWithCell"_ustr) >>= bIsResizeWithCell);
     CPPUNIT_ASSERT_MESSAGE("ResizeWithCell should be false for sheet anchored shapes",
                            !bIsResizeWithCell);
-    xShape->setPropertyValue("ResizeWithCell", uno::Any(true));
-    CPPUNIT_ASSERT(xShape->getPropertyValue("ResizeWithCell") >>= bIsResizeWithCell);
+    xShape->setPropertyValue(u"ResizeWithCell"_ustr, uno::Any(true));
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"ResizeWithCell"_ustr) >>= bIsResizeWithCell);
     CPPUNIT_ASSERT_MESSAGE("ResizeWithCell should be unchangeable for sheet anchored shapes",
                            !bIsResizeWithCell);
 }
@@ -89,24 +89,24 @@ void Shape::testShapePropertiesPosition()
     sal_Int32 nHoriOrientPositionGet = 0;
     sal_Int32 nHoriOrientPositionSet = 0;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue HoriOrientPosition",
-                           xShape->getPropertyValue("HoriOrientPosition")
+                           xShape->getPropertyValue(u"HoriOrientPosition"_ustr)
                            >>= nHoriOrientPositionGet);
 
     aNewValue <<= nHoriOrientPositionGet + 42;
-    xShape->setPropertyValue("HoriOrientPosition", aNewValue);
-    CPPUNIT_ASSERT(xShape->getPropertyValue("HoriOrientPosition") >>= nHoriOrientPositionSet);
+    xShape->setPropertyValue(u"HoriOrientPosition"_ustr, aNewValue);
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"HoriOrientPosition"_ustr) >>= nHoriOrientPositionSet);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue HoriOrientPosition",
                                  nHoriOrientPositionGet + 42, nHoriOrientPositionSet);
 
     sal_Int32 nVertOrientPositionGet = 0;
     sal_Int32 nVertOrientPositionSet = 0;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue VertOrientPosition",
-                           xShape->getPropertyValue("VertOrientPosition")
+                           xShape->getPropertyValue(u"VertOrientPosition"_ustr)
                            >>= nVertOrientPositionGet);
 
     aNewValue <<= nVertOrientPositionGet + 42;
-    xShape->setPropertyValue("VertOrientPosition", aNewValue);
-    CPPUNIT_ASSERT(xShape->getPropertyValue("VertOrientPosition") >>= nVertOrientPositionSet);
+    xShape->setPropertyValue(u"VertOrientPosition"_ustr, aNewValue);
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"VertOrientPosition"_ustr) >>= nVertOrientPositionSet);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue VertOrientPosition",
                                  nVertOrientPositionGet + 42, nVertOrientPositionSet);
 }

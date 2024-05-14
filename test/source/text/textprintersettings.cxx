@@ -20,15 +20,15 @@ void TextPrinterSettings::testPrinterSettingsProperties()
     css::uno::Reference<css::beans::XPropertySet> xPrinterSettings(init(),
                                                                    css::uno::UNO_QUERY_THROW);
 
-    testBooleanProperty(xPrinterSettings, "PrintGraphics");
-    testBooleanProperty(xPrinterSettings, "PrintLeftPages");
-    testBooleanProperty(xPrinterSettings, "PrintRightPages");
-    testBooleanProperty(xPrinterSettings, "PrintControls");
-    testStringProperty(xPrinterSettings, "PrintFaxName", "FaxName");
-    testBooleanProperty(xPrinterSettings, "PrintProspect");
-    testBooleanProperty(xPrinterSettings, "PrintPageBackground");
-    testBooleanProperty(xPrinterSettings, "PrintBlackFonts");
-    testBooleanOptionalProperty(xPrinterSettings, "PrintEmptyPages");
+    testBooleanProperty(xPrinterSettings, u"PrintGraphics"_ustr);
+    testBooleanProperty(xPrinterSettings, u"PrintLeftPages"_ustr);
+    testBooleanProperty(xPrinterSettings, u"PrintRightPages"_ustr);
+    testBooleanProperty(xPrinterSettings, u"PrintControls"_ustr);
+    testStringProperty(xPrinterSettings, u"PrintFaxName"_ustr, u"FaxName"_ustr);
+    testBooleanProperty(xPrinterSettings, u"PrintProspect"_ustr);
+    testBooleanProperty(xPrinterSettings, u"PrintPageBackground"_ustr);
+    testBooleanProperty(xPrinterSettings, u"PrintBlackFonts"_ustr);
+    testBooleanOptionalProperty(xPrinterSettings, u"PrintEmptyPages"_ustr);
 }
 } // end namespace apitest
 

@@ -37,7 +37,8 @@ void XNameContainer::testInsertByNameEmptyName()
     uno::Reference<container::XNameContainer> xNameContainer(init(), uno::UNO_QUERY_THROW);
 
     uno::Any aAny;
-    CPPUNIT_ASSERT_THROW(xNameContainer->insertByName("", aAny), lang::IllegalArgumentException);
+    CPPUNIT_ASSERT_THROW(xNameContainer->insertByName(u""_ustr, aAny),
+                         lang::IllegalArgumentException);
 }
 
 void XNameContainer::testInsertByNameInvalidElement()
@@ -85,14 +86,14 @@ void XNameContainer::testRemoveByNameEmptyName()
 {
     uno::Reference<container::XNameContainer> xNameContainer(init(), uno::UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_THROW(xNameContainer->removeByName(""), lang::IllegalArgumentException);
+    CPPUNIT_ASSERT_THROW(xNameContainer->removeByName(u""_ustr), lang::IllegalArgumentException);
 }
 
 void XNameContainer::testRemoveByNameNoneExistingElement()
 {
     uno::Reference<container::XNameContainer> xNameContainer(init(), uno::UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_THROW(xNameContainer->removeByName("UnitTest"),
+    CPPUNIT_ASSERT_THROW(xNameContainer->removeByName(u"UnitTest"_ustr),
                          container::NoSuchElementException);
 }
 

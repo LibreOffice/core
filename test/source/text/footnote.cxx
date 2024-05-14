@@ -24,7 +24,7 @@ void Footnote::testFootnoteProperties()
 
     short aReferenceIdGet;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue ReferenceId",
-                           xFootnote->getPropertyValue("ReferenceId") >>= aReferenceIdGet);
+                           xFootnote->getPropertyValue(u"ReferenceId"_ustr) >>= aReferenceIdGet);
 }
 }
 

@@ -56,27 +56,26 @@ void TableValidation::testTableValidationProperties()
     propName = "InputMessage";
     OUString aInputMessage;
     CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= aInputMessage);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get property value InputMessage", OUString(""),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get property value InputMessage", u""_ustr,
                                  aInputMessage);
 
-    aNewValue <<= OUString("UnitTest InputMessage");
+    aNewValue <<= u"UnitTest InputMessage"_ustr;
     xTableValidation->setPropertyValue(propName, aNewValue);
     CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= aInputMessage);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get property value InputMessage",
-                                 OUString("UnitTest InputMessage"), aInputMessage);
+                                 u"UnitTest InputMessage"_ustr, aInputMessage);
 
     // only possible if ShowInputMessage is true
     propName = "InputTitle";
     OUString aInputTitle;
     CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= aInputTitle);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get property value InputTitle", OUString(""),
-                                 aInputTitle);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get property value InputTitle", u""_ustr, aInputTitle);
 
-    aNewValue <<= OUString("UnitTest InputTitle");
+    aNewValue <<= u"UnitTest InputTitle"_ustr;
     xTableValidation->setPropertyValue(propName, aNewValue);
     CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= aInputTitle);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get property value InputTitle",
-                                 OUString("UnitTest InputTitle"), aInputTitle);
+                                 u"UnitTest InputTitle"_ustr, aInputTitle);
 
     propName = "ShowErrorMessage";
     bool aShowErrorMessage = true;
@@ -92,27 +91,26 @@ void TableValidation::testTableValidationProperties()
     propName = "ErrorMessage";
     OUString aErrorMessage;
     CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= aErrorMessage);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get property value ErrorMessage", OUString(""),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get property value ErrorMessage", u""_ustr,
                                  aErrorMessage);
 
-    aNewValue <<= OUString("UnitTest ErrorMessage");
+    aNewValue <<= u"UnitTest ErrorMessage"_ustr;
     xTableValidation->setPropertyValue(propName, aNewValue);
     CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= aErrorMessage);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get property value ErrorMessage",
-                                 OUString("UnitTest ErrorMessage"), aErrorMessage);
+                                 u"UnitTest ErrorMessage"_ustr, aErrorMessage);
 
     // only possible if ShowErrorMessage is true
     propName = "ErrorTitle";
     OUString aErrorTitle;
     CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= aErrorTitle);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get property value ErrorTitle", OUString(""),
-                                 aErrorTitle);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get property value ErrorTitle", u""_ustr, aErrorTitle);
 
-    aNewValue <<= OUString("UnitTest ErrorTitle");
+    aNewValue <<= u"UnitTest ErrorTitle"_ustr;
     xTableValidation->setPropertyValue(propName, aNewValue);
     CPPUNIT_ASSERT(xTableValidation->getPropertyValue(propName) >>= aErrorTitle);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get property value ErrorTitle",
-                                 OUString("UnitTest ErrorTitle"), aErrorTitle);
+                                 u"UnitTest ErrorTitle"_ustr, aErrorTitle);
 
     propName = "IgnoreBlankCells";
     bool aIgnoreBlankCells = false;

@@ -34,8 +34,8 @@ void XScenario::testScenario()
     CPPUNIT_ASSERT_MESSAGE("Unable execute getScenarioComment()",
                            !xScenario->getScenarioComment().isEmpty());
 
-    xScenario->setScenarioComment("Test");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable execute setScenarioComment()", OUString("Test"),
+    xScenario->setScenarioComment(u"Test"_ustr);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable execute setScenarioComment()", u"Test"_ustr,
                                  xScenario->getScenarioComment());
 }
 } // namespace apitest

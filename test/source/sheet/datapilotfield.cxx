@@ -30,7 +30,7 @@ void DataPilotField::testSortInfo()
 {
     uno::Reference< beans::XPropertySet> xPropSet(init(),UNO_QUERY_THROW);
     sheet::DataPilotFieldSortInfo aSortInfoValue;
-    OUString aSortInfo("SortInfo");
+    OUString aSortInfo(u"SortInfo"_ustr);
     aSortInfoValue.Field = "Col1";
     aSortInfoValue.IsAscending = false;
     aSortInfoValue.Mode = sheet::DataPilotFieldSortMode::MANUAL;
@@ -47,7 +47,7 @@ void DataPilotField::testSortInfo()
 
     //setting HasSortInfo only makes sense for false, for true the uno implementation does nothing
     bool bHasSortInfo(false);
-    OUString aHasSortInfo("HasSortInfo");
+    OUString aHasSortInfo(u"HasSortInfo"_ustr);
     aValue = xPropSet->getPropertyValue(aHasSortInfo);
     CPPUNIT_ASSERT( aValue >>= bHasSortInfo );
     CPPUNIT_ASSERT_MESSAGE("should have sort info", bHasSortInfo);
@@ -65,7 +65,7 @@ void DataPilotField::testLayoutInfo()
 {
     uno::Reference< beans::XPropertySet > xPropSet(init(),UNO_QUERY_THROW);
     sheet::DataPilotFieldLayoutInfo aLayoutInfoValue;
-    OUString aLayoutInfo("LayoutInfo");
+    OUString aLayoutInfo(u"LayoutInfo"_ustr);
     aLayoutInfoValue.AddEmptyLines = false;
     aLayoutInfoValue.LayoutMode = sheet::DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_BOTTOM;
     uno::Any aValue;
@@ -80,7 +80,7 @@ void DataPilotField::testLayoutInfo()
 
     //setting HasLayoutInfo only makes sense for false, tor true the uno implementation does nothing
     bool bHasLayoutInfo(false);
-    OUString aHasLayoutInfo("HasLayoutInfo");
+    OUString aHasLayoutInfo(u"HasLayoutInfo"_ustr);
     aValue = xPropSet->getPropertyValue(aHasLayoutInfo);
     CPPUNIT_ASSERT( aValue >>= bHasLayoutInfo );
     CPPUNIT_ASSERT_MESSAGE("should have layout information", bHasLayoutInfo);
@@ -100,7 +100,7 @@ void DataPilotField::testAutoShowInfo()
     sheet::DataPilotFieldAutoShowInfo aAutoShowInfoValue;
     aAutoShowInfoValue.DataField = "Col1";
     aAutoShowInfoValue.IsEnabled = true;
-    OUString aAutoShowInfo("AutoShowInfo");
+    OUString aAutoShowInfo(u"AutoShowInfo"_ustr);
     uno::Any aValue;
     aValue <<= aAutoShowInfoValue;
     xPropSet->setPropertyValue(aAutoShowInfo, aValue);
@@ -113,7 +113,7 @@ void DataPilotField::testAutoShowInfo()
 
     //setting HasLayoutInfo only makes sense for false, tor true the uno implementation does nothing
     bool bHasAutoShowInfo(false);
-    OUString aHasAutoShowInfo("HasAutoShowInfo");
+    OUString aHasAutoShowInfo(u"HasAutoShowInfo"_ustr);
     aValue = xPropSet->getPropertyValue(aHasAutoShowInfo);
     CPPUNIT_ASSERT( aValue >>= bHasAutoShowInfo );
     CPPUNIT_ASSERT_MESSAGE("should have AutoShow information", bHasAutoShowInfo);
@@ -133,7 +133,7 @@ void DataPilotField::testReference()
     sheet::DataPilotFieldReference aReferenceValue;
     aReferenceValue.ReferenceField = "Col1";
     aReferenceValue.ReferenceItemType = sheet::DataPilotFieldReferenceItemType::NAMED;
-    OUString aReference("Reference");
+    OUString aReference(u"Reference"_ustr);
     uno::Any aValue;
     aValue <<= aReferenceValue;
     xPropSet->setPropertyValue(aReference, aValue);
@@ -146,7 +146,7 @@ void DataPilotField::testReference()
 
     //setting HasReference only makes sense for false, tor true the uno implementation does nothing
     bool bHasReference(false);
-    OUString aHasReference("HasReference");
+    OUString aHasReference(u"HasReference"_ustr);
     aValue = xPropSet->getPropertyValue(aHasReference);
     CPPUNIT_ASSERT( aValue >>= bHasReference );
     CPPUNIT_ASSERT_MESSAGE("should have Reference information", bHasReference);
@@ -164,7 +164,7 @@ void DataPilotField::testIsGroupField()
 {
     uno::Reference< beans::XPropertySet > xPropSet(init(),UNO_QUERY_THROW);
     uno::Any aValue;
-    OUString aIsGroupField("IsGroupField");
+    OUString aIsGroupField(u"IsGroupField"_ustr);
     bool bIsGroupField(false);
 
     aValue = xPropSet->getPropertyValue(aIsGroupField);

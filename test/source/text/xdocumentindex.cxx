@@ -38,11 +38,11 @@ void XDocumentIndex::testUpdate()
     {
         auto xText = getTextDocument()->getText();
         auto xTextRange = xText->getEnd();
-        xTextRange->setString("IndexMark");
+        xTextRange->setString(u"IndexMark"_ustr);
         css::uno::Reference<css::lang::XMultiServiceFactory> xFactory(getTextDocument(),
                                                                       css::uno::UNO_QUERY_THROW);
         css::uno::Reference<css::text::XTextContent> xTextContentMark(
-            xFactory->createInstance("com.sun.star.text.DocumentIndexMark"),
+            xFactory->createInstance(u"com.sun.star.text.DocumentIndexMark"_ustr),
             css::uno::UNO_QUERY_THROW);
         xText->insertTextContent(xTextRange, xTextContentMark, true);
     }

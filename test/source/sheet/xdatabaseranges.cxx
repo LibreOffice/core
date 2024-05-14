@@ -25,19 +25,19 @@ void XDatabaseRanges::testAddRemoveDbRanges()
 {
     uno::Reference<sheet::XDatabaseRanges> xDbRanges(init(), UNO_QUERY_THROW);
 
-    xDbRanges->addNewByName("addNewRange", table::CellRangeAddress(0, 1, 2, 3, 4));
-    CPPUNIT_ASSERT_MESSAGE("Unable to add new db range", xDbRanges->hasByName("addNewRange"));
+    xDbRanges->addNewByName(u"addNewRange"_ustr, table::CellRangeAddress(0, 1, 2, 3, 4));
+    CPPUNIT_ASSERT_MESSAGE("Unable to add new db range", xDbRanges->hasByName(u"addNewRange"_ustr));
 
     CPPUNIT_ASSERT_THROW_MESSAGE(
         "No exception thrown, when adding range with existing name",
-        xDbRanges->addNewByName("addNewRange", table::CellRangeAddress(0, 1, 2, 3, 4)),
+        xDbRanges->addNewByName(u"addNewRange"_ustr, table::CellRangeAddress(0, 1, 2, 3, 4)),
         css::uno::RuntimeException);
 
-    xDbRanges->removeByName("addNewRange");
-    CPPUNIT_ASSERT_MESSAGE("Unable to remove db range", !xDbRanges->hasByName("addNewRange"));
+    xDbRanges->removeByName(u"addNewRange"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("Unable to remove db range", !xDbRanges->hasByName(u"addNewRange"_ustr));
 
     CPPUNIT_ASSERT_THROW_MESSAGE("No exception, when removing none-existing range",
-                                 xDbRanges->removeByName("addNewRange"),
+                                 xDbRanges->removeByName(u"addNewRange"_ustr),
                                  css::uno::RuntimeException);
 }
 }

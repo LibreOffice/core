@@ -26,14 +26,14 @@ void XDDELinks::testAddDDELink()
 {
     uno::Reference<sheet::XDDELinks> xLinks(init(), UNO_QUERY_THROW);
 
-    uno::Reference<sheet::XDDELink> xLink
-        = xLinks->addDDELink("soffice", m_aTopic, "Sheet1.A1", sheet::DDELinkMode_DEFAULT);
+    uno::Reference<sheet::XDDELink> xLink = xLinks->addDDELink(
+        u"soffice"_ustr, m_aTopic, u"Sheet1.A1"_ustr, sheet::DDELinkMode_DEFAULT);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to execute getApplication()", OUString("soffice"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to execute getApplication()", u"soffice"_ustr,
                                  xLink->getApplication());
     CPPUNIT_ASSERT_MESSAGE("Unable to execute getTopic()",
                            xLink->getTopic().endsWith("ScDDELinksObj.ods"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to execute getItem()", OUString("Sheet1.A1"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to execute getItem()", u"Sheet1.A1"_ustr,
                                  xLink->getItem());
 }
 } // namespace apitest

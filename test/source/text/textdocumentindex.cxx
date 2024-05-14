@@ -20,17 +20,17 @@ void TextDocumentIndex::testDocumentIndexProperties()
 {
     css::uno::Reference<css::beans::XPropertySet> xDocumentIndex(init(), css::uno::UNO_QUERY_THROW);
 
-    testBooleanProperty(xDocumentIndex, "UseAlphabeticalSeparators");
-    testBooleanProperty(xDocumentIndex, "UseKeyAsEntry");
-    testBooleanProperty(xDocumentIndex, "UseCombinedEntries");
-    testBooleanProperty(xDocumentIndex, "IsCaseSensitive");
-    testBooleanProperty(xDocumentIndex, "UsePP");
-    testBooleanProperty(xDocumentIndex, "UseDash");
-    testBooleanProperty(xDocumentIndex, "UseUpperCase");
-    testStringOptionalProperty(xDocumentIndex, "MainEntryCharacterStyleName");
+    testBooleanProperty(xDocumentIndex, u"UseAlphabeticalSeparators"_ustr);
+    testBooleanProperty(xDocumentIndex, u"UseKeyAsEntry"_ustr);
+    testBooleanProperty(xDocumentIndex, u"UseCombinedEntries"_ustr);
+    testBooleanProperty(xDocumentIndex, u"IsCaseSensitive"_ustr);
+    testBooleanProperty(xDocumentIndex, u"UsePP"_ustr);
+    testBooleanProperty(xDocumentIndex, u"UseDash"_ustr);
+    testBooleanProperty(xDocumentIndex, u"UseUpperCase"_ustr);
+    testStringOptionalProperty(xDocumentIndex, u"MainEntryCharacterStyleName"_ustr);
     //      [readonly, property] sequence <com::sun::star::text::XDocumentIndexMark> DocumentIndexMarks;
     //      [property] com::sun::star::lang::Locale  Locale;
-    testStringProperty(xDocumentIndex, "SortAlgorithm", "Value");
+    testStringProperty(xDocumentIndex, u"SortAlgorithm"_ustr, u"Value"_ustr);
 }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

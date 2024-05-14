@@ -145,7 +145,7 @@ testStringProperty(css::uno::Reference<css::beans::XPropertySet> const& xPropert
  */
 void OOO_DLLPUBLIC_TEST
 testStringOptionalProperty(css::uno::Reference<css::beans::XPropertySet> const& xPropertySet,
-                           const OUString& name, const OUString& rValue = OUString("StringValue"));
+                           const OUString& name, const OUString& rValue = u"StringValue"_ustr);
 
 /** @brief Tester for read-only property type 'string' of a @see com::sun::star::beans::XPropertySet.
  *

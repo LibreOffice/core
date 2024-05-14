@@ -32,11 +32,11 @@ void SheetLink::testSheetLinkProperties()
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue Url",
                            xSheetLink->getPropertyValue(propName) >>= aUrlGet);
 
-    aNewValue <<= OUString("file:///tmp/ScSheetLinkObj.ods");
+    aNewValue <<= u"file:///tmp/ScSheetLinkObj.ods"_ustr;
     xSheetLink->setPropertyValue(propName, aNewValue);
     CPPUNIT_ASSERT(xSheetLink->getPropertyValue(propName) >>= aUrlSet);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue Url",
-                                 OUString("file:///tmp/ScSheetLinkObj.ods"), aUrlSet);
+                                 u"file:///tmp/ScSheetLinkObj.ods"_ustr, aUrlSet);
 
     propName = "Filter";
     OUString aFilterGet;
@@ -44,11 +44,11 @@ void SheetLink::testSheetLinkProperties()
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue Filter",
                            xSheetLink->getPropertyValue(propName) >>= aFilterGet);
 
-    aNewValue <<= OUString("Text - txt - csv (StarCalc)");
+    aNewValue <<= u"Text - txt - csv (StarCalc)"_ustr;
     xSheetLink->setPropertyValue(propName, aNewValue);
     CPPUNIT_ASSERT(xSheetLink->getPropertyValue(propName) >>= aFilterSet);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue Filter",
-                                 OUString("Text - txt - csv (StarCalc)"), aFilterSet);
+                                 u"Text - txt - csv (StarCalc)"_ustr, aFilterSet);
 
     propName = "FilterOptions";
     OUString aFilterOptionsGet;
@@ -56,10 +56,10 @@ void SheetLink::testSheetLinkProperties()
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue FilterOptions",
                            xSheetLink->getPropertyValue(propName) >>= aFilterOptionsGet);
 
-    aNewValue <<= OUString("NewValue");
+    aNewValue <<= u"NewValue"_ustr;
     xSheetLink->setPropertyValue(propName, aNewValue);
     CPPUNIT_ASSERT(xSheetLink->getPropertyValue(propName) >>= aFilterOptionsSet);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue FilterOptions", OUString("NewValue"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue FilterOptions", u"NewValue"_ustr,
                                  aFilterOptionsSet);
 }
 }

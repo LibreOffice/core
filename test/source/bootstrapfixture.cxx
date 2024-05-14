@@ -73,13 +73,13 @@ static void test_init_impl(bool bAssertOnDialog, bool bNeedUCB,
     if (bNeedUCB)
     {
         // initialise unconfigured UCB:
-        uno::Reference<ucb::XUniversalContentBroker> xUcb(pSFactory->createInstance("com.sun.star.ucb.UniversalContentBroker"), uno::UNO_QUERY_THROW);
-        uno::Reference<ucb::XContentProvider> xFileProvider(pSFactory->createInstance("com.sun.star.ucb.FileContentProvider"), uno::UNO_QUERY_THROW);
-        xUcb->registerContentProvider(xFileProvider, "file", true);
-        uno::Reference<ucb::XContentProvider> xTdocProvider(pSFactory->createInstance("com.sun.star.ucb.TransientDocumentsContentProvider"), uno::UNO_QUERY);
+        uno::Reference<ucb::XUniversalContentBroker> xUcb(pSFactory->createInstance(u"com.sun.star.ucb.UniversalContentBroker"_ustr), uno::UNO_QUERY_THROW);
+        uno::Reference<ucb::XContentProvider> xFileProvider(pSFactory->createInstance(u"com.sun.star.ucb.FileContentProvider"_ustr), uno::UNO_QUERY_THROW);
+        xUcb->registerContentProvider(xFileProvider, u"file"_ustr, true);
+        uno::Reference<ucb::XContentProvider> xTdocProvider(pSFactory->createInstance(u"com.sun.star.ucb.TransientDocumentsContentProvider"_ustr), uno::UNO_QUERY);
         if (xTdocProvider.is())
         {
-            xUcb->registerContentProvider(xTdocProvider, "vnd.sun.star.tdoc", true);
+            xUcb->registerContentProvider(xTdocProvider, u"vnd.sun.star.tdoc"_ustr, true);
         }
     }
 }

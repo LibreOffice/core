@@ -23,14 +23,14 @@ void XDDELink::testGetApplication()
 {
     uno::Reference<sheet::XDDELink> xLink(init(), UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to execute getApplication()", OUString("soffice"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to execute getApplication()", u"soffice"_ustr,
                                  xLink->getApplication());
 }
 void XDDELink::testGetItem()
 {
     uno::Reference<sheet::XDDELink> xLink(init(), UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to execute getItem()", OUString("Sheet1.A1"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to execute getItem()", u"Sheet1.A1"_ustr,
                                  xLink->getItem());
 }
 void XDDELink::testGetTopic()

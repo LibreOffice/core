@@ -44,7 +44,7 @@ void XSheetFilterable::testCreateFilterDescriptor()
           /* Operator     */ sheet::FilterOperator_LESS,
           /* IsNumeric    */ false,
           /* NumericValue */ {},
-          /* StringValue  */ "C" }
+          /* StringValue  */ u"C"_ustr }
     };
 
     CPPUNIT_ASSERT_NO_THROW_MESSAGE("Unable to create XSheetFilterDescriptor", xSFD->setFilterFields(xTFF));
@@ -69,23 +69,23 @@ void XSheetFilterable::testFilter()
           /* Operator     */ sheet::FilterOperator_LESS,
           /* IsNumeric    */ false,
           /* NumericValue */ {},
-          /* StringValue  */ "C" }
+          /* StringValue  */ u"C"_ustr }
     };
     xSFD->setFilterFields(xTFF);
 
     xSheet->getCellByPosition(0, 0)->setValue(1);
     xSheet->getCellByPosition(0, 1)->setValue(2);
     xSheet->getCellByPosition(0, 2)->setValue(3);
-    xSheet->getCellByPosition(1, 0)->setFormula("A");
-    xSheet->getCellByPosition(1, 1)->setFormula("B");
-    xSheet->getCellByPosition(1, 2)->setFormula("C");
+    xSheet->getCellByPosition(1, 0)->setFormula(u"A"_ustr);
+    xSheet->getCellByPosition(1, 1)->setFormula(u"B"_ustr);
+    xSheet->getCellByPosition(1, 2)->setFormula(u"C"_ustr);
     xFA->filter(xSFD);
 
     uno::Reference< table::XColumnRowRange > xColRowRange(xSheet, UNO_QUERY_THROW);
     uno::Reference< table::XTableRows > xTableRows = xColRowRange->getRows();
     uno::Reference< beans::XPropertySet > xRowProps(xTableRows->getByIndex(0), UNO_QUERY_THROW);
     bool bIsVisible = true;
-    CPPUNIT_ASSERT(xRowProps->getPropertyValue("IsVisible") >>= bIsVisible);
+    CPPUNIT_ASSERT(xRowProps->getPropertyValue(u"IsVisible"_ustr) >>= bIsVisible);
 
     CPPUNIT_ASSERT_MESSAGE("Row 1 should be invisible", !bIsVisible);
 }

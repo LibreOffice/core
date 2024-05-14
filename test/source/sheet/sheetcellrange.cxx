@@ -57,7 +57,7 @@ void SheetCellRange::testSheetCellRangeProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Able to set PropertyValue Size", aSizeGet, aSizeSet);
 
     uno::Sequence<beans::PropertyValue> aPropValue{ comphelper::makePropertyValue(
-        "StyleName", OUString("Result2")) };
+        u"StyleName"_ustr, u"Result2"_ustr) };
 
     propName = "ConditionalFormat";
     uno::Reference<sheet::XSheetConditionalEntries> aConditionalFormatGet;
@@ -122,13 +122,13 @@ void SheetCellRange::testSheetCellRangeProperties()
     uno::Reference<beans::XPropertySet> aValidationNew(aValidationGet, UNO_SET_THROW);
     uno::Any aValidationType;
     aValidationType <<= sheet::ValidationType_WHOLE;
-    aValidationNew->setPropertyValue("Type", aValidationType);
+    aValidationNew->setPropertyValue(u"Type"_ustr, aValidationType);
 
     aNewValue <<= aValidationNew;
     xSheetCellRange->setPropertyValue(propName, aNewValue);
     CPPUNIT_ASSERT(xSheetCellRange->getPropertyValue(propName) >>= aValidationSet);
     sheet::ValidationType aType;
-    aValidationSet->getPropertyValue("Type") >>= aType;
+    aValidationSet->getPropertyValue(u"Type"_ustr) >>= aType;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue Validation",
                                  sheet::ValidationType_WHOLE, aType);
 
@@ -141,21 +141,21 @@ void SheetCellRange::testSheetCellRangeProperties()
 
     uno::Reference<beans::XPropertySet> aValidationLocalNew(aValidationLocalGet, UNO_SET_THROW);
     aValidationType <<= sheet::ValidationType_WHOLE;
-    aValidationLocalNew->setPropertyValue("Type", aValidationType);
+    aValidationLocalNew->setPropertyValue(u"Type"_ustr, aValidationType);
 
     aNewValue <<= aValidationLocalNew;
     xSheetCellRange->setPropertyValue(propName, aNewValue);
     CPPUNIT_ASSERT(xSheetCellRange->getPropertyValue(propName) >>= aValidationLocalSet);
-    aValidationLocalSet->getPropertyValue("Type") >>= aType;
+    aValidationLocalSet->getPropertyValue(u"Type"_ustr) >>= aType;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue ValidationLocal",
                                  sheet::ValidationType_WHOLE, aType);
 
     propName = "AbsoluteName";
-    OUString aAbsoluteNameGet = "";
+    OUString aAbsoluteNameGet = u""_ustr;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue AbsoluteName",
                            xSheetCellRange->getPropertyValue(propName) >>= aAbsoluteNameGet);
 
-    OUString aAbsoluteNameSet = "$Sheet1.$C$3";
+    OUString aAbsoluteNameSet = u"$Sheet1.$C$3"_ustr;
     aNewValue <<= aAbsoluteNameSet;
     xSheetCellRange->setPropertyValue(propName, aNewValue);
     CPPUNIT_ASSERT(xSheetCellRange->getPropertyValue(propName) >>= aAbsoluteNameSet);

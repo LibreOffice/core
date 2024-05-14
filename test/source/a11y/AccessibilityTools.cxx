@@ -217,181 +217,181 @@ OUString AccessibilityTools::getRoleName(const sal_Int16 role)
     switch (role)
     {
         case accessibility::AccessibleRole::UNKNOWN:
-            return "UNKNOWN";
+            return u"UNKNOWN"_ustr;
         case accessibility::AccessibleRole::ALERT:
-            return "ALERT";
+            return u"ALERT"_ustr;
         case accessibility::AccessibleRole::BLOCK_QUOTE:
-            return "BLOCK_QUOTE";
+            return u"BLOCK_QUOTE"_ustr;
         case accessibility::AccessibleRole::BUTTON_DROPDOWN:
-            return "BUTTON_DROPDOWN";
+            return u"BUTTON_DROPDOWN"_ustr;
         case accessibility::AccessibleRole::BUTTON_MENU:
-            return "BUTTON_MENU";
+            return u"BUTTON_MENU"_ustr;
         case accessibility::AccessibleRole::CANVAS:
-            return "CANVAS";
+            return u"CANVAS"_ustr;
         case accessibility::AccessibleRole::CAPTION:
-            return "CAPTION";
+            return u"CAPTION"_ustr;
         case accessibility::AccessibleRole::CHART:
-            return "CHART";
+            return u"CHART"_ustr;
         case accessibility::AccessibleRole::CHECK_BOX:
-            return "CHECK_BOX";
+            return u"CHECK_BOX"_ustr;
         case accessibility::AccessibleRole::CHECK_MENU_ITEM:
-            return "CHECK_MENU_ITEM";
+            return u"CHECK_MENU_ITEM"_ustr;
         case accessibility::AccessibleRole::COLOR_CHOOSER:
-            return "COLOR_CHOOSER";
+            return u"COLOR_CHOOSER"_ustr;
         case accessibility::AccessibleRole::COLUMN_HEADER:
-            return "COLUMN_HEADER";
+            return u"COLUMN_HEADER"_ustr;
         case accessibility::AccessibleRole::COMBO_BOX:
-            return "COMBO_BOX";
+            return u"COMBO_BOX"_ustr;
         case accessibility::AccessibleRole::COMMENT:
-            return "COMMENT";
+            return u"COMMENT"_ustr;
         case accessibility::AccessibleRole::COMMENT_END:
-            return "COMMENT_END";
+            return u"COMMENT_END"_ustr;
         case accessibility::AccessibleRole::DATE_EDITOR:
-            return "DATE_EDITOR";
+            return u"DATE_EDITOR"_ustr;
         case accessibility::AccessibleRole::DESKTOP_ICON:
-            return "DESKTOP_ICON";
+            return u"DESKTOP_ICON"_ustr;
         case accessibility::AccessibleRole::DESKTOP_PANE:
-            return "DESKTOP_PANE";
+            return u"DESKTOP_PANE"_ustr;
         case accessibility::AccessibleRole::DIALOG:
-            return "DIALOG";
+            return u"DIALOG"_ustr;
         case accessibility::AccessibleRole::DIRECTORY_PANE:
-            return "DIRECTORY_PANE";
+            return u"DIRECTORY_PANE"_ustr;
         case accessibility::AccessibleRole::DOCUMENT:
-            return "DOCUMENT";
+            return u"DOCUMENT"_ustr;
         case accessibility::AccessibleRole::DOCUMENT_PRESENTATION:
-            return "DOCUMENT_PRESENTATION";
+            return u"DOCUMENT_PRESENTATION"_ustr;
         case accessibility::AccessibleRole::DOCUMENT_SPREADSHEET:
-            return "DOCUMENT_SPREADSHEET";
+            return u"DOCUMENT_SPREADSHEET"_ustr;
         case accessibility::AccessibleRole::DOCUMENT_TEXT:
-            return "DOCUMENT_TEXT";
+            return u"DOCUMENT_TEXT"_ustr;
         case accessibility::AccessibleRole::EDIT_BAR:
-            return "EDIT_BAR";
+            return u"EDIT_BAR"_ustr;
         case accessibility::AccessibleRole::EMBEDDED_OBJECT:
-            return "EMBEDDED_OBJECT";
+            return u"EMBEDDED_OBJECT"_ustr;
         case accessibility::AccessibleRole::END_NOTE:
-            return "END_NOTE";
+            return u"END_NOTE"_ustr;
         case accessibility::AccessibleRole::FILE_CHOOSER:
-            return "FILE_CHOOSER";
+            return u"FILE_CHOOSER"_ustr;
         case accessibility::AccessibleRole::FILLER:
-            return "FILLER";
+            return u"FILLER"_ustr;
         case accessibility::AccessibleRole::FONT_CHOOSER:
-            return "FONT_CHOOSER";
+            return u"FONT_CHOOSER"_ustr;
         case accessibility::AccessibleRole::FOOTER:
-            return "FOOTER";
+            return u"FOOTER"_ustr;
         case accessibility::AccessibleRole::FOOTNOTE:
-            return "FOOTNOTE";
+            return u"FOOTNOTE"_ustr;
         case accessibility::AccessibleRole::FORM:
-            return "FORM";
+            return u"FORM"_ustr;
         case accessibility::AccessibleRole::FRAME:
-            return "FRAME";
+            return u"FRAME"_ustr;
         case accessibility::AccessibleRole::GLASS_PANE:
-            return "GLASS_PANE";
+            return u"GLASS_PANE"_ustr;
         case accessibility::AccessibleRole::GRAPHIC:
-            return "GRAPHIC";
+            return u"GRAPHIC"_ustr;
         case accessibility::AccessibleRole::GROUP_BOX:
-            return "GROUP_BOX";
+            return u"GROUP_BOX"_ustr;
         case accessibility::AccessibleRole::HEADER:
-            return "HEADER";
+            return u"HEADER"_ustr;
         case accessibility::AccessibleRole::HEADING:
-            return "HEADING";
+            return u"HEADING"_ustr;
         case accessibility::AccessibleRole::HYPER_LINK:
-            return "HYPER_LINK";
+            return u"HYPER_LINK"_ustr;
         case accessibility::AccessibleRole::ICON:
-            return "ICON";
+            return u"ICON"_ustr;
         case accessibility::AccessibleRole::IMAGE_MAP:
-            return "IMAGE_MAP";
+            return u"IMAGE_MAP"_ustr;
         case accessibility::AccessibleRole::INTERNAL_FRAME:
-            return "INTERNAL_FRAME";
+            return u"INTERNAL_FRAME"_ustr;
         case accessibility::AccessibleRole::LABEL:
-            return "LABEL";
+            return u"LABEL"_ustr;
         case accessibility::AccessibleRole::LAYERED_PANE:
-            return "LAYERED_PANE";
+            return u"LAYERED_PANE"_ustr;
         case accessibility::AccessibleRole::LIST:
-            return "LIST";
+            return u"LIST"_ustr;
         case accessibility::AccessibleRole::LIST_ITEM:
-            return "LIST_ITEM";
+            return u"LIST_ITEM"_ustr;
         case accessibility::AccessibleRole::MENU:
-            return "MENU";
+            return u"MENU"_ustr;
         case accessibility::AccessibleRole::MENU_BAR:
-            return "MENU_BAR";
+            return u"MENU_BAR"_ustr;
         case accessibility::AccessibleRole::MENU_ITEM:
-            return "MENU_ITEM";
+            return u"MENU_ITEM"_ustr;
         case accessibility::AccessibleRole::NOTE:
-            return "NOTE";
+            return u"NOTE"_ustr;
         case accessibility::AccessibleRole::OPTION_PANE:
-            return "OPTION_PANE";
+            return u"OPTION_PANE"_ustr;
         case accessibility::AccessibleRole::PAGE:
-            return "PAGE";
+            return u"PAGE"_ustr;
         case accessibility::AccessibleRole::PAGE_TAB:
-            return "PAGE_TAB";
+            return u"PAGE_TAB"_ustr;
         case accessibility::AccessibleRole::PAGE_TAB_LIST:
-            return "PAGE_TAB_LIST";
+            return u"PAGE_TAB_LIST"_ustr;
         case accessibility::AccessibleRole::PANEL:
-            return "PANEL";
+            return u"PANEL"_ustr;
         case accessibility::AccessibleRole::PARAGRAPH:
-            return "PARAGRAPH";
+            return u"PARAGRAPH"_ustr;
         case accessibility::AccessibleRole::PASSWORD_TEXT:
-            return "PASSWORD_TEXT";
+            return u"PASSWORD_TEXT"_ustr;
         case accessibility::AccessibleRole::POPUP_MENU:
-            return "POPUP_MENU";
+            return u"POPUP_MENU"_ustr;
         case accessibility::AccessibleRole::PROGRESS_BAR:
-            return "PROGRESS_BAR";
+            return u"PROGRESS_BAR"_ustr;
         case accessibility::AccessibleRole::PUSH_BUTTON:
-            return "PUSH_BUTTON";
+            return u"PUSH_BUTTON"_ustr;
         case accessibility::AccessibleRole::RADIO_BUTTON:
-            return "RADIO_BUTTON";
+            return u"RADIO_BUTTON"_ustr;
         case accessibility::AccessibleRole::RADIO_MENU_ITEM:
-            return "RADIO_MENU_ITEM";
+            return u"RADIO_MENU_ITEM"_ustr;
         case accessibility::AccessibleRole::ROOT_PANE:
-            return "ROOT_PANE";
+            return u"ROOT_PANE"_ustr;
         case accessibility::AccessibleRole::ROW_HEADER:
-            return "ROW_HEADER";
+            return u"ROW_HEADER"_ustr;
         case accessibility::AccessibleRole::RULER:
-            return "RULER";
+            return u"RULER"_ustr;
         case accessibility::AccessibleRole::SCROLL_BAR:
-            return "SCROLL_BAR";
+            return u"SCROLL_BAR"_ustr;
         case accessibility::AccessibleRole::SCROLL_PANE:
-            return "SCROLL_PANE";
+            return u"SCROLL_PANE"_ustr;
         case accessibility::AccessibleRole::SECTION:
-            return "SECTION";
+            return u"SECTION"_ustr;
         case accessibility::AccessibleRole::SEPARATOR:
-            return "SEPARATOR";
+            return u"SEPARATOR"_ustr;
         case accessibility::AccessibleRole::SHAPE:
-            return "SHAPE";
+            return u"SHAPE"_ustr;
         case accessibility::AccessibleRole::SLIDER:
-            return "SLIDER";
+            return u"SLIDER"_ustr;
         case accessibility::AccessibleRole::SPIN_BOX:
-            return "SPIN_BOX";
+            return u"SPIN_BOX"_ustr;
         case accessibility::AccessibleRole::SPLIT_PANE:
-            return "SPLIT_PANE";
+            return u"SPLIT_PANE"_ustr;
         case accessibility::AccessibleRole::STATIC:
-            return "STATIC";
+            return u"STATIC"_ustr;
         case accessibility::AccessibleRole::STATUS_BAR:
-            return "STATUS_BAR";
+            return u"STATUS_BAR"_ustr;
         case accessibility::AccessibleRole::TABLE:
-            return "TABLE";
+            return u"TABLE"_ustr;
         case accessibility::AccessibleRole::TABLE_CELL:
-            return "TABLE_CELL";
+            return u"TABLE_CELL"_ustr;
         case accessibility::AccessibleRole::TEXT:
-            return "TEXT";
+            return u"TEXT"_ustr;
         case accessibility::AccessibleRole::TEXT_FRAME:
-            return "TEXT_FRAME";
+            return u"TEXT_FRAME"_ustr;
         case accessibility::AccessibleRole::TOGGLE_BUTTON:
-            return "TOGGLE_BUTTON";
+            return u"TOGGLE_BUTTON"_ustr;
         case accessibility::AccessibleRole::TOOL_BAR:
-            return "TOOL_BAR";
+            return u"TOOL_BAR"_ustr;
         case accessibility::AccessibleRole::TOOL_TIP:
-            return "TOOL_TIP";
+            return u"TOOL_TIP"_ustr;
         case accessibility::AccessibleRole::TREE:
-            return "TREE";
+            return u"TREE"_ustr;
         case accessibility::AccessibleRole::TREE_ITEM:
-            return "TREE_ITEM";
+            return u"TREE_ITEM"_ustr;
         case accessibility::AccessibleRole::TREE_TABLE:
-            return "TREE_TABLE";
+            return u"TREE_TABLE"_ustr;
         case accessibility::AccessibleRole::VIEW_PORT:
-            return "VIEW_PORT";
+            return u"VIEW_PORT"_ustr;
         case accessibility::AccessibleRole::WINDOW:
-            return "WINDOW";
+            return u"WINDOW"_ustr;
     };
     return unknownName(role);
 }
@@ -526,7 +526,7 @@ OUString AccessibilityTools::debugAccessibleStateSet(const sal_Int64 nCombinedSt
     }
 
     if (combinedName.isEmpty())
-        return "unknown";
+        return u"unknown"_ustr;
     return combinedName;
 }
 
@@ -535,87 +535,87 @@ OUString AccessibilityTools::getEventIdName(const sal_Int16 event_id)
     switch (event_id)
     {
         case accessibility::AccessibleEventId::ACTION_CHANGED:
-            return "ACTION_CHANGED";
+            return u"ACTION_CHANGED"_ustr;
         case accessibility::AccessibleEventId::ACTIVE_DESCENDANT_CHANGED:
-            return "ACTIVE_DESCENDANT_CHANGED";
+            return u"ACTIVE_DESCENDANT_CHANGED"_ustr;
         case accessibility::AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS:
-            return "ACTIVE_DESCENDANT_CHANGED_NOFOCUS";
+            return u"ACTIVE_DESCENDANT_CHANGED_NOFOCUS"_ustr;
         case accessibility::AccessibleEventId::BOUNDRECT_CHANGED:
-            return "BOUNDRECT_CHANGED";
+            return u"BOUNDRECT_CHANGED"_ustr;
         case accessibility::AccessibleEventId::CARET_CHANGED:
-            return "CARET_CHANGED";
+            return u"CARET_CHANGED"_ustr;
         case accessibility::AccessibleEventId::CHILD:
-            return "CHILD";
+            return u"CHILD"_ustr;
         case accessibility::AccessibleEventId::COLUMN_CHANGED:
-            return "COLUMN_CHANGED";
+            return u"COLUMN_CHANGED"_ustr;
         case accessibility::AccessibleEventId::CONTENT_FLOWS_FROM_RELATION_CHANGED:
-            return "CONTENT_FLOWS_FROM_RELATION_CHANGED";
+            return u"CONTENT_FLOWS_FROM_RELATION_CHANGED"_ustr;
         case accessibility::AccessibleEventId::CONTENT_FLOWS_TO_RELATION_CHANGED:
-            return "CONTENT_FLOWS_TO_RELATION_CHANGED";
+            return u"CONTENT_FLOWS_TO_RELATION_CHANGED"_ustr;
         case accessibility::AccessibleEventId::CONTROLLED_BY_RELATION_CHANGED:
-            return "CONTROLLED_BY_RELATION_CHANGED";
+            return u"CONTROLLED_BY_RELATION_CHANGED"_ustr;
         case accessibility::AccessibleEventId::CONTROLLER_FOR_RELATION_CHANGED:
-            return "CONTROLLER_FOR_RELATION_CHANGED";
+            return u"CONTROLLER_FOR_RELATION_CHANGED"_ustr;
         case accessibility::AccessibleEventId::DESCRIPTION_CHANGED:
-            return "DESCRIPTION_CHANGED";
+            return u"DESCRIPTION_CHANGED"_ustr;
         case accessibility::AccessibleEventId::HYPERTEXT_CHANGED:
-            return "HYPERTEXT_CHANGED";
+            return u"HYPERTEXT_CHANGED"_ustr;
         case accessibility::AccessibleEventId::INVALIDATE_ALL_CHILDREN:
-            return "INVALIDATE_ALL_CHILDREN";
+            return u"INVALIDATE_ALL_CHILDREN"_ustr;
         case accessibility::AccessibleEventId::LABELED_BY_RELATION_CHANGED:
-            return "LABELED_BY_RELATION_CHANGED";
+            return u"LABELED_BY_RELATION_CHANGED"_ustr;
         case accessibility::AccessibleEventId::LABEL_FOR_RELATION_CHANGED:
-            return "LABEL_FOR_RELATION_CHANGED";
+            return u"LABEL_FOR_RELATION_CHANGED"_ustr;
         case accessibility::AccessibleEventId::LISTBOX_ENTRY_COLLAPSED:
-            return "LISTBOX_ENTRY_COLLAPSED";
+            return u"LISTBOX_ENTRY_COLLAPSED"_ustr;
         case accessibility::AccessibleEventId::LISTBOX_ENTRY_EXPANDED:
-            return "LISTBOX_ENTRY_EXPANDED";
+            return u"LISTBOX_ENTRY_EXPANDED"_ustr;
         case accessibility::AccessibleEventId::MEMBER_OF_RELATION_CHANGED:
-            return "MEMBER_OF_RELATION_CHANGED";
+            return u"MEMBER_OF_RELATION_CHANGED"_ustr;
         case accessibility::AccessibleEventId::NAME_CHANGED:
-            return "NAME_CHANGED";
+            return u"NAME_CHANGED"_ustr;
         case accessibility::AccessibleEventId::PAGE_CHANGED:
-            return "PAGE_CHANGED";
+            return u"PAGE_CHANGED"_ustr;
         case accessibility::AccessibleEventId::ROLE_CHANGED:
-            return "ROLE_CHANGED";
+            return u"ROLE_CHANGED"_ustr;
         case accessibility::AccessibleEventId::SECTION_CHANGED:
-            return "SECTION_CHANGED";
+            return u"SECTION_CHANGED"_ustr;
         case accessibility::AccessibleEventId::SELECTION_CHANGED:
-            return "SELECTION_CHANGED";
+            return u"SELECTION_CHANGED"_ustr;
         case accessibility::AccessibleEventId::SELECTION_CHANGED_ADD:
-            return "SELECTION_CHANGED_ADD";
+            return u"SELECTION_CHANGED_ADD"_ustr;
         case accessibility::AccessibleEventId::SELECTION_CHANGED_REMOVE:
-            return "SELECTION_CHANGED_REMOVE";
+            return u"SELECTION_CHANGED_REMOVE"_ustr;
         case accessibility::AccessibleEventId::SELECTION_CHANGED_WITHIN:
-            return "SELECTION_CHANGED_WITHIN";
+            return u"SELECTION_CHANGED_WITHIN"_ustr;
         case accessibility::AccessibleEventId::STATE_CHANGED:
-            return "STATE_CHANGED";
+            return u"STATE_CHANGED"_ustr;
         case accessibility::AccessibleEventId::SUB_WINDOW_OF_RELATION_CHANGED:
-            return "SUB_WINDOW_OF_RELATION_CHANGED";
+            return u"SUB_WINDOW_OF_RELATION_CHANGED"_ustr;
         case accessibility::AccessibleEventId::TABLE_CAPTION_CHANGED:
-            return "TABLE_CAPTION_CHANGED";
+            return u"TABLE_CAPTION_CHANGED"_ustr;
         case accessibility::AccessibleEventId::TABLE_COLUMN_DESCRIPTION_CHANGED:
-            return "TABLE_COLUMN_DESCRIPTION_CHANGED";
+            return u"TABLE_COLUMN_DESCRIPTION_CHANGED"_ustr;
         case accessibility::AccessibleEventId::TABLE_COLUMN_HEADER_CHANGED:
-            return "TABLE_COLUMN_HEADER_CHANGED";
+            return u"TABLE_COLUMN_HEADER_CHANGED"_ustr;
         case accessibility::AccessibleEventId::TABLE_MODEL_CHANGED:
-            return "TABLE_MODEL_CHANGED";
+            return u"TABLE_MODEL_CHANGED"_ustr;
         case accessibility::AccessibleEventId::TABLE_ROW_DESCRIPTION_CHANGED:
-            return "TABLE_ROW_DESCRIPTION_CHANGED";
+            return u"TABLE_ROW_DESCRIPTION_CHANGED"_ustr;
         case accessibility::AccessibleEventId::TABLE_ROW_HEADER_CHANGED:
-            return "TABLE_ROW_HEADER_CHANGED";
+            return u"TABLE_ROW_HEADER_CHANGED"_ustr;
         case accessibility::AccessibleEventId::TABLE_SUMMARY_CHANGED:
-            return "TABLE_SUMMARY_CHANGED";
+            return u"TABLE_SUMMARY_CHANGED"_ustr;
         case accessibility::AccessibleEventId::TEXT_ATTRIBUTE_CHANGED:
-            return "TEXT_ATTRIBUTE_CHANGED";
+            return u"TEXT_ATTRIBUTE_CHANGED"_ustr;
         case accessibility::AccessibleEventId::TEXT_CHANGED:
-            return "TEXT_CHANGED";
+            return u"TEXT_CHANGED"_ustr;
         case accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED:
-            return "TEXT_SELECTION_CHANGED";
+            return u"TEXT_SELECTION_CHANGED"_ustr;
         case accessibility::AccessibleEventId::VALUE_CHANGED:
-            return "VALUE_CHANGED";
+            return u"VALUE_CHANGED"_ustr;
         case accessibility::AccessibleEventId::VISIBLE_DATA_CHANGED:
-            return "VISIBLE_DATA_CHANGED";
+            return u"VISIBLE_DATA_CHANGED"_ustr;
     }
     return unknownName(event_id);
 }
@@ -625,27 +625,27 @@ OUString AccessibilityTools::getRelationTypeName(const sal_Int16 rel_type)
     switch (rel_type)
     {
         case accessibility::AccessibleRelationType::CONTENT_FLOWS_FROM:
-            return "CONTENT_FLOWS_FROM";
+            return u"CONTENT_FLOWS_FROM"_ustr;
         case accessibility::AccessibleRelationType::CONTENT_FLOWS_TO:
-            return "CONTENT_FLOWS_TO";
+            return u"CONTENT_FLOWS_TO"_ustr;
         case accessibility::AccessibleRelationType::CONTROLLED_BY:
-            return "CONTROLLED_BY";
+            return u"CONTROLLED_BY"_ustr;
         case accessibility::AccessibleRelationType::CONTROLLER_FOR:
-            return "CONTROLLER_FOR";
+            return u"CONTROLLER_FOR"_ustr;
         case accessibility::AccessibleRelationType::DESCRIBED_BY:
-            return "DESCRIBED_BY";
+            return u"DESCRIBED_BY"_ustr;
         case accessibility::AccessibleRelationType::INVALID:
-            return "INVALID";
+            return u"INVALID"_ustr;
         case accessibility::AccessibleRelationType::LABELED_BY:
-            return "LABELED_BY";
+            return u"LABELED_BY"_ustr;
         case accessibility::AccessibleRelationType::LABEL_FOR:
-            return "LABEL_FOR";
+            return u"LABEL_FOR"_ustr;
         case accessibility::AccessibleRelationType::MEMBER_OF:
-            return "MEMBER_OF";
+            return u"MEMBER_OF"_ustr;
         case accessibility::AccessibleRelationType::NODE_CHILD_OF:
-            return "NODE_CHILD_OF";
+            return u"NODE_CHILD_OF"_ustr;
         case accessibility::AccessibleRelationType::SUB_WINDOW_OF:
-            return "SUB_WINDOW_OF";
+            return u"SUB_WINDOW_OF"_ustr;
     }
     return unknownName(rel_type);
 }

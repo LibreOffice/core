@@ -31,21 +31,21 @@ void XDataPilotTables::testXDataPilotTables()
     uno::Reference<sheet::XDataPilotDescriptor> xDPD(xDPT->createDataPilotDescriptor(),
                                                      UNO_SET_THROW);
 
-    xDPT->insertNewByName("XDataPilotTables", table::CellAddress(0, 9, 8), xDPD);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to insert new DataPilotTable", OUString("Filter"),
+    xDPT->insertNewByName(u"XDataPilotTables"_ustr, table::CellAddress(0, 9, 8), xDPD);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to insert new DataPilotTable", u"Filter"_ustr,
                                  xSheet->getCellByPosition(9, 8)->getFormula());
 
     CPPUNIT_ASSERT_THROW_MESSAGE(
         "No exception thrown, when inserting element with existing name",
-        xDPT->insertNewByName("XDataPilotTables", table::CellAddress(0, 7, 7), xDPD),
+        xDPT->insertNewByName(u"XDataPilotTables"_ustr, table::CellAddress(0, 7, 7), xDPD),
         css::uno::RuntimeException);
 
-    xDPT->removeByName("XDataPilotTables");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to remove DataPilotTable", OUString(""),
+    xDPT->removeByName(u"XDataPilotTables"_ustr);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to remove DataPilotTable", u""_ustr,
                                  xSheet->getCellByPosition(9, 8)->getFormula());
 
     CPPUNIT_ASSERT_THROW_MESSAGE("No exception, when removing no existing element",
-                                 xDPT->removeByName("XDataPilotTables"),
+                                 xDPT->removeByName(u"XDataPilotTables"_ustr),
                                  css::uno::RuntimeException);
 }
 }

@@ -29,10 +29,10 @@ void CellAreaLink::testUrl()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Default Url already changed", m_aFileURL, aUrl);
 
     uno::Any aNewUrl;
-    aNewUrl <<= OUString("file:///tmp");
+    aNewUrl <<= u"file:///tmp"_ustr;
     xCellAreaLink->setPropertyValue(propName, aNewUrl);
     CPPUNIT_ASSERT(xCellAreaLink->getPropertyValue(propName) >>= aUrl);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Value of Url wasn't changed", OUString("file:///tmp"), aUrl);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Value of Url wasn't changed", u"file:///tmp"_ustr, aUrl);
 }
 
 void CellAreaLink::testFilter()
@@ -43,13 +43,13 @@ void CellAreaLink::testFilter()
 
     OUString aFilter;
     CPPUNIT_ASSERT(xCellAreaLink->getPropertyValue(propName) >>= aFilter);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default Filter already changed", OUString("calc8"), aFilter);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default Filter already changed", u"calc8"_ustr, aFilter);
 
     uno::Any aNewFilter;
-    aNewFilter <<= OUString("UnitTest");
+    aNewFilter <<= u"UnitTest"_ustr;
     xCellAreaLink->setPropertyValue(propName, aNewFilter);
     CPPUNIT_ASSERT(xCellAreaLink->getPropertyValue(propName) >>= aFilter);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Value of Filter wasn't changed", OUString("UnitTest"), aFilter);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Value of Filter wasn't changed", u"UnitTest"_ustr, aFilter);
 }
 
 void CellAreaLink::testFilterOptions()
@@ -60,14 +60,13 @@ void CellAreaLink::testFilterOptions()
 
     OUString aFilterOptions;
     CPPUNIT_ASSERT(xCellAreaLink->getPropertyValue(propName) >>= aFilterOptions);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default FilterOptions already changed", OUString(""),
-                                 aFilterOptions);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default FilterOptions already changed", u""_ustr, aFilterOptions);
 
     uno::Any aNewFilterOptions;
-    aNewFilterOptions <<= OUString("UnitTest");
+    aNewFilterOptions <<= u"UnitTest"_ustr;
     xCellAreaLink->setPropertyValue(propName, aNewFilterOptions);
     CPPUNIT_ASSERT(xCellAreaLink->getPropertyValue(propName) >>= aFilterOptions);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Value of FilterOptions wasn't changed", OUString("UnitTest"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Value of FilterOptions wasn't changed", u"UnitTest"_ustr,
                                  aFilterOptions);
 }
 

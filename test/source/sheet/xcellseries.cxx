@@ -46,9 +46,9 @@ void XCellSeries::testFillAuto()
 
     for(sal_Int32 i = 1; i < 3; i++) {
         uno::Reference<table::XCell> xCellResultH(xCellRange->getCellByPosition(maStartX + i, maStartY), UNO_SET_THROW);
-        xCellResultH->setFormula("");
+        xCellResultH->setFormula(u""_ustr);
         uno::Reference<table::XCell> xCellResultV(xCellRange->getCellByPosition(maStartX, maStartY + i), UNO_SET_THROW);
-        xCellResultV->setFormula("");
+        xCellResultV->setFormula(u""_ustr);
     }
 }
 
@@ -103,9 +103,9 @@ void XCellSeries::testFillSeries()
 
     for(sal_Int32 i = 1; i < 3; i++) {
         uno::Reference<table::XCell> xCellResultH(xCellRange->getCellByPosition(maStartX + i, maStartY), UNO_SET_THROW);
-        xCellResultH->setFormula("");
+        xCellResultH->setFormula(u""_ustr);
         uno::Reference<table::XCell> xCellResultV(xCellRange->getCellByPosition(maStartX, maStartY + i), UNO_SET_THROW);
-        xCellResultV->setFormula("");
+        xCellResultV->setFormula(u""_ustr);
     }
 }
 

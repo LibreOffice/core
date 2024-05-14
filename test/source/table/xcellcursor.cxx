@@ -104,7 +104,7 @@ void XCellCursor::testGoToEnd()
     uno::Reference<table::XCellCursor> xCellCursor(init(), UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSpreadsheet(getXSpreadsheet(), UNO_QUERY_THROW);
     uno::Reference<table::XCellRange> xCellRange(xCellCursor, UNO_QUERY_THROW);
-    xCellRange = xSpreadsheet->getCellRangeByName("$A$1:$g$7");
+    xCellRange = xSpreadsheet->getCellRangeByName(u"$A$1:$g$7"_ustr);
     uno::Reference<sheet::XSheetCellRange> xSheetCellRange(xCellCursor, UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellCursor> xSheetCellCursor(xCellCursor, UNO_QUERY_THROW);
     xSheetCellCursor = xSpreadsheet->createCursorByRange(xSheetCellRange);

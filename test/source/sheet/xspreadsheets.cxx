@@ -25,7 +25,7 @@ void XSpreadsheets::testInsertNewByName()
 {
     uno::Reference< sheet::XSpreadsheets > xSpreadsheets(init(), UNO_QUERY_THROW);
 
-    OUString newSheetName( "SheetToInsert" );
+    OUString newSheetName( u"SheetToInsert"_ustr );
     xSpreadsheets->insertNewByName(newSheetName, 0);
 
     uno::Reference< container::XNameAccess > xNameAccess(xSpreadsheets, UNO_QUERY_THROW);
@@ -38,7 +38,7 @@ void XSpreadsheets::testInsertNewByNameBadName()
     uno::Reference< sheet::XSpreadsheets > xSpreadsheets(init(), UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT_THROW_MESSAGE("No exception thrown",
-                                 xSpreadsheets->insertNewByName("$%#/?\\", 0),
+                                 xSpreadsheets->insertNewByName(u"$%#/?\\"_ustr, 0),
                                  uno::RuntimeException);
 }
 
@@ -47,12 +47,12 @@ void XSpreadsheets::testMoveByName()
     uno::Reference< sheet::XSpreadsheets > xSpreadsheets(init(), UNO_QUERY_THROW);
 
     // first insert one that should be moved
-    xSpreadsheets->insertNewByName("SheetToMove", 0);
+    xSpreadsheets->insertNewByName(u"SheetToMove"_ustr, 0);
     uno::Reference< container::XNameAccess > xNameAccess(xSpreadsheets, UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("Sheet to move was not insert",
-                           xNameAccess->hasByName("SheetToMove"));
+                           xNameAccess->hasByName(u"SheetToMove"_ustr));
 
-    xSpreadsheets->moveByName("SheetToMove", 2);
+    xSpreadsheets->moveByName(u"SheetToMove"_ustr, 2);
 
     // get sheet from the new position
     uno::Reference< container::XIndexAccess > oIndexAccess(xSpreadsheets, UNO_QUERY_THROW);
@@ -61,7 +61,7 @@ void XSpreadsheets::testMoveByName()
     CPPUNIT_ASSERT(aAny >>= xNamed);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet was not moved",
-                                 OUString("SheetToMove"),
+                                 u"SheetToMove"_ustr,
                                  xNamed->getName());
 }
 
@@ -70,14 +70,14 @@ void XSpreadsheets::testCopyByName()
     uno::Reference< sheet::XSpreadsheets > xSpreadsheets(init(), UNO_QUERY_THROW);
 
     // insert new sheet to copy
-    xSpreadsheets->insertNewByName("SheetToCopySrc", 0);
+    xSpreadsheets->insertNewByName(u"SheetToCopySrc"_ustr, 0);
     uno::Reference< container::XNameAccess > xNameAccess(xSpreadsheets, UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("Sheet to copy was not insert",
-                           xNameAccess->hasByName("SheetToCopySrc"));
+                           xNameAccess->hasByName(u"SheetToCopySrc"_ustr));
 
-    xSpreadsheets->copyByName("SheetToCopySrc", "SheetToCopyDst", 0);
+    xSpreadsheets->copyByName(u"SheetToCopySrc"_ustr, u"SheetToCopyDst"_ustr, 0);
     CPPUNIT_ASSERT_MESSAGE("Sheet was not copied",
-                           xNameAccess->hasByName("SheetToCopyDst"));
+                           xNameAccess->hasByName(u"SheetToCopyDst"_ustr));
 }
 
 }

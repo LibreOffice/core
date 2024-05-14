@@ -28,7 +28,7 @@ void XCellRangesQuery::testQueryColumnDifference()
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryColumnDifferences(table::CellAddress(0, 1, 1));
     OUString aResult = xRanges->getRangeAddressesAsString();
     std::cout << "testQueryColumnDifference: Result: " << aResult << std::endl;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryColumnDifference", OUString( "Sheet1.B1:C1,Sheet1.B3:C5" ), aResult);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryColumnDifference", u"Sheet1.B1:C1,Sheet1.B3:C5"_ustr, aResult);
 }
 
 void XCellRangesQuery::testQueryContentDifference()
@@ -37,7 +37,7 @@ void XCellRangesQuery::testQueryContentDifference()
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryContentCells(sheet::CellFlags::VALUE);
     OUString aResult = xRanges->getRangeAddressesAsString();
     std::cout << "testQueryContentDifference: Result: " << aResult << std::endl;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryContentDifference", OUString( "Sheet1.B3,Sheet1.C2" ), aResult);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryContentDifference", u"Sheet1.B3,Sheet1.C2"_ustr, aResult);
 }
 
 void XCellRangesQuery::testQueryEmptyCells()
@@ -46,7 +46,7 @@ void XCellRangesQuery::testQueryEmptyCells()
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryEmptyCells();
     OUString aResult = xRanges->getRangeAddressesAsString();
     std::cout << "testQueryEmptyCells: Result: " << aResult << std::endl;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryEmptyCells", OUString( "Sheet1.A1:A5,Sheet1.B1:C1,Sheet1.B5,Sheet1.C3:C5,Sheet1.D1:E5" ), aResult);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryEmptyCells", u"Sheet1.A1:A5,Sheet1.B1:C1,Sheet1.B5,Sheet1.C3:C5,Sheet1.D1:E5"_ustr, aResult);
 }
 
 void XCellRangesQuery::testQueryFormulaCells()
@@ -55,7 +55,7 @@ void XCellRangesQuery::testQueryFormulaCells()
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryFormulaCells(sheet::CellFlags::FORMULA);
     OUString aResult = xRanges->getRangeAddressesAsString();
     std::cout << "testQueryFormulaCells: Result: " << aResult << std::endl;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryFormulaCells", OUString( "Sheet1.B2" ), aResult);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryFormulaCells", u"Sheet1.B2"_ustr, aResult);
 }
 
 void XCellRangesQuery::testQueryIntersection()
@@ -64,7 +64,7 @@ void XCellRangesQuery::testQueryIntersection()
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryIntersection(table::CellRangeAddress(0,3,3,7,7));
     OUString aResult = xRanges->getRangeAddressesAsString();
     std::cout << "testQueryIntersection: Result: " << aResult << std::endl;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryIntersection", OUString( "Sheet1.D4:E5" ), aResult);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryIntersection", u"Sheet1.D4:E5"_ustr, aResult);
 }
 
 void XCellRangesQuery::testQueryRowDifference()
@@ -73,7 +73,7 @@ void XCellRangesQuery::testQueryRowDifference()
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryRowDifferences(table::CellAddress(0,1,1));
     OUString aResult = xRanges->getRangeAddressesAsString();
     std::cout << "testQueryRowDifference: Result: " << aResult << std::endl;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryRowDifference", OUString( "Sheet1.A2:A4,Sheet1.C2:E4" ), aResult);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryRowDifference", u"Sheet1.A2:A4,Sheet1.C2:E4"_ustr, aResult);
 }
 
 void XCellRangesQuery::testQueryVisibleCells()
@@ -82,7 +82,7 @@ void XCellRangesQuery::testQueryVisibleCells()
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryVisibleCells();
     OUString aResult = xRanges->getRangeAddressesAsString();
     std::cout << "testQueryVisibleCells: Result: " << aResult << std::endl;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryVisibleCells", OUString( "Sheet1.A1:E5" ), aResult);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryVisibleCells", u"Sheet1.A1:E5"_ustr, aResult);
 }
 
 }

@@ -68,7 +68,7 @@ void NumberingRules::testNumberingRulesProperties()
                                  !bIsContinuousNumberingGet, bIsContinuousNumberingSet);
 
     propName = "Name";
-    OUString aNameGet = "";
+    OUString aNameGet = u""_ustr;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue Name",
                            xNumberingRules->getPropertyValue(propName) >>= aNameGet);
 }

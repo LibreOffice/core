@@ -46,9 +46,9 @@ void XSubTotalCalculatable::testApplyRemoveSubTotals()
                                                     /* Function */ sheet::GeneralFunction_SUM } };
     xSTD->addNew(xCols, 1);
 
-    xSheet->getCellByPosition(0, 0)->setFormula("first");
-    xSheet->getCellByPosition(1, 0)->setFormula("second");
-    xSheet->getCellByPosition(0, 3)->setFormula("");
+    xSheet->getCellByPosition(0, 0)->setFormula(u"first"_ustr);
+    xSheet->getCellByPosition(1, 0)->setFormula(u"second"_ustr);
+    xSheet->getCellByPosition(0, 3)->setFormula(u""_ustr);
     xSheet->getCellByPosition(0, 1)->setValue(5);
     xSheet->getCellByPosition(0, 2)->setValue(5);
     xSheet->getCellByPosition(1, 1)->setValue(17);
@@ -56,12 +56,12 @@ void XSubTotalCalculatable::testApplyRemoveSubTotals()
 
     xSTC->applySubTotals(xSTD, true);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to apply SubTotals",
-                                 OUString("=SUBTOTAL(9;$A$2:$A$3)"),
+                                 u"=SUBTOTAL(9;$A$2:$A$3)"_ustr,
                                  xSheet->getCellByPosition(0, 3)->getFormula());
 
     xSTC->removeSubTotals();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to remove SubTotals",
-                                 OUString(""),
+                                 u""_ustr,
                                  xSheet->getCellByPosition(0, 3)->getFormula());
 }
 

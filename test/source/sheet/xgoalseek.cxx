@@ -25,7 +25,7 @@ void XGoalSeek::testSeekGoal()
 
     table::CellAddress aFormulaAddr(0, 3, 5);
     table::CellAddress aVariableAddr(0, 3, 4);
-    sheet::GoalResult aResult = xGoalSeek->seekGoal(aFormulaAddr, aVariableAddr, "4");
+    sheet::GoalResult aResult = xGoalSeek->seekGoal(aFormulaAddr, aVariableAddr, u"4"_ustr);
 
     double nDivergence = 0.01;
     CPPUNIT_ASSERT(aResult.Divergence < nDivergence);

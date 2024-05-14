@@ -78,7 +78,7 @@ void XStyleLoader::testLoadStylesFromStream()
     aInputStream.Value = aTmp;
     aOptions.getArray()[nLength] = aInputStream;
 
-    xStyleLoader->loadStylesFromURL("private:stream", aOptions);
+    xStyleLoader->loadStylesFromURL(u"private:stream"_ustr, aOptions);
 
     uno::Reference<style::XStyleFamiliesSupplier> xFamilySupplier(xDoc, UNO_QUERY_THROW);
     checkStyleProperties(xFamilySupplier);
@@ -90,28 +90,29 @@ void XStyleLoader::checkStyleProperties(
     // check if targetDocument has myStyle
     uno::Reference<container::XNameAccess> xFamilies(xFamilySupplier->getStyleFamilies(),
                                                      UNO_SET_THROW);
-    uno::Reference<container::XNameContainer> xCellStyles(xFamilies->getByName("CellStyles"),
+    uno::Reference<container::XNameContainer> xCellStyles(xFamilies->getByName(u"CellStyles"_ustr),
                                                           UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_MESSAGE("Style not imported", xCellStyles->hasByName("myStyle"));
+    CPPUNIT_ASSERT_MESSAGE("Style not imported", xCellStyles->hasByName(u"myStyle"_ustr));
 
     // test the backgroundcolor is correctly imported
-    uno::Reference<style::XStyle> xMyStyle(xCellStyles->getByName("myStyle"), UNO_QUERY_THROW);
+    uno::Reference<style::XStyle> xMyStyle(xCellStyles->getByName(u"myStyle"_ustr),
+                                           UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropSet(xMyStyle, UNO_QUERY_THROW);
 
-    uno::Any aBackColor = xPropSet->getPropertyValue("CellBackColor");
+    uno::Any aBackColor = xPropSet->getPropertyValue(u"CellBackColor"_ustr);
     uno::Any expectedBackColor(sal_Int32(16724787));
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong CellBackColor", expectedBackColor, aBackColor);
 
     // test default pageStyle
 
-    uno::Reference<container::XNameContainer> xPageStyles(xFamilies->getByName("PageStyles"),
+    uno::Reference<container::XNameContainer> xPageStyles(xFamilies->getByName(u"PageStyles"_ustr),
                                                           UNO_QUERY_THROW);
-    uno::Reference<beans::XPropertySet> xPagePropSet(xPageStyles->getByName("Default"),
+    uno::Reference<beans::XPropertySet> xPagePropSet(xPageStyles->getByName(u"Default"_ustr),
                                                      UNO_QUERY_THROW);
 
-    uno::Any aPageBackColor = xPagePropSet->getPropertyValue("BackColor");
+    uno::Any aPageBackColor = xPagePropSet->getPropertyValue(u"BackColor"_ustr);
     uno::Any expectedPageBackColor(sal_Int32(13434879));
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong page style BackColor", expectedPageBackColor,

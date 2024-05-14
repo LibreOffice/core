@@ -25,9 +25,9 @@ void XSearchDescriptor::testGetSetSearchString()
     const OUString aSearchStringOld = xDS->getSearchString();
     CPPUNIT_ASSERT(aSearchStringOld.isEmpty());
 
-    xDS->setSearchString("_XSearchDescriptor");
+    xDS->setSearchString(u"_XSearchDescriptor"_ustr);
     const OUString aSearchStringNew = xDS->getSearchString();
-    CPPUNIT_ASSERT_EQUAL(OUString("_XSearchDescriptor"), aSearchStringNew);
+    CPPUNIT_ASSERT_EQUAL(u"_XSearchDescriptor"_ustr, aSearchStringNew);
     CPPUNIT_ASSERT(aSearchStringOld != aSearchStringNew);
 }
 

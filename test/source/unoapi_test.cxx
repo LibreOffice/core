@@ -150,23 +150,23 @@ uno::Any UnoApiTest::executeMacro(const OUString& rScriptURL,
 void UnoApiTest::save(const OUString& rFilter, const char* pPassword)
 {
     utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= rFilter;
+    aMediaDescriptor[u"FilterName"_ustr] <<= rFilter;
     if (!maFilterOptions.isEmpty())
-        aMediaDescriptor["FilterOptions"] <<= maFilterOptions;
+        aMediaDescriptor[u"FilterOptions"_ustr] <<= maFilterOptions;
 
     if (pPassword)
     {
         if (rFilter != "Office Open XML Text" && rFilter != "Calc Office Open XML"
             && rFilter != "Impress Office Open XML")
         {
-            aMediaDescriptor["Password"] <<= OUString::createFromAscii(pPassword);
+            aMediaDescriptor[u"Password"_ustr] <<= OUString::createFromAscii(pPassword);
         }
         else
         {
             OUString sPassword = OUString::createFromAscii(pPassword);
             uno::Sequence<beans::NamedValue> aEncryptionData{
-                { "CryptoType", uno::Any(OUString("Standard")) },
-                { "OOXPassword", uno::Any(sPassword) }
+                { u"CryptoType"_ustr, uno::Any(u"Standard"_ustr) },
+                { u"OOXPassword"_ustr, uno::Any(sPassword) }
             };
             aMediaDescriptor[utl::MediaDescriptor::PROP_ENCRYPTIONDATA] <<= aEncryptionData;
 

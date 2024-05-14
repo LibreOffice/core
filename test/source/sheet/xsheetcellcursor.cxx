@@ -50,7 +50,7 @@ void XSheetCellCursor::testCollapseToCurrentArray()
                                  xColRowRange->getColumns()->getCount());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to collapseToCurrentArray (rows)", nHeight,
                                  xColRowRange->getRows()->getCount());
-    xArrayFormulaRange->setArrayFormula("");
+    xArrayFormulaRange->setArrayFormula(u""_ustr);
 }
 
 void XSheetCellCursor::testCollapseToCurrentRegion()

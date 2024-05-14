@@ -25,7 +25,7 @@ void XAreaLinks::testInsertAtPosition()
     uno::Reference< sheet::XAreaLinks > xAreaLinks(init(), UNO_QUERY_THROW);
 
     table::CellAddress aCellAddress(1, 2, 3);
-    xAreaLinks->insertAtPosition(aCellAddress, "", "a2:b5", "", "");
+    xAreaLinks->insertAtPosition(aCellAddress, u""_ustr, u"a2:b5"_ustr, u""_ustr, u""_ustr);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to insert new CellAddress",
                                  sal_Int32(1), xAreaLinks->getCount());
@@ -36,7 +36,7 @@ void XAreaLinks::testRemoveByIndex()
     uno::Reference< sheet::XAreaLinks > xAreaLinks(init(), UNO_QUERY_THROW);
 
     table::CellAddress aCellAddress(1, 2, 3);
-    xAreaLinks->insertAtPosition(aCellAddress, "", "a2:b5", "", "");
+    xAreaLinks->insertAtPosition(aCellAddress, u""_ustr, u"a2:b5"_ustr, u""_ustr, u""_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to insert CellAddress for removal",
                                  sal_Int32(1), xAreaLinks->getCount());
 

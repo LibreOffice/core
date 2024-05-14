@@ -25,7 +25,7 @@ void XCell::testGetError()
 {
     uno::Reference<table::XCell> xCell(init(), UNO_QUERY_THROW);
     const sal_Int32 nCorrectFormula = xCell->getError();
-    xCell->setFormula("=sqrt(-2)");
+    xCell->setFormula(u"=sqrt(-2)"_ustr);
     const sal_Int32 nIncorrectFormula = xCell->getError();
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Successfully able to get Error", sal_Int32(0), nCorrectFormula);
@@ -54,7 +54,7 @@ void XCell::testGetType()
 void XCell::testSetGetFormula()
 {
     uno::Reference<table::XCell> xCell(init(), UNO_QUERY_THROW);
-    OUString aFormula = "=2+2";
+    OUString aFormula = u"=2+2"_ustr;
 
     xCell->setFormula(aFormula);
 

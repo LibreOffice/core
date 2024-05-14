@@ -34,7 +34,7 @@ void XFormulaQuery::testQueryDependents()
     xSheet->getCellByPosition(3, 0)->setValue(1);
 
     uno::Reference<table::XCell> xCell = getXCell();
-    xCell->setFormula("=SUM(A1:D1)");
+    xCell->setFormula(u"=SUM(A1:D1)"_ustr);
 
     uno::Reference<sheet::XFormulaQuery> xFormulaQuery(init(), UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xSCR = xFormulaQuery->queryDependents(false);
@@ -50,10 +50,10 @@ void XFormulaQuery::testQueryPrecedents()
     xSheet->getCellByPosition(1, 0)->setValue(1);
     xSheet->getCellByPosition(2, 0)->setValue(1);
     xSheet->getCellByPosition(3, 0)->setValue(1);
-    xSheet->getCellByPosition(1, 2)->setFormula("=A16 * 2");
+    xSheet->getCellByPosition(1, 2)->setFormula(u"=A16 * 2"_ustr);
 
     uno::Reference<table::XCell> xCell = getXCell();
-    xCell->setFormula("=SUM(A1:D1)");
+    xCell->setFormula(u"=SUM(A1:D1)"_ustr);
 
     uno::Reference<sheet::XFormulaQuery> xFormulaQuery(init(), UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xSCR = xFormulaQuery->queryPrecedents(false);

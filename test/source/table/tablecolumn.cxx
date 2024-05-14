@@ -28,17 +28,17 @@ void TableColumn::testTableColumnProperties()
 {
     uno::Reference<beans::XPropertySet> xPS(init(), uno::UNO_QUERY_THROW);
 
-    OUString aPropName = "Width";
+    OUString aPropName = u"Width"_ustr;
     testLongProperty(xPS, aPropName);
 
     // currently changing the value to false has no effect
     aPropName = "OptimalWidth";
     uno::Reference<table::XCellRange> xCR(m_xSheet, uno::UNO_QUERY_THROW);
-    xCR->getCellByPosition(0, 0)->setFormula("That's a pretty long text.");
-    const sal_Int64 nWidthBefore = ::comphelper::getINT64(xPS->getPropertyValue("Width"));
+    xCR->getCellByPosition(0, 0)->setFormula(u"That's a pretty long text."_ustr);
+    const sal_Int64 nWidthBefore = ::comphelper::getINT64(xPS->getPropertyValue(u"Width"_ustr));
     xPS->setPropertyValue(aPropName, uno::Any(true));
     CPPUNIT_ASSERT(::comphelper::getBOOL(xPS->getPropertyValue(aPropName)));
-    const sal_Int64 nWidthAfter = ::comphelper::getINT64(xPS->getPropertyValue("Width"));
+    const sal_Int64 nWidthAfter = ::comphelper::getINT64(xPS->getPropertyValue(u"Width"_ustr));
     CPPUNIT_ASSERT(nWidthBefore != nWidthAfter);
 
     aPropName = "IsVisible";

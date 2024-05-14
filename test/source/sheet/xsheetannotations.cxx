@@ -35,7 +35,7 @@ void XSheetAnnotations::testCount()
 
     // insert a note on sheet 2
     table::CellAddress aTargetCellAddress (1,0,0);
-    xSheet2Annotations->insertNew(aTargetCellAddress, "an inserted annotation on sheet 2");
+    xSheet2Annotations->insertNew(aTargetCellAddress, u"an inserted annotation on sheet 2"_ustr);
 
     // count again on sheet 1
     sal_Int32 nAfter = xAnnotationsIndex->getCount();
@@ -56,7 +56,7 @@ void XSheetAnnotations::testInsertNew()
 
     // insert the annotation
     table::CellAddress aTargetCellAddress (0,3,4);
-    aSheetAnnotations->insertNew(aTargetCellAddress, "an inserted annotation");
+    aSheetAnnotations->insertNew(aTargetCellAddress, u"an inserted annotation"_ustr);
 
     // count after inserting
     //uno::Reference< container::XIndexAccess > xAnnotationsIndexAfter (aSheetAnnotations, UNO_QUERY_THROW);
@@ -84,7 +84,7 @@ void XSheetAnnotations::testInsertNew()
     OUString aString = aTextSheetAnnotation->getString();
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        "Insert Annotation - Wrong string", OUString("an inserted annotation"),
+        "Insert Annotation - Wrong string", u"an inserted annotation"_ustr,
         aString);
 
 }
@@ -95,11 +95,11 @@ void XSheetAnnotations::testRemoveByIndex()
 
     // insert some annotations
     table::CellAddress aTargetCellAddress (0,4,5);
-    aSheetAnnotations->insertNew(aTargetCellAddress, "an inserted annotation 1");
+    aSheetAnnotations->insertNew(aTargetCellAddress, u"an inserted annotation 1"_ustr);
     table::CellAddress aToBeRemovedCellAddress (0,5,6);
-    aSheetAnnotations->insertNew(aToBeRemovedCellAddress, "an inserted annotation 2");
+    aSheetAnnotations->insertNew(aToBeRemovedCellAddress, u"an inserted annotation 2"_ustr);
     table::CellAddress aOtherCellAddress (0,7,8);
-    aSheetAnnotations->insertNew(aOtherCellAddress, "an inserted annotation 3");
+    aSheetAnnotations->insertNew(aOtherCellAddress, u"an inserted annotation 3"_ustr);
 
     // count before removing
     uno::Reference< container::XIndexAccess > xAnnotationsIndex (aSheetAnnotations, UNO_QUERY_THROW);
@@ -132,7 +132,7 @@ void XSheetAnnotations::testRemoveByIndex()
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Remove Annotation - Wrong string",
-        OUString("an inserted annotation 3"), aLastString);
+        u"an inserted annotation 3"_ustr, aLastString);
 
     // the previous should be xTargetCellAddress
     uno::Reference< sheet::XSheetAnnotation > aPreviousSheetAnnotation (xAnnotationsIndex->getByIndex(nAfter-2), UNO_QUERY_THROW);
@@ -154,7 +154,7 @@ void XSheetAnnotations::testRemoveByIndex()
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Remove Annotation - Wrong string",
-        OUString("an inserted annotation 1"), aPreviousString);
+        u"an inserted annotation 1"_ustr, aPreviousString);
 }
 
 void XSheetAnnotations::testIndex()
@@ -165,20 +165,20 @@ void XSheetAnnotations::testIndex()
     // insert annotations in first sheet
     uno::Reference< sheet::XSheetAnnotations > aSheet0Annotations (init(), UNO_QUERY_THROW);
     table::CellAddress aTargetCellAddress0 (0,0,1);
-    aSheet0Annotations->insertNew(aTargetCellAddress0, "an inserted annotation 1 on sheet 1");
+    aSheet0Annotations->insertNew(aTargetCellAddress0, u"an inserted annotation 1 on sheet 1"_ustr);
     table::CellAddress aSecondTargetCellAddress0 (0,0,2);
-    aSheet0Annotations->insertNew(aSecondTargetCellAddress0, "an inserted annotation 2 on sheet 1");
+    aSheet0Annotations->insertNew(aSecondTargetCellAddress0, u"an inserted annotation 2 on sheet 1"_ustr);
     table::CellAddress aThirdCellAddress0 (0,0,3);
-    aSheet0Annotations->insertNew(aThirdCellAddress0, "an inserted annotation 3 on sheet 1");
+    aSheet0Annotations->insertNew(aThirdCellAddress0, u"an inserted annotation 3 on sheet 1"_ustr);
 
     // insert annotations in third sheet
     uno::Reference< sheet::XSheetAnnotations > aSheet2Annotations (getAnnotations(2), UNO_SET_THROW);
     table::CellAddress aTargetCellAddress2 (2,4,5);
-    aSheet2Annotations->insertNew(aTargetCellAddress2, "an inserted annotation 1 on sheet 3");
+    aSheet2Annotations->insertNew(aTargetCellAddress2, u"an inserted annotation 1 on sheet 3"_ustr);
     table::CellAddress aSecondTargetCellAddress2 (2,5,6);
-    aSheet2Annotations->insertNew(aSecondTargetCellAddress2, "an inserted annotation 2 on sheet 3");
+    aSheet2Annotations->insertNew(aSecondTargetCellAddress2, u"an inserted annotation 2 on sheet 3"_ustr);
     table::CellAddress aThirdCellAddress2 (2,7,8);
-    aSheet2Annotations->insertNew(aThirdCellAddress2, "an inserted annotation 3 on sheet 3");
+    aSheet2Annotations->insertNew(aThirdCellAddress2, u"an inserted annotation 3 on sheet 3"_ustr);
 
     // get second annotation for second sheet
     uno::Reference< sheet::XSheetAnnotations > aSheetAnnotations (getAnnotations(2), UNO_SET_THROW);
@@ -204,7 +204,7 @@ void XSheetAnnotations::testIndex()
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "GetByIndex Annotation - Wrong string",
-        OUString("an inserted annotation 2 on sheet 3"), aString);
+        u"an inserted annotation 2 on sheet 3"_ustr, aString);
 }
 
 }

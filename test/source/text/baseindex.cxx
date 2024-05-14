@@ -52,25 +52,25 @@ BaseIndex::~BaseIndex() {}
 void BaseIndex::testBaseIndexProperties()
 {
     css::uno::Reference<css::beans::XPropertySet> xBaseIndex(init(), css::uno::UNO_QUERY_THROW);
-    testStringProperty(xBaseIndex, "Title", "Value");
-    testBooleanProperty(xBaseIndex, "IsProtected");
+    testStringProperty(xBaseIndex, u"Title"_ustr, u"Value"_ustr);
+    testBooleanProperty(xBaseIndex, u"IsProtected"_ustr);
 
-    testStringProperty(xBaseIndex, "ParaStyleHeading", "Value");
-    testStringProperty(xBaseIndex, "ParaStyleLevel1", "Value");
-    testStringOptionalProperty(xBaseIndex, "ParaStyleLevel2");
-    testStringOptionalProperty(xBaseIndex, "ParaStyleLevel3");
-    testStringOptionalProperty(xBaseIndex, "ParaStyleLevel4");
-    testStringOptionalProperty(xBaseIndex, "ParaStyleLevel5");
-    testStringOptionalProperty(xBaseIndex, "ParaStyleLevel6");
-    testStringOptionalProperty(xBaseIndex, "ParaStyleLevel7");
-    testStringOptionalProperty(xBaseIndex, "ParaStyleLevel8");
-    testStringOptionalProperty(xBaseIndex, "ParaStyleLevel9");
-    testStringOptionalProperty(xBaseIndex, "ParaStyleLevel10");
-    testStringOptionalProperty(xBaseIndex, "ParaStyleSeparator");
+    testStringProperty(xBaseIndex, u"ParaStyleHeading"_ustr, u"Value"_ustr);
+    testStringProperty(xBaseIndex, u"ParaStyleLevel1"_ustr, u"Value"_ustr);
+    testStringOptionalProperty(xBaseIndex, u"ParaStyleLevel2"_ustr);
+    testStringOptionalProperty(xBaseIndex, u"ParaStyleLevel3"_ustr);
+    testStringOptionalProperty(xBaseIndex, u"ParaStyleLevel4"_ustr);
+    testStringOptionalProperty(xBaseIndex, u"ParaStyleLevel5"_ustr);
+    testStringOptionalProperty(xBaseIndex, u"ParaStyleLevel6"_ustr);
+    testStringOptionalProperty(xBaseIndex, u"ParaStyleLevel7"_ustr);
+    testStringOptionalProperty(xBaseIndex, u"ParaStyleLevel8"_ustr);
+    testStringOptionalProperty(xBaseIndex, u"ParaStyleLevel9"_ustr);
+    testStringOptionalProperty(xBaseIndex, u"ParaStyleLevel10"_ustr);
+    testStringOptionalProperty(xBaseIndex, u"ParaStyleSeparator"_ustr);
 
     //      [property] XTextColumns TextColumns;
     {
-        OUString name = "TextColumns";
+        OUString name = u"TextColumns"_ustr;
 
         css::uno::Reference<css::text::XTextColumns> xGetTextColumns;
         CPPUNIT_ASSERT(xBaseIndex->getPropertyValue(name) >>= xGetTextColumns);
@@ -87,7 +87,7 @@ void BaseIndex::testBaseIndexProperties()
     //      [property] com::sun::star::graphic::XGraphic BackGraphic;
     //      [property] string BackGraphicURL;
     {
-        OUString name = "BackGraphicURL";
+        OUString name = u"BackGraphicURL"_ustr;
         bool bOK = false;
         try
         {
@@ -105,40 +105,40 @@ void BaseIndex::testBaseIndexProperties()
         writerFileWithBitmap(aTempFile.GetURL());
 
         css::uno::Reference<css::graphic::XGraphic> xGraphic;
-        CPPUNIT_ASSERT(xBaseIndex->getPropertyValue("BackGraphic") >>= xGraphic);
+        CPPUNIT_ASSERT(xBaseIndex->getPropertyValue(u"BackGraphic"_ustr) >>= xGraphic);
         CPPUNIT_ASSERT(!xGraphic.is());
 
         xBaseIndex->setPropertyValue(name, css::uno::Any(aTempFile.GetURL()));
 
-        CPPUNIT_ASSERT(xBaseIndex->getPropertyValue("BackGraphic") >>= xGraphic);
+        CPPUNIT_ASSERT(xBaseIndex->getPropertyValue(u"BackGraphic"_ustr) >>= xGraphic);
         CPPUNIT_ASSERT(xGraphic.is());
     }
 
-    testStringProperty(xBaseIndex, "BackGraphicFilter", "Value");
+    testStringProperty(xBaseIndex, u"BackGraphicFilter"_ustr, u"Value"_ustr);
 
     //      [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
 
-    testColorProperty(xBaseIndex, "BackColor");
-    testBooleanProperty(xBaseIndex, "BackTransparent");
+    testColorProperty(xBaseIndex, u"BackColor"_ustr);
+    testBooleanProperty(xBaseIndex, u"BackTransparent"_ustr);
 
     //      [optional, property] com::sun::star::container::XIndexReplace LevelFormat;
 
-    testBooleanOptionalProperty(xBaseIndex, "CreateFromChapter");
+    testBooleanOptionalProperty(xBaseIndex, u"CreateFromChapter"_ustr);
 
     //      [property] com::sun::star::text::XTextSection ContentSection;
     {
-        OUString name = "ContentSection";
+        OUString name = u"ContentSection"_ustr;
 
         css::uno::Reference<css::text::XTextSection> xGetTextSection;
         CPPUNIT_ASSERT_MESSAGE(name.toUtf8().getStr(),
                                xBaseIndex->getPropertyValue(name) >>= xGetTextSection);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(name.toUtf8().getStr(), OUString(""),
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(name.toUtf8().getStr(), u""_ustr,
                                      xGetTextSection->getAnchor()->getString());
     }
 
     //      [property] com::sun::star::text::XTextSection HeaderSection;
     {
-        OUString name = "HeaderSection";
+        OUString name = u"HeaderSection"_ustr;
 
         css::uno::Reference<css::text::XTextSection> xGetTextSection;
         if (xBaseIndex->getPropertyValue(name).hasValue())

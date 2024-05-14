@@ -23,14 +23,14 @@ namespace apitest {
 
 void XNamedRange::testGetContent()
 {
-    uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange("initial1");
+    uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(u"initial1"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong expected content for initial1 on GetContent", OUString("$Sheet1.$B$1"), xNamedRange->getContent());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong expected content for initial1 on GetContent", u"$Sheet1.$B$1"_ustr, xNamedRange->getContent());
 }
 
 void XNamedRange::testSetContent()
 {
-    uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange("initial1");
+    uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(u"initial1"_ustr);
 
     OUString aExpectedContent;
 
@@ -53,13 +53,13 @@ void XNamedRange::testSetContent()
 
 void XNamedRange::testGetType()
 {
-    uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange("initial1");
+    uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(u"initial1"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong expected Type", sal_Int32(0), xNamedRange->getType());
 }
 
 void XNamedRange::testSetType()
 {
-    uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange("initial1");
+    uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(u"initial1"_ustr);
 
     sal_Int32 nType = ::sheet::NamedRangeFlag::ROW_HEADER;
     xNamedRange->setType(nType);
@@ -84,7 +84,7 @@ void XNamedRange::testSetType()
 
 void XNamedRange::testGetReferencePosition()
 {
-    uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange("initial2");
+    uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(u"initial2"_ustr);
 
     table::CellAddress aCellAddress = xNamedRange->getReferencePosition();
     // the expected address is on B1, as it was the active cell when initial2 was created
@@ -95,7 +95,7 @@ void XNamedRange::testGetReferencePosition()
 
 void XNamedRange::testSetReferencePosition()
 {
-    uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange("initial1");
+    uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(u"initial1"_ustr);
 
     table::CellAddress aBaseAddress(1,2,3);
 

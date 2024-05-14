@@ -27,16 +27,17 @@ void XScenarios::testAddNewByName()
 
     uno::Sequence<table::CellRangeAddress> aCellRangeAddresses{ table::CellRangeAddress(0, 0, 0, 0,
                                                                                         0) };
-    xScenarios->addNewByName("XScenarios2", aCellRangeAddresses, "new");
-    CPPUNIT_ASSERT_MESSAGE("Unable to add new XScenario", xScenarios->hasByName("XScenarios2"));
+    xScenarios->addNewByName(u"XScenarios2"_ustr, aCellRangeAddresses, u"new"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("Unable to add new XScenario",
+                           xScenarios->hasByName(u"XScenarios2"_ustr));
 }
 
 void XScenarios::testRemoveByName()
 {
     uno::Reference<sheet::XScenarios> xScenarios(init(), UNO_QUERY_THROW);
 
-    xScenarios->removeByName("XScenarios");
-    CPPUNIT_ASSERT_MESSAGE("Unable to remove XScenario", !xScenarios->hasByName("XScenario"));
+    xScenarios->removeByName(u"XScenarios"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("Unable to remove XScenario", !xScenarios->hasByName(u"XScenario"_ustr));
 }
 }
 

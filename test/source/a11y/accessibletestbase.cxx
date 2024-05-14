@@ -62,7 +62,8 @@ void test::AccessibleTestBase::load(const rtl::OUString& sURL)
 {
     // make sure there is no open document in case it is called more than once
     close();
-    mxDocument = mxDesktop->loadComponentFromURL(sURL, "_blank", frame::FrameSearchFlag::AUTO, {});
+    mxDocument
+        = mxDesktop->loadComponentFromURL(sURL, u"_blank"_ustr, frame::FrameSearchFlag::AUTO, {});
 
     uno::Reference<frame::XModel> xModel(mxDocument, uno::UNO_QUERY_THROW);
     mxWindow.set(xModel->getCurrentController()->getFrame()->getContainerWindow());
@@ -461,7 +462,7 @@ test::AccessibleTestBase::awaitDialog(const std::u16string_view name,
 
             // This is not very nice, but it should help fail earlier if we never catch the dialog
             // yet we're in a sub-loop and waitEndDialog() didn't have a chance to run yet.
-            throw new css::uno::RuntimeException("Timeout waiting for dialog");
+            throw new css::uno::RuntimeException(u"Timeout waiting for dialog"_ustr);
         }
 
         class MyTopWindowListener : public ::cppu::WeakImplHelper<awt::XTopWindowListener>

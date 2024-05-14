@@ -21,7 +21,7 @@ class OOO_DLLPUBLIC_TEST XSearchable
 {
 public:
     XSearchable(OUString aString, sal_Int32 nCount) : maSearchString(std::move(aString)), mnCount(nCount) {}
-    XSearchable() : maSearchString("SearchString"), mnCount(1) {}
+    XSearchable() : maSearchString(u"SearchString"_ustr), mnCount(1) {}
     virtual ~XSearchable();
 
     void testFindFirst();

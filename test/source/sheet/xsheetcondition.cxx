@@ -28,7 +28,7 @@ void XSheetCondition::testGetSetFormula1()
     CPPUNIT_ASSERT_NO_THROW_MESSAGE("Unable to get Formula1",
                                     aFormula1 = xSheetCondition->getFormula1());
 
-    xSheetCondition->setFormula1("$Sheet1.$C$");
+    xSheetCondition->setFormula1(u"$Sheet1.$C$"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Unable to set Formula1", aFormula1 != xSheetCondition->getFormula1());
 }
 
@@ -39,7 +39,7 @@ void XSheetCondition::testGetSetFormula2()
     CPPUNIT_ASSERT_NO_THROW_MESSAGE("Unable to get Formula2",
                                     aFormula2 = xSheetCondition->getFormula2());
 
-    xSheetCondition->setFormula2("$Sheet1.$A$");
+    xSheetCondition->setFormula2(u"$Sheet1.$A$"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Unable to set Formula2", aFormula2 != xSheetCondition->getFormula2());
 }
 

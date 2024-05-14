@@ -27,11 +27,12 @@ void XTableCharts::testAddNewRemoveByName()
     uno::Reference<table::XTableCharts> xTC(init(), uno::UNO_QUERY_THROW);
 
     uno::Sequence<table::CellRangeAddress> aRanges{ table::CellRangeAddress(0, 1, 1, 14, 4) };
-    xTC->addNewByName("XTableCharts", awt::Rectangle(500, 3000, 25000, 11000), aRanges, true, true);
-    CPPUNIT_ASSERT(xTC->hasByName("XTableCharts"));
+    xTC->addNewByName(u"XTableCharts"_ustr, awt::Rectangle(500, 3000, 25000, 11000), aRanges, true,
+                      true);
+    CPPUNIT_ASSERT(xTC->hasByName(u"XTableCharts"_ustr));
 
-    xTC->removeByName("XTableCharts");
-    CPPUNIT_ASSERT(!xTC->hasByName("XTableCharts"));
+    xTC->removeByName(u"XTableCharts"_ustr);
+    CPPUNIT_ASSERT(!xTC->hasByName(u"XTableCharts"_ustr));
 }
 
 } // namespace apitest

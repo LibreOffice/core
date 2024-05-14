@@ -38,14 +38,14 @@ void GlobalSheetSettings::testGlobalSheetSettingsProperties()
         css::uno::Any aOrigValue(origValue), aNewValue(newValue);
 
         css::uno::Sequence<css::uno::Any> args{ css::uno::Any(
-            css::beans::NamedValue("nodepath", css::uno::Any(regNodeName))) };
+            css::beans::NamedValue(u"nodepath"_ustr, css::uno::Any(regNodeName))) };
         css::uno::Reference<beans::XPropertySet> xRegNodeRO(
             configProvider->createInstanceWithArguments(
-                "com.sun.star.configuration.ConfigurationAccess", args),
+                u"com.sun.star.configuration.ConfigurationAccess"_ustr, args),
             css::uno::UNO_QUERY_THROW);
         css::uno::Reference<beans::XPropertySet> xRegNodeRW(
             configProvider->createInstanceWithArguments(
-                "com.sun.star.configuration.ConfigurationUpdateAccess", args),
+                u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr, args),
             css::uno::UNO_QUERY_THROW);
         css::uno::Reference<css::util::XChangesBatch> xBatch(xRegNodeRW, css::uno::UNO_QUERY_THROW);
 
@@ -71,29 +71,31 @@ void GlobalSheetSettings::testGlobalSheetSettingsProperties()
                                      xGlobalSheetSettings->getPropertyValue(propName));
     };
 
-    OUString node = "/org.openoffice.Office.Calc/Input";
-    DoCheck("MoveSelection", true, false, node, "MoveSelection");
-    DoCheck("MoveDirection", sal_Int16(0), sal_Int16(1), node, "MoveSelectionDirection");
-    DoCheck("EnterEdit", false, true, node, "SwitchToEditMode");
-    DoCheck("ExtendFormat", false, true, node, "ExpandFormatting");
-    DoCheck("RangeFinder", true, false, node, "ShowReference");
-    DoCheck("ExpandReferences", false, true, node, "ExpandReference");
-    DoCheck("MarkHeader", true, false, node, "HighlightSelection");
-    DoCheck("UseTabCol", false, true, node, "UseTabCol");
-    DoCheck("ReplaceCellsWarning", true, false, node, "ReplaceCellsWarning");
+    OUString node = u"/org.openoffice.Office.Calc/Input"_ustr;
+    DoCheck(u"MoveSelection"_ustr, true, false, node, u"MoveSelection"_ustr);
+    DoCheck(u"MoveDirection"_ustr, sal_Int16(0), sal_Int16(1), node,
+            u"MoveSelectionDirection"_ustr);
+    DoCheck(u"EnterEdit"_ustr, false, true, node, u"SwitchToEditMode"_ustr);
+    DoCheck(u"ExtendFormat"_ustr, false, true, node, u"ExpandFormatting"_ustr);
+    DoCheck(u"RangeFinder"_ustr, true, false, node, u"ShowReference"_ustr);
+    DoCheck(u"ExpandReferences"_ustr, false, true, node, u"ExpandReference"_ustr);
+    DoCheck(u"MarkHeader"_ustr, true, false, node, u"HighlightSelection"_ustr);
+    DoCheck(u"UseTabCol"_ustr, false, true, node, u"UseTabCol"_ustr);
+    DoCheck(u"ReplaceCellsWarning"_ustr, true, false, node, u"ReplaceCellsWarning"_ustr);
 
     node = "/org.openoffice.Office.Calc/Layout/Other/MeasureUnit";
-    DoCheck("Metric", sal_Int16(8), sal_Int16(1), node, "NonMetric"); // Test uses en-US locale
+    DoCheck(u"Metric"_ustr, sal_Int16(8), sal_Int16(1), node,
+            u"NonMetric"_ustr); // Test uses en-US locale
 
     node = "/org.openoffice.Office.Calc/Input";
-    DoCheck("DoAutoComplete", true, false, node, "AutoInput");
+    DoCheck(u"DoAutoComplete"_ustr, true, false, node, u"AutoInput"_ustr);
 
     node = "/org.openoffice.Office.Calc/Content/Update";
-    DoCheck("LinkUpdateMode", sal_Int16(2), sal_Int16(1), node, "Link");
+    DoCheck(u"LinkUpdateMode"_ustr, sal_Int16(2), sal_Int16(1), node, u"Link"_ustr);
 
     node = "/org.openoffice.Office.Calc/Print/";
-    DoCheck("PrintAllSheets", false, true, node + "Other", "AllSheets");
-    DoCheck("PrintEmptyPages", false, true, node + "Page", "EmptyPages");
+    DoCheck(u"PrintAllSheets"_ustr, false, true, node + "Other", u"AllSheets"_ustr);
+    DoCheck(u"PrintEmptyPages"_ustr, false, true, node + "Page", u"EmptyPages"_ustr);
 
     OUString propName;
     uno::Any aNewValue;
@@ -122,12 +124,12 @@ void GlobalSheetSettings::testGlobalSheetSettingsProperties()
 
     propName = "UserLists";
     uno::Sequence<OUString> aSeq{
-        "Sun,Mon,Tue,Wed,Thu,Fri,Sat",
-        "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday",
-        "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec",
-        "January,February,March,April,May,June,July,August,September,October,November,December",
-        "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Shabbat",
-        "Nissan,Iyar,Sivan,Tammuz,Av,Elul,Tishri,Heshvan,Kislev,Tevet,Shevat,Adar,Adar B"
+        u"Sun,Mon,Tue,Wed,Thu,Fri,Sat"_ustr,
+        u"Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday"_ustr,
+        u"Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec"_ustr,
+        u"January,February,March,April,May,June,July,August,September,October,November,December"_ustr,
+        u"Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Shabbat"_ustr,
+        u"Nissan,Iyar,Sivan,Tammuz,Av,Elul,Tishri,Heshvan,Kislev,Tevet,Shevat,Adar,Adar B"_ustr
     };
 
     uno::Sequence<OUString> aUserLists;

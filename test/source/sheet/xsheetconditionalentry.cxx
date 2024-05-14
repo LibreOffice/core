@@ -24,9 +24,9 @@ void XSheetConditionalEntry::testGetSetStyleName()
 {
     uno::Reference<sheet::XSheetConditionalEntry> xSheetConditionalEntry(init(), UNO_QUERY_THROW);
     OUString aStyleName = xSheetConditionalEntry->getStyleName();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get StyleName", OUString("Result2"), aStyleName);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get StyleName", u"Result2"_ustr, aStyleName);
 
-    xSheetConditionalEntry->setStyleName("Heading");
+    xSheetConditionalEntry->setStyleName(u"Heading"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Unable to set StyleName",
                            aStyleName != xSheetConditionalEntry->getStyleName());
 }

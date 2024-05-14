@@ -26,7 +26,7 @@ class OOO_DLLPUBLIC_TEST XNameContainer
 public:
     // removes default entry
     XNameContainer()
-        : m_aName("XNameContainer")
+        : m_aName(u"XNameContainer"_ustr)
     {
     }
     // removes given entry

@@ -52,7 +52,7 @@ void XDocumentAuditing::dispatch(const uno::Reference<frame::XFrame>& xFrame,
     uno::Reference<frame::XDispatchProvider> xDispatchProvider(xFrame, UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xDispatchProvider.is());
 
-    xDispatchHelper->executeDispatch(xDispatchProvider, ".uno:AutoRefreshArrows", "", 0,
+    xDispatchHelper->executeDispatch(xDispatchProvider, u".uno:AutoRefreshArrows"_ustr, u""_ustr, 0,
                                      rArguments);
 }
 
@@ -95,7 +95,7 @@ void XDocumentAuditing::testRefreshArrows()
         nDrawPageElementCount = xDrawPage->getCount();
 
     uno::Sequence<beans::PropertyValue> aPropertyValue{ comphelper::makePropertyValue(
-        "AutoRefreshArrows", false) };
+        u"AutoRefreshArrows"_ustr, false) };
     uno::Reference<frame::XModel> xModel(xDocumentAuditing, UNO_QUERY_THROW);
     dispatch(xModel->getCurrentController()->getFrame(), aPropertyValue);
 
@@ -104,7 +104,7 @@ void XDocumentAuditing::testRefreshArrows()
     OUString sSheet1Name = xNA1->getName();
 
     xSheet2->getCellByPosition(6, 6)->setValue(16);
-    xSheet2->getCellByPosition(6, 7)->setFormula("= SQRT(G7)");
+    xSheet2->getCellByPosition(6, 7)->setFormula(u"= SQRT(G7)"_ustr);
 
     uno::Reference<sheet::XSheetAuditing> xSheetAuditing(xSheet2, UNO_QUERY_THROW);
     xSheetAuditing->showPrecedents(table::CellAddress(1, 6, 7));

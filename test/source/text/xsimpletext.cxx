@@ -39,7 +39,7 @@ void XSimpleText::testInsertString()
 {
     uno::Reference<text::XSimpleText> xSimpleText(init(), UNO_QUERY_THROW);
     uno::Reference<text::XTextRange> xCursor(xSimpleText->createTextCursor(), UNO_QUERY_THROW);
-    ::rtl::OUString sString = "TestString";
+    ::rtl::OUString sString = u"TestString"_ustr;
 
     xSimpleText->insertString(xCursor, sString, false);
     ::rtl::OUString gString = xSimpleText->getText()->getString();
@@ -60,7 +60,7 @@ void XSimpleText::testInsertControlCharacter()
         xSimpleText->insertControlCharacter(xCursor, text::ControlCharacter::PARAGRAPH_BREAK,
                                             false);
         xSimpleText->insertControlCharacter(xCursor, text::ControlCharacter::LINE_BREAK, false);
-        xSimpleText->insertString(xSimpleText->createTextCursor(), "newLine", false);
+        xSimpleText->insertString(xSimpleText->createTextCursor(), u"newLine"_ustr, false);
     }
     catch (const lang::IllegalArgumentException&)
     {

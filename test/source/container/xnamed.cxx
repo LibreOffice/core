@@ -31,7 +31,7 @@ void XNamed::testGetName()
 void XNamed::testSetName()
 {
     uno::Reference<container::XNamed> xNamed(init(), UNO_QUERY_THROW);
-    OUString aTestName("NewName");
+    OUString aTestName(u"NewName"_ustr);
 
     xNamed->setName(aTestName);
     CPPUNIT_ASSERT_EQUAL(aTestName, xNamed->getName());
@@ -58,7 +58,7 @@ void XNamed::testSetNameThrowsException()
 {
     uno::Reference<container::XNamed> xNamed(init(), uno::UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_THROW(xNamed->setName("NewName"), uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xNamed->setName(u"NewName"_ustr), uno::RuntimeException);
 }
 }
 

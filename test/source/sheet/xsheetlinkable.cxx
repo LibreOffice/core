@@ -24,21 +24,21 @@ void XSheetLinkable::testSheetLinkable()
 {
     uno::Reference< sheet::XSheetLinkable > xSheetLinkable(init(), UNO_QUERY_THROW);
 
-    xSheetLinkable->link(getFileURL(), "Sheet1", "", "", sheet::SheetLinkMode_VALUE);
+    xSheetLinkable->link(getFileURL(), u"Sheet1"_ustr, u""_ustr, u""_ustr, sheet::SheetLinkMode_VALUE);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get link mode",
                                  sheet::SheetLinkMode_VALUE, xSheetLinkable->getLinkMode());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get link URL",
                                  getFileURL(), xSheetLinkable->getLinkUrl());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get sheet name",
-                                 OUString("Sheet1"), xSheetLinkable->getLinkSheetName());
+                                 u"Sheet1"_ustr, xSheetLinkable->getLinkSheetName());
 
     xSheetLinkable->setLinkMode(sheet::SheetLinkMode_NONE);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set link mode",
                                  sheet::SheetLinkMode_NONE, xSheetLinkable->getLinkMode());
 
-    xSheetLinkable->setLinkSheetName("Sheet2");
+    xSheetLinkable->setLinkSheetName(u"Sheet2"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set sheet name",
-                                 OUString("Sheet2"), xSheetLinkable->getLinkSheetName());
+                                 u"Sheet2"_ustr, xSheetLinkable->getLinkSheetName());
 
     xSheetLinkable->setLinkUrl(getFileURL());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set link URL",

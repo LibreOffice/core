@@ -29,50 +29,50 @@ void XTableColumns::testInsertByIndex()
 
     // insert one column at position one
     xTC->insertByIndex(1, 1);
-    CPPUNIT_ASSERT_EQUAL(OUString("0a"), getCellText(xCR->getCellByPosition(0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("0b"), getCellText(xCR->getCellByPosition(0, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(1, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(1, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1a"), getCellText(xCR->getCellByPosition(2, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1b"), getCellText(xCR->getCellByPosition(2, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("2a"), getCellText(xCR->getCellByPosition(3, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("2b"), getCellText(xCR->getCellByPosition(3, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(4, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(4, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"0a"_ustr, getCellText(xCR->getCellByPosition(0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"0b"_ustr, getCellText(xCR->getCellByPosition(0, 1)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(1, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"1a"_ustr, getCellText(xCR->getCellByPosition(2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"1b"_ustr, getCellText(xCR->getCellByPosition(2, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"2a"_ustr, getCellText(xCR->getCellByPosition(3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"2b"_ustr, getCellText(xCR->getCellByPosition(3, 1)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(4, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(4, 1)));
 
     // insert one column at position zero
     xTC->insertByIndex(0, 1);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(0, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("0a"), getCellText(xCR->getCellByPosition(1, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("0b"), getCellText(xCR->getCellByPosition(1, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(2, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(2, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1a"), getCellText(xCR->getCellByPosition(3, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1b"), getCellText(xCR->getCellByPosition(3, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("2a"), getCellText(xCR->getCellByPosition(4, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("2b"), getCellText(xCR->getCellByPosition(4, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(5, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(5, 1)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(0, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"0a"_ustr, getCellText(xCR->getCellByPosition(1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"0b"_ustr, getCellText(xCR->getCellByPosition(1, 1)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(2, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"1a"_ustr, getCellText(xCR->getCellByPosition(3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"1b"_ustr, getCellText(xCR->getCellByPosition(3, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"2a"_ustr, getCellText(xCR->getCellByPosition(4, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"2b"_ustr, getCellText(xCR->getCellByPosition(4, 1)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(5, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(5, 1)));
 
     // insert two columns at position zero
     xTC->insertByIndex(0, 2);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(0, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(1, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(1, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(2, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(2, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("0a"), getCellText(xCR->getCellByPosition(3, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("0b"), getCellText(xCR->getCellByPosition(3, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(4, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(4, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1a"), getCellText(xCR->getCellByPosition(5, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1b"), getCellText(xCR->getCellByPosition(5, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("2a"), getCellText(xCR->getCellByPosition(6, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("2b"), getCellText(xCR->getCellByPosition(6, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(7, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(7, 1)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(0, 1)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(1, 1)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(2, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"0a"_ustr, getCellText(xCR->getCellByPosition(3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"0b"_ustr, getCellText(xCR->getCellByPosition(3, 1)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(4, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(4, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"1a"_ustr, getCellText(xCR->getCellByPosition(5, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"1b"_ustr, getCellText(xCR->getCellByPosition(5, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"2a"_ustr, getCellText(xCR->getCellByPosition(6, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"2b"_ustr, getCellText(xCR->getCellByPosition(6, 1)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(7, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(7, 1)));
 }
 
 void XTableColumns::testInsertByIndexWithNegativeIndex()
@@ -105,42 +105,42 @@ void XTableColumns::testRemoveByIndex()
 
     // remove two columns at position zero
     xTC->removeByIndex(0, 2);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(0, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("0a"), getCellText(xCR->getCellByPosition(1, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("0b"), getCellText(xCR->getCellByPosition(1, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(2, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(2, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1a"), getCellText(xCR->getCellByPosition(3, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1b"), getCellText(xCR->getCellByPosition(3, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("2a"), getCellText(xCR->getCellByPosition(4, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("2b"), getCellText(xCR->getCellByPosition(4, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(5, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(5, 1)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(0, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"0a"_ustr, getCellText(xCR->getCellByPosition(1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"0b"_ustr, getCellText(xCR->getCellByPosition(1, 1)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(2, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"1a"_ustr, getCellText(xCR->getCellByPosition(3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"1b"_ustr, getCellText(xCR->getCellByPosition(3, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"2a"_ustr, getCellText(xCR->getCellByPosition(4, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"2b"_ustr, getCellText(xCR->getCellByPosition(4, 1)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(5, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(5, 1)));
 
     // remove one column at position zero
     xTC->removeByIndex(0, 1);
-    CPPUNIT_ASSERT_EQUAL(OUString("0a"), getCellText(xCR->getCellByPosition(0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("0b"), getCellText(xCR->getCellByPosition(0, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(1, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(1, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1a"), getCellText(xCR->getCellByPosition(2, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1b"), getCellText(xCR->getCellByPosition(2, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("2a"), getCellText(xCR->getCellByPosition(3, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("2b"), getCellText(xCR->getCellByPosition(3, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(4, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(4, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"0a"_ustr, getCellText(xCR->getCellByPosition(0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"0b"_ustr, getCellText(xCR->getCellByPosition(0, 1)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(1, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"1a"_ustr, getCellText(xCR->getCellByPosition(2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"1b"_ustr, getCellText(xCR->getCellByPosition(2, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"2a"_ustr, getCellText(xCR->getCellByPosition(3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"2b"_ustr, getCellText(xCR->getCellByPosition(3, 1)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(4, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(4, 1)));
 
     // remove one column at position one
     xTC->removeByIndex(1, 1);
-    CPPUNIT_ASSERT_EQUAL(OUString("0a"), getCellText(xCR->getCellByPosition(0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("0b"), getCellText(xCR->getCellByPosition(0, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1a"), getCellText(xCR->getCellByPosition(1, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1b"), getCellText(xCR->getCellByPosition(1, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString("2a"), getCellText(xCR->getCellByPosition(2, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("2b"), getCellText(xCR->getCellByPosition(2, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(3, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getCellText(xCR->getCellByPosition(3, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"0a"_ustr, getCellText(xCR->getCellByPosition(0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"0b"_ustr, getCellText(xCR->getCellByPosition(0, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"1a"_ustr, getCellText(xCR->getCellByPosition(1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"1b"_ustr, getCellText(xCR->getCellByPosition(1, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"2a"_ustr, getCellText(xCR->getCellByPosition(2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"2b"_ustr, getCellText(xCR->getCellByPosition(2, 1)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getCellText(xCR->getCellByPosition(3, 1)));
 }
 
 void XTableColumns::testRemoveByIndexWithNegativeIndex()

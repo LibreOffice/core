@@ -137,7 +137,7 @@ OUString XmlTestTools::getXPathContent(const xmlDocUniquePtr& pXmlDoc, const OSt
             {
                 auto boolVal = pXmlObj->boolval;
                 xmlXPathFreeObject(pXmlObj);
-                return boolVal ? OUString("true") : OUString("false");
+                return boolVal ? u"true"_ustr : u"false"_ustr;
             }
         case XPATH_NUMBER:
             {

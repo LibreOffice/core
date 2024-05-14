@@ -22,9 +22,9 @@ void XTextRange::testGetEnd()
 {
     uno::Reference<text::XTextRange> xTextRange(init(), uno::UNO_QUERY_THROW);
 
-    xTextRange->setString("UnitTest");
+    xTextRange->setString(u"UnitTest"_ustr);
     uno::Reference<text::XTextRange> xTR_end(xTextRange->getEnd(), uno::UNO_SET_THROW);
-    xTR_end->setString("End");
+    xTR_end->setString(u"End"_ustr);
 
     CPPUNIT_ASSERT(xTextRange->getText()->getString().endsWith("End"));
 }
@@ -33,17 +33,17 @@ void XTextRange::testGetSetString()
 {
     uno::Reference<text::XTextRange> xTextRange(init(), uno::UNO_QUERY_THROW);
 
-    xTextRange->setString("UnitTest");
-    CPPUNIT_ASSERT_EQUAL(OUString("UnitTest"), xTextRange->getString());
+    xTextRange->setString(u"UnitTest"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"UnitTest"_ustr, xTextRange->getString());
 }
 
 void XTextRange::testGetStart()
 {
     uno::Reference<text::XTextRange> xTextRange(init(), uno::UNO_QUERY_THROW);
 
-    xTextRange->setString("UnitTest");
+    xTextRange->setString(u"UnitTest"_ustr);
     uno::Reference<text::XTextRange> xTR_start(xTextRange->getStart(), uno::UNO_SET_THROW);
-    xTR_start->setString("Start");
+    xTR_start->setString(u"Start"_ustr);
 
     CPPUNIT_ASSERT(xTextRange->getText()->getString().startsWith("Start"));
 }
@@ -52,9 +52,9 @@ void XTextRange::testGetText()
 {
     uno::Reference<text::XTextRange> xTextRange(init(), uno::UNO_QUERY_THROW);
 
-    xTextRange->setString("UnitTest");
+    xTextRange->setString(u"UnitTest"_ustr);
     uno::Reference<text::XText> xText(xTextRange->getText(), uno::UNO_SET_THROW);
-    CPPUNIT_ASSERT_EQUAL(OUString("UnitTest"), xTextRange->getString());
+    CPPUNIT_ASSERT_EQUAL(u"UnitTest"_ustr, xTextRange->getString());
 }
 } // namespace apitest
 

@@ -33,7 +33,7 @@ void XTextRangeCompare::testCompareRegionStarts()
     try
     {
         Reference<text::XTextCursor> xCursor1 = xText->createTextCursor();
-        xText->insertString(xCursor1, "XTextRangeCompare", false);
+        xText->insertString(xCursor1, u"XTextRangeCompare"_ustr, false);
 
         xCursor1->gotoStart(false);
         xCursor1->goRight(5, true);
@@ -56,7 +56,7 @@ void XTextRangeCompare::testCompareRegionEnds()
     try
     {
         Reference<text::XTextCursor> xCursor1 = xText->createTextCursor();
-        xText->insertString(xCursor1, "XTextRangeCompare", false);
+        xText->insertString(xCursor1, u"XTextRangeCompare"_ustr, false);
 
         xCursor1->gotoStart(false);
         xCursor1->goRight(5, true);

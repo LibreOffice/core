@@ -29,7 +29,7 @@ void XCellRangeFormula::testGetSetFormulaArray()
     aFormulaArrayNew.getArray()[0].getArray()[0] = "NewValue";
 
     xCRF->setFormulaArray(aFormulaArrayNew);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get new FormulaArray", OUString("NewValue"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get new FormulaArray", u"NewValue"_ustr,
                                  xCRF->getFormulaArray()[0][0]);
 
     xCRF->setFormulaArray(aFormulaArrayOriginal);

@@ -47,7 +47,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.uui.TestInteractionHandler";
+        return u"com.sun.star.comp.uui.TestInteractionHandler"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & rServiceName) override
@@ -57,11 +57,11 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return { "com.sun.star.task.InteractionHandler",
+        return { u"com.sun.star.task.InteractionHandler"_ustr,
         // added to indicate support for configuration.backend.MergeRecoveryRequest
-                 "com.sun.star.configuration.backend.InteractionHandler",
+                 u"com.sun.star.configuration.backend.InteractionHandler"_ustr,
         // for backwards compatibility
-                 "com.sun.star.uui.InteractionHandler" };
+                 u"com.sun.star.uui.InteractionHandler"_ustr };
     }
 
     virtual void SAL_CALL initialize(css::uno::Sequence<css::uno::Any> const & /*rArguments*/) override

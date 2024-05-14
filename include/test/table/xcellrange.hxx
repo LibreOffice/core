@@ -23,7 +23,7 @@ class OOO_DLLPUBLIC_TEST XCellRange
 {
 public:
     XCellRange()
-        : m_aRangeName("A1:A1")
+        : m_aRangeName(u"A1:A1"_ustr)
     {
     }
     XCellRange(OUString aRangeName)

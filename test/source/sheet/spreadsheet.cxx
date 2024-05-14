@@ -39,7 +39,7 @@ void Spreadsheet::testSpreadsheetProperties()
     testBooleanProperty(xSpreadsheet, propName);
 
     propName = "PageStyle";
-    testStringProperty(xSpreadsheet, propName, "Report");
+    testStringProperty(xSpreadsheet, propName, u"Report"_ustr);
 
     propName = "TableLayout";
     testShortProperty(xSpreadsheet, propName, text::WritingMode2::RL_TB);
@@ -71,12 +71,12 @@ void Spreadsheet::testSpreadsheetProperties()
 
     uno::Reference<lang::XMultiServiceFactory> xMSF(xDoc, UNO_QUERY_THROW);
     uno::Reference<container::XNameContainer> xRanges(
-        xMSF->createInstance("com.sun.star.sheet.SheetCellRanges"), UNO_QUERY_THROW);
+        xMSF->createInstance(u"com.sun.star.sheet.SheetCellRanges"_ustr), UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xSheetCellRanges(xRanges, UNO_QUERY_THROW);
 
     uno::Any xCellRange;
-    xCellRange <<= xSheet->getCellRangeByName("C1:D4");
-    xRanges->insertByName("Range1", xCellRange);
+    xCellRange <<= xSheet->getCellRangeByName(u"C1:D4"_ustr);
+    xRanges->insertByName(u"Range1"_ustr, xCellRange);
     xConditionalFormatsGet->createByRange(xSheetCellRanges);
 
     aNewValue <<= xConditionalFormatsGet;

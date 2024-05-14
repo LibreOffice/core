@@ -26,9 +26,9 @@ void XReplaceDescriptor::testGetSetReplaceString()
     const OUString aReplaceStringOld = xRD->getReplaceString();
     CPPUNIT_ASSERT(aReplaceStringOld.isEmpty());
 
-    xRD->setReplaceString("_XReplaceDescriptor");
+    xRD->setReplaceString(u"_XReplaceDescriptor"_ustr);
     const OUString aReplaceStringNew = xRD->getReplaceString();
-    CPPUNIT_ASSERT_EQUAL(OUString("_XReplaceDescriptor"), aReplaceStringNew);
+    CPPUNIT_ASSERT_EQUAL(u"_XReplaceDescriptor"_ustr, aReplaceStringNew);
     CPPUNIT_ASSERT(aReplaceStringOld != aReplaceStringNew);
 }
 

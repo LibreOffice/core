@@ -29,7 +29,7 @@ void XFootnote::testGetSetLabel()
 {
     Reference<text::XFootnote> xFootnote(init(), UNO_QUERY_THROW);
 
-    rtl::OUString labelName = "New XFootnote Label";
+    rtl::OUString labelName = u"New XFootnote Label"_ustr;
     xFootnote->setLabel(labelName);
     rtl::OUString newLabel = xFootnote->getLabel();
     CPPUNIT_ASSERT(!newLabel.isEmpty());

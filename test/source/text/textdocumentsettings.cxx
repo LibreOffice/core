@@ -24,17 +24,17 @@ void TextDocumentSettings::testDocumentSettingsProperties()
     css::uno::Reference<css::beans::XPropertySet> xDocumentSettings(init(),
                                                                     css::uno::UNO_QUERY_THROW);
 
-    testBooleanOptionalProperty(xDocumentSettings, "ChartAutoUpdate");
-    testBooleanOptionalProperty(xDocumentSettings, "AddParaTableSpacing");
-    testBooleanOptionalProperty(xDocumentSettings, "AddParaTableSpacingAtStart");
-    testBooleanOptionalProperty(xDocumentSettings, "AlignTabStopPosition");
-    testBooleanOptionalProperty(xDocumentSettings, "SaveGlobalDocumentLinks");
-    testBooleanOptionalProperty(xDocumentSettings, "IsLabelDocument");
-    testBooleanOptionalProperty(xDocumentSettings, "UseFormerLineSpacing");
-    testBooleanOptionalProperty(xDocumentSettings, "AddParaSpacingToTableCells");
-    testBooleanOptionalProperty(xDocumentSettings, "UseFormerObjectPositioning");
-    testBooleanOptionalProperty(xDocumentSettings, "ConsiderTextWrapOnObjPos");
-    testBooleanOptionalProperty(xDocumentSettings, "MathBaselineAlignment");
+    testBooleanOptionalProperty(xDocumentSettings, u"ChartAutoUpdate"_ustr);
+    testBooleanOptionalProperty(xDocumentSettings, u"AddParaTableSpacing"_ustr);
+    testBooleanOptionalProperty(xDocumentSettings, u"AddParaTableSpacingAtStart"_ustr);
+    testBooleanOptionalProperty(xDocumentSettings, u"AlignTabStopPosition"_ustr);
+    testBooleanOptionalProperty(xDocumentSettings, u"SaveGlobalDocumentLinks"_ustr);
+    testBooleanOptionalProperty(xDocumentSettings, u"IsLabelDocument"_ustr);
+    testBooleanOptionalProperty(xDocumentSettings, u"UseFormerLineSpacing"_ustr);
+    testBooleanOptionalProperty(xDocumentSettings, u"AddParaSpacingToTableCells"_ustr);
+    testBooleanOptionalProperty(xDocumentSettings, u"UseFormerObjectPositioning"_ustr);
+    testBooleanOptionalProperty(xDocumentSettings, u"ConsiderTextWrapOnObjPos"_ustr);
+    testBooleanOptionalProperty(xDocumentSettings, u"MathBaselineAlignment"_ustr);
 }
 
 } // end namespace apitest

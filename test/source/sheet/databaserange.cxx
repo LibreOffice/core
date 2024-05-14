@@ -24,7 +24,7 @@ namespace apitest
 {
 void DatabaseRange::testMoveCells()
 {
-    uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDatabaseRange(init(u"DataArea"_ustr), UNO_QUERY_THROW);
 
     static constexpr OUString propName(u"MoveCells"_ustr);
 
@@ -41,7 +41,7 @@ void DatabaseRange::testMoveCells()
 
 void DatabaseRange::testKeepFormats()
 {
-    uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDatabaseRange(init(u"DataArea"_ustr), UNO_QUERY_THROW);
 
     static constexpr OUString propName(u"KeepFormats"_ustr);
 
@@ -58,7 +58,7 @@ void DatabaseRange::testKeepFormats()
 
 void DatabaseRange::testStripData()
 {
-    uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDatabaseRange(init(u"DataArea"_ustr), UNO_QUERY_THROW);
 
     static constexpr OUString propName(u"StripData"_ustr);
 
@@ -75,7 +75,7 @@ void DatabaseRange::testStripData()
 
 void DatabaseRange::testAutoFilter()
 {
-    uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDatabaseRange(init(u"DataArea"_ustr), UNO_QUERY_THROW);
 
     static constexpr OUString propName(u"AutoFilter"_ustr);
 
@@ -92,7 +92,7 @@ void DatabaseRange::testAutoFilter()
 
 void DatabaseRange::testUseFilterCriteriaSource()
 {
-    uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDatabaseRange(init(u"DataArea"_ustr), UNO_QUERY_THROW);
 
     static constexpr OUString propName(u"UseFilterCriteriaSource"_ustr);
 
@@ -111,7 +111,7 @@ void DatabaseRange::testUseFilterCriteriaSource()
 
 void DatabaseRange::testFilterCriteriaSource()
 {
-    uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDatabaseRange(init(u"DataArea"_ustr), UNO_QUERY_THROW);
 
     static constexpr OUString propName(u"FilterCriteriaSource"_ustr);
 
@@ -130,7 +130,7 @@ void DatabaseRange::testFilterCriteriaSource()
 
 void DatabaseRange::testRefreshPeriod()
 {
-    uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDatabaseRange(init(u"DataArea"_ustr), UNO_QUERY_THROW);
 
     static constexpr OUString propName(u"RefreshPeriod"_ustr);
 
@@ -149,7 +149,7 @@ void DatabaseRange::testRefreshPeriod()
 
 void DatabaseRange::testFromSelection()
 {
-    uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDatabaseRange(init(u"DataArea"_ustr), UNO_QUERY_THROW);
 
     static constexpr OUString propName(u"FromSelection"_ustr);
 
@@ -166,7 +166,7 @@ void DatabaseRange::testFromSelection()
 
 void DatabaseRange::testTokenIndex()
 {
-    uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDatabaseRange(init(u"DataArea"_ustr), UNO_QUERY_THROW);
 
     static constexpr OUString propName(u"TokenIndex"_ustr);
 
@@ -183,7 +183,7 @@ void DatabaseRange::testTokenIndex()
 
 void DatabaseRange::testTotalsRow()
 {
-    uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDatabaseRange(init(u"DataArea"_ustr), UNO_QUERY_THROW);
 
     static constexpr OUString propName(u"TotalsRow"_ustr);
 
@@ -200,7 +200,7 @@ void DatabaseRange::testTotalsRow()
 
 void DatabaseRange::testContainsHeader()
 {
-    uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDatabaseRange(init(u"DataArea"_ustr), UNO_QUERY_THROW);
 
     static constexpr OUString propName(u"ContainsHeader"_ustr);
 

@@ -26,7 +26,7 @@ class OOO_DLLPUBLIC_TEST XNamedRanges
 public:
     // remove default entry
     XNamedRanges()
-        : maNameToRemove("initial1")
+        : maNameToRemove(u"initial1"_ustr)
     {
     }
 

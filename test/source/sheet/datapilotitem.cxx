@@ -49,7 +49,7 @@ void DataPilotItem::testProperties()
     CPPUNIT_ASSERT_MESSAGE("Value of ShowDetail wasn't changed", bShowDetail);
 
     sal_Int32 nPosition = 42;
-    CPPUNIT_ASSERT(xItem->getPropertyValue("Position") >>= nPosition);
+    CPPUNIT_ASSERT(xItem->getPropertyValue(u"Position"_ustr) >>= nPosition);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Default Position already changed", sal_Int32(0), nPosition);
 
     // FIXME: This throws somehow a com.sun.star.lang.IllegalArgumentException

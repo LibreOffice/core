@@ -40,14 +40,14 @@ void XSheetAnnotation::testGetAuthor()
     uno::Reference< sheet::XSheetAnnotation > aSheetAnnotation (init(), UNO_QUERY_THROW);
     OUString aAuthor = aSheetAnnotation->getAuthor();
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong author", OUString("LG"), aAuthor);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong author", u"LG"_ustr, aAuthor);
 }
 void XSheetAnnotation::testGetDate()
 {
     uno::Reference< sheet::XSheetAnnotation > aSheetAnnotation (init(), UNO_QUERY_THROW);
     OUString aDate = aSheetAnnotation->getDate();
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong date", OUString("01/17/2013"), aDate);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong date", u"01/17/2013"_ustr, aDate);
 }
 void XSheetAnnotation::testGetIsVisible()
 {

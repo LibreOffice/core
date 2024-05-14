@@ -91,7 +91,7 @@ void XSheetAuditing::testShowErrors()
                       + ")");
 
     uno::Reference<text::XText> xText(xCell, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("No error code", OUString("Err:522"), xText->getString());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("No error code", u"Err:522"_ustr, xText->getString());
 
     xAuditing->showErrors(table::CellAddress(0, 7, 6));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to show errors", nElements + 1, xDrawPage->getCount());
@@ -110,14 +110,14 @@ void XSheetAuditing::testShowInvalid()
     xCell->setValue(2.5);
 
     uno::Reference<beans::XPropertySet> xPropSet(xCell, UNO_QUERY_THROW);
-    uno::Any aValidation = xPropSet->getPropertyValue("Validation");
+    uno::Any aValidation = xPropSet->getPropertyValue(u"Validation"_ustr);
     uno::Reference<beans::XPropertySet> xValidation(aValidation, UNO_QUERY_THROW);
     uno::Any aAny;
 
     aAny <<= sheet::ValidationType_WHOLE;
-    xValidation->setPropertyValue("Type", aAny);
+    xValidation->setPropertyValue(u"Type"_ustr, aAny);
     aAny <<= xValidation;
-    xPropSet->setPropertyValue("Validation", aAny);
+    xPropSet->setPropertyValue(u"Validation"_ustr, aAny);
     xAuditing->showInvalid();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to show invalid (WHOLE)", nElements + 1,
                                  xDrawPage->getCount());
@@ -125,9 +125,9 @@ void XSheetAuditing::testShowInvalid()
     xAuditing->clearArrows();
 
     aAny <<= sheet::ValidationType_ANY;
-    xValidation->setPropertyValue("Type", aAny);
+    xValidation->setPropertyValue(u"Type"_ustr, aAny);
     aAny <<= xValidation;
-    xPropSet->setPropertyValue("Validation", aAny);
+    xPropSet->setPropertyValue(u"Validation"_ustr, aAny);
 
     xAuditing->showInvalid();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to show invalid (ANY)", nElements, xDrawPage->getCount());

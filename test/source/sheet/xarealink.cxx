@@ -39,9 +39,9 @@ void XAreaLink::testSetSourceArea()
 {
     uno::Reference< sheet::XAreaLink > xAreaLink(init(), UNO_QUERY_THROW);
 
-    xAreaLink->setSourceArea("Sheet1.A1:B1");
+    xAreaLink->setSourceArea(u"Sheet1.A1:B1"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Couldn't set new source area",
-                                 OUString("Sheet1.A1:B1"), xAreaLink->getSourceArea());
+                                 u"Sheet1.A1:B1"_ustr, xAreaLink->getSourceArea());
 }
 
 void XAreaLink::testGetDestArea()
@@ -57,7 +57,7 @@ void XAreaLink::testGetSourceArea()
     uno::Reference< sheet::XAreaLink > xAreaLink(init(), UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Couldn't get source area",
-                                 OUString("a2:b5"), xAreaLink->getSourceArea());
+                                 u"a2:b5"_ustr, xAreaLink->getSourceArea());
 }
 
 }

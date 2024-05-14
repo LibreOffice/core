@@ -26,12 +26,12 @@ void XIndent::testIncrementIndent()
 {
     uno::Reference<util::XIndent> xIndent(init(), UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(xIndent, UNO_QUERY_THROW);
-    uno::Any aAny = xPropertySet->getPropertyValue("ParaIndent");
+    uno::Any aAny = xPropertySet->getPropertyValue(u"ParaIndent"_ustr);
     sal_Int32 nOldValue = aAny.get<sal_Int32>();
 
     xIndent->incrementIndent();
 
-    uno::Any aAny2 = xPropertySet->getPropertyValue("ParaIndent");
+    uno::Any aAny2 = xPropertySet->getPropertyValue(u"ParaIndent"_ustr);
     sal_Int32 nNewValue = aAny2.get<sal_Int32>();
     CPPUNIT_ASSERT_MESSAGE("Successfully able to Increment Indent", nOldValue < nNewValue);
 }
@@ -40,12 +40,12 @@ void XIndent::testDecrementIndent()
     uno::Reference<util::XIndent> xIndent(init(), UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(xIndent, UNO_QUERY_THROW);
     xIndent->incrementIndent();
-    uno::Any aAny = xPropertySet->getPropertyValue("ParaIndent");
+    uno::Any aAny = xPropertySet->getPropertyValue(u"ParaIndent"_ustr);
     sal_Int32 nOldValue = aAny.get<sal_Int32>();
 
     xIndent->decrementIndent();
 
-    uno::Any aAny2 = xPropertySet->getPropertyValue("ParaIndent");
+    uno::Any aAny2 = xPropertySet->getPropertyValue(u"ParaIndent"_ustr);
     sal_Int32 nNewValue = aAny2.get<sal_Int32>();
     CPPUNIT_ASSERT_MESSAGE("Successfully able to Decrement Indent", nOldValue > nNewValue);
 }

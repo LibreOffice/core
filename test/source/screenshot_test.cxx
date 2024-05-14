@@ -51,7 +51,7 @@ using namespace css::uno;
 constexpr OUString g_aScreenshotDirectory(u"screenshots"_ustr);
 
 ScreenshotTest::ScreenshotTest()
-    : maParent(nullptr, "vcl/ui/screenshotparent.ui", "ScreenShot")
+    : maParent(nullptr, u"vcl/ui/screenshotparent.ui"_ustr, u"ScreenShot"_ustr)
     , mxParentWidget(maParent.getDialog()->weld_content_area())
 {
     if (auto const env = getenv("LO_TEST_LOCALE")) {
@@ -172,7 +172,7 @@ void ScreenshotTest::dumpDialogToPath(weld::Builder& rBuilder)
 {
     std::unique_ptr<weld::Window> xDialog(rBuilder.create_screenshot_window());
 
-    auto xTabCtrl = rBuilder.weld_notebook("tabcontrol");
+    auto xTabCtrl = rBuilder.weld_notebook(u"tabcontrol"_ustr);
 
     int nPages = xTabCtrl ? xTabCtrl->get_n_pages() : 0;
     if (nPages)

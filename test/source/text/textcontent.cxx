@@ -27,14 +27,14 @@ void TextContent::testTextContentProperties()
     uno::Reference<beans::XPropertySet> xPS(init(), uno::UNO_QUERY_THROW);
 
     text::TextContentAnchorType aExpectedTCAT;
-    CPPUNIT_ASSERT(xPS->getPropertyValue("AnchorType") >>= aExpectedTCAT);
+    CPPUNIT_ASSERT(xPS->getPropertyValue(u"AnchorType"_ustr) >>= aExpectedTCAT);
     CPPUNIT_ASSERT_EQUAL(m_aExpectedTCAT, aExpectedTCAT);
 
     try
     {
-        xPS->setPropertyValue("AnchorType", uno::Any(m_aNewTCAT));
+        xPS->setPropertyValue(u"AnchorType"_ustr, uno::Any(m_aNewTCAT));
         text::TextContentAnchorType aNewTCAT;
-        CPPUNIT_ASSERT(xPS->getPropertyValue("AnchorType") >>= aNewTCAT);
+        CPPUNIT_ASSERT(xPS->getPropertyValue(u"AnchorType"_ustr) >>= aNewTCAT);
         CPPUNIT_ASSERT_EQUAL(m_aNewTCAT, aNewTCAT);
     }
     catch (const beans::UnknownPropertyException& /* ex */)
@@ -43,18 +43,18 @@ void TextContent::testTextContentProperties()
     }
 
     uno::Sequence<text::TextContentAnchorType> aAnchorTypes;
-    CPPUNIT_ASSERT(xPS->getPropertyValue("AnchorTypes") >>= aAnchorTypes);
+    CPPUNIT_ASSERT(xPS->getPropertyValue(u"AnchorTypes"_ustr) >>= aAnchorTypes);
     CPPUNIT_ASSERT(aAnchorTypes.hasElements());
 
     text::WrapTextMode aExpectedWTM;
-    CPPUNIT_ASSERT(xPS->getPropertyValue("TextWrap") >>= aExpectedWTM);
+    CPPUNIT_ASSERT(xPS->getPropertyValue(u"TextWrap"_ustr) >>= aExpectedWTM);
     CPPUNIT_ASSERT_EQUAL(m_aExpectedWTM, aExpectedWTM);
 
     try
     {
-        xPS->setPropertyValue("TextWrap", uno::Any(m_aNewWTM));
+        xPS->setPropertyValue(u"TextWrap"_ustr, uno::Any(m_aNewWTM));
         text::WrapTextMode aNewWTM;
-        CPPUNIT_ASSERT(xPS->getPropertyValue("TextWrap") >>= aNewWTM);
+        CPPUNIT_ASSERT(xPS->getPropertyValue(u"TextWrap"_ustr) >>= aNewWTM);
         CPPUNIT_ASSERT_EQUAL(m_aNewWTM, aNewWTM);
     }
     catch (const beans::UnknownPropertyException& /* ex */)

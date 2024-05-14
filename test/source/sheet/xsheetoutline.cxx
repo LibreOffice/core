@@ -137,13 +137,13 @@ void XSheetOutline::testShowLevel()
 
     aSheetOutline->showLevel(2, table::TableOrientation_COLUMNS);
 
-    std::cout << " verify showLevel col apres" << getVisibleAddress(aSheet, "OutlineSheet.A1:Z30") << std::endl;
+    std::cout << " verify showLevel col apres" << getVisibleAddress(aSheet, u"OutlineSheet.A1:Z30"_ustr) << std::endl;
 
     // verify that level 2 and level 1 are shown --> column 0..3 & column 22..26
     // level 3 & 4 are hidden --> column 4..19
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("testShowLevel Column", OUString("OutlineSheet.A1:D1"), getVisibleAddress(aSheet, "OutlineSheet.A1:D1"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("testShowLevel Column", OUString("OutlineSheet.V1:Z1"), getVisibleAddress(aSheet, "OutlineSheet.V1:Z1"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testShowLevel Column", u"OutlineSheet.A1:D1"_ustr, getVisibleAddress(aSheet, u"OutlineSheet.A1:D1"_ustr));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testShowLevel Column", u"OutlineSheet.V1:Z1"_ustr, getVisibleAddress(aSheet, u"OutlineSheet.V1:Z1"_ustr));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("testShowLevel Column", OUString(), getVisibleAddress(aSheet, colLevel3));
 
 /* FIXME !!
@@ -190,7 +190,7 @@ void XSheetOutline::testGroup()
     uno::Reference< sheet::XSheetOutline > aSheetOutline(aSheet, UNO_QUERY_THROW);
 
     // Column level 2
-    OUString aNewString = "OutlineSheet.AB1:AG1";
+    OUString aNewString = u"OutlineSheet.AB1:AG1"_ustr;
     table::CellRangeAddress aLevelRangeAddress = getAddressFromRangeString(aSheet, aNewString);
     aSheetOutline->group(aLevelRangeAddress, table::TableOrientation_COLUMNS);
 
@@ -215,7 +215,7 @@ void XSheetOutline::testUngroup()
     uno::Reference< sheet::XSheetOutline > aSheetOutline(aSheet, UNO_QUERY_THROW);
 
     // New Column level
-    OUString aNewString = "OutlineSheet.BB1:BG1";
+    OUString aNewString = u"OutlineSheet.BB1:BG1"_ustr;
     table::CellRangeAddress aLevelRangeAddress = getAddressFromRangeString(aSheet, aNewString);
     aSheetOutline->group(aLevelRangeAddress, table::TableOrientation_COLUMNS);
     aSheetOutline->hideDetail(aLevelRangeAddress);

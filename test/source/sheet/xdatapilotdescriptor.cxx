@@ -27,7 +27,7 @@ std::vector< OUString > XDataPilotDescriptor::maFieldNames;
 
 void XDataPilotDescriptor::testTag()
 {
-    OUString aTag("DataPilotDescriptor_Tag");
+    OUString aTag(u"DataPilotDescriptor_Tag"_ustr);
     uno::Reference< sheet::XDataPilotDescriptor > xDescr(init(), UNO_QUERY_THROW);
     xDescr->setTag(aTag);
     OUString aNewTag = xDescr->getTag();
@@ -72,7 +72,7 @@ void XDataPilotDescriptor::testGetDataPilotFields_Impl( uno::Reference< sheet::X
 
     sal_Int32 nCount = xIndex->getCount();
 
-    OUString aOrientation("Orientation");
+    OUString aOrientation(u"Orientation"_ustr);
     for (sal_Int32 i = 0; i < nCount && i < 5; ++i)
     {
         uno::Reference< container::XNamed > xNamed( xIndex->getByIndex( i ), UNO_QUERY_THROW);
