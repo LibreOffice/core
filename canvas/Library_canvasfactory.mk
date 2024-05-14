@@ -28,6 +28,10 @@ $(eval $(call gb_Library_set_componentfile,canvasfactory,canvas/source/factory/c
 
 $(eval $(call gb_Library_use_external,canvasfactory,boost_headers))
 
+$(eval $(call gb_Library_use_custom_headers,canvasfactory,\
+       officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_sdk_api,canvasfactory))
 
 $(eval $(call gb_Library_use_libraries,canvasfactory,\

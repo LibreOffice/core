@@ -39,6 +39,7 @@
 #include <o3tl/string_view.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <comphelper/configuration.hxx>
+#include <officecfg/Office/Canvas.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -60,7 +61,6 @@ class CanvasFactory
 
     mutable std::mutex                m_mutex;
     Reference<XComponentContext>      m_xContext;
-    Reference<container::XNameAccess> m_xCanvasConfigNameAccess;
     AvailVector                       m_aAvailableImplementations;
     AvailVector                       m_aAcceleratedImplementations;
     AvailVector                       m_aAAImplementations;
@@ -71,7 +71,7 @@ class CanvasFactory
 
     void checkConfigFlag( bool& r_bFlag,
                           bool& r_CacheFlag,
-                          const OUString& nodeName ) const;
+                          bool bCurrentConfigValue ) const;
     Reference<XInterface> use(
         OUString const & serviceName,
         Sequence<Any> const & args,
@@ -118,29 +118,11 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
         try
         {
             // read out configuration for preferred services:
-            Reference<lang::XMultiServiceFactory> xConfigProvider(
-                configuration::theDefaultProvider::get( m_xContext ) );
 
-            uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
-            {
-                {"nodepath", uno::Any(u"/org.openoffice.Office.Canvas"_ustr)}
-            }));
-            m_xCanvasConfigNameAccess.set(
-                xConfigProvider->createInstanceWithArguments(
-                    u"com.sun.star.configuration.ConfigurationAccess"_ustr,
-                    aArgs ),
-                UNO_QUERY_THROW );
-
-            uno::Sequence<uno::Any> aArgs2(comphelper::InitAnyPropertySequence(
-            {
-                {"nodepath", uno::Any(u"/org.openoffice.Office.Canvas/CanvasServiceList"_ustr)}
-            }));
-            Reference<container::XNameAccess> xNameAccess(
-                xConfigProvider->createInstanceWithArguments(
-                    u"com.sun.star.configuration.ConfigurationAccess"_ustr,
-                    aArgs2 ), UNO_QUERY_THROW );
+            Reference<container::XNameAccess> xNameAccess = officecfg::Office::Canvas::CanvasServiceList::get();
             Reference<container::XHierarchicalNameAccess> xHierarchicalNameAccess(
                 xNameAccess, UNO_QUERY_THROW);
+
 
             for (auto& serviceName : xNameAccess->getElementNames())
             {
@@ -253,19 +235,16 @@ Reference<XInterface> CanvasFactory::use(
 
 void CanvasFactory::checkConfigFlag( bool& r_bFlag,
                                      bool& r_CacheFlag,
-                                     const OUString& nodeName ) const
+                                     bool bCurrentConfigValue ) const
 {
-    if( m_xCanvasConfigNameAccess.is() )
-    {
-        m_xCanvasConfigNameAccess->getByName( nodeName ) >>= r_bFlag;
+    r_bFlag = bCurrentConfigValue;
 
-        if( r_CacheFlag != r_bFlag )
-        {
-            // cache is invalid, because of different order of
-            // elements
-            r_CacheFlag = r_bFlag;
-            m_aCachedImplementations.clear();
-        }
+    if( r_CacheFlag != r_bFlag )
+    {
+        // cache is invalid, because of different order of
+        // elements
+        r_CacheFlag = r_bFlag;
+        m_aCachedImplementations.clear();
     }
 }
 
@@ -280,19 +259,19 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     bool bForceLastEntry(false);
     checkConfigFlag( bForceLastEntry,
                      m_bCacheHasForcedLastImpl,
-                     u"ForceSafeServiceImpl"_ustr );
+                     officecfg::Office::Canvas::ForceSafeServiceImpl::get() );
 
     // use anti-aliasing canvas, if config flag set (or not existing)
     bool bUseAAEntry(true);
     checkConfigFlag( bUseAAEntry,
                      m_bCacheHasUseAAEntry,
-                     u"UseAntialiasingCanvas"_ustr );
+                     officecfg::Office::Canvas::UseAntialiasingCanvas::get() );
 
     // use accelerated canvas, if config flag set (or not existing)
     bool bUseAcceleratedEntry(true);
     checkConfigFlag( bUseAcceleratedEntry,
                      m_bCacheHasUseAcceleratedEntry,
-                     u"UseAcceleratedCanvas"_ustr );
+                     officecfg::Office::Canvas::UseAcceleratedCanvas::get() );
 
     // try to reuse last working implementation for given service name
     const CacheVector::iterator aEnd(m_aCachedImplementations.end());
