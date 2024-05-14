@@ -407,6 +407,20 @@ public:
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_G, -3, '.', true);
         CPPUNIT_ASSERT_EQUAL( u"1.2E+004"_ustr, aRes);
 
+        fVal = 2000000528764739.0;
+        aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_G, 15, '.', true);
+        CPPUNIT_ASSERT_EQUAL( u"2.00000052876474E+015"_ustr, aRes);
+
+        // The original problem of tdf#160985 was nDecPlaces = 16 with
+        // RTL_STR_MAX_VALUEOFDOUBLE - std::size("-x.E-xxx")
+        fVal = 2000000528764739.0;
+        aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_G, 16, '.', true);
+        CPPUNIT_ASSERT_EQUAL( u"2000000528764739"_ustr, aRes);
+
+        fVal = 2000000528764739.0;
+        aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_G, 18, '.', false);
+        CPPUNIT_ASSERT_EQUAL( u"2000000528764739.00"_ustr, aRes);
+
         // DBL_MAX and 4 nextafters
         fVal = DBL_MAX;
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_Automatic,
