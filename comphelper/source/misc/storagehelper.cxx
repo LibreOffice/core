@@ -704,7 +704,7 @@ uno::Reference< io::XStream > OStorageHelper::GetStreamAtPackageURL(
         const OUString& rURL, sal_uInt32 const nOpenMode,
         LifecycleProxy const & rNastiness)
 {
-    OUString path;
+    std::u16string_view path;
     if (rURL.startsWithIgnoreAsciiCase("vnd.sun.star.Package:", &path))
     {
         return GetStreamAtPath(xParentStorage, path, nOpenMode, rNastiness);

@@ -1002,11 +1002,11 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
         }
         else if( aKey == "CustomPageSize" ) // currently not handled
             continue;
-        else if (aKey.startsWith("Custom", &aKey) )
+        else if ( std::string_view rest; aKey.startsWith("Custom", &rest) )
         {
             //fdo#43049 very basic support for Custom entries, we ignore the
             //validation params and types
-            OUString aUniKey(OStringToOUString(aKey, RTL_TEXTENCODING_MS_1252));
+            OUString aUniKey(OStringToOUString(rest, RTL_TEXTENCODING_MS_1252));
             keyit = m_aKeys.find( aUniKey );
             if(keyit != m_aKeys.end())
             {

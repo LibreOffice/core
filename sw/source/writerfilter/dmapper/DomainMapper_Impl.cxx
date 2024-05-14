@@ -511,10 +511,10 @@ OUString DomainMapper_Impl::GetUnusedCharacterStyleName()
         sal_Int32         nMaxIndex       = 0;
         for ( const auto& rStyleName : aCharacterStyleNames )
         {
-            OUString sSuffix;
+            std::u16string_view sSuffix;
             if ( rStyleName.startsWith( cListLabel, &sSuffix ) )
             {
-                sal_Int32 nSuffix = sSuffix.toInt32();
+                sal_Int32 nSuffix = o3tl::toInt32(sSuffix);
                 if( nSuffix > 0 && nSuffix > nMaxIndex )
                     nMaxIndex = nSuffix;
             }

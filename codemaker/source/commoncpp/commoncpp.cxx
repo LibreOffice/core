@@ -55,9 +55,10 @@ OString scopedCppName(OString const & type, bool ns_alias)
     } while( nPos != -1 );
 
     OString s(tmpBuf.makeStringAndClear());
-    if (ns_alias && s.startsWith("::com::sun::star::", &s))
+    std::string_view rest;
+    if (ns_alias && s.startsWith("::com::sun::star::", &rest))
     {
-        s = "::css::" + s; // nicer shorthand
+        s = OString::Concat("::css::") + rest; // nicer shorthand
     }
 
     return s;

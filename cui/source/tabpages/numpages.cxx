@@ -1940,10 +1940,10 @@ IMPL_LINK(SvxNumOptionsTabPage, GraphicHdl_Impl, const OUString&, rIdent, void)
     bool                bSucc(false);
     SvxOpenGraphicDialog aGrfDlg(CuiResId(RID_CUISTR_EDIT_GRAPHIC), GetFrameWeld());
 
-    OUString sNumber;
+    std::u16string_view sNumber;
     if (rIdent.startsWith("gallery", &sNumber))
     {
-        auto idx = sNumber.toUInt32();
+        auto idx = o3tl::toUInt32(sNumber);
         if (idx < aGrfNames.size())
         {
             aGrfName = aGrfNames[idx];

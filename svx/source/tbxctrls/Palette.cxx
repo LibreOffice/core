@@ -224,7 +224,7 @@ bool PaletteGPL::IsValid()
 bool PaletteGPL::ReadPaletteHeader(SvFileStream& rFileStream)
 {
     OString aLine;
-    OString aPaletteName;
+    std::string_view aPaletteName;
 
     rFileStream.ReadLine(aLine);
     if( !aLine.startsWith("GIMP Palette") ) return false;

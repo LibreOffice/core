@@ -47,7 +47,7 @@
 #include <BulletAndPositionDlg.hxx>
 #include <sdresid.hxx>
 #include <DrawViewShell.hxx>
-
+#include <o3tl/string_view.hxx>
 #include <bitmaps.hlst>
 
 #define SHOW_NUMBERING 0
@@ -815,10 +815,10 @@ IMPL_LINK(SvxBulletAndPositionDlg, GraphicHdl_Impl, const OUString&, rIdent, voi
     bool bSucc(false);
     SvxOpenGraphicDialog aGrfDlg(SdResId(RID_SVXSTR_EDIT_GRAPHIC), p_Window);
 
-    OUString sNumber;
+    std::u16string_view sNumber;
     if (rIdent.startsWith("gallery", &sNumber))
     {
-        auto idx = sNumber.toUInt32();
+        auto idx = o3tl::toUInt32(sNumber);
         if (idx < aGrfNames.size())
         {
             aGrfName = aGrfNames[idx];

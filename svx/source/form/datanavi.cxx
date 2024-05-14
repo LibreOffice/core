@@ -1948,10 +1948,10 @@ namespace svxform
         for (int i = 0; i < nCount; ++i)
         {
             OUString sIdent = m_xTabCtrl->get_page_ident(i);
-            OUString sNumber;
+            std::u16string_view sNumber;
             if (!sIdent.startsWith("additional", &sNumber))
                 continue;
-            int nPageId = sNumber.toInt32();
+            int nPageId = o3tl::toInt32(sNumber);
             if (nMax < nPageId)
                 nMax = nPageId;
         }

@@ -1446,6 +1446,64 @@ public:
         const;
 #endif
 
+#if defined LIBO_INTERNAL_ONLY
+    /**
+      Check whether this string starts with a given substring.
+
+      @param str the substring to be compared
+
+      @return true if and only if the given str appears as a substring at the
+      start of this string
+
+      @since LibreOffice 4.0
+    */
+    bool startsWith(std::u16string_view sv) const {
+        return match(sv);
+    }
+    /**
+      Check whether this string starts with a given substring.
+
+      @param str the substring to be compared
+
+      @param rest if this function returns true, then assign a
+      copy of the remainder of this string to *rest. Available since
+      LibreOffice 4.2
+
+      @return true if and only if the given str appears as a substring at the
+      start of this string
+
+      @since LibreOffice 4.0
+    */
+    bool startsWith(std::u16string_view sv, OUString * rest) const {
+        assert(rest);
+        auto const b = match(sv);
+        if (b) {
+            *rest = copy(sv.size());
+        }
+        return b;
+    }
+    /**
+      Check whether this string starts with a given substring.
+
+      @param str the substring to be compared
+
+      @param rest if this function returns true, then assign a
+      copy of the remainder of this string to *rest.
+
+      @return true if and only if the given str appears as a substring at the
+      start of this string
+
+      @since LibreOffice 24.2
+    */
+    bool startsWith(std::u16string_view sv, std::u16string_view * rest) const {
+        assert(rest);
+        auto const b = match(sv);
+        if (b) {
+            *rest = subView(sv.size());
+        }
+        return b;
+    }
+#else
     /**
       Check whether this string starts with a given substring.
 
@@ -1460,15 +1518,6 @@ public:
 
       @since LibreOffice 4.0
     */
-#if defined LIBO_INTERNAL_ONLY
-    bool startsWith(std::u16string_view sv, OUString * rest = nullptr) const {
-        auto const b = match(sv);
-        if (b && rest != nullptr) {
-            *rest = copy(sv.size());
-        }
-        return b;
-    }
-#else
     bool startsWith(OUString const & str, OUString * rest = NULL) const {
         bool b = match(str);
         if (b && rest != NULL) {
@@ -1478,6 +1527,79 @@ public:
     }
 #endif
 
+#if defined LIBO_INTERNAL_ONLY
+    /**
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 25.2
+    */
+    template< typename T >
+    typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type startsWith(
+        T & literal) const
+    {
+        assert(
+            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        bool b
+            = (libreoffice_internal::ConstCharArrayDetector<T>::length
+               <= sal_uInt32(pData->length))
+            && rtl_ustr_asciil_reverseEquals_WithLength(
+                pData->buffer,
+                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
+                    literal),
+                libreoffice_internal::ConstCharArrayDetector<T>::length);
+        return b;
+    }
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 4.0
+    */
+    template< typename T >
+    typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type startsWith(
+        T & literal, OUString * rest) const
+    {
+        assert(
+            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        assert(rest);
+        bool b
+            = (libreoffice_internal::ConstCharArrayDetector<T>::length
+               <= sal_uInt32(pData->length))
+            && rtl_ustr_asciil_reverseEquals_WithLength(
+                pData->buffer,
+                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
+                    literal),
+                libreoffice_internal::ConstCharArrayDetector<T>::length);
+        if (b) {
+            *rest = copy(
+                libreoffice_internal::ConstCharArrayDetector<T>::length);
+        }
+        return b;
+    }
+    /**
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 25.2
+    */
+    template< typename T >
+    typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type startsWith(
+        T & literal, std::u16string_view * rest) const
+    {
+        assert(
+            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        assert(rest);
+        bool b
+            = (libreoffice_internal::ConstCharArrayDetector<T>::length
+               <= sal_uInt32(pData->length))
+            && rtl_ustr_asciil_reverseEquals_WithLength(
+                pData->buffer,
+                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
+                    literal),
+                libreoffice_internal::ConstCharArrayDetector<T>::length);
+        if (b) {
+            *rest = subView(
+                libreoffice_internal::ConstCharArrayDetector<T>::length);
+        }
+        return b;
+    }
+#else
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
@@ -1503,6 +1625,7 @@ public:
         }
         return b;
     }
+#endif
 
     /**
       Check whether this string starts with a given string, ignoring the case of
@@ -1525,10 +1648,22 @@ public:
       @since LibreOffice 4.0
     */
 #if defined LIBO_INTERNAL_ONLY
-    bool startsWithIgnoreAsciiCase(std::u16string_view sv, OUString * rest = nullptr) const {
+    bool startsWithIgnoreAsciiCase(std::u16string_view sv) const {
+        return matchIgnoreAsciiCase(sv);
+    }
+    bool startsWithIgnoreAsciiCase(std::u16string_view sv, OUString * rest) const {
+        assert(rest);
         auto const b = matchIgnoreAsciiCase(sv);
-        if (b && rest != nullptr) {
+        if (b) {
             *rest = copy(sv.size());
+        }
+        return b;
+    }
+    bool startsWithIgnoreAsciiCase(std::u16string_view sv, std::u16string_view * rest) const {
+        assert(rest);
+        auto const b = matchIgnoreAsciiCase(sv);
+        if (b) {
+            *rest = subView(sv.size());
         }
         return b;
     }
@@ -1544,6 +1679,86 @@ public:
     }
 #endif
 
+#if defined LIBO_INTERNAL_ONLY
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 4.0
+    */
+    template< typename T >
+    typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type
+    startsWithIgnoreAsciiCase(T & literal) const
+    {
+        assert(
+            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        bool b
+            = (libreoffice_internal::ConstCharArrayDetector<T>::length
+               <= sal_uInt32(pData->length))
+            && (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+                   pData->buffer,
+                   libreoffice_internal::ConstCharArrayDetector<T>::length,
+                   libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
+                       literal),
+                   libreoffice_internal::ConstCharArrayDetector<T>::length)
+               == 0);
+        return b;
+    }
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 4.0
+    */
+    template< typename T >
+    typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type
+    startsWithIgnoreAsciiCase(T & literal, OUString * rest) const
+    {
+        assert(
+            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        assert(rest);
+        bool b
+            = (libreoffice_internal::ConstCharArrayDetector<T>::length
+               <= sal_uInt32(pData->length))
+            && (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+                   pData->buffer,
+                   libreoffice_internal::ConstCharArrayDetector<T>::length,
+                   libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
+                       literal),
+                   libreoffice_internal::ConstCharArrayDetector<T>::length)
+               == 0);
+        if (b) {
+            *rest = copy(
+                libreoffice_internal::ConstCharArrayDetector<T>::length);
+        }
+        return b;
+    }
+    /**
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 24.2
+    */
+    template< typename T >
+    typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type
+    startsWithIgnoreAsciiCase(T & literal, std::u16string_view * rest) const
+    {
+        assert(
+            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        assert(rest);
+        bool b
+            = (libreoffice_internal::ConstCharArrayDetector<T>::length
+               <= sal_uInt32(pData->length))
+            && (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+                   pData->buffer,
+                   libreoffice_internal::ConstCharArrayDetector<T>::length,
+                   libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
+                       literal),
+                   libreoffice_internal::ConstCharArrayDetector<T>::length)
+               == 0);
+        if (b) {
+            *rest = subView(
+                libreoffice_internal::ConstCharArrayDetector<T>::length);
+        }
+        return b;
+    }
+#else
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
@@ -1571,7 +1786,54 @@ public:
         }
         return b;
     }
+#endif
 
+#if defined LIBO_INTERNAL_ONLY
+    /**
+      Check whether this string ends with a given substring.
+
+      @param str the substring to be compared
+
+      @return true if and only if the given str appears as a substring at the
+      end of this string
+
+      @since LibreOffice 3.6
+    */
+    bool endsWith(std::u16string_view sv) const {
+        return sv.size() <= sal_uInt32(pData->length)
+            && match(sv, pData->length - sv.size());
+    }
+    bool endsWith(std::u16string_view sv, OUString * rest) const {
+        auto const b = sv.size() <= sal_uInt32(pData->length)
+            && match(sv, pData->length - sv.size());
+        if (b && rest != nullptr) {
+            *rest = copy(0, (pData->length - sv.size()));
+        }
+        return b;
+    }
+    /**
+      Check whether this string ends with a given substring.
+
+      @param str the substring to be compared
+
+      @param rest if this function returns true, then assign a
+      copy of the remainder of this string to *rest.
+
+      @return true if and only if the given str appears as a substring at the
+      end of this string
+
+      @since LibreOffice 24.2
+    */
+    bool endsWith(std::u16string_view sv, std::u16string_view * rest) const {
+        assert(rest);
+        auto const b = sv.size() <= sal_uInt32(pData->length)
+            && match(sv, pData->length - sv.size());
+        if (b) {
+            *rest = subView(0, (pData->length - sv.size()));
+        }
+        return b;
+    }
+#else
     /**
       Check whether this string ends with a given substring.
 
@@ -1586,16 +1848,6 @@ public:
 
       @since LibreOffice 3.6
     */
-#if defined LIBO_INTERNAL_ONLY
-    bool endsWith(std::u16string_view sv, OUString * rest = nullptr) const {
-        auto const b = sv.size() <= sal_uInt32(pData->length)
-            && match(sv, pData->length - sv.size());
-        if (b && rest != nullptr) {
-            *rest = copy(0, (pData->length - sv.size()));
-        }
-        return b;
-    }
-#else
     bool endsWith(OUString const & str, OUString * rest = NULL) const {
         bool b = str.getLength() <= getLength()
             && match(str, getLength() - str.getLength());
@@ -1606,6 +1858,78 @@ public:
     }
 #endif
 
+#if defined LIBO_INTERNAL_ONLY
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 25.2
+    */
+    template< typename T >
+    typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type
+    endsWith(T & literal) const
+    {
+        assert(
+            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        bool b
+            = (libreoffice_internal::ConstCharArrayDetector<T>::length
+               <= sal_uInt32(pData->length))
+            && rtl_ustr_asciil_reverseEquals_WithLength(
+                (pData->buffer + pData->length
+                 - libreoffice_internal::ConstCharArrayDetector<T>::length),
+                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
+                    literal),
+                libreoffice_internal::ConstCharArrayDetector<T>::length);
+        return b;
+    }
+    template< typename T >
+    typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type
+    endsWith(T & literal, OUString * rest) const
+    {
+        assert(
+            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        assert(rest);
+        bool b
+            = (libreoffice_internal::ConstCharArrayDetector<T>::length
+               <= sal_uInt32(pData->length))
+            && rtl_ustr_asciil_reverseEquals_WithLength(
+                (pData->buffer + pData->length
+                 - libreoffice_internal::ConstCharArrayDetector<T>::length),
+                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
+                    literal),
+                libreoffice_internal::ConstCharArrayDetector<T>::length);
+        if (b) {
+            *rest = copy(
+                0,
+                (getLength()
+                 - libreoffice_internal::ConstCharArrayDetector<T>::length));
+        }
+        return b;
+    }
+    template< typename T >
+    typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type
+    endsWith(T & literal, std::u16string_view * rest) const
+    {
+        assert(
+            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        assert(rest);
+        bool b
+            = (libreoffice_internal::ConstCharArrayDetector<T>::length
+               <= sal_uInt32(pData->length))
+            && rtl_ustr_asciil_reverseEquals_WithLength(
+                (pData->buffer + pData->length
+                 - libreoffice_internal::ConstCharArrayDetector<T>::length),
+                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
+                    literal),
+                libreoffice_internal::ConstCharArrayDetector<T>::length);
+        if (b) {
+            *rest = subView(
+                0,
+                (getLength()
+                 - libreoffice_internal::ConstCharArrayDetector<T>::length));
+        }
+        return b;
+    }
+#else
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
@@ -1634,6 +1958,7 @@ public:
         }
         return b;
     }
+#endif
 
     /**
       Check whether this string ends with a given ASCII string.
@@ -1655,6 +1980,68 @@ public:
                 asciiStrLength);
     }
 
+#if defined LIBO_INTERNAL_ONLY
+    /**
+      Check whether this string ends with a given string, ignoring the case of
+      ASCII letters.
+
+      Character values between 65 and 90 (ASCII A-Z) are interpreted as
+      values between 97 and 122 (ASCII a-z).
+      This function can't be used for language specific comparison.
+
+      @param str the substring to be compared
+
+      @param rest if this function returns true, then assign a
+      copy of the remainder of this string to *rest. Available since
+      LibreOffice 4.2
+
+      @return true if and only if the given str appears as a substring at the
+      end of this string, ignoring the case of ASCII letters ("A"--"Z" and
+      "a"--"z")
+
+      @since LibreOffice 3.6
+    */
+    bool endsWithIgnoreAsciiCase(std::u16string_view sv) const {
+        return sv.size() <= sal_uInt32(pData->length)
+            && matchIgnoreAsciiCase(sv, pData->length - sv.size());
+    }
+    bool endsWithIgnoreAsciiCase(std::u16string_view sv, OUString * rest) const {
+        auto const b = sv.size() <= sal_uInt32(pData->length)
+            && matchIgnoreAsciiCase(sv, pData->length - sv.size());
+        if (b && rest != nullptr) {
+            *rest = copy(0, pData->length - sv.size());
+        }
+        return b;
+    }
+    /**
+      Check whether this string ends with a given string, ignoring the case of
+      ASCII letters.
+
+      Character values between 65 and 90 (ASCII A-Z) are interpreted as
+      values between 97 and 122 (ASCII a-z).
+      This function can't be used for language specific comparison.
+
+      @param str the substring to be compared
+
+      @param rest if this function returns true, then assign a
+      copy of the remainder of this string to *rest.
+
+      @return true if and only if the given str appears as a substring at the
+      end of this string, ignoring the case of ASCII letters ("A"--"Z" and
+      "a"--"z")
+
+      @since LibreOffice 24.2
+    */
+    bool endsWithIgnoreAsciiCase(std::u16string_view sv, std::u16string_view * rest) const {
+        assert(rest);
+        auto const b = sv.size() <= sal_uInt32(pData->length)
+            && matchIgnoreAsciiCase(sv, pData->length - sv.size());
+        if (b) {
+            *rest = subView(0, pData->length - sv.size());
+        }
+        return b;
+    }
+#else
     /**
       Check whether this string ends with a given string, ignoring the case of
       ASCII letters.
@@ -1675,16 +2062,6 @@ public:
 
       @since LibreOffice 3.6
     */
-#if defined LIBO_INTERNAL_ONLY
-    bool endsWithIgnoreAsciiCase(std::u16string_view sv, OUString * rest = nullptr) const {
-        auto const b = sv.size() <= sal_uInt32(pData->length)
-            && matchIgnoreAsciiCase(sv, pData->length - sv.size());
-        if (b && rest != nullptr) {
-            *rest = copy(0, pData->length - sv.size());
-        }
-        return b;
-    }
-#else
     bool endsWithIgnoreAsciiCase(OUString const & str, OUString * rest = NULL) const
     {
         bool b =  str.getLength() <= getLength()
@@ -1696,6 +2073,61 @@ public:
     }
 #endif
 
+#if defined LIBO_INTERNAL_ONLY
+    /**
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 24.2
+    */
+    template< typename T >
+    typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type
+    endsWithIgnoreAsciiCase(T & literal) const
+    {
+        assert(
+            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        bool b
+            = (libreoffice_internal::ConstCharArrayDetector<T>::length
+               <= sal_uInt32(pData->length))
+            && (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+                    (pData->buffer + pData->length
+                     - libreoffice_internal::ConstCharArrayDetector<T>::length),
+                    libreoffice_internal::ConstCharArrayDetector<T>::length,
+                    libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
+                        literal),
+                    libreoffice_internal::ConstCharArrayDetector<T>::length)
+                == 0);
+        return b;
+    }
+    /**
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 24.2
+    */
+    template< typename T >
+    typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type
+    endsWithIgnoreAsciiCase(T & literal, std::u16string_view * rest) const
+    {
+        assert(
+            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        assert(rest);
+        bool b
+            = (libreoffice_internal::ConstCharArrayDetector<T>::length
+               <= sal_uInt32(pData->length))
+            && (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+                    (pData->buffer + pData->length
+                     - libreoffice_internal::ConstCharArrayDetector<T>::length),
+                    libreoffice_internal::ConstCharArrayDetector<T>::length,
+                    libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
+                        literal),
+                    libreoffice_internal::ConstCharArrayDetector<T>::length)
+                == 0);
+        if (b) {
+            *rest = subView(
+                0,
+                (getLength()
+                 - libreoffice_internal::ConstCharArrayDetector<T>::length));
+        }
+        return b;
+    }
+#else
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
@@ -1726,6 +2158,7 @@ public:
         }
         return b;
     }
+#endif
 
     /**
       Check whether this string ends with a given ASCII string, ignoring the

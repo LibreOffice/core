@@ -1279,7 +1279,7 @@ void SfxLibraryContainer::checkStorageURL( const OUString& aSourceURL,
     else
     {
         // try to re-create the variable URL: helps moving the profile
-        if (OUString aRest; aSourceURL.startsWith(expand_url(sUserBasicVariablePrefix), &aRest))
+        if (std::u16string_view aRest; aSourceURL.startsWith(expand_url(sUserBasicVariablePrefix), &aRest))
             aUnexpandedStorageURL = sUserBasicVariablePrefix + aRest;
         else if (aSourceURL.startsWith(expand_url(sInstBasicVariablePrefix), &aRest))
             aUnexpandedStorageURL = sInstBasicVariablePrefix + aRest;

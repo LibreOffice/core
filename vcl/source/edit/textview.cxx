@@ -2282,10 +2282,10 @@ void TextView::ToggleComment()
         // Notice that a REM comment is only actually a comment if:
         // a) There is no subsequent character or
         // b) The subsequent character is a blank space or a tab
-        OUString sRest;
+        std::u16string_view sRest;
         if (sText.startsWithIgnoreAsciiCase("REM", &sRest))
         {
-            if (sRest.getLength() > 0 && !sRest.startsWith(" ") && !sRest.startsWith("\t"))
+            if (sRest.size() > 0 && !o3tl::starts_with(sRest, u" ") && !o3tl::starts_with(sRest, u"\t"))
             {
                 bAddCommentChar = true;
                 break;

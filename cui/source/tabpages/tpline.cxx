@@ -63,6 +63,7 @@
 #include <cuitabarea.hxx>
 #include <svtools/unitconv.hxx>
 #include <comphelper/lok.hxx>
+#include <o3tl/string_view.hxx>
 
 #define MAX_BMP_WIDTH   16
 #define MAX_BMP_HEIGHT  16
@@ -1527,16 +1528,16 @@ IMPL_LINK(SvxLineTabPage, GraphicHdl_Impl, const OUString&, rIdent, void)
     bool bEnable = true;
     tools::Long nPreviousSymbolType = m_nSymbolType;
 
-    OUString sNumber;
+    std::u16string_view sNumber;
     if (rIdent.startsWith("gallery", &sNumber))
     {
-        SvxBmpItemInfo* pInfo = m_aGalleryBrushItems[sNumber.toUInt32()].get();
+        SvxBmpItemInfo* pInfo = m_aGalleryBrushItems[o3tl::toUInt32(sNumber)].get();
         pGraphic = pInfo->pBrushItem->GetGraphic();
         m_nSymbolType = SVX_SYMBOLTYPE_BRUSHITEM;
     }
     else if (rIdent.startsWith("symbol", &sNumber))
     {
-        m_nSymbolType = sNumber.toUInt32();
+        m_nSymbolType = o3tl::toUInt32(sNumber);
         SvxBmpItemInfo* pInfo = m_aSymbolBrushItems[m_nSymbolType].get();
         pGraphic = pInfo->pBrushItem->GetGraphic();
     }

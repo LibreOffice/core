@@ -20,14 +20,14 @@ namespace cmis
 
     static OUString CheckInsecureProtocol(OUString const& rURL)
     {
-        OUString rest;
+        std::u16string_view rest;
         if (rURL.startsWithIgnoreAsciiCase("http://", &rest))
         {
             if (!officecfg::Office::Security::Net::AllowInsecureProtocols::get())
             {
                 // "http" not allowed -> immediately redirect to "https",
                 // better than showing confusing error to user
-                return "https://" + rest;
+                return OUString::Concat("https://") + rest;
             }
         }
         return rURL;

@@ -53,6 +53,7 @@
 #include <sal/log.hxx>
 #include <officecfg/Office/UI/Sidebar.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <o3tl/string_view.hxx>
 
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -1154,11 +1155,11 @@ IMPL_LINK(SidebarController, OnMenuItemSelected, const OUString&, rCurItemId, vo
     {
         try
         {
-            OUString sNumber;
+            std::u16string_view sNumber;
             if (rCurItemId.startsWith("select", &sNumber))
             {
                 RequestOpenDeck();
-                SwitchToDeck(mpTabBar->GetDeckIdForIndex(sNumber.toInt32()));
+                SwitchToDeck(mpTabBar->GetDeckIdForIndex(o3tl::toInt32(sNumber)));
             }
             mpParentWindow->GrabFocusToDocument();
         }
@@ -1176,10 +1177,10 @@ IMPL_LINK(SidebarController, OnSubMenuItemSelected, const OUString&, rCurItemId,
     {
         try
         {
-            OUString sNumber;
+            std::u16string_view sNumber;
             if (rCurItemId.startsWith("customize", &sNumber))
             {
-                mpTabBar->ToggleHideFlag(sNumber.toInt32());
+                mpTabBar->ToggleHideFlag(o3tl::toInt32(sNumber));
 
                 // Find the set of decks that could be displayed for the new context.
                 ResourceManager::DeckContextDescriptorContainer aDecks;

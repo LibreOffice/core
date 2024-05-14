@@ -28,6 +28,7 @@
 #include <set>
 
 #include <o3tl/any.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -2014,7 +2015,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 
                                 // Get name and evaluate
                                 OUString aMethName2 = rxMethod_k->getName();
-                                OUString aPropName2;
+                                std::u16string_view aPropName2;
                                 if (!(aMethName2.startsWith("set", &aPropName2)
                                       && aPropName2 == aPropName))
                                     continue;
@@ -2061,7 +2062,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                         else if( aMethName.startsWith("add", &aPropName) )
                         {
                             // Does it end with "Listener"?
-                            OUString aListenerName;
+                            std::u16string_view aListenerName;
                             if( !aPropName.endsWith("Listener", &aListenerName) )
                                 continue;
 
@@ -2083,11 +2084,12 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 
                                 // Get name and evaluate
                                 OUString aMethName2 = rxMethod_k->getName();
-                                OUString aListenerName2;
+                                std::u16string_view rest;
+                                std::u16string_view aListenerName2;
                                 if (!(aMethName2.startsWith(
-                                          "remove", &aPropName)
-                                      && aPropName.endsWith(
-                                          "Listener", &aListenerName2)
+                                          "remove", &rest)
+                                      && o3tl::ends_with(rest,
+                                          u"Listener", &aListenerName2)
                                       && aListenerName2 == aListenerName))
                                     continue;
 

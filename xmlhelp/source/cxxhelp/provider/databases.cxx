@@ -289,7 +289,7 @@ const std::vector< OUString >& Databases::getModuleList( const OUString& Languag
             fileName = aStatus.getFileName();
 
             // Check, whether fileName is of the form *.cfg
-            if (!fileName.endsWithIgnoreAsciiCase(".cfg", &fileName)) {
+            if (!fileName.endsWithIgnoreAsciiCase(u".cfg", &fileName)) {
                 continue;
             }
             fileName = fileName.toAsciiLowerCase();

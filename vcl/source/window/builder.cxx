@@ -3911,15 +3911,15 @@ std::vector<vcl::EnumContext::Context> VclBuilder::handleStyle(xmlreader::XmlRea
             if (name == "class")
             {
                 OUString classStyle = getStyleClass(reader);
-                OUString rest;
+                std::u16string_view rest;
 
                 if (classStyle.startsWith("context-", &rest))
                 {
-                    aContext.push_back(vcl::EnumContext::GetContextEnum(rest));
+                    aContext.push_back(vcl::EnumContext::GetContextEnum(OUString(rest)));
                 }
                 else if (classStyle.startsWith("priority-", &rest))
                 {
-                    nPriority = rest.toInt32();
+                    nPriority = o3tl::toInt32(rest);
                 }
                 else if (classStyle != "small-button" && classStyle != "destructive-action" && classStyle != "suggested-action")
                 {

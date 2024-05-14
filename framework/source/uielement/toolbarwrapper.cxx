@@ -120,8 +120,8 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
     if ( !(xFrame.is() && m_xConfigSource.is()) )
         return;
 
-    OUString aContextPart;
-    if ( m_aResourceURL.startsWith( "private:resource/toolbar/singlemode", &aContextPart ) && aContextPart.isEmpty() )
+    std::u16string_view aContextPart;
+    if ( m_aResourceURL.startsWith( "private:resource/toolbar/singlemode", &aContextPart ) && aContextPart.empty() )
     {
         auto xMultiplexer( ContextChangeEventMultiplexer::get( m_xContext ) );
         try
@@ -138,7 +138,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
     // Create VCL based toolbar which will be filled with settings data
     VclPtr<ToolBox> pToolBar;
     rtl::Reference<ToolBarManager> pToolBarManager;
-    if ( aContextPart.isEmpty() )
+    if ( aContextPart.empty() )
     {
         SolarMutexGuard aSolarMutexGuard;
         if ( !xParentWindow.is() )

@@ -313,12 +313,12 @@ void ShapeBase::finalizeFragmentImport()
         // Temporary fix, shapetype not found if referenced from different substream
         // FIXME: extend scope of ShapeContainer to store all shapetypes from the document
         static constexpr OUString sShapeTypePrefix = u"shapetype_"_ustr;
-        OUString tmp;
+        std::u16string_view tmp;
         if (aType.startsWith(sShapeTypePrefix)) {
             maTypeModel.moShapeType = o3tl::toInt32(aType.subView(sShapeTypePrefix.getLength()));
         }
         else if (aType.startsWith("_x0000_t", &tmp)) {
-            maTypeModel.moShapeType = tmp.toInt32();
+            maTypeModel.moShapeType = o3tl::toInt32(tmp);
         }
     }
 }

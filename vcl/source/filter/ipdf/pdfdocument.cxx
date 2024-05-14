@@ -112,11 +112,11 @@ sal_uInt32 PDFDocument::GetNextSignature()
             continue;
 
         const OString& rValue = pT->GetValue();
-        static constexpr std::string_view aPrefix = "Signature";
-        if (!rValue.startsWith(aPrefix))
+        std::string_view rest;
+        if (!rValue.startsWith("Signature", &rest))
             continue;
 
-        nRet = std::max(nRet, o3tl::toUInt32(rValue.subView(aPrefix.size())));
+        nRet = std::max(nRet, o3tl::toUInt32(rest));
     }
 
     return nRet + 1;

@@ -297,7 +297,7 @@ ShapeTypeContext::ShapeTypeContext(ContextHandler2Helper const & rParent,
         mrTypeModel.maShapeName = rAttribs.getXString( XML_id, OUString() );
         // get ShapeType and ShapeId from name for compatibility
         static constexpr OUString sShapeTypePrefix = u"shapetype_"_ustr;
-        OUString tmp;
+        std::u16string_view tmp;
         if( mrTypeModel.maShapeName.startsWith( sShapeTypePrefix ) )
         {
             mrTypeModel.maShapeId = mrTypeModel.maShapeName;
@@ -306,7 +306,7 @@ ShapeTypeContext::ShapeTypeContext(ContextHandler2Helper const & rParent,
         else if (mrTypeModel.maShapeName.startsWith("_x0000_t", &tmp))
         {
             mrTypeModel.maShapeId = mrTypeModel.maShapeName;
-            mrTypeModel.moShapeType = tmp.toInt32();
+            mrTypeModel.moShapeType = o3tl::toInt32(tmp);
         }
     }
 

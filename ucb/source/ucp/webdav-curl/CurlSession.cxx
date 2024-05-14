@@ -510,19 +510,19 @@ static auto ProcessHeaders(::std::vector<OString> const& rHeaders) -> ::std::map
     ::std::map<OUString, OUString> ret;
     for (OString const& rLine : rHeaders)
     {
-        OString line;
+        std::string_view line;
         if (!rLine.endsWith("\r\n", &line))
         {
             SAL_WARN("ucb.ucp.webdav.curl", "invalid header field (no CRLF)");
             continue;
         }
-        if (line.startsWith("HTTP/") // first line
-            || line.isEmpty()) // last line
+        if (o3tl::starts_with(line, "HTTP/") // first line
+            || line.empty()) // last line
         {
             continue;
         }
-        auto const nColon(line.indexOf(':'));
-        if (nColon == -1)
+        auto const nColon(line.find(':'));
+        if (nColon == std::string_view::npos)
         {
             {
                 SAL_WARN("ucb.ucp.webdav.curl", "invalid header field (no :)");
@@ -535,20 +535,21 @@ static auto ProcessHeaders(::std::vector<OString> const& rHeaders) -> ::std::map
             continue;
         }
         // case insensitive; must be ASCII
-        auto const name(::rtl::OStringToOUString(line.copy(0, nColon).toAsciiLowerCase(),
+        auto const name(::rtl::OStringToOUString(OString(line.substr(0, nColon)).toAsciiLowerCase(),
                                                  RTL_TEXTENCODING_ASCII_US));
         sal_Int32 nStart(nColon + 1);
-        while (nStart < line.getLength() && (line[nStart] == ' ' || line[nStart] == '\t'))
+        while (nStart < static_cast<sal_Int32>(line.size())
+               && (line[nStart] == ' ' || line[nStart] == '\t'))
         {
             ++nStart;
         }
-        sal_Int32 nEnd(line.getLength());
+        sal_Int32 nEnd(line.size());
         while (nStart < nEnd && (line[nEnd - 1] == ' ' || line[nEnd - 1] == '\t'))
         {
             --nEnd;
         }
         // RFC 7230 says that only ASCII works reliably anyway (neon also did this)
-        auto const value(::rtl::OStringToOUString(line.subView(nStart, nEnd - nStart),
+        auto const value(::rtl::OStringToOUString(line.substr(nStart, nEnd - nStart),
                                                   RTL_TEXTENCODING_ASCII_US));
         auto const it(ret.find(name));
         if (it != ret.end())
