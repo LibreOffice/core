@@ -860,21 +860,21 @@ Any ORowSetValue::makeAny() const
                 rValue <<= m_aValue.m_nDouble;
                 break;
             case DataType::DATE:
-                OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
+                assert(m_aValue.m_pValue && "Value is null!");
                 rValue <<= *static_cast<Date*>(m_aValue.m_pValue);
                 break;
             case DataType::TIME:
-                OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
+                assert(m_aValue.m_pValue && "Value is null!");
                 rValue <<= *static_cast<Time*>(m_aValue.m_pValue);
                 break;
             case DataType::TIMESTAMP:
-                OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
+                assert(m_aValue.m_pValue && "Value is null!");
                 rValue <<= *static_cast<DateTime*>(m_aValue.m_pValue);
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
-                OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
+                assert(m_aValue.m_pValue && "Value is null!");
                 rValue <<= *static_cast<Sequence<sal_Int8>*>(m_aValue.m_pValue);
                 break;
             case DataType::BLOB:
