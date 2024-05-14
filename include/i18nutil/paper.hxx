@@ -147,7 +147,7 @@ public:
     static PaperInfo getSystemDefaultPaper();
     static PaperInfo getDefaultPaperForLocale(const css::lang::Locale& rLocale);
 
-    static Paper fromPSName(const OString& rName);
+    static Paper fromPSName(std::string_view rName);
     static OString toPSName(Paper eType);
 
     static tools::Long sloppyFitPageDimension(tools::Long nDimension);

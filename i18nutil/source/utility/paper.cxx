@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <o3tl/unit_conversion.hxx>
+#include <o3tl/string_view.hxx>
 #include <officecfg/Setup.hxx>
 #include <officecfg/System.hxx>
 #include <sal/macros.h>
@@ -254,9 +255,9 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
 
             if (bOk && pBuffer && *pBuffer != 0)
             {
-                OString aPaper(pBuffer);
-                aPaper = aPaper.trim();
-                static const struct { const char *pName; Paper ePaper; } aCustoms [] =
+                std::string_view aPaper(pBuffer);
+                aPaper = o3tl::trim(aPaper);
+                static constexpr struct { std::string_view aName; Paper ePaper; } aCustoms [] =
                 {
                     { "B0",   PAPER_B0_ISO },
                     { "B1",   PAPER_B1_ISO },
@@ -279,7 +280,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
                 size_t const nExtraTabSize = SAL_N_ELEMENTS(aCustoms);
                 for (size_t i = 0; i < nExtraTabSize; ++i)
                 {
-                    if (rtl_str_compareIgnoreAsciiCase(aCustoms[i].pName, aPaper.getStr()) == 0)
+                    if (o3tl::equalsIgnoreAsciiCase(aCustoms[i].aName, aPaper))
                     {
                         ePaper = aCustoms[i].ePaper;
                         break;
@@ -288,7 +289,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
 
                 if (ePaper == PAPER_USER)
                 {
-                    bHalve = aPaper.startsWith("half", &aPaper);
+                    bHalve = o3tl::starts_with(aPaper, "half", &aPaper);
                     ePaper = PaperInfo::fromPSName(aPaper);
                 }
 
@@ -398,20 +399,20 @@ OString PaperInfo::toPSName(Paper ePaper)
     return static_cast<size_t>(ePaper) < nTabSize && aDinTab[ePaper].m_pPSName ?  OString(aDinTab[ePaper].m_pPSName) : OString();
 }
 
-Paper PaperInfo::fromPSName(const OString &rName)
+Paper PaperInfo::fromPSName(std::string_view rName)
 {
-    if (rName.isEmpty())
+    if (rName.empty())
         return PAPER_USER;
 
     for ( size_t i = 0; i < nTabSize; ++i )
     {
         if (aDinTab[i].m_pPSName &&
-          !rtl_str_compareIgnoreAsciiCase(aDinTab[i].m_pPSName, rName.getStr()))
+          o3tl::equalsIgnoreAsciiCase(aDinTab[i].m_pPSName, rName))
         {
             return static_cast<Paper>(i);
         }
         else if (aDinTab[i].m_pAltPSName &&
-          !rtl_str_compareIgnoreAsciiCase(aDinTab[i].m_pAltPSName, rName.getStr()))
+          o3tl::equalsIgnoreAsciiCase(aDinTab[i].m_pAltPSName, rName))
         {
             return static_cast<Paper>(i);
         }
