@@ -1527,6 +1527,11 @@ void doubleToString(rtl_tString** pResult, sal_Int32* pResultCapacity, sal_Int32
             }
             else
             {
+                if (nOrigDigits <= nDecPlaces && aParts.exponent >= 0 && fValue < 0x1p53)
+                {
+                    // Use integer representation with highest accuracy.
+                    nRoundDigits = nOrigDigits; // no rounding
+                }
                 nDecPlaces = std::max<sal_Int32>(0, nDecPlaces - nExp - 1);
                 eFormat = rtl_math_StringFormat_F;
             }
