@@ -32,6 +32,7 @@
 #include <string.h>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <officecfg/Office/Common.hxx>
 
 // Cyrillic upper case
 #define C_CYR_A "\xD0\x90"
@@ -1201,23 +1202,8 @@ OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
 bool
 DefaultNumberingProvider::isScriptFlagEnabled(const OUString& aName)
 {
-    if (! xHierarchicalNameAccess.is()) {
-        Reference< XMultiServiceFactory > xConfigProvider =
-            configuration::theDefaultProvider::get(m_xContext);
-
-        if (! xConfigProvider.is())
-            throw RuntimeException();
-
-        uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
-        {
-            {"nodepath", uno::Any(u"/org.openoffice.Office.Common/I18N"_ustr)}
-        }));
-
-        Reference<XInterface> xInterface = xConfigProvider->createInstanceWithArguments(
-            u"com.sun.star.configuration.ConfigurationAccess"_ustr, aArgs);
-
-        xHierarchicalNameAccess.set(xInterface, UNO_QUERY_THROW);
-    }
+    if (! xHierarchicalNameAccess.is())
+        xHierarchicalNameAccess = officecfg::Office::Common::I18N::get();
 
     Any aEnabled = xHierarchicalNameAccess->getByHierarchicalName(aName);
 
