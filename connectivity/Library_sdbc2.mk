@@ -14,6 +14,10 @@ $(eval $(call gb_Library_set_componentfile,sdbc2,connectivity/source/manager/sdb
 
 $(eval $(call gb_Library_use_external,sdbc2,boost_headers))
 
+$(eval $(call gb_Library_use_custom_headers,sdbc2,\
+       officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_sdk_api,sdbc2))
 
 $(eval $(call gb_Library_set_include,sdbc2,\

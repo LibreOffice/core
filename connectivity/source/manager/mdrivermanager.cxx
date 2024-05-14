@@ -32,6 +32,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/diagnose.h>
+#include <officecfg/Office/DataAccess.hxx>
 
 #include <algorithm>
 #include <iterator>
@@ -158,43 +159,6 @@ namespace
         return _rDriver.is() && _rDriver->acceptsURL( _rURL );
     }
 
-#if !ENABLE_FUZZERS
-    sal_Int32 lcl_getDriverPrecedence( const Reference<XComponentContext>& _rContext, Sequence< OUString >& _rPrecedence )
-    {
-        _rPrecedence.realloc( 0 );
-        try
-        {
-            // create a configuration provider
-            Reference< XMultiServiceFactory > xConfigurationProvider(
-                css::configuration::theDefaultProvider::get( _rContext ) );
-
-            // one argument for creating the node access: the path to the configuration node
-            Sequence< Any > aCreationArgs{ Any(NamedValue(
-                u"nodepath"_ustr, Any( u"org.openoffice.Office.DataAccess/DriverManager"_ustr ) )) };
-
-            // create the node access
-            Reference< XNameAccess > xDriverManagerNode(
-                xConfigurationProvider->createInstanceWithArguments(u"com.sun.star.configuration.ConfigurationAccess"_ustr, aCreationArgs),
-                UNO_QUERY);
-
-            OSL_ENSURE(xDriverManagerNode.is(), "lcl_getDriverPrecedence: could not open my configuration node!");
-            if (xDriverManagerNode.is())
-            {
-                // obtain the preference list
-                Any aPreferences = xDriverManagerNode->getByName(u"DriverPrecedence"_ustr);
-                bool bSuccess = aPreferences >>= _rPrecedence;
-                OSL_ENSURE(bSuccess || !aPreferences.hasValue(), "lcl_getDriverPrecedence: invalid value for the preferences node (no string sequence but not NULL)!");
-            }
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("connectivity.manager");
-        }
-
-        return _rPrecedence.getLength();
-    }
-#endif
-
     /// an STL algorithm compatible predicate comparing two DriverAccess instances by their implementation names
     struct CompareDriverAccessByName
     {
@@ -318,8 +282,8 @@ void OSDBCDriverManager::initializeDriverPrecedence()
     try
     {
         // get the precedence of the drivers from the configuration
-        Sequence< OUString > aDriverOrder;
-        if ( 0 == lcl_getDriverPrecedence( m_xContext, aDriverOrder ) )
+        Sequence< OUString > aDriverOrder = officecfg::Office::DataAccess::DriverManager::DriverPrecedence::get();
+        if ( 0 == aDriverOrder.getLength() )
             // nothing to do
             return;
 
