@@ -50,7 +50,7 @@ public:
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override
     {
-        return "stardiv.Toolkit.TreeControlModel";
+        return u"stardiv.Toolkit.TreeControlModel"_ustr;
     }
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override

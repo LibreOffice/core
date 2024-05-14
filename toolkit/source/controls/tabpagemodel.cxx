@@ -57,7 +57,7 @@ UnoControlTabPageModel::UnoControlTabPageModel( Reference< XComponentContext > c
 
 OUString SAL_CALL UnoControlTabPageModel::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoControlTabPageModel";
+    return u"stardiv.Toolkit.UnoControlTabPageModel"_ustr;
 }
 
 css::uno::Sequence< OUString > SAL_CALL UnoControlTabPageModel::getSupportedServiceNames()
@@ -70,7 +70,7 @@ css::uno::Sequence< OUString > SAL_CALL UnoControlTabPageModel::getSupportedServ
 
 OUString UnoControlTabPageModel::getServiceName( )
 {
-    return "com.sun.star.awt.tab.UnoControlTabPageModel";
+    return u"com.sun.star.awt.tab.UnoControlTabPageModel"_ustr;
 }
 
 Any UnoControlTabPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -80,7 +80,7 @@ Any UnoControlTabPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     switch ( nPropId )
     {
         case BASEPROPERTY_DEFAULTCONTROL:
-            aAny <<= OUString("com.sun.star.awt.tab.UnoControlTabPage");
+            aAny <<= u"com.sun.star.awt.tab.UnoControlTabPage"_ustr;
             break;
         case BASEPROPERTY_USERFORMCONTAINEES:
         {
@@ -168,12 +168,12 @@ UnoControlTabPage::~UnoControlTabPage()
 
 OUString UnoControlTabPage::GetComponentServiceName() const
 {
-    return "TabPageModel";
+    return u"TabPageModel"_ustr;
 }
 
 OUString SAL_CALL UnoControlTabPage::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoControlTabPage";
+    return u"stardiv.Toolkit.UnoControlTabPage"_ustr;
 }
 
 sal_Bool SAL_CALL UnoControlTabPage::supportsService(OUString const & ServiceName)
@@ -183,7 +183,7 @@ sal_Bool SAL_CALL UnoControlTabPage::supportsService(OUString const & ServiceNam
 
 css::uno::Sequence<OUString> SAL_CALL UnoControlTabPage::getSupportedServiceNames()
 {
-    return { "com.sun.star.awt.tab.UnoControlTabPage" };
+    return { u"com.sun.star.awt.tab.UnoControlTabPage"_ustr };
 }
 
 void SAL_CALL UnoControlTabPage::disposing( const lang::EventObject& Source )
@@ -242,7 +242,7 @@ void SAL_CALL UnoControlTabPage::windowResized( const css::awt::WindowEvent& e )
     // update the position because of property change event.
     mbSizeModified = true;
     // Properties in a sequence must be sorted!
-    Sequence< OUString > aProps{ "Height", "Width" };
+    Sequence< OUString > aProps{ u"Height"_ustr, u"Width"_ustr };
     Sequence< Any > aValues{ Any(aAppFontSize.Height()), Any(aAppFontSize.Width()) };
 
     ImplSetPropertyValues( aProps, aValues, true );
@@ -264,7 +264,7 @@ void SAL_CALL UnoControlTabPage::windowMoved( const css::awt::WindowEvent& e )
     // Remember that changes have been done by listener. No need to
     // update the position because of property change event.
     mbPosModified = true;
-    Sequence< OUString > aProps{ "PositionX", "PositionY" };
+    Sequence< OUString > aProps{ u"PositionX"_ustr, u"PositionY"_ustr };
     Sequence< Any > aValues{ Any(aTmp.Width()), Any(aTmp.Height()) };
 
     ImplSetPropertyValues( aProps, aValues, true );

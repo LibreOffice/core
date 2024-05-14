@@ -473,7 +473,7 @@ MapUnit /* MapModeUnit */ VCLUnoHelper::ConvertToMapModeUnit(sal_Int16 /* com.su
         break;
 
     default:
-        throw css::lang::IllegalArgumentException("Unsupported measure unit.", nullptr, 1 );
+        throw css::lang::IllegalArgumentException(u"Unsupported measure unit."_ustr, nullptr, 1 );
     }
     return eMode;
 }

@@ -218,7 +218,7 @@ bool UnoControl::ImplCheckLocalize( OUString& _rPossiblyLocalizable )
     {
         Reference< XPropertySet > xPropSet( mxModel, UNO_QUERY_THROW );
         Reference< resource::XStringResourceResolver > xStringResourceResolver(
-            xPropSet->getPropertyValue("ResourceResolver"),
+            xPropSet->getPropertyValue(u"ResourceResolver"_ustr),
             UNO_QUERY
         );
         if ( xStringResourceResolver.is() )
@@ -1059,7 +1059,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
     if ( !mxModel.is() )
     {
-        throw RuntimeException("createPeer: no model!", getXWeak());
+        throw RuntimeException(u"createPeer: no model!"_ustr, getXWeak());
     }
 
     if( getPeer().is() )
@@ -1284,9 +1284,9 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
     // tdf#150886 if false use the same settings for widgets regardless of theme
     // for consistency of document across platforms and in pdf/print output
     // note: tdf#155029 do this before updateFromModel
-    if (xInfo->hasPropertyByName("StandardTheme"))
+    if (xInfo->hasPropertyByName(u"StandardTheme"_ustr))
     {
-        aVal = xPSet->getPropertyValue("StandardTheme");
+        aVal = xPSet->getPropertyValue(u"StandardTheme"_ustr);
         bool bUseStandardTheme = false;
         aVal >>= bUseStandardTheme;
         if (bUseStandardTheme)
@@ -1363,7 +1363,7 @@ sal_Bool UnoControl::setModel( const Reference< XControlModel >& rxModel )
             Sequence< OUString> aNames = lcl_ImplGetPropertyNames( xPropSet );
             xPropSet->addPropertiesChangeListener( aNames, xListener );
 
-            mpData->bLocalizationSupport = xPSI->hasPropertyByName("ResourceResolver");
+            mpData->bLocalizationSupport = xPSI->hasPropertyByName(u"ResourceResolver"_ustr);
         }
         catch( const Exception& )
         {
@@ -1444,7 +1444,7 @@ sal_Bool UnoControl::supportsService( const OUString& rServiceName )
 
 Sequence< OUString > UnoControl::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.awt.UnoControl" };
+    return { u"com.sun.star.awt.UnoControl"_ustr };
 }
 
 

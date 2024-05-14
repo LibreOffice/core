@@ -139,7 +139,7 @@ private:
 
         GridColumn* const pGridColumn = dynamic_cast<GridColumn*>( i_column.get() );
         if ( pGridColumn == nullptr )
-            throw css::lang::IllegalArgumentException( "invalid column implementation", *this, 1 );
+            throw css::lang::IllegalArgumentException( u"invalid column implementation"_ustr, *this, 1 );
 
         m_aColumns.push_back( pGridColumn );
         sal_Int32 index = m_aColumns.size() - 1;
@@ -298,7 +298,7 @@ private:
 
     OUString SAL_CALL DefaultGridColumnModel::getImplementationName(  )
     {
-        return "stardiv.Toolkit.DefaultGridColumnModel";
+        return u"stardiv.Toolkit.DefaultGridColumnModel"_ustr;
     }
 
     sal_Bool SAL_CALL DefaultGridColumnModel::supportsService( const OUString& i_serviceName )
@@ -308,7 +308,7 @@ private:
 
     Sequence< OUString > SAL_CALL DefaultGridColumnModel::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.awt.grid.DefaultGridColumnModel" };
+        return { u"com.sun.star.awt.grid.DefaultGridColumnModel"_ustr };
     }
 
 

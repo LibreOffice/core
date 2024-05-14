@@ -52,7 +52,8 @@ CPPUNIT_TEST_FIXTURE(EventContainerTest, testInsertOrder)
 {
     Reference<XMultiComponentFactory> xFactory(mxContext->getServiceManager(), UNO_SET_THROW);
     Reference<XControlModel> xControlModel(
-        xFactory->createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", mxContext),
+        xFactory->createInstanceWithContext(u"com.sun.star.awt.UnoControlDialogModel"_ustr,
+                                            mxContext),
         UNO_QUERY_THROW);
 
     Reference<beans::XPropertySet> xPropSet(xControlModel, UNO_QUERY_THROW);
@@ -63,19 +64,19 @@ CPPUNIT_TEST_FIXTURE(EventContainerTest, testInsertOrder)
     script::ScriptEventDescriptor descr2;
     script::ScriptEventDescriptor descr3;
     script::ScriptEventDescriptor descr4;
-    xEvents->insertByName("b", Any(descr1));
-    xEvents->insertByName("a", Any(descr2));
-    xEvents->insertByName("1", Any(descr3));
-    xEvents->insertByName("A", Any(descr4));
+    xEvents->insertByName(u"b"_ustr, Any(descr1));
+    xEvents->insertByName(u"a"_ustr, Any(descr2));
+    xEvents->insertByName(u"1"_ustr, Any(descr3));
+    xEvents->insertByName(u"A"_ustr, Any(descr4));
 
     Sequence<OUString> aEventNames(xEvents->getElementNames());
     sal_Int32 nEventCount = aEventNames.getLength();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), nEventCount);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("b"), aEventNames[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), aEventNames[1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("1"), aEventNames[2]);
-    CPPUNIT_ASSERT_EQUAL(OUString("A"), aEventNames[3]);
+    CPPUNIT_ASSERT_EQUAL(u"b"_ustr, aEventNames[0]);
+    CPPUNIT_ASSERT_EQUAL(u"a"_ustr, aEventNames[1]);
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, aEventNames[2]);
+    CPPUNIT_ASSERT_EQUAL(u"A"_ustr, aEventNames[3]);
 
     css::uno::Reference<css::lang::XComponent>(xControlModel, css::uno::UNO_QUERY_THROW)->dispose();
 }

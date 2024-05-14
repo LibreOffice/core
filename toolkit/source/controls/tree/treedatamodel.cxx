@@ -245,7 +245,7 @@ void SAL_CALL MutableTreeDataModel::removeEventListener( const Reference< XEvent
 
 OUString SAL_CALL MutableTreeDataModel::getImplementationName(  )
 {
-    return "toolkit.MutableTreeDataModel";
+    return u"toolkit.MutableTreeDataModel"_ustr;
 }
 
 sal_Bool SAL_CALL MutableTreeDataModel::supportsService( const OUString& ServiceName )
@@ -255,7 +255,7 @@ sal_Bool SAL_CALL MutableTreeDataModel::supportsService( const OUString& Service
 
 Sequence< OUString > SAL_CALL MutableTreeDataModel::getSupportedServiceNames(  )
 {
-    Sequence<OUString> aSeq { "com.sun.star.awt.tree.MutableTreeDataModel" };
+    Sequence<OUString> aSeq { u"com.sun.star.awt.tree.MutableTreeDataModel"_ustr };
     return aSeq;
 }
 
@@ -508,7 +508,7 @@ OUString SAL_CALL MutableTreeNode::getCollapsedGraphicURL(  )
 
 OUString SAL_CALL MutableTreeNode::getImplementationName(  )
 {
-    return "toolkit.MutableTreeNode";
+    return u"toolkit.MutableTreeNode"_ustr;
 }
 
 sal_Bool SAL_CALL MutableTreeNode::supportsService( const OUString& ServiceName )
@@ -518,7 +518,7 @@ sal_Bool SAL_CALL MutableTreeNode::supportsService( const OUString& ServiceName 
 
 Sequence< OUString > SAL_CALL MutableTreeNode::getSupportedServiceNames(  )
 {
-    Sequence<OUString> aSeq { "com.sun.star.awt.tree.MutableTreeNode" };
+    Sequence<OUString> aSeq { u"com.sun.star.awt.tree.MutableTreeNode"_ustr };
     return aSeq;
 }
 

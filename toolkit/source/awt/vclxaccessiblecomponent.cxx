@@ -81,7 +81,7 @@ VCLXAccessibleComponent::~VCLXAccessibleComponent()
 
 OUString VCLXAccessibleComponent::getImplementationName()
 {
-    return "com.sun.star.comp.toolkit.AccessibleWindow";
+    return u"com.sun.star.comp.toolkit.AccessibleWindow"_ustr;
 }
 
 sal_Bool VCLXAccessibleComponent::supportsService( const OUString& rServiceName )
@@ -91,7 +91,7 @@ sal_Bool VCLXAccessibleComponent::supportsService( const OUString& rServiceName 
 
 uno::Sequence< OUString > VCLXAccessibleComponent::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aNames { "com.sun.star.awt.AccessibleWindow" };
+    uno::Sequence< OUString > aNames { u"com.sun.star.awt.AccessibleWindow"_ustr };
     return aNames;
 }
 

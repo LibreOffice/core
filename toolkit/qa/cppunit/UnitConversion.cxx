@@ -59,7 +59,7 @@ uno::Reference<awt::XWindowPeer>
 createFloatingWindow(uno::Reference<lang::XMultiServiceFactory> const& xMSF, sal_Int32 const nX,
                      sal_Int32 const nY, sal_Int32 const nWidth, sal_Int32 const nHeight)
 {
-    uno::Reference<awt::XToolkit> const xTk(xMSF->createInstance("com.sun.star.awt.Toolkit"),
+    uno::Reference<awt::XToolkit> const xTk(xMSF->createInstance(u"com.sun.star.awt.Toolkit"_ustr),
                                             uno::UNO_QUERY);
 
     awt::WindowDescriptor descriptor;
@@ -176,19 +176,19 @@ void ToolkitTest::testXUnitConversion()
                            std::abs(aSizeInMM_100TH.Height - aSizeInMM_10TH.Height * 10) < 10);
 
     // new
-    checkSize(xConv, aSize, util::MeasureUnit::PIXEL, "pixel");
-    checkSize(xConv, aSize, util::MeasureUnit::APPFONT, "appfont");
-    checkSize(xConv, aSize, util::MeasureUnit::SYSFONT, "sysfont");
+    checkSize(xConv, aSize, util::MeasureUnit::PIXEL, u"pixel"_ustr);
+    checkSize(xConv, aSize, util::MeasureUnit::APPFONT, u"appfont"_ustr);
+    checkSize(xConv, aSize, util::MeasureUnit::SYSFONT, u"sysfont"_ustr);
 
     // simply check some more parameters
-    checkSize(xConv, aSize, util::MeasureUnit::MM, "mm");
-    checkSize(xConv, aSize, util::MeasureUnit::CM, "cm");
-    checkSize(xConv, aSize, util::MeasureUnit::INCH_1000TH, "1/1000inch");
-    checkSize(xConv, aSize, util::MeasureUnit::INCH_100TH, "1/100inch");
-    checkSize(xConv, aSize, util::MeasureUnit::INCH_10TH, "1/10inch");
-    checkSize(xConv, aSize, util::MeasureUnit::INCH, "inch");
-    checkSize(xConv, aSize, util::MeasureUnit::POINT, "point");
-    checkSize(xConv, aSize, util::MeasureUnit::TWIP, "twip");
+    checkSize(xConv, aSize, util::MeasureUnit::MM, u"mm"_ustr);
+    checkSize(xConv, aSize, util::MeasureUnit::CM, u"cm"_ustr);
+    checkSize(xConv, aSize, util::MeasureUnit::INCH_1000TH, u"1/1000inch"_ustr);
+    checkSize(xConv, aSize, util::MeasureUnit::INCH_100TH, u"1/100inch"_ustr);
+    checkSize(xConv, aSize, util::MeasureUnit::INCH_10TH, u"1/10inch"_ustr);
+    checkSize(xConv, aSize, util::MeasureUnit::INCH, u"inch"_ustr);
+    checkSize(xConv, aSize, util::MeasureUnit::POINT, u"point"_ustr);
+    checkSize(xConv, aSize, util::MeasureUnit::TWIP, u"twip"_ustr);
 
     // convert the 1/100mm window size back to pixel
     awt::Size const aNewSize

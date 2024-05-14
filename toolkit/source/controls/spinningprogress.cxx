@@ -98,21 +98,21 @@ protected:
 
     OUString SAL_CALL SpinningProgressControlModel::getServiceName()
     {
-        return "com.sun.star.awt.SpinningProgressControlModel";
+        return u"com.sun.star.awt.SpinningProgressControlModel"_ustr;
     }
 
 
     OUString SAL_CALL SpinningProgressControlModel::getImplementationName(  )
     {
-        return "org.openoffice.comp.toolkit.SpinningProgressControlModel";
+        return u"org.openoffice.comp.toolkit.SpinningProgressControlModel"_ustr;
     }
 
 
     Sequence< OUString > SAL_CALL SpinningProgressControlModel::getSupportedServiceNames()
     {
-        return { "com.sun.star.awt.SpinningProgressControlModel",
-                 "com.sun.star.awt.AnimatedImagesControlModel",
-                 "com.sun.star.awt.UnoControlModel" };
+        return { u"com.sun.star.awt.SpinningProgressControlModel"_ustr,
+                 u"com.sun.star.awt.AnimatedImagesControlModel"_ustr,
+                 u"com.sun.star.awt.UnoControlModel"_ustr };
     }
 
 }

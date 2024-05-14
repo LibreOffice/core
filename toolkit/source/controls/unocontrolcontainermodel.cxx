@@ -40,12 +40,12 @@ UnoControlContainerModel::UnoControlContainerModel( const css::uno::Reference< c
 
 OUString UnoControlContainerModel::getServiceName()
 {
-    return "stardiv.vcl.controlmodel.ControlContainer";
+    return u"stardiv.vcl.controlmodel.ControlContainer"_ustr;
 }
 
 OUString UnoControlContainerModel::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoControlContainerModel";
+    return u"stardiv.Toolkit.UnoControlContainerModel"_ustr;
 }
 
 css::uno::Sequence<OUString>

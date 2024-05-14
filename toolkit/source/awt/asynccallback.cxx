@@ -67,7 +67,7 @@ private:
 // com.sun.star.uno.XServiceInfo:
 OUString SAL_CALL AsyncCallback::getImplementationName()
 {
-    return "com.sun.star.awt.comp.AsyncCallback";
+    return u"com.sun.star.awt.comp.AsyncCallback"_ustr;
 }
 
 sal_Bool SAL_CALL AsyncCallback::supportsService(OUString const & serviceName)
@@ -77,7 +77,7 @@ sal_Bool SAL_CALL AsyncCallback::supportsService(OUString const & serviceName)
 
 css::uno::Sequence< OUString > SAL_CALL AsyncCallback::getSupportedServiceNames()
 {
-    return { "com.sun.star.awt.AsyncCallback" };
+    return { u"com.sun.star.awt.AsyncCallback"_ustr };
 }
 
 // css::awt::XRequestCallback:

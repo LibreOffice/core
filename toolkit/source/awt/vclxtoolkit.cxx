@@ -1168,7 +1168,7 @@ void SVTXRoadmap::propertyChange( const css::beans::PropertyChangeEvent& evt )
     css::uno::Reference< css::uno::XInterface > xRoadmapItem = evt.Source;
     sal_Int32 nID = 0;
     css::uno::Reference< css::beans::XPropertySet > xPropertySet( xRoadmapItem, css::uno::UNO_QUERY );
-    css::uno::Any aValue = xPropertySet->getPropertyValue("ID");
+    css::uno::Any aValue = xPropertySet->getPropertyValue(u"ID"_ustr);
     aValue >>= nID;
 
     OUString sPropertyName = evt.PropertyName;
@@ -1213,11 +1213,11 @@ RMItemData SVTXRoadmap::GetRMItemData( const css::container::ContainerEvent& _rE
     css::uno::Reference< css::beans::XPropertySet > xPropertySet( xRoadmapItem, css::uno::UNO_QUERY );
     if ( xPropertySet.is() )
     {
-        css::uno::Any aValue = xPropertySet->getPropertyValue("Label");
+        css::uno::Any aValue = xPropertySet->getPropertyValue(u"Label"_ustr);
         aValue >>= aCurRMItemData.Label;
-        aValue = xPropertySet->getPropertyValue("ID");
+        aValue = xPropertySet->getPropertyValue(u"ID"_ustr);
         aValue >>= aCurRMItemData.n_ID;
-        aValue = xPropertySet->getPropertyValue("Enabled");
+        aValue = xPropertySet->getPropertyValue(u"Enabled"_ustr);
         aValue >>= aCurRMItemData.b_Enabled;
     }
     else
@@ -1382,7 +1382,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
     if ( aServiceName == "tabcontrolnotabs" )
     {
         nWinBits |= WB_NOBORDER;
-        nType = ImplGetComponentType( "tabcontrol" );
+        nType = ImplGetComponentType( u"tabcontrol"_ustr );
     }
     if ( !pParent )
     {
@@ -2121,7 +2121,7 @@ css::uno::Reference< css::datatransfer::clipboard::XClipboard > SAL_CALL VCLXToo
 // XServiceInfo
 OUString VCLXToolkit::getImplementationName()
 {
-    return "stardiv.Toolkit.VCLXToolkit";
+    return u"stardiv.Toolkit.VCLXToolkit"_ustr;
 }
 
 sal_Bool VCLXToolkit::supportsService( const OUString& rServiceName )
@@ -2132,7 +2132,7 @@ sal_Bool VCLXToolkit::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > VCLXToolkit::getSupportedServiceNames()
 {
     return css::uno::Sequence<OUString>{
-        "com.sun.star.awt.Toolkit", "stardiv.vcl.VclToolkit"};
+        u"com.sun.star.awt.Toolkit"_ustr, u"stardiv.vcl.VclToolkit"_ustr};
 }
 
 // css::awt::XExtendedToolkit:
@@ -2545,7 +2545,7 @@ void SAL_CALL VCLXToolkit::keyPress( const css::awt::KeyEvent & aKeyEvent )
     css::uno::Reference<css::awt::XWindow> xWindow ( aKeyEvent.Source, css::uno::UNO_QUERY_THROW );
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
     if( !pWindow )
-        throw css::uno::RuntimeException( "invalid event source" );
+        throw css::uno::RuntimeException( u"invalid event source"_ustr );
 
     ::KeyEvent aVCLKeyEvent = VCLUnoHelper::createVCLKeyEvent( aKeyEvent );
     ::Application::PostKeyEvent( VclEventId::WindowKeyInput, pWindow, &aVCLKeyEvent );
@@ -2556,7 +2556,7 @@ void SAL_CALL VCLXToolkit::keyRelease( const css::awt::KeyEvent & aKeyEvent )
     css::uno::Reference<css::awt::XWindow> xWindow ( aKeyEvent.Source, css::uno::UNO_QUERY_THROW );
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
     if( !pWindow )
-        throw css::uno::RuntimeException( "invalid event source" );
+        throw css::uno::RuntimeException( u"invalid event source"_ustr );
 
     ::KeyEvent aVCLKeyEvent = VCLUnoHelper::createVCLKeyEvent( aKeyEvent );
     ::Application::PostKeyEvent( VclEventId::WindowKeyUp, pWindow, &aVCLKeyEvent );
@@ -2568,7 +2568,7 @@ void SAL_CALL VCLXToolkit::mousePress( const css::awt::MouseEvent & aMouseEvent 
     css::uno::Reference<css::awt::XWindow> xWindow ( aMouseEvent.Source, css::uno::UNO_QUERY_THROW );
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
     if( !pWindow )
-        throw css::uno::RuntimeException( "invalid event source" );
+        throw css::uno::RuntimeException( u"invalid event source"_ustr );
 
     ::MouseEvent aVCLMouseEvent = VCLUnoHelper::createVCLMouseEvent( aMouseEvent );
     ::Application::PostMouseEvent( VclEventId::WindowMouseButtonDown, pWindow, &aVCLMouseEvent );
@@ -2579,7 +2579,7 @@ void SAL_CALL VCLXToolkit::mouseRelease( const css::awt::MouseEvent & aMouseEven
     css::uno::Reference<css::awt::XWindow> xWindow ( aMouseEvent.Source, css::uno::UNO_QUERY_THROW );
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
     if( !pWindow )
-        throw css::uno::RuntimeException( "invalid event source" );
+        throw css::uno::RuntimeException( u"invalid event source"_ustr );
 
     ::MouseEvent aVCLMouseEvent = VCLUnoHelper::createVCLMouseEvent( aMouseEvent );
     ::Application::PostMouseEvent( VclEventId::WindowMouseButtonUp, pWindow, &aVCLMouseEvent );
@@ -2590,7 +2590,7 @@ void SAL_CALL VCLXToolkit::mouseMove( const css::awt::MouseEvent & aMouseEvent )
     css::uno::Reference<css::awt::XWindow> xWindow ( aMouseEvent.Source, css::uno::UNO_QUERY_THROW );
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
     if( !pWindow )
-        throw css::uno::RuntimeException( "invalid event source" );
+        throw css::uno::RuntimeException( u"invalid event source"_ustr );
 
     ::MouseEvent aVCLMouseEvent = VCLUnoHelper::createVCLMouseEvent( aMouseEvent );
     ::Application::PostMouseEvent( VclEventId::WindowMouseMove, pWindow, &aVCLMouseEvent );

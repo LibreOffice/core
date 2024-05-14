@@ -1388,7 +1388,7 @@ bool TreeControlPeer::loadImage( const OUString& rURL, Image& rImage )
 
     try
     {
-        css::beans::PropertyValues aProps{ comphelper::makePropertyValue("URL", rURL) };
+        css::beans::PropertyValues aProps{ comphelper::makePropertyValue(u"URL"_ustr, rURL) };
         Reference< XGraphic > xGraphic( mxGraphicProvider->queryGraphic( aProps ) );
 
         Graphic aGraphic( xGraphic );

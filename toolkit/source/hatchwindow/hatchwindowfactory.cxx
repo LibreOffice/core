@@ -63,7 +63,7 @@ uno::Reference< embed::XHatchWindow > SAL_CALL OHatchWindowFactory::createHatchW
 
 OUString SAL_CALL OHatchWindowFactory::getImplementationName()
 {
-    return "com.sun.star.comp.embed.HatchWindowFactory";
+    return u"com.sun.star.comp.embed.HatchWindowFactory"_ustr;
 }
 
 sal_Bool SAL_CALL OHatchWindowFactory::supportsService( const OUString& ServiceName )
@@ -73,7 +73,7 @@ sal_Bool SAL_CALL OHatchWindowFactory::supportsService( const OUString& ServiceN
 
 uno::Sequence< OUString > SAL_CALL OHatchWindowFactory::getSupportedServiceNames()
 {
-    return { "com.sun.star.embed.HatchWindowFactory", "com.sun.star.comp.embed.HatchWindowFactory" };
+    return { u"com.sun.star.embed.HatchWindowFactory"_ustr, u"com.sun.star.comp.embed.HatchWindowFactory"_ustr };
 }
 
 }

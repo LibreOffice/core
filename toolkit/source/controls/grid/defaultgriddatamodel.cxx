@@ -480,7 +480,7 @@ private:
 
     OUString SAL_CALL DefaultGridDataModel::getImplementationName(  )
     {
-        return "stardiv.Toolkit.DefaultGridDataModel";
+        return u"stardiv.Toolkit.DefaultGridDataModel"_ustr;
     }
 
     sal_Bool SAL_CALL DefaultGridDataModel::supportsService( const OUString& ServiceName )
@@ -490,7 +490,7 @@ private:
 
     Sequence< OUString > SAL_CALL DefaultGridDataModel::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.awt.grid.DefaultGridDataModel" };
+        return { u"com.sun.star.awt.grid.DefaultGridDataModel"_ustr };
     }
 
 

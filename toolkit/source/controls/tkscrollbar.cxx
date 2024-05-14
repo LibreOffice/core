@@ -46,12 +46,12 @@ namespace toolkit
 
     OUString UnoControlScrollBarModel::getServiceName( )
     {
-        return "stardiv.vcl.controlmodel.ScrollBar";
+        return u"stardiv.vcl.controlmodel.ScrollBar"_ustr;
     }
 
     OUString UnoControlScrollBarModel::getImplementationName()
     {
-        return "stardiv.Toolkit.UnoControlScrollBarModel";
+        return u"stardiv.Toolkit.UnoControlScrollBarModel"_ustr;
     }
 
     css::uno::Sequence<OUString>
@@ -72,7 +72,7 @@ namespace toolkit
         case BASEPROPERTY_LIVE_SCROLL:
             return uno::Any( false );
         case BASEPROPERTY_DEFAULTCONTROL:
-            return uno::Any( OUString( "stardiv.vcl.control.ScrollBar" ) );
+            return uno::Any( u"stardiv.vcl.control.ScrollBar"_ustr );
 
         default:
             return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -103,7 +103,7 @@ namespace toolkit
 
     OUString UnoScrollBarControl::GetComponentServiceName() const
     {
-        return "ScrollBar";
+        return u"ScrollBar"_ustr;
     }
 
     // css::uno::XInterface
@@ -289,7 +289,7 @@ namespace toolkit
 
     OUString UnoScrollBarControl::getImplementationName()
     {
-        return "stardiv.Toolkit.UnoScrollBarControl";
+        return u"stardiv.Toolkit.UnoScrollBarControl"_ustr;
     }
 
     css::uno::Sequence<OUString> UnoScrollBarControl::getSupportedServiceNames()

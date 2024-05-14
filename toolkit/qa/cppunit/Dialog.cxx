@@ -48,11 +48,12 @@ CPPUNIT_TEST_FIXTURE(DialogTest, testDialogSizeable)
     uno::Reference<lang::XMultiComponentFactory> xFactory(mxContext->getServiceManager(),
                                                           uno::UNO_SET_THROW);
     uno::Reference<awt::XControlModel> xControlModel(
-        xFactory->createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", mxContext),
+        xFactory->createInstanceWithContext(u"com.sun.star.awt.UnoControlDialogModel"_ustr,
+                                            mxContext),
         uno::UNO_QUERY_THROW);
 
     uno::Reference<beans::XPropertySet> xPropSet(xControlModel, uno::UNO_QUERY_THROW);
-    xPropSet->setPropertyValue("Sizeable", uno::Any(true));
+    xPropSet->setPropertyValue(u"Sizeable"_ustr, uno::Any(true));
 
     uno::Reference<awt::XUnoControlDialog> xControl = awt::UnoControlDialog::create(mxContext);
     xControl->setModel(xControlModel);

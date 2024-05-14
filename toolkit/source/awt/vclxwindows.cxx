@@ -2035,7 +2035,7 @@ namespace
              Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
              Reference< XGraphicProvider > xProvider(graphic::GraphicProvider::create(xContext));
              ::comphelper::NamedValueCollection aMediaProperties;
-             aMediaProperties.put( "URL", i_rImageURL );
+             aMediaProperties.put( u"URL"_ustr, i_rImageURL );
              Reference< XGraphic > xGraphic = xProvider->queryGraphic( aMediaProperties.getPropertyValues() );
              return Image( xGraphic );
         }
@@ -2112,10 +2112,10 @@ void SAL_CALL VCLXListBox::itemListChanged( const EventObject& i_rEvent )
     uno::Reference< beans::XPropertySet > xPropSet( i_rEvent.Source, uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySetInfo > xPSI( xPropSet->getPropertySetInfo(), uno::UNO_SET_THROW );
     uno::Reference< resource::XStringResourceResolver > xStringResourceResolver;
-    if ( xPSI->hasPropertyByName("ResourceResolver") )
+    if ( xPSI->hasPropertyByName(u"ResourceResolver"_ustr) )
     {
         xStringResourceResolver.set(
-            xPropSet->getPropertyValue("ResourceResolver"),
+            xPropSet->getPropertyValue(u"ResourceResolver"_ustr),
             uno::UNO_QUERY
         );
     }
@@ -2590,8 +2590,8 @@ uno::Sequence< beans::NamedValue > SAL_CALL VCLXMultiPage::getTabProps( sal_Int3
 
     uno::Sequence< beans::NamedValue > props
     {
-        { "Title",    css::uno::Any(pTabControl->GetPageText( sal::static_int_cast< sal_uInt16 >( ID ) )) },
-        { "Position", css::uno::Any(pTabControl->GetPagePos( sal::static_int_cast< sal_uInt16 >( ID ) )) }
+        { u"Title"_ustr,    css::uno::Any(pTabControl->GetPageText( sal::static_int_cast< sal_uInt16 >( ID ) )) },
+        { u"Position"_ustr, css::uno::Any(pTabControl->GetPagePos( sal::static_int_cast< sal_uInt16 >( ID ) )) }
     };
     return props;
 }
@@ -4435,10 +4435,10 @@ void SAL_CALL VCLXComboBox::itemListChanged( const EventObject& i_rEvent )
     uno::Reference< beans::XPropertySetInfo > xPSI( xPropSet->getPropertySetInfo(), uno::UNO_SET_THROW );
     // bool localize = xPSI->hasPropertyByName("ResourceResolver");
     uno::Reference< resource::XStringResourceResolver > xStringResourceResolver;
-    if ( xPSI->hasPropertyByName("ResourceResolver") )
+    if ( xPSI->hasPropertyByName(u"ResourceResolver"_ustr) )
     {
         xStringResourceResolver.set(
-            xPropSet->getPropertyValue("ResourceResolver"),
+            xPropSet->getPropertyValue(u"ResourceResolver"_ustr),
             uno::UNO_QUERY
         );
     }
@@ -6959,7 +6959,7 @@ void SVTXFormattedField::SetValue(const css::uno::Any& rValue)
 
     if (!rValue.hasValue())
     {
-        pField->SetText("");
+        pField->SetText(u""_ustr);
     }
     else
     {

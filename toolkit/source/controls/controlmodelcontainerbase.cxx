@@ -73,7 +73,7 @@ namespace
     const Sequence< OUString >& lcl_getLanguageDependentProperties()
     {
         // note: properties must be sorted
-        static Sequence<OUString> s_aLanguageDependentProperties{ "HelpText", "Title" };
+        static Sequence<OUString> s_aLanguageDependentProperties{ u"HelpText"_ustr, u"Title"_ustr };
         return s_aLanguageDependentProperties;
     }
 
@@ -317,7 +317,7 @@ Reference< XInterface > ControlModelContainerBase::createInstance( const OUStrin
         Reference< XAggregation > xAgg( xCloneAccess, UNO_QUERY );
         if ( xAgg.is() )
         {
-            if ( xSI->supportsService("com.sun.star.awt.UnoControlModel") )
+            if ( xSI->supportsService(u"com.sun.star.awt.UnoControlModel"_ustr) )
             {
                 // release 3 of the 4 references we have to the object
                 xAgg.clear();
@@ -343,33 +343,33 @@ Reference< XInterface > ControlModelContainerBase::createInstanceWithArguments( 
 
 Sequence< OUString > ControlModelContainerBase::getAvailableServiceNames()
 {
-    return { "com.sun.star.awt.UnoControlEditModel",
-            "com.sun.star.awt.UnoControlFormattedFieldModel",
-            "com.sun.star.awt.UnoControlFileControlModel",
-            "com.sun.star.awt.UnoControlButtonModel",
-            "com.sun.star.awt.UnoControlImageControlModel",
-            "com.sun.star.awt.UnoControlRadioButtonModel",
-            "com.sun.star.awt.UnoControlCheckBoxModel",
-            "com.sun.star.awt.UnoControlFixedTextModel",
-            "com.sun.star.awt.UnoControlGroupBoxModel",
-            "com.sun.star.awt.UnoControlListBoxModel",
-            "com.sun.star.awt.UnoControlComboBoxModel",
-            "com.sun.star.awt.UnoControlDateFieldModel",
-            "com.sun.star.awt.UnoControlTimeFieldModel",
-            "com.sun.star.awt.UnoControlNumericFieldModel",
-            "com.sun.star.awt.UnoControlCurrencyFieldModel",
-            "com.sun.star.awt.UnoControlPatternFieldModel",
-            "com.sun.star.awt.UnoControlProgressBarModel",
-            "com.sun.star.awt.UnoControlScrollBarModel",
-            "com.sun.star.awt.UnoControlFixedLineModel",
-            "com.sun.star.awt.UnoControlRoadmapModel",
-            "com.sun.star.awt.tree.TreeControlModel",
-            "com.sun.star.awt.grid.UnoControlGridModel",
-            "com.sun.star.awt.UnoControlFixedHyperlinkModel",
-            "com.sun.star.awt.tab.UnoControlTabPageContainerModel",
-            "com.sun.star.awt.tab.UnoControlTabPageModel",
-            "com.sun.star.awt.UnoMultiPageModel",
-            "com.sun.star.awt.UnoFrameModel"
+    return { u"com.sun.star.awt.UnoControlEditModel"_ustr,
+            u"com.sun.star.awt.UnoControlFormattedFieldModel"_ustr,
+            u"com.sun.star.awt.UnoControlFileControlModel"_ustr,
+            u"com.sun.star.awt.UnoControlButtonModel"_ustr,
+            u"com.sun.star.awt.UnoControlImageControlModel"_ustr,
+            u"com.sun.star.awt.UnoControlRadioButtonModel"_ustr,
+            u"com.sun.star.awt.UnoControlCheckBoxModel"_ustr,
+            u"com.sun.star.awt.UnoControlFixedTextModel"_ustr,
+            u"com.sun.star.awt.UnoControlGroupBoxModel"_ustr,
+            u"com.sun.star.awt.UnoControlListBoxModel"_ustr,
+            u"com.sun.star.awt.UnoControlComboBoxModel"_ustr,
+            u"com.sun.star.awt.UnoControlDateFieldModel"_ustr,
+            u"com.sun.star.awt.UnoControlTimeFieldModel"_ustr,
+            u"com.sun.star.awt.UnoControlNumericFieldModel"_ustr,
+            u"com.sun.star.awt.UnoControlCurrencyFieldModel"_ustr,
+            u"com.sun.star.awt.UnoControlPatternFieldModel"_ustr,
+            u"com.sun.star.awt.UnoControlProgressBarModel"_ustr,
+            u"com.sun.star.awt.UnoControlScrollBarModel"_ustr,
+            u"com.sun.star.awt.UnoControlFixedLineModel"_ustr,
+            u"com.sun.star.awt.UnoControlRoadmapModel"_ustr,
+            u"com.sun.star.awt.tree.TreeControlModel"_ustr,
+            u"com.sun.star.awt.grid.UnoControlGridModel"_ustr,
+            u"com.sun.star.awt.UnoControlFixedHyperlinkModel"_ustr,
+            u"com.sun.star.awt.tab.UnoControlTabPageContainerModel"_ustr,
+            u"com.sun.star.awt.tab.UnoControlTabPageModel"_ustr,
+            u"com.sun.star.awt.UnoMultiPageModel"_ustr,
+            u"com.sun.star.awt.UnoFrameModel"_ustr
     };
 }
 
@@ -875,7 +875,7 @@ void ControlModelContainerBase::implUpdateGroupStructure()
         // we'll need this in every state
         xModelSI.set(rControlModel, css::uno::UNO_QUERY);
         // is it a radio button?
-        bool bIsRadioButton = xModelSI.is() && xModelSI->supportsService( "com.sun.star.awt.UnoControlRadioButtonModel" );
+        bool bIsRadioButton = xModelSI.is() && xModelSI->supportsService( u"com.sun.star.awt.UnoControlRadioButtonModel"_ustr );
 
         switch ( eState )
         {
@@ -1285,10 +1285,10 @@ void ControlContainerBase::ImplSetPosSize( Reference< XControl >& rxCtrl )
     Reference< XPropertySet > xP( rxCtrl->getModel(), UNO_QUERY );
 
     sal_Int32 nX = 0, nY = 0, nWidth = 0, nHeight = 0;
-    xP->getPropertyValue("PositionX") >>= nX;
-    xP->getPropertyValue("PositionY") >>= nY;
-    xP->getPropertyValue("Width") >>= nWidth;
-    xP->getPropertyValue("Height") >>= nHeight;
+    xP->getPropertyValue(u"PositionX"_ustr) >>= nX;
+    xP->getPropertyValue(u"PositionY"_ustr) >>= nY;
+    xP->getPropertyValue(u"Width"_ustr) >>= nWidth;
+    xP->getPropertyValue(u"Height"_ustr) >>= nHeight;
     MapMode aMode( MapUnit::MapAppFont );
     OutputDevice*pOutDev = Application::GetDefaultDevice();
     if ( pOutDev )
@@ -1581,10 +1581,10 @@ void ControlContainerBase::addingControl( const Reference< XControl >& _rxContro
     if ( xProps.is() )
     {
         const Sequence< OUString > aNames {
-          "PositionX",
-          "PositionY",
-          "Width",
-          "Height"
+          u"PositionX"_ustr,
+          u"PositionY"_ustr,
+          u"Width"_ustr,
+          u"Height"_ustr
         };
 
         xProps->addPropertiesChangeListener( aNames, this );

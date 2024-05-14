@@ -87,7 +87,7 @@ public:
 
     OUString AnimatedImagesControl::GetComponentServiceName() const
     {
-        return "AnimatedImages";
+        return u"AnimatedImages"_ustr;
     }
 
 
@@ -118,7 +118,7 @@ public:
 
     OUString SAL_CALL AnimatedImagesControl::getImplementationName(  )
     {
-        return "org.openoffice.comp.toolkit.AnimatedImagesControl";
+        return u"org.openoffice.comp.toolkit.AnimatedImagesControl"_ustr;
     }
 
 
@@ -271,19 +271,19 @@ namespace toolkit {
 
     OUString SAL_CALL AnimatedImagesControlModel::getServiceName()
     {
-        return "com.sun.star.awt.AnimatedImagesControlModel";
+        return u"com.sun.star.awt.AnimatedImagesControlModel"_ustr;
     }
 
 
     OUString SAL_CALL AnimatedImagesControlModel::getImplementationName(  )
     {
-        return "org.openoffice.comp.toolkit.AnimatedImagesControlModel";
+        return u"org.openoffice.comp.toolkit.AnimatedImagesControlModel"_ustr;
     }
 
 
     Sequence< OUString > SAL_CALL AnimatedImagesControlModel::getSupportedServiceNames()
     {
-        return { "com.sun.star.awt.AnimatedImagesControlModel", "com.sun.star.awt.UnoControlModel" };
+        return { u"com.sun.star.awt.AnimatedImagesControlModel"_ustr, u"com.sun.star.awt.UnoControlModel"_ustr };
     }
 
 
@@ -313,7 +313,7 @@ namespace toolkit {
         switch ( i_propertyId )
         {
         case BASEPROPERTY_DEFAULTCONTROL:
-            return Any( OUString("com.sun.star.awt.AnimatedImagesControl") );
+            return Any( u"com.sun.star.awt.AnimatedImagesControl"_ustr );
 
         case BASEPROPERTY_BORDER:
             return Any( css::awt::VisualEffect::NONE );

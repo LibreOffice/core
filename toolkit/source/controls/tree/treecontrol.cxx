@@ -76,7 +76,7 @@ rtl::Reference<UnoControlModel> UnoTreeModel::Clone() const
 
 OUString UnoTreeModel::getServiceName()
 {
-    return "com.sun.star.awt.tree.TreeControlModel";
+    return u"com.sun.star.awt.tree.TreeControlModel"_ustr;
 }
 
 Any UnoTreeModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -97,7 +97,7 @@ Any UnoTreeModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     case BASEPROPERTY_TREE_SHOWSHANDLES:
         return Any( true );
     case BASEPROPERTY_DEFAULTCONTROL:
-        return uno::Any( OUString( "com.sun.star.awt.tree.TreeControl" ) );
+        return uno::Any( u"com.sun.star.awt.tree.TreeControl"_ustr );
     default:
         return UnoControlModel::ImplGetDefaultValue( nPropId );
     }
@@ -189,7 +189,7 @@ UnoTreeControl::UnoTreeControl()
 
 OUString UnoTreeControl::GetComponentServiceName() const
 {
-    return "Tree";
+    return u"Tree"_ustr;
 }
 
 

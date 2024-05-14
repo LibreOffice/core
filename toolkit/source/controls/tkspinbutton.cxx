@@ -143,7 +143,7 @@ public:
 
     OUString UnoSpinButtonModel::getServiceName( )
     {
-        return "com.sun.star.awt.UnoControlSpinButtonModel";
+        return u"com.sun.star.awt.UnoControlSpinButtonModel"_ustr;
     }
 
 
@@ -152,7 +152,7 @@ public:
         switch ( nPropId )
         {
         case BASEPROPERTY_DEFAULTCONTROL:
-            return Any( OUString("com.sun.star.awt.UnoControlSpinButton") );
+            return Any( u"com.sun.star.awt.UnoControlSpinButton"_ustr );
 
         case BASEPROPERTY_BORDER:
             return Any( sal_Int16(0) );
@@ -182,13 +182,13 @@ public:
 
     OUString SAL_CALL UnoSpinButtonModel::getImplementationName(  )
     {
-        return "stardiv.Toolkit.UnoSpinButtonModel";
+        return u"stardiv.Toolkit.UnoSpinButtonModel"_ustr;
     }
 
 
     Sequence< OUString > SAL_CALL UnoSpinButtonModel::getSupportedServiceNames()
     {
-        const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlSpinButtonModel" };
+        const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlSpinButtonModel"_ustr };
         return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
     }
 
@@ -204,7 +204,7 @@ public:
 
     OUString UnoSpinButtonControl::GetComponentServiceName() const
     {
-        return "SpinButton";
+        return u"SpinButton"_ustr;
     }
 
 
@@ -242,13 +242,13 @@ public:
 
     OUString SAL_CALL UnoSpinButtonControl::getImplementationName(  )
     {
-        return "stardiv.Toolkit.UnoSpinButtonControl";
+        return u"stardiv.Toolkit.UnoSpinButtonControl"_ustr;
     }
 
 
     Sequence< OUString > SAL_CALL UnoSpinButtonControl::getSupportedServiceNames()
     {
-        const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlSpinButton" };
+        const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlSpinButton"_ustr };
         return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals );
     }
 

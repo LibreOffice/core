@@ -66,12 +66,12 @@ namespace toolkit
 
     OUString UnoControlRoadmapModel::getServiceName()
     {
-        return "stardiv.vcl.controlmodel.Roadmap";
+        return u"stardiv.vcl.controlmodel.Roadmap"_ustr;
     }
 
     OUString UnoControlRoadmapModel::getImplementationName()
     {
-        return "stardiv.Toolkit.UnoControlRoadmapModel";
+        return u"stardiv.Toolkit.UnoControlRoadmapModel"_ustr;
     }
 
     css::uno::Sequence<OUString>
@@ -105,7 +105,7 @@ namespace toolkit
                     aReturn <<= sal_Int16(2);              // No Border
                     break;
                 case BASEPROPERTY_DEFAULTCONTROL:
-                    aReturn <<= OUString( "stardiv.vcl.control.Roadmap" );
+                    aReturn <<= u"stardiv.vcl.control.Roadmap"_ustr;
                     break;
             default : aReturn = UnoControlRoadmapModel_Base::ImplGetDefaultValue( nPropId ); break;
         }
@@ -176,7 +176,7 @@ namespace toolkit
         if ( !xRoadmapItem.is() )
             throw IllegalArgumentException();
         Reference< XServiceInfo > xServiceInfo( xRoadmapItem, UNO_QUERY );
-        bool bIsRoadmapItem = xServiceInfo->supportsService("com.sun.star.awt.RoadmapItem");
+        bool bIsRoadmapItem = xServiceInfo->supportsService(u"com.sun.star.awt.RoadmapItem"_ustr);
         if ( !bIsRoadmapItem )
             throw IllegalArgumentException();
     }
@@ -189,11 +189,11 @@ namespace toolkit
         if ( xProps.is() )
         {
             sal_Int32 LocID = 0;
-            Any aValue = xPropertySet->getPropertyValue("ID");
+            Any aValue = xPropertySet->getPropertyValue(u"ID"_ustr);
             aValue >>= LocID;
             if (LocID < 0)              // index may not be smaller than zero
             {
-                xPropertySet->setPropertyValue("ID", Any(GetUniqueID()) );
+                xPropertySet->setPropertyValue(u"ID"_ustr, Any(GetUniqueID()) );
             }
         }
     }
@@ -216,7 +216,7 @@ namespace toolkit
               {
                 CurRoadmapItem = rRoadmapItem;
                 Reference< XPropertySet > xPropertySet( CurRoadmapItem, UNO_QUERY );
-                aAny = xPropertySet->getPropertyValue("ID");
+                aAny = xPropertySet->getPropertyValue(u"ID"_ustr);
                 aAny >>= n_CurItemID;
                 if (n_CurItemID == CurID)
                 {
@@ -374,7 +374,7 @@ sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& 
 
     OUString UnoRoadmapControl::GetComponentServiceName() const
     {
-        return "Roadmap";
+        return u"Roadmap"_ustr;
     }
 
 
@@ -470,7 +470,7 @@ void SAL_CALL UnoRoadmapControl::propertyChange( const PropertyChangeEvent& evt 
 
 OUString UnoRoadmapControl::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoRoadmapControl";
+    return u"stardiv.Toolkit.UnoRoadmapControl"_ustr;
 }
 
 css::uno::Sequence<OUString> UnoRoadmapControl::getSupportedServiceNames()

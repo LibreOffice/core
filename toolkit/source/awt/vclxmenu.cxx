@@ -171,7 +171,7 @@ OUString SAL_CALL VCLXMenu::getImplementationName(  )
     const bool bIsPopupMenu = IsPopupMenu();
     aGuard.unlock();
 
-    OUString implName( "stardiv.Toolkit." );
+    OUString implName( u"stardiv.Toolkit."_ustr );
     if ( bIsPopupMenu )
         implName += "VCLXPopupMenu";
     else
@@ -188,12 +188,12 @@ css::uno::Sequence< OUString > SAL_CALL VCLXMenu::getSupportedServiceNames(  )
 
     if ( bIsPopupMenu )
         return css::uno::Sequence<OUString>{
-            "com.sun.star.awt.PopupMenu",
-            "stardiv.vcl.PopupMenu"};
+            u"com.sun.star.awt.PopupMenu"_ustr,
+            u"stardiv.vcl.PopupMenu"_ustr};
     else
         return css::uno::Sequence<OUString>{
-            "com.sun.star.awt.MenuBar",
-            "stardiv.vcl.MenuBar"};
+            u"com.sun.star.awt.MenuBar"_ustr,
+            u"stardiv.vcl.MenuBar"_ustr};
 }
 
 sal_Bool SAL_CALL VCLXMenu::supportsService(const OUString& rServiceName )

@@ -27,22 +27,22 @@ ORoadmapEntry::ORoadmapEntry() : OPropertyContainer( GetBroadcastHelper() )
 {
     // registerProperty or registerMayBeVoidProperty or registerPropertyNoMember
 
-    registerProperty( "Label", RM_PROPERTY_ID_LABEL,
+    registerProperty( u"Label"_ustr, RM_PROPERTY_ID_LABEL,
                       css::beans::PropertyAttribute::BOUND |
                       css::beans::PropertyAttribute::CONSTRAINED,
                       & m_sLabel, cppu::UnoType<decltype(m_sLabel)>::get() );
     m_nID = -1;
-    registerProperty( "ID", RM_PROPERTY_ID_ID,
+    registerProperty( u"ID"_ustr, RM_PROPERTY_ID_ID,
                       css::beans::PropertyAttribute::BOUND |
                       css::beans::PropertyAttribute::CONSTRAINED,
                       & m_nID, cppu::UnoType<decltype(m_nID)>::get() );
     m_bEnabled = true;
-    registerProperty( "Enabled", RM_PROPERTY_ID_ENABLED,
+    registerProperty( u"Enabled"_ustr, RM_PROPERTY_ID_ENABLED,
                     css::beans::PropertyAttribute::BOUND |
                     css::beans::PropertyAttribute::MAYBEDEFAULT,
                     & m_bEnabled, cppu::UnoType<decltype(m_bEnabled)>::get() );
 
-    registerProperty( "Interactive", RM_PROPERTY_ID_INTERACTIVE,
+    registerProperty( u"Interactive"_ustr, RM_PROPERTY_ID_INTERACTIVE,
                     css::beans::PropertyAttribute::BOUND |
                     css::beans::PropertyAttribute::MAYBEDEFAULT,
                     & m_bInteractive, cppu::UnoType<decltype(m_bInteractive)>::get() );
@@ -74,7 +74,7 @@ css::uno::Reference< css:: beans::XPropertySetInfo > SAL_CALL
 
 OUString SAL_CALL ORoadmapEntry::getImplementationName(  )
 {
-    return "com.sun.star.comp.toolkit.RoadmapItem";
+    return u"com.sun.star.comp.toolkit.RoadmapItem"_ustr;
 }
 
 sal_Bool SAL_CALL ORoadmapEntry::supportsService( const OUString& ServiceName )
@@ -84,7 +84,7 @@ sal_Bool SAL_CALL ORoadmapEntry::supportsService( const OUString& ServiceName )
 
 css::uno::Sequence< OUString > SAL_CALL ORoadmapEntry::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.awt.RoadmapItem" };
+    return { u"com.sun.star.awt.RoadmapItem"_ustr };
 }
 
 ::cppu::IPropertyArrayHelper& ORoadmapEntry::getInfoHelper()

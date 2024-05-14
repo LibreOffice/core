@@ -1025,7 +1025,7 @@ sal_Bool UnoControlModel::supportsService( const OUString& rServiceName )
 
 css::uno::Sequence< OUString > UnoControlModel::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.awt.UnoControlModel" };
+    return { u"com.sun.star.awt.UnoControlModel"_ustr };
 }
 
 bool UnoControlModel::convertFastPropertyValue( std::unique_lock<std::mutex>& rGuard, Any & rConvertedValue, Any & rOldValue, sal_Int32 nPropId, const Any& rValue )
@@ -1263,7 +1263,7 @@ void UnoControlModel::setPropertyValuesImpl( std::unique_lock<std::mutex>& rGuar
 {
     sal_Int32 nProps = rPropertyNames.getLength();
     if (nProps != Values.getLength())
-        throw css::lang::IllegalArgumentException("lengths do not match",
+        throw css::lang::IllegalArgumentException(u"lengths do not match"_ustr,
                                                   getXWeak(), -1);
 
 //  sal_Int32* pHandles = new sal_Int32[nProps];

@@ -75,7 +75,7 @@ ImageHelper::getGraphicFromURL_nothrow( const OUString& _rURL )
     {
         uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
         uno::Reference< graphic::XGraphicProvider > xProvider( graphic::GraphicProvider::create(xContext) );
-        xGraphic = xProvider->queryGraphic({ comphelper::makePropertyValue("URL", _rURL) });
+        xGraphic = xProvider->queryGraphic({ comphelper::makePropertyValue(u"URL"_ustr, _rURL) });
     }
     catch (const Exception&)
     {
@@ -94,7 +94,7 @@ UnoControlEditModel::UnoControlEditModel( const Reference< XComponentContext >& 
 
 OUString UnoControlEditModel::getServiceName( )
 {
-    return "stardiv.vcl.controlmodel.Edit";
+    return u"stardiv.vcl.controlmodel.Edit"_ustr;
 }
 
 uno::Any UnoControlEditModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -107,7 +107,7 @@ uno::Any UnoControlEditModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
         aReturn <<= sal_Int16(awt::LineEndFormat::LINE_FEED);   // LF
         break;
     case BASEPROPERTY_DEFAULTCONTROL:
-        aReturn <<= OUString( "stardiv.vcl.control.Edit" );
+        aReturn <<= u"stardiv.vcl.control.Edit"_ustr;
         break;
     default:
         aReturn = UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -131,12 +131,12 @@ uno::Reference< beans::XPropertySetInfo > UnoControlEditModel::getPropertySetInf
 
 OUString UnoControlEditModel::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoControlEditModel";
+    return u"stardiv.Toolkit.UnoControlEditModel"_ustr;
 }
 
 css::uno::Sequence<OUString> UnoControlEditModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlEditModel", "stardiv.vcl.controlmodel.Edit" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlEditModel"_ustr, u"stardiv.vcl.controlmodel.Edit"_ustr };
     return comphelper::concatSequences(UnoControlModel::getSupportedServiceNames(), vals);
 }
 
@@ -189,7 +189,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoEditControl, UnoControlBase, UnoEditControl
 OUString UnoEditControl::GetComponentServiceName() const
 {
     // by default, we want a simple edit field
-    OUString sName( "Edit" );
+    OUString sName( u"Edit"_ustr );
 
     // but maybe we are to display multi-line text?
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_MULTILINE ) );
@@ -460,12 +460,12 @@ void UnoEditControl::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines )
 
 OUString UnoEditControl::getImplementationName(  )
 {
-    return "stardiv.Toolkit.UnoEditControl";
+    return u"stardiv.Toolkit.UnoEditControl"_ustr;
 }
 
 uno::Sequence< OUString > UnoEditControl::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlEdit", "stardiv.vcl.control.Edit" };
+    css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlEdit"_ustr, u"stardiv.vcl.control.Edit"_ustr };
     return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames( ), vals);
 }
 
@@ -504,14 +504,14 @@ UnoControlFileControlModel::UnoControlFileControlModel( const Reference< XCompon
 
 OUString UnoControlFileControlModel::getServiceName()
 {
-    return "stardiv.vcl.controlmodel.FileControl";
+    return u"stardiv.vcl.controlmodel.FileControl"_ustr;
 }
 
 uno::Any UnoControlFileControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( OUString( "stardiv.vcl.control.FileControl" ) );
+        return uno::Any( u"stardiv.vcl.control.FileControl"_ustr );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -531,13 +531,13 @@ uno::Reference< beans::XPropertySetInfo > UnoControlFileControlModel::getPropert
 
 OUString UnoControlFileControlModel::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoControlFileControlModel";
+    return u"stardiv.Toolkit.UnoControlFileControlModel"_ustr;
 }
 
 css::uno::Sequence<OUString>
 UnoControlFileControlModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlFileControlModel", "stardiv.vcl.controlmodel.FileControl" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlFileControlModel"_ustr, u"stardiv.vcl.controlmodel.FileControl"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals);
 }
 
@@ -557,17 +557,17 @@ UnoFileControl::UnoFileControl()
 
 OUString UnoFileControl::GetComponentServiceName() const
 {
-    return "filecontrol";
+    return u"filecontrol"_ustr;
 }
 
 OUString UnoFileControl::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoFileControl";
+    return u"stardiv.Toolkit.UnoFileControl"_ustr;
 }
 
 css::uno::Sequence<OUString> UnoFileControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlFileControl", "stardiv.vcl.control.FileControl" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlFileControl"_ustr, u"stardiv.vcl.control.FileControl"_ustr };
     return comphelper::concatSequences( UnoEditControl::getSupportedServiceNames(), vals );
 }
 
@@ -668,7 +668,7 @@ UnoControlButtonModel::UnoControlButtonModel( const Reference< XComponentContext
 
 OUString UnoControlButtonModel::getServiceName()
 {
-    return "stardiv.vcl.controlmodel.Button";
+    return u"stardiv.vcl.controlmodel.Button"_ustr;
 }
 
 uno::Any UnoControlButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -676,7 +676,7 @@ uno::Any UnoControlButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     switch ( nPropId )
     {
     case BASEPROPERTY_DEFAULTCONTROL:
-        return uno::Any( OUString( "stardiv.vcl.control.Button" ) );
+        return uno::Any( u"stardiv.vcl.control.Button"_ustr );
     case BASEPROPERTY_TOGGLE:
         return uno::Any( false );
     case BASEPROPERTY_ALIGN:
@@ -703,12 +703,12 @@ uno::Reference< beans::XPropertySetInfo > UnoControlButtonModel::getPropertySetI
 
 OUString UnoControlButtonModel::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoControlButtonModel";
+    return u"stardiv.Toolkit.UnoControlButtonModel"_ustr;
 }
 
 css::uno::Sequence<OUString> UnoControlButtonModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlButtonModel", "stardiv.vcl.controlmodel.Button" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlButtonModel"_ustr, u"stardiv.vcl.controlmodel.Button"_ustr };
     return comphelper::concatSequences( GraphicControlModel::getSupportedServiceNames(), vals );
 }
 
@@ -732,7 +732,7 @@ UnoButtonControl::UnoButtonControl()
 
 OUString UnoButtonControl::GetComponentServiceName() const
 {
-    OUString aName( "pushbutton" );
+    OUString aName( u"pushbutton"_ustr );
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_PUSHBUTTONTYPE ) );
     sal_Int16 n = sal_Int16();
     if ( ( aVal >>= n ) && n )
@@ -870,12 +870,12 @@ awt::Size UnoButtonControl::calcAdjustedSize( const awt::Size& rNewSize )
 
 OUString UnoButtonControl::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoButtonControl";
+    return u"stardiv.Toolkit.UnoButtonControl"_ustr;
 }
 
 css::uno::Sequence<OUString> UnoButtonControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlButton", "stardiv.vcl.control.Button" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlButton"_ustr, u"stardiv.vcl.control.Button"_ustr };
     return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals);
 }
 
@@ -898,22 +898,22 @@ UnoControlImageControlModel::UnoControlImageControlModel( const Reference< XComp
 
 OUString UnoControlImageControlModel::getServiceName()
 {
-    return "stardiv.vcl.controlmodel.ImageControl";
+    return u"stardiv.vcl.controlmodel.ImageControl"_ustr;
 }
 
 OUString UnoControlImageControlModel::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoControlImageControlModel";
+    return u"stardiv.Toolkit.UnoControlImageControlModel"_ustr;
 }
 
 css::uno::Sequence<OUString>
 UnoControlImageControlModel::getSupportedServiceNames()
 {
     const css::uno::Sequence<OUString> vals {
-        "com.sun.star.awt.UnoControlImageButtonModel",
-        "com.sun.star.awt.UnoControlImageControlModel",
-        "stardiv.vcl.controlmodel.ImageButton",
-        "stardiv.vcl.controlmodel.ImageControl"
+        u"com.sun.star.awt.UnoControlImageButtonModel"_ustr,
+        u"com.sun.star.awt.UnoControlImageControlModel"_ustr,
+        u"stardiv.vcl.controlmodel.ImageButton"_ustr,
+        u"stardiv.vcl.controlmodel.ImageControl"_ustr
     };
     return comphelper::concatSequences( GraphicControlModel::getSupportedServiceNames(), vals);
 }
@@ -921,7 +921,7 @@ UnoControlImageControlModel::getSupportedServiceNames()
 uno::Any UnoControlImageControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
-        return uno::Any( OUString( "stardiv.vcl.control.ImageControl" ) );
+        return uno::Any( u"stardiv.vcl.control.ImageControl"_ustr );
 
     if ( nPropId == BASEPROPERTY_IMAGE_SCALE_MODE )
         return Any( awt::ImageScaleMode::ANISOTROPIC );
@@ -1000,7 +1000,7 @@ UnoImageControlControl::UnoImageControlControl()
 
 OUString UnoImageControlControl::GetComponentServiceName() const
 {
-    return "fixedimage";
+    return u"fixedimage"_ustr;
 }
 
 void UnoImageControlControl::dispose()
@@ -1033,16 +1033,16 @@ awt::Size UnoImageControlControl::calcAdjustedSize( const awt::Size& rNewSize )
 
 OUString UnoImageControlControl::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoImageControlControl";
+    return u"stardiv.Toolkit.UnoImageControlControl"_ustr;
 }
 
 css::uno::Sequence<OUString> UnoImageControlControl::getSupportedServiceNames()
 {
     const css::uno::Sequence<OUString> vals {
-        "com.sun.star.awt.UnoControlImageButton",
-        "com.sun.star.awt.UnoControlImageControl",
-        "stardiv.vcl.control.ImageButton",
-        "stardiv.vcl.control.ImageControl"
+        u"com.sun.star.awt.UnoControlImageButton"_ustr,
+        u"com.sun.star.awt.UnoControlImageControl"_ustr,
+        u"stardiv.vcl.control.ImageButton"_ustr,
+        u"stardiv.vcl.control.ImageControl"_ustr
     };
     return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals);
 }
@@ -1065,7 +1065,7 @@ UnoControlRadioButtonModel::UnoControlRadioButtonModel( const Reference< XCompon
 
 OUString UnoControlRadioButtonModel::getServiceName()
 {
-    return "stardiv.vcl.controlmodel.RadioButton";
+    return u"stardiv.vcl.controlmodel.RadioButton"_ustr;
 }
 
 uno::Any UnoControlRadioButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -1073,7 +1073,7 @@ uno::Any UnoControlRadioButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) c
     switch ( nPropId )
     {
     case BASEPROPERTY_DEFAULTCONTROL:
-        return uno::Any( OUString( "stardiv.vcl.control.RadioButton" ) );
+        return uno::Any( u"stardiv.vcl.control.RadioButton"_ustr );
 
     case BASEPROPERTY_VISUALEFFECT:
         return uno::Any( sal_Int16(awt::VisualEffect::LOOK3D) );
@@ -1097,13 +1097,13 @@ uno::Reference< beans::XPropertySetInfo > UnoControlRadioButtonModel::getPropert
 
 OUString UnoControlRadioButtonModel::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoControlRadioButtonModel";
+    return u"stardiv.Toolkit.UnoControlRadioButtonModel"_ustr;
 }
 
 css::uno::Sequence<OUString>
 UnoControlRadioButtonModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlRadioButtonModel", "stardiv.vcl.controlmodel.RadioButton" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlRadioButtonModel"_ustr, u"stardiv.vcl.controlmodel.RadioButton"_ustr };
     return comphelper::concatSequences( GraphicControlModel::getSupportedServiceNames(), vals);
 }
 
@@ -1127,7 +1127,7 @@ UnoRadioButtonControl::UnoRadioButtonControl()
 
 OUString UnoRadioButtonControl::GetComponentServiceName() const
 {
-    return "radiobutton";
+    return u"radiobutton"_ustr;
 }
 
 void UnoRadioButtonControl::dispose()
@@ -1271,12 +1271,12 @@ awt::Size UnoRadioButtonControl::calcAdjustedSize( const awt::Size& rNewSize )
 
 OUString UnoRadioButtonControl::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoRadioButtonControl";
+    return u"stardiv.Toolkit.UnoRadioButtonControl"_ustr;
 }
 
 css::uno::Sequence<OUString> UnoRadioButtonControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlRadioButton", "stardiv.vcl.control.RadioButton" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlRadioButton"_ustr, u"stardiv.vcl.control.RadioButton"_ustr };
     return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals );
 }
 
@@ -1298,7 +1298,7 @@ UnoControlCheckBoxModel::UnoControlCheckBoxModel( const Reference< XComponentCon
 
 OUString UnoControlCheckBoxModel::getServiceName()
 {
-    return "stardiv.vcl.controlmodel.CheckBox";
+    return u"stardiv.vcl.controlmodel.CheckBox"_ustr;
 }
 
 uno::Any UnoControlCheckBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -1306,7 +1306,7 @@ uno::Any UnoControlCheckBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
     switch ( nPropId )
     {
     case BASEPROPERTY_DEFAULTCONTROL:
-        return uno::Any( OUString( "stardiv.vcl.control.CheckBox" ) );
+        return uno::Any( u"stardiv.vcl.control.CheckBox"_ustr );
 
     case BASEPROPERTY_VISUALEFFECT:
         return uno::Any( sal_Int16(awt::VisualEffect::LOOK3D) );
@@ -1330,12 +1330,12 @@ uno::Reference< beans::XPropertySetInfo > UnoControlCheckBoxModel::getPropertySe
 
 OUString UnoControlCheckBoxModel::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoControlCheckBoxModel";
+    return u"stardiv.Toolkit.UnoControlCheckBoxModel"_ustr;
 }
 
 css::uno::Sequence<OUString> UnoControlCheckBoxModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlCheckBoxModel", "stardiv.vcl.controlmodel.CheckBox" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlCheckBoxModel"_ustr, u"stardiv.vcl.controlmodel.CheckBox"_ustr };
     return comphelper::concatSequences( GraphicControlModel::getSupportedServiceNames(), vals );
 }
 
@@ -1358,7 +1358,7 @@ UnoCheckBoxControl::UnoCheckBoxControl()
 
 OUString UnoCheckBoxControl::GetComponentServiceName() const
 {
-    return "checkbox";
+    return u"checkbox"_ustr;
 }
 
 void UnoCheckBoxControl::dispose()
@@ -1476,12 +1476,12 @@ awt::Size UnoCheckBoxControl::calcAdjustedSize( const awt::Size& rNewSize )
 
 OUString UnoCheckBoxControl::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoCheckBoxControl";
+    return u"stardiv.Toolkit.UnoCheckBoxControl"_ustr;
 }
 
 css::uno::Sequence<OUString> UnoCheckBoxControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlCheckBox", "stardiv.vcl.control.CheckBox" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlCheckBox"_ustr, u"stardiv.vcl.control.CheckBox"_ustr };
     return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals );
 }
 
@@ -1503,14 +1503,14 @@ UnoControlFixedHyperlinkModel::UnoControlFixedHyperlinkModel( const Reference< X
 
 OUString UnoControlFixedHyperlinkModel::getServiceName()
 {
-    return "com.sun.star.awt.UnoControlFixedHyperlinkModel";
+    return u"com.sun.star.awt.UnoControlFixedHyperlinkModel"_ustr;
 }
 
 uno::Any UnoControlFixedHyperlinkModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( OUString( "com.sun.star.awt.UnoControlFixedHyperlink" ) );
+        return uno::Any( u"com.sun.star.awt.UnoControlFixedHyperlink"_ustr );
     }
     else if ( nPropId == BASEPROPERTY_BORDER )
     {
@@ -1556,7 +1556,7 @@ UnoFixedHyperlinkControl::UnoFixedHyperlinkControl()
 
 OUString UnoFixedHyperlinkControl::GetComponentServiceName() const
 {
-    return "fixedhyperlink";
+    return u"fixedhyperlink"_ustr;
 }
 
 // uno::XInterface
@@ -1693,14 +1693,14 @@ UnoControlFixedTextModel::UnoControlFixedTextModel( const Reference< XComponentC
 
 OUString UnoControlFixedTextModel::getServiceName()
 {
-    return "stardiv.vcl.controlmodel.FixedText";
+    return u"stardiv.vcl.controlmodel.FixedText"_ustr;
 }
 
 uno::Any UnoControlFixedTextModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( OUString( "stardiv.vcl.control.FixedText" ) );
+        return uno::Any( u"stardiv.vcl.control.FixedText"_ustr );
     }
     else if ( nPropId == BASEPROPERTY_BORDER )
     {
@@ -1725,13 +1725,13 @@ uno::Reference< beans::XPropertySetInfo > UnoControlFixedTextModel::getPropertyS
 
 OUString UnoControlFixedTextModel::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoControlFixedTextModel";
+    return u"stardiv.Toolkit.UnoControlFixedTextModel"_ustr;
 }
 
 css::uno::Sequence<OUString>
 UnoControlFixedTextModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlFixedTextModel", "stardiv.vcl.controlmodel.FixedText" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlFixedTextModel"_ustr, u"stardiv.vcl.controlmodel.FixedText"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
@@ -1753,7 +1753,7 @@ UnoFixedTextControl::UnoFixedTextControl()
 
 OUString UnoFixedTextControl::GetComponentServiceName() const
 {
-    return "fixedtext";
+    return u"fixedtext"_ustr;
 }
 
 // uno::XInterface
@@ -1827,12 +1827,12 @@ awt::Size UnoFixedTextControl::calcAdjustedSize( const awt::Size& rNewSize )
 
 OUString UnoFixedTextControl::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoFixedTextControl";
+    return u"stardiv.Toolkit.UnoFixedTextControl"_ustr;
 }
 
 css::uno::Sequence<OUString> UnoFixedTextControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlFixedText", "stardiv.vcl.control.FixedText" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlFixedText"_ustr, u"stardiv.vcl.control.FixedText"_ustr };
     return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals );
 }
 
@@ -1863,14 +1863,14 @@ UnoControlGroupBoxModel::UnoControlGroupBoxModel( const Reference< XComponentCon
 
 OUString UnoControlGroupBoxModel::getServiceName()
 {
-    return "stardiv.vcl.controlmodel.GroupBox";
+    return u"stardiv.vcl.controlmodel.GroupBox"_ustr;
 }
 
 uno::Any UnoControlGroupBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any(OUString( "stardiv.vcl.control.GroupBox" ) );
+        return uno::Any(u"stardiv.vcl.control.GroupBox"_ustr );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -1890,12 +1890,12 @@ uno::Reference< beans::XPropertySetInfo > UnoControlGroupBoxModel::getPropertySe
 
 OUString UnoControlGroupBoxModel::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoControlGroupBoxModel";
+    return u"stardiv.Toolkit.UnoControlGroupBoxModel"_ustr;
 }
 
 css::uno::Sequence<OUString> UnoControlGroupBoxModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlGroupBoxModel", "stardiv.vcl.controlmodel.GroupBox" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlGroupBoxModel"_ustr, u"stardiv.vcl.controlmodel.GroupBox"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
@@ -1917,7 +1917,7 @@ UnoGroupBoxControl::UnoGroupBoxControl()
 
 OUString UnoGroupBoxControl::GetComponentServiceName() const
 {
-    return "groupbox";
+    return u"groupbox"_ustr;
 }
 
 sal_Bool UnoGroupBoxControl::isTransparent()
@@ -1927,12 +1927,12 @@ sal_Bool UnoGroupBoxControl::isTransparent()
 
 OUString UnoGroupBoxControl::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoGroupBoxControl";
+    return u"stardiv.Toolkit.UnoGroupBoxControl"_ustr;
 }
 
 css::uno::Sequence<OUString> UnoGroupBoxControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlGroupBox", "stardiv.vcl.control.GroupBox" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlGroupBox"_ustr, u"stardiv.vcl.control.GroupBox"_ustr };
     return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals );
 }
 
@@ -2073,18 +2073,18 @@ UnoControlListBoxModel::~UnoControlListBoxModel()
 
 OUString UnoControlListBoxModel::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoControlListBoxModel";
+    return u"stardiv.Toolkit.UnoControlListBoxModel"_ustr;
 }
 
 css::uno::Sequence<OUString> UnoControlListBoxModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlListBoxModel", "stardiv.vcl.controlmodel.ListBox" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlListBoxModel"_ustr, u"stardiv.vcl.controlmodel.ListBox"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
 OUString UnoControlListBoxModel::getServiceName()
 {
-    return "stardiv.vcl.controlmodel.ListBox";
+    return u"stardiv.vcl.controlmodel.ListBox"_ustr;
 }
 
 
@@ -2092,7 +2092,7 @@ uno::Any UnoControlListBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( OUString( "stardiv.vcl.control.ListBox" ) );
+        return uno::Any( u"stardiv.vcl.control.ListBox"_ustr );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -2501,17 +2501,17 @@ UnoListBoxControl::UnoListBoxControl()
 
 OUString UnoListBoxControl::GetComponentServiceName() const
 {
-    return "listbox";
+    return u"listbox"_ustr;
 }
 
 OUString UnoListBoxControl::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoListBoxControl";
+    return u"stardiv.Toolkit.UnoListBoxControl"_ustr;
 }
 
 css::uno::Sequence<OUString> UnoListBoxControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlListBox", "stardiv.vcl.control.ListBox" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlListBox"_ustr, u"stardiv.vcl.control.ListBox"_ustr };
     return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals);
 }
 
@@ -2911,12 +2911,12 @@ UnoControlComboBoxModel::UnoControlComboBoxModel( const Reference< XComponentCon
 
 OUString UnoControlComboBoxModel::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoControlComboBoxModel";
+    return u"stardiv.Toolkit.UnoControlComboBoxModel"_ustr;
 }
 
 css::uno::Sequence<OUString> UnoControlComboBoxModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlComboBoxModel", "stardiv.vcl.controlmodel.ComboBox" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlComboBoxModel"_ustr, u"stardiv.vcl.controlmodel.ComboBox"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals);
 }
 
@@ -2935,7 +2935,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlComboBoxModel::getPropertySe
 
 OUString UnoControlComboBoxModel::getServiceName()
 {
-    return "stardiv.vcl.controlmodel.ComboBox";
+    return u"stardiv.vcl.controlmodel.ComboBox"_ustr;
 }
 
 void UnoControlComboBoxModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const uno::Any& rValue )
@@ -2972,7 +2972,7 @@ uno::Any UnoControlComboBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( OUString( "stardiv.vcl.control.ComboBox" ) );
+        return uno::Any( u"stardiv.vcl.control.ComboBox"_ustr );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -2997,18 +2997,18 @@ UnoComboBoxControl::UnoComboBoxControl()
 
 OUString UnoComboBoxControl::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoComboBoxControl";
+    return u"stardiv.Toolkit.UnoComboBoxControl"_ustr;
 }
 
 css::uno::Sequence<OUString> UnoComboBoxControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlComboBox", "stardiv.vcl.control.ComboBox" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlComboBox"_ustr, u"stardiv.vcl.control.ComboBox"_ustr };
     return comphelper::concatSequences( UnoEditControl::getSupportedServiceNames(), vals);
 }
 
 OUString UnoComboBoxControl::GetComponentServiceName() const
 {
-    return "combobox";
+    return u"combobox"_ustr;
 }
 
 void UnoComboBoxControl::dispose()
@@ -3405,14 +3405,14 @@ UnoControlDateFieldModel::UnoControlDateFieldModel( const Reference< XComponentC
 
 OUString UnoControlDateFieldModel::getServiceName()
 {
-    return "stardiv.vcl.controlmodel.DateField";
+    return u"stardiv.vcl.controlmodel.DateField"_ustr;
 }
 
 uno::Any UnoControlDateFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( OUString( "stardiv.vcl.control.DateField" ) );
+        return uno::Any( u"stardiv.vcl.control.DateField"_ustr );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -3433,13 +3433,13 @@ uno::Reference< beans::XPropertySetInfo > UnoControlDateFieldModel::getPropertyS
 
 OUString UnoControlDateFieldModel::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoControlDateFieldModel";
+    return u"stardiv.Toolkit.UnoControlDateFieldModel"_ustr;
 }
 
 css::uno::Sequence<OUString>
 UnoControlDateFieldModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlDateFieldModel", "stardiv.vcl.controlmodel.DateField" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlDateFieldModel"_ustr, u"stardiv.vcl.controlmodel.DateField"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
@@ -3462,7 +3462,7 @@ UnoDateFieldControl::UnoDateFieldControl()
 
 OUString UnoDateFieldControl::GetComponentServiceName() const
 {
-    return "datefield";
+    return u"datefield"_ustr;
 }
 
 // uno::XInterface
@@ -3646,12 +3646,12 @@ sal_Bool UnoDateFieldControl::isStrictFormat()
 
 OUString UnoDateFieldControl::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoDateFieldControl";
+    return u"stardiv.Toolkit.UnoDateFieldControl"_ustr;
 }
 
 css::uno::Sequence<OUString> UnoDateFieldControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlDateField", "stardiv.vcl.control.DateField" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlDateField"_ustr, u"stardiv.vcl.control.DateField"_ustr };
     return comphelper::concatSequences( UnoSpinFieldControl::getSupportedServiceNames(), vals );
 }
 
@@ -3673,14 +3673,14 @@ UnoControlTimeFieldModel::UnoControlTimeFieldModel( const Reference< XComponentC
 
 OUString UnoControlTimeFieldModel::getServiceName()
 {
-    return "stardiv.vcl.controlmodel.TimeField";
+    return u"stardiv.vcl.controlmodel.TimeField"_ustr;
 }
 
 uno::Any UnoControlTimeFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( OUString( "stardiv.vcl.control.TimeField" ) );
+        return uno::Any( u"stardiv.vcl.control.TimeField"_ustr );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -3701,13 +3701,13 @@ uno::Reference< beans::XPropertySetInfo > UnoControlTimeFieldModel::getPropertyS
 
 OUString UnoControlTimeFieldModel::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoControlTimeFieldModel";
+    return u"stardiv.Toolkit.UnoControlTimeFieldModel"_ustr;
 }
 
 css::uno::Sequence<OUString>
 UnoControlTimeFieldModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlTimeFieldModel", "stardiv.vcl.controlmodel.TimeField" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlTimeFieldModel"_ustr, u"stardiv.vcl.controlmodel.TimeField"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
@@ -3729,7 +3729,7 @@ UnoTimeFieldControl::UnoTimeFieldControl()
 
 OUString UnoTimeFieldControl::GetComponentServiceName() const
 {
-    return "timefield";
+    return u"timefield"_ustr;
 }
 
 // uno::XInterface
@@ -3873,12 +3873,12 @@ sal_Bool UnoTimeFieldControl::isStrictFormat()
 
 OUString UnoTimeFieldControl::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoTimeFieldControl";
+    return u"stardiv.Toolkit.UnoTimeFieldControl"_ustr;
 }
 
 css::uno::Sequence<OUString> UnoTimeFieldControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlTimeField", "stardiv.vcl.control.TimeField" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlTimeField"_ustr, u"stardiv.vcl.control.TimeField"_ustr };
     return comphelper::concatSequences( UnoSpinFieldControl::getSupportedServiceNames(), vals );
 }
 
@@ -3900,14 +3900,14 @@ UnoControlNumericFieldModel::UnoControlNumericFieldModel( const Reference< XComp
 
 OUString UnoControlNumericFieldModel::getServiceName()
 {
-    return "stardiv.vcl.controlmodel.NumericField";
+    return u"stardiv.vcl.controlmodel.NumericField"_ustr;
 }
 
 uno::Any UnoControlNumericFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( OUString( "stardiv.vcl.control.NumericField" ) );
+        return uno::Any( u"stardiv.vcl.control.NumericField"_ustr );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -3928,13 +3928,13 @@ uno::Reference< beans::XPropertySetInfo > UnoControlNumericFieldModel::getProper
 
 OUString UnoControlNumericFieldModel::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoControlNumericFieldModel";
+    return u"stardiv.Toolkit.UnoControlNumericFieldModel"_ustr;
 }
 
 css::uno::Sequence<OUString>
 UnoControlNumericFieldModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "stardiv.vcl.controlmodel.NumericField", "com.sun.star.awt.UnoControlNumericFieldModel" };
+    const css::uno::Sequence<OUString> vals { u"stardiv.vcl.controlmodel.NumericField"_ustr, u"com.sun.star.awt.UnoControlNumericFieldModel"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
@@ -3956,7 +3956,7 @@ UnoNumericFieldControl::UnoNumericFieldControl()
 
 OUString UnoNumericFieldControl::GetComponentServiceName() const
 {
-    return "numericfield";
+    return u"numericfield"_ustr;
 }
 
 // uno::XInterface
@@ -4071,12 +4071,12 @@ sal_Bool UnoNumericFieldControl::isStrictFormat()
 
 OUString UnoNumericFieldControl::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoNumericFieldControl";
+    return u"stardiv.Toolkit.UnoNumericFieldControl"_ustr;
 }
 
 css::uno::Sequence<OUString> UnoNumericFieldControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlNumericField", "stardiv.vcl.control.NumericField" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlNumericField"_ustr, u"stardiv.vcl.control.NumericField"_ustr };
     return comphelper::concatSequences( UnoSpinFieldControl::getSupportedServiceNames(), vals );
 }
 
@@ -4116,14 +4116,14 @@ UnoControlCurrencyFieldModel::UnoControlCurrencyFieldModel( const Reference< XCo
 
 OUString UnoControlCurrencyFieldModel::getServiceName()
 {
-    return "stardiv.vcl.controlmodel.CurrencyField";
+    return u"stardiv.vcl.controlmodel.CurrencyField"_ustr;
 }
 
 uno::Any UnoControlCurrencyFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( OUString( "stardiv.vcl.control.CurrencyField" ) );
+        return uno::Any( u"stardiv.vcl.control.CurrencyField"_ustr );
     }
     if ( nPropId == BASEPROPERTY_CURSYM_POSITION )
     {
@@ -4148,13 +4148,13 @@ uno::Reference< beans::XPropertySetInfo > UnoControlCurrencyFieldModel::getPrope
 
 OUString UnoControlCurrencyFieldModel::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoControlCurrencyFieldModel";
+    return u"stardiv.Toolkit.UnoControlCurrencyFieldModel"_ustr;
 }
 
 css::uno::Sequence<OUString>
 UnoControlCurrencyFieldModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlCurrencyFieldModel", "stardiv.vcl.controlmodel.CurrencyField" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlCurrencyFieldModel"_ustr, u"stardiv.vcl.controlmodel.CurrencyField"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
@@ -4176,7 +4176,7 @@ UnoCurrencyFieldControl::UnoCurrencyFieldControl()
 
 OUString UnoCurrencyFieldControl::GetComponentServiceName() const
 {
-    return "longcurrencyfield";
+    return u"longcurrencyfield"_ustr;
 }
 
 // uno::XInterface
@@ -4290,13 +4290,13 @@ sal_Bool UnoCurrencyFieldControl::isStrictFormat()
 
 OUString UnoCurrencyFieldControl::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoCurrencyFieldControl";
+    return u"stardiv.Toolkit.UnoCurrencyFieldControl"_ustr;
 }
 
 css::uno::Sequence<OUString>
 UnoCurrencyFieldControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlCurrencyField", "stardiv.vcl.control.CurrencyField" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlCurrencyField"_ustr, u"stardiv.vcl.control.CurrencyField"_ustr };
     return comphelper::concatSequences( UnoSpinFieldControl::getSupportedServiceNames(), vals );
 }
 
@@ -4338,14 +4338,14 @@ UnoControlPatternFieldModel::UnoControlPatternFieldModel( const Reference< XComp
 
 OUString UnoControlPatternFieldModel::getServiceName()
 {
-    return "stardiv.vcl.controlmodel.PatternField";
+    return u"stardiv.vcl.controlmodel.PatternField"_ustr;
 }
 
 uno::Any UnoControlPatternFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( OUString( "stardiv.vcl.control.PatternField" ) );
+        return uno::Any( u"stardiv.vcl.control.PatternField"_ustr );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -4365,13 +4365,13 @@ uno::Reference< beans::XPropertySetInfo > UnoControlPatternFieldModel::getProper
 
 OUString UnoControlPatternFieldModel::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoControlPatternFieldModel";
+    return u"stardiv.Toolkit.UnoControlPatternFieldModel"_ustr;
 }
 
 css::uno::Sequence<OUString>
 UnoControlPatternFieldModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlPatternFieldModel", "stardiv.vcl.controlmodel.PatternField" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlPatternFieldModel"_ustr, u"stardiv.vcl.controlmodel.PatternField"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
@@ -4391,7 +4391,7 @@ UnoPatternFieldControl::UnoPatternFieldControl()
 
 OUString UnoPatternFieldControl::GetComponentServiceName() const
 {
-    return "patternfield";
+    return u"patternfield"_ustr;
 }
 
 void UnoPatternFieldControl::ImplSetPeerProperty( const OUString& rPropName, const uno::Any& rVal )
@@ -4473,12 +4473,12 @@ sal_Bool UnoPatternFieldControl::isStrictFormat()
 
 OUString UnoPatternFieldControl::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoPatternFieldControl";
+    return u"stardiv.Toolkit.UnoPatternFieldControl"_ustr;
 }
 
 css::uno::Sequence<OUString> UnoPatternFieldControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlPatternField", "stardiv.vcl.control.PatternField" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlPatternField"_ustr, u"stardiv.vcl.control.PatternField"_ustr };
     return comphelper::concatSequences( UnoSpinFieldControl::getSupportedServiceNames(), vals );
 }
 
@@ -4512,14 +4512,14 @@ UnoControlProgressBarModel::UnoControlProgressBarModel( const Reference< XCompon
 
 OUString UnoControlProgressBarModel::getServiceName( )
 {
-    return "stardiv.vcl.controlmodel.ProgressBar";
+    return u"stardiv.vcl.controlmodel.ProgressBar"_ustr;
 }
 
 uno::Any UnoControlProgressBarModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( OUString( "stardiv.vcl.control.ProgressBar" ) );
+        return uno::Any( u"stardiv.vcl.control.ProgressBar"_ustr );
     }
 
     return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -4540,13 +4540,13 @@ uno::Reference< beans::XPropertySetInfo > UnoControlProgressBarModel::getPropert
 
 OUString UnoControlProgressBarModel::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoControlProgressBarModel";
+    return u"stardiv.Toolkit.UnoControlProgressBarModel"_ustr;
 }
 
 css::uno::Sequence<OUString>
 UnoControlProgressBarModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlProgressBarModel", "stardiv.vcl.controlmodel.ProgressBar" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlProgressBarModel"_ustr, u"stardiv.vcl.controlmodel.ProgressBar"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
@@ -4566,7 +4566,7 @@ UnoProgressBarControl::UnoProgressBarControl()
 
 OUString UnoProgressBarControl::GetComponentServiceName() const
 {
-    return "ProgressBar";
+    return u"ProgressBar"_ustr;
 }
 
 // uno::XInterface
@@ -4635,12 +4635,12 @@ sal_Int32 UnoProgressBarControl::getValue()
 
 OUString UnoProgressBarControl::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoProgressBarControl";
+    return u"stardiv.Toolkit.UnoProgressBarControl"_ustr;
 }
 
 css::uno::Sequence<OUString> UnoProgressBarControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlProgressBar", "stardiv.vcl.control.ProgressBar" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlProgressBar"_ustr, u"stardiv.vcl.control.ProgressBar"_ustr };
     return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals );
 }
 
@@ -4671,14 +4671,14 @@ UnoControlFixedLineModel::UnoControlFixedLineModel( const Reference< XComponentC
 
 OUString UnoControlFixedLineModel::getServiceName( )
 {
-    return "stardiv.vcl.controlmodel.FixedLine";
+    return u"stardiv.vcl.controlmodel.FixedLine"_ustr;
 }
 
 uno::Any UnoControlFixedLineModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( OUString( "stardiv.vcl.control.FixedLine" ) );
+        return uno::Any( u"stardiv.vcl.control.FixedLine"_ustr );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -4698,13 +4698,13 @@ uno::Reference< beans::XPropertySetInfo > UnoControlFixedLineModel::getPropertyS
 
 OUString UnoControlFixedLineModel::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoControlFixedLineModel";
+    return u"stardiv.Toolkit.UnoControlFixedLineModel"_ustr;
 }
 
 css::uno::Sequence<OUString>
 UnoControlFixedLineModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlFixedLineModel", "stardiv.vcl.controlmodel.FixedLine" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlFixedLineModel"_ustr, u"stardiv.vcl.controlmodel.FixedLine"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
@@ -4726,7 +4726,7 @@ UnoFixedLineControl::UnoFixedLineControl()
 
 OUString UnoFixedLineControl::GetComponentServiceName() const
 {
-    return "FixedLine";
+    return u"FixedLine"_ustr;
 }
 
 sal_Bool UnoFixedLineControl::isTransparent()
@@ -4736,12 +4736,12 @@ sal_Bool UnoFixedLineControl::isTransparent()
 
 OUString UnoFixedLineControl::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoFixedLineControl";
+    return u"stardiv.Toolkit.UnoFixedLineControl"_ustr;
 }
 
 css::uno::Sequence<OUString> UnoFixedLineControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlFixedLine", "stardiv.vcl.control.FixedLine" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlFixedLine"_ustr, u"stardiv.vcl.control.FixedLine"_ustr };
     return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals );
 }
 

@@ -150,7 +150,7 @@ namespace toolkit
 
     OUString UnoControlFormattedFieldModel::getServiceName()
     {
-        return "stardiv.vcl.controlmodel.FormattedField";
+        return u"stardiv.vcl.controlmodel.FormattedField"_ustr;
     }
 
 
@@ -360,7 +360,7 @@ namespace toolkit
         Any aReturn;
         switch (nPropId)
         {
-            case BASEPROPERTY_DEFAULTCONTROL: aReturn <<= OUString("stardiv.vcl.control.FormattedField"); break;
+            case BASEPROPERTY_DEFAULTCONTROL: aReturn <<= u"stardiv.vcl.control.FormattedField"_ustr; break;
 
             case BASEPROPERTY_TREATASNUMBER: aReturn <<= true; break;
 
@@ -396,7 +396,7 @@ namespace toolkit
 
     OUString UnoControlFormattedFieldModel::getImplementationName()
     {
-        return "stardiv.Toolkit.UnoControlFormattedFieldModel";
+        return u"stardiv.Toolkit.UnoControlFormattedFieldModel"_ustr;
     }
 
     css::uno::Sequence<OUString>
@@ -420,7 +420,7 @@ namespace toolkit
 
     OUString UnoFormattedFieldControl::GetComponentServiceName() const
     {
-        return "FormattedField";
+        return u"FormattedField"_ustr;
     }
 
 
@@ -443,7 +443,7 @@ namespace toolkit
 
     OUString UnoFormattedFieldControl::getImplementationName()
     {
-        return "stardiv.Toolkit.UnoFormattedFieldControl";
+        return u"stardiv.Toolkit.UnoFormattedFieldControl"_ustr;
     }
 
     css::uno::Sequence<OUString>

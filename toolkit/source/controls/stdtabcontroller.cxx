@@ -367,7 +367,7 @@ void StdTabController::activateLast(  )
 
 OUString StdTabController::getImplementationName()
 {
-    return "stardiv.Toolkit.StdTabController";
+    return u"stardiv.Toolkit.StdTabController"_ustr;
 }
 
 sal_Bool StdTabController::supportsService(OUString const & ServiceName)
@@ -378,15 +378,15 @@ sal_Bool StdTabController::supportsService(OUString const & ServiceName)
 css::uno::Sequence<OUString> StdTabController::getSupportedServiceNames()
 {
     return css::uno::Sequence<OUString>{
-        "com.sun.star.awt.TabController",
-        "stardiv.vcl.control.TabController"};
+        u"com.sun.star.awt.TabController"_ustr,
+        u"stardiv.vcl.control.TabController"_ustr};
 }
 
 Reference< XControl >  StdTabController::FindControl( Sequence< Reference< XControl > >& rCtrls,
  const Reference< XControlModel > & rxCtrlModel )
 {
     if (!rxCtrlModel.is())
-        throw lang::IllegalArgumentException("No valid XControlModel",
+        throw lang::IllegalArgumentException(u"No valid XControlModel"_ustr,
                                              uno::Reference<uno::XInterface>(), 0);
 
     auto pCtrl = std::find_if(std::cbegin(rCtrls), std::cend(rCtrls),

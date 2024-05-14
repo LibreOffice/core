@@ -889,7 +889,7 @@ void lcl_clear( STLCONTAINER& i_container )
 
     OUString SAL_CALL SortableGridDataModel::getImplementationName(  )
     {
-        return "org.openoffice.comp.toolkit.SortableGridDataModel";
+        return u"org.openoffice.comp.toolkit.SortableGridDataModel"_ustr;
     }
 
     sal_Bool SAL_CALL SortableGridDataModel::supportsService( const OUString& i_serviceName )
@@ -899,7 +899,7 @@ void lcl_clear( STLCONTAINER& i_container )
 
     Sequence< OUString > SAL_CALL SortableGridDataModel::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.awt.grid.SortableGridDataModel" };
+        return { u"com.sun.star.awt.grid.SortableGridDataModel"_ustr };
     }
 
 

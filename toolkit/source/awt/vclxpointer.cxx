@@ -45,7 +45,7 @@ sal_Int32 VCLXPointer::getType()
 
 OUString VCLXPointer::getImplementationName()
 {
-    return "stardiv.Toolkit.VCLXPointer";
+    return u"stardiv.Toolkit.VCLXPointer"_ustr;
 }
 
 sal_Bool VCLXPointer::supportsService(OUString const & ServiceName)
@@ -56,7 +56,7 @@ sal_Bool VCLXPointer::supportsService(OUString const & ServiceName)
 css::uno::Sequence<OUString> VCLXPointer::getSupportedServiceNames()
 {
     return css::uno::Sequence<OUString>{
-        "com.sun.star.awt.Pointer", "stardiv.vcl.Pointer"};
+        u"com.sun.star.awt.Pointer"_ustr, u"stardiv.vcl.Pointer"_ustr};
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

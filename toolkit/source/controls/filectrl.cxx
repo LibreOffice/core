@@ -159,7 +159,7 @@ void FileControl::Resize()
     }
     else
     {
-        OUString aSmallText( "..." );
+        OUString aSmallText( u"..."_ustr );
         maButton->SetText( aSmallText );
         nButtonTextWidth = maButton->GetTextWidth( aSmallText );
     }

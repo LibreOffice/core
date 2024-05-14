@@ -268,7 +268,7 @@ UnoControlHolderList::ControlIdentifier UnoControlHolderList::impl_getFreeIdenti
         if ( existent == maControls.end() )
             return candidateId;
     }
-    throw uno::RuntimeException("out of identifiers" );
+    throw uno::RuntimeException(u"out of identifiers"_ustr );
 }
 
 
@@ -281,7 +281,7 @@ OUString UnoControlHolderList::impl_getFreeName_throw()
                 [&candidateName](const ControlMap::value_type& rEntry) { return rEntry.second->getName() == candidateName; }) )
             return candidateName;
     }
-    throw uno::RuntimeException("out of identifiers" );
+    throw uno::RuntimeException(u"out of identifiers"_ustr );
 }
 
 //  Function to set the controls' visibility according
@@ -306,7 +306,7 @@ static void implUpdateVisibility
                 ( xModel, uno::UNO_QUERY );
             uno::Reference< beans::XPropertySetInfo >
                 xInfo = xPSet->getPropertySetInfo();
-            OUString aPropName( "Step" );
+            OUString aPropName( u"Step"_ustr );
             sal_Int32 nControlStep = 0;
             if ( xInfo->hasPropertyByName( aPropName ) )
             {
@@ -455,7 +455,7 @@ void UnoControlContainer::removeContainerListener( const uno::Reference< contain
     uno::Reference< awt::XControl > xControl;
     if ( !( _rElement >>= xControl ) || !xControl.is() )
         throw lang::IllegalArgumentException(
-            "Elements must support the XControl interface.",
+            u"Elements must support the XControl interface."_ustr,
             *this,
             1
         );
@@ -470,7 +470,7 @@ void SAL_CALL UnoControlContainer::removeByIdentifier( ::sal_Int32 _nIdentifier 
     uno::Reference< awt::XControl > xControl;
     if ( !mpControls->getControlForIdentifier( _nIdentifier, xControl ) )
         throw container::NoSuchElementException(
-            "There is no element with the given identifier.",
+            u"There is no element with the given identifier."_ustr,
             *this
         );
 
@@ -484,14 +484,14 @@ void SAL_CALL UnoControlContainer::replaceByIdentifer( ::sal_Int32 _nIdentifier,
     uno::Reference< awt::XControl > xExistentControl;
     if ( !mpControls->getControlForIdentifier( _nIdentifier, xExistentControl ) )
         throw container::NoSuchElementException(
-            "There is no element with the given identifier.",
+            u"There is no element with the given identifier."_ustr,
             *this
         );
 
     uno::Reference< awt::XControl > xNewControl;
     if ( !( _rElement >>= xNewControl ) )
         throw lang::IllegalArgumentException(
-            "Elements must support the XControl interface.",
+            u"Elements must support the XControl interface."_ustr,
             *this,
             1
         );
@@ -735,7 +735,7 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
             ( xModel, uno::UNO_QUERY );
         uno::Reference< beans::XPropertySetInfo >
             xInfo = xPSet->getPropertySetInfo();
-        OUString aPropName( "Step" );
+        OUString aPropName( u"Step"_ustr );
         if ( xInfo->hasPropertyByName( aPropName ) )
         {
             css::uno::Any aVal = xPSet->getPropertyValue( aPropName );
@@ -778,7 +778,7 @@ void UnoControlContainer::setVisible( sal_Bool bVisible )
 
 OUString UnoControlContainer::getImplementationName()
 {
-    return "stardiv.Toolkit.UnoControlContainer";
+    return u"stardiv.Toolkit.UnoControlContainer"_ustr;
 }
 
 css::uno::Sequence<OUString> UnoControlContainer::getSupportedServiceNames()

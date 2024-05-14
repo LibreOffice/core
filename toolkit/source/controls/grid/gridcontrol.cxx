@@ -213,7 +213,7 @@ void UnoGridModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex
 
 OUString UnoGridModel::getServiceName()
 {
-    return "com.sun.star.awt.grid.UnoControlGridModel";
+    return u"com.sun.star.awt.grid.UnoControlGridModel"_ustr;
 }
 
 
@@ -222,7 +222,7 @@ Any UnoGridModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     switch( nPropId )
     {
         case BASEPROPERTY_DEFAULTCONTROL:
-            return uno::Any( OUString("com.sun.star.awt.grid.UnoControlGrid") );
+            return uno::Any( u"com.sun.star.awt.grid.UnoControlGrid"_ustr );
         case BASEPROPERTY_GRID_SELECTIONMODE:
             return uno::Any( SelectionType(1) );
         case BASEPROPERTY_GRID_SHOWROWHEADER:
@@ -281,7 +281,7 @@ UnoGridControl::~UnoGridControl()
 
 OUString UnoGridControl::GetComponentServiceName() const
 {
-    return "Grid";
+    return u"Grid"_ustr;
 }
 
 
@@ -315,7 +315,7 @@ namespace
         try
         {
             Reference< XContainer > const xColModel(
-                xModelProps->getPropertyValue("ColumnModel"),
+                xModelProps->getPropertyValue(u"ColumnModel"_ustr),
                 UNO_QUERY_THROW );
             if ( i_add )
                 xColModel->addContainerListener( i_listener.get() );
@@ -323,7 +323,7 @@ namespace
                 xColModel->removeContainerListener( i_listener.get() );
 
             Reference< XGridDataModel > const xDataModel(
-                xModelProps->getPropertyValue("GridDataModel"),
+                xModelProps->getPropertyValue(u"GridDataModel"_ustr),
                 UNO_QUERY_THROW
             );
             Reference< XMutableGridDataModel > const xMutableDataModel( xDataModel, UNO_QUERY );

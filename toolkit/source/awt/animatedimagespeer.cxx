@@ -92,12 +92,12 @@ namespace toolkit
                 if ( i_isHighContrast )
                 {
                     // try (to find) the high-contrast version of the graphic first
-                    aMediaProperties.put( "URL", lcl_getHighContrastURL( i_cachedImage.sImageURL ) );
+                    aMediaProperties.put( u"URL"_ustr, lcl_getHighContrastURL( i_cachedImage.sImageURL ) );
                     i_cachedImage.xGraphic = i_graphicProvider->queryGraphic( aMediaProperties.getPropertyValues() );
                 }
                 if ( !i_cachedImage.xGraphic.is() )
                 {
-                    aMediaProperties.put( "URL", i_cachedImage.sImageURL );
+                    aMediaProperties.put( u"URL"_ustr, i_cachedImage.sImageURL );
                     i_cachedImage.xGraphic = i_graphicProvider->queryGraphic( aMediaProperties.getPropertyValues() );
                 }
             }
@@ -113,7 +113,7 @@ namespace toolkit
                 if ( i_graphic.is() )
                 {
                     const Reference< XPropertySet > xGraphicProps( i_graphic, UNO_QUERY_THROW );
-                    OSL_VERIFY( xGraphicProps->getPropertyValue("SizePixel") >>= aSizePixel );
+                    OSL_VERIFY( xGraphicProps->getPropertyValue(u"SizePixel"_ustr) >>= aSizePixel );
                 }
             }
             catch( const Exception& )
