@@ -474,6 +474,8 @@ bool SvxAutoCorrect::FnChgOrdinalNumber(
     // In some languages ordinal suffixes should never be
     // changed to superscript. Let's break for those languages.
     if (!eLang.anyOf(
+         LANGUAGE_CATALAN,              // tdf#156792
+         LANGUAGE_CATALAN_VALENCIAN,
          LANGUAGE_SWEDISH,
          LANGUAGE_SWEDISH_FINLAND))
     {
