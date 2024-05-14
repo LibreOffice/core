@@ -935,7 +935,7 @@ void Array::SetAddMergedLeftSize( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nAdd
             return;
         Cell aTempCell(*pTempCell);
         aTempCell.mnAddLeft = nAddSize;
-        mxImpl->PutCell( nCol, nRow, aTempCell );
+        mxImpl->PutCell( aIt.Col(), aIt.Row(), aTempCell );
     }
 }
 
@@ -950,7 +950,7 @@ void Array::SetAddMergedRightSize( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nAd
             return;
         Cell aTempCell(*pTempCell);
         aTempCell.mnAddRight = nAddSize;
-        mxImpl->PutCell( nCol, nRow, aTempCell );
+        mxImpl->PutCell( aIt.Col(), aIt.Row(), aTempCell );
     }
 }
 
@@ -965,7 +965,7 @@ void Array::SetAddMergedTopSize( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nAddS
             return;
         Cell aTempCell(*pTempCell);
         aTempCell.mnAddTop = nAddSize;
-        mxImpl->PutCell( nCol, nRow, aTempCell );
+        mxImpl->PutCell( aIt.Col(), aIt.Row(), aTempCell );
     }
 }
 
@@ -980,7 +980,7 @@ void Array::SetAddMergedBottomSize( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nA
             return;
         Cell aTempCell(*pTempCell);
         aTempCell.mnAddBottom = nAddSize;
-        mxImpl->PutCell( nCol, nRow, aTempCell );
+        mxImpl->PutCell( aIt.Col(), aIt.Row(), aTempCell );
     }
 }
 
