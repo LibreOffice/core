@@ -63,4 +63,25 @@ CPPUNIT_TEST_FIXTURE(Test, testFlySplitFootnoteLayout)
     CPPUNIT_ASSERT(pPage->FindFootnoteCont());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testInlineEndnoteAndFootnote)
+{
+    // Given a DOC file with an endnote and then a footnote:
+    createSwDoc("inline-endnote-and-footnote.doc");
+
+    // When laying out that document:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Then make sure the footnote is below the endnote:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - xpath should match exactly 1 node
+    // i.e. the endnote was also in the footnote container, not at the end of the body text.
+    sal_Int32 nEndnoteTop
+        = parseDump("/root/page/body/section/column/ftncont/ftn/infos/bounds"_ostr, "top"_ostr)
+              .toInt32();
+    sal_Int32 nFootnoteTop
+        = parseDump("/root/page/ftncont/ftn/infos/bounds"_ostr, "top"_ostr).toInt32();
+    // Endnote at the end of body text, footnote at page bottom.
+    CPPUNIT_ASSERT_LESS(nFootnoteTop, nEndnoteTop);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

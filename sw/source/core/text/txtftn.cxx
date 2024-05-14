@@ -598,8 +598,6 @@ void SwTextFrame::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDea
     mbFootnote = true;
     mbInFootnoteConnect = true; // Just reset!
     // See if pFootnote is an endnote on a separate endnote page.
-    const IDocumentSettingAccess& rSettings = GetDoc().getIDocumentSettingAccess();
-    const bool bContinuousEndnotes = rSettings.get(DocumentSettingId::CONTINUOUS_ENDNOTES);
     const bool bEnd = pFootnote->GetFootnote().IsEndNote();
 
     // We want to store this value, because it is needed as a fallback
@@ -630,15 +628,11 @@ void SwTextFrame::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDea
 
     if( bDocEnd )
     {
-        if ((pSect || bContinuousEndnotes) && pSrcFrame)
+        if (pSect && pSrcFrame)
         {
             SwFootnoteFrame *pFootnoteFrame = SwFootnoteBossFrame::FindFootnote( pSrcFrame, pFootnote );
-            if (pFootnoteFrame && (pFootnoteFrame->IsInSct() || bContinuousEndnotes))
+            if (pFootnoteFrame && pFootnoteFrame->IsInSct())
             {
-                // We either have a foot/endnote that goes to the end of the section or are in Word
-                // compatibility mode where endnotes go to the end of the document.  Handle both
-                // cases by removing the footnote here, then later appending them to the correct
-                // last page of the document or section.
                 pBoss->RemoveFootnote( pSrcFrame, pFootnote );
                 pSrcFrame = nullptr;
             }
