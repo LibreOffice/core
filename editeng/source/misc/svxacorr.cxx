@@ -44,6 +44,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <o3tl/string_view.hxx>
 #include <editeng/editids.hrc>
@@ -507,28 +508,61 @@ bool SvxAutoCorrect::FnChgOrdinalNumber(
 
         if (bFoundEnd && isValidNumber) {
             sal_Int32 nNum = o3tl::toInt32(rTxt.subView(nSttPos, nNumEnd - nSttPos + 1));
+            std::u16string_view sEnd = rTxt.subView(nNumEnd + 1, nEndPos - nNumEnd - 1);
 
             // Check if the characters after that number correspond to the ordinal suffix
             uno::Reference< i18n::XOrdinalSuffix > xOrdSuffix
                 = i18n::OrdinalSuffix::create(comphelper::getProcessComponentContext());
 
-            const uno::Sequence< OUString > aSuffixes = xOrdSuffix->getOrdinalSuffix(nNum, rCC.getLanguageTag().getLocale());
+            uno::Sequence< OUString > aSuffixes = xOrdSuffix->getOrdinalSuffix(nNum, rCC.getLanguageTag().getLocale());
+
+            // add extra suffixes for languages not handled by i18npool/ICU
+            if ( primary(eLang) == primary(LANGUAGE_PORTUGUESE) &&
+                            ( nEndPos == nNumEnd + 3 || nEndPos == nNumEnd + 4 ) &&
+                            ( sEnd[0] == 'a' || sEnd[0] == 'o' || sEnd[0] == 'r' ) )
+            {
+               auto aExtendedSuffixes = comphelper::sequenceToContainer< std::vector<OUString> >(aSuffixes);
+               aExtendedSuffixes.push_back("as"); // plural form of 'a'
+               aExtendedSuffixes.push_back("os"); // plural form of 'o'
+               aExtendedSuffixes.push_back("ra"); // alternative form of 'a'
+               aExtendedSuffixes.push_back("ro"); // alternative form of 'o'
+               aExtendedSuffixes.push_back("ras"); // alternative form of "as"
+               aExtendedSuffixes.push_back("ros"); // alternative form of "os"
+               aSuffixes = comphelper::containerToSequence(aExtendedSuffixes);
+            }
+
             for (OUString const & sSuffix : aSuffixes)
             {
-                std::u16string_view sEnd = rTxt.subView(nNumEnd + 1, nEndPos - nNumEnd - 1);
-
                 if (sSuffix == sEnd)
                 {
                     // Check if the ordinal suffix has to be set as super script
                     if (rCC.isLetter(sSuffix))
                     {
+                        sal_Int32 nNumberChanged = 0;
+                        sal_Int32 nSuffixChanged = 0;
+                        // exceptions for Portuguese
+                        // add missing dot: 1a -> 1.ª
+                        // and remove optional 'r': 1ro -> 1.º
+                        if ( primary(eLang) == primary(LANGUAGE_PORTUGUESE) )
+                        {
+                            if ( sSuffix.startsWith("r") )
+                            {
+                                rDoc.Delete( nNumEnd + 1, nNumEnd + 2 );
+                                nSuffixChanged = -1;
+                            }
+                            rDoc.Insert( nNumEnd + 1, "." );
+                            nNumberChanged = 1;
+                        }
+
                         // Do the change
                         SvxEscapementItem aSvxEscapementItem(DFLT_ESC_AUTO_SUPER,
                             DFLT_ESC_PROP, SID_ATTR_CHAR_ESCAPEMENT);
-                        rDoc.SetAttr(nNumEnd + 1, nEndPos,
+                        rDoc.SetAttr(nNumEnd + 1 + nNumberChanged,
+                            nEndPos + nNumberChanged + nSuffixChanged,
                             SID_ATTR_CHAR_ESCAPEMENT,
                             aSvxEscapementItem);
                         bChg = true;
+                        break;
                     }
                 }
             }

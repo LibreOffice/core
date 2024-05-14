@@ -2974,6 +2974,22 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf158703)
     CPPUNIT_ASSERT_EQUAL(u"Foo\u00A0:"_ustr, getParagraph(1)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf44293)
+{
+    // Given a document with Portuguese text
+    createSwDoc("tdf44293.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    emulateTyping(*pTextDoc, u"1a 1o ");
+    CPPUNIT_ASSERT_EQUAL(u"1.a 1.o "_ustr, getParagraph(1)->getString());
+    emulateTyping(*pTextDoc, u"1ra 1ro ");
+    CPPUNIT_ASSERT_EQUAL(u"1.a 1.o 1.a 1.o "_ustr, getParagraph(1)->getString());
+    emulateTyping(*pTextDoc, u"43as 43os 43ras 43ros ");
+    CPPUNIT_ASSERT_EQUAL(u"1.a 1.o 1.a 1.o 43.as 43.os 43.as 43.os "_ustr,
+                         getParagraph(1)->getString());
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
