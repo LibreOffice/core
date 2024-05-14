@@ -65,8 +65,8 @@ DTOA_TARBALL := dtoa-20180411.tgz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBCMIS_SHA256SUM := d54d19d86153dbc88e2d468f7136269a2cfe71b73227e12fded01d29ac268074
-LIBCMIS_TARBALL := libcmis-0.6.1.tar.xz
+LIBCMIS_SHA256SUM := 1b5c2d7258ff93eb5f9958ff0e4dfd7332dc75a071bb717dde2217a26602a644
+LIBCMIS_TARBALL := libcmis-0.6.2.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
