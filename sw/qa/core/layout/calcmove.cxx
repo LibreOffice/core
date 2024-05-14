@@ -39,6 +39,25 @@ CPPUNIT_TEST_FIXTURE(Test, testIgnoreTopMargin)
     // i.e. the top margin in the first para of a non-first page wasn't ignored, like in Word.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nParaTopMargin);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testIgnoreTopMarginTable)
+{
+    // Given a DOCX (>= Word 2013) file, with 2 pages:
+    // When loading that document:
+    createSwDoc("ignore-top-margin-table.docx");
+
+    // Then make sure that the paragraph on the 2nd page in B1 has a top margin:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nParaTopMargin
+        = getXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell[2]/txt/infos/prtBounds"_ostr,
+                   "top"_ostr)
+              .toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2000
+    // - Actual  : 0
+    // i.e. the top margin in B1's first paragraph was ignored, but not in Word.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2000), nParaTopMargin);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

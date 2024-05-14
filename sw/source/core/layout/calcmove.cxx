@@ -1092,9 +1092,9 @@ bool SwFrame::IsCollapseUpper() const
         return false;
     }
 
-    // Word >= 2013 style: when we're at the top of the page, but not on the first page, then ignore
-    // the upper margin for paragraphs.
-    if (GetPrev())
+    // Word >= 2013 style: when we're at the top of the page's body, but not on the first page, then
+    // ignore the upper margin for paragraphs.
+    if (GetPrev() || !GetUpper() || !GetUpper()->IsBodyFrame())
     {
         return false;
     }
