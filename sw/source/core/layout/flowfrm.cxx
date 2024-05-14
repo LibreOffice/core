@@ -2257,18 +2257,47 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
         const bool bEndnote = pFootnote->GetAttr()->GetFootnote().IsEndNote();
         const IDocumentSettingAccess& rSettings
             = pFootnote->GetAttrSet()->GetDoc()->getIDocumentSettingAccess();
-        if( bEndnote && pFootnote->IsInSct() )
+        bool bContEndnotes = rSettings.get(DocumentSettingId::CONTINUOUS_ENDNOTES);
+        if( bEndnote && pFootnote->IsInSct() && !bContEndnotes)
         {
             SwSectionFrame* pSect = pFootnote->FindSctFrame();
             if( pSect->IsEndnAtEnd() )
                 // Endnotes at the end of the section.
                 pRef = pSect->FindLastContent( SwFindMode::LastCnt );
         }
-        else if (bEndnote && rSettings.get(DocumentSettingId::CONTINUOUS_ENDNOTES))
+        else if (bEndnote && bContEndnotes)
         {
             // Endnotes at the end of the document.
-            SwPageFrame* pPage = m_rThis.getRootFrame()->GetLastPage();
-            pRef = pPage->FindLastBodyContent();
+            SwSectionFrame* pSect = pFootnote->FindSctFrame();
+            if (!pSect->GetPrev() && !pSect->FindMaster())
+            {
+                // The section is at the top of the page, and is not a follow of a master section.
+                // See if there is a previous body frame.
+                SwLayoutFrame* pPrev = pSect->GetPrevLayoutLeaf();
+                if (pPrev && pPrev->IsBodyFrame())
+                {
+                    // There is, then see if that's on a different page.
+                    SwPageFrame* pSectPage = pSect->FindPageFrame();
+                    SwPageFrame* pPage = pPrev->FindPageFrame();
+                    if (pPage != pSectPage)
+                    {
+                        // It is, then create a new section frame at the end of that previous body
+                        // frame.
+                        auto pNew = new SwSectionFrame(*pSect, /*bMaster=*/true);
+                        pNew->InsertBehind(pPage->FindBodyCont(), pPage->FindLastBodyContent());
+                        pNew->Init();
+                        SwFrame* pLower = pNew->GetLower();
+                        if (pLower->IsColumnFrame())
+                        {
+                            pRef = pLower;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                pRef = pFootnote->FindFootnoteBossFrame();
+            }
         }
         if( !pRef )
             // Endnotes on a separate page.
