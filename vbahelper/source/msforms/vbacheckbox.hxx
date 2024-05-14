@@ -44,7 +44,7 @@ public:
     virtual sal_Bool SAL_CALL getLocked() override;
     virtual void SAL_CALL setLocked( sal_Bool bAutoSize ) override;
     // XDefaultProperty
-    OUString SAL_CALL getDefaultPropertyName(  ) override { return "Value"; }
+    OUString SAL_CALL getDefaultPropertyName(  ) override { return u"Value"_ustr; }
     //XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

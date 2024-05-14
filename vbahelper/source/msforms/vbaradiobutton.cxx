@@ -33,21 +33,21 @@ OUString SAL_CALL
 ScVbaRadioButton::getCaption()
 {
     OUString Label;
-    m_xProps->getPropertyValue( "Label" ) >>= Label;
+    m_xProps->getPropertyValue( u"Label"_ustr ) >>= Label;
     return Label;
 }
 
 void SAL_CALL
 ScVbaRadioButton::setCaption( const OUString& _caption )
 {
-    m_xProps->setPropertyValue( "Label", uno::Any( _caption ) );
+    m_xProps->setPropertyValue( u"Label"_ustr, uno::Any( _caption ) );
 }
 
 uno::Any SAL_CALL
 ScVbaRadioButton::getValue()
 {
     sal_Int16 nValue = -1;
-    m_xProps->getPropertyValue( "State" ) >>= nValue;
+    m_xProps->getPropertyValue( u"State"_ustr ) >>= nValue;
     if( nValue != 0 )
         nValue = -1;
 //    return uno::makeAny( nValue );
@@ -62,7 +62,7 @@ ScVbaRadioButton::setValue( const uno::Any& _value )
 {
     sal_Int16 nValue = 0;
     sal_Int16 nOldValue = 0;
-    m_xProps->getPropertyValue( "State" ) >>= nOldValue;
+    m_xProps->getPropertyValue( u"State"_ustr ) >>= nOldValue;
 
     if( !( _value >>= nValue ) )
     {
@@ -74,7 +74,7 @@ ScVbaRadioButton::setValue( const uno::Any& _value )
 
     if( nValue == -1)
         nValue = 1;
-    m_xProps->setPropertyValue( "State", uno::Any( nValue ) );
+    m_xProps->setPropertyValue( u"State"_ustr, uno::Any( nValue ) );
     if ( nValue != nOldValue )
     {
         fireChangeEvent();
@@ -94,7 +94,7 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaRadioButton::getFont()
 OUString
 ScVbaRadioButton::getServiceImplName()
 {
-    return "ScVbaRadioButton";
+    return u"ScVbaRadioButton"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -102,7 +102,7 @@ ScVbaRadioButton::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.msforms.RadioButton"
+        u"ooo.vba.msforms.RadioButton"_ustr
     };
     return aServiceNames;
 }

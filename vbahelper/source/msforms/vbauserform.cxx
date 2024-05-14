@@ -104,13 +104,13 @@ OUString SAL_CALL
 ScVbaUserForm::getCaption()
 {
     OUString sCaption;
-    m_xProps->getPropertyValue( "Title" ) >>= sCaption;
+    m_xProps->getPropertyValue( u"Title"_ustr ) >>= sCaption;
     return sCaption;
 }
 void
 ScVbaUserForm::setCaption( const OUString& _caption )
 {
-    m_xProps->setPropertyValue( "Title", uno::Any( _caption ) );
+    m_xProps->setPropertyValue( u"Title"_ustr, uno::Any( _caption ) );
 }
 
 sal_Bool SAL_CALL
@@ -176,13 +176,13 @@ ScVbaUserForm::UnloadObject(  )
 OUString
 ScVbaUserForm::getServiceImplName()
 {
-    return "ScVbaUserForm";
+    return u"ScVbaUserForm"_ustr;
 }
 
 uno::Sequence< OUString >
 ScVbaUserForm::getServiceNames()
 {
-    return { "ooo.vba.excel.UserForm" };
+    return { u"ooo.vba.excel.UserForm"_ustr };
 }
 
 uno::Reference< beans::XIntrospectionAccess > SAL_CALL
@@ -292,7 +292,7 @@ ScVbaUserForm::hasProperty( const OUString& aName )
         uno::Reference< beans::XPropertySet > xDlgProps( xControl->getModel(), uno::UNO_QUERY );
         if ( xDlgProps.is() )
         {
-            uno::Reference< container::XNameContainer > xAllChildren( xDlgProps->getPropertyValue( "AllDialogChildren" ), uno::UNO_QUERY_THROW );
+            uno::Reference< container::XNameContainer > xAllChildren( xDlgProps->getPropertyValue( u"AllDialogChildren"_ustr ), uno::UNO_QUERY_THROW );
             bool bRes =  xAllChildren->hasByName( aName );
             SAL_INFO("vbahelper", "ScVbaUserForm::hasProperty(" << aName << ") " << xAllChildren.is() << " ---> " << bRes );
             return bRes;

@@ -33,14 +33,14 @@ OUString SAL_CALL
 ScVbaLabel::getCaption()
 {
     OUString Label;
-    m_xProps->getPropertyValue( "Label" ) >>= Label;
+    m_xProps->getPropertyValue( u"Label"_ustr ) >>= Label;
     return Label;
 }
 
 void SAL_CALL
 ScVbaLabel::setCaption( const OUString& _caption )
 {
-    m_xProps->setPropertyValue( "Label", uno::Any( _caption ) );
+    m_xProps->setPropertyValue( u"Label"_ustr, uno::Any( _caption ) );
 }
 uno::Any SAL_CALL
 ScVbaLabel::getValue()
@@ -76,7 +76,7 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaLabel::getFont()
 
 OUString ScVbaLabel::getServiceImplName()
 {
-    return "ScVbaLabel";
+    return u"ScVbaLabel"_ustr;
 }
 
 sal_Int32 SAL_CALL ScVbaLabel::getBackColor()
@@ -104,7 +104,7 @@ ScVbaLabel::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.msforms.Label"
+        u"ooo.vba.msforms.Label"_ustr
     };
     return aServiceNames;
 }

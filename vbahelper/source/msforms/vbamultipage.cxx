@@ -90,7 +90,7 @@ ScVbaMultiPage::setValue( const sal_Int32 _value )
 OUString
 ScVbaMultiPage::getServiceImplName()
 {
-    return "ScVbaMultiPage";
+    return u"ScVbaMultiPage"_ustr;
 }
 
 uno::Any SAL_CALL
@@ -109,7 +109,7 @@ ScVbaMultiPage::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.msforms.MultiPage"
+        u"ooo.vba.msforms.MultiPage"_ustr
     };
     return aServiceNames;
 }

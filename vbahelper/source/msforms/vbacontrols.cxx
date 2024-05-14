@@ -94,7 +94,7 @@ public:
 
         uno::Reference< beans::XPropertySet > xProp( xCtrl->getModel(), uno::UNO_QUERY_THROW );
         OUString sName;
-        xProp->getPropertyValue( "Name" ) >>= sName;
+        xProp->getPropertyValue( u"Name"_ustr ) >>= sName;
         return sName;
     }
 
@@ -286,80 +286,80 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
             bool bNativeAX = false;
             if( aComServiceName.equalsIgnoreAsciiCase( "Forms.CommandButton.1" ) )
             {
-                xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlButtonModel" ), uno::UNO_QUERY_THROW );
+                xNewModel.set( xModelFactory->createInstance( u"com.sun.star.awt.UnoControlButtonModel"_ustr ), uno::UNO_QUERY_THROW );
                 fDefWidth = 72.0; fDefHeight = 24.0;
                 bFontSupport = true;
             }
             else if( aComServiceName.equalsIgnoreAsciiCase( "Forms.Label.1" ) )
             {
-                xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlFixedTextModel" ), uno::UNO_QUERY_THROW );
+                xNewModel.set( xModelFactory->createInstance( u"com.sun.star.awt.UnoControlFixedTextModel"_ustr ), uno::UNO_QUERY_THROW );
                 fDefWidth = 72.0; fDefHeight = 18.0;
                 bFontSupport = true;
             }
             else if( aComServiceName.equalsIgnoreAsciiCase( "Forms.Image.1" ) )
             {
-                xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlImageControlModel" ), uno::UNO_QUERY_THROW );
+                xNewModel.set( xModelFactory->createInstance( u"com.sun.star.awt.UnoControlImageControlModel"_ustr ), uno::UNO_QUERY_THROW );
                 fDefWidth = 72.0; fDefHeight = 72.0;
             }
             else if( aComServiceName.equalsIgnoreAsciiCase( "Forms.CheckBox.1" ) )
             {
-                xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlCheckBoxModel" ), uno::UNO_QUERY_THROW );
+                xNewModel.set( xModelFactory->createInstance( u"com.sun.star.awt.UnoControlCheckBoxModel"_ustr ), uno::UNO_QUERY_THROW );
                 fDefWidth = 108.0; fDefHeight = 18.0;
                 bFontSupport = true;
             }
             else if( aComServiceName.equalsIgnoreAsciiCase( "Forms.OptionButton.1" ) )
             {
-                xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlRadioButtonModel" ), uno::UNO_QUERY_THROW );
+                xNewModel.set( xModelFactory->createInstance( u"com.sun.star.awt.UnoControlRadioButtonModel"_ustr ), uno::UNO_QUERY_THROW );
                 fDefWidth = 108.0; fDefHeight = 18.0;
                 bFontSupport = true;
             }
             else if( aComServiceName.equalsIgnoreAsciiCase( "Forms.TextBox.1" ) )
             {
-                xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlEditModel" ), uno::UNO_QUERY_THROW );
+                xNewModel.set( xModelFactory->createInstance( u"com.sun.star.awt.UnoControlEditModel"_ustr ), uno::UNO_QUERY_THROW );
                 fDefWidth = 72.0; fDefHeight = 18.0;
                 bFontSupport = true;
             }
             else if( aComServiceName.equalsIgnoreAsciiCase( "Forms.ListBox.1" ) )
             {
-                xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlListBoxModel" ), uno::UNO_QUERY_THROW );
+                xNewModel.set( xModelFactory->createInstance( u"com.sun.star.awt.UnoControlListBoxModel"_ustr ), uno::UNO_QUERY_THROW );
                 fDefWidth = 72.0; fDefHeight = 18.0;
                 bFontSupport = true;
             }
             else if( aComServiceName.equalsIgnoreAsciiCase( "Forms.ComboBox.1" ) )
             {
-                xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlComboBoxModel" ), uno::UNO_QUERY_THROW );
+                xNewModel.set( xModelFactory->createInstance( u"com.sun.star.awt.UnoControlComboBoxModel"_ustr ), uno::UNO_QUERY_THROW );
                 uno::Reference< beans::XPropertySet > xProps( xNewModel, uno::UNO_QUERY_THROW );
-                xProps->setPropertyValue( "Dropdown" , uno::Any( true ) );
+                xProps->setPropertyValue( u"Dropdown"_ustr , uno::Any( true ) );
                 fDefWidth = 72.0; fDefHeight = 18.0;
                 bFontSupport = true;
             }
             else if( aComServiceName.equalsIgnoreAsciiCase( "Forms.ToggleButton.1" ) )
             {
-                xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlButtonModel" ), uno::UNO_QUERY_THROW );
+                xNewModel.set( xModelFactory->createInstance( u"com.sun.star.awt.UnoControlButtonModel"_ustr ), uno::UNO_QUERY_THROW );
                 uno::Reference< beans::XPropertySet > xProps( xNewModel, uno::UNO_QUERY_THROW );
-                xProps->setPropertyValue( "Toggle" , uno::Any( true ) );
+                xProps->setPropertyValue( u"Toggle"_ustr , uno::Any( true ) );
                 fDefWidth = 72.0; fDefHeight = 18.0;
                 bFontSupport = true;
             }
             else if( aComServiceName.equalsIgnoreAsciiCase( "Forms.Frame.1" ) )
             {
-                xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlGroupBoxModel" ), uno::UNO_QUERY_THROW );
+                xNewModel.set( xModelFactory->createInstance( u"com.sun.star.awt.UnoControlGroupBoxModel"_ustr ), uno::UNO_QUERY_THROW );
                 fDefWidth = 216.0; fDefHeight = 144.0;
                 bFontSupport = true;
             }
             else if( aComServiceName.equalsIgnoreAsciiCase( "Forms.SpinButton.1" ) )
             {
-                xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlSpinButtonModel" ), uno::UNO_QUERY_THROW );
+                xNewModel.set( xModelFactory->createInstance( u"com.sun.star.awt.UnoControlSpinButtonModel"_ustr ), uno::UNO_QUERY_THROW );
                 fDefWidth = 12.75; fDefHeight = 25.5;
             }
             else if( aComServiceName.equalsIgnoreAsciiCase( "Forms.ScrollBar.1" ) )
             {
-                xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlScrollBarModel" ), uno::UNO_QUERY_THROW );
+                xNewModel.set( xModelFactory->createInstance( u"com.sun.star.awt.UnoControlScrollBarModel"_ustr ), uno::UNO_QUERY_THROW );
                 fDefWidth = 12.75; fDefHeight = 63.8;
             }
             else
             {
-                xNewModel.set( xModelFactory->createInstance( "com.sun.star.custom.awt.UnoControlSystemAXContainerModel" ), uno::UNO_QUERY_THROW );
+                xNewModel.set( xModelFactory->createInstance( u"com.sun.star.custom.awt.UnoControlSystemAXContainerModel"_ustr ), uno::UNO_QUERY_THROW );
                 fDefWidth = 72.0; fDefHeight = 18.0;
                 bNativeAX = true;
             }
@@ -368,12 +368,12 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
             if( bFontSupport )
             {
                 uno::Reference< beans::XPropertySet > xModelProps( xNewModel, uno::UNO_QUERY_THROW );
-                xModelProps->setPropertyValue( "FontName" , uno::Any( OUString("Tahoma" ) ) );
-                xModelProps->setPropertyValue( "FontHeight" , uno::Any( float( 8.0 ) ) );
-                xModelProps->setPropertyValue( "FontWeight" , uno::Any( awt::FontWeight::NORMAL ) );
-                xModelProps->setPropertyValue( "FontSlant" , uno::Any( awt::FontSlant_NONE ) );
-                xModelProps->setPropertyValue( "FontUnderline" , uno::Any( awt::FontUnderline::NONE ) );
-                xModelProps->setPropertyValue( "FontStrikeout" , uno::Any( awt::FontStrikeout::NONE ) );
+                xModelProps->setPropertyValue( u"FontName"_ustr , uno::Any( u"Tahoma"_ustr ) );
+                xModelProps->setPropertyValue( u"FontHeight"_ustr , uno::Any( float( 8.0 ) ) );
+                xModelProps->setPropertyValue( u"FontWeight"_ustr , uno::Any( awt::FontWeight::NORMAL ) );
+                xModelProps->setPropertyValue( u"FontSlant"_ustr , uno::Any( awt::FontSlant_NONE ) );
+                xModelProps->setPropertyValue( u"FontUnderline"_ustr , uno::Any( awt::FontUnderline::NONE ) );
+                xModelProps->setPropertyValue( u"FontStrikeout"_ustr , uno::Any( awt::FontStrikeout::NONE ) );
             }
 
             xDialogContainer->insertByName( aNewName, uno::Any( xNewModel ) );
@@ -387,7 +387,7 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
                 uno::Sequence< uno::Any > aArgs{ uno::Any(aComServiceName) };
                 uno::Sequence< sal_Int16 > aOutIDDummy;
                 uno::Sequence< uno::Any > aOutDummy;
-                xControlInvoke->invoke( "SOAddAXControl" , aArgs, aOutIDDummy, aOutDummy );
+                xControlInvoke->invoke( u"SOAddAXControl"_ustr , aArgs, aOutIDDummy, aOutDummy );
             }
             catch (const uno::Exception&)
             {
@@ -415,7 +415,7 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
     catch (const uno::Exception&)
     {
         css::uno::Any anyEx = cppu::getCaughtException();
-        throw lang::WrappedTargetRuntimeException( "Can not create AXControl!",
+        throw lang::WrappedTargetRuntimeException( u"Can not create AXControl!"_ustr,
                 uno::Reference< uno::XInterface >(),
                 anyEx );
     }
@@ -490,5 +490,5 @@ ScVbaControls::getElementType()
     return cppu::UnoType<ooo::vba::msforms::XControl>::get();
 }
 
-VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaControls, "ooo.vba.msforms.Controls" )
+VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaControls, u"ooo.vba.msforms.Controls"_ustr )
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

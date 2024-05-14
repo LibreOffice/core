@@ -52,15 +52,15 @@ ListPropListener::ListPropListener( uno::Reference< beans::XPropertySet > xProps
 void ListPropListener::setValueEvent( const uno::Any& value )
 {
     if( m_pvargIndex.hasValue() || m_pvarColumn.hasValue() )
-        throw uno::RuntimeException( "Bad argument" );
+        throw uno::RuntimeException( u"Bad argument"_ustr );
 
-    m_xProps->setPropertyValue( "StringItemList", value );
+    m_xProps->setPropertyValue( u"StringItemList"_ustr, value );
 }
 
 uno::Any ListPropListener::getValueEvent()
 {
     uno::Sequence< OUString > sList;
-    m_xProps->getPropertyValue( "StringItemList" ) >>= sList;
+    m_xProps->getPropertyValue( u"StringItemList"_ustr ) >>= sList;
     sal_Int16 nLength = static_cast< sal_Int16 >( sList.getLength() );
     uno::Any aRet;
     if ( m_pvargIndex.hasValue() )
@@ -68,11 +68,11 @@ uno::Any ListPropListener::getValueEvent()
         sal_Int16 nIndex = -1;
         m_pvargIndex >>= nIndex;
         if( nIndex < 0 || nIndex >= nLength )
-            throw uno::RuntimeException( "Bad row Index" );
+            throw uno::RuntimeException( u"Bad row Index"_ustr );
         aRet <<= sList[ nIndex ];
     }
     else if ( m_pvarColumn.hasValue() ) // pvarColumn on its own would be bad
-            throw uno::RuntimeException( "Bad column Index" );
+            throw uno::RuntimeException( u"Bad column Index"_ustr );
     else // List() ( e.g. no args )
     {
         uno::Sequence< uno::Sequence< OUString > > sReturnArray( nLength );
@@ -94,7 +94,7 @@ ListControlHelper::AddItem( const uno::Any& pvargItem, const uno::Any& pvargInde
         return;
 
     uno::Sequence< OUString > sList;
-    m_xProps->getPropertyValue( "StringItemList" ) >>= sList;
+    m_xProps->getPropertyValue( u"StringItemList"_ustr ) >>= sList;
 
     sal_Int32 nIndex = sList.getLength();
 
@@ -130,7 +130,7 @@ ListControlHelper::AddItem( const uno::Any& pvargItem, const uno::Any& pvargInde
         std::copy(sVec.begin(), sVec.end(), std::next(sList.getArray(), nIndex));
     }
 
-    m_xProps->setPropertyValue( "StringItemList", uno::Any( sList ) );
+    m_xProps->setPropertyValue( u"StringItemList"_ustr, uno::Any( sList ) );
 }
 
 void
@@ -142,9 +142,9 @@ ListControlHelper::removeItem( const uno::Any& index )
         return;
 
     uno::Sequence< OUString > sList;
-    m_xProps->getPropertyValue( "StringItemList" ) >>= sList;
+    m_xProps->getPropertyValue( u"StringItemList"_ustr ) >>= sList;
     if( nIndex < 0 || nIndex > ( sList.getLength() - 1 ) )
-        throw uno::RuntimeException( "Invalid index" , uno::Reference< uno::XInterface > () );
+        throw uno::RuntimeException( u"Invalid index"_ustr , uno::Reference< uno::XInterface > () );
     if( sList.hasElements() )
     {
         if( sList.getLength() == 1 )
@@ -156,7 +156,7 @@ ListControlHelper::removeItem( const uno::Any& index )
         comphelper::removeElementAt(sList, nIndex);
     }
 
-    m_xProps->setPropertyValue( "StringItemList", uno::Any( sList ) );
+    m_xProps->setPropertyValue( u"StringItemList"_ustr, uno::Any( sList ) );
 }
 
 void
@@ -164,7 +164,7 @@ ListControlHelper::Clear(  )
 {
     // urk, setValue doesn't seem to work !!
     //setValue( uno::makeAny( sal_Int16() ) );
-    m_xProps->setPropertyValue( "StringItemList", uno::Any( uno::Sequence< OUString >() ) );
+    m_xProps->setPropertyValue( u"StringItemList"_ustr, uno::Any( uno::Sequence< OUString >() ) );
 }
 
 void
@@ -178,7 +178,7 @@ sal_Int32
 ListControlHelper::getListCount()
 {
     uno::Sequence< OUString > sList;
-    m_xProps->getPropertyValue( "StringItemList" ) >>= sList;
+    m_xProps->getPropertyValue( u"StringItemList"_ustr ) >>= sList;
     return sList.getLength();
 }
 

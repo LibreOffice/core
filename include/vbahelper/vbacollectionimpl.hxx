@@ -245,7 +245,7 @@ protected:
     virtual css::uno::Any getItemByStringIndex( const OUString& sIndex )
     {
         if ( !m_xNameAccess.is() )
-            throw css::uno::RuntimeException("ScVbaCollectionBase string index access not supported by this object" );
+            throw css::uno::RuntimeException(u"ScVbaCollectionBase string index access not supported by this object"_ustr );
 
         if( mbIgnoreCase )
         {
@@ -266,11 +266,11 @@ protected:
     virtual css::uno::Any getItemByIntIndex( const sal_Int32 nIndex )
     {
         if ( !m_xIndexAccess.is() )
-            throw css::uno::RuntimeException("ScVbaCollectionBase numeric index access not supported by this object" );
+            throw css::uno::RuntimeException(u"ScVbaCollectionBase numeric index access not supported by this object"_ustr );
         if ( nIndex <= 0 )
         {
             throw css::lang::IndexOutOfBoundsException(
-                "index is 0 or negative" );
+                u"index is 0 or negative"_ustr );
         }
         // need to adjust for vba index ( for which first element is 1 )
         return createCollectionObject( m_xIndexAccess->getByIndex( nIndex - 1 ) );
@@ -307,7 +307,7 @@ public:
             sal_Int32 nIndex = 0;
             if ( !( Index1 >>= nIndex ) )
             {
-                throw  css::lang::IndexOutOfBoundsException( "Couldn't convert index to Int32" );
+                throw  css::lang::IndexOutOfBoundsException( u"Couldn't convert index to Int32"_ustr );
             }
 
             return  getItemByIntIndex( nIndex );
@@ -321,7 +321,7 @@ public:
     // XDefaultMethod
     OUString SAL_CALL getDefaultMethodName(  ) override
     {
-        return "Item";
+        return u"Item"_ustr;
     }
     // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override = 0;

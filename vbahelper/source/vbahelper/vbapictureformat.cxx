@@ -36,11 +36,11 @@ ScVbaPictureFormat::checkParameterRangeInDouble( double nRange, double nMin, dou
 {
     if( nRange < nMin )
     {
-        throw uno::RuntimeException( "Parameter out of range, value is too small." );
+        throw uno::RuntimeException( u"Parameter out of range, value is too small."_ustr );
     }
     if( nRange > nMax )
     {
-        throw uno::RuntimeException( "Parameter out of range, value is too high." );
+        throw uno::RuntimeException( u"Parameter out of range, value is too high."_ustr );
     }
 }
 
@@ -49,7 +49,7 @@ double SAL_CALL
 ScVbaPictureFormat::getBrightness()
 {
     sal_Int16 nLuminance = 0;
-    m_xPropertySet->getPropertyValue( "AdjustLuminance" ) >>= nLuminance;
+    m_xPropertySet->getPropertyValue( u"AdjustLuminance"_ustr ) >>= nLuminance;
     double fBrightness = static_cast< double >( nLuminance );
     fBrightness = ( fBrightness +100 ) / 200;
     return fBrightness;
@@ -61,14 +61,14 @@ ScVbaPictureFormat::setBrightness( double _brightness )
     checkParameterRangeInDouble( _brightness, 0.0, 1.0 );
     double fLuminance = _brightness * 200 - 100;
     sal_Int16 nLuminance = static_cast< sal_Int16 >( fLuminance );
-    m_xPropertySet->setPropertyValue( "AdjustLuminance" , uno::Any( nLuminance ) );
+    m_xPropertySet->setPropertyValue( u"AdjustLuminance"_ustr , uno::Any( nLuminance ) );
 }
 
 double SAL_CALL
 ScVbaPictureFormat::getContrast()
 {
     sal_Int16 nContrast = 0;
-    m_xPropertySet->getPropertyValue( "AdjustContrast" ) >>= nContrast;
+    m_xPropertySet->getPropertyValue( u"AdjustContrast"_ustr ) >>= nContrast;
     double fContrast = static_cast< double >( nContrast );
     fContrast = ( fContrast + 100 ) / 200;
     return fContrast;
@@ -80,7 +80,7 @@ ScVbaPictureFormat::setContrast( double _contrast )
     checkParameterRangeInDouble( _contrast, 0.0, 1.0 );
     double fContrast = _contrast * 200 - 100;
     sal_Int16 nContrast = static_cast< sal_Int16 >( fContrast );
-    m_xPropertySet->setPropertyValue( "AdjustContrast" , uno::Any( nContrast ) );
+    m_xPropertySet->setPropertyValue( u"AdjustContrast"_ustr , uno::Any( nContrast ) );
 }
 
 
@@ -120,7 +120,7 @@ ScVbaPictureFormat::IncrementContrast( double increment )
 OUString
 ScVbaPictureFormat::getServiceImplName()
 {
-    return "ScVbaPictureFormat";
+    return u"ScVbaPictureFormat"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -128,7 +128,7 @@ ScVbaPictureFormat::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.msform.PictureFormat"
+        u"ooo.vba.msform.PictureFormat"_ustr
     };
     return aServiceNames;
 }

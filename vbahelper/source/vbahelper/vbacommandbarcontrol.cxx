@@ -42,7 +42,7 @@ ScVbaCommandBarControl::getCaption()
 {
     // "Label" always empty
     OUString sCaption;
-    getPropertyValue( m_aPropertyValues, "Label" ) >>= sCaption;
+    getPropertyValue( m_aPropertyValues, u"Label"_ustr ) >>= sCaption;
     return sCaption;
 }
 
@@ -50,7 +50,7 @@ void SAL_CALL
 ScVbaCommandBarControl::setCaption( const OUString& _caption )
 {
     OUString sCaption = _caption.replace('&','~');
-    setPropertyValue( m_aPropertyValues, "Label" , uno::Any( sCaption ) );
+    setPropertyValue( m_aPropertyValues, u"Label"_ustr , uno::Any( sCaption ) );
     ApplyChange();
 }
 
@@ -58,7 +58,7 @@ OUString SAL_CALL
 ScVbaCommandBarControl::getOnAction()
 {
     OUString sCommandURL;
-    getPropertyValue( m_aPropertyValues, "CommandURL" ) >>= sCommandURL;
+    getPropertyValue( m_aPropertyValues, u"CommandURL"_ustr ) >>= sCommandURL;
     return sCommandURL;
 }
 
@@ -72,7 +72,7 @@ ScVbaCommandBarControl::setOnAction( const OUString& _onaction )
     {
         OUString aCommandURL = ooo::vba::makeMacroURL( aResolvedMacro.msResolvedMacro );
         SAL_INFO("vbahelper", "ScVbaCommandBarControl::setOnAction: " << aCommandURL);
-        setPropertyValue( m_aPropertyValues, "CommandURL" , uno::Any( aCommandURL ) );
+        setPropertyValue( m_aPropertyValues, u"CommandURL"_ustr , uno::Any( aCommandURL ) );
         ApplyChange();
     }
 }
@@ -180,7 +180,7 @@ ScVbaCommandBarControl::Controls( const uno::Any& aIndex )
 OUString
 ScVbaCommandBarControl::getServiceImplName()
 {
-    return "ScVbaCommandBarControl";
+    return u"ScVbaCommandBarControl"_ustr;
 }
 
 uno::Sequence<OUString>
@@ -188,7 +188,7 @@ ScVbaCommandBarControl::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.CommandBarControl"
+        u"ooo.vba.CommandBarControl"_ustr
     };
     return aServiceNames;
 }
@@ -210,7 +210,7 @@ ScVbaCommandBarPopup::ScVbaCommandBarPopup( const css::uno::Reference< ov::XHelp
 OUString
 ScVbaCommandBarPopup::getServiceImplName()
 {
-    return "ScVbaCommandBarPopup";
+    return u"ScVbaCommandBarPopup"_ustr;
 }
 
 uno::Sequence<OUString>
@@ -218,7 +218,7 @@ ScVbaCommandBarPopup::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.CommandBarPopup"
+        u"ooo.vba.CommandBarPopup"_ustr
     };
     return aServiceNames;
 }
@@ -240,7 +240,7 @@ ScVbaCommandBarButton::ScVbaCommandBarButton( const css::uno::Reference< ov::XHe
 OUString
 ScVbaCommandBarButton::getServiceImplName()
 {
-    return "ScVbaCommandBarButton";
+    return u"ScVbaCommandBarButton"_ustr;
 }
 
 uno::Sequence<OUString>
@@ -248,7 +248,7 @@ ScVbaCommandBarButton::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.CommandBarButton"
+        u"ooo.vba.CommandBarButton"_ustr
     };
     return aServiceNames;
 }

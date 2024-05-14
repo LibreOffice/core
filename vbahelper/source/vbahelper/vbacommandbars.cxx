@@ -146,7 +146,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
     }
 
     if( !aRet.hasValue() )
-        throw uno::RuntimeException( "Toolbar do not exist" );
+        throw uno::RuntimeException( u"Toolbar do not exist"_ustr );
 
     return aRet;
 }
@@ -167,7 +167,7 @@ ScVbaCommandBars::Add( const css::uno::Any& Name, const css::uno::Any& /*Positio
     {
         sResourceUrl = m_pCBarHelper->findToolbarByName( m_xNameAccess, sName );
         if( !sResourceUrl.isEmpty() )
-            throw uno::RuntimeException( "Toolbar exists" );
+            throw uno::RuntimeException( u"Toolbar exists"_ustr );
     }
     else
     {
@@ -207,9 +207,9 @@ ScVbaCommandBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ )
     {
         uno::Any aSource;
         if( m_pCBarHelper->getModuleId() == "com.sun.star.sheet.SpreadsheetDocument" )
-            aSource <<= OUString("Worksheet Menu Bar");
+            aSource <<= u"Worksheet Menu Bar"_ustr;
         else if( m_pCBarHelper->getModuleId() == "com.sun.star.text.TextDocument" )
-            aSource <<= OUString("Menu Bar");
+            aSource <<= u"Menu Bar"_ustr;
         if( aSource.hasValue() )
             return createCollectionObject( aSource );
     }
@@ -220,7 +220,7 @@ ScVbaCommandBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ )
 OUString
 ScVbaCommandBars::getServiceImplName()
 {
-    return "ScVbaCommandBars";
+    return u"ScVbaCommandBars"_ustr;
 }
 
 uno::Sequence<OUString>
@@ -228,7 +228,7 @@ ScVbaCommandBars::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.CommandBars"
+        u"ooo.vba.CommandBars"_ustr
     };
     return aServiceNames;
 }

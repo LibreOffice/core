@@ -121,7 +121,7 @@ ScVbaShapes::getElementType()
 OUString
 ScVbaShapes::getServiceImplName()
 {
-    return "ScVbaShapes";
+    return u"ScVbaShapes"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -129,7 +129,7 @@ ScVbaShapes::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.msform.Shapes"
+        u"ooo.vba.msform.Shapes"_ustr
     };
     return aServiceNames;
 }
@@ -221,7 +221,7 @@ ScVbaShapes::AddRectangle(sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWid
     sal_Int32 nWidth = Millimeter::getInHundredthsOfOneMillimeter( nLineWidth );
     sal_Int32 nHeight = Millimeter::getInHundredthsOfOneMillimeter( nLineHeight );
 
-    uno::Reference< drawing::XShape > xShape( createShape( "com.sun.star.drawing.RectangleShape" ), uno::UNO_SET_THROW );
+    uno::Reference< drawing::XShape > xShape( createShape( u"com.sun.star.drawing.RectangleShape"_ustr ), uno::UNO_SET_THROW );
     m_xShapes->add( xShape );
 
     OUString sName(createName( u"Rectangle" ));
@@ -251,7 +251,7 @@ ScVbaShapes::AddEllipse(sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth
     sal_Int32 nWidth = Millimeter::getInHundredthsOfOneMillimeter( nLineWidth );
     sal_Int32 nHeight = Millimeter::getInHundredthsOfOneMillimeter( nLineHeight );
 
-    uno::Reference< drawing::XShape > xShape( createShape( "com.sun.star.drawing.EllipseShape" ), uno::UNO_SET_THROW );
+    uno::Reference< drawing::XShape > xShape( createShape( u"com.sun.star.drawing.EllipseShape"_ustr ), uno::UNO_SET_THROW );
     m_xShapes->add( xShape );
 
     awt::Point aMovePositionIfRange( 0, 0 );
@@ -297,7 +297,7 @@ ScVbaShapes::AddLine( sal_Int32 StartX, sal_Int32 StartY, sal_Int32 endX, sal_In
     sal_Int32 nXPos = Millimeter::getInHundredthsOfOneMillimeter( StartX );
     sal_Int32 nYPos = Millimeter::getInHundredthsOfOneMillimeter( StartY );
 
-    uno::Reference< drawing::XShape > xShape( createShape( "com.sun.star.drawing.LineShape" ), uno::UNO_SET_THROW );
+    uno::Reference< drawing::XShape > xShape( createShape( u"com.sun.star.drawing.LineShape"_ustr ), uno::UNO_SET_THROW );
     m_xShapes->add( xShape );
 
     awt::Point aMovePositionIfRange( 0, 0 );
@@ -338,11 +338,11 @@ uno::Any SAL_CALL
 ScVbaShapes::AddTextbox( sal_Int32 /*_nOrientation*/, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight )
 {
     uno::Reference< lang::XServiceInfo > xServiceInfo( m_xModel, uno::UNO_QUERY_THROW );
-    if( xServiceInfo->supportsService( "com.sun.star.text.TextDocument" ) )
+    if( xServiceInfo->supportsService( u"com.sun.star.text.TextDocument"_ustr ) )
     {
         return AddTextboxInWriter( _nLeft, _nTop, _nWidth, _nHeight );
     }
-    throw uno::RuntimeException( "Not implemented" );
+    throw uno::RuntimeException( u"Not implemented"_ustr );
 }
 
 uno::Any
@@ -353,7 +353,7 @@ ScVbaShapes::AddTextboxInWriter( sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _n
     sal_Int32 nWidth = Millimeter::getInHundredthsOfOneMillimeter( _nWidth );
     sal_Int32 nHeight = Millimeter::getInHundredthsOfOneMillimeter( _nHeight );
 
-    uno::Reference< drawing::XShape > xShape( createShape( "com.sun.star.drawing.TextShape" ), uno::UNO_SET_THROW );
+    uno::Reference< drawing::XShape > xShape( createShape( u"com.sun.star.drawing.TextShape"_ustr ), uno::UNO_SET_THROW );
     m_xShapes->add( xShape );
 
     setDefaultShapeProperties(xShape);
@@ -367,20 +367,20 @@ ScVbaShapes::AddTextboxInWriter( sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _n
     xShape->setSize(size);
 
     uno::Reference< beans::XPropertySet > xShapeProps( xShape, uno::UNO_QUERY_THROW );
-    xShapeProps->setPropertyValue( "AnchorType", uno::Any( text::TextContentAnchorType_AT_PAGE ) );
-    xShapeProps->setPropertyValue( "HoriOrientRelation", uno::Any( text::RelOrientation::PAGE_LEFT ) );
-    xShapeProps->setPropertyValue( "HoriOrient", uno::Any( text::HoriOrientation::NONE ) );
-    xShapeProps->setPropertyValue( "HoriOrientPosition", uno::Any( nXPos ) );
+    xShapeProps->setPropertyValue( u"AnchorType"_ustr, uno::Any( text::TextContentAnchorType_AT_PAGE ) );
+    xShapeProps->setPropertyValue( u"HoriOrientRelation"_ustr, uno::Any( text::RelOrientation::PAGE_LEFT ) );
+    xShapeProps->setPropertyValue( u"HoriOrient"_ustr, uno::Any( text::HoriOrientation::NONE ) );
+    xShapeProps->setPropertyValue( u"HoriOrientPosition"_ustr, uno::Any( nXPos ) );
 
-    xShapeProps->setPropertyValue( "VertOrientRelation", uno::Any( text::RelOrientation::PAGE_FRAME ) );
-    xShapeProps->setPropertyValue( "VertOrient", uno::Any( text::VertOrientation::NONE ) );
-    xShapeProps->setPropertyValue( "VertOrientPosition", uno::Any( nYPos ) );
+    xShapeProps->setPropertyValue( u"VertOrientRelation"_ustr, uno::Any( text::RelOrientation::PAGE_FRAME ) );
+    xShapeProps->setPropertyValue( u"VertOrient"_ustr, uno::Any( text::VertOrientation::NONE ) );
+    xShapeProps->setPropertyValue( u"VertOrientPosition"_ustr, uno::Any( nYPos ) );
 
     // set to visible
-    xShapeProps->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_SOLID ) );
+    xShapeProps->setPropertyValue( u"LineStyle"_ustr, uno::Any( drawing::LineStyle_SOLID ) );
     // set to font
-    xShapeProps->setPropertyValue( "LayerID", uno::Any( sal_Int16(1) ) );
-    xShapeProps->setPropertyValue( "LayerName", uno::Any( OUString("Heaven") ) );
+    xShapeProps->setPropertyValue( u"LayerID"_ustr, uno::Any( sal_Int16(1) ) );
+    xShapeProps->setPropertyValue( u"LayerName"_ustr, uno::Any( u"Heaven"_ustr ) );
 
 
     rtl::Reference<ScVbaShape> pScVbaShape = new ScVbaShape( getParent(), mxContext, xShape, m_xShapes, m_xModel, ScVbaShape::getType( xShape ) );
@@ -391,9 +391,9 @@ void
 ScVbaShapes::setDefaultShapeProperties( const uno::Reference< drawing::XShape >& xShape )
 {
     uno::Reference< beans::XPropertySet > xPropertySet( xShape, uno::UNO_QUERY_THROW );
-    xPropertySet->setPropertyValue( "FillStyle", uno::Any( OUString("SOLID") ) );
-    xPropertySet->setPropertyValue( "FillColor", uno::Any( sal_Int32(0xFFFFFF) )  );
-    xPropertySet->setPropertyValue( "TextWordWrap", uno::Any( text::WrapTextMode_THROUGH )  );
+    xPropertySet->setPropertyValue( u"FillStyle"_ustr, uno::Any( u"SOLID"_ustr ) );
+    xPropertySet->setPropertyValue( u"FillColor"_ustr, uno::Any( sal_Int32(0xFFFFFF) )  );
+    xPropertySet->setPropertyValue( u"TextWordWrap"_ustr, uno::Any( text::WrapTextMode_THROUGH )  );
     //not find in OOo2.3
     //xPropertySet->setPropertyValue("Opaque", uno::makeAny( sal_True )  );
 }
@@ -404,7 +404,7 @@ ScVbaShapes::setShape_NameProperty( const uno::Reference< css::drawing::XShape >
     uno::Reference< beans::XPropertySet > xPropertySet( xShape, uno::UNO_QUERY_THROW );
     try
     {
-        xPropertySet->setPropertyValue( "Name", uno::Any( sName ) );
+        xPropertySet->setPropertyValue( u"Name"_ustr, uno::Any( sName ) );
     }
     catch(const script::BasicErrorException&)
     {

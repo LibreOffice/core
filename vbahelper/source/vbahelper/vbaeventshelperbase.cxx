@@ -278,7 +278,7 @@ OUString VbaEventsHelperBase::getEventHandlerPath( const EventHandlerInfo& rInfo
         break;
 
         default:
-            throw uno::RuntimeException("This module type is unsupported"); // unsupported module type
+            throw uno::RuntimeException(u"This module type is unsupported"_ustr); // unsupported module type
     }
 
     /*  Performance improvement: Check the list of existing event handlers
@@ -299,12 +299,12 @@ void VbaEventsHelperBase::ensureVBALibrary()
             throw uno::RuntimeException();
         uno::Reference< beans::XPropertySet > xModelProps( mxModel, uno::UNO_QUERY_THROW );
         uno::Reference< container::XNameAccess > xBasicLibs( xModelProps->getPropertyValue(
-            "BasicLibraries" ), uno::UNO_QUERY_THROW );
+            u"BasicLibraries"_ustr ), uno::UNO_QUERY_THROW );
 
         if(!xBasicLibs->hasByName(maLibraryName) )
         {
             uno::Reference< script::XLibraryContainer > xLibContainer(
-                    xModelProps->getPropertyValue("BasicLibraries"), uno::UNO_QUERY_THROW);
+                    xModelProps->getPropertyValue(u"BasicLibraries"_ustr), uno::UNO_QUERY_THROW);
             xLibContainer->createLibrary(maLibraryName);
         }
 
@@ -424,7 +424,7 @@ VbaEventsHelperBase::ModulePathMap& VbaEventsHelperBase::updateModulePathMap( co
                     || rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_OPEN
                     || rInfo.mnEventId == css::script::vba::VBAEventId::AUTO_CLOSE)
                 {
-                    sName = resolveVBAMacro(mpShell, maLibraryName, rInfo.maMacroName, "Main",
+                    sName = resolveVBAMacro(mpShell, maLibraryName, rInfo.maMacroName, u"Main"_ustr,
                                             bOnlyPublic, sSkipModule);
                 }
             }

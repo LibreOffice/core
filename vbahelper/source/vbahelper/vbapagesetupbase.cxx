@@ -39,16 +39,16 @@ double SAL_CALL VbaPageSetupBase::getTopMargin()
     {
         bool headerOn = false;
 
-        uno::Any aValue = mxPageProps->getPropertyValue( "HeaderIsOn" );
+        uno::Any aValue = mxPageProps->getPropertyValue( u"HeaderIsOn"_ustr );
         aValue >>= headerOn;
 
-        aValue = mxPageProps->getPropertyValue( "TopMargin" );
+        aValue = mxPageProps->getPropertyValue( u"TopMargin"_ustr );
         aValue >>= topMargin;
 
         if( headerOn )
         {
             sal_Int32 headerHeight = 0;
-            aValue = mxPageProps->getPropertyValue( "HeaderHeight" );
+            aValue = mxPageProps->getPropertyValue( u"HeaderHeight"_ustr );
             aValue >>= headerHeight;
             topMargin = topMargin + headerHeight;
         }
@@ -68,18 +68,18 @@ void SAL_CALL VbaPageSetupBase::setTopMargin( double margin )
     {
         bool headerOn = false;
 
-        uno::Any aValue = mxPageProps->getPropertyValue( "HeaderIsOn" );
+        uno::Any aValue = mxPageProps->getPropertyValue( u"HeaderIsOn"_ustr );
         aValue >>= headerOn;
 
         if( headerOn )
         {
             sal_Int32 headerHeight = 0;
-            aValue = mxPageProps->getPropertyValue( "HeaderHeight" );
+            aValue = mxPageProps->getPropertyValue( u"HeaderHeight"_ustr );
             aValue >>= headerHeight;
             topMargin -= headerHeight;
         }
 
-        mxPageProps->setPropertyValue( "TopMargin" , uno::Any(topMargin) );
+        mxPageProps->setPropertyValue( u"TopMargin"_ustr , uno::Any(topMargin) );
     }
     catch( uno::Exception& )
     {
@@ -94,16 +94,16 @@ double SAL_CALL VbaPageSetupBase::getBottomMargin()
     {
         bool footerOn = false;
 
-        uno::Any aValue = mxPageProps->getPropertyValue( "FooterIsOn" );
+        uno::Any aValue = mxPageProps->getPropertyValue( u"FooterIsOn"_ustr );
         aValue >>= footerOn;
 
-        aValue = mxPageProps->getPropertyValue( "BottomMargin" );
+        aValue = mxPageProps->getPropertyValue( u"BottomMargin"_ustr );
         aValue >>= bottomMargin;
 
         if( footerOn )
         {
             sal_Int32 footerHeight = 0;
-            aValue = mxPageProps->getPropertyValue( "FooterHeight" );
+            aValue = mxPageProps->getPropertyValue( u"FooterHeight"_ustr );
             aValue >>= footerHeight;
             bottomMargin += footerHeight;
         }
@@ -123,18 +123,18 @@ void SAL_CALL VbaPageSetupBase::setBottomMargin( double margin )
     {
         bool footerOn = false;
 
-        uno::Any aValue = mxPageProps->getPropertyValue( "FooterIsOn" );
+        uno::Any aValue = mxPageProps->getPropertyValue( u"FooterIsOn"_ustr );
         aValue >>= footerOn;
 
         if( footerOn )
         {
             sal_Int32 footerHeight = 0;
-            aValue = mxPageProps->getPropertyValue( "FooterHeight" );
+            aValue = mxPageProps->getPropertyValue( u"FooterHeight"_ustr );
             aValue >>= footerHeight;
             bottomMargin -= footerHeight;
         }
 
-        mxPageProps->setPropertyValue( "BottomMargin", uno::Any(bottomMargin) );
+        mxPageProps->setPropertyValue( u"BottomMargin"_ustr, uno::Any(bottomMargin) );
     }
     catch( uno::Exception& )
     {
@@ -146,7 +146,7 @@ double SAL_CALL VbaPageSetupBase::getRightMargin()
     sal_Int32 rightMargin = 0;
     try
     {
-        uno::Any aValue = mxPageProps->getPropertyValue( "RightMargin" );
+        uno::Any aValue = mxPageProps->getPropertyValue( u"RightMargin"_ustr );
         aValue >>= rightMargin;
     }
     catch( uno::Exception& )
@@ -161,7 +161,7 @@ void SAL_CALL VbaPageSetupBase::setRightMargin( double margin )
     sal_Int32 rightMargin = Millimeter::getInHundredthsOfOneMillimeter( margin );
     try
     {
-        mxPageProps->setPropertyValue( "RightMargin", uno::Any(rightMargin) );
+        mxPageProps->setPropertyValue( u"RightMargin"_ustr, uno::Any(rightMargin) );
     }
     catch( uno::Exception& )
     {
@@ -174,7 +174,7 @@ double SAL_CALL VbaPageSetupBase::getLeftMargin()
     sal_Int32 leftMargin = 0;
     try
     {
-        uno::Any aValue = mxPageProps->getPropertyValue( "LeftMargin" );
+        uno::Any aValue = mxPageProps->getPropertyValue( u"LeftMargin"_ustr );
         aValue >>= leftMargin;
     }
     catch( uno::Exception& )
@@ -189,7 +189,7 @@ void SAL_CALL VbaPageSetupBase::setLeftMargin( double margin )
     sal_Int32 leftMargin = Millimeter::getInHundredthsOfOneMillimeter( margin );
     try
     {
-        mxPageProps->setPropertyValue( "LeftMargin", uno::Any(leftMargin) );
+        mxPageProps->setPropertyValue( u"LeftMargin"_ustr, uno::Any(leftMargin) );
     }
     catch( uno::Exception& )
     {
@@ -201,7 +201,7 @@ double VbaPageSetupBase::getHeaderMargin()
     sal_Int32 headerMargin = 0;
     try
     {
-        uno::Any aValue = mxPageProps->getPropertyValue( "TopMargin" );
+        uno::Any aValue = mxPageProps->getPropertyValue( u"TopMargin"_ustr );
         aValue >>= headerMargin;
     }
     catch( uno::Exception& )
@@ -216,7 +216,7 @@ void VbaPageSetupBase::setHeaderMargin( double margin )
     sal_Int32 headerMargin = Millimeter::getInHundredthsOfOneMillimeter( margin );
     try
     {
-        mxPageProps->setPropertyValue( "TopMargin", uno::Any(headerMargin) );
+        mxPageProps->setPropertyValue( u"TopMargin"_ustr, uno::Any(headerMargin) );
     }
     catch( uno::Exception& )
     {
@@ -228,7 +228,7 @@ double VbaPageSetupBase::getFooterMargin()
     sal_Int32 footerMargin = 0;
     try
     {
-        uno::Any aValue = mxPageProps->getPropertyValue( "BottomMargin" );
+        uno::Any aValue = mxPageProps->getPropertyValue( u"BottomMargin"_ustr );
         aValue >>= footerMargin;
     }
     catch( uno::Exception& )
@@ -243,7 +243,7 @@ void VbaPageSetupBase::setFooterMargin( double margin )
     sal_Int32 footerMargin = Millimeter::getInHundredthsOfOneMillimeter( margin );
     try
     {
-        mxPageProps->setPropertyValue( "BottomMargin", uno::Any(footerMargin) );
+        mxPageProps->setPropertyValue( u"BottomMargin"_ustr, uno::Any(footerMargin) );
     }
     catch( uno::Exception& )
     {
@@ -256,7 +256,7 @@ sal_Int32 SAL_CALL VbaPageSetupBase::getOrientation()
     try
     {
         bool isLandscape = false;
-        uno::Any aValue = mxPageProps->getPropertyValue( "IsLandscape" );
+        uno::Any aValue = mxPageProps->getPropertyValue( u"IsLandscape"_ustr );
         aValue >>= isLandscape;
 
         if( isLandscape )
@@ -281,7 +281,7 @@ void SAL_CALL VbaPageSetupBase::setOrientation( sal_Int32 orientation )
     try
     {
         bool isLandscape = false;
-        uno::Any aValue = mxPageProps->getPropertyValue( "IsLandscape" );
+        uno::Any aValue = mxPageProps->getPropertyValue( u"IsLandscape"_ustr );
         aValue >>= isLandscape;
 
         bool switchOrientation = false;
@@ -293,11 +293,11 @@ void SAL_CALL VbaPageSetupBase::setOrientation( sal_Int32 orientation )
 
         if( switchOrientation )
         {
-            uno::Any aHeight = mxPageProps->getPropertyValue( "Height" );
-            uno::Any aWidth = mxPageProps->getPropertyValue( "Width" );
-            mxPageProps->setPropertyValue( "IsLandscape", uno::Any(!isLandscape) );
-            mxPageProps->setPropertyValue( "Width" ,  aHeight );
-            mxPageProps->setPropertyValue( "Height" , aWidth );
+            uno::Any aHeight = mxPageProps->getPropertyValue( u"Height"_ustr );
+            uno::Any aWidth = mxPageProps->getPropertyValue( u"Width"_ustr );
+            mxPageProps->setPropertyValue( u"IsLandscape"_ustr, uno::Any(!isLandscape) );
+            mxPageProps->setPropertyValue( u"Width"_ustr ,  aHeight );
+            mxPageProps->setPropertyValue( u"Height"_ustr , aWidth );
         }
     }
     catch( uno::Exception& )

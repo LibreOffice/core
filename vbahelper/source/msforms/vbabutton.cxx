@@ -33,14 +33,14 @@ OUString SAL_CALL
 VbaButton::getCaption()
 {
     OUString Label;
-    m_xProps->getPropertyValue( "Label" ) >>= Label;
+    m_xProps->getPropertyValue( u"Label"_ustr ) >>= Label;
     return Label;
 }
 
 void SAL_CALL
 VbaButton::setCaption( const OUString& _caption )
 {
-    m_xProps->setPropertyValue( "Label", uno::Any( _caption ) );
+    m_xProps->setPropertyValue( u"Label"_ustr, uno::Any( _caption ) );
 }
 
 sal_Bool SAL_CALL VbaButton::getAutoSize()
@@ -112,7 +112,7 @@ uno::Reference< msforms::XNewFont > SAL_CALL VbaButton::getFont()
 OUString
 VbaButton::getServiceImplName()
 {
-    return "VbaButton";
+    return u"VbaButton"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -120,7 +120,7 @@ VbaButton::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.msforms.Button"
+        u"ooo.vba.msforms.Button"_ustr
     };
     return aServiceNames;
 }

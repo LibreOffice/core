@@ -41,7 +41,7 @@ ScVbaPages::createCollectionObject( const css::uno::Any& aSource )
 OUString
 ScVbaPages::getServiceImplName()
 {
-    return "ScVbaPages";
+    return u"ScVbaPages"_ustr;
 }
 
 uno::Reference< container::XEnumeration > SAL_CALL
@@ -56,7 +56,7 @@ ScVbaPages::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.msform.Pages"
+        u"ooo.vba.msform.Pages"_ustr
     };
     return aServiceNames;
 }

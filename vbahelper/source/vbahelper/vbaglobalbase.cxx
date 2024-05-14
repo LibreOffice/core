@@ -47,14 +47,14 @@ const uno::Reference< uno::XComponentContext >& xContext, const OUString& sDocCt
     uno::Reference< uno::XInterface > aSrvMgr;
     if ( xContext.is() && xContext->getServiceManager().is() )
     {
-        aSrvMgr = xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.comp.stoc.OServiceManagerWrapper" , xContext );
+        aSrvMgr = xContext->getServiceManager()->createInstanceWithContext( u"com.sun.star.comp.stoc.OServiceManagerWrapper"_ustr , xContext );
     }
 
     ::cppu::ContextEntry_Init aHandlerContextInfo[] =
     {
         ::cppu::ContextEntry_Init( gsApplication, uno::Any() ),
         ::cppu::ContextEntry_Init( sDocCtxName, uno::Any() ),
-        ::cppu::ContextEntry_Init( "/singletons/com.sun.star.lang.theServiceManager" , uno::Any( aSrvMgr ) )
+        ::cppu::ContextEntry_Init( u"/singletons/com.sun.star.lang.theServiceManager"_ustr , uno::Any( aSrvMgr ) )
     };
     // don't pass a delegate, this seems to introduce yet another cyclic dependency ( and
     // some strange behavior
@@ -68,7 +68,7 @@ const uno::Reference< uno::XComponentContext >& xContext, const OUString& sDocCt
     {
         uno::Reference< beans::XPropertySet >(
             aSrvMgr, uno::UNO_QUERY_THROW )->
-            setPropertyValue( "DefaultContext", uno::Any( mxContext ) );
+            setPropertyValue( u"DefaultContext"_ustr, uno::Any( mxContext ) );
     }
     catch ( uno::RuntimeException & )
     {
@@ -78,8 +78,8 @@ const uno::Reference< uno::XComponentContext >& xContext, const OUString& sDocCt
     {
         uno::Any e(cppu::getCaughtException());
         throw lang::WrappedTargetRuntimeException(
-            ("VbaGlobalsBase ctor, setting OServiceManagerWrapper"
-             " DefaultContext failed"),
+            (u"VbaGlobalsBase ctor, setting OServiceManagerWrapper"
+             " DefaultContext failed"_ustr),
             uno::Reference< uno::XInterface >(), e);
     }
 }
@@ -156,7 +156,7 @@ VbaGlobalsBase::createInstanceWithArguments( const OUString& aServiceSpecifier, 
 uno::Sequence< OUString > SAL_CALL
 VbaGlobalsBase::getAvailableServiceNames(  )
 {
-    uno::Sequence< OUString > serviceNames { "ooo.vba.msforms.UserForm" };
+    uno::Sequence< OUString > serviceNames { u"ooo.vba.msforms.UserForm"_ustr };
     return serviceNames;
 }
 

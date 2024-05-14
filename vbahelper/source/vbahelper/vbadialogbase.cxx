@@ -29,7 +29,7 @@ void SAL_CALL VbaDialogBase::Show()
     {
         OUString aURL = mapIndexToName(mnIndex);
         if (aURL.isEmpty())
-            throw uno::RuntimeException("Unable to open the specified dialog");
+            throw uno::RuntimeException(u"Unable to open the specified dialog"_ustr);
 
         dispatchRequests(m_xModel, aURL, {});
     }

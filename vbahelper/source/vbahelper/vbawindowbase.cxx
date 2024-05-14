@@ -131,7 +131,7 @@ VbaWindowBase::setWidth( sal_Int32 _width )
 OUString
 VbaWindowBase::getServiceImplName()
 {
-    return "VbaWindowBase";
+    return u"VbaWindowBase"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -139,7 +139,7 @@ VbaWindowBase::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.VbaWindowBase"
+        u"ooo.vba.VbaWindowBase"_ustr
     };
     return aServiceNames;
 }

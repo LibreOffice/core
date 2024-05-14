@@ -41,7 +41,7 @@ namespace ooo::vba
         inline css::uno::Reference< css::lang::XMultiServiceFactory > getVBAServiceFactory( SfxObjectShell const * pShell )
         {
             css::uno::Any aUnoVar;
-            if ( !pShell || ! pShell->GetBasicManager()->GetGlobalUNOConstant( "VBAGlobals", aUnoVar ) )
+            if ( !pShell || ! pShell->GetBasicManager()->GetGlobalUNOConstant( u"VBAGlobals"_ustr, aUnoVar ) )
                 throw css::lang::IllegalArgumentException();
             css::uno::Reference< css::lang::XMultiServiceFactory > xVBAFactory( aUnoVar, css::uno::UNO_QUERY_THROW );
             return xVBAFactory;

@@ -44,13 +44,13 @@ ScVbaFrame::ScVbaFrame(
 OUString SAL_CALL ScVbaFrame::getCaption()
 {
     OUString Label;
-    m_xProps->getPropertyValue( "Label" ) >>= Label;
+    m_xProps->getPropertyValue( u"Label"_ustr ) >>= Label;
     return Label;
 }
 
 void SAL_CALL ScVbaFrame::setCaption( const OUString& _caption )
 {
-    m_xProps->setPropertyValue( "Label", uno::Any( _caption ) );
+    m_xProps->setPropertyValue( u"Label"_ustr, uno::Any( _caption ) );
 }
 
 sal_Int32 SAL_CALL ScVbaFrame::getSpecialEffect()
@@ -96,5 +96,5 @@ uno::Any SAL_CALL ScVbaFrame::Controls( const uno::Any& rIndex )
 
 // XHelperInterface
 
-VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaFrame, "ooo.vba.msforms.Frame" )
+VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaFrame, u"ooo.vba.msforms.Frame"_ustr )
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

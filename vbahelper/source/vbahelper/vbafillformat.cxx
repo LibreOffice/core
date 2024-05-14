@@ -40,7 +40,7 @@ ScVbaFillFormat::setFillStyle( drawing::FillStyle nFillStyle )
     m_nFillStyle = nFillStyle;
     if( m_nFillStyle == drawing::FillStyle_GRADIENT )
     {
-        m_xPropertySet->setPropertyValue( "FillStyle" , uno::Any( drawing::FillStyle_GRADIENT ) );
+        m_xPropertySet->setPropertyValue( u"FillStyle"_ustr , uno::Any( drawing::FillStyle_GRADIENT ) );
         awt::Gradient aGradient;
         // AXIAL
         // RADIAL
@@ -57,11 +57,11 @@ ScVbaFillFormat::setFillStyle( drawing::FillStyle nFillStyle )
         aGradient.StartIntensity = 100;
         aGradient.EndIntensity = 100;
         aGradient.StepCount = 1;
-        m_xPropertySet->setPropertyValue( "FillGradient" , uno::Any( aGradient ) );
+        m_xPropertySet->setPropertyValue( u"FillGradient"_ustr , uno::Any( aGradient ) );
     }
     else if( m_nFillStyle == drawing::FillStyle_SOLID )
     {
-        m_xPropertySet->setPropertyValue( "FillStyle" , uno::Any(drawing::FillStyle_SOLID) );
+        m_xPropertySet->setPropertyValue( u"FillStyle"_ustr , uno::Any(drawing::FillStyle_SOLID) );
     }
 }
 
@@ -77,7 +77,7 @@ sal_Bool SAL_CALL
 ScVbaFillFormat::getVisible()
 {
     drawing::FillStyle nFillStyle;
-    m_xPropertySet->getPropertyValue( "FillStyle" ) >>= nFillStyle;
+    m_xPropertySet->getPropertyValue( u"FillStyle"_ustr ) >>= nFillStyle;
     if( nFillStyle == drawing::FillStyle_NONE )
         return false;
     return true;
@@ -87,10 +87,10 @@ void SAL_CALL
 ScVbaFillFormat::setVisible( sal_Bool _visible )
 {
     drawing::FillStyle aFillStyle;
-    m_xPropertySet->getPropertyValue( "FillStyle" ) >>= aFillStyle;
+    m_xPropertySet->getPropertyValue( u"FillStyle"_ustr ) >>= aFillStyle;
     if( !_visible )
     {
-        m_xPropertySet->setPropertyValue( "FillStyle" , uno::Any( drawing::FillStyle_NONE ) );
+        m_xPropertySet->setPropertyValue( u"FillStyle"_ustr , uno::Any( drawing::FillStyle_NONE ) );
     }
     else
     {
@@ -106,7 +106,7 @@ ScVbaFillFormat::getTransparency()
 {
     sal_Int16 nTransparence = 0;
     double dTransparence = 0;
-    m_xPropertySet->getPropertyValue( "FillTransparence" ) >>= nTransparence;
+    m_xPropertySet->getPropertyValue( u"FillTransparence"_ustr ) >>= nTransparence;
     dTransparence = static_cast<double>( nTransparence );
     dTransparence /= 100;
     return dTransparence;
@@ -116,7 +116,7 @@ void SAL_CALL
 ScVbaFillFormat::setTransparency( double _transparency )
 {
     sal_Int16 nTransparence = static_cast< sal_Int16 >( _transparency * 100 );
-    m_xPropertySet->setPropertyValue( "FillTransparence" , uno::Any( nTransparence ) );
+    m_xPropertySet->setPropertyValue( u"FillTransparence"_ustr , uno::Any( nTransparence ) );
 }
 
 
@@ -171,7 +171,7 @@ ScVbaFillFormat::ForeColor()
 OUString
 ScVbaFillFormat::getServiceImplName()
 {
-    return "ScVbaFillFormat";
+    return u"ScVbaFillFormat"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -179,7 +179,7 @@ ScVbaFillFormat::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.msforms.FillFormat"
+        u"ooo.vba.msforms.FillFormat"_ustr
     };
     return aServiceNames;
 }

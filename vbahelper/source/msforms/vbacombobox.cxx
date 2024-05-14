@@ -42,7 +42,7 @@ ScVbaComboBox::ScVbaComboBox( const uno::Reference< XHelperInterface >& xParent,
     try
     {
        // grab the default value property name
-       m_xProps->getPropertyValue( "DataFieldProperty" ) >>= sSourceName;
+       m_xProps->getPropertyValue( u"DataFieldProperty"_ustr ) >>= sSourceName;
     }
     catch( uno::Exception& )
     {
@@ -72,11 +72,11 @@ ScVbaComboBox::setListIndex( const uno::Any& _value )
     sal_Int32 nOldIndex = -1;
     getListIndex() >>= nOldIndex;
     uno::Sequence< OUString > sItems;
-    m_xProps->getPropertyValue( "StringItemList" ) >>= sItems;
+    m_xProps->getPropertyValue( u"StringItemList"_ustr ) >>= sItems;
     if( ( nIndex >= 0 ) && ( sItems.getLength() > nIndex ) )
     {
         OUString sText = sItems[ nIndex ];
-        m_xProps->setPropertyValue( "Text", uno::Any( sText ) );
+        m_xProps->setPropertyValue( u"Text"_ustr, uno::Any( sText ) );
 
         // fire the _Change event
         if( nOldIndex != nIndex )
@@ -88,7 +88,7 @@ uno::Any SAL_CALL
 ScVbaComboBox::getListIndex()
 {
     uno::Sequence< OUString > sItems;
-    m_xProps->getPropertyValue( "StringItemList" ) >>= sItems;
+    m_xProps->getPropertyValue( u"StringItemList"_ustr ) >>= sItems;
     // should really return the item that has focus regardless of
     // it been selected
     if ( sItems.hasElements() )
@@ -250,7 +250,7 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaComboBox::getFont()
 OUString
 ScVbaComboBox::getServiceImplName()
 {
-    return "ScVbaComboBox";
+    return u"ScVbaComboBox"_ustr;
 }
 
 sal_Int32 SAL_CALL ScVbaComboBox::getBackColor()
@@ -298,7 +298,7 @@ ScVbaComboBox::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.msforms.ComboBox"
+        u"ooo.vba.msforms.ComboBox"_ustr
     };
     return aServiceNames;
 }

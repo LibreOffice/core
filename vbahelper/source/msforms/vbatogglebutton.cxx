@@ -28,7 +28,7 @@ ScVbaToggleButton::ScVbaToggleButton( const css::uno::Reference< ov::XHelperInte
     : ToggleButtonImpl_BASE( xParent, xContext, xControl, xModel, std::move(pGeomHelper) )
 {
     SAL_INFO("vbahelper", "ScVbaToggleButton(ctor)");
-    m_xProps->setPropertyValue( "Toggle", uno::Any( true ) );
+    m_xProps->setPropertyValue( u"Toggle"_ustr, uno::Any( true ) );
 }
 
 ScVbaToggleButton::~ScVbaToggleButton()
@@ -41,21 +41,21 @@ OUString SAL_CALL
 ScVbaToggleButton::getCaption()
 {
     OUString Label;
-    m_xProps->getPropertyValue( "Label" ) >>= Label;
+    m_xProps->getPropertyValue( u"Label"_ustr ) >>= Label;
     return Label;
 }
 
 void SAL_CALL
 ScVbaToggleButton::setCaption( const OUString& _caption )
 {
-    m_xProps->setPropertyValue( "Label", uno::Any( _caption ) );
+    m_xProps->setPropertyValue( u"Label"_ustr, uno::Any( _caption ) );
 }
 
 uno::Any SAL_CALL
 ScVbaToggleButton::getValue()
 {
     sal_Int16 nState = 0;
-    m_xProps->getPropertyValue( "State" ) >>= nState;
+    m_xProps->getPropertyValue( u"State"_ustr ) >>= nState;
     return uno::Any( nState ? sal_Int16( -1 ) : sal_Int16( 0 ) );
 }
 
@@ -74,7 +74,7 @@ ScVbaToggleButton::setValue( const uno::Any& _value )
     SAL_INFO("vbahelper", "nState - " << nState );
     nState = ( nState == -1 ) ?  1 : 0;
     SAL_INFO("vbahelper", "nState - " << nState );
-    m_xProps->setPropertyValue( "State", uno::Any(   nState ) );
+    m_xProps->setPropertyValue( u"State"_ustr, uno::Any(   nState ) );
 }
 
 sal_Bool SAL_CALL ScVbaToggleButton::getAutoSize()
@@ -148,7 +148,7 @@ void SAL_CALL ScVbaToggleButton::setLocked( sal_Bool bLocked )
 OUString
 ScVbaToggleButton::getServiceImplName()
 {
-    return "ScVbaToggleButton";
+    return u"ScVbaToggleButton"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -156,7 +156,7 @@ ScVbaToggleButton::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.msforms.ToggleButton"
+        u"ooo.vba.msforms.ToggleButton"_ustr
     };
     return aServiceNames;
 }

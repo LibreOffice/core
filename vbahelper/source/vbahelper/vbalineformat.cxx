@@ -79,17 +79,17 @@ ScVbaLineFormat::convertArrowheadStyleToLineStartEndName( sal_Int32 nArrowheadSt
         case office::MsoArrowheadStyle::msoArrowheadNone:
             return OUString();
         case office::MsoArrowheadStyle::msoArrowheadStealth:
-            return "Arrow concave";
+            return u"Arrow concave"_ustr;
         case office::MsoArrowheadStyle::msoArrowheadOpen:
-            return "Line Arrow";
+            return u"Line Arrow"_ustr;
         case office::MsoArrowheadStyle::msoArrowheadOval:
-            return  "Circle";
+            return  u"Circle"_ustr;
         case office::MsoArrowheadStyle::msoArrowheadDiamond:
-            return "Square 45";
+            return u"Square 45"_ustr;
         case office::MsoArrowheadStyle::msoArrowheadTriangle:
-            return "Arrow";
+            return u"Arrow"_ustr;
         default:
-            throw uno::RuntimeException( "Invalid Arrow Style!" );
+            throw uno::RuntimeException( u"Invalid Arrow Style!"_ustr );
     }
 }
 
@@ -99,7 +99,7 @@ ScVbaLineFormat::getBeginArrowheadStyle()
 {
     sal_Int32 nLineType = office::MsoArrowheadStyle::msoArrowheadNone;
     OUString sLineName;
-    m_xPropertySet->getPropertyValue( "LineStartName" ) >>= sLineName;
+    m_xPropertySet->getPropertyValue( u"LineStartName"_ustr ) >>= sLineName;
     if( ( sLineName.getLength() > 7 ) && ( sLineName.indexOf( "msArray" ) ) != -1 )
     {
         sal_Int32 nIndex = sLineName.indexOf( ' ' );
@@ -118,7 +118,7 @@ void SAL_CALL
 ScVbaLineFormat::setBeginArrowheadStyle( sal_Int32 _beginarrowheadstyle )
 {
     OUString sArrayName = convertArrowheadStyleToLineStartEndName( _beginarrowheadstyle );
-    m_xPropertySet->setPropertyValue( "LineStartName" , uno::Any( sArrayName ) );
+    m_xPropertySet->setPropertyValue( u"LineStartName"_ustr , uno::Any( sArrayName ) );
 }
 
 sal_Int32 SAL_CALL
@@ -126,7 +126,7 @@ ScVbaLineFormat::getBeginArrowheadLength()
 {
     // #STUB
     // force error
-    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." );
+    throw uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
 }
 
 void SAL_CALL
@@ -134,7 +134,7 @@ ScVbaLineFormat::setBeginArrowheadLength( sal_Int32 /*_beginarrowheadlength*/ )
 {
     // #STUB
     // force error
-    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." );
+    throw uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
 }
 
 sal_Int32 SAL_CALL
@@ -142,7 +142,7 @@ ScVbaLineFormat::getBeginArrowheadWidth()
 {
     // #STUB
     // force error
-    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." );
+    throw uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
 }
 
 void SAL_CALL
@@ -150,7 +150,7 @@ ScVbaLineFormat::setBeginArrowheadWidth( sal_Int32 /*_beginarrowheadwidth*/ )
 {
     // #STUB
     // force error
-    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." );
+    throw uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
 }
 
 sal_Int32 SAL_CALL
@@ -171,35 +171,35 @@ ScVbaLineFormat::getEndArrowheadLength()
 {
     // #STUB
     // force error
-    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." );
+    throw uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
 }
 
 void SAL_CALL
 ScVbaLineFormat::setEndArrowheadLength( sal_Int32 /*_endarrowheadlength*/ )
 {
     // #STUB
-    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." );
+    throw uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
 }
 
 sal_Int32 SAL_CALL
 ScVbaLineFormat::getEndArrowheadWidth()
 {
     // #STUB
-    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." );
+    throw uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
 }
 
 void SAL_CALL
 ScVbaLineFormat::setEndArrowheadWidth( sal_Int32 /*_endarrowheadwidth*/ )
 {
     // #STUB
-    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." );
+    throw uno::RuntimeException( u"Property 'EndArrowheadWidth' is not supported."_ustr );
 }
 
 double SAL_CALL
 ScVbaLineFormat::getWeight()
 {
     sal_Int32 nLineWidth=0;
-    m_xPropertySet->getPropertyValue( "LineWidth" ) >>= nLineWidth;
+    m_xPropertySet->getPropertyValue( u"LineWidth"_ustr ) >>= nLineWidth;
     double dLineWidth = Millimeter::getInPoints( nLineWidth );
     return dLineWidth;
 }
@@ -208,7 +208,7 @@ void SAL_CALL
 ScVbaLineFormat::setWeight( double _weight )
 {
     if( _weight < 0 )
-        throw uno::RuntimeException( "Parameter: Must be positive." );
+        throw uno::RuntimeException( u"Parameter: Must be positive."_ustr );
     if( _weight == 0 )
         _weight = 0.5;
     m_nLineWeight = _weight;
@@ -216,7 +216,7 @@ ScVbaLineFormat::setWeight( double _weight )
     aMillimeter.setInPoints( _weight );
 
     sal_Int32 nLineWidth = static_cast<sal_Int32>( aMillimeter.getInHundredthsOfOneMillimeter() );
-    m_xPropertySet->setPropertyValue( "LineWidth" , uno::Any( nLineWidth ) );
+    m_xPropertySet->setPropertyValue( u"LineWidth"_ustr , uno::Any( nLineWidth ) );
     setDashStyle( m_nLineDashStyle );
 }
 
@@ -224,7 +224,7 @@ sal_Bool SAL_CALL
 ScVbaLineFormat::getVisible()
 {
     drawing::LineStyle aLineStyle;
-    m_xPropertySet->getPropertyValue( "LineStyle" ) >>= aLineStyle;
+    m_xPropertySet->getPropertyValue( u"LineStyle"_ustr ) >>= aLineStyle;
     if( aLineStyle == drawing::LineStyle_NONE )
     {
         return false;
@@ -236,11 +236,11 @@ void SAL_CALL
 ScVbaLineFormat::setVisible( sal_Bool _visible )
 {
     drawing::LineStyle aLineStyle;
-    m_xPropertySet->getPropertyValue( "LineStyle" ) >>= aLineStyle;
+    m_xPropertySet->getPropertyValue( u"LineStyle"_ustr ) >>= aLineStyle;
     if( !_visible )
     {
         aLineStyle = drawing::LineStyle_NONE;
-        m_xPropertySet->setPropertyValue( "LineStyle" , uno::Any( aLineStyle ) );
+        m_xPropertySet->setPropertyValue( u"LineStyle"_ustr , uno::Any( aLineStyle ) );
     }
     else
     {
@@ -255,7 +255,7 @@ double SAL_CALL
 ScVbaLineFormat::getTransparency()
 {
     sal_Int16 nTransparency = 0;
-    m_xPropertySet->getPropertyValue( "LineTransparence" ) >>= nTransparency;
+    m_xPropertySet->getPropertyValue( u"LineTransparence"_ustr ) >>= nTransparency;
     double fTransparency = static_cast<double>( nTransparency );
     return fTransparency / 100;
 }
@@ -264,7 +264,7 @@ void SAL_CALL
 ScVbaLineFormat::setTransparency( double _transparency )
 {
     sal_Int16 nTransparency = static_cast<sal_Int16>( _transparency * 100 );
-    m_xPropertySet->setPropertyValue( "LineTransparence" , uno::Any( nTransparency ) );
+    m_xPropertySet->setPropertyValue( u"LineTransparence"_ustr , uno::Any( nTransparency ) );
 }
 
 sal_Int16 SAL_CALL
@@ -291,13 +291,13 @@ ScVbaLineFormat::getDashStyle()
 {
     drawing::LineStyle eLineStyle;
     //LineStyle integer in Xray
-    m_xPropertySet->getPropertyValue( "LineStyle" ) >>= eLineStyle;
+    m_xPropertySet->getPropertyValue( u"LineStyle"_ustr ) >>= eLineStyle;
     if( eLineStyle == drawing::LineStyle_SOLID )
         m_nLineDashStyle = office::MsoLineDashStyle::msoLineSolid;
     else
     {
         drawing::LineDash aLineDash;
-        m_xPropertySet->getPropertyValue( "LineDash" ) >>= aLineDash;
+        m_xPropertySet->getPropertyValue( u"LineDash"_ustr ) >>= aLineDash;
         if( aLineDash.Dots == 0 )
         {
             //LineDash
@@ -343,11 +343,11 @@ ScVbaLineFormat::setDashStyle( sal_Int32 _dashstyle )
     m_nLineDashStyle = _dashstyle;
     if( _dashstyle == office::MsoLineDashStyle::msoLineSolid )
     {
-        m_xPropertySet->setPropertyValue( "LineStyle" , uno::Any( drawing::LineStyle_SOLID  ));
+        m_xPropertySet->setPropertyValue( u"LineStyle"_ustr , uno::Any( drawing::LineStyle_SOLID  ));
     }
     else
     {
-        m_xPropertySet->setPropertyValue( "LineStyle" , uno::Any( drawing::LineStyle_DASH ) );
+        m_xPropertySet->setPropertyValue( u"LineStyle"_ustr , uno::Any( drawing::LineStyle_DASH ) );
         drawing::LineDash  aLineDash;
         Millimeter aMillimeter( m_nLineWeight );
         sal_Int32 nPixel = static_cast< sal_Int32 >( aMillimeter.getInHundredthsOfOneMillimeter() );
@@ -403,9 +403,9 @@ ScVbaLineFormat::setDashStyle( sal_Int32 _dashstyle )
             aLineDash.Distance = nPixel;
             break;
         default:
-            throw uno::RuntimeException( "this MsoLineDashStyle is not supported." );
+            throw uno::RuntimeException( u"this MsoLineDashStyle is not supported."_ustr );
         }
-        m_xPropertySet->setPropertyValue( "LineDash" , uno::Any( aLineDash ) );
+        m_xPropertySet->setPropertyValue( u"LineDash"_ustr , uno::Any( aLineDash ) );
     }
 }
 
@@ -425,7 +425,7 @@ ScVbaLineFormat::ForeColor()
 OUString
 ScVbaLineFormat::getServiceImplName()
 {
-    return "ScVbaLineFormat";
+    return u"ScVbaLineFormat"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -433,7 +433,7 @@ ScVbaLineFormat::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.msform.LineFormat"
+        u"ooo.vba.msform.LineFormat"_ustr
     };
     return aServiceNames;
 }

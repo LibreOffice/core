@@ -124,8 +124,8 @@ public:
         {
             uno::Reference< lang::XServiceInfo > xServiceInfo( xEnum->nextElement(), uno::UNO_QUERY );
             if ( xServiceInfo.is()
-                && (  ( xServiceInfo->supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) && eDocType == VbaDocumentsBase::EXCEL_DOCUMENT )
-                || ( xServiceInfo->supportsService( "com.sun.star.text.TextDocument" ) && eDocType == VbaDocumentsBase::WORD_DOCUMENT ) ) )
+                && (  ( xServiceInfo->supportsService( u"com.sun.star.sheet.SpreadsheetDocument"_ustr ) && eDocType == VbaDocumentsBase::EXCEL_DOCUMENT )
+                || ( xServiceInfo->supportsService( u"com.sun.star.text.TextDocument"_ustr ) && eDocType == VbaDocumentsBase::WORD_DOCUMENT ) ) )
             {
                 uno::Reference< frame::XModel > xModel( xServiceInfo, uno::UNO_QUERY_THROW ); // that the spreadsheetdocument is a xmodel is a given
                 m_documents.push_back( xModel );
@@ -242,16 +242,16 @@ uno::Any VbaDocumentsBase::createDocument()
     else if( meDocType == EXCEL_DOCUMENT )
         sURL = "private:factory/scalc";
     else
-        throw uno::RuntimeException( "Not implemented" );
+        throw uno::RuntimeException( u"Not implemented"_ustr );
 
     // prepare the media descriptor
     utl::MediaDescriptor aMediaDesc;
     aMediaDesc[ utl::MediaDescriptor::PROP_MACROEXECUTIONMODE ] <<= document::MacroExecMode::USE_CONFIG;
-    aMediaDesc.setComponentDataEntry( "ApplyFormDesignMode" , uno::Any( false ) );
+    aMediaDesc.setComponentDataEntry( u"ApplyFormDesignMode"_ustr , uno::Any( false ) );
 
     // create the new document
     uno::Reference< lang::XComponent > xComponent = xLoader->loadComponentFromURL(
-                                       sURL , "_blank", 0,
+                                       sURL , u"_blank"_ustr, 0,
                                        aMediaDesc.getAsConstPropertyValueList() );
 
     // #163808# lock document controllers and container window if specified by application
@@ -307,7 +307,7 @@ uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const uno::A
     }
 
     uno::Reference< lang::XComponent > xComponent = xDesktop->loadComponentFromURL( aURL,
-        "_default" ,
+        u"_default"_ustr ,
         frame::FrameSearchFlag::CREATE,
         sProps);
 

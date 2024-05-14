@@ -153,7 +153,7 @@ dispatchRequests (const uno::Reference< frame::XModel>& xModel, const OUString &
         return;
     }
 
-    uno::Reference<frame::XDispatch> xDispatcher = xDispatchProvider->queryDispatch(url,"",0);
+    uno::Reference<frame::XDispatch> xDispatcher = xDispatchProvider->queryDispatch(url,u""_ustr,0);
 
     sal_Int32 nProps = sProps.getLength();
     uno::Sequence<beans::PropertyValue> dispatchProps(nProps + 1);
@@ -209,14 +209,14 @@ getCurrentDoc( const OUString& sKey )
         if ( !( aModel >>= xModel ) || !xModel.is() )
         {
             throw uno::RuntimeException(
-                "Can't extract model from basic ( it's obviously not set yet  therefore don't know the current document context)" );
+                u"Can't extract model from basic ( it's obviously not set yet  therefore don't know the current document context)"_ustr );
         }
         SAL_INFO("vbahelper", "Have model points to url " << xModel->getURL());
     }
     else
     {
         SAL_INFO("vbahelper", "Failed to get " << sKey);
-        throw uno::RuntimeException( "Can't determine the currently selected document" );
+        throw uno::RuntimeException( u"Can't determine the currently selected document"_ustr );
     }
     return xModel;
 }
@@ -235,13 +235,13 @@ getCurrentDocCtx( const OUString& ctxName, const uno::Reference< uno::XComponent
 uno::Reference< frame::XModel >
 getThisExcelDoc( const uno::Reference< uno::XComponentContext >& xContext )
 {
-    return getCurrentDocCtx( "ExcelDocumentContext" , xContext );
+    return getCurrentDocCtx( u"ExcelDocumentContext"_ustr , xContext );
 }
 
 uno::Reference< frame::XModel >
 getThisWordDoc( const uno::Reference< uno::XComponentContext >& xContext )
 {
-    return getCurrentDocCtx( "WordDocumentContext" , xContext );
+    return getCurrentDocCtx( u"WordDocumentContext"_ustr , xContext );
 }
 
  uno::Reference< frame::XModel >
@@ -250,7 +250,7 @@ getCurrentExcelDoc( const uno::Reference< uno::XComponentContext >& xContext )
     uno::Reference< frame::XModel > xModel;
     try
     {
-        xModel = getCurrentDoc( "ThisExcelDoc" );
+        xModel = getCurrentDoc( u"ThisExcelDoc"_ustr );
     }
     catch (const uno::Exception&)
     {
@@ -271,7 +271,7 @@ getCurrentWordDoc( const uno::Reference< uno::XComponentContext >& xContext )
     uno::Reference< frame::XModel > xModel;
     try
     {
-        xModel = getCurrentDoc( "ThisWordDoc" );
+        xModel = getCurrentDoc( u"ThisWordDoc"_ustr );
     }
     catch (const uno::Exception&)
     {
@@ -352,7 +352,7 @@ void PrintOutHelper( SfxViewShell const * pViewShell, const uno::Any& From, cons
     if ( nCopies > 1 ) // Collate only useful when more that 1 copy
         Collate >>= bCollate;
 
-    OUString sRange(   "-"  );
+    OUString sRange(   u"-"_ustr  );
     OUString sFileName;
 
     if ( nFrom || nTo )
@@ -460,7 +460,7 @@ bool extractBoolFromAny( const uno::Any& rAny )
             return rAny.get< sal_Int64 >() != 0;
         default:;
     }
-    throw uno::RuntimeException( "Invalid type, cannot convert to boolean." , nullptr );
+    throw uno::RuntimeException( u"Invalid type, cannot convert to boolean."_ustr , nullptr );
 }
 
 OUString extractStringFromAny( const uno::Any& rAny, bool bUppercaseBool )
@@ -471,7 +471,7 @@ OUString extractStringFromAny( const uno::Any& rAny, bool bUppercaseBool )
             return rAny.get< OUString >();
         case uno::TypeClass_BOOLEAN:
             return bUppercaseBool ?
-                (rAny.get< bool >() ? OUString(  "TRUE"  ) : OUString(  "FALSE"  )) :
+                (rAny.get< bool >() ? u"TRUE"_ustr : u"FALSE"_ustr) :
                 OUString::boolean( rAny.get< bool >() );
         case uno::TypeClass_FLOAT:
             return OUString::number( rAny.get< float >() );
@@ -485,7 +485,7 @@ OUString extractStringFromAny( const uno::Any& rAny, bool bUppercaseBool )
             return OUString::number( rAny.get< sal_Int64 >() );
         default:;
     }
-    throw uno::RuntimeException( "Invalid type, cannot convert to string." , nullptr );
+    throw uno::RuntimeException( u"Invalid type, cannot convert to string."_ustr , nullptr );
 }
 
 OUString extractStringFromAny( const uno::Any& rAny, const OUString& rDefault, bool bUppercaseBool )
@@ -533,7 +533,7 @@ ContainerUtilities::FieldInList( const uno::Sequence< OUString >& SearchList, co
 
 static bool NeedEsc(sal_Unicode cCode)
 {
-    return OUString(".^$+\\|{}()").indexOf(cCode) != -1;
+    return u".^$+\\|{}()"_ustr.indexOf(cCode) != -1;
 }
 
 OUString VBAToRegexp(const OUString &rIn)
@@ -778,7 +778,7 @@ UserFormGeometryHelper::UserFormGeometryHelper(
     mbDialog( uno::Reference< awt::XDialog >( xControl, uno::UNO_QUERY ).is() )
 {
     if ( !xControl.is() )
-        throw uno::RuntimeException( "No control is provided!" );
+        throw uno::RuntimeException( u"No control is provided!"_ustr );
 
     mxWindow.set( xControl->getPeer(), uno::UNO_QUERY_THROW );
     mxModelProps.set( xControl->getModel(), uno::UNO_QUERY_THROW );
@@ -973,7 +973,7 @@ ShapeHelper::ShapeHelper( css::uno::Reference< css::drawing::XShape > _xShape)
     : xShape(std::move( _xShape ))
 {
     if( !xShape.is() )
-        throw css::uno::RuntimeException( "No valid shape for helper" );
+        throw css::uno::RuntimeException( u"No valid shape for helper"_ustr );
 }
 
 double ShapeHelper::getHeight() const
@@ -1080,7 +1080,7 @@ uno::Reference< XHelperInterface > getVBADocument( const uno::Reference< frame::
     {
         uno::Reference< beans::XPropertySet > xDocProps( xModel, uno::UNO_QUERY_THROW );
         OUString aCodeName;
-        xDocProps->getPropertyValue( "CodeName" ) >>= aCodeName;
+        xDocProps->getPropertyValue( u"CodeName"_ustr ) >>= aCodeName;
         xIf = getUnoDocModule( aCodeName, getSfxObjShell( xModel ) );
     }
     catch (const uno::Exception&)
@@ -1094,7 +1094,7 @@ uno::Reference< XHelperInterface > getUnoDocModule( std::u16string_view aModName
     uno::Reference< XHelperInterface > xIf;
     if ( pShell )
     {
-        OUString sProj( "Standard" );
+        OUString sProj( u"Standard"_ustr );
         // GetBasicManager() causes a SolarMutex assertion failure in some use cases from
         // Automation, at least when opening a Calc Document through ooo::vba::excel::
         // XWorkbooks::Open(). Let's see if this check is a good way around that. It does seem that

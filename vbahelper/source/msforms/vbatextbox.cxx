@@ -50,7 +50,7 @@ ScVbaTextBox::setValue( const uno::Any& _value )
 OUString SAL_CALL
 ScVbaTextBox::getText()
 {
-    uno::Any aValue = m_xProps->getPropertyValue( "Text" );
+    uno::Any aValue = m_xProps->getPropertyValue( u"Text"_ustr );
     OUString sString;
     aValue >>= sString;
     return sString;
@@ -66,7 +66,7 @@ ScVbaTextBox::setText( const OUString& _text )
         xTextRange->setString( _text );
     }
     else
-        m_xProps->setPropertyValue( "Text" , uno::Any( _text ) );
+        m_xProps->setPropertyValue( u"Text"_ustr , uno::Any( _text ) );
     if ( oldText != _text )
         fireChangeEvent();
 }
@@ -74,7 +74,7 @@ ScVbaTextBox::setText( const OUString& _text )
 sal_Int32 SAL_CALL
 ScVbaTextBox::getMaxLength()
 {
-    uno::Any aValue = m_xProps->getPropertyValue( "MaxTextLen" );
+    uno::Any aValue = m_xProps->getPropertyValue( u"MaxTextLen"_ustr );
     sal_Int16 nMaxLength = 0;
     aValue >>= nMaxLength;
     return static_cast<sal_Int32>(nMaxLength);
@@ -85,13 +85,13 @@ ScVbaTextBox::setMaxLength( sal_Int32 _maxlength )
 {
     sal_Int16 nTmp( _maxlength );
     uno::Any aValue( nTmp );
-    m_xProps->setPropertyValue( "MaxTextLen" , aValue);
+    m_xProps->setPropertyValue( u"MaxTextLen"_ustr , aValue);
 }
 
 sal_Bool SAL_CALL
 ScVbaTextBox::getMultiline()
 {
-    uno::Any aValue = m_xProps->getPropertyValue( "MultiLine" );
+    uno::Any aValue = m_xProps->getPropertyValue( u"MultiLine"_ustr );
     bool bRet = false;
     aValue >>= bRet;
     return bRet;
@@ -101,7 +101,7 @@ void SAL_CALL
 ScVbaTextBox::setMultiline( sal_Bool _multiline )
 {
     uno::Any aValue( _multiline );
-    m_xProps->setPropertyValue( "MultiLine" , aValue);
+    m_xProps->setPropertyValue( u"MultiLine"_ustr , aValue);
 }
 
 sal_Int32 SAL_CALL ScVbaTextBox::getSpecialEffect()
@@ -167,7 +167,7 @@ void SAL_CALL ScVbaTextBox::setLocked( sal_Bool bLocked )
 OUString
 ScVbaTextBox::getServiceImplName()
 {
-    return "ScVbaTextBox";
+    return u"ScVbaTextBox"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -175,7 +175,7 @@ ScVbaTextBox::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.msforms.TextBox"
+        u"ooo.vba.msforms.TextBox"_ustr
     };
     return aServiceNames;
 }

@@ -47,17 +47,17 @@ private:
     MSO2OOCommandbarHelper()
     {
         // Buildin toolbars
-        maBuildinToolbarMap.insert( std::make_pair( OUString("Standard") ,    OUString("private:resource/toolbar/standardbar" ) ) );
-        maBuildinToolbarMap.insert( std::make_pair( OUString("Formatting"),   OUString("private:resource/toolbar/formatobjectbar") ) );
-        maBuildinToolbarMap.insert( std::make_pair( OUString("Drawing"),      OUString("private:resource/toolbar/drawbar") ) );
-        maBuildinToolbarMap.insert( std::make_pair( OUString("Toolbar List"), OUString("private:resource/toolbar/toolbar") ) );
-        maBuildinToolbarMap.insert( std::make_pair( OUString("Forms"),        OUString("private:resource/toolbar/formcontrols") ) );
-        maBuildinToolbarMap.insert( std::make_pair( OUString("Form Controls"),OUString("private:resource/toolbar/formcontrols") ) );
-        maBuildinToolbarMap.insert( std::make_pair( OUString("Full Screen"),  OUString("private:resource/toolbar/fullscreenbar") ) );
-        maBuildinToolbarMap.insert( std::make_pair( OUString("Chart"),        OUString("private:resource/toolbar/flowchartshapes") ) );
-        maBuildinToolbarMap.insert( std::make_pair( OUString("Picture"),      OUString("private:resource/toolbar/graphicobjectbar") ) );
-        maBuildinToolbarMap.insert( std::make_pair( OUString("WordArt"),      OUString("private:resource/toolbar/fontworkobjectbar") ) );
-        maBuildinToolbarMap.insert( std::make_pair( OUString("3-D Settings"), OUString("private:resource/toolbar/extrusionobjectbar") ) );
+        maBuildinToolbarMap.insert( std::make_pair( u"Standard"_ustr ,    u"private:resource/toolbar/standardbar"_ustr ) );
+        maBuildinToolbarMap.insert( std::make_pair( u"Formatting"_ustr,   u"private:resource/toolbar/formatobjectbar"_ustr ) );
+        maBuildinToolbarMap.insert( std::make_pair( u"Drawing"_ustr,      u"private:resource/toolbar/drawbar"_ustr ) );
+        maBuildinToolbarMap.insert( std::make_pair( u"Toolbar List"_ustr, u"private:resource/toolbar/toolbar"_ustr ) );
+        maBuildinToolbarMap.insert( std::make_pair( u"Forms"_ustr,        u"private:resource/toolbar/formcontrols"_ustr ) );
+        maBuildinToolbarMap.insert( std::make_pair( u"Form Controls"_ustr,u"private:resource/toolbar/formcontrols"_ustr ) );
+        maBuildinToolbarMap.insert( std::make_pair( u"Full Screen"_ustr,  u"private:resource/toolbar/fullscreenbar"_ustr ) );
+        maBuildinToolbarMap.insert( std::make_pair( u"Chart"_ustr,        u"private:resource/toolbar/flowchartshapes"_ustr ) );
+        maBuildinToolbarMap.insert( std::make_pair( u"Picture"_ustr,      u"private:resource/toolbar/graphicobjectbar"_ustr ) );
+        maBuildinToolbarMap.insert( std::make_pair( u"WordArt"_ustr,      u"private:resource/toolbar/fontworkobjectbar"_ustr ) );
+        maBuildinToolbarMap.insert( std::make_pair( u"3-D Settings"_ustr, u"private:resource/toolbar/extrusionobjectbar"_ustr ) );
     }
 
 public:
@@ -96,18 +96,18 @@ void VbaCommandBarHelper::Init( )
     m_xDocCfgMgr = xUICfgSupplier->getUIConfigurationManager();
 
     uno::Reference< lang::XServiceInfo > xServiceInfo( mxModel, uno::UNO_QUERY_THROW );
-    if( xServiceInfo->supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) )
+    if( xServiceInfo->supportsService( u"com.sun.star.sheet.SpreadsheetDocument"_ustr ) )
     {
         maModuleId = "com.sun.star.sheet.SpreadsheetDocument";
     }
-    else if( xServiceInfo->supportsService( "com.sun.star.text.TextDocument" ) )
+    else if( xServiceInfo->supportsService( u"com.sun.star.text.TextDocument"_ustr ) )
     {
         maModuleId = "com.sun.star.text.TextDocument";
     }
 
     if( maModuleId.isEmpty() )
     {
-        throw uno::RuntimeException( "Not implemented" );
+        throw uno::RuntimeException( u"Not implemented"_ustr );
     }
 
     css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xUICfgMgrSupp(
@@ -159,7 +159,7 @@ uno::Reference< frame::XLayoutManager > VbaCommandBarHelper::getLayoutManager() 
 {
     uno::Reference< frame::XFrame > xFrame( getModel()->getCurrentController()->getFrame(), uno::UNO_SET_THROW );
     uno::Reference< beans::XPropertySet > xPropertySet( xFrame, uno::UNO_QUERY_THROW );
-    uno::Reference< frame::XLayoutManager > xLayoutManager( xPropertySet->getPropertyValue( "LayoutManager" ), uno::UNO_QUERY_THROW );
+    uno::Reference< frame::XLayoutManager > xLayoutManager( xPropertySet->getPropertyValue( u"LayoutManager"_ustr ), uno::UNO_QUERY_THROW );
     return xLayoutManager;
 }
 

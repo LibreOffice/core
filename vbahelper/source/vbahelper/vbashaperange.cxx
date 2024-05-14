@@ -406,7 +406,7 @@ ScVbaShapeRange:: createCollectionObject( const css::uno::Any& aSource )
 OUString
 ScVbaShapeRange::getServiceImplName()
 {
-    return "ScVbaShapeRange";
+    return u"ScVbaShapeRange"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -414,7 +414,7 @@ ScVbaShapeRange::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.msform.ShapeRange"
+        u"ooo.vba.msform.ShapeRange"_ustr
     };
     return aServiceNames;
 }

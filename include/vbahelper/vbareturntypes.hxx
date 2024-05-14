@@ -37,7 +37,7 @@ namespace ooo::vba
             DefaultReturnHelper( const T1& nValue ) : mnValue( nValue ) {}
             virtual void  SAL_CALL setValue( T1 nValue ) override { mnValue = nValue; }
             virtual T1  SAL_CALL getValue() override { return mnValue; }
-            OUString SAL_CALL getDefaultPropertyName(  ) override { return "Value"; }
+            OUString SAL_CALL getDefaultPropertyName(  ) override { return u"Value"_ustr; }
         };
 
         typedef DefaultReturnHelper< sal_Int32, ov::msforms::XReturnInteger > ReturnInteger_BASE;

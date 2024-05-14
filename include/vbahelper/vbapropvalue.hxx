@@ -51,7 +51,7 @@ public:
     virtual css::uno::Any SAL_CALL getValue() override;
     virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
 
-    OUString SAL_CALL getDefaultPropertyName() override { return "Value"; }
+    OUString SAL_CALL getDefaultPropertyName() override { return u"Value"_ustr; }
 
 };
 #endif //SC_VBA_PROPVALULE_HXX

@@ -30,7 +30,7 @@ ScVbaImage::ScVbaImage( const uno::Reference< XHelperInterface >& xParent, const
 OUString
 ScVbaImage::getServiceImplName()
 {
-    return "ScVbaImage";
+    return u"ScVbaImage"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -38,7 +38,7 @@ ScVbaImage::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.msforms.Image"
+        u"ooo.vba.msforms.Image"_ustr
     };
     return aServiceNames;
 }

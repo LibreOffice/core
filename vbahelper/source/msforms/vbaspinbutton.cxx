@@ -31,47 +31,47 @@ ScVbaSpinButton::ScVbaSpinButton(  const css::uno::Reference< ov::XHelperInterfa
 uno::Any SAL_CALL
 ScVbaSpinButton::getValue()
 {
-    return  m_xProps->getPropertyValue( "SpinValue" );
+    return  m_xProps->getPropertyValue( u"SpinValue"_ustr );
 }
 
 void SAL_CALL
 ScVbaSpinButton::setValue( const uno::Any& _value )
 {
-    m_xProps->setPropertyValue( "SpinValue", _value );
+    m_xProps->setPropertyValue( u"SpinValue"_ustr, _value );
 }
 
 ::sal_Int32 SAL_CALL
 ScVbaSpinButton::getMax()
 {
     sal_Int32 nMax = 0;
-    m_xProps->getPropertyValue( "SpinValueMax" ) >>= nMax;
+    m_xProps->getPropertyValue( u"SpinValueMax"_ustr ) >>= nMax;
     return nMax;
 }
 
 void SAL_CALL
 ScVbaSpinButton::setMax( sal_Int32 nVal )
 {
-    m_xProps->setPropertyValue( "SpinValueMax", uno::Any( nVal ) );
+    m_xProps->setPropertyValue( u"SpinValueMax"_ustr, uno::Any( nVal ) );
 }
 
 ::sal_Int32 SAL_CALL
 ScVbaSpinButton::getMin()
 {
     sal_Int32 nVal = 0;
-    m_xProps->getPropertyValue( "SpinValueMin" ) >>= nVal;
+    m_xProps->getPropertyValue( u"SpinValueMin"_ustr ) >>= nVal;
     return nVal;
 }
 
 void SAL_CALL
 ScVbaSpinButton::setMin( sal_Int32 nVal )
 {
-    m_xProps->setPropertyValue( "SpinValueMin", uno::Any( nVal ) );
+    m_xProps->setPropertyValue( u"SpinValueMin"_ustr, uno::Any( nVal ) );
 }
 
 OUString
 ScVbaSpinButton::getServiceImplName()
 {
-    return "ScVbaSpinButton";
+    return u"ScVbaSpinButton"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -79,7 +79,7 @@ ScVbaSpinButton::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.msforms.Frame"
+        u"ooo.vba.msforms.Frame"_ustr
     };
     return aServiceNames;
 }

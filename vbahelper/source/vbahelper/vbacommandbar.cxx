@@ -42,7 +42,7 @@ ScVbaCommandBar::getName()
 {
     // This will get a "NULL length string" when Name is not set.
     uno::Reference< beans::XPropertySet > xPropertySet( m_xBarSettings, uno::UNO_QUERY_THROW );
-    uno::Any aName = xPropertySet->getPropertyValue( "UIName" );
+    uno::Any aName = xPropertySet->getPropertyValue( u"UIName"_ustr );
     OUString sName;
     aName >>= sName;
     if( sName.isEmpty() )
@@ -64,7 +64,7 @@ ScVbaCommandBar::getName()
         {
             uno::Sequence< beans::PropertyValue > aToolBar;
             xNameAccess->getByName( m_sResourceUrl ) >>= aToolBar;
-            getPropertyValue( aToolBar, "UIName" ) >>= sName;
+            getPropertyValue( aToolBar, u"UIName"_ustr ) >>= sName;
         }
     }
     return sName;
@@ -73,7 +73,7 @@ void SAL_CALL
 ScVbaCommandBar::setName( const OUString& _name )
 {
     uno::Reference< beans::XPropertySet > xPropertySet( m_xBarSettings, uno::UNO_QUERY_THROW );
-    xPropertySet->setPropertyValue( "UIName" , uno::Any( _name ) );
+    xPropertySet->setPropertyValue( u"UIName"_ustr , uno::Any( _name ) );
 
     pCBarHelper->ApplyTempChange( m_sResourceUrl, m_xBarSettings );
 }
@@ -92,7 +92,7 @@ ScVbaCommandBar::getVisible()
         {
             uno::Sequence< beans::PropertyValue > aToolBar;
             xNameAccess->getByName( m_sResourceUrl ) >>= aToolBar;
-            getPropertyValue( aToolBar, "Visible" ) >>= bVisible;
+            getPropertyValue( aToolBar, u"Visible"_ustr ) >>= bVisible;
         }
     }
     catch (const uno::Exception&)
@@ -177,7 +177,7 @@ ScVbaCommandBar::FindControl( const uno::Any& /*aType*/, const uno::Any& /*aId*/
 OUString
 ScVbaCommandBar::getServiceImplName()
 {
-    return "ScVbaCommandBar";
+    return u"ScVbaCommandBar"_ustr;
 }
 
 uno::Sequence<OUString>
@@ -185,7 +185,7 @@ ScVbaCommandBar::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.CommandBar"
+        u"ooo.vba.CommandBar"_ustr
     };
     return aServiceNames;
 }
@@ -259,14 +259,14 @@ uno::Any SAL_CALL VbaDummyCommandBar::FindControl( const uno::Any& /*aType*/, co
 
 OUString VbaDummyCommandBar::getServiceImplName()
 {
-    return "VbaDummyCommandBar";
+    return u"VbaDummyCommandBar"_ustr;
 }
 
 uno::Sequence< OUString > VbaDummyCommandBar::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.CommandBar"
+        u"ooo.vba.CommandBar"_ustr
     };
     return aServiceNames;
 }

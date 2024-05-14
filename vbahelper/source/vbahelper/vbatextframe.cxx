@@ -37,8 +37,8 @@ VbaTextFrame::setAsMSObehavior()
     //set property TextWordWrap default as False.
     // TextFitToSize control the text content. It seems we should set the default as False.
     // com.sun.star.drawing.TextFitToSizeType.NONE
-    m_xPropertySet->setPropertyValue( "TextWordWrap", uno::Any( false ) );
-    m_xPropertySet->setPropertyValue( "TextFitToSize", uno::Any( drawing::TextFitToSizeType_NONE ) );
+    m_xPropertySet->setPropertyValue( u"TextWordWrap"_ustr, uno::Any( false ) );
+    m_xPropertySet->setPropertyValue( u"TextFitToSize"_ustr, uno::Any( drawing::TextFitToSizeType_NONE ) );
 }
 
 sal_Int32 VbaTextFrame::getMargin( const OUString& sMarginType )
@@ -63,7 +63,7 @@ VbaTextFrame::getAutoSize()
     // TextFitToSize control the text content.
     // and in mso, there isnot option TextWordWrap which means auto wrap. the default is False.
     bool bAutosize = false;
-    uno::Any aTextAutoGrowHeight = m_xPropertySet->getPropertyValue( "TextAutoGrowHeight" );
+    uno::Any aTextAutoGrowHeight = m_xPropertySet->getPropertyValue( u"TextAutoGrowHeight"_ustr );
     aTextAutoGrowHeight >>= bAutosize;
     return bAutosize;
 }
@@ -72,13 +72,13 @@ void SAL_CALL
 VbaTextFrame::setAutoSize( sal_Bool _autosize )
 {
     setAsMSObehavior();
-    m_xPropertySet->setPropertyValue( "TextAutoGrowHeight", uno::Any( _autosize ) );
+    m_xPropertySet->setPropertyValue( u"TextAutoGrowHeight"_ustr, uno::Any( _autosize ) );
 }
 
 float SAL_CALL
 VbaTextFrame::getMarginBottom()
 {
-    sal_Int32 nMargin = getMargin( "TextLowerDistance" );
+    sal_Int32 nMargin = getMargin( u"TextLowerDistance"_ustr );
     float fMargin = static_cast<float>(Millimeter::getInPoints( nMargin ));
     return fMargin;
 }
@@ -86,13 +86,13 @@ VbaTextFrame::getMarginBottom()
 void SAL_CALL
 VbaTextFrame::setMarginBottom( float _marginbottom )
 {
-    setMargin( "TextLowerDistance", _marginbottom );
+    setMargin( u"TextLowerDistance"_ustr, _marginbottom );
 }
 
 float SAL_CALL
 VbaTextFrame::getMarginTop()
 {
-    sal_Int32 nMargin = getMargin( "TextUpperDistance" );
+    sal_Int32 nMargin = getMargin( u"TextUpperDistance"_ustr );
     float fMargin = static_cast<float>(Millimeter::getInPoints( nMargin ));
     return fMargin;
 }
@@ -100,13 +100,13 @@ VbaTextFrame::getMarginTop()
 void SAL_CALL
 VbaTextFrame::setMarginTop( float _margintop )
 {
-    setMargin( "TextUpperDistance", _margintop );
+    setMargin( u"TextUpperDistance"_ustr, _margintop );
 }
 
 float SAL_CALL
 VbaTextFrame::getMarginLeft()
 {
-    sal_Int32 nMargin = getMargin( "TextLeftDistance" );
+    sal_Int32 nMargin = getMargin( u"TextLeftDistance"_ustr );
     float fMargin = static_cast<float>(Millimeter::getInPoints( nMargin ));
     return fMargin;
 }
@@ -114,13 +114,13 @@ VbaTextFrame::getMarginLeft()
 void SAL_CALL
 VbaTextFrame::setMarginLeft( float _marginleft )
 {
-    setMargin( "TextLeftDistance", _marginleft );
+    setMargin( u"TextLeftDistance"_ustr, _marginleft );
 }
 
 float SAL_CALL
 VbaTextFrame::getMarginRight()
 {
-    sal_Int32 nMargin = getMargin( "TextRightDistance" );
+    sal_Int32 nMargin = getMargin( u"TextRightDistance"_ustr );
     float fMargin = static_cast<float>(Millimeter::getInPoints( nMargin ));
     return fMargin;
 }
@@ -128,7 +128,7 @@ VbaTextFrame::getMarginRight()
 void SAL_CALL
 VbaTextFrame::setMarginRight( float _marginright )
 {
-    setMargin( "TextRightDistance" , _marginright );
+    setMargin( u"TextRightDistance"_ustr , _marginright );
 }
 
 
@@ -136,13 +136,13 @@ VbaTextFrame::setMarginRight( float _marginright )
 uno::Any SAL_CALL
 VbaTextFrame::Characters()
 {
-    throw uno::RuntimeException( "Not implemented" );
+    throw uno::RuntimeException( u"Not implemented"_ustr );
 }
 
 OUString
 VbaTextFrame::getServiceImplName()
 {
-    return "VbaTextFrame";
+    return u"VbaTextFrame"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -150,7 +150,7 @@ VbaTextFrame::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.msforms.TextFrame"
+        u"ooo.vba.msforms.TextFrame"_ustr
     };
     return aServiceNames;
 }

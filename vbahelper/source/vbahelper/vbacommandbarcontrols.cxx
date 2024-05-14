@@ -160,7 +160,7 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
 {
     // Parameter is not supported
     // the following name needs to be individually created;
-    OUString sLabel("Custom");
+    OUString sLabel(u"Custom"_ustr);
     OUString sCommandUrl( CUSTOM_MENU_STR + sLabel);
     sal_Int32 nType = office::MsoControlType::msoControlButton;
     sal_Int32 nPosition = 0;
@@ -172,11 +172,11 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
 
     if( nType != office::MsoControlType::msoControlButton &&
         nType != office::MsoControlType::msoControlPopup )
-        throw uno::RuntimeException( "Not implemented" );
+        throw uno::RuntimeException( u"Not implemented"_ustr );
 
     if( Id.hasValue() || Parameter.hasValue( ) )
     {
-        throw uno::RuntimeException( "Not implemented" );
+        throw uno::RuntimeException( u"Not implemented"_ustr );
     }
 
     if( Before.hasValue() )
@@ -197,11 +197,11 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
     sal_uInt16 nItemType = 0;
     if( m_bIsMenu )
     {
-        aProps = CreateMenuItemData( sCommandUrl, "", sLabel, nItemType, aSubMenu, true, true );
+        aProps = CreateMenuItemData( sCommandUrl, u""_ustr, sLabel, nItemType, aSubMenu, true, true );
     }
     else
     {
-        aProps = CreateToolbarItemData( sCommandUrl, "", sLabel, nItemType, aSubMenu, true/*isVisible*/, 0/*nStyle*/ );
+        aProps = CreateToolbarItemData( sCommandUrl, u""_ustr, sLabel, nItemType, aSubMenu, true/*isVisible*/, 0/*nStyle*/ );
     }
 
 
@@ -223,7 +223,7 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
 OUString
 ScVbaCommandBarControls::getServiceImplName()
 {
-    return "ScVbaCommandBarControls";
+    return u"ScVbaCommandBarControls"_ustr;
 }
 
 uno::Sequence<OUString>
@@ -231,7 +231,7 @@ ScVbaCommandBarControls::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.CommandBarControls"
+        u"ooo.vba.CommandBarControls"_ustr
     };
     return aServiceNames;
 }
@@ -294,14 +294,14 @@ uno::Reference< XCommandBarControl > SAL_CALL VbaDummyCommandBarControls::Add(
 // XHelperInterface
 OUString VbaDummyCommandBarControls::getServiceImplName()
 {
-    return "VbaDummyCommandBarControls";
+    return u"VbaDummyCommandBarControls"_ustr;
 }
 
 uno::Sequence<OUString> VbaDummyCommandBarControls::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.CommandBarControls"
+        u"ooo.vba.CommandBarControls"_ustr
     };
     return aServiceNames;
 }

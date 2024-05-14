@@ -61,20 +61,20 @@ ScVbaColorFormat::getRGB()
     switch( m_nColorFormatType )
     {
     case ColorFormatType::LINEFORMAT_FORECOLOR:
-        m_xPropertySet->getPropertyValue( "LineColor" ) >>= nRGB;
+        m_xPropertySet->getPropertyValue( u"LineColor"_ustr ) >>= nRGB;
         break;
     case ColorFormatType::LINEFORMAT_BACKCOLOR:
         //TODO BackColor not supported
         // m_xPropertySet->setPropertyValue("Color", uno::makeAny( nRGB ) );
         break;
     case ColorFormatType::FILLFORMAT_FORECOLOR:
-        m_xPropertySet->getPropertyValue( "FillColor" ) >>= nRGB;
+        m_xPropertySet->getPropertyValue( u"FillColor"_ustr ) >>= nRGB;
         break;
     case ColorFormatType::FILLFORMAT_BACKCOLOR:
         nRGB = m_nFillFormatBackColor;
         break;
     default:
-        throw uno::RuntimeException( "Second parameter of ColorFormat is wrong." );
+        throw uno::RuntimeException( u"Second parameter of ColorFormat is wrong."_ustr );
     }
     nRGB = OORGBToXLRGB( Color(ColorTransparency, nRGB) );
     return nRGB;
@@ -87,13 +87,13 @@ ScVbaColorFormat::setRGB( sal_Int32 _rgb )
     switch( m_nColorFormatType )
     {
     case ColorFormatType::LINEFORMAT_FORECOLOR:
-        m_xPropertySet->setPropertyValue( "LineColor" , uno::Any( nRGB ) );
+        m_xPropertySet->setPropertyValue( u"LineColor"_ustr , uno::Any( nRGB ) );
         break;
     case ColorFormatType::LINEFORMAT_BACKCOLOR:
         // TODO BackColor not supported
         break;
     case ColorFormatType::FILLFORMAT_FORECOLOR:
-        m_xPropertySet->setPropertyValue( "FillColor" , uno::Any( nRGB ) );
+        m_xPropertySet->setPropertyValue( u"FillColor"_ustr , uno::Any( nRGB ) );
         if( m_pFillFormat )
         {
             m_pFillFormat->setForeColorAndInternalStyle(nRGB);
@@ -107,7 +107,7 @@ ScVbaColorFormat::setRGB( sal_Int32 _rgb )
         }
         break;
     default:
-        throw uno::RuntimeException( "Second parameter of ColorFormat is wrong." );
+        throw uno::RuntimeException( u"Second parameter of ColorFormat is wrong."_ustr );
     }
 }
 
@@ -153,7 +153,7 @@ ScVbaColorFormat::setSchemeColor( sal_Int32 _schemecolor )
 OUString
 ScVbaColorFormat::getServiceImplName()
 {
-    return "ScVbaColorFormat";
+    return u"ScVbaColorFormat"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -161,7 +161,7 @@ ScVbaColorFormat::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.msforms.ColorFormat"
+        u"ooo.vba.msforms.ColorFormat"_ustr
     };
     return aServiceNames;
 }

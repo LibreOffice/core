@@ -33,21 +33,21 @@ OUString SAL_CALL
 ScVbaCheckbox::getCaption()
 {
     OUString Label;
-    m_xProps->getPropertyValue( "Label" ) >>= Label;
+    m_xProps->getPropertyValue( u"Label"_ustr ) >>= Label;
     return Label;
 }
 
 void SAL_CALL
 ScVbaCheckbox::setCaption( const OUString& _caption )
 {
-    m_xProps->setPropertyValue( "Label", uno::Any( _caption ) );
+    m_xProps->setPropertyValue( u"Label"_ustr, uno::Any( _caption ) );
 }
 
 uno::Any SAL_CALL
 ScVbaCheckbox::getValue()
 {
     sal_Int16 nValue = -1;
-    m_xProps->getPropertyValue( "State" ) >>= nValue;
+    m_xProps->getPropertyValue( u"State"_ustr ) >>= nValue;
     if( nValue != 0 )
         nValue = -1;
 //    return uno::makeAny( nValue );
@@ -61,7 +61,7 @@ ScVbaCheckbox::setValue( const uno::Any& _value )
 {
     sal_Int16 nValue = 0;
     sal_Int16 nOldValue = 0;
-    m_xProps->getPropertyValue( "State" ) >>= nOldValue;
+    m_xProps->getPropertyValue( u"State"_ustr ) >>= nOldValue;
     if( !( _value >>= nValue ) )
     {
         bool bValue = false;
@@ -72,7 +72,7 @@ ScVbaCheckbox::setValue( const uno::Any& _value )
 
     if( nValue == -1)
         nValue = 1;
-    m_xProps->setPropertyValue( "State", uno::Any( nValue ) );
+    m_xProps->setPropertyValue( u"State"_ustr, uno::Any( nValue ) );
     if ( nValue != nOldValue )
         fireClickEvent();
 }
@@ -85,7 +85,7 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaCheckbox::getFont()
 OUString
 ScVbaCheckbox::getServiceImplName()
 {
-    return "ScVbaCheckbox";
+    return u"ScVbaCheckbox"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -93,7 +93,7 @@ ScVbaCheckbox::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.msforms.CheckBox"
+        u"ooo.vba.msforms.CheckBox"_ustr
     };
     return aServiceNames;
 }

@@ -68,8 +68,8 @@ VbaFontBase::setSuperscript( const uno::Any& aValue )
         nValue = SUPERSCRIPT;
         nValue2 = SUPERSCRIPTHEIGHT;
     }
-    mxFont->setPropertyValue( "CharEscapement" , uno::Any(nValue) );
-    mxFont->setPropertyValue( "CharEscapementHeight" , uno::Any(nValue2) );
+    mxFont->setPropertyValue( u"CharEscapement"_ustr , uno::Any(nValue) );
+    mxFont->setPropertyValue( u"CharEscapementHeight"_ustr , uno::Any(nValue2) );
 }
 
 uno::Any SAL_CALL
@@ -78,7 +78,7 @@ VbaFontBase::getSuperscript()
     short nValue = NORMAL;
     // not supported in form controls
     if( !mbFormControl )
-       mxFont->getPropertyValue( "CharEscapement" ) >>= nValue;
+       mxFont->getPropertyValue( u"CharEscapement"_ustr ) >>= nValue;
     return uno::Any( nValue == SUPERSCRIPT );
 }
 
@@ -100,8 +100,8 @@ VbaFontBase::setSubscript( const uno::Any& aValue )
         nValue2 = SUBSCRIPTHEIGHT;
     }
 
-    mxFont->setPropertyValue( "CharEscapementHeight" , uno::Any(nValue2) );
-    mxFont->setPropertyValue( "CharEscapement" , uno::Any(nValue) );
+    mxFont->setPropertyValue( u"CharEscapementHeight"_ustr , uno::Any(nValue2) );
+    mxFont->setPropertyValue( u"CharEscapement"_ustr , uno::Any(nValue) );
 
 }
 
@@ -111,7 +111,7 @@ VbaFontBase::getSubscript()
     short nValue = NORMAL;
     // not supported in form controls
     if( !mbFormControl )
-       mxFont->getPropertyValue( "CharEscapement" ) >>= nValue;
+       mxFont->getPropertyValue( u"CharEscapement"_ustr ) >>= nValue;
     return uno::Any( nValue == SUBSCRIPT );
 }
 
@@ -222,13 +222,13 @@ void  SAL_CALL
 VbaFontBase::setShadow( const uno::Any& aValue )
 {
     if( !mbFormControl )
-       mxFont->setPropertyValue( "CharShadowed" , aValue );
+       mxFont->setPropertyValue( u"CharShadowed"_ustr , aValue );
 }
 
 uno::Any SAL_CALL
 VbaFontBase::getShadow()
 {
-    return mbFormControl ? uno::Any( false ) : mxFont->getPropertyValue( "CharShadowed" );
+    return mbFormControl ? uno::Any( false ) : mxFont->getPropertyValue( u"CharShadowed"_ustr );
 }
 
 void  SAL_CALL

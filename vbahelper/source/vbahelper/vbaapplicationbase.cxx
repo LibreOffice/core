@@ -96,7 +96,7 @@ public:
     void Start( const ::rtl::Reference< VbaApplicationBase >& xBase, const OUString& aFunction, double nFrom, double nTo )
     {
         if ( !xBase.is() || aFunction.isEmpty() )
-            throw uno::RuntimeException( "Unexpected arguments!" );
+            throw uno::RuntimeException( u"Unexpected arguments!"_ustr );
 
         m_xBase = xBase;
         m_aTimerInfo = VbaTimerInfo( aFunction, ::std::pair< double, double >( nFrom, nTo ) );
@@ -192,8 +192,8 @@ VbaApplicationBase::getDisplayStatusBar()
     uno::Reference< frame::XFrame > xFrame( xModel->getCurrentController()->getFrame(), uno::UNO_SET_THROW );
     uno::Reference< beans::XPropertySet > xProps( xFrame, uno::UNO_QUERY_THROW );
 
-    uno::Reference< frame::XLayoutManager > xLayoutManager( xProps->getPropertyValue( "LayoutManager"), uno::UNO_QUERY_THROW );
-    if( xLayoutManager->isElementVisible( "private:resource/statusbar/statusbar" ) ){
+    uno::Reference< frame::XLayoutManager > xLayoutManager( xProps->getPropertyValue( u"LayoutManager"_ustr), uno::UNO_QUERY_THROW );
+    if( xLayoutManager->isElementVisible( u"private:resource/statusbar/statusbar"_ustr ) ){
         return true;
     }
     return false;
@@ -206,8 +206,8 @@ VbaApplicationBase::setDisplayStatusBar(sal_Bool bDisplayStatusBar)
     uno::Reference< frame::XFrame > xFrame( xModel->getCurrentController()->getFrame(), uno::UNO_SET_THROW );
     uno::Reference< beans::XPropertySet > xProps( xFrame, uno::UNO_QUERY_THROW );
 
-    uno::Reference< frame::XLayoutManager > xLayoutManager( xProps->getPropertyValue( "LayoutManager" ), uno::UNO_QUERY_THROW );
-    OUString url( "private:resource/statusbar/statusbar" );
+    uno::Reference< frame::XLayoutManager > xLayoutManager( xProps->getPropertyValue( u"LayoutManager"_ustr ), uno::UNO_QUERY_THROW );
+    OUString url( u"private:resource/statusbar/statusbar"_ustr );
     if( bDisplayStatusBar && !xLayoutManager->isElementVisible( url ) ){
         if( !xLayoutManager->showElement( url ) )
             xLayoutManager->createElement( url );
@@ -349,7 +349,7 @@ uno::Any SAL_CALL VbaApplicationBase::Run( const OUString& MacroName, const uno:
     MacroResolvedInfo aMacroInfo = resolveVBAMacro( getSfxObjShell( xModel ), aMacroName );
     if( !aMacroInfo.mbFound )
     {
-        throw uno::RuntimeException( "The macro doesn't exist" );
+        throw uno::RuntimeException( u"The macro doesn't exist"_ustr );
     }
 
     // handle the arguments
@@ -380,13 +380,13 @@ uno::Any SAL_CALL VbaApplicationBase::Run( const OUString& MacroName, const uno:
 void SAL_CALL VbaApplicationBase::OnTime( const uno::Any& aEarliestTime, const OUString& aFunction, const uno::Any& aLatestTime, const uno::Any& aSchedule )
 {
     if ( aFunction.isEmpty() )
-        throw uno::RuntimeException( "Unexpected function name!" );
+        throw uno::RuntimeException( u"Unexpected function name!"_ustr );
 
     double nEarliestTime = 0;
     double nLatestTime = 0;
     if ( !( aEarliestTime >>= nEarliestTime )
       || ( aLatestTime.hasValue() && !( aLatestTime >>= nLatestTime ) ) )
-        throw uno::RuntimeException( "Only double is supported as time for now!" );
+        throw uno::RuntimeException( u"Only double is supported as time for now!"_ustr );
 
     bool bSetTimer = true;
     aSchedule >>= bSetTimer;
@@ -415,7 +415,7 @@ uno::Any SAL_CALL VbaApplicationBase::getVBE()
         uno::Sequence< uno::Any > aArgs{ uno::Any(getCurrentDocument()) };
         uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
         uno::Reference< uno::XInterface > xVBE = xServiceManager->createInstanceWithArgumentsAndContext(
-            "ooo.vba.vbide.VBE" , aArgs, mxContext );
+            u"ooo.vba.vbide.VBE"_ustr , aArgs, mxContext );
         return uno::Any( xVBE );
     }
     catch( const uno::Exception& )
@@ -427,7 +427,7 @@ uno::Any SAL_CALL VbaApplicationBase::getVBE()
 OUString
 VbaApplicationBase::getServiceImplName()
 {
-    return "VbaApplicationBase";
+    return u"VbaApplicationBase"_ustr;
 }
 
 uno::Sequence<OUString>
@@ -435,7 +435,7 @@ VbaApplicationBase::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.VbaApplicationBase"
+        u"ooo.vba.VbaApplicationBase"_ustr
     };
     return aServiceNames;
 }
@@ -443,7 +443,7 @@ VbaApplicationBase::getServiceNames()
 void SAL_CALL VbaApplicationBase::Undo()
 {
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_SET_THROW );
-    dispatchRequests( xModel, ".uno:Undo" );
+    dispatchRequests( xModel, u".uno:Undo"_ustr );
 }
 
 void VbaApplicationBase::Quit()

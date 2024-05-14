@@ -68,7 +68,7 @@ sal_Bool SAL_CALL VbaSystemAXControl::hasProperty( const OUString& aName )
 OUString
 VbaSystemAXControl::getServiceImplName()
 {
-    return "VbaSystemAXControl";
+    return u"VbaSystemAXControl"_ustr;
 }
 
 
@@ -77,7 +77,7 @@ VbaSystemAXControl::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.msforms.Frame"
+        u"ooo.vba.msforms.Frame"_ustr
     };
     return aServiceNames;
 }
