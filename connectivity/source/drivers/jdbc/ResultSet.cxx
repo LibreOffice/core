@@ -104,7 +104,8 @@ void java_sql_ResultSet::disposing()
     ::osl::MutexGuard aGuard(m_aMutex);
     if( object )
     {
-        SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java environment has been deleted!");
+        SDBThreadAttach t;
+        assert(t.pEnv && "Java environment has been deleted!");
         static jmethodID mID(nullptr);
         callVoidMethod_ThrowSQL("close", mID);
         clearObject(*t.pEnv);
