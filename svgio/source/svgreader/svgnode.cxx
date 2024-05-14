@@ -295,7 +295,7 @@ namespace {
             if(pParent && pParent->getType() == SVGToken::Svg)
             {
                 // #i125329# find Css selector '*', add as last element if found
-                const SvgStyleAttributes* pNew = getDocument().findGlobalCssStyleAttributes("*");
+                const SvgStyleAttributes* pNew = getDocument().findGlobalCssStyleAttributes(u"*"_ustr);
 
                 if(pNew)
                 {

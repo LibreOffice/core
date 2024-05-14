@@ -56,7 +56,7 @@ uno::Reference<io::XInputStream> TestParsing::parseSvg(const OUString& aSource)
 
 void TestParsing::testSimpleRectangle()
 {
-    OUString aSvgFile = "/svgio/qa/cppunit/data/VisiotorTest-Rect.svg";
+    OUString aSvgFile = u"/svgio/qa/cppunit/data/VisiotorTest-Rect.svg"_ustr;
     OUString aUrl = m_directories.getURLFromSrc(aSvgFile);
     OUString aPath = m_directories.getPathFromSrc(aSvgFile);
 
@@ -89,7 +89,7 @@ void TestParsing::testSimpleRectangle()
 
 void TestParsing::testPath()
 {
-    OUString aSvgFile = "/svgio/qa/cppunit/data/path.svg";
+    OUString aSvgFile = u"/svgio/qa/cppunit/data/path.svg"_ustr;
     OUString aUrl = m_directories.getURLFromSrc(aSvgFile);
     OUString aPath = m_directories.getPathFromSrc(aSvgFile);
 
@@ -109,7 +109,7 @@ void TestParsing::testPath()
     CPPUNIT_ASSERT_EQUAL(gfx::DrawCommandType::Path, pDrawBase->getType());
     auto* pDrawPath = static_cast<gfx::DrawPath*>(pDrawBase);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("m1 1h42v24h-42v-24z"),
+    CPPUNIT_ASSERT_EQUAL(u"m1 1h42v24h-42v-24z"_ustr,
                          basegfx::utils::exportToSvgD(pDrawPath->maPolyPolygon, true, true, false));
     CPPUNIT_ASSERT_EQUAL(0.0, pDrawPath->mnStrokeWidth);
     CPPUNIT_ASSERT(bool(pDrawPath->mpStrokeColor));

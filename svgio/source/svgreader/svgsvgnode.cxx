@@ -664,7 +664,7 @@ namespace svgio::svgreader
                             // but does not need to be.
                             bool bEmbedInFinalTransformPxTo100ThMM(true);
 
-                            if(getDocument().findSvgNodeById("ooo:meta_slides")
+                            if(getDocument().findSvgNodeById(u"ooo:meta_slides"_ustr)
                                 && !getWidth().isSet()
                                 && !getHeight().isSet())
                             {

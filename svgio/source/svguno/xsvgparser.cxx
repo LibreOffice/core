@@ -96,7 +96,7 @@ namespace svgio::svgreader
                 // that use entities to define XML namespaces.
                 uno::Reference<lang::XInitialization> const xInit(xParser,
                         uno::UNO_QUERY_THROW);
-                uno::Sequence<uno::Any> args{ uno::Any(OUString("DoSmeplease")) };
+                uno::Sequence<uno::Any> args{ uno::Any(u"DoSmeplease"_ustr) };
                 xInit->initialize(args);
 
                 // connect parser and filter
@@ -177,7 +177,7 @@ namespace svgio::svgreader
 
         OUString SAL_CALL XSvgParser::getImplementationName()
         {
-            return "svgio::svgreader::XSvgParser";
+            return u"svgio::svgreader::XSvgParser"_ustr;
         }
 
         sal_Bool SAL_CALL XSvgParser::supportsService(const OUString& rServiceName)
@@ -187,7 +187,7 @@ namespace svgio::svgreader
 
         uno::Sequence< OUString > SAL_CALL XSvgParser::getSupportedServiceNames()
         {
-            return { "com.sun.star.graphic.SvgTools" };
+            return { u"com.sun.star.graphic.SvgTools"_ustr };
         }
 
 } // end of namespace svgio::svgreader

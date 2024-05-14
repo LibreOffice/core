@@ -103,7 +103,7 @@ namespace svgio::svgreader
             const SvgStyleAttributes& rSvgStyleAttributes)
         {
             const SvgStringVector& rFontFamilyVector = rSvgStyleAttributes.getFontFamily();
-            OUString aFontFamily("Times New Roman");
+            OUString aFontFamily(u"Times New Roman"_ustr);
             if(!rFontFamilyVector.empty())
                 aFontFamily=rFontFamilyVector[0];
 

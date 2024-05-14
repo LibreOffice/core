@@ -215,7 +215,7 @@ namespace svgio::svgreader
 
                 // check for '!important' CssStyle mark, currently not supported
                 // but needs to be extracted for correct parsing
-                OUString aTokenImportant("!important");
+                OUString aTokenImportant(u"!important"_ustr);
                 const sal_Int32 nIndexTokenImportant(aOUTokenValue.indexOf(aTokenImportant));
 
                 if(-1 != nIndexTokenImportant)
@@ -2460,7 +2460,7 @@ namespace svgio::svgreader
             // All together gives:
             if(Visibility::hidden == maVisibility
                 && SVGToken::G == mrOwner.getType()
-                && nullptr != mrOwner.getDocument().findSvgNodeById("ooo:meta_slides"))
+                && nullptr != mrOwner.getDocument().findSvgNodeById(u"ooo:meta_slides"_ustr))
             {
                 const SvgNode* pParent(mrOwner.getParent());
 
