@@ -143,7 +143,7 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 OUString
 ContentProvider::getImplementationName()
 {
-    return "com.sun.star.comp.ucb.PackageContentProvider";
+    return u"com.sun.star.comp.ucb.PackageContentProvider"_ustr;
 }
 
 sal_Bool
@@ -155,7 +155,7 @@ ContentProvider::supportsService(const OUString& s)
 css::uno::Sequence< OUString >
 ContentProvider::getSupportedServiceNames()
 {
-    return { "com.sun.star.ucb.PackageContentProvider" };
+    return { u"com.sun.star.ucb.PackageContentProvider"_ustr };
 }
 
 
@@ -226,7 +226,7 @@ ContentProvider::createPackage( const PackageUri & rURI )
     {
         xNameAccess.set(
             m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                "com.sun.star.packages.comp.ZipPackage",
+                u"com.sun.star.packages.comp.ZipPackage"_ustr,
                 aArguments, m_xContext ),
             css::uno::UNO_QUERY_THROW );
     }

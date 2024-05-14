@@ -51,7 +51,7 @@ namespace
 
     void webdav_propcache_test::PropfindCacheElemTests( )
     {
-        OUString aTheURL( "http:://server/path/filename.odt" );
+        OUString aTheURL( u"http:://server/path/filename.odt"_ustr );
         PropertyNames aPropsNames( aTheURL );
 
         CPPUNIT_ASSERT_EQUAL( aTheURL, aPropsNames.getURL() );
@@ -63,15 +63,15 @@ namespace
         CPPUNIT_ASSERT_EQUAL( maxTime, aPropsNames.getStaleTime() );
 
         std::vector < OUString > properties {
-                "DAV:lockdiscovery",
-                "DAV:supportedlock",
-                "DAV:resourcetype",
-                "DAV:displayname",
-                "DAV:getlastmodified",
-                "DAV:getcontentlength",
-                "DAV:creationdate",
-                "DAV:getetag",
-                "DAV:authticket",
+                u"DAV:lockdiscovery"_ustr,
+                u"DAV:supportedlock"_ustr,
+                u"DAV:resourcetype"_ustr,
+                u"DAV:displayname"_ustr,
+                u"DAV:getlastmodified"_ustr,
+                u"DAV:getcontentlength"_ustr,
+                u"DAV:creationdate"_ustr,
+                u"DAV:getetag"_ustr,
+                u"DAV:authticket"_ustr,
                 };
 
         DAVResourceInfo aSingleInfo { properties };
@@ -90,22 +90,22 @@ namespace
     void webdav_propcache_test::PropfindCacheTests( )
     {
         PropertyNamesCache PropCache;
-        OUString aTheURL( "http:://server/path/filename.odt" );
+        OUString aTheURL( u"http:://server/path/filename.odt"_ustr );
         PropertyNames aPropsNames( aTheURL );
 
         // check cache emptiness
         CPPUNIT_ASSERT_EQUAL( false, PropCache.getCachedPropertyNames( aTheURL,  aPropsNames ) );
 
         std::vector < OUString > properties {
-                "DAV:lockdiscovery",
-                "DAV:supportedlock",
-                "DAV:resourcetype",
-                "DAV:displayname",
-                "DAV:getlastmodified",
-                "DAV:getcontentlength",
-                "DAV:creationdate",
-                "DAV:getetag",
-                "DAV:authticket",
+                u"DAV:lockdiscovery"_ustr,
+                u"DAV:supportedlock"_ustr,
+                u"DAV:resourcetype"_ustr,
+                u"DAV:displayname"_ustr,
+                u"DAV:getlastmodified"_ustr,
+                u"DAV:getcontentlength"_ustr,
+                u"DAV:creationdate"_ustr,
+                u"DAV:getetag"_ustr,
+                u"DAV:authticket"_ustr,
                 };
 
         DAVResourceInfo aSingleInfo { properties };

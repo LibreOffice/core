@@ -66,7 +66,7 @@ void SAL_CALL UcbCommandEnvironment::initialize(
 // virtual
 OUString SAL_CALL UcbCommandEnvironment::getImplementationName()
 {
-    return "com.sun.star.comp.ucb.CommandEnvironment";
+    return u"com.sun.star.comp.ucb.CommandEnvironment"_ustr;
 }
 
 
@@ -82,7 +82,7 @@ UcbCommandEnvironment::supportsService( const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL
 UcbCommandEnvironment::getSupportedServiceNames()
 {
-    return { "com.sun.star.ucb.CommandEnvironment" };
+    return { u"com.sun.star.ucb.CommandEnvironment"_ustr };
 }
 
 

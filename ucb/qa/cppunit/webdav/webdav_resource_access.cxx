@@ -52,17 +52,17 @@ namespace
     void webdav_resource_access_test::DAVCheckRetries()
     {
         // instantiate a resource access class
-        DAVResourceAccess ResourceAccess(nullptr, nullptr, "http://url");
+        DAVResourceAccess ResourceAccess(nullptr, nullptr, u"http://url"_ustr);
         // first check: all http errors from 100 to 399 should return true, to force a retry
         for (auto i = SC_CONTINUE; i < SC_BAD_REQUEST; i++)
         {
-            const DAVException aTheException(DAVException::DAV_HTTP_ERROR, "http error code", i );
+            const DAVException aTheException(DAVException::DAV_HTTP_ERROR, u"http error code"_ustr, i );
             CPPUNIT_ASSERT_EQUAL( true , ResourceAccess.handleException( aTheException, 1 ) );
         }
         // http error code from 400 to 499 should NOT force a retry
         for (auto i = SC_BAD_REQUEST; i < SC_INTERNAL_SERVER_ERROR; i++)
         {
-            const DAVException aTheException(DAVException::DAV_HTTP_ERROR, "http error code", i );
+            const DAVException aTheException(DAVException::DAV_HTTP_ERROR, u"http error code"_ustr, i );
             CPPUNIT_ASSERT_EQUAL( false , ResourceAccess.handleException( aTheException, 1 ) );
         }
 
@@ -72,7 +72,7 @@ namespace
         // RFC poses no limit to the max value of response status code
         for (auto i = SC_INTERNAL_SERVER_ERROR; i < 2000; i++)
         {
-            const DAVException aTheException(DAVException::DAV_HTTP_ERROR, "http error code", i );
+            const DAVException aTheException(DAVException::DAV_HTTP_ERROR, u"http error code"_ustr, i );
             switch ( i )
             {
                 // the HTTP response status codes that can be retried
@@ -90,7 +90,7 @@ namespace
 
         // check the retry request
         {
-            const DAVException aTheException(DAVException::DAV_HTTP_RETRY, "the-host-name", 8080 );
+            const DAVException aTheException(DAVException::DAV_HTTP_RETRY, u"the-host-name"_ustr, 8080 );
             CPPUNIT_ASSERT_EQUAL( true , ResourceAccess.handleException( aTheException, 1 ) );
         }
     }

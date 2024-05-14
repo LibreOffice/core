@@ -113,7 +113,7 @@ public:
     virtual void SAL_CALL setHidden( const OUString& FileURL, sal_Bool bHidden ) override;
 
     OUString SAL_CALL getImplementationName() override
-    { return "com.sun.star.comp.ucb.SimpleFileAccess"; }
+    { return u"com.sun.star.comp.ucb.SimpleFileAccess"_ustr; }
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
@@ -237,7 +237,7 @@ void OFileAccess::transferImpl( const OUString& rSource,
             {
                 css::uno::Any anyEx = cppu::getCaughtException();
                 throw css::lang::WrappedTargetRuntimeException(
-                    "OFileAccess::transferrImpl - Unable to obtain destination folder URL!",
+                    u"OFileAccess::transferrImpl - Unable to obtain destination folder URL!"_ustr,
                     getXWeak(), anyEx );
             }
 
@@ -246,7 +246,7 @@ void OFileAccess::transferImpl( const OUString& rSource,
         }
 
         throw RuntimeException(
-               "OFileAccess::transferrImpl - Unable to obtain destination folder URL!",
+               u"OFileAccess::transferrImpl - Unable to obtain destination folder URL!"_ustr,
                 getXWeak() );
 
     }
@@ -286,7 +286,7 @@ void OFileAccess::kill( const OUString& FileURL )
     ucbhelper::Content aCnt( aDeleteObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
     try
     {
-        aCnt.executeCommand( "delete", Any( true ) );
+        aCnt.executeCommand( u"delete"_ustr, Any( true ) );
     }
     catch ( css::ucb::CommandFailedException const & )
     {
@@ -311,7 +311,7 @@ sal_Bool OFileAccess::isReadOnly( const OUString& FileURL )
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
     ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
-    Any aRetAny = aCnt.getPropertyValue("IsReadOnly");
+    Any aRetAny = aCnt.getPropertyValue(u"IsReadOnly"_ustr);
     bool bRet = false;
     aRetAny >>= bRet;
     return bRet;
@@ -321,7 +321,7 @@ void OFileAccess::setReadOnly( const OUString& FileURL, sal_Bool bReadOnly )
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
     ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
-    aCnt.setPropertyValue("IsReadOnly", Any(bReadOnly) );
+    aCnt.setPropertyValue(u"IsReadOnly"_ustr, Any(bReadOnly) );
 }
 
 void OFileAccess::createFolder( const OUString& NewFolderURL )
@@ -365,7 +365,7 @@ void OFileAccess::createFolder( const OUString& NewFolderURL )
             ucbhelper::Content aNew;
             try
             {
-                if ( !aCnt.insertNewContent( rCurr.Type, { "Title" }, { Any(aTitle) }, aNew ) )
+                if ( !aCnt.insertNewContent( rCurr.Type, { u"Title"_ustr }, { Any(aTitle) }, aNew ) )
                     continue;
 
                 // Success. We're done.
@@ -387,7 +387,7 @@ sal_Int32 OFileAccess::getSize( const OUString& FileURL )
     sal_Int64 nTemp = 0;
     INetURLObject aObj( FileURL, INetProtocol::File );
     ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
-    aCnt.getPropertyValue( "Size" ) >>= nTemp;
+    aCnt.getPropertyValue( u"Size"_ustr ) >>= nTemp;
     nSize = static_cast<sal_Int32>(nTemp);
     return nSize;
 }
@@ -409,7 +409,7 @@ css::util::DateTime OFileAccess::getDateTimeModified( const OUString& FileURL )
 
     Reference< XCommandEnvironment > aCmdEnv;
     ucbhelper::Content aYoung( aFileObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aCmdEnv, comphelper::getProcessComponentContext() );
-    aYoung.getPropertyValue("DateModified") >>= aDateTime;
+    aYoung.getPropertyValue(u"DateModified"_ustr) >>= aDateTime;
     return aDateTime;
 }
 
@@ -524,7 +524,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
 
     try
     {
-        aCnt.executeCommand( "open", aCmdArg );
+        aCnt.executeCommand( u"open"_ustr, aCmdArg );
     }
     catch ( InteractiveIOException const & e )
     {
@@ -541,7 +541,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
             aInsertArg.ReplaceExisting = false;
 
             aCmdArg <<= aInsertArg;
-            aCnt.executeCommand( "insert", aCmdArg );
+            aCnt.executeCommand( u"insert"_ustr, aCmdArg );
 
             // Retry...
             return openFileReadWrite( FileURL );
@@ -594,7 +594,7 @@ bool OFileAccess::createNewFile( const OUString & rParentURL,
             {
                 ucbhelper::Content aNew;
                 if ( aParentCnt.insertNewContent(
-                         rCurr.Type, { "Title" }, { Any(rTitle) }, data, aNew ) )
+                         rCurr.Type, { u"Title"_ustr }, { Any(rTitle) }, data, aNew ) )
                     return true; // success.
                 else
                     continue;
@@ -665,7 +665,7 @@ sal_Bool OFileAccess::isHidden( const OUString& FileURL )
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
     ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
-    Any aRetAny = aCnt.getPropertyValue("IsHidden");
+    Any aRetAny = aCnt.getPropertyValue(u"IsHidden"_ustr);
     bool bRet = false;
     aRetAny >>= bRet;
     return bRet;
@@ -675,7 +675,7 @@ void OFileAccess::setHidden( const OUString& FileURL, sal_Bool bHidden )
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
     ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
-    aCnt.setPropertyValue("IsHidden", Any(bHidden) );
+    aCnt.setPropertyValue(u"IsHidden"_ustr, Any(bHidden) );
 }
 
 

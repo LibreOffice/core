@@ -426,13 +426,13 @@ bool setTitle(
 {
     try
     {
-        uno::Sequence< beans::PropertyValue > aPropValues{ { /* Name   */ "Title",
+        uno::Sequence< beans::PropertyValue > aPropValues{ { /* Name   */ u"Title"_ustr,
                                                              /* Handle */ -1,
                                                              /* Value  */ uno::Any(rNewTitle),
                                                              /* State  */ {} } };
 
         ucb::Command aSetPropsCommand(
-            "setPropertyValues",
+            u"setPropertyValues"_ustr,
             -1,
             uno::Any( aPropValues ) );
 
@@ -492,15 +492,15 @@ uno::Reference< ucb::XContent > createNew(
             ucb::IOErrorCode_CANT_CREATE,
             aArgs,
             rContext.xOrigEnv,
-            "Target is no XCommandProcessor!",
+            u"Target is no XCommandProcessor!"_ustr,
             rContext.xProcessor );
         // Unreachable
     }
 
-    uno::Sequence< beans::Property > aPropsToObtain{ makeProperty("CreatableContentsInfo", -1) };
+    uno::Sequence< beans::Property > aPropsToObtain{ makeProperty(u"CreatableContentsInfo"_ustr, -1) };
 
     ucb::Command aGetPropsCommand(
-            "getPropertyValues",
+            u"getPropertyValues"_ustr,
             -1,
             uno::Any( aPropsToObtain ) );
 
@@ -539,7 +539,7 @@ uno::Reference< ucb::XContent > createNew(
                 ucb::IOErrorCode_CANT_CREATE,
                 aArgs,
                 rContext.xOrigEnv,
-                "Target is no XContentCreator!",
+                u"Target is no XContentCreator!"_ustr,
                 rContext.xProcessor );
             // Unreachable
         }
@@ -557,7 +557,7 @@ uno::Reference< ucb::XContent > createNew(
             ucb::IOErrorCode_CANT_CREATE,
             aArgs,
             rContext.xOrigEnv,
-            "No types creatable!",
+            u"No types creatable!"_ustr,
             rContext.xProcessor );
         // Unreachable
     }
@@ -594,7 +594,7 @@ uno::Reference< ucb::XContent > createNew(
     {
         ucbhelper::cancelCommandExecution(
             uno::Any( lang::IllegalArgumentException(
-                                    "Unknown transfer operation!",
+                                    u"Unknown transfer operation!"_ustr,
                                     rContext.xProcessor,
                                     -1 ) ),
                           rContext.xOrigEnv );
@@ -613,7 +613,7 @@ uno::Reference< ucb::XContent > createNew(
             // First, try it using "CreatabeleContentsInfo" property and
             // "createNewContent" command -> the "new" way.
             ucb::Command aCreateNewCommand(
-               "createNewContent",
+               u"createNewContent"_ustr,
                -1,
                uno::Any( *pTypeInfo ) );
 
@@ -638,7 +638,7 @@ uno::Reference< ucb::XContent > createNew(
                 ucb::IOErrorCode_CANT_CREATE,
                 aArgs,
                 rContext.xOrigEnv,
-                "createNewContent failed!",
+                u"createNewContent failed!"_ustr,
                 rContext.xProcessor );
             // Unreachable
         }
@@ -654,7 +654,7 @@ void transferProperties(
     const uno::Reference< ucb::XCommandProcessor > & xCommandProcessorN )
 {
     ucb::Command aGetPropertySetInfoCommand(
-                "getPropertySetInfo",
+                u"getPropertySetInfo"_ustr,
                 -1,
                 uno::Any() );
 
@@ -672,7 +672,7 @@ void transferProperties(
             ucb::IOErrorCode_CANT_READ,
             aArgs,
             rContext.xOrigEnv,
-            "Unable to get propertyset info from source object!",
+            u"Unable to get propertyset info from source object!"_ustr,
             rContext.xProcessor );
         // Unreachable
     }
@@ -680,7 +680,7 @@ void transferProperties(
     uno::Sequence< beans::Property > aAllProps = xInfo->getProperties();
 
     ucb::Command aGetPropsCommand1(
-                "getPropertyValues",
+                u"getPropertyValues"_ustr,
                 -1,
                 uno::Any( aAllProps ) );
 
@@ -698,7 +698,7 @@ void transferProperties(
             ucb::IOErrorCode_CANT_READ,
             aArgs,
             rContext.xOrigEnv,
-            "Unable to get properties from source object!",
+            u"Unable to get properties from source object!"_ustr,
             rContext.xProcessor );
         // Unreachable
     }
@@ -792,7 +792,7 @@ void transferProperties(
     // Set properties at new object.
 
     ucb::Command aSetPropsCommand(
-                "setPropertyValues",
+                u"setPropertyValues"_ustr,
                 -1,
                 uno::Any( aPropValues ) );
 
@@ -824,7 +824,7 @@ uno::Reference< io::XInputStream > getInputStream(
         aArg.Properties = uno::Sequence< beans::Property >( 0 ); // unused
 
         ucb::Command aOpenCommand(
-                                "open",
+                                u"open"_ustr,
                                 -1,
                                 uno::Any( aArg ) );
 
@@ -858,7 +858,7 @@ uno::Reference< io::XInputStream > getInputStream(
             aArg.Properties = uno::Sequence< beans::Property >( 0 );
 
             ucb::Command aOpenCommand(
-                                "open",
+                                u"open"_ustr,
                                 -1,
                                 uno::Any( aArg ) );
 
@@ -890,11 +890,11 @@ uno::Reference< sdbc::XResultSet > getResultSet(
     aArg.Mode       = ucb::OpenMode::ALL;
     aArg.Priority   = 0; // unused
     aArg.Sink       = nullptr;
-    aArg.Properties = { makeProperty("IsFolder", -1 /* unknown */),
-                        makeProperty("IsDocument", -1 /* unknown */),
-                        makeProperty("TargetURL", -1 /* unknown */) };
+    aArg.Properties = { makeProperty(u"IsFolder"_ustr, -1 /* unknown */),
+                        makeProperty(u"IsDocument"_ustr, -1 /* unknown */),
+                        makeProperty(u"TargetURL"_ustr, -1 /* unknown */) };
 
-    ucb::Command aOpenCommand( "open",
+    ucb::Command aOpenCommand( u"open"_ustr,
                                      -1,
                                      uno::Any( aArg ) );
     try
@@ -930,10 +930,10 @@ void handleNameClashRename(
     sal_Int32 nTry = 0;
 
     // Obtain old title.
-    uno::Sequence< beans::Property > aProps{ makeProperty("Title", -1) };
+    uno::Sequence< beans::Property > aProps{ makeProperty(u"Title"_ustr, -1) };
 
     ucb::Command aGetPropsCommand(
-            "getPropertyValues",
+            u"getPropertyValues"_ustr,
             -1,
             uno::Any( aProps ) );
 
@@ -950,7 +950,7 @@ void handleNameClashRename(
             ucb::IOErrorCode_CANT_READ,
             aArgs,
             rContext.xOrigEnv,
-            "Unable to get properties from new object!",
+            u"Unable to get properties from new object!"_ustr,
             rContext.xProcessor );
         // Unreachable
     }
@@ -960,7 +960,7 @@ void handleNameClashRename(
     {
         ucbhelper::cancelCommandExecution(
             uno::Any( beans::UnknownPropertyException(
-                            "Unable to get property 'Title' from new object!",
+                            u"Unable to get property 'Title' from new object!"_ustr,
                             rContext.xProcessor ) ),
             rContext.xOrigEnv );
         // Unreachable
@@ -1033,7 +1033,7 @@ void handleNameClashRename(
                             ucb::IOErrorCode_CANT_READ,
                             aArgs,
                             rContext.xOrigEnv,
-                            "Got no data stream from source!",
+                            u"Got no data stream from source!"_ustr,
                             rContext.xProcessor );
                         // Unreachable
                     }
@@ -1045,7 +1045,7 @@ void handleNameClashRename(
             aArg.ReplaceExisting = false;
 
             ucb::Command aInsertCommand(
-                        "insert",
+                        u"insert"_ustr,
                         -1,
                         uno::Any( aArg ) );
 
@@ -1069,7 +1069,7 @@ void handleNameClashRename(
         ucbhelper::cancelCommandExecution(
             uno::Any(
                 ucb::UnsupportedNameClashException(
-                    "Unable to resolve name clash!",
+                    u"Unable to resolve name clash!"_ustr,
                     rContext.xProcessor,
                     ucb::NameClash::RENAME ) ),
             rContext.xOrigEnv );
@@ -1090,7 +1090,7 @@ void globalTransfer_(
     {
         ucbhelper::cancelCommandExecution(
             uno::Any( beans::UnknownPropertyException(
-                            "Unable to get property 'IsFolder' from source object!",
+                            u"Unable to get property 'IsFolder' from source object!"_ustr,
                             rContext.xProcessor ) ),
             rContext.xOrigEnv );
         // Unreachable
@@ -1102,7 +1102,7 @@ void globalTransfer_(
     {
         ucbhelper::cancelCommandExecution(
             uno::Any( beans::UnknownPropertyException(
-                            "Unable to get property 'IsDocument' from source object!",
+                            u"Unable to get property 'IsDocument' from source object!"_ustr,
                             rContext.xProcessor ) ),
             rContext.xOrigEnv );
         // Unreachable
@@ -1131,7 +1131,7 @@ void globalTransfer_(
             ucb::IOErrorCode_CANT_CREATE,
             aArgs,
             rContext.xOrigEnv,
-            "No matching content type at target!",
+            u"No matching content type at target!"_ustr,
             rContext.xProcessor );
         // Unreachable
     }
@@ -1145,7 +1145,7 @@ void globalTransfer_(
     if ( !xCommandProcessorN.is() )
     {
         uno::Any aProps(beans::PropertyValue(
-                                  "Uri",
+                                  u"Uri"_ustr,
                                   -1,
                                   uno::Any(
                                       xNew->getIdentifier()->
@@ -1155,7 +1155,7 @@ void globalTransfer_(
             ucb::IOErrorCode_CANT_WRITE,
             uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xOrigEnv,
-            "New content is not a XCommandProcessor!",
+            u"New content is not a XCommandProcessor!"_ustr,
             rContext.xProcessor );
         // Unreachable
     }
@@ -1174,7 +1174,7 @@ void globalTransfer_(
             ucb::IOErrorCode_CANT_READ,
             aArgs,
             rContext.xOrigEnv,
-            "Source content is not a XCommandProcessor!",
+            u"Source content is not a XCommandProcessor!"_ustr,
             rContext.xProcessor );
         // Unreachable
     }
@@ -1239,7 +1239,7 @@ void globalTransfer_(
         try
         {
             ucb::Command aInsertCommand(
-                                    "insert",
+                                    u"insert"_ustr,
                                     -1,
                                     uno::Any( aArg ) );
 
@@ -1257,8 +1257,8 @@ void globalTransfer_(
             // No chance to solve name clashes, because I'm not able to detect
             // whether there is one.
             throw ucb::UnsupportedNameClashException(
-                    "Unable to resolve name clashes, no chance to detect "
-                    "that there is one!",
+                    u"Unable to resolve name clashes, no chance to detect "
+                    "that there is one!"_ustr,
                     rContext.xProcessor,
                     rContext.aArg.NameClash );
         }
@@ -1284,8 +1284,8 @@ void globalTransfer_(
                     ucbhelper::cancelCommandExecution(
                         uno::Any(
                             ucb::UnsupportedNameClashException(
-                                "BUG: insert + replace == true MUST NOT "
-                                "throw NameClashException.",
+                                u"BUG: insert + replace == true MUST NOT "
+                                "throw NameClashException."_ustr,
                                 rContext.xProcessor,
                                 rContext.aArg.NameClash ) ),
                         rContext.xOrigEnv );
@@ -1331,8 +1331,8 @@ void globalTransfer_(
 
                             case ABORT:
                                 throw ucb::CommandFailedException(
-                                    "abort requested via interaction "
-                                    "handler",
+                                    u"abort requested via interaction "
+                                    "handler"_ustr,
                                     uno::Reference< uno::XInterface >(),
                                     aExc );
     //                            break;
@@ -1362,7 +1362,7 @@ void globalTransfer_(
                                 {
                                     // error setting title. Abort.
                                     throw ucb::CommandFailedException(
-                                        "error setting Title property!",
+                                        u"error setting Title property!"_ustr,
                                         uno::Reference< uno::XInterface >(),
                                         aExc );
                                 }
@@ -1380,8 +1380,8 @@ void globalTransfer_(
                     ucbhelper::cancelCommandExecution(
                         uno::Any(
                             ucb::UnsupportedNameClashException(
-                                "default action, don't know how to "
-                                "handle name clash",
+                                u"default action, don't know how to "
+                                "handle name clash"_ustr,
                                 rContext.xProcessor,
                                 rContext.aArg.NameClash ) ),
                         rContext.xOrigEnv );
@@ -1409,7 +1409,7 @@ void globalTransfer_(
             {
                 uno::Any aProps(
                              beans::PropertyValue(
-                                 "Uri",
+                                 u"Uri"_ustr,
                                  -1,
                                  uno::Any(rContext.aArg.SourceURL),
                                  beans::PropertyState_DIRECT_VALUE));
@@ -1417,7 +1417,7 @@ void globalTransfer_(
                     ucb::IOErrorCode_CANT_READ,
                     uno::Sequence< uno::Any >(&aProps, 1),
                     rContext.xOrigEnv,
-                    "Unable to get properties from children of source!",
+                    u"Unable to get properties from children of source!"_ustr,
                     rContext.xProcessor );
                 // Unreachable
             }
@@ -1435,7 +1435,7 @@ void globalTransfer_(
                     ucb::IOErrorCode_CANT_READ,
                     aArgs,
                     rContext.xOrigEnv,
-                    "Unable to get children of source!",
+                    u"Unable to get children of source!"_ustr,
                     rContext.xProcessor );
                 // Unreachable
             }
@@ -1493,7 +1493,7 @@ void globalTransfer_(
             aAny =
                 xcp->execute(
                     ucb::Command(
-                        "getCommandInfo",
+                        u"getCommandInfo"_ustr,
                         -1,
                         uno::Any()),
                     0,
@@ -1571,7 +1571,7 @@ void UniversalContentBroker::globalTransfer(
             ucb::IOErrorCode_CANT_READ,
             aArgs,
             xEnv,
-            "Can't instantiate target object!",
+            u"Can't instantiate target object!"_ustr,
             this );
         // Unreachable
     }
@@ -1591,7 +1591,7 @@ void UniversalContentBroker::globalTransfer(
                 ucb::IOErrorCode_CANT_READ,
                 aArgs,
                 xEnv,
-                "Target content is not a XCommandProcessor!",
+                u"Target content is not a XCommandProcessor!"_ustr,
                 this );
             // Unreachable
         }
@@ -1612,7 +1612,7 @@ void UniversalContentBroker::globalTransfer(
             try
             {
                 ucb::Command aCommand(
-                    "transfer", // Name
+                    u"transfer"_ustr, // Name
                     -1,                                           // Handle
                     uno::Any( aTransferArg ) );               // Argument
 
@@ -1649,7 +1649,7 @@ void UniversalContentBroker::globalTransfer(
                             aTransferArg.MimeType );
 
                         ucb::Command aCommand1(
-                            "transfer",
+                            u"transfer"_ustr,
                             -1,
                             uno::Any( aTransferArg1 ) );
 
@@ -1692,8 +1692,8 @@ void UniversalContentBroker::globalTransfer(
 
                             case ABORT:
                                 throw ucb::CommandFailedException(
-                                    "abort requested via interaction "
-                                    "handler",
+                                    u"abort requested via interaction "
+                                    "handler"_ustr,
                                     uno::Reference< uno::XInterface >(),
                                     aExc );
 //                                break;
@@ -1749,7 +1749,7 @@ void UniversalContentBroker::globalTransfer(
             ucb::IOErrorCode_CANT_READ,
             aArgs,
             xEnv,
-            "Can't instantiate source object!",
+            u"Can't instantiate source object!"_ustr,
             this );
         // Unreachable
     }
@@ -1766,20 +1766,20 @@ void UniversalContentBroker::globalTransfer(
             ucb::IOErrorCode_CANT_READ,
             aArgs,
             xEnv,
-            "Source content is not a XCommandProcessor!",
+            u"Source content is not a XCommandProcessor!"_ustr,
             this );
         // Unreachable
     }
 
     // Obtain interesting property values from source...
 
-    uno::Sequence< beans::Property > aProps{ makeProperty("IsFolder", -1 /* unknown */),
-                                             makeProperty("IsDocument", -1 /* unknown */),
-                                             makeProperty("TargetURL", -1 /* unknown */),
-                                             makeProperty("BaseURI", -1 /* unknown */) };
+    uno::Sequence< beans::Property > aProps{ makeProperty(u"IsFolder"_ustr, -1 /* unknown */),
+                                             makeProperty(u"IsDocument"_ustr, -1 /* unknown */),
+                                             makeProperty(u"TargetURL"_ustr, -1 /* unknown */),
+                                             makeProperty(u"BaseURI"_ustr, -1 /* unknown */) };
 
     ucb::Command aGetPropsCommand(
-                "getPropertyValues",
+                u"getPropertyValues"_ustr,
                 -1,
                 uno::Any( aProps ) );
 
@@ -1796,7 +1796,7 @@ void UniversalContentBroker::globalTransfer(
             ucb::IOErrorCode_CANT_READ,
             aArgs,
             xEnv,
-            "Unable to get properties from source object!",
+            u"Unable to get properties from source object!"_ustr,
             this );
         // Unreachable
     }
@@ -1828,7 +1828,7 @@ void UniversalContentBroker::globalTransfer(
     try
     {
         ucb::Command aCommand(
-            "delete",                   // Name
+            u"delete"_ustr,                   // Name
             -1,                         // Handle
             uno::Any( true ) );     // Argument
 
@@ -1881,7 +1881,7 @@ uno::Any UniversalContentBroker::checkIn( const ucb::CheckinArgument& rArg,
             ucb::IOErrorCode_CANT_READ,
             aArgs,
             xEnv,
-            "Can't instantiate target object!",
+            u"Can't instantiate target object!"_ustr,
             this );
         // Unreachable
     }
@@ -1898,7 +1898,7 @@ uno::Any UniversalContentBroker::checkIn( const ucb::CheckinArgument& rArg,
             ucb::IOErrorCode_CANT_READ,
             aArgs,
             xEnv,
-            "Target content is not a XCommandProcessor!",
+            u"Target content is not a XCommandProcessor!"_ustr,
             this );
         // Unreachable
     }
@@ -1906,7 +1906,7 @@ uno::Any UniversalContentBroker::checkIn( const ucb::CheckinArgument& rArg,
     try
     {
         ucb::Command aCommand(
-            "checkin", -1,
+            u"checkin"_ustr, -1,
             uno::Any( rArg ) );
 
         aRet = xCommandProcessor->execute( aCommand, 0, xLocalEnv );

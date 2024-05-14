@@ -191,7 +191,7 @@ OUString CurlUri::GetPathBaseName() const
     }
     if (nPos == -1)
     {
-        return "/";
+        return u"/"_ustr;
     }
     return m_Path.copy(nPos + 1, m_Path.getLength() - nPos - 1 - nTrail);
 }

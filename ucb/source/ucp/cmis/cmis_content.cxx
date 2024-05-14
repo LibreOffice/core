@@ -241,17 +241,17 @@ namespace
     uno::Sequence< uno::Any > generateErrorArguments( const cmis::URL & rURL )
     {
         uno::Sequence< uno::Any > aArguments{ uno::Any(beans::PropertyValue(
-                                                           "Binding URL",
+                                                           u"Binding URL"_ustr,
                                                            - 1,
                                                            uno::Any( rURL.getBindingUrl() ),
                                                            beans::PropertyState_DIRECT_VALUE )),
                                               uno::Any(beans::PropertyValue(
-                                                           "Username",
+                                                           u"Username"_ustr,
                                                            -1,
                                                            uno::Any( rURL.getUsername() ),
                                                            beans::PropertyState_DIRECT_VALUE )),
                                               uno::Any(beans::PropertyValue(
-                                                           "Repository Id",
+                                                           u"Repository Id"_ustr,
                                                            -1,
                                                            uno::Any( rURL.getRepositoryId() ),
                                                            beans::PropertyState_DIRECT_VALUE )) };
@@ -410,7 +410,7 @@ namespace cmis
                                 ucb::IOErrorCode_INVALID_DEVICE,
                                 generateErrorArguments(m_aURL),
                                 xEnv,
-                                "error accessing a repository");
+                                u"error accessing a repository"_ustr);
                         }
                         else
                         {
@@ -599,7 +599,7 @@ namespace cmis
     uno::Any Content::getBadArgExcept()
     {
         return uno::Any( lang::IllegalArgumentException(
-            "Wrong argument type!",
+            u"Wrong argument type!"_ustr,
             getXWeak(), -1) );
     }
 
@@ -826,7 +826,7 @@ namespace cmis
                 }
                 else if ( rProp.Name == "TargetURL" )
                 {
-                    xRow->appendString( rProp, "" );
+                    xRow->appendString( rProp, u""_ustr );
                 }
                 else if ( rProp.Name == "BaseURI" )
                 {
@@ -1057,7 +1057,7 @@ namespace cmis
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
                                 xEnv,
-                                "Checkin only supported by documents" );
+                                u"Checkin only supported by documents"_ustr );
         }
 
         boost::shared_ptr< std::ostream > pOut( new std::ostringstream ( std::ios_base::binary | std::ios_base::in | std::ios_base::out ) );
@@ -1111,7 +1111,7 @@ namespace cmis
                                     ucb::IOErrorCode_GENERAL,
                                     uno::Sequence< uno::Any >( 0 ),
                                     xEnv,
-                                    "Checkout only supported by documents" );
+                                    u"Checkout only supported by documents"_ustr );
             }
             libcmis::DocumentPtr pPwc = pDoc->checkOut( );
 
@@ -1156,7 +1156,7 @@ namespace cmis
                                     ucb::IOErrorCode_GENERAL,
                                     uno::Sequence< uno::Any >( 0 ),
                                     xEnv,
-                                    "CancelCheckout only supported by documents" );
+                                    u"CancelCheckout only supported by documents"_ustr );
             }
             pPwc->cancelCheckout( );
 
@@ -1219,7 +1219,7 @@ namespace cmis
                                     ucb::IOErrorCode_GENERAL,
                                     uno::Sequence< uno::Any >( 0 ),
                                     xEnv,
-                                    "Can not get the document" );
+                                    u"Can not get the document"_ustr );
             }
             std::vector< libcmis::DocumentPtr > aCmisVersions = pDoc->getAllVersions( );
             uno::Sequence< document::CmisVersion > aVersions( aCmisVersions.size( ) );
@@ -1261,7 +1261,7 @@ namespace cmis
                 ucbhelper::cancelCommandExecution(
                     uno::Any(
                         ucb::InteractiveBadTransferURLException(
-                            "Unsupported URL scheme!",
+                            u"Unsupported URL scheme!"_ustr,
                             getXWeak() ) ),
                     xEnv );
             }
@@ -1306,7 +1306,7 @@ namespace cmis
         if ( it == m_pObjectProps.end( ) )
         {
             ucbhelper::cancelCommandExecution( uno::Any
-                ( uno::RuntimeException( "Missing name property",
+                ( uno::RuntimeException( u"Missing name property"_ustr,
                     getXWeak() ) ),
                 xEnv );
         }
@@ -1334,7 +1334,7 @@ namespace cmis
             if ( object->getBaseType( ) != m_pObjectType->getBaseType( )->getId() )
             {
                 ucbhelper::cancelCommandExecution( uno::Any
-                    ( uno::RuntimeException( "Can't change a folder into a document and vice-versa.",
+                    ( uno::RuntimeException( u"Can't change a folder into a document and vice-versa."_ustr,
                         getXWeak() ) ),
                     xEnv );
             }
@@ -1353,7 +1353,7 @@ namespace cmis
                 catch ( const libcmis::Exception& )
                 {
                     ucbhelper::cancelCommandExecution( uno::Any
-                        ( uno::RuntimeException( "Error when setting document content",
+                        ( uno::RuntimeException( u"Error when setting document content"_ustr,
                             getXWeak() ) ),
                         xEnv );
                 }
@@ -1375,7 +1375,7 @@ namespace cmis
                 catch ( const libcmis::Exception& )
                 {
                     ucbhelper::cancelCommandExecution( uno::Any
-                        ( uno::RuntimeException( "Error when creating folder",
+                        ( uno::RuntimeException( u"Error when creating folder"_ustr,
                             getXWeak() ) ),
                         xEnv );
                 }
@@ -1393,7 +1393,7 @@ namespace cmis
                 catch ( const libcmis::Exception& )
                 {
                     ucbhelper::cancelCommandExecution( uno::Any
-                        ( uno::RuntimeException( "Error when creating document",
+                        ( uno::RuntimeException( u"Error when creating document"_ustr,
                             getXWeak() ) ),
                         xEnv );
                 }
@@ -1468,7 +1468,7 @@ namespace cmis
                  rValue.Name == "Size" ||
                  rValue.Name == "CreatableContentsInfo" )
             {
-                lang::IllegalAccessException e ( "Property is read-only!",
+                lang::IllegalAccessException e ( u"Property is read-only!"_ustr,
                        getXWeak() );
                 aRetRange[ n ] <<= e;
             }
@@ -1478,7 +1478,7 @@ namespace cmis
                 if (!( rValue.Value >>= aNewTitle ))
                 {
                     aRetRange[ n ] <<= beans::IllegalTypeException
-                        ( "Property value has wrong type!",
+                        ( u"Property value has wrong type!"_ustr,
                           getXWeak() );
                     continue;
                 }
@@ -1486,7 +1486,7 @@ namespace cmis
                 if ( aNewTitle.isEmpty() )
                 {
                     aRetRange[ n ] <<= lang::IllegalArgumentException
-                        ( "Empty title not allowed!",
+                        ( u"Empty title not allowed!"_ustr,
                           getXWeak(), -1 );
                     continue;
 
@@ -1498,7 +1498,7 @@ namespace cmis
             else
             {
                 SAL_INFO( "ucb.ucp.cmis", "Couldn't set property: " << rValue.Name );
-                lang::IllegalAccessException e ( "Property is read-only!",
+                lang::IllegalAccessException e ( u"Property is read-only!"_ustr,
                        getXWeak() );
                 aRetRange[ n ] <<= e;
             }
@@ -1574,52 +1574,52 @@ namespace cmis
     {
         static const beans::Property aGenericProperties[] =
         {
-            beans::Property( "IsDocument",
+            beans::Property( u"IsDocument"_ustr,
                 -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( "IsFolder",
+            beans::Property( u"IsFolder"_ustr,
                 -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( "Title",
+            beans::Property( u"Title"_ustr,
                 -1, cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND ),
-            beans::Property( "ObjectId",
+            beans::Property( u"ObjectId"_ustr,
                 -1, cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND ),
-            beans::Property( "TitleOnServer",
+            beans::Property( u"TitleOnServer"_ustr,
                 -1, cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND ),
-            beans::Property( "IsReadOnly",
+            beans::Property( u"IsReadOnly"_ustr,
                 -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( "DateCreated",
+            beans::Property( u"DateCreated"_ustr,
                 -1, cppu::UnoType<util::DateTime>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( "DateModified",
+            beans::Property( u"DateModified"_ustr,
                 -1, cppu::UnoType<util::DateTime>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( "Size",
+            beans::Property( u"Size"_ustr,
                 -1, cppu::UnoType<sal_Int64>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( "CreatableContentsInfo",
+            beans::Property( u"CreatableContentsInfo"_ustr,
                 -1, cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( "MediaType",
+            beans::Property( u"MediaType"_ustr,
                 -1, cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND ),
-            beans::Property( "CmisProperties",
+            beans::Property( u"CmisProperties"_ustr,
                 -1, cppu::UnoType<uno::Sequence< document::CmisProperty>>::get(),
                 beans::PropertyAttribute::BOUND ),
-            beans::Property( "IsVersionable",
+            beans::Property( u"IsVersionable"_ustr,
                 -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( "CanCheckOut",
+            beans::Property( u"CanCheckOut"_ustr,
                 -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( "CanCancelCheckOut",
+            beans::Property( u"CanCancelCheckOut"_ustr,
                 -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( "CanCheckIn",
+            beans::Property( u"CanCheckIn"_ustr,
                 -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
         };
@@ -1635,46 +1635,46 @@ namespace cmis
         {
             // Required commands
             ucb::CommandInfo
-            ( "getCommandInfo",
+            ( u"getCommandInfo"_ustr,
               -1, cppu::UnoType<void>::get() ),
             ucb::CommandInfo
-            ( "getPropertySetInfo",
+            ( u"getPropertySetInfo"_ustr,
               -1, cppu::UnoType<void>::get() ),
             ucb::CommandInfo
-            ( "getPropertyValues",
+            ( u"getPropertyValues"_ustr,
               -1, cppu::UnoType<uno::Sequence< beans::Property >>::get() ),
             ucb::CommandInfo
-            ( "setPropertyValues",
+            ( u"setPropertyValues"_ustr,
               -1, cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get() ),
 
             // Optional standard commands
             ucb::CommandInfo
-            ( "delete",
+            ( u"delete"_ustr,
               -1, cppu::UnoType<bool>::get() ),
             ucb::CommandInfo
-            ( "insert",
+            ( u"insert"_ustr,
               -1, cppu::UnoType<ucb::InsertCommandArgument2>::get() ),
             ucb::CommandInfo
-            ( "open",
+            ( u"open"_ustr,
               -1, cppu::UnoType<ucb::OpenCommandArgument2>::get() ),
 
             // Mandatory CMIS-only commands
-            ucb::CommandInfo ( "checkout", -1, cppu::UnoType<void>::get() ),
-            ucb::CommandInfo ( "cancelCheckout", -1, cppu::UnoType<void>::get() ),
-            ucb::CommandInfo ( "checkIn", -1,
+            ucb::CommandInfo ( u"checkout"_ustr, -1, cppu::UnoType<void>::get() ),
+            ucb::CommandInfo ( u"cancelCheckout"_ustr, -1, cppu::UnoType<void>::get() ),
+            ucb::CommandInfo ( u"checkIn"_ustr, -1,
                     cppu::UnoType<ucb::TransferInfo>::get() ),
-            ucb::CommandInfo ( "updateProperties", -1, cppu::UnoType<void>::get() ),
+            ucb::CommandInfo ( u"updateProperties"_ustr, -1, cppu::UnoType<void>::get() ),
             ucb::CommandInfo
-            ( "getAllVersions",
+            ( u"getAllVersions"_ustr,
               -1, cppu::UnoType<uno::Sequence< document::CmisVersion >>::get() ),
 
 
             // Folder Only, omitted if not a folder
             ucb::CommandInfo
-            ( "transfer",
+            ( u"transfer"_ustr,
               -1, cppu::UnoType<ucb::TransferInfo>::get() ),
             ucb::CommandInfo
-            ( "createNewContent",
+            ( u"createNewContent"_ustr,
               -1, cppu::UnoType<ucb::ContentInfo>::get() )
         };
 
@@ -1685,7 +1685,7 @@ namespace cmis
     OUString Content::getParentURL( )
     {
         SAL_INFO( "ucb.ucp.cmis", "Content::getParentURL()" );
-        OUString parentUrl = "/";
+        OUString parentUrl = u"/"_ustr;
         if ( m_sObjectPath == "/" )
             return parentUrl;
         else
@@ -1722,12 +1722,12 @@ namespace cmis
 
     OUString SAL_CALL Content::getImplementationName()
     {
-       return "com.sun.star.comp.CmisContent";
+       return u"com.sun.star.comp.CmisContent"_ustr;
     }
 
     uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     {
-           uno::Sequence<OUString> aSNS { "com.sun.star.ucb.CmisContent" };
+           uno::Sequence<OUString> aSNS { u"com.sun.star.ucb.CmisContent"_ustr };
            return aSNS;
     }
 
@@ -1984,7 +1984,7 @@ namespace cmis
                 uno::Sequence< beans::Property > props
                 {
                     {
-                        "Title",
+                        u"Title"_ustr,
                         -1,
                         cppu::UnoType<OUString>::get(),
                         beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND

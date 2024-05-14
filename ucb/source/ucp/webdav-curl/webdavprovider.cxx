@@ -84,7 +84,7 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 OUString
 ContentProvider::getImplementationName()
 {
-    return "com.sun.star.comp.WebDAVContentProvider";
+    return u"com.sun.star.comp.WebDAVContentProvider"_ustr;
 }
 
 css::uno::Sequence< OUString >

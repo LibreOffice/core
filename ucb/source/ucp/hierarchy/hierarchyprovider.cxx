@@ -63,7 +63,7 @@ HierarchyContentProvider::~HierarchyContentProvider()
 
 OUString SAL_CALL HierarchyContentProvider::getImplementationName()                       \
 {
-    return "com.sun.star.comp.ucb.HierarchyContentProvider";
+    return u"com.sun.star.comp.ucb.HierarchyContentProvider"_ustr;
 }
 sal_Bool SAL_CALL HierarchyContentProvider::supportsService( const OUString& ServiceName )
 {
@@ -71,7 +71,7 @@ sal_Bool SAL_CALL HierarchyContentProvider::supportsService( const OUString& Ser
 }
 css::uno::Sequence< OUString > HierarchyContentProvider::getSupportedServiceNames()
 {
-    return { "com.sun.star.ucb.HierarchyContentProvider" };
+    return { u"com.sun.star.ucb.HierarchyContentProvider"_ustr };
 }
 
 // Service factory implementation.
@@ -204,7 +204,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
 
                 (*it).second.xRootReadAccess.set(
                         xConfigProv->createInstanceWithArguments(
-                            "com.sun.star.ucb.HierarchyDataReadAccess",
+                            u"com.sun.star.ucb.HierarchyDataReadAccess"_ustr,
                             aArguments ),
                         uno::UNO_QUERY );
             }

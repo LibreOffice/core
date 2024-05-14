@@ -281,7 +281,7 @@ void SAL_CALL UniversalContentBroker::removeEventListener(
 
 OUString SAL_CALL UniversalContentBroker::getImplementationName()
 {
-    return "com.sun.star.comp.ucb.UniversalContentBroker";
+    return u"com.sun.star.comp.ucb.UniversalContentBroker"_ustr;
 }
 sal_Bool SAL_CALL UniversalContentBroker::supportsService( const OUString& ServiceName )
 {
@@ -289,7 +289,7 @@ sal_Bool SAL_CALL UniversalContentBroker::supportsService( const OUString& Servi
 }
 css::uno::Sequence< OUString > SAL_CALL UniversalContentBroker::getSupportedServiceNames()
 {
-    return { "com.sun.star.ucb.UniversalContentBroker" };
+    return { u"com.sun.star.ucb.UniversalContentBroker"_ustr };
 }
 
 
@@ -318,14 +318,14 @@ void SAL_CALL UniversalContentBroker::initialize( const css::uno::Sequence< Any 
                      && m_aArguments[1] == aArguments[1]))
             {
                 throw IllegalArgumentException(
-                    "UCB reinitialized with different arguments",
+                    u"UCB reinitialized with different arguments"_ustr,
                     getXWeak(), 0);
             }
             return;
         }
         if (!aArguments.hasElements())
         {
-            m_aArguments = { Any(OUString("Local")), Any(OUString("Office")) };
+            m_aArguments = { Any(u"Local"_ustr), Any(u"Office"_ustr) };
         }
         else
         {
@@ -580,7 +580,7 @@ Any SAL_CALL UniversalContentBroker::execute(
             {
                 ucbhelper::cancelCommandExecution(
                     Any( IllegalArgumentException(
-                                    "Wrong argument type!",
+                                    u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
                     Environment );
@@ -604,7 +604,7 @@ Any SAL_CALL UniversalContentBroker::execute(
         {
             ucbhelper::cancelCommandExecution(
                 Any( IllegalArgumentException(
-                                "Wrong argument type!",
+                                u"Wrong argument type!"_ustr,
                                 getXWeak(),
                                 -1 ) ),
                 Environment );
@@ -794,7 +794,7 @@ bool UniversalContentBroker::getContentProviderData(
 
         uno::Reference< uno::XInterface > xInterface(
                 xConfigProv->createInstanceWithArguments(
-                    "com.sun.star.configuration.ConfigurationAccess",
+                    u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                     aArguments ) );
 
         if ( !m_xNotifier.is() )

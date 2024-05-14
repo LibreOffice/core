@@ -88,7 +88,7 @@ StorageElementFactory::createStorage( const OUString & rUri,
          ( eMode != READ_WRITE_NOCREATE ) &&
          ( eMode != READ_WRITE_CREATE ) )
         throw lang::IllegalArgumentException(
-            "Invalid open mode!",
+            u"Invalid open mode!"_ustr,
             uno::Reference< uno::XInterface >(),
             sal_Int16( 2 ) );
 
@@ -96,7 +96,7 @@ StorageElementFactory::createStorage( const OUString & rUri,
     if ( aUri.isRoot() )
     {
         throw lang::IllegalArgumentException(
-            "Root never has a storage!",
+            u"Root never has a storage!"_ustr,
             uno::Reference< uno::XInterface >(),
             sal_Int16( 1 ) );
     }
@@ -367,12 +367,12 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
         {
             if ( eMode == READ_WRITE_CREATE )
                 throw lang::IllegalArgumentException(
-                    "Invalid open mode: document storages cannot be created!",
+                    u"Invalid open mode: document storages cannot be created!"_ustr,
                     uno::Reference< uno::XInterface >(),
                     sal_Int16( 2 ) );
             else
                 throw embed::InvalidStorageException(
-                    "Invalid document id!",
+                    u"Invalid document id!"_ustr,
                     uno::Reference< uno::XInterface >() );
         }
 
@@ -385,7 +385,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
                     "No XPropertySet interface!" );
         try
         {
-            uno::Any aPropValue = xPropSet->getPropertyValue("OpenMode");
+            uno::Any aPropValue = xPropSet->getPropertyValue(u"OpenMode"_ustr);
 
             sal_Int32 nOpenMode = 0;
             if ( aPropValue >>= nOpenMode )
@@ -397,7 +397,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
                         {
                             // document opened, but not readable.
                             throw embed::InvalidStorageException(
-                                    "Storage is open, but not readable!" );
+                                    u"Storage is open, but not readable!"_ustr );
                         }
                         // storage okay
                         break;
@@ -408,7 +408,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
                         {
                             // document opened, but not writable.
                             throw embed::InvalidStorageException(
-                                    "Storage is open, but not writable!" );
+                                    u"Storage is open, but not writable!"_ustr );
                         }
                         // storage okay
                         break;
@@ -420,7 +420,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
                     "Bug! Value of property OpenMode has wrong type!" );
 
                 throw uno::RuntimeException(
-                        "Bug! Value of property OpenMode has wrong type!" );
+                        u"Bug! Value of property OpenMode has wrong type!"_ustr );
             }
         }
         catch ( beans::UnknownPropertyException const & )
@@ -429,7 +429,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
             OSL_FAIL( "Property OpenMode not supported!" );
 
             throw embed::StorageWrappedTargetException(
-                    "Bug! Value of property OpenMode has wrong type!",
+                    u"Bug! Value of property OpenMode has wrong type!"_ustr,
                     uno::Reference< uno::XInterface >(),
                     anyEx );
         }
@@ -439,7 +439,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
             OSL_FAIL( "Caught WrappedTargetException!" );
 
             throw embed::StorageWrappedTargetException(
-                    "WrappedTargetException during getPropertyValue!",
+                    u"WrappedTargetException during getPropertyValue!"_ustr,
                     uno::Reference< uno::XInterface >(),
                     anyEx );
         }
@@ -496,7 +496,7 @@ StorageElementFactory::queryStream(
     if ( !xParentStorage.is() )
     {
         throw lang::IllegalArgumentException(
-            "No parent storage!",
+            u"No parent storage!"_ustr,
             uno::Reference< uno::XInterface >(),
             sal_Int16( 2 ) );
     }
@@ -505,14 +505,14 @@ StorageElementFactory::queryStream(
     if ( aUri.isRoot() )
     {
         throw lang::IllegalArgumentException(
-            "Root never is a stream!",
+            u"Root never is a stream!"_ustr,
             uno::Reference< uno::XInterface >(),
             sal_Int16( 2 ) );
     }
     else if ( aUri.isDocument() )
     {
         throw lang::IllegalArgumentException(
-            "A document never is a stream!",
+            u"A document never is a stream!"_ustr,
             uno::Reference< uno::XInterface >(),
             sal_Int16( 2 ) );
     }
@@ -549,7 +549,7 @@ StorageElementFactory::queryStream(
             OSL_FAIL( "StorageElementFactory::queryStream : Unknown open mode!" );
 
             throw embed::InvalidStorageException(
-                "Unknown open mode!",
+                u"Unknown open mode!"_ustr,
                 uno::Reference< uno::XInterface >() );
     }
 
@@ -605,7 +605,7 @@ StorageElementFactory::queryStream(
     if ( !xStream.is() )
     {
         throw embed::InvalidStorageException(
-            "No stream!",
+            u"No stream!"_ustr,
             uno::Reference< uno::XInterface >() );
     }
 

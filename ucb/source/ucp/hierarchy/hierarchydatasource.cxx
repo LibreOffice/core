@@ -199,7 +199,7 @@ HierarchyDataSource::~HierarchyDataSource()
 // XServiceInfo methods.
 OUString SAL_CALL HierarchyDataSource::getImplementationName()                       \
 {
-    return "com.sun.star.comp.ucb.HierarchyDataSource";
+    return u"com.sun.star.comp.ucb.HierarchyDataSource"_ustr;
 }
 sal_Bool SAL_CALL HierarchyDataSource::supportsService( const OUString& ServiceName )
 {
@@ -207,7 +207,7 @@ sal_Bool SAL_CALL HierarchyDataSource::supportsService( const OUString& ServiceN
 }
 css::uno::Sequence< OUString > HierarchyDataSource::getSupportedServiceNames()
 {
-    return { "com.sun.star.ucb.DefaultHierarchyDataSource", "com.sun.star.ucb.HierarchyDataSource" };
+    return { u"com.sun.star.ucb.DefaultHierarchyDataSource"_ustr, u"com.sun.star.ucb.HierarchyDataSource"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
@@ -378,14 +378,14 @@ HierarchyDataSource::createInstanceWithArguments(
         {
             // Create configuration read-only access object.
             xConfigAccess = xProv->createInstanceWithArguments(
-                                "com.sun.star.configuration.ConfigurationAccess",
+                                u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                                 aNewArgs );
         }
         else
         {
             // Create configuration read-write access object.
             xConfigAccess = xProv->createInstanceWithArguments(
-                                "com.sun.star.configuration.ConfigurationUpdateAccess",
+                                u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr,
                                 aNewArgs );
         }
     }
@@ -565,7 +565,7 @@ uno::Sequence< uno::Type > SAL_CALL HierarchyDataAccess::getTypes()
 
 OUString SAL_CALL HierarchyDataAccess::getImplementationName()
 {
-    return "com.sun.star.comp.ucb.HierarchyDataAccess";
+    return u"com.sun.star.comp.ucb.HierarchyDataAccess"_ustr;
 }
 
 sal_Bool SAL_CALL HierarchyDataAccess::supportsService( const OUString& ServiceName )

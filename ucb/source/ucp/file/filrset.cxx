@@ -587,8 +587,8 @@ XResultSet_impl::getPropertySetInfo()
 
     uno::Sequence< beans::Property > seq
     {
-        { "RowCount", -1, cppu::UnoType<sal_Int32>::get(), beans::PropertyAttribute::READONLY },
-        { "IsRowCountFinal", -1, cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::READONLY }
+        { u"RowCount"_ustr, -1, cppu::UnoType<sal_Int32>::get(), beans::PropertyAttribute::READONLY },
+        { u"IsRowCountFinal"_ustr, -1, cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::READONLY }
     };
 
     return new XPropertySetInfo_impl( m_pMyShell, seq );

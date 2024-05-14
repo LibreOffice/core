@@ -78,8 +78,8 @@ void ExpandContentProviderImpl::check() const
     if (m_bDisposed)
     {
         throw lang::DisposedException(
-            "expand content provider instance has "
-            "already been disposed!",
+            u"expand content provider instance has "
+            "already been disposed!"_ustr,
             const_cast< ExpandContentProviderImpl * >(this)->getXWeak() );
     }
 }
@@ -89,7 +89,7 @@ void ExpandContentProviderImpl::check() const
 OUString ExpandContentProviderImpl::getImplementationName()
 {
     check();
-    return "com.sun.star.comp.ucb.ExpandContentProvider";
+    return u"com.sun.star.comp.ucb.ExpandContentProvider"_ustr;
 }
 
 
@@ -97,8 +97,8 @@ uno::Sequence< OUString > ExpandContentProviderImpl::getSupportedServiceNames()
 {
     check();
     return {
-        "com.sun.star.ucb.ExpandContentProvider",
-        "com.sun.star.ucb.ContentProvider"
+        u"com.sun.star.ucb.ExpandContentProvider"_ustr,
+        u"com.sun.star.ucb.ContentProvider"_ustr
     };
 }
 
@@ -114,7 +114,7 @@ OUString ExpandContentProviderImpl::expandUri(
     if (!uri.startsWithIgnoreAsciiCase("vnd.sun.star.expand:", &uri))
     {
         throw ucb::IllegalIdentifierException(
-            "expected protocol vnd.sun.star.expand!",
+            u"expected protocol vnd.sun.star.expand!"_ustr,
             const_cast< ExpandContentProviderImpl * >(this)->getXWeak() );
     }
     // decode uric class chars

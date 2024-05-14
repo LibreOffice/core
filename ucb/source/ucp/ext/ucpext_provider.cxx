@@ -56,25 +56,25 @@ namespace ucb::ucp::ext
 
     OUString SAL_CALL ContentProvider::getImplementationName()
     {
-        return "org.openoffice.comp.ucp.ext.ContentProvider";
+        return u"org.openoffice.comp.ucp.ext.ContentProvider"_ustr;
     }
 
 
     Sequence< OUString > SAL_CALL ContentProvider::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.ucb.ContentProvider", "com.sun.star.ucb.ExtensionContentProvider" };
+        return { u"com.sun.star.ucb.ContentProvider"_ustr, u"com.sun.star.ucb.ExtensionContentProvider"_ustr };
     }
 
 
     OUString ContentProvider::getRootURL()
     {
-        return "vnd.sun.star.extension://";
+        return u"vnd.sun.star.extension://"_ustr;
     }
 
 
     OUString ContentProvider::getArtificialNodeContentType()
     {
-        return "application/vnd.sun.star.extension-content";
+        return u"application/vnd.sun.star.extension-content"_ustr;
     }
 
 

@@ -76,7 +76,7 @@ SortedDynamicResultSet::~SortedDynamicResultSet()
 
 OUString SAL_CALL SortedDynamicResultSet::getImplementationName()
 {
-    return "com.sun.star.comp.ucb.SortedDynamicResultSet";
+    return u"com.sun.star.comp.ucb.SortedDynamicResultSet"_ustr;
 }
 
 sal_Bool SAL_CALL SortedDynamicResultSet::supportsService( const OUString& ServiceName )
@@ -86,7 +86,7 @@ sal_Bool SAL_CALL SortedDynamicResultSet::supportsService( const OUString& Servi
 
 css::uno::Sequence< OUString > SAL_CALL SortedDynamicResultSet::getSupportedServiceNames()
 {
-    return { "com.sun.star.ucb.SortedDynamicResultSet" };
+    return { u"com.sun.star.ucb.SortedDynamicResultSet"_ustr };
 }
 
 // XComponent methods.
@@ -263,7 +263,7 @@ void SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
     Any  aRet;
 
     try {
-        aRet = pCurSet->getPropertyValue("IsRowCountFinal");
+        aRet = pCurSet->getPropertyValue(u"IsRowCountFinal"_ustr);
     }
     catch (const UnknownPropertyException&) {}
     catch (const WrappedTargetException&) {}
@@ -406,7 +406,7 @@ SortedDynamicResultSetFactory::~SortedDynamicResultSetFactory()
 
 OUString SAL_CALL SortedDynamicResultSetFactory::getImplementationName()
 {
-    return "com.sun.star.comp.ucb.SortedDynamicResultSetFactory";
+    return u"com.sun.star.comp.ucb.SortedDynamicResultSetFactory"_ustr;
 }
 
 sal_Bool SAL_CALL SortedDynamicResultSetFactory::supportsService( const OUString& ServiceName )
@@ -416,7 +416,7 @@ sal_Bool SAL_CALL SortedDynamicResultSetFactory::supportsService( const OUString
 
 css::uno::Sequence< OUString > SAL_CALL SortedDynamicResultSetFactory::getSupportedServiceNames()
 {
-    return { "com.sun.star.ucb.SortedDynamicResultSetFactory" };
+    return { u"com.sun.star.ucb.SortedDynamicResultSetFactory"_ustr };
 }
 
 

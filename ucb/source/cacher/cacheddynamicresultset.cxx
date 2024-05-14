@@ -118,7 +118,7 @@ XTYPEPROVIDER_IMPL_4( CachedDynamicResultSet
 
 OUString SAL_CALL CachedDynamicResultSet::getImplementationName()
 {
-    return "com.sun.star.comp.ucb.CachedDynamicResultSet";
+    return u"com.sun.star.comp.ucb.CachedDynamicResultSet"_ustr;
 }
 
 sal_Bool SAL_CALL CachedDynamicResultSet::supportsService( const OUString& ServiceName )
@@ -128,7 +128,7 @@ sal_Bool SAL_CALL CachedDynamicResultSet::supportsService( const OUString& Servi
 
 css::uno::Sequence< OUString > SAL_CALL CachedDynamicResultSet::getSupportedServiceNames()
 {
-    return { "com.sun.star.ucb.CachedDynamicResultSet" };
+    return { u"com.sun.star.ucb.CachedDynamicResultSet"_ustr };
 }
 
 
@@ -160,7 +160,7 @@ CachedDynamicResultSetFactory::~CachedDynamicResultSetFactory()
 
 OUString SAL_CALL CachedDynamicResultSetFactory::getImplementationName()
 {
-    return "com.sun.star.comp.ucb.CachedDynamicResultSetFactory";
+    return u"com.sun.star.comp.ucb.CachedDynamicResultSetFactory"_ustr;
 }
 sal_Bool SAL_CALL CachedDynamicResultSetFactory::supportsService( const OUString& ServiceName )
 {
@@ -168,7 +168,7 @@ sal_Bool SAL_CALL CachedDynamicResultSetFactory::supportsService( const OUString
 }
 css::uno::Sequence< OUString > SAL_CALL CachedDynamicResultSetFactory::getSupportedServiceNames()
 {
-    return { "com.sun.star.ucb.CachedDynamicResultSetFactory" };
+    return { u"com.sun.star.ucb.CachedDynamicResultSetFactory"_ustr };
 }
 
 // Service factory implementation.

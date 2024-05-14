@@ -304,7 +304,7 @@ bool HierarchyEntry::setData( const HierarchyEntryData& rData )
                     }
                     else
                     {
-                        xParentNameAccess->getByName("Children") >>= xNameAccess;
+                        xParentNameAccess->getByName(u"Children"_ustr) >>= xNameAccess;
                     }
 
                     if ( xNameAccess->hasByName( m_aName ) )
@@ -346,7 +346,7 @@ bool HierarchyEntry::setData( const HierarchyEntryData& rData )
                     {
                         // Append new entry to parents child list,
                         // which is a set of entries.
-                        xParentNameAccess->getByName("Children") >>= xFac;
+                        xParentNameAccess->getByName(u"Children"_ustr) >>= xFac;
                     }
 
                     OSL_ENSURE( xFac.is(),
@@ -373,7 +373,7 @@ bool HierarchyEntry::setData( const HierarchyEntryData& rData )
                 {
                     // Set Title value.
                     xNameReplace->replaceByName(
-                        "Title",
+                        u"Title"_ustr,
                         uno::Any( rData.getTitle() ) );
 
                     // Set TargetURL value.
@@ -389,14 +389,14 @@ bool HierarchyEntry::setData( const HierarchyEntryData& rData )
                             = m_xOfficeInstDirs->makeRelocatableURL( aValue );
 
                     xNameReplace->replaceByName(
-                        "TargetURL",
+                        u"TargetURL"_ustr,
                         uno::Any( aValue ) );
 
                     // Set Type value.
                     sal_Int32 nType
                         = rData.getType() == HierarchyEntryData::LINK ? 0 : 1;
                     xNameReplace->replaceByName(
-                        "Type",
+                        u"Type"_ustr,
                         uno::Any( nType ) );
 
                     if ( xContainer.is() )
@@ -592,7 +592,7 @@ bool HierarchyEntry::move(
         }
         else
         {
-            xOldParentNameAccess->getByName("Children") >>= xOldNameContainer;
+            xOldParentNameAccess->getByName(u"Children"_ustr) >>= xOldNameContainer;
         }
 
         aEntry = xOldNameContainer->getByName( m_aName );
@@ -665,7 +665,7 @@ bool HierarchyEntry::move(
             }
             else
             {
-                xNewParentNameAccess->getByName("Children") >>= xNewNameContainer;
+                xNewParentNameAccess->getByName(u"Children"_ustr) >>= xNewNameContainer;
             }
         }
         else
@@ -675,7 +675,7 @@ bool HierarchyEntry::move(
             return false;
 
         xNewNameReplace->replaceByName(
-            "Title",
+            u"Title"_ustr,
             uno::Any( rData.getTitle() ) );
 
         // TargetURL property may contain a reference to the Office
@@ -687,11 +687,11 @@ bool HierarchyEntry::move(
         if ( m_xOfficeInstDirs.is() &&  !aValue.isEmpty() )
             aValue = m_xOfficeInstDirs->makeRelocatableURL( aValue );
         xNewNameReplace->replaceByName(
-            "TargetURL",
+            u"TargetURL"_ustr,
             uno::Any( aValue ) );
         sal_Int32 nType = rData.getType() == HierarchyEntryData::LINK ? 0 : 1;
         xNewNameReplace->replaceByName(
-            "Type",
+            u"Type"_ustr,
             uno::Any( nType ) );
 
         xNewNameContainer->insertByName( aNewKey, aEntry );
@@ -796,7 +796,7 @@ bool HierarchyEntry::remove()
                 {
                     // Append new entry to parents child list,
                     // which is a set of entries.
-                     xParentNameAccess->getByName("Children") >>= xContainer;
+                     xParentNameAccess->getByName(u"Children"_ustr) >>= xContainer;
                 }
 
                 OSL_ENSURE( xContainer.is(),

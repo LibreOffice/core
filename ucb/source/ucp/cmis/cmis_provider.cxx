@@ -123,11 +123,11 @@ sal_Bool ContentProvider::supportsService(const OUString& sServiceName)
 }
 OUString ContentProvider::getImplementationName()
 {
-    return "com.sun.star.comp.CmisContentProvider";
+    return u"com.sun.star.comp.CmisContentProvider"_ustr;
 }
 css::uno::Sequence< OUString > ContentProvider::getSupportedServiceNames()
 {
-    return { "com.sun.star.ucb.CmisContentProvider" };
+    return { u"com.sun.star.ucb.CmisContentProvider"_ustr };
 }
 
 }

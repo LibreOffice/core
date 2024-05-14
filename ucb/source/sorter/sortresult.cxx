@@ -119,7 +119,7 @@ SortedResultSet::~SortedResultSet()
 
 OUString SAL_CALL SortedResultSet::getImplementationName()
 {
-    return "com.sun.star.comp.ucb.SortedResultSet";
+    return u"com.sun.star.comp.ucb.SortedResultSet"_ustr;
 }
 
 sal_Bool SAL_CALL SortedResultSet::supportsService( const OUString& ServiceName )
@@ -763,7 +763,7 @@ Any SAL_CALL SortedResultSet::getPropertyValue( const OUString& PropertyName )
         if ( bOrgFinal )
         {
             aOrgRet = Reference< XPropertySet >::query(mxOriginal)->
-                getPropertyValue("RowCount");
+                getPropertyValue(u"RowCount"_ustr);
             sal_uInt32  nOrgCount = 0;
             aOrgRet >>= nOrgCount;
             if ( nOrgCount == maS2O.Count() )
@@ -1266,7 +1266,7 @@ void SortedResultSet::CheckProperties( sal_Int32 nOldCount, bool bWasFinal )
 
             PropertyChanged( aEvt );
 
-            OUString aName = "IsRowCountFinal";
+            OUString aName = u"IsRowCountFinal"_ustr;
             Any aRet = getPropertyValue( aName );
             if ( (aRet >>= bIsFinal) && bIsFinal != bWasFinal )
             {

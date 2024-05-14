@@ -72,7 +72,7 @@ namespace cmis
     uno::Any RepoContent::getBadArgExcept()
     {
         return uno::Any( lang::IllegalArgumentException(
-            "Wrong argument type!",
+            u"Wrong argument type!"_ustr,
             getXWeak(), -1) );
     }
 
@@ -217,7 +217,7 @@ namespace cmis
                                     ucb::IOErrorCode_ABORT,
                                     uno::Sequence< uno::Any >( 0 ),
                                     xEnv,
-                                    "Authentication cancelled" );
+                                    u"Authentication cancelled"_ustr );
             }
         }
     }
@@ -246,16 +246,16 @@ namespace cmis
     {
         static const beans::Property aGenericProperties[] =
         {
-            beans::Property( "IsDocument",
+            beans::Property( u"IsDocument"_ustr,
                 -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( "IsFolder",
+            beans::Property( u"IsFolder"_ustr,
                 -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( "Title",
+            beans::Property( u"Title"_ustr,
                 -1, cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND ),
-            beans::Property( "IsReadOnly",
+            beans::Property( u"IsReadOnly"_ustr,
                 -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
         };
@@ -271,21 +271,21 @@ namespace cmis
         {
             // Required commands
             ucb::CommandInfo
-            ( "getCommandInfo",
+            ( u"getCommandInfo"_ustr,
               -1, cppu::UnoType<void>::get() ),
             ucb::CommandInfo
-            ( "getPropertySetInfo",
+            ( u"getPropertySetInfo"_ustr,
               -1, cppu::UnoType<void>::get() ),
             ucb::CommandInfo
-            ( "getPropertyValues",
+            ( u"getPropertyValues"_ustr,
               -1, cppu::UnoType<uno::Sequence< beans::Property >>::get() ),
             ucb::CommandInfo
-            ( "setPropertyValues",
+            ( u"setPropertyValues"_ustr,
               -1, cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get() ),
 
             // Optional standard commands
             ucb::CommandInfo
-            ( "open",
+            ( u"open"_ustr,
               -1, cppu::UnoType<ucb::OpenCommandArgument2>::get() ),
         };
 
@@ -306,12 +306,12 @@ namespace cmis
 
     OUString SAL_CALL RepoContent::getImplementationName()
     {
-       return "com.sun.star.comp.CmisRepoContent";
+       return u"com.sun.star.comp.CmisRepoContent"_ustr;
     }
 
     uno::Sequence< OUString > SAL_CALL RepoContent::getSupportedServiceNames()
     {
-       return { "com.sun.star.ucb.Content" };
+       return { u"com.sun.star.ucb.Content"_ustr };
     }
 
     OUString SAL_CALL RepoContent::getContentType()

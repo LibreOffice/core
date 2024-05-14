@@ -153,13 +153,13 @@ namespace ucb::ucp::ext
 
     OUString SAL_CALL Content::getImplementationName()
     {
-        return "org.openoffice.comp.ucp.ext.Content";
+        return u"org.openoffice.comp.ucp.ext.Content"_ustr;
     }
 
 
     Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     {
-        return { "com.sun.star.ucb.Content", "com.sun.star.ucb.ExtensionContent" };
+        return { u"com.sun.star.ucb.Content"_ustr, u"com.sun.star.ucb.ExtensionContent"_ustr };
     }
 
 
@@ -245,7 +245,7 @@ namespace ucb::ucp::ext
             {
                 const OUString sPhysicalContentURL( getPhysicalURL() );
                 ::ucbhelper::Content aRequestedContent( sPhysicalContentURL, i_rEnvironment, m_xContext );
-                aRet = aRequestedContent.executeCommand( "open", Any( aOpenCommand ) );
+                aRet = aRequestedContent.executeCommand( u"open"_ustr, Any( aOpenCommand ) );
             }
         }
 
@@ -395,22 +395,22 @@ namespace ucb::ucp::ext
         else
         {
             // Append all Core Properties.
-            xRow->appendString ( Property( "ContentType",
+            xRow->appendString ( Property( u"ContentType"_ustr,
                           -1,
                           cppu::UnoType<OUString>::get(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
                 ContentProvider::getArtificialNodeContentType() );
-            xRow->appendString ( Property( "Title",
+            xRow->appendString ( Property( u"Title"_ustr,
                           -1,
                           cppu::UnoType<OUString>::get(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
                 i_rTitle );
-            xRow->appendBoolean( Property( "IsDocument",
+            xRow->appendBoolean( Property( u"IsDocument"_ustr,
                           -1,
                           cppu::UnoType<bool>::get(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
                 false );
-            xRow->appendBoolean( Property( "IsFolder",
+            xRow->appendBoolean( Property( u"IsFolder"_ustr,
                           -1,
                           cppu::UnoType<bool>::get(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
@@ -495,7 +495,7 @@ namespace ucb::ucp::ext
         for ( auto& rRet : asNonConstRange(aRet) )
         {
             // all our properties are read-only ...
-            rRet <<= IllegalAccessException("property is read-only.", *this );
+            rRet <<= IllegalAccessException(u"property is read-only."_ustr, *this );
         }
 
         return aRet;
@@ -509,22 +509,22 @@ namespace ucb::ucp::ext
             // Mandatory commands
 
             CommandInfo(
-                "getCommandInfo",
+                u"getCommandInfo"_ustr,
                 -1,
                 cppu::UnoType<void>::get()
             ),
             CommandInfo(
-                "getPropertySetInfo",
+                u"getPropertySetInfo"_ustr,
                 -1,
                 cppu::UnoType<void>::get()
             ),
             CommandInfo(
-                "getPropertyValues",
+                u"getPropertyValues"_ustr,
                 -1,
                 cppu::UnoType<Sequence< Property >>::get()
             ),
             CommandInfo(
-                "setPropertyValues",
+                u"setPropertyValues"_ustr,
                 -1,
                 cppu::UnoType<Sequence< PropertyValue >>::get()
             )
@@ -532,7 +532,7 @@ namespace ucb::ucp::ext
             // Optional standard commands
 
             , CommandInfo(
-                "open",
+                u"open"_ustr,
                 -1,
                 cppu::UnoType<OpenCommandArgument2>::get()
             )
@@ -547,25 +547,25 @@ namespace ucb::ucp::ext
         static const Property aProperties[] =
         {
             Property(
-                "ContentType",
+                u"ContentType"_ustr,
                 -1,
                 cppu::UnoType<OUString>::get(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
             ),
             Property(
-                "IsDocument",
+                u"IsDocument"_ustr,
                 -1,
                 cppu::UnoType<bool>::get(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
             ),
             Property(
-                "IsFolder",
+                u"IsFolder"_ustr,
                 -1,
                 cppu::UnoType<bool>::get(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
             ),
             Property(
-                "Title",
+                u"Title"_ustr,
                 -1,
                 cppu::UnoType<OUString>::get(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
@@ -583,7 +583,7 @@ namespace ucb::ucp::ext
         bool bIsFolder = false;
         try
         {
-            Sequence< Property > aProps{ { /*Name*/ "IsFolder", {}, {}, {} } };
+            Sequence< Property > aProps{ { /*Name*/ u"IsFolder"_ustr, {}, {}, {} } };
             Reference< XRow > xRow( getPropertyValues( aProps, nullptr ), UNO_SET_THROW );
             bIsFolder = xRow->getBoolean(1);
         }
@@ -607,7 +607,7 @@ namespace ucb::ucp::ext
 
         try
         {
-            Sequence< Property > aProps{ { /*Name*/ "ContentType", {}, {}, {} } };
+            Sequence< Property > aProps{ { /*Name*/ u"ContentType"_ustr, {}, {}, {} } };
             Reference< XRow > xRow( getPropertyValues( aProps, nullptr ), UNO_SET_THROW );
             m_aContentType = xRow->getString(1);
         }

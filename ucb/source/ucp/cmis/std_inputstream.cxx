@@ -142,7 +142,7 @@ namespace cmis
 
         if ( location < 0 || location > m_nLength )
             throw lang::IllegalArgumentException(
-                    "Location can't be negative or greater than the length",
+                    u"Location can't be negative or greater than the length"_ustr,
                     getXWeak(), 0 );
 
         if (!m_pStream)

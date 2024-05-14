@@ -127,7 +127,7 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
     {
         try
         {
-            uno::Any aValue = xPropSet->getPropertyValue("RuntimeUID");
+            uno::Any aValue = xPropSet->getPropertyValue(u"RuntimeUID"_ustr);
             aValue >>= aId;
         }
         catch ( beans::UnknownPropertyException const & )
@@ -561,7 +561,7 @@ bool OfficeDocumentsManager::isDocumentPreview(
     if ( !xModel.is() )
         return false;
 
-    uno::Sequence<beans::PropertyValue> props = xModel->getArgs2( { "Preview" } );
+    uno::Sequence<beans::PropertyValue> props = xModel->getArgs2( { u"Preview"_ustr } );
     for (const auto & rProp : props)
         if (rProp.Name == "Preview")
         {

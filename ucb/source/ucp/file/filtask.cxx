@@ -139,39 +139,39 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
       m_xContext( rxContext ),
       // Commands
       m_sCommandInfo{
-          { /* Name    */ "getCommandInfo",
+          { /* Name    */ u"getCommandInfo"_ustr,
             /* Handle  */ -1,
             /* ArgType */ cppu::UnoType<void>::get() },
 
-          { /* Name    */ "getPropertySetInfo",
+          { /* Name    */ u"getPropertySetInfo"_ustr,
             /* Handle  */ -1,
             /* ArgType */ cppu::UnoType<void>::get() },
 
-          { /* Name    */ "getPropertyValues",
+          { /* Name    */ u"getPropertyValues"_ustr,
             /* Handle  */ -1,
             /* ArgType */ cppu::UnoType<uno::Sequence< beans::Property >>::get() },
 
-          { /* Name    */ "setPropertyValues",
+          { /* Name    */ u"setPropertyValues"_ustr,
             /* Handle  */ -1,
             /* ArgType */ cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get() },
 
-          { /* Name    */ "open",
+          { /* Name    */ u"open"_ustr,
             /* Handle  */ -1,
             /* ArgType */ cppu::UnoType<OpenCommandArgument>::get() },
 
-          { /* Name    */ "transfer",
+          { /* Name    */ u"transfer"_ustr,
             /* Handle  */ -1,
             /* ArgType */ cppu::UnoType<TransferInfo>::get() },
 
-          { /* Name    */ "delete",
+          { /* Name    */ u"delete"_ustr,
             /* Handle  */ -1,
             /* ArgType */ cppu::UnoType<sal_Bool>::get() },
 
-          { /* Name    */ "insert",
+          { /* Name    */ u"insert"_ustr,
             /* Handle  */ -1,
             /* ArgType */ cppu::UnoType<InsertCommandArgument>::get() },
 
-          { /* Name    */ "createNewContent",
+          { /* Name    */ u"createNewContent"_ustr,
             /* Handle  */ -1,
             /* ArgType */ cppu::UnoType<ucb::ContentInfo>::get() } }
 {
@@ -2912,7 +2912,7 @@ uno::Sequence< ucb::ContentInfo > TaskManager::queryCreatableContentsInfo()
 
     uno::Sequence< beans::Property > props
     {
-        { "Title", -1, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND }
+        { u"Title"_ustr, -1, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND }
     };
     return
     {

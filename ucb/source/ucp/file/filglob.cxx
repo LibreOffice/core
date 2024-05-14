@@ -122,25 +122,25 @@ namespace {
         auto pArguments = aArguments.getArray();
         sal_Int32 i = 0;
         pArguments[i++]
-            <<= PropertyValue("Uri",
+            <<= PropertyValue(u"Uri"_ustr,
                               -1,
                               Any(rPhysicalUrl),
                               PropertyState_DIRECT_VALUE);
         if (bResourceName)
             pArguments[i++]
-                <<= PropertyValue("ResourceName",
+                <<= PropertyValue(u"ResourceName"_ustr,
                                   -1,
                                   Any(aResourceName),
                                   PropertyState_DIRECT_VALUE);
         if (bResourceType)
             pArguments[i++]
-                <<= PropertyValue("ResourceType",
+                <<= PropertyValue(u"ResourceType"_ustr,
                                   -1,
                                   Any(aResourceType),
                                   PropertyState_DIRECT_VALUE);
         if (bRemoveProperty)
             pArguments[i++]
-                <<= PropertyValue("Removable",
+                <<= PropertyValue(u"Removable"_ustr,
                                   -1,
                                   Any(bRemovable),
                                   PropertyState_DIRECT_VALUE);
@@ -365,7 +365,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                "an error occurred during file opening",
+                u"an error occurred during file opening"_ustr,
                 xComProc);
         }
         else if( errorCode == TASKHANDLING_OPEN_FOR_DIRECTORYLISTING  ||
@@ -418,7 +418,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                "an error occurred during opening a directory",
+                u"an error occurred during opening a directory"_ustr,
                 xComProc);
         }
         else if( errorCode == TASKHANDLING_NOTCONNECTED_FOR_WRITE          ||
@@ -433,7 +433,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                "an error occurred writing or reading from a file",
+                u"an error occurred writing or reading from a file"_ustr,
                 xComProc );
         }
         else if( errorCode == TASKHANDLING_FILEIOERROR_FOR_NO_SPACE )
@@ -443,7 +443,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                "device full",
+                u"device full"_ustr,
                 xComProc);
         }
         else if( errorCode == TASKHANDLING_FILEIOERROR_FOR_WRITE ||
@@ -495,7 +495,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                "an error occurred during opening a file",
+                u"an error occurred during opening a file"_ustr,
                 xComProc);
         }
         else if( errorCode == TASKHANDLING_NONAMESET_INSERT_COMMAND ||
@@ -508,7 +508,7 @@ namespace fileaccess {
                                            : sContentType };
 
             aAny <<= MissingPropertiesException(
-                "a property is missing, necessary to create a content",
+                u"a property is missing, necessary to create a content"_ustr,
                 xComProc,
                 aSeq);
             cancelCommandExecution(aAny,xEnv);
@@ -532,21 +532,21 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                "there were problems with the filesize",
+                u"there were problems with the filesize"_ustr,
                 xComProc);
         }
         else if(errorCode == TASKHANDLING_INPUTSTREAM_FOR_WRITE)
         {
             aAny <<=
                 MissingInputStreamException(
-                    "the inputstream is missing, necessary to create a content",
+                    u"the inputstream is missing, necessary to create a content"_ustr,
                     xComProc);
             cancelCommandExecution(aAny,xEnv);
         }
         else if( errorCode == TASKHANDLING_NOREPLACE_FOR_WRITE )
             // Overwrite = false and file exists
         {
-            NameClashException excep("file exists and overwrite forbidden",
+            NameClashException excep(u"file exists and overwrite forbidden"_ustr,
                                      Reference<XInterface>(xComProc, UNO_QUERY),
                                      InteractionClassification_ERROR, OUString(getTitle(aUncPath)));
             cancelCommandExecution( Any(excep), xEnv );
@@ -563,7 +563,7 @@ namespace fileaccess {
                     RTL_TEXTENCODING_UTF8));
             prop.Value <<= aClashingName;
             InteractiveAugmentedIOException excep(
-                "the name contained invalid characters", Reference<XInterface>(xComProc, UNO_QUERY),
+                u"the name contained invalid characters"_ustr, Reference<XInterface>(xComProc, UNO_QUERY),
                 InteractionClassification_ERROR, IOErrorCode_INVALID_CHARACTER, { Any(prop) });
             if(isHandled)
                 throw excep;
@@ -578,7 +578,7 @@ namespace fileaccess {
         }
         else if( errorCode == TASKHANDLING_FOLDER_EXISTS_MKDIR )
         {
-            NameClashException excep("folder exists and overwrite forbidden", xComProc,
+            NameClashException excep(u"folder exists and overwrite forbidden"_ustr, xComProc,
                                      InteractionClassification_ERROR, OUString(getTitle(aUncPath)));
             if(isHandled)
                 throw excep;
@@ -614,7 +614,7 @@ namespace fileaccess {
                 generateErrorArguments(getParentName(aUncPath)),
                 //TODO! ok to supply physical URL to getParentName()?
                 xEnv,
-                "a folder could not be created",
+                u"a folder could not be created"_ustr,
                 xComProc  );
         }
         else if( errorCode == TASKHANDLING_VALIDFILESTATUSWHILE_FOR_REMOVE  ||
@@ -665,7 +665,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                "a file status object could not be filled",
+                u"a file status object could not be filled"_ustr,
                 xComProc  );
         }
         else if( errorCode == TASKHANDLING_DELETEFILE_FOR_REMOVE  ||
@@ -712,7 +712,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                "a file or directory could not be deleted",
+                u"a file or directory could not be deleted"_ustr,
                 xComProc );
         }
         else if( errorCode == TASKHANDLING_TRANSFER_BY_COPY_SOURCE         ||
@@ -762,13 +762,13 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                "accessing the root during transfer",
+                u"accessing the root during transfer"_ustr,
                 xComProc );
         }
         else if( errorCode == TASKHANDLING_TRANSFER_INVALIDSCHEME )
         {
             aAny <<= InteractiveBadTransferURLException(
-                        "bad transfer url",
+                        u"bad transfer url"_ustr,
                         xComProc);
             cancelCommandExecution( aAny,xEnv );
         }
@@ -784,7 +784,7 @@ namespace fileaccess {
                  errorCode == TASKHANDLING_RENAMEMOVE_FOR_COPY    )
         {
             OUString aMsg(
-                        "general error during transfer");
+                        u"general error during transfer"_ustr);
 
             switch( minorCode )
             {
@@ -827,7 +827,7 @@ namespace fileaccess {
         else if( errorCode == TASKHANDLING_NAMECLASH_FOR_COPY   ||
                  errorCode == TASKHANDLING_NAMECLASH_FOR_MOVE )
         {
-            NameClashException excep("name clash during copy or move",
+            NameClashException excep(u"name clash during copy or move"_ustr,
                                      Reference<XInterface>(xComProc, UNO_QUERY),
                                      InteractionClassification_ERROR, OUString(getTitle(aUncPath)));
 
@@ -837,7 +837,7 @@ namespace fileaccess {
                  errorCode == TASKHANDLING_NAMECLASHSUPPORT_FOR_COPY )
         {
             UnsupportedNameClashException excep(
-                "name clash value not supported during copy or move",
+                u"name clash value not supported during copy or move"_ustr,
                 Reference<XInterface>(xComProc, UNO_QUERY), minorCode);
 
             cancelCommandExecution(Any(excep), xEnv);

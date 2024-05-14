@@ -45,7 +45,7 @@ void SAL_CALL Seekable::truncate()
         throw css::io::NotConnectedException();
 
     if (!g_seekable_can_truncate(mpStream))
-        throw css::io::IOException("Truncate unsupported",
+        throw css::io::IOException(u"Truncate unsupported"_ustr,
             getXWeak());
 
     GError *pError=nullptr;
@@ -59,7 +59,7 @@ void SAL_CALL Seekable::seek( sal_Int64 location )
         throw css::io::NotConnectedException();
 
     if (!g_seekable_can_seek(mpStream))
-        throw css::io::IOException("Seek unsupported",
+        throw css::io::IOException(u"Seek unsupported"_ustr,
             getXWeak());
 
     GError *pError=nullptr;

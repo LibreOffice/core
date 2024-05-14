@@ -105,28 +105,28 @@ uno::Sequence< beans::Property > Content::getProperties(
             // Mandatory properties
 
             beans::Property(
-                "ContentType",
+                u"ContentType"_ustr,
                 -1,
                 cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                "IsDocument",
+                u"IsDocument"_ustr,
                 -1,
                 cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                "IsFolder",
+                u"IsFolder"_ustr,
                 -1,
                 cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                "Title",
+                u"Title"_ustr,
                 -1,
                 cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND
@@ -135,14 +135,14 @@ uno::Sequence< beans::Property > Content::getProperties(
             // Optional standard properties
 
             beans::Property(
-                "CreatableContentsInfo",
+                u"CreatableContentsInfo"_ustr,
                 -1,
                 cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                "DateModified",
+                u"DateModified"_ustr,
                 -1,
                 cppu::UnoType<css::util::DateTime>::get(),
                 beans::PropertyAttribute::BOUND
@@ -167,28 +167,28 @@ uno::Sequence< beans::Property > Content::getProperties(
             // Mandatory properties
 
             beans::Property(
-                "ContentType",
+                u"ContentType"_ustr,
                 -1,
                 cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                "IsDocument",
+                u"IsDocument"_ustr,
                 -1,
                 cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                "IsFolder",
+                u"IsFolder"_ustr,
                 -1,
                 cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                "Title",
+                u"Title"_ustr,
                 -1,
                 cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND
@@ -197,7 +197,7 @@ uno::Sequence< beans::Property > Content::getProperties(
             // Optional standard properties
 
             beans::Property(
-                "CreatableContentsInfo",
+                u"CreatableContentsInfo"_ustr,
                 -1,
                 cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
                 beans::PropertyAttribute::BOUND
@@ -207,7 +207,7 @@ uno::Sequence< beans::Property > Content::getProperties(
             // New properties
 
             beans::Property(
-                "Storage",
+                u"Storage"_ustr,
                 -1,
                 cppu::UnoType<embed::XStorage>::get(),
                 beans::PropertyAttribute::BOUND
@@ -229,28 +229,28 @@ uno::Sequence< beans::Property > Content::getProperties(
             // Mandatory properties
 
             beans::Property(
-                "ContentType",
+                u"ContentType"_ustr,
                 -1,
                 cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                "IsDocument",
+                u"IsDocument"_ustr,
                 -1,
                 cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                "IsFolder",
+                u"IsFolder"_ustr,
                 -1,
                 cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                "Title",
+                u"Title"_ustr,
                 -1,
                 cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND
@@ -260,7 +260,7 @@ uno::Sequence< beans::Property > Content::getProperties(
             // Optional standard properties
 
             beans::Property(
-                "CreatableContentsInfo",
+                u"CreatableContentsInfo"_ustr,
                 -1,
                 cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
                 beans::PropertyAttribute::BOUND
@@ -270,7 +270,7 @@ uno::Sequence< beans::Property > Content::getProperties(
             // New properties
 
             beans::Property(
-                "DocumentModel",
+                u"DocumentModel"_ustr,
                 -1,
                 cppu::UnoType<frame::XModel>::get(),
                 beans::PropertyAttribute::BOUND
@@ -294,28 +294,28 @@ uno::Sequence< beans::Property > Content::getProperties(
             // Mandatory properties
 
             beans::Property(
-                "ContentType",
+                u"ContentType"_ustr,
                 -1,
                 cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                "IsDocument",
+                u"IsDocument"_ustr,
                 -1,
                 cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                "IsFolder",
+                u"IsFolder"_ustr,
                 -1,
                 cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                "Title",
+                u"Title"_ustr,
                 -1,
                 cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND
@@ -325,7 +325,7 @@ uno::Sequence< beans::Property > Content::getProperties(
             // Optional standard properties
 
             beans::Property(
-                "CreatableContentsInfo",
+                u"CreatableContentsInfo"_ustr,
                 -1,
                 cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
                 beans::PropertyAttribute::BOUND
@@ -364,22 +364,22 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 // Mandatory commands
 
                 ucb::CommandInfo(
-                    "getCommandInfo",
+                    u"getCommandInfo"_ustr,
                     -1,
                     cppu::UnoType<void>::get()
                 ),
                 ucb::CommandInfo(
-                    "getPropertySetInfo",
+                    u"getPropertySetInfo"_ustr,
                     -1,
                     cppu::UnoType<void>::get()
                 ),
                 ucb::CommandInfo(
-                    "getPropertyValues",
+                    u"getPropertyValues"_ustr,
                     -1,
                     cppu::UnoType<uno::Sequence< beans::Property >>::get()
                 ),
                 ucb::CommandInfo(
-                    "setPropertyValues",
+                    u"setPropertyValues"_ustr,
                     -1,
                     cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get()
                 ),
@@ -387,12 +387,12 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 // Optional standard commands
 
                 ucb::CommandInfo(
-                    "delete",
+                    u"delete"_ustr,
                     -1,
                     cppu::UnoType<bool>::get()
                 ),
                 ucb::CommandInfo(
-                    "open",
+                    u"open"_ustr,
                     -1,
                     cppu::UnoType<ucb::OpenCommandArgument2>::get()
                 )
@@ -413,22 +413,22 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             // Mandatory commands
 
             ucb::CommandInfo(
-                "getCommandInfo",
+                u"getCommandInfo"_ustr,
                 -1,
                 cppu::UnoType<void>::get()
             ),
             ucb::CommandInfo(
-                "getPropertySetInfo",
+                u"getPropertySetInfo"_ustr,
                 -1,
                 cppu::UnoType<void>::get()
             ),
             ucb::CommandInfo(
-                "getPropertyValues",
+                u"getPropertyValues"_ustr,
                 -1,
                 cppu::UnoType< uno::Sequence< beans::Property >>::get()
             ),
             ucb::CommandInfo(
-                "setPropertyValues",
+                u"setPropertyValues"_ustr,
                 -1,
                 cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get()
             ),
@@ -436,17 +436,17 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             // Optional standard commands
 
             ucb::CommandInfo(
-                "delete",
+                u"delete"_ustr,
                 -1,
                 cppu::UnoType<bool>::get()
             ),
             ucb::CommandInfo(
-                "insert",
+                u"insert"_ustr,
                 -1,
                 cppu::UnoType<void>::get()
             ),
             ucb::CommandInfo(
-                "open",
+                u"open"_ustr,
                 -1,
                 cppu::UnoType<ucb::OpenCommandArgument2>::get()
             )
@@ -469,22 +469,22 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             // Mandatory commands
 
             ucb::CommandInfo(
-                "getCommandInfo",
+                u"getCommandInfo"_ustr,
                 -1,
                 cppu::UnoType<void>::get()
             ),
             ucb::CommandInfo(
-                "getPropertySetInfo",
+                u"getPropertySetInfo"_ustr,
                 -1,
                 cppu::UnoType<void>::get()
             ),
             ucb::CommandInfo(
-                "getPropertyValues",
+                u"getPropertyValues"_ustr,
                 -1,
                 cppu::UnoType<uno::Sequence< beans::Property >>::get()
             ),
             ucb::CommandInfo(
-                "setPropertyValues",
+                u"setPropertyValues"_ustr,
                 -1,
                 cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get()
             ),
@@ -492,27 +492,27 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             // Optional standard commands
 
             ucb::CommandInfo(
-                "delete",
+                u"delete"_ustr,
                 -1,
                 cppu::UnoType<bool>::get()
             ),
             ucb::CommandInfo(
-                "insert",
+                u"insert"_ustr,
                 -1,
                 cppu::UnoType<void>::get()
             ),
             ucb::CommandInfo(
-                "open",
+                u"open"_ustr,
                 -1,
                 cppu::UnoType<ucb::OpenCommandArgument2>::get()
             ),
             ucb::CommandInfo(
-                "transfer",
+                u"transfer"_ustr,
                 -1,
                 cppu::UnoType<ucb::TransferInfo>::get()
             ),
             ucb::CommandInfo(
-                "createNewContent",
+                u"createNewContent"_ustr,
                 -1,
                 cppu::UnoType<ucb::ContentInfo>::get()
             )
@@ -535,22 +535,22 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             // Mandatory commands
 
             ucb::CommandInfo(
-                "getCommandInfo",
+                u"getCommandInfo"_ustr,
                 -1,
                 cppu::UnoType<void>::get()
             ),
             ucb::CommandInfo(
-                "getPropertySetInfo",
+                u"getPropertySetInfo"_ustr,
                 -1,
                 cppu::UnoType<void>::get()
             ),
             ucb::CommandInfo(
-                "getPropertyValues",
+                u"getPropertyValues"_ustr,
                 -1,
                 cppu::UnoType<uno::Sequence< beans::Property >>::get()
             ),
             ucb::CommandInfo(
-                "setPropertyValues",
+                u"setPropertyValues"_ustr,
                 -1,
                 cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get()
             ),
@@ -558,17 +558,17 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             // Optional standard commands
 
             ucb::CommandInfo(
-                "open",
+                u"open"_ustr,
                 -1,
                 cppu::UnoType<ucb::OpenCommandArgument2>::get()
             ),
             ucb::CommandInfo(
-                "transfer",
+                u"transfer"_ustr,
                 -1,
                 cppu::UnoType<ucb::TransferInfo>::get()
             ),
             ucb::CommandInfo(
-                "createNewContent",
+                u"createNewContent"_ustr,
                 -1,
                 cppu::UnoType<ucb::ContentInfo>::get()
             )
@@ -593,22 +593,22 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             // Mandatory commands
 
             ucb::CommandInfo(
-                "getCommandInfo",
+                u"getCommandInfo"_ustr,
                 -1,
                 cppu::UnoType<void>::get()
             ),
             ucb::CommandInfo(
-                "getPropertySetInfo",
+                u"getPropertySetInfo"_ustr,
                 -1,
                 cppu::UnoType<void>::get()
             ),
             ucb::CommandInfo(
-                "getPropertyValues",
+                u"getPropertyValues"_ustr,
                 -1,
                 cppu::UnoType<uno::Sequence< beans::Property >>::get()
             ),
             ucb::CommandInfo(
-                "setPropertyValues",
+                u"setPropertyValues"_ustr,
                 -1,
                 cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get()
             ),
@@ -616,7 +616,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             // Optional standard commands
 
             ucb::CommandInfo(
-                "open",
+                u"open"_ustr,
                 -1,
                 cppu::UnoType<ucb::OpenCommandArgument2>::get()
             )

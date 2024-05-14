@@ -42,8 +42,8 @@ CachedContentResultSetStub::CachedContentResultSetStub( Reference< XResultSet > 
                 , m_bFirstFetchSizePropagationDone( false )
                 , m_nLastFetchSize( 1 )//this value is not important at all
                 , m_bLastFetchDirection( true )//this value is not important at all
-                , m_aPropertyNameForFetchSize( OUString("FetchSize") )
-                , m_aPropertyNameForFetchDirection( OUString("FetchDirection") )
+                , m_aPropertyNameForFetchSize( u"FetchSize"_ustr )
+                , m_aPropertyNameForFetchDirection( u"FetchDirection"_ustr )
 {
     impl_init();
 }
@@ -163,7 +163,7 @@ Sequence< Type > SAL_CALL CachedContentResultSetStub
 
 OUString SAL_CALL CachedContentResultSetStub::getImplementationName()
 {
-    return "com.sun.star.comp.ucb.CachedContentResultSetStub";
+    return u"com.sun.star.comp.ucb.CachedContentResultSetStub"_ustr;
 }
 
 sal_Bool SAL_CALL CachedContentResultSetStub::supportsService( const OUString& ServiceName )
@@ -173,7 +173,7 @@ sal_Bool SAL_CALL CachedContentResultSetStub::supportsService( const OUString& S
 
 css::uno::Sequence< OUString > SAL_CALL CachedContentResultSetStub::getSupportedServiceNames()
 {
-    return { "com.sun.star.ucb.CachedContentResultSetStub" };
+    return { u"com.sun.star.ucb.CachedContentResultSetStub"_ustr };
 }
 
 
@@ -506,7 +506,7 @@ CachedContentResultSetStubFactory::~CachedContentResultSetStubFactory()
 
 OUString SAL_CALL CachedContentResultSetStubFactory::getImplementationName()
 {
-    return "com.sun.star.comp.ucb.CachedContentResultSetStubFactory";
+    return u"com.sun.star.comp.ucb.CachedContentResultSetStubFactory"_ustr;
 }
 sal_Bool SAL_CALL CachedContentResultSetStubFactory::supportsService( const OUString& ServiceName )
 {
@@ -514,7 +514,7 @@ sal_Bool SAL_CALL CachedContentResultSetStubFactory::supportsService( const OUSt
 }
 css::uno::Sequence< OUString > SAL_CALL CachedContentResultSetStubFactory::getSupportedServiceNames()
 {
-    return { "com.sun.star.ucb.CachedContentResultSetStubFactory" };
+    return { u"com.sun.star.ucb.CachedContentResultSetStubFactory"_ustr };
 }
 
 // Service factory implementation.

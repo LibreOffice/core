@@ -67,7 +67,7 @@ ContentProvider::~ContentProvider()
 // XServiceInfo methods.
 OUString SAL_CALL ContentProvider::getImplementationName()
 {
-    return "com.sun.star.comp.ucb.TransientDocumentsContentProvider";
+    return u"com.sun.star.comp.ucb.TransientDocumentsContentProvider"_ustr;
 }
 
 sal_Bool SAL_CALL ContentProvider::supportsService( const OUString& ServiceName )
@@ -77,7 +77,7 @@ sal_Bool SAL_CALL ContentProvider::supportsService( const OUString& ServiceName 
 
 css::uno::Sequence< OUString > SAL_CALL ContentProvider::getSupportedServiceNames()
 {
-    return { "com.sun.star.ucb.TransientDocumentsContentProvider" };
+    return { u"com.sun.star.ucb.TransientDocumentsContentProvider"_ustr };
 }
 
 
@@ -102,7 +102,7 @@ ContentProvider::queryContent(
     Uri aUri( Identifier->getContentIdentifier() );
     if ( !aUri.isValid() )
         throw ucb::IllegalIdentifierException(
-            "Invalid URL!",
+            u"Invalid URL!"_ustr,
             Identifier );
 
     // Normalize URI.
@@ -136,7 +136,7 @@ ContentProvider::createDocumentContentIdentifier(
     if ( !m_xDocsMgr.is() )
     {
         throw lang::IllegalArgumentException(
-            "No Document Manager!",
+            u"No Document Manager!"_ustr,
             getXWeak(),
             1 );
     }
@@ -145,7 +145,7 @@ ContentProvider::createDocumentContentIdentifier(
     if ( aDocId.isEmpty() )
     {
         throw lang::IllegalArgumentException(
-            "Unable to obtain document id from model!",
+            u"Unable to obtain document id from model!"_ustr,
             getXWeak(),
             1 );
     }
@@ -183,7 +183,7 @@ ContentProvider::createDocumentContent(
 
     // no content.
     throw lang::IllegalArgumentException(
-        "Illegal Content Identifier!",
+        u"Illegal Content Identifier!"_ustr,
         getXWeak(),
         1 );
 }

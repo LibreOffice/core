@@ -392,7 +392,7 @@ bool DataSupplier::getData()
                             bool bFolder = false;
 
                             const uno::Any & rValue
-                                = pContentProperties->getValue( "IsFolder" );
+                                = pContentProperties->getValue( u"IsFolder"_ustr );
                             rValue >>= bFolder;
 
                             if ( !bFolder )
@@ -406,7 +406,7 @@ bool DataSupplier::getData()
                             bool bDocument = false;
 
                             const uno::Any & rValue
-                                = pContentProperties->getValue( "IsDocument" );
+                                = pContentProperties->getValue( u"IsDocument"_ustr );
                             rValue >>= bDocument;
 
                             if ( !bDocument )

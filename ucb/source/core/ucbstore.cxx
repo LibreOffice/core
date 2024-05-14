@@ -139,7 +139,7 @@ UcbStore::~UcbStore()
 
 OUString SAL_CALL UcbStore::getImplementationName()
 {
-    return "com.sun.star.comp.ucb.UcbStore";
+    return u"com.sun.star.comp.ucb.UcbStore"_ustr;
 }
 sal_Bool SAL_CALL UcbStore::supportsService( const OUString& ServiceName )
 {
@@ -147,7 +147,7 @@ sal_Bool SAL_CALL UcbStore::supportsService( const OUString& ServiceName )
 }
 css::uno::Sequence< OUString > SAL_CALL UcbStore::getSupportedServiceNames()
 {
-    return { "com.sun.star.ucb.Store" };
+    return { u"com.sun.star.ucb.Store"_ustr };
 }
 
 // Service factory implementation.
@@ -218,7 +218,7 @@ PropertySetRegistry::~PropertySetRegistry()
 
 OUString SAL_CALL PropertySetRegistry::getImplementationName()
 {
-    return "com.sun.star.comp.ucb.PropertySetRegistry";
+    return u"com.sun.star.comp.ucb.PropertySetRegistry"_ustr;
 }
 
 sal_Bool SAL_CALL PropertySetRegistry::supportsService( const OUString& ServiceName )
@@ -228,7 +228,7 @@ sal_Bool SAL_CALL PropertySetRegistry::supportsService( const OUString& ServiceN
 
 css::uno::Sequence< OUString > SAL_CALL PropertySetRegistry::getSupportedServiceNames()
 {
-    return {  "com.sun.star.ucb.PropertySetRegistry" };
+    return {  u"com.sun.star.ucb.PropertySetRegistry"_ustr };
 }
 
 
@@ -704,28 +704,28 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                             Any aAny =
                                 xRootHierNameAccess->getByHierarchicalName(
                                     aNewKey1 );
-                            xNewPropNameReplace->replaceByName( "Handle", aAny );
+                            xNewPropNameReplace->replaceByName( u"Handle"_ustr, aAny );
 
                             // ... value
                             aNewKey1 = aKey + "/Value";
                             aAny =
                                 xRootHierNameAccess->getByHierarchicalName(
                                     aNewKey1 );
-                            xNewPropNameReplace->replaceByName( "Value", aAny );
+                            xNewPropNameReplace->replaceByName( u"Value"_ustr, aAny );
 
                             // ... state
                             aNewKey1 = aKey + "/State";
                             aAny =
                                 xRootHierNameAccess->getByHierarchicalName(
                                     aNewKey1 );
-                            xNewPropNameReplace->replaceByName( "State", aAny );
+                            xNewPropNameReplace->replaceByName( u"State"_ustr, aAny );
 
                             // ... attributes
                             aNewKey1 = aKey + "/Attributes";
                             aAny =
                                 xRootHierNameAccess->getByHierarchicalName(
                                     aNewKey1 );
-                            xNewPropNameReplace->replaceByName( "Attributes", aAny );
+                            xNewPropNameReplace->replaceByName( u"Attributes"_ustr, aAny );
 
                             // Insert new item.
                             xNewContainer->insertByName(
@@ -885,7 +885,7 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccessImpl(std::un
 
                 m_xRootReadAccess =
                     m_xConfigProvider->createInstanceWithArguments(
-                        "com.sun.star.configuration.ConfigurationAccess",
+                        u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                         aArguments );
 
                 if ( m_xRootReadAccess.is() )
@@ -946,7 +946,7 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccessImpl(std::uniqu
 
                 m_xRootWriteAccess =
                     m_xConfigProvider->createInstanceWithArguments(
-                        "com.sun.star.configuration.ConfigurationUpdateAccess",
+                        u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr,
                         aArguments );
 
                 OSL_ENSURE( m_xRootWriteAccess.is(),
@@ -1025,7 +1025,7 @@ PersistentPropertySet::~PersistentPropertySet()
 
 OUString SAL_CALL PersistentPropertySet::getImplementationName()
 {
-    return "com.sun.star.comp.ucb.PersistentPropertySet";
+    return u"com.sun.star.comp.ucb.PersistentPropertySet"_ustr;
 }
 
 sal_Bool SAL_CALL PersistentPropertySet::supportsService( const OUString& ServiceName )
@@ -1035,7 +1035,7 @@ sal_Bool SAL_CALL PersistentPropertySet::supportsService( const OUString& Servic
 
 css::uno::Sequence< OUString > SAL_CALL PersistentPropertySet::getSupportedServiceNames()
 {
-    return { "com.sun.star.ucb.PersistentPropertySet" };
+    return { u"com.sun.star.ucb.PersistentPropertySet"_ustr };
 }
 
 
@@ -1145,11 +1145,11 @@ void SAL_CALL PersistentPropertySet::setPropertyValue( const OUString& aProperty
                     }
 
                     // Write value
-                    xNameReplace->replaceByName( "Value", aValue );
+                    xNameReplace->replaceByName( u"Value"_ustr, aValue );
 
                     // Write state ( Now it is a directly set value )
                     xNameReplace->replaceByName(
-                                    "State",
+                                    u"State"_ustr,
                                     Any(
                                         sal_Int32(
                                             PropertyState_DIRECT_VALUE ) ) );
@@ -1382,24 +1382,24 @@ void SAL_CALL PersistentPropertySet::addProperty(
 
                 // Set handle
                 xNameReplace->replaceByName(
-                                    "Handle",
+                                    u"Handle"_ustr,
                                     Any( sal_Int32( -1 ) ) );
 
                 // Set default value
                 xNameReplace->replaceByName(
-                                    "Value",
+                                    u"Value"_ustr,
                                     DefaultValue );
 
                 // Set state ( always "default" )
                 xNameReplace->replaceByName(
-                                    "State",
+                                    u"State"_ustr,
                                     Any(
                                         sal_Int32(
                                             PropertyState_DEFAULT_VALUE ) ) );
 
                 // Set attributes
                 xNameReplace->replaceByName(
-                                    "Attributes",
+                                    u"Attributes"_ustr,
                                     Any( sal_Int32( Attributes ) ) );
 
                 // Insert new item.
@@ -1800,7 +1800,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
                     {
                         // Write handle
                         xNameReplace->replaceByName(
-                                    "Handle",
+                                    u"Handle"_ustr,
                                     Any( rNewValue.Handle ) );
 
                         // Save old value
@@ -1810,12 +1810,12 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
                                                                 aValueName );
                         // Write value
                         xNameReplace->replaceByName(
-                                    "Value",
+                                    u"Value"_ustr,
                                     rNewValue.Value );
 
                         // Write state ( Now it is a directly set value )
                         xNameReplace->replaceByName(
-                                    "State",
+                                    u"State"_ustr,
                                     Any(
                                         sal_Int32(
                                             PropertyState_DIRECT_VALUE ) ) );

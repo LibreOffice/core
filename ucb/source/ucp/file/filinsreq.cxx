@@ -54,7 +54,7 @@ XInteractionRequestImpl::XInteractionRequestImpl(
     Any aAny;
     if(nErrorCode == TASKHANDLING_FOLDER_EXISTS_MKDIR)
     {
-        NameClashException excep("folder exists and overwrite forbidden", m_xOrigin,
+        NameClashException excep(u"folder exists and overwrite forbidden"_ustr, m_xOrigin,
                                  InteractionClassification_ERROR, aClashingName);
         aAny <<= excep;
     }
@@ -64,7 +64,7 @@ XInteractionRequestImpl::XInteractionRequestImpl(
         prop.Name = "ResourceName";
         prop.Handle = -1;
         prop.Value <<= aClashingName;
-        InteractiveAugmentedIOException excep("the name contained invalid characters", m_xOrigin,
+        InteractiveAugmentedIOException excep(u"the name contained invalid characters"_ustr, m_xOrigin,
                                               InteractionClassification_ERROR,
                                               IOErrorCode_INVALID_CHARACTER, { Any(prop) });
         aAny <<= excep;

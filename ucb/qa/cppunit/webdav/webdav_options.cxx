@@ -137,7 +137,7 @@ namespace
 
         DAVTypesCheckInit( aDavOpt );
         //example of allowed method for a Web resource
-        OUString aAllowedMethods = "POST,OPTIONS,GET,HEAD,TRACE";
+        OUString aAllowedMethods = u"POST,OPTIONS,GET,HEAD,TRACE"_ustr;
         aDavOpt.setAllowedMethods( aAllowedMethods );
         // now check...
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass1() );
@@ -204,7 +204,7 @@ namespace
 
         aDavOpt.setRequestedTimeLife( 0 );
 
-        OUString aHTTPResponseStatusText = "522 Origin Connection Time-out";
+        OUString aHTTPResponseStatusText = u"522 Origin Connection Time-out"_ustr;
         aDavOpt.setHttpResponseStatusCode( 522 );
         aDavOpt.setHttpResponseStatusText( aHTTPResponseStatusText );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass1() );
@@ -223,7 +223,7 @@ namespace
         aHTTPResponseStatusText.clear();
         aDavOpt.setHttpResponseStatusText( aHTTPResponseStatusText );
 
-        OUString aURL = "http://my.server.org/a%20fake%20url/to%20test";
+        OUString aURL = u"http://my.server.org/a%20fake%20url/to%20test"_ustr;
         aDavOpt.setURL( aURL );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass1() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass2() );
@@ -347,14 +347,14 @@ namespace
         // the returned value to test
         DAVOptions aDavOptCached;
         // init the values
-        OUString aURL = "http://my.server.org/a%20fake%20url/to%20test/another-url";
+        OUString aURL = u"http://my.server.org/a%20fake%20url/to%20test/another-url"_ustr;
         aDavOpt.setURL( aURL );
-        aDavOpt.setRedirectedURL( "http://my.server.org/a%20fake%20url/to%20test/another-url/redirected" );
+        aDavOpt.setRedirectedURL( u"http://my.server.org/a%20fake%20url/to%20test/another-url/redirected"_ustr );
         aDavOpt.setClass1();
         aDavOpt.setClass2();
         aDavOpt.setClass3();
         aDavOpt.setHeadAllowed( false );
-        aDavOpt.setAllowedMethods( "OPTIONS,GET,HEAD,POST,DELETE,TRACE,PROPFIND,PROPPATCH,COPY,MOVE,PUT,LOCK,UNLOCK" );
+        aDavOpt.setAllowedMethods( u"OPTIONS,GET,HEAD,POST,DELETE,TRACE,PROPFIND,PROPPATCH,COPY,MOVE,PUT,LOCK,UNLOCK"_ustr );
         // add to cache
         aDAVOptsCache.addDAVOptions( aDavOpt, 30000 );
         CPPUNIT_ASSERT_EQUAL( true ,aDAVOptsCache.getDAVOptions( aURL, aDavOptCached ) );

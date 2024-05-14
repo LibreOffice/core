@@ -302,7 +302,7 @@ css::uno::Any Content::mapGIOError( GError *pError )
 css::uno::Any Content::getBadArgExcept()
 {
     return css::uno::Any( css::lang::IllegalArgumentException(
-        "Wrong argument type!",
+        u"Wrong argument type!"_ustr,
         getXWeak(), -1) );
 }
 
@@ -555,7 +555,7 @@ css::uno::Reference< css::sdbc::XRow > Content::getPropertyValues(
 static css::lang::IllegalAccessException
 getReadOnlyException( const css::uno::Reference< css::uno::XInterface >& rContext )
 {
-    return css::lang::IllegalAccessException ("Property is read-only!", rContext );
+    return css::lang::IllegalAccessException (u"Property is read-only!"_ustr, rContext );
 }
 
 void Content::queryChildren( ContentRefList& rChildren )
@@ -711,7 +711,7 @@ css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
             if (!( rValue.Value >>= aNewTitle ))
             {
                 aRetRange[ n ] <<= css::beans::IllegalTypeException
-                    ( "Property value has wrong type!",
+                    ( u"Property value has wrong type!"_ustr,
                       getXWeak() );
                 continue;
             }
@@ -719,7 +719,7 @@ css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
             if ( aNewTitle.isEmpty() )
             {
                 aRetRange[ n ] <<= css::lang::IllegalArgumentException
-                    ( "Empty title not allowed!",
+                    ( u"Empty title not allowed!"_ustr,
                       getXWeak(), -1 );
                 continue;
 
@@ -777,7 +777,7 @@ css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
                 if (!exchangeIdentity( xNewId ) )
                 {
                     aRetRange[ nTitlePos ] <<= css::uno::Exception
-                        ( "Exchange failed!",
+                        ( u"Exchange failed!"_ustr,
                           getXWeak() );
                 }
             }
@@ -1132,7 +1132,7 @@ css::uno::Sequence< css::ucb::ContentInfo > Content::queryCreatableContentsInfo(
         // Minimum set of props we really need
         css::uno::Sequence< css::beans::Property > props
         {
-            { "Title", -1, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::BOUND }
+            { u"Title"_ustr, -1, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::BOUND }
         };
 
         return
@@ -1229,40 +1229,40 @@ css::uno::Sequence< css::beans::Property > Content::getProperties(
 {
     static const css::beans::Property aGenericProperties[] =
     {
-        css::beans::Property( "IsDocument",
+        css::beans::Property( u"IsDocument"_ustr,
             -1, cppu::UnoType<bool>::get(),
             css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
-        css::beans::Property( "IsFolder",
+        css::beans::Property( u"IsFolder"_ustr,
             -1, cppu::UnoType<bool>::get(),
             css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
-        css::beans::Property( "Title",
+        css::beans::Property( u"Title"_ustr,
             -1, cppu::UnoType<OUString>::get(),
             css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( "IsReadOnly",
+        css::beans::Property( u"IsReadOnly"_ustr,
             -1, cppu::UnoType<bool>::get(),
             css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
-        css::beans::Property( "DateCreated",
+        css::beans::Property( u"DateCreated"_ustr,
             -1, cppu::UnoType<css::util::DateTime>::get(),
             css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
-        css::beans::Property( "DateModified",
+        css::beans::Property( u"DateModified"_ustr,
             -1, cppu::UnoType<css::util::DateTime>::get(),
             css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
-        css::beans::Property( "Size",
+        css::beans::Property( u"Size"_ustr,
             -1, cppu::UnoType<sal_Int64>::get(),
             css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
-        css::beans::Property( "IsVolume",
+        css::beans::Property( u"IsVolume"_ustr,
             1, cppu::UnoType<bool>::get(),
             css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
-        css::beans::Property( "IsCompactDisc",
+        css::beans::Property( u"IsCompactDisc"_ustr,
             -1, cppu::UnoType<bool>::get(),
             css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
-        css::beans::Property( "IsRemoveable",
+        css::beans::Property( u"IsRemoveable"_ustr,
             -1, cppu::UnoType<bool>::get(),
             css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
-        css::beans::Property( "IsHidden",
+        css::beans::Property( u"IsHidden"_ustr,
             -1, cppu::UnoType<bool>::get(),
             css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
-        css::beans::Property( "CreatableContentsInfo",
+        css::beans::Property( u"CreatableContentsInfo"_ustr,
             -1, cppu::UnoType<css::uno::Sequence< css::ucb::ContentInfo >>::get(),
             css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY )
     };
@@ -1277,35 +1277,35 @@ css::uno::Sequence< css::ucb::CommandInfo > Content::getCommands( const css::uno
     {
         // Required commands
         css::ucb::CommandInfo
-        ( "getCommandInfo",
+        ( u"getCommandInfo"_ustr,
           -1, cppu::UnoType<void>::get() ),
         css::ucb::CommandInfo
-        ( "getPropertySetInfo",
+        ( u"getPropertySetInfo"_ustr,
           -1, cppu::UnoType<void>::get() ),
         css::ucb::CommandInfo
-        ( "getPropertyValues",
+        ( u"getPropertyValues"_ustr,
           -1, cppu::UnoType<css::uno::Sequence< css::beans::Property >>::get() ),
         css::ucb::CommandInfo
-        ( "setPropertyValues",
+        ( u"setPropertyValues"_ustr,
           -1, cppu::UnoType<css::uno::Sequence< css::beans::PropertyValue >>::get() ),
 
         // Optional standard commands
         css::ucb::CommandInfo
-        ( "delete",
+        ( u"delete"_ustr,
           -1, cppu::UnoType<bool>::get() ),
         css::ucb::CommandInfo
-        ( "insert",
+        ( u"insert"_ustr,
           -1, cppu::UnoType<css::ucb::InsertCommandArgument>::get() ),
         css::ucb::CommandInfo
-        ( "open",
+        ( u"open"_ustr,
           -1, cppu::UnoType<css::ucb::OpenCommandArgument2>::get() ),
 
         // Folder Only, omitted if not a folder
         css::ucb::CommandInfo
-        ( "transfer",
+        ( u"transfer"_ustr,
           -1, cppu::UnoType<css::ucb::TransferInfo>::get() ),
         css::ucb::CommandInfo
-        ( "createNewContent",
+        ( u"createNewContent"_ustr,
           -1, cppu::UnoType<css::ucb::ContentInfo>::get() )
     };
 
@@ -1333,12 +1333,12 @@ css::uno::Any SAL_CALL Content::queryInterface( const css::uno::Type & rType )
 
 OUString SAL_CALL Content::getImplementationName()
 {
-       return "com.sun.star.comp.GIOContent";
+       return u"com.sun.star.comp.GIOContent"_ustr;
 }
 
 css::uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 {
-       css::uno::Sequence<OUString> aSNS { "com.sun.star.ucb.GIOContent" };
+       css::uno::Sequence<OUString> aSNS { u"com.sun.star.ucb.GIOContent"_ustr };
        return aSNS;
 }
 

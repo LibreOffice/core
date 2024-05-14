@@ -56,7 +56,7 @@ DocumentContentFactory::~DocumentContentFactory()
 // virtual
 OUString SAL_CALL DocumentContentFactory::getImplementationName()
 {
-    return "com.sun.star.comp.ucb.TransientDocumentsDocumentContentFactory";
+    return u"com.sun.star.comp.ucb.TransientDocumentsDocumentContentFactory"_ustr;
 }
 
 // virtual
@@ -70,7 +70,7 @@ DocumentContentFactory::supportsService( const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL
 DocumentContentFactory::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.TransientDocumentsDocumentContentFactory" };
+    return { u"com.sun.star.frame.TransientDocumentsDocumentContentFactory"_ustr };
 }
 
 
@@ -85,7 +85,7 @@ DocumentContentFactory::createDocumentContent(
     uno::Reference< frame::XTransientDocumentsDocumentContentFactory > xDocFac;
     try
     {
-        xDocFac.set( m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.ucb.TransientDocumentsContentProvider", m_xContext),
+        xDocFac.set( m_xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.ucb.TransientDocumentsContentProvider"_ustr, m_xContext),
                      uno::UNO_QUERY );
     }
     catch ( uno::Exception const & )
@@ -97,7 +97,7 @@ DocumentContentFactory::createDocumentContent(
         return xDocFac->createDocumentContent( Model );
 
     throw uno::RuntimeException(
-        "Unable to obtain document content factory!",
+        u"Unable to obtain document content factory!"_ustr,
         getXWeak() );
 }
 

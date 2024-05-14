@@ -212,7 +212,7 @@ XStream_impl::closeStream()
         osl::FileBase::RC err = m_aFile.close();
 
         if( err != osl::FileBase::E_None ) {
-            throw io::IOException("could not close file");
+            throw io::IOException(u"could not close file"_ustr);
         }
 
         m_nIsOpen = false;
@@ -280,7 +280,7 @@ void XStream_impl::waitForCompletion()
     // afterwards, there appears to be no cheaper way than to call fsync:
     if (m_nIsOpen && m_aFile.sync() != osl::FileBase::E_None) {
         throw io::IOException(
-            "could not synchronize file to disc",
+            u"could not synchronize file to disc"_ustr,
             getXWeak());
     }
 }

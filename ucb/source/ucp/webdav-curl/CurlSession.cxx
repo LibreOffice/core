@@ -973,7 +973,7 @@ auto CurlProcessor::ProcessRequestImpl(
         }
         if (rSession.m_AbortFlag.load())
         { // flag was set by abort() -> not sure what exception to throw?
-            throw DAVException(DAVException::DAV_HTTP_ERROR, "abort() was called", 0);
+            throw DAVException(DAVException::DAV_HTTP_ERROR, u"abort() was called"_ustr, 0);
         }
     } while (nRunning != 0);
     // there should be exactly 1 CURLMsg now, but the interface is
@@ -1047,7 +1047,7 @@ auto CurlProcessor::ProcessRequestImpl(
                     DAVException::DAV_HTTP_TIMEOUT,
                     ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
             default: // lots of generic errors
-                throw DAVException(DAVException::DAV_HTTP_ERROR, "", 0);
+                throw DAVException(DAVException::DAV_HTTP_ERROR, u""_ustr, 0);
         }
     }
     // error handling part 2: HTTP status codes
@@ -1175,7 +1175,7 @@ auto CurlProcessor::ProcessRequest(
     if (HostFilter::isForbidden(rURI.GetHost()))
     {
         SAL_WARN("ucb.ucp.webdav.curl", "Access denied to host: " << rURI.GetHost());
-        throw uno::RuntimeException("access to host denied");
+        throw uno::RuntimeException(u"access to host denied"_ustr);
     }
 
     if (pEnv)
@@ -1189,7 +1189,7 @@ auto CurlProcessor::ProcessRequest(
                 curl_slist_append(pRequestHeaderList.release(), utf8Header.getStr()));
             if (!pRequestHeaderList)
             {
-                throw uno::RuntimeException("curl_slist_append failed");
+                throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
             }
         }
     }
@@ -1203,7 +1203,7 @@ auto CurlProcessor::ProcessRequest(
             auto const len(xSeekable->getLength() - xSeekable->getPosition());
             if ((**pxInStream).readBytes(data, len) != len)
             {
-                throw uno::RuntimeException("short readBytes");
+                throw uno::RuntimeException(u"short readBytes"_ustr);
             }
         }
         else
@@ -1456,7 +1456,7 @@ auto CurlProcessor::ProcessRequest(
                         ::std::map<OUString, OUString> const headerMap(
                             ProcessHeaders(headers.HeaderFields.back().first));
                         // X-MSDAVEXT_Error see [MS-WEBDAVE] 2.2.3.1.9
-                        auto const it(headerMap.find("x-msdavext_error"));
+                        auto const it(headerMap.find(u"x-msdavext_error"_ustr));
                         if (it == headerMap.end() || !it->second.startsWith("917656;"))
                         {
                             break;
@@ -1472,7 +1472,7 @@ auto CurlProcessor::ProcessRequest(
                             pRequestHeaderList.release(), "X-FORMS_BASED_AUTH_ACCEPTED: f"));
                         if (!pRequestHeaderList)
                         {
-                            throw uno::RuntimeException("curl_slist_append failed");
+                            throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
                         }
                     }
                         [[fallthrough]]; // SP, no cookie, or cookie failed: try NTLM/Negotiate
@@ -1558,7 +1558,7 @@ auto CurlProcessor::ProcessRequest(
                             guard.Release();
 
                             auto const ret = pEnv->m_xAuthListener->authenticate(
-                                oRealm ? *oRealm : "",
+                                oRealm ? *oRealm : u""_ustr,
                                 statusCode != SC_PROXY_AUTHENTICATION_REQUIRED
                                     ? rSession.m_URI.GetHost()
                                     : rSession.m_Proxy,
@@ -1646,15 +1646,15 @@ auto CurlSession::OPTIONS(OUString const& rURIReference,
 
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
-    ::std::vector<OUString> const headerNames{ "allow", "dav" };
+    ::std::vector<OUString> const headerNames{ u"allow"_ustr, u"dav"_ustr };
     DAVResource result;
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const headers(headerNames, result);
 
     ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, "OPTIONS",
                                                "CURLOPT_CUSTOMREQUEST" } };
 
-    CurlProcessor::ProcessRequest(*this, uri, "OPTIONS", options, &rEnv, nullptr, nullptr, nullptr,
-                                  &headers);
+    CurlProcessor::ProcessRequest(*this, uri, u"OPTIONS"_ustr, options, &rEnv, nullptr, nullptr,
+                                  nullptr, &headers);
 
     for (auto const& it : result.properties)
     {
@@ -1715,7 +1715,7 @@ auto CurlProcessor::PropFind(
     pList.reset(curl_slist_append(pList.release(), "Content-Type: application/xml"));
     if (!pList)
     {
-        throw uno::RuntimeException("curl_slist_append failed");
+        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
     OString depth;
     switch (nDepth)
@@ -1735,7 +1735,7 @@ auto CurlProcessor::PropFind(
     pList.reset(curl_slist_append(pList.release(), depth.getStr()));
     if (!pList)
     {
-        throw uno::RuntimeException("curl_slist_append failed");
+        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
 
     uno::Reference<io::XSequenceOutputStream> const xSeqOutStream(
@@ -1747,36 +1747,36 @@ auto CurlProcessor::PropFind(
     xWriter->setOutputStream(xRequestOutStream);
     xWriter->startDocument();
     rtl::Reference<::comphelper::AttributeList> const pAttrList(new ::comphelper::AttributeList);
-    pAttrList->AddAttribute("xmlns", "DAV:");
-    xWriter->startElement("propfind", pAttrList);
+    pAttrList->AddAttribute(u"xmlns"_ustr, u"DAV:"_ustr);
+    xWriter->startElement(u"propfind"_ustr, pAttrList);
     if (o_pResourceInfos)
     {
-        xWriter->startElement("propname", nullptr);
-        xWriter->endElement("propname");
+        xWriter->startElement(u"propname"_ustr, nullptr);
+        xWriter->endElement(u"propname"_ustr);
     }
     else
     {
         if (::std::get<0>(*o_pRequestedProperties).empty())
         {
-            xWriter->startElement("allprop", nullptr);
-            xWriter->endElement("allprop");
+            xWriter->startElement(u"allprop"_ustr, nullptr);
+            xWriter->endElement(u"allprop"_ustr);
         }
         else
         {
-            xWriter->startElement("prop", nullptr);
+            xWriter->startElement(u"prop"_ustr, nullptr);
             for (OUString const& rName : ::std::get<0>(*o_pRequestedProperties))
             {
                 SerfPropName name;
                 DAVProperties::createSerfPropName(rName, name);
                 pAttrList->Clear();
-                pAttrList->AddAttribute("xmlns", OUString::createFromAscii(name.nspace));
+                pAttrList->AddAttribute(u"xmlns"_ustr, OUString::createFromAscii(name.nspace));
                 xWriter->startElement(OUString::createFromAscii(name.name), pAttrList);
                 xWriter->endElement(OUString::createFromAscii(name.name));
             }
-            xWriter->endElement("prop");
+            xWriter->endElement(u"prop"_ustr);
         }
     }
-    xWriter->endElement("propfind");
+    xWriter->endElement(u"propfind"_ustr);
     xWriter->endDocument();
 
     uno::Reference<io::XInputStream> const xRequestInStream(
@@ -1799,8 +1799,9 @@ auto CurlProcessor::PropFind(
     assert(xResponseInStream.is());
     assert(xResponseOutStream.is());
 
-    CurlProcessor::ProcessRequest(rSession, rURI, "PROPFIND", options, &rEnv, ::std::move(pList),
-                                  &xResponseOutStream, &xRequestInStream, nullptr);
+    CurlProcessor::ProcessRequest(rSession, rURI, u"PROPFIND"_ustr, options, &rEnv,
+                                  ::std::move(pList), &xResponseOutStream, &xRequestInStream,
+                                  nullptr);
 
     if (o_pResourceInfos)
     {
@@ -1876,7 +1877,7 @@ auto CurlSession::PROPPATCH(OUString const& rURIReference,
     pList.reset(curl_slist_append(pList.release(), "Content-Type: application/xml"));
     if (!pList)
     {
-        throw uno::RuntimeException("curl_slist_append failed");
+        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
 
     // generate XML document for PROPPATCH
@@ -1888,19 +1889,18 @@ auto CurlSession::PROPPATCH(OUString const& rURIReference,
     xWriter->setOutputStream(xRequestOutStream);
     xWriter->startDocument();
     rtl::Reference<::comphelper::AttributeList> const pAttrList(new ::comphelper::AttributeList);
-    pAttrList->AddAttribute("xmlns", "DAV:");
-    xWriter->startElement("propertyupdate", pAttrList);
+    pAttrList->AddAttribute(u"xmlns"_ustr, u"DAV:"_ustr);
+    xWriter->startElement(u"propertyupdate"_ustr, pAttrList);
     for (ProppatchValue const& rPropValue : rValues)
     {
         assert(rPropValue.operation == PROPSET || rPropValue.operation == PROPREMOVE);
-        OUString const operation((rPropValue.operation == PROPSET) ? OUString("set")
-                                                                   : OUString("remove"));
+        OUString const operation((rPropValue.operation == PROPSET) ? u"set"_ustr : u"remove"_ustr);
         xWriter->startElement(operation, nullptr);
-        xWriter->startElement("prop", nullptr);
+        xWriter->startElement(u"prop"_ustr, nullptr);
         SerfPropName name;
         DAVProperties::createSerfPropName(rPropValue.name, name);
         pAttrList->Clear();
-        pAttrList->AddAttribute("xmlns", OUString::createFromAscii(name.nspace));
+        pAttrList->AddAttribute(u"xmlns"_ustr, OUString::createFromAscii(name.nspace));
         xWriter->startElement(OUString::createFromAscii(name.name), pAttrList);
         if (rPropValue.operation == PROPSET)
         {
@@ -1910,14 +1910,14 @@ auto CurlSession::PROPPATCH(OUString const& rURIReference,
                     UCBDeadPropertyValue::toXML(rPropValue.value));
                 if (oProp)
                 {
-                    xWriter->startElement("ucbprop", nullptr);
-                    xWriter->startElement("type", nullptr);
+                    xWriter->startElement(u"ucbprop"_ustr, nullptr);
+                    xWriter->startElement(u"type"_ustr, nullptr);
                     xWriter->characters(oProp->first);
-                    xWriter->endElement("type");
-                    xWriter->startElement("value", nullptr);
+                    xWriter->endElement(u"type"_ustr);
+                    xWriter->startElement(u"value"_ustr, nullptr);
                     xWriter->characters(oProp->second);
-                    xWriter->endElement("value");
-                    xWriter->endElement("ucbprop");
+                    xWriter->endElement(u"value"_ustr);
+                    xWriter->endElement(u"ucbprop"_ustr);
                 }
             }
             else
@@ -1928,10 +1928,10 @@ auto CurlSession::PROPPATCH(OUString const& rURIReference,
             }
         }
         xWriter->endElement(OUString::createFromAscii(name.name));
-        xWriter->endElement("prop");
+        xWriter->endElement(u"prop"_ustr);
         xWriter->endElement(operation);
     }
-    xWriter->endElement("propertyupdate");
+    xWriter->endElement(u"propertyupdate"_ustr);
     xWriter->endDocument();
 
     uno::Reference<io::XInputStream> const xRequestInStream(
@@ -1948,7 +1948,7 @@ auto CurlSession::PROPPATCH(OUString const& rURIReference,
         { CURLOPT_INFILESIZE_LARGE, len, nullptr, CurlOption::Type::CurlOffT }
     };
 
-    CurlProcessor::ProcessRequest(*this, uri, "PROPPATCH", options, &rEnv, ::std::move(pList),
+    CurlProcessor::ProcessRequest(*this, uri, u"PROPPATCH"_ustr, options, &rEnv, ::std::move(pList),
                                   nullptr, &xRequestInStream, nullptr);
 }
 
@@ -1970,8 +1970,8 @@ auto CurlSession::HEAD(OUString const& rURIReference, ::std::vector<OUString> co
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const headers(rHeaderNames,
                                                                             io_rResource);
 
-    CurlProcessor::ProcessRequest(*this, uri, "HEAD", options, &rEnv, nullptr, nullptr, nullptr,
-                                  &headers);
+    CurlProcessor::ProcessRequest(*this, uri, u"HEAD"_ustr, options, &rEnv, nullptr, nullptr,
+                                  nullptr, &headers);
 }
 
 auto CurlSession::GET(OUString const& rURIReference, DAVRequestEnvironment const& rEnv)
@@ -1993,8 +1993,8 @@ auto CurlSession::GET(OUString const& rURIReference, DAVRequestEnvironment const
 
     ::std::vector<CurlOption> const options{ { CURLOPT_HTTPGET, 1L, nullptr } };
 
-    CurlProcessor::ProcessRequest(*this, uri, "GET", options, &rEnv, nullptr, &xResponseOutStream,
-                                  nullptr, nullptr);
+    CurlProcessor::ProcessRequest(*this, uri, u"GET"_ustr, options, &rEnv, nullptr,
+                                  &xResponseOutStream, nullptr, nullptr);
 
     uno::Reference<io::XInputStream> const xResponseInStream(
         io::SequenceInputStream::createStreamFromSequence(m_xContext,
@@ -2013,8 +2013,8 @@ auto CurlSession::GET(OUString const& rURIReference, uno::Reference<io::XOutputS
 
     ::std::vector<CurlOption> const options{ { CURLOPT_HTTPGET, 1L, nullptr } };
 
-    CurlProcessor::ProcessRequest(*this, uri, "GET", options, &rEnv, nullptr, &rxOutStream, nullptr,
-                                  nullptr);
+    CurlProcessor::ProcessRequest(*this, uri, u"GET"_ustr, options, &rEnv, nullptr, &rxOutStream,
+                                  nullptr, nullptr);
 }
 
 auto CurlSession::GET(OUString const& rURIReference, ::std::vector<OUString> const& rHeaderNames,
@@ -2035,8 +2035,8 @@ auto CurlSession::GET(OUString const& rURIReference, ::std::vector<OUString> con
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const headers(rHeaderNames,
                                                                             io_rResource);
 
-    CurlProcessor::ProcessRequest(*this, uri, "GET", options, &rEnv, nullptr, &xResponseOutStream,
-                                  nullptr, &headers);
+    CurlProcessor::ProcessRequest(*this, uri, u"GET"_ustr, options, &rEnv, nullptr,
+                                  &xResponseOutStream, nullptr, &headers);
 
     uno::Reference<io::XInputStream> const xResponseInStream(
         io::SequenceInputStream::createStreamFromSequence(m_xContext,
@@ -2059,8 +2059,8 @@ auto CurlSession::GET(OUString const& rURIReference, uno::Reference<io::XOutputS
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const headers(rHeaderNames,
                                                                             io_rResource);
 
-    CurlProcessor::ProcessRequest(*this, uri, "GET", options, &rEnv, nullptr, &rxOutStream, nullptr,
-                                  &headers);
+    CurlProcessor::ProcessRequest(*this, uri, u"GET"_ustr, options, &rEnv, nullptr, &rxOutStream,
+                                  nullptr, &headers);
 }
 
 auto CurlSession::PUT(OUString const& rURIReference,
@@ -2075,7 +2075,7 @@ auto CurlSession::PUT(OUString const& rURIReference,
     uno::Reference<io::XSeekable> const xSeekable(rxInStream, uno::UNO_QUERY);
     if (!xSeekable.is())
     {
-        throw uno::RuntimeException("TODO: not seekable");
+        throw uno::RuntimeException(u"TODO: not seekable"_ustr);
     }
     curl_off_t const len(xSeekable->getLength() - xSeekable->getPosition());
 
@@ -2095,7 +2095,7 @@ auto CurlSession::PUT(OUString const& rURIReference,
         pList.reset(curl_slist_append(pList.release(), utf8If.getStr()));
         if (!pList)
         {
-            throw uno::RuntimeException("curl_slist_append failed");
+            throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
         }
     }
 
@@ -2107,8 +2107,8 @@ auto CurlSession::PUT(OUString const& rURIReference,
         { CURLOPT_INFILESIZE_LARGE, len, nullptr, CurlOption::Type::CurlOffT }
     };
 
-    CurlProcessor::ProcessRequest(*this, uri, "PUT", options, &rEnv, ::std::move(pList), nullptr,
-                                  &rxInStream, nullptr);
+    CurlProcessor::ProcessRequest(*this, uri, u"PUT"_ustr, options, &rEnv, ::std::move(pList),
+                                  nullptr, &rxInStream, nullptr);
 }
 
 auto CurlSession::POST(OUString const& rURIReference, OUString const& rContentType,
@@ -2124,20 +2124,20 @@ auto CurlSession::POST(OUString const& rURIReference, OUString const& rContentTy
         curl_slist_append(nullptr, "Transfer-Encoding: chunked"));
     if (!pList)
     {
-        throw uno::RuntimeException("curl_slist_append failed");
+        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
     OString const utf8ContentType("Content-Type: "
                                   + OUStringToOString(rContentType, RTL_TEXTENCODING_ASCII_US));
     pList.reset(curl_slist_append(pList.release(), utf8ContentType.getStr()));
     if (!pList)
     {
-        throw uno::RuntimeException("curl_slist_append failed");
+        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
     OString const utf8Referer("Referer: " + OUStringToOString(rReferer, RTL_TEXTENCODING_ASCII_US));
     pList.reset(curl_slist_append(pList.release(), utf8Referer.getStr()));
     if (!pList)
     {
-        throw uno::RuntimeException("curl_slist_append failed");
+        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
 
     ::std::vector<CurlOption> const options{ { CURLOPT_POST, 1L, nullptr } };
@@ -2147,7 +2147,7 @@ auto CurlSession::POST(OUString const& rURIReference, OUString const& rContentTy
     uno::Reference<io::XOutputStream> const xResponseOutStream(xSeqOutStream);
     assert(xResponseOutStream.is());
 
-    CurlProcessor::ProcessRequest(*this, uri, "POST", options, &rEnv, ::std::move(pList),
+    CurlProcessor::ProcessRequest(*this, uri, u"POST"_ustr, options, &rEnv, ::std::move(pList),
                                   &xResponseOutStream, &rxInStream, nullptr);
 
     uno::Reference<io::XInputStream> const xResponseInStream(
@@ -2172,25 +2172,25 @@ auto CurlSession::POST(OUString const& rURIReference, OUString const& rContentTy
         curl_slist_append(nullptr, "Transfer-Encoding: chunked"));
     if (!pList)
     {
-        throw uno::RuntimeException("curl_slist_append failed");
+        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
     OString const utf8ContentType("Content-Type: "
                                   + OUStringToOString(rContentType, RTL_TEXTENCODING_ASCII_US));
     pList.reset(curl_slist_append(pList.release(), utf8ContentType.getStr()));
     if (!pList)
     {
-        throw uno::RuntimeException("curl_slist_append failed");
+        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
     OString const utf8Referer("Referer: " + OUStringToOString(rReferer, RTL_TEXTENCODING_ASCII_US));
     pList.reset(curl_slist_append(pList.release(), utf8Referer.getStr()));
     if (!pList)
     {
-        throw uno::RuntimeException("curl_slist_append failed");
+        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
 
     ::std::vector<CurlOption> const options{ { CURLOPT_POST, 1L, nullptr } };
 
-    CurlProcessor::ProcessRequest(*this, uri, "POST", options, &rEnv, ::std::move(pList),
+    CurlProcessor::ProcessRequest(*this, uri, u"POST"_ustr, options, &rEnv, ::std::move(pList),
                                   &rxOutStream, &rxInStream, nullptr);
 }
 
@@ -2203,8 +2203,8 @@ auto CurlSession::MKCOL(OUString const& rURIReference, DAVRequestEnvironment con
     ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, "MKCOL",
                                                "CURLOPT_CUSTOMREQUEST" } };
 
-    CurlProcessor::ProcessRequest(*this, uri, "MKCOL", options, &rEnv, nullptr, nullptr, nullptr,
-                                  nullptr);
+    CurlProcessor::ProcessRequest(*this, uri, u"MKCOL"_ustr, options, &rEnv, nullptr, nullptr,
+                                  nullptr, nullptr);
 }
 
 auto CurlProcessor::MoveOrCopy(CurlSession& rSession, std::u16string_view rSourceURIReference,
@@ -2220,13 +2220,13 @@ auto CurlProcessor::MoveOrCopy(CurlSession& rSession, std::u16string_view rSourc
         curl_slist_append(nullptr, utf8Destination.getStr()));
     if (!pList)
     {
-        throw uno::RuntimeException("curl_slist_append failed");
+        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
     OString const utf8Overwrite(OString::Concat("Overwrite: ") + (isOverwrite ? "T" : "F"));
     pList.reset(curl_slist_append(pList.release(), utf8Overwrite.getStr()));
     if (!pList)
     {
-        throw uno::RuntimeException("curl_slist_append failed");
+        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
 
     ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, pMethod,
@@ -2263,8 +2263,8 @@ auto CurlSession::DESTROY(OUString const& rURIReference, DAVRequestEnvironment c
     ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, "DELETE",
                                                "CURLOPT_CUSTOMREQUEST" } };
 
-    CurlProcessor::ProcessRequest(*this, uri, "DESTROY", options, &rEnv, nullptr, nullptr, nullptr,
-                                  nullptr);
+    CurlProcessor::ProcessRequest(*this, uri, u"DESTROY"_ustr, options, &rEnv, nullptr, nullptr,
+                                  nullptr, nullptr);
 }
 
 auto CurlProcessor::Lock(
@@ -2298,7 +2298,7 @@ auto CurlProcessor::Lock(
     TimeValue startTime;
     osl_getSystemTime(&startTime);
 
-    CurlProcessor::ProcessRequest(rSession, rURI, "LOCK", options, pEnv,
+    CurlProcessor::ProcessRequest(rSession, rURI, u"LOCK"_ustr, options, pEnv,
                                   ::std::move(pRequestHeaderList), &xResponseOutStream,
                                   pxRequestInStream, nullptr);
 
@@ -2362,35 +2362,35 @@ auto CurlSession::LOCK(OUString const& rURIReference, ucb::Lock /*const*/& rLock
     xWriter->setOutputStream(xRequestOutStream);
     xWriter->startDocument();
     rtl::Reference<::comphelper::AttributeList> const pAttrList(new ::comphelper::AttributeList);
-    pAttrList->AddAttribute("xmlns", "DAV:");
-    xWriter->startElement("lockinfo", pAttrList);
-    xWriter->startElement("lockscope", nullptr);
+    pAttrList->AddAttribute(u"xmlns"_ustr, u"DAV:"_ustr);
+    xWriter->startElement(u"lockinfo"_ustr, pAttrList);
+    xWriter->startElement(u"lockscope"_ustr, nullptr);
     switch (rLock.Scope)
     {
         case ucb::LockScope_EXCLUSIVE:
-            xWriter->startElement("exclusive", nullptr);
-            xWriter->endElement("exclusive");
+            xWriter->startElement(u"exclusive"_ustr, nullptr);
+            xWriter->endElement(u"exclusive"_ustr);
             break;
         case ucb::LockScope_SHARED:
-            xWriter->startElement("shared", nullptr);
-            xWriter->endElement("shared");
+            xWriter->startElement(u"shared"_ustr, nullptr);
+            xWriter->endElement(u"shared"_ustr);
             break;
         default:
             assert(false);
     }
-    xWriter->endElement("lockscope");
-    xWriter->startElement("locktype", nullptr);
-    xWriter->startElement("write", nullptr);
-    xWriter->endElement("write");
-    xWriter->endElement("locktype");
+    xWriter->endElement(u"lockscope"_ustr);
+    xWriter->startElement(u"locktype"_ustr, nullptr);
+    xWriter->startElement(u"write"_ustr, nullptr);
+    xWriter->endElement(u"write"_ustr);
+    xWriter->endElement(u"locktype"_ustr);
     OUString owner;
     if ((rLock.Owner >>= owner) && !owner.isEmpty())
     {
-        xWriter->startElement("owner", nullptr);
+        xWriter->startElement(u"owner"_ustr, nullptr);
         xWriter->characters(owner);
-        xWriter->endElement("owner");
+        xWriter->endElement(u"owner"_ustr);
     }
-    xWriter->endElement("lockinfo");
+    xWriter->endElement(u"lockinfo"_ustr);
     xWriter->endDocument();
 
     uno::Reference<io::XInputStream> const xRequestInStream(
@@ -2402,7 +2402,7 @@ auto CurlSession::LOCK(OUString const& rURIReference, ucb::Lock /*const*/& rLock
     pList.reset(curl_slist_append(pList.release(), "Content-Type: application/xml"));
     if (!pList)
     {
-        throw uno::RuntimeException("curl_slist_append failed");
+        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
     OString depth;
     switch (rLock.Depth)
@@ -2422,7 +2422,7 @@ auto CurlSession::LOCK(OUString const& rURIReference, ucb::Lock /*const*/& rLock
     pList.reset(curl_slist_append(pList.release(), depth.getStr()));
     if (!pList)
     {
-        throw uno::RuntimeException("curl_slist_append failed");
+        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
     OString timeout;
     switch (rLock.Timeout)
@@ -2441,7 +2441,7 @@ auto CurlSession::LOCK(OUString const& rURIReference, ucb::Lock /*const*/& rLock
     pList.reset(curl_slist_append(pList.release(), timeout.getStr()));
     if (!pList)
     {
-        throw uno::RuntimeException("curl_slist_append failed");
+        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
 
     auto const acquiredLocks
@@ -2470,13 +2470,13 @@ auto CurlProcessor::Unlock(CurlSession& rSession, CurlUri const& rURI,
         curl_slist_append(nullptr, utf8LockToken.getStr()));
     if (!pList)
     {
-        throw uno::RuntimeException("curl_slist_append failed");
+        throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
     }
 
     ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, "UNLOCK",
                                                "CURLOPT_CUSTOMREQUEST" } };
 
-    CurlProcessor::ProcessRequest(rSession, rURI, "UNLOCK", options, pEnv, ::std::move(pList),
+    CurlProcessor::ProcessRequest(rSession, rURI, u"UNLOCK"_ustr, options, pEnv, ::std::move(pList),
                                   nullptr, nullptr, nullptr);
 }
 
@@ -2513,7 +2513,7 @@ auto CurlSession::NonInteractive_LOCK(OUString const& rURI, ::std::u16string_vie
         pList.reset(curl_slist_append(pList.release(), utf8If.getStr()));
         if (!pList)
         {
-            throw uno::RuntimeException("curl_slist_append failed");
+            throw uno::RuntimeException(u"curl_slist_append failed"_ustr);
         }
 
         auto const acquiredLocks

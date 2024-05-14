@@ -180,10 +180,10 @@ namespace cmis
             {
                 rtl::Reference< ucbhelper::AuthenticationFallbackRequest > xRequest
                     = new ucbhelper::AuthenticationFallbackRequest (
-                            "Open the following link in your browser and "
+                            u"Open the following link in your browser and "
                             "paste the code from the URL you have been redirected to in the "
                             "box below. For example:\n"
-                            "http://localhost/LibreOffice?code=YOUR_CODE",
+                            "http://localhost/LibreOffice?code=YOUR_CODE"_ustr,
                             url_oustr );
 
                 xIH->handle( xRequest );

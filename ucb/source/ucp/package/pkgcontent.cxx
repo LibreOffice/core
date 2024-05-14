@@ -110,7 +110,7 @@ ContentProperties::getCreatableContentsInfo( PackageUri const & rUri ) const
     {
         uno::Sequence< beans::Property > aProps( 1 );
         aProps.getArray()[ 0 ] = beans::Property(
-                    "Title",
+                    u"Title"_ustr,
                     -1,
                     cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND );
@@ -360,14 +360,14 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 // virtual
 OUString SAL_CALL Content::getImplementationName()
 {
-    return "com.sun.star.comp.ucb.PackageContent";
+    return u"com.sun.star.comp.ucb.PackageContent"_ustr;
 }
 
 
 // virtual
 uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 {
-    return { isFolder()? OUString("com.sun.star.ucb.PackageFolderContent"):OUString("com.sun.star.ucb.PackageStreamContent") } ;
+    return { isFolder()? u"com.sun.star.ucb.PackageFolderContent"_ustr:u"com.sun.star.ucb.PackageStreamContent"_ustr } ;
 }
 
 
@@ -403,7 +403,7 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::Any( lang::IllegalArgumentException(
-                                    "Wrong argument type!",
+                                    u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
                 Environment );
@@ -423,7 +423,7 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::Any( lang::IllegalArgumentException(
-                                    "Wrong argument type!",
+                                    u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
                 Environment );
@@ -434,7 +434,7 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::Any( lang::IllegalArgumentException(
-                                    "No properties!",
+                                    u"No properties!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
                 Environment );
@@ -472,7 +472,7 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::Any( lang::IllegalArgumentException(
-                                    "Wrong argument type!",
+                                    u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
                 Environment );
@@ -492,7 +492,7 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::Any( lang::IllegalArgumentException(
-                                    "Wrong argument type!",
+                                    u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
                 Environment );
@@ -525,7 +525,7 @@ uno::Any SAL_CALL Content::execute(
                 ucb::IOErrorCode_CANT_WRITE,
                 aArgs,
                 Environment,
-                "Cannot remove persistent data!",
+                u"Cannot remove persistent data!"_ustr,
                 this );
             // Unreachable
         }
@@ -545,7 +545,7 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::Any( lang::IllegalArgumentException(
-                                    "Wrong argument type!",
+                                    u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
                 Environment );
@@ -567,7 +567,7 @@ uno::Any SAL_CALL Content::execute(
             OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 uno::Any( lang::IllegalArgumentException(
-                                    "Wrong argument type!",
+                                    u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
                 Environment );
@@ -593,7 +593,7 @@ uno::Any SAL_CALL Content::execute(
                 ucb::IOErrorCode_CANT_WRITE,
                 aArgs,
                 Environment,
-                "Cannot write file to disk!",
+                u"Cannot write file to disk!"_ustr,
                 this );
             // Unreachable
         }
@@ -833,7 +833,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         // Append all Core Properties.
         xRow->appendString (
             beans::Property(
-                "ContentType",
+                u"ContentType"_ustr,
                 -1,
                 cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND
@@ -841,14 +841,14 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             rData.aContentType );
         xRow->appendString(
             beans::Property(
-                "Title",
+                u"Title"_ustr,
                 -1,
                 cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND ),
             rData.aTitle );
         xRow->appendBoolean(
             beans::Property(
-                "IsDocument",
+                u"IsDocument"_ustr,
                 -1,
                 cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND
@@ -856,7 +856,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             rData.bIsDocument );
         xRow->appendBoolean(
             beans::Property(
-                "IsFolder",
+                u"IsFolder"_ustr,
                 -1,
                 cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND
@@ -864,7 +864,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             rData.bIsFolder );
         xRow->appendObject(
             beans::Property(
-                "CreatableContentsInfo",
+                u"CreatableContentsInfo"_ustr,
                 -1,
                 cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
                 beans::PropertyAttribute::BOUND
@@ -873,7 +873,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 rData.getCreatableContentsInfo( PackageUri( rContentId ) ) ) );
         xRow->appendString(
             beans::Property(
-                "MediaType",
+                u"MediaType"_ustr,
                 -1,
                 cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND ),
@@ -884,7 +884,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         {
             xRow->appendLong(
                 beans::Property(
-                    "Size",
+                    u"Size"_ustr,
                     -1,
                     cppu::UnoType<sal_Int64>::get(),
                     beans::PropertyAttribute::BOUND
@@ -893,7 +893,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
             xRow->appendBoolean(
                 beans::Property(
-                    "Compressed",
+                    u"Compressed"_ustr,
                     -1,
                     cppu::UnoType<bool>::get(),
                     beans::PropertyAttribute::BOUND ),
@@ -901,7 +901,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
             xRow->appendBoolean(
                 beans::Property(
-                    "Encrypted",
+                    u"Encrypted"_ustr,
                     -1,
                     cppu::UnoType<bool>::get(),
                     beans::PropertyAttribute::BOUND ),
@@ -914,7 +914,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         {
             xRow->appendBoolean(
                 beans::Property(
-                    "HasEncryptedEntries",
+                    u"HasEncryptedEntries"_ustr,
                     -1,
                     cppu::UnoType<bool>::get(),
                     beans::PropertyAttribute::BOUND
@@ -982,28 +982,28 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Read-only property!
             aRetRange[ n ] <<= lang::IllegalAccessException(
-                            "Property is read-only!",
+                            u"Property is read-only!"_ustr,
                             getXWeak() );
         }
         else if ( rValue.Name == "IsDocument" )
         {
             // Read-only property!
             aRetRange[ n ] <<= lang::IllegalAccessException(
-                            "Property is read-only!",
+                            u"Property is read-only!"_ustr,
                             getXWeak() );
         }
         else if ( rValue.Name == "IsFolder" )
         {
             // Read-only property!
             aRetRange[ n ] <<= lang::IllegalAccessException(
-                            "Property is read-only!",
+                            u"Property is read-only!"_ustr,
                             getXWeak() );
         }
         else if ( rValue.Name == "CreatableContentsInfo" )
         {
             // Read-only property!
             aRetRange[ n ] <<= lang::IllegalAccessException(
-                            "Property is read-only!",
+                            u"Property is read-only!"_ustr,
                             getXWeak() );
         }
         else if ( rValue.Name == "Title" )
@@ -1012,7 +1012,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             {
                 // Read-only property!
                 aRetRange[ n ] <<= lang::IllegalAccessException(
-                                "Property is read-only!",
+                                u"Property is read-only!"_ustr,
                                 getXWeak() );
             }
             else
@@ -1041,7 +1041,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                     {
                         aRetRange[ n ] <<=
                             lang::IllegalArgumentException(
-                                "Empty title not allowed!",
+                                u"Empty title not allowed!"_ustr,
                                 getXWeak(),
                                 -1 );
                     }
@@ -1050,7 +1050,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 {
                     aRetRange[ n ] <<=
                         beans::IllegalTypeException(
-                            "Property value has wrong type!",
+                            u"Property value has wrong type!"_ustr,
                             getXWeak() );
                 }
             }
@@ -1075,7 +1075,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             else
             {
                 aRetRange[ n ] <<= beans::IllegalTypeException(
-                                "Property value has wrong type!",
+                                u"Property value has wrong type!"_ustr,
                                 getXWeak() );
             }
         }
@@ -1083,7 +1083,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Read-only property!
             aRetRange[ n ] <<= lang::IllegalAccessException(
-                            "Property is read-only!",
+                            u"Property is read-only!"_ustr,
                             getXWeak() );
         }
         else if ( rValue.Name == "Compressed" )
@@ -1109,14 +1109,14 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 else
                 {
                     aRetRange[ n ] <<= beans::IllegalTypeException(
-                                "Property value has wrong type!",
+                                u"Property value has wrong type!"_ustr,
                                 getXWeak() );
                 }
             }
             else
             {
                 aRetRange[ n ] <<= beans::UnknownPropertyException(
-                                "Compressed only supported by streams!",
+                                u"Compressed only supported by streams!"_ustr,
                                 getXWeak() );
             }
         }
@@ -1143,14 +1143,14 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 else
                 {
                     aRetRange[ n ] <<= beans::IllegalTypeException(
-                                "Property value has wrong type!",
+                                u"Property value has wrong type!"_ustr,
                                 getXWeak() );
                 }
             }
             else
             {
                 aRetRange[ n ] <<= beans::UnknownPropertyException(
-                                "Encrypted only supported by streams!",
+                                u"Encrypted only supported by streams!"_ustr,
                                 getXWeak() );
             }
         }
@@ -1158,7 +1158,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Read-only property!
             aRetRange[ n ] <<= lang::IllegalAccessException(
-                            "Property is read-only!",
+                            u"Property is read-only!"_ustr,
                             getXWeak() );
         }
         else if ( rValue.Name == "EncryptionKey" )
@@ -1188,14 +1188,14 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 else
                 {
                     aRetRange[ n ] <<= beans::IllegalTypeException(
-                                "Property value has wrong type!",
+                                u"Property value has wrong type!"_ustr,
                                 getXWeak() );
                 }
             }
             else
             {
                 aRetRange[ n ] <<= beans::UnknownPropertyException(
-                        "EncryptionKey not supported by non-root folder!",
+                        u"EncryptionKey not supported by non-root folder!"_ustr,
                         getXWeak() );
             }
         }
@@ -1248,7 +1248,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             else
             {
                 aRetRange[ n ] <<= uno::Exception(
-                                "No property set for storing the value!",
+                                u"No property set for storing the value!"_ustr,
                                 getXWeak() );
             }
         }
@@ -1281,7 +1281,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
             // Set error .
             aRetRange[ nTitlePos ] <<= uno::Exception(
-                    "Exchange failed!",
+                    u"Exchange failed!"_ustr,
                     getXWeak() );
         }
     }
@@ -1314,7 +1314,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                     ucb::IOErrorCode_CANT_WRITE,
                     aArgs,
                     xEnv,
-                    "Cannot store persistent data!",
+                    u"Cannot store persistent data!"_ustr,
                     this );
                 // Unreachable
             }
@@ -1383,7 +1383,7 @@ uno::Any Content::open(
                     m_eState == PERSISTENT
                         ? xEnv
                         : uno::Reference< ucb::XCommandEnvironment >(),
-                    "Got no data stream!",
+                    u"Got no data stream!"_ustr,
                     this );
                 // Unreachable
             }
@@ -1438,7 +1438,7 @@ uno::Any Content::open(
                             ? xEnv
                             : uno::Reference<
                                   ucb::XCommandEnvironment >(),
-                        "Got no data stream!",
+                        u"Got no data stream!"_ustr,
                         this );
                     // Unreachable
                 }
@@ -1548,7 +1548,7 @@ void Content::insert(
                     ucbhelper::cancelCommandExecution(
                         uno::Any(
                             ucb::UnsupportedNameClashException(
-                                "Unable to resolve name clash!",
+                                u"Unable to resolve name clash!"_ustr,
                                 getXWeak(),
                                 nNameClashResolve ) ),
                     xEnv );
@@ -1598,7 +1598,7 @@ void Content::insert(
             ucb::IOErrorCode_CANT_WRITE,
             aArgs,
             xEnv,
-            "Cannot store persistent data!",
+            u"Cannot store persistent data!"_ustr,
             this );
         // Unreachable
     }
@@ -1635,7 +1635,7 @@ void Content::destroy(
     {
         ucbhelper::cancelCommandExecution(
             uno::Any( ucb::UnsupportedCommandException(
-                                "Not persistent!",
+                                u"Not persistent!"_ustr,
                                 getXWeak() ) ),
             xEnv );
         // Unreachable
@@ -1672,7 +1672,7 @@ void Content::transfer(
     {
         ucbhelper::cancelCommandExecution(
             uno::Any( ucb::UnsupportedCommandException(
-                                "Not persistent!",
+                                u"Not persistent!"_ustr,
                                 getXWeak() ) ),
             xEnv );
         // Unreachable
@@ -1706,7 +1706,7 @@ void Content::transfer(
                 ucb::IOErrorCode_RECURSIVE,
                 aArgs,
                 xEnv,
-                "Target is equal to or is a child of source!",
+                u"Target is equal to or is a child of source!"_ustr,
                 this );
             // Unreachable
         }
@@ -1743,7 +1743,7 @@ void Content::transfer(
             ucb::IOErrorCode_CANT_READ,
             aArgs,
             xEnv,
-            "Cannot instantiate source object!",
+            u"Cannot instantiate source object!"_ustr,
             this );
         // Unreachable
     }
@@ -1772,7 +1772,7 @@ void Content::transfer(
             ucb::IOErrorCode_CANT_CREATE,
             aArgs,
             xEnv,
-            "XContentCreator::createNewContent failed!",
+            u"XContentCreator::createNewContent failed!"_ustr,
             this );
         // Unreachable
     }
@@ -1927,7 +1927,7 @@ void Content::transfer(
             ucb::IOErrorCode_CANT_WRITE,
             aArgs,
             xEnv,
-            "Cannot remove persistent data of source object!",
+            u"Cannot remove persistent data of source object!"_ustr,
             this );
         // Unreachable
     }
@@ -2116,7 +2116,7 @@ bool Content::loadData(
             try
             {
                 uno::Any aHasEncryptedEntries
-                    = xPackagePropSet->getPropertyValue( "HasEncryptedEntries" );
+                    = xPackagePropSet->getPropertyValue( u"HasEncryptedEntries"_ustr );
                 if ( !( aHasEncryptedEntries >>= rProps.bHasEncryptedEntries ) )
                 {
                     OSL_FAIL( "Content::loadData - "
@@ -2162,7 +2162,7 @@ bool Content::loadData(
             // MediaType
             try
             {
-                uno::Any aMediaType = xPropSet->getPropertyValue("MediaType");
+                uno::Any aMediaType = xPropSet->getPropertyValue(u"MediaType"_ustr);
                 if ( !( aMediaType >>= rProps.aMediaType ) )
                 {
                     OSL_FAIL( "Content::loadData - Got no MediaType value!" );
@@ -2204,7 +2204,7 @@ bool Content::loadData(
                 // Size ( only available for streams )
                 try
                 {
-                    uno::Any aSize = xPropSet->getPropertyValue("Size");
+                    uno::Any aSize = xPropSet->getPropertyValue(u"Size"_ustr);
                     if ( !( aSize >>= rProps.nSize ) )
                     {
                         OSL_FAIL( "Content::loadData - Got no Size value!" );
@@ -2225,7 +2225,7 @@ bool Content::loadData(
                 // Compressed ( only available for streams )
                 try
                 {
-                    uno::Any aCompressed = xPropSet->getPropertyValue("Compressed");
+                    uno::Any aCompressed = xPropSet->getPropertyValue(u"Compressed"_ustr);
                     if ( !( aCompressed >>= rProps.bCompressed ) )
                     {
                         OSL_FAIL( "Content::loadData - Got no Compressed value!" );
@@ -2246,7 +2246,7 @@ bool Content::loadData(
                 // Encrypted ( only available for streams )
                 try
                 {
-                    uno::Any aEncrypted = xPropSet->getPropertyValue("Encrypted");
+                    uno::Any aEncrypted = xPropSet->getPropertyValue(u"Encrypted"_ustr);
                     if ( !( aEncrypted >>= rProps.bEncrypted ) )
                     {
                         OSL_FAIL( "Content::loadData - Got no Encrypted value!" );
@@ -2336,7 +2336,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
             try
             {
                 xPackagePropSet->setPropertyValue(
-                        "EncryptionKey",
+                        u"EncryptionKey"_ustr,
                         uno::Any( m_aProps.aEncryptionKey ) );
                 m_nModifiedProps &= ~ENCRYPTIONKEY_MODIFIED;
             }
@@ -2460,7 +2460,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
         if ( m_nModifiedProps & MEDIATYPE_MODIFIED )
         {
             xPropSet->setPropertyValue(
-                                "MediaType",
+                                u"MediaType"_ustr,
                                 uno::Any( m_aProps.aMediaType ) );
             m_nModifiedProps &= ~MEDIATYPE_MODIFIED;
         }
@@ -2469,7 +2469,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
         {
             if ( !isFolder() )
                 xPropSet->setPropertyValue(
-                                "Compressed",
+                                u"Compressed"_ustr,
                                 uno::Any( m_aProps.bCompressed ) );
 
             m_nModifiedProps &= ~COMPRESSED_MODIFIED;
@@ -2479,7 +2479,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
         {
             if ( !isFolder() )
                 xPropSet->setPropertyValue(
-                                "Encrypted",
+                                u"Encrypted"_ustr,
                                 uno::Any( m_aProps.bEncrypted ) );
 
             m_nModifiedProps &= ~ENCRYPTED_MODIFIED;
@@ -2489,7 +2489,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
         {
             if ( !isFolder() )
                 xPropSet->setPropertyValue(
-                            "EncryptionKey",
+                            u"EncryptionKey"_ustr,
                             uno::Any( m_aProps.aEncryptionKey ) );
 
             m_nModifiedProps &= ~ENCRYPTIONKEY_MODIFIED;

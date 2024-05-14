@@ -243,7 +243,7 @@ uno::Sequence< uno::Type > SAL_CALL HierarchyContent::getTypes()
 // virtual
 OUString SAL_CALL HierarchyContent::getImplementationName()
 {
-    return "com.sun.star.comp.ucb.HierarchyContent";
+    return u"com.sun.star.comp.ucb.HierarchyContent"_ustr;
 }
 
 
@@ -311,7 +311,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::Any( lang::IllegalArgumentException(
-                                    "Wrong argument type!",
+                                    u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
                 Environment );
@@ -331,7 +331,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::Any( lang::IllegalArgumentException(
-                                    "Wrong argument type!",
+                                    u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
                 Environment );
@@ -342,7 +342,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::Any( lang::IllegalArgumentException(
-                                    "No properties!",
+                                    u"No properties!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
                 Environment );
@@ -378,7 +378,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::Any( lang::IllegalArgumentException(
-                                    "Wrong argument type!",
+                                    u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
                 Environment );
@@ -401,7 +401,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::Any( lang::IllegalArgumentException(
-                                    "Wrong argument type!",
+                                    u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
                 Environment );
@@ -435,7 +435,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
                 ucb::IOErrorCode_CANT_WRITE,
                 aArgs,
                 Environment,
-                "Cannot remove persistent data!",
+                u"Cannot remove persistent data!"_ustr,
                 this );
             // Unreachable
         }
@@ -456,7 +456,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
             OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 uno::Any( lang::IllegalArgumentException(
-                                    "Wrong argument type!",
+                                    u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
                 Environment );
@@ -478,7 +478,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
             OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 uno::Any( lang::IllegalArgumentException(
-                                    "Wrong argument type!",
+                                    u"Wrong argument type!"_ustr,
                                     getXWeak(),
                                     -1 ) ),
                 Environment );
@@ -913,28 +913,28 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
     {
         // Append all Core Properties.
         xRow->appendString (
-            beans::Property( "ContentType",
+            beans::Property( u"ContentType"_ustr,
                       -1,
                       cppu::UnoType<OUString>::get(),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData.getContentType() );
         xRow->appendString (
-            beans::Property( "Title",
+            beans::Property( u"Title"_ustr,
                       -1,
                       cppu::UnoType<OUString>::get(),
                           // @@@ Might actually be read-only!
                       beans::PropertyAttribute::BOUND ),
             rData.getTitle() );
         xRow->appendBoolean(
-            beans::Property( "IsDocument",
+            beans::Property( u"IsDocument"_ustr,
                       -1,
                       cppu::UnoType<bool>::get(),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData.getIsDocument() );
         xRow->appendBoolean(
-            beans::Property( "IsFolder",
+            beans::Property( u"IsFolder"_ustr,
                       -1,
                       cppu::UnoType<bool>::get(),
                       beans::PropertyAttribute::BOUND
@@ -943,7 +943,7 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
 
         if ( rData.getIsDocument() )
             xRow->appendString(
-                beans::Property( "TargetURL",
+                beans::Property( u"TargetURL"_ustr,
                           -1,
                           cppu::UnoType<OUString>::get(),
                           // @@@ Might actually be read-only!
@@ -951,7 +951,7 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
                 rData.getTargetURL() );
         xRow->appendObject(
             beans::Property(
-                "CreatableContentsInfo",
+                u"CreatableContentsInfo"_ustr,
                 -1,
                 cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
                 beans::PropertyAttribute::BOUND
@@ -1019,28 +1019,28 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
         {
             // Read-only property!
             aRetRange[ n ] <<= lang::IllegalAccessException(
-                            "Property is read-only!",
+                            u"Property is read-only!"_ustr,
                             getXWeak() );
         }
         else if ( rValue.Name == "IsDocument" )
         {
             // Read-only property!
             aRetRange[ n ] <<= lang::IllegalAccessException(
-                            "Property is read-only!",
+                            u"Property is read-only!"_ustr,
                             getXWeak() );
         }
         else if ( rValue.Name == "IsFolder" )
         {
             // Read-only property!
             aRetRange[ n ] <<= lang::IllegalAccessException(
-                            "Property is read-only!",
+                            u"Property is read-only!"_ustr,
                             getXWeak() );
         }
         else if ( rValue.Name == "CreatableContentsInfo" )
         {
             // Read-only property!
             aRetRange[ n ] <<= lang::IllegalAccessException(
-                            "Property is read-only!",
+                            u"Property is read-only!"_ustr,
                             getXWeak() );
         }
         else if ( rValue.Name == "Title" )
@@ -1048,7 +1048,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
             if ( isReadOnly() )
             {
                 aRetRange[ n ] <<= lang::IllegalAccessException(
-                                "Property is read-only!",
+                                u"Property is read-only!"_ustr,
                                 getXWeak() );
             }
             else
@@ -1083,7 +1083,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                     else
                     {
                         aRetRange[ n ] <<= lang::IllegalArgumentException(
-                                    "Empty title not allowed!",
+                                    u"Empty title not allowed!"_ustr,
                                     getXWeak(),
                                     -1 );
                     }
@@ -1091,7 +1091,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                 else
                 {
                     aRetRange[ n ] <<= beans::IllegalTypeException(
-                                "Property value has wrong type!",
+                                u"Property value has wrong type!"_ustr,
                                 getXWeak() );
                 }
             }
@@ -1101,7 +1101,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
             if ( isReadOnly() )
             {
                 aRetRange[ n ] <<= lang::IllegalAccessException(
-                                "Property is read-only!",
+                                u"Property is read-only!"_ustr,
                                 getXWeak() );
             }
             else
@@ -1131,7 +1131,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                         else
                         {
                             aRetRange[ n ] <<= lang::IllegalArgumentException(
-                                    "Empty target URL not allowed!",
+                                    u"Empty target URL not allowed!"_ustr,
                                     getXWeak(),
                                     -1 );
                         }
@@ -1139,14 +1139,14 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                     else
                     {
                         aRetRange[ n ] <<= beans::IllegalTypeException(
-                                "Property value has wrong type!",
+                                u"Property value has wrong type!"_ustr,
                                 getXWeak() );
                     }
                 }
                 else
                 {
                     aRetRange[ n ] <<= beans::UnknownPropertyException(
-                                "TargetURL only supported by links!",
+                                u"TargetURL only supported by links!"_ustr,
                                 getXWeak() );
                 }
             }
@@ -1200,7 +1200,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
             else
             {
                 aRetRange[ n ] <<= uno::Exception(
-                                "No property set for storing the value!",
+                                u"No property set for storing the value!"_ustr,
                                 getXWeak() );
             }
         }
@@ -1234,7 +1234,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
 
             // Set error .
             aRetRange[ nTitlePos ] <<= uno::Exception(
-                    "Exchange failed!",
+                    u"Exchange failed!"_ustr,
                     getXWeak() );
         }
         aGuard.reset();
@@ -1265,7 +1265,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                     ucb::IOErrorCode_CANT_WRITE,
                     aArgs,
                     xEnv,
-                    "Cannot store persistent data!",
+                    u"Cannot store persistent data!"_ustr,
                     this );
                 // Unreachable
             }
@@ -1292,7 +1292,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
     {
         ucbhelper::cancelCommandExecution(
             uno::Any( ucb::UnsupportedCommandException(
-                                "Not supported by root folder!",
+                                u"Not supported by root folder!"_ustr,
                                 getXWeak() ) ),
             xEnv );
         // Unreachable
@@ -1301,7 +1301,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
     // Check, if all required properties were set.
     if ( m_aProps.getTitle().isEmpty() )
     {
-        uno::Sequence<OUString> aProps { "Title" };
+        uno::Sequence<OUString> aProps { u"Title"_ustr };
         ucbhelper::cancelCommandExecution(
             uno::Any( ucb::MissingPropertiesException(
                                 OUString(),
@@ -1358,7 +1358,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
                     ucbhelper::cancelCommandExecution(
                         uno::Any(
                             ucb::UnsupportedNameClashException(
-                                "Unable to resolve name clash!",
+                                u"Unable to resolve name clash!"_ustr,
                                 getXWeak(),
                                 nNameClashResolve ) ),
                     xEnv );
@@ -1404,7 +1404,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
             ucb::IOErrorCode_CANT_WRITE,
             aArgs,
             xEnv,
-            "Cannot store persistent data!",
+            u"Cannot store persistent data!"_ustr,
             this );
         // Unreachable
     }
@@ -1434,7 +1434,7 @@ void HierarchyContent::destroy( bool bDeletePhysical,
     {
         ucbhelper::cancelCommandExecution(
             uno::Any( ucb::UnsupportedCommandException(
-                                "Not persistent!",
+                                u"Not persistent!"_ustr,
                                 getXWeak() ) ),
             xEnv );
         // Unreachable
@@ -1445,7 +1445,7 @@ void HierarchyContent::destroy( bool bDeletePhysical,
     {
         ucbhelper::cancelCommandExecution(
             uno::Any( ucb::UnsupportedCommandException(
-                                "Not supported by root folder!",
+                                u"Not supported by root folder!"_ustr,
                                 getXWeak() ) ),
             xEnv );
         // Unreachable
@@ -1482,7 +1482,7 @@ void HierarchyContent::transfer(
     {
         ucbhelper::cancelCommandExecution(
             uno::Any( ucb::UnsupportedCommandException(
-                                "Not persistent!",
+                                u"Not persistent!"_ustr,
                                 getXWeak() ) ),
             xEnv );
         // Unreachable
@@ -1520,7 +1520,7 @@ void HierarchyContent::transfer(
                 ucb::IOErrorCode_RECURSIVE,
                 aArgs,
                 xEnv,
-                "Target is equal to or is a child of source!",
+                u"Target is equal to or is a child of source!"_ustr,
                 this );
             // Unreachable
         }
@@ -1557,7 +1557,7 @@ void HierarchyContent::transfer(
             ucb::IOErrorCode_CANT_READ,
             aArgs,
             xEnv,
-            "Cannot instantiate source object!",
+            u"Cannot instantiate source object!"_ustr,
             this );
         // Unreachable
     }
@@ -1587,7 +1587,7 @@ void HierarchyContent::transfer(
             ucb::IOErrorCode_CANT_CREATE,
             aArgs,
             xEnv,
-            "XContentCreator::createNewContent failed!",
+            u"XContentCreator::createNewContent failed!"_ustr,
             this );
         // Unreachable
     }
@@ -1715,7 +1715,7 @@ void HierarchyContent::transfer(
             ucb::IOErrorCode_CANT_WRITE,
             aArgs,
             xEnv,
-            "Cannot remove persistent data of source object!",
+            u"Cannot remove persistent data of source object!"_ustr,
             this );
         // Unreachable
     }
@@ -1741,7 +1741,7 @@ HierarchyContentProperties::getCreatableContentsInfo() const
 
         uno::Sequence< beans::Property > aFolderProps( 1 );
         aFolderProps.getArray()[ 0 ] = beans::Property(
-                    "Title",
+                    u"Title"_ustr,
                     -1,
                     cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND );
@@ -1753,12 +1753,12 @@ HierarchyContentProperties::getCreatableContentsInfo() const
 
         uno::Sequence< beans::Property > aLinkProps( 2 );
         aLinkProps.getArray()[ 0 ] = beans::Property(
-                    "Title",
+                    u"Title"_ustr,
                     -1,
                     cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND );
         aLinkProps.getArray()[ 1 ] = beans::Property(
-                    "TargetURL",
+                    u"TargetURL"_ustr,
                     -1,
                     cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND );

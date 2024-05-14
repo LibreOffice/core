@@ -52,7 +52,7 @@ UcbContentProviderProxyFactory::~UcbContentProviderProxyFactory()
 
 OUString SAL_CALL UcbContentProviderProxyFactory::getImplementationName()
 {
-    return "com.sun.star.comp.ucb.UcbContentProviderProxyFactory";
+    return u"com.sun.star.comp.ucb.UcbContentProviderProxyFactory"_ustr;
 }
 sal_Bool SAL_CALL UcbContentProviderProxyFactory::supportsService( const OUString& ServiceName )
 {
@@ -60,7 +60,7 @@ sal_Bool SAL_CALL UcbContentProviderProxyFactory::supportsService( const OUStrin
 }
 css::uno::Sequence< OUString > SAL_CALL UcbContentProviderProxyFactory::getSupportedServiceNames()
 {
-    return { "com.sun.star.ucb.ContentProviderProxyFactory" };
+    return { u"com.sun.star.ucb.ContentProviderProxyFactory"_ustr };
 }
 
 // Service factory implementation.
@@ -177,7 +177,7 @@ Sequence< Type > SAL_CALL UcbContentProviderProxy::getTypes()
 
 OUString SAL_CALL UcbContentProviderProxy::getImplementationName()
 {
-    return "com.sun.star.comp.ucb.UcbContentProviderProxy";
+    return u"com.sun.star.comp.ucb.UcbContentProviderProxy"_ustr;
 }
 
 sal_Bool SAL_CALL UcbContentProviderProxy::supportsService( const OUString& ServiceName )
@@ -187,7 +187,7 @@ sal_Bool SAL_CALL UcbContentProviderProxy::supportsService( const OUString& Serv
 
 css::uno::Sequence< OUString > SAL_CALL UcbContentProviderProxy::getSupportedServiceNames()
 {
-    return { "com.sun.star.ucb.ContentProviderProxy" };
+    return { u"com.sun.star.ucb.ContentProviderProxy"_ustr };
 }
 
 

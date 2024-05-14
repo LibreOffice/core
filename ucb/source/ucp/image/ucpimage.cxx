@@ -47,7 +47,7 @@ public:
 
 private:
     OUString SAL_CALL getImplementationName() override
-    { return "com.sun.star.comp.ucb.ImageContentProvider"; }
+    { return u"com.sun.star.comp.ucb.ImageContentProvider"_ustr; }
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
@@ -55,7 +55,7 @@ private:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return css::uno::Sequence<OUString>{
-            "com.sun.star.ucb.ImageContentProvider"};
+            u"com.sun.star.ucb.ImageContentProvider"_ustr};
     }
 
     css::uno::Reference<css::ucb::XContent> SAL_CALL queryContent(
