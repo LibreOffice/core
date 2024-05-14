@@ -16,6 +16,7 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
@@ -52,6 +53,28 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf77964)
     loadAndReload("tdf77964.doc");
     // both images were loading as AT_PARA instead of AS_CHAR. Image2 visually had text wrapping.
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, getProperty<text::TextContentAnchorType>(getShapeByName(u"Image2"), "AnchorType"));
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf72511_editengLRSpace, "tdf72511_editengLRSpace.doc")
+{
+    // given a default paragraph style with a left indent of 2 inches,
+    // the comment should ignore the indent, but the textbox must not.
+    uno::Reference<beans::XPropertySet> xRun(
+        getProperty<uno::Reference<beans::XPropertySet>>(getRun(getParagraph(1), 3), "TextField"));
+    uno::Reference<text::XText> xComment(getProperty<uno::Reference<text::XText>>(xRun, "TextRange"));
+    uno::Reference<beans::XPropertySet> xParagraph(getParagraphOfText(1, xComment), uno::UNO_QUERY);
+    // The comment was indented by 4001 (2 inches) instead of nothing
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xParagraph, "ParaLeftMargin"));
+
+    uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape2(xGroupShape->getByIndex(1), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.TextShape"), xShape2->getShapeType());
+    uno::Reference<text::XTextRange> xTextbox(xShape2, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xTBPara(xTextbox, uno::UNO_QUERY);
+    // Textbox paragraphs had no indent instead of 5080 (2 inches - the same as normal paragraphs).
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5080), getProperty<sal_Int32>(xTBPara, "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("sanity check: normal paragraph's indent", sal_Int32(5080),
+                                 getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf160049_anchorMargin, "tdf160049_anchorMargin.doc")

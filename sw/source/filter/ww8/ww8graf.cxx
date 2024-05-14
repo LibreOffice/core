@@ -68,6 +68,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <svx/xfltrit.hxx>
 #include <filter/msfilter/msdffimp.hxx>
+#include <frmatr.hxx>
 #include <grfatr.hxx>
 #include <fmtornt.hxx>
 #include <fmtcntnt.hxx>
@@ -495,7 +496,7 @@ static ESelection GetESelection(EditEngine const &rDrawEditEngine, tools::Long n
 // Which-IDs are changed according to the aDstTab table so that the
 // EditEngine will not ignore them.
 // Both Paragraph and character attributes are stuffed into the ItemSet.
-void SwWW8ImplReader::InsertTxbxStyAttrs( SfxItemSet& rS, sal_uInt16 nColl )
+void SwWW8ImplReader::InsertTxbxStyAttrs(SfxItemSet& rS, sal_uInt16 nColl, ManTypes eType)
 {
     SwWW8StyInf * pStyInf = GetStyle(nColl);
     if( !(pStyInf != nullptr && pStyInf->m_pFormat && pStyInf->m_bColl) )
@@ -512,7 +513,30 @@ void SwWW8ImplReader::InsertTxbxStyAttrs( SfxItemSet& rS, sal_uInt16 nColl )
             SfxItemPool *pEditPool = rS.GetPool();
             sal_uInt16 nWhich = i;
             sal_uInt16 nSlotId = m_rDoc.GetAttrPool().GetSlotId(nWhich);
-            if (
+
+            if (nWhich == RES_MARGIN_FIRSTLINE || nWhich == RES_MARGIN_TEXTLEFT
+                || nWhich == RES_MARGIN_RIGHT)
+            {
+                // MSO ignores paragraph indents for comments in DOC format
+                if (eType == MAN_AND)
+                    continue;
+
+                if (SfxItemState::SET == rS.GetItemState(EE_PARA_LRSPACE, false))
+                    continue;
+
+                // LO7.6 split SW RES_LR_SPACE into three pieces,
+                // but EditEng still uses the combined SvxLRSpaceItem, so recombine
+                assert(!pEditPool->GetTrueWhichIDFromSlotID(nSlotId)
+                       && "unnecessary when EditEng learns about the separate pieces");
+
+                SvxLRSpaceItem aLR(rS.Get(EE_PARA_LRSPACE));
+                aLR.SetTextFirstLineOffset(
+                    pStyInf->m_pFormat->GetFirstLineIndent().GetTextFirstLineOffset());
+                aLR.SetTextLeft(pStyInf->m_pFormat->GetTextLeftMargin().GetTextLeft());
+                aLR.SetRight(pStyInf->m_pFormat->GetRightMargin().GetRight());
+                rS.Put(aLR);
+            }
+            else if (
                 nSlotId && nWhich != nSlotId &&
                 0 != (nWhich = pEditPool->GetWhichIDFromSlotID(nSlotId)) &&
                 nWhich != nSlotId &&
@@ -739,6 +763,37 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
                             Color aColor(static_cast<const SvxBrushItem*>(pItem)->GetColor());
                             pS->Put(SvxColorItem(aColor, EE_CHAR_BKGCOLOR));
                         }
+                        else if (nWhich == RES_MARGIN_FIRSTLINE || nWhich == RES_MARGIN_TEXTLEFT
+                                 || nWhich == RES_MARGIN_RIGHT)
+                        {
+                            // MSO ignores paragraph indents for comments in DOC format
+                            if (eType == MAN_AND)
+                                continue;
+
+                            // LO7.6 split SW RES_LR_SPACE into three pieces,
+                            // but EE still uses the combined SvxLRSpaceItem, so recombine
+                            assert(!pEditPool->GetTrueWhichIDFromSlotID(nSlotId)
+                                   && "unnecessary when EditEng learns about the separate pieces");
+
+                            SvxLRSpaceItem aLR(pS->Get(EE_PARA_LRSPACE));
+                            if (nWhich == RES_MARGIN_FIRSTLINE)
+                            {
+                                aLR.SetTextFirstLineOffset(
+                                    static_cast<const SvxFirstLineIndentItem*>(pItem)
+                                        ->GetTextFirstLineOffset());
+                            }
+                            else if (nWhich == RES_MARGIN_TEXTLEFT)
+                            {
+                                aLR.SetTextLeft(static_cast<const SvxTextLeftMarginItem*>(pItem)
+                                                    ->GetTextLeft());
+                            }
+                            else
+                            {
+                                aLR.SetRight(
+                                    static_cast<const SvxRightMarginItem*>(pItem)->GetRight());
+                            }
+                            pS->Put(aLR);
+                        }
                         else if (
                             nSlotId && nWhich != nSlotId &&
                             0 != (nWhich = pEditPool->GetWhichIDFromSlotID(nSlotId)) &&
@@ -751,7 +806,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
                 }
             }
             // Fill in the remainder from the style
-            InsertTxbxStyAttrs(*pS, m_nCurrentColl);
+            InsertTxbxStyAttrs(*pS, m_nCurrentColl, eType);
 
             if( pS->Count() )
             {

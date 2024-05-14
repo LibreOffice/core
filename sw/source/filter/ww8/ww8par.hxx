@@ -1628,7 +1628,7 @@ private:
     rtl::Reference<SdrObject> ReadEllipse(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
     rtl::Reference<SdrObject> ReadArc(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
     rtl::Reference<SdrObject> ReadPolyLine(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
-    void InsertTxbxStyAttrs( SfxItemSet& rS, sal_uInt16 nColl );
+    void InsertTxbxStyAttrs(SfxItemSet& rS, sal_uInt16 nColl, ManTypes eType);
     void InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp, ManTypes eType, bool bONLYnPicLocFc=false);
 
     bool GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp, sal_uInt16 nTxBxS,
