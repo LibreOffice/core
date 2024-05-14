@@ -51,6 +51,7 @@
 #include <com/sun/star/task/ErrorCodeRequest2.hpp>
 
 #include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
@@ -102,6 +103,7 @@
 #include <workwin.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/infobar.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <openflag.hxx>
 #include "objstor.hxx"
@@ -324,7 +326,6 @@ void SfxObjectShell::ModifyChanged()
         // SetModified dispose of the models!
         return;
 
-
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
     if ( pViewFrame )
         pViewFrame->GetBindings().Invalidate( SID_SAVEDOCS );
@@ -334,6 +335,14 @@ void SfxObjectShell::ModifyChanged()
     Broadcast( SfxHint( SfxHintId::TitleChanged ) );    // xmlsec05, signed state might change in title...
 
     SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::ModifyChanged, GlobalEventConfig::GetEventName(GlobalEventId::MODIFYCHANGED), this ) );
+
+    // Don't wait to get this important state via binding notification timeout.
+    if ( comphelper::LibreOfficeKit::isActive() )
+    {
+        OString aStatus = ".uno:ModifiedStatus="_ostr;
+        aStatus += IsModified() ? "true" : "false";
+        SfxLokHelper::notifyAllViews(LOK_CALLBACK_STATE_CHANGED, aStatus);
+    }
 }
 
 
