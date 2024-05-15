@@ -64,7 +64,7 @@ private:
 
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.comp.configuration.backend.KF5Backend";
+        return u"com.sun.star.comp.configuration.backend.KF5Backend"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override
@@ -74,7 +74,7 @@ private:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return { "com.sun.star.configuration.backend.KF5Backend" };
+        return { u"com.sun.star.configuration.backend.KF5Backend"_ustr };
     }
 
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override
@@ -137,10 +137,10 @@ OString getExecutable()
 void readKDESettings(std::map<OUString, css::beans::Optional<css::uno::Any>>& rSettings)
 {
     const std::vector<OUString> aKeys
-        = { "EnableATToolSupport", "ExternalMailer",       "SourceViewFontHeight",
-            "SourceViewFontName",  "WorkPathVariable",     "ooInetHTTPProxyName",
-            "ooInetHTTPProxyPort", "ooInetHTTPSProxyName", "ooInetHTTPSProxyPort",
-            "ooInetNoProxy",       "ooInetProxyType" };
+        = { u"EnableATToolSupport"_ustr, u"ExternalMailer"_ustr,       u"SourceViewFontHeight"_ustr,
+            u"SourceViewFontName"_ustr,  u"WorkPathVariable"_ustr,     u"ooInetHTTPProxyName"_ustr,
+            u"ooInetHTTPProxyPort"_ustr, u"ooInetHTTPSProxyName"_ustr, u"ooInetHTTPSProxyPort"_ustr,
+            u"ooInetNoProxy"_ustr,       u"ooInetProxyType"_ustr };
 
     for (const OUString& aKey : aKeys)
     {
@@ -202,7 +202,7 @@ Service::Service()
         return;
 
     OUString desktop;
-    context->getValueByName("system.desktop-environment") >>= desktop;
+    context->getValueByName(u"system.desktop-environment"_ustr) >>= desktop;
 
     if (desktop == "PLASMA5")
     {
@@ -219,7 +219,8 @@ Service::Service()
 
 void Service::setPropertyValue(OUString const&, css::uno::Any const&)
 {
-    throw css::lang::IllegalArgumentException("setPropertyValue not supported", getXWeak(), -1);
+    throw css::lang::IllegalArgumentException(u"setPropertyValue not supported"_ustr, getXWeak(),
+                                              -1);
 }
 
 css::uno::Any Service::getPropertyValue(OUString const& PropertyName)

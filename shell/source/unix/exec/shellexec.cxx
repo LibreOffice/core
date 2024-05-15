@@ -287,7 +287,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 
 OUString SAL_CALL ShellExec::getImplementationName(  )
 {
-    return "com.sun.star.comp.system.SystemShellExecute";
+    return u"com.sun.star.comp.system.SystemShellExecute"_ustr;
 }
 
 sal_Bool SAL_CALL ShellExec::supportsService( const OUString& ServiceName )
@@ -297,7 +297,7 @@ sal_Bool SAL_CALL ShellExec::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL ShellExec::getSupportedServiceNames(   )
 {
-    return { "com.sun.star.system.SystemShellExecute" };
+    return { u"com.sun.star.system.SystemShellExecute"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

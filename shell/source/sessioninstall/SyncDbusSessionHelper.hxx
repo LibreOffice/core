@@ -43,7 +43,7 @@ namespace shell::sessioninstall
             virtual void SAL_CALL InstallGStreamerResources( const css::uno::Sequence< OUString >& resources, const OUString& interaction ) override;
 
             virtual void SAL_CALL InstallResources( const css::uno::Sequence< OUString >& /* types */, const css::uno::Sequence< OUString >& /* resources */, const OUString& /* interaction */ ) override
-                { throw css::uno::RuntimeException("InstallResources is not implemented"); } // not implemented
+                { throw css::uno::RuntimeException(u"InstallResources is not implemented"_ustr); } // not implemented
 
             virtual void SAL_CALL RemovePackageByFiles( const css::uno::Sequence< OUString >& files, const OUString& interaction ) override;
 
@@ -53,7 +53,7 @@ namespace shell::sessioninstall
             virtual void SAL_CALL IsInstalled( const OUString& /* package_name */, const OUString& /* interaction */, sal_Bool& /* installed */ ) override;
 
             virtual void SAL_CALL SearchFile( const OUString& /* file_name */, const OUString& /* interaction */, sal_Bool& /* installed */, OUString& /* package_name */ ) override
-                { throw css::uno::RuntimeException("SearchFile is not implemented"); } // not implemented
+                { throw css::uno::RuntimeException(u"SearchFile is not implemented"_ustr); } // not implemented
 
         private:
             SyncDbusSessionHelper( const SyncDbusSessionHelper& ) = delete;

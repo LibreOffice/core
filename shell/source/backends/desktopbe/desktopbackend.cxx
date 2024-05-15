@@ -62,14 +62,14 @@ private:
     virtual ~Default() override {}
 
     virtual OUString SAL_CALL getImplementationName() override
-    { return "com.sun.star.comp.configuration.backend.DesktopBackend"; }
+    { return u"com.sun.star.comp.configuration.backend.DesktopBackend"_ustr; }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return ServiceName == getSupportedServiceNames()[0]; }
 
     virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override
-    { return { "com.sun.star.configuration.backend.DesktopBackend" }; }
+    { return { u"com.sun.star.configuration.backend.DesktopBackend"_ustr }; }
 
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
     getPropertySetInfo() override
@@ -105,7 +105,7 @@ private:
 void Default::setPropertyValue(OUString const &, css::uno::Any const &)
 {
     throw css::lang::IllegalArgumentException(
-        "setPropertyValue not supported",
+        u"setPropertyValue not supported"_ustr,
         getXWeak(), -1);
 }
 
@@ -125,7 +125,7 @@ OUString xdg_user_dir_lookup (const char *type, bool bAllowHomeDir)
 
     if (!aSecurity.getHomeDir( aHomeDirURL ) )
     {
-        osl::FileBase::getFileURLFromSystemPath("/tmp", aDocumentsDirURL);
+        osl::FileBase::getFileURLFromSystemPath(u"/tmp"_ustr, aDocumentsDirURL);
         return aDocumentsDirURL;
     }
 
@@ -279,14 +279,14 @@ shell_DesktopBackend_get_implementation(
     css::uno::Reference< css::uno::XCurrentContext > current(
         css::uno::getCurrentContext());
     if (current.is()) {
-        current->getValueByName("system.desktop-environment") >>= desktop;
+        current->getValueByName(u"system.desktop-environment"_ustr) >>= desktop;
     }
 
     // Fall back to the default if the specific backend is not available:
     css::uno::Reference< css::uno::XInterface > backend;
     if (desktop == "PLASMA5")
         backend = createBackend(context,
-            "com.sun.star.configuration.backend.KF5Backend");
+            u"com.sun.star.configuration.backend.KF5Backend"_ustr);
     if (!backend)
         backend = getXWeak(new Default);
     backend->acquire();

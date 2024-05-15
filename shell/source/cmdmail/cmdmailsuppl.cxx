@@ -113,24 +113,24 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 {
     if ( ! xSimpleMailMessage.is() )
     {
-        throw css::lang::IllegalArgumentException( "No message specified" ,
+        throw css::lang::IllegalArgumentException( u"No message specified"_ustr ,
             static_cast < XSimpleMailClient * > (this), 1 );
     }
 
     if( ! m_xConfigurationProvider.is() )
     {
-        throw css::uno::Exception( "Can not access configuration" ,
+        throw css::uno::Exception( u"Can not access configuration"_ustr ,
             static_cast < XSimpleMailClient * > (this) );
     }
 
 
-    OUString aProgramURL("$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER "/senddoc");
+    OUString aProgramURL(u"$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER "/senddoc"_ustr);
     rtl::Bootstrap::expandMacros(aProgramURL);
 
     OUString aProgram;
     if ( FileBase::E_None != FileBase::getSystemPathFromFileURL(aProgramURL, aProgram))
     {
-        throw css::uno::Exception("Could not convert executable path",
+        throw css::uno::Exception(u"Could not convert executable path"_ustr,
             static_cast < XSimpleMailClient * > (this));
     }
 
@@ -145,13 +145,13 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 
         PropertyValue aProperty;
         aProperty.Name = "nodepath";
-        aProperty.Value <<= OUString("org.openoffice.Office.Common/ExternalMailer");
+        aProperty.Value <<= u"org.openoffice.Office.Common/ExternalMailer"_ustr;
 
         Sequence< Any > aArgumentList{ Any(aProperty) };
 
         Reference< XNameAccess > xNameAccess(
                 m_xConfigurationProvider->createInstanceWithArguments(
-                    "com.sun.star.configuration.ConfigurationAccess",
+                    u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                     aArgumentList ),
                 UNO_QUERY );
 
@@ -161,7 +161,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 
             // Retrieve the value for "Program" node and append it feed senddoc with it
             // using the (undocumented) --mailclient switch
-            xNameAccess->getByName("Program") >>= aMailer;
+            xNameAccess->getByName(u"Program"_ustr) >>= aMailer;
 
             if( !aMailer.isEmpty() )
             {
@@ -255,7 +255,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     FILE * f = popen(cmd.getStr(), "w");
     if (f == nullptr || pclose(f) != 0)
     {
-        throw css::uno::Exception("No mail client configured",
+        throw css::uno::Exception(u"No mail client configured"_ustr,
             static_cast < XSimpleMailClient * > (this) );
     }
 }
@@ -264,7 +264,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 
 OUString SAL_CALL CmdMailSuppl::getImplementationName(  )
 {
-    return "com.sun.star.comp.system.SimpleCommandMail";
+    return u"com.sun.star.comp.system.SimpleCommandMail"_ustr;
 }
 
 sal_Bool SAL_CALL CmdMailSuppl::supportsService( const OUString& ServiceName )
@@ -274,7 +274,7 @@ sal_Bool SAL_CALL CmdMailSuppl::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL CmdMailSuppl::getSupportedServiceNames(    )
 {
-    return { "com.sun.star.system.SimpleCommandMail" };
+    return { u"com.sun.star.system.SimpleCommandMail"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

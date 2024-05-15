@@ -55,7 +55,7 @@ namespace
                                &error.getRef());
         }
         if(!proxy)
-            throw RuntimeException("couldn't get a proxy!");
+            throw RuntimeException(u"couldn't get a proxy!"_ustr);
         return proxy;
     }
 
@@ -105,12 +105,12 @@ namespace shell::sessioninstall
 
 Sequence< OUString > SAL_CALL SyncDbusSessionHelper::getSupportedServiceNames()
 {
-    return { "org.freedesktop.PackageKit.SyncDbusSessionHelper" };
+    return { u"org.freedesktop.PackageKit.SyncDbusSessionHelper"_ustr };
 }
 
 OUString SAL_CALL SyncDbusSessionHelper::getImplementationName()
 {
-    return "org.libreoffice.comp.shell.sessioninstall.SyncDbusSessionHelper";
+    return u"org.libreoffice.comp.shell.sessioninstall.SyncDbusSessionHelper"_ustr;
 }
 
 sal_Bool SAL_CALL SyncDbusSessionHelper::supportsService(const OUString& aServiceName)

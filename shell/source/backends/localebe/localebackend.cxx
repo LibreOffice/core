@@ -173,7 +173,7 @@ static css::beans::Optional<css::uno::Any> ImplGetLocale(char const * category)
     // Return "en-US" for C locales
     if( (locale == nullptr) || *locale == '\0' || std::strcmp(locale, "C") == 0
         || std::strcmp(locale, "POSIX") == 0 )
-        return {true, css::uno::Any(OUString("en-US"))};
+        return {true, css::uno::Any(u"en-US"_ustr)};
 
 
     const char *cp;
@@ -285,7 +285,7 @@ void LocaleBackend::setPropertyValue(
     OUString const &, css::uno::Any const &)
 {
     throw css::lang::IllegalArgumentException(
-        "setPropertyValue not supported",
+        u"setPropertyValue not supported"_ustr,
         getXWeak(), -1);
 }
 
@@ -309,7 +309,7 @@ css::uno::Any LocaleBackend::getPropertyValue(
 
 OUString SAL_CALL LocaleBackend::getImplementationName()
 {
-    return "com.sun.star.comp.configuration.backend.LocaleBackend" ;
+    return u"com.sun.star.comp.configuration.backend.LocaleBackend"_ustr ;
 }
 
 sal_Bool SAL_CALL LocaleBackend::supportsService(const OUString& aServiceName)
@@ -319,7 +319,7 @@ sal_Bool SAL_CALL LocaleBackend::supportsService(const OUString& aServiceName)
 
 uno::Sequence<OUString> SAL_CALL LocaleBackend::getSupportedServiceNames()
 {
-    return { "com.sun.star.configuration.backend.LocaleBackend" };
+    return { u"com.sun.star.configuration.backend.LocaleBackend"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
