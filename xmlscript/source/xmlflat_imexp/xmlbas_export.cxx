@@ -64,14 +64,14 @@ namespace xmlscript
 
         if ( aArguments.getLength() != 1 )
         {
-            throw RuntimeException( "XMLBasicExporterBase::initialize: invalid number of arguments!" );
+            throw RuntimeException( u"XMLBasicExporterBase::initialize: invalid number of arguments!"_ustr );
         }
 
         aArguments[0] >>= m_xHandler;
 
         if ( !m_xHandler.is() )
         {
-            throw RuntimeException( "XMLBasicExporterBase::initialize: invalid argument format!" );
+            throw RuntimeException( u"XMLBasicExporterBase::initialize: invalid argument format!"_ustr );
         }
     }
 
@@ -85,7 +85,7 @@ namespace xmlscript
 
         if ( !m_xModel.is() )
         {
-            throw IllegalArgumentException( "XMLBasicExporter::setSourceDocument: no document model!", Reference< XInterface >(), 1 );
+            throw IllegalArgumentException( u"XMLBasicExporter::setSourceDocument: no document model!"_ustr, Reference< XInterface >(), 1 );
         }
     }
 
@@ -125,7 +125,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                 pLibContElement->addAttribute( "xmlns:" + aPrefix, aURI );
 
                 // xlink namespace attribute
-                pLibContElement->addAttribute( "xmlns:" XMLNS_XLINK_PREFIX, XMLNS_XLINK_URI );
+                pLibContElement->addAttribute( u"xmlns:" XMLNS_XLINK_PREFIX ""_ustr, XMLNS_XLINK_URI );
 
                 // <ooo/script:libraries...
                 m_xHandler->ignorableWhitespace( OUString() );
@@ -143,7 +143,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                     // try the "BasicLibraries" property (old-style, for compatibility)
                     Reference< beans::XPropertySet > xPSet( m_xModel, UNO_QUERY );
                     if ( xPSet.is() )
-                        xPSet->getPropertyValue("BasicLibraries" ) >>= xLibContainer;
+                        xPSet->getPropertyValue(u"BasicLibraries"_ustr ) >>= xLibContainer;
                 }
 
                 SAL_WARN_IF( !xLibContainer.is(), "xmlscript.xmlflat", "XMLBasicExporterBase::filter: nowhere to export to!" );
@@ -155,7 +155,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                     {
                         if ( xLibContainer->hasByName( rLibName ) )
                         {
-                            OUString aTrueStr( "true" );
+                            OUString aTrueStr( u"true"_ustr );
 
                             if ( xLibContainer->isLibraryLink( rLibName ) )
                             {
@@ -170,10 +170,10 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                                 if ( !aLinkURL.isEmpty() )
                                 {
                                     // xlink:href attribute
-                                    pLibElement->addAttribute( XMLNS_XLINK_PREFIX ":href", aLinkURL );
+                                    pLibElement->addAttribute( u"" XMLNS_XLINK_PREFIX ":href"_ustr, aLinkURL );
 
                                     // xlink:type attribute
-                                    pLibElement->addAttribute( XMLNS_XLINK_PREFIX ":type", "simple" );
+                                    pLibElement->addAttribute( u"" XMLNS_XLINK_PREFIX ":type"_ustr, u"simple"_ustr );
                                 }
 
                                 if ( xLibContainer->isLibraryReadOnly( rLibName ) )
@@ -324,12 +324,12 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
     OUString XMLBasicExporter::getImplementationName(  )
     {
-        return "com.sun.star.comp.xmlscript.XMLBasicExporter";
+        return u"com.sun.star.comp.xmlscript.XMLBasicExporter"_ustr;
     }
 
     Sequence< OUString > XMLBasicExporter::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.document.XMLBasicExporter" };
+        return { u"com.sun.star.document.XMLBasicExporter"_ustr };
     }
 
     // XMLOasisBasicExporter
@@ -347,12 +347,12 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
     OUString XMLOasisBasicExporter::getImplementationName(  )
     {
-        return "com.sun.star.comp.xmlscript.XMLOasisBasicExporter";
+        return u"com.sun.star.comp.xmlscript.XMLOasisBasicExporter"_ustr;
     }
 
     Sequence< OUString > XMLOasisBasicExporter::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.document.XMLOasisBasicExporter" };
+        return { u"com.sun.star.document.XMLOasisBasicExporter"_ustr };
     }
 
 }   // namespace xmlscript

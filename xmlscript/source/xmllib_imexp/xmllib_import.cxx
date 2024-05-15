@@ -74,7 +74,7 @@ Reference< xml::input::XElement > LibElementBase::startChildElement(
     sal_Int32 /*nUid*/, OUString const & /*rLocalName*/,
     Reference< xml::input::XAttributes > const & /*xAttributes*/ )
 {
-    throw xml::sax::SAXException("unexpected element!", Reference< XInterface >(), Any() );
+    throw xml::sax::SAXException(u"unexpected element!"_ustr, Reference< XInterface >(), Any() );
 }
 
 LibElementBase::LibElementBase(
@@ -122,7 +122,7 @@ Reference< xml::input::XElement > LibraryImport::startRootElement(
 {
     if (XMLNS_LIBRARY_UID != nUid)
     {
-        throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( u"illegal namespace!"_ustr, Reference< XInterface >(), Any() );
     }
     else if ( mpLibArray && rLocalName == "libraries" )
     {
@@ -133,10 +133,10 @@ Reference< xml::input::XElement > LibraryImport::startRootElement(
         LibDescriptor& aDesc = *mpLibDesc;
         aDesc.bLink = aDesc.bReadOnly = aDesc.bPasswordProtected = aDesc.bPreload = false;
 
-        aDesc.aName = xAttributes->getValueByUidName(XMLNS_LIBRARY_UID, "name" );
-        getBoolAttr( &aDesc.bReadOnly, "readonly", xAttributes, XMLNS_LIBRARY_UID );
-        getBoolAttr( &aDesc.bPasswordProtected, "passwordprotected", xAttributes, XMLNS_LIBRARY_UID );
-        getBoolAttr( &aDesc.bPreload, "preload", xAttributes, XMLNS_LIBRARY_UID );
+        aDesc.aName = xAttributes->getValueByUidName(XMLNS_LIBRARY_UID, u"name"_ustr );
+        getBoolAttr( &aDesc.bReadOnly, u"readonly"_ustr, xAttributes, XMLNS_LIBRARY_UID );
+        getBoolAttr( &aDesc.bPasswordProtected, u"passwordprotected"_ustr, xAttributes, XMLNS_LIBRARY_UID );
+        getBoolAttr( &aDesc.bPreload, u"preload"_ustr, xAttributes, XMLNS_LIBRARY_UID );
 
         return new LibraryElement( rLocalName, xAttributes, nullptr, this );
     }
@@ -158,7 +158,7 @@ Reference< xml::input::XElement > LibrariesElement::startChildElement(
 {
     if (mxImport->XMLNS_LIBRARY_UID != nUid)
     {
-        throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( u"illegal namespace!"_ustr, Reference< XInterface >(), Any() );
     }
     // library
     else if ( rLocalName == "library" )
@@ -166,18 +166,18 @@ Reference< xml::input::XElement > LibrariesElement::startChildElement(
         LibDescriptor aDesc;
         aDesc.bLink = aDesc.bReadOnly = aDesc.bPasswordProtected = aDesc.bPreload = false;
 
-        aDesc.aName = xAttributes->getValueByUidName(mxImport->XMLNS_LIBRARY_UID, "name" );
-        aDesc.aStorageURL = xAttributes->getValueByUidName( mxImport->XMLNS_XLINK_UID, "href" );
-        getBoolAttr(&aDesc.bLink, "link", xAttributes, mxImport->XMLNS_LIBRARY_UID );
-        getBoolAttr(&aDesc.bReadOnly, "readonly", xAttributes, mxImport->XMLNS_LIBRARY_UID );
-        getBoolAttr(&aDesc.bPasswordProtected, "passwordprotected", xAttributes, mxImport->XMLNS_LIBRARY_UID );
+        aDesc.aName = xAttributes->getValueByUidName(mxImport->XMLNS_LIBRARY_UID, u"name"_ustr );
+        aDesc.aStorageURL = xAttributes->getValueByUidName( mxImport->XMLNS_XLINK_UID, u"href"_ustr );
+        getBoolAttr(&aDesc.bLink, u"link"_ustr, xAttributes, mxImport->XMLNS_LIBRARY_UID );
+        getBoolAttr(&aDesc.bReadOnly, u"readonly"_ustr, xAttributes, mxImport->XMLNS_LIBRARY_UID );
+        getBoolAttr(&aDesc.bPasswordProtected, u"passwordprotected"_ustr, xAttributes, mxImport->XMLNS_LIBRARY_UID );
 
         mLibDescriptors.push_back( aDesc );
         return new LibraryElement( rLocalName, xAttributes, this, mxImport.get() );
     }
     else
     {
-        throw xml::sax::SAXException( "expected styles of bulletinboard element!", Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( u"expected styles of bulletinboard element!"_ustr, Reference< XInterface >(), Any() );
     }
 }
 
@@ -200,12 +200,12 @@ Reference< xml::input::XElement > LibraryElement::startChildElement(
 {
     if (mxImport->XMLNS_LIBRARY_UID != nUid)
     {
-        throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( u"illegal namespace!"_ustr, Reference< XInterface >(), Any() );
     }
     // library
     else if ( rLocalName == "element" )
     {
-        OUString aValue( xAttributes->getValueByUidName(mxImport->XMLNS_LIBRARY_UID, "name" ) );
+        OUString aValue( xAttributes->getValueByUidName(mxImport->XMLNS_LIBRARY_UID, u"name"_ustr ) );
         if (!aValue.isEmpty())
             mElements.push_back( aValue );
 
@@ -213,7 +213,7 @@ Reference< xml::input::XElement > LibraryElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException( "expected styles or bulletinboard element!", Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( u"expected styles or bulletinboard element!"_ustr, Reference< XInterface >(), Any() );
     }
 }
 

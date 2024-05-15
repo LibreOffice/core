@@ -37,19 +37,19 @@ exportScriptModule(
     xOut->startDocument();
 
     xOut->unknown(
-        "<!DOCTYPE script:module PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\""
-        " \"module.dtd\">");
+        u"<!DOCTYPE script:module PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\""
+        " \"module.dtd\">"_ustr);
     xOut->ignorableWhitespace( OUString() );
 
-    OUString aModuleName( XMLNS_SCRIPT_PREFIX ":module" );
+    OUString aModuleName( u"" XMLNS_SCRIPT_PREFIX ":module"_ustr );
     rtl::Reference<XMLElement> pModElement = new XMLElement( aModuleName );
 
-    pModElement->addAttribute( "xmlns:" XMLNS_SCRIPT_PREFIX, XMLNS_SCRIPT_URI );
+    pModElement->addAttribute( u"xmlns:" XMLNS_SCRIPT_PREFIX ""_ustr, XMLNS_SCRIPT_URI );
 
-    pModElement->addAttribute( XMLNS_SCRIPT_PREFIX ":name", rMod.aName );
-    pModElement->addAttribute( XMLNS_SCRIPT_PREFIX ":language", rMod.aLanguage );
+    pModElement->addAttribute( u"" XMLNS_SCRIPT_PREFIX ":name"_ustr, rMod.aName );
+    pModElement->addAttribute( u"" XMLNS_SCRIPT_PREFIX ":language"_ustr, rMod.aLanguage );
     if( !rMod.aModuleType.isEmpty() )
-        pModElement->addAttribute( XMLNS_SCRIPT_PREFIX ":moduleType", rMod.aModuleType );
+        pModElement->addAttribute( u"" XMLNS_SCRIPT_PREFIX ":moduleType"_ustr, rMod.aModuleType );
 
     xOut->ignorableWhitespace( OUString() );
     xOut->startElement( aModuleName, pModElement );

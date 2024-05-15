@@ -88,7 +88,7 @@ Reference<container::XNameContainer> XmlScriptTest::importFile(std::u16string_vi
 
     Reference<container::XNameContainer> xDialogModel(
         mxComponentContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.awt.UnoControlDialogModel", mxComponentContext),
+            u"com.sun.star.awt.UnoControlDialogModel"_ustr, mxComponentContext),
         UNO_QUERY);
 
     ::xmlscript::importDialogModel(::xmlscript::createInputStream(std::move(bytes)), xDialogModel,
@@ -146,55 +146,66 @@ void XmlScriptTest::testBasicElements()
     CPPUNIT_ASSERT(pXmlDoc);
 
     // Ensure we have all elements
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:button[1]"_ostr, "id"_ostr, "button1");
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:button[2]"_ostr, "id"_ostr, "button3");
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:checkbox[1]"_ostr, "id"_ostr, "check1");
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:checkbox[2]"_ostr, "id"_ostr, "check2");
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:checkbox[3]"_ostr, "id"_ostr, "check3");
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:menulist[1]"_ostr, "id"_ostr, "list1");
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:menulist[2]"_ostr, "id"_ostr, "list2");
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:combobox[1]"_ostr, "id"_ostr, "combo1");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:button[1]"_ostr, "id"_ostr,
+                u"button1"_ustr);
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:button[2]"_ostr, "id"_ostr,
+                u"button3"_ustr);
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:checkbox[1]"_ostr, "id"_ostr,
+                u"check1"_ustr);
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:checkbox[2]"_ostr, "id"_ostr,
+                u"check2"_ustr);
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:checkbox[3]"_ostr, "id"_ostr,
+                u"check3"_ustr);
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:menulist[1]"_ostr, "id"_ostr,
+                u"list1"_ustr);
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:menulist[2]"_ostr, "id"_ostr,
+                u"list2"_ustr);
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:combobox[1]"_ostr, "id"_ostr,
+                u"combo1"_ustr);
     assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:radiogroup[1]/dlg:radio[1]"_ostr,
-                "id"_ostr, "radio1");
+                "id"_ostr, u"radio1"_ustr);
     assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:radiogroup[1]/dlg:radio[2]"_ostr,
-                "id"_ostr, "radio2");
+                "id"_ostr, u"radio2"_ustr);
     assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:radiogroup[1]/dlg:radio[3]"_ostr,
-                "id"_ostr, "radio3");
+                "id"_ostr, u"radio3"_ustr);
     assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:titledbox[1]"_ostr, "id"_ostr,
-                "groupbox1");
+                u"groupbox1"_ustr);
     assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:radiogroup[2]/dlg:radio[1]"_ostr,
-                "id"_ostr, "radio5");
+                "id"_ostr, u"radio5"_ustr);
     assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:radiogroup[2]/dlg:radio[2]"_ostr,
-                "id"_ostr, "radio7");
+                "id"_ostr, u"radio7"_ustr);
     assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:radiogroup[2]/dlg:radio[3]"_ostr,
-                "id"_ostr, "radio8");
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:text[1]"_ostr, "id"_ostr, "fixed1");
+                "id"_ostr, u"radio8"_ustr);
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:text[1]"_ostr, "id"_ostr,
+                u"fixed1"_ustr);
     assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:textfield[1]"_ostr, "id"_ostr,
-                "field1");
+                u"field1"_ustr);
     assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:textfield[2]"_ostr, "id"_ostr,
-                "field2");
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:img[1]"_ostr, "id"_ostr, "image1");
+                u"field2"_ustr);
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:img[1]"_ostr, "id"_ostr,
+                u"image1"_ustr);
     assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:filecontrol[1]"_ostr, "id"_ostr,
-                "file1");
+                u"file1"_ustr);
     assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:datefield[1]"_ostr, "id"_ostr,
-                "datefield1");
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:timefield[1]"_ostr, "id"_ostr, "time1");
+                u"datefield1"_ustr);
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:timefield[1]"_ostr, "id"_ostr,
+                u"time1"_ustr);
     assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:patternfield[1]"_ostr, "id"_ostr,
-                "pattern1");
+                u"pattern1"_ustr);
     assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:currencyfield[1]"_ostr, "id"_ostr,
-                "currency1");
+                u"currency1"_ustr);
     assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:numericfield[1]"_ostr, "id"_ostr,
-                "numeric1");
+                u"numeric1"_ustr);
     assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:fixedline[1]"_ostr, "id"_ostr,
-                "fixedline1");
+                u"fixedline1"_ustr);
     assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:progressmeter[1]"_ostr, "id"_ostr,
-                "progress1");
+                u"progress1"_ustr);
     assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:scrollbar[1]"_ostr, "id"_ostr,
-                "scrollbar1");
+                u"scrollbar1"_ustr);
     assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:formattedfield[1]"_ostr, "id"_ostr,
-                "ffield0");
+                u"ffield0"_ustr);
     assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:formattedfield[2]"_ostr, "id"_ostr,
-                "ffield1");
+                u"ffield1"_ustr);
 
     Reference<lang::XComponent> xDialogModelComp(xModel, UNO_QUERY);
     if (xDialogModelComp)
@@ -219,13 +230,13 @@ void XmlScriptTest::testEmptyPopupItems()
     // Ensure we have 3 items in combobox after import/export and second one is empty
     assertXPath(pXmlDoc,
                 "/dlg:window/dlg:bulletinboard/dlg:combobox/dlg:menupopup/dlg:menuitem[1]"_ostr,
-                "value"_ostr, "Eintrag1");
+                "value"_ostr, u"Eintrag1"_ustr);
     assertXPath(pXmlDoc,
                 "/dlg:window/dlg:bulletinboard/dlg:combobox/dlg:menupopup/dlg:menuitem[2]"_ostr,
-                "value"_ostr, "");
+                "value"_ostr, u""_ustr);
     assertXPath(pXmlDoc,
                 "/dlg:window/dlg:bulletinboard/dlg:combobox/dlg:menupopup/dlg:menuitem[3]"_ostr,
-                "value"_ostr, "Eintrag2");
+                "value"_ostr, u"Eintrag2"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(XmlScriptTest);

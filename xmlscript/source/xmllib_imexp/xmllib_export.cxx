@@ -40,15 +40,15 @@ exportLibraryContainer(
     xOut->startDocument();
 
     xOut->unknown(
-        "<!DOCTYPE library:libraries PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\""
-        " \"libraries.dtd\">" );
+        u"<!DOCTYPE library:libraries PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\""
+        " \"libraries.dtd\">"_ustr );
     xOut->ignorableWhitespace( OUString() );
 
-    OUString aLibrariesName( XMLNS_LIBRARY_PREFIX ":libraries" );
+    OUString aLibrariesName( u"" XMLNS_LIBRARY_PREFIX ":libraries"_ustr );
     rtl::Reference<XMLElement> pLibsElement = new XMLElement( aLibrariesName );
 
-    pLibsElement->addAttribute( "xmlns:" XMLNS_LIBRARY_PREFIX, XMLNS_LIBRARY_URI );
-    pLibsElement->addAttribute( "xmlns:" XMLNS_XLINK_PREFIX, XMLNS_XLINK_URI );
+    pLibsElement->addAttribute( u"xmlns:" XMLNS_LIBRARY_PREFIX ""_ustr, XMLNS_LIBRARY_URI );
+    pLibsElement->addAttribute( u"xmlns:" XMLNS_XLINK_PREFIX ""_ustr, XMLNS_XLINK_URI );
 
     xOut->ignorableWhitespace( OUString() );
     xOut->startElement( aLibrariesName, pLibsElement );
@@ -61,21 +61,21 @@ exportLibraryContainer(
     {
         LibDescriptor& rLib = pLibArray->mpLibs[i];
 
-        rtl::Reference<XMLElement> pLibElement(new XMLElement( XMLNS_LIBRARY_PREFIX ":library" ));
+        rtl::Reference<XMLElement> pLibElement(new XMLElement( u"" XMLNS_LIBRARY_PREFIX ":library"_ustr ));
 
-        pLibElement->addAttribute( XMLNS_LIBRARY_PREFIX ":name", rLib.aName );
+        pLibElement->addAttribute( u"" XMLNS_LIBRARY_PREFIX ":name"_ustr, rLib.aName );
 
         if( !rLib.aStorageURL.isEmpty() )
         {
-            pLibElement->addAttribute( XMLNS_XLINK_PREFIX ":href", rLib.aStorageURL );
-            pLibElement->addAttribute( XMLNS_XLINK_PREFIX ":type", "simple" );
+            pLibElement->addAttribute( u"" XMLNS_XLINK_PREFIX ":href"_ustr, rLib.aStorageURL );
+            pLibElement->addAttribute( u"" XMLNS_XLINK_PREFIX ":type"_ustr, u"simple"_ustr );
         }
 
-        pLibElement->addAttribute(  XMLNS_LIBRARY_PREFIX ":link", rLib.bLink ? sTrueStr : sFalseStr );
+        pLibElement->addAttribute(  u"" XMLNS_LIBRARY_PREFIX ":link"_ustr, rLib.bLink ? sTrueStr : sFalseStr );
 
         if( rLib.bLink )
         {
-            pLibElement->addAttribute( XMLNS_LIBRARY_PREFIX ":readonly", rLib.bReadOnly ? sTrueStr : sFalseStr );
+            pLibElement->addAttribute( u"" XMLNS_LIBRARY_PREFIX ":readonly"_ustr, rLib.bReadOnly ? sTrueStr : sFalseStr );
         }
 
         pLibElement->dump( xOut );
@@ -95,31 +95,31 @@ exportLibrary(
     xOut->startDocument();
 
     xOut->unknown(
-        "<!DOCTYPE library:library PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\""
-        " \"library.dtd\">" );
+        u"<!DOCTYPE library:library PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\""
+        " \"library.dtd\">"_ustr );
     xOut->ignorableWhitespace( OUString() );
 
-    rtl::Reference<XMLElement> pLibElement = new XMLElement( XMLNS_LIBRARY_PREFIX ":library" );
+    rtl::Reference<XMLElement> pLibElement = new XMLElement( u"" XMLNS_LIBRARY_PREFIX ":library"_ustr );
 
-    pLibElement->addAttribute( "xmlns:" XMLNS_LIBRARY_PREFIX, XMLNS_LIBRARY_URI );
+    pLibElement->addAttribute( u"xmlns:" XMLNS_LIBRARY_PREFIX ""_ustr, XMLNS_LIBRARY_URI );
 
-    pLibElement->addAttribute( XMLNS_LIBRARY_PREFIX ":name", rLib.aName );
+    pLibElement->addAttribute( u"" XMLNS_LIBRARY_PREFIX ":name"_ustr, rLib.aName );
 
     OUString sTrueStr(aTrueStr);
     OUString sFalseStr(aFalseStr);
 
-    pLibElement->addAttribute( XMLNS_LIBRARY_PREFIX ":readonly", rLib.bReadOnly ? sTrueStr : sFalseStr );
+    pLibElement->addAttribute( u"" XMLNS_LIBRARY_PREFIX ":readonly"_ustr, rLib.bReadOnly ? sTrueStr : sFalseStr );
 
-    pLibElement->addAttribute( XMLNS_LIBRARY_PREFIX ":passwordprotected", rLib.bPasswordProtected ? sTrueStr : sFalseStr );
+    pLibElement->addAttribute( u"" XMLNS_LIBRARY_PREFIX ":passwordprotected"_ustr, rLib.bPasswordProtected ? sTrueStr : sFalseStr );
 
     if( rLib.bPreload )
-        pLibElement->addAttribute( XMLNS_LIBRARY_PREFIX ":preload", sTrueStr );
+        pLibElement->addAttribute( u"" XMLNS_LIBRARY_PREFIX ":preload"_ustr, sTrueStr );
 
     for( const auto& rElementName : rLib.aElementNames )
     {
-        rtl::Reference<XMLElement> pElement(new XMLElement( XMLNS_LIBRARY_PREFIX ":element" ));
+        rtl::Reference<XMLElement> pElement(new XMLElement( u"" XMLNS_LIBRARY_PREFIX ":element"_ustr ));
 
-        pElement->addAttribute( XMLNS_LIBRARY_PREFIX ":name",
+        pElement->addAttribute( u"" XMLNS_LIBRARY_PREFIX ":name"_ustr,
                                     rElementName );
 
         pLibElement->addSubElement( pElement );

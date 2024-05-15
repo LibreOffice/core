@@ -171,9 +171,9 @@ DocumentHandlerImpl::DocumentHandlerImpl(
     : m_xRoot( xRoot ),
       m_uid_count( 0 ),
       m_nLastURI_lookup( UID_UNKNOWN ),
-      m_aLastURI_lookup( "<<< unknown URI >>>" ),
+      m_aLastURI_lookup( u"<<< unknown URI >>>"_ustr ),
       m_nLastPrefix_lookup( UID_UNKNOWN ),
-      m_aLastPrefix_lookup( "<<< unknown URI >>>" ),
+      m_aLastPrefix_lookup( u"<<< unknown URI >>>"_ustr ),
       m_nSkipElements( 0 )
 {
     m_elements.reserve( 10 );
@@ -353,7 +353,7 @@ inline ExtendedAttributes::ExtendedAttributes(
 
 OUString DocumentHandlerImpl::getImplementationName()
 {
-    return "com.sun.star.comp.xml.input.SaxDocumentHandler";
+    return u"com.sun.star.comp.xml.input.SaxDocumentHandler"_ustr;
 }
 
 sal_Bool DocumentHandlerImpl::supportsService( OUString const & servicename )
@@ -363,7 +363,7 @@ sal_Bool DocumentHandlerImpl::supportsService( OUString const & servicename )
 
 Sequence< OUString > DocumentHandlerImpl::getSupportedServiceNames()
 {
-    return { "com.sun.star.xml.input.SaxDocumentHandler" };
+    return { u"com.sun.star.xml.input.SaxDocumentHandler"_ustr };
 }
 
 // XInitialization
@@ -377,7 +377,7 @@ void DocumentHandlerImpl::initialize(
         !(arguments[ 0 ] >>= xRoot) ||
         !xRoot.is())
     {
-        throw RuntimeException( "missing root instance!" );
+        throw RuntimeException( u"missing root instance!"_ustr );
     }
     m_xRoot = xRoot;
 }
@@ -399,7 +399,7 @@ OUString DocumentHandlerImpl::getUriByUid( sal_Int32 Uid )
         if (rURIUid.second == Uid)
             return rURIUid.first;
     }
-    throw container::NoSuchElementException( "no such xmlns uid!" , getXWeak() );
+    throw container::NoSuchElementException( u"no such xmlns uid!"_ustr , getXWeak() );
 }
 
 // XDocumentHandler
