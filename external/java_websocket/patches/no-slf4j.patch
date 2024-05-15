@@ -326,7 +326,7 @@ diff -ru a/src/main/java/org/java_websocket/server/WebSocketServer.java b/src/ma
 +import java.util.logging.Logger;
  
  /**
-  * <tt>WebSocketServer</tt> is an abstract class that only takes care of the
+  * <code>WebSocketServer</code> is an abstract class that only takes care of the
 @@ -84,7 +83,7 @@
     *
     * @since 1.4.0
