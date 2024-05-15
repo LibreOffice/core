@@ -127,7 +127,7 @@ void SAL_CALL XMLSecurityContext_NssImpl::setDefaultSecurityEnvironmentIndex( sa
 
 /* XServiceInfo */
 OUString SAL_CALL XMLSecurityContext_NssImpl::getImplementationName() {
-    return "com.sun.star.xml.crypto.XMLSecurityContext";
+    return u"com.sun.star.xml.crypto.XMLSecurityContext"_ustr;
 }
 
 /* XServiceInfo */
@@ -137,7 +137,7 @@ sal_Bool SAL_CALL XMLSecurityContext_NssImpl::supportsService( const OUString& s
 
 /* XServiceInfo */
 uno::Sequence< OUString > SAL_CALL XMLSecurityContext_NssImpl::getSupportedServiceNames() {
-    return { "com.sun.star.xml.crypto.XMLSecurityContext" };
+    return { u"com.sun.star.xml.crypto.XMLSecurityContext"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*

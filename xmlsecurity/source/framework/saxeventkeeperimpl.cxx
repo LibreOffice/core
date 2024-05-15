@@ -1127,12 +1127,12 @@ void SAL_CALL SAXEventKeeperImpl::initialize( const css::uno::Sequence< css::uno
 
 OUString SAXEventKeeperImpl_getImplementationName ()
 {
-    return "com.sun.star.xml.security.framework.SAXEventKeeperImpl";
+    return u"com.sun.star.xml.security.framework.SAXEventKeeperImpl"_ustr;
 }
 
 css::uno::Sequence< OUString > SAXEventKeeperImpl_getSupportedServiceNames(  )
 {
-    return { "com.sun.star.xml.crypto.sax.SAXEventKeeper" };
+    return { u"com.sun.star.xml.crypto.sax.SAXEventKeeper"_ustr };
 }
 
 /* XServiceInfo */

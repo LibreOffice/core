@@ -98,12 +98,12 @@ Sequence< OUString > SAL_CALL XMLSignatureTemplateImpl::getSupportedServiceNames
 
 //Helper for XServiceInfo
 Sequence< OUString > XMLSignatureTemplateImpl::impl_getSupportedServiceNames() {
-    Sequence<OUString> seqServiceNames { "com.sun.star.xml.crypto.XMLSignatureTemplate" };
+    Sequence<OUString> seqServiceNames { u"com.sun.star.xml.crypto.XMLSignatureTemplate"_ustr };
     return seqServiceNames ;
 }
 
 OUString XMLSignatureTemplateImpl::impl_getImplementationName() {
-    return "com.sun.star.xml.security.framework.XMLSignatureTemplateImpl" ;
+    return u"com.sun.star.xml.security.framework.XMLSignatureTemplateImpl"_ustr ;
 }
 
 //Helper for registry

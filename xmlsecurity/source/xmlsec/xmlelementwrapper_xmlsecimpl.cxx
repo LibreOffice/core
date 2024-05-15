@@ -32,7 +32,7 @@ XMLElementWrapper_XmlSecImpl::XMLElementWrapper_XmlSecImpl(const xmlNodePtr pNod
 /* XServiceInfo */
 OUString SAL_CALL XMLElementWrapper_XmlSecImpl::getImplementationName(  )
 {
-    return "com.sun.star.xml.wrapper.XMLElementWrapper";
+    return u"com.sun.star.xml.wrapper.XMLElementWrapper"_ustr;
 }
 
 sal_Bool SAL_CALL XMLElementWrapper_XmlSecImpl::supportsService( const OUString& rServiceName )
@@ -42,7 +42,7 @@ sal_Bool SAL_CALL XMLElementWrapper_XmlSecImpl::supportsService( const OUString&
 
 uno::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.xml.wrapper.XMLElementWrapper" };
+    return { u"com.sun.star.xml.wrapper.XMLElementWrapper"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*

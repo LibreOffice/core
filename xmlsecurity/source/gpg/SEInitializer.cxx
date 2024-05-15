@@ -62,12 +62,12 @@ sal_Bool SAL_CALL SEInitializerGpg::supportsService(const OUString& rServiceName
 
 uno::Sequence<OUString> SAL_CALL SEInitializerGpg::getSupportedServiceNames()
 {
-    return { "com.sun.star.xml.crypto.GPGSEInitializer" };
+    return { u"com.sun.star.xml.crypto.GPGSEInitializer"_ustr };
 }
 
 OUString SAL_CALL SEInitializerGpg::getImplementationName()
 {
-    return "com.sun.star.xml.security.SEInitializer_Gpg";
+    return u"com.sun.star.xml.security.SEInitializer_Gpg"_ustr;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*

@@ -183,7 +183,7 @@ int pdfVerify(int nArgc, char** pArgv)
         SAL_WARN("xmlsecurity.workben", "no signing certificates found");
         return 1;
     }
-    if (!aDocument.Sign(aCertificates[0], "pdfverify", /*bAdES=*/true))
+    if (!aDocument.Sign(aCertificates[0], u"pdfverify"_ustr, /*bAdES=*/true))
     {
         SAL_WARN("xmlsecurity.workben", "failed to sign");
         return 1;

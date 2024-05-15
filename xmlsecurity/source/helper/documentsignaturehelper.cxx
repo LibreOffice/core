@@ -109,7 +109,7 @@ static void ImplFillElementList(
                 rName, rtl_UriCharClassRelSegment,
                 rtl_UriEncodeStrict, RTL_TEXTENCODING_UTF8);
             if (sEncName.isEmpty() && !rName.isEmpty())
-                throw css::uno::RuntimeException("Failed to encode element name of XStorage", nullptr);
+                throw css::uno::RuntimeException(u"Failed to encode element name of XStorage"_ustr, nullptr);
 
             if ( rxStore->isStreamElement( rName ) )
             {
@@ -184,7 +184,7 @@ DocumentSignatureHelper::CreateElementList(
     const DocumentSignatureAlgorithm mode)
 {
     std::vector< OUString > aElements;
-    OUString aSep(  "/"  );
+    OUString aSep(  u"/"_ustr  );
 
     switch ( eMode )
     {
@@ -196,7 +196,7 @@ DocumentSignatureHelper::CreateElementList(
                 ImplFillElementList(aElements, rxStore, std::u16string_view(), false, mode);
 
                 // 2) Pictures...
-                OUString aSubStorageName( "Pictures" );
+                OUString aSubStorageName( u"Pictures"_ustr );
                 try
                 {
                     Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
@@ -243,7 +243,7 @@ DocumentSignatureHelper::CreateElementList(
         case DocumentSignatureMode::Macros:
         {
             // 1) Macros
-            OUString aSubStorageName( "Basic" );
+            OUString aSubStorageName( u"Basic"_ustr );
             try
             {
                 Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
@@ -294,11 +294,11 @@ DocumentSignatureHelper::CreateElementList(
 
 void DocumentSignatureHelper::AppendContentTypes(const uno::Reference<embed::XStorage>& xStorage, std::vector<OUString>& rElements)
 {
-    if (!xStorage.is() || !xStorage->hasByName("[Content_Types].xml"))
+    if (!xStorage.is() || !xStorage->hasByName(u"[Content_Types].xml"_ustr))
         // ODF
         return;
 
-    uno::Reference<io::XInputStream> xRelStream(xStorage->openStreamElement("[Content_Types].xml", embed::ElementModes::READ), uno::UNO_QUERY);
+    uno::Reference<io::XInputStream> xRelStream(xStorage->openStreamElement(u"[Content_Types].xml"_ustr, embed::ElementModes::READ), uno::UNO_QUERY);
     uno::Sequence< uno::Sequence<beans::StringPair> > aContentTypeInfo = comphelper::OFOPXMLHelper::ReadContentTypeSequence(xRelStream, comphelper::getProcessComponentContext());
     if (aContentTypeInfo.getLength() < 2)
     {
@@ -349,11 +349,11 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
     if (!rxStore.is())
         return aHelper;
 
-    if (rxStore->hasByName("META-INF"))
+    if (rxStore->hasByName(u"META-INF"_ustr))
     {
         try
         {
-            aHelper.xSignatureStorage = rxStore->openStorageElement( "META-INF", nSubStorageOpenMode );
+            aHelper.xSignatureStorage = rxStore->openStorageElement( u"META-INF"_ustr, nSubStorageOpenMode );
             if ( aHelper.xSignatureStorage.is() )
             {
                 OUString aSIGStreamName;
@@ -376,7 +376,7 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
                                                                   uno::UNO_QUERY);
                     sal_Int64 nSize = 0;
                     uno::Reference<beans::XPropertySet> xPropertySet(xInputStream, uno::UNO_QUERY);
-                    xPropertySet->getPropertyValue("Size") >>= nSize;
+                    xPropertySet->getPropertyValue(u"Size"_ustr) >>= nSize;
                     if (nSize >= 0 || nSize < SAL_MAX_INT32)
                     {
                         uno::Sequence<sal_Int8> aData;
@@ -400,15 +400,15 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
             SAL_WARN_IF( nOpenMode != css::embed::ElementModes::READ, "xmlsecurity.helper", "Error creating signature stream..." );
         }
     }
-    else if(rxStore->hasByName("[Content_Types].xml"))
+    else if(rxStore->hasByName(u"[Content_Types].xml"_ustr))
     {
         try
         {
-            if (rxStore->hasByName("_xmlsignatures") && (nOpenMode & embed::ElementModes::TRUNCATE))
+            if (rxStore->hasByName(u"_xmlsignatures"_ustr) && (nOpenMode & embed::ElementModes::TRUNCATE))
                 // Truncate, then all signatures will be written -> remove previous ones.
-                rxStore->removeElement("_xmlsignatures");
+                rxStore->removeElement(u"_xmlsignatures"_ustr);
 
-            aHelper.xSignatureStorage = rxStore->openStorageElement("_xmlsignatures", nSubStorageOpenMode);
+            aHelper.xSignatureStorage = rxStore->openStorageElement(u"_xmlsignatures"_ustr, nSubStorageOpenMode);
             aHelper.nStorageFormat = embed::StorageFormats::OFOPXML;
         }
         catch (const io::IOException&)
@@ -428,7 +428,7 @@ bool DocumentSignatureHelper::CanSignWithGPG(
     if (!rxStore.is())
         return false;
 
-    if (rxStore->hasByName("META-INF")) // ODF
+    if (rxStore->hasByName(u"META-INF"_ustr)) // ODF
     {
         return !isODFPre_1_2(sOdfVersion);
     }
@@ -505,49 +505,49 @@ bool DocumentSignatureHelper::equalsReferenceUriManifestPath(
 
 OUString DocumentSignatureHelper::GetDocumentContentSignatureDefaultStreamName()
 {
-    return "documentsignatures.xml";
+    return u"documentsignatures.xml"_ustr;
 }
 
 OUString DocumentSignatureHelper::GetScriptingContentSignatureDefaultStreamName()
 {
-    return "macrosignatures.xml";
+    return u"macrosignatures.xml"_ustr;
 }
 
 OUString DocumentSignatureHelper::GetPackageSignatureDefaultStreamName()
 {
-    return "packagesignatures.xml";
+    return u"packagesignatures.xml"_ustr;
 }
 
 void DocumentSignatureHelper::writeDigestMethod(
     const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler)
 {
     rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
-    pAttributeList->AddAttribute("Algorithm", ALGO_XMLDSIGSHA256);
-    xDocumentHandler->startElement("DigestMethod", uno::Reference<xml::sax::XAttributeList>(pAttributeList));
-    xDocumentHandler->endElement("DigestMethod");
+    pAttributeList->AddAttribute(u"Algorithm"_ustr, ALGO_XMLDSIGSHA256);
+    xDocumentHandler->startElement(u"DigestMethod"_ustr, uno::Reference<xml::sax::XAttributeList>(pAttributeList));
+    xDocumentHandler->endElement(u"DigestMethod"_ustr);
 }
 
 static void WriteXadesCert(
     uno::Reference<xml::sax::XDocumentHandler> const& xDocumentHandler,
     SignatureInformation::X509CertInfo const& rCertInfo)
 {
-    xDocumentHandler->startElement("xd:Cert", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
-    xDocumentHandler->startElement("xd:CertDigest", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
+    xDocumentHandler->startElement(u"xd:Cert"_ustr, uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
+    xDocumentHandler->startElement(u"xd:CertDigest"_ustr, uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     DocumentSignatureHelper::writeDigestMethod(xDocumentHandler);
-    xDocumentHandler->startElement("DigestValue", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
+    xDocumentHandler->startElement(u"DigestValue"_ustr, uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     assert(!rCertInfo.CertDigest.isEmpty());
     xDocumentHandler->characters(rCertInfo.CertDigest);
-    xDocumentHandler->endElement("DigestValue");
-    xDocumentHandler->endElement("xd:CertDigest");
-    xDocumentHandler->startElement("xd:IssuerSerial", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
-    xDocumentHandler->startElement("X509IssuerName", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
+    xDocumentHandler->endElement(u"DigestValue"_ustr);
+    xDocumentHandler->endElement(u"xd:CertDigest"_ustr);
+    xDocumentHandler->startElement(u"xd:IssuerSerial"_ustr, uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
+    xDocumentHandler->startElement(u"X509IssuerName"_ustr, uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     xDocumentHandler->characters(rCertInfo.X509IssuerName);
-    xDocumentHandler->endElement("X509IssuerName");
-    xDocumentHandler->startElement("X509SerialNumber", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
+    xDocumentHandler->endElement(u"X509IssuerName"_ustr);
+    xDocumentHandler->startElement(u"X509SerialNumber"_ustr, uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     xDocumentHandler->characters(rCertInfo.X509SerialNumber);
-    xDocumentHandler->endElement("X509SerialNumber");
-    xDocumentHandler->endElement("xd:IssuerSerial");
-    xDocumentHandler->endElement("xd:Cert");
+    xDocumentHandler->endElement(u"X509SerialNumber"_ustr);
+    xDocumentHandler->endElement(u"xd:IssuerSerial"_ustr);
+    xDocumentHandler->endElement(u"xd:Cert"_ustr);
 }
 
 void DocumentSignatureHelper::writeSignedProperties(
@@ -557,15 +557,15 @@ void DocumentSignatureHelper::writeSignedProperties(
 {
     {
         rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
-        pAttributeList->AddAttribute("Id", "idSignedProperties_" + signatureInfo.ouSignatureId);
-        xDocumentHandler->startElement("xd:SignedProperties", uno::Reference<xml::sax::XAttributeList>(pAttributeList));
+        pAttributeList->AddAttribute(u"Id"_ustr, "idSignedProperties_" + signatureInfo.ouSignatureId);
+        xDocumentHandler->startElement(u"xd:SignedProperties"_ustr, uno::Reference<xml::sax::XAttributeList>(pAttributeList));
     }
 
-    xDocumentHandler->startElement("xd:SignedSignatureProperties", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
-    xDocumentHandler->startElement("xd:SigningTime", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
+    xDocumentHandler->startElement(u"xd:SignedSignatureProperties"_ustr, uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
+    xDocumentHandler->startElement(u"xd:SigningTime"_ustr, uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     xDocumentHandler->characters(sDate);
-    xDocumentHandler->endElement("xd:SigningTime");
-    xDocumentHandler->startElement("xd:SigningCertificate", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
+    xDocumentHandler->endElement(u"xd:SigningTime"_ustr);
+    xDocumentHandler->startElement(u"xd:SigningCertificate"_ustr, uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
     assert(signatureInfo.GetSigningCertificate() || !signatureInfo.ouGpgKeyID.isEmpty());
     if (signatureInfo.GetSigningCertificate())
     {
@@ -586,35 +586,35 @@ void DocumentSignatureHelper::writeSignedProperties(
         temp.CertDigest = signatureInfo.ouGpgKeyID;
         WriteXadesCert(xDocumentHandler, temp);
     }
-    xDocumentHandler->endElement("xd:SigningCertificate");
-    xDocumentHandler->startElement("xd:SignaturePolicyIdentifier", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
-    xDocumentHandler->startElement("xd:SignaturePolicyImplied", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
-    xDocumentHandler->endElement("xd:SignaturePolicyImplied");
-    xDocumentHandler->endElement("xd:SignaturePolicyIdentifier");
+    xDocumentHandler->endElement(u"xd:SigningCertificate"_ustr);
+    xDocumentHandler->startElement(u"xd:SignaturePolicyIdentifier"_ustr, uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
+    xDocumentHandler->startElement(u"xd:SignaturePolicyImplied"_ustr, uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
+    xDocumentHandler->endElement(u"xd:SignaturePolicyImplied"_ustr);
+    xDocumentHandler->endElement(u"xd:SignaturePolicyIdentifier"_ustr);
 
     if (bWriteSignatureLineData && !signatureInfo.ouSignatureLineId.isEmpty()
         && signatureInfo.aValidSignatureImage.is() && signatureInfo.aInvalidSignatureImage.is())
     {
         rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
         pAttributeList->AddAttribute(
-            "xmlns:loext", "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0");
+            u"xmlns:loext"_ustr, u"urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0"_ustr);
         xDocumentHandler->startElement(
-            "loext:SignatureLine",
+            u"loext:SignatureLine"_ustr,
             Reference<XAttributeList>(pAttributeList));
 
         {
             // Write SignatureLineId element
             xDocumentHandler->startElement(
-                "loext:SignatureLineId",
+                u"loext:SignatureLineId"_ustr,
                 Reference<XAttributeList>(new comphelper::AttributeList()));
             xDocumentHandler->characters(signatureInfo.ouSignatureLineId);
-            xDocumentHandler->endElement("loext:SignatureLineId");
+            xDocumentHandler->endElement(u"loext:SignatureLineId"_ustr);
         }
 
         {
             // Write SignatureLineValidImage element
             xDocumentHandler->startElement(
-                "loext:SignatureLineValidImage",
+                u"loext:SignatureLineValidImage"_ustr,
                 Reference<XAttributeList>(new comphelper::AttributeList()));
 
             OUString aGraphicInBase64;
@@ -623,28 +623,28 @@ void DocumentSignatureHelper::writeSignedProperties(
                 SAL_WARN("xmlsecurity.helper", "could not convert graphic to base64");
 
             xDocumentHandler->characters(aGraphicInBase64);
-            xDocumentHandler->endElement("loext:SignatureLineValidImage");
+            xDocumentHandler->endElement(u"loext:SignatureLineValidImage"_ustr);
         }
 
         {
             // Write SignatureLineInvalidImage element
             xDocumentHandler->startElement(
-                "loext:SignatureLineInvalidImage",
+                u"loext:SignatureLineInvalidImage"_ustr,
                 Reference<XAttributeList>(new comphelper::AttributeList()));
             OUString aGraphicInBase64;
             Graphic aGraphic(signatureInfo.aInvalidSignatureImage);
             if (!XOutBitmap::GraphicToBase64(aGraphic, aGraphicInBase64, false))
                 SAL_WARN("xmlsecurity.helper", "could not convert graphic to base64");
             xDocumentHandler->characters(aGraphicInBase64);
-            xDocumentHandler->endElement("loext:SignatureLineInvalidImage");
+            xDocumentHandler->endElement(u"loext:SignatureLineInvalidImage"_ustr);
         }
 
-        xDocumentHandler->endElement("loext:SignatureLine");
+        xDocumentHandler->endElement(u"loext:SignatureLine"_ustr);
     }
 
-    xDocumentHandler->endElement("xd:SignedSignatureProperties");
+    xDocumentHandler->endElement(u"xd:SignedSignatureProperties"_ustr);
 
-    xDocumentHandler->endElement("xd:SignedProperties");
+    xDocumentHandler->endElement(u"xd:SignedProperties"_ustr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

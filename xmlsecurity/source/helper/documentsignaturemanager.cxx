@@ -147,14 +147,15 @@ bool DocumentSignatureManager::readManifest()
     uno::Reference<packages::manifest::XManifestReader> xReader
         = packages::manifest::ManifestReader::create(mxContext);
 
-    if (mxStore->hasByName("META-INF"))
+    if (mxStore->hasByName(u"META-INF"_ustr))
     {
         //Get the manifest.xml
         uno::Reference<embed::XStorage> xSubStore(
-            mxStore->openStorageElement("META-INF", embed::ElementModes::READ), UNO_SET_THROW);
+            mxStore->openStorageElement(u"META-INF"_ustr, embed::ElementModes::READ),
+            UNO_SET_THROW);
 
         uno::Reference<io::XInputStream> xStream(
-            xSubStore->openStreamElement("manifest.xml", css::embed::ElementModes::READ),
+            xSubStore->openStreamElement(u"manifest.xml"_ustr, css::embed::ElementModes::READ),
             UNO_QUERY_THROW);
 
         m_manifest = xReader->readManifestSequence(xStream);
@@ -229,7 +230,7 @@ SignatureStreamHelper DocumentSignatureManager::ImplOpenSignatureStream(sal_Int3
                                                                         bool bTempStream)
 {
     SignatureStreamHelper aHelper;
-    if (mxStore.is() && mxStore->hasByName("[Content_Types].xml"))
+    if (mxStore.is() && mxStore->hasByName(u"[Content_Types].xml"_ustr))
         aHelper.nStorageFormat = embed::StorageFormats::OFOPXML;
 
     if (bTempStream)
@@ -655,7 +656,7 @@ void DocumentSignatureManager::write(bool bXAdESCompliantIfODF)
             maSignatureHelper.EnsureSignaturesRelation(mxStore, /*bAdd=*/false);
             // Also remove the whole signature sub-storage: release our read-write reference + remove the element.
             aStreamHelper = SignatureStreamHelper();
-            mxStore->removeElement("_xmlsignatures");
+            mxStore->removeElement(u"_xmlsignatures"_ustr);
         }
 
         for (std::size_t i = 0; i < nSignatureCount; ++i)

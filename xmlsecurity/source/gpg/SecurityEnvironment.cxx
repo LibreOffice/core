@@ -79,11 +79,11 @@ SecurityEnvironmentGpg::SecurityEnvironmentGpg()
 #endif
     GpgME::Error err = GpgME::checkEngine(GpgME::OpenPGP);
     if (err)
-        throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+        throw RuntimeException(u"The GpgME library failed to initialize for the OpenPGP protocol."_ustr);
 
     m_ctx.reset( GpgME::Context::createForProtocol(GpgME::OpenPGP) );
     if (m_ctx == nullptr)
-        throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+        throw RuntimeException(u"The GpgME library failed to initialize for the OpenPGP protocol."_ustr);
     m_ctx->setArmor(false);
 }
 
@@ -144,7 +144,7 @@ Reference< XCertificate > SecurityEnvironmentGpg::getCertificate( const OUString
     xmlSecSize nWritten;
     int nRet = xmlSecBase64Decode_ex(strKeyId, const_cast<xmlSecByte*>(strKeyId), xmlStrlen(strKeyId), &nWritten);
     if(nRet < 0)
-        throw RuntimeException("Base64 decode failed");
+        throw RuntimeException(u"Base64 decode failed"_ustr);
 
     m_ctx->setKeyListMode(GPGME_KEYLIST_MODE_LOCAL);
     GpgME::Error err = m_ctx->startKeyListing("", false);

@@ -126,7 +126,7 @@ CertificateContainer::hasCertificate( const OUString & url, const OUString & cer
 OUString SAL_CALL
 CertificateContainer::getImplementationName( )
 {
-    return "com.sun.star.security.CertificateContainer";
+    return u"com.sun.star.security.CertificateContainer"_ustr;
 }
 
 sal_Bool SAL_CALL
@@ -138,7 +138,7 @@ CertificateContainer::supportsService( const OUString& ServiceName )
 Sequence< OUString > SAL_CALL
 CertificateContainer::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.security.CertificateContainer" };
+    return { u"com.sun.star.security.CertificateContainer"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

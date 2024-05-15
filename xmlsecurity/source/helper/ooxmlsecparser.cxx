@@ -370,7 +370,7 @@ class OOXMLSecParser::DsDigestMethodContext
         virtual void StartElement(
             css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
-            OUString ouAlgorithm = xAttrs->getValueByName("Algorithm");
+            OUString ouAlgorithm = xAttrs->getValueByName(u"Algorithm"_ustr);
 
             SAL_WARN_IF( ouAlgorithm.isEmpty(), "xmlsecurity.helper", "no Algorithm in Reference" );
             if (ouAlgorithm.isEmpty())
@@ -409,7 +409,7 @@ class OOXMLSecParser::DsTransformContext
         virtual void StartElement(
             css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
-            OUString aAlgorithm = xAttrs->getValueByName("Algorithm");
+            OUString aAlgorithm = xAttrs->getValueByName(u"Algorithm"_ustr);
 
             if (aAlgorithm == ALGO_RELATIONSHIP)
             {
@@ -469,10 +469,10 @@ class OOXMLSecParser::DsReferenceContext
         {
             m_rParser.HandleIdAttr(xAttrs);
 
-            m_URI = xAttrs->getValueByName("URI");
+            m_URI = xAttrs->getValueByName(u"URI"_ustr);
             SAL_WARN_IF(m_URI.isEmpty(), "xmlsecurity.helper", "URI is empty");
             // Remember the type of this reference.
-            m_Type = xAttrs->getValueByName("Type");
+            m_Type = xAttrs->getValueByName(u"Type"_ustr);
         }
 
         virtual void EndElement() override
@@ -535,7 +535,7 @@ class OOXMLSecParser::DsSignatureMethodContext
         virtual void StartElement(
             css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
-            OUString ouAlgorithm = xAttrs->getValueByName("Algorithm");
+            OUString ouAlgorithm = xAttrs->getValueByName(u"Algorithm"_ustr);
             if (ouAlgorithm == ALGO_ECDSASHA1 || ouAlgorithm == ALGO_ECDSASHA256
                 || ouAlgorithm == ALGO_ECDSASHA512)
             {
@@ -701,7 +701,7 @@ class OOXMLSecParser::XadesSigningTimeContext
         {
             if (m_isReferenced)
             {
-                m_rParser.m_pXSecController->setDate("", m_Value);
+                m_rParser.m_pXSecController->setDate(u""_ustr, m_Value);
             }
             else
             {
@@ -897,7 +897,7 @@ class OOXMLSecParser::MsodigsigSignatureInfoV1Context
                 }
                 if (!m_SignatureComments.isEmpty())
                 {
-                    m_rParser.m_pXSecController->setDescription("", m_SignatureComments);
+                    m_rParser.m_pXSecController->setDescription(u""_ustr, m_SignatureComments);
 
                 }
             }
@@ -1223,13 +1223,13 @@ OOXMLSecParser::OOXMLSecParser(XMLSignatureHelper& rXMLSignatureHelper, XSecCont
 {
     using namespace xmloff::token;
     m_pNamespaceMap->Add( GetXMLToken(XML_XML), GetXMLToken(XML_N_XML), XML_NAMESPACE_XML );
-    m_pNamespaceMap->Add( "_ds", GetXMLToken(XML_N_DS), XML_NAMESPACE_DS );
-    m_pNamespaceMap->Add( "_xades132", GetXMLToken(XML_N_XADES132), XML_NAMESPACE_XADES132);
-    m_pNamespaceMap->Add( "_xades141", GetXMLToken(XML_N_XADES141), XML_NAMESPACE_XADES141);
-    m_pNamespaceMap->Add( "_dc", GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
-    m_pNamespaceMap->Add( "_mdssi", NS_MDSSI, XML_NAMESPACE_MDSSI );
-    m_pNamespaceMap->Add( "_msodigsig", "http://schemas.microsoft.com/office/2006/digsig", XML_NAMESPACE_MSODIGSIG );
-    m_pNamespaceMap->Add( "_office_libo",
+    m_pNamespaceMap->Add( u"_ds"_ustr, GetXMLToken(XML_N_DS), XML_NAMESPACE_DS );
+    m_pNamespaceMap->Add( u"_xades132"_ustr, GetXMLToken(XML_N_XADES132), XML_NAMESPACE_XADES132);
+    m_pNamespaceMap->Add( u"_xades141"_ustr, GetXMLToken(XML_N_XADES141), XML_NAMESPACE_XADES141);
+    m_pNamespaceMap->Add( u"_dc"_ustr, GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
+    m_pNamespaceMap->Add( u"_mdssi"_ustr, NS_MDSSI, XML_NAMESPACE_MDSSI );
+    m_pNamespaceMap->Add( u"_msodigsig"_ustr, u"http://schemas.microsoft.com/office/2006/digsig"_ustr, XML_NAMESPACE_MSODIGSIG );
+    m_pNamespaceMap->Add( u"_office_libo"_ustr,
                          GetXMLToken(XML_N_LO_EXT), XML_NAMESPACE_LO_EXT);
 }
 
@@ -1239,7 +1239,7 @@ OOXMLSecParser::~OOXMLSecParser()
 
 OUString OOXMLSecParser::HandleIdAttr(css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs)
 {
-    OUString const aId = xAttrs->getValueByName("Id");
+    OUString const aId = xAttrs->getValueByName(u"Id"_ustr);
     if (!aId.isEmpty())
     {
         m_pXSecController->collectToVerify(aId);
@@ -1275,7 +1275,7 @@ void SAL_CALL OOXMLSecParser::startElement(const OUString& rName, const uno::Ref
         if (nPrefix != XML_NAMESPACE_DS || localName != "Signature")
         {
             throw css::xml::sax::SAXException(
-                "xmlsecurity: unexpected root element", nullptr,
+                u"xmlsecurity: unexpected root element"_ustr, nullptr,
                 css::uno::Any());
         }
 

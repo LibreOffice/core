@@ -70,7 +70,7 @@ PDFSigningTest::PDFSigningTest() {}
 void PDFSigningTest::setUp()
 {
     test::BootstrapFixture::setUp();
-    MacrosTest::setUpX509(m_directories, "xmlsecurity_pdfsigning");
+    MacrosTest::setUpX509(m_directories, u"xmlsecurity_pdfsigning"_ustr);
 
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
         = xml::crypto::SEInitializer::create(mxComponentContext);
@@ -148,7 +148,7 @@ bool PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL,
             }
             else
             {
-                bool bSignResult = aDocument.Sign(cert, "test", /*bAdES=*/true);
+                bool bSignResult = aDocument.Sign(cert, u"test"_ustr, /*bAdES=*/true);
 #ifdef _WIN32
                 if (!bSignResult)
                 {

@@ -148,12 +148,12 @@ void SAL_CALL SignatureCreatorImpl::initialize( const css::uno::Sequence< css::u
 
 OUString SignatureCreatorImpl_getImplementationName ()
 {
-    return "com.sun.star.xml.security.framework.SignatureCreatorImpl";
+    return u"com.sun.star.xml.security.framework.SignatureCreatorImpl"_ustr;
 }
 
 css::uno::Sequence< OUString > SignatureCreatorImpl_getSupportedServiceNames(  )
 {
-    return { "com.sun.star.xml.crypto.sax.SignatureCreator" };
+    return { u"com.sun.star.xml.crypto.sax.SignatureCreator"_ustr };
 }
 
 /* XServiceInfo */

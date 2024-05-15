@@ -41,17 +41,17 @@ using namespace css;
 CertificateChooser::CertificateChooser(weld::Window* _pParent,
                                        std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > && rxSecurityContexts,
                                        CertificateChooserUserAction eAction)
-    : GenericDialogController(_pParent, "xmlsec/ui/selectcertificatedialog.ui", "SelectCertificateDialog")
+    : GenericDialogController(_pParent, u"xmlsec/ui/selectcertificatedialog.ui"_ustr, u"SelectCertificateDialog"_ustr)
     , meAction(eAction)
-    , m_xFTSign(m_xBuilder->weld_label("sign"))
-    , m_xFTEncrypt(m_xBuilder->weld_label("encrypt"))
-    , m_xCertLB(m_xBuilder->weld_tree_view("signatures"))
-    , m_xViewBtn(m_xBuilder->weld_button("viewcert"))
-    , m_xOKBtn(m_xBuilder->weld_button("ok"))
-    , m_xFTDescription(m_xBuilder->weld_label("description-label"))
-    , m_xDescriptionED(m_xBuilder->weld_entry("description"))
-    , m_xSearchBox(m_xBuilder->weld_entry("searchbox"))
-    , m_xReloadBtn(m_xBuilder->weld_button("reloadcert"))
+    , m_xFTSign(m_xBuilder->weld_label(u"sign"_ustr))
+    , m_xFTEncrypt(m_xBuilder->weld_label(u"encrypt"_ustr))
+    , m_xCertLB(m_xBuilder->weld_tree_view(u"signatures"_ustr))
+    , m_xViewBtn(m_xBuilder->weld_button(u"viewcert"_ustr))
+    , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xFTDescription(m_xBuilder->weld_label(u"description-label"_ustr))
+    , m_xDescriptionED(m_xBuilder->weld_entry(u"description"_ustr))
+    , m_xSearchBox(m_xBuilder->weld_entry(u"searchbox"_ustr))
+    , m_xReloadBtn(m_xBuilder->weld_button(u"reloadcert"_ustr))
 {
     auto nControlWidth = m_xCertLB->get_approximate_digit_width() * 105;
     m_xCertLB->set_size_request(nControlWidth, m_xCertLB->get_height_rows(12));

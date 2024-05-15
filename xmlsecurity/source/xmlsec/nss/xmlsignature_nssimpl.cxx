@@ -238,7 +238,7 @@ SAL_CALL XMLSignature_NssImpl::validate(
 
         // limit possible key data to valid X509 certificates only, no KeyValues
         if (xmlSecPtrListAdd(&(pDsigCtx->keyInfoReadCtx.enabledKeyData), BAD_CAST xmlSecNssKeyDataX509GetKlass()) < 0)
-            throw RuntimeException("failed to limit allowed key data");
+            throw RuntimeException(u"failed to limit allowed key data"_ustr);
 
         xmlBufferPtr pBuf = xmlBufferCreate();
         xmlNodeDump(pBuf, nullptr, pNode, 0, 0);
@@ -289,7 +289,7 @@ SAL_CALL XMLSignature_NssImpl::validate(
 /* XServiceInfo */
 OUString SAL_CALL XMLSignature_NssImpl::getImplementationName()
 {
-    return "com.sun.star.xml.crypto.XMLSignature";
+    return u"com.sun.star.xml.crypto.XMLSignature"_ustr;
 }
 
 /* XServiceInfo */
@@ -307,7 +307,7 @@ sal_Bool SAL_CALL XMLSignature_NssImpl::supportsService(const OUString& rService
 /* XServiceInfo */
 Sequence<OUString> SAL_CALL XMLSignature_NssImpl::getSupportedServiceNames()
 {
-    return { "com.sun.star.xml.crypto.XMLSignature" };
+    return { u"com.sun.star.xml.crypto.XMLSignature"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*

@@ -214,7 +214,7 @@ const OUString & ONSSInitializer::getMozillaCurrentProfile(const css::uno::Refer
         mozilla::MozillaProductType_Firefox,
         mozilla::MozillaProductType_Mozilla };
 
-    uno::Reference<uno::XInterface> xInstance = rxContext->getServiceManager()->createInstanceWithContext("com.sun.star.mozilla.MozillaBootstrap", rxContext);
+    uno::Reference<uno::XInterface> xInstance = rxContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.mozilla.MozillaBootstrap"_ustr, rxContext);
     OSL_ENSURE( xInstance.is(), "failed to create instance" );
 
     uno::Reference<mozilla::XMozillaBootstrap> xMozillaBootstrap(xInstance,uno::UNO_QUERY);
@@ -255,7 +255,7 @@ css::uno::Sequence<css::xml::crypto::NSSProfile> SAL_CALL ONSSInitializer::getNS
         mozilla::MozillaProductType_Firefox,
         mozilla::MozillaProductType_Mozilla };
 
-    uno::Reference<uno::XInterface> xInstance = m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.mozilla.MozillaBootstrap", m_xContext);
+    uno::Reference<uno::XInterface> xInstance = m_xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.mozilla.MozillaBootstrap"_ustr, m_xContext);
     OSL_ENSURE(xInstance.is(), "failed to create instance" );
 
     uno::Reference<mozilla::XMozillaBootstrap> xMozillaBootstrap(xInstance,uno::UNO_QUERY);
@@ -282,10 +282,10 @@ css::uno::Sequence<css::xml::crypto::NSSProfile> SAL_CALL ONSSInitializer::getNS
     {
         TOOLS_WARN_EXCEPTION("xmlsecurity.xmlsec", "getMozillaCurrentProfile:");
     }
-    aProfileList.push_back({"MANUAL", sUserSelect, mozilla::MozillaProductType_Default});
+    aProfileList.push_back({u"MANUAL"_ustr, sUserSelect, mozilla::MozillaProductType_Default});
 
     const char* pEnv = getenv("MOZILLA_CERTIFICATE_FOLDER");
-    aProfileList.push_back({"MOZILLA_CERTIFICATE_FOLDER",
+    aProfileList.push_back({u"MOZILLA_CERTIFICATE_FOLDER"_ustr,
                             pEnv ? OStringToOUString(pEnv, osl_getThreadTextEncoding()) : OUString(),
                             mozilla::MozillaProductType_Default});
 
@@ -436,7 +436,7 @@ bool nsscrypto_initialize(css::uno::Reference<css::uno::XComponentContext> const
         if (true)
 #else
 #if defined SYSTEM_NSS || defined ANDROID
-        OUString rootModule("libnssckbi" SAL_DLLEXTENSION);
+        OUString rootModule(u"libnssckbi" SAL_DLLEXTENSION ""_ustr);
 #else
         OUString rootModule("${LO_LIB_DIR}/libnssckbi" SAL_DLLEXTENSION);
 #endif
@@ -565,10 +565,10 @@ css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL ONSSInitializer
         b1KData = ( nDigestID == css::xml::crypto::DigestID::SHA512_1K );
     }
     else
-        throw css::lang::IllegalArgumentException("Unexpected digest requested.", css::uno::Reference< css::uno::XInterface >(), 1 );
+        throw css::lang::IllegalArgumentException(u"Unexpected digest requested."_ustr, css::uno::Reference< css::uno::XInterface >(), 1 );
 
     if ( aParams.hasElements() )
-        throw css::lang::IllegalArgumentException("Unexpected arguments provided for digest creation.", css::uno::Reference< css::uno::XInterface >(), 2 );
+        throw css::lang::IllegalArgumentException(u"Unexpected arguments provided for digest creation."_ustr, css::uno::Reference< css::uno::XInterface >(), 2 );
 
     css::uno::Reference< css::xml::crypto::XDigestContext > xResult;
     if( initNSS( m_xContext ) )
@@ -595,20 +595,20 @@ css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL ONSSInitializer
             nNSSCipherID = CKM_AES_GCM;
             break;
         default:
-            throw css::lang::IllegalArgumentException("Unexpected cipher requested.", css::uno::Reference< css::uno::XInterface >(), 1);
+            throw css::lang::IllegalArgumentException(u"Unexpected cipher requested."_ustr, css::uno::Reference< css::uno::XInterface >(), 1);
     }
 
     if ( aKey.getLength() != 16 && aKey.getLength() != 24 && aKey.getLength() != 32 )
-        throw css::lang::IllegalArgumentException("Unexpected key length.", css::uno::Reference< css::uno::XInterface >(), 2 );
+        throw css::lang::IllegalArgumentException(u"Unexpected key length."_ustr, css::uno::Reference< css::uno::XInterface >(), 2 );
 
     if ( aParams.hasElements() )
-        throw css::lang::IllegalArgumentException("Unexpected arguments provided for cipher creation.", css::uno::Reference< css::uno::XInterface >(), 5 );
+        throw css::lang::IllegalArgumentException(u"Unexpected arguments provided for cipher creation."_ustr, css::uno::Reference< css::uno::XInterface >(), 5 );
 
     css::uno::Reference< css::xml::crypto::XCipherContext > xResult;
     if( initNSS( m_xContext ) )
     {
         if ( aInitializationVector.getLength() != PK11_GetIVLength( nNSSCipherID ) )
-            throw css::lang::IllegalArgumentException("Unexpected length of initialization vector.", css::uno::Reference< css::uno::XInterface >(), 3 );
+            throw css::lang::IllegalArgumentException(u"Unexpected length of initialization vector."_ustr, css::uno::Reference< css::uno::XInterface >(), 3 );
 
         xResult = OCipherContext::Create( nNSSCipherID, aKey, aInitializationVector, bEncryption, bW3CPadding );
         assert(xResult.is());
@@ -620,7 +620,7 @@ css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL ONSSInitializer
 /* XServiceInfo */
 OUString SAL_CALL ONSSInitializer::getImplementationName()
 {
-    return "com.sun.star.xml.crypto.NSSInitializer";
+    return u"com.sun.star.xml.crypto.NSSInitializer"_ustr;
 }
 
 sal_Bool SAL_CALL ONSSInitializer::supportsService( const OUString& rServiceName )

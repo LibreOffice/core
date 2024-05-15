@@ -53,7 +53,7 @@ bool GetSignatureLinePage(const uno::Reference<frame::XModel>& xModel, sal_Int32
         return false;
     }
 
-    return xPage->getPropertyValue("Number") >>= rPage;
+    return xPage->getPropertyValue(u"Number"_ustr) >>= rPage;
 }
 
 /// If the currently selected shape is a Draw signature line, export that to PDF.
@@ -82,8 +82,8 @@ void GetSignatureLineShape(const uno::Reference<frame::XModel>& xModel, sal_Int3
         return;
     }
 
-    comphelper::SequenceAsHashMap aMap(xShapeProps->getPropertyValue("InteropGrabBag"));
-    auto it = aMap.find("SignatureCertificate");
+    comphelper::SequenceAsHashMap aMap(xShapeProps->getPropertyValue(u"InteropGrabBag"_ustr));
+    auto it = aMap.find(u"SignatureCertificate"_ustr);
     if (it == aMap.end())
     {
         return;
@@ -99,14 +99,14 @@ void GetSignatureLineShape(const uno::Reference<frame::XModel>& xModel, sal_Int3
 
     // Export just the signature line.
     utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("draw_pdf_Export");
+    aMediaDescriptor[u"FilterName"_ustr] <<= u"draw_pdf_Export"_ustr;
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xStream(new utl::OStreamWrapper(aStream));
-    aMediaDescriptor["OutputStream"] <<= xStream;
+    aMediaDescriptor[u"OutputStream"_ustr] <<= xStream;
     uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "Selection", uno::Any(xShapes) } }));
-    aMediaDescriptor["FilterData"] <<= aFilterData;
-    xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+    xStorable->storeToURL(u"private:stream"_ustr, aMediaDescriptor.getAsConstPropertyValueList());
     xStream->flush();
 
     aStream.Seek(0);

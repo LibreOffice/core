@@ -228,7 +228,7 @@ void DocumentDigitalSignatures::initialize( const Sequence< Any >& aArguments)
 {
     if (aArguments.getLength() > 2)
         throw css::lang::IllegalArgumentException(
-          "DocumentDigitalSignatures::initialize requires zero, one, or two arguments",
+          u"DocumentDigitalSignatures::initialize requires zero, one, or two arguments"_ustr,
           static_cast<XInitialization*>(this), 0);
 
     m_nArgumentsCount = aArguments.getLength();
@@ -238,13 +238,13 @@ void DocumentDigitalSignatures::initialize( const Sequence< Any >& aArguments)
 
     if (!(aArguments[0] >>= m_sODFVersion))
         throw css::lang::IllegalArgumentException(
-            "DocumentDigitalSignatures::initialize: the first arguments must be a string",
+            u"DocumentDigitalSignatures::initialize: the first arguments must be a string"_ustr,
             static_cast<XInitialization*>(this), 0);
 
     if (aArguments.getLength() == 2
         && !(aArguments[1] >>= m_bHasDocumentSignature))
         throw css::lang::IllegalArgumentException(
-            "DocumentDigitalSignatures::initialize: the second arguments must be a bool",
+            u"DocumentDigitalSignatures::initialize: the second arguments must be a bool"_ustr,
             static_cast<XInitialization*>(this), 1);
 
     //the Version is supported as of ODF1.2, so for and 1.1 document or older we will receive the
@@ -256,7 +256,7 @@ void DocumentDigitalSignatures::initialize( const Sequence< Any >& aArguments)
 
 OUString DocumentDigitalSignatures::getImplementationName()
 {
-    return "com.sun.star.security.DocumentDigitalSignatures";
+    return u"com.sun.star.security.DocumentDigitalSignatures"_ustr;
 }
 
 sal_Bool DocumentDigitalSignatures::supportsService(
@@ -268,7 +268,7 @@ sal_Bool DocumentDigitalSignatures::supportsService(
 css::uno::Sequence<OUString>
 DocumentDigitalSignatures::getSupportedServiceNames()
 {
-    Sequence<OUString> aRet{ "com.sun.star.security.DocumentDigitalSignatures" };
+    Sequence<OUString> aRet{ u"com.sun.star.security.DocumentDigitalSignatures"_ustr };
     return aRet;
 }
 
@@ -710,8 +710,8 @@ DocumentDigitalSignatures::chooseCertificatesImpl(std::map<OUString, OUString>& 
         return { Reference< css::security::XCertificate >(nullptr) };
 
     uno::Sequence< Reference< css::security::XCertificate > >  xCerts = aChooser->GetSelectedCertificates();
-    rProperties["Description"] = aChooser->GetDescription();
-    rProperties["Usage"] = aChooser->GetUsageText();
+    rProperties[u"Description"_ustr] = aChooser->GetDescription();
+    rProperties[u"Usage"_ustr] = aChooser->GetUsageText();
 
     return xCerts;
 }
@@ -725,7 +725,7 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseSignin
 {
     std::map<OUString, OUString> aProperties;
     Reference< css::security::XCertificate > xCert = chooseCertificatesImpl( aProperties, CertificateChooserUserAction::Sign )[0];
-    rDescription = aProperties["Description"];
+    rDescription = aProperties[u"Description"_ustr];
     return xCert;
 }
 
@@ -733,7 +733,7 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::selectSignin
 {
     std::map<OUString, OUString> aProperties;
     Reference< css::security::XCertificate > xCert = chooseCertificatesImpl( aProperties, CertificateChooserUserAction::SelectSign )[0];
-    rDescription = aProperties["Description"];
+    rDescription = aProperties[u"Description"_ustr];
     return xCert;
 }
 
@@ -744,7 +744,7 @@ DocumentDigitalSignatures::selectSigningCertificateWithType(const CertificateKin
     std::map<OUString, OUString> aProperties;
     Reference<css::security::XCertificate> xCert
         = chooseCertificatesImpl(aProperties, CertificateChooserUserAction::SelectSign, certificateKind)[0];
-    rDescription = aProperties["Description"];
+    rDescription = aProperties[u"Description"_ustr];
     return xCert;
 }
 
@@ -885,7 +885,7 @@ bool DocumentDigitalSignatures::signWithCertificateImpl(
 
     sal_Int32 nSecurityId;
 
-    bool bSuccess = aSignatureManager.add(xCertificate, xSecurityContext, "", nSecurityId, true);
+    bool bSuccess = aSignatureManager.add(xCertificate, xSecurityContext, u""_ustr, nSecurityId, true);
     if (!bSuccess)
         return false;
 

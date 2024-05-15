@@ -103,12 +103,12 @@ void SAL_CALL SignatureVerifierImpl::initialize(
 
 OUString SignatureVerifierImpl_getImplementationName ()
 {
-    return "com.sun.star.xml.security.framework.SignatureVerifierImpl";
+    return u"com.sun.star.xml.security.framework.SignatureVerifierImpl"_ustr;
 }
 
 css::uno::Sequence< OUString > SignatureVerifierImpl_getSupportedServiceNames(  )
 {
-    return { "com.sun.star.xml.crypto.sax.SignatureVerifier" };
+    return { u"com.sun.star.xml.crypto.sax.SignatureVerifier"_ustr };
 }
 
 /* XServiceInfo */

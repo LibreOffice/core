@@ -133,7 +133,7 @@ Sequence< sal_Int8 > SAL_CALL CertificateImpl::getEncoded()
     );
 
     if (err)
-        throw RuntimeException("The GpgME library failed to retrieve the public key");
+        throw RuntimeException(u"The GpgME library failed to retrieve the public key"_ustr);
 
     off_t result = data_out.seek(0,SEEK_SET);
     (void) result;
@@ -147,7 +147,7 @@ Sequence< sal_Int8 > SAL_CALL CertificateImpl::getEncoded()
     result = data_out.seek(0,SEEK_SET);
     assert(result == 0);
     if( data_out.read(m_aBits.getArray(), len) != len )
-        throw RuntimeException("The GpgME library failed to read the key");
+        throw RuntimeException(u"The GpgME library failed to read the key"_ustr);
 
     // Export key to base64Empty for gpg
     return m_aBits;
@@ -234,7 +234,7 @@ const GpgME::Key* CertificateImpl::getCertificate() const
 /* XServiceInfo */
 OUString SAL_CALL CertificateImpl::getImplementationName()
 {
-    return "com.sun.star.xml.security.gpg.XCertificate_GpgImpl";
+    return u"com.sun.star.xml.security.gpg.XCertificate_GpgImpl"_ustr;
 }
 
 /* XServiceInfo */

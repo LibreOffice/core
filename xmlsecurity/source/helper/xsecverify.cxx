@@ -486,7 +486,7 @@ Reference<css::graphic::XGraphic> lcl_getGraphicFromString(std::u16string_view r
         graphic::GraphicProvider::create(comphelper::getProcessComponentContext()) );
     Reference< io::XInputStream > xInputStream( new ::comphelper::SequenceInputStream( seq ) );
 
-    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("InputStream", xInputStream) };
+    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(u"InputStream"_ustr, xInputStream) };
     xGraphic = xGraphicProvider->queryGraphic(aArgs);
 
     return xGraphic;

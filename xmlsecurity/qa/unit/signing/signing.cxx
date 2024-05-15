@@ -84,7 +84,7 @@ protected:
 };
 
 SigningTest::SigningTest()
-    : UnoApiXmlTest("/xmlsecurity/qa/unit/signing/data/")
+    : UnoApiXmlTest(u"/xmlsecurity/qa/unit/signing/data/"_ustr)
 {
 }
 
@@ -92,8 +92,8 @@ void SigningTest::setUp()
 {
     UnoApiXmlTest::setUp();
 
-    MacrosTest::setUpX509(m_directories, "xmlsecurity_signing");
-    MacrosTest::setUpGpg(m_directories, "xmlsecurity_signing");
+    MacrosTest::setUpX509(m_directories, u"xmlsecurity_signing"_ustr);
+    MacrosTest::setUpGpg(m_directories, u"xmlsecurity_signing"_ustr);
 
     // Initialize crypto after setting up the environment variables.
     mxSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
@@ -137,9 +137,9 @@ SigningTest::getCertificate(DocumentSignatureManager& rSignatureManager,
 CPPUNIT_TEST_FIXTURE(SigningTest, testDescription)
 {
     // Create an empty document and store it to a tempfile, finally load it as a storage.
-    load("private:factory/swriter");
+    load(u"private:factory/swriter"_ustr);
 
-    save("writer8");
+    save(u"writer8"_ustr);
 
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
@@ -155,7 +155,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDescription)
         = getCertificate(aManager, svl::crypto::SignatureMethodAlgorithm::RSA);
     if (!xCertificate.is())
         return;
-    OUString aDescription("SigningTest::testDescription");
+    OUString aDescription(u"SigningTest::testDescription"_ustr);
     sal_Int32 nSecurityId;
     aManager.add(xCertificate, mxSecurityContext, aDescription, nSecurityId, false);
 
@@ -169,9 +169,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDescription)
 CPPUNIT_TEST_FIXTURE(SigningTest, testECDSA)
 {
     // Create an empty document and store it to a tempfile, finally load it as a storage.
-    load("private:factory/swriter");
+    load(u"private:factory/swriter"_ustr);
 
-    save("writer8");
+    save(u"writer8"_ustr);
 
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
@@ -188,7 +188,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSA)
     if (!xCertificate.is())
         return;
     sal_Int32 nSecurityId;
-    aManager.add(xCertificate, mxSecurityContext, "", nSecurityId, false);
+    aManager.add(xCertificate, mxSecurityContext, u""_ustr, nSecurityId, false);
 
     // Read back the signature and make sure that it's valid.
     aManager.read(/*bUseTempStream=*/true);
@@ -203,9 +203,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSA)
 CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAOOXML)
 {
     // Create an empty document and store it to a tempfile, finally load it as a storage.
-    load("private:factory/swriter");
+    load(u"private:factory/swriter"_ustr);
 
-    save("MS Word 2007 XML");
+    save(u"MS Word 2007 XML"_ustr);
 
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
@@ -222,7 +222,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAOOXML)
     if (!xCertificate.is())
         return;
     sal_Int32 nSecurityId;
-    aManager.add(xCertificate, mxSecurityContext, "", nSecurityId,
+    aManager.add(xCertificate, mxSecurityContext, u""_ustr, nSecurityId,
                  /*bAdESCompliant=*/false);
 
     // Read back the signature and make sure that it's valid.
@@ -239,9 +239,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAPDF)
 {
     // Create an empty document and store it to a tempfile, finally load it as
     // a stream.
-    load("private:factory/swriter");
+    load(u"private:factory/swriter"_ustr);
 
-    save("writer_pdf_Export");
+    save(u"writer_pdf_Export"_ustr);
 
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
@@ -257,7 +257,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAPDF)
     if (!xCertificate.is())
         return;
     sal_Int32 nSecurityId;
-    aManager.add(xCertificate, mxSecurityContext, "", nSecurityId,
+    aManager.add(xCertificate, mxSecurityContext, u""_ustr, nSecurityId,
                  /*bAdESCompliant=*/true);
 
     // Read back the signature and make sure that it's valid.
@@ -279,9 +279,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAPDF)
 CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLDescription)
 {
     // Create an empty document and store it to a tempfile, finally load it as a storage.
-    load("private:factory/swriter");
+    load(u"private:factory/swriter"_ustr);
 
-    save("MS Word 2007 XML");
+    save(u"MS Word 2007 XML"_ustr);
 
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
@@ -297,7 +297,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLDescription)
         = getCertificate(aManager, svl::crypto::SignatureMethodAlgorithm::RSA);
     if (!xCertificate.is())
         return;
-    OUString aDescription("SigningTest::testDescription");
+    OUString aDescription(u"SigningTest::testDescription"_ustr);
     sal_Int32 nSecurityId;
     aManager.add(xCertificate, mxSecurityContext, aDescription, nSecurityId, false);
 
@@ -367,7 +367,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemove)
     // Read back the signatures and make sure that only purpose1 is left.
     aManager.read(/*bUseTempStream=*/true);
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
-    CPPUNIT_ASSERT_EQUAL(OUString("purpose1"), rInformations[0].ouDescription);
+    CPPUNIT_ASSERT_EQUAL(u"purpose1"_ustr, rInformations[0].ouDescription);
 }
 
 /// Test removing all signatures from a document.
@@ -399,11 +399,11 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemoveAll)
 
     // Make sure that the signature count is zero and the whole signature storage is removed completely.
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0), rInformations.size());
-    CPPUNIT_ASSERT(!xStorage->hasByName("_xmlsignatures"));
+    CPPUNIT_ASSERT(!xStorage->hasByName(u"_xmlsignatures"_ustr));
 
     // And that content types no longer contains signature types.
     uno::Reference<io::XStream> xStream
-        = xStorage->openStreamElement("[Content_Types].xml", embed::ElementModes::READWRITE);
+        = xStorage->openStreamElement(u"[Content_Types].xml"_ustr, embed::ElementModes::READWRITE);
     uno::Reference<io::XInputStream> xInputStream = xStream->getInputStream();
     uno::Sequence<uno::Sequence<beans::StringPair>> aContentTypeInfo
         = comphelper::OFOPXMLHelper::ReadContentTypeSequence(xInputStream, mxComponentContext);
@@ -497,7 +497,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, aaa_testODFX509CertificateChain)
     CPPUNIT_ASSERT_EQUAL(security::CertificateValidity::VALID, infos[0].CertificateStatus);
     CPPUNIT_ASSERT(infos[0].Signer.is());
     CPPUNIT_ASSERT_EQUAL(
-        OUString("CN=Xmlsecurity RSA Test example Alice,O=Xmlsecurity RSA Test,ST=England,C=UK"),
+        u"CN=Xmlsecurity RSA Test example Alice,O=Xmlsecurity RSA Test,ST=England,C=UK"_ustr,
         // CryptoAPI puts a space after comma, NSS does not...
         infos[0].Signer->getSubjectName().replaceAll(", ", ","));
 }
@@ -725,9 +725,10 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFAddVisibleSignature)
     createTempCopy(u"add-visible-signature.pdf");
 
     // Open it.
-    uno::Sequence<beans::PropertyValue> aArgs = { comphelper::makePropertyValue("ReadOnly", true) };
+    uno::Sequence<beans::PropertyValue> aArgs
+        = { comphelper::makePropertyValue(u"ReadOnly"_ustr, true) };
     mxComponent
-        = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.drawing.DrawingDocument", aArgs);
+        = loadFromDesktop(maTempFile.GetURL(), u"com.sun.star.drawing.DrawingDocument"_ustr, aArgs);
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -736,7 +737,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFAddVisibleSignature)
     // Add a signature line.
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
-        xFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr), uno::UNO_QUERY);
     xShape->setPosition(awt::Point(1000, 15000));
     xShape->setSize(awt::Size(10000, 10000));
     uno::Reference<drawing::XDrawPagesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
@@ -795,14 +796,14 @@ CPPUNIT_TEST_FIXTURE(SigningTest, test96097Calc)
 
     // Save a copy
     uno::Sequence<beans::PropertyValue> descSaveACopy(comphelper::InitPropertySequence(
-        { { "SaveACopy", uno::Any(true) }, { "FilterName", uno::Any(OUString("calc8")) } }));
+        { { "SaveACopy", uno::Any(true) }, { "FilterName", uno::Any(u"calc8"_ustr) } }));
     xDocStorable->storeToURL(maTempFile.GetURL(), descSaveACopy);
 
     // FIXME: Error: element "document-signatures" is missing "version" attribute
     skipValidation();
 
     // Save As
-    save("calc8");
+    save(u"calc8"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SigningTest, test96097Doc)
@@ -822,14 +823,14 @@ CPPUNIT_TEST_FIXTURE(SigningTest, test96097Doc)
 
     // Save a copy
     uno::Sequence<beans::PropertyValue> descSaveACopy(comphelper::InitPropertySequence(
-        { { "SaveACopy", uno::Any(true) }, { "FilterName", uno::Any(OUString("writer8")) } }));
+        { { "SaveACopy", uno::Any(true) }, { "FilterName", uno::Any(u"writer8"_ustr) } }));
     xDocStorable->storeToURL(maTempFile.GetURL(), descSaveACopy);
 
     // FIXME: Error: element "document-signatures" is missing "version" attribute
     skipValidation();
 
     // Save As
-    save("writer8");
+    save(u"writer8"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testXAdESNotype)
@@ -865,9 +866,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdESNotype)
 
     // Parse the resulting XML.
     uno::Reference<embed::XStorage> xMetaInf
-        = xStorage->openStorageElement("META-INF", embed::ElementModes::READ);
+        = xStorage->openStorageElement(u"META-INF"_ustr, embed::ElementModes::READ);
     uno::Reference<io::XInputStream> xInputStream(
-        xMetaInf->openStreamElement("documentsignatures.xml", embed::ElementModes::READ),
+        xMetaInf->openStreamElement(u"documentsignatures.xml"_ustr, embed::ElementModes::READ),
         uno::UNO_QUERY);
     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
     xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
@@ -883,16 +884,16 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdESNotype)
     assertXPath(pXmlDoc,
                 "/odfds:document-signatures/dsig:Signature[2]/dsig:SignedInfo/"
                 "dsig:Reference[starts-with(@URI, '#idSignedProperties')]"_ostr,
-                "Type"_ostr, "http://uri.etsi.org/01903#SignedProperties");
+                "Type"_ostr, u"http://uri.etsi.org/01903#SignedProperties"_ustr);
 }
 
 /// Creates a XAdES signature from scratch.
 CPPUNIT_TEST_FIXTURE(SigningTest, testXAdES)
 {
     // Create an empty document, store it to a tempfile and load it as a storage.
-    load("private:factory/swriter");
+    load(u"private:factory/swriter"_ustr);
 
-    save("writer8");
+    save(u"writer8"_ustr);
 
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
@@ -920,9 +921,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdES)
 
     // Parse the resulting XML.
     uno::Reference<embed::XStorage> xMetaInf
-        = xStorage->openStorageElement("META-INF", embed::ElementModes::READ);
+        = xStorage->openStorageElement(u"META-INF"_ustr, embed::ElementModes::READ);
     uno::Reference<io::XInputStream> xInputStream(
-        xMetaInf->openStreamElement("documentsignatures.xml", embed::ElementModes::READ),
+        xMetaInf->openStreamElement(u"documentsignatures.xml"_ustr, embed::ElementModes::READ),
         uno::UNO_QUERY);
     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
     xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
@@ -938,14 +939,14 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdES)
 
     // Assert that the Type attribute is set on all URI's that start with #idSignedProperties
     assertXPath(pXmlDoc, "//dsig:Reference[starts-with(@URI, '#idSignedProperties')]"_ostr,
-                "Type"_ostr, "http://uri.etsi.org/01903#SignedProperties");
+                "Type"_ostr, u"http://uri.etsi.org/01903#SignedProperties"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_ODT)
 {
-    load("private:factory/swriter");
+    load(u"private:factory/swriter"_ustr);
 
-    save("writer8");
+    save(u"writer8"_ustr);
     {
         DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
         CPPUNIT_ASSERT(aManager.init());
@@ -1016,9 +1017,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_ODT)
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_OOXML)
 {
-    load("private:factory/swriter");
+    load(u"private:factory/swriter"_ustr);
 
-    save("MS Word 2007 XML");
+    save(u"MS Word 2007 XML"_ustr);
     {
         DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
         CPPUNIT_ASSERT(aManager.init());
@@ -1036,7 +1037,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_OOXML)
             return;
 
         sal_Int32 nSecurityId;
-        aManager.add(xCertificate, mxSecurityContext, "", nSecurityId, /*bAdESCompliant=*/false);
+        aManager.add(xCertificate, mxSecurityContext, u""_ustr, nSecurityId,
+                     /*bAdESCompliant=*/false);
         aManager.read(/*bUseTempStream=*/true);
         {
             std::vector<SignatureInformation>& rInformations
@@ -1046,7 +1048,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_OOXML)
                                  rInformations[0].nStatus);
         }
 
-        aManager.add(xCertificate, mxSecurityContext, "", nSecurityId, /*bAdESCompliant=*/false);
+        aManager.add(xCertificate, mxSecurityContext, u""_ustr, nSecurityId,
+                     /*bAdESCompliant=*/false);
         aManager.read(/*bUseTempStream=*/true);
         {
             std::vector<SignatureInformation>& rInformations
@@ -1056,7 +1059,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_OOXML)
                                  rInformations[1].nStatus);
         }
 
-        aManager.add(xCertificate, mxSecurityContext, "", nSecurityId, /*bAdESCompliant=*/false);
+        aManager.add(xCertificate, mxSecurityContext, u""_ustr, nSecurityId,
+                     /*bAdESCompliant=*/false);
         aManager.read(/*bUseTempStream=*/true);
         {
             std::vector<SignatureInformation>& rInformations
@@ -1119,7 +1123,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSignatureLineOOXML)
 
     // The signature should have a valid signature, and signature line with two valid images
     CPPUNIT_ASSERT(xSignatureInfo[0].SignatureIsValid);
-    CPPUNIT_ASSERT_EQUAL(OUString("{DEE0514B-13E8-4674-A831-46E3CDB18BB4}"),
+    CPPUNIT_ASSERT_EQUAL(u"{DEE0514B-13E8-4674-A831-46E3CDB18BB4}"_ustr,
                          xSignatureInfo[0].SignatureLineId);
     CPPUNIT_ASSERT(xSignatureInfo[0].ValidSignatureLineImage.is());
     CPPUNIT_ASSERT(xSignatureInfo[0].InvalidSignatureLineImage.is());
@@ -1139,7 +1143,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSignatureLineODF)
     CPPUNIT_ASSERT(xSignatureInfo.getLength());
 
     CPPUNIT_ASSERT(xSignatureInfo[0].SignatureIsValid);
-    CPPUNIT_ASSERT_EQUAL(OUString("{41CF56EE-331B-4125-97D8-2F5669DD3AAC}"),
+    CPPUNIT_ASSERT_EQUAL(u"{41CF56EE-331B-4125-97D8-2F5669DD3AAC}"_ustr,
                          xSignatureInfo[0].SignatureLineId);
     CPPUNIT_ASSERT(xSignatureInfo[0].ValidSignatureLineImage.is());
     CPPUNIT_ASSERT(xSignatureInfo[0].InvalidSignatureLineImage.is());
@@ -1221,7 +1225,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFEncryptedGPG)
     CPPUNIT_ASSERT(pObjectShell);
 
     // export and import again
-    saveAndReload("writer8");
+    saveAndReload(u"writer8"_ustr);
 
     pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
@@ -1253,7 +1257,7 @@ SfxObjectShell* SigningTest::assertDocument(const ::CppUnit::SourceLine aSrcLine
 
     OUString aODFVersion;
     uno::Reference<beans::XPropertySet> xPropSet(pObjectShell->GetStorage(), uno::UNO_QUERY_THROW);
-    xPropSet->getPropertyValue("Version") >>= aODFVersion;
+    xPropSet->getPropertyValue(u"Version"_ustr) >>= aODFVersion;
     CPPUNIT_ASSERT_EQUAL(sVersion, aODFVersion);
 
     return pObjectShell;
@@ -1262,7 +1266,7 @@ SfxObjectShell* SigningTest::assertDocument(const ::CppUnit::SourceLine aSrcLine
 /// Test if a macro signature from a OTT 1.2 template is preserved for ODT 1.2
 CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
 {
-    const OUString aFormats[] = { "writer8", "writer8_template" };
+    const OUString aFormats[] = { u"writer8"_ustr, u"writer8_template"_ustr };
 
     for (OUString const& sFormat : aFormats)
     {
@@ -1275,7 +1279,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
             comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
 
         // we are a template, and have a valid document and macro signature
-        assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::OK,
+        assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::OK,
                        SignatureState::OK, ODFVER_012_TEXT);
 
         // create new document from template
@@ -1284,7 +1288,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
                                mxComponent.is());
 
         // we are somehow a template (?), and have just a valid macro signature
-        assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
+        assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
                        SignatureState::OK, ODFVER_012_TEXT);
 
         // FIXME: Error: element "document-signatures" is missing "version" attribute
@@ -1296,7 +1300,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
         else
         {
             // save as new OTT template
-            save("writer8_template");
+            save(u"writer8_template"_ustr);
 
             // load the saved OTT template as-is to validate signatures
             mxComponent->dispose();
@@ -1310,7 +1314,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
                        SignatureState::OK, ODFVER_013_TEXT);
 
         // save as new OTT template
-        save("writer8_template");
+        save(u"writer8_template"_ustr);
 
         // load the template as-is to validate signatures
         mxComponent->dispose();
@@ -1319,7 +1323,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
             comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
 
         // the loaded document is a OTT with a valid macro signature
-        assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
+        assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
                        SignatureState::OK, ODFVER_013_TEXT);
 
         mxComponent->dispose();
@@ -1338,7 +1342,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
         aURL, OUString(), comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
 
     // we are a template, and have a non-invalid macro signature
-    assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
+    assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
                    SignatureState::NOTVALIDATED, OUString());
 
     // create new document from template
@@ -1347,14 +1351,14 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
                            mxComponent.is());
 
     // we are somehow a template (?), and have just a valid macro signature
-    assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
+    assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
                    SignatureState::NOTVALIDATED, OUString());
 
     // save as new ODT document
-    saveAndReload("writer8");
+    saveAndReload(u"writer8"_ustr);
 
     // the loaded document is a 1.2 ODT without any signatures
-    assertDocument(CPPUNIT_SOURCELINE(), "writer8", SignatureState::NOSIGNATURES,
+    assertDocument(CPPUNIT_SOURCELINE(), u"writer8"_ustr, SignatureState::NOSIGNATURES,
                    SignatureState::NOSIGNATURES, ODFVER_013_TEXT);
 
     // load the template as-is to validate signatures
@@ -1363,11 +1367,11 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
         aURL, OUString(), comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
 
     // we are a template, and have a non-invalid macro signature
-    assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
+    assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
                    SignatureState::NOTVALIDATED, OUString());
 
     // save as new OTT template
-    save("writer8_template");
+    save(u"writer8_template"_ustr);
 
     // load the template as-is to validate signatures
     mxComponent->dispose();
@@ -1376,7 +1380,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
                           comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
 
     // the loaded document is a 1.2 OTT without any signatures
-    assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
+    assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
                    SignatureState::NOSIGNATURES, ODFVER_013_TEXT);
 }
 
@@ -1395,7 +1399,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
     officecfg::Office::Common::Save::ODF::DefaultVersion::set(2, pBatch);
     pBatch->commit();
 
-    const OUString aFormats[] = { "writer8", "writer8_template" };
+    const OUString aFormats[] = { u"writer8"_ustr, u"writer8_template"_ustr };
 
     for (OUString const& sFormat : aFormats)
     {
@@ -1408,7 +1412,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
             comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
 
         // we are a template, and have a non-invalid macro signature
-        assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
+        assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
                        SignatureState::NOTVALIDATED, OUString());
 
         // create new document from template
@@ -1417,7 +1421,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
                                mxComponent.is());
 
         // we are somehow a template (?), and have just a valid macro signature
-        assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
+        assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
                        SignatureState::NOTVALIDATED, OUString());
 
         // FIXME: Error: element "manifest:manifest" is missing "version" attribute
@@ -1429,7 +1433,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
         else
         {
             // save as new OTT template
-            save("writer8_template");
+            save(u"writer8_template"_ustr);
 
             // load the saved OTT template as-is to validate signatures
             mxComponent->dispose();
@@ -1441,7 +1445,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
         assertDocument(CPPUNIT_SOURCELINE(), sFormat, SignatureState::NOSIGNATURES,
                        SignatureState::NOTVALIDATED, OUString());
 
-        save("writer8_template");
+        save(u"writer8_template"_ustr);
 
         // load the template as-is to validate signatures
         mxComponent->dispose();
@@ -1450,7 +1454,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
             comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
 
         // the loaded document is a OTT with a non-invalid macro signature
-        assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
+        assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
                        SignatureState::NOTVALIDATED, OUString());
 
         mxComponent->dispose();

@@ -193,28 +193,28 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     weld::Window* pParent,
     const uno::Reference< uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
     bool bReadOnly, OUString sODFVersion, bool bHasDocumentSignature)
-    : GenericDialogController(pParent, "xmlsec/ui/digitalsignaturesdialog.ui", "DigitalSignaturesDialog")
+    : GenericDialogController(pParent, u"xmlsec/ui/digitalsignaturesdialog.ui"_ustr, u"DigitalSignaturesDialog"_ustr)
     , maSignatureManager(rxCtx, eMode)
     , m_sODFVersion (std::move(sODFVersion))
     , m_bHasDocumentSignature(bHasDocumentSignature)
     , m_bWarningShowSignMacro(false)
-    , m_xHintDocFT(m_xBuilder->weld_label("dochint"))
-    , m_xHintBasicFT(m_xBuilder->weld_label("macrohint"))
-    , m_xHintPackageFT(m_xBuilder->weld_label("packagehint"))
-    , m_xSignaturesLB(m_xBuilder->weld_tree_view("signatures"))
-    , m_xSigsValidImg(m_xBuilder->weld_image("validimg"))
-    , m_xSigsValidFI(m_xBuilder->weld_label("validft"))
-    , m_xSigsInvalidImg(m_xBuilder->weld_image("invalidimg"))
-    , m_xSigsInvalidFI(m_xBuilder->weld_label("invalidft"))
-    , m_xSigsNotvalidatedImg(m_xBuilder->weld_image("notvalidatedimg"))
-    , m_xSigsNotvalidatedFI(m_xBuilder->weld_label("notvalidatedft"))
-    , m_xSigsOldSignatureImg(m_xBuilder->weld_image("oldsignatureimg"))
-    , m_xSigsOldSignatureFI(m_xBuilder->weld_label("oldsignatureft"))
-    , m_xViewBtn(m_xBuilder->weld_button("view"))
-    , m_xAddBtn(m_xBuilder->weld_button("sign"))
-    , m_xRemoveBtn(m_xBuilder->weld_button("remove"))
-    , m_xStartCertMgrBtn(m_xBuilder->weld_button("start_certmanager"))
-    , m_xCloseBtn(m_xBuilder->weld_button("close"))
+    , m_xHintDocFT(m_xBuilder->weld_label(u"dochint"_ustr))
+    , m_xHintBasicFT(m_xBuilder->weld_label(u"macrohint"_ustr))
+    , m_xHintPackageFT(m_xBuilder->weld_label(u"packagehint"_ustr))
+    , m_xSignaturesLB(m_xBuilder->weld_tree_view(u"signatures"_ustr))
+    , m_xSigsValidImg(m_xBuilder->weld_image(u"validimg"_ustr))
+    , m_xSigsValidFI(m_xBuilder->weld_label(u"validft"_ustr))
+    , m_xSigsInvalidImg(m_xBuilder->weld_image(u"invalidimg"_ustr))
+    , m_xSigsInvalidFI(m_xBuilder->weld_label(u"invalidft"_ustr))
+    , m_xSigsNotvalidatedImg(m_xBuilder->weld_image(u"notvalidatedimg"_ustr))
+    , m_xSigsNotvalidatedFI(m_xBuilder->weld_label(u"notvalidatedft"_ustr))
+    , m_xSigsOldSignatureImg(m_xBuilder->weld_image(u"oldsignatureimg"_ustr))
+    , m_xSigsOldSignatureFI(m_xBuilder->weld_label(u"oldsignatureft"_ustr))
+    , m_xViewBtn(m_xBuilder->weld_button(u"view"_ustr))
+    , m_xAddBtn(m_xBuilder->weld_button(u"sign"_ustr))
+    , m_xRemoveBtn(m_xBuilder->weld_button(u"remove"_ustr))
+    , m_xStartCertMgrBtn(m_xBuilder->weld_button(u"start_certmanager"_ustr))
+    , m_xCloseBtn(m_xBuilder->weld_button(u"close"_ustr))
 {
     auto nControlWidth = m_xSignaturesLB->get_approximate_digit_width() * 105;
     m_xSignaturesLB->set_size_request(nControlWidth, m_xSignaturesLB->get_height_rows(10));
@@ -307,7 +307,7 @@ void DigitalSignaturesDialog::SetStorage( const css::uno::Reference < css::embed
     }
 
     // only ODF 1.1 wants to be non-XAdES (m_sODFVersion="1.0" for OOXML somehow?)
-    m_bAdESCompliant = !rxStore->hasByName("META-INF") // it's a Zip storage
+    m_bAdESCompliant = !rxStore->hasByName(u"META-INF"_ustr) // it's a Zip storage
                     || !DocumentSignatureHelper::isODFPre_1_2(m_sODFVersion);
 
     maSignatureManager.setStore(rxStore);
@@ -324,7 +324,7 @@ bool DigitalSignaturesDialog::canAddRemove()
     //FIXME: this func needs some cleanup, such as real split between
     //'canAdd' and 'canRemove' case
     uno::Reference<container::XNameAccess> xNameAccess = maSignatureManager.getStore();
-    if (xNameAccess.is() && xNameAccess->hasByName("[Content_Types].xml"))
+    if (xNameAccess.is() && xNameAccess->hasByName(u"[Content_Types].xml"_ustr))
         // It's always possible to append an OOXML signature.
         return true;
 
@@ -789,7 +789,7 @@ uno::Reference<xml::crypto::XSecurityEnvironment> DigitalSignaturesDialog::getSe
         case CertificateKind_X509:
             return maSignatureManager.getSecurityEnvironment();
         default:
-            throw RuntimeException("Unknown certificate kind");
+            throw RuntimeException(u"Unknown certificate kind"_ustr);
     }
 }
 

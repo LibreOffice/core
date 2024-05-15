@@ -48,7 +48,7 @@ public:
 };
 
 SigningTest2::SigningTest2()
-    : UnoApiXmlTest("/xmlsecurity/qa/unit/signing/data/")
+    : UnoApiXmlTest(u"/xmlsecurity/qa/unit/signing/data/"_ustr)
 {
 }
 
@@ -56,8 +56,8 @@ void SigningTest2::setUp()
 {
     UnoApiXmlTest::setUp();
 
-    MacrosTest::setUpX509(m_directories, "xmlsecurity_signing2");
-    MacrosTest::setUpGpg(m_directories, "xmlsecurity_signing2");
+    MacrosTest::setUpX509(m_directories, u"xmlsecurity_signing2"_ustr);
+    MacrosTest::setUpGpg(m_directories, u"xmlsecurity_signing2"_ustr);
 
     // Initialize crypto after setting up the environment variables.
     mxSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
@@ -84,7 +84,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPreserveMacroSignatureODB)
     loadFromFile(u"odb_signed_macros.odb");
 
     // save as ODB
-    save("StarOffice XML (Base)");
+    save(u"StarOffice XML (Base)"_ustr);
 
     // Parse the resulting XML.
     uno::Reference<embed::XStorage> xStorage
@@ -92,16 +92,16 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPreserveMacroSignatureODB)
             ZIP_STORAGE_FORMAT_STRING, maTempFile.GetURL(), embed::ElementModes::READ);
     CPPUNIT_ASSERT(xStorage.is());
     uno::Reference<embed::XStorage> xMetaInf
-        = xStorage->openStorageElement("META-INF", embed::ElementModes::READ);
+        = xStorage->openStorageElement(u"META-INF"_ustr, embed::ElementModes::READ);
     uno::Reference<io::XInputStream> xInputStream(
-        xMetaInf->openStreamElement("macrosignatures.xml", embed::ElementModes::READ),
+        xMetaInf->openStreamElement(u"macrosignatures.xml"_ustr, embed::ElementModes::READ),
         uno::UNO_QUERY);
     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
     xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
 
     // Make sure the signature is still there
     assertXPath(pXmlDoc, "//dsig:Signature"_ostr, "Id"_ostr,
-                "ID_00a7002f009000bc00ce00f7004400460080002f002e00e400e0003700df00e8");
+                u"ID_00a7002f009000bc00ce00f7004400460080002f002e00e400e0003700df00e8"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODF13)
@@ -110,7 +110,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODF13)
     load(createFileURL(u"encrypted_scriptsig_odf13.odt"), "password");
     {
         uno::Reference<text::XTextDocument> xTextDoc(mxComponent, uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(OUString("secret"), xTextDoc->getText()->getString());
+        CPPUNIT_ASSERT_EQUAL(u"secret"_ustr, xTextDoc->getText()->getString());
         // test macro signature
         SfxBaseModel* pBaseModel(dynamic_cast<SfxBaseModel*>(mxComponent.get()));
         CPPUNIT_ASSERT(pBaseModel);
@@ -118,7 +118,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODF13)
         uno::Reference<beans::XPropertySet> xPropSet(pObjectShell->GetStorage(),
                                                      uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(ODFVER_013_TEXT,
-                             xPropSet->getPropertyValue("Version").get<OUString>());
+                             xPropSet->getPropertyValue(u"Version"_ustr).get<OUString>());
         CPPUNIT_ASSERT_EQUAL(SignatureState::OK, pObjectShell->GetScriptingSignatureState());
     }
 
@@ -135,10 +135,10 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODF13)
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
         pBatch->commit();
 
-        saveAndReload("writer8", "password");
+        saveAndReload(u"writer8"_ustr, "password");
 
-        xmlDocUniquePtr pXmlDoc = parseExport("META-INF/manifest.xml");
-        assertXPath(pXmlDoc, "/manifest:manifest"_ostr, "version"_ostr, "1.3");
+        xmlDocUniquePtr pXmlDoc = parseExport(u"META-INF/manifest.xml"_ustr);
+        assertXPath(pXmlDoc, "/manifest:manifest"_ostr, "version"_ostr, u"1.3"_ustr);
         assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry[@manifest:size != '0']"_ostr,
                     8);
         assertXPath(
@@ -171,7 +171,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODF13)
             8);
         // test reimport
         uno::Reference<text::XTextDocument> xTextDoc(mxComponent, uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(OUString("secret"), xTextDoc->getText()->getString());
+        CPPUNIT_ASSERT_EQUAL(u"secret"_ustr, xTextDoc->getText()->getString());
         // test macro signature - this didn't actually work!
         // using Zip Storage means the encrypted streams are signed, so
         // after encrypting again the signature didn't match and was dropped
@@ -181,14 +181,14 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODF13)
 
     {
         // store it with new wholesome ODF extended encryption - reload
-        saveAndReload("writer8", "password");
+        saveAndReload(u"writer8"_ustr, "password");
 
         // test wholesome ODF extended encryption
-        xmlDocUniquePtr pXmlDoc = parseExport("META-INF/manifest.xml");
-        assertXPath(pXmlDoc, "/manifest:manifest"_ostr, "version"_ostr, "1.3");
+        xmlDocUniquePtr pXmlDoc = parseExport(u"META-INF/manifest.xml"_ustr);
+        assertXPath(pXmlDoc, "/manifest:manifest"_ostr, "version"_ostr, u"1.3"_ustr);
         assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry"_ostr, 1);
         assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry"_ostr, "full-path"_ostr,
-                    "encrypted-package");
+                    u"encrypted-package"_ustr);
         assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry[@manifest:size != '0']"_ostr,
                     1);
         assertXPath(
@@ -225,7 +225,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODF13)
             1);
         // test reimport
         uno::Reference<text::XTextDocument> xTextDoc(mxComponent, uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(OUString("secret"), xTextDoc->getText()->getString());
+        CPPUNIT_ASSERT_EQUAL(u"secret"_ustr, xTextDoc->getText()->getString());
     }
 }
 
@@ -235,7 +235,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODFWholesom
     load(createFileURL(u"encrypted_scriptsig_lo242.odt"), "password");
     {
         uno::Reference<text::XTextDocument> xTextDoc(mxComponent, uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(OUString("secret"), xTextDoc->getText()->getString());
+        CPPUNIT_ASSERT_EQUAL(u"secret"_ustr, xTextDoc->getText()->getString());
         // test macro signature
         SfxBaseModel* pBaseModel(dynamic_cast<SfxBaseModel*>(mxComponent.get()));
         CPPUNIT_ASSERT(pBaseModel);
@@ -243,20 +243,20 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODFWholesom
         uno::Reference<beans::XPropertySet> xPropSet(pObjectShell->GetStorage(),
                                                      uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(ODFVER_013_TEXT,
-                             xPropSet->getPropertyValue("Version").get<OUString>());
+                             xPropSet->getPropertyValue(u"Version"_ustr).get<OUString>());
         CPPUNIT_ASSERT_EQUAL(SignatureState::OK, pObjectShell->GetScriptingSignatureState());
     }
 
     {
         // store it with new wholesome ODF extended encryption - reload
-        saveAndReload("writer8", "password");
+        saveAndReload(u"writer8"_ustr, "password");
 
         // test wholesome ODF extended encryption
-        xmlDocUniquePtr pXmlDoc = parseExport("META-INF/manifest.xml");
-        assertXPath(pXmlDoc, "/manifest:manifest"_ostr, "version"_ostr, "1.3");
+        xmlDocUniquePtr pXmlDoc = parseExport(u"META-INF/manifest.xml"_ustr);
+        assertXPath(pXmlDoc, "/manifest:manifest"_ostr, "version"_ostr, u"1.3"_ustr);
         assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry"_ostr, 1);
         assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry"_ostr, "full-path"_ostr,
-                    "encrypted-package");
+                    u"encrypted-package"_ustr);
         assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry[@manifest:size != '0']"_ostr,
                     1);
         assertXPath(
@@ -293,7 +293,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODFWholesom
             1);
         // test reimport
         uno::Reference<text::XTextDocument> xTextDoc(mxComponent, uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(OUString("secret"), xTextDoc->getText()->getString());
+        CPPUNIT_ASSERT_EQUAL(u"secret"_ustr, xTextDoc->getText()->getString());
         // test macro signature - this should work now
         SfxBaseModel* pBaseModel(dynamic_cast<SfxBaseModel*>(mxComponent.get()));
         CPPUNIT_ASSERT(pBaseModel);
@@ -301,7 +301,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODFWholesom
         uno::Reference<beans::XPropertySet> xPropSet(pObjectShell->GetStorage(),
                                                      uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(ODFVER_013_TEXT,
-                             xPropSet->getPropertyValue("Version").get<OUString>());
+                             xPropSet->getPropertyValue(u"Version"_ustr).get<OUString>());
         CPPUNIT_ASSERT_EQUAL(SignatureState::OK, pObjectShell->GetScriptingSignatureState());
     }
 
@@ -318,10 +318,10 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODFWholesom
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
         pBatch->commit();
 
-        saveAndReload("writer8", "password");
+        saveAndReload(u"writer8"_ustr, "password");
 
-        xmlDocUniquePtr pXmlDoc = parseExport("META-INF/manifest.xml");
-        assertXPath(pXmlDoc, "/manifest:manifest"_ostr, "version"_ostr, "1.3");
+        xmlDocUniquePtr pXmlDoc = parseExport(u"META-INF/manifest.xml"_ustr);
+        assertXPath(pXmlDoc, "/manifest:manifest"_ostr, "version"_ostr, u"1.3"_ustr);
         assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry[@manifest:size != '0']"_ostr,
                     8);
         assertXPath(
@@ -354,7 +354,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODFWholesom
             8);
         // test reimport
         uno::Reference<text::XTextDocument> xTextDoc(mxComponent, uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(OUString("secret"), xTextDoc->getText()->getString());
+        CPPUNIT_ASSERT_EQUAL(u"secret"_ustr, xTextDoc->getText()->getString());
         // test macro signature - this didn't actually work!
         // using Zip Storage means the encrypted streams are signed, so
         // after encrypting again the signature didn't match and was dropped

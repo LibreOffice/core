@@ -182,7 +182,7 @@ void XSecController::createXSecComponent( )
         m_xXMLSignature.set(new XMLSignature_GpgImpl());
     else // xmlsec or mscrypt
 #endif
-        m_xXMLSignature.set(xMCF->createInstanceWithContext("com.sun.star.xml.crypto.XMLSignature", mxCtx), css::uno::UNO_QUERY);
+        m_xXMLSignature.set(xMCF->createInstanceWithContext(u"com.sun.star.xml.crypto.XMLSignature"_ustr, mxCtx), css::uno::UNO_QUERY);
 
     bool bSuccess = m_xXMLSignature.is();
     if ( bSuccess )
@@ -531,32 +531,32 @@ void writeUnsignedProperties(
 {
     {
         rtl::Reference<comphelper::AttributeList> pAttributeList(new comphelper::AttributeList());
-        pAttributeList->AddAttribute("Id", "idUnsignedProperties_" + signatureInfo.ouSignatureId);
-        xDocumentHandler->startElement("xd:UnsignedProperties", uno::Reference<xml::sax::XAttributeList>(pAttributeList));
+        pAttributeList->AddAttribute(u"Id"_ustr, "idUnsignedProperties_" + signatureInfo.ouSignatureId);
+        xDocumentHandler->startElement(u"xd:UnsignedProperties"_ustr, uno::Reference<xml::sax::XAttributeList>(pAttributeList));
     }
 
     {
-        xDocumentHandler->startElement("xd:UnsignedSignatureProperties", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
+        xDocumentHandler->startElement(u"xd:UnsignedSignatureProperties"_ustr, uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
 
         {
-            xDocumentHandler->startElement("xd:CertificateValues", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
+            xDocumentHandler->startElement(u"xd:CertificateValues"_ustr, uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
 
             {
                 for (const auto& i: signatureInfo.maEncapsulatedX509Certificates)
                 {
-                    xDocumentHandler->startElement("xd:EncapsulatedX509Certificate", uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
+                    xDocumentHandler->startElement(u"xd:EncapsulatedX509Certificate"_ustr, uno::Reference<xml::sax::XAttributeList>(new comphelper::AttributeList()));
                     xDocumentHandler->characters(i);
-                    xDocumentHandler->endElement("xd:EncapsulatedX509Certificate");
+                    xDocumentHandler->endElement(u"xd:EncapsulatedX509Certificate"_ustr);
                 }
             }
 
-            xDocumentHandler->endElement("xd:CertificateValues");
+            xDocumentHandler->endElement(u"xd:CertificateValues"_ustr);
         }
 
-        xDocumentHandler->endElement("xd:UnsignedSignatureProperties");
+        xDocumentHandler->endElement(u"xd:UnsignedSignatureProperties"_ustr);
     }
 
-    xDocumentHandler->endElement("xd:UnsignedProperties");
+    xDocumentHandler->endElement(u"xd:UnsignedProperties"_ustr);
 }
 
 }
@@ -586,30 +586,30 @@ void XSecController::exportSignature(
      */
     pAttributeList = new comphelper::AttributeList();
     pAttributeList->AddAttribute(
-        "xmlns",
+        u"xmlns"_ustr,
         NS_XMLDSIG);
 
     if (!signatureInfo.ouSignatureId.isEmpty())
     {
         pAttributeList->AddAttribute(
-            "Id",
+            u"Id"_ustr,
             signatureInfo.ouSignatureId);
     }
 
-    xDocumentHandler->startElement( "Signature", pAttributeList);
+    xDocumentHandler->startElement( u"Signature"_ustr, pAttributeList);
     {
         /* Write SignedInfo element */
         xDocumentHandler->startElement(
-            "SignedInfo",
+            u"SignedInfo"_ustr,
             css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
         {
             /* Write CanonicalizationMethod element */
             pAttributeList = new comphelper::AttributeList();
             pAttributeList->AddAttribute(
-                "Algorithm",
+                u"Algorithm"_ustr,
                 ALGO_C14N);
-            xDocumentHandler->startElement( "CanonicalizationMethod", pAttributeList );
-            xDocumentHandler->endElement( "CanonicalizationMethod" );
+            xDocumentHandler->startElement( u"CanonicalizationMethod"_ustr, pAttributeList );
+            xDocumentHandler->endElement( u"CanonicalizationMethod"_ustr );
 
             /* Write SignatureMethod element */
             pAttributeList = new comphelper::AttributeList();
@@ -620,10 +620,10 @@ void XSecController::exportSignature(
             // Assume that all Reference elements use the same DigestMethod:Algorithm, and that the
             // SignatureMethod:Algorithm should be the corresponding one.
             pAttributeList->AddAttribute(
-                "Algorithm",
+                u"Algorithm"_ustr,
                 getSignatureURI(signatureInfo.eAlgorithmID, vReferenceInfors[0].nDigestID));
-            xDocumentHandler->startElement( "SignatureMethod", pAttributeList );
-            xDocumentHandler->endElement( "SignatureMethod" );
+            xDocumentHandler->startElement( u"SignatureMethod"_ustr, pAttributeList );
+            xDocumentHandler->endElement( u"SignatureMethod"_ustr );
 
             /* Write Reference element */
             int j;
@@ -640,7 +640,7 @@ void XSecController::exportSignature(
                  */
                 {
                     pAttributeList->AddAttribute(
-                        "URI",
+                        u"URI"_ustr,
                         refInfor.ouURI);
                 }
                 else
@@ -650,23 +650,23 @@ void XSecController::exportSignature(
                 {
                     if (refInfor.ouURI.startsWith("idSignedProperties"))
                     {
-                        pAttributeList->AddAttribute("URI", "#idSignedProperties_" + signatureInfo.ouSignatureId);
+                        pAttributeList->AddAttribute(u"URI"_ustr, "#idSignedProperties_" + signatureInfo.ouSignatureId);
                         if (bXAdESCompliantIfODF && !refInfor.ouType.isEmpty())
                         {
                             // The reference which points to the SignedProperties
                             // shall have this specific type.
-                            pAttributeList->AddAttribute("Type", refInfor.ouType);
+                            pAttributeList->AddAttribute(u"Type"_ustr, refInfor.ouType);
                         }
                     }
                     else
                     {
                         pAttributeList->AddAttribute(
-                        "URI",
+                        u"URI"_ustr,
                         "#" + refInfor.ouURI);
                     }
                 }
 
-                xDocumentHandler->startElement( "Reference", pAttributeList );
+                xDocumentHandler->startElement( u"Reference"_ustr, pAttributeList );
                 {
                     /* Write Transforms element */
                     if (refInfor.nType == SignatureReferenceType::XMLSTREAM)
@@ -675,90 +675,90 @@ void XSecController::exportSignature(
                      */
                     {
                         xDocumentHandler->startElement(
-                            "Transforms",
+                            u"Transforms"_ustr,
                             css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
                         {
                             pAttributeList = new comphelper::AttributeList();
                             pAttributeList->AddAttribute(
-                                "Algorithm",
+                                u"Algorithm"_ustr,
                                 ALGO_C14N);
                             xDocumentHandler->startElement(
-                                "Transform",
+                                u"Transform"_ustr,
                                 pAttributeList );
-                            xDocumentHandler->endElement( "Transform" );
+                            xDocumentHandler->endElement( u"Transform"_ustr );
                         }
-                        xDocumentHandler->endElement( "Transforms" );
+                        xDocumentHandler->endElement( u"Transforms"_ustr );
                     }
 
                     /* Write DigestMethod element */
                     pAttributeList = new comphelper::AttributeList();
                     pAttributeList->AddAttribute(
-                        "Algorithm",
+                        u"Algorithm"_ustr,
                         getDigestURI(refInfor.nDigestID));
                     xDocumentHandler->startElement(
-                        "DigestMethod",
+                        u"DigestMethod"_ustr,
                         pAttributeList );
-                    xDocumentHandler->endElement( "DigestMethod" );
+                    xDocumentHandler->endElement( u"DigestMethod"_ustr );
 
                     /* Write DigestValue element */
                     xDocumentHandler->startElement(
-                        "DigestValue",
+                        u"DigestValue"_ustr,
                         css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
                     xDocumentHandler->characters( refInfor.ouDigestValue );
-                    xDocumentHandler->endElement( "DigestValue" );
+                    xDocumentHandler->endElement( u"DigestValue"_ustr );
                 }
-                xDocumentHandler->endElement( "Reference" );
+                xDocumentHandler->endElement( u"Reference"_ustr );
             }
         }
-        xDocumentHandler->endElement( "SignedInfo" );
+        xDocumentHandler->endElement( u"SignedInfo"_ustr );
 
         /* Write SignatureValue element */
         xDocumentHandler->startElement(
-            "SignatureValue",
+            u"SignatureValue"_ustr,
             css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
         xDocumentHandler->characters( signatureInfo.ouSignatureValue );
-        xDocumentHandler->endElement( "SignatureValue" );
+        xDocumentHandler->endElement( u"SignatureValue"_ustr );
 
         /* Write KeyInfo element */
         xDocumentHandler->startElement(
-            "KeyInfo",
+            u"KeyInfo"_ustr,
             css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
         {
             // GPG or X509 key?
             if (!signatureInfo.ouGpgCertificate.isEmpty())
             {
                 pAttributeList = new comphelper::AttributeList();
-                pAttributeList->AddAttribute("xmlns:loext", NS_LOEXT);
+                pAttributeList->AddAttribute(u"xmlns:loext"_ustr, NS_LOEXT);
                 /* Write PGPData element */
                 xDocumentHandler->startElement(
-                    "PGPData",
+                    u"PGPData"_ustr,
                     pAttributeList);
                 {
                     /* Write keyid element */
                     xDocumentHandler->startElement(
-                        "PGPKeyID",
+                        u"PGPKeyID"_ustr,
                         css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
                     xDocumentHandler->characters(signatureInfo.ouGpgKeyID);
-                    xDocumentHandler->endElement( "PGPKeyID" );
+                    xDocumentHandler->endElement( u"PGPKeyID"_ustr );
 
                     /* Write PGPKeyPacket element */
                     if (!signatureInfo.ouGpgCertificate.isEmpty())
                     {
                         xDocumentHandler->startElement(
-                            "PGPKeyPacket",
+                            u"PGPKeyPacket"_ustr,
                             css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
                         xDocumentHandler->characters( signatureInfo.ouGpgCertificate );
-                        xDocumentHandler->endElement( "PGPKeyPacket" );
+                        xDocumentHandler->endElement( u"PGPKeyPacket"_ustr );
                     }
 
                     /* Write PGPOwner element */
                     xDocumentHandler->startElement(
-                        "loext:PGPOwner",
+                        u"loext:PGPOwner"_ustr,
                         css::uno::Reference< css::xml::sax::XAttributeList >(new comphelper::AttributeList()));
                     xDocumentHandler->characters( signatureInfo.ouGpgOwner );
-                    xDocumentHandler->endElement( "loext:PGPOwner" );
+                    xDocumentHandler->endElement( u"loext:PGPOwner"_ustr );
                 }
-                xDocumentHandler->endElement( "PGPData" );
+                xDocumentHandler->endElement( u"PGPData"_ustr );
             }
             else
             {
@@ -767,82 +767,82 @@ void XSecController::exportSignature(
                 {
                     /* Write X509Data element */
                     xDocumentHandler->startElement(
-                        "X509Data",
+                        u"X509Data"_ustr,
                         css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
                     {
                         for (auto const& it : rData)
                         {
                             /* Write X509IssuerSerial element */
                             xDocumentHandler->startElement(
-                                "X509IssuerSerial",
+                                u"X509IssuerSerial"_ustr,
                                 css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
                             {
                                 /* Write X509IssuerName element */
                                 xDocumentHandler->startElement(
-                                    "X509IssuerName",
+                                    u"X509IssuerName"_ustr,
                                     css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
                                 xDocumentHandler->characters(it.X509IssuerName);
-                                xDocumentHandler->endElement( "X509IssuerName" );
+                                xDocumentHandler->endElement( u"X509IssuerName"_ustr );
 
                                 /* Write X509SerialNumber element */
                                 xDocumentHandler->startElement(
-                                    "X509SerialNumber",
+                                    u"X509SerialNumber"_ustr,
                                     css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
                                 xDocumentHandler->characters(it.X509SerialNumber);
-                                xDocumentHandler->endElement( "X509SerialNumber" );
+                                xDocumentHandler->endElement( u"X509SerialNumber"_ustr );
                             }
-                            xDocumentHandler->endElement( "X509IssuerSerial" );
+                            xDocumentHandler->endElement( u"X509IssuerSerial"_ustr );
 
                             /* Write X509Certificate element */
                             if (!it.X509Certificate.isEmpty())
                             {
                                 xDocumentHandler->startElement(
-                                    "X509Certificate",
+                                    u"X509Certificate"_ustr,
                                     css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
                                 xDocumentHandler->characters(it.X509Certificate);
-                                xDocumentHandler->endElement( "X509Certificate" );
+                                xDocumentHandler->endElement( u"X509Certificate"_ustr );
                             }
                         }
                     }
-                    xDocumentHandler->endElement( "X509Data" );
+                    xDocumentHandler->endElement( u"X509Data"_ustr );
                 }
             }
         }
-        xDocumentHandler->endElement( "KeyInfo" );
+        xDocumentHandler->endElement( u"KeyInfo"_ustr );
 
         OUString sDate;
 
         /* Write Object element */
         xDocumentHandler->startElement(
-            "Object",
+            u"Object"_ustr,
             css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
         {
             /* Write SignatureProperties element */
             xDocumentHandler->startElement(
-                "SignatureProperties",
+                u"SignatureProperties"_ustr,
                 css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
             {
                 /* Write SignatureProperty element */
                 pAttributeList = new comphelper::AttributeList();
                 pAttributeList->AddAttribute(
-                    "Id",
+                    u"Id"_ustr,
                     signatureInfo.ouDateTimePropertyId);
                 pAttributeList->AddAttribute(
-                    "Target",
+                    u"Target"_ustr,
                     "#" + signatureInfo.ouSignatureId);
                 xDocumentHandler->startElement(
-                    "SignatureProperty",
+                    u"SignatureProperty"_ustr,
                     pAttributeList);
                 {
                     /* Write timestamp element */
 
                     pAttributeList = new comphelper::AttributeList();
                     pAttributeList->AddAttribute(
-                        "xmlns:dc",
+                        u"xmlns:dc"_ustr,
                         NS_DC);
 
                     xDocumentHandler->startElement(
-                        "dc:date",
+                        u"dc:date"_ustr,
                         pAttributeList);
 
                     OUStringBuffer buffer;
@@ -863,9 +863,9 @@ void XSecController::exportSignature(
                     xDocumentHandler->characters( sDate );
 
                     xDocumentHandler->endElement(
-                        "dc:date");
+                        u"dc:date"_ustr);
                 }
-                xDocumentHandler->endElement( "SignatureProperty" );
+                xDocumentHandler->endElement( u"SignatureProperty"_ustr );
             }
 
             // Write signature description.
@@ -873,49 +873,49 @@ void XSecController::exportSignature(
             {
                 // SignatureProperty element.
                 pAttributeList = new comphelper::AttributeList();
-                pAttributeList->AddAttribute("Id", signatureInfo.ouDescriptionPropertyId);
-                pAttributeList->AddAttribute("Target", "#" + signatureInfo.ouSignatureId);
-                xDocumentHandler->startElement("SignatureProperty", pAttributeList);
+                pAttributeList->AddAttribute(u"Id"_ustr, signatureInfo.ouDescriptionPropertyId);
+                pAttributeList->AddAttribute(u"Target"_ustr, "#" + signatureInfo.ouSignatureId);
+                xDocumentHandler->startElement(u"SignatureProperty"_ustr, pAttributeList);
 
                 {
                     // Description element.
                     pAttributeList = new comphelper::AttributeList();
-                    pAttributeList->AddAttribute("xmlns:dc", NS_DC);
+                    pAttributeList->AddAttribute(u"xmlns:dc"_ustr, NS_DC);
 
-                    xDocumentHandler->startElement("dc:description", pAttributeList);
+                    xDocumentHandler->startElement(u"dc:description"_ustr, pAttributeList);
                     xDocumentHandler->characters(signatureInfo.ouDescription);
-                    xDocumentHandler->endElement("dc:description");
+                    xDocumentHandler->endElement(u"dc:description"_ustr);
                 }
 
-                xDocumentHandler->endElement("SignatureProperty");
+                xDocumentHandler->endElement(u"SignatureProperty"_ustr);
             }
 
-            xDocumentHandler->endElement( "SignatureProperties" );
+            xDocumentHandler->endElement( u"SignatureProperties"_ustr );
         }
-        xDocumentHandler->endElement( "Object" );
+        xDocumentHandler->endElement( u"Object"_ustr );
 
         //  In XAdES, write another Object element for the QualifyingProperties
         if (bXAdESCompliantIfODF)
         {
             pAttributeList =  new comphelper::AttributeList();
-            pAttributeList->AddAttribute("xmlns:xd", NS_XD);
+            pAttributeList->AddAttribute(u"xmlns:xd"_ustr, NS_XD);
             xDocumentHandler->startElement(
-                "Object",
+                u"Object"_ustr,
                 pAttributeList);
             {
                 pAttributeList = new comphelper::AttributeList();
-                pAttributeList->AddAttribute("Target", "#" + signatureInfo.ouSignatureId);
+                pAttributeList->AddAttribute(u"Target"_ustr, "#" + signatureInfo.ouSignatureId);
                 xDocumentHandler->startElement(
-                    "xd:QualifyingProperties",
+                    u"xd:QualifyingProperties"_ustr,
                     pAttributeList);
                 DocumentSignatureHelper::writeSignedProperties(xDocumentHandler, signatureInfo, sDate, true);
                 writeUnsignedProperties(xDocumentHandler, signatureInfo);
-                xDocumentHandler->endElement( "xd:QualifyingProperties" );
+                xDocumentHandler->endElement( u"xd:QualifyingProperties"_ustr );
             }
-            xDocumentHandler->endElement( "Object" );
+            xDocumentHandler->endElement( u"Object"_ustr );
         }
     }
-    xDocumentHandler->endElement( "Signature" );
+    xDocumentHandler->endElement( u"Signature"_ustr );
 }
 
 void XSecController::exportOOXMLSignature(const uno::Reference<embed::XStorage>& xRootStorage, const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler, const SignatureInformation& rInformation)

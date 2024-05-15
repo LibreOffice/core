@@ -139,7 +139,7 @@ css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecCon
         {
             OUString aId = "idSignedProperties_" +  internalSignatureInfor.signatureInfor.ouSignatureId;
             // We write a new reference, so it's possible to use the correct type URI.
-            internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, aId, -1, "http://uri.etsi.org/01903#SignedProperties");
+            internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, aId, -1, u"http://uri.etsi.org/01903#SignedProperties"_ustr);
             size++;
         }
 

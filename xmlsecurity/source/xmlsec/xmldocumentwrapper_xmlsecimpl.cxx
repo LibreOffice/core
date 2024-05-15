@@ -185,7 +185,7 @@ void XMLDocumentWrapper_XmlSecImpl::sendStartElement(
         if (pNsDef->prefix == nullptr)
         {
             pAttributeList->AddAttribute(
-                STRXMLNS,
+                u"" STRXMLNS ""_ustr,
                 OUString::fromUtf8(reinterpret_cast<char const *>(pNsHref)));
         }
         else
@@ -877,7 +877,7 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::compressedSetDocumentLocator( sal_I
 /* XServiceInfo */
 OUString SAL_CALL XMLDocumentWrapper_XmlSecImpl::getImplementationName(  )
 {
-    return "com.sun.star.xml.wrapper.XMLDocumentWrapper";
+    return u"com.sun.star.xml.wrapper.XMLDocumentWrapper"_ustr;
 }
 
 sal_Bool SAL_CALL XMLDocumentWrapper_XmlSecImpl::supportsService( const OUString& rServiceName )
@@ -887,7 +887,7 @@ sal_Bool SAL_CALL XMLDocumentWrapper_XmlSecImpl::supportsService( const OUString
 
 uno::Sequence< OUString > SAL_CALL XMLDocumentWrapper_XmlSecImpl::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.xml.wrapper.XMLDocumentWrapper" };
+    return { u"com.sun.star.xml.wrapper.XMLDocumentWrapper"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*

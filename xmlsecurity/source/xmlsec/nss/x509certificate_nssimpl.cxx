@@ -481,7 +481,7 @@ sal_Int32 SAL_CALL X509Certificate_NssImpl::getCertificateUsage(  )
 /* XServiceInfo */
 OUString SAL_CALL X509Certificate_NssImpl::getImplementationName()
 {
-    return "com.sun.star.xml.security.gpg.XCertificate_NssImpl";
+    return u"com.sun.star.xml.security.gpg.XCertificate_NssImpl"_ustr;
 }
 
 /* XServiceInfo */

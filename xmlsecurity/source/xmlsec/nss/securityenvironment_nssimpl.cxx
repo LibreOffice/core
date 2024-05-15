@@ -138,7 +138,7 @@ SecurityEnvironment_NssImpl::~SecurityEnvironment_NssImpl() {
 
 /* XServiceInfo */
 OUString SAL_CALL SecurityEnvironment_NssImpl::getImplementationName() {
-    return "com.sun.star.xml.crypto.SecurityEnvironment";
+    return u"com.sun.star.xml.crypto.SecurityEnvironment"_ustr;
 }
 
 /* XServiceInfo */
@@ -148,7 +148,7 @@ sal_Bool SAL_CALL SecurityEnvironment_NssImpl::supportsService( const OUString& 
 
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL SecurityEnvironment_NssImpl::getSupportedServiceNames() {
-    Sequence<OUString> seqServiceNames{ "com.sun.star.xml.crypto.SecurityEnvironment" };
+    Sequence<OUString> seqServiceNames{ u"com.sun.star.xml.crypto.SecurityEnvironment"_ustr };
     return seqServiceNames;
 }
 

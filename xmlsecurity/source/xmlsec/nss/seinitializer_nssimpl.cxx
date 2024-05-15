@@ -88,7 +88,7 @@ void SAL_CALL SEInitializer_NssImpl::freeSecurityContext( const uno::Reference< 
 /* XServiceInfo */
 OUString SAL_CALL SEInitializer_NssImpl::getImplementationName(  )
 {
-    return "com.sun.star.xml.crypto.SEInitializer";
+    return u"com.sun.star.xml.crypto.SEInitializer"_ustr;
 }
 sal_Bool SAL_CALL SEInitializer_NssImpl::supportsService( const OUString& rServiceName )
 {
@@ -96,7 +96,7 @@ sal_Bool SAL_CALL SEInitializer_NssImpl::supportsService( const OUString& rServi
 }
 uno::Sequence< OUString > SAL_CALL SEInitializer_NssImpl::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.xml.crypto.SEInitializer" };
+    return { u"com.sun.star.xml.crypto.SEInitializer"_ustr };
 }
 
 namespace {
@@ -118,12 +118,12 @@ NSSInitializer_NssImpl::NSSInitializer_NssImpl(const uno::Reference<uno::XCompon
 
 OUString NSSInitializer_NssImpl::getImplementationName()
 {
-    return "com.sun.star.xml.crypto.NSSInitializer";
+    return u"com.sun.star.xml.crypto.NSSInitializer"_ustr;
 }
 
 uno::Sequence<OUString> SAL_CALL NSSInitializer_NssImpl::getSupportedServiceNames()
 {
-    return { "com.sun.star.xml.crypto.NSSInitializer" };
+    return { u"com.sun.star.xml.crypto.NSSInitializer"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*

@@ -49,23 +49,23 @@ CertificateViewer::CertificateViewer(weld::Window* _pParent,
         const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment,
         const css::uno::Reference< css::security::XCertificate >& _rXCert, bool bCheckForPrivateKey,
         CertificateChooser* pParentChooser)
-    : GenericDialogController(_pParent, "xmlsec/ui/viewcertdialog.ui", "ViewCertDialog")
+    : GenericDialogController(_pParent, u"xmlsec/ui/viewcertdialog.ui"_ustr, u"ViewCertDialog"_ustr)
     , mbCheckForPrivateKey(bCheckForPrivateKey)
     , mpParentChooser(pParentChooser)
-    , mxTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
+    , mxTabCtrl(m_xBuilder->weld_notebook(u"tabcontrol"_ustr))
 {
     mxTabCtrl->connect_enter_page(LINK(this, CertificateViewer, ActivatePageHdl));
 
     mxSecurityEnvironment = _rxSecurityEnvironment;
     mxCert = _rXCert;
 
-    mxGeneralPage.reset(new CertificateViewerGeneralTP(mxTabCtrl->get_page("general"), this));
-    mxDetailsPage.reset(new CertificateViewerDetailsTP(mxTabCtrl->get_page("details"), this));
+    mxGeneralPage.reset(new CertificateViewerGeneralTP(mxTabCtrl->get_page(u"general"_ustr), this));
+    mxDetailsPage.reset(new CertificateViewerDetailsTP(mxTabCtrl->get_page(u"details"_ustr), this));
     if (!mxSecurityEnvironment->buildCertificatePath(mxCert).hasElements())
-        mxTabCtrl->remove_page("path");
+        mxTabCtrl->remove_page(u"path"_ustr);
     else
-        mxPathId.reset(new CertificateViewerCertPathTP(mxTabCtrl->get_page("path"), this));
-    mxTabCtrl->set_current_page("general");
+        mxPathId.reset(new CertificateViewerCertPathTP(mxTabCtrl->get_page(u"path"_ustr), this));
+    mxTabCtrl->set_current_page(u"general"_ustr);
 }
 
 IMPL_LINK(CertificateViewer, ActivatePageHdl, const OUString&, rPage, void)
@@ -83,17 +83,17 @@ CertificateViewerTP::CertificateViewerTP(weld::Container* pParent, const OUStrin
 }
 
 CertificateViewerGeneralTP::CertificateViewerGeneralTP(weld::Container* pParent, CertificateViewer* pDlg)
-    : CertificateViewerTP(pParent, "xmlsec/ui/certgeneral.ui", "CertGeneral", pDlg)
-    , m_xCertImg(mxBuilder->weld_image("certimage"))
-    , m_xHintNotTrustedFT(mxBuilder->weld_label("hintnotrust"))
-    , m_xIssuedToLabelFT(mxBuilder->weld_label("issued_to"))
-    , m_xIssuedToFT(mxBuilder->weld_label("issued_to_value"))
-    , m_xIssuedByLabelFT(mxBuilder->weld_label("issued_by"))
-    , m_xIssuedByFT(mxBuilder->weld_label("issued_by_value"))
-    , m_xValidFromDateFT(mxBuilder->weld_label("valid_from_value"))
-    , m_xValidToDateFT(mxBuilder->weld_label("valid_to_value"))
-    , m_xKeyImg(mxBuilder->weld_image("keyimage"))
-    , m_xHintCorrespPrivKeyFT(mxBuilder->weld_label("privatekey"))
+    : CertificateViewerTP(pParent, u"xmlsec/ui/certgeneral.ui"_ustr, u"CertGeneral"_ustr, pDlg)
+    , m_xCertImg(mxBuilder->weld_image(u"certimage"_ustr))
+    , m_xHintNotTrustedFT(mxBuilder->weld_label(u"hintnotrust"_ustr))
+    , m_xIssuedToLabelFT(mxBuilder->weld_label(u"issued_to"_ustr))
+    , m_xIssuedToFT(mxBuilder->weld_label(u"issued_to_value"_ustr))
+    , m_xIssuedByLabelFT(mxBuilder->weld_label(u"issued_by"_ustr))
+    , m_xIssuedByFT(mxBuilder->weld_label(u"issued_by_value"_ustr))
+    , m_xValidFromDateFT(mxBuilder->weld_label(u"valid_from_value"_ustr))
+    , m_xValidToDateFT(mxBuilder->weld_label(u"valid_to_value"_ustr))
+    , m_xKeyImg(mxBuilder->weld_image(u"keyimage"_ustr))
+    , m_xHintCorrespPrivKeyFT(mxBuilder->weld_label(u"privatekey"_ustr))
 {
     //Verify the certificate
     sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(mpDlg->mxCert,
@@ -157,9 +157,9 @@ void CertificateViewerDetailsTP::InsertElement(const OUString& rField, const OUS
 }
 
 CertificateViewerDetailsTP::CertificateViewerDetailsTP(weld::Container* pParent, CertificateViewer* pDlg)
-    : CertificateViewerTP(pParent, "xmlsec/ui/certdetails.ui", "CertDetails", pDlg)
-    , m_xElementsLB(mxBuilder->weld_tree_view("tablecontainer"))
-    , m_xValueDetails(mxBuilder->weld_text_view("valuedetails"))
+    : CertificateViewerTP(pParent, u"xmlsec/ui/certdetails.ui"_ustr, u"CertDetails"_ustr, pDlg)
+    , m_xElementsLB(mxBuilder->weld_tree_view(u"tablecontainer"_ustr))
+    , m_xValueDetails(mxBuilder->weld_text_view(u"valuedetails"_ustr))
 {
     const int nWidth = m_xElementsLB->get_approximate_digit_width() * 60;
     const int nHeight = m_xElementsLB->get_height_rows(8);
@@ -252,15 +252,15 @@ IMPL_LINK_NOARG(CertificateViewerDetailsTP, ElementSelectHdl, weld::TreeView&, v
 }
 
 CertificateViewerCertPathTP::CertificateViewerCertPathTP(weld::Container* pParent, CertificateViewer* pDlg)
-    : CertificateViewerTP(pParent, "xmlsec/ui/certpage.ui", "CertPage", pDlg)
+    : CertificateViewerTP(pParent, u"xmlsec/ui/certpage.ui"_ustr, u"CertPage"_ustr, pDlg)
     , mpParent(pDlg)
     , mbFirstActivateDone(false)
-    , mxCertPathLB(mxBuilder->weld_tree_view("signatures"))
+    , mxCertPathLB(mxBuilder->weld_tree_view(u"signatures"_ustr))
     , mxScratchIter(mxCertPathLB->make_iterator())
-    , mxViewCertPB(mxBuilder->weld_button("viewcert"))
-    , mxCertStatusML(mxBuilder->weld_text_view("status"))
-    , mxCertOK(mxBuilder->weld_label("certok"))
-    , mxCertNotValidated(mxBuilder->weld_label("certnotok"))
+    , mxViewCertPB(mxBuilder->weld_button(u"viewcert"_ustr))
+    , mxCertStatusML(mxBuilder->weld_text_view(u"status"_ustr))
+    , mxCertOK(mxBuilder->weld_label(u"certok"_ustr))
+    , mxCertNotValidated(mxBuilder->weld_label(u"certnotok"_ustr))
 {
     const int nWidth = mxCertPathLB->get_approximate_digit_width() * 60;
     const int nHeight = mxCertPathLB->get_height_rows(6);

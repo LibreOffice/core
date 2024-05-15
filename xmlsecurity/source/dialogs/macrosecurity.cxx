@@ -55,18 +55,18 @@ IMPL_LINK_NOARG(MacroSecurity, OkBtnHdl, weld::Button&, void)
 
 MacroSecurity::MacroSecurity(weld::Window* pParent,
     css::uno::Reference<css::xml::crypto::XSecurityEnvironment> xSecurityEnvironment)
-    : GenericDialogController(pParent, "xmlsec/ui/macrosecuritydialog.ui", "MacroSecurityDialog")
+    : GenericDialogController(pParent, u"xmlsec/ui/macrosecuritydialog.ui"_ustr, u"MacroSecurityDialog"_ustr)
     , m_xSecurityEnvironment(std::move(xSecurityEnvironment))
-    , m_xTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
-    , m_xOkBtn(m_xBuilder->weld_button("ok"))
-    , m_xResetBtn(m_xBuilder->weld_button("reset"))
+    , m_xTabCtrl(m_xBuilder->weld_notebook(u"tabcontrol"_ustr))
+    , m_xOkBtn(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xResetBtn(m_xBuilder->weld_button(u"reset"_ustr))
 {
     m_xTabCtrl->connect_enter_page(LINK(this, MacroSecurity, ActivatePageHdl));
 
-    m_xLevelTP.reset(new MacroSecurityLevelTP(m_xTabCtrl->get_page("SecurityLevelPage"), this));
-    m_xTrustSrcTP.reset(new MacroSecurityTrustedSourcesTP(m_xTabCtrl->get_page("SecurityTrustPage"), this));
+    m_xLevelTP.reset(new MacroSecurityLevelTP(m_xTabCtrl->get_page(u"SecurityLevelPage"_ustr), this));
+    m_xTrustSrcTP.reset(new MacroSecurityTrustedSourcesTP(m_xTabCtrl->get_page(u"SecurityTrustPage"_ustr), this));
 
-    m_xTabCtrl->set_current_page("SecurityLevelPage");
+    m_xTabCtrl->set_current_page(u"SecurityLevelPage"_ustr);
     m_xOkBtn->connect_clicked(LINK(this, MacroSecurity, OkBtnHdl));
 }
 
@@ -95,18 +95,18 @@ MacroSecurityTP::~MacroSecurityTP()
 }
 
 MacroSecurityLevelTP::MacroSecurityLevelTP(weld::Container* pParent, MacroSecurity* pDlg)
-    : MacroSecurityTP(pParent, "xmlsec/ui/securitylevelpage.ui", "SecurityLevelPage", pDlg)
-    , m_xVeryHighRB(m_xBuilder->weld_radio_button("vhigh"))
-    , m_xHighRB(m_xBuilder->weld_radio_button("high"))
-    , m_xMediumRB(m_xBuilder->weld_radio_button("med"))
-    , m_xLowRB(m_xBuilder->weld_radio_button("low"))
-    , m_xVHighImg(m_xBuilder->weld_widget("vhighimg"))
-    , m_xHighImg(m_xBuilder->weld_widget("highimg"))
-    , m_xMedImg(m_xBuilder->weld_widget("medimg"))
-    , m_xLowImg(m_xBuilder->weld_widget("lowimg"))
-    , m_xWarningLb(m_xBuilder->weld_label("warningmsg"))
-    , m_xWarningImg(m_xBuilder->weld_image("warningimg"))
-    , m_xWarningBox(m_xBuilder->weld_box("warningbox"))
+    : MacroSecurityTP(pParent, u"xmlsec/ui/securitylevelpage.ui"_ustr, u"SecurityLevelPage"_ustr, pDlg)
+    , m_xVeryHighRB(m_xBuilder->weld_radio_button(u"vhigh"_ustr))
+    , m_xHighRB(m_xBuilder->weld_radio_button(u"high"_ustr))
+    , m_xMediumRB(m_xBuilder->weld_radio_button(u"med"_ustr))
+    , m_xLowRB(m_xBuilder->weld_radio_button(u"low"_ustr))
+    , m_xVHighImg(m_xBuilder->weld_widget(u"vhighimg"_ustr))
+    , m_xHighImg(m_xBuilder->weld_widget(u"highimg"_ustr))
+    , m_xMedImg(m_xBuilder->weld_widget(u"medimg"_ustr))
+    , m_xLowImg(m_xBuilder->weld_widget(u"lowimg"_ustr))
+    , m_xWarningLb(m_xBuilder->weld_label(u"warningmsg"_ustr))
+    , m_xWarningImg(m_xBuilder->weld_image(u"warningimg"_ustr))
+    , m_xWarningBox(m_xBuilder->weld_box(u"warningbox"_ustr))
 {
     m_xLowRB->connect_toggled( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
     m_xMediumRB->connect_toggled( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
@@ -170,7 +170,7 @@ MacroSecurityLevelTP::MacroSecurityLevelTP(weld::Container* pParent, MacroSecuri
         m_xLowRB->set_sensitive(false);
     }
 
-    SetWarningLabel("");
+    SetWarningLabel(u""_ustr);
     // Use same font color as in InfobarType::WARNING
     m_xWarningLb->set_font_color(Color(0x70, 0x43, 0x00));
     m_xWarningImg->set_size_request(24, 24);
@@ -214,7 +214,7 @@ IMPL_LINK_NOARG(MacroSecurityLevelTP, RadioButtonHdl, weld::Toggleable&, void)
         SetWarningLabel(XsResId(STR_RELOAD_FILE_WARNING));
     else
     {
-        SetWarningLabel("");
+        SetWarningLabel(u""_ustr);
     }
 }
 
@@ -398,15 +398,15 @@ void MacroSecurityTrustedSourcesTP::FillCertLB(const bool bShowWarnings)
 }
 
 MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(weld::Container* pParent, MacroSecurity* pDlg)
-    : MacroSecurityTP(pParent, "xmlsec/ui/securitytrustpage.ui", "SecurityTrustPage", pDlg)
-    , m_xTrustCertROFI(m_xBuilder->weld_image("lockcertimg"))
-    , m_xTrustCertLB(m_xBuilder->weld_tree_view("certificates"))
-    , m_xViewCertPB(m_xBuilder->weld_button("viewcert"))
-    , m_xRemoveCertPB(m_xBuilder->weld_button("removecert"))
-    , m_xTrustFileROFI(m_xBuilder->weld_image("lockfileimg"))
-    , m_xTrustFileLocLB(m_xBuilder->weld_tree_view("locations"))
-    , m_xAddLocPB(m_xBuilder->weld_button("addfile"))
-    , m_xRemoveLocPB(m_xBuilder->weld_button("removefile"))
+    : MacroSecurityTP(pParent, u"xmlsec/ui/securitytrustpage.ui"_ustr, u"SecurityTrustPage"_ustr, pDlg)
+    , m_xTrustCertROFI(m_xBuilder->weld_image(u"lockcertimg"_ustr))
+    , m_xTrustCertLB(m_xBuilder->weld_tree_view(u"certificates"_ustr))
+    , m_xViewCertPB(m_xBuilder->weld_button(u"viewcert"_ustr))
+    , m_xRemoveCertPB(m_xBuilder->weld_button(u"removecert"_ustr))
+    , m_xTrustFileROFI(m_xBuilder->weld_image(u"lockfileimg"_ustr))
+    , m_xTrustFileLocLB(m_xBuilder->weld_tree_view(u"locations"_ustr))
+    , m_xAddLocPB(m_xBuilder->weld_button(u"addfile"_ustr))
+    , m_xRemoveLocPB(m_xBuilder->weld_button(u"removefile"_ustr))
 {
     auto nColWidth = m_xTrustCertLB->get_approximate_digit_width() * 12;
     std::vector<int> aWidths

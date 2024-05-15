@@ -27,7 +27,7 @@ sal_Int32 SAL_CALL XMLSecurityContextGpg::addSecurityEnvironment(
     const Reference<XSecurityEnvironment>& aSecurityEnvironment)
 {
     if (!aSecurityEnvironment.is())
-        throw RuntimeException("Invalid SecurityEnvironment given!");
+        throw RuntimeException(u"Invalid SecurityEnvironment given!"_ustr);
 
     m_vSecurityEnvironments.push_back(aSecurityEnvironment);
     return m_vSecurityEnvironments.size() - 1;
@@ -42,7 +42,7 @@ Reference<XSecurityEnvironment>
     SAL_CALL XMLSecurityContextGpg::getSecurityEnvironmentByIndex(sal_Int32 index)
 {
     if (index < 0 || o3tl::make_unsigned(index) >= m_vSecurityEnvironments.size())
-        throw RuntimeException("Invalid index");
+        throw RuntimeException(u"Invalid index"_ustr);
 
     return m_vSecurityEnvironments[index];
 }
@@ -51,7 +51,7 @@ Reference<XSecurityEnvironment> SAL_CALL XMLSecurityContextGpg::getSecurityEnvir
 {
     if (m_nDefaultEnvIndex < 0
         || o3tl::make_unsigned(m_nDefaultEnvIndex) >= m_vSecurityEnvironments.size())
-        throw RuntimeException("Invalid index");
+        throw RuntimeException(u"Invalid index"_ustr);
 
     return getSecurityEnvironmentByIndex(m_nDefaultEnvIndex);
 }
@@ -69,7 +69,7 @@ void SAL_CALL XMLSecurityContextGpg::setDefaultSecurityEnvironmentIndex(sal_Int3
 /* XServiceInfo */
 OUString SAL_CALL XMLSecurityContextGpg::getImplementationName()
 {
-    return "com.sun.star.xml.security.gpg.XMLSecurityContext_GpgImpl";
+    return u"com.sun.star.xml.security.gpg.XMLSecurityContext_GpgImpl"_ustr;
 }
 
 /* XServiceInfo */
@@ -81,7 +81,7 @@ sal_Bool SAL_CALL XMLSecurityContextGpg::supportsService(const OUString& service
 /* XServiceInfo */
 Sequence<OUString> SAL_CALL XMLSecurityContextGpg::getSupportedServiceNames()
 {
-    return { OUString("com.sun.star.xml.crypto.XMLSecurityContext") };
+    return { u"com.sun.star.xml.crypto.XMLSecurityContext"_ustr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
