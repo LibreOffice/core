@@ -237,6 +237,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTextEditEmptyGrabBag)
 
     // When editing the shape text of the 2nd rectangle (insert a char at the start).
     SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
     SdrView* pSdrView = pViewShell->GetDrawView();
     SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xRect2);
     pSdrView->SdrBeginTextEdit(pObject);

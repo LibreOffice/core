@@ -2866,6 +2866,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_NoPreserveSpaces)
               xmlXPathObjectPtr pXmlObj = getXPathNode(pDoc, rXPath);
               xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
               CPPUNIT_ASSERT_EQUAL_MESSAGE(rXPath.getStr(), 1, xmlXPathNodeSetGetLength(pXmlNodes));
+              CPPUNIT_ASSERT(pXmlNodes);
               xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
               if (xmlChar* prop = xmlGetProp(pXmlNode, BAD_CAST("style")))
               {

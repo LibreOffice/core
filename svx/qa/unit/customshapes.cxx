@@ -122,6 +122,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf150302)
 
     // Mark Object
     SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
     SdrView* pSdrView = pViewShell->GetDrawView();
     pSdrView->MarkObj(pSdrCustomShape, pSdrView->GetSdrPageView());
 
@@ -157,6 +158,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf147409_GeomItemHash)
 
     // Mark Object
     SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
     SdrView* pSdrView = pViewShell->GetDrawView();
     pSdrView->MarkObj(pSdrCustomShape, pSdrView->GetSdrPageView());
 
@@ -174,6 +176,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf146866_GeomItemHash)
 
     // Mark Object
     SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
     SdrView* pSdrView = pViewShell->GetDrawView();
     pSdrView->MarkObj(pSdrCustomShape, pSdrView->GetSdrPageView());
 
@@ -502,6 +505,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf141021ExtrusionNorth)
 
     // Mark Object
     SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
     SdrView* pSdrView = pViewShell->GetDrawView();
     pSdrView->MarkObj(&rSdrCustomShape, pSdrView->GetSdrPageView());
 
@@ -509,7 +513,9 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf141021ExtrusionNorth)
     SfxRequest aReq(pViewShell->GetViewFrame(), SID_EXTRUSION_DIRECTION);
     SfxInt32Item aItem(SID_EXTRUSION_DIRECTION, 90);
     aReq.AppendItem(aItem);
-    svx::ExtrusionBar::execute(pSdrView, aReq, SfxViewFrame::Current()->GetBindings());
+    SfxViewFrame* pFrame = SfxViewFrame::Current();
+    CPPUNIT_ASSERT(pFrame);
+    svx::ExtrusionBar::execute(pSdrView, aReq, pFrame->GetBindings());
 
     // Verify height. Without the fix in place the height would 4001.
     tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());

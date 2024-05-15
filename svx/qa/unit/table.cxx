@@ -120,6 +120,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSvxTableControllerSetAttrToSelectedShape)
     auto pSdrObject
         = dynamic_cast<sdr::table::SdrTableObj*>(pSdrPage->GetObj(pSdrPage->GetObjCount() - 1));
     SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
     SdrView* pSdrView = pViewShell->GetDrawView();
     pSdrView->SdrBeginTextEdit(pSdrObject);
     CPPUNIT_ASSERT(pSdrView->IsTextEdit());

@@ -2180,6 +2180,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf65535)
         // choose the word "Baaed" from the spelling suggestions of the context menu
 
         SfxViewShell* pViewShell = SfxViewShell::Current();
+        CPPUNIT_ASSERT(pViewShell);
         {
             static constexpr OUStringLiteral sApplyRule(u"Spelling_Baaed");
             SfxStringItem aApplyItem(FN_PARAM_1, sApplyRule);

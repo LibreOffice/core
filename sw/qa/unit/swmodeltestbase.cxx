@@ -184,6 +184,7 @@ OUString SwModelTestBase::parseDump(const OString& aXPath, const OString& aAttri
         int nNodes = xmlXPathNodeSetGetLength(pXmlNodes);
         OString aMessage("xpath ('" + aXPath + "') should match exactly 1 node");
         CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), 1, nNodes);
+        CPPUNIT_ASSERT(pXmlNodes);
         xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
         if (aAttribute.getLength())
             pXpathStrResult = xmlGetProp(pXmlNode, BAD_CAST(aAttribute.getStr()));
