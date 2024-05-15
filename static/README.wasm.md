@@ -122,7 +122,11 @@ You can build LO with WASM exceptions, which should be "much" faster then the JS
 based Emscripten EH handling. For setjmp / longjmp (SjLj) used by the PNG and JPEG
 libraries error handling, this needs Emscripten 3.1.3+. That builds, but execution
 still fails early with a signature mismatch call to Task::UpdateMinPeriod in LO's
-job scheduler code. Unfortunately the build also needs a Qt build with
+job scheduler code (concretely: the call to `pSchedulerData->mpTask->UpdateMinPeriod` in
+`Scheduler::CallbackTaskScheduling` in vcl/source/app/scheduler.cxx being a pure virtual call on a
+destroyed `desktop::Desktop::m_firstRunTimer` instance, because `desktop::Desktop aDesktop` in
+`soffice_main` in desktop/source/app/sofficemain.cxx gets destroyed early, for unclear reasons).
+Unfortunately the build also needs a Qt build with
 "-s SUPPORT_LONGJMP=wasm", which is incompatible with the JS EH + SjLj.
 
 The LO configure flag is simply an additional --enable-wasm-exceptions. Qt5 can
