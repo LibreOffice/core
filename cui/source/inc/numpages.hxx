@@ -95,11 +95,13 @@ class SvxBulletPickTabPage final : public SfxTabPage
 
     OUString            sBulletCharFormatName;
 
+    std::unique_ptr<weld::Button> m_xBtChangeBullet;
     std::unique_ptr<SvxNumValueSet> m_xExamplesVS;
     std::unique_ptr<weld::CustomWeld> m_xExamplesVSWin;
 
     DECL_LINK(NumSelectHdl_Impl, ValueSet*, void);
     DECL_LINK(DoubleClickHdl_Impl, ValueSet*, void);
+    DECL_LINK(ClickAddChangeHdl_Impl, weld::Button&, void);
 public:
     SvxBulletPickTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SvxBulletPickTabPage() override;

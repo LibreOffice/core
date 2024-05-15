@@ -277,9 +277,11 @@ sal_uInt16 BulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLe
 
     const SvxNumberFormat& aFmt(aNum.GetLevel(nActLv));
     sal_UCS4 cChar = aFmt.GetBulletChar();
+
+    css::uno::Sequence<OUString> aBulletSymbols(officecfg::Office::Common::BulletsNumbering::DefaultBullets::get());
     for(sal_uInt16 i = nFromIndex; i < DEFAULT_BULLET_TYPES; i++)
     {
-        if ( (cChar == pActualBullets[i]->cBulletChar) ||
+        if ( (cChar == aBulletSymbols[i].toChar()) ||
              (cChar == 9830 && 57356 == pActualBullets[i]->cBulletChar) ||
              (cChar == 9632 && 57354 == pActualBullets[i]->cBulletChar)   )
         {
@@ -320,8 +322,13 @@ void BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
 {
     if ( nIndex >= DEFAULT_BULLET_TYPES )
         return;
-    sal_UCS4 cChar = pActualBullets[nIndex]->cBulletChar;
-    const vcl::Font& rActBulletFont = pActualBullets[nIndex]->aFont;
+
+    css::uno::Sequence<OUString> aBulletSymbols(officecfg::Office::Common::BulletsNumbering::DefaultBullets::get());
+    css::uno::Sequence<OUString> aBulletFontSymbols(officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::get());
+
+    sal_UCS4 cChar = aBulletSymbols[nIndex].toChar();
+    vcl::Font& rActBulletFont = pActualBullets[nIndex]->aFont;
+    rActBulletFont.SetFamilyName(aBulletFontSymbols[nIndex]);
 
     sal_uInt16 nMask = 1;
     OUString sBulletCharFormatName = GetBulletCharFmtName();
