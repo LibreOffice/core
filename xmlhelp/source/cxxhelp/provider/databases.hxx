@@ -143,7 +143,7 @@ namespace chelp {
 
         ~Databases();
 
-        OString getImageTheme() const;
+        static OString getImageTheme();
 
         OUString getInstallPathAsURL();
         OUString getInstallPathAsURL(std::unique_lock<std::mutex>& rGuard);

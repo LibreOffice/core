@@ -746,7 +746,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
                           RTL_TEXTENCODING_UTF8 ) + "'";
 
         parString[last++] = "imgtheme"_ostr;
-        parString[last++] = "'" + pDatabases->getImageTheme() + "'";
+        parString[last++] = "'" + chelp::Databases::getImageTheme() + "'";
         parString[last++] = "hp"_ostr;
         parString[last++] = "'" + urlParam->getByName( "HelpPrefix" ) + "'";
 

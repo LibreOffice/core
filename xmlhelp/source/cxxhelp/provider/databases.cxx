@@ -57,6 +57,7 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <utility>
 
 #include "databases.hxx"
@@ -176,26 +177,10 @@ Databases::~Databases()
     m_aKeywordInfo.clear();
 }
 
-OString Databases::getImageTheme() const
+// static
+OString Databases::getImageTheme()
 {
-    uno::Reference< lang::XMultiServiceFactory > xConfigProvider =
-        configuration::theDefaultProvider::get(m_xContext);
-
-    // set root path
-    uno::Sequence<uno::Any> lParams(comphelper::InitAnyPropertySequence(
-    {
-        {"nodepath", uno::Any(u"org.openoffice.Office.Common"_ustr)}
-    }));
-
-    // open it
-    uno::Reference< uno::XInterface > xCFG( xConfigProvider->createInstanceWithArguments(
-                u"com.sun.star.configuration.ConfigurationAccess"_ustr,
-                lParams) );
-
-    uno::Reference< container::XHierarchicalNameAccess > xAccess(xCFG, uno::UNO_QUERY_THROW);
-    uno::Any aResult = xAccess->getByHierarchicalName(u"Misc/SymbolStyle"_ustr);
-    OUString aSymbolsStyleName;
-    aResult >>= aSymbolsStyleName;
+    OUString aSymbolsStyleName = officecfg::Office::Common::Misc::SymbolStyle::get();
 
     if ( aSymbolsStyleName.isEmpty() || aSymbolsStyleName == "auto" )
     {
