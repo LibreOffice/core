@@ -536,12 +536,10 @@ void SwWW8ImplReader::InsertTxbxStyAttrs(SfxItemSet& rS, sal_uInt16 nColl, ManTy
                 aLR.SetRight(pStyInf->m_pFormat->GetRightMargin().GetRight());
                 rS.Put(aLR);
             }
-            else if (
-                nSlotId && nWhich != nSlotId &&
-                0 != (nWhich = pEditPool->GetWhichIDFromSlotID(nSlotId)) &&
-                nWhich != nSlotId &&
-                ( SfxItemState::SET != rS.GetItemState(nWhich, false) )
-               )
+            else if (nSlotId && nWhich != nSlotId
+                     && 0 != (nWhich = pEditPool->GetTrueWhichIDFromSlotID(nSlotId))
+                     && SfxItemState::SET != rS.GetItemState(nWhich, false))
+
             {
                 rS.Put( pItem->CloneSetWhich(nWhich) );
             }
@@ -794,11 +792,8 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
                             }
                             pS->Put(aLR);
                         }
-                        else if (
-                            nSlotId && nWhich != nSlotId &&
-                            0 != (nWhich = pEditPool->GetWhichIDFromSlotID(nSlotId)) &&
-                            nWhich != nSlotId
-                        )
+                        else if (nSlotId && nWhich != nSlotId
+                                 && 0 != (nWhich = pEditPool->GetTrueWhichIDFromSlotID(nSlotId)))
                         {
                             pS->Put( pItem->CloneSetWhich(nWhich) );
                         }
