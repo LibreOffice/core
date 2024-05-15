@@ -63,7 +63,13 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 #endif
     tools::extendApplicationEnvironment();
 
+#if defined EMSCRIPTEN
+    //TODO, see "Experimental (AKA currently broken) WASM exception + SjLj build" in
+    // static/README.wasm.md:
+    new desktop::Desktop();
+#else
     desktop::Desktop aDesktop;
+#endif
     // This string is used during initialization of the Gtk+ VCL module
     Application::SetAppName( u"soffice"_ustr );
 
