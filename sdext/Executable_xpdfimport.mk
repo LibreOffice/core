@@ -13,6 +13,7 @@ $(eval $(call gb_Executable_use_externals,xpdfimport,\
     boost_headers \
     expat \
     freetype \
+    libpng \
     poppler \
     $(if $(filter-out WNT MACOSX,$(OS)),fontconfig) \
     zlib \
