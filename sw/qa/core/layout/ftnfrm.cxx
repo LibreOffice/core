@@ -84,4 +84,22 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineEndnoteAndFootnote)
     CPPUNIT_ASSERT_LESS(nFootnoteTop, nEndnoteTop);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testInlineEndnoteAndSection)
+{
+    // Given a document ending with a section, ContinuousEndnotes is true:
+    createSwDoc("inline-endnote-and-section.odt");
+
+    // When laying out that document:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Then make sure the endnote section is after the section at the end of the document, not
+    // inside it:
+    int nToplevelSections = countXPathNodes(pXmlDoc, "/root/page/body/section"_ostr);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 1
+    // and we even crashed on shutdown.
+    CPPUNIT_ASSERT_EQUAL(2, nToplevelSections);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

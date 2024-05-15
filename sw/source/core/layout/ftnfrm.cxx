@@ -1560,7 +1560,21 @@ void SwFootnoteBossFrame::AppendFootnote( SwContentFrame *pRef, SwTextFootnote *
             {
                 SwSection* pSwSection = pDoc->GetEndNoteInfo().GetSwSection(*pDoc);
                 pEndnoteSection = new SwSectionFrame(*pSwSection, pPage);
-                pEndnoteSection->InsertBehind(pPage->FindBodyCont(), pPage->FindLastBodyContent());
+                SwLayoutFrame* pParent = pPage->FindBodyCont();
+                SwFrame* pBefore = pPage->FindLastBodyContent();
+                while (pBefore)
+                {
+                    // Check if the last content frame is directly under the body frame or there is
+                    // something in-between, e.g. a section frame.
+                    if (pBefore->GetUpper() == pParent)
+                    {
+                        break;
+                    }
+
+                    // If so, insert behind the parent of the content frame, not inside the parent.
+                    pBefore = pBefore->GetUpper();
+                }
+                pEndnoteSection->InsertBehind(pParent, pBefore);
                 pEndnoteSection->Init();
                 pEndnoteSection->SetEndNoteSection(true);
             }
