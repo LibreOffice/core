@@ -48,42 +48,42 @@ uno::Sequence< beans::Property > Content::getProperties(
     sal_Int32 idx = 0;
     pprops[idx++] =
         beans::Property(
-            "ContentType",
+            u"ContentType"_ustr,
             -1,
             cppu::UnoType<OUString>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
     pprops[idx++] =
         beans::Property(
-            "IsReadOnly",
+            u"IsReadOnly"_ustr,
             -1,
             cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
     pprops[idx++] =
         beans::Property(
-            "IsErrorDocument",
+            u"IsErrorDocument"_ustr,
             -1,
             cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
     pprops[idx++] =
         beans::Property(
-            "IsDocument",
+            u"IsDocument"_ustr,
             -1,
             cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
     pprops[idx++] =
         beans::Property(
-            "IsFolder",
+            u"IsFolder"_ustr,
             -1,
             cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
     pprops[idx++] =
         beans::Property(
-            "Title",
+            u"Title"_ustr,
             -1,
             cppu::UnoType<OUString>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
@@ -91,7 +91,7 @@ uno::Sequence< beans::Property > Content::getProperties(
     if( withMediaType )
         pprops[idx++] =
             beans::Property(
-                "MediaType",
+                u"MediaType"_ustr,
                 -1,
                 cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
@@ -100,42 +100,42 @@ uno::Sequence< beans::Property > Content::getProperties(
     {
         pprops[idx++] =
             beans::Property(
-                "Order",
+                u"Order"_ustr,
                 -1,
                 cppu::UnoType<sal_Int32>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
         pprops[idx++] =
             beans::Property(
-                "KeywordList",
+                u"KeywordList"_ustr,
                 -1,
                 cppu::UnoType<uno::Sequence< OUString >>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
         pprops[idx++] =
             beans::Property(
-                "KeywordRef",
+                u"KeywordRef"_ustr,
                 -1,
                 cppu::UnoType<uno::Sequence< uno::Sequence< OUString > >>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
         pprops[idx++] =
             beans::Property(
-                "KeywordTitleForRef",
+                u"KeywordTitleForRef"_ustr,
                 -1,
                 cppu::UnoType<uno::Sequence< uno::Sequence< OUString > >>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
         pprops[idx++] =
             beans::Property(
-                "KeywordAnchorForRef",
+                u"KeywordAnchorForRef"_ustr,
                 -1,
                 cppu::UnoType<uno::Sequence< uno::Sequence< OUString > >>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
         pprops[idx++] =
             beans::Property(
-                "SearchScopes",
+                u"SearchScopes"_ustr,
                 -1,
                 cppu::UnoType<uno::Sequence< OUString >>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
@@ -145,7 +145,7 @@ uno::Sequence< beans::Property > Content::getProperties(
     {
         pprops[idx++] =
             beans::Property(
-                "AnchorName",
+                u"AnchorName"_ustr,
                 -1,
                 cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
@@ -166,27 +166,27 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
     {
         // Required commands
         ucb::CommandInfo(
-            "getCommandInfo",
+            u"getCommandInfo"_ustr,
             -1,
             cppu::UnoType<void>::get()
         ),
         ucb::CommandInfo(
-            "getPropertySetInfo",
+            u"getPropertySetInfo"_ustr,
             -1,
             cppu::UnoType<void>::get()
         ),
         ucb::CommandInfo(
-            "getPropertyValues",
+            u"getPropertyValues"_ustr,
             -1,
             cppu::UnoType<uno::Sequence< beans::Property >>::get()
         ),
         ucb::CommandInfo(
-            "setPropertyValues",
+            u"setPropertyValues"_ustr,
             -1,
             cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get()
         ),
         ucb::CommandInfo(
-            "open",
+            u"open"_ustr,
             -1,
             cppu::UnoType<ucb::OpenCommandArgument2>::get()
         )

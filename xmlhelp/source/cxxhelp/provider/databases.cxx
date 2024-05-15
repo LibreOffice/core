@@ -184,16 +184,16 @@ OString Databases::getImageTheme() const
     // set root path
     uno::Sequence<uno::Any> lParams(comphelper::InitAnyPropertySequence(
     {
-        {"nodepath", uno::Any(OUString("org.openoffice.Office.Common"))}
+        {"nodepath", uno::Any(u"org.openoffice.Office.Common"_ustr)}
     }));
 
     // open it
     uno::Reference< uno::XInterface > xCFG( xConfigProvider->createInstanceWithArguments(
-                "com.sun.star.configuration.ConfigurationAccess",
+                u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                 lParams) );
 
     uno::Reference< container::XHierarchicalNameAccess > xAccess(xCFG, uno::UNO_QUERY_THROW);
-    uno::Any aResult = xAccess->getByHierarchicalName("Misc/SymbolStyle");
+    uno::Any aResult = xAccess->getByHierarchicalName(u"Misc/SymbolStyle"_ustr);
     OUString aSymbolsStyleName;
     aResult >>= aSymbolsStyleName;
 
@@ -353,7 +353,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( std::u16strin
 
             const sal_Unicode* str = fileContent.getStr();
             OUString current,program,startid,title;
-            OUString order( "1" );
+            OUString order( u"1"_ustr );
 
             for( sal_Int32 i = 0;i < fileContent.getLength();i++ )
             {
@@ -453,7 +453,7 @@ helpdatafileproxy::Hdf* Databases::getHelpDataFile(std::unique_lock<std::mutex>&
     if( Database.empty() || Language.isEmpty() )
         return nullptr;
 
-    OUString aFileExt( helpText ? OUString(".ht") : OUString(".db") );
+    OUString aFileExt( helpText ? u".ht"_ustr : u".db"_ustr );
     OUString dbFileName = OUString::Concat("/") + Database + aFileExt;
     OUString key;
     if( pExtensionPath == nullptr )
@@ -853,7 +853,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile(
 
             Reference< XInterface > xIfc
                 = m_xSMgr->createInstanceWithArgumentsAndContext(
-                    "com.sun.star.packages.comp.ZipPackage",
+                    u"com.sun.star.packages.comp.ZipPackage"_ustr,
                     aArguments, m_xContext );
 
             if ( xIfc.is() )
@@ -967,7 +967,7 @@ void Databases::cascadingStylesheet( const OUString& Language,
                 uno::Reference< awt::XVclWindowPeer > xVclWindowPeer( xTopWindow, uno::UNO_QUERY );
                 if ( xVclWindowPeer.is() )
                 {
-                    uno::Any aHCMode = xVclWindowPeer->getProperty( "HighContrastMode" );
+                    uno::Any aHCMode = xVclWindowPeer->getProperty( u"HighContrastMode"_ustr );
                     if ( ( aHCMode >>= bHighContrastMode ) && bHighContrastMode )
                     {
                         aCSS = "highcontrastblack";
@@ -1186,7 +1186,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromP
     }
     if( bRegistered )
     {
-        OUString aHelpMediaType( "application/vnd.sun.star.help" );
+        OUString aHelpMediaType( u"application/vnd.sun.star.help"_ustr );
         if( xPackage->isBundle() )
         {
             const Sequence< Reference< deployment::XPackage > > aPkgSeq = xPackage->getBundle
@@ -1227,7 +1227,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextUserHelpPack
     {
         Reference< XExtensionManager > xExtensionManager = ExtensionManager::get(m_xContext);
         m_aUserPackagesSeq = xExtensionManager->getDeployedExtensions
-            ( "user", Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+            ( u"user"_ustr, Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
         m_bUserPackagesLoaded = true;
     }
 
@@ -1255,7 +1255,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextSharedHelpPa
     {
         Reference< XExtensionManager > xExtensionManager = ExtensionManager::get(m_xContext);
         m_aSharedPackagesSeq = xExtensionManager->getDeployedExtensions
-            ( "shared", Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+            ( u"shared"_ustr, Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
         m_bSharedPackagesLoaded = true;
     }
 
@@ -1283,7 +1283,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextBundledHelpP
     {
         Reference< XExtensionManager > xExtensionManager = ExtensionManager::get(m_xContext);
         m_aBundledPackagesSeq = xExtensionManager->getDeployedExtensions
-            ( "bundled", Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+            ( u"bundled"_ustr, Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
         m_bBundledPackagesLoaded = true;
     }
 
@@ -1481,7 +1481,7 @@ helpdatafileproxy::Hdf* DataBaseIterator::implGetHdfFromPackage( const Reference
     {
         OUString aRegDataUrl = optRegData.Value + "/";
 
-        OUString aHelpFilesBaseName("help");
+        OUString aHelpFilesBaseName(u"help"_ustr);
 
         OUString aUsedLanguage = m_aLanguage;
         pRetHdf = m_rDatabases.getHelpDataFile(
@@ -1666,14 +1666,14 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage(
         Sequence< Any > aArguments{
             Any(zipFile),
             // let ZipPackage be used ( no manifest.xml is required )
-            Any(comphelper::makePropertyValue("StorageFormat",
+            Any(comphelper::makePropertyValue(u"StorageFormat"_ustr,
                                               ZIP_STORAGE_FORMAT_STRING))
         };
 
         Reference< XMultiComponentFactory >xSMgr = m_xContext->getServiceManager();
         Reference< XInterface > xIfc
             = xSMgr->createInstanceWithArgumentsAndContext(
-                "com.sun.star.packages.comp.ZipPackage",
+                u"com.sun.star.packages.comp.ZipPackage"_ustr,
                 aArguments, m_xContext );
 
         if ( xIfc.is() )
@@ -1839,7 +1839,7 @@ OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary
                     }
                 }
 
-                HelpIndexer aIndexer(aLang, "help", aLangURL, aZipDir);
+                HelpIndexer aIndexer(aLang, u"help"_ustr, aLangURL, aZipDir);
                 aIndexer.indexDocuments();
 
                 if( bIsWriteAccess )

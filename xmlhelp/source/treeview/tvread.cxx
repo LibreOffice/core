@@ -261,7 +261,7 @@ TVRead::getByName( const OUString& aName )
 Sequence< OUString > SAL_CALL
 TVRead::getElementNames( )
 {
-    return { "Title", "TargetURL", "Children" };
+    return { u"Title"_ustr, u"TargetURL"_ustr, u"Children"_ustr };
 }
 
 sal_Bool SAL_CALL
@@ -609,16 +609,16 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
 
         uno::Sequence<uno::Any> lParams(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", uno::Any(OUString("/org.openoffice.Setup/Product"))}
+            {"nodepath", uno::Any(u"/org.openoffice.Setup/Product"_ustr)}
         }));
 
         // open it
         uno::Reference< uno::XInterface > xCFG( xConfigProvider->createInstanceWithArguments(
-                    "com.sun.star.configuration.ConfigurationAccess",
+                    u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                     lParams) );
 
         uno::Reference< container::XNameAccess > xDirectAccess(xCFG, uno::UNO_QUERY);
-        uno::Any aRet = xDirectAccess->getByName("ooSetupExtension");
+        uno::Any aRet = xDirectAccess->getByName(u"ooSetupExtension"_ustr);
 
         aRet >>= setupextension;
     }
@@ -761,7 +761,7 @@ TVChildTarget::getHierAccess( const Reference< XMultiServiceFactory >& sProvider
         {
             xHierAccess =
                 Reference< XHierarchicalNameAccess >
-                ( sProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess", { Any(OUString::createFromAscii(file)) }),
+                ( sProvider->createInstanceWithArguments( u"com.sun.star.configuration.ConfigurationAccess"_ustr, { Any(OUString::createFromAscii(file)) }),
                   UNO_QUERY );
         }
         catch( const css::uno::Exception& )
@@ -832,7 +832,7 @@ TreeFileIterator::TreeFileIterator( OUString aLanguage )
     m_xContext = ::comphelper::getProcessComponentContext();
     if( !m_xContext.is() )
     {
-        throw RuntimeException( "TreeFileIterator::TreeFileIterator(), no XComponentContext" );
+        throw RuntimeException( u"TreeFileIterator::TreeFileIterator(), no XComponentContext"_ustr );
     }
 
     m_xSFA = ucb::SimpleFileAccess::create(m_xContext);
@@ -902,7 +902,7 @@ Reference< deployment::XPackage > TreeFileIterator::implGetNextUserHelpPackage
     if( !m_bUserPackagesLoaded )
     {
         Reference< XPackageManager > xUserManager =
-            thePackageManagerFactory::get( m_xContext )->getPackageManager("user");
+            thePackageManagerFactory::get( m_xContext )->getPackageManager(u"user"_ustr);
         m_aUserPackagesSeq = xUserManager->getDeployedPackages
             ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
 
@@ -932,7 +932,7 @@ Reference< deployment::XPackage > TreeFileIterator::implGetNextSharedHelpPackage
     if( !m_bSharedPackagesLoaded )
     {
         Reference< XPackageManager > xSharedManager =
-            thePackageManagerFactory::get( m_xContext )->getPackageManager("shared");
+            thePackageManagerFactory::get( m_xContext )->getPackageManager(u"shared"_ustr);
         m_aSharedPackagesSeq = xSharedManager->getDeployedPackages
             ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
 
@@ -962,7 +962,7 @@ Reference< deployment::XPackage > TreeFileIterator::implGetNextBundledHelpPackag
     if( !m_bBundledPackagesLoaded )
     {
         Reference< XPackageManager > xBundledManager =
-            thePackageManagerFactory::get( m_xContext )->getPackageManager("bundled");
+            thePackageManagerFactory::get( m_xContext )->getPackageManager(u"bundled"_ustr);
         m_aBundledPackagesSeq = xBundledManager->getDeployedPackages
             ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
 

@@ -57,7 +57,7 @@ ContentProvider::~ContentProvider()
 
 OUString SAL_CALL ContentProvider::getImplementationName()
 {
-    return "CHelpContentProvider";
+    return u"CHelpContentProvider"_ustr;
 }
 
 sal_Bool SAL_CALL
@@ -69,7 +69,7 @@ ContentProvider::supportsService(const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL
 ContentProvider::getSupportedServiceNames()
 {
-    return { "com.sun.star.help.XMLHelp", "com.sun.star.ucb.HelpContentProvider" };
+    return { u"com.sun.star.help.XMLHelp"_ustr, u"com.sun.star.ucb.HelpContentProvider"_ustr };
 }
 
 // XContentProvider methods.

@@ -49,7 +49,7 @@ TVFactory::~TVFactory()
 OUString SAL_CALL
 TVFactory::getImplementationName()
 {
-    return "com.sun.star.help.TreeViewImpl";
+    return u"com.sun.star.help.TreeViewImpl"_ustr;
 }
 
 sal_Bool SAL_CALL TVFactory::supportsService( const OUString& ServiceName )
@@ -60,7 +60,7 @@ sal_Bool SAL_CALL TVFactory::supportsService( const OUString& ServiceName )
 Sequence< OUString > SAL_CALL
 TVFactory::getSupportedServiceNames()
 {
-    return { "com.sun.star.help.TreeView", "com.sun.star.ucb.HiearchyDataSource" };
+    return { u"com.sun.star.help.TreeView"_ustr, u"com.sun.star.ucb.HiearchyDataSource"_ustr };
 }
 
 // XMultiServiceFactory
@@ -118,7 +118,7 @@ TVFactory::createInstanceWithArguments(
 Sequence< OUString > SAL_CALL
 TVFactory::getAvailableServiceNames( )
 {
-    return { "com.sun.star.ucb.HierarchyDataReadAccess" };
+    return { u"com.sun.star.ucb.HierarchyDataReadAccess"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

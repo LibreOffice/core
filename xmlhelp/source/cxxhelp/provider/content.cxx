@@ -100,13 +100,13 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 // virtual
 OUString SAL_CALL Content::getImplementationName()
 {
-    return "CHelpContent";
+    return u"CHelpContent"_ustr;
 }
 
 // virtual
 uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 {
-    return { "com.sun.star.ucb.CHelpContent" };
+    return { u"com.sun.star.ucb.CHelpContent"_ustr };
 }
 
 // XContent methods.
@@ -334,8 +334,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         if ( rProp.Name == "ContentType" )
             xRow->appendString(
                 rProp,
-                OUString(
-                    "application/vnd.sun.star.help" ) );
+                u"application/vnd.sun.star.help"_ustr );
         else if ( rProp.Name == "Title" )
             xRow->appendString ( rProp,m_aURLParameter.get_title() );
         else if ( rProp.Name == "IsReadOnly" )
@@ -354,14 +353,14 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             if( m_aURLParameter.isActive() )
                 xRow->appendString(
                     rProp,
-                    OUString( "text/plain" ) );
+                    u"text/plain"_ustr );
             else if( m_aURLParameter.isFile() )
                 xRow->appendString(
-                    rProp,OUString( "text/html" ) );
+                    rProp,u"text/html"_ustr );
             else if( m_aURLParameter.isRoot() )
                 xRow->appendString(
                     rProp,
-                    OUString( "text/css" ) );
+                    u"text/css"_ustr );
             else
                 xRow->appendVoid( rProp );
         else if( m_aURLParameter.isModule() )
@@ -411,7 +410,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             }
             else if ( rProp.Name == "SearchScopes" )
             {
-                uno::Sequence< OUString > seq{ "Heading", "FullText" };
+                uno::Sequence< OUString > seq{ u"Heading"_ustr, u"FullText"_ustr };
                 xRow->appendObject( rProp, uno::Any(seq) );
             }
             else if ( rProp.Name == "Order" )
