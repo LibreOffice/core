@@ -88,7 +88,7 @@ hud_awareness_register (GDBusConnection       *connection,
 
   if (object_id == 0)
   {
-      g_free (handle);
+      // note: tdf#161073 handle is expected to be freed by g_dbus_connection_register_object on failure
       return 0;
   }
 
