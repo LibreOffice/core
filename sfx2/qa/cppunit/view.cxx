@@ -43,7 +43,9 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testReloadPage)
     aSet.Put(SfxInt32Item(SID_PAGE_NUMBER, 1));
     SfxRequest aReq(SID_RELOAD, SfxCallMode::SLOT, aSet);
     pFrame->ExecReload_Impl(aReq);
-    uno::Reference<frame::XModel> xModel = SfxObjectShell::Current()->GetBaseModel();
+    SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    CPPUNIT_ASSERT(pDocSh);
+    uno::Reference<frame::XModel> xModel = pDocSh->GetBaseModel();
     mxComponent = xModel;
 
     // Check the current page after reload.
