@@ -178,7 +178,7 @@ namespace treeview {
 
         TVChildTarget( const ConfigData& configData,TVDom* tvDom );
 
-        TVChildTarget( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+        TVChildTarget();
 
         virtual ~TVChildTarget() override;
 
@@ -202,25 +202,7 @@ namespace treeview {
     private:
         std::vector< rtl::Reference< TVRead > >   Elements;
 
-        static ConfigData init(
-            const css::uno::Reference< css::uno::XComponentContext >& xContext );
-
-        static css::uno::Reference< css::lang::XMultiServiceFactory >
-        getConfiguration(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-
-        static css::uno::Reference< css::container::XHierarchicalNameAccess >
-        getHierAccess( const css::uno::Reference<  css::lang::XMultiServiceFactory >& rxProvider,
-                       const char* file );
-
-        static OUString
-        getKey( const css::uno::Reference< css::container::XHierarchicalNameAccess >& xHierAccess,
-                const char* key );
-
-        static bool
-        getBooleanKey(
-                    const css::uno::Reference< css::container::XHierarchicalNameAccess >& xHierAccess,
-                    const char* key);
+        static ConfigData init();
 
         static void subst( OUString& instpath );
 

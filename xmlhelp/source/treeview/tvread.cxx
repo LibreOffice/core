@@ -39,6 +39,8 @@
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/pathoptions.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <officecfg/Setup.hxx>
 #include <memory>
 #include <utility>
 
@@ -367,9 +369,9 @@ TVChildTarget::TVChildTarget( const ConfigData& configData,TVDom* tvDom )
         Elements[i] = new TVRead( configData,tvDom->children[i].get() );
 }
 
-TVChildTarget::TVChildTarget( const Reference< XComponentContext >& xContext )
+TVChildTarget::TVChildTarget()
 {
-    ConfigData configData = init( xContext );
+    ConfigData configData = init();
 
     if( configData.locale.isEmpty() || configData.system.isEmpty() )
         return;
@@ -572,20 +574,17 @@ TVChildTarget::hasByHierarchicalName( const OUString& aName )
         return hasByName( aName );
 }
 
-ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
+ConfigData TVChildTarget::init()
 {
     ConfigData configData;
-    Reference< XMultiServiceFactory > sProvider( getConfiguration(xContext) );
 
     /**********************************************************************/
     /*                       reading Office.Common                        */
     /**********************************************************************/
 
-    Reference< XHierarchicalNameAccess > xHierAccess( getHierAccess( sProvider,
-                                                                     "org.openoffice.Office.Common" ) );
-    configData.system = getKey(xHierAccess,"Help/System");
-    bool showBasic( getBooleanKey(xHierAccess,"Help/ShowBasic") );
-    OUString instPath( getKey( xHierAccess,"Path/Current/Help" ) );
+    configData.system = officecfg::Office::Common::Help::System::get();
+    bool showBasic = officecfg::Office::Common::Help::ShowBasic::get();
+    OUString instPath = officecfg::Office::Common::Path::Current::Help::get();
     if( instPath.isEmpty() )
       // try to determine path from default
       instPath = "$(instpath)/help";
@@ -597,40 +596,14 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
     /*                       reading setup                                */
     /**********************************************************************/
 
-    xHierAccess = getHierAccess( sProvider,
-                                 "org.openoffice.Setup" );
-
-    OUString setupversion( getKey( xHierAccess,"Product/ooSetupVersion" ) );
-    OUString setupextension;
-
-    try
-    {
-        Reference< lang::XMultiServiceFactory > xConfigProvider = theDefaultProvider::get( xContext );
-
-        uno::Sequence<uno::Any> lParams(comphelper::InitAnyPropertySequence(
-        {
-            {"nodepath", uno::Any(u"/org.openoffice.Setup/Product"_ustr)}
-        }));
-
-        // open it
-        uno::Reference< uno::XInterface > xCFG( xConfigProvider->createInstanceWithArguments(
-                    u"com.sun.star.configuration.ConfigurationAccess"_ustr,
-                    lParams) );
-
-        uno::Reference< container::XNameAccess > xDirectAccess(xCFG, uno::UNO_QUERY);
-        uno::Any aRet = xDirectAccess->getByName(u"ooSetupExtension"_ustr);
-
-        aRet >>= setupextension;
-    }
-    catch ( uno::Exception& )
-    {
-    }
+    OUString setupversion = officecfg::Setup::Product::ooSetupVersion::get();
+    OUString setupextension = officecfg::Setup::Product::ooSetupExtension::get();
 
     configData.m_vReplacement[0] = utl::ConfigManager::getProductName();
     configData.m_vReplacement[1] = setupversion + " " + setupextension; // productVersion
     // m_vReplacement[2...4] (vendorName/-Version/-Short) are empty strings
 
-    configData.locale = getKey(xHierAccess,"L10N/ooLocale");
+    configData.locale = officecfg::Setup::L10N::ooLocale::get();
 
     // Determine fileurl from url and locale
     OUString url;
@@ -728,92 +701,6 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
         "&UseDB=no";
 
     return configData;
-}
-
-Reference< XMultiServiceFactory >
-TVChildTarget::getConfiguration(const Reference< XComponentContext >& rxContext)
-{
-    Reference< XMultiServiceFactory > xProvider;
-    if( rxContext.is() )
-    {
-        try
-        {
-            xProvider = theDefaultProvider::get( rxContext );
-        }
-        catch( const css::uno::Exception& )
-        {
-            OSL_ENSURE( xProvider.is(),"can not instantiate configuration" );
-        }
-    }
-
-    return xProvider;
-}
-
-Reference< XHierarchicalNameAccess >
-TVChildTarget::getHierAccess( const Reference< XMultiServiceFactory >& sProvider,
-                              const char* file )
-{
-    Reference< XHierarchicalNameAccess > xHierAccess;
-
-    if( sProvider.is() )
-    {
-        try
-        {
-            xHierAccess =
-                Reference< XHierarchicalNameAccess >
-                ( sProvider->createInstanceWithArguments( u"com.sun.star.configuration.ConfigurationAccess"_ustr, { Any(OUString::createFromAscii(file)) }),
-                  UNO_QUERY );
-        }
-        catch( const css::uno::Exception& )
-        {
-        }
-    }
-
-    return xHierAccess;
-}
-
-OUString
-TVChildTarget::getKey( const Reference< XHierarchicalNameAccess >& xHierAccess,
-                       const char* key )
-{
-    OUString instPath;
-    if( xHierAccess.is() )
-    {
-        Any aAny;
-        try
-        {
-            aAny =
-                xHierAccess->getByHierarchicalName( OUString::createFromAscii( key ) );
-        }
-        catch( const css::container::NoSuchElementException& )
-        {
-        }
-        aAny >>= instPath;
-    }
-    return instPath;
-}
-
-bool
-TVChildTarget::getBooleanKey(const Reference<
-                             XHierarchicalNameAccess >& xHierAccess,
-                             const char* key)
-{
-    bool ret = false;
-    if( xHierAccess.is() )
-    {
-      Any aAny;
-      try
-        {
-          aAny =
-            xHierAccess->getByHierarchicalName(
-                                               OUString::createFromAscii(key));
-        }
-      catch( const css::container::NoSuchElementException& )
-        {
-        }
-      aAny >>= ret;
-    }
-    return ret;
 }
 
 void TVChildTarget::subst( OUString& instpath )

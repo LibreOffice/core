@@ -84,7 +84,7 @@ TVFactory::createInstanceWithArguments(
 {
     if( ! m_xHDS.is() )
     {
-        m_xHDS = cppu::getXWeak(new TVChildTarget( m_xContext ));
+        m_xHDS = cppu::getXWeak(new TVChildTarget());
     }
 
     OUString hierview;
