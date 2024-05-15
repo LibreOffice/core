@@ -5457,13 +5457,27 @@ std::tuple<OUString, std::vector<OUString>, std::vector<OUString> > splitFieldCo
         OUString const token =
             lcl_ExtractToken(rCommand, nStartIndex, bHaveToken, bIsSwitch);
         assert(nStartIndex <= rCommand.size());
+        static std::map<OUString, std::set<OUString>> const noArgumentSwitches = {
+            { u"STYLEREF"_ustr,
+              { u"\\l"_ustr, u"\\n"_ustr, u"\\p"_ustr, u"\\r"_ustr, u"\\t"_ustr, u"\\w"_ustr } }
+        };
         if (bHaveToken)
         {
             if (sType.isEmpty())
             {
                 sType = token.toAsciiUpperCase();
             }
-            else if (bIsSwitch || !switches.empty())
+            else if (bIsSwitch)
+            {
+                switches.push_back(token);
+            }
+            // evidently Word evaluates 'STYLEREF \t "Heading 1" \* MERGEFORMAT'
+            // despite the grammar specifying that the style name must
+            // precede switches like '\t'; try to approximate that here
+            // by checking for known switches that don't expect arguments
+            else if (auto const it = noArgumentSwitches.find(sType);
+                !switches.empty() && (it == noArgumentSwitches.end()
+                                    || it->second.find(switches.back().toAsciiLowerCase()) == it->second.end()))
             {
                 switches.push_back(token);
             }
