@@ -11,16 +11,16 @@
 
 AuthFallbackDlg::AuthFallbackDlg(weld::Window* pParent, const OUString& instructions,
                                  const OUString& url)
-    : GenericDialogController(pParent, "uui/ui/authfallback.ui", "AuthFallbackDlg")
+    : GenericDialogController(pParent, u"uui/ui/authfallback.ui"_ustr, u"AuthFallbackDlg"_ustr)
     , m_bGoogleMode(false)
-    , m_xTVInstructions(m_xBuilder->weld_label("instructions"))
-    , m_xEDUrl(m_xBuilder->weld_entry("url"))
-    , m_xEDCode(m_xBuilder->weld_entry("code"))
-    , m_xEDGoogleCode(m_xBuilder->weld_entry("google_code"))
-    , m_xBTOk(m_xBuilder->weld_button("ok"))
-    , m_xBTCancel(m_xBuilder->weld_button("cancel"))
-    , m_xGoogleBox(m_xBuilder->weld_widget("GDrive"))
-    , m_xOneDriveBox(m_xBuilder->weld_widget("OneDrive"))
+    , m_xTVInstructions(m_xBuilder->weld_label(u"instructions"_ustr))
+    , m_xEDUrl(m_xBuilder->weld_entry(u"url"_ustr))
+    , m_xEDCode(m_xBuilder->weld_entry(u"code"_ustr))
+    , m_xEDGoogleCode(m_xBuilder->weld_entry(u"google_code"_ustr))
+    , m_xBTOk(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xBTCancel(m_xBuilder->weld_button(u"cancel"_ustr))
+    , m_xGoogleBox(m_xBuilder->weld_widget(u"GDrive"_ustr))
+    , m_xOneDriveBox(m_xBuilder->weld_widget(u"OneDrive"_ustr))
 {
     m_xBTOk->connect_clicked(LINK(this, AuthFallbackDlg, OKHdl));
     m_xBTCancel->connect_clicked(LINK(this, AuthFallbackDlg, CancelHdl));

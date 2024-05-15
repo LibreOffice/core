@@ -46,10 +46,11 @@ IMPL_LINK_NOARG(UnknownAuthDialog, ViewCertHdl_Impl, weld::Button&, void)
 UnknownAuthDialog::UnknownAuthDialog(
     weld::Window* pParent, const css::uno::Reference<css::security::XCertificate>& rXCert,
     const css::uno::Reference<css::uno::XComponentContext>& xContext)
-    : MessageDialogController(pParent, "uui/ui/unknownauthdialog.ui", "UnknownAuthDialog")
-    , m_xCommandButtonOK(m_xBuilder->weld_button("ok"))
-    , m_xView_Certificate(m_xBuilder->weld_button("examine"))
-    , m_xOptionButtonAccept(m_xBuilder->weld_radio_button("accept"))
+    : MessageDialogController(pParent, u"uui/ui/unknownauthdialog.ui"_ustr,
+                              u"UnknownAuthDialog"_ustr)
+    , m_xCommandButtonOK(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xView_Certificate(m_xBuilder->weld_button(u"examine"_ustr))
+    , m_xOptionButtonAccept(m_xBuilder->weld_radio_button(u"accept"_ustr))
     , m_xContext(xContext)
     , m_rXCert(rXCert)
 {

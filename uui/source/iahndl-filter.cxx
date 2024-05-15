@@ -90,7 +90,7 @@ handleNoSuchFilterRequest_(
     try
     {
         xFilterContainer.set( xContext->getServiceManager()->createInstanceWithContext(
-                                  "com.sun.star.document.FilterFactory", xContext ),
+                                  u"com.sun.star.document.FilterFactory"_ustr, xContext ),
                               uno::UNO_QUERY );
     }
     catch ( uno::Exception const & )
@@ -120,7 +120,7 @@ handleNoSuchFilterRequest_(
     //            out by using DocumentService property later!
     uno::Reference< container::XEnumeration > xFilters
         = xFilterContainer->createSubSetEnumerationByQuery(
-            "_query_all:sort_prop=uiname:iflags=1:eflags=143360");
+            u"_query_all:sort_prop=uiname:iflags=1:eflags=143360"_ustr);
     while (xFilters->hasMoreElements())
     {
         try
@@ -129,9 +129,9 @@ handleNoSuchFilterRequest_(
             uui::FilterNamePair             aPair;
 
             aPair.sInternal = lProps.getUnpackedValueOrDefault(
-                "Name", OUString());
+                u"Name"_ustr, OUString());
             aPair.sUI       = lProps.getUnpackedValueOrDefault(
-                 "UIName", OUString());
+                 u"UIName"_ustr, OUString());
             if ( aPair.sInternal.isEmpty() || aPair.sUI.isEmpty() )
             {
                continue;
@@ -192,7 +192,7 @@ handleFilterOptionsRequest_(
     try
     {
         xFilterCFG.set( xContext->getServiceManager()->createInstanceWithContext(
-                            "com.sun.star.document.FilterFactory", xContext ),
+                            u"com.sun.star.document.FilterFactory"_ustr, xContext ),
                         uno::UNO_QUERY );
     }
     catch ( uno::Exception const & )

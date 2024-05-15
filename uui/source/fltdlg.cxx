@@ -40,10 +40,11 @@ namespace uui
     @threadsafe no
 */ /*-*************************************************************************************************************/
 FilterDialog::FilterDialog(weld::Window* pParentWindow)
-    : GenericDialogController(pParentWindow, "uui/ui/filterselect.ui", "FilterSelectDialog")
+    : GenericDialogController(pParentWindow, u"uui/ui/filterselect.ui"_ustr,
+                              u"FilterSelectDialog"_ustr)
     , m_pFilterNames(nullptr)
-    , m_xFtURL(m_xBuilder->weld_label("url"))
-    , m_xLbFilters(m_xBuilder->weld_tree_view("filters"))
+    , m_xFtURL(m_xBuilder->weld_label(u"url"_ustr))
+    , m_xLbFilters(m_xBuilder->weld_tree_view(u"filters"_ustr))
 {
     m_xLbFilters->set_size_request(m_xLbFilters->get_approximate_digit_width() * 42,
                                    m_xLbFilters->get_height_rows(15));

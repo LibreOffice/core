@@ -56,13 +56,13 @@ NameClashDialog::NameClashDialog( weld::Window* pParent, const std::locale& rRes
                                   OUString const & rClashingName,
                                   OUString const & rProposedNewName,
                                   bool bAllowOverwrite )
-    : GenericDialogController(pParent, "uui/ui/simplenameclash.ui", "SimpleNameClashDialog")
+    : GenericDialogController(pParent, u"uui/ui/simplenameclash.ui"_ustr, u"SimpleNameClashDialog"_ustr)
     , m_aNewName(rClashingName)
-    , m_xFTMessage(m_xBuilder->weld_label("warning"))
-    , m_xEDNewName(m_xBuilder->weld_entry("newname"))
-    , m_xBtnOverwrite(m_xBuilder->weld_button("replace"))
-    , m_xBtnRename(m_xBuilder->weld_button("rename"))
-    , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
+    , m_xFTMessage(m_xBuilder->weld_label(u"warning"_ustr))
+    , m_xEDNewName(m_xBuilder->weld_entry(u"newname"_ustr))
+    , m_xBtnOverwrite(m_xBuilder->weld_button(u"replace"_ustr))
+    , m_xBtnRename(m_xBuilder->weld_button(u"rename"_ustr))
+    , m_xBtnCancel(m_xBuilder->weld_button(u"cancel"_ustr))
 {
     Link<weld::Button&,void> aLink( LINK( this, NameClashDialog, ButtonHdl_Impl ) );
     m_xBtnOverwrite->connect_clicked( aLink );

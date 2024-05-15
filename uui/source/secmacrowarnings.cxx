@@ -40,16 +40,16 @@ using namespace ::com::sun::star;
 using namespace comphelper;
 
 MacroWarning::MacroWarning(weld::Window* pParent, bool _bWithSignatures)
-    : MessageDialogController(pParent, "uui/ui/macrowarnmedium.ui", "MacroWarnMedium", "grid")
-    , mxGrid(m_xBuilder->weld_widget("grid"))
-    , mxSignsFI(m_xBuilder->weld_label("signsLabel"))
-    , mxNotYetValid(m_xBuilder->weld_label("certNotYetValidLabel"))
-    , mxNoLongerValid(m_xBuilder->weld_label("certNoLongerValidLabel"))
-    , mxViewSignsBtn(m_xBuilder->weld_button("viewSignsButton"))
-    , mxViewCertBtn(m_xBuilder->weld_button("viewCertButton"))
-    , mxAlwaysTrustCB(m_xBuilder->weld_check_button("alwaysTrustCheckbutton"))
-    , mxEnableBtn(m_xBuilder->weld_button("ok"))
-    , mxDisableBtn(m_xBuilder->weld_button("cancel"))
+    : MessageDialogController(pParent, u"uui/ui/macrowarnmedium.ui"_ustr, u"MacroWarnMedium"_ustr, u"grid"_ustr)
+    , mxGrid(m_xBuilder->weld_widget(u"grid"_ustr))
+    , mxSignsFI(m_xBuilder->weld_label(u"signsLabel"_ustr))
+    , mxNotYetValid(m_xBuilder->weld_label(u"certNotYetValidLabel"_ustr))
+    , mxNoLongerValid(m_xBuilder->weld_label(u"certNoLongerValidLabel"_ustr))
+    , mxViewSignsBtn(m_xBuilder->weld_button(u"viewSignsButton"_ustr))
+    , mxViewCertBtn(m_xBuilder->weld_button(u"viewCertButton"_ustr))
+    , mxAlwaysTrustCB(m_xBuilder->weld_check_button(u"alwaysTrustCheckbutton"_ustr))
+    , mxEnableBtn(m_xBuilder->weld_button(u"ok"_ustr))
+    , mxDisableBtn(m_xBuilder->weld_button(u"cancel"_ustr))
     , mpInfos                ( nullptr )
     , mbShowSignatures       ( _bWithSignatures )
     , mnActSecLevel          ( 0 )
@@ -156,7 +156,7 @@ void MacroWarning::EnableOkBtn(bool bEnable)
 {
     mxEnableBtn->set_sensitive(bEnable);
     std::locale aResLocale(Translate::Create("uui"));
-    mxEnableBtn->set_tooltip_text(bEnable ? "" : Translate::get(STR_VERIFY_CERT, aResLocale));
+    mxEnableBtn->set_tooltip_text(bEnable ? u""_ustr : Translate::get(STR_VERIFY_CERT, aResLocale));
 }
 
 void MacroWarning::SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStore,

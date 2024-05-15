@@ -290,7 +290,7 @@ PasswordContainerInteractionHandler::~PasswordContainerInteractionHandler()
 OUString SAL_CALL
 PasswordContainerInteractionHandler::getImplementationName()
 {
-    return "com.sun.star.comp.uui.PasswordContainerInteractionHandler";
+    return u"com.sun.star.comp.uui.PasswordContainerInteractionHandler"_ustr;
 }
 
 
@@ -307,7 +307,7 @@ PasswordContainerInteractionHandler::supportsService(
 uno::Sequence< OUString > SAL_CALL
 PasswordContainerInteractionHandler::getSupportedServiceNames()
 {
-    return { "com.sun.star.task.PasswordContainerInteractionHandler" };
+    return { u"com.sun.star.task.PasswordContainerInteractionHandler"_ustr };
 }
 
 

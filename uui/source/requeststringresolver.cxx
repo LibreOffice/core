@@ -39,7 +39,7 @@ UUIInteractionRequestStringResolver::~UUIInteractionRequestStringResolver()
 OUString SAL_CALL
 UUIInteractionRequestStringResolver::getImplementationName()
 {
-    return "com.sun.star.comp.uui.UUIInteractionRequestStringResolver";
+    return u"com.sun.star.comp.uui.UUIInteractionRequestStringResolver"_ustr;
 }
 
 sal_Bool SAL_CALL
@@ -53,7 +53,7 @@ UUIInteractionRequestStringResolver::supportsService(
 uno::Sequence< OUString > SAL_CALL
 UUIInteractionRequestStringResolver::getSupportedServiceNames()
 {
-    return { "com.sun.star.task.InteractionRequestStringResolver" };
+    return { u"com.sun.star.task.InteractionRequestStringResolver"_ustr };
 }
 
 beans::Optional< OUString > SAL_CALL

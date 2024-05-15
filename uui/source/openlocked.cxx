@@ -48,14 +48,14 @@ IMPL_LINK(OpenLockedQueryBox, ClickHdl, weld::Button&, rButton, void)
 }
 
 OpenLockedQueryBox::OpenLockedQueryBox(weld::Window* pParent, const OUString& rHiddenData, bool bEnableOverride)
-    : GenericDialogController(pParent, "vcl/ui/openlockedquerybox.ui", "OpenLockedQueryBox")
-    , mxQuestionMarkImage(m_xBuilder->weld_image("questionmark"))
-    , mxOpenReadOnlyBtn(m_xBuilder->weld_button("readonly"))
-    , mxOpenCopyBtn(m_xBuilder->weld_button("opencopy"))
-    , mxOpenBtn(m_xBuilder->weld_button("open"))
-    , mxCancelBtn(m_xBuilder->weld_button("cancel"))
-    , mxNotifyBtn(m_xBuilder->weld_check_button("notify"))
-    , mxHiddenText(m_xBuilder->weld_label("hiddentext"))
+    : GenericDialogController(pParent, u"vcl/ui/openlockedquerybox.ui"_ustr, u"OpenLockedQueryBox"_ustr)
+    , mxQuestionMarkImage(m_xBuilder->weld_image(u"questionmark"_ustr))
+    , mxOpenReadOnlyBtn(m_xBuilder->weld_button(u"readonly"_ustr))
+    , mxOpenCopyBtn(m_xBuilder->weld_button(u"opencopy"_ustr))
+    , mxOpenBtn(m_xBuilder->weld_button(u"open"_ustr))
+    , mxCancelBtn(m_xBuilder->weld_button(u"cancel"_ustr))
+    , mxNotifyBtn(m_xBuilder->weld_check_button(u"notify"_ustr))
+    , mxHiddenText(m_xBuilder->weld_label(u"hiddentext"_ustr))
 {
     //setup click hdl
     mxOpenReadOnlyBtn->connect_clicked(LINK(this, OpenLockedQueryBox, ClickHdl));

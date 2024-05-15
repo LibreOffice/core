@@ -32,12 +32,12 @@ using namespace ::com::sun::star;
 PasswordDialog::PasswordDialog(weld::Window* pParent,
     task::PasswordRequestMode nDialogMode, const std::locale& rResLocale,
     const OUString& aDocURL, bool bOpenToModify, bool bIsSimplePasswordRequest)
-    : GenericDialogController(pParent, "uui/ui/password.ui", "PasswordDialog")
-    , m_xFTPassword(m_xBuilder->weld_label("newpassFT"))
-    , m_xEDPassword(m_xBuilder->weld_entry("newpassEntry"))
-    , m_xFTConfirmPassword(m_xBuilder->weld_label("confirmpassFT"))
-    , m_xEDConfirmPassword(m_xBuilder->weld_entry("confirmpassEntry"))
-    , m_xOKBtn(m_xBuilder->weld_button("ok"))
+    : GenericDialogController(pParent, u"uui/ui/password.ui"_ustr, u"PasswordDialog"_ustr)
+    , m_xFTPassword(m_xBuilder->weld_label(u"newpassFT"_ustr))
+    , m_xEDPassword(m_xBuilder->weld_entry(u"newpassEntry"_ustr))
+    , m_xFTConfirmPassword(m_xBuilder->weld_label(u"confirmpassFT"_ustr))
+    , m_xEDConfirmPassword(m_xBuilder->weld_entry(u"confirmpassEntry"_ustr))
+    , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
     , nMinLen(1)
     , aPasswdMismatch(Translate::get(STR_PASSWORD_MISMATCH, rResLocale))
 {

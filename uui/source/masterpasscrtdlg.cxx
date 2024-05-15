@@ -72,13 +72,13 @@ IMPL_LINK_NOARG(MasterPasswordCreateDialog, OKHdl_Impl, weld::Button&, void)
 }
 
 MasterPasswordCreateDialog::MasterPasswordCreateDialog(weld::Window* pParent, const std::locale& rLocale)
-    : GenericDialogController(pParent, "uui/ui/setmasterpassworddlg.ui", "SetMasterPasswordDialog")
+    : GenericDialogController(pParent, u"uui/ui/setmasterpassworddlg.ui"_ustr, u"SetMasterPasswordDialog"_ustr)
     , rResLocale(rLocale)
-    , m_xEDMasterPasswordCrt(m_xBuilder->weld_entry("password1"))
-    , m_xPasswordPolicyLabel(m_xBuilder->weld_label("passpolicylabel"))
-    , m_xEDMasterPasswordRepeat(m_xBuilder->weld_entry("password2"))
-    , m_xOKBtn(m_xBuilder->weld_button("ok"))
-    , m_xPasswdStrengthBar(m_xBuilder->weld_level_bar("password1levelbar"))
+    , m_xEDMasterPasswordCrt(m_xBuilder->weld_entry(u"password1"_ustr))
+    , m_xPasswordPolicyLabel(m_xBuilder->weld_label(u"passpolicylabel"_ustr))
+    , m_xEDMasterPasswordRepeat(m_xBuilder->weld_entry(u"password2"_ustr))
+    , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xPasswdStrengthBar(m_xBuilder->weld_level_bar(u"password1levelbar"_ustr))
     , m_oPasswordPolicy(officecfg::Office::Common::Security::Scripting::PasswordPolicy::get())
 {
     m_xOKBtn->set_sensitive(false);

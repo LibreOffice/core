@@ -36,9 +36,9 @@ MasterPasswordDialog::MasterPasswordDialog
     css::task::PasswordRequestMode              nDialogMode,
     const std::locale&                          rLocale
 )
-    : GenericDialogController(pParent, "uui/ui/masterpassworddlg.ui", "MasterPasswordDialog")
-    , m_xEDMasterPassword(m_xBuilder->weld_entry("password"))
-    , m_xOKBtn(m_xBuilder->weld_button("ok"))
+    : GenericDialogController(pParent, u"uui/ui/masterpassworddlg.ui"_ustr, u"MasterPasswordDialog"_ustr)
+    , m_xEDMasterPassword(m_xBuilder->weld_entry(u"password"_ustr))
+    , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
 {
     if( nDialogMode == css::task::PasswordRequestMode_PASSWORD_REENTER )
     {

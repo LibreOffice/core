@@ -83,13 +83,13 @@ void LoginDialog::SetRequest()
     OUString aRequest;
     if (m_xAccountFT->get_visible() && !m_realm.isEmpty())
     {
-        std::unique_ptr<weld::Label> xText(m_xBuilder->weld_label(oldPwd ? OUString("wrongloginrealm") : OUString("loginrealm")));
+        std::unique_ptr<weld::Label> xText(m_xBuilder->weld_label(oldPwd ? u"wrongloginrealm"_ustr : u"loginrealm"_ustr));
         aRequest = xText->get_label();
         aRequest = aRequest.replaceAll("%2", m_realm);
     }
     else
     {
-        std::unique_ptr<weld::Label> xText(m_xBuilder->weld_label(oldPwd ? OUString("wrongrequestinfo") : OUString("requestinfo")));
+        std::unique_ptr<weld::Label> xText(m_xBuilder->weld_label(oldPwd ? u"wrongrequestinfo"_ustr : u"requestinfo"_ustr));
         aRequest = xText->get_label();
     }
     aRequest = aRequest.replaceAll("%1", m_server);
@@ -111,19 +111,19 @@ IMPL_LINK_NOARG(LoginDialog, UseSysCredsHdl_Impl, weld::Toggleable&, void)
 
 LoginDialog::LoginDialog(weld::Window* pParent, LoginFlags nFlags,
     OUString aServer, OUString aRealm)
-    : GenericDialogController(pParent, "uui/ui/logindialog.ui", "LoginDialog")
-    , m_xErrorFT(m_xBuilder->weld_label("errorft"))
-    , m_xErrorInfo(m_xBuilder->weld_label("errorinfo"))
-    , m_xRequestInfo(m_xBuilder->weld_label("requestinfo"))
-    , m_xNameFT(m_xBuilder->weld_label("nameft"))
-    , m_xNameED(m_xBuilder->weld_entry("nameed"))
-    , m_xPasswordFT(m_xBuilder->weld_label("passwordft"))
-    , m_xPasswordED(m_xBuilder->weld_entry("passworded"))
-    , m_xAccountFT(m_xBuilder->weld_label("accountft"))
-    , m_xAccountED(m_xBuilder->weld_entry("accounted"))
-    , m_xSavePasswdBtn(m_xBuilder->weld_check_button("remember"))
-    , m_xUseSysCredsCB(m_xBuilder->weld_check_button("syscreds"))
-    , m_xOKBtn(m_xBuilder->weld_button("ok"))
+    : GenericDialogController(pParent, u"uui/ui/logindialog.ui"_ustr, u"LoginDialog"_ustr)
+    , m_xErrorFT(m_xBuilder->weld_label(u"errorft"_ustr))
+    , m_xErrorInfo(m_xBuilder->weld_label(u"errorinfo"_ustr))
+    , m_xRequestInfo(m_xBuilder->weld_label(u"requestinfo"_ustr))
+    , m_xNameFT(m_xBuilder->weld_label(u"nameft"_ustr))
+    , m_xNameED(m_xBuilder->weld_entry(u"nameed"_ustr))
+    , m_xPasswordFT(m_xBuilder->weld_label(u"passwordft"_ustr))
+    , m_xPasswordED(m_xBuilder->weld_entry(u"passworded"_ustr))
+    , m_xAccountFT(m_xBuilder->weld_label(u"accountft"_ustr))
+    , m_xAccountED(m_xBuilder->weld_entry(u"accounted"_ustr))
+    , m_xSavePasswdBtn(m_xBuilder->weld_check_button(u"remember"_ustr))
+    , m_xUseSysCredsCB(m_xBuilder->weld_check_button(u"syscreds"_ustr))
+    , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
     , m_server(std::move(aServer)), m_realm(std::move(aRealm))
 {
     if ( !( nFlags & LoginFlags::NoUseSysCreds ) )

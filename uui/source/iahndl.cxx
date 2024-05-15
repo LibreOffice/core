@@ -294,7 +294,7 @@ bool UUIInteractionHelper::handleCustomRequest( const Reference< XInteractionReq
         if ( xHandlerInit.is() )
         {
             ::comphelper::NamedValueCollection aInitArgs;
-            aInitArgs.put( "Parent", getParentXWindow() );
+            aInitArgs.put( u"Parent"_ustr, getParentXWindow() );
             xHandlerInit->initialize( aInitArgs.getWrappedPropertyValues() );
         }
 
@@ -321,7 +321,7 @@ bool UUIInteractionHelper::handleTypedHandlerImplementations( Reference< XIntera
     // the base registration node for "typed" interaction handlers
     const ::utl::OConfigurationTreeRoot aConfigRoot( ::utl::OConfigurationTreeRoot::createWithComponentContext(
         m_xContext,
-        "/org.openoffice.Interaction/InteractionHandlers",
+        u"/org.openoffice.Interaction/InteractionHandlers"_ustr,
         -1,
         ::utl::OConfigurationTreeRoot::CM_READONLY
     ) );

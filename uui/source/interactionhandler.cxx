@@ -77,28 +77,28 @@ public:
         addPropertyChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XPropertyChangeListener >& /*xListener*/ ) override
     {
         throw css::uno::RuntimeException(
-            "UUIInteractionHandler addPropertyChangeListener is not supported");
+            u"UUIInteractionHandler addPropertyChangeListener is not supported"_ustr);
     }
 
     virtual void SAL_CALL
         removePropertyChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XPropertyChangeListener >& /*xListener*/ ) override
     {
         throw css::uno::RuntimeException(
-            "UUIInteractionHandler removePropertyChangeListener is not supported");
+            u"UUIInteractionHandler removePropertyChangeListener is not supported"_ustr);
     }
 
     virtual void SAL_CALL
         addVetoableChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XVetoableChangeListener >& /*xListener*/ ) override
     {
         throw css::uno::RuntimeException(
-            "UUIInteractionHandler addVetoableChangeListener is not supported");
+            u"UUIInteractionHandler addVetoableChangeListener is not supported"_ustr);
     }
 
     virtual void SAL_CALL
         removeVetoableChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XVetoableChangeListener >& /*xListener*/ ) override
     {
         throw css::uno::RuntimeException(
-            "UUIInteractionHandler removeVetoableChangeListener is not supported");
+            u"UUIInteractionHandler removeVetoableChangeListener is not supported"_ustr);
     }
 
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
@@ -137,7 +137,7 @@ UUIInteractionHandler::UUIInteractionHandler(
 
 OUString SAL_CALL UUIInteractionHandler::getImplementationName()
 {
-    return "com.sun.star.comp.uui.UUIInteractionHandler";
+    return u"com.sun.star.comp.uui.UUIInteractionHandler"_ustr;
 }
 
 sal_Bool SAL_CALL
@@ -149,11 +149,11 @@ UUIInteractionHandler::supportsService(OUString const & rServiceName)
 uno::Sequence< OUString > SAL_CALL
 UUIInteractionHandler::getSupportedServiceNames()
 {
-    return { "com.sun.star.task.InteractionHandler",
+    return { u"com.sun.star.task.InteractionHandler"_ustr,
  // added to indicate support for configuration.backend.MergeRecoveryRequest
-             "com.sun.star.configuration.backend.InteractionHandler",
+             u"com.sun.star.configuration.backend.InteractionHandler"_ustr,
     // for backwards compatibility
-             "com.sun.star.uui.InteractionHandler" };
+             u"com.sun.star.uui.InteractionHandler"_ustr };
 }
 
 void SAL_CALL
@@ -171,13 +171,13 @@ UUIInteractionHandler::initialize(
            (rArguments[1] >>= aContext))))
     {
         ::comphelper::NamedValueCollection aProperties( rArguments );
-        if ( aProperties.has( "Parent" ) )
+        if ( aProperties.has( u"Parent"_ustr ) )
         {
-            OSL_VERIFY( aProperties.get( "Parent" ) >>= xWindow );
+            OSL_VERIFY( aProperties.get( u"Parent"_ustr ) >>= xWindow );
         }
-        if ( aProperties.has( "Context" ) )
+        if ( aProperties.has( u"Context"_ustr ) )
         {
-            OSL_VERIFY( aProperties.get( "Context" ) >>= aContext );
+            OSL_VERIFY( aProperties.get( u"Context"_ustr ) >>= aContext );
         }
     }
 
