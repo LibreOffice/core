@@ -90,7 +90,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf144576_ascii)
     //             B
     //             C
     //             D
-    // i.e. Each cell is seperated by a tab
+    // i.e. Each cell is separated by a tab
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
     // Add some newlines in the first two cells
@@ -141,7 +141,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf144576_ascii)
     //             B2
     //             C
     //             D
-    // i.e. Each cell is seperated by a tab, a newline inside
+    // i.e. Each cell is separated by a tab, a newline inside
     // a cell gets written to the next line in the furthest
     // left spot available
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
