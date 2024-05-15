@@ -325,6 +325,7 @@ SvxBulletPickTabPage::SvxBulletPickTabPage(weld::Container* pPage, weld::DialogC
     , bModified(false)
     , bPreset(false)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
+    , m_xBtChangeBullet(m_xBuilder->weld_button(u"changeBulletBtn"_ustr))
     , m_xExamplesVS(new SvxNumValueSet(m_xBuilder->weld_scrolled_window(u"valuesetwin"_ustr, true)))
     , m_xExamplesVSWin(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, *m_xExamplesVS))
 {
@@ -332,6 +333,7 @@ SvxBulletPickTabPage::SvxBulletPickTabPage(weld::Container* pPage, weld::DialogC
     m_xExamplesVS->init(NumberingPageType::BULLET);
     m_xExamplesVS->SetSelectHdl(LINK(this, SvxBulletPickTabPage, NumSelectHdl_Impl));
     m_xExamplesVS->SetDoubleClickHdl(LINK(this, SvxBulletPickTabPage, DoubleClickHdl_Impl));
+    m_xBtChangeBullet->connect_clicked(LINK(this, SvxBulletPickTabPage, ClickAddChangeHdl_Impl));
 }
 
 SvxBulletPickTabPage::~SvxBulletPickTabPage()
@@ -456,6 +458,90 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, DoubleClickHdl_Impl, ValueSet*, void)
     NumSelectHdl_Impl(m_xExamplesVS.get());
     weld::Button& rOk = GetDialogController()->GetOKButton();
     rOk.clicked();
+}
+
+IMPL_LINK_NOARG(SvxBulletPickTabPage, ClickAddChangeHdl_Impl, weld::Button&, void)
+{
+    SvxCharacterMap aMap(GetFrameWeld(), nullptr, nullptr);
+
+    sal_uInt16 nMask = 1;
+    std::optional<vcl::Font> pFmtFont;
+    bool bSameBullet = true;
+    sal_UCS4 cBullet = 0;
+    bool bFirst = true;
+    for (sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
+    {
+        if (nActNumLvl & nMask)
+        {
+            const SvxNumberFormat& rCurFmt = pActNum->GetLevel(i);
+            if (bFirst)
+            {
+                cBullet = rCurFmt.GetBulletChar();
+            }
+            else if (rCurFmt.GetBulletChar() != cBullet)
+            {
+                bSameBullet = false;
+                break;
+            }
+            if (!pFmtFont)
+                pFmtFont = rCurFmt.GetBulletFont();
+            bFirst = false;
+        }
+        nMask <<= 1;
+    }
+
+    if (pFmtFont)
+        aMap.SetCharFont(*pFmtFont);
+    if (bSameBullet)
+        aMap.SetChar(cBullet);
+    if (aMap.run() != RET_OK)
+        return;
+
+    sal_Unicode cChar = aMap.GetChar();
+    vcl::Font aActBulletFont = aMap.GetCharFont();
+
+    sal_uInt16 _nMask = 1;
+    for (sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
+    {
+        if (nActNumLvl & _nMask)
+        {
+            SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
+            aNumFmt.SetBulletFont(&aActBulletFont);
+            aNumFmt.SetBulletChar(cChar);
+            pActNum->SetLevel(i, aNumFmt);
+        }
+        _nMask <<= 1;
+    }
+
+    css::uno::Sequence<OUString> aBulletSymbols(officecfg::Office::Common::BulletsNumbering::DefaultBullets::get());
+    css::uno::Sequence<OUString> aBulletSymbolsFonts(officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::get());
+    css::uno::Sequence<OUString> aBulletSymbolsList(aBulletSymbols.size());
+    css::uno::Sequence<OUString> aBulletSymbolsFontsList(aBulletSymbolsFonts.size());
+    auto aBulletSymbolsListRange = asNonConstRange(aBulletSymbolsList);
+    auto aBulletSymbolsFontsListRange = asNonConstRange(aBulletSymbolsFontsList);
+
+    sal_uInt16 nIndex = m_xExamplesVS->GetSelectedItemId() - 1;
+    for (size_t i = 0; i < aBulletSymbols.size(); ++i)
+    {
+        if (i == nIndex)
+        {
+            aBulletSymbolsListRange[i] = OUStringChar(cChar);
+            aBulletSymbolsFontsListRange[i] = aActBulletFont.GetFamilyName();
+        }
+        else
+        {
+            aBulletSymbolsListRange[i] = aBulletSymbols[i];
+            aBulletSymbolsFontsListRange[i] = aBulletSymbolsFonts[i];
+        }
+    }
+
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::BulletsNumbering::DefaultBullets::set(aBulletSymbolsList, batch);
+    officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::set(aBulletSymbolsFontsList, batch);
+    batch->commit();
+
+    m_xExamplesVS->SetFormat();
+    m_xExamplesVS->Invalidate();
 }
 
 void SvxBulletPickTabPage::PageCreated(const SfxAllItemSet& aSet)

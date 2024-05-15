@@ -2,37 +2,63 @@
 <!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkScrolledWindow" id="PickBulletPage">
+  <object class="GtkGrid" id="PickBulletPage">
     <property name="visible">True</property>
-    <property name="can-focus">True</property>
+    <property name="can-focus">False</property>
     <property name="margin-start">6</property>
     <property name="margin-end">6</property>
     <property name="margin-top">6</property>
     <property name="margin-bottom">6</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
-    <property name="hscrollbar-policy">never</property>
-    <property name="vscrollbar-policy">never</property>
-    <property name="shadow-type">in</property>
+    <property name="row-spacing">6</property>
     <child>
-      <object class="GtkViewport">
+      <object class="GtkScrolledWindow" id="valusetwin">
         <property name="visible">True</property>
-        <property name="can-focus">False</property>
+        <property name="can-focus">True</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <property name="hscrollbar-policy">never</property>
+        <property name="vscrollbar-policy">never</property>
+        <property name="shadow-type">in</property>
         <child>
-          <object class="GtkDrawingArea" id="valueset">
+          <object class="GtkViewport">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="valueset-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="pickbulletpage|extended_tip|valueset">Click the bullet style that you want to use.</property>
+            <property name="can-focus">False</property>
+            <child>
+              <object class="GtkDrawingArea" id="valueset">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="valueset-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pickbulletpage|extended_tip|valueset">Click the bullet style that you want to use.</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
         </child>
       </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="changeBulletBtn">
+        <property name="label" translatable="yes" context="pickbulletpage|changeBulletBtn">Change Bullet</property>
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">False</property>
+        <property name="halign">end</property>
+      </object>
+        <packing>
+          <property name="left-attach">1</property>
+          <property name="top-attach">2</property>
+        </packing>
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="PickBulletPage-atkobject">
