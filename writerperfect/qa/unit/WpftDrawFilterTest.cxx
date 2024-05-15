@@ -24,7 +24,7 @@ public:
 };
 
 WpftDrawFilterTest::WpftDrawFilterTest()
-    : writerperfect::test::WpftFilterTestBase("private:factory/sdraw")
+    : writerperfect::test::WpftFilterTestBase(u"private:factory/sdraw"_ustr)
 {
 }
 
@@ -53,23 +53,25 @@ void WpftDrawFilterTest::test()
         { "Draw_3.1.sda", REQUIRE_STAROFFICE_VERSION(0, 0, 1) },
     };
 
-    doTest("com.sun.star.comp.Draw.CDRImportFilter", u"/writerperfect/qa/unit/data/draw/libcdr/");
-    doTest("com.sun.star.comp.Draw.CMXImportFilter",
+    doTest(u"com.sun.star.comp.Draw.CDRImportFilter"_ustr,
+           u"/writerperfect/qa/unit/data/draw/libcdr/");
+    doTest(u"com.sun.star.comp.Draw.CMXImportFilter"_ustr,
            u"/writerperfect/qa/unit/data/draw/libcdr-cmx/");
-    doTest("com.sun.star.comp.Draw.FreehandImportFilter",
+    doTest(u"com.sun.star.comp.Draw.FreehandImportFilter"_ustr,
            u"/writerperfect/qa/unit/data/draw/libfreehand/");
-    doTest("com.sun.star.comp.Draw.MSPUBImportFilter",
+    doTest(u"com.sun.star.comp.Draw.MSPUBImportFilter"_ustr,
            u"/writerperfect/qa/unit/data/draw/libmspub/");
-    doTest("com.sun.star.comp.Draw.MWAWDrawImportFilter",
+    doTest(u"com.sun.star.comp.Draw.MWAWDrawImportFilter"_ustr,
            u"/writerperfect/qa/unit/data/draw/libmwaw/", aMWAWOptional);
-    doTest("com.sun.star.comp.Draw.VisioImportFilter",
+    doTest(u"com.sun.star.comp.Draw.VisioImportFilter"_ustr,
            u"/writerperfect/qa/unit/data/draw/libvisio/");
-    doTest("com.sun.star.comp.Draw.WPGImportFilter", u"/writerperfect/qa/unit/data/draw/libwpg/");
-    doTest("org.libreoffice.comp.Draw.PageMakerImportFilter",
+    doTest(u"com.sun.star.comp.Draw.WPGImportFilter"_ustr,
+           u"/writerperfect/qa/unit/data/draw/libwpg/");
+    doTest(u"org.libreoffice.comp.Draw.PageMakerImportFilter"_ustr,
            u"/writerperfect/qa/unit/data/draw/libpagemaker/");
-    doTest("org.libreoffice.comp.Draw.StarOfficeDrawImportFilter",
+    doTest(u"org.libreoffice.comp.Draw.StarOfficeDrawImportFilter"_ustr,
            u"/writerperfect/qa/unit/data/draw/libstaroffice/", aStarOfficeOptional);
-    doTest("org.libreoffice.comp.Draw.ZMFImportFilter",
+    doTest(u"org.libreoffice.comp.Draw.ZMFImportFilter"_ustr,
            u"/writerperfect/qa/unit/data/draw/libzmf/");
 }
 

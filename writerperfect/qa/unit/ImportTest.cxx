@@ -66,9 +66,9 @@ void ImportTest::setUp()
 {
     writerperfect::test::WpftFilterFixture::setUp();
 
-    m_xFilterFactory.set(
-        m_xFactory->createInstanceWithContext("com.sun.star.document.FilterFactory", m_xContext),
-        UNO_QUERY);
+    m_xFilterFactory.set(m_xFactory->createInstanceWithContext(
+                             u"com.sun.star.document.FilterFactory"_ustr, m_xContext),
+                         UNO_QUERY);
     assert(m_xFilterFactory.is());
 }
 
@@ -84,13 +84,13 @@ void ImportTest::testWK3WithFM3()
     uno::Reference<beans::XPropertySet> xCellProps(xSheet->getCellByPosition(1, 1), UNO_QUERY);
     CPPUNIT_ASSERT(xCellProps.is());
     Color nCharColor;
-    CPPUNIT_ASSERT(xCellProps->getPropertyValue("CharColor") >>= nCharColor);
+    CPPUNIT_ASSERT(xCellProps->getPropertyValue(u"CharColor"_ustr) >>= nCharColor);
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, nCharColor); // blue text
 }
 
 WpftLoader ImportTest::createCalcLoader(std::u16string_view rFile) const
 {
-    return createLoader(makeUrl(rFile), "private:factory/scalc");
+    return createLoader(makeUrl(rFile), u"private:factory/scalc"_ustr);
 }
 
 WpftLoader ImportTest::createLoader(const OUString& rUrl, const OUString& rFactoryUrl) const

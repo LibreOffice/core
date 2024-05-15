@@ -65,7 +65,7 @@ bool SpreadsheetImportFilter::doDetectFormat(librevenge::RVNGInputStream&, OUStr
 // XServiceInfo
 OUString SAL_CALL SpreadsheetImportFilter::getImplementationName()
 {
-    return "org.libreoffice.comp.Wpft.QA.SpreadsheetImportFilter";
+    return u"org.libreoffice.comp.Wpft.QA.SpreadsheetImportFilter"_ustr;
 }
 
 sal_Bool SAL_CALL SpreadsheetImportFilter::supportsService(const OUString& rServiceName)
@@ -75,7 +75,8 @@ sal_Bool SAL_CALL SpreadsheetImportFilter::supportsService(const OUString& rServ
 
 uno::Sequence<OUString> SAL_CALL SpreadsheetImportFilter::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ImportFilter"_ustr,
+             u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 void SpreadsheetImportFilter::generate(librevenge::RVNGSpreadsheetInterface& rDocument)
@@ -117,8 +118,8 @@ void SpreadsheetImportTest::test()
     using namespace css;
 
     rtl::Reference<SpreadsheetImportFilter> xFilter{ new SpreadsheetImportFilter(m_xContext) };
-    writerperfect::test::WpftLoader aLoader(createDummyInput(), xFilter, "private:factory/scalc",
-                                            m_xDesktop, m_xContext);
+    writerperfect::test::WpftLoader aLoader(createDummyInput(), xFilter,
+                                            u"private:factory/scalc"_ustr, m_xDesktop, m_xContext);
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(aLoader.getDocument(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
@@ -129,7 +130,7 @@ void SpreadsheetImportTest::test()
     uno::Reference<table::XCell> xCell = xSheet->getCellByPosition(0, 0);
     CPPUNIT_ASSERT(xCell.is());
     CPPUNIT_ASSERT_EQUAL(table::CellContentType_TEXT, xCell->getType());
-    CPPUNIT_ASSERT_EQUAL(OUString("My hovercraft is full of eels."), xCell->getFormula());
+    CPPUNIT_ASSERT_EQUAL(u"My hovercraft is full of eels."_ustr, xCell->getFormula());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SpreadsheetImportTest);

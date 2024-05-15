@@ -40,9 +40,9 @@ EPUBPackage::EPUBPackage(uno::Reference<uno::XComponentContext> xContext,
                   uno::UNO_QUERY);
 
     // The zipped content represents an EPUB Publication.
-    mxOutputStream.set(
-        mxStorage->openStreamElementByHierarchicalName("mimetype", embed::ElementModes::READWRITE),
-        uno::UNO_QUERY);
+    mxOutputStream.set(mxStorage->openStreamElementByHierarchicalName(
+                           u"mimetype"_ustr, embed::ElementModes::READWRITE),
+                       uno::UNO_QUERY);
     static constexpr OString aMimeType("application/epub+zip"_ostr);
     uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(aMimeType.getStr()),
                                   aMimeType.getLength());
@@ -52,7 +52,7 @@ EPUBPackage::EPUBPackage(uno::Reference<uno::XComponentContext> xContext,
 
     // MIME type must be uncompressed.
     uno::Reference<beans::XPropertySet> xPropertySet(mxOutputStream, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("Compressed", uno::Any(false));
+    xPropertySet->setPropertyValue(u"Compressed"_ustr, uno::Any(false));
     mxOutputStream.clear();
 }
 

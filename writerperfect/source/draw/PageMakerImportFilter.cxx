@@ -33,7 +33,7 @@ bool PageMakerImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, 
 // XServiceInfo
 OUString SAL_CALL PageMakerImportFilter::getImplementationName()
 {
-    return "org.libreoffice.comp.Draw.PageMakerImportFilter";
+    return u"org.libreoffice.comp.Draw.PageMakerImportFilter"_ustr;
 }
 
 sal_Bool SAL_CALL PageMakerImportFilter::supportsService(const OUString& rServiceName)
@@ -43,7 +43,8 @@ sal_Bool SAL_CALL PageMakerImportFilter::supportsService(const OUString& rServic
 
 css::uno::Sequence<OUString> SAL_CALL PageMakerImportFilter::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ImportFilter"_ustr,
+             u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

@@ -24,7 +24,7 @@ public:
 };
 
 WpftWriterFilterTest::WpftWriterFilterTest()
-    : writerperfect::test::WpftFilterTestBase("private:factory/swriter")
+    : writerperfect::test::WpftFilterTestBase(u"private:factory/swriter"_ustr)
 {
 }
 
@@ -57,19 +57,19 @@ void WpftWriterFilterTest::test()
         { "Write_3.1.wri", REQUIRE_WPS_VERSION(0, 4, 2) },
     };
 
-    doTest("com.sun.star.comp.Writer.AbiWordImportFilter",
+    doTest(u"com.sun.star.comp.Writer.AbiWordImportFilter"_ustr,
            u"/writerperfect/qa/unit/data/writer/libabw/");
-    doTest("org.libreoffice.comp.Writer.EBookImportFilter",
+    doTest(u"org.libreoffice.comp.Writer.EBookImportFilter"_ustr,
            u"/writerperfect/qa/unit/data/writer/libe-book/", aEBookOptional);
-    doTest("com.sun.star.comp.Writer.MSWorksImportFilter",
+    doTest(u"com.sun.star.comp.Writer.MSWorksImportFilter"_ustr,
            u"/writerperfect/qa/unit/data/writer/libwps/", aWpsOptional);
-    doTest("com.sun.star.comp.Writer.MWAWImportFilter",
+    doTest(u"com.sun.star.comp.Writer.MWAWImportFilter"_ustr,
            u"/writerperfect/qa/unit/data/writer/libmwaw/", aMWAWOptional);
-    doTest("org.libreoffice.comp.Writer.PagesImportFilter",
+    doTest(u"org.libreoffice.comp.Writer.PagesImportFilter"_ustr,
            u"/writerperfect/qa/unit/data/writer/libetonyek/", aEtonyekOptional);
-    doTest("org.libreoffice.comp.Writer.StarOfficeWriterImportFilter",
+    doTest(u"org.libreoffice.comp.Writer.StarOfficeWriterImportFilter"_ustr,
            u"/writerperfect/qa/unit/data/writer/libstaroffice/", aStarOfficeOptional);
-    doTest("com.sun.star.comp.Writer.WordPerfectImportFilter",
+    doTest(u"com.sun.star.comp.Writer.WordPerfectImportFilter"_ustr,
            u"/writerperfect/qa/unit/data/writer/libwpd/");
 }
 

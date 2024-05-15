@@ -83,7 +83,7 @@ void MWAWPresentationImportFilter::doRegisterHandlers(OdpGenerator& rGenerator)
 // XServiceInfo
 OUString SAL_CALL MWAWPresentationImportFilter::getImplementationName()
 {
-    return "com.sun.star.comp.Impress.MWAWPresentationImportFilter";
+    return u"com.sun.star.comp.Impress.MWAWPresentationImportFilter"_ustr;
 }
 sal_Bool SAL_CALL MWAWPresentationImportFilter::supportsService(const OUString& rServiceName)
 {
@@ -91,7 +91,8 @@ sal_Bool SAL_CALL MWAWPresentationImportFilter::supportsService(const OUString& 
 }
 css::uno::Sequence<OUString> SAL_CALL MWAWPresentationImportFilter::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ImportFilter"_ustr,
+             u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

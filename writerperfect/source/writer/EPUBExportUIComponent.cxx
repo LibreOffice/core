@@ -27,7 +27,7 @@ EPUBExportUIComponent::EPUBExportUIComponent(uno::Reference<uno::XComponentConte
 
 uno::Sequence<beans::PropertyValue> EPUBExportUIComponent::getPropertyValues()
 {
-    maMediaDescriptor["FilterData"] <<= maFilterData.getAsConstPropertyValueList();
+    maMediaDescriptor[u"FilterData"_ustr] <<= maFilterData.getAsConstPropertyValueList();
     return maMediaDescriptor.getAsConstPropertyValueList();
 }
 
@@ -36,7 +36,7 @@ void EPUBExportUIComponent::setPropertyValues(
 {
     maMediaDescriptor.clear();
     maMediaDescriptor << rProperties;
-    auto it = maMediaDescriptor.find("FilterData");
+    auto it = maMediaDescriptor.find(u"FilterData"_ustr);
     if (it != maMediaDescriptor.end())
     {
         uno::Sequence<beans::PropertyValue> aFilterData;
@@ -50,7 +50,7 @@ void EPUBExportUIComponent::setPropertyValues(
 
 OUString EPUBExportUIComponent::getImplementationName()
 {
-    return "com.sun.star.comp.Writer.EPUBExportUIComponent";
+    return u"com.sun.star.comp.Writer.EPUBExportUIComponent"_ustr;
 }
 
 sal_Bool EPUBExportUIComponent::supportsService(const OUString& rServiceName)
@@ -60,7 +60,7 @@ sal_Bool EPUBExportUIComponent::supportsService(const OUString& rServiceName)
 
 uno::Sequence<OUString> EPUBExportUIComponent::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet = { OUString("com.sun.star.ui.dialogs.FilterOptionsDialog") };
+    uno::Sequence<OUString> aRet = { u"com.sun.star.ui.dialogs.FilterOptionsDialog"_ustr };
     return aRet;
 }
 
@@ -69,8 +69,8 @@ void EPUBExportUIComponent::setTitle(const OUString& /*rTitle*/) {}
 void SAL_CALL EPUBExportUIComponent::initialize(const uno::Sequence<uno::Any>& rArguments)
 {
     ::comphelper::NamedValueCollection aProperties(rArguments);
-    if (aProperties.has("ParentWindow"))
-        aProperties.get("ParentWindow") >>= mxDialogParent;
+    if (aProperties.has(u"ParentWindow"_ustr))
+        aProperties.get(u"ParentWindow"_ustr) >>= mxDialogParent;
 }
 
 sal_Int16 EPUBExportUIComponent::execute()

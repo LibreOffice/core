@@ -39,7 +39,7 @@ bool WPGImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUStri
 // XServiceInfo
 OUString SAL_CALL WPGImportFilter::getImplementationName()
 {
-    return "com.sun.star.comp.Draw.WPGImportFilter";
+    return u"com.sun.star.comp.Draw.WPGImportFilter"_ustr;
 }
 
 sal_Bool SAL_CALL WPGImportFilter::supportsService(const OUString& rServiceName)
@@ -49,7 +49,8 @@ sal_Bool SAL_CALL WPGImportFilter::supportsService(const OUString& rServiceName)
 
 css::uno::Sequence<OUString> SAL_CALL WPGImportFilter::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ImportFilter"_ustr,
+             u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

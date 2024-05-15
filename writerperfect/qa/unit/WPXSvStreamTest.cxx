@@ -91,7 +91,7 @@ shared_ptr<RVNGInputStream> lcl_createStreamForURL(const OUString& rURL)
                                                      css::uno::UNO_SET_THROW);
     const Reference<ucb::XSimpleFileAccess> xFileAccess(
         xContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.ucb.SimpleFileAccess", xContext),
+            u"com.sun.star.ucb.SimpleFileAccess"_ustr, xContext),
         UNO_QUERY_THROW);
     const Reference<io::XInputStream> xInputStream(xFileAccess->openFileRead(rURL),
                                                    css::uno::UNO_SET_THROW);

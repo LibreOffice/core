@@ -67,7 +67,7 @@ bool DrawingImportFilter::doDetectFormat(librevenge::RVNGInputStream&, OUString&
 // XServiceInfo
 OUString SAL_CALL DrawingImportFilter::getImplementationName()
 {
-    return "org.libreoffice.comp.Wpft.QA.DrawingImportFilter";
+    return u"org.libreoffice.comp.Wpft.QA.DrawingImportFilter"_ustr;
 }
 
 sal_Bool SAL_CALL DrawingImportFilter::supportsService(const OUString& rServiceName)
@@ -77,7 +77,8 @@ sal_Bool SAL_CALL DrawingImportFilter::supportsService(const OUString& rServiceN
 
 uno::Sequence<OUString> SAL_CALL DrawingImportFilter::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ImportFilter"_ustr,
+             u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 void DrawingImportFilter::generate(librevenge::RVNGDrawingInterface& rDocument)
@@ -123,8 +124,8 @@ void DrawingImportTest::test()
     using namespace css;
 
     rtl::Reference<DrawingImportFilter> xFilter{ new DrawingImportFilter(m_xContext) };
-    writerperfect::test::WpftLoader aLoader(createDummyInput(), xFilter, "private:factory/sdraw",
-                                            m_xDesktop, m_xContext);
+    writerperfect::test::WpftLoader aLoader(createDummyInput(), xFilter,
+                                            u"private:factory/sdraw"_ustr, m_xDesktop, m_xContext);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(aLoader.getDocument(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
@@ -135,9 +136,9 @@ void DrawingImportTest::test()
     CPPUNIT_ASSERT(aPage >>= xPageProps);
     CPPUNIT_ASSERT(xPageProps.is());
     sal_Int32 nProp = 0;
-    CPPUNIT_ASSERT(xPageProps->getPropertyValue("Height") >>= nProp);
+    CPPUNIT_ASSERT(xPageProps->getPropertyValue(u"Height"_ustr) >>= nProp);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(600), nProp);
-    CPPUNIT_ASSERT(xPageProps->getPropertyValue("Width") >>= nProp);
+    CPPUNIT_ASSERT(xPageProps->getPropertyValue(u"Width"_ustr) >>= nProp);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(800), nProp);
     uno::Reference<drawing::XShapes> xShapes(xPageProps, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShapes.is());
@@ -145,9 +146,9 @@ void DrawingImportTest::test()
     uno::Reference<drawing::XShapeDescriptor> xShapeDesc;
     CPPUNIT_ASSERT(aShape >>= xShapeDesc);
     CPPUNIT_ASSERT(xShapeDesc.is());
-    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.TextShape"), xShapeDesc->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.TextShape"_ustr, xShapeDesc->getShapeType());
     uno::Reference<text::XText> xText(xShapeDesc, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("My hovercraft is full of eels."), xText->getString());
+    CPPUNIT_ASSERT_EQUAL(u"My hovercraft is full of eels."_ustr, xText->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DrawingImportTest);

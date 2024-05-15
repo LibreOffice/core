@@ -94,7 +94,7 @@ void MWAWImportFilter::doRegisterHandlers(OdtGenerator& rGenerator)
 // XServiceInfo
 OUString SAL_CALL MWAWImportFilter::getImplementationName()
 {
-    return "com.sun.star.comp.Writer.MWAWImportFilter";
+    return u"com.sun.star.comp.Writer.MWAWImportFilter"_ustr;
 }
 
 sal_Bool SAL_CALL MWAWImportFilter::supportsService(const OUString& rServiceName)
@@ -104,7 +104,8 @@ sal_Bool SAL_CALL MWAWImportFilter::supportsService(const OUString& rServiceName
 
 css::uno::Sequence<OUString> SAL_CALL MWAWImportFilter::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ImportFilter"_ustr,
+             u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

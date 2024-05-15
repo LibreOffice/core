@@ -134,7 +134,7 @@ void MSWorksImportFilter::doRegisterHandlers(OdtGenerator& rGenerator)
 // XServiceInfo
 OUString SAL_CALL MSWorksImportFilter::getImplementationName()
 {
-    return "com.sun.star.comp.Writer.MSWorksImportFilter";
+    return u"com.sun.star.comp.Writer.MSWorksImportFilter"_ustr;
 }
 
 sal_Bool SAL_CALL MSWorksImportFilter::supportsService(const OUString& rServiceName)
@@ -144,7 +144,8 @@ sal_Bool SAL_CALL MSWorksImportFilter::supportsService(const OUString& rServiceN
 
 css::uno::Sequence<OUString> SAL_CALL MSWorksImportFilter::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ImportFilter"_ustr,
+             u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

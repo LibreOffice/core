@@ -76,29 +76,29 @@ EPUBExportDialog::EPUBExportDialog(weld::Window* pParent,
                                    comphelper::SequenceAsHashMap& rFilterData,
                                    uno::Reference<uno::XComponentContext> xContext,
                                    css::uno::Reference<css::lang::XComponent> xDocument)
-    : GenericDialogController(pParent, "writerperfect/ui/exportepub.ui", "EpubDialog")
+    : GenericDialogController(pParent, u"writerperfect/ui/exportepub.ui"_ustr, u"EpubDialog"_ustr)
     , m_xContext(std::move(xContext))
     , m_rFilterData(rFilterData)
     , m_xSourceDocument(std::move(xDocument))
-    , m_xVersion(m_xBuilder->weld_combo_box("versionlb"))
-    , m_xSplit(m_xBuilder->weld_combo_box("splitlb"))
-    , m_xLayout(m_xBuilder->weld_combo_box("layoutlb"))
-    , m_xCoverPath(m_xBuilder->weld_entry("coverpath"))
-    , m_xCoverButton(m_xBuilder->weld_button("coverbutton"))
-    , m_xMediaDir(m_xBuilder->weld_entry("mediadir"))
-    , m_xMediaButton(m_xBuilder->weld_button("mediabutton"))
-    , m_xOKButton(m_xBuilder->weld_button("ok"))
-    , m_xIdentifier(m_xBuilder->weld_entry("identifier"))
-    , m_xTitle(m_xBuilder->weld_entry("title"))
-    , m_xInitialCreator(m_xBuilder->weld_entry("author"))
-    , m_xLanguage(m_xBuilder->weld_entry("language"))
-    , m_xDate(m_xBuilder->weld_entry("date"))
-    , m_xCustomizeFrame(m_xBuilder->weld_frame("customize"))
+    , m_xVersion(m_xBuilder->weld_combo_box(u"versionlb"_ustr))
+    , m_xSplit(m_xBuilder->weld_combo_box(u"splitlb"_ustr))
+    , m_xLayout(m_xBuilder->weld_combo_box(u"layoutlb"_ustr))
+    , m_xCoverPath(m_xBuilder->weld_entry(u"coverpath"_ustr))
+    , m_xCoverButton(m_xBuilder->weld_button(u"coverbutton"_ustr))
+    , m_xMediaDir(m_xBuilder->weld_entry(u"mediadir"_ustr))
+    , m_xMediaButton(m_xBuilder->weld_button(u"mediabutton"_ustr))
+    , m_xOKButton(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xIdentifier(m_xBuilder->weld_entry(u"identifier"_ustr))
+    , m_xTitle(m_xBuilder->weld_entry(u"title"_ustr))
+    , m_xInitialCreator(m_xBuilder->weld_entry(u"author"_ustr))
+    , m_xLanguage(m_xBuilder->weld_entry(u"language"_ustr))
+    , m_xDate(m_xBuilder->weld_entry(u"date"_ustr))
+    , m_xCustomizeFrame(m_xBuilder->weld_frame(u"customize"_ustr))
 
 {
     assert(PositionToVersion(m_xVersion->get_active()) == EPUBExportFilter::GetDefaultVersion());
 
-    auto it = rFilterData.find("EPUBVersion");
+    auto it = rFilterData.find(u"EPUBVersion"_ustr);
     if (it != rFilterData.end())
     {
         sal_Int32 nVersion = 0;
@@ -107,7 +107,7 @@ EPUBExportDialog::EPUBExportDialog(weld::Window* pParent,
     }
     m_xVersion->connect_changed(LINK(this, EPUBExportDialog, VersionSelectHdl));
 
-    it = rFilterData.find("EPUBSplitMethod");
+    it = rFilterData.find(u"EPUBSplitMethod"_ustr);
     if (it != rFilterData.end())
     {
         sal_Int32 nSplitMethod = 0;
@@ -120,7 +120,7 @@ EPUBExportDialog::EPUBExportDialog(weld::Window* pParent,
         m_xSplit->set_active(EPUBExportFilter::GetDefaultSplitMethod());
     m_xSplit->connect_changed(LINK(this, EPUBExportDialog, SplitSelectHdl));
 
-    it = rFilterData.find("EPUBLayoutMethod");
+    it = rFilterData.find(u"EPUBLayoutMethod"_ustr);
     if (it != rFilterData.end())
     {
         sal_Int32 nLayoutMethod = 0;
@@ -163,27 +163,27 @@ EPUBExportDialog::EPUBExportDialog(weld::Window* pParent,
 
 IMPL_LINK_NOARG(EPUBExportDialog, VersionSelectHdl, weld::ComboBox&, void)
 {
-    m_rFilterData["EPUBVersion"] <<= PositionToVersion(m_xVersion->get_active());
+    m_rFilterData[u"EPUBVersion"_ustr] <<= PositionToVersion(m_xVersion->get_active());
 }
 
 IMPL_LINK_NOARG(EPUBExportDialog, SplitSelectHdl, weld::ComboBox&, void)
 {
     // No conversion, 1:1 mapping between entry positions and
     // libepubgen::EPUBSplitMethod.
-    m_rFilterData["EPUBSplitMethod"] <<= static_cast<sal_Int32>(m_xSplit->get_active());
+    m_rFilterData[u"EPUBSplitMethod"_ustr] <<= static_cast<sal_Int32>(m_xSplit->get_active());
 }
 
 IMPL_LINK_NOARG(EPUBExportDialog, LayoutSelectHdl, weld::ComboBox&, void)
 {
     // No conversion, 1:1 mapping between entry positions and
     // libepubgen::EPUBLayoutMethod.
-    m_rFilterData["EPUBLayoutMethod"] <<= static_cast<sal_Int32>(m_xLayout->get_active());
+    m_rFilterData[u"EPUBLayoutMethod"_ustr] <<= static_cast<sal_Int32>(m_xLayout->get_active());
     m_xSplit->set_sensitive(m_xLayout->get_active() != libepubgen::EPUB_LAYOUT_METHOD_FIXED);
 }
 
 IMPL_LINK_NOARG(EPUBExportDialog, CoverClickHdl, weld::Button&, void)
 {
-    SvxOpenGraphicDialog aDlg("Import", m_xDialog.get());
+    SvxOpenGraphicDialog aDlg(u"Import"_ustr, m_xDialog.get());
     aDlg.EnableLink(false);
     if (aDlg.Execute() == ERRCODE_NONE)
         m_xCoverPath->set_text(aDlg.GetPath());
@@ -203,21 +203,21 @@ IMPL_LINK_NOARG(EPUBExportDialog, OKClickHdl, weld::Button&, void)
 {
     // General
     if (!m_xCoverPath->get_text().isEmpty())
-        m_rFilterData["RVNGCoverImage"] <<= m_xCoverPath->get_text();
+        m_rFilterData[u"RVNGCoverImage"_ustr] <<= m_xCoverPath->get_text();
     if (!m_xMediaDir->get_text().isEmpty())
-        m_rFilterData["RVNGMediaDir"] <<= m_xMediaDir->get_text();
+        m_rFilterData[u"RVNGMediaDir"_ustr] <<= m_xMediaDir->get_text();
 
     // Metadata
     if (!m_xIdentifier->get_text().isEmpty())
-        m_rFilterData["RVNGIdentifier"] <<= m_xIdentifier->get_text();
+        m_rFilterData[u"RVNGIdentifier"_ustr] <<= m_xIdentifier->get_text();
     if (!m_xTitle->get_text().isEmpty())
-        m_rFilterData["RVNGTitle"] <<= m_xTitle->get_text();
+        m_rFilterData[u"RVNGTitle"_ustr] <<= m_xTitle->get_text();
     if (!m_xInitialCreator->get_text().isEmpty())
-        m_rFilterData["RVNGInitialCreator"] <<= m_xInitialCreator->get_text();
+        m_rFilterData[u"RVNGInitialCreator"_ustr] <<= m_xInitialCreator->get_text();
     if (!m_xLanguage->get_text().isEmpty())
-        m_rFilterData["RVNGLanguage"] <<= m_xLanguage->get_text();
+        m_rFilterData[u"RVNGLanguage"_ustr] <<= m_xLanguage->get_text();
     if (!m_xDate->get_text().isEmpty())
-        m_rFilterData["RVNGDate"] <<= m_xDate->get_text();
+        m_rFilterData[u"RVNGDate"_ustr] <<= m_xDate->get_text();
 
     m_xDialog->response(RET_OK);
 }

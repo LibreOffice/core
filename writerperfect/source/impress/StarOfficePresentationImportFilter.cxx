@@ -79,7 +79,7 @@ void StarOfficePresentationImportFilter::doRegisterHandlers(OdpGenerator& rGener
 // XServiceInfo
 OUString SAL_CALL StarOfficePresentationImportFilter::getImplementationName()
 {
-    return "org.libreoffice.comp.Impress.StarOfficePresentationImportFilter";
+    return u"org.libreoffice.comp.Impress.StarOfficePresentationImportFilter"_ustr;
 }
 
 sal_Bool SAL_CALL StarOfficePresentationImportFilter::supportsService(const OUString& rServiceName)
@@ -89,7 +89,8 @@ sal_Bool SAL_CALL StarOfficePresentationImportFilter::supportsService(const OUSt
 
 Sequence<OUString> SAL_CALL StarOfficePresentationImportFilter::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ImportFilter"_ustr,
+             u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

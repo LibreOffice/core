@@ -33,7 +33,7 @@ bool FreehandImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, O
 // XServiceInfo
 OUString SAL_CALL FreehandImportFilter::getImplementationName()
 {
-    return "com.sun.star.comp.Draw.FreehandImportFilter";
+    return u"com.sun.star.comp.Draw.FreehandImportFilter"_ustr;
 }
 
 sal_Bool SAL_CALL FreehandImportFilter::supportsService(const OUString& rServiceName)
@@ -43,7 +43,8 @@ sal_Bool SAL_CALL FreehandImportFilter::supportsService(const OUString& rService
 
 css::uno::Sequence<OUString> SAL_CALL FreehandImportFilter::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ImportFilter"_ustr,
+             u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

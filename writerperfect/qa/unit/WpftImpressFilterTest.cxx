@@ -24,7 +24,7 @@ public:
 };
 
 WpftImpressFilterTest::WpftImpressFilterTest()
-    : writerperfect::test::WpftFilterTestBase("private:factory/simpress")
+    : writerperfect::test::WpftFilterTestBase(u"private:factory/simpress"_ustr)
 {
 }
 
@@ -48,9 +48,9 @@ void WpftImpressFilterTest::test()
         { "PowerPoint_7.ppt", REQUIRE_MWAW_VERSION(0, 3, 11) },
     };
 
-    doTest("org.libreoffice.comp.Impress.KeynoteImportFilter",
+    doTest(u"org.libreoffice.comp.Impress.KeynoteImportFilter"_ustr,
            u"/writerperfect/qa/unit/data/impress/libetonyek/", aEtonyekOptional);
-    doTest("com.sun.star.comp.Impress.MWAWPresentationImportFilter",
+    doTest(u"com.sun.star.comp.Impress.MWAWPresentationImportFilter"_ustr,
            u"/writerperfect/qa/unit/data/impress/libmwaw/", aMWAWOptional);
 }
 

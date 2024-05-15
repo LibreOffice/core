@@ -78,7 +78,7 @@ void StarOfficeDrawImportFilter::doRegisterHandlers(OdgGenerator& rGenerator)
 // XServiceInfo
 OUString SAL_CALL StarOfficeDrawImportFilter::getImplementationName()
 {
-    return "org.libreoffice.comp.Draw.StarOfficeDrawImportFilter";
+    return u"org.libreoffice.comp.Draw.StarOfficeDrawImportFilter"_ustr;
 }
 
 sal_Bool SAL_CALL StarOfficeDrawImportFilter::supportsService(const OUString& rServiceName)
@@ -88,7 +88,8 @@ sal_Bool SAL_CALL StarOfficeDrawImportFilter::supportsService(const OUString& rS
 
 Sequence<OUString> SAL_CALL StarOfficeDrawImportFilter::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ImportFilter"_ustr,
+             u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

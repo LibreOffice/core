@@ -125,7 +125,7 @@ bool WordPerfectImportFilter::importImpl(
     // An XML import service: what we push sax messages to.
     Reference<XInterface> xInternalFilter
         = mxContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.comp.Writer.XMLOasisImporter", mxContext);
+            u"com.sun.star.comp.Writer.XMLOasisImporter"_ustr, mxContext);
     assert(xInternalFilter);
     css::uno::Reference<css::xml::sax::XFastDocumentHandler> xInternalHandler(xInternalFilter,
                                                                               css::uno::UNO_QUERY);
@@ -210,7 +210,7 @@ WordPerfectImportFilter::initialize(const css::uno::Sequence<css::uno::Any>& /*a
 // XServiceInfo
 OUString SAL_CALL WordPerfectImportFilter::getImplementationName()
 {
-    return "com.sun.star.comp.Writer.WordPerfectImportFilter";
+    return u"com.sun.star.comp.Writer.WordPerfectImportFilter"_ustr;
 }
 
 sal_Bool SAL_CALL WordPerfectImportFilter::supportsService(const OUString& rServiceName)
@@ -220,7 +220,8 @@ sal_Bool SAL_CALL WordPerfectImportFilter::supportsService(const OUString& rServ
 
 css::uno::Sequence<OUString> SAL_CALL WordPerfectImportFilter::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ImportFilter"_ustr,
+             u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

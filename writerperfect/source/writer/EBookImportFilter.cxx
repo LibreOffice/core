@@ -91,7 +91,7 @@ bool EBookImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUSt
 // XServiceInfo
 OUString SAL_CALL EBookImportFilter::getImplementationName()
 {
-    return "org.libreoffice.comp.Writer.EBookImportFilter";
+    return u"org.libreoffice.comp.Writer.EBookImportFilter"_ustr;
 }
 
 sal_Bool SAL_CALL EBookImportFilter::supportsService(const OUString& rServiceName)
@@ -101,7 +101,8 @@ sal_Bool SAL_CALL EBookImportFilter::supportsService(const OUString& rServiceNam
 
 css::uno::Sequence<OUString> SAL_CALL EBookImportFilter::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ImportFilter"_ustr,
+             u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

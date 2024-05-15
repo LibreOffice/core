@@ -87,7 +87,7 @@ const css::uno::Reference<css::lang::XComponent>& WpftLoader::getDocument() cons
 bool WpftLoader::impl_load()
 {
     // create an empty frame
-    m_xDoc.set(m_xDesktop->loadComponentFromURL(m_aFactoryURL, "_blank", 0,
+    m_xDoc.set(m_xDesktop->loadComponentFromURL(m_aFactoryURL, u"_blank"_ustr, 0,
                                                 uno::Sequence<beans::PropertyValue>()),
                uno::UNO_SET_THROW);
 

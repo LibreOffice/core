@@ -224,7 +224,7 @@ KeynoteImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descr
 // XServiceInfo
 OUString SAL_CALL KeynoteImportFilter::getImplementationName()
 {
-    return "org.libreoffice.comp.Impress.KeynoteImportFilter";
+    return u"org.libreoffice.comp.Impress.KeynoteImportFilter"_ustr;
 }
 
 sal_Bool SAL_CALL KeynoteImportFilter::supportsService(const OUString& rServiceName)
@@ -234,7 +234,8 @@ sal_Bool SAL_CALL KeynoteImportFilter::supportsService(const OUString& rServiceN
 
 css::uno::Sequence<OUString> SAL_CALL KeynoteImportFilter::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ImportFilter"_ustr,
+             u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

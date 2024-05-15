@@ -24,7 +24,7 @@ public:
 };
 
 WpftCalcFilterTest::WpftCalcFilterTest()
-    : writerperfect::test::WpftFilterTestBase("private:factory/scalc")
+    : writerperfect::test::WpftFilterTestBase(u"private:factory/scalc"_ustr)
 {
 }
 
@@ -44,13 +44,13 @@ void WpftCalcFilterTest::test()
         { "QuattroPro.wb1", REQUIRE_WPS_VERSION(0, 4, 8) },
     };
 
-    doTest("com.sun.star.comp.Calc.MWAWCalcImportFilter",
+    doTest(u"com.sun.star.comp.Calc.MWAWCalcImportFilter"_ustr,
            u"/writerperfect/qa/unit/data/calc/libmwaw/", aMWAWOptional);
-    doTest("com.sun.star.comp.Calc.MSWorksCalcImportFilter",
+    doTest(u"com.sun.star.comp.Calc.MSWorksCalcImportFilter"_ustr,
            u"/writerperfect/qa/unit/data/calc/libwps/", aWpsOptional);
-    doTest("org.libreoffice.comp.Calc.NumbersImportFilter",
+    doTest(u"org.libreoffice.comp.Calc.NumbersImportFilter"_ustr,
            u"/writerperfect/qa/unit/data/calc/libetonyek/", aEtonyekOptional);
-    doTest("org.libreoffice.comp.Calc.StarOfficeCalcImportFilter",
+    doTest(u"org.libreoffice.comp.Calc.StarOfficeCalcImportFilter"_ustr,
            u"/writerperfect/qa/unit/data/calc/libstaroffice/");
 }
 

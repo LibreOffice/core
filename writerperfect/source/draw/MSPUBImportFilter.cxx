@@ -33,7 +33,7 @@ bool MSPUBImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUSt
 // XServiceInfo
 OUString SAL_CALL MSPUBImportFilter::getImplementationName()
 {
-    return "com.sun.star.comp.Draw.MSPUBImportFilter";
+    return u"com.sun.star.comp.Draw.MSPUBImportFilter"_ustr;
 }
 
 sal_Bool SAL_CALL MSPUBImportFilter::supportsService(const OUString& rServiceName)
@@ -43,7 +43,8 @@ sal_Bool SAL_CALL MSPUBImportFilter::supportsService(const OUString& rServiceNam
 
 css::uno::Sequence<OUString> SAL_CALL MSPUBImportFilter::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ImportFilter"_ustr,
+             u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

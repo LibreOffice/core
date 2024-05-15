@@ -37,7 +37,7 @@ bool CDRImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUStri
 // XServiceInfo
 OUString SAL_CALL CDRImportFilter::getImplementationName()
 {
-    return "com.sun.star.comp.Draw.CDRImportFilter";
+    return u"com.sun.star.comp.Draw.CDRImportFilter"_ustr;
 }
 
 sal_Bool SAL_CALL CDRImportFilter::supportsService(const OUString& rServiceName)
@@ -47,7 +47,8 @@ sal_Bool SAL_CALL CDRImportFilter::supportsService(const OUString& rServiceName)
 
 css::uno::Sequence<OUString> SAL_CALL CDRImportFilter::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ImportFilter"_ustr,
+             u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

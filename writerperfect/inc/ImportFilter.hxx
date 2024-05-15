@@ -68,7 +68,7 @@ public:
         }
 
         css::uno::Reference<css::awt::XWindow> xDialogParent;
-        aDescriptor["ParentWindow"] >>= xDialogParent;
+        aDescriptor[u"ParentWindow"_ustr] >>= xDialogParent;
 
         // An XML import service: what we push sax messages to...
         css::uno::Reference<XInterface> xInternalFilter

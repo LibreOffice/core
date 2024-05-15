@@ -65,7 +65,7 @@ bool TextImportFilter::doDetectFormat(librevenge::RVNGInputStream&, OUString& rT
 // XServiceInfo
 OUString SAL_CALL TextImportFilter::getImplementationName()
 {
-    return "org.libreoffice.comp.Wpft.QA.TextImportFilter";
+    return u"org.libreoffice.comp.Wpft.QA.TextImportFilter"_ustr;
 }
 
 sal_Bool SAL_CALL TextImportFilter::supportsService(const OUString& rServiceName)
@@ -75,7 +75,8 @@ sal_Bool SAL_CALL TextImportFilter::supportsService(const OUString& rServiceName
 
 uno::Sequence<OUString> SAL_CALL TextImportFilter::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ImportFilter"_ustr,
+             u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 void TextImportFilter::generate(librevenge::RVNGTextInterface& rDocument)
@@ -111,8 +112,8 @@ void TextImportTest::test()
     using namespace css;
 
     rtl::Reference<TextImportFilter> xFilter{ new TextImportFilter(m_xContext) };
-    writerperfect::test::WpftLoader aLoader(createDummyInput(), xFilter, "private:factory/swriter",
-                                            m_xDesktop, m_xContext);
+    writerperfect::test::WpftLoader aLoader(
+        createDummyInput(), xFilter, u"private:factory/swriter"_ustr, m_xDesktop, m_xContext);
 
     uno::Reference<text::XTextDocument> xDoc(aLoader.getDocument(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
@@ -130,11 +131,11 @@ void TextImportTest::test()
     uno::Reference<beans::XPropertySet> xPortionProps(xPortions->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPortionProps.is());
     OUString aPortionType;
-    CPPUNIT_ASSERT(xPortionProps->getPropertyValue("TextPortionType") >>= aPortionType);
-    CPPUNIT_ASSERT_EQUAL(OUString("Text"), aPortionType);
+    CPPUNIT_ASSERT(xPortionProps->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType);
+    CPPUNIT_ASSERT_EQUAL(u"Text"_ustr, aPortionType);
     uno::Reference<text::XTextRange> xPortion(xPortionProps, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPortion.is());
-    CPPUNIT_ASSERT_EQUAL(OUString("My hovercraft is full of eels."), xPortion->getString());
+    CPPUNIT_ASSERT_EQUAL(u"My hovercraft is full of eels."_ustr, xPortion->getString());
     CPPUNIT_ASSERT(!xPortions->hasMoreElements());
     CPPUNIT_ASSERT(!xParas->hasMoreElements());
 }

@@ -49,7 +49,7 @@ getResultSet(const css::uno::Reference<css::ucb::XContent>& xPackageContent)
             ucbhelper::Content packageContent(xPackageContent,
                                               uno::Reference<ucb::XCommandEnvironment>(),
                                               comphelper::getProcessComponentContext());
-            uno::Sequence<OUString> lPropNames{ "Title" };
+            uno::Sequence<OUString> lPropNames{ u"Title"_ustr };
             uno::Reference<sdbc::XResultSet> xResultSet(
                 packageContent.createCursor(lPropNames, ucbhelper::INCLUDE_DOCUMENTS_ONLY));
             return xResultSet;
@@ -452,7 +452,7 @@ void MSWorksCalcImportFilter::doRegisterHandlers(OdsGenerator&) {}
 // XServiceInfo
 OUString SAL_CALL MSWorksCalcImportFilter::getImplementationName()
 {
-    return "com.sun.star.comp.Calc.MSWorksCalcImportFilter";
+    return u"com.sun.star.comp.Calc.MSWorksCalcImportFilter"_ustr;
 }
 
 sal_Bool SAL_CALL MSWorksCalcImportFilter::supportsService(const OUString& rServiceName)
@@ -462,7 +462,8 @@ sal_Bool SAL_CALL MSWorksCalcImportFilter::supportsService(const OUString& rServ
 
 css::uno::Sequence<OUString> SAL_CALL MSWorksCalcImportFilter::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ImportFilter"_ustr,
+             u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

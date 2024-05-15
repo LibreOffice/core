@@ -92,11 +92,11 @@ OUString getEncoding(const weld::ComboBox& box) { return box.get_active_id(); }
 
 WPFTEncodingDialog::WPFTEncodingDialog(weld::Window* pParent, const OUString& title,
                                        const OUString& encoding)
-    : GenericDialogController(pParent, "writerperfect/ui/wpftencodingdialog.ui",
-                              "WPFTEncodingDialog")
+    : GenericDialogController(pParent, u"writerperfect/ui/wpftencodingdialog.ui"_ustr,
+                              u"WPFTEncodingDialog"_ustr)
     , m_userHasCancelled(false)
-    , m_xLbCharset(m_xBuilder->weld_combo_box("comboboxtext"))
-    , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
+    , m_xLbCharset(m_xBuilder->weld_combo_box(u"comboboxtext"_ustr))
+    , m_xBtnCancel(m_xBuilder->weld_button(u"cancel"_ustr))
 {
     m_xBtnCancel->connect_clicked(LINK(this, WPFTEncodingDialog, CancelHdl));
 

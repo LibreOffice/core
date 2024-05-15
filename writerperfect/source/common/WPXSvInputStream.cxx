@@ -702,7 +702,7 @@ bool WPXSvInputStream::isZip()
                                                         UNO_SET_THROW);
             const Reference<packages::zip::XZipFileAccess2> xZip(
                 xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    "com.sun.star.packages.zip.ZipFileAccess", { Any(mxStream) }, xContext),
+                    u"com.sun.star.packages.zip.ZipFileAccess"_ustr, { Any(mxStream) }, xContext),
                 UNO_QUERY_THROW);
             mpZipStorage.reset(new ZipStorageImpl(xZip));
         }

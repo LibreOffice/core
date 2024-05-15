@@ -40,7 +40,7 @@ bool PagesImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OUSt
 // XServiceInfo
 OUString SAL_CALL PagesImportFilter::getImplementationName()
 {
-    return "org.libreoffice.comp.Writer.PagesImportFilter";
+    return u"org.libreoffice.comp.Writer.PagesImportFilter"_ustr;
 }
 
 sal_Bool SAL_CALL PagesImportFilter::supportsService(const OUString& rServiceName)
@@ -50,7 +50,8 @@ sal_Bool SAL_CALL PagesImportFilter::supportsService(const OUString& rServiceNam
 
 css::uno::Sequence<OUString> SAL_CALL PagesImportFilter::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection" };
+    return { u"com.sun.star.document.ImportFilter"_ustr,
+             u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
