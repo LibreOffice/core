@@ -1405,7 +1405,7 @@ PDFFileImplData* PDFFile::impl_getData() const
                             SAL_INFO("sdext.pdfimport.pdfparse", "p entry is " << m_pData->m_nPEntry );
                         }
 
-                        SAL_INFO("sdext.pdfimport.pdfparse", "Encryption dict: sec handler: " << (pFilter ? pFilter->getFilteredName() : OUString("<unknown>")) << ", version = " << static_cast<int>(m_pData->m_nAlgoVersion) << ", revision = " << static_cast<int>(m_pData->m_nStandardRevision) << ", key length = " << m_pData->m_nKeyLength );
+                        SAL_INFO("sdext.pdfimport.pdfparse", "Encryption dict: sec handler: " << (pFilter ? pFilter->getFilteredName() : u"<unknown>"_ustr) << ", version = " << static_cast<int>(m_pData->m_nAlgoVersion) << ", revision = " << static_cast<int>(m_pData->m_nStandardRevision) << ", key length = " << m_pData->m_nKeyLength );
                         break;
                     }
                 }

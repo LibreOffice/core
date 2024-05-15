@@ -76,8 +76,8 @@ sal_Int32 StyleContainer::impl_getStyleId( const Style& rStyle, bool bSubStyle )
 sal_Int32 StyleContainer::getStandardStyleId( std::string_view rName )
 {
     PropertyMap aProps;
-    aProps[ "style:family" ] = OStringToOUString( rName, RTL_TEXTENCODING_UTF8 );
-    aProps[ "style:name" ] = "standard";
+    aProps[ u"style:family"_ustr ] = OStringToOUString( rName, RTL_TEXTENCODING_UTF8 );
+    aProps[ u"style:name"_ustr ] = "standard";
 
     Style aStyle( "style:style"_ostr, std::move(aProps) );
     return getStyleId( aStyle );
@@ -153,12 +153,12 @@ OUString StyleContainer::getStyleName( sal_Int32 nStyle ) const
     {
         const HashedStyle& rStyle = style_it->second.style;
 
-        PropertyMap::const_iterator name_it = rStyle.Properties.find( "style:name" );
+        PropertyMap::const_iterator name_it = rStyle.Properties.find( u"style:name"_ustr );
         if( name_it != rStyle.Properties.end() )
             aRet.append( name_it->second );
         else
         {
-            PropertyMap::const_iterator fam_it = rStyle.Properties.find( "style:family" );
+            PropertyMap::const_iterator fam_it = rStyle.Properties.find( u"style:family"_ustr );
             OUString aStyleName;
             if( fam_it != rStyle.Properties.end() )
             {
@@ -189,9 +189,9 @@ void StyleContainer::impl_emitStyle( sal_Int32           nStyleId,
     const HashedStyle& rStyle = it->second.style;
     PropertyMap aProps( rStyle.Properties );
     if( !rStyle.IsSubStyle )
-        aProps[ "style:name" ] = getStyleName( nStyleId );
+        aProps[ u"style:name"_ustr ] = getStyleName( nStyleId );
     if (rStyle.Name == "draw:stroke-dash" || rStyle.Name == "draw:fill-image")
-        aProps[ "draw:name" ] = aProps[ "style:name" ];
+        aProps[ u"draw:name"_ustr ] = aProps[ u"style:name"_ustr ];
     rContext.rEmitter.beginTag( rStyle.Name.getStr(), aProps );
 
     for(sal_Int32 nSubStyle : rStyle.SubStyles)

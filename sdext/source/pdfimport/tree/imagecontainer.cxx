@@ -159,14 +159,14 @@ OUString ImageContainer::asBase64EncodedString( ImageId nId ) const
     if (pValue == pAry + nLen )
     {
         SAL_WARN("sdext.pdfimport", "InputSequence not found");
-        return "";
+        return u""_ustr;
     }
 
     uno::Sequence<sal_Int8> aData;
     if( !(pValue->Value >>= aData) )
     {
         SAL_WARN("sdext.pdfimport", "Wrong data type");
-        return "";
+        return u""_ustr;
     }
 
     return encodeBase64( aData.getConstArray(), aData.getLength() );

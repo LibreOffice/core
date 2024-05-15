@@ -197,7 +197,7 @@ sal_Int32 fillAttributes(uno::Sequence<beans::PropertyValue> const& rFilterData,
     sal_Int32 nAttribs = rFilterData.getLength();
     for (sal_Int32 i = 0; i < nAttribs; i++)
     {
-        OUString aVal( "<no string>" );
+        OUString aVal( u"<no string>"_ustr );
         pAttribs[i].Value >>= aVal;
         SAL_INFO("sdext.pdfimport", "doDetection: Attrib: " + pAttribs[i].Name + " = " + aVal);
 
@@ -411,15 +411,15 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
             switch (nDocumentType)
             {
                 case 0:
-                    pFilterData[nFilterNamePos].Value <<= OUString( "draw_pdf_import" );
+                    pFilterData[nFilterNamePos].Value <<= u"draw_pdf_import"_ustr;
                     break;
 
                 case 1:
-                    pFilterData[nFilterNamePos].Value <<= OUString( "impress_pdf_import" );
+                    pFilterData[nFilterNamePos].Value <<= u"impress_pdf_import"_ustr;
                     break;
 
                 case 2:
-                    pFilterData[nFilterNamePos].Value <<= OUString( "writer_pdf_import" );
+                    pFilterData[nFilterNamePos].Value <<= u"writer_pdf_import"_ustr;
                     break;
 
                 default:
@@ -435,7 +435,7 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
 
 OUString PDFDetector::getImplementationName()
 {
-    return "org.libreoffice.comp.documents.PDFDetector";
+    return u"org.libreoffice.comp.documents.PDFDetector"_ustr;
 }
 
 sal_Bool PDFDetector::supportsService(OUString const & ServiceName)
@@ -445,7 +445,7 @@ sal_Bool PDFDetector::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> PDFDetector::getSupportedServiceNames()
 {
-    return {"com.sun.star.document.ImportFilter"};
+    return {u"com.sun.star.document.ImportFilter"_ustr};
 }
 
 bool checkDocChecksum( const OUString& rInPDFFileURL,

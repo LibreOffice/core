@@ -110,7 +110,7 @@ static void ImpDeleteHiddenSlides(  const Reference< XModel >& rxModel )
             Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY_THROW );
 
             bool bVisible = true;
-            if ( xPropSet->getPropertyValue( "Visible" ) >>= bVisible )
+            if ( xPropSet->getPropertyValue( u"Visible"_ustr ) >>= bVisible )
             {
                 if (!bVisible )
                 {
@@ -140,7 +140,7 @@ static void ImpDeleteNotesPages( const Reference< XModel >& rxModel )
             while( xShapes->getCount() )
                 xShapes->remove( Reference< XShape >( xShapes->getByIndex( xShapes->getCount() - 1 ), UNO_QUERY_THROW ) );
 
-            xPropSet->setPropertyValue( "Layout", Any( sal_Int16(21) ) );
+            xPropSet->setPropertyValue( u"Layout"_ustr, Any( sal_Int16(21) ) );
         }
     }
     catch( Exception& )
@@ -168,23 +168,23 @@ static void ImpConvertOLE( const Reference< XModel >& rxModel, sal_Int32 nOLEOpt
                     if ( nOLEOptimizationType == 1 )
                     {
                         bool bIsInternal = true;
-                        xPropSet->getPropertyValue( "IsInternal" ) >>= bIsInternal;
+                        xPropSet->getPropertyValue( u"IsInternal"_ustr ) >>= bIsInternal;
                         bConvertOLE = !bIsInternal;
                     }
                     if ( bConvertOLE )
                     {
                         Reference< XGraphic > xGraphic;
-                        if ( xPropSet->getPropertyValue( "Graphic" ) >>= xGraphic )
+                        if ( xPropSet->getPropertyValue( u"Graphic"_ustr ) >>= xGraphic )
                         {
                             Reference< XMultiServiceFactory > xFact( rxModel, UNO_QUERY_THROW );
-                            Reference< XShape > xShape2( xFact->createInstance( "com.sun.star.drawing.GraphicObjectShape" ), UNO_QUERY_THROW );
+                            Reference< XShape > xShape2( xFact->createInstance( u"com.sun.star.drawing.GraphicObjectShape"_ustr ), UNO_QUERY_THROW );
                             xShapes->add( xShape2 );
                             xShape2->setPosition( xShape->getPosition() );
                             xShape2->setSize( xShape->getSize() );
                             Reference< XPropertySet > xPropSet2( xShape2, UNO_QUERY_THROW );
-                            xPropSet2->setPropertyValue( "Graphic", Any( xGraphic ) );
+                            xPropSet2->setPropertyValue( u"Graphic"_ustr, Any( xGraphic ) );
                             xShapes->remove( xShape );
-                            xPropSet2->setPropertyValue( "ZOrder", Any( j ) );
+                            xPropSet2->setPropertyValue( u"ZOrder"_ustr, Any( j ) );
                         }
                     }
                 }
@@ -204,20 +204,20 @@ static void ImpCompressGraphic( Reference< XGraphicProvider > const & rxGraphicP
         if ( rxGraphicProvider.is() && rxOutputStream.is() )
         {
             Sequence< PropertyValue > aFilterData{
-                comphelper::makePropertyValue("ImageResolution", nImageResolution),
-                comphelper::makePropertyValue("ColorMode", sal_Int32(0)), // todo: jpeg color mode (0->true color, 1->greyscale)
-                comphelper::makePropertyValue("Quality", nJPEGQuality), // quality that is used if we export to jpeg
-                comphelper::makePropertyValue("Compression", sal_Int32(6)), // compression that is used if we export to png
-                comphelper::makePropertyValue("Interlaced", sal_Int32(0)), // interlaced is turned off if we export to png
-                comphelper::makePropertyValue("LogicalSize", rLogicalSize),
-                comphelper::makePropertyValue("RemoveCropArea", bRemoveCropping),
-                comphelper::makePropertyValue("GraphicCropLogic", rGraphicCropLogic)
+                comphelper::makePropertyValue(u"ImageResolution"_ustr, nImageResolution),
+                comphelper::makePropertyValue(u"ColorMode"_ustr, sal_Int32(0)), // todo: jpeg color mode (0->true color, 1->greyscale)
+                comphelper::makePropertyValue(u"Quality"_ustr, nJPEGQuality), // quality that is used if we export to jpeg
+                comphelper::makePropertyValue(u"Compression"_ustr, sal_Int32(6)), // compression that is used if we export to png
+                comphelper::makePropertyValue(u"Interlaced"_ustr, sal_Int32(0)), // interlaced is turned off if we export to png
+                comphelper::makePropertyValue(u"LogicalSize"_ustr, rLogicalSize),
+                comphelper::makePropertyValue(u"RemoveCropArea"_ustr, bRemoveCropping),
+                comphelper::makePropertyValue(u"GraphicCropLogic"_ustr, rGraphicCropLogic)
             };
 
             Sequence< PropertyValue > aArgs{
-                comphelper::makePropertyValue("MimeType", rDestMimeType), // the GraphicProvider is using "MimeType", the GraphicExporter "MediaType"...
-                comphelper::makePropertyValue("OutputStream", rxOutputStream),
-                comphelper::makePropertyValue("FilterData", aFilterData)
+                comphelper::makePropertyValue(u"MimeType"_ustr, rDestMimeType), // the GraphicProvider is using "MimeType", the GraphicExporter "MediaType"...
+                comphelper::makePropertyValue(u"OutputStream"_ustr, rxOutputStream),
+                comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
             };
 
             rxGraphicProvider->storeGraphic( rxGraphic, aArgs );
@@ -237,7 +237,7 @@ static Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentCont
     {
         OUString aSourceMimeType;
         Reference< XPropertySet > xGraphicPropertySet( xGraphic, UNO_QUERY_THROW );
-        if ( xGraphicPropertySet->getPropertyValue( "MimeType" ) >>= aSourceMimeType )
+        if ( xGraphicPropertySet->getPropertyValue( u"MimeType"_ustr ) >>= aSourceMimeType )
         {
             sal_Int8 nGraphicType( xGraphic->getType() );
             if ( nGraphicType == css::graphic::GraphicType::PIXEL )
@@ -249,10 +249,10 @@ static Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentCont
                 awt::Size aSourceSizePixel( 0, 0 );
                 text::GraphicCrop aGraphicCropPixel( 0, 0, 0, 0 );
 
-                if ( ( xGraphicPropertySet->getPropertyValue( "SizePixel" ) >>= aSourceSizePixel ) &&
-                    ( xGraphicPropertySet->getPropertyValue( "Transparent" ) >>= bTransparent ) &&
-                    ( xGraphicPropertySet->getPropertyValue( "Alpha" ) >>= bAlpha ) &&
-                    ( xGraphicPropertySet->getPropertyValue( "Animated" ) >>= bAnimated ) )
+                if ( ( xGraphicPropertySet->getPropertyValue( u"SizePixel"_ustr ) >>= aSourceSizePixel ) &&
+                    ( xGraphicPropertySet->getPropertyValue( u"Transparent"_ustr ) >>= bTransparent ) &&
+                    ( xGraphicPropertySet->getPropertyValue( u"Alpha"_ustr ) >>= bAlpha ) &&
+                    ( xGraphicPropertySet->getPropertyValue( u"Animated"_ustr ) >>= bAnimated ) )
                 {
                     awt::Size aDestSizePixel( aSourceSizePixel );
                     if ( !bAnimated )
@@ -286,7 +286,7 @@ static Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentCont
                         }
                         if ( ( aSourceSizePixel.Width > 0 ) && ( aSourceSizePixel.Height > 0 ) )
                         {
-                            OUString aDestMimeType( "image/png"  );
+                            OUString aDestMimeType( u"image/png"_ustr  );
                             if (rGraphicSettings.mbJPEGCompression && !bTransparent && !bAlpha)
                             {
                                 aDestMimeType = "image/jpeg";
@@ -321,7 +321,7 @@ static Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentCont
                                 Reference< XSeekable > xSeekable( xInputStream, UNO_QUERY_THROW );
                                 xSeekable->seek( 0 );
                                 Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(
-                                    "InputStream", xInputStream) };
+                                    u"InputStream"_ustr, xInputStream) };
                                 xNewGraphic = xGraphicProvider->queryGraphic( aArgs );
                             }
                         }
@@ -338,7 +338,7 @@ static Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentCont
                 Reference< XInputStream > xInputStream( xTempFile->getInputStream() );
                 Reference< XSeekable > xSeekable( xInputStream, UNO_QUERY_THROW );
                 xSeekable->seek( 0 );
-                Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("InputStream",
+                Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(u"InputStream"_ustr,
                                                                                xInputStream) };
                 xNewGraphic = xGraphicProvider->queryGraphic( aArgs );
             }
@@ -372,13 +372,13 @@ static void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XCompon
                 if ( rGraphic.maUser[ 0 ].mbFillBitmap && rGraphic.maUser[ 0 ].mxPropertySet.is() )
                 {
                     Reference< rendering::XBitmap > xFillBitmap;
-                    if ( rGraphic.maUser[ 0 ].mxPropertySet->getPropertyValue( "FillBitmap" ) >>= xFillBitmap )
+                    if ( rGraphic.maUser[ 0 ].mxPropertySet->getPropertyValue( u"FillBitmap"_ustr ) >>= xFillBitmap )
                         xGraphic.set( xFillBitmap, UNO_QUERY_THROW );
                 }
                 else if ( rGraphic.maUser[ 0 ].mxShape.is() )
                 {
                     Reference< XPropertySet > xShapePropertySet( rGraphic.maUser[ 0 ].mxShape, UNO_QUERY_THROW );
-                    xShapePropertySet->getPropertyValue( "Graphic" ) >>= xGraphic;
+                    xShapePropertySet->getPropertyValue( u"Graphic"_ustr ) >>= xGraphic;
                 }
                 if ( xGraphic.is() )
                 {
@@ -393,7 +393,7 @@ static void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XCompon
                             if ( rGraphicUser.mxShape.is() )
                             {
                                 Reference< XPropertySet > xShapePropertySet( rGraphicUser.mxShape, UNO_QUERY_THROW );
-                                xShapePropertySet->setPropertyValue( "Graphic", Any( xNewGraphic ) );
+                                xShapePropertySet->setPropertyValue( u"Graphic"_ustr, Any( xNewGraphic ) );
 
                                 if ( rGraphicUser.maGraphicCropLogic.Left || rGraphicUser.maGraphicCropLogic.Top
                                 || rGraphicUser.maGraphicCropLogic.Right || rGraphicUser.maGraphicCropLogic.Bottom )
@@ -407,7 +407,7 @@ static void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XCompon
                                         aGraphicCropLogic.Right = static_cast<sal_Int32>(static_cast<double>(rGraphicUser.maGraphicCropLogic.Right) * (static_cast<double>(aNewSize.Width) / static_cast<double>(aSize100thMM.Width)));
                                         aGraphicCropLogic.Bottom = static_cast<sal_Int32>(static_cast<double>(rGraphicUser.maGraphicCropLogic.Bottom) * (static_cast<double>(aNewSize.Height) / static_cast<double>(aSize100thMM.Height)));
                                     }
-                                    xShapePropertySet->setPropertyValue( "GraphicCrop", Any( aGraphicCropLogic ) );
+                                    xShapePropertySet->setPropertyValue( u"GraphicCrop"_ustr, Any( aGraphicCropLogic ) );
                                 }
                             }
                             else if ( rGraphicUser.mxPropertySet.is() )
@@ -419,20 +419,20 @@ static void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XCompon
                                     bool bLogicalSize;
 
                                     Reference< XPropertySet >& rxPropertySet( rGraphicUser.mxPropertySet );
-                                    rxPropertySet->setPropertyValue( "FillBitmap", Any( xFillBitmap ) );
-                                    if ( ( rxPropertySet->getPropertyValue( "FillBitmapLogicalSize" ) >>= bLogicalSize )
-                                        && ( rxPropertySet->getPropertyValue( "FillBitmapSizeX" ) >>= aSize.Width )
-                                        && ( rxPropertySet->getPropertyValue( "FillBitmapSizeY" ) >>= aSize.Height ) )
+                                    rxPropertySet->setPropertyValue( u"FillBitmap"_ustr, Any( xFillBitmap ) );
+                                    if ( ( rxPropertySet->getPropertyValue( u"FillBitmapLogicalSize"_ustr ) >>= bLogicalSize )
+                                        && ( rxPropertySet->getPropertyValue( u"FillBitmapSizeX"_ustr ) >>= aSize.Width )
+                                        && ( rxPropertySet->getPropertyValue( u"FillBitmapSizeY"_ustr ) >>= aSize.Height ) )
                                     {
                                         if ( !aSize.Width || !aSize.Height )
                                         {
-                                            rxPropertySet->setPropertyValue( "FillBitmapLogicalSize", Any( true ) );
-                                            rxPropertySet->setPropertyValue( "FillBitmapSizeX", Any( rGraphicUser.maLogicalSize.Width ) );
-                                            rxPropertySet->setPropertyValue( "FillBitmapSizeY", Any( rGraphicUser.maLogicalSize.Height ) );
+                                            rxPropertySet->setPropertyValue( u"FillBitmapLogicalSize"_ustr, Any( true ) );
+                                            rxPropertySet->setPropertyValue( u"FillBitmapSizeX"_ustr, Any( rGraphicUser.maLogicalSize.Width ) );
+                                            rxPropertySet->setPropertyValue( u"FillBitmapSizeY"_ustr, Any( rGraphicUser.maLogicalSize.Height ) );
                                         }
                                     }
                                     if ( rGraphicUser.mxPagePropertySet.is() )
-                                        rGraphicUser.mxPagePropertySet->setPropertyValue( "Background", Any( rxPropertySet ) );
+                                        rGraphicUser.mxPagePropertySet->setPropertyValue( u"Background"_ustr, Any( rxPropertySet ) );
                                 }
                             }
                         }
@@ -491,14 +491,14 @@ void ImpOptimizer::Optimize()
     if ( mbDeleteHiddenSlides )
     {
         SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 40 ) ) );
-        SetStatusValue( TK_Status, Any( OUString("STR_DELETING_SLIDES") ) );
+        SetStatusValue( TK_Status, Any( u"STR_DELETING_SLIDES"_ustr ) );
         DispatchStatus();
         ImpDeleteHiddenSlides( mxModel );
     }
 
     if ( mbDeleteNotesPages )
     {
-        SetStatusValue( TK_Status, Any( OUString("STR_DELETING_SLIDES") ) );
+        SetStatusValue( TK_Status, Any( u"STR_DELETING_SLIDES"_ustr ) );
         DispatchStatus();
         ImpDeleteNotesPages( mxModel );
     }
@@ -506,7 +506,7 @@ void ImpOptimizer::Optimize()
     if ( mbDeleteUnusedMasterPages )
     {
         SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 40 ) ) );
-        SetStatusValue( TK_Status, Any( OUString("STR_DELETING_SLIDES") ) );
+        SetStatusValue( TK_Status, Any( u"STR_DELETING_SLIDES"_ustr ) );
         DispatchStatus();
         ImpDeleteUnusedMasterPages( mxModel );
     }
@@ -514,7 +514,7 @@ void ImpOptimizer::Optimize()
     if ( mbOLEOptimization )
     {
         SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 45 ) ) );
-        SetStatusValue( TK_Status, Any( OUString("STR_CREATING_OLE_REPLACEMENTS") ) );
+        SetStatusValue( TK_Status, Any( u"STR_CREATING_OLE_REPLACEMENTS"_ustr ) );
         DispatchStatus();
         ImpConvertOLE( mxModel, mnOLEOptimizationType );
     }
@@ -522,7 +522,7 @@ void ImpOptimizer::Optimize()
     if ( mbJPEGCompression || mbRemoveCropArea || mnImageResolution )
     {
         SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 50 ) ) );
-        SetStatusValue( TK_Status, Any( OUString("STR_OPTIMIZING_GRAPHICS") ) );
+        SetStatusValue( TK_Status, Any( u"STR_OPTIMIZING_GRAPHICS"_ustr ) );
         DispatchStatus();
 
         std::vector< GraphicCollector::GraphicEntity > aGraphicList;
@@ -610,7 +610,7 @@ void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
     {
 
         SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 10 ) ) );
-        SetStatusValue( TK_Status, Any( OUString("STR_DUPLICATING_PRESENTATION") ) );
+        SetStatusValue( TK_Status, Any( u"STR_DUPLICATING_PRESENTATION"_ustr ) );
         DispatchStatus();
 
         Reference< XStorable >xStorable( mxModel, UNO_QUERY );
@@ -633,16 +633,16 @@ void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
                 nSourceSize = PPPOptimizer::GetFileSize( maSaveAsURL );
 
             SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 30 ) ) );
-            SetStatusValue( TK_Status, Any( OUString("STR_DUPLICATING_PRESENTATION") ) );
+            SetStatusValue( TK_Status, Any( u"STR_DUPLICATING_PRESENTATION"_ustr ) );
             DispatchStatus();
 
             Reference< XDesktop2 > xDesktop = Desktop::create( mxContext );
-            xSelf = xDesktop->findFrame( "_blank", FrameSearchFlag::CREATE );
+            xSelf = xDesktop->findFrame( u"_blank"_ustr, FrameSearchFlag::CREATE );
             Reference< XComponentLoader > xComponentLoader( xSelf, UNO_QUERY );
 
-            Sequence< PropertyValue > aLoadProps{ comphelper::makePropertyValue("Hidden", true) };
+            Sequence< PropertyValue > aLoadProps{ comphelper::makePropertyValue(u"Hidden"_ustr, true) };
             mxModel.set( xComponentLoader->loadComponentFromURL(
-                maSaveAsURL, "_self", 0, aLoadProps ), UNO_QUERY );
+                maSaveAsURL, u"_self"_ustr, 0, aLoadProps ), UNO_QUERY );
         }
     }
 
@@ -658,7 +658,7 @@ void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
         Reference< XFrame > xFrame( xSelf.is() ? xSelf : mxDocumentFrame );
         if ( xFrame.is() )
         {
-            DispatchURL(mxContext, ".uno:ClearUndoStack", xFrame);
+            DispatchURL(mxContext, u".uno:ClearUndoStack"_ustr, xFrame);
         }
     }
 

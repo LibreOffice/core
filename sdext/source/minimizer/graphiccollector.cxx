@@ -84,7 +84,7 @@ static void ImpAddGraphicEntity( const Reference< XComponentContext >& rxMSF, Re
 {
     Reference< XGraphic > xGraphic;
     Reference< XPropertySet > xShapePropertySet( rxShape, UNO_QUERY_THROW );
-    if ( !(xShapePropertySet->getPropertyValue( "Graphic" ) >>= xGraphic) )
+    if ( !(xShapePropertySet->getPropertyValue( u"Graphic"_ustr ) >>= xGraphic) )
         return;
 
     text::GraphicCrop aGraphicCropLogic( 0, 0, 0, 0 );
@@ -93,7 +93,7 @@ static void ImpAddGraphicEntity( const Reference< XComponentContext >& rxMSF, Re
     aUser.mxShape = rxShape;
     aUser.mbFillBitmap = false;
     aUser.mxGraphic = xGraphic;
-    xShapePropertySet->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropLogic;
+    xShapePropertySet->getPropertyValue( u"GraphicCrop"_ustr ) >>= aGraphicCropLogic;
     awt::Size aLogicalSize( rxShape->getSize() );
 
     // calculating the logical size, as if there were no cropping
@@ -123,30 +123,30 @@ static void ImpAddFillBitmapEntity( const Reference< XComponentContext >& rxMSF,
     try
     {
         FillStyle eFillStyle;
-        if ( rxPropertySet->getPropertyValue( "FillStyle" ) >>= eFillStyle )
+        if ( rxPropertySet->getPropertyValue( u"FillStyle"_ustr ) >>= eFillStyle )
         {
             if ( eFillStyle == FillStyle_BITMAP )
             {
                 Reference< XBitmap > xFillBitmap;
-                if ( rxPropertySet->getPropertyValue( "FillBitmap" ) >>= xFillBitmap )
+                if ( rxPropertySet->getPropertyValue( u"FillBitmap"_ustr ) >>= xFillBitmap )
                 {
                     Reference< XGraphic > xGraphic( xFillBitmap, UNO_QUERY_THROW );
                     awt::Size aLogicalSize( rLogicalSize );
                     Reference< XPropertySetInfo > axPropSetInfo( rxPropertySet->getPropertySetInfo() );
                     if ( axPropSetInfo.is() )
                     {
-                        if ( axPropSetInfo->hasPropertyByName( "FillBitmapMode" ) )
+                        if ( axPropSetInfo->hasPropertyByName( u"FillBitmapMode"_ustr ) )
                         {
                             BitmapMode eBitmapMode;
-                            if ( rxPropertySet->getPropertyValue( "FillBitmapMode" ) >>= eBitmapMode )
+                            if ( rxPropertySet->getPropertyValue( u"FillBitmapMode"_ustr ) >>= eBitmapMode )
                             {
                                 if ( ( eBitmapMode == BitmapMode_REPEAT ) || ( eBitmapMode == BitmapMode_NO_REPEAT ) )
                                 {
                                     bool bLogicalSize = false;
                                     awt::Size aSize( 0, 0 );
-                                    if ( ( rxPropertySet->getPropertyValue( "FillBitmapLogicalSize" ) >>= bLogicalSize )
-                                      && ( rxPropertySet->getPropertyValue( "FillBitmapSizeX" ) >>= aSize.Width )
-                                      && ( rxPropertySet->getPropertyValue( "FillBitmapSizeY" ) >>= aSize.Height ) )
+                                    if ( ( rxPropertySet->getPropertyValue( u"FillBitmapLogicalSize"_ustr ) >>= bLogicalSize )
+                                      && ( rxPropertySet->getPropertyValue( u"FillBitmapSizeX"_ustr ) >>= aSize.Width )
+                                      && ( rxPropertySet->getPropertyValue( u"FillBitmapSizeY"_ustr ) >>= aSize.Height ) )
                                     {
                                         if ( bLogicalSize )
                                         {
@@ -191,11 +191,11 @@ static void ImpCollectBackgroundGraphic( const Reference< XComponentContext >& r
     {
         awt::Size aLogicalSize( 28000, 21000 );
         Reference< XPropertySet > xPropertySet( rxDrawPage, UNO_QUERY_THROW );
-        xPropertySet->getPropertyValue( "Width" ) >>= aLogicalSize.Width;
-        xPropertySet->getPropertyValue( "Height" ) >>= aLogicalSize.Height;
+        xPropertySet->getPropertyValue( u"Width"_ustr ) >>= aLogicalSize.Width;
+        xPropertySet->getPropertyValue( u"Height"_ustr ) >>= aLogicalSize.Height;
 
         Reference< XPropertySet > xBackgroundPropSet;
-        if ( xPropertySet->getPropertyValue( "Background" ) >>= xBackgroundPropSet )
+        if ( xPropertySet->getPropertyValue( u"Background"_ustr ) >>= xBackgroundPropSet )
             ImpAddFillBitmapEntity( rxMSF, xBackgroundPropSet, aLogicalSize, rGraphicEntities, rGraphicSettings, xPropertySet );
     }
     catch( Exception& )
@@ -238,12 +238,12 @@ awt::Size GraphicCollector::GetOriginalSize( const Reference< XComponentContext 
 {
     awt::Size aSize100thMM( 0, 0 );
     Reference< XPropertySet > xGraphicPropertySet( rxGraphic, UNO_QUERY_THROW );
-    if ( xGraphicPropertySet->getPropertyValue( "Size100thMM" ) >>= aSize100thMM )
+    if ( xGraphicPropertySet->getPropertyValue( u"Size100thMM"_ustr ) >>= aSize100thMM )
     {
         if ( !aSize100thMM.Width && !aSize100thMM.Height )
         {   // MAPMODE_PIXEL USED :-(
             awt::Size aSourceSizePixel( 0, 0 );
-            if ( xGraphicPropertySet->getPropertyValue( "SizePixel" ) >>= aSourceSizePixel )
+            if ( xGraphicPropertySet->getPropertyValue( u"SizePixel"_ustr ) >>= aSourceSizePixel )
             {
                 const DeviceInfo& rDeviceInfo( GraphicCollector::GetDeviceInfo( rxMSF ) );
                 if ( rDeviceInfo.PixelPerMeterX && rDeviceInfo.PixelPerMeterY )
@@ -345,7 +345,7 @@ static void ImpCountGraphicObjects( const Reference< XComponentContext >& rxMSF,
             // now check for a fillstyle
             Reference< XPropertySet > xShapePropertySet( xShape, UNO_QUERY_THROW );
             FillStyle eFillStyle;
-            if ( xShapePropertySet->getPropertyValue( "FillStyle" ) >>= eFillStyle )
+            if ( xShapePropertySet->getPropertyValue( u"FillStyle"_ustr ) >>= eFillStyle )
             {
                 if ( eFillStyle == FillStyle_BITMAP )
                 {
@@ -366,14 +366,14 @@ static void ImpCountBackgroundGraphic(
     {
         awt::Size aLogicalSize( 28000, 21000 );
         Reference< XPropertySet > xPropertySet( rxDrawPage, UNO_QUERY_THROW );
-        xPropertySet->getPropertyValue( "Width" ) >>= aLogicalSize.Width;
-        xPropertySet->getPropertyValue( "Height" ) >>= aLogicalSize.Height;
+        xPropertySet->getPropertyValue( u"Width"_ustr ) >>= aLogicalSize.Width;
+        xPropertySet->getPropertyValue( u"Height"_ustr ) >>= aLogicalSize.Height;
 
         Reference< XPropertySet > xBackgroundPropSet;
-        if ( xPropertySet->getPropertyValue( "Background" ) >>= xBackgroundPropSet )
+        if ( xPropertySet->getPropertyValue( u"Background"_ustr ) >>= xBackgroundPropSet )
         {
             FillStyle eFillStyle;
-            if ( xBackgroundPropSet->getPropertyValue( "FillStyle" ) >>= eFillStyle )
+            if ( xBackgroundPropSet->getPropertyValue( u"FillStyle"_ustr ) >>= eFillStyle )
             {
                 if ( eFillStyle == FillStyle_BITMAP )
                 {

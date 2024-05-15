@@ -720,7 +720,7 @@ uno::Sequence<beans::PropertyValue> LineParser::readImageImpl()
     uno::Reference< uno::XComponentContext > xContext( m_parser.m_xContext, uno::UNO_SET_THROW );
     uno::Reference< lang::XMultiComponentFactory > xFactory( xContext->getServiceManager(), uno::UNO_SET_THROW );
     uno::Reference< io::XInputStream > xDataStream(
-        xFactory->createInstanceWithArgumentsAndContext( "com.sun.star.io.SequenceInputStream", aStreamCreationArgs, m_parser.m_xContext ),
+        xFactory->createInstanceWithArgumentsAndContext( u"com.sun.star.io.SequenceInputStream"_ustr, aStreamCreationArgs, m_parser.m_xContext ),
         uno::UNO_QUERY_THROW );
 
     uno::Sequence<beans::PropertyValue> aSequence( comphelper::InitPropertySequence({
@@ -1077,7 +1077,7 @@ bool xpdf_ImportFromFile(const OUString& rURL,
     }
 
     // Determine xpdfimport executable URL:
-    OUString converterURL("$BRAND_BASE_DIR/" LIBO_BIN_FOLDER "/xpdfimport");
+    OUString converterURL(u"$BRAND_BASE_DIR/" LIBO_BIN_FOLDER "/xpdfimport"_ustr);
     rtl::Bootstrap::expandMacros(converterURL); //TODO: detect failure
 
     // spawn separate process to keep LGPL/GPL code apart.

@@ -37,7 +37,7 @@ using namespace ::com::sun::star::container;
 
 static OUString GetPathToConfigurationRoot()
 {
-    return "org.openoffice.Office.PresentationMinimizer";
+    return u"org.openoffice.Office.PresentationMinimizer"_ustr;
 }
 
 void OptimizerSettings::LoadSettingsFromConfiguration( const Reference< XNameAccess >& rSettings )
@@ -83,21 +83,21 @@ void OptimizerSettings::SaveSettingsToConfiguration( const Reference< XNameRepla
         return;
 
     OUString pNames[] = {
-        OUString("Name"),
-        OUString("JPEGCompression"),
-        OUString("JPEGQuality"),
-        OUString("RemoveCropArea"),
-        OUString("ImageResolution"),
-        OUString("EmbedLinkedGraphics"),
-        OUString("OLEOptimization"),
-        OUString("OLEOptimizationType"),
-        OUString("DeleteUnusedMasterPages"),
-        OUString("DeleteHiddenSlides"),
-        OUString("DeleteNotesPages"),
-        OUString("SaveAs"),
+        u"Name"_ustr,
+        u"JPEGCompression"_ustr,
+        u"JPEGQuality"_ustr,
+        u"RemoveCropArea"_ustr,
+        u"ImageResolution"_ustr,
+        u"EmbedLinkedGraphics"_ustr,
+        u"OLEOptimization"_ustr,
+        u"OLEOptimizationType"_ustr,
+        u"DeleteUnusedMasterPages"_ustr,
+        u"DeleteHiddenSlides"_ustr,
+        u"DeleteNotesPages"_ustr,
+        u"SaveAs"_ustr,
 //          OUString("SaveAsURL"),
 //          OUString("FilterName"),
-        OUString("OpenNewDocument") };
+        u"OpenNewDocument"_ustr };
 
     Any pValues[] = {
         Any( maName ),
@@ -170,7 +170,7 @@ void ConfigurationAccess::LoadStrings()
             Reference< XInterface > xRoot( OpenConfiguration( true ) );
             if ( !xRoot.is() )
                 break;
-            Reference< container::XNameAccess > xSet( GetConfigurationNode( xRoot, "Strings" ), UNO_QUERY );
+            Reference< container::XNameAccess > xSet( GetConfigurationNode( xRoot, u"Strings"_ustr ), UNO_QUERY );
             if ( xSet.is() )
             {
                 const Sequence< OUString > aElements( xSet->getElementNames() );
@@ -204,13 +204,13 @@ void ConfigurationAccess::LoadConfiguration()
             Reference< XInterface > xRoot( OpenConfiguration( true ) );
             if ( !xRoot.is() )
                 break;
-            Reference< container::XNameAccess > xSet( GetConfigurationNode( xRoot, "LastUsedSettings" ), UNO_QUERY );
+            Reference< container::XNameAccess > xSet( GetConfigurationNode( xRoot, u"LastUsedSettings"_ustr ), UNO_QUERY );
             if ( xSet.is() )
             {
                 OptimizerSettings& rCurrent( maSettings.front() );
                 rCurrent.LoadSettingsFromConfiguration( xSet );
             }
-            xSet.set( GetConfigurationNode( xRoot, "Settings/Templates" ), UNO_QUERY );
+            xSet.set( GetConfigurationNode( xRoot, u"Settings/Templates"_ustr ), UNO_QUERY );
             if ( xSet.is() )
             {
                 const Sequence< OUString > aElements( xSet->getElementNames() );
@@ -248,12 +248,12 @@ void ConfigurationAccess::SaveConfiguration()
             Reference<util::XChangesBatch> xRoot( OpenConfiguration( false ), UNO_QUERY_THROW );
 
             // storing the last used settings
-            Reference< container::XNameReplace > xSet( GetConfigurationNode( xRoot, "LastUsedSettings" ), UNO_QUERY_THROW );
+            Reference< container::XNameReplace > xSet( GetConfigurationNode( xRoot, u"LastUsedSettings"_ustr ), UNO_QUERY_THROW );
             OptimizerSettings& rCurrent( maSettings.front() );
             rCurrent.SaveSettingsToConfiguration( xSet );
 
             // updating template elements
-            xSet.set( GetConfigurationNode( xRoot, "Settings/Templates" ), UNO_QUERY_THROW );
+            xSet.set( GetConfigurationNode( xRoot, u"Settings/Templates"_ustr ), UNO_QUERY_THROW );
             Reference< container::XNameContainer > xNameContainer( xSet, UNO_QUERY_THROW );
 
             const Sequence< OUString > aElements( xSet->getElementNames() );
@@ -428,21 +428,21 @@ Sequence< PropertyValue > ConfigurationAccess::GetConfigurationSequence()
 {
     OptimizerSettings& rSettings( maSettings.front() );
     Sequence< PropertyValue > aRet{
-        comphelper::makePropertyValue("JPEGCompression", rSettings.mbJPEGCompression),
-        comphelper::makePropertyValue("JPEGQuality", rSettings.mnJPEGQuality),
-        comphelper::makePropertyValue("RemoveCropArea", rSettings.mbRemoveCropArea),
-        comphelper::makePropertyValue("ImageResolution", rSettings.mnImageResolution),
-        comphelper::makePropertyValue("EmbedLinkedGraphics", rSettings.mbEmbedLinkedGraphics),
-        comphelper::makePropertyValue("OLEOptimization", rSettings.mbOLEOptimization),
-        comphelper::makePropertyValue("OLEOptimizationType", rSettings.mnOLEOptimizationType),
-        comphelper::makePropertyValue("DeleteUnusedMasterPages", rSettings.mbDeleteUnusedMasterPages),
-        comphelper::makePropertyValue("DeleteHiddenSlides", rSettings.mbDeleteHiddenSlides),
-        comphelper::makePropertyValue("DeleteNotesPages", rSettings.mbDeleteNotesPages),
-        comphelper::makePropertyValue("CustomShowName", rSettings.maCustomShowName),
-        comphelper::makePropertyValue("SaveAsURL", rSettings.maSaveAsURL),
-        comphelper::makePropertyValue("FilterName", rSettings.maFilterName),
-        comphelper::makePropertyValue("OpenNewDocument", rSettings.mbOpenNewDocument),
-        comphelper::makePropertyValue("EstimatedFileSize", rSettings.mnEstimatedFileSize)
+        comphelper::makePropertyValue(u"JPEGCompression"_ustr, rSettings.mbJPEGCompression),
+        comphelper::makePropertyValue(u"JPEGQuality"_ustr, rSettings.mnJPEGQuality),
+        comphelper::makePropertyValue(u"RemoveCropArea"_ustr, rSettings.mbRemoveCropArea),
+        comphelper::makePropertyValue(u"ImageResolution"_ustr, rSettings.mnImageResolution),
+        comphelper::makePropertyValue(u"EmbedLinkedGraphics"_ustr, rSettings.mbEmbedLinkedGraphics),
+        comphelper::makePropertyValue(u"OLEOptimization"_ustr, rSettings.mbOLEOptimization),
+        comphelper::makePropertyValue(u"OLEOptimizationType"_ustr, rSettings.mnOLEOptimizationType),
+        comphelper::makePropertyValue(u"DeleteUnusedMasterPages"_ustr, rSettings.mbDeleteUnusedMasterPages),
+        comphelper::makePropertyValue(u"DeleteHiddenSlides"_ustr, rSettings.mbDeleteHiddenSlides),
+        comphelper::makePropertyValue(u"DeleteNotesPages"_ustr, rSettings.mbDeleteNotesPages),
+        comphelper::makePropertyValue(u"CustomShowName"_ustr, rSettings.maCustomShowName),
+        comphelper::makePropertyValue(u"SaveAsURL"_ustr, rSettings.maSaveAsURL),
+        comphelper::makePropertyValue(u"FilterName"_ustr, rSettings.maFilterName),
+        comphelper::makePropertyValue(u"OpenNewDocument"_ustr, rSettings.mbOpenNewDocument),
+        comphelper::makePropertyValue(u"EstimatedFileSize"_ustr, rSettings.mnEstimatedFileSize)
     };
     return aRet;
 }

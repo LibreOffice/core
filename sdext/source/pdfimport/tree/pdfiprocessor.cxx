@@ -586,7 +586,7 @@ void PDFIProcessor::startPage( const geometry::RealSize2D& rSize )
     if( m_xStatusIndicator.is() )
     {
         if( nNextPageNr == 1 )
-            startIndicator( " " );
+            startIndicator( u" "_ustr );
         m_xStatusIndicator->setValue( nNextPageNr );
     }
     m_pCurPage = ElementFactory::createPageElement(m_pDocument.get(), nNextPageNr);
@@ -608,7 +608,7 @@ void PDFIProcessor::emit( XmlEmitter&               rEmitter,
     ElementTreeVisitorSharedPtr optimizingVisitor(
         rVisitorFactory.createOptimizingVisitor(*this));
     // FIXME: localization
-    startIndicator( " " );
+    startIndicator( u" "_ustr );
     m_pDocument->visitedBy( *optimizingVisitor, std::list<std::unique_ptr<Element>>::const_iterator());
 
 #if OSL_DEBUG_LEVEL > 0
@@ -630,25 +630,25 @@ void PDFIProcessor::emit( XmlEmitter&               rEmitter,
     PropertyMap aProps;
     // document prolog
     #define OASIS_STR "urn:oasis:names:tc:opendocument:xmlns:"
-    aProps[ "xmlns:office" ]      = OASIS_STR "office:1.0" ;
-    aProps[ "xmlns:style" ]       = OASIS_STR "style:1.0" ;
-    aProps[ "xmlns:text" ]        = OASIS_STR "text:1.0" ;
-    aProps[ "xmlns:svg" ]         = OASIS_STR "svg-compatible:1.0" ;
-    aProps[ "xmlns:table" ]       = OASIS_STR "table:1.0" ;
-    aProps[ "xmlns:draw" ]        = OASIS_STR "drawing:1.0" ;
-    aProps[ "xmlns:fo" ]          = OASIS_STR "xsl-fo-compatible:1.0" ;
-    aProps[ "xmlns:xlink"]        = "http://www.w3.org/1999/xlink";
-    aProps[ "xmlns:dc"]           = "http://purl.org/dc/elements/1.1/";
-    aProps[ "xmlns:number"]       = OASIS_STR "datastyle:1.0" ;
-    aProps[ "xmlns:presentation"] = OASIS_STR "presentation:1.0" ;
-    aProps[ "xmlns:math"]         = "http://www.w3.org/1998/Math/MathML";
-    aProps[ "xmlns:form"]         = OASIS_STR "form:1.0" ;
-    aProps[ "xmlns:script"]       = OASIS_STR "script:1.0" ;
-    aProps[ "xmlns:dom"]          = "http://www.w3.org/2001/xml-events";
-    aProps[ "xmlns:xforms"]       = "http://www.w3.org/2002/xforms";
-    aProps[ "xmlns:xsd"]          = "http://www.w3.org/2001/XMLSchema";
-    aProps[ "xmlns:xsi"]          = "http://www.w3.org/2001/XMLSchema-instance";
-    aProps[ "office:version" ]    = "1.0";
+    aProps[ u"xmlns:office"_ustr ]      = OASIS_STR "office:1.0" ;
+    aProps[ u"xmlns:style"_ustr ]       = OASIS_STR "style:1.0" ;
+    aProps[ u"xmlns:text"_ustr ]        = OASIS_STR "text:1.0" ;
+    aProps[ u"xmlns:svg"_ustr ]         = OASIS_STR "svg-compatible:1.0" ;
+    aProps[ u"xmlns:table"_ustr ]       = OASIS_STR "table:1.0" ;
+    aProps[ u"xmlns:draw"_ustr ]        = OASIS_STR "drawing:1.0" ;
+    aProps[ u"xmlns:fo"_ustr ]          = OASIS_STR "xsl-fo-compatible:1.0" ;
+    aProps[ u"xmlns:xlink"_ustr]        = "http://www.w3.org/1999/xlink";
+    aProps[ u"xmlns:dc"_ustr]           = "http://purl.org/dc/elements/1.1/";
+    aProps[ u"xmlns:number"_ustr]       = OASIS_STR "datastyle:1.0" ;
+    aProps[ u"xmlns:presentation"_ustr] = OASIS_STR "presentation:1.0" ;
+    aProps[ u"xmlns:math"_ustr]         = "http://www.w3.org/1998/Math/MathML";
+    aProps[ u"xmlns:form"_ustr]         = OASIS_STR "form:1.0" ;
+    aProps[ u"xmlns:script"_ustr]       = OASIS_STR "script:1.0" ;
+    aProps[ u"xmlns:dom"_ustr]          = "http://www.w3.org/2001/xml-events";
+    aProps[ u"xmlns:xforms"_ustr]       = "http://www.w3.org/2002/xforms";
+    aProps[ u"xmlns:xsd"_ustr]          = "http://www.w3.org/2001/XMLSchema";
+    aProps[ u"xmlns:xsi"_ustr]          = "http://www.w3.org/2001/XMLSchema-instance";
+    aProps[ u"office:version"_ustr ]    = "1.0";
 
     aContext.rEmitter.beginTag( "office:document", aProps );
 

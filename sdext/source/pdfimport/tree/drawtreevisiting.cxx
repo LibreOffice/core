@@ -73,10 +73,10 @@ void DrawXmlEmitter::visit( HyperlinkElement& elem, const std::list< std::unique
     const char* pType = dynamic_cast<DrawElement*>(elem.Children.front().get()) ? "draw:a" : "text:a";
 
     PropertyMap aProps;
-    aProps[ "xlink:type" ] = "simple";
-    aProps[ "xlink:href" ] = elem.URI;
-    aProps[ "office:target-frame-name" ] = "_blank";
-    aProps[ "xlink:show" ] = "new";
+    aProps[ u"xlink:type"_ustr ] = "simple";
+    aProps[ u"xlink:href"_ustr ] = elem.URI;
+    aProps[ u"office:target-frame-name"_ustr ] = "_blank";
+    aProps[ u"xlink:show"_ustr ] = "new";
 
     m_rEmitContext.rEmitter.beginTag( pType, aProps );
     auto this_it = elem.Children.begin();
@@ -99,7 +99,7 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< std::unique_ptr<
     PropertyMap aProps;
     if( elem.StyleId != -1 )
     {
-        aProps[ OUString( "text:style-name"  ) ] =
+        aProps[ u"text:style-name"_ustr ] =
             m_rEmitContext.rStyles.getStyleName( elem.StyleId );
     }
 
@@ -138,7 +138,7 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< std::unique_ptr<
         OUString strToken=  str.copy(i,1) ;
         if( strSpace == strToken || strNbSpace == strToken )
         {
-            aProps[ "text:c" ] = "1";
+            aProps[ u"text:c"_ustr ] = "1";
             m_rEmitContext.rEmitter.beginTag( "text:s", aProps );
             m_rEmitContext.rEmitter.endTag( "text:s");
         }
@@ -171,7 +171,7 @@ void DrawXmlEmitter::visit( ParagraphElement& elem, const std::list< std::unique
     PropertyMap aProps;
     if( elem.StyleId != -1 )
     {
-        aProps[ "text:style-name" ] = m_rEmitContext.rStyles.getStyleName( elem.StyleId );
+        aProps[ u"text:style-name"_ustr ] = m_rEmitContext.rStyles.getStyleName( elem.StyleId );
     }
     const char* pTagType = "text:p";
     if( elem.Type == ParagraphElement::Headline )
@@ -332,12 +332,12 @@ void DrawXmlEmitter::visit( PolyPolyElement& elem, const std::list< std::unique_
     // so we need to tell fillFrameProps here that the transformation for
     // a PolyPolyElement was already applied (aside from translation)
     fillFrameProps( elem, aProps, m_rEmitContext, true );
-    aProps[ "svg:viewBox" ] =
+    aProps[ u"svg:viewBox"_ustr ] =
         "0 0 "
         + OUString::number( convPx2mmPrec2(elem.w)*100.0 )
         + " "
         + OUString::number( convPx2mmPrec2(elem.h)*100.0 );
-    aProps[ "svg:d" ]       = basegfx::utils::exportToSvgD( elem.PolyPoly, false, true, false );
+    aProps[ u"svg:d"_ustr ]       = basegfx::utils::exportToSvgD( elem.PolyPoly, false, true, false );
 
     m_rEmitContext.rEmitter.beginTag( "draw:path", aProps );
     m_rEmitContext.rEmitter.endTag( "draw:path" );
@@ -356,7 +356,7 @@ void DrawXmlEmitter::visit( ImageElement& elem, const std::list< std::unique_ptr
 void DrawXmlEmitter::visit( PageElement& elem, const std::list< std::unique_ptr<Element> >::const_iterator&   )
 {
     PropertyMap aPageProps;
-    aPageProps[ "draw:master-page-name" ] = m_rEmitContext.rStyles.getStyleName( elem.StyleId );
+    aPageProps[ u"draw:master-page-name"_ustr ] = m_rEmitContext.rStyles.getStyleName( elem.StyleId );
 
     m_rEmitContext.rEmitter.beginTag("draw:page", aPageProps);
 
@@ -781,8 +781,8 @@ void DrawXmlFinalizer::visit( PolyPolyElement& elem, const std::list< std::uniqu
     const GraphicsContext& rGC = m_rProcessor.getGraphicsContext(elem.GCId );
 
     PropertyMap aProps;
-    aProps[ "style:family" ] = "graphic";
-    aProps[ "style:parent-style-name" ] = "standard";
+    aProps[ u"style:family"_ustr ] = "graphic";
+    aProps[ u"style:parent-style-name"_ustr ] = "standard";
     // generate standard graphic style if necessary
     m_rStyleContainer.getStandardStyleId( "graphic" );
 
@@ -792,7 +792,7 @@ void DrawXmlFinalizer::visit( PolyPolyElement& elem, const std::list< std::uniqu
         double scale = GetAverageTransformationScale(rGC.Transformation);
         if (rGC.DashArray.size() < 2)
         {
-            aGCProps[ "draw:stroke" ] = "solid";
+            aGCProps[ u"draw:stroke"_ustr ] = "solid";
         }
         else
         {
@@ -800,22 +800,22 @@ void DrawXmlFinalizer::visit( PolyPolyElement& elem, const std::list< std::uniqu
             FillDashStyleProps(props, rGC.DashArray, scale);
             StyleContainer::Style style("draw:stroke-dash"_ostr, std::move(props));
 
-            aGCProps[ "draw:stroke" ] = "dash";
-            aGCProps[ "draw:stroke-dash" ] =
+            aGCProps[ u"draw:stroke"_ustr ] = "dash";
+            aGCProps[ u"draw:stroke-dash"_ustr ] =
                 m_rStyleContainer.getStyleName(
                 m_rStyleContainer.getStyleId(style));
         }
 
-        aGCProps[ "svg:stroke-color" ] = getColorString(rGC.LineColor);
+        aGCProps[ u"svg:stroke-color"_ustr ] = getColorString(rGC.LineColor);
         if (rGC.LineColor.Alpha != 1.0)
-            aGCProps["svg:stroke-opacity"] = getPercentString(rGC.LineColor.Alpha * 100.0);
-        aGCProps[ "svg:stroke-width" ] = convertPixelToUnitString(rGC.LineWidth * scale);
-        aGCProps[ "draw:stroke-linejoin" ] = rGC.GetLineJoinString();
-        aGCProps[ "svg:stroke-linecap" ] = rGC.GetLineCapString();
+            aGCProps[u"svg:stroke-opacity"_ustr] = getPercentString(rGC.LineColor.Alpha * 100.0);
+        aGCProps[ u"svg:stroke-width"_ustr ] = convertPixelToUnitString(rGC.LineWidth * scale);
+        aGCProps[ u"draw:stroke-linejoin"_ustr ] = rGC.GetLineJoinString();
+        aGCProps[ u"svg:stroke-linecap"_ustr ] = rGC.GetLineCapString();
     }
     else
     {
-        aGCProps[ "draw:stroke" ] = "none";
+        aGCProps[ u"draw:stroke"_ustr ] = "none";
     }
 
     if (elem.FillImage != -1)
@@ -824,11 +824,11 @@ void DrawXmlFinalizer::visit( PolyPolyElement& elem, const std::list< std::uniqu
         // The image isn't actually in a prop, it's in an extra chunk inside.
         StyleContainer::Style style("draw:fill-image"_ostr, std::move(props));
         style.Contents = m_rProcessor.getImages().asBase64EncodedString(elem.FillImage);
-        aGCProps[ "draw:fill-image-name" ] =
+        aGCProps[ u"draw:fill-image-name"_ustr ] =
             m_rStyleContainer.getStyleName(
             m_rStyleContainer.getStyleId(style));
-        aGCProps[ "draw:fill-image-width" ] = unitMMString(convPx2mm(elem.TileWidth));
-        aGCProps[ "draw:fill-image-height" ] = unitMMString(convPx2mm(elem.TileHeight));
+        aGCProps[ u"draw:fill-image-width"_ustr ] = unitMMString(convPx2mm(elem.TileWidth));
+        aGCProps[ u"draw:fill-image-height"_ustr ] = unitMMString(convPx2mm(elem.TileHeight));
 
     }
 
@@ -837,19 +837,19 @@ void DrawXmlFinalizer::visit( PolyPolyElement& elem, const std::list< std::uniqu
     {
         if (elem.FillImage == -1)
         {
-            aGCProps[ "draw:fill" ]   = "solid";
+            aGCProps[ u"draw:fill"_ustr ]   = "solid";
         }
         else
         {
-            aGCProps[ "draw:fill" ]   = "bitmap";
+            aGCProps[ u"draw:fill"_ustr ]   = "bitmap";
         }
-        aGCProps[ "draw:fill-color" ] = getColorString(rGC.FillColor);
+        aGCProps[ u"draw:fill-color"_ustr ] = getColorString(rGC.FillColor);
         if (rGC.FillColor.Alpha != 1.0)
-            aGCProps["draw:opacity"] = getPercentString(rGC.FillColor.Alpha * 100.0);
+            aGCProps[u"draw:opacity"_ustr] = getPercentString(rGC.FillColor.Alpha * 100.0);
     }
     else
     {
-        aGCProps[ "draw:fill" ] = "none";
+        aGCProps[ u"draw:fill"_ustr ] = "none";
     }
 
     StyleContainer::Style aStyle( "style:style"_ostr, std::move(aProps) );
@@ -866,57 +866,57 @@ void DrawXmlFinalizer::visit( HyperlinkElement&, const std::list< std::unique_pt
 static void SetFontsizeProperties(PropertyMap& props, double fontSize)
 {
     OUString aFSize = OUString::number(fontSize * 72 / PDFI_OUTDEV_RESOLUTION) + "pt";
-    props["fo:font-size"] = aFSize;
-    props["style:font-size-asian"] = aFSize;
-    props["style:font-size-complex"] = aFSize;
+    props[u"fo:font-size"_ustr] = aFSize;
+    props[u"style:font-size-asian"_ustr] = aFSize;
+    props[u"style:font-size-complex"_ustr] = aFSize;
 }
 
 void DrawXmlFinalizer::visit( TextElement& elem, const std::list< std::unique_ptr<Element> >::const_iterator& )
 {
     const FontAttributes& rFont = m_rProcessor.getFont( elem.FontId );
     PropertyMap aProps;
-    aProps[ "style:family" ] = "text";
+    aProps[ u"style:family"_ustr ] = "text";
 
     PropertyMap aFontProps;
 
     // family name
     // TODO: tdf#143095: use system font name rather than PSName
     SAL_INFO("sdext.pdfimport", "The font used in xml is: " << rFont.familyName);
-    aFontProps[ "fo:font-family" ] = rFont.familyName;
-    aFontProps[ "style:font-family-asian" ] = rFont.familyName;
-    aFontProps[ "style:font-family-complex" ] = rFont.familyName;
+    aFontProps[ u"fo:font-family"_ustr ] = rFont.familyName;
+    aFontProps[ u"style:font-family-asian"_ustr ] = rFont.familyName;
+    aFontProps[ u"style:font-family-complex"_ustr ] = rFont.familyName;
 
     // bold
-    aFontProps[ "fo:font-weight" ]         = rFont.fontWeight;
-    aFontProps[ "style:font-weight-asian" ]   = rFont.fontWeight;
-    aFontProps[ "style:font-weight-complex" ] = rFont.fontWeight;
+    aFontProps[ u"fo:font-weight"_ustr ]         = rFont.fontWeight;
+    aFontProps[ u"style:font-weight-asian"_ustr ]   = rFont.fontWeight;
+    aFontProps[ u"style:font-weight-complex"_ustr ] = rFont.fontWeight;
 
     // italic
     if( rFont.isItalic )
     {
-        aFontProps[ "fo:font-style" ]         = "italic";
-        aFontProps[ "style:font-style-asian" ]   = "italic";
-        aFontProps[ "style:font-style-complex" ] = "italic";
+        aFontProps[ u"fo:font-style"_ustr ]         = "italic";
+        aFontProps[ u"style:font-style-asian"_ustr ]   = "italic";
+        aFontProps[ u"style:font-style-complex"_ustr ] = "italic";
     }
 
     // underline
     if( rFont.isUnderline )
     {
-        aFontProps[ "style:text-underline-style" ]  = "solid";
-        aFontProps[ "style:text-underline-width" ]  = "auto";
-        aFontProps[ "style:text-underline-color" ]  = "font-color";
+        aFontProps[ u"style:text-underline-style"_ustr ]  = "solid";
+        aFontProps[ u"style:text-underline-width"_ustr ]  = "auto";
+        aFontProps[ u"style:text-underline-color"_ustr ]  = "font-color";
     }
 
     // outline
     if( rFont.isOutline )
-        aFontProps[ "style:text-outline" ]  = "true";
+        aFontProps[ u"style:text-outline"_ustr ]  = "true";
 
     // size
     SetFontsizeProperties(aFontProps, rFont.size);
 
     // color
     const GraphicsContext& rGC = m_rProcessor.getGraphicsContext( elem.GCId );
-    aFontProps[ "fo:color" ] = getColorString( rFont.isOutline ? rGC.LineColor : rGC.FillColor );
+    aFontProps[ u"fo:color"_ustr ] = getColorString( rFont.isOutline ? rGC.LineColor : rGC.FillColor );
 
     // scale
     double fRotate, fShearX;
@@ -926,7 +926,7 @@ void DrawXmlFinalizer::visit( TextElement& elem, const std::list< std::unique_pt
     if (((textScale >= 1) && (textScale <= 99)) ||
         ((textScale >= 101) && (textScale <= 999)))
     {
-        aFontProps[ "style:text-scale" ] = getPercentString(textScale);
+        aFontProps[ u"style:text-scale"_ustr ] = getPercentString(textScale);
     }
 
     StyleContainer::Style aStyle( "style:style"_ostr, std::move(aProps) );
@@ -939,17 +939,17 @@ void DrawXmlFinalizer::visit( ParagraphElement& elem, const std::list< std::uniq
 {
 
     PropertyMap aProps;
-    aProps[ "style:family" ] = "paragraph";
+    aProps[ u"style:family"_ustr ] = "paragraph";
     // generate standard paragraph style if necessary
     m_rStyleContainer.getStandardStyleId( "paragraph" );
 
     PropertyMap aParProps;
 
-    aParProps[ "fo:text-align"]                   = "start";
+    aParProps[ u"fo:text-align"_ustr]                   = "start";
     if (elem.bRtl)
-        aParProps[ "style:writing-mode"]                    = "rl-tb";
+        aParProps[ u"style:writing-mode"_ustr]                    = "rl-tb";
     else
-        aParProps[ "style:writing-mode"]                    = "lr-tb";
+        aParProps[ u"style:writing-mode"_ustr]                    = "lr-tb";
 
     StyleContainer::Style aStyle( "style:style"_ostr, std::move(aProps) );
     StyleContainer::Style aSubStyle( "style:paragraph-properties"_ostr, std::move(aParProps) );
@@ -963,25 +963,25 @@ void DrawXmlFinalizer::visit( ParagraphElement& elem, const std::list< std::uniq
 void DrawXmlFinalizer::visit( FrameElement& elem, const std::list< std::unique_ptr<Element> >::const_iterator&)
 {
     PropertyMap props1;
-    props1[ "style:family" ] = "graphic";
-    props1[ "style:parent-style-name" ] = "standard";
+    props1[ u"style:family"_ustr ] = "graphic";
+    props1[ u"style:parent-style-name"_ustr ] = "standard";
     // generate standard graphic style if necessary
     m_rStyleContainer.getStandardStyleId( "graphic" );
 
     PropertyMap aGCProps;
 
-    aGCProps[ "draw:stroke" ]                    = "none";
-    aGCProps[ "draw:fill" ]                      = "none";
-    aGCProps[ "draw:auto-grow-height" ]          = "true";
-    aGCProps[ "draw:auto-grow-width" ]           = "true";
-    aGCProps[ "draw:textarea-horizontal-align" ] = "left";
-    aGCProps[ "draw:textarea-vertical-align" ]   = "top";
-    aGCProps[ "fo:min-height"]                   = "0cm";
-    aGCProps[ "fo:min-width"]                    = "0cm";
-    aGCProps[ "fo:padding-top" ]                 = "0cm";
-    aGCProps[ "fo:padding-left" ]                = "0cm";
-    aGCProps[ "fo:padding-right" ]               = "0cm";
-    aGCProps[ "fo:padding-bottom" ]              = "0cm";
+    aGCProps[ u"draw:stroke"_ustr ]                    = "none";
+    aGCProps[ u"draw:fill"_ustr ]                      = "none";
+    aGCProps[ u"draw:auto-grow-height"_ustr ]          = "true";
+    aGCProps[ u"draw:auto-grow-width"_ustr ]           = "true";
+    aGCProps[ u"draw:textarea-horizontal-align"_ustr ] = "left";
+    aGCProps[ u"draw:textarea-vertical-align"_ustr ]   = "top";
+    aGCProps[ u"fo:min-height"_ustr]                   = "0cm";
+    aGCProps[ u"fo:min-width"_ustr]                    = "0cm";
+    aGCProps[ u"fo:padding-top"_ustr ]                 = "0cm";
+    aGCProps[ u"fo:padding-left"_ustr ]                = "0cm";
+    aGCProps[ u"fo:padding-right"_ustr ]               = "0cm";
+    aGCProps[ u"fo:padding-bottom"_ustr ]              = "0cm";
 
     StyleContainer::Style style1( "style:style"_ostr, std::move(props1) );
     StyleContainer::Style subStyle1( "style:graphic-properties"_ostr, std::move(aGCProps) );
@@ -992,7 +992,7 @@ void DrawXmlFinalizer::visit( FrameElement& elem, const std::list< std::unique_p
     if (elem.IsForText)
     {
         PropertyMap props2;
-        props2["style:family"] = "paragraph";
+        props2[u"style:family"_ustr] = "paragraph";
 
         PropertyMap textProps;
         SetFontsizeProperties(textProps, elem.FontSize);
@@ -1082,14 +1082,14 @@ void DrawXmlFinalizer::visit( PageElement& elem, const std::list< std::unique_pt
     // get styles for paragraphs
     PropertyMap aPageProps;
     PropertyMap aPageLayoutProps;
-    aPageLayoutProps[ "fo:margin-top" ]     =  unitMMString( top_margin );
-    aPageLayoutProps[ "fo:margin-bottom" ]  =  unitMMString( bottom_margin );
-    aPageLayoutProps[ "fo:margin-left" ]    =  unitMMString( left_margin );
-    aPageLayoutProps[ "fo:margin-right" ]   =  unitMMString( right_margin );
-    aPageLayoutProps[ "fo:page-width" ]     =  unitMMString( page_width );
-    aPageLayoutProps[ "fo:page-height" ]    =  unitMMString( page_height );
-    aPageLayoutProps[ "style:print-orientation" ]= elem.w < elem.h ? std::u16string_view(u"portrait") : std::u16string_view(u"landscape");
-    aPageLayoutProps[ "style:writing-mode" ]= "lr-tb";
+    aPageLayoutProps[ u"fo:margin-top"_ustr ]     =  unitMMString( top_margin );
+    aPageLayoutProps[ u"fo:margin-bottom"_ustr ]  =  unitMMString( bottom_margin );
+    aPageLayoutProps[ u"fo:margin-left"_ustr ]    =  unitMMString( left_margin );
+    aPageLayoutProps[ u"fo:margin-right"_ustr ]   =  unitMMString( right_margin );
+    aPageLayoutProps[ u"fo:page-width"_ustr ]     =  unitMMString( page_width );
+    aPageLayoutProps[ u"fo:page-height"_ustr ]    =  unitMMString( page_height );
+    aPageLayoutProps[ u"style:print-orientation"_ustr ]= elem.w < elem.h ? std::u16string_view(u"portrait") : std::u16string_view(u"landscape");
+    aPageLayoutProps[ u"style:writing-mode"_ustr ]= "lr-tb";
 
     StyleContainer::Style aStyle( "style:page-layout"_ostr, std::move(aPageProps));
     StyleContainer::Style aSubStyle( "style:page-layout-properties"_ostr, std::move(aPageLayoutProps));
@@ -1098,7 +1098,7 @@ void DrawXmlFinalizer::visit( PageElement& elem, const std::list< std::unique_pt
 
     // create master page
     OUString aMasterPageLayoutName = m_rStyleContainer.getStyleName( nPageStyle );
-    aPageProps[ "style:page-layout-name" ] = aMasterPageLayoutName;
+    aPageProps[ u"style:page-layout-name"_ustr ] = aMasterPageLayoutName;
 
     StyleContainer::Style aMPStyle( "style:master-page"_ostr, std::move(aPageProps));
 

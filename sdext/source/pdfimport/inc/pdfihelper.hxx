@@ -155,11 +155,11 @@ namespace pdfi
             {
             default:
             case css::rendering::PathJoinType::MITER:
-                return "miter";
+                return u"miter"_ustr;
             case css::rendering::PathJoinType::ROUND:
-                return "round";
+                return u"round"_ustr;
             case css::rendering::PathJoinType::BEVEL:
-                return "bevel";
+                return u"bevel"_ustr;
             }
         }
 
@@ -169,11 +169,11 @@ namespace pdfi
             {
             default:
             case css::rendering::PathCapType::BUTT:
-                return "butt";
+                return u"butt"_ustr;
             case css::rendering::PathCapType::ROUND:
-                return "round";
+                return u"round"_ustr;
             case css::rendering::PathCapType::SQUARE:
-                return "square";
+                return u"square"_ustr;
             }
         }
 

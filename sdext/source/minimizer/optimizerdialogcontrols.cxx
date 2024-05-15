@@ -211,7 +211,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
             Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY_THROW );
 
             bool bVisible = true;
-            if ( xPropSet->getPropertyValue( "Visible" ) >>= bVisible )
+            if ( xPropSet->getPropertyValue( u"Visible"_ustr ) >>= bVisible )
             {
                 if (!bVisible )
                     nDeletedSlides++;
@@ -230,7 +230,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
     if ( nDeletedSlides > 1 )
     {
         OUString aStr( getString( STR_DELETE_SLIDES ) );
-        OUString aPlaceholder( "%SLIDES"  );
+        OUString aPlaceholder( u"%SLIDES"_ustr  );
         sal_Int32 i = aStr.indexOf( aPlaceholder );
         if ( i >= 0 )
             aStr = aStr.replaceAt( i, aPlaceholder.getLength(), OUString::number( nDeletedSlides ) );
@@ -248,9 +248,9 @@ void OptimizerDialog::UpdateControlStatesPage4()
     if ( nGraphics > 1 )
     {
         OUString aStr( getString( STR_OPTIMIZE_IMAGES ) );
-        OUString aImagePlaceholder( "%IMAGES"  );
-        OUString aQualityPlaceholder( "%QUALITY"  );
-        OUString aResolutionPlaceholder( "%RESOLUTION"  );
+        OUString aImagePlaceholder( u"%IMAGES"_ustr  );
+        OUString aQualityPlaceholder( u"%QUALITY"_ustr  );
+        OUString aResolutionPlaceholder( u"%RESOLUTION"_ustr  );
         sal_Int32 i = aStr.indexOf( aImagePlaceholder );
         if ( i >= 0 )
             aStr = aStr.replaceAt( i, aImagePlaceholder.getLength(), OUString::number( nGraphics ) );
@@ -284,7 +284,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
         if ( nOLEReplacements > 1 )
         {
             OUString aStr( getString( STR_CREATE_REPLACEMENT ) );
-            OUString aPlaceholder( "%OLE"  );
+            OUString aPlaceholder( u"%OLE"_ustr  );
             sal_Int32 i = aStr.indexOf( aPlaceholder );
             if ( i >= 0 )
                 aStr = aStr.replaceAt( i, aPlaceholder.getLength(), OUString::number( nOLEReplacements ) );

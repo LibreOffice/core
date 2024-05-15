@@ -53,10 +53,10 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 
 IntroPage::IntroPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog)
-    : vcl::OWizardPage(pPage, &rOptimizerDialog, "modules/simpress/ui/pmintropage.ui", "PMIntroPage")
+    : vcl::OWizardPage(pPage, &rOptimizerDialog, u"modules/simpress/ui/pmintropage.ui"_ustr, u"PMIntroPage"_ustr)
     , mrOptimizerDialog(rOptimizerDialog)
-    , mxComboBox(m_xBuilder->weld_combo_box("LB_SETTINGS"))
-    , mxButton(m_xBuilder->weld_button("STR_REMOVE"))
+    , mxComboBox(m_xBuilder->weld_combo_box(u"LB_SETTINGS"_ustr))
+    , mxButton(m_xBuilder->weld_button(u"STR_REMOVE"_ustr))
 {
     rOptimizerDialog.SetIntroPage(this);
     mxComboBox->connect_changed(LINK(this, IntroPage, ComboBoxActionPerformed));
@@ -73,13 +73,13 @@ void IntroPage::UpdateControlStates(const std::vector<OUString>& rItemList, int 
 }
 
 SlidesPage::SlidesPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog)
-    : vcl::OWizardPage(pPage, &rOptimizerDialog, "modules/simpress/ui/pmslidespage.ui", "PMSlidesPage")
+    : vcl::OWizardPage(pPage, &rOptimizerDialog, u"modules/simpress/ui/pmslidespage.ui"_ustr, u"PMSlidesPage"_ustr)
     , mrOptimizerDialog(rOptimizerDialog)
-    , mxMasterSlides(m_xBuilder->weld_check_button("STR_DELETE_MASTER_PAGES"))
-    , mxHiddenSlides(m_xBuilder->weld_check_button("STR_DELETE_HIDDEN_SLIDES"))
-    , mxUnusedSlides(m_xBuilder->weld_check_button("STR_CUSTOM_SHOW"))
-    , mxComboBox(m_xBuilder->weld_combo_box("LB_SLIDES"))
-    , mxClearNodes(m_xBuilder->weld_check_button("STR_DELETE_NOTES_PAGES"))
+    , mxMasterSlides(m_xBuilder->weld_check_button(u"STR_DELETE_MASTER_PAGES"_ustr))
+    , mxHiddenSlides(m_xBuilder->weld_check_button(u"STR_DELETE_HIDDEN_SLIDES"_ustr))
+    , mxUnusedSlides(m_xBuilder->weld_check_button(u"STR_CUSTOM_SHOW"_ustr))
+    , mxComboBox(m_xBuilder->weld_combo_box(u"LB_SLIDES"_ustr))
+    , mxClearNodes(m_xBuilder->weld_check_button(u"STR_DELETE_NOTES_PAGES"_ustr))
 {
     rOptimizerDialog.SetSlidesPage(this);
     mxMasterSlides->connect_toggled(LINK(this, SlidesPage, UnusedMasterPagesActionPerformed));
@@ -105,15 +105,15 @@ void SlidesPage::UpdateControlStates(bool bDeleteUnusedMasterPages, bool bDelete
 }
 
 ImagesPage::ImagesPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog)
-    : vcl::OWizardPage(pPage, &rOptimizerDialog, "modules/simpress/ui/pmimagespage.ui", "PMImagesPage")
+    : vcl::OWizardPage(pPage, &rOptimizerDialog, u"modules/simpress/ui/pmimagespage.ui"_ustr, u"PMImagesPage"_ustr)
     , mrOptimizerDialog(rOptimizerDialog)
-    , m_xLossLessCompression(m_xBuilder->weld_radio_button("STR_LOSSLESS_COMPRESSION"))
-    , m_xQualityLabel(m_xBuilder->weld_label("STR_QUALITY"))
-    , m_xQuality(m_xBuilder->weld_spin_button("SB_QUALITY"))
-    , m_xJpegCompression(m_xBuilder->weld_radio_button("STR_JPEG_COMPRESSION"))
-    , m_xResolution(m_xBuilder->weld_combo_box("LB_RESOLUTION"))
-    , m_xRemoveCropArea(m_xBuilder->weld_check_button("STR_REMOVE_CROP_AREA"))
-    , m_xEmbedLinkedGraphics(m_xBuilder->weld_check_button("STR_EMBED_LINKED_GRAPHICS"))
+    , m_xLossLessCompression(m_xBuilder->weld_radio_button(u"STR_LOSSLESS_COMPRESSION"_ustr))
+    , m_xQualityLabel(m_xBuilder->weld_label(u"STR_QUALITY"_ustr))
+    , m_xQuality(m_xBuilder->weld_spin_button(u"SB_QUALITY"_ustr))
+    , m_xJpegCompression(m_xBuilder->weld_radio_button(u"STR_JPEG_COMPRESSION"_ustr))
+    , m_xResolution(m_xBuilder->weld_combo_box(u"LB_RESOLUTION"_ustr))
+    , m_xRemoveCropArea(m_xBuilder->weld_check_button(u"STR_REMOVE_CROP_AREA"_ustr))
+    , m_xEmbedLinkedGraphics(m_xBuilder->weld_check_button(u"STR_EMBED_LINKED_GRAPHICS"_ustr))
 {
     rOptimizerDialog.SetImagesPage(this);
     m_xRemoveCropArea->connect_toggled(LINK(this, ImagesPage, RemoveCropAreaActionPerformed));
@@ -139,12 +139,12 @@ void ImagesPage::UpdateControlStates(bool bJPEGCompression, int nJPEGQuality, bo
 }
 
 ObjectsPage::ObjectsPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog)
-    : vcl::OWizardPage(pPage, &rOptimizerDialog, "modules/simpress/ui/pmobjectspage.ui", "PMObjectsPage")
+    : vcl::OWizardPage(pPage, &rOptimizerDialog, u"modules/simpress/ui/pmobjectspage.ui"_ustr, u"PMObjectsPage"_ustr)
     , mrOptimizerDialog(rOptimizerDialog)
-    , m_xCreateStaticImage(m_xBuilder->weld_check_button("STR_OLE_REPLACE"))
-    , m_xAllOLEObjects(m_xBuilder->weld_radio_button("STR_ALL_OLE_OBJECTS"))
-    , m_xForeignOLEObjects(m_xBuilder->weld_radio_button("STR_ALIEN_OLE_OBJECTS_ONLY"))
-    , m_xLabel(m_xBuilder->weld_label("STR_OLE_OBJECTS_DESC"))
+    , m_xCreateStaticImage(m_xBuilder->weld_check_button(u"STR_OLE_REPLACE"_ustr))
+    , m_xAllOLEObjects(m_xBuilder->weld_radio_button(u"STR_ALL_OLE_OBJECTS"_ustr))
+    , m_xForeignOLEObjects(m_xBuilder->weld_radio_button(u"STR_ALIEN_OLE_OBJECTS_ONLY"_ustr))
+    , m_xLabel(m_xBuilder->weld_label(u"STR_OLE_OBJECTS_DESC"_ustr))
 {
     rOptimizerDialog.SetObjectsPage(this);
     m_xCreateStaticImage->connect_toggled(LINK(this, ObjectsPage, OLEOptimizationActionPerformed));
@@ -167,19 +167,19 @@ void ObjectsPage::UpdateControlStates(bool bConvertOLEObjects, int nOLEOptimizat
 }
 
 SummaryPage::SummaryPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog)
-    : vcl::OWizardPage(pPage, &rOptimizerDialog, "modules/simpress/ui/pmsummarypage.ui", "PMSummaryPage")
+    : vcl::OWizardPage(pPage, &rOptimizerDialog, u"modules/simpress/ui/pmsummarypage.ui"_ustr, u"PMSummaryPage"_ustr)
     , mrOptimizerDialog(rOptimizerDialog)
-    , m_xLabel1(m_xBuilder->weld_label("LABEL1"))
-    , m_xLabel2(m_xBuilder->weld_label("LABEL2"))
-    , m_xLabel3(m_xBuilder->weld_label("LABEL3"))
-    , m_xCurrentSize(m_xBuilder->weld_label("CURRENT_FILESIZE"))
-    , m_xEstimatedSize(m_xBuilder->weld_label("ESTIMATED_FILESIZE"))
-    , m_xStatus(m_xBuilder->weld_label("STR_STATUS"))
-    , m_xProgress(m_xBuilder->weld_progress_bar("PROGRESS"))
-    , m_xApplyToCurrent(m_xBuilder->weld_radio_button("STR_APPLY_TO_CURRENT"))
-    , m_xSaveToNew(m_xBuilder->weld_radio_button("STR_SAVE_AS"))
-    , m_xComboBox(m_xBuilder->weld_combo_box("MY_SETTINGS"))
-    , m_xSaveSettings(m_xBuilder->weld_check_button("STR_SAVE_SETTINGS"))
+    , m_xLabel1(m_xBuilder->weld_label(u"LABEL1"_ustr))
+    , m_xLabel2(m_xBuilder->weld_label(u"LABEL2"_ustr))
+    , m_xLabel3(m_xBuilder->weld_label(u"LABEL3"_ustr))
+    , m_xCurrentSize(m_xBuilder->weld_label(u"CURRENT_FILESIZE"_ustr))
+    , m_xEstimatedSize(m_xBuilder->weld_label(u"ESTIMATED_FILESIZE"_ustr))
+    , m_xStatus(m_xBuilder->weld_label(u"STR_STATUS"_ustr))
+    , m_xProgress(m_xBuilder->weld_progress_bar(u"PROGRESS"_ustr))
+    , m_xApplyToCurrent(m_xBuilder->weld_radio_button(u"STR_APPLY_TO_CURRENT"_ustr))
+    , m_xSaveToNew(m_xBuilder->weld_radio_button(u"STR_SAVE_AS"_ustr))
+    , m_xComboBox(m_xBuilder->weld_combo_box(u"MY_SETTINGS"_ustr))
+    , m_xSaveSettings(m_xBuilder->weld_check_button(u"STR_SAVE_SETTINGS"_ustr))
 {
     rOptimizerDialog.SetSummaryPage(this);
     m_xApplyToCurrent->connect_toggled(LINK(this, SummaryPage, SaveAsNewActionPerformed));
@@ -244,7 +244,7 @@ void OptimizerDialog::InitRoadmap()
          ITEM_ID_SUMMARY}
     );
 
-    m_xAssistant->set_page_side_image(BMP_PRESENTATION_MINIMIZER);
+    m_xAssistant->set_page_side_image(u"" BMP_PRESENTATION_MINIMIZER ""_ustr);
 }
 
 void OptimizerDialog::UpdateConfiguration()
@@ -579,10 +579,10 @@ bool OptimizerDialog::onFinish()
         aURL.Path = "optimize";
 
         Sequence< PropertyValue > lArguments{
-            comphelper::makePropertyValue("Settings", GetConfigurationSequence()),
-            comphelper::makePropertyValue("StatusDispatcher", GetStatusDispatcher()),
-            comphelper::makePropertyValue("DocumentFrame", GetFrame()),
-            comphelper::makePropertyValue("DialogParentWindow", m_xAssistant->GetXWindow())
+            comphelper::makePropertyValue(u"Settings"_ustr, GetConfigurationSequence()),
+            comphelper::makePropertyValue(u"StatusDispatcher"_ustr, GetStatusDispatcher()),
+            comphelper::makePropertyValue(u"DocumentFrame"_ustr, GetFrame()),
+            comphelper::makePropertyValue(u"DialogParentWindow"_ustr, m_xAssistant->GetXWindow())
         };
 
         ErrCode errorCode;

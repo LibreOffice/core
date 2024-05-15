@@ -46,8 +46,8 @@ void pdfi::FillDashStyleProps(PropertyMap& props, const std::vector<double>& das
         distance += dashArray[i * 2 + 1];
     distance /= pairCount;
 
-    props["draw:style"] = "rect";
-    props["draw:distance"] = convertPixelToUnitString(distance * scale);
+    props[u"draw:style"_ustr] = "rect";
+    props[u"draw:distance"_ustr] = convertPixelToUnitString(distance * scale);
 
     int dotStage = 0;
     int dotCounts[3] = {0, 0, 0};

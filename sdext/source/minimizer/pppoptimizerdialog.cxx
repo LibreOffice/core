@@ -51,7 +51,7 @@ void SAL_CALL PPPOptimizerDialog::initialize( const Sequence< Any >& aArguments 
 
 OUString SAL_CALL PPPOptimizerDialog::getImplementationName()
 {
-    return "com.sun.star.comp.PresentationMinimizerImp";
+    return u"com.sun.star.comp.PresentationMinimizerImp"_ustr;
 }
 
 sal_Bool SAL_CALL PPPOptimizerDialog::supportsService( const OUString& ServiceName )
@@ -61,7 +61,7 @@ sal_Bool SAL_CALL PPPOptimizerDialog::supportsService( const OUString& ServiceNa
 
 Sequence< OUString > SAL_CALL PPPOptimizerDialog::getSupportedServiceNames()
 {
-    return { "com.sun.star.comp.PresentationMinimizer" };
+    return { u"com.sun.star.comp.PresentationMinimizer"_ustr };
 }
 
 Reference< css::frame::XDispatch > SAL_CALL PPPOptimizerDialog::queryDispatch(

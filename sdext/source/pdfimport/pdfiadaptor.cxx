@@ -64,7 +64,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
             SAL_INFO("sdext.pdfimport", "filter: Attrib: " << pAttribs[i].Name
                     << " = " << (pAttribs[i].Value.has<OUString>()
                             ? pAttribs[i].Value.get<OUString>()
-                            : OUString("<no string>"))
+                            : u"<no string>"_ustr)
                     << "\n");
             if ( pAttribs[i].Name == "EmbeddedSubstream" )
                 pAttribs[i].Value >>= xSubStream;
@@ -135,7 +135,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
             try {
                 xSubFilter.set(
                     m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                        "com.sun.star.document.OwnSubFilter",
+                        u"com.sun.star.document.OwnSubFilter"_ustr,
                         aArgs,
                         m_xContext ),
                     uno::UNO_QUERY );
@@ -188,7 +188,7 @@ void SAL_CALL PDFIHybridAdaptor::setTargetDocument( const uno::Reference< lang::
 
 OUString PDFIHybridAdaptor::getImplementationName()
 {
-    return "org.libreoffice.comp.documents.HybridPDFImport";
+    return u"org.libreoffice.comp.documents.HybridPDFImport"_ustr;
 }
 
 sal_Bool PDFIHybridAdaptor::supportsService(OUString const & ServiceName)
@@ -198,7 +198,7 @@ sal_Bool PDFIHybridAdaptor::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> PDFIHybridAdaptor::getSupportedServiceNames()
 {
-    return {"com.sun.star.document.ImportFilter"};
+    return {u"com.sun.star.document.ImportFilter"_ustr};
 }
 
 PDFIRawAdaptor::PDFIRawAdaptor( OUString const & implementationName, const uno::Reference< uno::XComponentContext >& xContext ) :
@@ -246,7 +246,7 @@ bool PDFIRawAdaptor::odfConvert( const OUString&                          rURL,
     const bool bSuccess = parse(uno::Reference<io::XInputStream>(),
                                 uno::Reference<task::XInteractionHandler>(),
                                 OUString(),
-                                xStatus,pEmitter,rURL, "");
+                                xStatus,pEmitter,rURL, u""_ustr);
 
     // tell input stream that it is no longer needed
     xOutput->closeOutput();
@@ -317,7 +317,7 @@ sal_Bool PDFIRawAdaptor::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> PDFIRawAdaptor::getSupportedServiceNames()
 {
-    return {"com.sun.star.document.ImportFilter"};
+    return {u"com.sun.star.document.ImportFilter"_ustr};
 }
 
 
@@ -326,7 +326,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 sdext_PDFIRawAdaptor_Writer_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    rtl::Reference<pdfi::PDFIRawAdaptor> pAdaptor = new pdfi::PDFIRawAdaptor( "org.libreoffice.comp.documents.WriterPDFImport", context );
+    rtl::Reference<pdfi::PDFIRawAdaptor> pAdaptor = new pdfi::PDFIRawAdaptor( u"org.libreoffice.comp.documents.WriterPDFImport"_ustr, context );
     pAdaptor->setTreeVisitorFactory(pdfi::createWriterTreeVisitorFactory());
     pAdaptor->acquire();
     return getXWeak(pAdaptor.get());
@@ -336,7 +336,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 sdext_PDFIRawAdaptor_Draw_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    rtl::Reference<pdfi::PDFIRawAdaptor> pAdaptor = new pdfi::PDFIRawAdaptor( "org.libreoffice.comp.documents.DrawPDFImport", context );
+    rtl::Reference<pdfi::PDFIRawAdaptor> pAdaptor = new pdfi::PDFIRawAdaptor( u"org.libreoffice.comp.documents.DrawPDFImport"_ustr, context );
     pAdaptor->setTreeVisitorFactory(pdfi::createDrawTreeVisitorFactory());
     pAdaptor->acquire();
     return getXWeak(pAdaptor.get());
@@ -346,7 +346,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 sdext_PDFIRawAdaptor_Impress_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    rtl::Reference<pdfi::PDFIRawAdaptor> pAdaptor = new pdfi::PDFIRawAdaptor( "org.libreoffice.comp.documents.ImpressPDFImport", context );
+    rtl::Reference<pdfi::PDFIRawAdaptor> pAdaptor = new pdfi::PDFIRawAdaptor( u"org.libreoffice.comp.documents.ImpressPDFImport"_ustr, context );
     pAdaptor->setTreeVisitorFactory(pdfi::createImpressTreeVisitorFactory());
     pAdaptor->acquire();
     return getXWeak(pAdaptor.get());
