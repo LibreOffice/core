@@ -48,7 +48,7 @@ XMLVersionListExport::XMLVersionListExport(
     const css::uno::Sequence < css::util::RevisionTag >& rVersions,
     const OUString &rFileName,
     Reference< XDocumentHandler > const &rHandler )
-:   SvXMLExport( rContext, "", rFileName, util::MeasureUnit::CM, rHandler ),
+:   SvXMLExport( rContext, u""_ustr, rFileName, util::MeasureUnit::CM, rHandler ),
     maVersions( rVersions )
 {
     GetNamespaceMap_().AddAtIndex( xmloff::token::GetXMLToken(xmloff::token::XML_NP_DC),
@@ -104,7 +104,7 @@ ErrCode XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
 XMLVersionListImport::XMLVersionListImport(
     const css::uno::Reference< css::uno::XComponentContext >& rContext,
     css::uno::Sequence < css::util::RevisionTag >& rVersions )
-:   SvXMLImport(rContext, ""),
+:   SvXMLImport(rContext, u""_ustr),
     maVersions( rVersions )
 {
 }
@@ -326,7 +326,7 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
 
         Reference< io::XOutputStream > xOut = xVerStream->getOutputStream();
         if ( !xOut.is() )
-            throw uno::RuntimeException("The stream was successfully opened for writing already!");
+            throw uno::RuntimeException(u"The stream was successfully opened for writing already!"_ustr);
 
         xWriter->setOutputStream(xOut);
 
@@ -360,7 +360,7 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
             if ( xProps.is() )
             {
                 try {
-                    xProps->getPropertyValue("URL") >>= aParserInput.sSystemId;
+                    xProps->getPropertyValue(u"URL"_ustr) >>= aParserInput.sSystemId;
                 }
                 catch( uno::Exception& )
                 {}
@@ -401,7 +401,7 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
 
 OUString XMLVersionListPersistence::getImplementationName()
 {
-    return "XMLVersionListPersistence";
+    return u"XMLVersionListPersistence"_ustr;
 }
 
 sal_Bool XMLVersionListPersistence::supportsService(
@@ -414,7 +414,7 @@ css::uno::Sequence<OUString>
 XMLVersionListPersistence::getSupportedServiceNames()
 {
     return css::uno::Sequence<OUString>{
-        "com.sun.star.document.DocumentRevisionListPersistence"};
+        u"com.sun.star.document.DocumentRevisionListPersistence"_ustr};
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

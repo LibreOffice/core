@@ -212,7 +212,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
             SvXMLExport& rExp,
             const uno::Reference< util::XNumberFormatsSupplier >& rSupp ) :
     m_rExport( rExp ),
-    m_sPrefix( OUString("N") ),
+    m_sPrefix( u"N"_ustr ),
     m_pFormatter( nullptr ),
     m_bHasText( false )
 {
@@ -974,7 +974,7 @@ bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
             AddToTextElement_Impl( rString.subView( 0, nPos ) );
         }
         //  currency symbol (empty string -> default)
-        WriteCurrencyElement_Impl( "", u"" );
+        WriteCurrencyElement_Impl( u""_ustr, u"" );
         bRet = true;
 
         //  text after currency symbol
@@ -1814,7 +1814,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                             nElemType == NF_KEY_R );
                         WriteYearElement_Impl(
                                 ((bImplicitOtherCalendar && !bExplicitCalendar
-                                  && (nElemType == NF_KEY_YY || nElemType == NF_KEY_YYYY)) ? "gregorian" : aCalendar),
+                                  && (nElemType == NF_KEY_YY || nElemType == NF_KEY_YYYY)) ? u"gregorian"_ustr : aCalendar),
                                 (bSystemDate ? bLongSysDate : bLong));
                         bAnyContent = true;
                     }

@@ -80,14 +80,14 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
             if ( bTmpVisible )
             {
                 if ( !bTmpPrintable )
-                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY, OUString("screen") );
+                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY, u"screen"_ustr );
             }
             else
             {
                 if ( bTmpPrintable)
-                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY, OUString("printer") );
+                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY, u"printer"_ustr );
                 else
-                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY, OUString("none") );
+                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY, u"none"_ustr );
             }
 
             bool bTmpLocked( false );
@@ -95,7 +95,7 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
             // only write non-default value, default is "false"
             if ( bTmpLocked )
             {
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_PROTECTED, OUString("true") );
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_PROTECTED, u"true"_ustr );
             }
 
             SvXMLElementExport aEle( rExport, XML_NAMESPACE_DRAW, XML_LAYER, true, true );

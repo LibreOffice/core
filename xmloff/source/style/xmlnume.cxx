@@ -263,7 +263,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
         if (bIsLegal)
         {
             if (GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
-                GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_IS_LEGAL, "true");
+                GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_IS_LEGAL, u"true"_ustr);
         }
         if (!sListFormat.isEmpty())
         {
@@ -306,7 +306,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
         else
         {
             // If 'cBullet' is zero, XML_BULLET_CHAR must exist with blank.
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_BULLET_CHAR, "");
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_BULLET_CHAR, u""_ustr);
         }
     }
     else if( NumberingType::BITMAP == eType )
@@ -676,8 +676,8 @@ void SvxXMLNumRuleExport::exportNumberingRule(
     if (bIsHidden
         && GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
     {
-        GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_HIDDEN, "true");
-        GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_HIDDEN, "true"); // FIXME for compatibility
+        GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_HIDDEN, u"true"_ustr);
+        GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_HIDDEN, u"true"_ustr); // FIXME for compatibility
     }
 
     // text:consecutive-numbering="..."
@@ -722,9 +722,9 @@ void SvxXMLNumRuleExport::exportStyle( const Reference< XStyle >& rStyle )
     OUString sName = rStyle->getName();
 
     bool bHidden = false;
-    if ( xPropSetInfo->hasPropertyByName( "Hidden" ) )
+    if ( xPropSetInfo->hasPropertyByName( u"Hidden"_ustr ) )
     {
-        aAny = xPropSet->getPropertyValue( "Hidden" );
+        aAny = xPropSet->getPropertyValue( u"Hidden"_ustr );
         aAny >>= bHidden;
     }
 
@@ -755,7 +755,7 @@ void SvxXMLNumRuleExport::exportOutline()
             xCNSupplier->getChapterNumberingRules(), UNO_QUERY );
         if (xNumRulePropSet.is())
         {
-            xNumRulePropSet->getPropertyValue( "Name" ) >>= sOutlineStyleName;
+            xNumRulePropSet->getPropertyValue( u"Name"_ustr ) >>= sOutlineStyleName;
         }
     }
     const SvtSaveOptions::ODFSaneDefaultVersion nODFVersion =

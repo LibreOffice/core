@@ -46,8 +46,8 @@ XMLIndexChapterInfoEntryContext::XMLIndexChapterInfoEntryContext(
     XMLIndexTemplateContext& rTemplate,
     bool bT ) :
         XMLIndexSimpleEntryContext(rImport,
-                                   (bT ? OUString("TokenEntryNumber")
-                                       : OUString("TokenChapterInfo")),
+                                   (bT ? u"TokenEntryNumber"_ustr
+                                       : u"TokenChapterInfo"_ustr),
                                    rTemplate),
         nChapterInfo(ChapterFormat::NAME_NUMBER),
         bChapterInfoOK(false),

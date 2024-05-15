@@ -27,44 +27,44 @@ public:
 }
 
 Test::Test()
-    : UnoApiXmlTest("/xmloff/qa/unit/data/")
+    : UnoApiXmlTest(u"/xmloff/qa/unit/data/"_ustr)
 {
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFloatingTableWrapTextAtFlyStartExport)
 {
     // Given a document with a floating table:
-    mxComponent = loadFromDesktop("private:factory/swriter");
+    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
     // Insert a table:
     uno::Sequence<beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("Rows", static_cast<sal_Int32>(1)),
-        comphelper::makePropertyValue("Columns", static_cast<sal_Int32>(1)),
+        comphelper::makePropertyValue(u"Rows"_ustr, static_cast<sal_Int32>(1)),
+        comphelper::makePropertyValue(u"Columns"_ustr, static_cast<sal_Int32>(1)),
     };
-    dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
     // Select it:
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     // Wrap in a fly:
     aArgs = {
-        comphelper::makePropertyValue("AnchorType", static_cast<sal_uInt16>(0)),
+        comphelper::makePropertyValue(u"AnchorType"_ustr, static_cast<sal_uInt16>(0)),
     };
-    dispatchCommand(mxComponent, ".uno:InsertFrame", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertFrame"_ustr, aArgs);
     // Mark it as a floating table that wraps on all pages:
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFrame(
-        xTextFramesSupplier->getTextFrames()->getByName("Frame1"), uno::UNO_QUERY);
-    xFrame->setPropertyValue("IsSplitAllowed", uno::Any(true));
-    xFrame->setPropertyValue("WrapTextAtFlyStart", uno::Any(true));
+        xTextFramesSupplier->getTextFrames()->getByName(u"Frame1"_ustr), uno::UNO_QUERY);
+    xFrame->setPropertyValue(u"IsSplitAllowed"_ustr, uno::Any(true));
+    xFrame->setPropertyValue(u"WrapTextAtFlyStart"_ustr, uno::Any(true));
 
     // When saving to ODT:
-    save("writer8");
+    save(u"writer8"_ustr);
 
     // Then make sure we write a floating table, that wraps on all pages:
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//style:graphic-properties' no attribute 'wrap-text-at-frame-start' exist
     // i.e. no floating table was exported.
     assertXPath(pXmlDoc, "//style:graphic-properties"_ostr, "wrap-text-at-frame-start"_ostr,
-                "true");
+                u"true"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFloatingTableWrapTextAtFlyStartImport)
@@ -77,10 +77,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableWrapTextAtFlyStartImport)
     // Then make sure that the matching text frame property is set:
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFrame(
-        xTextFramesSupplier->getTextFrames()->getByName("Frame1"), uno::UNO_QUERY);
+        xTextFramesSupplier->getTextFrames()->getByName(u"Frame1"_ustr), uno::UNO_QUERY);
     bool bWrapTextAtFlyStart = false;
     // Without the accompanying fix in place, this test would have failed, the property was false.
-    xFrame->getPropertyValue("WrapTextAtFlyStart") >>= bWrapTextAtFlyStart;
+    xFrame->getPropertyValue(u"WrapTextAtFlyStart"_ustr) >>= bWrapTextAtFlyStart;
     CPPUNIT_ASSERT(bWrapTextAtFlyStart);
 }
 

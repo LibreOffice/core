@@ -52,7 +52,7 @@ void XFormsModelContext::HandleAttribute(const sax_fastparser::FastAttributeList
     switch( aIter.getToken() & TOKEN_MASK)
     {
     case XML_ID:
-        mxModel->setPropertyValue( "ID", Any( aIter.toString() ) );
+        mxModel->setPropertyValue( u"ID"_ustr, Any( aIter.toString() ) );
         break;
     case XML_SCHEMA:
         GetImport().SetError( XMLERROR_XFORMS_NO_SCHEMA_SUPPORT );

@@ -56,7 +56,7 @@ Reference < XStyle > XMLTextMasterPageContext::Create()
     if( xFactory.is() )
     {
         Reference < XInterface > xIfc =
-            xFactory->createInstance("com.sun.star.style.PageStyle");
+            xFactory->createInstance(u"com.sun.star.style.PageStyle"_ustr);
         if( xIfc.is() )
             xNewStyle.set( xIfc, UNO_QUERY );
     }
@@ -144,7 +144,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
     Reference < XPropertySet > xPropSet( m_xStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo =
                 xPropSet->getPropertySetInfo();
-    OUString sIsPhysical( "IsPhysical" );
+    OUString sIsPhysical( u"IsPhysical"_ustr );
     if( !bNew && xPropSetInfo->hasPropertyByName( sIsPhysical ) )
     {
         aAny = xPropSet->getPropertyValue( sIsPhysical );
@@ -162,11 +162,11 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
     if( xMultiStates.is() )
         xMultiStates->setAllPropertiesToDefault();
 
-    if ( xPropSetInfo->hasPropertyByName( "GridDisplay" ) )
-        xPropSet->setPropertyValue( "GridDisplay", Any(false) );
+    if ( xPropSetInfo->hasPropertyByName( u"GridDisplay"_ustr ) )
+        xPropSet->setPropertyValue( u"GridDisplay"_ustr, Any(false) );
 
-    if ( xPropSetInfo->hasPropertyByName( "GridPrint" ) )
-        xPropSet->setPropertyValue( "GridPrint", Any(false) );
+    if ( xPropSetInfo->hasPropertyByName( u"GridPrint"_ustr ) )
+        xPropSet->setPropertyValue( u"GridPrint"_ustr, Any(false) );
 
     m_bInsertHeader = m_bInsertFooter = true;
     m_bInsertHeaderLeft = m_bInsertFooterLeft = true;
@@ -291,9 +291,9 @@ void XMLTextMasterPageContext::Finish( bool bOverwrite )
         }
     }
 
-    if ( xPropSetInfo->hasPropertyByName( "Hidden" ) )
+    if ( xPropSetInfo->hasPropertyByName( u"Hidden"_ustr ) )
     {
-        xPropSet->setPropertyValue( "Hidden", uno::Any( IsHidden( ) ) );
+        xPropSet->setPropertyValue( u"Hidden"_ustr, uno::Any( IsHidden( ) ) );
     }
 }
 

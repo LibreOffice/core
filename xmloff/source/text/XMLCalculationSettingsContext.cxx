@@ -63,7 +63,7 @@ void XMLCalculationSettingsContext::endFastElement(sal_Int32 )
         if (xTextDoc.is())
         {
             Reference < XPropertySet > xPropSet ( xTextDoc, UNO_QUERY );
-            xPropSet->setPropertyValue ( "TwoDigitYear", Any(nYear) );
+            xPropSet->setPropertyValue ( u"TwoDigitYear"_ustr, Any(nYear) );
         }
     }
 }

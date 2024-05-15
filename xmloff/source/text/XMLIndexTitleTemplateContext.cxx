@@ -74,14 +74,14 @@ void XMLIndexTitleTemplateContext::endFastElement(sal_Int32 )
     Any aAny;
 
     aAny <<= sContent.makeStringAndClear();
-    rTOCPropertySet->setPropertyValue("Title", aAny);
+    rTOCPropertySet->setPropertyValue(u"Title"_ustr, aAny);
 
     if (bStyleNameOK)
     {
         aAny <<= GetImport().GetStyleDisplayName(
                                 XmlStyleFamily::TEXT_PARAGRAPH,
                                 sStyleName );
-        rTOCPropertySet->setPropertyValue("ParaStyleHeading", aAny);
+        rTOCPropertySet->setPropertyValue(u"ParaStyleHeading"_ustr, aAny);
     }
 }
 

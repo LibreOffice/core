@@ -70,7 +70,7 @@ public:
 };
 
 XmloffDrawTest::XmloffDrawTest()
-    : UnoApiXmlTest("/xmloff/qa/unit/data/")
+    : UnoApiXmlTest(u"/xmloff/qa/unit/data/"_ustr)
 {
 }
 
@@ -89,14 +89,14 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextBoxLoss)
 {
     // Load a document that has a shape with a textbox in it. Save it to ODF and reload.
     loadFromFile(u"textbox-loss.docx");
-    saveAndReload("impress8");
+    saveAndReload(u"impress8"_ustr);
 
     // Make sure that the shape is still a textbox.
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
     bool bTextBox = false;
-    xShape->getPropertyValue("TextBox") >>= bTextBox;
+    xShape->getPropertyValue(u"TextBox"_ustr) >>= bTextBox;
 
     // Without the accompanying fix in place, this test would have failed, as the shape only had
     // editeng text, losing the image part of the shape text.
@@ -109,18 +109,18 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf141301_Extrusion_Angle)
     loadFromFile(u"tdf141301_Extrusion_Skew.odg");
 
     // Prepare use of XPath
-    save("draw8");
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    save(u"draw8"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
     // Without fix draw:extrusion-skew="50 -135" was not written to file although "50 -135" is not
     // default in ODF, but only default inside LO.
-    assertXPath(pXmlDoc, "//draw:enhanced-geometry"_ostr, "extrusion-skew"_ostr, "50 -135");
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry"_ostr, "extrusion-skew"_ostr, u"50 -135"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
 {
     // Create an Impress document which has a master page which has a theme associated with it.
-    mxComponent = loadFromDesktop("private:factory/simpress");
+    mxComponent = loadFromDesktop(u"private:factory/simpress"_ustr);
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XMasterPageTarget> xDrawPage(
         xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
@@ -143,13 +143,13 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
     pTheme->setColorSet(pColorSet);
 
     uno::Reference<util::XTheme> xTheme = model::theme::createXTheme(pTheme);
-    xMasterPage->setPropertyValue("Theme", uno::Any(xTheme));
+    xMasterPage->setPropertyValue(u"Theme"_ustr, uno::Any(xTheme));
 
     // Export to ODP:
-    save("impress8");
+    save(u"impress8"_ustr);
 
     // Check if the 12 colors are written in the XML:
-    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 12
     // - Actual  : 0
@@ -185,9 +185,9 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testVideoSnapshot)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1356), rCrop.Right);
 
     // Execute ODP export:
-    save("impress8");
+    save(u"impress8"_ustr);
 
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     // Check that the preview was exported:
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -195,10 +195,10 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testVideoSnapshot)
     // - XPath '//draw:frame[@draw:style-name='gr1']/draw:image' number of nodes is incorrect
     // i.e. the preview wasn't exported to ODP.
     assertXPath(pXmlDoc, "//draw:frame[@draw:style-name='gr1']/draw:image"_ostr, "href"_ostr,
-                "Pictures/MediaPreview1.png");
+                u"Pictures/MediaPreview1.png"_ustr);
     // Check that the crop was exported:
     assertXPath(pXmlDoc, "//style:style[@style:name='gr1']/style:graphic-properties"_ostr,
-                "clip"_ostr, "rect(0cm, 1.356cm, 0cm, 1.356cm)");
+                "clip"_ostr, u"rect(0cm, 1.356cm, 0cm, 1.356cm)"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeImport)
@@ -213,7 +213,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeImport)
     uno::Reference<beans::XPropertySet> xMasterpage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
 
     uno::Reference<util::XTheme> xTheme;
-    xMasterpage->getPropertyValue("Theme") >>= xTheme;
+    xMasterpage->getPropertyValue(u"Theme"_ustr) >>= xTheme;
 
     // We expect the theme to be set on the master page
     CPPUNIT_ASSERT(xTheme.is());
@@ -222,10 +222,10 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeImport)
     auto pTheme = pUnoTheme->getTheme();
     CPPUNIT_ASSERT(pTheme);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Office Theme"), pTheme->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"Office Theme"_ustr, pTheme->GetName());
     auto pColorSet = pTheme->getColorSet();
     CPPUNIT_ASSERT(pColorSet);
-    CPPUNIT_ASSERT_EQUAL(OUString("Office"), pColorSet->getName());
+    CPPUNIT_ASSERT_EQUAL(u"Office"_ustr, pColorSet->getName());
 
     CPPUNIT_ASSERT_EQUAL(Color(0x954F72),
                          pColorSet->getColor(model::ThemeColorType::FollowedHyperlink));
@@ -239,7 +239,7 @@ void checkFillAndLineComplexColors(uno::Reference<drawing::XShape> const& xShape
     uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
     {
         uno::Reference<util::XComplexColor> xComplexColor;
-        xShapeProperties->getPropertyValue("FillComplexColor") >>= xComplexColor;
+        xShapeProperties->getPropertyValue(u"FillComplexColor"_ustr) >>= xComplexColor;
         CPPUNIT_ASSERT(xComplexColor.is());
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3, aComplexColor.getThemeColorType());
@@ -253,7 +253,7 @@ void checkFillAndLineComplexColors(uno::Reference<drawing::XShape> const& xShape
     }
     {
         uno::Reference<util::XComplexColor> xComplexColor;
-        xShapeProperties->getPropertyValue("LineComplexColor") >>= xComplexColor;
+        xShapeProperties->getPropertyValue(u"LineComplexColor"_ustr) >>= xComplexColor;
         CPPUNIT_ASSERT(xComplexColor.is());
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3, aComplexColor.getThemeColorType());
@@ -275,7 +275,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testFillAndLineThemeColorExportImport)
 
     checkFillAndLineComplexColors(getShape(0));
 
-    save("impress8");
+    save(u"impress8"_ustr);
 
     load(maTempFile.GetURL());
 
@@ -286,62 +286,62 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
 {
     // Given a document that refers to a theme color:
     loadFromFile(u"Reference-ThemeColors-TextAndFill.pptx");
-    save("impress8");
+    save(u"impress8"_ustr);
 
     // Make sure the export result has the theme reference:
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
     // Text color
     OString aStyle1(
         "//style:style[@style:name='T2']/style:text-properties/loext:char-complex-color"_ostr);
-    assertXPath(pXmlDoc, aStyle1, "color-type"_ostr, "theme");
-    assertXPath(pXmlDoc, aStyle1, "theme-type"_ostr, "accent3");
-    assertXPath(pXmlDoc, aStyle1 + "/loext:transformation[1]", "type"_ostr, "lummod");
-    assertXPath(pXmlDoc, aStyle1 + "/loext:transformation[1]", "value"_ostr, "2000");
-    assertXPath(pXmlDoc, aStyle1 + "/loext:transformation[2]", "type"_ostr, "lumoff");
-    assertXPath(pXmlDoc, aStyle1 + "/loext:transformation[2]", "value"_ostr, "8000");
+    assertXPath(pXmlDoc, aStyle1, "color-type"_ostr, u"theme"_ustr);
+    assertXPath(pXmlDoc, aStyle1, "theme-type"_ostr, u"accent3"_ustr);
+    assertXPath(pXmlDoc, aStyle1 + "/loext:transformation[1]", "type"_ostr, u"lummod"_ustr);
+    assertXPath(pXmlDoc, aStyle1 + "/loext:transformation[1]", "value"_ostr, u"2000"_ustr);
+    assertXPath(pXmlDoc, aStyle1 + "/loext:transformation[2]", "type"_ostr, u"lumoff"_ustr);
+    assertXPath(pXmlDoc, aStyle1 + "/loext:transformation[2]", "value"_ostr, u"8000"_ustr);
 
     OString aStyle2(
         "//style:style[@style:name='T3']/style:text-properties/loext:char-complex-color"_ostr);
-    assertXPath(pXmlDoc, aStyle1, "color-type"_ostr, "theme");
-    assertXPath(pXmlDoc, aStyle2, "theme-type"_ostr, "accent3");
-    assertXPath(pXmlDoc, aStyle2 + "/loext:transformation[1]", "type"_ostr, "lummod");
-    assertXPath(pXmlDoc, aStyle2 + "/loext:transformation[1]", "value"_ostr, "6000");
-    assertXPath(pXmlDoc, aStyle2 + "/loext:transformation[2]", "type"_ostr, "lumoff");
-    assertXPath(pXmlDoc, aStyle2 + "/loext:transformation[2]", "value"_ostr, "4000");
+    assertXPath(pXmlDoc, aStyle1, "color-type"_ostr, u"theme"_ustr);
+    assertXPath(pXmlDoc, aStyle2, "theme-type"_ostr, u"accent3"_ustr);
+    assertXPath(pXmlDoc, aStyle2 + "/loext:transformation[1]", "type"_ostr, u"lummod"_ustr);
+    assertXPath(pXmlDoc, aStyle2 + "/loext:transformation[1]", "value"_ostr, u"6000"_ustr);
+    assertXPath(pXmlDoc, aStyle2 + "/loext:transformation[2]", "type"_ostr, u"lumoff"_ustr);
+    assertXPath(pXmlDoc, aStyle2 + "/loext:transformation[2]", "value"_ostr, u"4000"_ustr);
 
     OString aStyle3(
         "//style:style[@style:name='T4']/style:text-properties/loext:char-complex-color"_ostr);
-    assertXPath(pXmlDoc, aStyle1, "color-type"_ostr, "theme");
-    assertXPath(pXmlDoc, aStyle3, "theme-type"_ostr, "accent3");
-    assertXPath(pXmlDoc, aStyle3 + "/loext:transformation[1]", "type"_ostr, "lummod");
-    assertXPath(pXmlDoc, aStyle3 + "/loext:transformation[1]", "value"_ostr, "5000");
+    assertXPath(pXmlDoc, aStyle1, "color-type"_ostr, u"theme"_ustr);
+    assertXPath(pXmlDoc, aStyle3, "theme-type"_ostr, u"accent3"_ustr);
+    assertXPath(pXmlDoc, aStyle3 + "/loext:transformation[1]", "type"_ostr, u"lummod"_ustr);
+    assertXPath(pXmlDoc, aStyle3 + "/loext:transformation[1]", "value"_ostr, u"5000"_ustr);
 
     // Shapes fill color
     OString aShape1("//style:style[@style:name='gr1']/style:graphic-properties/"
                     "loext:fill-complex-color"_ostr);
-    assertXPath(pXmlDoc, aStyle1, "color-type"_ostr, "theme");
-    assertXPath(pXmlDoc, aShape1, "theme-type"_ostr, "accent2");
-    assertXPath(pXmlDoc, aShape1 + "/loext:transformation[1]", "type"_ostr, "lummod");
-    assertXPath(pXmlDoc, aShape1 + "/loext:transformation[1]", "value"_ostr, "2000");
-    assertXPath(pXmlDoc, aShape1 + "/loext:transformation[2]", "type"_ostr, "lumoff");
-    assertXPath(pXmlDoc, aShape1 + "/loext:transformation[2]", "value"_ostr, "8000");
+    assertXPath(pXmlDoc, aStyle1, "color-type"_ostr, u"theme"_ustr);
+    assertXPath(pXmlDoc, aShape1, "theme-type"_ostr, u"accent2"_ustr);
+    assertXPath(pXmlDoc, aShape1 + "/loext:transformation[1]", "type"_ostr, u"lummod"_ustr);
+    assertXPath(pXmlDoc, aShape1 + "/loext:transformation[1]", "value"_ostr, u"2000"_ustr);
+    assertXPath(pXmlDoc, aShape1 + "/loext:transformation[2]", "type"_ostr, u"lumoff"_ustr);
+    assertXPath(pXmlDoc, aShape1 + "/loext:transformation[2]", "value"_ostr, u"8000"_ustr);
 
     OString aShape2("//style:style[@style:name='gr2']/style:graphic-properties/"
                     "loext:fill-complex-color"_ostr);
-    assertXPath(pXmlDoc, aStyle1, "color-type"_ostr, "theme");
-    assertXPath(pXmlDoc, aShape2, "theme-type"_ostr, "accent2");
-    assertXPath(pXmlDoc, aShape2 + "/loext:transformation[1]", "type"_ostr, "lummod");
-    assertXPath(pXmlDoc, aShape2 + "/loext:transformation[1]", "value"_ostr, "6000");
-    assertXPath(pXmlDoc, aShape2 + "/loext:transformation[2]", "type"_ostr, "lumoff");
-    assertXPath(pXmlDoc, aShape2 + "/loext:transformation[2]", "value"_ostr, "4000");
+    assertXPath(pXmlDoc, aStyle1, "color-type"_ostr, u"theme"_ustr);
+    assertXPath(pXmlDoc, aShape2, "theme-type"_ostr, u"accent2"_ustr);
+    assertXPath(pXmlDoc, aShape2 + "/loext:transformation[1]", "type"_ostr, u"lummod"_ustr);
+    assertXPath(pXmlDoc, aShape2 + "/loext:transformation[1]", "value"_ostr, u"6000"_ustr);
+    assertXPath(pXmlDoc, aShape2 + "/loext:transformation[2]", "type"_ostr, u"lumoff"_ustr);
+    assertXPath(pXmlDoc, aShape2 + "/loext:transformation[2]", "value"_ostr, u"4000"_ustr);
 
     OString aShape3("//style:style[@style:name='gr3']/style:graphic-properties/"
                     "loext:fill-complex-color"_ostr);
-    assertXPath(pXmlDoc, aStyle1, "color-type"_ostr, "theme");
-    assertXPath(pXmlDoc, aShape3, "theme-type"_ostr, "accent2");
-    assertXPath(pXmlDoc, aShape3 + "/loext:transformation[1]", "type"_ostr, "lummod");
-    assertXPath(pXmlDoc, aShape3 + "/loext:transformation[1]", "value"_ostr, "5000");
+    assertXPath(pXmlDoc, aStyle1, "color-type"_ostr, u"theme"_ustr);
+    assertXPath(pXmlDoc, aShape3, "theme-type"_ostr, u"accent2"_ustr);
+    assertXPath(pXmlDoc, aShape3 + "/loext:transformation[1]", "type"_ostr, u"lummod"_ustr);
+    assertXPath(pXmlDoc, aShape3 + "/loext:transformation[1]", "value"_ostr, u"5000"_ustr);
 
     // reload
     load(maTempFile.GetURL());
@@ -352,7 +352,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
         CPPUNIT_ASSERT(xShape.is());
         uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
         uno::Reference<util::XComplexColor> xComplexColor;
-        xShapeProperties->getPropertyValue("FillComplexColor") >>= xComplexColor;
+        xShapeProperties->getPropertyValue(u"FillComplexColor"_ustr) >>= xComplexColor;
         CPPUNIT_ASSERT(xComplexColor.is());
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent2, aComplexColor.getThemeColorType());
@@ -369,7 +369,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
         CPPUNIT_ASSERT(xShape.is());
         uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
         uno::Reference<util::XComplexColor> xComplexColor;
-        xShapeProperties->getPropertyValue("FillComplexColor") >>= xComplexColor;
+        xShapeProperties->getPropertyValue(u"FillComplexColor"_ustr) >>= xComplexColor;
         CPPUNIT_ASSERT(xComplexColor.is());
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent2, aComplexColor.getThemeColorType());
@@ -386,7 +386,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
         CPPUNIT_ASSERT(xShape.is());
         uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
         uno::Reference<util::XComplexColor> xComplexColor;
-        xShapeProperties->getPropertyValue("FillComplexColor") >>= xComplexColor;
+        xShapeProperties->getPropertyValue(u"FillComplexColor"_ustr) >>= xComplexColor;
         CPPUNIT_ASSERT(xComplexColor.is());
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent2, aComplexColor.getThemeColorType());
@@ -405,7 +405,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
         uno::Reference<beans::XPropertySet> xPortion = getShapeTextPortion(0, xShape);
         CPPUNIT_ASSERT(xPortion.is());
         uno::Reference<util::XComplexColor> xComplexColor;
-        xPortion->getPropertyValue("CharComplexColor") >>= xComplexColor;
+        xPortion->getPropertyValue(u"CharComplexColor"_ustr) >>= xComplexColor;
         CPPUNIT_ASSERT(xComplexColor.is());
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3, aComplexColor.getThemeColorType());
@@ -426,7 +426,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
         uno::Reference<beans::XPropertySet> xPortion = getShapeTextPortion(0, xShape);
         CPPUNIT_ASSERT(xPortion.is());
         uno::Reference<util::XComplexColor> xComplexColor;
-        xPortion->getPropertyValue("CharComplexColor") >>= xComplexColor;
+        xPortion->getPropertyValue(u"CharComplexColor"_ustr) >>= xComplexColor;
         CPPUNIT_ASSERT(xComplexColor.is());
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3, aComplexColor.getThemeColorType());
@@ -447,7 +447,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
         uno::Reference<beans::XPropertySet> xPortion = getShapeTextPortion(0, xShape);
         CPPUNIT_ASSERT(xPortion.is());
         uno::Reference<util::XComplexColor> xComplexColor;
-        xPortion->getPropertyValue("CharComplexColor") >>= xComplexColor;
+        xPortion->getPropertyValue(u"CharComplexColor"_ustr) >>= xComplexColor;
         CPPUNIT_ASSERT(xComplexColor.is());
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3, aComplexColor.getThemeColorType());
@@ -461,7 +461,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeColor_ShapeFill)
 {
     loadFromFile(u"ReferenceShapeFill.pptx");
-    save("impress8");
+    save(u"impress8"_ustr);
     // reload
     load(maTempFile.GetURL());
 
@@ -470,7 +470,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeColor_ShapeFill)
     CPPUNIT_ASSERT(xShape.is());
     uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
     uno::Reference<util::XComplexColor> xComplexColor;
-    xShapeProperties->getPropertyValue("FillComplexColor") >>= xComplexColor;
+    xShapeProperties->getPropertyValue(u"FillComplexColor"_ustr) >>= xComplexColor;
     CPPUNIT_ASSERT(xComplexColor.is());
     auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
     CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent6, aComplexColor.getThemeColorType());
@@ -495,8 +495,8 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTableInShape)
     uno::Reference<text::XTextTable> xTable(xEnum->nextElement(), uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have crashed, as xTable was an empty
     // reference, i.e. the table inside the shape was lost.
-    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("A1"), xCell->getString());
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"A1"_ustr, xCell->getString());
 }
 
 // Tests for save/load of new (LO 7.4) attribute loext:extrusion-metal-type
@@ -506,19 +506,19 @@ void lcl_assertMetalProperties(std::string_view sInfo, uno::Reference<drawing::X
 {
     uno::Reference<beans::XPropertySet> xShapeProps(rxShape, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aGeoPropSeq;
-    xShapeProps->getPropertyValue("CustomShapeGeometry") >>= aGeoPropSeq;
+    xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
     uno::Sequence<beans::PropertyValue> aExtrusionSeq;
-    aGeoPropMap.getValue("Extrusion") >>= aExtrusionSeq;
+    aGeoPropMap.getValue(u"Extrusion"_ustr) >>= aExtrusionSeq;
     comphelper::SequenceAsHashMap aExtrusionPropMap(aExtrusionSeq);
 
     bool bIsMetal(false);
-    aExtrusionPropMap.getValue("Metal") >>= bIsMetal;
+    aExtrusionPropMap.getValue(u"Metal"_ustr) >>= bIsMetal;
     OString sMsg = OString::Concat(sInfo) + " Metal";
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), bIsMetal);
 
     sal_Int16 nMetalType(-1);
-    aExtrusionPropMap.getValue("MetalType") >>= nMetalType;
+    aExtrusionPropMap.getValue(u"MetalType"_ustr) >>= nMetalType;
     sMsg = OString::Concat(sInfo) + " MetalType";
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         sMsg.getStr(), css::drawing::EnhancedCustomShapeMetalType::MetalMSCompatible, nMetalType);
@@ -533,17 +533,17 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeExtended)
     lcl_assertMetalProperties("from doc", xShape);
 
     // Test, that new attribute is written with loext namespace. Adapt when attribute is added to ODF.
-    save("writer8");
+    save(u"writer8"_ustr);
 
     // assert XML.
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
-    assertXPath(pXmlDoc, "//draw:enhanced-geometry"_ostr, "extrusion-metal"_ostr, "true");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry"_ostr, "extrusion-metal"_ostr, u"true"_ustr);
     assertXPath(
         pXmlDoc,
         "//draw:enhanced-geometry[@loext:extrusion-metal-type='loext:MetalMSCompatible']"_ostr);
 
     // reload
-    mxComponent = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument");
+    mxComponent = loadFromDesktop(maTempFile.GetURL(), u"com.sun.star.text.TextDocument"_ustr);
     // verify properties
     uno::Reference<drawing::XShape> xShapeReload(getShape(0));
     lcl_assertMetalProperties("from ODF 1.3 extended", xShapeReload);
@@ -557,11 +557,11 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeStrict)
     // added to ODF.
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
-    save("writer8");
+    save(u"writer8"_ustr);
 
     // assert XML.
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
-    assertXPath(pXmlDoc, "//draw:enhanced-geometry"_ostr, "extrusion-metal"_ostr, "true");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry"_ostr, "extrusion-metal"_ostr, u"true"_ustr);
     assertXPath(pXmlDoc, "//draw:enhanced-geometry[@loext:extrusion-metal-type]"_ostr, 0);
 
     SetODFDefaultVersion(nCurrentODFVersion);
@@ -573,14 +573,14 @@ void lcl_assertSpecularityProperty(std::string_view sInfo, uno::Reference<drawin
 {
     uno::Reference<beans::XPropertySet> xShapeProps(rxShape, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aGeoPropSeq;
-    xShapeProps->getPropertyValue("CustomShapeGeometry") >>= aGeoPropSeq;
+    xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
     uno::Sequence<beans::PropertyValue> aExtrusionSeq;
-    aGeoPropMap.getValue("Extrusion") >>= aExtrusionSeq;
+    aGeoPropMap.getValue(u"Extrusion"_ustr) >>= aExtrusionSeq;
     comphelper::SequenceAsHashMap aExtrusionPropMap(aExtrusionSeq);
 
     double fSpecularity(-1.0);
-    aExtrusionPropMap.getValue("Specularity") >>= fSpecularity;
+    aExtrusionPropMap.getValue(u"Specularity"_ustr) >>= fSpecularity;
     OString sMsg = OString::Concat(sInfo) + "Specularity";
     CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg.getStr(), 122.0703125, fSpecularity);
 }
@@ -595,16 +595,16 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityExtended)
 
     // Test, that attribute is written in draw namespace with value 100% and in loext namespace with
     // value 122.0703125%.
-    save("writer8");
+    save(u"writer8"_ustr);
 
     // assert XML.
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, "//draw:enhanced-geometry[@draw:extrusion-specularity='100%']"_ostr);
     assertXPath(pXmlDoc,
                 "//draw:enhanced-geometry[@loext:extrusion-specularity-loext='122.0703125%']"_ostr);
 
     // reload and verify, that the loext value is used
-    mxComponent = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument");
+    mxComponent = loadFromDesktop(maTempFile.GetURL(), u"com.sun.star.text.TextDocument"_ustr);
     // verify properties
     uno::Reference<drawing::XShape> xShapeReload(getShape(0));
     lcl_assertSpecularityProperty("from ODF 1.3 extended", xShapeReload);
@@ -618,7 +618,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularity)
     // Save to ODF 1.3 strict and make sure it does not produce a validation error.
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
-    save("writer8");
+    save(u"writer8"_ustr);
 
     SetODFDefaultVersion(nCurrentODFVersion);
 }
@@ -629,7 +629,7 @@ bool lcl_getShapeSegments(uno::Sequence<drawing::EnhancedCustomShapeSegment>& rS
                           const uno::Reference<drawing::XShape>& xShape)
 {
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY_THROW);
-    uno::Any anotherAny = xShapeProps->getPropertyValue("CustomShapeGeometry");
+    uno::Any anotherAny = xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr);
     uno::Sequence<beans::PropertyValue> aCustomShapeGeometry;
     if (!(anotherAny >>= aCustomShapeGeometry))
         return false;
@@ -707,18 +707,18 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextRotationPlusPre)
     uno::Reference<drawing::XShape> xShape(getShape(0));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aGeomSeq;
-    xShapeProps->getPropertyValue("CustomShapeGeometry") >>= aGeomSeq;
+    xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeomSeq;
     auto aGeomVec(comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aGeomSeq));
-    aGeomVec.push_back(comphelper::makePropertyValue("TextRotateAngle", sal_Int32(45)));
+    aGeomVec.push_back(comphelper::makePropertyValue(u"TextRotateAngle"_ustr, sal_Int32(45)));
     aGeomSeq = comphelper::containerToSequence(aGeomVec);
-    xShapeProps->setPropertyValue("CustomShapeGeometry", uno::Any(aGeomSeq));
+    xShapeProps->setPropertyValue(u"CustomShapeGeometry"_ustr, uno::Any(aGeomSeq));
 
     // Save to ODF. Without the fix, a file format error was produced, because attribute
     // draw:text-rotate-angle was written twice, one from TextPreRotateAngle and the other from
     // TextRotateAngle.
     // This should already catch the format error, but does not, see tdf#149567
     // But reload catches it.
-    saveAndReload("writer8");
+    saveAndReload(u"writer8"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf156975_ThemeExport)
@@ -727,7 +727,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf156975_ThemeExport)
     // Without fix for tdf#156975 it was not written at all.
     // The test needs to be adapted, when themes are available in ODF.
 
-    mxComponent = loadFromDesktop("private:factory/sdraw");
+    mxComponent = loadFromDesktop(u"private:factory/sdraw"_ustr);
     // generate a theme to be sure we have got one and know the values
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XMasterPageTarget> xDrawPage(
@@ -752,13 +752,13 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf156975_ThemeExport)
     pTheme->setColorSet(pColorSet);
 
     uno::Reference<util::XTheme> xTheme = model::theme::createXTheme(pTheme);
-    xMasterPageProps->setPropertyValue("Theme", uno::Any(xTheme));
+    xMasterPageProps->setPropertyValue(u"Theme"_ustr, uno::Any(xTheme));
 
     // save as odg
-    save("draw8");
+    save(u"draw8"_ustr);
 
     // and check the markup.
-    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
     static constexpr OString sThemePath
         = "//office:master-styles/style:master-page/loext:theme"_ostr;
     assertXPath(pXmlDoc, sThemePath, 1);
@@ -770,12 +770,12 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf156975_ThemeExport)
 
     const OString sThemeColorPath = sThemeColorsPath + "/loext:color";
     assertXPath(pXmlDoc, sThemeColorPath, 12);
-    assertXPath(pXmlDoc, sThemeColorPath + "[3]", "name"_ostr, "dark2");
-    assertXPath(pXmlDoc, sThemeColorPath + "[3]", "color"_ostr, "#002200");
-    assertXPath(pXmlDoc, sThemeColorPath + "[9]", "name"_ostr, "accent5");
-    assertXPath(pXmlDoc, sThemeColorPath + "[9]", "color"_ostr, "#880088");
-    assertXPath(pXmlDoc, sThemeColorPath + "[12]", "name"_ostr, "followed-hyperlink");
-    assertXPath(pXmlDoc, sThemeColorPath + "[12]", "color"_ostr, "#b0b0b0");
+    assertXPath(pXmlDoc, sThemeColorPath + "[3]", "name"_ostr, u"dark2"_ustr);
+    assertXPath(pXmlDoc, sThemeColorPath + "[3]", "color"_ostr, u"#002200"_ustr);
+    assertXPath(pXmlDoc, sThemeColorPath + "[9]", "name"_ostr, u"accent5"_ustr);
+    assertXPath(pXmlDoc, sThemeColorPath + "[9]", "color"_ostr, u"#880088"_ustr);
+    assertXPath(pXmlDoc, sThemeColorPath + "[12]", "name"_ostr, u"followed-hyperlink"_ustr);
+    assertXPath(pXmlDoc, sThemeColorPath + "[12]", "color"_ostr, u"#b0b0b0"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf157018_ThemeImportDraw)
@@ -791,7 +791,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf157018_ThemeImportDraw)
     uno::Reference<beans::XPropertySet> xMasterpage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
 
     uno::Reference<util::XTheme> xTheme;
-    xMasterpage->getPropertyValue("Theme") >>= xTheme;
+    xMasterpage->getPropertyValue(u"Theme"_ustr) >>= xTheme;
     CPPUNIT_ASSERT(xTheme.is());
 
     // Then make sure it is the custom color theme
@@ -800,10 +800,10 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf157018_ThemeImportDraw)
     auto pTheme = pUnoTheme->getTheme();
     CPPUNIT_ASSERT(pTheme);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Custom"), pTheme->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"Custom"_ustr, pTheme->GetName());
     auto pColorSet = pTheme->getColorSet();
     CPPUNIT_ASSERT(pColorSet);
-    CPPUNIT_ASSERT_EQUAL(OUString("My Colors"), pColorSet->getName());
+    CPPUNIT_ASSERT_EQUAL(u"My Colors"_ustr, pColorSet->getName());
 
     // and test some colors
     CPPUNIT_ASSERT_EQUAL(Color(0xFFFF11), pColorSet->getColor(model::ThemeColorType::Light1));
@@ -819,7 +819,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, test_scene3d_ooxml_light)
     loadFromFile(u"Scene3d_LightRig_threePt.pptx");
 
     // Without fix this would have failed with validation error.
-    save("impress8");
+    save(u"impress8"_ustr);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

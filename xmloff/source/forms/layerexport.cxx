@@ -114,7 +114,7 @@ namespace xmloff
         if (!xSI.is())
             return false;
 
-        if (!xSI->supportsService("com.sun.star.form.Forms"))
+        if (!xSI->supportsService(u"com.sun.star.form.Forms"_ustr))
         {
             OSL_FAIL("OFormLayerXMLExport_Impl::impl_isFormPageContainingForms: invalid collection (is no com.sun.star.form.Forms)!");
             // nothing to do
@@ -464,7 +464,7 @@ namespace xmloff
 
         OUString lcl_findFreeControlId( const MapPropertySet2Map& _rAllPagesControlIds )
         {
-            OUString sControlId = "control";
+            OUString sControlId = u"control"_ustr;
 
             size_t nKnownControlCount = ::std::accumulate( _rAllPagesControlIds.begin(), _rAllPagesControlIds.end(), size_t(0), AccumulateSize() );
             sControlId += OUString::number( static_cast<sal_Int32>(nKnownControlCount) + 1 );
@@ -691,7 +691,7 @@ namespace xmloff
         {
             // create it for en-US (does not really matter, as we will specify a locale for every
             // concrete language to use)
-            Locale aLocale (  "en", "US", OUString() );
+            Locale aLocale (  u"en"_ustr, u"US"_ustr, OUString() );
             xFormatsSupplier = NumberFormatsSupplier::createWithLocale( m_rContext.getComponentContext(), aLocale );
             m_xControlNumberFormats = xFormatsSupplier->getNumberFormats();
         }

@@ -83,12 +83,12 @@ void XMLSectionSourceImportContext::startFastElement( sal_Int32 /*nElement*/,
         aFileLink.FileURL = GetImport().GetAbsoluteReference( sURL );
         aFileLink.FilterName = sFilterName;
 
-        rSectionPropertySet->setPropertyValue("FileLink", Any(aFileLink));
+        rSectionPropertySet->setPropertyValue(u"FileLink"_ustr, Any(aFileLink));
     }
 
     if (!sSectionName.isEmpty())
     {
-        rSectionPropertySet->setPropertyValue("LinkRegion", Any(sSectionName));
+        rSectionPropertySet->setPropertyValue(u"LinkRegion"_ustr, Any(sSectionName));
     }
 }
 

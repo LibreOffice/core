@@ -52,7 +52,7 @@ void SchXMLLegendContext::startFastElement( sal_Int32 /*nElement*/,
     {
         try
         {
-            xDocProp->setPropertyValue("HasLegend", uno::Any( true ) );
+            xDocProp->setPropertyValue(u"HasLegend"_ustr, uno::Any( true ) );
         }
         catch(const beans::UnknownPropertyException&)
         {
@@ -90,7 +90,7 @@ void SchXMLLegendContext::startFastElement( sal_Int32 /*nElement*/,
                 try
                 {
                     if( SchXMLEnumConverter::getLegendPositionConverter().importXML( aIter.toString(), aAny, GetImport().GetMM100UnitConverter() ) )
-                        xLegendProps->setPropertyValue("Alignment", aAny );
+                        xLegendProps->setPropertyValue(u"Alignment"_ustr, aAny );
                 }
                 catch(const beans::UnknownPropertyException&)
                 {
@@ -101,7 +101,7 @@ void SchXMLLegendContext::startFastElement( sal_Int32 /*nElement*/,
                 try
                 {
                     bOverlay = aIter.toBoolean();
-                    xLegendProps->setPropertyValue("Overlay", uno::Any(bOverlay));
+                    xLegendProps->setPropertyValue(u"Overlay"_ustr, uno::Any(bOverlay));
                 }
                 catch(const beans::UnknownPropertyException&)
                 {
@@ -150,7 +150,7 @@ void SchXMLLegendContext::startFastElement( sal_Int32 /*nElement*/,
     }
 
     if( bHasExpansion && nLegendExpansion!= chart::ChartLegendExpansion_CUSTOM )
-        xLegendProps->setPropertyValue("Expansion", uno::Any(nLegendExpansion) );
+        xLegendProps->setPropertyValue(u"Expansion"_ustr, uno::Any(nLegendExpansion) );
     else if( bHasHeight && bHasWidth )
         xLegendShape->setSize( aLegendSize );
 
@@ -158,7 +158,7 @@ void SchXMLLegendContext::startFastElement( sal_Int32 /*nElement*/,
         xLegendShape->setPosition( aLegendPos );
 
     // the fill style has the default "none" in XML, but "solid" in the model.
-    xLegendProps->setPropertyValue("FillStyle", uno::Any( drawing::FillStyle_NONE ));
+    xLegendProps->setPropertyValue(u"FillStyle"_ustr, uno::Any( drawing::FillStyle_NONE ));
 
     // set auto-styles for Legend
     mrImportHelper.FillAutoStyle(sAutoStyleName, xLegendProps);

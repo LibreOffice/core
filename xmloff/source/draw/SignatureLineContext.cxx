@@ -42,35 +42,35 @@ SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_Int32 /*nEl
 {
     Reference<beans::XPropertySet> xPropSet(rxShape, UNO_QUERY_THROW);
 
-    xPropSet->setPropertyValue("IsSignatureLine", Any(true));
+    xPropSet->setPropertyValue(u"IsSignatureLine"_ustr, Any(true));
 
-    xPropSet->setPropertyValue("SignatureLineId",
+    xPropSet->setPropertyValue(u"SignatureLineId"_ustr,
                                Any(xAttrList->getOptionalValue(XML_ELEMENT(LO_EXT, XML_ID))));
     xPropSet->setPropertyValue(
-        "SignatureLineSuggestedSignerName",
+        u"SignatureLineSuggestedSignerName"_ustr,
         Any(xAttrList->getOptionalValue(XML_ELEMENT(LO_EXT, XML_SUGGESTED_SIGNER_NAME))));
     xPropSet->setPropertyValue(
-        "SignatureLineSuggestedSignerTitle",
+        u"SignatureLineSuggestedSignerTitle"_ustr,
         Any(xAttrList->getOptionalValue(XML_ELEMENT(LO_EXT, XML_SUGGESTED_SIGNER_TITLE))));
     xPropSet->setPropertyValue(
-        "SignatureLineSuggestedSignerEmail",
+        u"SignatureLineSuggestedSignerEmail"_ustr,
         Any(xAttrList->getOptionalValue(XML_ELEMENT(LO_EXT, XML_SUGGESTED_SIGNER_EMAIL))));
     xPropSet->setPropertyValue(
-        "SignatureLineSigningInstructions",
+        u"SignatureLineSigningInstructions"_ustr,
         Any(xAttrList->getOptionalValue(XML_ELEMENT(LO_EXT, XML_SIGNING_INSTRUCTIONS))));
 
     bool bShowSignDate = xAttrList->getOptionalValue(XML_ELEMENT(LO_EXT, XML_SHOW_SIGN_DATE))
                          == GetXMLToken(XML_TRUE);
     bool bCanAddComment = xAttrList->getOptionalValue(XML_ELEMENT(LO_EXT, XML_CAN_ADD_COMMENT))
                           == GetXMLToken(XML_TRUE);
-    xPropSet->setPropertyValue("SignatureLineShowSignDate", Any(bShowSignDate));
-    xPropSet->setPropertyValue("SignatureLineCanAddComment", Any(bCanAddComment));
+    xPropSet->setPropertyValue(u"SignatureLineShowSignDate"_ustr, Any(bShowSignDate));
+    xPropSet->setPropertyValue(u"SignatureLineCanAddComment"_ustr, Any(bCanAddComment));
 
     // Save unsigned graphic (need it when exporting)
     Reference<XGraphic> xUnsignedGraphic;
-    xPropSet->getPropertyValue("Graphic") >>= xUnsignedGraphic;
+    xPropSet->getPropertyValue(u"Graphic"_ustr) >>= xUnsignedGraphic;
     if (xUnsignedGraphic.is())
-        xPropSet->setPropertyValue("SignatureLineUnsignedImage", Any(xUnsignedGraphic));
+        xPropSet->setPropertyValue(u"SignatureLineUnsignedImage"_ustr, Any(xUnsignedGraphic));
 
     Reference<XGraphic> xGraphic;
     try
@@ -121,9 +121,9 @@ SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_Int32 /*nEl
                 xGraphic = pSignatureInfo->InvalidSignatureLineImage;
             }
 
-            xPropSet->setPropertyValue("Graphic", Any(xGraphic));
+            xPropSet->setPropertyValue(u"Graphic"_ustr, Any(xGraphic));
         }
-        xPropSet->setPropertyValue("SignatureLineIsSigned", Any(bIsSigned));
+        xPropSet->setPropertyValue(u"SignatureLineIsSigned"_ustr, Any(bIsSigned));
     }
     catch (css::uno::Exception&)
     {

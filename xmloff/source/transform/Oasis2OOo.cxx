@@ -1434,7 +1434,7 @@ void XMLConfigItemTContext_Impl::EndElement()
             GetTransformer().GetPropertySet();
         if( rPropSet.is() )
         {
-            OUString aPropName("RedlineProtectionKey");
+            OUString aPropName(u"RedlineProtectionKey"_ustr);
             Reference< XPropertySetInfo > xPropSetInfo(
                         rPropSet->getPropertySetInfo() );
             if( xPropSetInfo.is() &&
@@ -1486,7 +1486,7 @@ void XMLTrackedChangesOASISTContext_Impl::StartElement(
         GetTransformer().GetPropertySet();
     if( rPropSet.is() )
     {
-        OUString aPropName("RedlineProtectionKey");
+        OUString aPropName(u"RedlineProtectionKey"_ustr);
         Reference< XPropertySetInfo > xPropSetInfo(
                     rPropSet->getPropertySetInfo() );
         if( xPropSetInfo.is() &&
@@ -1867,7 +1867,7 @@ Oasis2OOoTransformer::~Oasis2OOoTransformer() noexcept
 // XServiceInfo
 OUString SAL_CALL Oasis2OOoTransformer::getImplementationName()
 {
-    return "com.sun.star.comp.Oasis2OOoTransformer";
+    return u"com.sun.star.comp.Oasis2OOoTransformer"_ustr;
 }
 
 sal_Bool SAL_CALL Oasis2OOoTransformer::supportsService( const OUString& ServiceName )

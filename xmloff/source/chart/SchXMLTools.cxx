@@ -370,7 +370,7 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
         try
         {
             bool bVal = false;
-            uno::Any any = xPropSet->getPropertyValue("UseInternalDataProvider");
+            uno::Any any = xPropSet->getPropertyValue(u"UseInternalDataProvider"_ustr);
             if (any >>= bVal)
                 bUseInternal = bVal;
         }
@@ -614,8 +614,8 @@ void exportFormattedText( SvXMLExport& rExport, const uno::Reference< beans::XPr
     if (xTitleProps.is())
     {
         OUString aTitle;
-        if ((xTitleProps->getPropertyValue("String") >>= aTitle) && !aTitle.isEmpty())
-            xTitleProps->getPropertyValue("FormattedStrings") >>= xFormattedTitle;
+        if ((xTitleProps->getPropertyValue(u"String"_ustr) >>= aTitle) && !aTitle.isEmpty())
+            xTitleProps->getPropertyValue(u"FormattedStrings"_ustr) >>= xFormattedTitle;
     }
 
     if (xFormattedTitle.hasElements())
@@ -650,7 +650,7 @@ void importFormattedText( SvXMLImport& rImport, const std::vector<std::pair<OUSt
 
     try
     {
-        if ((xTitleProp->getPropertyValue("FormattedStrings") >>= xFullTextTitle) &&
+        if ((xTitleProp->getPropertyValue(u"FormattedStrings"_ustr) >>= xFullTextTitle) &&
             xFullTextTitle.hasElements())
         {
             // these are the properties from the textshape object - needs to apply them
@@ -689,7 +689,7 @@ void importFormattedText( SvXMLImport& rImport, const std::vector<std::pair<OUSt
 
         uno::Sequence< Reference< chart2::XFormattedString > > aStringSeq =
             comphelper::containerToSequence(aStringVec);
-        xTitleProp->setPropertyValue("FormattedStrings", uno::Any(aStringSeq));
+        xTitleProp->setPropertyValue(u"FormattedStrings"_ustr, uno::Any(aStringSeq));
     }
     catch (const beans::UnknownPropertyException&)
     {

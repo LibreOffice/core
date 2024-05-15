@@ -225,7 +225,7 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
                 {
                     xResult.set(
                         xContext->getServiceManager()->createInstanceWithContext(
-                            "com.sun.star.chart2.DataSeries",
+                            u"com.sun.star.chart2.DataSeries"_ustr,
                             xContext ), uno::UNO_QUERY_THROW );
                 }
                 if( xResult.is() )
@@ -365,7 +365,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisImporter_get_implementation(uno::XComponentContext* pCtx,
                                                             uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return cppu::acquire(new SchXMLImport(pCtx, "SchXMLImport", SvXMLImportFlags::ALL));
+    return cppu::acquire(new SchXMLImport(pCtx, u"SchXMLImport"_ustr, SvXMLImportFlags::ALL));
 }
 
 // multiple storage version: one for content / styles / meta
@@ -374,21 +374,21 @@ extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisMetaImporter_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return cppu::acquire(new SchXMLImport(pCtx, "SchXMLImport.Meta", SvXMLImportFlags::META));
+    return cppu::acquire(new SchXMLImport(pCtx, u"SchXMLImport.Meta"_ustr, SvXMLImportFlags::META));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisStylesImporter_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return cppu::acquire(new SchXMLImport(pCtx, "SchXMLImport.Styles", SvXMLImportFlags::STYLES));
+    return cppu::acquire(new SchXMLImport(pCtx, u"SchXMLImport.Styles"_ustr, SvXMLImportFlags::STYLES));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisContentImporter_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return cppu::acquire(new SchXMLImport(pCtx, "SchXMLImport.Content",
+    return cppu::acquire(new SchXMLImport(pCtx, u"SchXMLImport.Content"_ustr,
                                           SvXMLImportFlags::CONTENT | SvXMLImportFlags::AUTOSTYLES
                                               | SvXMLImportFlags::FONTDECLS));
 }

@@ -102,7 +102,7 @@ void XMLGraphicsDefaultStyle::SetDefaults()
     if( !xFact.is() )
         return;
 
-    Reference< XPropertySet > xDefaults( xFact->createInstance( "com.sun.star.drawing.Defaults" ), UNO_QUERY );
+    Reference< XPropertySet > xDefaults( xFact->createInstance( u"com.sun.star.drawing.Defaults"_ustr ), UNO_QUERY );
     if( !xDefaults.is() )
         return;
                                             // SJ: #i114750#
@@ -125,11 +125,11 @@ void XMLGraphicsDefaultStyle::SetDefaults()
         xDefaults->setPropertyValue( sTextWordWrap, Any( bWordWrapDefault ) );
 
     if (GetImport().IsOOoXML()
-        && xInfo->hasPropertyByName("IsFollowingTextFlow"))
+        && xInfo->hasPropertyByName(u"IsFollowingTextFlow"_ustr))
     {
         // OOo 1.x only supported "true" so that is the more appropriate
         // default for OOoXML format documents.
-        xDefaults->setPropertyValue("IsFollowingTextFlow", uno::Any(true));
+        xDefaults->setPropertyValue(u"IsFollowingTextFlow"_ustr, uno::Any(true));
     }
 
     // NOTE: the only reason why it's legal to check "==" (not "<") against
@@ -159,7 +159,7 @@ void XMLGraphicsDefaultStyle::SetDefaults()
         {
             Color const nStroke(
                     bIsAOO4 ? Color(128, 128, 128) : COL_BLACK);
-            xDefaults->setPropertyValue("LineColor", Any(nStroke));
+            xDefaults->setPropertyValue(u"LineColor"_ustr, Any(nStroke));
         }
         Color const nFillColor( bIsAOO4
             ? Color(0xCF, 0xE7, 0xF5) : Color(153, 204, 255));
@@ -168,16 +168,16 @@ void XMLGraphicsDefaultStyle::SetDefaults()
         if (std::none_of(GetProperties().begin(), GetProperties().end(),
                          XMLPropertyByIndex(nFillIndex)))
         {
-            xDefaults->setPropertyValue("FillColor", Any(nFillColor));
+            xDefaults->setPropertyValue(u"FillColor"_ustr, Any(nFillColor));
         }
-        if (xInfo->hasPropertyByName("FillColor2"))
+        if (xInfo->hasPropertyByName(u"FillColor2"_ustr))
         {
             sal_Int32 const nFill2Index(pImpPrMap->GetEntryIndex(
                         XML_NAMESPACE_DRAW, u"secondary-fill-color", 0));
             if (std::none_of(GetProperties().begin(), GetProperties().end(),
                              XMLPropertyByIndex(nFill2Index)))
             {
-                xDefaults->setPropertyValue("FillColor2", Any(sal_Int32(nFillColor)));
+                xDefaults->setPropertyValue(u"FillColor2"_ustr, Any(sal_Int32(nFillColor)));
             }
         }
     }

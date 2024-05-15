@@ -135,15 +135,15 @@ bool XMLPageExport::exportStyle(
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
                           GetExport().EncodeStyleName( sName, &bEncoded ) );
 
-        if ( xPropSetInfo->hasPropertyByName( "Hidden" ) )
+        if ( xPropSetInfo->hasPropertyByName( u"Hidden"_ustr ) )
         {
-            uno::Any aValue = xPropSet->getPropertyValue( "Hidden" );
+            uno::Any aValue = xPropSet->getPropertyValue( u"Hidden"_ustr );
             bool bHidden = false;
             if ((aValue >>= bHidden) && bHidden
                 && GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
             {
-                GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_HIDDEN, "true");
-                GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_HIDDEN, "true"); // FIXME for compatibility
+                GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_HIDDEN, u"true"_ustr);
+                GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_HIDDEN, u"true"_ustr); // FIXME for compatibility
             }
         }
 
@@ -234,12 +234,12 @@ XMLPageExport::XMLPageExport(SvXMLExport & rExp)
         return;
 
     uno::Reference<beans::XPropertySet> xProps(
-        xFac->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+        xFac->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
     if (!xProps.is())
         return;
 
     bool bGutterAtTop{};
-    xProps->getPropertyValue("GutterAtTop") >>= bGutterAtTop;
+    xProps->getPropertyValue(u"GutterAtTop"_ustr) >>= bGutterAtTop;
     if (bGutterAtTop)
     {
         m_xPageMasterExportPropMapper->SetGutterAtTop(true);
@@ -278,7 +278,7 @@ void XMLPageExport::exportDefaultStyle()
     if (!xFactory.is())
         return;
 
-    Reference < XPropertySet > xPropSet (xFactory->createInstance ( "com.sun.star.text.Defaults" ), UNO_QUERY);
+    Reference < XPropertySet > xPropSet (xFactory->createInstance ( u"com.sun.star.text.Defaults"_ustr ), UNO_QUERY);
     if (!xPropSet.is())
         return;
 

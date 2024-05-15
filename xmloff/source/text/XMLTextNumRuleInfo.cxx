@@ -61,14 +61,14 @@ void XMLTextNumRuleInfo::Set(
     Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
 
     // check if this paragraph supports a numbering
-    if( !xPropSetInfo->hasPropertyByName( "NumberingLevel" ) )
+    if( !xPropSetInfo->hasPropertyByName( u"NumberingLevel"_ustr ) )
         return;
 
-    if( xPropSet->getPropertyValue( "NumberingLevel" ) >>= mnListLevel )
+    if( xPropSet->getPropertyValue( u"NumberingLevel"_ustr ) >>= mnListLevel )
     {
-        if( xPropSetInfo->hasPropertyByName( "NumberingRules" ) )
+        if( xPropSetInfo->hasPropertyByName( u"NumberingRules"_ustr ) )
         {
-            xPropSet->getPropertyValue( "NumberingRules" ) >>= mxNumRules;
+            xPropSet->getPropertyValue( u"NumberingRules"_ustr ) >>= mxNumRules;
         }
     }
     else
@@ -104,10 +104,10 @@ void XMLTextNumRuleInfo::Set(
             Reference<XPropertySet> xNumRulesProps(mxNumRules, UNO_QUERY);
             if ( xNumRulesProps.is() &&
                  xNumRulesProps->getPropertySetInfo()->
-                                    hasPropertyByName( "NumberingIsOutline" ) )
+                                    hasPropertyByName( u"NumberingIsOutline"_ustr ) )
             {
                 bool bIsOutline = false;
-                xNumRulesProps->getPropertyValue( "NumberingIsOutline" ) >>= bIsOutline;
+                xNumRulesProps->getPropertyValue( u"NumberingIsOutline"_ustr ) >>= bIsOutline;
                 bSuppressListStyle = bIsOutline;
             }
         }
@@ -131,23 +131,23 @@ void XMLTextNumRuleInfo::Set(
         SAL_WARN_IF( msNumRulesName.isEmpty(), "xmloff",
                     "<XMLTextNumRuleInfo::Set(..)> - no name found for numbering rules instance. Serious defect." );
 
-        if( xPropSetInfo->hasPropertyByName( "ListId" ) )
+        if( xPropSetInfo->hasPropertyByName( u"ListId"_ustr ) )
         {
-            xPropSet->getPropertyValue( "ListId" ) >>= msListId;
+            xPropSet->getPropertyValue( u"ListId"_ustr ) >>= msListId;
         }
 
         mbListIdIsDefault = bListIdIsDefault;
 
         mbContinueingPreviousSubTree = false;
-        if( xPropSetInfo->hasPropertyByName( "ContinueingPreviousSubTree" ) )
+        if( xPropSetInfo->hasPropertyByName( u"ContinueingPreviousSubTree"_ustr ) )
         {
-            xPropSet->getPropertyValue( "ContinueingPreviousSubTree" ) >>= mbContinueingPreviousSubTree;
+            xPropSet->getPropertyValue( u"ContinueingPreviousSubTree"_ustr ) >>= mbContinueingPreviousSubTree;
         }
 
         mbIsNumbered = true;
-        if( xPropSetInfo->hasPropertyByName( "NumberingIsNumber" ) )
+        if( xPropSetInfo->hasPropertyByName( u"NumberingIsNumber"_ustr ) )
         {
-            if( !(xPropSet->getPropertyValue( "NumberingIsNumber" ) >>= mbIsNumbered ) )
+            if( !(xPropSet->getPropertyValue( u"NumberingIsNumber"_ustr ) >>= mbIsNumbered ) )
             {
                 OSL_FAIL( "numbered paragraph without number info" );
                 mbIsNumbered = false;
@@ -156,13 +156,13 @@ void XMLTextNumRuleInfo::Set(
 
         if( mbIsNumbered )
         {
-            if( xPropSetInfo->hasPropertyByName( "ParaIsNumberingRestart" ) )
+            if( xPropSetInfo->hasPropertyByName( u"ParaIsNumberingRestart"_ustr ) )
             {
-                xPropSet->getPropertyValue( "ParaIsNumberingRestart" ) >>= mbIsRestart;
+                xPropSet->getPropertyValue( u"ParaIsNumberingRestart"_ustr ) >>= mbIsRestart;
             }
-            if( xPropSetInfo->hasPropertyByName( "NumberingStartValue" ) )
+            if( xPropSetInfo->hasPropertyByName( u"NumberingStartValue"_ustr ) )
             {
-                xPropSet->getPropertyValue( "NumberingStartValue" ) >>= mnListStartValue;
+                xPropSet->getPropertyValue( u"NumberingStartValue"_ustr ) >>= mnListStartValue;
             }
         }
 
@@ -185,9 +185,9 @@ void XMLTextNumRuleInfo::Set(
 
         msListLabelString.clear();
         if ( bExportTextNumberElement &&
-             xPropSetInfo->hasPropertyByName( "ListLabelString" ) )
+             xPropSetInfo->hasPropertyByName( u"ListLabelString"_ustr ) )
         {
-            xPropSet->getPropertyValue( "ListLabelString" ) >>= msListLabelString;
+            xPropSet->getPropertyValue( u"ListLabelString"_ustr ) >>= msListLabelString;
         }
 
         // paragraph's list level range is [0..9] representing list levels [1..10]

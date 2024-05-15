@@ -145,13 +145,13 @@ class XMLTextListAutoStylePool_Impl : public o3tl::sorted_vector<std::unique_ptr
 
 XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
     m_rExport( rExp ),
-    m_sPrefix( "L" ),
+    m_sPrefix( u"L"_ustr ),
     m_pPool( new XMLTextListAutoStylePool_Impl ),
     m_nName( 0 )
 {
     Reference<ucb::XAnyCompareFactory> xCompareFac( rExp.GetModel(), uno::UNO_QUERY );
     if( xCompareFac.is() )
-        mxNumRuleCompare = xCompareFac->createAnyCompareByName( "NumberingRules" );
+        mxNumRuleCompare = xCompareFac->createAnyCompareByName( u"NumberingRules"_ustr );
     SvXMLExportFlags nExportFlags = m_rExport.getExportFlags();
     bool bStylesOnly = (nExportFlags & SvXMLExportFlags::STYLES) && !(nExportFlags & SvXMLExportFlags::CONTENT);
     if( bStylesOnly )

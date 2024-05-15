@@ -632,14 +632,14 @@ void XMLPageMasterExportPropMapper::ContextFilter(
 
     if (pPrint)
     {
-        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_ANNOTATIONS), "PrintAnnotations", rPropSet);
-        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_CHARTS), "PrintCharts", rPropSet);
-        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_DRAWING), "PrintDrawing", rPropSet);
-        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_FORMULAS), "PrintFormulas", rPropSet);
-        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_GRID), "PrintGrid", rPropSet);
-        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_HEADERS), "PrintHeaders", rPropSet);
-        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_OBJECTS), "PrintObjects", rPropSet);
-        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_ZEROVALUES), "PrintZeroValues", rPropSet);
+        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_ANNOTATIONS), u"PrintAnnotations"_ustr, rPropSet);
+        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_CHARTS), u"PrintCharts"_ustr, rPropSet);
+        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_DRAWING), u"PrintDrawing"_ustr, rPropSet);
+        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_FORMULAS), u"PrintFormulas"_ustr, rPropSet);
+        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_GRID), u"PrintGrid"_ustr, rPropSet);
+        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_HEADERS), u"PrintHeaders"_ustr, rPropSet);
+        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_OBJECTS), u"PrintObjects"_ustr, rPropSet);
+        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_ZEROVALUES), u"PrintZeroValues"_ustr, rPropSet);
     }
 
     SvXMLExportPropertyMapper::ContextFilter(bEnableFoFontFamily, rPropState, rPropSet);

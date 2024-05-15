@@ -75,8 +75,8 @@ void XMLFootnoteImportContext::startFastElement(
 
     Reference<XInterface> xIfc = xFactory->createInstance(
         bIsEndnote ?
-        OUString("com.sun.star.text.Endnote") :
-        OUString("com.sun.star.text.Footnote") );
+        u"com.sun.star.text.Endnote"_ustr :
+        u"com.sun.star.text.Footnote"_ustr );
 
     // attach footnote to document
     Reference<XTextContent> xTextContent(xIfc, UNO_QUERY);
@@ -89,7 +89,7 @@ void XMLFootnoteImportContext::startFastElement(
         {
             // get ID ...
             Reference<XPropertySet> xPropertySet(xTextContent, UNO_QUERY);
-            Any aAny =xPropertySet->getPropertyValue("ReferenceId");
+            Any aAny =xPropertySet->getPropertyValue(u"ReferenceId"_ustr);
             sal_Int16 nID = 0;
             aAny >>= nID;
 

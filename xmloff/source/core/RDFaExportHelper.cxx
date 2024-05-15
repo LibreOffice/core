@@ -162,7 +162,7 @@ RDFaExportHelper::AddRDFa(
         OUStringBuffer property;
         ::comphelper::intersperse(curies.begin(), curies.end(),
             ::comphelper::OUStringBufferAppender(property),
-            OUString(" "));
+            u" "_ustr);
 
         m_rExport.AddAttribute(XML_NAMESPACE_XHTML, token::XML_PROPERTY,
             property.makeStringAndClear());

@@ -127,7 +127,7 @@ XMLTextImportHelper::MakeBackpatcherImpl()
 
 static OUString GetSequenceNumber()
 {
-    return "SequenceNumber";
+    return u"SequenceNumber"_ustr;
 }
 
 
@@ -169,7 +169,7 @@ XMLPropertyBackpatcher<OUString>& XMLTextImportHelper::GetSequenceNameBP()
     if (!m_xBackpatcherImpl->m_pSequenceNameBackpatcher)
     {
         m_xBackpatcherImpl->m_pSequenceNameBackpatcher.reset(
-            new XMLPropertyBackpatcher<OUString>("SourceName"));
+            new XMLPropertyBackpatcher<OUString>(u"SourceName"_ustr));
     }
     return *m_xBackpatcherImpl->m_pSequenceNameBackpatcher;
 }

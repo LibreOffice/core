@@ -51,7 +51,7 @@ XMLThemeContext::~XMLThemeContext()
         uno::Reference<beans::XPropertySet> xPropertySet(m_xObjectWithThemeProperty,
                                                          uno::UNO_QUERY);
         auto xTheme = model::theme::createXTheme(mpTheme);
-        xPropertySet->setPropertyValue("Theme", uno::Any(xTheme));
+        xPropertySet->setPropertyValue(u"Theme"_ustr, uno::Any(xTheme));
     }
 }
 

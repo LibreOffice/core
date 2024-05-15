@@ -882,7 +882,7 @@ void XMLEnhancedCustomShapeContext::startFastElement(
     sal_Int32               nAttrNumber;
     std::optional<std::string_view> oSpecularityValue; // for postpone extrusion-specularity
     std::optional<OUString> oPathValue; // for postpone GetEnhancedPath;
-    OUString sType("non-primitive"); // default in ODF
+    OUString sType(u"non-primitive"_ustr); // default in ODF
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
         switch( EASGet( aIter.getToken() ) )

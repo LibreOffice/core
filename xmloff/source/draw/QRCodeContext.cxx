@@ -76,7 +76,7 @@ QRCodeContext::QRCodeContext(SvXMLImport& rImport, sal_Int32 /*nElement*/,
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
-    xPropSet->setPropertyValue("BarCodeProperties", Any(aBarCode));
+    xPropSet->setPropertyValue(u"BarCodeProperties"_ustr, Any(aBarCode));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

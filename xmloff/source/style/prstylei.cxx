@@ -75,13 +75,13 @@ namespace
         static const OldFillStyleDefinitionSet theSet = []()
             {
                 OldFillStyleDefinitionSet aSet;
-                aSet.insert("BackColorRGB");
-                aSet.insert("BackTransparent");
-                aSet.insert("BackColorTransparency");
-                aSet.insert("BackGraphic");
-                aSet.insert("BackGraphicFilter");
-                aSet.insert("BackGraphicLocation");
-                aSet.insert("BackGraphicTransparency");
+                aSet.insert(u"BackColorRGB"_ustr);
+                aSet.insert(u"BackTransparent"_ustr);
+                aSet.insert(u"BackColorTransparency"_ustr);
+                aSet.insert(u"BackGraphic"_ustr);
+                aSet.insert(u"BackGraphicFilter"_ustr);
+                aSet.insert(u"BackGraphicLocation"_ustr);
+                aSet.insert(u"BackGraphicTransparency"_ustr);
                 return aSet;
             }();
         return theSet;
@@ -91,13 +91,13 @@ namespace
         static const OldFillStyleDefinitionSet theSet = []()
             {
                 OldFillStyleDefinitionSet aSet;
-                aSet.insert("HeaderBackColorRGB");
-                aSet.insert("HeaderBackTransparent");
-                aSet.insert("HeaderBackColorTransparency");
-                aSet.insert("HeaderBackGraphic");
-                aSet.insert("HeaderBackGraphicFilter");
-                aSet.insert("HeaderBackGraphicLocation");
-                aSet.insert("HeaderBackGraphicTransparency");
+                aSet.insert(u"HeaderBackColorRGB"_ustr);
+                aSet.insert(u"HeaderBackTransparent"_ustr);
+                aSet.insert(u"HeaderBackColorTransparency"_ustr);
+                aSet.insert(u"HeaderBackGraphic"_ustr);
+                aSet.insert(u"HeaderBackGraphicFilter"_ustr);
+                aSet.insert(u"HeaderBackGraphicLocation"_ustr);
+                aSet.insert(u"HeaderBackGraphicTransparency"_ustr);
                 return aSet;
             }();
         return theSet;
@@ -107,13 +107,13 @@ namespace
         static const OldFillStyleDefinitionSet theSet = []()
             {
                 OldFillStyleDefinitionSet aSet;
-                aSet.insert("FooterBackColorRGB");
-                aSet.insert("FooterBackTransparent");
-                aSet.insert("FooterBackColorTransparency");
-                aSet.insert("FooterBackGraphic");
-                aSet.insert("FooterBackGraphicFilter");
-                aSet.insert("FooterBackGraphicLocation");
-                aSet.insert("FooterBackGraphicTransparency");
+                aSet.insert(u"FooterBackColorRGB"_ustr);
+                aSet.insert(u"FooterBackTransparent"_ustr);
+                aSet.insert(u"FooterBackColorTransparency"_ustr);
+                aSet.insert(u"FooterBackGraphic"_ustr);
+                aSet.insert(u"FooterBackGraphicFilter"_ustr);
+                aSet.insert(u"FooterBackGraphicLocation"_ustr);
+                aSet.insert(u"FooterBackGraphicTransparency"_ustr);
                 return aSet;
             }();
         return theSet;
@@ -125,11 +125,11 @@ namespace
                 OldFillStyleDefinitionSet aSet;
                 // Caution: here it is *not* 'ParaBackColorRGB' as it should be, but indeed
                 // 'ParaBackColor' is used, see aXMLParaPropMap definition (line 313)
-                aSet.insert("ParaBackColor");
-                aSet.insert("ParaBackTransparent");
-                aSet.insert("ParaBackGraphicLocation");
-                aSet.insert("ParaBackGraphicFilter");
-                aSet.insert("ParaBackGraphic");
+                aSet.insert(u"ParaBackColor"_ustr);
+                aSet.insert(u"ParaBackTransparent"_ustr);
+                aSet.insert(u"ParaBackGraphicLocation"_ustr);
+                aSet.insert(u"ParaBackGraphicFilter"_ustr);
+                aSet.insert(u"ParaBackGraphic"_ustr);
 
                 // These are not used in aXMLParaPropMap definition, thus not needed here
                 // aSet.insert("ParaBackColorTransparency");
@@ -266,7 +266,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
     if(bTakeCareOfDrawingLayerFillStyle)
     {
         // check if new FillStyles are used and if so mark old ones with -1
-        static OUString s_FillStyle("FillStyle");
+        static OUString s_FillStyle(u"FillStyle"_ustr);
 
         if(doNewDrawingLayerFillStyleDefinitionsExist(s_FillStyle))
         {
@@ -333,8 +333,8 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
                     Sequence< OUString > aPropNames
                     {
                         (GetFamily() == XmlStyleFamily::TEXT_PARAGRAPH)?
-                        OUString("ParaAutoStyleName"):
-                        OUString("CharAutoStyleName")
+                        u"ParaAutoStyleName"_ustr:
+                        u"CharAutoStyleName"_ustr
                     };
                     Sequence< Any > aAny = xAutoStyle->getPropertyValues( aPropNames );
                     if( aAny.hasElements() )
@@ -520,20 +520,20 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
             aLinked = GetImport().GetStyleDisplayName(XmlStyleFamily::TEXT_PARAGRAPH, aLinked);
         }
     }
-    if (!aLinked.isEmpty() && xPropSetInfo->hasPropertyByName("LinkStyle"))
+    if (!aLinked.isEmpty() && xPropSetInfo->hasPropertyByName(u"LinkStyle"_ustr))
     {
-        uno::Any aAny = xPropSet->getPropertyValue("LinkStyle");
+        uno::Any aAny = xPropSet->getPropertyValue(u"LinkStyle"_ustr);
         OUString aCurrentLinked;
         aAny >>= aCurrentLinked;
         if (aCurrentLinked != aLinked)
         {
-            xPropSet->setPropertyValue("LinkStyle", uno::Any(aLinked));
+            xPropSet->setPropertyValue(u"LinkStyle"_ustr, uno::Any(aLinked));
         }
     }
 
-    if ( xPropSetInfo->hasPropertyByName( "Hidden" ) )
+    if ( xPropSetInfo->hasPropertyByName( u"Hidden"_ustr ) )
     {
-        xPropSet->setPropertyValue( "Hidden", uno::Any( IsHidden( ) ) );
+        xPropSet->setPropertyValue( u"Hidden"_ustr, uno::Any( IsHidden( ) ) );
     }
 
 }

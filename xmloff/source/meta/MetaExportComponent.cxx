@@ -80,7 +80,7 @@ ErrCode XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
         {
             static const ::comphelper::PropertyMapEntry aInfoMap[] =
             {
-                { OUString("Class"), 0,
+                { u"Class"_ustr, 0,
                     ::cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::MAYBEVOID, 0},
             };
@@ -88,7 +88,7 @@ ErrCode XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
                 ::comphelper::GenericPropertySet_CreateInstance(
                         new ::comphelper::PropertySetInfo( aInfoMap ) ) );
 
-            xConvPropSet->setPropertyValue("Class", uno::Any(GetXMLToken( XML_TEXT )) );
+            xConvPropSet->setPropertyValue(u"Class"_ustr, uno::Any(GetXMLToken( XML_TEXT )) );
 
             uno::Reference< beans::XPropertySet > xPropSet =
                 getExportInfo().is()
@@ -102,7 +102,7 @@ ErrCode XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
             // get filter component
             xDocHandler.set(
                 xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    "com.sun.star.comp.Oasis2OOoTransformer", aArgs, xContext),
+                    u"com.sun.star.comp.Oasis2OOoTransformer"_ustr, aArgs, xContext),
                 uno::UNO_QUERY_THROW );
 
             SetDocHandler( xDocHandler );
@@ -167,7 +167,7 @@ XMLMetaExportComponent_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new XMLMetaExportComponent(context, "XMLMetaExportComponent", SvXMLExportFlags::META|SvXMLExportFlags::OASIS));
+    return cppu::acquire(new XMLMetaExportComponent(context, u"XMLMetaExportComponent"_ustr, SvXMLExportFlags::META|SvXMLExportFlags::OASIS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
@@ -175,7 +175,7 @@ XMLMetaExportOOo_get_implementation(css::uno::XComponentContext* context,
                                     css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(
-        new XMLMetaExportComponent(context, "XMLMetaExportOOo", SvXMLExportFlags::META));
+        new XMLMetaExportComponent(context, u"XMLMetaExportOOo"_ustr, SvXMLExportFlags::META));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

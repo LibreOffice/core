@@ -219,9 +219,9 @@ namespace
         if(!xShape.is())
             return false;
         Reference<XServiceInfo> xServiceInfo(xTxtContent, UNO_QUERY);
-        return !xServiceInfo->supportsService("com.sun.star.text.TextFrame") &&
-               !xServiceInfo->supportsService("com.sun.star.text.TextGraphicObject") &&
-               !xServiceInfo->supportsService("com.sun.star.text.TextEmbeddedObject");
+        return !xServiceInfo->supportsService(u"com.sun.star.text.TextFrame"_ustr) &&
+               !xServiceInfo->supportsService(u"com.sun.star.text.TextGraphicObject"_ustr) &&
+               !xServiceInfo->supportsService(u"com.sun.star.text.TextEmbeddedObject"_ustr);
     };
 
     class BoundFrames
@@ -599,14 +599,14 @@ void FieldParamExporter::Export()
                 Reference< embed::XStorage > xTargetStg = m_pExport->GetTargetStorage();
                 if (xTargetStg.is()) {
                     Reference< embed::XStorage > xDstStg = xTargetStg->openStorageElement(
-                        "OLELinks", embed::ElementModes::WRITE );
+                        u"OLELinks"_ustr, embed::ElementModes::WRITE );
 
                     if ( !xDstStg->hasByName( sValue ) ) {
                         Reference< XStorageBasedDocument > xStgDoc (
                             m_pExport->GetModel( ), UNO_QUERY );
                         Reference< embed::XStorage > xDocStg = xStgDoc->getDocumentStorage();
                         Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement(
-                            "OLELinks", embed::ElementModes::READ );
+                            u"OLELinks"_ustr, embed::ElementModes::READ );
 
                         xOleStg->copyElementTo( sValue, xDstStg, sValue );
                         Reference< embed::XTransactedObject > xTransact( xDstStg, UNO_QUERY );
@@ -714,15 +714,15 @@ void XMLTextParagraphExport::Add( XmlStyleFamily nFamily,
                                                             UNO_QUERY );
                     if( xNumPropSet.is() &&
                         xNumPropSet->getPropertySetInfo()
-                                   ->hasPropertyByName( "IsAutomatic" ) )
+                                   ->hasPropertyByName( u"IsAutomatic"_ustr ) )
                     {
-                        bAdd = *o3tl::doAccess<bool>(xNumPropSet->getPropertyValue( "IsAutomatic" ));
+                        bAdd = *o3tl::doAccess<bool>(xNumPropSet->getPropertyValue( u"IsAutomatic"_ustr ));
                         // Check on outline style (#i73361#)
                         if ( bAdd &&
                              xNumPropSet->getPropertySetInfo()
-                                       ->hasPropertyByName( "NumberingIsOutline" ) )
+                                       ->hasPropertyByName( u"NumberingIsOutline"_ustr ) )
                         {
-                            bAdd = !(*o3tl::doAccess<bool>(xNumPropSet->getPropertyValue( "NumberingIsOutline" )));
+                            bAdd = !(*o3tl::doAccess<bool>(xNumPropSet->getPropertyValue( u"NumberingIsOutline"_ustr )));
                         }
                     }
                     else
@@ -822,15 +822,15 @@ void XMLTextParagraphExport::Add( XmlStyleFamily nFamily,
                                                         UNO_QUERY );
                 if( xNumPropSet.is() &&
                     xNumPropSet->getPropertySetInfo()
-                               ->hasPropertyByName( "IsAutomatic" ) )
+                               ->hasPropertyByName( u"IsAutomatic"_ustr ) )
                 {
-                    bAdd = *o3tl::doAccess<bool>(xNumPropSet->getPropertyValue( "IsAutomatic" ));
+                    bAdd = *o3tl::doAccess<bool>(xNumPropSet->getPropertyValue( u"IsAutomatic"_ustr ));
                     // Check on outline style (#i73361#)
                     if ( bAdd &&
                          xNumPropSet->getPropertySetInfo()
-                                   ->hasPropertyByName( "NumberingIsOutline" ) )
+                                   ->hasPropertyByName( u"NumberingIsOutline"_ustr ) )
                     {
-                        bAdd = !(*o3tl::doAccess<bool>(xNumPropSet->getPropertyValue( "NumberingIsOutline" )));
+                        bAdd = !(*o3tl::doAccess<bool>(xNumPropSet->getPropertyValue( u"NumberingIsOutline"_ustr )));
                     }
                 }
                 else
@@ -1347,7 +1347,7 @@ struct XMLTextParagraphExport::DocumentListNodes
             try
             {
                 // See SwXTextDocument::getPropertyValue
-                xPropSet->getPropertyValue("ODFExport_ListNodes") >>= nodes;
+                xPropSet->getPropertyValue(u"ODFExport_ListNodes"_ustr) >>= nodes;
             }
             catch (css::beans::UnknownPropertyException&)
             {
@@ -1383,7 +1383,7 @@ struct XMLTextParagraphExport::DocumentListNodes
             try
             {
                 // See SwXParagraph::Impl::GetPropertyValues_Impl
-                xPropSet->getPropertyValue("ODFExport_NodeIndex") >>= index;
+                xPropSet->getPropertyValue(u"ODFExport_NodeIndex"_ustr) >>= index;
             }
             catch (css::beans::UnknownPropertyException&)
             {
@@ -1782,7 +1782,7 @@ void XMLTextParagraphExport::RecordNodeIndex(const css::uno::Reference<css::text
         {
             sal_Int32 index = 0;
             // See SwXParagraph::Impl::GetPropertyValues_Impl
-            xPropSet->getPropertyValue("ODFExport_NodeIndex") >>= index;
+            xPropSet->getPropertyValue(u"ODFExport_NodeIndex"_ustr) >>= index;
             assert(std::find(maDocumentNodeOrder.begin(), maDocumentNodeOrder.end(), index)
                    == maDocumentNodeOrder.end());
             maDocumentNodeOrder.push_back(index);
@@ -2138,7 +2138,7 @@ void XMLTextParagraphExport::exportParagraph(
                                     Reference< XPropertySet > xNumRulePropSet( xNumRule, UNO_QUERY );
                                     OUString sOutlineName;
                                     xNumRulePropSet->getPropertyValue(
-                                        "Name" ) >>= sOutlineName;
+                                        u"Name"_ustr ) >>= sOutlineName;
                                     bAssignedtoOutlineStyle = ( sListStyleName == sOutlineName );
                                 }
                             }
@@ -2159,9 +2159,9 @@ void XMLTextParagraphExport::exportParagraph(
                                      xPropSet->getPropertySetInfo());
 
                         if (xPropSetInfo->
-                            hasPropertyByName("ParaIsNumberingRestart"))
+                            hasPropertyByName(u"ParaIsNumberingRestart"_ustr))
                         {
-                            xPropSet->getPropertyValue("ParaIsNumberingRestart")
+                            xPropSet->getPropertyValue(u"ParaIsNumberingRestart"_ustr)
                                 >>= bIsRestartNumbering;
                         }
 
@@ -2172,11 +2172,11 @@ void XMLTextParagraphExport::exportParagraph(
                                                      XML_TRUE);
 
                             if (xPropSetInfo->
-                                hasPropertyByName("NumberingStartValue"))
+                                hasPropertyByName(u"NumberingStartValue"_ustr))
                             {
                                 sal_Int32 nStartValue = 0;
 
-                                xPropSet->getPropertyValue("NumberingStartValue")
+                                xPropSet->getPropertyValue(u"NumberingStartValue"_ustr)
                                     >>= nStartValue;
 
                                 GetExport().
@@ -2196,7 +2196,7 @@ void XMLTextParagraphExport::exportParagraph(
             {
                 // ParaMarkerAutoStyleSpan is a hidden property, just to pass the autostyle here
                 // See SwXParagraph::Impl::GetPropertyValues_Impl
-                css::uno::Any aVal = xPropSet->getPropertyValue("ParaMarkerAutoStyleSpan");
+                css::uno::Any aVal = xPropSet->getPropertyValue(u"ParaMarkerAutoStyleSpan"_ustr);
                 if (auto xFakeSpan = aVal.query<css::beans::XPropertySet>())
                 {
                     if (bAutoStyles)
@@ -2429,9 +2429,9 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                         {
                             OUString sName;
                             Reference< css::container::XNameAccess > xParameters = xFormField->getParameters();
-                            if (xParameters.is() && xParameters->hasByName("Name"))
+                            if (xParameters.is() && xParameters->hasByName(u"Name"_ustr))
                             {
-                                const Any aValue = xParameters->getByName("Name");
+                                const Any aValue = xParameters->getByName(u"Name"_ustr);
                                 aValue >>= sName;
                             }
                             if (sName.isEmpty())
@@ -2492,9 +2492,9 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                         {
                             OUString sName;
                             Reference< css::container::XNameAccess > xParameters = xFormField->getParameters();
-                            if (xParameters.is() && xParameters->hasByName("Name"))
+                            if (xParameters.is() && xParameters->hasByName(u"Name"_ustr))
                             {
-                                const Any aValue = xParameters->getByName("Name");
+                                const Any aValue = xParameters->getByName(u"Name"_ustr);
                                 aValue >>= sName;
                             }
                             if (sName.isEmpty())
@@ -2644,7 +2644,7 @@ void XMLTextParagraphExport::exportTextLineBreak(
     };
 
     uno::Reference<text::XTextContent> xLineBreak;
-    xPropSet->getPropertyValue("LineBreak") >>= xLineBreak;
+    xPropSet->getPropertyValue(u"LineBreak"_ustr) >>= xLineBreak;
     if (!xLineBreak.is())
     {
         return;
@@ -2657,7 +2657,7 @@ void XMLTextParagraphExport::exportTextLineBreak(
     }
 
     sal_Int16 eClear{};
-    xLineBreakProps->getPropertyValue("Clear") >>= eClear;
+    xLineBreakProps->getPropertyValue(u"Clear"_ustr) >>= eClear;
     if (eClear >= 0 && o3tl::make_unsigned(eClear) < SAL_N_ELEMENTS(aLineBreakClears))
     {
         GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_CLEAR,
@@ -2713,20 +2713,20 @@ void XMLTextParagraphExport::exportTextMark(
     {
         Reference<XPropertySet> bkmkProps(rPropSet->getPropertyValue(rProperty), UNO_QUERY);
         Reference<XPropertySetInfo> bkmkPropInfo = bkmkProps->getPropertySetInfo();
-        OUString sHidden("BookmarkHidden");
+        OUString sHidden(u"BookmarkHidden"_ustr);
         if (bkmkPropInfo->hasPropertyByName(sHidden))
         {
             bool bHidden = false;
             bkmkProps->getPropertyValue(sHidden) >>= bHidden;
             if (bHidden)
             {
-                GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "hidden", "true");
-                OUString sCondition("BookmarkCondition");
+                GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, u"hidden"_ustr, u"true"_ustr);
+                OUString sCondition(u"BookmarkCondition"_ustr);
                 if (bkmkPropInfo->hasPropertyByName(sCondition))
                 {
                     OUString sBookmarkCondition;
                     bkmkProps->getPropertyValue(sCondition) >>= sBookmarkCondition;
-                    GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "condition", sBookmarkCondition);
+                    GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, u"condition"_ustr, sBookmarkCondition);
                 }
             }
         }
@@ -2746,7 +2746,7 @@ static bool lcl_txtpara_isBoundAsChar(
         const Reference < XPropertySetInfo > & rPropSetInfo )
 {
     bool bIsBoundAsChar = false;
-    OUString sAnchorType( "AnchorType"  );
+    OUString sAnchorType( u"AnchorType"_ustr  );
     if( rPropSetInfo->hasPropertyByName( sAnchorType ) )
     {
         TextContentAnchorType eAnchor;
@@ -2880,9 +2880,9 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
         rPropSet->getPropertyValue(gsRelativeHeight) >>= nRelHeight;
     }
     awt::Size aLayoutSize;
-    if ((nRelWidth > 0 || nRelHeight > 0) && xPropSetInfo->hasPropertyByName("LayoutSize"))
+    if ((nRelWidth > 0 || nRelHeight > 0) && xPropSetInfo->hasPropertyByName(u"LayoutSize"_ustr))
     {
-        rPropSet->getPropertyValue("LayoutSize") >>= aLayoutSize;
+        rPropSet->getPropertyValue(u"LayoutSize"_ustr) >>= aLayoutSize;
     }
 
     bool bUseLayoutSize = true;
@@ -3017,7 +3017,7 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
                                       sValue.makeStringAndClear() );
     }
 
-    OUString sZOrder( "ZOrder"  );
+    OUString sZOrder( u"ZOrder"_ustr  );
     if( xPropSetInfo->hasPropertyByName( sZOrder ) )
     {
         sal_Int32 nZIndex = 0;
@@ -3029,8 +3029,8 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
         }
     }
 
-    if (xPropSetInfo->hasPropertyByName("IsSplitAllowed")
-        && rPropSet->getPropertyValue("IsSplitAllowed").get<bool>())
+    if (xPropSetInfo->hasPropertyByName(u"IsSplitAllowed"_ustr)
+        && rPropSet->getPropertyValue(u"IsSplitAllowed"_ustr).get<bool>())
     {
         GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_MAY_BREAK_BETWEEN_PAGES, XML_TRUE);
     }
@@ -3406,7 +3406,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
     {
         // xlink:href
         uno::Reference<graphic::XGraphic> xGraphic;
-        rPropSet->getPropertyValue("Graphic") >>= xGraphic;
+        rPropSet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
 
         OUString sInternalURL;
         OUString sOutMimeType;
@@ -3444,7 +3444,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
                     SvtSaveOptions::ODFSVER_013 <= GetExport().getSaneDefaultVersion()
                         ? XML_NAMESPACE_DRAW
                         : XML_NAMESPACE_LO_EXT,
-                    "mime-type", sOutMimeType);
+                    u"mime-type"_ustr, sOutMimeType);
             }
         }
 
@@ -3463,7 +3463,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
         // replacement graphic for backwards compatibility, but
         // only for SVG and metafiles currently
         uno::Reference<graphic::XGraphic> xReplacementGraphic;
-        rPropSet->getPropertyValue("ReplacementGraphic") >>= xReplacementGraphic;
+        rPropSet->getPropertyValue(u"ReplacementGraphic"_ustr) >>= xReplacementGraphic;
 
         OUString sInternalURL;
         OUString sOutMimeType;
@@ -3496,7 +3496,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
                     SvtSaveOptions::ODFSVER_013 <= GetExport().getSaneDefaultVersion()
                         ? XML_NAMESPACE_DRAW
                         : XML_NAMESPACE_LO_EXT,
-                    "mime-type", sOutMimeType);
+                    u"mime-type"_ustr, sOutMimeType);
             }
         }
 
@@ -3542,7 +3542,7 @@ void XMLTextParagraphExport::exportEvents( const Reference < XPropertySet > & rP
     GetExport().GetEventExport().Export(xEventsSupp);
 
     // image map
-    if (rPropSet->getPropertySetInfo()->hasPropertyByName("ImageMap"))
+    if (rPropSet->getPropertySetInfo()->hasPropertyByName(u"ImageMap"_ustr))
         GetExport().GetImageMapExport().Export( rPropSet );
 }
 
@@ -3779,7 +3779,7 @@ void XMLTextParagraphExport::exportTextDeclarations()
 
     OUString sUrl;
     OUString sIndexAutoMarkFileURL(
-        "IndexAutoMarkFileURL");
+        u"IndexAutoMarkFileURL"_ustr);
     if (!xPropertySet->getPropertySetInfo()->hasPropertyByName(
         sIndexAutoMarkFileURL))
         return;
@@ -3889,7 +3889,7 @@ void XMLTextParagraphExport::exportRuby(
 
             // ruby style
             GetExport().CheckAttrList();
-            OUString sStyleName(Find(XmlStyleFamily::TEXT_RUBY, rPropSet, ""));
+            OUString sStyleName(Find(XmlStyleFamily::TEXT_RUBY, rPropSet, u""_ustr));
             SAL_WARN_IF(sStyleName.isEmpty(), "xmloff", "Can't find ruby style!");
             GetExport().AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_STYLE_NAME, sStyleName);
@@ -3948,7 +3948,7 @@ void XMLTextParagraphExport::exportMeta(
     }
 
     const Reference< XTextContent > xTextContent(
-            i_xPortion->getPropertyValue("InContentMetadata"), UNO_QUERY_THROW);
+            i_xPortion->getPropertyValue(u"InContentMetadata"_ustr), UNO_QUERY_THROW);
     const Reference< XEnumerationAccess > xEA( xTextContent, UNO_QUERY_THROW );
     const Reference< XEnumeration > xTextEnum( xEA->createEnumeration() );
 
@@ -3982,7 +3982,7 @@ void XMLTextParagraphExport::ExportContentControl(
         bExport = false;
     }
 
-    uno::Reference<text::XTextContent> xTextContent(xPortion->getPropertyValue("ContentControl"),
+    uno::Reference<text::XTextContent> xTextContent(xPortion->getPropertyValue(u"ContentControl"_ustr),
                                                     uno::UNO_QUERY_THROW);
     uno::Reference<container::XEnumerationAccess> xEA(xTextContent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XEnumeration> xTextEnum = xEA->createEnumeration();
@@ -3991,7 +3991,7 @@ void XMLTextParagraphExport::ExportContentControl(
     if (bExport)
     {
         bool bShowingPlaceHolder = false;
-        xPropertySet->getPropertyValue("ShowingPlaceHolder") >>= bShowingPlaceHolder;
+        xPropertySet->getPropertyValue(u"ShowingPlaceHolder"_ustr) >>= bShowingPlaceHolder;
         if (bShowingPlaceHolder)
         {
             OUStringBuffer aBuffer;
@@ -4001,7 +4001,7 @@ void XMLTextParagraphExport::ExportContentControl(
         }
 
         bool bCheckbox = false;
-        xPropertySet->getPropertyValue("Checkbox") >>= bCheckbox;
+        xPropertySet->getPropertyValue(u"Checkbox"_ustr) >>= bCheckbox;
         if (bCheckbox)
         {
             OUStringBuffer aBuffer;
@@ -4010,7 +4010,7 @@ void XMLTextParagraphExport::ExportContentControl(
         }
 
         bool bChecked = false;
-        xPropertySet->getPropertyValue("Checked") >>= bChecked;
+        xPropertySet->getPropertyValue(u"Checked"_ustr) >>= bChecked;
         if (bChecked)
         {
             OUStringBuffer aBuffer;
@@ -4019,21 +4019,21 @@ void XMLTextParagraphExport::ExportContentControl(
         }
 
         OUString aCheckedState;
-        xPropertySet->getPropertyValue("CheckedState") >>= aCheckedState;
+        xPropertySet->getPropertyValue(u"CheckedState"_ustr) >>= aCheckedState;
         if (!aCheckedState.isEmpty())
         {
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_CHECKED_STATE, aCheckedState);
         }
 
         OUString aUncheckedState;
-        xPropertySet->getPropertyValue("UncheckedState") >>= aUncheckedState;
+        xPropertySet->getPropertyValue(u"UncheckedState"_ustr) >>= aUncheckedState;
         if (!aUncheckedState.isEmpty())
         {
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_UNCHECKED_STATE, aUncheckedState);
         }
 
         bool bPicture = false;
-        xPropertySet->getPropertyValue("Picture") >>= bPicture;
+        xPropertySet->getPropertyValue(u"Picture"_ustr) >>= bPicture;
         if (bPicture)
         {
             OUStringBuffer aBuffer;
@@ -4043,7 +4043,7 @@ void XMLTextParagraphExport::ExportContentControl(
         }
 
         bool bDate = false;
-        xPropertySet->getPropertyValue("Date") >>= bDate;
+        xPropertySet->getPropertyValue(u"Date"_ustr) >>= bDate;
         if (bDate)
         {
             OUStringBuffer aBuffer;
@@ -4052,27 +4052,27 @@ void XMLTextParagraphExport::ExportContentControl(
         }
 
         OUString aDateFormat;
-        xPropertySet->getPropertyValue("DateFormat") >>= aDateFormat;
+        xPropertySet->getPropertyValue(u"DateFormat"_ustr) >>= aDateFormat;
         if (!aDateFormat.isEmpty())
         {
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_DATE_FORMAT, aDateFormat);
         }
 
         OUString aDateLanguage;
-        xPropertySet->getPropertyValue("DateLanguage") >>= aDateLanguage;
+        xPropertySet->getPropertyValue(u"DateLanguage"_ustr) >>= aDateLanguage;
         if (!aDateLanguage.isEmpty())
         {
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_DATE_RFC_LANGUAGE_TAG, aDateLanguage);
         }
         OUString aCurrentDate;
-        xPropertySet->getPropertyValue("CurrentDate") >>= aCurrentDate;
+        xPropertySet->getPropertyValue(u"CurrentDate"_ustr) >>= aCurrentDate;
         if (!aCurrentDate.isEmpty())
         {
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_CURRENT_DATE, aCurrentDate);
         }
 
         bool bPlainText = false;
-        xPropertySet->getPropertyValue("PlainText") >>= bPlainText;
+        xPropertySet->getPropertyValue(u"PlainText"_ustr) >>= bPlainText;
         if (bPlainText)
         {
             OUStringBuffer aBuffer;
@@ -4081,7 +4081,7 @@ void XMLTextParagraphExport::ExportContentControl(
         }
 
         bool bComboBox = false;
-        xPropertySet->getPropertyValue("ComboBox") >>= bComboBox;
+        xPropertySet->getPropertyValue(u"ComboBox"_ustr) >>= bComboBox;
         if (bComboBox)
         {
             OUStringBuffer aBuffer;
@@ -4090,7 +4090,7 @@ void XMLTextParagraphExport::ExportContentControl(
         }
 
         bool bDropDown = false;
-        xPropertySet->getPropertyValue("DropDown") >>= bDropDown;
+        xPropertySet->getPropertyValue(u"DropDown"_ustr) >>= bDropDown;
         if (bDropDown)
         {
             OUStringBuffer aBuffer;
@@ -4099,35 +4099,35 @@ void XMLTextParagraphExport::ExportContentControl(
         }
 
         OUString aAlias;
-        xPropertySet->getPropertyValue("Alias") >>= aAlias;
+        xPropertySet->getPropertyValue(u"Alias"_ustr) >>= aAlias;
         if (!aAlias.isEmpty())
         {
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_ALIAS, aAlias);
         }
 
         OUString aTag;
-        xPropertySet->getPropertyValue("Tag") >>= aTag;
+        xPropertySet->getPropertyValue(u"Tag"_ustr) >>= aTag;
         if (!aTag.isEmpty())
         {
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_TAG, aTag);
         }
 
         sal_Int32 nId = 0;
-        xPropertySet->getPropertyValue("Id") >>= nId;
+        xPropertySet->getPropertyValue(u"Id"_ustr) >>= nId;
         if (nId)
         {
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_ID, OUString::number(nId));
         }
 
         sal_uInt32 nTabIndex = 0;
-        if ((xPropertySet->getPropertyValue("TabIndex") >>= nTabIndex) && nTabIndex)
+        if ((xPropertySet->getPropertyValue(u"TabIndex"_ustr) >>= nTabIndex) && nTabIndex)
         {
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_TAB_INDEX,
                                      OUString::number(nTabIndex));
         }
 
         OUString aLock;
-        xPropertySet->getPropertyValue("Lock") >>= aLock;
+        xPropertySet->getPropertyValue(u"Lock"_ustr) >>= aLock;
         if (!aLock.isEmpty())
         {
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_LOCK, aLock);
@@ -4141,18 +4141,18 @@ void XMLTextParagraphExport::ExportContentControl(
     {
         // Export list items of dropdowns.
         uno::Sequence<beans::PropertyValues> aListItems;
-        xPropertySet->getPropertyValue("ListItems") >>= aListItems;
+        xPropertySet->getPropertyValue(u"ListItems"_ustr) >>= aListItems;
         for (const auto& rListItem : aListItems)
         {
             comphelper::SequenceAsHashMap aMap(rListItem);
-            auto it = aMap.find("DisplayText");
+            auto it = aMap.find(u"DisplayText"_ustr);
             OUString aValue;
             if (it != aMap.end() && (it->second >>= aValue) && !aValue.isEmpty())
             {
                 GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_DISPLAY_TEXT, aValue);
             }
 
-            it = aMap.find("Value");
+            it = aMap.find(u"Value"_ustr);
             if (it != aMap.end() && (it->second >>= aValue))
             {
                 GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_VALUE, aValue);

@@ -117,17 +117,17 @@ void XMLIndexUserSourceContext::ProcessAttribute(const sax_fastparser::FastAttri
 
 void XMLIndexUserSourceContext::endFastElement(sal_Int32 nElement)
 {
-    rIndexPropertySet->setPropertyValue("CreateFromEmbeddedObjects", css::uno::Any(bUseObjects));
-    rIndexPropertySet->setPropertyValue("CreateFromGraphicObjects", css::uno::Any(bUseGraphic));
-    rIndexPropertySet->setPropertyValue("UseLevelFromSource", css::uno::Any(bUseLevelFromSource));
-    rIndexPropertySet->setPropertyValue("CreateFromMarks", css::uno::Any(bUseMarks));
-    rIndexPropertySet->setPropertyValue("CreateFromTables", css::uno::Any(bUseTables));
-    rIndexPropertySet->setPropertyValue("CreateFromTextFrames", css::uno::Any(bUseFrames));
-    rIndexPropertySet->setPropertyValue("CreateFromLevelParagraphStyles", css::uno::Any(bUseLevelParagraphStyles));
+    rIndexPropertySet->setPropertyValue(u"CreateFromEmbeddedObjects"_ustr, css::uno::Any(bUseObjects));
+    rIndexPropertySet->setPropertyValue(u"CreateFromGraphicObjects"_ustr, css::uno::Any(bUseGraphic));
+    rIndexPropertySet->setPropertyValue(u"UseLevelFromSource"_ustr, css::uno::Any(bUseLevelFromSource));
+    rIndexPropertySet->setPropertyValue(u"CreateFromMarks"_ustr, css::uno::Any(bUseMarks));
+    rIndexPropertySet->setPropertyValue(u"CreateFromTables"_ustr, css::uno::Any(bUseTables));
+    rIndexPropertySet->setPropertyValue(u"CreateFromTextFrames"_ustr, css::uno::Any(bUseFrames));
+    rIndexPropertySet->setPropertyValue(u"CreateFromLevelParagraphStyles"_ustr, css::uno::Any(bUseLevelParagraphStyles));
 
     if( !sIndexName.isEmpty() )
     {
-        rIndexPropertySet->setPropertyValue("UserIndexName", css::uno::Any(sIndexName));
+        rIndexPropertySet->setPropertyValue(u"UserIndexName"_ustr, css::uno::Any(sIndexName));
     }
 
     XMLIndexSourceBaseContext::endFastElement(nElement);

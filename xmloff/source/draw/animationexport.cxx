@@ -552,9 +552,9 @@ void AnimationsExporterImpl::exportTransitionNode()
         return;
 
     sal_Int16 nTransition = 0;
-    mxPageProps->getPropertyValue("TransitionType") >>= nTransition;
+    mxPageProps->getPropertyValue(u"TransitionType"_ustr) >>= nTransition;
 
-    Any aSound( mxPageProps->getPropertyValue("Sound") );
+    Any aSound( mxPageProps->getPropertyValue(u"Sound"_ustr) );
     OUString sSoundURL;
     aSound >>= sSoundURL;
     bool bStopSound = false;
@@ -583,10 +583,10 @@ void AnimationsExporterImpl::exportTransitionNode()
         bool bDirection = false;
         sal_Int32 nFadeColor = 0;
         double fDuration = 0.0;
-        mxPageProps->getPropertyValue("TransitionSubtype") >>= nSubtype;
-        mxPageProps->getPropertyValue("TransitionDirection") >>= bDirection;
-        mxPageProps->getPropertyValue("TransitionFadeColor") >>= nFadeColor;
-        mxPageProps->getPropertyValue("TransitionDuration") >>= fDuration;
+        mxPageProps->getPropertyValue(u"TransitionSubtype"_ustr) >>= nSubtype;
+        mxPageProps->getPropertyValue(u"TransitionDirection"_ustr) >>= bDirection;
+        mxPageProps->getPropertyValue(u"TransitionFadeColor"_ustr) >>= nFadeColor;
+        mxPageProps->getPropertyValue(u"TransitionDuration"_ustr) >>= fDuration;
 
         ::sax::Converter::convertDouble( sTmp, fDuration );
         sTmp.append( 's');
@@ -625,7 +625,7 @@ void AnimationsExporterImpl::exportTransitionNode()
         mxExport->AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sSoundURL );
 
         bool bLoopSound = false;
-        mxPageProps->getPropertyValue("LoopSound") >>= bLoopSound;
+        mxPageProps->getPropertyValue(u"LoopSound"_ustr) >>= bLoopSound;
 
         if( bLoopSound )
             mxExport->AddAttribute( XML_NAMESPACE_SMIL, XML_REPEATCOUNT, XML_INDEFINITE );
@@ -641,14 +641,14 @@ void AnimationsExporterImpl::prepareTransitionNode()
     try
     {
         sal_Int16 nTransition = 0;
-        mxPageProps->getPropertyValue("TransitionType") >>= nTransition;
+        mxPageProps->getPropertyValue(u"TransitionType"_ustr) >>= nTransition;
 
         bool bStopSound = false;
         OUString sSoundURL;
 
         if( nTransition == 0 )
         {
-            Any aSound( mxPageProps->getPropertyValue("Sound") );
+            Any aSound( mxPageProps->getPropertyValue(u"Sound"_ustr) );
             aSound >>= sSoundURL;
 
             if( !(aSound >>= bStopSound) )
@@ -1120,7 +1120,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
             }
             else
             {
-                mxExport->AddAttribute( XML_NAMESPACE_SMIL, XML_ATTRIBUTENAME, "invalid" );
+                mxExport->AddAttribute( XML_NAMESPACE_SMIL, XML_ATTRIBUTENAME, u"invalid"_ustr );
             }
         }
 

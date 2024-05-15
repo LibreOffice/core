@@ -65,7 +65,7 @@ void SchXMLCalculationSettingsContext::endFastElement(sal_Int32 )
     if ( m_aNullDate.hasValue() )
     {
         Reference < XPropertySet > xPropSet ( GetImport().GetModel(), UNO_QUERY );
-        xPropSet->setPropertyValue ( "NullDate", m_aNullDate );
+        xPropSet->setPropertyValue ( u"NullDate"_ustr, m_aNullDate );
     }
 }
 

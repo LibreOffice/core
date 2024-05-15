@@ -85,7 +85,7 @@ BasicLibrariesElement::BasicLibrariesElement(SvXMLImport& rImport,
         // try the "BasicLibraries" property (old-style, for compatibility)
         Reference<beans::XPropertySet> xPSet(rxModel, UNO_QUERY);
         if (xPSet.is())
-            xPSet->getPropertyValue("BasicLibraries") >>= m_xLibContainer;
+            xPSet->getPropertyValue(u"BasicLibraries"_ustr) >>= m_xLibContainer;
     }
 
     SAL_WARN_IF(!m_xLibContainer.is(), "xmlscript.xmlflat",
@@ -93,7 +93,7 @@ BasicLibrariesElement::BasicLibrariesElement(SvXMLImport& rImport,
 
     if (!m_xLibContainer.is())
     {
-        throw xml::sax::SAXException("nowhere to import to", Reference<XInterface>(), Any());
+        throw xml::sax::SAXException(u"nowhere to import to"_ustr, Reference<XInterface>(), Any());
     }
 }
 
@@ -105,7 +105,7 @@ BasicLibrariesElement::createFastChildContext(sal_Int32 nElement,
 {
     if (!IsTokenInNamespace(nElement, XML_NAMESPACE_OOO))
     {
-        throw xml::sax::SAXException("illegal namespace!", Reference<XInterface>(), Any());
+        throw xml::sax::SAXException(u"illegal namespace!"_ustr, Reference<XInterface>(), Any());
     }
     else if ((nElement & TOKEN_MASK) == XML_LIBRARY_LINKED)
     {
@@ -174,7 +174,7 @@ BasicLibrariesElement::createFastChildContext(sal_Int32 nElement,
     }
     else
     {
-        throw xml::sax::SAXException("expected library-linked or library-embedded element!",
+        throw xml::sax::SAXException(u"expected library-linked or library-embedded element!"_ustr,
                                      Reference<XInterface>(), Any());
     }
 
@@ -207,7 +207,7 @@ Reference<XFastContextHandler> BasicEmbeddedLibraryElement::createFastChildConte
 {
     if (!IsTokenInNamespace(nElement, XML_NAMESPACE_OOO))
     {
-        throw xml::sax::SAXException("illegal namespace!", Reference<XInterface>(), Any());
+        throw xml::sax::SAXException(u"illegal namespace!"_ustr, Reference<XInterface>(), Any());
     }
     else if ((nElement & TOKEN_MASK) == XML_MODULE)
     {
@@ -218,7 +218,8 @@ Reference<XFastContextHandler> BasicEmbeddedLibraryElement::createFastChildConte
     }
     else
     {
-        throw xml::sax::SAXException("expected module element!", Reference<XInterface>(), Any());
+        throw xml::sax::SAXException(u"expected module element!"_ustr, Reference<XInterface>(),
+                                     Any());
     }
 
     return nullptr;
@@ -249,7 +250,7 @@ BasicModuleElement::createFastChildContext(sal_Int32 nElement,
 
     if (!IsTokenInNamespace(nElement, XML_NAMESPACE_OOO))
     {
-        throw xml::sax::SAXException("illegal namespace!", Reference<XInterface>(), Any());
+        throw xml::sax::SAXException(u"illegal namespace!"_ustr, Reference<XInterface>(), Any());
     }
     else if ((nElement & TOKEN_MASK) == XML_SOURCE_CODE)
     {
@@ -263,7 +264,7 @@ BasicModuleElement::createFastChildContext(sal_Int32 nElement,
     }
     else
     {
-        throw xml::sax::SAXException("expected source-code element!", Reference<XInterface>(),
+        throw xml::sax::SAXException(u"expected source-code element!"_ustr, Reference<XInterface>(),
                                      Any());
     }
 

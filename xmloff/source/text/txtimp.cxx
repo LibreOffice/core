@@ -648,34 +648,34 @@ bool XMLTextImportHelper::IsDuplicateFrame(const OUString& sName, sal_Int32 nX, 
             xOtherFrame.set(m_xImpl->m_xObjects->getByName(sName), uno::UNO_QUERY);
 
         Reference< XPropertySetInfo > xPropSetInfo = xOtherFrame->getPropertySetInfo();
-        if(xPropSetInfo->hasPropertyByName("Width"))
+        if(xPropSetInfo->hasPropertyByName(u"Width"_ustr))
         {
             sal_Int32 nOtherWidth = 0;
-            xOtherFrame->getPropertyValue("Width") >>= nOtherWidth;
+            xOtherFrame->getPropertyValue(u"Width"_ustr) >>= nOtherWidth;
             if(nWidth != nOtherWidth)
                 return false;
         }
 
-        if (xPropSetInfo->hasPropertyByName("Height"))
+        if (xPropSetInfo->hasPropertyByName(u"Height"_ustr))
         {
             sal_Int32 nOtherHeight = 0;
-            xOtherFrame->getPropertyValue("Height") >>= nOtherHeight;
+            xOtherFrame->getPropertyValue(u"Height"_ustr) >>= nOtherHeight;
             if (nHeight != nOtherHeight)
                 return false;
         }
 
-        if (xPropSetInfo->hasPropertyByName("HoriOrientPosition"))
+        if (xPropSetInfo->hasPropertyByName(u"HoriOrientPosition"_ustr))
         {
             sal_Int32 nOtherX = 0;
-            xOtherFrame->getPropertyValue("HoriOrientPosition") >>= nOtherX;
+            xOtherFrame->getPropertyValue(u"HoriOrientPosition"_ustr) >>= nOtherX;
             if (nX != nOtherX)
                 return false;
         }
 
-        if (xPropSetInfo->hasPropertyByName("VertOrientPosition"))
+        if (xPropSetInfo->hasPropertyByName(u"VertOrientPosition"_ustr))
         {
             sal_Int32 nOtherY = 0;
-            xOtherFrame->getPropertyValue("VertOrientPosition") >>= nOtherY;
+            xOtherFrame->getPropertyValue(u"VertOrientPosition"_ustr) >>= nOtherY;
             if (nY != nOtherY)
                 return false;
         }
@@ -794,7 +794,7 @@ void XMLTextImportHelper::DeleteParagraph()
         if (m_xImpl->m_xCursor->goLeft( 1, true ))
         {
             m_xImpl->m_xText->insertString(m_xImpl->m_xCursorAsRange,
-                                           "", true);
+                                           u""_ustr, true);
         }
     }
 }
@@ -1043,7 +1043,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     if( !sStyleName.isEmpty() )
     {
         sStyleName = rImport.GetStyleDisplayName( nFamily, sStyleName );
-        const OUString rPropName = bPara ? OUString("ParaStyleName") : OUString("CharStyleName");
+        const OUString rPropName = bPara ? u"ParaStyleName"_ustr : u"CharStyleName"_ustr;
         const Reference < XNameContainer > & rStyles = bPara
             ? m_xImpl->m_xParaStyles
             : m_xImpl->m_xTextStyles;
@@ -1272,9 +1272,9 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                                 XmlStyleFamily::TEXT_TEXT,
                                 pStyle->GetDropCapStyleName()) );
             if (m_xImpl->m_xTextStyles->hasByName(sDisplayName) &&
-                xPropSetInfo->hasPropertyByName("DropCapCharStyleName"))
+                xPropSetInfo->hasPropertyByName(u"DropCapCharStyleName"_ustr))
             {
-                xPropSet->setPropertyValue("DropCapCharStyleName", Any(sDisplayName));
+                xPropSet->setPropertyValue(u"DropCapCharStyleName"_ustr, Any(sDisplayName));
             }
         }
 
@@ -1286,7 +1286,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             {
                 uno::Reference<beans::XPropertySet> const xTmp(
                     m_xImpl->m_xServiceFactory->createInstance(
-                        "com.sun.star.text.TextField.CombinedCharacters"), UNO_QUERY);
+                        u"com.sun.star.text.TextField.CombinedCharacters"_ustr), UNO_QUERY);
                 if( xTmp.is() )
                 {
                     // fix cursor if larger than possible for
@@ -1299,7 +1299,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                     }
 
                     // set field value (the combined character string)
-                    xTmp->setPropertyValue("Content",
+                    xTmp->setPropertyValue(u"Content"_ustr,
                         Any(rCursor->getString()));
 
                     // insert the field over it's original text
@@ -1369,13 +1369,13 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             if (!bOutlineContentVisible)
             {
                 uno::Sequence<beans::PropertyValue> aGrabBag;
-                xPropSet->getPropertyValue("ParaInteropGrabBag") >>= aGrabBag;
+                xPropSet->getPropertyValue(u"ParaInteropGrabBag"_ustr) >>= aGrabBag;
                 sal_Int32 length = aGrabBag.getLength();
                 aGrabBag.realloc(length + 1);
                 auto pGrabBag = aGrabBag.getArray();
                 pGrabBag[length].Name = "OutlineContentVisibleAttr";
                 pGrabBag[length].Value <<= bool(bOutlineContentVisible);
-                xPropSet->setPropertyValue("ParaInteropGrabBag", uno::Any(aGrabBag));
+                xPropSet->setPropertyValue(u"ParaInteropGrabBag"_ustr, uno::Any(aGrabBag));
             }
             // RFE: inserting headings into text documents (#i70748#)
             if ( bApplyOutlineLevelAsListLevel )
@@ -1545,7 +1545,7 @@ void XMLTextImportHelper::SetOutlineStyles( bool bSetEmptyLevels )
     {
         Reference<XPropertySet> xChapterNumRule(
             m_xImpl->m_xChapterNumbering, UNO_QUERY);
-        xChapterNumRule->getPropertyValue("Name") >>= sOutlineStyleName;
+        xChapterNumRule->getPropertyValue(u"Name"_ustr) >>= sOutlineStyleName;
     }
 
     const sal_Int32 nCount = m_xImpl->m_xChapterNumbering->getCount();
@@ -1582,7 +1582,7 @@ void XMLTextImportHelper::SetOutlineStyles( bool bSetEmptyLevels )
                                 m_xImpl->m_xOutlineStylesCandidates[i][j],
                                 m_xImpl->m_xParaStyles,
                                 GetXMLImport(),
-                                "NumberingStyleName",
+                                u"NumberingStyleName"_ustr,
                                 sOutlineStyleName))
                         {
                             sChosenStyles[i] =
@@ -1701,7 +1701,7 @@ void XMLTextImportHelper::SetRuby(
 {
     Reference<XPropertySet> xPropSet(rCursor, UNO_QUERY);
 
-    OUString sRubyText("RubyText");
+    OUString sRubyText(u"RubyText"_ustr);
 
     // if we have one Ruby property, we assume all of them are present
     if (!xPropSet.is() ||
@@ -1732,7 +1732,7 @@ void XMLTextImportHelper::SetRuby(
         if( (!sDisplayName.isEmpty()) &&
             m_xImpl->m_xTextStyles->hasByName( sDisplayName ))
         {
-            xPropSet->setPropertyValue("RubyCharStyleName", Any(sDisplayName));
+            xPropSet->setPropertyValue(u"RubyCharStyleName"_ustr, Any(sDisplayName));
         }
     }
 }
@@ -2189,7 +2189,7 @@ void XMLTextImportHelper::ConnectFrameChains(
         if (m_xImpl->m_xTextFrames.is()
             && m_xImpl->m_xTextFrames->hasByName(sNextFrmName))
         {
-            rFrmPropSet->setPropertyValue("ChainNextName",
+            rFrmPropSet->setPropertyValue(u"ChainNextName"_ustr,
                 Any(sNextFrmName));
         }
         else
@@ -2212,7 +2212,7 @@ void XMLTextImportHelper::ConnectFrameChains(
         {
             // The previous frame must exist, because it existing than
             // inserting the entry
-            rFrmPropSet->setPropertyValue("ChainPrevName", Any(*i));
+            rFrmPropSet->setPropertyValue(u"ChainPrevName"_ustr, Any(*i));
 
             i = m_xImpl->m_xPrevFrmNames->erase(i);
             j = m_xImpl->m_xNextFrmNames->erase(j);
@@ -2370,7 +2370,7 @@ void XMLTextImportHelper::SetOpenRedlineId( OUString const & rId)
 
 void XMLTextImportHelper::ResetOpenRedlineId()
 {
-    SetOpenRedlineId("");
+    SetOpenRedlineId(u""_ustr);
 }
 
 void
@@ -2417,26 +2417,26 @@ void XMLTextImportHelper::MapCrossRefHeadingFieldsHorribly()
     {
         uno::Reference<lang::XServiceInfo> const xFieldInfo(
                 xFields->nextElement(), uno::UNO_QUERY);
-        if (!xFieldInfo->supportsService("com.sun.star.text.textfield.GetReference"))
+        if (!xFieldInfo->supportsService(u"com.sun.star.text.textfield.GetReference"_ustr))
         {
             continue;
         }
         uno::Reference<beans::XPropertySet> const xField(
                 xFieldInfo, uno::UNO_QUERY);
         sal_uInt16 nType(0);
-        xField->getPropertyValue("ReferenceFieldSource") >>= nType;
+        xField->getPropertyValue(u"ReferenceFieldSource"_ustr) >>= nType;
         if (text::ReferenceFieldSource::BOOKMARK != nType)
         {
             continue;
         }
         OUString name;
-        xField->getPropertyValue("SourceName") >>= name;
+        xField->getPropertyValue(u"SourceName"_ustr) >>= name;
         auto const iter(m_xImpl->m_xCrossRefHeadingBookmarkMap->find(name));
         if (iter == m_xImpl->m_xCrossRefHeadingBookmarkMap->end())
         {
             continue;
         }
-        xField->setPropertyValue("SourceName", uno::Any(iter->second));
+        xField->setPropertyValue(u"SourceName"_ustr, uno::Any(iter->second));
     }
 }
 

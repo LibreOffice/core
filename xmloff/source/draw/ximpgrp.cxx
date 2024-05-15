@@ -75,7 +75,7 @@ void SdXMLGroupShapeContext::startFastElement (sal_Int32 /*nElement*/,
 {
     // create new group shape and add it to rShapes, use it
     // as base for the new group import
-    AddShape( "com.sun.star.drawing.GroupShape" );
+    AddShape( u"com.sun.star.drawing.GroupShape"_ustr );
 
     if(mxShape.is())
     {

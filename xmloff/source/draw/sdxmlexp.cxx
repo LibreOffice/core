@@ -132,33 +132,33 @@ ImpXMLEXPPageMasterInfo::ImpXMLEXPPageMasterInfo(
         Any aAny;
 
         Reference< beans::XPropertySetInfo > xPropsInfo( xPropSet->getPropertySetInfo() );
-        if( xPropsInfo.is() && xPropsInfo->hasPropertyByName("BorderBottom"))
+        if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(u"BorderBottom"_ustr))
         {
-            aAny = xPropSet->getPropertyValue("BorderBottom");
+            aAny = xPropSet->getPropertyValue(u"BorderBottom"_ustr);
             aAny >>= mnBorderBottom;
 
-            aAny = xPropSet->getPropertyValue("BorderLeft");
+            aAny = xPropSet->getPropertyValue(u"BorderLeft"_ustr);
             aAny >>= mnBorderLeft;
 
-            aAny = xPropSet->getPropertyValue("BorderRight");
+            aAny = xPropSet->getPropertyValue(u"BorderRight"_ustr);
             aAny >>= mnBorderRight;
 
-            aAny = xPropSet->getPropertyValue("BorderTop");
+            aAny = xPropSet->getPropertyValue(u"BorderTop"_ustr);
             aAny >>= mnBorderTop;
         }
 
-        if( xPropsInfo.is() && xPropsInfo->hasPropertyByName("Width"))
+        if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(u"Width"_ustr))
         {
-            aAny = xPropSet->getPropertyValue("Width");
+            aAny = xPropSet->getPropertyValue(u"Width"_ustr);
             aAny >>= mnWidth;
 
-            aAny = xPropSet->getPropertyValue("Height");
+            aAny = xPropSet->getPropertyValue(u"Height"_ustr);
             aAny >>= mnHeight;
         }
 
-        if( xPropsInfo.is() && xPropsInfo->hasPropertyByName("Orientation"))
+        if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(u"Orientation"_ustr))
         {
-            aAny = xPropSet->getPropertyValue("Orientation");
+            aAny = xPropSet->getPropertyValue(u"Orientation"_ustr);
             aAny >>= meOrientation;
         }
     }
@@ -444,7 +444,7 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
         if(mxDocMasterPages.is())
         {
             mnDocMasterPageCount = mxDocMasterPages->getCount();
-            maMasterPagesStyleNames.insert( maMasterPagesStyleNames.begin(), mnDocMasterPageCount, "" );
+            maMasterPagesStyleNames.insert( maMasterPagesStyleNames.begin(), mnDocMasterPageCount, u""_ustr );
         }
     }
 
@@ -456,8 +456,8 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
         if(mxDocDrawPages.is())
         {
             mnDocDrawPageCount = mxDocDrawPages->getCount();
-            maDrawPagesStyleNames.insert( maDrawPagesStyleNames.begin(), mnDocDrawPageCount, "" );
-            maDrawNotesPagesStyleNames.insert( maDrawNotesPagesStyleNames.begin(), mnDocDrawPageCount, "" );
+            maDrawPagesStyleNames.insert( maDrawPagesStyleNames.begin(), mnDocDrawPageCount, u""_ustr );
+            maDrawNotesPagesStyleNames.insert( maDrawNotesPagesStyleNames.begin(), mnDocDrawPageCount, u""_ustr );
             if( !mbIsDraw )
                 maDrawPagesAutoLayoutNames.realloc( mnDocDrawPageCount + 1 );
 
@@ -657,7 +657,7 @@ bool SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, OUStr
     if(xPropSet.is())
     {
         sal_uInt16 nType = sal_uInt16();
-        Any aAny = xPropSet->getPropertyValue("Layout");
+        Any aAny = xPropSet->getPropertyValue(u"Layout"_ustr);
         if(aAny >>= nType)
         {
             if(ImpXMLAutoLayoutInfo::IsCreateNecessary(nType))
@@ -1396,8 +1396,8 @@ HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( cons
             bool bFixed = false;
             sal_Int32 nFormat = 0;
             xSet->getPropertyValue( aStrDateTimeTextProp ) >>= aStrText;
-            xSet->getPropertyValue("IsDateTimeFixed") >>= bFixed;
-            xSet->getPropertyValue("DateTimeFormat") >>= nFormat;
+            xSet->getPropertyValue(u"IsDateTimeFixed"_ustr) >>= bFixed;
+            xSet->getPropertyValue(u"DateTimeFormat"_ustr) >>= nFormat;
 
             if( !bFixed || !aStrText.isEmpty() )
             {
@@ -1605,7 +1605,7 @@ void SdXMLExport::ImpWritePresentationStyles()
 
 void SdXMLExport::ExportMeta_()
 {
-    uno::Sequence<beans::NamedValue> stats { { "ObjectCount", uno::Any(mnObjectCount) } };
+    uno::Sequence<beans::NamedValue> stats { { u"ObjectCount"_ustr, uno::Any(mnObjectCount) } };
 
     // update document statistics at the model
     uno::Reference<document::XDocumentPropertiesSupplier> xPropSup(GetModel(),
@@ -1680,7 +1680,7 @@ void SdXMLExport::ExportContent_()
                 try
                 {
                     OUString aBookmarkURL;
-                    xProps->getPropertyValue("BookmarkURL") >>= aBookmarkURL;
+                    xProps->getPropertyValue(u"BookmarkURL"_ustr) >>= aBookmarkURL;
 
                     if( !aBookmarkURL.isEmpty() )
                     {
@@ -1822,11 +1822,11 @@ void SdXMLExport::exportPresentationSettings()
         bool bTemp = false;
 
         // export range
-        xPresProps->getPropertyValue("IsShowAll") >>= bTemp;
+        xPresProps->getPropertyValue(u"IsShowAll"_ustr) >>= bTemp;
         if( !bTemp )
         {
             OUString aFirstPage;
-            xPresProps->getPropertyValue("FirstPage") >>= aFirstPage;
+            xPresProps->getPropertyValue(u"FirstPage"_ustr) >>= aFirstPage;
             if( !aFirstPage.isEmpty() )
             {
                 AddAttribute(XML_NAMESPACE_PRESENTATION, XML_START_PAGE, aFirstPage );
@@ -1835,7 +1835,7 @@ void SdXMLExport::exportPresentationSettings()
             else
             {
                 OUString aCustomShow;
-                xPresProps->getPropertyValue("CustomShow") >>= aCustomShow;
+                xPresProps->getPropertyValue(u"CustomShow"_ustr) >>= aCustomShow;
                 if( !aCustomShow.isEmpty() )
                 {
                     AddAttribute(XML_NAMESPACE_PRESENTATION, XML_SHOW, aCustomShow );
@@ -1844,14 +1844,14 @@ void SdXMLExport::exportPresentationSettings()
             }
         }
 
-        xPresProps->getPropertyValue("IsEndless") >>= bTemp;
+        xPresProps->getPropertyValue(u"IsEndless"_ustr) >>= bTemp;
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_ENDLESS, XML_TRUE );
             bHasAttr = true;
 
             sal_Int32 nPause = 0;
-            xPresProps->getPropertyValue("Pause") >>= nPause;
+            xPresProps->getPropertyValue(u"Pause"_ustr) >>= nPause;
 
             util::Duration aDuration;
             aDuration.Seconds = static_cast<sal_uInt16>(nPause);
@@ -1861,28 +1861,28 @@ void SdXMLExport::exportPresentationSettings()
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_PAUSE, aOut.makeStringAndClear() );
         }
 
-        xPresProps->getPropertyValue("AllowAnimations") >>= bTemp;
+        xPresProps->getPropertyValue(u"AllowAnimations"_ustr) >>= bTemp;
         if( !bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_ANIMATIONS, XML_DISABLED );
             bHasAttr = true;
         }
 
-        xPresProps->getPropertyValue("IsAlwaysOnTop") >>= bTemp;
+        xPresProps->getPropertyValue(u"IsAlwaysOnTop"_ustr) >>= bTemp;
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_STAY_ON_TOP, XML_TRUE );
             bHasAttr = true;
         }
 
-        xPresProps->getPropertyValue("IsAutomatic") >>= bTemp;
+        xPresProps->getPropertyValue(u"IsAutomatic"_ustr) >>= bTemp;
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_FORCE_MANUAL, XML_TRUE );
             bHasAttr = true;
         }
 
-        xPresProps->getPropertyValue("IsFullScreen") >>= bTemp;
+        xPresProps->getPropertyValue(u"IsFullScreen"_ustr) >>= bTemp;
         if( !bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_FULL_SCREEN, XML_FALSE );
@@ -1890,32 +1890,32 @@ void SdXMLExport::exportPresentationSettings()
         }
 
         // We need to always export this attribute, because the import had the wrong default (tdf#108824)
-        xPresProps->getPropertyValue("IsMouseVisible") >>= bTemp;
+        xPresProps->getPropertyValue(u"IsMouseVisible"_ustr) >>= bTemp;
         AddAttribute(XML_NAMESPACE_PRESENTATION, XML_MOUSE_VISIBLE, bTemp ? XML_TRUE : XML_FALSE);
         bHasAttr = true;
 
-        xPresProps->getPropertyValue("StartWithNavigator") >>= bTemp;
+        xPresProps->getPropertyValue(u"StartWithNavigator"_ustr) >>= bTemp;
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_START_WITH_NAVIGATOR, XML_TRUE );
             bHasAttr = true;
         }
 
-        xPresProps->getPropertyValue("UsePen") >>= bTemp;
+        xPresProps->getPropertyValue(u"UsePen"_ustr) >>= bTemp;
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_MOUSE_AS_PEN, XML_TRUE );
             bHasAttr = true;
         }
 
-        xPresProps->getPropertyValue("IsTransitionOnClick") >>= bTemp;
+        xPresProps->getPropertyValue(u"IsTransitionOnClick"_ustr) >>= bTemp;
         if( !bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_TRANSITION_ON_CLICK, XML_DISABLED );
             bHasAttr = true;
         }
 
-        xPresProps->getPropertyValue("IsShowLogo") >>= bTemp;
+        xPresProps->getPropertyValue(u"IsShowLogo"_ustr) >>= bTemp;
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_SHOW_LOGO, XML_TRUE );
@@ -2368,7 +2368,7 @@ void SdXMLExport::exportTheme(const uno::Reference<drawing::XDrawPage>& xDrawPag
         return;
 
     uno::Reference<util::XTheme> xTheme;
-    xPropertySet->getPropertyValue("Theme") >>= xTheme;
+    xPropertySet->getPropertyValue(u"Theme"_ustr) >>= xTheme;
     if (!xTheme.is())
         return;
 
@@ -2390,7 +2390,7 @@ void SdXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
         return;
 
     awt::Rectangle aVisArea;
-    xPropSet->getPropertyValue("VisibleArea") >>= aVisArea;
+    xPropSet->getPropertyValue(u"VisibleArea"_ustr) >>= aVisArea;
 
     rProps.realloc(4);
     beans::PropertyValue* pProps = rProps.getArray();
@@ -2412,7 +2412,7 @@ void SdXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
     if( !xFac.is() )
         return;
 
-    Reference< beans::XPropertySet > xProps( xFac->createInstance("com.sun.star.document.Settings"), UNO_QUERY );
+    Reference< beans::XPropertySet > xProps( xFac->createInstance(u"com.sun.star.document.Settings"_ustr), UNO_QUERY );
     if( xProps.is() )
         SvXMLUnitConverter::convertPropertySet( rProps, xProps );
     DocumentSettingsSerializer *pFilter(dynamic_cast<DocumentSettingsSerializer *>(xProps.get()));
@@ -2475,7 +2475,7 @@ OUString SdXMLExport::getNavigationOrder( const Reference< XDrawPage >& xDrawPag
     try
     {
         Reference< XPropertySet > xSet( xDrawPage, UNO_QUERY_THROW );
-        Reference< XIndexAccess > xNavOrder( xSet->getPropertyValue("NavigationOrder"), UNO_QUERY_THROW );
+        Reference< XIndexAccess > xNavOrder( xSet->getPropertyValue(u"NavigationOrder"_ustr), UNO_QUERY_THROW );
 
         Reference< XIndexAccess > xZOrderAccess = xDrawPage;
 
@@ -2635,7 +2635,7 @@ com_sun_star_comp_Impress_XMLOasisExporter_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SdXMLExport(
-        pCtx, "XMLImpressExportOasis", false,
+        pCtx, u"XMLImpressExportOasis"_ustr, false,
         SvXMLExportFlags::OASIS | SvXMLExportFlags::META | SvXMLExportFlags::STYLES
             | SvXMLExportFlags::MASTERSTYLES | SvXMLExportFlags::AUTOSTYLES
             | SvXMLExportFlags::CONTENT | SvXMLExportFlags::SCRIPTS | SvXMLExportFlags::SETTINGS
@@ -2647,7 +2647,7 @@ com_sun_star_comp_Impress_XMLOasisStylesExporter_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SdXMLExport(
-        pCtx, "XMLImpressStylesExportOasis", false,
+        pCtx, u"XMLImpressStylesExportOasis"_ustr, false,
         SvXMLExportFlags::OASIS | SvXMLExportFlags::STYLES | SvXMLExportFlags::MASTERSTYLES
             | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::FONTDECLS));
 }
@@ -2656,7 +2656,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Impress_XMLOasisContentExporter_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return cppu::acquire(new SdXMLExport(pCtx, "XMLImpressContentExportOasis", false,
+    return cppu::acquire(new SdXMLExport(pCtx, u"XMLImpressContentExportOasis"_ustr, false,
                                          SvXMLExportFlags::OASIS | SvXMLExportFlags::AUTOSTYLES
                                              | SvXMLExportFlags::CONTENT | SvXMLExportFlags::SCRIPTS
                                              | SvXMLExportFlags::FONTDECLS));
@@ -2666,7 +2666,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Impress_XMLOasisMetaExporter_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return cppu::acquire(new SdXMLExport(pCtx, "XMLImpressMetaExportOasis", false,
+    return cppu::acquire(new SdXMLExport(pCtx, u"XMLImpressMetaExportOasis"_ustr, false,
                                          SvXMLExportFlags::OASIS | SvXMLExportFlags::META));
 }
 
@@ -2674,7 +2674,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Impress_XMLOasisSettingsExporter_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return cppu::acquire(new SdXMLExport(pCtx, "XMLImpressSettingsExportOasis", false,
+    return cppu::acquire(new SdXMLExport(pCtx, u"XMLImpressSettingsExportOasis"_ustr, false,
                                          SvXMLExportFlags::OASIS | SvXMLExportFlags::SETTINGS));
 }
 
@@ -2683,7 +2683,7 @@ com_sun_star_comp_Impress_XMLExporter_get_implementation(uno::XComponentContext*
                                                          uno::Sequence<uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SdXMLExport(
-        pCtx, "XMLImpressExportOOO", false,
+        pCtx, u"XMLImpressExportOOO"_ustr, false,
         SvXMLExportFlags::META | SvXMLExportFlags::STYLES | SvXMLExportFlags::MASTERSTYLES
             | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT | SvXMLExportFlags::SCRIPTS
             | SvXMLExportFlags::SETTINGS | SvXMLExportFlags::FONTDECLS
@@ -2695,7 +2695,7 @@ com_sun_star_comp_Draw_XMLExporter_get_implementation(uno::XComponentContext* pC
                                                       uno::Sequence<uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SdXMLExport(
-        pCtx, "XMLDrawExportOOO", true,
+        pCtx, u"XMLDrawExportOOO"_ustr, true,
         SvXMLExportFlags::META | SvXMLExportFlags::STYLES | SvXMLExportFlags::MASTERSTYLES
             | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT | SvXMLExportFlags::SCRIPTS
             | SvXMLExportFlags::SETTINGS | SvXMLExportFlags::FONTDECLS
@@ -2706,7 +2706,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Draw_XMLOasisSettingsExporter_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return cppu::acquire(new SdXMLExport(pCtx, "XMLDrawSettingsExportOasis", true,
+    return cppu::acquire(new SdXMLExport(pCtx, u"XMLDrawSettingsExportOasis"_ustr, true,
                                          SvXMLExportFlags::OASIS | SvXMLExportFlags::SETTINGS));
 }
 
@@ -2714,7 +2714,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Draw_XMLOasisMetaExporter_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return cppu::acquire(new SdXMLExport(pCtx, "XMLDrawMetaExportOasis", true,
+    return cppu::acquire(new SdXMLExport(pCtx, u"XMLDrawMetaExportOasis"_ustr, true,
                                          SvXMLExportFlags::OASIS | SvXMLExportFlags::META));
 }
 
@@ -2722,7 +2722,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Draw_XMLOasisContentExporter_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return cppu::acquire(new SdXMLExport(pCtx, "XMLDrawContentExportOasis", true,
+    return cppu::acquire(new SdXMLExport(pCtx, u"XMLDrawContentExportOasis"_ustr, true,
                                          SvXMLExportFlags::OASIS | SvXMLExportFlags::AUTOSTYLES
                                              | SvXMLExportFlags::CONTENT | SvXMLExportFlags::SCRIPTS
                                              | SvXMLExportFlags::FONTDECLS));
@@ -2733,7 +2733,7 @@ com_sun_star_comp_Draw_XMLOasisStylesExporter_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SdXMLExport(
-        pCtx, "XMLDrawStylesExportOasis", true,
+        pCtx, u"XMLDrawStylesExportOasis"_ustr, true,
         SvXMLExportFlags::OASIS | SvXMLExportFlags::STYLES | SvXMLExportFlags::MASTERSTYLES
             | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::FONTDECLS));
 }
@@ -2743,7 +2743,7 @@ com_sun_star_comp_Draw_XMLOasisExporter_get_implementation(uno::XComponentContex
                                                            uno::Sequence<uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SdXMLExport(
-        pCtx, "XMLDrawExportOasis", true,
+        pCtx, u"XMLDrawExportOasis"_ustr, true,
         SvXMLExportFlags::OASIS | SvXMLExportFlags::META | SvXMLExportFlags::STYLES
             | SvXMLExportFlags::MASTERSTYLES | SvXMLExportFlags::AUTOSTYLES
             | SvXMLExportFlags::CONTENT | SvXMLExportFlags::SCRIPTS | SvXMLExportFlags::SETTINGS
@@ -2755,7 +2755,7 @@ com_sun_star_comp_DrawingLayer_XMLExporter_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(
-        new SdXMLExport(pCtx, "XMLDrawingLayerExport", true,
+        new SdXMLExport(pCtx, u"XMLDrawingLayerExport"_ustr, true,
                         SvXMLExportFlags::OASIS | SvXMLExportFlags::STYLES
                             | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT
                             | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::EMBEDDED));
@@ -2766,7 +2766,7 @@ com_sun_star_comp_Impress_XMLClipboardExporter_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(
-        new SdXMLExport(pCtx, "XMLImpressClipboardExport", /*bIsDraw=*/false,
+        new SdXMLExport(pCtx, u"XMLImpressClipboardExport"_ustr, /*bIsDraw=*/false,
                         SvXMLExportFlags::OASIS | SvXMLExportFlags::STYLES
                             | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT
                             | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::EMBEDDED));
@@ -2789,21 +2789,21 @@ XMLFontAutoStylePool* SdXMLExport::CreateFontAutoStylePool()
             Reference<beans::XPropertySetInfo> xInfo;
 
             if (xFactory.is())
-                xProps.set(xFactory->createInstance("com.sun.star.document.Settings"), UNO_QUERY);
+                xProps.set(xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), UNO_QUERY);
             if (xProps.is())
                 xInfo =  xProps->getPropertySetInfo();
             if (xInfo.is() && xProps.is())
             {
-                if (xInfo->hasPropertyByName("EmbedFonts"))
-                    xProps->getPropertyValue("EmbedFonts") >>= bEmbedFonts;
-                if (xInfo->hasPropertyByName("EmbedOnlyUsedFonts"))
-                    xProps->getPropertyValue("EmbedOnlyUsedFonts") >>= bEmbedUsedOnly;
-                if (xInfo->hasPropertyByName("EmbedLatinScriptFonts"))
-                    xProps->getPropertyValue("EmbedLatinScriptFonts") >>= bEmbedLatinScript;
-                if (xInfo->hasPropertyByName("EmbedAsianScriptFonts"))
-                    xProps->getPropertyValue("EmbedAsianScriptFonts") >>= bEmbedAsianScript;
-                if (xInfo->hasPropertyByName("EmbedComplexScriptFonts"))
-                    xProps->getPropertyValue("EmbedComplexScriptFonts") >>= bEmbedComplexScript;
+                if (xInfo->hasPropertyByName(u"EmbedFonts"_ustr))
+                    xProps->getPropertyValue(u"EmbedFonts"_ustr) >>= bEmbedFonts;
+                if (xInfo->hasPropertyByName(u"EmbedOnlyUsedFonts"_ustr))
+                    xProps->getPropertyValue(u"EmbedOnlyUsedFonts"_ustr) >>= bEmbedUsedOnly;
+                if (xInfo->hasPropertyByName(u"EmbedLatinScriptFonts"_ustr))
+                    xProps->getPropertyValue(u"EmbedLatinScriptFonts"_ustr) >>= bEmbedLatinScript;
+                if (xInfo->hasPropertyByName(u"EmbedAsianScriptFonts"_ustr))
+                    xProps->getPropertyValue(u"EmbedAsianScriptFonts"_ustr) >>= bEmbedAsianScript;
+                if (xInfo->hasPropertyByName(u"EmbedComplexScriptFonts"_ustr))
+                    xProps->getPropertyValue(u"EmbedComplexScriptFonts"_ustr) >>= bEmbedComplexScript;
             }
         } catch(...)
         {
@@ -2819,7 +2819,7 @@ XMLFontAutoStylePool* SdXMLExport::CreateFontAutoStylePool()
     Reference< beans::XPropertySet > xProps( GetModel(), UNO_QUERY );
     if ( xProps.is() ) {
         Sequence<Any> aAnySeq;
-        if( xProps->getPropertyValue("Fonts") >>= aAnySeq )
+        if( xProps->getPropertyValue(u"Fonts"_ustr) >>= aAnySeq )
         {
             if( aAnySeq.getLength() % 5 == 0 )
             {

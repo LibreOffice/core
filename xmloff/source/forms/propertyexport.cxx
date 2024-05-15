@@ -435,11 +435,11 @@ namespace xmloff
         exportedProperty(PROPERTY_TIMEFORMAT);
 
         // the following properties should have been exported at the shape already:
-        exportedProperty( "VerticalAlign" );
-        exportedProperty( "WritingMode" );
-        exportedProperty( "ScaleMode" );
+        exportedProperty( u"VerticalAlign"_ustr );
+        exportedProperty( u"WritingMode"_ustr );
+        exportedProperty( u"ScaleMode"_ustr );
         // ditto the TextWritingMode
-        exportedProperty( "WritingMode" );
+        exportedProperty( u"WritingMode"_ustr );
     }
 
     void OPropertyExport::exportGenericPropertyAttribute(

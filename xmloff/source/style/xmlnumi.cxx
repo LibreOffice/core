@@ -220,7 +220,7 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
         const Reference< xml::sax::XFastAttributeList > & xAttrList )
 
 :   SvXMLImportContext( rImport )
-,   sNumFormat( "1" )
+,   sNumFormat( u"1"_ustr )
 ,   nLevel( -1 )
 ,   nSpaceBefore( 0 )
 ,   nMinLabelWidth( 0 )
@@ -419,34 +419,34 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
         *sListFormat += sSuffix;
     }
 
-    aProperties.push_back(comphelper::makePropertyValue("NumberingType", eType));
+    aProperties.push_back(comphelper::makePropertyValue(u"NumberingType"_ustr, eType));
 
-    aProperties.push_back(comphelper::makePropertyValue("Prefix", sPrefix));
+    aProperties.push_back(comphelper::makePropertyValue(u"Prefix"_ustr, sPrefix));
 
-    aProperties.push_back(comphelper::makePropertyValue("Suffix", sSuffix));
+    aProperties.push_back(comphelper::makePropertyValue(u"Suffix"_ustr, sSuffix));
 
-    aProperties.push_back(comphelper::makePropertyValue("Adjust", eAdjust));
+    aProperties.push_back(comphelper::makePropertyValue(u"Adjust"_ustr, eAdjust));
 
     sal_Int32 nLeftMargin = nSpaceBefore + nMinLabelWidth;
-    aProperties.push_back(comphelper::makePropertyValue("LeftMargin", nLeftMargin));
+    aProperties.push_back(comphelper::makePropertyValue(u"LeftMargin"_ustr, nLeftMargin));
 
     sal_Int32 nFirstLineOffset = -nMinLabelWidth;
-    aProperties.push_back(comphelper::makePropertyValue("FirstLineOffset", nFirstLineOffset));
+    aProperties.push_back(comphelper::makePropertyValue(u"FirstLineOffset"_ustr, nFirstLineOffset));
 
-    aProperties.push_back(comphelper::makePropertyValue("SymbolTextDistance", static_cast<sal_Int16>(nMinLabelDist)));
+    aProperties.push_back(comphelper::makePropertyValue(u"SymbolTextDistance"_ustr, static_cast<sal_Int16>(nMinLabelDist)));
 
-    aProperties.push_back(comphelper::makePropertyValue("PositionAndSpaceMode", ePosAndSpaceMode));
+    aProperties.push_back(comphelper::makePropertyValue(u"PositionAndSpaceMode"_ustr, ePosAndSpaceMode));
 
-    aProperties.push_back(comphelper::makePropertyValue("LabelFollowedBy", eLabelFollowedBy));
+    aProperties.push_back(comphelper::makePropertyValue(u"LabelFollowedBy"_ustr, eLabelFollowedBy));
 
-    aProperties.push_back(comphelper::makePropertyValue("ListtabStopPosition", nListtabStopPosition));
+    aProperties.push_back(comphelper::makePropertyValue(u"ListtabStopPosition"_ustr, nListtabStopPosition));
 
-    aProperties.push_back(comphelper::makePropertyValue("FirstLineIndent", nFirstLineIndent));
+    aProperties.push_back(comphelper::makePropertyValue(u"FirstLineIndent"_ustr, nFirstLineIndent));
 
-    aProperties.push_back(comphelper::makePropertyValue("IndentAt", nIndentAt));
+    aProperties.push_back(comphelper::makePropertyValue(u"IndentAt"_ustr, nIndentAt));
 
     OUString sDisplayTextStyleName = GetImport().GetStyleDisplayName(XmlStyleFamily::TEXT_TEXT, sTextStyleName);
-    aProperties.push_back(comphelper::makePropertyValue("CharStyleName", sDisplayTextStyleName));
+    aProperties.push_back(comphelper::makePropertyValue(u"CharStyleName"_ustr, sDisplayTextStyleName));
 
     if( bBullet )
     {
@@ -476,8 +476,8 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
 
         // Must append 'cBullet' even if it is zero
         // if 'bBullet' is true and 'cBullet' is zero - BulletChar property must be 0.
-        aProperties.push_back(comphelper::makePropertyValue("BulletChar", OUString(&cBullet, 1)));
-        aProperties.push_back(comphelper::makePropertyValue("BulletFont", aFDesc));
+        aProperties.push_back(comphelper::makePropertyValue(u"BulletChar"_ustr, OUString(&cBullet, 1)));
+        aProperties.push_back(comphelper::makePropertyValue(u"BulletFont"_ustr, aFDesc));
     }
 
     if( bImage )
@@ -498,34 +498,34 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
 
         if (xBitmap.is())
         {
-            aProperties.push_back(comphelper::makePropertyValue("GraphicBitmap", xBitmap));
+            aProperties.push_back(comphelper::makePropertyValue(u"GraphicBitmap"_ustr, xBitmap));
         }
 
         awt::Size aSize(nImageWidth, nImageHeight);
-        aProperties.push_back(comphelper::makePropertyValue("GraphicSize", aSize));
-        aProperties.push_back(comphelper::makePropertyValue("VertOrient", eImageVertOrient));
+        aProperties.push_back(comphelper::makePropertyValue(u"GraphicSize"_ustr, aSize));
+        aProperties.push_back(comphelper::makePropertyValue(u"VertOrient"_ustr, eImageVertOrient));
     }
 
     if( bNum )
     {
-        aProperties.push_back(comphelper::makePropertyValue("StartWith", nNumStartValue));
-        aProperties.push_back(comphelper::makePropertyValue("ParentNumbering", nNumDisplayLevels));
+        aProperties.push_back(comphelper::makePropertyValue(u"StartWith"_ustr, nNumStartValue));
+        aProperties.push_back(comphelper::makePropertyValue(u"ParentNumbering"_ustr, nNumDisplayLevels));
     }
 
     if( ( bNum || bBullet ) && nRelSize )
     {
-        aProperties.push_back(comphelper::makePropertyValue("BulletRelSize", nRelSize));
+        aProperties.push_back(comphelper::makePropertyValue(u"BulletRelSize"_ustr, nRelSize));
     }
 
     if( !bImage && bHasColor )
     {
-        aProperties.push_back(comphelper::makePropertyValue("BulletColor", m_nColor));
+        aProperties.push_back(comphelper::makePropertyValue(u"BulletColor"_ustr, m_nColor));
     }
 
-    aProperties.push_back(comphelper::makePropertyValue("ListFormat", *sListFormat));
+    aProperties.push_back(comphelper::makePropertyValue(u"ListFormat"_ustr, *sListFormat));
 
     if (m_bIsLegal)
-        aProperties.push_back(comphelper::makePropertyValue("IsLegal", true));
+        aProperties.push_back(comphelper::makePropertyValue(u"IsLegal"_ustr, true));
 
     return comphelper::containerToSequence(aProperties);
 }
@@ -963,7 +963,7 @@ void SvxXMLListStyleContext::CreateAndInsertLate( bool bOverwrite )
             if( !xFactory.is() )
                 return;
 
-            Reference < XInterface > xIfc = xFactory->createInstance("com.sun.star.style.NumberingStyle");
+            Reference < XInterface > xIfc = xFactory->createInstance(u"com.sun.star.style.NumberingStyle"_ustr);
             if( !xIfc.is() )
                 return;
             xStyle.set(xIfc, UNO_QUERY);
@@ -983,8 +983,8 @@ void SvxXMLListStyleContext::CreateAndInsertLate( bool bOverwrite )
             bNew = !*o3tl::doAccess<bool>(aAny);
         }
 
-        if ( xPropSetInfo->hasPropertyByName( "Hidden" ) )
-            xPropSet->setPropertyValue( "Hidden", uno::Any( IsHidden( ) ) );
+        if ( xPropSetInfo->hasPropertyByName( u"Hidden"_ustr ) )
+            xPropSet->setPropertyValue( u"Hidden"_ustr, uno::Any( IsHidden( ) ) );
 
         if( rName != GetName() )
             GetImport().AddStyleDisplayName( XmlStyleFamily::TEXT_LIST,
@@ -1034,7 +1034,7 @@ Reference < XIndexReplace > SvxXMLListStyleContext::CreateNumRule(
     if( !xFactory.is() )
         return xNumRule;
 
-    Reference < XInterface > xIfc = xFactory->createInstance("com.sun.star.text.NumberingRules");
+    Reference < XInterface > xIfc = xFactory->createInstance(u"com.sun.star.text.NumberingRules"_ustr);
     if( !xIfc.is() )
         return xNumRule;
 
@@ -1076,7 +1076,7 @@ void SvxXMLListStyleContext::SetDefaultStyle(
         pProps->Name = "BulletChar";
         (pProps++)->Value <<= OUString(sal_Unicode(0xF000 + 149));
         pProps->Name = "CharStyleName";
-        (pProps++)->Value <<= OUString( "Numbering Symbols"  );
+        (pProps++)->Value <<= u"Numbering Symbols"_ustr;
     }
 
     rNumRule->replaceByIndex( nLevel, Any(aPropSeq) );

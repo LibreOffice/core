@@ -486,7 +486,7 @@ constexpr OUStringLiteral gsPropertyFieldSubType(u"UserDataType");
 
 XMLSenderFieldImportContext::XMLSenderFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp)
-    : XMLTextFieldImportContext(rImport, rHlp, "ExtendedUser")
+    : XMLTextFieldImportContext(rImport, rHlp, u"ExtendedUser"_ustr)
     , nSubType(0)
     , sPropertyFixed(sAPI_is_fixed)
     , sPropertyContent(sAPI_content)
@@ -836,7 +836,7 @@ constexpr OUStringLiteral gsPropertyPlaceholder(u"PlaceHolder");
 
 XMLPlaceholderFieldImportContext::XMLPlaceholderFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp)
-:   XMLTextFieldImportContext(rImport, rHlp, "JumpEdit")
+:   XMLTextFieldImportContext(rImport, rHlp, u"JumpEdit"_ustr)
 ,   sPropertyHint(sAPI_hint)
 ,   nPlaceholderType(PlaceholderType::TEXT)
 {
@@ -1226,7 +1226,7 @@ void XMLDatabaseFieldImportContext::PrepareField(
 
 XMLDatabaseNameImportContext::XMLDatabaseNameImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp) :
-        XMLDatabaseFieldImportContext(rImport, rHlp, "DatabaseName", true)
+        XMLDatabaseFieldImportContext(rImport, rHlp, u"DatabaseName"_ustr, true)
 {
 }
 
@@ -1254,7 +1254,7 @@ XMLDatabaseNextImportContext::XMLDatabaseNextImportContext(
 
 XMLDatabaseNextImportContext::XMLDatabaseNextImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp)
-: XMLDatabaseFieldImportContext(rImport, rHlp, "DatabaseNextSet", false)
+: XMLDatabaseFieldImportContext(rImport, rHlp, u"DatabaseNextSet"_ustr, false)
 ,   sPropertyCondition(sAPI_condition)
 ,   sTrue(sAPI_true)
 ,   bConditionOK(false)
@@ -1303,7 +1303,7 @@ void XMLDatabaseNextImportContext::PrepareField(
 
 XMLDatabaseSelectImportContext::XMLDatabaseSelectImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp) :
-        XMLDatabaseNextImportContext(rImport, rHlp, "DatabaseNumberOfSet"),
+        XMLDatabaseNextImportContext(rImport, rHlp, u"DatabaseNumberOfSet"_ustr),
         sPropertySetNumber(sAPI_set_number),
         nNumber(0),
         bNumberOK(false)
@@ -1346,11 +1346,11 @@ void XMLDatabaseSelectImportContext::PrepareField(
 
 XMLDatabaseNumberImportContext::XMLDatabaseNumberImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp) :
-        XMLDatabaseFieldImportContext(rImport, rHlp, "DatabaseSetNumber", true),
+        XMLDatabaseFieldImportContext(rImport, rHlp, u"DatabaseSetNumber"_ustr, true),
         sPropertyNumberingType(
             sAPI_numbering_type),
         sPropertySetNumber(sAPI_set_number),
-        sNumberFormat("1"),
+        sNumberFormat(u"1"_ustr),
         sNumberSync(GetXMLToken(XML_FALSE)),
         nValue(0),
         bValueOK(false)
@@ -1767,7 +1767,7 @@ void XMLUserDocInfoImportContext::PrepareField(
 
 XMLHiddenParagraphImportContext::XMLHiddenParagraphImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp) :
-        XMLTextFieldImportContext(rImport, rHlp, "HiddenParagraph"),
+        XMLTextFieldImportContext(rImport, rHlp, u"HiddenParagraph"_ustr),
         sPropertyCondition(sAPI_condition),
         sPropertyIsHidden(sAPI_is_hidden),
         bIsHidden(false)
@@ -1819,7 +1819,7 @@ constexpr OUStringLiteral gsPropertyIsConditionTrue(u"IsConditionTrue");
 
 XMLConditionalTextImportContext::XMLConditionalTextImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp) :
-        XMLTextFieldImportContext(rImport, rHlp, "ConditionalText"),
+        XMLTextFieldImportContext(rImport, rHlp, u"ConditionalText"_ustr),
         sPropertyCondition(sAPI_condition),
         sPropertyCurrentPresentation(sAPI_current_presentation),
         bConditionOK(false),
@@ -1889,7 +1889,7 @@ void XMLConditionalTextImportContext::PrepareField(
 
 XMLHiddenTextImportContext::XMLHiddenTextImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp) :
-        XMLTextFieldImportContext(rImport, rHlp, "HiddenText"),
+        XMLTextFieldImportContext(rImport, rHlp, u"HiddenText"_ustr),
         sPropertyCondition(sAPI_condition),
         sPropertyContent(sAPI_content),
         sPropertyIsHidden(sAPI_is_hidden),
@@ -1963,7 +1963,7 @@ const SvXMLEnumMapEntry<sal_uInt16> aFilenameDisplayMap[] =
 
 XMLFileNameImportContext::XMLFileNameImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp) :
-        XMLTextFieldImportContext(rImport, rHlp, "FileName"),
+        XMLTextFieldImportContext(rImport, rHlp, u"FileName"_ustr),
         sPropertyFixed(sAPI_is_fixed),
         sPropertyFileFormat(sAPI_file_format),
         sPropertyCurrentPresentation(
@@ -2047,7 +2047,7 @@ const SvXMLEnumMapEntry<sal_uInt16> aTemplateDisplayMap[] =
 
 XMLTemplateNameImportContext::XMLTemplateNameImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp) :
-        XMLTextFieldImportContext(rImport, rHlp, "TemplateName"),
+        XMLTextFieldImportContext(rImport, rHlp, u"TemplateName"_ustr),
         sPropertyFileFormat(sAPI_file_format),
         nFormat(TemplateDisplayFormat::FULL)
 {
@@ -2102,7 +2102,7 @@ constexpr OUStringLiteral gsPropertyLevel(u"Level");
 
 XMLChapterImportContext::XMLChapterImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp) :
-        XMLTextFieldImportContext(rImport, rHlp, "Chapter"),
+        XMLTextFieldImportContext(rImport, rHlp, u"Chapter"_ustr),
         nFormat(ChapterFormat::NAME_NUMBER),
         nLevel(0)
 {
@@ -2251,7 +2251,7 @@ OUString XMLCountFieldImportContext::MapTokenToServiceName(
 
 XMLPageVarGetFieldImportContext::XMLPageVarGetFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp) :
-        XMLTextFieldImportContext(rImport, rHlp, "ReferencePageGet"),
+        XMLTextFieldImportContext(rImport, rHlp, u"ReferencePageGet"_ustr),
         bNumberFormatOK(false)
 {
     bValid = true;
@@ -2300,7 +2300,7 @@ void XMLPageVarGetFieldImportContext::PrepareField(
 
 XMLPageVarSetFieldImportContext::XMLPageVarSetFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp) :
-        XMLTextFieldImportContext(rImport, rHlp, "ReferencePageSet"),
+        XMLTextFieldImportContext(rImport, rHlp, u"ReferencePageSet"_ustr),
         nAdjust(0),
         bActive(true)
 {
@@ -2340,7 +2340,7 @@ void XMLPageVarSetFieldImportContext::ProcessAttribute(
 void XMLPageVarSetFieldImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
-    xPropertySet->setPropertyValue("On", Any(bActive));
+    xPropertySet->setPropertyValue(u"On"_ustr, Any(bActive));
     xPropertySet->setPropertyValue(sAPI_offset, Any(nAdjust));
 }
 
@@ -2350,7 +2350,7 @@ void XMLPageVarSetFieldImportContext::PrepareField(
 
 XMLMacroFieldImportContext::XMLMacroFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp) :
-        XMLTextFieldImportContext(rImport, rHlp, "Macro"),
+        XMLTextFieldImportContext(rImport, rHlp, u"Macro"_ustr),
         bDescriptionOK(false)
 {
 }
@@ -2409,7 +2409,7 @@ void XMLMacroFieldImportContext::PrepareField(
         // get event sequence
         XMLEventsImportContext* pEvents = xEventContext.get();
         Sequence<PropertyValue> aValues;
-        pEvents->GetEventSequence( "OnClick", aValues );
+        pEvents->GetEventSequence( u"OnClick"_ustr, aValues );
 
         for (const auto& rValue : aValues)
         {
@@ -2453,9 +2453,9 @@ void XMLMacroFieldImportContext::PrepareField(
             sMacroName = sMacro;
     }
 
-    xPropertySet->setPropertyValue("ScriptURL", Any(sScriptURL));
-    xPropertySet->setPropertyValue("MacroName", Any(sMacroName));
-    xPropertySet->setPropertyValue("MacroLibrary", Any(sLibraryName));
+    xPropertySet->setPropertyValue(u"ScriptURL"_ustr, Any(sScriptURL));
+    xPropertySet->setPropertyValue(u"MacroName"_ustr, Any(sMacroName));
+    xPropertySet->setPropertyValue(u"MacroLibrary"_ustr, Any(sLibraryName));
 }
 
 
@@ -2465,7 +2465,7 @@ void XMLMacroFieldImportContext::PrepareField(
 XMLReferenceFieldImportContext::XMLReferenceFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
     sal_Int32 nToken)
-:   XMLTextFieldImportContext(rImport, rHlp, "GetReference")
+:   XMLTextFieldImportContext(rImport, rHlp, u"GetReference"_ustr)
 ,   nElementToken(nToken)
 ,   nSource(0)
 ,   nType(ReferenceFieldPart::PAGE_DESC)
@@ -2583,19 +2583,19 @@ void XMLReferenceFieldImportContext::ProcessAttribute(
 void XMLReferenceFieldImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
-    xPropertySet->setPropertyValue("ReferenceFieldPart", Any(nType));
+    xPropertySet->setPropertyValue(u"ReferenceFieldPart"_ustr, Any(nType));
 
-    xPropertySet->setPropertyValue("ReferenceFieldSource", Any(nSource));
+    xPropertySet->setPropertyValue(u"ReferenceFieldSource"_ustr, Any(nSource));
 
-    xPropertySet->setPropertyValue("ReferenceFieldLanguage", Any(sLanguage));
+    xPropertySet->setPropertyValue(u"ReferenceFieldLanguage"_ustr, Any(sLanguage));
     switch (nElementToken)
     {
         case XML_ELEMENT(TEXT, XML_REFERENCE_REF):
         case XML_ELEMENT(TEXT, XML_BOOKMARK_REF):
         case XML_ELEMENT(TEXT, XML_STYLE_REF):
         case XML_ELEMENT(LO_EXT, XML_STYLE_REF):
-            xPropertySet->setPropertyValue("SourceName", Any(sName));
-            xPropertySet->setPropertyValue("ReferenceFieldFlags", Any(nFlags));
+            xPropertySet->setPropertyValue(u"SourceName"_ustr, Any(sName));
+            xPropertySet->setPropertyValue(u"ReferenceFieldFlags"_ustr, Any(nFlags));
             break;
 
         case XML_ELEMENT(TEXT, XML_NOTE_REF):
@@ -2715,18 +2715,18 @@ void XMLDdeFieldDeclImportContext::startFastElement(
             Reference<XPropertySet> xPropSet( xIfc, UNO_QUERY );
             if (xPropSet.is() &&
                 xPropSet->getPropertySetInfo()->hasPropertyByName(
-                                                                  "DDECommandType"))
+                                                                  u"DDECommandType"_ustr))
             {
                 xPropSet->setPropertyValue(sAPI_name, Any(sName));
 
-                xPropSet->setPropertyValue("DDECommandType", Any(sCommandApplication));
+                xPropSet->setPropertyValue(u"DDECommandType"_ustr, Any(sCommandApplication));
 
-                xPropSet->setPropertyValue("DDECommandFile", Any(sCommandTopic));
+                xPropSet->setPropertyValue(u"DDECommandFile"_ustr, Any(sCommandTopic));
 
-                xPropSet->setPropertyValue("DDECommandElement",
+                xPropSet->setPropertyValue(u"DDECommandElement"_ustr,
                                            Any(sCommandItem));
 
-                xPropSet->setPropertyValue("IsAutomaticUpdate",
+                xPropSet->setPropertyValue(u"IsAutomaticUpdate"_ustr,
                                            Any(bUpdate));
             }
             // else: ignore (can't get XPropertySet, or DDE
@@ -2824,7 +2824,7 @@ void XMLDdeFieldImportContext::PrepareField(
 XMLSheetNameImportContext::XMLSheetNameImportContext(
     SvXMLImport& rImport,
     XMLTextImportHelper& rHlp) :
-        XMLTextFieldImportContext(rImport, rHlp, "SheetName")
+        XMLTextFieldImportContext(rImport, rHlp, u"SheetName"_ustr)
 {
     bValid = true;  // always valid!
 }
@@ -2848,7 +2848,7 @@ void XMLSheetNameImportContext::PrepareField(
 XMLPageNameFieldImportContext::XMLPageNameFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp)              /// Text import helper
-: XMLTextFieldImportContext(rImport, rHlp, "PageName" )
+: XMLTextFieldImportContext(rImport, rHlp, u"PageName"_ustr )
 {
     bValid = true;
 }
@@ -2906,17 +2906,17 @@ void XMLUrlFieldImportContext::PrepareField(
 
     if (bFrameOK)
     {
-        xPropertySet->setPropertyValue("TargetFrame", Any(sFrame));
+        xPropertySet->setPropertyValue(u"TargetFrame"_ustr, Any(sFrame));
     }
 
-    xPropertySet->setPropertyValue("Representation", Any(GetContent()));
+    xPropertySet->setPropertyValue(u"Representation"_ustr, Any(GetContent()));
 }
 
 
 XMLBibliographyFieldImportContext::XMLBibliographyFieldImportContext(
     SvXMLImport& rImport,
     XMLTextImportHelper& rHlp) :
-        XMLTextFieldImportContext(rImport, rHlp, "Bibliography")
+        XMLTextFieldImportContext(rImport, rHlp, u"Bibliography"_ustr)
 {
     bValid = true;
 }
@@ -3023,7 +3023,7 @@ void XMLBibliographyFieldImportContext::PrepareField(
     }
 
     // set sequence
-    xPropertySet->setPropertyValue("Fields", Any(aValueSequence));
+    xPropertySet->setPropertyValue(u"Fields"_ustr, Any(aValueSequence));
 }
 
 OUString XMLBibliographyFieldImportContext::MapBibliographyFieldName(
@@ -3150,7 +3150,7 @@ XMLAnnotationImportContext::XMLAnnotationImportContext(
     SvXMLImport& rImport,
     XMLTextImportHelper& rHlp,
     sal_Int32 nElement) :
-        XMLTextFieldImportContext(rImport, rHlp, "Annotation"),
+        XMLTextFieldImportContext(rImport, rHlp, u"Annotation"_ustr),
         mnElement(nElement)
 {
     bValid = true;
@@ -3195,7 +3195,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLAnnotationImportCon
             bOK = CreateField( mxField, sServicePrefix + GetServiceName() );
         if (bOK)
         {
-            Any aAny = mxField->getPropertyValue( "TextRange" );
+            Any aAny = mxField->getPropertyValue( u"TextRange"_ustr );
             Reference< XText > xText;
             aAny >>= xText;
             if( xText.is() )
@@ -3230,7 +3230,7 @@ void XMLAnnotationImportContext::endFastElement(sal_Int32 /*nElement*/)
         // delete addition newline
         mxCursor->gotoEnd( false );
         mxCursor->goLeft( 1, true );
-        mxCursor->setString( "" );
+        mxCursor->setString( u""_ustr );
 
         // reset cursor
         GetImport().GetTextImport()->ResetCursor();
@@ -3329,12 +3329,12 @@ void XMLAnnotationImportContext::PrepareField(
 
     // import (possibly empty) initials
     OUString sInitials( aInitialsBuffer.makeStringAndClear() );
-    xPropertySet->setPropertyValue("Initials", Any(sInitials));
+    xPropertySet->setPropertyValue(u"Initials"_ustr, Any(sInitials));
 
     //import resolved flag
     bool bTmp(false);
     (void)::sax::Converter::convertBool(bTmp, aResolved);
-    xPropertySet->setPropertyValue("Resolved", Any(bTmp));
+    xPropertySet->setPropertyValue(u"Resolved"_ustr, Any(bTmp));
 
     util::DateTime aDateTime;
     if (::sax::Converter::parseDateTime(aDateTime, aDateBuffer))
@@ -3373,7 +3373,7 @@ void XMLAnnotationImportContext::PrepareField(
 XMLScriptImportContext::XMLScriptImportContext(
     SvXMLImport& rImport,
     XMLTextImportHelper& rHlp)
-:   XMLTextFieldImportContext(rImport, rHlp, "Script")
+:   XMLTextFieldImportContext(rImport, rHlp, u"Script"_ustr)
 ,   bContentOK(false)
 {
 }
@@ -3414,9 +3414,9 @@ void XMLScriptImportContext::PrepareField(
     xPropertySet->setPropertyValue(sAPI_content, Any(sContent));
 
     // URL or script text? We use URL if we have an href-attribute
-    xPropertySet->setPropertyValue("URLContent", Any(bContentOK));
+    xPropertySet->setPropertyValue(u"URLContent"_ustr, Any(bContentOK));
 
-    xPropertySet->setPropertyValue("ScriptType", Any(sScriptType));
+    xPropertySet->setPropertyValue(u"ScriptType"_ustr, Any(sScriptType));
 }
 
 
@@ -3426,7 +3426,7 @@ void XMLScriptImportContext::PrepareField(
 XMLMeasureFieldImportContext::XMLMeasureFieldImportContext(
     SvXMLImport& rImport,
     XMLTextImportHelper& rHlp) :
-        XMLTextFieldImportContext(rImport, rHlp, "Measure"),
+        XMLTextFieldImportContext(rImport, rHlp, u"Measure"_ustr),
         mnKind( 0 )
 {
 }
@@ -3459,7 +3459,7 @@ void XMLMeasureFieldImportContext::ProcessAttribute(
 void XMLMeasureFieldImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
-    xPropertySet->setPropertyValue("Kind", Any(mnKind));
+    xPropertySet->setPropertyValue(u"Kind"_ustr, Any(mnKind));
 }
 
 
@@ -3469,7 +3469,7 @@ void XMLMeasureFieldImportContext::PrepareField(
 XMLDropDownFieldImportContext::XMLDropDownFieldImportContext(
         SvXMLImport& rImport,
         XMLTextImportHelper& rHlp) :
-    XMLTextFieldImportContext( rImport, rHlp, "DropDown" ),
+    XMLTextFieldImportContext( rImport, rHlp, u"DropDown"_ustr ),
     nSelected( -1 ),
     bNameOK( false ),
     bHelpOK(false),
@@ -3560,27 +3560,27 @@ void XMLDropDownFieldImportContext::PrepareField(
 
     // now set values:
 
-    xPropertySet->setPropertyValue( "Items", Any(aSequence) );
+    xPropertySet->setPropertyValue( u"Items"_ustr, Any(aSequence) );
 
     if( nSelected >= 0  &&  nSelected < nLength )
     {
-        xPropertySet->setPropertyValue( "SelectedItem", Any(pSequence[nSelected]) );
+        xPropertySet->setPropertyValue( u"SelectedItem"_ustr, Any(pSequence[nSelected]) );
     }
 
     // set name
     if( bNameOK )
     {
-        xPropertySet->setPropertyValue( "Name", Any(sName) );
+        xPropertySet->setPropertyValue( u"Name"_ustr, Any(sName) );
     }
     // set help
     if( bHelpOK )
     {
-        xPropertySet->setPropertyValue( "Help", Any(sHelp) );
+        xPropertySet->setPropertyValue( u"Help"_ustr, Any(sHelp) );
     }
     // set hint
     if( bHintOK )
     {
-        xPropertySet->setPropertyValue( "Tooltip", Any(sHint) );
+        xPropertySet->setPropertyValue( u"Tooltip"_ustr, Any(sHint) );
     }
 
 }
@@ -3590,7 +3590,7 @@ void XMLDropDownFieldImportContext::PrepareField(
 XMLHeaderFieldImportContext::XMLHeaderFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp)              /// Text import helper
-: XMLTextFieldImportContext(rImport, rHlp, "Header" )
+: XMLTextFieldImportContext(rImport, rHlp, u"Header"_ustr )
 {
     sServicePrefix = sAPI_presentation_prefix;
     bValid = true;
@@ -3612,7 +3612,7 @@ void XMLHeaderFieldImportContext::PrepareField(const Reference<XPropertySet> &)
 XMLFooterFieldImportContext::XMLFooterFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp)              /// Text import helper
-: XMLTextFieldImportContext(rImport, rHlp, "Footer" )
+: XMLTextFieldImportContext(rImport, rHlp, u"Footer"_ustr )
 {
     sServicePrefix = sAPI_presentation_prefix;
     bValid = true;
@@ -3635,7 +3635,7 @@ void XMLFooterFieldImportContext::PrepareField(const Reference<XPropertySet> &)
 XMLDateTimeFieldImportContext::XMLDateTimeFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp)              /// Text import helper
-: XMLTextFieldImportContext(rImport, rHlp, "DateTime" )
+: XMLTextFieldImportContext(rImport, rHlp, u"DateTime"_ustr )
 {
     sServicePrefix = sAPI_presentation_prefix;
     bValid = true;

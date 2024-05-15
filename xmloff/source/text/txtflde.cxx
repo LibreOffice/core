@@ -165,11 +165,11 @@ uno::Reference<text::XText> GetToplevelText(const uno::Reference<text::XText>& x
         if (!xPropertySet.is())
             return xRet;
 
-        if (!xPropertySet->getPropertySetInfo()->hasPropertyByName("ParentText"))
+        if (!xPropertySet->getPropertySetInfo()->hasPropertyByName(u"ParentText"_ustr))
             return xRet;
 
         uno::Reference<text::XText> xParent;
-        if (xPropertySet->getPropertyValue("ParentText") >>= xParent)
+        if (xPropertySet->getPropertyValue(u"ParentText"_ustr) >>= xParent)
             xRet = xParent;
         else
             return xRet;
@@ -1106,7 +1106,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         // show style, unless name will be shown
         ProcessValueAndType(IsStringField(nToken, rPropSet),
                             GetIntProperty(gsPropertyNumberFormat, rPropSet),
-                            "", u"", 0.0, // values not used
+                            u""_ustr, u"", 0.0, // values not used
                             false,
                             false,
                             !bCmd,
@@ -1147,7 +1147,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                        bCmd);
         ProcessValueAndType(IsStringField(nToken, rPropSet),
                             GetIntProperty(gsPropertyNumberFormat, rPropSet),
-                            "", u"", 0.0, // values not used
+                            u""_ustr, u"", 0.0, // values not used
                             false, false, !bCmd,
                             ! GetOptionalBoolProperty(
                                  gsPropertyIsFixedLanguage,
@@ -1230,7 +1230,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         {
             ProcessValueAndType(false,
                                 GetIntProperty(gsPropertyNumberFormat,rPropSet),
-                                "", u"", 0.0, // not used
+                                u""_ustr, u"", 0.0, // not used
                                 false, false, true,
                                 ! GetOptionalBoolProperty(
                                     gsPropertyIsFixedLanguage,
@@ -1272,7 +1272,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         {
             ProcessValueAndType(false,
                                 GetIntProperty(gsPropertyNumberFormat,rPropSet),
-                                "", u"", 0.0, // not used
+                                u""_ustr, u"", 0.0, // not used
                                 false, false, true,
                                 ! GetOptionalBoolProperty(
                                     gsPropertyIsFixedLanguage,
@@ -1404,7 +1404,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         {
             ProcessValueAndType(false,  // doesn't happen for text
                                 GetIntProperty(gsPropertyNumberFormat,rPropSet),
-                                "", u"", 0.0, // not used
+                                u""_ustr, u"", 0.0, // not used
                                 false, false, true, false);
         }
         ProcessDisplay(GetBoolProperty(gsPropertyIsVisible, rPropSet),
@@ -1429,7 +1429,7 @@ void XMLTextFieldExport::ExportFieldHelper(
     case FIELD_ID_DOCINFO_PRINT_DATE:
         ProcessValueAndType(false,
                             GetIntProperty(gsPropertyNumberFormat, rPropSet),
-                            "", u"", 0.0,
+                            u""_ustr, u"", 0.0,
                             false, false, true,
                             ! GetOptionalBoolProperty(
                                     gsPropertyIsFixedLanguage,
@@ -1460,7 +1460,7 @@ void XMLTextFieldExport::ExportFieldHelper(
     {
         ProcessValueAndType(false,  // doesn't happen for text
                                 GetIntProperty(gsPropertyNumberFormat,rPropSet),
-                                "", u"", 0.0, // not used
+                                u""_ustr, u"", 0.0, // not used
                                 false, false, true,
                                 ! GetOptionalBoolProperty(
                                     gsPropertyIsFixedLanguage,
@@ -1780,7 +1780,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
         if (eVersion & SvtSaveOptions::ODFSVER_EXTENDED)
         {
-            bool b = GetBoolProperty("Resolved", rPropSet);
+            bool b = GetBoolProperty(u"Resolved"_ustr, rPropSet);
             OUString aResolvedText;
             OUStringBuffer aResolvedTextBuffer;
             ::sax::Converter::convertBool(aResolvedTextBuffer, b);
@@ -1882,7 +1882,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                         GetBoolProperty(gsPropertyIsShowFormula, rPropSet) );
         ProcessValueAndType( false,
                              GetIntProperty(gsPropertyNumberFormat, rPropSet),
-                             "", u"", 0.0f,
+                             u""_ustr, u"", 0.0f,
                              false, false, true,
                              false );
         ExportElement( XML_TABLE_FORMULA, sPresentation );
@@ -2077,7 +2077,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                 ProcessValueAndType(
                     bIsString,
                     GetIntProperty(gsPropertyNumberFormat, xFieldPropSet),
-                    "", u"", 0.0,
+                    u""_ustr, u"", 0.0,
                     false, true, false, false);
             }
             else
@@ -2090,7 +2090,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                 // from NumberFormats
                 ProcessValueAndType(
                     bIsString,
-                    0, "", u"", 0.0,
+                    0, u""_ustr, u"", 0.0,
                     false, true, false, false);
             }
 
@@ -2163,7 +2163,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                 // expression:
                 ProcessValueAndType(
                     false,
-                    0, "", u"",
+                    0, u""_ustr, u"",
                     GetDoubleProperty(gsPropertyValue, xPropSet),
                     true,
                     true,
@@ -2295,7 +2295,7 @@ void XMLTextFieldExport::ExportMacro(
     const OUString& rContent )
 {
     // some strings we'll need
-    OUString sEventType( "EventType" );
+    OUString sEventType( u"EventType"_ustr );
 
 
     // the description attribute
@@ -2312,13 +2312,13 @@ void XMLTextFieldExport::ExportMacro(
     // 1) build sequence of PropertyValues
     Sequence<PropertyValue> aSeq;
     OUString sName;
-    rPropSet->getPropertyValue("ScriptURL") >>= sName;
+    rPropSet->getPropertyValue(u"ScriptURL"_ustr) >>= sName;
 
     // if the ScriptURL property is not empty then this is a Scripting
     // Framework URL, otherwise treat it as a Basic Macro
     if (!sName.isEmpty())
     {
-        OUString sScript( "Script" );
+        OUString sScript( u"Script"_ustr );
         aSeq = Sequence<PropertyValue>
         {
             comphelper::makePropertyValue(sEventType, sScript),
@@ -2329,14 +2329,14 @@ void XMLTextFieldExport::ExportMacro(
     {
         aSeq = Sequence<PropertyValue>
         {
-            comphelper::makePropertyValue(sEventType, OUString("StarBasic")),
-            comphelper::makePropertyValue("Library", rPropSet->getPropertyValue( "MacroLibrary" )),
-            comphelper::makePropertyValue("MacroName", rPropSet->getPropertyValue( "MacroName" ))
+            comphelper::makePropertyValue(sEventType, u"StarBasic"_ustr),
+            comphelper::makePropertyValue(u"Library"_ustr, rPropSet->getPropertyValue( u"MacroLibrary"_ustr )),
+            comphelper::makePropertyValue(u"MacroName"_ustr, rPropSet->getPropertyValue( u"MacroName"_ustr ))
         };
     }
 
     // 2) export the sequence
-    GetExport().GetEventExport().ExportSingleEvent( aSeq, "OnClick", false );
+    GetExport().GetEventExport().ExportSingleEvent( aSeq, u"OnClick"_ustr, false );
 
     // and finally, the field presentation
     GetExport().Characters(rContent);
@@ -2365,7 +2365,7 @@ void XMLTextFieldExport::ExportMetaField(
         // style:data-style-name
         ProcessValueAndType(false,
             GetIntProperty(gsPropertyNumberFormat, i_xMeta),
-            "", u"", 0.0, false, false, true,
+            u""_ustr, u"", 0.0, false, false, true,
             false  );
 
         // text:meta-field without xml:id is invalid

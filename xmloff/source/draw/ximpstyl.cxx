@@ -1034,8 +1034,8 @@ void SdXMLStylesContext::endFastElement(sal_Int32 )
         {
             uno::Reference< beans::XPropertySetInfo > xInfoSetInfo( xInfoSet->getPropertySetInfo() );
 
-            if( xInfoSetInfo->hasPropertyByName("PageLayouts") )
-                xInfoSet->setPropertyValue("PageLayouts", uno::Any( getPageLayouts() ) );
+            if( xInfoSetInfo->hasPropertyByName(u"PageLayouts"_ustr) )
+                xInfoSet->setPropertyValue(u"PageLayouts"_ustr, uno::Any( getPageLayouts() ) );
         }
 
     }
@@ -1074,7 +1074,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles() const
 {
     if(GetSdImport().GetLocalDocStyleFamilies().is()) try
     {
-        uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName("graphics"), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(u"graphics"_ustr), uno::UNO_QUERY_THROW );
 
         ImpSetGraphicStyles(xGraphicPageStyles, XmlStyleFamily::SD_GRAPHICS_ID, u"");
     }
@@ -1088,7 +1088,7 @@ void SdXMLStylesContext::ImpSetCellStyles() const
 {
     if(GetSdImport().GetLocalDocStyleFamilies().is()) try
     {
-        uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName("cell"), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(u"cell"_ustr), uno::UNO_QUERY_THROW );
 
         ImpSetGraphicStyles(xGraphicPageStyles, XmlStyleFamily::TABLE_CELL, u"");
     }
@@ -1111,7 +1111,7 @@ static bool canSkipReset(std::u16string_view rName, const XMLPropStyleContext* p
     if (pPropStyle && rName == u"TextAutoGrowHeight")
     {
         bool bOldStyleTextAutoGrowHeight(false);
-        rPropSet->getPropertyValue("TextAutoGrowHeight") >>= bOldStyleTextAutoGrowHeight;
+        rPropSet->getPropertyValue(u"TextAutoGrowHeight"_ustr) >>= bOldStyleTextAutoGrowHeight;
 
         sal_Int32 nIndexStyle = rPrMap->GetEntryIndex(XML_NAMESPACE_DRAW, u"auto-grow-height", 0);
         if (nIndexStyle != -1)
@@ -1451,7 +1451,7 @@ bool IsIgnoreFillStyleNamedItem(
 
     // note: the caller must have called FillPropertySet() previously
     drawing::FillStyle fillStyle{drawing::FillStyle_NONE};
-    xProps->getPropertyValue("FillStyle") >>= fillStyle;
+    xProps->getPropertyValue(u"FillStyle"_ustr) >>= fillStyle;
     return fillStyle != nExpectedFillStyle;
 }
 

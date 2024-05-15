@@ -1141,7 +1141,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 uno::Reference<ucb::XAnyCompareFactory> xCompareFac( mxModel, uno::UNO_QUERY );
                 uno::Reference<ucb::XAnyCompare> xCompare;
                 if( xCompareFac.is() )
-                    xCompare = xCompareFac->createAnyCompareByName( "NumberingRules" );
+                    xCompare = xCompareFac->createAnyCompareByName( u"NumberingRules"_ustr );
 
                 pHdl = new XMLNumRulePropHdl( xCompare );
                 break;
@@ -1566,7 +1566,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
             try
             {
                 awt::Rectangle aRect;
-                if( rPropSet->getPropertyValue( "VisibleArea" ) >>= aRect )
+                if( rPropSet->getPropertyValue( u"VisibleArea"_ustr ) >>= aRect )
                 {
                     if( pOLEVisAreaLeft )
                     {

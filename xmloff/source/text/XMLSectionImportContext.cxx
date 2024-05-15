@@ -98,8 +98,8 @@ void XMLSectionImportContext::startFastElement( sal_Int32 nElement,
         return;
 
     Reference<XInterface> xIfc =
-        xFactory->createInstance( bIsIndexHeader ? OUString("com.sun.star.text.IndexHeaderSection")
-                                                 : OUString("com.sun.star.text.TextSection") );
+        xFactory->createInstance( bIsIndexHeader ? u"com.sun.star.text.IndexHeaderSection"_ustr
+                                                 : u"com.sun.star.text.TextSection"_ustr );
     if (!xIfc.is())
         return;
 
@@ -127,19 +127,19 @@ void XMLSectionImportContext::startFastElement( sal_Int32 nElement,
     // IsVisible and condition (not for index headers)
     if (! bIsIndexHeader)
     {
-        xPropSet->setPropertyValue( "IsVisible", Any(bIsVisible) );
+        xPropSet->setPropertyValue( u"IsVisible"_ustr, Any(bIsVisible) );
 
         // #97450# hidden sections must be hidden on reload
         // For backwards compatibility, set flag only if it is
         // present
         if( bIsCurrentlyVisibleOK )
         {
-            xPropSet->setPropertyValue( "IsCurrentlyVisible", Any(bIsCurrentlyVisible));
+            xPropSet->setPropertyValue( u"IsCurrentlyVisible"_ustr, Any(bIsCurrentlyVisible));
         }
 
         if (bCondOK)
         {
-            xPropSet->setPropertyValue( "Condition", Any(sCond) );
+            xPropSet->setPropertyValue( u"Condition"_ustr, Any(sCond) );
         }
     }
 
@@ -147,11 +147,11 @@ void XMLSectionImportContext::startFastElement( sal_Int32 nElement,
     if ( bSequenceOK &&
          (nElement & TOKEN_MASK) == XML_SECTION )
     {
-        xPropSet->setPropertyValue("ProtectionKey", Any(aSequence));
+        xPropSet->setPropertyValue(u"ProtectionKey"_ustr, Any(aSequence));
     }
 
     // protection
-    xPropSet->setPropertyValue( "IsProtected", Any(bProtect) );
+    xPropSet->setPropertyValue( u"IsProtected"_ustr, Any(bProtect) );
 
     // insert marker, <paragraph>, marker; then insert
     // section over the first marker character, and delete the
@@ -161,7 +161,7 @@ void XMLSectionImportContext::startFastElement( sal_Int32 nElement,
 #ifndef DBG_UTIL
     OUString sMarkerString(" ");
 #else
-    OUString sMarkerString("X");
+    OUString sMarkerString(u"X"_ustr);
 #endif
     rHelper->InsertString(sMarkerString);
     rHelper->InsertControlCharacter(
@@ -182,7 +182,7 @@ void XMLSectionImportContext::startFastElement( sal_Int32 nElement,
 
     // and delete first marker (in section)
     rHelper->GetText()->insertString(
-        rHelper->GetCursorAsRange(), "", true);
+        rHelper->GetCursorAsRange(), u""_ustr, true);
 
     // finally, check for redlines that should start at
     // the section start node
@@ -279,13 +279,13 @@ void XMLSectionImportContext::endFastElement(sal_Int32 )
     {
         rHelper->GetCursor()->goLeft(1, true);
         rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
-                                         "", true);
+                                         u""_ustr, true);
     }
 
     // and delete second marker
     rHelper->GetCursor()->goRight(1, true);
     rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
-                                     "", true);
+                                     u""_ustr, true);
 
     // check for redlines to our endnode
     rHelper->RedlineAdjustStartNodeCursor();

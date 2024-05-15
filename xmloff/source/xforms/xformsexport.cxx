@@ -272,13 +272,13 @@ void exportXFormsBinding( SvXMLExport& rExport,
     // name check; generate binding ID if necessary
     {
         OUString sName;
-        xBinding->getPropertyValue( "BindingID" ) >>= sName;
+        xBinding->getPropertyValue( u"BindingID"_ustr ) >>= sName;
         if( sName.isEmpty() )
         {
             // if we don't have a name yet, generate one on the fly
             sal_Int64 nId = reinterpret_cast<sal_uInt64>( xBinding.get() );
             sName = "bind_" + OUString::number( nId , 16 );
-            xBinding->setPropertyValue( "BindingID", Any(sName));
+            xBinding->setPropertyValue( u"BindingID"_ustr, Any(sName));
         }
     }
 
@@ -287,14 +287,14 @@ void exportXFormsBinding( SvXMLExport& rExport,
     // handle type attribute
     {
         OUString sTypeName;
-        xBinding->getPropertyValue( "Type" ) >>= sTypeName;
+        xBinding->getPropertyValue( u"Type"_ustr ) >>= sTypeName;
 
         try
         {
             // now get type, and determine whether it's a standard type. If
             // so, export the XSD name
             Reference<css::xforms::XModel> xModel(
-                xBinding->getPropertyValue( "Model" ),
+                xBinding->getPropertyValue( u"Model"_ustr ),
                 UNO_QUERY );
             Reference<XDataTypeRepository> xRepository(
                 xModel.is() ? xModel->getDataTypeRepository() : Reference<XDataTypeRepository>() );
@@ -306,7 +306,7 @@ void exportXFormsBinding( SvXMLExport& rExport,
                 // if it's a basic data type, write out the XSD name
                 // for the XSD type class
                 bool bIsBasic = false;
-                xDataType->getPropertyValue( "IsBasic" ) >>= bIsBasic;
+                xDataType->getPropertyValue( u"IsBasic"_ustr ) >>= bIsBasic;
                 if( bIsBasic )
                     sTypeName = lcl_getXSDType( rExport, xDataType );
             }
@@ -328,7 +328,7 @@ void exportXFormsBinding( SvXMLExport& rExport,
     // to do so, we will write out all missing namespace declaractions.
     const SvXMLNamespaceMap& rMap = rExport.GetNamespaceMap();
     Reference<XNameAccess> xNamespaces(
-        xBinding->getPropertyValue( "ModelNamespaces" ), UNO_QUERY);
+        xBinding->getPropertyValue( u"ModelNamespaces"_ustr ), UNO_QUERY);
     if( xNamespaces.is() )
     {
         // iterate over Prefixes for this binding
@@ -467,7 +467,7 @@ static OUString lcl_getXSDType( SvXMLExport const & rExport,
     XMLTokenEnum eToken = XML_STRING;
 
     sal_uInt16 nDataTypeClass = 0;
-    xType->getPropertyValue( "TypeClass" ) >>= nDataTypeClass;
+    xType->getPropertyValue( u"TypeClass"_ustr ) >>= nDataTypeClass;
     switch( nDataTypeClass )
     {
     case css::xsd::DataTypeClass::STRING:
@@ -526,7 +526,7 @@ static void lcl_exportDataType( SvXMLExport& rExport,
 {
     // we do not need to export basic types; exit if we have one
     bool bIsBasic = false;
-    xType->getPropertyValue( "IsBasic" ) >>= bIsBasic;
+    xType->getPropertyValue( u"IsBasic"_ustr ) >>= bIsBasic;
     if( bIsBasic )
         return;
 
@@ -534,7 +534,7 @@ static void lcl_exportDataType( SvXMLExport& rExport,
 
     // <xsd:simpleType name="...">
     OUString sName;
-    xType->getPropertyValue( "Name" ) >>= sName;
+    xType->getPropertyValue( u"Name"_ustr ) >>= sName;
     rExport.AddAttribute( XML_NAMESPACE_NONE, XML_NAME, sName );
     SvXMLElementExport aSimpleType( rExport,
                                     XML_NAMESPACE_XSD, XML_SIMPLETYPE,
@@ -581,7 +581,7 @@ void exportXFormsSchemas( SvXMLExport& rExport,
     if( xPropSet.is() )
     {
         Reference<XDocument> xDocument(
-            xPropSet->getPropertyValue( "ForeignSchema" ),
+            xPropSet->getPropertyValue( u"ForeignSchema"_ustr ),
             UNO_QUERY );
 
         if( xDocument.is() )
@@ -704,7 +704,7 @@ OUString xforms_whitespace( const Any& rAny )
 /// return name of Binding
 static OUString lcl_getXFormsBindName( const Reference<XPropertySet>& xBinding )
 {
-    OUString sProp( "BindingID" );
+    OUString sProp( u"BindingID"_ustr );
 
     OUString sReturn;
     if( xBinding.is() &&
@@ -745,7 +745,7 @@ OUString getXFormsSubmissionName( const Reference<XPropertySet>& xBinding )
     {
         Reference<XPropertySet> xPropertySet(
             xSubmissionSupplier->getSubmission(), UNO_QUERY );
-        OUString sProp( "ID" );
+        OUString sProp( u"ID"_ustr );
         if( xPropertySet.is() &&
             xPropertySet->getPropertySetInfo()->hasPropertyByName( sProp ) )
         {
@@ -788,7 +788,7 @@ void getXFormsSettings( const Reference< XNameAccess >& _rXForms, Sequence< Prop
 
         if ( xModelSettings->hasElements() )
         {
-            _out_rSettings = { comphelper::makePropertyValue("XFormModels", xModelSettings) };
+            _out_rSettings = { comphelper::makePropertyValue(u"XFormModels"_ustr, xModelSettings) };
         }
     }
     catch( const Exception& )

@@ -130,13 +130,13 @@ void SdXMLLayerContext::endFastElement(sal_Int32 )
             SAL_WARN_IF( !xLayer.is(), "xmloff", "xmloff::SdXMLLayerContext::EndElement(), failed to create new XLayer!" );
 
             if( xLayer.is() )
-                xLayer->setPropertyValue("Name", Any( msName ) );
+                xLayer->setPropertyValue(u"Name"_ustr, Any( msName ) );
         }
 
         if( xLayer.is() )
         {
-            xLayer->setPropertyValue("Title", Any( sTitleBuffer.makeStringAndClear() ) );
-            xLayer->setPropertyValue("Description", Any( sDescriptionBuffer.makeStringAndClear() ) );
+            xLayer->setPropertyValue(u"Title"_ustr, Any( sTitleBuffer.makeStringAndClear() ) );
+            xLayer->setPropertyValue(u"Description"_ustr, Any( sDescriptionBuffer.makeStringAndClear() ) );
             bool bIsVisible( true );
             bool bIsPrintable( true );
             if ( !msDisplay.isEmpty() )
@@ -144,20 +144,20 @@ void SdXMLLayerContext::endFastElement(sal_Int32 )
                 bIsVisible = (msDisplay == "always") || (msDisplay == "screen");
                 bIsPrintable = (msDisplay == "always") || (msDisplay == "printer");
             }
-            xLayer->setPropertyValue("IsVisible", Any( bIsVisible ) );
-            xLayer->setPropertyValue("IsPrintable", Any( bIsPrintable ) );
+            xLayer->setPropertyValue(u"IsVisible"_ustr, Any( bIsVisible ) );
+            xLayer->setPropertyValue(u"IsPrintable"_ustr, Any( bIsPrintable ) );
             bool bIsLocked( false );
             if ( !msProtected.isEmpty() )
                 bIsLocked = (msProtected == "true");
-            xLayer->setPropertyValue("IsLocked", Any( bIsLocked ) );
+            xLayer->setPropertyValue(u"IsLocked"_ustr, Any( bIsLocked ) );
 
             // tdf#129898 repair layer "DrawnInSlideshow", which was wrongly written
             // in LO 6.2 to 6.4. It should always have ODF defaults.
             if (msName == "DrawnInSlideshow")
             {
-                xLayer->setPropertyValue("IsVisible", Any(true));
-                xLayer->setPropertyValue("IsPrintable", Any(true));
-                xLayer->setPropertyValue("IsLocked", Any(false));
+                xLayer->setPropertyValue(u"IsVisible"_ustr, Any(true));
+                xLayer->setPropertyValue(u"IsPrintable"_ustr, Any(true));
+                xLayer->setPropertyValue(u"IsLocked"_ustr, Any(false));
             }
         }
     }

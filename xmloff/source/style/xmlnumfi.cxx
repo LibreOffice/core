@@ -603,7 +603,7 @@ static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumForm
     {
         // A quote is turned into "\"" - a quote to end quoted text, an escaped quote,
         // and a quote to resume quoting.
-        OUString aInsert(  "\"\\\""  );
+        OUString aInsert(  u"\"\\\""_ustr  );
 
         sal_Int32 nPos = 0;
         while ( nPos < rContent.getLength() )

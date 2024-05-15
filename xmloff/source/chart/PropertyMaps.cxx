@@ -1007,17 +1007,17 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
             case XML_SCH_CONTEXT_SPECIAL_REGRESSION_TYPE:
             {
                 if      (IsXMLToken( rValue, XML_LINEAR ))
-                    rProperty.maValue <<= OUString("com.sun.star.chart2.LinearRegressionCurve");
+                    rProperty.maValue <<= u"com.sun.star.chart2.LinearRegressionCurve"_ustr;
                 else if (IsXMLToken( rValue, XML_LOGARITHMIC))
-                    rProperty.maValue <<= OUString("com.sun.star.chart2.LogarithmicRegressionCurve");
+                    rProperty.maValue <<= u"com.sun.star.chart2.LogarithmicRegressionCurve"_ustr;
                 else if (IsXMLToken( rValue, XML_EXPONENTIAL))
-                    rProperty.maValue <<= OUString("com.sun.star.chart2.ExponentialRegressionCurve");
+                    rProperty.maValue <<= u"com.sun.star.chart2.ExponentialRegressionCurve"_ustr;
                 else if (IsXMLToken( rValue, XML_POWER))
-                    rProperty.maValue <<= OUString("com.sun.star.chart2.PotentialRegressionCurve");
+                    rProperty.maValue <<= u"com.sun.star.chart2.PotentialRegressionCurve"_ustr;
                 else if (IsXMLToken( rValue, XML_POLYNOMIAL))
-                    rProperty.maValue <<= OUString("com.sun.star.chart2.PolynomialRegressionCurve");
+                    rProperty.maValue <<= u"com.sun.star.chart2.PolynomialRegressionCurve"_ustr;
                 else if (IsXMLToken( rValue, XML_MOVING_AVERAGE))
-                    rProperty.maValue <<= OUString("com.sun.star.chart2.MovingAverageRegressionCurve");
+                    rProperty.maValue <<= u"com.sun.star.chart2.MovingAverageRegressionCurve"_ustr;
             }
             break;
 

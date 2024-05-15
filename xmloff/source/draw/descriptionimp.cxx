@@ -49,11 +49,11 @@ void SdXMLDescriptionContext::endFastElement(sal_Int32 )
         uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY_THROW);
         if( (mnElement & TOKEN_MASK) == XML_TITLE)
         {
-            xPropSet->setPropertyValue("Title", Any(msText));
+            xPropSet->setPropertyValue(u"Title"_ustr, Any(msText));
         }
         else
         {
-            xPropSet->setPropertyValue("Description", Any(msText));
+            xPropSet->setPropertyValue(u"Description"_ustr, Any(msText));
         }
     }
     catch( uno::Exception& )

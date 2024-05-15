@@ -396,16 +396,16 @@ void PageMasterImportPropertyMapper::finished(std::vector< XMLPropertyState >& r
 
         bool bGutterAtTop{};
         uno::Reference<lang::XServiceInfo> xSI(GetImport().GetModel(), uno::UNO_QUERY);
-        if (xSI.is() && xSI->supportsService("com.sun.star.text.TextDocument"))
+        if (xSI.is() && xSI->supportsService(u"com.sun.star.text.TextDocument"_ustr))
         {
             uno::Reference<lang::XMultiServiceFactory> xFac(GetImport().GetModel(), uno::UNO_QUERY);
             if (xFac.is())
             {
                 uno::Reference<beans::XPropertySet> xProps(
-                    xFac->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+                    xFac->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
                 if (xProps.is())
                 {
-                    xProps->getPropertyValue("GutterAtTop") >>= bGutterAtTop;
+                    xProps->getPropertyValue(u"GutterAtTop"_ustr) >>= bGutterAtTop;
                 }
             }
         }

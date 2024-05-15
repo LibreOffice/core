@@ -57,7 +57,7 @@ void SchXMLDataTableContext::startFastElement(
     // Create a new DataTable instance
     uno::Reference<lang::XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
     uno::Reference<chart2::XDataTable> xDataTable(
-        xFactory->createInstance("com.sun.star.chart2.DataTable"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.chart2.DataTable"_ustr), uno::UNO_QUERY);
     if (!xDataTable.is())
         return;
 

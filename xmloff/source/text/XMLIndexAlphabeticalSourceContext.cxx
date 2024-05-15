@@ -162,28 +162,28 @@ void XMLIndexAlphabeticalSourceContext::endFastElement(sal_Int32 nElement)
     {
         aAny <<= GetImport().GetStyleDisplayName(
                             XmlStyleFamily::TEXT_TEXT, sMainEntryStyleName );
-        rIndexPropertySet->setPropertyValue("MainEntryCharacterStyleName",aAny);
+        rIndexPropertySet->setPropertyValue(u"MainEntryCharacterStyleName"_ustr,aAny);
     }
 
-    rIndexPropertySet->setPropertyValue("UseAlphabeticalSeparators", css::uno::Any(bSeparators));
-    rIndexPropertySet->setPropertyValue("UseCombinedEntries", css::uno::Any(bCombineEntries));
-    rIndexPropertySet->setPropertyValue("IsCaseSensitive", css::uno::Any(bCaseSensitive));
-    rIndexPropertySet->setPropertyValue("UseKeyAsEntry", css::uno::Any(bEntry));
-    rIndexPropertySet->setPropertyValue("UseUpperCase", css::uno::Any(bUpperCase));
-    rIndexPropertySet->setPropertyValue("UseDash", css::uno::Any(bCombineDash));
-    rIndexPropertySet->setPropertyValue("UsePP", css::uno::Any(bCombinePP));
-    rIndexPropertySet->setPropertyValue("IsCommaSeparated", css::uno::Any(bCommaSeparated));
+    rIndexPropertySet->setPropertyValue(u"UseAlphabeticalSeparators"_ustr, css::uno::Any(bSeparators));
+    rIndexPropertySet->setPropertyValue(u"UseCombinedEntries"_ustr, css::uno::Any(bCombineEntries));
+    rIndexPropertySet->setPropertyValue(u"IsCaseSensitive"_ustr, css::uno::Any(bCaseSensitive));
+    rIndexPropertySet->setPropertyValue(u"UseKeyAsEntry"_ustr, css::uno::Any(bEntry));
+    rIndexPropertySet->setPropertyValue(u"UseUpperCase"_ustr, css::uno::Any(bUpperCase));
+    rIndexPropertySet->setPropertyValue(u"UseDash"_ustr, css::uno::Any(bCombineDash));
+    rIndexPropertySet->setPropertyValue(u"UsePP"_ustr, css::uno::Any(bCombinePP));
+    rIndexPropertySet->setPropertyValue(u"IsCommaSeparated"_ustr, css::uno::Any(bCommaSeparated));
 
 
     if (!sAlgorithm.isEmpty())
     {
-        rIndexPropertySet->setPropertyValue("SortAlgorithm", css::uno::Any(sAlgorithm));
+        rIndexPropertySet->setPropertyValue(u"SortAlgorithm"_ustr, css::uno::Any(sAlgorithm));
     }
 
     if ( !maLanguageTagODF.isEmpty() )
     {
         aAny <<= maLanguageTagODF.getLanguageTag().getLocale( false);
-        rIndexPropertySet->setPropertyValue("Locale", aAny);
+        rIndexPropertySet->setPropertyValue(u"Locale"_ustr, aAny);
     }
 
     XMLIndexSourceBaseContext::endFastElement(nElement);

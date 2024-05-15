@@ -178,7 +178,7 @@ void XMLErrors::AddRecord(
     else
     {
         AddRecord( nId, rParams, rExceptionMessage,
-                   -1, -1, "", "" );
+                   -1, -1, u""_ustr, u""_ustr );
     }
 }
 

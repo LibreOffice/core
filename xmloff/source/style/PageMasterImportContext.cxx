@@ -241,11 +241,11 @@ void PageStyleContext::FillPropertySet_PageStyle(
         drawing::FillStyle fillStyle{drawing::FillStyle_NONE};
         drawing::FillStyle fillStyleHeader{drawing::FillStyle_NONE};
         drawing::FillStyle fillStyleFooter{drawing::FillStyle_NONE};
-        if (xInfo->hasPropertyByName("FillStyle")) // SwXTextDefaults lacks it?
+        if (xInfo->hasPropertyByName(u"FillStyle"_ustr)) // SwXTextDefaults lacks it?
         {
-            xPropSet->getPropertyValue("FillStyle") >>= fillStyle;
-            xPropSet->getPropertyValue("HeaderFillStyle") >>= fillStyleHeader;
-            xPropSet->getPropertyValue("FooterFillStyle") >>= fillStyleFooter;
+            xPropSet->getPropertyValue(u"FillStyle"_ustr) >>= fillStyle;
+            xPropSet->getPropertyValue(u"HeaderFillStyle"_ustr) >>= fillStyleHeader;
+            xPropSet->getPropertyValue(u"FooterFillStyle"_ustr) >>= fillStyleFooter;
         }
 
         // handle special attributes which have MID_FLAG_NO_PROPERTY_IMPORT set
@@ -330,7 +330,7 @@ void PageStyleContext::FillPropertySet_PageStyle(
     {
         bool isFullSize(true); // default is current LO default
         drawing::FillStyle fillStyle{drawing::FillStyle_NONE};
-        xPropSet->getPropertyValue("FillStyle") >>= fillStyle;
+        xPropSet->getPropertyValue(u"FillStyle"_ustr) >>= fillStyle;
         if (GetImport().isGeneratorVersionOlderThan(SvXMLImport::AOO_4x, SvXMLImport::LO_63x)
             // also for AOO 4.x, assume there won't ever be a 4.2
             || GetImport().getGeneratorVersion() == SvXMLImport::AOO_4x)
@@ -360,7 +360,7 @@ void PageStyleContext::FillPropertySet_PageStyle(
                 case drawing::FillStyle_BITMAP:
                     {
                         drawing::BitmapMode bitmapMode{};
-                        xPropSet->getPropertyValue("FillBitmapMode") >>= bitmapMode;
+                        xPropSet->getPropertyValue(u"FillBitmapMode"_ustr) >>= bitmapMode;
                         switch (bitmapMode)
                         {
                             case drawing::BitmapMode_REPEAT:
@@ -383,7 +383,7 @@ void PageStyleContext::FillPropertySet_PageStyle(
         if (!isFullSize)
         {
             SAL_INFO("xmloff.style", "FillPropertySet_PageStyle: Heuristically resetting BackgroundFullSize");
-            xPropSet->setPropertyValue("BackgroundFullSize", uno::Any(isFullSize));
+            xPropSet->setPropertyValue(u"BackgroundFullSize"_ustr, uno::Any(isFullSize));
         }
     }
 
@@ -395,7 +395,7 @@ void PageStyleContext::FillPropertySet_PageStyle(
         uno::Any aPageUsage;
         XMLPMPropHdl_PageStyleLayout aPageUsageHdl;
         if (aPageUsageHdl.importXML(sPageUsage, aPageUsage, GetImport().GetMM100UnitConverter()))
-            xPropSet->setPropertyValue("PageStyleLayout", aPageUsage);
+            xPropSet->setPropertyValue(u"PageStyleLayout"_ustr, aPageUsage);
     }
 }
 
@@ -424,7 +424,7 @@ void PageStyleContext::SetDefaults( )
     Reference < XMultiServiceFactory > xFactory ( GetImport().GetModel(), UNO_QUERY);
     if (xFactory.is())
     {
-        Reference < XInterface > xInt = xFactory->createInstance( "com.sun.star.text.Defaults" );
+        Reference < XInterface > xInt = xFactory->createInstance( u"com.sun.star.text.Defaults"_ustr );
         Reference < beans::XPropertySet > xProperties ( xInt, UNO_QUERY );
         if ( xProperties.is() )
             FillPropertySet_PageStyle(xProperties, nullptr);

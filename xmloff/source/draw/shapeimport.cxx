@@ -131,7 +131,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mpPresPagePropsMapper = new SvXMLImportPropertyMapper( xMapper, rImporter );
 
     uno::Reference< lang::XServiceInfo > xInfo( rImporter.GetModel(), uno::UNO_QUERY );
-    mpImpl->mbIsPresentationShapesSupported = xInfo.is() && xInfo->supportsService( "com.sun.star.presentation.PresentationDocument" );
+    mpImpl->mbIsPresentationShapesSupported = xInfo.is() && xInfo->supportsService( u"com.sun.star.presentation.PresentationDocument"_ustr );
 }
 
 XMLShapeImportHelper::~XMLShapeImportHelper()
@@ -488,11 +488,11 @@ void XMLShapeImportHelper::finishShape(
     {
         if ( mrImporter.IsShapePositionInHoriL2R() &&
              xPropSet->getPropertySetInfo()->hasPropertyByName(
-                "PositionLayoutDir") )
+                u"PositionLayoutDir"_ustr) )
         {
             uno::Any aPosLayoutDir;
             aPosLayoutDir <<= text::PositionLayoutDir::PositionInHoriL2R;
-            xPropSet->setPropertyValue( "PositionLayoutDir", aPosLayoutDir );
+            xPropSet->setPropertyValue( u"PositionLayoutDir"_ustr, aPosLayoutDir );
         }
     }
 }
@@ -544,10 +544,10 @@ void ShapeGroupContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
     uno::Reference< beans::XPropertySet > xPropSet;
     aAny >>= xPropSet;
 
-    if( !(xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName( "ZOrder" )) )
+    if( !(xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName( u"ZOrder"_ustr )) )
         return;
 
-    xPropSet->setPropertyValue( "ZOrder", uno::Any(nDestPos) );
+    xPropSet->setPropertyValue( u"ZOrder"_ustr, uno::Any(nDestPos) );
 
     for( ZOrderHint& rHint : maZOrderList )
     {
@@ -794,9 +794,9 @@ void XMLShapeImportHelper::restoreConnections()
             uno::Any aLine1Delta;
             uno::Any aLine2Delta;
             uno::Any aLine3Delta;
-            OUString aStr1("EdgeLine1Delta");
-            OUString aStr2("EdgeLine2Delta");
-            OUString aStr3("EdgeLine3Delta");
+            OUString aStr1(u"EdgeLine1Delta"_ustr);
+            OUString aStr2(u"EdgeLine2Delta"_ustr);
+            OUString aStr3(u"EdgeLine3Delta"_ustr);
             aLine1Delta = xConnector->getPropertyValue(aStr1);
             aLine2Delta = xConnector->getPropertyValue(aStr2);
             aLine3Delta = xConnector->getPropertyValue(aStr3);

@@ -332,7 +332,7 @@ OUString SvXMLAutoStylePoolP::Add( XmlStyleFamily nFamily,
                                    std::vector< XMLPropertyState >&& rProperties )
 {
     OUString sName;
-    m_pImpl->Add(sName, nFamily, "", std::move(rProperties) );
+    m_pImpl->Add(sName, nFamily, u""_ustr, std::move(rProperties) );
     return sName;
 }
 

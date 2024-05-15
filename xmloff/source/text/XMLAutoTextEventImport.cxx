@@ -40,7 +40,7 @@ using ::xmloff::token::XML_AUTO_TEXT_EVENTS;
 
 XMLAutoTextEventImport::XMLAutoTextEventImport(
     const css::uno::Reference<css::uno::XComponentContext>& xContext)
-    : SvXMLImport(xContext, "com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter")
+    : SvXMLImport(xContext, u"com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter"_ustr)
 {
 }
 

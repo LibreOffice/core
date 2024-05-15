@@ -122,8 +122,8 @@ XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
     sal_Int32 /*nElement*/,
     const Reference<XFastAttributeList> & xAttrList)
 :   SvXMLStyleContext(rImport, XmlStyleFamily::TEXT_FOOTNOTECONFIG)
-,   sNumFormat("1")
-,   sNumSync("false")
+,   sNumFormat(u"1"_ustr)
+,   sNumSync(u"false"_ustr)
 ,   nOffset(0)
 ,   nNumbering(FootnoteNumbering::PER_PAGE)
 ,   bPosition(false)

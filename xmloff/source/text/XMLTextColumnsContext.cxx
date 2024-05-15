@@ -257,7 +257,7 @@ void XMLTextColumnsContext::endFastElement(sal_Int32 nElement )
     if( !xFactory.is() )
         return;
 
-    Reference<XInterface> xIfc = xFactory->createInstance("com.sun.star.text.TextColumns");
+    Reference<XInterface> xIfc = xFactory->createInstance(u"com.sun.star.text.TextColumns"_ustr);
     if( !xIfc.is() )
         return;
 

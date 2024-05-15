@@ -166,7 +166,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPISeriesProp
             uno::Reference< lang::XMultiServiceFactory > xFactory( xChartModel, uno::UNO_QUERY );
             if( xFactory.is() )
             {
-                xRet.set( xFactory->createInstance( "com.sun.star.comp.chart2.DataSeriesWrapper" ), uno::UNO_QUERY );
+                xRet.set( xFactory->createInstance( u"com.sun.star.comp.chart2.DataSeriesWrapper"_ustr ), uno::UNO_QUERY );
                 Reference< lang::XInitialization > xInit( xRet, uno::UNO_QUERY );
                 if(xInit.is())
                 {
@@ -198,7 +198,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPIDataPointP
             uno::Reference< lang::XMultiServiceFactory > xFactory( xChartModel, uno::UNO_QUERY );
             if( xFactory.is() )
             {
-                xRet.set( xFactory->createInstance( "com.sun.star.comp.chart2.DataSeriesWrapper" ), uno::UNO_QUERY );
+                xRet.set( xFactory->createInstance( u"com.sun.star.comp.chart2.DataSeriesWrapper"_ustr ), uno::UNO_QUERY );
                 Reference< lang::XInitialization > xInit( xRet, uno::UNO_QUERY );
                 if(xInit.is())
                 {

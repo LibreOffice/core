@@ -35,35 +35,35 @@ namespace xmloff
     {
         switch (_nId)
         {
-            case CCAFlags::Name:              return "name";
-            case CCAFlags::ServiceName:      return "control-implementation";
-            case CCAFlags::ButtonType:       return "button-type";
+            case CCAFlags::Name:              return u"name"_ustr;
+            case CCAFlags::ServiceName:      return u"control-implementation"_ustr;
+            case CCAFlags::ButtonType:       return u"button-type"_ustr;
 // disabled(AddAttributeIdLegacy)   case CCAFlags::ControlId:        return "id";
-            case CCAFlags::CurrentSelected:  return "current-selected";
-            case CCAFlags::CurrentValue:     return "current-value";
-            case CCAFlags::Disabled:          return "disabled";
-            case CCAFlags::EnableVisible:     return "visible";
-            case CCAFlags::Dropdown:          return "dropdown";
-            case CCAFlags::For:               return "for";
-            case CCAFlags::ImageData:        return "image-data";
-            case CCAFlags::Label:             return "label";
-            case CCAFlags::MaxLength:        return "max-length";
-            case CCAFlags::Printable:         return "printable";
-            case CCAFlags::ReadOnly:          return "readonly";
-            case CCAFlags::Selected:          return "selected";
-            case CCAFlags::Size:              return "size";
-            case CCAFlags::TabIndex:         return "tab-index";
-            case CCAFlags::TargetFrame:      return "target-frame";
-            case CCAFlags::TargetLocation:   return "href";      // the only special thing here: TargetLocation is represented by an xlink:href attribute
-            case CCAFlags::TabStop:          return "tab-stop";
-            case CCAFlags::Title:             return "title";
-            case CCAFlags::Value:             return "value";
-            case CCAFlags::Orientation:       return "orientation";
-            case CCAFlags::VisualEffect:     return "visual-effect";
+            case CCAFlags::CurrentSelected:  return u"current-selected"_ustr;
+            case CCAFlags::CurrentValue:     return u"current-value"_ustr;
+            case CCAFlags::Disabled:          return u"disabled"_ustr;
+            case CCAFlags::EnableVisible:     return u"visible"_ustr;
+            case CCAFlags::Dropdown:          return u"dropdown"_ustr;
+            case CCAFlags::For:               return u"for"_ustr;
+            case CCAFlags::ImageData:        return u"image-data"_ustr;
+            case CCAFlags::Label:             return u"label"_ustr;
+            case CCAFlags::MaxLength:        return u"max-length"_ustr;
+            case CCAFlags::Printable:         return u"printable"_ustr;
+            case CCAFlags::ReadOnly:          return u"readonly"_ustr;
+            case CCAFlags::Selected:          return u"selected"_ustr;
+            case CCAFlags::Size:              return u"size"_ustr;
+            case CCAFlags::TabIndex:         return u"tab-index"_ustr;
+            case CCAFlags::TargetFrame:      return u"target-frame"_ustr;
+            case CCAFlags::TargetLocation:   return u"href"_ustr;      // the only special thing here: TargetLocation is represented by an xlink:href attribute
+            case CCAFlags::TabStop:          return u"tab-stop"_ustr;
+            case CCAFlags::Title:             return u"title"_ustr;
+            case CCAFlags::Value:             return u"value"_ustr;
+            case CCAFlags::Orientation:       return u"orientation"_ustr;
+            case CCAFlags::VisualEffect:     return u"visual-effect"_ustr;
             default:
                 OSL_FAIL("OAttributeMetaData::getCommonControlAttributeName: invalid id (maybe you or-ed two flags?)!");
         }
-        return "";
+        return u""_ustr;
     }
 
     sal_Int32 OAttributeMetaData::getCommonControlAttributeToken(CCAFlags _nId)
@@ -116,29 +116,29 @@ namespace xmloff
     {
         switch (_eAttrib)
         {
-            case faName:                return "name";
-            case faAction:              return "href";      // the only special thing here: Action is represented by an xlink:href attribute
-            case faEnctype:             return "enctype";
-            case faMethod:              return "method";
-            case faAllowDeletes:        return "allow-deletes";
-            case faAllowInserts:        return "allow-inserts";
-            case faAllowUpdates:        return "allow-updates";
-            case faApplyFilter:         return "apply-filter";
-            case faCommand:             return "command";
-            case faCommandType:         return "command-type";
-            case faEscapeProcessing:    return "escape-processing";
-            case faDatasource:          return "datasource";
-            case faDetailFields:        return "detail-fields";
-            case faFilter:              return "filter";
-            case faIgnoreResult:        return "ignore-result";
-            case faMasterFields:        return "master-fields";
-            case faNavigationMode:      return "navigation-mode";
-            case faOrder:               return "order";
-            case faTabbingCycle:        return "tab-cycle";
+            case faName:                return u"name"_ustr;
+            case faAction:              return u"href"_ustr;      // the only special thing here: Action is represented by an xlink:href attribute
+            case faEnctype:             return u"enctype"_ustr;
+            case faMethod:              return u"method"_ustr;
+            case faAllowDeletes:        return u"allow-deletes"_ustr;
+            case faAllowInserts:        return u"allow-inserts"_ustr;
+            case faAllowUpdates:        return u"allow-updates"_ustr;
+            case faApplyFilter:         return u"apply-filter"_ustr;
+            case faCommand:             return u"command"_ustr;
+            case faCommandType:         return u"command-type"_ustr;
+            case faEscapeProcessing:    return u"escape-processing"_ustr;
+            case faDatasource:          return u"datasource"_ustr;
+            case faDetailFields:        return u"detail-fields"_ustr;
+            case faFilter:              return u"filter"_ustr;
+            case faIgnoreResult:        return u"ignore-result"_ustr;
+            case faMasterFields:        return u"master-fields"_ustr;
+            case faNavigationMode:      return u"navigation-mode"_ustr;
+            case faOrder:               return u"order"_ustr;
+            case faTabbingCycle:        return u"tab-cycle"_ustr;
             default:
                 OSL_FAIL("OAttributeMetaData::getFormAttributeName: invalid id!");
         }
-        return "";
+        return u""_ustr;
     }
 
     sal_Int32 OAttributeMetaData::getFormAttributeToken(FormAttributes _eAttrib)
@@ -182,16 +182,16 @@ namespace xmloff
     {
         switch (_nId)
         {
-            case DAFlags::BoundColumn:       return "bound-column";
-            case DAFlags::ConvertEmpty:      return "convert-empty-to-null";
-            case DAFlags::DataField:         return "data-field";
-            case DAFlags::ListSource:        return "list-source";
-            case DAFlags::ListSource_TYPE:   return "list-source-type";
-            case DAFlags::InputRequired:     return "input-required";
+            case DAFlags::BoundColumn:       return u"bound-column"_ustr;
+            case DAFlags::ConvertEmpty:      return u"convert-empty-to-null"_ustr;
+            case DAFlags::DataField:         return u"data-field"_ustr;
+            case DAFlags::ListSource:        return u"list-source"_ustr;
+            case DAFlags::ListSource_TYPE:   return u"list-source-type"_ustr;
+            case DAFlags::InputRequired:     return u"input-required"_ustr;
             default:
                 OSL_FAIL("OAttributeMetaData::getDatabaseAttributeName: invalid id (maybe you or-ed two flags?)!");
         }
-        return "";
+        return u""_ustr;
     }
 
     sal_Int32 OAttributeMetaData::getDatabaseAttributeToken(DAFlags _nId)
@@ -214,13 +214,13 @@ namespace xmloff
     {
         switch (_nId)
         {
-            case BAFlags::LinkedCell:       return "linked-cell";
-            case BAFlags::ListLinkingType: return "list-linkage-type";
-            case BAFlags::ListCellRange:   return "source-cell-range";
+            case BAFlags::LinkedCell:       return u"linked-cell"_ustr;
+            case BAFlags::ListLinkingType: return u"list-linkage-type"_ustr;
+            case BAFlags::ListCellRange:   return u"source-cell-range"_ustr;
             default:
                 OSL_FAIL("OAttributeMetaData::getBindingAttributeName: invalid id (maybe you or-ed two flags?)!");
         }
-        return "";
+        return u""_ustr;
     }
 
     sal_Int32 OAttributeMetaData::getBindingAttributeToken(BAFlags _nId)
@@ -240,28 +240,28 @@ namespace xmloff
     {
         switch (_nId)
         {
-            case SCAFlags::EchoChar:             return "echo-char";
-            case SCAFlags::MaxValue:             return "max-value";
-            case SCAFlags::MinValue:             return "min-value";
-            case SCAFlags::Validation:            return "validation";
-            case SCAFlags::GroupName:            return "group-name";
-            case SCAFlags::MultiLine:            return "multi-line";
-            case SCAFlags::AutoCompletion:  return "auto-complete";
-            case SCAFlags::Multiple:              return "multiple";
-            case SCAFlags::DefaultButton:        return "default-button";
-            case SCAFlags::CurrentState:         return "current-state";
-            case SCAFlags::IsTristate:           return "is-tristate";
-            case SCAFlags::State:                 return "state";
-            case SCAFlags::ColumnStyleName:     return "text-style-name";
-            case SCAFlags::StepSize:             return "step-size";
-            case SCAFlags::PageStepSize:        return "page-step-size";
-            case SCAFlags::RepeatDelay:          return "delay-for-repeat";
-            case SCAFlags::Toggle:                return "toggle";
-            case SCAFlags::FocusOnClick:        return "focus-on-click";
+            case SCAFlags::EchoChar:             return u"echo-char"_ustr;
+            case SCAFlags::MaxValue:             return u"max-value"_ustr;
+            case SCAFlags::MinValue:             return u"min-value"_ustr;
+            case SCAFlags::Validation:            return u"validation"_ustr;
+            case SCAFlags::GroupName:            return u"group-name"_ustr;
+            case SCAFlags::MultiLine:            return u"multi-line"_ustr;
+            case SCAFlags::AutoCompletion:  return u"auto-complete"_ustr;
+            case SCAFlags::Multiple:              return u"multiple"_ustr;
+            case SCAFlags::DefaultButton:        return u"default-button"_ustr;
+            case SCAFlags::CurrentState:         return u"current-state"_ustr;
+            case SCAFlags::IsTristate:           return u"is-tristate"_ustr;
+            case SCAFlags::State:                 return u"state"_ustr;
+            case SCAFlags::ColumnStyleName:     return u"text-style-name"_ustr;
+            case SCAFlags::StepSize:             return u"step-size"_ustr;
+            case SCAFlags::PageStepSize:        return u"page-step-size"_ustr;
+            case SCAFlags::RepeatDelay:          return u"delay-for-repeat"_ustr;
+            case SCAFlags::Toggle:                return u"toggle"_ustr;
+            case SCAFlags::FocusOnClick:        return u"focus-on-click"_ustr;
             default:
                 OSL_FAIL("OAttributeMetaData::getSpecialAttributeName: invalid id (maybe you or-ed two flags?)!");
         }
-        return "";
+        return u""_ustr;
     }
 
     sal_Int32 OAttributeMetaData::getSpecialAttributeToken(SCAFlags _nId)
@@ -306,12 +306,12 @@ namespace xmloff
     {
         switch (_eAttrib)
         {
-            case ofaAutomaticFocus:     return "automatic-focus";
-            case ofaApplyDesignMode:    return "apply-design-mode";
+            case ofaAutomaticFocus:     return u"automatic-focus"_ustr;
+            case ofaApplyDesignMode:    return u"apply-design-mode"_ustr;
             default:
                 OSL_FAIL("OAttributeMetaData::getOfficeFormsAttributeName: invalid id!");
         }
-        return "";
+        return u""_ustr;
     }
 
     xmloff::token::XMLTokenEnum OAttributeMetaData::getOfficeFormsAttributeToken(OfficeFormsAttributes _eAttrib)

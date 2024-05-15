@@ -245,8 +245,8 @@ void SdXMLImExTransform2D::AddSkewX(double fNew)
 const OUString& SdXMLImExTransform2D::GetExportString(const SvXMLUnitConverter& rConv)
 {
     OUStringBuffer aNewString;
-    OUString aClosingBrace(")");
-    OUString aEmptySpace(" ");
+    OUString aClosingBrace(u")"_ustr);
+    OUString aEmptySpace(u" "_ustr);
 
     const sal_uInt32 nCount = maList.size();
     for(sal_uInt32 a(0); a < nCount; a++)
@@ -618,8 +618,8 @@ void SdXMLImExTransform3D::AddHomogenMatrix(const drawing::HomogenMatrix& xHomMa
 const OUString& SdXMLImExTransform3D::GetExportString(const SvXMLUnitConverter& rConv)
 {
     OUStringBuffer aNewString;
-    OUString aClosingBrace(")");
-    OUString aEmptySpace(" ");
+    OUString aClosingBrace(u")"_ustr);
+    OUString aEmptySpace(u" "_ustr);
 
     const sal_uInt32 nCount = maList.size();
     for(sal_uInt32 a(0); a < nCount; a++)
@@ -1034,7 +1034,7 @@ SdXMLImExViewBox::SdXMLImExViewBox(OUString aNew, const SvXMLUnitConverter& rCon
 const OUString& SdXMLImExViewBox::GetExportString()
 {
     OUString aNewString;
-    OUString aEmptySpace(" ");
+    OUString aEmptySpace(u" "_ustr);
 
     Imp_PutDoubleChar(aNewString, mfX);
     aNewString += aEmptySpace;

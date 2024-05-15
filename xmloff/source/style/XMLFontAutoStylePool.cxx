@@ -332,26 +332,26 @@ std::unordered_set<OUString> XMLFontAutoStylePool::getUsedFontList()
                         uno::Reference<beans::XPropertySetInfo> xInfo(xPropertySet ? xPropertySet->getPropertySetInfo() : nullptr);
                         if (xInfo)
                         {
-                            if (m_bEmbedLatinScript && xInfo->hasPropertyByName("CharFontName"))
+                            if (m_bEmbedLatinScript && xInfo->hasPropertyByName(u"CharFontName"_ustr))
                             {
                                 OUString sCharFontName;
-                                Any aFontAny = xPropertySet->getPropertyValue("CharFontName");
+                                Any aFontAny = xPropertySet->getPropertyValue(u"CharFontName"_ustr);
                                 aFontAny >>= sCharFontName;
                                 if (!sCharFontName.isEmpty())
                                     aReturnSet.insert(sCharFontName);
                             }
-                            if (m_bEmbedAsianScript && xInfo->hasPropertyByName("CharFontNameAsian"))
+                            if (m_bEmbedAsianScript && xInfo->hasPropertyByName(u"CharFontNameAsian"_ustr))
                             {
                                 OUString sCharFontNameAsian;
-                                Any aFontAny = xPropertySet->getPropertyValue("CharFontNameAsian");
+                                Any aFontAny = xPropertySet->getPropertyValue(u"CharFontNameAsian"_ustr);
                                 aFontAny >>= sCharFontNameAsian;
                                 if (!sCharFontNameAsian.isEmpty())
                                     aReturnSet.insert(sCharFontNameAsian);
                             }
-                            if (m_bEmbedComplexScript && xInfo->hasPropertyByName("CharFontNameComplex"))
+                            if (m_bEmbedComplexScript && xInfo->hasPropertyByName(u"CharFontNameComplex"_ustr))
                             {
                                 OUString sCharFontNameComplex;
-                                Any aFontAny = xPropertySet->getPropertyValue("CharFontNameComplex");
+                                Any aFontAny = xPropertySet->getPropertyValue(u"CharFontNameComplex"_ustr);
                                 aFontAny >>= sCharFontNameComplex;
                                 if (!sCharFontNameComplex.isEmpty())
                                     aReturnSet.insert(sCharFontNameComplex);
@@ -512,7 +512,7 @@ void XMLFontAutoStylePool::exportXML()
                         {
                             GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_HREF,
                                                      fontFilesMap[rEmbeddedFont.aURL]);
-                            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, "simple");
+                            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, u"simple"_ustr);
                         }
 
                         // Help consumers of our output by telling them which
@@ -541,7 +541,7 @@ void XMLFontAutoStylePool::exportXML()
                             }
                         }
 
-                        GetExport().AddAttribute(XML_NAMESPACE_SVG, XML_STRING, "truetype");
+                        GetExport().AddAttribute(XML_NAMESPACE_SVG, XML_STRING, u"truetype"_ustr);
                         SvXMLElementExport fontFaceFormat(GetExport(), XML_NAMESPACE_SVG,
                                                           XML_FONT_FACE_FORMAT, true, true);
                     }
@@ -625,7 +625,7 @@ OUString XMLFontAutoStylePool::embedFontFile(OUString const & fileUrl, OUString 
             return OUString();
 
         uno::Reference< embed::XStorage > storage;
-        storage.set( GetExport().GetTargetStorage()->openStorageElement( "Fonts",
+        storage.set( GetExport().GetTargetStorage()->openStorageElement( u"Fonts"_ustr,
             ::embed::ElementModes::WRITE ), uno::UNO_SET_THROW );
 
         OUString name = getFreeFontName(storage, rFamilyName);
@@ -634,7 +634,7 @@ OUString XMLFontAutoStylePool::embedFontFile(OUString const & fileUrl, OUString 
         outputStream.set( storage->openStreamElement( name, ::embed::ElementModes::WRITE ), UNO_QUERY_THROW );
         uno::Reference < beans::XPropertySet > propertySet( outputStream, uno::UNO_QUERY );
         assert( propertySet.is());
-        propertySet->setPropertyValue( "MediaType", uno::Any( OUString( "application/x-font-ttf" ))); // TODO
+        propertySet->setPropertyValue( u"MediaType"_ustr, uno::Any( u"application/x-font-ttf"_ustr)); // TODO
         for(;;)
         {
             sal_Int8 buffer[ 4096 ];

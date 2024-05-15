@@ -230,11 +230,11 @@ void XMLIndexTOCContext::startFastElement(
         pStyle->FillPropertySet( xTOCPropertySet );
     }
 
-    xTOCPropertySet->setPropertyValue( "IsProtected", Any(bProtected) );
+    xTOCPropertySet->setPropertyValue( u"IsProtected"_ustr, Any(bProtected) );
 
     if (!sIndexName.isEmpty())
     {
-        xTOCPropertySet->setPropertyValue( "Name", Any(sIndexName) );
+        xTOCPropertySet->setPropertyValue( u"Name"_ustr, Any(sIndexName) );
     }
 
 }
@@ -255,13 +255,13 @@ void XMLIndexTOCContext::endFastElement(sal_Int32 )
     {
         rHelper->GetCursor()->goLeft(1, true);
         rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
-                                         "", true);
+                                         u""_ustr, true);
     }
 
     // and delete second marker
     rHelper->GetCursor()->goRight(1, true);
     rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
-                                     "", true);
+                                     u""_ustr, true);
 
     // check for Redlines on our end node
     GetImport().GetTextImport()->RedlineAdjustStartNodeCursor();

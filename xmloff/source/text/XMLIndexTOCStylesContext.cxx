@@ -95,7 +95,7 @@ void XMLIndexTOCStylesContext::endFastElement(sal_Int32 )
     }
 
     // get index replace
-    Any aAny = rTOCPropertySet->getPropertyValue("LevelParagraphStyles");
+    Any aAny = rTOCPropertySet->getPropertyValue(u"LevelParagraphStyles"_ustr);
     Reference<XIndexReplace> xIndexReplace;
     aAny >>= xIndexReplace;
 

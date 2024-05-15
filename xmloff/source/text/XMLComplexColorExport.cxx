@@ -41,7 +41,7 @@ void XMLComplexColorExport::doExport(model::ComplexColor const& rComplexColor, s
 
     XMLTokenEnum nToken = constThemeColorTypeToToken[sal_Int16(eThemeType)];
     mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_THEME_TYPE, nToken);
-    mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_COLOR_TYPE, "theme");
+    mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_COLOR_TYPE, u"theme"_ustr);
     SvXMLElementExport aComplexColorElement(mrExport, nPrefix, rLocalName, true, true);
 
     for (auto const& rTransform : rComplexColor.getTransformations())

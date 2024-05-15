@@ -107,16 +107,16 @@ void XMLIndexTableSourceContext::ProcessAttribute(const sax_fastparser::FastAttr
 
 void XMLIndexTableSourceContext::endFastElement(sal_Int32 nElement)
 {
-    rIndexPropertySet->setPropertyValue("CreateFromLabels", css::uno::Any(bUseCaption));
+    rIndexPropertySet->setPropertyValue(u"CreateFromLabels"_ustr, css::uno::Any(bUseCaption));
 
     if (bSequenceOK)
     {
-        rIndexPropertySet->setPropertyValue("LabelCategory", css::uno::Any(sSequence));
+        rIndexPropertySet->setPropertyValue(u"LabelCategory"_ustr, css::uno::Any(sSequence));
     }
 
     if (bDisplayFormatOK)
     {
-        rIndexPropertySet->setPropertyValue("LabelDisplayType", css::uno::Any(nDisplayFormat));
+        rIndexPropertySet->setPropertyValue(u"LabelDisplayType"_ustr, css::uno::Any(nDisplayFormat));
     }
 
     XMLIndexSourceBaseContext::endFastElement(nElement);

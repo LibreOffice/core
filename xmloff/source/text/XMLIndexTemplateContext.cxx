@@ -131,7 +131,7 @@ void XMLIndexTemplateContext::endFastElement(sal_Int32 )
     std::copy(aValueVector.begin(), aValueVector.end(), aValueSequence.getArray());
 
     // get LevelFormat IndexReplace ...
-    Any aAny = rPropertySet->getPropertyValue("LevelFormat");
+    Any aAny = rPropertySet->getPropertyValue(u"LevelFormat"_ustr);
     Reference<XIndexReplace> xIndexReplace;
     aAny >>= xIndexReplace;
 
@@ -211,22 +211,22 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexTemplateContex
                 {
                     case XML_TOK_INDEX_TYPE_ENTRY_TEXT:
                         pContext = new XMLIndexSimpleEntryContext(
-                            GetImport(), "TokenEntryText", *this);
+                            GetImport(), u"TokenEntryText"_ustr, *this);
                         break;
 
                     case XML_TOK_INDEX_TYPE_PAGE_NUMBER:
                         pContext = new XMLIndexSimpleEntryContext(
-                            GetImport(), "TokenPageNumber", *this);
+                            GetImport(), u"TokenPageNumber"_ustr, *this);
                         break;
 
                     case XML_TOK_INDEX_TYPE_LINK_START:
                         pContext = new XMLIndexSimpleEntryContext(
-                            GetImport(), "TokenHyperlinkStart", *this);
+                            GetImport(), u"TokenHyperlinkStart"_ustr, *this);
                         break;
 
                     case XML_TOK_INDEX_TYPE_LINK_END:
                         pContext = new XMLIndexSimpleEntryContext(
-                            GetImport(), "TokenHyperlinkEnd", *this);
+                            GetImport(), u"TokenHyperlinkEnd"_ustr, *this);
                         break;
 
                     case XML_TOK_INDEX_TYPE_TEXT:

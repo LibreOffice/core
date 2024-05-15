@@ -65,7 +65,7 @@ void XMLAutoMarkFileContext::startFastElement(
                     GetImport().GetModel(), UNO_QUERY );
                 if (xPropertySet.is())
                 {
-                    xPropertySet->setPropertyValue( "IndexAutoMarkFileURL", aAny );
+                    xPropertySet->setPropertyValue( u"IndexAutoMarkFileURL"_ustr, aAny );
                 }
                 break;
             }

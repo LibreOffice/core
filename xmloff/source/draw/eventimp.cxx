@@ -311,7 +311,7 @@ void SdXMLEventContextData::ApplyProperties()
 
                 pProperties->Name = "EventType";
                 pProperties->Handle = -1;
-                pProperties->Value <<= OUString( "StarBasic" );
+                pProperties->Value <<= u"StarBasic"_ustr;
                 pProperties->State = beans::PropertyState_DIRECT_VALUE;
                 pProperties++;
 
@@ -330,7 +330,7 @@ void SdXMLEventContextData::ApplyProperties()
             {
                 pProperties->Name = "EventType";
                 pProperties->Handle = -1;
-                pProperties->Value <<= OUString( "Script" );
+                pProperties->Value <<= u"Script"_ustr;
                 pProperties->State = beans::PropertyState_DIRECT_VALUE;
                 pProperties++;
 
@@ -344,7 +344,7 @@ void SdXMLEventContextData::ApplyProperties()
         {
             pProperties->Name = "EventType";
             pProperties->Handle = -1;
-            pProperties->Value <<= OUString( "Presentation" );
+            pProperties->Value <<= u"Presentation"_ustr;
             pProperties->State = beans::PropertyState_DIRECT_VALUE;
             pProperties++;
 

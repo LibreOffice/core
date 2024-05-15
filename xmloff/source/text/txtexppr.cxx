@@ -1032,7 +1032,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         pAnchorTypeState->maValue >>= eAnchor;
     else if( bNeedsAnchor )
     {
-        Any aAny = rPropSet->getPropertyValue("AnchorType");
+        Any aAny = rPropSet->getPropertyValue(u"AnchorType"_ustr);
         aAny >>= eAnchor;
     }
 
@@ -1056,7 +1056,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         if (pRelWidthRel)
         {
             sal_Int16 nRelWidth = 0;
-            rPropSet->getPropertyValue("RelativeWidth") >>= nRelWidth;
+            rPropSet->getPropertyValue(u"RelativeWidth"_ustr) >>= nRelWidth;
             if (!nRelWidth)
                 pRelWidthRel->mnIndex = -1;
         }
@@ -1077,7 +1077,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         if (pRelHeightRel)
         {
             sal_Int16 nRelHeight = 0;
-            rPropSet->getPropertyValue("RelativeHeight") >>= nRelHeight;
+            rPropSet->getPropertyValue(u"RelativeHeight"_ustr) >>= nRelHeight;
             if (!nRelHeight)
                 pRelHeightRel->mnIndex = -1;
         }
@@ -1194,7 +1194,7 @@ bool lcl_IsOutlineStyle(const SvXMLExport &rExport, std::u16string_view rName)
         SAL_WARN_IF( !xNumRule.is(), "xmloff", "no chapter numbering rules" );
         if (xNumRule.is())
         {
-            xNumRule->getPropertyValue("Name") >>= sOutlineName;
+            xNumRule->getPropertyValue(u"Name"_ustr) >>= sOutlineName;
         }
     }
 

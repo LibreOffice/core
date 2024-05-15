@@ -409,7 +409,7 @@ void XMLSettingsExportHelper::exportIndexAccess(
         sal_Int32 nCount = rIndexed->getCount();
         for (sal_Int32 i = 0; i < nCount; i++)
         {
-            exportMapEntry(rIndexed->getByIndex(i), "", false);
+            exportMapEntry(rIndexed->getByIndex(i), u""_ustr, false);
         }
         m_rContext.EndElement( true );
     }
@@ -492,11 +492,11 @@ void XMLSettingsExportHelper::ManipulateSetting( uno::Any& rAny, std::u16string_
         if( rAny >>= nTmp )
         {
             if( nTmp == document::PrinterIndependentLayout::LOW_RESOLUTION )
-                rAny <<= OUString("low-resolution");
+                rAny <<= u"low-resolution"_ustr;
             else if( nTmp == document::PrinterIndependentLayout::DISABLED )
-                rAny <<= OUString("disabled");
+                rAny <<= u"disabled"_ustr;
             else if( nTmp == document::PrinterIndependentLayout::HIGH_RESOLUTION )
-                rAny <<= OUString("high-resolution");
+                rAny <<= u"high-resolution"_ustr;
         }
     }
     else if( (rName == gsColorTableURL) || (rName == gsLineEndTableURL) || (rName == gsHatchTableURL) ||

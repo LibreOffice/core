@@ -308,7 +308,7 @@ void XMLTableImport::finishStyles()
         {
             const OUString sTemplateName( rTemplate.first );
             Reference< XNameReplace > xTemplate(xFactory ? xFactory->createInstance() :
-                xMultiFactory->createInstance("com.sun.star.style.TableStyle"), UNO_QUERY_THROW);
+                xMultiFactory->createInstance(u"com.sun.star.style.TableStyle"_ustr), UNO_QUERY_THROW);
 
             std::shared_ptr< XMLTableTemplate > xT( rTemplate.second );
 
@@ -689,7 +689,7 @@ void XMLCellImportContext::endFastElement(sal_Int32 )
         // delete addition newline
         mxCursor->gotoEnd( false );
         mxCursor->goLeft( 1, true );
-        mxCursor->setString( "" );
+        mxCursor->setString( u""_ustr );
 
         // reset cursor
         GetImport().GetTextImport()->ResetCursor();

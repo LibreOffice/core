@@ -95,9 +95,9 @@ data2string(void *data,
     switch (type->eTypeClass)
     {
     case typelib_TypeClass_VOID:
-        return "";
+        return u""_ustr;
     case typelib_TypeClass_BOOLEAN:
-        return *static_cast<const sal_Bool*>(data) ? OUString("true") : OUString("false");
+        return *static_cast<const sal_Bool*>(data) ? u"true"_ustr : u"false"_ustr;
     case typelib_TypeClass_BYTE:
         return OUString::number(*static_cast<const sal_Int8*>(data));
     case typelib_TypeClass_SHORT:
@@ -124,7 +124,7 @@ data2string(void *data,
     case typelib_TypeClass_SEQUENCE:
     case typelib_TypeClass_EXCEPTION:
     case typelib_TypeClass_INTERFACE:
-        return "wtf";
+        return u"wtf"_ustr;
     case typelib_TypeClass_STRUCT:
         return struct2string(data, type->pType);
     case typelib_TypeClass_ENUM:
@@ -133,7 +133,7 @@ data2string(void *data,
         assert(false); // this cannot happen I hope
         break;
     }
-    return "";
+    return u""_ustr;
 }
 
 static OUString any2string(const uno::Any& any)

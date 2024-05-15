@@ -407,7 +407,7 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
         OUString sRelPath, sName;
         Reference< XPropertySetInfo > xPropSetInfo =
             m_xPropSet->getPropertySetInfo();
-        OUString sPropName( "StreamRelPath"  );
+        OUString sPropName( u"StreamRelPath"_ustr  );
         if( xPropSetInfo->hasPropertyByName(sPropName) )
         {
             aAny = m_xPropSet->getPropertyValue(sPropName);
@@ -1397,9 +1397,9 @@ bool XMLTransformerBase::isWriter() const
 {
     Reference< XServiceInfo > xSI( mxModel, UNO_QUERY );
     return  xSI.is() &&
-        (   xSI->supportsService("com.sun.star.text.TextDocument") ||
-            xSI->supportsService("com.sun.star.text.WebDocument") ||
-            xSI->supportsService("com.sun.star.text.GlobalDocument") );
+        (   xSI->supportsService(u"com.sun.star.text.TextDocument"_ustr) ||
+            xSI->supportsService(u"com.sun.star.text.WebDocument"_ustr) ||
+            xSI->supportsService(u"com.sun.star.text.GlobalDocument"_ustr) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

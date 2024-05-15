@@ -197,7 +197,7 @@ void XMLContentControlContext::endFastElement(sal_Int32)
 
     uno::Reference<text::XTextContent> xContentControl
         = XMLTextMarkImportContext::CreateAndInsertMark(
-            GetImport(), "com.sun.star.text.ContentControl", OUString(), xInsertionCursor);
+            GetImport(), u"com.sun.star.text.ContentControl"_ustr, OUString(), xInsertionCursor);
     if (!xContentControl.is())
     {
         SAL_WARN("xmloff.text", "cannot insert content control");
@@ -212,91 +212,91 @@ void XMLContentControlContext::endFastElement(sal_Int32)
 
     if (m_bShowingPlaceHolder)
     {
-        xPropertySet->setPropertyValue("ShowingPlaceHolder", uno::Any(m_bShowingPlaceHolder));
+        xPropertySet->setPropertyValue(u"ShowingPlaceHolder"_ustr, uno::Any(m_bShowingPlaceHolder));
     }
 
     if (m_bCheckbox)
     {
-        xPropertySet->setPropertyValue("Checkbox", uno::Any(m_bCheckbox));
+        xPropertySet->setPropertyValue(u"Checkbox"_ustr, uno::Any(m_bCheckbox));
     }
     if (m_bChecked)
     {
-        xPropertySet->setPropertyValue("Checked", uno::Any(m_bChecked));
+        xPropertySet->setPropertyValue(u"Checked"_ustr, uno::Any(m_bChecked));
     }
     if (!m_aCheckedState.isEmpty())
     {
-        xPropertySet->setPropertyValue("CheckedState", uno::Any(m_aCheckedState));
+        xPropertySet->setPropertyValue(u"CheckedState"_ustr, uno::Any(m_aCheckedState));
     }
     if (!m_aUncheckedState.isEmpty())
     {
-        xPropertySet->setPropertyValue("UncheckedState", uno::Any(m_aUncheckedState));
+        xPropertySet->setPropertyValue(u"UncheckedState"_ustr, uno::Any(m_aUncheckedState));
     }
     if (!m_aListItems.empty())
     {
-        xPropertySet->setPropertyValue("ListItems",
+        xPropertySet->setPropertyValue(u"ListItems"_ustr,
                                        uno::Any(comphelper::containerToSequence(m_aListItems)));
     }
 
     if (m_bPicture)
     {
-        xPropertySet->setPropertyValue("Picture", uno::Any(m_bPicture));
+        xPropertySet->setPropertyValue(u"Picture"_ustr, uno::Any(m_bPicture));
     }
 
     if (m_bDate)
     {
-        xPropertySet->setPropertyValue("Date", uno::Any(m_bDate));
+        xPropertySet->setPropertyValue(u"Date"_ustr, uno::Any(m_bDate));
     }
     if (!m_aDateFormat.isEmpty())
     {
-        xPropertySet->setPropertyValue("DateFormat", uno::Any(m_aDateFormat));
+        xPropertySet->setPropertyValue(u"DateFormat"_ustr, uno::Any(m_aDateFormat));
     }
     if (!m_aDateLanguage.isEmpty())
     {
-        xPropertySet->setPropertyValue("DateLanguage", uno::Any(m_aDateLanguage));
+        xPropertySet->setPropertyValue(u"DateLanguage"_ustr, uno::Any(m_aDateLanguage));
     }
     if (!m_aCurrentDate.isEmpty())
     {
-        xPropertySet->setPropertyValue("CurrentDate", uno::Any(m_aCurrentDate));
+        xPropertySet->setPropertyValue(u"CurrentDate"_ustr, uno::Any(m_aCurrentDate));
     }
 
     if (m_bPlainText)
     {
-        xPropertySet->setPropertyValue("PlainText", uno::Any(m_bPlainText));
+        xPropertySet->setPropertyValue(u"PlainText"_ustr, uno::Any(m_bPlainText));
     }
 
     if (m_bComboBox)
     {
-        xPropertySet->setPropertyValue("ComboBox", uno::Any(m_bComboBox));
+        xPropertySet->setPropertyValue(u"ComboBox"_ustr, uno::Any(m_bComboBox));
     }
 
     if (m_bDropDown)
     {
-        xPropertySet->setPropertyValue("DropDown", uno::Any(m_bDropDown));
+        xPropertySet->setPropertyValue(u"DropDown"_ustr, uno::Any(m_bDropDown));
     }
 
     if (!m_aAlias.isEmpty())
     {
-        xPropertySet->setPropertyValue("Alias", uno::Any(m_aAlias));
+        xPropertySet->setPropertyValue(u"Alias"_ustr, uno::Any(m_aAlias));
     }
 
     if (!m_aTag.isEmpty())
     {
-        xPropertySet->setPropertyValue("Tag", uno::Any(m_aTag));
+        xPropertySet->setPropertyValue(u"Tag"_ustr, uno::Any(m_aTag));
     }
 
     if (m_nId)
     {
-        xPropertySet->setPropertyValue("Id", uno::Any(m_nId));
+        xPropertySet->setPropertyValue(u"Id"_ustr, uno::Any(m_nId));
     }
 
     if (m_nTabIndex)
     {
-        xPropertySet->setPropertyValue("TabIndex", uno::Any(m_nTabIndex));
+        xPropertySet->setPropertyValue(u"TabIndex"_ustr, uno::Any(m_nTabIndex));
     }
 
     if (!m_aLock.isEmpty())
     {
-        xPropertySet->setPropertyValue("Lock", uno::Any(m_aLock));
+        xPropertySet->setPropertyValue(u"Lock"_ustr, uno::Any(m_aLock));
     }
 }
 
@@ -360,8 +360,8 @@ void XMLListItemContext::startFastElement(
     }
 
     uno::Sequence<beans::PropertyValue> aListItem = {
-        comphelper::makePropertyValue("DisplayText", uno::Any(aDisplayText)),
-        comphelper::makePropertyValue("Value", uno::Any(aValue)),
+        comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(aDisplayText)),
+        comphelper::makePropertyValue(u"Value"_ustr, uno::Any(aValue)),
     };
     m_rContentControl.AppendListItem(aListItem);
 }

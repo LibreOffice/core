@@ -763,8 +763,8 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
         try
         {
             Reference< beans::XPropertySet > xProps( xChartDoc, uno::UNO_QUERY_THROW );
-            xProps->setPropertyValue( "DisableDataTableDialog", uno::Any( true ) );
-            xProps->setPropertyValue( "DisableComplexChartTypes", uno::Any( true ) );
+            xProps->setPropertyValue( u"DisableDataTableDialog"_ustr, uno::Any( true ) );
+            xProps->setPropertyValue( u"DisableComplexChartTypes"_ustr, uno::Any( true ) );
         }
         catch ( uno::Exception& )
         {
@@ -836,7 +836,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                         {
                             Reference< beans::XPropertySet > xOldSequenceProp( rLSeq.second->getValues(), uno::UNO_QUERY );
                             Reference< chart2::data::XDataSequence > xNewSequence(
-                                xDataProv->createDataSequenceByRangeRepresentation("categories"));
+                                xDataProv->createDataSequenceByRangeRepresentation(u"categories"_ustr));
                             SchXMLTools::copyProperties(
                                 xOldSequenceProp, Reference< beans::XPropertySet >( xNewSequence, uno::UNO_QUERY ));
                             rLSeq.second->setValues( xNewSequence );
@@ -894,7 +894,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
     if( ! bCategoriesApplied )
     {
         SchXMLTools::CreateCategories(
-            xDataProv, xChartDoc, "categories",
+            xDataProv, xChartDoc, u"categories"_ustr,
             0 /* nCooSysIndex */, 0 /* nDimension */ );
     }
 

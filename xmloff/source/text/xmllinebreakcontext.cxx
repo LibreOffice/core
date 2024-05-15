@@ -44,14 +44,14 @@ void SvXMLLineBreakContext::startFastElement(
         return;
 
     uno::Reference<text::XTextContent> xLineBreak(
-        xFactory->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.LineBreak"_ustr), uno::UNO_QUERY);
 
     sal_Int16 eClear = 0;
     OUString aClear = xAttrList->getValue(XML_ELEMENT(LO_EXT, XML_CLEAR));
     if (SvXMLUnitConverter::convertEnum(eClear, aClear, pXML_LineBreakClear_Enum))
     {
         uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
-        xLineBreakProps->setPropertyValue("Clear", uno::Any(eClear));
+        xLineBreakProps->setPropertyValue(u"Clear"_ustr, uno::Any(eClear));
     }
 
     m_rHelper.InsertTextContent(xLineBreak);

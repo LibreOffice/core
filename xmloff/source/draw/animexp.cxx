@@ -262,7 +262,7 @@ void XMLAnimationsExporter::prepare( const Reference< XShape >& xShape )
         // check for presentation shape service
         {
             Reference< XServiceInfo > xServiceInfo( xShape, UNO_QUERY );
-            if( !xServiceInfo.is() || !xServiceInfo->supportsService("com.sun.star.presentation.Shape") )
+            if( !xServiceInfo.is() || !xServiceInfo->supportsService(u"com.sun.star.presentation.Shape"_ustr) )
                 return;
         }
 
@@ -292,7 +292,7 @@ void XMLAnimationsExporter::collect( const Reference< XShape >& xShape, SvXMLExp
         // check for presentation shape service
         {
             Reference< XServiceInfo > xServiceInfo( xShape, UNO_QUERY );
-            if( !xServiceInfo.is() || !xServiceInfo->supportsService("com.sun.star.presentation.Shape") )
+            if( !xServiceInfo.is() || !xServiceInfo->supportsService(u"com.sun.star.presentation.Shape"_ustr) )
                 return;
         }
 

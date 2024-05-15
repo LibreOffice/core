@@ -221,7 +221,7 @@ void SchXMLAxisContext::CreateGrid( const OUString& sAutoStyleName, bool bIsMajo
     if( xGridProp.is())
     {
         // the line color is black as default, in the model it is a light gray
-        xGridProp->setPropertyValue("LineColor",
+        xGridProp->setPropertyValue(u"LineColor"_ustr,
                                      uno::Any( COL_BLACK ));
         if (!sAutoStyleName.isEmpty())
             m_rImportHelper.FillAutoStyle(sAutoStyleName, xGridProp);
@@ -394,7 +394,7 @@ void SchXMLAxisContext::CreateAxis()
     {
         try
         {
-            xDiaProp->setPropertyValue("HasXAxis", uno::Any(true) );
+            xDiaProp->setPropertyValue(u"HasXAxis"_ustr, uno::Any(true) );
         }
         catch( beans::UnknownPropertyException & )
         {
@@ -410,23 +410,23 @@ void SchXMLAxisContext::CreateAxis()
     uno::Any aFalseBool( uno::Any( false ));
 
     // #i109879# the line color is black as default, in the model it is a light gray
-    m_xAxisProps->setPropertyValue("LineColor",
+    m_xAxisProps->setPropertyValue(u"LineColor"_ustr,
                                  uno::Any( COL_BLACK ));
 
-    m_xAxisProps->setPropertyValue("DisplayLabels", aFalseBool );
+    m_xAxisProps->setPropertyValue(u"DisplayLabels"_ustr, aFalseBool );
 
     // Compatibility option: starting from LibreOffice 5.1 the rotated
     // layout is preferred to staggering for axis labels.
     // So the import default value for having compatibility with ODF
     // documents created with earlier LibreOffice versions is `true`.
     if( GetImport().getGeneratorVersion() != SvXMLImport::ProductVersionUnknown )
-        m_xAxisProps->setPropertyValue("TryStaggeringFirst", aTrueBool );
+        m_xAxisProps->setPropertyValue(u"TryStaggeringFirst"_ustr, aTrueBool );
 
     // #88077# AutoOrigin 'on' is default
-    m_xAxisProps->setPropertyValue("AutoOrigin", aTrueBool );
+    m_xAxisProps->setPropertyValue(u"AutoOrigin"_ustr, aTrueBool );
 
     if( m_bAxisTypeImported )
-        m_xAxisProps->setPropertyValue("AxisType", uno::Any(m_nAxisType) );
+        m_xAxisProps->setPropertyValue(u"AxisType"_ustr, uno::Any(m_nAxisType) );
 
     if( !m_aAutoStyleName.isEmpty())
     {
@@ -478,7 +478,7 @@ void SchXMLAxisContext::CreateAxis()
                     Reference< beans::XPropertySet > xNewAxisProp( xAxis, uno::UNO_QUERY );
                     if( xNewAxisProp.is() )
                     {
-                        xNewAxisProp->setPropertyValue("LineStyle"
+                        xNewAxisProp->setPropertyValue(u"LineStyle"_ustr
                             , uno::Any(drawing::LineStyle_NONE));
                     }
                 }
@@ -486,7 +486,7 @@ void SchXMLAxisContext::CreateAxis()
                 if( m_bAdaptXAxisOrientationForOld2DBarCharts && m_aCurrentAxis.eDimension == SCH_XML_AXIS_X )
                 {
                     bool bIs3DChart = false;
-                    if( xDiaProp.is() && ( xDiaProp->getPropertyValue("Dim3D") >>= bIs3DChart )
+                    if( xDiaProp.is() && ( xDiaProp->getPropertyValue(u"Dim3D"_ustr) >>= bIs3DChart )
                         && !bIs3DChart )
                     {
                         Reference< chart2::XChartDocument > xChart2Document( GetImport().GetModel(), uno::UNO_QUERY );
@@ -501,7 +501,7 @@ void SchXMLAxisContext::CreateAxis()
                                     bool bSwapXandYAxis = false;
                                     Reference< chart2::XCoordinateSystem > xCooSys( aCooSysSeq[0] );
                                     Reference< beans::XPropertySet > xCooSysProp( xCooSys, uno::UNO_QUERY );
-                                    if( xCooSysProp.is() && ( xCooSysProp->getPropertyValue("SwapXAndYAxis") >>= bSwapXandYAxis )
+                                    if( xCooSysProp.is() && ( xCooSysProp->getPropertyValue(u"SwapXAndYAxis"_ustr) >>= bSwapXandYAxis )
                                         && bSwapXandYAxis )
                                     {
                                         Reference< chart2::XAxis > xAxis = xCooSys->getAxisByDimension( 0, m_aCurrentAxis.nAxisIndex );
@@ -535,18 +535,18 @@ void SchXMLAxisContext::CreateAxis()
     bool bIs3DChart = false;
     double fMajorOrigin = -1;
     OUString sChartType = m_xDiagram->getDiagramType();
-    if ((xDiaProp->getPropertyValue("Dim3D") >>= bIs3DChart) && bIs3DChart
+    if ((xDiaProp->getPropertyValue(u"Dim3D"_ustr) >>= bIs3DChart) && bIs3DChart
         && (sChartType == "com.sun.star.chart.BarDiagram" || sChartType == "com.sun.star.chart.StockDiagram"))
     {
         aScaleData.ShiftedCategoryPosition = true;
         xAxis->setScaleData(aScaleData);
     }
-    else if ((m_xAxisProps->getPropertyValue("MajorOrigin") >>= fMajorOrigin)
+    else if ((m_xAxisProps->getPropertyValue(u"MajorOrigin"_ustr) >>= fMajorOrigin)
             && (rtl::math::approxEqual(fMajorOrigin, 0.0) || rtl::math::approxEqual(fMajorOrigin, 0.5)))
     {
         aScaleData.ShiftedCategoryPosition = rtl::math::approxEqual(fMajorOrigin, 0.5);
         xAxis->setScaleData(aScaleData);
-        m_xAxisProps->setPropertyValue("MajorOrigin", uno::Any());
+        m_xAxisProps->setPropertyValue(u"MajorOrigin"_ustr, uno::Any());
     }
 }
 
@@ -694,31 +694,31 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
                     chart2::ScaleData aMainXScale = xMainXAxis->getScaleData();
                     if( rChartTypeServiceName == u"com.sun.star.chart2.ScatterChartType" )
                     {
-                        xMainYAxisProp->setPropertyValue("CrossoverPosition"
+                        xMainYAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
                                 , uno::Any( css::chart::ChartAxisPosition_VALUE) );
                         double fCrossoverValue = 0.0;
                         aMainXScale.Origin >>= fCrossoverValue;
-                        xMainYAxisProp->setPropertyValue("CrossoverValue"
+                        xMainYAxisProp->setPropertyValue(u"CrossoverValue"_ustr
                                 , uno::Any( fCrossoverValue ) );
 
                         if( aMainXScale.Orientation == chart2::AxisOrientation_REVERSE )
                         {
-                            xMainYAxisProp->setPropertyValue("LabelPosition"
+                            xMainYAxisProp->setPropertyValue(u"LabelPosition"_ustr
                                 , uno::Any( css::chart::ChartAxisLabelPosition_OUTSIDE_END) );
-                            xMainYAxisProp->setPropertyValue("MarkPosition"
+                            xMainYAxisProp->setPropertyValue(u"MarkPosition"_ustr
                                 , uno::Any( css::chart::ChartAxisMarkPosition_AT_LABELS) );
                             if( xSecondaryYAxisProp.is() )
-                                xSecondaryYAxisProp->setPropertyValue("CrossoverPosition"
+                                xSecondaryYAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
                                 , uno::Any( css::chart::ChartAxisPosition_START) );
                         }
                         else
                         {
-                            xMainYAxisProp->setPropertyValue("LabelPosition"
+                            xMainYAxisProp->setPropertyValue(u"LabelPosition"_ustr
                                 , uno::Any( css::chart::ChartAxisLabelPosition_OUTSIDE_START) );
-                            xMainYAxisProp->setPropertyValue("MarkPosition"
+                            xMainYAxisProp->setPropertyValue(u"MarkPosition"_ustr
                                 , uno::Any( css::chart::ChartAxisMarkPosition_AT_LABELS) );
                             if( xSecondaryYAxisProp.is() )
-                                xSecondaryYAxisProp->setPropertyValue("CrossoverPosition"
+                                xSecondaryYAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
                                 , uno::Any( css::chart::ChartAxisPosition_END) );
                         }
                     }
@@ -726,48 +726,48 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
                     {
                         if( aMainXScale.Orientation == chart2::AxisOrientation_REVERSE )
                         {
-                            xMainYAxisProp->setPropertyValue("CrossoverPosition"
+                            xMainYAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
                                 , uno::Any( css::chart::ChartAxisPosition_END) );
                             if( xSecondaryYAxisProp.is() )
-                                xSecondaryYAxisProp->setPropertyValue("CrossoverPosition"
+                                xSecondaryYAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
                                     , uno::Any( css::chart::ChartAxisPosition_START) );
                         }
                         else
                         {
-                            xMainYAxisProp->setPropertyValue("CrossoverPosition"
+                            xMainYAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
                                 , uno::Any( css::chart::ChartAxisPosition_START) );
                             if( xSecondaryYAxisProp.is() )
-                                xSecondaryYAxisProp->setPropertyValue("CrossoverPosition"
+                                xSecondaryYAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
                                     , uno::Any( css::chart::ChartAxisPosition_END) );
                         }
                     }
 
                     chart2::ScaleData aMainYScale = xMainYAxis->getScaleData();
-                    xMainXAxisProp->setPropertyValue("CrossoverPosition"
+                    xMainXAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
                             , uno::Any( css::chart::ChartAxisPosition_VALUE) );
                     double fCrossoverValue = 0.0;
                     aMainYScale.Origin >>= fCrossoverValue;
-                    xMainXAxisProp->setPropertyValue("CrossoverValue"
+                    xMainXAxisProp->setPropertyValue(u"CrossoverValue"_ustr
                             , uno::Any( fCrossoverValue ) );
 
                     if( aMainYScale.Orientation == chart2::AxisOrientation_REVERSE )
                     {
-                        xMainXAxisProp->setPropertyValue("LabelPosition"
+                        xMainXAxisProp->setPropertyValue(u"LabelPosition"_ustr
                             , uno::Any( css::chart::ChartAxisLabelPosition_OUTSIDE_END) );
-                        xMainXAxisProp->setPropertyValue("MarkPosition"
+                        xMainXAxisProp->setPropertyValue(u"MarkPosition"_ustr
                             , uno::Any( css::chart::ChartAxisMarkPosition_AT_LABELS) );
                         if( xSecondaryXAxisProp.is() )
-                            xSecondaryXAxisProp->setPropertyValue("CrossoverPosition"
+                            xSecondaryXAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
                             , uno::Any( css::chart::ChartAxisPosition_START) );
                     }
                     else
                     {
-                        xMainXAxisProp->setPropertyValue("LabelPosition"
+                        xMainXAxisProp->setPropertyValue(u"LabelPosition"_ustr
                             , uno::Any( css::chart::ChartAxisLabelPosition_OUTSIDE_START) );
-                        xMainXAxisProp->setPropertyValue("MarkPosition"
+                        xMainXAxisProp->setPropertyValue(u"MarkPosition"_ustr
                             , uno::Any( css::chart::ChartAxisMarkPosition_AT_LABELS) );
                         if( xSecondaryXAxisProp.is() )
-                            xSecondaryXAxisProp->setPropertyValue("CrossoverPosition"
+                            xSecondaryXAxisProp->setPropertyValue(u"CrossoverPosition"_ustr
                             , uno::Any( css::chart::ChartAxisPosition_END) );
                     }
                 }
@@ -832,7 +832,7 @@ void DateScaleContext::startFastElement( sal_Int32 /*nElement*/,
     // parse attributes
     bool bSetNewIncrement=false;
     chart::TimeIncrement aIncrement;
-    m_xAxisProps->getPropertyValue("TimeIncrement") >>= aIncrement;
+    m_xAxisProps->getPropertyValue(u"TimeIncrement"_ustr) >>= aIncrement;
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
@@ -886,7 +886,7 @@ void DateScaleContext::startFastElement( sal_Int32 /*nElement*/,
     }
 
     if( bSetNewIncrement )
-        m_xAxisProps->setPropertyValue("TimeIncrement", uno::Any( aIncrement ) );
+        m_xAxisProps->setPropertyValue(u"TimeIncrement"_ustr, uno::Any( aIncrement ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -104,7 +104,7 @@ ErrCode XMLAutoTextEventExport::exportDoc( enum XMLTokenEnum )
             // get filter component
             Reference< xml::sax::XDocumentHandler > xTmpDocHandler(
                 xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    "com.sun.star.comp.Oasis2OOoTransformer",
+                    u"com.sun.star.comp.Oasis2OOoTransformer"_ustr,
                     aArgs,
                     xContext),
                 UNO_QUERY);
@@ -198,7 +198,7 @@ com_sun_star_comp_Writer_XMLOasisAutotextEventsExporter_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(new XMLAutoTextEventExport(
-        context, "com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter",
+        context, u"com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter"_ustr,
         SvXMLExportFlags::ALL | SvXMLExportFlags::OASIS));
 }
 
@@ -207,7 +207,7 @@ com_sun_star_comp_Writer_XMLAutotextEventsExporter_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(new XMLAutoTextEventExport(
-        context, "com.sun.star.comp.Writer.XMLAutotextEventsExporter",
+        context, u"com.sun.star.comp.Writer.XMLAutotextEventsExporter"_ustr,
         SvXMLExportFlags::ALL));
 }
 

@@ -625,7 +625,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
         try
         {
             Reference < XInterface > xIfc =
-                xFactory->createInstance("com.sun.star.xml.NamespaceMap");
+                xFactory->createInstance(u"com.sun.star.xml.NamespaceMap"_ustr);
             if( xIfc.is() )
             {
                 Reference< XNameAccess > xNamespaceMap( xIfc, UNO_QUERY );
@@ -741,7 +741,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
         aAny >>= mpImpl->mbOutlineStyleAsNormalListStyle;
     }
 
-    OUString sTargetStorage( "TargetStorage" );
+    OUString sTargetStorage( u"TargetStorage"_ustr );
     if( xPropertySetInfo->hasPropertyByName( sTargetStorage ) )
         mxExportInfo->getPropertyValue( sTargetStorage ) >>= mpImpl->mxTargetStorage;
 
@@ -862,7 +862,7 @@ sal_Bool SAL_CALL SvXMLExport::supportsService( const OUString& rServiceName )
 
 uno::Sequence< OUString > SAL_CALL SvXMLExport::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.document.ExportFilter", "com.sun.star.xml.XMLExportFilter" };
+    return { u"com.sun.star.document.ExportFilter"_ustr, u"com.sun.star.xml.XMLExportFilter"_ustr };
 }
 
 OUString
@@ -1100,8 +1100,8 @@ void SvXMLExport::ImplExportStyles()
 void SvXMLExport::ImplExportAutoStyles()
 {
     // transfer style names (+ families) FROM other components (if appropriate)
-    OUString sStyleNames( "StyleNames" );
-    OUString sStyleFamilies( "StyleFamilies" );
+    OUString sStyleNames( u"StyleNames"_ustr );
+    OUString sStyleFamilies( u"StyleFamilies"_ustr );
     if( ( !( mnExportFlags & SvXMLExportFlags::STYLES ) )
         && mxExportInfo.is()
         && mxExportInfo->getPropertySetInfo()->hasPropertyByName( sStyleNames )
@@ -1240,14 +1240,14 @@ ErrCode SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
             {
                 if (!mxGraphicStorageHandler.is())
                 {
-                    mxGraphicStorageHandler.set(xFactory->createInstance( "com.sun.star.document.ExportGraphicStorageHandler"), UNO_QUERY);
+                    mxGraphicStorageHandler.set(xFactory->createInstance( u"com.sun.star.document.ExportGraphicStorageHandler"_ustr), UNO_QUERY);
                     bOwnGraphicResolver = mxGraphicStorageHandler.is();
                 }
 
                 if( !mxEmbeddedResolver.is() )
                 {
                     mxEmbeddedResolver.set(
-                        xFactory->createInstance( "com.sun.star.document.ExportEmbeddedObjectResolver" ), UNO_QUERY);
+                        xFactory->createInstance( u"com.sun.star.document.ExportEmbeddedObjectResolver"_ustr ), UNO_QUERY);
                     bOwnEmbeddedResolver = mxEmbeddedResolver.is();
                 }
             }
@@ -1262,7 +1262,7 @@ ErrCode SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
         {
             static ::comphelper::PropertyMapEntry const aInfoMap[] =
             {
-                { OUString("Class"), 0,
+                { u"Class"_ustr, 0,
                     ::cppu::UnoType<OUString>::get(),
                       PropertyAttribute::MAYBEVOID, 0},
             };
@@ -1270,7 +1270,7 @@ ErrCode SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
                 ::comphelper::GenericPropertySet_CreateInstance(
                         new ::comphelper::PropertySetInfo( aInfoMap ) ) );
 
-            xConvPropSet->setPropertyValue( "Class", Any(GetXMLToken( eClass )) );
+            xConvPropSet->setPropertyValue( u"Class"_ustr, Any(GetXMLToken( eClass )) );
 
             Reference< XPropertySet > xPropSet =
                 mxExportInfo.is()
@@ -1281,7 +1281,7 @@ ErrCode SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
             Sequence<Any> aArgs{ Any(mxHandler), Any(xPropSet), Any(mxModel) };
             // get filter component
             Reference< xml::sax::XDocumentHandler > xTmpDocHandler(
-                m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.comp.Oasis2OOoTransformer", aArgs, m_xContext),
+                m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(u"com.sun.star.comp.Oasis2OOoTransformer"_ustr, aArgs, m_xContext),
                 UNO_QUERY);
             SAL_WARN_IF(!xTmpDocHandler.is(), "xmloff.core", "can't instantiate OASIS transformer component" );
             if( xTmpDocHandler.is() )
@@ -1472,7 +1472,7 @@ void SvXMLExport::ExportScripts_()
         {
             Reference< beans::XPropertySet > xPSet( mxModel, UNO_QUERY );
             if ( xPSet.is() )
-                xPSet->getPropertyValue("BasicLibraries");
+                xPSet->getPropertyValue(u"BasicLibraries"_ustr);
         }
 
         Reference < XDocumentHandler > xHdl( new XMLBasicExportFilter( mxHandler ) );
@@ -1503,7 +1503,7 @@ void SvXMLExport::ExportStyles_( bool )
     // export (fill-)gradient-styles
     try
     {
-        uno::Reference< container::XNameAccess > xGradient( xFact->createInstance("com.sun.star.drawing.GradientTable"), uno::UNO_QUERY );
+        uno::Reference< container::XNameAccess > xGradient( xFact->createInstance(u"com.sun.star.drawing.GradientTable"_ustr), uno::UNO_QUERY );
         if( xGradient.is() )
         {
             XMLGradientStyleExport aGradientStyle( *this );
@@ -1533,7 +1533,7 @@ void SvXMLExport::ExportStyles_( bool )
     // export (fill-)hatch-styles
     try
     {
-        uno::Reference< container::XNameAccess > xHatch( xFact->createInstance("com.sun.star.drawing.HatchTable"), uno::UNO_QUERY );
+        uno::Reference< container::XNameAccess > xHatch( xFact->createInstance(u"com.sun.star.drawing.HatchTable"_ustr), uno::UNO_QUERY );
         if( xHatch.is() )
         {
             XMLHatchStyleExport aHatchStyle( *this );
@@ -1562,7 +1562,7 @@ void SvXMLExport::ExportStyles_( bool )
     // export (fill-)bitmap-styles
     try
     {
-        uno::Reference< container::XNameAccess > xBitmap( xFact->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY );
+        uno::Reference< container::XNameAccess > xBitmap( xFact->createInstance(u"com.sun.star.drawing.BitmapTable"_ustr), uno::UNO_QUERY );
         if( xBitmap.is() )
         {
             if( xBitmap->hasElements() )
@@ -1590,7 +1590,7 @@ void SvXMLExport::ExportStyles_( bool )
     // export transparency-gradient -styles
     try
     {
-        uno::Reference< container::XNameAccess > xTransGradient( xFact->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY );
+        uno::Reference< container::XNameAccess > xTransGradient( xFact->createInstance(u"com.sun.star.drawing.TransparencyGradientTable"_ustr), uno::UNO_QUERY );
         if( xTransGradient.is() )
         {
             XMLTransGradientStyleExport aTransGradientstyle( *this );
@@ -1620,7 +1620,7 @@ void SvXMLExport::ExportStyles_( bool )
     // export marker-styles
     try
     {
-        uno::Reference< container::XNameAccess > xMarker( xFact->createInstance("com.sun.star.drawing.MarkerTable"), uno::UNO_QUERY );
+        uno::Reference< container::XNameAccess > xMarker( xFact->createInstance(u"com.sun.star.drawing.MarkerTable"_ustr), uno::UNO_QUERY );
         if( xMarker.is() )
         {
             XMLMarkerStyleExport aMarkerStyle( *this );
@@ -1650,7 +1650,7 @@ void SvXMLExport::ExportStyles_( bool )
     // export dash-styles
     try
     {
-        uno::Reference< container::XNameAccess > xDashes( xFact->createInstance("com.sun.star.drawing.DashTable"), uno::UNO_QUERY );
+        uno::Reference< container::XNameAccess > xDashes( xFact->createInstance(u"com.sun.star.drawing.DashTable"_ustr), uno::UNO_QUERY );
         if( xDashes.is() )
         {
             XMLDashStyleExport aDashStyle( *this );
@@ -1807,7 +1807,7 @@ void SvXMLExport::GetViewSettingsAndViews(uno::Sequence<beans::PropertyValue>& r
     {
         sal_Int32 nOldLength(rProps.getLength());
         rProps.realloc(nOldLength + 1);
-        rProps.getArray()[nOldLength] = comphelper::makePropertyValue("Views", xIndexAccess);
+        rProps.getArray()[nOldLength] = comphelper::makePropertyValue(u"Views"_ustr, xIndexAccess);
     }
 }
 
@@ -1834,7 +1834,7 @@ void SvXMLExport::collectDataStyles(bool bFromUsedStyles)
     if (!xStylesFamilies.is())
         return;
 
-    Reference<container::XIndexAccess> xCellStyles(xStylesFamilies->getByName("CellStyles"), uno::UNO_QUERY);
+    Reference<container::XIndexAccess> xCellStyles(xStylesFamilies->getByName(u"CellStyles"_ustr), uno::UNO_QUERY);
     if (!xCellStyles.is())
         return;
 
@@ -1849,7 +1849,7 @@ void SvXMLExport::collectDataStyles(bool bFromUsedStyles)
         if (xCellProperties.is())
         {
             sal_Int32 nNumberFormat = 0;
-            if (xCellProperties->getPropertyValue("NumberFormat") >>= nNumberFormat)
+            if (xCellProperties->getPropertyValue(u"NumberFormat"_ustr) >>= nNumberFormat)
                 addDataStyle(nNumberFormat);
         }
     }
@@ -2053,8 +2053,8 @@ XMLEventExport& SvXMLExport::GetEventExport()
         mpEventExport.reset( new XMLEventExport(*this) );
 
         // and register standard handlers + names
-        mpEventExport->AddHandler("StarBasic", std::make_unique<XMLStarBasicExportHandler>());
-        mpEventExport->AddHandler("Script", std::make_unique<XMLScriptExportHandler>());
+        mpEventExport->AddHandler(u"StarBasic"_ustr, std::make_unique<XMLStarBasicExportHandler>());
+        mpEventExport->AddHandler(u"Script"_ustr, std::make_unique<XMLScriptExportHandler>());
         mpEventExport->AddTranslationTable(aStandardEventTable);
     }
 
@@ -2292,7 +2292,7 @@ void SvXMLExport::SetError(
     sal_Int32 nId,
     const Sequence<OUString>& rMsgParams)
 {
-    SetError( nId, rMsgParams, "", nullptr );
+    SetError( nId, rMsgParams, u""_ustr, nullptr );
 }
 
 void SvXMLExport::DisposingModel()

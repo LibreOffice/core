@@ -64,7 +64,7 @@ XMLMetaImportComponent_get_implementation(
 
 XMLMetaImportComponent::XMLMetaImportComponent(
     const uno::Reference< uno::XComponentContext >& xContext)
-    :   SvXMLImport(xContext, "XMLMetaImportComponent")
+    :   SvXMLImport(xContext, u"XMLMetaImportComponent"_ustr)
 {
 }
 
@@ -75,8 +75,8 @@ SvXMLImportContext *XMLMetaImportComponent::CreateFastContext( sal_Int32 nElemen
     {
         if (!mxDocProps.is()) {
             throw uno::RuntimeException(
-                "XMLMetaImportComponent::CreateFastContext: setTargetDocument "
-                "has not been called", *this);
+                u"XMLMetaImportComponent::CreateFastContext: setTargetDocument "
+                "has not been called"_ustr, *this);
         }
         return new SvXMLMetaDocumentContext(
                         *this, mxDocProps);
@@ -90,8 +90,8 @@ void SAL_CALL XMLMetaImportComponent::setTargetDocument(
     mxDocProps.set( xDoc, uno::UNO_QUERY );
     if( !mxDocProps.is() )
         throw lang::IllegalArgumentException(
-            "XMLMetaImportComponent::setTargetDocument: argument is no "
-            "XDocumentProperties", uno::Reference<uno::XInterface>(*this), 0);
+            u"XMLMetaImportComponent::setTargetDocument: argument is no "
+            "XDocumentProperties"_ustr, uno::Reference<uno::XInterface>(*this), 0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

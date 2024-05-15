@@ -99,7 +99,7 @@ void XMLDocumentTransformerContext::StartElement( const Reference< XAttributeLis
         {
             Reference< XPropertySetInfo > xPropSetInfo(
                 rPropSet->getPropertySetInfo() );
-            OUString aPropName("Class");
+            OUString aPropName(u"Class"_ustr);
             if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName( aPropName ) )
             {
                 Any aAny = rPropSet->getPropertyValue( aPropName );

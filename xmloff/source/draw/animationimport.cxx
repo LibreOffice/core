@@ -1212,7 +1212,7 @@ private:
 }
 
 AnimationsImport::AnimationsImport( const Reference< XComponentContext > & rxContext )
-: SvXMLImport( rxContext, "xmloff::AnimationsImport", SvXMLImportFlags::META )
+: SvXMLImport( rxContext, u"xmloff::AnimationsImport"_ustr, SvXMLImportFlags::META )
     //FIXME: the above "IMPORT_META" used to be a nonsensical "true", question
     // remains whether this should be IMPORT_META (same numerical value as
     // true) or default IMPORT_ALL
@@ -1292,14 +1292,14 @@ void AnimationNodeContext::postProcessRootNode( const Reference< XAnimationNode 
                         {
                             Reference< XTransitionFilter > xTransFilter( xChildNode, UNO_QUERY_THROW );
 
-                            xPageProps->setPropertyValue("TransitionType", Any( xTransFilter->getTransition() ) );
-                            xPageProps->setPropertyValue("TransitionSubtype", Any( xTransFilter->getSubtype() ) );
-                            xPageProps->setPropertyValue("TransitionDirection", Any( xTransFilter->getDirection() ) );
-                            xPageProps->setPropertyValue("TransitionFadeColor", Any( xTransFilter->getFadeColor() ) );
+                            xPageProps->setPropertyValue(u"TransitionType"_ustr, Any( xTransFilter->getTransition() ) );
+                            xPageProps->setPropertyValue(u"TransitionSubtype"_ustr, Any( xTransFilter->getSubtype() ) );
+                            xPageProps->setPropertyValue(u"TransitionDirection"_ustr, Any( xTransFilter->getDirection() ) );
+                            xPageProps->setPropertyValue(u"TransitionFadeColor"_ustr, Any( xTransFilter->getFadeColor() ) );
 
                             double fDuration;
                             if( xTransFilter->getDuration() >>= fDuration )
-                                xPageProps->setPropertyValue("TransitionDuration", Any( fDuration ) );
+                                xPageProps->setPropertyValue(u"TransitionDuration"_ustr, Any( fDuration ) );
 
                         }
                         break;
@@ -1309,7 +1309,7 @@ void AnimationNodeContext::postProcessRootNode( const Reference< XAnimationNode 
                             Reference< XCommand > xCommand( xChildNode, UNO_QUERY_THROW );
                             if( xCommand->getCommand() == EffectCommands::STOPAUDIO )
                             {
-                                xPageProps->setPropertyValue("Sound", Any(true) );
+                                xPageProps->setPropertyValue(u"Sound"_ustr, Any(true) );
                             }
                         }
                         break;
@@ -1320,11 +1320,11 @@ void AnimationNodeContext::postProcessRootNode( const Reference< XAnimationNode 
                             OUString sSoundURL;
                             if( (xAudio->getSource() >>= sSoundURL) && !sSoundURL.isEmpty() )
                             {
-                                xPageProps->setPropertyValue("Sound", Any(sSoundURL) );
+                                xPageProps->setPropertyValue(u"Sound"_ustr, Any(sSoundURL) );
 
                                 Timing eTiming;
                                 if( (xAudio->getRepeatCount() >>= eTiming) && (eTiming == Timing_INDEFINITE) )
-                                    xPageProps->setPropertyValue("LoopSound", Any( true ) );
+                                    xPageProps->setPropertyValue(u"LoopSound"_ustr, Any( true ) );
                             }
                         }
                         break;

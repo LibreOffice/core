@@ -190,7 +190,7 @@ OUString XMLTextListsHelper::GetContinueListIdOfProcessedList(
 OUString XMLTextListsHelper::GenerateNewListId() const
 {
     static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
-    OUString sTmpStr( "list" );
+    OUString sTmpStr( u"list"_ustr );
 
     if (bHack)
     {
@@ -425,7 +425,7 @@ XMLTextListsHelper::MakeNumRule(
 
             uno::Reference< beans::XPropertySet > xPropSet( xStyle,
                 uno::UNO_QUERY );
-            any = xPropSet->getPropertyValue("NumberingRules");
+            any = xPropSet->getPropertyValue(u"NumberingRules"_ustr);
             any >>= xNumRules;
         }
         else

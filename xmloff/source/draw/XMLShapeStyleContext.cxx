@@ -238,7 +238,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
                 Sequence<OUString> const seq{ sStyleName };
                 GetImport().SetError(
                     XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_WARNING,
-                    seq, "empty style name reference", nullptr );
+                    seq, u"empty style name reference"_ustr, nullptr );
                 break;
             }
 

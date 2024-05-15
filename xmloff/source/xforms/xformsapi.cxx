@@ -78,7 +78,7 @@ void xforms_addXFormsModel(
             if( xForms.is() )
             {
                 OUString sName;
-                xModel->getPropertyValue("ID") >>= sName;
+                xModel->getPropertyValue(u"ID"_ustr) >>= sName;
                 xForms->insertByName( sName, Any( xModel ) );
                 bSuccess = true;
             }

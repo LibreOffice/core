@@ -86,7 +86,7 @@ namespace xmloff
     void SAL_CALL OEventDescriptorMapper::replaceByName( const OUString&, const Any& )
     {
         throw IllegalArgumentException(
-            "replacing is not implemented for this wrapper class.", getXWeak(), 1);
+            u"replacing is not implemented for this wrapper class."_ustr, getXWeak(), 1);
     }
 
     Any SAL_CALL OEventDescriptorMapper::getByName( const OUString& _rName )

@@ -360,10 +360,10 @@ XMLImpHyperlinkContext_Impl::XMLImpHyperlinkContext_Impl(
     {
         if( IsXMLToken( sShow, XML_NEW ) )
             mpHint->SetTargetFrameName(
-                    "_blank" );
+                    u"_blank"_ustr );
         else if( IsXMLToken( sShow, XML_REPLACE ) )
             mpHint->SetTargetFrameName(
-                    "_self" );
+                    u"_self"_ustr );
     }
 
     if ( mpHint->GetHRef().isEmpty() )
@@ -763,7 +763,7 @@ void XMLMetaImportContext::InsertMeta(
         const uno::Reference<rdf::XMetadatable> xMeta(
             XMLTextMarkImportContext::CreateAndInsertMark(
                 GetImport(),
-                "com.sun.star.text.InContentMetadata",
+                u"com.sun.star.text.InContentMetadata"_ustr,
                 OUString(),
                 i_xInsertionRange, m_XmlId),
             uno::UNO_QUERY);
@@ -834,7 +834,7 @@ void XMLMetaFieldImportContext::InsertMeta(
         const Reference<XPropertySet> xPropertySet(
             XMLTextMarkImportContext::CreateAndInsertMark(
                 GetImport(),
-                "com.sun.star.text.textfield.MetadataField",
+                u"com.sun.star.text.textfield.MetadataField"_ustr,
                 OUString(),
                 i_xInsertionRange, m_XmlId),
             UNO_QUERY);
@@ -850,8 +850,8 @@ void XMLMetaFieldImportContext::InsertMeta(
 
             if (-1 != nKey)
             {
-                OUString sPropertyIsFixedLanguage("IsFixedLanguage");
-                xPropertySet->setPropertyValue("NumberFormat", Any(nKey));
+                OUString sPropertyIsFixedLanguage(u"IsFixedLanguage"_ustr);
+                xPropertySet->setPropertyValue(u"NumberFormat"_ustr, Any(nKey));
                 if ( xPropertySet->getPropertySetInfo()->
                         hasPropertyByName( sPropertyIsFixedLanguage ) )
                 {
@@ -1027,7 +1027,7 @@ void XMLIndexMarkImportContext_Impl::ProcessAttribute(
         case XML_ELEMENT(TEXT, XML_ALPHABETICAL_INDEX_MARK):
             if ( aIter.getToken() == XML_ELEMENT(TEXT, XML_STRING_VALUE) )
             {
-                rPropSet->setPropertyValue("AlternativeText", uno::Any(aIter.toString()));
+                rPropSet->setPropertyValue(u"AlternativeText"_ustr, uno::Any(aIter.toString()));
             }
             // else: ignore!
             break;
@@ -1153,7 +1153,7 @@ void XMLTOCMarkImportContext_Impl::ProcessAttribute(
                 && nTmp < GetImport().GetTextImport()->
                                 GetChapterNumbering()->getCount() )
             {
-                rPropSet->setPropertyValue("Level", uno::Any(static_cast<sal_Int16>(nTmp - 1)));
+                rPropSet->setPropertyValue(u"Level"_ustr, uno::Any(static_cast<sal_Int16>(nTmp - 1)));
             }
             // else: value out of range -> ignore
             break;
@@ -1199,7 +1199,7 @@ void XMLUserIndexMarkImportContext_Impl::ProcessAttribute(
     switch (aIter.getToken())
     {
         case XML_ELEMENT(TEXT, XML_INDEX_NAME):
-            rPropSet->setPropertyValue("UserIndexName", uno::Any(aIter.toString()));
+            rPropSet->setPropertyValue(u"UserIndexName"_ustr, uno::Any(aIter.toString()));
             break;
         case XML_ELEMENT(TEXT, XML_OUTLINE_LEVEL):
         {
@@ -1209,7 +1209,7 @@ void XMLUserIndexMarkImportContext_Impl::ProcessAttribute(
                 nTmp, aIter.toView(), 0,
                GetImport().GetTextImport()->GetChapterNumbering()->getCount()))
             {
-                rPropSet->setPropertyValue("Level", uno::Any(static_cast<sal_Int16>(nTmp - 1)));
+                rPropSet->setPropertyValue(u"Level"_ustr, uno::Any(static_cast<sal_Int16>(nTmp - 1)));
             }
             // else: value out of range -> ignore
             break;
@@ -1255,19 +1255,19 @@ void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
     switch (aIter.getToken())
     {
         case XML_ELEMENT(TEXT, XML_KEY1):
-            rPropSet->setPropertyValue("PrimaryKey", uno::Any(aIter.toString()));
+            rPropSet->setPropertyValue(u"PrimaryKey"_ustr, uno::Any(aIter.toString()));
             break;
         case XML_ELEMENT(TEXT, XML_KEY2):
-            rPropSet->setPropertyValue("SecondaryKey", uno::Any(aIter.toString()));
+            rPropSet->setPropertyValue(u"SecondaryKey"_ustr, uno::Any(aIter.toString()));
             break;
         case XML_ELEMENT(TEXT, XML_KEY1_PHONETIC):
-            rPropSet->setPropertyValue("PrimaryKeyReading", uno::Any(aIter.toString()));
+            rPropSet->setPropertyValue(u"PrimaryKeyReading"_ustr, uno::Any(aIter.toString()));
             break;
         case XML_ELEMENT(TEXT, XML_KEY2_PHONETIC):
-            rPropSet->setPropertyValue("SecondaryKeyReading", uno::Any(aIter.toString()));
+            rPropSet->setPropertyValue(u"SecondaryKeyReading"_ustr, uno::Any(aIter.toString()));
             break;
         case XML_ELEMENT(TEXT, XML_STRING_VALUE_PHONETIC):
-            rPropSet->setPropertyValue("TextReading", uno::Any(aIter.toString()));
+            rPropSet->setPropertyValue(u"TextReading"_ustr, uno::Any(aIter.toString()));
             break;
         case XML_ELEMENT(TEXT, XML_MAIN_ENTRY):
         {
@@ -1277,7 +1277,7 @@ void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
             if (::sax::Converter::convertBool(bTmp, aIter.toView()))
                 bMainEntry = bTmp;
 
-            rPropSet->setPropertyValue("IsMainEntry", uno::Any(bMainEntry));
+            rPropSet->setPropertyValue(u"IsMainEntry"_ustr, uno::Any(bMainEntry));
             break;
         }
         default:
@@ -1383,7 +1383,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLImpSpanContext_Impl
         // field (StarCalc, StarDraw, ...)
         Reference< beans::XPropertySet > xPropSet( rImport.GetTextImport()->GetCursor(), UNO_QUERY );
 
-        if ( xPropSet->getPropertySetInfo()->hasPropertyByName( "HyperLinkURL" ) )
+        if ( xPropSet->getPropertySetInfo()->hasPropertyByName( u"HyperLinkURL"_ustr ) )
         {
             pContext = new XMLImpHyperlinkContext_Impl(
                     rImport,
@@ -1795,7 +1795,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
         {
             try
             {
-                xPropSet->setPropertyValue("ListAutoFormat", m_aMarkerStyleName);
+                xPropSet->setPropertyValue(u"ListAutoFormat"_ustr, m_aMarkerStyleName);
             }
             catch (const css::beans::UnknownPropertyException&)
             {
@@ -1814,7 +1814,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
             if (bIsListHeader)
             {
                 OUString sNumberingIsNumber
-                    ("NumberingIsNumber");
+                    (u"NumberingIsNumber"_ustr);
                 if(xPropSet->getPropertySetInfo()->
                    hasPropertyByName(sNumberingIsNumber))
                 {
@@ -1825,9 +1825,9 @@ void XMLParaContext::endFastElement(sal_Int32 )
             if (bIsRestart)
             {
                 OUString sParaIsNumberingRestart
-                    ("ParaIsNumberingRestart");
+                    (u"ParaIsNumberingRestart"_ustr);
                 OUString sNumberingStartValue
-                    ("NumberingStartValue");
+                    (u"NumberingStartValue"_ustr);
                 if (xPropSet->getPropertySetInfo()->
                     hasPropertyByName(sParaIsNumberingRestart))
                 {
@@ -1873,11 +1873,11 @@ void XMLParaContext::endFastElement(sal_Int32 )
             // We have at least one empty hint, then make try to ask the cursor to not upgrade our character
             // attributes to paragraph-level formatting, which would lead to incorrect rendering.
             uno::Reference<beans::XPropertySetInfo> xCursorPropsInfo = xCursorProps->getPropertySetInfo();
-            bSetNoFormatAttr = xCursorPropsInfo->hasPropertyByName("NoFormatAttr");
+            bSetNoFormatAttr = xCursorPropsInfo->hasPropertyByName(u"NoFormatAttr"_ustr);
         }
         if (bSetNoFormatAttr)
         {
-            xCursorProps->setPropertyValue("NoFormatAttr", uno::Any(true));
+            xCursorProps->setPropertyValue(u"NoFormatAttr"_ustr, uno::Any(true));
         }
         for (const auto & i : m_xHints->GetHints())
         {
@@ -1909,7 +1909,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
                         // borrow from XMLTextMarkImportContext
                         XMLTextMarkImportContext::CreateAndInsertMark(
                             GetImport(),
-                            "com.sun.star.text.ReferenceMark",
+                            u"com.sun.star.text.ReferenceMark"_ustr,
                             rRefName,
                             xAttrCursor);
                     }
@@ -1975,13 +1975,13 @@ void XMLParaContext::endFastElement(sal_Int32 )
                             TextContentAnchorType eAnchorType =
                                             TextContentAnchorType_AT_PARAGRAPH;
                             {
-                                Any aAny = xPropSet->getPropertyValue( "AnchorType" );
+                                Any aAny = xPropSet->getPropertyValue( u"AnchorType"_ustr );
                                 aAny >>= eAnchorType;
                             }
                             if ( TextContentAnchorType_AT_CHARACTER == eAnchorType )
                             {
                                 // set anchor position for at-character anchored objects
-                                xPropSet->setPropertyValue("TextRange", Any(xAttrCursor));
+                                xPropSet->setPropertyValue(u"TextRange"_ustr, Any(xAttrCursor));
                             }
                         }
                     }
@@ -2002,13 +2002,13 @@ void XMLParaContext::endFastElement(sal_Int32 )
                         Reference < XPropertySet > xPropSet( xShape, UNO_QUERY );
                         TextContentAnchorType eAnchorType = TextContentAnchorType_AT_PARAGRAPH;
                         {
-                            Any aAny = xPropSet->getPropertyValue( "AnchorType" );
+                            Any aAny = xPropSet->getPropertyValue( u"AnchorType"_ustr );
                             aAny >>= eAnchorType;
                         }
                         if ( TextContentAnchorType_AT_CHARACTER == eAnchorType )
                         {
                             // set anchor position for at-character anchored objects
-                            xPropSet->setPropertyValue("TextRange", Any(xAttrCursor));
+                            xPropSet->setPropertyValue(u"TextRange"_ustr, Any(xAttrCursor));
                         }
                     }
                 }
@@ -2020,7 +2020,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
         }
         if (bSetNoFormatAttr)
         {
-            xCursorProps->setPropertyValue("NoFormatAttr", uno::Any(false));
+            xCursorProps->setPropertyValue(u"NoFormatAttr"_ustr, uno::Any(false));
         }
     }
     m_xHints.reset();

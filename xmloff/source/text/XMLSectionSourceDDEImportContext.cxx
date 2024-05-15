@@ -86,11 +86,11 @@ void XMLSectionSourceDDEImportContext::startFastElement(sal_Int32 /*nElement*/,
 
     // DDE not supported on all platforms; query property first
     if (!rSectionPropertySet->getPropertySetInfo()->
-        hasPropertyByName("DDECommandFile"))
+        hasPropertyByName(u"DDECommandFile"_ustr))
         return;
 
     // use multi property set to force single update of connection #83654#
-    Sequence<OUString> aNames { "DDECommandFile", "DDECommandType", "DDECommandElement", "IsAutomaticUpdate" };
+    Sequence<OUString> aNames { u"DDECommandFile"_ustr, u"DDECommandType"_ustr, u"DDECommandElement"_ustr, u"IsAutomaticUpdate"_ustr };
     Sequence<Any> aValues { Any(sApplication), Any(sTopic), Any(sItem), Any(bAutomaticUpdate) };
 
     Reference<XMultiPropertySet> rMultiPropSet(rSectionPropertySet,

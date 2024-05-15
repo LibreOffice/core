@@ -290,9 +290,9 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
                 // get style
                 OUString sParentStyleName;
                 Reference< XPropertySetInfo > xPropertySetInfo( xCellSet->getPropertySetInfo() );
-                if( xPropertySetInfo.is() && xPropertySetInfo->hasPropertyByName("Style") )
+                if( xPropertySetInfo.is() && xPropertySetInfo->hasPropertyByName(u"Style"_ustr) )
                 {
-                    Reference< XStyle > xStyle( xCellSet->getPropertyValue("Style"), UNO_QUERY );
+                    Reference< XStyle > xStyle( xCellSet->getPropertyValue(u"Style"_ustr), UNO_QUERY );
                     if( xStyle.is() )
                         sParentStyleName = xStyle->getName();
                 }
@@ -529,16 +529,16 @@ const TableStyleElement* getTableStyleMap()
 {
     static const struct TableStyleElement gTableStyleElements[] =
     {
-        { XML_FIRST_ROW, OUString("first-row") },
-        { XML_LAST_ROW, OUString("last-row") },
-        { XML_FIRST_COLUMN, OUString("first-column") },
-        { XML_LAST_COLUMN, OUString("last-column") },
-        { XML_BODY, OUString("body") },
-        { XML_EVEN_ROWS, OUString("even-rows") },
-        { XML_ODD_ROWS, OUString("odd-rows") },
-        { XML_EVEN_COLUMNS, OUString("even-columns") },
-        { XML_ODD_COLUMNS, OUString("odd-columns") },
-        { XML_BACKGROUND, OUString("background") },
+        { XML_FIRST_ROW, u"first-row"_ustr },
+        { XML_LAST_ROW, u"last-row"_ustr },
+        { XML_FIRST_COLUMN, u"first-column"_ustr },
+        { XML_LAST_COLUMN, u"last-column"_ustr },
+        { XML_BODY, u"body"_ustr },
+        { XML_EVEN_ROWS, u"even-rows"_ustr },
+        { XML_ODD_ROWS, u"odd-rows"_ustr },
+        { XML_EVEN_COLUMNS, u"even-columns"_ustr },
+        { XML_ODD_COLUMNS, u"odd-columns"_ustr },
+        { XML_BACKGROUND, u"background"_ustr },
         { XML_TOKEN_END, OUString() }
     };
 
@@ -549,12 +549,12 @@ const TableStyleElement* getWriterSpecificTableStyleMap()
 {
     static const struct TableStyleElement gWriterSpecificTableStyleElements[] =
     {
-        { XML_FIRST_ROW_EVEN_COLUMN, OUString("first-row-even-column") },
-        { XML_LAST_ROW_EVEN_COLUMN, OUString("last-row-even-column") },
-        { XML_FIRST_ROW_END_COLUMN, OUString("first-row-end-column") },
-        { XML_FIRST_ROW_START_COLUMN, OUString("first-row-start-column") },
-        { XML_LAST_ROW_END_COLUMN, OUString("last-row-end-column") },
-        { XML_LAST_ROW_START_COLUMN, OUString("last-row-start-column") },
+        { XML_FIRST_ROW_EVEN_COLUMN, u"first-row-even-column"_ustr },
+        { XML_LAST_ROW_EVEN_COLUMN, u"last-row-even-column"_ustr },
+        { XML_FIRST_ROW_END_COLUMN, u"first-row-end-column"_ustr },
+        { XML_FIRST_ROW_START_COLUMN, u"first-row-start-column"_ustr },
+        { XML_LAST_ROW_END_COLUMN, u"last-row-end-column"_ustr },
+        { XML_LAST_ROW_START_COLUMN, u"last-row-start-column"_ustr },
         { XML_TOKEN_END, OUString() }
     };
 
@@ -565,10 +565,10 @@ static const TableStyleElement* getWriterSpecificTableStyleAttributes()
 {
     static const struct TableStyleElement gWriterSpecifitTableStyleAttributes[] =
     {
-        { XML_FIRST_ROW_END_COLUMN, OUString("FirstRowEndColumn") },
-        { XML_FIRST_ROW_START_COLUMN, OUString("FirstRowStartColumn") },
-        { XML_LAST_ROW_END_COLUMN, OUString("LastRowEndColumn") },
-        { XML_LAST_ROW_START_COLUMN, OUString("LastRowStartColumn") },
+        { XML_FIRST_ROW_END_COLUMN, u"FirstRowEndColumn"_ustr },
+        { XML_FIRST_ROW_START_COLUMN, u"FirstRowStartColumn"_ustr },
+        { XML_LAST_ROW_END_COLUMN, u"LastRowEndColumn"_ustr },
+        { XML_LAST_ROW_START_COLUMN, u"LastRowStartColumn"_ustr },
         { XML_TOKEN_END, OUString() }
     };
 
@@ -602,7 +602,7 @@ void XMLTableExport::exportTableTemplates()
 
             try
             {
-                xTableStylePropSet->getPropertyValue("IsPhysical") >>= bPhysical;
+                xTableStylePropSet->getPropertyValue(u"IsPhysical"_ustr) >>= bPhysical;
             }
             catch(const Exception&)
             {

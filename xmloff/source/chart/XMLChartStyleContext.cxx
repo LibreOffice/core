@@ -99,8 +99,8 @@ void XMLChartStyleContext::FillPropertySet(
         TOOLS_WARN_EXCEPTION( "xmloff", "unknown property exception -> shape style not completely imported for chart style" );
     }
 
-    lcl_NumberFormatStyleToProperty( msDataStyleName, "NumberFormat", mrStyles, rPropSet );
-    lcl_NumberFormatStyleToProperty( msPercentageDataStyleName, "PercentageNumberFormat", mrStyles, rPropSet );
+    lcl_NumberFormatStyleToProperty( msDataStyleName, u"NumberFormat"_ustr, mrStyles, rPropSet );
+    lcl_NumberFormatStyleToProperty( msPercentageDataStyleName, u"PercentageNumberFormat"_ustr, mrStyles, rPropSet );
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > XMLChartStyleContext::createFastChildContext(

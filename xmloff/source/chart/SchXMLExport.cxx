@@ -325,7 +325,7 @@ CustomLabelData lcl_getCustomLabelField(SvXMLExport const& rExport,
 
     if(Reference<beans::XPropertySet> xLabels = rSeries->getDataPointByIndex(nDataPointIndex); xLabels.is())
     {
-        if(Any aAny = xLabels->getPropertyValue("CustomLabelFields"); aAny.hasValue())
+        if(Any aAny = xLabels->getPropertyValue(u"CustomLabelFields"_ustr); aAny.hasValue())
         {
             CustomLabelData aData;
             Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aCustomLabels;
@@ -364,7 +364,7 @@ css::chart2::RelativePosition lcl_getCustomLabelPosition(
 
     if (Reference<beans::XPropertySet> xLabels = rSeries->getDataPointByIndex(nDataPointIndex); xLabels.is())
     {
-        if (Any aAny = xLabels->getPropertyValue("CustomLabelPosition"); aAny.hasValue())
+        if (Any aAny = xLabels->getPropertyValue(u"CustomLabelPosition"_ustr); aAny.hasValue())
         {
             chart2::RelativePosition aCustomLabelPos;
             aAny >>= aCustomLabelPos;
@@ -389,7 +389,7 @@ public:
         OUString aRole;
 
         return ( xProp.is() &&
-                 (xProp->getPropertyValue( "Role" ) >>= aRole ) &&
+                 (xProp->getPropertyValue( u"Role"_ustr ) >>= aRole ) &&
                  m_aRole == aRole );
     }
 
@@ -445,7 +445,7 @@ Reference< chart2::data::XDataSource > lcl_createDataSource(
         comphelper::getProcessComponentContext() );
     Reference< chart2::data::XDataSink > xSink(
         xContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.chart2.data.DataSource", xContext ),
+            u"com.sun.star.chart2.data.DataSource"_ustr, xContext ),
         uno::UNO_QUERY_THROW );
     xSink->setData( aData );
 
@@ -506,12 +506,12 @@ Reference< chart2::data::XDataSource > lcl_pressUsedDataIntoRectangularFormat( c
 
     //the first x-values is always the next sequence //todo ... other x-values get lost for old format
     Reference< chart2::data::XLabeledDataSequence > xXValues(
-        lcl_getDataSequenceByRole( aSeriesSeqVector, "values-x" ) );
+        lcl_getDataSequenceByRole( aSeriesSeqVector, u"values-x"_ustr ) );
     if( xXValues.is() )
         aLabeledSeqVector.push_back( xXValues );
 
     //add all other sequences now without x-values
-    lcl_MatchesRole aHasXValues( "values-x" );
+    lcl_MatchesRole aHasXValues( u"values-x"_ustr );
     std::copy_if(aSeriesSeqVector.begin(), aSeriesSeqVector.end(), std::back_inserter(aLabeledSeqVector),
                  [&aHasXValues](const auto& rSeriesSeq) { return !aHasXValues( rSeriesSeq ); });
 
@@ -529,7 +529,7 @@ bool lcl_isSeriesAttachedToFirstAxis(
     {
         sal_Int32 nAxisIndex = 0;
         Reference< beans::XPropertySet > xProp( xDataSeries, uno::UNO_QUERY_THROW );
-        xProp->getPropertyValue("AttachedAxisIndex") >>= nAxisIndex;
+        xProp->getPropertyValue(u"AttachedAxisIndex"_ustr) >>= nAxisIndex;
         bResult = (0==nAxisIndex);
     }
     catch( const uno::Exception & )
@@ -695,7 +695,7 @@ uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
     if( xProp.is() )
     {
         OUString aRole;
-        xProp->getPropertyValue("Role") >>= aRole;
+        xProp->getPropertyValue(u"Role"_ustr) >>= aRole;
         if( aRole.match("values-x") )
         {
             //lcl_clearIfNoValuesButTextIsContained - replace by indices if the values are not appropriate
@@ -731,7 +731,7 @@ bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDataSeque
         uno::Sequence< sal_Int32 > aHiddenValues;
         try
         {
-            xProp->getPropertyValue("HiddenValues") >>= aHiddenValues;
+            xProp->getPropertyValue(u"HiddenValues"_ustr) >>= aHiddenValues;
             if( !aHiddenValues.hasElements() )
                 return true;
         }
@@ -980,7 +980,7 @@ void lcl_exportNumberFormat( const OUString& rPropertyName, const Reference< bea
                 Reference< chart2::data::XDataSequence > xSequence( rSequence->getValues());
                 Reference< beans::XPropertySet > xSeqProp( xSequence, uno::UNO_QUERY_THROW );
                 OUString aRole;
-                if( ( xSeqProp->getPropertyValue( "Role" ) >>= aRole ) &&
+                if( ( xSeqProp->getPropertyValue( u"Role"_ustr ) >>= aRole ) &&
                     aRole.match( "error-bars-" ))
                 {
                     aResult.push_back( xSequence );
@@ -1184,23 +1184,23 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
     {
         try
         {
-            Any aAny = xDocPropSet->getPropertyValue("HasMainTitle");
+            Any aAny = xDocPropSet->getPropertyValue(u"HasMainTitle"_ustr);
             aAny >>= bHasMainTitle;
-            aAny = xDocPropSet->getPropertyValue("HasSubTitle");
+            aAny = xDocPropSet->getPropertyValue(u"HasSubTitle"_ustr);
             aAny >>= bHasSubTitle;
-            aAny = xDocPropSet->getPropertyValue("HasLegend");
+            aAny = xDocPropSet->getPropertyValue(u"HasLegend"_ustr);
             aAny >>= bHasLegend;
             if ( bIncludeTable )
             {
-                aAny = xDocPropSet->getPropertyValue("NullDate");
+                aAny = xDocPropSet->getPropertyValue(u"NullDate"_ustr);
                 if ( !aAny.hasValue() )
                 {
                     Reference<container::XChild> xChild(rChartDoc, uno::UNO_QUERY );
                     if ( xChild.is() )
                     {
                         Reference< beans::XPropertySet > xParentDoc( xChild->getParent(),uno::UNO_QUERY);
-                        if ( xParentDoc.is() && xParentDoc->getPropertySetInfo()->hasPropertyByName("NullDate") )
-                            aAny = xParentDoc->getPropertyValue("NullDate");
+                        if ( xParentDoc.is() && xParentDoc->getPropertySetInfo()->hasPropertyByName(u"NullDate"_ustr) )
+                            aAny = xParentDoc->getPropertyValue(u"NullDate"_ustr);
                     }
                 }
 
@@ -1241,7 +1241,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
 
         if (nCurrentODFVersion >= SvtSaveOptions::ODFSVER_012)
         {
-            OUString aDataProviderURL(  ".."  );
+            OUString aDataProviderURL(  u".."_ustr  );
             if( xNewDoc->hasInternalDataProvider() )
                 aDataProviderURL = ".";
             else //special handling for data base data provider necessary
@@ -1407,7 +1407,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                 // export legend anchor position
                 try
                 {
-                    Any aAny( xProp->getPropertyValue("Alignment"));
+                    Any aAny( xProp->getPropertyValue(u"Alignment"_ustr));
                     if( SchXMLEnumConverter::getLegendPositionConverter().exportXML( msString, aAny, mrExport.GetMM100UnitConverter() ) )
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_LEGEND_POSITION, msString );
                 }
@@ -1421,7 +1421,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                 {
                     if (nCurrentODFVersion & SvtSaveOptions::ODFSVER_EXTENDED)
                     {
-                        Any aAny( xProp->getPropertyValue("Overlay"));
+                        Any aAny( xProp->getPropertyValue(u"Overlay"_ustr));
                         if(aAny.get<bool>())
                             mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_OVERLAY, OUString::boolean(true));
                     }
@@ -1442,7 +1442,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                     {
                         chart::ChartLegendExpansion nLegendExpansion = chart::ChartLegendExpansion_HIGH;
                         OUString aExpansionString;
-                        Any aAny( xProp->getPropertyValue("Expansion"));
+                        Any aAny( xProp->getPropertyValue(u"Expansion"_ustr));
                         bool bHasExpansion = (aAny >>= nLegendExpansion);
                         if( bHasExpansion && SchXMLEnumConverter::getLegendExpansionConverter().exportXML( aExpansionString, aAny, mrExport.GetMM100UnitConverter() ) )
                         {
@@ -1557,7 +1557,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
             // get a sequence of non-chart shapes (inserted via clipboard)
             try
             {
-                Any aShapesAny = xDocPropSet->getPropertyValue("AdditionalShapes");
+                Any aShapesAny = xDocPropSet->getPropertyValue(u"AdditionalShapes"_ustr);
                 aShapesAny >>= mxAdditionalShapes;
             }
             catch( const uno::Exception & )
@@ -1641,7 +1641,7 @@ void SchXMLExportHelper_Impl::exportTable()
     {
         bool bProtected = false;
         Reference< beans::XPropertySet > xProps( mrExport.GetModel(), uno::UNO_QUERY_THROW );
-        if ( ( xProps->getPropertyValue("DisableDataTableDialog") >>= bProtected ) &&
+        if ( ( xProps->getPropertyValue(u"DisableDataTableDialog"_ustr) >>= bProtected ) &&
              bProtected )
         {
             mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_PROTECTED, XML_TRUE );
@@ -1962,9 +1962,9 @@ void SchXMLExportHelper_Impl::exportPlotArea(
                     {
                         bool bFirstCol = false, bFirstRow = false;
 
-                        aAny = xDocProp->getPropertyValue( "DataSourceLabelsInFirstColumn" );
+                        aAny = xDocProp->getPropertyValue( u"DataSourceLabelsInFirstColumn"_ustr );
                         aAny >>= bFirstCol;
-                        aAny = xDocProp->getPropertyValue( "DataSourceLabelsInFirstRow" );
+                        aAny = xDocProp->getPropertyValue( u"DataSourceLabelsInFirstRow"_ustr );
                         aAny >>= bFirstRow;
 
                         if( bFirstCol || bFirstRow )
@@ -2002,7 +2002,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
             // 3d attributes
             try
             {
-                aAny = xPropSet->getPropertyValue("Dim3D");
+                aAny = xPropSet->getPropertyValue(u"Dim3D"_ustr);
                 aAny >>= bIs3DChart;
 
                 if( bIs3DChart )
@@ -2224,7 +2224,7 @@ void SchXMLExportHelper_Impl::exportDateScale( const Reference< beans::XProperty
         return;
 
     chart::TimeIncrement aIncrement;
-    if( !(rAxisProps->getPropertyValue("TimeIncrement") >>= aIncrement) )
+    if( !(rAxisProps->getPropertyValue(u"TimeIncrement"_ustr) >>= aIncrement) )
         return;
 
     sal_Int32 nTimeResolution = css::chart::TimeUnit::DAY;
@@ -2383,13 +2383,13 @@ void SchXMLExportHelper_Impl::exportAxis(
             if (sChartType == u"com.sun.star.chart.BarDiagram" || sChartType == u"com.sun.star.chart.StockDiagram")
             {
                 if (!bShiftedCatPos)
-                    rAxisProps->setPropertyValue("MajorOrigin", uno::Any(0.0));
+                    rAxisProps->setPropertyValue(u"MajorOrigin"_ustr, uno::Any(0.0));
             }
             else if (bShiftedCatPos)
-                rAxisProps->setPropertyValue("MajorOrigin", uno::Any(0.5));
+                rAxisProps->setPropertyValue(u"MajorOrigin"_ustr, uno::Any(0.5));
         }
 
-        lcl_exportNumberFormat( "NumberFormat", rAxisProps, mrExport );
+        lcl_exportNumberFormat( u"NumberFormat"_ustr, rAxisProps, mrExport );
         aPropertyStates = mxExpPropMapper->Filter(mrExport, rAxisProps);
 
         if (!maSrcShellID.isEmpty() && !maDestShellID.isEmpty() && maSrcShellID != maDestShellID)
@@ -2479,25 +2479,25 @@ void SchXMLExportHelper_Impl::exportAxes(
     // get multiple properties using XMultiPropertySet
     MultiPropertySetHandler aDiagramProperties (xDiagram);
 
-    aDiagramProperties.Add ("HasXAxis", bHasXAxis);
-    aDiagramProperties.Add ("HasYAxis", bHasYAxis);
-    aDiagramProperties.Add ("HasZAxis", bHasZAxis);
-    aDiagramProperties.Add ("HasSecondaryXAxis", bHasSecondaryXAxis);
-    aDiagramProperties.Add ("HasSecondaryYAxis", bHasSecondaryYAxis);
+    aDiagramProperties.Add (u"HasXAxis"_ustr, bHasXAxis);
+    aDiagramProperties.Add (u"HasYAxis"_ustr, bHasYAxis);
+    aDiagramProperties.Add (u"HasZAxis"_ustr, bHasZAxis);
+    aDiagramProperties.Add (u"HasSecondaryXAxis"_ustr, bHasSecondaryXAxis);
+    aDiagramProperties.Add (u"HasSecondaryYAxis"_ustr, bHasSecondaryYAxis);
 
-    aDiagramProperties.Add ("HasXAxisTitle", bHasXAxisTitle);
-    aDiagramProperties.Add ("HasYAxisTitle", bHasYAxisTitle);
-    aDiagramProperties.Add ("HasZAxisTitle", bHasZAxisTitle);
-    aDiagramProperties.Add ("HasSecondaryXAxisTitle", bHasSecondaryXAxisTitle);
-    aDiagramProperties.Add ("HasSecondaryYAxisTitle", bHasSecondaryYAxisTitle);
+    aDiagramProperties.Add (u"HasXAxisTitle"_ustr, bHasXAxisTitle);
+    aDiagramProperties.Add (u"HasYAxisTitle"_ustr, bHasYAxisTitle);
+    aDiagramProperties.Add (u"HasZAxisTitle"_ustr, bHasZAxisTitle);
+    aDiagramProperties.Add (u"HasSecondaryXAxisTitle"_ustr, bHasSecondaryXAxisTitle);
+    aDiagramProperties.Add (u"HasSecondaryYAxisTitle"_ustr, bHasSecondaryYAxisTitle);
 
-    aDiagramProperties.Add ("HasXAxisGrid", bHasXAxisMajorGrid);
-    aDiagramProperties.Add ("HasYAxisGrid", bHasYAxisMajorGrid);
-    aDiagramProperties.Add ("HasZAxisGrid", bHasZAxisMajorGrid);
+    aDiagramProperties.Add (u"HasXAxisGrid"_ustr, bHasXAxisMajorGrid);
+    aDiagramProperties.Add (u"HasYAxisGrid"_ustr, bHasYAxisMajorGrid);
+    aDiagramProperties.Add (u"HasZAxisGrid"_ustr, bHasZAxisMajorGrid);
 
-    aDiagramProperties.Add ("HasXAxisHelpGrid", bHasXAxisMinorGrid);
-    aDiagramProperties.Add ("HasYAxisHelpGrid", bHasYAxisMinorGrid);
-    aDiagramProperties.Add ("HasZAxisHelpGrid", bHasZAxisMinorGrid);
+    aDiagramProperties.Add (u"HasXAxisHelpGrid"_ustr, bHasXAxisMinorGrid);
+    aDiagramProperties.Add (u"HasYAxisHelpGrid"_ustr, bHasYAxisMinorGrid);
+    aDiagramProperties.Add (u"HasZAxisHelpGrid"_ustr, bHasZAxisMinorGrid);
 
     if ( ! aDiagramProperties.GetProperties ())
     {
@@ -2652,15 +2652,15 @@ void lcl_createDataLabelProperties(
     };
 
     const API2ODFMapItem aLabelFoo2ODFArray[]
-        = { API2ODFMapItem("LabelBorderStyle", XML_NAMESPACE_DRAW, "stroke"),
-            API2ODFMapItem("LabelBorderWidth", XML_NAMESPACE_SVG, "stroke-width"),
-            API2ODFMapItem("LabelBorderColor", XML_NAMESPACE_SVG, "stroke-color"),
-            API2ODFMapItem("LabelBorderDashName", XML_NAMESPACE_DRAW, "stroke-dash"),
-            API2ODFMapItem("LabelBorderTransparency", XML_NAMESPACE_SVG, "stroke-opacity"),
-            API2ODFMapItem("LabelFillStyle", XML_NAMESPACE_DRAW, "fill"),
-            API2ODFMapItem("LabelFillBackground", XML_NAMESPACE_DRAW, "fill-hatch-solid"),
-            API2ODFMapItem("LabelFillHatchName", XML_NAMESPACE_DRAW, "fill-hatch-name"),
-            API2ODFMapItem("LabelFillColor", XML_NAMESPACE_DRAW, "fill-color") };
+        = { API2ODFMapItem(u"LabelBorderStyle"_ustr, XML_NAMESPACE_DRAW, u"stroke"_ustr),
+            API2ODFMapItem(u"LabelBorderWidth"_ustr, XML_NAMESPACE_SVG, u"stroke-width"_ustr),
+            API2ODFMapItem(u"LabelBorderColor"_ustr, XML_NAMESPACE_SVG, u"stroke-color"_ustr),
+            API2ODFMapItem(u"LabelBorderDashName"_ustr, XML_NAMESPACE_DRAW, u"stroke-dash"_ustr),
+            API2ODFMapItem(u"LabelBorderTransparency"_ustr, XML_NAMESPACE_SVG, u"stroke-opacity"_ustr),
+            API2ODFMapItem(u"LabelFillStyle"_ustr, XML_NAMESPACE_DRAW, u"fill"_ustr),
+            API2ODFMapItem(u"LabelFillBackground"_ustr, XML_NAMESPACE_DRAW, u"fill-hatch-solid"_ustr),
+            API2ODFMapItem(u"LabelFillHatchName"_ustr, XML_NAMESPACE_DRAW, u"fill-hatch-name"_ustr),
+            API2ODFMapItem(u"LabelFillColor"_ustr, XML_NAMESPACE_DRAW, u"fill-color"_ustr) };
 
     for (const auto& rIt : aLabelFoo2ODFArray)
     {
@@ -2718,7 +2718,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                 bool bJapaneseCandleSticks = false;
                 Reference< beans::XPropertySet > xCTProp( rChartType, uno::UNO_QUERY );
                 if( xCTProp.is())
-                    xCTProp->getPropertyValue("Japanese") >>= bJapaneseCandleSticks;
+                    xCTProp->getPropertyValue(u"Japanese"_ustr) >>= bJapaneseCandleSticks;
                 exportCandleStickSeries(
                     xDSCnt->getDataSeries(), xNewDiagram, bJapaneseCandleSticks, bExportContent );
                 continue;
@@ -2754,7 +2754,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                 OUString aRole;
                                 Reference< beans::XPropertySet > xSeqProp( xTempValueSeq, uno::UNO_QUERY );
                                 if( xSeqProp.is())
-                                    xSeqProp->getPropertyValue("Role") >>= aRole;
+                                    xSeqProp->getPropertyValue(u"Role"_ustr) >>= aRole;
                                 // "main" sequence
                                 if( aRole == aLabelRole )
                                 {
@@ -2788,10 +2788,10 @@ void SchXMLExportHelper_Impl::exportSeries(
                                 // determine attached axis
                                 try
                                 {
-                                    Any aAny( xPropSet->getPropertyValue( "Axis" ));
+                                    Any aAny( xPropSet->getPropertyValue( u"Axis"_ustr ));
                                     aAny >>= nAttachedAxis;
 
-                                    aAny = xPropSet->getPropertyValue( "MeanValue" );
+                                    aAny = xPropSet->getPropertyValue( u"MeanValue"_ustr );
                                     aAny >>= bHasMeanValueLine;
                                 }
                                 catch( const beans::UnknownPropertyException & )
@@ -2803,8 +2803,8 @@ void SchXMLExportHelper_Impl::exportSeries(
                                     mrExport.getSaneDefaultVersion());
                                 if (nCurrentODFVersion >= SvtSaveOptions::ODFSVER_012)
                                 {
-                                    lcl_exportNumberFormat( "NumberFormat", xPropSet, mrExport );
-                                    lcl_exportNumberFormat( "PercentageNumberFormat", xPropSet, mrExport );
+                                    lcl_exportNumberFormat( u"NumberFormat"_ustr, xPropSet, mrExport );
+                                    lcl_exportNumberFormat( u"PercentageNumberFormat"_ustr, xPropSet, mrExport );
                                 }
 
                                 if( mxExpPropMapper.is())
@@ -2839,7 +2839,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                 {
                                     if (xPropSet.is())
                                     {
-                                        Any aAny = xPropSet->getPropertyValue("ShowLegendEntry");
+                                        Any aAny = xPropSet->getPropertyValue(u"ShowLegendEntry"_ustr);
                                         if (!aAny.get<bool>())
                                         {
                                             mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_HIDE_LEGEND, OUString::boolean(true));
@@ -2856,7 +2856,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                     {
                                         try
                                         {
-                                            xLSProp->getPropertyValue("HasStringLabel") >>= bHasString;
+                                            xLSProp->getPropertyValue(u"HasStringLabel"_ustr) >>= bHasString;
                                         }
                                         catch (const beans::UnknownPropertyException&) {}
                                     }
@@ -2911,7 +2911,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                             Reference< chart2::data::XDataSequence > xYValuesForBubbleChart;
                             if( bIsBubbleChart )
                             {
-                                Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, "values-y" ) );
+                                Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, u"values-y"_ustr ) );
                                 if( xSequence.is() )
                                 {
                                     xYValuesForBubbleChart = xSequence->getValues();
@@ -2921,7 +2921,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                             }
                             if( bIsScatterChart || bIsBubbleChart )
                             {
-                                Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, "values-x" ) );
+                                Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, u"values-x"_ustr ) );
                                 if( xSequence.is() )
                                 {
                                     Reference< chart2::data::XDataSequence > xValues( xSequence->getValues() );
@@ -2962,7 +2962,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                         Reference< beans::XPropertySet > xStatProp;
                         try
                         {
-                            Any aPropAny( xPropSet->getPropertyValue( "DataMeanValueProperties" ));
+                            Any aPropAny( xPropSet->getPropertyValue( u"DataMeanValueProperties"_ustr ));
                             aPropAny >>= xStatProp;
                         }
                         catch( const uno::Exception & )
@@ -3128,8 +3128,8 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
         xEquationProperties.set( xRegCurve->getEquationProperties() );
         if( xEquationProperties.is())
         {
-            xEquationProperties->getPropertyValue( "ShowEquation") >>= bShowEquation;
-            xEquationProperties->getPropertyValue( "ShowCorrelationCoefficient") >>= bShowRSquared;
+            xEquationProperties->getPropertyValue( u"ShowEquation"_ustr) >>= bShowEquation;
+            xEquationProperties->getPropertyValue( u"ShowCorrelationCoefficient"_ustr) >>= bShowRSquared;
 
             bExportEquation = ( bShowEquation || bShowRSquared );
             const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion(
@@ -3142,7 +3142,7 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
             {
                 // number format
                 sal_Int32 nNumberFormat = 0;
-                if( (xEquationProperties->getPropertyValue("NumberFormat") >>= nNumberFormat ) &&
+                if( (xEquationProperties->getPropertyValue(u"NumberFormat"_ustr) >>= nNumberFormat ) &&
                     nNumberFormat != -1 )
                 {
                     mrExport.addDataStyle( nNumberFormat );
@@ -3170,7 +3170,7 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
 
                     // export position
                     chart2::RelativePosition aRelativePosition;
-                    if( xEquationProperties->getPropertyValue( "RelativePosition" ) >>= aRelativePosition )
+                    if( xEquationProperties->getPropertyValue( u"RelativePosition"_ustr ) >>= aRelativePosition )
                     {
                         double fX = aRelativePosition.Primary * rPageSize.Width;
                         double fY = aRelativePosition.Secondary * rPageSize.Height;
@@ -3224,18 +3224,18 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
 
     try
     {
-        Any aAny = xSeriesProp->getPropertyValue( bYError ? OUString("ErrorBarY") : OUString("ErrorBarX") );
+        Any aAny = xSeriesProp->getPropertyValue( bYError ? u"ErrorBarY"_ustr : u"ErrorBarX"_ustr );
         aAny >>= xErrorBarProp;
 
         if ( xErrorBarProp.is() )
         {
-            aAny = xErrorBarProp->getPropertyValue("ShowNegativeError" );
+            aAny = xErrorBarProp->getPropertyValue(u"ShowNegativeError"_ustr );
             aAny >>= bNegative;
 
-            aAny = xErrorBarProp->getPropertyValue("ShowPositiveError" );
+            aAny = xErrorBarProp->getPropertyValue(u"ShowPositiveError"_ustr );
             aAny >>= bPositive;
 
-            aAny = xErrorBarProp->getPropertyValue("ErrorBarStyle" );
+            aAny = xErrorBarProp->getPropertyValue(u"ErrorBarStyle"_ustr );
             aAny >>= nErrorBarStyle;
         }
     }
@@ -3303,7 +3303,7 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
                 xSource->getDataSequences());
 
             sal_Int32 nSeriesLength =
-                lcl_getSequenceLengthByRole( aSeqCnt, "values-last");
+                lcl_getSequenceLengthByRole( aSeqCnt, u"values-last"_ustr);
 
             if( bExportContent )
             {
@@ -3315,7 +3315,7 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
                 if( bJapaneseCandleSticks )
                 {
                     tLabelAndValueRange aRanges( lcl_getLabelAndValueRangeByRole(
-                        aSeqCnt, "values-first",  xNewDoc, m_aDataSequencesToExport ));
+                        aSeqCnt, u"values-first"_ustr,  xNewDoc, m_aDataSequencesToExport ));
                     if( !aRanges.second.isEmpty())
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_VALUES_CELL_RANGE_ADDRESS, aRanges.second );
                     if( !aRanges.first.isEmpty())
@@ -3332,7 +3332,7 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
                 // low
                 {
                     tLabelAndValueRange aRanges( lcl_getLabelAndValueRangeByRole(
-                        aSeqCnt, "values-min",  xNewDoc, m_aDataSequencesToExport ));
+                        aSeqCnt, u"values-min"_ustr,  xNewDoc, m_aDataSequencesToExport ));
                     if( !aRanges.second.isEmpty())
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_VALUES_CELL_RANGE_ADDRESS, aRanges.second );
                     if( !aRanges.first.isEmpty())
@@ -3349,7 +3349,7 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
                 // high
                 {
                     tLabelAndValueRange aRanges( lcl_getLabelAndValueRangeByRole(
-                        aSeqCnt, "values-max",  xNewDoc, m_aDataSequencesToExport ));
+                        aSeqCnt, u"values-max"_ustr,  xNewDoc, m_aDataSequencesToExport ));
                     if( !aRanges.second.isEmpty())
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_VALUES_CELL_RANGE_ADDRESS, aRanges.second );
                     if( !aRanges.first.isEmpty())
@@ -3366,7 +3366,7 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
                 // close
                 {
                     tLabelAndValueRange aRanges( lcl_getLabelAndValueRangeByRole(
-                        aSeqCnt, "values-last",  xNewDoc, m_aDataSequencesToExport ));
+                        aSeqCnt, u"values-last"_ustr,  xNewDoc, m_aDataSequencesToExport ));
                     if( !aRanges.second.isEmpty())
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_VALUES_CELL_RANGE_ADDRESS, aRanges.second );
                     if( !aRanges.first.isEmpty())
@@ -3421,13 +3421,13 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     Sequence<sal_Int32> deletedLegendEntriesSeq;
     if( xSeriesProperties.is())
     {
-        xSeriesProperties->getPropertyValue("AttributedDataPoints") >>= aDataPointSeq;
-        xSeriesProperties->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint;
+        xSeriesProperties->getPropertyValue(u"AttributedDataPoints"_ustr) >>= aDataPointSeq;
+        xSeriesProperties->getPropertyValue(u"VaryColorsByPoint"_ustr) >>= bVaryColorsByPoint;
 
         const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(
             mrExport.getSaneDefaultVersion());
         if (nCurrentODFVersion & SvtSaveOptions::ODFSVER_EXTENDED) // do not export to ODF 1.3 or older
-            xSeriesProperties->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq;
+            xSeriesProperties->getPropertyValue(u"DeletedLegendEntries"_ustr) >>= deletedLegendEntriesSeq;
     }
 
     sal_Int32 nSize = aDataPointSeq.getLength();
@@ -3483,8 +3483,8 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                     mrExport.getSaneDefaultVersion());
                 if (nCurrentODFVersion >= SvtSaveOptions::ODFSVER_012 && bExportNumFmt)
                 {
-                    lcl_exportNumberFormat( "NumberFormat", xPropSet, mrExport );
-                    lcl_exportNumberFormat( "PercentageNumberFormat", xPropSet, mrExport );
+                    lcl_exportNumberFormat( u"NumberFormat"_ustr, xPropSet, mrExport );
+                    lcl_exportNumberFormat( u"PercentageNumberFormat"_ustr, xPropSet, mrExport );
                 }
 
                 // Generate style for <chart:data-label> child element
@@ -3497,10 +3497,10 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                 if (nCurrentODFVersion & SvtSaveOptions::ODFSVER_EXTENDED)
                 {
                     sal_Int32 nPlacement = 0;
-                    xPropSet->getPropertyValue("LabelPlacement") >>= nPlacement;
+                    xPropSet->getPropertyValue(u"LabelPlacement"_ustr) >>= nPlacement;
                     if (nPlacement == chart::DataLabelPlacement::CUSTOM)
                     {
-                        xPropSet->setPropertyValue("LabelPlacement",
+                        xPropSet->setPropertyValue(u"LabelPlacement"_ustr,
                                                   uno::Any(chart::DataLabelPlacement::OUTSIDE));
                     }
                 }
@@ -3580,8 +3580,8 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                     mrExport.getSaneDefaultVersion());
                 if (nCurrentODFVersion >= SvtSaveOptions::ODFSVER_012)
                 {
-                    lcl_exportNumberFormat( "NumberFormat", xPropSet, mrExport );
-                    lcl_exportNumberFormat( "PercentageNumberFormat", xPropSet, mrExport );
+                    lcl_exportNumberFormat( u"NumberFormat"_ustr, xPropSet, mrExport );
+                    lcl_exportNumberFormat( u"PercentageNumberFormat"_ustr, xPropSet, mrExport );
                 }
 
                 // Generate style for <chart:data-label> child element
@@ -3817,8 +3817,8 @@ void SchXMLExportHelper_Impl::CollectAutoTextStyle( const css::uno::Reference< b
         Sequence< uno::Reference< chart2::XFormattedString > > xFormattedTitle;
 
         OUString aTitle;
-        if ((xTitlePropSet->getPropertyValue("String") >>= aTitle) && !aTitle.isEmpty())
-            xTitlePropSet->getPropertyValue("FormattedStrings") >>= xFormattedTitle;
+        if ((xTitlePropSet->getPropertyValue(u"String"_ustr) >>= aTitle) && !aTitle.isEmpty())
+            xTitlePropSet->getPropertyValue(u"FormattedStrings"_ustr) >>= xFormattedTitle;
 
         if (xFormattedTitle.hasElements())
         {
@@ -3950,7 +3950,7 @@ void SchXMLExport::ExportContent_()
             Reference< lang::XServiceInfo > xServ( xChartDoc, uno::UNO_QUERY );
             if( xServ.is())
             {
-                if( xServ->supportsService( "com.sun.star.chart.ChartTableAddressSupplier" ))
+                if( xServ->supportsService( u"com.sun.star.chart.ChartTableAddressSupplier"_ustr ))
                 {
                     Reference< beans::XPropertySet > xProp( xServ, uno::UNO_QUERY );
                     if( xProp.is())
@@ -3959,7 +3959,7 @@ void SchXMLExport::ExportContent_()
                         try
                         {
                             OUString sChartAddress;
-                            aAny = xProp->getPropertyValue( "ChartRangeAddress" );
+                            aAny = xProp->getPropertyValue( u"ChartRangeAddress"_ustr );
                             aAny >>= sChartAddress;
                             maExportHelper->m_pImpl->SetChartRangeAddress( sChartAddress );
 
@@ -4047,7 +4047,7 @@ com_sun_star_comp_Chart_XMLExporter_get_implementation(uno::XComponentContext* p
                                                        uno::Sequence<uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(
-        new SchXMLExport(pCtx, "SchXMLExport.Compact",
+        new SchXMLExport(pCtx, u"SchXMLExport.Compact"_ustr,
                          SvXMLExportFlags::ALL
                              ^ (SvXMLExportFlags::SETTINGS | SvXMLExportFlags::MASTERSTYLES
                                 | SvXMLExportFlags::SCRIPTS)));
@@ -4059,7 +4059,7 @@ com_sun_star_comp_Chart_XMLOasisExporter_get_implementation(uno::XComponentConte
                                                             uno::Sequence<uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(
-        new SchXMLExport(pCtx, "SchXMLExport.Oasis.Compact",
+        new SchXMLExport(pCtx, u"SchXMLExport.Oasis.Compact"_ustr,
                          (SvXMLExportFlags::ALL
                           ^ (SvXMLExportFlags::SETTINGS | SvXMLExportFlags::MASTERSTYLES
                              | SvXMLExportFlags::SCRIPTS))
@@ -4072,7 +4072,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLStylesExporter_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return cppu::acquire(new SchXMLExport(pCtx, "SchXMLExport.Styles", SvXMLExportFlags::STYLES));
+    return cppu::acquire(new SchXMLExport(pCtx, u"SchXMLExport.Styles"_ustr, SvXMLExportFlags::STYLES));
 }
 
 // Oasis format
@@ -4080,7 +4080,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisStylesExporter_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return cppu::acquire(new SchXMLExport(pCtx, "SchXMLExport.Oasis.Styles",
+    return cppu::acquire(new SchXMLExport(pCtx, u"SchXMLExport.Oasis.Styles"_ustr,
                                           SvXMLExportFlags::STYLES | SvXMLExportFlags::OASIS));
 }
 
@@ -4088,7 +4088,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLContentExporter_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return cppu::acquire(new SchXMLExport(pCtx, "SchXMLExport.Content",
+    return cppu::acquire(new SchXMLExport(pCtx, u"SchXMLExport.Content"_ustr,
                                           SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT
                                               | SvXMLExportFlags::FONTDECLS));
 }
@@ -4097,7 +4097,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisContentExporter_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return cppu::acquire(new SchXMLExport(pCtx, "SchXMLExport.Oasis.Content",
+    return cppu::acquire(new SchXMLExport(pCtx, u"SchXMLExport.Oasis.Content"_ustr,
                                           SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT
                                               | SvXMLExportFlags::FONTDECLS
                                               | SvXMLExportFlags::OASIS));
@@ -4109,7 +4109,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisMetaExporter_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return cppu::acquire(new SchXMLExport(pCtx, "SchXMLExport.Oasis.Meta",
+    return cppu::acquire(new SchXMLExport(pCtx, u"SchXMLExport.Oasis.Meta"_ustr,
                                           SvXMLExportFlags::META | SvXMLExportFlags::OASIS));
 }
 

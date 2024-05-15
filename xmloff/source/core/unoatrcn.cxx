@@ -214,12 +214,12 @@ void SAL_CALL SvUnoAttributeContainer::removeByName(const OUString& Name)
 //XServiceInfo
 OUString SAL_CALL SvUnoAttributeContainer::getImplementationName()
 {
-    return "SvUnoAttributeContainer";
+    return u"SvUnoAttributeContainer"_ustr;
 }
 
 uno::Sequence< OUString > SvUnoAttributeContainer::getSupportedServiceNames()
 {
-    return { "com.sun.star.xml.AttributeContainer" };
+    return { u"com.sun.star.xml.AttributeContainer"_ustr };
 }
 
 sal_Bool SvUnoAttributeContainer::supportsService(const OUString& ServiceName)

@@ -136,10 +136,10 @@ getBuildIdsProperty(uno::Reference<beans::XPropertySet> const& xImportInfo)
         {
             Reference< XPropertySetInfo > const xSetInfo(
                     xImportInfo->getPropertySetInfo());
-            if (xSetInfo.is() && xSetInfo->hasPropertyByName("BuildId"))
+            if (xSetInfo.is() && xSetInfo->hasPropertyByName(u"BuildId"_ustr))
             {
                 OUString aBuildId;
-                xImportInfo->getPropertyValue("BuildId") >>= aBuildId;
+                xImportInfo->getPropertyValue(u"BuildId"_ustr) >>= aBuildId;
                 return aBuildId;
             }
         }
@@ -358,7 +358,7 @@ public:
         SAL_WARN_IF(!mxComponentContext.is(), "xmloff.core", "SvXMLImport: no ComponentContext");
         if (!mxComponentContext.is()) throw uno::RuntimeException();
         if (!maSupportedServiceNames.hasElements())
-            maSupportedServiceNames = { "com.sun.star.document.ImportFilter", "com.sun.star.xml.XMLImportFilter" };
+            maSupportedServiceNames = { u"com.sun.star.document.ImportFilter"_ustr, u"com.sun.star.xml.XMLImportFilter"_ustr };
     }
 
     sal_uInt16 getGeneratorVersion( const SvXMLImport& rImport )
@@ -388,41 +388,41 @@ void SvXMLImport::InitCtor_()
     {
         // implicit "xml" namespace prefix
         mxNamespaceMap->Add( GetXMLToken(XML_XML), GetXMLToken(XML_N_XML), XML_NAMESPACE_XML );
-        mxNamespaceMap->Add( "_office", GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
-        mxNamespaceMap->Add( "_office_ooo", GetXMLToken(XML_N_OFFICE_EXT), XML_NAMESPACE_OFFICE_EXT );
-        mxNamespaceMap->Add( "_ooo", GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
-        mxNamespaceMap->Add( "_style", GetXMLToken(XML_N_STYLE), XML_NAMESPACE_STYLE );
-        mxNamespaceMap->Add( "_text", GetXMLToken(XML_N_TEXT), XML_NAMESPACE_TEXT );
-        mxNamespaceMap->Add( "_table", GetXMLToken(XML_N_TABLE), XML_NAMESPACE_TABLE );
-        mxNamespaceMap->Add( "_table_ooo", GetXMLToken(XML_N_TABLE_EXT), XML_NAMESPACE_TABLE_EXT );
-        mxNamespaceMap->Add( "_draw", GetXMLToken(XML_N_DRAW), XML_NAMESPACE_DRAW );
-        mxNamespaceMap->Add( "_draw_ooo", GetXMLToken(XML_N_DRAW_EXT), XML_NAMESPACE_DRAW_EXT );
-        mxNamespaceMap->Add( "_dr3d", GetXMLToken(XML_N_DR3D), XML_NAMESPACE_DR3D );
-        mxNamespaceMap->Add( "_fo", GetXMLToken(XML_N_FO_COMPAT), XML_NAMESPACE_FO );
-        mxNamespaceMap->Add( "_xlink", GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
-        mxNamespaceMap->Add( "_dc", GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
-        mxNamespaceMap->Add( "_dom", GetXMLToken(XML_N_DOM), XML_NAMESPACE_DOM );
-        mxNamespaceMap->Add( "_meta", GetXMLToken(XML_N_META), XML_NAMESPACE_META );
-        mxNamespaceMap->Add( "_number", GetXMLToken(XML_N_NUMBER), XML_NAMESPACE_NUMBER );
-        mxNamespaceMap->Add( "_svg", GetXMLToken(XML_N_SVG_COMPAT), XML_NAMESPACE_SVG );
-        mxNamespaceMap->Add( "_chart", GetXMLToken(XML_N_CHART), XML_NAMESPACE_CHART );
-        mxNamespaceMap->Add( "_math", GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH );
-        mxNamespaceMap->Add( "_form", GetXMLToken(XML_N_FORM), XML_NAMESPACE_FORM );
-        mxNamespaceMap->Add( "_script", GetXMLToken(XML_N_SCRIPT), XML_NAMESPACE_SCRIPT );
-        mxNamespaceMap->Add( "_config", GetXMLToken(XML_N_CONFIG), XML_NAMESPACE_CONFIG );
-        mxNamespaceMap->Add( "_xforms", GetXMLToken(XML_N_XFORMS_1_0), XML_NAMESPACE_XFORMS );
-        mxNamespaceMap->Add( "_formx", GetXMLToken( XML_N_FORMX ), XML_NAMESPACE_FORMX );
-        mxNamespaceMap->Add( "_xsd", GetXMLToken(XML_N_XSD), XML_NAMESPACE_XSD );
-        mxNamespaceMap->Add( "_xsi", GetXMLToken(XML_N_XSI), XML_NAMESPACE_XFORMS );
-        mxNamespaceMap->Add( "_ooow", GetXMLToken(XML_N_OOOW), XML_NAMESPACE_OOOW );
-        mxNamespaceMap->Add( "_oooc", GetXMLToken(XML_N_OOOC), XML_NAMESPACE_OOOC );
-        mxNamespaceMap->Add( "_field", GetXMLToken(XML_N_FIELD), XML_NAMESPACE_FIELD );
-        mxNamespaceMap->Add( "_of", GetXMLToken(XML_N_OF), XML_NAMESPACE_OF );
-        mxNamespaceMap->Add( "_xhtml", GetXMLToken(XML_N_XHTML), XML_NAMESPACE_XHTML );
-        mxNamespaceMap->Add( "_css3text", GetXMLToken(XML_N_CSS3TEXT), XML_NAMESPACE_CSS3TEXT );
+        mxNamespaceMap->Add( u"_office"_ustr, GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
+        mxNamespaceMap->Add( u"_office_ooo"_ustr, GetXMLToken(XML_N_OFFICE_EXT), XML_NAMESPACE_OFFICE_EXT );
+        mxNamespaceMap->Add( u"_ooo"_ustr, GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
+        mxNamespaceMap->Add( u"_style"_ustr, GetXMLToken(XML_N_STYLE), XML_NAMESPACE_STYLE );
+        mxNamespaceMap->Add( u"_text"_ustr, GetXMLToken(XML_N_TEXT), XML_NAMESPACE_TEXT );
+        mxNamespaceMap->Add( u"_table"_ustr, GetXMLToken(XML_N_TABLE), XML_NAMESPACE_TABLE );
+        mxNamespaceMap->Add( u"_table_ooo"_ustr, GetXMLToken(XML_N_TABLE_EXT), XML_NAMESPACE_TABLE_EXT );
+        mxNamespaceMap->Add( u"_draw"_ustr, GetXMLToken(XML_N_DRAW), XML_NAMESPACE_DRAW );
+        mxNamespaceMap->Add( u"_draw_ooo"_ustr, GetXMLToken(XML_N_DRAW_EXT), XML_NAMESPACE_DRAW_EXT );
+        mxNamespaceMap->Add( u"_dr3d"_ustr, GetXMLToken(XML_N_DR3D), XML_NAMESPACE_DR3D );
+        mxNamespaceMap->Add( u"_fo"_ustr, GetXMLToken(XML_N_FO_COMPAT), XML_NAMESPACE_FO );
+        mxNamespaceMap->Add( u"_xlink"_ustr, GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
+        mxNamespaceMap->Add( u"_dc"_ustr, GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
+        mxNamespaceMap->Add( u"_dom"_ustr, GetXMLToken(XML_N_DOM), XML_NAMESPACE_DOM );
+        mxNamespaceMap->Add( u"_meta"_ustr, GetXMLToken(XML_N_META), XML_NAMESPACE_META );
+        mxNamespaceMap->Add( u"_number"_ustr, GetXMLToken(XML_N_NUMBER), XML_NAMESPACE_NUMBER );
+        mxNamespaceMap->Add( u"_svg"_ustr, GetXMLToken(XML_N_SVG_COMPAT), XML_NAMESPACE_SVG );
+        mxNamespaceMap->Add( u"_chart"_ustr, GetXMLToken(XML_N_CHART), XML_NAMESPACE_CHART );
+        mxNamespaceMap->Add( u"_math"_ustr, GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH );
+        mxNamespaceMap->Add( u"_form"_ustr, GetXMLToken(XML_N_FORM), XML_NAMESPACE_FORM );
+        mxNamespaceMap->Add( u"_script"_ustr, GetXMLToken(XML_N_SCRIPT), XML_NAMESPACE_SCRIPT );
+        mxNamespaceMap->Add( u"_config"_ustr, GetXMLToken(XML_N_CONFIG), XML_NAMESPACE_CONFIG );
+        mxNamespaceMap->Add( u"_xforms"_ustr, GetXMLToken(XML_N_XFORMS_1_0), XML_NAMESPACE_XFORMS );
+        mxNamespaceMap->Add( u"_formx"_ustr, GetXMLToken( XML_N_FORMX ), XML_NAMESPACE_FORMX );
+        mxNamespaceMap->Add( u"_xsd"_ustr, GetXMLToken(XML_N_XSD), XML_NAMESPACE_XSD );
+        mxNamespaceMap->Add( u"_xsi"_ustr, GetXMLToken(XML_N_XSI), XML_NAMESPACE_XFORMS );
+        mxNamespaceMap->Add( u"_ooow"_ustr, GetXMLToken(XML_N_OOOW), XML_NAMESPACE_OOOW );
+        mxNamespaceMap->Add( u"_oooc"_ustr, GetXMLToken(XML_N_OOOC), XML_NAMESPACE_OOOC );
+        mxNamespaceMap->Add( u"_field"_ustr, GetXMLToken(XML_N_FIELD), XML_NAMESPACE_FIELD );
+        mxNamespaceMap->Add( u"_of"_ustr, GetXMLToken(XML_N_OF), XML_NAMESPACE_OF );
+        mxNamespaceMap->Add( u"_xhtml"_ustr, GetXMLToken(XML_N_XHTML), XML_NAMESPACE_XHTML );
+        mxNamespaceMap->Add( u"_css3text"_ustr, GetXMLToken(XML_N_CSS3TEXT), XML_NAMESPACE_CSS3TEXT );
 
-        mxNamespaceMap->Add( "_calc_libo", GetXMLToken(XML_N_CALC_EXT), XML_NAMESPACE_CALC_EXT);
-        mxNamespaceMap->Add( "_office_libo",
+        mxNamespaceMap->Add( u"_calc_libo"_ustr, GetXMLToken(XML_N_CALC_EXT), XML_NAMESPACE_CALC_EXT);
+        mxNamespaceMap->Add( u"_office_libo"_ustr,
                              GetXMLToken(XML_N_LO_EXT), XML_NAMESPACE_LO_EXT);
     }
 
@@ -589,7 +589,7 @@ void SAL_CALL SvXMLImport::startDocument()
         {
             // #99870# Import... instead of Export...
             mxGraphicStorageHandler.set(
-                xFactory->createInstance("com.sun.star.document.ImportGraphicStorageHandler"),
+                xFactory->createInstance(u"com.sun.star.document.ImportGraphicStorageHandler"_ustr),
                 UNO_QUERY);
             mpImpl->mbOwnGraphicResolver = mxGraphicStorageHandler.is();
         }
@@ -598,7 +598,7 @@ void SAL_CALL SvXMLImport::startDocument()
         {
             // #99870# Import... instead of Export...
             mxEmbeddedResolver.set(
-                xFactory->createInstance("com.sun.star.document.ImportEmbeddedObjectResolver"),
+                xFactory->createInstance(u"com.sun.star.document.ImportEmbeddedObjectResolver"_ustr),
                 UNO_QUERY);
             mpImpl->mbOwnEmbeddedResolver = mxEmbeddedResolver.is();
         }
@@ -713,10 +713,10 @@ std::optional<SvXMLNamespaceMap> SvXMLImport::processNSAttributes(
             if (pImport->mpImpl->mStreamName == "content.xml"
                 && !pImport->IsODFVersionConsistent(*pImport->mpImpl->mxODFVersion))
             {
-                throw xml::sax::SAXException("Inconsistent ODF versions in content.xml and manifest.xml!",
+                throw xml::sax::SAXException(u"Inconsistent ODF versions in content.xml and manifest.xml!"_ustr,
                         uno::Reference< uno::XInterface >(),
                         uno::Any(
-                            packages::zip::ZipIOException("Inconsistent ODF versions in content.xml and manifest.xml!" ) ) );
+                            packages::zip::ZipIOException(u"Inconsistent ODF versions in content.xml and manifest.xml!"_ustr ) ) );
             }
         }
         else if( ( rAttrName.getLength() >= 5 ) &&
@@ -785,10 +785,10 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
             // the ODF version in content.xml and manifest.xml must be the same starting from ODF1.2
             if ( mpImpl->mStreamName == "content.xml" && !IsODFVersionConsistent( *mpImpl->mxODFVersion ) )
             {
-                throw xml::sax::SAXException("Inconsistent ODF versions in content.xml and manifest.xml!",
+                throw xml::sax::SAXException(u"Inconsistent ODF versions in content.xml and manifest.xml!"_ustr,
                         uno::Reference< uno::XInterface >(),
                         uno::Any(
-                            packages::zip::ZipIOException("Inconsistent ODF versions in content.xml and manifest.xml!" ) ) );
+                            packages::zip::ZipIOException(u"Inconsistent ODF versions in content.xml and manifest.xml!"_ustr ) ) );
             }
         }
     }
@@ -1066,7 +1066,7 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
     }
 
     uno::Reference<lang::XInitialization> const xInit(mxParser, uno::UNO_QUERY_THROW);
-    xInit->initialize( { Any(OUString("IgnoreMissingNSDecl")) });
+    xInit->initialize( { Any(u"IgnoreMissingNSDecl"_ustr) });
 }
 
 // XServiceInfo
@@ -1130,7 +1130,7 @@ const Reference< container::XNameContainer > & SvXMLImport::GetGradientHelper()
                 try
                 {
                     mxGradientHelper.set( xServiceFact->createInstance(
-                        "com.sun.star.drawing.GradientTable" ), UNO_QUERY);
+                        u"com.sun.star.drawing.GradientTable"_ustr ), UNO_QUERY);
                 }
                 catch( lang::ServiceNotRegisteredException& )
                 {}
@@ -1153,7 +1153,7 @@ const Reference< container::XNameContainer > & SvXMLImport::GetHatchHelper()
                 try
                 {
                     mxHatchHelper.set( xServiceFact->createInstance(
-                        "com.sun.star.drawing.HatchTable" ), UNO_QUERY);
+                        u"com.sun.star.drawing.HatchTable"_ustr ), UNO_QUERY);
                 }
                 catch( lang::ServiceNotRegisteredException& )
                 {}
@@ -1176,7 +1176,7 @@ const Reference< container::XNameContainer > & SvXMLImport::GetBitmapHelper()
                 try
                 {
                     mxBitmapHelper.set( xServiceFact->createInstance(
-                        "com.sun.star.drawing.BitmapTable" ), UNO_QUERY);
+                        u"com.sun.star.drawing.BitmapTable"_ustr ), UNO_QUERY);
                 }
                 catch( lang::ServiceNotRegisteredException& )
                 {}
@@ -1199,7 +1199,7 @@ const Reference< container::XNameContainer > & SvXMLImport::GetTransGradientHelp
                 try
                 {
                     mxTransGradientHelper.set( xServiceFact->createInstance(
-                        "com.sun.star.drawing.TransparencyGradientTable" ), UNO_QUERY);
+                        u"com.sun.star.drawing.TransparencyGradientTable"_ustr ), UNO_QUERY);
                 }
                 catch( lang::ServiceNotRegisteredException& )
                 {}
@@ -1221,7 +1221,7 @@ const Reference< container::XNameContainer > & SvXMLImport::GetMarkerHelper()
             {
                 try
                 {
-                    mxMarkerHelper.set( xServiceFact->createInstance( "com.sun.star.drawing.MarkerTable" ), UNO_QUERY);
+                    mxMarkerHelper.set( xServiceFact->createInstance( u"com.sun.star.drawing.MarkerTable"_ustr ), UNO_QUERY);
                 }
                 catch( lang::ServiceNotRegisteredException& )
                 {}
@@ -1241,7 +1241,7 @@ const Reference< container::XNameContainer > & SvXMLImport::GetDashHelper()
         {
             try
             {
-                mxDashHelper.set( xServiceFact->createInstance( "com.sun.star.drawing.DashTable" ), UNO_QUERY);
+                mxDashHelper.set( xServiceFact->createInstance( u"com.sun.star.drawing.DashTable"_ustr ), UNO_QUERY);
             }
             catch( lang::ServiceNotRegisteredException& )
             {}
@@ -1383,7 +1383,7 @@ Reference < XOutputStream >
         Reference< XNameAccess > xNA( mxEmbeddedResolver, UNO_QUERY );
         if( xNA.is() )
         {
-            Any aAny = xNA->getByName( "Obj12345678" );
+            Any aAny = xNA->getByName( u"Obj12345678"_ustr );
             aAny >>= xOLEStream;
         }
     }
@@ -1397,7 +1397,7 @@ OUString SvXMLImport::ResolveEmbeddedObjectURLFromBase64()
 
     if( mxEmbeddedResolver.is() )
     {
-        sRet = mxEmbeddedResolver->resolveEmbeddedObjectURL( "Obj12345678" );
+        sRet = mxEmbeddedResolver->resolveEmbeddedObjectURL( u"Obj12345678"_ustr );
     }
 
     return sRet;
@@ -1412,7 +1412,7 @@ void SvXMLImport::AddStyleDisplayName( XmlStyleFamily nFamily,
         mpStyleMap = new StyleMap;
         if( mxImportInfo.is() )
         {
-            OUString sPrivateData( "PrivateData" );
+            OUString sPrivateData( u"PrivateData"_ustr );
             Reference< beans::XPropertySetInfo > xPropertySetInfo =
                 mxImportInfo->getPropertySetInfo();
             if( xPropertySetInfo.is() &&
@@ -1544,7 +1544,7 @@ XMLEventImportHelper& SvXMLImport::GetEventImport()
         mpEventImportHelper->AddTranslationTable(aStandardEventTable);
 
         // register StarBasic event handler with capitalized spelling
-        mpEventImportHelper->RegisterFactory("StarBasic",
+        mpEventImportHelper->RegisterFactory(u"StarBasic"_ustr,
                                             std::make_unique<XMLStarBasicContextFactory>());
     }
 
@@ -1666,7 +1666,7 @@ bool SvXMLImport::IsODFVersionConsistent( const OUString& aODFVersion )
                 bool bRepairPackage = false;
                 try
                 {
-                    xStorProps->getPropertyValue( "RepairPackage" )
+                    xStorProps->getPropertyValue( u"RepairPackage"_ustr )
                         >>= bRepairPackage;
                 } catch ( uno::Exception& )
                 {}
@@ -1675,7 +1675,7 @@ bool SvXMLImport::IsODFVersionConsistent( const OUString& aODFVersion )
                 if ( !bRepairPackage )
                 {
                     OUString aStorVersion;
-                    xStorProps->getPropertyValue( "Version" )
+                    xStorProps->getPropertyValue( u"Version"_ustr )
                         >>= aStorVersion;
 
                     // if the storage version is set in manifest.xml, it must be the same as in content.xml
@@ -1685,13 +1685,13 @@ bool SvXMLImport::IsODFVersionConsistent( const OUString& aODFVersion )
                     if ( !aStorVersion.isEmpty() )
                         bResult = aODFVersion == aStorVersion;
                     else
-                        xStorProps->setPropertyValue( "Version",
+                        xStorProps->setPropertyValue( u"Version"_ustr,
                                                       uno::Any( aODFVersion ) );
 
                     if ( bResult )
                     {
                         bool bInconsistent = false;
-                        xStorProps->getPropertyValue( "IsInconsistent" )
+                        xStorProps->getPropertyValue( u"IsInconsistent"_ustr )
                             >>= bInconsistent;
                         bResult = !bInconsistent;
                     }
@@ -1776,7 +1776,7 @@ void SvXMLImport::SetError(
     sal_Int32 nId,
     const Sequence<OUString>& rMsgParams)
 {
-    SetError( nId, rMsgParams, "", nullptr );
+    SetError( nId, rMsgParams, u""_ustr, nullptr );
 }
 
 void SvXMLImport::SetError(

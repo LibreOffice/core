@@ -345,7 +345,7 @@ namespace xmloff
             // later on imported, it overwrites anything which has previously been imported for
             // CharStrikeout.
             // #i27729#
-            exportedProperty( "CharCrossedOut" );
+            exportedProperty( u"CharCrossedOut"_ustr );
         }
 
         if ( m_eType == LISTBOX )
@@ -405,7 +405,7 @@ namespace xmloff
                             OAttributeMetaData::getCommonControlAttributeNamespace(CCAFlags::Label),
                             OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Label),
                             rListItem);
-                        SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "item", true, true);
+                        SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, u"item"_ustr, true, true);
                     }
                 }
             }
@@ -1312,7 +1312,7 @@ namespace xmloff
                     );
                 aDefaultSelection.erase(aDefaultSelectedPos);
             }
-            SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "option", true, true);
+            SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, u"option"_ustr, true, true);
         }
 
         // There may be more "selected" or "default-selected" items than there are in the lists in real,
@@ -1356,7 +1356,7 @@ namespace xmloff
                     sTrue
                     );
             }
-            SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "option", true, true);
+            SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, u"option"_ustr, true, true);
         }
     }
 
@@ -1860,7 +1860,7 @@ namespace xmloff
         try
         {
             // currently exchanging the data with a database column?
-            OUString sBoundFieldPropertyName( "BoundField" );
+            OUString sBoundFieldPropertyName( u"BoundField"_ustr );
             if ( m_xPropertyInfo.is() && m_xPropertyInfo->hasPropertyByName( sBoundFieldPropertyName ) )
             {
                 Reference< XPropertySet > xBoundField;

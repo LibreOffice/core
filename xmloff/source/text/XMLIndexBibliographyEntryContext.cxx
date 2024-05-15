@@ -40,7 +40,7 @@ XMLIndexBibliographyEntryContext::XMLIndexBibliographyEntryContext(
     SvXMLImport& rImport,
     XMLIndexTemplateContext& rTemplate ) :
         XMLIndexSimpleEntryContext(rImport,
-                                   "TokenBibliographyDataField",
+                                   u"TokenBibliographyDataField"_ustr,
                                    rTemplate),
         nBibliographyInfo(BibliographyDataField::IDENTIFIER),
         bBibliographyInfoOK(false)

@@ -200,7 +200,7 @@ static auto InsertFieldmark(SvXMLImport & rImport,
     xCursor->gotoRange(rHelper.GetCursorAsRange(), true);
 
     Reference<XTextContent> const xContent = XMLTextMarkImportContext::CreateAndInsertMark(
-            rImport, "com.sun.star.text.Fieldmark", name, xCursor,
+            rImport, u"com.sun.star.text.Fieldmark"_ustr, name, xCursor,
             OUString(), isFieldmarkSeparatorMissing);
 
     if (!xContent.is())
@@ -276,7 +276,7 @@ void XMLTextMarkImportContext::endFastElement(sal_Int32 nElement)
         case TypeReference:
             // export point reference mark
             CreateAndInsertMark(GetImport(),
-                "com.sun.star.text.ReferenceMark",
+                u"com.sun.star.text.ReferenceMark"_ustr,
                 m_sBookmarkName,
                 m_rHelper.GetCursorAsRange()->getStart());
             break;
@@ -304,7 +304,7 @@ void XMLTextMarkImportContext::endFastElement(sal_Int32 nElement)
                 // export point bookmark
                 const Reference<XInterface> xContent(
                     CreateAndInsertMark(GetImport(),
-                                (bImportAsField ? OUString("com.sun.star.text.FormFieldmark") : sAPI_bookmark),
+                                (bImportAsField ? u"com.sun.star.text.FormFieldmark"_ustr : sAPI_bookmark),
                         m_sBookmarkName,
                         m_rHelper.GetCursorAsRange()->getStart(),
                         m_sXmlId) );
@@ -410,8 +410,8 @@ void XMLTextMarkImportContext::endFastElement(sal_Int32 nElement)
                     const Reference<XPropertySet> xPropertySet(xContent, UNO_QUERY);
                     if (xPropertySet.is())
                     {
-                        xPropertySet->setPropertyValue("BookmarkHidden",    uno::Any(m_rHelper.getBookmarkHidden(m_sBookmarkName)));
-                        xPropertySet->setPropertyValue("BookmarkCondition", uno::Any(m_rHelper.getBookmarkCondition(m_sBookmarkName)));
+                        xPropertySet->setPropertyValue(u"BookmarkHidden"_ustr,    uno::Any(m_rHelper.getBookmarkHidden(m_sBookmarkName)));
+                        xPropertySet->setPropertyValue(u"BookmarkCondition"_ustr, uno::Any(m_rHelper.getBookmarkCondition(m_sBookmarkName)));
                     }
                     if (m_sBookmarkName.startsWith("__RefHeading__"))
                     {
@@ -502,7 +502,7 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
         if (isFieldmarkSeparatorMissing)
         {
             uno::Reference<beans::XPropertySet> const xProps(xIfc, uno::UNO_QUERY_THROW);
-            xProps->setPropertyValue("PrivateSeparatorAtStart", uno::Any(true));
+            xProps->setPropertyValue(u"PrivateSeparatorAtStart"_ustr, uno::Any(true));
         }
 
         // cast to XTextContent and attach to document

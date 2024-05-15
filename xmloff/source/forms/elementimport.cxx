@@ -1431,7 +1431,7 @@ namespace xmloff
         PropertyValueArray::iterator aDefaultControlPropertyPos = ::std::find_if(
             m_aValues.begin(),
             m_aValues.end(),
-            EqualName( "DefaultControl" )
+            EqualName( u"DefaultControl"_ustr )
         );
         if ( aDefaultControlPropertyPos != m_aValues.end() )
         {
@@ -2065,7 +2065,7 @@ namespace xmloff
 
     OUString OFormImport::determineDefaultServiceName() const
     {
-        return "com.sun.star.form.component.Form";
+        return u"com.sun.star.form.component.Form"_ustr;
     }
 
 }   // namespace xmloff

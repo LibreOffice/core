@@ -148,8 +148,8 @@ lcl_initDocumentProperties(SvXMLImport & rImport,
     } catch (const uno::Exception&) {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
-            "SvXMLMetaDocumentContext::initDocumentProperties: "
-            "properties init exception",
+            u"SvXMLMetaDocumentContext::initDocumentProperties: "
+            "properties init exception"_ustr,
             rImport, anyEx);
     }
 }
@@ -167,7 +167,7 @@ lcl_initGenerator(SvXMLImport & rImport,
         xPath->registerNS(GetXMLToken(XML_NP_META), GetXMLToken(XML_N_META));
 
         uno::Reference< xml::xpath::XXPathObject > const xObj(
-            xPath->eval(xDoc, "string(/office:document-meta/office:meta/meta:generator)"),
+            xPath->eval(xDoc, u"string(/office:document-meta/office:meta/meta:generator)"_ustr),
             uno::UNO_SET_THROW);
         OUString const value(xObj->getString());
         SvXMLMetaDocumentContext::setBuildId(value, rImport.getImportInfo());
@@ -176,7 +176,7 @@ lcl_initGenerator(SvXMLImport & rImport,
     } catch (const uno::Exception&) {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
-            "SvXMLMetaDocumentContext::initGenerator: exception",
+            u"SvXMLMetaDocumentContext::initGenerator: exception"_ustr,
             rImport, anyEx);
     }
 }
