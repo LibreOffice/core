@@ -1071,6 +1071,7 @@ void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
                 auto pPostItField = mrMgr.GetLatestPostItField();
                 pPostItField->SetParentId(GetTopReplyNote()->GetParaId());
                 pPostItField->SetParentPostItId(GetTopReplyNote()->GetPostItField()->GetPostItId());
+                this->GeneratePostItName();
                 pPostItField->SetParentName(GetTopReplyNote()->GetPostItField()->GetName());
             }
             break;
