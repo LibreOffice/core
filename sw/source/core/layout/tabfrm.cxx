@@ -760,6 +760,9 @@ static bool lcl_RecalcSplitLine( SwRowFrame& rLastLine, SwRowFrame& rFollowLine,
     // #i26945# - include check, if objects fit
     const SwTwips nDistanceToUpperPrtBottom =
         aRectFnSet.BottomDist(rTab.getFrameArea(), aRectFnSet.GetPrtBottom(*rTab.GetUpper()));
+    // also check the footnote boss - it *may* be smaller than the upper now!
+    const SwTwips nDistanceToFootnoteBodyPrtBottom =
+        aRectFnSet.BottomDist(rTab.getFrameArea(), aRectFnSet.GetPrtBottom(*rTab.FindFootnoteBossFrame()->FindBodyCont()));
     // tdf#125685 ignore footnotes that are anchored in follow-table of this
     // table - if split is successful they move to the next page/column anyway
     assert(rTab.GetFollow() == rFollowLine.GetUpper());
@@ -802,6 +805,14 @@ static bool lcl_RecalcSplitLine( SwRowFrame& rLastLine, SwRowFrame& rFollowLine,
     }
     if (nDistanceToUpperPrtBottom + nFollowFootnotes < 0 || !rTab.DoesObjsFit())
         bRet = false;
+
+    // apparently checking nFootnoteHeight here does *not* guarantee that it fits into the body
+    if (bRet && nDistanceToFootnoteBodyPrtBottom + nFollowFootnotes < 0)
+    {
+        assert(rTab.GetUpper() != rTab.FindFootnoteBossFrame()->FindBodyCont());
+        SAL_INFO("sw.layout", "SwTabFrame Split failed because of footnote growth");
+        bRet = false; // tdf#160897
+    }
 
     // 2. Check if each cell in the last line has at least one content frame.
 
