@@ -807,6 +807,47 @@ bool PieChart::isSeparateStackingForDifferentSigns( sal_Int32 /* nDimensionIndex
     return false;
 }
 
+// Determine left endpoints of connecting lines. These will terminate either
+// at the corners of the composite wedge (if the wedge is small enough), or
+// tangent to the left pie circle (if the wedge is larger). The endpoints
+// are at the returned values (xl0, +/-yl0).
+// static
+void PieChart::leftConnEndpoints(double* xl0_p, double* yl0_p,
+        const PieDataSrcBase *pDataSrc,
+        const VDataSeries *pSeries,
+        const ShapeParam &aParam)
+{
+    const sal_Int32 nEnd = pDataSrc->getNPoints(pSeries, SubPieType::LEFT);
+    const double compFrac = pDataSrc->getData(pSeries, nEnd - 1,
+            SubPieType::LEFT) / aParam.mfLogicYSum;
+
+    // Assuming temporarily that the left circle is at the origin,
+    // the tangent point (xp0, yp0) on the left circle satisfies
+    // (1) xp0 = (1-r) / t
+    // (2) xp0^2 + yp0^2 = 1
+    // where the left-hand circle has radius 1, the right-hand circle
+    // has radius r, and the right-hand circle is centered at (t, 0).
+    const double r0 = aParam.mfUnitCircleOuterRadius * m_fLeftScale;
+    const double rho = m_fRightScale / m_fLeftScale;
+    const double xp0 = (1 - rho) / (m_fRightShift - m_fLeftShift);
+    // Determine if the composite wedge is large enough that the
+    // connecting lines hit the tangent point, instead of the corners of
+    // the wedge
+    assert(abs(xp0) <= 1.0);
+    const double theta = acos(xp0);
+
+    double xl0, yl0;
+    if (compFrac < theta / M_PI) {
+        xl0 = r0 * cos(compFrac * M_PI);
+        yl0 = r0 * sin(compFrac * M_PI);
+    } else {
+        xl0 = r0 * xp0;
+        yl0 = sqrt(r0 * r0 - xl0 * xl0);
+    }
+    *xl0_p = xl0;
+    *yl0_p = yl0;
+}
+
 void PieChart::createShapes()
 {
     ///a ZSlot is a vector< vector< VDataSeriesGroup > >. There is only one
@@ -941,19 +982,9 @@ void PieChart::createShapes()
             //
             double xl0, xl1, yl0, yl1, x0, y0, x1, y1, y2, y3;
 
-            // Get coordinates of "corners" of left composite wedge
-            sal_Int32 nEnd = pDataSrc->getNPoints(pSeries, SubPieType::LEFT);
-            double compFrac = pDataSrc->getData(pSeries, nEnd - 1,
-                    SubPieType::LEFT) / aParam.mfLogicYSum;
-            if (compFrac < 0.5) {
-                xl0 = aParam.mfUnitCircleOuterRadius * m_fLeftScale *
-                    cos(compFrac * M_PI) + m_fLeftShift;
-                yl0 = aParam.mfUnitCircleOuterRadius * m_fLeftScale *
-                    sin(compFrac * M_PI);
-            } else {
-                xl0 = m_fLeftShift;
-                yl0 = aParam.mfUnitCircleOuterRadius * m_fLeftScale;
-            }
+            leftConnEndpoints(&xl0, &yl0, pDataSrc, pSeries, aParam);
+
+            xl0 += m_fLeftShift;
 
             // Coordinates of bar top left corner
             xl1 = m_fBarLeft;
@@ -1000,39 +1031,22 @@ void PieChart::createShapes()
             //
             double xl0, xl1, yl0, yl1, x0, y0, x1, y1, y2, y3;
 
-            // Get coordinates of "corners" of left composite wedge
-            sal_Int32 nEnd = pDataSrc->getNPoints(pSeries, SubPieType::LEFT);
-            double compFrac = pDataSrc->getData(pSeries, nEnd - 1,
-                    SubPieType::LEFT) / aParam.mfLogicYSum;
-            // The following isn't quite right. The tangent points on the left
-            // pie are only at pi/2 and -pi/2 for composite wedges over 1/2 the
-            // total if left and right pies are the same diameter. And the
-            // threshold of 1/2 isn't quite right either. So there
-            // really should be a more sophisticated approach here. TODO
-            if (compFrac < 0.5) {
-                // Translated, per below
-                xl0 = aParam.mfUnitCircleOuterRadius * m_fLeftScale *
-                    cos(compFrac * M_PI) + m_fLeftShift - m_fRightShift;
-                yl0 = aParam.mfUnitCircleOuterRadius * m_fLeftScale *
-                    sin(compFrac * M_PI);
-            } else {
-                // Translated, per below
-                xl0 = m_fLeftShift - m_fRightShift;
-                yl0 = aParam.mfUnitCircleOuterRadius * m_fLeftScale;
-            }
+            leftConnEndpoints(&xl0, &yl0, pDataSrc, pSeries, aParam);
+
+            // Translated, per below
+            xl0 += m_fLeftShift - m_fRightShift;
 
             // Compute tangent point on the right-hand circle of the line
             // through (xl0, yl0). If we translate things so the right-hand
             // circle is centered on the origin, then this point (x,y)
-            // satisfies these two equations, where r is the radius of the
+            // satisfies these two equations, where r1 is the radius of the
             // right-hand circle:
-            // (1) x^2 + y^2 = r^2
+            // (1) x^2 + y^2 = r1^2
             // (2) (y - yl0) / (x - xl0) = -x / y
-            const double r = aParam.mfUnitCircleOuterRadius * m_fRightScale;
-
-            xl1 = (r*r * xl0 + yl0 * r * sqrt(xl0*xl0 + yl0*yl0 - r*r)) /
+            const double r1 = aParam.mfUnitCircleOuterRadius * m_fRightScale;
+            xl1 = (r1*r1 * xl0 + yl0 * r1 * sqrt(xl0*xl0 + yl0*yl0 - r1*r1)) /
                 (xl0*xl0 + yl0*yl0);
-            yl1 = sqrt(r*r - xl1*xl1);
+            yl1 = sqrt(r1*r1 - xl1*xl1);
 
             // Now translate back to the coordinates we use
             xl0 += m_fRightShift;

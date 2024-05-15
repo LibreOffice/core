@@ -225,6 +225,15 @@ struct PieLabelInfo;
             const PieDataSrcBase *pDataSrc,
             sal_Int32 n3DRelativeHeight);
 
+    // Determine left endpoints of connecting lines. These will terminate either
+    // at the corners of the composite wedge (if the wedge is small enough), or
+    // tangent to the left pie circle (if the wedge is larger). The endpoints
+    // are at the returned values (xl0, +/-yl0).
+    static void leftConnEndpoints(double* xl0_p, double* yl0_p,
+            const PieDataSrcBase *pDataSrc,
+            const VDataSeries *pSeries,
+            const ShapeParam &aParam);
+
 private: //member
     // Constants for of-pie charts. Some of these will want to become
     // user-selectable values. TODO
