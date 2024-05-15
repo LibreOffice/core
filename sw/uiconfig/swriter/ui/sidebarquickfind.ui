@@ -33,7 +33,7 @@
           <object class="GtkEntry" id="Find">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
-            <property name="placeholder-text">Find</property>
+            <property name="placeholder-text" translatable="yes" context="sidebarquickfind|find">Find</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -61,7 +61,6 @@
                 <property name="enable-search">False</property>
                 <property name="search-column">1</property>
                 <property name="show-expanders">False</property>
-                <property name="activate-on-single-click">False</property>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection"/>
                 </child>
