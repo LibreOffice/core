@@ -62,23 +62,23 @@ using ::com::sun::star::sheet::DataPilotFieldAutoShowInfo;
 
 #define SC_MINCOUNT_LIMIT   1000000
 
-SC_SIMPLE_SERVICE_INFO( ScDPSource,      "ScDPSource",      "com.sun.star.sheet.DataPilotSource" )
-SC_SIMPLE_SERVICE_INFO( ScDPDimensions,  "ScDPDimensions",  "com.sun.star.sheet.DataPilotSourceDimensions" )
-SC_SIMPLE_SERVICE_INFO( ScDPDimension,   "ScDPDimension",   "com.sun.star.sheet.DataPilotSourceDimension" )
+SC_SIMPLE_SERVICE_INFO( ScDPSource,      u"ScDPSource"_ustr,      u"com.sun.star.sheet.DataPilotSource"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScDPDimensions,  u"ScDPDimensions"_ustr,  u"com.sun.star.sheet.DataPilotSourceDimensions"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScDPDimension,   u"ScDPDimension"_ustr,   u"com.sun.star.sheet.DataPilotSourceDimension"_ustr )
 
 // Typos are on purpose here, quote from Eike Rathke (see https://gerrit.libreoffice.org/c/core/+/101116):
 // "The typo is exactly why the SC_SIMPLE_SERVICE_INFO_COMPAT() lists both service names,
 // the old with the typo and the new corrected one. Correcting the typo in the old name
 // will make all extensions fail that use it. This is not to be changed."
-SC_SIMPLE_SERVICE_INFO_COMPAT( ScDPHierarchies, "ScDPHierarchies",
-        "com.sun.star.sheet.DataPilotSourceHierarchies", "com.sun.star.sheet.DataPilotSourceHierarcies" )
-SC_SIMPLE_SERVICE_INFO_COMPAT( ScDPHierarchy,   "ScDPHierarchy",
-        "com.sun.star.sheet.DataPilotSourceHierarchy", "com.sun.star.sheet.DataPilotSourceHierarcy" )
+SC_SIMPLE_SERVICE_INFO_COMPAT( ScDPHierarchies, u"ScDPHierarchies"_ustr,
+        u"com.sun.star.sheet.DataPilotSourceHierarchies"_ustr, u"com.sun.star.sheet.DataPilotSourceHierarcies"_ustr )
+SC_SIMPLE_SERVICE_INFO_COMPAT( ScDPHierarchy,   u"ScDPHierarchy"_ustr,
+        u"com.sun.star.sheet.DataPilotSourceHierarchy"_ustr, u"com.sun.star.sheet.DataPilotSourceHierarcy"_ustr )
 
-SC_SIMPLE_SERVICE_INFO( ScDPLevels,      "ScDPLevels",      "com.sun.star.sheet.DataPilotSourceLevels" )
-SC_SIMPLE_SERVICE_INFO( ScDPLevel,       "ScDPLevel",       "com.sun.star.sheet.DataPilotSourceLevel" )
-SC_SIMPLE_SERVICE_INFO( ScDPMembers,     "ScDPMembers",     "com.sun.star.sheet.DataPilotSourceMembers" )
-SC_SIMPLE_SERVICE_INFO( ScDPMember,      "ScDPMember",      "com.sun.star.sheet.DataPilotSourceMember" )
+SC_SIMPLE_SERVICE_INFO( ScDPLevels,      u"ScDPLevels"_ustr,      u"com.sun.star.sheet.DataPilotSourceLevels"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScDPLevel,       u"ScDPLevel"_ustr,       u"com.sun.star.sheet.DataPilotSourceLevel"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScDPMembers,     u"ScDPMembers"_ustr,     u"com.sun.star.sheet.DataPilotSourceMembers"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScDPMember,      u"ScDPMember"_ustr,      u"com.sun.star.sheet.DataPilotSourceMember"_ustr )
 
 // property maps for PropertySetInfo
 //  DataDescription / NumberFormat are internal

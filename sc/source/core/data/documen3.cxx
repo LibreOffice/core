@@ -2048,7 +2048,7 @@ void ScDocument::DoMergeContents( SCCOL nStartCol, SCROW nStartRow,
                     aCell = ScRefCellValue(*this, aPos);
             }
             if (nCol != nStartCol || nRow != nStartRow)
-                SetString(nCol,nRow,nTab,"");
+                SetString(nCol,nRow,nTab,u""_ustr);
         }
 
     if (aCell.isEmpty() || !GetString(nStartCol, nStartRow, nTab).isEmpty())
@@ -2066,7 +2066,7 @@ void ScDocument::DoEmptyBlock( SCCOL nStartCol, SCROW nStartRow,
         for (nCol=nStartCol; nCol<=nEndCol; nCol++)
         {  // empty block except first cell
             if (nCol != nStartCol || nRow != nStartRow)
-                SetString(nCol,nRow,nTab,"");
+                SetString(nCol,nRow,nTab,u""_ustr);
         }
 }
 

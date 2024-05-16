@@ -202,7 +202,7 @@ OUString SolverSettings::GetParameter(SolverParameter eParam)
             return m_sLibrarySize;
             break;
         default:
-            return "";
+            return u""_ustr;
     }
 }
 

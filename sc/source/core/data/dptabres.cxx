@@ -876,7 +876,7 @@ OUString ScDPResultData::GetMeasureDimensionName(tools::Long nMeasure) const
     if ( nMeasure < 0 )
     {
         OSL_FAIL("GetMeasureDimensionName: negative");
-        return "***";
+        return u"***"_ustr;
     }
 
     return mrSource.GetDataDimName(nMeasure);
@@ -1797,7 +1797,7 @@ void ScDPResultMember::UpdateRunningTotals( const ScDPResultMember* pRefMember, 
 #if DUMP_PIVOT_TABLE
 void ScDPResultMember::DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const
 {
-    dumpRow("ScDPResultMember", GetName(), nullptr, pDoc, rPos);
+    dumpRow(u"ScDPResultMember"_ustr, GetName(), nullptr, pDoc, rPos);
     SCROW nStartRow = rPos.Row();
 
     if (pDataRoot)
@@ -2657,7 +2657,7 @@ void ScDPDataMember::UpdateRunningTotals(
 #if DUMP_PIVOT_TABLE
 void ScDPDataMember::DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const
 {
-    dumpRow("ScDPDataMember", GetName(), &aAggregate, pDoc, rPos);
+    dumpRow(u"ScDPDataMember"_ustr, GetName(), &aAggregate, pDoc, rPos);
     SCROW nStartRow = rPos.Row();
 
     const ScDPDataDimension* pDataChild = GetChildDimension();
@@ -3471,8 +3471,8 @@ ScDPDataMember* ScDPResultDimension::GetColReferenceMember(
 #if DUMP_PIVOT_TABLE
 void ScDPResultDimension::DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const
 {
-    OUString aDimName = bIsDataLayout ? OUString("(data layout)") : GetName();
-    dumpRow("ScDPResultDimension", aDimName, nullptr, pDoc, rPos);
+    OUString aDimName = bIsDataLayout ? u"(data layout)"_ustr : GetName();
+    dumpRow(u"ScDPResultDimension"_ustr, aDimName, nullptr, pDoc, rPos);
 
     SCROW nStartRow = rPos.Row();
 
@@ -3851,8 +3851,8 @@ void ScDPDataDimension::UpdateRunningTotals( const ScDPResultDimension* pRefDim,
 #if DUMP_PIVOT_TABLE
 void ScDPDataDimension::DumpState( const ScDPResultDimension* pRefDim, ScDocument* pDoc, ScAddress& rPos ) const
 {
-    OUString aDimName = bIsDataLayout ? OUString("(data layout)") : OUString("(unknown)");
-    dumpRow("ScDPDataDimension", aDimName, nullptr, pDoc, rPos);
+    OUString aDimName = bIsDataLayout ? u"(data layout)"_ustr : u"(unknown)"_ustr;
+    dumpRow(u"ScDPDataDimension"_ustr, aDimName, nullptr, pDoc, rPos);
 
     SCROW nStartRow = rPos.Row();
 

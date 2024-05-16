@@ -812,9 +812,9 @@ static void lcl_FormatAndInsertAuthorAndDatepara(SdrCaptionObj* pCaption, OUStri
         }
         else
         {
-            xBodyTextAppend->insertTextPortion("\n--------\n", aArgs, xText->getStart());
+            xBodyTextAppend->insertTextPortion(u"\n--------\n"_ustr, aArgs, xText->getStart());
             aArgs = {
-                comphelper::makePropertyValue("CharWeight", uno::Any(awt::FontWeight::BOLD)),
+                comphelper::makePropertyValue(u"CharWeight"_ustr, uno::Any(awt::FontWeight::BOLD)),
             };
             xBodyTextAppend->insertTextPortion(aUserData.makeStringAndClear(), aArgs, xText->getStart());
         }

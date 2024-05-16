@@ -119,7 +119,7 @@ static bool SplitString( const OUString &sWhole,
     const OUString& sUser = ScGlobal::getLocaleData().getNumDecimalSep();
     ParseResult aPRNum = ScGlobal::getCharClass().parsePredefinedToken(
         KParseType::ANY_NUMBER, sWhole, nPos,
-        KParseTokens::ANY_NUMBER, "", KParseTokens::ANY_NUMBER, sUser );
+        KParseTokens::ANY_NUMBER, u""_ustr, KParseTokens::ANY_NUMBER, sUser );
 
     if ( aPRNum.EndPos == nPos )
     {

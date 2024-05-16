@@ -873,7 +873,7 @@ bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool bExternalDoc
         }
     }
 
-    collectUIInformation({{"NewName", rName}}, "Rename_Sheet");
+    collectUIInformation({{"NewName", rName}}, u"Rename_Sheet"_ustr);
 
     return bValid;
 }
@@ -6609,7 +6609,7 @@ void ScDocument::SetNote(SCCOL nCol, SCROW nRow, SCTAB nTab, std::unique_ptr<ScP
         if (ScDocShell* pDocSh = GetDocumentShell())
         {
             HelperNotifyChanges::NotifyIfChangesListeners(
-                *pDocSh, ScRange(nCol, nRow, nTab), "note");
+                *pDocSh, ScRange(nCol, nRow, nTab), u"note"_ustr);
         }
     }
 }

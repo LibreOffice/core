@@ -297,12 +297,12 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, OUString _aName ) :
     SetStyleSheetPool(pDocument ? pDocument->GetStyleSheetPool() : new ScStyleSheetPool(rPool, pDocument));
 
     SdrLayerAdmin& rAdmin = GetLayerAdmin();
-    rAdmin.NewLayer("vorne",    SC_LAYER_FRONT.get());
-    rAdmin.NewLayer("hinten",   SC_LAYER_BACK.get());
-    rAdmin.NewLayer("intern",   SC_LAYER_INTERN.get());
+    rAdmin.NewLayer(u"vorne"_ustr,    SC_LAYER_FRONT.get());
+    rAdmin.NewLayer(u"hinten"_ustr,   SC_LAYER_BACK.get());
+    rAdmin.NewLayer(u"intern"_ustr,   SC_LAYER_INTERN.get());
     // tdf#140252 use same name as in ctor of SdrLayerAdmin
     rAdmin.NewLayer(rAdmin.GetControlLayerName(), SC_LAYER_CONTROLS.get());
-    rAdmin.NewLayer("hidden",   SC_LAYER_HIDDEN.get());
+    rAdmin.NewLayer(u"hidden"_ustr,   SC_LAYER_HIDDEN.get());
 
     // Set link for URL-Fields
     ScModule* pScMod = SC_MOD();

@@ -578,7 +578,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
         {
             maTabs.resize(nTab+1);
         }
-        maTabs[nTab].reset( new ScTable(*this, nTab, "baeh") );
+        maTabs[nTab].reset( new ScTable(*this, nTab, u"baeh"_ustr) );
         if (nTab < pSourceDoc->GetTableCount() && pSourceDoc->maTabs[nTab])
             maTabs[nTab]->SetLayoutRTL( pSourceDoc->maTabs[nTab]->IsLayoutRTL() );
     }
@@ -595,7 +595,7 @@ void ScDocument::EnsureTable( SCTAB nTab )
         maTabs.resize(nTab+1);
 
     if (!maTabs[nTab])
-        maTabs[nTab].reset( new ScTable(*this, nTab, "temp", bExtras, bExtras) );
+        maTabs[nTab].reset( new ScTable(*this, nTab, u"temp"_ustr, bExtras, bExtras) );
 }
 
 ScRefCellValue ScDocument::GetRefCellValue( const ScAddress& rPos )
@@ -1107,7 +1107,7 @@ bool ScDocument::TransferTab( ScDocument& rSrcDoc, SCTAB nSrcPos,
         ScDocShell* pSrcShell = rSrcDoc.GetDocumentShell();
         if ( pSrcShell )
         {
-            OUString aLibName("Standard");
+            OUString aLibName(u"Standard"_ustr);
 #if HAVE_FEATURE_SCRIPTING
             const BasicManager *pBasicManager = pSrcShell->GetBasicManager();
             if (pBasicManager && !pBasicManager->GetName().isEmpty())

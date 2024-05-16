@@ -540,7 +540,7 @@ bool ScViewObjectModeItem::GetPresentation
     const IntlWrapper& /* rIntl */
 )   const
 {
-    OUString aDel(": ");
+    OUString aDel(u": "_ustr);
     rText.clear();
 
     switch ( ePres )

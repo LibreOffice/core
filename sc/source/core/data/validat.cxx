@@ -127,7 +127,7 @@ ScValidationData::~ScValidationData()
 
 bool ScValidationData::IsEmpty() const
 {
-    ScValidationData aDefault( SC_VALID_ANY, ScConditionMode::Equal, "", "", *GetDocument(), ScAddress() );
+    ScValidationData aDefault( SC_VALID_ANY, ScConditionMode::Equal, u""_ustr, u""_ustr, *GetDocument(), ScAddress() );
     return EqualEntries( aDefault );
 }
 
@@ -444,7 +444,7 @@ bool ScValidationData::IsDataValidCustom(
     SvNumberFormatter* pFormatter = nullptr;
     sal_uInt32 nFormat = 0;
     double nVal = 0.0;
-    OUString rStrResult = "";
+    OUString rStrResult = u""_ustr;
     bool bIsVal = false;
 
     if (rTest[0] == '=')
@@ -546,7 +546,7 @@ bool ScValidationData::IsDataValid(
     SvNumberFormatter* pFormatter = nullptr;
     sal_uInt32 nFormat = 0;
     double nVal = 0.0;
-    OUString rStrResult = "";
+    OUString rStrResult = u""_ustr;
     bool bIsVal = false;
 
     if (rTest[0] == '=')

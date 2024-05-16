@@ -257,7 +257,7 @@ static ItemInfoPackage& getItemInfoPackageScDocument()
 }
 
 ScDocumentPool::ScDocumentPool()
-: SfxItemPool("ScDocumentPool")
+: SfxItemPool(u"ScDocumentPool"_ustr)
 {
     registerItemInfoPackage(getItemInfoPackageScDocument());
 }
@@ -373,7 +373,7 @@ bool ScDocumentPool::GetPresentation(
     sal_uInt16  nW = rItem.Which();
     OUString aStrYes  ( ScResId(STR_YES) );
     OUString aStrNo   ( ScResId(STR_NO) );
-    OUString aStrSep(": ");
+    OUString aStrSep(u": "_ustr);
 
     bool ePresentationRet = true;
     switch( nW )

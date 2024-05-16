@@ -842,18 +842,18 @@ ScFunctionList::ScFunctionList( bool bEnglishFunctionNames )
     sal_uInt16 nNextId = SC_OPCODE_LAST_OPCODE_ID + 1; // FuncID for AddIn functions
 
     // Interpretation of AddIn list
-    OUString aDefArgNameValue   = "value";
-    OUString aDefArgNameString  = "string";
-    OUString aDefArgNameValues  = "values";
-    OUString aDefArgNameStrings = "strings";
-    OUString aDefArgNameCells   = "cells";
-    OUString aDefArgNameNone    = "none";
-    OUString aDefArgDescValue   = "a value";
-    OUString aDefArgDescString  = "a string";
-    OUString aDefArgDescValues  = "array of values";
-    OUString aDefArgDescStrings = "array of strings";
-    OUString aDefArgDescCells   = "range of cells";
-    OUString aDefArgDescNone    = "none";
+    OUString aDefArgNameValue   = u"value"_ustr;
+    OUString aDefArgNameString  = u"string"_ustr;
+    OUString aDefArgNameValues  = u"values"_ustr;
+    OUString aDefArgNameStrings = u"strings"_ustr;
+    OUString aDefArgNameCells   = u"cells"_ustr;
+    OUString aDefArgNameNone    = u"none"_ustr;
+    OUString aDefArgDescValue   = u"a value"_ustr;
+    OUString aDefArgDescString  = u"a string"_ustr;
+    OUString aDefArgDescValues  = u"array of values"_ustr;
+    OUString aDefArgDescStrings = u"array of strings"_ustr;
+    OUString aDefArgDescCells   = u"range of cells"_ustr;
+    OUString aDefArgDescNone    = u"none"_ustr;
 
     OUString aArgName, aArgDesc;
     const LegacyFuncCollection& rLegacyFuncColl = *ScGlobal::GetLegacyFuncCollection();
