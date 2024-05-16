@@ -18,6 +18,7 @@
  */
 
 #include <pagefrm.hxx>
+#include <colfrm.hxx>
 #include <rootfrm.hxx>
 #include <cellfrm.hxx>
 #include <rowfrm.hxx>
@@ -1988,6 +1989,16 @@ SwPageFrame* SwFrame::DynCastPageFrame()
 const SwPageFrame* SwFrame::DynCastPageFrame() const
 {
     return IsPageFrame() ? static_cast<const SwPageFrame*>(this) : nullptr;
+}
+
+SwColumnFrame* SwFrame::DynCastColumnFrame()
+{
+    return IsColumnFrame() ? static_cast<SwColumnFrame*>(this) : nullptr;
+}
+
+const SwColumnFrame* SwFrame::DynCastColumnFrame() const
+{
+    return IsColumnFrame() ? static_cast<const SwColumnFrame*>(this) : nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

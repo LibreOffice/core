@@ -30,6 +30,8 @@
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <ftnidx.hxx>
 #include <tabfrm.hxx>
+#include <cntfrm.hxx>
+#include <colfrm.hxx>
 
 namespace
 {
@@ -298,7 +300,10 @@ CPPUNIT_TEST_FIXTURE(Test, test3Endnotes)
     SwDoc* pDoc = getSwDoc();
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     SwPageFrame* pPage = pLayout->GetLastPage();
-    SwFootnoteContFrame* pFootnoteCont = pPage->FindFootnoteCont();
+    SwContentFrame* pLastContent = pPage->FindLastBodyContent();
+    SwFrame* pSectionFrame = pLastContent->GetNext();
+    auto pColumnFrame = pSectionFrame->GetLower()->DynCastColumnFrame();
+    SwFootnoteContFrame* pFootnoteCont = pColumnFrame->FindFootnoteCont();
     int nEndnotes = 0;
     for (SwFrame* pLower = pFootnoteCont->GetLower(); pLower; pLower = pLower->GetNext())
     {
