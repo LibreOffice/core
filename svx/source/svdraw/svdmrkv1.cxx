@@ -207,6 +207,7 @@ bool SdrMarkView::MarkPoints(const tools::Rectangle* pRect, bool bUnmark)
                     pPV0=pPV;
                 } else {
 #ifdef DBG_UTIL
+                    assert(pObj);
                     if (pObj->IsInserted()) {
                         OSL_FAIL("SdrMarkView::MarkPoints(const Rectangle* pRect): Selected object not found.");
                     }

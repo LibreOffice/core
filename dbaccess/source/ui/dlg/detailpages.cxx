@@ -445,7 +445,7 @@ namespace dbaui
     }
     IMPL_LINK_NOARG(OGeneralSpecialJDBCDetailsPage, OnTestJavaClickHdl, weld::Button&, void)
     {
-        OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
+        assert(m_pAdminDialog && "No Admin dialog set! ->GPF");
         OSL_ENSURE(m_bUseClass,"Who called me?");
 
         bool bSuccess = false;

@@ -468,7 +468,7 @@ using namespace ::com::sun::star;
 
     IMPL_LINK_NOARG(OGeneralSpecialJDBCConnectionPageSetup, OnTestJavaClickHdl, weld::Button&, void)
     {
-        OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
+        assert(m_pAdminDialog && "No Admin dialog set! ->GPF");
 
         bool bSuccess = false;
 #if HAVE_FEATURE_JAVA
@@ -704,7 +704,7 @@ using namespace ::com::sun::star;
 
     IMPL_LINK_NOARG(OJDBCConnectionPageSetup, OnTestJavaClickHdl, weld::Button&, void)
     {
-        OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
+        assert(m_pAdminDialog && "No Admin dialog set! ->GPF");
         bool bSuccess = false;
 #if HAVE_FEATURE_JAVA
         try

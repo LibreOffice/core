@@ -231,7 +231,7 @@ namespace dbaui
     }
     IMPL_LINK_NOARG(OConnectionTabPage, OnTestJavaClickHdl, weld::Button&, void)
     {
-        OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
+        assert(m_pAdminDialog && "No Admin dialog set! ->GPF");
         bool bSuccess = false;
 #if HAVE_FEATURE_JAVA
         try
@@ -255,7 +255,7 @@ namespace dbaui
     }
     bool OConnectionTabPage::checkTestConnection()
     {
-        OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
+        assert(m_pAdminDialog && "No Admin dialog set! ->GPF");
         bool bEnableTestConnection = !m_xConnectionURL->get_visible() || !m_xConnectionURL->GetTextNoPrefix().isEmpty();
         if ( m_pCollection->determineType(m_eType) ==  ::dbaccess::DST_JDBC )
             bEnableTestConnection = bEnableTestConnection && (!o3tl::trim(m_xJavaDriver->get_text()).empty());
