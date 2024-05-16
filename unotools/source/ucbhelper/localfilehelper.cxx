@@ -44,7 +44,7 @@ css::uno::Sequence < OUString > LocalFileHelper::GetFolderContents( const OUStri
             rFolder, Reference< XCommandEnvironment >(),
             comphelper::getProcessComponentContext() );
         Reference< css::sdbc::XResultSet > xResultSet;
-        css::uno::Sequence< OUString > aProps { "Url" };
+        css::uno::Sequence< OUString > aProps { u"Url"_ustr };
 
         try
         {

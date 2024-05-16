@@ -135,7 +135,7 @@ SvtUserOptions::Impl::Impl() :
         m_xCfg.set(
             comphelper::ConfigurationHelper::openConfig(
                 comphelper::getProcessComponentContext(),
-                "org.openoffice.UserProfile/Data",
+                u"org.openoffice.UserProfile/Data"_ustr,
                 comphelper::EConfigurationModes::Standard
             ),
             uno::UNO_QUERY

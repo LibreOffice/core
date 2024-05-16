@@ -60,7 +60,7 @@ namespace utl
 static OUString makeImplName()
 {
     OUString uri;
-    rtl::Bootstrap::get( "BRAND_BASE_DIR", uri);
+    rtl::Bootstrap::get( u"BRAND_BASE_DIR"_ustr, uri);
     return uri + "/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap");
 }
 
@@ -126,7 +126,7 @@ const Bootstrap::Impl& Bootstrap::data()
 bool Bootstrap::getProcessWorkingDir(OUString &rUrl)
 {
     rUrl.clear();
-    OUString s("$OOO_CWD");
+    OUString s(u"$OOO_CWD"_ustr);
     rtl::Bootstrap::expandMacros(s);
     if (s.isEmpty())
     {
@@ -549,7 +549,7 @@ OUString Bootstrap::getBuildIdData(OUString const& _sDefault)
 {
     // try to open version.ini (versionrc)
     OUString uri;
-    rtl::Bootstrap::get( "BRAND_BASE_DIR", uri);
+    rtl::Bootstrap::get( u"BRAND_BASE_DIR"_ustr, uri);
     rtl::Bootstrap aData( uri + "/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") );
     if ( aData.getHandle() == nullptr )
         // version.ini (versionrc) doesn't exist

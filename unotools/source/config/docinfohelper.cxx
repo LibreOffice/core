@@ -60,8 +60,8 @@ OUString DocInfoHelper::GetGeneratorString()
                     }
                 }
 
-                OUString os( "$_OS" );
-                OUString arch( "$_ARCH" );
+                OUString os( u"$_OS"_ustr );
+                OUString arch( u"$_ARCH"_ustr );
                 ::rtl::Bootstrap::expandMacros(os);
                 ::rtl::Bootstrap::expandMacros(arch);
                 aResult.append( "$" + os + "_" + arch + " " );

@@ -110,17 +110,17 @@ void TransliterationWrapper::loadModuleIfNeeded( LanguageType nLang )
     if( nType == TransliterationFlags::SENTENCE_CASE )
     {
         if( bLoad )
-            loadModuleByImplName("SENTENCE_CASE", nLang);
+            loadModuleByImplName(u"SENTENCE_CASE"_ustr, nLang);
     }
     else if( nType == TransliterationFlags::TITLE_CASE )
     {
         if( bLoad )
-            loadModuleByImplName("TITLE_CASE", nLang);
+            loadModuleByImplName(u"TITLE_CASE"_ustr, nLang);
     }
     else if( nType == TransliterationFlags::TOGGLE_CASE )
     {
         if( bLoad )
-            loadModuleByImplName("TOGGLE_CASE", nLang);
+            loadModuleByImplName(u"TOGGLE_CASE"_ustr, nLang);
     }
     else
     {

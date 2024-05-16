@@ -220,7 +220,7 @@ std::vector< SvtSecurityOptions::Certificate > GetTrustedAuthors()
     Sequence< OUString >    lAllAuthors( c2 );
     auto plAllAuthors = lAllAuthors.getArray();
     sal_Int32               i2 = 0;
-    OUString                aSep( "/" );
+    OUString                aSep( u"/"_ustr );
     for( const auto& rAuthor : lAuthors )
     {
         plAllAuthors[ i2 ] = PROPERTYNAME_MACRO_TRUSTEDAUTHORS + aSep + rAuthor + aSep + PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME;

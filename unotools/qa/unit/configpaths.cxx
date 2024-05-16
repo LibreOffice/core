@@ -26,8 +26,8 @@ public:
         {
             OUString path, last;
             CPPUNIT_ASSERT(!utl::splitLastFromConfigurationPath(u"", path, last));
-            CPPUNIT_ASSERT_EQUAL(OUString(""), path);
-            CPPUNIT_ASSERT_EQUAL(OUString(""), last);
+            CPPUNIT_ASSERT_EQUAL(u""_ustr, path);
+            CPPUNIT_ASSERT_EQUAL(u""_ustr, last);
         }
         {
             // Already prior to 5edefc801fb48559c8064003f23d22d838710ee4 "use more string_view in
@@ -35,8 +35,8 @@ public:
             // "@returns <FALSE/>, if the path was a one-level path or an invalid path"):
             OUString path, last;
             CPPUNIT_ASSERT(utl::splitLastFromConfigurationPath(u"/", path, last));
-            CPPUNIT_ASSERT_EQUAL(OUString(""), path);
-            CPPUNIT_ASSERT_EQUAL(OUString(""), last);
+            CPPUNIT_ASSERT_EQUAL(u""_ustr, path);
+            CPPUNIT_ASSERT_EQUAL(u""_ustr, last);
         }
         {
             // Already prior to 5edefc801fb48559c8064003f23d22d838710ee4 "use more string_view in
@@ -44,8 +44,8 @@ public:
             // "@returns <FALSE/>, if the path was a one-level path or an invalid path"):
             OUString path, last;
             CPPUNIT_ASSERT(utl::splitLastFromConfigurationPath(u"/foo", path, last));
-            CPPUNIT_ASSERT_EQUAL(OUString(""), path);
-            CPPUNIT_ASSERT_EQUAL(OUString("foo"), last);
+            CPPUNIT_ASSERT_EQUAL(u""_ustr, path);
+            CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, last);
         }
         {
             // Already prior to 5edefc801fb48559c8064003f23d22d838710ee4 "use more string_view in
@@ -53,14 +53,14 @@ public:
             // "@returns <FALSE/>, if the path was a one-level path or an invalid path"):
             OUString path, last;
             CPPUNIT_ASSERT(utl::splitLastFromConfigurationPath(u"/foo/", path, last));
-            CPPUNIT_ASSERT_EQUAL(OUString(""), path);
-            CPPUNIT_ASSERT_EQUAL(OUString("foo"), last);
+            CPPUNIT_ASSERT_EQUAL(u""_ustr, path);
+            CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, last);
         }
         {
             OUString path, last;
             CPPUNIT_ASSERT(utl::splitLastFromConfigurationPath(u"/foo/bar/baz", path, last));
-            CPPUNIT_ASSERT_EQUAL(OUString("/foo/bar"), path);
-            CPPUNIT_ASSERT_EQUAL(OUString("baz"), last);
+            CPPUNIT_ASSERT_EQUAL(u"/foo/bar"_ustr, path);
+            CPPUNIT_ASSERT_EQUAL(u"baz"_ustr, last);
         }
         {
             // Trailing slash accepted for backwards compatibility (cf
@@ -68,21 +68,21 @@ public:
             // Data::resolvePathRepresentation, configmgr/source/data.cxx):
             OUString path, last;
             CPPUNIT_ASSERT(utl::splitLastFromConfigurationPath(u"/foo/bar/baz/", path, last));
-            CPPUNIT_ASSERT_EQUAL(OUString("/foo/bar"), path);
-            CPPUNIT_ASSERT_EQUAL(OUString("baz"), last);
+            CPPUNIT_ASSERT_EQUAL(u"/foo/bar"_ustr, path);
+            CPPUNIT_ASSERT_EQUAL(u"baz"_ustr, last);
         }
         {
             OUString path, last;
             CPPUNIT_ASSERT(utl::splitLastFromConfigurationPath(
                 u"/foo/bar/baz['abc']/baz['de&amp;f']", path, last));
-            CPPUNIT_ASSERT_EQUAL(OUString("/foo/bar/baz['abc']"), path);
-            CPPUNIT_ASSERT_EQUAL(OUString("de&f"), last);
+            CPPUNIT_ASSERT_EQUAL(u"/foo/bar/baz['abc']"_ustr, path);
+            CPPUNIT_ASSERT_EQUAL(u"de&f"_ustr, last);
         }
         {
             OUString path, last;
             CPPUNIT_ASSERT(!utl::splitLastFromConfigurationPath(u"foo", path, last));
-            CPPUNIT_ASSERT_EQUAL(OUString(""), path);
-            CPPUNIT_ASSERT_EQUAL(OUString("foo"), last);
+            CPPUNIT_ASSERT_EQUAL(u""_ustr, path);
+            CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, last);
         }
         {
             // In accordance with the documentation, this sets last to "foo/" ("If
@@ -90,15 +90,15 @@ public:
             // <var>_sInPath</var>"):
             OUString path, last;
             CPPUNIT_ASSERT(!utl::splitLastFromConfigurationPath(u"foo/", path, last));
-            CPPUNIT_ASSERT_EQUAL(OUString(""), path);
-            CPPUNIT_ASSERT_EQUAL(OUString("foo/"), last);
+            CPPUNIT_ASSERT_EQUAL(u""_ustr, path);
+            CPPUNIT_ASSERT_EQUAL(u"foo/"_ustr, last);
         }
         {
             // Some broken input missing a leading slash happens to be considered OK:
             OUString path, last;
             CPPUNIT_ASSERT(utl::splitLastFromConfigurationPath(u"foo/bar/baz", path, last));
-            CPPUNIT_ASSERT_EQUAL(OUString("foo/bar"), path);
-            CPPUNIT_ASSERT_EQUAL(OUString("baz"), last);
+            CPPUNIT_ASSERT_EQUAL(u"foo/bar"_ustr, path);
+            CPPUNIT_ASSERT_EQUAL(u"baz"_ustr, last);
         }
     }
 

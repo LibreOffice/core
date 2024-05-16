@@ -141,7 +141,7 @@ namespace Translate
 #if defined(ANDROID) || defined(EMSCRIPTEN)
         OString sPath(OString(lo_get_app_data_dir()) + "/program/resource");
 #else
-        OUString uri("$BRAND_BASE_DIR/$BRAND_SHARE_RESOURCE_SUBDIR/");
+        OUString uri(u"$BRAND_BASE_DIR/$BRAND_SHARE_RESOURCE_SUBDIR/"_ustr);
         rtl::Bootstrap::expandMacros(uri);
         OUString path;
         osl::File::getSystemPathFromFileURL(uri, path);

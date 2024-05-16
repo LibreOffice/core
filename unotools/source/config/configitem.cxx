@@ -670,7 +670,7 @@ static void lcl_normalizeLocalNames(Sequence< OUString >& _rNames, ConfigNameFor
             else
             {
                 Reference<XServiceInfo> xSVI(_xParentNode, UNO_QUERY);
-                if (xSVI.is() && xSVI->supportsService("com.sun.star.configuration.SetAccess"))
+                if (xSVI.is() && xSVI->supportsService(u"com.sun.star.configuration.SetAccess"_ustr))
                 {
                     std::transform(std::cbegin(_rNames), std::cend(_rNames), _rNames.getArray(),
                         [](const OUString& rName) -> OUString { return wrapConfigurationElementName(rName); });

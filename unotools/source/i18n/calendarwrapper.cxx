@@ -45,7 +45,7 @@ void CalendarWrapper::loadDefaultCalendar( const css::lang::Locale& rLocale, boo
     try
     {
         if ( xC.is() )
-            xC->loadDefaultCalendarTZ( rLocale, (bTimeZoneUTC ? "UTC" : OUString()));
+            xC->loadDefaultCalendarTZ( rLocale, (bTimeZoneUTC ? u"UTC"_ustr : OUString()));
     }
     catch (const Exception&)
     {
@@ -58,7 +58,7 @@ void CalendarWrapper::loadCalendar( const OUString& rUniqueID, const css::lang::
     try
     {
         if ( xC.is() )
-            xC->loadCalendarTZ( rUniqueID, rLocale, (bTimeZoneUTC ? "UTC" : OUString()));
+            xC->loadCalendarTZ( rUniqueID, rLocale, (bTimeZoneUTC ? u"UTC"_ustr : OUString()));
     }
     catch (const Exception&)
     {

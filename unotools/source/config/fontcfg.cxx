@@ -98,11 +98,11 @@ DefaultFontConfiguration::DefaultFontConfiguration()
         m_xConfigProvider = theDefaultProvider::get(comphelper::getProcessComponentContext());
         Sequence<Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", Any(OUString( "/org.openoffice.VCL/DefaultFonts" ))}
+            {"nodepath", Any(u"/org.openoffice.VCL/DefaultFonts"_ustr)}
         }));
         m_xConfigAccess =
             Reference< XNameAccess >(
-                m_xConfigProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess",
+                m_xConfigProvider->createInstanceWithArguments( u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                                                                 aArgs ),
                 UNO_QUERY );
         if( m_xConfigAccess.is() )
@@ -213,7 +213,7 @@ OUString DefaultFontConfiguration::getDefaultFont( const LanguageTag& rLanguageT
     }
     if( aRet.isEmpty() )
     {
-        aRet = tryLocale( "en", aType );
+        aRet = tryLocale( u"en"_ustr, aType );
     }
     return aRet;
 }
@@ -299,7 +299,7 @@ FontSubstConfiguration& FontSubstConfiguration::get()
 
 FontSubstConfiguration::FontSubstConfiguration() :
     maSubstHash( 300 ),
-    maLanguageTag("en")
+    maLanguageTag(u"en"_ustr)
 {
     if (comphelper::IsFuzzing())
         return;
@@ -311,11 +311,11 @@ FontSubstConfiguration::FontSubstConfiguration() :
         m_xConfigProvider = theDefaultProvider::get( xContext );
         Sequence<Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", Any(OUString( "/org.openoffice.VCL/FontSubstitutions" ))}
+            {"nodepath", Any(u"/org.openoffice.VCL/FontSubstitutions"_ustr)}
         }));
         m_xConfigAccess =
             Reference< XNameAccess >(
-                m_xConfigProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess",
+                m_xConfigProvider->createInstanceWithArguments( u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                                                                 aArgs ),
                 UNO_QUERY );
         if( m_xConfigAccess.is() )

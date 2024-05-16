@@ -317,7 +317,7 @@ namespace utl
         Reference< XServiceInfo > xSI(m_xHierarchyAccess, UNO_QUERY);
         if (xSI.is())
         {
-            try { bIsSet = xSI->supportsService("com.sun.star.configuration.SetAccess"); }
+            try { bIsSet = xSI->supportsService(u"com.sun.star.configuration.SetAccess"_ustr); }
             catch(Exception&) { }
         }
         return bIsSet;
@@ -460,12 +460,12 @@ namespace utl
             try
             {
                 ::comphelper::NamedValueCollection aArgs;
-                aArgs.put( "nodepath", i_rNodePath );
-                aArgs.put( "depth", i_nDepth );
+                aArgs.put( u"nodepath"_ustr, i_rNodePath );
+                aArgs.put( u"depth"_ustr, i_nDepth );
 
                 OUString sAccessService( i_bUpdatable ?
-                                OUString( "com.sun.star.configuration.ConfigurationUpdateAccess" ) :
-                                OUString( "com.sun.star.configuration.ConfigurationAccess" ));
+                                u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr :
+                                u"com.sun.star.configuration.ConfigurationAccess"_ustr);
 
                 Reference< XInterface > xRoot(
                     i_rxConfigProvider->createInstanceWithArguments( sAccessService, aArgs.getWrappedPropertyValues() ),

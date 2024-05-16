@@ -80,7 +80,7 @@ struct SvtDynMenu
         sal_Int32                             nUserCount  = static_cast<sal_Int32>(lUserEntries.size());
         sal_Int32                             nStep       = 0;
         std::vector< SvtDynMenuEntry >        lResult ( nSetupCount+nUserCount );
-        OUString                              sSeparator  ( "private:separator" );
+        OUString                              sSeparator  ( u"private:separator"_ustr );
 
         for( const auto& pList : {&lSetupEntries, &lUserEntries} )
         {

@@ -82,7 +82,7 @@ std::vector<OUString> getContents(OUString const & url) {
     try {
         std::vector<OUString> cs;
         ucbhelper::Content c(content(url));
-        css::uno::Sequence<OUString> args { "Title" };
+        css::uno::Sequence<OUString> args { u"Title"_ustr };
         css::uno::Reference<css::sdbc::XResultSet> res( c.createCursor(args), css::uno::UNO_SET_THROW);
         css::uno::Reference<css::ucb::XContentAccess> acc( res, css::uno::UNO_QUERY_THROW);
         while (res->next()) {
@@ -103,7 +103,7 @@ std::vector<OUString> getContents(OUString const & url) {
 OUString getCasePreservingUrl(const INetURLObject& url) {
     return
         content(url).executeCommand(
-            "getCasePreservingURL",
+            u"getCasePreservingURL"_ustr,
             css::uno::Any()).
         get<OUString>();
 }
@@ -177,7 +177,7 @@ bool utl::UCBContentHelper::GetTitle(
 {
     assert(title != nullptr);
     try {
-        return content(url).getPropertyValue("Title") >>= *title;
+        return content(url).getPropertyValue(u"Title"_ustr) >>= *title;
     } catch (css::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {
@@ -192,7 +192,7 @@ bool utl::UCBContentHelper::GetTitle(
 bool utl::UCBContentHelper::Kill(OUString const & url) {
     try {
         content(url).executeCommand(
-            "delete",
+            u"delete"_ustr,
             css::uno::Any(true));
         return true;
     } catch (css::uno::RuntimeException const &) {
@@ -225,7 +225,7 @@ bool utl::UCBContentHelper::MakeFolder(
                 {
                     continue;
                 }
-                if (parent.insertNewContent(rInfo.Type, { "Title" }, { css::uno::Any(title) }, result))
+                if (parent.insertNewContent(rInfo.Type, { u"Title"_ustr }, { css::uno::Any(title) }, result))
                 {
                     return true;
                 }
@@ -268,11 +268,11 @@ bool utl::UCBContentHelper::IsYounger(
         return
             convert(
                 content(younger).getPropertyValue(
-                    "DateModified").
+                    u"DateModified"_ustr).
                 get<css::util::DateTime>())
             > convert(
                 content(older).getPropertyValue(
-                    "DateModified").
+                    u"DateModified"_ustr).
                 get<css::util::DateTime>());
     } catch (css::uno::RuntimeException const &) {
         throw;

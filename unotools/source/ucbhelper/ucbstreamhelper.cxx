@@ -60,7 +60,7 @@ static std::unique_ptr<SvStream> lcl_CreateStream( const OUString& rFileName, St
                 ::ucbhelper::Content aCnt(
                     rFileName, Reference < XCommandEnvironment >(),
                     comphelper::getProcessComponentContext() );
-                aCnt.executeCommand( "delete", css::uno::Any( true ) );
+                aCnt.executeCommand( u"delete"_ustr, css::uno::Any( true ) );
             }
 
             catch ( const CommandAbortedException& )
@@ -92,7 +92,7 @@ static std::unique_ptr<SvStream> lcl_CreateStream( const OUString& rFileName, St
                 aInsertArg.ReplaceExisting = false;
                 Any aCmdArg;
                 aCmdArg <<= aInsertArg;
-                aContent.executeCommand( "insert", aCmdArg );
+                aContent.executeCommand( u"insert"_ustr, aCmdArg );
             }
 
             // it is NOT an error when the stream already exists and no truncation was desired

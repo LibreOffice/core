@@ -921,16 +921,16 @@ OUString SvtModuleOptions::GetModuleName( EModule eModule ) const
 {
     switch( eModule )
     {
-        case SvtModuleOptions::EModule::WRITER    :   { return "Writer"; }
-        case SvtModuleOptions::EModule::WEB       :   { return "Web"; }
-        case SvtModuleOptions::EModule::GLOBAL    :   { return "Global"; }
-        case SvtModuleOptions::EModule::CALC      :   { return "Calc"; }
-        case SvtModuleOptions::EModule::DRAW      :   { return "Draw"; }
-        case SvtModuleOptions::EModule::IMPRESS   :   { return "Impress"; }
-        case SvtModuleOptions::EModule::MATH      :   { return "Math"; }
-        case SvtModuleOptions::EModule::CHART     :   { return "Chart"; }
-        case SvtModuleOptions::EModule::BASIC     :   { return "Basic"; }
-        case SvtModuleOptions::EModule::DATABASE  :   { return "Database"; }
+        case SvtModuleOptions::EModule::WRITER    :   { return u"Writer"_ustr; }
+        case SvtModuleOptions::EModule::WEB       :   { return u"Web"_ustr; }
+        case SvtModuleOptions::EModule::GLOBAL    :   { return u"Global"_ustr; }
+        case SvtModuleOptions::EModule::CALC      :   { return u"Calc"_ustr; }
+        case SvtModuleOptions::EModule::DRAW      :   { return u"Draw"_ustr; }
+        case SvtModuleOptions::EModule::IMPRESS   :   { return u"Impress"_ustr; }
+        case SvtModuleOptions::EModule::MATH      :   { return u"Math"_ustr; }
+        case SvtModuleOptions::EModule::CHART     :   { return u"Chart"_ustr; }
+        case SvtModuleOptions::EModule::BASIC     :   { return u"Basic"_ustr; }
+        case SvtModuleOptions::EModule::DATABASE  :   { return u"Database"_ustr; }
         default:
             OSL_FAIL( "unknown module" );
             break;
@@ -1003,9 +1003,9 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const OUString
     try
     {
         xFilterCfg.set(
-            xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", xContext), css::uno::UNO_QUERY);
+            xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.FilterFactory"_ustr, xContext), css::uno::UNO_QUERY);
         xTypeCfg.set(
-            xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", xContext), css::uno::UNO_QUERY);
+            xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.TypeDetection"_ustr, xContext), css::uno::UNO_QUERY);
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
@@ -1015,13 +1015,13 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const OUString
     ::comphelper::SequenceAsHashMap stlDesc(lMediaDescriptor);
 
     // is there already a filter inside the descriptor?
-    OUString sFilterName = stlDesc.getUnpackedValueOrDefault("FilterName", OUString());
+    OUString sFilterName = stlDesc.getUnpackedValueOrDefault(u"FilterName"_ustr, OUString());
     if (!sFilterName.isEmpty())
     {
         try
         {
             ::comphelper::SequenceAsHashMap stlFilterProps   (xFilterCfg->getByName(sFilterName));
-            OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault("DocumentService", OUString());
+            OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(u"DocumentService"_ustr, OUString());
             SvtModuleOptions::EFactory      eApp             = SvtModuleOptions::ClassifyFactoryByServiceName(sDocumentService);
 
             if (eApp != EFactory::UNKNOWN_FACTORY)
@@ -1034,7 +1034,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const OUString
     }
 
     // is there already a type inside the descriptor?
-    OUString sTypeName = stlDesc.getUnpackedValueOrDefault("TypeName", OUString());
+    OUString sTypeName = stlDesc.getUnpackedValueOrDefault(u"TypeName"_ustr, OUString());
     if (sTypeName.isEmpty())
     {
         // no :-(
@@ -1051,9 +1051,9 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const OUString
     try
     {
         ::comphelper::SequenceAsHashMap stlTypeProps     (xTypeCfg->getByName(sTypeName));
-        OUString                 sPreferredFilter = stlTypeProps.getUnpackedValueOrDefault("PreferredFilter", OUString());
+        OUString                 sPreferredFilter = stlTypeProps.getUnpackedValueOrDefault(u"PreferredFilter"_ustr, OUString());
         ::comphelper::SequenceAsHashMap stlFilterProps   (xFilterCfg->getByName(sPreferredFilter));
-        OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault("DocumentService", OUString());
+        OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(u"DocumentService"_ustr, OUString());
         SvtModuleOptions::EFactory      eApp             = SvtModuleOptions::ClassifyFactoryByServiceName(sDocumentService);
 
         if (eApp != EFactory::UNKNOWN_FACTORY)

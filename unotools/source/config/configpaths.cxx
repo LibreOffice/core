@@ -292,7 +292,7 @@ OUString lcl_wrapName(std::u16string_view _sContent, const OUString& _sType)
 
 OUString wrapConfigurationElementName(std::u16string_view _sElementName)
 {
-    return lcl_wrapName(_sElementName, "*" );
+    return lcl_wrapName(_sElementName, u"*"_ustr );
 }
 
 OUString wrapConfigurationElementName(std::u16string_view _sElementName,

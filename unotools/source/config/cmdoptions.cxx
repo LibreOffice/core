@@ -175,7 +175,7 @@ SvtCommandOptions_Impl::SvtCommandOptions_Impl()
 /*TODO: Not used in the moment! see Notify() ...
     // Enable notification mechanism of our baseclass.
     // We need it to get information about changes outside these class on our used configuration keys! */
-    Sequence<OUString> aNotifySeq { "Disabled" };
+    Sequence<OUString> aNotifySeq { u"Disabled"_ustr };
     EnableNotification( aNotifySeq, true );
 }
 
@@ -271,7 +271,7 @@ void SvtCommandOptions_Impl::EstablishFrameCallback(const css::uno::Reference< c
 Sequence< OUString > SvtCommandOptions_Impl::impl_GetPropertyNames()
 {
     // First get ALL names of current existing list items in configuration!
-    Sequence< OUString > lDisabledItems      = GetNodeNames( SETNODE_DISABLED, utl::ConfigNameFormat::LocalPath );
+    Sequence< OUString > lDisabledItems      = GetNodeNames( u"" SETNODE_DISABLED ""_ustr, utl::ConfigNameFormat::LocalPath );
 
     // Expand all keys
     for (OUString& rItem : asNonConstRange(lDisabledItems))

@@ -60,12 +60,12 @@ ZipPackageHelper::ZipPackageHelper(
     Sequence< Any > aArguments{
         Any(sPackageURL),
         // let ZipPackage be used
-        Any(beans::NamedValue("StorageFormat", Any(ZIP_STORAGE_FORMAT_STRING)))
+        Any(beans::NamedValue(u"StorageFormat"_ustr, Any(ZIP_STORAGE_FORMAT_STRING)))
     };
 
     mxHNameAccess.set(
         mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            "com.sun.star.packages.comp.ZipPackage",
+            u"com.sun.star.packages.comp.ZipPackage"_ustr,
             aArguments, mxContext ), UNO_QUERY);
 
     if( !mxHNameAccess.is() )
@@ -74,7 +74,7 @@ ZipPackageHelper::ZipPackageHelper(
     mxFactory.set(mxHNameAccess, UNO_QUERY);
 
     // get root zip folder
-    mxHNameAccess->getByHierarchicalName( "/" ) >>= mxRootFolder;
+    mxHNameAccess->getByHierarchicalName( u"/"_ustr ) >>= mxRootFolder;
 }
 
 static OUString encodeZipUri( const OUString& rURI )

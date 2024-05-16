@@ -733,7 +733,7 @@ static bool UCBOpenContentSync(
                         xContId->getContentIdentifier() :
                         OUString() );
                     InteractiveNetworkConnectException aExcep(
-                        "server not responding after five seconds", {},
+                        u"server not responding after five seconds"_ustr, {},
                         InteractionClassification_ERROR, aURL.GetHost());
                     Any request;
                     request <<= aExcep;

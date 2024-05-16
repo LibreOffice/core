@@ -61,7 +61,7 @@ sal_Bool SAL_CALL OTempFileService::getRemoveFile()
     if ( !mpTempFile )
     {
         // the stream is already disconnected
-        throw css::uno::RuntimeException("Not connected to a file.");
+        throw css::uno::RuntimeException(u"Not connected to a file."_ustr);
     }
 
     return mbRemoveFile;
@@ -73,7 +73,7 @@ void SAL_CALL OTempFileService::setRemoveFile( sal_Bool _removefile )
     if ( !mpTempFile )
     {
         // the stream is already disconnected
-        throw css::uno::RuntimeException("Not connected to a file.");
+        throw css::uno::RuntimeException(u"Not connected to a file."_ustr);
     }
 
     mbRemoveFile = _removefile;
@@ -85,7 +85,7 @@ OUString SAL_CALL OTempFileService::getUri()
 
     if ( !mpTempFile )
     {
-        throw css::uno::RuntimeException("Not connected to a file.");
+        throw css::uno::RuntimeException(u"Not connected to a file."_ustr);
     }
 
     return mpTempFile->GetURL();
@@ -97,7 +97,7 @@ OUString SAL_CALL OTempFileService::getResourceName()
 
     if ( !mpTempFile )
     {
-        throw css::uno::RuntimeException("Not connected to a file.");
+        throw css::uno::RuntimeException(u"Not connected to a file."_ustr);
     }
 
     return mpTempFile->GetFileName();
@@ -322,11 +322,11 @@ void SAL_CALL OTempFileService::truncate()
     // attention: properties need to be sorted by name!
     static cppu::OPropertyArrayHelper ourPropertyInfo(
         {
-            css::beans::Property( "Uri", PROPERTY_HANDLE_URI, cppu::UnoType<OUString>::get(),
+            css::beans::Property( u"Uri"_ustr, PROPERTY_HANDLE_URI, cppu::UnoType<OUString>::get(),
                 css::beans::PropertyAttribute::READONLY ),
-            css::beans::Property( "RemoveFile", PROPERTY_HANDLE_REMOVE_FILE, cppu::UnoType<bool>::get(),
+            css::beans::Property( u"RemoveFile"_ustr, PROPERTY_HANDLE_REMOVE_FILE, cppu::UnoType<bool>::get(),
                 0 ),
-            css::beans::Property( "ResourceName", PROPERTY_HANDLE_RESOURCE_NAME, cppu::UnoType<OUString>::get(),
+            css::beans::Property( u"ResourceName"_ustr, PROPERTY_HANDLE_RESOURCE_NAME, cppu::UnoType<OUString>::get(),
                 css::beans::PropertyAttribute::READONLY )
         },
         true );
@@ -399,9 +399,9 @@ void OTempFileService::setFastPropertyValue( ::sal_Int32 nHandle, const ::css::u
 ::css::uno::Sequence< ::css::beans::PropertyValue > OTempFileService::getPropertyValues()
 {
     return {
-        css::beans::PropertyValue("Uri", PROPERTY_HANDLE_URI, css::uno::Any(getUri()), css::beans::PropertyState_DEFAULT_VALUE),
-        css::beans::PropertyValue("RemoveFile", PROPERTY_HANDLE_REMOVE_FILE, css::uno::Any(getRemoveFile()), css::beans::PropertyState_DEFAULT_VALUE),
-        css::beans::PropertyValue("ResourceName", PROPERTY_HANDLE_RESOURCE_NAME, css::uno::Any(getResourceName()), css::beans::PropertyState_DEFAULT_VALUE)
+        css::beans::PropertyValue(u"Uri"_ustr, PROPERTY_HANDLE_URI, css::uno::Any(getUri()), css::beans::PropertyState_DEFAULT_VALUE),
+        css::beans::PropertyValue(u"RemoveFile"_ustr, PROPERTY_HANDLE_REMOVE_FILE, css::uno::Any(getRemoveFile()), css::beans::PropertyState_DEFAULT_VALUE),
+        css::beans::PropertyValue(u"ResourceName"_ustr, PROPERTY_HANDLE_RESOURCE_NAME, css::uno::Any(getResourceName()), css::beans::PropertyState_DEFAULT_VALUE)
     };
 }
 void OTempFileService::setPropertyValues( const ::css::uno::Sequence< ::css::beans::PropertyValue >& aProps )
@@ -417,11 +417,11 @@ sal_Bool OTempFileService::supportsService(const OUString& sServiceName)
 }
 OUString OTempFileService::getImplementationName()
 {
-    return "com.sun.star.io.comp.TempFile";
+    return u"com.sun.star.io.comp.TempFile"_ustr;
 }
 css::uno::Sequence< OUString > OTempFileService::getSupportedServiceNames()
 {
-    return { "com.sun.star.io.TempFile" };
+    return { u"com.sun.star.io.TempFile"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

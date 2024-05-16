@@ -23,8 +23,8 @@ class ServiceDocumenter : public ::cppu::WeakImplHelper<
     public:
         ServiceDocumenter(css::uno::Reference< css::uno::XComponentContext> xContext)
             : m_xContext(std::move(xContext))
-            , m_sCoreBaseUrl("http://example.com")
-            , m_sServiceBaseUrl("https://api.libreoffice.org/docs/idl/ref")
+            , m_sCoreBaseUrl(u"http://example.com"_ustr)
+            , m_sServiceBaseUrl(u"https://api.libreoffice.org/docs/idl/ref"_ustr)
             {};
 
         //  XServiceInfo
