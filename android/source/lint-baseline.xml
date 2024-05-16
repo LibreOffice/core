@@ -8,7 +8,7 @@
         errorLine2="                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="AndroidManifest.xml"
-            line="10"
+            line="9"
             column="36"/>
     </issue>
 
@@ -68,17 +68,6 @@
     </issue>
 
     <issue
-        id="CommitPrefEdits"
-        message="`SharedPreferences.edit()` without a corresponding `commit()` or `apply()` call"
-        errorLine1="        preferences.edit().putString(SELECTED_LANG, lang);"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/java/org/libreoffice/LocaleHelper.java"
-            line="49"
-            column="9"/>
-    </issue>
-
-    <issue
         id="DefaultLocale"
         message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
         errorLine1="        return String.format(&quot;TileIdentifier (%d, %d) z=%f s=(%d, %d)&quot;, x, y, zoom, size.width, size.height);"
@@ -87,17 +76,6 @@
             file="src/java/org/libreoffice/TileIdentifier.java"
             line="88"
             column="16"/>
-    </issue>
-
-    <issue
-        id="AppBundleLocaleChanges"
-        message="Found dynamic locale changes, but did not find corresponding Play Core library calls for downloading languages and splitting by language is not disabled in the `bundle` configuration"
-        errorLine1="        cfg.locale = locale;"
-        errorLine2="            ~~~~~~">
-        <location
-            file="src/java/org/libreoffice/LocaleHelper.java"
-            line="40"
-            column="13"/>
     </issue>
 
     <issue
@@ -123,50 +101,6 @@
     </issue>
 
     <issue
-        id="QueryPermissionsNeeded"
-        message="Consider adding a `&lt;queries>` declaration to your manifest when calling this method; see https://g.co/dev/packagevisibility for details"
-        errorLine1="        if (takePictureIntent.resolveActivity(mContext.getPackageManager()) != null) {"
-        errorLine2="                              ~~~~~~~~~~~~~~~">
-        <location
-            file="src/java/org/libreoffice/FormattingController.java"
-            line="370"
-            column="31"/>
-    </issue>
-
-    <issue
-        id="QueryPermissionsNeeded"
-        message="Consider adding a `&lt;queries>` declaration to your manifest when calling this method; see https://g.co/dev/packagevisibility for details"
-        errorLine1="                        .queryIntentActivities(takePictureIntent, PackageManager.MATCH_DEFAULT_ONLY);"
-        errorLine2="                         ~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/java/org/libreoffice/FormattingController.java"
-            line="386"
-            column="26"/>
-    </issue>
-
-    <issue
-        id="GradleDependency"
-        message="A newer version of com.google.android.material:material than 1.11.0 is available: 1.12.0"
-        errorLine1="    implementation &apos;com.google.android.material:material:1.11.0&apos;"
-        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="35"
-            column="20"/>
-    </issue>
-
-    <issue
-        id="UnsupportedChromeOsCameraSystemFeature"
-        message="You should look for any camera available on the device, not just the rear"
-        errorLine1="        if (!mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {"
-        errorLine2="             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/java/org/libreoffice/FormattingController.java"
-            line="363"
-            column="14"/>
-    </issue>
-
-    <issue
         id="SpUsage"
         message="Should use &quot;`sp`&quot; instead of &quot;`dp`&quot; for text sizes"
         errorLine1="                    android:textSize=&quot;14dp&quot;"
@@ -184,7 +118,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="AndroidManifest.xml"
-            line="109"
+            line="108"
             column="13"/>
     </issue>
 
@@ -1436,7 +1370,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/java/org/libreoffice/ui/LibreOfficeUIActivity.java"
-            line="430"
+            line="407"
             column="13"/>
     </issue>
 
