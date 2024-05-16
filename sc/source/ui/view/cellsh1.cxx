@@ -873,6 +873,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SCROW nFillRow = GetViewData().GetRefEndY();
                 ScDocument& rDoc = GetViewData().GetDocument();
 
+                sal_uInt16 nOrigScFillModeMouseModifier = nScFillModeMouseModifier;
+                bool bUseSelection = true;
+
                 if( pReqArgs != nullptr )
                 {
                     if( const SfxStringItem* pItem = pReqArgs->GetItemIfSet( FID_FILL_AUTO ) )
@@ -885,13 +888,33 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             nFillRow = aScAddress.Row();
                             nFillCol = aScAddress.Col();
                         }
+
+                        SCTAB nStartTab, nEndTab;
+                        GetViewData().GetSimpleArea(nStartCol, nStartRow, nStartTab, nEndCol,
+                                                    nEndRow, nEndTab);
+                        bUseSelection = false;
                     }
 
-                    SCTAB nStartTab, nEndTab;
-                    GetViewData().GetSimpleArea( nStartCol,nStartRow,nStartTab,
-                                              nEndCol,nEndRow,nEndTab );
+                    const SfxPoolItem* pItem;
+                    if (pReqArgs->HasItem(FN_PARAM_1, &pItem))
+                    {
+                        /*
+                            nScFillModeMouseModifier controls if we "Copy cells" or "Fill series"
+                            - if nScFillModeMouseModifier is set to "KEY_MOD1", use "Copy cells"
+                            - otherwise use "Fill series"
+
+                            This is also the same with auto fill by dragging mouse
+                            - dragging with Ctrl key will set nScFillModeMouseModifier to KEY_MOD1, use "Copy cells"
+                            - only dragging will use "Fill series" (no Ctrl key)
+                        */
+                        const bool bCopyCells = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+                        nScFillModeMouseModifier &= ~KEY_MOD1; // turn off, reset to 0
+
+                        if (bCopyCells)
+                            nScFillModeMouseModifier |= KEY_MOD1; // turn on
+                    }
                 }
-                else    // call via mouse
+                if (bUseSelection) // call via mouse or if FN_PARAM_1 exists
                 {
                     //  not in a merged cell
 
@@ -965,6 +988,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         OSL_FAIL( "Direction not unique for autofill" );
                     }
                 }
+
+                // reset nScFillModeMouseModifier to its original state
+                // otherwise, auto fill by dragging will not work as expected
+                nScFillModeMouseModifier = nOrigScFillModeMouseModifier;
             }
             break;
         case FID_FILL_SINGLE_EDIT:
