@@ -5518,8 +5518,11 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
         // #i86492# - use <SwDoc::SetNumRule(..)>, because it also handles the <ListId>
         // Don't reset indent attributes, that would mean loss of direct
         // formatting.
-        rDoc.SetNumRule( *pCopyPam, *pNumRuleToPropagate, false, nullptr,
-                          aListIdToPropagate, true, /*bResetIndentAttrs=*/false );
+        // It could be that pNumRuleToPropagate is already applied via
+        // the paragraph style, in that case applying it again in mpAttrSet could
+        // override indents, so avoid that.
+        rDoc.SetNumRule(*pCopyPam, *pNumRuleToPropagate,
+            SwDoc::SetNumRuleMode::DontSetIfAlreadyApplied, nullptr, aListIdToPropagate);
     }
 
     rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );

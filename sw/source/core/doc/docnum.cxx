@@ -860,11 +860,9 @@ static void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
 
 OUString SwDoc::SetNumRule( const SwPaM& rPam,
                         const SwNumRule& rRule,
-                        const bool bCreateNewList,
+                        SetNumRuleMode eMode,
                         SwRootFrame const*const pLayout,
-                        const OUString& sContinuedListId,
-                        bool bSetItem,
-                        const bool bResetIndentAttrs )
+                        const OUString& sContinuedListId)
 {
     OUString sListId;
 
@@ -902,9 +900,9 @@ OUString SwDoc::SetNumRule( const SwPaM& rPam,
         }
     }
 
-    if ( bSetItem )
+    if (!(eMode & SetNumRuleMode::DontSetItem))
     {
-        if ( bCreateNewList )
+        if (eMode & SetNumRuleMode::CreateNewList)
         {
             if ( bNewNumRuleCreated )
             {
@@ -944,7 +942,7 @@ OUString SwDoc::SetNumRule( const SwPaM& rPam,
 
             if (pRule && pRule->GetName() == pNewOrChangedNumRule->GetName())
             {
-                bSetItem = false;
+                eMode |= SetNumRuleMode::DontSetItem;
                 if ( !pTextNd->IsInList() )
                 {
                     pTextNd->AddToList();
@@ -961,21 +959,42 @@ OUString SwDoc::SetNumRule( const SwPaM& rPam,
                     if ( pCollRule && pCollRule->GetName() == pNewOrChangedNumRule->GetName() )
                     {
                         pTextNd->ResetAttr( RES_PARATR_NUMRULE );
-                        bSetItem = false;
+                        eMode |= SetNumRuleMode::DontSetItem;
                     }
                 }
             }
         }
     }
 
-    if ( bSetItem )
+    if (!(eMode & SetNumRuleMode::DontSetItem))
     {
-        getIDocumentContentOperations().InsertPoolItem(aPam,
-                SwNumRuleItem(pNewOrChangedNumRule->GetName()),
-                SetAttrMode::DEFAULT, pLayout);
+        if (eMode & SetNumRuleMode::DontSetIfAlreadyApplied)
+        {
+            for (SwNodeIndex i = aPam.Start()->nNode; i <= aPam.End()->nNode; ++i)
+            {
+                if (SwTextNode const*const pNode = i.GetNode().GetTextNode())
+                {
+                    if (pNode->GetNumRule(true) != pNewOrChangedNumRule)
+                    {
+                        // only apply if it doesn't already have it - to
+                        // avoid overriding indents from style
+                        SwPaM const temp(*pNode, 0, *pNode, pNode->Len());
+                        getIDocumentContentOperations().InsertPoolItem(temp,
+                                SwNumRuleItem(pNewOrChangedNumRule->GetName()),
+                                SetAttrMode::DEFAULT, pLayout);
+                    }
+                }
+            }
+        }
+        else
+        {
+            getIDocumentContentOperations().InsertPoolItem(aPam,
+                    SwNumRuleItem(pNewOrChangedNumRule->GetName()),
+                    SetAttrMode::DEFAULT, pLayout);
+        }
     }
 
-    if ( bResetIndentAttrs
+    if ((eMode & SetNumRuleMode::ResetIndentAttrs)
          && pNewOrChangedNumRule->Get( 0 ).GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
     {
         const o3tl::sorted_vector<sal_uInt16> attrs{ RES_MARGIN_FIRSTLINE, RES_MARGIN_TEXTLEFT, RES_MARGIN_RIGHT };
@@ -1275,7 +1294,7 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
 
                 SetNumRule( aPam,
                             *aListStyleData.pReplaceNumRule,
-                            aListStyleData.bCreateNewList,
+                            aListStyleData.bCreateNewList ? SetNumRuleMode::CreateNewList : SetNumRuleMode::Default,
                             nullptr,
                             aListStyleData.sListId );
                 if ( aListStyleData.bCreateNewList )
