@@ -355,7 +355,7 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
 
         // change numbering rule - changed numbering rule is not applied at <aPaM>
         SwPaM aPaM(pos);
-        GetDoc()->SetNumRule(aPaM, aRule, false, GetLayout(), OUString(), false);
+        GetDoc()->SetNumRule(aPaM, aRule, SwDoc::SetNumRuleMode::DontSetItem, GetLayout(), OUString());
     }
 
     EndAllAction();
@@ -748,8 +748,9 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
         for (SwPaM& rPaM : pCursor->GetRingContainer())
         {
             OUString sListId = GetDoc()->SetNumRule(rPaM, rRule,
-                                  bCreateNewList, GetLayout(), sContinuedListId,
-                                  true, bResetIndentAttrs );
+              (bCreateNewList ? SwDoc::SetNumRuleMode::CreateNewList : SwDoc::SetNumRuleMode::Default)
+              | (bResetIndentAttrs ? SwDoc::SetNumRuleMode::ResetIndentAttrs : SwDoc::SetNumRuleMode::Default),
+              GetLayout(), sContinuedListId);
 
             //tdf#87548 On creating a new list for a multi-selection only
             //create a single new list for the multi-selection, not one per selection
@@ -765,8 +766,9 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
     else
     {
         GetDoc()->SetNumRule( *pCursor, rRule,
-                              bCreateNewList, GetLayout(), rContinuedListId,
-                              true, bResetIndentAttrs );
+              (bCreateNewList ? SwDoc::SetNumRuleMode::CreateNewList : SwDoc::SetNumRuleMode::Default)
+              | (bResetIndentAttrs ? SwDoc::SetNumRuleMode::ResetIndentAttrs : SwDoc::SetNumRuleMode::Default),
+              GetLayout(), rContinuedListId);
         GetDoc()->SetCounted( *pCursor, true, GetLayout() );
     }
     GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::INSATTR, nullptr );

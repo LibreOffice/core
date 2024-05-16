@@ -906,14 +906,14 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                     for ( size_t n = 0; n < aRangeArr.Count(); ++n )
                     {
                         // no start of a new list
-                        rDoc.SetNumRule( aRangeArr.SetPam( n, aPam ), aRule, false );
+                        rDoc.SetNumRule(aRangeArr.SetPam( n, aPam ), aRule, SwDoc::SetNumRuleMode::Default);
                     }
                     rDoc.GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
                 }
                 else
                 {
                     // no start of a new list
-                    rDoc.SetNumRule( rPam, aRule, false );
+                    rDoc.SetNumRule(rPam, aRule, SwDoc::SetNumRuleMode::Default);
                 }
 
             }
@@ -924,7 +924,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                 if ( !pRule )
                     throw RuntimeException();
                 // no start of a new list
-                rDoc.SetNumRule( rPam, *pRule, false );
+                rDoc.SetNumRule(rPam, *pRule, SwDoc::SetNumRuleMode::Default);
             }
             else
             {
@@ -934,7 +934,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                 SwNumRule* pRule = rDoc.GetOutlineNumRule();
                 if(!pRule)
                     throw RuntimeException();
-                rDoc.SetNumRule( rPam, *pRule, false );
+                rDoc.SetNumRule(rPam, *pRule, SwDoc::SetNumRuleMode::Default);
             }
         }
     }

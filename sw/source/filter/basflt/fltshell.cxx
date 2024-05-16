@@ -535,7 +535,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     {
                         SwPaM aTmpPam( aTmpStart, aTmpEnd );
                         // no start of a new list
-                        m_rDoc.SetNumRule( aTmpPam, *pNumRule, false );
+                        m_rDoc.SetNumRule(aTmpPam, *pNumRule, SwDoc::SetNumRuleMode::Default);
 
                         aTmpStart = aTmpEnd;    // here starts the next range
                         ++aTmpStart;

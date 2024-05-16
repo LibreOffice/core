@@ -1710,7 +1710,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
             const_cast<SwTextNode*>(m_pCurTextFrame->GetTextNodeForParaProps())->SetAttrListLevel(nLvl);
 
             // start new list
-            m_pDoc->SetNumRule(m_aDelPam, aRule, true, m_pEditShell->GetLayout());
+            m_pDoc->SetNumRule(m_aDelPam, aRule, SwDoc::SetNumRuleMode::CreateNewList, m_pEditShell->GetLayout());
             m_aDelPam.DeleteMark();
 
             *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(TextFrameIndex(0));

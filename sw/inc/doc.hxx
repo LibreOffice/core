@@ -1052,23 +1052,28 @@ public:
 
     SW_DLLPUBLIC bool GotoOutline(SwPosition& rPos, const OUString& rName, SwRootFrame const* = nullptr) const;
 
-    /** Accept changes of outline styles for OutlineRule.
-     @param bResetIndentAttrs Optional parameter - default value false:
-      If <bResetIndentAttrs> equals true, the indent attributes "before text"
-      and "first line indent" are additionally reset at the provided PaM, if
-      the list style makes use of the new list level attributes.
-     @param bCreateNewList indicates if a new list is created by applying the given list style.
+    enum class SetNumRuleMode {
+        Default = 0,
+        /// indicates if a new list is created by applying the given list style.
+        CreateNewList = 1,
+        DontSetItem = 2,
+        /** If enabled, the indent attributes "before text" and
+          "first line indent" are additionally reset at the provided PaM,
+          if the list style makes use of the new list level attributes. */
+        ResetIndentAttrs = 4,
+        DontSetIfAlreadyApplied = 8
+    };
+
+    /** Set or change numbering rule on text nodes, as direct formatting.
      @param sContinuedListId If bCreateNewList is false, may contain the
       list Id of a list which has to be continued by applying the given list style
 
      @return the set ListId if bSetItem is true */
     OUString SetNumRule( const SwPaM&,
                      const SwNumRule&,
-                     bool bCreateNewList,
+                     SetNumRuleMode mode,
                      SwRootFrame const* pLayout = nullptr,
-                     const OUString& sContinuedListId = OUString(),
-                     bool bSetItem = true,
-                     const bool bResetIndentAttrs = false );
+                     const OUString& sContinuedListId = OUString());
     void SetCounted(const SwPaM&, bool bCounted, SwRootFrame const* pLayout);
 
     void MakeUniqueNumRules(const SwPaM & rPaM);
@@ -1705,6 +1710,7 @@ private:
 
 namespace o3tl {
     template<> struct typed_flags<SwDoc::RowColMode> : is_typed_flags<SwDoc::RowColMode, 3> {};
+    template<> struct typed_flags<SwDoc::SetNumRuleMode> : is_typed_flags<SwDoc::SetNumRuleMode, 0x0f> {};
 }
 
 // This method is called in Dtor of SwDoc and deletes cache of ContourObjects.

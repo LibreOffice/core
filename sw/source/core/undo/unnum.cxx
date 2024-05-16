@@ -112,7 +112,7 @@ void SwUndoInsNum::RedoImpl(::sw::UndoRedoContext & rContext)
         else
         {
             // #i42921# - adapt to changed signature
-            rDoc.SetNumRule(rPam, m_aNumRule, false);
+            rDoc.SetNumRule(rPam, m_aNumRule, SwDoc::SetNumRuleMode::Default);
         }
     }
 }
@@ -131,7 +131,7 @@ void SwUndoInsNum::RepeatImpl(::sw::RepeatContext & rContext)
         if( m_sReplaceRule.isEmpty() )
         {
             // #i42921# - adapt to changed signature
-            rDoc.SetNumRule(rContext.GetRepeatPaM(), m_aNumRule, false);
+            rDoc.SetNumRule(rContext.GetRepeatPaM(), m_aNumRule, SwDoc::SetNumRuleMode::Default);
         }
     }
     else
