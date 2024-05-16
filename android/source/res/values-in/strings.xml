@@ -64,8 +64,6 @@
     <string name="alert_ok">OK</string>
     <string name="alert_cancel">Batal</string>
     <string name="current_uno_command">Perintah UNO saat ini</string>
-    <string name="display_language">Bahasa Tampilan</string>
-    <string name="display_language_summary">Atur bahasa tampilan baku</string>
     <string name="pdf_export_finished">Ekspor PDF telah selesai</string>
     <string name="unable_to_export_pdf">Tidak bisa mengekspor ke pdf</string>
     <string name="unable_to_save">Tidak bisa menyimpan berkas</string>

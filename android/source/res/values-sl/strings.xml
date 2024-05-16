@@ -73,7 +73,6 @@
     <string name="action_cut">Izreži</string>
     <string name="UNO_commands_string_type_hint">Vrsta</string>
     <string name="tabhost_style">Slog</string>
-    <string name="display_language">Prikaži jezik</string>
     <string name="current_uno_command">Trenutni ukaz UNO</string>
     <string name="action_back">Nazaj</string>
     <string name="action_print">Natisni</string>
@@ -90,7 +89,6 @@
     <string name="select_insert_options">Izberite možnosti vstavljanja:</string>
     <string name="select_delete_options">Izberite možnosti brisanja:</string>
     <string name="enter_part_name">Vnesite ime dela</string>
-    <string name="display_language_summary">Določite privzeti jezik za prikaz</string>
     <string name="pdf_export_finished">Izvoz v PDF je dokončan</string>
     <string name="unable_to_export_pdf">Izvoz v PDF ni možen</string>
     <string name="unable_to_save">Datoteke ni mogoče shraniti</string>

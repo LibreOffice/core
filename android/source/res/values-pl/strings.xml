@@ -85,8 +85,6 @@
     <string name="tabhost_style">Styl</string>
     <string name="alert_ok">OK</string>
     <string name="alert_cancel">Anuluj</string>
-    <string name="display_language_summary">Ustaw domyślny język wyświetlania</string>
-    <string name="display_language">Język wyświetlania</string>
     <string name="pdf_export_finished">Zakończono eksport do PDF</string>
     <string name="unable_to_export_pdf">Nie można wyeksportować do PDF</string>
     <string name="unable_to_save">Nie można zapisać pliku</string>

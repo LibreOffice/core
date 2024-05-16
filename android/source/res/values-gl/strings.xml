@@ -87,8 +87,6 @@
     <string name="alert_ok">Aceptar</string>
     <string name="alert_cancel">Cancelar</string>
     <string name="current_uno_command">Orde de UNO actual</string>
-    <string name="display_language">Idioma para mostrar</string>
-    <string name="display_language_summary">Configurar o idioma predeterminado</string>
     <string name="pdf_export_finished">Rematou a exportación a PDF</string>
     <string name="unable_to_export_pdf">Non foi posíbel exportar a pdf</string>
     <string name="unable_to_save">Non foi posíbel gardar o ficheiro</string>

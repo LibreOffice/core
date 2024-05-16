@@ -102,8 +102,6 @@
     <string name="alert_ok">OK</string>
     <string name="alert_cancel">Cancelar</string>
     <string name="current_uno_command">Comando UNO atual</string>
-    <string name="display_language">Exibir idioma</string>
-    <string name="display_language_summary">Definir o idioma padrão de exibição</string>
     <string name="unable_to_export_pdf">Não foi possível exportar em PDF</string>
     <string name="error">Erro</string>
     <string name="enter_part_name">Digite um nome para a parte</string>

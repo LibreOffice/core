@@ -92,7 +92,6 @@
     <string name="part_deleted">Rész törölve.</string>
     <string name="action_pwd_dialog_title">Írja be a jelszót</string>
     <string name="compress_photo_medium_size">Közepes méret</string>
-    <string name="display_language_summary">Alapértelmezett nyelv beállítása</string>
     <string name="select_delete_options">Válasszon törlési lehetőségeket:</string>
     <string name="action_text_copied">Szöveg vágólapra másolva</string>
     <string name="action_exportToPDF">PDF-be exportálás</string>
@@ -114,7 +113,6 @@
     <string name="take_photo">Fényképezés</string>
     <string name="unable_to_save">Nem lehet menteni a fájlt</string>
     <string name="insert_table">Táblázat beszúrása</string>
-    <string name="display_language">Megjelenítési nyelv</string>
     <string name="alert_cancel">Mégse</string>
     <string name="tabhost_character">Karakter</string>
     <string name="calc_alert_double_click_optimal_length">Koppintson duplán a fejlécre optimális szélesség/magasság beállításához.</string>

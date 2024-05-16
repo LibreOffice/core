@@ -86,8 +86,6 @@
     <string name="alert_ok">W porjadku</string>
     <string name="alert_cancel">Přetorhnyć</string>
     <string name="current_uno_command">Aktualny přikaz UNO</string>
-    <string name="display_language">Pokazowanska rěč</string>
-    <string name="display_language_summary">Nastajće standardnu pokazowansku rěč</string>
     <string name="pdf_export_finished">Eksport jako PDF dokónčeny</string>
     <string name="unable_to_export_pdf">Eksport jako PDF móžny njeje</string>
     <string name="unable_to_save">Dataja njeda so składować</string>

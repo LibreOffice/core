@@ -109,8 +109,6 @@
     <string name="alert_ok">Í lagi</string>
     <string name="alert_cancel">Hætta við</string>
     <string name="current_uno_command">Fyrirliggjandi UNO-skipun</string>
-    <string name="display_language">Birt tungumál</string>
-    <string name="display_language_summary">Settu sjálfgefið birtingartungumál</string>
     <string name="pdf_export_finished">Útflutningi í PDF er lokið</string>
     <string name="unable_to_export_pdf">Tókst ekki að flytja út í PDF</string>
     <string name="unable_to_save">Get ekki vistað skrá</string>

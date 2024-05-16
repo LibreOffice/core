@@ -43,7 +43,6 @@
     <string name="action_pwd_dialog_title">Insere le contrasigno</string>
     <string name="calc_optimal_length_confirm">OK</string>
     <string name="action_parts">Partes</string>
-    <string name="display_language_summary">Definir le lingua predefinite del interfacie</string>
     <string name="pref_category_general">General</string>
     <string name="action_text_copied">Texto copiate al area de transferentia</string>
     <string name="action_exportToPDF">Exportar a PDF</string>
@@ -68,7 +67,6 @@
     <string name="app_name">Visualisator de LibreOffice</string>
     <string name="action_add_slide">Adder un diapositiva</string>
     <string name="action_cancel">Cancellar</string>
-    <string name="display_language">Lingua a monstrar</string>
     <string name="search_find_next">Trovar le sequente</string>
     <string name="search_find_previous">Trovar le previe</string>
     <string name="pref_experimental_editing_summary">Activar le modo de modification experimental. Usa lo sub tu proprie risco.</string>

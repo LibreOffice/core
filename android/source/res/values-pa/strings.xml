@@ -70,7 +70,6 @@
     <string name="tabhost_insert">ਸ਼ਾਮਲ ਕਰੋ</string>
     <string name="alert_ok">ਠੀਕ ਹੈ</string>
     <string name="alert_cancel">ਰੱਦ ਕਰੋ</string>
-    <string name="display_language_summary">ਮੂਲ ਦਿਖਾਉਣ ਵਾਲੀ ਭਾਸ਼ਾ ਵਜੋਂ ਸੈੱਟ ਕਰੋ</string>
     <string name="about_privacy_policy">ਪਰਦੇਦਾਰੀ ਨੀਤੀ</string>
     <string name="default_document_name">ਬਿਨਾਂ-ਨਾਂ</string>
     <string name="select_photo">ਫੋਟੋ ਚੁਣੋ</string>
@@ -98,7 +97,6 @@
     <string name="take_photo">ਫੋਟੋ ਲਵੋ</string>
     <string name="action_rename_worksheet">ਵਰਕਸ਼ੀਟ ਦਾ ਨਾਂ ਬਦਲੋ</string>
     <string name="tabhost_style">ਸਟਾਈਲ</string>
-    <string name="display_language">ਦਿਖਾਉਣ ਲਈ ਭਾਸ਼ਾ</string>
     <string name="pdf_export_finished">PDF ਐਕਸਪੋਰਟ ਕਰਨਾ ਪੂਰਾ ਹੋਇਆ</string>
     <string name="unable_to_save">ਫਾਈਲ ਸੰਭਾਲਣ ਲਈ ਅਸਮਰੱਥ</string>
     <string name="action_rename_slide">ਸਲਾਈਡ ਦਾ ਨਾਂ ਬਦਲੋ</string>

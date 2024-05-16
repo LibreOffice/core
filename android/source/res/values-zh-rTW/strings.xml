@@ -97,7 +97,6 @@
     <string name="tabhost_insert">插入</string>
     <string name="tabhost_style">樣式</string>
     <string name="alert_ok">確定</string>
-    <string name="display_language">顯示語言</string>
     <string name="pdf_export_finished">PDF 匯出結束</string>
     <string name="unable_to_export_pdf">無法匯出為 PDF</string>
     <string name="unable_to_save">無法儲存檔案</string>
@@ -114,7 +113,6 @@
     <string name="select_file_to_open">選取要開啟的檔案</string>
     <string name="about_notice">顯示注意事項</string>
     <string name="no_save_document">否</string>
-    <string name="display_language_summary">設定預設顯示語言</string>
     <string name="pref_experimental_editing_summary">啟用實驗性編輯模式。使用風險自負。</string>
     <string name="calc_optimal_length_default_text">輸入額外長度（以 100th/mm 為單位）</string>
     <string name="action_presentation">投影片放映</string>

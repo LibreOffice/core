@@ -87,7 +87,6 @@
     <string name="action_pwd_dialog_title">Inserisci password</string>
     <string name="calc_optimal_length_confirm">OK</string>
     <string name="compress_photo_medium_size">Dimensione media</string>
-    <string name="display_language_summary">Imposta lingua di visualizzazione predefinita</string>
     <string name="select_delete_options">Scegli opzioni di eliminazione:</string>
     <string name="action_text_copied">Testo copiato negli appunti</string>
     <string name="action_exportToPDF">Esporta in PDF</string>
@@ -111,7 +110,6 @@
     <string name="unable_to_save">Impossibile salvare il file</string>
     <string name="insert_table">Inserisci tabella</string>
     <string name="calc_adjust_height">Regola l\'altezza</string>
-    <string name="display_language">Mostra lingua</string>
     <string name="search_find_next">Trova successivo</string>
     <string name="search_find_previous">Trova precedente</string>
     <string name="alert_cancel">Annulla</string>

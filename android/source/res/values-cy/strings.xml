@@ -82,8 +82,6 @@
     <string name="tabhost_style">Arddull</string>
     <string name="alert_ok">Iawn</string>
     <string name="current_uno_command">Y gorchymyn UNO cyfredol</string>
-    <string name="display_language">Iaith Dangos</string>
-    <string name="display_language_summary">Gosod yr iaith dangos ragosodedig</string>
     <string name="pdf_export_finished">Allforio PDF wedi gorffen</string>
     <string name="unable_to_export_pdf">Methu allforio i PDF</string>
     <string name="error">Gwall</string>

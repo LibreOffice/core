@@ -85,8 +85,6 @@
     <string name="alert_ok">ԼԱՎ</string>
     <string name="alert_cancel">Չեղարկել</string>
     <string name="current_uno_command">Ընթացիկ UNO հրամանը</string>
-    <string name="display_language">Արտածիր լեզուն</string>
-    <string name="display_language_summary">Սահմանեք ցուցադրման լռելյայն լեզուն</string>
     <string name="pdf_export_finished">PDF արտահանումն ավարտված է</string>
     <string name="unable_to_export_pdf">Հնարավոր չէ արտահանել pdf</string>
     <string name="unable_to_save">Հնարավոր չէ պահպանել նիշքը</string>

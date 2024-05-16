@@ -86,7 +86,6 @@
     <string name="alert_ok">OK</string>
     <string name="alert_cancel">Annuleren</string>
     <string name="current_uno_command">Huidige UNO-opdracht</string>
-    <string name="display_language">Taal weergeven</string>
     <string name="pdf_export_finished">PDF-export voltooit</string>
     <string name="unable_to_export_pdf">Kan niet exporteren naar PDF</string>
     <string name="unable_to_save">Kan bestand niet opslaan</string>
@@ -115,7 +114,6 @@
     <string name="action_back">Terug</string>
     <string name="action_text_copied">Tekst naar het klembord gekopieerd</string>
     <string name="part_name_changed">De naam voor de sectie is gewijzigd.</string>
-    <string name="display_language_summary">De standaard weergavetaal instellen</string>
     <string name="page">Pagina</string>
     <string name="font_color">Tekstkleur</string>
 </resources>

@@ -92,7 +92,7 @@
     <string name="calc_optimal_width">Amplada òptima</string>
     <string name="calc_optimal_length_confirm">D\'acord</string>
     <string name="action_pwd_dialog_OK">D\'acord</string>
-    <string name="calc_optimal_length_default_text">Introduïu la longitud addicional en centèsimes de mil·límetre.</string>
+    <string name="calc_optimal_length_default_text">Introduïu la longitud addicional en centèsimes de mil·límetre</string>
     <string name="action_add_worksheet">Afegeix un full de càlcul</string>
     <string name="no_camera_found">No s\'ha trobat cap càmera</string>
     <string name="compress_photo_medium_size">Mida mitjana</string>
@@ -109,8 +109,6 @@
     <string name="part_name_changed">S\'ha canviat el nom de la part.</string>
     <string name="part_deleted">S\'ha suprimit la part.</string>
     <string name="alert_ok">D\'acord</string>
-    <string name="display_language">Llengua de la interfície</string>
-    <string name="display_language_summary">Estableix la llengua predeterminada de la interfície</string>
     <string name="pdf_export_finished">L\'exportació a PDF ha finalitzat</string>
     <string name="unable_to_export_pdf">No s\'ha pogut exportar a pdf</string>
     <string name="current_uno_command">Ordre UNO actual</string>

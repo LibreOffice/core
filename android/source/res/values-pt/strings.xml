@@ -70,7 +70,6 @@
     <string name="calc_optimal_length_confirm">Aceitar</string>
     <string name="action_parts">Partes</string>
     <string name="compress_photo_medium_size">Tamanho médio</string>
-    <string name="display_language_summary">Defina o idioma de exibição padrão</string>
     <string name="select_delete_options">Selecione as opções de eliminação:</string>
     <string name="pref_category_general">Geral</string>
     <string name="action_text_copied">Teto copiado para a área de transferência</string>
@@ -108,7 +107,6 @@
     <string name="action_add_slide">Adicionar diapositivo</string>
     <string name="action_cancel">Cancelar</string>
     <string name="calc_adjust_height">Ajustar altura</string>
-    <string name="display_language">Idioma de exibição</string>
     <string name="search_find_next">Localizar seguinte</string>
     <string name="search_find_previous">Localizar anterior</string>
     <string name="pref_experimental_editing_summary">Ativar o modo de edição experimental. Use por sua conta e risco.</string>

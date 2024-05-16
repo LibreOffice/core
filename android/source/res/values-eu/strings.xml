@@ -88,8 +88,6 @@
     <string name="alert_ok">Ados</string>
     <string name="alert_cancel">Utzi</string>
     <string name="current_uno_command">Uneko UNO komandoa</string>
-    <string name="display_language">Bistaratzeko hizkuntza</string>
-    <string name="display_language_summary">Ezarri bistaratzeko hizkuntza lehenetsia</string>
     <string name="pdf_export_finished">PDF-a esportatu da</string>
     <string name="unable_to_export_pdf">Ezin izan da esportatu PDF-ra</string>
     <string name="unable_to_save">Ezin izan da gorde fitxategia</string>

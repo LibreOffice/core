@@ -82,7 +82,6 @@
     <string name="alert_ok">ОК</string>
     <string name="alert_cancel">Відміна</string>
     <string name="current_uno_command">Поточна команда UNO</string>
-    <string name="display_language">Мова на екрані</string>
     <string name="pdf_export_finished">Експорт до PDF завершено</string>
     <string name="unable_to_export_pdf">Неможливо експортувати в PDF</string>
     <string name="unable_to_save">Неможливо зберегти файл</string>
@@ -116,6 +115,5 @@
     <string name="action_back">Назад</string>
     <string name="action_print">Друк</string>
     <string name="tabhost_character">Символ</string>
-    <string name="display_language_summary">Встановити типову мову</string>
     <string name="bmp_null">Bmp має нульове значення!</string>
 </resources>

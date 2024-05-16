@@ -103,7 +103,6 @@
     <string name="alert_ok">Val</string>
     <string name="alert_cancel">Encaboxar</string>
     <string name="current_uno_command">Orde d\'UNO actual</string>
-    <string name="display_language">Llingua p\'amosar</string>
     <string name="select_photo">Esbilla una foto</string>
     <string name="pdf_export_finished">Acabó la esportación a PDF</string>
     <string name="unable_to_export_pdf">Nun se pudo esportar a PDF</string>
@@ -117,5 +116,4 @@
     <string name="font_color">Color de la lletra</string>
     <string name="action_rename_slide">Cambiar el nome de la diapositiva</string>
     <string name="automatic">Automáticu</string>
-    <string name="display_language_summary">Afitar la llingua predeterminada de la interfaz</string>
 </resources>

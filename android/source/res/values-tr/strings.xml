@@ -116,8 +116,6 @@
     <string name="alert_ok">Tamam</string>
     <string name="alert_cancel">İptal</string>
     <string name="current_uno_command">Şuan ki UNO komutu</string>
-    <string name="display_language">Uygulama Dili</string>
-    <string name="display_language_summary">Varsayılan dili değiştir</string>
     <string name="unable_to_export_pdf">Pdf dışa aktarılamıyor.</string>
     <string name="error">Hata</string>
     <string name="enter_part_name">Bölüm ismi girin.</string>

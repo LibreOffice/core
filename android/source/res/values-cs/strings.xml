@@ -99,8 +99,6 @@
     <string name="tabhost_style">Styl</string>
     <string name="alert_ok">OK</string>
     <string name="alert_cancel">Zrušit</string>
-    <string name="display_language">Jazyk zobrazení</string>
-    <string name="display_language_summary">Nastaví výchozí jazyk zobrazení</string>
     <string name="pdf_export_finished">Export do PDF dokončen</string>
     <string name="unable_to_export_pdf">Export do PDF se nepodařil</string>
     <string name="unable_to_save">Soubor se uložit nepodařilo</string>

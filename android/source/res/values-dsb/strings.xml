@@ -95,8 +95,6 @@
     <string name="alert_ok">W pórěźe</string>
     <string name="alert_cancel">Pśetergnuś</string>
     <string name="current_uno_command">Aktualny pśikaz UNO</string>
-    <string name="display_language">Pokazowańska rěc</string>
-    <string name="display_language_summary">Nastajśo standardnu pokazowańsku rěc</string>
     <string name="pdf_export_finished">Eksport ako PDF dokóńcony</string>
     <string name="unable_to_export_pdf">Eksport ako PDF njejo móžny</string>
     <string name="unable_to_save">Dataja njedajo se składowaś</string>

@@ -103,8 +103,6 @@
     <string name="alert_ok">OK</string>
     <string name="alert_cancel">Annuler</string>
     <string name="current_uno_command">Commande UNO actuelle</string>
-    <string name="display_language">Afficher la langue</string>
-    <string name="display_language_summary">Définir la langue d\'affichage par défaut</string>
     <string name="pdf_export_finished">Export au format PDF terminé</string>
     <string name="unable_to_export_pdf">Impossible d\'exporter au format PDF</string>
     <string name="unable_to_save">Impossible d\'enregistrer le fichier</string>

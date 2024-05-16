@@ -99,8 +99,6 @@
     <string name="alert_ok">Εντάξει</string>
     <string name="alert_cancel">Ακύρωση</string>
     <string name="current_uno_command">Τρέχουσα εντολή UNO</string>
-    <string name="display_language">Εμφάνιση γλώσσας</string>
-    <string name="display_language_summary">Ορίστε την προεπιλεγμένη γλώσσα εμφάνισης</string>
     <string name="pdf_export_finished">Η εξαγωγή PDF ολοκληρώθηκε</string>
     <string name="unable_to_export_pdf">Αδυναμία εξαγωγής σε pdf</string>
     <string name="unable_to_save">Αδυναμία αποθήκευσης του αρχείου</string>
