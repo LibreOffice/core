@@ -34,7 +34,6 @@ dependencies {
     ])
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation "androidx.multidex:multidex:2.0.1"
     implementation 'androidx.preference:preference:1.2.1'
 }
 
@@ -60,9 +59,6 @@ android {
     defaultConfig {
         // minSdkVersion is set in liboSettings.gradle
         targetSdkVersion 34
-        // multidex needed when > 65,536 methods referenced with minSdKVersion < 21
-        // s. https://developer.android.com/studio/build/multidex
-        multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
