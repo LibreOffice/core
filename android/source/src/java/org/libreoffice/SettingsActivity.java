@@ -8,30 +8,35 @@
  */
 package org.libreoffice;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceGroup;
+import androidx.fragment.app.FragmentActivity;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceGroup;
 
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Display the fragment as the main content.
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
             .replace(android.R.id.content, new SettingsFragment())
             .commit();
     }
 
-    public static class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+    public static class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+        @Override
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            setPreferencesFromResource(R.xml.libreoffice_preferences, rootKey);
+        }
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.libreoffice_preferences);
             if(!BuildConfig.ALLOW_EDITING) {
-                PreferenceGroup generalGroup = (PreferenceGroup) findPreference("PREF_CATEGORY_GENERAL");
+                PreferenceGroup generalGroup = findPreference("PREF_CATEGORY_GENERAL");
                 generalGroup.removePreference(generalGroup.findPreference("ENABLE_EXPERIMENTAL"));
                 generalGroup.removePreference(generalGroup.findPreference("ENABLE_DEVELOPER"));
             }
@@ -41,14 +46,14 @@ public class SettingsActivity extends Activity {
         public void onResume() {
             super.onResume();
             getPreferenceScreen().getSharedPreferences()
-                    .registerOnSharedPreferenceChangeListener(this);
+                .registerOnSharedPreferenceChangeListener(this);
         }
 
         @Override
         public void onPause() {
             super.onPause();
             getPreferenceScreen().getSharedPreferences()
-                    .unregisterOnSharedPreferenceChangeListener(this);
+                .unregisterOnSharedPreferenceChangeListener(this);
         }
 
         @Override
