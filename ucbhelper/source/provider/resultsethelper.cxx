@@ -65,7 +65,7 @@ ResultSetImplHelper::~ResultSetImplHelper()
 
 OUString SAL_CALL ResultSetImplHelper::getImplementationName()
 {
-    return "ResultSetImplHelper";
+    return u"ResultSetImplHelper"_ustr;
 }
 
 sal_Bool SAL_CALL ResultSetImplHelper::supportsService( const OUString& ServiceName )

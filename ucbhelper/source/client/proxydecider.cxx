@@ -303,7 +303,7 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
         uno::Sequence< uno::Any > aArguments{ uno::Any(CONFIG_ROOT_KEY) };
         uno::Reference< uno::XInterface > xInterface(
                     xConfigProv->createInstanceWithArguments(
-                        "com.sun.star.configuration.ConfigurationAccess",
+                        u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                         aArguments ) );
 
         OSL_ENSURE( xInterface.is(),

@@ -223,7 +223,7 @@ static Reference< XContentIdentifier > getContentIdentifierThrow(
         ensureContentProviderForURL( rBroker, rURL );
 
         throw ContentCreationException(
-            "Unable to create Content Identifier!",
+            u"Unable to create Content Identifier!"_ustr,
             Reference< XInterface >(),
             ContentCreationError_IDENTIFIER_CREATION_FAILED );
     }
@@ -513,8 +513,8 @@ Sequence< Any > Content::setPropertyValues(
     {
         ucbhelper::cancelCommandExecution(
             Any( IllegalArgumentException(
-                        "Length of property names sequence and value "
-                        "sequence are unequal!",
+                        u"Length of property names sequence and value "
+                        "sequence are unequal!"_ustr,
                         get(),
                         -1 ) ),
             m_xImpl->getEnvironment() );
@@ -851,7 +851,7 @@ Sequence< ContentInfo > Content::queryCreatableContentsInfo()
     // First, try it using "CreatableContentsInfo" property -> the "new" way.
     Sequence< ContentInfo > aInfo;
     if ( getPropertyValue(
-             "CreatableContentsInfo" )
+             u"CreatableContentsInfo"_ustr )
          >>= aInfo )
         return aInfo;
 
@@ -930,7 +930,7 @@ bool Content::insertNewContent( const OUString& rContentType,
     Content aNewContent(
         xNew, m_xImpl->getEnvironment(), m_xImpl->getComponentContext() );
     aNewContent.setPropertyValues( rPropertyNames, rPropertyValues );
-    aNewContent.executeCommand( "insert",
+    aNewContent.executeCommand( u"insert"_ustr,
                                 Any(
                                     InsertCommandArgument(
                                         rData.is() ? rData : new EmptyInputStream,
@@ -958,7 +958,7 @@ void Content::transferContent( const Content& rSourceContent,
     // Execute command "globalTransfer" at UCB.
 
     TransferCommandOperation eTransOp = TransferCommandOperation();
-    OUString sCommand( "globalTransfer" );
+    OUString sCommand( u"globalTransfer"_ustr );
     bool bCheckIn = false;
     switch ( eOperation )
     {
@@ -1008,13 +1008,13 @@ void Content::transferContent( const Content& rSourceContent,
 bool Content::isFolder()
 {
     bool bFolder = false;
-    if ( getPropertyValue("IsFolder")
+    if ( getPropertyValue(u"IsFolder"_ustr)
         >>= bFolder )
         return bFolder;
 
     ucbhelper::cancelCommandExecution(
          Any( UnknownPropertyException(
-                    "Unable to retrieve value of property 'IsFolder'!",
+                    u"Unable to retrieve value of property 'IsFolder'!"_ustr,
                     get() ) ),
          m_xImpl->getEnvironment() );
 
@@ -1025,13 +1025,13 @@ bool Content::isFolder()
 bool Content::isDocument()
 {
     bool bDoc = false;
-    if ( getPropertyValue("IsDocument")
+    if ( getPropertyValue(u"IsDocument"_ustr)
         >>= bDoc )
         return bDoc;
 
     ucbhelper::cancelCommandExecution(
          Any( UnknownPropertyException(
-                    "Unable to retrieve value of property 'IsDocument'!",
+                    u"Unable to retrieve value of property 'IsDocument'!"_ustr,
                     get() ) ),
          m_xImpl->getEnvironment() );
 

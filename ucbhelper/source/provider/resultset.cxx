@@ -209,7 +209,7 @@ ResultSet::~ResultSet()
 
 OUString SAL_CALL ResultSet::getImplementationName()
 {
-    return "ResultSet";
+    return u"ResultSet"_ustr;
 }
 
 sal_Bool SAL_CALL ResultSet::supportsService( const OUString& ServiceName )
@@ -1330,7 +1330,7 @@ void ResultSet::rowCountChanged( sal_uInt32 nOld, sal_uInt32 nNew )
     propertyChanged(
         beans::PropertyChangeEvent(
             getXWeak(),
-            "RowCount",
+            u"RowCount"_ustr,
             false,
             1001,
             uno::Any( nOld ),     // old value
@@ -1346,7 +1346,7 @@ void ResultSet::rowCountFinal()
     propertyChanged(
         beans::PropertyChangeEvent(
             getXWeak(),
-            "IsRowCountFinal",
+            u"IsRowCountFinal"_ustr,
             false,
             1000,
             uno:: Any( false ),   // old value
