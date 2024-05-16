@@ -870,6 +870,87 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf116315)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testInsertAutoTextIntoListFromParaStyle)
+{
+    createSwDoc("stylewithlistandindents.fodt");
+    SwDoc* const pDoc = getSwDoc();
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    pWrtShell->FwdPara();
+    pWrtShell->EndPara(/*bSelect=*/false);
+    // expands autotext (via F3)
+    pWrtShell->Insert(" dt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_F3);
+    Scheduler::ProcessEventsToIdle();
+
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->FwdPara();
+
+    {
+        SwTextNode& rNode{ *pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode() };
+        // numrule from paragraph style, but not from direct formatting
+        auto pSet{ rNode.GetpSwAttrSet() };
+        CPPUNIT_ASSERT(pSet);
+        // list id was set
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_PARATR_LIST_ID, false));
+        // the numrule is set on the paragraph style, not on the paragraph
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, pSet->GetItemState(RES_PARATR_NUMRULE, false));
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_PARATR_NUMRULE, true));
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT,
+                             pSet->GetItemState(RES_MARGIN_FIRSTLINE, false));
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_MARGIN_FIRSTLINE, true));
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, pSet->GetItemState(RES_MARGIN_TEXTLEFT, false));
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_MARGIN_TEXTLEFT, true));
+        CPPUNIT_ASSERT_EQUAL(u"ListAndIndents"_ustr, rNode.GetTextColl()->GetName());
+        CPPUNIT_ASSERT(rNode.GetText().startsWith("Item He heard quiet steps"));
+    }
+
+    pWrtShell->FwdPara();
+
+    {
+        SwTextNode& rNode{ *pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode() };
+        // numrule from paragraph style, but not from direct formatting
+        auto pSet{ rNode.GetpSwAttrSet() };
+        CPPUNIT_ASSERT(pSet);
+        // list id was set
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_PARATR_LIST_ID, false));
+        // the numrule is set on the paragraph style, not on the paragraph
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, pSet->GetItemState(RES_PARATR_NUMRULE, false));
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_PARATR_NUMRULE, true));
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT,
+                             pSet->GetItemState(RES_MARGIN_FIRSTLINE, false));
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_MARGIN_FIRSTLINE, true));
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, pSet->GetItemState(RES_MARGIN_TEXTLEFT, false));
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_MARGIN_TEXTLEFT, true));
+        CPPUNIT_ASSERT_EQUAL(u"ListAndIndents"_ustr, rNode.GetTextColl()->GetName());
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, rNode.GetText()); // this is a new empty paragraph
+    }
+
+    pWrtShell->FwdPara();
+
+    {
+        SwTextNode& rNode{ *pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode() };
+        // numrule from paragraph style, but not from direct formatting
+        auto pSet{ rNode.GetpSwAttrSet() };
+        CPPUNIT_ASSERT(pSet);
+        // list id was set
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_PARATR_LIST_ID, false));
+        // the numrule is set on the paragraph style, not on the paragraph
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, pSet->GetItemState(RES_PARATR_NUMRULE, false));
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_PARATR_NUMRULE, true));
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT,
+                             pSet->GetItemState(RES_MARGIN_FIRSTLINE, false));
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_MARGIN_FIRSTLINE, true));
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, pSet->GetItemState(RES_MARGIN_TEXTLEFT, false));
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_MARGIN_TEXTLEFT, true));
+        CPPUNIT_ASSERT_EQUAL(u"ListAndIndents"_ustr, rNode.GetTextColl()->GetName());
+        CPPUNIT_ASSERT_EQUAL(u"more"_ustr, rNode.GetText()); // pre-exising list item
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf144364)
 {
     createSwDoc();
