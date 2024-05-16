@@ -4,15 +4,6 @@
         android:title="@string/pref_category_general"
         android:key="PREF_CATEGORY_GENERAL">
 
-        <ListPreference
-            android:title="@string/display_language"
-            android:summary="@string/display_language_summary"
-            android:entries="@array/SupportedLanguages"
-            android:entryValues="@array/SupportedLanguagesValues"
-            android:defaultValue="SYSTEM_DEFAULT_LANGUAGE"
-            android:key="DISPLAY_LANGUAGE"
-            />
-
         <CheckBoxPreference
             android:title="@string/pref_experimental_editing"
             android:key="ENABLE_EXPERIMENTAL"

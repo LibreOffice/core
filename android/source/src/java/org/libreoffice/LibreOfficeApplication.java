@@ -25,9 +25,4 @@ public class LibreOfficeApplication extends MultiDexApplication {
     public static Handler getMainHandler() {
         return mainHandler;
     }
-
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleHelper.onAttach(base));
-    }
 }
