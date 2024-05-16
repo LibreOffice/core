@@ -3046,17 +3046,21 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     if (pImpl->bPreserveVersions)
         pMediumTmp->TransferVersionList_Impl( *pRetrMedium );
 
+    // Save the original interaction handler
+    Any aOriginalInteract;
+    if (const SfxUnoAnyItem *pItem = pRetrMedium->GetItemSet().GetItemIfSet(SID_INTERACTIONHANDLER, false))
+    {
+        aOriginalInteract = pItem->GetValue();
+        // The original pRetrMedium and potential replacement pMediumTmp have the same interaction handler at this point
+        assert(pMediumTmp->GetItemSet().GetItemIfSet(SID_INTERACTIONHANDLER, false)->GetValue() == aOriginalInteract);
+    }
+
     // an interaction handler here can acquire only in case of GUI Saving
     // and should be removed after the saving is done
-    Any aOriginalInteract;
     css::uno::Reference< XInteractionHandler > xInteract;
     const SfxUnoAnyItem* pxInteractionItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pArgs, SID_INTERACTIONHANDLER, false);
     if ( pxInteractionItem && ( pxInteractionItem->GetValue() >>= xInteract ) && xInteract.is() )
-    {
-        if (const SfxUnoAnyItem *pItem = pMediumTmp->GetItemSet().GetItemIfSet(SID_INTERACTIONHANDLER, false))
-            aOriginalInteract = pItem->GetValue();
         pMediumTmp->GetItemSet().Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, Any( xInteract ) ) );
-    }
 
     const SfxBoolItem* pNoFileSync = pArgs->GetItem<SfxBoolItem>(SID_NO_FILE_SYNC, false);
     if (pNoFileSync && pNoFileSync->GetValue())
@@ -3096,7 +3100,10 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
         // reconnect to object storage
         DoSaveCompleted();
 
-        pRetrMedium->GetItemSet().ClearItem( SID_INTERACTIONHANDLER );
+        if (aOriginalInteract.hasValue())
+            pRetrMedium->GetItemSet().Put(SfxUnoAnyItem(SID_INTERACTIONHANDLER, aOriginalInteract));
+        else
+            pRetrMedium->GetItemSet().ClearItem(SID_INTERACTIONHANDLER);
         pRetrMedium->GetItemSet().ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
 
         delete pMediumTmp;
