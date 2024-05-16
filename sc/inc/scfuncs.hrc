@@ -4259,8 +4259,8 @@ const TranslateId SC_OPCODE_UNIQUE_ARY[] =
     NC_("SC_OPCODE_UNIQUE", "The range or array from which to return unique values."),
     NC_("SC_OPCODE_UNIQUE", "By col"),
     NC_("SC_OPCODE_UNIQUE", "Logical value indicating how to compare data: TRUE - compares data across columns. FALSE or omitted (default) - compares data across rows."),
-    NC_("SC_OPCODE_UNIQUE", "Exactly once"),
-    NC_("SC_OPCODE_UNIQUE", "Logical value that defines what values are considered unique: TRUE - returns values that occur only once, which is the database notion of unique. FALSE or omitted (default) - returns all distinct (different) values in the range or array.")
+    NC_("SC_OPCODE_UNIQUE", "Uniqueness"),
+    NC_("SC_OPCODE_UNIQUE", "Logical value that defines what values are considered unique: TRUE - returns values that occur only once. FALSE or omitted (default) - returns all distinct (different) values in the range or array.")
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
