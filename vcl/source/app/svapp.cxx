@@ -319,6 +319,12 @@ void Application::notifyWindow(vcl::LOKWindowId /*nLOKWindowId*/,
     SAL_WARN("vcl", "Invoked not implemented method: Application::notifyWindow");
 }
 
+OString Application::dumpNotifyState() const
+{
+    SAL_WARN("vcl", "Invoked not implemented method: Application::dumpNotifyState");
+    return "notimpl"_ostr;
+}
+
 void Application::libreOfficeKitViewCallback(int nType, const OString& pPayload) const
 {
     if (!comphelper::LibreOfficeKit::isActive())
@@ -1754,6 +1760,16 @@ void dumpState(rtl::OStringBuffer &rState)
         pWin->DumpAsPropertyTree(aProps);
 
         rState.append("\n\tWindow: ");
+
+        auto notifier = pWin->GetLOKNotifier();
+        if (notifier)
+        {
+            rState.append(notifier->dumpNotifyState());
+            rState.append(" ");
+        }
+        else
+            rState.append("no notifier ");
+
         OString aPropStr = aProps.finishAndGetAsOString();
         if (aPropStr.getLength() > 256)
         {

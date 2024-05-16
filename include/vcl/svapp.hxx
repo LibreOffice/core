@@ -1326,7 +1326,7 @@ public:
                               const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>()) const override;
     virtual void libreOfficeKitViewCallback(int nType, const OString& pPayload) const override;
     virtual void notifyInvalidation(tools::Rectangle const *) const override;
-
+    virtual OString dumpNotifyState() const override;
 
 private:
     DECL_DLLPRIVATE_STATIC_LINK( Application, PostEventHandler, void*, void );

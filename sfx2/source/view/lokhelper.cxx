@@ -735,7 +735,8 @@ void SfxLokHelper::notifyPartSizeChangedAllViews(vcl::ITiledRenderable* pDoc, in
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        if (pViewShell->getPart() == nPart)
+        if (// FIXME should really filter on pViewShell->GetDocId() too
+            pViewShell->getPart() == nPart)
             SfxLokHelper::notifyDocumentSizeChanged(pViewShell, ""_ostr, pDoc, false);
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }

@@ -274,6 +274,7 @@ public:
 
     // ILibreOfficeKitNotifier
     virtual void                notifyWindow(vcl::LOKWindowId nLOKWindowId, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>()) const override;
+    virtual OString             dumpNotifyState() const override;
 
     // Focus, KeyInput, Cursor
     virtual void                ShowCursor( bool bOn = true );
