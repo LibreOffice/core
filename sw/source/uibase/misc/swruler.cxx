@@ -17,15 +17,12 @@
 #include <view.hxx>
 #include <cmdid.h>
 #include <sfx2/request.hxx>
-#include <tools/UnitConversion.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
-#include <tools/json_writer.hxx>
 #include <strings.hrc>
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #define CONTROL_BORDER_WIDTH 1
 
@@ -96,7 +93,6 @@ SwCommentRuler::SwCommentRuler(SwViewShell* pViewSh, vcl::Window* pParent, SwEdi
     vcl::Font aFont(maVirDev->GetFont());
     aFont.SetFontHeight(aFont.GetFontHeight() + 1);
     maVirDev->SetFont(aFont);
-    mbHorizontal = nWinStyle & WB_HSCROLL;
 }
 
 SwCommentRuler::~SwCommentRuler() { disposeOnce(); }
@@ -234,76 +230,12 @@ void SwCommentRuler::MouseButtonDown(const MouseEvent& rMEvt)
     Invalidate();
 }
 
-void SwCommentRuler::CreateJsonNotification(tools::JsonWriter& rJsonWriter)
-{
-    // Note that GetMargin1(), GetMargin2(), GetNullOffset(), and GetPageOffset() return values in
-    // pixels. Not twips. So "converting" the returned values with convertTwipToMm100() is quite
-    // wrong. (Also, even if the return values actually were in twips, it is questionable why we
-    // would want to pass them in mm100, as all other length values in the LOKit protocol apparently
-    // are in twips.)
-
-    // Anyway, as the consuming code in Online mostly seems to work anyway, it is likely that it
-    // would work as well even if the values in pixels were passed without a bogus "conversion" to
-    // mm100. But let's keep this as is for now.
-
-    // Also note that in desktop LibreOffice, these pixel values for the ruler of course change as
-    // one changes the zoom level. (Can be seen if one temporarily modifies the NotifyKit() function
-    // below to call this CreateJsonNotification() function and print its result in all cases even
-    // without LibreOfficeKit::isActive().) But in both web-based Online and in the iOS app, the
-    // zoom level from the point of view of this code here apparently does not change even if one
-    // zooms from the Online code's point of view.
-    rJsonWriter.put("margin1", convertTwipToMm100(GetMargin1()));
-    rJsonWriter.put("margin2", convertTwipToMm100(GetMargin2()));
-    rJsonWriter.put("leftOffset", convertTwipToMm100(GetNullOffset()));
-    rJsonWriter.put("pageOffset", convertTwipToMm100(GetPageOffset()));
-
-    // GetPageWidth() on the other hand does return a value in twips.
-    // So here convertTwipToMm100() really does produce actual mm100. Fun.
-    rJsonWriter.put("pageWidth", convertTwipToMm100(GetPageWidth()));
-    {
-        auto tabsNode = rJsonWriter.startNode("tabs");
-
-        // The RulerTab array elements that GetTabs() returns have their nPos field in twips. So these
-        // too are actual mm100.
-        for (auto const& tab : GetTabs())
-        {
-            auto tabNode = rJsonWriter.startNode("");
-            rJsonWriter.put("position", convertTwipToMm100(tab.nPos));
-            rJsonWriter.put("style", tab.nStyle);
-        }
-    }
-
-    RulerUnitData aUnitData = GetCurrentRulerUnit();
-    rJsonWriter.put("unit", aUnitData.aUnitStr);
-}
-
-void SwCommentRuler::NotifyKit()
-{
-    if (!comphelper::LibreOfficeKit::isActive())
-        return;
-
-    tools::JsonWriter aJsonWriter;
-    CreateJsonNotification(aJsonWriter);
-    OString pJsonData = aJsonWriter.finishAndGetAsOString();
-    if (mbHorizontal)
-    {
-        mpViewShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_RULER_UPDATE,
-                                                                   pJsonData);
-    }
-    else
-    {
-        mpViewShell->GetSfxViewShell()->libreOfficeKitViewCallback(
-            LOK_CALLBACK_VERTICAL_RULER_UPDATE, pJsonData);
-    }
-}
-
 void SwCommentRuler::Update()
 {
     tools::Rectangle aPreviousControlRect = GetCommentControlRegion();
     SvxRuler::Update();
     if (aPreviousControlRect != GetCommentControlRegion())
         Invalidate();
-    NotifyKit();
 }
 
 void SwCommentRuler::UpdateCommentHelpText()

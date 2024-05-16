@@ -36,6 +36,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/ruler.hxx>
 #include <svx/rulritem.hxx>
+#include <sfx2/viewsh.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -44,7 +45,10 @@
 #include <rtl/math.hxx>
 #include <o3tl/string_view.hxx>
 #include <svl/itemset.hxx>
-
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <tools/json_writer.hxx>
+#include <tools/UnitConversion.hxx>
+#include <comphelper/lok.hxx>
 #include "rlrcitem.hxx"
 #include <memory>
 
@@ -1141,6 +1145,46 @@ void SvxRuler::SetNullOffsetLogic(tools::Long lVal) // Setting of the logic Null
     Update();
 }
 
+void SvxRuler::CreateJsonNotification(tools::JsonWriter& rJsonWriter)
+{
+    rJsonWriter.put("margin1", convertTwipToMm100(GetMargin1()));
+    rJsonWriter.put("margin2", convertTwipToMm100(GetMargin2()));
+    rJsonWriter.put("leftOffset", convertTwipToMm100(GetNullOffset()));
+    rJsonWriter.put("pageOffset", convertTwipToMm100(GetPageOffset()));
+
+    rJsonWriter.put("pageWidth", convertTwipToMm100(GetPageWidth()));
+    {
+        auto tabsNode = rJsonWriter.startNode("tabs");
+
+        // The RulerTab array elements that GetTabs() returns have their nPos field in twips. So these
+        // too are actual mm100.
+        for (auto const& tab : GetTabs())
+        {
+            auto tabNode = rJsonWriter.startNode("");
+            rJsonWriter.put("position", convertTwipToMm100(tab.nPos));
+            rJsonWriter.put("style", tab.nStyle);
+        }
+    }
+
+    RulerUnitData aUnitData = GetCurrentRulerUnit();
+    rJsonWriter.put("unit", aUnitData.aUnitStr);
+}
+
+void SvxRuler::NotifyKit()
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (!pViewShell)
+        return;
+
+    tools::JsonWriter aJsonWriter;
+    CreateJsonNotification(aJsonWriter);
+    OString pJsonData = aJsonWriter.finishAndGetAsOString();
+    LibreOfficeKitCallbackType eType = isHorizontal() ? LOK_CALLBACK_RULER_UPDATE : LOK_CALLBACK_VERTICAL_RULER_UPDATE;
+    pViewShell->libreOfficeKitViewCallback(eType, pJsonData);
+}
+
 void SvxRuler::Update()
 {
     /* Perform update of view */
@@ -1159,6 +1203,8 @@ void SvxRuler::Update()
 
     if(nFlags & SvxRulerSupportFlags::TABS)
       UpdateTabs();
+
+    NotifyKit();
 }
 
 tools::Long SvxRuler::GetPageWidth() const

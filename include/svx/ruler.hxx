@@ -40,6 +40,7 @@ class SfxRectangleItem;
 class SvxObjectItem;
 class SfxBoolItem;
 struct SvxRuler_Impl;
+namespace tools { class JsonWriter; }
 
 enum class RulerChangeType
 {
@@ -162,6 +163,8 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     void UpdateColumns();
     void UpdateObject();
 
+    void NotifyKit();
+
     // Convert position to stick to ruler ticks
     tools::Long MakePositionSticky(tools::Long rValue, tools::Long aPointOfReference, bool aSnapToFrameMargin = true) const;
 
@@ -230,6 +233,8 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     void UpdateParaContents_Impl(tools::Long lDiff, UpdateType);
 
 protected:
+    bool isHorizontal() { return bHorz; }
+
     virtual void    Command( const CommandEvent& rCEvt ) override;
     virtual void    Click() override;
     virtual bool    StartDrag() override;
@@ -274,6 +279,8 @@ public:
     {
         Update();
     }
+
+    void CreateJsonNotification(tools::JsonWriter& rJsonWriter);
 
     //#i24363# tab stops relative to indent
     void SetTabsRelativeToIndent( bool bRel );
