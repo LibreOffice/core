@@ -171,7 +171,7 @@ void useWriter()
         //Object table = xIndexedTables.getByIndex(i);
         Any table = xIndexedTables->getByIndex(i);
         xTableProps = Reference<XPropertySet>(table, UNO_QUERY_THROW);
-        xTableProps->setPropertyValue("BackColor", Any(0xC8FFB9));
+        xTableProps->setPropertyValue("BackColor", Any(static_cast<sal_Int32>(0xC8FFB9)));
     }
 }
 
@@ -311,7 +311,7 @@ void manipulateTable(const Reference<XCellRange>& xCellRange)
         xTableProps = Reference<XPropertySet>(xCellRange, UNO_QUERY_THROW);
     }
     // set cell background color
-    xCellProps->setPropertyValue(backColorPropertyName, Any(0x99CCFF));
+    xCellProps->setPropertyValue(backColorPropertyName, Any(static_cast<sal_Int32>(0x99CCFF)));
 
     // set table borders
     // create description for blue line, width 10
@@ -336,14 +336,14 @@ void manipulateTable(const Reference<XCellRange>& xCellRange)
 void manipulateShape(const Reference<XShape>& xShape)
 {
     Reference<XPropertySet> xShapeProps = Reference<XPropertySet>(xShape, UNO_QUERY_THROW);
-    xShapeProps->setPropertyValue("FillColor", Any(0x99CCFF));
-    xShapeProps->setPropertyValue("LineColor", Any(0x000099));
-    xShapeProps->setPropertyValue("RotateAngle", Any(3000));
+    xShapeProps->setPropertyValue("FillColor", Any(static_cast<sal_Int32>(0x99CCFF)));
+    xShapeProps->setPropertyValue("LineColor", Any(static_cast<sal_Int32>(0x000099)));
+    xShapeProps->setPropertyValue("RotateAngle", Any(static_cast<sal_Int32>(3000)));
 
-    xShapeProps->setPropertyValue("TextLeftDistance", Any(0));
-    xShapeProps->setPropertyValue("TextRightDistance", Any(0));
-    xShapeProps->setPropertyValue("TextUpperDistance", Any(0));
-    xShapeProps->setPropertyValue("TextLowerDistance", Any(0));
+    xShapeProps->setPropertyValue("TextLeftDistance", Any(static_cast<sal_Int32>(0)));
+    xShapeProps->setPropertyValue("TextRightDistance", Any(static_cast<sal_Int32>(0)));
+    xShapeProps->setPropertyValue("TextUpperDistance", Any(static_cast<sal_Int32>(0)));
+    xShapeProps->setPropertyValue("TextLowerDistance", Any(static_cast<sal_Int32>(0)));
 }
 
 Reference<XComponent> newDocComponent(const OUString docType)
