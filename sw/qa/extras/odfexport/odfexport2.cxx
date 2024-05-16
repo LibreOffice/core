@@ -139,7 +139,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page)
     if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
         return;
 
-    // fo:hyphenation-keep="page"
+    // fo:hyphenation-keep="page" defined in direct paragraph formatting
     loadAndReload("tdf132599_page.fodt");
     // This was 2 (not truncated hyphenated line)
     CPPUNIT_ASSERT_EQUAL(3, getPages());
@@ -151,7 +151,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_auto)
     if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
         return;
 
-    // fo:hyphenation-keep="auto"
+    // fo:hyphenation-keep="auto" defined in direct paragraph formatting
     loadAndReload("tdf132599_auto.fodt");
     // not truncated hyphenated line
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -250,6 +250,50 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_table)
 
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     assertXPath(pXmlDoc, "//style:style[@style:family='paragraph']/style:paragraph-properties[@loext:hyphenation-keep-type='page']"_ostr, 1);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_default_paragraph_style)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    // fo:hyphenation-keep="page" defined in default paragraph style
+    loadAndReload("tdf160518_page_in_default_paragraph_style.fodt");
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf132599_auto_in_default_paragraph_style)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    // fo:hyphenation-keep="auto" defined in default paragraph style
+    loadAndReload("tdf160518_auto_in_default_paragraph_style.fodt");
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_text_body_style)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    // fo:hyphenation-keep="page" defined in text body style
+    loadAndReload("tdf160518_page_in_text_body_style.fodt");
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf132599_auto_in_text_body_style)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    // fo:hyphenation-keep="auto" defined in text body style
+    loadAndReload("tdf160518_auto_in_text_body_style.fodt");
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf158885_compound_remain)

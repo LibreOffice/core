@@ -79,6 +79,7 @@ public:
     bool GetNoLeading() const;
     bool GetNoHyphenateCaps() const;
     sal_Int16 GetHyphenationZone() const;
+    bool GetHyphenationKeep() const;
 
     const OUString& GetDecimalSymbol() const;
     const OUString& GetListSeparator() const;

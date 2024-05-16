@@ -1201,9 +1201,12 @@ void DocxExport::WriteSettings()
     // Set it's value to "auto" and disable on paragraph level, if no hyphenation is used there.
     pFS->singleElementNS(XML_w, XML_autoHyphenation, FSNS(XML_w, XML_val), "true");
 
-    // Hyphenation details set depending on default style
+    // Hyphenation details set depending on default style, otherwise on body style
     SwTextFormatColl* pColl = m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, /*bRegardLanguage=*/false);
+    if (!pColl || !pColl->GetItemIfSet(RES_PARATR_HYPHENZONE, false))
+        pColl = m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT, /*bRegardLanguage=*/false);
     const SvxHyphenZoneItem* pZoneItem;
+    bool bHyphenationKeep = false;
     if (pColl && (pZoneItem = pColl->GetItemIfSet(RES_PARATR_HYPHENZONE, false)))
     {
         if (pZoneItem->IsNoCapsHyphenation())
@@ -1212,6 +1215,9 @@ void DocxExport::WriteSettings()
         if ( sal_Int16 nHyphenZone = pZoneItem->GetTextHyphenZone() )
             pFS->singleElementNS(XML_w, XML_hyphenationZone, FSNS(XML_w, XML_val),
                                          OString::number(nHyphenZone));
+
+        if ( pZoneItem->IsKeep() && pZoneItem->GetKeepType() )
+            bHyphenationKeep = true;
     }
 
     // Even and Odd Headers
@@ -1447,6 +1453,24 @@ void DocxExport::WriteSettings()
                     FSNS(XML_w, XML_name), "allowTextAfterFloatingTableBreak",
                     FSNS(XML_w, XML_uri), "http://schemas.microsoft.com/office/word",
                     FSNS(XML_w, XML_val), "1");
+        }
+
+        // export useWord2013TrackBottomHyphenation and
+        // allowHyphenationAtTrackBottom for Word 2013/2016/2019
+        if ( nTargetCompatibilityMode >= 12 )
+        {
+            pFS->singleElementNS(XML_w, XML_compatSetting,
+                    FSNS(XML_w, XML_name), "useWord2013TrackBottomHyphenation",
+                    FSNS(XML_w, XML_uri), "http://schemas.microsoft.com/office/word",
+                    FSNS(XML_w, XML_val), "1");
+
+            if ( !bHyphenationKeep )
+            {
+                pFS->singleElementNS(XML_w, XML_compatSetting,
+                    FSNS(XML_w, XML_name), "allowHyphenationAtTrackBottom",
+                    FSNS(XML_w, XML_uri), "http://schemas.microsoft.com/office/word",
+                    FSNS(XML_w, XML_val), "1");
+            }
         }
 
         pFS->endElementNS( XML_w, XML_compat );

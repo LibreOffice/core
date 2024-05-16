@@ -93,6 +93,8 @@ struct SettingsTable_Impl
     bool                m_bAutoHyphenation;
     bool                m_bNoHyphenateCaps;
     sal_Int16           m_nHyphenationZone;
+    sal_Int16           m_nUseWord2013TrackBottomHyphenation;
+    sal_Int16           m_nAllowHyphenationAtTrackBottom;
     bool                m_bWidowControl;
     bool                m_bLongerSpaceSequence;
     bool                m_bSplitPgBreakAndParaMark;
@@ -138,6 +140,8 @@ struct SettingsTable_Impl
     , m_bAutoHyphenation(false)
     , m_bNoHyphenateCaps(false)
     , m_nHyphenationZone(0)
+    , m_nUseWord2013TrackBottomHyphenation(-1)
+    , m_nAllowHyphenationAtTrackBottom(-1)
     , m_bWidowControl(false)
     , m_bLongerSpaceSequence(false)
     , m_bSplitPgBreakAndParaMark(false)
@@ -370,6 +374,18 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
             {
                 m_pImpl->m_bAllowTextAfterFloatingTableBreak = true;
             }
+            else if (m_pImpl->m_aCurrentCompatSettingName == "useWord2013TrackBottomHyphenation" &&
+                m_pImpl->m_aCurrentCompatSettingUri == "http://schemas.microsoft.com/office/word")
+            {
+                m_pImpl->m_nUseWord2013TrackBottomHyphenation =
+                        static_cast<int>(ooxml::GetBooleanValue(aCompatSettingValue));
+            }
+            else if (m_pImpl->m_aCurrentCompatSettingName == "allowHyphenationAtTrackBottom" &&
+                m_pImpl->m_aCurrentCompatSettingUri == "http://schemas.microsoft.com/office/word")
+            {
+                m_pImpl->m_nAllowHyphenationAtTrackBottom =
+                        static_cast<int>(ooxml::GetBooleanValue(aCompatSettingValue));
+            }
         }
     }
     break;
@@ -532,6 +548,14 @@ sal_Int16 SettingsTable::GetHyphenationZone() const
     return m_pImpl->m_nHyphenationZone;
 }
 
+bool SettingsTable::GetHyphenationKeep() const
+{
+    // if allowHyphenationAtTrackBottom is not true and useWord2013TrackBottomHyphenation is
+    // not present or it is true, set ParaHyphenationKeep to COLUMN
+    return m_pImpl->m_nAllowHyphenationAtTrackBottom != 1 &&
+                m_pImpl->m_nUseWord2013TrackBottomHyphenation != 0;
+}
+
 const OUString & SettingsTable::GetDecimalSymbol() const
 {
     return m_pImpl->m_sDecimalSymbol;
@@ -691,12 +715,7 @@ void SettingsTable::ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc)
         xPropertySet->setPropertyValue("ParaWidows", aAny);
         xPropertySet->setPropertyValue("ParaOrphans", aAny);
     }
-
-    std::pair<bool, bool> aAllow = GetCompatSettingHasAndValue(u"allowHyphenationAtTrackBottom");
-    std::pair<bool, bool> aUse = GetCompatSettingHasAndValue(u"useWord2013TrackBottomHyphenation");
-    // if allowHyphenationAtTrackBottom is not true and useWord2013TrackBottomHyphenation is
-    // not present or it is true, set ParaHyphenationKeep to COLUMN
-    if ( !aAllow.second && ( !aUse.first || aUse.second ) )
+    if ( GetHyphenationKeep() )
     {
         uno::Reference<beans::XPropertySet> xPropertySet(xDefault, uno::UNO_QUERY);
         xPropertySet->setPropertyValue("ParaHyphenationKeep", uno::Any(true));

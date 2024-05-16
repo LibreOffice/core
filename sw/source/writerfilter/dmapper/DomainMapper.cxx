@@ -41,6 +41,7 @@
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/ParagraphHyphenationKeepType.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
@@ -1718,6 +1719,15 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         break;
     case NS_ooxml::LN_CT_PPrBase_suppressAutoHyphens:
         rContext->Insert(PROP_PARA_IS_HYPHENATION, uno::Any( nIntValue == 0 ));
+        // if hyphenation is enabled, don't lose other paragraph-level
+        // hyphenation settings of SvxHyphenZoneItem
+        if ( nIntValue == 0 )
+        {
+            rContext->Insert(PROP_PARA_HYPHENATION_KEEP,
+                            uno::Any(m_pImpl->GetSettingsTable()->GetHyphenationKeep()));
+            rContext->Insert(PROP_PARA_HYPHENATION_KEEP_TYPE,
+                            uno::Any(text::ParagraphHyphenationKeepType::COLUMN));
+        }
         break;
     case NS_ooxml::LN_CT_FramePr_h:
         break;
