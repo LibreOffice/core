@@ -63,6 +63,7 @@ uno::Reference<drawing::XShape> TestScene3d::getShape(sal_uInt8 nShapeIndex, sal
 void TestScene3d::getShapeAsBitmap(BitmapEx& rBMP, sal_uInt8 nShapeIndex)
 {
     SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
     SdrView* pSdrView = pViewShell->GetDrawView();
 
     // Mark object and convert it to bitmap
