@@ -250,9 +250,9 @@ OUString INetMIMEMessage::GetDefaultContentType()
             aParentCT = pParent->GetDefaultContentType();
 
         if (aParentCT.equalsIgnoreAsciiCase("multipart/digest"))
-            return "message/rfc822";
+            return u"message/rfc822"_ustr;
     }
-    return "text/plain; charset=us-ascii";
+    return u"text/plain; charset=us-ascii"_ustr;
 }
 
 void INetMIMEMessage::EnableAttachMultipartFormDataChild()
@@ -273,10 +273,10 @@ void INetMIMEMessage::EnableAttachMultipartFormDataChild()
     m_aBoundary += sTail;
 
     // Set header fields.
-    SetMIMEVersion("1.0");
+    SetMIMEVersion(u"1.0"_ustr);
     SetContentType(
         "multipart/form-data; boundary=" + OUString::fromUtf8(m_aBoundary));
-    SetContentTransferEncoding("7bit");
+    SetContentTransferEncoding(u"7bit"_ustr);
 }
 
 void INetMIMEMessage::AttachChild(std::unique_ptr<INetMIMEMessage> pChildMsg)

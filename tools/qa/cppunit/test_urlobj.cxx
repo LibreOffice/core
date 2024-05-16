@@ -39,27 +39,27 @@ namespace tools_urlobj
         {
             INetURLObject aUrl( u"file://10.10.1.1/sampledir/sample.file" );
             CPPUNIT_ASSERT_EQUAL(INetProtocol::File, aUrl.GetProtocol());
-            CPPUNIT_ASSERT_EQUAL(OUString("10.10.1.1"),
+            CPPUNIT_ASSERT_EQUAL(u"10.10.1.1"_ustr,
                                  aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
-            CPPUNIT_ASSERT_EQUAL(OUString("/sampledir/sample.file"),
+            CPPUNIT_ASSERT_EQUAL(u"/sampledir/sample.file"_ustr,
                                  aUrl.GetURLPath(INetURLObject::DecodeMechanism::NONE));
-            CPPUNIT_ASSERT_EQUAL(OUString("sample.file"),
+            CPPUNIT_ASSERT_EQUAL(u"sample.file"_ustr,
                                  aUrl.getName());
-            CPPUNIT_ASSERT_EQUAL(OUString("sample"), aUrl.getBase());
-            CPPUNIT_ASSERT_EQUAL(OUString("file"), aUrl.getExtension());
+            CPPUNIT_ASSERT_EQUAL(u"sample"_ustr, aUrl.getBase());
+            CPPUNIT_ASSERT_EQUAL(u"file"_ustr, aUrl.getExtension());
         }
 
         void urlobjTest_004(  )
         {
             INetURLObject aUrl( u"smb://10.10.1.1/sampledir/sample.file" );
             CPPUNIT_ASSERT_EQUAL( INetProtocol::Smb, aUrl.GetProtocol(  ) );
-            CPPUNIT_ASSERT_EQUAL(OUString("10.10.1.1"),
+            CPPUNIT_ASSERT_EQUAL(u"10.10.1.1"_ustr,
                                  aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
-            CPPUNIT_ASSERT_EQUAL(OUString("/sampledir/sample.file"),
+            CPPUNIT_ASSERT_EQUAL(u"/sampledir/sample.file"_ustr,
                                  aUrl.GetURLPath(INetURLObject::DecodeMechanism::NONE));
-            CPPUNIT_ASSERT_EQUAL(OUString("sample.file"), aUrl.getName());
-            CPPUNIT_ASSERT_EQUAL(OUString("sample"), aUrl.getBase());
-            CPPUNIT_ASSERT_EQUAL(OUString("file"), aUrl.getExtension());
+            CPPUNIT_ASSERT_EQUAL(u"sample.file"_ustr, aUrl.getName());
+            CPPUNIT_ASSERT_EQUAL(u"sample"_ustr, aUrl.getBase());
+            CPPUNIT_ASSERT_EQUAL(u"file"_ustr, aUrl.getExtension());
         }
 
         void urlobjCmisTest(  )
@@ -92,8 +92,8 @@ namespace tools_urlobj
             {
                 INetURLObject url(u"http://example.com");
                 CPPUNIT_ASSERT_EQUAL(INetProtocol::Http, url.GetProtocol());
-                CPPUNIT_ASSERT_EQUAL(OUString("example.com"), url.GetHost());
-                CPPUNIT_ASSERT_EQUAL(OUString("/"), url.GetURLPath());
+                CPPUNIT_ASSERT_EQUAL(u"example.com"_ustr, url.GetHost());
+                CPPUNIT_ASSERT_EQUAL(u"/"_ustr, url.GetURLPath());
             }
             {
                 // This is a valid http URL per RFC 7230:
@@ -103,9 +103,9 @@ namespace tools_urlobj
             {
                 INetURLObject url(u"http://example.com#fragment");
                 CPPUNIT_ASSERT_EQUAL(INetProtocol::Http, url.GetProtocol());
-                CPPUNIT_ASSERT_EQUAL(OUString("example.com"), url.GetHost());
-                CPPUNIT_ASSERT_EQUAL(OUString("/"), url.GetURLPath());
-                CPPUNIT_ASSERT_EQUAL(OUString("fragment"), url.GetMark());
+                CPPUNIT_ASSERT_EQUAL(u"example.com"_ustr, url.GetHost());
+                CPPUNIT_ASSERT_EQUAL(u"/"_ustr, url.GetURLPath());
+                CPPUNIT_ASSERT_EQUAL(u"fragment"_ustr, url.GetMark());
             }
         }
 
@@ -246,21 +246,21 @@ namespace tools_urlobj
                 bool ok = obj.setName(u"bar");
                 CPPUNIT_ASSERT(ok);
                 CPPUNIT_ASSERT_EQUAL(
-                    OUString("file:///bar"), obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+                    u"file:///bar"_ustr, obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
             }
             {
                 INetURLObject obj(u"file:///foo/");
                 bool ok = obj.setName(u"bar");
                 CPPUNIT_ASSERT(ok);
                 CPPUNIT_ASSERT_EQUAL(
-                    OUString("file:///bar/"), obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+                    u"file:///bar/"_ustr, obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
             }
             {
                 INetURLObject obj(u"file:///foo/bar");
                 bool ok = obj.setName(u"baz");
                 CPPUNIT_ASSERT(ok);
                 CPPUNIT_ASSERT_EQUAL(
-                    OUString("file:///foo/baz"),
+                    u"file:///foo/baz"_ustr,
                     obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
             }
             {
@@ -268,7 +268,7 @@ namespace tools_urlobj
                 bool ok = obj.setName(u"baz");
                 CPPUNIT_ASSERT(ok);
                 CPPUNIT_ASSERT_EQUAL(
-                    OUString("file:///foo/baz/"),
+                    u"file:///foo/baz/"_ustr,
                     obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
             }
         }
@@ -279,7 +279,7 @@ namespace tools_urlobj
                 u"other", INetURLObject::LAST_SEGMENT, false);
             CPPUNIT_ASSERT(ok);
             CPPUNIT_ASSERT_EQUAL(
-                OUString("file:///foo/bar.baz/.other"),
+                u"file:///foo/bar.baz/.other"_ustr,
                 obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
         }
 
@@ -288,15 +288,15 @@ namespace tools_urlobj
             CPPUNIT_ASSERT(!obj.HasError());
             obj.changeScheme(INetProtocol::Http);
             CPPUNIT_ASSERT_EQUAL(
-                OUString("http://example.com/foo/bar"),
+                u"http://example.com/foo/bar"_ustr,
                 obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
             obj.changeScheme(INetProtocol::Https);
             CPPUNIT_ASSERT_EQUAL(
-                OUString("https://example.com/foo/bar"),
+                u"https://example.com/foo/bar"_ustr,
                 obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
             obj.changeScheme(INetProtocol::Ftp);
             CPPUNIT_ASSERT_EQUAL(
-                OUString("ftp://example.com/foo/bar"),
+                u"ftp://example.com/foo/bar"_ustr,
                 obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
         }
 
@@ -304,7 +304,7 @@ namespace tools_urlobj
             INetURLObject obj(u"file://share.allotropia.de@SSL/DavWWWRoot/remote.php");
             CPPUNIT_ASSERT(!obj.HasError());
             CPPUNIT_ASSERT_EQUAL(
-                OUString("file://share.allotropia.de@SSL/DavWWWRoot/remote.php"),
+                u"file://share.allotropia.de@SSL/DavWWWRoot/remote.php"_ustr,
                 obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
         }
 
@@ -314,23 +314,23 @@ namespace tools_urlobj
                 // host:port must not be misinterpreted as scheme:path
                 INetURLObject obj(u"example.com:8080/foo", INetProtocol::Http);
                 CPPUNIT_ASSERT(!obj.HasError());
-                CPPUNIT_ASSERT_EQUAL(OUString("http://example.com:8080/foo"),
+                CPPUNIT_ASSERT_EQUAL(u"http://example.com:8080/foo"_ustr,
                     obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
                 CPPUNIT_ASSERT_EQUAL(INetProtocol::Http, obj.GetProtocol());
-                CPPUNIT_ASSERT_EQUAL(OUString("example.com"), obj.GetHost());
+                CPPUNIT_ASSERT_EQUAL(u"example.com"_ustr, obj.GetHost());
                 CPPUNIT_ASSERT_EQUAL(sal_uInt32(8080), obj.GetPort());
-                CPPUNIT_ASSERT_EQUAL(OUString("/foo"), obj.GetURLPath());
+                CPPUNIT_ASSERT_EQUAL(u"/foo"_ustr, obj.GetURLPath());
             }
             {
                 // port may only contain decimal digits, so this must be treated as unknown scheme
                 INetURLObject obj(u"example.com:80a0/foo", INetProtocol::Http);
                 CPPUNIT_ASSERT(!obj.HasError());
-                CPPUNIT_ASSERT_EQUAL(OUString("example.com:80a0/foo"),
+                CPPUNIT_ASSERT_EQUAL(u"example.com:80a0/foo"_ustr,
                     obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
                 CPPUNIT_ASSERT_EQUAL(INetProtocol::Generic, obj.GetProtocol());
                 CPPUNIT_ASSERT(obj.isSchemeEqualTo(u"example.com"));
-                CPPUNIT_ASSERT_EQUAL(OUString(""), obj.GetHost());
-                CPPUNIT_ASSERT_EQUAL(OUString("80a0/foo"), obj.GetURLPath());
+                CPPUNIT_ASSERT_EQUAL(u""_ustr, obj.GetHost());
+                CPPUNIT_ASSERT_EQUAL(u"80a0/foo"_ustr, obj.GetURLPath());
             }
             {
                 // Test Windows \\?\C:... long path scheme

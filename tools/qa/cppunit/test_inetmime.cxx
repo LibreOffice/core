@@ -59,7 +59,7 @@ namespace
     void Test::test_scanContentType_basic()
     {
         OUString input
-            = "TEST/subTST; parm1=Value1; Parm2=\"unpacked value; %20\"";
+            = u"TEST/subTST; parm1=Value1; Parm2=\"unpacked value; %20\""_ustr;
         // Just scan input for valid string:
         auto end = INetMIME::scanContentType(input);
         CPPUNIT_ASSERT(end != nullptr);
@@ -72,21 +72,21 @@ namespace
                                         &type, &subType, &parameters);
         CPPUNIT_ASSERT(end != nullptr);
         CPPUNIT_ASSERT_EQUAL(OUString(), OUString(end));
-        CPPUNIT_ASSERT_EQUAL(OUString("test"), type);
-        CPPUNIT_ASSERT_EQUAL(OUString("subtst"), subType);
+        CPPUNIT_ASSERT_EQUAL(u"test"_ustr, type);
+        CPPUNIT_ASSERT_EQUAL(u"subtst"_ustr, subType);
         CPPUNIT_ASSERT_EQUAL(
             INetContentTypeParameterList::size_type(2), parameters.size());
         auto i = parameters.find("parm1"_ostr);
         CPPUNIT_ASSERT(i != parameters.end());
         CPPUNIT_ASSERT_EQUAL(OString(), i->second.m_sCharset);
         CPPUNIT_ASSERT_EQUAL(OString(), i->second.m_sLanguage);
-        CPPUNIT_ASSERT_EQUAL(OUString("Value1"), i->second.m_sValue);
+        CPPUNIT_ASSERT_EQUAL(u"Value1"_ustr, i->second.m_sValue);
         CPPUNIT_ASSERT(i->second.m_bConverted);
         i = parameters.find("parm2"_ostr);
         CPPUNIT_ASSERT(i != parameters.end());
         CPPUNIT_ASSERT_EQUAL(OString(), i->second.m_sCharset);
         CPPUNIT_ASSERT_EQUAL(OString(), i->second.m_sLanguage);
-        CPPUNIT_ASSERT_EQUAL(OUString("unpacked value; %20"), i->second.m_sValue);
+        CPPUNIT_ASSERT_EQUAL(u"unpacked value; %20"_ustr, i->second.m_sValue);
         CPPUNIT_ASSERT(i->second.m_bConverted);
     }
 
@@ -94,10 +94,10 @@ namespace
     {
         // Test extended parameter with value split in 3 sections:
         OUString input
-            = "TEST/subTST; "
+            = u"TEST/subTST; "
               "parm1*0*=US-ASCII'En'5%25%20; "
               "Parm1*1*=of%2010;\t"
-              "parm1*2*=%20%3d%200.5";
+              "parm1*2*=%20%3d%200.5"_ustr;
         // Just scan input for valid string:
         auto end = INetMIME::scanContentType(input);
         CPPUNIT_ASSERT(end != nullptr);
@@ -110,15 +110,15 @@ namespace
                                         &type, &subType, &parameters);
         CPPUNIT_ASSERT(end != nullptr);
         CPPUNIT_ASSERT_EQUAL(OUString(), OUString(end));
-        CPPUNIT_ASSERT_EQUAL(OUString("test"), type);
-        CPPUNIT_ASSERT_EQUAL(OUString("subtst"), subType);
+        CPPUNIT_ASSERT_EQUAL(u"test"_ustr, type);
+        CPPUNIT_ASSERT_EQUAL(u"subtst"_ustr, subType);
         CPPUNIT_ASSERT_EQUAL(
             INetContentTypeParameterList::size_type(1), parameters.size());
         auto i = parameters.find("parm1"_ostr);
         CPPUNIT_ASSERT(i != parameters.end());
         CPPUNIT_ASSERT_EQUAL("us-ascii"_ostr, i->second.m_sCharset);
         CPPUNIT_ASSERT_EQUAL("en"_ostr, i->second.m_sLanguage);
-        CPPUNIT_ASSERT_EQUAL(OUString("5% of 10 = 0.5"), i->second.m_sValue);
+        CPPUNIT_ASSERT_EQUAL(u"5% of 10 = 0.5"_ustr, i->second.m_sValue);
         CPPUNIT_ASSERT(i->second.m_bConverted);
 
         // Test extended parameters with different value charsets:
@@ -131,21 +131,21 @@ namespace
         // Just scan input for valid string:
         end = INetMIME::scanContentType(input);
         CPPUNIT_ASSERT(end != nullptr);
-        CPPUNIT_ASSERT_EQUAL(OUString(";parm1*1*=2"), OUString(end)); // the invalid end of input
+        CPPUNIT_ASSERT_EQUAL(u";parm1*1*=2"_ustr, OUString(end)); // the invalid end of input
         // Scan input and parse type, subType and parameters:
         end = INetMIME::scanContentType(input,
                                         &type, &subType, &parameters);
         CPPUNIT_ASSERT(end != nullptr);
-        CPPUNIT_ASSERT_EQUAL(OUString(";parm1*1*=2"), OUString(end)); // the invalid end of input
-        CPPUNIT_ASSERT_EQUAL(OUString("test"), type);
-        CPPUNIT_ASSERT_EQUAL(OUString("subtst"), subType);
+        CPPUNIT_ASSERT_EQUAL(u";parm1*1*=2"_ustr, OUString(end)); // the invalid end of input
+        CPPUNIT_ASSERT_EQUAL(u"test"_ustr, type);
+        CPPUNIT_ASSERT_EQUAL(u"subtst"_ustr, subType);
         CPPUNIT_ASSERT_EQUAL(
             INetContentTypeParameterList::size_type(3), parameters.size());
         i = parameters.find("parm1"_ostr);
         CPPUNIT_ASSERT(i != parameters.end());
         CPPUNIT_ASSERT_EQUAL("us-ascii"_ostr, i->second.m_sCharset);
         CPPUNIT_ASSERT_EQUAL("en"_ostr, i->second.m_sLanguage);
-        CPPUNIT_ASSERT_EQUAL(OUString("value1"), i->second.m_sValue);
+        CPPUNIT_ASSERT_EQUAL(u"value1"_ustr, i->second.m_sValue);
         CPPUNIT_ASSERT(i->second.m_bConverted);
         i = parameters.find("parm2"_ostr);
         CPPUNIT_ASSERT(i != parameters.end());

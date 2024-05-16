@@ -94,13 +94,13 @@ int INetMIMEMessageStream::GetMsgLine(char* pData, sal_uInt32 nSize)
             {
                 OUString aPCT(pSourceMsg->GetParent()->GetContentType());
                 if (aPCT.startsWithIgnoreAsciiCase("message/rfc822"))
-                    pSourceMsg->SetMIMEVersion("1.0");
+                    pSourceMsg->SetMIMEVersion(u"1.0"_ustr);
                 else
                     pSourceMsg->SetMIMEVersion(OUString());
             }
             else
             {
-                pSourceMsg->SetMIMEVersion("1.0");
+                pSourceMsg->SetMIMEVersion(u"1.0"_ustr);
             }
 
             // Check ContentType.

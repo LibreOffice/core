@@ -38,7 +38,7 @@ void JsonWriterTest::test1()
 
     {
         auto testNode = aJson.startNode("node");
-        aJson.put("oustring", OUString("val1"));
+        aJson.put("oustring", u"val1"_ustr);
         aJson.put("charptr", "val3");
         aJson.put("int", static_cast<sal_Int32>(12));
     }
@@ -56,15 +56,15 @@ void JsonWriterTest::test2()
 
     {
         auto testNode = aJson.startNode("node");
-        aJson.put("field1", OUString("val1"));
-        aJson.put("field2", OUString("val2"));
+        aJson.put("field1", u"val1"_ustr);
+        aJson.put("field2", u"val2"_ustr);
         {
             auto testNode2 = aJson.startNode("node");
-            aJson.put("field3", OUString("val3"));
+            aJson.put("field3", u"val3"_ustr);
             {
                 auto testNode3 = aJson.startNode("node");
-                aJson.put("field4", OUString("val4"));
-                aJson.put("field5", OUString("val5"));
+                aJson.put("field4", u"val4"_ustr);
+                aJson.put("field5", u"val5"_ustr);
             }
         }
     }

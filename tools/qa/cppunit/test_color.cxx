@@ -84,27 +84,27 @@ void Test::test_asRGBColor()
 {
     Color aColor;
     aColor = COL_BLACK;
-    CPPUNIT_ASSERT_EQUAL(OUString("000000"), aColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(u"000000"_ustr, aColor.AsRGBHexString());
 
     aColor = COL_WHITE;
-    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), aColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(u"ffffff"_ustr, aColor.AsRGBHexString());
 
     aColor = COL_RED;
-    CPPUNIT_ASSERT_EQUAL(OUString("800000"), aColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(u"800000"_ustr, aColor.AsRGBHexString());
 
     aColor = COL_TRANSPARENT;
-    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), aColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(u"ffffff"_ustr, aColor.AsRGBHexString());
 
     aColor = COL_BLUE;
-    CPPUNIT_ASSERT_EQUAL(OUString("000080"), aColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(u"000080"_ustr, aColor.AsRGBHexString());
 
     aColor.SetRed(0x12);
     aColor.SetGreen(0x34);
     aColor.SetBlue(0x56);
-    CPPUNIT_ASSERT_EQUAL(OUString("123456"), aColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(u"123456"_ustr, aColor.AsRGBHexString());
 
     aColor = COL_AUTO;
-    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), aColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(u"ffffff"_ustr, aColor.AsRGBHexString());
 }
 
 OUString createTintShade(sal_uInt8 nR, sal_uInt8 nG, sal_uInt8 nB, std::u16string_view sReference, sal_Int16 nTintShade)
@@ -121,48 +121,48 @@ void Test::test_ApplyTintOrShade()
     // BLACK reference
 
     // 5% tint
-    CPPUNIT_ASSERT_EQUAL(OUString("0d0d0d"), createTintShade(0x00, 0x00, 0x00, u"000000",  500));
+    CPPUNIT_ASSERT_EQUAL(u"0d0d0d"_ustr, createTintShade(0x00, 0x00, 0x00, u"000000",  500));
     // 15% tint
-    CPPUNIT_ASSERT_EQUAL(OUString("262626"), createTintShade(0x00, 0x00, 0x00, u"000000",  1500));
+    CPPUNIT_ASSERT_EQUAL(u"262626"_ustr, createTintShade(0x00, 0x00, 0x00, u"000000",  1500));
     // 25% tint
-    CPPUNIT_ASSERT_EQUAL(OUString("404040"), createTintShade(0x00, 0x00, 0x00, u"000000",  2500));
+    CPPUNIT_ASSERT_EQUAL(u"404040"_ustr, createTintShade(0x00, 0x00, 0x00, u"000000",  2500));
     // 50% tint
-    CPPUNIT_ASSERT_EQUAL(OUString("808080"), createTintShade(0x00, 0x00, 0x00, u"000000",  5000));
+    CPPUNIT_ASSERT_EQUAL(u"808080"_ustr, createTintShade(0x00, 0x00, 0x00, u"000000",  5000));
     // 100% tint
-    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), createTintShade(0x00, 0x00, 0x00, u"000000", 10000));
+    CPPUNIT_ASSERT_EQUAL(u"ffffff"_ustr, createTintShade(0x00, 0x00, 0x00, u"000000", 10000));
 
     // WHITE reference
 
     // 5% shade
-    CPPUNIT_ASSERT_EQUAL(OUString("f2f2f2"), createTintShade(0xff, 0xff, 0xff, u"ffffff",   -500));
+    CPPUNIT_ASSERT_EQUAL(u"f2f2f2"_ustr, createTintShade(0xff, 0xff, 0xff, u"ffffff",   -500));
     // 15% shade
-    CPPUNIT_ASSERT_EQUAL(OUString("d9d9d9"), createTintShade(0xff, 0xff, 0xff, u"ffffff",  -1500));
+    CPPUNIT_ASSERT_EQUAL(u"d9d9d9"_ustr, createTintShade(0xff, 0xff, 0xff, u"ffffff",  -1500));
     // 25% shade
-    CPPUNIT_ASSERT_EQUAL(OUString("bfbfbf"), createTintShade(0xff, 0xff, 0xff, u"ffffff",  -2500));
+    CPPUNIT_ASSERT_EQUAL(u"bfbfbf"_ustr, createTintShade(0xff, 0xff, 0xff, u"ffffff",  -2500));
     // 50% shade
-    CPPUNIT_ASSERT_EQUAL(OUString("808080"), createTintShade(0xff, 0xff, 0xff, u"ffffff",  -5000));
+    CPPUNIT_ASSERT_EQUAL(u"808080"_ustr, createTintShade(0xff, 0xff, 0xff, u"ffffff",  -5000));
     // 100% shade
-    CPPUNIT_ASSERT_EQUAL(OUString("000000"), createTintShade(0xff, 0xff, 0xff, u"ffffff", -10000));
+    CPPUNIT_ASSERT_EQUAL(u"000000"_ustr, createTintShade(0xff, 0xff, 0xff, u"ffffff", -10000));
 
     // GREY reference
 
     // 0% - no change
-    CPPUNIT_ASSERT_EQUAL(OUString("808080"), createTintShade(0x80, 0x80, 0x80, u"808080",      0));
+    CPPUNIT_ASSERT_EQUAL(u"808080"_ustr, createTintShade(0x80, 0x80, 0x80, u"808080",      0));
 
     // 25% tint
-    CPPUNIT_ASSERT_EQUAL(OUString("a0a0a0"), createTintShade(0x80, 0x80, 0x80, u"808080",   2500));
+    CPPUNIT_ASSERT_EQUAL(u"a0a0a0"_ustr, createTintShade(0x80, 0x80, 0x80, u"808080",   2500));
     // 50% tint
     //CPPUNIT_ASSERT_EQUAL(OUString("c0c0c0"), createTintShade(0x80, 0x80, 0x80, "808080",   5000));
     // disable for now - a rounding error happens on come platforms...
     // 100% tint
-    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), createTintShade(0x80, 0x80, 0x80, u"808080",  10000));
+    CPPUNIT_ASSERT_EQUAL(u"ffffff"_ustr, createTintShade(0x80, 0x80, 0x80, u"808080",  10000));
 
     // 25% shade
-    CPPUNIT_ASSERT_EQUAL(OUString("606060"), createTintShade(0x80, 0x80, 0x80, u"808080",  -2500));
+    CPPUNIT_ASSERT_EQUAL(u"606060"_ustr, createTintShade(0x80, 0x80, 0x80, u"808080",  -2500));
     // 50% shade
-    CPPUNIT_ASSERT_EQUAL(OUString("404040"), createTintShade(0x80, 0x80, 0x80, u"808080",  -5000));
+    CPPUNIT_ASSERT_EQUAL(u"404040"_ustr, createTintShade(0x80, 0x80, 0x80, u"808080",  -5000));
     // 100% shade
-    CPPUNIT_ASSERT_EQUAL(OUString("000000"), createTintShade(0x80, 0x80, 0x80, u"808080", -10000));
+    CPPUNIT_ASSERT_EQUAL(u"000000"_ustr, createTintShade(0x80, 0x80, 0x80, u"808080", -10000));
 }
 
 void Test::test_ApplyLumModOff()
@@ -173,7 +173,7 @@ void Test::test_ApplyLumModOff()
     // PowerPoint calls this "Lighter 40%".
     aColor.ApplyLumModOff(6000, 4000);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("8faadc"), aColor.AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(u"8faadc"_ustr, aColor.AsRGBHexString());
 }
 
 void Test::testGetColorError()
