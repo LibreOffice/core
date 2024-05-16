@@ -608,7 +608,9 @@ static void lcl_ExportBookmark(
         const SwXBookmarkPortion_ImplSharedPtr& pPtr = *aIter;
         if ( nIndex > pPtr->getIndex() )
         {
-            assert(!"Some bookmarks were not consumed earlier");
+            // We may get here, if SwXTextPortionEnumeration ctor was called with nStart greater
+            // than this bookmark's index. Just drop it.
+            aIter = rBkmArr.erase(aIter);
             continue;
         }
         if ( nIndex < pPtr->getIndex() )
