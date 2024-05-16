@@ -57,7 +57,7 @@ import java.util.UUID;
 /**
  * Main activity of the LibreOffice App. It is started in the UI thread.
  */
-public class LibreOfficeMainActivity extends AppCompatActivity implements SettingsListenerModel.OnSettingsPreferenceChangedListener {
+public class LibreOfficeMainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String LOGTAG = "LibreOfficeMainActivity";
     public static final String ENABLE_EXPERIMENTAL_PREFS_KEY = "ENABLE_EXPERIMENTAL";
@@ -125,8 +125,9 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         Log.w(LOGTAG, "onCreate..");
         super.onCreate(savedInstanceState);
 
-        SettingsListenerModel.getInstance().setListener(this);
         updatePreferences();
+        PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+            .registerOnSharedPreferenceChangeListener(this);
 
         setContentView(R.layout.activity_main);
 
@@ -492,6 +493,9 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     @Override
     protected void onDestroy() {
         Log.i(LOGTAG, "onDestroy..");
+        PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+            .unregisterOnSharedPreferenceChangeListener(this);
+
         LOKitShell.sendCloseEvent();
         mLayerClient.destroy();
         super.onDestroy();
@@ -842,7 +846,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     }
 
     @Override
-    public void settingsPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.matches(ENABLE_EXPERIMENTAL_PREFS_KEY)) {
             Log.d(LOGTAG, "Editing Preference Changed");
             mIsExperimentalMode = sharedPreferences.getBoolean(ENABLE_EXPERIMENTAL_PREFS_KEY, false);
