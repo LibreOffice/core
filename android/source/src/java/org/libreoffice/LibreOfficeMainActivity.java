@@ -458,8 +458,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Shared
     protected void onResume() {
         super.onResume();
         Log.i(LOGTAG, "onResume..");
-        // check for config change
-        updatePreferences();
         if (mToolbarController.getEditModeStatus() && isExperimentalMode()) {
             mToolbarController.switchToEditMode();
         } else {
@@ -847,10 +845,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Shared
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.matches(ENABLE_EXPERIMENTAL_PREFS_KEY)) {
-            Log.d(LOGTAG, "Editing Preference Changed");
-            mIsExperimentalMode = sharedPreferences.getBoolean(ENABLE_EXPERIMENTAL_PREFS_KEY, false);
-        }
+        updatePreferences();
     }
 
     public void promptForPassword() {
