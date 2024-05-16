@@ -310,7 +310,7 @@ bool SdStyleSheet::IsUsed() const
                     try
                     {
                         Reference<XPropertySet> xPropertySet(xStyle, UNO_QUERY_THROW);
-                        if (xPropertySet->getPropertyValue("IsPhysical").get<bool>())
+                        if (xPropertySet->getPropertyValue(u"IsPhysical"_ustr).get<bool>())
                             return true;
                     }
                     catch (const Exception&)
@@ -699,12 +699,12 @@ OUString SdStyleSheet::GetFamilyString( SfxStyleFamily eFamily )
     switch( eFamily )
     {
     case SfxStyleFamily::Frame:
-        return "cell";
+        return u"cell"_ustr;
     default:
         OSL_FAIL( "SdStyleSheet::GetFamilyString(), illegal family!" );
         [[fallthrough]];
     case SfxStyleFamily::Para:
-        return "graphics";
+        return u"graphics"_ustr;
     }
 }
 
@@ -867,7 +867,7 @@ void SdStyleSheet::notifyModifyListener()
 // XServiceInfo
 OUString SAL_CALL SdStyleSheet::getImplementationName()
 {
-    return "SdStyleSheet";
+    return u"SdStyleSheet"_ustr;
 }
 
 sal_Bool SAL_CALL SdStyleSheet::supportsService( const OUString& ServiceName )
@@ -877,16 +877,16 @@ sal_Bool SAL_CALL SdStyleSheet::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL SdStyleSheet::getSupportedServiceNames()
 {
-    return { "com.sun.star.style.Style",
-             "com.sun.star.drawing.FillProperties",
-             "com.sun.star.drawing.LineProperties",
-             "com.sun.star.drawing.ShadowProperties",
-             "com.sun.star.drawing.ConnectorProperties",
-             "com.sun.star.drawing.MeasureProperties",
-             "com.sun.star.style.ParagraphProperties",
-             "com.sun.star.style.CharacterProperties",
-             "com.sun.star.drawing.TextProperties",
-             "com.sun.star.drawing.Text" };
+    return { u"com.sun.star.style.Style"_ustr,
+             u"com.sun.star.drawing.FillProperties"_ustr,
+             u"com.sun.star.drawing.LineProperties"_ustr,
+             u"com.sun.star.drawing.ShadowProperties"_ustr,
+             u"com.sun.star.drawing.ConnectorProperties"_ustr,
+             u"com.sun.star.drawing.MeasureProperties"_ustr,
+             u"com.sun.star.style.ParagraphProperties"_ustr,
+             u"com.sun.star.style.CharacterProperties"_ustr,
+             u"com.sun.star.drawing.TextProperties"_ustr,
+             u"com.sun.star.drawing.Text"_ustr };
 }
 
 bool SdStyleSheet::SetName(const OUString& rNewName, bool bReindexNow)
@@ -1040,7 +1040,7 @@ void SdStyleSheet::setPropertyValue_Impl(const OUString& aPropertyName, const cs
             if (css::uno::Reference<css::beans::XPropertySet> xPropSet{ xColumns,
                                                                         css::uno::UNO_QUERY })
             {
-                auto aVal = xPropSet->getPropertyValue("AutomaticDistance");
+                auto aVal = xPropSet->getPropertyValue(u"AutomaticDistance"_ustr);
                 if (sal_Int32 nSpacing; aVal >>= nSpacing)
                     rStyleSet.Put(SdrMetricItem(SDRATTR_TEXTCOLUMNS_SPACING, nSpacing));
             }
@@ -1157,7 +1157,7 @@ css::uno::Any SdStyleSheet::getPropertyValue_Impl(const OUString& PropertyName)
         xCols->setColumnCount(rStyleSet.Get(SDRATTR_TEXTCOLUMNS_NUMBER).GetValue());
         css::uno::Reference<css::beans::XPropertySet> xProp(xIf, css::uno::UNO_QUERY_THROW);
         xProp->setPropertyValue(
-            "AutomaticDistance",
+            u"AutomaticDistance"_ustr,
             css::uno::Any(rStyleSet.Get(SDRATTR_TEXTCOLUMNS_SPACING).GetValue()));
         aAny <<= xIf;
     }

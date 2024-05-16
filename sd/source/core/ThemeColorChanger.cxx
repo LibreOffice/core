@@ -145,7 +145,7 @@ void ThemeColorChanger::doApply(std::shared_ptr<model::ColorSet> const& pColorSe
         return;
 
     ViewShellId nViewShellId = pViewShell->GetViewShellBase().GetViewShellId();
-    pUndoManager->EnterListAction(SvxResId(RID_SVXSTR_UNDO_THEME_COLOR_CHANGE), "", 0,
+    pUndoManager->EnterListAction(SvxResId(RID_SVXSTR_UNDO_THEME_COLOR_CHANGE), u""_ustr, 0,
                                   nViewShellId);
 
     changeStyles(mpDocShell, pColorSet);

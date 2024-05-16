@@ -349,7 +349,7 @@ void
 lcl_removeUnusedTableStyles(SdStyleSheetPool* const pStyleSheetPool, XStyleVector const & rStyles)
 {
     css::uno::Reference<css::container::XNameContainer> xTableFamily(
-        pStyleSheetPool->getByName("table"), css::uno::UNO_QUERY);
+        pStyleSheetPool->getByName(u"table"_ustr), css::uno::UNO_QUERY);
     if (!xTableFamily)
         return;
 
@@ -494,7 +494,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
         ViewShellId nViewShellId(-1);
         if (sd::ViewShell* pViewShell = mpDocSh->GetViewShell())
             nViewShellId = pViewShell->GetViewShellBase().GetViewShellId();
-        pUndoMgr->EnterListAction(SdResId(STR_UNDO_INSERTPAGES), "", 0, nViewShellId);
+        pUndoMgr->EnterListAction(SdResId(STR_UNDO_INSERTPAGES), u""_ustr, 0, nViewShellId);
     }
 
     // Refactored copy'n'pasted layout name collection into IterateBookmarkPages
@@ -542,7 +542,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
                 uno::Reference<beans::XPropertySet> xPropSet(xOldPage, uno::UNO_QUERY_THROW);
                 if (xPropSet.is())
                 {
-                    uno::Any aLayoutID = xPropSet->getPropertyValue("SlideLayout");
+                    uno::Any aLayoutID = xPropSet->getPropertyValue(u"SlideLayout"_ustr);
                     if (aLayoutID.hasValue()) {
                         aLayoutID >>= nLayout;
                     }
@@ -947,7 +947,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
                     {
                         nLayout = it->second;
                     }
-                    xNewPropSet->setPropertyValue("SlideLayout", uno::Any(nLayout));
+                    xNewPropSet->setPropertyValue(u"SlideLayout"_ustr, uno::Any(nLayout));
                 }
             }
             else        // Can only be notes

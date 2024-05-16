@@ -1144,7 +1144,7 @@ void SdDrawDocument::InitLayoutVector()
         {
             // loop over every layout entry in current file
             const Reference<XDocument> xDoc = xDocBuilder->parseURI( sFilename );
-            const Reference<XNodeList> layoutlist = xDoc->getElementsByTagName("layout");
+            const Reference<XNodeList> layoutlist = xDoc->getElementsByTagName(u"layout"_ustr);
             const int nElements = layoutlist->getLength();
             for(int index=0; index < nElements; index++)
                 maLayoutInfo.push_back( layoutlist->item(index) );
@@ -1181,7 +1181,7 @@ void SdDrawDocument::InitObjectVector()
         {
             // loop over every object entry in current file
             const Reference<XDocument> xDoc = xDocBuilder->parseURI( sFilename );
-            const Reference<XNodeList> objectlist = xDoc->getElementsByTagName("object");
+            const Reference<XNodeList> objectlist = xDoc->getElementsByTagName(u"object"_ustr);
             const int nElements = objectlist->getLength();
             for(int index=0; index < nElements; index++)
                 maPresObjectInfo.push_back( objectlist->item(index) );

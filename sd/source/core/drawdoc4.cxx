@@ -299,7 +299,7 @@ void SdDrawDocument::CreateLayoutTemplates()
         pSheet = &(pSSPool->Make(aTextName, SfxStyleFamily::Para, nMask));
         pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXT );
         pISet = &pSheet->GetItemSet();
-        aSvxFontItem.SetFamilyName("Noto Sans");
+        aSvxFontItem.SetFamilyName(u"Noto Sans"_ustr);
         pISet->Put( aSvxFontItem );                                        // Noto Sans
         pISet->Put(XFillStyleItem(drawing::FillStyle_SOLID));              // solid fill
         pISet->Put(XFillColorItem(OUString(), Color(0xeeeeee)));           // light gray 5
@@ -398,7 +398,7 @@ void SdDrawDocument::CreateLayoutTemplates()
         pSheet = &(pSSPool->Make(aGraphicName, SfxStyleFamily::Para, nMask));
         pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_GRAPHIC );
         pISet = &pSheet->GetItemSet();
-        aSvxFontItem.SetFamilyName("Liberation Sans");                     // Liberation Sans
+        aSvxFontItem.SetFamilyName(u"Liberation Sans"_ustr);                     // Liberation Sans
         pISet->Put( aSvxFontItem );
         pISet->Put( SvxFontHeightItem(635, 100, EE_CHAR_FONTHEIGHT) );     // 18 pt
         pISet->Put( XFillStyleItem(drawing::FillStyle_SOLID) );            // solid fill
@@ -632,12 +632,12 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     Reference<css::uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
     Reference<css::document::XImporter> xImporter(xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-        "com.sun.star.comp.Draw.XMLOasisStylesImporter",
-        { Any(comphelper::makePropertyValue("OrganizerMode", true)) }, xContext), UNO_QUERY);
+        u"com.sun.star.comp.Draw.XMLOasisStylesImporter"_ustr,
+        { Any(comphelper::makePropertyValue(u"OrganizerMode"_ustr, true)) }, xContext), UNO_QUERY);
     if (xImporter)
         xImporter->setTargetDocument(mpDocSh->GetModel());
 
-    OUString aURL("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/config/soffice.cfg/simpress/styles.xml");
+    OUString aURL(u"$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/config/soffice.cfg/simpress/styles.xml"_ustr);
     rtl::Bootstrap::expandMacros(aURL);
     SvFileStream aFile(aURL, StreamMode::READ);
 
@@ -663,7 +663,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
                                  aCTLFont.GetCharSet(), EE_CHAR_FONTINFO_CTL );
 
     SdStyleSheetPool* pSSPool = static_cast<SdStyleSheetPool*>(GetStyleSheetPool());
-    SfxStyleSheetBase* pDefaultStyle = pSSPool->Find("default", SfxStyleFamily::Frame);
+    SfxStyleSheetBase* pDefaultStyle = pSSPool->Find(u"default"_ustr, SfxStyleFamily::Frame);
     if (pDefaultStyle)
     {
         SfxItemSet& rSet(pDefaultStyle->GetItemSet());
@@ -683,7 +683,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
         pSheet = pSSPool->Next();
     }
 
-    Reference<form::XReset> xReset(pSSPool->getByName("table"), UNO_QUERY);
+    Reference<form::XReset> xReset(pSSPool->getByName(u"table"_ustr), UNO_QUERY);
     if (xReset)
         xReset->reset();
 }

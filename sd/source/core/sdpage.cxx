@@ -365,7 +365,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
         case PresObjKind::Chart:
         {
             pSdrObj = new SdrOle2Obj(getSdrModelFromSdrPage());
-            static_cast<SdrOle2Obj*>(pSdrObj.get())->SetProgName( "StarChart" );
+            static_cast<SdrOle2Obj*>(pSdrObj.get())->SetProgName( u"StarChart"_ustr );
             BitmapEx aBmpEx(BMP_PRESOBJ_CHART);
             Graphic aGraphic( aBmpEx );
             static_cast<SdrOle2Obj*>(pSdrObj.get())->SetGraphic(aGraphic);
@@ -375,7 +375,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
         case PresObjKind::OrgChart:
         {
             pSdrObj = new SdrOle2Obj(getSdrModelFromSdrPage());
-            static_cast<SdrOle2Obj*>(pSdrObj.get())->SetProgName( "StarOrg" );
+            static_cast<SdrOle2Obj*>(pSdrObj.get())->SetProgName( u"StarOrg"_ustr );
             BitmapEx aBmpEx(BMP_PRESOBJ_ORGCHART);
             Graphic aGraphic( aBmpEx );
             static_cast<SdrOle2Obj*>(pSdrObj.get())->SetGraphic(aGraphic);
@@ -386,7 +386,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
         case PresObjKind::Calc:
         {
             pSdrObj = new SdrOle2Obj(getSdrModelFromSdrPage());
-            static_cast<SdrOle2Obj*>(pSdrObj.get())->SetProgName( "StarCalc" );
+            static_cast<SdrOle2Obj*>(pSdrObj.get())->SetProgName( u"StarCalc"_ustr );
             BitmapEx aBmpEx(BMP_PRESOBJ_TABLE);
             Graphic aGraphic( aBmpEx );
             static_cast<SdrOle2Obj*>(pSdrObj.get())->SetGraphic(aGraphic);
@@ -916,7 +916,7 @@ void getPresObjProp( const SdPage& rPage, const char* sObjKind, const char* sPag
         if(bNoObjectFound)
         {
             Reference<XNamedNodeMap> objectattrlist = objectNode->getAttributes();
-            Reference<XNode> objectattr = objectattrlist->getNamedItem("type");
+            Reference<XNode> objectattr = objectattrlist->getNamedItem(u"type"_ustr);
             OUString sObjType = objectattr->getNodeValue();
 
             if (sObjType.equalsAscii(sObjKind))
@@ -933,24 +933,24 @@ void getPresObjProp( const SdPage& rPage, const char* sObjKind, const char* sPag
                     if(nodename == "object-prop")
                     {
                         Reference<XNamedNodeMap> ObjAttributes = obj->getAttributes();
-                        Reference<XNode> ObjPageKind = ObjAttributes->getNamedItem("pagekind");
+                        Reference<XNode> ObjPageKind = ObjAttributes->getNamedItem(u"pagekind"_ustr);
                         OUString sObjPageKind = ObjPageKind->getNodeValue();
 
                         if (sObjPageKind.equalsAscii(sPageKind))
                         {
-                            Reference<XNode> ObjSizeHeight = ObjAttributes->getNamedItem("relative-height");
+                            Reference<XNode> ObjSizeHeight = ObjAttributes->getNamedItem(u"relative-height"_ustr);
                             OUString sValue = ObjSizeHeight->getNodeValue();
                             presObjPropValue[0] = sValue.toDouble();
 
-                            Reference<XNode> ObjSizeWidth = ObjAttributes->getNamedItem("relative-width");
+                            Reference<XNode> ObjSizeWidth = ObjAttributes->getNamedItem(u"relative-width"_ustr);
                             sValue = ObjSizeWidth->getNodeValue();
                             presObjPropValue[1] = sValue.toDouble();
 
-                            Reference<XNode> ObjPosX = ObjAttributes->getNamedItem("relative-posX");
+                            Reference<XNode> ObjPosX = ObjAttributes->getNamedItem(u"relative-posX"_ustr);
                             sValue = ObjPosX->getNodeValue();
                             presObjPropValue[2] = sValue.toDouble();
 
-                            Reference<XNode> ObjPosY = ObjAttributes->getNamedItem("relative-posY");
+                            Reference<XNode> ObjPosY = ObjAttributes->getNamedItem(u"relative-posY"_ustr);
                             sValue = ObjPosY->getNodeValue();
                             presObjPropValue[3] = sValue.toDouble();
 
@@ -1387,7 +1387,7 @@ static void CalcAutoLayoutRectangles( SdPage const & rPage,::tools::Rectangle* r
             Reference<XNamedNodeMap> layoutAttrList = layoutNode->getAttributes();
 
             // get the attribute value of layout (i.e it's type)
-            OUString sLayoutAttName = layoutAttrList->getNamedItem("type")->getNodeValue();
+            OUString sLayoutAttName = layoutAttrList->getNamedItem(u"type"_ustr)->getNodeValue();
             return sLayoutAttName == sLayoutType;
         });
     if (aIter == layoutInfo.end())
@@ -1411,19 +1411,19 @@ static void CalcAutoLayoutRectangles( SdPage const & rPage,::tools::Rectangle* r
 
             Reference<XNamedNodeMap> presObjAttributes = presobj->getAttributes();
 
-            Reference<XNode> presObjSizeHeight = presObjAttributes->getNamedItem("relative-height");
+            Reference<XNode> presObjSizeHeight = presObjAttributes->getNamedItem(u"relative-height"_ustr);
             OUString sValue = presObjSizeHeight->getNodeValue();
             propvalue[0] = sValue.toDouble();
 
-            Reference<XNode> presObjSizeWidth = presObjAttributes->getNamedItem("relative-width");
+            Reference<XNode> presObjSizeWidth = presObjAttributes->getNamedItem(u"relative-width"_ustr);
             sValue = presObjSizeWidth->getNodeValue();
             propvalue[1] = sValue.toDouble();
 
-            Reference<XNode> presObjPosX = presObjAttributes->getNamedItem("relative-posX");
+            Reference<XNode> presObjPosX = presObjAttributes->getNamedItem(u"relative-posX"_ustr);
             sValue = presObjPosX->getNodeValue();
             propvalue[2] = sValue.toDouble();
 
-            Reference<XNode> presObjPosY = presObjAttributes->getNamedItem("relative-posY");
+            Reference<XNode> presObjPosY = presObjAttributes->getNamedItem(u"relative-posY"_ustr);
             sValue = presObjPosY->getNodeValue();
             propvalue[3] = sValue.toDouble();
 

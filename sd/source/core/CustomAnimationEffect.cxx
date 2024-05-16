@@ -580,7 +580,7 @@ bool CustomAnimationEffect::checkForText( const std::vector<sal_Int32>* paragrap
                             xEnumeration->nextElement() >>= xParaSet;
                             if( xParaSet.is() )
                             {
-                                xParaSet->getPropertyValue( "NumberingLevel" ) >>= nParaDepth;
+                                xParaSet->getPropertyValue( u"NumberingLevel"_ustr ) >>= nParaDepth;
                             }
                         }
                     }
@@ -1678,7 +1678,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
 
     if( pPreset )
     {
-        Reference< XAnimationNode > xNode( pPreset->create( "" ) );
+        Reference< XAnimationNode > xNode( pPreset->create( u""_ustr ) );
         if( xNode.is() )
         {
             // first, filter all only ui relevant user data
@@ -1803,7 +1803,7 @@ void EffectSequenceHelper::replace( const CustomAnimationEffectPtr& pEffect, con
 
 void EffectSequenceHelper::replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pPreset, double fDuration /* = -1.0 */ )
 {
-    replace( pEffect, pPreset, "", fDuration );
+    replace( pEffect, pPreset, u""_ustr, fDuration );
 }
 
 void EffectSequenceHelper::remove( const CustomAnimationEffectPtr& pEffect )
@@ -2190,7 +2190,7 @@ bool EffectSequenceHelper::getParagraphNumberingLevels( const Reference< XShape 
                     sal_Int32 nParaDepth = 0;
                     if( xParaSet.is() )
                     {
-                        xParaSet->getPropertyValue( "NumberingLevel" ) >>= nParaDepth;
+                        xParaSet->getPropertyValue( u"NumberingLevel"_ustr ) >>= nParaDepth;
                     }
 
                     rParagraphNumberingLevel.push_back( nParaDepth );
@@ -3062,7 +3062,7 @@ MainSequence::MainSequence()
     if( mxTimingRootNode.is() )
     {
         Sequence< css::beans::NamedValue > aUserData
-            { { "node-type", css::uno::Any(css::presentation::EffectNodeType::MAIN_SEQUENCE) } };
+            { { u"node-type"_ustr, css::uno::Any(css::presentation::EffectNodeType::MAIN_SEQUENCE) } };
         mxTimingRootNode->setUserData( aUserData );
     }
     init();
@@ -3150,7 +3150,7 @@ void MainSequence::createMainSequence()
             mxSequenceRoot = SequenceTimeContainer::create( ::comphelper::getProcessComponentContext() );
 
             uno::Sequence< css::beans::NamedValue > aUserData
-                { { "node-type", css::uno::Any(css::presentation::EffectNodeType::MAIN_SEQUENCE) } };
+                { { u"node-type"_ustr, css::uno::Any(css::presentation::EffectNodeType::MAIN_SEQUENCE) } };
             mxSequenceRoot->setUserData( aUserData );
 
             // empty sequence until now, set duration to 0.0
@@ -3207,7 +3207,7 @@ InteractiveSequencePtr MainSequence::createInteractiveSequence( const css::uno::
     Reference< XTimeContainer > xISRoot = SequenceTimeContainer::create( ::comphelper::getProcessComponentContext() );
 
     uno::Sequence< css::beans::NamedValue > aUserData
-        { { "node-type", css::uno::Any(css::presentation::EffectNodeType::INTERACTIVE_SEQUENCE) } };
+        { { u"node-type"_ustr, css::uno::Any(css::presentation::EffectNodeType::INTERACTIVE_SEQUENCE) } };
     xISRoot->setUserData( aUserData );
     xISRoot->setRestart( css::animations::AnimationRestart::WHEN_NOT_ACTIVE );
 

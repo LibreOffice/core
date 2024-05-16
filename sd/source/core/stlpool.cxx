@@ -1109,7 +1109,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                     SvxNumberFormat aFrmt( pDefaultRule->GetLevel(i) );
                     aFrmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                     // #i93908# clear suffix for bullet lists
-                    aFrmt.SetListFormat("", "", i);
+                    aFrmt.SetListFormat(u""_ustr, u""_ustr, i);
                     aFrmt.SetStart(1);
                     aFrmt.SetBulletRelSize(45);
                     aFrmt.SetBulletChar( 0x25CF );  // StarBats: 0xF000 + 34
@@ -1156,7 +1156,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
 
 vcl::Font SdStyleSheetPool::GetBulletFont()
 {
-    vcl::Font aBulletFont( "OpenSymbol", Size(0, 1000) );
+    vcl::Font aBulletFont( u"OpenSymbol"_ustr, Size(0, 1000) );
     aBulletFont.SetCharSet(RTL_TEXTENCODING_UNICODE);
     aBulletFont.SetWeight(WEIGHT_NORMAL);
     aBulletFont.SetUnderline(LINESTYLE_NONE);
@@ -1204,7 +1204,7 @@ void SdStyleSheetPool::throwIfDisposed()
 // XServiceInfo
 OUString SAL_CALL SdStyleSheetPool::getImplementationName()
 {
-    return "SdStyleSheetPool";
+    return u"SdStyleSheetPool"_ustr;
 }
 
 sal_Bool SAL_CALL SdStyleSheetPool::supportsService( const OUString& ServiceName )
@@ -1214,7 +1214,7 @@ sal_Bool SAL_CALL SdStyleSheetPool::supportsService( const OUString& ServiceName
 
 Sequence< OUString > SAL_CALL SdStyleSheetPool::getSupportedServiceNames()
 {
-    return { "com.sun.star.style.StyleFamilies" };
+    return { u"com.sun.star.style.StyleFamilies"_ustr };
 }
 
 // XNameAccess

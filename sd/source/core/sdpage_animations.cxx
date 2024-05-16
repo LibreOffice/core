@@ -50,7 +50,7 @@ Reference< XAnimationNode > const & SdPage::getAnimationNode()
     {
         mxAnimationNode.set( ParallelTimeContainer::create( ::comphelper::getProcessComponentContext() ), UNO_QUERY_THROW );
         Sequence< css::beans::NamedValue > aUserData
-            { { "node-type", css::uno::Any(css::presentation::EffectNodeType::TIMING_ROOT) } };
+            { { u"node-type"_ustr, css::uno::Any(css::presentation::EffectNodeType::TIMING_ROOT) } };
         mxAnimationNode->setUserData( aUserData );
     }
 

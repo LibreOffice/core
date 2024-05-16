@@ -133,7 +133,7 @@ geometry::RealPoint2D SAL_CALL Annotation::getPosition()
 
 void SAL_CALL Annotation::setPosition(const geometry::RealPoint2D & the_value)
 {
-    prepareSet("Position", uno::Any(), uno::Any(), nullptr);
+    prepareSet(u"Position"_ustr, uno::Any(), uno::Any(), nullptr);
     {
         std::unique_lock g(m_aMutex);
         createChangeUndoImpl(g);
@@ -150,7 +150,7 @@ geometry::RealSize2D SAL_CALL Annotation::getSize()
 
 void SAL_CALL Annotation::setSize(const geometry::RealSize2D & the_value)
 {
-    prepareSet("Size", uno::Any(), uno::Any(), nullptr);
+    prepareSet(u"Size"_ustr, uno::Any(), uno::Any(), nullptr);
     {
         std::unique_lock g(m_aMutex);
         createChangeUndoImpl(g);
@@ -166,7 +166,7 @@ OUString SAL_CALL Annotation::getAuthor()
 
 void SAL_CALL Annotation::setAuthor(const OUString & the_value)
 {
-    prepareSet("Author", uno::Any(), uno::Any(), nullptr);
+    prepareSet(u"Author"_ustr, uno::Any(), uno::Any(), nullptr);
     {
         std::unique_lock g(m_aMutex);
         createChangeUndoImpl(g);
@@ -182,7 +182,7 @@ OUString SAL_CALL Annotation::getInitials()
 
 void SAL_CALL Annotation::setInitials(const OUString & the_value)
 {
-    prepareSet("Initials", uno::Any(), uno::Any(), nullptr);
+    prepareSet(u"Initials"_ustr, uno::Any(), uno::Any(), nullptr);
     {
         std::unique_lock g(m_aMutex);
         createChangeUndoImpl(g);
@@ -198,7 +198,7 @@ util::DateTime SAL_CALL Annotation::getDateTime()
 
 void SAL_CALL Annotation::setDateTime(const util::DateTime & the_value)
 {
-    prepareSet("DateTime", uno::Any(), uno::Any(), nullptr);
+    prepareSet(u"DateTime"_ustr, uno::Any(), uno::Any(), nullptr);
     {
         std::unique_lock g(m_aMutex);
         createChangeUndoImpl(g);
@@ -228,7 +228,7 @@ void Annotation::createChangeUndoImpl(std::unique_lock<std::mutex>& g)
         uno::Reference< XInterface > xSource( static_cast<uno::XWeak*>( this ) );
         NotifyDocumentEvent(
             static_cast< SdDrawDocument& >( *pModel ),
-            "OnAnnotationChanged" ,
+            u"OnAnnotationChanged"_ustr ,
             xSource );
     }
 }

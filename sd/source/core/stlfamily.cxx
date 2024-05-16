@@ -170,7 +170,7 @@ SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName )
 // XServiceInfo
 OUString SAL_CALL SdStyleFamily::getImplementationName()
 {
-    return "SdStyleFamily";
+    return u"SdStyleFamily"_ustr;
 }
 
 sal_Bool SAL_CALL SdStyleFamily::supportsService( const OUString& ServiceName )
@@ -180,7 +180,7 @@ sal_Bool SAL_CALL SdStyleFamily::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL SdStyleFamily::getSupportedServiceNames()
 {
-    return { "com.sun.star.style.StyleFamily" };
+    return { u"com.sun.star.style.StyleFamily"_ustr };
 }
 
 // XNamed

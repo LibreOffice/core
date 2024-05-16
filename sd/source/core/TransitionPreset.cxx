@@ -250,8 +250,8 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
                         OUString sSet;
                         OUString sVariant;
 
-                        xTransitionNode->getByName( "Set" ) >>= sSet;
-                        xTransitionNode->getByName( "Variant" ) >>= sVariant;
+                        xTransitionNode->getByName( u"Set"_ustr ) >>= sSet;
+                        xTransitionNode->getByName( u"Variant"_ustr ) >>= sVariant;
 
                         Reference< container::XNameAccess > xSetNode;
 
@@ -259,26 +259,26 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
                         if( xSetNode.is() )
                         {
                             pPreset->maSetId = sSet;
-                            xSetNode->getByName( "Label" ) >>= sSet;
+                            xSetNode->getByName( u"Label"_ustr ) >>= sSet;
                             pPreset->maSetLabel = sSet;
 
                             OUString sGroup;
 
-                            xSetNode->getByName( "Group" ) >>= sGroup;
+                            xSetNode->getByName( u"Group"_ustr ) >>= sGroup;
 
                             Reference< container::XNameAccess > xGroupNode;
                             xTransitionGroups->getByName( sGroup ) >>= xGroupNode;
 
                             if( xGroupNode.is() )
                             {
-                                xGroupNode->getByName( "Label" ) >>= sGroup;
+                                xGroupNode->getByName( u"Label"_ustr ) >>= sGroup;
                                 if( !sVariant.isEmpty() )
                                 {
                                     Reference< container::XNameAccess > xVariantNode;
                                     xTransitionVariants->getByName( sVariant ) >>= xVariantNode;
                                     if( xVariantNode.is() )
                                     {
-                                        xVariantNode->getByName( "Label" ) >>= sVariant;
+                                        xVariantNode->getByName( u"Label"_ustr ) >>= sVariant;
                                         pPreset->maVariantLabel = sVariant;
                                     }
                                 }
