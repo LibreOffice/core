@@ -94,7 +94,7 @@ PresenterScrollBar::PresenterScrollBar (
 
         mxPresenterHelper.set(
             xFactory->createInstanceWithContext(
-                "com.sun.star.comp.Draw.PresenterHelper",
+                u"com.sun.star.comp.Draw.PresenterHelper"_ustr,
                 rxComponentContext),
             UNO_QUERY_THROW);
 
@@ -674,14 +674,14 @@ void PresenterVerticalScrollBar::UpdateBitmaps()
     if (mpBitmaps == nullptr)
         return;
 
-    mpPrevButtonDescriptor = mpBitmaps->GetBitmap("Up");
-    mpNextButtonDescriptor = mpBitmaps->GetBitmap("Down");
-    mpPagerStartDescriptor = mpBitmaps->GetBitmap("PagerTop");
-    mpPagerCenterDescriptor = mpBitmaps->GetBitmap("PagerVertical");
-    mpPagerEndDescriptor = mpBitmaps->GetBitmap("PagerBottom");
-    mpThumbStartDescriptor = mpBitmaps->GetBitmap("ThumbTop");
-    mpThumbCenterDescriptor = mpBitmaps->GetBitmap("ThumbVertical");
-    mpThumbEndDescriptor = mpBitmaps->GetBitmap("ThumbBottom");
+    mpPrevButtonDescriptor = mpBitmaps->GetBitmap(u"Up"_ustr);
+    mpNextButtonDescriptor = mpBitmaps->GetBitmap(u"Down"_ustr);
+    mpPagerStartDescriptor = mpBitmaps->GetBitmap(u"PagerTop"_ustr);
+    mpPagerCenterDescriptor = mpBitmaps->GetBitmap(u"PagerVertical"_ustr);
+    mpPagerEndDescriptor = mpBitmaps->GetBitmap(u"PagerBottom"_ustr);
+    mpThumbStartDescriptor = mpBitmaps->GetBitmap(u"ThumbTop"_ustr);
+    mpThumbCenterDescriptor = mpBitmaps->GetBitmap(u"ThumbVertical"_ustr);
+    mpThumbEndDescriptor = mpBitmaps->GetBitmap(u"ThumbBottom"_ustr);
 
     mnScrollBarWidth = 0;
     UpdateWidthOrHeight(mnScrollBarWidth, mpPrevButtonDescriptor);

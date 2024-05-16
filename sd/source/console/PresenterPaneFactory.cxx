@@ -69,7 +69,7 @@ void PresenterPaneFactory::Register (const rtl::Reference<::sd::DrawController>&
             throw RuntimeException();
         }
         xCC->addResourceFactory(
-            "private:resource/pane/Presenter/*",
+            u"private:resource/pane/Presenter/*"_ustr,
              this);
     }
     catch (RuntimeException&)
@@ -273,7 +273,7 @@ void PresenterPaneFactory::ThrowIfDisposed() const
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            "PresenterPaneFactory object has already been disposed",
+            u"PresenterPaneFactory object has already been disposed"_ustr,
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }

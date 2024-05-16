@@ -47,7 +47,7 @@ PresenterBitmapContainer::PresenterBitmapContainer (
     // Get access to the configuration.
     PresenterConfigurationAccess aConfiguration (
         rxComponentContext,
-        "org.openoffice.Office.PresenterScreen",
+        u"org.openoffice.Office.PresenterScreen"_ustr,
         PresenterConfigurationAccess::READ_ONLY);
     Reference<container::XNameAccess> xBitmapList (
         aConfiguration.GetConfigurationNode(rsConfigurationBase),
@@ -85,7 +85,7 @@ void PresenterBitmapContainer::Initialize (
         return;
     mxPresenterHelper.set(
         xFactory->createInstanceWithContext(
-            "com.sun.star.drawing.PresenterHelper",
+            u"com.sun.star.drawing.PresenterHelper"_ustr,
             rxComponentContext),
         UNO_QUERY_THROW);
 }
@@ -172,7 +172,7 @@ void PresenterBitmapContainer::ProcessBitmap (
     const Reference<beans::XPropertySet>& rxProperties)
 {
     OUString sName;
-    if ( ! (PresenterConfigurationAccess::GetProperty(rxProperties, "Name") >>= sName))
+    if ( ! (PresenterConfigurationAccess::GetProperty(rxProperties, u"Name"_ustr) >>= sName))
         sName = rsKey;
 
     maIconContainer[sName] = LoadBitmap(
@@ -199,7 +199,7 @@ std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> PresenterBitmapConta
     OUString sFileName;
 
     // Load bitmaps.
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, "NormalFileName") >>= sFileName)
+    if (PresenterConfigurationAccess::GetProperty(rxProperties, u"NormalFileName"_ustr) >>= sFileName)
         try
         {
             pBitmap->SetBitmap(
@@ -208,7 +208,7 @@ std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> PresenterBitmapConta
         }
         catch (Exception&)
         {}
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, "MouseOverFileName") >>= sFileName)
+    if (PresenterConfigurationAccess::GetProperty(rxProperties, u"MouseOverFileName"_ustr) >>= sFileName)
         try
         {
             pBitmap->SetBitmap(
@@ -217,7 +217,7 @@ std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> PresenterBitmapConta
         }
         catch (Exception&)
         {}
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, "ButtonDownFileName") >>= sFileName)
+    if (PresenterConfigurationAccess::GetProperty(rxProperties, u"ButtonDownFileName"_ustr) >>= sFileName)
         try
         {
             pBitmap->SetBitmap(
@@ -226,7 +226,7 @@ std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> PresenterBitmapConta
         }
         catch (Exception&)
         {}
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, "DisabledFileName") >>= sFileName)
+    if (PresenterConfigurationAccess::GetProperty(rxProperties, u"DisabledFileName"_ustr) >>= sFileName)
         try
         {
             pBitmap->SetBitmap(
@@ -235,7 +235,7 @@ std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> PresenterBitmapConta
         }
         catch (Exception&)
         {}
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, "MaskFileName") >>= sFileName)
+    if (PresenterConfigurationAccess::GetProperty(rxProperties, u"MaskFileName"_ustr) >>= sFileName)
         try
         {
             pBitmap->SetBitmap(
@@ -245,18 +245,18 @@ std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> PresenterBitmapConta
         catch (Exception&)
         {}
 
-    PresenterConfigurationAccess::GetProperty(rxProperties, "XOffset") >>= pBitmap->mnXOffset;
-    PresenterConfigurationAccess::GetProperty(rxProperties, "YOffset") >>= pBitmap->mnYOffset;
+    PresenterConfigurationAccess::GetProperty(rxProperties, u"XOffset"_ustr) >>= pBitmap->mnXOffset;
+    PresenterConfigurationAccess::GetProperty(rxProperties, u"YOffset"_ustr) >>= pBitmap->mnYOffset;
 
-    PresenterConfigurationAccess::GetProperty(rxProperties, "XHotSpot") >>= pBitmap->mnXHotSpot;
-    PresenterConfigurationAccess::GetProperty(rxProperties, "YHotSpot") >>= pBitmap->mnYHotSpot;
+    PresenterConfigurationAccess::GetProperty(rxProperties, u"XHotSpot"_ustr) >>= pBitmap->mnXHotSpot;
+    PresenterConfigurationAccess::GetProperty(rxProperties, u"YHotSpot"_ustr) >>= pBitmap->mnYHotSpot;
 
-    PresenterConfigurationAccess::GetProperty(rxProperties, "ReplacementColor") >>= pBitmap->maReplacementColor;
+    PresenterConfigurationAccess::GetProperty(rxProperties, u"ReplacementColor"_ustr) >>= pBitmap->maReplacementColor;
 
     OUString sTexturingMode;
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, "HorizontalTexturingMode") >>= sTexturingMode)
+    if (PresenterConfigurationAccess::GetProperty(rxProperties, u"HorizontalTexturingMode"_ustr) >>= sTexturingMode)
         pBitmap->meHorizontalTexturingMode = StringToTexturingMode(sTexturingMode);
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, "VerticalTexturingMode") >>= sTexturingMode)
+    if (PresenterConfigurationAccess::GetProperty(rxProperties, u"VerticalTexturingMode"_ustr) >>= sTexturingMode)
         pBitmap->meVerticalTexturingMode = StringToTexturingMode(sTexturingMode);
 
     return pBitmap;

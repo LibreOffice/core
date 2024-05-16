@@ -259,7 +259,7 @@ std::shared_ptr<PresenterTheme::Theme> PresenterTheme::ReadTheme()
 
     PresenterConfigurationAccess aConfiguration (
         mxContext,
-        "/org.openoffice.Office.PresenterScreen/",
+        u"/org.openoffice.Office.PresenterScreen/"_ustr,
         PresenterConfigurationAccess::READ_ONLY);
 
     return aReadContext.ReadTheme(aConfiguration, OUString());
@@ -352,7 +352,7 @@ std::shared_ptr<PresenterConfigurationAccess> PresenterTheme::GetNodeForViewStyl
             [&rsStyleName] (OUString const&, uno::Reference<beans::XPropertySet> const& xProps)
             {
                 return PresenterConfigurationAccess::IsStringPropertyEqual(
-                        rsStyleName, "StyleName", xProps);
+                        rsStyleName, u"StyleName"_ustr, xProps);
             });
     }
     return pConfiguration;
@@ -466,7 +466,7 @@ PresenterTheme::FontDescriptor::FontDescriptor (
     const std::shared_ptr<FontDescriptor>& rpDescriptor)
     : mnSize(12),
       mnColor(0x00000000),
-      msAnchor(OUString("Left")),
+      msAnchor(u"Left"_ustr),
       mnXOffset(0),
       mnYOffset(0)
 {
@@ -538,7 +538,7 @@ double PresenterTheme::FontDescriptor::GetCellSizeForDesignSize (
     if ( ! xFont.is())
         return nDesignSize;
 
-    geometry::RealRectangle2D aBox (PresenterCanvasHelper::GetTextBoundingBox (xFont, "X"));
+    geometry::RealRectangle2D aBox (PresenterCanvasHelper::GetTextBoundingBox (xFont, u"X"_ustr));
 
     const double nAscent (-aBox.Y1);
     //tdf#112408
@@ -568,7 +568,7 @@ void PresenterTheme::Theme::Read (
 {
     // Parent theme name.
     OUString sParentThemeName;
-    if ((PresenterConfigurationAccess::GetConfigurationNode(mxThemeRoot, "ParentTheme")
+    if ((PresenterConfigurationAccess::GetConfigurationNode(mxThemeRoot, u"ParentTheme"_ustr)
             >>= sParentThemeName)
         && !sParentThemeName.isEmpty())
     {
@@ -578,7 +578,7 @@ void PresenterTheme::Theme::Read (
     // Background.
     mpBackground = PresenterBitmapContainer::LoadBitmap(
         mxThemeRoot,
-        "Background",
+        u"Background"_ustr,
         rReadContext.mxPresenterHelper,
         rReadContext.mxCanvas,
         SharedBitmapDescriptor());
@@ -595,14 +595,14 @@ void PresenterTheme::Theme::Read (
     // Read bitmaps.
     mpIconContainer = std::make_shared<PresenterBitmapContainer>(
         Reference<container::XNameAccess>(
-            PresenterConfigurationAccess::GetConfigurationNode(mxThemeRoot, "Bitmaps"), UNO_QUERY),
+            PresenterConfigurationAccess::GetConfigurationNode(mxThemeRoot, u"Bitmaps"_ustr), UNO_QUERY),
         mpParentTheme != nullptr ? mpParentTheme->mpIconContainer
                                  : std::shared_ptr<PresenterBitmapContainer>(),
         rReadContext.mxComponentContext, rReadContext.mxCanvas);
 
     // Read fonts.
     Reference<container::XNameAccess> xFontNode(
-        PresenterConfigurationAccess::GetConfigurationNode(mxThemeRoot, "Fonts"),
+        PresenterConfigurationAccess::GetConfigurationNode(mxThemeRoot, u"Fonts"_ustr),
         UNO_QUERY);
     PresenterConfigurationAccess::ForAll(
         xFontNode,
@@ -656,7 +656,7 @@ ReadContext::ReadContext (
     {
         mxPresenterHelper.set(
             xFactory->createInstanceWithContext(
-                "com.sun.star.comp.Draw.PresenterHelper",
+                u"com.sun.star.comp.Draw.PresenterHelper"_ustr,
                 rxContext),
             UNO_QUERY_THROW);
     }
@@ -674,7 +674,7 @@ PresenterTheme::SharedFontDescriptor ReadContext::ReadFont (
         Reference<container::XHierarchicalNameAccess> xFont (
             PresenterConfigurationAccess::GetConfigurationNode(
                 rxNode,
-                /*rsFontPath*/""),
+                /*rsFontPath*/u""_ustr),
                 UNO_QUERY_THROW);
 
         Reference<beans::XPropertySet> xProperties (xFont, UNO_QUERY_THROW);
@@ -694,15 +694,15 @@ PresenterTheme::SharedFontDescriptor ReadContext::ReadFont (
 {
     auto pDescriptor = std::make_shared<PresenterTheme::FontDescriptor>(rpDefault);
 
-    PresenterConfigurationAccess::GetProperty(rxProperties, "FamilyName") >>= pDescriptor->msFamilyName;
-    PresenterConfigurationAccess::GetProperty(rxProperties, "Style") >>= pDescriptor->msStyleName;
-    PresenterConfigurationAccess::GetProperty(rxProperties, "Size") >>= pDescriptor->mnSize;
+    PresenterConfigurationAccess::GetProperty(rxProperties, u"FamilyName"_ustr) >>= pDescriptor->msFamilyName;
+    PresenterConfigurationAccess::GetProperty(rxProperties, u"Style"_ustr) >>= pDescriptor->msStyleName;
+    PresenterConfigurationAccess::GetProperty(rxProperties, u"Size"_ustr) >>= pDescriptor->mnSize;
     PresenterTheme::ConvertToColor(
-        PresenterConfigurationAccess::GetProperty(rxProperties, "Color"),
+        PresenterConfigurationAccess::GetProperty(rxProperties, u"Color"_ustr),
         pDescriptor->mnColor);
-    PresenterConfigurationAccess::GetProperty(rxProperties, "Anchor") >>= pDescriptor->msAnchor;
-    PresenterConfigurationAccess::GetProperty(rxProperties, "XOffset") >>= pDescriptor->mnXOffset;
-    PresenterConfigurationAccess::GetProperty(rxProperties, "YOffset") >>= pDescriptor->mnYOffset;
+    PresenterConfigurationAccess::GetProperty(rxProperties, u"Anchor"_ustr) >>= pDescriptor->msAnchor;
+    PresenterConfigurationAccess::GetProperty(rxProperties, u"XOffset"_ustr) >>= pDescriptor->mnXOffset;
+    PresenterConfigurationAccess::GetProperty(rxProperties, u"YOffset"_ustr) >>= pDescriptor->mnYOffset;
 
     return pDescriptor;
 }
@@ -728,7 +728,7 @@ std::shared_ptr<PresenterTheme::Theme> ReadContext::ReadTheme (
     if (sCurrentThemeName.isEmpty())
     {
          // No theme name given.  Look up the CurrentTheme property.
-         rConfiguration.GetConfigurationNode("Presenter/CurrentTheme") >>= sCurrentThemeName;
+         rConfiguration.GetConfigurationNode(u"Presenter/CurrentTheme"_ustr) >>= sCurrentThemeName;
          if (sCurrentThemeName.isEmpty())
          {
              // Still no name.  Use "DefaultTheme".
@@ -737,7 +737,7 @@ std::shared_ptr<PresenterTheme::Theme> ReadContext::ReadTheme (
     }
 
     Reference<container::XNameAccess> xThemes (
-        rConfiguration.GetConfigurationNode("Presenter/Themes"),
+        rConfiguration.GetConfigurationNode(u"Presenter/Themes"_ustr),
         UNO_QUERY);
     if (xThemes.is())
     {
@@ -750,7 +750,7 @@ std::shared_ptr<PresenterTheme::Theme> ReadContext::ReadTheme (
             if (xTheme.is())
             {
                 OUString sThemeName;
-                PresenterConfigurationAccess::GetConfigurationNode(xTheme, "ThemeName")
+                PresenterConfigurationAccess::GetConfigurationNode(xTheme, u"ThemeName"_ustr)
                     >>= sThemeName;
                 if (sThemeName == sCurrentThemeName)
                 {
@@ -775,10 +775,10 @@ BorderSize ReadContext::ReadBorderSize (const Reference<container::XNameAccess>&
 
     if (rxNode.is())
     {
-        GetByName(rxNode, "Left") >>= aBorderSize.mnLeft;
-        GetByName(rxNode, "Top") >>= aBorderSize.mnTop;
-        GetByName(rxNode, "Right") >>= aBorderSize.mnRight;
-        GetByName(rxNode, "Bottom") >>= aBorderSize.mnBottom;
+        GetByName(rxNode, u"Left"_ustr) >>= aBorderSize.mnLeft;
+        GetByName(rxNode, u"Top"_ustr) >>= aBorderSize.mnTop;
+        GetByName(rxNode, u"Right"_ustr) >>= aBorderSize.mnRight;
+        GetByName(rxNode, u"Bottom"_ustr) >>= aBorderSize.mnBottom;
     }
 
     return aBorderSize;
@@ -793,7 +793,7 @@ void PaneStyleContainer::Read (
     Reference<container::XNameAccess> xPaneStyleList (
         PresenterConfigurationAccess::GetConfigurationNode(
             rxThemeRoot,
-            "PaneStyles"),
+            u"PaneStyles"_ustr),
         UNO_QUERY);
     if (!xPaneStyleList.is())
         return;
@@ -914,7 +914,7 @@ void ViewStyleContainer::Read (
     Reference<container::XNameAccess> xViewStyleList (
         PresenterConfigurationAccess::GetConfigurationNode(
             rxThemeRoot,
-            "ViewStyles"),
+            u"ViewStyles"_ustr),
         UNO_QUERY);
     if (xViewStyleList.is())
     {
@@ -933,11 +933,11 @@ void ViewStyleContainer::ProcessViewStyle(
 {
     auto pStyle = std::make_shared<ViewStyle>();
 
-    PresenterConfigurationAccess::GetProperty(rxProperties, "StyleName")
+    PresenterConfigurationAccess::GetProperty(rxProperties, u"StyleName"_ustr)
         >>= pStyle->msStyleName;
 
     OUString sParentStyleName;
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, "ParentStyle")
+    if (PresenterConfigurationAccess::GetProperty(rxProperties, u"ParentStyle"_ustr)
         >>= sParentStyleName)
     {
         // Find parent style.
@@ -952,14 +952,14 @@ void ViewStyleContainer::ProcessViewStyle(
     }
 
     Reference<container::XHierarchicalNameAccess> xFontNode (
-        PresenterConfigurationAccess::GetProperty(rxProperties, "Font"), UNO_QUERY);
+        PresenterConfigurationAccess::GetProperty(rxProperties, u"Font"_ustr), UNO_QUERY);
     PresenterTheme::SharedFontDescriptor pFont (
         ReadContext::ReadFont(xFontNode, PresenterTheme::SharedFontDescriptor()));
     if (pFont)
         pStyle->mpFont = pFont;
 
     Reference<container::XHierarchicalNameAccess> xBackgroundNode (
-        PresenterConfigurationAccess::GetProperty(rxProperties, "Background"),
+        PresenterConfigurationAccess::GetProperty(rxProperties, u"Background"_ustr),
         UNO_QUERY);
     SharedBitmapDescriptor pBackground (PresenterBitmapContainer::LoadBitmap(
         xBackgroundNode,
@@ -1014,12 +1014,12 @@ void StyleAssociationContainer::Read (
     Reference<container::XNameAccess> xStyleAssociationList (
         PresenterConfigurationAccess::GetConfigurationNode(
             rxThemeRoot,
-            "StyleAssociations"),
+            u"StyleAssociations"_ustr),
         UNO_QUERY);
     if (!xStyleAssociationList.is())
         return;
 
-    ::std::vector<OUString> aProperties { "ResourceURL", "StyleName" };
+    ::std::vector<OUString> aProperties { u"ResourceURL"_ustr, u"StyleName"_ustr };
     PresenterConfigurationAccess::ForAll(
         xStyleAssociationList,
         aProperties,

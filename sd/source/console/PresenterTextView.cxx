@@ -91,7 +91,7 @@ PresenterTextView::PresenterTextView (
     // portions of the same text direction.
     mxScriptTypeDetector.set(
         xFactory->createInstanceWithContext(
-            "com.sun.star.i18n.ScriptTypeDetector",
+            u"com.sun.star.i18n.ScriptTypeDetector"_ustr,
             rxContext),
         UNO_QUERY_THROW);
 }
@@ -454,7 +454,7 @@ PresenterTextParagraph::PresenterTextParagraph (
     Reference<beans::XPropertySet> xProperties (rxTextRange, UNO_QUERY);
     try
     {
-        xProperties->getPropertyValue("WritingMode") >>= mnWritingMode;
+        xProperties->getPropertyValue(u"WritingMode"_ustr) >>= mnWritingMode;
     }
     catch(beans::UnknownPropertyException&)
     {

@@ -324,12 +324,12 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const lang::Locale& rLocale)
     {
-        OUString sName ("Presenter Console");
+        OUString sName (u"Presenter Console"_ustr);
         PresenterConfigurationAccess aConfiguration (
             rxContext,
-            "/org.openoffice.Office.PresenterScreen/",
+            u"/org.openoffice.Office.PresenterScreen/"_ustr,
             PresenterConfigurationAccess::READ_ONLY);
-        aConfiguration.GetConfigurationNode("Presenter/Accessibility/Console/String")
+        aConfiguration.GetConfigurationNode(u"Presenter/Accessibility/Console/String"_ustr)
             >>= sName;
 
         rtl::Reference<PresenterAccessible::AccessibleObject> pObject (
@@ -353,13 +353,13 @@ public:
         const Reference<awt::XWindow>& rxContentWindow,
         const Reference<awt::XWindow>& rxBorderWindow)
     {
-        OUString sName ("Presenter Notes Window");
+        OUString sName (u"Presenter Notes Window"_ustr);
         {
             PresenterConfigurationAccess aConfiguration (
                 rxContext,
-                "/org.openoffice.Office.PresenterScreen/",
+                u"/org.openoffice.Office.PresenterScreen/"_ustr,
                 PresenterConfigurationAccess::READ_ONLY);
-            aConfiguration.GetConfigurationNode("Presenter/Accessibility/Preview/String")
+            aConfiguration.GetConfigurationNode(u"Presenter/Accessibility/Preview/String"_ustr)
                 >>= sName;
         }
 
@@ -763,7 +763,7 @@ Reference<XAccessible> SAL_CALL
     ThrowIfDisposed();
 
     if (nIndex<0 || o3tl::make_unsigned(nIndex)>=maChildren.size())
-        throw lang::IndexOutOfBoundsException("invalid child index", static_cast<uno::XWeak*>(this));
+        throw lang::IndexOutOfBoundsException(u"invalid child index"_ustr, static_cast<uno::XWeak*>(this));
 
     return maChildren[nIndex];
 }
@@ -1181,7 +1181,7 @@ awt::Point PresenterAccessible::AccessibleObject::GetAbsoluteParentLocation()
 void PresenterAccessible::AccessibleObject::ThrowIfDisposed() const
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
-        throw lang::DisposedException("object has already been disposed", uno::Reference<uno::XInterface>(const_cast<uno::XWeak*>(static_cast<uno::XWeak const *>(this))));
+        throw lang::DisposedException(u"object has already been disposed"_ustr, uno::Reference<uno::XInterface>(const_cast<uno::XWeak*>(static_cast<uno::XWeak const *>(this))));
 }
 
 
@@ -1304,7 +1304,7 @@ sal_Unicode SAL_CALL PresenterAccessible::AccessibleParagraph::getCharacter (sal
     ThrowIfDisposed();
 
     if (!mpParagraph)
-        throw lang::IndexOutOfBoundsException("no text support in current mode", static_cast<uno::XWeak*>(this));
+        throw lang::IndexOutOfBoundsException(u"no text support in current mode"_ustr, static_cast<uno::XWeak*>(this));
     return mpParagraph->GetCharacter(nIndex);
 }
 
@@ -1341,7 +1341,7 @@ awt::Rectangle SAL_CALL PresenterAccessible::AccessibleParagraph::getCharacterBo
     awt::Rectangle aCharacterBox;
     if (nIndex < 0)
     {
-        throw lang::IndexOutOfBoundsException("invalid text index", static_cast<uno::XWeak*>(this));
+        throw lang::IndexOutOfBoundsException(u"invalid text index"_ustr, static_cast<uno::XWeak*>(this));
     }
     else if (mpParagraph)
     {
@@ -1354,7 +1354,7 @@ awt::Rectangle SAL_CALL PresenterAccessible::AccessibleParagraph::getCharacterBo
     }
     else
     {
-        throw lang::IndexOutOfBoundsException("no text support in current mode", static_cast<uno::XWeak*>(this));
+        throw lang::IndexOutOfBoundsException(u"no text support in current mode"_ustr, static_cast<uno::XWeak*>(this));
     }
 
     return aCharacterBox;
@@ -1567,13 +1567,13 @@ rtl::Reference<PresenterAccessible::AccessibleObject> AccessibleNotes::Create (
     const Reference<awt::XWindow>& rxBorderWindow,
     const std::shared_ptr<PresenterTextView>& rpTextView)
 {
-    OUString sName ("Presenter Notes Text");
+    OUString sName (u"Presenter Notes Text"_ustr);
     {
         PresenterConfigurationAccess aConfiguration (
             rxContext,
-            "/org.openoffice.Office.PresenterScreen/",
+            u"/org.openoffice.Office.PresenterScreen/"_ustr,
             PresenterConfigurationAccess::READ_ONLY);
-        aConfiguration.GetConfigurationNode("Presenter/Accessibility/Notes/String")
+        aConfiguration.GetConfigurationNode(u"Presenter/Accessibility/Notes/String"_ustr)
             >>= sName;
     }
 

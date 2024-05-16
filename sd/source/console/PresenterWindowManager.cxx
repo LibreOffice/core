@@ -137,7 +137,7 @@ void PresenterWindowManager::SetTheme (const std::shared_ptr<PresenterTheme>& rp
 
     if (mpTheme != nullptr)
     {
-        mpBackgroundBitmap = mpTheme->GetBitmap(OUString(), "Background");
+        mpBackgroundBitmap = mpTheme->GetBitmap(OUString(), u"Background"_ustr);
     }
 }
 
@@ -462,9 +462,9 @@ void PresenterWindowManager::RestoreViewMode()
     sal_Int32 nMode (0);
     PresenterConfigurationAccess aConfiguration (
         mxComponentContext,
-        "/org.openoffice.Office.PresenterScreen/",
+        u"/org.openoffice.Office.PresenterScreen/"_ustr,
         PresenterConfigurationAccess::READ_ONLY);
-    aConfiguration.GetConfigurationNode("Presenter/InitialViewMode") >>= nMode;
+    aConfiguration.GetConfigurationNode(u"Presenter/InitialViewMode"_ustr) >>= nMode;
     switch (nMode)
     {
         default:
@@ -488,9 +488,9 @@ void PresenterWindowManager::StoreViewMode (const ViewMode eViewMode)
     {
         PresenterConfigurationAccess aConfiguration (
             mxComponentContext,
-            "/org.openoffice.Office.PresenterScreen/",
+            u"/org.openoffice.Office.PresenterScreen/"_ustr,
             PresenterConfigurationAccess::READ_WRITE);
-        aConfiguration.GoToChild("Presenter");
+        aConfiguration.GoToChild(u"Presenter"_ustr);
         Any aValue;
         switch (eViewMode)
         {
@@ -508,7 +508,7 @@ void PresenterWindowManager::StoreViewMode (const ViewMode eViewMode)
                 break;
         }
 
-        aConfiguration.SetProperty ("InitialViewMode", aValue);
+        aConfiguration.SetProperty (u"InitialViewMode"_ustr, aValue);
         aConfiguration.CommitChanges();
     }
     catch (Exception&)
@@ -1034,7 +1034,7 @@ void PresenterWindowManager::ThrowIfDisposed() const
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            "PresenterWindowManager has already been disposed",
+            u"PresenterWindowManager has already been disposed"_ustr,
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }

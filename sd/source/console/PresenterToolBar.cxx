@@ -584,7 +584,7 @@ void PresenterToolBar::CreateControls (
     // Expand the macro in the bitmap file names.
     PresenterConfigurationAccess aConfiguration (
         mxComponentContext,
-        "/org.openoffice.Office.PresenterScreen/",
+        u"/org.openoffice.Office.PresenterScreen/"_ustr,
         PresenterConfigurationAccess::READ_ONLY);
 
     mpCurrentContainerPart = std::make_shared<ElementContainerPart>();
@@ -598,7 +598,7 @@ void PresenterToolBar::CreateControls (
         return;
 
     Reference<container::XNameAccess> xEntries (
-        PresenterConfigurationAccess::GetConfigurationNode(xToolBarNode, "Entries"),
+        PresenterConfigurationAccess::GetConfigurationNode(xToolBarNode, u"Entries"_ustr),
         UNO_QUERY);
     Context aContext;
     aContext.mxPresenterHelper = mpPresenterController->GetPresenterHelper();
@@ -625,7 +625,7 @@ void PresenterToolBar::ProcessEntry (
 
     // Type has to be present.
     OUString sType;
-    if ( ! (PresenterConfigurationAccess::GetProperty(rxProperties, "Type") >>= sType))
+    if ( ! (PresenterConfigurationAccess::GetProperty(rxProperties, u"Type"_ustr) >>= sType))
         return;
 
     // Read mode specific values.
@@ -634,11 +634,11 @@ void PresenterToolBar::ProcessEntry (
     SharedElementMode pSelectedMode = std::make_shared<ElementMode>();
     SharedElementMode pDisabledMode = std::make_shared<ElementMode>();
     SharedElementMode pMouseOverSelectedMode = std::make_shared<ElementMode>();
-    pNormalMode->ReadElementMode(rxProperties, "Normal", pNormalMode, rContext);
-    pMouseOverMode->ReadElementMode(rxProperties, "MouseOver", pNormalMode, rContext);
-    pSelectedMode->ReadElementMode(rxProperties, "Selected", pNormalMode, rContext);
-    pDisabledMode->ReadElementMode(rxProperties, "Disabled", pNormalMode, rContext);
-    pMouseOverSelectedMode->ReadElementMode(rxProperties, "MouseOverSelected", pSelectedMode, rContext);
+    pNormalMode->ReadElementMode(rxProperties, u"Normal"_ustr, pNormalMode, rContext);
+    pMouseOverMode->ReadElementMode(rxProperties, u"MouseOver"_ustr, pNormalMode, rContext);
+    pSelectedMode->ReadElementMode(rxProperties, u"Selected"_ustr, pNormalMode, rContext);
+    pDisabledMode->ReadElementMode(rxProperties, u"Disabled"_ustr, pNormalMode, rContext);
+    pMouseOverSelectedMode->ReadElementMode(rxProperties, u"MouseOverSelected"_ustr, pSelectedMode, rContext);
 
     // Create new element.
     ::rtl::Reference<Element> pElement;
@@ -997,7 +997,7 @@ void PresenterToolBar::ThrowIfDisposed() const
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            "PresenterToolBar has already been disposed",
+            u"PresenterToolBar has already been disposed"_ustr,
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }
@@ -1027,7 +1027,7 @@ PresenterToolBarView::PresenterToolBarView (
             mxCanvas,
             rpPresenterController,
             PresenterToolBar::Center);
-        mpToolBar->Initialize("PresenterScreenSettings/ToolBars/ToolBar");
+        mpToolBar->Initialize(u"PresenterScreenSettings/ToolBars/ToolBar"_ustr);
 
         if (mxWindow.is())
         {
@@ -1344,16 +1344,16 @@ void ElementMode::ReadElementMode (
     }
 
     // Read action.
-    if ( ! (PresenterConfigurationAccess::GetProperty(xProperties, "Action") >>= msAction))
+    if ( ! (PresenterConfigurationAccess::GetProperty(xProperties, u"Action"_ustr) >>= msAction))
         if (rpDefaultMode != nullptr)
             msAction = rpDefaultMode->msAction;
 
     // Read text and font
     {
         OUString sText(rpDefaultMode != nullptr ? rpDefaultMode->maText.GetText() : OUString());
-        PresenterConfigurationAccess::GetProperty(xProperties, "Text") >>= sText;
+        PresenterConfigurationAccess::GetProperty(xProperties, u"Text"_ustr) >>= sText;
         Reference<container::XHierarchicalNameAccess> xFontNode (
-            PresenterConfigurationAccess::GetProperty(xProperties, "Font"), UNO_QUERY);
+            PresenterConfigurationAccess::GetProperty(xProperties, u"Font"_ustr), UNO_QUERY);
         PresenterTheme::SharedFontDescriptor pFont(PresenterTheme::ReadFont(
             xFontNode, rpDefaultMode != nullptr ? rpDefaultMode->maText.GetFont()
                                                 : PresenterTheme::SharedFontDescriptor()));
@@ -1362,9 +1362,9 @@ void ElementMode::ReadElementMode (
 
     // Read bitmaps to display as icons.
     Reference<container::XHierarchicalNameAccess> xIconNode (
-        PresenterConfigurationAccess::GetProperty(xProperties, "Icon"), UNO_QUERY);
+        PresenterConfigurationAccess::GetProperty(xProperties, u"Icon"_ustr), UNO_QUERY);
     mpIcon = PresenterBitmapContainer::LoadBitmap(
-        xIconNode, "", rContext.mxPresenterHelper, rContext.mxCanvas,
+        xIconNode, u""_ustr, rContext.mxPresenterHelper, rContext.mxCanvas,
         rpDefaultMode != nullptr ? rpDefaultMode->mpIcon : SharedBitmapDescriptor());
     }
     catch(Exception&)
@@ -1942,7 +1942,7 @@ void VerticalSeparator::Paint (
             PresenterCanvasHelper::SetDeviceColor(aRenderState, pFont->mnColor);
     }
 
-    Reference<rendering::XBitmap> xBitmap(mpToolBar->GetPresenterController()->GetPresenterHelper()->loadBitmap("bitmaps/Separator.png", rxCanvas));
+    Reference<rendering::XBitmap> xBitmap(mpToolBar->GetPresenterController()->GetPresenterHelper()->loadBitmap(u"bitmaps/Separator.png"_ustr, rxCanvas));
     if (!xBitmap.is())
         return;
 

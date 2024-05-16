@@ -356,7 +356,7 @@ void PresenterPaneBorderPainter::ThrowIfDisposed() const
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            "PresenterPaneBorderPainter object has already been disposed",
+            u"PresenterPaneBorderPainter object has already been disposed"_ustr,
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }
@@ -375,7 +375,7 @@ PresenterPaneBorderPainter::Renderer::Renderer (
     {
         mxPresenterHelper.set(
             xFactory->createInstanceWithContext(
-                "com.sun.star.comp.Draw.PresenterHelper",
+                u"com.sun.star.comp.Draw.PresenterHelper"_ustr,
                 rxContext),
             UNO_QUERY_THROW);
     }
@@ -549,7 +549,7 @@ std::shared_ptr<RendererPaneStyle>
     RendererPaneStyleContainer::const_iterator iStyle (maRendererPaneStyles.find(rsResourceURL));
     if (iStyle == maRendererPaneStyles.end())
     {
-        OUString sPaneStyleName ("DefaultRendererPaneStyle");
+        OUString sPaneStyleName (u"DefaultRendererPaneStyle"_ustr);
 
         // Get pane layout name for resource URL.
         const OUString sStyleName (mpTheme->GetStyleName(rsResourceURL));
@@ -740,20 +740,20 @@ RendererPaneStyle::RendererPaneStyle (
     if (rpTheme == nullptr)
         return;
 
-    mpTopLeft = GetBitmap(rpTheme, rsStyleName, "TopLeft");
-    mpTop = GetBitmap(rpTheme, rsStyleName, "Top");
-    mpTopRight = GetBitmap(rpTheme, rsStyleName, "TopRight");
-    mpLeft = GetBitmap(rpTheme, rsStyleName,"Left");
-    mpRight = GetBitmap(rpTheme, rsStyleName, "Right");
-    mpBottomLeft = GetBitmap(rpTheme, rsStyleName, "BottomLeft");
-    mpBottom = GetBitmap(rpTheme, rsStyleName, "Bottom");
-    mpBottomRight = GetBitmap(rpTheme, rsStyleName, "BottomRight");
-    mpBottomCallout = GetBitmap(rpTheme, rsStyleName, "BottomCallout");
+    mpTopLeft = GetBitmap(rpTheme, rsStyleName, u"TopLeft"_ustr);
+    mpTop = GetBitmap(rpTheme, rsStyleName, u"Top"_ustr);
+    mpTopRight = GetBitmap(rpTheme, rsStyleName, u"TopRight"_ustr);
+    mpLeft = GetBitmap(rpTheme, rsStyleName,u"Left"_ustr);
+    mpRight = GetBitmap(rpTheme, rsStyleName, u"Right"_ustr);
+    mpBottomLeft = GetBitmap(rpTheme, rsStyleName, u"BottomLeft"_ustr);
+    mpBottom = GetBitmap(rpTheme, rsStyleName, u"Bottom"_ustr);
+    mpBottomRight = GetBitmap(rpTheme, rsStyleName, u"BottomRight"_ustr);
+    mpBottomCallout = GetBitmap(rpTheme, rsStyleName, u"BottomCallout"_ustr);
 
     // Get font description.
     mpFont = rpTheme->GetFont(rsStyleName);
 
-    OUString sAnchor ("Left");
+    OUString sAnchor (u"Left"_ustr);
     if (mpFont)
     {
         sAnchor = mpFont->msAnchor;

@@ -275,7 +275,7 @@ void SAL_CALL PresenterProtocolHandler::initialize (const Sequence<Any>& aArgume
 
 OUString PresenterProtocolHandler::getImplementationName()
 {
-    return "org.libreoffice.comp.PresenterScreenProtocolHandler";
+    return u"org.libreoffice.comp.PresenterScreenProtocolHandler"_ustr;
 }
 
 sal_Bool PresenterProtocolHandler::supportsService(OUString const & ServiceName)
@@ -286,7 +286,7 @@ sal_Bool PresenterProtocolHandler::supportsService(OUString const & ServiceName)
 css::uno::Sequence<OUString>
 PresenterProtocolHandler::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ProtocolHandler" };
+    return { u"com.sun.star.frame.ProtocolHandler"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
@@ -331,7 +331,7 @@ void PresenterProtocolHandler::ThrowIfDisposed() const
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            "PresenterProtocolHandler object has already been disposed",
+            u"PresenterProtocolHandler object has already been disposed"_ustr,
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }
@@ -432,7 +432,7 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::dispatch(
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            "PresenterProtocolHandler::Dispatch object has already been disposed",
+            u"PresenterProtocolHandler::Dispatch object has already been disposed"_ustr,
             static_cast<uno::XWeak*>(this));
     }
 

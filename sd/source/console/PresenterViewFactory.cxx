@@ -472,7 +472,7 @@ void PresenterViewFactory::ThrowIfDisposed() const
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            "PresenterViewFactory object has already been disposed",
+            u"PresenterViewFactory object has already been disposed"_ustr,
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }

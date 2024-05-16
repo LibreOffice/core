@@ -81,7 +81,7 @@ void PresenterSlideShowView::LateInit()
     Reference<lang::XMultiComponentFactory> xFactory (
         mxComponentContext->getServiceManager(), UNO_SET_THROW);
     mxPresenterHelper.set (xFactory->createInstanceWithContext(
-                   "com.sun.star.comp.Draw.PresenterHelper",
+                   u"com.sun.star.comp.Draw.PresenterHelper"_ustr,
                    mxComponentContext),
                UNO_QUERY_THROW);
 
@@ -144,12 +144,12 @@ void PresenterSlideShowView::LateInit()
         PresenterConfigurationAccess::msPresenterScreenRootName,
         PresenterConfigurationAccess::READ_ONLY);
     aConfiguration.GetConfigurationNode(
-        "Presenter/Views/CurrentSlidePreview/"
-        "Strings/ClickToExitPresentationText/String")
+        u"Presenter/Views/CurrentSlidePreview/"
+        "Strings/ClickToExitPresentationText/String"_ustr)
         >>= msClickToExitPresentationText;
     aConfiguration.GetConfigurationNode(
-        "Presenter/Views/CurrentSlidePreview/"
-        "Strings/ClickToExitPresentationTitle/String")
+        u"Presenter/Views/CurrentSlidePreview/"
+        "Strings/ClickToExitPresentationTitle/String"_ustr)
         >>= msClickToExitPresentationTitle;
 }
 
@@ -930,7 +930,7 @@ void PresenterSlideShowView::ThrowIfDisposed()
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            "PresenterSlideShowView object has already been disposed",
+            u"PresenterSlideShowView object has already been disposed"_ustr,
             static_cast<uno::XWeak*>(this));
     }
 }

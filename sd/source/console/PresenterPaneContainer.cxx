@@ -35,7 +35,7 @@ PresenterPaneContainer::PresenterPaneContainer (
     {
         mxPresenterHelper.set(
             xFactory->createInstanceWithContext(
-                "com.sun.star.comp.Draw.PresenterHelper",
+                u"com.sun.star.comp.Draw.PresenterHelper"_ustr,
                 rxContext),
             UNO_QUERY_THROW);
     }

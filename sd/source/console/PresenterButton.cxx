@@ -53,16 +53,16 @@ const double gnVerticalBorder (5);
     {
         OUString sText;
         OUString sAction;
-        PresenterConfigurationAccess::GetProperty(xProperties, "Text") >>= sText;
-        PresenterConfigurationAccess::GetProperty(xProperties, "Action") >>= sAction;
+        PresenterConfigurationAccess::GetProperty(xProperties, u"Text"_ustr) >>= sText;
+        PresenterConfigurationAccess::GetProperty(xProperties, u"Action"_ustr) >>= sAction;
 
         PresenterTheme::SharedFontDescriptor pFont;
         if (rpTheme != nullptr)
-            pFont = rpTheme->GetFont("ButtonFont");
+            pFont = rpTheme->GetFont(u"ButtonFont"_ustr);
 
         PresenterTheme::SharedFontDescriptor pMouseOverFont;
         if (rpTheme != nullptr)
-            pMouseOverFont = rpTheme->GetFont("ButtonMouseOverFont");
+            pMouseOverFont = rpTheme->GetFont(u"ButtonMouseOverFont"_ustr);
 
         rtl::Reference<PresenterButton> pButton (
             new PresenterButton(
@@ -108,7 +108,7 @@ PresenterButton::PresenterButton (
 
         mxPresenterHelper.set(
             xFactory->createInstanceWithContext(
-                "com.sun.star.comp.Draw.PresenterHelper",
+                u"com.sun.star.comp.Draw.PresenterHelper"_ustr,
                 rxComponentContext),
             UNO_QUERY_THROW);
 
@@ -376,9 +376,9 @@ void PresenterButton::SetupButtonBitmaps()
         return;
 
     // Get the bitmaps for the button border.
-    SharedBitmapDescriptor pLeftBitmap (mpTheme->GetBitmap("ButtonFrameLeft"));
-    SharedBitmapDescriptor pCenterBitmap(mpTheme->GetBitmap("ButtonFrameCenter"));
-    SharedBitmapDescriptor pRightBitmap(mpTheme->GetBitmap("ButtonFrameRight"));
+    SharedBitmapDescriptor pLeftBitmap (mpTheme->GetBitmap(u"ButtonFrameLeft"_ustr));
+    SharedBitmapDescriptor pCenterBitmap(mpTheme->GetBitmap(u"ButtonFrameCenter"_ustr));
+    SharedBitmapDescriptor pRightBitmap(mpTheme->GetBitmap(u"ButtonFrameRight"_ustr));
 
     maButtonSize = CalculateButtonSize();
 
@@ -423,12 +423,12 @@ Reference<beans::XPropertySet> PresenterButton::GetConfigurationProperties (
     return Reference<beans::XPropertySet>(
         PresenterConfigurationAccess::Find (
             Reference<container::XNameAccess>(
-                aConfiguration.GetConfigurationNode("PresenterScreenSettings/Buttons"),
+                aConfiguration.GetConfigurationNode(u"PresenterScreenSettings/Buttons"_ustr),
                 UNO_QUERY),
             [&rsConfigurationName](OUString const&, uno::Reference<beans::XPropertySet> const& xProps) -> bool
             {
                 return PresenterConfigurationAccess::IsStringPropertyEqual(
-                        rsConfigurationName, "Name", xProps);
+                        rsConfigurationName, u"Name"_ustr, xProps);
             }),
         UNO_QUERY);
 }
@@ -438,7 +438,7 @@ void PresenterButton::ThrowIfDisposed() const
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            "PresenterButton object has already been disposed",
+            u"PresenterButton object has already been disposed"_ustr,
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }

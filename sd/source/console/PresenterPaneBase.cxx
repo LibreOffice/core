@@ -116,14 +116,14 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
     if ( ! mxComponentContext.is())
     {
         throw RuntimeException(
-            "PresenterSpritePane: missing component context",
+            u"PresenterSpritePane: missing component context"_ustr,
             static_cast<XWeak*>(this));
     }
 
     if (rArguments.getLength() != 5 && rArguments.getLength() != 6)
     {
         throw RuntimeException(
-            "PresenterSpritePane: invalid number of arguments",
+            u"PresenterSpritePane: invalid number of arguments"_ustr,
                 static_cast<XWeak*>(this));
     }
 
@@ -133,7 +133,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
         if ( ! (rArguments[0] >>= mxPaneId))
         {
             throw lang::IllegalArgumentException(
-                "PresenterPane: invalid pane id",
+                u"PresenterPane: invalid pane id"_ustr,
                 static_cast<XWeak*>(this),
                 0);
         }
@@ -141,7 +141,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
         if ( ! (rArguments[1] >>= mxParentWindow))
         {
             throw lang::IllegalArgumentException(
-                "PresenterPane: invalid parent window",
+                u"PresenterPane: invalid parent window"_ustr,
                 static_cast<XWeak*>(this),
                 1);
         }
@@ -150,7 +150,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
         if ( ! (rArguments[2] >>= xParentCanvas))
         {
             throw lang::IllegalArgumentException(
-                "PresenterPane: invalid parent canvas",
+                u"PresenterPane: invalid parent canvas"_ustr,
                 static_cast<XWeak*>(this),
                 2);
         }
@@ -158,7 +158,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
         if ( ! (rArguments[3] >>= msTitle))
         {
             throw lang::IllegalArgumentException(
-                "PresenterPane: invalid title",
+                u"PresenterPane: invalid title"_ustr,
                 static_cast<XWeak*>(this),
                 3);
         }
@@ -166,7 +166,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
         if ( ! (rArguments[4] >>= mxBorderPainter))
         {
             throw lang::IllegalArgumentException(
-                "PresenterPane: invalid border painter",
+                u"PresenterPane: invalid border painter"_ustr,
                 static_cast<XWeak*>(this),
                 4);
         }
@@ -175,7 +175,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
         if (rArguments.getLength()>5 && ! (rArguments[5] >>= bIsWindowVisibleOnCreation))
         {
             throw lang::IllegalArgumentException(
-                "PresenterPane: invalid window visibility flag",
+                u"PresenterPane: invalid window visibility flag"_ustr,
                 static_cast<XWeak*>(this),
                 5);
         }
@@ -333,7 +333,7 @@ void PresenterPaneBase::ThrowIfDisposed()
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            "PresenterPane object has already been disposed",
+            u"PresenterPane object has already been disposed"_ustr,
             static_cast<uno::XWeak*>(this));
     }
 }

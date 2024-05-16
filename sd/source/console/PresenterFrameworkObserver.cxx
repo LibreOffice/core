@@ -42,7 +42,7 @@ PresenterFrameworkObserver::PresenterFrameworkObserver (
     {
         mxConfigurationController->addConfigurationChangeListener(
             this,
-            "ConfigurationUpdateEnd",
+            u"ConfigurationUpdateEnd"_ustr,
             Any());
     }
     else

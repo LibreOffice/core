@@ -96,7 +96,7 @@ Sequence< OUString > SAL_CALL PresenterScreenJob::getSupportedServiceNames()
 
 OUString SAL_CALL PresenterScreenJob::getImplementationName()
 {
-    return "org.libreoffice.comp.PresenterScreenJob";
+    return u"org.libreoffice.comp.PresenterScreenJob"_ustr;
 }
 
 sal_Bool SAL_CALL PresenterScreenJob::supportsService(const OUString& aServiceName)
@@ -148,7 +148,7 @@ Any SAL_CALL PresenterScreenJob::execute(
         pProp->Value >>= xModel;
 
     Reference< XServiceInfo > xInfo( xModel, UNO_QUERY );
-    if( xInfo.is() && xInfo->supportsService("com.sun.star.presentation.PresentationDocument") )
+    if( xInfo.is() && xInfo->supportsService(u"com.sun.star.presentation.PresentationDocument"_ustr) )
     {
         // Create a new listener that waits for the full screen presentation
         // to start and to end.  It takes care of its own lifetime.
@@ -202,7 +202,7 @@ void SAL_CALL PresenterScreenListener::notifyEvent( const css::document::EventOb
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            "PresenterScreenListener object has already been disposed",
+            u"PresenterScreenListener object has already been disposed"_ustr,
             static_cast<uno::XWeak*>(this));
     }
 
@@ -277,9 +277,9 @@ bool PresenterScreen::isPresenterScreenEnabled(const css::uno::Reference<css::un
         bool dEnablePresenterScreen=true;
         PresenterConfigurationAccess aConfiguration (
             rxContext,
-            "/org.openoffice.Office.Impress/",
+            u"/org.openoffice.Office.Impress/"_ustr,
             PresenterConfigurationAccess::READ_ONLY);
-        aConfiguration.GetConfigurationNode("Misc/Start/EnablePresenterScreen")
+        aConfiguration.GetConfigurationNode(u"Misc/Start/EnablePresenterScreen"_ustr)
             >>= dEnablePresenterScreen;
         return dEnablePresenterScreen;
 }
@@ -289,9 +289,9 @@ bool PresenterScreen::isPresenterScreenFullScreen(const css::uno::Reference<css:
     bool dPresenterScreenFullScreen = true;
     PresenterConfigurationAccess aConfiguration (
         rxContext,
-        "/org.openoffice.Office.Impress/",
+        u"/org.openoffice.Office.Impress/"_ustr,
         PresenterConfigurationAccess::READ_ONLY);
-    aConfiguration.GetConfigurationNode("Misc/Start/PresenterScreenFullScreen")
+    aConfiguration.GetConfigurationNode(u"Misc/Start/PresenterScreenFullScreen"_ustr)
         >>= dPresenterScreenFullScreen;
     return dPresenterScreenFullScreen;
 }
@@ -441,7 +441,7 @@ void PresenterScreen::SwitchMonitors()
 
         // Set the new presentation display
         Reference<beans::XPropertySet> xProperties (xPresentation, UNO_QUERY_THROW);
-        xProperties->setPropertyValue("Display", Any(nNewScreen));
+        xProperties->setPropertyValue(u"Display"_ustr, Any(nNewScreen));
     } catch (const uno::Exception &) {
     }
 }
@@ -471,7 +471,7 @@ sal_Int32 PresenterScreen::GetPresenterScreenNumber (
         // Determine the screen on which the full screen presentation is being
         // displayed.
         sal_Int32 nDisplayNumber (-1);
-        if ( ! (rxPresentation->getPropertyValue("Display") >>= nDisplayNumber))
+        if ( ! (rxPresentation->getPropertyValue(u"Display"_ustr) >>= nDisplayNumber))
             return -1;
         if (nDisplayNumber == -1)
         {
@@ -508,12 +508,12 @@ sal_Int32 PresenterScreen::GetPresenterScreenNumber (
             Reference<XComponentContext> xContext (mxContextWeak);
             PresenterConfigurationAccess aConfiguration (
                 xContext,
-                "/org.openoffice.Office.PresenterScreen/",
+                u"/org.openoffice.Office.PresenterScreen/"_ustr,
                 PresenterConfigurationAccess::READ_ONLY);
             bool bStartAlways (false);
             bool bPresenterScreenFullScreen = isPresenterScreenFullScreen(xContext);
             if (aConfiguration.GetConfigurationNode(
-                "Presenter/StartAlways") >>= bStartAlways)
+                u"Presenter/StartAlways"_ustr) >>= bStartAlways)
             {
                 if (bStartAlways || !bPresenterScreenFullScreen)
                     return GetPresenterScreenFromScreen(nScreenNumber);
@@ -569,8 +569,8 @@ Reference<drawing::framework::XResourceId> PresenterScreen::GetMainPaneId (
         return nullptr;
 
     auto fullScreenStr = isPresenterScreenFullScreen(xContext)
-        ? OUString("true")
-        : OUString("false");
+        ? u"true"_ustr
+        : u"false"_ustr;
 
     return ResourceId::create(
         Reference<XComponentContext>(mxContextWeak),
@@ -674,13 +674,13 @@ void PresenterScreen::SetupConfiguration (
     {
         PresenterConfigurationAccess aConfiguration (
             rxContext,
-            "org.openoffice.Office.PresenterScreen",
+            u"org.openoffice.Office.PresenterScreen"_ustr,
             PresenterConfigurationAccess::READ_ONLY);
         maViewDescriptors.clear();
         ProcessViewDescriptions(aConfiguration);
-        OUString sLayoutName ("DefaultLayout");
+        OUString sLayoutName (u"DefaultLayout"_ustr);
         aConfiguration.GetConfigurationNode(
-            "Presenter/CurrentLayout") >>= sLayoutName;
+            u"Presenter/CurrentLayout"_ustr) >>= sLayoutName;
         ProcessLayout(aConfiguration, sLayoutName, rxContext, rxAnchorId);
     }
     catch (const RuntimeException&)
@@ -705,7 +705,7 @@ void PresenterScreen::ProcessLayout (
         OUString sParentLayout;
         PresenterConfigurationAccess::GetConfigurationNode(
             xLayoutNode,
-            "ParentLayout") >>= sParentLayout;
+            u"ParentLayout"_ustr) >>= sParentLayout;
         if (!sParentLayout.isEmpty())
         {
             // Prevent infinite recursion.
@@ -717,17 +717,17 @@ void PresenterScreen::ProcessLayout (
         Reference<container::XNameAccess> xList (
             PresenterConfigurationAccess::GetConfigurationNode(
                 xLayoutNode,
-                "Layout"),
+                u"Layout"_ustr),
             UNO_QUERY_THROW);
 
         ::std::vector<OUString> aProperties
         {
-            "PaneURL",
-            "ViewURL",
-            "RelativeX",
-            "RelativeY",
-            "RelativeWidth",
-            "RelativeHeight"
+            u"PaneURL"_ustr,
+            u"ViewURL"_ustr,
+            u"RelativeX"_ustr,
+            u"RelativeY"_ustr,
+            u"RelativeWidth"_ustr,
+            u"RelativeHeight"_ustr
         };
         PresenterConfigurationAccess::ForAll(
             xList,
@@ -748,15 +748,15 @@ void PresenterScreen::ProcessViewDescriptions (
     try
     {
         Reference<container::XNameAccess> xViewDescriptionsNode (
-            rConfiguration.GetConfigurationNode("Presenter/Views"),
+            rConfiguration.GetConfigurationNode(u"Presenter/Views"_ustr),
             UNO_QUERY_THROW);
 
         ::std::vector<OUString> aProperties
         {
-            "ViewURL",
-            "Title",
-            "AccessibleTitle",
-            "IsOpaque"
+            u"ViewURL"_ustr,
+            u"Title"_ustr,
+            u"AccessibleTitle"_ustr,
+            u"IsOpaque"_ustr
         };
         PresenterConfigurationAccess::ForAll(
             xViewDescriptionsNode,

@@ -163,7 +163,7 @@ PresenterHelpView::PresenterHelpView (
             mpPresenterController->GetTheme(),
             mxWindow,
             mxCanvas,
-            "HelpViewCloser");
+            u"HelpViewCloser"_ustr);
 
         ReadHelpStrings();
         Resize();
@@ -339,10 +339,10 @@ void PresenterHelpView::ReadHelpStrings()
     mpTextContainer.reset(new TextContainer);
     PresenterConfigurationAccess aConfiguration (
         mxComponentContext,
-        "/org.openoffice.Office.PresenterScreen/",
+        u"/org.openoffice.Office.PresenterScreen/"_ustr,
         PresenterConfigurationAccess::READ_ONLY);
     Reference<container::XNameAccess> xStrings (
-        aConfiguration.GetConfigurationNode("PresenterScreenSettings/HelpView/HelpStrings"),
+        aConfiguration.GetConfigurationNode(u"PresenterScreenSettings/HelpView/HelpStrings"_ustr),
         UNO_QUERY);
     PresenterConfigurationAccess::ForAll(
         xStrings,
@@ -359,9 +359,9 @@ void PresenterHelpView::ProcessString (
         return;
 
     OUString sLeftText;
-    PresenterConfigurationAccess::GetProperty(rsProperties, "Left") >>= sLeftText;
+    PresenterConfigurationAccess::GetProperty(rsProperties, u"Left"_ustr) >>= sLeftText;
     OUString sRightText;
-    PresenterConfigurationAccess::GetProperty(rsProperties, "Right") >>= sRightText;
+    PresenterConfigurationAccess::GetProperty(rsProperties, u"Right"_ustr) >>= sRightText;
     mpTextContainer->push_back(
         std::make_shared<Block>(
             sLeftText, sRightText, mpFont->mxFont, mnMaximalWidth));
@@ -480,7 +480,7 @@ void PresenterHelpView::ThrowIfDisposed()
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            "PresenterHelpView has been already disposed",
+            u"PresenterHelpView has been already disposed"_ustr,
             static_cast<uno::XWeak*>(this));
     }
 }

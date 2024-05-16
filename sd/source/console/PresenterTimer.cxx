@@ -447,7 +447,7 @@ PresenterClockTimer::PresenterClockTimer (const Reference<XComponentContext>& rx
     if (xFactory.is())
         mxRequestCallback.set(
             xFactory->createInstanceWithContext(
-                "com.sun.star.awt.AsyncCallback",
+                u"com.sun.star.awt.AsyncCallback"_ustr,
                 rxContext),
             UNO_QUERY_THROW);
 }

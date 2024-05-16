@@ -88,7 +88,7 @@ PresenterNotesView::PresenterNotesView (
             mpPresenterController->GetTheme(),
             mxParentWindow,
             mxCanvas,
-            "NotesViewCloser");
+            u"NotesViewCloser"_ustr);
 
         if (mxParentWindow.is())
         {
@@ -200,7 +200,7 @@ void PresenterNotesView::CreateToolBar (
         rpPresenterController,
         PresenterToolBar::Left);
     mpToolBar->Initialize(
-        "PresenterScreenSettings/ToolBars/NotesToolBar");
+        u"PresenterScreenSettings/ToolBars/NotesToolBar"_ustr);
 }
 
 void PresenterNotesView::SetSlide (const Reference<drawing::XDrawPage>& rxNotesPage)
@@ -283,7 +283,7 @@ void SAL_CALL PresenterNotesView::windowPaint (const awt::PaintEvent& rEvent)
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            "PresenterNotesView object has already been disposed",
+            u"PresenterNotesView object has already been disposed"_ustr,
             static_cast<uno::XWeak*>(this));
     }
 
@@ -608,8 +608,8 @@ void PresenterNotesView::ChangeFontSize (const sal_Int32 nSizeChange)
         if (pConfiguration == nullptr || !pConfiguration->IsValid())
             return;
 
-        pConfiguration->GoToChild("Font");
-        pConfiguration->SetProperty("Size", Any(static_cast<sal_Int32>(nNewSize+0.5)));
+        pConfiguration->GoToChild(u"Font"_ustr);
+        pConfiguration->SetProperty(u"Size"_ustr, Any(static_cast<sal_Int32>(nNewSize+0.5)));
         pConfiguration->CommitChanges();
     }
     catch (Exception&)

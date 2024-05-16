@@ -107,7 +107,7 @@ PresenterController::PresenterController (
 
     if ( ! mxSlideShowController.is())
         throw lang::IllegalArgumentException(
-            "missing slide show controller",
+            u"missing slide show controller"_ustr,
             static_cast<XWeak*>(this),
             2);
 
@@ -119,15 +119,15 @@ PresenterController::PresenterController (
     {
         mxConfigurationController->addConfigurationChangeListener(
             this,
-            "ResourceActivation",
+            u"ResourceActivation"_ustr,
             Any(ResourceActivationEventType));
         mxConfigurationController->addConfigurationChangeListener(
             this,
-            "ResourceDeactivation",
+            u"ResourceDeactivation"_ustr,
             Any(ResourceDeactivationEventType));
         mxConfigurationController->addConfigurationChangeListener(
             this,
-            "ConfigurationUpdateEnd",
+            u"ConfigurationUpdateEnd"_ustr,
             Any(ConfigurationUpdateEndEventType));
     }
 
@@ -148,7 +148,7 @@ PresenterController::PresenterController (
         return;
     mxPresenterHelper.set(
         xFactory->createInstanceWithContext(
-            "com.sun.star.drawing.PresenterHelper",
+            u"com.sun.star.drawing.PresenterHelper"_ustr,
             rxContext),
         UNO_QUERY_THROW);
 
@@ -159,7 +159,7 @@ PresenterController::PresenterController (
         if (xProperties.is())
         {
             Reference<awt::XWindow> xWindow (
-                xProperties->getPropertyValue("ParentWindow"), UNO_QUERY);
+                xProperties->getPropertyValue(u"ParentWindow"_ustr), UNO_QUERY);
             if (xWindow.is())
                 xWindow->addKeyListener(this);
         }
@@ -309,7 +309,7 @@ void PresenterController::UpdatePaneTitles()
     static constexpr OUStringLiteral sSlideCountPlaceholder (u"SLIDE_COUNT");
 
     // Get string for slide count.
-    OUString sSlideCount ("---");
+    OUString sSlideCount (u"---"_ustr);
     Reference<container::XIndexAccess> xIndexAccess(mxSlideShowController, UNO_QUERY);
     if (xIndexAccess.is())
         sSlideCount = OUString::number(xIndexAccess->getCount());
@@ -328,7 +328,7 @@ void PresenterController::UpdatePaneTitles()
         try
         {
             OUString sName;
-            if (xSlideProperties->getPropertyValue("LinkDisplayName") >>= sName)
+            if (xSlideProperties->getPropertyValue(u"LinkDisplayName"_ustr) >>= sName)
             {
                 // Find out whether the name of the current slide has been
                 // automatically created or has been set by the user.
@@ -419,7 +419,7 @@ SharedBitmapDescriptor
     if (mpTheme != nullptr)
     {
         const OUString sStyleName (mpTheme->GetStyleName(rsViewURL));
-        return mpTheme->GetBitmap(sStyleName, "Background");
+        return mpTheme->GetBitmap(sStyleName, u"Background"_ustr);
     }
     return SharedBitmapDescriptor();
 }
@@ -573,7 +573,7 @@ bool PresenterController::HasTransition (Reference<drawing::XDrawPage> const & r
         try
         {
             sal_uInt16 aTransitionType = 0;
-            xSlidePropertySet->getPropertyValue("TransitionType") >>= aTransitionType;
+            xSlidePropertySet->getPropertyValue(u"TransitionType"_ustr) >>= aTransitionType;
             if (aTransitionType > 0)
             {
                 bTransition = true;
@@ -600,8 +600,8 @@ bool PresenterController::HasCustomAnimation (Reference<drawing::XDrawPage> cons
             presentation::AnimationEffect aTextEffect = presentation::AnimationEffect_NONE;
             try
             {
-                xShapePropertySet->getPropertyValue("Effect") >>= aEffect;
-                xShapePropertySet->getPropertyValue("TextEffect") >>= aTextEffect;
+                xShapePropertySet->getPropertyValue(u"Effect"_ustr) >>= aEffect;
+                xShapePropertySet->getPropertyValue(u"TextEffect"_ustr) >>= aTextEffect;
             }
             catch (const beans::UnknownPropertyException&)
             {
@@ -707,7 +707,7 @@ void SAL_CALL PresenterController::notifyConfigurationChange (
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            "PresenterController object has already been disposed",
+            u"PresenterController object has already been disposed"_ustr,
             static_cast<uno::XWeak*>(this));
     }
 
@@ -1122,8 +1122,8 @@ double PresenterController::GetSlideAspectRatio() const
                 Reference<beans::XPropertySet> xProperties(xSlides->getByIndex(0),UNO_QUERY_THROW);
                 sal_Int32 nWidth (28000);
                 sal_Int32 nHeight (21000);
-                if ((xProperties->getPropertyValue("Width") >>= nWidth)
-                    && (xProperties->getPropertyValue("Height") >>= nHeight)
+                if ((xProperties->getPropertyValue(u"Width"_ustr) >>= nWidth)
+                    && (xProperties->getPropertyValue(u"Height"_ustr) >>= nHeight)
                     && nHeight > 0)
                 {
                     nSlideAspectRatio = double(nWidth) / double(nHeight);
@@ -1150,7 +1150,7 @@ void PresenterController::UpdatePendingSlideNumber (const sal_Int32 nPendingSlid
         return;
 
     PresenterTheme::SharedFontDescriptor pFont (
-        mpTheme->GetFont("PendingSlideNumberFont"));
+        mpTheme->GetFont(u"PendingSlideNumberFont"_ustr));
     if (!pFont)
         return;
 

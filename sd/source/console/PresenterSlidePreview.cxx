@@ -56,7 +56,7 @@ PresenterSlidePreview::PresenterSlidePreview (
         || ! rpPresenterController.is())
     {
         throw RuntimeException(
-            "PresenterSlidePreview can not be constructed due to empty argument",
+            u"PresenterSlidePreview can not be constructed due to empty argument"_ustr,
             static_cast<XWeak*>(this));
     }
 
@@ -82,7 +82,7 @@ PresenterSlidePreview::PresenterSlidePreview (
     if (xFactory.is())
         mxPreviewRenderer.set(
             xFactory->createInstanceWithContext(
-                "com.sun.star.drawing.SlideRenderer",
+                u"com.sun.star.drawing.SlideRenderer"_ustr,
                 rxContext),
             UNO_QUERY);
     mpBitmaps = std::make_shared<PresenterBitmapContainer>(
@@ -278,7 +278,7 @@ void PresenterSlidePreview::Paint (const awt::Rectangle& rBoundingBox)
         if( bTransition )
         {
             const awt::Rectangle aTransitionPreviewBox(5, aWindowBox.Height-20, 0, 0);
-            SharedBitmapDescriptor aTransitionDescriptor = mpBitmaps->GetBitmap("Transition");
+            SharedBitmapDescriptor aTransitionDescriptor = mpBitmaps->GetBitmap(u"Transition"_ustr);
             Reference<rendering::XBitmap> xTransitionIcon (aTransitionDescriptor->GetNormalBitmap());
             rendering::RenderState aTransitionRenderState (
                 geometry::AffineMatrix2D(1, 0, aTransitionPreviewBox.X, 0, 1, aTransitionPreviewBox.Y),
@@ -290,7 +290,7 @@ void PresenterSlidePreview::Paint (const awt::Rectangle& rBoundingBox)
         if( bCustomAnimation )
         {
             const awt::Rectangle aAnimationPreviewBox(5, aWindowBox.Height-40, 0, 0);
-            SharedBitmapDescriptor aAnimationDescriptor = mpBitmaps->GetBitmap("Animation");
+            SharedBitmapDescriptor aAnimationDescriptor = mpBitmaps->GetBitmap(u"Animation"_ustr);
             Reference<rendering::XBitmap> xAnimationIcon (aAnimationDescriptor->GetNormalBitmap());
             rendering::RenderState aAnimationRenderState (
                 geometry::AffineMatrix2D(1, 0, aAnimationPreviewBox.X, 0, 1, aAnimationPreviewBox.Y),
@@ -342,7 +342,7 @@ void PresenterSlidePreview::ThrowIfDisposed()
     if (PresenterSlidePreviewInterfaceBase::rBHelper.bDisposed || PresenterSlidePreviewInterfaceBase::rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            "PresenterSlidePreview object has already been disposed",
+            u"PresenterSlidePreview object has already been disposed"_ustr,
             static_cast<uno::XWeak*>(this));
     }
 }
