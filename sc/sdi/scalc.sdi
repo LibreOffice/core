@@ -338,7 +338,7 @@ SfxBoolItem AutoComplete FID_AUTOCOMPLETE
 
 
 SfxVoidItem AutoFill FID_FILL_AUTO
-(SfxStringItem EndCell FID_FILL_AUTO)
+(SfxStringItem EndCell FID_FILL_AUTO,SfxBoolItem Copy FN_PARAM_1)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
