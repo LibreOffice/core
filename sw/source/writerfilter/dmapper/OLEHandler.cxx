@@ -98,7 +98,7 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
 
             // Control shape is handled on a different code path
             uno::Reference< lang::XServiceInfo > xSInfo( xTempShape, uno::UNO_QUERY_THROW );
-            if(xSInfo->supportsService("com.sun.star.drawing.ControlShape"))
+            if(xSInfo->supportsService(u"com.sun.star.drawing.ControlShape"_ustr))
             {
                 m_rDomainMapper.hasControls(true);
                 break;
@@ -116,7 +116,7 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
                     try
                     {
                         uno::Reference<beans::XPropertySet> xShapeProps(m_xShape, uno::UNO_QUERY);
-                        xShapeProps->setPropertyValue("Opaque", uno::Any(false));
+                        xShapeProps->setPropertyValue(u"Opaque"_ustr, uno::Any(false));
                     }
                     catch( const uno::Exception& )
                     {
@@ -183,7 +183,7 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
                     // Through shapes in the header or footer(that spill into the body) should be in the background.
                     // It is just assumed that all shapes will spill into the body.
                     if( m_rDomainMapper.IsInHeaderFooter() )
-                        xShapeProps->setPropertyValue("Opaque", uno::Any(m_nWrapMode != text::WrapTextMode_THROUGH));
+                        xShapeProps->setPropertyValue(u"Opaque"_ustr, uno::Any(m_nWrapMode != text::WrapTextMode_THROUGH));
                 }
                 catch( const uno::Exception& )
                 {
@@ -227,14 +227,14 @@ void OLEHandler::importStream(const uno::Reference<uno::XComponentContext>& xCom
 
     // Import the input stream.
     utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["InputStream"] <<= m_xInputStream;
+    aMediaDescriptor[u"InputStream"_ustr] <<= m_xInputStream;
     uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY);
     xFilter->filter(aMediaDescriptor.getAsConstPropertyValueList());
 
     // Now that the data is imported, update the (typically) changed stream name.
     uno::Reference<beans::XPropertySet> xPropertySet(xOLE, uno::UNO_QUERY);
     ::oox::ole::SaveInteropProperties(xTextDocument,
-        xPropertySet->getPropertyValue("StreamName").get<OUString>(), &m_aURL,
+        xPropertySet->getPropertyValue(u"StreamName"_ustr).get<OUString>(), &m_aURL,
         m_sProgId);
 }
 

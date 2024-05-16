@@ -104,7 +104,7 @@ void CellMarginHandler::lcl_sprm(Sprm & rSprm)
             case NS_ooxml::LN_CT_TcMar_top:
                 m_nTopMargin = m_nValue;
                 m_bTopMarginValid = true;
-                createGrabBag("top");
+                createGrabBag(u"top"_ustr);
             break;
             case NS_ooxml::LN_CT_TblCellMar_start:
             case NS_ooxml::LN_CT_TcMar_start:
@@ -118,19 +118,19 @@ void CellMarginHandler::lcl_sprm(Sprm & rSprm)
                     m_nLeftMargin = m_nValue;
                     m_bLeftMarginValid = true;
                 }
-                createGrabBag("start");
+                createGrabBag(u"start"_ustr);
             break;
             case NS_ooxml::LN_CT_TblCellMar_left:
             case NS_ooxml::LN_CT_TcMar_left:
                 m_nLeftMargin = m_nValue;
                 m_bLeftMarginValid = true;
-                createGrabBag("left");
+                createGrabBag(u"left"_ustr);
             break;
             case NS_ooxml::LN_CT_TblCellMar_bottom:
             case NS_ooxml::LN_CT_TcMar_bottom:
                 m_nBottomMargin = m_nValue;
                 m_bBottomMarginValid = true;
-                createGrabBag("bottom");
+                createGrabBag(u"bottom"_ustr);
             break;
             case NS_ooxml::LN_CT_TblCellMar_end:
             case NS_ooxml::LN_CT_TcMar_end:
@@ -144,13 +144,13 @@ void CellMarginHandler::lcl_sprm(Sprm & rSprm)
                     m_nRightMargin = m_nValue;
                     m_bRightMarginValid = true;
                 }
-                createGrabBag("end");
+                createGrabBag(u"end"_ustr);
             break;
             case NS_ooxml::LN_CT_TblCellMar_right:
             case NS_ooxml::LN_CT_TcMar_right:
                 m_nRightMargin = m_nValue;
                 m_bRightMarginValid = true;
-                createGrabBag("right");
+                createGrabBag(u"right"_ustr);
             break;
             default:
                 SAL_WARN("writerfilter", "CellMarginHandler::lcl_sprm: unknown sprm");

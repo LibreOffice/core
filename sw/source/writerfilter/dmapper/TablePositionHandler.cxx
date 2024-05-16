@@ -75,21 +75,23 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
 {
     comphelper::SequenceAsHashMap aFrameProperties;
 
-    aFrameProperties["LeftBorderDistance"] <<= sal_Int32(0);
-    aFrameProperties["RightBorderDistance"] <<= sal_Int32(0);
-    aFrameProperties["TopBorderDistance"] <<= sal_Int32(0);
-    aFrameProperties["BottomBorderDistance"] <<= sal_Int32(0);
+    aFrameProperties[u"LeftBorderDistance"_ustr] <<= sal_Int32(0);
+    aFrameProperties[u"RightBorderDistance"_ustr] <<= sal_Int32(0);
+    aFrameProperties[u"TopBorderDistance"_ustr] <<= sal_Int32(0);
+    aFrameProperties[u"BottomBorderDistance"_ustr] <<= sal_Int32(0);
 
-    aFrameProperties["LeftMargin"] <<= ConversionHelper::convertTwipToMM100(m_nLeftFromText);
-    aFrameProperties["RightMargin"] <<= ConversionHelper::convertTwipToMM100(m_nRightFromText);
-    aFrameProperties["TopMargin"] <<= ConversionHelper::convertTwipToMM100(m_nTopFromText);
-    aFrameProperties["BottomMargin"] <<= ConversionHelper::convertTwipToMM100(m_nBottomFromText);
+    aFrameProperties[u"LeftMargin"_ustr] <<= ConversionHelper::convertTwipToMM100(m_nLeftFromText);
+    aFrameProperties[u"RightMargin"_ustr]
+        <<= ConversionHelper::convertTwipToMM100(m_nRightFromText);
+    aFrameProperties[u"TopMargin"_ustr] <<= ConversionHelper::convertTwipToMM100(m_nTopFromText);
+    aFrameProperties[u"BottomMargin"_ustr]
+        <<= ConversionHelper::convertTwipToMM100(m_nBottomFromText);
 
     table::BorderLine2 aEmptyBorder;
-    aFrameProperties["TopBorder"] <<= aEmptyBorder;
-    aFrameProperties["BottomBorder"] <<= aEmptyBorder;
-    aFrameProperties["LeftBorder"] <<= aEmptyBorder;
-    aFrameProperties["RightBorder"] <<= aEmptyBorder;
+    aFrameProperties[u"TopBorder"_ustr] <<= aEmptyBorder;
+    aFrameProperties[u"BottomBorder"_ustr] <<= aEmptyBorder;
+    aFrameProperties[u"LeftBorder"_ustr] <<= aEmptyBorder;
+    aFrameProperties[u"RightBorder"_ustr] <<= aEmptyBorder;
 
     // Horizontal positioning
     sal_Int16 nHoriOrient = text::HoriOrientation::NONE;
@@ -112,9 +114,9 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
     else if (m_aHorzAnchor == "text")
         nHoriOrientRelation = text::RelOrientation::FRAME;
 
-    aFrameProperties["HoriOrient"] <<= nHoriOrient;
-    aFrameProperties["HoriOrientRelation"] <<= nHoriOrientRelation;
-    aFrameProperties["HoriOrientPosition"] <<= ConversionHelper::convertTwipToMM100(m_nX);
+    aFrameProperties[u"HoriOrient"_ustr] <<= nHoriOrient;
+    aFrameProperties[u"HoriOrientRelation"_ustr] <<= nHoriOrientRelation;
+    aFrameProperties[u"HoriOrientPosition"_ustr] <<= ConversionHelper::convertTwipToMM100(m_nX);
 
     // Vertical positioning
     sal_Int16 nVertOrient = text::VertOrientation::NONE;
@@ -134,15 +136,15 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
     else if (m_aVertAnchor == "text")
         nVertOrientRelation = text::RelOrientation::FRAME;
 
-    aFrameProperties["VertOrient"] <<= nVertOrient;
-    aFrameProperties["VertOrientRelation"] <<= nVertOrientRelation;
-    aFrameProperties["VertOrientPosition"] <<= ConversionHelper::convertTwipToMM100(m_nY);
-    aFrameProperties["FillTransparence"] <<= sal_Int32(100);
+    aFrameProperties[u"VertOrient"_ustr] <<= nVertOrient;
+    aFrameProperties[u"VertOrientRelation"_ustr] <<= nVertOrientRelation;
+    aFrameProperties[u"VertOrientPosition"_ustr] <<= ConversionHelper::convertTwipToMM100(m_nY);
+    aFrameProperties[u"FillTransparence"_ustr] <<= sal_Int32(100);
 
     if (m_nTableOverlap == NS_ooxml::LN_Value_ST_TblOverlap_never)
     {
         // NS_ooxml::LN_Value_ST_TblOverlap_overlap is the default, both in OOXML and in Writer.
-        aFrameProperties["AllowOverlap"] <<= false;
+        aFrameProperties[u"AllowOverlap"_ustr] <<= false;
     }
 
     return aFrameProperties.getAsConstPropertyValueList();

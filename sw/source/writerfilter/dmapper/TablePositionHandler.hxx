@@ -20,9 +20,9 @@ namespace writerfilter::dmapper
 /// Handler for floating table positioning
 class TablePositionHandler : public LoggedProperties
 {
-    OUString m_aVertAnchor{ "margin" };
+    OUString m_aVertAnchor{ u"margin"_ustr };
     OUString m_aYSpec;
-    OUString m_aHorzAnchor{ "text" };
+    OUString m_aHorzAnchor{ u"text"_ustr };
     OUString m_aXSpec;
     sal_Int32 m_nY = 0;
     sal_Int32 m_nX = 0;

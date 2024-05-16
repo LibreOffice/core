@@ -1832,9 +1832,9 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
         if (bForceShapeIntoCell)
         {
             text::WrapTextMode nSurround = text::WrapTextMode_NONE;
-            xShapePropSet->getPropertyValue("Surround") >>= nSurround;
+            xShapePropSet->getPropertyValue(u"Surround"_ustr) >>= nSurround;
             sal_Int32 nHoriRelation = -1;
-            xShapePropSet->getPropertyValue("HoriOrientRelation") >>= nHoriRelation;
+            xShapePropSet->getPropertyValue(u"HoriOrientRelation"_ustr) >>= nHoriRelation;
             bForceShapeIntoCell = (nSurround != text::WrapTextMode_THROUGH)
                                    || (nHoriRelation != text::RelOrientation::FRAME);
         }
@@ -2312,7 +2312,7 @@ void OOXMLFastContextHandlerMath::process()
     comphelper::EmbeddedObjectContainer container;
     OUString aName;
     uno::Sequence<beans::PropertyValue> objArgs{ comphelper::makePropertyValue(
-        "DefaultParentBaseURL", getDocument()->GetDocumentBaseURL()) };
+        u"DefaultParentBaseURL"_ustr, getDocument()->GetDocumentBaseURL()) };
     uno::Reference<embed::XEmbeddedObject> ref =
         container.CreateEmbeddedObject(name.GetByteSequence(), objArgs, aName);
     assert(ref.is());

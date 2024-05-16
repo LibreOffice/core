@@ -172,7 +172,7 @@ static RTFValue::Pointer_t getDefaultSPRM(Id const id, Id nStyleType)
             case NS_ooxml::LN_CT_Fonts_ascii:
             case NS_ooxml::LN_CT_Fonts_eastAsia:
             case NS_ooxml::LN_CT_Fonts_cs:
-                return new RTFValue("Times New Roman");
+                return new RTFValue(u"Times New Roman"_ustr);
             default:
                 break;
         }

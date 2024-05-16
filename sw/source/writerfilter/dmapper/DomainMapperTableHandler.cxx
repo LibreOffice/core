@@ -364,7 +364,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         if (bConvertToFloatingInFootnote)
         {
             // define empty "TablePosition" to avoid export temporary floating
-            aGrabBag["TablePosition"] = uno::Any();
+            aGrabBag[u"TablePosition"_ustr] = uno::Any();
         }
 
         std::optional<PropertyMap::Property> aTableStyleVal = m_aTableProperties->getProperty(META_PROP_TABLE_STYLE_NAME);
@@ -378,7 +378,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             pTableStyle = dynamic_cast<TableStyleSheetEntry*>( pStyleSheet.get( ) );
             m_aTableProperties->Erase( aTableStyleVal->first );
 
-            aGrabBag["TableStyleName"] <<= sTableStyleName;
+            aGrabBag[u"TableStyleName"_ustr] <<= sTableStyleName;
 
             if( pStyleSheet )
             {
@@ -393,19 +393,19 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
                 TableInfo rStyleInfo;
                 if (lcl_extractTableBorderProperty(pMergedProperties, PROP_TOP_BORDER, rStyleInfo, aBorderLine))
                 {
-                    aGrabBag["TableStyleTopBorder"] <<= aBorderLine;
+                    aGrabBag[u"TableStyleTopBorder"_ustr] <<= aBorderLine;
                 }
                 if (lcl_extractTableBorderProperty(pMergedProperties, PROP_BOTTOM_BORDER, rStyleInfo, aBorderLine))
                 {
-                    aGrabBag["TableStyleBottomBorder"] <<= aBorderLine;
+                    aGrabBag[u"TableStyleBottomBorder"_ustr] <<= aBorderLine;
                 }
                 if (lcl_extractTableBorderProperty(pMergedProperties, PROP_LEFT_BORDER, rStyleInfo, aBorderLine))
                 {
-                    aGrabBag["TableStyleLeftBorder"] <<= aBorderLine;
+                    aGrabBag[u"TableStyleLeftBorder"_ustr] <<= aBorderLine;
                 }
                 if (lcl_extractTableBorderProperty(pMergedProperties, PROP_RIGHT_BORDER, rStyleInfo, aBorderLine))
                 {
-                    aGrabBag["TableStyleRightBorder"] <<= aBorderLine;
+                    aGrabBag[u"TableStyleRightBorder"_ustr] <<= aBorderLine;
                 }
 
 #ifdef DBG_UTIL
@@ -437,7 +437,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         std::optional<PropertyMap::Property> oTableLook = m_aTableProperties->getProperty(META_PROP_TABLE_LOOK);
         if (oTableLook)
         {
-            aGrabBag["TableStyleLook"] = oTableLook->second;
+            aGrabBag[u"TableStyleLook"_ustr] = oTableLook->second;
             m_aTableProperties->Erase(oTableLook->first);
         }
 
@@ -1138,7 +1138,7 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                     }
                 }
                 OUString sParaStyleName;
-                rParaProp.m_rPropertySet->getPropertyValue("ParaStyleName") >>= sParaStyleName;
+                rParaProp.m_rPropertySet->getPropertyValue(u"ParaStyleName"_ustr) >>= sParaStyleName;
                 bool bDocDefault;
                 uno::Any aParaStyle = m_rDMapper_Impl.GetPropertyFromStyleSheet(eId,
                         m_rDMapper_Impl.GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(sParaStyleName),
@@ -1173,7 +1173,7 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                     if (eId == PROP_FILL_COLOR)
                     {
                         // we need this for complete import of table-style based paragraph background color
-                        aProps.push_back(comphelper::makePropertyValue("FillStyle",  uno::Any(drawing::FillStyle_SOLID)));
+                        aProps.push_back(comphelper::makePropertyValue(u"FillStyle"_ustr,  uno::Any(drawing::FillStyle_SOLID)));
                     }
                 }
                 catch ( const uno::Exception & )
@@ -1215,7 +1215,7 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
             rParaProp.m_rEndParagraph->getText()->createTextCursorByRange(
                 rParaProp.m_rEndParagraph),
             uno::UNO_QUERY_THROW);
-        xCursorProps->setPropertyValue("ParaAutoStyleDef",
+        xCursorProps->setPropertyValue(u"ParaAutoStyleDef"_ustr,
                                        uno::Any(comphelper::containerToSequence(aProps)));
     }
 }
@@ -1234,7 +1234,7 @@ static void lcl_convertFormulaRanges(const uno::Reference<text::XTextTable> & xT
             {
                 uno::Reference<beans::XPropertySet> xCellProperties(xCellRange->getCellByPosition(nCol, nRow), uno::UNO_QUERY_THROW);
                 uno::Sequence<beans::PropertyValue> aCellGrabBag;
-                xCellProperties->getPropertyValue("CellInteropGrabBag") >>= aCellGrabBag;
+                xCellProperties->getPropertyValue(u"CellInteropGrabBag"_ustr) >>= aCellGrabBag;
                 OUString sFormula;
                 bool bReplace = false;
                 for (const auto& rProp : aCellGrabBag)
@@ -1250,10 +1250,10 @@ static void lcl_convertFormulaRanges(const uno::Reference<text::XTextTable> & xT
                         };
                         static const RangeDirection pDirections[] =
                         {
-                            { OUString(" LEFT "), -1, 0},
-                            { OUString(" RIGHT "), 1, 0},
-                            { OUString(" ABOVE "), 0, -1},
-                            { OUString(" BELOW "), 0, 1 }
+                            { u" LEFT "_ustr, -1, 0},
+                            { u" RIGHT "_ustr, 1, 0},
+                            { u" ABOVE "_ustr, 0, -1},
+                            { u" BELOW "_ustr, 0, 1 }
                         };
                         for (const RangeDirection& rRange : pDirections)
                         {
@@ -1276,7 +1276,7 @@ static void lcl_convertFormulaRanges(const uno::Reference<text::XTextTable> & xT
                                                 uno::UNO_QUERY_THROW);
                                         // empty cell or cell with text content is end of the range
                                         uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY_THROW);
-                                        sLastCell = xCell->getPropertyValue("CellName").get<OUString>();
+                                        sLastCell = xCell->getPropertyValue(u"CellName"_ustr).get<OUString>();
                                         if (sNextCell.isEmpty())
                                             sNextCell = sLastCell;
 
@@ -1331,21 +1331,21 @@ static void lcl_convertFormulaRanges(const uno::Reference<text::XTextTable> & xT
                             {
                                 uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
                                 uno::Reference< beans::XPropertySet > xRunProperties( xRun, uno::UNO_QUERY_THROW );
-                                if ( xRunProperties->getPropertyValue("TextPortionType") == uno::Any(OUString("TextField")) )
+                                if ( xRunProperties->getPropertyValue(u"TextPortionType"_ustr) == uno::Any(u"TextField"_ustr) )
                                 {
-                                    uno::Reference<text::XTextField> const xField(xRunProperties->getPropertyValue("TextField").get<uno::Reference<text::XTextField>>());
+                                    uno::Reference<text::XTextField> const xField(xRunProperties->getPropertyValue(u"TextField"_ustr).get<uno::Reference<text::XTextField>>());
                                     uno::Reference< beans::XPropertySet > xFieldProperties( xField, uno::UNO_QUERY_THROW );
                                     // cell can contain multiple text fields, but only one is handled now (~formula cell)
-                                    if ( rProp.Value != xFieldProperties->getPropertyValue("Content") )
+                                    if ( rProp.Value != xFieldProperties->getPropertyValue(u"Content"_ustr) )
                                         continue;
-                                    xFieldProperties->setPropertyValue("Content", uno::Any(sFormula));
+                                    xFieldProperties->setPropertyValue(u"Content"_ustr, uno::Any(sFormula));
                                     // update grab bag
                                     auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aCellGrabBag);
                                     beans::PropertyValue aValue;
                                     aValue.Name = "CellFormulaConverted";
                                     aValue.Value <<= sFormula;
                                     aGrabBag.push_back(aValue);
-                                    xCellProperties->setPropertyValue("CellInteropGrabBag", uno::Any(comphelper::containerToSequence(aGrabBag)));
+                                    xCellProperties->setPropertyValue(u"CellInteropGrabBag"_ustr, uno::Any(comphelper::containerToSequence(aGrabBag)));
                                 }
                             }
                         }
@@ -1494,7 +1494,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                                 xCellRange->getCellByPosition(it->m_nFirstCol, it->m_nFirstRow),
                                 uno::UNO_QUERY_THROW);
                             OUString aFirst
-                                = xFirstCell->getPropertyValue("CellName").get<OUString>();
+                                = xFirstCell->getPropertyValue(u"CellName"_ustr).get<OUString>();
                             // tdf#105852: Only try to merge if m_nLastCol is set (i.e. there were some merge continuation cells)
                             if (it->m_nLastCol != -1)
                             {
@@ -1509,7 +1509,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                                     xCellRange->getCellByPosition(it->m_nLastCol, it->m_nLastRow),
                                     uno::UNO_QUERY_THROW);
                                 OUString aLast
-                                    = xLastCell->getPropertyValue("CellName").get<OUString>();
+                                    = xLastCell->getPropertyValue(u"CellName"_ustr).get<OUString>();
 
                                 uno::Reference<text::XTextTableCursor> xCursor = xTable->createCursorByCellName(aFirst);
                                 xCursor->gotoCellByName(aLast, true);
@@ -1551,35 +1551,35 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
         {
             uno::Reference<beans::XPropertySet> xTableProperties(xTable, uno::UNO_QUERY);
             bool bIsRelative = false;
-            xTableProperties->getPropertyValue("IsWidthRelative") >>= bIsRelative;
+            xTableProperties->getPropertyValue(u"IsWidthRelative"_ustr) >>= bIsRelative;
             if (!bIsRelative)
             {
                 beans::PropertyValue aValue;
                 aValue.Name = "Width";
-                aValue.Value = xTableProperties->getPropertyValue("Width");
+                aValue.Value = xTableProperties->getPropertyValue(u"Width"_ustr);
                 aFrameProperties.push_back(aValue);
             }
             else
             {
                 beans::PropertyValue aValue;
                 aValue.Name = "FrameWidthPercent";
-                aValue.Value = xTableProperties->getPropertyValue("RelativeWidth");
+                aValue.Value = xTableProperties->getPropertyValue(u"RelativeWidth"_ustr);
                 aFrameProperties.push_back(aValue);
 
                 // Applying the relative width to the frame, needs to have the table width to be 100% of the frame width
-                xTableProperties->setPropertyValue("RelativeWidth", uno::Any(sal_Int16(100)));
+                xTableProperties->setPropertyValue(u"RelativeWidth"_ustr, uno::Any(sal_Int16(100)));
             }
 
             // A non-zero left margin would move the table out of the frame, move the frame itself instead.
-            xTableProperties->setPropertyValue("LeftMargin", uno::Any(sal_Int32(0)));
+            xTableProperties->setPropertyValue(u"LeftMargin"_ustr, uno::Any(sal_Int32(0)));
 
             style::BreakType eBreakType{};
-            xTableProperties->getPropertyValue("BreakType") >>= eBreakType;
+            xTableProperties->getPropertyValue(u"BreakType"_ustr) >>= eBreakType;
             if (eBreakType != style::BreakType_NONE)
             {
                 // A break before the table was requested. Reset that break here, since the table
                 // will be at the start of the fly frame, not in the body frame.
-                xTableProperties->setPropertyValue("BreakType", uno::Any(style::BreakType_NONE));
+                xTableProperties->setPropertyValue(u"BreakType"_ustr, uno::Any(style::BreakType_NONE));
             }
 
             if (nestedTableLevel >= 2 || m_rDMapper_Impl.IsInHeaderFooter())
@@ -1605,11 +1605,11 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                 }
 
                 aFrameProperties.push_back(
-                    comphelper::makePropertyValue("IsFollowingTextFlow", bIsFollowingTextFlow));
+                    comphelper::makePropertyValue(u"IsFollowingTextFlow"_ustr, bIsFollowingTextFlow));
             }
 
             // A text frame created for floating tables is always allowed to split.
-            aFrameProperties.push_back(comphelper::makePropertyValue("IsSplitAllowed", true));
+            aFrameProperties.push_back(comphelper::makePropertyValue(u"IsSplitAllowed"_ustr, true));
 
             sal_Int32 nTableWidth = 0;
             m_aTableProperties->getValue(TablePropertyMap::TABLE_WIDTH, nTableWidth);
@@ -1640,7 +1640,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                     uno::Reference<lang::XServiceInfo> xText(xContent->getAnchor()->getText(), uno::UNO_QUERY);
                     if (xText.is())
                     {
-                        bConvertToFloatingInFootnote = xText->supportsService("com.sun.star.text.Footnote");
+                        bConvertToFloatingInFootnote = xText->supportsService(u"com.sun.star.text.Footnote"_ustr);
                     }
                 }
 
@@ -1653,9 +1653,9 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                                     xContent->getAnchor(), uno::UNO_QUERY);
                     if ( xParagraph.is() )
                     {
-                        xParagraph->setPropertyValue("ParaTopMargin",
+                        xParagraph->setPropertyValue(u"ParaTopMargin"_ustr,
                                     uno::Any(static_cast<sal_Int32>(0)));
-                        xParagraph->setPropertyValue("ParaBottomMargin",
+                        xParagraph->setPropertyValue(u"ParaBottomMargin"_ustr,
                                     uno::Any(static_cast<sal_Int32>(0)));
                     }
                 }
@@ -1670,10 +1670,10 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                     if (xParagraph.is())
                     {
                         bool bCharHidden{};
-                        xParagraph->getPropertyValue("CharHidden") >>= bCharHidden;
+                        xParagraph->getPropertyValue(u"CharHidden"_ustr) >>= bCharHidden;
                         if (bCharHidden)
                         {
-                            xParagraph->setPropertyValue("CharHidden", uno::Any(false));
+                            xParagraph->setPropertyValue(u"CharHidden"_ustr, uno::Any(false));
                         }
                     }
                 }
@@ -1684,7 +1684,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
             if (xFrameAnchor.is() && eBreakType != style::BreakType_NONE)
             {
                 // A break before the table was requested. Restore that on the anchor.
-                xFrameAnchor->setPropertyValue("BreakType", uno::Any(eBreakType));
+                xFrameAnchor->setPropertyValue(u"BreakType"_ustr, uno::Any(eBreakType));
             }
         }
     }

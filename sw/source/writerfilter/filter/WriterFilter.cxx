@@ -134,7 +134,7 @@ sal_Bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescri
         uno::Reference<uno::XInterface> xIfc;
         try
         {
-            xIfc.set(xMSF->createInstance("com.sun.star.comp.Writer.DocxExport"),
+            xIfc.set(xMSF->createInstance(u"com.sun.star.comp.Writer.DocxExport"_ustr),
                      uno::UNO_SET_THROW);
         }
         catch (uno::RuntimeException&)
@@ -159,14 +159,14 @@ sal_Bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescri
     }
     if (m_xDstDoc.is())
     {
-        m_xDstDoc->setPropertyValue("UndocumentedWriterfilterHack", uno::Any(true));
+        m_xDstDoc->setPropertyValue(u"UndocumentedWriterfilterHack"_ustr, uno::Any(true));
         comphelper::ScopeGuard g([this] {
-            m_xDstDoc->setPropertyValue("UndocumentedWriterfilterHack", uno::Any(false));
+            m_xDstDoc->setPropertyValue(u"UndocumentedWriterfilterHack"_ustr, uno::Any(false));
         });
         utl::MediaDescriptor aMediaDesc(rDescriptor);
-        bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault("RepairPackage", false);
-        bool bSkipImages
-            = aMediaDesc.getUnpackedValueOrDefault("FilterOptions", OUString()) == "SkipImages";
+        bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault(u"RepairPackage"_ustr, false);
+        bool bSkipImages = aMediaDesc.getUnpackedValueOrDefault(u"FilterOptions"_ustr, OUString())
+                           == "SkipImages";
 
         uno::Reference<io::XInputStream> xInputStream;
         try
@@ -212,13 +212,13 @@ sal_Bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescri
         {
             // note: SfxObjectShell checks for WrongFormatException
             io::WrongFormatException wfe(lcl_GetExceptionMessage(e));
-            throw lang::WrappedTargetRuntimeException("", getXWeak(), uno::Any(wfe));
+            throw lang::WrappedTargetRuntimeException(u""_ustr, getXWeak(), uno::Any(wfe));
         }
         catch (xml::sax::SAXException const& e)
         {
             // note: SfxObjectShell checks for WrongFormatException
             io::WrongFormatException wfe(lcl_GetExceptionMessage(e));
-            throw lang::WrappedTargetRuntimeException("", getXWeak(), uno::Any(wfe));
+            throw lang::WrappedTargetRuntimeException(u""_ustr, getXWeak(), uno::Any(wfe));
         }
         catch (uno::RuntimeException const&)
         {
@@ -229,25 +229,25 @@ sal_Bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescri
             css::uno::Any anyEx = cppu::getCaughtException();
             SAL_WARN("writerfilter",
                      "WriterFilter::filter(): failed with " << exceptionToString(anyEx));
-            throw lang::WrappedTargetRuntimeException("", getXWeak(), anyEx);
+            throw lang::WrappedTargetRuntimeException(u""_ustr, getXWeak(), anyEx);
         }
 
         // Adding some properties to the document's grab bag for interoperability purposes:
         comphelper::SequenceAsHashMap aGrabBagProperties;
 
         // Adding the saved Theme DOM
-        aGrabBagProperties["OOXTheme"] <<= pDocument->getThemeDom();
+        aGrabBagProperties[u"OOXTheme"_ustr] <<= pDocument->getThemeDom();
 
         // Adding the saved custom xml DOM
-        aGrabBagProperties["OOXCustomXml"] <<= pDocument->getCustomXmlDomList();
-        aGrabBagProperties["OOXCustomXmlProps"] <<= pDocument->getCustomXmlDomPropsList();
+        aGrabBagProperties[u"OOXCustomXml"_ustr] <<= pDocument->getCustomXmlDomList();
+        aGrabBagProperties[u"OOXCustomXmlProps"_ustr] <<= pDocument->getCustomXmlDomPropsList();
 
         // Adding the saved Glossary Document DOM to the document's grab bag
-        aGrabBagProperties["OOXGlossary"] <<= pDocument->getGlossaryDocDom();
-        aGrabBagProperties["OOXGlossaryDom"] <<= pDocument->getGlossaryDomList();
+        aGrabBagProperties[u"OOXGlossary"_ustr] <<= pDocument->getGlossaryDocDom();
+        aGrabBagProperties[u"OOXGlossaryDom"_ustr] <<= pDocument->getGlossaryDomList();
 
         // Adding the saved embedding document to document's grab bag
-        aGrabBagProperties["OOXEmbeddings"] <<= pDocument->getEmbeddingsList();
+        aGrabBagProperties[u"OOXEmbeddings"_ustr] <<= pDocument->getEmbeddingsList();
 
         oox::core::XmlFilterBase::putPropertiesToDocumentGrabBag(
             static_cast<SfxBaseModel*>(m_xDstDoc.get()), aGrabBagProperties);
@@ -303,25 +303,25 @@ void WriterFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDo
     // Set some compatibility options that are valid for the DOCX format
     rtl::Reference<SwXDocumentSettings> xSettings = m_xDstDoc->createDocumentSettings();
 
-    xSettings->setPropertyValue("UseOldNumbering", uno::Any(false));
-    xSettings->setPropertyValue("IgnoreFirstLineIndentInNumbering", uno::Any(false));
+    xSettings->setPropertyValue(u"UseOldNumbering"_ustr, uno::Any(false));
+    xSettings->setPropertyValue(u"IgnoreFirstLineIndentInNumbering"_ustr, uno::Any(false));
     xSettings->setPropertyValue(u"NoGapAfterNoteNumber"_ustr, uno::Any(true));
-    xSettings->setPropertyValue("DoNotResetParaAttrsForNumFont", uno::Any(false));
-    xSettings->setPropertyValue("UseFormerLineSpacing", uno::Any(false));
-    xSettings->setPropertyValue("AddParaSpacingToTableCells", uno::Any(true));
-    xSettings->setPropertyValue("AddParaLineSpacingToTableCells", uno::Any(true));
-    xSettings->setPropertyValue("UseFormerObjectPositioning", uno::Any(false));
-    xSettings->setPropertyValue("ConsiderTextWrapOnObjPos", uno::Any(true));
-    xSettings->setPropertyValue("UseFormerTextWrapping", uno::Any(false));
-    xSettings->setPropertyValue("IgnoreTabsAndBlanksForLineCalculation", uno::Any(true));
-    xSettings->setPropertyValue("InvertBorderSpacing", uno::Any(true));
-    xSettings->setPropertyValue("CollapseEmptyCellPara", uno::Any(true));
+    xSettings->setPropertyValue(u"DoNotResetParaAttrsForNumFont"_ustr, uno::Any(false));
+    xSettings->setPropertyValue(u"UseFormerLineSpacing"_ustr, uno::Any(false));
+    xSettings->setPropertyValue(u"AddParaSpacingToTableCells"_ustr, uno::Any(true));
+    xSettings->setPropertyValue(u"AddParaLineSpacingToTableCells"_ustr, uno::Any(true));
+    xSettings->setPropertyValue(u"UseFormerObjectPositioning"_ustr, uno::Any(false));
+    xSettings->setPropertyValue(u"ConsiderTextWrapOnObjPos"_ustr, uno::Any(true));
+    xSettings->setPropertyValue(u"UseFormerTextWrapping"_ustr, uno::Any(false));
+    xSettings->setPropertyValue(u"IgnoreTabsAndBlanksForLineCalculation"_ustr, uno::Any(true));
+    xSettings->setPropertyValue(u"InvertBorderSpacing"_ustr, uno::Any(true));
+    xSettings->setPropertyValue(u"CollapseEmptyCellPara"_ustr, uno::Any(true));
     // tdf#142404 TabOverSpacing (new for compatibilityMode15/Word2013+) is a subset of TabOverMargin
     // (which applied to DOCX <= compatibilityMode14).
     // TabOverMargin looks at tabs beyond the normal text area,
     // while TabOverSpacing only refers to a tab beyond the paragraph margin.
-    xSettings->setPropertyValue("TabOverSpacing", uno::Any(true));
-    xSettings->setPropertyValue("UnbreakableNumberings", uno::Any(true));
+    xSettings->setPropertyValue(u"TabOverSpacing"_ustr, uno::Any(true));
+    xSettings->setPropertyValue(u"UnbreakableNumberings"_ustr, uno::Any(true));
 
     xSettings->setPropertyValue("ClippedPictures", uno::Any(true));
     xSettings->setPropertyValue("BackgroundParaOverDrawings", uno::Any(true));
@@ -348,7 +348,10 @@ void WriterFilter::initialize(const uno::Sequence<uno::Any>& rArguments)
     m_xInitializationArguments = rArguments;
 }
 
-OUString WriterFilter::getImplementationName() { return "com.sun.star.comp.Writer.WriterFilter"; }
+OUString WriterFilter::getImplementationName()
+{
+    return u"com.sun.star.comp.Writer.WriterFilter"_ustr;
+}
 
 sal_Bool WriterFilter::supportsService(const OUString& rServiceName)
 {
@@ -357,8 +360,8 @@ sal_Bool WriterFilter::supportsService(const OUString& rServiceName)
 
 uno::Sequence<OUString> WriterFilter::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet = { OUString("com.sun.star.document.ImportFilter"),
-                                     OUString("com.sun.star.document.ExportFilter") };
+    uno::Sequence<OUString> aRet = { u"com.sun.star.document.ImportFilter"_ustr,
+                                     u"com.sun.star.document.ExportFilter"_ustr };
     return aRet;
 }
 

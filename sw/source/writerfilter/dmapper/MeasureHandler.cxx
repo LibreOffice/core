@@ -59,10 +59,10 @@ void MeasureHandler::lcl_attribute(Id rName, Value & rVal)
                 aValue.Name = "type";
                 switch (nIntValue)
                 {
-                    case NS_ooxml::LN_Value_ST_TblWidth_nil: aValue.Value <<= OUString("nil"); break;
-                    case NS_ooxml::LN_Value_ST_TblWidth_pct: aValue.Value <<= OUString("pct"); break;
-                    case NS_ooxml::LN_Value_ST_TblWidth_dxa: aValue.Value <<= OUString("dxa"); break;
-                    case NS_ooxml::LN_Value_ST_TblWidth_auto: aValue.Value <<= OUString("auto"); break;
+                    case NS_ooxml::LN_Value_ST_TblWidth_nil: aValue.Value <<= u"nil"_ustr; break;
+                    case NS_ooxml::LN_Value_ST_TblWidth_pct: aValue.Value <<= u"pct"_ustr; break;
+                    case NS_ooxml::LN_Value_ST_TblWidth_dxa: aValue.Value <<= u"dxa"_ustr; break;
+                    case NS_ooxml::LN_Value_ST_TblWidth_auto: aValue.Value <<= u"auto"_ustr; break;
                 }
                 m_aInteropGrabBag.push_back(aValue);
             }

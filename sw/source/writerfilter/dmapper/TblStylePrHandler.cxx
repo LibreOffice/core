@@ -47,19 +47,19 @@ OUString TblStylePrHandler::getTypeString() const
 {
     switch (m_nType)
     {
-        case TBL_STYLE_WHOLETABLE: return "wholeTable";
-        case TBL_STYLE_FIRSTROW: return "firstRow";
-        case TBL_STYLE_LASTROW: return "lastRow";
-        case TBL_STYLE_FIRSTCOL: return "firstCol";
-        case TBL_STYLE_LASTCOL: return "lastCol";
-        case TBL_STYLE_BAND1VERT: return "band1Vert";
-        case TBL_STYLE_BAND2VERT: return "band2Vert";
-        case TBL_STYLE_BAND1HORZ: return "band1Horz";
-        case TBL_STYLE_BAND2HORZ: return "band2Horz";
-        case TBL_STYLE_NECELL: return "neCell";
-        case TBL_STYLE_NWCELL: return "nwCell";
-        case TBL_STYLE_SECELL: return "seCell";
-        case TBL_STYLE_SWCELL: return "swCell";
+        case TBL_STYLE_WHOLETABLE: return u"wholeTable"_ustr;
+        case TBL_STYLE_FIRSTROW: return u"firstRow"_ustr;
+        case TBL_STYLE_LASTROW: return u"lastRow"_ustr;
+        case TBL_STYLE_FIRSTCOL: return u"firstCol"_ustr;
+        case TBL_STYLE_LASTCOL: return u"lastCol"_ustr;
+        case TBL_STYLE_BAND1VERT: return u"band1Vert"_ustr;
+        case TBL_STYLE_BAND2VERT: return u"band2Vert"_ustr;
+        case TBL_STYLE_BAND1HORZ: return u"band1Horz"_ustr;
+        case TBL_STYLE_BAND2HORZ: return u"band2Horz"_ustr;
+        case TBL_STYLE_NECELL: return u"neCell"_ustr;
+        case TBL_STYLE_NWCELL: return u"nwCell"_ustr;
+        case TBL_STYLE_SECELL: return u"seCell"_ustr;
+        case TBL_STYLE_SWCELL: return u"swCell"_ustr;
         default: break;
     }
     return OUString();
@@ -148,15 +148,15 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
             if (bGrabBag)
             {
                 if (rSprm.getId() == NS_ooxml::LN_CT_PPrBase)
-                    aSavedGrabBag.push_back(getInteropGrabBag("pPr"));
+                    aSavedGrabBag.push_back(getInteropGrabBag(u"pPr"_ustr));
                 else if (rSprm.getId() == NS_ooxml::LN_EG_RPrBase)
-                    aSavedGrabBag.push_back(getInteropGrabBag("rPr"));
+                    aSavedGrabBag.push_back(getInteropGrabBag(u"rPr"_ustr));
                 else if (rSprm.getId() == NS_ooxml::LN_CT_TblPrBase)
-                    aSavedGrabBag.push_back(getInteropGrabBag("tblPr"));
+                    aSavedGrabBag.push_back(getInteropGrabBag(u"tblPr"_ustr));
                 else if (rSprm.getId() == NS_ooxml::LN_CT_TrPrBase)
-                    aSavedGrabBag.push_back(getInteropGrabBag("trPr"));
+                    aSavedGrabBag.push_back(getInteropGrabBag(u"trPr"_ustr));
                 else if (rSprm.getId() == NS_ooxml::LN_CT_TcPrBase)
-                    aSavedGrabBag.push_back(getInteropGrabBag("tcPr"));
+                    aSavedGrabBag.push_back(getInteropGrabBag(u"tcPr"_ustr));
                 std::swap(m_aInteropGrabBag, aSavedGrabBag);
             }
         }
@@ -190,7 +190,7 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
             if ( pProperties )
             {
                 auto pCellMarginHandler = std::make_shared<CellMarginHandler>();
-                pCellMarginHandler->enableInteropGrabBag("tblCellMar");
+                pCellMarginHandler->enableInteropGrabBag(u"tblCellMar"_ustr);
                 pProperties->resolve( *pCellMarginHandler );
                 m_aInteropGrabBag.push_back(pCellMarginHandler->getInteropGrabBag());
 
@@ -216,7 +216,7 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
                 // The DomainMapper can handle some of the properties
                 m_rDMapper.PushStyleSheetProperties( m_pProperties, true );
                 // Just pass a non-empty string, the array will have a single element anyway.
-                m_rDMapper.enableInteropGrabBag("TblStylePrHandler");
+                m_rDMapper.enableInteropGrabBag(u"TblStylePrHandler"_ustr);
                 m_rDMapper.sprm( rSprm );
                 uno::Sequence<beans::PropertyValue> aGrabBag = m_rDMapper.getInteropGrabBag().Value.get< uno::Sequence<beans::PropertyValue> >();
                 if (aGrabBag.hasElements())

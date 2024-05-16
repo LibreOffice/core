@@ -58,37 +58,37 @@ void BorderHandler::lcl_attribute(Id rName, Value & rVal)
         case NS_ooxml::LN_CT_Border_sz:
             //  width of a single line in 1/8 pt, max of 32 pt -> twip * 5 / 2.
             m_nLineWidth = nIntValue * 5 / 2;
-            appendGrabBag("sz", OUString::number(nIntValue));
+            appendGrabBag(u"sz"_ustr, OUString::number(nIntValue));
         break;
         case NS_ooxml::LN_CT_Border_val:
             m_nLineType = nIntValue;
-            appendGrabBag("val", TDefTableHandler::getBorderTypeString(nIntValue));
+            appendGrabBag(u"val"_ustr, TDefTableHandler::getBorderTypeString(nIntValue));
         break;
         case NS_ooxml::LN_CT_Border_color:
             m_nLineColor = nIntValue;
-            appendGrabBag("color", msfilter::util::ConvertColorOU(Color(ColorTransparency, nIntValue)));
+            appendGrabBag(u"color"_ustr, msfilter::util::ConvertColorOU(Color(ColorTransparency, nIntValue)));
         break;
         case NS_ooxml::LN_CT_Border_space: // border distance in points
             m_nLineDistance = ConversionHelper::convertTwipToMM100( nIntValue * 20 );
-            appendGrabBag("space", OUString::number(nIntValue));
+            appendGrabBag(u"space"_ustr, OUString::number(nIntValue));
         break;
         case NS_ooxml::LN_CT_Border_shadow:
             m_bShadow = nIntValue;
         break;
         case NS_ooxml::LN_CT_Border_frame:
-            appendGrabBag("frame", OUString::number(nIntValue, 16));
+            appendGrabBag(u"frame"_ustr, OUString::number(nIntValue, 16));
         break;
         case NS_ooxml::LN_CT_Border_themeTint:
             m_nThemeTint = nIntValue;
-            appendGrabBag("themeTint", OUString::number(nIntValue, 16));
+            appendGrabBag(u"themeTint"_ustr, OUString::number(nIntValue, 16));
         break;
         case NS_ooxml::LN_CT_Border_themeShade:
             m_nThemeShade = nIntValue;
-            appendGrabBag("themeShade", OUString::number(nIntValue, 16));
+            appendGrabBag(u"themeShade"_ustr, OUString::number(nIntValue, 16));
         break;
         case NS_ooxml::LN_CT_Border_themeColor:
             m_eThemeColorType = TDefTableHandler::getThemeColorTypeIndex(nIntValue);
-            appendGrabBag("themeColor", TDefTableHandler::getThemeColorTypeString(nIntValue));
+            appendGrabBag(u"themeColor"_ustr, TDefTableHandler::getThemeColorTypeString(nIntValue));
         break;
         default:
             OSL_FAIL( "unknown attribute");

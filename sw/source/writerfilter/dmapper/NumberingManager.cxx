@@ -481,7 +481,7 @@ static uno::Reference< container::XNameContainer > lcl_getUnoNumberingStyles(
 
     try
     {
-        uno::Any oFamily = xTextDoc->getStyleFamilies( )->getByName("NumberingStyles");
+        uno::Any oFamily = xTextDoc->getStyleFamilies( )->getByName(u"NumberingStyles"_ustr);
 
         oFamily >>= xStyles;
     }
@@ -875,7 +875,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                 uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
                 try
                 {
-                    uno::Any aAny = xPropertySet->getPropertyValue("Graphic");
+                    uno::Any aAny = xPropertySet->getPropertyValue(u"Graphic"_ustr);
                     if (aAny.has<uno::Reference<graphic::XGraphic>>() && pCurrentLevel)
                     {
                         auto xGraphic = aAny.get<uno::Reference<graphic::XGraphic>>();

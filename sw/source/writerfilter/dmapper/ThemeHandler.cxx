@@ -48,18 +48,18 @@ OUString fromLCIDToScriptTag(LanguageType lang)
         case 0x460: // lidKashmiri
         case 0x463: // lidPashto
         case 0x48c: // lidDari
-            return "Arab";
+            return u"Arab"_ustr;
         case 0x42b: // lidArmenian
-            return "Armn";
+            return u"Armn"_ustr;
         case 0x445: // lidBengali
         case 0x845: // lidBengaliBangladesh
         case 0x44d: // lidAssamese
         case 0x458: // lidManipuri
-            return "Beng";
+            return u"Beng"_ustr;
         case 0x45d: // lidInuktitut
-            return "Cans";
+            return u"Cans"_ustr;
         case 0x45c: // lidCherokee
-            return "Cher";
+            return u"Cher"_ustr;
         case 0x419: // lidRussian
         case 0x402: // lidBulgarian
         case 0x281a: // lidSerbianCyrillic
@@ -80,7 +80,7 @@ OUString fromLCIDToScriptTag(LanguageType lang)
         case 0x450: // lidMongolian
         case 0x46d: // lidBashkir
         case 0x485: // lidSakha
-            return "Cyrl";
+            return u"Cyrl"_ustr;
         case 0x439: // lidHindi
         case 0x44e: // lidMarathi
         case 0x44f: // lidSanskrit
@@ -89,39 +89,39 @@ OUString fromLCIDToScriptTag(LanguageType lang)
         case 0x860: // lidKashmiriIndia
         case 0x461: // lidNepali
         case 0x861: // lidNepaliIndia
-            return "Deva";
+            return u"Deva"_ustr;
         case 0x45e: // lidAmharic
         case 0x473: // lidTigrignaEthiopic
         case 0x873: // lidTigrignaEritrea
-            return "Ethi";
+            return u"Ethi"_ustr;
         case 0x437: // lidGeorgian
-            return "Geor";
+            return u"Geor"_ustr;
         case 0x408: // lidGreek
-            return "Grek";
+            return u"Grek"_ustr;
         case 0x447: // lidGujarati
-            return "Gujr";
+            return u"Gujr"_ustr;
         case 0x446: // lidPunjabi
-            return "Guru";
+            return u"Guru"_ustr;
         case 0x412: // lidKoreanExtWansung
-            return "Hang";
+            return u"Hang"_ustr;
         case 0x804: // lidChineseSimp
         case 0x1004: // lidSingapore
-            return "Hans";
+            return u"Hans"_ustr;
         case 0x404: // lidChineseTrad
         case 0xc04: // lidHongkong
         case 0x1404: // lidMacau
-            return "Hant";
+            return u"Hant"_ustr;
         case 0x40d: // lidHebrew
         case 0x43d: // lidYiddish
-            return "Hebr";
+            return u"Hebr"_ustr;
         case 0x411: // lidJapanese
-            return "Jpan";
+            return u"Jpan"_ustr;
         case 0x453: // lidKhmer
-            return "Khmr";
+            return u"Khmr"_ustr;
         case 0x44b: // lidKannada
-            return "Knda";
+            return u"Knda"_ustr;
         case 0x454: // lidLao
-            return "Laoo";
+            return u"Laoo"_ustr;
         case 0x409: // lidAmerican
         case 0xc09: // lidAustralian
         case 0x809: // lidBritish
@@ -280,36 +280,36 @@ OUString fromLCIDToScriptTag(LanguageType lang)
         case 0x486: // lidKiche
         case 0x487: // lidKinyarwanda
         case 0x488: // lidWolof
-            return "Latn";
+            return u"Latn"_ustr;
         case 0x44c: // lidMalayalam
-            return "Mlym";
+            return u"Mlym"_ustr;
         case 0x850: // lidMongolianMongo
-            return "Mong";
+            return u"Mong"_ustr;
         case 0x455: // lidBurmese
-            return "Mymr";
+            return u"Mymr"_ustr;
         case 0x448: // lidOriya
-            return "Orya";
+            return u"Orya"_ustr;
         case 0x45b: // lidSinhalese
-            return "Sinh";
+            return u"Sinh"_ustr;
         case 0x45a: // lidSyriac
-            return "Syrc";
+            return u"Syrc"_ustr;
         case 0x449: // lidTamil
-            return "Taml";
+            return u"Taml"_ustr;
         case 0x44a: // lidTelugu
-            return "Telu";
+            return u"Telu"_ustr;
         case 0x465: // lidMaldivian
-            return "Thaa";
+            return u"Thaa"_ustr;
         case 0x41e: // lidThai
-            return "Thai";
+            return u"Thai"_ustr;
         case 0x451: // lidTibetan
         case 0x851: // lidBhutanese
-            return "Tibt";
+            return u"Tibt"_ustr;
         case 0x480: // lidUighur
-            return "Uigh";
+            return u"Uigh"_ustr;
         case 0x42a: // lidVietnamese
-            return "Viet";
+            return u"Viet"_ustr;
         case 0x478: // lidYi
-            return "Yiii";
+            return u"Yiii"_ustr;
         default:
             return OUString();
     }
@@ -387,21 +387,21 @@ OUString ThemeHandler::getStringForTheme(const Id id)
     switch (id)
     {
         case NS_ooxml::LN_Value_ST_Theme_majorEastAsia:
-            return "majorEastAsia";
+            return u"majorEastAsia"_ustr;
         case NS_ooxml::LN_Value_ST_Theme_majorBidi:
-            return "majorBidi";
+            return u"majorBidi"_ustr;
         case NS_ooxml::LN_Value_ST_Theme_majorAscii:
-            return "majorAscii";
+            return u"majorAscii"_ustr;
         case NS_ooxml::LN_Value_ST_Theme_majorHAnsi:
-            return "majorHAnsi";
+            return u"majorHAnsi"_ustr;
         case NS_ooxml::LN_Value_ST_Theme_minorEastAsia:
-            return "minorEastAsia";
+            return u"minorEastAsia"_ustr;
         case NS_ooxml::LN_Value_ST_Theme_minorBidi:
-            return "minorBidi";
+            return u"minorBidi"_ustr;
         case NS_ooxml::LN_Value_ST_Theme_minorAscii:
-            return "minorAscii";
+            return u"minorAscii"_ustr;
         case NS_ooxml::LN_Value_ST_Theme_minorHAnsi:
-            return "minorHAnsi";
+            return u"minorHAnsi"_ustr;
     }
     return OUString();
 }

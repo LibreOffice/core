@@ -103,12 +103,12 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
     {
         case NS_ooxml::LN_CT_Shd_val:
         {
-            createGrabBag("val", lcl_ConvertShd(nIntValue));
+            createGrabBag(u"val"_ustr, lcl_ConvertShd(nIntValue));
             m_nShadingPattern = nIntValue;
         }
         break;
         case NS_ooxml::LN_CT_Shd_fill:
-            createGrabBag("fill", uno::Any(msfilter::util::ConvertColorOU(Color(ColorTransparency, nIntValue))));
+            createGrabBag(u"fill"_ustr, uno::Any(msfilter::util::ConvertColorOU(Color(ColorTransparency, nIntValue))));
             if( nIntValue == sal_Int32(COL_AUTO) )
                 nIntValue = 0xffffff; //fill color auto means white
             else
@@ -118,7 +118,7 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
             m_bFillSpecified = true;
         break;
         case NS_ooxml::LN_CT_Shd_color:
-            createGrabBag("color", uno::Any(msfilter::util::ConvertColorOU(Color(ColorTransparency, nIntValue))));
+            createGrabBag(u"color"_ustr, uno::Any(msfilter::util::ConvertColorOU(Color(ColorTransparency, nIntValue))));
             if( nIntValue == sal_Int32(COL_AUTO) )
                 nIntValue = 0; //shading color auto means black
             //color of the shading
@@ -126,27 +126,27 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
         break;
         case NS_ooxml::LN_CT_Shd_themeFill:
             m_eFillThemeColorType = TDefTableHandler::getThemeColorTypeIndex(nIntValue);
-            createGrabBag("themeFill", uno::Any(TDefTableHandler::getThemeColorTypeString(nIntValue)));
+            createGrabBag(u"themeFill"_ustr, uno::Any(TDefTableHandler::getThemeColorTypeString(nIntValue)));
         break;
         case NS_ooxml::LN_CT_Shd_themeFillShade:
             m_nFillThemeColorShade = nIntValue;
-            createGrabBag("themeFillShade", uno::Any(OUString::number(nIntValue, 16)));
+            createGrabBag(u"themeFillShade"_ustr, uno::Any(OUString::number(nIntValue, 16)));
         break;
         case NS_ooxml::LN_CT_Shd_themeFillTint:
             m_nFillThemeColorTint = nIntValue;
-            createGrabBag("themeFillTint", uno::Any(OUString::number(nIntValue, 16)));
+            createGrabBag(u"themeFillTint"_ustr, uno::Any(OUString::number(nIntValue, 16)));
             break;
         case NS_ooxml::LN_CT_Shd_themeColor:
             m_eThemeColorType = TDefTableHandler::getThemeColorTypeIndex(nIntValue);
-            createGrabBag("themeColor", uno::Any(TDefTableHandler::getThemeColorTypeString(nIntValue)));
+            createGrabBag(u"themeColor"_ustr, uno::Any(TDefTableHandler::getThemeColorTypeString(nIntValue)));
         break;
         case NS_ooxml::LN_CT_Shd_themeShade:
             m_nThemeColorShade = nIntValue;
-            createGrabBag("themeShade", uno::Any(OUString::number(nIntValue, 16)));
+            createGrabBag(u"themeShade"_ustr, uno::Any(OUString::number(nIntValue, 16)));
         break;
         case NS_ooxml::LN_CT_Shd_themeTint:
             m_nThemeColorTint = nIntValue;
-            createGrabBag("themeTint", uno::Any(OUString::number(nIntValue, 16)));
+            createGrabBag(u"themeTint"_ustr, uno::Any(OUString::number(nIntValue, 16)));
             break;
         default:
             OSL_FAIL( "unknown attribute");
@@ -308,7 +308,7 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
             }
         }
     }
-    createGrabBag("originalColor", uno::Any(msfilter::util::ConvertColorOU(Color(ColorTransparency, nApplyColor))));
+    createGrabBag(u"originalColor"_ustr, uno::Any(msfilter::util::ConvertColorOU(Color(ColorTransparency, nApplyColor))));
 
     return pPropertyMap;
 }

@@ -191,16 +191,16 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues( bool bChar
     }
 
     if ( nCharGrabBag && bCharGrabBag )
-        m_aValues.push_back( makePropertyValue( "CharInteropGrabBag", uno::Any( aCharGrabBagValues ) ) );
+        m_aValues.push_back( makePropertyValue( u"CharInteropGrabBag"_ustr, uno::Any( aCharGrabBagValues ) ) );
 
     if ( nParaGrabBag )
-        m_aValues.push_back( makePropertyValue( "ParaInteropGrabBag", uno::Any( aParaGrabBagValues ) ) );
+        m_aValues.push_back( makePropertyValue( u"ParaInteropGrabBag"_ustr, uno::Any( aParaGrabBagValues ) ) );
 
     if ( nCellGrabBag )
-        m_aValues.push_back( makePropertyValue( "CellInteropGrabBag", uno::Any( aCellGrabBagValues ) ) );
+        m_aValues.push_back( makePropertyValue( u"CellInteropGrabBag"_ustr, uno::Any( aCellGrabBagValues ) ) );
 
     if ( nRowGrabBag )
-        m_aValues.push_back( makePropertyValue( "RowInteropGrabBag", uno::Any( aRowGrabBagValues ) ) );
+        m_aValues.push_back( makePropertyValue( u"RowInteropGrabBag"_ustr, uno::Any( aRowGrabBagValues ) ) );
 
     return comphelper::containerToSequence( m_aValues );
 }
@@ -721,7 +721,7 @@ void SectionPropertyMap::SetBorderDistance( const uno::Reference< beans::XProper
 
     if (eOffsetFrom == BorderOffsetFrom::Edge)
     {
-        uno::Any aGutterMargin = xStyle->getPropertyValue( "GutterMargin" );
+        uno::Any aGutterMargin = xStyle->getPropertyValue( u"GutterMargin"_ustr );
         sal_Int32 nGutterMargin = 0;
         aGutterMargin >>= nGutterMargin;
 
@@ -750,7 +750,7 @@ void SectionPropertyMap::DontBalanceTextColumns()
     try
     {
         if ( m_xColumnContainer.is() )
-            m_xColumnContainer->setPropertyValue( "DontBalanceTextColumns", uno::Any( true ) );
+            m_xColumnContainer->setPropertyValue( u"DontBalanceTextColumns"_ustr, uno::Any( true ) );
     }
     catch ( const uno::Exception& )
     {
@@ -859,12 +859,12 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties( 
 
         if ( m_bSeparatorLineIsOn )
         {
-            xColumnPropSet->setPropertyValue( "SeparatorLineIsOn", uno::Any( true ) );
-            xColumnPropSet->setPropertyValue( "SeparatorLineVerticalAlignment", uno::Any( style::VerticalAlignment_TOP ) );
-            xColumnPropSet->setPropertyValue( "SeparatorLineRelativeHeight", uno::Any( static_cast<sal_Int8>(100) ) );
-            xColumnPropSet->setPropertyValue( "SeparatorLineColor", uno::Any( static_cast<sal_Int32>(COL_BLACK) ) );
+            xColumnPropSet->setPropertyValue( u"SeparatorLineIsOn"_ustr, uno::Any( true ) );
+            xColumnPropSet->setPropertyValue( u"SeparatorLineVerticalAlignment"_ustr, uno::Any( style::VerticalAlignment_TOP ) );
+            xColumnPropSet->setPropertyValue( u"SeparatorLineRelativeHeight"_ustr, uno::Any( static_cast<sal_Int8>(100) ) );
+            xColumnPropSet->setPropertyValue( u"SeparatorLineColor"_ustr, uno::Any( static_cast<sal_Int32>(COL_BLACK) ) );
             // 1 twip -> 2 mm100.
-            xColumnPropSet->setPropertyValue( "SeparatorLineWidth", uno::Any( static_cast<sal_Int32>(2) ) );
+            xColumnPropSet->setPropertyValue( u"SeparatorLineWidth"_ustr, uno::Any( static_cast<sal_Int32>(2) ) );
         }
         xColumnContainer->setPropertyValue( sTextColumns, uno::Any( xColumns ) );
         // Set the columns to be unbalanced if that compatibility option is set or this is the last section.
@@ -1180,13 +1180,13 @@ void SectionPropertyMap::HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl)
         if (rDM_Impl.m_bCopyStandardPageStyleFill && m_sPageStyleName == "Standard")
         {
             rDM_Impl.m_bCopyStandardPageStyleFill = false;
-            m_aPageStyle->setPropertyValue("FillStyle", uno::Any(drawing::FillStyle_NONE));
+            m_aPageStyle->setPropertyValue(u"FillStyle"_ustr, uno::Any(drawing::FillStyle_NONE));
         }
     }
     else if (rDM_Impl.m_bCopyStandardPageStyleFill) // complex fill: graphics/gradients/patterns
     {
         uno::Reference<beans::XPropertySet> xDefaultPageStyle(
-                    rDM_Impl.GetPageStyles()->getByName("Standard"), uno::UNO_QUERY_THROW);
+                    rDM_Impl.GetPageStyles()->getByName(u"Standard"_ustr), uno::UNO_QUERY_THROW);
         for (const beans::Property& rProp : m_aPageStyle->getPropertySetInfo()->getProperties())
         {
             try
@@ -1219,10 +1219,10 @@ void SectionPropertyMap::HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl)
             uno::Reference<container::XNameAccess> xStyleFamilies = rDM_Impl.GetTextDocument()->getStyleFamilies();
             uno::Reference<container::XNameAccess> xParagraphStyles;
             if ( xStyleFamilies.is() )
-                xStyleFamilies->getByName("ParagraphStyles") >>= xParagraphStyles;
+                xStyleFamilies->getByName(u"ParagraphStyles"_ustr) >>= xParagraphStyles;
             uno::Reference<beans::XPropertySet> xStandard;
             if ( xParagraphStyles.is() )
-                xParagraphStyles->getByName("Standard") >>= xStandard;
+                xParagraphStyles->getByName(u"Standard"_ustr) >>= xStandard;
             if ( xStandard.is() )
             {
                 sal_Int16 aWritingMode(0);
@@ -1299,7 +1299,7 @@ void SectionPropertyMap::HandleIncreasedAnchoredObjectSpacing(DomainMapper_Impl&
             }
 
             bool bOpaque = true;
-            xShape->getPropertyValue("Opaque") >>= bOpaque;
+            xShape->getPropertyValue(u"Opaque"_ustr) >>= bOpaque;
             if (!bOpaque)
             {
                 ++nOpaqueCount;
@@ -1325,7 +1325,7 @@ void SectionPropertyMap::HandleIncreasedAnchoredObjectSpacing(DomainMapper_Impl&
 
             // Ignore objects with no wrapping.
             text::WrapTextMode eWrap = text::WrapTextMode_THROUGH;
-            xPropertySet->getPropertyValue("Surround") >>= eWrap;
+            xPropertySet->getPropertyValue(u"Surround"_ustr) >>= eWrap;
             if (eWrap == text::WrapTextMode_THROUGH)
                 continue;
 
@@ -1333,7 +1333,7 @@ void SectionPropertyMap::HandleIncreasedAnchoredObjectSpacing(DomainMapper_Impl&
             // one to 0.
             sal_Int32 nLeftMargin = rAnchored.m_nLeftMargin;
             sal_Int32 nRightMargin = 0;
-            xPropertySet->getPropertyValue("RightMargin") >>= nRightMargin;
+            xPropertySet->getPropertyValue(u"RightMargin"_ustr) >>= nRightMargin;
             nShapesWidth += xShape->getSize().Width + nLeftMargin + nRightMargin;
         }
 
@@ -1355,11 +1355,11 @@ void SectionPropertyMap::HandleIncreasedAnchoredObjectSpacing(DomainMapper_Impl&
         if (xParagraph.is())
         {
             sal_Int32 nTopMargin = 0;
-            xParagraph->getPropertyValue("ParaTopMargin") >>= nTopMargin;
+            xParagraph->getPropertyValue(u"ParaTopMargin"_ustr) >>= nTopMargin;
             // Increase top spacing of the paragraph to match Word layout
             // behavior.
             nTopMargin = std::max(nTopMargin, nHeight);
-            xParagraph->setPropertyValue("ParaTopMargin", uno::Any(nTopMargin));
+            xParagraph->setPropertyValue(u"ParaTopMargin"_ustr, uno::Any(nTopMargin));
         }
     }
     rAnchoredObjectAnchors.clear();
@@ -1379,24 +1379,24 @@ void BeforeConvertToTextFrame(std::deque<css::uno::Any>& rFramedRedlines, std::v
             OUString sTableName;
             OUString sCellName;
             xRangeProperties.set( xRange, uno::UNO_QUERY_THROW );
-            if (xRangeProperties->getPropertySetInfo()->hasPropertyByName("TextTable"))
+            if (xRangeProperties->getPropertySetInfo()->hasPropertyByName(u"TextTable"_ustr))
             {
-                uno::Any aTable = xRangeProperties->getPropertyValue("TextTable");
+                uno::Any aTable = xRangeProperties->getPropertyValue(u"TextTable"_ustr);
                 if ( aTable != uno::Any() )
                 {
                     uno::Reference<text::XTextTable> xTable;
                     aTable >>= xTable;
                     uno::Reference<beans::XPropertySet> xTableProperties(xTable, uno::UNO_QUERY);
-                    xTableProperties->getPropertyValue("TableName") >>= sTableName;
+                    xTableProperties->getPropertyValue(u"TableName"_ustr) >>= sTableName;
                 }
-                if (xRangeProperties->getPropertySetInfo()->hasPropertyByName("Cell"))
+                if (xRangeProperties->getPropertySetInfo()->hasPropertyByName(u"Cell"_ustr))
                 {
-                    uno::Any aCell = xRangeProperties->getPropertyValue("Cell");
+                    uno::Any aCell = xRangeProperties->getPropertyValue(u"Cell"_ustr);
                     if ( aCell != uno::Any() )
                     {
                         aCell >>= xCell;
                         uno::Reference<beans::XPropertySet> xCellProperties(xCell, uno::UNO_QUERY);
-                        xCellProperties->getPropertyValue("CellName") >>= sCellName;
+                        xCellProperties->getPropertyValue(u"CellName"_ustr) >>= sCellName;
                     }
                 }
             }
@@ -1484,7 +1484,7 @@ void SectionPropertyMap::CreateEvenOddPageStyleCopy(DomainMapper_Impl& rDM_Impl,
             }
         }
     }
-    evenOddStyle->setPropertyValue("FollowStyle", uno::Any(m_sPageStyleName));
+    evenOddStyle->setPropertyValue(u"FollowStyle"_ustr, uno::Any(m_sPageStyleName));
 
     rDM_Impl.GetPageStyles()->insertByName(evenOddStyleName, uno::Any(uno::Reference<style::XStyle>(evenOddStyle)));
 
@@ -1634,10 +1634,10 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 {
                     uno::Reference<beans::XPropertySet> xElem;
                     xEnum->nextElement() >>= xElem;
-                    if (xElem->getPropertySetInfo()->hasPropertyByName("BreakType"))
+                    if (xElem->getPropertySetInfo()->hasPropertyByName(u"BreakType"_ustr))
                     {
                         style::BreakType eBreakType;
-                        if ((xElem->getPropertyValue("BreakType") >>= eBreakType) && eBreakType == style::BreakType_PAGE_BEFORE)
+                        if ((xElem->getPropertyValue(u"BreakType"_ustr) >>= eBreakType) && eBreakType == style::BreakType_PAGE_BEFORE)
                         {
                             // tdf#112201: do *not* use m_sFirstPageStyleName here!
                             xElem->setPropertyValue(getPropertyName(PROP_PAGE_DESC_NAME), uno::Any(m_sPageStyleName));
@@ -1654,7 +1654,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                     xPCursor->gotoPreviousParagraph(false);
                     uno::Reference<beans::XPropertySet> const xPSCursor(xCursor, uno::UNO_QUERY_THROW);
                     style::BreakType eBreakType;
-                    if ((xPSCursor->getPropertyValue("BreakType") >>= eBreakType) && eBreakType == style::BreakType_PAGE_BEFORE)
+                    if ((xPSCursor->getPropertyValue(u"BreakType"_ustr) >>= eBreakType) && eBreakType == style::BreakType_PAGE_BEFORE)
                     {
                         xPSCursor->setPropertyValue(getPropertyName(PROP_PAGE_DESC_NAME), uno::Any(m_sPageStyleName));
                         m_aPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), uno::Any(true));
@@ -1662,7 +1662,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                     }
                     else
                     {
-                        xPSCursor->getPropertyValue("CharHeight") >>= fCharHeight;
+                        xPSCursor->getPropertyValue(u"CharHeight"_ustr) >>= fCharHeight;
                     }
                 }
                 if (!isFound && fCharHeight <= 1.0)
@@ -1672,10 +1672,10 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                     xPCursor->gotoPreviousParagraph(false);
                     uno::Reference<beans::XPropertySet> xPropertySet(xCursor, uno::UNO_QUERY_THROW);
                     OUString aPageDescName;
-                    if ((xPropertySet->getPropertyValue("PageDescName") >>= aPageDescName) && !aPageDescName.isEmpty())
+                    if ((xPropertySet->getPropertyValue(u"PageDescName"_ustr) >>= aPageDescName) && !aPageDescName.isEmpty())
                     {
                         uno::Reference<beans::XPropertySet> xPageStyle(rDM_Impl.GetPageStyles()->getByName(aPageDescName), uno::UNO_QUERY);
-                        xPageStyle->setPropertyValue("FollowStyle", uno::Any(m_sPageStyleName));
+                        xPageStyle->setPropertyValue(u"FollowStyle"_ustr, uno::Any(m_sPageStyleName));
                         m_aPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), uno::Any(true));
                     }
                 }
@@ -1832,7 +1832,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             if (rDM_Impl.GetTextDocument())
             {
                 Insert(PROP_GRID_STANDARD_MODE, uno::Any(true));
-                rDM_Impl.GetTextDocument()->setPropertyValue("DefaultPageMode", uno::Any(false));
+                rDM_Impl.GetTextDocument()->setPropertyValue(u"DefaultPageMode"_ustr, uno::Any(false));
             }
         }
         catch ( const uno::Exception& )
@@ -2009,10 +2009,10 @@ void SectionPropertyMap::ApplyProperties_( const uno::Reference< beans::XPropert
         //Temporarily store the items that are in grab bags
         uno::Sequence< beans::PropertyValue > vCharVals;
         uno::Sequence< beans::PropertyValue > vParaVals;
-        const beans::PropertyValue* pCharGrabBag = std::find_if( vPropVals.begin(), vPropVals.end(), NamedPropertyValue( "CharInteropGrabBag" ) );
+        const beans::PropertyValue* pCharGrabBag = std::find_if( vPropVals.begin(), vPropVals.end(), NamedPropertyValue( u"CharInteropGrabBag"_ustr ) );
         if ( pCharGrabBag != vPropVals.end() )
             (pCharGrabBag->Value) >>= vCharVals;
-        const beans::PropertyValue* pParaGrabBag = std::find_if( vPropVals.begin(), vPropVals.end(), NamedPropertyValue( "ParaInteropGrabBag" ) );
+        const beans::PropertyValue* pParaGrabBag = std::find_if( vPropVals.begin(), vPropVals.end(), NamedPropertyValue( u"ParaInteropGrabBag"_ustr ) );
         if ( pParaGrabBag != vPropVals.end() )
             (pParaGrabBag->Value) >>= vParaVals;
 

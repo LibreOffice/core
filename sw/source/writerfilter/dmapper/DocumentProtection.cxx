@@ -37,8 +37,8 @@ DocumentProtection::DocumentProtection()
     , m_bEnforcement(false)
     , m_bFormatting(false)
     , m_nCryptProviderType(NS_ooxml::LN_Value_doc_ST_CryptProv_rsaAES)
-    , m_sCryptAlgorithmClass("hash")
-    , m_sCryptAlgorithmType("typeAny")
+    , m_sCryptAlgorithmClass(u"hash"_ustr)
+    , m_sCryptAlgorithmType(u"typeAny"_ustr)
     , m_CryptSpinCount(0)
 {
 }
@@ -128,19 +128,19 @@ uno::Sequence<beans::PropertyValue> DocumentProtection::toSequence() const
             switch (m_nEdit)
             {
                 case NS_ooxml::LN_Value_doc_ST_DocProtect_none:
-                    aValue.Value <<= OUString("none");
+                    aValue.Value <<= u"none"_ustr;
                     break;
                 case NS_ooxml::LN_Value_doc_ST_DocProtect_readOnly:
-                    aValue.Value <<= OUString("readOnly");
+                    aValue.Value <<= u"readOnly"_ustr;
                     break;
                 case NS_ooxml::LN_Value_doc_ST_DocProtect_comments:
-                    aValue.Value <<= OUString("comments");
+                    aValue.Value <<= u"comments"_ustr;
                     break;
                 case NS_ooxml::LN_Value_doc_ST_DocProtect_trackedChanges:
-                    aValue.Value <<= OUString("trackedChanges");
+                    aValue.Value <<= u"trackedChanges"_ustr;
                     break;
                 case NS_ooxml::LN_Value_doc_ST_DocProtect_forms:
-                    aValue.Value <<= OUString("forms");
+                    aValue.Value <<= u"forms"_ustr;
                     break;
                 default:
                 {
@@ -158,7 +158,7 @@ uno::Sequence<beans::PropertyValue> DocumentProtection::toSequence() const
         {
             beans::PropertyValue aValue;
             aValue.Name = "enforcement";
-            aValue.Value <<= OUString("1");
+            aValue.Value <<= u"1"_ustr;
             documentProtection.push_back(aValue);
         }
 
@@ -167,7 +167,7 @@ uno::Sequence<beans::PropertyValue> DocumentProtection::toSequence() const
         {
             beans::PropertyValue aValue;
             aValue.Name = "formatting";
-            aValue.Value <<= OUString("1");
+            aValue.Value <<= u"1"_ustr;
             documentProtection.push_back(aValue);
         }
 
@@ -176,9 +176,9 @@ uno::Sequence<beans::PropertyValue> DocumentProtection::toSequence() const
             beans::PropertyValue aValue;
             aValue.Name = "cryptProviderType";
             if (m_nCryptProviderType == NS_ooxml::LN_Value_doc_ST_CryptProv_rsaAES)
-                aValue.Value <<= OUString("rsaAES");
+                aValue.Value <<= u"rsaAES"_ustr;
             else if (m_nCryptProviderType == NS_ooxml::LN_Value_doc_ST_CryptProv_rsaFull)
-                aValue.Value <<= OUString("rsaFull");
+                aValue.Value <<= u"rsaFull"_ustr;
             documentProtection.push_back(aValue);
         }
 

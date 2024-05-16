@@ -183,19 +183,19 @@ static void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >
         return;
 
     if ( !pFFDataHandler->getName().isEmpty() )
-        rxFieldProps->setPropertyValue( "Name", uno::Any( pFFDataHandler->getName() ) );
+        rxFieldProps->setPropertyValue( u"Name"_ustr, uno::Any( pFFDataHandler->getName() ) );
 
     const FFDataHandler::DropDownEntries_t& rEntries = pFFDataHandler->getDropDownEntries();
     uno::Sequence< OUString > sItems( rEntries.size() );
     ::std::copy( rEntries.begin(), rEntries.end(), sItems.getArray());
     if ( sItems.hasElements() )
-        rxFieldProps->setPropertyValue( "Items", uno::Any( sItems ) );
+        rxFieldProps->setPropertyValue( u"Items"_ustr, uno::Any( sItems ) );
 
     sal_Int32 nResult = pFFDataHandler->getDropDownResult().toInt32();
     if (nResult > 0 && o3tl::make_unsigned(nResult) < sItems.size())
-        rxFieldProps->setPropertyValue("SelectedItem", uno::Any(sItems[nResult]));
+        rxFieldProps->setPropertyValue(u"SelectedItem"_ustr, uno::Any(sItems[nResult]));
     if ( !pFFDataHandler->getHelpText().isEmpty() )
-         rxFieldProps->setPropertyValue( "Help", uno::Any( pFFDataHandler->getHelpText() ) );
+         rxFieldProps->setPropertyValue( u"Help"_ustr, uno::Any( pFFDataHandler->getHelpText() ) );
 }
 
 static void lcl_handleTextField( const uno::Reference< beans::XPropertySet >& rxFieldProps, const FFDataHandler::Pointer_t& pFFDataHandler )
@@ -378,11 +378,11 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bUsingEnhancedFields( false ),
         m_nAnnotationId( -1 ),
         m_aSmartTagHandler(m_xComponentContext, m_xTextDocument),
-        m_xInsertTextRange(rMediaDesc.getUnpackedValueOrDefault("TextInsertModeRange", uno::Reference<text::XTextRange>())),
-        m_xAltChunkStartingRange(rMediaDesc.getUnpackedValueOrDefault("AltChunkStartingRange", uno::Reference<text::XTextRange>())),
-        m_bIsNewDoc(!rMediaDesc.getUnpackedValueOrDefault("InsertMode", false)),
-        m_bIsAltChunk(rMediaDesc.getUnpackedValueOrDefault("AltChunkMode", false)),
-        m_bIsReadGlossaries(rMediaDesc.getUnpackedValueOrDefault("ReadGlossaries", false)),
+        m_xInsertTextRange(rMediaDesc.getUnpackedValueOrDefault(u"TextInsertModeRange"_ustr, uno::Reference<text::XTextRange>())),
+        m_xAltChunkStartingRange(rMediaDesc.getUnpackedValueOrDefault(u"AltChunkStartingRange"_ustr, uno::Reference<text::XTextRange>())),
+        m_bIsNewDoc(!rMediaDesc.getUnpackedValueOrDefault(u"InsertMode"_ustr, false)),
+        m_bIsAltChunk(rMediaDesc.getUnpackedValueOrDefault(u"AltChunkMode"_ustr, false)),
+        m_bIsReadGlossaries(rMediaDesc.getUnpackedValueOrDefault(u"ReadGlossaries"_ustr, false)),
         m_bHasFtnSep(false),
         m_bIsSplitPara(false),
         m_bIsActualParagraphFramed( false ),
@@ -400,7 +400,7 @@ DomainMapper_Impl::DomainMapper_Impl(
     GetBodyText();
     if (!m_bIsNewDoc && !m_xBodyText)
     {
-        throw uno::Exception("failed to find body text of the insert position", nullptr);
+        throw uno::Exception(u"failed to find body text of the insert position"_ustr, nullptr);
     }
 
     uno::Reference< text::XTextAppend > xBodyTextAppend( m_xBodyText, uno::UNO_QUERY );
@@ -451,7 +451,7 @@ writerfilter::ooxml::OOXMLDocument* DomainMapper_Impl::getDocumentReference() co
 uno::Reference< container::XNameContainer > const &  DomainMapper_Impl::GetPageStyles()
 {
     if(!m_xPageStyles1.is() && m_xTextDocument)
-        m_xTextDocument->getStyleFamilies()->getByName("PageStyles") >>= m_xPageStyles1;
+        m_xTextDocument->getStyleFamilies()->getByName(u"PageStyles"_ustr) >>= m_xPageStyles1;
     return m_xPageStyles1;
 }
 
@@ -485,14 +485,14 @@ OUString DomainMapper_Impl::GetUnusedPageStyleName()
 uno::Reference< container::XNameContainer > const &  DomainMapper_Impl::GetCharacterStyles()
 {
     if(!m_xCharacterStyles.is() && m_xTextDocument)
-        m_xTextDocument->getStyleFamilies()->getByName("CharacterStyles") >>= m_xCharacterStyles;
+        m_xTextDocument->getStyleFamilies()->getByName(u"CharacterStyles"_ustr) >>= m_xCharacterStyles;
     return m_xCharacterStyles;
 }
 
 uno::Reference<container::XNameContainer> const& DomainMapper_Impl::GetParagraphStyles()
 {
     if (!m_xParagraphStyles.is() && m_xTextDocument)
-        m_xTextDocument->getStyleFamilies()->getByName("ParagraphStyles") >>= m_xParagraphStyles;
+        m_xTextDocument->getStyleFamilies()->getByName(u"ParagraphStyles"_ustr) >>= m_xParagraphStyles;
     return m_xParagraphStyles;
 }
 
@@ -572,7 +572,7 @@ void CopyPageDescNameToNextParagraph(const uno::Reference<lang::XComponent>& xPa
         return;
     }
 
-    uno::Any aPageDescName = xParagraphProps->getPropertyValue("PageDescName");
+    uno::Any aPageDescName = xParagraphProps->getPropertyValue(u"PageDescName"_ustr);
     OUString sPageDescName;
     aPageDescName >>= sPageDescName;
     if (sPageDescName.isEmpty())
@@ -621,14 +621,14 @@ void CopyPageDescNameToNextParagraph(const uno::Reference<lang::XComponent>& xPa
 
     // See if there is page style set already: if so, don't touch it.
     OUString sNextPageDescName;
-    xNextParagraph->getPropertyValue("PageDescName") >>= sNextPageDescName;
+    xNextParagraph->getPropertyValue(u"PageDescName"_ustr) >>= sNextPageDescName;
     if (!sNextPageDescName.isEmpty())
     {
         return;
     }
 
     // Finally copy it over, so it's not lost.
-    xNextParagraph->setPropertyValue("PageDescName", aPageDescName);
+    xNextParagraph->setPropertyValue(u"PageDescName"_ustr, aPageDescName);
 }
 }
 
@@ -714,12 +714,12 @@ void DomainMapper_Impl::AddDummyParaForTableInSection()
      while (xRunEnum->hasMoreElements())
      {
          uno::Reference<beans::XPropertySet> xProps(xRunEnum->nextElement(), uno::UNO_QUERY_THROW);
-         uno::Any aType(xProps->getPropertyValue("TextPortionType"));
+         uno::Any aType(xProps->getPropertyValue(u"TextPortionType"_ustr));
          OUString sType;
          aType >>= sType;
          if (sType == "Bookmark")
          {
-             uno::Reference<container::XNamed> xBookmark(xProps->getPropertyValue("Bookmark"),
+             uno::Reference<container::XNamed> xBookmark(xProps->getPropertyValue(u"Bookmark"_ustr),
                                                          uno::UNO_QUERY_THROW);
              sName = xBookmark->getName();
              // Do not stop the scan here. Maybe there are 2 bookmarks?
@@ -1084,88 +1084,88 @@ void DomainMapper_Impl::PopSdt()
         uno::Reference<beans::XPropertyState> xPropertyState(xCursor, uno::UNO_QUERY);
         if (xPropertyState.is())
         {
-            xPropertyState->setPropertyToDefault("CharStyleName");
+            xPropertyState->setPropertyToDefault(u"CharStyleName"_ustr);
         }
     }
 
     rtl::Reference<SwXContentControl> xContentControl( m_xTextDocument->createContentControl());
     if (m_pSdtHelper->GetShowingPlcHdr())
     {
-        xContentControl->setPropertyValue("ShowingPlaceHolder",
+        xContentControl->setPropertyValue(u"ShowingPlaceHolder"_ustr,
                                                uno::Any(m_pSdtHelper->GetShowingPlcHdr()));
     }
 
     if (!m_pSdtHelper->GetPlaceholderDocPart().isEmpty())
     {
-        xContentControl->setPropertyValue("PlaceholderDocPart",
+        xContentControl->setPropertyValue(u"PlaceholderDocPart"_ustr,
                                                uno::Any(m_pSdtHelper->GetPlaceholderDocPart()));
     }
 
     if (!m_pSdtHelper->GetDataBindingPrefixMapping().isEmpty())
     {
-        xContentControl->setPropertyValue("DataBindingPrefixMappings",
+        xContentControl->setPropertyValue(u"DataBindingPrefixMappings"_ustr,
                                                uno::Any(m_pSdtHelper->GetDataBindingPrefixMapping()));
     }
     if (!m_pSdtHelper->GetDataBindingXPath().isEmpty())
     {
-        xContentControl->setPropertyValue("DataBindingXpath",
+        xContentControl->setPropertyValue(u"DataBindingXpath"_ustr,
                                                uno::Any(m_pSdtHelper->GetDataBindingXPath()));
     }
     if (!m_pSdtHelper->GetDataBindingStoreItemID().isEmpty())
     {
-        xContentControl->setPropertyValue("DataBindingStoreItemID",
+        xContentControl->setPropertyValue(u"DataBindingStoreItemID"_ustr,
                                                uno::Any(m_pSdtHelper->GetDataBindingStoreItemID()));
     }
 
     if (!m_pSdtHelper->GetColor().isEmpty())
     {
-        xContentControl->setPropertyValue("Color",
+        xContentControl->setPropertyValue(u"Color"_ustr,
                                                uno::Any(m_pSdtHelper->GetColor()));
     }
 
     if (!m_pSdtHelper->GetAppearance().isEmpty())
     {
-        xContentControl->setPropertyValue("Appearance",
+        xContentControl->setPropertyValue(u"Appearance"_ustr,
                                                uno::Any(m_pSdtHelper->GetAppearance()));
     }
 
     if (!m_pSdtHelper->GetAlias().isEmpty())
     {
-        xContentControl->setPropertyValue("Alias",
+        xContentControl->setPropertyValue(u"Alias"_ustr,
                                                uno::Any(m_pSdtHelper->GetAlias()));
     }
 
     if (!m_pSdtHelper->GetTag().isEmpty())
     {
-        xContentControl->setPropertyValue("Tag",
+        xContentControl->setPropertyValue(u"Tag"_ustr,
                                                uno::Any(m_pSdtHelper->GetTag()));
     }
 
     if (m_pSdtHelper->GetId())
     {
-        xContentControl->setPropertyValue("Id", uno::Any(m_pSdtHelper->GetId()));
+        xContentControl->setPropertyValue(u"Id"_ustr, uno::Any(m_pSdtHelper->GetId()));
     }
 
     if (m_pSdtHelper->GetTabIndex())
     {
-        xContentControl->setPropertyValue("TabIndex", uno::Any(m_pSdtHelper->GetTabIndex()));
+        xContentControl->setPropertyValue(u"TabIndex"_ustr, uno::Any(m_pSdtHelper->GetTabIndex()));
     }
 
     if (!m_pSdtHelper->GetLock().isEmpty())
     {
-        xContentControl->setPropertyValue("Lock", uno::Any(m_pSdtHelper->GetLock()));
+        xContentControl->setPropertyValue(u"Lock"_ustr, uno::Any(m_pSdtHelper->GetLock()));
     }
 
     if (m_pSdtHelper->getControlType() == SdtControlType::checkBox)
     {
-        xContentControl->setPropertyValue("Checkbox", uno::Any(true));
+        xContentControl->setPropertyValue(u"Checkbox"_ustr, uno::Any(true));
 
-        xContentControl->setPropertyValue("Checked", uno::Any(m_pSdtHelper->GetChecked()));
+        xContentControl->setPropertyValue(u"Checked"_ustr, uno::Any(m_pSdtHelper->GetChecked()));
 
-        xContentControl->setPropertyValue("CheckedState",
+        xContentControl->setPropertyValue(u"CheckedState"_ustr,
                                                uno::Any(m_pSdtHelper->GetCheckedState()));
 
-        xContentControl->setPropertyValue("UncheckedState",
+        xContentControl->setPropertyValue(u"UncheckedState"_ustr,
                                                uno::Any(m_pSdtHelper->GetUncheckedState()));
     }
 
@@ -1181,35 +1181,35 @@ void DomainMapper_Impl::PopSdt()
             for (size_t i = 0; i < rValues.size(); ++i)
             {
                 pItems[i] = {
-                    comphelper::makePropertyValue("DisplayText", rDisplayTexts[i]),
-                    comphelper::makePropertyValue("Value", rValues[i])
+                    comphelper::makePropertyValue(u"DisplayText"_ustr, rDisplayTexts[i]),
+                    comphelper::makePropertyValue(u"Value"_ustr, rValues[i])
                 };
             }
-            xContentControl->setPropertyValue("ListItems", uno::Any(aItems));
+            xContentControl->setPropertyValue(u"ListItems"_ustr, uno::Any(aItems));
             if (m_pSdtHelper->getControlType() == SdtControlType::dropDown)
             {
-                xContentControl->setPropertyValue("DropDown", uno::Any(true));
+                xContentControl->setPropertyValue(u"DropDown"_ustr, uno::Any(true));
             }
             else
             {
-                xContentControl->setPropertyValue("ComboBox", uno::Any(true));
+                xContentControl->setPropertyValue(u"ComboBox"_ustr, uno::Any(true));
             }
         }
     }
 
     if (m_pSdtHelper->getControlType() == SdtControlType::picture)
     {
-        xContentControl->setPropertyValue("Picture", uno::Any(true));
+        xContentControl->setPropertyValue(u"Picture"_ustr, uno::Any(true));
     }
 
     bool bDateFromDataBinding = false;
     if (m_pSdtHelper->getControlType() == SdtControlType::datePicker)
     {
-        xContentControl->setPropertyValue("Date", uno::Any(true));
+        xContentControl->setPropertyValue(u"Date"_ustr, uno::Any(true));
         OUString aDateFormat = m_pSdtHelper->getDateFormat().makeStringAndClear();
-        xContentControl->setPropertyValue("DateFormat",
+        xContentControl->setPropertyValue(u"DateFormat"_ustr,
                                                uno::Any(aDateFormat.replaceAll("'", "\"")));
-        xContentControl->setPropertyValue("DateLanguage",
+        xContentControl->setPropertyValue(u"DateLanguage"_ustr,
                                                uno::Any(m_pSdtHelper->getLocale().makeStringAndClear()));
         OUString aCurrentDate = m_pSdtHelper->getDate().makeStringAndClear();
         if (oData.has_value())
@@ -1217,13 +1217,13 @@ void DomainMapper_Impl::PopSdt()
             aCurrentDate = *oData;
             bDateFromDataBinding = true;
         }
-        xContentControl->setPropertyValue("CurrentDate",
+        xContentControl->setPropertyValue(u"CurrentDate"_ustr,
                                                uno::Any(aCurrentDate));
     }
 
     if (m_pSdtHelper->getControlType() == SdtControlType::plainText)
     {
-        xContentControl->setPropertyValue("PlainText", uno::Any(true));
+        xContentControl->setPropertyValue(u"PlainText"_ustr, uno::Any(true));
     }
 
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
@@ -1231,7 +1231,7 @@ void DomainMapper_Impl::PopSdt()
     if (bDateFromDataBinding)
     {
         OUString aDateString;
-        xContentControl->getPropertyValue("DateString") >>= aDateString;
+        xContentControl->getPropertyValue(u"DateString"_ustr) >>= aDateString;
         xCursor->setString(aDateString);
     }
 
@@ -1451,7 +1451,7 @@ OUString DomainMapper_Impl::GetDefaultParaStyleName()
             return pEntry->m_sConvertedStyleName;
         }
         else
-            return "Standard";
+            return u"Standard"_ustr;
     }
     return m_sDefaultParaStyleName;
 }
@@ -2020,7 +2020,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion(bool bPreventOverlap)
     }
 
     if (bPreventOverlap)
-        aFrameProperties.push_back(comphelper::makePropertyValue("AllowOverlap", uno::Any(false)));
+        aFrameProperties.push_back(comphelper::makePropertyValue(u"AllowOverlap"_ustr, uno::Any(false)));
 
     // If there is no fill, the Word default is 100% transparency.
     // Otherwise CellColorHandler has priority, and this setting
@@ -2030,7 +2030,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion(bool bPreventOverlap)
 
     uno::Sequence<beans::PropertyValue> aGrabBag(comphelper::InitPropertySequence(
         { { "ParaFrameProperties", uno::Any(true) } }));
-    aFrameProperties.push_back(comphelper::makePropertyValue("FrameInteropGrabBag", aGrabBag));
+    aFrameProperties.push_back(comphelper::makePropertyValue(u"FrameInteropGrabBag"_ustr, aGrabBag));
 
     lcl_MoveBorderPropertiesToFrame(aFrameProperties,
                                     rAppendContext.pLastParagraphProperties->GetStartingRange(),
@@ -2279,8 +2279,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             if  ( pParentProperties && (oProperty = pParentProperties->getProperty(PROP_PARA_RIGHT_MARGIN)) && (nParaRightMargin = oProperty->second.get<sal_Int32>()) != 0 )
             {
                 // If we're setting the right margin, we should set the first / left margin as well from the numbering style.
-                const sal_Int32 nFirstLineIndent = getNumberingProperty(nListId, nListLevel, "FirstLineIndent");
-                const sal_Int32 nParaLeftMargin  = getNumberingProperty(nListId, nListLevel, "IndentAt");
+                const sal_Int32 nFirstLineIndent = getNumberingProperty(nListId, nListLevel, u"FirstLineIndent"_ustr);
+                const sal_Int32 nParaLeftMargin  = getNumberingProperty(nListId, nListLevel, u"IndentAt"_ustr);
                 if (nFirstLineIndent != 0)
                     pParaContext->Insert(PROP_PARA_FIRST_LINE_INDENT, uno::Any(nFirstLineIndent), /*bOverwrite=*/false);
                 if (nParaLeftMargin != 0)
@@ -2302,8 +2302,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             {
                 pParaContext->Insert(PROP_PARA_RIGHT_MARGIN, aRightMargin, /*bOverwrite=*/false);
 
-                const sal_Int32 nFirstLineIndent = getNumberingProperty(nListId, nListLevel, "FirstLineIndent");
-                const sal_Int32 nParaLeftMargin  = getNumberingProperty(nListId, nListLevel, "IndentAt");
+                const sal_Int32 nFirstLineIndent = getNumberingProperty(nListId, nListLevel, u"FirstLineIndent"_ustr);
+                const sal_Int32 nParaLeftMargin  = getNumberingProperty(nListId, nListLevel, u"IndentAt"_ustr);
                 if (nFirstLineIndent != 0)
                     pParaContext->Insert(PROP_PARA_FIRST_LINE_INDENT, uno::Any(nFirstLineIndent), /*bOverwrite=*/false);
                 if (nParaLeftMargin != 0)
@@ -2589,7 +2589,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 }
                 if (!charProperties.empty())
                 {
-                    aProperties.push_back(beans::PropertyValue("ListAutoFormat",
+                    aProperties.push_back(beans::PropertyValue(u"ListAutoFormat"_ustr,
                         0, uno::Any(comphelper::containerToSequence(charProperties)), beans::PropertyState_DIRECT_VALUE));
                 }
             }
@@ -2623,7 +2623,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         if (xCursor.is())
                             xCursor->gotoEnd(false);
                         PropertyMapPtr pEmpty(new PropertyMap());
-                        appendTextPortion("X", pEmpty);
+                        appendTextPortion(u"X"_ustr, pEmpty);
                     }
 
                     // Check if top / bottom margin has to be updated, now that we know the numbering status of both the previous and
@@ -2650,7 +2650,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             try
                             {
                                 uno::Reference<container::XNamed> xPreviousNumberingRules(
-                                    m_StreamStateStack.top().xPreviousParagraph->getPropertyValue("NumberingRules"),
+                                    m_StreamStateStack.top().xPreviousParagraph->getPropertyValue(u"NumberingRules"_ustr),
                                     uno::UNO_QUERY_THROW);
                                 aPreviousNumberingName = xPreviousNumberingRules->getName();
                             }
@@ -2659,13 +2659,13 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                 TOOLS_WARN_EXCEPTION("writerfilter", "DomainMapper_Impl::finishParagraph NumberingRules");
                             }
                         }
-                        else if (m_StreamStateStack.top().xPreviousParagraph->getPropertySetInfo()->hasPropertyByName("NumberingStyleName")
+                        else if (m_StreamStateStack.top().xPreviousParagraph->getPropertySetInfo()->hasPropertyByName(u"NumberingStyleName"_ustr)
                                 // don't update before tables
                             && (m_StreamStateStack.top().nTableDepth == 0
                                 || !m_StreamStateStack.top().bFirstParagraphInCell))
                         {
                             aCurrentNumberingName = GetListStyleName(nListId);
-                            m_StreamStateStack.top().xPreviousParagraph->getPropertyValue("NumberingStyleName") >>= aPreviousNumberingName;
+                            m_StreamStateStack.top().xPreviousParagraph->getPropertyValue(u"NumberingStyleName"_ustr) >>= aPreviousNumberingName;
                         }
 
                         // tdf#133363: remove extra auto space even for mixed list styles
@@ -2674,7 +2674,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                 || !isNumberingViaRule))
                         {
                             uno::Sequence<beans::PropertyValue> aPrevPropertiesSeq;
-                            m_StreamStateStack.top().xPreviousParagraph->getPropertyValue("ParaInteropGrabBag") >>= aPrevPropertiesSeq;
+                            m_StreamStateStack.top().xPreviousParagraph->getPropertyValue(u"ParaInteropGrabBag"_ustr) >>= aPrevPropertiesSeq;
                             const auto & rPrevProperties = aPrevPropertiesSeq;
                             bool bParaAutoBefore = m_StreamStateStack.top().bParaAutoBefore
                                 || std::any_of(rPrevProperties.begin(), rPrevProperties.end(), [](const beans::PropertyValue& rValue)
@@ -2683,14 +2683,14 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             });
                             // if style based spacing was set to auto in the previous paragraph, style of the actual paragraph must be the same
                             if (bParaAutoBefore && !m_StreamStateStack.top().bParaAutoBefore
-                                && m_StreamStateStack.top().xPreviousParagraph->getPropertySetInfo()->hasPropertyByName("ParaStyleName"))
+                                && m_StreamStateStack.top().xPreviousParagraph->getPropertySetInfo()->hasPropertyByName(u"ParaStyleName"_ustr))
                             {
                                auto itParaStyle = std::find_if(aProperties.begin(), aProperties.end(), [](const beans::PropertyValue& rValue)
                                {
                                    return rValue.Name == "ParaStyleName";
                                });
                                bParaAutoBefore = itParaStyle != aProperties.end() &&
-                                   m_StreamStateStack.top().xPreviousParagraph->getPropertyValue("ParaStyleName") == itParaStyle->Value;
+                                   m_StreamStateStack.top().xPreviousParagraph->getPropertyValue(u"ParaStyleName"_ustr) == itParaStyle->Value;
                             }
                             // There was a previous textnode and it had the same numbering.
                             if (bParaAutoBefore)
@@ -2703,7 +2703,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                 if (itParaTopMargin != aProperties.end())
                                     itParaTopMargin->Value <<= static_cast<sal_Int32>(0);
                                 else
-                                    aProperties.push_back(comphelper::makePropertyValue("ParaTopMargin", static_cast<sal_Int32>(0)));
+                                    aProperties.push_back(comphelper::makePropertyValue(u"ParaTopMargin"_ustr, static_cast<sal_Int32>(0)));
                             }
 
                             bool bPrevParaAutoAfter = std::any_of(rPrevProperties.begin(), rPrevProperties.end(), [](const beans::PropertyValue& rValue)
@@ -2713,7 +2713,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             if (bPrevParaAutoAfter)
                             {
                                 // Previous after spacing is set to auto, set previous after space to 0.
-                                m_StreamStateStack.top().xPreviousParagraph->setPropertyValue("ParaBottomMargin", uno::Any(static_cast<sal_Int32>(0)));
+                                m_StreamStateStack.top().xPreviousParagraph->setPropertyValue(u"ParaBottomMargin"_ustr, uno::Any(static_cast<sal_Int32>(0)));
                             }
                         }
                     }
@@ -2749,16 +2749,16 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                     pList->GetAbstractDefinition();
                             if (pAbsList &&
                                 // SvxUnoTextRange doesn't have ListId
-                                m_StreamStateStack.top().xPreviousParagraph->getPropertySetInfo()->hasPropertyByName("ListId"))
+                                m_StreamStateStack.top().xPreviousParagraph->getPropertySetInfo()->hasPropertyByName(u"ListId"_ustr))
                             {
                                 OUString paraId;
-                                m_StreamStateStack.top().xPreviousParagraph->getPropertyValue("ListId") >>= paraId;
+                                m_StreamStateStack.top().xPreviousParagraph->getPropertyValue(u"ListId"_ustr) >>= paraId;
                                 if (!paraId.isEmpty()) // must be on some list?
                                 {
                                     OUString const listId = pAbsList->MapListId(paraId);
                                     if (listId != paraId)
                                     {
-                                        m_StreamStateStack.top().xPreviousParagraph->setPropertyValue("ListId", uno::Any(listId));
+                                        m_StreamStateStack.top().xPreviousParagraph->setPropertyValue(u"ListId"_ustr, uno::Any(listId));
                                     }
                                 }
                             }
@@ -2779,8 +2779,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                     // TODO: Not tested variant with different levels override in different lists.
                                     // Probably m_aListOverrideApplied as a set of overridden listids is not sufficient
                                     // and we need to register level overrides separately.
-                                    m_StreamStateStack.top().xPreviousParagraph->setPropertyValue("ParaIsNumberingRestart", uno::Any(true));
-                                    m_StreamStateStack.top().xPreviousParagraph->setPropertyValue("NumberingStartValue", uno::Any(nOverrideLevel));
+                                    m_StreamStateStack.top().xPreviousParagraph->setPropertyValue(u"ParaIsNumberingRestart"_ustr, uno::Any(true));
+                                    m_StreamStateStack.top().xPreviousParagraph->setPropertyValue(u"NumberingStartValue"_ustr, uno::Any(nOverrideLevel));
                                     m_aListOverrideApplied.insert(nListId);
                                 }
                             }
@@ -2827,7 +2827,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         {
                             OUString sChar = xCur->getString();
                             if ( sChar == " " || sChar == "\t" || sChar == OUStringChar(u'\x00A0') )
-                                xCur->setString("");
+                                xCur->setString(u""_ustr);
                             else
                                 break;
                         }
@@ -2906,19 +2906,19 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         {
                             uno::Any aMargin = GetPropertyFromParaStyleSheet(PROP_PARA_TOP_MARGIN);
                             if ( aMargin != uno::Any() )
-                                xParaProps->setPropertyValue("ParaTopMargin", aMargin);
+                                xParaProps->setPropertyValue(u"ParaTopMargin"_ustr, aMargin);
                         }
                         if ( !bBottomSet )
                         {
                             uno::Any aMargin = GetPropertyFromParaStyleSheet(PROP_PARA_BOTTOM_MARGIN);
                             if ( aMargin != uno::Any() )
-                                xParaProps->setPropertyValue("ParaBottomMargin", aMargin);
+                                xParaProps->setPropertyValue(u"ParaBottomMargin"_ustr, aMargin);
                         }
                         if ( !bContextSet )
                         {
                             uno::Any aMargin = GetPropertyFromParaStyleSheet(PROP_PARA_CONTEXT_MARGIN);
                             if ( aMargin != uno::Any() )
-                                xParaProps->setPropertyValue("ParaContextMargin", aMargin);
+                                xParaProps->setPropertyValue(u"ParaContextMargin"_ustr, aMargin);
                         }
                     }
                 }
@@ -2935,30 +2935,30 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         {
                             uno::Any aMargin = GetPropertyFromParaStyleSheet(PROP_PARA_LEFT_MARGIN);
                             if ( aMargin != uno::Any() )
-                                xParaProps->setPropertyValue("ParaLeftMargin", aMargin);
+                                xParaProps->setPropertyValue(u"ParaLeftMargin"_ustr, aMargin);
                             else if (isNumberingViaStyle)
                             {
-                                const sal_Int32 nParaLeftMargin = getNumberingProperty(nListId, GetListLevel(pEntry, pPropertyMap), "IndentAt");
+                                const sal_Int32 nParaLeftMargin = getNumberingProperty(nListId, GetListLevel(pEntry, pPropertyMap), u"IndentAt"_ustr);
                                 if (nParaLeftMargin != 0)
-                                    xParaProps->setPropertyValue("ParaLeftMargin", uno::Any(nParaLeftMargin));
+                                    xParaProps->setPropertyValue(u"ParaLeftMargin"_ustr, uno::Any(nParaLeftMargin));
                             }
                         }
                         if ( !bRightSet )
                         {
                             uno::Any aMargin = GetPropertyFromParaStyleSheet(PROP_PARA_RIGHT_MARGIN);
                             if ( aMargin != uno::Any() )
-                                xParaProps->setPropertyValue("ParaRightMargin", aMargin);
+                                xParaProps->setPropertyValue(u"ParaRightMargin"_ustr, aMargin);
                         }
                         if ( !bFirstSet )
                         {
                             uno::Any aMargin = GetPropertyFromParaStyleSheet(PROP_PARA_FIRST_LINE_INDENT);
                             if ( aMargin != uno::Any() )
-                                xParaProps->setPropertyValue("ParaFirstLineIndent", aMargin);
+                                xParaProps->setPropertyValue(u"ParaFirstLineIndent"_ustr, aMargin);
                             else if (isNumberingViaStyle)
                             {
-                                const sal_Int32 nFirstLineIndent = getNumberingProperty(nListId, GetListLevel(pEntry, pPropertyMap), "FirstLineIndent");
+                                const sal_Int32 nFirstLineIndent = getNumberingProperty(nListId, GetListLevel(pEntry, pPropertyMap), u"FirstLineIndent"_ustr);
                                 if (nFirstLineIndent != 0)
-                                    xParaProps->setPropertyValue("ParaFirstLineIndent", uno::Any(nFirstLineIndent));
+                                    xParaProps->setPropertyValue(u"ParaFirstLineIndent"_ustr, uno::Any(nFirstLineIndent));
                             }
                         }
                     }
@@ -3211,10 +3211,10 @@ void DomainMapper_Impl::MergeAtContentImageRedlineWithNext(const css::uno::Refer
             if ( xCursor->getString() == u"​​" )
             {
                 xCursor->goRight(1, true);
-                xCursor->setString("");
+                xCursor->setString(u""_ustr);
                 xCursor->gotoEnd(false);
                 xCursor->goLeft(1, true);
-                xCursor->setString("");
+                xCursor->setString(u""_ustr);
             }
         }
 
@@ -3286,7 +3286,7 @@ void DomainMapper_Impl::MergeAtContentImageRedlineWithNext(const css::uno::Refer
                         xTextRange = xTextAppend->insertTextPortion(rString, aValues, xTOCTextCursor);
                     SAL_WARN_IF(!xTextRange.is(), "writerfilter.dmapper", "insertTextPortion failed");
                     if (!xTextRange.is())
-                        throw uno::Exception("insertTextPortion failed", nullptr);
+                        throw uno::Exception(u"insertTextPortion failed"_ustr, nullptr);
                     m_StreamStateStack.top().bTextInserted = true;
                     xTOCTextCursor->gotoRange(xTextRange->getEnd(), true);
                     if (m_nStartGenericField == 0)
@@ -3309,7 +3309,7 @@ void DomainMapper_Impl::MergeAtContentImageRedlineWithNext(const css::uno::Refer
 #if !defined(MACOSX) // TODO: check layout differences and support all platforms, if needed
                 sal_Int32 nPos = 0;
                 OUString sFontName;
-                OUString sDoubleSpace("  ");
+                OUString sDoubleSpace(u"  "_ustr);
                 PropertyMapPtr pContext = GetTopContextOfType(CONTEXT_CHARACTER);
                 // tdf#123703 workaround for longer space sequences of the old or compatible RTF documents
                 if (GetSettingsTable()->GetLongerSpaceSequence() && !IsOpenFieldCommand() && (nPos = rString.indexOf(sDoubleSpace)) != -1 &&
@@ -3390,11 +3390,11 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
             xOLE->setPropertyValue(getPropertyName( PROP_STREAM_NAME ),
                             uno::Any( rStreamName ));
         else
-            xOLE->setPropertyValue("CLSID", uno::Any(aCLSID));
+            xOLE->setPropertyValue(u"CLSID"_ustr, uno::Any(aCLSID));
 
         OUString aDrawAspect = pOLEHandler->GetDrawAspect();
         if(!aDrawAspect.isEmpty())
-            xOLE->setPropertyValue("DrawAspect", uno::Any(aDrawAspect));
+            xOLE->setPropertyValue(u"DrawAspect"_ustr, uno::Any(aDrawAspect));
 
         awt::Size aSize = pOLEHandler->getSize();
         if( !aSize.Width )
@@ -3408,11 +3408,11 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
 
         OUString aVisAreaWidth = pOLEHandler->GetVisAreaWidth();
         if(!aVisAreaWidth.isEmpty())
-            xOLE->setPropertyValue("VisibleAreaWidth", uno::Any(aVisAreaWidth));
+            xOLE->setPropertyValue(u"VisibleAreaWidth"_ustr, uno::Any(aVisAreaWidth));
 
         OUString aVisAreaHeight = pOLEHandler->GetVisAreaHeight();
         if(!aVisAreaHeight.isEmpty())
-            xOLE->setPropertyValue("VisibleAreaHeight", uno::Any(aVisAreaHeight));
+            xOLE->setPropertyValue(u"VisibleAreaHeight"_ustr, uno::Any(aVisAreaHeight));
 
         uno::Reference< graphic::XGraphic > xGraphic = pOLEHandler->getReplacement();
         xOLE->setPropertyValue(getPropertyName( PROP_GRAPHIC ),
@@ -3421,31 +3421,31 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
         if (xReplacementProperties.is())
         {
             table::BorderLine2 aBorderProps;
-            xReplacementProperties->getPropertyValue("LineColor") >>= aBorderProps.Color;
-            xReplacementProperties->getPropertyValue("LineWidth") >>= aBorderProps.LineWidth;
-            xReplacementProperties->getPropertyValue("LineStyle") >>= aBorderProps.LineStyle;
+            xReplacementProperties->getPropertyValue(u"LineColor"_ustr) >>= aBorderProps.Color;
+            xReplacementProperties->getPropertyValue(u"LineWidth"_ustr) >>= aBorderProps.LineWidth;
+            xReplacementProperties->getPropertyValue(u"LineStyle"_ustr) >>= aBorderProps.LineStyle;
 
             if (aBorderProps.LineStyle) // Set line props only if LineStyle is set
             {
-                xOLE->setPropertyValue("RightBorder", uno::Any(aBorderProps));
-                xOLE->setPropertyValue("TopBorder", uno::Any(aBorderProps));
-                xOLE->setPropertyValue("LeftBorder", uno::Any(aBorderProps));
-                xOLE->setPropertyValue("BottomBorder", uno::Any(aBorderProps));
+                xOLE->setPropertyValue(u"RightBorder"_ustr, uno::Any(aBorderProps));
+                xOLE->setPropertyValue(u"TopBorder"_ustr, uno::Any(aBorderProps));
+                xOLE->setPropertyValue(u"LeftBorder"_ustr, uno::Any(aBorderProps));
+                xOLE->setPropertyValue(u"BottomBorder"_ustr, uno::Any(aBorderProps));
             }
             OUString pProperties[] = {
-                "AnchorType",
-                "Surround",
-                "SurroundContour",
-                "HoriOrient",
-                "HoriOrientPosition",
-                "VertOrient",
-                "VertOrientPosition",
-                "VertOrientRelation",
-                "HoriOrientRelation",
-                "LeftMargin",
-                "RightMargin",
-                "TopMargin",
-                "BottomMargin"
+                u"AnchorType"_ustr,
+                u"Surround"_ustr,
+                u"SurroundContour"_ustr,
+                u"HoriOrient"_ustr,
+                u"HoriOrientPosition"_ustr,
+                u"VertOrient"_ustr,
+                u"VertOrientPosition"_ustr,
+                u"VertOrientRelation"_ustr,
+                u"HoriOrientRelation"_ustr,
+                u"LeftMargin"_ustr,
+                u"RightMargin"_ustr,
+                u"TopMargin"_ustr,
+                u"BottomMargin"_ustr
             };
             for (const OUString& s : pProperties)
             {
@@ -3453,15 +3453,15 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
                 xOLE->setPropertyValue(s, aVal);
             }
 
-            if (xReplacementProperties->getPropertyValue("FillStyle").get<css::drawing::FillStyle>()
+            if (xReplacementProperties->getPropertyValue(u"FillStyle"_ustr).get<css::drawing::FillStyle>()
                 != css::drawing::FillStyle::FillStyle_NONE) // Apply fill props if style is set
             {
                 xOLE->setPropertyValue(
-                    "FillStyle", xReplacementProperties->getPropertyValue("FillStyle"));
+                    u"FillStyle"_ustr, xReplacementProperties->getPropertyValue(u"FillStyle"_ustr));
                 xOLE->setPropertyValue(
-                    "FillColor", xReplacementProperties->getPropertyValue("FillColor"));
+                    u"FillColor"_ustr, xReplacementProperties->getPropertyValue(u"FillColor"_ustr));
                 xOLE->setPropertyValue(
-                    "FillColor2", xReplacementProperties->getPropertyValue("FillColor2"));
+                    u"FillColor2"_ustr, xReplacementProperties->getPropertyValue(u"FillColor2"_ustr));
             }
         }
         else
@@ -3742,7 +3742,7 @@ void DomainMapper_Impl::ConvertHeaderFooterToTextFrame(bool bDynamicHeightTop, b
 
             std::vector<beans::PropertyValue> aFrameProperties
             {
-                comphelper::makePropertyValue("TextWrap", css::text::WrapTextMode_THROUGH),
+                comphelper::makePropertyValue(u"TextWrap"_ustr, css::text::WrapTextMode_THROUGH),
                 comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT), text::HoriOrientation::LEFT),
                 comphelper::makePropertyValue(getPropertyName(PROP_OPAQUE), false),
                 comphelper::makePropertyValue(getPropertyName(PROP_WIDTH_TYPE), text::SizeType::MIN),
@@ -4068,7 +4068,7 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
             sType = getPropertyName( PROP_PARAGRAPH_FORMAT );
             break;
         default:
-            throw lang::IllegalArgumentException("illegal redline token type", nullptr, 0);
+            throw lang::IllegalArgumentException(u"illegal redline token type"_ustr, nullptr, 0);
         }
         beans::PropertyValues aRedlineProperties( 4 );
         beans::PropertyValue * pRedlineProperties = aRedlineProperties.getArray(  );
@@ -4254,7 +4254,7 @@ void DomainMapper_Impl::PushAnnotation()
             return;
         m_xAnnotationField = m_xTextDocument->createFieldAnnotation();
         uno::Reference< text::XText > xAnnotationText;
-        m_xAnnotationField->getPropertyValue("TextRange") >>= xAnnotationText;
+        m_xAnnotationField->getPropertyValue(u"TextRange"_ustr) >>= xAnnotationText;
         m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >( xAnnotationText, uno::UNO_QUERY_THROW ),
                     m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : xAnnotationText->createTextCursorByRange(xAnnotationText->getStart())));
     }
@@ -4380,14 +4380,14 @@ void DomainMapper_Impl::RemoveTemporaryFootOrEndnotes()
             uno::Reference< text::XFootnote > xFirstNote;
             xFootnotes->getByIndex(0) >>= xFirstNote;
             uno::Reference< text::XText > xText( xFirstNote, uno::UNO_QUERY_THROW );
-            xText->setString("");
+            xText->setString(u""_ustr);
             xFootnotes->getByIndex(m_nFirstFootnoteIndex) >>= xNote;
             CopyTemporaryNotes(xNote, xFirstNote);
         }
         for (sal_Int32 i = GetFootnoteCount(); i > 0; --i)
         {
             xFootnotes->getByIndex(i) >>= xNote;
-            xNote->getAnchor()->setString("");
+            xNote->getAnchor()->setString(u""_ustr);
         }
     }
     if  (GetEndnoteCount() > 0)
@@ -4398,14 +4398,14 @@ void DomainMapper_Impl::RemoveTemporaryFootOrEndnotes()
             uno::Reference< text::XFootnote > xFirstNote;
             xEndnotes->getByIndex(0) >>= xFirstNote;
             uno::Reference< text::XText > xText( xFirstNote, uno::UNO_QUERY_THROW );
-            xText->setString("");
+            xText->setString(u""_ustr);
             xEndnotes->getByIndex(m_nFirstEndnoteIndex) >>= xNote;
             CopyTemporaryNotes(xNote, xFirstNote);
         }
         for (sal_Int32 i = GetEndnoteCount(); i > 0; --i)
         {
             xEndnotes->getByIndex(i) >>= xNote;
-            xNote->getAnchor()->setString("");
+            xNote->getAnchor()->setString(u""_ustr);
         }
     }
 }
@@ -4516,10 +4516,10 @@ void DomainMapper_Impl::PopAnnotation()
     try
     {
         if (m_bAnnotationResolved)
-            m_xAnnotationField->setPropertyValue("Resolved", uno::Any(true));
+            m_xAnnotationField->setPropertyValue(u"Resolved"_ustr, uno::Any(true));
 
-        m_xAnnotationField->setPropertyValue("ParaIdParent", uno::Any(m_sAnnotationParent));
-        m_xAnnotationField->setPropertyValue("ParaId", uno::Any(m_sAnnotationImportedParaId));
+        m_xAnnotationField->setPropertyValue(u"ParaIdParent"_ustr, uno::Any(m_sAnnotationParent));
+        m_xAnnotationField->setPropertyValue(u"ParaId"_ustr, uno::Any(m_sAnnotationImportedParaId));
 
         // See if the annotation will be a single position or a range.
         if (m_nAnnotationId == -1 || !m_aAnnotationPositions[m_nAnnotationId].m_xStart.is() || !m_aAnnotationPositions[m_nAnnotationId].m_xEnd.is())
@@ -4541,7 +4541,7 @@ void DomainMapper_Impl::PopAnnotation()
             {
                 // Insert a marker so that comment around an anchored image is not collapsed during
                 // insertion.
-                xText->insertString(xCursor, "x", false);
+                xText->insertString(xCursor, u"x"_ustr, false);
                 bMarker = true;
             }
 
@@ -4633,7 +4633,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
     try
     {
         uno::Reference< lang::XServiceInfo > xSInfo( xShape, uno::UNO_QUERY_THROW );
-        if (xSInfo->supportsService("com.sun.star.drawing.GroupShape"))
+        if (xSInfo->supportsService(u"com.sun.star.drawing.GroupShape"_ustr))
         {
             // Textboxes in shapes do not support styles, so check saved style information and apply properties directly to the child shapes.
             const uno::Reference<drawing::XShapes> xShapes(xShape, uno::UNO_QUERY);
@@ -4648,14 +4648,14 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                         xFramePropertySet.set(xFrame, uno::UNO_QUERY_THROW);
                     uno::Reference<beans::XPropertySet> xShapePropertySet(xShapes->getByIndex(i), uno::UNO_QUERY_THROW);
 
-                    comphelper::SequenceAsHashMap aGrabBag( xShapePropertySet->getPropertyValue("CharInteropGrabBag") );
+                    comphelper::SequenceAsHashMap aGrabBag( xShapePropertySet->getPropertyValue(u"CharInteropGrabBag"_ustr) );
 
                     // only VML import has checked for style. Don't apply default parastyle properties to other imported shapes
                     // - except for fontsize - to maintain compatibility with previous versions of LibreOffice.
-                    const bool bOnlyApplyCharHeight = !aGrabBag["mso-pStyle"].hasValue();
+                    const bool bOnlyApplyCharHeight = !aGrabBag[u"mso-pStyle"_ustr].hasValue();
 
                     OUString sStyleName;
-                    aGrabBag["mso-pStyle"] >>= sStyleName;
+                    aGrabBag[u"mso-pStyle"_ustr] >>= sStyleName;
                     StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByISTD( sStyleName );
                     if ( !pEntry )
                     {
@@ -4712,7 +4712,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
 
             uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
             uno::Sequence<beans::PropertyValue> aGrabBag;
-            xShapePropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+            xShapePropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
 
             for (const auto& rProp : aGrabBag)
             {
@@ -4739,7 +4739,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             uno::Reference<text::XTextContent> xTxtContent(xShape, uno::UNO_QUERY);
             m_aAnchoredStack.push(AnchoredContext(xTxtContent));
         }
-        else if (xSInfo->supportsService("com.sun.star.drawing.OLE2Shape"))
+        else if (xSInfo->supportsService(u"com.sun.star.drawing.OLE2Shape"_ustr))
         {
             // OLE2Shape from oox should be converted to a TextEmbeddedObject for sw.
             m_aTextAppendStack.push(TextAppendContext(uno::Reference<text::XTextAppend>(xShape, uno::UNO_QUERY), uno::Reference<text::XTextCursor>()));
@@ -4781,14 +4781,14 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             text::TextContentAnchorType nAnchorType(text::TextContentAnchorType_AT_PARAGRAPH);
             xProps->getPropertyValue(getPropertyName( PROP_ANCHOR_TYPE )) >>= nAnchorType;
             bool checkZOrderStatus = false;
-            if (xSInfo->supportsService("com.sun.star.text.TextFrame"))
+            if (xSInfo->supportsService(u"com.sun.star.text.TextFrame"_ustr))
             {
                 SetIsTextFrameInserted(true);
                 // Extract the special "btLr text frame" mode, requested by oox, if needed.
                 // Extract vml ZOrder from FrameInteropGrabBag
                 uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
                 uno::Sequence<beans::PropertyValue> aGrabBag;
-                xShapePropertySet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
+                xShapePropertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= aGrabBag;
 
                 for (const auto& rProp : aGrabBag)
                 {
@@ -4799,7 +4799,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                         rProp.Value >>= zOrder;
                         GraphicZOrderHelper::adjustRelativeHeight(zOrder, /*IsZIndex=*/true,
                                                                   zOrder < 0, IsInHeaderFooter());
-                        xShapePropertySet->setPropertyValue("ZOrder",
+                        xShapePropertySet->setPropertyValue(u"ZOrder"_ustr,
                             uno::Any(rZOrderHelper.findZOrder(zOrder, /*LastDuplicateWins*/true)));
                         rZOrderHelper.addItem(xShapePropertySet, zOrder);
                         xShapePropertySet->setPropertyValue(getPropertyName( PROP_OPAQUE ), uno::Any( zOrder >= 0 ) );
@@ -4821,7 +4821,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
 
                 uno::Reference<beans::XPropertySet> xPropertySet(xTextContent, uno::UNO_QUERY);
                 // we need to re-set this value to xTextContent, then only values are preserved.
-                xPropertySet->setPropertyValue("FrameInteropGrabBag",uno::Any(aGrabBag));
+                xPropertySet->setPropertyValue(u"FrameInteropGrabBag"_ustr,uno::Any(aGrabBag));
             }
             else if (nAnchorType == text::TextContentAnchorType_AS_CHARACTER)
             {
@@ -4836,7 +4836,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             {
                 uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
                 uno::Sequence<beans::PropertyValue> aGrabBag;
-                xShapePropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+                xShapePropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
                 for (const auto& rProp : aGrabBag)
                 {
                     if (rProp.Name == "VML-Z-ORDER")
@@ -4846,7 +4846,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                         rProp.Value >>= zOrder;
                         GraphicZOrderHelper::adjustRelativeHeight(zOrder, /*IsZIndex=*/true,
                                                                   zOrder < 0, IsInHeaderFooter());
-                        xShapePropertySet->setPropertyValue("ZOrder",
+                        xShapePropertySet->setPropertyValue(u"ZOrder"_ustr,
                             uno::Any(rZOrderHelper.findZOrder(zOrder, /*LastDuplicateWins*/true)));
                         rZOrderHelper.addItem(xShapePropertySet, zOrder);
                         xShapePropertySet->setPropertyValue(getPropertyName( PROP_OPAQUE ), uno::Any( zOrder >= 0 ) );
@@ -4868,12 +4868,12 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                     if(xShapePropertySet.is())
                     {
                         xPropSetInfo = xShapePropertySet->getPropertySetInfo();
-                        if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("InteropGrabBag"))
+                        if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"InteropGrabBag"_ustr))
                         {
                             uno::Sequence<beans::PropertyValue> aShapeGrabBag( comphelper::InitPropertySequence({
                                 { "SdtEndBefore", uno::Any(true) }
                             }));
-                            xShapePropertySet->setPropertyValue("InteropGrabBag",uno::Any(aShapeGrabBag));
+                            xShapePropertySet->setPropertyValue(u"InteropGrabBag"_ustr,uno::Any(aShapeGrabBag));
                         }
                     }
                 }
@@ -5035,9 +5035,9 @@ void DomainMapper_Impl::ClearPreviousParagraph()
         && m_StreamStateStack.top().xPreviousParagraph.is()
         && hasTableManager() && getTableManager().isCellLastParaAfterAutospacing())
     {
-        uno::Reference<container::XNamed> xPreviousNumberingRules(m_StreamStateStack.top().xPreviousParagraph->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+        uno::Reference<container::XNamed> xPreviousNumberingRules(m_StreamStateStack.top().xPreviousParagraph->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
         if ( !xPreviousNumberingRules.is() || xPreviousNumberingRules->getName().isEmpty() )
-            m_StreamStateStack.top().xPreviousParagraph->setPropertyValue("ParaBottomMargin", uno::Any(static_cast<sal_Int32>(0)));
+            m_StreamStateStack.top().xPreviousParagraph->setPropertyValue(u"ParaBottomMargin"_ustr, uno::Any(static_cast<sal_Int32>(0)));
     }
 
     m_StreamStateStack.top().xPreviousParagraph.clear();
@@ -5054,7 +5054,7 @@ void DomainMapper_Impl::HandleAltChunk(const OUString& rStreamName)
         uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(
             comphelper::getProcessServiceFactory());
         uno::Reference<uno::XInterface> xDocxFilter
-            = xMultiServiceFactory->createInstance("com.sun.star.comp.Writer.WriterFilter");
+            = xMultiServiceFactory->createInstance(u"com.sun.star.comp.Writer.WriterFilter"_ustr);
 
         // Set the target document.
         uno::Reference<document::XImporter> xImporter(xDocxFilter, uno::UNO_QUERY);
@@ -5180,14 +5180,14 @@ void DomainMapper_Impl::HandleLineBreak(const PropertyMapPtr& pPropertyMap)
 {
     if (!m_StreamStateStack.top().oLineBreakClear.has_value())
     {
-        appendTextPortion("\n", pPropertyMap);
+        appendTextPortion(u"\n"_ustr, pPropertyMap);
         return;
     }
 
     if (m_xTextDocument)
     {
         rtl::Reference<SwXLineBreak> xLineBreak = m_xTextDocument->createLineBreak();
-        xLineBreak->setPropertyValue("Clear", uno::Any(*m_StreamStateStack.top().oLineBreakClear));
+        xLineBreak->setPropertyValue(u"Clear"_ustr, uno::Any(*m_StreamStateStack.top().oLineBreakClear));
         appendTextContent(xLineBreak, pPropertyMap->GetPropertyValues());
     }
     m_StreamStateStack.top().oLineBreakClear.reset();
@@ -5412,7 +5412,7 @@ static OUString lcl_ExtractToken(std::u16string_view rCommand,
                 {
                     rHaveToken = true;
                     ++rIndex;
-                    return "FORMULA";
+                    return u"FORMULA"_ustr;
                 }
                 else
                     token.append('=');
@@ -5672,7 +5672,7 @@ void DomainMapper_Impl::ChainTextFrames()
     {
         ChainMap aTextFramesForChainingHelper;
         ::std::vector<TextFramesForChaining> chainingWPS;
-        OUString sChainNextName("ChainNextName");
+        OUString sChainNextName(u"ChainNextName"_ustr);
 
         //learn about ALL of the textboxes and their chaining values first - because frames are processed in no specific order.
         for( const auto& rTextFrame : m_vTextFramesForChaining )
@@ -5691,21 +5691,21 @@ void DomainMapper_Impl::ChainTextFrames()
 
             //The chaining name and the shape name CAN be different in .docx.
             //MUST use LinkDisplayName/ChainName as the shape name for establishing links.
-            if ( xServiceInfo->supportsService("com.sun.star.text.TextFrame") )
+            if ( xServiceInfo->supportsService(u"com.sun.star.text.TextFrame"_ustr) )
             {
-                xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
-                xPropertySet->getPropertyValue("LinkDisplayName") >>= sShapeName;
+                xPropertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= aGrabBag;
+                xPropertySet->getPropertyValue(u"LinkDisplayName"_ustr) >>= sShapeName;
             }
             else
             {
-                xPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
-                xPropertySet->getPropertyValue("ChainName") >>= sShapeName;
+                xPropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
+                xPropertySet->getPropertyValue(u"ChainName"_ustr) >>= sShapeName;
             }
 
-            lcl_getGrabBagValue( aGrabBag, "Txbx-Id")  >>= aChainStruct.nId;
-            lcl_getGrabBagValue( aGrabBag, "Txbx-Seq") >>= aChainStruct.nSeq;
-            lcl_getGrabBagValue( aGrabBag, "LinkChainName") >>= sLinkChainName;
-            lcl_getGrabBagValue( aGrabBag, "mso-next-textbox") >>= aChainStruct.s_mso_next_textbox;
+            lcl_getGrabBagValue( aGrabBag, u"Txbx-Id"_ustr)  >>= aChainStruct.nId;
+            lcl_getGrabBagValue( aGrabBag, u"Txbx-Seq"_ustr) >>= aChainStruct.nSeq;
+            lcl_getGrabBagValue( aGrabBag, u"LinkChainName"_ustr) >>= sLinkChainName;
+            lcl_getGrabBagValue( aGrabBag, u"mso-next-textbox"_ustr) >>= aChainStruct.s_mso_next_textbox;
 
             //Sometimes the shape names have not been imported.  If not, we may have a fallback name.
             //Set name later, only if required for linking.
@@ -5863,7 +5863,7 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(css::uno::Reference<css::dra
                 uno::Reference<drawing::XShape>(xGroup->getByIndex(i), uno::UNO_QUERY));
 
     // if this shape has to be a textbox, attach the frame
-    if (!xProps->getPropertyValue("TextBox").get<bool>())
+    if (!xProps->getPropertyValue(u"TextBox"_ustr).get<bool>())
         return;
 
     // if this is a textbox there must be a waiting frame
@@ -5877,7 +5877,7 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(css::uno::Reference<css::dra
     // Attach the textbox to the shape
     try
     {
-        xProps->setPropertyValue("TextBoxContent", uno::Any(uno::Reference< text::XTextFrame >(xTextBox)));
+        xProps->setPropertyValue(u"TextBoxContent"_ustr, uno::Any(uno::Reference< text::XTextFrame >(xTextBox)));
     }
     catch (...)
     {
@@ -5895,8 +5895,8 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(css::uno::Reference<css::dra
 
         // Try to get the grabbag
         uno::Sequence<beans::PropertyValue> aOldGrabBagSeq;
-        if (xProps->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
-            xProps->getPropertyValue("InteropGrabBag") >>= aOldGrabBagSeq;
+        if (xProps->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+            xProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= aOldGrabBagSeq;
 
         // If the grabbag successfully get...
         if (!aOldGrabBagSeq.hasElements())
@@ -5905,12 +5905,12 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(css::uno::Reference<css::dra
         // Check for the existing linking information
         bool bSuccess = false;
         beans::PropertyValues aNewGrabBagSeq;
-        const auto& aHasLink = lcl_getGrabBagValue(aOldGrabBagSeq, "TxbxHasLink");
+        const auto& aHasLink = lcl_getGrabBagValue(aOldGrabBagSeq, u"TxbxHasLink"_ustr);
 
         // If there must be a link, do it
         if (aHasLink.hasValue() && aHasLink.get<bool>())
         {
-            auto aLinkProp = comphelper::makePropertyValue("LinkChainName", sTextBoxName);
+            auto aLinkProp = comphelper::makePropertyValue(u"LinkChainName"_ustr, sTextBoxName);
             for (sal_uInt32 i = 0; i < aOldGrabBagSeq.size(); ++i)
             {
                 aNewGrabBagSeq.realloc(i + 1);
@@ -5938,7 +5938,7 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(css::uno::Reference<css::dra
         // If the linking changed the grabbag, apply the modifications
         if (aNewGrabBagSeq.hasElements() && bSuccess)
         {
-            xProps->setPropertyValue("InteropGrabBag", uno::Any(aNewGrabBagSeq));
+            xProps->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aNewGrabBagSeq));
             m_vTextFramesForChaining.push_back(xShape);
         }
     }
@@ -6071,8 +6071,8 @@ void FieldContext::SetTextField(uno::Reference<text::XTextField> const& xTextFie
         uno::Reference<lang::XServiceInfo> const xServiceInfo(xTextField, uno::UNO_QUERY);
         assert(xServiceInfo.is());
         // those must be set by SetFormField()
-        assert(!xServiceInfo->supportsService("com.sun.star.text.Fieldmark")
-            && !xServiceInfo->supportsService("com.sun.star.text.FormFieldmark"));
+        assert(!xServiceInfo->supportsService(u"com.sun.star.text.Fieldmark"_ustr)
+            && !xServiceInfo->supportsService(u"com.sun.star.text.FormFieldmark"_ustr));
     }
 #endif
     m_xTextField = xTextField;
@@ -6273,69 +6273,69 @@ static const FieldConversionMap_t & lcl_GetFieldConversion()
     {
 //      {"ADDRESSBLOCK",    {"",                        FIELD_ADDRESSBLOCK  }},
 //      {"ADVANCE",         {"",                        FIELD_ADVANCE       }},
-        {"ASK",             {"SetExpression",           FIELD_ASK           }},
-        {"AUTONUM",         {"SetExpression",           FIELD_AUTONUM       }},
-        {"AUTONUMLGL",      {"SetExpression",           FIELD_AUTONUMLGL    }},
-        {"AUTONUMOUT",      {"SetExpression",           FIELD_AUTONUMOUT    }},
-        {"AUTHOR",          {"DocInfo.CreateAuthor",    FIELD_AUTHOR        }},
-        {"DATE",            {"DateTime",                FIELD_DATE          }},
-        {"COMMENTS",        {"DocInfo.Description",     FIELD_COMMENTS      }},
-        {"CREATEDATE",      {"DocInfo.CreateDateTime",  FIELD_CREATEDATE    }},
-        {"DOCPROPERTY",     {"",                        FIELD_DOCPROPERTY   }},
-        {"DOCVARIABLE",     {"User",                    FIELD_DOCVARIABLE   }},
-        {"EDITTIME",        {"DocInfo.EditTime",        FIELD_EDITTIME      }},
-        {"EQ",              {"",                        FIELD_EQ            }},
-        {"FILLIN",          {"Input",                   FIELD_FILLIN        }},
-        {"FILENAME",        {"FileName",                FIELD_FILENAME      }},
+        {u"ASK"_ustr,             {"SetExpression",           FIELD_ASK           }},
+        {u"AUTONUM"_ustr,         {"SetExpression",           FIELD_AUTONUM       }},
+        {u"AUTONUMLGL"_ustr,      {"SetExpression",           FIELD_AUTONUMLGL    }},
+        {u"AUTONUMOUT"_ustr,      {"SetExpression",           FIELD_AUTONUMOUT    }},
+        {u"AUTHOR"_ustr,          {"DocInfo.CreateAuthor",    FIELD_AUTHOR        }},
+        {u"DATE"_ustr,            {"DateTime",                FIELD_DATE          }},
+        {u"COMMENTS"_ustr,        {"DocInfo.Description",     FIELD_COMMENTS      }},
+        {u"CREATEDATE"_ustr,      {"DocInfo.CreateDateTime",  FIELD_CREATEDATE    }},
+        {u"DOCPROPERTY"_ustr,     {"",                        FIELD_DOCPROPERTY   }},
+        {u"DOCVARIABLE"_ustr,     {"User",                    FIELD_DOCVARIABLE   }},
+        {u"EDITTIME"_ustr,        {"DocInfo.EditTime",        FIELD_EDITTIME      }},
+        {u"EQ"_ustr,              {"",                        FIELD_EQ            }},
+        {u"FILLIN"_ustr,          {"Input",                   FIELD_FILLIN        }},
+        {u"FILENAME"_ustr,        {"FileName",                FIELD_FILENAME      }},
 //      {"FILESIZE",        {"",                        FIELD_FILESIZE      }},
-        {"FORMULA",         {"TableFormula",            FIELD_FORMULA       }},
-        {"FORMCHECKBOX",    {"",                        FIELD_FORMCHECKBOX  }},
-        {"FORMDROPDOWN",    {"DropDown",                FIELD_FORMDROPDOWN  }},
-        {"FORMTEXT",        {"Input",                   FIELD_FORMTEXT      }},
-        {"GOTOBUTTON",      {"",                        FIELD_GOTOBUTTON    }},
-        {"HYPERLINK",       {"",                        FIELD_HYPERLINK     }},
-        {"IF",              {"ConditionalText",         FIELD_IF            }},
+        {u"FORMULA"_ustr,         {"TableFormula",            FIELD_FORMULA       }},
+        {u"FORMCHECKBOX"_ustr,    {"",                        FIELD_FORMCHECKBOX  }},
+        {u"FORMDROPDOWN"_ustr,    {"DropDown",                FIELD_FORMDROPDOWN  }},
+        {u"FORMTEXT"_ustr,        {"Input",                   FIELD_FORMTEXT      }},
+        {u"GOTOBUTTON"_ustr,      {"",                        FIELD_GOTOBUTTON    }},
+        {u"HYPERLINK"_ustr,       {"",                        FIELD_HYPERLINK     }},
+        {u"IF"_ustr,              {"ConditionalText",         FIELD_IF            }},
 //      {"INFO",            {"",                        FIELD_INFO          }},
-        {"INCLUDEPICTURE",  {"",                        FIELD_INCLUDEPICTURE}},
-        {"KEYWORDS",        {"DocInfo.KeyWords",        FIELD_KEYWORDS      }},
-        {"LASTSAVEDBY",     {"DocInfo.ChangeAuthor",    FIELD_LASTSAVEDBY   }},
-        {"MACROBUTTON",     {"Macro",                   FIELD_MACROBUTTON   }},
-        {"MERGEFIELD",      {"Database",                FIELD_MERGEFIELD    }},
-        {"MERGEREC",        {"DatabaseNumberOfSet",     FIELD_MERGEREC      }},
+        {u"INCLUDEPICTURE"_ustr,  {"",                        FIELD_INCLUDEPICTURE}},
+        {u"KEYWORDS"_ustr,        {"DocInfo.KeyWords",        FIELD_KEYWORDS      }},
+        {u"LASTSAVEDBY"_ustr,     {"DocInfo.ChangeAuthor",    FIELD_LASTSAVEDBY   }},
+        {u"MACROBUTTON"_ustr,     {"Macro",                   FIELD_MACROBUTTON   }},
+        {u"MERGEFIELD"_ustr,      {"Database",                FIELD_MERGEFIELD    }},
+        {u"MERGEREC"_ustr,        {"DatabaseNumberOfSet",     FIELD_MERGEREC      }},
 //      {"MERGESEQ",        {"",                        FIELD_MERGESEQ      }},
-        {"NEXT",            {"DatabaseNextSet",         FIELD_NEXT          }},
-        {"NEXTIF",          {"DatabaseNextSet",         FIELD_NEXTIF        }},
-        {"PAGE",            {"PageNumber",              FIELD_PAGE          }},
-        {"PAGEREF",         {"GetReference",            FIELD_PAGEREF       }},
-        {"PRINTDATE",       {"DocInfo.PrintDateTime",   FIELD_PRINTDATE     }},
-        {"REF",             {"GetReference",            FIELD_REF           }},
-        {"REVNUM",          {"DocInfo.Revision",        FIELD_REVNUM        }},
-        {"SAVEDATE",        {"DocInfo.ChangeDateTime",  FIELD_SAVEDATE      }},
+        {u"NEXT"_ustr,            {"DatabaseNextSet",         FIELD_NEXT          }},
+        {u"NEXTIF"_ustr,          {"DatabaseNextSet",         FIELD_NEXTIF        }},
+        {u"PAGE"_ustr,            {"PageNumber",              FIELD_PAGE          }},
+        {u"PAGEREF"_ustr,         {"GetReference",            FIELD_PAGEREF       }},
+        {u"PRINTDATE"_ustr,       {"DocInfo.PrintDateTime",   FIELD_PRINTDATE     }},
+        {u"REF"_ustr,             {"GetReference",            FIELD_REF           }},
+        {u"REVNUM"_ustr,          {"DocInfo.Revision",        FIELD_REVNUM        }},
+        {u"SAVEDATE"_ustr,        {"DocInfo.ChangeDateTime",  FIELD_SAVEDATE      }},
 //      {"SECTION",         {"",                        FIELD_SECTION       }},
 //      {"SECTIONPAGES",    {"",                        FIELD_SECTIONPAGES  }},
-        {"SEQ",             {"SetExpression",           FIELD_SEQ           }},
-        {"SET",             {"SetExpression",           FIELD_SET           }},
+        {u"SEQ"_ustr,             {"SetExpression",           FIELD_SEQ           }},
+        {u"SET"_ustr,             {"SetExpression",           FIELD_SET           }},
 //      {"SKIPIF",          {"",                        FIELD_SKIPIF        }},
-        {"STYLEREF",        {"GetReference",            FIELD_STYLEREF      }},
-        {"SUBJECT",         {"DocInfo.Subject",         FIELD_SUBJECT       }},
-        {"SYMBOL",          {"",                        FIELD_SYMBOL        }},
-        {"TEMPLATE",        {"TemplateName",            FIELD_TEMPLATE      }},
-        {"TIME",            {"DateTime",                FIELD_TIME          }},
-        {"TITLE",           {"DocInfo.Title",           FIELD_TITLE         }},
-        {"USERINITIALS",    {"Author",                  FIELD_USERINITIALS  }},
+        {u"STYLEREF"_ustr,        {"GetReference",            FIELD_STYLEREF      }},
+        {u"SUBJECT"_ustr,         {"DocInfo.Subject",         FIELD_SUBJECT       }},
+        {u"SYMBOL"_ustr,          {"",                        FIELD_SYMBOL        }},
+        {u"TEMPLATE"_ustr,        {"TemplateName",            FIELD_TEMPLATE      }},
+        {u"TIME"_ustr,            {"DateTime",                FIELD_TIME          }},
+        {u"TITLE"_ustr,           {"DocInfo.Title",           FIELD_TITLE         }},
+        {u"USERINITIALS"_ustr,    {"Author",                  FIELD_USERINITIALS  }},
 //      {"USERADDRESS",     {"",                        FIELD_USERADDRESS   }},
-        {"USERNAME",        {"Author",                  FIELD_USERNAME      }},
+        {u"USERNAME"_ustr,        {"Author",                  FIELD_USERNAME      }},
 
 
-        {"TOC",         {"com.sun.star.text.ContentIndex",          FIELD_TOC           }},
-        {"TC",          {"com.sun.star.text.ContentIndexMark",      FIELD_TC            }},
-        {"NUMCHARS",    {"CharacterCount",                          FIELD_NUMCHARS      }},
-        {"NUMWORDS",    {"WordCount",                               FIELD_NUMWORDS      }},
-        {"NUMPAGES",    {"PageCount",                               FIELD_NUMPAGES      }},
-        {"INDEX",       {"com.sun.star.text.DocumentIndex",         FIELD_INDEX         }},
-        {"XE",          {"com.sun.star.text.DocumentIndexMark",     FIELD_XE            }},
-        {"BIBLIOGRAPHY",{"com.sun.star.text.Bibliography",          FIELD_BIBLIOGRAPHY  }},
-        {"CITATION",    {"com.sun.star.text.TextField.Bibliography",FIELD_CITATION      }},
+        {u"TOC"_ustr,         {"com.sun.star.text.ContentIndex",          FIELD_TOC           }},
+        {u"TC"_ustr,          {"com.sun.star.text.ContentIndexMark",      FIELD_TC            }},
+        {u"NUMCHARS"_ustr,    {"CharacterCount",                          FIELD_NUMCHARS      }},
+        {u"NUMWORDS"_ustr,    {"WordCount",                               FIELD_NUMWORDS      }},
+        {u"NUMPAGES"_ustr,    {"PageCount",                               FIELD_NUMPAGES      }},
+        {u"INDEX"_ustr,       {"com.sun.star.text.DocumentIndex",         FIELD_INDEX         }},
+        {u"XE"_ustr,          {"com.sun.star.text.DocumentIndexMark",     FIELD_XE            }},
+        {u"BIBLIOGRAPHY"_ustr,{"com.sun.star.text.Bibliography",          FIELD_BIBLIOGRAPHY  }},
+        {u"CITATION"_ustr,    {"com.sun.star.text.TextField.Bibliography",FIELD_CITATION      }},
     };
 
     return aFieldConversionMap;
@@ -6345,9 +6345,9 @@ static const FieldConversionMap_t & lcl_GetEnhancedFieldConversion()
 {
     static const FieldConversionMap_t aEnhancedFieldConversionMap =
     {
-        {"FORMCHECKBOX", {"FormFieldmark", FIELD_FORMCHECKBOX}},
-        {"FORMDROPDOWN", {"FormFieldmark", FIELD_FORMDROPDOWN}},
-        {"FORMTEXT",     {"Fieldmark",     FIELD_FORMTEXT}},
+        {u"FORMCHECKBOX"_ustr, {"FormFieldmark", FIELD_FORMCHECKBOX}},
+        {u"FORMDROPDOWN"_ustr, {"FormFieldmark", FIELD_FORMDROPDOWN}},
+        {u"FORMTEXT"_ustr,     {"Fieldmark",     FIELD_FORMTEXT}},
     };
 
     return aEnhancedFieldConversionMap;
@@ -6544,7 +6544,7 @@ void DomainMapper_Impl::handleFieldFormula
 
     xFieldProperties->setPropertyValue(getPropertyName(PROP_CONTENT), uno::Any(formula));
     xFieldProperties->setPropertyValue(getPropertyName(PROP_NUMBER_FORMAT), uno::Any(sal_Int32(0)));
-    xFieldProperties->setPropertyValue("IsShowFormula", uno::Any(false));
+    xFieldProperties->setPropertyValue(u"IsShowFormula"_ustr, uno::Any(false));
 
     // grab-bag the original and converted formula
     if (hasTableManager())
@@ -6644,7 +6644,7 @@ void DomainMapper_Impl::handleAutoNum
     uno::Reference< beans::XPropertySet > xMaster =
     FindOrCreateFieldMaster
         ("com.sun.star.text.FieldMaster.SetExpression",
-        "AutoNr");
+        u"AutoNr"_ustr);
 
     xMaster->setPropertyValue( getPropertyName(PROP_SUB_TYPE),
         uno::Any(text::SetVariableType::SEQUENCE));
@@ -6740,7 +6740,7 @@ void DomainMapper_Impl::handleAuthor
     else
         pContext->CacheVariableValue(xUserDefinedProps->getPropertyValue(rFirstParam));
 
-    OUString sServiceName("com.sun.star.text.TextField.");
+    OUString sServiceName(u"com.sun.star.text.TextField."_ustr);
     bool bIsCustomField = false;
     if(sFieldServiceName.isEmpty())
     {
@@ -6809,10 +6809,10 @@ static uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool
         {
             // This is an existing page number token; insert the chapter and separator before it
             aNewLevel.push_back(
-                { comphelper::makePropertyValue(tokType, OUString("TokenChapterInfo")),
-                  comphelper::makePropertyValue("ChapterFormat", text::ChapterFormat::NUMBER) });
-            aNewLevel.push_back({ comphelper::makePropertyValue(tokType, OUString("TokenText")),
-                                  comphelper::makePropertyValue("Text", sChapterNoSeparator) });
+                { comphelper::makePropertyValue(tokType, u"TokenChapterInfo"_ustr),
+                  comphelper::makePropertyValue(u"ChapterFormat"_ustr, text::ChapterFormat::NUMBER) });
+            aNewLevel.push_back({ comphelper::makePropertyValue(tokType, u"TokenText"_ustr),
+                                  comphelper::makePropertyValue(u"Text"_ustr, sChapterNoSeparator) });
         }
 
         aNewLevel.push_back(item);
@@ -6821,8 +6821,8 @@ static uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool
         {
             // There is a fixed tab stop position needed in the level after the numbering
             aNewLevel.push_back(
-                { comphelper::makePropertyValue(tokType, OUString("TokenTabStop")),
-                  comphelper::makePropertyValue("TabStopPosition", numtab->Position) });
+                { comphelper::makePropertyValue(tokType, u"TokenTabStop"_ustr),
+                  comphelper::makePropertyValue(u"TabStopPosition"_ustr, numtab->Position) });
         }
     }
 
@@ -7088,7 +7088,7 @@ void DomainMapper_Impl::handleToc
 
             // Create section before setting m_bStartTOC: finishing paragraph
             // inside StartIndexSectionChecked could do the wrong thing otherwise
-            xTOC = StartIndexSectionChecked(bTableOfFigures ? "com.sun.star.text.IllustrationsIndex"
+            xTOC = StartIndexSectionChecked(bTableOfFigures ? u"com.sun.star.text.IllustrationsIndex"_ustr
                                                             : sTOCServiceName);
 
             const auto xTextCursor = xTextAppend->getText()->createTextCursor();
@@ -7107,7 +7107,7 @@ void DomainMapper_Impl::handleToc
             m_xTOCMarkerCursor = xText->createTextCursor();
 
             // create header of the TOC with the TOC title inside
-            createSectionForRange(m_StreamStateStack.top().xSdtEntryStart, xTextRangeEndOfTocHeader, "com.sun.star.text.IndexHeaderSection", true);
+            createSectionForRange(m_StreamStateStack.top().xSdtEntryStart, xTextRangeEndOfTocHeader, u"com.sun.star.text.IndexHeaderSection"_ustr, true);
         }
     }
 
@@ -7223,11 +7223,11 @@ void DomainMapper_Impl::handleToc
                         if (uno::Reference<beans::XPropertyState> xPropState{ xStyle,
                                                                               uno::UNO_QUERY })
                         {
-                            if (xPropState->getPropertyState("ParaTabStops")
+                            if (xPropState->getPropertyState(u"ParaTabStops"_ustr)
                                 == beans::PropertyState_DIRECT_VALUE)
                             {
                                 if (uno::Sequence<style::TabStop> tabStops;
-                                    xStyle->getPropertyValue("ParaTabStops") >>= tabStops)
+                                    xStyle->getPropertyValue(u"ParaTabStops"_ustr) >>= tabStops)
                                 {
                                     // If the style only has one tab stop, Word uses it for
                                     // page number, and generates the other from defaults
@@ -7263,7 +7263,7 @@ void DomainMapper_Impl::handleToc
         if (!sTemplate.isEmpty())
         {
             OUString const sConvertedStyleName(ConvertTOCStyleName(sTemplate));
-            xTOC->setPropertyValue("CreateFromParagraphStyle", uno::Any(sConvertedStyleName));
+            xTOC->setPropertyValue(u"CreateFromParagraphStyle"_ustr, uno::Any(sConvertedStyleName));
         }
 
         if ( bHyperlinks )
@@ -7366,7 +7366,7 @@ void DomainMapper_Impl::handleIndex
     // inside StartIndexSectionChecked could do the wrong thing otherwise
     const auto xTOC = StartIndexSectionChecked( sUserIndex.isEmpty()
             ? sTOCServiceName
-            : "com.sun.star.text.UserIndex");
+            : u"com.sun.star.text.UserIndex"_ustr);
 
     m_bStartTOC = true;
     m_bStartIndex = true;
@@ -7377,15 +7377,15 @@ void DomainMapper_Impl::handleIndex
 
         if( lcl_FindInCommand( pContext->GetCommand(), 'r', sValue ))
         {
-            xTOC->setPropertyValue("IsCommaSeparated", uno::Any(true));
+            xTOC->setPropertyValue(u"IsCommaSeparated"_ustr, uno::Any(true));
         }
         if( lcl_FindInCommand( pContext->GetCommand(), 'h', sValue ))
         {
-            xTOC->setPropertyValue("UseAlphabeticalSeparators", uno::Any(true));
+            xTOC->setPropertyValue(u"UseAlphabeticalSeparators"_ustr, uno::Any(true));
         }
         if( !sUserIndex.isEmpty() )
         {
-            xTOC->setPropertyValue("UserIndexName", uno::Any(sUserIndex));
+            xTOC->setPropertyValue(u"UserIndexName"_ustr, uno::Any(sUserIndex));
         }
     }
     pContext->SetTOC( xTOC );
@@ -7596,7 +7596,7 @@ void DomainMapper_Impl::CloseFieldCommand()
             if( bCreateField || bCreateEnhancedField )
             {
                 //add the service prefix
-                OUString sServiceName("com.sun.star.text.");
+                OUString sServiceName(u"com.sun.star.text."_ustr);
                 if ( bCreateEnhancedField )
                 {
                     const FieldConversionMap_t& aEnhancedFieldConversionMap = lcl_GetEnhancedFieldConversion();
@@ -7923,11 +7923,11 @@ void DomainMapper_Impl::CloseFieldCommand()
                         }
 
                         xFieldProperties->setPropertyValue(
-                            "TrueContent", uno::Any(vArguments[vArguments.size() - 2]));
+                            u"TrueContent"_ustr, uno::Any(vArguments[vArguments.size() - 2]));
                         xFieldProperties->setPropertyValue(
-                            "FalseContent", uno::Any(vArguments[vArguments.size() - 1]));
+                            u"FalseContent"_ustr, uno::Any(vArguments[vArguments.size() - 1]));
                         xFieldProperties->setPropertyValue(
-                            "Condition", uno::Any(sCondition));
+                            u"Condition"_ustr, uno::Any(sCondition));
                     }
                 }
                 break;
@@ -8082,7 +8082,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     }
                     else if( m_xTextDocument )
                     {
-                        xFieldInterface = m_xTextDocument->createInstance("com.sun.star.text.TextField.GetExpression");
+                        xFieldInterface = m_xTextDocument->createInstance(u"com.sun.star.text.TextField.GetExpression"_ustr);
                         xFieldProperties.set(xFieldInterface, uno::UNO_QUERY);
                         xFieldProperties->setPropertyValue(
                             getPropertyName(PROP_CONTENT),
@@ -8245,7 +8245,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     OUString sUserIndex;
                     OUString sFieldServiceName =
                         lcl_FindInCommand( pContext->GetCommand(), 'f', sUserIndex )
-                            ? "com.sun.star.text.UserIndexMark"
+                            ? u"com.sun.star.text.UserIndexMark"_ustr
                             : OUString::createFromAscii(aIt->second.cFieldServiceName);
                     uno::Reference< beans::XPropertySet > xTC(
                             m_xTextDocument->createInstance(sFieldServiceName),
@@ -8254,15 +8254,15 @@ void DomainMapper_Impl::CloseFieldCommand()
                     if (!sFirstParam.isEmpty())
                     {
                         xTC->setPropertyValue(sUserIndex.isEmpty()
-                                    ? OUString("PrimaryKey")
-                                    : OUString("AlternativeText"),
+                                    ? u"PrimaryKey"_ustr
+                                    : u"AlternativeText"_ustr,
                                 uno::Any(sFirstParam));
                     }
 
                     sUserIndex = lcl_trim(sUserIndex);
                     if (!sUserIndex.isEmpty())
                     {
-                        xTC->setPropertyValue("UserIndexName",
+                        xTC->setPropertyValue(u"UserIndexName"_ustr,
                                 uno::Any(sUserIndex));
                     }
                     uno::Reference< text::XTextContent > xToInsert( xTC, uno::UNO_QUERY );
@@ -8293,7 +8293,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         uno::Sequence<beans::PropertyValue> aValues( comphelper::InitPropertySequence({
                             { "Identifier", uno::Any(sCmd) }
                         }));
-                        xTC->setPropertyValue("Fields", uno::Any(aValues));
+                        xTC->setPropertyValue(u"Fields"_ustr, uno::Any(aValues));
                     }
                     uno::Reference< text::XTextContent > xToInsert( xTC, uno::UNO_QUERY );
 
@@ -8511,10 +8511,10 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                     // In case of SetExpression, the field result contains the content of the variable.
                     uno::Reference<lang::XServiceInfo> xServiceInfo(xTextField, uno::UNO_QUERY);
 
-                    bool bIsSetbiblio = xServiceInfo->supportsService("com.sun.star.text.TextField.Bibliography");
+                    bool bIsSetbiblio = xServiceInfo->supportsService(u"com.sun.star.text.TextField.Bibliography"_ustr);
                     if( bIsSetbiblio )
                     {
-                        uno::Any aProperty  = xFieldProperties->getPropertyValue("Fields");
+                        uno::Any aProperty  = xFieldProperties->getPropertyValue(u"Fields"_ustr);
                         uno::Sequence<beans::PropertyValue> aValues ;
                         aProperty >>= aValues;
                         beans::PropertyValue propertyVal;
@@ -8544,7 +8544,7 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                             propertyVal.Value <<= rResult;
                             aValues.getArray()[aValues.getLength() - 1] = propertyVal;
                         }
-                        xFieldProperties->setPropertyValue("Fields",
+                        xFieldProperties->setPropertyValue(u"Fields"_ustr,
                                 uno::Any(aValues));
                     }
                 }
@@ -8558,9 +8558,9 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
 
                     uno::Reference< beans::XPropertySet > xFieldProperties( xTextField, uno::UNO_QUERY_THROW);
 
-                    xFieldProperties->getPropertyValue( "NumberFormat" ) >>= nKey;
+                    xFieldProperties->getPropertyValue( u"NumberFormat"_ustr ) >>= nKey;
                     xFieldProperties->setPropertyValue(
-                        "DateTimeValue",
+                        u"DateTimeValue"_ustr,
                         uno::Any( lcl_dateTimeFromSerial( xFormatter->convertStringToNumber( nKey, rResult ) ) ) );
                 }
                 else
@@ -8571,8 +8571,8 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                     // there are fields with a content property, which aren't working correctly with
                     // a generalized try catch of the content, property, so just restrict content
                     // handling to these explicit services.
-                    const bool bHasContent = xServiceInfo->supportsService("com.sun.star.text.TextField.SetExpression") ||
-                        xServiceInfo->supportsService("com.sun.star.text.TextField.Input");
+                    const bool bHasContent = xServiceInfo->supportsService(u"com.sun.star.text.TextField.SetExpression"_ustr) ||
+                        xServiceInfo->supportsService(u"com.sun.star.text.TextField.Input"_ustr);
                     // If we already have content set, then use the current presentation
                     OUString sValue;
                     if (bHasContent)
@@ -8599,13 +8599,13 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                             sVariable = sVariable.copy(0, nLen);
                     }
                     bool bCustomFixedField = rResult != sVariable &&
-                        xServiceInfo->supportsService("com.sun.star.text.TextField.DocInfo.Custom");
+                        xServiceInfo->supportsService(u"com.sun.star.text.TextField.DocInfo.Custom"_ustr);
 
                     if (bCustomFixedField || xServiceInfo->supportsService(
-                            "com.sun.star.text.TextField.DocInfo.CreateDateTime"))
+                            u"com.sun.star.text.TextField.DocInfo.CreateDateTime"_ustr))
                     {
                         // Creation time is const, don't try to update it.
-                        xFieldProperties->setPropertyValue("IsFixed", uno::Any(true));
+                        xFieldProperties->setPropertyValue(u"IsFixed"_ustr, uno::Any(true));
                     }
                 }
             }
@@ -8792,28 +8792,28 @@ void DomainMapper_Impl::PopFieldContext()
                                                                   Any(pContext->GetHyperlinkURL()));
 
                                 if (!pContext->GetHyperlinkTarget().isEmpty())
-                                    xCrsrProperties->setPropertyValue("HyperLinkTarget", uno::Any(pContext->GetHyperlinkTarget()));
+                                    xCrsrProperties->setPropertyValue(u"HyperLinkTarget"_ustr, uno::Any(pContext->GetHyperlinkTarget()));
 
                                 if (IsInTOC())
                                 {
-                                    OUString sDisplayName("Index Link");
-                                    xCrsrProperties->setPropertyValue("VisitedCharStyleName",uno::Any(sDisplayName));
-                                    xCrsrProperties->setPropertyValue("UnvisitedCharStyleName",uno::Any(sDisplayName));
+                                    OUString sDisplayName(u"Index Link"_ustr);
+                                    xCrsrProperties->setPropertyValue(u"VisitedCharStyleName"_ustr,uno::Any(sDisplayName));
+                                    xCrsrProperties->setPropertyValue(u"UnvisitedCharStyleName"_ustr,uno::Any(sDisplayName));
                                 }
                                 else if (!pContext->GetHyperlinkStyle().isEmpty())
                                 {
-                                    uno::Any aAny = xCrsrProperties->getPropertyValue("CharStyleName");
+                                    uno::Any aAny = xCrsrProperties->getPropertyValue(u"CharStyleName"_ustr);
                                     OUString charStyle;
                                     if (css::uno::fromAny(aAny, &charStyle))
                                     {
                                         if (!charStyle.isEmpty() && charStyle.equalsIgnoreAsciiCase("Internet Link"))
                                         {
-                                            xCrsrProperties->setPropertyValue("CharStyleName", uno::Any(OUString("Default Style")));
+                                            xCrsrProperties->setPropertyValue(u"CharStyleName"_ustr, uno::Any(u"Default Style"_ustr));
                                         }
                                         else
                                         {
-                                            xCrsrProperties->setPropertyValue("VisitedCharStyleName", uno::Any(pContext->GetHyperlinkStyle()));
-                                            xCrsrProperties->setPropertyValue("UnvisitedCharStyleName", uno::Any(pContext->GetHyperlinkStyle()));
+                                            xCrsrProperties->setPropertyValue(u"VisitedCharStyleName"_ustr, uno::Any(pContext->GetHyperlinkStyle()));
+                                            xCrsrProperties->setPropertyValue(u"UnvisitedCharStyleName"_ustr, uno::Any(pContext->GetHyperlinkStyle()));
 
                                         }
                                     }
@@ -9194,13 +9194,13 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
     if (xPropertySet.is())
     {
         uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
-        bHasGrabBag = xPropertySetInfo->hasPropertyByName("FrameInteropGrabBag");
+        bHasGrabBag = xPropertySetInfo->hasPropertyByName(u"FrameInteropGrabBag"_ustr);
         // In case we're outside a paragraph, then the SDT properties are stored in the paragraph grab-bag, not the frame one.
         if (!m_pSdtHelper->isInteropGrabBagEmpty() && bHasGrabBag && !m_pSdtHelper->isOutsideAParagraph())
         {
-            comphelper::SequenceAsHashMap aFrameGrabBag(xPropertySet->getPropertyValue("FrameInteropGrabBag"));
-            aFrameGrabBag["SdtPr"] <<= m_pSdtHelper->getInteropGrabBagAndClear();
-            xPropertySet->setPropertyValue("FrameInteropGrabBag", uno::Any(aFrameGrabBag.getAsConstPropertyValueList()));
+            comphelper::SequenceAsHashMap aFrameGrabBag(xPropertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr));
+            aFrameGrabBag[u"SdtPr"_ustr] <<= m_pSdtHelper->getInteropGrabBagAndClear();
+            xPropertySet->setPropertyValue(u"FrameInteropGrabBag"_ustr, uno::Any(aFrameGrabBag.getAsConstPropertyValueList()));
         }
     }
 
@@ -9216,7 +9216,7 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
             uno::Sequence<beans::PropertyValue> aFrameGrabBag( comphelper::InitPropertySequence({
                 { "SdtEndBefore", uno::Any(true) }
             }));
-            xPropertySet->setPropertyValue("FrameInteropGrabBag",uno::Any(aFrameGrabBag));
+            xPropertySet->setPropertyValue(u"FrameInteropGrabBag"_ustr,uno::Any(aFrameGrabBag));
         }
     }
 
@@ -9233,20 +9233,20 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
         if (m_eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
         {
             rtl::Reference<SwXTextEmbeddedObject> const xEmbedded(m_StreamStateStack.top().xEmbedded);
-            xEmbedded->setPropertyValue("AnchorType", uno::Any(text::TextContentAnchorType_AT_CHARACTER));
-            xEmbedded->setPropertyValue("IsFollowingTextFlow", uno::Any(m_pGraphicImport->GetLayoutInCell()));
+            xEmbedded->setPropertyValue(u"AnchorType"_ustr, uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+            xEmbedded->setPropertyValue(u"IsFollowingTextFlow"_ustr, uno::Any(m_pGraphicImport->GetLayoutInCell()));
             uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-            xEmbedded->setPropertyValue("HoriOrient", xShapeProps->getPropertyValue("HoriOrient"));
-            xEmbedded->setPropertyValue("HoriOrientPosition", xShapeProps->getPropertyValue("HoriOrientPosition"));
-            xEmbedded->setPropertyValue("HoriOrientRelation", xShapeProps->getPropertyValue("HoriOrientRelation"));
-            xEmbedded->setPropertyValue("VertOrient", xShapeProps->getPropertyValue("VertOrient"));
-            xEmbedded->setPropertyValue("VertOrientPosition", xShapeProps->getPropertyValue("VertOrientPosition"));
-            xEmbedded->setPropertyValue("VertOrientRelation", xShapeProps->getPropertyValue("VertOrientRelation"));
+            xEmbedded->setPropertyValue(u"HoriOrient"_ustr, xShapeProps->getPropertyValue(u"HoriOrient"_ustr));
+            xEmbedded->setPropertyValue(u"HoriOrientPosition"_ustr, xShapeProps->getPropertyValue(u"HoriOrientPosition"_ustr));
+            xEmbedded->setPropertyValue(u"HoriOrientRelation"_ustr, xShapeProps->getPropertyValue(u"HoriOrientRelation"_ustr));
+            xEmbedded->setPropertyValue(u"VertOrient"_ustr, xShapeProps->getPropertyValue(u"VertOrient"_ustr));
+            xEmbedded->setPropertyValue(u"VertOrientPosition"_ustr, xShapeProps->getPropertyValue(u"VertOrientPosition"_ustr));
+            xEmbedded->setPropertyValue(u"VertOrientRelation"_ustr, xShapeProps->getPropertyValue(u"VertOrientRelation"_ustr));
             //tdf123873 fix missing textwrap import
-            xEmbedded->setPropertyValue("TextWrap", xShapeProps->getPropertyValue("TextWrap"));
+            xEmbedded->setPropertyValue(u"TextWrap"_ustr, xShapeProps->getPropertyValue(u"TextWrap"_ustr));
 
             // GraphicZOrderHelper::findZOrder() was called already, so can just copy it over.
-            xEmbedded->setPropertyValue("ZOrder", xShapeProps->getPropertyValue("ZOrder"));
+            xEmbedded->setPropertyValue(u"ZOrder"_ustr, xShapeProps->getPropertyValue(u"ZOrder"_ustr));
         }
     }
     //insert it into the document at the current cursor position
@@ -9349,8 +9349,8 @@ void DomainMapper_Impl::SetLineNumbering( sal_Int32 nLnnMod, sal_uInt32 nLnc, sa
     uno::Reference< container::XNameAccess > xStyleFamilies = m_xTextDocument->getStyleFamilies();
     uno::Reference<container::XNameContainer> xStyles;
     xStyleFamilies->getByName(getPropertyName( PROP_PARAGRAPH_STYLES )) >>= xStyles;
-    lcl_linenumberingHeaderFooter( xStyles, "Header", this );
-    lcl_linenumberingHeaderFooter( xStyles, "Footer", this );
+    lcl_linenumberingHeaderFooter( xStyles, u"Header"_ustr, this );
+    lcl_linenumberingHeaderFooter( xStyles, u"Footer"_ustr, this );
 }
 
 
@@ -9503,13 +9503,13 @@ void DomainMapper_Impl::SetCurrentRedlineAuthor( const OUString& sAuthor )
             SAL_INFO("writerfilter.dmapper", "numberingChange not implemented");
     }
     else
-        m_xAnnotationField->setPropertyValue("Author", uno::Any(sAuthor));
+        m_xAnnotationField->setPropertyValue(u"Author"_ustr, uno::Any(sAuthor));
 }
 
 void DomainMapper_Impl::SetCurrentRedlineInitials( const OUString& sInitials )
 {
     if (m_xAnnotationField.is())
-        m_xAnnotationField->setPropertyValue("Initials", uno::Any(sInitials));
+        m_xAnnotationField->setPropertyValue(u"Initials"_ustr, uno::Any(sInitials));
 }
 
 void DomainMapper_Impl::SetCurrentRedlineDate( const OUString& sDate )
@@ -9522,7 +9522,7 @@ void DomainMapper_Impl::SetCurrentRedlineDate( const OUString& sDate )
             SAL_INFO("writerfilter.dmapper", "numberingChange not implemented");
     }
     else
-        m_xAnnotationField->setPropertyValue("DateTimeValue", uno::Any(ConversionHelper::ConvertDateStringToDateTime(sDate)));
+        m_xAnnotationField->setPropertyValue(u"DateTimeValue"_ustr, uno::Any(ConversionHelper::ConvertDateStringToDateTime(sDate)));
 }
 
 void DomainMapper_Impl::SetCurrentRedlineId( sal_Int32 sId )
@@ -9562,7 +9562,7 @@ void DomainMapper_Impl::RemoveTopRedline( )
         if (GetFootnoteCount() > -1 || GetEndnoteCount() > -1)
             return;
         SAL_WARN("writerfilter.dmapper", "RemoveTopRedline called with empty stack");
-        throw uno::Exception("RemoveTopRedline failed", nullptr);
+        throw uno::Exception(u"RemoveTopRedline failed"_ustr, nullptr);
     }
     m_aRedlines.top().pop_back( );
     m_currentRedline.clear();
@@ -9607,35 +9607,35 @@ void DomainMapper_Impl::ApplySettingsTable()
         rtl::Reference<SwXDocumentSettings> xSettings(m_xTextDocument->createDocumentSettings());
 
         if (m_pSettingsTable->GetDoNotExpandShiftReturn())
-            xSettings->setPropertyValue( "DoNotJustifyLinesWithManualBreak", uno::Any(true) );
+            xSettings->setPropertyValue( u"DoNotJustifyLinesWithManualBreak"_ustr, uno::Any(true) );
         // new paragraph justification has been introduced in version 15,
         // breaking text layout interoperability: new line shrinking needs less space
         // i.e. it typesets the same text with less lines and pages.
         if (m_pSettingsTable->GetWordCompatibilityMode() >= 15)
-            xSettings->setPropertyValue("JustifyLinesWithShrinking", uno::Any( true ));
+            xSettings->setPropertyValue(u"JustifyLinesWithShrinking"_ustr, uno::Any( true ));
         if (m_pSettingsTable->GetUsePrinterMetrics())
-            xSettings->setPropertyValue("PrinterIndependentLayout", uno::Any(document::PrinterIndependentLayout::DISABLED));
+            xSettings->setPropertyValue(u"PrinterIndependentLayout"_ustr, uno::Any(document::PrinterIndependentLayout::DISABLED));
         if( m_pSettingsTable->GetEmbedTrueTypeFonts())
             xSettings->setPropertyValue( getPropertyName( PROP_EMBED_FONTS ), uno::Any(true) );
         if( m_pSettingsTable->GetEmbedSystemFonts())
             xSettings->setPropertyValue( getPropertyName( PROP_EMBED_SYSTEM_FONTS ), uno::Any(true) );
-        xSettings->setPropertyValue("AddParaTableSpacing", uno::Any(m_pSettingsTable->GetDoNotUseHTMLParagraphAutoSpacing()));
+        xSettings->setPropertyValue(u"AddParaTableSpacing"_ustr, uno::Any(m_pSettingsTable->GetDoNotUseHTMLParagraphAutoSpacing()));
         if (m_pSettingsTable->GetNoLeading())
         {
-            xSettings->setPropertyValue("AddExternalLeading", uno::Any(!m_pSettingsTable->GetNoLeading()));
+            xSettings->setPropertyValue(u"AddExternalLeading"_ustr, uno::Any(!m_pSettingsTable->GetNoLeading()));
         }
         if( m_pSettingsTable->GetProtectForm() )
-            xSettings->setPropertyValue("ProtectForm", uno::Any( true ));
+            xSettings->setPropertyValue(u"ProtectForm"_ustr, uno::Any( true ));
         if( m_pSettingsTable->GetReadOnly() )
-            xSettings->setPropertyValue("LoadReadonly", uno::Any( true ));
+            xSettings->setPropertyValue(u"LoadReadonly"_ustr, uno::Any( true ));
         if (m_pSettingsTable->GetGutterAtTop())
         {
-            xSettings->setPropertyValue("GutterAtTop", uno::Any(true));
+            xSettings->setPropertyValue(u"GutterAtTop"_ustr, uno::Any(true));
         }
         uno::Sequence<beans::PropertyValue> aWriteProtection
                 = m_pSettingsTable->GetWriteProtectionSettings();
         if (aWriteProtection.hasElements())
-                xSettings->setPropertyValue("ModifyPasswordInfo", uno::Any(aWriteProtection));
+                xSettings->setPropertyValue(u"ModifyPasswordInfo"_ustr, uno::Any(aWriteProtection));
     }
     catch(const uno::Exception&)
     {
@@ -9688,9 +9688,9 @@ sal_Int32 DomainMapper_Impl::getNumberingProperty(const sal_Int32 nListId, sal_I
         const OUString aListName = pList->GetStyleName();
         const uno::Reference< container::XNameAccess > xStyleFamilies = m_xTextDocument->getStyleFamilies();
         uno::Reference<container::XNameAccess> xNumberingStyles;
-        xStyleFamilies->getByName("NumberingStyles") >>= xNumberingStyles;
+        xStyleFamilies->getByName(u"NumberingStyles"_ustr) >>= xNumberingStyles;
         const uno::Reference<beans::XPropertySet> xStyle(xNumberingStyles->getByName(aListName), uno::UNO_QUERY);
-        const uno::Reference<container::XIndexAccess> xNumberingRules(xStyle->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+        const uno::Reference<container::XIndexAccess> xNumberingRules(xStyle->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
         if (xNumberingRules.is())
         {
             uno::Sequence<beans::PropertyValue> aProps;

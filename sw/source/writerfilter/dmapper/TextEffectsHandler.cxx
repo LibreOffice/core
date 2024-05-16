@@ -79,23 +79,23 @@ OUString TextEffectsHandler::getSchemeColorValTypeString(sal_Int32 nType)
 {
     switch (nType)
     {
-        case NS_ooxml::LN_ST_SchemeColorVal_bg1: return "bg1";
-        case NS_ooxml::LN_ST_SchemeColorVal_tx1: return "tx1";
-        case NS_ooxml::LN_ST_SchemeColorVal_bg2: return "bg2";
-        case NS_ooxml::LN_ST_SchemeColorVal_tx2: return "tx2";
-        case NS_ooxml::LN_ST_SchemeColorVal_accent1: return "accent1";
-        case NS_ooxml::LN_ST_SchemeColorVal_accent2: return "accent2";
-        case NS_ooxml::LN_ST_SchemeColorVal_accent3: return "accent3";
-        case NS_ooxml::LN_ST_SchemeColorVal_accent4: return "accent4";
-        case NS_ooxml::LN_ST_SchemeColorVal_accent5: return "accent5";
-        case NS_ooxml::LN_ST_SchemeColorVal_accent6: return "accent6";
-        case NS_ooxml::LN_ST_SchemeColorVal_hlink: return "hlink";
-        case NS_ooxml::LN_ST_SchemeColorVal_folHlink: return "folHlink";
-        case NS_ooxml::LN_ST_SchemeColorVal_dk1: return "dk1";
-        case NS_ooxml::LN_ST_SchemeColorVal_lt1: return "lt1";
-        case NS_ooxml::LN_ST_SchemeColorVal_dk2: return "dk2";
-        case NS_ooxml::LN_ST_SchemeColorVal_lt2: return "lt2";
-        case NS_ooxml::LN_ST_SchemeColorVal_phClr: return "phClr";
+        case NS_ooxml::LN_ST_SchemeColorVal_bg1: return u"bg1"_ustr;
+        case NS_ooxml::LN_ST_SchemeColorVal_tx1: return u"tx1"_ustr;
+        case NS_ooxml::LN_ST_SchemeColorVal_bg2: return u"bg2"_ustr;
+        case NS_ooxml::LN_ST_SchemeColorVal_tx2: return u"tx2"_ustr;
+        case NS_ooxml::LN_ST_SchemeColorVal_accent1: return u"accent1"_ustr;
+        case NS_ooxml::LN_ST_SchemeColorVal_accent2: return u"accent2"_ustr;
+        case NS_ooxml::LN_ST_SchemeColorVal_accent3: return u"accent3"_ustr;
+        case NS_ooxml::LN_ST_SchemeColorVal_accent4: return u"accent4"_ustr;
+        case NS_ooxml::LN_ST_SchemeColorVal_accent5: return u"accent5"_ustr;
+        case NS_ooxml::LN_ST_SchemeColorVal_accent6: return u"accent6"_ustr;
+        case NS_ooxml::LN_ST_SchemeColorVal_hlink: return u"hlink"_ustr;
+        case NS_ooxml::LN_ST_SchemeColorVal_folHlink: return u"folHlink"_ustr;
+        case NS_ooxml::LN_ST_SchemeColorVal_dk1: return u"dk1"_ustr;
+        case NS_ooxml::LN_ST_SchemeColorVal_lt1: return u"lt1"_ustr;
+        case NS_ooxml::LN_ST_SchemeColorVal_dk2: return u"dk2"_ustr;
+        case NS_ooxml::LN_ST_SchemeColorVal_lt2: return u"lt2"_ustr;
+        case NS_ooxml::LN_ST_SchemeColorVal_phClr: return u"phClr"_ustr;
         default: break;
     }
     return OUString();
@@ -105,16 +105,16 @@ OUString TextEffectsHandler::getRectAlignmentString(sal_Int32 nType)
 {
     switch (nType)
     {
-        case NS_ooxml::LN_ST_RectAlignment_none: return "none";
-        case NS_ooxml::LN_ST_RectAlignment_tl: return "tl";
-        case NS_ooxml::LN_ST_RectAlignment_t: return "t";
-        case NS_ooxml::LN_ST_RectAlignment_tr: return "tr";
-        case NS_ooxml::LN_ST_RectAlignment_l: return "l";
-        case NS_ooxml::LN_ST_RectAlignment_ctr: return "ctr";
-        case NS_ooxml::LN_ST_RectAlignment_r: return "r";
-        case NS_ooxml::LN_ST_RectAlignment_bl: return "bl";
-        case NS_ooxml::LN_ST_RectAlignment_b: return "b";
-        case NS_ooxml::LN_ST_RectAlignment_br: return "br";
+        case NS_ooxml::LN_ST_RectAlignment_none: return u"none"_ustr;
+        case NS_ooxml::LN_ST_RectAlignment_tl: return u"tl"_ustr;
+        case NS_ooxml::LN_ST_RectAlignment_t: return u"t"_ustr;
+        case NS_ooxml::LN_ST_RectAlignment_tr: return u"tr"_ustr;
+        case NS_ooxml::LN_ST_RectAlignment_l: return u"l"_ustr;
+        case NS_ooxml::LN_ST_RectAlignment_ctr: return u"ctr"_ustr;
+        case NS_ooxml::LN_ST_RectAlignment_r: return u"r"_ustr;
+        case NS_ooxml::LN_ST_RectAlignment_bl: return u"bl"_ustr;
+        case NS_ooxml::LN_ST_RectAlignment_b: return u"b"_ustr;
+        case NS_ooxml::LN_ST_RectAlignment_br: return u"br"_ustr;
 
         default: break;
     }
@@ -125,9 +125,9 @@ OUString TextEffectsHandler::getLineCapString(sal_Int32 nType)
 {
     switch (nType)
     {
-        case NS_ooxml::LN_ST_LineCap_rnd: return "rnd";
-        case NS_ooxml::LN_ST_LineCap_sq: return "sq";
-        case NS_ooxml::LN_ST_LineCap_flat: return "flat";
+        case NS_ooxml::LN_ST_LineCap_rnd: return u"rnd"_ustr;
+        case NS_ooxml::LN_ST_LineCap_sq: return u"sq"_ustr;
+        case NS_ooxml::LN_ST_LineCap_flat: return u"flat"_ustr;
         default: break;
     }
     return OUString();
@@ -137,11 +137,11 @@ OUString TextEffectsHandler::getCompoundLineString(sal_Int32 nType)
 {
     switch (nType)
     {
-        case NS_ooxml::LN_ST_CompoundLine_sng: return "sng";
-        case NS_ooxml::LN_ST_CompoundLine_dbl: return "dbl";
-        case NS_ooxml::LN_ST_CompoundLine_thickThin: return "thickThin";
-        case NS_ooxml::LN_ST_CompoundLine_thinThick: return "thinThick";
-        case NS_ooxml::LN_ST_CompoundLine_tri: return "tri";
+        case NS_ooxml::LN_ST_CompoundLine_sng: return u"sng"_ustr;
+        case NS_ooxml::LN_ST_CompoundLine_dbl: return u"dbl"_ustr;
+        case NS_ooxml::LN_ST_CompoundLine_thickThin: return u"thickThin"_ustr;
+        case NS_ooxml::LN_ST_CompoundLine_thinThick: return u"thinThick"_ustr;
+        case NS_ooxml::LN_ST_CompoundLine_tri: return u"tri"_ustr;
         default: break;
     }
     return OUString();
@@ -151,8 +151,8 @@ OUString TextEffectsHandler::getPenAlignmentString(sal_Int32 nType)
 {
     switch (nType)
     {
-        case NS_ooxml::LN_ST_PenAlignment_ctr: return "ctr";
-        case NS_ooxml::LN_ST_PenAlignment_in: return "in";
+        case NS_ooxml::LN_ST_PenAlignment_ctr: return u"ctr"_ustr;
+        case NS_ooxml::LN_ST_PenAlignment_in: return u"in"_ustr;
         default: break;
     }
     return OUString();
@@ -162,10 +162,10 @@ OUString TextEffectsHandler::getOnOffString(sal_Int32 nType)
 {
     switch (nType)
     {
-        case NS_ooxml::LN_ST_OnOff_true: return "true";
-        case NS_ooxml::LN_ST_OnOff_false: return "false";
-        case NS_ooxml::LN_ST_OnOff_1: return "1";
-        case NS_ooxml::LN_ST_OnOff_0: return "0";
+        case NS_ooxml::LN_ST_OnOff_true: return u"true"_ustr;
+        case NS_ooxml::LN_ST_OnOff_false: return u"false"_ustr;
+        case NS_ooxml::LN_ST_OnOff_1: return u"1"_ustr;
+        case NS_ooxml::LN_ST_OnOff_0: return u"0"_ustr;
         default: break;
     }
     return OUString();
@@ -175,9 +175,9 @@ OUString TextEffectsHandler::getPathShadeTypeString(sal_Int32 nType)
 {
     switch (nType)
     {
-        case NS_ooxml::LN_ST_PathShadeType_shape: return "shape";
-        case NS_ooxml::LN_ST_PathShadeType_circle: return "circle";
-        case NS_ooxml::LN_ST_PathShadeType_rect: return "rect";
+        case NS_ooxml::LN_ST_PathShadeType_shape: return u"shape"_ustr;
+        case NS_ooxml::LN_ST_PathShadeType_circle: return u"circle"_ustr;
+        case NS_ooxml::LN_ST_PathShadeType_rect: return u"rect"_ustr;
         default: break;
     }
     return OUString();
@@ -187,17 +187,17 @@ OUString TextEffectsHandler::getPresetLineDashValString(sal_Int32 nType)
 {
     switch (nType)
     {
-        case NS_ooxml::LN_ST_PresetLineDashVal_solid: return "solid";
-        case NS_ooxml::LN_ST_PresetLineDashVal_dot: return "dot";
-        case NS_ooxml::LN_ST_PresetLineDashVal_sysDot: return "sysDot";
-        case NS_ooxml::LN_ST_PresetLineDashVal_dash: return "dash";
-        case NS_ooxml::LN_ST_PresetLineDashVal_sysDash: return "sysDash";
-        case NS_ooxml::LN_ST_PresetLineDashVal_lgDash: return "lgDash";
-        case NS_ooxml::LN_ST_PresetLineDashVal_dashDot: return "dashDot";
-        case NS_ooxml::LN_ST_PresetLineDashVal_sysDashDot: return "sysDashDot";
-        case NS_ooxml::LN_ST_PresetLineDashVal_lgDashDot: return "lgDashDot";
-        case NS_ooxml::LN_ST_PresetLineDashVal_lgDashDotDot: return "lgDashDotDot";
-        case NS_ooxml::LN_ST_PresetLineDashVal_sysDashDotDot: return "sysDashDotDot";
+        case NS_ooxml::LN_ST_PresetLineDashVal_solid: return u"solid"_ustr;
+        case NS_ooxml::LN_ST_PresetLineDashVal_dot: return u"dot"_ustr;
+        case NS_ooxml::LN_ST_PresetLineDashVal_sysDot: return u"sysDot"_ustr;
+        case NS_ooxml::LN_ST_PresetLineDashVal_dash: return u"dash"_ustr;
+        case NS_ooxml::LN_ST_PresetLineDashVal_sysDash: return u"sysDash"_ustr;
+        case NS_ooxml::LN_ST_PresetLineDashVal_lgDash: return u"lgDash"_ustr;
+        case NS_ooxml::LN_ST_PresetLineDashVal_dashDot: return u"dashDot"_ustr;
+        case NS_ooxml::LN_ST_PresetLineDashVal_sysDashDot: return u"sysDashDot"_ustr;
+        case NS_ooxml::LN_ST_PresetLineDashVal_lgDashDot: return u"lgDashDot"_ustr;
+        case NS_ooxml::LN_ST_PresetLineDashVal_lgDashDotDot: return u"lgDashDotDot"_ustr;
+        case NS_ooxml::LN_ST_PresetLineDashVal_sysDashDotDot: return u"sysDashDotDot"_ustr;
         default: break;
     }
     return OUString();
@@ -207,68 +207,68 @@ OUString TextEffectsHandler::getPresetCameraTypeString(sal_Int32 nType)
 {
     switch (nType)
     {
-        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueTopLeft: return "legacyObliqueTopLeft";
-        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueTop: return "legacyObliqueTop";
-        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueTopRight: return "legacyObliqueTopRight";
-        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueLeft: return "legacyObliqueLeft";
-        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueFront: return "legacyObliqueFront";
-        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueRight: return "legacyObliqueRight";
-        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueBottomLeft: return "legacyObliqueBottomLeft";
-        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueBottom: return "legacyObliqueBottom";
-        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueBottomRight: return "legacyObliqueBottomRight";
-        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveTopLeft: return "legacyPerspectiveTopLeft";
-        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveTop: return "legacyPerspectiveTop";
-        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveTopRight: return "legacyPerspectiveTopRight";
-        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveLeft: return "legacyPerspectiveLeft";
-        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveFront: return "legacyPerspectiveFront";
-        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveRight: return "legacyPerspectiveRight";
-        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveBottomLeft: return "legacyPerspectiveBottomLeft";
-        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveBottom: return "legacyPerspectiveBottom";
-        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveBottomRight: return "legacyPerspectiveBottomRight";
-        case NS_ooxml::LN_ST_PresetCameraType_orthographicFront: return "orthographicFront";
-        case NS_ooxml::LN_ST_PresetCameraType_isometricTopUp: return "isometricTopUp";
-        case NS_ooxml::LN_ST_PresetCameraType_isometricTopDown: return "isometricTopDown";
-        case NS_ooxml::LN_ST_PresetCameraType_isometricBottomUp: return "isometricBottomUp";
-        case NS_ooxml::LN_ST_PresetCameraType_isometricBottomDown: return "isometricBottomDown";
-        case NS_ooxml::LN_ST_PresetCameraType_isometricLeftUp: return "isometricLeftUp";
-        case NS_ooxml::LN_ST_PresetCameraType_isometricLeftDown: return "isometricLeftDown";
-        case NS_ooxml::LN_ST_PresetCameraType_isometricRightUp: return "isometricRightUp";
-        case NS_ooxml::LN_ST_PresetCameraType_isometricRightDown: return "isometricRightDown";
-        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis1Left: return "isometricOffAxis1Left";
-        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis1Right: return "isometricOffAxis1Right";
-        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis1Top: return "isometricOffAxis1Top";
-        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis2Left: return "isometricOffAxis2Left";
-        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis2Right: return "isometricOffAxis2Right";
-        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis2Top: return "isometricOffAxis2Top";
-        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis3Left: return "isometricOffAxis3Left";
-        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis3Right: return "isometricOffAxis3Right";
-        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis3Bottom: return "isometricOffAxis3Bottom";
-        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis4Left: return "isometricOffAxis4Left";
-        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis4Right: return "isometricOffAxis4Right";
-        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis4Bottom: return "isometricOffAxis4Bottom";
-        case NS_ooxml::LN_ST_PresetCameraType_obliqueTopLeft: return "obliqueTopLeft";
-        case NS_ooxml::LN_ST_PresetCameraType_obliqueTop: return "obliqueTop";
-        case NS_ooxml::LN_ST_PresetCameraType_obliqueTopRight: return "obliqueTopRight";
-        case NS_ooxml::LN_ST_PresetCameraType_obliqueLeft: return "obliqueLeft";
-        case NS_ooxml::LN_ST_PresetCameraType_obliqueRight: return "obliqueRight";
-        case NS_ooxml::LN_ST_PresetCameraType_obliqueBottomLeft: return "obliqueBottomLeft";
-        case NS_ooxml::LN_ST_PresetCameraType_obliqueBottom: return "obliqueBottom";
-        case NS_ooxml::LN_ST_PresetCameraType_obliqueBottomRight: return "obliqueBottomRight";
-        case NS_ooxml::LN_ST_PresetCameraType_perspectiveFront: return "perspectiveFront";
-        case NS_ooxml::LN_ST_PresetCameraType_perspectiveLeft: return "perspectiveLeft";
-        case NS_ooxml::LN_ST_PresetCameraType_perspectiveRight: return "perspectiveRight";
-        case NS_ooxml::LN_ST_PresetCameraType_perspectiveAbove: return "perspectiveAbove";
-        case NS_ooxml::LN_ST_PresetCameraType_perspectiveBelow: return "perspectiveBelow";
-        case NS_ooxml::LN_ST_PresetCameraType_perspectiveAboveLeftFacing: return "perspectiveAboveLeftFacing";
-        case NS_ooxml::LN_ST_PresetCameraType_perspectiveAboveRightFacing: return "perspectiveAboveRightFacing";
-        case NS_ooxml::LN_ST_PresetCameraType_perspectiveContrastingLeftFacing: return "perspectiveContrastingLeftFacing";
-        case NS_ooxml::LN_ST_PresetCameraType_perspectiveContrastingRightFacing: return "perspectiveContrastingRightFacing";
-        case NS_ooxml::LN_ST_PresetCameraType_perspectiveHeroicLeftFacing: return "perspectiveHeroicLeftFacing";
-        case NS_ooxml::LN_ST_PresetCameraType_perspectiveHeroicRightFacing: return "perspectiveHeroicRightFacing";
-        case NS_ooxml::LN_ST_PresetCameraType_perspectiveHeroicExtremeLeftFacing: return "perspectiveHeroicExtremeLeftFacing";
-        case NS_ooxml::LN_ST_PresetCameraType_perspectiveHeroicExtremeRightFacing: return "perspectiveHeroicExtremeRightFacing";
-        case NS_ooxml::LN_ST_PresetCameraType_perspectiveRelaxed: return "perspectiveRelaxed";
-        case NS_ooxml::LN_ST_PresetCameraType_perspectiveRelaxedModerately: return "perspectiveRelaxedModerately";
+        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueTopLeft: return u"legacyObliqueTopLeft"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueTop: return u"legacyObliqueTop"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueTopRight: return u"legacyObliqueTopRight"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueLeft: return u"legacyObliqueLeft"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueFront: return u"legacyObliqueFront"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueRight: return u"legacyObliqueRight"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueBottomLeft: return u"legacyObliqueBottomLeft"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueBottom: return u"legacyObliqueBottom"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_legacyObliqueBottomRight: return u"legacyObliqueBottomRight"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveTopLeft: return u"legacyPerspectiveTopLeft"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveTop: return u"legacyPerspectiveTop"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveTopRight: return u"legacyPerspectiveTopRight"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveLeft: return u"legacyPerspectiveLeft"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveFront: return u"legacyPerspectiveFront"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveRight: return u"legacyPerspectiveRight"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveBottomLeft: return u"legacyPerspectiveBottomLeft"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveBottom: return u"legacyPerspectiveBottom"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_legacyPerspectiveBottomRight: return u"legacyPerspectiveBottomRight"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_orthographicFront: return u"orthographicFront"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_isometricTopUp: return u"isometricTopUp"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_isometricTopDown: return u"isometricTopDown"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_isometricBottomUp: return u"isometricBottomUp"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_isometricBottomDown: return u"isometricBottomDown"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_isometricLeftUp: return u"isometricLeftUp"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_isometricLeftDown: return u"isometricLeftDown"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_isometricRightUp: return u"isometricRightUp"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_isometricRightDown: return u"isometricRightDown"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis1Left: return u"isometricOffAxis1Left"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis1Right: return u"isometricOffAxis1Right"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis1Top: return u"isometricOffAxis1Top"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis2Left: return u"isometricOffAxis2Left"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis2Right: return u"isometricOffAxis2Right"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis2Top: return u"isometricOffAxis2Top"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis3Left: return u"isometricOffAxis3Left"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis3Right: return u"isometricOffAxis3Right"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis3Bottom: return u"isometricOffAxis3Bottom"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis4Left: return u"isometricOffAxis4Left"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis4Right: return u"isometricOffAxis4Right"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_isometricOffAxis4Bottom: return u"isometricOffAxis4Bottom"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_obliqueTopLeft: return u"obliqueTopLeft"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_obliqueTop: return u"obliqueTop"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_obliqueTopRight: return u"obliqueTopRight"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_obliqueLeft: return u"obliqueLeft"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_obliqueRight: return u"obliqueRight"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_obliqueBottomLeft: return u"obliqueBottomLeft"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_obliqueBottom: return u"obliqueBottom"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_obliqueBottomRight: return u"obliqueBottomRight"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveFront: return u"perspectiveFront"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveLeft: return u"perspectiveLeft"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveRight: return u"perspectiveRight"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveAbove: return u"perspectiveAbove"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveBelow: return u"perspectiveBelow"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveAboveLeftFacing: return u"perspectiveAboveLeftFacing"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveAboveRightFacing: return u"perspectiveAboveRightFacing"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveContrastingLeftFacing: return u"perspectiveContrastingLeftFacing"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveContrastingRightFacing: return u"perspectiveContrastingRightFacing"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveHeroicLeftFacing: return u"perspectiveHeroicLeftFacing"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveHeroicRightFacing: return u"perspectiveHeroicRightFacing"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveHeroicExtremeLeftFacing: return u"perspectiveHeroicExtremeLeftFacing"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveHeroicExtremeRightFacing: return u"perspectiveHeroicExtremeRightFacing"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveRelaxed: return u"perspectiveRelaxed"_ustr;
+        case NS_ooxml::LN_ST_PresetCameraType_perspectiveRelaxedModerately: return u"perspectiveRelaxedModerately"_ustr;
         default: break;
     }
     return OUString();
@@ -279,33 +279,33 @@ OUString TextEffectsHandler::getLightRigTypeString(sal_Int32 nType)
 {
     switch (nType)
     {
-        case NS_ooxml::LN_ST_LightRigType_legacyFlat1: return "legacyFlat1";
-        case NS_ooxml::LN_ST_LightRigType_legacyFlat2: return "legacyFlat2";
-        case NS_ooxml::LN_ST_LightRigType_legacyFlat3: return "legacyFlat3";
-        case NS_ooxml::LN_ST_LightRigType_legacyFlat4: return "legacyFlat4";
-        case NS_ooxml::LN_ST_LightRigType_legacyNormal1: return "legacyNormal1";
-        case NS_ooxml::LN_ST_LightRigType_legacyNormal2: return "legacyNormal2";
-        case NS_ooxml::LN_ST_LightRigType_legacyNormal3: return "legacyNormal3";
-        case NS_ooxml::LN_ST_LightRigType_legacyNormal4: return "legacyNormal4";
-        case NS_ooxml::LN_ST_LightRigType_legacyHarsh1: return "legacyHarsh1";
-        case NS_ooxml::LN_ST_LightRigType_legacyHarsh2: return "legacyHarsh2";
-        case NS_ooxml::LN_ST_LightRigType_legacyHarsh3: return "legacyHarsh3";
-        case NS_ooxml::LN_ST_LightRigType_legacyHarsh4: return "legacyHarsh4";
-        case NS_ooxml::LN_ST_LightRigType_threePt: return "threePt";
-        case NS_ooxml::LN_ST_LightRigType_balanced: return "balanced";
-        case NS_ooxml::LN_ST_LightRigType_soft: return "soft";
-        case NS_ooxml::LN_ST_LightRigType_harsh: return "harsh";
-        case NS_ooxml::LN_ST_LightRigType_flood: return "flood";
-        case NS_ooxml::LN_ST_LightRigType_contrasting: return "contrasting";
-        case NS_ooxml::LN_ST_LightRigType_morning: return "morning";
-        case NS_ooxml::LN_ST_LightRigType_sunrise: return "sunrise";
-        case NS_ooxml::LN_ST_LightRigType_sunset: return "sunset";
-        case NS_ooxml::LN_ST_LightRigType_chilly: return "chilly";
-        case NS_ooxml::LN_ST_LightRigType_freezing: return "freezing";
-        case NS_ooxml::LN_ST_LightRigType_flat: return "flat";
-        case NS_ooxml::LN_ST_LightRigType_twoPt: return "twoPt";
-        case NS_ooxml::LN_ST_LightRigType_glow: return "glow";
-        case NS_ooxml::LN_ST_LightRigType_brightRoom: return "brightRoom";
+        case NS_ooxml::LN_ST_LightRigType_legacyFlat1: return u"legacyFlat1"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_legacyFlat2: return u"legacyFlat2"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_legacyFlat3: return u"legacyFlat3"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_legacyFlat4: return u"legacyFlat4"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_legacyNormal1: return u"legacyNormal1"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_legacyNormal2: return u"legacyNormal2"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_legacyNormal3: return u"legacyNormal3"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_legacyNormal4: return u"legacyNormal4"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_legacyHarsh1: return u"legacyHarsh1"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_legacyHarsh2: return u"legacyHarsh2"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_legacyHarsh3: return u"legacyHarsh3"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_legacyHarsh4: return u"legacyHarsh4"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_threePt: return u"threePt"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_balanced: return u"balanced"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_soft: return u"soft"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_harsh: return u"harsh"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_flood: return u"flood"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_contrasting: return u"contrasting"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_morning: return u"morning"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_sunrise: return u"sunrise"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_sunset: return u"sunset"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_chilly: return u"chilly"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_freezing: return u"freezing"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_flat: return u"flat"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_twoPt: return u"twoPt"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_glow: return u"glow"_ustr;
+        case NS_ooxml::LN_ST_LightRigType_brightRoom: return u"brightRoom"_ustr;
         default: break;
     }
     return OUString();
@@ -315,14 +315,14 @@ OUString TextEffectsHandler::getLightRigDirectionString(sal_Int32 nType)
 {
     switch (nType)
     {
-        case NS_ooxml::LN_ST_LightRigDirection_tl: return "tl";
-        case NS_ooxml::LN_ST_LightRigDirection_t: return "t";
-        case NS_ooxml::LN_ST_LightRigDirection_tr: return "tr";
-        case NS_ooxml::LN_ST_LightRigDirection_l: return "l";
-        case NS_ooxml::LN_ST_LightRigDirection_r: return "r";
-        case NS_ooxml::LN_ST_LightRigDirection_bl: return "bl";
-        case NS_ooxml::LN_ST_LightRigDirection_b: return "b";
-        case NS_ooxml::LN_ST_LightRigDirection_br: return "br";
+        case NS_ooxml::LN_ST_LightRigDirection_tl: return u"tl"_ustr;
+        case NS_ooxml::LN_ST_LightRigDirection_t: return u"t"_ustr;
+        case NS_ooxml::LN_ST_LightRigDirection_tr: return u"tr"_ustr;
+        case NS_ooxml::LN_ST_LightRigDirection_l: return u"l"_ustr;
+        case NS_ooxml::LN_ST_LightRigDirection_r: return u"r"_ustr;
+        case NS_ooxml::LN_ST_LightRigDirection_bl: return u"bl"_ustr;
+        case NS_ooxml::LN_ST_LightRigDirection_b: return u"b"_ustr;
+        case NS_ooxml::LN_ST_LightRigDirection_br: return u"br"_ustr;
 
         default: break;
     }
@@ -333,18 +333,18 @@ OUString TextEffectsHandler::getBevelPresetTypeString(sal_Int32 nType)
 {
     switch (nType)
     {
-        case NS_ooxml::LN_ST_BevelPresetType_relaxedInset: return "relaxedInset";
-        case NS_ooxml::LN_ST_BevelPresetType_circle: return "circle";
-        case NS_ooxml::LN_ST_BevelPresetType_slope: return "slope";
-        case NS_ooxml::LN_ST_BevelPresetType_cross: return "cross";
-        case NS_ooxml::LN_ST_BevelPresetType_angle: return "angle";
-        case NS_ooxml::LN_ST_BevelPresetType_softRound: return "softRound";
-        case NS_ooxml::LN_ST_BevelPresetType_convex: return "convex";
-        case NS_ooxml::LN_ST_BevelPresetType_coolSlant: return "coolSlant";
-        case NS_ooxml::LN_ST_BevelPresetType_divot: return "divot";
-        case NS_ooxml::LN_ST_BevelPresetType_riblet: return "riblet";
-        case NS_ooxml::LN_ST_BevelPresetType_hardEdge: return "hardEdge";
-        case NS_ooxml::LN_ST_BevelPresetType_artDeco: return "artDeco";
+        case NS_ooxml::LN_ST_BevelPresetType_relaxedInset: return u"relaxedInset"_ustr;
+        case NS_ooxml::LN_ST_BevelPresetType_circle: return u"circle"_ustr;
+        case NS_ooxml::LN_ST_BevelPresetType_slope: return u"slope"_ustr;
+        case NS_ooxml::LN_ST_BevelPresetType_cross: return u"cross"_ustr;
+        case NS_ooxml::LN_ST_BevelPresetType_angle: return u"angle"_ustr;
+        case NS_ooxml::LN_ST_BevelPresetType_softRound: return u"softRound"_ustr;
+        case NS_ooxml::LN_ST_BevelPresetType_convex: return u"convex"_ustr;
+        case NS_ooxml::LN_ST_BevelPresetType_coolSlant: return u"coolSlant"_ustr;
+        case NS_ooxml::LN_ST_BevelPresetType_divot: return u"divot"_ustr;
+        case NS_ooxml::LN_ST_BevelPresetType_riblet: return u"riblet"_ustr;
+        case NS_ooxml::LN_ST_BevelPresetType_hardEdge: return u"hardEdge"_ustr;
+        case NS_ooxml::LN_ST_BevelPresetType_artDeco: return u"artDeco"_ustr;
         default: break;
     }
     return OUString();
@@ -354,22 +354,22 @@ OUString TextEffectsHandler::getPresetMaterialTypeString(sal_Int32 nType)
 {
     switch (nType)
     {
-        case NS_ooxml::LN_ST_PresetMaterialType_legacyMatte: return "legacyMatte";
-        case NS_ooxml::LN_ST_PresetMaterialType_legacyPlastic: return "legacyPlastic";
-        case NS_ooxml::LN_ST_PresetMaterialType_legacyMetal: return "legacyMetal";
-        case NS_ooxml::LN_ST_PresetMaterialType_legacyWireframe: return "legacyWireframe";
-        case NS_ooxml::LN_ST_PresetMaterialType_matte: return "matte";
-        case NS_ooxml::LN_ST_PresetMaterialType_plastic: return "plastic";
-        case NS_ooxml::LN_ST_PresetMaterialType_metal: return "metal";
-        case NS_ooxml::LN_ST_PresetMaterialType_warmMatte: return "warmMatte";
-        case NS_ooxml::LN_ST_PresetMaterialType_translucentPowder: return "translucentPowder";
-        case NS_ooxml::LN_ST_PresetMaterialType_powder: return "powder";
-        case NS_ooxml::LN_ST_PresetMaterialType_dkEdge: return "dkEdge";
-        case NS_ooxml::LN_ST_PresetMaterialType_softEdge: return "softEdge";
-        case NS_ooxml::LN_ST_PresetMaterialType_clear: return "clear";
-        case NS_ooxml::LN_ST_PresetMaterialType_flat: return "flat";
-        case NS_ooxml::LN_ST_PresetMaterialType_softmetal: return "softmetal";
-        case NS_ooxml::LN_ST_PresetMaterialType_none: return "none";
+        case NS_ooxml::LN_ST_PresetMaterialType_legacyMatte: return u"legacyMatte"_ustr;
+        case NS_ooxml::LN_ST_PresetMaterialType_legacyPlastic: return u"legacyPlastic"_ustr;
+        case NS_ooxml::LN_ST_PresetMaterialType_legacyMetal: return u"legacyMetal"_ustr;
+        case NS_ooxml::LN_ST_PresetMaterialType_legacyWireframe: return u"legacyWireframe"_ustr;
+        case NS_ooxml::LN_ST_PresetMaterialType_matte: return u"matte"_ustr;
+        case NS_ooxml::LN_ST_PresetMaterialType_plastic: return u"plastic"_ustr;
+        case NS_ooxml::LN_ST_PresetMaterialType_metal: return u"metal"_ustr;
+        case NS_ooxml::LN_ST_PresetMaterialType_warmMatte: return u"warmMatte"_ustr;
+        case NS_ooxml::LN_ST_PresetMaterialType_translucentPowder: return u"translucentPowder"_ustr;
+        case NS_ooxml::LN_ST_PresetMaterialType_powder: return u"powder"_ustr;
+        case NS_ooxml::LN_ST_PresetMaterialType_dkEdge: return u"dkEdge"_ustr;
+        case NS_ooxml::LN_ST_PresetMaterialType_softEdge: return u"softEdge"_ustr;
+        case NS_ooxml::LN_ST_PresetMaterialType_clear: return u"clear"_ustr;
+        case NS_ooxml::LN_ST_PresetMaterialType_flat: return u"flat"_ustr;
+        case NS_ooxml::LN_ST_PresetMaterialType_softmetal: return u"softmetal"_ustr;
+        case NS_ooxml::LN_ST_PresetMaterialType_none: return u"none"_ustr;
         default: break;
     }
     return OUString();
@@ -379,22 +379,22 @@ OUString TextEffectsHandler::getLigaturesString(sal_Int32 nType)
 {
     switch (nType)
     {
-        case NS_ooxml::LN_ST_Ligatures_none: return "none";
-        case NS_ooxml::LN_ST_Ligatures_standard: return "standard";
-        case NS_ooxml::LN_ST_Ligatures_contextual: return "contextual";
-        case NS_ooxml::LN_ST_Ligatures_historical: return "historical";
-        case NS_ooxml::LN_ST_Ligatures_discretional: return "discretional";
-        case NS_ooxml::LN_ST_Ligatures_standardContextual: return "standardContextual";
-        case NS_ooxml::LN_ST_Ligatures_standardHistorical: return "standardHistorical";
-        case NS_ooxml::LN_ST_Ligatures_contextualHistorical: return "contextualHistorical";
-        case NS_ooxml::LN_ST_Ligatures_standardDiscretional: return "standardDiscretional";
-        case NS_ooxml::LN_ST_Ligatures_contextualDiscretional: return "contextualDiscretional";
-        case NS_ooxml::LN_ST_Ligatures_historicalDiscretional: return "historicalDiscretional";
-        case NS_ooxml::LN_ST_Ligatures_standardContextualHistorical: return "standardContextualHistorical";
-        case NS_ooxml::LN_ST_Ligatures_standardContextualDiscretional: return "standardContextualDiscretional";
-        case NS_ooxml::LN_ST_Ligatures_standardHistoricalDiscretional: return "standardHistoricalDiscretional";
-        case NS_ooxml::LN_ST_Ligatures_contextualHistoricalDiscretional: return "contextualHistoricalDiscretional";
-        case NS_ooxml::LN_ST_Ligatures_all: return "all";
+        case NS_ooxml::LN_ST_Ligatures_none: return u"none"_ustr;
+        case NS_ooxml::LN_ST_Ligatures_standard: return u"standard"_ustr;
+        case NS_ooxml::LN_ST_Ligatures_contextual: return u"contextual"_ustr;
+        case NS_ooxml::LN_ST_Ligatures_historical: return u"historical"_ustr;
+        case NS_ooxml::LN_ST_Ligatures_discretional: return u"discretional"_ustr;
+        case NS_ooxml::LN_ST_Ligatures_standardContextual: return u"standardContextual"_ustr;
+        case NS_ooxml::LN_ST_Ligatures_standardHistorical: return u"standardHistorical"_ustr;
+        case NS_ooxml::LN_ST_Ligatures_contextualHistorical: return u"contextualHistorical"_ustr;
+        case NS_ooxml::LN_ST_Ligatures_standardDiscretional: return u"standardDiscretional"_ustr;
+        case NS_ooxml::LN_ST_Ligatures_contextualDiscretional: return u"contextualDiscretional"_ustr;
+        case NS_ooxml::LN_ST_Ligatures_historicalDiscretional: return u"historicalDiscretional"_ustr;
+        case NS_ooxml::LN_ST_Ligatures_standardContextualHistorical: return u"standardContextualHistorical"_ustr;
+        case NS_ooxml::LN_ST_Ligatures_standardContextualDiscretional: return u"standardContextualDiscretional"_ustr;
+        case NS_ooxml::LN_ST_Ligatures_standardHistoricalDiscretional: return u"standardHistoricalDiscretional"_ustr;
+        case NS_ooxml::LN_ST_Ligatures_contextualHistoricalDiscretional: return u"contextualHistoricalDiscretional"_ustr;
+        case NS_ooxml::LN_ST_Ligatures_all: return u"all"_ustr;
         default: break;
     }
     return OUString();
@@ -404,9 +404,9 @@ OUString TextEffectsHandler::getNumFormString(sal_Int32 nType)
 {
     switch (nType)
     {
-        case NS_ooxml::LN_ST_NumForm_default: return "default";
-        case NS_ooxml::LN_ST_NumForm_lining: return "lining";
-        case NS_ooxml::LN_ST_NumForm_oldStyle: return "oldStyle";
+        case NS_ooxml::LN_ST_NumForm_default: return u"default"_ustr;
+        case NS_ooxml::LN_ST_NumForm_lining: return u"lining"_ustr;
+        case NS_ooxml::LN_ST_NumForm_oldStyle: return u"oldStyle"_ustr;
         default: break;
     }
     return OUString();
@@ -416,9 +416,9 @@ OUString TextEffectsHandler::getNumSpacingString(sal_Int32 nType)
 {
     switch (nType)
     {
-        case NS_ooxml::LN_ST_NumSpacing_default: return "default";
-        case NS_ooxml::LN_ST_NumSpacing_proportional: return "proportional";
-        case NS_ooxml::LN_ST_NumSpacing_tabular: return "tabular";
+        case NS_ooxml::LN_ST_NumSpacing_default: return u"default"_ustr;
+        case NS_ooxml::LN_ST_NumSpacing_proportional: return u"proportional"_ustr;
+        case NS_ooxml::LN_ST_NumSpacing_tabular: return u"tabular"_ustr;
         default: break;
     }
     return OUString();
@@ -503,15 +503,15 @@ void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
         case NS_ooxml::LN_CT_Percentage_val:
         case NS_ooxml::LN_CT_PositiveFixedPercentage_val:
         case NS_ooxml::LN_CT_PositivePercentage_val:
-            mpGrabBagStack->addInt32("val", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"val"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Glow_rad:
-            mpGrabBagStack->addInt32("rad", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"rad"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_SchemeColor_val:
             {
                 OUString aString = getSchemeColorValTypeString(sal_Int32(aValue.getInt()));
-                mpGrabBagStack->addString("val", aString);
+                mpGrabBagStack->addString(u"val"_ustr, aString);
             }
             break;
         case NS_ooxml::LN_CT_SRgbColor_val:
@@ -520,196 +520,196 @@ void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
                 OUStringBuffer aString;
                 comphelper::string::padToLength(aString, 6 - aBuffer.getLength(), '0');
                 aString.append(aBuffer.getStr());
-                mpGrabBagStack->addString("val", aString.makeStringAndClear().toAsciiUpperCase());
+                mpGrabBagStack->addString(u"val"_ustr, aString.makeStringAndClear().toAsciiUpperCase());
             }
             break;
         case NS_ooxml::LN_CT_Shadow_blurRad:
         case NS_ooxml::LN_CT_Reflection_blurRad:
-            mpGrabBagStack->addInt32("blurRad", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"blurRad"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Reflection_stA:
-            mpGrabBagStack->addInt32("stA", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"stA"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Reflection_stPos:
-            mpGrabBagStack->addInt32("stPos", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"stPos"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Reflection_endA:
-            mpGrabBagStack->addInt32("endA", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"endA"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Reflection_endPos:
-            mpGrabBagStack->addInt32("endPos", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"endPos"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Shadow_dist:
         case NS_ooxml::LN_CT_Reflection_dist:
-            mpGrabBagStack->addInt32("dist", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"dist"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Shadow_dir:
         case NS_ooxml::LN_CT_Reflection_dir:
-            mpGrabBagStack->addInt32("dir", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"dir"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Reflection_fadeDir:
-            mpGrabBagStack->addInt32("fadeDir", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"fadeDir"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Shadow_sx:
         case NS_ooxml::LN_CT_Reflection_sx:
-            mpGrabBagStack->addInt32("sx", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"sx"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Shadow_sy:
         case NS_ooxml::LN_CT_Reflection_sy:
-            mpGrabBagStack->addInt32("sy", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"sy"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Shadow_kx:
         case NS_ooxml::LN_CT_Reflection_kx:
-            mpGrabBagStack->addInt32("kx", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"kx"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Shadow_ky:
         case NS_ooxml::LN_CT_Reflection_ky:
-            mpGrabBagStack->addInt32("ky", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"ky"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Shadow_algn:
         case NS_ooxml::LN_CT_Reflection_algn:
             {
                 uno::Any aAny(getRectAlignmentString(sal_Int32(aValue.getInt())));
-                mpGrabBagStack->appendElement("algn", aAny);
+                mpGrabBagStack->appendElement(u"algn"_ustr, aAny);
             }
             break;
         case NS_ooxml::LN_CT_TextOutlineEffect_w:
-            mpGrabBagStack->addInt32("w", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"w"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_TextOutlineEffect_cap:
             {
                 uno::Any aAny(getLineCapString(sal_Int32(aValue.getInt())));
-                mpGrabBagStack->appendElement("cap", aAny);
+                mpGrabBagStack->appendElement(u"cap"_ustr, aAny);
             }
             break;
         case NS_ooxml::LN_CT_TextOutlineEffect_cmpd:
             {
                 uno::Any aAny(getCompoundLineString(sal_Int32(aValue.getInt())));
-                mpGrabBagStack->appendElement("cmpd", aAny);
+                mpGrabBagStack->appendElement(u"cmpd"_ustr, aAny);
             }
             break;
         case NS_ooxml::LN_CT_TextOutlineEffect_algn:
             {
                 uno::Any aAny(getPenAlignmentString(sal_Int32(aValue.getInt())));
-                mpGrabBagStack->appendElement("algn", aAny);
+                mpGrabBagStack->appendElement(u"algn"_ustr, aAny);
             }
             break;
         case NS_ooxml::LN_CT_GradientStop_pos:
-            mpGrabBagStack->addInt32("pos", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"pos"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_LinearShadeProperties_ang:
-            mpGrabBagStack->addInt32("ang", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"ang"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_LinearShadeProperties_scaled:
             {
                 uno::Any aAny(getOnOffString(sal_Int32(aValue.getInt())));
-                mpGrabBagStack->appendElement("scaled", aAny);
+                mpGrabBagStack->appendElement(u"scaled"_ustr, aAny);
             }
             break;
         case NS_ooxml::LN_CT_PathShadeProperties_path:
             {
                 uno::Any aAny(getPathShadeTypeString(sal_Int32(aValue.getInt())));
-                mpGrabBagStack->appendElement("path", aAny);
+                mpGrabBagStack->appendElement(u"path"_ustr, aAny);
             }
             break;
         case NS_ooxml::LN_CT_RelativeRect_l:
-            mpGrabBagStack->addInt32("l", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"l"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_RelativeRect_t:
-            mpGrabBagStack->addInt32("t", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"t"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_RelativeRect_r:
-            mpGrabBagStack->addInt32("r", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"r"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_RelativeRect_b:
-            mpGrabBagStack->addInt32("b", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"b"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_PresetLineDashProperties_val:
             {
                 uno::Any aAny(getPresetLineDashValString(sal_Int32(aValue.getInt())));
-                mpGrabBagStack->appendElement("val", aAny);
+                mpGrabBagStack->appendElement(u"val"_ustr, aAny);
             }
             break;
         case NS_ooxml::LN_CT_LineJoinMiterProperties_lim:
-            mpGrabBagStack->addInt32("lim", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"lim"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Camera_prst:
             {
                 uno::Any aAny(getPresetCameraTypeString(sal_Int32(aValue.getInt())));
-                mpGrabBagStack->appendElement("prst", aAny);
+                mpGrabBagStack->appendElement(u"prst"_ustr, aAny);
             }
             break;
         case NS_ooxml::LN_CT_LightRig_rig:
             {
                 uno::Any aAny(getLightRigTypeString(sal_Int32(aValue.getInt())));
-                mpGrabBagStack->appendElement("rig", aAny);
+                mpGrabBagStack->appendElement(u"rig"_ustr, aAny);
             }
             break;
         case NS_ooxml::LN_CT_LightRig_dir:
             {
                 uno::Any aAny(getLightRigDirectionString(sal_Int32(aValue.getInt())));
-                mpGrabBagStack->appendElement("dir", aAny);
+                mpGrabBagStack->appendElement(u"dir"_ustr, aAny);
             }
             break;
         case NS_ooxml::LN_CT_SphereCoords_lat:
-            mpGrabBagStack->addInt32("lat", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"lat"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_SphereCoords_lon:
-            mpGrabBagStack->addInt32("lon", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"lon"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_SphereCoords_rev:
-            mpGrabBagStack->addInt32("rev", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"rev"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Props3D_extrusionH:
-            mpGrabBagStack->addInt32("extrusionH", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"extrusionH"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Props3D_contourW:
-            mpGrabBagStack->addInt32("contourW", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"contourW"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Props3D_prstMaterial:
             {
                 uno::Any aAny(getPresetMaterialTypeString(sal_Int32(aValue.getInt())));
-                mpGrabBagStack->appendElement("prstMaterial", aAny);
+                mpGrabBagStack->appendElement(u"prstMaterial"_ustr, aAny);
             }
             break;
         case NS_ooxml::LN_CT_Bevel_w:
-            mpGrabBagStack->addInt32("w", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"w"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Bevel_h:
-            mpGrabBagStack->addInt32("h", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"h"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_Bevel_prst:
             {
                 uno::Any aAny(getBevelPresetTypeString(sal_Int32(aValue.getInt())));
-                mpGrabBagStack->appendElement("prst", aAny);
+                mpGrabBagStack->appendElement(u"prst"_ustr, aAny);
             }
             break;
         case NS_ooxml::LN_CT_Ligatures_val:
             {
                 uno::Any aAny(getLigaturesString(sal_Int32(aValue.getInt())));
-                mpGrabBagStack->appendElement("val", aAny);
+                mpGrabBagStack->appendElement(u"val"_ustr, aAny);
             }
             break;
         case NS_ooxml::LN_CT_NumForm_val:
             {
                 uno::Any aAny(getNumFormString(sal_Int32(aValue.getInt())));
-                mpGrabBagStack->appendElement("val", aAny);
+                mpGrabBagStack->appendElement(u"val"_ustr, aAny);
             }
             break;
         case NS_ooxml::LN_CT_NumSpacing_val:
             {
                 uno::Any aAny(getNumSpacingString(sal_Int32(aValue.getInt())));
-                mpGrabBagStack->appendElement("val", aAny);
+                mpGrabBagStack->appendElement(u"val"_ustr, aAny);
             }
             break;
         case NS_ooxml::LN_CT_StyleSet_id:
-            mpGrabBagStack->addInt32("id", sal_Int32(aValue.getInt()));
+            mpGrabBagStack->addInt32(u"id"_ustr, sal_Int32(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_StyleSet_val:
         case NS_ooxml::LN_CT_OnOff_val:
             {
                 uno::Any aAny(getOnOffString(sal_Int32(aValue.getInt())));
-                mpGrabBagStack->appendElement("val", aAny);
+                mpGrabBagStack->appendElement(u"val"_ustr, aAny);
             }
             break;
         default:
@@ -761,37 +761,37 @@ sal_uInt8 TextEffectsHandler::GetTextFillSolidFillAlpha(const css::beans::Proper
     uno::Sequence<beans::PropertyValue> aPropertyValues;
     rValue.Value >>= aPropertyValues;
     comphelper::SequenceAsHashMap aMap(aPropertyValues);
-    auto it = aMap.find("solidFill");
+    auto it = aMap.find(u"solidFill"_ustr);
     if (it == aMap.end())
     {
         return 0;
     }
 
     comphelper::SequenceAsHashMap aSolidFillMap(it->second);
-    it = aSolidFillMap.find("srgbClr");
+    it = aSolidFillMap.find(u"srgbClr"_ustr);
     if (it == aSolidFillMap.end())
     {
-        it = aSolidFillMap.find("schemeClr");
+        it = aSolidFillMap.find(u"schemeClr"_ustr);
         if (it == aSolidFillMap.end())
             return 0;
     }
 
     comphelper::SequenceAsHashMap aSrgbClrMap(it->second);
-    it = aSrgbClrMap.find("alpha");
+    it = aSrgbClrMap.find(u"alpha"_ustr);
     if (it == aSrgbClrMap.end())
     {
         return 0;
     }
 
     comphelper::SequenceAsHashMap aAlphaMap(it->second);
-    it = aAlphaMap.find("attributes");
+    it = aAlphaMap.find(u"attributes"_ustr);
     if (it == aAlphaMap.end())
     {
         return 0;
     }
 
     comphelper::SequenceAsHashMap aAttributesMap(it->second);
-    it = aAttributesMap.find("val");
+    it = aAttributesMap.find(u"val"_ustr);
     if (it == aAttributesMap.end())
     {
         return 0;

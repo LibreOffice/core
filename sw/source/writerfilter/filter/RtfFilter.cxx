@@ -89,7 +89,7 @@ sal_Bool RtfFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescripto
         uno::Reference<lang::XMultiServiceFactory> xMSF(m_xContext->getServiceManager(),
                                                         uno::UNO_QUERY_THROW);
         uno::Reference<uno::XInterface> xIfc(
-            xMSF->createInstance("com.sun.star.comp.Writer.RtfExport"), uno::UNO_SET_THROW);
+            xMSF->createInstance(u"com.sun.star.comp.Writer.RtfExport"_ustr), uno::UNO_SET_THROW);
         uno::Reference<document::XExporter> xExporter(xIfc, uno::UNO_QUERY_THROW);
         uno::Reference<document::XFilter> xFilter(xIfc, uno::UNO_QUERY_THROW);
         xExporter->setSourceDocument(m_xSrcDoc);
@@ -102,21 +102,21 @@ sal_Bool RtfFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescripto
     uno::Reference<beans::XPropertySet> xDocProps;
     if (m_xDstDoc.is()) // not in cppunittest?
     {
-        m_xDstDoc->setPropertyValue("UndocumentedWriterfilterHack", uno::Any(true));
+        m_xDstDoc->setPropertyValue(u"UndocumentedWriterfilterHack"_ustr, uno::Any(true));
     }
     comphelper::ScopeGuard g([xDocProps] {
         if (xDocProps.is()) // not in cppunittest?
         {
             // note: pStream.clear calls RemoveLastParagraph()
-            xDocProps->setPropertyValue("UndocumentedWriterfilterHack", uno::Any(false));
+            xDocProps->setPropertyValue(u"UndocumentedWriterfilterHack"_ustr, uno::Any(false));
         }
     });
 
     try
     {
         utl::MediaDescriptor aMediaDesc(rDescriptor);
-        bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault("RepairPackage", false);
-        bool bIsNewDoc = !aMediaDesc.getUnpackedValueOrDefault("InsertMode", false);
+        bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault(u"RepairPackage"_ustr, false);
+        bool bIsNewDoc = !aMediaDesc.getUnpackedValueOrDefault(u"InsertMode"_ustr, false);
         uno::Reference<io::XInputStream> xInputStream;
 
         aMediaDesc.addInputStream();
@@ -168,7 +168,7 @@ sal_Bool RtfFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescripto
     {
         css::uno::Any anyEx = cppu::getCaughtException();
         // cannot throw WrongFormatException directly :(
-        throw lang::WrappedTargetRuntimeException("", getXWeak(), anyEx);
+        throw lang::WrappedTargetRuntimeException(u""_ustr, getXWeak(), anyEx);
     }
     catch (const uno::Exception&)
     {
@@ -199,7 +199,7 @@ void RtfFilter::initialize(const uno::Sequence<uno::Any>& /*aArguments*/)
     // 'Word Template' but we don't need it for RTF.
 }
 
-OUString RtfFilter::getImplementationName() { return "com.sun.star.comp.Writer.RtfFilter"; }
+OUString RtfFilter::getImplementationName() { return u"com.sun.star.comp.Writer.RtfFilter"_ustr; }
 
 sal_Bool RtfFilter::supportsService(const OUString& rServiceName)
 {
@@ -208,8 +208,8 @@ sal_Bool RtfFilter::supportsService(const OUString& rServiceName)
 
 uno::Sequence<OUString> RtfFilter::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet = { OUString("com.sun.star.document.ImportFilter"),
-                                     OUString("com.sun.star.document.ExportFilter") };
+    uno::Sequence<OUString> aRet = { u"com.sun.star.document.ImportFilter"_ustr,
+                                     u"com.sun.star.document.ExportFilter"_ustr };
     return aRet;
 }
 

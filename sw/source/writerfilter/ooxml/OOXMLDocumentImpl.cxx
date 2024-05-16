@@ -63,7 +63,7 @@ OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, uno::Refere
     , mnProgressLastPos(0)
     , mnProgressCurrentPos(0)
     , mnProgressEndPos(0)
-    , m_rBaseURL(utl::MediaDescriptor(rDescriptor).getUnpackedValueOrDefault("DocumentBaseURL", OUString()))
+    , m_rBaseURL(utl::MediaDescriptor(rDescriptor).getUnpackedValueOrDefault(u"DocumentBaseURL"_ustr, OUString()))
     , maMediaDescriptor(rDescriptor)
     , mxGraphicMapper(graphic::GraphicMapper::create(mpStream->getContext()))
 {
@@ -439,7 +439,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
 {
     StatusIndicatorGuard aStatusIndicatorGuard(mxStatusIndicator);
 
-    if (utl::MediaDescriptor(maMediaDescriptor).getUnpackedValueOrDefault("ReadGlossaries", false))
+    if (utl::MediaDescriptor(maMediaDescriptor).getUnpackedValueOrDefault(u"ReadGlossaries"_ustr, false))
     {
         resolveFastSubStream(rStream, OOXMLStream::GLOSSARY);
         return;
@@ -452,10 +452,10 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxModel, uno::UNO_QUERY);
         uno::Reference<document::XDocumentProperties> xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
         comphelper::SequenceAsHashMap aMap(xDocumentProperties->getDocumentStatistics());
-        if (aMap.find("ParagraphCount") != aMap.end())
+        if (aMap.find(u"ParagraphCount"_ustr) != aMap.end())
         {
             sal_Int32 nValue;
-            if (aMap["ParagraphCount"] >>= nValue)
+            if (aMap[u"ParagraphCount"_ustr] >>= nValue)
             {
                 if (mxStatusIndicator.is())
                 {
@@ -532,7 +532,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
     {
         css::uno::Any anyEx = cppu::getCaughtException();
         SAL_WARN("writerfilter.ooxml", "OOXMLDocumentImpl::resolve(): " << exceptionToString(anyEx));
-        throw lang::WrappedTargetRuntimeException("", nullptr, anyEx);
+        throw lang::WrappedTargetRuntimeException(u""_ustr, nullptr, anyEx);
     }
     catch (...)
     {

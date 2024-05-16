@@ -325,7 +325,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     , m_bHadSect(false)
     , m_nCellxMax(0)
     , m_nListPictureId(0)
-    , m_bIsNewDoc(!rMediaDescriptor.getUnpackedValueOrDefault("InsertMode", false))
+    , m_bIsNewDoc(!rMediaDescriptor.getUnpackedValueOrDefault(u"InsertMode"_ustr, false))
     , m_rMediaDescriptor(rMediaDescriptor)
     , m_hasRHeader(false)
     , m_hasFHeader(false)
@@ -959,7 +959,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     WmfExternal* pExtHeader = &aExtHeader;
     uno::Reference<lang::XServiceInfo> xServiceInfo(m_aStates.top().getDrawingObject().getShape(),
                                                     uno::UNO_QUERY);
-    if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
+    if (xServiceInfo.is() && xServiceInfo->supportsService(u"com.sun.star.text.TextFrame"_ustr))
         pExtHeader = nullptr;
 
     uno::Reference<graphic::XGraphic> xGraphic
@@ -1001,7 +1001,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     if (xShape.is())
     {
         uno::Reference<lang::XServiceInfo> xSI(xShape, uno::UNO_QUERY_THROW);
-        if (!xSI->supportsService("com.sun.star.drawing.GraphicObjectShape"))
+        if (!xSI->supportsService(u"com.sun.star.drawing.GraphicObjectShape"_ustr))
         {
             // it's sometimes an error to get here - but it's possible to have
             // a \pict inside the \shptxt of a \shp of shapeType 202 "TextBox"
@@ -1014,7 +1014,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     }
     if (!xShape.is() && m_xDstDoc)
     {
-        xShape.set(m_xDstDoc->createInstance("com.sun.star.drawing.GraphicObjectShape"),
+        xShape.set(m_xDstDoc->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr),
                    uno::UNO_QUERY);
         uno::Reference<drawing::XShapes> xShapes = m_xDstDoc->getDrawPage();
         if (xShapes.is())
@@ -1024,7 +1024,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
 
     if (xPropertySet.is())
-        xPropertySet->setPropertyValue("Graphic", uno::Any(xGraphic));
+        xPropertySet->setPropertyValue(u"Graphic"_ustr, uno::Any(xGraphic));
 
     // check if the picture is in an OLE object and if the \objdata element is used
     // (see RTFKeyword::OBJECT in RTFDocumentImpl::dispatchDestination)
@@ -1041,7 +1041,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         xShape->setSize(aSize);
 
         // Replacement graphic is inline by default, see oox::vml::SimpleShape::implConvertAndInsert().
-        xPropertySet->setPropertyValue("AnchorType",
+        xPropertySet->setPropertyValue(u"AnchorType"_ustr,
                                        uno::Any(text::TextContentAnchorType_AS_CHARACTER));
 
         auto pShapeValue = new RTFValue(xShape);
@@ -2757,8 +2757,8 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
             if (&m_aStates.top().getDestinationText()
                 != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
-            OUString aName = rState.getDestination() == Destination::OPERATOR ? OUString("Operator")
-                                                                              : OUString("Company");
+            OUString aName = rState.getDestination() == Destination::OPERATOR ? u"Operator"_ustr
+                                                                              : u"Company"_ustr;
             uno::Any aValue(m_aStates.top().getCurrentDestinationText()->makeStringAndClear());
             if (m_xDocumentProperties.is())
             {
@@ -2912,17 +2912,18 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                 const uno::Reference<beans::XPropertySet>& xPropertySet(rDrawing.getPropertySet());
 
                 uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY);
-                bool bTextFrame = xServiceInfo->supportsService("com.sun.star.text.TextFrame");
+                bool bTextFrame
+                    = xServiceInfo->supportsService(u"com.sun.star.text.TextFrame"_ustr);
 
                 // The default is certainly not inline, but then what Word supports is just at-character.
-                xPropertySet->setPropertyValue("AnchorType",
+                xPropertySet->setPropertyValue(u"AnchorType"_ustr,
                                                uno::Any(text::TextContentAnchorType_AT_CHARACTER));
 
                 if (bTextFrame)
                 {
-                    xPropertySet->setPropertyValue("HoriOrientPosition",
+                    xPropertySet->setPropertyValue(u"HoriOrientPosition"_ustr,
                                                    uno::Any(rDrawing.getLeft()));
-                    xPropertySet->setPropertyValue("VertOrientPosition",
+                    xPropertySet->setPropertyValue(u"VertOrientPosition"_ustr,
                                                    uno::Any(rDrawing.getTop()));
                 }
                 else
@@ -2942,12 +2943,13 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                 }
                 if (rDrawing.getHasFillColor())
                     xPropertySet->setPropertyValue(
-                        "FillColor", uno::Any(sal_uInt32((rDrawing.getFillColorR() << 16)
-                                                         + (rDrawing.getFillColorG() << 8)
-                                                         + rDrawing.getFillColorB())));
+                        u"FillColor"_ustr, uno::Any(sal_uInt32((rDrawing.getFillColorR() << 16)
+                                                               + (rDrawing.getFillColorG() << 8)
+                                                               + rDrawing.getFillColorB())));
                 else if (!bTextFrame)
                     // If there is no fill, the Word default is 100% transparency.
-                    xPropertySet->setPropertyValue("FillTransparence", uno::Any(sal_Int32(100)));
+                    xPropertySet->setPropertyValue(u"FillTransparence"_ustr,
+                                                   uno::Any(sal_Int32(100)));
 
                 RTFSdrImport::resolveFLine(xPropertySet, rDrawing.getFLine());
 
@@ -3517,14 +3519,16 @@ void RTFDocumentImpl::afterPopState(RTFParserState& rState)
                 else
                 {
                     uno::Reference<beans::XPropertySet> xMaster(
-                        m_xDstDoc->createInstance("com.sun.star.text.FieldMaster.User"),
+                        m_xDstDoc->createInstance(u"com.sun.star.text.FieldMaster.User"_ustr),
                         uno::UNO_QUERY_THROW);
-                    xMaster->setPropertyValue("Name", uno::Any(m_aStates.top().getDocVarName()));
+                    xMaster->setPropertyValue(u"Name"_ustr,
+                                              uno::Any(m_aStates.top().getDocVarName()));
                     uno::Reference<text::XDependentTextField> xField(
-                        m_xDstDoc->createInstance("com.sun.star.text.TextField.User"),
+                        m_xDstDoc->createInstance(u"com.sun.star.text.TextField.User"_ustr),
                         uno::UNO_QUERY);
                     xField->attachTextFieldMaster(xMaster);
-                    xField->getTextFieldMaster()->setPropertyValue("Content", uno::Any(docvar));
+                    xField->getTextFieldMaster()->setPropertyValue(u"Content"_ustr,
+                                                                   uno::Any(docvar));
 
                     m_aStates.top().clearDocVarName();
                 }

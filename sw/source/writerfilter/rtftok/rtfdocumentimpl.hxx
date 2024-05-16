@@ -644,14 +644,16 @@ public:
     {
         if (m_Impl.empty())
             throw css::io::WrongFormatException(
-                "Parser state is empty! Invalid usage of destination braces in RTF?", nullptr);
+                u"Parser state is empty! Invalid usage of destination braces in RTF?"_ustr,
+                nullptr);
         return m_Impl.back();
     }
     void pop()
     {
         if (m_Impl.empty())
             throw css::io::WrongFormatException(
-                "Parser state is empty! Invalid usage of destination braces in RTF?", nullptr);
+                u"Parser state is empty! Invalid usage of destination braces in RTF?"_ustr,
+                nullptr);
         return m_Impl.pop_back();
     }
     void push(RTFParserState const& rState) { return m_Impl.push_back(rState); }

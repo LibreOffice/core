@@ -131,7 +131,7 @@ namespace writerfilter::dmapper {
                             nToken = XML_tableCellDelete;
                             break;
                         default:
-                            throw lang::IllegalArgumentException("illegal redline token type", nullptr, 0);
+                            throw lang::IllegalArgumentException(u"illegal redline token type"_ustr, nullptr, 0);
                             break;
                     }
                     auto pTrackChangesHandler = std::make_shared<TrackChangesHandler>( nToken );
@@ -194,7 +194,7 @@ namespace writerfilter::dmapper {
                 {
                     auto pBorderHandler = std::make_shared<BorderHandler>(true);
                     if (m_pCurrentInteropGrabBag)
-                        pBorderHandler->enableInteropGrabBag("tblBorders");
+                        pBorderHandler->enableInteropGrabBag(u"tblBorders"_ustr);
                     pProperties->resolve(*pBorderHandler);
                     if (m_pCurrentInteropGrabBag)
                         m_pCurrentInteropGrabBag->push_back(pBorderHandler->getInteropGrabBag());
@@ -241,7 +241,7 @@ namespace writerfilter::dmapper {
                     //in OOXML there's one set of borders at each cell (if there is any)
                     tools::SvRef< TDefTableHandler > pTDefTableHandler( new TDefTableHandler());
                     if (m_pCurrentInteropGrabBag)
-                        pTDefTableHandler->enableInteropGrabBag("tcBorders");
+                        pTDefTableHandler->enableInteropGrabBag(u"tcBorders"_ustr);
                     pProperties->resolve( *pTDefTableHandler );
                     if (m_pCurrentInteropGrabBag)
                         m_pCurrentInteropGrabBag->push_back(pTDefTableHandler->getInteropGrabBag());
@@ -259,7 +259,7 @@ namespace writerfilter::dmapper {
                     {
                         auto pCellMarginHandler = std::make_shared<CellMarginHandler>();
                         if (m_pCurrentInteropGrabBag)
-                            pCellMarginHandler->enableInteropGrabBag("tcMar");
+                            pCellMarginHandler->enableInteropGrabBag(u"tcMar"_ustr);
                         pProperties->resolve(*pCellMarginHandler);
                         if (m_pCurrentInteropGrabBag)
                             m_pCurrentInteropGrabBag->push_back(pCellMarginHandler->getInteropGrabBag());
@@ -298,7 +298,7 @@ namespace writerfilter::dmapper {
                 if( pProperties )
                 {
                     auto pCellColorHandler = std::make_shared<CellColorHandler>();
-                    pCellColorHandler->enableInteropGrabBag("shd"); //enable to store shd unsupported props in grab bag
+                    pCellColorHandler->enableInteropGrabBag(u"shd"_ustr); //enable to store shd unsupported props in grab bag
                     pProperties->resolve( *pCellColorHandler );
                     TablePropertyMapPtr pPropertyMap = pCellColorHandler->getProperties();
                     beans::PropertyValue aGrabBag = pCellColorHandler->getInteropGrabBag();
@@ -319,7 +319,7 @@ namespace writerfilter::dmapper {
                 {
                     auto pCellMarginHandler = std::make_shared<CellMarginHandler>();
                     if (m_pCurrentInteropGrabBag)
-                        pCellMarginHandler->enableInteropGrabBag("tblCellMar");
+                        pCellMarginHandler->enableInteropGrabBag(u"tblCellMar"_ustr);
                     pProperties->resolve( *pCellMarginHandler );
                     if (m_pCurrentInteropGrabBag)
                         m_pCurrentInteropGrabBag->push_back(pCellMarginHandler->getInteropGrabBag());
@@ -343,7 +343,7 @@ namespace writerfilter::dmapper {
                {
                    MeasureHandlerPtr pHandler(new MeasureHandler);
                    if (m_pCurrentInteropGrabBag)
-                       pHandler->enableInteropGrabBag("tblInd");
+                       pHandler->enableInteropGrabBag(u"tblInd"_ustr);
                    pProperties->resolve( *pHandler );
                    if (m_pCurrentInteropGrabBag)
                        m_pCurrentInteropGrabBag->push_back(pHandler->getInteropGrabBag());

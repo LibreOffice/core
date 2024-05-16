@@ -220,8 +220,8 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 
             if (m_aTableBufferStack.size() == 1 || !m_aStates.top().getCurrentBuffer())
             {
-                throw io::WrongFormatException("mismatch between \\itap and number of \\nestrow",
-                                               nullptr);
+                throw io::WrongFormatException(
+                    u"mismatch between \\itap and number of \\nestrow"_ustr, nullptr);
             }
             assert(m_aStates.top().getCurrentBuffer() == &m_aTableBufferStack.back());
             // note: there may be several states pointing to table buffer!
@@ -426,7 +426,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         break;
         case RTFKeyword::CHPGN:
         {
-            OUString aStr("PAGE");
+            OUString aStr(u"PAGE"_ustr);
             singleChar(cFieldStart);
             text(aStr);
             singleChar(cFieldSep, true);

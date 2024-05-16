@@ -126,10 +126,10 @@ uno::Sequence<beans::PropertyValue> WriteProtection::toSequence() const
     if (!m_sAlgorithmName.isEmpty() && !m_sSalt.isEmpty() && !m_sHash.isEmpty()
         && m_sCryptAlgorithmClass == "hash" && m_sCryptAlgorithmType == "typeAny")
     {
-        aResult = { comphelper::makePropertyValue("algorithm-name", m_sAlgorithmName),
-                    comphelper::makePropertyValue("salt", m_sSalt),
-                    comphelper::makePropertyValue("iteration-count", m_CryptSpinCount),
-                    comphelper::makePropertyValue("hash", m_sHash) };
+        aResult = { comphelper::makePropertyValue(u"algorithm-name"_ustr, m_sAlgorithmName),
+                    comphelper::makePropertyValue(u"salt"_ustr, m_sSalt),
+                    comphelper::makePropertyValue(u"iteration-count"_ustr, m_CryptSpinCount),
+                    comphelper::makePropertyValue(u"hash"_ustr, m_sHash) };
     }
 
     return aResult;

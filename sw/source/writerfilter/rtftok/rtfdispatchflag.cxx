@@ -892,13 +892,13 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             if (!m_aStates.top().getCurrentBuffer())
                 m_aStates.top().setCurrentBuffer(&m_aSuperBuffer);
 
-            auto pValue = new RTFValue("superscript");
+            auto pValue = new RTFValue(u"superscript"_ustr);
             m_aStates.top().getCharacterSprms().set(NS_ooxml::LN_EG_RPrBase_vertAlign, pValue);
         }
         break;
         case RTFKeyword::SUB:
         {
-            auto pValue = new RTFValue("subscript");
+            auto pValue = new RTFValue(u"subscript"_ustr);
             m_aStates.top().getCharacterSprms().set(NS_ooxml::LN_EG_RPrBase_vertAlign, pValue);
         }
         break;
@@ -1040,7 +1040,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 case RTFKeyword::DPLINE:
                 {
                     uno::Reference<drawing::XShape> xShape(
-                        getTextDocument()->createInstance("com.sun.star.drawing.LineShape"),
+                        getTextDocument()->createInstance(u"com.sun.star.drawing.LineShape"_ustr),
                         uno::UNO_QUERY);
                     m_aStates.top().getDrawingObject().setShape(xShape);
                     break;
@@ -1049,7 +1049,8 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 {
                     // The reason this is not a simple CustomShape is that in the old syntax we have no ViewBox info.
                     uno::Reference<drawing::XShape> xShape(
-                        getTextDocument()->createInstance("com.sun.star.drawing.PolyLineShape"),
+                        getTextDocument()->createInstance(
+                            u"com.sun.star.drawing.PolyLineShape"_ustr),
                         uno::UNO_QUERY);
                     m_aStates.top().getDrawingObject().setShape(xShape);
                     break;
@@ -1057,7 +1058,8 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 case RTFKeyword::DPPOLYGON:
                 {
                     uno::Reference<drawing::XShape> xShape(
-                        getTextDocument()->createInstance("com.sun.star.drawing.PolyPolygonShape"),
+                        getTextDocument()->createInstance(
+                            u"com.sun.star.drawing.PolyPolygonShape"_ustr),
                         uno::UNO_QUERY);
                     m_aStates.top().getDrawingObject().setShape(xShape);
                     break;
@@ -1065,7 +1067,8 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 case RTFKeyword::DPRECT:
                 {
                     uno::Reference<drawing::XShape> xShape(
-                        getTextDocument()->createInstance("com.sun.star.drawing.RectangleShape"),
+                        getTextDocument()->createInstance(
+                            u"com.sun.star.drawing.RectangleShape"_ustr),
                         uno::UNO_QUERY);
                     m_aStates.top().getDrawingObject().setShape(xShape);
                     break;
@@ -1098,7 +1101,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             if (nType)
             {
                 uno::Reference<drawing::XShape> xShape(
-                    getTextDocument()->createInstance("com.sun.star.drawing.CustomShape"),
+                    getTextDocument()->createInstance(u"com.sun.star.drawing.CustomShape"_ustr),
                     uno::UNO_QUERY);
                 m_aStates.top().getDrawingObject().setShape(xShape);
             }
@@ -1112,7 +1115,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 {
                     // set default VertOrient before inserting
                     m_aStates.top().getDrawingObject().getPropertySet()->setPropertyValue(
-                        "VertOrient", uno::Any(text::VertOrientation::NONE));
+                        u"VertOrient"_ustr, uno::Any(text::VertOrientation::NONE));
                     xShapes->add(m_aStates.top().getDrawingObject().getShape());
                 }
             }
@@ -1230,7 +1233,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             if (m_aStates.top().getDrawingObject().getPropertySet().is())
                 // Seems this old syntax has no way to specify a custom radius, and this is the default
                 m_aStates.top().getDrawingObject().getPropertySet()->setPropertyValue(
-                    "CornerRadius", uno::Any(sal_Int32(83)));
+                    u"CornerRadius"_ustr, uno::Any(sal_Int32(83)));
             break;
         case RTFKeyword::NOWRAP:
             m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_wrap,

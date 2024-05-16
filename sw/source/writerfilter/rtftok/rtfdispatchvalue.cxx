@@ -458,7 +458,7 @@ bool RTFDocumentImpl::dispatchTableValue(RTFKeyword nKeyword, int nParam)
         break;
         case RTFKeyword::TRRH:
         {
-            OUString hRule("auto");
+            OUString hRule(u"auto"_ustr);
             if (nParam < 0)
             {
                 tools::SvRef<RTFValue> pAbsValue(new RTFValue(-nParam));
@@ -1686,7 +1686,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     uno::Sequence<uno::Sequence<awt::Point>> aPointSequenceSequence
                         = { comphelper::containerToSequence(rDrawingObject.getPolyLinePoints()) };
                     rDrawingObject.getPropertySet()->setPropertyValue(
-                        "PolyPolygon", uno::Any(aPointSequenceSequence));
+                        u"PolyPolygon"_ustr, uno::Any(aPointSequenceSequence));
                 }
             }
         }

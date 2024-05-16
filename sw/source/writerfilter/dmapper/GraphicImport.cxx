@@ -455,15 +455,15 @@ public:
     {
         comphelper::SequenceAsHashMap aEffectExtent;
         if (m_oEffectExtentLeft)
-            aEffectExtent["l"] <<= *m_oEffectExtentLeft;
+            aEffectExtent[u"l"_ustr] <<= *m_oEffectExtentLeft;
         if (m_oEffectExtentTop)
-            aEffectExtent["t"] <<= *m_oEffectExtentTop;
+            aEffectExtent[u"t"_ustr] <<= *m_oEffectExtentTop;
         if (m_oEffectExtentRight)
-            aEffectExtent["r"] <<= *m_oEffectExtentRight;
+            aEffectExtent[u"r"_ustr] <<= *m_oEffectExtentRight;
         if (m_oEffectExtentBottom)
-            aEffectExtent["b"] <<= *m_oEffectExtentBottom;
+            aEffectExtent[u"b"_ustr] <<= *m_oEffectExtentBottom;
         if (!aEffectExtent.empty())
-            m_aInteropGrabBag["CT_EffectExtent"] <<= aEffectExtent.getAsConstPropertyValueList();
+            m_aInteropGrabBag[u"CT_EffectExtent"_ustr] <<= aEffectExtent.getAsConstPropertyValueList();
         return m_aInteropGrabBag;
     }
 };
@@ -535,7 +535,7 @@ void GraphicImport::putPropertyToFrameGrabBag( const OUString& sPropertyName, co
 
     OUString aGrabBagPropName;
     uno::Reference<lang::XServiceInfo> xServiceInfo(m_xShape, uno::UNO_QUERY_THROW);
-    if (xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
+    if (xServiceInfo->supportsService(u"com.sun.star.text.TextFrame"_ustr))
         aGrabBagPropName = "FrameInteropGrabBag";
     else
         aGrabBagPropName = "InteropGrabBag";
@@ -838,13 +838,13 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             ( xShape, uno::UNO_QUERY_THROW );
 
                         uno::Reference<graphic::XGraphic> xGraphic;
-                        xShapeProps->getPropertyValue("Graphic") >>= xGraphic;
+                        xShapeProps->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
 
                         sal_Int32 nRotation = 0;
-                        xShapeProps->getPropertyValue("RotateAngle") >>= nRotation;
+                        xShapeProps->getPropertyValue(u"RotateAngle"_ustr) >>= nRotation;
 
                         css::beans::PropertyValues aGrabBag;
-                        xShapeProps->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+                        xShapeProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
                         // if the shape contains effects in the grab bag, we should not transform it
                         // in a XTextContent so those effects can be preserved
                         bool bContainsEffects = std::any_of(std::cbegin(aGrabBag), std::cend(aGrabBag), [](const auto& rProp) {
@@ -853,18 +853,18 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                                 || rProp.Name == "ArtisticEffectProperties";
                         });
 
-                        xShapeProps->getPropertyValue("Shadow") >>= m_pImpl->m_bShadow;
+                        xShapeProps->getPropertyValue(u"Shadow"_ustr) >>= m_pImpl->m_bShadow;
                         if (m_pImpl->m_bShadow)
                         {
-                            xShapeProps->getPropertyValue("ShadowXDistance") >>= m_pImpl->m_nShadowXDistance;
-                            xShapeProps->getPropertyValue("ShadowYDistance") >>= m_pImpl->m_nShadowYDistance;
-                            xShapeProps->getPropertyValue("ShadowColor") >>= m_pImpl->m_nShadowColor;
-                            xShapeProps->getPropertyValue("ShadowTransparence") >>= m_pImpl->m_nShadowTransparence;
+                            xShapeProps->getPropertyValue(u"ShadowXDistance"_ustr) >>= m_pImpl->m_nShadowXDistance;
+                            xShapeProps->getPropertyValue(u"ShadowYDistance"_ustr) >>= m_pImpl->m_nShadowYDistance;
+                            xShapeProps->getPropertyValue(u"ShadowColor"_ustr) >>= m_pImpl->m_nShadowColor;
+                            xShapeProps->getPropertyValue(u"ShadowTransparence"_ustr) >>= m_pImpl->m_nShadowTransparence;
                         }
 
-                        xShapeProps->getPropertyValue("GraphicColorMode") >>= m_pImpl->m_eColorMode;
-                        xShapeProps->getPropertyValue("AdjustLuminance") >>= m_pImpl->m_nBrightness;
-                        xShapeProps->getPropertyValue("AdjustContrast") >>= m_pImpl->m_nContrast;
+                        xShapeProps->getPropertyValue(u"GraphicColorMode"_ustr) >>= m_pImpl->m_eColorMode;
+                        xShapeProps->getPropertyValue(u"AdjustLuminance"_ustr) >>= m_pImpl->m_nBrightness;
+                        xShapeProps->getPropertyValue(u"AdjustContrast"_ustr) >>= m_pImpl->m_nContrast;
 
                         // fdo#70457: transform XShape into a SwXTextGraphicObject only if there's no rotation
                         if ( nRotation == 0 && !bContainsEffects )
@@ -876,22 +876,22 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         {
                             // Define the object size
                             awt::Size aSize = xShape->getSize( );
-                            m_xGraphicObject->setPropertyValue("Height",
+                            m_xGraphicObject->setPropertyValue(u"Height"_ustr,
                                    uno::Any( aSize.Height ) );
-                            m_xGraphicObject->setPropertyValue("Width",
+                            m_xGraphicObject->setPropertyValue(u"Width"_ustr,
                                    uno::Any( aSize.Width ) );
 
                             text::GraphicCrop aGraphicCrop( 0, 0, 0, 0 );
                             uno::Reference< beans::XPropertySet > xSourceGraphProps( xShape, uno::UNO_QUERY );
-                            uno::Any aAny = xSourceGraphProps->getPropertyValue("GraphicCrop");
+                            uno::Any aAny = xSourceGraphProps->getPropertyValue(u"GraphicCrop"_ustr);
                             if (m_pImpl->m_oCrop)
                             {   // RTF: RTFValue from resolvePict()
-                                m_xGraphicObject->setPropertyValue("GraphicCrop",
+                                m_xGraphicObject->setPropertyValue(u"GraphicCrop"_ustr,
                                         uno::Any(*m_pImpl->m_oCrop));
                             }
                             else if (aAny >>= aGraphicCrop)
                             {   // DOCX: imported in oox BlipFillContext
-                                m_xGraphicObject->setPropertyValue("GraphicCrop",
+                                m_xGraphicObject->setPropertyValue(u"GraphicCrop"_ustr,
                                     uno::Any( aGraphicCrop ) );
                             }
 
@@ -921,7 +921,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
 
                         // In Word, if a shape is anchored inline, that
                         // excludes being in the background.
-                        xShapeProps->setPropertyValue("Opaque", uno::Any(true));
+                        xShapeProps->setPropertyValue(u"Opaque"_ustr, uno::Any(true));
 
                         uno::Reference<lang::XServiceInfo> xServiceInfo(m_xShape, uno::UNO_QUERY_THROW);
 
@@ -929,7 +929,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         // make sure that setting size doesn't affect rotation,
                         // that would not match Word's definition of rotation.
                         bool bKeepRotation = false;
-                        if (!xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
+                        if (!xServiceInfo->supportsService(u"com.sun.star.text.TextFrame"_ustr))
                         {
                             bKeepRotation = true;
                             xShapeProps->setPropertyValue
@@ -954,9 +954,9 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         // here, because it returns the rotate angle of the first child for groups
                         // and slope angle for lines, even if line or group had not been rotated.
                         // Import in oox has put the rotation from oox file into InteropGrabBag.
-                        comphelper::SequenceAsHashMap aInteropGrabBag(xShapeProps->getPropertyValue("InteropGrabBag"));
+                        comphelper::SequenceAsHashMap aInteropGrabBag(xShapeProps->getPropertyValue(u"InteropGrabBag"_ustr));
                         sal_Int32 nOOXAngle(0);
-                        aInteropGrabBag.getValue("mso-rotation-angle") >>= nOOXAngle; // 1/60000 deg
+                        aInteropGrabBag.getValue(u"mso-rotation-angle"_ustr) >>= nOOXAngle; // 1/60000 deg
                         // tdf#143455: A diagram is imported as group, but has no valid object list
                         // and contour wrap is different to Word. As workaround diagrams are excluded
                         // here in various places.
@@ -965,12 +965,12 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         // tdf#143476: A lockedCanvas (Word2007) is imported as group, but has not
                         // got size and position. Values from m_Impl has to be used.
                         bool bIsLockedCanvas(false);
-                        aInteropGrabBag.getValue("LockedCanvas") >>= bIsLockedCanvas;
+                        aInteropGrabBag.getValue(u"LockedCanvas"_ustr) >>= bIsLockedCanvas;
                         bool bIsWordprocessingCanvas(false);
-                        aInteropGrabBag.getValue("WordprocessingCanvas") >>= bIsWordprocessingCanvas;
-                        const bool bIsGroupOrLine = (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape")
+                        aInteropGrabBag.getValue(u"WordprocessingCanvas"_ustr) >>= bIsWordprocessingCanvas;
+                        const bool bIsGroupOrLine = (xServiceInfo->supportsService(u"com.sun.star.drawing.GroupShape"_ustr)
                             && !bIsDiagram && !bIsLockedCanvas && !bIsWordprocessingCanvas)
-                            || xServiceInfo->supportsService("com.sun.star.drawing.LineShape");
+                            || xServiceInfo->supportsService(u"com.sun.star.drawing.LineShape"_ustr);
                         SdrObject* pShape = SdrObject::getSdrObjectFromXShape(m_xShape);
                         if (!bIsGroupOrLine || (!nOOXAngle && !lcl_bHasGroupSlantedChild(pShape)))
                         {
@@ -998,14 +998,14 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
 
                         if (bKeepRotation)
                         {
-                            xShapeProps->setPropertyValue("RotateAngle", uno::Any(nRotation.get()));
+                            xShapeProps->setPropertyValue(u"RotateAngle"_ustr, uno::Any(nRotation.get()));
                         }
 
                         m_pImpl->m_bIsGraphic = true;
 
                         if (!m_pImpl->m_sAnchorId.isEmpty())
                         {
-                            putPropertyToFrameGrabBag("AnchorId", uno::Any(m_pImpl->m_sAnchorId));
+                            putPropertyToFrameGrabBag(u"AnchorId"_ustr, uno::Any(m_pImpl->m_sAnchorId));
                         }
 
                         // Calculate mso unrotated rectangle and its center, needed below
@@ -1051,7 +1051,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         // based on the unrotated image without width-height-swap. We correct this to
                         // those values, which would be calculated if width-height-swap was used.
                         if (m_pImpl->m_rDomainMapper.GetSettingsTable()->GetWordCompatibilityMode() < 14
-                            && xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape")
+                            && xServiceInfo->supportsService(u"com.sun.star.drawing.GraphicObjectShape"_ustr)
                             && nOOXAngle != 0)
                         {
                             lcl_correctWord2007EffectExtent(nOOXAngle);
@@ -1215,25 +1215,25 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
 
                             const double fTopDiff = aShapeRange.getMinY() - aB2DWrapRange.getMinY();
                             m_pImpl->m_nTopMargin += basegfx::fround(fTopDiff);
-                            aAnchorDistDiff["distTDiff"] <<= basegfx::fround(
+                            aAnchorDistDiff[u"distTDiff"_ustr] <<= basegfx::fround(
                                 o3tl::convert(fTopDiff, o3tl::Length::mm100, o3tl::Length::twip));
 
                             const double fBottomDiff = aB2DWrapRange.getMaxY() - aShapeRange.getMaxY();
                             m_pImpl->m_nBottomMargin += basegfx::fround(fBottomDiff);
-                            aAnchorDistDiff["distBDiff"] <<= basegfx::fround(
+                            aAnchorDistDiff[u"distBDiff"_ustr] <<= basegfx::fround(
                                 o3tl::convert(fBottomDiff, o3tl::Length::mm100, o3tl::Length::twip));
 
                             const double fLeftDiff = aShapeRange.getMinX() - aB2DWrapRange.getMinX();
                             m_pImpl->m_nLeftMargin += basegfx::fround(fLeftDiff);
-                            aAnchorDistDiff["distLDiff"] <<= basegfx::fround(
+                            aAnchorDistDiff[u"distLDiff"_ustr] <<= basegfx::fround(
                                 o3tl::convert(fLeftDiff, o3tl::Length::mm100, o3tl::Length::twip));
 
                             const double fRightDiff = aB2DWrapRange.getMaxX() - aShapeRange.getMaxX();
                             m_pImpl->m_nRightMargin += basegfx::fround(fRightDiff);
-                            aAnchorDistDiff["distRDiff"] <<= basegfx::fround(
+                            aAnchorDistDiff[u"distRDiff"_ustr] <<= basegfx::fround(
                                 o3tl::convert(fRightDiff, o3tl::Length::mm100, o3tl::Length::twip));
 
-                            m_pImpl->m_aInteropGrabBag["AnchorDistDiff"]
+                            m_pImpl->m_aInteropGrabBag[u"AnchorDistDiff"_ustr]
                                 <<= aAnchorDistDiff.getAsConstPropertyValueList();
 
                             // FixMe: tdf#141880. LibreOffice cannot handle negative horizontal margin in contour wrap
@@ -1319,13 +1319,13 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
 
                         if (m_pImpl->m_bHidden)
                         {
-                            xShapeProps->setPropertyValue("Visible", uno::Any(false));
-                            xShapeProps->setPropertyValue("Printable", uno::Any(false));
+                            xShapeProps->setPropertyValue(u"Visible"_ustr, uno::Any(false));
+                            xShapeProps->setPropertyValue(u"Printable"_ustr, uno::Any(false));
                         }
 
                         // Avoid setting AnchorType for TextBoxes till SwTextBoxHelper::syncProperty() doesn't handle transition.
                         bool bTextBox = false;
-                        xShapeProps->getPropertyValue("TextBox") >>= bTextBox;
+                        xShapeProps->getPropertyValue(u"TextBox"_ustr) >>= bTextBox;
 
                         // The positioning change caused by LayoutInCell doesn't sync well
                         // in the text / frame duo. So the compatibility fix only correctly
@@ -1335,7 +1335,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         if (m_pImpl->m_bLayoutInCell && bTextBox)
                             m_pImpl->m_bLayoutInCell = !m_pImpl->m_bCompatForcedLayoutInCell;
 
-                        xShapeProps->setPropertyValue("AnchorType", uno::Any(eAnchorType));
+                        xShapeProps->setPropertyValue(u"AnchorType"_ustr, uno::Any(eAnchorType));
 
                         if (m_pImpl->m_nVertRelation == text::RelOrientation::TEXT_LINE)
                         {
@@ -1357,8 +1357,8 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         m_pImpl->applyPosition(xShapeProps);
 
                         uno::Reference<lang::XServiceInfo> xServiceInfo(m_xShape, uno::UNO_QUERY_THROW);
-                        if (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape") ||
-                                xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape"))
+                        if (xServiceInfo->supportsService(u"com.sun.star.drawing.GroupShape"_ustr) ||
+                                xServiceInfo->supportsService(u"com.sun.star.drawing.GraphicObjectShape"_ustr))
                         {
                             // You would expect that position and rotation are
                             // independent, but they are not. Till we are not
@@ -1367,12 +1367,12 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             // make sure there is no graphic rotation set when we set
                             // the position.
                             sal_Int32 nRotation = 0;
-                            if (xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape"))
+                            if (xServiceInfo->supportsService(u"com.sun.star.drawing.GraphicObjectShape"_ustr))
                             {
-                                xShapeProps->getPropertyValue("RotateAngle") >>= nRotation;
+                                xShapeProps->getPropertyValue(u"RotateAngle"_ustr) >>= nRotation;
                             }
                             if (nRotation)
-                                xShapeProps->setPropertyValue("RotateAngle", uno::Any(sal_Int32(0)));
+                                xShapeProps->setPropertyValue(u"RotateAngle"_ustr, uno::Any(sal_Int32(0)));
 
                             // Position of the groupshape should be set after children have been added.
                             // Long-term we should get rid of positioning group
@@ -1386,27 +1386,27 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                                     awt::Point(m_pImpl->m_nLeftPosition, m_pImpl->m_nTopPosition));
 
                             if (nRotation)
-                                xShapeProps->setPropertyValue("RotateAngle", uno::Any(nRotation));
+                                xShapeProps->setPropertyValue(u"RotateAngle"_ustr, uno::Any(nRotation));
                         }
 
 
                         m_pImpl->applyRelativePosition(xShapeProps, /*bRelativeOnly=*/true);
 
-                        xShapeProps->setPropertyValue("SurroundContour", uno::Any(m_pImpl->m_bContour));
-                        xShapeProps->setPropertyValue("ContourOutside", uno::Any(m_pImpl->m_bContourOutside));
+                        xShapeProps->setPropertyValue(u"SurroundContour"_ustr, uno::Any(m_pImpl->m_bContour));
+                        xShapeProps->setPropertyValue(u"ContourOutside"_ustr, uno::Any(m_pImpl->m_bContourOutside));
                         m_pImpl->applyMargins(xShapeProps);
-                        xShapeProps->setPropertyValue("Opaque", uno::Any(m_pImpl->m_bOpaque));
-                        xShapeProps->setPropertyValue("Surround", uno::Any(static_cast<sal_Int32>(m_pImpl->m_nWrap)));
+                        xShapeProps->setPropertyValue(u"Opaque"_ustr, uno::Any(m_pImpl->m_bOpaque));
+                        xShapeProps->setPropertyValue(u"Surround"_ustr, uno::Any(static_cast<sal_Int32>(m_pImpl->m_nWrap)));
                         m_pImpl->applyZOrder(xShapeProps);
                         m_pImpl->applyName(xShapeProps);
                         m_pImpl->applyHyperlink(xShapeProps, bUseShape);
-                        xShapeProps->setPropertyValue("AllowOverlap",
+                        xShapeProps->setPropertyValue(u"AllowOverlap"_ustr,
                                                       uno::Any(m_pImpl->m_bAllowOverlap));
 
                         // Get the grab-bag set by oox, merge with our one and then put it back.
-                        comphelper::SequenceAsHashMap aInteropGrabBag(xShapeProps->getPropertyValue("InteropGrabBag"));
+                        comphelper::SequenceAsHashMap aInteropGrabBag(xShapeProps->getPropertyValue(u"InteropGrabBag"_ustr));
                         aInteropGrabBag.update(m_pImpl->getInteropGrabBag());
-                        xShapeProps->setPropertyValue("InteropGrabBag", uno::Any(aInteropGrabBag.getAsConstPropertyValueList()));
+                        xShapeProps->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aInteropGrabBag.getAsConstPropertyValueList()));
                     }
                     else if (bUseShape && m_pImpl->m_rGraphicImportType == IMPORT_AS_DETECTED_INLINE)
                     {
@@ -1414,9 +1414,9 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         m_pImpl->applyMargins(xShapeProps);
                         m_pImpl->applyZOrder(xShapeProps);
                         m_pImpl->applyName(xShapeProps);
-                        comphelper::SequenceAsHashMap aInteropGrabBag(xShapeProps->getPropertyValue("InteropGrabBag"));
+                        comphelper::SequenceAsHashMap aInteropGrabBag(xShapeProps->getPropertyValue(u"InteropGrabBag"_ustr));
                         aInteropGrabBag.update(m_pImpl->getInteropGrabBag());
-                        xShapeProps->setPropertyValue("InteropGrabBag", uno::Any(aInteropGrabBag.getAsConstPropertyValueList()));
+                        xShapeProps->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aInteropGrabBag.getAsConstPropertyValueList()));
                     }
                 }
             }
@@ -1445,7 +1445,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                     if (m_xShape.is())
                     {
                         uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
-                        xPropertySet->setPropertyValue("RelativeWidthRelation", uno::Any(text::RelOrientation::FRAME));
+                        xPropertySet->setPropertyValue(u"RelativeWidthRelation"_ustr, uno::Any(text::RelOrientation::FRAME));
                     }
                     break;
                 case NS_ooxml::LN_ST_SizeRelFromH_leftMargin:
@@ -1456,7 +1456,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         // The size of the shape's width is going to be relative to the size of the left margin.
                         // E.g.: (left margin = 8 && relative size = 150%) -> width of some shape = 12.
                         uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
-                        xPropertySet->setPropertyValue("RelativeWidthRelation", uno::Any(text::RelOrientation::PAGE_LEFT));
+                        xPropertySet->setPropertyValue(u"RelativeWidthRelation"_ustr, uno::Any(text::RelOrientation::PAGE_LEFT));
                     }
                     break;
                 case NS_ooxml::LN_ST_SizeRelFromH_rightMargin:
@@ -1465,14 +1465,14 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                     {
                         // Same as the left margin above.
                         uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
-                        xPropertySet->setPropertyValue("RelativeWidthRelation", uno::Any(text::RelOrientation::PAGE_RIGHT));
+                        xPropertySet->setPropertyValue(u"RelativeWidthRelation"_ustr, uno::Any(text::RelOrientation::PAGE_RIGHT));
                     }
                     break;
                 case NS_ooxml::LN_ST_SizeRelFromH_page:
                     if (m_xShape.is())
                     {
                         uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
-                        xPropertySet->setPropertyValue("RelativeWidthRelation", uno::Any(text::RelOrientation::PAGE_FRAME));
+                        xPropertySet->setPropertyValue(u"RelativeWidthRelation"_ustr, uno::Any(text::RelOrientation::PAGE_FRAME));
                     }
                     break;
                 default:
@@ -1489,28 +1489,28 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                     if (m_xShape.is())
                     {
                         uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
-                        xPropertySet->setPropertyValue("RelativeHeightRelation", uno::Any(text::RelOrientation::FRAME));
+                        xPropertySet->setPropertyValue(u"RelativeHeightRelation"_ustr, uno::Any(text::RelOrientation::FRAME));
                     }
                     break;
                 case NS_ooxml::LN_ST_SizeRelFromV_page:
                     if (m_xShape.is())
                     {
                         uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
-                        xPropertySet->setPropertyValue("RelativeHeightRelation", uno::Any(text::RelOrientation::PAGE_FRAME));
+                        xPropertySet->setPropertyValue(u"RelativeHeightRelation"_ustr, uno::Any(text::RelOrientation::PAGE_FRAME));
                     }
                     break;
                 case NS_ooxml::LN_ST_SizeRelFromV_topMargin:
                     if (m_xShape.is())
                     {
                         uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
-                        xPropertySet->setPropertyValue("RelativeHeightRelation", uno::Any(text::RelOrientation::PAGE_PRINT_AREA));
+                        xPropertySet->setPropertyValue(u"RelativeHeightRelation"_ustr, uno::Any(text::RelOrientation::PAGE_PRINT_AREA));
                     }
                     break;
                 case NS_ooxml::LN_ST_SizeRelFromV_bottomMargin:
                     if (m_xShape.is())
                     {
                         uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
-                        xPropertySet->setPropertyValue("RelativeHeightRelation", uno::Any(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
+                        xPropertySet->setPropertyValue(u"RelativeHeightRelation"_ustr, uno::Any(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
                     }
                     break;
                 default:
@@ -1613,9 +1613,9 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
 
             // We'll map these to PARALLEL, save the original wrap type.
             if (nSprmId == NS_ooxml::LN_EG_WrapType_wrapTight)
-                m_pImpl->m_aInteropGrabBag["EG_WrapType"] <<= OUString("wrapTight");
+                m_pImpl->m_aInteropGrabBag[u"EG_WrapType"_ustr] <<= u"wrapTight"_ustr;
             else if (nSprmId == NS_ooxml::LN_EG_WrapType_wrapThrough)
-                m_pImpl->m_aInteropGrabBag["EG_WrapType"] <<= OUString("wrapThrough");
+                m_pImpl->m_aInteropGrabBag[u"EG_WrapType"_ustr] <<= u"wrapThrough"_ustr;
 
             switch (nSprmId)
             {
@@ -1642,7 +1642,7 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
                 m_pImpl->mpWrapPolygon = aHandler.getPolygon();
 
                 // Save the wrap path in case we can't handle it natively: drawinglayer shapes, TextFrames.
-                m_pImpl->m_aInteropGrabBag["CT_WrapPath"] <<= m_pImpl->mpWrapPolygon->getPointSequenceSequence();
+                m_pImpl->m_aInteropGrabBag[u"CT_WrapPath"_ustr] <<= m_pImpl->mpWrapPolygon->getPointSequenceSequence();
             }
             break;
         case NS_ooxml::LN_CT_Anchor_positionH:
@@ -1702,17 +1702,17 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
                 if (nPositivePercentage)
                 {
                     uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
-                    OUString aProperty = nSprmId == NS_ooxml::LN_CT_SizeRelH_pctWidth ? OUString("RelativeWidth") : OUString("RelativeHeight");
+                    OUString aProperty = nSprmId == NS_ooxml::LN_CT_SizeRelH_pctWidth ? u"RelativeWidth"_ustr : u"RelativeHeight"_ustr;
 
                     sal_Int32 nTextPreRotateAngle = 0;
                     uno::Any aAny;
                     if (xPropertySet->getPropertySetInfo()->hasPropertyByName(
-                            "CustomShapeGeometry"))
+                            u"CustomShapeGeometry"_ustr))
                     {
-                        aAny = xPropertySet->getPropertyValue("CustomShapeGeometry");
+                        aAny = xPropertySet->getPropertyValue(u"CustomShapeGeometry"_ustr);
                     }
                     comphelper::SequenceAsHashMap aCustomShapeGeometry(aAny);
-                    auto it = aCustomShapeGeometry.find("TextPreRotateAngle");
+                    auto it = aCustomShapeGeometry.find(u"TextPreRotateAngle"_ustr);
                     if (it != aCustomShapeGeometry.end())
                     {
                         nTextPreRotateAngle = it->second.get<sal_Int32>();
@@ -1790,13 +1790,13 @@ rtl::Reference<SwXTextGraphicObject> GraphicImport::createGraphicObject(uno::Ref
             //shapes have only one border
             table::BorderLine2 aBorderLine;
             GraphicBorderLine& rBorderLine = m_pImpl->m_aBorders[0];
-            if (rBorderLine.isEmpty() && xShapeProps.is() && xShapeProps->getPropertyValue("LineStyle").get<drawing::LineStyle>() != drawing::LineStyle_NONE)
+            if (rBorderLine.isEmpty() && xShapeProps.is() && xShapeProps->getPropertyValue(u"LineStyle"_ustr).get<drawing::LineStyle>() != drawing::LineStyle_NONE)
             {
                 // In case we got no border tokens and we have the
                 // original shape, then use its line properties as the
                 // border.
-                aBorderLine.Color = xShapeProps->getPropertyValue("LineColor").get<sal_Int32>();
-                aBorderLine.LineWidth = xShapeProps->getPropertyValue("LineWidth").get<sal_Int32>();
+                aBorderLine.Color = xShapeProps->getPropertyValue(u"LineColor"_ustr).get<sal_Int32>();
+                aBorderLine.LineWidth = xShapeProps->getPropertyValue(u"LineWidth"_ustr).get<sal_Int32>();
             }
             else
             {
@@ -1980,7 +1980,7 @@ rtl::Reference<SwXTextGraphicObject> GraphicImport::createGraphicObject(uno::Ref
                 }
 
                 text::GraphicCrop aGraphicCrop;
-                xShapeProps->getPropertyValue("GraphicCrop") >>= aGraphicCrop;
+                xShapeProps->getPropertyValue(u"GraphicCrop"_ustr) >>= aGraphicCrop;
                 if (aGraphicCrop.Top != 0 || aGraphicCrop.Bottom != 0 || aGraphicCrop.Left != 0
                     || aGraphicCrop.Right != 0)
                 {
@@ -1997,7 +1997,7 @@ rtl::Reference<SwXTextGraphicObject> GraphicImport::createGraphicObject(uno::Ref
                     // We should bring it to front, even if wp:anchor's behindDoc="1",
                     // because otherwise paragraph background (if set) overlaps the graphic
                     // TODO: if paragraph's background becomes bottommost, then remove this hack
-                    xGraphicObject->setPropertyValue("Opaque", uno::Any(true));
+                    xGraphicObject->setPropertyValue(u"Opaque"_ustr, uno::Any(true));
                 }
             }
 
@@ -2015,12 +2015,12 @@ rtl::Reference<SwXTextGraphicObject> GraphicImport::createGraphicObject(uno::Ref
 
             // Handle horizontal flip.
             bool bMirrored = false;
-            xShapeProps->getPropertyValue("IsMirrored") >>= bMirrored;
+            xShapeProps->getPropertyValue(u"IsMirrored"_ustr) >>= bMirrored;
             if (bMirrored)
             {
-                xGraphicObject->setPropertyValue("HoriMirroredOnEvenPages",
+                xGraphicObject->setPropertyValue(u"HoriMirroredOnEvenPages"_ustr,
                                                            uno::Any(true));
-                xGraphicObject->setPropertyValue("HoriMirroredOnOddPages",
+                xGraphicObject->setPropertyValue(u"HoriMirroredOnOddPages"_ustr,
                                                            uno::Any(true));
             }
         }

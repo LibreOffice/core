@@ -101,7 +101,7 @@ void SdtHelper::loadPropertiesXMLs()
     // Initialize properties xml storage (m_xPropertiesXMLs)
     uno::Reference<uno::XInterface> xTemp
         = m_xComponentContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.document.OOXMLDocumentPropertiesImporter", m_xComponentContext);
+            u"com.sun.star.document.OOXMLDocumentPropertiesImporter"_ustr, m_xComponentContext);
     uno::Reference<document::XOOXMLDocumentPropertiesImporter> xImporter(xTemp, uno::UNO_QUERY);
     if (!xImporter.is())
         return;
@@ -116,7 +116,7 @@ void SdtHelper::loadPropertiesXMLs()
     {
         auto xCorePropsStream = xImporter->getCorePropertiesStream(m_rDM_Impl.m_xDocumentStorage);
         m_xPropertiesXMLs.insert(
-            { OUString("{6C3C8BC8-F283-45AE-878A-BAB7291924A1}"), // hardcoded id for core props
+            { u"{6C3C8BC8-F283-45AE-878A-BAB7291924A1}"_ustr, // hardcoded id for core props
               xDomBuilder->parse(xCorePropsStream) });
     }
     catch (const uno::Exception&)
@@ -131,7 +131,7 @@ void SdtHelper::loadPropertiesXMLs()
         auto xExtPropsStream
             = xImporter->getExtendedPropertiesStream(m_rDM_Impl.m_xDocumentStorage);
         m_xPropertiesXMLs.insert(
-            { OUString("{6668398D-A668-4E3E-A5EB-62B293D839F1}"), // hardcoded id for extended props
+            { u"{6668398D-A668-4E3E-A5EB-62B293D839F1}"_ustr, // hardcoded id for extended props
               xDomBuilder->parse(xExtPropsStream) });
     }
     catch (const uno::Exception&)
@@ -150,8 +150,8 @@ void SdtHelper::loadPropertiesXMLs()
     if (aCustomXmls.getLength())
     {
         uno::Reference<XXPathAPI> xXpathAPI = XPathAPI::create(m_xComponentContext);
-        xXpathAPI->registerNS("ds",
-                              "http://schemas.openxmlformats.org/officeDocument/2006/customXml");
+        xXpathAPI->registerNS(
+            u"ds"_ustr, u"http://schemas.openxmlformats.org/officeDocument/2006/customXml"_ustr);
         sal_Int32 nItem = 0;
         // Hereby we assume that items from getCustomXmlDomList() and getCustomXmlDomPropsList()
         // are matching each other:
@@ -161,8 +161,8 @@ void SdtHelper::loadPropertiesXMLs()
         {
             // Retrieve storeid from properties xml
             OUString aStoreId;
-            uno::Reference<XXPathObject> xResult
-                = xXpathAPI->eval(aCustomXmlProps[nItem], "string(/ds:datastoreItem/@ds:itemID)");
+            uno::Reference<XXPathObject> xResult = xXpathAPI->eval(
+                aCustomXmlProps[nItem], u"string(/ds:datastoreItem/@ds:itemID)"_ustr);
 
             if (xResult.is() && xResult->getString().getLength())
             {
@@ -288,7 +288,8 @@ void SdtHelper::createDropDownControl()
     {
         // create field
         uno::Reference<css::text::XTextField> xControlModel(
-            m_rDM_Impl.GetTextDocument()->createInstance("com.sun.star.text.TextField.DropDown"),
+            m_rDM_Impl.GetTextDocument()->createInstance(
+                u"com.sun.star.text.TextField.DropDown"_ustr),
             uno::UNO_QUERY);
 
         const auto it = std::find_if(
@@ -302,8 +303,8 @@ void SdtHelper::createDropDownControl()
 
         // set properties
         uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
-        xPropertySet->setPropertyValue("SelectedItem", uno::Any(aDefaultText));
-        xPropertySet->setPropertyValue("Items",
+        xPropertySet->setPropertyValue(u"SelectedItem"_ustr, uno::Any(aDefaultText));
+        xPropertySet->setPropertyValue(u"Items"_ustr,
                                        uno::Any(comphelper::containerToSequence(m_aDropDownItems)));
 
         // add it into document
@@ -315,14 +316,15 @@ void SdtHelper::createDropDownControl()
     {
         // create control
         uno::Reference<awt::XControlModel> xControlModel(
-            m_rDM_Impl.GetTextDocument()->createInstance("com.sun.star.form.component.ComboBox"),
+            m_rDM_Impl.GetTextDocument()->createInstance(
+                u"com.sun.star.form.component.ComboBox"_ustr),
             uno::UNO_QUERY);
 
         // set properties
         uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
-        xPropertySet->setPropertyValue("DefaultText", uno::Any(aDefaultText));
-        xPropertySet->setPropertyValue("Dropdown", uno::Any(true));
-        xPropertySet->setPropertyValue("StringItemList",
+        xPropertySet->setPropertyValue(u"DefaultText"_ustr, uno::Any(aDefaultText));
+        xPropertySet->setPropertyValue(u"Dropdown"_ustr, uno::Any(true));
+        xPropertySet->setPropertyValue(u"StringItemList"_ustr,
                                        uno::Any(comphelper::containerToSequence(m_aDropDownItems)));
 
         // add it into document
@@ -430,7 +432,7 @@ void SdtHelper::createPlainTextControl()
         }
     }
 
-    xContentControl->setPropertyValue("PlainText", uno::Any(true));
+    xContentControl->setPropertyValue(u"PlainText"_ustr, uno::Any(true));
 
     xText->insertTextContent(xCrsr, xContentControl, /*bAbsorb=*/true);
 
@@ -523,13 +525,13 @@ void SdtHelper::createControlShape(awt::Size aSize,
                                    const uno::Sequence<beans::PropertyValue>& rGrabBag)
 {
     uno::Reference<drawing::XControlShape> xControlShape(
-        m_rDM_Impl.GetTextDocument()->createInstance("com.sun.star.drawing.ControlShape"),
+        m_rDM_Impl.GetTextDocument()->createInstance(u"com.sun.star.drawing.ControlShape"_ustr),
         uno::UNO_QUERY);
     xControlShape->setSize(aSize);
     xControlShape->setControl(xControlModel);
 
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("VertOrient", uno::Any(text::VertOrientation::CENTER));
+    xPropertySet->setPropertyValue(u"VertOrient"_ustr, uno::Any(text::VertOrientation::CENTER));
 
     if (rGrabBag.hasElements())
         xPropertySet->setPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG, uno::Any(rGrabBag));

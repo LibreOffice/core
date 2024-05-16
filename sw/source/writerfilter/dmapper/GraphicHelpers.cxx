@@ -359,9 +359,9 @@ sal_Int32 GraphicZOrderHelper::findZOrder(sal_Int64 relativeHeight, bool bOldSty
         bool bTextBox = false;
         uno::Reference<beans::XPropertySet> xShape = it->second;
         uno::Reference<beans::XPropertySetInfo> xInfo = xShape->getPropertySetInfo();
-        if (xInfo->hasPropertyByName("TextBox"))
+        if (xInfo->hasPropertyByName(u"TextBox"_ustr))
         {
-            xShape->getPropertyValue("TextBox") >>= bTextBox;
+            xShape->getPropertyValue(u"TextBox"_ustr) >>= bTextBox;
         }
         if (bTextBox)
         {

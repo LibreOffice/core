@@ -613,14 +613,15 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 if (!aLookahead.hasTable())
                 {
                     uno::Reference<drawing::XShapes> xGroupShape(
-                        getTextDocument()->createInstance("com.sun.star.drawing.GroupShape"),
+                        getTextDocument()->createInstance(u"com.sun.star.drawing.GroupShape"_ustr),
                         uno::UNO_QUERY);
                     if (m_xDstDoc)
                     {
                         uno::Reference<drawing::XShape> xShape(xGroupShape, uno::UNO_QUERY);
                         // set default VertOrient before inserting
                         uno::Reference<beans::XPropertySet>(xShape, uno::UNO_QUERY_THROW)
-                            ->setPropertyValue("VertOrient", uno::Any(text::VertOrientation::NONE));
+                            ->setPropertyValue(u"VertOrient"_ustr,
+                                               uno::Any(text::VertOrientation::NONE));
                         m_xDstDoc->getDrawPage()->add(xShape);
                     }
                     m_pSdrImport->pushParent(xGroupShape);
