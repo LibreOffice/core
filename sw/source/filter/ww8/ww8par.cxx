@@ -5195,13 +5195,6 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
         if( m_xWDop->nEdn )
             aInfo.m_nFootnoteOffset = m_xWDop->nEdn - 1;
         m_rDoc.SetEndNoteInfo( aInfo );
-
-        if (m_xSBase->GetEndnoteCount() > 2)
-        {
-            // This compatibility flag only works in easy cases, disable it for anything non-trivial
-            // for now.
-            m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::CONTINUOUS_ENDNOTES, false);
-        }
     }
 
     if (m_xWwFib->m_lcbPlcfhdd)

@@ -40,6 +40,7 @@ namespace drawinglayer::processor2d { class BaseProcessor2D; }
 class SwLayoutFrame;
 class SwRootFrame;
 class SwPageFrame;
+class SwColumnFrame;
 class SwBodyFrame;
 class SwFlyFrame;
 class SwSectionFrame;
@@ -876,6 +877,8 @@ public:
     const SwTextFrame* DynCastTextFrame() const;
     SwPageFrame* DynCastPageFrame();
     const SwPageFrame* DynCastPageFrame() const;
+    SwColumnFrame* DynCastColumnFrame();
+    const SwColumnFrame* DynCastColumnFrame() const;
     inline bool IsNoTextFrame() const;
     // Frames where its PrtArea depends on their neighbors and that are
     // positioned in the content flow
