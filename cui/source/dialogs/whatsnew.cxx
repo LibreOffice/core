@@ -155,7 +155,7 @@ void WhatsNewProgress::Paint(vcl::RenderContext& rRenderContext, const tools::Re
     rRenderContext.Erase();
     rRenderContext.SetAntialiasing(AntialiasingFlags::Enable);
 
-    tools::Rectangle aRect(Point(0, 0), Size(PROGRESS_DOTSIZE, PROGRESS_DOTSIZE));
+    tools::Rectangle aRect(Point(1, 1), Size(PROGRESS_DOTSIZE, PROGRESS_DOTSIZE));
     for (sal_Int32 i = 0; i < m_nTotal; i++)
     {
         if (i == m_nCurrent)
