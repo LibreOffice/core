@@ -15,7 +15,6 @@
 #include "webdavresponseparser.hxx"
 
 #include <comphelper/attributelist.hxx>
-#include <comphelper/lok.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/string.hxx>
 
@@ -688,14 +687,6 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> xContext,
         // neon would close the connection from ne_end_request(), this seems
         // to be the equivalent and not CURLOPT_TCP_KEEPALIVE
         rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_FORBID_REUSE, 1L);
-        assert(rc == CURLE_OK);
-    }
-    // If WOPI-like host has self-signed certificate, it's not possible to insert images
-    // to the document, so here is a compromise. The user has already accepted the self
-    // signed certificate in the browser, when we get here.
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_SSL_VERIFYPEER, 0L);
         assert(rc == CURLE_OK);
     }
 }
