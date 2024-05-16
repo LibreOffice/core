@@ -73,7 +73,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
     private static boolean mIsExperimentalMode;
     private static boolean mIsDeveloperMode;
-    private static boolean mbISReadOnlyMode;
+    private static boolean mbReadOnlyDoc;
 
     private DrawerLayout mDrawerLayout;
     Toolbar toolbarTop;
@@ -168,21 +168,20 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         // create TextCursorLayer
         mDocumentOverlay = new DocumentOverlay(this, layerView);
 
-        mbISReadOnlyMode = !isExperimentalMode();
+        mbReadOnlyDoc = false;
 
         final Uri docUri = getIntent().getData();
         if (docUri != null) {
             if (docUri.getScheme().equals(ContentResolver.SCHEME_CONTENT)
                     || docUri.getScheme().equals(ContentResolver.SCHEME_ANDROID_RESOURCE)) {
-                final boolean isReadOnlyDoc  = (getIntent().getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0;
-                mbISReadOnlyMode = !isExperimentalMode() || isReadOnlyDoc;
+                mbReadOnlyDoc  = (getIntent().getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0;
                 Log.d(LOGTAG, "SCHEME_CONTENT: getPath(): " + docUri.getPath());
 
                 String displayName = FileUtilities.retrieveDisplayNameForDocumentUri(getContentResolver(), docUri);
                 toolbarTop.setTitle(displayName);
 
             } else if (docUri.getScheme().equals(ContentResolver.SCHEME_FILE)) {
-                mbISReadOnlyMode = true;
+                mbReadOnlyDoc = true;
                 Log.d(LOGTAG, "SCHEME_FILE: getPath(): " + docUri.getPath());
                 toolbarTop.setTitle(docUri.getLastPathSegment());
             }
@@ -344,7 +343,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
         String displayName = FileUtilities.retrieveDisplayNameForDocumentUri(getContentResolver(), mDocumentUri);
         toolbarTop.setTitle(displayName);
-        mbISReadOnlyMode = !isExperimentalMode();
+        mbReadOnlyDoc = false;
         getToolbarController().setupToolbars();
     }
 
@@ -901,7 +900,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     }
 
     public static boolean isReadOnlyMode() {
-        return mbISReadOnlyMode;
+        return !isExperimentalMode() || mbReadOnlyDoc;
     }
 
     public boolean hasLocationForSave() {
