@@ -3181,6 +3181,20 @@ SfxLokCallbackInterface* SfxViewShell::getLibreOfficeKitViewCallback() const
 
 void SfxViewShell::dumpLibreOfficeKitViewState(rtl::OStringBuffer &rState)
 {
+    rState.append("\n    SfxViewShell: ");
+    rState.append(OString::number(reinterpret_cast<sal_uInt64>(this), 16));
+    rState.append("\n\tDocId:\t");
+    auto nDocId = static_cast<int>(GetDocId());
+    rState.append(static_cast<sal_Int32>(nDocId));
+    rState.append("\n\tViewId:\t");
+    rState.append(static_cast<sal_Int32>(GetViewShellId()));
+    rState.append("\n\tPart:\t");
+    rState.append(static_cast<sal_Int32>(getPart()));
+    rState.append("\n\tLang:\t");
+    rState.append(OUStringToOString(GetLOKLanguageTag().getBcp47(), RTL_TEXTENCODING_UTF8));
+    rState.append("\n\tA11y:\t");
+    rState.append(GetLOKAccessibilityState() ? "enabled" : "disabled");
+
     if (pImpl->m_pLibreOfficeKitViewCallback)
         pImpl->m_pLibreOfficeKitViewCallback->dumpState(rState);
 }
@@ -3863,6 +3877,15 @@ Reference< view::XRenderable > SfxViewShell::GetRenderable()
 void SfxViewShell::notifyWindow(vcl::LOKWindowId nDialogId, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload) const
 {
     SfxLokHelper::notifyWindow(this, nDialogId, rAction, rPayload);
+}
+
+OString SfxViewShell::dumpNotifyState() const
+{
+    return OString("sfxviewsh: " +
+                   OString::number(reinterpret_cast<sal_uInt64>(this), 16) +
+                   " doc: " + OString::number(static_cast<sal_Int32>(static_cast<int>(GetDocId()))) +
+                   " view: " +
+                   OString::number(static_cast<sal_Int32>(GetViewShellId())));
 }
 
 uno::Reference< datatransfer::clipboard::XClipboardNotifier > SfxViewShell::GetClipboardNotifier() const

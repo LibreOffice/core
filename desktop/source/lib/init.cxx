@@ -1660,7 +1660,7 @@ void CallbackFlushHandler::libreOfficeKitViewUpdatedCallbackPerViewId(int nType,
 void CallbackFlushHandler::dumpState(rtl::OStringBuffer &rState)
 {
     // NB. no locking
-    rState.append("\nView:\t");
+    rState.append("\n    View:\t");
     rState.append(static_cast<sal_Int32>(m_viewId));
     rState.append("\n\tDisableCallbacks:\t");
     rState.append(static_cast<sal_Int32>(m_nDisableCallbacks));

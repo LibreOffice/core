@@ -42,6 +42,9 @@ public:
 
     /// Emits a LOK_CALLBACK_INVALIDATE_TILES.
     virtual void notifyInvalidation(tools::Rectangle const *) const = 0;
+
+    /// Debugging
+    virtual OString dumpNotifyState() const = 0;
 };
 
 } // namespace vcl
