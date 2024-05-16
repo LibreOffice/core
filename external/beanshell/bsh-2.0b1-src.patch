@@ -4,7 +4,7 @@
  		- Why can't I nest filesets?  This seems like it would be so easy and
  		useful...
  -->
--<project name="beanshell" default="compile" basedir=".">
+-<project name="beanshell" default="compile-all" basedir=".">
 +<project name="beanshell" default="jarall" basedir=".">
  
  <!-- Project Configuration -->
@@ -39,10 +39,10 @@
  import bsh.NameSource;
  
  /**
-@@ -659,6 +660,8 @@
- 				URL url = new File( rtjar ).toURI().toURL();
- 				bootClassPath = new BshClassPath( 
- 					"Boot Class Path", new URL[] { url } );
+@@ -661,6 +661,8 @@
+ 					URL url = new File(rtjar).toURI().toURL();
+ 					bootClassPath = new BshClassPath("Boot Class Path", new URL[]{url});
+ 				}
 +                        } catch ( SecurityException e ) {
 +                               throw new ClassPathException(" can't access to boot jar: "+e);
  			} catch ( MalformedURLException e ) {

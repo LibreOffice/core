@@ -29,8 +29,8 @@ BREAKPAD_TARBALL := breakpad-b324760c7f53667af128a6b77b790323da04fcb9.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-BSH_SHA256SUM := 9e93c73e23aff644b17dfff656444474c14150e7f3b38b19635e622235e01c96
-BSH_TARBALL := beeca87be45ec87d241ddd0e1bad80c1-bsh-2.0b6-src.zip
+BSH_SHA256SUM := 2248387ceaa319840434a3547a8b2fec12f95a8418ee039ce5ff5726053a139c
+BSH_TARBALL := bsh-2.1.1-src.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

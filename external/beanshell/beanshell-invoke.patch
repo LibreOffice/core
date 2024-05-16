@@ -1,6 +1,6 @@
 --- old/beanshell/engine/src/bsh/engine/BshScriptEngine.java
 +++ new/beanshell/engine/src/bsh/engine/BshScriptEngine.java
-@@ -229,6 +229,12 @@
+@@ -281,6 +281,11 @@
  		}
  	}
  
@@ -9,12 +9,11 @@
 +	{
 +		return invokeMethod( thiz, name, args );
 +	}
-+
+ 
  	/**
- 	 * Same as invoke(Object, String, Object...) with <code>null</code> as the
- 	 * first argument.  Used to call top-level procedures defined in scripts.
-@@ -249,6 +255,12 @@
- 		return invokeMethod( getGlobal(), name, args );
+ 	 * Same as invoke(Object, String, Object...) with {@code null} as the
+@@ -298,6 +303,11 @@
+ 		return invokeMethod(getGlobal(), name, args);
  	}
  
 +	public Object invoke( String name, Object... args )
@@ -22,12 +21,11 @@
 +	{
 +		return invokeFunction( name, args );
 +	}
-+
-     /**
+ 
+ 	/**
  	 * Returns an implementation of an interface using procedures compiled in the
- 	 * interpreter. The methods of the interface may be implemented using the
---- old/beanshell/engine/src/TestBshScriptEngine.java
-+++ new/beanshell/engine/src/TestBshScriptEngine.java
+--- old/beanshell/engine/src/bsh/TestBshScriptEngine.java
++++ new/beanshell/engine/src/bsh/TestBshScriptEngine.java
 @@ -2,11 +2,12 @@
  import java.io.*;
  import javax.script.*;
