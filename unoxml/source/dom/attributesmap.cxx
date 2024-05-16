@@ -163,7 +163,7 @@ namespace DOM
         Reference< XAttr > const xAttr(m_pElement->getAttributeNode(name));
         if (!xAttr.is()) {
             throw DOMException(
-                "CAttributesMap::removeNamedItem: no such attribute",
+                u"CAttributesMap::removeNamedItem: no such attribute"_ustr,
                 getXWeak(),
                 DOMExceptionType_NOT_FOUND_ERR);
         }
@@ -182,7 +182,7 @@ namespace DOM
             m_pElement->getAttributeNodeNS(namespaceURI, localName));
         if (!xAttr.is()) {
             throw DOMException(
-                "CAttributesMap::removeNamedItemNS: no such attribute",
+                u"CAttributesMap::removeNamedItemNS: no such attribute"_ustr,
                 getXWeak(),
                 DOMExceptionType_NOT_FOUND_ERR);
         }
@@ -198,7 +198,7 @@ namespace DOM
         Reference< XAttr > const xAttr(xNode, UNO_QUERY);
         if (!xNode.is()) {
             throw DOMException(
-                "CAttributesMap::setNamedItem: XAttr argument expected",
+                u"CAttributesMap::setNamedItem: XAttr argument expected"_ustr,
                 getXWeak(),
                 DOMExceptionType_HIERARCHY_REQUEST_ERR);
         }
@@ -215,7 +215,7 @@ namespace DOM
         Reference< XAttr > const xAttr(xNode, UNO_QUERY);
         if (!xNode.is()) {
             throw DOMException(
-                "CAttributesMap::setNamedItemNS: XAttr argument expected",
+                u"CAttributesMap::setNamedItemNS: XAttr argument expected"_ustr,
                 getXWeak(),
                 DOMExceptionType_HIERARCHY_REQUEST_ERR);
         }

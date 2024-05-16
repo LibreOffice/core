@@ -63,7 +63,7 @@ CBlankNode::CBlankNode()
 // com.sun.star.uno.XServiceInfo:
 OUString SAL_CALL CBlankNode::getImplementationName()
 {
-    return  "CBlankNode";
+    return  u"CBlankNode"_ustr;
 }
 
 sal_Bool SAL_CALL CBlankNode::supportsService(OUString const & serviceName)
@@ -73,7 +73,7 @@ sal_Bool SAL_CALL CBlankNode::supportsService(OUString const & serviceName)
 
 css::uno::Sequence< OUString > SAL_CALL CBlankNode::getSupportedServiceNames()
 {
-    return { "com.sun.star.rdf.BlankNode" };
+    return { u"com.sun.star.rdf.BlankNode"_ustr };
 }
 
 // css::lang::XInitialization:
@@ -81,19 +81,19 @@ void SAL_CALL CBlankNode::initialize(const css::uno::Sequence< css::uno::Any > &
 {
     if (aArguments.getLength() != 1) {
         throw css::lang::IllegalArgumentException(
-            "CBlankNode::initialize: must give exactly 1 argument", *this, 1);
+            u"CBlankNode::initialize: must give exactly 1 argument"_ustr, *this, 1);
     }
 
     OUString arg;
     if (!(aArguments[0] >>= arg)) {
         throw css::lang::IllegalArgumentException(
-            "CBlankNode::initialize: argument must be string", *this, 0);
+            u"CBlankNode::initialize: argument must be string"_ustr, *this, 0);
     }
 
     //FIXME: what is legal?
     if (arg.isEmpty()) {
         throw css::lang::IllegalArgumentException(
-            "CBlankNode::initialize: argument is not valid blank node ID", *this, 0);
+            u"CBlankNode::initialize: argument is not valid blank node ID"_ustr, *this, 0);
     }
     m_NodeID = arg;
 }

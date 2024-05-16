@@ -98,7 +98,7 @@ namespace DOM
             assert(xTarget.is());
             if (!xTarget.is())
                 return;
-            xTarget->removeEventListener("DOMSubtreeModified", m_xEventListener, false/*capture*/);
+            xTarget->removeEventListener(u"DOMSubtreeModified"_ustr, m_xEventListener, false/*capture*/);
         }
     }
 
@@ -108,7 +108,7 @@ namespace DOM
             Reference< XEventTarget > const xTarget(
                     static_cast<XElement*>(& rElement), UNO_QUERY_THROW);
             m_xEventListener = new WeakEventListener(this);
-            xTarget->addEventListener("DOMSubtreeModified", m_xEventListener, false/*capture*/);
+            xTarget->addEventListener(u"DOMSubtreeModified"_ustr, m_xEventListener, false/*capture*/);
         } catch (const Exception &){
             TOOLS_WARN_EXCEPTION( "unoxml", "Exception caught while registering NodeList as listener");
         }

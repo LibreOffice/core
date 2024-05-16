@@ -868,9 +868,9 @@ namespace DOM
         {
             Reference< XDocumentEvent > const xDocevent(xDocument, UNO_QUERY);
             Reference< XMutationEvent > const event(xDocevent->createEvent(
-                "DOMNodeInsertedIntoDocument"), UNO_QUERY_THROW);
+                u"DOMNodeInsertedIntoDocument"_ustr), UNO_QUERY_THROW);
             event->initMutationEvent(
-                "DOMNodeInsertedIntoDocument", true, false, Reference< XNode >(),
+                u"DOMNodeInsertedIntoDocument"_ustr, true, false, Reference< XNode >(),
                 OUString(), OUString(), OUString(), AttrChangeType(0) );
             Reference< XEventTarget > const xDocET(xDocument, UNO_QUERY);
             xDocET->dispatchEvent(event);
@@ -912,7 +912,7 @@ namespace DOM
     OUString SAL_CALL CDocument::getNodeName()
     {
         // does not need mutex currently
-        return "#document";
+        return u"#document"_ustr;
     }
 
     OUString SAL_CALL CDocument::getNodeValue()

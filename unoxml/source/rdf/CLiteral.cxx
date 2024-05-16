@@ -70,7 +70,7 @@ CLiteral::CLiteral()
 // com.sun.star.uno.XServiceInfo:
 OUString SAL_CALL CLiteral::getImplementationName()
 {
-    return "CLiteral";
+    return u"CLiteral"_ustr;
 }
 
 sal_Bool SAL_CALL CLiteral::supportsService(OUString const & serviceName)
@@ -80,7 +80,7 @@ sal_Bool SAL_CALL CLiteral::supportsService(OUString const & serviceName)
 
 css::uno::Sequence< OUString > SAL_CALL CLiteral::getSupportedServiceNames()
 {
-    return { "com.sun.star.rdf.Literal" };
+    return { u"com.sun.star.rdf.Literal"_ustr };
 }
 
 // css::lang::XInitialization:
@@ -89,18 +89,18 @@ void SAL_CALL CLiteral::initialize(const css::uno::Sequence< css::uno::Any > & a
     const sal_Int32 len( aArguments.getLength() );
     if (len < 1 || len > 2) {
             throw css::lang::IllegalArgumentException(
-                "CLiteral::initialize: must give 1 or 2 argument(s)", *this, 2);
+                u"CLiteral::initialize: must give 1 or 2 argument(s)"_ustr, *this, 2);
     }
 
     OUString arg0;
     if (!(aArguments[0] >>= arg0)) {
         throw css::lang::IllegalArgumentException(
-            "CLiteral::initialize: argument must be string", *this, 0);
+            u"CLiteral::initialize: argument must be string"_ustr, *this, 0);
     }
     //FIXME: what is legal?
     if (!(true)) {
         throw css::lang::IllegalArgumentException(
-            "CLiteral::initialize: argument is not valid literal value", *this, 0);
+            u"CLiteral::initialize: argument is not valid literal value"_ustr, *this, 0);
     }
     m_Value = arg0;
 
@@ -112,18 +112,18 @@ void SAL_CALL CLiteral::initialize(const css::uno::Sequence< css::uno::Any > & a
     if (aArguments[1] >>= arg1) {
         if (arg1.isEmpty()) {
             throw css::lang::IllegalArgumentException(
-                "CLiteral::initialize: argument is not valid language", *this, 1);
+                u"CLiteral::initialize: argument is not valid language"_ustr, *this, 1);
         }
         m_Language = arg1;
     } else if (aArguments[1] >>= xURI) {
         if (!xURI.is()) {
             throw css::lang::IllegalArgumentException(
-                "CLiteral::initialize: argument is null", *this, 1);
+                u"CLiteral::initialize: argument is null"_ustr, *this, 1);
         }
         m_xDatatype = xURI;
     } else {
         throw css::lang::IllegalArgumentException(
-            "CLiteral::initialize: argument must be string or URI", *this, 1);
+            u"CLiteral::initialize: argument must be string or URI"_ustr, *this, 1);
     }
 }
 

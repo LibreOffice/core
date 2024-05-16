@@ -202,7 +202,7 @@ struct BasicTest : public test::BootstrapFixture
         test::BootstrapFixture::setUp();
 
         mxErrHandler.set( new ErrorHandler() );
-        uno::Reference<XDocumentBuilder> xDB( getMultiServiceFactory()->createInstance("com.sun.star.xml.dom.DocumentBuilder"), uno::UNO_QUERY_THROW );
+        uno::Reference<XDocumentBuilder> xDB( getMultiServiceFactory()->createInstance(u"com.sun.star.xml.dom.DocumentBuilder"_ustr), uno::UNO_QUERY_THROW );
         mxDomBuilder.set( xDB );
         mxValidInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(validTestFile), std::size(validTestFile) - 1)) );
         mxWarningInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(warningTestFile), std::size(warningTestFile) - 1)) );
@@ -286,7 +286,7 @@ struct SerializerTest : public test::BootstrapFixture
         test::BootstrapFixture::setUp();
 
         mxErrHandler.set( new ErrorHandler() );
-        uno::Reference<XDocumentBuilder> xDB( getMultiServiceFactory()->createInstance("com.sun.star.xml.dom.DocumentBuilder"), uno::UNO_QUERY_THROW );
+        uno::Reference<XDocumentBuilder> xDB( getMultiServiceFactory()->createInstance(u"com.sun.star.xml.dom.DocumentBuilder"_ustr), uno::UNO_QUERY_THROW );
         mxDomBuilder.set( xDB );
         mxInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(validTestFile), std::size(validTestFile) - 1)) );
         mxDomBuilder->setErrorHandler(mxErrHandler);
@@ -295,10 +295,10 @@ struct SerializerTest : public test::BootstrapFixture
 
         maRegisteredNamespaces = {
             beans::make_Pair(
-                OUString( "urn:oasis:names:tc:opendocument:xmlns:office:1.0" ),
+                u"urn:oasis:names:tc:opendocument:xmlns:office:1.0"_ustr,
                 xml::sax::FastToken::NAMESPACE),
             beans::make_Pair(
-                OUString( "http://www.w3.org/1999/xlink" ),
+                u"http://www.w3.org/1999/xlink"_ustr,
                 2*xml::sax::FastToken::NAMESPACE)
         };
     }

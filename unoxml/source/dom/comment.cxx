@@ -44,7 +44,7 @@ namespace DOM
 
     OUString SAL_CALL CComment::getNodeName()
     {
-        return "#comment";
+        return u"#comment"_ustr;
     }
 
     OUString SAL_CALL CComment::getNodeValue()

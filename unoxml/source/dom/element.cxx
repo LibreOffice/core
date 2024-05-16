@@ -65,7 +65,7 @@ namespace DOM
                 strlen(reinterpret_cast<const char*>(pPrefix)),
                 RTL_TEXTENCODING_UTF8);
             OUString name = (prefix.isEmpty())
-                ? OUString( "xmlns" ) : "xmlns:" + prefix;
+                ? u"xmlns"_ustr : "xmlns:" + prefix;
             const xmlChar *pHref = pNs->href;
             OUString val(reinterpret_cast<const char*>(pHref),
                 strlen(reinterpret_cast<const char*>(pHref)),
@@ -191,7 +191,7 @@ namespace DOM
                                              strlen(reinterpret_cast<char const *>(pPrefix)),
                                              RTL_TEXTENCODING_UTF8 );
 
-                i_rContext.mxCurrentHandler->endUnknownElement( "", aElementName );
+                i_rContext.mxCurrentHandler->endUnknownElement( u""_ustr, aElementName );
             }
         }
         catch( Exception& )
@@ -563,8 +563,8 @@ namespace DOM
         // dispatch DOMAttrModified event
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
-            "DOMAttrModified"), UNO_QUERY);
-        event->initMutationEvent("DOMAttrModified",
+            u"DOMAttrModified"_ustr), UNO_QUERY);
+        event->initMutationEvent(u"DOMAttrModified"_ustr,
             true, false, xAttr,
             OUString(), xAttr->getValue(), xAttr->getName(),
             AttrChangeType_ADDITION);
@@ -625,8 +625,8 @@ namespace DOM
         // dispatch DOMAttrModified event
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
-            "DOMAttrModified"), UNO_QUERY);
-        event->initMutationEvent("DOMAttrModified",
+            u"DOMAttrModified"_ustr), UNO_QUERY);
+        event->initMutationEvent(u"DOMAttrModified"_ustr,
             true, false,
             getAttributeNode(name),
             oldValue, value, name, aChangeType);
@@ -706,9 +706,9 @@ namespace DOM
         // dispatch DOMAttrModified event
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
-            "DOMAttrModified"), UNO_QUERY);
+            u"DOMAttrModified"_ustr), UNO_QUERY);
         event->initMutationEvent(
-            "DOMAttrModified", true, false,
+            u"DOMAttrModified"_ustr, true, false,
             getAttributeNodeNS(namespaceURI, OUString(reinterpret_cast<char const *>(pLName), strlen(reinterpret_cast<char const *>(pLName)), RTL_TEXTENCODING_UTF8)),
             oldValue, value, qualifiedName, aChangeType);
 

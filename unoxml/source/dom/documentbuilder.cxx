@@ -97,12 +97,12 @@ namespace DOM
 
     Sequence< OUString > SAL_CALL CDocumentBuilder::getSupportedServiceNames()
     {
-        return { "com.sun.star.xml.dom.DocumentBuilder" };
+        return { u"com.sun.star.xml.dom.DocumentBuilder"_ustr };
     }
 
     OUString SAL_CALL CDocumentBuilder::getImplementationName()
     {
-        return "com.sun.star.comp.xml.dom.DocumentBuilder";
+        return u"com.sun.star.comp.xml.dom.DocumentBuilder"_ustr;
     }
 
     sal_Bool SAL_CALL CDocumentBuilder::supportsService(const OUString& aServiceName)

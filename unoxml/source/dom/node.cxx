@@ -367,8 +367,8 @@ namespace DOM
         pNode->m_bUnlinked = false; // will be deleted by xmlFreeDoc
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
-            "DOMNodeInserted"), UNO_QUERY);
-        event->initMutationEvent("DOMNodeInserted", true, false, this,
+            u"DOMNodeInserted"_ustr), UNO_QUERY);
+        event->initMutationEvent(u"DOMNodeInserted"_ustr, true, false, this,
             OUString(), OUString(), OUString(), AttrChangeType(0) );
 
         // the following dispatch functions use only UNO interfaces
@@ -762,8 +762,8 @@ namespace DOM
          */
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
-            "DOMNodeRemoved"), UNO_QUERY);
-        event->initMutationEvent("DOMNodeRemoved",
+            u"DOMNodeRemoved"_ustr), UNO_QUERY);
+        event->initMutationEvent(u"DOMNodeRemoved"_ustr,
             true,
             false,
             this,
@@ -884,9 +884,9 @@ namespace DOM
         // target is _this_ node
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
-            "DOMSubtreeModified"), UNO_QUERY);
+            u"DOMSubtreeModified"_ustr), UNO_QUERY);
         event->initMutationEvent(
-            "DOMSubtreeModified", true,
+            u"DOMSubtreeModified"_ustr, true,
             false, Reference< XNode >(),
             OUString(), OUString(), OUString(), AttrChangeType(0) );
         dispatchEvent(event);

@@ -48,9 +48,9 @@ namespace DOM
     {
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
-            "DOMCharacterDataModified"), UNO_QUERY);
+            u"DOMCharacterDataModified"_ustr), UNO_QUERY);
         event->initMutationEvent(
-                "DOMCharacterDataModified",
+                u"DOMCharacterDataModified"_ustr,
                 true, false, Reference< XNode >(),
                 prevValue, newValue, OUString(), AttrChangeType(0) );
         dispatchEvent(event);

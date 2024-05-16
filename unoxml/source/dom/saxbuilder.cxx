@@ -39,12 +39,12 @@ namespace DOM
 
     Sequence< OUString > SAL_CALL CSAXDocumentBuilder::getSupportedServiceNames()
     {
-        return { "com.sun.star.xml.dom.SAXDocumentBuilder" };
+        return { u"com.sun.star.xml.dom.SAXDocumentBuilder"_ustr };
     }
 
     OUString SAL_CALL CSAXDocumentBuilder::getImplementationName()
     {
-        return "com.sun.star.comp.xml.dom.SAXDocumentBuilder";
+        return u"com.sun.star.comp.xml.dom.SAXDocumentBuilder"_ustr;
     }
 
     sal_Bool SAL_CALL CSAXDocumentBuilder::supportsService(const OUString& aServiceName)

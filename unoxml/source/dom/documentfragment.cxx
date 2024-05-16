@@ -49,7 +49,7 @@ namespace DOM
 
     OUString SAL_CALL CDocumentFragment::getNodeName()
     {
-        return "#document-fragment";
+        return u"#document-fragment"_ustr;
     }
     OUString SAL_CALL CDocumentFragment::getNodeValue()
     {

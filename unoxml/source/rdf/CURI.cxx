@@ -72,7 +72,7 @@ CURI::CURI()
 // com.sun.star.uno.XServiceInfo:
 OUString SAL_CALL CURI::getImplementationName()
 {
-    return "CURI";
+    return u"CURI"_ustr;
 }
 
 sal_Bool SAL_CALL CURI::supportsService(OUString const & serviceName)
@@ -82,7 +82,7 @@ sal_Bool SAL_CALL CURI::supportsService(OUString const & serviceName)
 
 css::uno::Sequence< OUString > SAL_CALL CURI::getSupportedServiceNames()
 {
-    return { "com.sun.star.rdf.URI" };
+    return { u"com.sun.star.rdf.URI"_ustr };
 }
 
 constexpr OUString s_nsXSD = u"http://www.w3.org/2001/XMLSchema-datatypes#"_ustr;
@@ -703,7 +703,7 @@ void CURI::initFromConstant(const sal_Int16 i_Constant)
 
         default:
             throw css::lang::IllegalArgumentException(
-                "CURI::initialize: invalid URIs constant argument", *this, 0);
+                u"CURI::initialize: invalid URIs constant argument"_ustr, *this, 0);
     }
     m_Namespace = ns;
     m_LocalName = ln;
@@ -715,7 +715,7 @@ void SAL_CALL CURI::initialize(const css::uno::Sequence< css::uno::Any > & aArgu
     sal_Int32 len = aArguments.getLength();
     if ((len < 1) || (len > 2)) {
         throw css::lang::IllegalArgumentException(
-            "CURI::initialize: must give 1 or 2 argument(s)", *this, 2);
+            u"CURI::initialize: must give 1 or 2 argument(s)"_ustr, *this, 2);
     }
 
     sal_Int16 arg(0);
@@ -725,19 +725,19 @@ void SAL_CALL CURI::initialize(const css::uno::Sequence< css::uno::Any > & aArgu
         // integer argument: constant from rdf::URIs
         if (len != 1) {
             throw css::lang::IllegalArgumentException(
-                "CURI::initialize: must give 1 int argument", *this, 1);
+                u"CURI::initialize: must give 1 int argument"_ustr, *this, 1);
         }
         initFromConstant(arg);
         return;
     }
     if (!(aArguments[0] >>= arg0)) {
         throw css::lang::IllegalArgumentException(
-            "CURI::initialize: argument must be string or short", *this, 0);
+            u"CURI::initialize: argument must be string or short"_ustr, *this, 0);
     }
     if (len > 1) {
         if (!(aArguments[1] >>= arg1)) {
             throw css::lang::IllegalArgumentException(
-                "CURI::initialize: argument must be string", *this, 1);
+                u"CURI::initialize: argument must be string"_ustr, *this, 1);
         }
         // just append the parameters and then split them again; seems simplest
         arg0 = arg0 + arg1;
@@ -753,7 +753,7 @@ void SAL_CALL CURI::initialize(const css::uno::Sequence< css::uno::Any > & aArgu
     if (idx < 0)
     {
         throw css::lang::IllegalArgumentException(
-            "CURI::initialize: argument not splittable: no separator [#/:]", *this, 0);
+            u"CURI::initialize: argument not splittable: no separator [#/:]"_ustr, *this, 0);
     }
     if (idx < arg0.getLength() - 1) {
         arg1 = arg0.copy(idx+1);
@@ -763,14 +763,14 @@ void SAL_CALL CURI::initialize(const css::uno::Sequence< css::uno::Any > & aArgu
     //FIXME: what is legal?
     if (arg0.isEmpty()) {
         throw css::lang::IllegalArgumentException(
-            "CURI::initialize: argument is not valid namespace", *this, 0);
+            u"CURI::initialize: argument is not valid namespace"_ustr, *this, 0);
     }
     m_Namespace = arg0;
 
     //FIXME: what is legal?
     if ((false)) {
         throw css::lang::IllegalArgumentException(
-            "CURI::initialize: argument is not valid local name", *this, 1);
+            u"CURI::initialize: argument is not valid local name"_ustr, *this, 1);
     }
     m_LocalName = arg1;
 }
