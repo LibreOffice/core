@@ -252,11 +252,12 @@ extern "C" {
 
 #endif
 
-
 using LanguageToolCfg = officecfg::Office::Linguistic::GrammarChecking::LanguageTool;
+
 
 static LibLibreOffice_Impl *gImpl = nullptr;
 static bool lok_preinit_2_called = false;
+static bool gUseCompactFonts = false;
 static std::weak_ptr< LibreOfficeKitClass > gOfficeClass;
 static std::weak_ptr< LibreOfficeKitDocumentClass > gDocumentClass;
 
@@ -6036,7 +6037,7 @@ static char* getLanguages(const char* pCommand)
     return pJson;
 }
 
-static char* getFonts (const char* pCommand)
+static char* getFonts (const char* pCommand, const bool bBloatWithRepeatedSizes)
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     if (!pDocSh)
@@ -6045,36 +6046,60 @@ static char* getFonts (const char* pCommand)
         pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
     const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;
 
-    boost::property_tree::ptree aTree;
-    aTree.put("commandName", pCommand);
-    boost::property_tree::ptree aValues;
-    if ( pList )
+    if (!bBloatWithRepeatedSizes)
     {
-        sal_uInt16 nFontCount = pList->GetFontNameCount();
-        for (sal_uInt16 i = 0; i < nFontCount; ++i)
+        tools::JsonWriter aJson;
+        aJson.put("commandName", pCommand);
+        if (pList)
         {
-            boost::property_tree::ptree aChildren;
-            const FontMetric& rFontMetric = pList->GetFontName(i);
-            const int* pAry = FontList::GetStdSizeAry();
-            sal_uInt16 nSizeCount = 0;
-            while (pAry[nSizeCount])
-            {
-                boost::property_tree::ptree aChild;
-                aChild.put("", static_cast<float>(pAry[nSizeCount]) / 10);
-                aChildren.push_back(std::make_pair("", aChild));
-                nSizeCount++;
-            }
-            aValues.add_child(rFontMetric.GetFamilyName().toUtf8().getStr(), aChildren);
+            auto aFontNames = aJson.startArray("FontNames");
+
+            sal_uInt16 nFontCount = pList->GetFontNameCount();
+            for (sal_uInt16 i = 0; i < nFontCount; ++i)
+                aJson.putSimpleValue(pList->GetFontName(i).GetFamilyName());
         }
+        {
+            auto aFontSizes = aJson.startArray("FontSizes");
+            const int* pAry = FontList::GetStdSizeAry();
+            for (sal_uInt16 i = 0; pAry[i]; ++i)
+                aJson.putSimpleValue(OUString::number(static_cast<float>(pAry[i]) / 10));
+        }
+
+        return convertOString(aJson.finishAndGetAsOString());
     }
-    aTree.add_child("commandValues", aValues);
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree, false /* pretty */);
-    char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
-    assert(pJson); // Don't handle OOM conditions
-    strcpy(pJson, aStream.str().c_str());
-    pJson[aStream.str().size()] = '\0';
-    return pJson;
+    else // FIXME: remove nonsensical legacy version
+    {
+        boost::property_tree::ptree aTree;
+        aTree.put("commandName", pCommand);
+        boost::property_tree::ptree aValues;
+        if ( pList )
+        {
+            sal_uInt16 nFontCount = pList->GetFontNameCount();
+            for (sal_uInt16 i = 0; i < nFontCount; ++i)
+            {
+                boost::property_tree::ptree aChildren;
+                const FontMetric& rFontMetric = pList->GetFontName(i);
+                const int* pAry = FontList::GetStdSizeAry();
+                sal_uInt16 nSizeCount = 0;
+                while (pAry[nSizeCount])
+                {
+                    boost::property_tree::ptree aChild;
+                    aChild.put("", static_cast<float>(pAry[nSizeCount]) / 10);
+                    aChildren.push_back(std::make_pair("", aChild));
+                    nSizeCount++;
+                }
+                aValues.add_child(rFontMetric.GetFamilyName().toUtf8().getStr(), aChildren);
+            }
+        }
+        aTree.add_child("commandValues", aValues);
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aTree, false /* pretty */);
+        char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
+        assert(pJson); // Don't handle OOM conditions
+        strcpy(pJson, aStream.str().c_str());
+        pJson[aStream.str().size()] = '\0';
+        return pJson;
+    }
 }
 
 static char* getFontSubset (std::string_view aFontName)
@@ -6371,7 +6396,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     }
     else if (aCommand == ".uno:CharFontName")
     {
-        return getFonts(pCommand);
+        return getFonts(pCommand, !gUseCompactFonts);
     }
     else if (aCommand == ".uno:StyleApply")
     {
@@ -7886,6 +7911,8 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
         {
             if (it == "unipoll")
                 bUnipoll = true;
+            if (it == "compact_fonts")
+                gUseCompactFonts = true;
             else if (it == "profile_events")
                 bProfileZones = true;
             else if (it == "sc_no_grid_bg")
