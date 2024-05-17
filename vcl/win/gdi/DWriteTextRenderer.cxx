@@ -311,12 +311,14 @@ WinFontTransformGuard::WinFontTransformGuard(ID2D1RenderTarget* pRenderTarget,
                                              bool bIsVertical)
     : mpRenderTarget(pRenderTarget)
 {
-    const float hscale = [&font = rLayout.GetFont()]
+    const float hscale = [&rLayout]
     {
-        const auto& rPattern = font.GetFontSelectPattern();
+        if (!rLayout.ScaleFont())
+            return 1.0;
+        const auto& rPattern = rLayout.GetFont().GetFontSelectPattern();
         if (!rPattern.mnHeight || !rPattern.mnWidth)
             return 1.0;
-        return rPattern.mnWidth * font.GetAverageWidthFactor() / rPattern.mnHeight;
+        return rPattern.mnWidth * rLayout.GetFont().GetAverageWidthFactor() / rPattern.mnHeight;
     }();
 
     Degree10 angle = rLayout.GetOrientation();
