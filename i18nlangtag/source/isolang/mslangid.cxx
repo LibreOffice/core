@@ -364,6 +364,13 @@ bool MsLangId::needsSequenceChecking( LanguageType nLang )
 // static
 sal_Int16 MsLangId::getScriptType( LanguageType nLang )
 {
+    // single-element cache
+    static thread_local LanguageType nCachedLang = LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA;
+    static thread_local sal_Int16 nCachedScript = css::i18n::ScriptType::COMPLEX;
+
+    if (nCachedLang == nLang)
+        return nCachedScript;
+
     sal_Int16 nScript;
 
         // CTL
@@ -471,6 +478,8 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
     {
         nScript = css::i18n::ScriptType::LATIN;
     }
+    nCachedLang = nLang;
+    nCachedScript = nScript;
     return nScript;
 }
 
