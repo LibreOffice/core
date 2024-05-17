@@ -7289,7 +7289,7 @@ static void doc_setViewTimezone(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*p
     }
 }
 
-static void doc_setViewReadOnly(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis, int nId, const bool readOnly)
+static void doc_setViewReadOnly(LibreOfficeKitDocument* /*pThis*/, int nId, const bool readOnly)
 {
     comphelper::ProfileZone aZone("doc_setViewReadOnly");
 
@@ -7299,7 +7299,7 @@ static void doc_setViewReadOnly(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pTh
     SfxLokHelper::setViewReadOnly(nId, readOnly);
 }
 
-static void doc_setAllowChangeComments(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis, int nId, const bool allow)
+static void doc_setAllowChangeComments(LibreOfficeKitDocument* /*pThis*/, int nId, const bool allow)
 {
     comphelper::ProfileZone aZone("doc_setAllowChangeComments");
 
