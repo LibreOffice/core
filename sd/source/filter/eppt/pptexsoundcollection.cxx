@@ -40,7 +40,7 @@ ExSoundEntry::ExSoundEntry(OUString aString)
             css::uno::Reference< css::ucb::XCommandEnvironment >(),
             comphelper::getProcessComponentContext() );
         sal_Int64 nVal = 0;
-        aCnt.getPropertyValue("Size") >>= nVal;
+        aCnt.getPropertyValue(u"Size"_ustr) >>= nVal;
         nFileSize = static_cast<sal_uInt32>(nVal);
     }
     catch( css::uno::Exception& )

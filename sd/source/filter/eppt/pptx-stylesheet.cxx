@@ -109,7 +109,7 @@ void PPTExCharSheet::Write( SvStream& rSt, sal_uInt16 nLev, bool bSimpleText,
     {
         bool bIsDark = false;
         css::uno::Any aAny;
-        if ( PropValue::GetPropertyValue( aAny, rPagePropSet, "IsBackgroundDark", true ) )
+        if ( PropValue::GetPropertyValue( aAny, rPagePropSet, u"IsBackgroundDark"_ustr, true ) )
             aAny >>= bIsDark;
         nFontColor = Color(ColorTransparency, bIsDark ? 0xffffff : 0x000000);
     }
@@ -239,7 +239,7 @@ void PPTExParaSheet::SetStyleSheet( const css::uno::Reference< css::beans::XProp
         if ( nLineSpacing > 0 ) // if nLinespacing is < 0 the linespacing is an absolute spacing
         {
             bool bFixedLineSpacing = false;
-            uno::Any aAny = rXPropSet->getPropertyValue("FontIndependentLineSpacing");
+            uno::Any aAny = rXPropSet->getPropertyValue(u"FontIndependentLineSpacing"_ustr);
             if( !(aAny >>= bFixedLineSpacing) || !bFixedLineSpacing )
             {
                 const FontCollectionEntry* pDesc = rFontCollection.GetById( rCharLevel.mnFont );
@@ -351,7 +351,7 @@ void PPTExParaSheet::Write( SvStream& rSt, sal_uInt16 nLev, bool bSimpleText,
     {
         bool bIsDark = false;
         css::uno::Any aAny;
-        if ( PropValue::GetPropertyValue( aAny, rPagePropSet, "IsBackgroundDark", true ) )
+        if ( PropValue::GetPropertyValue( aAny, rPagePropSet, u"IsBackgroundDark"_ustr, true ) )
             aAny >>= bIsDark;
         nBulletColor = bIsDark ? 0xffffff : 0x000000;
     }

@@ -342,7 +342,7 @@ ErrCodeMsg ReadThroughComponent(
     DBG_ASSERT( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
     {
-        xInfoSet->setPropertyValue( "StreamName", Any( sStreamName ) );
+        xInfoSet->setPropertyValue( u"StreamName"_ustr, Any( sStreamName ) );
     }
 
     try
@@ -354,7 +354,7 @@ ErrCodeMsg ReadThroughComponent(
         if ( !xStream.is() || ! xProps.is() )
             return SD_XML_READERROR;
 
-        Any aAny = xProps->getPropertyValue( "Encrypted" );
+        Any aAny = xProps->getPropertyValue( u"Encrypted"_ustr );
 
         bool bEncrypted = false;
         aAny >>= bEncrypted;
@@ -461,22 +461,22 @@ bool SdXMLFilter::Import( ErrCode& nError )
     static PropertyMapEntry const aImportInfoMap[] =
     {
         // necessary properties for XML progress bar at load time
-        { OUString("ProgressRange"),   0, cppu::UnoType<sal_Int32>::get(),               css::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("ProgressMax"),     0, cppu::UnoType<sal_Int32>::get(),               css::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("ProgressCurrent"), 0, cppu::UnoType<sal_Int32>::get(),               css::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("Preview"),         0, cppu::UnoType<sal_Bool>::get(),                css::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("PageLayouts"),     0, cppu::UnoType<container::XNameAccess>::get(),  css::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("PrivateData"),     0, cppu::UnoType<XInterface>::get(),              css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("BaseURI"),         0, cppu::UnoType<OUString>::get(),                css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamRelPath"),   0, cppu::UnoType<OUString>::get(),                css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamName"),      0, cppu::UnoType<OUString>::get(),                css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("BuildId"),         0, cppu::UnoType<OUString>::get(),                css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("OrganizerMode"),   0, cppu::UnoType<bool>::get(),                    css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("SourceStorage"),   0, cppu::UnoType<embed::XStorage>::get(),         css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { u"ProgressRange"_ustr,   0, cppu::UnoType<sal_Int32>::get(),               css::beans::PropertyAttribute::MAYBEVOID, 0},
+        { u"ProgressMax"_ustr,     0, cppu::UnoType<sal_Int32>::get(),               css::beans::PropertyAttribute::MAYBEVOID, 0},
+        { u"ProgressCurrent"_ustr, 0, cppu::UnoType<sal_Int32>::get(),               css::beans::PropertyAttribute::MAYBEVOID, 0},
+        { u"Preview"_ustr,         0, cppu::UnoType<sal_Bool>::get(),                css::beans::PropertyAttribute::MAYBEVOID, 0},
+        { u"PageLayouts"_ustr,     0, cppu::UnoType<container::XNameAccess>::get(),  css::beans::PropertyAttribute::MAYBEVOID, 0},
+        { u"PrivateData"_ustr,     0, cppu::UnoType<XInterface>::get(),              css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { u"BaseURI"_ustr,         0, cppu::UnoType<OUString>::get(),                css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { u"StreamRelPath"_ustr,   0, cppu::UnoType<OUString>::get(),                css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { u"StreamName"_ustr,      0, cppu::UnoType<OUString>::get(),                css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { u"BuildId"_ustr,         0, cppu::UnoType<OUString>::get(),                css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { u"OrganizerMode"_ustr,   0, cppu::UnoType<bool>::get(),                    css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { u"SourceStorage"_ustr,   0, cppu::UnoType<embed::XStorage>::get(),         css::beans::PropertyAttribute::MAYBEVOID, 0 },
     };
 
     uno::Reference< beans::XPropertySet > xInfoSet( GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
-    xInfoSet->setPropertyValue( "Preview" , uno::Any( mrDocShell.GetDoc()->IsStarDrawPreviewMode() ) );
+    xInfoSet->setPropertyValue( u"Preview"_ustr , uno::Any( mrDocShell.GetDoc()->IsStarDrawPreviewMode() ) );
 
     // ---- get BuildId from parent container if available
 
@@ -487,7 +487,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
         if( xParentSet.is() )
         {
             uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xParentSet->getPropertySetInfo() );
-            OUString sPropName( "BuildId" );
+            OUString sPropName( u"BuildId"_ustr );
             if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(sPropName) )
             {
                 xInfoSet->setPropertyValue( sPropName, xParentSet->getPropertyValue(sPropName) );
@@ -519,12 +519,12 @@ bool SdXMLFilter::Import( ErrCode& nError )
             // set ProgressRange
             uno::Any aProgRange;
             aProgRange <<= nProgressRange;
-            xInfoSet->setPropertyValue( "ProgressRange" , aProgRange);
+            xInfoSet->setPropertyValue( u"ProgressRange"_ustr , aProgRange);
 
             // set ProgressCurrent
             uno::Any aProgCurrent;
             aProgCurrent <<= sal_Int32(0);
-            xInfoSet->setPropertyValue( "ProgressCurrent" , aProgCurrent);
+            xInfoSet->setPropertyValue( u"ProgressCurrent"_ustr , aProgCurrent);
         }
     }
 
@@ -532,7 +532,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
 
     uno::Reference < embed::XStorage > xStorage = mrMedium.GetStorage();
 
-    xInfoSet->setPropertyValue( "SourceStorage", Any( xStorage ) );
+    xInfoSet->setPropertyValue( u"SourceStorage"_ustr, Any( xStorage ) );
 
     if( !xStorage.is() )
         nRet = SD_XML_READERROR;
@@ -552,7 +552,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
     OUString const baseURI(mrMedium.GetBaseURL());
     // needed for relative URLs, but in clipboard copy/paste there may be none
     SAL_INFO_IF(baseURI.isEmpty(), "sd.filter", "SdXMLFilter: no base URL");
-    xInfoSet->setPropertyValue("BaseURI", Any(baseURI));
+    xInfoSet->setPropertyValue(u"BaseURI"_ustr, Any(baseURI));
 
     if( ERRCODE_NONE == nRet && SfxObjectCreateMode::EMBEDDED == mrDocShell.GetCreateMode() )
     {
@@ -565,11 +565,11 @@ bool SdXMLFilter::Import( ErrCode& nError )
             aName = "dummyObjectName" ;
 
         if( !aName.isEmpty() )
-            xInfoSet->setPropertyValue( "StreamRelPath", Any( aName ) );
+            xInfoSet->setPropertyValue( u"StreamRelPath"_ustr, Any( aName ) );
     }
 
     if (SdXMLFilterMode::Organizer == meFilterMode)
-        xInfoSet->setPropertyValue("OrganizerMode", uno::Any(true));
+        xInfoSet->setPropertyValue(u"OrganizerMode"_ustr, uno::Any(true));
 
     if( ERRCODE_NONE == nRet )
     {
@@ -748,7 +748,7 @@ bool SdXMLFilter::Export()
 
         uno::Reference< lang::XServiceInfo > xServiceInfo( mxModel, uno::UNO_QUERY );
 
-        if( !xServiceInfo.is() || !xServiceInfo->supportsService( "com.sun.star.drawing.GenericDrawingDocument" ) )
+        if( !xServiceInfo.is() || !xServiceInfo->supportsService( u"com.sun.star.drawing.GenericDrawingDocument"_ustr ) )
         {
             SAL_WARN( "sd.filter", "Model is no DrawingDocument in XMLExport" );
             return false;
@@ -761,31 +761,31 @@ bool SdXMLFilter::Export()
         /** property map for export info set */
         static PropertyMapEntry const aExportInfoMap[] =
         {
-            { OUString("ProgressRange"),    0, cppu::UnoType<sal_Int32>::get(),   css::beans::PropertyAttribute::MAYBEVOID, 0},
-            { OUString("ProgressMax"),      0, cppu::UnoType<sal_Int32>::get(),   css::beans::PropertyAttribute::MAYBEVOID, 0},
-            { OUString("ProgressCurrent"),  0, cppu::UnoType<sal_Int32>::get(),   css::beans::PropertyAttribute::MAYBEVOID, 0},
-            { OUString("UsePrettyPrinting"),0, cppu::UnoType<bool>::get(),        css::beans::PropertyAttribute::MAYBEVOID, 0},
-            { OUString("PageLayoutNames"),  0, cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::MAYBEVOID, 0},
-            { OUString("BaseURI"),          0, cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("StreamRelPath"),    0, cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("StreamName"),       0, cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("StyleNames"),       0, cppu::UnoType<Sequence<OUString>>::get(),  css::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("StyleFamilies"),    0, cppu::UnoType<Sequence<sal_Int32>>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("TargetStorage"),    0, cppu::UnoType<embed::XStorage>::get(),     css::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { u"ProgressRange"_ustr,    0, cppu::UnoType<sal_Int32>::get(),   css::beans::PropertyAttribute::MAYBEVOID, 0},
+            { u"ProgressMax"_ustr,      0, cppu::UnoType<sal_Int32>::get(),   css::beans::PropertyAttribute::MAYBEVOID, 0},
+            { u"ProgressCurrent"_ustr,  0, cppu::UnoType<sal_Int32>::get(),   css::beans::PropertyAttribute::MAYBEVOID, 0},
+            { u"UsePrettyPrinting"_ustr,0, cppu::UnoType<bool>::get(),        css::beans::PropertyAttribute::MAYBEVOID, 0},
+            { u"PageLayoutNames"_ustr,  0, cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::MAYBEVOID, 0},
+            { u"BaseURI"_ustr,          0, cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { u"StreamRelPath"_ustr,    0, cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { u"StreamName"_ustr,       0, cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { u"StyleNames"_ustr,       0, cppu::UnoType<Sequence<OUString>>::get(),  css::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { u"StyleFamilies"_ustr,    0, cppu::UnoType<Sequence<sal_Int32>>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { u"TargetStorage"_ustr,    0, cppu::UnoType<embed::XStorage>::get(),     css::beans::PropertyAttribute::MAYBEVOID, 0 },
         };
 
         uno::Reference< beans::XPropertySet > xInfoSet( GenericPropertySet_CreateInstance( new PropertySetInfo( aExportInfoMap ) ) );
 
         bool bUsePrettyPrinting = officecfg::Office::Common::Save::Document::PrettyPrinting::get();
-        xInfoSet->setPropertyValue( "UsePrettyPrinting", Any( bUsePrettyPrinting ) );
+        xInfoSet->setPropertyValue( u"UsePrettyPrinting"_ustr, Any( bUsePrettyPrinting ) );
 
         const uno::Reference < embed::XStorage >& xStorage = mrMedium.GetOutputStorage();
 
         // Set base URI
-        OUString sPropName( "BaseURI" );
+        OUString sPropName( u"BaseURI"_ustr );
         xInfoSet->setPropertyValue( sPropName, Any( mrMedium.GetBaseURL( true ) ) );
 
-        xInfoSet->setPropertyValue( "TargetStorage", Any( xStorage ) );
+        xInfoSet->setPropertyValue( u"TargetStorage"_ustr, Any( xStorage ) );
 
         if( SfxObjectCreateMode::EMBEDDED == mrDocShell.GetCreateMode() )
         {
@@ -833,12 +833,12 @@ bool SdXMLFilter::Export()
                 // set ProgressRange
                 uno::Any aProgRange;
                 aProgRange <<= nProgressRange;
-                xInfoSet->setPropertyValue( "ProgressRange" , aProgRange);
+                xInfoSet->setPropertyValue( u"ProgressRange"_ustr , aProgRange);
 
                 // set ProgressCurrent
                 uno::Any aProgCurrent;
                 aProgCurrent <<= sal_Int32(0);
-                xInfoSet->setPropertyValue( "ProgressCurrent" , aProgCurrent);
+                xInfoSet->setPropertyValue( u"ProgressCurrent"_ustr , aProgCurrent);
             }
 
             XML_SERVICES const * pServiceNames = getServices( false, IsDraw(), mnStoreVer );
@@ -886,13 +886,13 @@ bool SdXMLFilter::Export()
                     if( !xDocOut.is() || !xProps.is() )
                         return false;
 
-                    xProps->setPropertyValue( "MediaType", Any(OUString( "text/xml")));
+                    xProps->setPropertyValue( u"MediaType"_ustr, Any(u"text/xml"_ustr));
 
                     // encrypt all streams
-                    xProps->setPropertyValue( "UseCommonStoragePasswordEncryption",
+                    xProps->setPropertyValue( u"UseCommonStoragePasswordEncryption"_ustr,
                                               uno::Any( true ) );
 
-                    xInfoSet->setPropertyValue( "StreamName", Any( sDocName ) );
+                    xInfoSet->setPropertyValue( u"StreamName"_ustr, Any( sDocName ) );
                 }
 
                 xWriter->setOutputStream( xDocOut );
@@ -958,17 +958,17 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODP(SvStream &rStream)
 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
     uno::Reference<io::XInputStream> xStream(new ::utl::OSeekableInputStreamWrapper(rStream));
-    uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance("com.sun.star.comp.Writer.XmlFilterAdaptor"), uno::UNO_SET_THROW);
+    uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance(u"com.sun.star.comp.Writer.XmlFilterAdaptor"_ustr), uno::UNO_SET_THROW);
 
     css::uno::Sequence<OUString> aUserData
     {
-        "com.sun.star.comp.filter.OdfFlatXml",
-        "",
-        "com.sun.star.comp.Impress.XMLOasisImporter",
-        "com.sun.star.comp.Impress.XMLOasisExporter",
-        "",
-        "",
-        "true"
+        u"com.sun.star.comp.filter.OdfFlatXml"_ustr,
+        u""_ustr,
+        u"com.sun.star.comp.Impress.XMLOasisImporter"_ustr,
+        u"com.sun.star.comp.Impress.XMLOasisExporter"_ustr,
+        u""_ustr,
+        u""_ustr,
+        u"true"_ustr
     };
     uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence(
     {
@@ -983,7 +983,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODP(SvStream &rStream)
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
         { "InputStream", uno::Any(xStream) },
-        { "URL", uno::Any(OUString("private:stream")) },
+        { "URL", uno::Any(u"private:stream"_ustr) },
     }));
     xImporter->setTargetDocument(xModel);
 
@@ -1012,7 +1012,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportPPTX(SvStream &rStream)
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
     uno::Reference<io::XInputStream> xStream(new utl::OSeekableInputStreamWrapper(rStream));
 
-    uno::Reference<document::XFilter> xFilter(xMultiServiceFactory->createInstance("com.sun.star.comp.oox.ppt.PowerPointImport"), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XFilter> xFilter(xMultiServiceFactory->createInstance(u"com.sun.star.comp.oox.ppt.PowerPointImport"_ustr), uno::UNO_QUERY_THROW);
 
     uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(

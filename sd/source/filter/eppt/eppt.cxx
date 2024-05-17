@@ -99,21 +99,21 @@ void PPTWriter::exportPPTPre( const std::vector< css::beans::PropertyValue >& rM
     {
         mbStatusIndicator = true;
         mnStatMaxValue = ( mnPages + mnMasterPages ) * 5;
-        mXStatusIndicator->start( "PowerPoint Export", mnStatMaxValue + ( mnStatMaxValue >> 3 ) );
+        mXStatusIndicator->start( u"PowerPoint Export"_ustr, mnStatMaxValue + ( mnStatMaxValue >> 3 ) );
     }
 
     SvGlobalName aGName(MSO_PPT8_CLASSID);
-    mrStg->SetClass( aGName, SotClipboardFormatId::NONE, "MS PowerPoint 97" );
+    mrStg->SetClass( aGName, SotClipboardFormatId::NONE, u"MS PowerPoint 97"_ustr );
 
     if ( !ImplCreateCurrentUserStream() )
         return;
 
-    mpStrm = mrStg->OpenSotStream( "PowerPoint Document" );
+    mpStrm = mrStg->OpenSotStream( u"PowerPoint Document"_ustr );
     if ( !mpStrm )
         return;
 
     if ( !mpPicStrm )
-        mpPicStrm = mrStg->OpenSotStream( "Pictures" );
+        mpPicStrm = mrStg->OpenSotStream( u"Pictures"_ustr );
 
     auto aIter = std::find_if(rMediaData.begin(), rMediaData.end(),
         [](const css::beans::PropertyValue& rProp) { return rProp.Name == "BaseURI"; });
@@ -129,7 +129,7 @@ void PPTWriter::exportPPTPost( )
 
     if ( mbStatusIndicator )
     {
-        mXStatusIndicator->setText( "PowerPoint Export" );
+        mXStatusIndicator->setText( u"PowerPoint Export"_ustr );
         sal_uInt32 nValue = mnStatMaxValue + ( mnStatMaxValue >> 3 );
         if ( nValue > mnLatestStatValue )
         {
@@ -171,9 +171,9 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     bool bVisible = true;
     css::presentation::FadeEffect eFe = css::presentation::FadeEffect_NONE;
 
-    if ( GetPropertyValue( aAny, mXPagePropSet, "Visible" ) )
+    if ( GetPropertyValue( aAny, mXPagePropSet, u"Visible"_ustr ) )
         aAny >>= bVisible;
-    if ( GetPropertyValue( aAny, mXPagePropSet, "Change" ) )
+    if ( GetPropertyValue( aAny, mXPagePropSet, u"Change"_ustr ) )
     {
         switch ( *o3tl::doAccess<sal_Int32>(aAny) )
         {
@@ -188,7 +188,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
             break;
         }
     }
-    if ( GetPropertyValue( aAny, mXPagePropSet, "Effect" ) )
+    if ( GetPropertyValue( aAny, mXPagePropSet, u"Effect"_ustr ) )
         aAny >>= eFe;
 
     sal_uInt32  nSoundRef = 0;
@@ -196,7 +196,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     bool    bStopSound = false;
     bool    bLoopSound = false;
 
-    if ( GetPropertyValue( aAny, mXPagePropSet, "Sound" ) )
+    if ( GetPropertyValue( aAny, mXPagePropSet, u"Sound"_ustr ) )
     {
         OUString aSoundURL;
         if ( aAny >>= aSoundURL )
@@ -207,7 +207,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
         else
             aAny >>= bStopSound;
     }
-    if ( GetPropertyValue( aAny, mXPagePropSet, "LoopSound" ) )
+    if ( GetPropertyValue( aAny, mXPagePropSet, u"LoopSound"_ustr ) )
         aAny >>= bLoopSound;
 
     bool bNeedsSSSlideInfoAtom = !bVisible
@@ -223,7 +223,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
         sal_Int32   nSlideTime = 0;         // still has to !!!
         sal_uInt8   nSpeed = 1;
 
-        if ( GetPropertyValue( aAny, mXPagePropSet, "TransitionDuration" ) )
+        if ( GetPropertyValue( aAny, mXPagePropSet, u"TransitionDuration"_ustr ) )
         {
             css::presentation::AnimationSpeed aAs;
             double fTransitionDuration = -1.0;
@@ -250,11 +250,11 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
             nSpeed = static_cast<sal_uInt8>(aAs);
         }
         sal_Int16 nTT = 0;
-        if ( GetPropertyValue( aAny, mXPagePropSet, "TransitionType" )
+        if ( GetPropertyValue( aAny, mXPagePropSet, u"TransitionType"_ustr )
             && ( aAny >>= nTT ) )
         {
             sal_Int16 nTST = 0;
-            if ( GetPropertyValue( aAny, mXPagePropSet, "TransitionSubtype" )
+            if ( GetPropertyValue( aAny, mXPagePropSet, u"TransitionSubtype"_ustr )
                 && ( aAny >>= nTST ) )
                 nTransitionType = GetTransition( nTT, nTST, eFe, 0, nDirection );
 
@@ -272,7 +272,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
         if ( bStopSound )
             nBuildFlags |= 256;
 
-        if ( GetPropertyValue( aAny, mXPagePropSet, "Duration" ) )// duration of this slide
+        if ( GetPropertyValue( aAny, mXPagePropSet, u"Duration"_ustr ) )// duration of this slide
             nSlideTime = *o3tl::doAccess<sal_Int32>(aAny) << 10;        // in ticks
 
         mpPptEscherEx->AddAtom( 16, EPP_SSSlideInfoAtom );
@@ -461,7 +461,7 @@ PPTWriter::~PPTWriter()
 
 bool PPTWriter::ImplCreateCurrentUserStream()
 {
-    mpCurUserStrm = mrStg->OpenSotStream( "Current User" );
+    mpCurUserStrm = mrStg->OpenSotStream( u"Current User"_ustr );
     if ( !mpCurUserStrm )
         return false;
     char pUserName[] = "Current User";
@@ -522,7 +522,7 @@ void PPTWriter::ImplCreateDocumentSummaryInformation()
     if ( mnCnvrtFlags & 0x8000 )
     {
         uno::Sequence<sal_Int8> aThumbSeq;
-        if ( GetPageByIndex( 0, NORMAL ) && ImplGetPropertyValue( mXPagePropSet, "PreviewBitmap" ) )
+        if ( GetPageByIndex( 0, NORMAL ) && ImplGetPropertyValue( mXPagePropSet, u"PreviewBitmap"_ustr ) )
         {
             aThumbSeq = *o3tl::doAccess<uno::Sequence<sal_Int8>>(mAny);
         }
@@ -556,17 +556,17 @@ void PPTWriter::ImplCreateHeaderFooterStrings( SvStream& rStrm, css::uno::Refere
 
     OUString aString;
     css::uno::Any aAny;
-    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "HeaderText", true ) )
+    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, u"HeaderText"_ustr, true ) )
     {
         if ( aAny >>= aString )
             PPTWriter::WriteCString( rStrm, aString, 1 );
     }
-    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "FooterText", true ) )
+    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, u"FooterText"_ustr, true ) )
     {
         if ( aAny >>= aString )
             PPTWriter::WriteCString( rStrm, aString, 2 );
     }
-    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "DateTimeText", true ) )
+    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, u"DateTimeText"_ustr, true ) )
     {
         if ( aAny >>= aString )
             PPTWriter::WriteCString( rStrm, aString );
@@ -581,34 +581,34 @@ void PPTWriter::ImplCreateHeaderFooters( css::uno::Reference< css::beans::XPrope
     bool bVal = false;
     sal_uInt32 nVal = 0;
     css::uno::Any aAny;
-    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "IsHeaderVisible", true ) )
+    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, u"IsHeaderVisible"_ustr, true ) )
     {
         if ( ( aAny >>= bVal ) && bVal )
             nVal |= 0x100000;
     }
-    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "IsFooterVisible", true ) )
+    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, u"IsFooterVisible"_ustr, true ) )
     {
         if ( ( aAny >>= bVal ) && bVal )
             nVal |= 0x200000;
     }
-    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "IsDateTimeVisible", true ) )
+    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, u"IsDateTimeVisible"_ustr, true ) )
     {
         if ( ( aAny >>= bVal ) && bVal )
             nVal |= 0x010000;
     }
-    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "IsPageNumberVisible", true ) )
+    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, u"IsPageNumberVisible"_ustr, true ) )
     {
         if ( ( aAny >>= bVal ) && bVal )
             nVal |= 0x080000;
     }
-    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "IsDateTimeFixed", true ) )
+    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, u"IsDateTimeFixed"_ustr, true ) )
     {
         if ( ( aAny >>= bVal ) && !bVal )
             nVal |= 0x20000;
         else
             nVal |= 0x40000;
     }
-    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, "DateTimeFormat", true ) )
+    if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, u"DateTimeFormat"_ustr, true ) )
     {
         sal_Int32 nFormat = *o3tl::doAccess<sal_Int32>(aAny);
         SvxDateFormat eDateFormat = static_cast<SvxDateFormat>( nFormat & 0xf );
@@ -769,7 +769,7 @@ bool PPTWriter::ImplCreateDocument()
                                                     // Bit 7    loop continuously
                                                     // Bit 8    show scrollbar
 
-                if ( ImplGetPropertyValue( "CustomShow" ) )
+                if ( ImplGetPropertyValue( u"CustomShow"_ustr ) )
                 {
                     aCustomShow = *o3tl::doAccess<OUString>(mAny);
                     if ( !aCustomShow.isEmpty() )
@@ -779,7 +779,7 @@ bool PPTWriter::ImplCreateDocument()
                 }
                 if ( ( nFlags & 8 ) == 0 )
                 {
-                    if ( ImplGetPropertyValue( "FirstPage" ) )
+                    if ( ImplGetPropertyValue( u"FirstPage"_ustr ) )
                     {
                         auto aSlideName = o3tl::doAccess<OUString>(mAny);
 
@@ -795,7 +795,7 @@ bool PPTWriter::ImplCreateDocument()
                     }
                 }
 
-                if ( ImplGetPropertyValue( "IsAutomatic" ) )
+                if ( ImplGetPropertyValue( u"IsAutomatic"_ustr ) )
                 {
                     bool bBool = false;
                     mAny >>= bBool;
@@ -803,14 +803,14 @@ bool PPTWriter::ImplCreateDocument()
                         nFlags |= 1;
                 }
 
-                if ( ImplGetPropertyValue( "IsEndless" ) )
+                if ( ImplGetPropertyValue( u"IsEndless"_ustr ) )
                 {
                     bool bBool = false;
                     mAny >>= bBool;
                     if ( bBool )
                         nFlags |= 0x80;
                 }
-                if ( ImplGetPropertyValue( "IsFullScreen" ) )
+                if ( ImplGetPropertyValue( u"IsFullScreen"_ustr ) )
                 {
                     bool bBool = false;
                     mAny >>= bBool;
@@ -1168,7 +1168,7 @@ void PPTWriter::ImplWriteBackground( css::uno::Reference< css::beans::XPropertyS
     EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm.get(), aRect );
     aPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillSolid );
     css::drawing::FillStyle aFS( css::drawing::FillStyle_NONE );
-    if ( ImplGetPropertyValue( rXPropSet, "FillStyle" ) )
+    if ( ImplGetPropertyValue( rXPropSet, u"FillStyle"_ustr ) )
         mAny >>= aFS;
 
     switch( aFS )
@@ -1183,16 +1183,16 @@ void PPTWriter::ImplWriteBackground( css::uno::Reference< css::beans::XPropertyS
         break;
 
         case css::drawing::FillStyle_BITMAP :
-            aPropOpt.CreateGraphicProperties( rXPropSet, "FillBitmap", true );
+            aPropOpt.CreateGraphicProperties( rXPropSet, u"FillBitmap"_ustr, true );
         break;
 
         case css::drawing::FillStyle_HATCH :
-            aPropOpt.CreateGraphicProperties( rXPropSet, "FillHatch", true );
+            aPropOpt.CreateGraphicProperties( rXPropSet, u"FillHatch"_ustr, true );
         break;
 
         case css::drawing::FillStyle_SOLID :
         {
-            if ( ImplGetPropertyValue( rXPropSet, "FillColor" ) )
+            if ( ImplGetPropertyValue( rXPropSet, u"FillColor"_ustr ) )
             {
                 nFillColor = EscherEx::GetColor( *o3tl::doAccess<sal_uInt32>(mAny) );
                 nFillBackColor = nFillColor ^ 0xffffff;
@@ -1435,15 +1435,15 @@ SAL_DLLPUBLIC_EXPORT bool SaveVBA( SfxObjectShell& rDocShell, SvMemoryStream*& p
 {
     rtl::Reference<SotStorage> xDest(new SotStorage(new SvMemoryStream(), true));
     SvxImportMSVBasic aMSVBas( rDocShell, *xDest );
-    aMSVBas.SaveOrDelMSVBAStorage( true, "_MS_VBA_Overhead" );
+    aMSVBas.SaveOrDelMSVBAStorage( true, u"_MS_VBA_Overhead"_ustr );
 
-    rtl::Reference<SotStorage> xOverhead = xDest->OpenSotStorage("_MS_VBA_Overhead");
+    rtl::Reference<SotStorage> xOverhead = xDest->OpenSotStorage(u"_MS_VBA_Overhead"_ustr);
     if ( xOverhead.is() && ( xOverhead->GetError() == ERRCODE_NONE ) )
     {
-        rtl::Reference<SotStorage> xOverhead2 = xOverhead->OpenSotStorage("_MS_VBA_Overhead");
+        rtl::Reference<SotStorage> xOverhead2 = xOverhead->OpenSotStorage(u"_MS_VBA_Overhead"_ustr);
         if ( xOverhead2.is() && ( xOverhead2->GetError() == ERRCODE_NONE ) )
         {
-            rtl::Reference<SotStorageStream> xTemp = xOverhead2->OpenSotStream("_MS_VBA_Overhead2");
+            rtl::Reference<SotStorageStream> xTemp = xOverhead2->OpenSotStream(u"_MS_VBA_Overhead2"_ustr);
             if ( xTemp.is() && ( xTemp->GetError() == ERRCODE_NONE ) )
             {
                 sal_uInt32 nLen = xTemp->GetSize();

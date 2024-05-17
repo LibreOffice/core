@@ -351,8 +351,8 @@ PowerPointExport::PowerPointExport(const Reference< XComponentContext >& rContex
     , mnPlaceholderIndexMax(1)
 {
     comphelper::SequenceAsHashMap aArgumentsMap(rArguments);
-    mbPptm = aArgumentsMap.getUnpackedValueOrDefault("IsPPTM", false);
-    mbExportTemplate = aArgumentsMap.getUnpackedValueOrDefault("IsTemplate", false);
+    mbPptm = aArgumentsMap.getUnpackedValueOrDefault(u"IsPPTM"_ustr, false);
+    mbExportTemplate = aArgumentsMap.getUnpackedValueOrDefault(u"IsTemplate"_ustr, false);
 }
 
 PowerPointExport::~PowerPointExport()
@@ -368,10 +368,10 @@ void PowerPointExport::writeDocumentProperties()
     {
         bool bSecurityOptOpenReadOnly = false;
         uno::Reference< lang::XMultiServiceFactory > xFactory(mXModel, uno::UNO_QUERY);
-        uno::Reference< beans::XPropertySet > xSettings(xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+        uno::Reference< beans::XPropertySet > xSettings(xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
         try
         {
-            xSettings->getPropertyValue("LoadReadonly") >>= bSecurityOptOpenReadOnly;
+            xSettings->getPropertyValue(u"LoadReadonly"_ustr) >>= bSecurityOptOpenReadOnly;
         }
         catch( Exception& )
         {
@@ -427,7 +427,7 @@ bool PowerPointExport::exportDocument()
         }
     }
 
-    mPresentationFS = openFragmentStreamWithSerializer("ppt/presentation.xml", aMediaType);
+    mPresentationFS = openFragmentStreamWithSerializer(u"ppt/presentation.xml"_ustr, aMediaType);
 
     addRelation(mPresentationFS->getOutputStream(),
                 oox::getRelationship(Relationship::THEME),
@@ -552,7 +552,7 @@ void PowerPointExport::WriteCustomSlideShow()
 void PowerPointExport::ImplWriteBackground(const FSHelperPtr& pFS, const Reference< XPropertySet >& rXPropSet)
 {
     FillStyle aFillStyle(FillStyle_NONE);
-    if (ImplGetPropertyValue(rXPropSet, "FillStyle"))
+    if (ImplGetPropertyValue(rXPropSet, u"FillStyle"_ustr))
         mAny >>= aFillStyle;
 
     if (aFillStyle == FillStyle_NONE ||
@@ -644,7 +644,7 @@ const char* PowerPointExport::Get8Direction(sal_uInt8 nDirection)
 void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
 {
     FadeEffect eFadeEffect = FadeEffect_NONE;
-    if (ImplGetPropertyValue(mXPagePropSet, "Effect"))
+    if (ImplGetPropertyValue(mXPagePropSet, u"Effect"_ustr))
         mAny >>= eFadeEffect;
 
     sal_Int16 nTransitionType = 0, nTransitionSubtype = 0;
@@ -655,12 +655,12 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
     OUString sSoundRelId;
     OUString sSoundName;
 
-    if (ImplGetPropertyValue(mXPagePropSet, "TransitionType") && (mAny >>= nTransitionType) &&
-            ImplGetPropertyValue(mXPagePropSet, "TransitionSubtype") && (mAny >>= nTransitionSubtype))
+    if (ImplGetPropertyValue(mXPagePropSet, u"TransitionType"_ustr) && (mAny >>= nTransitionType) &&
+            ImplGetPropertyValue(mXPagePropSet, u"TransitionSubtype"_ustr) && (mAny >>= nTransitionSubtype))
     {
         // FADEOVERCOLOR with black -> fade, with white -> flash
         sal_Int32 nTransitionFadeColor = 0;
-        if( ImplGetPropertyValue(mXPagePropSet, "TransitionFadeColor"))
+        if( ImplGetPropertyValue(mXPagePropSet, u"TransitionFadeColor"_ustr))
             mAny >>= nTransitionFadeColor;
         nPPTTransitionType = GetTransition(nTransitionType, nTransitionSubtype, eFadeEffect, nTransitionFadeColor, nDirection);
     }
@@ -668,7 +668,7 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
     if (!nPPTTransitionType && eFadeEffect != FadeEffect_NONE)
         nPPTTransitionType = GetTransition(eFadeEffect, nDirection);
 
-    if (ImplGetPropertyValue(mXPagePropSet, "Sound") && (mAny >>= sSoundUrl))
+    if (ImplGetPropertyValue(mXPagePropSet, u"Sound"_ustr) && (mAny >>= sSoundUrl))
         embedEffectAudio(pFS, sSoundUrl, sSoundRelId, sSoundName);
 
     bool bOOXmlSpecificTransition = false;
@@ -770,7 +770,7 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
     bool isTransitionDurationSet = false;
 
     // try to use TransitionDuration instead of old Speed property
-    if (ImplGetPropertyValue(mXPagePropSet, "TransitionDuration"))
+    if (ImplGetPropertyValue(mXPagePropSet, u"TransitionDuration"_ustr))
     {
         double fTransitionDuration = -1.0;
         mAny >>= fTransitionDuration;
@@ -801,7 +801,7 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
                 isTransitionDurationSet = true;
         }
     }
-    else if (ImplGetPropertyValue(mXPagePropSet, "Speed"))
+    else if (ImplGetPropertyValue(mXPagePropSet, u"Speed"_ustr))
     {
         mAny >>= animationSpeed;
 
@@ -823,11 +823,11 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
     if (!nPPTTransitionType && !bOOXmlSpecificTransition && !isTransitionDurationSet)
         return;
 
-    if (ImplGetPropertyValue(mXPagePropSet, "Change"))
+    if (ImplGetPropertyValue(mXPagePropSet, u"Change"_ustr))
         mAny >>= changeType;
 
     // 1 means automatic, 2 half automatic - not sure what it means - at least I don't see it in UI
-    if (changeType == 1 && ImplGetPropertyValue(mXPagePropSet, "Duration"))
+    if (changeType == 1 && ImplGetPropertyValue(mXPagePropSet, u"Duration"_ustr))
         mAny >>= advanceTiming;
 
     if (!bOOXmlSpecificTransition)
@@ -1040,8 +1040,8 @@ void PowerPointExport::WriteAuthors()
     if (maAuthors.empty())
         return;
 
-    FSHelperPtr pFS = openFragmentStreamWithSerializer("ppt/commentAuthors.xml",
-                      "application/vnd.openxmlformats-officedocument.presentationml.commentAuthors+xml");
+    FSHelperPtr pFS = openFragmentStreamWithSerializer(u"ppt/commentAuthors.xml"_ustr,
+                      u"application/vnd.openxmlformats-officedocument.presentationml.commentAuthors+xml"_ustr);
     addRelation(mPresentationFS->getOutputStream(),
                 oox::getRelationship(Relationship::COMMENTAUTHORS),
                 u"commentAuthors.xml");
@@ -1089,14 +1089,14 @@ void PowerPointExport::WritePresentationProps()
 
     Reference<beans::XPropertySet> xPresentationProps(xPresentationSupplier->getPresentation(),
                                                       uno::UNO_QUERY);
-    bool bEndlessVal = xPresentationProps->getPropertyValue("IsEndless").get<bool>();
-    bool bChangeManually = xPresentationProps->getPropertyValue("IsAutomatic").get<bool>();
-    OUString sFirstPage = xPresentationProps->getPropertyValue("FirstPage").get<OUString>();
-    OUString sCustomShow = xPresentationProps->getPropertyValue("CustomShow").get<OUString>();
+    bool bEndlessVal = xPresentationProps->getPropertyValue(u"IsEndless"_ustr).get<bool>();
+    bool bChangeManually = xPresentationProps->getPropertyValue(u"IsAutomatic"_ustr).get<bool>();
+    OUString sFirstPage = xPresentationProps->getPropertyValue(u"FirstPage"_ustr).get<OUString>();
+    OUString sCustomShow = xPresentationProps->getPropertyValue(u"CustomShow"_ustr).get<OUString>();
 
     FSHelperPtr pFS = openFragmentStreamWithSerializer(
-        "ppt/presProps.xml",
-        "application/vnd.openxmlformats-officedocument.presentationml.presProps+xml");
+        u"ppt/presProps.xml"_ustr,
+        u"application/vnd.openxmlformats-officedocument.presentationml.presProps+xml"_ustr);
 
     addRelation(mPresentationFS->getOutputStream(),
                 oox::getRelationship(Relationship::PRESPROPS), u"presProps.xml");
@@ -1168,7 +1168,7 @@ bool PowerPointExport::WriteComments(sal_uInt32 nPageNum)
         {
             FSHelperPtr pFS = openFragmentStreamWithSerializer(
                               "ppt/comments/comment" + OUString::number(nPageNum + 1) + ".xml",
-                              "application/vnd.openxmlformats-officedocument.presentationml.comments+xml");
+                              u"application/vnd.openxmlformats-officedocument.presentationml.comments+xml"_ustr);
 
             pFS->startElementNS(XML_p, XML_cmLst,
                                 FSNS(XML_xmlns, XML_p), this->getNamespaceURL(OOX_NS(ppt)));
@@ -1225,7 +1225,7 @@ void PowerPointExport::WriteVBA()
         return;
 
     uno::Reference<embed::XStorage> xDocumentStorage = xStorageBasedDocument->getDocumentStorage();
-    OUString aMacrosName("_MS_VBA_Macros");
+    OUString aMacrosName(u"_MS_VBA_Macros"_ustr);
     if (!xDocumentStorage.is() || !xDocumentStorage->hasByName(aMacrosName))
         return;
 
@@ -1234,7 +1234,7 @@ void PowerPointExport::WriteVBA()
     if (!xMacrosStream.is())
         return;
 
-    uno::Reference<io::XOutputStream> xOutputStream = openFragmentStream("ppt/vbaProject.bin", "application/vnd.ms-office.vbaProject");
+    uno::Reference<io::XOutputStream> xOutputStream = openFragmentStream(u"ppt/vbaProject.bin"_ustr, u"application/vnd.ms-office.vbaProject"_ustr);
     comphelper::OStorageHelper::CopyInputToOutput(xMacrosStream, xOutputStream);
 
     // Write the relationship.
@@ -1249,8 +1249,8 @@ void PowerPointExport::WriteModifyVerifier()
     {
         Reference<lang::XMultiServiceFactory> xFactory(mXModel, UNO_QUERY);
         Reference<XPropertySet> xDocSettings(
-            xFactory->createInstance("com.sun.star.document.Settings"), UNO_QUERY);
-        xDocSettings->getPropertyValue("ModifyPasswordInfo") >>= aInfo;
+            xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), UNO_QUERY);
+        xDocSettings->getPropertyValue(u"ModifyPasswordInfo"_ustr) >>= aInfo;
     }
     catch (const Exception&)
     {
@@ -1335,7 +1335,7 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
 
     FSHelperPtr pFS = openFragmentStreamWithSerializer(
                         "ppt/slides/slide" + OUString::number(nPageNum + 1) + ".xml",
-                        "application/vnd.openxmlformats-officedocument.presentationml.slide+xml");
+                        u"application/vnd.openxmlformats-officedocument.presentationml.slide+xml"_ustr);
 
     if (mpSlidesFSArray.size() < mnPages)
         mpSlidesFSArray.resize(mnPages);
@@ -1344,14 +1344,14 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
     const char* pShow = nullptr;
     const char* pShowMasterShape = nullptr;
 
-    if (ImplGetPropertyValue(mXPagePropSet, "Visible"))
+    if (ImplGetPropertyValue(mXPagePropSet, u"Visible"_ustr))
     {
         bool bShow(false);
         if ((mAny >>= bShow) && !bShow)
             pShow = "0";
     }
 
-    if (ImplGetPropertyValue(mXPagePropSet, "IsBackgroundObjectsVisible"))
+    if (ImplGetPropertyValue(mXPagePropSet, u"IsBackgroundObjectsVisible"_ustr))
     {
         bool bShowMasterShape(false);
         if ((mAny >>= bShowMasterShape) && !bShowMasterShape)
@@ -1404,7 +1404,7 @@ void PowerPointExport::ImplWriteNotes(sal_uInt32 nPageNum)
                         "ppt/notesSlides/notesSlide" +
                         OUString::number(nPageNum + 1) +
                         ".xml",
-                        "application/vnd.openxmlformats-officedocument.presentationml.notesSlide+xml");
+                        u"application/vnd.openxmlformats-officedocument.presentationml.notesSlide+xml"_ustr);
 
     pFS->startElementNS(XML_p, XML_notes, PNMSS);
 
@@ -1471,7 +1471,7 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
     FSHelperPtr pFS =
         openFragmentStreamWithSerializer("ppt/slideMasters/slideMaster" +
                                           OUString::number(nPageNum + 1) + ".xml",
-                                         "application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml");
+                                         u"application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml"_ustr);
 
     SdrPage* pMasterPage = SdPage::getImplementation(mXDrawPage);
     model::Theme* pTheme = nullptr;
@@ -1544,7 +1544,7 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
     if (xPagePropSet.is())
     {
         uno::Any aAny;
-        if (GetPropertyValue(aAny, xPagePropSet, "SlideLayout"))
+        if (GetPropertyValue(aAny, xPagePropSet, u"SlideLayout"_ustr))
             aLayouts.insert(aAny.get<sal_Int32>());
     }
 
@@ -1591,7 +1591,7 @@ void PowerPointExport::ImplWritePPTXLayout(sal_Int32 nOffset, sal_uInt32 nMaster
 #endif
 
     Reference< beans::XPropertySet > xPropSet(xSlide, uno::UNO_QUERY);
-    xPropSet->setPropertyValue("Layout", Any(short(aLayoutInfo[ nOffset ].nType)));
+    xPropSet->setPropertyValue(u"Layout"_ustr, Any(short(aLayoutInfo[ nOffset ].nType)));
 #if OSL_DEBUG_LEVEL > 1
     dump_pset(xPropSet);
 #endif
@@ -1609,7 +1609,7 @@ void PowerPointExport::ImplWritePPTXLayout(sal_Int32 nOffset, sal_uInt32 nMaster
     FSHelperPtr pFS
         = openFragmentStreamWithSerializer("ppt/slideLayouts/slideLayout" +
                                             OUString::number(mnLayoutFileIdMax) + ".xml",
-                                           "application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml");
+                                           u"application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml"_ustr);
 
     // add implicit relation of slide layout to slide master
     addRelation(pFS->getOutputStream(),
@@ -1702,7 +1702,7 @@ bool PowerPointShapeExport::WritePlaceholder(const Reference< XShape >& xShape, 
     try
     {
         Reference<XPropertySet> xShapeProps(xShape, UNO_QUERY);
-        if (xShapeProps->getPropertyValue("IsPresentationObject").get<bool>())
+        if (xShapeProps->getPropertyValue(u"IsPresentationObject"_ustr).get<bool>())
         {
             WritePlaceholderShape(xShape, ePlaceholder);
 
@@ -1720,8 +1720,8 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
 {
     Reference<XPropertySet> xProps(xShape, UNO_QUERY);
     bool bUseBackground(false);
-    if (xProps.is() && xProps->getPropertySetInfo()->hasPropertyByName("FillUseSlideBackground"))
-        xProps->getPropertyValue("FillUseSlideBackground") >>= bUseBackground;
+    if (xProps.is() && xProps->getPropertySetInfo()->hasPropertyByName(u"FillUseSlideBackground"_ustr))
+        xProps->getPropertyValue(u"FillUseSlideBackground"_ustr) >>= bUseBackground;
 
     if (bUseBackground)
         mpFS->startElementNS(XML_p, XML_sp, XML_useBgFill, "1");
@@ -1766,7 +1766,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     WritePresetShape("rect"_ostr);
     if (xProps.is())
     {
-        WriteBlipFill(xProps, "Graphic");
+        WriteBlipFill(xProps, u"Graphic"_ustr);
         // Do not forget to export the visible properties.
         WriteFill( xProps, xShape->getSize());
         WriteOutline( xProps );
@@ -1774,8 +1774,8 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
 
         bool bHas3DEffectinShape = false;
         uno::Sequence<beans::PropertyValue> grabBag;
-        if (xProps->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
-            xProps->getPropertyValue("InteropGrabBag") >>= grabBag;
+        if (xProps->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+            xProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= grabBag;
 
         for (auto const& it : grabBag)
             if (it.Name == "3DEffectProperties")
@@ -1847,7 +1847,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceTextBody(
             }
             else
             {
-                xPagePropSet->getPropertyValue("FooterText") >>= aFooterText;
+                xPagePropSet->getPropertyValue(u"FooterText"_ustr) >>= aFooterText;
             }
             mpFS->startElementNS(XML_a, XML_r);
             mpFS->startElementNS(XML_a, XML_t);
@@ -1866,7 +1866,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceTextBody(
             }
             else
             {
-                xPagePropSet->getPropertyValue("Number") >>= nSlideNum;
+                xPagePropSet->getPropertyValue(u"Number"_ustr) >>= nSlideNum;
                 aSlideNum = OUString::number(nSlideNum);
             }
             OString aUUID(comphelper::xml::generateGUIDString());
@@ -1879,17 +1879,17 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceTextBody(
         }
         case DateAndTime:
         {
-            OUString aDateTimeType = "datetime1";
+            OUString aDateTimeType = u"datetime1"_ustr;
             bool bIsDateTimeFixed = false;
-            xPagePropSet->getPropertyValue("IsDateTimeFixed") >>= bIsDateTimeFixed;
+            xPagePropSet->getPropertyValue(u"IsDateTimeFixed"_ustr) >>= bIsDateTimeFixed;
 
-            OUString aDateTimeText = "Date";
+            OUString aDateTimeText = u"Date"_ustr;
             const LanguageTag& rLanguageTag = Application::GetSettings().GetLanguageTag();
 
             if(ePageType != LAYOUT && !bIsDateTimeFixed)
             {
                 sal_Int32 nDateTimeFormat = 0;
-                xPagePropSet->getPropertyValue("DateTimeFormat") >>= nDateTimeFormat;
+                xPagePropSet->getPropertyValue(u"DateTimeFormat"_ustr) >>= nDateTimeFormat;
 
                 // 4 LSBs represent the date
                 SvxDateFormat eDate = static_cast<SvxDateFormat>(nDateTimeFormat & 0x0f);
@@ -1915,7 +1915,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceTextBody(
             }
             else
             {
-                xPagePropSet->getPropertyValue("DateTimeText") >>= aDateTimeText;
+                xPagePropSet->getPropertyValue(u"DateTimeText"_ustr) >>= aDateTimeText;
                 mpFS->startElementNS(XML_a, XML_r);
             }
 
@@ -2036,8 +2036,8 @@ void PowerPointExport::WriteNotesMaster()
     mPresentationFS->endElementNS(XML_p, XML_notesMasterIdLst);
 
     FSHelperPtr pFS =
-        openFragmentStreamWithSerializer("ppt/notesMasters/notesMaster1.xml",
-                                         "application/vnd.openxmlformats-officedocument.presentationml.notesMaster+xml");
+        openFragmentStreamWithSerializer(u"ppt/notesMasters/notesMaster1.xml"_ustr,
+                                         u"application/vnd.openxmlformats-officedocument.presentationml.notesMaster+xml"_ustr);
     // write theme per master
 
     // TODO: Need to implement theme support for note master, so the
@@ -2063,7 +2063,7 @@ void PowerPointExport::WriteNotesMaster()
     pFS->startElementNS(XML_p, XML_cSld);
 
     Reference< XPropertySet > aXBackgroundPropSet;
-    if (ImplGetPropertyValue(mXPagePropSet, "Background") &&
+    if (ImplGetPropertyValue(mXPagePropSet, u"Background"_ustr) &&
             (mAny >>= aXBackgroundPropSet))
         ImplWriteBackground(pFS, aXBackgroundPropSet);
 
@@ -2138,7 +2138,7 @@ void PowerPointExport::embedEffectAudio(const FSHelperPtr& pFS, const OUString& 
                         oox::getRelationship(Relationship::AUDIO), sPath);
 
     uno::Reference<io::XOutputStream> xOutputStream = openFragmentStream(sPath.replaceAt(0, 2, u"/ppt"),
-            "audio/x-wav");
+            u"audio/x-wav"_ustr);
 
     comphelper::OStorageHelper::CopyInputToOutput(xAudioStream, xOutputStream);
 }
@@ -2163,7 +2163,7 @@ bool PowerPointExport::ImplCreateMainNotes()
 
 OUString PowerPointExport::getImplementationName()
 {
-    return "com.sun.star.comp.Impress.oox.PowerPointExport";
+    return u"com.sun.star.comp.Impress.oox.PowerPointExport"_ustr;
 }
 
 void PowerPointExport::WriteDiagram(const FSHelperPtr& pFS, PowerPointShapeExport& rDML, const css::uno::Reference<css::drawing::XShape>& rXShape, int nDiagramId)
@@ -2181,8 +2181,8 @@ void PowerPointExport::WritePlaceholderReferenceShapes(PowerPointShapeExport& rD
     Any aAny;
     OUString aText;
     if (ePageType == LAYOUT
-        || (bCheckProps && PropValue::GetPropertyValue(aAny, mXPagePropSet, "IsFooterVisible", true)
-            && aAny == true && GetPropertyValue(aAny, mXPagePropSet, "FooterText", true)
+        || (bCheckProps && PropValue::GetPropertyValue(aAny, mXPagePropSet, u"IsFooterVisible"_ustr, true)
+            && aAny == true && GetPropertyValue(aAny, mXPagePropSet, u"FooterText"_ustr, true)
             && (aAny >>= aText) && !aText.isEmpty()))
     {
         if ((xShape = GetReferencedPlaceholderXShape(Footer, ePageType)))
@@ -2197,7 +2197,7 @@ void PowerPointExport::WritePlaceholderReferenceShapes(PowerPointShapeExport& rD
 
     if (ePageType == LAYOUT
         || (bCheckProps
-            && PropValue::GetPropertyValue(aAny, mXPagePropSet, "IsPageNumberVisible", true)
+            && PropValue::GetPropertyValue(aAny, mXPagePropSet, u"IsPageNumberVisible"_ustr, true)
             && aAny == true))
     {
         if ((xShape = GetReferencedPlaceholderXShape(SlideNumber, ePageType)))
@@ -2212,11 +2212,11 @@ void PowerPointExport::WritePlaceholderReferenceShapes(PowerPointShapeExport& rD
 
     if (ePageType == LAYOUT
         || (bCheckProps
-            && PropValue::GetPropertyValue(aAny, mXPagePropSet, "IsDateTimeVisible", true)
+            && PropValue::GetPropertyValue(aAny, mXPagePropSet, u"IsDateTimeVisible"_ustr, true)
             && aAny == true
-            && ((GetPropertyValue(aAny, mXPagePropSet, "DateTimeText", true) && (aAny >>= aText)
+            && ((GetPropertyValue(aAny, mXPagePropSet, u"DateTimeText"_ustr, true) && (aAny >>= aText)
                  && !aText.isEmpty())
-                || mXPagePropSet->getPropertyValue("IsDateTimeFixed") == false)))
+                || mXPagePropSet->getPropertyValue(u"IsDateTimeFixed"_ustr) == false)))
     {
         if ((xShape = GetReferencedPlaceholderXShape(DateAndTime, ePageType)))
         {

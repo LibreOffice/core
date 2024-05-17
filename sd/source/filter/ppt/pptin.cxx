@@ -101,7 +101,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SotSt
     : maParam(rDocStream)
 {
 #ifdef DBG_UTIL
-    std::unique_ptr<PropRead> pSummaryInformation(new PropRead( rStorage, "\005SummaryInformation" ));
+    std::unique_ptr<PropRead> pSummaryInformation(new PropRead( rStorage, u"\005SummaryInformation"_ustr ));
     if ( pSummaryInformation->IsValid() )
     {
         pSummaryInformation->Read();
@@ -127,7 +127,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SotSt
     pSummaryInformation.reset();
 #endif
 
-    rtl::Reference<SotStorageStream> pCurrentUserStream(rStorage.OpenSotStream("Current User", StreamMode::STD_READ));
+    rtl::Reference<SotStorageStream> pCurrentUserStream(rStorage.OpenSotStream(u"Current User"_ustr, StreamMode::STD_READ));
     if (pCurrentUserStream)
     {
         ReadPptCurrentUserAtom(*pCurrentUserStream, maParam.aCurrentUserAtom);
@@ -184,7 +184,7 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SotStorage& rStorag
     {
         sal_uInt64 nOldPos = rStCtrl.Tell();
 
-        mxPicturesStream = rStorage_.OpenSotStream( "Pictures", StreamMode::STD_READ );
+        mxPicturesStream = rStorage_.OpenSotStream( u"Pictures"_ustr, StreamMode::STD_READ );
         pStData = mxPicturesStream.get();
 
         rStCtrl.Seek( maDocHd.GetRecBegFilePos() + 8 );
@@ -248,7 +248,7 @@ bool ImplSdPPTImport::Import()
         SeekOle( pDocShell, mnFilterOptions );
 
     // hyperlinks
-    std::unique_ptr<PropRead> pDInfoSec2(new PropRead( mrStorage, "\005DocumentSummaryInformation" ));
+    std::unique_ptr<PropRead> pDInfoSec2(new PropRead( mrStorage, u"\005DocumentSummaryInformation"_ustr ));
     if ( pDInfoSec2->IsValid() )
     {
         PropItem aPropItem;
@@ -366,7 +366,7 @@ bool ImplSdPPTImport::Import()
                 pSection->GetDictionary(aDict);
                 if (!aDict.empty())
                 {
-                    auto iter = aDict.find( OUString("_PID_HLINKS") );
+                    auto iter = aDict.find( u"_PID_HLINKS"_ustr );
 
                     if ( iter != aDict.end() )
                     {
@@ -2715,7 +2715,7 @@ rtl::Reference<SdrObject> ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData
                                                 }
 
                                                 pObj = pMediaObj;  // SJ: hoping that pObj is not inserted in any list
-                                                pMediaObj->setURL( aMediaURL, ""/*TODO?*/ );
+                                                pMediaObj->setURL( aMediaURL, u""_ustr/*TODO?*/ );
                                             }
                                         }
                                     }
@@ -2775,13 +2775,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportPPT(SvStream &rStream)
         if (xStorage->GetError())
             return false;
 
-        rtl::Reference<SotStorageStream> xDocStream(xStorage->OpenSotStream( "PowerPoint Document", StreamMode::STD_READ));
+        rtl::Reference<SotStorageStream> xDocStream(xStorage->OpenSotStream( u"PowerPoint Document"_ustr, StreamMode::STD_READ));
         if ( !xDocStream.is() )
             return false;
 
         SdDLL::Init();
 
-        SfxMedium aSrcMed("", StreamMode::STD_READ);
+        SfxMedium aSrcMed(u""_ustr, StreamMode::STD_READ);
 
         xDocStream->SetVersion(xStorage->GetVersion());
         xDocStream->SetCryptMaskKey(xStorage->GetKey());

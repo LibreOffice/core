@@ -1389,7 +1389,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, std::u16str
     {
         sal_Int32 nColor = 0;
         Sequence< double > aHSL( 3 );
-        OUString aP( "," );
+        OUString aP( u","_ustr );
         if ( rSourceValue >>= aHSL )
         {
             aDest += "hsl("

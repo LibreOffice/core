@@ -177,8 +177,8 @@ void NodeContext::initValid(bool bHasValidChild, bool bIsIterateChild)
             {
                 Reference<XPropertySet> xShapeProps(xShape, UNO_QUERY);
                 bool bHasMediaURL
-                    = xShapeProps->getPropertySetInfo()->hasPropertyByName("MediaURL");
-                if (bHasMediaURL && (xShapeProps->getPropertyValue("MediaURL") >>= sURL))
+                    = xShapeProps->getPropertySetInfo()->hasPropertyByName(u"MediaURL"_ustr);
+                if (bHasMediaURL && (xShapeProps->getPropertyValue(u"MediaURL"_ustr) >>= sURL))
                 {
                     mbValid = IsAudioURL(sURL) || IsVideoURL(sURL);
                 }

@@ -726,7 +726,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
             {
                 bool bIsDark = false;
                 css::uno::Any aAny;
-                if ( PropValue::GetPropertyValue( aAny, mXPagePropSet, "IsBackgroundDark", true ) )
+                if ( PropValue::GetPropertyValue( aAny, mXPagePropSet, u"IsBackgroundDark"_ustr, true ) )
                     aAny >>= bIsDark;
                 nBulletColor = bIsDark ? 0xffffff : 0x000000;
             }
@@ -779,7 +779,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
             {
                 bool bIsDark = false;
                 css::uno::Any aAny;
-                if ( PropValue::GetPropertyValue( aAny, mXPagePropSet, "IsBackgroundDark", true ) )
+                if ( PropValue::GetPropertyValue( aAny, mXPagePropSet, u"IsBackgroundDark"_ustr, true ) )
                     aAny >>= bIsDark;
                 nCharColor = bIsDark ? 0xffffff : 0x000000;
             }
@@ -797,7 +797,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
 
                 css::uno::Any aAny;
                 css::drawing::FillStyle aFS( css::drawing::FillStyle_NONE );
-                if ( PropValue::GetPropertyValue( aAny, mXPropSet, "FillStyle" ) )
+                if ( PropValue::GetPropertyValue( aAny, mXPropSet, u"FillStyle"_ustr ) )
                     aAny >>= aFS;
                 switch( aFS )
                 {
@@ -811,7 +811,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                     break;
                     case css::drawing::FillStyle_SOLID :
                     {
-                        if ( PropValue::GetPropertyValue( aAny, mXPropSet, "FillColor" ) )
+                        if ( PropValue::GetPropertyValue( aAny, mXPropSet, u"FillColor"_ustr ) )
                             nBackgroundColor = EscherEx::GetColor( *o3tl::doAccess<sal_uInt32>(aAny) );
                     }
                     break;
@@ -819,7 +819,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                     {
                         css::uno::Any aBackAny;
                         css::drawing::FillStyle aBackFS( css::drawing::FillStyle_NONE );
-                        if ( PropValue::GetPropertyValue( aBackAny, mXBackgroundPropSet, "FillStyle" ) )
+                        if ( PropValue::GetPropertyValue( aBackAny, mXBackgroundPropSet, u"FillStyle"_ustr ) )
                             aBackAny >>= aBackFS;
                         switch( aBackFS )
                         {
@@ -833,7 +833,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                             break;
                             case css::drawing::FillStyle_SOLID :
                             {
-                                if ( PropValue::GetPropertyValue( aAny, mXBackgroundPropSet, "FillColor" ) )
+                                if ( PropValue::GetPropertyValue( aAny, mXBackgroundPropSet, u"FillColor"_ustr ) )
                                     nBackgroundColor = EscherEx::GetColor( *o3tl::doAccess<sal_uInt32>(aAny) );
                             }
                             break;
@@ -867,7 +867,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                             if ( aPropSetOfNextShape.is() )
                             {
                                 if ( PropValue::GetPropertyValue( aAny, aPropSetOfNextShape,
-                                                    "FillColor", true ) )
+                                                    u"FillColor"_ustr, true ) )
                                 {
                                     if ( nCharColor == EscherEx::GetColor( *o3tl::doAccess<sal_uInt32>(aAny) ) )
                                     {
@@ -950,7 +950,7 @@ bool PPTWriter::ImplGetText()
     {
         mnTextSize = mXText->getString().getLength();
         css::uno::Any aAny;
-        if ( GetPropertyValue( aAny, mXPropSet, "FontIndependentLineSpacing", true ) )
+        if ( GetPropertyValue( aAny, mXPropSet, u"FontIndependentLineSpacing"_ustr, true ) )
             aAny >>= mbFontIndependentLineSpacing;
     }
     return ( mnTextSize != 0 );
@@ -1199,7 +1199,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
         const uno::Reference< beans::XPropertySet > xPropSet( mXModel, uno::UNO_QUERY );
         if ( xPropSet.is() )
         {
-            if(ImplGetPropertyValue( xPropSet, "TabStop" ))
+            if(ImplGetPropertyValue( xPropSet, u"TabStop"_ustr ))
             {
                 sal_Int32 nTabStop( 0 );
                 if ( mAny >>= nTabStop )
@@ -1399,13 +1399,13 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, css::presentation::ClickAct
         break;
         case css::presentation::ClickAction_SOUND :
         {
-            if ( ImplGetPropertyValue( "Bookmark" ) )
+            if ( ImplGetPropertyValue( u"Bookmark"_ustr ) )
                 nSoundRef = maSoundCollection.GetId( *o3tl::doAccess<OUString>(mAny) );
         }
         break;
         case css::presentation::ClickAction_PROGRAM :
         {
-            if ( ImplGetPropertyValue( "Bookmark" ) )
+            if ( ImplGetPropertyValue( u"Bookmark"_ustr ) )
             {
                 INetURLObject aUrl( *o3tl::doAccess<OUString>(mAny) );
                 if ( INetProtocol::File == aUrl.GetProtocol() )
@@ -1419,7 +1419,7 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, css::presentation::ClickAct
 
         case css::presentation::ClickAction_BOOKMARK :
         {
-            if ( ImplGetPropertyValue( "Bookmark" ) )
+            if ( ImplGetPropertyValue( u"Bookmark"_ustr ) )
             {
                 OUString  aBookmark( *o3tl::doAccess<OUString>(mAny) );
                 sal_uInt32 nIndex = 0;
@@ -1446,7 +1446,7 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, css::presentation::ClickAct
 
         case css::presentation::ClickAction_DOCUMENT :
         {
-            if ( ImplGetPropertyValue( "Bookmark" ) )
+            if ( ImplGetPropertyValue( u"Bookmark"_ustr ) )
             {
                 OUString aBookmark( *o3tl::doAccess<OUString>(mAny) );
                 if ( !aBookmark.isEmpty() )
@@ -1504,16 +1504,16 @@ bool PPTWriter::ImplGetEffect( const css::uno::Reference< css::beans::XPropertyS
                                 bool& bIsSound )
 {
     css::uno::Any aAny;
-    if ( GetPropertyValue( aAny, rPropSet, "Effect" ) )
+    if ( GetPropertyValue( aAny, rPropSet, u"Effect"_ustr ) )
         aAny >>= eEffect;
     else
         eEffect = css::presentation::AnimationEffect_NONE;
 
-    if ( GetPropertyValue( aAny, rPropSet, "TextEffect" ) )
+    if ( GetPropertyValue( aAny, rPropSet, u"TextEffect"_ustr ) )
         aAny >>= eTextEffect;
     else
         eTextEffect = css::presentation::AnimationEffect_NONE;
-    if ( GetPropertyValue( aAny, rPropSet, "SoundOn" ) )
+    if ( GetPropertyValue( aAny, rPropSet, u"SoundOn"_ustr ) )
         aAny >>= bIsSound;
     else
         bIsSound = false;
@@ -1658,7 +1658,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
             bool bEffect = ImplGetEffect( mXPropSet, eAe, eTe, bIsSound );
             css::presentation::ClickAction eCa = css::presentation::ClickAction_NONE;
-            if ( ImplGetPropertyValue( "OnClick" ) )
+            if ( ImplGetPropertyValue( u"OnClick"_ustr ) )
                 mAny >>= eCa;
 
             bool bGroup = mType == "drawing.Group";
@@ -1666,7 +1666,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             bool bClosedBezier = mType == "drawing.ClosedBezier";
             bool bPolyPolygon  = mType == "drawing.PolyPolygon";
             bool bPolyLine = mType == "drawing.PolyLine";
-            OUString aGraphicPropertyName("Graphic");
+            OUString aGraphicPropertyName(u"Graphic"_ustr);
 
             const css::awt::Size   aSize100thmm( mXShape->getSize() );
             const css::awt::Point  aPoint100thmm( mXShape->getPosition() );
@@ -1694,9 +1694,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 bool bIsFontwork = false;
                 bool bIsHatching = false;
                 css::uno::Any aAny;
-                if ( GetPropertyValue( aAny, mXPropSet, "IsFontwork", true ) )
+                if ( GetPropertyValue( aAny, mXPropSet, u"IsFontwork"_ustr, true ) )
                     aAny >>= bIsFontwork;
-                if ( GetPropertyValue( aAny, mXPropSet, "FillStyle", true ) )
+                if ( GetPropertyValue( aAny, mXPropSet, u"FillStyle"_ustr, true ) )
                 {
                     css::drawing::FillStyle eFS;
                     aAny >>= eFS;
@@ -1718,7 +1718,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 }
                 if ( bIsHatching || bIsFontwork || ( mType == "drawing.Measure" ) || ( mType == "drawing.Caption" ) )
                 {
-                    if ( ImplGetPropertyValue( "BoundRect" ) )
+                    if ( ImplGetPropertyValue( u"BoundRect"_ustr ) )
                     {
                         auto aRect = o3tl::doAccess<css::awt::Rectangle>(mAny);
                         maPosition = MapPoint( css::awt::Point( aRect->X, aRect->Y ) );
@@ -1744,7 +1744,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     ImplCreateShape( ESCHER_ShpInst_PictureFrame,
                                      ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
                                      aSolverContainer );
-                    if ( aPropOpt.CreateGraphicProperties( mXPropSet, "MetaFile", false ) )
+                    if ( aPropOpt.CreateGraphicProperties( mXPropSet, u"MetaFile"_ustr, false ) )
                     {
                         aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                         SdrObject* pObj = SdrObject::getSdrObjectFromXShape(mXShape);
@@ -1779,7 +1779,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 sal_Int32 nRadius = 0;
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                if ( ImplGetPropertyValue( "CornerRadius" ) )
+                if ( ImplGetPropertyValue( u"CornerRadius"_ustr ) )
                 {
                     mAny >>= nRadius;
                     nRadius = MapSize( css::awt::Size( nRadius, 0 ) ).Width;
@@ -1821,7 +1821,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 css::drawing::CircleKind  eCircleKind( css::drawing::CircleKind_FULL );
                 PolyStyle ePolyKind = PolyStyle::Chord;
-                if ( ImplGetPropertyValue( "CircleKind" ) )
+                if ( ImplGetPropertyValue( u"CircleKind"_ustr ) )
                 {
                     mAny >>= eCircleKind;
                     switch ( eCircleKind )
@@ -1863,10 +1863,10 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 else
                 {
                     sal_Int32 nStartAngle, nEndAngle;
-                    if ( !ImplGetPropertyValue( "CircleStartAngle" ) )
+                    if ( !ImplGetPropertyValue( u"CircleStartAngle"_ustr ) )
                         continue;
                     nStartAngle = *o3tl::doAccess<sal_Int32>(mAny);
-                    if( !ImplGetPropertyValue( "CircleEndAngle" ) )
+                    if( !ImplGetPropertyValue( u"CircleEndAngle"_ustr ) )
                         continue;
                     nEndAngle = *o3tl::doAccess<sal_Int32>(mAny);
                     css::awt::Point aPoint( mXShape->getPosition() );
@@ -1945,7 +1945,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 {
                     // try to get the aspect when available
                     css::uno::Reference< css::beans::XPropertySet > xShapeProps( mXShape, css::uno::UNO_QUERY_THROW );
-                    xShapeProps->getPropertyValue("Aspect") >>= nAspect;
+                    xShapeProps->getPropertyValue(u"Aspect"_ustr) >>= nAspect;
                 }
                 catch( css::uno::Exception& )
                 {}
@@ -1989,7 +1989,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     if ( !aUserName.isEmpty() )
                     {
                         rtl::Reference<SotStorageStream> xCompObj = xTemp->OpenSotStream(
-                            "\1CompObj",
+                            u"\1CompObj"_ustr,
                                 StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL );
                         sal_uInt32 const nStreamLen = xCompObj->remainingSize();
                         sal_Int16   nVersion, nByteOrder;
@@ -2030,7 +2030,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ShapeFlag const nSpFlags = ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor | ShapeFlag::OLEShape;
                 ImplCreateShape( ESCHER_ShpInst_HostControl, nSpFlags, aSolverContainer );
-                if ( aPropOpt.CreateGraphicProperties( mXPropSet, "MetaFile", false  ) )
+                if ( aPropOpt.CreateGraphicProperties( mXPropSet, u"MetaFile"_ustr, false  ) )
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                 //export form control graphic
                 else if ( aPropOpt.CreateBlipPropertiesforOLEControl(mXPropSet,mXShape))
@@ -2211,7 +2211,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         ImplCreateShape( ESCHER_ShpInst_Rectangle,
                                          ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
                                          aSolverContainer );
-                        if ( aPropOpt.CreateGraphicProperties( mXPropSet, "Graphic", true, true, false ) )
+                        if ( aPropOpt.CreateGraphicProperties( mXPropSet, u"Graphic"_ustr, true, true, false ) )
                         {
                             aPropOpt.AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapNone );
                             aPropOpt.AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
@@ -2528,7 +2528,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     {
                         // try to get the aspect when available
                         css::uno::Reference< css::beans::XPropertySet > xShapeProps( mXShape, css::uno::UNO_QUERY_THROW );
-                        xShapeProps->getPropertyValue("Aspect") >>= nAspect;
+                        xShapeProps->getPropertyValue(u"Aspect"_ustr) >>= nAspect;
                     }
                     catch( css::uno::Exception& )
                     {}
@@ -2605,7 +2605,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             else if ( (mType.getLength() > 9) && (mType[8] == '3') && (mType[9] == 'D') )  // drawing.3D
             {
                 // SceneObject, CubeObject, SphereObject, LatheObject, ExtrudeObject, PolygonObject
-                if ( !ImplGetPropertyValue( "Bitmap" ) )
+                if ( !ImplGetPropertyValue( u"Bitmap"_ustr ) )
                     continue;
 
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
@@ -2613,7 +2613,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                  ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
                                  aSolverContainer );
 
-                if ( aPropOpt.CreateGraphicProperties( mXPropSet, "Bitmap", false ) )
+                if ( aPropOpt.CreateGraphicProperties( mXPropSet, u"Bitmap"_ustr, false ) )
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
             }
             else if ( mType == "drawing.Media" )
@@ -2626,7 +2626,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 if ( aPropOpt.CreateMediaGraphicProperties( mXShape ) )
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                 css::uno::Any aAny;
-                if ( PropValue::GetPropertyValue( aAny, mXPropSet, "MediaURL", true ) )
+                if ( PropValue::GetPropertyValue( aAny, mXPropSet, u"MediaURL"_ustr, true ) )
                 {
                     OUString aMediaURL;
                     if ( (aAny >>= aMediaURL ) &&  !aMediaURL.isEmpty() )
@@ -2706,7 +2706,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 ImplCreateShape( ESCHER_ShpInst_PictureFrame,
                                  ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
                                  aSolverContainer );
-                if ( aPropOpt.CreateGraphicProperties( mXPropSet, "MetaFile", false ) )
+                if ( aPropOpt.CreateGraphicProperties( mXPropSet, u"MetaFile"_ustr, false ) )
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
             }
             else
@@ -2884,7 +2884,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             css::uno::Any  aAny;
             EscherPropertyContainer     aPropOpt;
             mnAngle = ( PropValue::GetPropertyValue( aAny,
-                mXPropSet, "RotateAngle", true ) )
+                mXPropSet, u"RotateAngle"_ustr, true ) )
                     ? *o3tl::doAccess<sal_Int32>(aAny)
                     : 0;
 
@@ -3068,7 +3068,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
     try
     {
         uno::Reference< table::XTable > xTable;
-        if ( mXPropSet->getPropertyValue( "Model" ) >>= xTable )
+        if ( mXPropSet->getPropertyValue( u"Model"_ustr ) >>= xTable )
         {
             uno::Reference< table::XColumnRowRange > xColumnRowRange( xTable, uno::UNO_QUERY_THROW );
             uno::Reference< container::XIndexAccess > xColumns( xColumnRowRange->getColumns(), uno::UNO_QUERY_THROW );
@@ -3085,7 +3085,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
             {
                 uno::Reference< beans::XPropertySet > xPropSet( xColumns->getByIndex( x ), uno::UNO_QUERY_THROW );
                 awt::Size aS( 0, 0 );
-                xPropSet->getPropertyValue( "Width" ) >>= aS.Width;
+                xPropSet->getPropertyValue( u"Width"_ustr ) >>= aS.Width;
                 awt::Size aM( MapSize( aS ) );
                 aColumns.emplace_back( nPosition, aM.Width );
                 nPosition += aM.Width;
@@ -3098,7 +3098,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
             {
                 uno::Reference< beans::XPropertySet > xPropSet( xRows->getByIndex( y ), uno::UNO_QUERY_THROW );
                 awt::Size aS( 0, 0 );
-                xPropSet->getPropertyValue( "Height" ) >>= aS.Height;
+                xPropSet->getPropertyValue( u"Height"_ustr ) >>= aS.Height;
                 awt::Size aM( MapSize( aS ) );
                 aRows.emplace_back( nPosition, aM.Height );
                 nPosition += aM.Height;
@@ -3158,7 +3158,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
                         mnTextSize = mXText->getString().getLength();
 
                         css::uno::Any aAny;
-                        if ( GetPropertyValue( aAny, mXPropSet, "FontIndependentLineSpacing", true ) )
+                        if ( GetPropertyValue( aAny, mXPropSet, u"FontIndependentLineSpacing"_ustr, true ) )
                             aAny >>= mbFontIndependentLineSpacing;
 
                         EscherPropertyContainer aPropOptSp;
@@ -3220,7 +3220,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
                         {
                             uno::Reference< beans::XPropertySet > xPropSet2( xCell, uno::UNO_QUERY_THROW );
                             table::BorderLine aBorderLine;
-                            if ( xPropSet2->getPropertyValue( "TopBorder" ) >>= aBorderLine )
+                            if ( xPropSet2->getPropertyValue( u"TopBorder"_ustr ) >>= aBorderLine )
                                 aCellBorder.maCellBorder = aBorderLine;
                             sal_Int32 nRight  = GetCellRight( nColumn, maRect,aColumns,xCell );
                             bTop = ImplCreateCellBorder( &aCellBorder, aCellBorder.mnPos,
@@ -3246,7 +3246,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
                                     uno::Reference< table::XMergeableCell > xCellOwn( xCellRange->getCellByPosition( nColumn, nRow - 1 ), uno::UNO_QUERY_THROW );
                                     uno::Reference< beans::XPropertySet > xPropSet2( xCellOwn, uno::UNO_QUERY_THROW );
                                     table::BorderLine aBorderLine;
-                                    if ( xPropSet2->getPropertyValue( "BottomBorder" ) >>= aBorderLine )
+                                    if ( xPropSet2->getPropertyValue( u"BottomBorder"_ustr ) >>= aBorderLine )
                                         aCellBorder.maCellBorder = aBorderLine;
                                     ImplCreateCellBorder( &aCellBorder, aCellBorder.mnPos,
                                         nBottom, nRight, nBottom);
@@ -3276,7 +3276,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
                         {
                             uno::Reference< beans::XPropertySet > xCellSet( xCell, uno::UNO_QUERY_THROW );
                             table::BorderLine aBorderLine;
-                            if ( xCellSet->getPropertyValue( "LeftBorder" ) >>= aBorderLine )
+                            if ( xCellSet->getPropertyValue( u"LeftBorder"_ustr ) >>= aBorderLine )
                                 aCellBorder.maCellBorder = aBorderLine;
                             sal_Int32 nBottom = GetCellBottom( nRow, maRect, aRows,xCell );
                             bLeft = ImplCreateCellBorder( &aCellBorder, aColumns[nLine].first, aCellBorder.mnPos,
@@ -3298,7 +3298,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
                                     uno::Reference< table::XMergeableCell > xCellOwn( xCellRange->getCellByPosition( nColumn - 1, nRow ), uno::UNO_QUERY_THROW );
                                     uno::Reference< beans::XPropertySet > xCellSet( xCellOwn, uno::UNO_QUERY_THROW );
                                     table::BorderLine aBorderLine;
-                                    if ( xCellSet->getPropertyValue( "RightBorder" ) >>= aBorderLine )
+                                    if ( xCellSet->getPropertyValue( u"RightBorder"_ustr ) >>= aBorderLine )
                                         aCellBorder.maCellBorder = aBorderLine;
                                     ImplCreateCellBorder( &aCellBorder, nRight, aCellBorder.mnPos,
                                         nRight,  nBottom );

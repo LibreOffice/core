@@ -90,7 +90,7 @@ static rtl::Reference<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const
     Reference<XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
     Reference< css::packages::XPackageEncryption > xPackageEncryption(
         xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            "com.sun.star.comp.oox.crypto.DRMDataSpace", aArguments, xComponentContext), UNO_QUERY);
+            u"com.sun.star.comp.oox.crypto.DRMDataSpace"_ustr, aArguments, xComponentContext), UNO_QUERY);
 
     if (!xPackageEncryption.is())
     {
@@ -109,7 +109,7 @@ static rtl::Reference<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const
             return aNewStorage;
         }
 
-        rtl::Reference<SotStorageStream> rContentStream = rStorage->OpenSotStream("\011DRMContent", StreamMode::READ | StreamMode::SHARE_DENYALL);
+        rtl::Reference<SotStorageStream> rContentStream = rStorage->OpenSotStream(u"\011DRMContent"_ustr, StreamMode::READ | StreamMode::SHARE_DENYALL);
         if (!rContentStream.is())
         {
             return aNewStorage;
@@ -132,7 +132,7 @@ static rtl::Reference<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const
         aNewStorage = new SotStorage(*rNewStorageStrm);
 
         // Set the media descriptor data
-        Sequence<NamedValue> aEncryptionData = xPackageEncryption->createEncryptionData("");
+        Sequence<NamedValue> aEncryptionData = xPackageEncryption->createEncryptionData(u""_ustr);
         rMedium.GetItemSet().Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, Any(aEncryptionData)));
     }
     catch (const std::exception&)
@@ -153,24 +153,24 @@ bool SdPPTFilter::Import()
         /* check if there is a dualstorage, then the
         document is probably a PPT95 containing PPT97 */
         rtl::Reference<SotStorage> xDualStorage;
-        OUString sDualStorage( "PP97_DUALSTORAGE"  );
+        OUString sDualStorage( u"PP97_DUALSTORAGE"_ustr  );
         if ( pStorage->IsContained( sDualStorage ) )
         {
             xDualStorage = pStorage->OpenSotStorage( sDualStorage, StreamMode::STD_READ );
             pStorage = xDualStorage;
         }
-        if (pStorage->IsContained("\011DRMContent"))
+        if (pStorage->IsContained(u"\011DRMContent"_ustr))
         {
             // Document is DRM encrypted
             pStorage = lcl_DRMDecrypt(mrMedium, pStorage, aDecryptedStorageStrm);
         }
-        rtl::Reference<SotStorageStream> pDocStream(pStorage->OpenSotStream( "PowerPoint Document" , StreamMode::STD_READ ));
+        rtl::Reference<SotStorageStream> pDocStream(pStorage->OpenSotStream( u"PowerPoint Document"_ustr , StreamMode::STD_READ ));
         if( pDocStream )
         {
             pDocStream->SetVersion( pStorage->GetVersion() );
             pDocStream->SetCryptMaskKey(pStorage->GetKey());
 
-            if ( pStorage->IsStream( "EncryptedSummary" ) )
+            if ( pStorage->IsStream( u"EncryptedSummary"_ustr ) )
                 mrMedium.SetError(ERRCODE_SVX_READ_FILTER_PPOINT);
             else
             {
@@ -221,13 +221,13 @@ bool SdPPTFilter::Export()
         if (pEncryptionDataItem && (pEncryptionDataItem->GetValue() >>= aEncryptionData))
         {
             ::comphelper::SequenceAsHashMap aHashData(aEncryptionData);
-            OUString sCryptoType = aHashData.getUnpackedValueOrDefault("CryptoType", OUString());
+            OUString sCryptoType = aHashData.getUnpackedValueOrDefault(u"CryptoType"_ustr, OUString());
 
             if (sCryptoType.getLength())
             {
                 Reference<XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
                 Sequence<Any> aArguments{
-                    Any(NamedValue("Binary", Any(true))) };
+                    Any(NamedValue(u"Binary"_ustr, Any(true))) };
                 xPackageEncryption.set(
                     xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                         "com.sun.star.comp.oox.crypto." + sCryptoType, aArguments, xComponentContext), UNO_QUERY);

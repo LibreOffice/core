@@ -135,7 +135,7 @@ OUString HtmlState::Flush()
                   + SetUnderline(false)
                   + SetStrikeout(false)
                   + SetColor(maDefColor)
-                  + SetLink("","");
+                  + SetLink(u""_ustr,u""_ustr);
 
     return aStr;
 }
@@ -444,7 +444,7 @@ void WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutliner,
 
         if (nDepth < 0)
         {
-            OUString aTag = bHeadLine ? OUString("h2") : OUString("p");
+            OUString aTag = bHeadLine ? u"h2"_ustr : u"p"_ustr;
             lclAppendStyle(aStr, aTag, getParagraphStyle(pOutliner, nIndex));
 
             aStr.append(aParaText);

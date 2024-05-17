@@ -1025,7 +1025,7 @@ void PPTXAnimationExport::WriteAnimationNodeCommand()
             uno::Sequence<beans::NamedValue> aParamSeq;
             xCommand->getParameter() >>= aParamSeq;
             comphelper::SequenceAsHashMap aMap(aParamSeq);
-            auto it = aMap.find("MediaTime");
+            auto it = aMap.find(u"MediaTime"_ustr);
             if (it != aMap.end())
             {
                 double fMediaTime = 0;
@@ -1086,8 +1086,9 @@ void PPTXAnimationExport::WriteAnimationNodeMedia()
         if (xAudio->getSource() >>= xShape)
         {
             uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-            bool bHasMediaURL = xShapeProps->getPropertySetInfo()->hasPropertyByName("MediaURL");
-            if (bHasMediaURL && (xShapeProps->getPropertyValue("MediaURL") >>= sUrl))
+            bool bHasMediaURL
+                = xShapeProps->getPropertySetInfo()->hasPropertyByName(u"MediaURL"_ustr);
+            if (bHasMediaURL && (xShapeProps->getPropertyValue(u"MediaURL"_ustr) >>= sUrl))
             {
                 bVideo = IsVideoURL(sUrl);
                 bValid = IsAudioURL(sUrl) || bVideo;
