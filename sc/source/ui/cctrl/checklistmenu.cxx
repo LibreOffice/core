@@ -686,11 +686,15 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData
 void ScCheckListMenuControl::GrabFocus()
 {
     if (mxEdSearch->get_visible())
+    {
         mxEdSearch->grab_focus();
+        meRestoreFocus = RestoreFocus::EdSearch;
+    }
     else
     {
         mxMenu->set_cursor(0);
         mxMenu->grab_focus();
+        meRestoreFocus = RestoreFocus::Menu;
     }
 }
 
