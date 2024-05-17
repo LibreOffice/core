@@ -82,7 +82,8 @@ struct FieldShadowState
     }
 };
 
-class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
+class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener,
+                                             public SfxBroadcaster
 {
     private:
         SwView*                         mpView;
@@ -141,9 +142,11 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
         typedef std::vector< std::unique_ptr<SwSidebarItem> >::const_iterator const_iterator;
         const_iterator begin()  const { return mvPostItFields.begin(); }
         const_iterator end()    const { return mvPostItFields.end();  }
+        const std::vector<std::unique_ptr<SwSidebarItem>>& GetPostItFields() { return mvPostItFields; }
 
         void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
+        std::vector<SwFormatField*> UpdatePostItsParentInfo();
         void LayoutPostIts();
         bool CalcRects();
 
@@ -168,6 +171,8 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
         void DeleteCommentThread(sal_uInt32 nPostItId);
         void ToggleResolved(sal_uInt32 nPostItId);
         void ToggleResolvedForThread(sal_uInt32 nPostItId);
+
+        sw::annotation::SwAnnotationWin* GetRemovedAnnotationWin(const SfxBroadcaster* pBroadcast);
 
         void ExecuteFormatAllDialog(SwView& rView);
         void FormatAll(const SfxItemSet &rNewAttr);

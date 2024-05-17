@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.40.0 -->
+<interface domain="sw">
+  <requires lib="gtk+" version="3.20"/>
+  <!-- n-columns=1 n-rows=1 -->
+  <object class="GtkGrid" id="Thread">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkExpander">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="hexpand">True</property>
+        <property name="expanded">True</property>
+        <child>
+          <object class="GtkBox" id="comments_box">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="commentedtext">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="label" translatable="yes" context="commentspanel|referencetext">commentedtext</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">0</property>
+      </packing>
+    </child>
+  </object>
+</interface>

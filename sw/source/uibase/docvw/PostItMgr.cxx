@@ -319,6 +319,17 @@ SwSidebarItem* SwPostItMgr::InsertItem(SfxBroadcaster* pItem, bool bCheckExisten
     return pAnnotationItem;
 }
 
+sw::annotation::SwAnnotationWin* SwPostItMgr::GetRemovedAnnotationWin( const SfxBroadcaster* pBroadcast )
+{
+    auto i = std::find_if(mvPostItFields.begin(), mvPostItFields.end(),
+        [&pBroadcast](const std::unique_ptr<SwSidebarItem>& pField) { return pField->GetBroadcaster() == pBroadcast; });
+    if (i != mvPostItFields.end())
+    {
+        return (*i)->mpPostIt;
+    }
+    return nullptr;
+}
+
 void SwPostItMgr::RemoveItem( SfxBroadcaster* pBroadcast )
 {
     EndListening(*pBroadcast);
@@ -400,6 +411,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                             mbLayout = true;
                         break;
                     }
+                    this->Broadcast(rHint);
                     RemoveItem(pField);
 
                     // If LOK has disabled tiled annotations, emit annotation callbacks
@@ -430,6 +442,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         {
                             postItField->mpPostIt->SetPostItText();
                             mbLayout = true;
+                            this->Forward(rBC, rHint);
                         }
 
                         // If LOK has disabled tiled annotations, emit annotation callbacks
@@ -821,6 +834,9 @@ void SwPostItMgr::LayoutPostIts()
                         if (pPostIt)
                             pPostIt->HideNote();
                     }
+                    SwFormatField* pFormatField = &(pItem->GetFormatField());
+                    SwFormatFieldHintWhich nWhich = SwFormatFieldHintWhich::INSERTED;
+                    this->Broadcast(SwFormatFieldHint(pFormatField, nWhich, mpView));
                 }
 
                 if (!aVisiblePostItList.empty() && ShowNotes())
@@ -1331,9 +1347,8 @@ bool SwPostItMgr::LayoutByPage(std::vector<SwAnnotationWin*> &aVisiblePostItList
     return bScrollbars;
  }
 
-void SwPostItMgr::AddPostIts(const bool bCheckExistence, const bool bFocus)
+std::vector<SwFormatField*> SwPostItMgr::UpdatePostItsParentInfo()
 {
-    const bool bEmpty = mvPostItFields.empty();
     IDocumentRedlineAccess const& rIDRA(mpWrtShell->getIDocumentRedlineAccess());
     SwFieldType* pType = mpView->GetDocShell()->GetDoc()->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Postit, OUString(),false);
     std::vector<SwFormatField*> vFormatFields;
@@ -1361,6 +1376,14 @@ void SwPostItMgr::AddPostIts(const bool bCheckExistence, const bool bFocus)
             }
         }
     }
+    return vFormatFields;
+}
+
+
+void SwPostItMgr::AddPostIts(const bool bCheckExistence, const bool bFocus)
+{
+    const bool bEmpty = mvPostItFields.empty();
+    std::vector<SwFormatField*> vFormatFields = UpdatePostItsParentInfo();
 
     for(auto pFormatField : vFormatFields)
         InsertItem(pFormatField, bCheckExistence, bFocus);

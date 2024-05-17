@@ -74,6 +74,12 @@ OString DateToOString( const Date& rDate )
     return DateTimeToOString( DateTime( rDate, aTime ) );
 }
 
+OString TimeToOString( const tools::Time& rTime )
+{
+    Date aDate( Date::EMPTY );
+    return DateTimeToOString( DateTime( aDate, rTime ) );
+}
+
 OUString DateToDDMMYYYYOUString( const Date& rDate )
 {
     OUStringBuffer aBuffer( 25 );

@@ -20,6 +20,7 @@
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 
 #include "A11yCheckIssuesPanel.hxx"
+#include "CommentsPanel.hxx"
 #include "ThemePanel.hxx"
 #include "StylePresetsPanel.hxx"
 #include "PageStylesPanel.hxx"
@@ -40,6 +41,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <officecfg/Office/Common.hxx>
 
 
 using namespace css;
@@ -197,6 +199,15 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
         std::unique_ptr<PanelLayout> xPanel = sw::sidebar::TableEditPanel::Create(pParent, xFrame, pBindings );
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
                         rsResourceURL, xFrame, std::move(xPanel), ui::LayoutSize(-1,-1,-1));
+    }
+    else if (rsResourceURL.endsWith("/CommentsPanel"))
+    {
+        if (officecfg::Office::Common::Misc::ExperimentalMode::get())
+        {
+            std::unique_ptr<PanelLayout> xPanel = sw::sidebar::CommentsPanel::Create(pParent);
+            xElement = sfx2::sidebar::SidebarPanelBase::Create(
+                            rsResourceURL, xFrame, std::move(xPanel), ui::LayoutSize(-1,-1,-1));
+        }
     }
     else if (rsResourceURL.endsWith("/A11yCheckIssuesPanel"))
     {

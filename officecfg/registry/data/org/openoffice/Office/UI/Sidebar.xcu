@@ -81,6 +81,29 @@
         </prop>
       </node>
 
+      <node oor:name="CommentsDeck" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Comments</value>
+        </prop>
+        <prop oor:name="IsExperimental" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>CommentsDeck</value>
+        </prop>
+        <prop oor:name="IconURL" oor:type="xs:string">
+          <value>private:graphicrepository/cmd/lc_showannotations.png</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            WriterVariants, any, visible ;
+          </value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>900</value>
+        </prop>
+      </node>
+
       <node oor:name="A11yCheckDeck" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Accessibility Check</value>
@@ -612,6 +635,41 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>500</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+      </node>
+
+      <node oor:name="CommentsPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Comments</value>
+        </prop>
+        <prop oor:name="IsExperimental" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>CommentsPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>CommentsDeck</value>
+        </prop>
+        <prop oor:name="DefaultMenuCommand">
+          <value></value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            WriterVariants, any, visible ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SwPanelFactory/CommentsPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>100</value>
         </prop>
         <prop oor:name="WantsAWT" oor:type="xs:boolean">
           <value>false</value>

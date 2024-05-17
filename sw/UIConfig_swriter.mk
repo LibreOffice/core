@@ -285,6 +285,9 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/pagestylespanel \
 	sw/uiconfig/swriter/ui/pageheaderpanel \
 	sw/uiconfig/swriter/ui/pagefooterpanel \
+	sw/uiconfig/swriter/ui/commentspanel \
+	sw/uiconfig/swriter/ui/commentsthread \
+	sw/uiconfig/swriter/ui/commentwidget \
 	sw/uiconfig/swriter/ui/a11ycheckissuespanel \
 	sw/uiconfig/swriter/ui/poseditbox \
 	sw/uiconfig/swriter/ui/sidebarwrap \
