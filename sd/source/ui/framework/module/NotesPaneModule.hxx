@@ -73,7 +73,7 @@ private:
 
     std::set<OUString> maActiveMainViewContainer;
     OUString msCurrentMainViewURL;
-    ViewShellBase* mpViewShellBase;
+    ViewShellBase* mpViewShellBase = nullptr;
     bool mbListeningEventMultiplexer = false;
     bool mbInMasterEditMode = false;
 
