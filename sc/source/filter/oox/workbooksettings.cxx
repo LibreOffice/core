@@ -197,10 +197,10 @@ void WorkbookSettings::finalizeImport()
     if (maFileSharing.mbRecommendReadOnly || (maFileSharing.mnPasswordHash != 0) ||
             !maFileSharing.maHashValue.isEmpty()) try
     {
-        getBaseFilter().getMediaDescriptor()[ "ReadOnly" ] <<= true;
+        getBaseFilter().getMediaDescriptor()[ u"ReadOnly"_ustr ] <<= true;
 
         Reference< XPropertySet > xDocumentSettings( getBaseFilter().getModelFactory()->createInstance(
-            "com.sun.star.document.Settings" ), UNO_QUERY_THROW );
+            u"com.sun.star.document.Settings"_ustr ), UNO_QUERY_THROW );
         PropertySet aSettingsProp( xDocumentSettings );
 
         /* TODO: not setting read-only if only mnPasswordHash ('password'
@@ -215,10 +215,10 @@ void WorkbookSettings::finalizeImport()
         if (!maFileSharing.maHashValue.isEmpty())
         {
             Sequence<PropertyValue> aResult{
-                comphelper::makePropertyValue("algorithm-name", maFileSharing.maAlgorithmName),
-                comphelper::makePropertyValue("salt", maFileSharing.maSaltValue),
-                comphelper::makePropertyValue("iteration-count", maFileSharing.mnSpinCount),
-                comphelper::makePropertyValue("hash", maFileSharing.maHashValue)
+                comphelper::makePropertyValue(u"algorithm-name"_ustr, maFileSharing.maAlgorithmName),
+                comphelper::makePropertyValue(u"salt"_ustr, maFileSharing.maSaltValue),
+                comphelper::makePropertyValue(u"iteration-count"_ustr, maFileSharing.mnSpinCount),
+                comphelper::makePropertyValue(u"hash"_ustr, maFileSharing.maHashValue)
             };
             aSettingsProp.setProperty(PROP_ModifyPasswordInfo, aResult);
         }

@@ -90,7 +90,7 @@ static rtl::Reference<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const
     uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference< packages::XPackageEncryption > xPackageEncryption(
         xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            "com.sun.star.comp.oox.crypto.DRMDataSpace", aArguments, xComponentContext), uno::UNO_QUERY);
+            u"com.sun.star.comp.oox.crypto.DRMDataSpace"_ustr, aArguments, xComponentContext), uno::UNO_QUERY);
 
     if (!xPackageEncryption.is())
     {
@@ -109,7 +109,7 @@ static rtl::Reference<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const
             return aNewStorage;
         }
 
-        rtl::Reference<SotStorageStream> rContentStream = rStorage->OpenSotStream("\011DRMContent", StreamMode::READ | StreamMode::SHARE_DENYALL);
+        rtl::Reference<SotStorageStream> rContentStream = rStorage->OpenSotStream(u"\011DRMContent"_ustr, StreamMode::READ | StreamMode::SHARE_DENYALL);
         if (!rContentStream.is())
         {
             return aNewStorage;
@@ -132,7 +132,7 @@ static rtl::Reference<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const
         aNewStorage = new SotStorage(*rNewStorageStrm);
 
         // Set the media descriptor data
-        uno::Sequence<beans::NamedValue> aEncryptionData = xPackageEncryption->createEncryptionData("");
+        uno::Sequence<beans::NamedValue> aEncryptionData = xPackageEncryption->createEncryptionData(u""_ustr);
         rMedium.GetItemSet().Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, uno::Any(aEncryptionData)));
     }
     catch (const std::exception&)
@@ -182,7 +182,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument*
     if( xRootStrg.is() )
     {
         // Check if there is DRM encryption in storage
-        rtl::Reference<SotStorageStream> xDRMStrm = ScfTools::OpenStorageStreamRead(xRootStrg, "\011DRMContent");
+        rtl::Reference<SotStorageStream> xDRMStrm = ScfTools::OpenStorageStreamRead(xRootStrg, u"\011DRMContent"_ustr);
         if (xDRMStrm.is())
         {
             auto pDecryptedStorage = lcl_DRMDecrypt(rMedium, xRootStrg, aNewStorageStrm);
@@ -273,13 +273,13 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
     if (pEncryptionDataItem && (pEncryptionDataItem->GetValue() >>= aEncryptionData))
     {
         ::comphelper::SequenceAsHashMap aHashData(aEncryptionData);
-        OUString sCryptoType = aHashData.getUnpackedValueOrDefault("CryptoType", OUString());
+        OUString sCryptoType = aHashData.getUnpackedValueOrDefault(u"CryptoType"_ustr, OUString());
 
         if (sCryptoType.getLength())
         {
             uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
             uno::Sequence<uno::Any> aArguments{
-                uno::Any(beans::NamedValue("Binary", uno::Any(true))) };
+                uno::Any(beans::NamedValue(u"Binary"_ustr, uno::Any(true))) };
             xPackageEncryption.set(
                 xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                     "com.sun.star.comp.oox.crypto." + sCryptoType, aArguments, xComponentContext), uno::UNO_QUERY);

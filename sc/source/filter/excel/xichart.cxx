@@ -857,7 +857,7 @@ Reference< XDataSequence > XclImpChSourceLink::CreateDataSequence( const OUStrin
         {
             try
             {
-                OUString aString("\"");
+                OUString aString(u"\""_ustr);
                 xDataSeq = xDataProv->createDataSequenceByRangeRepresentation( aString + mxString->GetText() + aString );
                 // set sequence role
                 ScfPropertySet aSeqProp( xDataSeq );
@@ -1543,7 +1543,7 @@ void XclImpChDataFormat::Convert( ScfPropertySet& rPropSet, const XclChExtTypeIn
 
     // #i83151# only hair lines in 3D charts with filled data points
     if( rTypeInfo.mb3dChart && rTypeInfo.IsSeriesFrameFormat() && mxLineFmt && mxLineFmt->HasLine() )
-        rPropSet.SetProperty< sal_Int32 >( "BorderWidth", 0 );
+        rPropSet.SetProperty< sal_Int32 >( u"BorderWidth"_ustr, 0 );
 
     // other formatting
     if( mxMarkerFmt )

@@ -565,7 +565,7 @@ void XclExpBiff8Encrypter::Init( const Sequence< NamedValue >& rEncryptionData )
     // generate the salt here
     if (rtl_random_getBytes(nullptr, mpnSalt, 16) != rtl_Random_E_None)
     {
-        throw uno::RuntimeException("rtl_random_getBytes failed");
+        throw uno::RuntimeException(u"rtl_random_getBytes failed"_ustr);
     }
 
     memset( mpnSaltDigest, 0, sizeof( mpnSaltDigest ) );
@@ -1117,7 +1117,7 @@ bool XclExpXmlStream::exportDocument()
             css::uno::Reference<css::io::XInputStream> xVBAStream(
                     new utl::OInputStreamWrapper(aVbaStream));
             css::uno::Reference<css::io::XOutputStream> xVBAOutput =
-                openFragmentStream("xl/vbaProject.bin", "application/vnd.ms-office.vbaProject");
+                openFragmentStream(u"xl/vbaProject.bin"_ustr, u"application/vnd.ms-office.vbaProject"_ustr);
             comphelper::OStorageHelper::CopyInputToOutput(xVBAStream, xVBAOutput);
 
             addRelation(GetCurrentStream()->getOutputStream(), oox::getRelationship(Relationship::VBAPROJECT), u"vbaProject.bin");
@@ -1169,7 +1169,7 @@ bool XclExpXmlStream::exportDocument()
 
 OUString XclExpXmlStream::getImplementationName()
 {
-    return "TODO";
+    return u"TODO"_ustr;
 }
 
 void XclExpXmlStream::validateTabNames(std::vector<OUString>& aOriginalTabNames)

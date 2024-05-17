@@ -551,7 +551,7 @@ void XMLTableStyleContext::SetDefaults()
         rtl::Reference<ScModelObj> xMultiServiceFactory(GetScImport().GetScModel());
         if (xMultiServiceFactory.is())
         {
-            uno::Reference <beans::XPropertySet> xProperties(xMultiServiceFactory->createInstance("com.sun.star.sheet.Defaults"), uno::UNO_QUERY);
+            uno::Reference <beans::XPropertySet> xProperties(xMultiServiceFactory->createInstance(u"com.sun.star.sheet.Defaults"_ustr), uno::UNO_QUERY);
             if (xProperties.is())
                 FillPropertySet(xProperties);
         }
@@ -992,9 +992,9 @@ void ScMasterPageContext::ClearContent(const OUString& rContent)
         uno::Reference < sheet::XHeaderFooterContent > xHeaderFooterContent(xPropSet->getPropertyValue( rContent ), uno::UNO_QUERY);
         if (xHeaderFooterContent.is())
         {
-            xHeaderFooterContent->getLeftText()->setString("");
-            xHeaderFooterContent->getCenterText()->setString("");
-            xHeaderFooterContent->getRightText()->setString("");
+            xHeaderFooterContent->getLeftText()->setString(u""_ustr);
+            xHeaderFooterContent->getCenterText()->setString(u""_ustr);
+            xHeaderFooterContent->getRightText()->setString(u""_ustr);
             xPropSet->setPropertyValue( rContent, uno::Any(xHeaderFooterContent) );
         }
     }

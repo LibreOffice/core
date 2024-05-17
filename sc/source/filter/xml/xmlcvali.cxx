@@ -364,7 +364,7 @@ void SAL_CALL ScXMLContentValidationContext::endFastElement( sal_Int32 /*nElemen
     if (xEventContext.is())
     {
         uno::Sequence<beans::PropertyValue> aValues;
-        xEventContext->GetEventSequence( "OnError", aValues );
+        xEventContext->GetEventSequence( u"OnError"_ustr, aValues );
 
         auto pValue = std::find_if(std::cbegin(aValues), std::cend(aValues),
             [](const beans::PropertyValue& rValue) {

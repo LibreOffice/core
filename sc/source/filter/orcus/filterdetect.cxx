@@ -48,7 +48,7 @@ OrcusFormatDetect::OrcusFormatDetect()
 
 OUString OrcusFormatDetect::getImplementationName()
 {
-    return "com.sun.star.comp.sc.OrcusFilterDetect";
+    return u"com.sun.star.comp.sc.OrcusFilterDetect"_ustr;
 }
 
 sal_Bool OrcusFormatDetect::supportsService(const OUString& rServiceName)
@@ -58,7 +58,7 @@ sal_Bool OrcusFormatDetect::supportsService(const OUString& rServiceName)
 
 css::uno::Sequence<OUString> OrcusFormatDetect::getSupportedServiceNames()
 {
-    return {"com.sun.star.frame.ExtendedTypeDetection"};
+    return {u"com.sun.star.frame.ExtendedTypeDetection"_ustr};
 }
 
 OUString OrcusFormatDetect::detect(css::uno::Sequence<css::beans::PropertyValue>& rMediaDescSeq)
@@ -87,11 +87,11 @@ OUString OrcusFormatDetect::detect(css::uno::Sequence<css::beans::PropertyValue>
     switch (eFormat)
     {
         case orcus::format_t::gnumeric:
-            return "Gnumeric XML";
+            return u"Gnumeric XML"_ustr;
         case orcus::format_t::xls_xml:
-            return "calc_MS_Excel_2003_XML";
+            return u"calc_MS_Excel_2003_XML"_ustr;
         case orcus::format_t::parquet:
-            return "Apache Parquet";
+            return u"Apache Parquet"_ustr;
         default:
             ;
     }

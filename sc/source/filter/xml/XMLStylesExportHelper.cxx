@@ -393,12 +393,12 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
 
                         static constexpr OUString sScript(u"Script"_ustr);
                         uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
-                                { "EventType", uno::Any(bScriptURL ? sScript : OUString("StarBasic")) },
+                                { "EventType", uno::Any(bScriptURL ? sScript : u"StarBasic"_ustr) },
                                 { "Library", uno::Any(OUString()) },
-                                { bScriptURL ? sScript : OUString("MacroName"), uno::Any(rValidation.sErrorTitle) }
+                                { bScriptURL ? sScript : u"MacroName"_ustr, uno::Any(rValidation.sErrorTitle) }
                             }));
                         // 2) export the sequence
-                        rExport.GetEventExport().ExportSingleEvent( aSeq, "OnError");
+                        rExport.GetEventExport().ExportSingleEvent( aSeq, u"OnError"_ustr);
                     }
                 }
                 break;

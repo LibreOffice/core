@@ -383,21 +383,21 @@ private:
                 if (eSearchType == utl::SearchParam::SearchType::Regexp)
                     return GetXMLToken(XML_MATCH);
                 else
-                    return "=";
+                    return u"="_ustr;
             }
             case SC_GREATER:
-                return ">";
+                return u">"_ustr;
             case SC_GREATER_EQUAL:
-                return ">=";
+                return u">="_ustr;
             case SC_LESS:
-                return "<";
+                return u"<"_ustr;
             case SC_LESS_EQUAL:
-                return "<=";
+                return u"<="_ustr;
             case SC_NOT_EQUAL:
                 if (eSearchType == utl::SearchParam::SearchType::Regexp)
                     return GetXMLToken(XML_NOMATCH);
                 else
-                    return "!=";
+                    return u"!="_ustr;
             case SC_TOPPERC:
                 return GetXMLToken(XML_TOP_PERCENT);
             case SC_TOPVAL:
@@ -405,7 +405,7 @@ private:
             default:
                 ;
         }
-        return "=";
+        return u"="_ustr;
     }
 
     class WriteSetItem
@@ -489,7 +489,7 @@ private:
             // Store the 1st value for backward compatibility.
             const ScQueryEntry::Item& rItem = rItems.front();
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, OUString("="));
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, u"="_ustr);
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::number(rEntry.nField - nFieldStart));
             if (bCaseSens)
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);

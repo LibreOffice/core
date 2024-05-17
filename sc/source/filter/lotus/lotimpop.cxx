@@ -193,7 +193,7 @@ void ImportLotus::Errcell()
     aParam.setTextInput();
     rD.EnsureTable(aA.Tab());
     // coverity[tainted_data : FALSE] - ValidAddress has sanitized aA
-    rD.SetString(aA, "#ERR!", &aParam);
+    rD.SetString(aA, u"#ERR!"_ustr, &aParam);
 }
 
 void ImportLotus::Nacell()
@@ -212,7 +212,7 @@ void ImportLotus::Nacell()
     aParam.setTextInput();
     rD.EnsureTable(aA.Tab());
     // coverity[tainted_data : FALSE] - ValidAddress has sanitized aA
-    rD.SetString(aA, "#NA!", &aParam);
+    rD.SetString(aA, u"#NA!"_ustr, &aParam);
 }
 
 void ImportLotus::Labelcell()

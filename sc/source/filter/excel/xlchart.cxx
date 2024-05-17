@@ -1162,7 +1162,7 @@ namespace {
 uno::Reference<drawing::XShape> lclGetMainTitleShape(const uno::Reference<chart::XChartDocument> & rxChart1Doc)
 {
     ScfPropertySet aPropSet(rxChart1Doc);
-    if (rxChart1Doc.is() && aPropSet.GetBoolProperty("HasMainTitle"))
+    if (rxChart1Doc.is() && aPropSet.GetBoolProperty(u"HasMainTitle"_ustr))
         return rxChart1Doc->getTitle();
     return uno::Reference<drawing::XShape>();
 }
@@ -1171,7 +1171,7 @@ uno::Reference<drawing::XShape> lclGetXAxisTitleShape(const uno::Reference<chart
 {
     uno::Reference<chart::XAxisXSupplier> xAxisSupp(rxChart1Doc->getDiagram(), uno::UNO_QUERY);
     ScfPropertySet aPropSet(xAxisSupp);
-    if (xAxisSupp.is() && aPropSet.GetBoolProperty("HasXAxisTitle"))
+    if (xAxisSupp.is() && aPropSet.GetBoolProperty(u"HasXAxisTitle"_ustr))
         return xAxisSupp->getXAxisTitle();
     return uno::Reference<drawing::XShape>();
 }
@@ -1180,7 +1180,7 @@ uno::Reference<drawing::XShape> lclGetYAxisTitleShape(const uno::Reference<chart
 {
     uno::Reference<chart::XAxisYSupplier> xAxisSupp(rxChart1Doc->getDiagram(), uno::UNO_QUERY);
     ScfPropertySet aPropSet(xAxisSupp);
-    if (xAxisSupp.is() && aPropSet.GetBoolProperty("HasYAxisTitle"))
+    if (xAxisSupp.is() && aPropSet.GetBoolProperty(u"HasYAxisTitle"_ustr))
         return xAxisSupp->getYAxisTitle();
     return uno::Reference<drawing::XShape>();
 }
@@ -1189,7 +1189,7 @@ uno::Reference<drawing::XShape> lclGetZAxisTitleShape(const uno::Reference<chart
 {
     uno::Reference<chart::XAxisZSupplier> xAxisSupp(rxChart1Doc->getDiagram(), uno::UNO_QUERY);
     ScfPropertySet aPropSet(xAxisSupp);
-    if (xAxisSupp.is() && aPropSet.GetBoolProperty("HasZAxisTitle"))
+    if (xAxisSupp.is() && aPropSet.GetBoolProperty(u"HasZAxisTitle"_ustr))
         return xAxisSupp->getZAxisTitle();
     return uno::Reference<drawing::XShape>();
 }
@@ -1198,7 +1198,7 @@ uno::Reference<drawing::XShape> lclGetSecXAxisTitleShape(const uno::Reference<ch
 {
     uno::Reference<chart::XSecondAxisTitleSupplier> xAxisSupp(rxChart1Doc->getDiagram(), uno::UNO_QUERY);
     ScfPropertySet aPropSet(xAxisSupp);
-    if (xAxisSupp.is() && aPropSet.GetBoolProperty("HasSecondaryXAxisTitle"))
+    if (xAxisSupp.is() && aPropSet.GetBoolProperty(u"HasSecondaryXAxisTitle"_ustr))
         return xAxisSupp->getSecondXAxisTitle();
     return uno::Reference<drawing::XShape>();
 }
@@ -1207,7 +1207,7 @@ uno::Reference<drawing::XShape> lclGetSecYAxisTitleShape(const uno::Reference<ch
 {
     uno::Reference<chart::XSecondAxisTitleSupplier> xAxisSupp(rxChart1Doc->getDiagram(), uno::UNO_QUERY);
     ScfPropertySet aPropSet(xAxisSupp);
-    if (xAxisSupp.is() && aPropSet.GetBoolProperty("HasSecondaryYAxisTitle"))
+    if (xAxisSupp.is() && aPropSet.GetBoolProperty(u"HasSecondaryYAxisTitle"_ustr))
         return xAxisSupp->getSecondYAxisTitle();
     return uno::Reference<drawing::XShape>();
 }

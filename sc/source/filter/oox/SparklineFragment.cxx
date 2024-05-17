@@ -138,12 +138,12 @@ void addAttributesToSparklineAttributes(sc::SparklineAttributes& rSparklineAttri
 
     rSparklineAttributes.setLineWeight(rAttribs.getDouble(XML_lineWeight, 0.75));
 
-    OUString sType = rAttribs.getString(XML_type, "line");
+    OUString sType = rAttribs.getString(XML_type, u"line"_ustr);
     rSparklineAttributes.setType(parseSparklineType(sType));
 
     rSparklineAttributes.setDateAxis(rAttribs.getBool(XML_dateAxis, false));
 
-    OUString sDisplayEmptyCellsAs = rAttribs.getString(XML_displayEmptyCellsAs, "zero");
+    OUString sDisplayEmptyCellsAs = rAttribs.getString(XML_displayEmptyCellsAs, u"zero"_ustr);
     rSparklineAttributes.setDisplayEmptyCellsAs(parseDisplayEmptyCellsAs(sDisplayEmptyCellsAs));
 
     rSparklineAttributes.setMarkers(rAttribs.getBool(XML_markers, false));
@@ -155,10 +155,10 @@ void addAttributesToSparklineAttributes(sc::SparklineAttributes& rSparklineAttri
     rSparklineAttributes.setDisplayXAxis(rAttribs.getBool(XML_displayXAxis, false));
     rSparklineAttributes.setDisplayHidden(rAttribs.getBool(XML_displayHidden, false));
 
-    OUString sMinAxisType = rAttribs.getString(XML_minAxisType, "individual");
+    OUString sMinAxisType = rAttribs.getString(XML_minAxisType, u"individual"_ustr);
     rSparklineAttributes.setMinAxisType(parseAxisType(sMinAxisType));
 
-    OUString sMaxAxisType = rAttribs.getString(XML_maxAxisType, "individual");
+    OUString sMaxAxisType = rAttribs.getString(XML_maxAxisType, u"individual"_ustr);
     rSparklineAttributes.setMaxAxisType(parseAxisType(sMaxAxisType));
 
     rSparklineAttributes.setRightToLeft(rAttribs.getBool(XML_rightToLeft, false));

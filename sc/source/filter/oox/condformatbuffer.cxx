@@ -406,7 +406,7 @@ void IconSetRule::importCfvo( const AttributeList& rAttribs )
 
 void IconSetRule::importAttribs( const AttributeList& rAttribs )
 {
-    maIconSetType = rAttribs.getString( XML_iconSet, "3TrafficLights1" );
+    maIconSetType = rAttribs.getString( XML_iconSet, u"3TrafficLights1"_ustr );
     mxFormatData->mbShowValue = rAttribs.getBool( XML_showValue, true );
     mxFormatData->mbReverse = rAttribs.getBool( XML_reverse, false );
     mbCustom = rAttribs.getBool(XML_custom, false);
@@ -1516,7 +1516,7 @@ void ExtCfDataBarRule::importDataBar( const AttributeList& rAttribs )
 {
     mnRuleType = DATABAR;
     maModel.mbGradient = rAttribs.getBool( XML_gradient, true );
-    maModel.maAxisPosition = rAttribs.getString( XML_axisPosition, "automatic" );
+    maModel.maAxisPosition = rAttribs.getString( XML_axisPosition, u"automatic"_ustr );
 }
 
 void ExtCfDataBarRule::importPositiveFillColor( const AttributeList& rAttribs )

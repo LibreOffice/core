@@ -1865,7 +1865,7 @@ private:
 };
 
 NumberFormatFinalizer::NumberFormatFinalizer( const WorkbookHelper& rHelper ) :
-    maEnUsLocale( "en", "US", OUString() )
+    maEnUsLocale( u"en"_ustr, u"US"_ustr, OUString() )
 {
     try
     {
@@ -2050,7 +2050,7 @@ void NumberFormatsBuffer::insertBuiltinFormats()
             "' not supported (#i29949#)" ).getStr() );
     // start with default table, if no table has been found
     if( aMIt == aMEnd )
-        aMIt = aBuiltinMap.find( "*" );
+        aMIt = aBuiltinMap.find( u"*"_ustr );
     OSL_ENSURE( aMIt != aMEnd, "NumberFormatsBuffer::insertBuiltinFormats - default map not found" );
     // insert all tables into the vector
     for( ; aMIt != aMEnd; aMIt = aBuiltinMap.find( OUString::createFromAscii( aMIt->second->mpcParent ) ) )

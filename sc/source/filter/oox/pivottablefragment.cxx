@@ -184,7 +184,7 @@ ContextHandlerRef PivotTableFragment::onCreateContext( sal_Int32 nElement, const
                 case XLS_TOKEN(formats):
                     return this;
                 case XLS_TOKEN(pivotTableStyleInfo):
-                    mrPivotTable.putToInteropGrabBag("pivotTableStyleInfo", rAttribs);
+                    mrPivotTable.putToInteropGrabBag(u"pivotTableStyleInfo"_ustr, rAttribs);
                     break;
             }
         break;

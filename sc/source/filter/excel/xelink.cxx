@@ -1117,7 +1117,7 @@ sal_uInt16 XclExpExtNameBuffer::InsertDde(
             // create the leading 'StdDocumentName' EXTERNNAME record
             if( maNameList.IsEmpty() )
                 AppendNew( new XclExpExtNameDde(
-                    GetRoot(), "StdDocumentName", EXC_EXTN_EXPDDE_STDDOC ) );
+                    GetRoot(), u"StdDocumentName"_ustr, EXC_EXTN_EXPDDE_STDDOC ) );
 
             // try to find DDE result array, but create EXTERNNAME record without them too
             const ScMatrix* pScMatrix = GetDoc().GetDdeLinkResultMatrix( nPos );
@@ -1997,7 +1997,7 @@ bool XclExpSupbookBuffer::InsertEuroTool(
         sal_uInt16& rnSupbook, sal_uInt16& rnExtName, const OUString& rName )
 {
     XclExpSupbookRef xSupbook;
-    OUString aUrl( "\001\010EUROTOOL.XLA" );
+    OUString aUrl( u"\001\010EUROTOOL.XLA"_ustr );
     if( !GetSupbookUrl( xSupbook, rnSupbook, aUrl ) )
     {
         xSupbook = new XclExpSupbook( GetRoot(), aUrl, XclSupbookType::Eurotool );

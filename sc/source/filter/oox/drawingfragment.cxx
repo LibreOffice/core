@@ -82,9 +82,9 @@ void ShapeMacroAttacher::attachMacro( const OUString& rMacroUrl )
     {
         Reference< XEventsSupplier > xSupplier( mxShape, UNO_QUERY_THROW );
         Reference< XNameReplace > xEvents( xSupplier->getEvents(), UNO_SET_THROW );
-        Sequence aEventProps{ comphelper::makePropertyValue("EventType", OUString( "Script" )),
-                              comphelper::makePropertyValue("Script", rMacroUrl) };
-        xEvents->replaceByName( "OnClick", Any( aEventProps ) );
+        Sequence aEventProps{ comphelper::makePropertyValue(u"EventType"_ustr, u"Script"_ustr),
+                              comphelper::makePropertyValue(u"Script"_ustr, rMacroUrl) };
+        xEvents->replaceByName( u"OnClick"_ustr, Any( aEventProps ) );
     }
     catch( Exception& )
     {
@@ -489,19 +489,19 @@ OUString VmlDrawing::getShapeBaseName( const ::oox::vml::ShapeBase& rShape ) con
     {
         switch( pClientData->mnObjType )
         {
-            case XML_Button:    return "Button";
-            case XML_Checkbox:  return "Check Box";
-            case XML_Dialog:    return "Dialog Frame";
-            case XML_Drop:      return "Drop Down";
-            case XML_Edit:      return "Edit Box";
-            case XML_GBox:      return "Group Box";
-            case XML_Label:     return "Label";
-            case XML_List:      return "List Box";
-            case XML_Note:      return "Comment";
-            case XML_Pict:      return (pClientData->mbDde || getOleObjectInfo( rShape.getShapeId() )) ? OUString( "Object" ) : OUString( "Picture" );
-            case XML_Radio:     return "Option Button";
-            case XML_Scroll:    return "Scroll Bar";
-            case XML_Spin:      return "Spinner";
+            case XML_Button:    return u"Button"_ustr;
+            case XML_Checkbox:  return u"Check Box"_ustr;
+            case XML_Dialog:    return u"Dialog Frame"_ustr;
+            case XML_Drop:      return u"Drop Down"_ustr;
+            case XML_Edit:      return u"Edit Box"_ustr;
+            case XML_GBox:      return u"Group Box"_ustr;
+            case XML_Label:     return u"Label"_ustr;
+            case XML_List:      return u"List Box"_ustr;
+            case XML_Note:      return u"Comment"_ustr;
+            case XML_Pict:      return (pClientData->mbDde || getOleObjectInfo( rShape.getShapeId() )) ? u"Object"_ustr : u"Picture"_ustr;
+            case XML_Radio:     return u"Option Button"_ustr;
+            case XML_Scroll:    return u"Scroll Bar"_ustr;
+            case XML_Spin:      return u"Spinner"_ustr;
         }
     }
     return ::oox::vml::Drawing::getShapeBaseName( rShape );

@@ -328,8 +328,8 @@ void ExtConditionalFormattingContext::onEndElement()
                 for (size_t i = 0; i < maModels.size(); ++i)
                 {
                     ScAddress rPos = aRange.GetTopLeftCorner();
-                    ScCondFormatEntry* pEntry = new ScCondFormatEntry(maModels[i].eOperator, maModels[i].aFormula, "", rDoc,
-                                                                      rPos, maModels[i].aStyle, "", "",
+                    ScCondFormatEntry* pEntry = new ScCondFormatEntry(maModels[i].eOperator, maModels[i].aFormula, u""_ustr, rDoc,
+                                                                      rPos, maModels[i].aStyle, u""_ustr, u""_ustr,
                                                                       formula::FormulaGrammar::GRAM_OOXML ,
                                                                       formula::FormulaGrammar::GRAM_OOXML,
                                                                       ScFormatEntry::Type::ExtCondition );

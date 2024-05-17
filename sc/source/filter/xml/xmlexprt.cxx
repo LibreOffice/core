@@ -249,61 +249,61 @@ OUString lcl_GetFormattedString(ScDocument* pDoc, const ScRefCellValue& rCell, c
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ScXMLExport(context, "com.sun.star.comp.Calc.XMLExporter", SvXMLExportFlags::ALL));
+    return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLExporter"_ustr, SvXMLExportFlags::ALL));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLMetaExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ScXMLExport(context, "com.sun.star.comp.Calc.XMLMetaExporter", SvXMLExportFlags::META));
+    return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLMetaExporter"_ustr, SvXMLExportFlags::META));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLStylesExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ScXMLExport(context, "com.sun.star.comp.Calc.XMLStylesExporter", SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::FONTDECLS));
+    return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLStylesExporter"_ustr, SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::FONTDECLS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLContentExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ScXMLExport(context, "com.sun.star.comp.Calc.XMLContentExporter", SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS|SvXMLExportFlags::FONTDECLS));
+    return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLContentExporter"_ustr, SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS|SvXMLExportFlags::FONTDECLS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLSettingsExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ScXMLExport(context, "com.sun.star.comp.Calc.XMLSettingsExporter", SvXMLExportFlags::SETTINGS));
+    return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLSettingsExporter"_ustr, SvXMLExportFlags::SETTINGS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ScXMLExport(context, "com.sun.star.comp.Calc.XMLOasisExporter", SvXMLExportFlags::ALL|SvXMLExportFlags::OASIS));
+    return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLOasisExporter"_ustr, SvXMLExportFlags::ALL|SvXMLExportFlags::OASIS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisMetaExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ScXMLExport(context, "com.sun.star.comp.Calc.XMLOasisMetaExporter", SvXMLExportFlags::META|SvXMLExportFlags::OASIS));
+    return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLOasisMetaExporter"_ustr, SvXMLExportFlags::META|SvXMLExportFlags::OASIS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisStylesExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ScXMLExport(context, "com.sun.star.comp.Calc.XMLOasisStylesExporter", SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::OASIS));
+    return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLOasisStylesExporter"_ustr, SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::OASIS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisContentExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ScXMLExport(context, "com.sun.star.comp.Calc.XMLOasisContentExporter", SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS|SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::OASIS));
+    return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLOasisContentExporter"_ustr, SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS|SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::OASIS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ScXMLExport(context, "com.sun.star.comp.Calc.XMLOasisSettingsExporter", SvXMLExportFlags::SETTINGS|SvXMLExportFlags::OASIS));
+    return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLOasisSettingsExporter"_ustr, SvXMLExportFlags::SETTINGS|SvXMLExportFlags::OASIS));
 }
 
 namespace {
@@ -640,9 +640,9 @@ void ScXMLExport::ExportMeta_()
 
     uno::Sequence<beans::NamedValue> stats
     {
-        { "TableCount",  uno::Any(static_cast<sal_Int32>(nTableCount)) },
-        { "CellCount",   uno::Any(nCellCount) },
-        { "ObjectCount", uno::Any(nShapesCount) }
+        { u"TableCount"_ustr,  uno::Any(static_cast<sal_Int32>(nTableCount)) },
+        { u"CellCount"_ustr,   uno::Any(nCellCount) },
+        { u"ObjectCount"_ustr, uno::Any(nShapesCount) }
     };
 
     // update document statistics at the model
@@ -1983,7 +1983,7 @@ void ScXMLExport::ExportStyles_( bool bUsed )
         uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
         if (xMultiServiceFactory.is())
         {
-            uno::Reference <beans::XPropertySet> xProperties(xMultiServiceFactory->createInstance("com.sun.star.sheet.Defaults"), uno::UNO_QUERY);
+            uno::Reference <beans::XPropertySet> xProperties(xMultiServiceFactory->createInstance(u"com.sun.star.sheet.Defaults"_ustr), uno::UNO_QUERY);
             if (xProperties.is())
                 aStylesExp->exportDefaultStyle(xProperties, XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME, xCellStylesExportPropertySetMapper);
             GetShapeExport()->ExportGraphicDefaults();
@@ -1992,7 +1992,7 @@ void ScXMLExport::ExportStyles_( bool bUsed )
     }
     exportDataStyles();
 
-    aStylesExp->exportStyleFamily("CellStyles",
+    aStylesExp->exportStyleFamily(u"CellStyles"_ustr,
         XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME, xCellStylesExportPropertySetMapper, false, XmlStyleFamily::TABLE_CELL);
 
     SvXMLExport::ExportStyles_(bUsed);
@@ -2021,7 +2021,7 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
                                     const uno::Reference<sheet::XSpreadsheet>& xTable,
                                     sal_Int32 nTable, const OUString* pOldName)
 {
-    css::uno::Any aAny = xProperties->getPropertyValue("FormatID");
+    css::uno::Any aAny = xProperties->getPropertyValue(u"FormatID"_ustr);
     sal_uInt64 nKey = 0;
     aAny >>= nKey;
 
@@ -3053,7 +3053,7 @@ void writeContent(
                 const SvxURLField* pURLField = static_cast<const SvxURLField*>(pField);
                 const OUString& aURL = pURLField->GetURL();
                 rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, rExport.GetRelativeReference(aURL));
-                rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, "simple");
+                rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, u"simple"_ustr);
                 const OUString& aTargetFrame = pURLField->GetTargetFrame();
                 if (!aTargetFrame.isEmpty())
                     rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_TARGET_FRAME_NAME, aTargetFrame);
@@ -3080,7 +3080,7 @@ void writeContent(
                 if (nVal < 10)
                     aBuf.append('0');
                 aBuf.append(nVal);
-                rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_DATA_STYLE_NAME, "N2");
+                rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_DATA_STYLE_NAME, u"N2"_ustr);
                 rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_DATE_VALUE, aBuf.makeStringAndClear());
 
                 OUString aElemName = rExport.GetNamespaceMap().GetQNameByKey(
@@ -3234,7 +3234,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                         if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
                         {
                             //export calcext:value-type="error"
-                            AddAttribute(XML_NAMESPACE_CALC_EXT,XML_VALUE_TYPE, OUString("error"));
+                            AddAttribute(XML_NAMESPACE_CALC_EXT,XML_VALUE_TYPE, u"error"_ustr);
                         }
                     }
                     else if (pFormulaCell->IsValue())
@@ -3398,12 +3398,12 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
     if (xShapeProps.is())
     {
         sal_Int32 nZOrder = 0;
-        if (xShapeProps->getPropertyValue("ZOrder") >>= nZOrder)
+        if (xShapeProps->getPropertyValue(u"ZOrder"_ustr) >>= nZOrder)
         {
             AddAttribute(XML_NAMESPACE_DRAW, XML_ZINDEX, OUString::number(nZOrder));
         }
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xShapeProps->getPropertySetInfo();
-        OUString sPropCLSID ("CLSID");
+        OUString sPropCLSID (u"CLSID"_ustr);
         if( xPropSetInfo->hasPropertyByName( sPropCLSID ) )
         {
             OUString sCLSID;
@@ -3416,7 +3416,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                     if ( pDoc )
                     {
                         OUString aChartName;
-                        xShapeProps->getPropertyValue( "PersistName" ) >>= aChartName;
+                        xShapeProps->getPropertyValue( u"PersistName"_ustr ) >>= aChartName;
                         ScChartListenerCollection* pCollection = pDoc->GetChartListenerCollection();
                         if (pCollection)
                         {
@@ -3443,7 +3443,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                     if ( sRanges.isEmpty() )
                     {
                         uno::Reference< frame::XModel > xChartModel;
-                        if( ( xShapeProps->getPropertyValue( "Model" ) >>= xChartModel ) &&
+                        if( ( xShapeProps->getPropertyValue( u"Model"_ustr ) >>= xChartModel ) &&
                             xChartModel.is())
                         {
                             uno::Reference< chart2::XChartDocument > xChartDoc( xChartModel, uno::UNO_QUERY );
@@ -3675,7 +3675,7 @@ void ScXMLExport::WriteTableShapes()
                 // GetSnapRect() from associated SdrObject.
                 uno::Reference<beans::XPropertySet> xShapeProp(rxShape, uno::UNO_QUERY);
                 awt::Rectangle aFrameRect;
-                if (xShapeProp.is() && (xShapeProp->getPropertyValue("FrameRect") >>= aFrameRect))
+                if (xShapeProp.is() && (xShapeProp->getPropertyValue(u"FrameRect"_ustr) >>= aFrameRect))
                 {
                     // file format uses shape in LTR mode. newLeft = - oldRight = - (oldLeft + width).
                     // newTranslate = oldTranslate - refPoint, oldTranslate from transformation matrix,
@@ -3749,7 +3749,7 @@ void ScXMLExport::exportAnnotationMeta( const uno::Reference < drawing::XShape >
             : sAuthor );
     }
 
-    const OUString& aDate(bRemovePersonalInfo ? OUString("1970-01-01") : pNote->GetDate()); // Epoch time
+    const OUString& aDate(bRemovePersonalInfo ? u"1970-01-01"_ustr : pNote->GetDate()); // Epoch time
     if (pDoc)
     {
         SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
@@ -4611,23 +4611,23 @@ OUString getCondFormatEntryType(const ScColorScaleEntry& rEntry, bool bFirst = t
     switch(rEntry.GetType())
     {
         case COLORSCALE_MIN:
-            return "minimum";
+            return u"minimum"_ustr;
         case COLORSCALE_MAX:
-            return "maximum";
+            return u"maximum"_ustr;
         case COLORSCALE_PERCENT:
-            return "percent";
+            return u"percent"_ustr;
         case COLORSCALE_PERCENTILE:
-            return "percentile";
+            return u"percentile"_ustr;
         case COLORSCALE_FORMULA:
-            return "formula";
+            return u"formula"_ustr;
         case COLORSCALE_VALUE:
-            return "number";
+            return u"number"_ustr;
         case COLORSCALE_AUTO:
             // only important for data bars
             if(bFirst)
-                return "auto-minimum";
+                return u"auto-minimum"_ustr;
             else
-                return "auto-maximum";
+                return u"auto-maximum"_ustr;
     }
     return OUString();
 }
@@ -4637,31 +4637,31 @@ OUString getDateStringForType(condformat::ScCondFormatDateType eType)
     switch(eType)
     {
         case condformat::TODAY:
-            return "today";
+            return u"today"_ustr;
         case condformat::YESTERDAY:
-            return "yesterday";
+            return u"yesterday"_ustr;
         case condformat::TOMORROW:
-            return "tomorrow";
+            return u"tomorrow"_ustr;
         case condformat::LAST7DAYS:
-            return "last-7-days";
+            return u"last-7-days"_ustr;
         case condformat::THISWEEK:
-            return "this-week";
+            return u"this-week"_ustr;
         case condformat::LASTWEEK:
-            return "last-week";
+            return u"last-week"_ustr;
         case condformat::NEXTWEEK:
-            return "next-week";
+            return u"next-week"_ustr;
         case condformat::THISMONTH:
-            return "this-month";
+            return u"this-month"_ustr;
         case condformat::LASTMONTH:
-            return "last-month";
+            return u"last-month"_ustr;
         case condformat::NEXTMONTH:
-            return "next-month";
+            return u"next-month"_ustr;
         case condformat::THISYEAR:
-            return "this-year";
+            return u"this-year"_ustr;
         case condformat::LASTYEAR:
-            return "last-year";
+            return u"last-year"_ustr;
         case condformat::NEXTYEAR:
-            return "next-year";
+            return u"next-year"_ustr;
     }
 
     return OUString();
@@ -4868,11 +4868,11 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                 {
                     if(pFormatData->meAxisPosition == databar::NONE)
                     {
-                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_AXIS_POSITION, OUString("none"));
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_AXIS_POSITION, u"none"_ustr);
                     }
                     else
                     {
-                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_AXIS_POSITION, OUString("middle"));
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_AXIS_POSITION, u"middle"_ustr);
                     }
                 }
 
@@ -5275,7 +5275,7 @@ void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
     if (!xMultiServiceFactory.is())
         return;
 
-    uno::Reference <beans::XPropertySet> xProperties(xMultiServiceFactory->createInstance("com.sun.star.comp.SpreadsheetSettings"), uno::UNO_QUERY);
+    uno::Reference <beans::XPropertySet> xProperties(xMultiServiceFactory->createInstance(u"com.sun.star.comp.SpreadsheetSettings"_ustr), uno::UNO_QUERY);
     if (xProperties.is())
         SvXMLUnitConverter::convertPropertySet(rProps, xProperties);
 

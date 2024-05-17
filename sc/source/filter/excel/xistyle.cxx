@@ -139,7 +139,7 @@ XclImpPalette::ExportPalette()
     if ( pModel )
     {
         uno::Reference< container::XIndexAccess > xIndex( new PaletteIndex( std::move(aColors) ) );
-        pModel->setPropertyValue( "ColorPalette", uno::Any( xIndex ) );
+        pModel->setPropertyValue( u"ColorPalette"_ustr, uno::Any( xIndex ) );
     }
 
 }

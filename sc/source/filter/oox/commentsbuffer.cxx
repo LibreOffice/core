@@ -204,7 +204,7 @@ void Comment::finalizeImport()
         // Add shape formatting properties (autoFill, colHidden and rowHidden are dropped)
         // vvv TODO vvv TextFitToSize should be a drawing::TextFitToSizeType not bool
         xGenerator->maPropertyNames =
-            css::uno::Sequence<OUString>{ "TextFitToSize", "MoveProtect", "TextHorizontalAdjust", "TextVerticalAdjust" };
+            css::uno::Sequence<OUString>{ u"TextFitToSize"_ustr, u"MoveProtect"_ustr, u"TextHorizontalAdjust"_ustr, u"TextVerticalAdjust"_ustr };
         xGenerator->maPropertyValues =
             css::uno::Sequence<css::uno::Any>{ Any(maModel.mbAutoScale), Any(maModel.mbLocked),
                                                Any(lcl_ToHorizAlign( maModel.mnTHA )), Any(lcl_ToVertAlign( maModel.mnTVA )) };

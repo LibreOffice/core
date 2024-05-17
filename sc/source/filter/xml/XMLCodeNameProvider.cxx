@@ -152,7 +152,7 @@ sal_Bool SAL_CALL XMLCodeNameProvider::hasElements()
 void XMLCodeNameProvider::set( const uno::Reference< container::XNameAccess>& xNameAccess, ScDocument *pDoc )
 {
     uno::Any aAny;
-    OUString sDocName("*doc*");
+    OUString sDocName(u"*doc*"_ustr);
     OUString sCodeName;
     if( xNameAccess->hasByName( sDocName ) )
     {

@@ -360,7 +360,7 @@ ErrCode ScHTMLLayoutParser::Read( SvStream& rStream, const OUString& rBaseURL )
                 OUString::createFromAscii( pCharSet );
 
             xValues = new SvKeyValueIterator;
-            xValues->Append( SvKeyValue( OOO_STRING_SVTOOLS_HTML_META_content_type, aContentType ) );
+            xValues->Append( SvKeyValue( u"" OOO_STRING_SVTOOLS_HTML_META_content_type ""_ustr, aContentType ) );
             pAttributes = xValues.get();
         }
     }
@@ -2272,7 +2272,7 @@ void ScHTMLTable::DataOn( const HtmlImportInfo& rInfo )
                     // any).
                     OUString aClass = rOption.GetString();
                     const ScHTMLStyles& rStyles = mpParser->GetStyles();
-                    const OUString& rVal = rStyles.getPropertyValue("td", aClass, "mso-number-format");
+                    const OUString& rVal = rStyles.getPropertyValue(u"td"_ustr, aClass, u"mso-number-format"_ustr);
                     if (!rVal.isEmpty())
                     {
                         OUString aNumFmt = decodeNumberFormat(rVal);
@@ -2983,7 +2983,7 @@ ErrCode ScHTMLQueryParser::Read( SvStream& rStrm, const OUString& rBaseURL  )
                 OUString::createFromAscii( pCharSet );
 
             xValues = new SvKeyValueIterator;
-            xValues->Append( SvKeyValue( OOO_STRING_SVTOOLS_HTML_META_content_type, aContentType ) );
+            xValues->Append( SvKeyValue( u"" OOO_STRING_SVTOOLS_HTML_META_content_type ""_ustr, aContentType ) );
             pAttributes = xValues.get();
         }
     }

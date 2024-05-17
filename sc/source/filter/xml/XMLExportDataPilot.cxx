@@ -72,27 +72,27 @@ OUString ScXMLExportDataPilot::getDPOperatorXML(
             if (eSearchType == utl::SearchParam::SearchType::Regexp)
                 return GetXMLToken(XML_MATCH);
             else
-                return "=";
+                return u"="_ustr;
         }
         case SC_NOT_EQUAL :
         {
             if (eSearchType == utl::SearchParam::SearchType::Regexp)
                 return GetXMLToken(XML_NOMATCH);
             else
-                return "!=";
+                return u"!="_ustr;
         }
         case SC_BOTPERC :
             return GetXMLToken(XML_BOTTOM_PERCENT);
         case SC_BOTVAL :
             return GetXMLToken(XML_BOTTOM_VALUES);
         case SC_GREATER :
-            return ">";
+            return u">"_ustr;
         case SC_GREATER_EQUAL :
-            return ">=";
+            return u">="_ustr;
         case SC_LESS :
-            return "<";
+            return u"<"_ustr;
         case SC_LESS_EQUAL :
-            return "<=";
+            return u"<="_ustr;
         case SC_TOPPERC :
             return GetXMLToken(XML_TOP_PERCENT);
         case SC_TOPVAL :
@@ -100,7 +100,7 @@ OUString ScXMLExportDataPilot::getDPOperatorXML(
         default:
             OSL_FAIL("This FilterOperator is not supported.");
     }
-    return "=";
+    return u"="_ustr;
 }
 
 void ScXMLExportDataPilot::WriteDPCondition(const ScQueryEntry& aQueryEntry, bool bIsCaseSensitive,
@@ -698,7 +698,7 @@ void ScXMLExportDataPilot::WriteDimension(const ScDPSaveDimension* pDim, const S
     {
         if (rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
         {
-            rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_IGNORE_SELECTED_PAGE, "true");
+            rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_IGNORE_SELECTED_PAGE, u"true"_ustr);
         }
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SELECTED_PAGE, pDim->GetCurrentPage());
     }

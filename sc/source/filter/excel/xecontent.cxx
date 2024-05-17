@@ -211,7 +211,7 @@ void XclExpSstImpl::SaveXml( XclExpXmlStream& rStrm )
         return;
 
     sax_fastparser::FSHelperPtr pSst = rStrm.CreateOutputStream(
-            "xl/sharedStrings.xml",
+            u"xl/sharedStrings.xml"_ustr,
             u"sharedStrings.xml",
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml",
@@ -1043,7 +1043,7 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
         || eOperation == ScConditionMode::BottomPercent;
     bool bPercent = eOperation == ScConditionMode::TopPercent ||
         eOperation == ScConditionMode::BottomPercent;
-    OUString aRank("0");
+    OUString aRank(u"0"_ustr);
     if(IsTopBottomRule(eOperation))
     {
         // position and formula grammar are not important

@@ -633,7 +633,7 @@ void ScHTMLExport::WriteBody()
                         // Save graphic as (JPG) file
                         aGrfNm = aStreamPath;
                         ErrCode nErr = XOutBitmap::WriteGraphic( *pGrf, aGrfNm,
-                            "JPG", XOutFlags::UseNativeIfPossible );
+                            u"JPG"_ustr, XOutFlags::UseNativeIfPossible );
                         if( !nErr ) // Contains errors, as we have nothing to output
                         {
                             aGrfNm = URIHelper::SmartRel2Abs(

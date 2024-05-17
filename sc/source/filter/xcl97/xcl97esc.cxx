@@ -232,7 +232,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
             Any aAny;
             try
             {
-                aAny = xPropSet->getPropertyValue("ControlTypeinMSO");
+                aAny = xPropSet->getPropertyValue(u"ControlTypeinMSO"_ustr);
                 aAny >>= nMsCtlType;
             }
             catch(const Exception&)
@@ -314,7 +314,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
             Any aAny;
             try
             {
-                aAny = xPropSet->getPropertyValue("ObjIDinMSO");
+                aAny = xPropSet->getPropertyValue(u"ObjIDinMSO"_ustr);
             }
             catch(const Exception&)
             {

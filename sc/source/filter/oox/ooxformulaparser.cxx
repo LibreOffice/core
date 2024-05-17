@@ -109,7 +109,7 @@ OOXMLFormulaParser::~OOXMLFormulaParser()
 // com.sun.star.lang.XServiceInfo interface -----------------------------------
 OUString SAL_CALL OOXMLFormulaParser::getImplementationName()
 {
-    return "com.sun.star.comp.oox.xls.FormulaParser";
+    return u"com.sun.star.comp.oox.xls.FormulaParser"_ustr;
 }
 
 sal_Bool SAL_CALL OOXMLFormulaParser::supportsService( const OUString& rService )
@@ -119,7 +119,7 @@ sal_Bool SAL_CALL OOXMLFormulaParser::supportsService( const OUString& rService 
 
 Sequence< OUString > SAL_CALL OOXMLFormulaParser::getSupportedServiceNames()
 {
-    return { "com.sun.star.sheet.FilterFormulaParser" };
+    return { u"com.sun.star.sheet.FilterFormulaParser"_ustr };
 }
 
 // com.sun.star.lang.XInitialization interface --------------------------------
@@ -136,7 +136,7 @@ void SAL_CALL OOXMLFormulaParser::initialize( const Sequence< Any >& rArgs )
 
 OUString SAL_CALL OOXMLFormulaParser::getSupportedNamespace()
 {
-    return "http://schemas.microsoft.com/office/excel/formula";
+    return u"http://schemas.microsoft.com/office/excel/formula"_ustr;
 }
 
 // com.sun.star.sheet.XFormulaParser interface --------------------------------

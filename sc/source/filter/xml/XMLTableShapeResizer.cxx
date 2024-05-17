@@ -116,7 +116,7 @@ void ScMyOLEFixer::FixupOLEs()
     if (aShapes.empty() || !rImport.GetModel().is())
         return;
 
-    OUString sPersistName ("PersistName");
+    OUString sPersistName (u"PersistName"_ustr);
     ScDocument* pDoc(rImport.GetDocument());
 
     ScXMLImport::MutexGuard aGuard(rImport);

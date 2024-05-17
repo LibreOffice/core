@@ -435,7 +435,7 @@ WorkbookHelper::RangeDataRet WorkbookGlobals::createLocalNamedRangeObject(
         ScDocument& rDoc =  getScDocument();
         ScRangeName* pNames = rDoc.GetRangeName( nTab );
         if(!pNames)
-            throw RuntimeException("invalid sheet index used");
+            throw RuntimeException(u"invalid sheet index used"_ustr);
         // find an unused name
         orName = findUnusedName( pNames, orName );
         // create the named range
@@ -553,7 +553,7 @@ void WorkbookGlobals::initialize()
         mpDoc = &mpDocShell->GetDocument();
 
     if (!mpDoc)
-        throw RuntimeException("Workbookhelper::getScDocument(): Failed to access ScDocument from model");
+        throw RuntimeException(u"Workbookhelper::getScDocument(): Failed to access ScDocument from model"_ustr);
 
     Reference< XDocumentProperties > xDocProps = mxDoc->getDocumentProperties();
     const OUString aGenerator( xDocProps->getGenerator());
@@ -739,7 +739,7 @@ void WorkbookHelper::finalizeWorkbookImport()
         number 1). Otherwise hidden sheets (e.g. for scenarios) which have
         'Default' page style will break automatic page numbering for following
         sheets. Automatic numbering is set by passing the value 0. */
-    PropertySet aDefPageStyle( getStyleObject( "Default", true ) );
+    PropertySet aDefPageStyle( getStyleObject( u"Default"_ustr, true ) );
     aDefPageStyle.setProperty< sal_Int16 >( PROP_FirstPageNumber, 0 );
 
     // Has any string ref syntax been imported?

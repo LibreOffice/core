@@ -57,7 +57,7 @@ void SparklineGroupsExport::insertComplexColor(model::ComplexColor const& rCompl
 void SparklineGroupsExport::insertBool(bool bValue, XMLTokenEnum eToken)
 {
     if (bValue)
-        m_rExport.AddAttribute(XML_NAMESPACE_CALC_EXT, eToken, "true");
+        m_rExport.AddAttribute(XML_NAMESPACE_CALC_EXT, eToken, u"true"_ustr);
 }
 
 void SparklineGroupsExport::addSparklineAttributes(Sparkline const& rSparkline)

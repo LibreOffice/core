@@ -153,7 +153,7 @@ ConvErr ExcelToSc8::Convert( std::unique_ptr<ScTokenArray>& rpTokArray, XclImpSt
 
     if( nFormulaLen == 0 )
     {
-        aPool.Store( "-/-" );
+        aPool.Store( u"-/-"_ustr );
         aPool >> aStack;
         rpTokArray = aPool.GetTokenArray( GetDocImport().getDoc(), aStack.Get());
         return ConvErr::OK;
@@ -651,7 +651,7 @@ ConvErr ExcelToSc8::Convert( std::unique_ptr<ScTokenArray>& rpTokArray, XclImpSt
             case 0x78:
             case 0x38: // Command-Equivalent Function           [333    ]
             {
-                OUString aString = "COMM_EQU_FUNC";
+                OUString aString = u"COMM_EQU_FUNC"_ustr;
                 sal_uInt8 nByte = aIn.ReaduInt8();
                 aString += OUString::number( nByte );
                 nByte = aIn.ReaduInt8();
@@ -1300,7 +1300,7 @@ void ExcelToSc8::ConvertExternName( std::unique_ptr<ScTokenArray>& rpArray, XclI
 
     if (nFormulaLen == 0)
     {
-        aPool.Store("-/-");
+        aPool.Store(u"-/-"_ustr);
         aPool >> aStack;
         rpArray = aPool.GetTokenArray( GetDocImport().getDoc(), aStack.Get());
         return;

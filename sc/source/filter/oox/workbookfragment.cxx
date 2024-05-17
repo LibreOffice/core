@@ -550,8 +550,8 @@ private:
     std::unique_ptr<weld::CheckButton> m_xWarningOnBox;
 public:
     MessageWithCheck(weld::Window *pParent, const OUString& rUIFile, const OUString& rDialogId)
-        : MessageDialogController(pParent, rUIFile, rDialogId, "ask")
-        , m_xWarningOnBox(m_xBuilder->weld_check_button("ask"))
+        : MessageDialogController(pParent, rUIFile, rDialogId, u"ask"_ustr)
+        , m_xWarningOnBox(m_xBuilder->weld_check_button(u"ask"_ustr))
     {
     }
     bool get_active() const { return m_xWarningOnBox->get_active(); }
@@ -573,7 +573,7 @@ void WorkbookFragment::recalcFormulaCells()
         if (rDoc.IsUserInteractionEnabled())
         {
             // Ask the user if full re-calculation is desired.
-            MessageWithCheck aQueryBox(ScDocShell::GetActiveDialogParent(), "modules/scalc/ui/recalcquerydialog.ui", "RecalcQueryDialog");
+            MessageWithCheck aQueryBox(ScDocShell::GetActiveDialogParent(), u"modules/scalc/ui/recalcquerydialog.ui"_ustr, u"RecalcQueryDialog"_ustr);
             aQueryBox.set_primary_text(ScResId(STR_QUERY_FORMULA_RECALC_ONLOAD_XLS));
             aQueryBox.set_default_response(RET_YES);
 

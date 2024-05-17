@@ -198,7 +198,7 @@ sal_Bool SAL_CALL ExcelFilter::filter( const css::uno::Sequence< css::beans::Pro
 
 OUString ExcelFilter::getImplementationName()
 {
-    return "com.sun.star.comp.oox.xls.ExcelFilter";
+    return u"com.sun.star.comp.oox.xls.ExcelFilter"_ustr;
 }
 
 } // namespace oox::xls

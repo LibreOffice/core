@@ -91,7 +91,7 @@ ErrCode ExportBiff5::Write()
         VbaExport aExport(pDocShell->GetModel());
         if (aExport.containsVBAProject())
         {
-            rtl::Reference<SotStorage> xVBARoot = xRootStrg->OpenSotStorage("_VBA_PROJECT_CUR");
+            rtl::Reference<SotStorage> xVBARoot = xRootStrg->OpenSotStorage(u"_VBA_PROJECT_CUR"_ustr);
             aExport.exportVBA( xVBARoot.get() );
         }
     }

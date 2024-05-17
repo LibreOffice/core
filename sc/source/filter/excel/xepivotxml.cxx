@@ -1187,7 +1187,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     savePivotTableFormats(rStrm, rDPObj);
 
     // Now add style info (use grab bag, or just a set which is default on Excel 2007 through 2016)
-    if (const auto [bHas, aVal] = rDPObj.GetInteropGrabBagValue("pivotTableStyleInfo"); bHas)
+    if (const auto [bHas, aVal] = rDPObj.GetInteropGrabBagValue(u"pivotTableStyleInfo"_ustr); bHas)
         WriteGrabBagItemToStream(rStrm, XML_pivotTableStyleInfo, aVal);
     else
         pPivotStrm->singleElement(XML_pivotTableStyleInfo, XML_name, "PivotStyleLight16",

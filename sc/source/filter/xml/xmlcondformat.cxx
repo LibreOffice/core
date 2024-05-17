@@ -260,7 +260,7 @@ void SAL_CALL ScXMLConditionalFormatContext::endFastElement( sal_Int32 /*nElemen
             aSrcPos.Parse( aSrcString, *pDoc );
         ScCompiler aComp( *pDoc, aSrcPos );
         aComp.SetGrammar( formula::FormulaGrammar::GRAM_ODFF );
-        pTokens = aComp.CompileString( pCondFormatEntry->GetExpression(aSrcPos, 0), "" );
+        pTokens = aComp.CompileString( pCondFormatEntry->GetExpression(aSrcPos, 0), u""_ustr );
         if (HasRelRefIgnoringSheet0Relative( pDoc, pTokens.get() ))
         {
             // In general not eligible, but some might be. We handle one very special case: When the

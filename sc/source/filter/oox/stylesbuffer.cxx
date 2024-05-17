@@ -521,7 +521,7 @@ ApiScriptFontName::ApiScriptFontName() :
 
 ApiFontData::ApiFontData() :
     maDesc(
-        "Calibri",
+        u"Calibri"_ustr,
         220,                                            // height 11 points
         0,
         OUString(),

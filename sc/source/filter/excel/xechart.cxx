@@ -3293,7 +3293,7 @@ static void lcl_getChartSubTitle(const Reference<XChartDocument>& xChartDoc,
         return;
 
     OUString aTitle;
-    Any any = xProp->getPropertyValue("String");
+    Any any = xProp->getPropertyValue(u"String"_ustr);
     if (any >>= aTitle)
         rSubTitle = aTitle;
 }

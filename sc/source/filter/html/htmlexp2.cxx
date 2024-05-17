@@ -180,7 +180,7 @@ void ScHTMLExport::WriteImage( OUString& rLinkName, const Graphic& rGrf,
             OUString aGrfNm( aStreamPath );
             nXOutFlags |= XOutFlags::UseNativeIfPossible;
             ErrCode nErr = XOutBitmap::WriteGraphic( rGrf, aGrfNm,
-                "PNG", nXOutFlags );
+                u"PNG"_ustr, nXOutFlags );
 
             // If it worked, create a URL for the IMG tag
             if( !nErr )

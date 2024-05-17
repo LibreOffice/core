@@ -121,9 +121,9 @@ Calc_XMLOasisImporter_get_implementation(
     return cppu::acquire(
         new ScXMLImport(
             context,
-            "com.sun.star.comp.Calc.XMLOasisImporter",
+            u"com.sun.star.comp.Calc.XMLOasisImporter"_ustr,
             SvXMLImportFlags::ALL,
-            { "com.sun.star.comp.Calc.XMLOasisImporter" } ));
+            { u"com.sun.star.comp.Calc.XMLOasisImporter"_ustr } ));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
@@ -133,9 +133,9 @@ Calc_XMLOasisMetaImporter_get_implementation(
     return cppu::acquire(
         new ScXMLImport(
             context,
-            "com.sun.star.comp.Calc.XMLOasisMetaImporter",
+            u"com.sun.star.comp.Calc.XMLOasisMetaImporter"_ustr,
             SvXMLImportFlags::META,
-            { "com.sun.star.comp.Calc.XMLOasisMetaImporter" }  ));
+            { u"com.sun.star.comp.Calc.XMLOasisMetaImporter"_ustr }  ));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
@@ -145,9 +145,9 @@ Calc_XMLOasisStylesImporter_get_implementation(
     return cppu::acquire(
         new ScXMLImport(
             context,
-            "com.sun.star.comp.Calc.XMLOasisStylesImporter",
+            u"com.sun.star.comp.Calc.XMLOasisStylesImporter"_ustr,
             SvXMLImportFlags::STYLES|SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::MASTERSTYLES|SvXMLImportFlags::FONTDECLS,
-            { "com.sun.star.comp.Calc.XMLOasisStylesImporter" } ));
+            { u"com.sun.star.comp.Calc.XMLOasisStylesImporter"_ustr } ));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
@@ -156,9 +156,9 @@ Calc_XMLOasisContentImporter_get_implementation(
 {
     return cppu::acquire(new ScXMLImport(
         context,
-        "com.sun.star.comp.Calc.XMLOasisContentImporter",
+        u"com.sun.star.comp.Calc.XMLOasisContentImporter"_ustr,
         SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::CONTENT|SvXMLImportFlags::SCRIPTS|SvXMLImportFlags::FONTDECLS,
-        uno::Sequence< OUString > { "com.sun.star.comp.Calc.XMLOasisContentImporter" }));
+        uno::Sequence< OUString > { u"com.sun.star.comp.Calc.XMLOasisContentImporter"_ustr }));
 }
 
 
@@ -169,9 +169,9 @@ Calc_XMLOasisSettingsImporter_get_implementation(
     return cppu::acquire(
         new ScXMLImport(
             context,
-            "com.sun.star.comp.Calc.XMLOasisSettingsImporter",
+            u"com.sun.star.comp.Calc.XMLOasisSettingsImporter"_ustr,
             SvXMLImportFlags::SETTINGS,
-            { "com.sun.star.comp.Calc.XMLOasisSettingsImporter" } ));
+            { u"com.sun.star.comp.Calc.XMLOasisSettingsImporter"_ustr } ));
 }
 
 namespace {
@@ -784,7 +784,7 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
         }
     }
     aFilteredProps.realloc(nFilteredPropsLen);
-    uno::Reference <uno::XInterface> xInterface = xMultiServiceFactory->createInstance("com.sun.star.comp.SpreadsheetSettings");
+    uno::Reference <uno::XInterface> xInterface = xMultiServiceFactory->createInstance(u"com.sun.star.comp.SpreadsheetSettings"_ustr);
     uno::Reference <beans::XPropertySet> xProperties(xInterface, uno::UNO_QUERY);
     if (xProperties.is())
         SvXMLUnitConverter::convertPropertySet(xProperties, aFilteredProps);
@@ -991,7 +991,7 @@ void ScXMLImport::SetStyleToRanges()
                 sal_Int32 nNumberFormat(pStyle->GetNumberFormat());
                 SetType(xProperties, nNumberFormat, nPrevCellType, sPrevCurrency);
 
-                css::uno::Any aAny = xProperties->getPropertyValue("FormatID");
+                css::uno::Any aAny = xProperties->getPropertyValue(u"FormatID"_ustr);
                 sal_uInt64 nKey = 0;
                 if ((aAny >>= nKey) && nKey)
                 {
@@ -1029,7 +1029,7 @@ void ScXMLImport::SetStyleToRanges()
     {
         rtl::Reference<ScModelObj> xMultiServiceFactory(GetScModel());
         mxSheetCellRanges = &dynamic_cast<ScCellRangesObj&>(
-            *xMultiServiceFactory->createInstance("com.sun.star.sheet.SheetCellRanges"));
+            *xMultiServiceFactory->createInstance(u"com.sun.star.sheet.SheetCellRanges"_ustr));
     }
     OSL_ENSURE(mxSheetCellRanges.is(), "didn't get SheetCellRanges");
 }
@@ -1071,7 +1071,7 @@ void ScXMLImport::SetStyleToRanges(const ScRangeList& rRanges, const OUString* p
     if (!mxSheetCellRanges.is() && GetModel().is())
     {
         rtl::Reference<ScModelObj> xMultiServiceFactory(GetScModel());
-        mxSheetCellRanges = &dynamic_cast<ScCellRangesObj&>(*xMultiServiceFactory->createInstance("com.sun.star.sheet.SheetCellRanges"));
+        mxSheetCellRanges = &dynamic_cast<ScCellRangesObj&>(*xMultiServiceFactory->createInstance(u"com.sun.star.sheet.SheetCellRanges"_ustr));
         OSL_ENSURE(mxSheetCellRanges.is(), "didn't get SheetCellRanges");
     }
     mxSheetCellRanges->SetNewRanges(rRanges);
@@ -1681,17 +1681,17 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODS(SvStream &rStream)
 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
     uno::Reference<io::XInputStream> xStream(new ::utl::OSeekableInputStreamWrapper(rStream));
-    uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance("com.sun.star.comp.Writer.XmlFilterAdaptor"), uno::UNO_SET_THROW);
+    uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance(u"com.sun.star.comp.Writer.XmlFilterAdaptor"_ustr), uno::UNO_SET_THROW);
 
     css::uno::Sequence<OUString> aUserData
     {
-        "com.sun.star.comp.filter.OdfFlatXml",
-        "",
-        "com.sun.star.comp.Calc.XMLOasisImporter",
-        "com.sun.star.comp.Calc.XMLOasisExporter",
-        "",
-        "",
-        "true"
+        u"com.sun.star.comp.filter.OdfFlatXml"_ustr,
+        u""_ustr,
+        u"com.sun.star.comp.Calc.XMLOasisImporter"_ustr,
+        u"com.sun.star.comp.Calc.XMLOasisExporter"_ustr,
+        u""_ustr,
+        u""_ustr,
+        u"true"_ustr
     };
     uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence(
     {
@@ -1706,7 +1706,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODS(SvStream &rStream)
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
         { "InputStream", uno::Any(xStream) },
-        { "URL", uno::Any(OUString("private:stream")) },
+        { "URL", uno::Any(u"private:stream"_ustr) },
     }));
     xImporter->setTargetDocument(xModel);
 
@@ -1734,17 +1734,17 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODSExportXLS(SvStream &rStream)
 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
     uno::Reference<io::XInputStream> xStream(new ::utl::OSeekableInputStreamWrapper(rStream));
-    uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance("com.sun.star.comp.Writer.XmlFilterAdaptor"), uno::UNO_SET_THROW);
+    uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance(u"com.sun.star.comp.Writer.XmlFilterAdaptor"_ustr), uno::UNO_SET_THROW);
 
     css::uno::Sequence<OUString> aUserData
     {
-        "com.sun.star.comp.filter.OdfFlatXml",
-        "",
-        "com.sun.star.comp.Calc.XMLOasisImporter",
-        "com.sun.star.comp.Calc.XMLOasisExporter",
-        "",
-        "",
-        "true"
+        u"com.sun.star.comp.filter.OdfFlatXml"_ustr,
+        u""_ustr,
+        u"com.sun.star.comp.Calc.XMLOasisImporter"_ustr,
+        u"com.sun.star.comp.Calc.XMLOasisExporter"_ustr,
+        u""_ustr,
+        u""_ustr,
+        u"true"_ustr
     };
     uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence(
     {
@@ -1759,7 +1759,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODSExportXLS(SvStream &rStream)
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
         { "InputStream", uno::Any(xStream) },
-        { "URL", uno::Any(OUString("private:stream")) },
+        { "URL", uno::Any(u"private:stream"_ustr) },
     }));
     xImporter->setTargetDocument(xModel);
 
@@ -1777,7 +1777,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODSExportXLS(SvStream &rStream)
         utl::TempFileFast aTempFile;
 
         uno::Reference<document::XFilter> xXLSFilter(
-            xMultiServiceFactory->createInstance("com.sun.star.comp.oox.xls.ExcelFilter"), uno::UNO_QUERY);
+            xMultiServiceFactory->createInstance(u"com.sun.star.comp.oox.xls.ExcelFilter"_ustr), uno::UNO_QUERY);
         uno::Reference<document::XExporter> xExporter(xXLSFilter, uno::UNO_QUERY);
         xExporter->setSourceDocument(xModel);
 
@@ -1809,7 +1809,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportXLSX(SvStream &rStream)
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
     uno::Reference<io::XInputStream> xStream(new utl::OSeekableInputStreamWrapper(rStream));
 
-    uno::Reference<document::XFilter> xFilter(xMultiServiceFactory->createInstance("com.sun.star.comp.oox.xls.ExcelFilter"), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XFilter> xFilter(xMultiServiceFactory->createInstance(u"com.sun.star.comp.oox.xls.ExcelFilter"_ustr), uno::UNO_QUERY_THROW);
 
     uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(

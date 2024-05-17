@@ -335,7 +335,7 @@ void ImportExcel8::ReadBasic()
               officecfg::Office::Calc::Filter::Import::VBA::Executable::get() )
         {
             // see if we have the XCB stream
-            rtl::Reference<SotStorageStream> xXCB = xRootStrg->OpenSotStream( "XCB", StreamMode::STD_READ );
+            rtl::Reference<SotStorageStream> xXCB = xRootStrg->OpenSotStream( u"XCB"_ustr, StreamMode::STD_READ );
             if ( xXCB.is()|| ERRCODE_NONE == xXCB->GetError() )
             {
                 ScCTBWrapper wrapper;
@@ -354,7 +354,7 @@ void ImportExcel8::ReadBasic()
             SfxMedium& rMedium = GetMedium();
             uno::Reference< io::XInputStream > xIn = rMedium.GetInputStream();
             oox::ole::OleStorage root( aCtx, xIn, false );
-            oox::StorageRef vbaStg = root.openSubStorage( "_VBA_PROJECT_CUR", false );
+            oox::StorageRef vbaStg = root.openSubStorage( u"_VBA_PROJECT_CUR"_ustr, false );
             if ( vbaStg )
             {
                 oox::ole::VbaProject aVbaPrj( aCtx, pShell->GetModel(), u"Calc" );

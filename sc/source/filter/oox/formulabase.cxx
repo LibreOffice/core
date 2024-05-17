@@ -1179,7 +1179,7 @@ OpCodeProviderImpl::OpCodeProviderImpl( const FunctionInfoVector& rFuncInfos,
     try
     {
         Reference< XFormulaOpCodeMapper > xMapper( rxModelFactory->createInstance(
-            "com.sun.star.sheet.FormulaOpCodeMapper" ), UNO_QUERY_THROW );
+            u"com.sun.star.sheet.FormulaOpCodeMapper"_ustr ), UNO_QUERY_THROW );
 
         // op-codes provided as attributes
         OPCODE_UNKNOWN = xMapper->getOpCodeUnknown();
@@ -1463,7 +1463,7 @@ ApiParserWrapper::ApiParserWrapper(
 {
     if( rxModelFactory.is() ) try
     {
-        mxParser.set( rxModelFactory->createInstance( "com.sun.star.sheet.FormulaParser" ), UNO_QUERY_THROW );
+        mxParser.set( rxModelFactory->createInstance( u"com.sun.star.sheet.FormulaParser"_ustr ), UNO_QUERY_THROW );
     }
     catch( Exception& )
     {

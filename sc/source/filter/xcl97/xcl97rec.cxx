@@ -1009,7 +1009,7 @@ XclObjOle::~XclObjOle()
 void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
 {
     // write only as embedded, not linked
-    OUString        aStorageName( "MBD" );
+    OUString        aStorageName( u"MBD"_ustr );
     char        aBuf[ sizeof(sal_uInt32) * 2 + 1 ];
     // FIXME Eeek! Is this just a way to get a unique id?
     sal_uInt32          nPictureId = sal_uInt32(reinterpret_cast<sal_uIntPtr>(this) >> 2);

@@ -318,7 +318,7 @@ uno::Sequence< beans::NamedValue > XclExpRoot::GenerateEncryptionData( std::u16s
         sal_uInt8 pnDocId[16];
         if (rtl_random_getBytes(nullptr, pnDocId, 16) != rtl_Random_E_None)
         {
-            throw uno::RuntimeException("rtl_random_getBytes failed");
+            throw uno::RuntimeException(u"rtl_random_getBytes failed"_ustr);
         }
 
         sal_uInt16 pnPasswd[16] = {};

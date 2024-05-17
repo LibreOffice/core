@@ -872,7 +872,7 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
             std::shared_ptr<model::Theme> pTheme = pDrawLayer->getTheme();
             if (pTheme)
             {
-                OUString sThemeRelationshipPath = "theme/theme1.xml";
+                OUString sThemeRelationshipPath = u"theme/theme1.xml"_ustr;
                 OUString sThemeDocumentPath = "xl/" + sThemeRelationshipPath;
 
                 oox::ThemeExport aThemeExport(&rStrm, oox::drawingml::DOCUMENT_XLSX);

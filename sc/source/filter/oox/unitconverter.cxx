@@ -100,13 +100,13 @@ UnitConverter::UnitConverter( const WorkbookHelper& rHelper ) :
     maCoeffs[Unit::Space]   = o3tl::convert(1.0, o3tl::Length::mm, o3tl::Length::emu); // default  1 space = 1 mm
 
     // error code maps
-    addErrorCode( BIFF_ERR_NULL,  "#NULL!" );
-    addErrorCode( BIFF_ERR_DIV0,  "#DIV/0!" );
-    addErrorCode( BIFF_ERR_VALUE, "#VALUE!" );
-    addErrorCode( BIFF_ERR_REF,   "#REF!" );
-    addErrorCode( BIFF_ERR_NAME,  "#NAME?" );
-    addErrorCode( BIFF_ERR_NUM,   "#NUM!" );
-    addErrorCode( BIFF_ERR_NA,    "#N/A" );
+    addErrorCode( BIFF_ERR_NULL,  u"#NULL!"_ustr );
+    addErrorCode( BIFF_ERR_DIV0,  u"#DIV/0!"_ustr );
+    addErrorCode( BIFF_ERR_VALUE, u"#VALUE!"_ustr );
+    addErrorCode( BIFF_ERR_REF,   u"#REF!"_ustr );
+    addErrorCode( BIFF_ERR_NAME,  u"#NAME?"_ustr );
+    addErrorCode( BIFF_ERR_NUM,   u"#NUM!"_ustr );
+    addErrorCode( BIFF_ERR_NA,    u"#N/A"_ustr );
 }
 
 void UnitConverter::finalizeImport()

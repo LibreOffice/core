@@ -168,7 +168,7 @@ void SheetDataBuffer::setDateTimeCell( const CellModel& rModel, const css::util:
 void SheetDataBuffer::setBooleanCell( const CellModel& rModel, bool bValue )
 {
     getFormulaBuffer().setCellFormula(
-        rModel.maCellAddr, bValue ? OUString("TRUE()") : OUString("FALSE()"));
+        rModel.maCellAddr, bValue ? u"TRUE()"_ustr : u"FALSE()"_ustr);
 
     // #108770# set 'Standard' number format for all Boolean cells
     setCellFormat( rModel );
