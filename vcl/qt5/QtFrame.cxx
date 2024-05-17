@@ -350,6 +350,14 @@ void QtFrame::SetTitle(const OUString& rTitle)
 
 void QtFrame::SetIcon(sal_uInt16 nIcon)
 {
+    QtInstance* pSalInst(GetQtInstance());
+    assert(pSalInst);
+    if (!pSalInst->IsMainThread())
+    {
+        pSalInst->RunInMainThread([this, nIcon]() { SetIcon(nIcon); });
+        return;
+    }
+
     if (m_nStyle
             & (SalFrameStyleFlags::PLUG | SalFrameStyleFlags::SYSTEMCHILD
                | SalFrameStyleFlags::FLOAT | SalFrameStyleFlags::INTRO
