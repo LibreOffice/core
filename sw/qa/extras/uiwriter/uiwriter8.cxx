@@ -979,7 +979,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testInsertAutoTextIntoListFromParaStyle)
         CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, pSet->GetItemState(RES_MARGIN_TEXTLEFT, false));
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_MARGIN_TEXTLEFT, true));
         CPPUNIT_ASSERT_EQUAL(u"ListAndIndents"_ustr, rNode.GetTextColl()->GetName());
-        CPPUNIT_ASSERT_EQUAL(u"more"_ustr, rNode.GetText()); // pre-exising list item
+        CPPUNIT_ASSERT_EQUAL(u"more"_ustr, rNode.GetText()); // pre-existing list item
         CPPUNIT_ASSERT_EQUAL(pNumRule, rNode.GetNumRule());
         CPPUNIT_ASSERT_EQUAL(pTextLeftMargin->GetTextLeft(),
                              rNode.GetAttr(RES_MARGIN_TEXTLEFT).GetTextLeft());
