@@ -416,7 +416,7 @@ SdTpOptionsMisc::SdTpOptionsMisc(weld::Container* pPage, weld::DialogController*
 
     // determine PoolUnit
     SfxItemPool* pPool = rInAttrs.GetPool();
-    DBG_ASSERT( pPool, "Where is the Pool?" );
+    assert(pPool &&  "Where is the Pool?");
     ePoolUnit = pPool->GetMetric( SID_ATTR_FILL_HATCH );
 
     // Fill the CB
