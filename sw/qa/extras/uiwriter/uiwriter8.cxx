@@ -25,6 +25,7 @@
 #include <frameformats.hxx>
 #include <tools/json_writer.hxx>
 #include <unotools/streamwrap.hxx>
+#include <editeng/lrspitem.hxx>
 #include <sfx2/linkmgr.hxx>
 
 #include <wrtsh.hxx>
@@ -880,7 +881,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testInsertAutoTextIntoListFromParaStyle)
     pWrtShell->FwdPara();
     pWrtShell->EndPara(/*bSelect=*/false);
     // expands autotext (via F3)
-    pWrtShell->Insert(" dt");
+    pWrtShell->Insert(" jacr");
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_F3);
@@ -888,6 +889,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testInsertAutoTextIntoListFromParaStyle)
 
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->FwdPara();
+
+    SwNumRule* pNumRule;
+    SvxTextLeftMarginItem const* pTextLeftMargin;
+    SvxFirstLineIndentItem const* pFirstLineIndent;
 
     {
         SwTextNode& rNode{ *pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode() };
@@ -905,7 +910,32 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testInsertAutoTextIntoListFromParaStyle)
         CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, pSet->GetItemState(RES_MARGIN_TEXTLEFT, false));
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_MARGIN_TEXTLEFT, true));
         CPPUNIT_ASSERT_EQUAL(u"ListAndIndents"_ustr, rNode.GetTextColl()->GetName());
-        CPPUNIT_ASSERT(rNode.GetText().startsWith("Item He heard quiet steps"));
+        CPPUNIT_ASSERT_EQUAL(u"Item We confirm receipt of your application material."_ustr,
+                             rNode.GetText());
+        pNumRule = rNode.GetNumRule();
+        pTextLeftMargin = &rNode.GetAttr(RES_MARGIN_TEXTLEFT);
+        pFirstLineIndent = &rNode.GetAttr(RES_MARGIN_FIRSTLINE);
+    }
+
+    pWrtShell->FwdPara();
+
+    {
+        SwTextNode& rNode{ *pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode() };
+        auto pSet{ rNode.GetpSwAttrSet() };
+        CPPUNIT_ASSERT(pSet);
+        // list id was set
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_PARATR_LIST_ID, false));
+        // middle paragraph was pasted - has numrule and indents applied directly
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_PARATR_NUMRULE, false));
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_MARGIN_FIRSTLINE, false));
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_MARGIN_TEXTLEFT, false));
+        CPPUNIT_ASSERT_EQUAL(u"Default Paragraph Style"_ustr, rNode.GetTextColl()->GetName());
+        CPPUNIT_ASSERT(rNode.GetText().startsWith("As more applicants applied"));
+        CPPUNIT_ASSERT_EQUAL(pNumRule, rNode.GetNumRule());
+        CPPUNIT_ASSERT_EQUAL(pTextLeftMargin->GetTextLeft(),
+                             rNode.GetAttr(RES_MARGIN_TEXTLEFT).GetTextLeft());
+        CPPUNIT_ASSERT_EQUAL(pFirstLineIndent->GetTextFirstLineOffset(),
+                             rNode.GetAttr(RES_MARGIN_FIRSTLINE).GetTextFirstLineOffset());
     }
 
     pWrtShell->FwdPara();
@@ -926,7 +956,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testInsertAutoTextIntoListFromParaStyle)
         CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, pSet->GetItemState(RES_MARGIN_TEXTLEFT, false));
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_MARGIN_TEXTLEFT, true));
         CPPUNIT_ASSERT_EQUAL(u"ListAndIndents"_ustr, rNode.GetTextColl()->GetName());
-        CPPUNIT_ASSERT_EQUAL(u""_ustr, rNode.GetText()); // this is a new empty paragraph
+        CPPUNIT_ASSERT(rNode.GetText().endsWith("as soon as we have come to a decision."));
+        CPPUNIT_ASSERT_EQUAL(pNumRule, rNode.GetNumRule());
+        CPPUNIT_ASSERT_EQUAL(pTextLeftMargin->GetTextLeft(),
+                             rNode.GetAttr(RES_MARGIN_TEXTLEFT).GetTextLeft());
+        CPPUNIT_ASSERT_EQUAL(pFirstLineIndent->GetTextFirstLineOffset(),
+                             rNode.GetAttr(RES_MARGIN_FIRSTLINE).GetTextFirstLineOffset());
     }
 
     pWrtShell->FwdPara();
@@ -948,6 +983,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testInsertAutoTextIntoListFromParaStyle)
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_MARGIN_TEXTLEFT, true));
         CPPUNIT_ASSERT_EQUAL(u"ListAndIndents"_ustr, rNode.GetTextColl()->GetName());
         CPPUNIT_ASSERT_EQUAL(u"more"_ustr, rNode.GetText()); // pre-exising list item
+        CPPUNIT_ASSERT_EQUAL(pNumRule, rNode.GetNumRule());
+        CPPUNIT_ASSERT_EQUAL(pTextLeftMargin->GetTextLeft(),
+                             rNode.GetAttr(RES_MARGIN_TEXTLEFT).GetTextLeft());
+        CPPUNIT_ASSERT_EQUAL(pFirstLineIndent->GetTextFirstLineOffset(),
+                             rNode.GetAttr(RES_MARGIN_FIRSTLINE).GetTextFirstLineOffset());
     }
 }
 
