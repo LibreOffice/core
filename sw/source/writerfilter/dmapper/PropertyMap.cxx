@@ -594,11 +594,10 @@ void SectionPropertyMap::SetBorder( BorderPosition ePos, sal_Int32 nLineDistance
 
 void SectionPropertyMap::ApplyPaperSource(DomainMapper_Impl& rDM_Impl)
 {
-    uno::Reference<beans::XPropertySet> xFirst;
     // todo: negative spacing (from ww8par6.cxx)
     if (!m_sPageStyleName.isEmpty())
     {
-        xFirst = GetPageStyle(rDM_Impl);
+        rtl::Reference<SwXPageStyle> xFirst = GetPageStyle(rDM_Impl);
         if ( xFirst.is() )
             try
             {
@@ -630,7 +629,7 @@ void SectionPropertyMap::ApplyBorderToPageStyles( DomainMapper_Impl& rDM_Impl,
     1 offset from edge of page
     */
 
-    uno::Reference<beans::XPropertySet> xFirst;
+    rtl::Reference<SwXPageStyle> xFirst;
     // todo: negative spacing (from ww8par6.cxx)
     if (!m_sPageStyleName.isEmpty())
         xFirst = GetPageStyle(rDM_Impl);
@@ -895,8 +894,8 @@ namespace
 {
 
 // Copy the content of the header/footer property to the target style
-void copyHeaderFooterTextProperty(const uno::Reference<beans::XPropertySet>& xSource,
-                                  const uno::Reference<beans::XPropertySet>& xTarget,
+void copyHeaderFooterTextProperty(const rtl::Reference<SwXPageStyle>& xSource,
+                                  const rtl::Reference<SwXPageStyle>& xTarget,
                                   PropertyIds ePropId)
 {
     if (!xSource.is() || !xTarget.is())
@@ -923,8 +922,8 @@ void copyHeaderFooterTextProperty(const uno::Reference<beans::XPropertySet>& xSo
 }
 
 // Copies all the header and footer content and relevant flags from the source style to the target.
-void completeCopyHeaderFooter(const uno::Reference<beans::XPropertySet>& xSourceStyle,
-        const uno::Reference<beans::XPropertySet>& xTargetStyle,
+void completeCopyHeaderFooter(const rtl::Reference<SwXPageStyle>& xSourceStyle,
+        const rtl::Reference<SwXPageStyle>& xTargetStyle,
         bool const bMissingHeader, bool const bMissingFooter)
 {
     if (!xSourceStyle.is() || !xTargetStyle.is())
@@ -994,8 +993,8 @@ void completeCopyHeaderFooter(const uno::Reference<beans::XPropertySet>& xSource
 
 // Copy headers and footers from the previous page style.
 void copyHeaderFooter(const DomainMapper_Impl& rDM_Impl,
-                                          const uno::Reference< beans::XPropertySet >& xPreviousStyle,
-                                          const uno::Reference< beans::XPropertySet >& xStyle,
+                                          const rtl::Reference< SwXPageStyle >& xPreviousStyle,
+                                          const rtl::Reference< SwXPageStyle >& xStyle,
                                           bool bCopyRightHeader, bool bCopyLeftHeader, bool bCopyFirstHeader,
                                           bool bCopyRightFooter, bool bCopyLeftFooter, bool bCopyFirstFooter,
                                           bool bEvenAndOdd, bool bTitlePage)
@@ -1081,8 +1080,8 @@ void SectionPropertyMap::CopyLastHeaderFooter(DomainMapper_Impl& rDM_Impl )
     SectionPropertyMap* pLastContext = rDM_Impl.GetLastSectionContext();
     if (pLastContext)
     {
-        uno::Reference<beans::XPropertySet> xPreviousStyle = pLastContext->GetPageStyle(rDM_Impl);
-        uno::Reference<beans::XPropertySet> xStyle = GetPageStyle(rDM_Impl);
+        rtl::Reference<SwXPageStyle> xPreviousStyle = pLastContext->GetPageStyle(rDM_Impl);
+        rtl::Reference<SwXPageStyle> xStyle = GetPageStyle(rDM_Impl);
 
         bool bEvenAndOdd = rDM_Impl.GetSettingsTable()->GetEvenAndOddHeaders();
 
@@ -1454,7 +1453,7 @@ void SectionPropertyMap::CreateEvenOddPageStyleCopy(DomainMapper_Impl& rDM_Impl,
     OUString evenOddStyleName = rDM_Impl.GetUnusedPageStyleName();
     rtl::Reference<SwXPageStyle> evenOddStyle = rDM_Impl.GetTextDocument()->createPageStyle();
     // Unfortunately using setParent() does not work for page styles, so make a deep copy of the page style.
-    uno::Reference<beans::XPropertySet> pageProperties(m_aPageStyle);
+    rtl::Reference<SwXPageStyle> pageProperties(m_aPageStyle);
     uno::Reference<beans::XPropertySetInfo> pagePropertiesInfo(pageProperties->getPropertySetInfo());
     const uno::Sequence<beans::Property> propertyList(pagePropertiesInfo->getProperties());
 
@@ -1714,11 +1713,11 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         ApplyProtectionProperties( xSection, rDM_Impl );
 
         //get the properties and create appropriate page styles
-        uno::Reference<beans::XPropertySet> xPageStyle;
+        rtl::Reference<SwXPageStyle> xPageStyle;
         //This part certainly is not needed for footnotes, so don't create unused page styles.
         if ( !rDM_Impl.IsInFootOrEndnote() )
         {
-            xPageStyle.set(GetPageStyle(rDM_Impl));
+            xPageStyle = GetPageStyle(rDM_Impl);
             setHeaderFooterProperties(rDM_Impl);
             HandleMarginsHeaderFooter(rDM_Impl);
         }

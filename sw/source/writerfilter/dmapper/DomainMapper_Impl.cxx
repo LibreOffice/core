@@ -3883,7 +3883,7 @@ void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, PageTyp
 
 /** Prepares the header/footer text content by first removing the existing
  *  content and adding it to the text append stack. */
-void DomainMapper_Impl::prepareHeaderFooterContent(uno::Reference<beans::XPropertySet> const& xPageStyle,
+void DomainMapper_Impl::prepareHeaderFooterContent(rtl::Reference<SwXPageStyle> const& xPageStyle,
                                                    PagePartType ePagePartType, PropertyIds ePropertyID,
                                                    bool bAppendToHeaderAndFooterTextStack)
 {
@@ -3921,7 +3921,7 @@ void DomainMapper_Impl::checkIfHeaderFooterIsEmpty(PagePartType ePagePartType, P
 
     bool bHeader = ePagePartType == PagePartType::Header;
 
-    uno::Reference<beans::XPropertySet> xPageStyle(pSectionContext->GetPageStyle(*this));
+    rtl::Reference<SwXPageStyle> xPageStyle(pSectionContext->GetPageStyle(*this));
 
     if (!xPageStyle.is())
         return;

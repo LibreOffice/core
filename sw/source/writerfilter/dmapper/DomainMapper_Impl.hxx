@@ -744,7 +744,7 @@ public:
     void RemoveLastParagraph();
 
     void checkIfHeaderFooterIsEmpty(PagePartType ePagePartType, PageType eType);
-    void prepareHeaderFooterContent(css::uno::Reference<css::beans::XPropertySet> const& xPageStyle,
+    void prepareHeaderFooterContent(rtl::Reference<SwXPageStyle> const& xPageStyle,
                                     PagePartType ePagePartType, PropertyIds eID,
                                     bool bAppendToHeaderAndFooterTextStack);
 
