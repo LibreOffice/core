@@ -289,7 +289,7 @@ typedef void *                   sal_Handle;
 #endif
 
 /** Use this as markup for functions and methods whose return value may be
-    null and should not be derefenced unconditionally.
+    null and should not be dereferenced unconditionally.
 
     Compilers that support a construct of this nature will emit a compile
     time warning on unconditional dereference of returned pointer.
