@@ -302,7 +302,7 @@ namespace
 
 OUString SwXTextPortionEnumeration::getImplementationName()
 {
-    return "SwXTextPortionEnumeration";
+    return u"SwXTextPortionEnumeration"_ustr;
 }
 
 sal_Bool
@@ -313,7 +313,7 @@ SwXTextPortionEnumeration::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXTextPortionEnumeration::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.TextPortionEnumeration" };
+    return { u"com.sun.star.text.TextPortionEnumeration"_ustr };
 }
 
 SwXTextPortionEnumeration::SwXTextPortionEnumeration(

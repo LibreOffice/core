@@ -497,7 +497,7 @@ SwUnoCursorHelper::SetCursorPropertyValue(
                     if (nLevel < 0 || MAXLEVEL <= nLevel)
                     {
                         throw lang::IllegalArgumentException(
-                            "invalid NumberingLevel", nullptr, 0);
+                            u"invalid NumberingLevel"_ustr, nullptr, 0);
                     }
                     pTextNd->SetAttrListLevel(nLevel);
                 }
@@ -950,7 +950,7 @@ bool SwXTextCursor::IsAtEndOfContentControl() const
 
 OUString SwXTextCursor::getImplementationName()
 {
-    return "SwXTextCursor";
+    return u"SwXTextCursor"_ustr;
 }
 
 sal_Bool SAL_CALL SwXTextCursor::supportsService(const OUString& rServiceName)
@@ -962,14 +962,14 @@ uno::Sequence< OUString > SAL_CALL
 SwXTextCursor::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.text.TextCursor",
-        "com.sun.star.style.CharacterProperties",
-        "com.sun.star.style.CharacterPropertiesAsian",
-        "com.sun.star.style.CharacterPropertiesComplex",
-        "com.sun.star.style.ParagraphProperties",
-        "com.sun.star.style.ParagraphPropertiesAsian",
-        "com.sun.star.style.ParagraphPropertiesComplex",
-        "com.sun.star.text.TextSortable"
+        u"com.sun.star.text.TextCursor"_ustr,
+        u"com.sun.star.style.CharacterProperties"_ustr,
+        u"com.sun.star.style.CharacterPropertiesAsian"_ustr,
+        u"com.sun.star.style.CharacterPropertiesComplex"_ustr,
+        u"com.sun.star.style.ParagraphProperties"_ustr,
+        u"com.sun.star.style.ParagraphPropertiesAsian"_ustr,
+        u"com.sun.star.style.ParagraphPropertiesComplex"_ustr,
+        u"com.sun.star.text.TextSortable"_ustr
     };
 }
 
@@ -1247,8 +1247,8 @@ SwXTextCursor::gotoRange(
         if (!bNotForced)
         {
             throw uno::RuntimeException(
-                "gotoRange: parameter range not contained in nesting"
-                    " text content for which this cursor was created",
+                u"gotoRange: parameter range not contained in nesting"
+                    " text content for which this cursor was created"_ustr,
                 static_cast<text::XWordCursor*>(this));
         }
     }
@@ -1257,7 +1257,7 @@ SwXTextCursor::gotoRange(
         SwPaM aPaM(*pPam->GetMark(), *pPam->GetPoint());
         if (!lcl_ForceIntoContentControl(aPaM, m_xParentText, CONTENT_CONTROL_CHECK_BOTH))
         {
-            throw uno::RuntimeException("gotoRange: xRange is out of bounds of the content control",
+            throw uno::RuntimeException(u"gotoRange: xRange is out of bounds of the content control"_ustr,
                                         static_cast<text::XWordCursor*>(this));
         }
     }
@@ -2730,19 +2730,19 @@ SwUnoCursorHelper::CreateSortDescriptor(const bool bFromTable)
 
     uno::Any aVal;
     aVal <<= bFromTable;
-    pArray[0] = beans::PropertyValue("IsSortInTable", -1, aVal,
+    pArray[0] = beans::PropertyValue(u"IsSortInTable"_ustr, -1, aVal,
                     beans::PropertyState_DIRECT_VALUE);
 
     aVal <<= u' ';
-    pArray[1] = beans::PropertyValue("Delimiter", -1, aVal,
+    pArray[1] = beans::PropertyValue(u"Delimiter"_ustr, -1, aVal,
                     beans::PropertyState_DIRECT_VALUE);
 
     aVal <<= false;
-    pArray[2] = beans::PropertyValue("IsSortColumns", -1, aVal,
+    pArray[2] = beans::PropertyValue(u"IsSortColumns"_ustr, -1, aVal,
                     beans::PropertyState_DIRECT_VALUE);
 
     aVal <<= sal_Int32(3);
-    pArray[3] = beans::PropertyValue("MaxSortFieldsCount", -1, aVal,
+    pArray[3] = beans::PropertyValue(u"MaxSortFieldsCount"_ustr, -1, aVal,
                     beans::PropertyState_DIRECT_VALUE);
 
     lang::Locale aLang( SvtSysLocale().GetLanguageTag().getLocale());
@@ -2766,7 +2766,7 @@ SwUnoCursorHelper::CreateSortDescriptor(const bool bFromTable)
     };
 
     aVal <<= aFields;
-    pArray[4] = beans::PropertyValue("SortFields", -1, aVal,
+    pArray[4] = beans::PropertyValue(u"SortFields"_ustr, -1, aVal,
                     beans::PropertyState_DIRECT_VALUE);
 
     return aRet;
@@ -3044,7 +3044,7 @@ SwXTextCursor::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor)
     SwSortOptions aSortOpt;
     if (!SwUnoCursorHelper::ConvertSortProperties(rDescriptor, aSortOpt))
     {
-        throw uno::RuntimeException("Bad sort properties");
+        throw uno::RuntimeException(u"Bad sort properties"_ustr);
     }
     UnoActionContext aContext( &rUnoCursor.GetDoc() );
 
@@ -3124,7 +3124,7 @@ sal_Bool SAL_CALL SwXTextCursor::hasElements()
 uno::Sequence< OUString > SAL_CALL
 SwXTextCursor::getAvailableServiceNames()
 {
-    uno::Sequence<OUString> aRet { "com.sun.star.text.TextContent" };
+    uno::Sequence<OUString> aRet { u"com.sun.star.text.TextContent"_ustr };
     return aRet;
 }
 

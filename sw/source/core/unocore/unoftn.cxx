@@ -90,7 +90,7 @@ public:
     SwFormatFootnote const& GetFootnoteFormatOrThrow() const {
         SwFormatFootnote const*const pFootnote( GetFootnoteFormat() );
         if (!pFootnote) {
-            throw uno::RuntimeException("SwXFootnote: disposed or invalid", nullptr);
+            throw uno::RuntimeException(u"SwXFootnote: disposed or invalid"_ustr, nullptr);
         }
         return *pFootnote;
     }
@@ -167,7 +167,7 @@ SwXFootnote::CreateXFootnote(SwDoc & rDoc, SwFormatFootnote *const pFootnoteForm
 OUString SAL_CALL
 SwXFootnote::getImplementationName()
 {
-    return "SwXFootnote";
+    return u"SwXFootnote"_ustr;
 }
 
 char const*const g_ServicesFootnote[] =

@@ -1026,13 +1026,13 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
         if (pTextNode->GetTextAttrAt(pUnoCursor->GetPoint()->GetContentIndex(),
                 RES_TXTATR_INPUTFIELD, ::sw::GetTextAttrMode::Parent))
         {
-            throw uno::RuntimeException("cannot insert file inside input field");
+            throw uno::RuntimeException(u"cannot insert file inside input field"_ustr);
         }
 
         if (pTextNode->GetTextAttrAt(pUnoCursor->GetPoint()->GetContentIndex(),
                 RES_TXTATR_CONTENTCONTROL, ::sw::GetTextAttrMode::Parent))
         {
-            throw uno::RuntimeException("cannot insert file inside content controls");
+            throw uno::RuntimeException(u"cannot insert file inside content controls"_ustr);
         }
     }
 
@@ -1300,7 +1300,7 @@ void makeRedline( SwPaM const & rPaM,
             if (!aRevertProperties.hasElements())
             {
                 // to reject the paragraph style change, use standard style
-                xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl( "",  RES_POOLCOLL_STANDARD, nullptr ));
+                xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl( u""_ustr,  RES_POOLCOLL_STANDARD, nullptr ));
             }
         }
         else
@@ -1390,7 +1390,7 @@ void makeRedline( SwPaM const & rPaM,
                     sUIStyle.isEmpty() ? sParaStyleName : sUIStyle, nStylePoolId, &aItemSet));
             }
             else if (eType == RedlineType::ParagraphFormat)
-                xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl( "", RES_POOLCOLL_STANDARD, nullptr ));
+                xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl( u""_ustr, RES_POOLCOLL_STANDARD, nullptr ));
         }
     }
 
@@ -1463,16 +1463,16 @@ void makeTableRowRedline( SwTableLine& rTableLine,
     comphelper::SequenceAsHashMap aPropMap( rRedlineProperties );
     std::size_t nAuthor = 0;
     OUString sAuthor;
-    if( aPropMap.getValue("RedlineAuthor") >>= sAuthor )
+    if( aPropMap.getValue(u"RedlineAuthor"_ustr) >>= sAuthor )
         nAuthor = pRedlineAccess->InsertRedlineAuthor(sAuthor);
 
     OUString sComment;
     SwRedlineData aRedlineData( eType, nAuthor );
-    if( aPropMap.getValue("RedlineComment") >>= sComment )
+    if( aPropMap.getValue(u"RedlineComment"_ustr) >>= sComment )
         aRedlineData.SetComment( sComment );
 
     ::util::DateTime aStamp;
-    if( aPropMap.getValue("RedlineDateTime") >>= aStamp )
+    if( aPropMap.getValue(u"RedlineDateTime"_ustr) >>= aStamp )
     {
        aRedlineData.SetTimeStamp(
         DateTime( Date( aStamp.Day, aStamp.Month, aStamp.Year ), tools::Time( aStamp.Hours, aStamp.Minutes, aStamp.Seconds ) ) );
@@ -1538,16 +1538,16 @@ void makeTableCellRedline( SwTableBox& rTableBox,
     comphelper::SequenceAsHashMap aPropMap( rRedlineProperties );
     std::size_t nAuthor = 0;
     OUString sAuthor;
-    if( aPropMap.getValue("RedlineAuthor") >>= sAuthor )
+    if( aPropMap.getValue(u"RedlineAuthor"_ustr) >>= sAuthor )
         nAuthor = pRedlineAccess->InsertRedlineAuthor(sAuthor);
 
     OUString sComment;
     SwRedlineData aRedlineData( eType, nAuthor );
-    if( aPropMap.getValue("RedlineComment") >>= sComment )
+    if( aPropMap.getValue(u"RedlineComment"_ustr) >>= sComment )
         aRedlineData.SetComment( sComment );
 
     ::util::DateTime aStamp;
-    if( aPropMap.getValue("RedlineDateTime") >>= aStamp )
+    if( aPropMap.getValue(u"RedlineDateTime"_ustr) >>= aStamp )
     {
        aRedlineData.SetTimeStamp(
         DateTime( Date( aStamp.Day, aStamp.Month, aStamp.Year ), tools::Time( aStamp.Hours, aStamp.Minutes, aStamp.Seconds ) ) );

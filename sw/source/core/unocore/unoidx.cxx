@@ -340,7 +340,7 @@ public:
         if (!pTOXSection)
         {
             throw uno::RuntimeException(
-                    "SwXDocumentIndex: disposed or invalid", nullptr);
+                    u"SwXDocumentIndex: disposed or invalid"_ustr, nullptr);
         }
         return *pTOXSection;
     }
@@ -428,7 +428,7 @@ SwXDocumentIndex::CreateXDocumentIndex(
 OUString SAL_CALL
 SwXDocumentIndex::getImplementationName()
 {
-    return "SwXDocumentIndex";
+    return u"SwXDocumentIndex"_ustr;
 }
 
 sal_Bool SAL_CALL
@@ -879,7 +879,7 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
     // TODO: is this the best approach to tell API clients about the change?
     if (pEntry->nWID == RES_BACKGROUND && pEntry->nMemberId == MID_GRAPHIC_URL)
     {
-        throw uno::RuntimeException("Getting GraphicURL property is not supported");
+        throw uno::RuntimeException(u"Getting GraphicURL property is not supported"_ustr);
     }
 
     SwSectionFormat *const pSectionFormat( m_pImpl->GetSectionFormat() );
@@ -1271,7 +1271,7 @@ void SAL_CALL SwXDocumentIndex::refresh()
         if (!pTOXBase)
         {
             throw uno::RuntimeException(
-                    "SwXDocumentIndex::refresh: must be in attached state",
+                    u"SwXDocumentIndex::refresh: must be in attached state"_ustr,
                      getXWeak());
         }
         pTOXBase->Update(nullptr, m_pImpl->m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
@@ -1670,7 +1670,7 @@ namespace
 OUString SAL_CALL
 SwXDocumentIndexMark::getImplementationName()
 {
-    return "SwXDocumentIndexMark";
+    return u"SwXDocumentIndexMark"_ustr;
 }
 
 sal_Bool SAL_CALL SwXDocumentIndexMark::supportsService(const OUString& rServiceName)
@@ -1913,7 +1913,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     // thus use a space - is this really the ideal solution?
     if (!bMark && rMark.GetAlternativeText().isEmpty())
     {
-        rMark.SetAlternativeText( " " );
+        rMark.SetAlternativeText( u" "_ustr );
     }
 
     const bool bForceExpandHints( !bMark && pTextCursor && pTextCursor->IsAtEndOfMeta() );
@@ -1935,7 +1935,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     if (!pNewTextAttr)
     {
         throw uno::RuntimeException(
-            "SwXDocumentIndexMark::InsertTOXMark(): cannot insert attribute",
+            u"SwXDocumentIndexMark::InsertTOXMark(): cannot insert attribute"_ustr,
             nullptr);
     }
 
@@ -2320,7 +2320,7 @@ SwXDocumentIndexes::~SwXDocumentIndexes()
 OUString SAL_CALL
 SwXDocumentIndexes::getImplementationName()
 {
-    return "SwXDocumentIndexes";
+    return u"SwXDocumentIndexes"_ustr;
 }
 
 sal_Bool SAL_CALL SwXDocumentIndexes::supportsService(const OUString& rServiceName)
@@ -2331,7 +2331,7 @@ sal_Bool SAL_CALL SwXDocumentIndexes::supportsService(const OUString& rServiceNa
 uno::Sequence< OUString > SAL_CALL
 SwXDocumentIndexes::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.DocumentIndexes" };
+    return { u"com.sun.star.text.DocumentIndexes"_ustr };
 }
 
 sal_Int32 SAL_CALL
@@ -2486,7 +2486,7 @@ SwXDocumentIndex::StyleAccess_Impl::~StyleAccess_Impl()
 OUString SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::getImplementationName()
 {
-    return "SwXDocumentIndex::StyleAccess_Impl";
+    return u"SwXDocumentIndex::StyleAccess_Impl"_ustr;
 }
 
 sal_Bool SAL_CALL
@@ -2498,7 +2498,7 @@ SwXDocumentIndex::StyleAccess_Impl::supportsService(const OUString& rServiceName
 uno::Sequence< OUString > SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.DocumentIndexParagraphStyles" };
+    return { u"com.sun.star.text.DocumentIndexParagraphStyles"_ustr };
 }
 
 void SAL_CALL
@@ -2599,7 +2599,7 @@ SwXDocumentIndex::TokenAccess_Impl::~TokenAccess_Impl()
 OUString SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::getImplementationName()
 {
-    return "SwXDocumentIndex::TokenAccess_Impl";
+    return u"SwXDocumentIndex::TokenAccess_Impl"_ustr;
 }
 
 sal_Bool SAL_CALL SwXDocumentIndex::TokenAccess_Impl::supportsService(
@@ -2611,7 +2611,7 @@ sal_Bool SAL_CALL SwXDocumentIndex::TokenAccess_Impl::supportsService(
 uno::Sequence< OUString > SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.DocumentIndexLevelFormat" };
+    return { u"com.sun.star.text.DocumentIndexLevelFormat"_ustr };
 }
 
 namespace {
@@ -2766,7 +2766,7 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
                 pProperties[j].Value >>= nType;
                 if(nType < 0 || nType > text::BibliographyDataField::LOCAL_URL)
                 {
-                    throw lang::IllegalArgumentException("BibliographyDataField - wrong value", nullptr, j);
+                    throw lang::IllegalArgumentException(u"BibliographyDataField - wrong value"_ustr, nullptr, j);
                 }
                 aToken.nAuthorityField = nType;
             }
@@ -2885,7 +2885,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
 
                 pArr[nCurrentElement].Name = "TokenType";
                 pArr[nCurrentElement++].Value <<=
-                    OUString("TokenEntryNumber");
+                    u"TokenEntryNumber"_ustr;
 
                 pArr[nCurrentElement].Name = "CharacterStyleName";
                 pArr[nCurrentElement++].Value <<= aProgCharStyle;
@@ -2924,7 +2924,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = "TokenType";
-                pArr[0].Value <<= OUString("TokenEntryText");
+                pArr[0].Value <<= u"TokenEntryText"_ustr;
 
                 pArr[1].Name = "CharacterStyleName";
                 pArr[1].Value <<= aProgCharStyle;
@@ -2936,7 +2936,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = "TokenType";
-                pArr[0].Value <<= OUString("TokenTabStop");
+                pArr[0].Value <<= u"TokenTabStop"_ustr;
 
                 if(SvxTabAdjust::End == aToken.eTabAlign)
                 {
@@ -2966,7 +2966,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = "TokenType";
-                pArr[0].Value <<= OUString("TokenText");
+                pArr[0].Value <<= u"TokenText"_ustr;
 
                 pArr[1].Name = "CharacterStyleName";
                 pArr[1].Value <<= aProgCharStyle;
@@ -2981,7 +2981,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = "TokenType";
-                pArr[0].Value <<= OUString("TokenPageNumber");
+                pArr[0].Value <<= u"TokenPageNumber"_ustr;
 
                 pArr[1].Name = "CharacterStyleName";
                 pArr[1].Value <<= aProgCharStyle;
@@ -2993,7 +2993,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = "TokenType";
-                pArr[0].Value <<= OUString("TokenChapterInfo");
+                pArr[0].Value <<= u"TokenChapterInfo"_ustr;
 
                 pArr[1].Name = "CharacterStyleName";
                 pArr[1].Value <<= aProgCharStyle;
@@ -3031,7 +3031,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
 
                 pArr[0].Name = "TokenType";
                 pArr[0].Value <<=
-                    OUString("TokenHyperlinkStart");
+                    u"TokenHyperlinkStart"_ustr;
                 pArr[1].Name = "CharacterStyleName";
                 pArr[1].Value <<= aProgCharStyle;
             }
@@ -3043,7 +3043,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
 
                 pArr[0].Name = "TokenType";
                 pArr[0].Value <<=
-                    OUString("TokenHyperlinkEnd");
+                    u"TokenHyperlinkEnd"_ustr;
             }
             break;
             case TOKEN_AUTHORITY:
@@ -3053,7 +3053,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
 
                 pArr[0].Name = "TokenType";
                 pArr[0].Value <<=
-                    OUString("TokenBibliographyDataField");
+                    u"TokenBibliographyDataField"_ustr;
 
                 pArr[1].Name = "CharacterStyleName";
                 pArr[1].Value <<= aProgCharStyle;

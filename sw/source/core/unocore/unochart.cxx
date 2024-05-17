@@ -523,7 +523,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     uno::Reference< chart2::data::XDataSource > xRes;
 
     if (!m_pDoc)
-        throw uno::RuntimeException("Not connected to a document.");
+        throw uno::RuntimeException(u"Not connected to a document."_ustr);
 
     // get arguments
     OUString aRangeRepresentation;
@@ -1393,7 +1393,7 @@ void SAL_CALL SwChartDataProvider::removeEventListener(
 
 OUString SAL_CALL SwChartDataProvider::getImplementationName(  )
 {
-    return "SwChartDataProvider";
+    return u"SwChartDataProvider"_ustr;
 }
 
 sal_Bool SAL_CALL SwChartDataProvider::supportsService(const OUString& rServiceName )
@@ -1403,7 +1403,7 @@ sal_Bool SAL_CALL SwChartDataProvider::supportsService(const OUString& rServiceN
 
 uno::Sequence< OUString > SAL_CALL SwChartDataProvider::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.chart2.data.DataProvider"};
+    return { u"com.sun.star.chart2.data.DataProvider"_ustr};
 }
 
 void SwChartDataProvider::AddDataSequence( const SwTable &rTable, rtl::Reference< SwChartDataSequence > const &rxDataSequence )
@@ -1638,7 +1638,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
             throw lang::IllegalArgumentException();
         SwTable* pTable = SwTable::FindTable( pTableFormat );
         if  (pTable->IsTableComplex())
-            throw uno::RuntimeException("Table too complex.");
+            throw uno::RuntimeException(u"Table too complex."_ustr);
 
         // check that there is only one table used in all ranges
         if (!pFirstFoundTable)
@@ -1655,7 +1655,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
         sal_Int32 nCol, nRow;
         SwXTextTable::GetCellPosition( aStartCell, nCol, nRow );
         if (nCol < 0 || nRow < 0)
-            throw uno::RuntimeException("Cell not found.");
+            throw uno::RuntimeException(u"Cell not found."_ustr);
 
         //!! following objects/functions are implemented in XMLRangeHelper.?xx
         //!! which is a copy of the respective file from chart2 !!
@@ -1668,7 +1668,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
         {
             SwXTextTable::GetCellPosition( aEndCell, nCol, nRow );
             if (nCol < 0 || nRow < 0)
-                throw uno::RuntimeException("Cell not found.");
+                throw uno::RuntimeException(u"Cell not found."_ustr);
 
             aCellRange.aLowerRight.nColumn   = nCol;
             aCellRange.aLowerRight.nRow      = nRow;
@@ -1750,7 +1750,7 @@ uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > SAL_CALL S
 
 OUString SAL_CALL SwChartDataSource::getImplementationName(  )
 {
-    return "SwChartDataSource";
+    return u"SwChartDataSource"_ustr;
 }
 
 sal_Bool SAL_CALL SwChartDataSource::supportsService(const OUString& rServiceName )
@@ -1760,7 +1760,7 @@ sal_Bool SAL_CALL SwChartDataSource::supportsService(const OUString& rServiceNam
 
 uno::Sequence< OUString > SAL_CALL SwChartDataSource::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.chart2.data.DataSource" };
+    return { u"com.sun.star.chart2.data.DataSource"_ustr };
 }
 
 SwChartDataSequence::SwChartDataSequence(
@@ -1889,12 +1889,12 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
         bool bOk = false;
         SwFrameFormat* pTableFormat = GetFrameFormat();
         if (!pTableFormat)
-            throw uno::RuntimeException("No table format found.");
+            throw uno::RuntimeException(u"No table format found."_ustr);
         SwTable* pTable = SwTable::FindTable( pTableFormat );
         if (!pTable)
-            throw uno::RuntimeException("No table found.");
+            throw uno::RuntimeException(u"No table found."_ustr);
         if (pTable->IsTableComplex())
-            throw uno::RuntimeException("Table too complex.");
+            throw uno::RuntimeException(u"Table too complex."_ustr);
 
         const OUString aCellRange( GetCellRangeName( *pTableFormat, *m_pTableCursor ) );
         OSL_ENSURE( !aCellRange.isEmpty(), "failed to get cell range" );
@@ -2127,7 +2127,7 @@ void SAL_CALL SwChartDataSequence::removeVetoableChangeListener(
 
 OUString SAL_CALL SwChartDataSequence::getImplementationName(  )
 {
-    return "SwChartDataSequence";
+    return u"SwChartDataSequence"_ustr;
 }
 
 sal_Bool SAL_CALL SwChartDataSequence::supportsService(const OUString& rServiceName )
@@ -2137,7 +2137,7 @@ sal_Bool SAL_CALL SwChartDataSequence::supportsService(const OUString& rServiceN
 
 uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.chart2.data.DataSequence" };
+    return { u"com.sun.star.chart2.data.DataSequence"_ustr };
 }
 
 void SwChartDataSequence::Notify( const SfxHint& rHint)
@@ -2596,7 +2596,7 @@ uno::Reference< util::XCloneable > SAL_CALL SwChartLabeledDataSequence::createCl
 
 OUString SAL_CALL SwChartLabeledDataSequence::getImplementationName(  )
 {
-    return "SwChartLabeledDataSequence";
+    return u"SwChartLabeledDataSequence"_ustr;
 }
 
 sal_Bool SAL_CALL SwChartLabeledDataSequence::supportsService(
@@ -2607,7 +2607,7 @@ sal_Bool SAL_CALL SwChartLabeledDataSequence::supportsService(
 
 uno::Sequence< OUString > SAL_CALL SwChartLabeledDataSequence::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.chart2.data.LabeledDataSequence" };
+    return { u"com.sun.star.chart2.data.LabeledDataSequence"_ustr };
 }
 
 void SAL_CALL SwChartLabeledDataSequence::disposing(

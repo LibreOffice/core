@@ -148,7 +148,7 @@ public:
     SwSectionFormat & GetSectionFormatOrThrow() const {
         SwSectionFormat *const pFormat( GetSectionFormat() );
         if (!pFormat) {
-            throw uno::RuntimeException("SwXTextSection: disposed or invalid", nullptr);
+            throw uno::RuntimeException(u"SwXTextSection: disposed or invalid"_ustr, nullptr);
         }
         return *pFormat;
     }
@@ -388,7 +388,7 @@ SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
         // shouldn't have created an undo object yet
         pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::INSSECTION, nullptr );
         throw lang::IllegalArgumentException(
-                "SwXTextSection::attach(): invalid TextRange",
+                u"SwXTextSection::attach(): invalid TextRange"_ustr,
                 getXWeak(), 0);
     }
     m_pImpl->Attach(pRet->GetFormat());
@@ -946,7 +946,7 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
     SwSectionFormat *const pFormat = GetSectionFormat();
     if (!pFormat && !m_bIsDescriptor)
     {
-        throw uno::RuntimeException( "non-descriptor section without format");
+        throw uno::RuntimeException( u"non-descriptor section without format"_ustr);
     }
 
     uno::Sequence< uno::Any > aRet(rPropertyNames.getLength());
@@ -1259,13 +1259,13 @@ SwXTextSection::getPropertyValues(
     catch (beans::UnknownPropertyException &)
     {
         css::uno::Any anyEx = cppu::getCaughtException();
-        throw lang::WrappedTargetRuntimeException("Unknown property exception caught",
+        throw lang::WrappedTargetRuntimeException(u"Unknown property exception caught"_ustr,
                 getXWeak(), anyEx );
     }
     catch (lang::WrappedTargetException &)
     {
         css::uno::Any anyEx = cppu::getCaughtException();
-        throw lang::WrappedTargetRuntimeException("WrappedTargetException caught",
+        throw lang::WrappedTargetRuntimeException(u"WrappedTargetException caught"_ustr,
                 getXWeak(), anyEx );
     }
 
@@ -1692,7 +1692,7 @@ void SAL_CALL SwXTextSection::setName(const OUString& rName)
 OUString SAL_CALL
 SwXTextSection::getImplementationName()
 {
-    return "SwXTextSection";
+    return u"SwXTextSection"_ustr;
 }
 
 sal_Bool SAL_CALL SwXTextSection::supportsService(const OUString& rServiceName)
@@ -1704,9 +1704,9 @@ uno::Sequence< OUString > SAL_CALL
 SwXTextSection::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.text.TextContent",
-        "com.sun.star.text.TextSection",
-        "com.sun.star.document.LinkTarget"
+        u"com.sun.star.text.TextContent"_ustr,
+        u"com.sun.star.text.TextSection"_ustr,
+        u"com.sun.star.document.LinkTarget"_ustr
     };
 }
 

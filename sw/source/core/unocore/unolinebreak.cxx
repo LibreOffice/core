@@ -74,7 +74,7 @@ const SwFormatLineBreak& SwXLineBreak::Impl::GetLineBreakFormatOrThrow() const
     const SwFormatLineBreak* pLineBreak(GetLineBreakFormat());
     if (!pLineBreak)
     {
-        throw uno::RuntimeException("SwXLineBreak: disposed or invalid", nullptr);
+        throw uno::RuntimeException(u"SwXLineBreak: disposed or invalid"_ustr, nullptr);
     }
 
     return *pLineBreak;
@@ -126,7 +126,7 @@ rtl::Reference<SwXLineBreak> SwXLineBreak::CreateXLineBreak(SwFormatLineBreak* p
     return xLineBreak;
 }
 
-OUString SAL_CALL SwXLineBreak::getImplementationName() { return "SwXLineBreak"; }
+OUString SAL_CALL SwXLineBreak::getImplementationName() { return u"SwXLineBreak"_ustr; }
 
 sal_Bool SAL_CALL SwXLineBreak::supportsService(const OUString& rServiceName)
 {
@@ -135,7 +135,7 @@ sal_Bool SAL_CALL SwXLineBreak::supportsService(const OUString& rServiceName)
 
 uno::Sequence<OUString> SAL_CALL SwXLineBreak::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.LineBreak" };
+    return { u"com.sun.star.text.LineBreak"_ustr };
 }
 
 void SAL_CALL SwXLineBreak::attach(const uno::Reference<text::XTextRange>& xTextRange)

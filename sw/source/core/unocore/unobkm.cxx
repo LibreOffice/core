@@ -325,7 +325,7 @@ void SAL_CALL SwXBookmark::setName(const OUString& rName)
         m_pImpl->m_pDoc->getIDocumentMarkAccess();
     if(pMarkAccess->findMark(rName) != pMarkAccess->getAllMarksEnd())
     {
-        throw uno::RuntimeException("setName(): name already in use",
+        throw uno::RuntimeException(u"setName(): name already in use"_ustr,
                 getXWeak());
     }
 
@@ -342,7 +342,7 @@ void SAL_CALL SwXBookmark::setName(const OUString& rName)
 OUString SAL_CALL
 SwXBookmark::getImplementationName()
 {
-    return "SwXBookmark";
+    return u"SwXBookmark"_ustr;
 }
 
 sal_Bool SAL_CALL SwXBookmark::supportsService(const OUString& rServiceName)
@@ -354,9 +354,9 @@ uno::Sequence< OUString > SAL_CALL
 SwXBookmark::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.text.TextContent",
-        "com.sun.star.text.Bookmark",
-        "com.sun.star.document.LinkTarget"
+        u"com.sun.star.text.TextContent"_ustr,
+        u"com.sun.star.text.Bookmark"_ustr,
+        u"com.sun.star.document.LinkTarget"_ustr
     };
 }
 
@@ -397,7 +397,7 @@ SwXBookmark::setPropertyValue(const OUString& PropertyName,
     {
         bool bNewValue = false;
         if (!(rValue >>= bNewValue))
-            throw lang::IllegalArgumentException("Property BookmarkHidden requires value of type boolean", nullptr, 0);
+            throw lang::IllegalArgumentException(u"Property BookmarkHidden requires value of type boolean"_ustr, nullptr, 0);
 
         IBookmark* pBookmark = dynamic_cast<IBookmark*>(m_pImpl->m_pRegisteredBookmark);
         if (pBookmark)
@@ -414,7 +414,7 @@ SwXBookmark::setPropertyValue(const OUString& PropertyName,
     {
         OUString newValue;
         if (!(rValue >>= newValue))
-            throw lang::IllegalArgumentException("Property BookmarkCondition requires value of type string", nullptr, 0);
+            throw lang::IllegalArgumentException(u"Property BookmarkCondition requires value of type string"_ustr, nullptr, 0);
 
         IBookmark* pBookmark = dynamic_cast<IBookmark*>(m_pImpl->m_pRegisteredBookmark);
         if (pBookmark)
@@ -588,7 +588,7 @@ SwXFieldmark::SwXFieldmark(bool const isReplacementObject, SwDoc *const pDoc)
 OUString SAL_CALL
 SwXFieldmark::getImplementationName()
 {
-    return "SwXFieldmark";
+    return u"SwXFieldmark"_ustr;
 }
 
 uno::Sequence<OUString> SAL_CALL
@@ -597,15 +597,15 @@ SwXFieldmark::getSupportedServiceNames()
     // is const, no lock needed
     if (m_bReplacementObject)
     {
-        return {"com.sun.star.text.TextContent",
-                "com.sun.star.text.Bookmark",
-                "com.sun.star.text.FormFieldmark"};
+        return {u"com.sun.star.text.TextContent"_ustr,
+                u"com.sun.star.text.Bookmark"_ustr,
+                u"com.sun.star.text.FormFieldmark"_ustr};
     }
     else
     {
-        return {"com.sun.star.text.TextContent",
-                "com.sun.star.text.Bookmark",
-                "com.sun.star.text.Fieldmark"};
+        return {u"com.sun.star.text.TextContent"_ustr,
+                u"com.sun.star.text.Bookmark"_ustr,
+                u"com.sun.star.text.Fieldmark"_ustr};
     }
 }
 
@@ -658,7 +658,7 @@ void SwXFieldmark::setFieldType(const OUString & fieldType)
          return;
     }
 
-    throw uno::RuntimeException("changing to that type isn't implemented");
+    throw uno::RuntimeException(u"changing to that type isn't implemented"_ustr);
 }
 
 uno::Reference<container::XNameContainer> SwXFieldmark::getParameters()

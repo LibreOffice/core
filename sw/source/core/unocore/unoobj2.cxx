@@ -429,11 +429,11 @@ struct SwXParagraphEnumerationImpl final : public SwXParagraphEnumeration
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
-        { return "SwXParagraphEnumeration"; }
+        { return u"SwXParagraphEnumeration"_ustr; }
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName) override
         { return cppu::supportsService(this, rServiceName); };
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
-        { return {"com.sun.star.text.ParagraphEnumeration"}; };
+        { return {u"com.sun.star.text.ParagraphEnumeration"_ustr}; };
 
     // XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements() override;
@@ -814,7 +814,7 @@ void SwXTextRange::DeleteAndInsert(
     if (RANGE_IS_TABLE == m_pImpl->m_eRangePosition)
     {
         // setString on table not allowed
-        throw uno::RuntimeException("not possible for table");
+        throw uno::RuntimeException(u"not possible for table"_ustr);
     }
 
     const SwPosition aPos(GetDoc().GetNodes().GetEndOfContent());
@@ -829,7 +829,7 @@ void SwXTextRange::DeleteAndInsert(
             nullptr;
         if (!pSectionNode)
         {
-            throw uno::RuntimeException("disposed?");
+            throw uno::RuntimeException(u"disposed?"_ustr);
         }
         m_pImpl->m_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
         SwNodeIndex const start(*pSectionNode);
@@ -915,7 +915,7 @@ void SwXTextRange::DeleteAndInsert(
 OUString SAL_CALL
 SwXTextRange::getImplementationName()
 {
-    return "SwXTextRange";
+    return u"SwXTextRange"_ustr;
 }
 
 sal_Bool SAL_CALL SwXTextRange::supportsService(const OUString& rServiceName)
@@ -927,13 +927,13 @@ uno::Sequence< OUString > SAL_CALL
 SwXTextRange::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.text.TextRange",
-        "com.sun.star.style.CharacterProperties",
-        "com.sun.star.style.CharacterPropertiesAsian",
-        "com.sun.star.style.CharacterPropertiesComplex",
-        "com.sun.star.style.ParagraphProperties",
-        "com.sun.star.style.ParagraphPropertiesAsian",
-        "com.sun.star.style.ParagraphPropertiesComplex"
+        u"com.sun.star.text.TextRange"_ustr,
+        u"com.sun.star.style.CharacterProperties"_ustr,
+        u"com.sun.star.style.CharacterPropertiesAsian"_ustr,
+        u"com.sun.star.style.CharacterPropertiesComplex"_ustr,
+        u"com.sun.star.style.ParagraphProperties"_ustr,
+        u"com.sun.star.style.ParagraphPropertiesAsian"_ustr,
+        u"com.sun.star.style.ParagraphPropertiesComplex"_ustr
     };
 }
 
@@ -996,7 +996,7 @@ SwXTextRange::getStart()
     }
     else
     {
-        throw uno::RuntimeException("disposed?");
+        throw uno::RuntimeException(u"disposed?"_ustr);
     }
     return xRet;
 }
@@ -1033,7 +1033,7 @@ SwXTextRange::getEnd()
     }
     else
     {
-        throw uno::RuntimeException("disposed?");
+        throw uno::RuntimeException(u"disposed?"_ustr);
     }
     return xRet;
 }
@@ -1364,18 +1364,18 @@ SwXTextRange::createContentEnumeration(const OUString& rServiceName)
 
     if ( rServiceName != "com.sun.star.text.TextContent" )
     {
-        throw uno::RuntimeException("unsupported service");
+        throw uno::RuntimeException(u"unsupported service"_ustr);
     }
 
     if (!m_pImpl->GetBookmark())
     {
-        throw uno::RuntimeException("range has no mark (table?)");
+        throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     const SwPosition aPos(GetDoc().GetNodes().GetEndOfContent());
     const auto pNewCursor(m_pImpl->m_rDoc.CreateUnoCursor(aPos));
     if (!GetPositions(*pNewCursor))
     {
-        throw uno::RuntimeException("range has no positions");
+        throw uno::RuntimeException(u"range has no positions"_ustr);
     }
 
     return SwXParaFrameEnumeration::Create(*pNewCursor, PARAFRAME_PORTION_TEXTRANGE);
@@ -1388,13 +1388,13 @@ SwXTextRange::createEnumeration()
 
     if (!m_pImpl->GetBookmark())
     {
-        throw uno::RuntimeException("range has no mark (table?)");
+        throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     const SwPosition aPos(GetDoc().GetNodes().GetEndOfContent());
     auto pNewCursor(m_pImpl->m_rDoc.CreateUnoCursor(aPos));
     if (!GetPositions(*pNewCursor))
     {
-        throw uno::RuntimeException("range has no positions");
+        throw uno::RuntimeException(u"range has no positions"_ustr);
     }
     if (!m_pImpl->m_xParentText.is())
     {
@@ -1419,7 +1419,7 @@ sal_Bool SAL_CALL SwXTextRange::hasElements()
 uno::Sequence< OUString > SAL_CALL
 SwXTextRange::getAvailableServiceNames()
 {
-    uno::Sequence<OUString> aRet { "com.sun.star.text.TextContent" };
+    uno::Sequence<OUString> aRet { u"com.sun.star.text.TextContent"_ustr };
     return aRet;
 }
 
@@ -1441,7 +1441,7 @@ SwXTextRange::setPropertyValue(
 
     if (!m_pImpl->GetBookmark())
     {
-        throw uno::RuntimeException("range has no mark (table?)");
+        throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     SwPaM aPaM(GetDoc().GetNodes());
     GetPositions(aPaM);
@@ -1456,7 +1456,7 @@ SwXTextRange::getPropertyValue(const OUString& rPropertyName)
 
     if (!m_pImpl->GetBookmark())
     {
-        throw uno::RuntimeException("range has no mark (table?)");
+        throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     SwPaM aPaM(GetDoc().GetNodes());
     GetPositions(aPaM);
@@ -1503,7 +1503,7 @@ SwXTextRange::getPropertyState(const OUString& rPropertyName)
 
     if (!m_pImpl->GetBookmark())
     {
-        throw uno::RuntimeException("range has no mark (table?)");
+        throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     SwPaM aPaM(GetDoc().GetNodes());
     GetPositions(aPaM);
@@ -1518,7 +1518,7 @@ SwXTextRange::getPropertyStates(const uno::Sequence< OUString >& rPropertyName)
 
     if (!m_pImpl->GetBookmark())
     {
-        throw uno::RuntimeException("range has no mark (table?)");
+        throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     SwPaM aPaM(GetDoc().GetNodes());
     GetPositions(aPaM);
@@ -1532,7 +1532,7 @@ void SAL_CALL SwXTextRange::setPropertyToDefault(const OUString& rPropertyName)
 
     if (!m_pImpl->GetBookmark())
     {
-        throw uno::RuntimeException("range has no mark (table?)");
+        throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     SwPaM aPaM(GetDoc().GetNodes());
     GetPositions(aPaM);
@@ -1547,7 +1547,7 @@ SwXTextRange::getPropertyDefault(const OUString& rPropertyName)
 
     if (!m_pImpl->GetBookmark())
     {
-        throw uno::RuntimeException("range has no mark (table?)");
+        throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     SwPaM aPaM(GetDoc().GetNodes());
     GetPositions(aPaM);
@@ -1564,7 +1564,7 @@ SwXTextRange::makeRedline(
 
     if (!m_pImpl->GetBookmark())
     {
-        throw uno::RuntimeException("range has no mark (table?)");
+        throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     SwPaM aPaM(GetDoc().GetNodes());
     SwXTextRange::GetPositions(aPaM);
@@ -1578,11 +1578,11 @@ struct SwXTextRangesImpl final : public SwXTextRanges
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
-        { return "SwXTextRanges"; };
+        { return u"SwXTextRanges"_ustr; };
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName) override
         { return cppu::supportsService(this, rServiceName); };
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
-        { return { "com.sun.star.text.TextRanges" }; };
+        { return { u"com.sun.star.text.TextRanges"_ustr }; };
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override
@@ -1685,11 +1685,11 @@ struct SwXParaFrameEnumerationImpl final : public SwXParaFrameEnumeration
 {
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
-        { return "SwXParaFrameEnumeration"; };
+        { return u"SwXParaFrameEnumeration"_ustr; };
     virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override
         { return cppu::supportsService(this, rServiceName); };
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
-        { return {"com.sun.star.util.ContentEnumeration"}; };
+        { return {u"com.sun.star.util.ContentEnumeration"_ustr}; };
 
     // XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements() override;

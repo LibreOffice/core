@@ -1192,7 +1192,7 @@ public:
 
 OUString SwXFrame::getImplementationName()
 {
-    return "SwXFrame";
+    return u"SwXFrame"_ustr;
 }
 
 sal_Bool SwXFrame::supportsService(const OUString& rServiceName)
@@ -1202,7 +1202,7 @@ sal_Bool SwXFrame::supportsService(const OUString& rServiceName)
 
 uno::Sequence< OUString > SwXFrame::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.BaseFrame", "com.sun.star.text.TextContent", "com.sun.star.document.LinkTarget" };
+    return { u"com.sun.star.text.BaseFrame"_ustr, u"com.sun.star.text.TextContent"_ustr, u"com.sun.star.document.LinkTarget"_ustr };
 }
 
 SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDoc)
@@ -1226,7 +1226,7 @@ SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDo
     // Get the style families
     uno::Reference < XNameAccess > xFamilies = xFamilySupplier->getStyleFamilies();
     // Get the Frame family (and keep it for later)
-    const ::uno::Any aAny = xFamilies->getByName ("FrameStyles");
+    const ::uno::Any aAny = xFamilies->getByName (u"FrameStyles"_ustr);
     aAny >>= mxStyleFamily;
     // In the derived class, we'll ask mxStyleFamily for the relevant default style
     // mxStyleFamily is initialised in the SwXFrame constructor
@@ -1234,21 +1234,21 @@ SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDo
     {
         case FLYCNTTYPE_FRM:
         {
-            uno::Any aAny2 = mxStyleFamily->getByName ("Frame");
+            uno::Any aAny2 = mxStyleFamily->getByName (u"Frame"_ustr);
             aAny2 >>= mxStyleData;
             m_pProps.reset(new SwFrameProperties_Impl);
         }
         break;
         case FLYCNTTYPE_GRF:
         {
-            uno::Any aAny2 = mxStyleFamily->getByName ("Graphics");
+            uno::Any aAny2 = mxStyleFamily->getByName (u"Graphics"_ustr);
             aAny2 >>= mxStyleData;
             m_pProps.reset(new SwGraphicProperties_Impl);
         }
         break;
         case FLYCNTTYPE_OLE:
         {
-            uno::Any aAny2 = mxStyleFamily->getByName ("OLE");
+            uno::Any aAny2 = mxStyleFamily->getByName (u"OLE"_ustr);
             aAny2 >>= mxStyleData;
             m_pProps.reset(new SwOLEProperties_Impl);
         }
@@ -1327,7 +1327,7 @@ void SwXFrame::setName(const OUString& rName)
         pFormat->GetDoc()->SetFlyName(static_cast<SwFlyFrameFormat&>(*pFormat), rName);
         if(pFormat->GetName() != rName)
         {
-            throw uno::RuntimeException("SwXFrame::setName(): Illegal object name. Duplicate name?");
+            throw uno::RuntimeException(u"SwXFrame::setName(): Illegal object name. Duplicate name?"_ustr);
         }
     }
     else if(m_bIsDescriptor)
@@ -1887,7 +1887,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     SwFrameFormat* pFlyFormat = pAnchorNode ? pAnchorNode->GetFlyFormat() : nullptr;
                     if(!pFlyFormat || pFlyFormat->Which() == RES_DRAWFRMFMT)
                     {
-                        throw lang::IllegalArgumentException("Anchor to frame: no frame found", nullptr, 0);
+                        throw lang::IllegalArgumentException(u"Anchor to frame: no frame found"_ustr, nullptr, 0);
                     }
                     else
                     {
@@ -1966,7 +1966,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
         }
         else if (FN_UNO_DRAW_ASPECT == pEntry->nWID)
         {
-            OUString sAspect = "";
+            OUString sAspect = u""_ustr;
             aValue >>= sAspect;
 
             if (sAspect == "Icon")
@@ -1976,13 +1976,13 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
         }
         else if (FN_UNO_VISIBLE_AREA_WIDTH == pEntry->nWID)
         {
-            OUString sAspect = "";
+            OUString sAspect = u""_ustr;
             aValue >>= sAspect;
             m_nVisibleAreaWidth = sAspect.toInt64();
         }
         else if (FN_UNO_VISIBLE_AREA_HEIGHT == pEntry->nWID)
         {
-            OUString sAspect = "";
+            OUString sAspect = u""_ustr;
             aValue >>= sAspect;
             m_nVisibleAreaHeight = sAspect.toInt64();
         }
@@ -2110,7 +2110,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         }
         else if( FN_UNO_GRAPHIC_URL == pEntry->nWID )
         {
-            throw uno::RuntimeException("Getting from this property is not supported");
+            throw uno::RuntimeException(u"Getting from this property is not supported"_ustr);
         }
         else if( FN_UNO_GRAPHIC == pEntry->nWID )
         {
@@ -2961,7 +2961,7 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
             {
                 if( !aClassName.MakeId( aCLSID ) )
                 {
-                    throw lang::IllegalArgumentException("CLSID invalid", nullptr, 0);
+                    throw lang::IllegalArgumentException(u"CLSID invalid"_ustr, nullptr, 0);
                 }
 
                 pCnt.reset( new comphelper::EmbeddedObjectContainer );
@@ -3170,7 +3170,7 @@ void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
     if (aAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
     {
         throw lang::IllegalArgumentException(
-                "SwXFrame::attach(): re-anchoring AS_CHAR not supported",
+                u"SwXFrame::attach(): re-anchoring AS_CHAR not supported"_ustr,
                 *this, 0);
     }
 
@@ -3181,17 +3181,17 @@ void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
 
 awt::Point SwXFrame::getPosition()
 {
-    throw uno::RuntimeException("position cannot be determined with this method");
+    throw uno::RuntimeException(u"position cannot be determined with this method"_ustr);
 }
 
 void SwXFrame::setPosition(const awt::Point& /*aPosition*/)
 {
-    throw uno::RuntimeException("position cannot be changed with this method");
+    throw uno::RuntimeException(u"position cannot be changed with this method"_ustr);
 }
 
 awt::Size SwXFrame::getSize()
 {
-    const ::uno::Any aVal = getPropertyValue("Size");
+    const ::uno::Any aVal = getPropertyValue(u"Size"_ustr);
     awt::Size const * pRet =  o3tl::doAccess<awt::Size>(aVal);
     return *pRet;
 }
@@ -3199,12 +3199,12 @@ awt::Size SwXFrame::getSize()
 void SwXFrame::setSize(const awt::Size& aSize)
 {
     const ::uno::Any aVal(&aSize, ::cppu::UnoType<awt::Size>::get());
-    setPropertyValue("Size", aVal);
+    setPropertyValue(u"Size"_ustr, aVal);
 }
 
 OUString SwXFrame::getShapeType()
 {
-    return "FrameShape";
+    return u"FrameShape"_ustr;
 }
 
 SwXTextFrame::SwXTextFrame( SwDoc *_pDoc ) :
@@ -3309,7 +3309,7 @@ rtl::Reference<SwXTextCursor>  SwXTextFrame::createXTextCursor()
         aPam.GetPointNode().FindSttNodeByType(SwFlyStartNode);
     if(!pNewStartNode || pNewStartNode != pOwnStartNode)
     {
-        throw uno::RuntimeException("no text available");
+        throw uno::RuntimeException(u"no text available"_ustr);
     }
 
     return new SwXTextCursor(
@@ -3387,7 +3387,7 @@ void SwXTextFrame::removeEventListener(const uno::Reference< lang::XEventListene
 
 OUString SwXTextFrame::getImplementationName()
 {
-    return "SwXTextFrame";
+    return u"SwXTextFrame"_ustr;
 }
 
 sal_Bool SwXTextFrame::supportsService(const OUString& rServiceName)
@@ -3450,7 +3450,7 @@ SwXTextGraphicObject::CreateXTextGraphicObject(SwDoc & rDoc, SwFrameFormat *cons
 
 OUString SwXTextGraphicObject::getImplementationName()
 {
-    return "SwXTextGraphicObject";
+    return u"SwXTextGraphicObject"_ustr;
 }
 
 sal_Bool SwXTextGraphicObject::supportsService(const OUString& rServiceName)
@@ -3588,7 +3588,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL SwXTextEmbeddedObject::getReplaceme
 
 OUString SwXTextEmbeddedObject::getImplementationName()
 {
-    return "SwXTextEmbeddedObject";
+    return u"SwXTextEmbeddedObject"_ustr;
 }
 
 sal_Bool SwXTextEmbeddedObject::supportsService(const OUString& rServiceName)

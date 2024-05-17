@@ -548,7 +548,7 @@ uno::Any SwXShapesEnumeration::nextElement()
 
 OUString SwXShapesEnumeration::getImplementationName()
 {
-    return "SwXShapeEnumeration";
+    return u"SwXShapeEnumeration"_ustr;
 }
 
 sal_Bool SwXShapesEnumeration::supportsService(const OUString& ServiceName)
@@ -558,7 +558,7 @@ sal_Bool SwXShapesEnumeration::supportsService(const OUString& ServiceName)
 
 uno::Sequence< OUString > SwXShapesEnumeration::getSupportedServiceNames()
 {
-    return { OUString("com.sun.star.container.XEnumeration") };
+    return { u"com.sun.star.container.XEnumeration"_ustr };
 }
 
 uno::Reference< container::XEnumeration > SwFmDrawPage::createEnumeration()
@@ -570,7 +570,7 @@ uno::Reference< container::XEnumeration > SwFmDrawPage::createEnumeration()
 
 OUString SwFmDrawPage::getImplementationName()
 {
-    return "SwFmDrawPage";
+    return u"SwFmDrawPage"_ustr;
 }
 
 sal_Bool SwFmDrawPage::supportsService(const OUString& rServiceName)
@@ -580,7 +580,7 @@ sal_Bool SwFmDrawPage::supportsService(const OUString& rServiceName)
 
 uno::Sequence< OUString > SwFmDrawPage::getSupportedServiceNames()
 {
-    return { "com.sun.star.drawing.GenericDrawPage" };
+    return { u"com.sun.star.drawing.GenericDrawPage"_ustr };
 }
 
 sal_Int32 SwFmDrawPage::getCount()
@@ -631,7 +631,7 @@ void SwFmDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
 
     // this is not a writer shape
     if(!pShape)
-        throw uno::RuntimeException("illegal object",
+        throw uno::RuntimeException(u"illegal object"_ustr,
                                     getXWeak() );
 
     // we're already registered in the model / SwXDrawPage::add() already called
@@ -825,7 +825,7 @@ uno::Reference< drawing::XShapeGroup >  SwFmDrawPage::group(const uno::Reference
                                     pObj))->GetAnchor().GetAnchorId())
             {
                 throw lang::IllegalArgumentException(
-                    "Shape must not have 'as character' anchor!", nullptr, 0);
+                    u"Shape must not have 'as character' anchor!"_ustr, nullptr, 0);
             }
         }
 
@@ -1584,7 +1584,7 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                 {
                     // get property <::drawing::Shape::Transformation>
                     // without conversion to layout direction as below
-                    aRet = _getPropAtAggrObj( "Transformation" );
+                    aRet = _getPropAtAggrObj( u"Transformation"_ustr );
                 }
                 else if ( FN_SHAPE_POSITION_LAYOUT_DIR == pEntry->nWID )
                 {
@@ -1595,13 +1595,13 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                 {
                     // get property <::drawing::Shape::StartPosition>
                     // without conversion to layout direction as below
-                    aRet = _getPropAtAggrObj( "StartPosition" );
+                    aRet = _getPropAtAggrObj( u"StartPosition"_ustr );
                 }
                 else if ( FN_SHAPE_ENDPOSITION_IN_HORI_L2R == pEntry->nWID )
                 {
                     // get property <::drawing::Shape::EndPosition>
                     // without conversion to layout direction as below
-                    aRet = _getPropAtAggrObj( "EndPosition" );
+                    aRet = _getPropAtAggrObj( u"EndPosition"_ustr );
                 }
                 else if (pEntry->nWID == RES_FRM_SIZE &&
                          (pEntry->nMemberId == MID_FRMSIZE_REL_HEIGHT ||
@@ -1692,7 +1692,7 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                     {
                         // get property <::drawing::Shape::Transformation>
                         // without conversion to layout direction as below
-                        aRet = _getPropAtAggrObj( "Transformation" );
+                        aRet = _getPropAtAggrObj( u"Transformation"_ustr );
                     }
                     break;
                     case FN_SHAPE_POSITION_LAYOUT_DIR:
@@ -1705,14 +1705,14 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                     {
                         // get property <::drawing::Shape::StartPosition>
                         // without conversion to layout direction as below
-                        aRet = _getPropAtAggrObj( "StartPosition" );
+                        aRet = _getPropAtAggrObj( u"StartPosition"_ustr );
                     }
                     break;
                     case FN_SHAPE_ENDPOSITION_IN_HORI_L2R:
                     {
                         // get property <::drawing::Shape::StartPosition>
                         // without conversion to layout direction as below
-                        aRet = _getPropAtAggrObj( "EndPosition" );
+                        aRet = _getPropAtAggrObj( u"EndPosition"_ustr );
                     }
                     break;
                 }
@@ -2020,7 +2020,7 @@ void SwXShape::addPropertyChangeListener(
     const uno::Reference< beans::XPropertyChangeListener > & _listener )
 {
     if ( !m_xShapeAgg.is() )
-        throw uno::RuntimeException("no shape aggregate", *this );
+        throw uno::RuntimeException(u"no shape aggregate"_ustr, *this );
 
     // must be handled by the aggregate
     uno::Reference< beans::XPropertySet > xShapeProps;
@@ -2033,7 +2033,7 @@ void SwXShape::removePropertyChangeListener(
     const uno::Reference< beans::XPropertyChangeListener > & _listener)
 {
     if ( !m_xShapeAgg.is() )
-        throw uno::RuntimeException("no shape aggregate", *this );
+        throw uno::RuntimeException(u"no shape aggregate"_ustr, *this );
 
     // must be handled by the aggregate
     uno::Reference< beans::XPropertySet > xShapeProps;
@@ -2089,7 +2089,7 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
         {
             uno::Any aPos;
             aPos <<= xTextRange;
-            setPropertyValue("TextRange", aPos);
+            setPropertyValue(u"TextRange"_ustr, aPos);
             uno::Reference< drawing::XShape > xTemp( getXWeak(), uno::UNO_QUERY );
             xDP->add( xTemp );
         }
@@ -2197,7 +2197,7 @@ void SwXShape::removeEventListener(
 
 OUString SwXShape::getImplementationName()
 {
-    return "SwXShape";
+    return u"SwXShape"_ustr;
 }
 
 sal_Bool SwXShape::supportsService(const OUString& rServiceName)
@@ -2404,9 +2404,9 @@ awt::Point SwXShape::GetAttrPosition()
 {
     awt::Point aAttrPos;
 
-    uno::Any aHoriPos( getPropertyValue("HoriOrientPosition") );
+    uno::Any aHoriPos( getPropertyValue(u"HoriOrientPosition"_ustr) );
     aHoriPos >>= aAttrPos.X;
-    uno::Any aVertPos( getPropertyValue("VertOrientPosition") );
+    uno::Any aVertPos( getPropertyValue(u"VertOrientPosition"_ustr) );
     aVertPos >>= aAttrPos.Y;
     // #i35798# - fallback, if attribute position is (0,0)
     // and no anchor position is applied to the drawing object
@@ -2429,7 +2429,7 @@ awt::Point SwXShape::GetAttrPosition()
     text::TextContentAnchorType eTextAnchorType =
                             text::TextContentAnchorType_AT_PARAGRAPH;
     {
-        uno::Any aAny = getPropertyValue( "AnchorType" );
+        uno::Any aAny = getPropertyValue( u"AnchorType"_ustr );
         aAny >>= eTextAnchorType;
     }
     if ( eTextAnchorType == text::TextContentAnchorType_AS_CHARACTER )
@@ -2558,7 +2558,7 @@ void SwXShape::AdjustPositionProperties( const awt::Point& rPosition )
     text::TextContentAnchorType eTextAnchorType =
                             text::TextContentAnchorType_AT_PARAGRAPH;
     {
-        uno::Any aAny = getPropertyValue( "AnchorType" );
+        uno::Any aAny = getPropertyValue( u"AnchorType"_ustr );
         aAny >>= eTextAnchorType;
     }
     if ( eTextAnchorType != text::TextContentAnchorType_AS_CHARACTER )

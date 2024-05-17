@@ -460,7 +460,7 @@ protected:
 OUString SAL_CALL
 SwXFieldMaster::getImplementationName()
 {
-    return "SwXFieldMaster";
+    return u"SwXFieldMaster"_ustr;
 }
 
 namespace
@@ -503,7 +503,7 @@ sal_Bool SAL_CALL SwXFieldMaster::supportsService(const OUString& rServiceName)
 uno::Sequence< OUString > SAL_CALL
 SwXFieldMaster::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.TextFieldMaster", getServiceName(m_pImpl->m_nResTypeId) };
+    return { u"com.sun.star.text.TextFieldMaster"_ustr, getServiceName(m_pImpl->m_nResTypeId) };
 }
 
 SwXFieldMaster::SwXFieldMaster(SwDoc& rDoc, SwFieldIds const nResId)
@@ -668,7 +668,7 @@ void SAL_CALL SwXFieldMaster::setPropertyValue(
         }
         if (!pType2)
         {
-            throw uno::RuntimeException("no field type found!", *this);
+            throw uno::RuntimeException(u"no field type found!"_ustr, *this);
         }
         m_pImpl->SetFieldType(pType2);
     }
@@ -1938,7 +1938,7 @@ void SAL_CALL SwXTextField::attach(
         }
 
         if (!xField)
-            throw uno::RuntimeException("no SwField created?");
+            throw uno::RuntimeException(u"no SwField created?"_ustr);
 
         xField->SetAutomaticLanguage(!m_pImpl->m_pProps->bBool4);
         SwFormatField aFormat(*xField);
@@ -1973,7 +1973,7 @@ void SAL_CALL SwXTextField::attach(
 
         // What about updating the fields? (see fldmgr.cxx)
         if (!pTextAttr)
-            throw uno::RuntimeException("no SwTextAttr inserted?");  // could theoretically happen, if paragraph is full
+            throw uno::RuntimeException(u"no SwTextAttr inserted?"_ustr);  // could theoretically happen, if paragraph is full
 
         m_pImpl->ClearFieldType();
         const SwFormatField& rField = pTextAttr->GetFormatField();
@@ -2587,7 +2587,7 @@ void SAL_CALL SwXTextField::update()
 
 OUString SAL_CALL SwXTextField::getImplementationName()
 {
-    return "SwXTextField";
+    return u"SwXTextField"_ustr;
 }
 
 static OUString OldNameToNewName_Impl( const OUString &rOld )
@@ -2668,7 +2668,7 @@ const SwField* SwXTextField::Impl::GetField() const
 
 OUString SwXTextFieldMasters::getImplementationName()
 {
-    return "SwXTextFieldMasters";
+    return u"SwXTextFieldMasters"_ustr;
 }
 
 sal_Bool SwXTextFieldMasters::supportsService(const OUString& rServiceName)
@@ -2678,7 +2678,7 @@ sal_Bool SwXTextFieldMasters::supportsService(const OUString& rServiceName)
 
 uno::Sequence< OUString > SwXTextFieldMasters::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet { "com.sun.star.text.TextFieldMasters" };
+    uno::Sequence<OUString> aRet { u"com.sun.star.text.TextFieldMasters"_ustr };
     return aRet;
 }
 
@@ -2858,7 +2858,7 @@ public:
 
 OUString SwXTextFieldTypes::getImplementationName()
 {
-    return "SwXTextFieldTypes";
+    return u"SwXTextFieldTypes"_ustr;
 }
 
 sal_Bool SwXTextFieldTypes::supportsService(const OUString& rServiceName)
@@ -2868,7 +2868,7 @@ sal_Bool SwXTextFieldTypes::supportsService(const OUString& rServiceName)
 
 uno::Sequence< OUString > SwXTextFieldTypes::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet { "com.sun.star.text.TextFields" };
+    uno::Sequence<OUString> aRet { u"com.sun.star.text.TextFields"_ustr };
     return aRet;
 }
 
@@ -2964,7 +2964,7 @@ public:
 OUString SAL_CALL
 SwXFieldEnumeration::getImplementationName()
 {
-    return "SwXFieldEnumeration";
+    return u"SwXFieldEnumeration"_ustr;
 }
 
 sal_Bool SAL_CALL SwXFieldEnumeration::supportsService(const OUString& rServiceName)
@@ -2975,7 +2975,7 @@ sal_Bool SAL_CALL SwXFieldEnumeration::supportsService(const OUString& rServiceN
 uno::Sequence<OUString> SAL_CALL
 SwXFieldEnumeration::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.FieldEnumeration" };
+    return { u"com.sun.star.text.FieldEnumeration"_ustr };
 }
 
 SwXFieldEnumeration::SwXFieldEnumeration(SwDoc & rDoc)
@@ -3026,7 +3026,7 @@ uno::Any SAL_CALL SwXFieldEnumeration::nextElement()
 
     if (m_pImpl->m_nNextIndex >= static_cast<sal_Int32>(m_pImpl->m_Items.size()))
         throw container::NoSuchElementException(
-            "SwXFieldEnumeration::nextElement",
+            u"SwXFieldEnumeration::nextElement"_ustr,
             css::uno::Reference<css::uno::XInterface>());
 
     uno::Reference< text::XTextField >  &rxField =

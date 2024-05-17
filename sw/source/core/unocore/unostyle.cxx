@@ -424,13 +424,13 @@ sal_uInt16 StyleFamilyEntry::TranslateIndex<SfxStyleFamily::Pseudo>(const sal_uI
 static const std::vector<StyleFamilyEntry>& lcl_GetStyleFamilyEntries()
 {
     static const std::vector<StyleFamilyEntry> our_pStyleFamilyEntries{
-        StyleFamilyEntry::Create<SfxStyleFamily::Char>  (PROPERTY_MAP_CHAR_STYLE,  SwGetPoolIdFromName::ChrFmt,    "CharacterStyles", STR_STYLE_FAMILY_CHARACTER),
-        StyleFamilyEntry::Create<SfxStyleFamily::Para>  (PROPERTY_MAP_PARA_STYLE,  SwGetPoolIdFromName::TxtColl,   "ParagraphStyles", STR_STYLE_FAMILY_PARAGRAPH),
-        StyleFamilyEntry::Create<SfxStyleFamily::Page>  (PROPERTY_MAP_PAGE_STYLE,  SwGetPoolIdFromName::PageDesc,  "PageStyles",      STR_STYLE_FAMILY_PAGE),
-        StyleFamilyEntry::Create<SfxStyleFamily::Frame> (PROPERTY_MAP_FRAME_STYLE, SwGetPoolIdFromName::FrmFmt,    "FrameStyles",     STR_STYLE_FAMILY_FRAME),
-        StyleFamilyEntry::Create<SfxStyleFamily::Pseudo>(PROPERTY_MAP_NUM_STYLE,   SwGetPoolIdFromName::NumRule,   "NumberingStyles", STR_STYLE_FAMILY_NUMBERING),
-        StyleFamilyEntry::Create<SfxStyleFamily::Table> (PROPERTY_MAP_TABLE_STYLE, SwGetPoolIdFromName::TabStyle,  "TableStyles",     STR_STYLE_FAMILY_TABLE),
-        StyleFamilyEntry::Create<SfxStyleFamily::Cell>  (PROPERTY_MAP_CELL_STYLE,  SwGetPoolIdFromName::CellStyle, "CellStyles",      STR_STYLE_FAMILY_CELL),
+        StyleFamilyEntry::Create<SfxStyleFamily::Char>  (PROPERTY_MAP_CHAR_STYLE,  SwGetPoolIdFromName::ChrFmt,    u"CharacterStyles"_ustr, STR_STYLE_FAMILY_CHARACTER),
+        StyleFamilyEntry::Create<SfxStyleFamily::Para>  (PROPERTY_MAP_PARA_STYLE,  SwGetPoolIdFromName::TxtColl,   u"ParagraphStyles"_ustr, STR_STYLE_FAMILY_PARAGRAPH),
+        StyleFamilyEntry::Create<SfxStyleFamily::Page>  (PROPERTY_MAP_PAGE_STYLE,  SwGetPoolIdFromName::PageDesc,  u"PageStyles"_ustr,      STR_STYLE_FAMILY_PAGE),
+        StyleFamilyEntry::Create<SfxStyleFamily::Frame> (PROPERTY_MAP_FRAME_STYLE, SwGetPoolIdFromName::FrmFmt,    u"FrameStyles"_ustr,     STR_STYLE_FAMILY_FRAME),
+        StyleFamilyEntry::Create<SfxStyleFamily::Pseudo>(PROPERTY_MAP_NUM_STYLE,   SwGetPoolIdFromName::NumRule,   u"NumberingStyles"_ustr, STR_STYLE_FAMILY_NUMBERING),
+        StyleFamilyEntry::Create<SfxStyleFamily::Table> (PROPERTY_MAP_TABLE_STYLE, SwGetPoolIdFromName::TabStyle,  u"TableStyles"_ustr,     STR_STYLE_FAMILY_TABLE),
+        StyleFamilyEntry::Create<SfxStyleFamily::Cell>  (PROPERTY_MAP_CELL_STYLE,  SwGetPoolIdFromName::CellStyle, u"CellStyles"_ustr,      STR_STYLE_FAMILY_CELL),
     };
     return our_pStyleFamilyEntries;
 }
@@ -505,7 +505,7 @@ SfxStyleFamily SwXStyle::GetFamily() const
 {return m_rEntry.family();}
 
 OUString SwXStyle::getImplementationName()
-{ return {"SwXStyle"}; };
+{ return {u"SwXStyle"_ustr}; };
 
 sal_Bool SwXStyle::supportsService(const OUString& rServiceName)
 { return cppu::supportsService(this, rServiceName); };
@@ -678,16 +678,16 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
-        { return {"XStyleFamily"}; };
+        { return {u"XStyleFamily"_ustr}; };
     virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override
         { return cppu::supportsService(this, rServiceName); };
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
-        { return { "com.sun.star.style.StyleFamily" }; }
+        { return { u"com.sun.star.style.StyleFamily"_ustr }; }
 };
 }
 
 OUString SwXStyleFamilies::getImplementationName()
-    { return {"SwXStyleFamilies"}; }
+    { return {u"SwXStyleFamilies"_ustr}; }
 
 sal_Bool SwXStyleFamilies::supportsService(const OUString& rServiceName)
 {
@@ -695,7 +695,7 @@ sal_Bool SwXStyleFamilies::supportsService(const OUString& rServiceName)
 }
 
 uno::Sequence< OUString > SwXStyleFamilies::getSupportedServiceNames()
-    { return { "com.sun.star.style.StyleFamilies" }; }
+    { return { u"com.sun.star.style.StyleFamilies"_ustr }; }
 
 SwXStyleFamilies::SwXStyleFamilies(SwDocShell& rDocShell) :
         SwUnoCollection(rDocShell.GetDoc()),
@@ -795,8 +795,8 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
         {
             Reference<XInputStream> xInputStream;
             if (!(rProperty.Value >>= xInputStream))
-                throw IllegalArgumentException("Parameter 'InputStream' could not be converted to "
-                                               "type 'com::sun::star::io::XInputStream'",
+                throw IllegalArgumentException(u"Parameter 'InputStream' could not be converted to "
+                                               "type 'com::sun::star::io::XInputStream'"_ustr,
                                                nullptr, 0);
 
             aOpt.SetInputStream(xInputStream);
@@ -861,27 +861,27 @@ css::uno::Reference<css::style::XStyle> SwXStyleFamilies::CreateStyle(SfxStyleFa
 
 rtl::Reference<SwXStyle> SwXStyleFamilies::CreateStyleCharOrParaOrPseudo(SfxStyleFamily eFamily, SwDoc& rDoc)
 {
-    return ::CreateStyleCharOrParaOrPseudo(nullptr, rDoc.GetDocShell(), "", eFamily);
+    return ::CreateStyleCharOrParaOrPseudo(nullptr, rDoc.GetDocShell(), u""_ustr, eFamily);
 }
 
 rtl::Reference<SwXPageStyle> SwXStyleFamilies::CreateStylePage(SwDoc& rDoc)
 {
-    return ::CreateStylePage(nullptr, rDoc.GetDocShell(), "");
+    return ::CreateStylePage(nullptr, rDoc.GetDocShell(), u""_ustr);
 }
 
 rtl::Reference<SwXFrameStyle> SwXStyleFamilies::CreateStyleFrame(SwDoc& rDoc)
 {
-    return ::CreateStyleFrame(nullptr, rDoc.GetDocShell(), "");
+    return ::CreateStyleFrame(nullptr, rDoc.GetDocShell(), u""_ustr);
 }
 
 rtl::Reference<SwXTextTableStyle> SwXStyleFamilies::CreateStyleTable(SwDoc& rDoc)
 {
-    return ::CreateStyleTable(rDoc.GetDocShell(), "");
+    return ::CreateStyleTable(rDoc.GetDocShell(), u""_ustr);
 }
 
 rtl::Reference<SwXTextCellStyle> SwXStyleFamilies::CreateStyleCell(SwDoc& rDoc)
 {
-    return ::CreateStyleCell(rDoc.GetDocShell(), "");
+    return ::CreateStyleCell(rDoc.GetDocShell(), u""_ustr);
 }
 
 // FIXME: Ugly special casing that should die.
@@ -1208,7 +1208,7 @@ static uno::Reference<beans::XPropertySet> lcl_InitStandardStyle(const SfxStyleF
     using return_t = decltype(lcl_InitStandardStyle(eFamily, rxStyleFamily));
     if(eFamily != SfxStyleFamily::Para && eFamily != SfxStyleFamily::Page)
         return {};
-    auto aResult(rxStyleFamily->getByName("Standard"));
+    auto aResult(rxStyleFamily->getByName(u"Standard"_ustr));
     if(!aResult.has<return_t>())
         return {};
     return aResult.get<return_t>();
@@ -2050,7 +2050,7 @@ uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_PAPER_BIN)>(const SfxItemProp
     SfxItemPropertySet::getPropertyValue(rEntry, rSet, aValue);
     sal_Int8 nBin(aValue.get<sal_Int8>());
     if(nBin == -1)
-        return uno::Any(OUString("[From printer settings]"));
+        return uno::Any(u"[From printer settings]"_ustr);
     SfxPrinter* pPrinter = GetDoc()->getIDocumentDeviceAccess().getPrinter(false);
     if(!pPrinter)
         return uno::Any();
@@ -2343,13 +2343,13 @@ uno::Sequence<uno::Any> SwXStyle::getPropertyValues(const uno::Sequence<OUString
     catch(beans::UnknownPropertyException&)
     {
         css::uno::Any anyEx = cppu::getCaughtException();
-        throw css::lang::WrappedTargetRuntimeException("Unknown property exception caught",
+        throw css::lang::WrappedTargetRuntimeException(u"Unknown property exception caught"_ustr,
                 getXWeak(), anyEx );
     }
     catch(lang::WrappedTargetException&)
     {
         css::uno::Any anyEx = cppu::getCaughtException();
-        throw lang::WrappedTargetRuntimeException("WrappedTargetException caught",
+        throw lang::WrappedTargetRuntimeException(u"WrappedTargetException caught"_ustr,
                 getXWeak(), anyEx );
     }
     return aValues;
@@ -3193,13 +3193,13 @@ uno::Sequence<uno::Any> SwXPageStyle::getPropertyValues(const uno::Sequence<OUSt
     catch(beans::UnknownPropertyException &)
     {
         css::uno::Any anyEx = cppu::getCaughtException();
-        throw lang::WrappedTargetRuntimeException("Unknown property exception caught",
+        throw lang::WrappedTargetRuntimeException(u"Unknown property exception caught"_ustr,
                 getXWeak(), anyEx );
     }
     catch(lang::WrappedTargetException &)
     {
         css::uno::Any anyEx = cppu::getCaughtException();
-        throw lang::WrappedTargetRuntimeException("WrappedTargetException caught",
+        throw lang::WrappedTargetRuntimeException(u"WrappedTargetException caught"_ustr,
                 getXWeak(), anyEx );
     }
 }
@@ -4014,12 +4014,12 @@ uno::Sequence< uno::Any > SwXAutoStyle::getPropertyValues (
     catch (beans::UnknownPropertyException &)
     {
         css::uno::Any exc = cppu::getCaughtException();
-        throw lang::WrappedTargetRuntimeException("Unknown property exception caught", getXWeak(), exc );
+        throw lang::WrappedTargetRuntimeException(u"Unknown property exception caught"_ustr, getXWeak(), exc );
     }
     catch (lang::WrappedTargetException &)
     {
         css::uno::Any exc = cppu::getCaughtException();
-        throw lang::WrappedTargetRuntimeException("WrappedTargetException caught", getXWeak(), exc );
+        throw lang::WrappedTargetRuntimeException(u"WrappedTargetException caught"_ustr, getXWeak(), exc );
     }
 }
 
@@ -4424,7 +4424,7 @@ css::uno::Any SAL_CALL SwXTextTableStyle::getPropertyValue(const OUString& rProp
     else
         throw css::beans::UnknownPropertyException(rPropertyName);
 
-    return uno::Any(bIsRow ? OUString("row") : OUString("column"));
+    return uno::Any(bIsRow ? u"row"_ustr : u"column"_ustr);
 }
 
 void SAL_CALL SwXTextTableStyle::addPropertyChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XPropertyChangeListener >& /*xListener*/ )
@@ -4528,7 +4528,7 @@ sal_Bool SAL_CALL SAL_CALL SwXTextTableStyle::hasElements()
 //XServiceInfo
 OUString SAL_CALL SwXTextTableStyle::getImplementationName()
 {
-    return {"SwXTextTableStyle"};
+    return {u"SwXTextTableStyle"_ustr};
 }
 
 sal_Bool SAL_CALL SwXTextTableStyle::supportsService(const OUString& rServiceName)
@@ -4538,7 +4538,7 @@ sal_Bool SAL_CALL SwXTextTableStyle::supportsService(const OUString& rServiceNam
 
 css::uno::Sequence<OUString> SAL_CALL SwXTextTableStyle::getSupportedServiceNames()
 {
-    return {"com.sun.star.style.Style"};
+    return {u"com.sun.star.style.Style"_ustr};
 }
 
 // SwXTextCellStyle
@@ -4688,7 +4688,7 @@ sal_Bool SAL_CALL SwXTextCellStyle::isInUse()
         return false;
 
     uno::Reference<container::XNameAccess> xTableStyles;
-    xFamilies->getByName("TableStyles") >>= xTableStyles;
+    xFamilies->getByName(u"TableStyles"_ustr) >>= xTableStyles;
     if (!xTableStyles.is())
         return false;
 
@@ -5500,7 +5500,7 @@ css::uno::Any SAL_CALL SwXTextCellStyle::getPropertyDefault(const OUString& /*aP
 //XServiceInfo
 OUString SAL_CALL SwXTextCellStyle::getImplementationName()
 {
-    return {"SwXTextCellStyle"};
+    return {u"SwXTextCellStyle"_ustr};
 }
 
 sal_Bool SAL_CALL SwXTextCellStyle::supportsService(const OUString& rServiceName)
@@ -5510,7 +5510,7 @@ sal_Bool SAL_CALL SwXTextCellStyle::supportsService(const OUString& rServiceName
 
 css::uno::Sequence<OUString> SAL_CALL SwXTextCellStyle::getSupportedServiceNames()
 {
-    return {"com.sun.star.style.Style"};
+    return {u"com.sun.star.style.Style"_ustr};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

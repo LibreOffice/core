@@ -125,13 +125,13 @@ namespace
     SwFrameFormat* lcl_EnsureCoreConnected(SwFrameFormat* pFormat, cppu::OWeakObject* pObject)
     {
         if(!pFormat)
-            throw uno::RuntimeException("Lost connection to core objects", pObject);
+            throw uno::RuntimeException(u"Lost connection to core objects"_ustr, pObject);
         return pFormat;
     }
     SwTable* lcl_EnsureTableNotComplex(SwTable* pTable, cppu::OWeakObject* pObject)
     {
         if(pTable->IsTableComplex())
-            throw uno::RuntimeException("Table too complex", pObject);
+            throw uno::RuntimeException(u"Table too complex"_ustr, pObject);
         return pTable;
     }
 
@@ -227,7 +227,7 @@ static void lcl_SetSpecialProperty(SwFrameFormat* pFormat,
                     aSz.SetWidthPercent(0);
                 else
                 {
-                    throw lang::IllegalArgumentException("relative width cannot be switched on with this property", nullptr, 0);
+                    throw lang::IllegalArgumentException(u"relative width cannot be switched on with this property"_ustr, nullptr, 0);
                 }
             }
             pFormat->GetDoc()->SetAttr(aSz, *pFormat);
@@ -947,8 +947,8 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
         uno::Sequence<beans::PropertyValue> tableCellProperties = aValue.get< uno::Sequence< beans::PropertyValue > >();
         comphelper::SequenceAsHashMap aPropMap(tableCellProperties);
         OUString sRedlineType;
-        if(!(aPropMap.getValue("RedlineType") >>= sRedlineType))
-            throw beans::UnknownPropertyException("No redline type property: ", getXWeak());
+        if(!(aPropMap.getValue(u"RedlineType"_ustr) >>= sRedlineType))
+            throw beans::UnknownPropertyException(u"No redline type property: "_ustr, getXWeak());
 
         // Create a 'Table Cell Redline' object
         SwUnoCursorHelper::makeTableCellRedline(*m_pBox, sRedlineType, tableCellProperties);
@@ -1060,16 +1060,16 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
 }
 
 void SwXCell::addPropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/)
-    { throw uno::RuntimeException("not implemented", getXWeak()); };
+    { throw uno::RuntimeException(u"not implemented"_ustr, getXWeak()); };
 
 void SwXCell::removePropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/)
-    { throw uno::RuntimeException("not implemented", getXWeak()); };
+    { throw uno::RuntimeException(u"not implemented"_ustr, getXWeak()); };
 
 void SwXCell::addVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/)
-    { throw uno::RuntimeException("not implemented", getXWeak()); };
+    { throw uno::RuntimeException(u"not implemented"_ustr, getXWeak()); };
 
 void SwXCell::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/)
-    { throw uno::RuntimeException("not implemented", getXWeak()); };
+    { throw uno::RuntimeException(u"not implemented"_ustr, getXWeak()); };
 
 uno::Reference<container::XEnumeration> SwXCell::createEnumeration()
 {
@@ -1201,22 +1201,22 @@ uno::Any SwXCell::GetAny() const
 }
 
 OUString SwXCell::getImplementationName()
-    { return "SwXCell"; }
+    { return u"SwXCell"_ustr; }
 
 sal_Bool SwXCell::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
 
 uno::Sequence< OUString > SwXCell::getSupportedServiceNames()
-    { return {"com.sun.star.text.CellProperties"}; }
+    { return {u"com.sun.star.text.CellProperties"_ustr}; }
 
 OUString SwXTextTableRow::getImplementationName()
-    { return "SwXTextTableRow"; }
+    { return u"SwXTextTableRow"_ustr; }
 
 sal_Bool SwXTextTableRow::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
 
 uno::Sequence< OUString > SwXTextTableRow::getSupportedServiceNames()
-    { return {"com.sun.star.text.TextTableRow"}; }
+    { return {u"com.sun.star.text.TextTableRow"_ustr}; }
 
 
 SwXTextTableRow::SwXTextTableRow(SwFrameFormat* pFormat, SwTableLine* pLn) :
@@ -1255,9 +1255,9 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno:
         uno::Sequence< beans::PropertyValue > tableRowProperties = aValue.get< uno::Sequence< beans::PropertyValue > >();
         comphelper::SequenceAsHashMap aPropMap( tableRowProperties );
         OUString sRedlineType;
-        if( !(aPropMap.getValue("RedlineType") >>= sRedlineType) )
+        if( !(aPropMap.getValue(u"RedlineType"_ustr) >>= sRedlineType) )
         {
-            throw beans::UnknownPropertyException("No redline type property: ", getXWeak() );
+            throw beans::UnknownPropertyException(u"No redline type property: "_ustr, getXWeak() );
         }
 
         // Create a 'Table Row Redline' object
@@ -1362,16 +1362,16 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName)
 }
 
 void SwXTextTableRow::addPropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/)
-    { throw uno::RuntimeException("not implemented", getXWeak()); };
+    { throw uno::RuntimeException(u"not implemented"_ustr, getXWeak()); };
 
 void SwXTextTableRow::removePropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/)
-    { throw uno::RuntimeException("not implemented", getXWeak()); };
+    { throw uno::RuntimeException(u"not implemented"_ustr, getXWeak()); };
 
 void SwXTextTableRow::addVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/)
-    { throw uno::RuntimeException("not implemented", getXWeak()); };
+    { throw uno::RuntimeException(u"not implemented"_ustr, getXWeak()); };
 
 void SwXTextTableRow::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/)
-    { throw uno::RuntimeException("not implemented", getXWeak()); };
+    { throw uno::RuntimeException(u"not implemented"_ustr, getXWeak()); };
 
 void SwXTextTableRow::Notify(const SfxHint& rHint)
 {
@@ -1396,7 +1396,7 @@ SwTableLine* SwXTextTableRow::FindLine(SwTable* pTable, SwTableLine const * pLin
 // SwXTextTableCursor
 
 OUString SwXTextTableCursor::getImplementationName()
-    { return "SwXTextTableCursor"; }
+    { return u"SwXTextTableCursor"_ustr; }
 
 sal_Bool SwXTextTableCursor::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
@@ -1415,7 +1415,7 @@ const SwUnoCursor&    SwXTextTableCursor::GetCursor() const { return *m_pUnoCurs
 SwUnoCursor&          SwXTextTableCursor::GetCursor()       { return *m_pUnoCursor; }
 
 uno::Sequence<OUString> SwXTextTableCursor::getSupportedServiceNames()
-    { return {"com.sun.star.text.TextTableCursor"}; }
+    { return {u"com.sun.star.text.TextTableCursor"_ustr}; }
 
 SwXTextTableCursor::SwXTextTableCursor(SwFrameFormat* pFrameFormat, SwTableBox const* pBox)
     : m_pFrameFormat(pFrameFormat)
@@ -1571,7 +1571,7 @@ sal_Bool SwXTextTableCursor::splitRange(sal_Int16 Count, sal_Bool Horizontal)
 {
     SolarMutexGuard aGuard;
     if (Count <= 0)
-        throw uno::RuntimeException("Illegal first argument: needs to be > 0", getXWeak());
+        throw uno::RuntimeException(u"Illegal first argument: needs to be > 0"_ustr, getXWeak());
     SwUnoCursor& rUnoCursor = GetCursor();
     SwUnoTableCursor& rTableCursor = dynamic_cast<SwUnoTableCursor&>(rUnoCursor);
     {
@@ -1698,16 +1698,16 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
 }
 
 void SwXTextTableCursor::addPropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/)
-    { throw uno::RuntimeException("not implemented", getXWeak()); };
+    { throw uno::RuntimeException(u"not implemented"_ustr, getXWeak()); };
 
 void SwXTextTableCursor::removePropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/)
-    { throw uno::RuntimeException("not implemented", getXWeak()); };
+    { throw uno::RuntimeException(u"not implemented"_ustr, getXWeak()); };
 
 void SwXTextTableCursor::addVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/)
-    { throw uno::RuntimeException("not implemented", getXWeak()); };
+    { throw uno::RuntimeException(u"not implemented"_ustr, getXWeak()); };
 
 void SwXTextTableCursor::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/)
-    { throw uno::RuntimeException("not implemented", getXWeak()); };
+    { throw uno::RuntimeException(u"not implemented"_ustr, getXWeak()); };
 
 void SwXTextTableCursor::Notify( const SfxHint& rHint )
 {
@@ -1923,7 +1923,7 @@ public:
         sal_uInt16 const nColCount(rThis.m_pImpl->GetColumnCount());
         if (!nRowCount || !nColCount)
         {
-            throw uno::RuntimeException("Table too complex", rThis.getXWeak());
+            throw uno::RuntimeException(u"Table too complex"_ustr, rThis.getXWeak());
         }
         return std::make_pair(nRowCount, nColCount);
     }
@@ -2051,7 +2051,7 @@ SwXTextTable::attach(const uno::Reference<text::XTextRange> & xTextRange)
 
     // attach() must only be called once
     if (!m_pImpl->IsDescriptor())  /* already attached ? */
-        throw uno::RuntimeException("SwXTextTable: already attached to range.", getXWeak());
+        throw uno::RuntimeException(u"SwXTextTable: already attached to range."_ustr, getXWeak());
 
     SwXTextRange* pRange(dynamic_cast<SwXTextRange*>(xTextRange.get()));
     OTextCursorHelper* pCursor(dynamic_cast<OTextCursorHelper*>(xTextRange.get()));
@@ -2930,16 +2930,16 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
 }
 
 void SwXTextTable::addPropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/)
-    { throw uno::RuntimeException("Not implemented", getXWeak()); }
+    { throw uno::RuntimeException(u"Not implemented"_ustr, getXWeak()); }
 
 void SwXTextTable::removePropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/)
-    { throw uno::RuntimeException("Not implemented", getXWeak()); }
+    { throw uno::RuntimeException(u"Not implemented"_ustr, getXWeak()); }
 
 void SwXTextTable::addVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/)
-    { throw uno::RuntimeException("Not implemented", getXWeak()); }
+    { throw uno::RuntimeException(u"Not implemented"_ustr, getXWeak()); }
 
 void SwXTextTable::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/)
-    { throw uno::RuntimeException("Not implemented", getXWeak()); }
+    { throw uno::RuntimeException(u"Not implemented"_ustr, getXWeak()); }
 
 OUString SwXTextTable::getName()
 {
@@ -3063,7 +3063,7 @@ void SwXTextTable::Impl::Notify(const SfxHint& rHint)
 }
 
 OUString SAL_CALL SwXTextTable::getImplementationName()
-    { return "SwXTextTable"; }
+    { return u"SwXTextTable"_ustr; }
 
 sal_Bool SwXTextTable::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
@@ -3071,10 +3071,10 @@ sal_Bool SwXTextTable::supportsService(const OUString& rServiceName)
 uno::Sequence<OUString> SwXTextTable::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.document.LinkTarget",
-        "com.sun.star.text.TextTable",
-        "com.sun.star.text.TextContent",
-        "com.sun.star.text.TextSortable" };
+        u"com.sun.star.document.LinkTarget"_ustr,
+        u"com.sun.star.text.TextTable"_ustr,
+        u"com.sun.star.text.TextContent"_ustr,
+        u"com.sun.star.text.TextSortable"_ustr };
 }
 
 
@@ -3129,7 +3129,7 @@ public:
 };
 
 OUString SwXCellRange::getImplementationName()
-    { return "SwXCellRange"; }
+    { return u"SwXCellRange"_ustr; }
 
 sal_Bool SwXCellRange::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
@@ -3137,13 +3137,13 @@ sal_Bool SwXCellRange::supportsService(const OUString& rServiceName)
 uno::Sequence<OUString> SwXCellRange::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.text.CellRange",
-        "com.sun.star.style.CharacterProperties",
-        "com.sun.star.style.CharacterPropertiesAsian",
-        "com.sun.star.style.CharacterPropertiesComplex",
-        "com.sun.star.style.ParagraphProperties",
-        "com.sun.star.style.ParagraphPropertiesAsian",
-        "com.sun.star.style.ParagraphPropertiesComplex" };
+        u"com.sun.star.text.CellRange"_ustr,
+        u"com.sun.star.style.CharacterProperties"_ustr,
+        u"com.sun.star.style.CharacterPropertiesAsian"_ustr,
+        u"com.sun.star.style.CharacterPropertiesComplex"_ustr,
+        u"com.sun.star.style.ParagraphProperties"_ustr,
+        u"com.sun.star.style.ParagraphPropertiesAsian"_ustr,
+        u"com.sun.star.style.ParagraphPropertiesComplex"_ustr };
 }
 
 SwXCellRange::SwXCellRange(sw::UnoCursorPointer const& pCursor,
@@ -3492,16 +3492,16 @@ uno::Any SAL_CALL SwXCellRange::getPropertyValue(const OUString& rPropertyName)
 }
 
 void SwXCellRange::addPropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
-    { throw uno::RuntimeException("Not implemented", getXWeak()); }
+    { throw uno::RuntimeException(u"Not implemented"_ustr, getXWeak()); }
 
 void SwXCellRange::removePropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
-    { throw uno::RuntimeException("Not implemented", getXWeak()); }
+    { throw uno::RuntimeException(u"Not implemented"_ustr, getXWeak()); }
 
 void SwXCellRange::addVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
-    { throw uno::RuntimeException("Not implemented", getXWeak()); }
+    { throw uno::RuntimeException(u"Not implemented"_ustr, getXWeak()); }
 
 void SwXCellRange::removeVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
-    { throw uno::RuntimeException("Not implemented", getXWeak()); }
+    { throw uno::RuntimeException(u"Not implemented"_ustr, getXWeak()); }
 
 ///@see SwXCellRange::getData
 uno::Sequence<uno::Sequence<uno::Any>> SAL_CALL SwXCellRange::getDataArray()
@@ -3510,7 +3510,7 @@ uno::Sequence<uno::Sequence<uno::Any>> SAL_CALL SwXCellRange::getDataArray()
     const sal_Int32 nRowCount = m_pImpl->GetRowCount();
     const sal_Int32 nColCount = m_pImpl->GetColumnCount();
     if(!nRowCount || !nColCount)
-        throw uno::RuntimeException("Table too complex", getXWeak());
+        throw uno::RuntimeException(u"Table too complex"_ustr, getXWeak());
     lcl_EnsureCoreConnected(m_pImpl->GetFrameFormat(), this);
     uno::Sequence< uno::Sequence< uno::Any > > aRowSeq(nRowCount);
     auto vCells(GetCells());
@@ -3522,7 +3522,7 @@ uno::Sequence<uno::Sequence<uno::Any>> SAL_CALL SwXCellRange::getDataArray()
         {
             auto pCell(static_cast<SwXCell*>(pCurrentCell->get()));
             if(!pCell)
-                throw uno::RuntimeException("Table too complex", getXWeak());
+                throw uno::RuntimeException(u"Table too complex"_ustr, getXWeak());
             rCellAny = pCell->GetAny();
             ++pCurrentCell;
         }
@@ -3537,7 +3537,7 @@ void SAL_CALL SwXCellRange::setDataArray(const uno::Sequence< uno::Sequence< uno
     const sal_Int32 nRowCount = m_pImpl->GetRowCount();
     const sal_Int32 nColCount = m_pImpl->GetColumnCount();
     if(!nRowCount || !nColCount)
-        throw uno::RuntimeException("Table too complex", getXWeak());
+        throw uno::RuntimeException(u"Table too complex"_ustr, getXWeak());
     SwFrameFormat *const pFormat = m_pImpl->GetFrameFormat();
     if(!pFormat)
         return;
@@ -3553,7 +3553,7 @@ void SAL_CALL SwXCellRange::setDataArray(const uno::Sequence< uno::Sequence< uno
         {
             auto pCell(static_cast<SwXCell*>(pCurrentCell->get()));
             if(!pCell || !pCell->GetTableBox())
-                throw uno::RuntimeException("Box for cell missing", getXWeak());
+                throw uno::RuntimeException(u"Box for cell missing"_ustr, getXWeak());
             if(aValue.isExtractableTo(cppu::UnoType<OUString>::get()))
                 sw_setString(*pCell, aValue.get<OUString>());
             else if(aValue.isExtractableTo(cppu::UnoType<double>::get()))
@@ -3572,7 +3572,7 @@ SwXCellRange::getData()
     const sal_Int32 nRowCount = m_pImpl->GetRowCount();
     const sal_Int32 nColCount = m_pImpl->GetColumnCount();
     if(!nRowCount || !nColCount)
-        throw uno::RuntimeException("Table too complex", getXWeak());
+        throw uno::RuntimeException(u"Table too complex"_ustr, getXWeak());
     if (m_pImpl->m_bFirstColumnAsLabel || m_pImpl->m_bFirstRowAsLabel)
     {
         uno::Reference<chart::XChartDataArray> const xDataRange(
@@ -3590,7 +3590,7 @@ SwXCellRange::getData()
         for(auto& rValue : asNonConstRange(rRow))
         {
             if(!(*pCurrentCell))
-                throw uno::RuntimeException("Table too complex", getXWeak());
+                throw uno::RuntimeException(u"Table too complex"_ustr, getXWeak());
             rValue = (*pCurrentCell)->getValue();
             ++pCurrentCell;
         }
@@ -3605,7 +3605,7 @@ SwXCellRange::setData(const uno::Sequence< uno::Sequence<double> >& rData)
     const sal_Int32 nRowCount = m_pImpl->GetRowCount();
     const sal_Int32 nColCount = m_pImpl->GetColumnCount();
     if(!nRowCount || !nColCount)
-        throw uno::RuntimeException("Table too complex", getXWeak());
+        throw uno::RuntimeException(u"Table too complex"_ustr, getXWeak());
     if (m_pImpl->m_bFirstColumnAsLabel || m_pImpl->m_bFirstRowAsLabel)
     {
         uno::Reference<chart::XChartDataArray> const xDataRange(
@@ -3656,7 +3656,7 @@ SwXCellRange::Impl::GetLabelDescriptions(SwXCellRange & rThis, bool bRow)
     sal_uInt32 nLeft, nTop, nRight, nBottom;
     std::tie(nLeft, nTop, nRight, nBottom) = GetLabelCoordinates(bRow);
     if(!nRight && !nBottom)
-        throw uno::RuntimeException("Table too complex", rThis.getXWeak());
+        throw uno::RuntimeException(u"Table too complex"_ustr, rThis.getXWeak());
     lcl_EnsureCoreConnected(GetFrameFormat(), &rThis);
     if (!(bRow ? m_bFirstColumnAsLabel : m_bFirstRowAsLabel))
         return {};  // without labels we have no descriptions
@@ -3688,13 +3688,13 @@ void SwXCellRange::Impl::SetLabelDescriptions(SwXCellRange & rThis,
     sal_uInt32 nLeft, nTop, nRight, nBottom;
     std::tie(nLeft, nTop, nRight, nBottom) = GetLabelCoordinates(bRow);
     if(!nRight && !nBottom)
-        throw uno::RuntimeException("Table too complex", rThis.getXWeak());
+        throw uno::RuntimeException(u"Table too complex"_ustr, rThis.getXWeak());
     auto xLabelRange(rThis.getCellRangeByPosition(nLeft, nTop, nRight, nBottom));
     if (!xLabelRange.is())
-        throw uno::RuntimeException("Missing Cell Range", rThis.getXWeak());
+        throw uno::RuntimeException(u"Missing Cell Range"_ustr, rThis.getXWeak());
     auto vCells(static_cast<SwXCellRange*>(xLabelRange.get())->GetCells());
     if (sal::static_int_cast<sal_uInt32>(rDesc.getLength()) != vCells.size())
-        throw uno::RuntimeException("Too few or too many descriptions", rThis.getXWeak());
+        throw uno::RuntimeException(u"Too few or too many descriptions"_ustr, rThis.getXWeak());
     auto pDescIterator(rDesc.begin());
     for(auto& xCell : vCells)
         uno::Reference<text::XText>(xCell, uno::UNO_QUERY_THROW)->setString(*pDescIterator++);
@@ -3729,10 +3729,10 @@ void SAL_CALL SwXCellRange::removeChartDataChangeEventListener(
 }
 
 sal_Bool SwXCellRange::isNotANumber(double /*fNumber*/)
-    { throw uno::RuntimeException("Not implemented", getXWeak()); }
+    { throw uno::RuntimeException(u"Not implemented"_ustr, getXWeak()); }
 
 double SwXCellRange::getNotANumber()
-    { throw uno::RuntimeException("Not implemented", getXWeak()); }
+    { throw uno::RuntimeException(u"Not implemented"_ustr, getXWeak()); }
 
 uno::Sequence< beans::PropertyValue > SwXCellRange::createSortDescriptor()
 {
@@ -3810,13 +3810,13 @@ public:
 //  SwXTableRows
 
 OUString SwXTableRows::getImplementationName()
-    { return "SwXTableRows"; }
+    { return u"SwXTableRows"_ustr; }
 
 sal_Bool SwXTableRows::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
 
 uno::Sequence< OUString > SwXTableRows::getSupportedServiceNames()
-    { return { "com.sun.star.text.TableRows" }; }
+    { return { u"com.sun.star.text.TableRows"_ustr }; }
 
 
 SwXTableRows::SwXTableRows(SwFrameFormat& rFrameFormat) :
@@ -3884,7 +3884,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     SwTable* pTable = lcl_EnsureTableNotComplex(SwTable::FindTable(pFrameFormat), this);
     const size_t nRowCount = pTable->GetTabLines().size();
     if (nCount <= 0 || 0 > nIndex || o3tl::make_unsigned(nIndex) > nRowCount)
-        throw uno::RuntimeException("Illegal arguments", getXWeak());
+        throw uno::RuntimeException(u"Illegal arguments"_ustr, getXWeak());
     const OUString sTLName = sw_GetCellName(0, nIndex);
     const SwTableBox* pTLBox = pTable->GetTableBox(sTLName);
     bool bAppend = false;
@@ -3898,7 +3898,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
         pTLBox = rBoxes.front();
     }
     if(!pTLBox)
-        throw uno::RuntimeException("Illegal arguments", getXWeak());
+        throw uno::RuntimeException(u"Illegal arguments"_ustr, getXWeak());
     const SwStartNode* pSttNd = pTLBox->GetSttNd();
     SwPosition aPos(*pSttNd);
     // set cursor to the upper-left cell of the range
@@ -3926,7 +3926,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     OUString sTLName = sw_GetCellName(0, nIndex);
     const SwTableBox* pTLBox = pTable->GetTableBox(sTLName);
     if(!pTLBox)
-        throw uno::RuntimeException("Illegal arguments", getXWeak());
+        throw uno::RuntimeException(u"Illegal arguments"_ustr, getXWeak());
     const SwStartNode* pSttNd = pTLBox->GetSttNd();
     SwPosition aPos(*pSttNd);
     // set cursor to the upper-left cell of the range
@@ -3936,7 +3936,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     const OUString sBLName = sw_GetCellName(0, nIndex + nCount - 1);
     const SwTableBox* pBLBox = pTable->GetTableBox( sBLName );
     if(!pBLBox)
-        throw uno::RuntimeException("Illegal arguments", getXWeak());
+        throw uno::RuntimeException(u"Illegal arguments"_ustr, getXWeak());
     pUnoCursor->SetMark();
     pUnoCursor->GetPoint()->Assign( *pBLBox->GetSttNd() );
     pUnoCursor->Move(fnMoveForward, GoInNode);
@@ -3978,13 +3978,13 @@ class SwXTableColumns::Impl : public SvtListener
 };
 
 OUString SwXTableColumns::getImplementationName()
-    { return "SwXTableColumns"; }
+    { return u"SwXTableColumns"_ustr; }
 
 sal_Bool SwXTableColumns::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
 
 uno::Sequence< OUString > SwXTableColumns::getSupportedServiceNames()
-    { return { "com.sun.star.text.TableColumns"}; }
+    { return { u"com.sun.star.text.TableColumns"_ustr}; }
 
 
 SwXTableColumns::SwXTableColumns(SwFrameFormat& rFrameFormat) :
@@ -4043,7 +4043,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     SwTableLine* pLine = rLines.front();
     const size_t nColCount = pLine->GetTabBoxes().size();
     if (nCount <= 0 || 0 > nIndex || o3tl::make_unsigned(nIndex) > nColCount)
-        throw uno::RuntimeException("Illegal arguments", getXWeak());
+        throw uno::RuntimeException(u"Illegal arguments"_ustr, getXWeak());
     const OUString sTLName = sw_GetCellName(nIndex, 0);
     const SwTableBox* pTLBox = pTable->GetTableBox( sTLName );
     bool bAppend = false;
@@ -4055,7 +4055,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
         pTLBox = rBoxes.back();
     }
     if(!pTLBox)
-        throw uno::RuntimeException("Illegal arguments", getXWeak());
+        throw uno::RuntimeException(u"Illegal arguments"_ustr, getXWeak());
     const SwStartNode* pSttNd = pTLBox->GetSttNd();
     SwPosition aPos(*pSttNd);
     UnoActionContext aAction(pFrameFormat->GetDoc());
@@ -4083,7 +4083,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     const OUString sTLName = sw_GetCellName(nIndex, 0);
     const SwTableBox* pTLBox = pTable->GetTableBox( sTLName );
     if(!pTLBox)
-        throw uno::RuntimeException("Cell not found", getXWeak());
+        throw uno::RuntimeException(u"Cell not found"_ustr, getXWeak());
     const SwStartNode* pSttNd = pTLBox->GetSttNd();
     SwPosition aPos(*pSttNd);
     // set cursor to the upper-left cell of the range
@@ -4093,7 +4093,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     const OUString sTRName = sw_GetCellName(nIndex + nCount - 1, 0);
     const SwTableBox* pTRBox = pTable->GetTableBox(sTRName);
     if(!pTRBox)
-        throw uno::RuntimeException("Cell not found", getXWeak());
+        throw uno::RuntimeException(u"Cell not found"_ustr, getXWeak());
     pUnoCursor->SetMark();
     pUnoCursor->GetPoint()->Assign( *pTRBox->GetSttNd() );
     pUnoCursor->Move(fnMoveForward, GoInNode);

@@ -447,7 +447,7 @@ void SwXTextPortion::SetPropertyValues_Impl(
     const uno::Sequence< uno::Any >& rValues )
 {
     if (rPropertyNames.getLength() != rValues.getLength())
-        throw lang::IllegalArgumentException("lengths do not match",
+        throw lang::IllegalArgumentException(u"lengths do not match"_ustr,
                                              getXWeak(), -1);
 
     SwUnoCursor& rUnoCursor = GetCursor();
@@ -508,13 +508,13 @@ uno::Sequence< uno::Any > SwXTextPortion::getPropertyValues(
     catch (beans::UnknownPropertyException &)
     {
         css::uno::Any anyEx = cppu::getCaughtException();
-        throw lang::WrappedTargetRuntimeException("Unknown property exception caught",
+        throw lang::WrappedTargetRuntimeException(u"Unknown property exception caught"_ustr,
                 getXWeak(), anyEx );
     }
     catch (lang::WrappedTargetException &)
     {
         css::uno::Any anyEx = cppu::getCaughtException();
-        throw lang::WrappedTargetRuntimeException("WrappedTargetException caught",
+        throw lang::WrappedTargetRuntimeException(u"WrappedTargetException caught"_ustr,
                 getXWeak(), anyEx );
     }
 
@@ -838,12 +838,12 @@ uno::Reference< container::XEnumeration >  SwXTextPortion::createContentEnumerat
 
 uno::Sequence< OUString > SwXTextPortion::getAvailableServiceNames()
 {
-    return { "com.sun.star.text.TextContent" };
+    return { u"com.sun.star.text.TextContent"_ustr };
 }
 
 OUString SwXTextPortion::getImplementationName()
 {
-    return { "SwXTextPortion" };
+    return { u"SwXTextPortion"_ustr };
 }
 
 sal_Bool SwXTextPortion::supportsService(const OUString& rServiceName)
@@ -853,13 +853,13 @@ sal_Bool SwXTextPortion::supportsService(const OUString& rServiceName)
 
 uno::Sequence< OUString > SwXTextPortion::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.TextPortion",
-            "com.sun.star.style.CharacterProperties",
-            "com.sun.star.style.CharacterPropertiesAsian",
-            "com.sun.star.style.CharacterPropertiesComplex",
-            "com.sun.star.style.ParagraphProperties",
-            "com.sun.star.style.ParagraphPropertiesAsian",
-            "com.sun.star.style.ParagraphPropertiesComplex" };
+    return { u"com.sun.star.text.TextPortion"_ustr,
+            u"com.sun.star.style.CharacterProperties"_ustr,
+            u"com.sun.star.style.CharacterPropertiesAsian"_ustr,
+            u"com.sun.star.style.CharacterPropertiesComplex"_ustr,
+            u"com.sun.star.style.ParagraphProperties"_ustr,
+            u"com.sun.star.style.ParagraphPropertiesAsian"_ustr,
+            u"com.sun.star.style.ParagraphPropertiesComplex"_ustr };
 }
 
 void SwXTextPortion::Notify(const SfxHint& rHint)

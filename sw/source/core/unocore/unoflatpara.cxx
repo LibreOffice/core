@@ -82,10 +82,10 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXFlatParagraph::getPropertySetInfo()
 {
     static const comphelper::PropertyMapEntry s_Entries[] = {
-        { OUString("FieldPositions"), -1, ::cppu::UnoType<uno::Sequence<sal_Int32>>::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("FootnotePositions"), -1, ::cppu::UnoType<uno::Sequence<sal_Int32>>::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("SortedTextId"), -1, ::cppu::UnoType<sal_Int32>::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("DocumentElementsCount"), -1, ::cppu::UnoType<sal_Int32>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { u"FieldPositions"_ustr, -1, ::cppu::UnoType<uno::Sequence<sal_Int32>>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { u"FootnotePositions"_ustr, -1, ::cppu::UnoType<uno::Sequence<sal_Int32>>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { u"SortedTextId"_ustr, -1, ::cppu::UnoType<sal_Int32>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { u"DocumentElementsCount"_ustr, -1, ::cppu::UnoType<sal_Int32>::get(), beans::PropertyAttribute::READONLY, 0 },
     };
     return new comphelper::PropertySetInfo(s_Entries);
 }
@@ -93,7 +93,7 @@ SwXFlatParagraph::getPropertySetInfo()
 void SAL_CALL
 SwXFlatParagraph::setPropertyValue(const OUString&, const uno::Any&)
 {
-    throw lang::IllegalArgumentException("no values can be set",
+    throw lang::IllegalArgumentException(u"no values can be set"_ustr,
             getXWeak(), 0);
 }
 

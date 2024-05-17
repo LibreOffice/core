@@ -147,7 +147,7 @@ SwXReferenceMark::CreateXReferenceMark(
 
 OUString SAL_CALL SwXReferenceMark::getImplementationName()
 {
-    return "SwXReferenceMark";
+    return u"SwXReferenceMark"_ustr;
 }
 
 sal_Bool SAL_CALL
@@ -160,8 +160,8 @@ uno::Sequence< OUString > SAL_CALL
 SwXReferenceMark::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.text.TextContent",
-        "com.sun.star.text.ReferenceMark"
+        u"com.sun.star.text.TextContent"_ustr,
+        u"com.sun.star.text.ReferenceMark"_ustr
     };
 }
 
@@ -241,7 +241,7 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
     if (!pTextAttr)
     {
         throw uno::RuntimeException(
-            "SwXReferenceMark::InsertRefMark(): cannot insert attribute", nullptr);
+            u"SwXReferenceMark::InsertRefMark(): cannot insert attribute"_ustr, nullptr);
     }
 
     m_pMarkFormat = &pTextAttr->GetRefMark();
@@ -759,8 +759,8 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
     if (&pStartPos->GetNode() != pTextNode)
     {
         throw lang::IllegalArgumentException(
-            "trying to insert into a nesting text content, but start "
-                "of text range not in same paragraph as text content",
+            u"trying to insert into a nesting text content, but start "
+                "of text range not in same paragraph as text content"_ustr,
                 nullptr, 0);
     }
     bool bForceExpandHints(false);
@@ -770,8 +770,8 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
     if ((nStartPos < nMetaStart) || (nStartPos > nMetaEnd))
     {
         throw lang::IllegalArgumentException(
-            "trying to insert into a nesting text content, but start "
-                "of text range not inside text content",
+            u"trying to insert into a nesting text content, but start "
+                "of text range not inside text content"_ustr,
                 nullptr, 0);
     }
     else if (nStartPos == nMetaEnd)
@@ -784,8 +784,8 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
         if (&pEndPos->GetNode() != pTextNode)
         {
             throw lang::IllegalArgumentException(
-                "trying to insert into a nesting text content, but end "
-                    "of text range not in same paragraph as text content",
+                u"trying to insert into a nesting text content, but end "
+                    "of text range not in same paragraph as text content"_ustr,
                     nullptr, 0);
         }
         const sal_Int32 nEndPos(pEndPos->GetContentIndex());
@@ -794,8 +794,8 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
         if ((nEndPos < nMetaStart) || (nEndPos > nMetaEnd))
         {
             throw lang::IllegalArgumentException(
-                "trying to insert into a nesting text content, but end "
-                    "of text range not inside text content",
+                u"trying to insert into a nesting text content, but end "
+                    "of text range not inside text content"_ustr,
                     nullptr, 0);
         }
         else if (nEndPos == nMetaEnd)
@@ -810,7 +810,7 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
 OUString SAL_CALL
 SwXMeta::getImplementationName()
 {
-    return "SwXMeta";
+    return u"SwXMeta"_ustr;
 }
 
 sal_Bool SAL_CALL
@@ -823,8 +823,8 @@ uno::Sequence< OUString > SAL_CALL
 SwXMeta::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.text.TextContent",
-        "com.sun.star.text.InContentMetadata"
+        u"com.sun.star.text.TextContent"_ustr,
+        u"com.sun.star.text.InContentMetadata"_ustr
     };
 }
 
@@ -894,7 +894,7 @@ SwXMeta::AttachImpl(const uno::Reference< text::XTextRange > & i_xTextRange,
     if (!m_pImpl->m_bIsDescriptor)
     {
         throw uno::RuntimeException(
-            "SwXMeta::attach(): already attached",
+            u"SwXMeta::attach(): already attached"_ustr,
             getXWeak());
     }
 
@@ -903,7 +903,7 @@ SwXMeta::AttachImpl(const uno::Reference< text::XTextRange > & i_xTextRange,
     if (!pRange && !pCursor)
     {
         throw lang::IllegalArgumentException(
-            "SwXMeta::attach(): argument not supported type",
+            u"SwXMeta::attach(): argument not supported type"_ustr,
             getXWeak(), 0);
     }
 
@@ -912,7 +912,7 @@ SwXMeta::AttachImpl(const uno::Reference< text::XTextRange > & i_xTextRange,
     if (!pDoc)
     {
         throw lang::IllegalArgumentException(
-            "SwXMeta::attach(): argument has no SwDoc",
+            u"SwXMeta::attach(): argument has no SwDoc"_ustr,
             getXWeak(), 0);
     }
 
@@ -939,14 +939,14 @@ SwXMeta::AttachImpl(const uno::Reference< text::XTextRange > & i_xTextRange,
     if (!bSuccess)
     {
         throw lang::IllegalArgumentException(
-            "SwXMeta::attach(): cannot create meta: range invalid?",
+            u"SwXMeta::attach(): cannot create meta: range invalid?"_ustr,
             getXWeak(), 1);
     }
     if (!pTextAttr)
     {
         OSL_FAIL("meta inserted, but has no text attribute?");
         throw uno::RuntimeException(
-            "SwXMeta::attach(): cannot create meta",
+            u"SwXMeta::attach(): cannot create meta"_ustr,
             getXWeak());
     }
 
@@ -979,7 +979,7 @@ SwXMeta::getAnchor()
     if (m_pImpl->m_bIsDescriptor)
     {
         throw uno::RuntimeException(
-                "SwXMeta::getAnchor(): not inserted",
+                u"SwXMeta::getAnchor(): not inserted"_ustr,
                 getXWeak());
     }
 
@@ -991,7 +991,7 @@ SwXMeta::getAnchor()
     if (!bSuccess)
     {
         throw lang::DisposedException(
-                "SwXMeta::getAnchor(): not attached",
+                u"SwXMeta::getAnchor(): not attached"_ustr,
                 getXWeak());
     }
 
@@ -1108,7 +1108,7 @@ SwXMeta::getParent()
 void SAL_CALL
 SwXMeta::setParent(uno::Reference< uno::XInterface > const& /*xParent*/)
 {
-    throw lang::NoSupportException("setting parent not supported", *this);
+    throw lang::NoSupportException(u"setting parent not supported"_ustr, *this);
 }
 
 // XElementAccess
@@ -1137,7 +1137,7 @@ SwXMeta::createEnumeration()
     if (m_pImpl->m_bIsDescriptor)
     {
         throw uno::RuntimeException(
-                "createEnumeration(): not inserted",
+                u"createEnumeration(): not inserted"_ustr,
                 getXWeak());
     }
 
@@ -1209,7 +1209,7 @@ SwXMetaField::~SwXMetaField()
 OUString SAL_CALL
 SwXMetaField::getImplementationName()
 {
-    return "SwXMetaField";
+    return u"SwXMetaField"_ustr;
 }
 
 sal_Bool SAL_CALL
@@ -1222,9 +1222,9 @@ uno::Sequence< OUString > SAL_CALL
 SwXMetaField::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.text.TextContent",
-        "com.sun.star.text.TextField",
-        "com.sun.star.text.textfield.MetadataField"
+        u"com.sun.star.text.TextContent"_ustr,
+        u"com.sun.star.text.TextField"_ustr,
+        u"com.sun.star.text.textfield.MetadataField"_ustr
     };
 }
 
@@ -1446,7 +1446,7 @@ getPrefixAndSuffix(
         throw;
     } catch (const uno::Exception &) {
         css::uno::Any anyEx = cppu::getCaughtException();
-        throw lang::WrappedTargetRuntimeException("getPrefixAndSuffix: exception", nullptr, anyEx);
+        throw lang::WrappedTargetRuntimeException(u"getPrefixAndSuffix: exception"_ustr, nullptr, anyEx);
     }
 }
 

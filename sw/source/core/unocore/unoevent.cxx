@@ -102,7 +102,7 @@ SwHyperlinkEventDescriptor::~SwHyperlinkEventDescriptor()
 
 OUString SwHyperlinkEventDescriptor::getImplementationName()
 {
-    return "SwHyperlinkEventDescriptor";
+    return u"SwHyperlinkEventDescriptor"_ustr;
 }
 
 void SwHyperlinkEventDescriptor::copyMacrosFromINetFormat(
@@ -125,7 +125,7 @@ void SwHyperlinkEventDescriptor::copyMacrosIntoINetFormat(
         const SvMacroItemId nEvent = mpSupportedMacroItems[i].mnEvent;
         if (hasById(nEvent))
         {
-            SvxMacro aMacro("", "");
+            SvxMacro aMacro(u""_ustr, u""_ustr);
             getByName(aMacro, nEvent);
             aFormat.SetMacro(nEvent, aMacro);
         }
@@ -192,7 +192,7 @@ sal_uInt16 SwFrameEventDescriptor::getMacroItemWhich() const
 
 OUString SwFrameEventDescriptor::getImplementationName()
 {
-    return "SwFrameEventDescriptor";
+    return u"SwFrameEventDescriptor"_ustr;
 }
 
 SwFrameStyleEventDescriptor::SwFrameStyleEventDescriptor(
@@ -222,7 +222,7 @@ const SvxMacroItem& SwFrameStyleEventDescriptor::getMacroItem()
 
 OUString SwFrameStyleEventDescriptor::getImplementationName()
 {
-    return "SwFrameStyleEventDescriptor";
+    return u"SwFrameStyleEventDescriptor"_ustr;
 }
 
 sal_uInt16 SwFrameStyleEventDescriptor::getMacroItemWhich() const

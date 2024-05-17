@@ -110,8 +110,8 @@ public:
             try
             {
                 uno::Reference< beans::XPropertySet > xProps( mpDocShell->GetModel(), uno::UNO_QUERY_THROW );
-                uno::Reference< container::XNameAccess > xLibContainer( xProps->getPropertyValue("BasicLibraries"), uno::UNO_QUERY_THROW );
-                OUString sProjectName( "Standard");
+                uno::Reference< container::XNameAccess > xLibContainer( xProps->getPropertyValue(u"BasicLibraries"_ustr), uno::UNO_QUERY_THROW );
+                OUString sProjectName( u"Standard"_ustr);
                 if ( !mpDocShell->GetBasicManager()->GetName().isEmpty() )
                 {
                     sProjectName =  mpDocShell->GetBasicManager()->GetName();
@@ -594,11 +594,11 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
         {
             uno::Any aGlobs;
             BasicManager *pBasicMan = rDoc.GetDocShell()->GetBasicManager();
-            if (pBasicMan && !pBasicMan->GetGlobalUNOConstant("VBAGlobals", aGlobs))
+            if (pBasicMan && !pBasicMan->GetGlobalUNOConstant(u"VBAGlobals"_ustr, aGlobs))
             {
                 uno::Sequence< uno::Any > aArgs{ uno::Any(rDoc.GetDocShell()->GetModel()) };
-                aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( "ooo.vba.word.Globals", aArgs );
-                pBasicMan->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
+                aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( u"ooo.vba.word.Globals"_ustr, aArgs );
+                pBasicMan->SetGlobalUNOConstant( u"VBAGlobals"_ustr, aGlobs );
             }
             aGlobs >>= xRet;
         }
@@ -960,7 +960,7 @@ sal_Bool SwXTextTables::hasElements()
 
 OUString SwXTextTables::getImplementationName()
 {
-    return "SwXTextTables";
+    return u"SwXTextTables"_ustr;
 }
 
 sal_Bool SwXTextTables::supportsService(const OUString& rServiceName)
@@ -970,7 +970,7 @@ sal_Bool SwXTextTables::supportsService(const OUString& rServiceName)
 
 uno::Sequence< OUString > SwXTextTables::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.TextTables" };
+    return { u"com.sun.star.text.TextTables"_ustr };
 }
 
 uno::Reference<text::XTextTable> SwXTextTables::GetObject(SwFrameFormat& rFormat)
@@ -1103,7 +1103,7 @@ Any SwXFrameEnumeration<T>::nextElement()
 template<FlyCntType T>
 OUString SwXFrameEnumeration<T>::getImplementationName()
 {
-    return "SwXFrameEnumeration";
+    return u"SwXFrameEnumeration"_ustr;
 }
 
 template<FlyCntType T>
@@ -1115,12 +1115,12 @@ sal_Bool SwXFrameEnumeration<T>::supportsService(const OUString& ServiceName)
 template<FlyCntType T>
 Sequence< OUString > SwXFrameEnumeration<T>::getSupportedServiceNames()
 {
-    return { OUString("com.sun.star.container.XEnumeration") };
+    return { u"com.sun.star.container.XEnumeration"_ustr };
 }
 
 OUString SwXFrames::getImplementationName()
 {
-    return "SwXFrames";
+    return u"SwXFrames"_ustr;
 }
 
 sal_Bool SwXFrames::supportsService(const OUString& rServiceName)
@@ -1130,7 +1130,7 @@ sal_Bool SwXFrames::supportsService(const OUString& rServiceName)
 
 Sequence<OUString> SwXFrames::getSupportedServiceNames()
 {
-    return { OUString("com.sun.star.text.TextFrames") };
+    return { u"com.sun.star.text.TextFrames"_ustr };
 }
 
 SwXFrames::SwXFrames(SwDoc* _pDoc, FlyCntType eSet) :
@@ -1254,7 +1254,7 @@ sal_Bool SwXFrames::hasElements()
 
 OUString SwXTextFrames::getImplementationName()
 {
-    return "SwXTextFrames";
+    return u"SwXTextFrames"_ustr;
 }
 
 sal_Bool SwXTextFrames::supportsService(const OUString& rServiceName)
@@ -1264,7 +1264,7 @@ sal_Bool SwXTextFrames::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXTextFrames::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.TextFrames" };
+    return { u"com.sun.star.text.TextFrames"_ustr };
 }
 
 SwXTextFrames::SwXTextFrames(SwDoc* _pDoc) :
@@ -1278,7 +1278,7 @@ SwXTextFrames::~SwXTextFrames()
 
 OUString SwXTextGraphicObjects::getImplementationName()
 {
-    return "SwXTextGraphicObjects";
+    return u"SwXTextGraphicObjects"_ustr;
 }
 
 sal_Bool SwXTextGraphicObjects::supportsService(const OUString& rServiceName)
@@ -1288,7 +1288,7 @@ sal_Bool SwXTextGraphicObjects::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXTextGraphicObjects::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.TextGraphicObjects" };
+    return { u"com.sun.star.text.TextGraphicObjects"_ustr };
 }
 
 SwXTextGraphicObjects::SwXTextGraphicObjects(SwDoc* _pDoc) :
@@ -1302,7 +1302,7 @@ SwXTextGraphicObjects::~SwXTextGraphicObjects()
 
 OUString SwXTextEmbeddedObjects::getImplementationName()
 {
-    return "SwXTextEmbeddedObjects";
+    return u"SwXTextEmbeddedObjects"_ustr;
 }
 
 sal_Bool SwXTextEmbeddedObjects::supportsService(const OUString& rServiceName)
@@ -1312,7 +1312,7 @@ sal_Bool SwXTextEmbeddedObjects::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXTextEmbeddedObjects::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.TextEmbeddedObjects" };
+    return { u"com.sun.star.text.TextEmbeddedObjects"_ustr };
 }
 
 SwXTextEmbeddedObjects::SwXTextEmbeddedObjects(SwDoc* _pDoc) :
@@ -1326,7 +1326,7 @@ SwXTextEmbeddedObjects::~SwXTextEmbeddedObjects()
 
 OUString SwXTextSections::getImplementationName()
 {
-    return "SwXTextSections";
+    return u"SwXTextSections"_ustr;
 }
 
 sal_Bool SwXTextSections::supportsService(const OUString& rServiceName)
@@ -1336,7 +1336,7 @@ sal_Bool SwXTextSections::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXTextSections::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.TextSections" };
+    return { u"com.sun.star.text.TextSections"_ustr };
 }
 
 SwXTextSections::SwXTextSections(SwDoc* _pDoc) :
@@ -1482,7 +1482,7 @@ rtl::Reference< SwXTextSection >  SwXTextSections::GetObject( SwSectionFormat& r
 
 OUString SwXBookmarks::getImplementationName()
 {
-    return "SwXBookmarks";
+    return u"SwXBookmarks"_ustr;
 }
 
 sal_Bool SwXBookmarks::supportsService(const OUString& rServiceName)
@@ -1492,7 +1492,7 @@ sal_Bool SwXBookmarks::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXBookmarks::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.Bookmarks" };
+    return { u"com.sun.star.text.Bookmarks"_ustr };
 }
 
 SwXBookmarks::SwXBookmarks(SwDoc* _pDoc) :
@@ -1663,7 +1663,7 @@ sal_Bool SwXNumberingRulesCollection::hasElements()
 
 OUString SwXFootnotes::getImplementationName()
 {
-    return "SwXFootnotes";
+    return u"SwXFootnotes"_ustr;
 }
 
 sal_Bool SwXFootnotes::supportsService(const OUString& rServiceName)
@@ -1673,7 +1673,7 @@ sal_Bool SwXFootnotes::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXFootnotes::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.Footnotes" };
+    return { u"com.sun.star.text.Footnotes"_ustr };
 }
 
 SwXFootnotes::SwXFootnotes(bool bEnd, SwDoc* _pDoc)
@@ -1755,7 +1755,7 @@ rtl::Reference<SwXFootnote> SwXFootnotes::GetObject( SwDoc& rDoc, const SwFormat
 
 OUString SwXReferenceMarks::getImplementationName()
 {
-    return "SwXReferenceMarks";
+    return u"SwXReferenceMarks"_ustr;
 }
 
 sal_Bool SwXReferenceMarks::supportsService(const OUString& rServiceName)
@@ -1765,7 +1765,7 @@ sal_Bool SwXReferenceMarks::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXReferenceMarks::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.ReferenceMarks" };
+    return { u"com.sun.star.text.ReferenceMarks"_ustr };
 }
 
 SwXReferenceMarks::SwXReferenceMarks(SwDoc* _pDoc) :

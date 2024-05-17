@@ -64,7 +64,7 @@ bool UCB_DeleteFile( const OUString& rURL )
         ucbhelper::Content aTempContent( rURL,
                                 css::uno::Reference< css::ucb::XCommandEnvironment >(),
                                 comphelper::getProcessComponentContext() );
-        aTempContent.executeCommand("delete", css::uno::Any( true ) );
+        aTempContent.executeCommand(u"delete"_ustr, css::uno::Any( true ) );
         bRemoved = true;
     }
     catch( css::uno::Exception& )
@@ -94,7 +94,7 @@ bool UCB_MoveFile( const OUString& rURL, std::u16string_view rNewURL )
         aInfo.NewTitle = sName;
         aInfo.SourceURL = rURL;
         aInfo.MoveData = true;
-        aTempContent.executeCommand( "transfer", uno::Any(aInfo) );
+        aTempContent.executeCommand( u"transfer"_ustr, uno::Any(aInfo) );
     }
     catch( css::uno::Exception& )
     {
@@ -138,7 +138,7 @@ bool UCB_IsReadOnlyFileName( const OUString& rURL )
     try
     {
         ucbhelper::Content aCnt( rURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-        css::uno::Any aAny = aCnt.getPropertyValue("IsReadOnly");
+        css::uno::Any aAny = aCnt.getPropertyValue(u"IsReadOnly"_ustr);
         if(aAny.hasValue())
             bIsReadOnly = *o3tl::doAccess<bool>(aAny);
     }

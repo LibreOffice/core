@@ -552,7 +552,7 @@ bool    SwXTextSearch::HasReplaceAttributes() const
 
 OUString SwXTextSearch::getImplementationName()
 {
-    return "SwXTextSearch";
+    return u"SwXTextSearch"_ustr;
 }
 
 sal_Bool SwXTextSearch::supportsService(const OUString& rServiceName)
@@ -562,7 +562,7 @@ sal_Bool SwXTextSearch::supportsService(const OUString& rServiceName)
 
 uno::Sequence< OUString > SwXTextSearch::getSupportedServiceNames()
 {
-    return { "com.sun.star.util.SearchDescriptor", "com.sun.star.util.ReplaceDescriptor" };
+    return { u"com.sun.star.util.SearchDescriptor"_ustr, u"com.sun.star.util.ReplaceDescriptor"_ustr };
 }
 
 void SwXTextSearch::FillSearchOptions( i18nutil::SearchOptions2& rSearchOpt ) const

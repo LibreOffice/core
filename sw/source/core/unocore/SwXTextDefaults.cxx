@@ -213,7 +213,7 @@ Any SAL_CALL SwXTextDefaults::getPropertyDefault( const OUString& rPropertyName 
 
 OUString SAL_CALL SwXTextDefaults::getImplementationName(  )
 {
-    return "SwXTextDefaults";
+    return u"SwXTextDefaults"_ustr;
 }
 
 sal_Bool SAL_CALL SwXTextDefaults::supportsService( const OUString& rServiceName )
@@ -223,13 +223,13 @@ sal_Bool SAL_CALL SwXTextDefaults::supportsService( const OUString& rServiceName
 
 uno::Sequence< OUString > SAL_CALL SwXTextDefaults::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.text.Defaults",
-             "com.sun.star.style.CharacterProperties",
-             "com.sun.star.style.CharacterPropertiesAsian",
-             "com.sun.star.style.CharacterPropertiesComplex",
-             "com.sun.star.style.ParagraphProperties",
-             "com.sun.star.style.ParagraphPropertiesAsian",
-             "com.sun.star.style.ParagraphPropertiesComplex" };
+    return { u"com.sun.star.text.Defaults"_ustr,
+             u"com.sun.star.style.CharacterProperties"_ustr,
+             u"com.sun.star.style.CharacterPropertiesAsian"_ustr,
+             u"com.sun.star.style.CharacterPropertiesComplex"_ustr,
+             u"com.sun.star.style.ParagraphProperties"_ustr,
+             u"com.sun.star.style.ParagraphPropertiesAsian"_ustr,
+             u"com.sun.star.style.ParagraphPropertiesComplex"_ustr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

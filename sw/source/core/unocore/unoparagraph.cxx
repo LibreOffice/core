@@ -149,7 +149,7 @@ public:
 
     SwTextNode& GetTextNodeOrThrow() {
         if (!m_pTextNode) {
-            throw uno::RuntimeException("SwXParagraph: disposed or invalid", nullptr);
+            throw uno::RuntimeException(u"SwXParagraph: disposed or invalid"_ustr, nullptr);
         }
         return *m_pTextNode;
     }
@@ -300,7 +300,7 @@ bool SwXParagraph::SelectPaM(SwPaM & rPaM)
 OUString SAL_CALL
 SwXParagraph::getImplementationName()
 {
-    return "SwXParagraph";
+    return u"SwXParagraph"_ustr;
 }
 
 sal_Bool SAL_CALL
@@ -313,14 +313,14 @@ uno::Sequence< OUString > SAL_CALL
 SwXParagraph::getSupportedServiceNames()
 {
     return {
-        "com.sun.star.text.TextContent",
-        "com.sun.star.text.Paragraph",
-        "com.sun.star.style.CharacterProperties",
-        "com.sun.star.style.CharacterPropertiesAsian",
-        "com.sun.star.style.CharacterPropertiesComplex",
-        "com.sun.star.style.ParagraphProperties",
-        "com.sun.star.style.ParagraphPropertiesAsian",
-        "com.sun.star.style.ParagraphPropertiesComplex"
+        u"com.sun.star.text.TextContent"_ustr,
+        u"com.sun.star.text.Paragraph"_ustr,
+        u"com.sun.star.style.CharacterProperties"_ustr,
+        u"com.sun.star.style.CharacterPropertiesAsian"_ustr,
+        u"com.sun.star.style.CharacterPropertiesComplex"_ustr,
+        u"com.sun.star.style.ParagraphProperties"_ustr,
+        u"com.sun.star.style.ParagraphPropertiesAsian"_ustr,
+        u"com.sun.star.style.ParagraphPropertiesComplex"_ustr
     };
 }
 
@@ -407,7 +407,7 @@ void SAL_CALL SwXParagraph::setPropertyValues(
     const uno::Sequence< uno::Any >& rValues )
 {
     if (rPropertyNames.getLength() != rValues.getLength())
-        throw lang::IllegalArgumentException("lengths do not match",
+        throw lang::IllegalArgumentException(u"lengths do not match"_ustr,
                                              getXWeak(), -1);
 
     SolarMutexGuard aGuard;
@@ -606,13 +606,13 @@ SwXParagraph::getPropertyValues(const uno::Sequence< OUString >& rPropertyNames)
     catch (beans::UnknownPropertyException &)
     {
         css::uno::Any anyEx = cppu::getCaughtException();
-        throw css::lang::WrappedTargetRuntimeException("Unknown property exception caught",
+        throw css::lang::WrappedTargetRuntimeException(u"Unknown property exception caught"_ustr,
                 getXWeak(), anyEx );
     }
     catch (lang::WrappedTargetException &)
     {
         css::uno::Any anyEx = cppu::getCaughtException();
-        throw css::lang::WrappedTargetRuntimeException("WrappedTargetException caught",
+        throw css::lang::WrappedTargetRuntimeException(u"WrappedTargetException caught"_ustr,
                 getXWeak(), anyEx );
     }
 
@@ -1433,7 +1433,7 @@ SwXParagraph::createContentEnumeration(const OUString& rServiceName)
 uno::Sequence< OUString > SAL_CALL
 SwXParagraph::getAvailableServiceNames()
 {
-    uno::Sequence<OUString> aRet { "com.sun.star.text.TextContent" };
+    uno::Sequence<OUString> aRet { u"com.sun.star.text.TextContent"_ustr };
     return aRet;
 }
 
