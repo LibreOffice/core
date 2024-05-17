@@ -58,6 +58,30 @@ CPPUNIT_TEST_FIXTURE(Test, testIgnoreTopMarginTable)
     // i.e. the top margin in B1's first paragraph was ignored, but not in Word.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2000), nParaTopMargin);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testIgnoreTopMarginFly)
+{
+    // Given a document with compat flags like DOCX (>= Word 2013), 2 pages, multi-col fly frame on
+    // page 2:
+    createSwDoc("ignore-top-margin-fly.odt");
+
+    // When laying out that document:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Then make sure that the top margin is not ignored inside shape text:
+    sal_Int32 nParaTopMargin
+        = getXPath(
+              pXmlDoc,
+              "/root/page[2]/body/section/column[2]/body/txt/anchored/fly/column/body/txt/infos/prtBounds"_ostr,
+              "top"_ostr)
+              .toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4000
+    // - Actual  : 0
+    // i.e. the top margin was ignored inside shape text for Word compat, while multi-col shape text
+    // is a Writer feature.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4000), nParaTopMargin);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
