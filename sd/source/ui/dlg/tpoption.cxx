@@ -114,6 +114,7 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
         m_xCbxOrtho->set_active( officecfg::Office::Draw::Snap::Position::CreatingMoving::get() );
         m_xCbxBigOrtho->set_active( officecfg::Office::Draw::Snap::Position::ExtendEdges::get() );
         m_xCbxRotate->set_active( officecfg::Office::Draw::Snap::Position::Rotating::get() );
+        m_xMtrFldSnapArea->set_value( officecfg::Office::Draw::Snap::Object::Range::get(), FieldUnit::PIXEL);
         m_xMtrFldAngle->set_value( officecfg::Office::Draw::Snap::Position::RotatingValue::get(), FieldUnit::DEGREE);
     }
     else
