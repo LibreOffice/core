@@ -428,17 +428,21 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
             mpOutputDevice->SetFont(aFont);
             mpOutputDevice->SetTextColor(Color(aRGBFontColor));
 
-            if (!aDXArray.empty())
             {
-                const SalLayoutGlyphs* pGlyphs = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(
-                    mpOutputDevice, aText, nPos, nLen);
-                mpOutputDevice->DrawTextArray(aStartPoint, aText, aDXArray,
-                                              rTextCandidate.getKashidaArray(), nPos, nLen,
-                                              SalLayoutFlags::NONE, pGlyphs);
-            }
-            else
-            {
-                mpOutputDevice->DrawText(aStartPoint, aText, nPos, nLen);
+                // For D2DWriteTextOutRenderer, we must pass a flag to not use font scaling
+                auto guard = mpOutputDevice->ScopedNoFontScaling();
+                if (!aDXArray.empty())
+                {
+                    const SalLayoutGlyphs* pGlyphs = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(
+                        mpOutputDevice, aText, nPos, nLen);
+                    mpOutputDevice->DrawTextArray(aStartPoint, aText, aDXArray,
+                                                  rTextCandidate.getKashidaArray(), nPos, nLen,
+                                                  SalLayoutFlags::NONE, pGlyphs);
+                }
+                else
+                {
+                    mpOutputDevice->DrawText(aStartPoint, aText, nPos, nLen);
+                }
             }
 
             if (rTextCandidate.getFontAttribute().getRTL())
