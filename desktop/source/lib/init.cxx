@@ -5113,8 +5113,8 @@ void LibLibreOffice_Impl::dumpState(rtl::OStringBuffer &rState)
     rState.append("\n\tCallbackData:\t0x");
     rState.append(reinterpret_cast<sal_Int64>(mpCallback), 16);
     rState.append("\n\tIsModified:\t");
-    if (SfxObjectShell::Current())
-        rState.append(SfxObjectShell::Current()->IsModified() ? "modified" : "unmodified");
+    if (const SfxObjectShell* pObjSh = SfxObjectShell::Current())
+        rState.append(pObjSh->IsModified() ? "modified" : "unmodified");
     else
         rState.append("noshell");
     // TODO: dump mInteractionMap
