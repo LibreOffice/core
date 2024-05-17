@@ -46,6 +46,7 @@
 #include <SwNodeNum.hxx>
 #include <list.hxx>
 #include <calbck.hxx>
+#include <editeng/lrspitem.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/random.hxx>
 #include <o3tl/safeint.hxx>
@@ -862,7 +863,9 @@ OUString SwDoc::SetNumRule( const SwPaM& rPam,
                         const SwNumRule& rRule,
                         SetNumRuleMode eMode,
                         SwRootFrame const*const pLayout,
-                        const OUString& sContinuedListId)
+                        const OUString& sContinuedListId,
+                        SvxTextLeftMarginItem const*const pTextLeftMarginToPropagate,
+                        SvxFirstLineIndentItem const*const pFirstLineIndentToPropagate)
 {
     OUString sListId;
 
@@ -982,6 +985,19 @@ OUString SwDoc::SetNumRule( const SwPaM& rPam,
                         getIDocumentContentOperations().InsertPoolItem(temp,
                                 SwNumRuleItem(pNewOrChangedNumRule->GetName()),
                                 SetAttrMode::DEFAULT, pLayout);
+                        // apply provided margins to get visually same result
+                        if (pTextLeftMarginToPropagate)
+                        {
+                            getIDocumentContentOperations().InsertPoolItem(temp,
+                                    *pTextLeftMarginToPropagate,
+                                    SetAttrMode::DEFAULT, pLayout);
+                        }
+                        if (pFirstLineIndentToPropagate)
+                        {
+                            getIDocumentContentOperations().InsertPoolItem(temp,
+                                    *pFirstLineIndentToPropagate,
+                                    SetAttrMode::DEFAULT, pLayout);
+                        }
                     }
                 }
             }
@@ -991,6 +1007,18 @@ OUString SwDoc::SetNumRule( const SwPaM& rPam,
             getIDocumentContentOperations().InsertPoolItem(aPam,
                     SwNumRuleItem(pNewOrChangedNumRule->GetName()),
                     SetAttrMode::DEFAULT, pLayout);
+            if (pTextLeftMarginToPropagate)
+            {
+                getIDocumentContentOperations().InsertPoolItem(aPam,
+                        *pTextLeftMarginToPropagate,
+                        SetAttrMode::DEFAULT, pLayout);
+            }
+            if (pFirstLineIndentToPropagate)
+            {
+                getIDocumentContentOperations().InsertPoolItem(aPam,
+                        *pFirstLineIndentToPropagate,
+                        SetAttrMode::DEFAULT, pLayout);
+            }
         }
     }
 
@@ -1648,7 +1676,9 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
                                         int nNonEmptyAllowed,
                                         OUString& sListId,
                                         SwRootFrame const* pLayout,
-                                        const bool bInvestigateStartNode)
+                                        const bool bInvestigateStartNode,
+                                        SvxTextLeftMarginItem const** o_ppTextLeftMargin,
+                                        SvxFirstLineIndentItem const** o_ppFirstLineIndent)
 {
     const SwNumRule * pResult = nullptr;
     SwTextNode * pTextNd = rPos.GetNode().GetTextNode();
@@ -1685,9 +1715,28 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
                          ( ( bNum && pNumRule->Get(0).IsEnumeration()) ||
                            ( !bNum && pNumRule->Get(0).IsItemize() ) ) ) // #i22362#, #i29560#
                     {
-                        pResult = pTextNd->GetNumRule();
+                        pResult = pNumRule;
                         // provide also the list id, to which the text node belongs.
                         sListId = pTextNd->GetListId();
+                        // also get the margins that override the numrule
+                        int const nListLevel{pTextNd->GetActualListLevel()};
+                        if ((o_ppTextLeftMargin || o_ppFirstLineIndent)
+                            && 0 <= nListLevel
+                            && pNumRule->Get(o3tl::narrowing<sal_uInt16>(nListLevel))
+                                .GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT)
+                        {
+                            ::sw::ListLevelIndents const indents{pTextNd->AreListLevelIndentsApplicable()};
+                            if (!(indents & ::sw::ListLevelIndents::LeftMargin)
+                                && o_ppTextLeftMargin)
+                            {
+                                *o_ppTextLeftMargin = &pTextNd->SwContentNode::GetAttr(RES_MARGIN_TEXTLEFT);
+                            }
+                            if (!(indents & ::sw::ListLevelIndents::FirstLine)
+                                && o_ppFirstLineIndent)
+                            {
+                                *o_ppFirstLineIndent = &pTextNd->SwContentNode::GetAttr(RES_MARGIN_FIRSTLINE);
+                            }
+                        }
                     }
 
                     break;

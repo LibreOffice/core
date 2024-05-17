@@ -1073,7 +1073,9 @@ public:
                      const SwNumRule&,
                      SetNumRuleMode mode,
                      SwRootFrame const* pLayout = nullptr,
-                     const OUString& sContinuedListId = OUString());
+                     const OUString& sContinuedListId = OUString(),
+                     SvxTextLeftMarginItem const* pTextLeftMarginToPropagate = nullptr,
+                     SvxFirstLineIndentItem const* pFirstLineIndentToPropagate = nullptr);
     void SetCounted(const SwPaM&, bool bCounted, SwRootFrame const* pLayout);
 
     void MakeUniqueNumRules(const SwPaM & rPaM);
@@ -1151,7 +1153,9 @@ public:
                                     int nNonEmptyAllowed,
                                     OUString& sListId,
                                     SwRootFrame const* pLayout,
-                                    const bool bInvestigateStartNode = false );
+                                    const bool bInvestigateStartNode = false,
+                                    SvxTextLeftMarginItem const** o_ppTextLeftMargin = nullptr,
+                                    SvxFirstLineIndentItem const** o_ppFirstLineIndent = nullptr);
 
     // Paragraphs without numbering but with indents.
     bool NoNum( const SwPaM& );
