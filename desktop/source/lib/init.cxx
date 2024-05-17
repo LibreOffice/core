@@ -6013,7 +6013,7 @@ static char* getDocReadOnly(LibreOfficeKitDocument* pThis)
     aTree.put("success", pObjectShell->IsLoadReadonly());
 
     std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
+    boost::property_tree::write_json(aStream, aTree, false /* pretty */);
     char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
     if (!pJson)
         return nullptr;
@@ -6072,7 +6072,7 @@ static char* getLanguages(const char* pCommand)
         addLocale(aValues, rLocale);
     aTree.add_child("commandValues", aValues);
     std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
+    boost::property_tree::write_json(aStream, aTree, false /* pretty */);
     char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
     assert(pJson); // Don't handle OOM conditions
     strcpy(pJson, aStream.str().c_str());
@@ -6113,7 +6113,7 @@ static char* getFonts (const char* pCommand)
     }
     aTree.add_child("commandValues", aValues);
     std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
+    boost::property_tree::write_json(aStream, aTree, false /* pretty */);
     char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
     assert(pJson); // Don't handle OOM conditions
     strcpy(pJson, aStream.str().c_str());
@@ -6148,7 +6148,7 @@ static char* getFontSubset (std::string_view aFontName)
 
     aTree.add_child("commandValues", aValues);
     std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
+    boost::property_tree::write_json(aStream, aTree, false /* pretty */);
     char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
     assert(pJson); // Don't handle OOM conditions
     strcpy(pJson, aStream.str().c_str());
@@ -6271,7 +6271,7 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
 
     aTree.add_child("commandValues", aValues);
     std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
+    boost::property_tree::write_json(aStream, aTree, false /* pretty */);
     char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
     assert(pJson); // Don't handle OOM conditions
     strcpy(pJson, aStream.str().c_str());
