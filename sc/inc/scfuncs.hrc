@@ -1757,7 +1757,7 @@ const TranslateId SC_OPCODE_VAR_A_ARY[] =
 {
     NC_("SC_OPCODE_VAR_A", "Returns the variance based on a sample. Text is evaluated as zero."),
     NC_("SC_OPCODE_VAR_A", "Value "),
-    NC_("SC_OPCODE_VAR_A", "Value 1; value 2; ... are arguments representing a sample taken from a basic total population.")
+    NC_("SC_OPCODE_VAR_A", "Value 1; value 2; ... are arguments representing a sample taken from the population.")
 };
 
 // -=*# Resource for function VARP #*=-
@@ -1805,7 +1805,7 @@ const TranslateId SC_OPCODE_ST_DEV_A_ARY[] =
 {
     NC_("SC_OPCODE_ST_DEV_A", "Returns the standard deviation based on a sample. Text is evaluated as zero."),
     NC_("SC_OPCODE_ST_DEV_A", "Value "),
-    NC_("SC_OPCODE_ST_DEV_A", "Value 1; value 2; ... are arguments representing a sample taken from a basic total population.")
+    NC_("SC_OPCODE_ST_DEV_A", "Value 1; value 2; ... are arguments representing a sample taken from the population.")
 };
 
 // -=*# Resource for function STDEVP #*=-
@@ -1845,7 +1845,7 @@ const TranslateId SC_OPCODE_AVERAGE_A_ARY[] =
 {
     NC_("SC_OPCODE_AVERAGE_A", "Returns the average value for a sample. Text is evaluated as zero."),
     NC_("SC_OPCODE_AVERAGE_A", "Value "),
-    NC_("SC_OPCODE_AVERAGE_A", "Value 1; value 2; ... are arguments representing a sample taken from a basic total population.")
+    NC_("SC_OPCODE_AVERAGE_A", "Value 1; value 2; ... are arguments representing a sample taken from the population.")
 };
 
 // -=*# Resource for function DEVSQ #*=-
