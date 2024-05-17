@@ -24,13 +24,13 @@ using comphelper::ConfigurationListener;
 
 static rtl::Reference<ConfigurationListener> const & getMiscListener()
 {
-    static rtl::Reference<ConfigurationListener> xListener(new ConfigurationListener("/org.openoffice.Office.Common/Misc"));
+    static rtl::Reference<ConfigurationListener> xListener(new ConfigurationListener(u"/org.openoffice.Office.Common/Misc"_ustr));
     return xListener;
 }
 
 static rtl::Reference<ConfigurationListener> const & getFormulaCalculationListener()
 {
-    static rtl::Reference<ConfigurationListener> xListener(new ConfigurationListener("/org.openoffice.Office.Calc/Formula/Calculation"));
+    static rtl::Reference<ConfigurationListener> xListener(new ConfigurationListener(u"/org.openoffice.Office.Calc/Formula/Calculation"_ustr));
     return xListener;
 }
 
@@ -73,7 +73,7 @@ bool ScCalcConfig::isOpenCLEnabled()
     static ForceCalculationType force = getForceCalculationType();
     if( force != ForceCalculationNone )
         return force == ForceCalculationOpenCL;
-    static comphelper::ConfigurationListenerProperty<bool> gOpenCLEnabled(getMiscListener(), "UseOpenCL");
+    static comphelper::ConfigurationListenerProperty<bool> gOpenCLEnabled(getMiscListener(), u"UseOpenCL"_ustr);
     return gOpenCLEnabled.get();
 }
 
@@ -84,7 +84,7 @@ bool ScCalcConfig::isThreadingEnabled()
     static ForceCalculationType force = getForceCalculationType();
     if( force != ForceCalculationNone )
         return force == ForceCalculationThreads;
-    static comphelper::ConfigurationListenerProperty<bool> gThreadingEnabled(getFormulaCalculationListener(), "UseThreadedCalculationForFormulaGroups");
+    static comphelper::ConfigurationListenerProperty<bool> gThreadingEnabled(getFormulaCalculationListener(), u"UseThreadedCalculationForFormulaGroups"_ustr);
     return gThreadingEnabled.get();
 }
 

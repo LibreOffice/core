@@ -846,7 +846,7 @@ OUString ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
 {
     const SvxFieldData* pFieldData = rField.GetField();
     if (!pFieldData)
-        return "?";
+        return u"?"_ustr;
 
     OUString aRet;
     sal_Int32 nClsId = pFieldData->GetClassId();
@@ -912,7 +912,7 @@ OUString ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
     const SvxFieldData* pFieldData = rField.GetField();
 
     if (!pFieldData)
-        return " ";
+        return u" "_ustr;
 
     return ScEditUtil::GetCellFieldValue(*pFieldData, mpDoc, &rTxtColor, &rFldLineStyle);
 }

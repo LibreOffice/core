@@ -3338,7 +3338,7 @@ void ScInterpreter::ScInfo()
     OUString aStr = GetString().getString();
     ScCellKeywordTranslator::transKeyword(aStr, &ScGlobal::GetLocale(), ocInfo);
     if( aStr == "SYSTEM" )
-        PushString( SC_INFO_OSVERSION );
+        PushString( u"" SC_INFO_OSVERSION ""_ustr );
     else if( aStr == "OSVERSION" )
 #if (defined LINUX || defined __FreeBSD__)
         PushString(Application::GetOSVersion());

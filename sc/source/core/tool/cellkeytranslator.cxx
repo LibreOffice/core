@@ -97,7 +97,7 @@ static void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap,
         return;
     }
 
-    LanguageTag aLanguageTag( pLocale ? *pLocale : lang::Locale("","",""));
+    LanguageTag aLanguageTag( pLocale ? *pLocale : lang::Locale(u""_ustr,u""_ustr,u""_ustr));
     const char* aBestMatchName = itr->second.front().mpName;
     LocaleMatch eLocaleMatchLevel = LOCALE_MATCH_NONE;
     bool bOpCodeMatched = false;

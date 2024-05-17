@@ -62,7 +62,7 @@ ScParserFactoryMap::ScParserFactoryMap() :
     {
         // enumerate all implementations of the FormulaParser service
         Reference< XContentEnumerationAccess > xFactoryEA( mxContext->getServiceManager(), UNO_QUERY_THROW );
-        Reference< XEnumeration > xEnum( xFactoryEA->createContentEnumeration( "com.sun.star.sheet.FilterFormulaParser" ), UNO_SET_THROW );
+        Reference< XEnumeration > xEnum( xFactoryEA->createContentEnumeration( u"com.sun.star.sheet.FilterFormulaParser"_ustr ), UNO_SET_THROW );
         while( xEnum->hasMoreElements() ) try // single try/catch for every element
         {
             // create an instance of the formula parser implementation

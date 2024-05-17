@@ -703,7 +703,7 @@ static bool lcl_parseExternalName(
 static OUString lcl_makeExternalNameStr(const OUString& rFile, const OUString& rName,
         const sal_Unicode cSep, bool bODF )
 {
-    OUString aEscQuote("''");
+    OUString aEscQuote(u"''"_ustr);
     OUString aFile(rFile.replaceAll("'", aEscQuote));
     OUString aName(rName);
     if (bODF)

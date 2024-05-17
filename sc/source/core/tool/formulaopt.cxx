@@ -170,22 +170,22 @@ constexpr OUStringLiteral CFGPATH_FORMULA = u"Office.Calc/Formula";
 
 Sequence<OUString> ScFormulaCfg::GetPropertyNames()
 {
-    return {"Syntax/Grammar",                       // SCFORMULAOPT_GRAMMAR
-            "Syntax/EnglishFunctionName",           // SCFORMULAOPT_ENGLISH_FUNCNAME
-            "Syntax/SeparatorArg",                  // SCFORMULAOPT_SEP_ARG
-            "Syntax/SeparatorArrayRow",             // SCFORMULAOPT_SEP_ARRAY_ROW
-            "Syntax/SeparatorArrayCol",             // SCFORMULAOPT_SEP_ARRAY_COL
-            "Syntax/StringRefAddressSyntax",        // SCFORMULAOPT_STRING_REF_SYNTAX
-            "Syntax/StringConversion",              // SCFORMULAOPT_STRING_CONVERSION
-            "Syntax/EmptyStringAsZero",             // SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO
-            "Load/OOXMLRecalcMode",                 // SCFORMULAOPT_OOXML_RECALC
-            "Load/ODFRecalcMode",                   // SCFORMULAOPT_ODF_RECALC
-            "Load/RecalcOptimalRowHeightMode",      // SCFORMULAOPT_ROW_HEIGHT_RECALC
-            "Calculation/OpenCLAutoSelect",         // SCFORMULAOPT_OPENCL_AUTOSELECT
-            "Calculation/OpenCLDevice",             // SCFORMULAOPT_OPENCL_DEVICE
-            "Calculation/OpenCLSubsetOnly",         // SCFORMULAOPT_OPENCL_SUBSET_ONLY
-            "Calculation/OpenCLMinimumDataSize",    // SCFORMULAOPT_OPENCL_MIN_SIZE
-            "Calculation/OpenCLSubsetOpCodes"};     // SCFORMULAOPT_OPENCL_SUBSET_OPS
+    return {u"Syntax/Grammar"_ustr,                       // SCFORMULAOPT_GRAMMAR
+            u"Syntax/EnglishFunctionName"_ustr,           // SCFORMULAOPT_ENGLISH_FUNCNAME
+            u"Syntax/SeparatorArg"_ustr,                  // SCFORMULAOPT_SEP_ARG
+            u"Syntax/SeparatorArrayRow"_ustr,             // SCFORMULAOPT_SEP_ARRAY_ROW
+            u"Syntax/SeparatorArrayCol"_ustr,             // SCFORMULAOPT_SEP_ARRAY_COL
+            u"Syntax/StringRefAddressSyntax"_ustr,        // SCFORMULAOPT_STRING_REF_SYNTAX
+            u"Syntax/StringConversion"_ustr,              // SCFORMULAOPT_STRING_CONVERSION
+            u"Syntax/EmptyStringAsZero"_ustr,             // SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO
+            u"Load/OOXMLRecalcMode"_ustr,                 // SCFORMULAOPT_OOXML_RECALC
+            u"Load/ODFRecalcMode"_ustr,                   // SCFORMULAOPT_ODF_RECALC
+            u"Load/RecalcOptimalRowHeightMode"_ustr,      // SCFORMULAOPT_ROW_HEIGHT_RECALC
+            u"Calculation/OpenCLAutoSelect"_ustr,         // SCFORMULAOPT_OPENCL_AUTOSELECT
+            u"Calculation/OpenCLDevice"_ustr,             // SCFORMULAOPT_OPENCL_DEVICE
+            u"Calculation/OpenCLSubsetOnly"_ustr,         // SCFORMULAOPT_OPENCL_SUBSET_ONLY
+            u"Calculation/OpenCLMinimumDataSize"_ustr,    // SCFORMULAOPT_OPENCL_MIN_SIZE
+            u"Calculation/OpenCLSubsetOpCodes"_ustr};     // SCFORMULAOPT_OPENCL_SUBSET_OPS
 }
 
 ScFormulaCfg::PropsToIds ScFormulaCfg::GetPropNamesToId()

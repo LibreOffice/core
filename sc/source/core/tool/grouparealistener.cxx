@@ -96,7 +96,7 @@ FormulaGroupAreaListener::FormulaGroupAreaListener( const ScRange& rRange, const
     assert(mpColumn);
     SAL_INFO( "sc.core.grouparealistener",
             "FormulaGroupAreaListener ctor this " << this <<
-            " range " << (maRange == BCA_LISTEN_ALWAYS ? "LISTEN-ALWAYS" : maRange.Format(mrDocument, ScRefFlags::VALID)) <<
+            " range " << (maRange == BCA_LISTEN_ALWAYS ? u"LISTEN-ALWAYS"_ustr : maRange.Format(mrDocument, ScRefFlags::VALID)) <<
             " mnTopCellRow " << mnTopCellRow << " length " << mnGroupLen <<
             ", col/tab " << mpColumn->GetCol() << "/" << mpColumn->GetTab());
 }
@@ -186,7 +186,7 @@ void FormulaGroupAreaListener::collectFormulaCells(
 {
     SAL_INFO( "sc.core.grouparealistener",
             "FormulaGroupAreaListener::collectFormulaCells() this " << this <<
-            " range " << (maRange == BCA_LISTEN_ALWAYS ? "LISTEN-ALWAYS" : maRange.Format(mrDocument, ScRefFlags::VALID)) <<
+            " range " << (maRange == BCA_LISTEN_ALWAYS ? u"LISTEN-ALWAYS"_ustr : maRange.Format(mrDocument, ScRefFlags::VALID)) <<
             " mnTopCellRow " << mnTopCellRow << " length " << mnGroupLen <<
             ", col/tab " << mpColumn->GetCol() << "/" << mpColumn->GetTab());
 

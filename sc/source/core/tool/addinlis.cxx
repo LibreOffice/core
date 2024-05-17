@@ -31,7 +31,7 @@
 
 using namespace com::sun::star;
 
-SC_SIMPLE_SERVICE_INFO( ScAddInListener, "ScAddInListener", "stardiv.one.sheet.AddInListener" )
+SC_SIMPLE_SERVICE_INFO( ScAddInListener, u"ScAddInListener"_ustr, u"stardiv.one.sheet.AddInListener"_ustr )
 
 ::std::vector<rtl::Reference<ScAddInListener>> ScAddInListener::aAllListeners;
 

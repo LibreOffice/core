@@ -28,7 +28,7 @@
 #include <tools/stream.hxx>
 
 ScNumFormatAbbrev::ScNumFormatAbbrev() :
-    sFormatstring   ( "Standard" ),
+    sFormatstring   ( u"Standard"_ustr ),
     eLanguage       (LANGUAGE_SYSTEM),
     eSysLanguage    (LANGUAGE_GERMAN)       // otherwise "Standard" does not fit
 {

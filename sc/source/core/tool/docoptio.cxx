@@ -153,27 +153,27 @@ constexpr OUStringLiteral CFGPATH_DOCLAYOUT = u"Office.Calc/Layout/Other";
 
 Sequence<OUString> ScDocCfg::GetCalcPropertyNames()
 {
-    return {"IterativeReference/Iteration",     // SCCALCOPT_ITER_ITER
-            "IterativeReference/Steps",         // SCCALCOPT_ITER_STEPS
-            "IterativeReference/MinimumChange", // SCCALCOPT_ITER_MINCHG
-            "Other/Date/DD",                    // SCCALCOPT_DATE_DAY
-            "Other/Date/MM",                    // SCCALCOPT_DATE_MONTH
-            "Other/Date/YY",                    // SCCALCOPT_DATE_YEAR
-            "Other/DecimalPlaces",              // SCCALCOPT_DECIMALS
-            "Other/CaseSensitive",              // SCCALCOPT_CASESENSITIVE
-            "Other/Precision",                  // SCCALCOPT_PRECISION
-            "Other/SearchCriteria",             // SCCALCOPT_SEARCHCRIT
-            "Other/FindLabel",                  // SCCALCOPT_FINDLABEL
-            "Other/RegularExpressions",         // SCCALCOPT_REGEX
-            "Other/Wildcards"};                 // SCCALCOPT_WILDCARDS
+    return {u"IterativeReference/Iteration"_ustr,     // SCCALCOPT_ITER_ITER
+            u"IterativeReference/Steps"_ustr,         // SCCALCOPT_ITER_STEPS
+            u"IterativeReference/MinimumChange"_ustr, // SCCALCOPT_ITER_MINCHG
+            u"Other/Date/DD"_ustr,                    // SCCALCOPT_DATE_DAY
+            u"Other/Date/MM"_ustr,                    // SCCALCOPT_DATE_MONTH
+            u"Other/Date/YY"_ustr,                    // SCCALCOPT_DATE_YEAR
+            u"Other/DecimalPlaces"_ustr,              // SCCALCOPT_DECIMALS
+            u"Other/CaseSensitive"_ustr,              // SCCALCOPT_CASESENSITIVE
+            u"Other/Precision"_ustr,                  // SCCALCOPT_PRECISION
+            u"Other/SearchCriteria"_ustr,             // SCCALCOPT_SEARCHCRIT
+            u"Other/FindLabel"_ustr,                  // SCCALCOPT_FINDLABEL
+            u"Other/RegularExpressions"_ustr,         // SCCALCOPT_REGEX
+            u"Other/Wildcards"_ustr};                 // SCCALCOPT_WILDCARDS
 }
 
 Sequence<OUString> ScDocCfg::GetLayoutPropertyNames()
 {
     if (ScOptionsUtil::IsMetricSystem())
-        return {"TabStop/Metric"};    // SCDOCLAYOUTOPT_TABSTOP
+        return {u"TabStop/Metric"_ustr};    // SCDOCLAYOUTOPT_TABSTOP
     else
-        return {"TabStop/NonMetric"}; // SCDOCLAYOUTOPT_TABSTOP
+        return {u"TabStop/NonMetric"_ustr}; // SCDOCLAYOUTOPT_TABSTOP
 }
 
 ScDocCfg::ScDocCfg() :

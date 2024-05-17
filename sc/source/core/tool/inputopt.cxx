@@ -66,18 +66,18 @@ constexpr OUStringLiteral CFGPATH_INPUT = u"Office.Calc/Input";
 
 Sequence<OUString> ScInputCfg::GetPropertyNames()
 {
-    return {"MoveSelectionDirection",   // SCINPUTOPT_MOVEDIR
-            "MoveSelection",            // SCINPUTOPT_MOVESEL
-            "SwitchToEditMode",         // SCINPUTOPT_EDTEREDIT
-            "ExpandFormatting",         // SCINPUTOPT_EXTENDFMT
-            "ShowReference",            // SCINPUTOPT_RANGEFIND
-            "ExpandReference",          // SCINPUTOPT_EXPANDREFS
-            "UpdateReferenceOnSort",    // SCINPUTOPT_SORT_REF_UPDATE
-            "HighlightSelection",       // SCINPUTOPT_MARKHEADER
-            "UseTabCol",                // SCINPUTOPT_USETABCOL
-            "ReplaceCellsWarning",      // SCINPUTOPT_REPLCELLSWARN
-            "LegacyCellSelection",      // SCINPUTOPT_LEGACY_CELL_SELECTION
-            "EnterPasteMode"};          // SCINPUTOPT_ENTER_PASTE_MODE
+    return {u"MoveSelectionDirection"_ustr,   // SCINPUTOPT_MOVEDIR
+            u"MoveSelection"_ustr,            // SCINPUTOPT_MOVESEL
+            u"SwitchToEditMode"_ustr,         // SCINPUTOPT_EDTEREDIT
+            u"ExpandFormatting"_ustr,         // SCINPUTOPT_EXTENDFMT
+            u"ShowReference"_ustr,            // SCINPUTOPT_RANGEFIND
+            u"ExpandReference"_ustr,          // SCINPUTOPT_EXPANDREFS
+            u"UpdateReferenceOnSort"_ustr,    // SCINPUTOPT_SORT_REF_UPDATE
+            u"HighlightSelection"_ustr,       // SCINPUTOPT_MARKHEADER
+            u"UseTabCol"_ustr,                // SCINPUTOPT_USETABCOL
+            u"ReplaceCellsWarning"_ustr,      // SCINPUTOPT_REPLCELLSWARN
+            u"LegacyCellSelection"_ustr,      // SCINPUTOPT_LEGACY_CELL_SELECTION
+            u"EnterPasteMode"_ustr};          // SCINPUTOPT_ENTER_PASTE_MODE
 }
 
 ScInputCfg::ScInputCfg() :

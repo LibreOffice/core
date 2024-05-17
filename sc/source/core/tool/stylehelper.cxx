@@ -50,24 +50,24 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( SfxStyleFamily nType )
             // Installed to "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/calc/styles.xml"
             // e.g. /usr/lib64/libreoffice/share/calc/styles.xml
             // or instdir/share/calc/styles.xml
-            { ScResId( STR_STYLENAME_HEADING ),   "Heading" },
-            { ScResId( STR_STYLENAME_HEADING_1 ), "Heading 1" },
-            { ScResId( STR_STYLENAME_HEADING_2 ), "Heading 2" },
-            { ScResId( STR_STYLENAME_TEXT ),      "Text" },
-            { ScResId( STR_STYLENAME_NOTE ),      "Note" },
-            { ScResId( STR_STYLENAME_FOOTNOTE ),  "Footnote" },
-            { ScResId( STR_STYLENAME_HYPERLINK ), "Hyperlink" },
-            { ScResId( STR_STYLENAME_STATUS ),    "Status" },
-            { ScResId( STR_STYLENAME_GOOD ),      "Good" },
-            { ScResId( STR_STYLENAME_NEUTRAL ),   "Neutral" },
-            { ScResId( STR_STYLENAME_BAD ),       "Bad" },
-            { ScResId( STR_STYLENAME_WARNING ),   "Warning" },
-            { ScResId( STR_STYLENAME_ERROR ),     "Error" },
-            { ScResId( STR_STYLENAME_ACCENT ),    "Accent" },
-            { ScResId( STR_STYLENAME_ACCENT_1 ),  "Accent 1" },
-            { ScResId( STR_STYLENAME_ACCENT_2 ),  "Accent 2" },
-            { ScResId( STR_STYLENAME_ACCENT_3 ),  "Accent 3" },
-            { ScResId( STR_STYLENAME_RESULT ),    "Result" },
+            { ScResId( STR_STYLENAME_HEADING ),   u"Heading"_ustr },
+            { ScResId( STR_STYLENAME_HEADING_1 ), u"Heading 1"_ustr },
+            { ScResId( STR_STYLENAME_HEADING_2 ), u"Heading 2"_ustr },
+            { ScResId( STR_STYLENAME_TEXT ),      u"Text"_ustr },
+            { ScResId( STR_STYLENAME_NOTE ),      u"Note"_ustr },
+            { ScResId( STR_STYLENAME_FOOTNOTE ),  u"Footnote"_ustr },
+            { ScResId( STR_STYLENAME_HYPERLINK ), u"Hyperlink"_ustr },
+            { ScResId( STR_STYLENAME_STATUS ),    u"Status"_ustr },
+            { ScResId( STR_STYLENAME_GOOD ),      u"Good"_ustr },
+            { ScResId( STR_STYLENAME_NEUTRAL ),   u"Neutral"_ustr },
+            { ScResId( STR_STYLENAME_BAD ),       u"Bad"_ustr },
+            { ScResId( STR_STYLENAME_WARNING ),   u"Warning"_ustr },
+            { ScResId( STR_STYLENAME_ERROR ),     u"Error"_ustr },
+            { ScResId( STR_STYLENAME_ACCENT ),    u"Accent"_ustr },
+            { ScResId( STR_STYLENAME_ACCENT_1 ),  u"Accent 1"_ustr },
+            { ScResId( STR_STYLENAME_ACCENT_2 ),  u"Accent 2"_ustr },
+            { ScResId( STR_STYLENAME_ACCENT_3 ),  u"Accent 3"_ustr },
+            { ScResId( STR_STYLENAME_RESULT ),    u"Result"_ustr },
             // API compatibility programmatic names after.
             { ScResId( STR_STYLENAME_STANDARD ), SC_STYLE_PROG_STANDARD },
             { ScResId( STR_STYLENAME_RESULT ), SC_STYLE_PROG_RESULT },
@@ -102,7 +102,7 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( SfxStyleFamily nType )
         static ScDisplayNameMap const aGraphicMap[]
         {
             { ScResId( STR_STYLENAME_STANDARD ), SC_STYLE_PROG_STANDARD },
-            { ScResId( STR_STYLENAME_NOTE ), "Note" },
+            { ScResId( STR_STYLENAME_NOTE ), u"Note"_ustr },
             //  last entry remains empty
             { OUString(), OUString() },
         };

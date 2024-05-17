@@ -70,9 +70,9 @@ constexpr OUStringLiteral CFGPATH_FORMULA = u"Office.Calc/Defaults";
 
 Sequence<OUString> ScDefaultsCfg::GetPropertyNames()
 {
-    return {"Sheet/SheetCount",   // SCDEFAULTSOPT_TAB_COUNT
-            "Sheet/SheetPrefix",  // SCDEFAULTSOPT_TAB_PREFIX
-            "Sheet/JumboSheets"};  // SCDEFAULTSOPT_JUMBO_SHEETS
+    return {u"Sheet/SheetCount"_ustr,   // SCDEFAULTSOPT_TAB_COUNT
+            u"Sheet/SheetPrefix"_ustr,  // SCDEFAULTSOPT_TAB_PREFIX
+            u"Sheet/JumboSheets"_ustr};  // SCDEFAULTSOPT_JUMBO_SHEETS
 
 }
 

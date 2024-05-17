@@ -3170,7 +3170,7 @@ static uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCe
     uno::Reference< sheet::XSheetCellRange > xSheetRange( xCellRange, uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xProps( xSheetRange->getSpreadsheet(), uno::UNO_QUERY_THROW );
     OUString sCodeName;
-    xProps->getPropertyValue("CodeName") >>= sCodeName;
+    xProps->getPropertyValue(u"CodeName"_ustr) >>= sCodeName;
     // #TODO #FIXME ideally we should 'throw' here if we don't get a valid parent, but... it is possible
     // to create a module ( and use 'Option VBASupport 1' ) for a calc document, in this scenario there
     // are *NO* special document module objects ( of course being able to switch between vba/non vba mode at
@@ -3181,7 +3181,7 @@ static uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCe
     uno::Reference< uno::XInterface > xIf;
     if ( pBasMgr && !pBasMgr->GetName().isEmpty() )
     {
-        OUString sProj( "Standard" );
+        OUString sProj( u"Standard"_ustr );
         if ( !pDok->GetDocumentShell()->GetBasicManager()->GetName().isEmpty() )
         {
             sProj = pDok->GetDocumentShell()->GetBasicManager()->GetName();
@@ -3211,7 +3211,7 @@ static bool lcl_setVBARange( const ScRange& aRange, const ScDocument& rDok, SbxV
         xVBARange = ooo::vba::createVBAUnoAPIServiceWithArgs( rDok.GetDocumentShell(), "ooo.vba.excel.Range", aArgs );
         if ( xVBARange.is() )
         {
-            SbxObjectRef aObj = GetSbUnoObject( "A-Range", uno::Any( xVBARange ) );
+            SbxObjectRef aObj = GetSbUnoObject( u"A-Range"_ustr, uno::Any( xVBARange ) );
             SetSbUnoObjectDfltPropName( aObj.get() );
             bOk = pPar->PutObject( aObj.get() );
         }

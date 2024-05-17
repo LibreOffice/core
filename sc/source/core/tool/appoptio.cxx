@@ -213,51 +213,51 @@ Sequence<OUString> ScAppCfg::GetLayoutPropertyNames()
 {
     const bool bIsMetric = ScOptionsUtil::IsMetricSystem();
 
-    return {(bIsMetric ? OUString("Other/MeasureUnit/Metric")
-                       : OUString("Other/MeasureUnit/NonMetric")),  // SCLAYOUTOPT_MEASURE
-             "Other/StatusbarFunction",                             // SCLAYOUTOPT_STATUSBAR
-             "Zoom/Value",                                          // SCLAYOUTOPT_ZOOMVAL
-             "Zoom/Type",                                           // SCLAYOUTOPT_ZOOMTYPE
-             "Zoom/Synchronize",                                    // SCLAYOUTOPT_SYNCZOOM
-             "Other/StatusbarMultiFunction"};                       // SCLAYOUTOPT_STATUSBARMULTI
+    return {(bIsMetric ? u"Other/MeasureUnit/Metric"_ustr
+                       : u"Other/MeasureUnit/NonMetric"_ustr),  // SCLAYOUTOPT_MEASURE
+             u"Other/StatusbarFunction"_ustr,                             // SCLAYOUTOPT_STATUSBAR
+             u"Zoom/Value"_ustr,                                          // SCLAYOUTOPT_ZOOMVAL
+             u"Zoom/Type"_ustr,                                           // SCLAYOUTOPT_ZOOMTYPE
+             u"Zoom/Synchronize"_ustr,                                    // SCLAYOUTOPT_SYNCZOOM
+             u"Other/StatusbarMultiFunction"_ustr};                       // SCLAYOUTOPT_STATUSBARMULTI
 }
 
 Sequence<OUString> ScAppCfg::GetInputPropertyNames()
 {
-    return {"LastFunctions",            // SCINPUTOPT_LASTFUNCS
-            "AutoInput",                // SCINPUTOPT_AUTOINPUT
-            "DetectiveAuto"};           // SCINPUTOPT_DET_AUTO
+    return {u"LastFunctions"_ustr,            // SCINPUTOPT_LASTFUNCS
+            u"AutoInput"_ustr,                // SCINPUTOPT_AUTOINPUT
+            u"DetectiveAuto"_ustr};           // SCINPUTOPT_DET_AUTO
 }
 
 Sequence<OUString> ScAppCfg::GetRevisionPropertyNames()
 {
-    return {"Change",                   // SCREVISOPT_CHANGE
-            "Insertion",                // SCREVISOPT_INSERTION
-            "Deletion",                 // SCREVISOPT_DELETION
-            "MovedEntry"};              // SCREVISOPT_MOVEDENTRY
+    return {u"Change"_ustr,                   // SCREVISOPT_CHANGE
+            u"Insertion"_ustr,                // SCREVISOPT_INSERTION
+            u"Deletion"_ustr,                 // SCREVISOPT_DELETION
+            u"MovedEntry"_ustr};              // SCREVISOPT_MOVEDENTRY
 }
 
 Sequence<OUString> ScAppCfg::GetContentPropertyNames()
 {
-    return {"Link"};                    // SCCONTENTOPT_LINK
+    return {u"Link"_ustr};                    // SCCONTENTOPT_LINK
 }
 
 Sequence<OUString> ScAppCfg::GetSortListPropertyNames()
 {
-    return {"List"};                    // SCSORTLISTOPT_LIST
+    return {u"List"_ustr};                    // SCSORTLISTOPT_LIST
 }
 
 Sequence<OUString> ScAppCfg::GetMiscPropertyNames()
 {
-    return {"DefaultObjectSize/Width",      // SCMISCOPT_DEFOBJWIDTH
-            "DefaultObjectSize/Height",     // SCMISCOPT_DEFOBJHEIGHT
-            "SharedDocument/ShowWarning"};  // SCMISCOPT_SHOWSHAREDDOCWARN
+    return {u"DefaultObjectSize/Width"_ustr,      // SCMISCOPT_DEFOBJWIDTH
+            u"DefaultObjectSize/Height"_ustr,     // SCMISCOPT_DEFOBJHEIGHT
+            u"SharedDocument/ShowWarning"_ustr};  // SCMISCOPT_SHOWSHAREDDOCWARN
 }
 
 Sequence<OUString> ScAppCfg::GetCompatPropertyNames()
 {
-    return {"KeyBindings/BaseGroup",    // SCCOMPATOPT_KEY_BINDING
-            "Links" };                  // SCCOMPATOPT_LINK_LIKE_MS
+    return {u"KeyBindings/BaseGroup"_ustr,    // SCCOMPATOPT_KEY_BINDING
+            u"Links"_ustr };                  // SCCOMPATOPT_LINK_LIKE_MS
 }
 
 ScAppCfg::ScAppCfg() :

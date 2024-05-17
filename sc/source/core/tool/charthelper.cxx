@@ -223,7 +223,7 @@ void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument
 
     try
     {
-        OUString aPropertyNameRole( "Role" );
+        OUString aPropertyNameRole( u"Role"_ustr );
 
         uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLabeledDataSequences( xDataSource->getDataSequences() );
         sal_Int32 nRange=0;
@@ -291,7 +291,7 @@ void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector,
     (void)svt::EmbeddedObjectRef::TryRunningState( xEmbeddedObj );
     uno::Reference< beans::XPropertySet > xProps( xEmbeddedObj->getComponent(), uno::UNO_QUERY );
     if ( xProps.is() &&
-         ( xProps->getPropertyValue("DisableDataTableDialog") >>= bDisableDataTableDialog ) &&
+         ( xProps->getPropertyValue(u"DisableDataTableDialog"_ustr) >>= bDisableDataTableDialog ) &&
          bDisableDataTableDialog )
     {
         ScChartListenerCollection* pCollection = rDocument.GetChartListenerCollection();
@@ -372,7 +372,7 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument& rDoc, co
                         (void)svt::EmbeddedObjectRef::TryRunningState( xEmbeddedObj );
                         uno::Reference< beans::XPropertySet > xProps( xEmbeddedObj->getComponent(), uno::UNO_QUERY );
                         if ( xProps.is() &&
-                             ( xProps->getPropertyValue("DisableDataTableDialog") >>= bDisableDataTableDialog ) &&
+                             ( xProps->getPropertyValue(u"DisableDataTableDialog"_ustr) >>= bDisableDataTableDialog ) &&
                              bDisableDataTableDialog )
                         {
                             if ( bSameDoc )
@@ -388,9 +388,9 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument& rDoc, co
                             }
                             else
                             {
-                                xProps->setPropertyValue("DisableDataTableDialog",
+                                xProps->setPropertyValue(u"DisableDataTableDialog"_ustr,
                                     uno::Any( false ) );
-                                xProps->setPropertyValue("DisableComplexChartTypes",
+                                xProps->setPropertyValue(u"DisableComplexChartTypes"_ustr,
                                     uno::Any( false ) );
                             }
                         }
@@ -403,10 +403,10 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument& rDoc, co
                         ScRangeList aChangeRanges( aRange );
 
                         uno::Sequence< beans::PropertyValue > aProperties{
-                            comphelper::makePropertyValue("Name", aChartName)
+                            comphelper::makePropertyValue(u"Name"_ustr, aChartName)
                         };
 
-                        pModelObj->NotifyChanges( "insert-chart", aChangeRanges, aProperties );
+                        pModelObj->NotifyChanges( u"insert-chart"_ustr, aChangeRanges, aProperties );
                     }
                 }
             }

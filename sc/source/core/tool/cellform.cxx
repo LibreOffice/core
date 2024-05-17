@@ -81,7 +81,7 @@ OUString ScCellFormat::GetString( const ScRefCellValue& rCell, sal_uInt32 nForma
                         (!pFCell->GetDocument().GetMacroInterpretLevel()
                         || pFCell->IsRunning()) )
                 {
-                    return "...";
+                    return u"..."_ustr;
                 }
                 else
                 {

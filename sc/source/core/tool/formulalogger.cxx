@@ -222,7 +222,7 @@ void FormulaLogger::GroupScope::addGroupSizeThresholdMessage( const ScFormulaCel
 void FormulaLogger::GroupScope::setCalcComplete()
 {
     mpImpl->mbCalcComplete = true;
-    addMessage("calculation performed");
+    addMessage(u"calculation performed"_ustr);
 }
 
 FormulaLogger::FormulaLogger()

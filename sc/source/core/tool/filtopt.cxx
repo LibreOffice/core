@@ -35,9 +35,9 @@ ScFilterOptions::ScFilterOptions() :
     ConfigItem( CFGPATH_FILTER ),
     bWK3Flag( false )
 {
-    Sequence<OUString> aNames { "MS_Excel/ColScale",  // SCFILTOPT_COLSCALE
-                                "MS_Excel/RowScale",  // SCFILTOPT_ROWSCALE
-                                "Lotus123/WK3" };     // SCFILTOPT_WK3
+    Sequence<OUString> aNames { u"MS_Excel/ColScale"_ustr,  // SCFILTOPT_COLSCALE
+                                u"MS_Excel/RowScale"_ustr,  // SCFILTOPT_ROWSCALE
+                                u"Lotus123/WK3"_ustr };     // SCFILTOPT_WK3
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
     OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");

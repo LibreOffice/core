@@ -69,7 +69,7 @@ bool ScGridOptions::operator==( const ScGridOptions& rCpy ) const
 }
 
 ScViewRenderingOptions::ScViewRenderingOptions()
-    : sColorSchemeName("Default")
+    : sColorSchemeName(u"Default"_ustr)
     , aDocCol(SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor)
 {
 }
@@ -235,48 +235,48 @@ constexpr OUStringLiteral CFGPATH_GRID = u"Office.Calc/Grid";
 
 Sequence<OUString> ScViewCfg::GetLayoutPropertyNames()
 {
-    return {"Line/GridLine",            // SCLAYOUTOPT_GRIDLINES
-            "Line/GridLineColor",       // SCLAYOUTOPT_GRIDCOLOR
-            "Line/PageBreak",           // SCLAYOUTOPT_PAGEBREAK
-            "Line/Guide",               // SCLAYOUTOPT_GUIDE
-            "Window/ColumnRowHeader",   // SCLAYOUTOPT_COLROWHDR
-            "Window/HorizontalScroll",  // SCLAYOUTOPT_HORISCROLL
-            "Window/VerticalScroll",    // SCLAYOUTOPT_VERTSCROLL
-            "Window/SheetTab",          // SCLAYOUTOPT_SHEETTAB
-            "Window/OutlineSymbol",     // SCLAYOUTOPT_OUTLINE
-            "Line/GridOnColoredCells",  // SCLAYOUTOPT_GRID_ONCOLOR;
-            "Window/SearchSummary",     // SCLAYOUTOPT_SUMMARY
-            "Window/ThemedCursor"};     // SCLAYOUTOPT_THEMEDCURSOR
+    return {u"Line/GridLine"_ustr,            // SCLAYOUTOPT_GRIDLINES
+            u"Line/GridLineColor"_ustr,       // SCLAYOUTOPT_GRIDCOLOR
+            u"Line/PageBreak"_ustr,           // SCLAYOUTOPT_PAGEBREAK
+            u"Line/Guide"_ustr,               // SCLAYOUTOPT_GUIDE
+            u"Window/ColumnRowHeader"_ustr,   // SCLAYOUTOPT_COLROWHDR
+            u"Window/HorizontalScroll"_ustr,  // SCLAYOUTOPT_HORISCROLL
+            u"Window/VerticalScroll"_ustr,    // SCLAYOUTOPT_VERTSCROLL
+            u"Window/SheetTab"_ustr,          // SCLAYOUTOPT_SHEETTAB
+            u"Window/OutlineSymbol"_ustr,     // SCLAYOUTOPT_OUTLINE
+            u"Line/GridOnColoredCells"_ustr,  // SCLAYOUTOPT_GRID_ONCOLOR;
+            u"Window/SearchSummary"_ustr,     // SCLAYOUTOPT_SUMMARY
+            u"Window/ThemedCursor"_ustr};     // SCLAYOUTOPT_THEMEDCURSOR
 }
 
 Sequence<OUString> ScViewCfg::GetDisplayPropertyNames()
 {
-    return {"Formula",                  // SCDISPLAYOPT_FORMULA
-            "ZeroValue",                // SCDISPLAYOPT_ZEROVALUE
-            "NoteTag",                  // SCDISPLAYOPT_NOTETAG
-            "NoteAuthor",               // SCDISPLAYOPT_NOTEAUTHOR
-            "FormulaMark",              // SCDISPLAYOPT_FORMULAMARK
-            "ValueHighlighting",        // SCDISPLAYOPT_VALUEHI
-            "Anchor",                   // SCDISPLAYOPT_ANCHOR
-            "ObjectGraphic",            // SCDISPLAYOPT_OBJECTGRA
-            "Chart",                    // SCDISPLAYOPT_CHART
-            "DrawingObject"};           // SCDISPLAYOPT_DRAWING;
+    return {u"Formula"_ustr,                  // SCDISPLAYOPT_FORMULA
+            u"ZeroValue"_ustr,                // SCDISPLAYOPT_ZEROVALUE
+            u"NoteTag"_ustr,                  // SCDISPLAYOPT_NOTETAG
+            u"NoteAuthor"_ustr,               // SCDISPLAYOPT_NOTEAUTHOR
+            u"FormulaMark"_ustr,              // SCDISPLAYOPT_FORMULAMARK
+            u"ValueHighlighting"_ustr,        // SCDISPLAYOPT_VALUEHI
+            u"Anchor"_ustr,                   // SCDISPLAYOPT_ANCHOR
+            u"ObjectGraphic"_ustr,            // SCDISPLAYOPT_OBJECTGRA
+            u"Chart"_ustr,                    // SCDISPLAYOPT_CHART
+            u"DrawingObject"_ustr};           // SCDISPLAYOPT_DRAWING;
 }
 
 Sequence<OUString> ScViewCfg::GetGridPropertyNames()
 {
     const bool bIsMetric = ScOptionsUtil::IsMetricSystem();
 
-    return {(bIsMetric ? OUString("Resolution/XAxis/Metric")
-                       : OUString("Resolution/XAxis/NonMetric")),   // SCGRIDOPT_RESOLU_X
-            (bIsMetric ? OUString("Resolution/YAxis/Metric")
-                       : OUString("Resolution/YAxis/NonMetric")),   // SCGRIDOPT_RESOLU_Y
-             "Subdivision/XAxis",                                   // SCGRIDOPT_SUBDIV_X
-             "Subdivision/YAxis",                                   // SCGRIDOPT_SUBDIV_Y
-             "Option/SnapToGrid",                                   // SCGRIDOPT_SNAPTOGRID
-             "Option/Synchronize",                                  // SCGRIDOPT_SYNCHRON
-             "Option/VisibleGrid",                                  // SCGRIDOPT_VISIBLE
-             "Option/SizeToGrid"};                                  // SCGRIDOPT_SIZETOGRID;
+    return {(bIsMetric ? u"Resolution/XAxis/Metric"_ustr
+                       : u"Resolution/XAxis/NonMetric"_ustr),   // SCGRIDOPT_RESOLU_X
+            (bIsMetric ? u"Resolution/YAxis/Metric"_ustr
+                       : u"Resolution/YAxis/NonMetric"_ustr),   // SCGRIDOPT_RESOLU_Y
+             u"Subdivision/XAxis"_ustr,                                   // SCGRIDOPT_SUBDIV_X
+             u"Subdivision/YAxis"_ustr,                                   // SCGRIDOPT_SUBDIV_Y
+             u"Option/SnapToGrid"_ustr,                                   // SCGRIDOPT_SNAPTOGRID
+             u"Option/Synchronize"_ustr,                                  // SCGRIDOPT_SYNCHRON
+             u"Option/VisibleGrid"_ustr,                                  // SCGRIDOPT_VISIBLE
+             u"Option/SizeToGrid"_ustr};                                  // SCGRIDOPT_SIZETOGRID;
 }
 
 ScViewCfg::ScViewCfg() :

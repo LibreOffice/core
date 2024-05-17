@@ -3664,7 +3664,7 @@ static OUString lcl_convertIntoHalfWidth( const OUString & rStr )
     auto init = []() -> utl::TransliterationWrapper&
         {
         static utl::TransliterationWrapper trans( ::comphelper::getProcessComponentContext(), TransliterationFlags::NONE );
-        trans.loadModuleByImplName( "FULLWIDTH_HALFWIDTH_LIKE_ASC", LANGUAGE_SYSTEM );
+        trans.loadModuleByImplName( u"FULLWIDTH_HALFWIDTH_LIKE_ASC"_ustr, LANGUAGE_SYSTEM );
         return trans;
         };
     static utl::TransliterationWrapper& aTrans( init());
@@ -3676,7 +3676,7 @@ static OUString lcl_convertIntoFullWidth( const OUString & rStr )
     auto init = []() -> utl::TransliterationWrapper&
         {
         static utl::TransliterationWrapper trans( ::comphelper::getProcessComponentContext(), TransliterationFlags::NONE );
-        trans.loadModuleByImplName( "HALFWIDTH_FULLWIDTH_LIKE_JIS", LANGUAGE_SYSTEM );
+        trans.loadModuleByImplName( u"HALFWIDTH_FULLWIDTH_LIKE_JIS"_ustr, LANGUAGE_SYSTEM );
         return trans;
         };
     static utl::TransliterationWrapper& aTrans( init());

@@ -260,7 +260,7 @@ void ScUnoAddInCollection::Initialize()
     if ( xEnAc.is() )
     {
         uno::Reference<container::XEnumeration> xEnum =
-                        xEnAc->createContentEnumeration( "com.sun.star.sheet.AddIn" );
+                        xEnAc->createContentEnumeration( u"com.sun.star.sheet.AddIn"_ustr );
         if ( xEnum.is() )
         {
             //  loop through all AddIns
@@ -368,7 +368,7 @@ void ScUnoAddInCollection::ReadConfiguration()
     const OUString sSlash('/');
 
     // get the list of add-ins (services)
-    const uno::Sequence<OUString> aServiceNames = rAddInConfig.GetNodeNames( "" );
+    const uno::Sequence<OUString> aServiceNames = rAddInConfig.GetNodeNames( u""_ustr );
 
     for ( const OUString& aServiceName : aServiceNames )
     {

@@ -78,9 +78,9 @@ constexpr OUStringLiteral CFGPATH_PRINT = u"Office.Calc/Print";
 
 Sequence<OUString> ScPrintCfg::GetPropertyNames()
 {
-    return {"Page/EmptyPages",          // SCPRINTOPT_EMPTYPAGES
-            "Other/AllSheets",          // SCPRINTOPT_ALLSHEETS
-            "Page/ForceBreaks"};        // SCPRINTOPT_FORCEBREAKS;
+    return {u"Page/EmptyPages"_ustr,          // SCPRINTOPT_EMPTYPAGES
+            u"Other/AllSheets"_ustr,          // SCPRINTOPT_ALLSHEETS
+            u"Page/ForceBreaks"_ustr};        // SCPRINTOPT_FORCEBREAKS;
 }
 
 ScPrintCfg::ScPrintCfg() :
