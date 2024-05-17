@@ -62,6 +62,13 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableLeak)
     CPPUNIT_ASSERT(xParagraph->supportsService("com.sun.star.text.Paragraph"));
     CPPUNIT_ASSERT(!xParaEnum->hasMoreElements());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testRecursiveHeaderRels)
+{
+    // Given a document with self-referencing rels in a header/footer:
+    loadFromURL(u"recursive_header_rels.docx");
+    // It should not crash/hang on load
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
