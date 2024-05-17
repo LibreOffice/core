@@ -626,17 +626,39 @@ void SvxNumberFormat::SetListFormat(std::optional<OUString> oSet)
     // For backward compatibility and UI we should create something looking like
     // a prefix, suffix and included levels also. This is not possible in general case
     // since level format string is much more flexible. But for most cases is okay
+
+    // If properly formatted, sListFormat should look something like "%1%…%10%"
+    // with an optional prefix or suffix (which could theoretically include a percent symbol)
+    const sal_Int32 nLen = sListFormat->getLength();
     sal_Int32 nFirstReplacement = sListFormat->indexOf('%');
-    sal_Int32 nLastReplacement = sListFormat->lastIndexOf('%') + 1;
+    while (nFirstReplacement > -1 && nFirstReplacement < nLen - 1
+           && ((*sListFormat)[nFirstReplacement + 1] < '1'
+               || (*sListFormat)[nFirstReplacement + 1] > '9'))
+    {
+        nFirstReplacement = sListFormat->indexOf('%', nFirstReplacement + 1);
+    }
+
+    sal_Int32 nLastReplacement = nFirstReplacement == -1 ? -1 : sListFormat->lastIndexOf('%');
+    while (nLastReplacement > 0
+           && ((*sListFormat)[nLastReplacement - 1] < '0'
+               || (*sListFormat)[nLastReplacement - 1] > '9'))
+    {
+        nLastReplacement = sListFormat->lastIndexOf('%', nLastReplacement);
+    }
+    if (nLastReplacement < nFirstReplacement)
+        nLastReplacement = nFirstReplacement;
+    else
+        ++nLastReplacement;
+
     if (nFirstReplacement > 0)
         // Everything before first '%' will be prefix
         sPrefix = sListFormat->copy(0, nFirstReplacement);
-    if (nLastReplacement >= 0 && nLastReplacement < sListFormat->getLength())
+    if (nLastReplacement >= 0 && nLastReplacement < nLen)
         // Everything beyond last '%' is a suffix
         sSuffix = sListFormat->copy(nLastReplacement);
 
     sal_uInt8 nPercents = 0;
-    for (sal_Int32 i = 0; i < sListFormat->getLength(); i++)
+    for (sal_Int32 i = nFirstReplacement > 0 ? nFirstReplacement : 0; i < nLastReplacement; i++)
     {
         if ((*sListFormat)[i] == '%')
             nPercents++;
