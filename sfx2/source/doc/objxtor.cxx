@@ -458,7 +458,7 @@ OUString SfxObjectShell::CreateShellID( const SfxObjectShell* pShell )
 
 // returns a pointer the first SfxDocument of specified type
 
-SAL_RET_MAYBENULL SfxObjectShell* SfxObjectShell::GetFirst
+SfxObjectShell* SfxObjectShell::GetFirst
 (
     const std::function<bool ( const SfxObjectShell* )>& isObjectShell,
     bool          bOnlyVisible
@@ -483,7 +483,7 @@ SAL_RET_MAYBENULL SfxObjectShell* SfxObjectShell::GetFirst
 
 // returns a pointer to the next SfxDocument of specified type behind *pDoc
 
-SAL_RET_MAYBENULL SfxObjectShell* SfxObjectShell::GetNext
+SfxObjectShell* SfxObjectShell::GetNext
 (
     const SfxObjectShell&   rPrev,
     const std::function<bool ( const SfxObjectShell* )>& isObjectShell,
@@ -512,7 +512,7 @@ SAL_RET_MAYBENULL SfxObjectShell* SfxObjectShell::GetNext
     return nullptr;
 }
 
-SAL_RET_MAYBENULL SfxObjectShell* SfxObjectShell::Current()
+SfxObjectShell* SfxObjectShell::Current()
 {
     SfxViewFrame *pFrame = SfxViewFrame::Current();
     return pFrame ? pFrame->GetObjectShell() : nullptr;
