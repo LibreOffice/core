@@ -30,6 +30,7 @@
 
 #include <vector>
 #include <stack>
+#include <set>
 
 namespace writerfilter::ooxml
 {
@@ -55,6 +56,7 @@ class OOXMLDocumentImpl : public OOXMLDocument
     css::uno::Reference<css::io::XInputStream> mxEmbeddings;
     css::uno::Sequence < css::beans::PropertyValue > mxEmbeddingsList;
     std::vector<css::beans::PropertyValue> m_aEmbeddings;
+    std::set<OUString> maSeenStreams;
     bool mbIsSubstream;
     bool mbSkipImages;
     /// How many paragraphs equal to 1 percent?
