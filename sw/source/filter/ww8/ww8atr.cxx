@@ -5521,17 +5521,21 @@ static void ParaTabStopDelAdd( WW8Export& rWrt,
             aTab.Add(*pTN, nLParaMgn);              // must be inserted
             nN++;
         }
-        else if (lcl_IsEqual(nOP, *pTO, nNP, *pTN)) // tabs are equal
+        else
         {
-            nO++;                                   // nothing to do
-            nN++;
-        }
-        else                                        // tabs same position, different type
-        {
-            aTab.Del(*pTO, nLStypeMgn);             // delete old one
-            aTab.Add(*pTN, nLParaMgn);              // insert new one
-            nO++;
-            nN++;
+            assert(pTO && pTN);
+            if (lcl_IsEqual(nOP, *pTO, nNP, *pTN)) // tabs are equal
+            {
+                nO++;                                   // nothing to do
+                nN++;
+            }
+            else                                        // tabs same position, different type
+            {
+                aTab.Del(*pTO, nLStypeMgn);             // delete old one
+                aTab.Add(*pTN, nLParaMgn);              // insert new one
+                nO++;
+                nN++;
+            }
         }
     } while( true );
 
