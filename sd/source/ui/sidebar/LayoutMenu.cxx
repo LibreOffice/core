@@ -155,10 +155,10 @@ LayoutMenu::LayoutMenu (
     weld::Widget* pParent,
     ViewShellBase& rViewShellBase,
     css::uno::Reference<css::ui::XSidebar> xSidebar)
-    : PanelLayout( pParent, "LayoutPanel", "modules/simpress/ui/layoutpanel.ui" ),
+    : PanelLayout( pParent, u"LayoutPanel"_ustr, u"modules/simpress/ui/layoutpanel.ui"_ustr ),
       mrBase(rViewShellBase),
       mxLayoutValueSet(new LayoutValueSet(*this)),
-      mxLayoutValueSetWin(new weld::CustomWeld(*m_xBuilder, "layoutvalueset", *mxLayoutValueSet)),
+      mxLayoutValueSetWin(new weld::CustomWeld(*m_xBuilder, u"layoutvalueset"_ustr, *mxLayoutValueSet)),
       mbIsMainViewChangePending(false),
       mxSidebar(std::move(xSidebar)),
       mbIsDisposed(false)
@@ -198,7 +198,7 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
     mxListener = new ::sd::tools::SlotStateListener(
         aStateChangeLink,
         Reference<frame::XDispatchProvider>(mrBase.GetController()->getFrame(), UNO_QUERY),
-        ".uno:VerticalTextState");
+        u".uno:VerticalTextState"_ustr);
 }
 
 LayoutMenu::~LayoutMenu()
@@ -583,8 +583,8 @@ void LayoutMenu::ShowContextMenu(const Point* pPos)
     // Setup the menu.
     ::tools::Rectangle aRect(aMenuPosition, Size(1, 1));
     weld::Widget* pPopupParent = mxLayoutValueSet->GetDrawingArea();
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "modules/simpress/ui/layoutmenu.ui"));
-    std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, u"modules/simpress/ui/layoutmenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu(u"menu"_ustr));
 
     // Disable the SID_INSERTPAGE_LAYOUT_MENU item when
     // the document is read-only.
@@ -592,7 +592,7 @@ void LayoutMenu::ShowContextMenu(const Point* pPos)
     const SfxItemState aState (
         mrBase.GetViewFrame().GetDispatcher()->QueryState(SID_INSERTPAGE, aResult));
     if (aState == SfxItemState::DISABLED)
-        xMenu->set_sensitive("insert", false);
+        xMenu->set_sensitive(u"insert"_ustr, false);
 
     // Show the menu.
     OnMenuItemSelected(xMenu->popup_at_rect(pPopupParent, aRect));

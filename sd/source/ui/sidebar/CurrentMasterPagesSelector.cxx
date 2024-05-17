@@ -67,7 +67,7 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
     ViewShellBase& rBase,
     const std::shared_ptr<MasterPageContainer>& rpContainer,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
-    : MasterPagesSelector (pParent, rDocument, rBase, rpContainer, rxSidebar, "modules/simpress/ui/masterpagepanel.ui", "usedvalueset")
+    : MasterPagesSelector (pParent, rDocument, rBase, rpContainer, rxSidebar, u"modules/simpress/ui/masterpagepanel.ui"_ustr, u"usedvalueset"_ustr)
 {
     Link<sd::tools::EventMultiplexerEvent&,void> aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
     rBase.GetEventMultiplexer()->AddEventListener(aLink);
@@ -142,7 +142,7 @@ void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
 
 OUString CurrentMasterPagesSelector::GetContextMenuUIFile() const
 {
-    return "modules/simpress/ui/currentmastermenu.ui";
+    return u"modules/simpress/ui/currentmastermenu.ui"_ustr;
 }
 
 void CurrentMasterPagesSelector::UpdateSelection()
@@ -213,13 +213,13 @@ void CurrentMasterPagesSelector::ProcessPopupMenu(weld::Menu& rMenu)
 {
     // Disable the delete entry when there is only one master page.
     if (mrDocument.GetMasterPageUserCount(GetSelectedMasterPage()) > 0)
-        rMenu.set_sensitive("delete", false);
+        rMenu.set_sensitive(u"delete"_ustr, false);
 
     std::shared_ptr<DrawViewShell> pDrawViewShell (
         std::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
     if (pDrawViewShell && pDrawViewShell->GetEditMode() == EditMode::MasterPage)
     {
-        rMenu.set_sensitive("edit", false);
+        rMenu.set_sensitive(u"edit"_ustr, false);
     }
 
     MasterPagesSelector::ProcessPopupMenu(rMenu);

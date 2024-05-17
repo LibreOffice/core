@@ -77,7 +77,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
         try
         {
             rtl::Reference<SotStorage> aStorage = new SotStorage(pInStrm, false);
-            if ( !aStorage->GetError() && aStorage->IsStream( "PowerPoint Document" ) )
+            if ( !aStorage->GetError() && aStorage->IsStream( u"PowerPoint Document"_ustr ) )
                 return aTypeName;
         }
         catch (const css::ucb::ContentCreationException&)
@@ -101,7 +101,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
                 if ( ( n8 & 0xf0 ) == 0 )
                     // we are supporting binary cgm format only, so
                     // this is a small test to exclude cgm text
-                    return "impress_CGM_Computer_Graphics_Metafile";
+                    return u"impress_CGM_Computer_Graphics_Metafile"_ustr;
             }
         }
         else
@@ -118,10 +118,10 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
                 else if ( aTypeName == "pcd_Photo_CD_Base16" )
                     nBase = 0;
                 FilterConfigItem aFilterConfigItem( u"Office.Common/Filter/Graphic/Import/PCD" );
-                aFilterConfigItem.WriteInt32( "Resolution" , nBase );
+                aFilterConfigItem.WriteInt32( u"Resolution"_ustr , nBase );
             }
 
-            SfxFilterMatcher aMatch("sdraw");
+            SfxFilterMatcher aMatch(u"sdraw"_ustr);
             std::shared_ptr<const SfxFilter> pFilter = aMatch.GetFilter4FilterName( aName );
             if ( pFilter )
                 return pFilter->GetRealTypeName();
@@ -134,7 +134,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
 // XServiceInfo
 OUString SAL_CALL SdFilterDetect::getImplementationName()
 {
-    return "com.sun.star.comp.draw.FormatDetector";
+    return u"com.sun.star.comp.draw.FormatDetector"_ustr;
 }
 
 // XServiceInfo
@@ -146,7 +146,7 @@ sal_Bool SAL_CALL SdFilterDetect::supportsService( const OUString& sServiceName 
 // XServiceInfo
 Sequence< OUString > SAL_CALL SdFilterDetect::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ExtendedTypeDetection" };
+    return { u"com.sun.star.frame.ExtendedTypeDetection"_ustr };
 }
 
 

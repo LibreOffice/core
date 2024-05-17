@@ -25,14 +25,14 @@
 using namespace ::sd;
 
 MasterLayoutDialog::MasterLayoutDialog(weld::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage)
-    : GenericDialogController(pParent, "modules/simpress/ui/masterlayoutdlg.ui", "MasterLayoutDialog")
+    : GenericDialogController(pParent, u"modules/simpress/ui/masterlayoutdlg.ui"_ustr, u"MasterLayoutDialog"_ustr)
     , mpDoc(pDoc)
     , mpCurrentPage(pCurrentPage)
-    , mxCBDate(m_xBuilder->weld_check_button("datetime"))
-    , mxCBPageNumber(m_xBuilder->weld_check_button("pagenumber"))
-    , mxCBSlideNumber(m_xBuilder->weld_check_button("slidenumber"))
-    , mxCBHeader(m_xBuilder->weld_check_button("header"))
-    , mxCBFooter(m_xBuilder->weld_check_button("footer"))
+    , mxCBDate(m_xBuilder->weld_check_button(u"datetime"_ustr))
+    , mxCBPageNumber(m_xBuilder->weld_check_button(u"pagenumber"_ustr))
+    , mxCBSlideNumber(m_xBuilder->weld_check_button(u"slidenumber"_ustr))
+    , mxCBHeader(m_xBuilder->weld_check_button(u"header"_ustr))
+    , mxCBFooter(m_xBuilder->weld_check_button(u"footer"_ustr))
 {
     if( mpCurrentPage && !mpCurrentPage->IsMasterPage() )
     {

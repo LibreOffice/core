@@ -34,7 +34,7 @@ public:
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "com.sun.star.presentation.comp.CreateDialogFactoryService";
+        return u"com.sun.star.presentation.comp.CreateDialogFactoryService"_ustr;
     }
     virtual sal_Bool SAL_CALL supportsService(const OUString& serviceName) override
     {
@@ -42,7 +42,7 @@ public:
     }
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return { "com.sun.star.presentation.CreateDialogFactoryService" };
+        return { u"com.sun.star.presentation.CreateDialogFactoryService"_ustr };
     }
 
     // XUnoTunnel

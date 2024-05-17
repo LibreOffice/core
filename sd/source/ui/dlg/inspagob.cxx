@@ -31,13 +31,13 @@
 SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
     weld::Window* pWindow, const SdDrawDocument* pInDoc,
     SfxMedium* pSfxMedium, const OUString& rFileName )
-    : GenericDialogController(pWindow, "modules/sdraw/ui/insertslidesdialog.ui", "InsertSlidesDialog")
+    : GenericDialogController(pWindow, u"modules/sdraw/ui/insertslidesdialog.ui"_ustr, u"InsertSlidesDialog"_ustr)
     , m_pMedium(pSfxMedium)
     , m_pDoc(pInDoc)
     , m_rName(rFileName)
-    , m_xLbTree(new SdPageObjsTLV(m_xBuilder->weld_tree_view("tree")))
-    , m_xCbxLink(m_xBuilder->weld_check_button("links"))
-    , m_xCbxMasters(m_xBuilder->weld_check_button("backgrounds"))
+    , m_xLbTree(new SdPageObjsTLV(m_xBuilder->weld_tree_view(u"tree"_ustr)))
+    , m_xCbxLink(m_xBuilder->weld_check_button(u"links"_ustr))
+    , m_xCbxMasters(m_xBuilder->weld_check_button(u"backgrounds"_ustr))
 {
     m_xLbTree->set_size_request(m_xLbTree->get_approximate_digit_width() * 48,
                                 m_xLbTree->get_height_rows(12));

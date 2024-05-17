@@ -32,10 +32,10 @@ using namespace com::sun::star;
 namespace sd {
 
 MorphDlg::MorphDlg(weld::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2 )
-    : GenericDialogController(pParent, "modules/sdraw/ui/crossfadedialog.ui", "CrossFadeDialog")
-    , m_xMtfSteps(m_xBuilder->weld_spin_button("increments"))
-    , m_xCbxAttributes(m_xBuilder->weld_check_button("attributes"))
-    , m_xCbxOrientation(m_xBuilder->weld_check_button("orientation"))
+    : GenericDialogController(pParent, u"modules/sdraw/ui/crossfadedialog.ui"_ustr, u"CrossFadeDialog"_ustr)
+    , m_xMtfSteps(m_xBuilder->weld_spin_button(u"increments"_ustr))
+    , m_xCbxAttributes(m_xBuilder->weld_check_button(u"attributes"_ustr))
+    , m_xCbxOrientation(m_xBuilder->weld_check_button(u"orientation"_ustr))
 {
     LoadSettings();
 

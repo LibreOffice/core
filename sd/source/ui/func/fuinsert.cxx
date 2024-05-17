@@ -262,7 +262,7 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
     if (!pDrViewSh)
         return;
 
-    INetBookmark        aINetBookmark( "", "" );
+    INetBookmark        aINetBookmark( u""_ustr, u""_ustr );
 
     if( ( aDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) &&
         aDataHelper.GetINetBookmark( SotClipboardFormatId::NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
@@ -271,7 +271,7 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
         ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) &&
         aDataHelper.GetINetBookmark( SotClipboardFormatId::UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
     {
-        pDrViewSh->InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), "" );
+        pDrViewSh->InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), u""_ustr );
     }
 }
 
@@ -408,15 +408,15 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 // via LibreOfficeKit)
                 if (nSlotId == SID_INSERT_DIAGRAM)
                 {
-                    pOleObj->SetProgName( "StarChart");
+                    pOleObj->SetProgName( u"StarChart"_ustr);
                 }
                 else if (nSlotId == SID_ATTR_TABLE)
                 {
-                    pOleObj->SetProgName( "StarCalc" );
+                    pOleObj->SetProgName( u"StarCalc"_ustr );
                 }
                 else if (nSlotId == SID_INSERT_MATH)
                 {
-                    pOleObj->SetProgName( "StarMath" );
+                    pOleObj->SetProgName( u"StarMath"_ustr );
                 }
 
                 pOleObj->SetLogicRect(aRect);
@@ -733,7 +733,7 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
                 avmedia::MediaWindow::dispatchInsertAVMedia(xDispatchProvider, aSize, aURL, bLink);
             }));
 
-        const bool bIsMediaURL = ::avmedia::MediaWindow::isMediaURL(aURL, "", true, xPlayerListener);
+        const bool bIsMediaURL = ::avmedia::MediaWindow::isMediaURL(aURL, u""_ustr, true, xPlayerListener);
 
         if( mpWindow )
             mpWindow->LeaveWait();

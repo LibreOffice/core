@@ -213,7 +213,7 @@ CacheKey RequestQueue::GetFront()
     ::osl::MutexGuard aGuard (maMutex);
 
     if (mpRequestQueue->empty())
-        throw css::uno::RuntimeException("RequestQueue::GetFront(): queue is empty",
+        throw css::uno::RuntimeException(u"RequestQueue::GetFront(): queue is empty"_ustr,
             nullptr);
 
     return mpRequestQueue->begin()->maKey;
@@ -224,7 +224,7 @@ RequestPriorityClass RequestQueue::GetFrontPriorityClass()
     ::osl::MutexGuard aGuard (maMutex);
 
     if (mpRequestQueue->empty())
-        throw css::uno::RuntimeException("RequestQueue::GetFrontPriorityClass(): queue is empty",
+        throw css::uno::RuntimeException(u"RequestQueue::GetFrontPriorityClass(): queue is empty"_ustr,
             nullptr);
 
     return mpRequestQueue->begin()->meClass;

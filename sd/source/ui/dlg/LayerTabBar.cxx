@@ -401,7 +401,7 @@ void  LayerTabBar::Command(const CommandEvent& rCEvt)
     {
         BringLayerObjectsToAttention();
         SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
-        pDispatcher->ExecutePopup("layertab");
+        pDispatcher->ExecutePopup(u"layertab"_ustr);
     }
 }
 

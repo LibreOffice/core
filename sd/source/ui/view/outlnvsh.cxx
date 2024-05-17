@@ -104,7 +104,7 @@ SFX_IMPL_INTERFACE(OutlineViewShell, SfxShell)
 
 void OutlineViewShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("outline");
+    GetStaticInterface()->RegisterPopupMenu(u"outline"_ustr);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS, SfxVisibilityFlags::Standard | SfxVisibilityFlags::FullScreen | SfxVisibilityFlags::Server,
                                             ToolbarId::Outline_Toolbox);
@@ -155,7 +155,7 @@ void OutlineViewShell::Construct()
 
     pLastPage = GetActualPage();
 
-    SetName( "OutlineViewShell" );
+    SetName( u"OutlineViewShell"_ustr );
 
     GetActiveWindow()->SetHelpId( HID_SDOUTLINEVIEWSHELL );
 }
@@ -1362,7 +1362,7 @@ void OutlineViewShell::Command( const CommandEvent& rCEvt, ::sd::Window* pWin )
         }
         else
         {
-           GetViewFrame()->GetDispatcher()->ExecutePopup("outline");
+           GetViewFrame()->GetDispatcher()->ExecutePopup(u"outline"_ustr);
         }
     }
     else

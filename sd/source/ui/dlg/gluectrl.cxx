@@ -53,9 +53,9 @@ SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlGlueEscDir, SfxUInt16Item )
  * Constructor for gluepoint escape direction Listbox
  */
 GlueEscDirLB::GlueEscDirLB(vcl::Window* pParent, const Reference<XFrame>& rFrame)
-    : InterimItemWindow(pParent, "modules/simpress/ui/gluebox.ui", "GlueBox")
+    : InterimItemWindow(pParent, u"modules/simpress/ui/gluebox.ui"_ustr, u"GlueBox"_ustr)
     , m_xFrame(rFrame)
-    , m_xWidget(m_xBuilder->weld_combo_box("gluetype"))
+    , m_xWidget(m_xBuilder->weld_combo_box(u"gluetype"_ustr))
 {
     InitControlBase(m_xWidget.get());
 
@@ -103,9 +103,9 @@ IMPL_LINK(GlueEscDirLB, SelectHdl, weld::ComboBox&, rBox, void)
     {
         Any a;
         aItem.QueryValue( a );
-        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("GlueEscapeDirection", a) };
+        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(u"GlueEscapeDirection"_ustr, a) };
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),
-                                    ".uno:GlueEscapeDirection",
+                                    u".uno:GlueEscapeDirection"_ustr,
                                     aArgs );
     }
 }

@@ -119,15 +119,15 @@ uno::Sequence<sal_Int8> ImagePreparer::preparePreview(
     xFilter->setSourceDocument( xSourceDoc );
 
     uno::Sequence< beans::PropertyValue > aFilterData{
-        comphelper::makePropertyValue("PixelWidth", aWidth),
-        comphelper::makePropertyValue("PixelHeight", aHeight),
-        comphelper::makePropertyValue("ColorMode", sal_Int32(0)) // 0: Color, 1: B&W
+        comphelper::makePropertyValue(u"PixelWidth"_ustr, aWidth),
+        comphelper::makePropertyValue(u"PixelHeight"_ustr, aHeight),
+        comphelper::makePropertyValue(u"ColorMode"_ustr, sal_Int32(0)) // 0: Color, 1: B&W
     };
 
     uno::Sequence< beans::PropertyValue > aProps{
-        comphelper::makePropertyValue("MediaType", OUString( "image/png" )),
-        comphelper::makePropertyValue("URL", aFileURL),
-        comphelper::makePropertyValue("FilterData", aFilterData)
+        comphelper::makePropertyValue(u"MediaType"_ustr, u"image/png"_ustr),
+        comphelper::makePropertyValue(u"URL"_ustr, aFileURL),
+        comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
     };
 
     xFilter->filter( aProps );

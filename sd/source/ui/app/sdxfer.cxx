@@ -189,14 +189,14 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
                 return;
 
             css::form::FormButtonType  eButtonType;
-            Any                                     aTmp( xPropSet->getPropertyValue( "ButtonType" ) );
+            Any                                     aTmp( xPropSet->getPropertyValue( u"ButtonType"_ustr ) );
 
             if( aTmp >>= eButtonType )
             {
                 OUString aLabel, aURL;
 
-                xPropSet->getPropertyValue( "Label" ) >>= aLabel;
-                xPropSet->getPropertyValue( "TargetURL" ) >>= aURL;
+                xPropSet->getPropertyValue( u"Label"_ustr ) >>= aLabel;
+                xPropSet->getPropertyValue( u"TargetURL"_ustr ) >>= aURL;
 
                 moBookmark.emplace( aURL, aLabel );
             }

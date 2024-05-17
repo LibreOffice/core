@@ -334,7 +334,7 @@ MotionPathTag::MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, con
         maOriginPos = mxOrigin->getPosition();
 
     XDash aDash( css::drawing::DashStyle_RECT, 1, 80, 1, 80, 80);
-    OUString aEmpty( "?" );
+    OUString aEmpty( u"?"_ustr );
     mpPathObj->SetMergedItem( XLineDashItem( aEmpty, aDash ) );
     mpPathObj->SetMergedItem( XLineStyleItem( drawing::LineStyle_DASH ) );
     mpPathObj->SetMergedItem( XLineColorItem(aEmpty, COL_GRAY) );
@@ -386,7 +386,7 @@ void MotionPathTag::updatePathAttributes()
         aEndArrow.append(::basegfx::B2DPoint(0.0, 30.0));
         aEndArrow.append(::basegfx::B2DPoint(20.0, 30.0));
         aEndArrow.setClosed(true);
-        mpPathObj->SetMergedItem(XLineEndItem("?",::basegfx::B2DPolyPolygon(aEndArrow)));
+        mpPathObj->SetMergedItem(XLineEndItem(u"?"_ustr,::basegfx::B2DPolyPolygon(aEndArrow)));
         mpPathObj->SetMergedItem(XLineEndWidthItem(400));
         mpPathObj->SetMergedItem(XLineEndCenterItem(true));
     }

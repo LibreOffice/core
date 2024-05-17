@@ -90,26 +90,26 @@ SlideBackground::SlideBackground(
     ViewShellBase& rBase,
     css::uno::Reference<css::frame::XFrame> xFrame,
     SfxBindings* pBindings) :
-    PanelLayout( pParent, "SlideBackgroundPanel", "modules/simpress/ui/sidebarslidebackground.ui" ),
+    PanelLayout( pParent, u"SlideBackgroundPanel"_ustr, u"modules/simpress/ui/sidebarslidebackground.ui"_ustr ),
     mrBase( rBase ),
-    mxPaperSizeBox(new SvxPaperSizeListBox(m_xBuilder->weld_combo_box("paperformat"))),
-    mxPaperOrientation(m_xBuilder->weld_combo_box("orientation")),
-    mxMasterSlide(m_xBuilder->weld_combo_box("masterslide")),
-    mxBackgroundLabel(m_xBuilder->weld_label("label3")),
-    mxFillStyle(m_xBuilder->weld_combo_box("fillstyle")),
-    mxFillLB(new ColorListBox(m_xBuilder->weld_menu_button("fillattr"), [this]{ return GetFrameWeld(); })),
-    mxFillAttr(m_xBuilder->weld_combo_box("fillattr1")),
-    mxFillGrad1(new ColorListBox(m_xBuilder->weld_menu_button("fillattr2"), [this]{ return GetFrameWeld(); })),
-    mxFillGrad2(new ColorListBox(m_xBuilder->weld_menu_button("fillattr3"), [this]{ return GetFrameWeld(); })),
-    mxInsertImage(m_xBuilder->weld_button("button2")),
-    mxDspMasterBackground(m_xBuilder->weld_check_button("displaymasterbackground")),
-    mxDspMasterObjects(m_xBuilder->weld_check_button("displaymasterobjects")),
-    mxCloseMaster(m_xBuilder->weld_button("closemasterslide")),
-    mxEditMaster(m_xBuilder->weld_button("masterslidebutton")),
-    mxMasterLabel(m_xBuilder->weld_label("masterlabel")),
-    mxMarginSelectBox(m_xBuilder->weld_combo_box("marginLB")),
-    mxCustomEntry(m_xBuilder->weld_label("customlabel")),
-    mxMarginLabel(m_xBuilder->weld_label("labelmargin")),
+    mxPaperSizeBox(new SvxPaperSizeListBox(m_xBuilder->weld_combo_box(u"paperformat"_ustr))),
+    mxPaperOrientation(m_xBuilder->weld_combo_box(u"orientation"_ustr)),
+    mxMasterSlide(m_xBuilder->weld_combo_box(u"masterslide"_ustr)),
+    mxBackgroundLabel(m_xBuilder->weld_label(u"label3"_ustr)),
+    mxFillStyle(m_xBuilder->weld_combo_box(u"fillstyle"_ustr)),
+    mxFillLB(new ColorListBox(m_xBuilder->weld_menu_button(u"fillattr"_ustr), [this]{ return GetFrameWeld(); })),
+    mxFillAttr(m_xBuilder->weld_combo_box(u"fillattr1"_ustr)),
+    mxFillGrad1(new ColorListBox(m_xBuilder->weld_menu_button(u"fillattr2"_ustr), [this]{ return GetFrameWeld(); })),
+    mxFillGrad2(new ColorListBox(m_xBuilder->weld_menu_button(u"fillattr3"_ustr), [this]{ return GetFrameWeld(); })),
+    mxInsertImage(m_xBuilder->weld_button(u"button2"_ustr)),
+    mxDspMasterBackground(m_xBuilder->weld_check_button(u"displaymasterbackground"_ustr)),
+    mxDspMasterObjects(m_xBuilder->weld_check_button(u"displaymasterobjects"_ustr)),
+    mxCloseMaster(m_xBuilder->weld_button(u"closemasterslide"_ustr)),
+    mxEditMaster(m_xBuilder->weld_button(u"masterslidebutton"_ustr)),
+    mxMasterLabel(m_xBuilder->weld_label(u"masterlabel"_ustr)),
+    mxMarginSelectBox(m_xBuilder->weld_combo_box(u"marginLB"_ustr)),
+    mxCustomEntry(m_xBuilder->weld_label(u"customlabel"_ustr)),
+    mxMarginLabel(m_xBuilder->weld_label(u"labelmargin"_ustr)),
     maPaperSizeController(SID_ATTR_PAGE_SIZE, *pBindings, *this),
     maPaperOrientationController(SID_ATTR_PAGE, *pBindings, *this),
     maPaperMarginLRController(SID_ATTR_PAGE_LRSPACE, *pBindings, *this),
@@ -530,7 +530,7 @@ void SlideBackground::SetPanelTitle( const OUString& rTitle )
     if ( !xDecks.is() )
         return;
 
-    Reference<ui::XDeck> xDeck ( xDecks->getByName("PropertyDeck"), uno::UNO_QUERY);
+    Reference<ui::XDeck> xDeck ( xDecks->getByName(u"PropertyDeck"_ustr), uno::UNO_QUERY);
     if ( !xDeck.is() )
         return;
 
@@ -538,9 +538,9 @@ void SlideBackground::SetPanelTitle( const OUString& rTitle )
     if ( !xPanels.is() )
         return;
 
-    if (xPanels->hasByName("SlideBackgroundPanel"))
+    if (xPanels->hasByName(u"SlideBackgroundPanel"_ustr))
     {
-        Reference<ui::XPanel> xPanel ( xPanels->getByName("SlideBackgroundPanel"), uno::UNO_QUERY);
+        Reference<ui::XPanel> xPanel ( xPanels->getByName(u"SlideBackgroundPanel"_ustr), uno::UNO_QUERY);
         if ( !xPanel.is() )
             return;
 
@@ -1138,7 +1138,7 @@ IMPL_LINK_NOARG(SlideBackground, FillColorHdl, ColorListBox&, void)
 
             // the name doesn't really matter, it'll be converted to unique one eventually,
             // but it has to be non-empty
-            XFillGradientItem aItem("gradient", aGradient);
+            XFillGradientItem aItem(u"gradient"_ustr, aGradient);
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_GRADIENT, SfxCallMode::RECORD, { &aItem });
         }
         break;

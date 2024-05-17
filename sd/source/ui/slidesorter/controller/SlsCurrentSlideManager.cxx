@@ -234,7 +234,7 @@ void CurrentSlideManager::SetCurrentSlideAtXController (const SharedPageDescript
         {
             Any aPage;
             aPage <<= rpDescriptor->GetPage()->getUnoPage();
-            xSet->setPropertyValue( "CurrentPage", aPage );
+            xSet->setPropertyValue( u"CurrentPage"_ustr, aPage );
         }
     }
     catch (const Exception&)

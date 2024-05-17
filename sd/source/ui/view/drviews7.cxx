@@ -311,7 +311,7 @@ bool DrawViewShell::ShouldDisableEditHyperlink() const
                 if( xPropSet.is() )
                 {
                     uno::Reference< beans::XPropertySetInfo > xPropInfo( xPropSet->getPropertySetInfo() );
-                    if( xPropInfo.is() && xPropInfo->hasPropertyByName( "TargetURL") )
+                    if( xPropInfo.is() && xPropInfo->hasPropertyByName( u"TargetURL"_ustr) )
                     {
                         bDisableEditHyperlink = false;
                     }
@@ -1802,7 +1802,7 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
             {
                 rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_SOLID ) );
                 if (const XFillColorItem* pColorItem = static_cast<const XFillColorItem*>(pArgs->GetItem(SID_ATTR_PAGE_COLOR)))
-                    rPageProperties.PutItem(XFillColorItem("", pColorItem->GetColorValue()));
+                    rPageProperties.PutItem(XFillColorItem(u""_ustr, pColorItem->GetColorValue()));
                 else
                     rPageProperties.PutItem(pArgs->Get(XATTR_FILLCOLOR));
             }

@@ -47,14 +47,14 @@ void SAL_CALL SlideRenderer::initialize (const Sequence<Any>& rArguments)
 
     if (rArguments.hasElements())
     {
-        throw RuntimeException("SlideRenderer: invalid number of arguments",
+        throw RuntimeException(u"SlideRenderer: invalid number of arguments"_ustr,
                 static_cast<XWeak*>(this));
     }
 }
 
 OUString SlideRenderer::getImplementationName()
 {
-    return "com.sun.star.comp.Draw.SlideRenderer";
+    return u"com.sun.star.comp.Draw.SlideRenderer"_ustr;
 }
 
 sal_Bool SlideRenderer::supportsService(OUString const & ServiceName)
@@ -64,7 +64,7 @@ sal_Bool SlideRenderer::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> SlideRenderer::getSupportedServiceNames()
 {
-    return {"com.sun.star.drawing.SlideRenderer"};
+    return {u"com.sun.star.drawing.SlideRenderer"_ustr};
 }
 
 //----- XSlideRenderer --------------------------------------------------------
@@ -129,14 +129,14 @@ BitmapEx SlideRenderer::CreatePreview (
 {
     const SdPage* pPage = SdPage::getImplementation(rxSlide);
     if (pPage == nullptr)
-        throw lang::IllegalArgumentException("SlideRenderer::createPreview() called with invalid slide",
+        throw lang::IllegalArgumentException(u"SlideRenderer::createPreview() called with invalid slide"_ustr,
             static_cast<XWeak*>(this),
             0);
 
     // Determine the size of the current slide and its aspect ratio.
     Size aPageSize = pPage->GetSize();
     if (aPageSize.Height() <= 0)
-        throw lang::IllegalArgumentException("SlideRenderer::createPreview() called with invalid size",
+        throw lang::IllegalArgumentException(u"SlideRenderer::createPreview() called with invalid size"_ustr,
             static_cast<XWeak*>(this),
             1);
 
@@ -182,7 +182,7 @@ void SlideRenderer::ThrowIfDisposed()
 {
     if (m_bDisposed)
     {
-        throw lang::DisposedException ("SlideRenderer object has already been disposed",
+        throw lang::DisposedException (u"SlideRenderer object has already been disposed"_ustr,
             static_cast<uno::XWeak*>(this));
     }
 }

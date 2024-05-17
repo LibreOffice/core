@@ -96,7 +96,7 @@ SfxItemPool* GetAnnotationPool()
         s_pAnnotationPool->SetUserDefaultItem(SvxFontHeightItem(423,100,EE_CHAR_FONTHEIGHT));
 
         vcl::Font aAppFont( Application::GetSettings().GetStyleSettings().GetAppFont() );
-        s_pAnnotationPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyType(),aAppFont.GetFamilyName(),"",PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
+        s_pAnnotationPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyType(),aAppFont.GetFamilyName(),u""_ustr,PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
     }
 
     return s_pAnnotationPool.get();
@@ -1060,24 +1060,24 @@ void AnnotationManagerImpl::ExecuteAnnotationTagContextMenu(const rtl::Reference
     if (bReadOnly)
         return;
 
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pParent, "modules/simpress/ui/annotationtagmenu.ui"));
-    std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pParent, u"modules/simpress/ui/annotationtagmenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu(u"menu"_ustr));
 
     SvtUserOptions aUserOptions;
     OUString sCurrentAuthor( aUserOptions.GetFullName() );
     OUString sAuthor( xAnnotation->getAuthor() );
 
-    OUString aStr(xMenu->get_label(".uno:DeleteAllAnnotationByAuthor"));
+    OUString aStr(xMenu->get_label(u".uno:DeleteAllAnnotationByAuthor"_ustr));
     OUString aReplace( sAuthor );
     if( aReplace.isEmpty() )
         aReplace = SdResId( STR_ANNOTATION_NOAUTHOR );
     aStr = aStr.replaceFirst("%1", aReplace);
-    xMenu->set_label(".uno:DeleteAllAnnotationByAuthor", aStr);
+    xMenu->set_label(u".uno:DeleteAllAnnotationByAuthor"_ustr, aStr);
 
     bool bShowReply = sAuthor != sCurrentAuthor;
-    xMenu->set_visible(".uno:ReplyToAnnotation", bShowReply);
-    xMenu->set_visible("separator", bShowReply);
-    xMenu->set_visible(".uno:DeleteAnnotation", xAnnotation.is());
+    xMenu->set_visible(u".uno:ReplyToAnnotation"_ustr, bShowReply);
+    xMenu->set_visible(u"separator"_ustr, bShowReply);
+    xMenu->set_visible(u".uno:DeleteAnnotation"_ustr, xAnnotation.is());
 
     auto sId = xMenu->popup_at_rect(pParent, rContextRect);
 

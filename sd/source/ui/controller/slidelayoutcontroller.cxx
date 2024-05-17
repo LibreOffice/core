@@ -155,16 +155,16 @@ static void fillLayoutValueSet( ValueSet* pValue, const snew_slide_value_info_la
 }
 
 LayoutToolbarMenu::LayoutToolbarMenu(SlideLayoutController* pControl, weld::Widget* pParent, const bool bInsertPage, const OUString& rCommand)
-    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "modules/simpress/ui/layoutwindow.ui", "LayoutWindow")
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"modules/simpress/ui/layoutwindow.ui"_ustr, u"LayoutWindow"_ustr)
     , mxControl(pControl)
     , mbInsertPage(bInsertPage)
-    , mxFrame1(m_xBuilder->weld_frame("horiframe"))
+    , mxFrame1(m_xBuilder->weld_frame(u"horiframe"_ustr))
     , mxLayoutSet1(new ValueSet(nullptr))
-    , mxLayoutSetWin1(new weld::CustomWeld(*m_xBuilder, "valueset1", *mxLayoutSet1))
-    , mxFrame2(m_xBuilder->weld_frame("vertframe"))
+    , mxLayoutSetWin1(new weld::CustomWeld(*m_xBuilder, u"valueset1"_ustr, *mxLayoutSet1))
+    , mxFrame2(m_xBuilder->weld_frame(u"vertframe"_ustr))
     , mxLayoutSet2(new ValueSet(nullptr))
-    , mxLayoutSetWin2(new weld::CustomWeld(*m_xBuilder, "valueset2", *mxLayoutSet2))
-    , mxMoreButton(m_xBuilder->weld_button("more"))
+    , mxLayoutSetWin2(new weld::CustomWeld(*m_xBuilder, u"valueset2"_ustr, *mxLayoutSet2))
+    , mxMoreButton(m_xBuilder->weld_button(u"more"_ustr))
 {
     mxLayoutSet1->SetStyle(WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT);
     mxLayoutSet2->SetStyle(WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT);
@@ -175,7 +175,7 @@ LayoutToolbarMenu::LayoutToolbarMenu(SlideLayoutController* pControl, weld::Widg
     if( m_xFrame.is() ) try
     {
         Reference< XPropertySet > xControllerSet( m_xFrame->getController(), UNO_QUERY_THROW );
-        xControllerSet->getPropertyValue( "DrawViewMode" ) >>= eMode;
+        xControllerSet->getPropertyValue( u"DrawViewMode"_ustr ) >>= eMode;
     }
     catch( Exception& )
     {
@@ -266,7 +266,7 @@ void LayoutToolbarMenu::SelectHdl(AutoLayout eLayout)
 
     if( eLayout != AUTOLAYOUT_END )
     {
-        aArgs = { comphelper::makePropertyValue("WhatLayout", static_cast<sal_Int32>(eLayout)) };
+        aArgs = { comphelper::makePropertyValue(u"WhatLayout"_ustr, static_cast<sal_Int32>(eLayout)) };
     }
     else if( mbInsertPage )
     {
@@ -282,26 +282,26 @@ void LayoutToolbarMenu::SelectHdl(AutoLayout eLayout)
 /// @throws css::uno::RuntimeException
 static OUString SlideLayoutController_getImplementationName()
 {
-    return "com.sun.star.comp.sd.SlideLayoutController";
+    return u"com.sun.star.comp.sd.SlideLayoutController"_ustr;
 }
 
 /// @throws RuntimeException
 static Sequence< OUString >  SlideLayoutController_getSupportedServiceNames()
 {
-    Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
+    Sequence<OUString> aSNS { u"com.sun.star.frame.ToolbarController"_ustr };
     return aSNS;
 }
 
 /// @throws css::uno::RuntimeException
 static OUString InsertSlideController_getImplementationName()
 {
-    return "com.sun.star.comp.sd.InsertSlideController";
+    return u"com.sun.star.comp.sd.InsertSlideController"_ustr;
 }
 
 /// @throws RuntimeException
 static Sequence< OUString >  InsertSlideController_getSupportedServiceNames()
 {
-    Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
+    Sequence<OUString> aSNS { u"com.sun.star.frame.ToolbarController"_ustr };
     return aSNS;
 }
 

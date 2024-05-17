@@ -39,21 +39,21 @@ namespace sd {
 constexpr char TOKEN = ';';
 
 CopyDlg::CopyDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pInView)
-    : SfxDialogController(pWindow, "modules/sdraw/ui/copydlg.ui", "DuplicateDialog")
+    : SfxDialogController(pWindow, u"modules/sdraw/ui/copydlg.ui"_ustr, u"DuplicateDialog"_ustr)
     , mrOutAttrs(rInAttrs)
     , maUIScale(pInView->GetDoc().GetUIScale())
     , mpView(pInView)
-    , m_xNumFldCopies(m_xBuilder->weld_spin_button("copies"))
-    , m_xBtnSetViewData(m_xBuilder->weld_button("viewdata"))
-    , m_xMtrFldMoveX(m_xBuilder->weld_metric_spin_button("x", FieldUnit::CM))
-    , m_xMtrFldMoveY(m_xBuilder->weld_metric_spin_button("y", FieldUnit::CM))
-    , m_xMtrFldAngle(m_xBuilder->weld_metric_spin_button("angle", FieldUnit::DEGREE))
-    , m_xMtrFldWidth(m_xBuilder->weld_metric_spin_button("width", FieldUnit::CM))
-    , m_xMtrFldHeight(m_xBuilder->weld_metric_spin_button("height", FieldUnit::CM))
-    , m_xFtEndColor(m_xBuilder->weld_label("endlabel"))
-    , m_xBtnSetDefault(m_xBuilder->weld_button("default"))
-    , m_xLbStartColor(new ColorListBox(m_xBuilder->weld_menu_button("start"), [this]{ return m_xDialog.get(); } ))
-    , m_xLbEndColor(new ColorListBox(m_xBuilder->weld_menu_button("end"), [this]{ return m_xDialog.get(); } ))
+    , m_xNumFldCopies(m_xBuilder->weld_spin_button(u"copies"_ustr))
+    , m_xBtnSetViewData(m_xBuilder->weld_button(u"viewdata"_ustr))
+    , m_xMtrFldMoveX(m_xBuilder->weld_metric_spin_button(u"x"_ustr, FieldUnit::CM))
+    , m_xMtrFldMoveY(m_xBuilder->weld_metric_spin_button(u"y"_ustr, FieldUnit::CM))
+    , m_xMtrFldAngle(m_xBuilder->weld_metric_spin_button(u"angle"_ustr, FieldUnit::DEGREE))
+    , m_xMtrFldWidth(m_xBuilder->weld_metric_spin_button(u"width"_ustr, FieldUnit::CM))
+    , m_xMtrFldHeight(m_xBuilder->weld_metric_spin_button(u"height"_ustr, FieldUnit::CM))
+    , m_xFtEndColor(m_xBuilder->weld_label(u"endlabel"_ustr))
+    , m_xBtnSetDefault(m_xBuilder->weld_button(u"default"_ustr))
+    , m_xLbStartColor(new ColorListBox(m_xBuilder->weld_menu_button(u"start"_ustr), [this]{ return m_xDialog.get(); } ))
+    , m_xLbEndColor(new ColorListBox(m_xBuilder->weld_menu_button(u"end"_ustr), [this]{ return m_xDialog.get(); } ))
 {
     m_xLbStartColor->SetSelectHdl( LINK( this, CopyDlg, SelectColorHdl ) );
     m_xBtnSetViewData->connect_clicked( LINK( this, CopyDlg, SetViewData ) );
@@ -81,7 +81,7 @@ CopyDlg::~CopyDlg()
         OUString::number(m_xMtrFldHeight->get_value(FieldUnit::NONE)) + OUStringChar(TOKEN) +
         OUString::number(static_cast<sal_uInt32>(m_xLbStartColor->GetSelectEntryColor())) + OUStringChar(TOKEN) +
         OUString::number(static_cast<sal_uInt32>(m_xLbEndColor->GetSelectEntryColor()));
-    aDlgOpt.SetUserItem("UserItem", css::uno::Any(sStr));
+    aDlgOpt.SetUserItem(u"UserItem"_ustr, css::uno::Any(sStr));
 }
 
 /**
@@ -110,7 +110,7 @@ void CopyDlg::Reset()
     SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
     if (aDlgOpt.Exists())
     {
-        css::uno::Any aUserItem = aDlgOpt.GetUserItem("UserItem");
+        css::uno::Any aUserItem = aDlgOpt.GetUserItem(u"UserItem"_ustr);
         aUserItem >>= aStr;
     }
 

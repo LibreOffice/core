@@ -30,7 +30,7 @@ namespace sd {
 
 static SfxSlot aLeftImpressPaneShellSlots_Impl[] =
 {
-    { 0, SfxGroupId::NONE, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0, SfxDisableFlags::NONE, "" }
+    { 0, SfxGroupId::NONE, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0, SfxDisableFlags::NONE, u""_ustr }
 };
 
 SFX_IMPL_INTERFACE(LeftImpressPaneShell, SfxShell)
@@ -43,7 +43,7 @@ void LeftImpressPaneShell::InitInterface_Impl()
 
 LeftImpressPaneShell::LeftImpressPaneShell()
 {
-    SetName("LeftImpressPane");
+    SetName(u"LeftImpressPane"_ustr);
 }
 
 LeftImpressPaneShell::~LeftImpressPaneShell()
@@ -54,7 +54,7 @@ LeftImpressPaneShell::~LeftImpressPaneShell()
 
 static SfxSlot aBottomImpressPaneShellSlots_Impl[]
     = { { 0, SfxGroupId::NONE, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr,
-          0, SfxDisableFlags::NONE, "" } };
+          0, SfxDisableFlags::NONE, u""_ustr } };
 
 SFX_IMPL_INTERFACE(BottomImpressPaneShell, SfxShell)
 
@@ -63,7 +63,7 @@ void BottomImpressPaneShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(::sd::BottomPaneImpressChildWindow::GetChildWindowId());
 }
 
-BottomImpressPaneShell::BottomImpressPaneShell() { SetName("BottomImpressPane"); }
+BottomImpressPaneShell::BottomImpressPaneShell() { SetName(u"BottomImpressPane"_ustr); }
 
 BottomImpressPaneShell::~BottomImpressPaneShell() {}
 
@@ -71,7 +71,7 @@ BottomImpressPaneShell::~BottomImpressPaneShell() {}
 
 static SfxSlot aLeftDrawPaneShellSlots_Impl[] =
 {
-    { 0, SfxGroupId::NONE, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0, SfxDisableFlags::NONE, "" }
+    { 0, SfxGroupId::NONE, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0, SfxDisableFlags::NONE, u""_ustr }
 };
 
 SFX_IMPL_INTERFACE(LeftDrawPaneShell, SfxShell)
@@ -84,7 +84,7 @@ void LeftDrawPaneShell::InitInterface_Impl()
 
 LeftDrawPaneShell::LeftDrawPaneShell()
 {
-    SetName("LeftDrawPane");
+    SetName(u"LeftDrawPane"_ustr);
 }
 
 LeftDrawPaneShell::~LeftDrawPaneShell()

@@ -133,7 +133,7 @@ Any SAL_CALL SdUnoOutlineView::getFastPropertyValue (
 // XServiceInfo
 OUString SAL_CALL SdUnoOutlineView::getImplementationName(  )
 {
-    return "com.sun.star.comp.sd.SdUnoOutlineView";
+    return u"com.sun.star.comp.sd.SdUnoOutlineView"_ustr;
 }
 
 sal_Bool SAL_CALL SdUnoOutlineView::supportsService( const OUString& ServiceName )
@@ -143,7 +143,7 @@ sal_Bool SAL_CALL SdUnoOutlineView::supportsService( const OUString& ServiceName
 
 Sequence< OUString > SAL_CALL SdUnoOutlineView::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.presentation.OutlineView" };
+    return { u"com.sun.star.presentation.OutlineView"_ustr };
 }
 
 } // end of namespace sd

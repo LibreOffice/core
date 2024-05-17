@@ -94,7 +94,7 @@ SFX_IMPL_INTERFACE(NotesPanelViewShell, SfxShell)
 
 void NotesPanelViewShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("drawtext");
+    GetStaticInterface()->RegisterPopupMenu(u"drawtext"_ustr);
 
     GetStaticInterface()->RegisterChildWindow(SvxHlinkDlgWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(::sd::SpellDialogChildWindow::GetChildWindowId());
@@ -158,7 +158,7 @@ void NotesPanelViewShell::Construct()
     // Apply settings of FrameView
     ReadFrameViewData(mpFrameView);
 
-    SetName("NotesPanelViewShell");
+    SetName(u"NotesPanelViewShell"_ustr);
     // TODO: Help ID
     // GetActiveWindow()->SetHelpId(HID_SDNOTESPANEL);
 }
@@ -1404,7 +1404,7 @@ void NotesPanelViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
         }
         else
         {
-            GetViewFrame()->GetDispatcher()->ExecutePopup("drawtext");
+            GetViewFrame()->GetDispatcher()->ExecutePopup(u"drawtext"_ustr);
         }
     }
     else

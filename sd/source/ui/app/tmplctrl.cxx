@@ -80,8 +80,8 @@ void SdTemplateControl::Command( const CommandEvent& rCEvt )
     if( !pDoc )
         return;
 
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/simpress/ui/masterpagemenu.ui"));
-    std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu("menu"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, u"modules/simpress/ui/masterpagemenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu(u"menu"_ustr));
 
     const sal_uInt16 nMasterCount = pDoc->GetMasterSdPageCount(PageKind::Standard);
 

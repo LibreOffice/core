@@ -541,7 +541,7 @@ Reference< XAnimationNode > SAL_CALL RandomAnimationNode::appendChild( const Ref
 // XServiceInfo
 OUString RandomAnimationNode::getImplementationName()
 {
-    return "sd::RandomAnimationNode" ;
+    return u"sd::RandomAnimationNode"_ustr ;
 }
 
 // XServiceInfo
@@ -553,7 +553,7 @@ sal_Bool RandomAnimationNode::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > RandomAnimationNode::getSupportedServiceNames()
 {
-    return { "com.sun.star.animations.ParallelTimeContainer", "com.sun.star.comp.sd.RandomAnimationNode" };
+    return { u"com.sun.star.animations.ParallelTimeContainer"_ustr, u"com.sun.star.comp.sd.RandomAnimationNode"_ustr };
 }
 
 }

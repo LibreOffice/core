@@ -24,14 +24,14 @@
 
 SdInsertLayerDlg::SdInsertLayerDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs,
     bool bDeletable, const OUString& rStr)
-    : GenericDialogController(pWindow, "modules/sdraw/ui/insertlayer.ui", "InsertLayerDialog")
-    , m_xEdtName(m_xBuilder->weld_entry("name"))
-    , m_xEdtTitle(m_xBuilder->weld_entry("title"))
-    , m_xEdtDesc(m_xBuilder->weld_text_view("textview"))
-    , m_xCbxVisible(m_xBuilder->weld_check_button("visible"))
-    , m_xCbxPrintable(m_xBuilder->weld_check_button("printable"))
-    , m_xCbxLocked(m_xBuilder->weld_check_button("locked"))
-    , m_xNameFrame(m_xBuilder->weld_widget("nameframe"))
+    : GenericDialogController(pWindow, u"modules/sdraw/ui/insertlayer.ui"_ustr, u"InsertLayerDialog"_ustr)
+    , m_xEdtName(m_xBuilder->weld_entry(u"name"_ustr))
+    , m_xEdtTitle(m_xBuilder->weld_entry(u"title"_ustr))
+    , m_xEdtDesc(m_xBuilder->weld_text_view(u"textview"_ustr))
+    , m_xCbxVisible(m_xBuilder->weld_check_button(u"visible"_ustr))
+    , m_xCbxPrintable(m_xBuilder->weld_check_button(u"printable"_ustr))
+    , m_xCbxLocked(m_xBuilder->weld_check_button(u"locked"_ustr))
+    , m_xNameFrame(m_xBuilder->weld_widget(u"nameframe"_ustr))
 {
     m_xDialog->set_title(rStr);
 

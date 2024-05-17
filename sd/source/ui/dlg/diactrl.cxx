@@ -53,8 +53,8 @@ namespace
 // SdPagesField
 SdPagesField::SdPagesField( vcl::Window* pParent,
                             uno::Reference< frame::XFrame > xFrame )
-    : InterimItemWindow(pParent, "modules/simpress/ui/pagesfieldbox.ui", "PagesFieldBox")
-    , m_xWidget(m_xBuilder->weld_spin_button("pagesfield"))
+    : InterimItemWindow(pParent, u"modules/simpress/ui/pagesfieldbox.ui"_ustr, u"PagesFieldBox"_ustr)
+    , m_xWidget(m_xBuilder->weld_spin_button(u"pagesfield"_ustr))
     , m_xFrame(std::move(xFrame))
 {
     InitControlBase(m_xWidget.get());
@@ -97,7 +97,7 @@ void SdPagesField::set_sensitive(bool bSensitive)
     Enable(bSensitive);
     m_xWidget->set_sensitive(bSensitive);
     if (!bSensitive)
-        m_xWidget->set_text("");
+        m_xWidget->set_text(u""_ustr);
 }
 
 void SdPagesField::UpdatePagesField( const SfxUInt16Item* pItem )
@@ -135,9 +135,9 @@ IMPL_LINK_NOARG(SdPagesField, ModifyHdl, weld::SpinButton&, void)
 
     uno::Any a;
     aItem.QueryValue( a );
-    uno::Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue("PagesPerRow", a) };
+    uno::Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue(u"PagesPerRow"_ustr, a) };
     SfxToolBoxControl::Dispatch( ::uno::Reference< ::frame::XDispatchProvider >( m_xFrame->getController(), ::uno::UNO_QUERY ),
-                                 ".uno:PagesPerRow",
+                                 u".uno:PagesPerRow"_ustr,
                                  aArgs );
 }
 

@@ -115,7 +115,7 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineVie
     mrOutlineViewShell.GetViewShellBase().GetEventMultiplexer()->AddEventListener(aLink);
 
     Reference<XFrame> xFrame = mrOutlineViewShell.GetViewShellBase().GetFrame()->GetFrame().GetFrameInterface();
-    maSlideImage = vcl::CommandInfoProvider::GetImageForCommand(".uno:ShowSlide", xFrame, vcl::ImageType::Size26);
+    maSlideImage = vcl::CommandInfoProvider::GetImageForCommand(u".uno:ShowSlide"_ustr, xFrame, vcl::ImageType::Size26);
 
     // Tell undo manager of the document about the undo manager of the
     // outliner, so that the former can synchronize with the later.
@@ -1392,7 +1392,7 @@ void OutlineView::IgnoreCurrentPageChanges (bool bIgnoreChanges)
     and or the drawing document model. It will create needed undo actions */
 void OutlineView::BeginModelChange()
 {
-    mrOutliner.GetUndoManager().EnterListAction("", "", 0, mrOutlineViewShell.GetViewShellBase().GetViewShellId());
+    mrOutliner.GetUndoManager().EnterListAction(u""_ustr, u""_ustr, 0, mrOutlineViewShell.GetViewShellBase().GetViewShellId());
     BegUndo(SdResId(STR_UNDO_CHANGE_TITLE_AND_LAYOUT));
 }
 

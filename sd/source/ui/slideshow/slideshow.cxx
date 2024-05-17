@@ -258,7 +258,7 @@ void SlideShow::CreateController(  ViewShell* pViewSh, ::sd::View* pView, vcl::W
 // XServiceInfo
 OUString SAL_CALL SlideShow::getImplementationName(  )
 {
-    return "com.sun.star.comp.sd.SlideShow";
+    return u"com.sun.star.comp.sd.SlideShow"_ustr;
 }
 
 sal_Bool SAL_CALL SlideShow::supportsService( const OUString& ServiceName )
@@ -268,7 +268,7 @@ sal_Bool SAL_CALL SlideShow::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL SlideShow::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.presentation.Presentation" };
+    return { u"com.sun.star.presentation.Presentation"_ustr };
 }
 
 // XPropertySet
@@ -798,8 +798,8 @@ void SAL_CALL SlideShow::end()
 
             // In case mbMouseAsPen was set, a new layer DrawnInSlideshow might have been generated
             // during slideshow, which is not known to FrameView yet.
-            if (any2bool(getPropertyValue("UsePen"))
-                && pViewShell->GetDoc()->GetLayerAdmin().GetLayer("DrawnInSlideshow"))
+            if (any2bool(getPropertyValue(u"UsePen"_ustr))
+                && pViewShell->GetDoc()->GetLayerAdmin().GetLayer(u"DrawnInSlideshow"_ustr))
             {
                 SdrLayerIDSet aDocLayerIDSet;
                 pViewShell->GetDoc()->GetLayerAdmin().getVisibleLayersODF(aDocLayerIDSet);
@@ -831,7 +831,7 @@ void SAL_CALL SlideShow::end()
 
 void SAL_CALL SlideShow::rehearseTimings()
 {
-    Sequence< PropertyValue > aArguments{ comphelper::makePropertyValue("RehearseTimings", true) };
+    Sequence< PropertyValue > aArguments{ comphelper::makePropertyValue(u"RehearseTimings"_ustr, true) };
     startWithArguments( aArguments );
 }
 
@@ -959,10 +959,10 @@ void SlideShow::endInteractivePreview()
 void SlideShow::startPreview( const Reference< XDrawPage >& xDrawPage, const Reference< XAnimationNode >& xAnimationNode )
 {
     Sequence< PropertyValue > aArguments{
-        comphelper::makePropertyValue("Preview", true),
-        comphelper::makePropertyValue("FirstPage", xDrawPage),
-        comphelper::makePropertyValue("AnimationNode", xAnimationNode),
-        comphelper::makePropertyValue("ParentWindow", Reference< XWindow >()),
+        comphelper::makePropertyValue(u"Preview"_ustr, true),
+        comphelper::makePropertyValue(u"FirstPage"_ustr, xDrawPage),
+        comphelper::makePropertyValue(u"AnimationNode"_ustr, xAnimationNode),
+        comphelper::makePropertyValue(u"ParentWindow"_ustr, Reference< XWindow >()),
     };
 
     startWithArguments( aArguments );

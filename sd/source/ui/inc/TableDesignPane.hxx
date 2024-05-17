@@ -116,8 +116,8 @@ private:
     std::unique_ptr<TableDesignWidget> m_xImpl;
 public:
     TableDesignPane( weld::Widget* pParent, ViewShellBase& rBase )
-        : PanelLayout(pParent, "TableDesignPanel",
-            "modules/simpress/ui/tabledesignpanel.ui")
+        : PanelLayout(pParent, u"TableDesignPanel"_ustr,
+            u"modules/simpress/ui/tabledesignpanel.ui"_ustr)
         , m_xImpl(new TableDesignWidget(*m_xBuilder, rBase))
     {
     }

@@ -35,7 +35,7 @@ void SAL_CALL UpdateRequest::execute(const Reference<XConfiguration>&)
     // becomes empty.
 }
 
-OUString SAL_CALL UpdateRequest::getName() { return "UpdateRequest"; }
+OUString SAL_CALL UpdateRequest::getName() { return u"UpdateRequest"_ustr; }
 
 void SAL_CALL UpdateRequest::setName(const OUString&)
 {

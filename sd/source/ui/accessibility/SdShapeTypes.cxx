@@ -66,59 +66,59 @@ void RegisterImpressShapeTypes()
     ShapeTypeDescriptor aSdShapeTypeList[] = {
         ShapeTypeDescriptor (
             PRESENTATION_OUTLINER,
-            "com.sun.star.presentation.OutlinerShape",
+            u"com.sun.star.presentation.OutlinerShape"_ustr,
             CreateSdAccessibleShape ),
         ShapeTypeDescriptor (
             PRESENTATION_SUBTITLE,
-            "com.sun.star.presentation.SubtitleShape",
+            u"com.sun.star.presentation.SubtitleShape"_ustr,
             CreateSdAccessibleShape ),
         ShapeTypeDescriptor (
             PRESENTATION_GRAPHIC_OBJECT,
-            "com.sun.star.presentation.GraphicObjectShape",
+            u"com.sun.star.presentation.GraphicObjectShape"_ustr,
             CreateSdAccessibleShape ),
         ShapeTypeDescriptor (
             PRESENTATION_PAGE,
-            "com.sun.star.presentation.PageShape",
+            u"com.sun.star.presentation.PageShape"_ustr,
             CreateSdAccessibleShape ),
         ShapeTypeDescriptor (
             PRESENTATION_OLE,
-            "com.sun.star.presentation.OLE2Shape",
+            u"com.sun.star.presentation.OLE2Shape"_ustr,
             CreateSdAccessibleShape ),
         ShapeTypeDescriptor (
             PRESENTATION_CHART,
-            "com.sun.star.presentation.ChartShape",
+            u"com.sun.star.presentation.ChartShape"_ustr,
             CreateSdAccessibleShape ),
         ShapeTypeDescriptor (
             PRESENTATION_TABLE,
-            "com.sun.star.presentation.TableShape",
+            u"com.sun.star.presentation.TableShape"_ustr,
             CreateSdAccessibleShape ),
         ShapeTypeDescriptor (
             PRESENTATION_NOTES,
-            "com.sun.star.presentation.NotesShape",
+            u"com.sun.star.presentation.NotesShape"_ustr,
             CreateSdAccessibleShape ),
         ShapeTypeDescriptor (
             PRESENTATION_TITLE,
-            "com.sun.star.presentation.TitleTextShape",
+            u"com.sun.star.presentation.TitleTextShape"_ustr,
             CreateSdAccessibleShape ),
         ShapeTypeDescriptor (
             PRESENTATION_HANDOUT,
-            "com.sun.star.presentation.HandoutShape",
+            u"com.sun.star.presentation.HandoutShape"_ustr,
             CreateSdAccessibleShape ),
         ShapeTypeDescriptor (
             PRESENTATION_HEADER,
-            "com.sun.star.presentation.HeaderShape",
+            u"com.sun.star.presentation.HeaderShape"_ustr,
             CreateSdAccessibleShape ),
         ShapeTypeDescriptor (
             PRESENTATION_FOOTER,
-            "com.sun.star.presentation.FooterShape",
+            u"com.sun.star.presentation.FooterShape"_ustr,
             CreateSdAccessibleShape ),
         ShapeTypeDescriptor (
             PRESENTATION_DATETIME,
-            "com.sun.star.presentation.DateTimeShape",
+            u"com.sun.star.presentation.DateTimeShape"_ustr,
             CreateSdAccessibleShape ),
         ShapeTypeDescriptor (
             PRESENTATION_PAGENUMBER,
-            "com.sun.star.presentation.SlideNumberShape",
+            u"com.sun.star.presentation.SlideNumberShape"_ustr,
             CreateSdAccessibleShape )
     };
 

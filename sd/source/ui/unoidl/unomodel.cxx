@@ -1110,7 +1110,7 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
 
 uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( const OUString& aServiceSpecifier )
 {
-    return create(aServiceSpecifier, "");
+    return create(aServiceSpecifier, u""_ustr);
 }
 
 css::uno::Reference<css::uno::XInterface>
@@ -1139,50 +1139,50 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
 
     const uno::Sequence< OUString > aSNS_ORG( SvxFmMSFactory::getAvailableServiceNames() );
 
-    uno::Sequence< OUString > aSNS_Common{ "com.sun.star.drawing.DashTable",
-                                           "com.sun.star.drawing.GradientTable",
-                                           "com.sun.star.drawing.HatchTable",
-                                           "com.sun.star.drawing.BitmapTable",
-                                           "com.sun.star.drawing.TransparencyGradientTable",
-                                           "com.sun.star.drawing.MarkerTable",
-                                           "com.sun.star.text.NumberingRules",
-                                           "com.sun.star.drawing.Background",
-                                           "com.sun.star.document.Settings",
+    uno::Sequence< OUString > aSNS_Common{ u"com.sun.star.drawing.DashTable"_ustr,
+                                           u"com.sun.star.drawing.GradientTable"_ustr,
+                                           u"com.sun.star.drawing.HatchTable"_ustr,
+                                           u"com.sun.star.drawing.BitmapTable"_ustr,
+                                           u"com.sun.star.drawing.TransparencyGradientTable"_ustr,
+                                           u"com.sun.star.drawing.MarkerTable"_ustr,
+                                           u"com.sun.star.text.NumberingRules"_ustr,
+                                           u"com.sun.star.drawing.Background"_ustr,
+                                           u"com.sun.star.document.Settings"_ustr,
                                            sUNO_Service_ImageMapRectangleObject,
                                            sUNO_Service_ImageMapCircleObject,
                                            sUNO_Service_ImageMapPolygonObject,
-                                           "com.sun.star.xml.NamespaceMap",
+                                           u"com.sun.star.xml.NamespaceMap"_ustr,
 
                                            // Support creation of GraphicStorageHandler and EmbeddedObjectResolver
-                                           "com.sun.star.document.ExportGraphicStorageHandler",
-                                           "com.sun.star.document.ImportGraphicStorageHandler",
-                                           "com.sun.star.document.ExportEmbeddedObjectResolver",
-                                           "com.sun.star.document.ImportEmbeddedObjectResolver",
-                                           "com.sun.star.drawing.TableShape" };
+                                           u"com.sun.star.document.ExportGraphicStorageHandler"_ustr,
+                                           u"com.sun.star.document.ImportGraphicStorageHandler"_ustr,
+                                           u"com.sun.star.document.ExportEmbeddedObjectResolver"_ustr,
+                                           u"com.sun.star.document.ImportEmbeddedObjectResolver"_ustr,
+                                           u"com.sun.star.drawing.TableShape"_ustr };
 
     uno::Sequence< OUString > aSNS_Specific;
 
     if(mbImpressDoc)
-        aSNS_Specific = { "com.sun.star.presentation.TitleTextShape",
-                          "com.sun.star.presentation.OutlinerShape",
-                          "com.sun.star.presentation.SubtitleShape",
-                          "com.sun.star.presentation.GraphicObjectShape",
-                          "com.sun.star.presentation.ChartShape",
-                          "com.sun.star.presentation.PageShape",
-                          "com.sun.star.presentation.OLE2Shape",
-                          "com.sun.star.presentation.TableShape",
-                          "com.sun.star.presentation.OrgChartShape",
-                          "com.sun.star.presentation.NotesShape",
-                          "com.sun.star.presentation.HandoutShape",
-                          "com.sun.star.presentation.DocumentSettings",
-                          "com.sun.star.presentation.FooterShape",
-                          "com.sun.star.presentation.HeaderShape",
-                          "com.sun.star.presentation.SlideNumberShape",
-                          "com.sun.star.presentation.DateTimeShape",
-                          "com.sun.star.presentation.CalcShape",
-                          "com.sun.star.presentation.MediaShape" };
+        aSNS_Specific = { u"com.sun.star.presentation.TitleTextShape"_ustr,
+                          u"com.sun.star.presentation.OutlinerShape"_ustr,
+                          u"com.sun.star.presentation.SubtitleShape"_ustr,
+                          u"com.sun.star.presentation.GraphicObjectShape"_ustr,
+                          u"com.sun.star.presentation.ChartShape"_ustr,
+                          u"com.sun.star.presentation.PageShape"_ustr,
+                          u"com.sun.star.presentation.OLE2Shape"_ustr,
+                          u"com.sun.star.presentation.TableShape"_ustr,
+                          u"com.sun.star.presentation.OrgChartShape"_ustr,
+                          u"com.sun.star.presentation.NotesShape"_ustr,
+                          u"com.sun.star.presentation.HandoutShape"_ustr,
+                          u"com.sun.star.presentation.DocumentSettings"_ustr,
+                          u"com.sun.star.presentation.FooterShape"_ustr,
+                          u"com.sun.star.presentation.HeaderShape"_ustr,
+                          u"com.sun.star.presentation.SlideNumberShape"_ustr,
+                          u"com.sun.star.presentation.DateTimeShape"_ustr,
+                          u"com.sun.star.presentation.CalcShape"_ustr,
+                          u"com.sun.star.presentation.MediaShape"_ustr };
     else
-        aSNS_Specific = { "com.sun.star.drawing.DocumentSettings" };
+        aSNS_Specific = { u"com.sun.star.drawing.DocumentSettings"_ustr };
 
     return comphelper::concatSequences( aSNS_ORG, aSNS_Common, aSNS_Specific );
 }
@@ -1190,7 +1190,7 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
 // lang::XServiceInfo
 OUString SAL_CALL SdXImpressDocument::getImplementationName()
 {
-    return "SdXImpressDocument";
+    return u"SdXImpressDocument"_ustr;
     /* // Matching the .component information:
        return mbImpressDoc
            ? OUString("com.sun.star.comp.Draw.PresentationDocument")
@@ -1207,10 +1207,10 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getSupportedServiceNames(
 {
     ::SolarMutexGuard aGuard;
 
-    return { "com.sun.star.document.OfficeDocument",
-             "com.sun.star.drawing.GenericDrawingDocument",
-             "com.sun.star.drawing.DrawingDocumentFactory",
-             mbImpressDoc?OUString("com.sun.star.presentation.PresentationDocument"):OUString("com.sun.star.drawing.DrawingDocument") };
+    return { u"com.sun.star.document.OfficeDocument"_ustr,
+             u"com.sun.star.drawing.GenericDrawingDocument"_ustr,
+             u"com.sun.star.drawing.DrawingDocumentFactory"_ustr,
+             mbImpressDoc?u"com.sun.star.presentation.PresentationDocument"_ustr:u"com.sun.star.drawing.DrawingDocument"_ustr };
 }
 
 // XPropertySet
@@ -1547,7 +1547,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
             const ::tools::Rectangle aVisArea( mpDocShell->GetVisArea( embed::Aspects::MSOLE_DOCPRINT ) );
             aPageSize = awt::Size( aVisArea.GetWidth(), aVisArea.GetHeight() );
         }
-        aRenderer = { comphelper::makePropertyValue("PageSize", aPageSize) };
+        aRenderer = { comphelper::makePropertyValue(u"PageSize"_ustr, aPageSize) };
     }
     return aRenderer;
 }
@@ -1680,9 +1680,9 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
             if (xShape->getShapeType() == "com.sun.star.drawing.MediaShape" || xShape->getShapeType() == "com.sun.star.presentation.MediaShape")
             {
                 OUString title;
-                xShapePropSet->getPropertyValue("Title") >>= title;
+                xShapePropSet->getPropertyValue(u"Title"_ustr) >>= title;
                 OUString description;
-                xShapePropSet->getPropertyValue("Description") >>= description;
+                xShapePropSet->getPropertyValue(u"Description"_ustr) >>= description;
                 OUString const altText(title.isEmpty()
                     ? description
                     : description.isEmpty()
@@ -1690,16 +1690,16 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
                         : OUString::Concat(title) + OUString::Concat("\n") + OUString::Concat(description));
 
                 OUString aMediaURL;
-                xShapePropSet->getPropertyValue("MediaURL") >>= aMediaURL;
+                xShapePropSet->getPropertyValue(u"MediaURL"_ustr) >>= aMediaURL;
                 if (!aMediaURL.isEmpty())
                 {
                     SdrObject const*const pSdrObj(SdrObject::getSdrObjectFromXShape(xShape));
-                    OUString const mimeType(xShapePropSet->getPropertyValue("MediaMimeType").get<OUString>());
+                    OUString const mimeType(xShapePropSet->getPropertyValue(u"MediaMimeType"_ustr).get<OUString>());
                     sal_Int32 nScreenId = rPDFExtOutDevData.CreateScreen(aLinkRect, altText, mimeType, rPDFExtOutDevData.GetCurrentPageNumber(), pSdrObj);
                     if (aMediaURL.startsWith("vnd.sun.star.Package:"))
                     {
                         OUString aTempFileURL;
-                        xShapePropSet->getPropertyValue("PrivateTempFileURL") >>= aTempFileURL;
+                        xShapePropSet->getPropertyValue(u"PrivateTempFileURL"_ustr) >>= aTempFileURL;
                         rPDFExtOutDevData.SetScreenStream(nScreenId, aTempFileURL);
                     }
                     else
@@ -1708,7 +1708,7 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
             }
 
             presentation::ClickAction eCa;
-            uno::Any aAny( xShapePropSet->getPropertyValue( "OnClick" ) );
+            uno::Any aAny( xShapePropSet->getPropertyValue( u"OnClick"_ustr ) );
             if ( aAny >>= eCa )
             {
                 OUString const actionName(SdResId(SdTPAction::GetClickActionSdResId(eCa)));
@@ -1756,7 +1756,7 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
                     case presentation::ClickAction_DOCUMENT :
                     {
                         OUString aBookmark;
-                        xShapePropSet->getPropertyValue( "Bookmark" ) >>= aBookmark;
+                        xShapePropSet->getPropertyValue( u"Bookmark"_ustr ) >>= aBookmark;
                         if( !aBookmark.isEmpty() )
                         {
                             switch( eCa )
@@ -2000,8 +2000,8 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
                         // if necessary, the master page interactions will be exported first
                         bool bIsBackgroundObjectsVisible = false;   // #i39428# IsBackgroundObjectsVisible not available for Draw
-                        if ( mbImpressDoc && xPagePropSet->getPropertySetInfo()->hasPropertyByName( "IsBackgroundObjectsVisible" ) )
-                            xPagePropSet->getPropertyValue( "IsBackgroundObjectsVisible" ) >>= bIsBackgroundObjectsVisible;
+                        if ( mbImpressDoc && xPagePropSet->getPropertySetInfo()->hasPropertyByName( u"IsBackgroundObjectsVisible"_ustr ) )
+                            xPagePropSet->getPropertyValue( u"IsBackgroundObjectsVisible"_ustr ) >>= bIsBackgroundObjectsVisible;
                         if ( bIsBackgroundObjectsVisible && !pPDFExtOutDevData->GetIsExportNotesPages() )
                         {
                             uno::Reference< drawing::XMasterPageTarget > xMasterPageTarget( xPage, uno::UNO_QUERY );
@@ -2652,7 +2652,7 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
         {
             { "NewTheme", uno::Any(sThemeName) }
         }));
-        comphelper::dispatchCommand(".uno:ChangeTheme", aPropertyValues);
+        comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, aPropertyValues);
     }
 }
 
@@ -3166,7 +3166,7 @@ void SAL_CALL SdDrawPagesAccess::remove( const uno::Reference< drawing::XDrawPag
 
 OUString SAL_CALL SdDrawPagesAccess::getImplementationName(  )
 {
-    return "SdDrawPagesAccess";
+    return u"SdDrawPagesAccess"_ustr;
 }
 
 sal_Bool SAL_CALL SdDrawPagesAccess::supportsService( const OUString& ServiceName )
@@ -3176,7 +3176,7 @@ sal_Bool SAL_CALL SdDrawPagesAccess::supportsService( const OUString& ServiceNam
 
 uno::Sequence< OUString > SAL_CALL SdDrawPagesAccess::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.drawing.DrawPages" };
+    return { u"com.sun.star.drawing.DrawPages"_ustr };
 }
 
 // XComponent
@@ -3413,7 +3413,7 @@ void SAL_CALL SdMasterPagesAccess::remove( const uno::Reference< drawing::XDrawP
 
 OUString SAL_CALL SdMasterPagesAccess::getImplementationName(  )
 {
-    return "SdMasterPagesAccess";
+    return u"SdMasterPagesAccess"_ustr;
 }
 
 sal_Bool SAL_CALL SdMasterPagesAccess::supportsService( const OUString& ServiceName )
@@ -3423,7 +3423,7 @@ sal_Bool SAL_CALL SdMasterPagesAccess::supportsService( const OUString& ServiceN
 
 uno::Sequence< OUString > SAL_CALL SdMasterPagesAccess::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.drawing.MasterPages" };
+    return { u"com.sun.star.drawing.MasterPages"_ustr };
 }
 
 SdDocLinkTargets::SdDocLinkTargets(SdXImpressDocument& rMyModel)
@@ -3530,7 +3530,7 @@ SdPage* SdDocLinkTarget::FindPage( std::u16string_view rName ) const
 // XServiceInfo
 OUString SAL_CALL SdDocLinkTargets::getImplementationName()
 {
-    return "SdDocLinkTargets";
+    return u"SdDocLinkTargets"_ustr;
 }
 
 sal_Bool SAL_CALL SdDocLinkTargets::supportsService( const OUString& ServiceName )
@@ -3540,7 +3540,7 @@ sal_Bool SAL_CALL SdDocLinkTargets::supportsService( const OUString& ServiceName
 
 uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.LinkTargets" };
+    return { u"com.sun.star.document.LinkTargets"_ustr };
 }
 
 SdDocLinkTargetType::SdDocLinkTargetType(SdXImpressDocument* pModel, sal_uInt16 nT)
@@ -3599,7 +3599,7 @@ uno::Reference< container::XNameAccess > SAL_CALL SdDocLinkTargetType::getLinks(
 // XServiceInfo
 OUString SAL_CALL SdDocLinkTargetType::getImplementationName()
 {
-    return "SdDocLinkTargetType";
+    return u"SdDocLinkTargetType"_ustr;
 }
 
 sal_Bool SAL_CALL SdDocLinkTargetType::supportsService( const OUString& ServiceName )
@@ -3609,7 +3609,7 @@ sal_Bool SAL_CALL SdDocLinkTargetType::supportsService( const OUString& ServiceN
 
 uno::Sequence< OUString > SAL_CALL SdDocLinkTargetType::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.LinkTargetSupplier" };
+    return { u"com.sun.star.document.LinkTargetSupplier"_ustr };
 }
 
 SdDocLinkTarget::SdDocLinkTarget( SdXImpressDocument* pModel, sal_uInt16 nT )
@@ -3760,7 +3760,7 @@ sal_Bool SAL_CALL SdDocLinkTarget::hasElements()
 // XServiceInfo
 OUString SAL_CALL SdDocLinkTarget::getImplementationName()
 {
-    return "SdDocLinkTarget";
+    return u"SdDocLinkTarget"_ustr;
 }
 
 sal_Bool SAL_CALL SdDocLinkTarget::supportsService( const OUString& ServiceName )
@@ -3770,7 +3770,7 @@ sal_Bool SAL_CALL SdDocLinkTarget::supportsService( const OUString& ServiceName 
 
 uno::Sequence< OUString > SAL_CALL SdDocLinkTarget::getSupportedServiceNames()
 {
-    return { "com.sun.star.document.LinkTargets" };
+    return { u"com.sun.star.document.LinkTargets"_ustr };
 }
 
 rtl::Reference< SdXImpressDocument > SdXImpressDocument::GetModel( SdDrawDocument const & rDocument )

@@ -91,7 +91,7 @@ SdLayer::~SdLayer() noexcept
 // XServiceInfo
 OUString SAL_CALL SdLayer::getImplementationName()
 {
-    return "SdUnoLayer";
+    return u"SdUnoLayer"_ustr;
 }
 
 sal_Bool SAL_CALL SdLayer::supportsService( const OUString& ServiceName )
@@ -101,7 +101,7 @@ sal_Bool SAL_CALL SdLayer::supportsService( const OUString& ServiceName )
 
 uno::Sequence< OUString > SAL_CALL SdLayer::getSupportedServiceNames()
 {
-    return { "com.sun.star.drawing.Layer" };
+    return { u"com.sun.star.drawing.Layer"_ustr };
 }
 
 // beans::XPropertySet
@@ -400,7 +400,7 @@ void SAL_CALL SdLayerManager::removeEventListener( const uno::Reference< lang::X
 // XServiceInfo
 OUString SAL_CALL SdLayerManager::getImplementationName()
 {
-    return "SdUnoLayerManager";
+    return u"SdUnoLayerManager"_ustr;
 }
 
 sal_Bool SAL_CALL SdLayerManager::supportsService( const OUString& ServiceName )
@@ -410,7 +410,7 @@ sal_Bool SAL_CALL SdLayerManager::supportsService( const OUString& ServiceName )
 
 uno::Sequence< OUString > SAL_CALL SdLayerManager::getSupportedServiceNames()
 {
-    return {"com.sun.star.drawing.LayerManager"};
+    return {u"com.sun.star.drawing.LayerManager"_ustr};
 }
 
 // XLayerManager

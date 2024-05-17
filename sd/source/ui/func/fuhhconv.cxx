@@ -197,7 +197,7 @@ void FuHangulHanjaConversion::StartChineseConversion()
         return;
 
     Reference< ui::dialogs::XExecutableDialog > xDialog(
-            xMCF->createInstanceWithContext("com.sun.star.linguistic2.ChineseTranslationDialog"
+            xMCF->createInstanceWithContext(u"com.sun.star.linguistic2.ChineseTranslationDialog"_ustr
                 , xContext), UNO_QUERY);
     Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
     if( xInit.is() )
@@ -223,9 +223,9 @@ void FuHangulHanjaConversion::StartChineseConversion()
             {
                 try
                 {
-                    xProp->getPropertyValue( "IsDirectionToSimplified" ) >>= bToSimplified;
-                    xProp->getPropertyValue( "IsUseCharacterVariants" ) >>= bUseVariants;
-                    xProp->getPropertyValue( "IsTranslateCommonTerms" ) >>= bCommonTerms;
+                    xProp->getPropertyValue( u"IsDirectionToSimplified"_ustr ) >>= bToSimplified;
+                    xProp->getPropertyValue( u"IsUseCharacterVariants"_ustr ) >>= bUseVariants;
+                    xProp->getPropertyValue( u"IsTranslateCommonTerms"_ustr ) >>= bCommonTerms;
                 }
                 catch( Exception& )
                 {

@@ -134,7 +134,7 @@ void BasicToolBarFactory::ThrowIfDisposed() const
 {
     if (m_bDisposed)
     {
-        throw lang::DisposedException ("BasicToolBarFactory object has already been disposed",
+        throw lang::DisposedException (u"BasicToolBarFactory object has already been disposed"_ustr,
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }

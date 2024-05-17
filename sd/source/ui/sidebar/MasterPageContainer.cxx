@@ -787,7 +787,7 @@ Reference<frame::XModel> MasterPageContainer::Implementation::GetModel()
         // Create a new model.
         mxModel.set(
             ::comphelper::getProcessServiceFactory()->createInstance(
-                "com.sun.star.presentation.PresentationDocument"),
+                u"com.sun.star.presentation.PresentationDocument"_ustr),
             uno::UNO_QUERY);
 
         // Initialize the model.
@@ -814,7 +814,7 @@ Reference<frame::XModel> MasterPageContainer::Implementation::GetModel()
                 uno::Reference<beans::XPropertySet> xProperties(xNewPage, uno::UNO_QUERY);
                 if (xProperties.is())
                     xProperties->setPropertyValue(
-                        "Layout",
+                        u"Layout"_ustr,
                         Any(sal_Int16(AUTOLAYOUT_TITLE)));
             }
         }

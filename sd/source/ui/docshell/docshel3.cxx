@@ -421,7 +421,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                 SfxBindings& rBindings( mpViewShell->GetFrame()->GetBindings() );
 
                 if ( sfx2::SfxNotebookBar::IsActive() )
-                    sfx2::SfxNotebookBar::ExecMethod( rBindings, pFile ? pFile->GetValue() : "" );
+                    sfx2::SfxNotebookBar::ExecMethod( rBindings, pFile ? pFile->GetValue() : u""_ustr );
                 else
                     sfx2::SfxNotebookBar::CloseMethod( rBindings );
             }

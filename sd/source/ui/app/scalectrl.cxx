@@ -76,8 +76,8 @@ void SdScaleControl::Command(const CommandEvent& rCEvt)
         return;
 
     std::unique_ptr<weld::Builder> xBuilder(
-        Application::CreateBuilder(nullptr, "modules/simpress/ui/masterpagemenu.ui"));
-    std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu("menu"));
+        Application::CreateBuilder(nullptr, u"modules/simpress/ui/masterpagemenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu(u"menu"_ustr));
 
     sal_uInt16 aTable[12] = { 1, 2, 4, 5, 8, 10, 16, 20, 30, 40, 50, 100 };
 

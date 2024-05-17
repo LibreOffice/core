@@ -43,7 +43,7 @@ void ConfigurationControllerBroadcaster::AddListener(
     const Any& rUserData)
 {
     if ( ! rxListener.is())
-        throw lang::IllegalArgumentException("invalid listener",
+        throw lang::IllegalArgumentException(u"invalid listener"_ustr,
             mxConfigurationController,
             0);
 
@@ -59,7 +59,7 @@ void ConfigurationControllerBroadcaster::RemoveListener(
     const Reference<XConfigurationChangeListener>& rxListener)
 {
     if ( ! rxListener.is())
-        throw lang::IllegalArgumentException("invalid listener",
+        throw lang::IllegalArgumentException(u"invalid listener"_ustr,
             mxConfigurationController,
             0);
 

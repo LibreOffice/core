@@ -40,11 +40,11 @@ namespace {
 
 OUString GetPathToImpressConfigurationRoot()
 {
-    return "/org.openoffice.Office.Impress/";
+    return u"/org.openoffice.Office.Impress/"_ustr;
 }
 OUString GetPathToSetNode()
 {
-    return "MultiPaneGUI/ToolPanel/RecentlyUsedMasterPages";
+    return u"MultiPaneGUI/ToolPanel/RecentlyUsedMasterPages"_ustr;
 }
 
 } // end of anonymous namespace

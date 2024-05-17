@@ -94,9 +94,9 @@ StringMap ImpressWindowUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
 
-    aMap["SelectedText"] = getViewShell(mxWindow)->GetSelectionText(false);
-    aMap["CurrentSlide"] = OUString::number(getViewShell(mxWindow)->GetCurPagePos() + 1);
-    aMap["Zoom"] = OUString::number(getViewShell(mxWindow)->GetZoom());
+    aMap[u"SelectedText"_ustr] = getViewShell(mxWindow)->GetSelectionText(false);
+    aMap[u"CurrentSlide"_ustr] = OUString::number(getViewShell(mxWindow)->GetCurPagePos() + 1);
+    aMap[u"Zoom"_ustr] = OUString::number(getViewShell(mxWindow)->GetZoom());
 
     return aMap;
 }
@@ -105,9 +105,9 @@ void ImpressWindowUIObject::execute(const OUString& rAction, const StringMap& rP
 {
     if (rAction == "SET")
     {
-        if (rParameters.find("ZOOM") != rParameters.end())
+        if (rParameters.find(u"ZOOM"_ustr) != rParameters.end())
         {
-            auto itr = rParameters.find("ZOOM");
+            auto itr = rParameters.find(u"ZOOM"_ustr);
             OUString aVal = itr->second;
             sal_Int32 nVal = aVal.toInt32();
             getViewShell(mxWindow)->SetZoom(nVal);
@@ -115,9 +115,9 @@ void ImpressWindowUIObject::execute(const OUString& rAction, const StringMap& rP
     }
     else if (rAction == "GOTO")
     {
-        if (rParameters.find("PAGE") != rParameters.end())
+        if (rParameters.find(u"PAGE"_ustr) != rParameters.end())
         {
-            auto itr = rParameters.find("PAGE");
+            auto itr = rParameters.find(u"PAGE"_ustr);
             OUString aVal = itr->second;
             sal_Int32 nVal = aVal.toInt32();
             getViewShell(mxWindow)->SwitchPage(nVal - 1);
@@ -125,9 +125,9 @@ void ImpressWindowUIObject::execute(const OUString& rAction, const StringMap& rP
     }
     else if (rAction == "SELECT")
     {
-        if (rParameters.find("OBJECT") != rParameters.end())
+        if (rParameters.find(u"OBJECT"_ustr) != rParameters.end())
         {
-            auto itr = rParameters.find("OBJECT");
+            auto itr = rParameters.find(u"OBJECT"_ustr);
             OUString aName = itr->second;
             SdrObject* pObj = getObject(mxWindow, aName);
             SdrPageView* pPageView = getViewShell(mxWindow)->GetView()->GetSdrPageView();
@@ -140,7 +140,7 @@ void ImpressWindowUIObject::execute(const OUString& rAction, const StringMap& rP
         assert(pViewFrm && "ImpressWindowUIObject::execute: no viewframe");
         pViewFrm->ShowChildWindow(SID_SIDEBAR);
 
-        auto itr = rParameters.find("PANEL");
+        auto itr = rParameters.find(u"PANEL"_ustr);
         if (itr != rParameters.end())
         {
             OUString aVal = itr->second;
@@ -174,7 +174,7 @@ std::set<OUString> ImpressWindowUIObject::get_children() const
     return aRet;
 }
 
-OUString ImpressWindowUIObject::get_name() const { return "ImpressWindowUIObject"; }
+OUString ImpressWindowUIObject::get_name() const { return u"ImpressWindowUIObject"_ustr; }
 
 std::unique_ptr<UIObject> ImpressWindowUIObject::create(vcl::Window* pWindow)
 {

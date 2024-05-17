@@ -42,7 +42,7 @@ SfxViewShell* ImpressViewShellBase::CreateInstance (
     SfxViewFrame& rFrame, SfxViewShell *pOldView)
 {
     ImpressViewShellBase* pBase = new ImpressViewShellBase(rFrame, pOldView);
-    pBase->LateInit(comphelper::LibreOfficeKit::isActive() ? framework::FrameworkHelper::msImpressViewURL : "");
+    pBase->LateInit(comphelper::LibreOfficeKit::isActive() ? framework::FrameworkHelper::msImpressViewURL : u""_ustr);
     return pBase;
 }
 void ImpressViewShellBase::RegisterFactory( SfxInterfaceId nPrio )

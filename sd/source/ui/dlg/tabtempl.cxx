@@ -41,8 +41,8 @@ SdTabTemplateDlg::SdTabTemplateDlg(weld::Window* pParent,
                                    SfxStyleSheetBase& rStyleBase,
                                    SdrModel const * pModel,
                                    SdrView* pView)
-    : SfxStyleDialogController(pParent, "modules/simpress/ui/templatedialog.ui",
-                               "TemplateDialog", rStyleBase)
+    : SfxStyleDialogController(pParent, u"modules/simpress/ui/templatedialog.ui"_ustr,
+                               u"TemplateDialog"_ustr, rStyleBase)
     , rDocShell(*pDocShell)
     , pSdrView(pView)
     , pColorList(pModel->GetColorList())
@@ -55,24 +55,24 @@ SdTabTemplateDlg::SdTabTemplateDlg(weld::Window* pParent,
 {
     // fill Listbox and set Select-Handler
 
-    AddTabPage("line", RID_SVXPAGE_LINE);
-    AddTabPage("area", RID_SVXPAGE_AREA);
-    AddTabPage("shadowing", RID_SVXPAGE_SHADOW);
-    AddTabPage("transparency", RID_SVXPAGE_TRANSPARENCE);
-    AddTabPage("font", RID_SVXPAGE_CHAR_NAME);
-    AddTabPage("fonteffect", RID_SVXPAGE_CHAR_EFFECTS);
-    AddTabPage("background", RID_SVXPAGE_BKG);
-    AddTabPage("indents", RID_SVXPAGE_STD_PARAGRAPH);
-    AddTabPage("text", RID_SVXPAGE_TEXTATTR);
-    AddTabPage("animation", RID_SVXPAGE_TEXTANIMATION);
-    AddTabPage("dimensioning", RID_SVXPAGE_MEASURE);
-    AddTabPage("connector", RID_SVXPAGE_CONNECTION);
-    AddTabPage("alignment", RID_SVXPAGE_ALIGN_PARAGRAPH);
-    AddTabPage("tabs", RID_SVXPAGE_TABULATOR);
+    AddTabPage(u"line"_ustr, RID_SVXPAGE_LINE);
+    AddTabPage(u"area"_ustr, RID_SVXPAGE_AREA);
+    AddTabPage(u"shadowing"_ustr, RID_SVXPAGE_SHADOW);
+    AddTabPage(u"transparency"_ustr, RID_SVXPAGE_TRANSPARENCE);
+    AddTabPage(u"font"_ustr, RID_SVXPAGE_CHAR_NAME);
+    AddTabPage(u"fonteffect"_ustr, RID_SVXPAGE_CHAR_EFFECTS);
+    AddTabPage(u"background"_ustr, RID_SVXPAGE_BKG);
+    AddTabPage(u"indents"_ustr, RID_SVXPAGE_STD_PARAGRAPH);
+    AddTabPage(u"text"_ustr, RID_SVXPAGE_TEXTATTR);
+    AddTabPage(u"animation"_ustr, RID_SVXPAGE_TEXTANIMATION);
+    AddTabPage(u"dimensioning"_ustr, RID_SVXPAGE_MEASURE);
+    AddTabPage(u"connector"_ustr, RID_SVXPAGE_CONNECTION);
+    AddTabPage(u"alignment"_ustr, RID_SVXPAGE_ALIGN_PARAGRAPH);
+    AddTabPage(u"tabs"_ustr, RID_SVXPAGE_TABULATOR);
     if( SvtCJKOptions::IsAsianTypographyEnabled() )
-        AddTabPage("asiantypo", RID_SVXPAGE_PARA_ASIAN);
+        AddTabPage(u"asiantypo"_ustr, RID_SVXPAGE_PARA_ASIAN);
     else
-        RemoveTabPage("asiantypo");
+        RemoveTabPage(u"asiantypo"_ustr);
 }
 
 void SdTabTemplateDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)

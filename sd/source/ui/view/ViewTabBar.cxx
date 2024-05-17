@@ -486,8 +486,8 @@ void ViewTabBar::UpdateTabBarButtons()
 TabBarControl::TabBarControl (
     vcl::Window* pParentWindow,
     ::rtl::Reference<ViewTabBar> pViewTabBar)
-    : InterimItemWindow(pParentWindow, "modules/simpress/ui/tabviewbar.ui", "TabViewBar")
-    , mxTabControl(m_xBuilder->weld_notebook("tabcontrol"))
+    : InterimItemWindow(pParentWindow, u"modules/simpress/ui/tabviewbar.ui"_ustr, u"TabViewBar"_ustr)
+    , mxTabControl(m_xBuilder->weld_notebook(u"tabcontrol"_ustr))
     , mpViewTabBar(std::move(pViewTabBar))
     , mnAllocatedWidth(0)
 {

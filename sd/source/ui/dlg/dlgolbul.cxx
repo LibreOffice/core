@@ -44,7 +44,7 @@ namespace sd {
  * Constructor of tab dialog: append pages to the dialog
  */
 OutlineBulletDlg::OutlineBulletDlg(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView)
-    : SfxTabDialogController(pParent, "modules/sdraw/ui/bulletsandnumbering.ui", "BulletsAndNumberingDialog")
+    : SfxTabDialogController(pParent, u"modules/sdraw/ui/bulletsandnumbering.ui"_ustr, u"BulletsAndNumberingDialog"_ustr)
     , m_aInputSet(*pAttr)
     , m_bTitle(false)
     , m_pSdView(pView)
@@ -115,10 +115,10 @@ OutlineBulletDlg::OutlineBulletDlg(weld::Window* pParent, const SfxItemSet* pAtt
     SetInputSet(&m_aInputSet);
 
     if (m_bTitle)
-        RemoveTabPage("singlenum");
+        RemoveTabPage(u"singlenum"_ustr);
 
-    AddTabPage("customize", RID_SVXPAGE_NUM_OPTIONS);
-    AddTabPage("position", RID_SVXPAGE_NUM_POSITION);
+    AddTabPage(u"customize"_ustr, RID_SVXPAGE_NUM_OPTIONS);
+    AddTabPage(u"position"_ustr, RID_SVXPAGE_NUM_POSITION);
 }
 
 OutlineBulletDlg::~OutlineBulletDlg()

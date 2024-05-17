@@ -56,12 +56,12 @@
  * SdNavigatorWin - FloatingWindow
  */
 SdNavigatorWin::SdNavigatorWin(weld::Widget* pParent, SfxBindings* pInBindings, SfxNavigator* pNavigatorDlg)
-    : PanelLayout(pParent, "NavigatorPanel", "modules/simpress/ui/navigatorpanel.ui")
-    , mxToolbox(m_xBuilder->weld_toolbar("toolbox"))
-    , mxTlbObjects(new SdPageObjsTLV(m_xBuilder->weld_tree_view("tree")))
-    , mxLbDocs(m_xBuilder->weld_combo_box("documents"))
-    , mxDragModeMenu(m_xBuilder->weld_menu("dragmodemenu"))
-    , mxShapeMenu(m_xBuilder->weld_menu("shapemenu"))
+    : PanelLayout(pParent, u"NavigatorPanel"_ustr, u"modules/simpress/ui/navigatorpanel.ui"_ustr)
+    , mxToolbox(m_xBuilder->weld_toolbar(u"toolbox"_ustr))
+    , mxTlbObjects(new SdPageObjsTLV(m_xBuilder->weld_tree_view(u"tree"_ustr)))
+    , mxLbDocs(m_xBuilder->weld_combo_box(u"documents"_ustr))
+    , mxDragModeMenu(m_xBuilder->weld_menu(u"dragmodemenu"_ustr))
+    , mxShapeMenu(m_xBuilder->weld_menu(u"shapemenu"_ustr))
     , mxNavigatorDlg(pNavigatorDlg)
     , mbDocImported ( false )
       // On changes of the DragType: adjust SelectionMode of TLB!
@@ -78,11 +78,11 @@ SdNavigatorWin::SdNavigatorWin(weld::Widget* pParent, SfxBindings* pInBindings, 
     mxToolbox->connect_clicked(LINK(this, SdNavigatorWin, SelectToolboxHdl));
     mxToolbox->connect_menu_toggled(LINK(this, SdNavigatorWin, DropdownClickToolBoxHdl));
 
-    mxToolbox->set_item_menu("dragmode", mxDragModeMenu.get());
+    mxToolbox->set_item_menu(u"dragmode"_ustr, mxDragModeMenu.get());
     mxDragModeMenu->connect_activate(LINK(this, SdNavigatorWin, MenuSelectHdl));
 
     // Shape filter drop down menu.
-    mxToolbox->set_item_menu("shapes", mxShapeMenu.get());
+    mxToolbox->set_item_menu(u"shapes"_ustr, mxShapeMenu.get());
     mxShapeMenu->connect_activate(LINK(this, SdNavigatorWin, ShapeFilterCallback));
 
     mxTlbObjects->SetSdNavigator(this);
@@ -228,9 +228,9 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
     // show.
     if (sd::SlideShow::IsRunning( pViewShell->GetViewShellBase() )
         && !sd::SlideShow::IsInteractiveSlideshow( &pViewShell->GetViewShellBase() ) ) // IASS
-        mxToolbox->set_item_sensitive("shapes", false);
+        mxToolbox->set_item_sensitive(u"shapes"_ustr, false);
     else
-        mxToolbox->set_item_sensitive("shapes", true);
+        mxToolbox->set_item_sensitive(u"shapes"_ustr, true);
 
     if( !mxTlbObjects->IsEqualToDoc( pDoc ) )
     {
@@ -290,8 +290,8 @@ IMPL_LINK(SdNavigatorWin, CommandHdl, const CommandEvent&, rCEvt, bool)
         return false;
     weld::TreeView& rTreeView = GetObjects().get_treeview();
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(&rTreeView,
-                                            "modules/sdraw/ui/navigatorcontextmenu.ui"));
-    std::unique_ptr<weld::Menu> xPop = xBuilder->weld_menu("navmenu");
+                                            u"modules/sdraw/ui/navigatorcontextmenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xPop = xBuilder->weld_menu(u"navmenu"_ustr);
     OUString sCommand = xPop->popup_at_rect(&rTreeView,
                                            tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
     if (!sCommand.isEmpty())
@@ -334,9 +334,9 @@ IMPL_LINK(SdNavigatorWin, SelectToolboxHdl, const OUString&, rCommand, void)
     else if (rCommand == "last")
         ePage = PAGE_LAST;
     else if (rCommand == "dragmode")
-        mxToolbox->set_menu_item_active("dragmode", !mxToolbox->get_menu_item_active("dragmode"));
+        mxToolbox->set_menu_item_active(u"dragmode"_ustr, !mxToolbox->get_menu_item_active(u"dragmode"_ustr));
     else if (rCommand == "shapes")
-        mxToolbox->set_menu_item_active("shapes", !mxToolbox->get_menu_item_active("shapes"));
+        mxToolbox->set_menu_item_active(u"shapes"_ustr, !mxToolbox->get_menu_item_active(u"shapes"_ustr));
 
     if (ePage != PAGE_NONE)
     {
@@ -366,11 +366,11 @@ IMPL_LINK(SdNavigatorWin, DropdownClickToolBoxHdl, const OUString&, rCommand, vo
     else if (rCommand == "shapes")
     {
         bool bAll = mxTlbObjects->GetShowAllShapes();
-        mxShapeMenu->set_active("named", !bAll);
-        mxShapeMenu->set_active("all", bAll);
+        mxShapeMenu->set_active(u"named"_ustr, !bAll);
+        mxShapeMenu->set_active(u"all"_ustr, bAll);
         bool bOrderFrontToBack = mxTlbObjects->GetOrderFrontToBack();
-        mxShapeMenu->set_active("fronttoback", bOrderFrontToBack);
-        mxShapeMenu->set_active("backtofront", !bOrderFrontToBack);
+        mxShapeMenu->set_active(u"fronttoback"_ustr, bOrderFrontToBack);
+        mxShapeMenu->set_active(u"backtofront"_ustr, !bOrderFrontToBack);
     }
 }
 
@@ -632,7 +632,7 @@ bool SdNavigatorWin::InsertFile(const OUString& rFileName)
         if (aFileName != maDropFileName)
         {
             SfxMedium aMed(aFileName, (StreamMode::READ | StreamMode::SHARE_DENYNONE));
-            SfxFilterMatcher aMatch( "simpress" );
+            SfxFilterMatcher aMatch( u"simpress"_ustr );
             aMed.UseInteractionHandler( true );
             nErr = aMatch.GuessFilter(aMed, pFilter);
         }
@@ -802,7 +802,7 @@ IMPL_LINK(SdNavigatorWin, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 
 void SdNavigatorWin::SetDragImage()
 {
-    mxToolbox->set_item_icon_name("dragmode", GetDragTypeSdBmpId(meDragType));
+    mxToolbox->set_item_icon_name(u"dragmode"_ustr, GetDragTypeSdBmpId(meDragType));
 }
 
 // for the sidebar to make the panel invisible when the shell type is outline or slide sorter
@@ -856,35 +856,35 @@ void SdNavigatorControllerItem::StateChangedAtToolBoxControl( sal_uInt16 nSId,
 
     // First
     if (nState & NavState::BtnFirstEnabled &&
-        !pNavigatorWin->mxToolbox->get_item_sensitive("first"))
-        pNavigatorWin->mxToolbox->set_item_sensitive("first", true);
+        !pNavigatorWin->mxToolbox->get_item_sensitive(u"first"_ustr))
+        pNavigatorWin->mxToolbox->set_item_sensitive(u"first"_ustr, true);
     if (nState & NavState::BtnFirstDisabled &&
-        pNavigatorWin->mxToolbox->get_item_sensitive("first"))
-        pNavigatorWin->mxToolbox->set_item_sensitive("first", false);
+        pNavigatorWin->mxToolbox->get_item_sensitive(u"first"_ustr))
+        pNavigatorWin->mxToolbox->set_item_sensitive(u"first"_ustr, false);
 
     // Prev
     if (nState & NavState::BtnPrevEnabled &&
-        !pNavigatorWin->mxToolbox->get_item_sensitive("previous"))
-        pNavigatorWin->mxToolbox->set_item_sensitive("previous", true);
+        !pNavigatorWin->mxToolbox->get_item_sensitive(u"previous"_ustr))
+        pNavigatorWin->mxToolbox->set_item_sensitive(u"previous"_ustr, true);
     if (nState & NavState::BtnPrevDisabled &&
-        pNavigatorWin->mxToolbox->get_item_sensitive("previous"))
-        pNavigatorWin->mxToolbox->set_item_sensitive("previous", false);
+        pNavigatorWin->mxToolbox->get_item_sensitive(u"previous"_ustr))
+        pNavigatorWin->mxToolbox->set_item_sensitive(u"previous"_ustr, false);
 
     // Last
     if (nState & NavState::BtnLastEnabled &&
-        !pNavigatorWin->mxToolbox->get_item_sensitive("last"))
-        pNavigatorWin->mxToolbox->set_item_sensitive("last", true);
+        !pNavigatorWin->mxToolbox->get_item_sensitive(u"last"_ustr))
+        pNavigatorWin->mxToolbox->set_item_sensitive(u"last"_ustr, true);
     if (nState & NavState::BtnLastDisabled &&
-        pNavigatorWin->mxToolbox->get_item_sensitive("last"))
-        pNavigatorWin->mxToolbox->set_item_sensitive("last", false);
+        pNavigatorWin->mxToolbox->get_item_sensitive(u"last"_ustr))
+        pNavigatorWin->mxToolbox->set_item_sensitive(u"last"_ustr, false);
 
     // Next
     if (nState & NavState::BtnNextEnabled &&
-        !pNavigatorWin->mxToolbox->get_item_sensitive("next"))
-        pNavigatorWin->mxToolbox->set_item_sensitive("next", true);
+        !pNavigatorWin->mxToolbox->get_item_sensitive(u"next"_ustr))
+        pNavigatorWin->mxToolbox->set_item_sensitive(u"next"_ustr, true);
     if (nState & NavState::BtnNextDisabled &&
-        pNavigatorWin->mxToolbox->get_item_sensitive("next"))
-        pNavigatorWin->mxToolbox->set_item_sensitive("next", false);
+        pNavigatorWin->mxToolbox->get_item_sensitive(u"next"_ustr))
+        pNavigatorWin->mxToolbox->set_item_sensitive(u"next"_ustr, false);
 
     if (nState & NavState::TableUpdate)
     {

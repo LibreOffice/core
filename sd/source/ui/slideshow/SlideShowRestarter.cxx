@@ -144,7 +144,7 @@ void SlideShowRestarter::StartPresentation()
         mpDispatcher->Execute(SID_PRESENTATION, SfxCallMode::ASYNCHRON);
         if (mpSlideShow.is())
         {
-            Sequence aProperties{ comphelper::makePropertyValue("FirstPage",
+            Sequence aProperties{ comphelper::makePropertyValue(u"FirstPage"_ustr,
                                   "page" + OUString::number(mnCurrentSlideNumber+1)) };
             mpSlideShow->startWithArguments(aProperties);
         }

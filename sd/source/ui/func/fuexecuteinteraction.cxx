@@ -154,8 +154,9 @@ void FuExecuteInteraction::DoExecute(SfxRequest&)
 #if HAVE_FEATURE_AVMEDIA
             try
             {
-                mxPlayer.set(avmedia::MediaWindow::createPlayer(pInfo->GetBookmark(), "" /*TODO?*/),
-                             uno::UNO_SET_THROW);
+                mxPlayer.set(
+                    avmedia::MediaWindow::createPlayer(pInfo->GetBookmark(), u""_ustr /*TODO?*/),
+                    uno::UNO_SET_THROW);
                 mxPlayer->start();
             }
             catch (uno::Exception&)

@@ -37,13 +37,13 @@
  * dialog to edit field commands
  */
 SdModifyFieldDlg::SdModifyFieldDlg(weld::Window* pWindow, const SvxFieldData* pInField, SfxItemSet aSet)
-    : GenericDialogController(pWindow, "modules/simpress/ui/dlgfield.ui", "EditFieldsDialog")
+    : GenericDialogController(pWindow, u"modules/simpress/ui/dlgfield.ui"_ustr, u"EditFieldsDialog"_ustr)
     , m_aInputSet(std::move(aSet))
     , m_pField(pInField)
-    , m_xRbtFix(m_xBuilder->weld_radio_button("fixedRB"))
-    , m_xRbtVar(m_xBuilder->weld_radio_button("varRB"))
-    , m_xLbLanguage(new SvxLanguageBox(m_xBuilder->weld_combo_box("languageLB")))
-    , m_xLbFormat(m_xBuilder->weld_combo_box("formatLB"))
+    , m_xRbtFix(m_xBuilder->weld_radio_button(u"fixedRB"_ustr))
+    , m_xRbtVar(m_xBuilder->weld_radio_button(u"varRB"_ustr))
+    , m_xLbLanguage(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"languageLB"_ustr)))
+    , m_xLbFormat(m_xBuilder->weld_combo_box(u"formatLB"_ustr))
 {
     m_xLbLanguage->SetLanguageList( SvxLanguageListFlags::ALL|SvxLanguageListFlags::ONLY_KNOWN, false );
     m_xLbLanguage->connect_changed(LINK(this, SdModifyFieldDlg, LanguageChangeHdl));

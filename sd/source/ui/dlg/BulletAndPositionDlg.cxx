@@ -62,7 +62,7 @@ static bool bLastRelative = false;
 static const vcl::Font& lcl_GetDefaultBulletFont()
 {
     static vcl::Font aDefBulletFont = []() {
-        vcl::Font tmp("OpenSymbol", "", Size(0, 14));
+        vcl::Font tmp(u"OpenSymbol"_ustr, u""_ustr, Size(0, 14));
         tmp.SetCharSet(RTL_TEXTENCODING_SYMBOL);
         tmp.SetFamily(FAMILY_DONTKNOW);
         tmp.SetPitch(PITCH_DONTKNOW);
@@ -77,7 +77,8 @@ class SdDrawDocument;
 
 SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const SfxItemSet& rSet,
                                                  const ::sd::View* pView)
-    : GenericDialogController(pWindow, "cui/ui/bulletandposition.ui", "BulletAndPosition")
+    : GenericDialogController(pWindow, u"cui/ui/bulletandposition.ui"_ustr,
+                              u"BulletAndPosition"_ustr)
     , aInvalidateTimer("sd SvxBulletAndPositionDlg aInvalidateTimer")
     , rFirstStateSet(rSet)
     , bLastWidthModified(false)
@@ -91,44 +92,44 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
     , m_aRatioTop(ConnectorType::Top)
     , m_aRatioBottom(ConnectorType::Bottom)
-    , m_xGrid(m_xBuilder->weld_widget("grid2"))
-    , m_xLevelLB(m_xBuilder->weld_tree_view("levellb"))
-    , m_xFmtLB(m_xBuilder->weld_combo_box("numfmtlb"))
-    , m_xPrefixFT(m_xBuilder->weld_label("prefixft"))
-    , m_xPrefixED(m_xBuilder->weld_entry("prefix"))
-    , m_xSuffixFT(m_xBuilder->weld_label("suffixft"))
-    , m_xSuffixED(m_xBuilder->weld_entry("suffix"))
-    , m_xBeforeAfter(m_xBuilder->weld_frame("beforeafter"))
-    , m_xBulColorFT(m_xBuilder->weld_label("colorft"))
-    , m_xBulColLB(new ColorListBox(m_xBuilder->weld_menu_button("color"),
+    , m_xGrid(m_xBuilder->weld_widget(u"grid2"_ustr))
+    , m_xLevelLB(m_xBuilder->weld_tree_view(u"levellb"_ustr))
+    , m_xFmtLB(m_xBuilder->weld_combo_box(u"numfmtlb"_ustr))
+    , m_xPrefixFT(m_xBuilder->weld_label(u"prefixft"_ustr))
+    , m_xPrefixED(m_xBuilder->weld_entry(u"prefix"_ustr))
+    , m_xSuffixFT(m_xBuilder->weld_label(u"suffixft"_ustr))
+    , m_xSuffixED(m_xBuilder->weld_entry(u"suffix"_ustr))
+    , m_xBeforeAfter(m_xBuilder->weld_frame(u"beforeafter"_ustr))
+    , m_xBulColorFT(m_xBuilder->weld_label(u"colorft"_ustr))
+    , m_xBulColLB(new ColorListBox(m_xBuilder->weld_menu_button(u"color"_ustr),
                                    [this] { return m_xDialog.get(); }))
-    , m_xBulRelSizeFT(m_xBuilder->weld_label("relsizeft"))
-    , m_xBulRelSizeMF(m_xBuilder->weld_metric_spin_button("relsize", FieldUnit::PERCENT))
-    , m_xStartFT(m_xBuilder->weld_label("startatft"))
-    , m_xStartED(m_xBuilder->weld_spin_button("startat"))
-    , m_xBulletFT(m_xBuilder->weld_label("bulletft"))
-    , m_xBulletPB(m_xBuilder->weld_button("bullet"))
-    , m_xBitmapMB(m_xBuilder->weld_menu_button("bitmap"))
-    , m_xWidthFT(m_xBuilder->weld_label("widthft"))
-    , m_xWidthMF(m_xBuilder->weld_metric_spin_button("widthmf", FieldUnit::CM))
-    , m_xHeightFT(m_xBuilder->weld_label("heightft"))
-    , m_xHeightMF(m_xBuilder->weld_metric_spin_button("heightmf", FieldUnit::CM))
-    , m_xRatioCB(m_xBuilder->weld_check_button("keepratio"))
-    , m_xCbxScaleImg(m_xBuilder->weld_image("imRatio"))
-    , m_xImgRatioTop(new weld::CustomWeld(*m_xBuilder, "daRatioTop", m_aRatioTop))
-    , m_xImgRatioBottom(new weld::CustomWeld(*m_xBuilder, "daRatioBottom", m_aRatioBottom))
-    , m_xPreviewWIN(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWIN))
-    , m_xDistBorderFT(m_xBuilder->weld_label("indent"))
-    , m_xDistBorderMF(m_xBuilder->weld_metric_spin_button("indentmf", FieldUnit::CM))
-    , m_xRelativeCB(m_xBuilder->weld_check_button("relative"))
-    , m_xIndentMF(m_xBuilder->weld_metric_spin_button("numberingwidthmf", FieldUnit::CM))
-    , m_xLeftTB(m_xBuilder->weld_toggle_button("left"))
-    , m_xCenterTB(m_xBuilder->weld_toggle_button("center"))
-    , m_xRightTB(m_xBuilder->weld_toggle_button("right"))
-    , m_xSlideRB(m_xBuilder->weld_radio_button("sliderb"))
-    , m_xSelectionRB(m_xBuilder->weld_radio_button("selectionrb"))
-    , m_xApplyToMaster(m_xBuilder->weld_toggle_button("applytomaster"))
-    , m_xReset(m_xBuilder->weld_button("reset"))
+    , m_xBulRelSizeFT(m_xBuilder->weld_label(u"relsizeft"_ustr))
+    , m_xBulRelSizeMF(m_xBuilder->weld_metric_spin_button(u"relsize"_ustr, FieldUnit::PERCENT))
+    , m_xStartFT(m_xBuilder->weld_label(u"startatft"_ustr))
+    , m_xStartED(m_xBuilder->weld_spin_button(u"startat"_ustr))
+    , m_xBulletFT(m_xBuilder->weld_label(u"bulletft"_ustr))
+    , m_xBulletPB(m_xBuilder->weld_button(u"bullet"_ustr))
+    , m_xBitmapMB(m_xBuilder->weld_menu_button(u"bitmap"_ustr))
+    , m_xWidthFT(m_xBuilder->weld_label(u"widthft"_ustr))
+    , m_xWidthMF(m_xBuilder->weld_metric_spin_button(u"widthmf"_ustr, FieldUnit::CM))
+    , m_xHeightFT(m_xBuilder->weld_label(u"heightft"_ustr))
+    , m_xHeightMF(m_xBuilder->weld_metric_spin_button(u"heightmf"_ustr, FieldUnit::CM))
+    , m_xRatioCB(m_xBuilder->weld_check_button(u"keepratio"_ustr))
+    , m_xCbxScaleImg(m_xBuilder->weld_image(u"imRatio"_ustr))
+    , m_xImgRatioTop(new weld::CustomWeld(*m_xBuilder, u"daRatioTop"_ustr, m_aRatioTop))
+    , m_xImgRatioBottom(new weld::CustomWeld(*m_xBuilder, u"daRatioBottom"_ustr, m_aRatioBottom))
+    , m_xPreviewWIN(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aPreviewWIN))
+    , m_xDistBorderFT(m_xBuilder->weld_label(u"indent"_ustr))
+    , m_xDistBorderMF(m_xBuilder->weld_metric_spin_button(u"indentmf"_ustr, FieldUnit::CM))
+    , m_xRelativeCB(m_xBuilder->weld_check_button(u"relative"_ustr))
+    , m_xIndentMF(m_xBuilder->weld_metric_spin_button(u"numberingwidthmf"_ustr, FieldUnit::CM))
+    , m_xLeftTB(m_xBuilder->weld_toggle_button(u"left"_ustr))
+    , m_xCenterTB(m_xBuilder->weld_toggle_button(u"center"_ustr))
+    , m_xRightTB(m_xBuilder->weld_toggle_button(u"right"_ustr))
+    , m_xSlideRB(m_xBuilder->weld_radio_button(u"sliderb"_ustr))
+    , m_xSelectionRB(m_xBuilder->weld_radio_button(u"selectionrb"_ustr))
+    , m_xApplyToMaster(m_xBuilder->weld_toggle_button(u"applytomaster"_ustr))
+    , m_xReset(m_xBuilder->weld_button(u"reset"_ustr))
 {
     m_xBulColLB->SetSlotId(SID_ATTR_CHAR_COLOR);
     m_xBulRelSizeMF->set_min(SVX_NUM_REL_SIZE_MIN, FieldUnit::PERCENT);
@@ -519,8 +520,8 @@ void SvxBulletAndPositionDlg::InitControls()
         }
         else
         {
-            m_xHeightMF->set_text("");
-            m_xWidthMF->set_text("");
+            m_xHeightMF->set_text(u""_ustr);
+            m_xWidthMF->set_text(u""_ustr);
         }
     }
 
@@ -537,7 +538,7 @@ void SvxBulletAndPositionDlg::InitControls()
         if (bSameBulRelSize)
             m_xBulRelSizeMF->set_value(aNumFmtArr[nLvl]->GetBulletRelSize(), FieldUnit::PERCENT);
         else
-            m_xBulRelSizeMF->set_text("");
+            m_xBulRelSizeMF->set_text(u""_ustr);
     }
     if (bBullColor)
     {
@@ -554,7 +555,7 @@ void SvxBulletAndPositionDlg::InitControls()
                 m_xStartED->set_value(aNumFmtArr[nLvl]->GetStart());
             }
             else
-                m_xStartED->set_text("");
+                m_xStartED->set_text(u""_ustr);
             break;
         case SHOW_BULLET:
             break;
@@ -586,11 +587,11 @@ void SvxBulletAndPositionDlg::InitControls()
     if (bSamePrefix)
         m_xPrefixED->set_text(aNumFmtArr[nLvl]->GetPrefix());
     else
-        m_xPrefixED->set_text("");
+        m_xPrefixED->set_text(u""_ustr);
     if (bSameSuffix)
         m_xSuffixED->set_text(aNumFmtArr[nLvl]->GetSuffix());
     else
-        m_xSuffixED->set_text("");
+        m_xSuffixED->set_text(u""_ustr);
 
     if (bSameDistBorderNum)
     {
@@ -614,12 +615,12 @@ void SvxBulletAndPositionDlg::InitControls()
         bSetDistEmpty = true;
 
     if (bSetDistEmpty)
-        m_xDistBorderMF->set_text("");
+        m_xDistBorderMF->set_text(u""_ustr);
 
     if (bSameIndent)
         SetMetricValue(*m_xIndentMF, -aNumFmtArr[nLvl]->GetFirstLineOffset(), eCoreUnit);
     else
-        m_xIndentMF->set_text("");
+        m_xIndentMF->set_text(u""_ustr);
 
     m_xSelectionRB->set_active(true);
 
@@ -737,16 +738,16 @@ IMPL_LINK(SvxBulletAndPositionDlg, NumberTypeSelectHdl_Impl, weld::ComboBox&, rB
             {
                 bBmp |= nullptr != aNumFmt.GetBrush();
                 aNumFmt.SetIncludeUpperLevels(0);
-                aNumFmt.SetListFormat("", "", i);
+                aNumFmt.SetListFormat(u""_ustr, u""_ustr, i);
                 if (!bBmp)
-                    aNumFmt.SetGraphic("");
+                    aNumFmt.SetGraphic(u""_ustr);
                 pActNum->SetLevel(i, aNumFmt);
                 SwitchNumberType(SHOW_BITMAP);
             }
             else if (SVX_NUM_CHAR_SPECIAL == nNumberingType)
             {
                 aNumFmt.SetIncludeUpperLevels(0);
-                aNumFmt.SetListFormat("", "", i);
+                aNumFmt.SetListFormat(u""_ustr, u""_ustr, i);
                 if (!aNumFmt.GetBulletFont())
                     aNumFmt.SetBulletFont(&aActBulletFont);
                 if (!aNumFmt.GetBulletChar())
@@ -889,7 +890,7 @@ IMPL_LINK_NOARG(SvxBulletAndPositionDlg, PopupActivateHdl_Impl, weld::Toggleable
     if (m_xGalleryMenu)
         return;
 
-    m_xGalleryMenu = m_xBuilder->weld_menu("gallerysubmenu");
+    m_xGalleryMenu = m_xBuilder->weld_menu(u"gallerysubmenu"_ustr);
     weld::WaitObject aWait(p_Window);
 
     if (!GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames))
@@ -1206,7 +1207,7 @@ IMPL_LINK(SvxBulletAndPositionDlg, DistanceHdl_Impl, weld::MetricSpinButton&, rF
     SetModified();
     if (!m_xDistBorderMF->get_sensitive())
     {
-        m_xDistBorderMF->set_text("");
+        m_xDistBorderMF->set_text(u""_ustr);
     }
 
     sal_Int32 aLastLevelLSpace
@@ -1250,7 +1251,7 @@ IMPL_LINK(SvxBulletAndPositionDlg, RelativeHdl_Impl, weld::Toggleable&, rBox, vo
     if (bSetValue)
         SetMetricValue(*m_xDistBorderMF, nValue, eCoreUnit);
     else
-        m_xDistBorderMF->set_text("");
+        m_xDistBorderMF->set_text(u""_ustr);
     m_xDistBorderMF->set_sensitive(bOn || bSingleSelection);
     m_xDistBorderFT->set_sensitive(bOn || bSingleSelection);
     bLastRelative = bOn;

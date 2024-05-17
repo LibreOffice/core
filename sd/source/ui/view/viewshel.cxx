@@ -225,7 +225,7 @@ void ViewShell::construct()
         mpVerticalScrollBar->SetScrollHdl(LINK(this, ViewShell, VScrollHdl));
     }
 
-    SetName ("ViewShell");
+    SetName (u"ViewShell"_ustr);
 
     GetDoc()->StartOnlineSpelling(false);
 

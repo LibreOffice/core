@@ -93,7 +93,7 @@ void SAL_CALL PresenterPreviewCache::initialize (const Sequence<Any>& rArguments
 }
 
 OUString PresenterPreviewCache::getImplementationName() {
-    return "com.sun.star.comp.Draw.PresenterPreviewCache";
+    return u"com.sun.star.comp.Draw.PresenterPreviewCache"_ustr;
 }
 
 sal_Bool PresenterPreviewCache::supportsService(OUString const & ServiceName) {
@@ -101,7 +101,7 @@ sal_Bool PresenterPreviewCache::supportsService(OUString const & ServiceName) {
 }
 
 css::uno::Sequence<OUString> PresenterPreviewCache::getSupportedServiceNames() {
-    return {"com.sun.star.drawing.PresenterPreviewCache"};
+    return {u"com.sun.star.drawing.PresenterPreviewCache"_ustr};
 }
 
 //----- XSlidePreviewCache ----------------------------------------------------
@@ -193,7 +193,7 @@ void PresenterPreviewCache::ThrowIfDisposed()
 {
     if (m_bDisposed)
     {
-        throw lang::DisposedException ("PresenterPreviewCache object has already been disposed",
+        throw lang::DisposedException (u"PresenterPreviewCache object has already been disposed"_ustr,
             static_cast<uno::XWeak*>(this));
     }
 }

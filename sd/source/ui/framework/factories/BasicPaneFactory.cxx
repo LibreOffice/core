@@ -203,7 +203,7 @@ Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
     {
         // The requested pane can not be created by any of the factories
         // managed by the called BasicPaneFactory object.
-        throw lang::IllegalArgumentException("BasicPaneFactory::createPane() called for unknown resource id",
+        throw lang::IllegalArgumentException(u"BasicPaneFactory::createPane() called for unknown resource id"_ustr,
             nullptr,
             0);
     }
@@ -266,7 +266,7 @@ void SAL_CALL BasicPaneFactory::releaseResource (
         // The given XPane reference is either empty or the pane was not
         // created by any of the factories managed by the called
         // BasicPaneFactory object.
-        throw lang::IllegalArgumentException("BasicPaneFactory::releasePane() called for pane that was not created by same factory.",
+        throw lang::IllegalArgumentException(u"BasicPaneFactory::releasePane() called for pane that was not created by same factory."_ustr,
             nullptr,
             0);
     }
@@ -409,7 +409,7 @@ void BasicPaneFactory::ThrowIfDisposed() const
 {
     if (m_bDisposed)
     {
-        throw lang::DisposedException ("BasicPaneFactory object has already been disposed",
+        throw lang::DisposedException (u"BasicPaneFactory object has already been disposed"_ustr,
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }

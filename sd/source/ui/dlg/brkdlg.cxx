@@ -38,11 +38,11 @@ namespace sd {
 
 BreakDlg::BreakDlg(weld::Window* pWindow, DrawView* pDrView, DrawDocShell* pShell,
     sal_uLong nSumActionCount, sal_uLong nObjCount)
-    : SfxDialogController(pWindow, "modules/sdraw/ui/breakdialog.ui", "BreakDialog")
-    , m_xFiObjInfo(m_xBuilder->weld_label("metafiles"))
-    , m_xFiActInfo(m_xBuilder->weld_label("metaobjects"))
-    , m_xFiInsInfo(m_xBuilder->weld_label("drawingobjects"))
-    , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
+    : SfxDialogController(pWindow, u"modules/sdraw/ui/breakdialog.ui"_ustr, u"BreakDialog"_ustr)
+    , m_xFiObjInfo(m_xBuilder->weld_label(u"metafiles"_ustr))
+    , m_xFiActInfo(m_xBuilder->weld_label(u"metaobjects"_ustr))
+    , m_xFiInsInfo(m_xBuilder->weld_label(u"drawingobjects"_ustr))
+    , m_xBtnCancel(m_xBuilder->weld_button(u"cancel"_ustr))
     , m_pDrView(pDrView)
     , m_bCancel(false)
     , m_aUpdateIdle( "sd::BreakDlg m_aUpdateIdle" )

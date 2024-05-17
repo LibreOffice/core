@@ -127,7 +127,7 @@ SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
         {
             Reference< beans::XPropertySet > xCanvasProps( getCanvas(),
                                                            uno::UNO_QUERY_THROW );
-            xCanvasProps->setPropertyValue("UnsafeScrolling",
+            xCanvasProps->setPropertyValue(u"UnsafeScrolling"_ustr,
                 uno::Any( true ) );
         }
         catch( uno::Exception& )

@@ -651,7 +651,7 @@ void SlideshowImpl::disposing(std::unique_lock<std::mutex>&)
     if( mxShow.is() && mpDoc )
         NotifyDocumentEvent(
             *mpDoc,
-            "OnEndPresentation" );
+            u"OnEndPresentation"_ustr );
 
     if( mbAutoSaveWasOn )
         setAutoSaveState( true );
@@ -853,7 +853,7 @@ void SlideshowImpl::startInteractivePreview( const Reference< XDrawPage >& xDraw
     // mpSlideController = std::make_shared<AnimationSlideController>( xSlides, AnimationSlideController::PREVIEW );
     sal_Int32 nSlideNumber = 0;
     Reference< XPropertySet > xSet( xDrawPage, UNO_QUERY_THROW );
-    xSet->getPropertyValue( "Number" ) >>= nSlideNumber;
+    xSet->getPropertyValue( u"Number"_ustr ) >>= nSlideNumber;
     mpSlideController->insertSlideNumber( nSlideNumber-1 );
     mpSlideController->setPreviewNode( xAnimationNode );
 
@@ -965,7 +965,7 @@ bool SlideshowImpl::startPreview(
 
         sal_Int32 nSlideNumber = 0;
         Reference< XPropertySet > xSet( mxPreviewDrawPage, UNO_QUERY_THROW );
-        xSet->getPropertyValue( "Number" ) >>= nSlideNumber;
+        xSet->getPropertyValue( u"Number"_ustr ) >>= nSlideNumber;
         mpSlideController->insertSlideNumber( nSlideNumber-1 );
         mpSlideController->setPreviewNode( xAnimationNode );
 
@@ -1259,7 +1259,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
             if (xBitmap.is())
             {
                 mxShow->setProperty(
-                    beans::PropertyValue( "WaitSymbolBitmap" ,
+                    beans::PropertyValue( u"WaitSymbolBitmap"_ustr ,
                         -1,
                         Any( xBitmap ),
                         beans::PropertyState_DIRECT_VALUE ) );
@@ -1271,7 +1271,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
             if (xPointerBitmap.is())
             {
                 mxShow->setProperty(
-                    beans::PropertyValue( "PointerSymbolBitmap" ,
+                    beans::PropertyValue( u"PointerSymbolBitmap"_ustr ,
                         -1,
                         Any( xPointerBitmap ),
                         beans::PropertyState_DIRECT_VALUE ) );
@@ -1279,9 +1279,9 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
             if (officecfg::Office::Impress::Misc::Start::ShowNavigationPanel::get())
             {
                 NavbarButtonSize btnScale = static_cast<NavbarButtonSize>(officecfg::Office::Impress::Layout::Display::NavigationBtnScale::get());
-                OUString prevSlidePath = "";
-                OUString nextSlidePath = "";
-                OUString menuPath = "";
+                OUString prevSlidePath = u""_ustr;
+                OUString nextSlidePath = u""_ustr;
+                OUString menuPath = u""_ustr;
                 switch (btnScale)
                 {
                     case NavbarButtonSize::Large:
@@ -1313,7 +1313,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
                     vcl::unotools::xBitmapFromBitmapEx(prevSlideBm));
                 if (xPrevSBitmap.is())
                 {
-                    mxShow->setProperty(beans::PropertyValue("NavigationSlidePrev", -1,
+                    mxShow->setProperty(beans::PropertyValue(u"NavigationSlidePrev"_ustr, -1,
                                                              Any(xPrevSBitmap),
                                                              beans::PropertyState_DIRECT_VALUE));
                 }
@@ -1322,7 +1322,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
                     vcl::unotools::xBitmapFromBitmapEx(menuSlideBm));
                 if (xMenuSBitmap.is())
                 {
-                    mxShow->setProperty(beans::PropertyValue("NavigationSlideMenu", -1,
+                    mxShow->setProperty(beans::PropertyValue(u"NavigationSlideMenu"_ustr, -1,
                                                              Any(xMenuSBitmap),
                                                              beans::PropertyState_DIRECT_VALUE));
                 }
@@ -1331,7 +1331,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
                     vcl::unotools::xBitmapFromBitmapEx(nextSlideBm));
                 if (xNextSBitmap.is())
                 {
-                    mxShow->setProperty(beans::PropertyValue("NavigationSlideNext", -1,
+                    mxShow->setProperty(beans::PropertyValue(u"NavigationSlideNext"_ustr, -1,
                                                              Any(xNextSBitmap),
                                                              beans::PropertyState_DIRECT_VALUE));
                 }
@@ -1355,7 +1355,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
             // it visible (if activated)
             NotifyDocumentEvent(
                 *mpDoc,
-                "OnStartPresentation");
+                u"OnStartPresentation"_ustr);
         }
 
         displaySlideIndex( mpSlideController->getStartSlideIndex() );
@@ -1725,7 +1725,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape )
 #if HAVE_FEATURE_AVMEDIA
         try
         {
-            mxPlayer.set(avmedia::MediaWindow::createPlayer(pEvent->maStrBookmark, ""/*TODO?*/), uno::UNO_SET_THROW );
+            mxPlayer.set(avmedia::MediaWindow::createPlayer(pEvent->maStrBookmark, u""_ustr/*TODO?*/), uno::UNO_SET_THROW );
             mxPlayer->start();
         }
         catch( uno::Exception& )
@@ -2234,30 +2234,30 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
     if( !mbWasPaused )
         pause();
 
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/simpress/ui/slidecontextmenu.ui"));
-    std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, u"modules/simpress/ui/slidecontextmenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu(u"menu"_ustr));
     OUString sNextImage(BMP_MENU_NEXT), sPrevImage(BMP_MENU_PREV);
-    xMenu->insert(0, "next", SdResId(RID_SVXSTR_MENU_NEXT), &sNextImage, nullptr, nullptr, TRISTATE_INDET);
-    xMenu->insert(1, "prev", SdResId(RID_SVXSTR_MENU_PREV), &sPrevImage, nullptr, nullptr, TRISTATE_INDET);
+    xMenu->insert(0, u"next"_ustr, SdResId(RID_SVXSTR_MENU_NEXT), &sNextImage, nullptr, nullptr, TRISTATE_INDET);
+    xMenu->insert(1, u"prev"_ustr, SdResId(RID_SVXSTR_MENU_PREV), &sPrevImage, nullptr, nullptr, TRISTATE_INDET);
 
     // Adding button to display if in Pen  mode
-    xMenu->set_active("pen", mbUsePen);
+    xMenu->set_active(u"pen"_ustr, mbUsePen);
 
     const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
-    xMenu->set_visible("next", mpSlideController->getNextSlideIndex() != -1);
-    xMenu->set_visible("prev", (mpSlideController->getPreviousSlideIndex() != -1 ) || (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK));
-    xMenu->set_visible("edit", mpViewShell->GetDoc()->GetStartWithPresentation() != 0);
+    xMenu->set_visible(u"next"_ustr, mpSlideController->getNextSlideIndex() != -1);
+    xMenu->set_visible(u"prev"_ustr, (mpSlideController->getPreviousSlideIndex() != -1 ) || (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK));
+    xMenu->set_visible(u"edit"_ustr, mpViewShell->GetDoc()->GetStartWithPresentation() != 0);
 
-    std::unique_ptr<weld::Menu> xPageMenu(xBuilder->weld_menu("gotomenu"));
+    std::unique_ptr<weld::Menu> xPageMenu(xBuilder->weld_menu(u"gotomenu"_ustr));
     OUString sFirstImage(BMP_MENU_FIRST), sLastImage(BMP_MENU_LAST);
-    xPageMenu->insert(0, "first", SdResId(RID_SVXSTR_MENU_FIRST), &sFirstImage, nullptr, nullptr, TRISTATE_INDET);
-    xPageMenu->insert(1, "last", SdResId(RID_SVXSTR_MENU_LAST), &sLastImage, nullptr, nullptr, TRISTATE_INDET);
+    xPageMenu->insert(0, u"first"_ustr, SdResId(RID_SVXSTR_MENU_FIRST), &sFirstImage, nullptr, nullptr, TRISTATE_INDET);
+    xPageMenu->insert(1, u"last"_ustr, SdResId(RID_SVXSTR_MENU_LAST), &sLastImage, nullptr, nullptr, TRISTATE_INDET);
 
     // populate slide goto list
     const sal_Int32 nPageNumberCount = mpSlideController->getSlideNumberCount();
     if( nPageNumberCount <= 1 )
     {
-        xMenu->set_visible("goto", false);
+        xMenu->set_visible(u"goto"_ustr, false);
     }
     else
     {
@@ -2265,8 +2265,8 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
         if( (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) )
             nCurrentSlideNumber = -1;
 
-        xPageMenu->set_visible("first", mpSlideController->getSlideNumber(0) != nCurrentSlideNumber);
-        xPageMenu->set_visible("last", mpSlideController->getSlideNumber(mpSlideController->getSlideIndexCount() - 1) != nCurrentSlideNumber);
+        xPageMenu->set_visible(u"first"_ustr, mpSlideController->getSlideNumber(0) != nCurrentSlideNumber);
+        xPageMenu->set_visible(u"last"_ustr, mpSlideController->getSlideNumber(mpSlideController->getSlideIndexCount() - 1) != nCurrentSlideNumber);
 
         sal_Int32 nPageNumber;
 
@@ -2286,14 +2286,14 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
         }
     }
 
-    std::unique_ptr<weld::Menu> xBlankMenu(xBuilder->weld_menu("screenmenu"));
+    std::unique_ptr<weld::Menu> xBlankMenu(xBuilder->weld_menu(u"screenmenu"_ustr));
 
     if (mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_BLANK)
     {
         xBlankMenu->set_active((mpShowWindow->GetBlankColor() == COL_WHITE) ? "white" : "black", true);
     }
 
-    std::unique_ptr<weld::Menu> xWidthMenu(xBuilder->weld_menu("widthmenu"));
+    std::unique_ptr<weld::Menu> xWidthMenu(xBuilder->weld_menu(u"widthmenu"_ustr));
 
     // populate color width list
     sal_Int32 nIterator;
@@ -2690,7 +2690,7 @@ void SlideshowImpl::setActiveXToolbarsVisible( bool bVisible )
     {
         Reference< frame::XLayoutManager > xLayoutManager;
         Reference< beans::XPropertySet > xFrameProps( pViewFrame->GetFrame().GetFrameInterface(), UNO_QUERY_THROW );
-        if ( ( xFrameProps->getPropertyValue( "LayoutManager" )
+        if ( ( xFrameProps->getPropertyValue( u"LayoutManager"_ustr )
                     >>= xLayoutManager )
           && xLayoutManager.is() )
         {
@@ -2788,7 +2788,7 @@ void SlideshowImpl::setAutoSaveState( bool bOn)
         aURL.Complete = "vnd.sun.star.autorecovery:/setAutoSaveState";
         xParser->parseStrict(aURL);
 
-        Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue("AutoSaveState", bOn) };
+        Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue(u"AutoSaveState"_ustr, bOn) };
 
         uno::Reference< frame::XDispatch > xAutoSave = frame::theAutoRecovery::get(xContext);
         xAutoSave->dispatch(aURL, aArgs);
@@ -3432,7 +3432,7 @@ void SlideshowImpl::sendHintSlideChanged(const SdrPage* pChangedPage) const
         return;
 
     mxShow->setProperty(
-        beans::PropertyValue( "HintSlideChanged" ,
+        beans::PropertyValue( u"HintSlideChanged"_ustr ,
             -1,
             Any( GetXDrawPageForSdrPage(const_cast<SdrPage*>(pChangedPage)) ),
             beans::PropertyState_DIRECT_VALUE ) );

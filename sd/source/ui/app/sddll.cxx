@@ -238,12 +238,12 @@ void SdDLL::Init()
     {
         // Register the Impress shape types in order to make the shapes accessible.
         ::accessibility::RegisterImpressShapeTypes ();
-        ::sd::DrawDocShell::Factory().SetDocumentServiceName( "com.sun.star.presentation.PresentationDocument" );
+        ::sd::DrawDocShell::Factory().SetDocumentServiceName( u"com.sun.star.presentation.PresentationDocument"_ustr );
     }
 
     if (!comphelper::IsFuzzing() && SvtModuleOptions().IsDraw())
     {
-        ::sd::GraphicDocShell::Factory().SetDocumentServiceName( "com.sun.star.drawing.DrawingDocument" );
+        ::sd::GraphicDocShell::Factory().SetDocumentServiceName( u"com.sun.star.drawing.DrawingDocument"_ustr );
     }
 
     // register your view-factories here

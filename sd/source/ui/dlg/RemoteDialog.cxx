@@ -13,10 +13,11 @@
 using namespace ::sd;
 
 RemoteDialog::RemoteDialog(weld::Window* pWindow)
-    : GenericDialogController(pWindow, "modules/simpress/ui/remotedialog.ui", "RemoteDialog")
-    , m_xButtonConnect(m_xBuilder->weld_button("ok"))
-    , m_xClientBox(new sd::ClientBox(m_xBuilder->weld_scrolled_window("scroll"),
-                                     m_xBuilder->weld_container("tree")))
+    : GenericDialogController(pWindow, u"modules/simpress/ui/remotedialog.ui"_ustr,
+                              u"RemoteDialog"_ustr)
+    , m_xButtonConnect(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xClientBox(new sd::ClientBox(m_xBuilder->weld_scrolled_window(u"scroll"_ustr),
+                                     m_xBuilder->weld_container(u"tree"_ustr)))
 {
     m_xButtonConnect->connect_clicked(LINK(this, RemoteDialog, HandleConnectButton));
 }

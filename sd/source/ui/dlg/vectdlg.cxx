@@ -31,21 +31,21 @@
 #define VECTORIZE_MAX_EXTENT 512
 
 SdVectorizeDlg::SdVectorizeDlg(weld::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell)
-    : GenericDialogController(pParent, "modules/sdraw/ui/vectorize.ui", "VectorizeDialog")
+    : GenericDialogController(pParent, u"modules/sdraw/ui/vectorize.ui"_ustr, u"VectorizeDialog"_ustr)
     , m_pDocSh(pDocShell)
     , aBmp(rBmp)
     , m_aBmpWin(m_xDialog.get())
     , m_aMtfWin(m_xDialog.get())
-    , m_xNmLayers(m_xBuilder->weld_spin_button("colors"))
-    , m_xMtReduce(m_xBuilder->weld_metric_spin_button("points", FieldUnit::PIXEL))
-    , m_xFtFillHoles(m_xBuilder->weld_label("tilesft"))
-    , m_xMtFillHoles(m_xBuilder->weld_metric_spin_button("tiles", FieldUnit::PIXEL))
-    , m_xCbFillHoles(m_xBuilder->weld_check_button("fillholes"))
-    , m_xBmpWin(new weld::CustomWeld(*m_xBuilder, "source", m_aBmpWin))
-    , m_xMtfWin(new weld::CustomWeld(*m_xBuilder, "vectorized", m_aMtfWin))
-    , m_xPrgs(m_xBuilder->weld_progress_bar("progressbar"))
-    , m_xBtnOK(m_xBuilder->weld_button("ok"))
-    , m_xBtnPreview(m_xBuilder->weld_button("preview"))
+    , m_xNmLayers(m_xBuilder->weld_spin_button(u"colors"_ustr))
+    , m_xMtReduce(m_xBuilder->weld_metric_spin_button(u"points"_ustr, FieldUnit::PIXEL))
+    , m_xFtFillHoles(m_xBuilder->weld_label(u"tilesft"_ustr))
+    , m_xMtFillHoles(m_xBuilder->weld_metric_spin_button(u"tiles"_ustr, FieldUnit::PIXEL))
+    , m_xCbFillHoles(m_xBuilder->weld_check_button(u"fillholes"_ustr))
+    , m_xBmpWin(new weld::CustomWeld(*m_xBuilder, u"source"_ustr, m_aBmpWin))
+    , m_xMtfWin(new weld::CustomWeld(*m_xBuilder, u"vectorized"_ustr, m_aMtfWin))
+    , m_xPrgs(m_xBuilder->weld_progress_bar(u"progressbar"_ustr))
+    , m_xBtnOK(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xBtnPreview(m_xBuilder->weld_button(u"preview"_ustr))
 {
     const int nWidth = m_xFtFillHoles->get_approximate_digit_width() * 32;
     const int nHeight = m_xFtFillHoles->get_text_height() * 16;

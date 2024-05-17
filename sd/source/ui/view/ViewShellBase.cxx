@@ -1186,7 +1186,7 @@ void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot()
     pHelper->RequestView(
         FrameworkHelper::GetViewURL(pFrameView->GetViewShellTypeOnLoad()),
         FrameworkHelper::msCenterPaneURL);
-    pHelper->RunOnConfigurationEvent("ConfigurationUpdateEnd", CurrentPageSetter(mrBase));
+    pHelper->RunOnConfigurationEvent(u"ConfigurationUpdateEnd"_ustr, CurrentPageSetter(mrBase));
 }
 
 void ViewShellBase::Implementation::SetUserWantsTabBar(bool inValue)
@@ -1504,7 +1504,7 @@ void CurrentPageSetter::operator() (bool)
         // Switch to the page last edited by setting the CurrentPage
         // property.
         Reference<beans::XPropertySet> xSet (mrBase.GetController(), UNO_QUERY_THROW);
-        xSet->setPropertyValue ("CurrentPage", aPage);
+        xSet->setPropertyValue (u"CurrentPage"_ustr, aPage);
     }
     catch (const RuntimeException&)
     {

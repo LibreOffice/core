@@ -65,8 +65,8 @@ ModuleController::ModuleController(const rtl::Reference<::sd::DrawController>& r
           "private:resource/view/SlideSorter",
         "private:resource/view/PresentationView" });
     ProcessFactory(
-        "com.sun.star.drawing.framework.BasicToolBarFactory",
-        { "private:resource/toolbar/ViewTabBar" });
+        u"com.sun.star.drawing.framework.BasicToolBarFactory"_ustr,
+        { u"private:resource/toolbar/ViewTabBar"_ustr });
 
     try
     {
@@ -150,7 +150,7 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
     else if (iFactory->second == "com.sun.star.drawing.framework.BasicToolBarFactory")
         xFactory = uno::Reference<css::drawing::framework::XResourceFactory>(new BasicToolBarFactory(mxController));
     else
-        throw RuntimeException("unknown factory");
+        throw RuntimeException(u"unknown factory"_ustr);
 
     // Remember that this factory has been instanced.
     maLoadedFactories[iFactory->second] = xFactory;

@@ -120,7 +120,7 @@ void AccessibleDocumentViewBase::Init()
     uno::Reference<beans::XPropertySet> xSet (mxController, uno::UNO_QUERY);
     if (xSet.is())
         xSet->addPropertyChangeListener (
-            "",
+            u""_ustr,
             static_cast<beans::XPropertyChangeListener*>(this));
 
     // Register this object as dispose event listener at the controller.
@@ -402,7 +402,7 @@ void SAL_CALL
 OUString SAL_CALL
     AccessibleDocumentViewBase::getImplementationName()
 {
-    return "AccessibleDocumentViewBase";
+    return u"AccessibleDocumentViewBase"_ustr;
 }
 
 css::uno::Sequence< OUString> SAL_CALL
@@ -466,7 +466,7 @@ void AccessibleDocumentViewBase::impl_dispose()
     {
         uno::Reference<beans::XPropertySet> xSet (mxController, uno::UNO_QUERY);
         if (xSet.is())
-            xSet->removePropertyChangeListener ("", static_cast<beans::XPropertyChangeListener*>(this));
+            xSet->removePropertyChangeListener (u""_ustr, static_cast<beans::XPropertyChangeListener*>(this));
 
         mxController->removeEventListener (
             static_cast<awt::XWindowListener*>(this));
@@ -580,7 +580,7 @@ void SAL_CALL AccessibleDocumentViewBase::disposing()
 OUString
     AccessibleDocumentViewBase::CreateAccessibleName()
 {
-    return "AccessibleDocumentViewBase";
+    return u"AccessibleDocumentViewBase"_ustr;
 }
 
 void AccessibleDocumentViewBase::Activated()
@@ -657,7 +657,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
     if (auto pDrViewSh = dynamic_cast<::sd::DrawViewShell* > (mpViewShell))
     {
         OUString sDisplay;
-        OUString sName = "page-name:";
+        OUString sName = u"page-name:"_ustr;
         // MT IA2: Not used...
         // SdPage*  pCurrPge = pDrViewSh->getCurrentPage();
         SdDrawDocument* pDoc = pDrViewSh->GetDoc();

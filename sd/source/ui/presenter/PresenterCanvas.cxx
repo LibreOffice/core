@@ -683,7 +683,7 @@ void PresenterCanvas::ThrowIfDisposed()
 {
     if (m_bDisposed || ! mxSharedCanvas.is())
     {
-        throw lang::DisposedException ("PresenterCanvas object has already been disposed",
+        throw lang::DisposedException (u"PresenterCanvas object has already been disposed"_ustr,
             static_cast<uno::XWeak*>(this));
     }
 }
@@ -781,7 +781,7 @@ void PresenterCustomSprite::ThrowIfDisposed()
 {
     if (m_bDisposed || ! mxSprite.is())
     {
-        throw lang::DisposedException ("PresenterCustomSprite object has already been disposed",
+        throw lang::DisposedException (u"PresenterCustomSprite object has already been disposed"_ustr,
             static_cast<uno::XWeak*>(this));
     }
 }

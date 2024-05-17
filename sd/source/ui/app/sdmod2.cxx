@@ -213,7 +213,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
     }
     else if( dynamic_cast< const SvxPageField*  >(pField) )
     {
-        OUString aRepresentation(" ");
+        OUString aRepresentation(u" "_ustr);
 
         ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : nullptr;
         if(pViewSh == nullptr)
@@ -249,7 +249,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
     }
     else if( dynamic_cast< const SvxPageTitleField*  >(pField) )
     {
-        OUString aRepresentation(" ");
+        OUString aRepresentation(u" "_ustr);
 
         ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : nullptr;
         if(pViewSh == nullptr)
@@ -280,7 +280,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
     }
     else if( dynamic_cast< const SvxPagesField*  >(pField) )
     {
-        OUString aRepresentation(" ");
+        OUString aRepresentation(u" "_ustr);
 
         ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : nullptr;
         if(pViewSh == nullptr)

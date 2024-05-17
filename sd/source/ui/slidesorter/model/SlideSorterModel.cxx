@@ -194,7 +194,7 @@ sal_Int32 SlideSorterModel::GetIndex (const Reference<drawing::XDrawPage>& rxSli
     {
         try
         {
-            const Any aNumber (xSet->getPropertyValue("Number"));
+            const Any aNumber (xSet->getPropertyValue(u"Number"_ustr));
             sal_Int16 nNumber (-1);
             aNumber >>= nNumber;
             nNumber -= 1;
@@ -628,7 +628,7 @@ bool SlideSorterModel::DeleteSlide (const SdPage* pPage)
         maPageDescriptors.erase(iter);
         UpdateIndices(nIndex);
 
-        collectUIInformation(OUString::number(nIndex + 1), "Delete_Slide_or_Page");
+        collectUIInformation(OUString::number(nIndex + 1), u"Delete_Slide_or_Page"_ustr);
     }
     return bMarkedSelected;
 }

@@ -192,16 +192,16 @@ std::unique_ptr<SfxTabPage> SdTpOptionsSnap::Create( weld::Container* pPage, wel
 |*
 \************************************************************************/
 SdTpOptionsContents::SdTpOptionsContents(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "modules/simpress/ui/sdviewpage.ui", "SdViewPage", &rInAttrs)
+    : SfxTabPage(pPage, pController, u"modules/simpress/ui/sdviewpage.ui"_ustr, u"SdViewPage"_ustr, &rInAttrs)
     , m_bDrawMode(false)
-    , m_xCbxRuler(m_xBuilder->weld_check_button("ruler"))
-    , m_xCbxRulerImg(m_xBuilder->weld_widget("lockruler"))
-    , m_xCbxDragStripes(m_xBuilder->weld_check_button("dragstripes"))
-    , m_xCbxDragStripesImg(m_xBuilder->weld_widget("lockdragstripes"))
-    , m_xCbxHandlesBezier(m_xBuilder->weld_check_button("handlesbezier"))
-    , m_xCbxHandlesBezierImg(m_xBuilder->weld_widget("lockhandlesbezier"))
-    , m_xCbxMoveOutline(m_xBuilder->weld_check_button("moveoutline"))
-    , m_xCbxMoveOutlineImg(m_xBuilder->weld_widget("lockmoveoutline"))
+    , m_xCbxRuler(m_xBuilder->weld_check_button(u"ruler"_ustr))
+    , m_xCbxRulerImg(m_xBuilder->weld_widget(u"lockruler"_ustr))
+    , m_xCbxDragStripes(m_xBuilder->weld_check_button(u"dragstripes"_ustr))
+    , m_xCbxDragStripesImg(m_xBuilder->weld_widget(u"lockdragstripes"_ustr))
+    , m_xCbxHandlesBezier(m_xBuilder->weld_check_button(u"handlesbezier"_ustr))
+    , m_xCbxHandlesBezierImg(m_xBuilder->weld_widget(u"lockhandlesbezier"_ustr))
+    , m_xCbxMoveOutline(m_xBuilder->weld_check_button(u"moveoutline"_ustr))
+    , m_xCbxMoveOutlineImg(m_xBuilder->weld_widget(u"lockmoveoutline"_ustr))
 {
 }
 
@@ -212,7 +212,7 @@ SdTpOptionsContents::~SdTpOptionsContents()
 OUString SdTpOptionsContents::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label1" };
+    OUString labels[] = { u"label1"_ustr };
 
     for (const auto& label : labels)
     {
@@ -220,7 +220,7 @@ OUString SdTpOptionsContents::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString checkButton[] = { "ruler", "dragstripes", "handlesbezier", "moveoutline" };
+    OUString checkButton[] = { u"ruler"_ustr, u"dragstripes"_ustr, u"handlesbezier"_ustr, u"moveoutline"_ustr };
 
     for (const auto& check : checkButton)
     {
@@ -333,43 +333,43 @@ void SdTpOptionsContents::PageCreated( const SfxAllItemSet& aSet )
 #define TOKEN ':'
 
 SdTpOptionsMisc::SdTpOptionsMisc(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "modules/simpress/ui/optimpressgeneralpage.ui", "OptSavePage", &rInAttrs)
+    : SfxTabPage(pPage, pController, u"modules/simpress/ui/optimpressgeneralpage.ui"_ustr, u"OptSavePage"_ustr, &rInAttrs)
     , nWidth(0)
     , nHeight(0)
     , m_bDrawMode(false)
-    , m_xCbxQuickEdit(m_xBuilder->weld_check_button("qickedit"))
-    , m_xCbxQuickEditImg(m_xBuilder->weld_widget("lockqickedit"))
-    , m_xCbxPickThrough(m_xBuilder->weld_check_button("textselected"))
-    , m_xCbxPickThroughImg(m_xBuilder->weld_widget("locktextselected"))
-    , m_xNewDocumentFrame(m_xBuilder->weld_frame("newdocumentframe"))
-    , m_xCbxStartWithTemplate(m_xBuilder->weld_check_button("startwithwizard"))
-    , m_xCbxStartWithTemplateImg(m_xBuilder->weld_widget("lockstartwithwizard"))
-    , m_xCbxMasterPageCache(m_xBuilder->weld_check_button("backgroundback"))
-    , m_xCbxMasterPageCacheImg(m_xBuilder->weld_widget("lockbackgroundback"))
-    , m_xCbxCopy(m_xBuilder->weld_check_button("copywhenmove"))
-    , m_xCbxCopyImg(m_xBuilder->weld_widget("lockcopywhenmove"))
-    , m_xCbxMarkedHitMovesAlways(m_xBuilder->weld_check_button("objalwymov"))
-    , m_xCbxMarkedHitMovesAlwaysImg(m_xBuilder->weld_widget("lockobjalwymov"))
-    , m_xLbMetric(m_xBuilder->weld_combo_box("units"))
-    , m_xLbMetricImg(m_xBuilder->weld_widget("lockunits"))
-    , m_xMtrFldTabstop(m_xBuilder->weld_metric_spin_button("metricFields", FieldUnit::MM))
-    , m_xMtrFldTabstopImg(m_xBuilder->weld_widget("locktabstop"))
-    , m_xCbxCompatibility(m_xBuilder->weld_check_button("cbCompatibility"))
-    , m_xCbxCompatibilityImg(m_xBuilder->weld_widget("lockcbCompatibility"))
-    , m_xScaleFrame(m_xBuilder->weld_frame("scaleframe"))
-    , m_xCbScale(m_xBuilder->weld_combo_box("scaleBox"))
-    , m_xCbScaleImg(m_xBuilder->weld_widget("lockscaleBox"))
-    , m_xNewDocLb(m_xBuilder->weld_label("newdoclbl"))
-    , m_xFiInfo1(m_xBuilder->weld_label("info1"))
-    , m_xMtrFldOriginalWidth(m_xBuilder->weld_metric_spin_button("metricWidthFields", FieldUnit::MM))
-    , m_xWidthLb(m_xBuilder->weld_label("widthlbl"))
-    , m_xHeightLb(m_xBuilder->weld_label("heightlbl"))
-    , m_xFiInfo2(m_xBuilder->weld_label("info2"))
-    , m_xMtrFldOriginalHeight(m_xBuilder->weld_metric_spin_button("metricHeightFields", FieldUnit::MM))
-    , m_xCbxDistort(m_xBuilder->weld_check_button("distortcb"))
-    , m_xCbxDistortImg(m_xBuilder->weld_widget("lockdistortcb"))
-    , m_xMtrFldInfo1(m_xBuilder->weld_metric_spin_button("metricInfo1Fields", FieldUnit::MM))
-    , m_xMtrFldInfo2(m_xBuilder->weld_metric_spin_button("metricInfo2Fields", FieldUnit::MM))
+    , m_xCbxQuickEdit(m_xBuilder->weld_check_button(u"qickedit"_ustr))
+    , m_xCbxQuickEditImg(m_xBuilder->weld_widget(u"lockqickedit"_ustr))
+    , m_xCbxPickThrough(m_xBuilder->weld_check_button(u"textselected"_ustr))
+    , m_xCbxPickThroughImg(m_xBuilder->weld_widget(u"locktextselected"_ustr))
+    , m_xNewDocumentFrame(m_xBuilder->weld_frame(u"newdocumentframe"_ustr))
+    , m_xCbxStartWithTemplate(m_xBuilder->weld_check_button(u"startwithwizard"_ustr))
+    , m_xCbxStartWithTemplateImg(m_xBuilder->weld_widget(u"lockstartwithwizard"_ustr))
+    , m_xCbxMasterPageCache(m_xBuilder->weld_check_button(u"backgroundback"_ustr))
+    , m_xCbxMasterPageCacheImg(m_xBuilder->weld_widget(u"lockbackgroundback"_ustr))
+    , m_xCbxCopy(m_xBuilder->weld_check_button(u"copywhenmove"_ustr))
+    , m_xCbxCopyImg(m_xBuilder->weld_widget(u"lockcopywhenmove"_ustr))
+    , m_xCbxMarkedHitMovesAlways(m_xBuilder->weld_check_button(u"objalwymov"_ustr))
+    , m_xCbxMarkedHitMovesAlwaysImg(m_xBuilder->weld_widget(u"lockobjalwymov"_ustr))
+    , m_xLbMetric(m_xBuilder->weld_combo_box(u"units"_ustr))
+    , m_xLbMetricImg(m_xBuilder->weld_widget(u"lockunits"_ustr))
+    , m_xMtrFldTabstop(m_xBuilder->weld_metric_spin_button(u"metricFields"_ustr, FieldUnit::MM))
+    , m_xMtrFldTabstopImg(m_xBuilder->weld_widget(u"locktabstop"_ustr))
+    , m_xCbxCompatibility(m_xBuilder->weld_check_button(u"cbCompatibility"_ustr))
+    , m_xCbxCompatibilityImg(m_xBuilder->weld_widget(u"lockcbCompatibility"_ustr))
+    , m_xScaleFrame(m_xBuilder->weld_frame(u"scaleframe"_ustr))
+    , m_xCbScale(m_xBuilder->weld_combo_box(u"scaleBox"_ustr))
+    , m_xCbScaleImg(m_xBuilder->weld_widget(u"lockscaleBox"_ustr))
+    , m_xNewDocLb(m_xBuilder->weld_label(u"newdoclbl"_ustr))
+    , m_xFiInfo1(m_xBuilder->weld_label(u"info1"_ustr))
+    , m_xMtrFldOriginalWidth(m_xBuilder->weld_metric_spin_button(u"metricWidthFields"_ustr, FieldUnit::MM))
+    , m_xWidthLb(m_xBuilder->weld_label(u"widthlbl"_ustr))
+    , m_xHeightLb(m_xBuilder->weld_label(u"heightlbl"_ustr))
+    , m_xFiInfo2(m_xBuilder->weld_label(u"info2"_ustr))
+    , m_xMtrFldOriginalHeight(m_xBuilder->weld_metric_spin_button(u"metricHeightFields"_ustr, FieldUnit::MM))
+    , m_xCbxDistort(m_xBuilder->weld_check_button(u"distortcb"_ustr))
+    , m_xCbxDistortImg(m_xBuilder->weld_widget(u"lockdistortcb"_ustr))
+    , m_xMtrFldInfo1(m_xBuilder->weld_metric_spin_button(u"metricInfo1Fields"_ustr, FieldUnit::MM))
+    , m_xMtrFldInfo2(m_xBuilder->weld_metric_spin_button(u"metricInfo2Fields"_ustr, FieldUnit::MM))
 {
     SetExchangeSupport();
 
@@ -500,8 +500,8 @@ OUString SdTpOptionsMisc::GetAllStrings()
 {
     OUString sAllStrings;
     OUString labels[]
-        = { "newdoclbl", "label4", "label6",   "tabstoplabel", "label1",    "label7", "label2",
-            "label5",    "label8", "widthlbl", "info1",        "heightlbl", "info2" };
+        = { u"newdoclbl"_ustr, u"label4"_ustr, u"label6"_ustr,   u"tabstoplabel"_ustr, u"label1"_ustr,    u"label7"_ustr, u"label2"_ustr,
+            u"label5"_ustr,    u"label8"_ustr, u"widthlbl"_ustr, u"info1"_ustr,        u"heightlbl"_ustr, u"info2"_ustr };
 
     for (const auto& label : labels)
     {
@@ -509,9 +509,9 @@ OUString SdTpOptionsMisc::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString checkButton[] = { "startwithwizard", "copywhenmove", "backgroundback",
-                               "objalwymov",      "distortcb",    "cbCompatibility",
-                               "qickedit",     "textselected"};
+    OUString checkButton[] = { u"startwithwizard"_ustr, u"copywhenmove"_ustr, u"backgroundback"_ustr,
+                               u"objalwymov"_ustr,      u"distortcb"_ustr,    u"cbCompatibility"_ustr,
+                               u"qickedit"_ustr,     u"textselected"_ustr};
 
     for (const auto& check : checkButton)
     {

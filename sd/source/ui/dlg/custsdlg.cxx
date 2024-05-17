@@ -33,15 +33,15 @@
 
 // SdCustomShowDlg
 SdCustomShowDlg::SdCustomShowDlg(weld::Window* pWindow, SdDrawDocument& rDrawDoc)
-    : GenericDialogController(pWindow, "modules/simpress/ui/customslideshows.ui", "CustomSlideShows")
+    : GenericDialogController(pWindow, u"modules/simpress/ui/customslideshows.ui"_ustr, u"CustomSlideShows"_ustr)
     , rDoc(rDrawDoc)
     , pCustomShowList(nullptr)
-    , m_xLbCustomShows(m_xBuilder->weld_tree_view("customshowlist"))
-    , m_xBtnNew(m_xBuilder->weld_button("new"))
-    , m_xBtnEdit(m_xBuilder->weld_button("edit"))
-    , m_xBtnRemove(m_xBuilder->weld_button("delete"))
-    , m_xBtnCopy(m_xBuilder->weld_button("copy"))
-    , m_xBtnStartShow(m_xBuilder->weld_button("startshow"))
+    , m_xLbCustomShows(m_xBuilder->weld_tree_view(u"customshowlist"_ustr))
+    , m_xBtnNew(m_xBuilder->weld_button(u"new"_ustr))
+    , m_xBtnEdit(m_xBuilder->weld_button(u"edit"_ustr))
+    , m_xBtnRemove(m_xBuilder->weld_button(u"delete"_ustr))
+    , m_xBtnCopy(m_xBuilder->weld_button(u"copy"_ustr))
+    , m_xBtnStartShow(m_xBuilder->weld_button(u"startshow"_ustr))
 {
     m_xLbCustomShows->set_size_request(m_xLbCustomShows->get_approximate_digit_width() * 32,
                                        m_xLbCustomShows->get_height_rows(8));
@@ -239,17 +239,17 @@ bool SdCustomShowDlg::IsCustomShow() const
 
 // SdDefineCustomShowDlg
 SdDefineCustomShowDlg::SdDefineCustomShowDlg(weld::Window* pWindow, SdDrawDocument& rDrawDoc, std::unique_ptr<SdCustomShow>& rpCS)
-    : GenericDialogController(pWindow, "modules/simpress/ui/definecustomslideshow.ui", "DefineCustomSlideShow")
+    : GenericDialogController(pWindow, u"modules/simpress/ui/definecustomslideshow.ui"_ustr, u"DefineCustomSlideShow"_ustr)
     , rDoc(rDrawDoc)
     , rpCustomShow(rpCS)
     , bModified(false)
-    , m_xEdtName(m_xBuilder->weld_entry("customname"))
-    , m_xLbPages(m_xBuilder->weld_tree_view("pages"))
-    , m_xBtnAdd(m_xBuilder->weld_button("add"))
-    , m_xBtnRemove(m_xBuilder->weld_button("remove"))
-    , m_xLbCustomPages(m_xBuilder->weld_tree_view("custompages"))
+    , m_xEdtName(m_xBuilder->weld_entry(u"customname"_ustr))
+    , m_xLbPages(m_xBuilder->weld_tree_view(u"pages"_ustr))
+    , m_xBtnAdd(m_xBuilder->weld_button(u"add"_ustr))
+    , m_xBtnRemove(m_xBuilder->weld_button(u"remove"_ustr))
+    , m_xLbCustomPages(m_xBuilder->weld_tree_view(u"custompages"_ustr))
     , m_xDropTargetHelper(new weld::ReorderingDropTarget(*m_xLbCustomPages))
-    , m_xBtnOK(m_xBuilder->weld_button("ok"))
+    , m_xBtnOK(m_xBuilder->weld_button(u"ok"_ustr))
 {
     Link<weld::Button&,void> aLink = LINK( this, SdDefineCustomShowDlg, ClickButtonHdl );
     m_xBtnAdd->connect_clicked( aLink );
@@ -284,7 +284,7 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg(weld::Window* pWindow, SdDrawDocume
         // fill ListBox with CustomShow pages
         for( const auto& rpPage : rpCustomShow->PagesVector() )
         {
-            m_xLbCustomPages->append(weld::toId(rpPage), rpPage->GetName(), "");
+            m_xLbCustomPages->append(weld::toId(rpPage), rpPage->GetName(), u""_ustr);
         }
     }
     else

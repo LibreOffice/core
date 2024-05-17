@@ -374,7 +374,7 @@ void SAL_CALL ResourceId::initialize (const Sequence<Any>& aArguments)
 
 OUString ResourceId::getImplementationName()
 {
-    return "com.sun.star.comp.Draw.framework.ResourceId";
+    return u"com.sun.star.comp.Draw.framework.ResourceId"_ustr;
 }
 
 sal_Bool ResourceId::supportsService(OUString const & ServiceName)
@@ -384,7 +384,7 @@ sal_Bool ResourceId::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> ResourceId::getSupportedServiceNames()
 {
-    return {"com.sun.star.drawing.framework.ResourceId"};
+    return {u"com.sun.star.drawing.framework.ResourceId"_ustr};
 }
 
 /** When eMode is DIRECTLY then the anchor of the called object and the

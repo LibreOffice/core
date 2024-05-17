@@ -98,7 +98,7 @@ const snew_slide_value_info editmodes[] =
         BMP_DISPLAYMODE_SLIDE_SORTER,
         STR_SLIDE_SORTER_MODE,
         ".uno:DiaMode" },
-    {0, "", {}, "" }
+    {0, u""_ustr, {}, "" }
 };
 
 const snew_slide_value_info mastermodes[] =
@@ -115,7 +115,7 @@ const snew_slide_value_info mastermodes[] =
         BMP_DISPLAYMODE_HANDOUT_MASTER,
         STR_HANDOUT_MASTER_MODE,
         ".uno:HandoutMode" },
-    {0, "", {}, "" }
+    {0, u""_ustr, {}, "" }
 };
 
 
@@ -145,14 +145,14 @@ static void fillLayoutValueSet(ValueSet* pValue, const snew_slide_value_info* pI
 }
 
 DisplayModeToolbarMenu::DisplayModeToolbarMenu(DisplayModeController* pControl, weld::Widget* pParent)
-    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "modules/simpress/ui/displaywindow.ui", "DisplayWindow")
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"modules/simpress/ui/displaywindow.ui"_ustr, u"DisplayWindow"_ustr)
     , mxControl(pControl)
-    , mxFrame1(m_xBuilder->weld_frame("editframe"))
+    , mxFrame1(m_xBuilder->weld_frame(u"editframe"_ustr))
     , mxDisplayModeSet1(new ValueSet(nullptr))
-    , mxDisplayModeSetWin1(new weld::CustomWeld(*m_xBuilder, "valueset1", *mxDisplayModeSet1))
-    , mxFrame2(m_xBuilder->weld_frame("masterframe"))
+    , mxDisplayModeSetWin1(new weld::CustomWeld(*m_xBuilder, u"valueset1"_ustr, *mxDisplayModeSet1))
+    , mxFrame2(m_xBuilder->weld_frame(u"masterframe"_ustr))
     , mxDisplayModeSet2(new ValueSet(nullptr))
-    , mxDisplayModeSetWin2(new weld::CustomWeld(*m_xBuilder, "valueset2", *mxDisplayModeSet2))
+    , mxDisplayModeSetWin2(new weld::CustomWeld(*m_xBuilder, u"valueset2"_ustr, *mxDisplayModeSet2))
 {
     mxDisplayModeSet1->SetStyle(WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT);
     mxDisplayModeSet1->SetStyle(WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT);
@@ -243,12 +243,12 @@ void DisplayModeController::setToolboxItemImage(const OUString& rImage)
 
 OUString SAL_CALL DisplayModeController::getImplementationName()
 {
-    return "com.sun.star.comp.sd.DisplayModeController";
+    return u"com.sun.star.comp.sd.DisplayModeController"_ustr;
 }
 
 Sequence< OUString > SAL_CALL DisplayModeController::getSupportedServiceNames(  )
 {
-    css::uno::Sequence<OUString> aRet { "com.sun.star.frame.ToolbarController" };
+    css::uno::Sequence<OUString> aRet { u"com.sun.star.frame.ToolbarController"_ustr };
     return aRet;
 }
 

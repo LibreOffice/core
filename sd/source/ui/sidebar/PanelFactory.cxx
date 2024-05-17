@@ -61,9 +61,9 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
 {
     // Process arguments.
     const ::comphelper::NamedValueCollection aArguments (rArguments);
-    Reference<frame::XFrame> xFrame (aArguments.getOrDefault("Frame", Reference<frame::XFrame>()));
-    Reference<awt::XWindow> xParentWindow (aArguments.getOrDefault("ParentWindow", Reference<awt::XWindow>()));
-    Reference<ui::XSidebar> xSidebar (aArguments.getOrDefault("Sidebar", Reference<ui::XSidebar>()));
+    Reference<frame::XFrame> xFrame (aArguments.getOrDefault(u"Frame"_ustr, Reference<frame::XFrame>()));
+    Reference<awt::XWindow> xParentWindow (aArguments.getOrDefault(u"ParentWindow"_ustr, Reference<awt::XWindow>()));
+    Reference<ui::XSidebar> xSidebar (aArguments.getOrDefault(u"Sidebar"_ustr, Reference<ui::XSidebar>()));
 
     // Throw exceptions when the arguments are not as expected.
     weld::Widget* pParent(nullptr);
@@ -72,10 +72,10 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
 
     if (!pParent)
         throw RuntimeException(
-            "PanelFactory::createUIElement called without ParentWindow");
+            u"PanelFactory::createUIElement called without ParentWindow"_ustr);
     if ( ! xFrame.is())
         throw RuntimeException(
-            "PanelFactory::createUIElement called without XFrame");
+            u"PanelFactory::createUIElement called without XFrame"_ustr);
 
     // Tunnel through the controller to obtain a ViewShellBase.
     ViewShellBase* pBase = nullptr;
@@ -83,10 +83,10 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     if (pController != nullptr)
         pBase = pController->GetViewShellBase();
     if (pBase == nullptr)
-        throw RuntimeException("can not get ViewShellBase for frame");
+        throw RuntimeException(u"can not get ViewShellBase for frame"_ustr);
 
     // Get bindings from given arguments.
-    const sal_uInt64 nBindingsValue (aArguments.getOrDefault("SfxBindings", sal_uInt64(0)));
+    const sal_uInt64 nBindingsValue (aArguments.getOrDefault(u"SfxBindings"_ustr, sal_uInt64(0)));
     SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
 
     // Create a framework view.
@@ -129,7 +129,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
 }
 
 OUString PanelFactory::getImplementationName() {
-    return "org.openoffice.comp.Draw.framework.PanelFactory";
+    return u"org.openoffice.comp.Draw.framework.PanelFactory"_ustr;
 }
 
 sal_Bool PanelFactory::supportsService(OUString const & ServiceName) {
@@ -137,7 +137,7 @@ sal_Bool PanelFactory::supportsService(OUString const & ServiceName) {
 }
 
 css::uno::Sequence<OUString> PanelFactory::getSupportedServiceNames() {
-    return {"com.sun.star.drawing.framework.PanelFactory"};
+    return {u"com.sun.star.drawing.framework.PanelFactory"_ustr};
 }
 
 } // end of namespace sd::sidebar

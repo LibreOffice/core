@@ -113,7 +113,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl, void*, void)
         {
             try
             {
-                mxPlayer.set( avmedia::MediaWindow::createPlayer( aUrl, "" ), css::uno::UNO_SET_THROW );
+                mxPlayer.set( avmedia::MediaWindow::createPlayer( aUrl, u""_ustr ), css::uno::UNO_SET_THROW );
                 mxPlayer->start();
                 maUpdateIdle.Start();
             }
@@ -212,21 +212,21 @@ SdOpenSoundFileDialog::SdOpenSoundFileDialog(weld::Window *pParent)
     : mpImpl(new SdFileDialog_Imp(pParent))
 {
     OUString aDescr = SdResId(STR_ALL_FILES);
-    mpImpl->AddFilter( aDescr, "*.*");
+    mpImpl->AddFilter( aDescr, u"*.*"_ustr);
     mpImpl->SetContext(sfx2::FileDialogHelper::DrawImpressOpenSound);
 
     // setup filter
 #if defined UNX
     aDescr = SdResId(STR_AU_FILE);
-    mpImpl->AddFilter( aDescr, "*.au;*.snd");
+    mpImpl->AddFilter( aDescr, u"*.au;*.snd"_ustr);
     aDescr = SdResId(STR_VOC_FILE);
-    mpImpl->AddFilter( aDescr, "*.voc");
+    mpImpl->AddFilter( aDescr, u"*.voc"_ustr);
     aDescr = SdResId(STR_WAV_FILE);
-    mpImpl->AddFilter( aDescr, "*.wav");
+    mpImpl->AddFilter( aDescr, u"*.wav"_ustr);
     aDescr = SdResId(STR_AIFF_FILE);
-    mpImpl->AddFilter( aDescr, "*.aiff");
+    mpImpl->AddFilter( aDescr, u"*.aiff"_ustr);
     aDescr = SdResId(STR_SVX_FILE);
-    mpImpl->AddFilter( aDescr, "*.svx");
+    mpImpl->AddFilter( aDescr, u"*.svx"_ustr);
 #else
     aDescr = SdResId(STR_WAV_FILE);
     mpImpl->AddFilter( aDescr, "*.wav;*.mp3;*.ogg" );

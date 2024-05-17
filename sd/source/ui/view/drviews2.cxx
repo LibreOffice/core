@@ -232,7 +232,7 @@ bool hasCustomPropertyField(std::vector<editeng::Section> const & aSections, std
 
 OUString getWeightString(SfxItemSet const & rItemSet)
 {
-    OUString sWeightString = "NORMAL";
+    OUString sWeightString = u"NORMAL"_ustr;
 
     if (const SfxPoolItem* pItem = rItemSet.GetItem(EE_CHAR_WEIGHT, false))
     {
@@ -447,7 +447,7 @@ private:
                 case svx::ClassificationType::PARAGRAPH:
                 {
                     nParagraph++;
-                    pOutliner->Insert("");
+                    pOutliner->Insert(u""_ustr);
 
                     SfxItemSetFixed<EE_ITEMS_START, EE_ITEMS_END> aItemSet(m_rDrawViewShell.GetDoc()->GetPool());
 
@@ -609,7 +609,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             if( rMarkList.GetMarkCount() == 1 )
             {
-                pUndoManager->EnterListAction("", "", 0, GetViewShellBase().GetViewShellId());
+                pUndoManager->EnterListAction(u""_ustr, u""_ustr, 0, GetViewShellBase().GetViewShellId());
                 mpDrawView->BegUndo();
 
                 SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -1383,12 +1383,12 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                     if (nState == RET_YES)
                     {
-                        GraphicHelper::ExportGraphic(pFrame, pObj->GetTransformedGraphic(), "");
+                        GraphicHelper::ExportGraphic(pFrame, pObj->GetTransformedGraphic(), u""_ustr);
                     }
                     else if (nState == RET_NO)
                     {
                         const GraphicObject& aGraphicObject(pObj->GetGraphicObject());
-                        GraphicHelper::ExportGraphic(pFrame, aGraphicObject.GetGraphic(), "");
+                        GraphicHelper::ExportGraphic(pFrame, aGraphicObject.GetGraphic(), u""_ustr);
                     }
                 }
             }
@@ -3386,7 +3386,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if (comphelper::LibreOfficeKit::isActive())
             {
                 GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
-                OUString panelId = "SdNavigatorPanel";
+                OUString panelId = u"SdNavigatorPanel"_ustr;
                 ::sfx2::sidebar::Sidebar::TogglePanel(
                     panelId, GetViewFrame()->GetFrame().GetFrameInterface());
 
@@ -3635,7 +3635,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_ADDITIONS_DIALOG:
         {
-            OUString sAdditionsTag = "";
+            OUString sAdditionsTag = u""_ustr;
 
             const SfxStringItem* pStringArg = rReq.GetArg<SfxStringItem>(FN_PARAM_ADDITIONS_TAG);
             if (pStringArg)

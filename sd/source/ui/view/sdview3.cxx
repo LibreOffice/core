@@ -1033,11 +1033,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         svt::EmbeddedObjectRef::TryRunningState( xObj );
                         uno::Reference< beans::XPropertySet > xProps( xObj->getComponent(), uno::UNO_QUERY );
                         if ( xProps.is() &&
-                             ( xProps->getPropertyValue( "DisableDataTableDialog" ) >>= bDisableDataTableDialog ) &&
+                             ( xProps->getPropertyValue( u"DisableDataTableDialog"_ustr ) >>= bDisableDataTableDialog ) &&
                              bDisableDataTableDialog )
                         {
-                            xProps->setPropertyValue( "DisableDataTableDialog" , uno::Any( false ) );
-                            xProps->setPropertyValue( "DisableComplexChartTypes" , uno::Any( false ) );
+                            xProps->setPropertyValue( u"DisableDataTableDialog"_ustr , uno::Any( false ) );
+                            xProps->setPropertyValue( u"DisableComplexChartTypes"_ustr , uno::Any( false ) );
                             uno::Reference< util::XModifiable > xModifiable( xProps, uno::UNO_QUERY );
                             if ( xModifiable.is() )
                             {
@@ -1086,7 +1086,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                         embed::InsertedObjectInfo aInfo = xClipboardCreator->createInstanceInitFromClipboard(
                                                                 xTmpStor,
-                                                                "DummyName" ,
+                                                                u"DummyName"_ustr ,
                                                                 uno::Sequence< beans::PropertyValue >() );
 
                         // TODO/LATER: in future InsertedObjectInfo will be used to get container related information
@@ -1336,7 +1336,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
     if(!bReturn && pPickObj && CHECK_FORMAT_TRANS( SotClipboardFormatId::XFA ) )
     {
-        uno::Any const data(aDataHelper.GetAny(SotClipboardFormatId::XFA, ""));
+        uno::Any const data(aDataHelper.GetAny(SotClipboardFormatId::XFA, u""_ustr));
         uno::Sequence<beans::NamedValue> props;
         if (data >>= props)
         {
@@ -1350,14 +1350,14 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             ::comphelper::SequenceAsHashMap const map(props);
             drawing::FillStyle eFill(drawing::FillStyle_BITMAP); // default to something that's ignored
             Color aColor(COL_BLACK);
-            auto it = map.find("FillStyle");
+            auto it = map.find(u"FillStyle"_ustr);
             if (it != map.end())
             {
                 XFillStyleItem style;
                 style.PutValue(it->second, 0);
                 eFill = style.GetValue();
             }
-            it = map.find("FillColor");
+            it = map.find(u"FillColor"_ustr);
             if (it != map.end())
             {
                 XFillColorItem color;
@@ -1391,12 +1391,12 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 {
                     // area fill
                     if(eFill == drawing::FillStyle_SOLID )
-                        aSet.Put(XFillColorItem("", aColor));
+                        aSet.Put(XFillColorItem(u""_ustr, aColor));
 
                     aSet.Put( XFillStyleItem( eFill ) );
                 }
                 else
-                    aSet.Put( XLineColorItem( "", aColor ) );
+                    aSet.Put( XLineColorItem( u""_ustr, aColor ) );
 
                 // add text color
                 pPickObj->SetMergedItemSetAndBroadcast( aSet );

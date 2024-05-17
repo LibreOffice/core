@@ -167,14 +167,14 @@ public:
 using namespace ::sd;
 
 HeaderFooterDialog::HeaderFooterDialog(ViewShell* pViewShell, weld::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage)
-    : GenericDialogController(pParent, "modules/simpress/ui/headerfooterdialog.ui", "HeaderFooterDialog")
+    : GenericDialogController(pParent, u"modules/simpress/ui/headerfooterdialog.ui"_ustr, u"HeaderFooterDialog"_ustr)
     , mpDoc( pDoc )
     , mpCurrentPage( pCurrentPage )
     , mpViewShell( pViewShell )
-    , mxTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
-    , mxPBApplyToAll(m_xBuilder->weld_button("apply_all"))
-    , mxPBApply(m_xBuilder->weld_button("apply"))
-    , mxPBCancel(m_xBuilder->weld_button("cancel"))
+    , mxTabCtrl(m_xBuilder->weld_notebook(u"tabcontrol"_ustr))
+    , mxPBApplyToAll(m_xBuilder->weld_button(u"apply_all"_ustr))
+    , mxPBApply(m_xBuilder->weld_button(u"apply"_ustr))
+    , mxPBCancel(m_xBuilder->weld_button(u"cancel"_ustr))
 {
     SdPage* pSlide;
     SdPage* pNotes;
@@ -197,8 +197,8 @@ HeaderFooterDialog::HeaderFooterDialog(ViewShell* pViewShell, weld::Window* pPar
         mpCurrentPage = nullptr;
     }
 
-    mxSlideTabPage.reset(new HeaderFooterTabPage(mxTabCtrl->get_page("slides"), pDoc, pSlide, false));
-    mxNotesHandoutsTabPage.reset(new HeaderFooterTabPage(mxTabCtrl->get_page("notes"), pDoc, pNotes, true));
+    mxSlideTabPage.reset(new HeaderFooterTabPage(mxTabCtrl->get_page(u"slides"_ustr), pDoc, pSlide, false));
+    mxNotesHandoutsTabPage.reset(new HeaderFooterTabPage(mxTabCtrl->get_page(u"notes"_ustr), pDoc, pNotes, true));
 
     pDoc->StopWorkStartupDelay();
     mxTabCtrl->show();
@@ -356,28 +356,28 @@ void HeaderFooterDialog::change( SdUndoGroup* pUndoGroup, SdPage* pPage, const H
 HeaderFooterTabPage::HeaderFooterTabPage(weld::Container* pParent, SdDrawDocument* pDoc, SdPage* pActualPage, bool bHandoutMode)
     : mpDoc(pDoc)
     , mbHandoutMode(bHandoutMode)
-    , mxBuilder(Application::CreateBuilder(pParent, "modules/simpress/ui/headerfootertab.ui"))
-    , mxContainer(mxBuilder->weld_container("HeaderFooterTab"))
-    , mxFTIncludeOn(mxBuilder->weld_label("include_label"))
-    , mxCBHeader(mxBuilder->weld_check_button("header_cb" ))
-    , mxHeaderBox(mxBuilder->weld_widget("header_box"))
-    , mxTBHeader(mxBuilder->weld_entry("header_text"))
-    , mxCBDateTime(mxBuilder->weld_check_button("datetime_cb"))
-    , mxRBDateTimeFixed(mxBuilder->weld_radio_button("rb_fixed"))
-    , mxRBDateTimeAutomatic(mxBuilder->weld_radio_button("rb_auto"))
-    , mxTBDateTimeFixed(mxBuilder->weld_entry("datetime_value"))
-    , mxCBDateTimeFormat(mxBuilder->weld_combo_box("datetime_format_list"))
-    , mxFTDateTimeLanguage(mxBuilder->weld_label("language_label"))
-    , mxCBDateTimeLanguage(new SvxLanguageBox(mxBuilder->weld_combo_box("language_list")))
-    , mxCBFooter(mxBuilder->weld_check_button("footer_cb"))
-    , mxFooterBox(mxBuilder->weld_widget("footer_box" ))
-    , mxTBFooter(mxBuilder->weld_entry("footer_text"))
-    , mxCBSlideNumber(mxBuilder->weld_check_button("slide_number"))
-    , mxCBNotOnTitle(mxBuilder->weld_check_button("not_on_title"))
-    , mxReplacementA(mxBuilder->weld_label("replacement_a"))
-    , mxReplacementB(mxBuilder->weld_label("replacement_b"))
+    , mxBuilder(Application::CreateBuilder(pParent, u"modules/simpress/ui/headerfootertab.ui"_ustr))
+    , mxContainer(mxBuilder->weld_container(u"HeaderFooterTab"_ustr))
+    , mxFTIncludeOn(mxBuilder->weld_label(u"include_label"_ustr))
+    , mxCBHeader(mxBuilder->weld_check_button(u"header_cb"_ustr ))
+    , mxHeaderBox(mxBuilder->weld_widget(u"header_box"_ustr))
+    , mxTBHeader(mxBuilder->weld_entry(u"header_text"_ustr))
+    , mxCBDateTime(mxBuilder->weld_check_button(u"datetime_cb"_ustr))
+    , mxRBDateTimeFixed(mxBuilder->weld_radio_button(u"rb_fixed"_ustr))
+    , mxRBDateTimeAutomatic(mxBuilder->weld_radio_button(u"rb_auto"_ustr))
+    , mxTBDateTimeFixed(mxBuilder->weld_entry(u"datetime_value"_ustr))
+    , mxCBDateTimeFormat(mxBuilder->weld_combo_box(u"datetime_format_list"_ustr))
+    , mxFTDateTimeLanguage(mxBuilder->weld_label(u"language_label"_ustr))
+    , mxCBDateTimeLanguage(new SvxLanguageBox(mxBuilder->weld_combo_box(u"language_list"_ustr)))
+    , mxCBFooter(mxBuilder->weld_check_button(u"footer_cb"_ustr))
+    , mxFooterBox(mxBuilder->weld_widget(u"footer_box"_ustr ))
+    , mxTBFooter(mxBuilder->weld_entry(u"footer_text"_ustr))
+    , mxCBSlideNumber(mxBuilder->weld_check_button(u"slide_number"_ustr))
+    , mxCBNotOnTitle(mxBuilder->weld_check_button(u"not_on_title"_ustr))
+    , mxReplacementA(mxBuilder->weld_label(u"replacement_a"_ustr))
+    , mxReplacementB(mxBuilder->weld_label(u"replacement_b"_ustr))
     , mxCTPreview(new PresLayoutPreview)
-    , mxCTPreviewWin(new weld::CustomWeld(*mxBuilder, "preview", *mxCTPreview))
+    , mxCTPreviewWin(new weld::CustomWeld(*mxBuilder, u"preview"_ustr, *mxCTPreview))
 {
     mxCTPreview->init( pActualPage ?
             (pActualPage->IsMasterPage() ? pActualPage : static_cast<SdPage*>(&(pActualPage->TRG_GetMasterPage()))) :

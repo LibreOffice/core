@@ -65,7 +65,7 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     mbEventListenerAdded(false),
     mpColorConfig(new svtools::ColorConfig)
 {
-    SetName( "StarDraw" );  // Do not translate!
+    SetName( u"StarDraw"_ustr );  // Do not translate!
     pSearchItem.reset( new SvxSearchItem(SID_SEARCH_ITEM) );
     pSearchItem->SetAppFlag(SvxSearchApp::DRAW);
     StartListening( *SfxGetpApp() );

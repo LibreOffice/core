@@ -58,7 +58,7 @@ GraphicObjectBar::GraphicObjectBar (
     SetPool( &pDocShell->GetPool() );
     SetUndoManager( pDocShell->GetUndoManager() );
     SetRepeatTarget( mpView );
-    SetName( "Graphic objectbar");
+    SetName( u"Graphic objectbar"_ustr);
 }
 
 GraphicObjectBar::~GraphicObjectBar()

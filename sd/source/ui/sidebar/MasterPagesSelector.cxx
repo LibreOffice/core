@@ -56,7 +56,7 @@ MasterPagesSelector::MasterPagesSelector (
     css::uno::Reference<css::ui::XSidebar> xSidebar,
     const OUString& rUIFileName,
     const OUString& rValueSetName)
-    : PanelLayout( pParent, "MasterPagePanel", rUIFileName ),
+    : PanelLayout( pParent, u"MasterPagePanel"_ustr, rUIFileName ),
       mpContainer(std::move(pContainer)),
       mxPreviewValueSet(new PreviewValueSet),
       mxPreviewValueSetWin(new weld::CustomWeld(*m_xBuilder, rValueSetName, *mxPreviewValueSet)),
@@ -141,7 +141,7 @@ void MasterPagesSelector::Fill()
 
 OUString MasterPagesSelector::GetContextMenuUIFile() const
 {
-    return "modules/simpress/ui/mastermenu.ui";
+    return u"modules/simpress/ui/mastermenu.ui"_ustr;
 }
 
 IMPL_LINK_NOARG(MasterPagesSelector, ClickHandler, ValueSet*, void)
@@ -194,7 +194,7 @@ void MasterPagesSelector::ShowContextMenu(const Point* pPos)
     // Setup the menu.
     weld::Widget* pParent = mxPreviewValueSet->GetDrawingArea();
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pParent, GetContextMenuUIFile()));
-    std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
+    std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu(u"menu"_ustr));
     ProcessPopupMenu(*xMenu);
     ::tools::Rectangle aRect(aPosition, Size(1,1));
     // Show the menu.
@@ -205,9 +205,9 @@ void MasterPagesSelector::ProcessPopupMenu(weld::Menu& rMenu)
 {
     // Disable some entries.
     if (mpContainer->GetPreviewSize() == MasterPageContainer::SMALL)
-        rMenu.set_sensitive("small", false);
+        rMenu.set_sensitive(u"small"_ustr, false);
     else
-        rMenu.set_sensitive("large", false);
+        rMenu.set_sensitive(u"large"_ustr, false);
 }
 
 void MasterPagesSelector::ExecuteCommand(const OUString &rIdent)

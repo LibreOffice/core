@@ -975,7 +975,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                                           GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(), GetActiveWindow()->GetOutputSizePixel() ).Center() ),
                                           nAction, false, nFormat ) )
                 {
-                    INetBookmark    aINetBookmark( "", "" );
+                    INetBookmark    aINetBookmark( u""_ustr, u""_ustr );
 
                     if( ( aDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) &&
                           aDataHelper.GetINetBookmark( SotClipboardFormatId::NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
@@ -984,7 +984,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                         ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) &&
                           aDataHelper.GetINetBookmark( SotClipboardFormatId::UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
                     {
-                        InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), "" );
+                        InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), u""_ustr );
                     }
                 }
             }
@@ -1573,25 +1573,25 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
                 if (!bIsButton && pMarkedObj->GetObjIdentifier() == SdrObjKind::UNO)
                 {
                     const Reference<beans::XPropertySetInfo> xInfo(xPropSet->getPropertySetInfo());
-                    bIsButton = xInfo.is() && xInfo->hasPropertyByName("ButtonType")
-                                && xInfo->hasPropertyByName("Label")
-                                && xInfo->hasPropertyByName("TargetURL");
+                    bIsButton = xInfo.is() && xInfo->hasPropertyByName(u"ButtonType"_ustr)
+                                && xInfo->hasPropertyByName(u"Label"_ustr)
+                                && xInfo->hasPropertyByName(u"TargetURL"_ustr);
                 }
                 if (bIsButton)
                 {
                     bNewObj = false;
 
-                    xPropSet->setPropertyValue("Label", Any(rText));
-                    xPropSet->setPropertyValue("TargetURL", Any(sTargetURL));
+                    xPropSet->setPropertyValue(u"Label"_ustr, Any(rText));
+                    xPropSet->setPropertyValue(u"TargetURL"_ustr, Any(sTargetURL));
 
                     if (!rTarget.isEmpty())
-                        xPropSet->setPropertyValue("TargetFrame", Any(rTarget));
+                        xPropSet->setPropertyValue(u"TargetFrame"_ustr, Any(rTarget));
 
-                    xPropSet->setPropertyValue("ButtonType", Any(form::FormButtonType_URL));
+                    xPropSet->setPropertyValue(u"ButtonType"_ustr, Any(form::FormButtonType_URL));
 #if HAVE_FEATURE_AVMEDIA
-                    if (::avmedia::MediaWindow::isMediaURL(rURL, ""/*TODO?*/))
+                    if (::avmedia::MediaWindow::isMediaURL(rURL, u""_ustr/*TODO?*/))
                     {
-                        xPropSet->setPropertyValue("DispatchURLInternal", Any(true));
+                        xPropSet->setPropertyValue(u"DispatchURLInternal"_ustr, Any(true));
                     }
 #endif
                 }
@@ -1626,16 +1626,16 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
         Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel(), uno::UNO_SET_THROW );
         Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY_THROW );
 
-        xPropSet->setPropertyValue( "Label" , Any( rText ) );
-        xPropSet->setPropertyValue( "TargetURL" , Any( sTargetURL ) );
+        xPropSet->setPropertyValue( u"Label"_ustr , Any( rText ) );
+        xPropSet->setPropertyValue( u"TargetURL"_ustr , Any( sTargetURL ) );
 
         if( !rTarget.isEmpty() )
-            xPropSet->setPropertyValue( "TargetFrame" , Any( rTarget ) );
+            xPropSet->setPropertyValue( u"TargetFrame"_ustr , Any( rTarget ) );
 
-        xPropSet->setPropertyValue( "ButtonType" , Any(  form::FormButtonType_URL ) );
+        xPropSet->setPropertyValue( u"ButtonType"_ustr , Any(  form::FormButtonType_URL ) );
 #if HAVE_FEATURE_AVMEDIA
-        if ( ::avmedia::MediaWindow::isMediaURL( rURL, ""/*TODO?*/ ) )
-            xPropSet->setPropertyValue( "DispatchURLInternal" , Any( true ) );
+        if ( ::avmedia::MediaWindow::isMediaURL( rURL, u""_ustr/*TODO?*/ ) )
+            xPropSet->setPropertyValue( u"DispatchURLInternal"_ustr , Any( true ) );
 #endif
 
         Point aPos;
@@ -1714,7 +1714,7 @@ namespace slideshowhelp
             SdPage* pSlide = rDoc.GetSdPage(nStartingSlide, PageKind::Standard);
             const OUString& rStartingSlide = pSlide ? pSlide->GetName() : OUString();
 
-            Sequence< PropertyValue > aArguments{ comphelper::makePropertyValue("FirstPage",
+            Sequence< PropertyValue > aArguments{ comphelper::makePropertyValue(u"FirstPage"_ustr,
                                                                                 rStartingSlide) };
             xPresentation->startWithArguments( aArguments );
         }

@@ -210,9 +210,9 @@ void AnnotationTextWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 AnnotationWindow::AnnotationWindow(weld::Window* pParent, const ::tools::Rectangle& rRect,
                                    DrawDocShell* pDocShell,
                                    const Reference<XAnnotation>& xAnnotation)
-    : mxBuilder(Application::CreateBuilder(pParent, "modules/simpress/ui/annotation.ui"))
-    , mxPopover(mxBuilder->weld_popover("Annotation"))
-    , mxContainer(mxBuilder->weld_widget("container"))
+    : mxBuilder(Application::CreateBuilder(pParent, u"modules/simpress/ui/annotation.ui"_ustr))
+    , mxPopover(mxBuilder->weld_popover(u"Annotation"_ustr))
+    , mxContainer(mxBuilder->weld_widget(u"container"_ustr))
     , mpDocShell(pDocShell)
     , mpDoc(pDocShell->GetDoc())
     , mbReadonly(pDocShell->IsReadOnly())
@@ -237,7 +237,7 @@ AnnotationWindow::~AnnotationWindow()
 void AnnotationWindow::InitControls()
 {
     // window control for author and date
-    mxMeta = mxBuilder->weld_label("meta");
+    mxMeta = mxBuilder->weld_label(u"meta"_ustr);
     mxMeta->set_direction(AllSettings::GetLayoutRTL());
 
     maLabelFont = Application::GetSettings().GetStyleSettings().GetLabelFont();
@@ -258,11 +258,11 @@ void AnnotationWindow::InitControls()
     mpOutliner->InsertView(mpOutlinerView.get() );
 
     //create Scrollbars
-    mxVScrollbar = mxBuilder->weld_scrolled_window("scrolledwindow", true);
+    mxVScrollbar = mxBuilder->weld_scrolled_window(u"scrolledwindow"_ustr, true);
 
     // actual window which holds the user text
     mxTextControl.reset(new AnnotationTextWindow(*this));
-    mxTextControlWin.reset(new weld::CustomWeld(*mxBuilder, "editview", *mxTextControl));
+    mxTextControlWin.reset(new weld::CustomWeld(*mxBuilder, u"editview"_ustr, *mxTextControl));
     mxTextControl->SetPointer(PointerStyle::Text);
 
     Rescale();
@@ -274,7 +274,7 @@ void AnnotationWindow::InitControls()
     mpOutlinerView->SetBackgroundColor(COL_TRANSPARENT);
     mpOutlinerView->SetOutputArea(rDevice.PixelToLogic(::tools::Rectangle(0, 0, 1, 1)));
 
-    mxMenuButton = mxBuilder->weld_menu_button("menubutton");
+    mxMenuButton = mxBuilder->weld_menu_button(u"menubutton"_ustr);
     if (mbReadonly)
         mxMenuButton->hide();
     else
@@ -333,19 +333,19 @@ void AnnotationWindow::FillMenuButton()
     OUString sCurrentAuthor( aUserOptions.GetFullName() );
     OUString sAuthor( mxAnnotation->getAuthor() );
 
-    OUString aStr(mxMenuButton->get_item_label(".uno:DeleteAllAnnotationByAuthor"));
+    OUString aStr(mxMenuButton->get_item_label(u".uno:DeleteAllAnnotationByAuthor"_ustr));
     OUString aReplace( sAuthor );
     if( aReplace.isEmpty() )
         aReplace = SdResId( STR_ANNOTATION_NOAUTHOR );
     aStr = aStr.replaceFirst("%1", aReplace);
-    mxMenuButton->set_item_label(".uno:DeleteAllAnnotationByAuthor", aStr);
+    mxMenuButton->set_item_label(u".uno:DeleteAllAnnotationByAuthor"_ustr, aStr);
 
     bool bShowReply = sAuthor != sCurrentAuthor && !mbReadonly;
-    mxMenuButton->set_item_visible(".uno:ReplyToAnnotation", bShowReply);
-    mxMenuButton->set_item_visible("separator", bShowReply);
-    mxMenuButton->set_item_visible(".uno:DeleteAnnotation", mxAnnotation.is() && !mbReadonly);
-    mxMenuButton->set_item_visible(".uno:DeleteAllAnnotationByAuthor", !mbReadonly);
-    mxMenuButton->set_item_visible(".uno:DeleteAllAnnotation", !mbReadonly);
+    mxMenuButton->set_item_visible(u".uno:ReplyToAnnotation"_ustr, bShowReply);
+    mxMenuButton->set_item_visible(u"separator"_ustr, bShowReply);
+    mxMenuButton->set_item_visible(u".uno:DeleteAnnotation"_ustr, mxAnnotation.is() && !mbReadonly);
+    mxMenuButton->set_item_visible(u".uno:DeleteAllAnnotationByAuthor"_ustr, !mbReadonly);
+    mxMenuButton->set_item_visible(u".uno:DeleteAllAnnotation"_ustr, !mbReadonly);
 }
 
 void AnnotationWindow::StartEdit()
@@ -622,8 +622,8 @@ bool AnnotationTextWindow::Command(const CommandEvent& rCEvt)
 
         ::tools::Rectangle aRect(rCEvt.GetMousePosPixel(), Size(1, 1));
         weld::Widget* pPopupParent = GetDrawingArea();
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "modules/simpress/ui/annotationtagmenu.ui"));
-        std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, u"modules/simpress/ui/annotationtagmenu.ui"_ustr));
+        std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu(u"menu"_ustr));
 
         auto xAnnotation = mrContents.getAnnotation();
 
@@ -631,19 +631,19 @@ bool AnnotationTextWindow::Command(const CommandEvent& rCEvt)
         OUString sCurrentAuthor( aUserOptions.GetFullName() );
         OUString sAuthor( xAnnotation->getAuthor() );
 
-        OUString aStr(xMenu->get_label(".uno:DeleteAllAnnotationByAuthor"));
+        OUString aStr(xMenu->get_label(u".uno:DeleteAllAnnotationByAuthor"_ustr));
         OUString aReplace( sAuthor );
         if( aReplace.isEmpty() )
             aReplace = SdResId( STR_ANNOTATION_NOAUTHOR );
         aStr = aStr.replaceFirst("%1", aReplace);
-        xMenu->set_label(".uno:DeleteAllAnnotationByAuthor", aStr);
+        xMenu->set_label(u".uno:DeleteAllAnnotationByAuthor"_ustr, aStr);
 
         bool bShowReply = sAuthor != sCurrentAuthor && !bReadOnly;
-        xMenu->set_visible(".uno:ReplyToAnnotation", bShowReply);
-        xMenu->set_visible("separator", bShowReply);
-        xMenu->set_visible(".uno:DeleteAnnotation", xAnnotation.is() && !bReadOnly);
-        xMenu->set_visible(".uno:DeleteAllAnnotationByAuthor", !bReadOnly);
-        xMenu->set_visible(".uno:DeleteAllAnnotation", !bReadOnly);
+        xMenu->set_visible(u".uno:ReplyToAnnotation"_ustr, bShowReply);
+        xMenu->set_visible(u"separator"_ustr, bShowReply);
+        xMenu->set_visible(u".uno:DeleteAnnotation"_ustr, xAnnotation.is() && !bReadOnly);
+        xMenu->set_visible(u".uno:DeleteAllAnnotationByAuthor"_ustr, !bReadOnly);
+        xMenu->set_visible(u".uno:DeleteAllAnnotation"_ustr, !bReadOnly);
 
         int nInsertPos = 2;
 
@@ -655,68 +655,68 @@ bool AnnotationTextWindow::Command(const CommandEvent& rCEvt)
         {
             SfxItemSet aSet(mrContents.GetOutlinerView()->GetAttribs());
 
-            xMenu->insert(nInsertPos++, ".uno:Bold",
+            xMenu->insert(nInsertPos++, u".uno:Bold"_ustr,
                           vcl::CommandInfoProvider::GetMenuLabelForCommand(
-                              vcl::CommandInfoProvider::GetCommandProperties(".uno:Bold", aModuleName)),
-                          nullptr, nullptr, vcl::CommandInfoProvider::GetXGraphicForCommand(".uno:Bold", xFrame),
+                              vcl::CommandInfoProvider::GetCommandProperties(u".uno:Bold"_ustr, aModuleName)),
+                          nullptr, nullptr, vcl::CommandInfoProvider::GetXGraphicForCommand(u".uno:Bold"_ustr, xFrame),
                           TRISTATE_TRUE);
 
             if ( aSet.GetItemState( EE_CHAR_WEIGHT ) == SfxItemState::SET )
             {
                 if( aSet.Get( EE_CHAR_WEIGHT ).GetWeight() == WEIGHT_BOLD )
-                    xMenu->set_active(".uno:Bold", true);
+                    xMenu->set_active(u".uno:Bold"_ustr, true);
             }
 
-            xMenu->insert(nInsertPos++, ".uno:Italic",
+            xMenu->insert(nInsertPos++, u".uno:Italic"_ustr,
                           vcl::CommandInfoProvider::GetMenuLabelForCommand(
-                              vcl::CommandInfoProvider::GetCommandProperties(".uno:Italic", aModuleName)),
-                          nullptr, nullptr, vcl::CommandInfoProvider::GetXGraphicForCommand(".uno:Italic", xFrame),
+                              vcl::CommandInfoProvider::GetCommandProperties(u".uno:Italic"_ustr, aModuleName)),
+                          nullptr, nullptr, vcl::CommandInfoProvider::GetXGraphicForCommand(u".uno:Italic"_ustr, xFrame),
                           TRISTATE_TRUE);
 
             if ( aSet.GetItemState( EE_CHAR_ITALIC ) == SfxItemState::SET )
             {
                 if( aSet.Get( EE_CHAR_ITALIC ).GetPosture() != ITALIC_NONE )
-                    xMenu->set_active(".uno:Italic", true);
+                    xMenu->set_active(u".uno:Italic"_ustr, true);
 
             }
 
-            xMenu->insert(nInsertPos++, ".uno:Underline",
+            xMenu->insert(nInsertPos++, u".uno:Underline"_ustr,
                           vcl::CommandInfoProvider::GetMenuLabelForCommand(
-                              vcl::CommandInfoProvider::GetCommandProperties(".uno:Underline", aModuleName)),
-                          nullptr, nullptr, vcl::CommandInfoProvider::GetXGraphicForCommand(".uno:Underline", xFrame),
+                              vcl::CommandInfoProvider::GetCommandProperties(u".uno:Underline"_ustr, aModuleName)),
+                          nullptr, nullptr, vcl::CommandInfoProvider::GetXGraphicForCommand(u".uno:Underline"_ustr, xFrame),
                           TRISTATE_TRUE);
 
             if ( aSet.GetItemState( EE_CHAR_UNDERLINE ) == SfxItemState::SET )
             {
                 if( aSet.Get( EE_CHAR_UNDERLINE ).GetLineStyle() != LINESTYLE_NONE )
-                    xMenu->set_active(".uno:Underline", true);
+                    xMenu->set_active(u".uno:Underline"_ustr, true);
             }
 
-            xMenu->insert(nInsertPos++, ".uno:Strikeout",
+            xMenu->insert(nInsertPos++, u".uno:Strikeout"_ustr,
                           vcl::CommandInfoProvider::GetMenuLabelForCommand(
-                              vcl::CommandInfoProvider::GetCommandProperties(".uno:Strikeout", aModuleName)),
-                          nullptr, nullptr, vcl::CommandInfoProvider::GetXGraphicForCommand(".uno:Strikeout", xFrame),
+                              vcl::CommandInfoProvider::GetCommandProperties(u".uno:Strikeout"_ustr, aModuleName)),
+                          nullptr, nullptr, vcl::CommandInfoProvider::GetXGraphicForCommand(u".uno:Strikeout"_ustr, xFrame),
                           TRISTATE_TRUE);
 
             if ( aSet.GetItemState( EE_CHAR_STRIKEOUT ) == SfxItemState::SET )
             {
                 if( aSet.Get( EE_CHAR_STRIKEOUT ).GetStrikeout() != STRIKEOUT_NONE )
-                    xMenu->set_active(".uno:Strikeout", true);
+                    xMenu->set_active(u".uno:Strikeout"_ustr, true);
             }
 
-            xMenu->insert_separator(nInsertPos++, "separator2");
+            xMenu->insert_separator(nInsertPos++, u"separator2"_ustr);
         }
 
-        xMenu->insert(nInsertPos++, ".uno:Copy",
+        xMenu->insert(nInsertPos++, u".uno:Copy"_ustr,
                       vcl::CommandInfoProvider::GetMenuLabelForCommand(
-                          vcl::CommandInfoProvider::GetCommandProperties(".uno:Copy", aModuleName)),
-                      nullptr, nullptr, vcl::CommandInfoProvider::GetXGraphicForCommand(".uno:Copy", xFrame),
+                          vcl::CommandInfoProvider::GetCommandProperties(u".uno:Copy"_ustr, aModuleName)),
+                      nullptr, nullptr, vcl::CommandInfoProvider::GetXGraphicForCommand(u".uno:Copy"_ustr, xFrame),
                       TRISTATE_INDET);
 
-        xMenu->insert(nInsertPos++, ".uno:Paste",
+        xMenu->insert(nInsertPos++, u".uno:Paste"_ustr,
                       vcl::CommandInfoProvider::GetMenuLabelForCommand(
-                          vcl::CommandInfoProvider::GetCommandProperties(".uno:Paste", aModuleName)),
-                      nullptr, nullptr, vcl::CommandInfoProvider::GetXGraphicForCommand(".uno:Paste", xFrame),
+                          vcl::CommandInfoProvider::GetCommandProperties(u".uno:Paste"_ustr, aModuleName)),
+                      nullptr, nullptr, vcl::CommandInfoProvider::GetXGraphicForCommand(u".uno:Paste"_ustr, xFrame),
                       TRISTATE_INDET);
 
         bool bCanPaste = false;
@@ -726,10 +726,10 @@ bool AnnotationTextWindow::Command(const CommandEvent& rCEvt)
             bCanPaste = aDataHelper.GetFormatCount() != 0;
         }
 
-        xMenu->insert_separator(nInsertPos++, "separator3");
+        xMenu->insert_separator(nInsertPos++, u"separator3"_ustr);
 
-        xMenu->set_sensitive(".uno:Copy", mrContents.GetOutlinerView()->HasSelection());
-        xMenu->set_sensitive(".uno:Paste", bCanPaste);
+        xMenu->set_sensitive(u".uno:Copy"_ustr, mrContents.GetOutlinerView()->HasSelection());
+        xMenu->set_sensitive(u".uno:Paste"_ustr, bCanPaste);
 
         auto sId = xMenu->popup_at_rect(pPopupParent, aRect);
 

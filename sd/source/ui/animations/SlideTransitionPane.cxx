@@ -392,7 +392,7 @@ public:
 SlideTransitionPane::SlideTransitionPane(
     weld::Widget* pParent,
     ViewShellBase & rBase) :
-        PanelLayout( pParent, "SlideTransitionsPanel", "modules/simpress/ui/slidetransitionspanel.ui" ),
+        PanelLayout( pParent, u"SlideTransitionsPanel"_ustr, u"modules/simpress/ui/slidetransitionspanel.ui"_ustr ),
         mrBase( rBase ),
         mpDrawDoc( rBase.GetDocShell() ? rBase.GetDocShell()->GetDoc() : nullptr ),
         mbHasSelection( false ),
@@ -413,17 +413,17 @@ constexpr sal_uInt16 nNoneId = std::numeric_limits<sal_uInt16>::max();
 
 void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
 {
-    mxLB_VARIANT = m_xBuilder->weld_combo_box("variant_list");
-    mxCBX_duration = m_xBuilder->weld_metric_spin_button("transition_duration", FieldUnit::SECOND);
-    mxFT_SOUND = m_xBuilder->weld_label("sound_label");
-    mxLB_SOUND = m_xBuilder->weld_combo_box("sound_list");
-    mxCB_LOOP_SOUND = m_xBuilder->weld_check_button("loop_sound");
-    mxRB_ADVANCE_ON_MOUSE = m_xBuilder->weld_radio_button("rb_mouse_click");
-    mxRB_ADVANCE_AUTO = m_xBuilder->weld_radio_button("rb_auto_after");
-    mxMF_ADVANCE_AUTO_AFTER  = m_xBuilder->weld_metric_spin_button("auto_after_value", FieldUnit::SECOND);
-    mxPB_APPLY_TO_ALL = m_xBuilder->weld_button("apply_to_all");
-    mxPB_PLAY = m_xBuilder->weld_button("play");
-    mxCB_AUTO_PREVIEW = m_xBuilder->weld_check_button("auto_preview");
+    mxLB_VARIANT = m_xBuilder->weld_combo_box(u"variant_list"_ustr);
+    mxCBX_duration = m_xBuilder->weld_metric_spin_button(u"transition_duration"_ustr, FieldUnit::SECOND);
+    mxFT_SOUND = m_xBuilder->weld_label(u"sound_label"_ustr);
+    mxLB_SOUND = m_xBuilder->weld_combo_box(u"sound_list"_ustr);
+    mxCB_LOOP_SOUND = m_xBuilder->weld_check_button(u"loop_sound"_ustr);
+    mxRB_ADVANCE_ON_MOUSE = m_xBuilder->weld_radio_button(u"rb_mouse_click"_ustr);
+    mxRB_ADVANCE_AUTO = m_xBuilder->weld_radio_button(u"rb_auto_after"_ustr);
+    mxMF_ADVANCE_AUTO_AFTER  = m_xBuilder->weld_metric_spin_button(u"auto_after_value"_ustr, FieldUnit::SECOND);
+    mxPB_APPLY_TO_ALL = m_xBuilder->weld_button(u"apply_to_all"_ustr);
+    mxPB_PLAY = m_xBuilder->weld_button(u"play"_ustr);
+    mxCB_AUTO_PREVIEW = m_xBuilder->weld_check_button(u"auto_preview"_ustr);
 
     auto nMax = mxMF_ADVANCE_AUTO_AFTER->get_max(FieldUnit::SECOND);
     mxMF_ADVANCE_AUTO_AFTER->set_max(99, FieldUnit::SECOND);
@@ -432,8 +432,8 @@ void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
     mxMF_ADVANCE_AUTO_AFTER->set_width_chars(nWidthChars);
     mxCBX_duration->set_width_chars(nWidthChars);
 
-    mxVS_TRANSITION_ICONS.reset(new TransitionPane(m_xBuilder->weld_scrolled_window("transitions_iconswin", true)));
-    mxVS_TRANSITION_ICONSWin.reset(new weld::CustomWeld(*m_xBuilder, "transitions_icons", *mxVS_TRANSITION_ICONS));
+    mxVS_TRANSITION_ICONS.reset(new TransitionPane(m_xBuilder->weld_scrolled_window(u"transitions_iconswin"_ustr, true)));
+    mxVS_TRANSITION_ICONSWin.reset(new weld::CustomWeld(*m_xBuilder, u"transitions_icons"_ustr, *mxVS_TRANSITION_ICONS));
 
     if( pDoc )
         mxModel = pDoc->getUnoModel();
@@ -443,7 +443,7 @@ void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
 
     // dummy list box of slide transitions for startup.
     mxVS_TRANSITION_ICONS->InsertItem(
-        nNoneId, Image( StockImage::Yes, "sd/cmd/transition-none.png" ),
+        nNoneId, Image( StockImage::Yes, u"sd/cmd/transition-none.png"_ustr ),
         SdResId( STR_SLIDETRANSITION_NONE ),
         VALUESET_APPEND, /* show legend */ true );
     mxVS_TRANSITION_ICONS->Recalculate();
@@ -576,7 +576,7 @@ void SlideTransitionPane::updateControls()
 
     if( aEffect.mbDurationAmbiguous )
     {
-        mxCBX_duration->set_text("");
+        mxCBX_duration->set_text(u""_ustr);
 //TODO        mxCBX_duration->SetNoSelection();
     }
     else

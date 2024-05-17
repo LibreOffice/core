@@ -1439,17 +1439,17 @@ Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) co
                 if( GetPage()->GetPageKind() == PageKind::Notes && GetPage()->IsMasterPage() )
                 {
                     // fake an empty PageShape if it's a title shape on the master page
-                    pShape->SetShapeType("com.sun.star.presentation.PageShape");
+                    pShape->SetShapeType(u"com.sun.star.presentation.PageShape"_ustr);
                 }
                 else
                 {
-                    pShape->SetShapeType("com.sun.star.presentation.TitleTextShape");
+                    pShape->SetShapeType(u"com.sun.star.presentation.TitleTextShape"_ustr);
                 }
                 eKind = PresObjKind::NONE;
                 break;
             case SdrObjKind::OutlineText:
                 pShape = new SvxShapeText( pObj );
-                pShape->SetShapeType("com.sun.star.presentation.OutlinerShape");
+                pShape->SetShapeType(u"com.sun.star.presentation.OutlinerShape"_ustr);
                 eKind = PresObjKind::NONE;
                 break;
             default: ;
@@ -1463,7 +1463,7 @@ Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) co
 
         if( eKind != PresObjKind::NONE )
         {
-            OUString aShapeType("com.sun.star.presentation.");
+            OUString aShapeType(u"com.sun.star.presentation."_ustr);
 
             switch( eKind )
             {
@@ -2047,7 +2047,7 @@ SdrObject* SdPageLinkTargets::FindObject( std::u16string_view rName ) const noex
 // XServiceInfo
 OUString SAL_CALL SdPageLinkTargets::getImplementationName()
 {
-    return "SdPageLinkTargets";
+    return u"SdPageLinkTargets"_ustr;
 }
 
 sal_Bool SAL_CALL SdPageLinkTargets::supportsService( const OUString& ServiceName )
@@ -2057,7 +2057,7 @@ sal_Bool SAL_CALL SdPageLinkTargets::supportsService( const OUString& ServiceNam
 
 Sequence< OUString > SAL_CALL SdPageLinkTargets::getSupportedServiceNames()
 {
-  return { "com.sun.star.document.LinkTargets" };
+  return { u"com.sun.star.document.LinkTargets"_ustr };
 }
 
 // SdDrawPage
@@ -2235,7 +2235,7 @@ OUString SdDrawPage::getUiNameFromPageApiName( const OUString& rApiName )
 // XServiceInfo
 OUString SAL_CALL SdDrawPage::getImplementationName()
 {
-    return "SdDrawPage";
+    return u"SdDrawPage"_ustr;
 }
 
 Sequence< OUString > SAL_CALL SdDrawPage::getSupportedServiceNames()
@@ -2750,7 +2750,7 @@ Sequence< sal_Int8 > SAL_CALL SdMasterPage::getImplementationId()
 // XServiceInfo
 OUString SAL_CALL SdMasterPage::getImplementationName()
 {
-    return "SdMasterPage";
+    return u"SdMasterPage"_ustr;
 }
 
 Sequence< OUString > SAL_CALL SdMasterPage::getSupportedServiceNames()

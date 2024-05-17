@@ -34,17 +34,17 @@
  * dialog to adjust grid (scarcely ESO!)
  */
 SdSnapLineDlg::SdSnapLineDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View const * pView)
-    : GenericDialogController(pWindow, "modules/sdraw/ui/dlgsnap.ui", "SnapObjectDialog")
+    : GenericDialogController(pWindow, u"modules/sdraw/ui/dlgsnap.ui"_ustr, u"SnapObjectDialog"_ustr)
     , aUIScale(pView->GetDoc().GetUIScale())
-    , m_xFtX(m_xBuilder->weld_label("xlabel"))
-    , m_xMtrFldX(m_xBuilder->weld_metric_spin_button("x", FieldUnit::CM))
-    , m_xFtY(m_xBuilder->weld_label("ylabel"))
-    , m_xMtrFldY(m_xBuilder->weld_metric_spin_button("y", FieldUnit::CM))
-    , m_xRadioGroup(m_xBuilder->weld_widget("radiogroup"))
-    , m_xRbPoint(m_xBuilder->weld_radio_button("point"))
-    , m_xRbVert(m_xBuilder->weld_radio_button("vert"))
-    , m_xRbHorz(m_xBuilder->weld_radio_button("horz"))
-    , m_xBtnDelete(m_xBuilder->weld_button("delete"))
+    , m_xFtX(m_xBuilder->weld_label(u"xlabel"_ustr))
+    , m_xMtrFldX(m_xBuilder->weld_metric_spin_button(u"x"_ustr, FieldUnit::CM))
+    , m_xFtY(m_xBuilder->weld_label(u"ylabel"_ustr))
+    , m_xMtrFldY(m_xBuilder->weld_metric_spin_button(u"y"_ustr, FieldUnit::CM))
+    , m_xRadioGroup(m_xBuilder->weld_widget(u"radiogroup"_ustr))
+    , m_xRbPoint(m_xBuilder->weld_radio_button(u"point"_ustr))
+    , m_xRbVert(m_xBuilder->weld_radio_button(u"vert"_ustr))
+    , m_xRbHorz(m_xBuilder->weld_radio_button(u"horz"_ustr))
+    , m_xBtnDelete(m_xBuilder->weld_button(u"delete"_ustr))
 {
     m_xRbHorz->connect_toggled(LINK(this, SdSnapLineDlg, ToggleHdl));
     m_xRbVert->connect_toggled(LINK(this, SdSnapLineDlg, ToggleHdl));

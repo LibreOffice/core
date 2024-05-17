@@ -117,7 +117,7 @@ Image PreviewRenderer::RenderPage (
             if (Initialize(pPage, aPixelSize, bObeyHighContrastMode))
             {
                 PaintPage(pPage, bDisplayPresentationObjects);
-                PaintSubstitutionText("");
+                PaintSubstitutionText(u""_ustr);
                 PaintFrame();
 
                 Size aSize (mpPreviewDevice->GetOutputSizePixel());

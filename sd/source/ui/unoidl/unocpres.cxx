@@ -60,7 +60,7 @@ SdXCustomPresentation::~SdXCustomPresentation() noexcept
 // XServiceInfo
 OUString SAL_CALL SdXCustomPresentation::getImplementationName()
 {
-    return "SdXCustomPresentation" ;
+    return u"SdXCustomPresentation"_ustr ;
 }
 
 sal_Bool SAL_CALL SdXCustomPresentation::supportsService( const OUString& ServiceName )
@@ -70,7 +70,7 @@ sal_Bool SAL_CALL SdXCustomPresentation::supportsService( const OUString& Servic
 
 uno::Sequence< OUString > SAL_CALL SdXCustomPresentation::getSupportedServiceNames()
 {
-    return { "com.sun.star.presentation.CustomPresentation" };
+    return { u"com.sun.star.presentation.CustomPresentation"_ustr };
 }
 
 // XIndexContainer
@@ -274,7 +274,7 @@ SdXCustomPresentationAccess::~SdXCustomPresentationAccess() noexcept
 // XServiceInfo
 OUString SAL_CALL SdXCustomPresentationAccess::getImplementationName()
 {
-    return "SdXCustomPresentationAccess";
+    return u"SdXCustomPresentationAccess"_ustr;
 }
 
 sal_Bool SAL_CALL SdXCustomPresentationAccess::supportsService( const OUString& ServiceName )
@@ -284,7 +284,7 @@ sal_Bool SAL_CALL SdXCustomPresentationAccess::supportsService( const OUString& 
 
 uno::Sequence< OUString > SAL_CALL SdXCustomPresentationAccess::getSupportedServiceNames()
 {
-    return { "com.sun.star.presentation.CustomPresentationAccess" };
+    return { u"com.sun.star.presentation.CustomPresentationAccess"_ustr };
 }
 
 // XSingleServiceFactory

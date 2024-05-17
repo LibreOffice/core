@@ -272,8 +272,8 @@ void DrawViewShell::ExecBmpMask( SfxRequest const & rReq )
 
                 if (xNewObj->IsLinkedGraphic())
                 {
-                    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/sdraw/ui/queryunlinkimagedialog.ui"));
-                    std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryUnlinkImageDialog"));
+                    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"modules/sdraw/ui/queryunlinkimagedialog.ui"_ustr));
+                    std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog(u"QueryUnlinkImageDialog"_ustr));
 
                     if (RET_YES == xQueryBox->run())
                         xNewObj->ReleaseGraphicLink();

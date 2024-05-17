@@ -143,7 +143,7 @@ void SlotStateListener::ThrowIfDisposed()
 {
     if (m_bDisposed)
     {
-        throw lang::DisposedException ("SlideSorterController object has already been disposed",
+        throw lang::DisposedException (u"SlideSorterController object has already been disposed"_ustr,
             static_cast<uno::XWeak*>(this));
     }
 }

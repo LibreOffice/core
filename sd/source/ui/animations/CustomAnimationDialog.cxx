@@ -84,9 +84,9 @@ using ::com::sun::star::beans::XPropertySet;
 namespace sd {
 
 SdPropertySubControl::SdPropertySubControl(weld::Container* pParent)
-    : mxBuilder(Application::CreateBuilder(pParent, "modules/simpress/ui/customanimationfragment.ui",
+    : mxBuilder(Application::CreateBuilder(pParent, u"modules/simpress/ui/customanimationfragment.ui"_ustr,
         false, reinterpret_cast<sal_uInt64>(SfxViewShell::Current())))
-    , mxContainer(mxBuilder->weld_container("EffectFragment"))
+    , mxContainer(mxBuilder->weld_container(u"EffectFragment"_ustr))
     , mpParent(pParent)
 {
 }
@@ -119,7 +119,7 @@ private:
 SdPresetPropertyBox::SdPresetPropertyBox(weld::Label* pLabel, weld::Container* pParent, const Any& rValue, const OUString& aPresetId, const Link<LinkParamNone*,void>& rModifyHdl)
     : SdPropertySubControl(pParent)
     , maModifyLink(rModifyHdl)
-    , mxControl(mxBuilder->weld_combo_box("combo"))
+    , mxControl(mxBuilder->weld_combo_box(u"combo"_ustr))
 {
     mxControl->connect_changed(LINK(this, SdPresetPropertyBox, OnSelect));
     mxControl->set_help_id(HID_SD_CUSTOMANIMATIONPANE_PRESETPROPERTYBOX);
@@ -202,7 +202,7 @@ private:
 SdColorPropertyBox::SdColorPropertyBox(weld::Label* pLabel, weld::Container* pParent, weld::Window* pTopLevel, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl)
     : SdPropertySubControl(pParent)
     , maModifyLink(rModifyHdl)
-    , mxControl(new ColorListBox(mxBuilder->weld_menu_button("color"), [pTopLevel]{ return pTopLevel; }))
+    , mxControl(new ColorListBox(mxBuilder->weld_menu_button(u"color"_ustr), [pTopLevel]{ return pTopLevel; }))
 {
     mxControl->SetSelectHdl(LINK(this, SdColorPropertyBox, OnSelect));
     mxControl->set_help_id(HID_SD_CUSTOMANIMATIONPANE_COLORPROPERTYBOX);
@@ -258,7 +258,7 @@ private:
 SdFontPropertyBox::SdFontPropertyBox(weld::Label* pLabel, weld::Container* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl)
     : SdPropertySubControl(pParent)
     , maModifyHdl(rModifyHdl)
-    , mxControl(mxBuilder->weld_combo_box("fontname"))
+    , mxControl(mxBuilder->weld_combo_box(u"fontname"_ustr))
 {
     mxControl->connect_changed(LINK(this, SdFontPropertyBox, ControlSelectHdl));
     mxControl->set_help_id(HID_SD_CUSTOMANIMATIONPANE_FONTPROPERTYBOX);
@@ -344,8 +344,8 @@ private:
 SdCharHeightPropertyBox::SdCharHeightPropertyBox(weld::Label* pLabel, weld::Container* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl)
     : SdPropertySubControl(pParent)
     , maModifyHdl(rModifyHdl)
-    , mxMetric(mxBuilder->weld_metric_spin_button("fontsize", FieldUnit::PERCENT))
-    , mxControl(mxBuilder->weld_menu_button("fontsizemenu"))
+    , mxMetric(mxBuilder->weld_metric_spin_button(u"fontsize"_ustr, FieldUnit::PERCENT))
+    , mxControl(mxBuilder->weld_menu_button(u"fontsizemenu"_ustr))
 {
     mxMetric->connect_value_changed(LINK(this, SdCharHeightPropertyBox, EditModifyHdl));
     mxMetric->set_help_id(HID_SD_CUSTOMANIMATIONPANE_CHARHEIGHTPROPERTYBOX);
@@ -413,8 +413,8 @@ private:
 SdTransparencyPropertyBox::SdTransparencyPropertyBox(weld::Label* pLabel, weld::Container* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl)
     : SdPropertySubControl(pParent)
     , maModifyHdl(rModifyHdl)
-    , mxMetric(mxBuilder->weld_metric_spin_button("transparent", FieldUnit::PERCENT))
-    , mxControl(mxBuilder->weld_menu_button("transparentmenu"))
+    , mxMetric(mxBuilder->weld_metric_spin_button(u"transparent"_ustr, FieldUnit::PERCENT))
+    , mxControl(mxBuilder->weld_menu_button(u"transparentmenu"_ustr))
 {
     for (sal_Int32 i = 25; i < 101; i += 25)
     {
@@ -502,8 +502,8 @@ private:
 SdRotationPropertyBox::SdRotationPropertyBox(weld::Label* pLabel, weld::Container* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl)
     : SdPropertySubControl(pParent)
     , maModifyHdl(rModifyHdl)
-    , mxMetric(mxBuilder->weld_metric_spin_button("rotate", FieldUnit::DEGREE))
-    , mxControl(mxBuilder->weld_menu_button("rotatemenu"))
+    , mxMetric(mxBuilder->weld_metric_spin_button(u"rotate"_ustr, FieldUnit::DEGREE))
+    , mxControl(mxBuilder->weld_menu_button(u"rotatemenu"_ustr))
 {
     mxMetric->connect_value_changed(LINK( this, SdRotationPropertyBox, implModifyHdl));
     mxMetric->set_help_id(HID_SD_CUSTOMANIMATIONPANE_ROTATIONPROPERTYBOX);
@@ -523,13 +523,13 @@ void SdRotationPropertyBox::updateMenu()
     bool bDirection = nValue >= 0;
     nValue = (nValue < 0 ? -nValue : nValue);
 
-    mxControl->set_item_active("90", nValue == 90);
-    mxControl->set_item_active("180", nValue == 180);
-    mxControl->set_item_active("360", nValue == 360);
-    mxControl->set_item_active("720", nValue == 720);
+    mxControl->set_item_active(u"90"_ustr, nValue == 90);
+    mxControl->set_item_active(u"180"_ustr, nValue == 180);
+    mxControl->set_item_active(u"360"_ustr, nValue == 360);
+    mxControl->set_item_active(u"720"_ustr, nValue == 720);
 
-    mxControl->set_item_active("clockwise", bDirection);
-    mxControl->set_item_active("counterclock", !bDirection);
+    mxControl->set_item_active(u"clockwise"_ustr, bDirection);
+    mxControl->set_item_active(u"counterclock"_ustr, !bDirection);
 }
 
 IMPL_LINK_NOARG(SdRotationPropertyBox, implModifyHdl, weld::MetricSpinButton&, void)
@@ -606,8 +606,8 @@ private:
 SdScalePropertyBox::SdScalePropertyBox(weld::Label* pLabel, weld::Container* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl)
     : SdPropertySubControl(pParent)
     , maModifyHdl( rModifyHdl )
-    , mxMetric(mxBuilder->weld_metric_spin_button("scale", FieldUnit::PERCENT))
-    , mxControl(mxBuilder->weld_menu_button("scalemenu"))
+    , mxMetric(mxBuilder->weld_metric_spin_button(u"scale"_ustr, FieldUnit::PERCENT))
+    , mxControl(mxBuilder->weld_menu_button(u"scalemenu"_ustr))
 {
     mxControl->connect_selected(LINK(this, SdScalePropertyBox, implMenuSelectHdl));
     mxControl->set_help_id(HID_SD_CUSTOMANIMATIONPANE_SCALEPROPERTYBOX);
@@ -625,14 +625,14 @@ void SdScalePropertyBox::updateMenu()
 {
     auto nValue = mxMetric->get_value(FieldUnit::PERCENT);
 
-    mxControl->set_item_active("25scale", nValue == 25);
-    mxControl->set_item_active("50scale", nValue == 50);
-    mxControl->set_item_active("150scale", nValue == 150);
-    mxControl->set_item_active("400scale", nValue == 400);
+    mxControl->set_item_active(u"25scale"_ustr, nValue == 25);
+    mxControl->set_item_active(u"50scale"_ustr, nValue == 50);
+    mxControl->set_item_active(u"150scale"_ustr, nValue == 150);
+    mxControl->set_item_active(u"400scale"_ustr, nValue == 400);
 
-    mxControl->set_item_active("hori", mnDirection == 1);
-    mxControl->set_item_active("vert", mnDirection == 2);
-    mxControl->set_item_active("both", mnDirection == 3);
+    mxControl->set_item_active(u"hori"_ustr, mnDirection == 1);
+    mxControl->set_item_active(u"vert"_ustr, mnDirection == 2);
+    mxControl->set_item_active(u"both"_ustr, mnDirection == 3);
 }
 
 IMPL_LINK_NOARG(SdScalePropertyBox, implModifyHdl, weld::MetricSpinButton&, void)
@@ -789,8 +789,8 @@ private:
 SdFontStylePropertyBox::SdFontStylePropertyBox(weld::Label* pLabel, weld::Container* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl )
     : SdPropertySubControl(pParent)
     , maModifyHdl( rModifyHdl )
-    , mxEdit(mxBuilder->weld_entry("entry"))
-    , mxControl(mxBuilder->weld_menu_button("entrymenu"))
+    , mxEdit(mxBuilder->weld_entry(u"entry"_ustr))
+    , mxControl(mxBuilder->weld_menu_button(u"entrymenu"_ustr))
 {
     mxEdit->set_text(SdResId(STR_CUSTOMANIMATION_SAMPLE));
     mxEdit->set_help_id(HID_SD_CUSTOMANIMATIONPANE_FONTSTYLEPROPERTYBOX);
@@ -807,9 +807,9 @@ SdFontStylePropertyBox::SdFontStylePropertyBox(weld::Label* pLabel, weld::Contai
 void SdFontStylePropertyBox::update()
 {
     // update menu
-    mxControl->set_item_active("bold", mfFontWeight == awt::FontWeight::BOLD);
-    mxControl->set_item_active("italic", meFontSlant == awt::FontSlant_ITALIC);
-    mxControl->set_item_active("underline", mnFontUnderline != awt::FontUnderline::NONE );
+    mxControl->set_item_active(u"bold"_ustr, mfFontWeight == awt::FontWeight::BOLD);
+    mxControl->set_item_active(u"italic"_ustr, meFontSlant == awt::FontSlant_ITALIC);
+    mxControl->set_item_active(u"underline"_ustr, mnFontUnderline != awt::FontUnderline::NONE );
 
     // update sample edit
     vcl::Font aFont(mxEdit->get_font());
@@ -915,23 +915,23 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage(weld::Container* pPar
     : mbHasText(false)
     , mpSet(pSet)
     , mpDialog(pDialog)
-    , mxBuilder(Application::CreateBuilder(pParent, "modules/simpress/ui/customanimationeffecttab.ui"))
-    , mxContainer(mxBuilder->weld_container("EffectTab"))
-    , mxSettings(mxBuilder->weld_widget("settings"))
-    , mxFTProperty1(mxBuilder->weld_label("prop_label1"))
-    , mxPlaceholderBox(mxBuilder->weld_container("placeholder"))
-    , mxCBSmoothStart(mxBuilder->weld_check_button("smooth_start"))
-    , mxCBSmoothEnd(mxBuilder->weld_check_button("smooth_end"))
-    , mxFTSound(mxBuilder->weld_label("sound_label"))
-    , mxLBSound(mxBuilder->weld_combo_box("sound_list"))
-    , mxPBSoundPreview(mxBuilder->weld_button("sound_preview"))
-    , mxLBAfterEffect(mxBuilder->weld_combo_box("aeffect_list"))
-    , mxFTDimColor(mxBuilder->weld_label("dim_color_label"))
-    , mxCLBDimColor(new ColorListBox(mxBuilder->weld_menu_button("dim_color_list"), [pDialog]{ return pDialog; }))
-    , mxFTTextAnim(mxBuilder->weld_label("text_animation_label"))
-    , mxLBTextAnim(mxBuilder->weld_combo_box("text_animation_list"))
-    , mxMFTextDelay(mxBuilder->weld_metric_spin_button("text_delay", FieldUnit::PERCENT))
-    , mxFTTextDelay(mxBuilder->weld_label("text_delay_label"))
+    , mxBuilder(Application::CreateBuilder(pParent, u"modules/simpress/ui/customanimationeffecttab.ui"_ustr))
+    , mxContainer(mxBuilder->weld_container(u"EffectTab"_ustr))
+    , mxSettings(mxBuilder->weld_widget(u"settings"_ustr))
+    , mxFTProperty1(mxBuilder->weld_label(u"prop_label1"_ustr))
+    , mxPlaceholderBox(mxBuilder->weld_container(u"placeholder"_ustr))
+    , mxCBSmoothStart(mxBuilder->weld_check_button(u"smooth_start"_ustr))
+    , mxCBSmoothEnd(mxBuilder->weld_check_button(u"smooth_end"_ustr))
+    , mxFTSound(mxBuilder->weld_label(u"sound_label"_ustr))
+    , mxLBSound(mxBuilder->weld_combo_box(u"sound_list"_ustr))
+    , mxPBSoundPreview(mxBuilder->weld_button(u"sound_preview"_ustr))
+    , mxLBAfterEffect(mxBuilder->weld_combo_box(u"aeffect_list"_ustr))
+    , mxFTDimColor(mxBuilder->weld_label(u"dim_color_label"_ustr))
+    , mxCLBDimColor(new ColorListBox(mxBuilder->weld_menu_button(u"dim_color_list"_ustr), [pDialog]{ return pDialog; }))
+    , mxFTTextAnim(mxBuilder->weld_label(u"text_animation_label"_ustr))
+    , mxLBTextAnim(mxBuilder->weld_combo_box(u"text_animation_list"_ustr))
+    , mxMFTextDelay(mxBuilder->weld_metric_spin_button(u"text_delay"_ustr, FieldUnit::PERCENT))
+    , mxFTTextDelay(mxBuilder->weld_label(u"text_delay_label"_ustr))
 {
     mxCLBDimColor->SelectEntry(COL_BLACK);
 
@@ -1405,7 +1405,7 @@ void CustomAnimationEffectTabPage::onSoundPreview()
     if( nPos >= 2 ) try
     {
         const OUString aSoundURL( maSoundList[ nPos-2 ] );
-        mxPlayer.set( avmedia::MediaWindow::createPlayer( aSoundURL, "" ), uno::UNO_SET_THROW );
+        mxPlayer.set( avmedia::MediaWindow::createPlayer( aSoundURL, u""_ustr ), uno::UNO_SET_THROW );
         mxPlayer->start();
     }
     catch( uno::Exception& )
@@ -1444,18 +1444,18 @@ private:
 
 CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(weld::Container* pParent, const STLPropertySet* pSet)
     : mpSet(pSet)
-    , mxBuilder(Application::CreateBuilder(pParent, "modules/simpress/ui/customanimationtimingtab.ui"))
-    , mxContainer(mxBuilder->weld_container("TimingTab"))
-    , mxLBStart(mxBuilder->weld_combo_box("start_list"))
-    , mxMFStartDelay(mxBuilder->weld_metric_spin_button("delay_value", FieldUnit::SECOND))
-    , mxFTDuration(mxBuilder->weld_label("duration_label"))
-    , mxCBXDuration(mxBuilder->weld_metric_spin_button("anim_duration", FieldUnit::SECOND))
-    , mxFTRepeat(mxBuilder->weld_label("repeat_label"))
-    , mxCBRepeat(mxBuilder->weld_combo_box("repeat_list"))
-    , mxCBXRewind(mxBuilder->weld_check_button("rewind"))
-    , mxRBClickSequence(mxBuilder->weld_radio_button("rb_click_sequence"))
-    , mxRBInteractive(mxBuilder->weld_radio_button("rb_interactive"))
-    , mxLBTrigger(mxBuilder->weld_combo_box("trigger_list"))
+    , mxBuilder(Application::CreateBuilder(pParent, u"modules/simpress/ui/customanimationtimingtab.ui"_ustr))
+    , mxContainer(mxBuilder->weld_container(u"TimingTab"_ustr))
+    , mxLBStart(mxBuilder->weld_combo_box(u"start_list"_ustr))
+    , mxMFStartDelay(mxBuilder->weld_metric_spin_button(u"delay_value"_ustr, FieldUnit::SECOND))
+    , mxFTDuration(mxBuilder->weld_label(u"duration_label"_ustr))
+    , mxCBXDuration(mxBuilder->weld_metric_spin_button(u"anim_duration"_ustr, FieldUnit::SECOND))
+    , mxFTRepeat(mxBuilder->weld_label(u"repeat_label"_ustr))
+    , mxCBRepeat(mxBuilder->weld_combo_box(u"repeat_list"_ustr))
+    , mxCBXRewind(mxBuilder->weld_check_button(u"rewind"_ustr))
+    , mxRBClickSequence(mxBuilder->weld_radio_button(u"rb_click_sequence"_ustr))
+    , mxRBInteractive(mxBuilder->weld_radio_button(u"rb_interactive"_ustr))
+    , mxLBTrigger(mxBuilder->weld_combo_box(u"trigger_list"_ustr))
 {
     mxLBTrigger->set_size_request(mxLBTrigger->get_approximate_digit_width() * 20, -1);
 
@@ -1788,13 +1788,13 @@ private:
 CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(weld::Container* pParent, const STLPropertySet* pSet)
     : mpSet(pSet)
     , mbHasVisibleShapes(true)
-    , mxBuilder(Application::CreateBuilder(pParent, "modules/simpress/ui/customanimationtexttab.ui"))
-    , mxContainer(mxBuilder->weld_container("TextAnimationTab"))
-    , mxLBGroupText(mxBuilder->weld_combo_box("group_text_list"))
-    , mxCBXGroupAuto(mxBuilder->weld_check_button("auto_after"))
-    , mxMFGroupAuto(mxBuilder->weld_metric_spin_button("auto_after_value",FieldUnit::SECOND))
-    , mxCBXAnimateForm(mxBuilder->weld_check_button("animate_shape"))
-    , mxCBXReverse(mxBuilder->weld_check_button("reverse_order"))
+    , mxBuilder(Application::CreateBuilder(pParent, u"modules/simpress/ui/customanimationtexttab.ui"_ustr))
+    , mxContainer(mxBuilder->weld_container(u"TextAnimationTab"_ustr))
+    , mxLBGroupText(mxBuilder->weld_combo_box(u"group_text_list"_ustr))
+    , mxCBXGroupAuto(mxBuilder->weld_check_button(u"auto_after"_ustr))
+    , mxMFGroupAuto(mxBuilder->weld_metric_spin_button(u"auto_after_value"_ustr,FieldUnit::SECOND))
+    , mxCBXAnimateForm(mxBuilder->weld_check_button(u"animate_shape"_ustr))
+    , mxCBXReverse(mxBuilder->weld_check_button(u"reverse_order"_ustr))
 {
     mxLBGroupText->connect_changed(LINK(this, CustomAnimationTextAnimTabPage, implSelectHdl));
 
@@ -1943,11 +1943,11 @@ IMPL_LINK_NOARG(CustomAnimationTextAnimTabPage, implSelectHdl, weld::ComboBox&, 
 }
 
 CustomAnimationDialog::CustomAnimationDialog(weld::Window* pParent, std::unique_ptr<STLPropertySet> pSet, const OUString& rPage)
-    : GenericDialogController(pParent, "modules/simpress/ui/customanimationproperties.ui", "CustomAnimationProperties")
+    : GenericDialogController(pParent, u"modules/simpress/ui/customanimationproperties.ui"_ustr, u"CustomAnimationProperties"_ustr)
     , mxSet(std::move(pSet))
-    , mxTabControl(m_xBuilder->weld_notebook("tabcontrol"))
-    , mxDurationTabPage(new CustomAnimationDurationTabPage(mxTabControl->get_page("timing"), mxSet.get()))
-    , mxEffectTabPage(new CustomAnimationEffectTabPage(mxTabControl->get_page("effect"), m_xDialog.get(), mxSet.get()))
+    , mxTabControl(m_xBuilder->weld_notebook(u"tabcontrol"_ustr))
+    , mxDurationTabPage(new CustomAnimationDurationTabPage(mxTabControl->get_page(u"timing"_ustr), mxSet.get()))
+    , mxEffectTabPage(new CustomAnimationEffectTabPage(mxTabControl->get_page(u"effect"_ustr), m_xDialog.get(), mxSet.get()))
 {
     bool bHasText = false;
     if( mxSet->getPropertyState( nHandleHasText ) != STLPropertyState::Ambiguous )
@@ -1955,11 +1955,11 @@ CustomAnimationDialog::CustomAnimationDialog(weld::Window* pParent, std::unique_
 
     if( bHasText )
     {
-        mxTextAnimTabPage.reset(new CustomAnimationTextAnimTabPage(mxTabControl->get_page("textanim"), mxSet.get()));
+        mxTextAnimTabPage.reset(new CustomAnimationTextAnimTabPage(mxTabControl->get_page(u"textanim"_ustr), mxSet.get()));
     }
     else
     {
-        mxTabControl->remove_page("textanim");
+        mxTabControl->remove_page(u"textanim"_ustr);
     }
 
     if (!rPage.isEmpty())

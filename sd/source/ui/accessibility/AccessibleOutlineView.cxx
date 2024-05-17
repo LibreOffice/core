@@ -160,7 +160,7 @@ void SAL_CALL AccessibleOutlineView::removeAccessibleEventListener( const uno::R
 OUString SAL_CALL
     AccessibleOutlineView::getImplementationName()
 {
-    return "AccessibleOutlineView";
+    return u"AccessibleOutlineView"_ustr;
 }
 
 //=====  XEventListener  ======================================================

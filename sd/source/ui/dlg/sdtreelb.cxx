@@ -143,7 +143,7 @@ SdPageObjsTLV::SdPageObjsTransferable* SdPageObjsTLV::SdPageObjsTransferable::ge
 SotClipboardFormatId SdPageObjsTLV::SdPageObjsTransferable::GetListBoxDropFormatId()
 {
     if (mnListBoxDropFormatId == static_cast<SotClipboardFormatId>(SAL_MAX_UINT32))
-        mnListBoxDropFormatId = SotExchange::RegisterFormatMimeType("application/x-openoffice-treelistbox-moveonly;windows_formatname=\"SV_LBOX_DD_FORMAT_MOVE\"");
+        mnListBoxDropFormatId = SotExchange::RegisterFormatMimeType(u"application/x-openoffice-treelistbox-moveonly;windows_formatname=\"SV_LBOX_DD_FORMAT_MOVE\""_ustr);
     return mnListBoxDropFormatId;
 }
 
@@ -933,7 +933,7 @@ OUString SdPageObjsTLV::GetObjectName(
                 OUString sShapeType;
                 const SdrCustomShapeGeometryItem& rGeometryItem
                     = pObject->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
-                const uno::Any* pAny = rGeometryItem.GetPropertyValueByName("Type");
+                const uno::Any* pAny = rGeometryItem.GetPropertyValueByName(u"Type"_ustr);
                 if (pAny && (*pAny >>= sShapeType))
                     sObjName = SdResId(STR_NAVIGATOR_CUSTOMSHAPE) + u": " + sShapeType;
             }
@@ -1206,7 +1206,7 @@ void SdPageObjsTLV::AddShapeList (
     else if (pShape != nullptr)
         aIcon = BMP_GROUP;
 
-    OUString aUserData("1");
+    OUString aUserData(u"1"_ustr);
     if (pShape != nullptr)
         aUserData = weld::toId(pShape);
 

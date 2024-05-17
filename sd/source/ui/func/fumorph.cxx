@@ -396,7 +396,7 @@ void FuMorph::ImpInsertPolygons(
         if ( bLineColor )
         {
             const basegfx::BColor aLineColor(basegfx::interpolate(aStartLineCol.getBColor(), aEndLineCol.getBColor(), fFactor));
-            aSet.Put( XLineColorItem( "", Color(aLineColor)));
+            aSet.Put( XLineColorItem( u""_ustr, Color(aLineColor)));
         }
         else if ( bIgnoreLine )
             aSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
@@ -405,7 +405,7 @@ void FuMorph::ImpInsertPolygons(
         if ( bFillColor )
         {
             const basegfx::BColor aFillColor(basegfx::interpolate(aStartFillCol.getBColor(), aEndFillCol.getBColor(), fFactor));
-            aSet.Put( XFillColorItem( "", Color(aFillColor)));
+            aSet.Put( XFillColorItem( u""_ustr, Color(aFillColor)));
         }
         else if ( bIgnoreFill )
             aSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );

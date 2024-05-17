@@ -529,7 +529,7 @@ Any SdUnoDrawView::getDrawViewMode() const
 // XServiceInfo
 OUString SAL_CALL SdUnoDrawView::getImplementationName(  )
 {
-    return "com.sun.star.comp.sd.SdUnoDrawView" ;
+    return u"com.sun.star.comp.sd.SdUnoDrawView"_ustr ;
 }
 
 sal_Bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName )
@@ -539,7 +539,7 @@ sal_Bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL SdUnoDrawView::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.drawing.DrawingDocumentDrawView" };
+    return { u"com.sun.star.drawing.DrawingDocumentDrawView"_ustr };
 }
 
 } // end of namespace sd

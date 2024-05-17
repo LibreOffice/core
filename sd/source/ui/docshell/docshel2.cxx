@@ -355,7 +355,7 @@ bool DrawDocShell::IsNewPageNameValid( OUString & rInOutPageName, bool bResetStr
         else
         {
             // check for upper/lower case roman numbering
-            OUString sReserved("cdilmvx");
+            OUString sReserved(u"cdilmvx"_ustr);
 
             // skip all following characters contained in one reserved class
             if (sReserved.indexOf(sRemainder[0]) == -1)

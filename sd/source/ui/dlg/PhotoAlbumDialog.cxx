@@ -38,22 +38,22 @@ namespace sd
 {
 
 SdPhotoAlbumDialog::SdPhotoAlbumDialog(weld::Window* pWindow, SdDrawDocument* pActDoc)
-    : GenericDialogController(pWindow, "modules/simpress/ui/photoalbum.ui", "PhotoAlbumCreatorDialog")
+    : GenericDialogController(pWindow, u"modules/simpress/ui/photoalbum.ui"_ustr, u"PhotoAlbumCreatorDialog"_ustr)
     , m_pDoc(pActDoc)
     , m_aImg(m_xDialog.get())
-    , m_xCancelBtn(m_xBuilder->weld_button("cancel"))
-    , m_xCreateBtn(m_xBuilder->weld_button("ok"))
-    , m_xAddBtn(m_xBuilder->weld_button("add_btn"))
-    , m_xUpBtn(m_xBuilder->weld_button("up_btn"))
-    , m_xDownBtn(m_xBuilder->weld_button("down_btn"))
-    , m_xRemoveBtn(m_xBuilder->weld_button("rem_btn"))
-    , m_xImagesLst(m_xBuilder->weld_tree_view("images_tree"))
-    , m_xImg(new weld::CustomWeld(*m_xBuilder, "preview_img", m_aImg))
-    , m_xInsTypeCombo(m_xBuilder->weld_combo_box("opt_combo"))
-    , m_xASRCheck(m_xBuilder->weld_check_button("asr_check"))
-    , m_xASRCheckCrop(m_xBuilder->weld_check_button("asr_check_crop"))
-    , m_xCapCheck(m_xBuilder->weld_check_button("cap_check"))
-    , m_xInsertAsLinkCheck(m_xBuilder->weld_check_button("insert_as_link_check"))
+    , m_xCancelBtn(m_xBuilder->weld_button(u"cancel"_ustr))
+    , m_xCreateBtn(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xAddBtn(m_xBuilder->weld_button(u"add_btn"_ustr))
+    , m_xUpBtn(m_xBuilder->weld_button(u"up_btn"_ustr))
+    , m_xDownBtn(m_xBuilder->weld_button(u"down_btn"_ustr))
+    , m_xRemoveBtn(m_xBuilder->weld_button(u"rem_btn"_ustr))
+    , m_xImagesLst(m_xBuilder->weld_tree_view(u"images_tree"_ustr))
+    , m_xImg(new weld::CustomWeld(*m_xBuilder, u"preview_img"_ustr, m_aImg))
+    , m_xInsTypeCombo(m_xBuilder->weld_combo_box(u"opt_combo"_ustr))
+    , m_xASRCheck(m_xBuilder->weld_check_button(u"asr_check"_ustr))
+    , m_xASRCheckCrop(m_xBuilder->weld_check_button(u"asr_check_crop"_ustr))
+    , m_xCapCheck(m_xBuilder->weld_check_button(u"cap_check"_ustr))
+    , m_xInsertAsLinkCheck(m_xBuilder->weld_check_button(u"insert_as_link_check"_ustr))
 {
     m_xCancelBtn->connect_clicked(LINK(this, SdPhotoAlbumDialog, CancelHdl));
     m_xCreateBtn->connect_clicked(LINK(this, SdPhotoAlbumDialog, CreateHdl));
@@ -125,18 +125,18 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                 ::awt::Size aPicSize(aGraphic.GetSizePixel().Width()*100, aGraphic.GetSizePixel().Height()*100);
 
                 Reference< drawing::XShape > xShape(
-                    xShapeFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"),
+                    xShapeFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr),
                     uno::UNO_QUERY);
 
                 Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
+                xProps->setPropertyValue(u"Graphic"_ustr, ::uno::Any(xGraphic));
 
                 ::awt::Size aPageSize;
 
                 xSlideProps->getPropertyValue(
-                    "Width") >>= aPageSize.Width;
+                    u"Width"_ustr) >>= aPageSize.Width;
                 xSlideProps->getPropertyValue(
-                    "Height") >>= aPageSize.Height;
+                    u"Height"_ustr) >>= aPageSize.Height;
 
                 ::awt::Point aPicPos;
 
@@ -178,9 +178,9 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                 ::awt::Size aPageSize;
 
                 xSlideProps->getPropertyValue(
-                    "Width") >>= aPageSize.Width;
+                    u"Width"_ustr) >>= aPageSize.Width;
                 xSlideProps->getPropertyValue(
-                    "Height") >>= aPageSize.Height;
+                    u"Height"_ustr) >>= aPageSize.Height;
 
                 // grab the left one
                 OUString sUrl1 = m_xImagesLst->get_id(i);
@@ -198,11 +198,11 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     ::awt::Size aPicSize(aGraphic.GetSizePixel().Width()*100, aGraphic.GetSizePixel().Height()*100);
 
                     Reference< drawing::XShape > xShape(
-                        xShapeFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"),
+                        xShapeFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr),
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
+                    xProps->setPropertyValue(u"Graphic"_ustr, ::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -242,11 +242,11 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     ::awt::Size aPicSize(aGraphic.GetSizePixel().Width()*100, aGraphic.GetSizePixel().Height()*100);
 
                     Reference< drawing::XShape > xShape(
-                        xShapeFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"),
+                        xShapeFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr),
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
+                    xProps->setPropertyValue(u"Graphic"_ustr, ::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -290,9 +290,9 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                 ::awt::Size aPageSize;
 
                 xSlideProps->getPropertyValue(
-                    "Width") >>= aPageSize.Width;
+                    u"Width"_ustr) >>= aPageSize.Width;
                 xSlideProps->getPropertyValue(
-                    "Height") >>= aPageSize.Height;
+                    u"Height"_ustr) >>= aPageSize.Height;
 
                 // grab the upper left one
                 OUString sUrl1 = m_xImagesLst->get_id(i);
@@ -317,11 +317,11 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     ::awt::Size aPicSize(aGraphic.GetSizePixel().Width()*100, aGraphic.GetSizePixel().Height()*100);
 
                     Reference< drawing::XShape > xShape(
-                        xShapeFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"),
+                        xShapeFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr),
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
+                    xProps->setPropertyValue(u"Graphic"_ustr, ::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -360,11 +360,11 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     ::awt::Size aPicSize(aGraphic.GetSizePixel().Width()*100, aGraphic.GetSizePixel().Height()*100);
 
                     Reference< drawing::XShape > xShape(
-                        xShapeFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"),
+                        xShapeFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr),
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
+                    xProps->setPropertyValue(u"Graphic"_ustr, ::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -403,11 +403,11 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     ::awt::Size aPicSize(aGraphic.GetSizePixel().Width()*100, aGraphic.GetSizePixel().Height()*100);
 
                     Reference< drawing::XShape > xShape(
-                        xShapeFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"),
+                        xShapeFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr),
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
+                    xProps->setPropertyValue(u"Graphic"_ustr, ::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -446,11 +446,11 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
                     ::awt::Size aPicSize(aGraphic.GetSizePixel().Width()*100, aGraphic.GetSizePixel().Height()*100);
 
                     Reference< drawing::XShape > xShape(
-                        xShapeFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"),
+                        xShapeFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr),
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
+                    xProps->setPropertyValue(u"Graphic"_ustr, ::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -486,7 +486,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
         {
             std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                           VclMessageType::Info, VclButtonsType::Ok,
-                                                          "Function is not implemented!"));
+                                                          u"Function is not implemented!"_ustr));
             xInfoBox->run();
         }
         m_xDialog->response(RET_OK);
@@ -507,7 +507,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl, weld::Button&, void)
         {
             // Store full path, show filename only. Use INetURLObject to display spaces in filename correctly
             INetURLObject aUrl(rFile);
-            m_xImagesLst->append(aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE), aUrl.GetLastName(INetURLObject::DecodeMechanism::WithCharset), "");
+            m_xImagesLst->append(aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE), aUrl.GetLastName(INetURLObject::DecodeMechanism::WithCharset), u""_ustr);
         }
     }
     EnableDisableButtons();
@@ -743,7 +743,7 @@ void SdPhotoAlbumDialog::createCaption(const awt::Size& aPageSize )
         SfxItemSet aSet(m_pDoc->GetItemPool() );
 
         aSet.Put( XFillStyleItem(drawing::FillStyle_SOLID) );
-        aSet.Put( XFillColorItem( "", COL_BLACK ) );
+        aSet.Put( XFillColorItem( u""_ustr, COL_BLACK ) );
         aSet.Put( XFillTransparenceItem( 20 ) );
         pSdrObj->SetMergedItemSetAndBroadcast(aSet);
     }
@@ -755,7 +755,7 @@ Reference< graphic::XGraphic> SdPhotoAlbumDialog::createXGraphicFromUrl(const OU
 {
     // The same as above, except this returns an XGraphic from the image URL
     ::comphelper::NamedValueCollection aMediaProperties;
-    aMediaProperties.put( "URL", sUrl );
+    aMediaProperties.put( u"URL"_ustr, sUrl );
     Reference< graphic::XGraphic> xGraphic =
         xProvider->queryGraphic( aMediaProperties.getPropertyValues() );
     return xGraphic;

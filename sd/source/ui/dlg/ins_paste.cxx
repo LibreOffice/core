@@ -20,9 +20,10 @@
 #include <ins_paste.hxx>
 
 SdInsertPasteDlg::SdInsertPasteDlg(weld::Window* pWindow)
-    : GenericDialogController(pWindow, "modules/simpress/ui/insertslides.ui", "InsertSlidesDialog")
-    , m_xRbBefore(m_xBuilder->weld_radio_button("before"))
-    , m_xRbAfter(m_xBuilder->weld_radio_button("after"))
+    : GenericDialogController(pWindow, u"modules/simpress/ui/insertslides.ui"_ustr,
+                              u"InsertSlidesDialog"_ustr)
+    , m_xRbBefore(m_xBuilder->weld_radio_button(u"before"_ustr))
+    , m_xRbAfter(m_xBuilder->weld_radio_button(u"after"_ustr))
 {
     m_xRbAfter->set_active(true);
 }

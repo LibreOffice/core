@@ -48,7 +48,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg(SfxObjectShell const * pDocSh,
                                 SfxStyleSheetBase& rStyleBase,
                                 PresentationObjects _ePO,
                                 SfxStyleSheetBasePool* pSSPool)
-    : SfxTabDialogController(pParent, "modules/sdraw/ui/drawprtldialog.ui", "DrawPRTLDialog")
+    : SfxTabDialogController(pParent, u"modules/sdraw/ui/drawprtldialog.ui"_ustr, u"DrawPRTLDialog"_ustr)
     , mpDocShell(pDocSh)
     , ePO(_ePO)
     , aInputSet(*rStyleBase.GetItemSet().GetPool(), svl::Items<SID_PARAM_NUM_PRESET, SID_PARAM_CUR_NUM_LEVEL>)
@@ -124,43 +124,43 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg(SfxObjectShell const * pDocSh,
 
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
-    AddTabPage( "RID_SVXPAGE_LINE", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_LINE ), nullptr );
-    AddTabPage( "RID_SVXPAGE_AREA", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), nullptr );
-    AddTabPage( "RID_SVXPAGE_SHADOW", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_SHADOW ), nullptr );
-    AddTabPage( "RID_SVXPAGE_TRANSPARENCE", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), nullptr );
-    AddTabPage( "RID_SVXPAGE_CHAR_NAME", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), nullptr );
-    AddTabPage( "RID_SVXPAGE_CHAR_EFFECTS", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), nullptr );
-    AddTabPage( "RID_SVXPAGE_STD_PARAGRAPH", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_STD_PARAGRAPH ), nullptr );
-    AddTabPage( "RID_SVXPAGE_TEXTATTR", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TEXTATTR ), nullptr );
-    AddTabPage( "RID_SVXPAGE_PICK_BULLET", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PICK_BULLET ), nullptr );
-    AddTabPage( "RID_SVXPAGE_PICK_SINGLE_NUM", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PICK_SINGLE_NUM ), nullptr );
-    AddTabPage( "RID_SVXPAGE_PICK_BMP", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PICK_BMP ), nullptr );
-    AddTabPage( "RID_SVXPAGE_NUM_OPTIONS", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUM_OPTIONS ), nullptr );
-    AddTabPage( "RID_SVXPAGE_TABULATOR", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TABULATOR ), nullptr );
-    AddTabPage( "RID_SVXPAGE_PARA_ASIAN", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PARA_ASIAN ), nullptr );
-    AddTabPage( "RID_SVXPAGE_ALIGN_PARAGRAPH", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGN_PARAGRAPH ), nullptr );
-    AddTabPage( "RID_SVXPAGE_BKG", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr);
+    AddTabPage( u"RID_SVXPAGE_LINE"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_LINE ), nullptr );
+    AddTabPage( u"RID_SVXPAGE_AREA"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), nullptr );
+    AddTabPage( u"RID_SVXPAGE_SHADOW"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_SHADOW ), nullptr );
+    AddTabPage( u"RID_SVXPAGE_TRANSPARENCE"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), nullptr );
+    AddTabPage( u"RID_SVXPAGE_CHAR_NAME"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), nullptr );
+    AddTabPage( u"RID_SVXPAGE_CHAR_EFFECTS"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), nullptr );
+    AddTabPage( u"RID_SVXPAGE_STD_PARAGRAPH"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_STD_PARAGRAPH ), nullptr );
+    AddTabPage( u"RID_SVXPAGE_TEXTATTR"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TEXTATTR ), nullptr );
+    AddTabPage( u"RID_SVXPAGE_PICK_BULLET"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PICK_BULLET ), nullptr );
+    AddTabPage( u"RID_SVXPAGE_PICK_SINGLE_NUM"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PICK_SINGLE_NUM ), nullptr );
+    AddTabPage( u"RID_SVXPAGE_PICK_BMP"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PICK_BMP ), nullptr );
+    AddTabPage( u"RID_SVXPAGE_NUM_OPTIONS"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUM_OPTIONS ), nullptr );
+    AddTabPage( u"RID_SVXPAGE_TABULATOR"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TABULATOR ), nullptr );
+    AddTabPage( u"RID_SVXPAGE_PARA_ASIAN"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PARA_ASIAN ), nullptr );
+    AddTabPage( u"RID_SVXPAGE_ALIGN_PARAGRAPH"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGN_PARAGRAPH ), nullptr );
+    AddTabPage( u"RID_SVXPAGE_BKG"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr);
 
     if (!SvtCJKOptions::IsAsianTypographyEnabled() || bBackground)
-        RemoveTabPage( "RID_SVXPAGE_PARA_ASIAN" );
+        RemoveTabPage( u"RID_SVXPAGE_PARA_ASIAN"_ustr );
 
     if (bBackground)
     {
-        RemoveTabPage( "RID_SVXPAGE_LINE");
+        RemoveTabPage( u"RID_SVXPAGE_LINE"_ustr);
 
-        RemoveTabPage( "RID_SVXPAGE_SHADOW");
-        RemoveTabPage( "RID_SVXPAGE_TRANSPARENCE");
-        RemoveTabPage( "RID_SVXPAGE_CHAR_NAME");
-        RemoveTabPage( "RID_SVXPAGE_CHAR_EFFECTS");
-        RemoveTabPage( "RID_SVXPAGE_STD_PARAGRAPH");
-        RemoveTabPage( "RID_SVXPAGE_TEXTATTR");
-        RemoveTabPage( "RID_SVXPAGE_PICK_BULLET");
-        RemoveTabPage( "RID_SVXPAGE_PICK_SINGLE_NUM");
-        RemoveTabPage( "RID_SVXPAGE_PICK_BMP");
-        RemoveTabPage( "RID_SVXPAGE_NUM_OPTIONS");
-        RemoveTabPage( "RID_SVXPAGE_TABULATOR");
-        RemoveTabPage( "RID_SVXPAGE_ALIGN_PARAGRAPH");
-        RemoveTabPage( "RID_SVXPAGE_BKG" );
+        RemoveTabPage( u"RID_SVXPAGE_SHADOW"_ustr);
+        RemoveTabPage( u"RID_SVXPAGE_TRANSPARENCE"_ustr);
+        RemoveTabPage( u"RID_SVXPAGE_CHAR_NAME"_ustr);
+        RemoveTabPage( u"RID_SVXPAGE_CHAR_EFFECTS"_ustr);
+        RemoveTabPage( u"RID_SVXPAGE_STD_PARAGRAPH"_ustr);
+        RemoveTabPage( u"RID_SVXPAGE_TEXTATTR"_ustr);
+        RemoveTabPage( u"RID_SVXPAGE_PICK_BULLET"_ustr);
+        RemoveTabPage( u"RID_SVXPAGE_PICK_SINGLE_NUM"_ustr);
+        RemoveTabPage( u"RID_SVXPAGE_PICK_BMP"_ustr);
+        RemoveTabPage( u"RID_SVXPAGE_NUM_OPTIONS"_ustr);
+        RemoveTabPage( u"RID_SVXPAGE_TABULATOR"_ustr);
+        RemoveTabPage( u"RID_SVXPAGE_ALIGN_PARAGRAPH"_ustr);
+        RemoveTabPage( u"RID_SVXPAGE_BKG"_ustr );
     }
 
     // set title and add corresponding pages to dialog

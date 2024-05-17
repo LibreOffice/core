@@ -1095,7 +1095,7 @@ namespace o3tl {
 
 static void clearEventsInAnimationInfo( SdAnimationInfo* pInfo )
 {
-    pInfo->SetBookmark( "" );
+    pInfo->SetBookmark( u""_ustr );
     pInfo->mbSecondSoundOn = false;
     pInfo->mbSecondPlayFull = false;
     pInfo->meClickAction = presentation::ClickAction_NONE;
@@ -1466,7 +1466,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
             pProperties->State = beans::PropertyState_DIRECT_VALUE;
             pProperties++;
 
-            aAny <<= OUString( "StarOffice" );
+            aAny <<= u"StarOffice"_ustr;
             pProperties->Name = gaStrLibrary;
             pProperties->Handle = -1;
             pProperties->Value = aAny;
@@ -1600,7 +1600,7 @@ sal_Bool SAL_CALL SdUnoEventsAccess::hasElements(  )
 // XServiceInfo
 OUString SAL_CALL SdUnoEventsAccess::getImplementationName(  )
 {
-    return "SdUnoEventsAccess";
+    return u"SdUnoEventsAccess"_ustr;
 }
 
 sal_Bool SAL_CALL SdUnoEventsAccess::supportsService( const OUString& ServiceName )

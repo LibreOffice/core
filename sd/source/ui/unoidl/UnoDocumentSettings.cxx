@@ -158,65 +158,65 @@ enum SdDocumentSettingsPropertyHandles
     {
         static PropertyMapEntry const aImpressSettingsInfoMap[] =
         {
-            { OUString("IsPrintDrawing"),        HANDLE_PRINTDRAWING,        cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
-            { OUString("IsPrintNotes"),          HANDLE_PRINTNOTES,          cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
-            { OUString("IsPrintHandout"),        HANDLE_PRINTHANDOUT,        cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
-            { OUString("IsPrintOutline"),        HANDLE_PRINTOUTLINE,        cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
-            { OUString("SlidesPerHandout"),      HANDLE_SLIDESPERHANDOUT,    ::cppu::UnoType<sal_Int16>::get(),    0,  MID_PRINTER },
-            { OUString("HandoutsHorizontal"),    HANDLE_HANDOUTHORIZONTAL,   cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
+            { u"IsPrintDrawing"_ustr,        HANDLE_PRINTDRAWING,        cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
+            { u"IsPrintNotes"_ustr,          HANDLE_PRINTNOTES,          cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
+            { u"IsPrintHandout"_ustr,        HANDLE_PRINTHANDOUT,        cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
+            { u"IsPrintOutline"_ustr,        HANDLE_PRINTOUTLINE,        cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
+            { u"SlidesPerHandout"_ustr,      HANDLE_SLIDESPERHANDOUT,    ::cppu::UnoType<sal_Int16>::get(),    0,  MID_PRINTER },
+            { u"HandoutsHorizontal"_ustr,    HANDLE_HANDOUTHORIZONTAL,   cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
         };
 
         static PropertyMapEntry const aDrawSettingsInfoMap[] =
         {
-            { OUString("MeasureUnit"),           HANDLE_MEASUREUNIT,         ::cppu::UnoType<sal_Int16>::get(),    0,  0 },
-            { OUString("ScaleNumerator"),        HANDLE_SCALE_NUM,           ::cppu::UnoType<sal_Int32>::get(),    0,  0 },
-            { OUString("ScaleDenominator"),      HANDLE_SCALE_DOM,           ::cppu::UnoType<sal_Int32>::get(),    0,  0 },
+            { u"MeasureUnit"_ustr,           HANDLE_MEASUREUNIT,         ::cppu::UnoType<sal_Int16>::get(),    0,  0 },
+            { u"ScaleNumerator"_ustr,        HANDLE_SCALE_NUM,           ::cppu::UnoType<sal_Int32>::get(),    0,  0 },
+            { u"ScaleDenominator"_ustr,      HANDLE_SCALE_DOM,           ::cppu::UnoType<sal_Int32>::get(),    0,  0 },
         };
 
         static PropertyMapEntry const aCommonSettingsInfoMap[] =
         {
-            { OUString("DefaultTabStop"),        HANDLE_TABSTOP,             ::cppu::UnoType<sal_Int32>::get(),    0,  0 },
-            { OUString("PrinterName"),           HANDLE_PRINTERNAME,         ::cppu::UnoType<OUString>::get(),     0,  0 },
-            { OUString("PrinterSetup"),          HANDLE_PRINTERJOB,          cppu::UnoType<uno::Sequence < sal_Int8 >>::get(),  0, MID_PRINTER },
-            { OUString("PrinterPaperFromSetup"), HANDLE_PRINTERPAPERSIZE,    cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
+            { u"DefaultTabStop"_ustr,        HANDLE_TABSTOP,             ::cppu::UnoType<sal_Int32>::get(),    0,  0 },
+            { u"PrinterName"_ustr,           HANDLE_PRINTERNAME,         ::cppu::UnoType<OUString>::get(),     0,  0 },
+            { u"PrinterSetup"_ustr,          HANDLE_PRINTERJOB,          cppu::UnoType<uno::Sequence < sal_Int8 >>::get(),  0, MID_PRINTER },
+            { u"PrinterPaperFromSetup"_ustr, HANDLE_PRINTERPAPERSIZE,    cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
 
-            { OUString("IsPrintPageName"),       HANDLE_PRINTPAGENAME,       cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
-            { OUString("IsPrintDate"),           HANDLE_PRINTDATE,           cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
-            { OUString("IsPrintTime"),           HANDLE_PRINTTIME,           cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
-            { OUString("IsPrintHiddenPages"),    HANDLE_PRINTHIDDENPAGES,    cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
-            { OUString("IsPrintFitPage"),        HANDLE_PRINTFITPAGE,        cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
-            { OUString("IsPrintTilePage"),       HANDLE_PRINTTILEPAGE,       cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
-            { OUString("IsPrintBooklet"),        HANDLE_PRINTBOOKLET,        cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
-            { OUString("IsPrintBookletFront"),   HANDLE_PRINTBOOKLETFRONT,   cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
-            { OUString("IsPrintBookletBack"),    HANDLE_PRINTBOOKLETBACK,    cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
-            { OUString("PrintQuality"),          HANDLE_PRINTQUALITY,        ::cppu::UnoType<sal_Int32>::get(),    0,  MID_PRINTER },
-            { OUString("ColorTableURL"),         HANDLE_COLORTABLEURL,       ::cppu::UnoType<OUString>::get(),     0,  0 },
-            { OUString("DashTableURL"),          HANDLE_DASHTABLEURL,        ::cppu::UnoType<OUString>::get(),     0,  0 },
-            { OUString("LineEndTableURL"),       HANDLE_LINEENDTABLEURL,     ::cppu::UnoType<OUString>::get(),     0,  0 },
-            { OUString("HatchTableURL"),         HANDLE_HATCHTABLEURL,       ::cppu::UnoType<OUString>::get(),     0,  0 },
-            { OUString("GradientTableURL"),      HANDLE_GRADIENTTABLEURL,    ::cppu::UnoType<OUString>::get(),     0,  0 },
-            { OUString("BitmapTableURL"),        HANDLE_BITMAPTABLEURL,      ::cppu::UnoType<OUString>::get(),     0,  0 },
+            { u"IsPrintPageName"_ustr,       HANDLE_PRINTPAGENAME,       cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
+            { u"IsPrintDate"_ustr,           HANDLE_PRINTDATE,           cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
+            { u"IsPrintTime"_ustr,           HANDLE_PRINTTIME,           cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
+            { u"IsPrintHiddenPages"_ustr,    HANDLE_PRINTHIDDENPAGES,    cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
+            { u"IsPrintFitPage"_ustr,        HANDLE_PRINTFITPAGE,        cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
+            { u"IsPrintTilePage"_ustr,       HANDLE_PRINTTILEPAGE,       cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
+            { u"IsPrintBooklet"_ustr,        HANDLE_PRINTBOOKLET,        cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
+            { u"IsPrintBookletFront"_ustr,   HANDLE_PRINTBOOKLETFRONT,   cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
+            { u"IsPrintBookletBack"_ustr,    HANDLE_PRINTBOOKLETBACK,    cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
+            { u"PrintQuality"_ustr,          HANDLE_PRINTQUALITY,        ::cppu::UnoType<sal_Int32>::get(),    0,  MID_PRINTER },
+            { u"ColorTableURL"_ustr,         HANDLE_COLORTABLEURL,       ::cppu::UnoType<OUString>::get(),     0,  0 },
+            { u"DashTableURL"_ustr,          HANDLE_DASHTABLEURL,        ::cppu::UnoType<OUString>::get(),     0,  0 },
+            { u"LineEndTableURL"_ustr,       HANDLE_LINEENDTABLEURL,     ::cppu::UnoType<OUString>::get(),     0,  0 },
+            { u"HatchTableURL"_ustr,         HANDLE_HATCHTABLEURL,       ::cppu::UnoType<OUString>::get(),     0,  0 },
+            { u"GradientTableURL"_ustr,      HANDLE_GRADIENTTABLEURL,    ::cppu::UnoType<OUString>::get(),     0,  0 },
+            { u"BitmapTableURL"_ustr,        HANDLE_BITMAPTABLEURL,      ::cppu::UnoType<OUString>::get(),     0,  0 },
 
-            { OUString("ForbiddenCharacters"),   HANDLE_FORBIDDENCHARS,      cppu::UnoType<XForbiddenCharacters>::get(),    0, 0 },
-            { OUString("ApplyUserData"),         HANDLE_APPLYUSERDATA,       cppu::UnoType<bool>::get(),                0,  0 },
-            { OUString("SaveThumbnail"),         HANDLE_SAVETHUMBNAIL,       cppu::UnoType<bool>::get(),                0,  0 },
+            { u"ForbiddenCharacters"_ustr,   HANDLE_FORBIDDENCHARS,      cppu::UnoType<XForbiddenCharacters>::get(),    0, 0 },
+            { u"ApplyUserData"_ustr,         HANDLE_APPLYUSERDATA,       cppu::UnoType<bool>::get(),                0,  0 },
+            { u"SaveThumbnail"_ustr,         HANDLE_SAVETHUMBNAIL,       cppu::UnoType<bool>::get(),                0,  0 },
 
-            { OUString("PageNumberFormat"),      HANDLE_PAGENUMFMT,          ::cppu::UnoType<sal_Int32>::get(),    0,  0 },
-            { OUString("ParagraphSummation"),    HANDLE_PARAGRAPHSUMMATION,  cppu::UnoType<bool>::get(),                0,  0 },
-            { OUString("CharacterCompressionType"),HANDLE_CHARCOMPRESS,      ::cppu::UnoType<sal_Int16>::get(),          0,  0 },
-            { OUString("IsKernAsianPunctuation"),HANDLE_ASIANPUNCT,          cppu::UnoType<bool>::get(),                0,  0 },
-            { OUString("UpdateFromTemplate"),    HANDLE_UPDATEFROMTEMPLATE,  cppu::UnoType<bool>::get(),                0,  0 },
-            { OUString("PrinterIndependentLayout"),HANDLE_PRINTER_INDEPENDENT_LAYOUT,::cppu::UnoType<sal_Int16>::get(), 0,  0 },
+            { u"PageNumberFormat"_ustr,      HANDLE_PAGENUMFMT,          ::cppu::UnoType<sal_Int32>::get(),    0,  0 },
+            { u"ParagraphSummation"_ustr,    HANDLE_PARAGRAPHSUMMATION,  cppu::UnoType<bool>::get(),                0,  0 },
+            { u"CharacterCompressionType"_ustr,HANDLE_CHARCOMPRESS,      ::cppu::UnoType<sal_Int16>::get(),          0,  0 },
+            { u"IsKernAsianPunctuation"_ustr,HANDLE_ASIANPUNCT,          cppu::UnoType<bool>::get(),                0,  0 },
+            { u"UpdateFromTemplate"_ustr,    HANDLE_UPDATEFROMTEMPLATE,  cppu::UnoType<bool>::get(),                0,  0 },
+            { u"PrinterIndependentLayout"_ustr,HANDLE_PRINTER_INDEPENDENT_LAYOUT,::cppu::UnoType<sal_Int16>::get(), 0,  0 },
             // --> #i33095#
-            { OUString("LoadReadonly"),          HANDLE_LOAD_READONLY,       cppu::UnoType<bool>::get(),                0,  0 },
-            { OUString("ModifyPasswordInfo"),    HANDLE_MODIFY_PASSWD,       cppu::UnoType<uno::Sequence < beans::PropertyValue >>::get(),  0,  0 },
-            { OUString("SaveVersionOnClose"),    HANDLE_SAVE_VERSION,        cppu::UnoType<bool>::get(),                0,  0 },
-            { OUString("EmbedFonts"),              HANDLE_EMBED_FONTS,                cppu::UnoType<bool>::get(), 0,  0 },
-            { OUString("EmbedOnlyUsedFonts"),      HANDLE_EMBED_USED_FONTS,           cppu::UnoType<bool>::get(), 0,  0 },
-            { OUString("EmbedLatinScriptFonts"),   HANDLE_EMBED_LATIN_SCRIPT_FONTS,   cppu::UnoType<bool>::get(), 0,  0 },
-            { OUString("EmbedAsianScriptFonts"),   HANDLE_EMBED_ASIAN_SCRIPT_FONTS,   cppu::UnoType<bool>::get(), 0,  0 },
-            { OUString("EmbedComplexScriptFonts"), HANDLE_EMBED_COMPLEX_SCRIPT_FONTS, cppu::UnoType<bool>::get(), 0,  0 },
-            { OUString("ImagePreferredDPI"), HANDLE_IMAGE_PREFERRED_DPI, cppu::UnoType<sal_Int32>::get(), 0,  0 },
+            { u"LoadReadonly"_ustr,          HANDLE_LOAD_READONLY,       cppu::UnoType<bool>::get(),                0,  0 },
+            { u"ModifyPasswordInfo"_ustr,    HANDLE_MODIFY_PASSWD,       cppu::UnoType<uno::Sequence < beans::PropertyValue >>::get(),  0,  0 },
+            { u"SaveVersionOnClose"_ustr,    HANDLE_SAVE_VERSION,        cppu::UnoType<bool>::get(),                0,  0 },
+            { u"EmbedFonts"_ustr,              HANDLE_EMBED_FONTS,                cppu::UnoType<bool>::get(), 0,  0 },
+            { u"EmbedOnlyUsedFonts"_ustr,      HANDLE_EMBED_USED_FONTS,           cppu::UnoType<bool>::get(), 0,  0 },
+            { u"EmbedLatinScriptFonts"_ustr,   HANDLE_EMBED_LATIN_SCRIPT_FONTS,   cppu::UnoType<bool>::get(), 0,  0 },
+            { u"EmbedAsianScriptFonts"_ustr,   HANDLE_EMBED_ASIAN_SCRIPT_FONTS,   cppu::UnoType<bool>::get(), 0,  0 },
+            { u"EmbedComplexScriptFonts"_ustr, HANDLE_EMBED_COMPLEX_SCRIPT_FONTS, cppu::UnoType<bool>::get(), 0,  0 },
+            { u"ImagePreferredDPI"_ustr, HANDLE_IMAGE_PREFERRED_DPI, cppu::UnoType<sal_Int32>::get(), 0,  0 },
         };
 
         rtl::Reference<PropertySetInfo> xInfo = new PropertySetInfo( aCommonSettingsInfoMap );
@@ -272,7 +272,7 @@ void DocumentSettings::AssignURL( XPropertyListType t, const Any* pValue,
     if( !( *pValue >>= aURL ) )
         return;
 
-    if( LoadList( t, aURL, ""/*TODO?*/, uno::Reference< embed::XStorage >() ) )
+    if( LoadList( t, aURL, u""_ustr/*TODO?*/, uno::Reference< embed::XStorage >() ) )
         *pOk = *pChanged = true;
 }
 
@@ -354,7 +354,7 @@ uno::Sequence<beans::PropertyValue>
 
     try {
         // create Settings/ sub storage.
-        uno::Reference< embed::XStorage > xSubStorage = xStorage->openStorageElement( "Settings" ,
+        uno::Reference< embed::XStorage > xSubStorage = xStorage->openStorageElement( u"Settings"_ustr ,
             embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
         if( !xSubStorage.is() )
             return aRet;
@@ -412,7 +412,7 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
     ::sd::DrawDocShell* pDocSh = mxModel->GetDocShell();
     if( nullptr == pDoc || nullptr == pDocSh )
     {
-        throw RuntimeException("Document or Shell missing",
+        throw RuntimeException(u"Document or Shell missing"_ustr,
                 static_cast<OWeakObject *>(this));
     }
 
@@ -947,13 +947,13 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
                 uno::Sequence< beans::PropertyValue > aInfo;
                 if ( !( *pValues >>= aInfo ) )
                     throw lang::IllegalArgumentException(
-                        "Value of type Sequence<PropertyValue> expected!",
+                        u"Value of type Sequence<PropertyValue> expected!"_ustr,
                         uno::Reference< uno::XInterface >(),
                         2 );
 
                 if ( !pDocSh->SetModifyPasswordInfo( aInfo ) )
                     throw beans::PropertyVetoException(
-                        "The hash is not allowed to be changed now!" );
+                        u"The hash is not allowed to be changed now!"_ustr );
 
                 bOk = true
 ;
@@ -1089,7 +1089,7 @@ DocumentSettings::_getPropertyValues(
     ::sd::DrawDocShell* pDocSh = mxModel->GetDocShell();
     if( nullptr == pDoc || nullptr == pDocSh )
     {
-        throw RuntimeException("Document or Shell missing",
+        throw RuntimeException(u"Document or Shell missing"_ustr,
                 static_cast<OWeakObject *>(this));
     }
 
@@ -1412,7 +1412,7 @@ void SAL_CALL DocumentSettings::firePropertiesChangeEvent( const Sequence< OUStr
 // XServiceInfo
 OUString SAL_CALL DocumentSettings::getImplementationName(  )
 {
-    return "com.sun.star.comp.Draw.DocumentSettings";
+    return u"com.sun.star.comp.Draw.DocumentSettings"_ustr;
 }
 
 sal_Bool SAL_CALL DocumentSettings::supportsService( const OUString& ServiceName )
@@ -1422,8 +1422,8 @@ sal_Bool SAL_CALL DocumentSettings::supportsService( const OUString& ServiceName
 
 Sequence< OUString > SAL_CALL DocumentSettings::getSupportedServiceNames(  )
 {
-    return {  "com.sun.star.document.Settings" ,
-              mxModel->IsImpressDocument()?OUString("com.sun.star.presentation.DocumentSettings"):OUString("com.sun.star.drawing.DocumentSettings") };
+    return {  u"com.sun.star.document.Settings"_ustr ,
+              mxModel->IsImpressDocument()?u"com.sun.star.presentation.DocumentSettings"_ustr:u"com.sun.star.drawing.DocumentSettings"_ustr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -56,7 +56,7 @@ PresenterHelper::~PresenterHelper()
 void SAL_CALL PresenterHelper::initialize (const Sequence<Any>&) {}
 
 OUString PresenterHelper::getImplementationName() {
-    return "com.sun.star.comp.Draw.PresenterHelper";
+    return u"com.sun.star.comp.Draw.PresenterHelper"_ustr;
 }
 
 sal_Bool PresenterHelper::supportsService(OUString const & ServiceName) {
@@ -64,7 +64,7 @@ sal_Bool PresenterHelper::supportsService(OUString const & ServiceName) {
 }
 
 css::uno::Sequence<OUString> PresenterHelper::getSupportedServiceNames() {
-    return {"com.sun.star.drawing.PresenterHelper"};
+    return {u"com.sun.star.drawing.PresenterHelper"_ustr};
 }
 
 //----- XPaneHelper ----------------------------------------------------
@@ -127,7 +127,7 @@ Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createSharedCanvas (
         || ! rxSharedWindow.is()
         || ! rxWindow.is())
     {
-        throw RuntimeException("illegal argument", static_cast<XWeak*>(this));
+        throw RuntimeException(u"illegal argument"_ustr, static_cast<XWeak*>(this));
     }
 
     if (rxWindow == rxSharedWindow)
@@ -165,7 +165,7 @@ Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createCanvas (
         xFactory->createInstanceWithArguments(
             !rsOptionalCanvasServiceName.isEmpty()
                 ? rsOptionalCanvasServiceName
-                : OUString("com.sun.star.rendering.Canvas.VCL"),
+                : u"com.sun.star.rendering.Canvas.VCL"_ustr,
             aArg),
         UNO_QUERY);
 }

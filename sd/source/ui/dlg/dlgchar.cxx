@@ -32,16 +32,16 @@
  */
 SdCharDlg::SdCharDlg(weld::Window* pParent, const SfxItemSet* pAttr,
                     const SfxObjectShell* pDocShell)
-    : SfxTabDialogController(pParent, "modules/sdraw/ui/drawchardialog.ui",
-                             "DrawCharDialog", pAttr)
+    : SfxTabDialogController(pParent, u"modules/sdraw/ui/drawchardialog.ui"_ustr,
+                             u"DrawCharDialog"_ustr, pAttr)
     , rDocShell(*pDocShell)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
-    AddTabPage("RID_SVXPAGE_CHAR_NAME", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), nullptr);
-    AddTabPage("RID_SVXPAGE_CHAR_EFFECTS", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), nullptr);
-    AddTabPage("RID_SVXPAGE_CHAR_POSITION", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_POSITION), nullptr);
-    AddTabPage("RID_SVXPAGE_BKG", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
+    AddTabPage(u"RID_SVXPAGE_CHAR_NAME"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), nullptr);
+    AddTabPage(u"RID_SVXPAGE_CHAR_EFFECTS"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), nullptr);
+    AddTabPage(u"RID_SVXPAGE_CHAR_POSITION"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_POSITION), nullptr);
+    AddTabPage(u"RID_SVXPAGE_BKG"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
 }
 
 void SdCharDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)

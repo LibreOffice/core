@@ -120,7 +120,7 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
             }
             else if (nSId == SID_NAVIGATOR_OBJECT)
             {
-                OUString aBookmarkStr("#");
+                OUString aBookmarkStr(u"#"_ustr);
                 const SfxItemSet* pArgs = rReq.GetArgs();
                 OUString aTarget = pArgs->Get(SID_NAVIGATOR_OBJECT).GetValue();
                 aBookmarkStr += aTarget;

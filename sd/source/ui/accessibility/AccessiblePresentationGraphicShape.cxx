@@ -44,7 +44,7 @@ AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape() {}
 
 OUString SAL_CALL AccessiblePresentationGraphicShape::getImplementationName()
 {
-    return "AccessiblePresentationGraphicShape";
+    return u"AccessiblePresentationGraphicShape"_ustr;
 }
 
 /// Set this object's name if is different to the current name.

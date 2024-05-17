@@ -540,7 +540,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 
             if( !mpDrawView->InsertData( aDataHelper, aPos, nDnDAction, false ) )
             {
-                INetBookmark    aINetBookmark( "", "" );
+                INetBookmark    aINetBookmark( u""_ustr, u""_ustr );
 
                 if( ( aDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) &&
                       aDataHelper.GetINetBookmark( SotClipboardFormatId::NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
@@ -549,7 +549,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) &&
                       aDataHelper.GetINetBookmark( SotClipboardFormatId::UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
                 {
-                    InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), "" );
+                    InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), u""_ustr );
                 }
             }
         }
@@ -919,19 +919,19 @@ void DrawViewShell::ShowSnapLineContextMenu(weld::Window* pParent, const ::tools
                                             SdrPageView& rPageView, const sal_uInt16 nSnapLineIndex)
 {
     const SdrHelpLine& rHelpLine (rPageView.GetHelpLines()[nSnapLineIndex]);
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/simpress/ui/snapmenu.ui"));
-    std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, u"modules/simpress/ui/snapmenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu(u"menu"_ustr));
 
     if (rHelpLine.GetKind() == SdrHelpLineKind::Point)
     {
         xMenu->append(OUString::number(SID_SET_SNAPITEM), SdResId(STR_POPUP_EDIT_SNAPPOINT));
-        xMenu->append_separator("separator");
+        xMenu->append_separator(u"separator"_ustr);
         xMenu->append(OUString::number(SID_DELETE_SNAPITEM), SdResId(STR_POPUP_DELETE_SNAPPOINT));
     }
     else
     {
         xMenu->append(OUString::number(SID_SET_SNAPITEM), SdResId(STR_POPUP_EDIT_SNAPLINE));
-        xMenu->append_separator("separator");
+        xMenu->append_separator(u"separator"_ustr);
         xMenu->append(OUString::number(SID_DELETE_SNAPITEM), SdResId(STR_POPUP_DELETE_SNAPLINE));
     }
 

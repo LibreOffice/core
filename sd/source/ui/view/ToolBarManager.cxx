@@ -552,7 +552,7 @@ void ToolBarManager::Implementation::SetValid (bool bValid)
         try
         {
             Reference<beans::XPropertySet> xFrameProperties (xFrame, UNO_QUERY_THROW);
-            Any aValue (xFrameProperties->getPropertyValue("LayoutManager"));
+            Any aValue (xFrameProperties->getPropertyValue(u"LayoutManager"_ustr));
             aValue >>= mxLayouter;
             // tdf#119997 if mpSynchronousLayouterLock was created before mxLayouter was
             // set then update it now that its available

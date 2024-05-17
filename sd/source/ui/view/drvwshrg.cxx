@@ -58,7 +58,7 @@ SFX_IMPL_INTERFACE(DrawViewShell, SfxShell)
 
 void DrawViewShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("drawtext");
+    GetStaticInterface()->RegisterPopupMenu(u"drawtext"_ustr);
 
     GetStaticInterface()->RegisterChildWindow(SID_NAVIGATOR, true);
 
@@ -86,7 +86,7 @@ SFX_IMPL_INTERFACE(GraphicViewShell, SfxShell)
 
 void GraphicViewShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("drawtext");
+    GetStaticInterface()->RegisterPopupMenu(u"drawtext"_ustr);
 
     GetStaticInterface()->RegisterChildWindow(SID_NAVIGATOR, true);
 

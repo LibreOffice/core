@@ -63,7 +63,7 @@ sal_Bool SAL_CALL SdUnoSlideView::select (const Any& aSelection)
         {
             try
             {
-                Any aNumber = xSet->getPropertyValue("Number");
+                Any aNumber = xSet->getPropertyValue(u"Number"_ustr);
                 sal_Int32 nPageNumber = 0;
                 aNumber >>= nPageNumber;
                 nPageNumber -=1; // Transform 1-based page numbers to 0-based ones.
@@ -118,7 +118,7 @@ void SAL_CALL SdUnoSlideView::setCurrentPage (
     if (xProperties.is())
     {
         sal_uInt16 nPageNumber(0);
-        if (xProperties->getPropertyValue("Number") >>= nPageNumber)
+        if (xProperties->getPropertyValue(u"Number"_ustr) >>= nPageNumber)
         {
             mrSlideSorter.GetController().GetCurrentSlideManager()->SwitchCurrentSlide(
                 nPageNumber-1);
@@ -153,7 +153,7 @@ Any SAL_CALL SdUnoSlideView::getFastPropertyValue (
 // XServiceInfo
 OUString SAL_CALL SdUnoSlideView::getImplementationName(  )
 {
-    return "com.sun.star.comp.sd.SdUnoSlideView";
+    return u"com.sun.star.comp.sd.SdUnoSlideView"_ustr;
 }
 
 sal_Bool SAL_CALL SdUnoSlideView::supportsService( const OUString& ServiceName )
@@ -163,7 +163,7 @@ sal_Bool SAL_CALL SdUnoSlideView::supportsService( const OUString& ServiceName )
 
 Sequence< OUString > SAL_CALL SdUnoSlideView::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.presentation.SlidesView" };
+    return { u"com.sun.star.presentation.SlidesView"_ustr };
 }
 
 } // end of namespace sd

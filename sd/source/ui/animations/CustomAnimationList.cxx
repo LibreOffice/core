@@ -578,10 +578,10 @@ IMPL_LINK(CustomAnimationList, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     switch (nKeyCode)
     {
         case KEY_DELETE:
-            mpController->onContextMenu("remove");
+            mpController->onContextMenu(u"remove"_ustr);
             return true;
         case KEY_INSERT:
-            mpController->onContextMenu("create");
+            mpController->onContextMenu(u"create"_ustr);
             return true;
         case KEY_SPACE:
         {
@@ -1173,8 +1173,8 @@ IMPL_LINK(CustomAnimationList, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (!mxTreeView->get_selected(nullptr))
         return false;
 
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(mxTreeView.get(), "modules/simpress/ui/effectmenu.ui"));
-    std::unique_ptr<weld::Menu> xMenu = xBuilder->weld_menu("menu");
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(mxTreeView.get(), u"modules/simpress/ui/effectmenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xMenu = xBuilder->weld_menu(u"menu"_ustr);
 
     sal_Int16 nNodeType = -1;
     sal_Int16 nEntries = 0;
@@ -1203,11 +1203,11 @@ IMPL_LINK(CustomAnimationList, CommandHdl, const CommandEvent&, rCEvt, bool)
         return false;
     });
 
-    xMenu->set_active("onclick", nNodeType == EffectNodeType::ON_CLICK);
-    xMenu->set_active("withprev", nNodeType == EffectNodeType::WITH_PREVIOUS);
-    xMenu->set_active("afterprev", nNodeType == EffectNodeType::AFTER_PREVIOUS);
-    xMenu->set_sensitive("options", nEntries == 1);
-    xMenu->set_sensitive("timing", nEntries == 1);
+    xMenu->set_active(u"onclick"_ustr, nNodeType == EffectNodeType::ON_CLICK);
+    xMenu->set_active(u"withprev"_ustr, nNodeType == EffectNodeType::WITH_PREVIOUS);
+    xMenu->set_active(u"afterprev"_ustr, nNodeType == EffectNodeType::AFTER_PREVIOUS);
+    xMenu->set_sensitive(u"options"_ustr, nEntries == 1);
+    xMenu->set_sensitive(u"timing"_ustr, nEntries == 1);
 
     OUString sCommand = xMenu->popup_at_rect(mxTreeView.get(), ::tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
     if (!sCommand.isEmpty())

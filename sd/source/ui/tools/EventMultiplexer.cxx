@@ -434,7 +434,7 @@ void SAL_CALL EventMultiplexer::Implementation::propertyChange (
     if (m_bDisposed)
     {
         throw lang::DisposedException (
-            "SlideSorterController object has already been disposed",
+            u"SlideSorterController object has already been disposed"_ustr,
             static_cast<uno::XWeak*>(this));
     }
 

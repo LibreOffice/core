@@ -76,7 +76,7 @@ IPRemoteServer::~IPRemoteServer()
 void IPRemoteServer::execute()
 {
     SAL_INFO("sdremote", "IPRemoteServer::execute called");
-    osl::SocketAddr aAddr( "0.0.0.0", PORT );
+    osl::SocketAddr aAddr( u"0.0.0.0"_ustr, PORT );
     if ( !mSocket.bind( aAddr ) )
     {
         SAL_WARN( "sdremote", "bind failed" << mSocket.getErrorAsString() );
@@ -157,7 +157,7 @@ void IPRemoteServer::handleAcceptedConnection( BufferedStreamSocket *pSocket )
         if ( rName == pClient->mName )
         {
             Reference<XNameAccess> xSetItem( xConfig->getByName(rName), UNO_QUERY );
-            Any axPin(xSetItem->getByName("PIN"));
+            Any axPin(xSetItem->getByName(u"PIN"_ustr));
             OUString sPin;
             axPin >>= sPin;
 
@@ -280,7 +280,7 @@ bool IPRemoteServer::connectClient(const std::shared_ptr<ClientInfo>& pClient, s
             else
                 xConfig->insertByName( apClient->mName, Any( xChild ) );
             aValue <<= apClient->mPin;
-            xChild->replaceByName("PIN", aValue);
+            xChild->replaceByName(u"PIN"_ustr, aValue);
             aChanges->commit();
         }
 

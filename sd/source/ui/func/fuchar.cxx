@@ -69,7 +69,7 @@ void FuChar::DoExecute( SfxRequest& rReq )
         ScopedVclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSdTabCharDialog(mpViewShell->GetFrameWeld(), &aNewAttr, mpDoc->GetDocSh() ) );
         if (rReq.GetSlot() == SID_CHAR_DLG_EFFECT)
         {
-            pDlg->SetCurPageId("RID_SVXPAGE_CHAR_EFFECTS");
+            pDlg->SetCurPageId(u"RID_SVXPAGE_CHAR_EFFECTS"_ustr);
         }
 
         sal_uInt16 nResult = pDlg->Execute();

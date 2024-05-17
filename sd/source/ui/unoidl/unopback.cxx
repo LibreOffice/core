@@ -163,7 +163,7 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet )
 // XServiceInfo
 OUString SAL_CALL SdUnoPageBackground::getImplementationName()
 {
-    return "SdUnoPageBackground";
+    return u"SdUnoPageBackground"_ustr;
 }
 
 sal_Bool SAL_CALL SdUnoPageBackground::supportsService( const OUString& ServiceName )

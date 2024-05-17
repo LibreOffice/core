@@ -38,16 +38,16 @@
 
 SdPresLayoutDlg::SdPresLayoutDlg(::sd::DrawDocShell* pDocShell,
     weld::Window* pWindow, const SfxItemSet& rInAttrs)
-    : GenericDialogController(pWindow, "modules/simpress/ui/slidedesigndialog.ui", "SlideDesignDialog")
+    : GenericDialogController(pWindow, u"modules/simpress/ui/slidedesigndialog.ui"_ustr, u"SlideDesignDialog"_ustr)
     , mpDocSh(pDocShell)
     , mrOutAttrs(rInAttrs)
     , maStrNone(SdResId(STR_NULL))
-    , m_xCbxMasterPage(m_xBuilder->weld_check_button("masterpage"))
-    , m_xCbxCheckMasters(m_xBuilder->weld_check_button("checkmasters"))
-    , m_xBtnLoad(m_xBuilder->weld_button("load"))
-    , m_xVS(new ValueSet(m_xBuilder->weld_scrolled_window("selectwin", true)))
-    , m_xVSWin(new weld::CustomWeld(*m_xBuilder, "select", *m_xVS))
-    , m_xLabel(m_xBuilder->weld_label("label1"))
+    , m_xCbxMasterPage(m_xBuilder->weld_check_button(u"masterpage"_ustr))
+    , m_xCbxCheckMasters(m_xBuilder->weld_check_button(u"checkmasters"_ustr))
+    , m_xBtnLoad(m_xBuilder->weld_button(u"load"_ustr))
+    , m_xVS(new ValueSet(m_xBuilder->weld_scrolled_window(u"selectwin"_ustr, true)))
+    , m_xVSWin(new weld::CustomWeld(*m_xBuilder, u"select"_ustr, *m_xVS))
+    , m_xLabel(m_xBuilder->weld_label(u"label1"_ustr))
 {
     if (mpDocSh->GetDoc()->GetDocumentType() == DocumentType::Draw)
     {

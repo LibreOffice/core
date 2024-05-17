@@ -276,7 +276,7 @@ void TabControl::Command(const CommandEvent& rCEvt)
     if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
         SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
-        pDispatcher->ExecutePopup("pagetab");
+        pDispatcher->ExecutePopup(u"pagetab"_ustr);
     }
 }
 

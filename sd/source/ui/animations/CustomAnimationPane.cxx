@@ -118,32 +118,32 @@ void fillRepeatComboBox(weld::ComboBox& rBox)
 }
 
 CustomAnimationPane::CustomAnimationPane( weld::Widget* pParent, ViewShellBase& rBase )
-    : PanelLayout(pParent, "CustomAnimationsPanel", "modules/simpress/ui/customanimationspanel.ui")
+    : PanelLayout(pParent, u"CustomAnimationsPanel"_ustr, u"modules/simpress/ui/customanimationspanel.ui"_ustr)
     , mrBase(rBase)
     // load resources
-    , mxFTAnimation(m_xBuilder->weld_label("effectlabel"))
-    , mxCustomAnimationList(new CustomAnimationList(m_xBuilder->weld_tree_view("custom_animation_list"),
-                                                    m_xBuilder->weld_label("custom_animation_label"),
-                                                    m_xBuilder->weld_widget("custom_animation_label_parent")))
-    , mxPBAddEffect(m_xBuilder->weld_button("add_effect"))
-    , mxPBRemoveEffect(m_xBuilder->weld_button("remove_effect"))
-    , mxPBMoveUp(m_xBuilder->weld_button("move_up"))
-    , mxPBMoveDown(m_xBuilder->weld_button("move_down"))
-    , mxFTCategory(m_xBuilder->weld_label("categorylabel"))
-    , mxLBCategory(m_xBuilder->weld_combo_box("categorylb"))
-    , mxFTEffect(m_xBuilder->weld_label("effect_label"))
-    , mxLBAnimation(m_xBuilder->weld_tree_view("effect_list"))
-    , mxFTStart(m_xBuilder->weld_label("start_effect"))
-    , mxLBStart(m_xBuilder->weld_combo_box("start_effect_list"))
-    , mxFTProperty(m_xBuilder->weld_label("effect_property"))
-    , mxPlaceholderBox(m_xBuilder->weld_container("placeholder"))
-    , mxPBPropertyMore(m_xBuilder->weld_button("more_properties"))
-    , mxFTDuration(m_xBuilder->weld_label("effect_duration"))
-    , mxCBXDuration(m_xBuilder->weld_metric_spin_button("anim_duration", FieldUnit::SECOND))
-    , mxFTStartDelay(m_xBuilder->weld_label("delay_label"))
-    , mxMFStartDelay(m_xBuilder->weld_metric_spin_button("delay_value", FieldUnit::SECOND))
-    , mxCBAutoPreview(m_xBuilder->weld_check_button("auto_preview"))
-    , mxPBPlay(m_xBuilder->weld_button("play"))
+    , mxFTAnimation(m_xBuilder->weld_label(u"effectlabel"_ustr))
+    , mxCustomAnimationList(new CustomAnimationList(m_xBuilder->weld_tree_view(u"custom_animation_list"_ustr),
+                                                    m_xBuilder->weld_label(u"custom_animation_label"_ustr),
+                                                    m_xBuilder->weld_widget(u"custom_animation_label_parent"_ustr)))
+    , mxPBAddEffect(m_xBuilder->weld_button(u"add_effect"_ustr))
+    , mxPBRemoveEffect(m_xBuilder->weld_button(u"remove_effect"_ustr))
+    , mxPBMoveUp(m_xBuilder->weld_button(u"move_up"_ustr))
+    , mxPBMoveDown(m_xBuilder->weld_button(u"move_down"_ustr))
+    , mxFTCategory(m_xBuilder->weld_label(u"categorylabel"_ustr))
+    , mxLBCategory(m_xBuilder->weld_combo_box(u"categorylb"_ustr))
+    , mxFTEffect(m_xBuilder->weld_label(u"effect_label"_ustr))
+    , mxLBAnimation(m_xBuilder->weld_tree_view(u"effect_list"_ustr))
+    , mxFTStart(m_xBuilder->weld_label(u"start_effect"_ustr))
+    , mxLBStart(m_xBuilder->weld_combo_box(u"start_effect_list"_ustr))
+    , mxFTProperty(m_xBuilder->weld_label(u"effect_property"_ustr))
+    , mxPlaceholderBox(m_xBuilder->weld_container(u"placeholder"_ustr))
+    , mxPBPropertyMore(m_xBuilder->weld_button(u"more_properties"_ustr))
+    , mxFTDuration(m_xBuilder->weld_label(u"effect_duration"_ustr))
+    , mxCBXDuration(m_xBuilder->weld_metric_spin_button(u"anim_duration"_ustr, FieldUnit::SECOND))
+    , mxFTStartDelay(m_xBuilder->weld_label(u"delay_label"_ustr))
+    , mxMFStartDelay(m_xBuilder->weld_metric_spin_button(u"delay_value"_ustr, FieldUnit::SECOND))
+    , mxCBAutoPreview(m_xBuilder->weld_check_button(u"auto_preview"_ustr))
+    , mxPBPlay(m_xBuilder->weld_button(u"play"_ustr))
     , maIdle("sd idle treeview select")
     , mnLastSelectedAnimation(-1)
     , mnPropertyType(nPropertyTypeNone)
@@ -862,7 +862,7 @@ void CustomAnimationPane::onContextMenu(const OUString &rIdent)
     else if (rIdent == "options")
         showOptions();
     else if (rIdent == "timing")
-        showOptions("timing");
+        showOptions(u"timing"_ustr);
     else if (rIdent == "remove")
         onRemove();
     else if (rIdent == "create" && maViewSelection.hasValue())
@@ -907,7 +907,7 @@ static sal_Int32 calcMaxParaDepth( const Reference< XShape >& xTargetShape )
                 if( xParaSet.is() )
                 {
                     sal_Int32 nParaDepth = 0;
-                    xParaSet->getPropertyValue( "NumberingLevel" ) >>= nParaDepth;
+                    xParaSet->getPropertyValue( u"NumberingLevel"_ustr ) >>= nParaDepth;
 
                     if( nParaDepth > nMaxParaDepth )
                         nMaxParaDepth = nParaDepth;
@@ -1062,10 +1062,10 @@ static bool hasVisibleShape( const Reference< XShape >& xShape )
             Reference< XPropertySet > xSet( xShape, UNO_QUERY_THROW );
 
             FillStyle eFillStyle;
-            xSet->getPropertyValue( "FillStyle" ) >>= eFillStyle;
+            xSet->getPropertyValue( u"FillStyle"_ustr ) >>= eFillStyle;
 
             css::drawing::LineStyle eLineStyle;
-            xSet->getPropertyValue( "LineStyle" ) >>= eLineStyle;
+            xSet->getPropertyValue( u"LineStyle"_ustr ) >>= eLineStyle;
 
             return eFillStyle != FillStyle_NONE || eLineStyle != css::drawing::LineStyle_NONE;
         }
@@ -2473,7 +2473,7 @@ void CustomAnimationPane::preview( const Reference< XAnimationNode >& xAnimation
 {
     Reference< XParallelTimeContainer > xRoot = ParallelTimeContainer::create( ::comphelper::getProcessComponentContext() );
     Sequence< css::beans::NamedValue > aUserData
-        { { "node-type", css::uno::Any(css::presentation::EffectNodeType::TIMING_ROOT) } };
+        { { u"node-type"_ustr, css::uno::Any(css::presentation::EffectNodeType::TIMING_ROOT) } };
     xRoot->setUserData( aUserData );
     xRoot->appendChild( xAnimationNode );
 

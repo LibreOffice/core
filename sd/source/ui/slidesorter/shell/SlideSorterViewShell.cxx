@@ -130,7 +130,7 @@ SlideSorterViewShell::SlideSorterViewShell (
     : ViewShell (pParentWindow, rViewShellBase),
       mbIsArrangeGUIElementsPending(true)
 {
-    GetContentWindow()->set_id("slidesorter");
+    GetContentWindow()->set_id(u"slidesorter"_ustr);
     meShellType = ST_SLIDE_SORTER;
 
     if (pFrameViewArgument != nullptr)
@@ -139,7 +139,7 @@ SlideSorterViewShell::SlideSorterViewShell (
         mpFrameView = new FrameView(GetDoc());
     GetFrameView()->Connect();
 
-    SetName ("SlideSorterViewShell");
+    SetName (u"SlideSorterViewShell"_ustr);
 
     pParentWindow->SetStyle(pParentWindow->GetStyle() | WB_DIALOGCONTROL);
 }

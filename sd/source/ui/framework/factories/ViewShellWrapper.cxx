@@ -120,7 +120,7 @@ sal_Bool SAL_CALL ViewShellWrapper::select( const css::uno::Any& aSelection )
         {
             try
             {
-                Any aNumber = xSet->getPropertyValue("Number");
+                Any aNumber = xSet->getPropertyValue(u"Number"_ustr);
                 sal_Int32 nPageNumber = 0;
                 aNumber >>= nPageNumber;
                 nPageNumber -=1; // Transform 1-based page numbers to 0-based ones.

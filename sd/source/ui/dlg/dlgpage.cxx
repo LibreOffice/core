@@ -37,7 +37,8 @@
  */
 SdPageDlg::SdPageDlg(SfxObjectShell const* pDocSh, weld::Window* pParent, const SfxItemSet* pAttr,
                      bool bAreaPage, bool bIsImpressDoc)
-    : SfxTabDialogController(pParent, "modules/sdraw/ui/drawpagedialog.ui", "DrawPageDialog", pAttr)
+    : SfxTabDialogController(pParent, u"modules/sdraw/ui/drawpagedialog.ui"_ustr,
+                             u"DrawPageDialog"_ustr, pAttr)
     , mbIsImpressDoc(bIsImpressDoc)
 {
     SvxColorListItem const* pColorListItem = pDocSh->GetItem(SID_COLOR_TABLE);
@@ -54,21 +55,21 @@ SdPageDlg::SdPageDlg(SfxObjectShell const* pDocSh, weld::Window* pParent, const 
 
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
-    AddTabPage("RID_SVXPAGE_PAGE", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PAGE), nullptr);
-    AddTabPage("RID_SVXPAGE_AREA", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_AREA), nullptr);
-    AddTabPage("RID_SVXPAGE_TRANSPARENCE", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TRANSPARENCE),
-               nullptr);
+    AddTabPage(u"RID_SVXPAGE_PAGE"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PAGE), nullptr);
+    AddTabPage(u"RID_SVXPAGE_AREA"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_AREA), nullptr);
+    AddTabPage(u"RID_SVXPAGE_TRANSPARENCE"_ustr,
+               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TRANSPARENCE), nullptr);
 
     if (!bAreaPage) // I have to add the page before I remove it !
     {
-        RemoveTabPage("RID_SVXPAGE_AREA");
-        RemoveTabPage("RID_SVXPAGE_TRANSPARENCE");
+        RemoveTabPage(u"RID_SVXPAGE_AREA"_ustr);
+        RemoveTabPage(u"RID_SVXPAGE_TRANSPARENCE"_ustr);
     }
 
     if (mbIsImpressDoc)
     {
         set_title(SdResId(STR_SLIDE_SETUP_TITLE));
-        m_xTabCtrl->set_tab_label_text("RID_SVXPAGE_PAGE", SdResId(STR_SLIDE_NAME));
+        m_xTabCtrl->set_tab_label_text(u"RID_SVXPAGE_PAGE"_ustr, SdResId(STR_SLIDE_NAME));
     }
 }
 

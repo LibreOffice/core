@@ -176,7 +176,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                 lcl_AddFilter( aFilterVector, pFilter );
 
                 // get Powerpoint filter
-                pFilter = aMatch.GetFilter4Extension( ".ppt" );
+                pFilter = aMatch.GetFilter4Extension( u".ppt"_ustr );
                 lcl_AddFilter( aFilterVector, pFilter );
 
                 // Get other draw/impress filters
@@ -220,7 +220,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                 }
 
                 // end with "All files" as fallback
-                xFilterManager->appendFilter( SdResId( STR_ALL_FILES ), "*.*" );
+                xFilterManager->appendFilter( SdResId( STR_ALL_FILES ), u"*.*"_ustr );
             }
             catch (const IllegalArgumentException&)
             {
@@ -709,13 +709,13 @@ void FuInsertFile::GetSupportedFilterVector( ::std::vector< OUString >& rFilterV
 
     rFilterVector.clear();
 
-    if( ( pSearchFilter = rMatcher.GetFilter4Mime( "text/plain" )) != nullptr )
+    if( ( pSearchFilter = rMatcher.GetFilter4Mime( u"text/plain"_ustr )) != nullptr )
         rFilterVector.push_back( pSearchFilter->GetMimeType() );
 
-    if( ( pSearchFilter = rMatcher.GetFilter4Mime( "application/rtf" ) ) != nullptr )
+    if( ( pSearchFilter = rMatcher.GetFilter4Mime( u"application/rtf"_ustr ) ) != nullptr )
         rFilterVector.push_back( pSearchFilter->GetMimeType() );
 
-    if( ( pSearchFilter = rMatcher.GetFilter4Mime( "text/html" ) ) != nullptr )
+    if( ( pSearchFilter = rMatcher.GetFilter4Mime( u"text/html"_ustr ) ) != nullptr )
         rFilterVector.push_back( pSearchFilter->GetMimeType() );
 }
 

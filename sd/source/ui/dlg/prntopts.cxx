@@ -29,37 +29,37 @@
  *  dialog to adjust print options
  */
 SdPrintOptions::SdPrintOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "modules/simpress/ui/prntopts.ui", "prntopts", &rInAttrs)
+    : SfxTabPage(pPage, pController, u"modules/simpress/ui/prntopts.ui"_ustr, u"prntopts"_ustr, &rInAttrs)
     , m_bDrawMode(false)
-    , m_xFrmContent(m_xBuilder->weld_frame("contentframe"))
-    , m_xCbxDraw(m_xBuilder->weld_check_button("drawingcb"))
-    , m_xCbxNotes(m_xBuilder->weld_check_button("notecb"))
-    , m_xCbxHandout(m_xBuilder->weld_check_button("handoutcb"))
-    , m_xCbxOutline(m_xBuilder->weld_check_button("outlinecb"))
-    , m_xRbtColor(m_xBuilder->weld_radio_button("defaultrb"))
-    , m_xRbtGrayscale(m_xBuilder->weld_radio_button("grayscalerb"))
-    , m_xRbtBlackWhite(m_xBuilder->weld_radio_button("blackwhiterb"))
-    , m_xRbQualityImg(m_xBuilder->weld_widget("lockquality"))
-    , m_xCbxPagename(m_xBuilder->weld_check_button("pagenmcb"))
-    , m_xCbxPagenameImg(m_xBuilder->weld_widget("lockpagenmcb"))
-    , m_xCbxDate(m_xBuilder->weld_check_button("datecb"))
-    , m_xCbxDateImg(m_xBuilder->weld_widget("lockdatecb"))
-    , m_xCbxTime(m_xBuilder->weld_check_button("timecb"))
-    , m_xCbxTimeImg(m_xBuilder->weld_widget("locktimecb"))
-    , m_xCbxHiddenPages(m_xBuilder->weld_check_button("hiddenpgcb"))
-    , m_xCbxHiddenPagesImg(m_xBuilder->weld_widget("lockhiddenpgcb"))
-    , m_xRbtDefault(m_xBuilder->weld_radio_button("pagedefaultrb"))
-    , m_xRbtPagesize(m_xBuilder->weld_radio_button("fittopgrb"))
-    , m_xRbtPagetile(m_xBuilder->weld_radio_button("tilepgrb"))
-    , m_xRbtBooklet(m_xBuilder->weld_radio_button("brouchrb"))
-    , m_xGridPageOpt(m_xBuilder->weld_widget("pageoptions"))
-    , m_xRbtPageOptImg(m_xBuilder->weld_widget("lockpageoptions"))
-    , m_xCbxFront(m_xBuilder->weld_check_button("frontcb"))
-    , m_xCbxFrontImg(m_xBuilder->weld_widget("lockfrontcb"))
-    , m_xCbxBack(m_xBuilder->weld_check_button("backcb"))
-    , m_xCbxBackImg(m_xBuilder->weld_widget("lockbackcb"))
-    , m_xCbxPaperbin(m_xBuilder->weld_check_button("papertryfrmprntrcb"))
-    , m_xCbxPaperbinImg(m_xBuilder->weld_widget("lockpapertryfrmprntrcb"))
+    , m_xFrmContent(m_xBuilder->weld_frame(u"contentframe"_ustr))
+    , m_xCbxDraw(m_xBuilder->weld_check_button(u"drawingcb"_ustr))
+    , m_xCbxNotes(m_xBuilder->weld_check_button(u"notecb"_ustr))
+    , m_xCbxHandout(m_xBuilder->weld_check_button(u"handoutcb"_ustr))
+    , m_xCbxOutline(m_xBuilder->weld_check_button(u"outlinecb"_ustr))
+    , m_xRbtColor(m_xBuilder->weld_radio_button(u"defaultrb"_ustr))
+    , m_xRbtGrayscale(m_xBuilder->weld_radio_button(u"grayscalerb"_ustr))
+    , m_xRbtBlackWhite(m_xBuilder->weld_radio_button(u"blackwhiterb"_ustr))
+    , m_xRbQualityImg(m_xBuilder->weld_widget(u"lockquality"_ustr))
+    , m_xCbxPagename(m_xBuilder->weld_check_button(u"pagenmcb"_ustr))
+    , m_xCbxPagenameImg(m_xBuilder->weld_widget(u"lockpagenmcb"_ustr))
+    , m_xCbxDate(m_xBuilder->weld_check_button(u"datecb"_ustr))
+    , m_xCbxDateImg(m_xBuilder->weld_widget(u"lockdatecb"_ustr))
+    , m_xCbxTime(m_xBuilder->weld_check_button(u"timecb"_ustr))
+    , m_xCbxTimeImg(m_xBuilder->weld_widget(u"locktimecb"_ustr))
+    , m_xCbxHiddenPages(m_xBuilder->weld_check_button(u"hiddenpgcb"_ustr))
+    , m_xCbxHiddenPagesImg(m_xBuilder->weld_widget(u"lockhiddenpgcb"_ustr))
+    , m_xRbtDefault(m_xBuilder->weld_radio_button(u"pagedefaultrb"_ustr))
+    , m_xRbtPagesize(m_xBuilder->weld_radio_button(u"fittopgrb"_ustr))
+    , m_xRbtPagetile(m_xBuilder->weld_radio_button(u"tilepgrb"_ustr))
+    , m_xRbtBooklet(m_xBuilder->weld_radio_button(u"brouchrb"_ustr))
+    , m_xGridPageOpt(m_xBuilder->weld_widget(u"pageoptions"_ustr))
+    , m_xRbtPageOptImg(m_xBuilder->weld_widget(u"lockpageoptions"_ustr))
+    , m_xCbxFront(m_xBuilder->weld_check_button(u"frontcb"_ustr))
+    , m_xCbxFrontImg(m_xBuilder->weld_widget(u"lockfrontcb"_ustr))
+    , m_xCbxBack(m_xBuilder->weld_check_button(u"backcb"_ustr))
+    , m_xCbxBackImg(m_xBuilder->weld_widget(u"lockbackcb"_ustr))
+    , m_xCbxPaperbin(m_xBuilder->weld_check_button(u"papertryfrmprntrcb"_ustr))
+    , m_xCbxPaperbinImg(m_xBuilder->weld_widget(u"lockpapertryfrmprntrcb"_ustr))
 {
     Link<weld::Toggleable&,void> aLink = LINK( this, SdPrintOptions, ClickBookletHdl );
     m_xRbtDefault->connect_toggled( aLink );
@@ -85,7 +85,7 @@ SdPrintOptions::~SdPrintOptions()
 OUString SdPrintOptions::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label3", "label2", "printlbl", "contentlbl" };
+    OUString labels[] = { u"label3"_ustr, u"label2"_ustr, u"printlbl"_ustr, u"contentlbl"_ustr };
 
     for (const auto& label : labels)
     {
@@ -93,9 +93,9 @@ OUString SdPrintOptions::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString checkButton[] = { "frontcb", "backcb",    "papertryfrmprntrcb", "pagenmcb",
-                               "datecb",  "timecb",    "hiddenpgcb",         "drawingcb",
-                               "notecb",  "handoutcb", "outlinecb" };
+    OUString checkButton[] = { u"frontcb"_ustr, u"backcb"_ustr,    u"papertryfrmprntrcb"_ustr, u"pagenmcb"_ustr,
+                               u"datecb"_ustr,  u"timecb"_ustr,    u"hiddenpgcb"_ustr,         u"drawingcb"_ustr,
+                               u"notecb"_ustr,  u"handoutcb"_ustr, u"outlinecb"_ustr };
 
     for (const auto& check : checkButton)
     {
@@ -103,8 +103,8 @@ OUString SdPrintOptions::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString radioButton[] = { "pagedefaultrb", "fittopgrb",   "tilepgrb",    "brouchrb",
-                               "defaultrb",     "grayscalerb", "blackwhiterb" };
+    OUString radioButton[] = { u"pagedefaultrb"_ustr, u"fittopgrb"_ustr,   u"tilepgrb"_ustr,    u"brouchrb"_ustr,
+                               u"defaultrb"_ustr,     u"grayscalerb"_ustr, u"blackwhiterb"_ustr };
 
     for (const auto& radio : radioButton)
     {

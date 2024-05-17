@@ -323,7 +323,7 @@ void View::DoPaste (::sd::Window* pWindow)
             sal_Int8    nDnDAction = DND_ACTION_COPY;
             if( !InsertData( aDataHelper, aPos, nDnDAction, false ) )
             {
-                INetBookmark    aINetBookmark( "", "" );
+                INetBookmark    aINetBookmark( u""_ustr, u""_ustr );
 
                 if( ( aDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) &&
                       aDataHelper.GetINetBookmark( SotClipboardFormatId::NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
@@ -332,7 +332,7 @@ void View::DoPaste (::sd::Window* pWindow)
                     ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) &&
                       aDataHelper.GetINetBookmark( SotClipboardFormatId::UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
                 {
-                    pDrViewSh->InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), "" );
+                    pDrViewSh->InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), u""_ustr );
                 }
             }
         }
@@ -670,13 +670,13 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
                     {
                         if(pIAOHandle->getOverlayObjectList().isHitPixel(rEvt.maPosPixel))
                         {
-                            uno::Any const data(aDataHelper.GetAny(SotClipboardFormatId::XFA, ""));
+                            uno::Any const data(aDataHelper.GetAny(SotClipboardFormatId::XFA, u""_ustr));
                             uno::Sequence<beans::NamedValue> props;
                             if (data >>= props)
                             {
                                 ::comphelper::SequenceAsHashMap const map(props);
                                 Color aColor(COL_BLACK);
-                                auto const it = map.find("FillColor");
+                                auto const it = map.find(u"FillColor"_ustr);
                                 if (it != map.end())
                                 {
                                     XFillColorItem color;

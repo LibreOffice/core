@@ -147,7 +147,7 @@ rtl::Reference<AccessiblePageShape> AccessibleDrawDocumentView::CreateDrawPageSh
             uno::Reference<lang::XMultiServiceFactory> xFactory (mxModel, uno::UNO_QUERY);
             uno::Reference<drawing::XShape> xRectangle;
             if (xFactory.is())
-                xRectangle.set(xFactory->createInstance ("com.sun.star.drawing.RectangleShape"),
+                xRectangle.set(xFactory->createInstance (u"com.sun.star.drawing.RectangleShape"_ustr),
                     uno::UNO_QUERY);
 
             // Set the shape's size and position.
@@ -159,15 +159,15 @@ rtl::Reference<AccessiblePageShape> AccessibleDrawDocumentView::CreateDrawPageSh
 
                 // Set size and position of the shape to those of the draw
                 // page.
-                aValue = xSet->getPropertyValue ("BorderLeft");
+                aValue = xSet->getPropertyValue (u"BorderLeft"_ustr);
                 aValue >>= aPosition.X;
-                aValue = xSet->getPropertyValue ("BorderTop");
+                aValue = xSet->getPropertyValue (u"BorderTop"_ustr);
                 aValue >>= aPosition.Y;
                 xRectangle->setPosition (aPosition);
 
-                aValue = xSet->getPropertyValue ("Width");
+                aValue = xSet->getPropertyValue (u"Width"_ustr);
                 aValue >>= aSize.Width;
-                aValue = xSet->getPropertyValue ("Height");
+                aValue = xSet->getPropertyValue (u"Height"_ustr);
                 aValue >>= aSize.Height;
                 xRectangle->setSize (aSize);
 
@@ -375,14 +375,14 @@ void SAL_CALL
 OUString SAL_CALL
     AccessibleDrawDocumentView::getImplementationName()
 {
-    return "AccessibleDrawDocumentView";
+    return u"AccessibleDrawDocumentView"_ustr;
 }
 
 css::uno::Sequence< OUString> SAL_CALL
     AccessibleDrawDocumentView::getSupportedServiceNames()
 {
     ThrowIfDisposed();
-    const css::uno::Sequence<OUString> vals { "com.sun.star.drawing.AccessibleDrawDocumentView" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleDrawDocumentView"_ustr };
     uno::Sequence<OUString> aServiceNames =
         AccessibleDocumentViewBase::getSupportedServiceNames();
 
@@ -750,7 +750,7 @@ void AccessibleDrawDocumentView::UpdateAccessibleName()
             try
             {
                 sal_Int16 nPageNumber (0);
-                if (xProperties->getPropertyValue("Number") >>= nPageNumber)
+                if (xProperties->getPropertyValue(u"Number"_ustr) >>= nPageNumber)
                 {
                     sNewName += OUString::number(nPageNumber);
                 }

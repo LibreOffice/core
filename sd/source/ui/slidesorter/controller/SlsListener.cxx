@@ -191,7 +191,7 @@ void Listener::ConnectToController()
     {
         try
         {
-            xSet->addPropertyChangeListener("CurrentPage", this);
+            xSet->addPropertyChangeListener(u"CurrentPage"_ustr, this);
         }
         catch (beans::UnknownPropertyException&)
         {
@@ -199,7 +199,7 @@ void Listener::ConnectToController()
         }
         try
         {
-            xSet->addPropertyChangeListener("IsMasterPageMode", this);
+            xSet->addPropertyChangeListener(u"IsMasterPageMode"_ustr, this);
         }
         catch (beans::UnknownPropertyException&)
         {
@@ -230,8 +230,8 @@ void Listener::DisconnectFromController()
         // Remove the property listener.
         if (xSet.is())
         {
-            xSet->removePropertyChangeListener( "CurrentPage", this );
-            xSet->removePropertyChangeListener( "IsMasterPageMode", this);
+            xSet->removePropertyChangeListener( u"CurrentPage"_ustr, this );
+            xSet->removePropertyChangeListener( u"IsMasterPageMode"_ustr, this);
         }
 
         // Remove the dispose listener.
@@ -416,7 +416,7 @@ void SAL_CALL Listener::propertyChange (
 {
     if (m_bDisposed)
     {
-        throw lang::DisposedException ("SlideSorterController object has already been disposed",
+        throw lang::DisposedException (u"SlideSorterController object has already been disposed"_ustr,
             static_cast<uno::XWeak*>(this));
     }
 
@@ -428,7 +428,7 @@ void SAL_CALL Listener::propertyChange (
         {
             try
             {
-                Any aPageNumber = xPageSet->getPropertyValue ("Number");
+                Any aPageNumber = xPageSet->getPropertyValue (u"Number"_ustr);
                 sal_Int32 nCurrentPage = 0;
                 aPageNumber >>= nCurrentPage;
                 // The selection is already set but we call SelectPage()
@@ -504,7 +504,7 @@ void Listener::UpdateEditMode()
     {
         try
         {
-            Any aValue (xSet->getPropertyValue( "IsMasterPageMode" ));
+            Any aValue (xSet->getPropertyValue( u"IsMasterPageMode"_ustr ));
             aValue >>= bIsMasterPageMode;
         }
         catch (beans::UnknownPropertyException&)

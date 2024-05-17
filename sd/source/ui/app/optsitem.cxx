@@ -186,8 +186,8 @@ bool SdOptionsGeneric::isMetricSystem()
 SdOptionsMisc::SdOptionsMisc( bool bImpress, bool bUseConfig ) :
     SdOptionsGeneric( bImpress, bUseConfig ?
                       ( bImpress ?
-                        OUString( "Office.Impress/Misc" ) :
-                        OUString( "Office.Draw/Misc" ) ) :
+                        u"Office.Impress/Misc"_ustr :
+                        u"Office.Draw/Misc"_ustr ) :
                       OUString() ),
     nDefaultObjectSizeWidth(8000),
     nDefaultObjectSizeHeight(5000),
@@ -524,8 +524,8 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
 SdOptionsGrid::SdOptionsGrid(bool bImpress) :
     SdOptionsGeneric( bImpress,
                       bImpress ?
-                        OUString( "Office.Impress/Grid" ) :
-                        OUString( "Office.Draw/Grid" )
+                        u"Office.Impress/Grid"_ustr :
+                        u"Office.Draw/Grid"_ustr
                     )
 {
     EnableModify( false );
@@ -666,8 +666,8 @@ void SdOptionsGridItem::SetOptions( SdOptions* pOpts ) const
 SdOptionsPrint::SdOptionsPrint( bool bImpress, bool bUseConfig ) :
     SdOptionsGeneric( bImpress, bUseConfig ?
                       ( bImpress ?
-                        OUString( "Office.Impress/Print" ) :
-                        OUString( "Office.Draw/Print" ) ) :
+                        u"Office.Impress/Print"_ustr :
+                        u"Office.Draw/Print"_ustr ) :
                       OUString() ),
     bDraw( true ),
     bNotes( false ),

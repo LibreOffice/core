@@ -37,8 +37,8 @@
  * Popup menu for editing of field command
  */
 SdFieldPopup::SdFieldPopup(const SvxFieldData* pInField, LanguageType eLanguage)
-    : m_xBuilder(Application::CreateBuilder(nullptr, "modules/simpress/ui/fieldmenu.ui"))
-    , m_xPopup(m_xBuilder->weld_menu("menu"))
+    : m_xBuilder(Application::CreateBuilder(nullptr, u"modules/simpress/ui/fieldmenu.ui"_ustr))
+    , m_xPopup(m_xBuilder->weld_menu(u"menu"_ustr))
     , m_pField(pInField)
 {
     Fill(eLanguage);
@@ -53,16 +53,16 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
     sal_uInt16 nID = 1;
     m_xPopup->append_radio(OUString::number(nID++), SdResId(STR_FIX));
     m_xPopup->append_radio(OUString::number(nID++), SdResId(STR_VAR));
-    m_xPopup->append_separator("separator1");
+    m_xPopup->append_separator(u"separator1"_ustr);
 
     if( auto pDateField = dynamic_cast< const SvxDateField *>( m_pField ) )
     {
         SvxDateField aDateField( *pDateField );
 
         if (pDateField->GetType() == SvxDateType::Fix)
-            m_xPopup->set_active("1", true);
+            m_xPopup->set_active(u"1"_ustr, true);
         else
-            m_xPopup->set_active("2", true);
+            m_xPopup->set_active(u"2"_ustr, true);
 
         //SvxDateFormat::AppDefault,     // is not used
         //SvxDateFormat::System,         // is not used
@@ -91,9 +91,9 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         SvxExtTimeField aTimeField( *pTimeField );
 
         if( pTimeField->GetType() == SvxTimeType::Fix )
-            m_xPopup->set_active("1", true);
+            m_xPopup->set_active(u"1"_ustr, true);
         else
-            m_xPopup->set_active("2", true);
+            m_xPopup->set_active(u"2"_ustr, true);
 
         //SvxTimeFormat::AppDefault,     // is not used
         //SvxTimeFormat::System,         // is not used
@@ -124,9 +124,9 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         //SvxExtFileField aFileField( *pFileField );
 
         if( pFileField->GetType() == SvxFileType::Fix )
-            m_xPopup->set_active("1", true);
+            m_xPopup->set_active(u"1"_ustr, true);
         else
-            m_xPopup->set_active("2", true);
+            m_xPopup->set_active(u"2"_ustr, true);
 
         m_xPopup->append_radio(OUString::number(nID++), SdResId(STR_FILEFORMAT_NAME_EXT));
         m_xPopup->append_radio(OUString::number(nID++), SdResId(STR_FILEFORMAT_FULLPATH));
@@ -140,9 +140,9 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         SvxAuthorField aAuthorField( *pAuthorField );
 
         if( pAuthorField->GetType() == SvxAuthorType::Fix )
-            m_xPopup->set_active("1", true);
+            m_xPopup->set_active(u"1"_ustr, true);
         else
-            m_xPopup->set_active("2", true);
+            m_xPopup->set_active(u"2"_ustr, true);
 
         for( sal_uInt16 i = 0; i < 4; i++ )
         {
@@ -161,8 +161,8 @@ void SdFieldPopup::Execute(weld::Window* pParent, const tools::Rectangle& rRect)
 
     if (sIdent == "1" || sIdent == "2")
     {
-        m_xPopup->set_active("1", sIdent == "1");
-        m_xPopup->set_active("2", sIdent == "2");
+        m_xPopup->set_active(u"1"_ustr, sIdent == "1");
+        m_xPopup->set_active(u"2"_ustr, sIdent == "2");
     }
     else
     {
@@ -189,7 +189,7 @@ SvxFieldData* SdFieldPopup::GetField()
         SvxDateFormat eFormat;
         sal_uInt16 i;
 
-        if (m_xPopup->get_active("1"))
+        if (m_xPopup->get_active(u"1"_ustr))
             eType = SvxDateType::Fix;
         else
             eType = SvxDateType::Var;
@@ -221,7 +221,7 @@ SvxFieldData* SdFieldPopup::GetField()
         SvxTimeFormat eFormat;
         sal_uInt16 i;
 
-        if (m_xPopup->get_active("1"))
+        if (m_xPopup->get_active(u"1"_ustr))
             eType = SvxTimeType::Fix;
         else
             eType = SvxTimeType::Var;
@@ -254,7 +254,7 @@ SvxFieldData* SdFieldPopup::GetField()
         SvxFileFormat eFormat;
         sal_uInt16 i;
 
-        if (m_xPopup->get_active("1"))
+        if (m_xPopup->get_active(u"1"_ustr))
             eType = SvxFileType::Fix;
         else
             eType = SvxFileType::Var;
@@ -290,7 +290,7 @@ SvxFieldData* SdFieldPopup::GetField()
         SvxAuthorFormat eFormat;
         sal_uInt16 i;
 
-        if (m_xPopup->get_active("1"))
+        if (m_xPopup->get_active(u"1"_ustr))
             eType = SvxAuthorType::Fix;
         else
             eType = SvxAuthorType::Var;

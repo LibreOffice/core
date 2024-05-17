@@ -261,7 +261,7 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
         mpPage->IsBackgroundFullSize() : static_cast<SdPage&>(mpPage->TRG_GetMasterPage()).IsBackgroundFullSize();
 
     SfxGrabBagItem grabBag(SID_ATTR_CHAR_GRABBAG);
-    grabBag.GetGrabBag()["BackgroundFullSize"] <<= bFullSize;
+    grabBag.GetGrabBag()[u"BackgroundFullSize"_ustr] <<= bFullSize;
 
     aNewAttr.Put(grabBag);
 
@@ -297,7 +297,7 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
         {
             const XFillBitmapItem& rBitmap = aMergedAttr.Get(XATTR_FILLBITMAP);
             const GraphicObject& rGraphicObj = rBitmap.GetGraphicObject();
-            GraphicHelper::ExportGraphic(pParent, rGraphicObj.GetGraphic(), "");
+            GraphicHelper::ExportGraphic(pParent, rGraphicObj.GetGraphic(), u""_ustr);
         }
     }
     else if (nId == SID_SELECT_BACKGROUND)
@@ -338,7 +338,7 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
 
             // MigrateItemSet makes sure the XFillBitmapItem will have a unique name
             SfxItemSetFixed<XATTR_FILLBITMAP, XATTR_FILLBITMAP> aMigrateSet( mpDoc->GetPool() );
-            aMigrateSet.Put(XFillBitmapItem("background", std::move(aGraphic)));
+            aMigrateSet.Put(XFillBitmapItem(u"background"_ustr, std::move(aGraphic)));
             SdrModel::MigrateItemSet( &aMigrateSet, &*pTempSet, mpDoc );
 
             pTempSet->Put( XFillBmpStretchItem( true ));
@@ -399,7 +399,7 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
             {
                 // MigrateItemSet guarantees unique gradient names
                 SfxItemSetFixed<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT> aMigrateSet( mpDoc->GetPool() );
-                aMigrateSet.Put( XFillGradientItem("gradient", pTempGradItem->GetGradientValue()) );
+                aMigrateSet.Put( XFillGradientItem(u"gradient"_ustr, pTempGradItem->GetGradientValue()) );
                 SdrModel::MigrateItemSet( &aMigrateSet, &*pTempSet, mpDoc);
             }
 
@@ -408,7 +408,7 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
             {
                 // MigrateItemSet guarantees unique hatch names
                 SfxItemSetFixed<XATTR_FILLHATCH, XATTR_FILLHATCH> aMigrateSet( mpDoc->GetPool() );
-                aMigrateSet.Put( XFillHatchItem("hatch", pTempHatchItem->GetHatchValue()) );
+                aMigrateSet.Put( XFillHatchItem(u"hatch"_ustr, pTempHatchItem->GetHatchValue()) );
                 SdrModel::MigrateItemSet( &aMigrateSet, &*pTempSet, mpDoc);
             }
 
@@ -549,7 +549,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     {
         SfxGrabBagItem const*const pGrabBag(static_cast<SfxGrabBagItem const*>(pPoolItem));
         const auto pGrabBagInner = pGrabBag->GetGrabBag();
-        const auto iter = pGrabBagInner.find("BackgroundFullSize");
+        const auto iter = pGrabBagInner.find(u"BackgroundFullSize"_ustr);
         assert(iter != pGrabBagInner.end());
         if (iter->second >>= bFullSize)
         {

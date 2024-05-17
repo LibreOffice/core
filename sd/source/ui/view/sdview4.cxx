@@ -341,7 +341,7 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, sal_Int8& rAction,
     if( mnAction == DND_ACTION_LINK && pPV && dynamic_cast< SdrMediaObj *>( pPickObj ) )
     {
         pNewMediaObj = SdrObject::Clone(static_cast<SdrMediaObj&>(*pPickObj), pPickObj->getSdrModelFromSdrObject());
-        pNewMediaObj->setURL(rMediaURL, ""/*TODO?*/);
+        pNewMediaObj->setURL(rMediaURL, u""_ustr/*TODO?*/);
 
         BegUndo(SdResId(STR_UNDO_DRAGDROP));
         ReplaceObjectAtView(pPickObj, *pPV, pNewMediaObj.get());
@@ -437,7 +437,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
         aCurrentDropFile = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
 #if HAVE_FEATURE_AVMEDIA
-        if( !::avmedia::MediaWindow::isMediaURL( aCurrentDropFile, ""/*TODO?*/ ) )
+        if( !::avmedia::MediaWindow::isMediaURL( aCurrentDropFile, u""_ustr/*TODO?*/ ) )
 #else
 #endif
         {
@@ -499,7 +499,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
 #if HAVE_FEATURE_AVMEDIA
         if (!bHandled)
         {
-            bool bShallowDetect = ::avmedia::MediaWindow::isMediaURL(aCurrentDropFile, ""/*TODO?*/);
+            bool bShallowDetect = ::avmedia::MediaWindow::isMediaURL(aCurrentDropFile, u""_ustr/*TODO?*/);
             if (bShallowDetect)
             {
                 mxDropMediaSizeListener.set(new avmedia::PlayerListener(
@@ -526,7 +526,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
                         mxDropMediaSizeListener.clear();
                     }));
             }
-            bHandled = bShallowDetect && ::avmedia::MediaWindow::isMediaURL(aCurrentDropFile, ""/*TODO?*/, true, mxDropMediaSizeListener);
+            bHandled = bShallowDetect && ::avmedia::MediaWindow::isMediaURL(aCurrentDropFile, u""_ustr/*TODO?*/, true, mxDropMediaSizeListener);
         }
 #endif
 
@@ -543,7 +543,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
                         //TODO/MBA: testing
                         OUString aName;
                         uno::Sequence < beans::PropertyValue > aMedium{ comphelper::makePropertyValue(
-                            "URL", aCurrentDropFile) };
+                            u"URL"_ustr, aCurrentDropFile) };
 
                         uno::Reference < embed::XEmbeddedObject > xObj = mpDocSh->GetEmbeddedObjectContainer().
                                 InsertEmbeddedObject( aMedium, aName );

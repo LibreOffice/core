@@ -215,7 +215,7 @@ OUString SAL_CALL DrawController::getImplementationName(  )
     // Do not throw an exception at the moment.  This leads to a crash
     // under Solaris on reload.  See issue i70929 for details.
     //    ThrowIfDisposed();
-    return "DrawController" ;
+    return u"DrawController"_ustr ;
 }
 
 constexpr OUString ssServiceName = u"com.sun.star.drawing.DrawingDocumentDrawView"_ustr;
@@ -801,7 +801,7 @@ void DrawController::ThrowIfDisposed() const
     {
         SAL_WARN("sd", "Calling disposed DrawController object. Throwing exception.");
         throw lang::DisposedException (
-            "DrawController object has already been disposed",
+            u"DrawController object has already been disposed"_ustr,
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }
