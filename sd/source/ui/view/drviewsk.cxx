@@ -23,7 +23,9 @@ void DrawViewShell::ConfigurationChanged( utl::ConfigurationBroadcaster* pCb, Co
 {
     svtools::ColorConfig *pColorConfig = dynamic_cast<svtools::ColorConfig*>(pCb);
     ConfigureAppBackgroundColor(pColorConfig);
-    if (comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::LibreOfficeKit::isActive())
+        maViewOptions.mnDocBackgroundColor = pColorConfig->GetColorValue(svtools::DOCCOLOR).nColor;
+    else
     {
         SfxViewShell* pCurrentShell = SfxViewShell::Current();
         ViewShellBase* pShellBase = dynamic_cast<ViewShellBase*>(pCurrentShell);
