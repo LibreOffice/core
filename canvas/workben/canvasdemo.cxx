@@ -38,6 +38,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <o3tl/deleter.hxx>
 #include <o3tl/safeint.hxx>
 #include <utility>
 #include <vcl/canvastools.hxx>
@@ -624,7 +625,7 @@ int DemoApp::Main()
     }
 
     ScopedVclPtr<TestWindow> aWindow = VclPtr<TestWindow>::Create();
-    aWindow->Show();
+    suppress_fun_call_w_exception(aWindow->Show());
 
     Application::Execute();
     return 0;
