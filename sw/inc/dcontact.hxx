@@ -57,7 +57,7 @@ void setContextWritingMode( SdrObject* pObj, SwFrame const * pAnchor );
 SwRect GetBoundRectOfAnchoredObj( const SdrObject* pObj );
 
 /// @return UserCall of group object (if applicable).
-SwContact* GetUserCall( const SdrObject* );
+SAL_RET_MAYBENULL SwContact* GetUserCall( const SdrObject* );
 
 /// @return TRUE if the SrdObject is a Marquee object.
 bool IsMarqueeTextObj( const SdrObject& rObj );
