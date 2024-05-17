@@ -721,32 +721,15 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
 
     if (rMyNFormat.GetNumberingType() == SVX_NUM_NUMBER_NONE)
     {
-        if (!rMyNFormat.HasListFormat()) {
-            OUString sRet = bInclStrings ? rMyNFormat.GetPrefix() + rMyNFormat.GetSuffix() : OUString();
+        // since numbering is disabled for this level,
+        // only emit prefix/suffix (unless they are not wanted either)
+        if (!bInclStrings)
+            return OUString();
+
+        OUString sRet = rMyNFormat.GetPrefix() + rMyNFormat.GetSuffix();
+        if (bHideNonNumerical)
             StripNonDelimiter(sRet);
-            return sRet;
-        }
-
-        // If numbering is disabled for this level we should emit just prefix/suffix
-        // Remove everything between first %1% and last %n% (including markers)
-        OUString sLevelFormat = rMyNFormat.GetListFormat(bInclStrings && !bHideNonNumerical);
-
-        if (bInclStrings && bHideNonNumerical) {
-            // If hiding non numerical text, we need to strip the prefix and suffix properly, so let's add them manually
-            OUString sPrefix = rMyNFormat.GetPrefix();
-            OUString sSuffix = rMyNFormat.GetSuffix();
-
-            StripNonDelimiter(sPrefix);
-            StripNonDelimiter(sSuffix);
-
-            sLevelFormat = sPrefix + sLevelFormat + sSuffix;
-        }
-
-        sal_Int32 nFirstPosition = sLevelFormat.indexOf("%");
-        sal_Int32 nLastPosition = sLevelFormat.lastIndexOf("%");
-        if (nFirstPosition >= 0 && nLastPosition >= nFirstPosition)
-            sLevelFormat = sLevelFormat.replaceAt(nFirstPosition, nLastPosition - nFirstPosition + 1, u"");
-        return sLevelFormat;
+        return sRet;
     }
 
     css::lang::Locale aLocale( LanguageTag::convertToLocale(nLang));

@@ -293,6 +293,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf158597, "tdf158597.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf156105_percentSuffix, "tdf156105_percentSuffix.odt")
+{
+    // given a numbered list with a non-escaping percent symbol in the prefix and suffix
+    CPPUNIT_ASSERT_EQUAL(OUString("(%)[%]"),
+                         getProperty<OUString>(getParagraph(3), "ListLabelString"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf160049_anchorMarginVML, "tdf160049_anchorMarginVML.docx")
 {
     // given a VML (Word 2003) document with a LEFT "column/text" anchored image
