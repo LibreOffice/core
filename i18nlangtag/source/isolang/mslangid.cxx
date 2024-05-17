@@ -374,87 +374,83 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
     sal_Int16 nScript;
 
         // CTL
-    if( nLang.anyOf(
-         LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA,
-         LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA,
-         LANGUAGE_MONGOLIAN_MONGOLIAN_LSO,
-         LANGUAGE_USER_KURDISH_IRAN,
-         LANGUAGE_OBSOLETE_USER_KURDISH_IRAQ,
-         LANGUAGE_KURDISH_ARABIC_IRAQ,
-         LANGUAGE_KURDISH_ARABIC_LSO,
-         LANGUAGE_USER_KURDISH_SOUTHERN_IRAN,
-         LANGUAGE_USER_KURDISH_SOUTHERN_IRAQ,
-         LANGUAGE_USER_KYRGYZ_CHINA,
-         LANGUAGE_USER_HUNGARIAN_ROVAS,
-         LANGUAGE_USER_MANCHU,
-         LANGUAGE_USER_XIBE,
-         LANGUAGE_USER_MALAY_ARABIC_MALAYSIA,
-         LANGUAGE_USER_MALAY_ARABIC_BRUNEI,
-         LANGUAGE_USER_ROHINGYA_HANIFI,
-         LANGUAGE_USER_PALI_THAI))
+    if( nLang == LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA
+        || nLang == LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA
+        || nLang == LANGUAGE_MONGOLIAN_MONGOLIAN_LSO
+        || nLang == LANGUAGE_USER_KURDISH_IRAN
+        || nLang == LANGUAGE_OBSOLETE_USER_KURDISH_IRAQ
+        || nLang == LANGUAGE_KURDISH_ARABIC_IRAQ
+        || nLang == LANGUAGE_KURDISH_ARABIC_LSO
+        || nLang == LANGUAGE_USER_KURDISH_SOUTHERN_IRAN
+        || nLang == LANGUAGE_USER_KURDISH_SOUTHERN_IRAQ
+        || nLang == LANGUAGE_USER_KYRGYZ_CHINA
+        || nLang == LANGUAGE_USER_HUNGARIAN_ROVAS
+        || nLang == LANGUAGE_USER_MANCHU
+        || nLang == LANGUAGE_USER_XIBE
+        || nLang == LANGUAGE_USER_MALAY_ARABIC_MALAYSIA
+        || nLang == LANGUAGE_USER_MALAY_ARABIC_BRUNEI
+        || nLang == LANGUAGE_USER_ROHINGYA_HANIFI
+        || nLang == LANGUAGE_USER_PALI_THAI)
     {
             nScript = css::i18n::ScriptType::COMPLEX;
     }
         // "Western"
-    else if (nLang.anyOf(
-        LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA,
-        LANGUAGE_MONGOLIAN_CYRILLIC_LSO,
-        LANGUAGE_USER_KURDISH_SYRIA,
-        LANGUAGE_USER_KURDISH_TURKEY))
+    else if ( nLang == LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA
+        || nLang == LANGUAGE_MONGOLIAN_CYRILLIC_LSO
+        || nLang == LANGUAGE_USER_KURDISH_SYRIA
+        || nLang == LANGUAGE_USER_KURDISH_TURKEY)
     {
             nScript = css::i18n::ScriptType::LATIN;
     }
             // CJK catcher
-    else if ( primary(nLang).anyOf(
-        primary(LANGUAGE_CHINESE              ),
-        primary(LANGUAGE_YUE_CHINESE_HONGKONG ),
-        primary(LANGUAGE_JAPANESE             ),
-        primary(LANGUAGE_KOREAN               )
-        ))
+    else if ( primary(nLang) == primary(LANGUAGE_CHINESE              )
+        || primary(nLang) == primary(LANGUAGE_YUE_CHINESE_HONGKONG )
+        || primary(nLang) == primary(LANGUAGE_JAPANESE             )
+        || primary(nLang) == primary(LANGUAGE_KOREAN               )
+        )
     {
             nScript = css::i18n::ScriptType::ASIAN;
     }
             // CTL catcher
-    else if (primary(nLang).anyOf(
-        primary(LANGUAGE_AMHARIC_ETHIOPIA    ),
-        primary(LANGUAGE_ARABIC_SAUDI_ARABIA ),
-        primary(LANGUAGE_ASSAMESE            ),
-        primary(LANGUAGE_BENGALI             ),
-        primary(LANGUAGE_BURMESE             ),
-        primary(LANGUAGE_DHIVEHI             ),
-        primary(LANGUAGE_FARSI               ),
-        primary(LANGUAGE_GUJARATI            ),
-        primary(LANGUAGE_HEBREW              ),
-        primary(LANGUAGE_HINDI               ),
-        primary(LANGUAGE_KANNADA             ),
-        primary(LANGUAGE_KASHMIRI            ),
-        primary(LANGUAGE_KHMER               ),
-        primary(LANGUAGE_KONKANI             ),
-        primary(LANGUAGE_LAO                 ),
-        primary(LANGUAGE_MALAYALAM           ),
-        primary(LANGUAGE_MANIPURI            ),
-        primary(LANGUAGE_MARATHI             ),
-        primary(LANGUAGE_NEPALI              ),
-        primary(LANGUAGE_ODIA                ),
-        primary(LANGUAGE_PUNJABI             ),
-        primary(LANGUAGE_SANSKRIT            ),
-        primary(LANGUAGE_SINDHI              ),
-        primary(LANGUAGE_SINHALESE_SRI_LANKA ),
-        primary(LANGUAGE_SYRIAC              ),
-        primary(LANGUAGE_TAMIL               ),
-        primary(LANGUAGE_TELUGU              ),
-        primary(LANGUAGE_THAI                ),
-        primary(LANGUAGE_TIBETAN             ),  // also LANGUAGE_DZONGKHA
-        primary(LANGUAGE_TIGRIGNA_ETHIOPIA   ),
-        primary(LANGUAGE_UIGHUR_CHINA        ),
-        primary(LANGUAGE_URDU_INDIA          ),
-        primary(LANGUAGE_USER_BODO_INDIA     ),
-        primary(LANGUAGE_USER_DOGRI_INDIA    ),
-        primary(LANGUAGE_USER_LIMBU          ),
-        primary(LANGUAGE_USER_MAITHILI_INDIA ),
-        primary(LANGUAGE_USER_NKO            ),
-        primary(LANGUAGE_USER_SARAIKI        ),
-        primary(LANGUAGE_YIDDISH             )))
+    else if (primary(nLang) == primary(LANGUAGE_AMHARIC_ETHIOPIA    )
+        || primary(nLang) == primary(LANGUAGE_ARABIC_SAUDI_ARABIA )
+        || primary(nLang) == primary(LANGUAGE_ASSAMESE            )
+        || primary(nLang) == primary(LANGUAGE_BENGALI             )
+        || primary(nLang) == primary(LANGUAGE_BURMESE             )
+        || primary(nLang) == primary(LANGUAGE_DHIVEHI             )
+        || primary(nLang) == primary(LANGUAGE_FARSI               )
+        || primary(nLang) == primary(LANGUAGE_GUJARATI            )
+        || primary(nLang) == primary(LANGUAGE_HEBREW              )
+        || primary(nLang) == primary(LANGUAGE_HINDI               )
+        || primary(nLang) == primary(LANGUAGE_KANNADA             )
+        || primary(nLang) == primary(LANGUAGE_KASHMIRI            )
+        || primary(nLang) == primary(LANGUAGE_KHMER               )
+        || primary(nLang) == primary(LANGUAGE_KONKANI             )
+        || primary(nLang) == primary(LANGUAGE_LAO                 )
+        || primary(nLang) == primary(LANGUAGE_MALAYALAM           )
+        || primary(nLang) == primary(LANGUAGE_MANIPURI            )
+        || primary(nLang) == primary(LANGUAGE_MARATHI             )
+        || primary(nLang) == primary(LANGUAGE_NEPALI              )
+        || primary(nLang) == primary(LANGUAGE_ODIA                )
+        || primary(nLang) == primary(LANGUAGE_PUNJABI             )
+        || primary(nLang) == primary(LANGUAGE_SANSKRIT            )
+        || primary(nLang) == primary(LANGUAGE_SINDHI              )
+        || primary(nLang) == primary(LANGUAGE_SINHALESE_SRI_LANKA )
+        || primary(nLang) == primary(LANGUAGE_SYRIAC              )
+        || primary(nLang) == primary(LANGUAGE_TAMIL               )
+        || primary(nLang) == primary(LANGUAGE_TELUGU              )
+        || primary(nLang) == primary(LANGUAGE_THAI                )
+        || primary(nLang) == primary(LANGUAGE_TIBETAN             )  // also LANGUAGE_DZONGKHA
+        || primary(nLang) == primary(LANGUAGE_TIGRIGNA_ETHIOPIA   )
+        || primary(nLang) == primary(LANGUAGE_UIGHUR_CHINA        )
+        || primary(nLang) == primary(LANGUAGE_URDU_INDIA          )
+        || primary(nLang) == primary(LANGUAGE_USER_BODO_INDIA     )
+        || primary(nLang) == primary(LANGUAGE_USER_DOGRI_INDIA    )
+        || primary(nLang) == primary(LANGUAGE_USER_LIMBU          )
+        || primary(nLang) == primary(LANGUAGE_USER_MAITHILI_INDIA )
+        || primary(nLang) == primary(LANGUAGE_USER_NKO            )
+        || primary(nLang) == primary(LANGUAGE_USER_SARAIKI        )
+        || primary(nLang) == primary(LANGUAGE_YIDDISH             ))
     {
             nScript = css::i18n::ScriptType::COMPLEX;
     }
