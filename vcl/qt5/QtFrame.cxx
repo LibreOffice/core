@@ -640,6 +640,14 @@ bool QtFrame::GetModal() const { return isWindow() && windowHandle()->isModal();
 
 void QtFrame::SetWindowState(const vcl::WindowData* pState)
 {
+    QtInstance* pSalInst(GetQtInstance());
+    assert(pSalInst);
+    if (!pSalInst->IsMainThread())
+    {
+        pSalInst->RunInMainThread([this, pState]() { SetWindowState(pState); });
+        return;
+    }
+
     if (!isWindow() || !pState || isChild(true, false))
         return;
 
