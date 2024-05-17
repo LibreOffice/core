@@ -468,7 +468,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
 
 void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
 {
-
+    auto guard = rSalLayout.ScopedFontScaling(!mbNoFontScaling);
     if( mbInitClipRegion )
         InitClipRegion();
     if( mbOutputClipped )
