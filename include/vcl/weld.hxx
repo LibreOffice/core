@@ -889,6 +889,10 @@ public:
     virtual void set_max_mru_count(int nCount) = 0;
     virtual OUString get_mru_entries() const = 0;
     virtual void set_mru_entries(const OUString& rEntries) = 0;
+
+    // Backwards compatibility, should be avoided to allow
+    // UI consistency.
+    virtual void set_max_drop_down_rows(int nRows) = 0;
 };
 
 enum class ColumnToggleType

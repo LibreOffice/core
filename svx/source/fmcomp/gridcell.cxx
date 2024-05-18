@@ -2629,9 +2629,16 @@ void DbListBox::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xCurso
     DbCellControl::Init( rParent, xCursor );
 }
 
-void DbListBox::implAdjustGenericFieldSetting( const Reference< XPropertySet >& /*rxModel*/ )
+void DbListBox::implAdjustGenericFieldSetting(const Reference<XPropertySet>& _rxModel)
 {
-    // ignore FM_PROP_LINECOUNT
+    DBG_ASSERT( m_pWindow, "DbListBox::implAdjustGenericFieldSetting: not to be called without window!" );
+    DBG_ASSERT( _rxModel.is(), "DbListBox::implAdjustGenericFieldSetting: invalid model!" );
+    if ( m_pWindow && _rxModel.is() )
+    {
+        sal_Int16  nLines   = getINT16( _rxModel->getPropertyValue( FM_PROP_LINECOUNT ) );
+        weld::ComboBox& rComboBox = static_cast<ListBoxControl*>(m_pWindow.get())->get_widget();
+        rComboBox.set_max_drop_down_rows(nLines);
+    }
 }
 
 CellControllerRef DbListBox::CreateController() const

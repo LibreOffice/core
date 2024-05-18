@@ -6927,6 +6927,8 @@ public:
 
     virtual void set_mru_entries(const OUString&) override { assert(false && "not implemented"); }
 
+    virtual void set_max_drop_down_rows(int) override { assert(false && "not implemented"); }
+
     virtual void set_item_menu(const OUString&, weld::Menu*) override
     {
         assert(false && "not implemented");
