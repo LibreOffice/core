@@ -2746,15 +2746,11 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
                 appendDouble(aRect.GetWidth() * fScale, aContents);
                 aContents.append(" 0 0 ");
                 appendDouble(aRect.GetHeight() * fScale, aContents);
-                aContents.append(
-                    + " "
-                    + OString::number(aRect.getX())
-                    + " "
-                    + OString::number(aRect.getY())
-                    + " cm "
-                      "/Im"
-                    + OString::number(nObject)
-                    + " Do Q\n");
+                aContents.append(" ");
+                appendDouble(aRect.getX() * fScale, aContents);
+                aContents.append(" ");
+                appendDouble(aRect.getY() * fScale, aContents);
+                aContents.append(" cm /Im" + OString::number(nObject) + " Do Q\n");
             }
 
             const auto& rOutline = rGlyph.getOutline();
