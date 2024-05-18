@@ -10944,7 +10944,7 @@ AC_SUBST(ICU_MINOR)
 dnl ==================================================================
 dnl CURL
 dnl ==================================================================
-if test "$enable_curl" == "yes"; then
+if test "$enable_curl" = "yes"; then
     AC_DEFINE([HAVE_FEATURE_CURL])
 fi
 
@@ -10990,7 +10990,7 @@ AC_SUBST(DEFAULT_CRASHDUMP_VALUE)
 dnl ==================================================================
 dnl libcmis
 dnl ==================================================================
-if test "$enable_libcmis" == "yes"; then
+if test "$enable_libcmis" = "yes"; then
     if test "$enable_curl" != "yes"; then
         AC_MSG_ERROR([--disable-libcmis must be used when --disable-curl is used])
     fi
