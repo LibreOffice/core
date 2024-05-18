@@ -697,14 +697,6 @@
         <info>
           <desc>Specifies how to force object positions and sizes to predefined locations in relation to other objects.</desc>
         </info>
-        <prop oor:name="Grid" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Tools - Options - Impress - Grid - [Section] Snap to -->
-          <info>
-            <desc>Indicates whether to snap an object when moved to the next grid point.</desc>
-            <label>Grid lines</label>
-          </info>
-          <value>true</value>
-        </prop>
         <prop oor:name="SnapLine" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options - Impress - Grid - [Section] Snap to -->
           <info>
