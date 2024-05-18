@@ -571,7 +571,7 @@ OUString SvxNumberFormat::CreateRomanString( sal_Int32 nNo, bool bUpper )
 void SvxNumberFormat::SetPrefix(const OUString& rSet)
 {
     // ListFormat manages the prefix. If badly changed via this function, sListFormat is invalidated
-    if (sListFormat && rSet.getLength() != sPrefix.getLength())
+    if (sListFormat)
         sListFormat.reset();
 
     sPrefix = rSet;
@@ -580,7 +580,7 @@ void SvxNumberFormat::SetPrefix(const OUString& rSet)
 void SvxNumberFormat::SetSuffix(const OUString& rSet)
 {
     // ListFormat manages the suffix. If badly changed via this function, sListFormat is invalidated
-    if (sListFormat && rSet.getLength() != sSuffix.getLength())
+    if (sListFormat)
         sListFormat.reset();
 
     sSuffix = rSet;
