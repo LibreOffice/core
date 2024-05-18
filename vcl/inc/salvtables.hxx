@@ -923,6 +923,8 @@ public:
         return 20 * (pDefault ? pDefault->GetDPIScaleFactor() : 1.0);
     }
 
+    void set_max_drop_down_rows(int nRows) override { m_xComboBox->SetDropDownLineCount(nRows); }
+
     void CallHandleEventListener(VclWindowEvent& rEvent)
     {
         if (rEvent.GetId() == VclEventId::DropdownPreOpen

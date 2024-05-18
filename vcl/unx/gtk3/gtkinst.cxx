@@ -21032,6 +21032,11 @@ public:
 #endif
     }
 
+    virtual void set_max_drop_down_rows(int) override
+    {
+        SAL_WARN( "vcl.gtk", "set_max_drop_down_rows unimplemented");
+    }
+
     virtual ~GtkInstanceComboBox() override
     {
 //        m_xCustomMenuButtonHelper.reset();
@@ -21112,6 +21117,7 @@ private:
     gint m_nPrePopupCursorPos;
     int m_nMRUCount;
     int m_nMaxMRUCount;
+    int m_nMaxDropdownRows;
 
     static gboolean idleAutoComplete(gpointer widget)
     {
@@ -21234,7 +21240,7 @@ private:
     {
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
-        int nMaxRows = rSettings.GetListBoxMaximumLineCount();
+        int nMaxRows = m_nMaxDropdownRows == -1 ? rSettings.GetListBoxMaximumLineCount() : m_nMaxDropdownRows;
         bool bAddScrollWidth = false;
         int nRows = get_count_including_mru();
         if (nMaxRows < nRows)
@@ -22152,6 +22158,7 @@ public:
         , m_nPrePopupCursorPos(-1)
         , m_nMRUCount(0)
         , m_nMaxMRUCount(0)
+        , m_nMaxDropdownRows(-1)
     {
         int nActive = gtk_combo_box_get_active(m_pComboBox);
 
@@ -22863,6 +22870,11 @@ public:
         return nWidth;
     }
 
+    virtual void set_max_drop_down_rows(int nMaxRows) override
+    {
+        m_nMaxDropdownRows = nMaxRows;
+    }
+
     virtual ~GtkInstanceComboBox() override
     {
         m_xCustomMenuButtonHelper.reset();
@@ -23247,6 +23259,8 @@ public:
         assert(false && "not implemented");
         return 0;
     }
+
+    virtual void set_max_drop_down_rows(int) override { assert(false && "not implemented"); }
 
     virtual ~GtkInstanceEntryTreeView() override
     {
