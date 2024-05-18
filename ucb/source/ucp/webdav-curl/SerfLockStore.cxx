@@ -101,17 +101,14 @@ SerfLockStore::~SerfLockStore()
     }
 }
 
-void SerfLockStore::startTicker()
+void SerfLockStore::startTicker(std::unique_lock<std::mutex> & /* rGuard is held */)
 {
-    std::unique_lock aGuard( m_aMutex );
-
     if ( !m_pTickerThread.is() )
     {
         m_pTickerThread = new TickerThread( *this );
         m_pTickerThread->launch();
     }
 }
-
 
 void SerfLockStore::stopTicker(std::unique_lock<std::mutex> & rGuard)
 {
@@ -122,6 +119,7 @@ void SerfLockStore::stopTicker(std::unique_lock<std::mutex> & rGuard)
         m_pTickerThread->finish(); // needs mutex
         // the TickerThread may run refreshLocks() at most once after this
         pTickerThread = m_pTickerThread;
+
         m_pTickerThread.clear();
     }
 
@@ -131,6 +129,25 @@ void SerfLockStore::stopTicker(std::unique_lock<std::mutex> & rGuard)
     {
         pTickerThread->join(); // without m_aMutex locked (to prevent deadlock)
     }
+}
+
+bool SerfLockStore::joinThreads()
+{
+    std::unique_lock aGuard(m_aMutex);
+    // FIXME: cure could be worse than the problem; we don't
+    // want to block on a long-standing webdav lock refresh request.
+    // perhaps we should timeout on a condition instead if a request
+    // is in progress.
+    if (m_pTickerThread.is())
+        stopTicker(aGuard);
+    return true;
+}
+
+void SerfLockStore::startThreads()
+{
+    std::unique_lock aGuard( m_aMutex );
+    if (!m_aLockInfoMap.empty())
+        startTicker(aGuard);
 }
 
 OUString const*
@@ -175,14 +192,12 @@ void SerfLockStore::addLock( const OUString& rURI,
                              sal_Int32 nLastChanceToSendRefreshRequest )
 {
     assert(rURI.startsWith("http://") || rURI.startsWith("https://"));
-    {
-        std::unique_lock aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
-        m_aLockInfoMap[ rURI ]
-            = LockInfo(sToken, rLock, xSession, nLastChanceToSendRefreshRequest);
-    }
+    m_aLockInfoMap[ rURI ]
+        = LockInfo(sToken, rLock, xSession, nLastChanceToSendRefreshRequest);
 
-    startTicker();
+    startTicker(aGuard);
 }
 
 

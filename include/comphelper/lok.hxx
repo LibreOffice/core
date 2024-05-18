@@ -26,6 +26,8 @@ class COMPHELPER_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") ThreadJoinable
 public:
     /// shutdown and join threads, @returns true on success
     virtual bool joinThreads() = 0;
+    /// restart any required threads, usually are demand-restarted
+    virtual void startThreads() {}
 };
 
 // Functions to be called only from the LibreOfficeKit implementation in desktop, not from other
