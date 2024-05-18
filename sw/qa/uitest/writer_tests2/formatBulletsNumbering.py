@@ -259,4 +259,11 @@ class formatBulletsNumbering(UITestCase):
                 self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "73")
 
 
+   def test_bullets_and_numbering_document_bullet_list(self):
+        with self.ui_test.create_doc_in_start_center("writer"):
+            self.xUITest.executeCommand(".uno:DefaultBullet")
+            # Without the fix in place, this test would have crashed here
+            self.xUITest.executeCommand(".uno:DocumentBulletList")
+
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
