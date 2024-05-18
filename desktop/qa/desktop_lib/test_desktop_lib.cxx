@@ -3594,11 +3594,12 @@ void DesktopLOKTest::testABI()
     CPPUNIT_ASSERT_EQUAL(classOffset(18), offsetof(struct _LibreOfficeKitClass, startURP));
     CPPUNIT_ASSERT_EQUAL(classOffset(19), offsetof(struct _LibreOfficeKitClass, stopURP));
     CPPUNIT_ASSERT_EQUAL(classOffset(20), offsetof(struct _LibreOfficeKitClass, joinThreads));
-    CPPUNIT_ASSERT_EQUAL(classOffset(21), offsetof(struct _LibreOfficeKitClass, setForkedChild));
+    CPPUNIT_ASSERT_EQUAL(classOffset(21), offsetof(struct _LibreOfficeKitClass, startThreads));
+    CPPUNIT_ASSERT_EQUAL(classOffset(22), offsetof(struct _LibreOfficeKitClass, setForkedChild));
 
     // When extending LibreOfficeKit with a new function pointer,  add new assert for the offsetof the
     // new function pointer and bump this assert for the size of the class.
-    CPPUNIT_ASSERT_EQUAL(classOffset(22), sizeof(struct _LibreOfficeKitClass));
+    CPPUNIT_ASSERT_EQUAL(classOffset(23), sizeof(struct _LibreOfficeKitClass));
 
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(0), offsetof(struct _LibreOfficeKitDocumentClass, destroy));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(1), offsetof(struct _LibreOfficeKitDocumentClass, saveAs));

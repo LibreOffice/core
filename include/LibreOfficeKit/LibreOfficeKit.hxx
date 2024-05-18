@@ -1224,6 +1224,15 @@ public:
     }
 
     /**
+     * Starts all threads that are necessary to continue working
+     * after a joinThreads().
+     */
+    void startThreads()
+    {
+        mpThis->pClass->startThreads(mpThis);
+    }
+
+    /**
      * Informs that this process is either a parent, or a child
      * process post-fork, allowing improved resource sharing.
      */

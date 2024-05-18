@@ -2602,6 +2602,8 @@ static void lo_stopURP(LibreOfficeKit* pThis, void* pSendURPToLOContext);
 
 static int lo_joinThreads(LibreOfficeKit* pThis);
 
+static void lo_startThreads(LibreOfficeKit* pThis);
+
 static void lo_setForkedChild(LibreOfficeKit* pThis, bool bIsChild);
 
 static void lo_runLoop(LibreOfficeKit* pThis,
@@ -2649,6 +2651,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->startURP = lo_startURP;
         m_pOfficeClass->stopURP = lo_stopURP;
         m_pOfficeClass->joinThreads = lo_joinThreads;
+        m_pOfficeClass->startThreads = lo_startThreads;
         m_pOfficeClass->setForkedChild = lo_setForkedChild;
 
         gOfficeClass = m_pOfficeClass;
@@ -3399,6 +3402,12 @@ static int lo_joinThreads(LibreOfficeKit* /* pThis */)
     if (joinable && !joinable->joinThreads())
         return 0;
 
+    auto ucpWebdav = xContext->getServiceManager()->createInstanceWithContext(
+        "com.sun.star.ucb.WebDAVManager", xContext);
+    joinable = dynamic_cast<comphelper::LibreOfficeKit::ThreadJoinable *>(ucpWebdav.get());
+    if (joinable && !joinable->joinThreads())
+        return 0;
+
     // Ensure configmgr's write thread is down
     css::uno::Reference< css::util::XFlushable >(
         css::configuration::theDefaultProvider::get(
@@ -3406,6 +3415,15 @@ static int lo_joinThreads(LibreOfficeKit* /* pThis */)
         css::uno::UNO_QUERY_THROW)->flush();
 
     return 1;
+}
+
+static void lo_startThreads(LibreOfficeKit* /* pThis */)
+{
+    auto ucpWebdav = xContext->getServiceManager()->createInstanceWithContext(
+        "com.sun.star.ucb.WebDAVManager", xContext);
+    auto joinable = dynamic_cast<comphelper::LibreOfficeKit::ThreadJoinable *>(ucpWebdav.get());
+    if (joinable)
+        joinable->startThreads();
 }
 
 static void lo_setForkedChild(LibreOfficeKit* /* pThis */, bool bIsChild)

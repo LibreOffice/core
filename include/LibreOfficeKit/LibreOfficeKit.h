@@ -144,6 +144,9 @@ struct _LibreOfficeKitClass
     /// @see lok::Office::joinThreads
     int (*joinThreads)(LibreOfficeKit* pThis);
 
+    /// @see lok::Office::startThreads
+    void (*startThreads)(LibreOfficeKit* pThis);
+
     /// @see lok::Office::setForkedChild
     void (*setForkedChild)(LibreOfficeKit* pThis, bool bIsChild);
 };
