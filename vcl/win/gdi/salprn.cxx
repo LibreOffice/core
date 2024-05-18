@@ -164,9 +164,9 @@ void WinSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
     if ( nBytes )
     {
         PRINTER_INFO_4W* pWinInfo4 = static_cast<PRINTER_INFO_4W*>(std::malloc( nBytes ));
+        assert(pWinInfo4 && "Don't handle OOM conditions");
         if ( EnumPrintersW( PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS, nullptr, 4, reinterpret_cast<LPBYTE>(pWinInfo4), nBytes, &nBytes, &nInfoPrn4 ) )
         {
-            assert(pWinInfo4);
             for ( i = 0; i < nInfoPrn4; i++ )
             {
                 std::unique_ptr<SalPrinterQueueInfo> pInfo(new SalPrinterQueueInfo);
