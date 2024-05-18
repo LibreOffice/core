@@ -2534,8 +2534,11 @@ std::vector<OUString> SwDoc::GetUsedBullets()
         for (int nLevel=0; nLevel<10; ++nLevel)
         {
             const SwNumFormat& rFormat = (*mpNumRuleTable)[nRule]->Get(nLevel);
-            if (SVX_NUM_CHAR_SPECIAL != rFormat.GetNumberingType())
+            if (SVX_NUM_CHAR_SPECIAL != rFormat.GetNumberingType()
+                || !rFormat.GetBulletFont().has_value())
+            {
                 continue;
+            }
             vcl::Font aFont(*rFormat.GetBulletFont());
             sal_UCS4 cBullet = rFormat.GetBulletChar();
             OUString sBullet(&cBullet, 1);
