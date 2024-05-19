@@ -161,6 +161,7 @@ enum class DbGridControlNavigationBarState
 
 class FmXGridSourcePropListener;
 class DisposeListenerGridBridge;
+class DbGridControl;
 
 // NavigationBar
 class NavigationBar final : public InterimItemWindow
@@ -195,21 +196,26 @@ class NavigationBar final : public InterimItemWindow
     std::shared_ptr<weld::ButtonPressRepeater> m_xPrevRepeater;
     std::shared_ptr<weld::ButtonPressRepeater> m_xNextRepeater;
 
+    Size                 m_aLastAllocSize;
+
     sal_Int32            m_nCurrentPos;
 
     bool                 m_bPositioning;     // protect PositionDataSource against recursion
 
 public:
-    NavigationBar(vcl::Window* pParent);
+    NavigationBar(DbGridControl* pParent);
     virtual ~NavigationBar() override;
     virtual void dispose() override;
+
+    DECL_LINK(SizeAllocHdl, const Size&, void);
 
     // Status methods for Controls
     void InvalidateAll(sal_Int32 nCurrentPos, bool bAll = false);
     void InvalidateState(DbGridControlNavigationBarState nWhich) {SetState(nWhich);}
     void SetState(DbGridControlNavigationBarState nWhich);
     bool GetState(DbGridControlNavigationBarState nWhich) const;
-    sal_uInt16 ArrangeControls();
+    void SetPointFontAndZoom(const vcl::Font& rFont, const Fraction& rZoom);
+    sal_uInt16 GetPreferredWidth() const;
 
 private:
 
@@ -277,6 +283,8 @@ private:
                                             // records. Initial value is -1
     osl::Mutex          m_aDestructionSafety;
     osl::Mutex          m_aAdjustSafety;
+
+    Idle                m_aRearrangeIdle;
 
     css::util::Date
                         m_aNullDate;        // NullDate of the Numberformatter;
@@ -552,6 +560,8 @@ public:
         css::accessibility::XAccessible >
     CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId ) override;
 
+    void RearrangeAtIdle();
+
 protected:
     void RecalcRows(sal_Int32 nNewTopRow, sal_uInt16 nLinesOnScreen, bool bUpdateCursor);
     bool SeekCursor(sal_Int32 nRow, bool bAbsolute = false);
@@ -588,6 +598,7 @@ protected:
 protected:
     void ImplInitWindow( const InitWindowFacet _eInitWhat );
     DECL_DLLPRIVATE_LINK(OnDelete, void*, void);
+    DECL_DLLPRIVATE_LINK(RearrangeHdl, Timer*, void);
 
     DECL_DLLPRIVATE_LINK(OnAsyncAdjust, void*, void);
         // if the param is != NULL, AdjustRows will be called, else AdjustDataSource

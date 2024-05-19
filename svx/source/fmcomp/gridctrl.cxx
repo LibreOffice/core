@@ -43,6 +43,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/debug.hxx>
+#include <tools/fract.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
@@ -302,7 +303,7 @@ void NavigationBar::PositionDataSource(sal_Int32 nRecord)
     m_bPositioning = false;
 }
 
-NavigationBar::NavigationBar(vcl::Window* pParent)
+NavigationBar::NavigationBar(DbGridControl* pParent)
     : InterimItemWindow(pParent, u"svx/ui/navigationbar.ui"_ustr, u"NavigationBar"_ustr)
     , m_xRecordText(m_xBuilder->weld_label(u"recordtext"_ustr))
     , m_xAbsolute(new NavigationBar::AbsolutePos(m_xBuilder->weld_entry(u"entry-noframe"_ustr), this))
@@ -318,13 +319,6 @@ NavigationBar::NavigationBar(vcl::Window* pParent)
     , m_nCurrentPos(-1)
     , m_bPositioning(false)
 {
-    vcl::Font aApplFont(Application::GetSettings().GetStyleSettings().GetToolFont());
-    m_xAbsolute->set_font(aApplFont);
-    aApplFont.SetTransparent(true);
-    m_xRecordText->set_font(aApplFont);
-    m_xRecordOf->set_font(aApplFont);
-    m_xRecordCount->set_font(aApplFont);
-
     m_xFirstBtn->set_help_id(HID_GRID_TRAVEL_FIRST);
     m_xPrevBtn->set_help_id(HID_GRID_TRAVEL_PREV);
     m_xNextBtn->set_help_id(HID_GRID_TRAVEL_NEXT);
@@ -342,9 +336,18 @@ NavigationBar::NavigationBar(vcl::Window* pParent)
     m_xRecordOf->set_label(SvxResId(RID_STR_REC_FROM_TEXT));
     m_xRecordCount->set_label(OUString('?'));
 
-    auto nReserveWidth = m_xRecordCount->get_approximate_digit_width() * nReserveNumDigits;
-    m_xAbsolute->GetWidget()->set_size_request(nReserveWidth, -1);
-    m_xRecordCount->set_size_request(nReserveWidth, -1);
+    vcl::Font aApplFont(Application::GetSettings().GetStyleSettings().GetToolFont());
+    SetPointFontAndZoom(aApplFont, Fraction(1, 1));
+
+    m_xContainer->connect_size_allocate(LINK(this, NavigationBar, SizeAllocHdl));
+}
+
+IMPL_LINK(NavigationBar, SizeAllocHdl, const Size&, rSize, void)
+{
+    if (rSize == m_aLastAllocSize)
+        return;
+    m_aLastAllocSize = rSize;
+    static_cast<DbGridControl*>(GetParent())->RearrangeAtIdle();
 }
 
 NavigationBar::~NavigationBar()
@@ -366,7 +369,7 @@ void NavigationBar::dispose()
     InterimItemWindow::dispose();
 }
 
-sal_uInt16 NavigationBar::ArrangeControls()
+sal_uInt16 NavigationBar::GetPreferredWidth() const
 {
     return m_xContainer->get_preferred_size().Width();
 }
@@ -579,6 +582,46 @@ void NavigationBar::SetState(DbGridControlNavigationBarState nWhich)
     }
 }
 
+static void ScaleButton(weld::Button& rBtn, const Fraction& rZoom)
+{
+    rBtn.set_size_request(-1, -1);
+    Size aPrefSize = rBtn.get_preferred_size();
+    aPrefSize.setWidth(std::round(double(aPrefSize.Width() * rZoom)));
+    aPrefSize.setHeight(std::round(double(aPrefSize.Height() * rZoom)));
+    rBtn.set_size_request(aPrefSize.Width(), aPrefSize.Height());
+}
+
+void NavigationBar::SetPointFontAndZoom(const vcl::Font& rFont, const Fraction& rZoom)
+{
+    vcl::Font aFont(rFont);
+    if (rZoom.GetNumerator() != rZoom.GetDenominator())
+    {
+        Size aSize = aFont.GetFontSize();
+        aSize.setWidth(std::round(double(aSize.Width() * rZoom)));
+        aSize.setHeight(std::round(double(aSize.Height() * rZoom)));
+        aFont.SetFontSize(aSize);
+    }
+
+    m_xRecordText->set_font(aFont);
+    m_xAbsolute->GetWidget()->set_font(aFont);
+    m_xRecordOf->set_font(aFont);
+    m_xRecordCount->set_font(aFont);
+
+    auto nReserveWidth = m_xRecordCount->get_approximate_digit_width() * nReserveNumDigits;
+    m_xAbsolute->GetWidget()->set_size_request(nReserveWidth, -1);
+    m_xRecordCount->set_size_request(nReserveWidth, -1);
+
+    ScaleButton(*m_xFirstBtn, rZoom);
+    ScaleButton(*m_xPrevBtn, rZoom);
+    ScaleButton(*m_xNextBtn, rZoom);
+    ScaleButton(*m_xLastBtn, rZoom);
+    ScaleButton(*m_xNewBtn, rZoom);
+
+    SetZoom(rZoom);
+
+    InvalidateChildSizeCache();
+}
+
 DbGridRow::DbGridRow():m_eStatus(GridRowStatus::Clean), m_bIsNew(true)
 {}
 
@@ -692,6 +735,7 @@ DbGridControl::DbGridControl(
             ,m_pGridListener(nullptr)
             ,m_nSeekPos(-1)
             ,m_nTotalCount(-1)
+            ,m_aRearrangeIdle("DbGridControl Rearrange Idle")
             ,m_aNullDate(::dbtools::DBTypeConversion::getStandardDate())
             ,m_nMode(DEFAULT_BROWSE_MODE)
             ,m_nCurrentPos(-1)
@@ -716,6 +760,8 @@ DbGridControl::DbGridControl(
     m_aBar->SetAccessibleName(sName);
     m_aBar->Show();
     ImplInitWindow( InitWindowFacet::All );
+
+    m_aRearrangeIdle.SetInvokeHandler(LINK(this, DbGridControl, RearrangeHdl));
 }
 
 void DbGridControl::InsertHandleColumn()
@@ -774,6 +820,11 @@ void DbGridControl::dispose()
     EditBrowseBox::dispose();
 }
 
+void DbGridControl::RearrangeAtIdle()
+{
+    m_aRearrangeIdle.Start();
+}
+
 void DbGridControl::StateChanged( StateChangedType nType )
 {
     EditBrowseBox::StateChanged( nType );
@@ -788,12 +839,7 @@ void DbGridControl::StateChanged( StateChangedType nType )
         case StateChangedType::Zoom:
         {
             ImplInitWindow( InitWindowFacet::Font );
-
-            // and give it a chance to rearrange
-            Point aPoint = GetControlArea().TopLeft();
-            sal_uInt16 nX = static_cast<sal_uInt16>(aPoint.X());
-            ArrangeControls(nX, static_cast<sal_uInt16>(aPoint.Y()));
-            ReserveControlArea(nX);
+            RearrangeAtIdle();
         }
         break;
         case StateChangedType::ControlFont:
@@ -853,12 +899,12 @@ void DbGridControl::ImplInitWindow( const InitWindowFacet _eInitWhat )
     {
         if ( m_bNavigationBar )
         {
-            if ( IsControlFont() )
-                m_aBar->SetControlFont( GetControlFont() );
-            else
-                m_aBar->SetControlFont();
+            const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+            vcl::Font aFont = rStyleSettings.GetToolFont();
+            if (IsControlFont())
+                aFont.Merge(GetControlFont());
 
-            m_aBar->SetZoom( GetZoom() );
+            m_aBar->SetPointFontAndZoom(aFont, GetZoom());
         }
     }
 
@@ -926,8 +972,8 @@ void DbGridControl::ArrangeControls(sal_uInt16& nX, sal_uInt16 nY)
     if (m_bNavigationBar)
     {
         tools::Rectangle aRect(GetControlArea());
-        m_aBar->SetPosSizePixel(Point(0, nY + 1), Size(aRect.GetSize().Width(), aRect.GetSize().Height() - 1));
-        nX = m_aBar->ArrangeControls();
+        nX = m_aBar->GetPreferredWidth();
+        m_aBar->SetPosSizePixel(Point(0, nY + 1), Size(nX, aRect.GetSize().Height() - 1));
     }
 }
 
@@ -2592,6 +2638,22 @@ IMPL_LINK_NOARG(DbGridControl, OnDelete, void*, void)
 {
     m_nDeleteEvent = nullptr;
     DeleteSelectedRows();
+}
+
+IMPL_LINK_NOARG(DbGridControl, RearrangeHdl, Timer*, void)
+{
+    // and give it a chance to rearrange
+    Point aPoint = GetControlArea().TopLeft();
+    sal_uInt16 nX = static_cast<sal_uInt16>(aPoint.X());
+    ArrangeControls(nX, aPoint.Y());
+    // tdf#155364 like tdf#97731 if the reserved area changed size, give
+    // the controls a chance to adapt to the new size
+    bool bChanged = ReserveControlArea(nX);
+    if (bChanged)
+    {
+        ArrangeControls(nX, aPoint.Y());
+        Invalidate();
+    }
 }
 
 void DbGridControl::DeleteSelectedRows()
