@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:styles>
+  <style:style style:name="Num_1_lvl2" style:family="paragraph" style:list-style-name="Num_1" style:list-level="2"/>
+  <style:style style:name="No_list" style:family="paragraph" style:list-style-name=""/>
+  <text:list-style style:name="Num_1">
+   <text:list-level-style-number text:level="1" style:num-prefix="Num1_lvl1_" style:num-format="1">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="space"/>
+    </style:list-level-properties>
+   </text:list-level-style-number>
+   <text:list-level-style-number text:level="2" style:num-prefix="Num1_lvl2_" style:num-format="1">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="space"/>
+    </style:list-level-properties>
+   </text:list-level-style-number>
+  </text:list-style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="P1" style:family="paragraph" style:parent-style-name="No_list" style:list-style-name="Num_1"/>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:list text:style-name="Num_1">
+    <text:list-item>
+     <text:p text:style-name="P1">foo</text:p>
+    </text:list-item>
+   </text:list>
+  </office:text>
+ </office:body>
+</office:document>
