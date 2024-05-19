@@ -5521,11 +5521,11 @@ void ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
 
     if ( DeleteContents( aMark, InsertDeleteFlags::CONTENTS, true, false/*bApi*/ ) )
     {
-        // GRAM_API for API compatibility.
-        if (!EnterMatrix( aNewRange, &aMark, nullptr, aFormula, false/*bApi*/, false, OUString(), formula::FormulaGrammar::GRAM_API ))
+        // Formula string was obtained in document grammar.
+        if (!EnterMatrix( aNewRange, &aMark, nullptr, aFormula, false/*bApi*/, false, OUString(), rDoc.GetGrammar() ))
         {
             // try to restore the previous state
-            EnterMatrix( rOldRange, &aMark, nullptr, aFormula, false/*bApi*/, false, OUString(), formula::FormulaGrammar::GRAM_API );
+            EnterMatrix( rOldRange, &aMark, nullptr, aFormula, false/*bApi*/, false, OUString(), rDoc.GetGrammar() );
         }
     }
 
