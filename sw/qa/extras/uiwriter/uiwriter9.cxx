@@ -19,6 +19,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <swdtflvr.hxx>
 #include <o3tl/string_view.hxx>
 
@@ -212,6 +213,47 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf160898)
     pWrtShell->Down(false, 2);
     // Without the fix, this would crash:
     pWrtShell->SelAll();
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf161172)
+{
+    // Given a paragraph manually made a member of a list:
+    createSwDoc("tdf161172.fodt");
+    auto para = getParagraph(1);
+
+    // Check initial state: the first paragraph has "No_list" para style, "Num_1" numbering style,
+    // numbering level 0, and "Num1_lvl1_1" numbering label.
+    CPPUNIT_ASSERT_EQUAL(u"No_list"_ustr, getProperty<OUString>(para, u"ParaStyleName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Num_1"_ustr, getProperty<OUString>(para, u"NumberingStyleName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Num1_lvl1_1"_ustr, getProperty<OUString>(para, u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(para, u"NumberingLevel"_ustr));
+
+    // Assign "Num_1_lvl2" paragraph style to the first paragraph. The style is associated with
+    // "Num_1" numbering style, level 1.
+    dispatchCommand(mxComponent, u".uno:StyleApply"_ustr,
+                    { comphelper::makePropertyValue(u"FamilyName"_ustr, u"ParagraphStyles"_ustr),
+                      comphelper::makePropertyValue(u"Style"_ustr, u"Num_1_lvl2"_ustr) });
+
+    // Check that the respective properties got correctly applied
+    CPPUNIT_ASSERT_EQUAL(u"Num_1_lvl2"_ustr, getProperty<OUString>(para, u"ParaStyleName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Num_1"_ustr, getProperty<OUString>(para, u"NumberingStyleName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Num1_lvl2_1"_ustr, getProperty<OUString>(para, u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(para, u"NumberingLevel"_ustr));
+
+    // Undo
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    // Check that the numbering properties got correctly restored
+    CPPUNIT_ASSERT_EQUAL(u"No_list"_ustr, getProperty<OUString>(para, u"ParaStyleName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Num_1"_ustr, getProperty<OUString>(para, u"NumberingStyleName"_ustr));
+    // Without the fix, this would fail with
+    // - Expected: Num1_lvl1_1
+    // - Actual  : Num1_lvl2_1
+    CPPUNIT_ASSERT_EQUAL(u"Num1_lvl1_1"_ustr, getProperty<OUString>(para, u"ListLabelString"_ustr));
+    // Without the fix, this would fail with
+    // - Expected: 0
+    // - Actual  : 1
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(para, u"NumberingLevel"_ustr));
 }
 
 } // end of anonymous namespace
