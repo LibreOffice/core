@@ -2713,7 +2713,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                 case  FN_UNO_ANCHOR_TYPES:
                 case  FN_UNO_TEXT_WRAP:
                 case  FN_UNO_ANCHOR_TYPE:
-                    ::sw::GetDefaultTextContentValue(
+                    (void)::sw::GetDefaultTextContentValue(
                             aRet, u"", pEntry->nWID);
                 break;
 
