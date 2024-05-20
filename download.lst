@@ -359,8 +359,8 @@ LIBJPEG_TURBO_TARBALL := libjpeg-turbo-2.1.5.1.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LANGTAGREG_SHA256SUM := 642c1c8e08aa79884f3d0fe15c0f5866e6fb6828af22c3c9c1fe3827f99e58cc
-LANGTAGREG_TARBALL := language-subtag-registry-2024-03-07.tar.bz2
+LANGTAGREG_SHA256SUM := 9090265f2bb0f4fb20ec1f7357062c033b9556b362b70c441985c1c905dd9a73
+LANGTAGREG_TARBALL := language-subtag-registry-2024-05-16.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
