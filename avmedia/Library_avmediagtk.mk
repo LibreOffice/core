@@ -13,15 +13,12 @@ $(eval $(call gb_Library_set_componentfile,avmediagtk,avmedia/source/gtk/avmedia
 
 $(eval $(call gb_Library_set_include,avmediagtk,\
 	$$(INCLUDE) \
+	$$(GTK4_CFLAGS) \
 	-I$(SRCDIR)/avmedia/source/inc \
 	-I$(SRCDIR)/avmedia/source/gstreamer \
 ))
 
 $(eval $(call gb_Library_use_external,avmediagtk,boost_headers))
-
-$(eval $(call gb_Library_add_cxxflags,avmediagtk,\
-    $$(GTK4_CFLAGS) \
-))
 
 $(eval $(call gb_Library_use_sdk_api,avmediagtk))
 
