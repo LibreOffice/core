@@ -176,8 +176,8 @@ public:
     SvtUserOptions&     GetUserOptions();
 
     // Iterate over views.
-    static SwView*      GetFirstView();
-    static SwView*      GetNextView(SwView const *);
+    SAL_RET_MAYBENULL static SwView*      GetFirstView();
+    SAL_RET_MAYBENULL static SwView*      GetNextView(SwView const *);
 
     bool IsEmbeddedLoadSave() const         { return m_bEmbeddedLoadSave; }
     void SetEmbeddedLoadSave( bool bFlag )  { m_bEmbeddedLoadSave = bFlag; }
@@ -251,8 +251,8 @@ public:
 
 #define SW_MOD() ( static_cast<SwModule*>(SfxApplication::GetModule(SfxToolsModule::Writer)))
 
-SW_DLLPUBLIC SwView*    GetActiveView();
-SW_DLLPUBLIC SwWrtShell* GetActiveWrtShell();
+SAL_RET_MAYBENULL SW_DLLPUBLIC SwView*    GetActiveView();
+SAL_RET_MAYBENULL SW_DLLPUBLIC SwWrtShell* GetActiveWrtShell();
 
 namespace sw
 {
