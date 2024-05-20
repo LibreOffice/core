@@ -102,11 +102,11 @@ ScVbaPalette::getPalette() const
     uno::Reference< container::XIndexAccess > xIndex;
     uno::Reference< beans::XPropertySet > xProps;
     if ( !m_pShell )
-        throw uno::RuntimeException("Can't extract palette, no doc shell" );
+        throw uno::RuntimeException(u"Can't extract palette, no doc shell"_ustr );
 
     xProps.set( m_pShell->GetModel(), uno::UNO_QUERY_THROW );
 
-    xIndex.set( xProps->getPropertyValue("ColorPalette"), uno::UNO_QUERY );
+    xIndex.set( xProps->getPropertyValue(u"ColorPalette"_ustr), uno::UNO_QUERY );
     if ( !xIndex.is() )
         return new DefaultPalette();
     return xIndex;

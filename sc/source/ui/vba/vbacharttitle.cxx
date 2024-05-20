@@ -29,7 +29,7 @@ ScVbaChartTitle::ScVbaChartTitle( const uno::Reference< XHelperInterface >& xPar
 OUString
 ScVbaChartTitle::getServiceImplName()
 {
-    return "ScVbaChartTitle";
+    return u"ScVbaChartTitle"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -37,7 +37,7 @@ ScVbaChartTitle::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames = comphelper::concatSequences(
         ChartTitleBase::getServiceNames(),
-        uno::Sequence< OUString > { "ooo.vba.excel.Chart" } );
+        uno::Sequence< OUString > { u"ooo.vba.excel.Chart"_ustr } );
     return aServiceNames;
 }
 

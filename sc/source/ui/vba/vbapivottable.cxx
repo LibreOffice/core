@@ -39,7 +39,7 @@ ScVbaPivotTable::PivotCache()
 OUString
 ScVbaPivotTable::getServiceImplName()
 {
-    return "ScVbaPivotTable";
+    return u"ScVbaPivotTable"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -47,7 +47,7 @@ ScVbaPivotTable::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.PivotTable"
+        u"ooo.vba.excel.PivotTable"_ustr
     };
     return aServiceNames;
 }

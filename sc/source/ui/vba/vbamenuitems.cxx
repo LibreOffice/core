@@ -123,7 +123,7 @@ uno::Reference< excel::XMenuItem > SAL_CALL ScVbaMenuItems::Add( const OUString&
 OUString
 ScVbaMenuItems::getServiceImplName()
 {
-    return "ScVbaMenuItems";
+    return u"ScVbaMenuItems"_ustr;
 }
 
 uno::Sequence<OUString>
@@ -131,7 +131,7 @@ ScVbaMenuItems::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.MenuItems"
+        u"ooo.vba.excel.MenuItems"_ustr
     };
     return aServiceNames;
 }

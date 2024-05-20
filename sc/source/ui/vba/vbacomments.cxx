@@ -97,7 +97,7 @@ ScVbaComments::getElementType()
 OUString
 ScVbaComments::getServiceImplName()
 {
-    return "ScVbaComments";
+    return u"ScVbaComments"_ustr;
 }
 
 css::uno::Sequence<OUString>
@@ -105,7 +105,7 @@ ScVbaComments::getServiceNames()
 {
     static uno::Sequence< OUString > const sNames
     {
-        "ooo.vba.excel.Comments"
+        u"ooo.vba.excel.Comments"_ustr
     };
     return sNames;
 }

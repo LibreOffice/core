@@ -43,7 +43,7 @@ ScVbaTextFrame::Characters()
 OUString
 ScVbaTextFrame::getServiceImplName()
 {
-    return "ScVbaTextFrame";
+    return u"ScVbaTextFrame"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -51,7 +51,7 @@ ScVbaTextFrame::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.TextFrame"
+        u"ooo.vba.excel.TextFrame"_ustr
     };
     return aServiceNames;
 }

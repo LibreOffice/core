@@ -52,7 +52,7 @@ ScVbaMenu::MenuItems( const uno::Any& aIndex )
 OUString
 ScVbaMenu::getServiceImplName()
 {
-    return "ScVbaMenu";
+    return u"ScVbaMenu"_ustr;
 }
 
 uno::Sequence<OUString>
@@ -60,7 +60,7 @@ ScVbaMenu::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.Menu"
+        u"ooo.vba.excel.Menu"_ustr
     };
     return aServiceNames;
 }

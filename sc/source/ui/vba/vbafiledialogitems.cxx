@@ -73,9 +73,9 @@ ScVbaFileDialogSelectedItems::createCollectionObject( const uno::Any& aSource )
 {
     sal_Int32 nPosition = -1;
     if (!(aSource >>= nPosition))
-        throw uno::RuntimeException("not an sal_Int32");
+        throw uno::RuntimeException(u"not an sal_Int32"_ustr);
     if (nPosition < 0 || o3tl::make_unsigned(nPosition) >= m_sItems.size())
-        throw uno::RuntimeException("out of range");
+        throw uno::RuntimeException(u"out of range"_ustr);
 
     OUString sPath = m_sItems[nPosition];
     return uno::Any( sPath );
@@ -107,7 +107,7 @@ sal_Int32 ScVbaFileDialogSelectedItems::getCount()
 OUString
 ScVbaFileDialogSelectedItems::getServiceImplName()
 {
-    return "ScVbaFileDialogSelectedItems";
+    return u"ScVbaFileDialogSelectedItems"_ustr;
 }
 
 uno::Sequence<OUString>
@@ -115,7 +115,7 @@ ScVbaFileDialogSelectedItems::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.FileDialogSelectedItems"
+        u"ooo.vba.FileDialogSelectedItems"_ustr
     };
     return aServiceNames;
 }

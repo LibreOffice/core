@@ -142,7 +142,7 @@ ScVbaFormatCondition::notifyRange()
 OUString
 ScVbaFormatCondition::getServiceImplName()
 {
-    return "ScVbaFormatCondition";
+    return u"ScVbaFormatCondition"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -150,7 +150,7 @@ ScVbaFormatCondition::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.FormatCondition"
+        u"ooo.vba.excel.FormatCondition"_ustr
     };
     return aServiceNames;
 }

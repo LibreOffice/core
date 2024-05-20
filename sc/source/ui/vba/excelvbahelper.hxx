@@ -100,7 +100,7 @@ template < typename ImplObject >
     {
         ImplObject* pObj = comphelper::getFromUnoTunnel<ImplObject>(rxWrapperIf);
         if ( !pObj )
-            throw css::uno::RuntimeException("Internal error, can't extract implementation object", rxWrapperIf );
+            throw css::uno::RuntimeException(u"Internal error, can't extract implementation object"_ustr, rxWrapperIf );
         return pObj;
     }
 

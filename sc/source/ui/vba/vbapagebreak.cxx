@@ -41,7 +41,7 @@ ScVbaPageBreak< Ifc... >::ScVbaPageBreak( const uno::Reference< XHelperInterface
 template< typename... Ifc >
 sal_Int32 ScVbaPageBreak< Ifc... >::getType()
 {
-    uno::Any aValue = mxRowColPropertySet->getPropertyValue("IsStartOfNewPage");
+    uno::Any aValue = mxRowColPropertySet->getPropertyValue(u"IsStartOfNewPage"_ustr);
     bool hasPageBreak = false;
     aValue >>= hasPageBreak;
 
@@ -66,11 +66,11 @@ void ScVbaPageBreak< Ifc... >::setType(sal_Int32 type)
 
     if( type == excel::XlPageBreak::xlPageBreakNone )
     {
-        mxRowColPropertySet->setPropertyValue("IsStartOfNewPage", uno::Any(false));
+        mxRowColPropertySet->setPropertyValue(u"IsStartOfNewPage"_ustr, uno::Any(false));
         return;
     }
 
-    mxRowColPropertySet->setPropertyValue("IsStartOfNewPage", uno::Any(true));
+    mxRowColPropertySet->setPropertyValue(u"IsStartOfNewPage"_ustr, uno::Any(true));
     if( type == excel::XlPageBreak::xlPageBreakManual )
         maTablePageBreakData.ManualBreak = true;
     else
@@ -80,7 +80,7 @@ void ScVbaPageBreak< Ifc... >::setType(sal_Int32 type)
 template< typename... Ifc >
 void ScVbaPageBreak< Ifc... >::Delete()
 {
-    mxRowColPropertySet->setPropertyValue("IsStartOfNewPage", uno::Any(false));
+    mxRowColPropertySet->setPropertyValue(u"IsStartOfNewPage"_ustr, uno::Any(false));
 }
 
 template< typename... Ifc >
@@ -96,7 +96,7 @@ template class ScVbaPageBreak< excel::XHPageBreak >;
 OUString
 ScVbaHPageBreak::getServiceImplName()
 {
-    return "ScVbaHPageBreak";
+    return u"ScVbaHPageBreak"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -104,7 +104,7 @@ ScVbaHPageBreak::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.HPageBreak"
+        u"ooo.vba.excel.HPageBreak"_ustr
     };
     return aServiceNames;
 }
@@ -127,7 +127,7 @@ ScVbaVPageBreak::~ScVbaVPageBreak()
 OUString
 ScVbaVPageBreak::getServiceImplName()
 {
-    return "ScVbaVPageBreak";
+    return u"ScVbaVPageBreak"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -135,7 +135,7 @@ ScVbaVPageBreak::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.VPageBreak"
+        u"ooo.vba.excel.VPageBreak"_ustr
     };
     return aServiceNames;
 }

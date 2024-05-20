@@ -621,12 +621,12 @@ void SAL_CALL ScVbaEventsHelper::notifyEvent( const css::document::EventObject& 
 
 OUString ScVbaEventsHelper::getImplementationName()
 {
-    return "ScVbaEventsHelper";
+    return u"ScVbaEventsHelper"_ustr;
 }
 
 css::uno::Sequence<OUString> ScVbaEventsHelper::getSupportedServiceNames()
 {
-    return {"com.sun.star.script.vba.VBASpreadsheetEventProcessor"};
+    return {u"com.sun.star.script.vba.VBASpreadsheetEventProcessor"_ustr};
 }
 
 // protected ------------------------------------------------------------------
@@ -658,7 +658,7 @@ bool ScVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
             rEventQueue.emplace_back(WORKBOOK_ACTIVATE );
             uno::Sequence< uno::Any > aArgs{ uno::Any(mxModel->getCurrentController()) };
             rEventQueue.emplace_back( WORKBOOK_WINDOWACTIVATE, aArgs );
-            if (!hasModule("Auto_Open"))
+            if (!hasModule(u"Auto_Open"_ustr))
                 rEventQueue.emplace_back(AUTO_OPEN );
             // remember initial selection
             maOldSelection <<= mxModel->getCurrentSelection();
@@ -779,7 +779,7 @@ void ScVbaEventsHelper::implPostProcessEvent( EventQueue& rEventQueue,
         case WORKBOOK_BEFORECLOSE:
             /*  Execute Auto_Close only if not cancelled by event handler, but
                 before UI asks user whether to cancel closing the document. */
-            if (!bCancel && !hasModule("Auto_Close"))
+            if (!bCancel && !hasModule(u"Auto_Close"_ustr))
                 rEventQueue.emplace_back(AUTO_CLOSE );
         break;
     }

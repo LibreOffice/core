@@ -90,20 +90,20 @@ ScVbaMenuBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ )
     if( nIndex == excel::XlSheetType::xlWorksheet )
     {
         uno::Any aSource;
-        aSource <<= OUString( "Worksheet Menu Bar" );
+        aSource <<= u"Worksheet Menu Bar"_ustr;
         uno::Reference< XCommandBar > xCommandBar( m_xCommandBars->Item( aSource, uno::Any() ), uno::UNO_QUERY_THROW );
         uno::Reference< excel::XMenuBar > xMenuBar( new ScVbaMenuBar( this, mxContext, xCommandBar ) );
         return uno::Any( xMenuBar );
     }
 
-    throw uno::RuntimeException("Not implemented" );
+    throw uno::RuntimeException(u"Not implemented"_ustr );
 }
 
 // XHelperInterface
 OUString
 ScVbaMenuBars::getServiceImplName()
 {
-    return "ScVbaMenuBars";
+    return u"ScVbaMenuBars"_ustr;
 }
 
 uno::Sequence<OUString>
@@ -111,7 +111,7 @@ ScVbaMenuBars::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.MenuBars"
+        u"ooo.vba.excel.MenuBars"_ustr
     };
     return aServiceNames;
 }

@@ -72,7 +72,7 @@ ScVbaInterior::ScVbaInterior( const uno::Reference< XHelperInterface >& xParent,
     m_aPattColor = Color(0);
     m_nPattern = 0;
     if ( !m_xProps.is() )
-        throw lang::IllegalArgumentException("properties", uno::Reference< uno::XInterface >(), 2 );
+        throw lang::IllegalArgumentException(u"properties"_ustr, uno::Reference< uno::XInterface >(), 2 );
 }
 
 uno::Any
@@ -238,7 +238,7 @@ ScVbaInterior::GetMixedColorComp(  sal_uInt8 nFore, sal_uInt8 nBack, sal_uInt8 n
 uno::Reference< container::XNameContainer >
 ScVbaInterior::GetAttributeContainer()
 {
-    return uno::Reference < container::XNameContainer > ( m_xProps->getPropertyValue("UserDefinedAttributes"), uno::UNO_QUERY_THROW );
+    return uno::Reference < container::XNameContainer > ( m_xProps->getPropertyValue(u"UserDefinedAttributes"_ustr), uno::UNO_QUERY_THROW );
 }
 sal_Int32
 ScVbaInterior::GetAttributeData( uno::Any const & aValue )
@@ -277,7 +277,7 @@ ScVbaInterior::SetUserDefinedAttributes( const OUString& sName, const uno::Any& 
         if( xNameContainer->hasByName( sName ) )
             xNameContainer->removeByName( sName );
         xNameContainer->insertByName( sName, aValue );
-        m_xProps->setPropertyValue("UserDefinedAttributes", uno::Any( xNameContainer ) );
+        m_xProps->setPropertyValue(u"UserDefinedAttributes"_ustr, uno::Any( xNameContainer ) );
     }
 }
 // OOo do not support below API
@@ -294,7 +294,7 @@ void SAL_CALL
 ScVbaInterior::setPattern( const uno::Any& _pattern )
 {
     if( !(_pattern >>= m_nPattern) )
-        throw uno::RuntimeException("Invalid Pattern index" );
+        throw uno::RuntimeException(u"Invalid Pattern index"_ustr );
 
     SetUserDefinedAttributes( PATTERN, SetAttributeData( m_nPattern ) );
     SetMixedColor();
@@ -340,7 +340,7 @@ ScVbaInterior::setPatternColor( const uno::Any& _patterncolor )
 {
     sal_Int32 nPattColor = 0;
     if( !(_patterncolor >>= nPattColor) )
-        throw uno::RuntimeException("Invalid Pattern Color" );
+        throw uno::RuntimeException(u"Invalid Pattern Color"_ustr );
 
     SetUserDefinedAttributes( PATTERNCOLOR, SetAttributeData( XLRGBToOORGB( nPattColor ) ) );
     SetMixedColor();
@@ -359,7 +359,7 @@ ScVbaInterior::setPatternColorIndex( const uno::Any& _patterncolorindex )
 {
     sal_Int32 nColorIndex = 0;
     if( !(_patterncolorindex >>= nColorIndex) )
-        throw uno::RuntimeException("Invalid Pattern Color" );
+        throw uno::RuntimeException(u"Invalid Pattern Color"_ustr );
 
     if( nColorIndex == 0 )
         return;
@@ -405,7 +405,7 @@ void SAL_CALL ScVbaInterior::setPatternTintAndShade(const uno::Any& /*rAny*/)
 OUString
 ScVbaInterior::getServiceImplName()
 {
-    return "ScVbaInterior";
+    return u"ScVbaInterior"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -413,7 +413,7 @@ ScVbaInterior::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.Interior"
+        u"ooo.vba.excel.Interior"_ustr
     };
     return aServiceNames;
 }

@@ -50,7 +50,7 @@ ScVbaTextBoxShape::characters( const uno::Any& Start, const uno::Any& Length )
     ScDocument* pDoc = pDocShell ? &pDocShell->GetDocument() : nullptr;
 
     if ( !pDoc )
-        throw uno::RuntimeException("Failed to access document from shell" );
+        throw uno::RuntimeException(u"Failed to access document from shell"_ustr );
     uno::Reference< text::XSimpleText > xSimple( m_xTextRange, uno::UNO_QUERY_THROW );
 
     ScVbaPalette aPalette( pDoc->GetDocumentShell() );

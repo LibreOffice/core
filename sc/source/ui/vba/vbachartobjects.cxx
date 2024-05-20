@@ -74,7 +74,7 @@ public:
         {
             css::uno::Any anyEx(cppu::getCaughtException());
             throw lang::WrappedTargetException(
-                    "Error creating ScVbaChartObject!",
+                    u"Error creating ScVbaChartObject!"_ustr,
                     getXWeak(),
                     anyEx );
         }
@@ -106,10 +106,10 @@ ScVbaChartObjects::getChartObjectNames() const
         ScCellRangesBase* pUno = dynamic_cast< ScCellRangesBase* >( xIf.get() );
         ScDocShell* pDocShell = nullptr;
         if ( !pUno )
-            throw uno::RuntimeException("Failed to obtain the impl class from the drawpage" );
+            throw uno::RuntimeException(u"Failed to obtain the impl class from the drawpage"_ustr );
         pDocShell = pUno->GetDocShell();
         if ( !pDocShell )
-            throw uno::RuntimeException("Failed to obtain the docshell implclass" );
+            throw uno::RuntimeException(u"Failed to obtain the docshell implclass"_ustr );
 
         uno::Reference< sheet::XSpreadsheets > xSpreadsheets = pDocShell->GetModel()->getSheets();
         std::vector< OUString > aChartNamesVector;
@@ -143,7 +143,7 @@ ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight 
         aRectangle.Width = Millimeter::getInHundredthsOfOneMillimeter(_nWidth);
         aRectangle.Height = Millimeter::getInHundredthsOfOneMillimeter(_nHeight);
         // Note the space at the end of the stem ("Chart "). In ChartSheets only "Chart" is the stem
-        OUString sPersistChartName = ContainerUtilities::getUniqueName( getChartObjectNames(), "Chart " , std::u16string_view(), 1);
+        OUString sPersistChartName = ContainerUtilities::getUniqueName( getChartObjectNames(), u"Chart "_ustr , std::u16string_view(), 1);
         xTableCharts->addNewByName(sPersistChartName, aRectangle, aCellRangeAddress, true, false );
         uno::Reference< excel::XChartObject > xChartObject( getItemByStringIndex( sPersistChartName ), uno::UNO_QUERY_THROW );
         xChartObject->getChart()->setChartType(excel::XlChartType::xlColumnClustered);
@@ -191,7 +191,7 @@ ScVbaChartObjects::createCollectionObject( const css::uno::Any& aSource )
 OUString
 ScVbaChartObjects::getServiceImplName()
 {
-    return "ScVbaChartObjects";
+    return u"ScVbaChartObjects"_ustr;
 }
 
 css::uno::Sequence<OUString>
@@ -199,7 +199,7 @@ ScVbaChartObjects::getServiceNames()
 {
     static uno::Sequence< OUString > const sNames
     {
-        "ooo.vba.excel.ChartObjects"
+        u"ooo.vba.excel.ChartObjects"_ustr
     };
     return sNames;
 }

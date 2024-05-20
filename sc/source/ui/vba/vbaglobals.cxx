@@ -205,7 +205,7 @@ ScVbaGlobals::getDebug()
     {
         uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
         uno::Reference< uno::XInterface > xVBADebug = xServiceManager->createInstanceWithContext(
-            "ooo.vba.Debug", mxContext );
+            u"ooo.vba.Debug"_ustr, mxContext );
         return uno::Any( xVBADebug );
     }
     catch( uno::Exception& )
@@ -227,13 +227,13 @@ ScVbaGlobals::getAvailableServiceNames(  )
         ScVbaGlobals_BASE::getAvailableServiceNames(),
         uno::Sequence< OUString >
         {
-            "ooo.vba.excel.Range",
-            "ooo.vba.excel.Workbook",
-            "ooo.vba.excel.Window",
-            "ooo.vba.excel.Worksheet",
-            "ooo.vba.excel.Application",
-            "ooo.vba.excel.Hyperlink",
-            "com.sun.star.script.vba.VBASpreadsheetEventProcessor"
+            u"ooo.vba.excel.Range"_ustr,
+            u"ooo.vba.excel.Workbook"_ustr,
+            u"ooo.vba.excel.Window"_ustr,
+            u"ooo.vba.excel.Worksheet"_ustr,
+            u"ooo.vba.excel.Application"_ustr,
+            u"ooo.vba.excel.Hyperlink"_ustr,
+            u"com.sun.star.script.vba.VBASpreadsheetEventProcessor"_ustr
         } );
     return serviceNames;
 }
@@ -241,7 +241,7 @@ ScVbaGlobals::getAvailableServiceNames(  )
 OUString
 ScVbaGlobals::getServiceImplName()
 {
-    return "ScVbaGlobals";
+    return u"ScVbaGlobals"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -249,7 +249,7 @@ ScVbaGlobals::getServiceNames()
 {
         static uno::Sequence< OUString > aServiceNames
         {
-            "ooo.vba.excel.Globals"
+            u"ooo.vba.excel.Globals"_ustr
         };
         return aServiceNames;
 }

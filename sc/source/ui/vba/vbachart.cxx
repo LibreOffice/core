@@ -264,7 +264,7 @@ ScVbaChart::setChartType( ::sal_Int32 _nChartType )
         case xlSurfaceWireframe:
         case xlSurfaceTopView:
         case xlSurfaceTopViewWireframe:
-            setDiagram( "com.sun.star.chart.BarDiagram");
+            setDiagram( u"com.sun.star.chart.BarDiagram"_ustr);
             break;
         case xlLine:
         case xl3DLine:
@@ -273,7 +273,7 @@ ScVbaChart::setChartType( ::sal_Int32 _nChartType )
         case xlLineMarkers:
         case xlLineMarkersStacked:
         case xlLineMarkersStacked100:
-            setDiagram( "com.sun.star.chart.LineDiagram");
+            setDiagram( u"com.sun.star.chart.LineDiagram"_ustr);
             break;
         case xl3DArea:
         case xlArea:
@@ -281,17 +281,17 @@ ScVbaChart::setChartType( ::sal_Int32 _nChartType )
         case xlAreaStacked100:
         case xl3DAreaStacked:
         case xl3DAreaStacked100:
-            setDiagram( "com.sun.star.chart.AreaDiagram" );
+            setDiagram( u"com.sun.star.chart.AreaDiagram"_ustr );
             break;
         case xlDoughnut:
         case xlDoughnutExploded:
-            setDiagram( "com.sun.star.chart.DonutDiagram" );
+            setDiagram( u"com.sun.star.chart.DonutDiagram"_ustr );
             break;
         case xlStockHLC:
         case xlStockOHLC:
         case xlStockVHLC:
         case xlStockVOHLC:
-            setDiagram( "com.sun.star.chart.StockDiagram");
+            setDiagram( u"com.sun.star.chart.StockDiagram"_ustr);
             mxDiagramPropertySet->setPropertyValue( UPDOWN, uno::Any((_nChartType == xlStockOHLC) || (_nChartType == xlStockVOHLC)));
             mxDiagramPropertySet->setPropertyValue( VOLUME, uno::Any((_nChartType == xlStockVHLC) || (_nChartType == xlStockVOHLC)));
             break;
@@ -302,13 +302,13 @@ ScVbaChart::setChartType( ::sal_Int32 _nChartType )
         case xl3DPie:
         case xlPie:
         case xlBarOfPie:                            // not possible (Zoom pie)
-            setDiagram( "com.sun.star.chart.PieDiagram");
+            setDiagram( u"com.sun.star.chart.PieDiagram"_ustr);
             break;
 
         case xlRadar:
         case xlRadarMarkers:
         case xlRadarFilled:
-            setDiagram( "com.sun.star.chart.NetDiagram");
+            setDiagram( u"com.sun.star.chart.NetDiagram"_ustr);
             break;
         case xlXYScatter:
         case xlBubble:                      // not possible
@@ -317,7 +317,7 @@ ScVbaChart::setChartType( ::sal_Int32 _nChartType )
         case xlXYScatterLinesNoMarkers:
         case xlXYScatterSmooth:
         case xlXYScatterSmoothNoMarkers:
-            setDiagram( "com.sun.star.chart.XYDiagram");
+            setDiagram( u"com.sun.star.chart.XYDiagram"_ustr);
             switch(_nChartType)
             {
                 case xlXYScatter:
@@ -554,7 +554,7 @@ ScVbaChart::Activate()
     uno::Reference< XHelperInterface > xParent( getParent() );
     ScVbaChartObject* pChartObj = static_cast< ScVbaChartObject* >( xParent.get() );
     if ( !pChartObj )
-        throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), "no ChartObject as parent" );
+        throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), u"no ChartObject as parent"_ustr );
 
     pChartObj->Activate();
 
@@ -1041,7 +1041,7 @@ ScVbaChart::getAxisPropertySet(sal_Int32 _nAxisType, sal_Int32 _nAxisGroup)
 OUString
 ScVbaChart::getServiceImplName()
 {
-    return "ScVbaChart";
+    return u"ScVbaChart"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -1049,7 +1049,7 @@ ScVbaChart::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.Chart"
+        u"ooo.vba.excel.Chart"_ustr
     };
     return aServiceNames;
 }

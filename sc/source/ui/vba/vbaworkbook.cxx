@@ -92,26 +92,26 @@ bool ScVbaWorkbook::setFilterPropsFromFormat( sal_Int32 nFormat, uno::Sequence< 
                 pProp->Value <<= SC_TEXT_CSV_FILTER_NAME;
                 break;
             case excel::XlFileFormat::xlDBF4:
-                pProp->Value <<= OUString("DBF");
+                pProp->Value <<= u"DBF"_ustr;
                 break;
             case excel::XlFileFormat::xlDIF:
-                pProp->Value <<= OUString("DIF");
+                pProp->Value <<= u"DIF"_ustr;
                 break;
             case excel::XlFileFormat::xlWK3:
-                pProp->Value <<= OUString("Lotus");
+                pProp->Value <<= u"Lotus"_ustr;
                 break;
             case excel::XlFileFormat::xlExcel4Workbook:
-                pProp->Value <<= OUString("MS Excel 4.0");
+                pProp->Value <<= u"MS Excel 4.0"_ustr;
                 break;
             case excel::XlFileFormat::xlExcel5:
-                pProp->Value <<= OUString("MS Excel 5.0/95");
+                pProp->Value <<= u"MS Excel 5.0/95"_ustr;
                 break;
             case excel::XlFileFormat::xlHtml:
-                pProp->Value <<= OUString("HTML (StarCalc)");
+                pProp->Value <<= u"HTML (StarCalc)"_ustr;
                 break;
             case excel::XlFileFormat::xlExcel9795:
             default:
-                pProp->Value <<= OUString("MS Excel 97");
+                pProp->Value <<= u"MS Excel 97"_ustr;
                 break;
         }
     }
@@ -286,7 +286,7 @@ OUString SAL_CALL ScVbaWorkbook::getAuthor()
 {
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS( getModel(), uno::UNO_QUERY );
     if (!xDPS.is())
-        return "?";
+        return u"?"_ustr;
     uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
     return xDocProps->getAuthor();
 }
@@ -307,7 +307,7 @@ ScVbaWorkbook::SaveCopyAs( const OUString& sFileName )
     osl::FileBase::getFileURLFromSystemPath( sFileName, aURL );
     uno::Reference< frame::XStorable > xStor( getModel(), uno::UNO_QUERY_THROW );
     uno::Sequence<  beans::PropertyValue > storeProps{ comphelper::makePropertyValue(
-        "FilterName", OUString( "MS Excel 97" )) };
+        u"FilterName"_ustr, u"MS Excel 97"_ustr) };
     xStor->storeToURL( aURL, storeProps );
 }
 
@@ -349,7 +349,7 @@ ScVbaWorkbook::SaveAs( const uno::Any& FileName, const uno::Any& FileFormat, con
     sal_Int32 nFileFormat = excel::XlFileFormat::xlExcel9795;
     FileFormat >>= nFileFormat;
 
-    uno::Sequence storeProps{ comphelper::makePropertyValue("FilterName", uno::Any()) };
+    uno::Sequence storeProps{ comphelper::makePropertyValue(u"FilterName"_ustr, uno::Any()) };
     setFilterPropsFromFormat( nFileFormat, storeProps );
 
     uno::Reference< frame::XStorable > xStor( getModel(), uno::UNO_QUERY_THROW );
@@ -385,7 +385,7 @@ ScVbaWorkbook::Names( const uno::Any& aIndex )
 {
     uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_SET_THROW );
     uno::Reference< beans::XPropertySet > xProps( xModel, uno::UNO_QUERY_THROW );
-    uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue("NamedRanges"), uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue(u"NamedRanges"_ustr), uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xNames( new ScVbaNames( this, mxContext, xNamedRanges, xModel ) );
     if ( aIndex.hasValue() )
         return xNames->Item( aIndex, uno::Any() );
@@ -395,7 +395,7 @@ ScVbaWorkbook::Names( const uno::Any& aIndex )
 OUString
 ScVbaWorkbook::getServiceImplName()
 {
-    return "ScVbaWorkbook";
+    return u"ScVbaWorkbook"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -403,7 +403,7 @@ ScVbaWorkbook::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.Workbook"
+        u"ooo.vba.excel.Workbook"_ustr
     };
     return aServiceNames;
 }
@@ -412,7 +412,7 @@ OUString SAL_CALL
 ScVbaWorkbook::getCodeName()
 {
     uno::Reference< beans::XPropertySet > xModelProp( getModel(), uno::UNO_QUERY_THROW );
-    return xModelProp->getPropertyValue("CodeName").get< OUString >();
+    return xModelProp->getPropertyValue(u"CodeName"_ustr).get< OUString >();
 }
 
 sal_Int64

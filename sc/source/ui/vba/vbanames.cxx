@@ -79,7 +79,7 @@ ScVbaNames::getScDocument()
     uno::Reference< frame::XModel > xModel( getModel() , uno::UNO_SET_THROW );
     ScTabViewShell * pTabViewShell = excel::getBestViewShell( xModel );
     if ( !pTabViewShell )
-        throw uno::RuntimeException( "No ViewShell available" );
+        throw uno::RuntimeException( u"No ViewShell available"_ustr );
     ScViewData& rViewData = pTabViewShell->GetViewData();
     return rViewData.GetDocument();
 }
@@ -113,7 +113,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
                 sName = sName.copy(nIndex+1);
             if (ScRangeData::IsNameValid(sName, getScDocument())
                 != ScRangeData::IsNameValidType::NAME_VALID)
-                throw uno::RuntimeException( "This Name is not valid ." );
+                throw uno::RuntimeException( u"This Name is not valid ."_ustr );
         }
     }
     uno::Reference< table::XCellRange > xUnoRange;
@@ -245,7 +245,7 @@ ScVbaNames::createCollectionObject( const uno::Any& aSource )
 OUString
 ScVbaNames::getServiceImplName()
 {
-    return "ScVbaNames";
+    return u"ScVbaNames"_ustr;
 }
 
 css::uno::Sequence<OUString>
@@ -253,7 +253,7 @@ ScVbaNames::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.NamedRanges"
+        u"ooo.vba.excel.NamedRanges"_ustr
     };
     return aServiceNames;
 }

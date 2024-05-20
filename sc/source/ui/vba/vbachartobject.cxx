@@ -99,7 +99,7 @@ ScVbaChartObject::Delete()
     uno::Reference< excel::XChartObjects > xColl( xParent->ChartObjects( uno::Any() ), uno::UNO_QUERY_THROW );
     ScVbaChartObjects* pChartObjectsImpl = static_cast< ScVbaChartObjects* >( xColl.get() );
     if (!pChartObjectsImpl)
-        throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), "Parent is not ChartObjects" );
+        throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), u"Parent is not ChartObjects"_ustr );
 
     pChartObjectsImpl->removeByName( getPersistName() );
 
@@ -119,7 +119,7 @@ ScVbaChartObject::Activate()
     }
     catch (uno::Exception& )
     {
-        throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), "ChartObject Activate internal error" );
+        throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), u"ChartObject Activate internal error"_ustr );
     }
 }
 
@@ -132,7 +132,7 @@ ScVbaChartObject::getChart()
 OUString
 ScVbaChartObject::getServiceImplName()
 {
-    return "ScVbaChartObject";
+    return u"ScVbaChartObject"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -140,7 +140,7 @@ ScVbaChartObject::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.ChartObject"
+        u"ooo.vba.excel.ChartObject"_ustr
     };
     return aServiceNames;
 }

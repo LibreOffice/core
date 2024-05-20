@@ -50,7 +50,7 @@ ScVbaComment::ScVbaComment(
     mxRange( xRange )
 {
     if  ( !xRange.is() )
-        throw lang::IllegalArgumentException("range is not set ", uno::Reference< uno::XInterface >() , 1 );
+        throw lang::IllegalArgumentException(u"range is not set "_ustr, uno::Reference< uno::XInterface >() , 1 );
     getAnnotation();
 }
 
@@ -203,7 +203,7 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
             xAnnoText->insertString( xRange, sText, bOverwrite );
             return xAnnoText->getString();
         }
-        throw uno::RuntimeException("ScVbaComment::Text - bad Start value " );
+        throw uno::RuntimeException(u"ScVbaComment::Text - bad Start value "_ustr );
     }
     else if ( aText.hasValue() )
     {
@@ -218,7 +218,7 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
 OUString
 ScVbaComment::getServiceImplName()
 {
-    return "ScVbaComment";
+    return u"ScVbaComment"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -226,7 +226,7 @@ ScVbaComment::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-       "ooo.vba.excel.ScVbaComment"
+       u"ooo.vba.excel.ScVbaComment"_ustr
     };
     return aServiceNames;
 }

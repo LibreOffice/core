@@ -168,17 +168,17 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
         else
             aValue <<= ScVbaFormatCondition::retrieveAPIOperator(_aOperator);
 
-        beans::PropertyValue aProperty( "Operator", 0, aValue, beans::PropertyState_DIRECT_VALUE );
+        beans::PropertyValue aProperty( u"Operator"_ustr, 0, aValue, beans::PropertyState_DIRECT_VALUE );
         aPropertyValueVector.push_back( aProperty );
 
         if ( _aFormula1.hasValue() )
         {
-            beans::PropertyValue aProp( "Formula1", 0, uno::Any( getA1Formula( _aFormula1 ) ), beans::PropertyState_DIRECT_VALUE );
+            beans::PropertyValue aProp( u"Formula1"_ustr, 0, uno::Any( getA1Formula( _aFormula1 ) ), beans::PropertyState_DIRECT_VALUE );
             aPropertyValueVector.push_back( aProp );
         }
         if ( _aFormula2.hasValue() )
         {
-            beans::PropertyValue aProp( "Formula2", 0, uno::Any( getA1Formula( _aFormula2 ) ), beans::PropertyState_DIRECT_VALUE );
+            beans::PropertyValue aProp( u"Formula2"_ustr, 0, uno::Any( getA1Formula( _aFormula2 ) ), beans::PropertyState_DIRECT_VALUE );
             aPropertyValueVector.push_back( aProp );
         }
         aProperty.Name = "StyleName";
@@ -239,7 +239,7 @@ ScVbaFormatConditions::getStyleName()
     if ( !pStyles )
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     uno::Sequence< OUString > sCellStyleNames = pStyles->getStyleNames();
-    return ContainerUtilities::getUniqueName(sCellStyleNames, "Excel_CondFormat", u"_");
+    return ContainerUtilities::getUniqueName(sCellStyleNames, u"Excel_CondFormat"_ustr, u"_");
 }
 
 void
@@ -274,7 +274,7 @@ ScVbaFormatConditions::removeFormatCondition( const OUString& _sStyleName, bool 
 OUString
 ScVbaFormatConditions::getServiceImplName()
 {
-    return "ScVbaFormatConditions";
+    return u"ScVbaFormatConditions"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -282,7 +282,7 @@ ScVbaFormatConditions::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.FormatConditions"
+        u"ooo.vba.excel.FormatConditions"_ustr
     };
     return aServiceNames;
 }

@@ -134,7 +134,7 @@ public:
     {
         css::uno::Reference<css::container::XNameAccess> xNameAccess(m_xContext,
                                                                      css::uno::UNO_QUERY_THROW);
-        const auto aAppplication = xNameAccess->getByName("Application");
+        const auto aAppplication = xNameAccess->getByName(u"Application"_ustr);
 
         uno::Reference< container::XEnumeration > xEnum = new WindowComponentEnumImpl( m_xContext );
         sal_Int32 nIndex=0;
@@ -256,7 +256,7 @@ ScVbaWindows::Arrange( ::sal_Int32 /*ArrangeStyle*/, const uno::Any& /*ActiveWor
 OUString
 ScVbaWindows::getServiceImplName()
 {
-    return "ScVbaWindows";
+    return u"ScVbaWindows"_ustr;
 }
 
 css::uno::Sequence<OUString>
@@ -264,7 +264,7 @@ ScVbaWindows::getServiceNames()
 {
     static uno::Sequence< OUString > const sNames
     {
-        "ooo.vba.excel.Windows"
+        u"ooo.vba.excel.Windows"_ustr
     };
     return sNames;
 }

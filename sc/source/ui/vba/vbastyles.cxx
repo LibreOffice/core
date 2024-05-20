@@ -133,7 +133,7 @@ ScVbaStyles::Add( const OUString& _sName, const uno::Any& _aBasedOn )
     uno::Reference< excel::XStyle > aRet;
     try
     {
-        OUString sParentCellStyleName("Default");
+        OUString sParentCellStyleName(u"Default"_ustr);
         if ( _aBasedOn.hasValue() )
         {
             uno::Reference< excel::XRange > oRange;
@@ -148,7 +148,7 @@ ScVbaStyles::Add( const OUString& _sName, const uno::Any& _aBasedOn )
             }
         }
 
-        uno::Reference< style::XStyle > xStyle( mxMSF->createInstance("com.sun.star.style.CellStyle"), uno::UNO_QUERY_THROW );
+        uno::Reference< style::XStyle > xStyle( mxMSF->createInstance(u"com.sun.star.style.CellStyle"_ustr), uno::UNO_QUERY_THROW );
 
         if (!mxNameContainerCellStyles->hasByName(_sName))
         {
@@ -184,7 +184,7 @@ ScVbaStyles::Delete(const OUString& _sStyleName)
 OUString
 ScVbaStyles::getServiceImplName()
 {
-    return "ScVbaStyles";
+    return u"ScVbaStyles"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -192,7 +192,7 @@ ScVbaStyles::getServiceNames()
 {
         static uno::Sequence< OUString > const aServiceNames
         {
-            "ooo.vba.excel.XStyles"
+            u"ooo.vba.excel.XStyles"_ustr
         };
         return aServiceNames;
 }

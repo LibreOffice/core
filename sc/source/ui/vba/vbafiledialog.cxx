@@ -35,7 +35,7 @@ using namespace ::ooo::vba;
 ScVbaFileDialog::ScVbaFileDialog( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const sal_Int32 nType )
     : ScVbaFileDialog_BASE( xParent, xContext)
     , m_nType(nType)
-    , m_sTitle("FileDialog")
+    , m_sTitle(u"FileDialog"_ustr)
     , m_bMultiSelectMode(false)
 {}
 
@@ -158,7 +158,7 @@ sal_Int32 ScVbaFileDialog::Show()
 OUString
 ScVbaFileDialog::getServiceImplName()
 {
-    return "ScVbaFileDialog";
+    return u"ScVbaFileDialog"_ustr;
 }
 
 uno::Sequence<OUString>
@@ -166,7 +166,7 @@ ScVbaFileDialog::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.FileDialog"
+        u"ooo.vba.FileDialog"_ustr
     };
     return aServiceNames;
 }

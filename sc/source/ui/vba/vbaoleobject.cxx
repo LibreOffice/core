@@ -38,7 +38,7 @@ ScVbaOLEObject::ScVbaOLEObject( const uno::Reference< XHelperInterface >& xParen
     xChild.set( xChild->getParent(), uno::UNO_QUERY_THROW );
     uno::Reference<frame::XModel> xModel( xChild->getParent(), uno::UNO_QUERY_THROW );
     uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
-    uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext("ooo.vba.ControlProvider", mxContext ), uno::UNO_QUERY_THROW );
+    uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext(u"ooo.vba.ControlProvider"_ustr, mxContext ), uno::UNO_QUERY_THROW );
     m_xControl.set( xControlProvider->createControl(  xControlShape, xModel ) );
 }
 
@@ -134,7 +134,7 @@ void SAL_CALL ScVbaOLEObject::setLinkedCell( const OUString& _linkedcell )
 OUString
 ScVbaOLEObject::getServiceImplName()
 {
-    return "ScVbaOLEObject";
+    return u"ScVbaOLEObject"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -142,7 +142,7 @@ ScVbaOLEObject::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.OLEObject"
+        u"ooo.vba.excel.OLEObject"_ustr
     };
     return aServiceNames;
 }

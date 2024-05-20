@@ -88,7 +88,7 @@ using namespace ooo::vba;
 static void getNewSpreadsheetName (OUString &aNewName, std::u16string_view aOldName, const uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc )
 {
     if (!xSpreadDoc.is())
-        throw lang::IllegalArgumentException( "getNewSpreadsheetName() xSpreadDoc is null", uno::Reference< uno::XInterface  >(), 1 );
+        throw lang::IllegalArgumentException( u"getNewSpreadsheetName() xSpreadDoc is null"_ustr, uno::Reference< uno::XInterface  >(), 1 );
     static const char aUnderScore[] =  "_";
     int currentNum =2;
     aNewName = OUString::Concat(aOldName) + aUnderScore + OUString::number(currentNum) ;
@@ -102,7 +102,7 @@ static void getNewSpreadsheetName (OUString &aNewName, std::u16string_view aOldN
 static void removeAllSheets( const uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc, const OUString& aSheetName)
 {
     if (!xSpreadDoc.is())
-        throw lang::IllegalArgumentException( "removeAllSheets() xSpreadDoc is null", uno::Reference< uno::XInterface  >(), 1 );
+        throw lang::IllegalArgumentException( u"removeAllSheets() xSpreadDoc is null"_ustr, uno::Reference< uno::XInterface  >(), 1 );
     uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
     uno::Reference <container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
 
@@ -134,8 +134,8 @@ openNewDoc(const OUString& aSheetName )
         uno::Reference <frame::XDesktop2 > xComponentLoader = frame::Desktop::create(xContext);
 
         uno::Reference<lang::XComponent > xComponent( xComponentLoader->loadComponentFromURL(
-                "private:factory/scalc",
-                "_blank", 0,
+                u"private:factory/scalc"_ustr,
+                u"_blank"_ustr, 0,
                 uno::Sequence < css::beans::PropertyValue >() ) );
         uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xComponent, uno::UNO_QUERY_THROW );
         removeAllSheets(xSpreadDoc,aSheetName);
@@ -265,7 +265,7 @@ ScVbaWorksheet::getVisible()
 {
     uno::Reference< beans::XPropertySet > xProps( getSheet(), uno::UNO_QUERY_THROW );
     bool bVisible = false;
-    xProps->getPropertyValue( "IsVisible" ) >>= bVisible;
+    xProps->getPropertyValue( u"IsVisible"_ustr ) >>= bVisible;
     using namespace ::ooo::vba::excel::XlSheetVisibility;
     return bVisible ? xlSheetVisible : (mbVeryHidden ? xlSheetVeryHidden : xlSheetHidden);
 }
@@ -293,7 +293,7 @@ ScVbaWorksheet::setVisible( sal_Int32 nVisible )
             throw uno::RuntimeException();
     }
     uno::Reference< beans::XPropertySet > xProps( getSheet(), uno::UNO_QUERY_THROW );
-    xProps->setPropertyValue( "IsVisible", uno::Any( bVisible ) );
+    xProps->setPropertyValue( u"IsVisible"_ustr, uno::Any( bVisible ) );
 }
 
 sal_Int16
@@ -308,7 +308,7 @@ ScVbaWorksheet::getEnableSelection()
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( getModel(), uno::UNO_QUERY_THROW );
     SCTAB nTab = 0;
     if ( !ScVbaWorksheets::nameExists(xSpreadDoc, getName(), nTab) )
-        throw uno::RuntimeException("Sheet Name does not exist." );
+        throw uno::RuntimeException(u"Sheet Name does not exist."_ustr );
 
     if ( ScDocShell* pShell = excel::getDocShell( getModel() ))
     {
@@ -343,7 +343,7 @@ ScVbaWorksheet::setEnableSelection( sal_Int32 nSelection )
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( getModel(), uno::UNO_QUERY_THROW );
     SCTAB nTab = 0;
     if ( !ScVbaWorksheets::nameExists(xSpreadDoc, getName(), nTab) )
-        throw uno::RuntimeException("Sheet Name does not exist." );
+        throw uno::RuntimeException(u"Sheet Name does not exist."_ustr );
 
     if ( ScDocShell* pShell = excel::getDocShell( getModel() ))
     {
@@ -662,7 +662,7 @@ ScVbaWorksheet::CheckSpelling( const uno::Any& /*CustomDictionary*/,const uno::A
 {
     // #TODO# #FIXME# unused params above, can we do anything with those
     uno::Reference< frame::XModel > xModel( getModel() );
-    dispatchRequests(xModel,".uno:SpellDialog");
+    dispatchRequests(xModel,u".uno:SpellDialog"_ustr);
 }
 
 uno::Reference< excel::XRange >
@@ -761,7 +761,7 @@ uno::Any SAL_CALL
 ScVbaWorksheet::Names( const css::uno::Any& aIndex )
 {
     css::uno::Reference<css::beans::XPropertySet> xProps(getSheet(), css::uno::UNO_QUERY_THROW);
-    uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue("NamedRanges"), uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue(u"NamedRanges"_ustr), uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xNames( new ScVbaNames( this, mxContext, xNamedRanges, mxModel ) );
     if ( aIndex.hasValue() )
         return xNames->Item( aIndex, uno::Any() );
@@ -897,7 +897,7 @@ ScVbaWorksheet::getIntrospection(  )
 uno::Any SAL_CALL
 ScVbaWorksheet::invoke( const OUString& /*aFunctionName*/, const uno::Sequence< uno::Any >& /*aParams*/, uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, uno::Sequence< uno::Any >& /*aOutParam*/ )
 {
-    throw uno::RuntimeException("Unsupported"); // unsupported operation
+    throw uno::RuntimeException(u"Unsupported"_ustr); // unsupported operation
 }
 
 void SAL_CALL
@@ -911,7 +911,7 @@ ScVbaWorksheet::getValue( const OUString& aPropertyName )
     uno::Reference< drawing::XControlShape > xControlShape( getControlShape( aPropertyName ), uno::UNO_QUERY_THROW );
 
     uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
-    uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext("ooo.vba.ControlProvider", mxContext ), uno::UNO_QUERY_THROW );
+    uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext(u"ooo.vba.ControlProvider"_ustr, mxContext ), uno::UNO_QUERY_THROW );
     uno::Reference< msforms::XControl > xControl( xControlProvider->createControl(  xControlShape, getModel() ) );
     return uno::Any( xControl );
 }
@@ -990,7 +990,7 @@ ScVbaWorksheet::getControlShape( std::u16string_view sName )
 OUString
 ScVbaWorksheet::getServiceImplName()
 {
-    return "ScVbaWorksheet";
+    return u"ScVbaWorksheet"_ustr;
 }
 
 void SAL_CALL
@@ -1011,7 +1011,7 @@ ScVbaWorksheet::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.Worksheet"
+        u"ooo.vba.excel.Worksheet"_ustr
     };
     return aServiceNames;
 }
@@ -1020,7 +1020,7 @@ OUString SAL_CALL
 ScVbaWorksheet::getCodeName()
 {
     uno::Reference< beans::XPropertySet > xSheetProp( mxSheet, uno::UNO_QUERY_THROW );
-    return xSheetProp->getPropertyValue("CodeName").get< OUString >();
+    return xSheetProp->getPropertyValue(u"CodeName"_ustr).get< OUString >();
 }
 
 sal_Int16

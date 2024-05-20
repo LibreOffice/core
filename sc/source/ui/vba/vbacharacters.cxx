@@ -98,7 +98,7 @@ void SAL_CALL
 ScVbaCharacters::setFont( const uno::Reference< excel::XFont >& /*_font*/ )
 {
     // #TODO #FIXME needs implementation, or can't be done?
-    throw uno::RuntimeException("Not Implemented" );
+    throw uno::RuntimeException(u"Not Implemented"_ustr );
 }
 
 // Methods
@@ -119,7 +119,7 @@ ScVbaCharacters::Delete(  )
 OUString
 ScVbaCharacters::getServiceImplName()
 {
-    return "ScVbaCharacters";
+    return u"ScVbaCharacters"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -127,7 +127,7 @@ ScVbaCharacters::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.Characters"
+        u"ooo.vba.excel.Characters"_ustr
     };
     return aServiceNames;
 }

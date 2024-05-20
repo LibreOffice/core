@@ -150,18 +150,18 @@ void SAL_CALL ScVbaButtonCharacters::Delete()
 
 // XHelperInterface
 
-VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaButtonCharacters, "ooo.vba.excel.Characters" )
+VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaButtonCharacters, u"ooo.vba.excel.Characters"_ustr )
 
 // private
 
 OUString ScVbaButtonCharacters::getFullString() const
 {
-    return mxPropSet->getPropertyValue( "Label" ).get< OUString >();
+    return mxPropSet->getPropertyValue( u"Label"_ustr ).get< OUString >();
 }
 
 void ScVbaButtonCharacters::setFullString( const OUString& rString )
 {
-    mxPropSet->setPropertyValue( "Label", uno::Any( rString ) );
+    mxPropSet->setPropertyValue( u"Label"_ustr, uno::Any( rString ) );
 }
 
 ScVbaSheetObjectBase::ScVbaSheetObjectBase(
@@ -229,12 +229,12 @@ void SAL_CALL ScVbaSheetObjectBase::setHeight( double fHeight )
 
 OUString SAL_CALL ScVbaSheetObjectBase::getName()
 {
-    return mxShapeProps->getPropertyValue( "Name" ).get< OUString >();
+    return mxShapeProps->getPropertyValue( u"Name"_ustr ).get< OUString >();
 }
 
 void SAL_CALL ScVbaSheetObjectBase::setName( const OUString& rName )
 {
-    mxShapeProps->setPropertyValue( "Name", uno::Any( rName ) );
+    mxShapeProps->setPropertyValue( u"Name"_ustr, uno::Any( rName ) );
 }
 
 sal_Int32 SAL_CALL ScVbaSheetObjectBase::getPlacement()
@@ -318,12 +318,12 @@ ScVbaControlObjectBase::ScVbaControlObjectBase(
 
 OUString SAL_CALL ScVbaControlObjectBase::getName()
 {
-    return mxControlProps->getPropertyValue( "Name" ).get< OUString >();
+    return mxControlProps->getPropertyValue( u"Name"_ustr ).get< OUString >();
 }
 
 void SAL_CALL ScVbaControlObjectBase::setName( const OUString& rName )
 {
-    mxControlProps->setPropertyValue( "Name", uno::Any( rName ) );
+    mxControlProps->setPropertyValue( u"Name"_ustr, uno::Any( rName ) );
 }
 
 OUString SAL_CALL ScVbaControlObjectBase::getOnAction()
@@ -379,12 +379,12 @@ void SAL_CALL ScVbaControlObjectBase::setOnAction( const OUString& rMacroName )
 
 sal_Bool SAL_CALL ScVbaControlObjectBase::getPrintObject()
 {
-    return mxControlProps->getPropertyValue( "Printable" ).get<bool>();
+    return mxControlProps->getPropertyValue( u"Printable"_ustr ).get<bool>();
 }
 
 void SAL_CALL ScVbaControlObjectBase::setPrintObject( sal_Bool bPrintObject )
 {
-    mxControlProps->setPropertyValue( "Printable", uno::Any( bPrintObject ) );
+    mxControlProps->setPropertyValue( u"Printable"_ustr, uno::Any( bPrintObject ) );
 }
 
 // XControlObject attributes
@@ -427,12 +427,12 @@ ScVbaButton::ScVbaButton(
 
 OUString SAL_CALL ScVbaButton::getCaption()
 {
-    return mxControlProps->getPropertyValue( "Label" ).get< OUString >();
+    return mxControlProps->getPropertyValue( u"Label"_ustr ).get< OUString >();
 }
 
 void SAL_CALL ScVbaButton::setCaption( const OUString& rCaption )
 {
-    mxControlProps->setPropertyValue( "Label", uno::Any( rCaption ) );
+    mxControlProps->setPropertyValue( u"Label"_ustr, uno::Any( rCaption ) );
 }
 
 uno::Reference< excel::XFont > SAL_CALL ScVbaButton::getFont()
@@ -447,7 +447,7 @@ void SAL_CALL ScVbaButton::setFont( const uno::Reference< excel::XFont >& /*rxFo
 
 sal_Int32 SAL_CALL ScVbaButton::getHorizontalAlignment()
 {
-    switch( mxControlProps->getPropertyValue( "Align" ).get< sal_Int16 >() )
+    switch( mxControlProps->getPropertyValue( u"Align"_ustr ).get< sal_Int16 >() )
     {
         case awt::TextAlign::LEFT:      return excel::Constants::xlLeft;
         case awt::TextAlign::RIGHT:     return excel::Constants::xlRight;
@@ -466,12 +466,12 @@ void SAL_CALL ScVbaButton::setHorizontalAlignment( sal_Int32 nAlign )
         case excel::Constants::xlCenter:    nAwtAlign = awt::TextAlign::CENTER; break;
     }
     // form controls expect short value
-    mxControlProps->setPropertyValue( "Align", uno::Any( static_cast< sal_Int16 >( nAwtAlign ) ) );
+    mxControlProps->setPropertyValue( u"Align"_ustr, uno::Any( static_cast< sal_Int16 >( nAwtAlign ) ) );
 }
 
 sal_Int32 SAL_CALL ScVbaButton::getVerticalAlignment()
 {
-    switch( mxControlProps->getPropertyValue( "VerticalAlign" ).get< style::VerticalAlignment >() )
+    switch( mxControlProps->getPropertyValue( u"VerticalAlign"_ustr ).get< style::VerticalAlignment >() )
     {
         case style::VerticalAlignment_TOP:      return excel::Constants::xlTop;
         case style::VerticalAlignment_BOTTOM:   return excel::Constants::xlBottom;
@@ -490,7 +490,7 @@ void SAL_CALL ScVbaButton::setVerticalAlignment( sal_Int32 nAlign )
         case excel::Constants::xlBottom:    eAwtAlign = style::VerticalAlignment_BOTTOM;    break;
         case excel::Constants::xlCenter:    eAwtAlign = style::VerticalAlignment_MIDDLE;    break;
     }
-    mxControlProps->setPropertyValue( "VerticalAlign", uno::Any( eAwtAlign ) );
+    mxControlProps->setPropertyValue( u"VerticalAlign"_ustr, uno::Any( eAwtAlign ) );
 }
 
 sal_Int32 SAL_CALL ScVbaButton::getOrientation()
@@ -506,22 +506,22 @@ void SAL_CALL ScVbaButton::setOrientation( sal_Int32 /*nOrientation*/ )
 
 uno::Any SAL_CALL ScVbaButton::getValue()
 {
-    return mxControlProps->getPropertyValue( "State" );
+    return mxControlProps->getPropertyValue( u"State"_ustr );
 }
 
 void SAL_CALL ScVbaButton::setValue( const uno::Any &nValue )
 {
-    return mxControlProps->setPropertyValue( "State", nValue );
+    return mxControlProps->setPropertyValue( u"State"_ustr, nValue );
 }
 
 OUString SAL_CALL ScVbaButton::getText()
 {
-    return mxControlProps->getPropertyValue( "Label" ).get< OUString >();
+    return mxControlProps->getPropertyValue( u"Label"_ustr ).get< OUString >();
 }
 
 void SAL_CALL ScVbaButton::setText( const OUString &aText )
 {
-    return mxControlProps->setPropertyValue( "Label", uno::Any( aText ) );
+    return mxControlProps->setPropertyValue( u"Label"_ustr, uno::Any( aText ) );
 }
 
 // XButton methods
@@ -533,13 +533,13 @@ uno::Reference< excel::XCharacters > SAL_CALL ScVbaButton::Characters( const uno
 
 // XHelperInterface
 
-VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaButton, "ooo.vba.excel.Button" )
+VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaButton, u"ooo.vba.excel.Button"_ustr )
 
 // private
 
 OUString ScVbaButton::implGetBaseName() const
 {
-    return "Button";
+    return u"Button"_ustr;
 }
 
 void ScVbaButton::implSetDefaultProperties()

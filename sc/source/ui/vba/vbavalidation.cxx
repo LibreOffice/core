@@ -238,10 +238,10 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
     sheet::ValidationType nValType = sheet::ValidationType_ANY;
     xProps->getPropertyValue( SC_UNONAME_TYPE )  >>= nValType;
     if ( nValType  != sheet::ValidationType_ANY  )
-        throw uno::RuntimeException("validation object already exists" );
+        throw uno::RuntimeException(u"validation object already exists"_ustr );
     sal_Int32 nType = -1;
     if ( !Type.hasValue()  || !( Type >>= nType ) )
-        throw uno::RuntimeException("missing required param" );
+        throw uno::RuntimeException(u"missing required param"_ustr );
 
     Delete(); // set up defaults
     OUString sFormula1;
@@ -255,7 +255,7 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
                 // for validate list
                 // at least formula1 is required
                 if ( !Formula1.hasValue() )
-                    throw uno::RuntimeException("missing param" );
+                    throw uno::RuntimeException(u"missing param"_ustr );
                 nValType = sheet::ValidationType_LIST;
                 xProps->setPropertyValue( SC_UNONAME_TYPE, uno::Any(nValType ));
                 // #TODO validate required params
@@ -267,7 +267,7 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
             xProps->setPropertyValue( SC_UNONAME_TYPE, uno::Any(nValType ));
             break;
         default:
-            throw uno::RuntimeException("unsupported operation..." );
+            throw uno::RuntimeException(u"unsupported operation..."_ustr );
     }
 
     sheet::ValidationAlertStyle eStyle = sheet::ValidationAlertStyle_STOP;
@@ -288,7 +288,7 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
                 eStyle = sheet::ValidationAlertStyle_INFO;
                 break;
             default:
-            throw uno::RuntimeException("bad param..." );
+            throw uno::RuntimeException(u"bad param..."_ustr );
 
         }
     }
@@ -384,7 +384,7 @@ ScVbaValidation::getType()
 OUString
 ScVbaValidation::getServiceImplName()
 {
-    return "ScVbaValidation";
+    return u"ScVbaValidation"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -392,7 +392,7 @@ ScVbaValidation::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.Validation"
+        u"ooo.vba.excel.Validation"_ustr
     };
     return aServiceNames;
 }

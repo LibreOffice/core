@@ -42,7 +42,7 @@ ScVbaOutline::ShowLevels( const uno::Any& RowLevels, const uno::Any& ColumnLevel
 OUString
 ScVbaOutline::getServiceImplName()
 {
-    return "ScVbaOutline";
+    return u"ScVbaOutline"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -50,7 +50,7 @@ ScVbaOutline::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.Outline"
+        u"ooo.vba.excel.Outline"_ustr
     };
     return aServiceNames;
 }

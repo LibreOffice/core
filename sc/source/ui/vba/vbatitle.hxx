@@ -68,7 +68,7 @@ public:
     {
         try
         {
-            xShapePropertySet->setPropertyValue("String", css::uno::Any( Text ));
+            xShapePropertySet->setPropertyValue(u"String"_ustr, css::uno::Any( Text ));
         }
         catch ( css::uno::Exception& )
         {
@@ -80,7 +80,7 @@ public:
         OUString sText;
         try
         {
-            xShapePropertySet->getPropertyValue("String") >>= sText;
+            xShapePropertySet->getPropertyValue(u"String"_ustr) >>= sText;
         }
         catch ( css::uno::Exception& )
         {
@@ -109,7 +109,7 @@ public:
     {
         try
         {
-            xShapePropertySet->setPropertyValue("TextRotation", css::uno::Any(_nOrientation*100));
+            xShapePropertySet->setPropertyValue(u"TextRotation"_ustr, css::uno::Any(_nOrientation*100));
         }
         catch (css::uno::Exception& )
         {
@@ -121,7 +121,7 @@ public:
         sal_Int32 nSOOrientation = 0;
         try
         {
-            xShapePropertySet->getPropertyValue("TextRotation") >>= nSOOrientation;
+            xShapePropertySet->getPropertyValue(u"TextRotation"_ustr) >>= nSOOrientation;
         }
         catch (css::uno::Exception& )
         {
@@ -132,11 +132,11 @@ public:
 // XHelperInterface
     OUString getServiceImplName() override
     {
-        return "TitleImpl";
+        return u"TitleImpl"_ustr;
     }
     css::uno::Sequence< OUString > getServiceNames() override
     {
-        static const css::uno::Sequence< OUString > aServiceNames{ "ooo.vba.excel.XTitle" };
+        static const css::uno::Sequence< OUString > aServiceNames{ u"ooo.vba.excel.XTitle"_ustr };
         return aServiceNames;
     }
 };

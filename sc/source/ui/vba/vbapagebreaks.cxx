@@ -180,7 +180,7 @@ uno::Any RangePageBreaks::Add( const css::uno::Any& Before )
     sal_Int32 nAPIRowColIndex = getAPIStartofRange( xRange );
     uno::Reference< container::XIndexAccess > xIndexAccess = getRowColContainer();
     uno::Reference< beans::XPropertySet > xRowColPropertySet( xIndexAccess->getByIndex(nAPIRowColIndex), uno::UNO_QUERY_THROW );
-    xRowColPropertySet->setPropertyValue("IsStartOfNewPage", uno::Any(true));
+    xRowColPropertySet->setPropertyValue(u"IsStartOfNewPage"_ustr, uno::Any(true));
     sheet::TablePageBreakData aTablePageBreakData;
     aTablePageBreakData.ManualBreak = true;
     aTablePageBreakData.Position = nAPIRowColIndex;
@@ -250,7 +250,7 @@ ScVbaHPageBreaks::getElementType()
 OUString
 ScVbaHPageBreaks::getServiceImplName()
 {
-    return "ScVbaHPageBreaks";
+    return u"ScVbaHPageBreaks"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -258,7 +258,7 @@ ScVbaHPageBreaks::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.HPageBreaks"
+        u"ooo.vba.excel.HPageBreaks"_ustr
     };
     return aServiceNames;
 }
@@ -307,7 +307,7 @@ ScVbaVPageBreaks::getElementType()
 OUString
 ScVbaVPageBreaks::getServiceImplName()
 {
-    return "ScVbaVPageBreaks";
+    return u"ScVbaVPageBreaks"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -315,7 +315,7 @@ ScVbaVPageBreaks::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.VPageBreaks"
+        u"ooo.vba.excel.VPageBreaks"_ustr
     };
     return aServiceNames;
 }

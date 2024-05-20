@@ -39,7 +39,7 @@ bool lclContains( const ScRangeList& rScOuter, const uno::Reference< excel::XRan
 {
     const ScRangeList& rScInner = ScVbaRange::getScRangeList( rxInner );
     if( rScInner.empty() || rScOuter.empty() )
-        throw uno::RuntimeException("Empty range objects" );
+        throw uno::RuntimeException(u"Empty range objects"_ustr );
 
     for( size_t nIndex = 0, nCount = rScInner.size(); nIndex < nCount; ++nIndex )
         if( !rScOuter.Contains( rScInner[ nIndex ] ) )
@@ -272,6 +272,6 @@ uno::Any ScVbaHyperlinks::createCollectionObject( const uno::Any& rSource )
 
 // XHelperInterface -----------------------------------------------------------
 
-VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaHyperlinks, "ooo.vba.excel.Hyperlinks" )
+VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaHyperlinks, u"ooo.vba.excel.Hyperlinks"_ustr )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -261,7 +261,7 @@ ScVbaWorksheets::Add( const uno::Any& Before, const uno::Any& After,
         nSheetIndex++;
 
     SCTAB nSheetName = nCount + 1;
-    OUString aStringBase( "Sheet" );
+    OUString aStringBase( u"Sheet"_ustr );
     uno::Any result;
     for (SCTAB i=0; i < nNewSheets; i++, nSheetName++)
     {
@@ -339,7 +339,7 @@ ScVbaWorksheets::setVisible( const uno::Any& _visible )
 {
     bool bState = false;
     if ( !(_visible >>= bState) )
-        throw uno::RuntimeException("Visible property doesn't support non boolean #FIXME" );
+        throw uno::RuntimeException(u"Visible property doesn't support non boolean #FIXME"_ustr );
 
     uno::Reference< container::XEnumeration > xEnum( createEnumeration(), uno::UNO_SET_THROW );
     while ( xEnum->hasMoreElements() )
@@ -355,7 +355,7 @@ ScVbaWorksheets::Select( const uno::Any& Replace )
 {
     ScTabViewShell* pViewShell = excel::getBestViewShell( mxModel );
     if ( !pViewShell )
-        throw uno::RuntimeException("Cannot obtain view shell" );
+        throw uno::RuntimeException(u"Cannot obtain view shell"_ustr );
 
     ScMarkData& rMarkData = pViewShell->GetViewData().GetMarkData();
     bool bReplace = true;
@@ -450,7 +450,7 @@ ScVbaWorksheets::Item(const uno::Any& Index, const uno::Any& Index2)
 OUString
 ScVbaWorksheets::getServiceImplName()
 {
-    return "ScVbaWorksheets";
+    return u"ScVbaWorksheets"_ustr;
 }
 
 css::uno::Sequence<OUString>
@@ -458,7 +458,7 @@ ScVbaWorksheets::getServiceNames()
 {
     static uno::Sequence< OUString > const sNames
     {
-        "ooo.vba.excel.Worksheets"
+        u"ooo.vba.excel.Worksheets"_ustr
     };
     return sNames;
 }
@@ -466,7 +466,7 @@ ScVbaWorksheets::getServiceNames()
 bool ScVbaWorksheets::nameExists( const uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc, std::u16string_view name, SCTAB& nTab )
 {
     if (!xSpreadDoc.is())
-        throw lang::IllegalArgumentException( "nameExists() xSpreadDoc is null", uno::Reference< uno::XInterface  >(), 1 );
+        throw lang::IllegalArgumentException( u"nameExists() xSpreadDoc is null"_ustr, uno::Reference< uno::XInterface  >(), 1 );
     uno::Reference <container::XIndexAccess> xIndex( xSpreadDoc->getSheets(), uno::UNO_QUERY );
     if ( xIndex.is() )
     {

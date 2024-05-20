@@ -29,7 +29,7 @@ ScVbaAxisTitle::ScVbaAxisTitle( const uno::Reference< XHelperInterface >& xParen
 OUString
 ScVbaAxisTitle::getServiceImplName()
 {
-    return "ScVbaAxisTitle";
+    return u"ScVbaAxisTitle"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -37,7 +37,7 @@ ScVbaAxisTitle::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames = comphelper::concatSequences(
         AxisTitleBase::getServiceNames(),
-        uno::Sequence<OUString> { "ooo.vba.excel.AxisTitle" } );
+        uno::Sequence<OUString> { u"ooo.vba.excel.AxisTitle"_ustr } );
     return aServiceNames;
 }
 

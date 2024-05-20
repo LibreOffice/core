@@ -50,7 +50,7 @@ ScVbaMenuItem::Delete( )
 OUString
 ScVbaMenuItem::getServiceImplName()
 {
-    return "ScVbaMenuItem";
+    return u"ScVbaMenuItem"_ustr;
 }
 
 uno::Sequence<OUString>
@@ -58,7 +58,7 @@ ScVbaMenuItem::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.MenuItem"
+        u"ooo.vba.excel.MenuItem"_ustr
     };
     return aServiceNames;
 }

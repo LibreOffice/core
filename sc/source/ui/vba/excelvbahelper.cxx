@@ -64,7 +64,7 @@ GetUnnamedDataBaseRanges( const ScDocShell* pShell )
     if ( pShell )
         xModel.set( pShell->GetModel(), uno::UNO_SET_THROW );
     uno::Reference< beans::XPropertySet > xModelProps( xModel, uno::UNO_QUERY_THROW );
-    uno::Reference< sheet::XUnnamedDatabaseRanges > xUnnamedDBRanges( xModelProps->getPropertyValue("UnnamedDatabaseRanges"), uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XUnnamedDatabaseRanges > xUnnamedDBRanges( xModelProps->getPropertyValue(u"UnnamedDatabaseRanges"_ustr), uno::UNO_QUERY_THROW );
     return xUnnamedDBRanges;
 }
 
@@ -80,7 +80,7 @@ GetAutoFiltRange( const ScDocShell* pShell, sal_Int16 nSheet )
         uno::Reference< sheet::XDatabaseRange > xDBRange( xUnnamedDBRanges->getByTable( nSheet ) , uno::UNO_QUERY_THROW );
         bool bHasAuto = false;
         uno::Reference< beans::XPropertySet > xProps( xDBRange, uno::UNO_QUERY_THROW );
-        xProps->getPropertyValue("AutoFilter") >>= bHasAuto;
+        xProps->getPropertyValue(u"AutoFilter"_ustr) >>= bHasAuto;
         if ( bHasAuto )
         {
             xDataBaseRange=xDBRange;
@@ -94,7 +94,7 @@ ScDocShell* GetDocShellFromRange( const uno::Reference< uno::XInterface >& xRang
     ScCellRangesBase* pScCellRangesBase = dynamic_cast<ScCellRangesBase*>( xRange.get() );
     if ( !pScCellRangesBase )
     {
-        throw uno::RuntimeException("Failed to access underlying doc shell uno range object" );
+        throw uno::RuntimeException(u"Failed to access underlying doc shell uno range object"_ustr );
     }
     return pScCellRangesBase->GetDocShell();
 }
@@ -285,7 +285,7 @@ getUnoSheetModuleObj( const uno::Reference< sheet::XSpreadsheet >& xSheet )
 {
     uno::Reference< beans::XPropertySet > xProps( xSheet, uno::UNO_QUERY_THROW );
     OUString sCodeName;
-    xProps->getPropertyValue("CodeName") >>= sCodeName;
+    xProps->getPropertyValue(u"CodeName"_ustr) >>= sCodeName;
     // #TODO #FIXME ideally we should 'throw' here if we don't get a valid parent, but... it is possible
     // to create a module ( and use 'Option VBASupport 1' ) for a calc document, in this scenario there
     // are *NO* special document module objects ( of course being able to switch between vba/non vba mode at
@@ -327,7 +327,7 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
     if ( !pShell )
         return;
 
-    OUString aPrjName( "Standard" );
+    OUString aPrjName( u"Standard"_ustr );
     pShell->GetBasicManager()->SetName( aPrjName );
 
     /*  Set library container to VBA compatibility mode. This will create
@@ -347,7 +347,7 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
         if( xLib.is()  )
         {
             uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY_THROW );
-            uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess( pShell->GetModel()->createInstance("ooo.vba.VBAObjectModuleObjectProvider"), uno::UNO_QUERY_THROW );
+            uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess( pShell->GetModel()->createInstance(u"ooo.vba.VBAObjectModuleObjectProvider"_ustr), uno::UNO_QUERY_THROW );
             // set up the module info for the workbook and sheets in the newly created
             // spreadsheet
             ScDocument& rDoc = pShell->GetDocument();
@@ -376,9 +376,9 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
                 sModuleInfo.ModuleType = script::ModuleType::DOCUMENT;
                 xVBAModuleInfo->insertModuleInfo( rName, sModuleInfo );
                 if( xLib->hasByName( rName ) )
-                    xLib->replaceByName( rName, uno::Any( OUString( "Option VBASupport 1\n") ) );
+                    xLib->replaceByName( rName, uno::Any( u"Option VBASupport 1\n"_ustr ) );
                 else
-                    xLib->insertByName( rName, uno::Any( OUString( "Option VBASupport 1\n" ) ) );
+                    xLib->insertByName( rName, uno::Any( u"Option VBASupport 1\n"_ustr ) );
             }
         }
     }
@@ -455,7 +455,7 @@ void ExportAsFixedFormatHelper(
     From >>= nFrom;
     To >>= nTo;
 
-    OUString sRange("-");
+    OUString sRange(u"-"_ustr);
 
     css::uno::Sequence<css::beans::PropertyValue> aFilterData;
     if (nFrom || nTo)
@@ -466,7 +466,7 @@ void ExportAsFixedFormatHelper(
             sRange += OUString::number(nTo);
 
         aFilterData.realloc(aFilterData.getLength() + 1);
-        aFilterData.getArray()[aFilterData.getLength() - 1] = comphelper::makePropertyValue("PageRange", sRange);
+        aFilterData.getArray()[aFilterData.getLength() - 1] = comphelper::makePropertyValue(u"PageRange"_ustr, sRange);
     }
 
     OUString sQuality;
@@ -475,12 +475,12 @@ void ExportAsFixedFormatHelper(
         if (sQuality.equalsIgnoreAsciiCase(u"xlQualityMinimum") || sQuality == "1")
         {
             aFilterData.realloc(aFilterData.getLength() + 1);
-            aFilterData.getArray()[aFilterData.getLength() - 1] = comphelper::makePropertyValue("Quality", sal_Int32(70));
+            aFilterData.getArray()[aFilterData.getLength() - 1] = comphelper::makePropertyValue(u"Quality"_ustr, sal_Int32(70));
         }
         else if (sQuality.equalsIgnoreAsciiCase(u"xlQualityStandard") || sQuality == "0")
         {
             aFilterData.realloc(aFilterData.getLength() + 1);
-            aFilterData.getArray()[aFilterData.getLength() - 1] = comphelper::makePropertyValue("UseLosslessCompression", true);
+            aFilterData.getArray()[aFilterData.getLength() - 1] = comphelper::makePropertyValue(u"UseLosslessCompression"_ustr, true);
         }
         else
         {
@@ -492,9 +492,9 @@ void ExportAsFixedFormatHelper(
 
     // init set of params for storeToURL() call
     css::uno::Sequence<css::beans::PropertyValue> storeProps{
-        comphelper::makePropertyValue("FilterData", aFilterData),
-        comphelper::makePropertyValue("FilterName", OUString("calc_pdf_Export")),
-        comphelper::makePropertyValue("URL", sURL)
+        comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"calc_pdf_Export"_ustr),
+        comphelper::makePropertyValue(u"URL"_ustr, sURL)
     };
 
     bool bIncludeDocProperties = true;
@@ -533,7 +533,7 @@ void ExportAsFixedFormatHelper(
     if ((OpenAfterPublish >>= bOpenAfterPublish) && bOpenAfterPublish)
     {
         uno::Reference<css::system::XSystemShellExecute> xSystemShellExecute(css::system::SystemShellExecute::create(::comphelper::getProcessComponentContext()));
-        xSystemShellExecute->execute(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), "", css::system::SystemShellExecuteFlags::URIS_ONLY);
+        xSystemShellExecute->execute(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), u""_ustr, css::system::SystemShellExecuteFlags::URIS_ONLY);
     }
 }
 

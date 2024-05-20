@@ -64,7 +64,7 @@ ScVbaFormat< Ifc... >::ScVbaFormat( const uno::Reference< XHelperInterface >& xP
                                     uno::Reference< frame::XModel > xModel,
                                     bool bCheckAmbiguoity )
     : ScVbaFormat_BASE( xParent, xContext ),
-      m_aDefaultLocale( "en", "US", OUString() ),
+      m_aDefaultLocale( u"en"_ustr, u"US"_ustr, OUString() ),
       mxPropertySet(std::move( _xPropertySet )),
       mxModel(std::move( xModel )),
       mbCheckAmbiguoity( bCheckAmbiguoity ),
@@ -805,7 +805,7 @@ ScVbaFormat< Ifc... >::getCurrentDataSet()
 {
     SfxItemSet* pDataSet = excel::ScVbaCellRangeAccess::GetDataSet( getCellRangesBase() );
     if ( !pDataSet )
-        throw uno::RuntimeException("Can't access Itemset for XPropertySet" );
+        throw uno::RuntimeException(u"Can't access Itemset for XPropertySet"_ustr );
     return pDataSet;
 }
 

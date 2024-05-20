@@ -70,7 +70,7 @@ ScVbaDialog::mapIndexToName( sal_Int32 nIndex )
 OUString
 ScVbaDialog::getServiceImplName()
 {
-    return "ScVbaDialog";
+    return u"ScVbaDialog"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -78,7 +78,7 @@ ScVbaDialog::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.Dialog"
+        u"ooo.vba.excel.Dialog"_ustr
     };
     return aServiceNames;
 }

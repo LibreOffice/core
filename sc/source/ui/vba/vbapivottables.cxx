@@ -73,7 +73,7 @@ ScVbaPivotTables::getElementType()
 OUString
 ScVbaPivotTables::getServiceImplName()
 {
-    return "ScVbaPivotTables";
+    return u"ScVbaPivotTables"_ustr;
 }
 
 css::uno::Sequence<OUString>
@@ -81,7 +81,7 @@ ScVbaPivotTables::getServiceNames()
 {
     static uno::Sequence< OUString > const sNames
     {
-        "ooo.vba.excel.PivotTables"
+        u"ooo.vba.excel.PivotTables"_ustr
     };
     return sNames;
 }

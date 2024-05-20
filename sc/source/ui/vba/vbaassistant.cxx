@@ -100,7 +100,7 @@ ScVbaAssistant::Name(  )
 OUString
 ScVbaAssistant::getServiceImplName()
 {
-    return "ScVbaAssistant";
+    return u"ScVbaAssistant"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -108,7 +108,7 @@ ScVbaAssistant::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.Assistant"
+        u"ooo.vba.Assistant"_ustr
     };
     return aServiceNames;
 }

@@ -203,7 +203,7 @@ ScVbaName::Delete()
 OUString
 ScVbaName::getServiceImplName()
 {
-    return "ScVbaName";
+    return u"ScVbaName"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -211,7 +211,7 @@ ScVbaName::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.Name"
+        u"ooo.vba.excel.Name"_ustr
     };
     return aServiceNames;
 }

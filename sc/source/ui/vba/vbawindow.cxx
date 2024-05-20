@@ -106,14 +106,14 @@ public:
     {
         ScModelObj* pModel = static_cast< ScModelObj* >( xModel.get() );
         if ( !pModel )
-            throw uno::RuntimeException("Cannot obtain current document" );
+            throw uno::RuntimeException(u"Cannot obtain current document"_ustr );
         m_xModel = pModel;
         ScDocShell* pDocShell = static_cast<ScDocShell*>(pModel->GetEmbeddedObject());
         if ( !pDocShell )
-            throw uno::RuntimeException("Cannot obtain docshell" );
+            throw uno::RuntimeException(u"Cannot obtain docshell"_ustr );
         ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
         if ( !pViewShell )
-            throw uno::RuntimeException("Cannot obtain view shell" );
+            throw uno::RuntimeException(u"Cannot obtain view shell"_ustr );
 
         SCTAB nTabCount = pDocShell->GetDocument().GetTableCount();
         SCTAB nIndex = 0;
@@ -411,7 +411,7 @@ ScVbaWindow::setWindowState( const uno::Any& _windowstate )
         else if (nwindowState == xlNormal)
             pWork -> Restore();
         else
-            throw uno::RuntimeException("Invalid Parameter" );
+            throw uno::RuntimeException(u"Invalid Parameter"_ustr );
     }
 }
 
@@ -846,7 +846,7 @@ void SAL_CALL ScVbaWindow::setTabRatio( double fRatio )
 OUString
 ScVbaWindow::getServiceImplName()
 {
-    return "ScVbaWindow";
+    return u"ScVbaWindow"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -854,7 +854,7 @@ ScVbaWindow::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.Window"
+        u"ooo.vba.excel.Window"_ustr
     };
     return aServiceNames;
 }

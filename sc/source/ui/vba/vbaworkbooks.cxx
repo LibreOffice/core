@@ -183,8 +183,8 @@ ScVbaWorkbooks::isSpreadSheetFile( std::u16string_view sType )
 OUString
 ScVbaWorkbooks::getFileFilterType( const OUString& rFileName )
 {
-    uno::Reference< document::XTypeDetection > xTypeDetect( mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", mxContext), uno::UNO_QUERY_THROW );
-    uno::Sequence aMediaDesc{ comphelper::makePropertyValue("URL", rFileName) };
+    uno::Reference< document::XTypeDetection > xTypeDetect( mxContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.TypeDetection"_ustr, mxContext), uno::UNO_QUERY_THROW );
+    uno::Sequence aMediaDesc{ comphelper::makePropertyValue(u"URL"_ustr, rFileName) };
     OUString sType = xTypeDetect->queryTypeByDescriptor( aMediaDesc, true );
     return sType;
 }
@@ -227,7 +227,7 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
             Format >>= nFormat; // val of nFormat overwritten if extracted
             // validate param
             if ( nFormat < 1 || nFormat > 6 )
-                throw uno::RuntimeException("Illegal value for Format" );
+                throw uno::RuntimeException(u"Illegal value for Format"_ustr );
         }
 
         sal_Int16 nDelim = getCurrentDelim();
@@ -240,11 +240,11 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
         {
             // Need to check Delimiter param
             if ( !Delimiter.hasValue() )
-                throw uno::RuntimeException("Expected value for Delimiter" );
+                throw uno::RuntimeException(u"Expected value for Delimiter"_ustr );
             OUString sStr;
             Delimiter >>= sStr;
             if ( sStr.isEmpty() )
-                throw uno::RuntimeException("Incorrect value for Delimiter" );
+                throw uno::RuntimeException(u"Incorrect value for Delimiter"_ustr );
 
             nDelim = sStr[0];
 
@@ -254,15 +254,15 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
 
         sFormat = OUString::number( nDelim ) + ",34,0,1";
 
-        sProps = { comphelper::makePropertyValue("FilterOptions", sFormat),
-                   comphelper::makePropertyValue("FilterName", SC_TEXT_CSV_FILTER_NAME),
+        sProps = { comphelper::makePropertyValue(u"FilterOptions"_ustr, sFormat),
+                   comphelper::makePropertyValue(u"FilterName"_ustr, SC_TEXT_CSV_FILTER_NAME),
                    // Ensure WORKAROUND_CSV_TXT_BUG_i60158 gets called in typedetection.cxx so
                    // csv is forced for deep detected 'writerxxx' types
                    comphelper::makePropertyValue(
-                       "DocumentService", OUString("com.sun.star.sheet.SpreadsheetDocument")) };
+                       u"DocumentService"_ustr, u"com.sun.star.sheet.SpreadsheetDocument"_ustr) };
     }
     else if ( !isSpreadSheetFile( sType ) )
-        throw uno::RuntimeException("Bad Format" );
+        throw uno::RuntimeException(u"Bad Format"_ustr );
 
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( openDocument( rFileName, ReadOnly, sProps ), uno::UNO_QUERY_THROW );
     uno::Any aRet = getWorkbook( mxContext, xSpreadDoc, mxParent );
@@ -275,7 +275,7 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
 OUString
 ScVbaWorkbooks::getServiceImplName()
 {
-    return "ScVbaWorkbooks";
+    return u"ScVbaWorkbooks"_ustr;
 }
 
 css::uno::Sequence<OUString>
@@ -283,7 +283,7 @@ ScVbaWorkbooks::getServiceNames()
 {
     static uno::Sequence< OUString > const sNames
     {
-        "ooo.vba.excel.Workbooks"
+        u"ooo.vba.excel.Workbooks"_ustr
     };
     return sNames;
 }

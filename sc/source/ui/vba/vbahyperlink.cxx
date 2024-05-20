@@ -55,7 +55,7 @@ ScVbaHyperlink::ScVbaHyperlink( const uno::Reference< XHelperInterface >& rxAnch
     UrlComponents aUrlComp;
     OUString aTextToDisplay;
     if( !(rAddress >>= aUrlComp.first) || aUrlComp.first.isEmpty() )
-        throw uno::RuntimeException("Cannot get address" );
+        throw uno::RuntimeException(u"Cannot get address"_ustr );
     rSubAddress >>= aUrlComp.second;
     rScreenTip >>= maScreenTip;
     rTextToDisplay >>= aTextToDisplay;
@@ -84,7 +84,7 @@ ScVbaHyperlink::ScVbaHyperlink( const uno::Reference< XHelperInterface >& rxAnch
         }
         // create and initialize a new URL text field
         uno::Reference< lang::XMultiServiceFactory > xFactory( ScVbaRange::getUnoModel( xAnchorRange ), uno::UNO_QUERY_THROW );
-        uno::Reference< text::XTextContent > xUrlField( xFactory->createInstance("com.sun.star.text.TextField.URL"), uno::UNO_QUERY_THROW );
+        uno::Reference< text::XTextContent > xUrlField( xFactory->createInstance(u"com.sun.star.text.TextField.URL"_ustr), uno::UNO_QUERY_THROW );
         mxTextField.set( xUrlField, uno::UNO_QUERY_THROW );
         setUrlComponents( aUrlComp );
         setTextToDisplay( aTextToDisplay );
@@ -155,14 +155,14 @@ OUString ScVbaHyperlink::getTextToDisplay()
 {
     ensureTextField();
     OUString aTextToDisplay;
-    mxTextField->getPropertyValue("Representation") >>= aTextToDisplay;
+    mxTextField->getPropertyValue(u"Representation"_ustr) >>= aTextToDisplay;
     return aTextToDisplay;
 }
 
 void ScVbaHyperlink::setTextToDisplay( const OUString& rTextToDisplay )
 {
     ensureTextField();
-    mxTextField->setPropertyValue("Representation", uno::Any( rTextToDisplay ) );
+    mxTextField->setPropertyValue(u"Representation"_ustr, uno::Any( rTextToDisplay ) );
 }
 
 sal_Int32 SAL_CALL ScVbaHyperlink::getType()
@@ -195,7 +195,7 @@ uno::Reference< msforms::XShape > SAL_CALL ScVbaHyperlink::getShape()
     return uno::Reference< msforms::XShape >( getParent(), uno::UNO_QUERY_THROW );
 }
 
-VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaHyperlink, "ooo.vba.excel.Hyperlink" )
+VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaHyperlink, u"ooo.vba.excel.Hyperlink"_ustr )
 
 // private --------------------------------------------------------------------
 
@@ -209,7 +209,7 @@ ScVbaHyperlink::UrlComponents ScVbaHyperlink::getUrlComponents()
 {
     ensureTextField();
     OUString aUrl;
-    mxTextField->getPropertyValue("URL") >>= aUrl;
+    mxTextField->getPropertyValue(u"URL"_ustr) >>= aUrl;
     sal_Int32 nHashPos = aUrl.indexOf( '#' );
     if( nHashPos < 0 )
         return UrlComponents( aUrl, OUString() );
@@ -222,7 +222,7 @@ void ScVbaHyperlink::setUrlComponents( const UrlComponents& rUrlComp )
     OUStringBuffer aUrl( rUrlComp.first );
     if( !rUrlComp.second.isEmpty() )
         aUrl.append( "#" + rUrlComp.second );
-    mxTextField->setPropertyValue("URL", uno::Any( aUrl.makeStringAndClear() ) );
+    mxTextField->setPropertyValue(u"URL"_ustr, uno::Any( aUrl.makeStringAndClear() ) );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

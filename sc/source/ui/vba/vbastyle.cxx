@@ -31,7 +31,7 @@ uno::Reference< container::XNameAccess >
 ScVbaStyle::getStylesNameContainer( const uno::Reference< frame::XModel >& xModel )
 {
     uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( xModel, uno::UNO_QUERY_THROW);
-    uno::Reference< container::XNameAccess > xStylesAccess( xStyleSupplier->getStyleFamilies()->getByName("CellStyles"), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameAccess > xStylesAccess( xStyleSupplier->getStyleFamilies()->getByName(u"CellStyles"_ustr), uno::UNO_QUERY_THROW );
     return xStylesAccess;
 }
 
@@ -50,7 +50,7 @@ void ScVbaStyle::initialise()
     if (!mxModel.is() )
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, u"XModel Interface could not be retrieved" );
     uno::Reference< lang::XServiceInfo > xServiceInfo( mxPropertySet, uno::UNO_QUERY_THROW );
-    if ( !xServiceInfo->supportsService("com.sun.star.style.CellStyle") )
+    if ( !xServiceInfo->supportsService(u"com.sun.star.style.CellStyle"_ustr) )
     {
             DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     }
@@ -167,7 +167,7 @@ ScVbaStyle::getMergeCells(  )
 OUString
 ScVbaStyle::getServiceImplName()
 {
-    return "ScVbaStyle";
+    return u"ScVbaStyle"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -175,7 +175,7 @@ ScVbaStyle::getServiceNames()
 {
         static uno::Sequence< OUString > const aServiceNames
         {
-            "ooo.vba.excel.XStyle"
+            u"ooo.vba.excel.XStyle"_ustr
         };
         return aServiceNames;
 }

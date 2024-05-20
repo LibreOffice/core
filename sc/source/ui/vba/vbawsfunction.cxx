@@ -168,10 +168,10 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
     {
         uno::Reference< lang::XMultiComponentFactory > xSMgr( mxContext->getServiceManager(), uno::UNO_SET_THROW );
         uno::Reference< sheet::XFunctionAccess > xFunctionAccess( xSMgr->createInstanceWithContext(
-            "com.sun.star.sheet.FunctionAccess", mxContext ),
+            u"com.sun.star.sheet.FunctionAccess"_ustr, mxContext ),
             uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xPropSet( xFunctionAccess, uno::UNO_QUERY_THROW );
-        xPropSet->setPropertyValue("IsArrayFunction", uno::Any( bAsArray ) );
+        xPropSet->setPropertyValue(u"IsArrayFunction"_ustr, uno::Any( bAsArray ) );
         aRet = xFunctionAccess->callFunction( FunctionName, aParamTemp );
     }
 
@@ -282,7 +282,7 @@ ScVbaWSFunction::getExactName( const OUString& aApproximateName )
 OUString
 ScVbaWSFunction::getServiceImplName()
 {
-    return "ScVbaWSFunction";
+    return u"ScVbaWSFunction"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -290,7 +290,7 @@ ScVbaWSFunction::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.excel.WorksheetFunction"
+        u"ooo.vba.excel.WorksheetFunction"_ustr
     };
     return aServiceNames;
 }
