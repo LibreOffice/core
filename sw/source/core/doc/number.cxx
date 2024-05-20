@@ -763,8 +763,11 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
                 // Numbering disabled - replacement is empty
                 // And we should skip all level string content until next level marker:
                 // so %1%.%2%.%3% with second level as NONE will result 1.1, not 1..1
+
+                // NOTE: if changed, fix MSWordExportBase::NumberingLevel to match new behaviour.
+
                 sal_Int32 nPositionNext = sLevelFormat.indexOf('%', nPosition + sFind.getLength());
-                if (nPosition >= 0 && nPositionNext >= nPosition)
+                if (nPosition >= 0 && nPositionNext > nPosition)
                 {
                     sLevelFormat = sLevelFormat.replaceAt(nPosition, nPositionNext - nPosition, u"");
                 }

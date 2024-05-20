@@ -298,6 +298,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf156105_percentSuffix, "tdf156105_percentSuffix.o
     // given a numbered list with a non-escaping percent symbol in the prefix and suffix
     CPPUNIT_ASSERT_EQUAL(OUString("(%)[%]"),
                          getProperty<OUString>(getParagraph(3), "ListLabelString"));
+
+    // tdf#149258 - NONE number should not export separator since LO doesn't currently show it
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("showing levels 1, 2, and 4", OUString("(%)1.1.1[%]"),
+                                 getProperty<OUString>(getParagraph(4), "ListLabelString"));
+    if (isExported())
+    {
+        xmlDocUniquePtr pXmlNum = parseExport("word/numbering.xml");
+        // The 3rd level is NONE. If we include the separator, MS Word will display it.
+        assertXPath(pXmlNum, "/w:numbering/w:abstractNum[1]/w:lvl[4]/w:lvlText"_ostr, "val"_ostr,
+                    "(%)%1.%2.%3%4[%]");
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf160049_anchorMarginVML, "tdf160049_anchorMarginVML.docx")

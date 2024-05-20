@@ -489,9 +489,18 @@ void MSWordExportBase::NumberingLevel(
                 sal_Int32 nFnd = sNumStr.indexOf(sSrch);
                 if (-1 != nFnd)
                 {
+                    sal_Int32 nLen = sSrch.getLength();
+                    if (i < nLvl && rRule.Get(i).GetNumberingType() == SVX_NUM_NUMBER_NONE)
+                    {
+                        // LO doesn't show this level, so don't export its separator
+                        const OUString sSrch2("%" + OUString::number(i + 2) + "%");
+                        const sal_Int32 nFnd2 = sNumStr.indexOf(sSrch2, nFnd);
+                        if (-1 != nFnd2)
+                            nLen = nFnd2 - nFnd;
+                    }
                     *pLvlPos = static_cast<sal_uInt8>(nFnd + 1);
                     ++pLvlPos;
-                    sNumStr = sNumStr.replaceAt(nFnd, sSrch.getLength(), rtl::OUStringChar(static_cast<char>(i)));
+                    sNumStr = sNumStr.replaceAt(nFnd, nLen, OUStringChar(static_cast<char>(i)));
                 }
             }
         }
