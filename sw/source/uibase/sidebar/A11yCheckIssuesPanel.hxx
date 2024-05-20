@@ -78,10 +78,16 @@ private:
     std::array<std::vector<std::unique_ptr<AccessibilityCheckEntry>>, 10> m_aEntries;
     std::array<std::unique_ptr<weld::Expander>, 10> m_xExpanders;
     std::array<std::unique_ptr<weld::Box>, 10> m_xBoxes;
+    std::unique_ptr<weld::Box> mxAccessibilityBox;
+    std::unique_ptr<weld::Box> mxUpdateBox;
+    std::unique_ptr<weld::LinkButton> mxUpdateLinkButton;
 
     sfx::AccessibilityIssueCollection m_aIssueCollection;
     void removeAllEntries();
     void populateIssues();
+
+    DECL_LINK(UpdateLinkButtonClicked, weld::LinkButton&, bool);
+    DECL_LINK(PopulateIssuesHdl, void*, void);
 
     void addEntryForGroup(AccessibilityCheckGroups eGroup, std::vector<sal_Int32>& rIndices,
                           std::shared_ptr<sfx::AccessibilityIssue> const& pIssue);

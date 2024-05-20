@@ -23,6 +23,7 @@
 #include <unotools/configmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <o3tl/enumrange.hxx>
+#include <comphelper/lok.hxx>
 
 #include "A11yCheckIssuesPanel.hxx"
 
@@ -103,6 +104,9 @@ std::unique_ptr<PanelLayout> A11yCheckIssuesPanel::Create(weld::Widget* pParent,
 
 A11yCheckIssuesPanel::A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* pBindings)
     : PanelLayout(pParent, "A11yCheckIssuesPanel", "modules/swriter/ui/a11ycheckissuespanel.ui")
+    , mxAccessibilityBox(m_xBuilder->weld_box("accessibilityCheckBox"))
+    , mxUpdateBox(m_xBuilder->weld_box("updateBox"))
+    , mxUpdateLinkButton(m_xBuilder->weld_link_button("updateLinkButton"))
     , mpBindings(pBindings)
     , mpDoc(nullptr)
     , maA11yCheckController(FN_STAT_ACCESSIBILITY_CHECK, *pBindings, *this)
@@ -131,6 +135,9 @@ A11yCheckIssuesPanel::A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* p
     m_xBoxes[8] = m_xBuilder->weld_box("box_numbering");
     m_xBoxes[9] = m_xBuilder->weld_box("box_other");
 
+    mxUpdateLinkButton->connect_activate_link(
+        LINK(this, A11yCheckIssuesPanel, UpdateLinkButtonClicked));
+
     SwDocShell* pDocSh = dynamic_cast<SwDocShell*>(SfxObjectShell::Current());
     if (!pDocSh)
         return;
@@ -149,8 +156,30 @@ A11yCheckIssuesPanel::A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* p
 
     mpDoc = pDocSh->GetDoc();
 
-    populateIssues();
+    // If LOKit is enabled, then enable the update button and don't run the accessibility check.
+    // In desktop don't show the update button and schedule to run the accessibility check async
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        mxAccessibilityBox->hide();
+        mxUpdateBox->show();
+    }
+    else
+    {
+        mxAccessibilityBox->show();
+        mxUpdateBox->hide();
+        Application::PostUserEvent(LINK(this, A11yCheckIssuesPanel, PopulateIssuesHdl));
+    }
 }
+
+IMPL_LINK_NOARG(A11yCheckIssuesPanel, UpdateLinkButtonClicked, weld::LinkButton&, bool)
+{
+    mxAccessibilityBox->show();
+    mxUpdateBox->hide();
+    Application::PostUserEvent(LINK(this, A11yCheckIssuesPanel, PopulateIssuesHdl));
+    return true;
+}
+
+IMPL_LINK_NOARG(A11yCheckIssuesPanel, PopulateIssuesHdl, void*, void) { populateIssues(); }
 
 void A11yCheckIssuesPanel::ImplDestroy()
 {
@@ -195,7 +224,7 @@ void A11yCheckIssuesPanel::addEntryForGroup(AccessibilityCheckGroups eGroup,
 
 void A11yCheckIssuesPanel::populateIssues()
 {
-    if (!mpDoc)
+    if (!mpDoc || !mxAccessibilityBox->is_visible())
         return;
 
     sw::AccessibilityCheck aCheck(mpDoc);
