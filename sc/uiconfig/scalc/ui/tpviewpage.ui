@@ -74,7 +74,7 @@
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="annot-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|annot">Specifies that a small rectangle in the top right corner of the cell indicates that a comment exists.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|annot">Specifies that a small triangle in the top right corner of the cell indicates that a comment exists.</property>
                       </object>
                     </child>
                   </object>
