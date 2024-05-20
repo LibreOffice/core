@@ -1357,7 +1357,7 @@ void QtFrame::ResolveWindowHandle(SystemEnvData& rData) const
         return;
     assert(rData.platform != SystemEnvData::Platform::Invalid);
     // Calling QWidget::winId() implicitly enables native windows to be used instead
-    // of "alien widgets" that don't have a native widget asscoiated with them,
+    // of "alien widgets" that don't have a native widget associated with them,
     // s. https://doc.qt.io/qt-6/qwidget.html#native-widgets-vs-alien-widgets
     // Avoid native widgets with Qt 5 on Wayland and with Qt 6 altogether as they
     // cause unsresponsive UI, s. tdf#122293/QTBUG-75766 and tdf#160565
