@@ -1360,7 +1360,7 @@ void QtFrame::ResolveWindowHandle(SystemEnvData& rData) const
     // of "alien widgets" that don't have a native widget associated with them,
     // s. https://doc.qt.io/qt-6/qwidget.html#native-widgets-vs-alien-widgets
     // Avoid native widgets with Qt 5 on Wayland and with Qt 6 altogether as they
-    // cause unsresponsive UI, s. tdf#122293/QTBUG-75766 and tdf#160565
+    // cause unresponsive UI, s. tdf#122293/QTBUG-75766 and tdf#160565
     // (for qt5 xcb, they're needed for video playback)
     if (rData.platform != SystemEnvData::Platform::Wayland
         && QLibraryInfo::version().majorVersion() < 6)
