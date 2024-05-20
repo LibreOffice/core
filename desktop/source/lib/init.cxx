@@ -112,6 +112,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
+#include <com/sun/star/util/XFlushable.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
@@ -3396,6 +3398,12 @@ static int lo_joinThreads(LibreOfficeKit* /* pThis */)
     auto joinable = dynamic_cast<comphelper::LibreOfficeKit::ThreadJoinable *>(xLangSrv.get());
     if (joinable && !joinable->joinThreads())
         return 0;
+
+    // Ensure configmgr's write thread is down
+    css::uno::Reference< css::util::XFlushable >(
+        css::configuration::theDefaultProvider::get(
+            comphelper::getProcessComponentContext()),
+        css::uno::UNO_QUERY_THROW)->flush();
 
     return 1;
 }
