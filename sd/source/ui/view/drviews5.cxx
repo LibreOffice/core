@@ -315,7 +315,15 @@ void DrawViewShell::WriteFrameViewData()
     mpFrameView->SetGridCoarse( mpDrawView->GetGridCoarse() );
     mpFrameView->SetGridFine( mpDrawView->GetGridFine() );
     mpFrameView->SetSnapGridWidth(mpDrawView->GetSnapGridWidthX(), mpDrawView->GetSnapGridWidthY());
-    mpFrameView->SetGridVisible( mpDrawView->IsGridVisible() );
+
+    // In LOK, Grid isn't implemented, and it appears in the slide thumbnails
+    // Remove this when Grid is implemented and/or thumbnails are fixed to no longer
+    // show the grid.
+    if (comphelper::LibreOfficeKit::isActive())
+        mpFrameView->SetGridVisible( false );
+    else
+        mpFrameView->SetGridVisible( mpDrawView->IsGridVisible() );
+
     mpFrameView->SetGridFront( mpDrawView->IsGridFront() );
     mpFrameView->SetSnapAngle( mpDrawView->GetSnapAngle() );
     mpFrameView->SetGridSnap( mpDrawView->IsGridSnap() );
