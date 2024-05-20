@@ -26,6 +26,7 @@
 #include <QtGui/QGuiApplication>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QMouseEvent>
+#include <QtWidgets/QVBoxLayout>
 
 QtObject::QtObject(QtFrame* pParent, bool bShow)
     : m_pParent(pParent)
@@ -111,6 +112,10 @@ QtObjectWidget::QtObjectWidget(QtObject& rParent)
     assert(m_rParent.frame() && m_rParent.frame()->GetQWidget());
     setAttribute(Qt::WA_NoSystemBackground);
     setAttribute(Qt::WA_OpaquePaintEvent);
+
+    // set layout, used for video playback, see QtPlayer::createPlayerWindow
+    QVBoxLayout* layout = new QVBoxLayout;
+    setLayout(layout);
 }
 
 void QtObjectWidget::focusInEvent(QFocusEvent*)

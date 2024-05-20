@@ -31,6 +31,13 @@ $(eval $(call gb_Module_add_targets,avmedia,\
 ))
 endif
 
+ifneq ($(ENABLE_QT6_MULTIMEDIA),)
+$(eval $(call gb_Module_add_targets,avmedia,\
+	CustomTarget_avmediaqt6_moc \
+	Library_avmediaqt6 \
+))
+endif
+
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,avmedia,\
 	Library_avmediaMacAVF \

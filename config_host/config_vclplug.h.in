@@ -29,6 +29,7 @@ Settings about which desktops have support enabled.
  */
 #define USE_HEADLESS_CODE 0
 #define ENABLE_GSTREAMER_1_0 0
+#define ENABLE_QT6_MULTIMEDIA 0
 #define QT5_HAVE_GOBJECT 0
 #define QT5_USING_X11 0
 #define QT6_USING_X11 0

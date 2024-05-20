@@ -1815,6 +1815,10 @@ AC_ARG_ENABLE(qt6,
          available.]),
 ,)
 
+AC_ARG_ENABLE(qt6-multimedia,
+    AS_HELP_STRING([--disable-qt6-multimedia],
+        [Determines whether to enable media playback using QtMultimedia when using the qt6/kf6 VCL plugins.]))
+
 AC_ARG_ENABLE(kf5,
     AS_HELP_STRING([--enable-kf5],
         [Determines whether to use Qt5/KF5 vclplug on platforms where Qt5 and
@@ -13419,6 +13423,7 @@ dnl ===================================================================
 QT6_CFLAGS=""
 QT6_LIBS=""
 QT6_PLATFORMS_SRCDIR=""
+ENABLE_QT6_MULTIMEDIA=""
 if test \( "$test_kf6" = "yes" -a "$ENABLE_KF6" = "TRUE" \) -o \
         \( "$test_qt6" = "yes" -a "$ENABLE_QT6" = "TRUE" \)
 then
@@ -13505,6 +13510,15 @@ then
     QT6_LIBS="-L$qt6_libdir -lQt6Core -lQt6Gui -lQt6Widgets -lQt6Network"
     if test "$_os" = "Emscripten"; then
         QT6_LIBS="$QT6_LIBS -lQt6BundledPcre2 -lQt6BundledZLIB -L${qt6_platformsdir} -lqwasm -sGL_ENABLE_GET_PROC_ADDRESS"
+    else
+        if ! test "$enable_qt6_multimedia" = "no"; then
+            if ! test -r "$qt6_incdir/QtMultimediaWidgets/QVideoWidget"; then
+                AC_MSG_ERROR([Qt 6 QMultimedia not found.])
+                break
+            fi
+            ENABLE_QT6_MULTIMEDIA=TRUE
+            QT6_LIBS="$QT6_LIBS -lQt6Multimedia -lQt6MultimediaWidgets"
+        fi
     fi
 
     if test "$USING_X11" = TRUE; then
@@ -13540,6 +13554,7 @@ AC_SUBST(QT6_CFLAGS)
 AC_SUBST(QT6_LIBS)
 AC_SUBST(MOC6)
 AC_SUBST(QT6_PLATFORMS_SRCDIR)
+AC_SUBST(ENABLE_QT6_MULTIMEDIA)
 
 dnl ===================================================================
 dnl KF5 Integration
@@ -13704,6 +13719,10 @@ int main(int argc, char **argv) {
 fi
 AC_SUBST(KF6_CFLAGS)
 AC_SUBST(KF6_LIBS)
+
+if test "$enable_qt6_multimedia" = "yes" -a "$ENABLE_QT6" != "TRUE"; then
+    AC_MSG_ERROR([--enable-qt6-multimedia requires --enable-qt6 or --enable-kf6])
+fi
 
 dnl ===================================================================
 dnl Test whether to include Evolution 2 support
