@@ -141,11 +141,11 @@ void Test::test() {
         test::getTestArgument(
             u"smoketest.doc", &doc));
     css::uno::Sequence< css::beans::PropertyValue > args{
-        { /* Name   */ "MacroExecutionMode",
+        { /* Name   */ u"MacroExecutionMode"_ustr,
           /* Handle */ -1,
           /* Value  */ css::uno::Any(css::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN),
           /* State  */ css::beans::PropertyState_DIRECT_VALUE },
-        { /* Name   */ "ReadOnly",
+        { /* Name   */ u"ReadOnly"_ustr,
           /* Handle */ -1,
           /* Value  */ css::uno::Any(true),
           /* State  */ css::beans::PropertyState_DIRECT_VALUE }
@@ -162,12 +162,12 @@ void Test::test() {
                 css::uno::Reference< css::frame::XModel >(
                     xDesktop->loadComponentFromURL(
                             test::toAbsoluteFileUrl(doc),
-                            "_default",
+                            u"_default"_ustr,
                             0, args),
                     css::uno::UNO_QUERY_THROW)->getCurrentController(),
                 css::uno::UNO_SET_THROW)->getFrame(),
             css::uno::UNO_QUERY_THROW)->queryDispatch(
-                url, "_self", 0),
+                url, u"_self"_ustr, 0),
         css::uno::UNO_QUERY_THROW);
     Result result;
     // Shifted to main thread to work around potential deadlocks (i112867):

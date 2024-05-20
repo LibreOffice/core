@@ -278,7 +278,7 @@ EventAttacherImpl::EventAttacherImpl( const Reference< XComponentContext >& rxCo
 /// @throws Exception
 OUString SAL_CALL EventAttacherImpl::getImplementationName(  )
 {
-    return "com.sun.star.comp.EventAttacher";
+    return u"com.sun.star.comp.EventAttacher"_ustr;
 }
 
 sal_Bool SAL_CALL EventAttacherImpl::supportsService( const OUString& ServiceName )
@@ -288,7 +288,7 @@ sal_Bool SAL_CALL EventAttacherImpl::supportsService( const OUString& ServiceNam
 
 Sequence<OUString> SAL_CALL EventAttacherImpl::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.script.EventAttacher" };
+    return { u"com.sun.star.script.EventAttacher"_ustr };
 }
 
 void SAL_CALL EventAttacherImpl::initialize(const Sequence< Any >& Arguments)

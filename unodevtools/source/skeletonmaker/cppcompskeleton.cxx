@@ -781,18 +781,18 @@ static OString generateClassDefinition(std::ostream& o,
               << scopedCppName(u2b(propertyhelper)) << " >(\n"
                  "        context, static_cast< Implements >(\n            ";
             OStringBuffer buffer(128);
-            if (propinterfaces.find("com/sun/star/beans/XPropertySet")
+            if (propinterfaces.find(u"com/sun/star/beans/XPropertySet"_ustr)
                 != propinterfaces.end()) {
                 buffer.append("IMPLEMENTS_PROPERTY_SET");
             }
-            if (propinterfaces.find("com/sun/star/beans/XFastPropertySet")
+            if (propinterfaces.find(u"com/sun/star/beans/XFastPropertySet"_ustr)
                 != propinterfaces.end()) {
                 if (!buffer.isEmpty())
                     buffer.append(" | IMPLEMENTS_FAST_PROPERTY_SET");
                 else
                     buffer.append("IMPLEMENTS_FAST_PROPERTY_SET");
             }
-            if (propinterfaces.find("com/sun/star/beans/XPropertyAccess")
+            if (propinterfaces.find(u"com/sun/star/beans/XPropertyAccess"_ustr)
                 != propinterfaces.end()) {
                 if (!buffer.isEmpty())
                     buffer.append(" | IMPLEMENTS_PROPERTY_ACCESS");
@@ -945,9 +945,9 @@ void generateSkeleton(ProgramOptions const & options,
         // so it is defaulted. The XDispatchProvider provides Dispatch objects for
         // certain functions and the generated impl object implements XDispatch
         // directly for simplicity reasons.
-        checkType(manager, "com.sun.star.frame.ProtocolHandler",
+        checkType(manager, u"com.sun.star.frame.ProtocolHandler"_ustr,
                   interfaces, services, properties);
-        checkType(manager, "com.sun.star.frame.XDispatch",
+        checkType(manager, u"com.sun.star.frame.XDispatch"_ustr,
                   interfaces, services, properties);
     }
 
@@ -962,8 +962,8 @@ void generateSkeleton(ProgramOptions const & options,
 
     if (interfaces.size() > 12)
         throw CannotDumpException(
-            "the skeletonmaker supports components with 12 interfaces "
-            "only (limitation of the UNO implementation helpers)!");
+            u"the skeletonmaker supports components with 12 interfaces "
+            "only (limitation of the UNO implementation helpers)!"_ustr);
 
 
     supportxcomponent = checkXComponentSupport(manager, interfaces);
@@ -1075,8 +1075,8 @@ void generateCalcAddin(ProgramOptions const & options,
     OUString sAddinService;
     if (services.size() != 1) {
         throw CannotDumpException(
-            "for calc add-in components one and only one service type is necessary!"
-            " Please reference a valid type with the '-t' option.");
+            u"for calc add-in components one and only one service type is necessary!"
+            " Please reference a valid type with the '-t' option."_ustr);
     }
 
 
@@ -1093,13 +1093,13 @@ void generateCalcAddin(ProgramOptions const & options,
     // taken from the configuration from Calc directly, this simplifies the
     // add-in code
     if (options.backwardcompatible) {
-        checkType(manager, "com.sun.star.sheet.AddIn",
+        checkType(manager, u"com.sun.star.sheet.AddIn"_ustr,
                   interfaces, services, properties);
     } else {
         // special case for the optional XLocalization interface. It should be
         // implemented always. But it is parent of the XAddIn and we need it only
         // if backwardcompatible is false.
-        interfaces.insert("com.sun.star.lang.XLocalizable");
+        interfaces.insert(u"com.sun.star.lang.XLocalizable"_ustr);
     }
 
     OUString propertyhelper = checkPropertyHelper(
@@ -1113,8 +1113,8 @@ void generateCalcAddin(ProgramOptions const & options,
 
     if (interfaces.size() > 12) {
         throw CannotDumpException(
-            "the skeletonmaker supports components with 12 interfaces "
-            "only (limitation of the UNO implementation helpers)!");
+            u"the skeletonmaker supports components with 12 interfaces "
+            "only (limitation of the UNO implementation helpers)!"_ustr);
     }
 
     // check if service object or simple UNO object

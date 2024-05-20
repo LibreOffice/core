@@ -43,8 +43,8 @@ void StoreTest::createStream()
     CPPUNIT_ASSERT_EQUAL(store_E_None, aFile.createInMemory());
 
     store::OStoreStream aStream;
-    CPPUNIT_ASSERT_EQUAL(store_E_None,
-                         aStream.create(aFile, "testnode", "testname", storeAccessMode::Create));
+    CPPUNIT_ASSERT_EQUAL(store_E_None, aStream.create(aFile, u"testnode"_ustr, u"testname"_ustr,
+                                                      storeAccessMode::Create));
 
     aFile.close();
 }
@@ -55,8 +55,8 @@ void StoreTest::writeAndReadByte()
     CPPUNIT_ASSERT_EQUAL(store_E_None, aFile.createInMemory());
 
     store::OStoreStream aStream;
-    CPPUNIT_ASSERT_EQUAL(store_E_None,
-                         aStream.create(aFile, "testnode", "testname", storeAccessMode::Create));
+    CPPUNIT_ASSERT_EQUAL(store_E_None, aStream.create(aFile, u"testnode"_ustr, u"testname"_ustr,
+                                                      storeAccessMode::Create));
 
     {
         std::unique_ptr<sal_uInt8[]> pWriteBuffer(new sal_uInt8[1]);

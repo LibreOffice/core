@@ -60,7 +60,7 @@ void Theme::dumpAsXml(xmlTextWriterPtr pWriter) const
 void Theme::ToAny(uno::Any& rVal) const
 {
     comphelper::SequenceAsHashMap aMap;
-    aMap["Name"] <<= maName;
+    aMap[u"Name"_ustr] <<= maName;
 
     if (mpColorSet)
     {
@@ -74,8 +74,8 @@ void Theme::ToAny(uno::Any& rVal) const
             }
         }
 
-        aMap["ColorSchemeName"] <<= mpColorSet->getName();
-        aMap["ColorScheme"] <<= comphelper::containerToSequence(aColorScheme);
+        aMap[u"ColorSchemeName"_ustr] <<= mpColorSet->getName();
+        aMap[u"ColorScheme"_ustr] <<= comphelper::containerToSequence(aColorScheme);
     }
 
     rVal <<= aMap.getAsConstPropertyValueList();
@@ -87,7 +87,7 @@ std::unique_ptr<Theme> Theme::FromAny(const uno::Any& rVal)
     std::unique_ptr<Theme> pTheme;
     std::shared_ptr<model::ColorSet> pColorSet;
 
-    auto it = aMap.find("Name");
+    auto it = aMap.find(u"Name"_ustr);
     if (it != aMap.end())
     {
         OUString aName;
@@ -95,7 +95,7 @@ std::unique_ptr<Theme> Theme::FromAny(const uno::Any& rVal)
         pTheme = std::make_unique<Theme>(aName);
     }
 
-    it = aMap.find("ColorSchemeName");
+    it = aMap.find(u"ColorSchemeName"_ustr);
     if (it != aMap.end() && pTheme)
     {
         OUString aName;
@@ -104,7 +104,7 @@ std::unique_ptr<Theme> Theme::FromAny(const uno::Any& rVal)
         pTheme->setColorSet(pColorSet);
     }
 
-    it = aMap.find("ColorScheme");
+    it = aMap.find(u"ColorScheme"_ustr);
     if (it != aMap.end() && pColorSet)
     {
         uno::Sequence<util::Color> aColors;

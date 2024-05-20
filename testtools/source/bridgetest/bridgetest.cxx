@@ -646,7 +646,7 @@ static bool performTest(
                 TestPolyStruct< sal_Int64 > tps1(12345);
                 xLBT->transportPolyHyper(tps1);
                 bRet &= check(tps1.member == 12345, "transportPolyHyper");
-                Sequence< Any > seq{ Any(static_cast< sal_uInt32 >(33)), Any(OUString("ABC")) };
+                Sequence< Any > seq{ Any(static_cast< sal_uInt32 >(33)), Any(u"ABC"_ustr) };
                 TestPolyStruct< Sequence< Any > > tps2(seq);
                 TestPolyStruct< Sequence< Any > > tps3;
                 xLBT->transportPolySequence(tps2, tps3);
@@ -762,8 +762,8 @@ static bool performTest(
             Sequence<float> arFloat({1.1f, 2.2f, 3.3f});
             Sequence<double> arDouble({1.11, 2.22, 3.33});
             Sequence<OUString> arString({
-                OUString("String 1"), OUString("String 2"),
-                OUString("String 3")});
+                u"String 1"_ustr, u"String 2"_ustr,
+                u"String 3"_ustr});
             Sequence<Any> arAny(_arAny, 3);
             Sequence<Reference<XInterface> > arObject(_arObj, 3);
             Sequence<TestEnum> arEnum({
@@ -1157,7 +1157,7 @@ static bool makeSurrogate(
     OUString aCppEnvTypeName(
         CPPU_CURRENT_LANGUAGE_BINDING_NAME );
     OUString aUnoEnvTypeName(
-        UNO_LB_UNO );
+        u"" UNO_LB_UNO ""_ustr );
     // official:
     uno_getEnvironment(
         reinterpret_cast< uno_Environment ** >( &aCppEnv_official ),
@@ -1175,7 +1175,7 @@ static bool makeSurrogate(
     Mapping uno2cpp( aUnoEnv_ano.get(), aCppEnv_ano.get() );
     if (!cpp2uno.is() || !uno2cpp.is())
     {
-        throw RuntimeException("cannot get C++-UNO mappings!" );
+        throw RuntimeException(u"cannot get C++-UNO mappings!"_ustr );
     }
     cpp2uno.mapInterface(
         reinterpret_cast< void ** >( &unoI.m_pUnoI ),
@@ -1183,7 +1183,7 @@ static bool makeSurrogate(
     if (! unoI.is())
     {
         throw RuntimeException(
-            "mapping C++ to binary UNO failed!" );
+            u"mapping C++ to binary UNO failed!"_ustr );
     }
     uno2cpp.mapInterface(
         reinterpret_cast< void ** >( &rOut ),
@@ -1191,7 +1191,7 @@ static bool makeSurrogate(
     if (! rOut.is())
     {
         throw RuntimeException(
-            "mapping binary UNO to C++ failed!" );
+            u"mapping binary UNO to C++ failed!"_ustr );
     }
 
     return rOut.is();
@@ -1205,8 +1205,8 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
     {
         if (! rArgs.hasElements())
         {
-            throw RuntimeException( "no test object specified!\n"
-                                    "usage : ServiceName of test object | -u unourl of test object" );
+            throw RuntimeException( u"no test object specified!\n"
+                                    "usage : ServiceName of test object | -u unourl of test object"_ustr );
         }
 
         Reference< XInterface > xOriginal;
@@ -1251,7 +1251,7 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
 
         if (! xOriginal.is())
         {
-            throw RuntimeException( "cannot get test object!" );
+            throw RuntimeException( u"cannot get test object!"_ustr );
         }
         Reference< XBridgeTest > xTest( xOriginal, UNO_QUERY_THROW );
 
@@ -1269,7 +1269,7 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
         bRet = (dynamic_cast<TestBridgeImpl *>(xOriginal.get()) == nullptr) && bRet;
         if (! bRet)
         {
-            throw RuntimeException( "error: test failed!" );
+            throw RuntimeException( u"error: test failed!"_ustr );
         }
     }
     catch (const Exception & exc)

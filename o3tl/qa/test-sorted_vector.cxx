@@ -263,16 +263,16 @@ public:
         CPPUNIT_ASSERT(!aVec.insert(std::make_unique<OUString>("b")).second);
         aVec.insert(std::make_unique<OUString>("a"));
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(3), aVec.size() );
-        CPPUNIT_ASSERT_EQUAL( OUString("a"), *aVec[0] );
-        CPPUNIT_ASSERT_EQUAL( OUString("b"), *aVec[1] );
-        CPPUNIT_ASSERT_EQUAL( OUString("c"), *aVec[2] );
+        CPPUNIT_ASSERT_EQUAL( u"a"_ustr, *aVec[0] );
+        CPPUNIT_ASSERT_EQUAL( u"b"_ustr, *aVec[1] );
+        CPPUNIT_ASSERT_EQUAL( u"c"_ustr, *aVec[2] );
 
         CPPUNIT_ASSERT( aVec.find(str_c) != aVec.end() );
         CPPUNIT_ASSERT( aVec.find(str_b1) != aVec.end() );
 
-        OUString tmp("b");
+        OUString tmp(u"b"_ustr);
         CPPUNIT_ASSERT( aVec.find(&tmp) != aVec.end() );
-        OUString tmp2("z");
+        OUString tmp2(u"z"_ustr);
         CPPUNIT_ASSERT( bool(aVec.find(&tmp2) == aVec.end()) );
     }
 
@@ -286,16 +286,16 @@ public:
         auto str_b2 = aVec.insert(std::make_unique<OUString>("b")).first->get();
         aVec.insert(std::make_unique<OUString>("a"));
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(4), aVec.size() );
-        CPPUNIT_ASSERT_EQUAL( OUString("a"), *aVec[0] );
-        CPPUNIT_ASSERT_EQUAL( OUString("b"), *aVec[1] );
-        CPPUNIT_ASSERT_EQUAL( OUString("b"), *aVec[2] );
-        CPPUNIT_ASSERT_EQUAL( OUString("c"), *aVec[3] );
+        CPPUNIT_ASSERT_EQUAL( u"a"_ustr, *aVec[0] );
+        CPPUNIT_ASSERT_EQUAL( u"b"_ustr, *aVec[1] );
+        CPPUNIT_ASSERT_EQUAL( u"b"_ustr, *aVec[2] );
+        CPPUNIT_ASSERT_EQUAL( u"c"_ustr, *aVec[3] );
 
         CPPUNIT_ASSERT( aVec.find(str_c) != aVec.end() );
         CPPUNIT_ASSERT( aVec.find(str_b1) != aVec.end() );
         CPPUNIT_ASSERT( aVec.find(str_b2) != aVec.end() );
 
-        OUString tmp2("z");
+        OUString tmp2(u"z"_ustr);
         CPPUNIT_ASSERT( bool(aVec.find(&tmp2) == aVec.end()) );
     }
 

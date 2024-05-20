@@ -412,11 +412,11 @@ css::uno::Reference< css::uno::XInterface > create(
 
 OUString getImplementationName() {
     return
-            "comp.test.testtools.bridgetest.Constructors";
+            u"comp.test.testtools.bridgetest.Constructors"_ustr;
 }
 
 css::uno::Sequence< OUString > getSupportedServiceNames() {
-    return { "test.testtools.bridgetest.Constructors" };
+    return { u"test.testtools.bridgetest.Constructors"_ustr };
 }
 
 css::uno::Reference< css::uno::XInterface > create2(
@@ -427,11 +427,11 @@ css::uno::Reference< css::uno::XInterface > create2(
 }
 
 OUString getImplementationName2() {
-    return "comp.test.testtools.bridgetest.Constructors2";
+    return u"comp.test.testtools.bridgetest.Constructors2"_ustr;
 }
 
 css::uno::Sequence< OUString > getSupportedServiceNames2() {
-    return { "test.testtools.bridgetest.Constructors2" };
+    return { u"test.testtools.bridgetest.Constructors2"_ustr };
 }
 
 ::cppu::ImplementationEntry const entries[] = {

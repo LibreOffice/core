@@ -174,7 +174,7 @@ RegError REGISTRY_CALLTYPE setValue(RegKeyHandle hKey,
     if (pKey->isReadOnly())
         return RegError::REGISTRY_READONLY;
 
-    OUString valueName("value");
+    OUString valueName(u"value"_ustr);
     if (keyName->length)
     {
         ORegKey* pSubKey = nullptr;
@@ -213,7 +213,7 @@ RegError REGISTRY_CALLTYPE setLongListValue(RegKeyHandle hKey,
     if (pKey->isReadOnly())
         return RegError::REGISTRY_READONLY;
 
-    OUString valueName("value");
+    OUString valueName(u"value"_ustr);
     if (keyName->length)
     {
         ORegKey* pSubKey = nullptr;
@@ -252,7 +252,7 @@ RegError REGISTRY_CALLTYPE setStringListValue(RegKeyHandle hKey,
     if (pKey->isReadOnly())
         return RegError::REGISTRY_READONLY;
 
-    OUString valueName("value");
+    OUString valueName(u"value"_ustr);
     if (keyName->length)
     {
         ORegKey* pSubKey = nullptr;
@@ -291,7 +291,7 @@ RegError REGISTRY_CALLTYPE setUnicodeListValue(RegKeyHandle hKey,
     if (pKey->isReadOnly())
         return RegError::REGISTRY_READONLY;
 
-    OUString valueName("value");
+    OUString valueName(u"value"_ustr);
     if (keyName->length)
     {
         ORegKey* pSubKey = nullptr;
@@ -333,7 +333,7 @@ RegError REGISTRY_CALLTYPE getValueInfo(RegKeyHandle hKey,
     RegValueType valueType;
     sal_uInt32   valueSize;
 
-    OUString valueName("value");
+    OUString valueName(u"value"_ustr);
     if (keyName->length)
     {
         ORegKey* pSubKey = nullptr;
@@ -376,7 +376,7 @@ RegError REGISTRY_CALLTYPE getValue(RegKeyHandle hKey,
     if (pKey->isDeleted())
         return RegError::INVALID_KEY;
 
-    OUString valueName("value");
+    OUString valueName(u"value"_ustr);
     if (keyName->length)
     {
         ORegKey* pSubKey = nullptr;
@@ -413,7 +413,7 @@ RegError REGISTRY_CALLTYPE getLongListValue(RegKeyHandle hKey,
     if (pKey->isDeleted())
         return RegError::INVALID_KEY;
 
-    OUString valueName("value");
+    OUString valueName(u"value"_ustr);
     if (keyName->length)
     {
         ORegKey* pSubKey = nullptr;
@@ -450,7 +450,7 @@ RegError REGISTRY_CALLTYPE getStringListValue(RegKeyHandle hKey,
     if (pKey->isDeleted())
         return RegError::INVALID_KEY;
 
-    OUString valueName("value");
+    OUString valueName(u"value"_ustr);
     if (keyName->length)
     {
         ORegKey* pSubKey = nullptr;
@@ -487,7 +487,7 @@ RegError REGISTRY_CALLTYPE getUnicodeListValue(RegKeyHandle hKey,
     if (pKey->isDeleted())
         return RegError::INVALID_KEY;
 
-    OUString valueName("value");
+    OUString valueName(u"value"_ustr);
     if (keyName->length)
     {
         ORegKey* pSubKey = nullptr;

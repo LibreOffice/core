@@ -522,7 +522,7 @@ double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, co
 
     // #i32269# 0^0 is undefined, Excel returns #NUM! error
     if( fX == 0.0 && fN == 0 )
-        throw uno::RuntimeException("undefined expression: 0^0");
+        throw uno::RuntimeException(u"undefined expression: 0^0"_ustr);
 
     if( fX != 0.0 )
     {

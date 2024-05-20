@@ -58,7 +58,7 @@ private:
 
 public:
     FontScheme()
-        : maName("Office")
+        : maName(u"Office"_ustr)
     {
     }
 

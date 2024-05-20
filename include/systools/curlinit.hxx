@@ -37,7 +37,7 @@ static void InitCurl_easy(CURL* const pCURL)
     rc = curl_easy_setopt(pCURL, CURLOPT_CAINFO, path);
     if (rc != CURLE_OK) // only if OOM?
     {
-        throw css::uno::RuntimeException("CURLOPT_CAINFO failed");
+        throw css::uno::RuntimeException(u"CURLOPT_CAINFO failed"_ustr);
     }
 #endif
 

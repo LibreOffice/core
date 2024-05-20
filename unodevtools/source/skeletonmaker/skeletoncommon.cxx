@@ -188,7 +188,7 @@ void checkType(rtl::Reference< TypeManager > const & manager,
                     (ent2->getConstructors().size() == 1 &&
                      !ent2->getConstructors()[0].defaultConstructor))
                 {
-                    interfaceTypes.insert(OUString("com.sun.star.lang.XInitialization"));
+                    interfaceTypes.insert(u"com.sun.star.lang.XInitialization"_ustr);
                 }
             }
         }
@@ -228,15 +228,15 @@ void checkDefaultInterfaces(
     std::u16string_view propertyhelper)
 {
     if ( services.empty() ) {
-        interfaces.erase("com.sun.star.lang.XServiceInfo");
+        interfaces.erase(u"com.sun.star.lang.XServiceInfo"_ustr);
     } else {
-        interfaces.insert("com.sun.star.lang.XServiceInfo");
+        interfaces.insert(u"com.sun.star.lang.XServiceInfo"_ustr);
     }
 
     if ( propertyhelper == u"_" ) {
-        interfaces.erase("com.sun.star.beans.XPropertySet");
-        interfaces.erase("com.sun.star.beans.XFastPropertySet");
-        interfaces.erase("com.sun.star.beans.XPropertyAccess");
+        interfaces.erase(u"com.sun.star.beans.XPropertySet"_ustr);
+        interfaces.erase(u"com.sun.star.beans.XFastPropertySet"_ustr);
+        interfaces.erase(u"com.sun.star.beans.XPropertyAccess"_ustr);
     }
 }
 
@@ -314,7 +314,7 @@ OUString checkPropertyHelper(
         ++iter;
     }
 
-    return oldStyleWithProperties ? OUString("_") : OUString();
+    return oldStyleWithProperties ? u"_"_ustr : OUString();
 }
 
 static bool checkXComponentSupport(
@@ -349,7 +349,7 @@ bool checkXComponentSupport(rtl::Reference< TypeManager > const & manager,
 
     for ( const auto& rIface : interfaces ) {
         if ( rIface == "com.sun.star.lang.XComponent" ) {
-            interfaces.erase("com.sun.star.lang.XComponent");
+            interfaces.erase(u"com.sun.star.lang.XComponent"_ustr);
             return true;
         }
         if ( checkXComponentSupport(manager, rIface) )
@@ -467,13 +467,11 @@ static void checkAddInTypes(
                     + " parameter of the calc add-in function '" + name
                     + ":" + rMethod.name + "' is invalid."
                     + (bLastAny
-                       ? OUString(
-                           " The type 'sequence<any>' is allowed as last"
-                           " parameter only.")
+                       ? u" The type 'sequence<any>' is allowed as last"
+                           " parameter only."_ustr
                        : OUString())
                     + (bHasXPropertySet
-                       ? OUString(
-                           " The type 'XPropertySet' is allowed only once.")
+                       ? u" The type 'XPropertySet' is allowed only once."_ustr
                        : OUString())
                     + " Please check your IDL definition.");
             }

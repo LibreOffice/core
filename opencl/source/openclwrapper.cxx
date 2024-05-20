@@ -90,7 +90,7 @@ OString const & getCacheFolder()
 {
     static OString const aCacheFolder = []()
     {
-        OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/");
+        OUString url(u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/"_ustr);
         rtl::Bootstrap::expandMacros(url);
 
         osl::Directory::create(url);

@@ -177,12 +177,12 @@ static Reference< XInterface > loadComponent(
     if (aExt == u"dll" || aExt == u"exe" || aExt == u"dylib" || aExt == u"so")
     {
         createInstance(
-            xLoader, xContext, "com.sun.star.loader.SharedLibrary" );
+            xLoader, xContext, u"com.sun.star.loader.SharedLibrary"_ustr );
     }
     else if (aExt == u"jar" || aExt == u"class")
     {
         createInstance(
-            xLoader, xContext, "com.sun.star.loader.Java" );
+            xLoader, xContext, u"com.sun.star.loader.Java"_ustr );
     }
     else
     {
@@ -404,18 +404,18 @@ SAL_IMPLEMENT_MAIN()
         }
 
         if (!(aImplName.isEmpty() || aServiceName.isEmpty()))
-            throw RuntimeException("give component exOR service name!" );
+            throw RuntimeException(u"give component exOR service name!"_ustr );
         if (aImplName.isEmpty() && aServiceName.isEmpty())
         {
             if (! aUnoUrl.endsWithIgnoreAsciiCase( ";uno.ComponentContext" ))
                 throw RuntimeException(
-                    "expected UNO-URL with instance name uno.ComponentContext!" );
+                    u"expected UNO-URL with instance name uno.ComponentContext!"_ustr );
             if (bSingleInstance)
                 throw RuntimeException(
-                    "unexpected option --singleinstance!" );
+                    u"unexpected option --singleinstance!"_ustr );
         }
         if (!aImplName.isEmpty() && aLocation.isEmpty())
-            throw RuntimeException("give component location!" );
+            throw RuntimeException(u"give component location!"_ustr );
         if (!aServiceName.isEmpty() && !aLocation.isEmpty())
             out( "\n> warning: service name given, will ignore location!" );
 
@@ -437,7 +437,7 @@ SAL_IMPLEMENT_MAIN()
         {
             if (aUnoUrl.getLength() < 10 || !aUnoUrl.startsWithIgnoreAsciiCase( "uno:" ))
             {
-                throw RuntimeException("illegal uno url given!" );
+                throw RuntimeException(u"illegal uno url given!"_ustr );
             }
 
             sal_Int32 nIndex = 4; // skip initial "uno:"
@@ -451,7 +451,7 @@ SAL_IMPLEMENT_MAIN()
             // Exactly 3 tokens are required
             if (bTooFewTokens || nIndex>0)
             {
-                throw RuntimeException("illegal uno url given!" );
+                throw RuntimeException(u"illegal uno url given!"_ustr );
             }
 
             Reference< XAcceptor > xAcceptor = Acceptor::create(xContext);
@@ -482,7 +482,7 @@ SAL_IMPLEMENT_MAIN()
                 Reference< XBridgeFactory > xBridgeFactory;
                 createInstance(
                     xBridgeFactory, xContext,
-                    "com.sun.star.bridge.BridgeFactory" );
+                    u"com.sun.star.bridge.BridgeFactory"_ustr );
 
                 // bridge
                 Reference< XBridge > xBridge( xBridgeFactory->createBridge(
@@ -520,7 +520,7 @@ SAL_IMPLEMENT_MAIN()
                 Reference< XComponent > xComp( xInstance, UNO_QUERY );
                 if (xComp.is())
                     xComp->dispose();
-                throw RuntimeException( "component does not export interface \"com.sun.star.lang.XMain\"!" );
+                throw RuntimeException( u"component does not export interface \"com.sun.star.lang.XMain\"!"_ustr );
             }
         }
     }

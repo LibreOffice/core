@@ -224,7 +224,7 @@ void LiblangtagDataRef::setupDataPath()
     maDataPath = OString(lo_get_app_data_dir()) + "/share/liblangtag";
 #else
     // maDataPath is assumed to be empty here.
-    OUString aURL("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/liblangtag");
+    OUString aURL(u"$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/liblangtag"_ustr);
     rtl::Bootstrap::expandMacros(aURL); //TODO: detect failure
 
     // Check if data is in our own installation, else assume system
@@ -2210,7 +2210,7 @@ LanguageTag & LanguageTag::makeFallback()
             }
             else if (aLanguage == "ca" && aCountry == "XV")
             {
-                ::std::vector< OUString > aRep( LanguageTag( "ca-ES-valencia").getFallbackStrings( true));
+                ::std::vector< OUString > aRep( LanguageTag( u"ca-ES-valencia"_ustr).getFallbackStrings( true));
                 aVec.insert( aVec.end(), aRep.begin(), aRep.end());
                 // Already includes 'ca' language fallback.
             }
@@ -2398,7 +2398,7 @@ LanguageTag & LanguageTag::makeFallback()
 OUString LanguageTag::getBcp47MS() const
 {
     if (getLanguageType() == LANGUAGE_SPANISH_DATED)
-        return "es-ES_tradnl";
+        return u"es-ES_tradnl"_ustr;
     return getBcp47();
 }
 
@@ -3153,7 +3153,7 @@ LanguageTag makeLanguageTagFromAppleLanguageId(AppleLanguageId nLanguage)
             nLang = LANGUAGE_AZERI_CYRILLIC;
             break;
         case AppleLanguageId::AZERI_ARABIC:
-            return LanguageTag("az-Arab");
+            return LanguageTag(u"az-Arab"_ustr);
         case AppleLanguageId::ARMENIAN:
             nLang = LANGUAGE_ARMENIAN;
             break;
@@ -3275,7 +3275,7 @@ LanguageTag makeLanguageTagFromAppleLanguageId(AppleLanguageId nLanguage)
             nLang = LANGUAGE_KINYARWANDA_RWANDA;
             break;
         case AppleLanguageId::RUNDI:
-            return LanguageTag("rn");
+            return LanguageTag(u"rn"_ustr);
         case AppleLanguageId::NYANJA:
             nLang = LANGUAGE_USER_NYANJA;
             break;
@@ -3304,7 +3304,7 @@ LanguageTag makeLanguageTagFromAppleLanguageId(AppleLanguageId nLanguage)
             nLang = LANGUAGE_GUARANI_PARAGUAY;
             break;
         case AppleLanguageId::AYMARA:
-            return LanguageTag("ay");
+            return LanguageTag(u"ay"_ustr);
         case AppleLanguageId::TATAR:
             nLang = LANGUAGE_TATAR;
             break;
@@ -3315,9 +3315,9 @@ LanguageTag makeLanguageTagFromAppleLanguageId(AppleLanguageId nLanguage)
             nLang = LANGUAGE_DZONGKHA_BHUTAN;
             break;
         case AppleLanguageId::JAVANESE_LATIN:
-            return LanguageTag("jv-Latn");
+            return LanguageTag(u"jv-Latn"_ustr);
         case AppleLanguageId::SUNDANESE_LATIN:
-            return LanguageTag("su-Latn");
+            return LanguageTag(u"su-Latn"_ustr);
         case AppleLanguageId::GALICIAN:
             nLang = LANGUAGE_GALICIAN;
             break;
@@ -3337,9 +3337,9 @@ LanguageTag makeLanguageTagFromAppleLanguageId(AppleLanguageId nLanguage)
             nLang = LANGUAGE_USER_MANX;
             break;
         case AppleLanguageId::IRISH_GAELIC_WITH_DOT_ABOVE:
-            return LanguageTag("ga-Latg");
+            return LanguageTag(u"ga-Latg"_ustr);
         case AppleLanguageId::TONGAN:
-            return LanguageTag("to");
+            return LanguageTag(u"to"_ustr);
         case AppleLanguageId::GREEK_POLYTONIC:
             nLang = LANGUAGE_USER_ANCIENT_GREEK;
             break;

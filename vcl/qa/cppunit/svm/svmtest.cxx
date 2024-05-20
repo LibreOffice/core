@@ -207,7 +207,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
 public:
     SvmTest()
         : BootstrapFixture(true, false)
-        , maDataUrl("/vcl/qa/cppunit/svm/data/")
+        , maDataUrl(u"/vcl/qa/cppunit/svm/data/"_ustr)
     {}
 
     CPPUNIT_TEST_SUITE(SvmTest);
@@ -363,22 +363,22 @@ xmlDocUniquePtr SvmTest::dumpMeta(const GDIMetaFile& rMetaFile)
 
 void SvmTest::checkVirtualDevice(const xmlDocUniquePtr& pDoc)
 {
-    assertXPath(pDoc, "/metafile/linecolor[1]"_ostr, "color"_ostr, "#000000");
-    assertXPath(pDoc, "/metafile/fillcolor[1]"_ostr, "color"_ostr, "#ffffff");
+    assertXPath(pDoc, "/metafile/linecolor[1]"_ostr, "color"_ostr, u"#000000"_ustr);
+    assertXPath(pDoc, "/metafile/fillcolor[1]"_ostr, "color"_ostr, u"#ffffff"_ustr);
 
     assertXPathAttrs(pDoc, "/metafile/rect[1]"_ostr, {
         {"left", "0"},  {"top", "0"},
         {"right", "9"}, {"bottom", "9"}
     });
 
-    assertXPath(pDoc, "/metafile/linecolor[2]"_ostr, "color"_ostr, "#000000");
-    assertXPath(pDoc, "/metafile/fillcolor[2]"_ostr, "color"_ostr, "#ffffff");
+    assertXPath(pDoc, "/metafile/linecolor[2]"_ostr, "color"_ostr, u"#000000"_ustr);
+    assertXPath(pDoc, "/metafile/fillcolor[2]"_ostr, "color"_ostr, u"#ffffff"_ustr);
 }
 
 void SvmTest::checkErase(const xmlDocUniquePtr& pDoc)
 {
-    assertXPath(pDoc, "/metafile/linecolor[3]"_ostr, "color"_ostr, "#000000");
-    assertXPath(pDoc, "/metafile/fillcolor[3]"_ostr, "color"_ostr, "#ff0000");
+    assertXPath(pDoc, "/metafile/linecolor[3]"_ostr, "color"_ostr, u"#000000"_ustr);
+    assertXPath(pDoc, "/metafile/fillcolor[3]"_ostr, "color"_ostr, u"#ff0000"_ustr);
 
     assertXPathAttrs(pDoc, "/metafile/rect[2]"_ostr, {
         {"left", "0"},  {"top", "0"},
@@ -490,8 +490,8 @@ void SvmTest::checkRect(const GDIMetaFile& rMetaFile)
 
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPath(pDoc, "/metafile/linecolor[5]"_ostr, "color"_ostr, "#123456");
-    assertXPath(pDoc, "/metafile/fillcolor[5]"_ostr, "color"_ostr, "#654321");
+    assertXPath(pDoc, "/metafile/linecolor[5]"_ostr, "color"_ostr, u"#123456"_ustr);
+    assertXPath(pDoc, "/metafile/fillcolor[5]"_ostr, "color"_ostr, u"#654321"_ustr);
 
     assertXPathAttrs(pDoc, "/metafile/rect[3]"_ostr, {
         {"left", "1"}, {"top", "2"},
@@ -518,8 +518,8 @@ void SvmTest::checkRoundRect(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPath(pDoc, "/metafile/linecolor[5]"_ostr, "color"_ostr, "#123456");
-    assertXPath(pDoc, "/metafile/fillcolor[5]"_ostr, "color"_ostr, "#654321");
+    assertXPath(pDoc, "/metafile/linecolor[5]"_ostr, "color"_ostr, u"#123456"_ustr);
+    assertXPath(pDoc, "/metafile/fillcolor[5]"_ostr, "color"_ostr, u"#654321"_ustr);
 
     assertXPathAttrs(pDoc, "/metafile/roundrect[1]"_ostr, {
         {"left", "1"}, {"top", "2"},
@@ -547,8 +547,8 @@ void SvmTest::checkEllipse(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPath(pDoc, "/metafile/linecolor[5]"_ostr, "color"_ostr, "#123456");
-    assertXPath(pDoc, "/metafile/fillcolor[5]"_ostr, "color"_ostr, "#654321");
+    assertXPath(pDoc, "/metafile/linecolor[5]"_ostr, "color"_ostr, u"#123456"_ustr);
+    assertXPath(pDoc, "/metafile/fillcolor[5]"_ostr, "color"_ostr, u"#654321"_ustr);
 
     assertXPathAttrs(pDoc, "/metafile/ellipse[1]"_ostr, {
         {"left", "1"}, {"top", "2"},
@@ -575,8 +575,8 @@ void SvmTest::checkArc(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPath(pDoc, "/metafile/linecolor[5]"_ostr, "color"_ostr, "#123456");
-    assertXPath(pDoc, "/metafile/fillcolor[5]"_ostr, "color"_ostr, "#654321");
+    assertXPath(pDoc, "/metafile/linecolor[5]"_ostr, "color"_ostr, u"#123456"_ustr);
+    assertXPath(pDoc, "/metafile/fillcolor[5]"_ostr, "color"_ostr, u"#654321"_ustr);
 
     assertXPathAttrs(pDoc, "/metafile/arc[1]"_ostr, {
         {"left",  "1"}, {"top",    "2"},
@@ -606,8 +606,8 @@ void SvmTest::checkPie(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPath(pDoc, "/metafile/linecolor[5]"_ostr, "color"_ostr, "#123456");
-    assertXPath(pDoc, "/metafile/fillcolor[5]"_ostr, "color"_ostr, "#654321");
+    assertXPath(pDoc, "/metafile/linecolor[5]"_ostr, "color"_ostr, u"#123456"_ustr);
+    assertXPath(pDoc, "/metafile/fillcolor[5]"_ostr, "color"_ostr, u"#654321"_ustr);
 
     assertXPathAttrs(pDoc, "/metafile/pie[1]"_ostr, {
         {"left",  "11"}, {"top",    "12"},
@@ -637,8 +637,8 @@ void SvmTest::checkChord(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPath(pDoc, "/metafile/linecolor[5]"_ostr, "color"_ostr, "#123456");
-    assertXPath(pDoc, "/metafile/fillcolor[5]"_ostr, "color"_ostr, "#654321");
+    assertXPath(pDoc, "/metafile/linecolor[5]"_ostr, "color"_ostr, u"#123456"_ustr);
+    assertXPath(pDoc, "/metafile/fillcolor[5]"_ostr, "color"_ostr, u"#654321"_ustr);
 
     assertXPathAttrs(pDoc, "/metafile/chord[1]"_ostr, {
         {"left",  "21"}, {"top",    "22"},
@@ -830,7 +830,7 @@ void SvmTest::checkText(const GDIMetaFile& rMetaFile)
         {"x", "4"}, {"y", "6"}, {"index", "1"}, {"length", "2"},
     });
 
-    assertXPathContent(pDoc, "/metafile/text[1]/textcontent"_ostr, "xABC");
+    assertXPathContent(pDoc, "/metafile/text[1]/textcontent"_ostr, u"xABC"_ustr);
 }
 
 void SvmTest::testText()
@@ -839,7 +839,7 @@ void SvmTest::testText()
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
     setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
-    pVirtualDev->DrawText(Point(4,6), "xABC", 1, 2);
+    pVirtualDev->DrawText(Point(4,6), u"xABC"_ustr, 1, 2);
 
     checkText(writeAndReadStream(aGDIMetaFile));
     checkText(readFile(u"text.svm"));
@@ -852,8 +852,8 @@ void SvmTest::checkTextArray(const GDIMetaFile& rMetaFile)
     assertXPathAttrs(pDoc, "/metafile/textarray[1]"_ostr, {
         {"x", "4"}, {"y", "6"}, {"index", "1"}, {"length", "4"},
     });
-    assertXPathContent(pDoc, "/metafile/textarray[1]/dxarray"_ostr, "15 20 25 ");
-    assertXPathContent(pDoc, "/metafile/textarray[1]/text"_ostr, "123456");
+    assertXPathContent(pDoc, "/metafile/textarray[1]/dxarray"_ostr, u"15 20 25 "_ustr);
+    assertXPathContent(pDoc, "/metafile/textarray[1]/text"_ostr, u"123456"_ustr);
 }
 
 void SvmTest::testTextArray()
@@ -862,7 +862,7 @@ void SvmTest::testTextArray()
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
     setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
     sal_Int32 const aDX[] = { 10, 15, 20, 25, 30, 35 };
-    pVirtualDev->DrawTextArray(Point(4,6), "123456", KernArraySpan(aDX), {}, 1, 4);
+    pVirtualDev->DrawTextArray(Point(4,6), u"123456"_ustr, KernArraySpan(aDX), {}, 1, 4);
 
     checkTextArray(writeAndReadStream(aGDIMetaFile));
     checkTextArray(readFile(u"textarray.svm"));
@@ -876,7 +876,7 @@ void SvmTest::checkstretchText(const GDIMetaFile& rMetaFile)
         {"x", "4"}, {"y", "6"}, {"index", "1"}, {"length", "4"}, {"width", "10"}
     });
 
-    assertXPathContent(pDoc, "/metafile/stretchtext[1]/textcontent"_ostr, "123456");
+    assertXPathContent(pDoc, "/metafile/stretchtext[1]/textcontent"_ostr, u"123456"_ustr);
 }
 
 void SvmTest::teststretchText()
@@ -884,7 +884,7 @@ void SvmTest::teststretchText()
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
     setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
-    pVirtualDev->DrawStretchText(Point(4,6), 10, "123456", 1, 4);
+    pVirtualDev->DrawStretchText(Point(4,6), 10, u"123456"_ustr, 1, 4);
 
     checkstretchText(writeAndReadStream(aGDIMetaFile));
     checkstretchText(readFile(u"strecthtext.svm"));
@@ -897,8 +897,8 @@ void SvmTest::checkTextRect(const GDIMetaFile& rMetaFile)
     assertXPathAttrs(pDoc, "/metafile/textrect[1]"_ostr, {
         {"left", "0"}, {"top", "0"}, {"right", "4"}, {"bottom", "4"}
     });
-    assertXPathContent(pDoc, "/metafile/textrect[1]/textcontent"_ostr, "123456");
-    assertXPathContent(pDoc, "/metafile/textrect[1]/style"_ostr, "Center");
+    assertXPathContent(pDoc, "/metafile/textrect[1]/textcontent"_ostr, u"123456"_ustr);
+    assertXPathContent(pDoc, "/metafile/textrect[1]/style"_ostr, u"Center"_ustr);
 }
 
 void SvmTest::testTextRect()
@@ -906,7 +906,7 @@ void SvmTest::testTextRect()
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
     setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
-    pVirtualDev->DrawText(tools::Rectangle(Point(0,0), Size(5,5)), "123456", DrawTextFlags::Center);
+    pVirtualDev->DrawText(tools::Rectangle(Point(0,0), Size(5,5)), u"123456"_ustr, DrawTextFlags::Center);
 
     checkTextRect(writeAndReadStream(aGDIMetaFile));
     checkTextRect(readFile(u"textrectangle.svm"));
@@ -1028,34 +1028,34 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile, bool bIsSvmFile)
         "742c3e35",
 #else
 #if !ENABLE_CAIRO_RGBA
-        "ac936607", // typical BGRA little-endian config
+        u"ac936607"_ustr, // typical BGRA little-endian config
 #else
         "ecd75a28", // atypical RGBA little-endian config
 #endif
-        "4937e32d",
+        u"4937e32d"_ustr,
 #if !ENABLE_CAIRO_RGBA
-        "3789377b", // typical BGRA little-endian config
+        u"3789377b"_ustr, // typical BGRA little-endian config
 #else
         "469f0820", // atypical RGBA little-endian config
 #endif
-        "839e8cce",
-        "236aaf55", // 1-bit
-        "2949ccc7", // 4-bit color bitmap - same as 8-bit color bitmap
-        "2949ccc7",
-        "e5df8aad",
+        u"839e8cce"_ustr,
+        u"236aaf55"_ustr, // 1-bit
+        u"2949ccc7"_ustr, // 4-bit color bitmap - same as 8-bit color bitmap
+        u"2949ccc7"_ustr,
+        u"e5df8aad"_ustr,
 #endif
     };
 
     static const std::array<OUString, 8> aExpectedContentChecksum
     {
-        "26bdebd04e5b18d685cea04982179e273ee3b659",
-        "f4f52df6ef965a2f0fbccbe6aca35ba3457cf9d5",
-        "7c953a06d34bbd38897f950d595df2880dbb0f75",
-        "ca3e5cdde1c395e1ee76d339a5bf6e46fbac3249",
-        "8a1ebc46f890eb0879464c6e293bffd4ce7fadc0", // 1-bit
-        "23611fc9f484c23e45bbd457730adb8ab5355509", // 4-bit color bitmap - same as 8-bit color bitmap
-        "23611fc9f484c23e45bbd457730adb8ab5355509",
-        "97e499b74104debf12f99a774a2c4edc914d8900",
+        u"26bdebd04e5b18d685cea04982179e273ee3b659"_ustr,
+        u"f4f52df6ef965a2f0fbccbe6aca35ba3457cf9d5"_ustr,
+        u"7c953a06d34bbd38897f950d595df2880dbb0f75"_ustr,
+        u"ca3e5cdde1c395e1ee76d339a5bf6e46fbac3249"_ustr,
+        u"8a1ebc46f890eb0879464c6e293bffd4ce7fadc0"_ustr, // 1-bit
+        u"23611fc9f484c23e45bbd457730adb8ab5355509"_ustr, // 4-bit color bitmap - same as 8-bit color bitmap
+        u"23611fc9f484c23e45bbd457730adb8ab5355509"_ustr,
+        u"97e499b74104debf12f99a774a2c4edc914d8900"_ustr,
     };
 
     assertXPathAttrs(pDoc, "/metafile/bmpex[1]"_ostr, {
@@ -1991,8 +1991,8 @@ void SvmTest::testFont()
     setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
     vcl::Font aFont(FontFamily::FAMILY_SCRIPT, Size(15, 15));
     aFont.SetWeight(FontWeight::WEIGHT_THIN);
-    aFont.SetFamilyName("Liberation Sans");
-    aFont.SetStyleName("Regular");
+    aFont.SetFamilyName(u"Liberation Sans"_ustr);
+    aFont.SetStyleName(u"Regular"_ustr);
     aFont.SetFontHeight(12);
     aFont.SetAverageFontWidth(12);
     aFont.SetVertical(true);
@@ -2273,7 +2273,7 @@ void SvmTest::checkComment(const GDIMetaFile& rMetafile)
         {"value", "0"}
     });
 
-    assertXPathContent(pDoc, "/metafile/comment[1]/comment[1]"_ostr, "Test comment");
+    assertXPathContent(pDoc, "/metafile/comment[1]/comment[1]"_ostr, u"Test comment"_ustr);
 
     assertXPathAttrs(pDoc, "/metafile/comment[2]"_ostr, {
         {"datasize", "48"}
@@ -2287,7 +2287,7 @@ void SvmTest::checkComment(const GDIMetaFile& rMetafile)
         {"value", "4"}
     });
 
-    assertXPathContent(pDoc, "/metafile/comment[2]/comment[1]"_ostr, "This is a test comment");
+    assertXPathContent(pDoc, "/metafile/comment[2]/comment[1]"_ostr, u"This is a test comment"_ustr);
 }
 
 void SvmTest::testComment()

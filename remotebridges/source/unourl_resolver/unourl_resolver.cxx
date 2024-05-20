@@ -67,7 +67,7 @@ ResolverImpl::ResolverImpl( const Reference< XComponentContext > & xCtx )
 // XServiceInfo
 OUString ResolverImpl::getImplementationName()
 {
-    return "com.sun.star.comp.bridge.UnoUrlResolver";
+    return u"com.sun.star.comp.bridge.UnoUrlResolver"_ustr;
 }
 
 sal_Bool ResolverImpl::supportsService( const OUString & rServiceName )
@@ -77,7 +77,7 @@ sal_Bool ResolverImpl::supportsService( const OUString & rServiceName )
 
 Sequence< OUString > ResolverImpl::getSupportedServiceNames()
 {
-    return { "com.sun.star.bridge.UnoUrlResolver" };
+    return { u"com.sun.star.bridge.UnoUrlResolver"_ustr };
 }
 
 // XUnoUrlResolver
@@ -99,7 +99,7 @@ Reference< XInterface > ResolverImpl::resolve( const OUString & rUnoUrl )
     }
 
     Reference< XConnector > xConnector(
-        _xSMgr->createInstanceWithContext( "com.sun.star.connection.Connector", _xCtx ),
+        _xSMgr->createInstanceWithContext( u"com.sun.star.connection.Connector"_ustr, _xCtx ),
         UNO_QUERY_THROW );
     Reference< XConnection > xConnection( xConnector->connect( aConnectDescr ) );
 

@@ -27,14 +27,14 @@ OpenCLConfig::OpenCLConfig() :
     // This entry we have had for some time (when denylisting was
     // done elsewhere in the code), so presumably there is a known
     // good reason for it.
-    maDenyList.insert(ImplMatcher("Windows", "", "Intel\\(R\\) Corporation", "", "9\\.17\\.10\\.2884"));
+    maDenyList.insert(ImplMatcher(u"Windows"_ustr, u""_ustr, u"Intel\\(R\\) Corporation"_ustr, u""_ustr, u"9\\.17\\.10\\.2884"_ustr));
     // This was reported to produce bogus values in unit tests
-    maDenyList.insert(ImplMatcher("Windows", "", "Intel\\(R\\) Corporation", "", "27\\.20\\.100\\.8681"));
+    maDenyList.insert(ImplMatcher(u"Windows"_ustr, u""_ustr, u"Intel\\(R\\) Corporation"_ustr, u""_ustr, u"27\\.20\\.100\\.8681"_ustr));
 
     // For now, assume that AMD, Intel and NVIDIA drivers are good
-    maAllowList.insert(ImplMatcher("", "", "Advanced Micro Devices, Inc\\.", "", ""));
-    maAllowList.insert(ImplMatcher("", "", "Intel\\(R\\) Corporation", "", ""));
-    maAllowList.insert(ImplMatcher("", "", "NVIDIA Corporation", "", ""));
+    maAllowList.insert(ImplMatcher(u""_ustr, u""_ustr, u"Advanced Micro Devices, Inc\\."_ustr, u""_ustr, u""_ustr));
+    maAllowList.insert(ImplMatcher(u""_ustr, u""_ustr, u"Intel\\(R\\) Corporation"_ustr, u""_ustr, u""_ustr));
+    maAllowList.insert(ImplMatcher(u""_ustr, u""_ustr, u"NVIDIA Corporation"_ustr, u""_ustr, u""_ustr));
 }
 
 bool OpenCLConfig::operator== (const OpenCLConfig& r) const

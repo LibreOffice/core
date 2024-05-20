@@ -126,12 +126,12 @@ Sequence< Type > SAL_CALL FrameControl::getTypes()
 
 OUString FrameControl::getImplementationName()
 {
-    return "stardiv.UnoControls.FrameControl";
+    return u"stardiv.UnoControls.FrameControl"_ustr;
 }
 
 css::uno::Sequence<OUString> FrameControl::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.FrameControl" };
+    return { u"com.sun.star.frame.FrameControl"_ustr };
 }
 
 //  XControl
@@ -323,11 +323,11 @@ IPropertyArrayHelper& FrameControl::getInfoHelper()
     // attention: properties need to be sorted by name!
     static OPropertyArrayHelper ourPropertyInfo(
                 {
-                    Property( "ComponentUrl", PropertyHandle::Componenturl, cppu::UnoType<OUString>::get(),
+                    Property( u"ComponentUrl"_ustr, PropertyHandle::Componenturl, cppu::UnoType<OUString>::get(),
                             PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED ),
-                    Property( "Frame", PropertyHandle::Frame, cppu::UnoType<XFrame>::get(),
+                    Property( u"Frame"_ustr, PropertyHandle::Frame, cppu::UnoType<XFrame>::get(),
                             PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT ),
-                    Property( "LoaderArguments", PropertyHandle::Loaderarguments, cppu::UnoType<Sequence<PropertyValue>>::get(),
+                    Property( u"LoaderArguments"_ustr, PropertyHandle::Loaderarguments, cppu::UnoType<Sequence<PropertyValue>>::get(),
                             PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED )
                 },
                 true );

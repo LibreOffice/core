@@ -50,20 +50,20 @@ void OfficeConnection::setUp() {
             u"soffice",
             &argSoffice));
     if (argSoffice.match("path:")) {
-        desc = "pipe,name=" + osl::test::uniquePipeName("oootest");
-        OUString noquickArg("--quickstart=no");
-        OUString norestoreArg("--norestore");
-        OUString nologoArg("--nologo");
+        desc = "pipe,name=" + osl::test::uniquePipeName(u"oootest"_ustr);
+        OUString noquickArg(u"--quickstart=no"_ustr);
+        OUString norestoreArg(u"--norestore"_ustr);
+        OUString nologoArg(u"--nologo"_ustr);
             // disable use of the unix standalone splash screen app for the
             // tests (probably not needed in combination with --headless?)
-        OUString headlessArg("--headless");
+        OUString headlessArg(u"--headless"_ustr);
         OUString acceptArg("--accept=" + desc + ";urp");
         OUString argUser;
         CPPUNIT_ASSERT(
             getArgument(u"user", &argUser));
         OUString userArg("-env:UserInstallation=" + toAbsoluteFileUrl(argUser));
         OUString jreArg(
-            "-env:UNO_JAVA_JFW_ENV_JREHOME=true");
+            u"-env:UNO_JAVA_JFW_ENV_JREHOME=true"_ustr);
         rtl_uString * args[] = {
             noquickArg.pData, norestoreArg.pData,
             nologoArg.pData, headlessArg.pData, acceptArg.pData, userArg.pData,

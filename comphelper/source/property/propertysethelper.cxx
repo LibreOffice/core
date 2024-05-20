@@ -112,7 +112,7 @@ void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< OUString >& 
     const sal_Int32 nCount = rPropertyNames.getLength();
 
     if( nCount != rValues.getLength() )
-        throw IllegalArgumentException("lengths do not match", static_cast<XPropertySet*>(this), -1);
+        throw IllegalArgumentException(u"lengths do not match"_ustr, static_cast<XPropertySet*>(this), -1);
 
     if( !nCount )
         return;

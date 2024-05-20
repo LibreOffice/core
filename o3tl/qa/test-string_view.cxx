@@ -37,12 +37,12 @@ OString ostringFood() { return "food"_ostr; } // avoid loplugin:stringview
 OString ostringOof() { return "oof"_ostr; } // avoid loplugin:stringview
 OString ostringSraboof() { return "sraboof"_ostr; } // avoid loplugin:stringview
 OUString oustringEmpty() { return {}; } // avoid loplugin:stringview
-OUString oustringDoof() { return "doof"; } // avoid loplugin:stringview
-OUString oustringFoo() { return "foo"; } // avoid loplugin:stringview
-OUString oustringFoobars() { return "foobars"; } // avoid loplugin:stringview
-OUString oustringFood() { return "food"; } // avoid loplugin:stringview
-OUString oustringOof() { return "oof"; } // avoid loplugin:stringview
-OUString oustringSraboof() { return "sraboof"; } // avoid loplugin:stringview
+OUString oustringDoof() { return u"doof"_ustr; } // avoid loplugin:stringview
+OUString oustringFoo() { return u"foo"_ustr; } // avoid loplugin:stringview
+OUString oustringFoobars() { return u"foobars"_ustr; } // avoid loplugin:stringview
+OUString oustringFood() { return u"food"_ustr; } // avoid loplugin:stringview
+OUString oustringOof() { return u"oof"_ustr; } // avoid loplugin:stringview
+OUString oustringSraboof() { return u"sraboof"_ustr; } // avoid loplugin:stringview
 
 class Test : public CppUnit::TestFixture
 {
@@ -597,7 +597,7 @@ private:
         {
             // Explicit initialization of suTokenStr to avoid an unhelpful loplugin:stringviewvar;
             // it is the o3tl::getToken overload taking OUString that we want to test here:
-            OUString suTokenStr("");
+            OUString suTokenStr(u""_ustr);
             sal_Int32 nIndex = 0;
             do
             {
@@ -606,7 +606,7 @@ private:
             // should not GPF
         }
         {
-            OUString suTokenStr("a;b");
+            OUString suTokenStr(u"a;b"_ustr);
 
             sal_Int32 nIndex = 0;
 

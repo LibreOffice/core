@@ -217,7 +217,7 @@ void TestBreakIterator::testLineBreaking()
 
             // An identical result should be generated for solidus.
             aResult = m_xBreak->getLineBreak(
-                "C:/Program Files/LibreOffice", strlen("C:/Program Files/Libre"), aLocale, 0,
+                u"C:/Program Files/LibreOffice"_ustr, strlen("C:/Program Files/Libre"), aLocale, 0,
                 aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11), aResult.breakIndex);
         }
@@ -289,7 +289,7 @@ void TestBreakIterator::testLineBreaking()
             // From the same bug: "the leading minus must stay with numbers and strings"
 
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(
-                    "range of -100.000 to 100.000", strlen("range of -1"), aLocale, 0,
+                    u"range of -100.000 to 100.000"_ustr, strlen("range of -1"), aLocale, 0,
                     aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL(sal_Int32{9}, aResult.breakIndex);
 
@@ -306,7 +306,7 @@ void TestBreakIterator::testLineBreaking()
             // From the same bug: "the leading minus must stay with numbers and strings"
 
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(
-                    "EURO is -10,50", strlen("EURO is -1"), aLocale, 0, aHyphOptions, aUserOptions);
+                    u"EURO is -10,50"_ustr, strlen("EURO is -1"), aLocale, 0, aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL(sal_Int32{8}, aResult.breakIndex);
 
             // Also the mathematical minus sign:
@@ -321,7 +321,7 @@ void TestBreakIterator::testLineBreaking()
             // From the same bug: "the leading minus must stay with numbers and strings"
 
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(
-                    "und -kosten", strlen("und -ko"), aLocale, 0,
+                    u"und -kosten"_ustr, strlen("und -ko"), aLocale, 0,
                     aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL(sal_Int32{4}, aResult.breakIndex);
 

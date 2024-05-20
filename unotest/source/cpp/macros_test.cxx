@@ -69,7 +69,7 @@ MacrosTest::loadFromDesktop(const OUString& rURL, const OUString& rDocService,
     args.insert(args.end(), rExtraArgs.begin(), rExtraArgs.end());
 
     uno::Reference<lang::XComponent> xComponent = mxDesktop->loadComponentFromURL(
-        rURL, "_default", 0, comphelper::containerToSequence(args));
+        rURL, u"_default"_ustr, 0, comphelper::containerToSequence(args));
     OUString sMessage = "loading failed: " + rURL;
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sMessage, RTL_TEXTENCODING_UTF8).getStr(),
                            xComponent.is());
@@ -139,7 +139,7 @@ void MacrosTest::setUpX509(const test::Directories& rDirectories, const OUString
     osl::File::copy(aSourceDir + "key4.db", aTargetDir + "/key4.db");
     osl::File::copy(aSourceDir + "pkcs11.txt", aTargetDir + "/pkcs11.txt");
 
-    OUString mozCertVar("MOZILLA_CERTIFICATE_FOLDER");
+    OUString mozCertVar(u"MOZILLA_CERTIFICATE_FOLDER"_ustr);
     // explicit prefix with "sql:" needed for CentOS7 system NSS 3.67
     osl_setEnvironment(mozCertVar.pData, OUString("sql:" + aTargetPath).pData);
 #endif
@@ -160,7 +160,7 @@ void MacrosTest::setUpGpg(const test::Directories& rDirectories, const OUString&
     osl::File::copy(aSourceDir + "secring.gpg", aTargetDir + "/secring.gpg");
     osl::File::copy(aSourceDir + "trustdb.gpg", aTargetDir + "/trustdb.gpg");
 
-    OUString gpgHomeVar("GNUPGHOME");
+    OUString gpgHomeVar(u"GNUPGHOME"_ustr);
     osl_setEnvironment(gpgHomeVar.pData, aTargetPath.pData);
 
 #if HAVE_GPGCONF_SOCKETDIR

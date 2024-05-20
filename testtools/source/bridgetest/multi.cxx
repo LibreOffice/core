@@ -118,30 +118,30 @@ OUString testMulti(  css::uno::Reference< test::testtools::bridgetest::XMulti > 
             css::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
                 multi, css::uno::UNO_QUERY_THROW)->fn11(5));
         checkEqual(
-            OUString("12" "abc"),
+            u"12" "abc"_ustr,
             css::uno::Reference< test::testtools::bridgetest::XMultiBase1 >(
                 multi, css::uno::UNO_QUERY_THROW)->fn12(
-                    "abc"));
+                    u"abc"_ustr));
         checkEqual(
-            OUString("12" "abc-2"),
+            u"12" "abc-2"_ustr,
             static_cast< test::testtools::bridgetest::XMultiBase2 * >(
-                multi.get())->fn12("abc-2"));
+                multi.get())->fn12(u"abc-2"_ustr));
         checkEqual(
-            OUString("12" "abc-2"),
+            u"12" "abc-2"_ustr,
             css::uno::Reference< test::testtools::bridgetest::XMultiBase2 >(
-                multi, css::uno::UNO_QUERY_THROW)->fn12("abc-2"));
+                multi, css::uno::UNO_QUERY_THROW)->fn12(u"abc-2"_ustr));
         checkEqual(
-            OUString("12" "abc-5"),
+            u"12" "abc-5"_ustr,
             static_cast< test::testtools::bridgetest::XMultiBase5 * >(
-                multi.get())->fn12("abc-5"));
+                multi.get())->fn12(u"abc-5"_ustr));
         checkEqual(
-            OUString("12" "abc-5"),
+            u"12" "abc-5"_ustr,
             css::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
-                multi, css::uno::UNO_QUERY_THROW)->fn12("abc-5"));
+                multi, css::uno::UNO_QUERY_THROW)->fn12(u"abc-5"_ustr));
         checkEqual< sal_Int32 >(21 * 2, multi->fn21(2));
         checkEqual(
-            OUString("22" "de"),
-            multi->fn22("de"));
+            u"22" "de"_ustr,
+            multi->fn22(u"de"_ustr));
         checkEqual< sal_Int32 >(
             31 * 3,
             css::uno::Reference< test::testtools::bridgetest::XMultiBase3 >(
@@ -181,17 +181,17 @@ OUString testMulti(  css::uno::Reference< test::testtools::bridgetest::XMulti > 
             css::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
                 multi, css::uno::UNO_QUERY_THROW)->getatt3());
         checkEqual(
-            OUString("32" "f"),
+            u"32" "f"_ustr,
             css::uno::Reference< test::testtools::bridgetest::XMultiBase3 >(
-                multi, css::uno::UNO_QUERY_THROW)->fn32("f"));
+                multi, css::uno::UNO_QUERY_THROW)->fn32(u"f"_ustr));
         checkEqual(
-            OUString("32" "f-5"),
+            u"32" "f-5"_ustr,
             static_cast< test::testtools::bridgetest::XMultiBase5 * >(
-                multi.get())->fn32("f-5"));
+                multi.get())->fn32(u"f-5"_ustr));
         checkEqual(
-            OUString("32" "f-5"),
+            u"32" "f-5"_ustr,
             css::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
-                multi, css::uno::UNO_QUERY_THROW)->fn32("f-5"));
+                multi, css::uno::UNO_QUERY_THROW)->fn32(u"f-5"_ustr));
         checkEqual< sal_Int32 >(
             33,
             css::uno::Reference< test::testtools::bridgetest::XMultiBase3 >(
@@ -207,12 +207,12 @@ OUString testMulti(  css::uno::Reference< test::testtools::bridgetest::XMulti > 
         checkEqual< sal_Int32 >(41 * 4, multi->fn41(4));
         checkEqual< sal_Int32 >(61 * 6, multi->fn61(6));
         checkEqual(
-            OUString("62" ""),
+            u"62" ""_ustr,
             multi->fn62(OUString()));
         checkEqual< sal_Int32 >(71 * 7, multi->fn71(7));
         checkEqual(
-            OUString("72" "g"),
-            multi->fn72("g"));
+            u"72" "g"_ustr,
+            multi->fn72(u"g"_ustr));
         checkEqual< sal_Int32 >(73, multi->fn73());
     } catch (CheckFailed const & f) {
         return f.message;

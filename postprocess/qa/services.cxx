@@ -149,7 +149,7 @@ void Test::test() {
         m_xContext->getServiceManager(), css::uno::UNO_QUERY_THROW);
     css::uno::Reference<css::container::XHierarchicalNameAccess> typeMgr(
         m_xContext->getValueByName(
-            "/singletons/com.sun.star.reflection.theTypeDescriptionManager"),
+            u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
         css::uno::UNO_QUERY_THROW);
     const css::uno::Sequence<OUString> serviceNames(
         m_xContext->getServiceManager()->getAvailableServiceNames());
@@ -346,7 +346,7 @@ void Test::createInstance(
         // Instantiating a ConfigurationProvider with no or empty args must
         // return theDefaultProvider:
         expImpl = "com.sun.star.comp.configuration.DefaultProvider";
-        expServs = {"com.sun.star.configuration.DefaultProvider"};
+        expServs = {u"com.sun.star.configuration.DefaultProvider"_ustr};
     } else if (name == "com.sun.star.datatransfer.clipboard.SystemClipboard") {
         // SystemClipboard is a wrapper returning either a platform-specific or
         // the generic VCLGenericClipboard:
@@ -356,19 +356,19 @@ void Test::createInstance(
                || name == "com.sun.star.datatransfer.dnd.XdndSupport")
     {
         expImpl = "com.sun.star.datatransfer.dnd.VclGenericDragSource";
-        expServs = {"com.sun.star.datatransfer.dnd.GenericDragSource"};
+        expServs = {u"com.sun.star.datatransfer.dnd.GenericDragSource"_ustr};
     } else if (name == "com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1"
                || name == "com.sun.star.datatransfer.dnd.XdndDropTarget")
     {
         expImpl = "com.sun.star.datatransfer.dnd.VclGenericDropTarget";
-        expServs = {"com.sun.star.datatransfer.dnd.GenericDropTarget"};
+        expServs = {u"com.sun.star.datatransfer.dnd.GenericDropTarget"_ustr};
 #endif
     } else if (name == "com.sun.star.ui.dialogs.FolderPicker") {
         // FolderPicker is a wrapper returning either a platform-specific or the
         // generic OfficeFolderPicker. In headless mode it is always the
         // generic one.
         expImpl = "com.sun.star.svtools.OfficeFolderPicker";
-        expServs = {"com.sun.star.ui.dialogs.OfficeFolderPicker"};
+        expServs = {u"com.sun.star.ui.dialogs.OfficeFolderPicker"_ustr};
     } else if (expImpl == "com.sun.star.comp.Calc.SpreadsheetDocument") {
         expImpl = "ScModelObj";
     } else if (expImpl == "com.sun.star.comp.Draw.DrawingDocument"

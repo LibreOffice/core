@@ -820,17 +820,17 @@ void generateSkeleton(ProgramOptions const & options,
         // so it is defaulted. The XDispatchProvider provides Dispatch objects for
         // certain functions and the generated impl object implements XDispatch
         // directly for simplicity reasons.
-        checkType(manager, "com.sun.star.frame.ProtocolHandler",
+        checkType(manager, u"com.sun.star.frame.ProtocolHandler"_ustr,
                   interfaces, services, properties);
-        checkType(manager, "com.sun.star.frame.XDispatch",
+        checkType(manager, u"com.sun.star.frame.XDispatch"_ustr,
                   interfaces, services, properties);
     }
 
     if (options.componenttype == 2) {
         if (services.size() != 1) {
             throw CannotDumpException(
-                "for calc add-in components one and only one service type is "
-                "necessary! Please reference a valid type with the '-t' option.");
+                u"for calc add-in components one and only one service type is "
+                "necessary! Please reference a valid type with the '-t' option."_ustr);
         }
 
         // if backwardcompatible==true the AddIn service needs to be added to the
@@ -839,13 +839,13 @@ void generateSkeleton(ProgramOptions const & options,
         // taken from the configuration from Calc directly, this simplifies the
         // add-in code
         if (options.backwardcompatible) {
-            checkType(manager, "com.sun.star.sheet.AddIn",
+            checkType(manager, u"com.sun.star.sheet.AddIn"_ustr,
                       interfaces, services, properties);
         } else {
             // special case for the optional XLocalization interface. It should be
             // implemented always. But it is parent of the XAddIn and we need it only
             // if backwardcompatible is false.
-            interfaces.insert("com.sun.star.lang.XLocalizable");
+            interfaces.insert(u"com.sun.star.lang.XLocalizable"_ustr);
         }
     }
 
