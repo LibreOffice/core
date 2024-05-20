@@ -92,7 +92,7 @@
     <string name="calc_optimal_width">Amplada òptima</string>
     <string name="calc_optimal_length_confirm">D\'acord</string>
     <string name="action_pwd_dialog_OK">D\'acord</string>
-    <string name="calc_optimal_length_default_text">Introduïu la longitud addicional en centèsimes de mil·límetre.</string>
+    <string name="calc_optimal_length_default_text">Introduïu la longitud addicional en centèsimes de mil·límetre</string>
     <string name="action_add_worksheet">Afegeix un full de càlcul</string>
     <string name="no_camera_found">No s\'ha trobat cap càmera</string>
     <string name="compress_photo_medium_size">Mida mitjana</string>

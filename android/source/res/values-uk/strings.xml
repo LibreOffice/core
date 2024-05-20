@@ -118,4 +118,18 @@
     <string name="tabhost_character">Символ</string>
     <string name="display_language_summary">Встановити типову мову</string>
     <string name="bmp_null">Bmp має нульове значення!</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">ОК</string>
+    <string name="message_save_incomplete">Збереження не завершено. Були якісь зміни?</string>
+    <string name="action_underline">Підкреслений</string>
+    <string name="unable_to_go_further">Неможливо продовжити.</string>
+    <string name="action_bold">Жирний</string>
+    <string name="browser_app_name">LibreOffice Browser</string>
+    <string name="menu_search">Пошук</string>
+    <string name="app_about_name"><b>Оглядач LibreOffice \'Beta\'</b></string>
+    <string name="action_strikeout">Викреслити</string>
+    <string name="search_not_found">Ключове слово не знайдено</string>
+    <string name="menu_preferences">Налаштування</string>
+    <string name="directory_not_saved">Каталог не збережено.</string>
+    <string name="action_italic">Нахилений</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard">Ваш пристрій Android не підтримує слайд-шоу у форматі svg. Ми скопіювали посилання на слайд-шоу в буфер обміну. Будь ласка, натисніть кнопку \"Додому\", відкрийте сучасний веб-браузер, вставте в адресний рядок і перейдіть.</string>
 </resources>
