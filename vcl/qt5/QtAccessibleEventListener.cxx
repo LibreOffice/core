@@ -164,11 +164,11 @@ void QtAccessibleEventListener::HandleStateChangedEvent(
         new QAccessibleStateChangeEvent(pQAccessibleInterface, aState));
 }
 
-void QtAccessibleEventListener::notifyEvent(const css::accessibility::AccessibleEventObject& aEvent)
+void QtAccessibleEventListener::notifyEvent(const css::accessibility::AccessibleEventObject& rEvent)
 {
     QAccessibleInterface* pQAccessibleInterface = m_pAccessibleWidget;
 
-    switch (aEvent.EventId)
+    switch (rEvent.EventId)
     {
         case AccessibleEventId::NAME_CHANGED:
             QAccessible::updateAccessibility(
@@ -189,7 +189,7 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
             // Send a state change event for the focused state of the newly
             // active descendant instead
             uno::Reference<accessibility::XAccessible> xActiveAccessible;
-            aEvent.NewValue >>= xActiveAccessible;
+            rEvent.NewValue >>= xActiveAccessible;
             if (!xActiveAccessible.is())
                 return;
 
@@ -203,7 +203,7 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
         case AccessibleEventId::CARET_CHANGED:
         {
             sal_Int32 nNewCursorPos = 0;
-            aEvent.NewValue >>= nNewCursorPos;
+            rEvent.NewValue >>= nNewCursorPos;
             QAccessible::updateAccessibility(
                 new QAccessibleTextCursorEvent(pQAccessibleInterface, nNewCursorPos));
             return;
@@ -211,7 +211,7 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
         case AccessibleEventId::CHILD:
         {
             Reference<XAccessible> xChild;
-            if (aEvent.NewValue >>= xChild)
+            if (rEvent.NewValue >>= xChild)
             {
                 assert(xChild.is()
                        && "AccessibleEventId::CHILD event NewValue without valid child set");
@@ -222,7 +222,7 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
                     QtAccessibleRegistry::getQObject(xChild), QAccessible::ObjectCreated));
                 return;
             }
-            if (aEvent.OldValue >>= xChild)
+            if (rEvent.OldValue >>= xChild)
             {
                 assert(xChild.is()
                        && "AccessibleEventId::CHILD event OldValue without valid child set");
@@ -273,13 +273,13 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
         {
             TextSegment aDeletedText;
             TextSegment aInsertedText;
-            if (aEvent.OldValue >>= aDeletedText)
+            if (rEvent.OldValue >>= aDeletedText)
             {
                 QAccessible::updateAccessibility(
                     new QAccessibleTextRemoveEvent(pQAccessibleInterface, aDeletedText.SegmentStart,
                                                    toQString(aDeletedText.SegmentText)));
             }
-            if (aEvent.NewValue >>= aInsertedText)
+            if (rEvent.NewValue >>= aInsertedText)
             {
                 QAccessible::updateAccessibility(new QAccessibleTextInsertEvent(
                     pQAccessibleInterface, aInsertedText.SegmentStart,
@@ -302,7 +302,7 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
         case AccessibleEventId::TABLE_MODEL_CHANGED:
         {
             AccessibleTableModelChange aChange;
-            aEvent.NewValue >>= aChange;
+            rEvent.NewValue >>= aChange;
 
             QAccessibleTableModelChangeEvent::ModelChangeType nType;
             switch (aChange.Type)
@@ -351,13 +351,13 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
         case AccessibleEventId::SELECTION_CHANGED_REMOVE:
         {
             QAccessible::Event eEventType;
-            if (aEvent.EventId == AccessibleEventId::SELECTION_CHANGED_ADD)
+            if (rEvent.EventId == AccessibleEventId::SELECTION_CHANGED_ADD)
                 eEventType = QAccessible::SelectionAdd;
             else
                 eEventType = QAccessible::SelectionRemove;
 
             uno::Reference<accessibility::XAccessible> xChildAcc;
-            aEvent.NewValue >>= xChildAcc;
+            rEvent.NewValue >>= xChildAcc;
             if (!xChildAcc.is())
             {
                 SAL_WARN("vcl.qt",
@@ -398,7 +398,7 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
                 new QAccessibleEvent(pQAccessibleInterface, QAccessible::LocationChanged));
             return;
         case AccessibleEventId::STATE_CHANGED:
-            HandleStateChangedEvent(pQAccessibleInterface, aEvent);
+            HandleStateChangedEvent(pQAccessibleInterface, rEvent);
             return;
         case AccessibleEventId::VALUE_CHANGED:
         {
@@ -425,7 +425,7 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
         case AccessibleEventId::LISTBOX_ENTRY_COLLAPSED:
         case AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS:
         default:
-            SAL_WARN("vcl.qt", "Unmapped AccessibleEventId: " << aEvent.EventId);
+            SAL_WARN("vcl.qt", "Unmapped AccessibleEventId: " << rEvent.EventId);
             return;
     }
 }

@@ -24,7 +24,7 @@ public:
     explicit QtAccessibleEventListener(QtAccessibleWidget* pAccessibleWidget);
 
     virtual void SAL_CALL
-    notifyEvent(const css::accessibility::AccessibleEventObject& aEvent) override;
+    notifyEvent(const css::accessibility::AccessibleEventObject& rEvent) override;
 
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
