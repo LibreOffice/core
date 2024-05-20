@@ -97,7 +97,7 @@ sal_Bool SAL_CALL SwAccessibleFootnote::supportsService(const OUString& sTestSer
 
 Sequence< OUString > SAL_CALL SwAccessibleFootnote::getSupportedServiceNames()
 {
-    return { (AccessibleRole::END_NOTE == GetRole())?OUString("com.sun.star.text.AccessibleEndnoteView"):OUString("com.sun.star.text.AccessibleFootnoteView"),
+    return { (AccessibleRole::END_NOTE == GetRole())?u"com.sun.star.text.AccessibleEndnoteView"_ustr:u"com.sun.star.text.AccessibleFootnoteView"_ustr,
              sAccessibleServiceName };
 }
 

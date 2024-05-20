@@ -79,7 +79,7 @@ sal_Bool SAL_CALL SwAccessibleEmbeddedObject::supportsService(const OUString& sT
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleEmbeddedObject::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.AccessibleTextEmbeddedObject", sAccessibleServiceName };
+    return { u"com.sun.star.text.AccessibleTextEmbeddedObject"_ustr, sAccessibleServiceName };
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleEmbeddedObject::getImplementationId()

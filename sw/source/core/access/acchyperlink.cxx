@@ -195,7 +195,7 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::isValid(  )
                 uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
                 if( ! xFactory.is() )
                     return false;
-                uno::Reference< css::frame::XDesktop > xDesktop( xFactory->createInstance( "com.sun.star.frame.Desktop" ),
+                uno::Reference< css::frame::XDesktop > xDesktop( xFactory->createInstance( u"com.sun.star.frame.Desktop"_ustr ),
                     uno::UNO_QUERY );
                 if( !xDesktop.is() )
                     return false;

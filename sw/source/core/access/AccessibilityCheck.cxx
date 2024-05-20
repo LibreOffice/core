@@ -373,11 +373,11 @@ private:
                         sal_Int32 nStart)
     {
         uno::Reference<beans::XPropertySet> xProperties(xTextRange, uno::UNO_QUERY);
-        if (!xProperties->getPropertySetInfo()->hasPropertyByName("HyperLinkURL"))
+        if (!xProperties->getPropertySetInfo()->hasPropertyByName(u"HyperLinkURL"_ustr))
             return;
 
         OUString sHyperlink;
-        xProperties->getPropertyValue("HyperLinkURL") >>= sHyperlink;
+        xProperties->getPropertyValue(u"HyperLinkURL"_ustr) >>= sHyperlink;
         if (!sHyperlink.isEmpty())
         {
             OUString sText = xTextRange->getString();
@@ -485,7 +485,7 @@ private:
 
         Color nParaBackColor(COL_AUTO);
         uno::Reference<beans::XPropertySet> xParagraphProperties(xParagraph, uno::UNO_QUERY);
-        if (!(xParagraphProperties->getPropertyValue("ParaBackColor") >>= nParaBackColor))
+        if (!(xParagraphProperties->getPropertyValue(u"ParaBackColor"_ustr) >>= nParaBackColor))
         {
             SAL_WARN("sw.a11y", "ParaBackColor void");
             return;
@@ -497,7 +497,7 @@ private:
 
         // Foreground color
         sal_Int32 nCharColor = {}; // spurious -Werror=maybe-uninitialized
-        if (!(xProperties->getPropertyValue("CharColor") >>= nCharColor))
+        if (!(xProperties->getPropertyValue(u"CharColor"_ustr) >>= nCharColor))
         { // not sure this is impossible, can the default be void?
             SAL_WARN("sw.a11y", "CharColor void");
             return;
@@ -522,7 +522,7 @@ private:
 
         Color nCharBackColor(COL_AUTO);
 
-        if (!(xProperties->getPropertyValue("CharBackColor") >>= nCharBackColor))
+        if (!(xProperties->getPropertyValue(u"CharBackColor"_ustr) >>= nCharBackColor))
         {
             SAL_WARN("sw.a11y", "CharBackColor void");
             return;
@@ -538,7 +538,7 @@ private:
         {
             OUString sCharStyleName;
             Color nCharStyleBackColor(COL_AUTO);
-            if (xProperties->getPropertyValue("CharStyleName") >>= sCharStyleName)
+            if (xProperties->getPropertyValue(u"CharStyleName"_ustr) >>= sCharStyleName)
             {
                 try
                 {
@@ -547,10 +547,10 @@ private:
                     uno::Reference<container::XNameAccess> xCont
                         = xStyleFamiliesSupplier->getStyleFamilies();
                     uno::Reference<container::XNameAccess> xStyleFamily(
-                        xCont->getByName("CharacterStyles"), uno::UNO_QUERY);
+                        xCont->getByName(u"CharacterStyles"_ustr), uno::UNO_QUERY);
                     uno::Reference<beans::XPropertySet> xInfo(
                         xStyleFamily->getByName(sCharStyleName), uno::UNO_QUERY);
-                    xInfo->getPropertyValue("CharBackColor") >>= nCharStyleBackColor;
+                    xInfo->getPropertyValue(u"CharBackColor"_ustr) >>= nCharStyleBackColor;
                 }
                 catch (const uno::Exception&)
                 {
@@ -1095,10 +1095,11 @@ private:
                         sal_Int32 nStart)
     {
         uno::Reference<beans::XPropertySet> xProperties(xTextRange, uno::UNO_QUERY);
-        if (xProperties.is() && xProperties->getPropertySetInfo()->hasPropertyByName("CharFlash"))
+        if (xProperties.is()
+            && xProperties->getPropertySetInfo()->hasPropertyByName(u"CharFlash"_ustr))
         {
             bool bBlinking = false;
-            xProperties->getPropertyValue("CharFlash") >>= bBlinking;
+            xProperties->getPropertyValue(u"CharFlash"_ustr) >>= bBlinking;
 
             if (bBlinking)
             {
@@ -1529,8 +1530,8 @@ public:
             return;
         uno::Reference<container::XNameAccess> xStyleFamilies
             = xStyleFamiliesSupplier->getStyleFamilies();
-        uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"),
-                                                            uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xStyleFamily(
+            xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
         if (!xStyleFamily.is())
             return;
         const uno::Sequence<OUString>& xStyleFamilyNames = xStyleFamily->getElementNames();
@@ -1540,7 +1541,7 @@ public:
                 xStyleFamily->getByName(rStyleFamilyName), uno::UNO_QUERY);
             if (!xPropertySet.is())
                 continue;
-            auto aFillStyleContainer = xPropertySet->getPropertyValue("FillStyle");
+            auto aFillStyleContainer = xPropertySet->getPropertyValue(u"FillStyle"_ustr);
             if (aFillStyleContainer.has<drawing::FillStyle>())
             {
                 drawing::FillStyle aFillStyle = aFillStyleContainer.get<drawing::FillStyle>();
@@ -1572,7 +1573,7 @@ void AccessibilityCheck::checkObject(SwNode* pCurrent, SdrObject* pObject)
         const SdrCustomShapeGeometryItem& rGeometryItem
             = pCustomShape->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
 
-        if (const uno::Any* pAny = rGeometryItem.GetPropertyValueByName("Type"))
+        if (const uno::Any* pAny = rGeometryItem.GetPropertyValueByName(u"Type"_ustr))
             if (pAny->get<OUString>().startsWith("fontwork-"))
                 lclAddIssue(m_aIssueCollection, SwResId(STR_FONTWORKS));
     }

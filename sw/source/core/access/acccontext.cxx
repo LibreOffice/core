@@ -528,7 +528,7 @@ void SwAccessibleContext::ThrowIfDisposed()
 {
     if (IsDisposed())
     {
-        throw lang::DisposedException("object is nonfunctional",
+        throw lang::DisposedException(u"object is nonfunctional"_ustr,
                 getXWeak());
     }
 }
@@ -594,7 +594,7 @@ uno::Reference< XAccessible> SAL_CALL
     {
         uno::Reference < XAccessibleContext > xThis( this );
         lang::IndexOutOfBoundsException aExcept(
-                "index out of bounds",
+                u"index out of bounds"_ustr,
                 xThis );
         throw aExcept;
     }
@@ -828,7 +828,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAtPoint
     vcl::Window *pWin = GetWindow();
     if (!pWin)
     {
-        throw uno::RuntimeException("no Window", getXWeak());
+        throw uno::RuntimeException(u"no Window"_ustr, getXWeak());
     }
 
     Point aPixPoint( aPoint.X, aPoint.Y ); // px rel to parent
@@ -887,11 +887,11 @@ awt::Rectangle SwAccessibleContext::getBoundsImpl(bool bRelative)
 
     if (!pParent)
     {
-        throw uno::RuntimeException("no Parent", getXWeak());
+        throw uno::RuntimeException(u"no Parent"_ustr, getXWeak());
     }
     if (!pWin)
     {
-        throw uno::RuntimeException("no Window", getXWeak());
+        throw uno::RuntimeException(u"no Window"_ustr, getXWeak());
     }
 
     SwRect aLogBounds( GetBounds( *(GetMap()), GetFrame() ) ); // twip relative to document root
@@ -947,7 +947,7 @@ awt::Point SAL_CALL SwAccessibleContext::getLocationOnScreen()
     vcl::Window *pWin = GetWindow();
     if (!pWin)
     {
-        throw uno::RuntimeException("no Window", getXWeak());
+        throw uno::RuntimeException(u"no Window"_ustr, getXWeak());
     }
 
     AbsoluteScreenPixelPoint aPixPosAbs = pWin->OutputToAbsoluteScreenPixel(aPixPos);

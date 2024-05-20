@@ -400,7 +400,7 @@ void SwAccessibleTableData_Impl::CheckRowAndCol(
     {
         uno::Reference < XAccessibleTable > xThis( pThis );
         lang::IndexOutOfBoundsException aExcept(
-               "row or column index out of range",
+               u"row or column index out of range"_ustr,
                xThis );
         throw aExcept;
     }
@@ -1148,7 +1148,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumn(
 
 OUString SAL_CALL SwAccessibleTable::getImplementationName()
 {
-    return "com.sun.star.comp.Writer.SwAccessibleTableView";
+    return u"com.sun.star.comp.Writer.SwAccessibleTableView"_ustr;
 }
 
 sal_Bool SAL_CALL SwAccessibleTable::supportsService(
@@ -1159,7 +1159,7 @@ sal_Bool SAL_CALL SwAccessibleTable::supportsService(
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleTable::getSupportedServiceNames()
 {
-    return { "com.sun.star.table.AccessibleTableView", sAccessibleServiceName };
+    return { u"com.sun.star.table.AccessibleTableView"_ustr, sAccessibleServiceName };
 }
 
 void SwAccessibleTable::InvalidatePosOrSize( const SwRect& rOldBox )

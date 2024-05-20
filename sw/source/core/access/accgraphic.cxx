@@ -42,7 +42,7 @@ SwAccessibleGraphic::~SwAccessibleGraphic()
 
 OUString SAL_CALL SwAccessibleGraphic::getImplementationName()
 {
-    return "com.sun.star.comp.Writer.SwAccessibleGraphic";
+    return u"com.sun.star.comp.Writer.SwAccessibleGraphic"_ustr;
 }
 
 sal_Bool SAL_CALL SwAccessibleGraphic::supportsService(const OUString& sTestServiceName)
@@ -52,7 +52,7 @@ sal_Bool SAL_CALL SwAccessibleGraphic::supportsService(const OUString& sTestServ
 
 Sequence< OUString > SAL_CALL SwAccessibleGraphic::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.AccessibleTextGraphicObject", sAccessibleServiceName };
+    return { u"com.sun.star.text.AccessibleTextGraphicObject"_ustr, sAccessibleServiceName };
 }
 
 Sequence< sal_Int8 > SAL_CALL SwAccessibleGraphic::getImplementationId()

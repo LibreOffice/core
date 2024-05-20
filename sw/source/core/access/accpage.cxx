@@ -139,7 +139,7 @@ sal_Bool SwAccessiblePage::supportsService( const OUString& rServiceName)
 
 Sequence<OUString> SwAccessiblePage::getSupportedServiceNames( )
 {
-    return { "com.sun.star.text.AccessiblePageView", sAccessibleServiceName };
+    return { u"com.sun.star.text.AccessiblePageView"_ustr, sAccessibleServiceName };
 }
 
 Sequence< sal_Int8 > SAL_CALL SwAccessiblePage::getImplementationId()

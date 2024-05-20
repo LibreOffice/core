@@ -351,7 +351,7 @@ void AccessibilityIssue::quickFixIssue() const
             uno::Reference<frame::XModel> xModel(m_pDoc->GetDocShell()->GetModel(),
                                                  uno::UNO_QUERY_THROW);
 
-            comphelper::dispatchCommand(".uno:PageAreaDialog",
+            comphelper::dispatchCommand(u".uno:PageAreaDialog"_ustr,
                                         xModel->getCurrentController()->getFrame(), {});
         }
         break;
@@ -364,19 +364,19 @@ void AccessibilityIssue::quickFixIssue() const
             {
                 // open the dialog "Tools/Options/Languages and Locales - General"
                 uno::Sequence<beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
-                    "Language", OUString("*")) };
+                    u"Language"_ustr, u"*"_ustr) };
 
-                comphelper::dispatchCommand(".uno:LanguageStatus",
+                comphelper::dispatchCommand(u".uno:LanguageStatus"_ustr,
                                             xModel->getCurrentController()->getFrame(), aArgs);
             }
             else
             {
                 uno::Sequence<beans::PropertyValue> aArgs{
-                    comphelper::makePropertyValue("Param", m_sObjectID),
-                    comphelper::makePropertyValue("Family", sal_Int16(SfxStyleFamily::Para))
+                    comphelper::makePropertyValue(u"Param"_ustr, m_sObjectID),
+                    comphelper::makePropertyValue(u"Family"_ustr, sal_Int16(SfxStyleFamily::Para))
                 };
 
-                comphelper::dispatchCommand(".uno:EditStyleFont",
+                comphelper::dispatchCommand(u".uno:EditStyleFont"_ustr,
                                             xModel->getCurrentController()->getFrame(), aArgs);
             }
         }

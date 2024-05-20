@@ -725,7 +725,7 @@ lang::Locale SAL_CALL SwAccessibleParagraph::getLocale()
     const SwTextFrame *pTextFrame = GetFrame()->DynCastTextFrame();
     if( !pTextFrame )
     {
-        throw uno::RuntimeException("no SwTextFrame", getXWeak());
+        throw uno::RuntimeException(u"no SwTextFrame"_ustr, getXWeak());
     }
 
     lang::Locale aLoc(g_pBreakIt->GetLocale(pTextFrame->GetLangOfChar(TextFrameIndex(0), 0, true)));
@@ -1134,7 +1134,7 @@ css::uno::Sequence< css::style::TabStop > SwAccessibleParagraph::GetCurrentTabSt
         vcl::Window *pWin = GetWindow();
         if (!pWin)
         {
-            throw uno::RuntimeException("no Window", getXWeak());
+            throw uno::RuntimeException(u"no Window"_ustr, getXWeak());
         }
 
         SwRect aTmpRect(0, 0, tabs[0].Position, 0);
@@ -2055,7 +2055,7 @@ awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
     vcl::Window *pWin = GetWindow();
     if (!pWin)
     {
-        throw uno::RuntimeException("no Window", getXWeak());
+        throw uno::RuntimeException(u"no Window"_ustr, getXWeak());
     }
 
     tools::Rectangle aScreenRect( GetMap()->CoreToPixel( aCoreRect ));
@@ -2089,7 +2089,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     vcl::Window *pWin = GetWindow();
     if (!pWin)
     {
-        throw uno::RuntimeException("no Window", getXWeak());
+        throw uno::RuntimeException(u"no Window"_ustr, getXWeak());
     }
     Point aPoint( rPoint.X, rPoint.Y );
     SwRect aLogBounds( GetBounds( *(GetMap()), GetFrame() ) ); // twip rel to doc root
@@ -2481,7 +2481,7 @@ sal_Bool SwAccessibleParagraph::scrollSubstringTo( sal_Int32 nStartIndex,
 
     vcl::Window *pWin = GetWindow();
     if ( ! pWin )
-        throw uno::RuntimeException("no Window", getXWeak());
+        throw uno::RuntimeException(u"no Window"_ustr, getXWeak());
 
     /* Start and end character bounds, in pixels, relative to the paragraph */
     awt::Rectangle startR, endR;
@@ -3285,7 +3285,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getNumberOfLineWithCaret()
                 vcl::Window *pWin = GetWindow();
                 if (!pWin)
                 {
-                    throw uno::RuntimeException("no Window", getXWeak());
+                    throw uno::RuntimeException(u"no Window"_ustr, getXWeak());
                 }
 
                 tools::Rectangle aScreenRect( GetMap()->CoreToPixel( aCursorCoreRect ));
@@ -3483,7 +3483,7 @@ sal_Int16 SAL_CALL SwAccessibleParagraph::getAccessibleRole()
 sal_Int32 SwAccessibleParagraph::GetRealHeadingLevel()
 {
     uno::Reference< css::beans::XPropertySet > xPortion = CreateUnoPortion( 0, 0 );
-    uno::Any styleAny = xPortion->getPropertyValue( "ParaStyleName" );
+    uno::Any styleAny = xPortion->getPropertyValue( u"ParaStyleName"_ustr );
     OUString sValue;
     if (styleAny >>= sValue)
     {
@@ -3504,7 +3504,7 @@ sal_Int32 SwAccessibleParagraph::GetRealHeadingLevel()
 bool SwAccessibleParagraph::IsBlockQuote()
 {
     uno::Reference<css::beans::XPropertySet> xPortion = CreateUnoPortion(0, 0);
-    uno::Any aStyleAny = xPortion->getPropertyValue("ParaStyleName");
+    uno::Any aStyleAny = xPortion->getPropertyValue(u"ParaStyleName"_ustr);
     OUString sValue;
     if (aStyleAny >>= sValue)
         return sValue == "Quotations";

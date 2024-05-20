@@ -49,7 +49,7 @@ sal_Bool SwAccessiblePreview::supportsService( const OUString& rServiceName )
 
 Sequence<OUString> SwAccessiblePreview::getSupportedServiceNames( )
 {
-    return {"com.sun.star.text.AccessibleTextDocumentPageView",
+    return {u"com.sun.star.text.AccessibleTextDocumentPageView"_ustr,
             sAccessibleServiceName};
 }
 

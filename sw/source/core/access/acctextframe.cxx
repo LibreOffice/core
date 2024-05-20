@@ -235,7 +235,7 @@ OUString SAL_CALL SwAccessibleTextFrame::getAccessibleDescription()
 
 OUString SAL_CALL SwAccessibleTextFrame::getImplementationName()
 {
-    return "com.sun.star.comp.Writer.SwAccessibleTextFrameView";
+    return u"com.sun.star.comp.Writer.SwAccessibleTextFrameView"_ustr;
 }
 
 sal_Bool SAL_CALL SwAccessibleTextFrame::supportsService(const OUString& sTestServiceName)
@@ -245,7 +245,7 @@ sal_Bool SAL_CALL SwAccessibleTextFrame::supportsService(const OUString& sTestSe
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleTextFrame::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.AccessibleTextFrameView", sAccessibleServiceName };
+    return { u"com.sun.star.text.AccessibleTextFrameView"_ustr, sAccessibleServiceName };
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleTextFrame::getImplementationId()

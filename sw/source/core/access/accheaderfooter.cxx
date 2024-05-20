@@ -86,7 +86,7 @@ sal_Bool SAL_CALL SwAccessibleHeaderFooter::supportsService(const OUString& sTes
 
 Sequence< OUString > SAL_CALL SwAccessibleHeaderFooter::getSupportedServiceNames()
 {
-    return { (AccessibleRole::HEADER == GetRole())?OUString("com.sun.star.text.AccessibleHeaderView"):OUString("com.sun.star.text.AccessibleFooterView"),
+    return { (AccessibleRole::HEADER == GetRole())?u"com.sun.star.text.AccessibleHeaderView"_ustr:u"com.sun.star.text.AccessibleFooterView"_ustr,
              sAccessibleServiceName };
 }
 
