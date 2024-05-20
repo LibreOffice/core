@@ -33,6 +33,7 @@
 #include <unotools/charclass.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
 #include <com/sun/star/sheet/FormulaMapGroup.hpp>
@@ -966,28 +967,58 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::CreateOpCodeMap(
 static bool lcl_fillNativeSymbols( FormulaCompiler::NonConstOpCodeMapPtr& xMap, FormulaCompiler::InitSymbols eWhat = FormulaCompiler::InitSymbols::INIT )
 {
     static OpCodeMapData aSymbolMap;
+    static std::map<OUString, OpCodeMapData> aLocaleSymbolMap;
     osl::MutexGuard aGuard(&aSymbolMap.maMtx);
 
-    if (eWhat == FormulaCompiler::InitSymbols::ASK)
+    if (comphelper::LibreOfficeKit::isActive())
     {
-        return bool(aSymbolMap.mxSymbolMap);
-    }
-    else if (eWhat == FormulaCompiler::InitSymbols::DESTROY)
-    {
-        aSymbolMap.mxSymbolMap.reset();
-    }
-    else if (!aSymbolMap.mxSymbolMap)
-    {
-        // Core
-        aSymbolMap.mxSymbolMap =
-            std::make_shared<FormulaCompiler::OpCodeMap>(
+        OUString langauge = comphelper::LibreOfficeKit::getLanguageTag().getLanguage();
+        if (eWhat == FormulaCompiler::InitSymbols::ASK)
+        {
+            return aLocaleSymbolMap.find(langauge) != aLocaleSymbolMap.end()
+                   && bool(aLocaleSymbolMap[langauge].mxSymbolMap);
+        }
+        else if (eWhat == FormulaCompiler::InitSymbols::DESTROY)
+        {
+            aLocaleSymbolMap[langauge].mxSymbolMap.reset();
+        }
+        else if (!aLocaleSymbolMap[langauge].mxSymbolMap)
+        {
+            // Core
+            aLocaleSymbolMap[langauge].mxSymbolMap = std::make_shared<FormulaCompiler::OpCodeMap>(
                 SC_OPCODE_LAST_OPCODE_ID + 1, true, FormulaGrammar::GRAM_NATIVE_UI);
-        OpCodeList aOpCodeListSymbols(RID_STRLIST_FUNCTION_NAMES_SYMBOLS, aSymbolMap.mxSymbolMap);
-        OpCodeList aOpCodeListNative(RID_STRLIST_FUNCTION_NAMES, aSymbolMap.mxSymbolMap);
-        // No AddInMap for native core mapping.
-    }
+            OpCodeList aOpCodeListSymbols(RID_STRLIST_FUNCTION_NAMES_SYMBOLS,
+                                          aLocaleSymbolMap[langauge].mxSymbolMap);
+            OpCodeList aOpCodeListNative(RID_STRLIST_FUNCTION_NAMES,
+                                         aLocaleSymbolMap[langauge].mxSymbolMap);
+            // No AddInMap for native core mapping.
+        }
 
-    xMap = aSymbolMap.mxSymbolMap;
+        xMap = aLocaleSymbolMap[langauge].mxSymbolMap;
+    }
+    else
+    {
+        if (eWhat == FormulaCompiler::InitSymbols::ASK)
+        {
+            return bool(aSymbolMap.mxSymbolMap);
+        }
+        else if (eWhat == FormulaCompiler::InitSymbols::DESTROY)
+        {
+            aSymbolMap.mxSymbolMap.reset();
+        }
+        else if (!aSymbolMap.mxSymbolMap)
+        {
+            // Core
+            aSymbolMap.mxSymbolMap = std::make_shared<FormulaCompiler::OpCodeMap>(
+                SC_OPCODE_LAST_OPCODE_ID + 1, true, FormulaGrammar::GRAM_NATIVE_UI);
+            OpCodeList aOpCodeListSymbols(RID_STRLIST_FUNCTION_NAMES_SYMBOLS,
+                                          aSymbolMap.mxSymbolMap);
+            OpCodeList aOpCodeListNative(RID_STRLIST_FUNCTION_NAMES, aSymbolMap.mxSymbolMap);
+            // No AddInMap for native core mapping.
+        }
+
+        xMap = aSymbolMap.mxSymbolMap;
+    }
 
     return true;
 }
