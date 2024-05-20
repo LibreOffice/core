@@ -22,7 +22,9 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
+
 #include <osl/diagnose.h>
+
 #include <cmath>
 #include <limits>
 
@@ -644,17 +646,17 @@ namespace basegfx
         // now look for the closest point
         const sal_uInt32 nPointCount(aInitialPolygon.count());
         B2DVector aVector(rTestPoint - aInitialPolygon.getB2DPoint(0));
-        double fQuadDist(std::hypot(aVector.getX(), aVector.getY()));
-        double fNewQuadDist;
+        double pointDistance(std::hypot(aVector.getX(), aVector.getY()));
+        double newPointDistance;
         sal_uInt32 nSmallestIndex(0);
 
         for(sal_uInt32 a(1); a < nPointCount; a++)
         {
             aVector = B2DVector(rTestPoint - aInitialPolygon.getB2DPoint(a));
-            fNewQuadDist = std::hypot(aVector.getX(), aVector.getY());
-            if(fNewQuadDist < fQuadDist)
+            newPointDistance = std::hypot(aVector.getX(), aVector.getY());
+            if(newPointDistance < pointDistance)
             {
-                fQuadDist = fNewQuadDist;
+                pointDistance = newPointDistance;
                 nSmallestIndex = a;
             }
         }
@@ -678,11 +680,11 @@ namespace basegfx
                 aVector = B2DVector(rTestPoint - interpolatePoint(fPosLeft));
             }
 
-            fNewQuadDist = std::hypot(aVector.getX(), aVector.getY());
+            newPointDistance = std::hypot(aVector.getX(), aVector.getY());
 
-            if(fTools::less(fNewQuadDist, fQuadDist))
+            if(fTools::less(newPointDistance, pointDistance))
             {
-                fQuadDist = fNewQuadDist;
+                pointDistance = newPointDistance;
                 fPosition = fPosLeft;
             }
             else
@@ -700,11 +702,11 @@ namespace basegfx
                     aVector = B2DVector(rTestPoint - interpolatePoint(fPosRight));
                 }
 
-                fNewQuadDist = std::hypot(aVector.getX(), aVector.getY());
+                newPointDistance = std::hypot(aVector.getX(), aVector.getY());
 
-                if(fTools::less(fNewQuadDist, fQuadDist))
+                if(fTools::less(newPointDistance, pointDistance))
                 {
-                    fQuadDist = fNewQuadDist;
+                    pointDistance = newPointDistance;
                     fPosition = fPosRight;
                 }
                 else
@@ -725,7 +727,7 @@ namespace basegfx
         }
 
         rCut = fPosition;
-        return fQuadDist;
+        return pointDistance;
     }
 
     void B2DCubicBezier::split(double t, B2DCubicBezier* pBezierA, B2DCubicBezier* pBezierB) const
