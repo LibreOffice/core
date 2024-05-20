@@ -72,10 +72,10 @@
 using namespace ::com::sun::star;
 
 SwFrameAreaDefinition::SwFrameAreaDefinition()
-:   mbFrameAreaPositionValid(false),
+:   mnFrameId(SwFrameAreaDefinition::snLastFrameId++),
+    mbFrameAreaPositionValid(false),
     mbFrameAreaSizeValid(false),
-    mbFramePrintAreaValid(false),
-    mnFrameId(SwFrameAreaDefinition::snLastFrameId++)
+    mbFramePrintAreaValid(false)
 {
 }
 

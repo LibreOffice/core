@@ -143,6 +143,8 @@ private:
     // When identical to FrameArea, Pos() will be (0, 0) and Size identical.
     SwRect  maFramePrintArea;
 
+    sal_uInt32 mnFrameId;
+
     // bitfield
     bool mbFrameAreaPositionValid   : 1;
     bool mbFrameAreaSizeValid       : 1;
@@ -151,7 +153,6 @@ private:
     // #i65250#
     // frame ID is now in general available - used for layout loop control
     static sal_uInt32 snLastFrameId;
-    const  sal_uInt32 mnFrameId;
 
 protected:
     // write access to mb*Valid flags
