@@ -284,7 +284,7 @@ public:
         return static_cast<SmDocShell *>( GetViewFrame().GetObjectShell() );
     }
 
-    SmEditWindow * GetEditWindow();
+    SAL_RET_MAYBENULL SmEditWindow * GetEditWindow();
 
     SmGraphicWidget& GetGraphicWidget()
     {
