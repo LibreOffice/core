@@ -140,8 +140,8 @@ void QtAccessibleEventListener::HandleStateChangedEvent(
                 eEventType = QAccessible::ObjectShow;
             else
                 eEventType = QAccessible::ObjectHide;
-            QAccessible::updateAccessibility(
-                new QAccessibleEvent(pQAccessibleInterface, eEventType));
+            QAccessibleEvent aEvent(pQAccessibleInterface, eEventType);
+            QAccessible::updateAccessibility(&aEvent);
             break;
         }
         // These don't seem to have a matching Qt equivalent
@@ -160,8 +160,8 @@ void QtAccessibleEventListener::HandleStateChangedEvent(
             return;
     }
 
-    QAccessible::updateAccessibility(
-        new QAccessibleStateChangeEvent(pQAccessibleInterface, aState));
+    QAccessibleStateChangeEvent aEvent(pQAccessibleInterface, aState);
+    QAccessible::updateAccessibility(&aEvent);
 }
 
 void QtAccessibleEventListener::notifyEvent(const css::accessibility::AccessibleEventObject& rEvent)
@@ -171,17 +171,23 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
     switch (rEvent.EventId)
     {
         case AccessibleEventId::NAME_CHANGED:
-            QAccessible::updateAccessibility(
-                new QAccessibleEvent(pQAccessibleInterface, QAccessible::NameChanged));
+        {
+            QAccessibleEvent aEvent(pQAccessibleInterface, QAccessible::NameChanged);
+            QAccessible::updateAccessibility(&aEvent);
             return;
+        }
         case AccessibleEventId::DESCRIPTION_CHANGED:
-            QAccessible::updateAccessibility(
-                new QAccessibleEvent(pQAccessibleInterface, QAccessible::DescriptionChanged));
+        {
+            QAccessibleEvent aEvent(pQAccessibleInterface, QAccessible::DescriptionChanged);
+            QAccessible::updateAccessibility(&aEvent);
             return;
+        }
         case AccessibleEventId::ACTION_CHANGED:
-            QAccessible::updateAccessibility(
-                new QAccessibleEvent(pQAccessibleInterface, QAccessible::ActionChanged));
+        {
+            QAccessibleEvent aEvent(pQAccessibleInterface, QAccessible::ActionChanged);
+            QAccessible::updateAccessibility(&aEvent);
             return;
+        }
         case AccessibleEventId::ACTIVE_DESCENDANT_CHANGED:
         {
             // Qt has a QAccessible::ActiveDescendantChanged event type, but events of
@@ -197,15 +203,16 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
             QAccessibleInterface* pInterface = QAccessible::queryAccessibleInterface(pQtAcc);
             QAccessible::State aState;
             aState.focused = true;
-            QAccessible::updateAccessibility(new QAccessibleStateChangeEvent(pInterface, aState));
+            QAccessibleStateChangeEvent aEvent(pInterface, aState);
+            QAccessible::updateAccessibility(&aEvent);
             return;
         }
         case AccessibleEventId::CARET_CHANGED:
         {
             sal_Int32 nNewCursorPos = 0;
             rEvent.NewValue >>= nNewCursorPos;
-            QAccessible::updateAccessibility(
-                new QAccessibleTextCursorEvent(pQAccessibleInterface, nNewCursorPos));
+            QAccessibleTextCursorEvent aEvent(pQAccessibleInterface, nNewCursorPos);
+            QAccessible::updateAccessibility(&aEvent);
             return;
         }
         case AccessibleEventId::CHILD:
@@ -218,8 +225,9 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
                 // tdf#159213 for now, workaround invalid events being sent and don't crash in release builds
                 if (!xChild.is())
                     return;
-                QAccessible::updateAccessibility(new QAccessibleEvent(
-                    QtAccessibleRegistry::getQObject(xChild), QAccessible::ObjectCreated));
+                QAccessibleEvent aEvent(QtAccessibleRegistry::getQObject(xChild),
+                                        QAccessible::ObjectCreated);
+                QAccessible::updateAccessibility(&aEvent);
                 return;
             }
             if (rEvent.OldValue >>= xChild)
@@ -229,8 +237,9 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
                 // tdf#159213 for now, workaround invalid events being sent and don't crash in release builds
                 if (!xChild.is())
                     return;
-                QAccessible::updateAccessibility(new QAccessibleEvent(
-                    QtAccessibleRegistry::getQObject(xChild), QAccessible::ObjectDestroyed));
+                QAccessibleEvent aEvent(QtAccessibleRegistry::getQObject(xChild),
+                                        QAccessible::ObjectDestroyed);
+                QAccessible::updateAccessibility(&aEvent);
                 return;
             }
             SAL_WARN("vcl.qt",
@@ -238,17 +247,23 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
             return;
         }
         case AccessibleEventId::HYPERTEXT_CHANGED:
-            QAccessible::updateAccessibility(
-                new QAccessibleEvent(pQAccessibleInterface, QAccessible::HypertextChanged));
+        {
+            QAccessibleEvent aEvent(pQAccessibleInterface, QAccessible::HypertextChanged);
+            QAccessible::updateAccessibility(&aEvent);
             return;
+        }
         case AccessibleEventId::SELECTION_CHANGED:
-            QAccessible::updateAccessibility(
-                new QAccessibleEvent(pQAccessibleInterface, QAccessible::Selection));
+        {
+            QAccessibleEvent aEvent(pQAccessibleInterface, QAccessible::Selection);
+            QAccessible::updateAccessibility(&aEvent);
             return;
+        }
         case AccessibleEventId::VISIBLE_DATA_CHANGED:
-            QAccessible::updateAccessibility(
-                new QAccessibleEvent(pQAccessibleInterface, QAccessible::VisibleDataChanged));
+        {
+            QAccessibleEvent aEvent(pQAccessibleInterface, QAccessible::VisibleDataChanged);
+            QAccessible::updateAccessibility(&aEvent);
             return;
+        }
         case AccessibleEventId::TEXT_SELECTION_CHANGED:
         {
             QAccessibleTextInterface* pTextInterface = pQAccessibleInterface->textInterface();
@@ -261,44 +276,53 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
             int nStartOffset = 0;
             int nEndOffset = 0;
             pTextInterface->selection(0, &nStartOffset, &nEndOffset);
-            QAccessible::updateAccessibility(
-                new QAccessibleTextSelectionEvent(pQAccessibleInterface, nStartOffset, nEndOffset));
+            QAccessibleTextSelectionEvent aEvent(pQAccessibleInterface, nStartOffset, nEndOffset);
+            QAccessible::updateAccessibility(&aEvent);
             return;
         }
         case AccessibleEventId::TEXT_ATTRIBUTE_CHANGED:
-            QAccessible::updateAccessibility(
-                new QAccessibleEvent(pQAccessibleInterface, QAccessible::AttributeChanged));
+        {
+            QAccessibleEvent aEvent(pQAccessibleInterface, QAccessible::AttributeChanged);
+            QAccessible::updateAccessibility(&aEvent);
             return;
+        }
         case AccessibleEventId::TEXT_CHANGED:
         {
             TextSegment aDeletedText;
             TextSegment aInsertedText;
             if (rEvent.OldValue >>= aDeletedText)
             {
-                QAccessible::updateAccessibility(
-                    new QAccessibleTextRemoveEvent(pQAccessibleInterface, aDeletedText.SegmentStart,
-                                                   toQString(aDeletedText.SegmentText)));
+                QAccessibleTextRemoveEvent aEvent(pQAccessibleInterface, aDeletedText.SegmentStart,
+                                                  toQString(aDeletedText.SegmentText));
+                QAccessible::updateAccessibility(&aEvent);
             }
             if (rEvent.NewValue >>= aInsertedText)
             {
-                QAccessible::updateAccessibility(new QAccessibleTextInsertEvent(
-                    pQAccessibleInterface, aInsertedText.SegmentStart,
-                    toQString(aInsertedText.SegmentText)));
+                QAccessibleTextInsertEvent aEvent(pQAccessibleInterface, aInsertedText.SegmentStart,
+                                                  toQString(aInsertedText.SegmentText));
+                QAccessible::updateAccessibility(&aEvent);
             }
             return;
         }
         case AccessibleEventId::TABLE_CAPTION_CHANGED:
-            QAccessible::updateAccessibility(
-                new QAccessibleEvent(pQAccessibleInterface, QAccessible::TableCaptionChanged));
+        {
+            QAccessibleEvent aEvent(pQAccessibleInterface, QAccessible::TableCaptionChanged);
+            QAccessible::updateAccessibility(&aEvent);
             return;
+        }
         case AccessibleEventId::TABLE_COLUMN_DESCRIPTION_CHANGED:
-            QAccessible::updateAccessibility(new QAccessibleEvent(
-                pQAccessibleInterface, QAccessible::TableColumnDescriptionChanged));
+        {
+            QAccessibleEvent aEvent(pQAccessibleInterface,
+                                    QAccessible::TableColumnDescriptionChanged);
+            QAccessible::updateAccessibility(&aEvent);
             return;
+        }
         case AccessibleEventId::TABLE_COLUMN_HEADER_CHANGED:
-            QAccessible::updateAccessibility(
-                new QAccessibleEvent(pQAccessibleInterface, QAccessible::TableColumnHeaderChanged));
+        {
+            QAccessibleEvent aEvent(pQAccessibleInterface, QAccessible::TableColumnHeaderChanged);
+            QAccessible::updateAccessibility(&aEvent);
             return;
+        }
         case AccessibleEventId::TABLE_MODEL_CHANGED:
         {
             AccessibleTableModelChange aChange;
@@ -326,27 +350,32 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
                     assert(false && "Unhandled AccessibleTableModelChangeType");
                     return;
             }
-            QAccessibleTableModelChangeEvent* pTableEvent
-                = new QAccessibleTableModelChangeEvent(pQAccessibleInterface, nType);
-            pTableEvent->setFirstRow(aChange.FirstRow);
-            pTableEvent->setLastRow(aChange.LastRow);
-            pTableEvent->setFirstColumn(aChange.FirstColumn);
-            pTableEvent->setLastColumn(aChange.LastColumn);
-            QAccessible::updateAccessibility(pTableEvent);
+            QAccessibleTableModelChangeEvent aTableEvent(pQAccessibleInterface, nType);
+            aTableEvent.setFirstRow(aChange.FirstRow);
+            aTableEvent.setLastRow(aChange.LastRow);
+            aTableEvent.setFirstColumn(aChange.FirstColumn);
+            aTableEvent.setLastColumn(aChange.LastColumn);
+            QAccessible::updateAccessibility(&aTableEvent);
             return;
         }
         case AccessibleEventId::TABLE_ROW_DESCRIPTION_CHANGED:
-            QAccessible::updateAccessibility(new QAccessibleEvent(
-                pQAccessibleInterface, QAccessible::TableRowDescriptionChanged));
+        {
+            QAccessibleEvent aEvent(pQAccessibleInterface, QAccessible::TableRowDescriptionChanged);
+            QAccessible::updateAccessibility(&aEvent);
             return;
+        }
         case AccessibleEventId::TABLE_ROW_HEADER_CHANGED:
-            QAccessible::updateAccessibility(
-                new QAccessibleEvent(pQAccessibleInterface, QAccessible::TableRowHeaderChanged));
+        {
+            QAccessibleEvent aEvent(pQAccessibleInterface, QAccessible::TableRowHeaderChanged);
+            QAccessible::updateAccessibility(&aEvent);
             return;
+        }
         case AccessibleEventId::TABLE_SUMMARY_CHANGED:
-            QAccessible::updateAccessibility(
-                new QAccessibleEvent(pQAccessibleInterface, QAccessible::TableSummaryChanged));
+        {
+            QAccessibleEvent aEvent(pQAccessibleInterface, QAccessible::TableSummaryChanged);
+            QAccessible::updateAccessibility(&aEvent);
             return;
+        }
         case AccessibleEventId::SELECTION_CHANGED_ADD:
         case AccessibleEventId::SELECTION_CHANGED_REMOVE:
         {
@@ -374,29 +403,40 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
             // Qt expects the event to be sent for the (un)selected child
             QObject* pChildObject = QtAccessibleRegistry::getQObject(xChildAcc);
             assert(pChildObject);
-            QAccessible::updateAccessibility(new QAccessibleEvent(pChildObject, eEventType));
+            QAccessibleEvent aEvent(pChildObject, eEventType);
+            QAccessible::updateAccessibility(&aEvent);
             return;
         }
         case AccessibleEventId::SELECTION_CHANGED_WITHIN:
-            QAccessible::updateAccessibility(
-                new QAccessibleEvent(pQAccessibleInterface, QAccessible::SelectionWithin));
+        {
+            QAccessibleEvent aEvent(pQAccessibleInterface, QAccessible::SelectionWithin);
+            QAccessible::updateAccessibility(&aEvent);
             return;
+        }
         case AccessibleEventId::PAGE_CHANGED:
-            QAccessible::updateAccessibility(
-                new QAccessibleEvent(pQAccessibleInterface, QAccessible::PageChanged));
+        {
+            QAccessibleEvent aEvent(pQAccessibleInterface, QAccessible::PageChanged);
+            QAccessible::updateAccessibility(&aEvent);
             return;
+        }
         case AccessibleEventId::SECTION_CHANGED:
-            QAccessible::updateAccessibility(
-                new QAccessibleEvent(pQAccessibleInterface, QAccessible::SectionChanged));
+        {
+            QAccessibleEvent aEvent(pQAccessibleInterface, QAccessible::SectionChanged);
+            QAccessible::updateAccessibility(&aEvent);
             return;
+        }
         case AccessibleEventId::COLUMN_CHANGED:
-            QAccessible::updateAccessibility(
-                new QAccessibleEvent(pQAccessibleInterface, QAccessible::TextColumnChanged));
+        {
+            QAccessibleEvent aEvent(pQAccessibleInterface, QAccessible::TextColumnChanged);
+            QAccessible::updateAccessibility(&aEvent);
             return;
+        }
         case AccessibleEventId::BOUNDRECT_CHANGED:
-            QAccessible::updateAccessibility(
-                new QAccessibleEvent(pQAccessibleInterface, QAccessible::LocationChanged));
+        {
+            QAccessibleEvent aEvent(pQAccessibleInterface, QAccessible::LocationChanged);
+            QAccessible::updateAccessibility(&aEvent);
             return;
+        }
         case AccessibleEventId::STATE_CHANGED:
             HandleStateChangedEvent(pQAccessibleInterface, rEvent);
             return;
@@ -406,8 +446,8 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
             if (pValueInterface)
             {
                 const QVariant aValue = pValueInterface->currentValue();
-                QAccessible::updateAccessibility(
-                    new QAccessibleValueChangeEvent(pQAccessibleInterface, aValue));
+                QAccessibleValueChangeEvent aEvent(pQAccessibleInterface, aValue);
+                QAccessible::updateAccessibility(&aEvent);
             }
             return;
         }
