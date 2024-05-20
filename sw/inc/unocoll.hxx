@@ -40,6 +40,7 @@ class SwSectionFormat;
 struct SvEventDescription;
 class SwXFootnote;
 class SwXTextSection;
+class SwXTextTable;
 
 const SvEventDescription* sw_GetSupportedMacroItems();
 
@@ -287,7 +288,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    SW_DLLPUBLIC static css::uno::Reference<css::text::XTextTable> GetObject(SwFrameFormat& rFormat);
+    SW_DLLPUBLIC static rtl::Reference<SwXTextTable> GetObject(SwFrameFormat& rFormat);
 };
 
 typedef

@@ -42,6 +42,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <docary.hxx>
+#include <unotbl.hxx>
 
 using namespace ::com::sun::star;
 
@@ -422,7 +423,7 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
                 OSL_ENSURE(pTableNode, "No table node!");
                 SwTable& rTable = pTableNode->GetTable();
                 SwFrameFormat* pTableFormat = rTable.GetFrameFormat();
-                xRet = SwXTextTables::GetObject( *pTableFormat );
+                xRet = cppu::getXWeak(SwXTextTables::GetObject( *pTableFormat ).get());
             }
             break;
             case SwNodeType::Text :

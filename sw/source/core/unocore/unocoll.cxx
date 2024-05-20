@@ -973,7 +973,7 @@ uno::Sequence< OUString > SwXTextTables::getSupportedServiceNames()
     return { u"com.sun.star.text.TextTables"_ustr };
 }
 
-uno::Reference<text::XTextTable> SwXTextTables::GetObject(SwFrameFormat& rFormat)
+rtl::Reference<SwXTextTable> SwXTextTables::GetObject(SwFrameFormat& rFormat)
 {
     return SwXTextTable::CreateXTextTable(& rFormat);
 }

@@ -38,6 +38,7 @@
 #include <swmodule.hxx>
 #include <fmtrowsplt.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
+#include <unotbl.hxx>
 
 #include "docxexportfilter.hxx"
 #include "docxhelper.hxx"
@@ -218,8 +219,7 @@ void DocxAttributeOutput::TableDefinition(
         nWidthPercent = rFrameSize.GetWidthPercent();
     }
 
-    uno::Reference<beans::XPropertySet> xPropertySet(
-        SwXTextTables::GetObject(*pTable->GetFrameFormat()), uno::UNO_QUERY);
+    rtl::Reference<SwXTextTable> xPropertySet = SwXTextTables::GetObject(*pTable->GetFrameFormat());
     bool isWidthRelative = false;
     xPropertySet->getPropertyValue("IsWidthRelative") >>= isWidthRelative;
     if (!isWidthRelative && !nWidthPercent)

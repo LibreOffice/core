@@ -2214,9 +2214,8 @@ SwXText::convertToTable(
     if (!pTable)
         return uno::Reference< text::XTextTable >();
 
-    uno::Reference<text::XTextTable> const xRet =
+    rtl::Reference<SwXTextTable> const xRet =
         SwXTextTable::CreateXTextTable(pTable->GetFrameFormat());
-    uno::Reference<beans::XPropertySet> const xPrSet(xRet, uno::UNO_QUERY);
     // set properties to the table
     // catch lang::WrappedTargetException and lang::IndexOutOfBoundsException
     try
@@ -2254,7 +2253,7 @@ SwXText::convertToTable(
                 };
                 if (std::find(vDenylist.begin(), vDenylist.end(), rTableProperty.Name) == vDenylist.end())
                 {
-                    xPrSet->setPropertyValue(rTableProperty.Name, rTableProperty.Value);
+                    xRet->setPropertyValue(rTableProperty.Name, rTableProperty.Value);
                 }
             }
             catch (const uno::Exception&)
@@ -2270,7 +2269,6 @@ SwXText::convertToTable(
         for(sal_Int32 nCnt = 0; nCnt < nLast; ++nCnt)
             lcl_ApplyRowProperties(rRowProperties[nCnt], xRows->getByIndex(nCnt), aRowSeparators[nCnt]);
 
-        uno::Reference<table::XCellRange> const xCR(xRet, uno::UNO_QUERY_THROW);
         //apply cell properties
         sal_Int32 nRow = 0;
         for(const auto& rCellPropertiesForRow : rCellProperties)
@@ -2280,7 +2278,7 @@ SwXText::convertToTable(
             {
                 lcl_ApplyCellProperties(lcl_GetLeftPos(nCell, aRowSeparators[nRow]),
                     rCellProps,
-                    xCR->getCellByPosition(nCell, nRow),
+                    xRet->getCellByPosition(nCell, nRow),
                     aMergedCells);
                 ++nCell;
             }
@@ -2299,8 +2297,7 @@ SwXText::convertToTable(
     }
 
     assert(SwTable::FindTable(pTable->GetFrameFormat()) == pTable);
-    assert(pTable->GetFrameFormat() ==
-            dynamic_cast<SwXTextTable&>(*xRet).GetFrameFormat());
+    assert(pTable->GetFrameFormat() == xRet->GetFrameFormat());
     return xRet;
 }
 
