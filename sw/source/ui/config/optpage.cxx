@@ -2577,10 +2577,6 @@ SwCompareOptionsTabPage::SwCompareOptionsTabPage(weld::Container* pPage, weld::D
     , m_xCompareModeImg(m_xBuilder->weld_widget("lockcomparemode"))
     , m_xRsidCB(m_xBuilder->weld_check_button("useRSID"))
     , m_xRsidImg(m_xBuilder->weld_widget("lockuseRSID"))
-    , m_xIgnoreCB(m_xBuilder->weld_check_button("ignore"))
-    , m_xIgnoreImg(m_xBuilder->weld_widget("lockignore"))
-    , m_xLenNF(m_xBuilder->weld_spin_button("ignorelen"))
-    , m_xLenImg(m_xBuilder->weld_widget("lockignorelen"))
     , m_xStoreRsidCB(m_xBuilder->weld_check_button("storeRSID"))
     , m_xStoreRsidImg(m_xBuilder->weld_widget("lockstoreRSID"))
 {
@@ -2588,8 +2584,6 @@ SwCompareOptionsTabPage::SwCompareOptionsTabPage(weld::Container* pPage, weld::D
     m_xAutoRB->connect_toggled( aLnk );
     m_xWordRB->connect_toggled( aLnk );
     m_xCharRB->connect_toggled( aLnk );
-
-    m_xIgnoreCB->connect_toggled( LINK( this, SwCompareOptionsTabPage, IgnoreHdl) );
 }
 
 SwCompareOptionsTabPage::~SwCompareOptionsTabPage()
@@ -2609,14 +2603,6 @@ OUString SwCompareOptionsTabPage::GetAllStrings()
     for (const auto& label : labels)
     {
         if (const auto& pString = m_xBuilder->weld_label(label))
-            sAllStrings += pString->get_label() + " ";
-    }
-
-    OUString checkButton[] = { "useRSID", "ignore", "storeRSID" };
-
-    for (const auto& check : checkButton)
-    {
-        if (const auto& pString = m_xBuilder->weld_check_button(check))
             sAllStrings += pString->get_label() + " ";
     }
 
@@ -2656,18 +2642,6 @@ bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet* )
         bRet = true;
     }
 
-    if( m_xIgnoreCB->get_state_changed_from_saved() )
-    {
-        pOpt->SetIgnorePieces( m_xIgnoreCB->get_active() );
-        bRet = true;
-    }
-
-    if( m_xLenNF->get_value_changed_from_saved() )
-    {
-        pOpt->SetPieceLen( m_xLenNF->get_value() );
-        bRet = true;
-    }
-
     if (m_xStoreRsidCB->get_state_changed_from_saved())
     {
         pOpt->SetStoreRsid(m_xStoreRsidCB->get_active());
@@ -2686,22 +2660,16 @@ void SwCompareOptionsTabPage::Reset( const SfxItemSet* )
     {
         m_xAutoRB->set_active(true);
         m_xRsidCB->set_sensitive(false);
-        m_xIgnoreCB->set_sensitive(false);
-        m_xLenNF->set_sensitive(false);
     }
     else if( eCmpMode == SwCompareMode::ByWord )
     {
         m_xWordRB->set_active(true);
         m_xRsidCB->set_sensitive(true);
-        m_xIgnoreCB->set_sensitive(true);
-        m_xLenNF->set_sensitive(true);
     }
     else if( eCmpMode == SwCompareMode::ByChar)
     {
         m_xCharRB->set_active(true);
         m_xRsidCB->set_sensitive(true);
-        m_xIgnoreCB->set_sensitive(true);
-        m_xLenNF->set_sensitive(true);
     }
 
     if (officecfg::Office::Writer::Comparison::Mode::isReadOnly())
@@ -2724,24 +2692,6 @@ void SwCompareOptionsTabPage::Reset( const SfxItemSet* )
     }
     m_xRsidCB->save_state();
 
-    m_xIgnoreCB->set_active( pOpt->IsIgnorePieces() );
-    if (officecfg::Office::Writer::Comparison::IgnorePieces::isReadOnly())
-    {
-        m_xIgnoreCB->set_sensitive(false);
-        m_xIgnoreImg->set_visible(true);
-    }
-    m_xIgnoreCB->save_state();
-
-    m_xLenNF->set_sensitive( m_xIgnoreCB->get_active() && eCmpMode != SwCompareMode::Auto );
-
-    m_xLenNF->set_value( pOpt->GetPieceLen() );
-    if (officecfg::Office::Writer::Comparison::IgnoreLength::isReadOnly())
-    {
-        m_xLenNF->set_sensitive(false);
-        m_xLenImg->set_visible(true);
-    }
-    m_xLenNF->save_value();
-
     m_xStoreRsidCB->set_active(pOpt->IsStoreRsid());
     m_xStoreRsidCB->set_sensitive(!officecfg::Office::Writer::Comparison::StoreRSID::isReadOnly());
     m_xStoreRsidImg->set_visible(officecfg::Office::Writer::Comparison::StoreRSID::isReadOnly());
@@ -2755,13 +2705,6 @@ IMPL_LINK(SwCompareOptionsTabPage, ComparisonHdl, weld::Toggleable&, rButton, vo
 
     bool bChecked = !m_xAutoRB->get_active();
     m_xRsidCB->set_sensitive( bChecked );
-    m_xIgnoreCB->set_sensitive( bChecked );
-    m_xLenNF->set_sensitive( bChecked && m_xIgnoreCB->get_active() );
-}
-
-IMPL_LINK_NOARG(SwCompareOptionsTabPage, IgnoreHdl, weld::Toggleable&, void)
-{
-    m_xLenNF->set_sensitive(m_xIgnoreCB->get_active());
 }
 
 #ifdef DBG_UTIL
