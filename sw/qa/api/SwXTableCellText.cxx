@@ -41,7 +41,7 @@ class SwXTableCellText final : public UnoApiTest,
 {
 public:
     SwXTableCellText()
-        : UnoApiTest("")
+        : UnoApiTest(u""_ustr)
         , XElementAccess(cppu::UnoType<text::XTextRange>::get())
     {
     }
@@ -50,7 +50,7 @@ public:
     {
         UnoApiTest::setUp();
         mxDesktop.set(frame::Desktop::create(mxComponentContext));
-        mxComponent = loadFromDesktop("private:factory/swriter");
+        mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
         CPPUNIT_ASSERT(mxComponent.is());
     }
 
@@ -62,16 +62,16 @@ public:
         Reference<text::XText> xText = xTextDocument->getText();
         Reference<text::XTextCursor> xCursor = xText->createTextCursor();
 
-        Reference<text::XTextTable> xTable(xMSF->createInstance("com.sun.star.text.TextTable"),
-                                           UNO_QUERY_THROW);
+        Reference<text::XTextTable> xTable(
+            xMSF->createInstance(u"com.sun.star.text.TextTable"_ustr), UNO_QUERY_THROW);
         xText->insertTextContent(xCursor, xTable, false);
 
-        Reference<table::XCell> xCell = xTable->getCellByName("A1");
+        Reference<table::XCell> xCell = xTable->getCellByName(u"A1"_ustr);
         Reference<text::XSimpleText> xCellText(xCell, UNO_QUERY_THROW);
-        xCellText->setString("SwXTableCellText");
+        xCellText->setString(u"SwXTableCellText"_ustr);
 
         mxTextContent = Reference<text::XTextContent>(
-            xMSF->createInstance("com.sun.star.text.TextTable"), UNO_QUERY_THROW);
+            xMSF->createInstance(u"com.sun.star.text.TextTable"_ustr), UNO_QUERY_THROW);
 
         return Reference<XInterface>(xCellText->getText(), UNO_QUERY_THROW);
     }

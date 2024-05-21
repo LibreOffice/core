@@ -89,7 +89,8 @@ void SwXBodyText::tearDown()
 
 Reference<XInterface> SwXBodyText::init()
 {
-    component_ = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    component_
+        = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
     Reference<text::XTextDocument> xTextDocument(component_, UNO_QUERY_THROW);
     Reference<lang::XMultiServiceFactory> xMSF(component_, UNO_QUERY_THROW);
 

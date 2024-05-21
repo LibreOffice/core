@@ -87,7 +87,7 @@ void SwXFootnote::setUp()
 
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
     mxTextDocument = Reference<text::XTextDocument>(
-        loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"),
+        loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr),
         uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(mxTextDocument.is());
 }
@@ -104,7 +104,7 @@ Reference<XInterface> SwXFootnote::init()
 {
     Reference<lang::XMultiServiceFactory> xMSF(mxTextDocument, UNO_QUERY_THROW);
 
-    Reference<text::XFootnote> xFootnote(xMSF->createInstance("com.sun.star.text.Footnote"),
+    Reference<text::XFootnote> xFootnote(xMSF->createInstance(u"com.sun.star.text.Footnote"_ustr),
                                          UNO_QUERY_THROW);
 
     Reference<text::XText> xText = getTextDocument()->getText();
@@ -114,7 +114,7 @@ Reference<XInterface> SwXFootnote::init()
 
     mxTextRange = Reference<text::XTextRange>(xCursor, UNO_QUERY_THROW);
     mxTextContent = Reference<text::XTextContent>(
-        xMSF->createInstance("com.sun.star.text.Footnote"), UNO_QUERY_THROW);
+        xMSF->createInstance(u"com.sun.star.text.Footnote"_ustr), UNO_QUERY_THROW);
 
     return Reference<XInterface>(xFootnote, UNO_QUERY_THROW);
 }

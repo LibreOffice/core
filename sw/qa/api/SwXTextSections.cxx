@@ -39,10 +39,10 @@ class SwXTextSections final : public UnoApiTest,
 {
 public:
     SwXTextSections()
-        : UnoApiTest("")
+        : UnoApiTest(u""_ustr)
         , XElementAccess(cppu::UnoType<text::XTextSection>::get())
         , XIndexAccess(2)
-        , XNameAccess("TextSection")
+        , XNameAccess(u"TextSection"_ustr)
     {
     }
 
@@ -50,7 +50,7 @@ public:
     {
         UnoApiTest::setUp();
         mxDesktop.set(frame::Desktop::create(mxComponentContext));
-        mxComponent = loadFromDesktop("private:factory/swriter");
+        mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
         CPPUNIT_ASSERT(mxComponent.is());
     }
 
@@ -63,11 +63,11 @@ public:
         Reference<text::XTextCursor> xCursor = xText->createTextCursor();
 
         Reference<text::XTextContent> xContent(
-            xMSF->createInstance("com.sun.star.text.TextSection"), UNO_QUERY_THROW);
+            xMSF->createInstance(u"com.sun.star.text.TextSection"_ustr), UNO_QUERY_THROW);
         xText->insertTextContent(xCursor, xContent, false);
 
         Reference<text::XTextContent> xContent2(
-            xMSF->createInstance("com.sun.star.text.TextSection"), UNO_QUERY_THROW);
+            xMSF->createInstance(u"com.sun.star.text.TextSection"_ustr), UNO_QUERY_THROW);
         xText->insertTextContent(xCursor, xContent2, false);
 
         Reference<container::XNameAccess> xNameAccess;

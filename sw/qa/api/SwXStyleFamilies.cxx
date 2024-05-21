@@ -38,10 +38,10 @@ class SwXStyleFamilies final : public UnoApiTest,
 {
 public:
     SwXStyleFamilies()
-        : UnoApiTest("")
+        : UnoApiTest(u""_ustr)
         , XElementAccess(cppu::UnoType<container::XNameContainer>::get())
         , XIndexAccess(7)
-        , XNameAccess("CharacterStyles")
+        , XNameAccess(u"CharacterStyles"_ustr)
     {
     }
 
@@ -49,7 +49,7 @@ public:
     {
         UnoApiTest::setUp();
         mxDesktop.set(frame::Desktop::create(mxComponentContext));
-        mxComponent = loadFromDesktop("private:factory/swriter");
+        mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
         CPPUNIT_ASSERT(mxComponent.is());
     }
 

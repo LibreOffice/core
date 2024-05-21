@@ -41,10 +41,10 @@ class SwXTextEmbeddedObjects final : public UnoApiTest,
 {
 public:
     SwXTextEmbeddedObjects()
-        : UnoApiTest("")
+        : UnoApiTest(u""_ustr)
         , XElementAccess(cppu::UnoType<document::XEmbeddedObjectSupplier>::get())
         , XIndexAccess(1)
-        , XNameAccess("Object1")
+        , XNameAccess(u"Object1"_ustr)
     {
     }
 
@@ -52,7 +52,7 @@ public:
     {
         UnoApiTest::setUp();
         mxDesktop.set(frame::Desktop::create(mxComponentContext));
-        mxComponent = loadFromDesktop("private:factory/swriter");
+        mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
         CPPUNIT_ASSERT(mxComponent.is());
     }
 
@@ -67,10 +67,11 @@ public:
         try
         {
             Reference<text::XTextContent> xTextContent(
-                xMSF->createInstance("com.sun.star.text.TextEmbeddedObject"), UNO_QUERY_THROW);
+                xMSF->createInstance(u"com.sun.star.text.TextEmbeddedObject"_ustr),
+                UNO_QUERY_THROW);
             Reference<beans::XPropertySet> xPropertySet(xTextContent, UNO_QUERY_THROW);
-            xPropertySet->setPropertyValue("CLSID",
-                                           Any(OUString("12dcae26-281f-416f-a234-c3086127382e")));
+            xPropertySet->setPropertyValue(u"CLSID"_ustr,
+                                           Any(u"12dcae26-281f-416f-a234-c3086127382e"_ustr));
 
             xText->insertTextContent(xCursor, xTextContent, false);
         }

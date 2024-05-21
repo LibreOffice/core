@@ -37,7 +37,7 @@ class SwXTextFieldTypes final : public UnoApiTest,
 {
 public:
     SwXTextFieldTypes()
-        : UnoApiTest("")
+        : UnoApiTest(u""_ustr)
         , XElementAccess(cppu::UnoType<text::XDependentTextField>::get())
     {
     }
@@ -46,13 +46,14 @@ public:
     {
         UnoApiTest::setUp();
         mxDesktop.set(frame::Desktop::create(mxComponentContext));
-        mxComponent = loadFromDesktop("private:factory/swriter");
+        mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
         CPPUNIT_ASSERT(mxComponent.is());
     }
 
     Reference<XInterface> init() override
     {
-        component_ = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+        component_ = loadFromDesktop(u"private:factory/swriter"_ustr,
+                                     u"com.sun.star.text.TextDocument"_ustr);
         Reference<text::XTextDocument> xTextDocument(component_, UNO_QUERY_THROW);
 
         Reference<text::XTextFieldsSupplier> xTFS;

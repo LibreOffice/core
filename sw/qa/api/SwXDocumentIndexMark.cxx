@@ -72,7 +72,7 @@ void SwXDocumentIndexMark::setUp()
 
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
     mxTextDocument = uno::Reference<text::XTextDocument>(
-        loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"),
+        loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr),
         uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(mxTextDocument.is());
 }
@@ -93,11 +93,11 @@ Reference<XInterface> SwXDocumentIndexMark::init()
     Reference<text::XTextCursor> xCursor = xText->createTextCursor();
 
     Reference<text::XDocumentIndexMark> xDIM(
-        xMSF->createInstance("com.sun.star.text.DocumentIndexMark"), UNO_QUERY_THROW);
+        xMSF->createInstance(u"com.sun.star.text.DocumentIndexMark"_ustr), UNO_QUERY_THROW);
 
     mxTextRange = uno::Reference<text::XTextRange>(xCursor, uno::UNO_QUERY_THROW);
     mxTextContent = uno::Reference<text::XTextContent>(
-        xMSF->createInstance("com.sun.star.text.DocumentIndex"), uno::UNO_QUERY_THROW);
+        xMSF->createInstance(u"com.sun.star.text.DocumentIndex"_ustr), uno::UNO_QUERY_THROW);
     xText->insertTextContent(xCursor, xDIM, false);
 
     return Reference<XInterface>(xDIM, UNO_QUERY_THROW);

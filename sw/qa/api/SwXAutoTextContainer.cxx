@@ -35,10 +35,10 @@ class SwXAutoTextContainer final : public UnoApiTest,
 {
 public:
     SwXAutoTextContainer()
-        : UnoApiTest("")
+        : UnoApiTest(u""_ustr)
         , XElementAccess(cppu::UnoType<text::XAutoTextGroup>::get())
         , XIndexAccess(3)
-        , XNameAccess("crdbus50")
+        , XNameAccess(u"crdbus50"_ustr)
     {
     }
 

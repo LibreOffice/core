@@ -34,7 +34,7 @@ class SwXFieldEnumeration final : public UnoApiTest, public apitest::XEnumeratio
 {
 public:
     SwXFieldEnumeration()
-        : UnoApiTest("")
+        : UnoApiTest(u""_ustr)
     {
     }
 
@@ -42,7 +42,7 @@ public:
     {
         UnoApiTest::setUp();
         mxDesktop.set(frame::Desktop::create(mxComponentContext));
-        mxComponent = loadFromDesktop("private:factory/swriter");
+        mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
         CPPUNIT_ASSERT(mxComponent.is());
     }
 
@@ -57,9 +57,11 @@ public:
         try
         {
             xFieldMaster = Reference<beans::XPropertySet>(
-                xMSF->createInstance("com.sun.star.text.FieldMaster.Database"), UNO_QUERY_THROW);
+                xMSF->createInstance(u"com.sun.star.text.FieldMaster.Database"_ustr),
+                UNO_QUERY_THROW);
             xTF = Reference<text::XDependentTextField>(
-                xMSF->createInstance("com.sun.star.text.TextField.Database"), UNO_QUERY_THROW);
+                xMSF->createInstance(u"com.sun.star.text.TextField.Database"_ustr),
+                UNO_QUERY_THROW);
         }
         catch (Exception&)
         {
@@ -67,9 +69,9 @@ public:
 
         try
         {
-            xFieldMaster->setPropertyValue("DataBaseName", Any(OUString("Bibliography")));
-            xFieldMaster->setPropertyValue("DataTableName", Any(OUString("biblio")));
-            xFieldMaster->setPropertyValue("DataColumnName", Any(OUString("Address")));
+            xFieldMaster->setPropertyValue(u"DataBaseName"_ustr, Any(u"Bibliography"_ustr));
+            xFieldMaster->setPropertyValue(u"DataTableName"_ustr, Any(u"biblio"_ustr));
+            xFieldMaster->setPropertyValue(u"DataColumnName"_ustr, Any(u"Address"_ustr));
         }
         catch (lang::WrappedTargetException&)
         {

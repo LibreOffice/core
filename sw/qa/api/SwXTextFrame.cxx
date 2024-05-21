@@ -31,8 +31,8 @@ class SwXTextFrame final : public UnoApiTest,
 {
 public:
     SwXTextFrame()
-        : UnoApiTest("")
-        , apitest::XServiceInfo("SwXTextFrame", "com.sun.star.text.TextFrame")
+        : UnoApiTest(u""_ustr)
+        , apitest::XServiceInfo(u"SwXTextFrame"_ustr, u"com.sun.star.text.TextFrame"_ustr)
     {
     }
 
@@ -40,7 +40,7 @@ public:
     {
         UnoApiTest::setUp();
         mxDesktop.set(frame::Desktop::create(mxComponentContext));
-        mxComponent = loadFromDesktop("private:factory/swriter");
+        mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
         CPPUNIT_ASSERT(mxComponent.is());
     }
 
@@ -49,7 +49,7 @@ public:
         uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<text::XTextFrame> xTextFrame(
-            xMSF->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY_THROW);
+            xMSF->createInstance(u"com.sun.star.text.TextFrame"_ustr), uno::UNO_QUERY_THROW);
         auto xText = xTextDocument->getText();
         auto xTextCursor = xText->createTextCursor();
         CPPUNIT_ASSERT(xTextCursor.is());

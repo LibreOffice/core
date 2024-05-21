@@ -43,7 +43,7 @@ class SwXNumberingRules final : public UnoApiTest,
 {
 public:
     SwXNumberingRules()
-        : UnoApiTest("")
+        : UnoApiTest(u""_ustr)
         , XElementAccess(cppu::UnoType<Sequence<beans::PropertyValue>>::get())
         , XIndexAccess(10)
     {
@@ -53,7 +53,7 @@ public:
     {
         UnoApiTest::setUp();
         mxDesktop.set(frame::Desktop::create(mxComponentContext));
-        mxComponent = loadFromDesktop("private:factory/swriter");
+        mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
         CPPUNIT_ASSERT(mxComponent.is());
     }
 
@@ -69,7 +69,8 @@ public:
 
         try
         {
-            xText->insertString(xCursor, "The quick brown fox jumps over the lazy dog", false);
+            xText->insertString(xCursor, u"The quick brown fox jumps over the lazy dog"_ustr,
+                                false);
             xText->insertControlCharacter(xCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
         }
         catch (lang::IllegalArgumentException&)
@@ -82,7 +83,7 @@ public:
         {
             Reference<container::XNameAccess> xStyleFamNames = xStyleFam->getStyleFamilies();
             Reference<container::XNameContainer> xNumStyles(
-                xStyleFamNames->getByName("NumberingStyles"), UNO_QUERY_THROW);
+                xStyleFamNames->getByName(u"NumberingStyles"_ustr), UNO_QUERY_THROW);
             xIndexAccess = Reference<container::XIndexAccess>(xNumStyles, UNO_QUERY_THROW);
         }
         catch (lang::WrappedTargetException&)
@@ -99,7 +100,7 @@ public:
         {
             Reference<beans::XPropertySet> xPropSet(xIndexAccess->getByIndex(0), UNO_QUERY_THROW);
             xNumRules = Reference<container::XIndexAccess>(
-                xPropSet->getPropertyValue("NumberingRules"), UNO_QUERY_THROW);
+                xPropSet->getPropertyValue(u"NumberingRules"_ustr), UNO_QUERY_THROW);
         }
         catch (lang::WrappedTargetException&)
         {

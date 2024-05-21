@@ -36,8 +36,8 @@ class SwXReferenceMark final : public UnoApiTest,
 {
 public:
     SwXReferenceMark()
-        : UnoApiTest("")
-        , XNamed("SwXReferenceMark")
+        : UnoApiTest(u""_ustr)
+        , XNamed(u"SwXReferenceMark"_ustr)
     {
     }
 
@@ -45,7 +45,7 @@ public:
     {
         UnoApiTest::setUp();
         mxDesktop.set(frame::Desktop::create(mxComponentContext));
-        mxComponent = loadFromDesktop("private:factory/swriter");
+        mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
         CPPUNIT_ASSERT(mxComponent.is());
     }
 
@@ -57,16 +57,17 @@ public:
         Reference<text::XText> xText = xTextDocument->getText();
         Reference<text::XTextCursor> xCursor = xText->createTextCursor();
 
-        Reference<XInterface> xRefMark = xMSF->createInstance("com.sun.star.text.ReferenceMark");
+        Reference<XInterface> xRefMark
+            = xMSF->createInstance(u"com.sun.star.text.ReferenceMark"_ustr);
         Reference<container::XNamed> xNamed(xRefMark, UNO_QUERY_THROW);
-        xNamed->setName("SwXReferenceMark");
+        xNamed->setName(u"SwXReferenceMark"_ustr);
 
         Reference<text::XTextContent> xTextContent(xRefMark, UNO_QUERY_THROW);
         xText->insertTextContent(xCursor, xTextContent, false);
 
         mxTextRange = Reference<text::XTextRange>(xCursor, uno::UNO_QUERY_THROW);
         mxTextContent = Reference<text::XTextContent>(
-            xMSF->createInstance("com.sun.star.text.ReferenceMark"), UNO_QUERY_THROW);
+            xMSF->createInstance(u"com.sun.star.text.ReferenceMark"_ustr), UNO_QUERY_THROW);
 
         return xRefMark;
     }

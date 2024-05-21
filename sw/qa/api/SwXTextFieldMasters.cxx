@@ -36,9 +36,9 @@ class SwXTextFieldMasters final : public UnoApiTest,
 {
 public:
     SwXTextFieldMasters()
-        : UnoApiTest("")
+        : UnoApiTest(u""_ustr)
         , XElementAccess(cppu::UnoType<beans::XPropertySet>::get())
-        , XNameAccess("com.sun.star.text.fieldmaster.SetExpression.Illustration")
+        , XNameAccess(u"com.sun.star.text.fieldmaster.SetExpression.Illustration"_ustr)
     {
     }
 
@@ -46,7 +46,7 @@ public:
     {
         UnoApiTest::setUp();
         mxDesktop.set(frame::Desktop::create(mxComponentContext));
-        mxComponent = loadFromDesktop("private:factory/swriter");
+        mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
         CPPUNIT_ASSERT(mxComponent.is());
     }
 

@@ -67,12 +67,13 @@ void SwXTextTable::triggerDesktopTerminate() { mxDesktop->terminate(); }
 
 Reference<XInterface> SwXTextTable::init()
 {
-    component_ = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    component_
+        = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
     Reference<text::XTextDocument> xTextDocument(component_, UNO_QUERY_THROW);
     Reference<lang::XMultiServiceFactory> xMSF(component_, UNO_QUERY_THROW);
     Reference<text::XText> xText = xTextDocument->getText();
     Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-    Reference<text::XTextTable> xTable(xMSF->createInstance("com.sun.star.text.TextTable"),
+    Reference<text::XTextTable> xTable(xMSF->createInstance(u"com.sun.star.text.TextTable"_ustr),
                                        UNO_QUERY_THROW);
     xTable->initialize(4, 3);
     xText->insertTextContent(xCursor, xTable, false);

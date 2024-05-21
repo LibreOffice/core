@@ -35,7 +35,7 @@ class SwXChapterNumbering final : public UnoApiTest,
 {
 public:
     SwXChapterNumbering()
-        : UnoApiTest("")
+        : UnoApiTest(u""_ustr)
         , XElementAccess(cppu::UnoType<Sequence<beans::PropertyValue>>::get())
         , XIndexAccess(10)
     {
@@ -45,7 +45,7 @@ public:
     {
         UnoApiTest::setUp();
         mxDesktop.set(frame::Desktop::create(mxComponentContext));
-        mxComponent = loadFromDesktop("private:factory/swriter");
+        mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
         CPPUNIT_ASSERT(mxComponent.is());
     }
 

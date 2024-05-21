@@ -52,14 +52,14 @@ void TerminateTest::setUp()
 css::uno::Reference<css::uno::XInterface> TerminateTest::init()
 {
     auto const component
-        = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+        = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
     css::uno::Reference<css::text::XTextDocument> xTextDocument(component,
                                                                 css::uno::UNO_QUERY_THROW);
     css::uno::Reference<css::lang::XMultiServiceFactory> xMSF(component, css::uno::UNO_QUERY_THROW);
     css::uno::Reference<css::text::XText> xText = xTextDocument->getText();
     css::uno::Reference<css::text::XTextCursor> xCursor = xText->createTextCursor();
     css::uno::Reference<css::text::XTextTable> xTable(
-        xMSF->createInstance("com.sun.star.text.TextTable"), css::uno::UNO_QUERY_THROW);
+        xMSF->createInstance(u"com.sun.star.text.TextTable"_ustr), css::uno::UNO_QUERY_THROW);
     xTable->initialize(4, 3);
     xText->insertTextContent(xCursor, xTable, false);
     CPPUNIT_ASSERT(xCursor.is());

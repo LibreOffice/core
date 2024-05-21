@@ -96,11 +96,12 @@ void SwXFootnoteText::tearDown()
 
 Reference<XInterface> SwXFootnoteText::init()
 {
-    component_ = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    component_
+        = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
     Reference<text::XTextDocument> xTextDocument(component_, UNO_QUERY_THROW);
     Reference<lang::XMultiServiceFactory> xMSF(component_, UNO_QUERY_THROW);
 
-    Reference<text::XFootnote> xFootnote(xMSF->createInstance("com.sun.star.text.Footnote"),
+    Reference<text::XFootnote> xFootnote(xMSF->createInstance(u"com.sun.star.text.Footnote"_ustr),
                                          UNO_QUERY_THROW);
 
     Reference<text::XText> xText = xTextDocument->getText();
@@ -109,9 +110,9 @@ Reference<XInterface> SwXFootnoteText::init()
     xText->insertTextContent(xCursor, xFootnote, false);
 
     Reference<text::XSimpleText> xFootText(xFootnote, UNO_QUERY_THROW);
-    xFootText->setString("SwXFootnoteText");
+    xFootText->setString(u"SwXFootnoteText"_ustr);
     mxTextContent = Reference<text::XTextContent>(
-        xMSF->createInstance("com.sun.star.text.Footnote"), UNO_QUERY_THROW);
+        xMSF->createInstance(u"com.sun.star.text.Footnote"_ustr), UNO_QUERY_THROW);
 
     return Reference<XInterface>(xFootText->getText(), UNO_QUERY_THROW);
 }

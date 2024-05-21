@@ -98,22 +98,23 @@ void SwXHeadFootText::tearDown()
 
 Reference<XInterface> SwXHeadFootText::init()
 {
-    component_ = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    component_
+        = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
     Reference<text::XTextDocument> xTextDocument(component_, UNO_QUERY_THROW);
     Reference<lang::XMultiServiceFactory> xMSF(component_, UNO_QUERY_THROW);
 
     Reference<style::XStyleFamiliesSupplier> xStyleFam(xTextDocument, UNO_QUERY_THROW);
     Reference<container::XNameAccess> xStyleFamNames = xStyleFam->getStyleFamilies();
 
-    Reference<container::XNameAccess> xPageStyles(xStyleFamNames->getByName("PageStyles"),
+    Reference<container::XNameAccess> xPageStyles(xStyleFamNames->getByName(u"PageStyles"_ustr),
                                                   UNO_QUERY_THROW);
-    Reference<style::XStyle> xStyle(xPageStyles->getByName("Standard"), UNO_QUERY_THROW);
+    Reference<style::XStyle> xStyle(xPageStyles->getByName(u"Standard"_ustr), UNO_QUERY_THROW);
 
     Reference<beans::XPropertySet> xPropSet(xStyle, UNO_QUERY_THROW);
 
-    xPropSet->setPropertyValue("HeaderIsOn", uno::Any(true));
-    xPropSet->setPropertyValue("FooterIsOn", uno::Any(true));
-    Reference<text::XText> xText(xPropSet->getPropertyValue("HeaderText"), UNO_QUERY_THROW);
+    xPropSet->setPropertyValue(u"HeaderIsOn"_ustr, uno::Any(true));
+    xPropSet->setPropertyValue(u"FooterIsOn"_ustr, uno::Any(true));
+    Reference<text::XText> xText(xPropSet->getPropertyValue(u"HeaderText"_ustr), UNO_QUERY_THROW);
 
     return Reference<XInterface>(xText, UNO_QUERY_THROW);
 }

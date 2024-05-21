@@ -43,7 +43,8 @@ public:
     virtual void tearDown() override;
 
     SwXDocumentSettings()
-        : apitest::XServiceInfo("SwXDocumentSettings", "com.sun.star.text.DocumentSettings"){};
+        : apitest::XServiceInfo(u"SwXDocumentSettings"_ustr,
+                                u"com.sun.star.text.DocumentSettings"_ustr){};
     uno::Reference<uno::XInterface> init() override;
 
     CPPUNIT_TEST_SUITE(SwXDocumentSettings);
@@ -73,12 +74,13 @@ void SwXDocumentSettings::tearDown()
 
 uno::Reference<uno::XInterface> SwXDocumentSettings::init()
 {
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    mxComponent
+        = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<lang::XMultiServiceFactory> xFactory(xTextDocument, uno::UNO_QUERY_THROW);
 
     uno::Reference<uno::XInterface> xDocumentSettings(
-        xFactory->createInstance("com.sun.star.text.DocumentSettings"), uno::UNO_SET_THROW);
+        xFactory->createInstance(u"com.sun.star.text.DocumentSettings"_ustr), uno::UNO_SET_THROW);
 
     return xDocumentSettings;
 }

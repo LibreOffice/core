@@ -36,10 +36,10 @@ class SwXTextTables final : public UnoApiTest,
 {
 public:
     SwXTextTables()
-        : UnoApiTest("")
+        : UnoApiTest(u""_ustr)
         , XElementAccess(cppu::UnoType<text::XTextTable>::get())
         , XIndexAccess(1)
-        , XNameAccess("Table1")
+        , XNameAccess(u"Table1"_ustr)
     {
     }
 
@@ -47,7 +47,7 @@ public:
     {
         UnoApiTest::setUp();
         mxDesktop.set(frame::Desktop::create(mxComponentContext));
-        mxComponent = loadFromDesktop("private:factory/swriter");
+        mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
         CPPUNIT_ASSERT(mxComponent.is());
     }
 
@@ -61,13 +61,13 @@ public:
 
         try
         {
-            Reference<text::XTextTable> xTable(xMSF->createInstance("com.sun.star.text.TextTable"),
-                                               UNO_QUERY_THROW);
+            Reference<text::XTextTable> xTable(
+                xMSF->createInstance(u"com.sun.star.text.TextTable"_ustr), UNO_QUERY_THROW);
             xTable->initialize(4, 3);
             xText->insertTextContent(xCursor, xTable, false);
 
-            Reference<text::XTextTable> xTable2(xMSF->createInstance("com.sun.star.text.TextTable"),
-                                                UNO_QUERY_THROW);
+            Reference<text::XTextTable> xTable2(
+                xMSF->createInstance(u"com.sun.star.text.TextTable"_ustr), UNO_QUERY_THROW);
             xTable->initialize(4, 3);
             xText->insertTextContent(xCursor, xTable2, false);
         }

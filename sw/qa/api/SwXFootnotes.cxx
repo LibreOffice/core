@@ -36,7 +36,7 @@ class SwXFootnotes final : public UnoApiTest,
 {
 public:
     SwXFootnotes()
-        : UnoApiTest("")
+        : UnoApiTest(u""_ustr)
         , XElementAccess(cppu::UnoType<text::XFootnote>::get())
         , XIndexAccess(1)
     {
@@ -46,7 +46,7 @@ public:
     {
         UnoApiTest::setUp();
         mxDesktop.set(frame::Desktop::create(mxComponentContext));
-        mxComponent = loadFromDesktop("private:factory/swriter");
+        mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
         CPPUNIT_ASSERT(mxComponent.is());
     }
 
@@ -55,8 +55,8 @@ public:
         Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
         Reference<lang::XMultiServiceFactory> xMSF(mxComponent, UNO_QUERY_THROW);
 
-        Reference<text::XFootnote> xFootnote(xMSF->createInstance("com.sun.star.text.Footnote"),
-                                             UNO_QUERY_THROW);
+        Reference<text::XFootnote> xFootnote(
+            xMSF->createInstance(u"com.sun.star.text.Footnote"_ustr), UNO_QUERY_THROW);
 
         Reference<text::XText> xText = xTextDocument->getText();
         Reference<text::XTextCursor> xCursor = xText->createTextCursor();

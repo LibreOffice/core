@@ -50,8 +50,8 @@ public:
     // SwXDocumentIndex()
     //     : apitest::XServiceInfo("SwXDocumentIndex", "com.sun.star.text.BaseIndex"){};
     SwXDocumentIndex()
-        : UnoApiTest("")
-        , apitest::XServiceInfo("SwXDocumentIndex", "com.sun.star.text.BaseIndex")
+        : UnoApiTest(u""_ustr)
+        , apitest::XServiceInfo(u"SwXDocumentIndex"_ustr, u"com.sun.star.text.BaseIndex"_ustr)
     {
     }
 
@@ -59,7 +59,7 @@ public:
     {
         UnoApiTest::setUp();
         mxDesktop.set(frame::Desktop::create(mxComponentContext));
-        mxComponent = loadFromDesktop("private:factory/swriter");
+        mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
         CPPUNIT_ASSERT(mxComponent.is());
     }
 
@@ -68,7 +68,7 @@ public:
         mxTextDocument = Reference<text::XTextDocument>(mxComponent, UNO_QUERY_THROW);
         Reference<lang::XMultiServiceFactory> xMSF(mxTextDocument, UNO_QUERY_THROW);
         Reference<text::XDocumentIndex> xDocumentIndex(
-            xMSF->createInstance("com.sun.star.text.DocumentIndex"), UNO_QUERY_THROW);
+            xMSF->createInstance(u"com.sun.star.text.DocumentIndex"_ustr), UNO_QUERY_THROW);
 
         auto xText = getTextDocument()->getText();
         auto xTextCursor = xText->createTextCursor();
@@ -78,7 +78,7 @@ public:
 
         mxTextRange = Reference<text::XTextRange>(xTextCursor, UNO_QUERY_THROW);
         mxTextContent = Reference<text::XTextContent>(
-            xMSF->createInstance("com.sun.star.text.DocumentIndex"), UNO_QUERY_THROW);
+            xMSF->createInstance(u"com.sun.star.text.DocumentIndex"_ustr), UNO_QUERY_THROW);
 
         return xDocumentIndex;
     }
