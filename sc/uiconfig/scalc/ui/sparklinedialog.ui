@@ -119,6 +119,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="lbInputRange"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="btnInputRange-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|btnInputRange">Shrink</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">2</property>
@@ -139,7 +144,7 @@
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edInputRange-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|edInputRange">Enter the cell range of the data fopr the sparklines.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|edInputRange">Enter the cell range containing the data for the sparklines.</property>
                           </object>
                         </child>
                       </object>
@@ -156,6 +161,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="lbOutputRange"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="btnOutputRange-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|btnOutputRange">Shrink</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">2</property>
@@ -354,7 +364,7 @@
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="cbHigh-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbHigh">check and select the color for high points.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbHigh">Check and select the color for high points.</property>
                           </object>
                         </child>
                       </object>
@@ -675,8 +685,7 @@
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="cbEmptyCells-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbEmptyCells">Display empty cells as:  Gap - the missing data is not displayed. The line type discontinues in the gap and the column is not displayed.   Zero -  the missing data is displayed as value zero. Span - for line type only, draws a continuous line connecting the previous value to the next value.
-</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbEmptyCells">Display empty cells as: Gap - the missing data is not displayed. The line type discontinues in the gap and the column is not displayed. Zero - the missing data is displayed as value zero. Span - for line type only, draws a continuous line connecting the previous value to the next value.</property>
                           </object>
                         </child>
                       </object>
@@ -737,8 +746,7 @@
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="cbType-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbType">Select the sparkline type in the drop-down list. Choices are:    Line - draws a line between data values.    Column - draws a bar for each data value.    Stacked -  also known as win/loss. Displays equally sized bars indicating positive and negative values.
-</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbType">Select the sparkline type in the drop-down list. Choices are: Line - draws a line between data values.  Column - draws a bar for each data value. Stacked - also known as win/loss: displays equally sized bars indicating positive and negative values.</property>
                           </object>
                         </child>
                       </object>
@@ -806,8 +814,7 @@
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="cbMinAxisType-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbMinAxisType"> Individual: sets automatically the minimum value for each sparkline based on the sparkline data range values.    Group: sets the minimum value based on the lower and higher values found in the group of sparklines.  Custom: enter the minimum value for the sparkline group.
-</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbMinAxisType">Individual: sets automatically the minimum value for each sparkline based on the sparkline data range values. Group: sets the minimum value based on the lower and higher values found in the group of sparklines. Custom: enter the minimum value for the sparkline group.</property>
                           </object>
                         </child>
                       </object>
@@ -847,7 +854,7 @@
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="cbMaxAxisType-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbMaxAxisType"> Individual: sets automatically the maximum value for each sparkline based on the sparkline data range values.    Group: sets the maximum value based on the lower and higher values found in the group of sparklines.  Custom: enter the maximum value for the sparkline group.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbMaxAxisType">Individual: sets automatically the maximum value for each sparkline based on the sparkline data range values. Group: sets the maximum value based on the lower and higher values found in the group of sparklines. Custom: enter the maximum value for the sparkline group.</property>
                           </object>
                         </child>
                       </object>
