@@ -19,6 +19,7 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/viewsh.hxx>
 #include <sfx2/AccessibilityIssue.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/svapp.hxx>
@@ -227,6 +228,12 @@ void A11yCheckIssuesPanel::populateIssues()
     if (!mpDoc || !mxAccessibilityBox->is_visible())
         return;
 
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    auto* pWindow = pViewShell ? pViewShell->GetWindow() : nullptr;
+
+    if (pWindow)
+        pWindow->SetPointer(PointerStyle::Wait);
+
     sw::AccessibilityCheck aCheck(mpDoc);
     aCheck.check();
     m_aIssueCollection = aCheck.getIssueCollection();
@@ -313,6 +320,9 @@ void A11yCheckIssuesPanel::populateIssues()
             m_xExpanders[nGroupIndex]->hide();
         nGroupIndex++;
     }
+
+    if (pWindow)
+        pWindow->SetPointer(PointerStyle::Arrow);
 }
 
 void A11yCheckIssuesPanel::NotifyItemUpdate(const sal_uInt16 nSid, const SfxItemState /* eState */,
