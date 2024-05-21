@@ -36,6 +36,7 @@
 #include <sfx2/dispatch.hxx>
 #include <cmdid.h>
 #include <tools/json_writer.hxx>
+#include <tools/UnitConversion.hxx>
 #include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/text/XTextTable.hpp>
@@ -1557,6 +1558,68 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf160836)
 
     // this was 3910 (not modified row height previously)
     CPPUNIT_ASSERT_EQUAL(tools::Long(1980), pCellA1->getFrameArea().Height());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161261)
+{
+    createSwDoc("tdf160842.fodt");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    // the cursor is not in the table
+    CPPUNIT_ASSERT(!pWrtShell->IsCursorInTable());
+
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage);
+    const SwSortedObjs& rPageObjs = *pPage->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
+    auto pPageFly = dynamic_cast<SwFlyAtContentFrame*>(rPageObjs[0]);
+    CPPUNIT_ASSERT(pPageFly);
+    auto pTable = dynamic_cast<SwTabFrame*>(pPageFly->GetLower());
+    CPPUNIT_ASSERT(pTable);
+    auto pRow1 = pTable->GetLower();
+    CPPUNIT_ASSERT(pRow1->IsRowFrame());
+    auto pCellA1 = pRow1->GetLower();
+    CPPUNIT_ASSERT(pCellA1);
+    const SwRect& rCellA1Rect = pCellA1->getFrameArea();
+    auto nRowHeight = rCellA1Rect.Height();
+
+    // select image by clicking on it at the center of the upper cell
+    Point ptFrom(rCellA1Rect.Left() + rCellA1Rect.Width() / 2, rCellA1Rect.Top() + nRowHeight / 2);
+    vcl::Window& rEditWin = pDoc->GetDocShell()->GetView()->GetEditWin();
+    Point aFrom = rEditWin.LogicToPixel(ptFrom);
+    MouseEvent aClickEvent(aFrom, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+    rEditWin.MouseButtonDown(aClickEvent);
+    rEditWin.MouseButtonUp(aClickEvent);
+
+    // Then make sure that the image is selected:
+    SelectionType eType = pWrtShell->GetSelectionType();
+    CPPUNIT_ASSERT_EQUAL(SelectionType::Graphic, eType);
+
+    uno::Reference<drawing::XShape> xShape = getShape(2);
+    CPPUNIT_ASSERT(xShape.is());
+
+    // zoom image by drag & drop using right bottom handle of the image
+    const SwRect& rSelRect = pWrtShell->GetAnyCurRect(CurRectType::Frame);
+    Point ptFromHandle(rSelRect.Right(), rSelRect.Bottom());
+    Point aFromHandle = rEditWin.LogicToPixel(ptFromHandle);
+    Point ptTo(rSelRect.Left() + rSelRect.Width() * 1.5, rSelRect.Top() + rSelRect.Height() * 1.5);
+    Point aTo = rEditWin.LogicToPixel(ptTo);
+    MouseEvent aClickEvent2(aFromHandle, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+    rEditWin.MouseButtonDown(aClickEvent2);
+    MouseEvent aClickEvent3(aTo, 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
+    rEditWin.MouseMove(aClickEvent3);
+    rEditWin.MouseMove(aClickEvent3);
+    MouseEvent aClickEvent4(aTo, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+    rEditWin.MouseButtonUp(aClickEvent4);
+    Scheduler::ProcessEventsToIdle();
+
+    // Make sure image is greater than before, instead of minimizing it to the cell size
+    // This was 8707 and 6509
+    CPPUNIT_ASSERT_GREATER(sal_Int32(10000), xShape->getSize().Width);
+    CPPUNIT_ASSERT_GREATER(sal_Int32(8000), xShape->getSize().Height);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115132)
