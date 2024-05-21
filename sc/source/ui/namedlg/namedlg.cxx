@@ -306,8 +306,8 @@ void ScNameDlg::ShowOptions(const ScRangeNameLine& rLine)
 void ScNameDlg::AddPushed()
 {
     mbCloseWithoutUndo = true;
-    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-    pViewSh->SwitchBetweenRefDialogs(this);
+    if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
+        pViewSh->SwitchBetweenRefDialogs(this);
 }
 
 void ScNameDlg::SetEntry(const OUString& rName, const OUString& rScope)
