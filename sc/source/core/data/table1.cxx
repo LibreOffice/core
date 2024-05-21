@@ -48,6 +48,7 @@
 #include <refupdatecontext.hxx>
 #include <rowheightcontext.hxx>
 #include <compressedarray.hxx>
+#include <tabvwsh.hxx>
 #include <vcl/svapp.hxx>
 
 #include <formula/vectortoken.hxx>
@@ -487,6 +488,18 @@ bool ScTable::SetOptimalHeight(
 
     mpRowHeights->enableTreeSearch(true);
 
+    if (bChanged)
+    {
+        if (ScViewData* pViewData = ScDocShell::GetViewData())
+        {
+            ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+                pViewData->GetViewShell(),
+                false /* bColsAffected */, true /* bRowsAffected */,
+                true /* bSizes*/, false /* bHidden */, false /* bFiltered */,
+                false /* bGroups */, nTab);
+        }
+    }
+
     return bChanged;
 }
 
@@ -508,10 +521,22 @@ void ScTable::SetOptimalHeightOnly(
 
     SetRowHeightOnlyFunc aFunc(this);
 
-    SetOptimalHeightsToRows(rCxt, aFunc, pRowFlags.get(), nStartRow, nEndRow, true);
+    bool bChanged = SetOptimalHeightsToRows(rCxt, aFunc, pRowFlags.get(), nStartRow, nEndRow, true);
 
     if ( pProgress != pOuterProgress )
         delete pProgress;
+
+    if (bChanged)
+    {
+        if (ScViewData* pViewData = ScDocShell::GetViewData())
+        {
+            ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+                pViewData->GetViewShell(),
+                false /* bColsAffected */, true /* bRowsAffected */,
+                true /* bSizes*/, false /* bHidden */, false /* bFiltered */,
+                false /* bGroups */, nTab);
+        }
+    }
 }
 
 bool ScTable::GetCellArea( SCCOL& rEndCol, SCROW& rEndRow )
