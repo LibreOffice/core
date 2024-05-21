@@ -50,10 +50,9 @@ enum class EditEntryMode
 {
     EDIT          = 0,
     UPD_IDX       = 1,
-    RMV_IDX       = 2,
-    UNPROTECT_TABLE    = 3,
-    DELETE        = 4,
-    RENAME        = 5,
+    UNPROTECT_TABLE    = 2,
+    DELETE        = 3,
+    RENAME        = 4,
 };
 
 // Flags for PopupMenu-enable/disable

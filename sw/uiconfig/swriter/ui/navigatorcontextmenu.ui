@@ -99,14 +99,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="401">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_REMOVE_INDEX">_Remove Index</property>
-        <property name="use-underline">True</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkMenuItem" id="402">
         <property name="visible">True</property>
         <property name="can-focus">False</property>

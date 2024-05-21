@@ -1692,8 +1692,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         bRemoveGotoEntry = true;
 
     bool bRemovePostItEntries = true;
-    bool bRemoveIndexEntries = true;
-    bool bRemoveCopyEntry = true;
+    bool bRemoveUpdateIndexEntry = true;
+    bool bRemoveReadonlyIndexEntry = true;    bool bRemoveCopyEntry = true;
     bool bRemoveEditEntry = true;
     bool bRemoveUnprotectEntry = true;
     bool bRemoveDeleteChapterEntry = true,
@@ -1825,7 +1825,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 (State::ACTIVE == m_eState || (GetActiveView() && m_pActiveShell == GetActiveView()->GetWrtShellPtr()))
                 && lcl_IsContent(*xEntry, *m_xTreeView))
         {
-            const bool bReadonly = m_pActiveShell->GetView().GetDocShell()->IsReadOnly();
+            bool bReadonly = m_pActiveShell->GetView().GetDocShell()->IsReadOnly();
             const bool bVisible = !weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry))->IsInvisible();
             const bool bProtected = weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry))->IsProtect();
             const bool bProtectBM = (ContentTypeId::BOOKMARK == nContentType)
@@ -1873,9 +1873,6 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                     case ContentTypeId::REFERENCE:
                         bRemoveDeleteReferenceEntry = false;
                     break;
-                    case ContentTypeId::INDEX:
-                        bRemoveDeleteIndexEntry = false;
-                    break;
                     case ContentTypeId::POSTIT:
                         bRemoveDeleteCommentEntry = false;
                     break;
@@ -1919,12 +1916,16 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             {
                 if(ContentTypeId::INDEX == nContentType)
                 {
-                    bRemoveIndexEntries = false;
-
+                    bRemoveReadonlyIndexEntry = false;
+                    bRemoveEditEntry = false;
                     const SwTOXBase* pBase = weld::fromId<SwTOXBaseContent*>(m_xTreeView->get_id(*xEntry))->GetTOXBase();
-                    if (!pBase->IsTOXBaseInReadonly())
-                        bRemoveEditEntry = false;
-
+                    if (!pBase->IsTOXBaseInReadonly() && !SwEditShell::IsTOXBaseReadonly(*pBase))
+                    {
+                        bRemoveUpdateIndexEntry = false;
+                        bRemoveDeleteIndexEntry = false;
+                    }
+                    else
+                        bReadonly = true;
                     xPop->set_active(OUString::number(405), SwEditShell::IsTOXBaseReadonly(*pBase));
                 }
                 else if(ContentTypeId::TABLE == nContentType)
@@ -1955,7 +1956,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 else
                     bRemoveEditEntry = false;
             }
-            if (bRenamable)
+            if (bRenamable && !bReadonly)
                 bRemoveRenameEntry = false;
         }
         else
@@ -2071,12 +2072,11 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (bRemoveRenameEntry)
         xPop->remove(OUString::number(502));
 
-    if (bRemoveIndexEntries)
-    {
-        xPop->remove(OUString::number(401));
+    if (bRemoveUpdateIndexEntry)
         xPop->remove(OUString::number(402));
+
+    if (bRemoveReadonlyIndexEntry)
         xPop->remove(OUString::number(405));
-    }
 
     if (bRemoveUnprotectEntry)
         xPop->remove(OUString::number(404));
@@ -2098,7 +2098,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             bRemoveChapterEntries &&
             bRemovePostItEntries &&
             bRemoveRenameEntry &&
-            bRemoveIndexEntries &&
+            bRemoveReadonlyIndexEntry &&
             bRemoveUnprotectEntry &&
             bRemoveEditEntry)
         xPop->remove("separator2");
@@ -5260,9 +5260,8 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
             if(m_nOutlineLevel != nSelectedPopupEntry )
                 SetOutlineLevel(static_cast<sal_Int8>(nSelectedPopupEntry));
         break;
-        case 401:
         case 402:
-            EditEntry(*xFirst, nSelectedPopupEntry == 401 ? EditEntryMode::RMV_IDX : EditEntryMode::UPD_IDX);
+            EditEntry(*xFirst, EditEntryMode::UPD_IDX);
         break;
         // Edit entry
         case 403:
@@ -5779,7 +5778,6 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
 
                     }
                 break;
-                case EditEntryMode::RMV_IDX:
                 case EditEntryMode::DELETE:
                 {
                     if( pBase )
