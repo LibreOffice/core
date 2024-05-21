@@ -1349,9 +1349,9 @@ public:
           SwAttrPool& GetAttrPool()         { return *mpAttrPool; }
 
     // Search for an EditShell.
-    SwEditShell const * GetEditShell() const;
-    SW_DLLPUBLIC SwEditShell* GetEditShell();
-    ::sw::IShellCursorSupplier * GetIShellCursorSupplier();
+    SAL_RET_MAYBENULL SwEditShell const * GetEditShell() const;
+    SAL_RET_MAYBENULL SW_DLLPUBLIC SwEditShell* GetEditShell();
+    SAL_RET_MAYBENULL ::sw::IShellCursorSupplier * GetIShellCursorSupplier();
 
     // OLE 2.0-notification.
     void  SetOle2Link(const Link<bool,void>& rLink) {maOle2Link = rLink;}
