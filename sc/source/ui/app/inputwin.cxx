@@ -799,9 +799,11 @@ void ScInputWindow::MouseButtonDown( const MouseEvent& rMEvt )
             // I'd prefer to leave at least a single column header and a
             // row but I don't know how to get that value in pixels.
             // Use TOOLBOX_WINDOW_HEIGHT for the moment
-            ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-            mnMaxY = GetOutputSizePixel().Height() + (pViewSh->GetGridHeight(SC_SPLIT_TOP)
-                   + pViewSh->GetGridHeight(SC_SPLIT_BOTTOM)) - TOOLBOX_WINDOW_HEIGHT;
+            if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
+            {
+                mnMaxY = GetOutputSizePixel().Height() + (pViewSh->GetGridHeight(SC_SPLIT_TOP)
+                       + pViewSh->GetGridHeight(SC_SPLIT_BOTTOM)) - TOOLBOX_WINDOW_HEIGHT;
+            }
         }
     }
 
@@ -1720,7 +1722,6 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
     if (m_xEditView)
     {
         ScModule* pScMod = SC_MOD();
-        ScTabViewShell* pStartViewSh = ScTabViewShell::GetActiveViewShell();
 
         // don't modify the font defaults here - the right defaults are
         // already set in StartEditEngine when the EditEngine is created
@@ -1738,6 +1739,7 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
         {
             // Is dragged onto another View?
             ScTabViewShell* pEndViewSh = ScTabViewShell::GetActiveViewShell();
+            ScTabViewShell* pStartViewSh = ScTabViewShell::GetActiveViewShell();
             if ( pEndViewSh != pStartViewSh && pStartViewSh != nullptr )
             {
                 ScViewData& rViewData = pStartViewSh->GetViewData();
@@ -2663,11 +2665,12 @@ void ScPosWnd::DoEnter()
     if (bOpenManageNamesDialog)
     {
         const sal_uInt16 nId  = ScNameDlgWrapper::GetChildWindowId();
-        ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-        assert(pViewSh);
-        SfxViewFrame& rViewFrm = pViewSh->GetViewFrame();
-        SfxChildWindow* pWnd = rViewFrm.GetChildWindow( nId );
-        SC_MOD()->SetRefDialog( nId, pWnd == nullptr );
+        if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
+        {
+            SfxViewFrame& rViewFrm = pViewSh->GetViewFrame();
+            SfxChildWindow* pWnd = rViewFrm.GetChildWindow( nId );
+            SC_MOD()->SetRefDialog( nId, pWnd == nullptr );
+        }
     }
 }
 

@@ -249,18 +249,22 @@ IMPL_LINK_NOARG( SearchResultsDlg, ListSelectHdl, weld::TreeView&, void )
         return;
 
     // Jump to the cell.
-    ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
-    pScViewShell->SetTabNo(nTab);
-    pScViewShell->SetCursor(aPos.Col(), aPos.Row());
-    pScViewShell->AlignToCursor(aPos.Col(), aPos.Row(), SC_FOLLOW_JUMP);
+    if (ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell())
+    {
+        pScViewShell->SetTabNo(nTab);
+        pScViewShell->SetCursor(aPos.Col(), aPos.Row());
+        pScViewShell->AlignToCursor(aPos.Col(), aPos.Row(), SC_FOLLOW_JUMP);
+    }
 }
 
 IMPL_STATIC_LINK( SearchResultsDlg, OnShowToggled, weld::Toggleable&, rButton, void )
 {
-    ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
-    ScViewOptions aViewOpt( pScViewShell->GetViewData().GetOptions() );
-    aViewOpt.SetOption( VOPT_SUMMARY, rButton.get_active() );
-    pScViewShell->GetViewData().SetOptions( aViewOpt );
+    if (ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell())
+    {
+        ScViewOptions aViewOpt( pScViewShell->GetViewData().GetOptions() );
+        aViewOpt.SetOption( VOPT_SUMMARY, rButton.get_active() );
+        pScViewShell->GetViewData().SetOptions( aViewOpt );
+    }
 }
 
 SearchResultsDlgWrapper::SearchResultsDlgWrapper(

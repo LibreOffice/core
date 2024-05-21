@@ -446,43 +446,45 @@ void StyleSelect(weld::Window* pDialogParent, weld::ComboBox& rLbStyle, const Sc
 
         // unlock the dispatcher so SID_STYLE_NEW can be executed
         // (SetDispatcherLock would affect all Calc documents)
-        ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-        SfxDispatcher* pDisp = pViewShell->GetDispatcher();
-        bool bLocked = pDisp->IsLocked();
-        if (bLocked)
-            pDisp->Lock(false);
-
-        // Execute the "new style" slot, complete with undo and all necessary updates.
-        // The return value (SfxUInt16Item) is ignored, look for new styles instead.
-        pDisp->ExecuteList(SID_STYLE_NEW,
-            SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
-            { &aFamilyItem, &aRefItem }, { &aDialogParent });
-
-        if (bLocked)
-            pDisp->Lock(true);
-
-        // Find the new style and add it into the style list boxes
-        SfxStyleSheetIterator aStyleIter( pDoc->GetStyleSheetPool(), SfxStyleFamily::Para );
-        bool bFound = false;
-        for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle && !bFound; pStyle = aStyleIter.Next() )
+        if (ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell())
         {
-            const OUString& aName = pStyle->GetName();
-            if (rLbStyle.find_text(aName) == -1)    // all lists contain the same entries
+            SfxDispatcher* pDisp = pViewShell->GetDispatcher();
+            bool bLocked = pDisp->IsLocked();
+            if (bLocked)
+                pDisp->Lock(false);
+
+            // Execute the "new style" slot, complete with undo and all necessary updates.
+            // The return value (SfxUInt16Item) is ignored, look for new styles instead.
+            pDisp->ExecuteList(SID_STYLE_NEW,
+                SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                { &aFamilyItem, &aRefItem }, { &aDialogParent });
+
+            if (bLocked)
+                pDisp->Lock(true);
+
+            // Find the new style and add it into the style list boxes
+            SfxStyleSheetIterator aStyleIter( pDoc->GetStyleSheetPool(), SfxStyleFamily::Para );
+            bool bFound = false;
+            for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle && !bFound; pStyle = aStyleIter.Next() )
             {
-                for( sal_Int32 i = 1, n = rLbStyle.get_count(); i <= n && !bFound; ++i)
+                const OUString& aName = pStyle->GetName();
+                if (rLbStyle.find_text(aName) == -1)    // all lists contain the same entries
                 {
-                    OUString aStyleName = ScGlobal::getCharClass().uppercase(rLbStyle.get_text(i));
-                    if( i == n )
+                    for( sal_Int32 i = 1, n = rLbStyle.get_count(); i <= n && !bFound; ++i)
                     {
-                        rLbStyle.append_text(aName);
-                        rLbStyle.set_active_text(aName);
-                        bFound = true;
-                    }
-                    else if( aStyleName > ScGlobal::getCharClass().uppercase(aName) )
-                    {
-                        rLbStyle.insert_text(i, aName);
-                        rLbStyle.set_active_text(aName);
-                        bFound = true;
+                        OUString aStyleName = ScGlobal::getCharClass().uppercase(rLbStyle.get_text(i));
+                        if( i == n )
+                        {
+                            rLbStyle.append_text(aName);
+                            rLbStyle.set_active_text(aName);
+                            bFound = true;
+                        }
+                        else if( aStyleName > ScGlobal::getCharClass().uppercase(aName) )
+                        {
+                            rLbStyle.insert_text(i, aName);
+                            rLbStyle.set_active_text(aName);
+                            bFound = true;
+                        }
                     }
                 }
             }

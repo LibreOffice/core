@@ -1352,18 +1352,21 @@ void ScUndoDragDrop::DoUndo( ScRange aRange )
     pDocShell->UpdatePaintExt(mnPaintExtFlags, aPaintRange);
     maPaintRanges.Join(aPaintRange);
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (ScTabViewShell* pTabViewShell = ScTabViewShell::GetActiveViewShell())
     {
-        ScTabViewShell* pTabViewShell = ScTabViewShell::GetActiveViewShell();
-        pTabViewShell->OnLOKSetWidthOrHeight(aPaintRange.aStart.Col(), true);
-        pTabViewShell->OnLOKSetWidthOrHeight(aPaintRange.aStart.Row(), false);
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            pTabViewShell->OnLOKSetWidthOrHeight(aPaintRange.aStart.Col(), true);
+            pTabViewShell->OnLOKSetWidthOrHeight(aPaintRange.aStart.Row(), false);
+        }
+
+        ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+            pTabViewShell,
+            true /* bColumns */, true /* bRows */,
+            true /* bSizes */, true /* bHidden */, true /* bFiltered */,
+            true /* bGroups */, aPaintRange.aStart.Tab());
     }
 
-    ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
-        ScTabViewShell::GetActiveViewShell(),
-        true /* bColumns */, true /* bRows */,
-        true /* bSizes */, true /* bHidden */, true /* bFiltered */,
-        true /* bGroups */, aPaintRange.aStart.Tab());
 }
 
 void ScUndoDragDrop::Undo()
@@ -1522,23 +1525,25 @@ void ScUndoDragDrop::Redo()
             nStartRow = std::min(nStartRow, aSrcRange.aStart.Row());
         }
 
-        ScTabViewShell* pTabViewShell = ScTabViewShell::GetActiveViewShell();
-        pTabViewShell->OnLOKSetWidthOrHeight(nStartCol, true);
-        pTabViewShell->OnLOKSetWidthOrHeight(nStartRow, false);
+        if (ScTabViewShell* pTabViewShell = ScTabViewShell::GetActiveViewShell())
+        {
+            pTabViewShell->OnLOKSetWidthOrHeight(nStartCol, true);
+            pTabViewShell->OnLOKSetWidthOrHeight(nStartRow, false);
 
-        SCTAB nStartTab = aDestRange.aStart.Tab();
-        SCTAB nEndTab = aDestRange.aEnd.Tab();
-        if (bCut)
-        {
-            nStartTab = std::min(nStartTab, aSrcRange.aStart.Tab());
-            nEndTab = std::max(nEndTab, aSrcRange.aEnd.Tab());
-        }
-        for (nTab = nStartTab; nTab <= nEndTab; ++nTab)
-        {
-            ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
-                ScTabViewShell::GetActiveViewShell(), true /* bColumns */, true /* bRows */,
-                true /* bSizes */, true /* bHidden */, true /* bFiltered */, true /* bGroups */,
-                nTab);
+            SCTAB nStartTab = aDestRange.aStart.Tab();
+            SCTAB nEndTab = aDestRange.aEnd.Tab();
+            if (bCut)
+            {
+                nStartTab = std::min(nStartTab, aSrcRange.aStart.Tab());
+                nEndTab = std::max(nEndTab, aSrcRange.aEnd.Tab());
+            }
+            for (nTab = nStartTab; nTab <= nEndTab; ++nTab)
+            {
+                ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+                    pTabViewShell, true /* bColumns */, true /* bRows */,
+                    true /* bSizes */, true /* bHidden */, true /* bFiltered */, true /* bGroups */,
+                    nTab);
+            }
         }
     }
 }
