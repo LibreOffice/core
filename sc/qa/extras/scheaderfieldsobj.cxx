@@ -67,7 +67,7 @@ private:
 uno::Reference<text::XText> ScHeaderFieldsObj::m_xText;
 
 ScHeaderFieldsObj::ScHeaderFieldsObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , ::apitest::XElementAccess(cppu::UnoType<text::XTextField>::get())
 {
 }
@@ -78,19 +78,20 @@ uno::Reference<uno::XInterface> ScHeaderFieldsObj::init()
 
     uno::Reference<style::XStyleFamiliesSupplier> xSFS(xDoc, uno::UNO_QUERY_THROW);
     uno::Reference<container::XNameAccess> xNA(xSFS->getStyleFamilies(), uno::UNO_SET_THROW);
-    uno::Reference<container::XNameAccess> xNA1(xNA->getByName("PageStyles"), uno::UNO_QUERY_THROW);
-    uno::Reference<style::XStyle> xStyle(xNA1->getByName("Default"), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XNameAccess> xNA1(xNA->getByName(u"PageStyles"_ustr),
+                                                uno::UNO_QUERY_THROW);
+    uno::Reference<style::XStyle> xStyle(xNA1->getByName(u"Default"_ustr), uno::UNO_QUERY_THROW);
 
     uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XHeaderFooterContent> xHFC(
-        xPropertySet->getPropertyValue("RightPageHeaderContent"), uno::UNO_QUERY_THROW);
+        xPropertySet->getPropertyValue(u"RightPageHeaderContent"_ustr), uno::UNO_QUERY_THROW);
     m_xText = xHFC->getLeftText();
 
     uno::Reference<lang::XMultiServiceFactory> xMSF(xDoc, uno::UNO_QUERY_THROW);
-    uno::Reference<text::XTextContent> xTC(xMSF->createInstance("com.sun.star.text.TextField.Time"),
-                                           uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextContent> xTC(
+        xMSF->createInstance(u"com.sun.star.text.TextField.Time"_ustr), uno::UNO_QUERY_THROW);
     m_xText->insertTextContent(m_xText->createTextCursor(), xTC, false);
-    xPropertySet->setPropertyValue("RightPageHeaderContent", uno::Any(xHFC));
+    xPropertySet->setPropertyValue(u"RightPageHeaderContent"_ustr, uno::Any(xHFC));
 
     uno::Reference<text::XTextFieldsSupplier> xTFS(m_xText, uno::UNO_QUERY_THROW);
     return xTFS->getTextFields();
@@ -100,7 +101,7 @@ void ScHeaderFieldsObj::setUp()
 {
     UnoApiTest::setUp();
     // create calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 void ScHeaderFieldsObj::tearDown()

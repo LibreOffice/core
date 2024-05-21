@@ -92,12 +92,13 @@ private:
 };
 
 ScDataPilotFieldGroupsObj::ScDataPilotFieldGroupsObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XElementAccess(cppu::UnoType<container::XNameAccess>::get())
     , XIndexAccess(1)
-    , XNameAccess("Group1")
-    , XNameContainer("Group1")
-    , XServiceInfo("ScDataPilotFieldGroupsObj", "com.sun.star.sheet.DataPilotFieldGroups")
+    , XNameAccess(u"Group1"_ustr)
+    , XNameContainer(u"Group1"_ustr)
+    , XServiceInfo(u"ScDataPilotFieldGroupsObj"_ustr,
+                   u"com.sun.star.sheet.DataPilotFieldGroups"_ustr)
 {
 }
 
@@ -109,7 +110,7 @@ uno::Reference<uno::XInterface> ScDataPilotFieldGroupsObj::init()
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIA(xSheets, uno::UNO_QUERY_THROW);
-    xSheets->insertNewByName("Some Sheet", 0);
+    xSheets->insertNewByName(u"Some Sheet"_ustr, 0);
 
     uno::Reference<sheet::XSpreadsheet> xSheet0(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet1(xIA->getByIndex(1), uno::UNO_QUERY_THROW);
@@ -131,11 +132,11 @@ uno::Reference<uno::XInterface> ScDataPilotFieldGroupsObj::init()
         }
     }
 
-    xSheet0->getCellByPosition(1, 1)->setFormula("aName");
-    xSheet0->getCellByPosition(1, 2)->setFormula("otherName");
-    xSheet0->getCellByPosition(1, 3)->setFormula("una");
-    xSheet0->getCellByPosition(1, 4)->setFormula("otherName");
-    xSheet0->getCellByPosition(1, 5)->setFormula("somethingelse");
+    xSheet0->getCellByPosition(1, 1)->setFormula(u"aName"_ustr);
+    xSheet0->getCellByPosition(1, 2)->setFormula(u"otherName"_ustr);
+    xSheet0->getCellByPosition(1, 3)->setFormula(u"una"_ustr);
+    xSheet0->getCellByPosition(1, 4)->setFormula(u"otherName"_ustr);
+    xSheet0->getCellByPosition(1, 5)->setFormula(u"somethingelse"_ustr);
 
     xSheet0->getCellByPosition(1, 5);
     xSheet0->getCellByPosition(aCellAddress.Column, aCellAddress.Row + 3);
@@ -149,19 +150,21 @@ uno::Reference<uno::XInterface> ScDataPilotFieldGroupsObj::init()
 
     uno::Reference<beans::XPropertySet> xPropertySet0(xDPD->getDataPilotFields()->getByIndex(0),
                                                       uno::UNO_QUERY_THROW);
-    xPropertySet0->setPropertyValue("Orientation", uno::Any(sheet::DataPilotFieldOrientation_ROW));
+    xPropertySet0->setPropertyValue(u"Orientation"_ustr,
+                                    uno::Any(sheet::DataPilotFieldOrientation_ROW));
 
     uno::Reference<beans::XPropertySet> xPropertySet1(xDPD->getDataPilotFields()->getByIndex(1),
                                                       uno::UNO_QUERY_THROW);
-    xPropertySet1->setPropertyValue("Function", uno::Any(sheet::GeneralFunction_SUM));
-    xPropertySet1->setPropertyValue("Orientation", uno::Any(sheet::DataPilotFieldOrientation_DATA));
+    xPropertySet1->setPropertyValue(u"Function"_ustr, uno::Any(sheet::GeneralFunction_SUM));
+    xPropertySet1->setPropertyValue(u"Orientation"_ustr,
+                                    uno::Any(sheet::DataPilotFieldOrientation_DATA));
 
     uno::Reference<beans::XPropertySet> xPropertySet2(xDPD->getDataPilotFields()->getByIndex(2),
                                                       uno::UNO_QUERY_THROW);
-    xPropertySet2->setPropertyValue("Orientation",
+    xPropertySet2->setPropertyValue(u"Orientation"_ustr,
                                     uno::Any(sheet::DataPilotFieldOrientation_COLUMN));
 
-    xDPT->insertNewByName("DataPilotTable", aCellAddress, xDPD);
+    xDPT->insertNewByName(u"DataPilotTable"_ustr, aCellAddress, xDPD);
 
     uno::Reference<container::XIndexAccess> xIA_DPT0(xDPTS->getDataPilotTables(),
                                                      uno::UNO_QUERY_THROW);
@@ -171,7 +174,7 @@ uno::Reference<uno::XInterface> ScDataPilotFieldGroupsObj::init()
 
     uno::Reference<sheet::XDataPilotFieldGrouping> xDPFG(xIA_RF0->getByIndex(0),
                                                          uno::UNO_QUERY_THROW);
-    xDPFG->createNameGroup({ "aName", "otherName" });
+    xDPFG->createNameGroup({ u"aName"_ustr, u"otherName"_ustr });
 
     uno::Reference<container::XIndexAccess> xIA_DPT1(xDPTS->getDataPilotTables(),
                                                      uno::UNO_QUERY_THROW);
@@ -184,9 +187,9 @@ uno::Reference<uno::XInterface> ScDataPilotFieldGroupsObj::init()
     {
         uno::Reference<beans::XPropertySet> xPropertySet(xIA_RF1->getByIndex(i),
                                                          uno::UNO_QUERY_THROW);
-        if (::comphelper::getBOOL(xPropertySet->getPropertyValue("IsGroupField")))
+        if (::comphelper::getBOOL(xPropertySet->getPropertyValue(u"IsGroupField"_ustr)))
         {
-            CPPUNIT_ASSERT(xPropertySet->getPropertyValue("GroupInfo") >>= aDPFGI);
+            CPPUNIT_ASSERT(xPropertySet->getPropertyValue(u"GroupInfo"_ustr) >>= aDPFGI);
         }
     }
 
@@ -201,7 +204,7 @@ void ScDataPilotFieldGroupsObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDataPilotFieldGroupsObj);

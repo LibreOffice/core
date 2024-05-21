@@ -61,7 +61,7 @@ public:
 };
 
 ScFiltersTest3::ScFiltersTest3()
-    : ScModelTestBase("sc/qa/unit/data")
+    : ScModelTestBase(u"sc/qa/unit/data"_ustr)
 {
 }
 
@@ -319,25 +319,25 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testActiveXCheckboxXLSX)
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
     uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(
-        true, bool(xServiceInfo->supportsService("com.sun.star.form.component.CheckBox")));
+        true, bool(xServiceInfo->supportsService(u"com.sun.star.form.component.CheckBox"_ustr)));
 
     // Check custom label
     OUString sLabel;
-    xPropertySet->getPropertyValue("Label") >>= sLabel;
-    CPPUNIT_ASSERT_EQUAL(OUString("Custom Caption"), sLabel);
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= sLabel;
+    CPPUNIT_ASSERT_EQUAL(u"Custom Caption"_ustr, sLabel);
 
     // Check background color (highlight system color)
     Color nColor;
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0x316AC5), nColor);
 
     // Check Text color (active border system color)
-    xPropertySet->getPropertyValue("TextColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"TextColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0xD4D0C8), nColor);
 
     // Check state of the checkbox
     sal_Int16 nState;
-    xPropertySet->getPropertyValue("State") >>= nState;
+    xPropertySet->getPropertyValue(u"State"_ustr) >>= nState;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nState);
 }
 
@@ -356,7 +356,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf60673)
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
     OUString sLabel;
-    xPropertySet->getPropertyValue("Label") >>= sLabel;
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= sLabel;
 
     // Without the fix in place, this test would have failed with
     // - Expected: PL: ĄŚŻŹĆŃŁÓĘ
@@ -378,8 +378,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testtdf120301_xmlSpaceParsingXLSX)
                                                          UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> XPropSet(xControlShape->getControl(), uno::UNO_QUERY_THROW);
     OUString sCaption;
-    XPropSet->getPropertyValue("Label") >>= sCaption;
-    CPPUNIT_ASSERT_EQUAL(OUString("Check Box 1"), sCaption);
+    XPropSet->getPropertyValue(u"Label"_ustr) >>= sCaption;
+    CPPUNIT_ASSERT_EQUAL(u"Check Box 1"_ustr, sCaption);
 }
 
 namespace
@@ -461,7 +461,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf150815_RepaintSparkline)
     CPPUNIT_ASSERT(pSparkline);
 
     ScTabViewShell* pViewShell = getViewShell();
-    pViewShell->EnterData(0, 0, 0, "10");
+    pViewShell->EnterData(0, 0, 0, u"10"_ustr);
 
     CPPUNIT_ASSERT(aListener.mbCalled);
 }
@@ -471,7 +471,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf137091)
     // Set the system locale to Turkish
     SvtSysLocaleOptions aOptions;
     OUString sLocaleConfigString = aOptions.GetLanguageTag().getBcp47();
-    aOptions.SetLocaleConfigString("tr-TR");
+    aOptions.SetLocaleConfigString(u"tr-TR"_ustr);
     aOptions.Commit();
     comphelper::ScopeGuard g([&aOptions, &sLocaleConfigString] {
         aOptions.SetLocaleConfigString(sLocaleConfigString);
@@ -484,7 +484,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf137091)
     // Without the fix in place, this test would have failed with
     // - Expected: 28/4
     // - Actual  : Err:507
-    CPPUNIT_ASSERT_EQUAL(OUString("28/4"), pDoc->GetString(ScAddress(2, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"28/4"_ustr, pDoc->GetString(ScAddress(2, 1, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf141495)
@@ -492,7 +492,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf141495)
     // Set the system locale to Turkish
     SvtSysLocaleOptions aOptions;
     OUString sLocaleConfigString = aOptions.GetLanguageTag().getBcp47();
-    aOptions.SetLocaleConfigString("tr-TR");
+    aOptions.SetLocaleConfigString(u"tr-TR"_ustr);
     aOptions.Commit();
     comphelper::ScopeGuard g([&aOptions, &sLocaleConfigString] {
         aOptions.SetLocaleConfigString(sLocaleConfigString);
@@ -508,7 +508,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf141495)
     // Without the fix in place, this test would have failed with
     // - Expected: 44926
     // - Actual  : #ADDIN?
-    CPPUNIT_ASSERT_EQUAL(OUString("44926"), pDoc->GetString(ScAddress(11, 6, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"44926"_ustr, pDoc->GetString(ScAddress(11, 6, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf70455)
@@ -544,7 +544,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf137453)
     // Without the fix in place, this test would have failed with
     // - Expected: 3333333333/100
     // - Actual  : -961633963/100
-    CPPUNIT_ASSERT_EQUAL(OUString("3333333333/100"), pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"3333333333/100"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf112780)
@@ -556,10 +556,10 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf112780)
     // Without the fix in place, this test would have failed with
     // - Expected:
     // - Actual  : #VALUE!
-    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(3, 5, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(3, 5, 0)));
 
     OUString aFormula = pDoc->GetFormula(3, 5, 0);
-    CPPUNIT_ASSERT_EQUAL(OUString("=G6+J6+M6"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(u"=G6+J6+M6"_ustr, aFormula);
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf72470)
@@ -570,7 +570,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf72470)
 
     ScDocument* pDoc = getScDoc();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("name"), pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"name"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(u"أسمي walid"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
 }
 
@@ -734,7 +734,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testShapeRotationImport)
         uno::Reference<drawing::XShape> xShape(xPage->getByIndex(ind), uno::UNO_QUERY_THROW);
 
         uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
-        uno::Any nRotProp = xShapeProperties->getPropertyValue("RotateAngle");
+        uno::Any nRotProp = xShapeProperties->getPropertyValue(u"RotateAngle"_ustr);
         sal_Int32 nRot = nRotProp.get<sal_Int32>();
         const OString sNote = "RotateAngle = " + OString::number(nRot);
 
@@ -760,7 +760,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testShapeDisplacementOnRotationImport)
     uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
 
     uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY_THROW);
-    uno::Any aRectProp = xShapeProperties->getPropertyValue("FrameRect");
+    uno::Any aRectProp = xShapeProperties->getPropertyValue(u"FrameRect"_ustr);
     awt::Rectangle aRectangle = aRectProp.get<awt::Rectangle>();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aRectangle.X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aRectangle.Y);
@@ -779,10 +779,10 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTextBoxBodyUpright)
 
     // Check that we imported "Upright".
     bool isUpright = false;
-    if (xShapeProperties->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
+    if (xShapeProperties->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
     {
         uno::Sequence<beans::PropertyValue> aGrabBag;
-        xShapeProperties->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+        xShapeProperties->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
         for (auto& aProp : aGrabBag)
         {
             if (aProp.Name == "Upright")
@@ -797,7 +797,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTextBoxBodyUpright)
     // Check the TextPreRotateAngle has the compensation for the additional 90deg area rotation,
     // which is added in Shape::createAndInsert to get the same rendering as in MS Office.
     sal_Int32 nAngle;
-    uno::Any aGeom = xShapeProperties->getPropertyValue("CustomShapeGeometry");
+    uno::Any aGeom = xShapeProperties->getPropertyValue(u"CustomShapeGeometry"_ustr);
     auto aGeomSeq = aGeom.get<Sequence<beans::PropertyValue>>();
     for (const auto& aProp : aGeomSeq)
     {
@@ -822,8 +822,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTextBoxBodyRotateAngle)
 
     // Check the text direction.
     sal_Int16 eWritingMode = text::WritingMode2::LR_TB;
-    if (xShapeProperties->getPropertySetInfo()->hasPropertyByName("WritingMode"))
-        xShapeProperties->getPropertyValue("WritingMode") >>= eWritingMode;
+    if (xShapeProperties->getPropertySetInfo()->hasPropertyByName(u"WritingMode"_ustr))
+        xShapeProperties->getPropertyValue(u"WritingMode"_ustr) >>= eWritingMode;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(text::WritingMode2::BT_LR), eWritingMode);
 }
 
@@ -885,7 +885,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testDeleteCircles)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
 
     // The value of A1 change to Hello1.
-    pDoc->SetString(0, 0, 0, "Hello1");
+    pDoc->SetString(0, 0, 0, u"Hello1"_ustr);
 
     // Check that the data is valid.(True if text length = 6)
     const ScValidationData* pData = pDoc->GetValidationEntry(1);
@@ -1137,12 +1137,12 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testInvalidBareBiff5)
     aPos = ScAddress(0, 1, 0);
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, pDoc->GetCellType(aPos));
     OUString sFormula = pDoc->GetFormula(aPos.Col(), aPos.Row(), aPos.Tab());
-    CPPUNIT_ASSERT_EQUAL(OUString("=TRUE()"), sFormula);
+    CPPUNIT_ASSERT_EQUAL(u"=TRUE()"_ustr, sFormula);
     CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(aPos));
     aPos.IncCol();
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, pDoc->GetCellType(aPos));
     sFormula = pDoc->GetFormula(aPos.Col(), aPos.Row(), aPos.Tab());
-    CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), sFormula);
+    CPPUNIT_ASSERT_EQUAL(u"=FALSE()"_ustr, sFormula);
     CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(aPos));
     aPos.IncCol();
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, pDoc->GetCellType(aPos));
@@ -1348,7 +1348,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf151818_SmartArtFontColor)
     uno::Reference<beans::XPropertySet> xPortion(xPara->createEnumeration()->nextElement(),
                                                  uno::UNO_QUERY);
     Color nActualColor{ 0 };
-    xPortion->getPropertyValue("CharColor") >>= nActualColor;
+    xPortion->getPropertyValue(u"CharColor"_ustr) >>= nActualColor;
     // Without fix the test would have failed with:
     // - Expected: rgba[44546aff]
     // - Actual  : rgba[ffffffff], that is text was white
@@ -1358,7 +1358,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf151818_SmartArtFontColor)
     // oox::drawingml::Color::getSchemeColorIndex()
     // Without fix the color scheme was "lt1" (1) but should be "dk2" (2).
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2),
-                         xPortion->getPropertyValue("CharColorTheme").get<sal_Int16>());
+                         xPortion->getPropertyValue(u"CharColorTheme"_ustr).get<sal_Int16>());
 
     if (!bUseGroup)
     {
@@ -1480,7 +1480,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf98657)
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf88821)
 {
-    setImportFilterName("calc_HTML_WebQuery");
+    setImportFilterName(u"calc_HTML_WebQuery"_ustr);
     createScDoc("html/tdf88821.html");
     ScDocument* pDoc = getScDoc();
 
@@ -1491,7 +1491,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf88821)
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf88821_2)
 {
-    setImportFilterName("calc_HTML_WebQuery");
+    setImportFilterName(u"calc_HTML_WebQuery"_ustr);
     createScDoc("html/tdf88821-2.html");
     ScDocument* pDoc = getScDoc();
 
@@ -1503,7 +1503,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf88821_2)
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf103960)
 {
-    setImportFilterName("calc_HTML_WebQuery");
+    setImportFilterName(u"calc_HTML_WebQuery"_ustr);
     createScDoc("html/tdf103960.html");
     ScDocument* pDoc = getScDoc();
 
@@ -1517,8 +1517,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testRhbz1390776)
     createScDoc("xml/rhbz1390776.xml");
     ScDocument* pDoc = getScDoc();
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong range", OUString("=SUM(A18:A23)"),
-                                 pDoc->GetFormula(0, 27, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong range", u"=SUM(A18:A23)"_ustr, pDoc->GetFormula(0, 27, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf104310)
@@ -1551,9 +1550,9 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf104310)
         std::vector<ScTypedStrData> aList;
         pData->FillSelectionList(aList, ScAddress(0, 1, 0));
         CPPUNIT_ASSERT_EQUAL(size_t(3), aList.size());
-        CPPUNIT_ASSERT_EQUAL(OUString("1"), aList[0].GetString());
-        CPPUNIT_ASSERT_EQUAL(OUString("2,3"), aList[1].GetString());
-        CPPUNIT_ASSERT_EQUAL(OUString("4"), aList[2].GetString());
+        CPPUNIT_ASSERT_EQUAL(u"1"_ustr, aList[0].GetString());
+        CPPUNIT_ASSERT_EQUAL(u"2,3"_ustr, aList[1].GetString());
+        CPPUNIT_ASSERT_EQUAL(u"4"_ustr, aList[2].GetString());
     }
 }
 
@@ -1598,12 +1597,13 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf128951)
     // 2. Create a new sheet instance
     css::uno::Reference<css::lang::XMultiServiceFactory> xFac(mxComponent,
                                                               css::uno::UNO_QUERY_THROW);
-    auto xSheet = xFac->createInstance("com.sun.star.sheet.Spreadsheet");
+    auto xSheet = xFac->createInstance(u"com.sun.star.sheet.Spreadsheet"_ustr);
 
     // 3. Insert sheet into the spreadsheet (was throwing IllegalArgumentException)
     css::uno::Reference<css::sheet::XSpreadsheetDocument> xDoc(mxComponent,
                                                                css::uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_NO_THROW(xDoc->getSheets()->insertByName("mustNotThrow", css::uno::Any(xSheet)));
+    CPPUNIT_ASSERT_NO_THROW(
+        xDoc->getSheets()->insertByName(u"mustNotThrow"_ustr, css::uno::Any(xSheet)));
 }
 
 namespace
@@ -1742,7 +1742,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf130725)
     css::uno::Reference<css::sheet::XCellRangesAccess> xSheets(xDoc->getSheets(),
                                                                css::uno::UNO_QUERY_THROW);
     css::uno::Reference<css::table::XCell> xCell = xSheets->getCellByPosition(0, 0, 0);
-    xCell->setFormula("0.0042"); // this assumes en-US locale
+    xCell->setFormula(u"0.0042"_ustr); // this assumes en-US locale
 
     // 3. Check that the value is the nearest double-precision representation of the decimal 0.0042
     //    (it was 0.0042000000000000006 instead of 0.0041999999999999997).

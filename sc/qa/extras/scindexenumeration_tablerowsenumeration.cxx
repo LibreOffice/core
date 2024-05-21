@@ -45,7 +45,7 @@ public:
 };
 
 ScIndexEnumeration_TableRowsEnumeration::ScIndexEnumeration_TableRowsEnumeration()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
 {
 }
 
@@ -60,7 +60,8 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_TableRowsEnumeration::init()
                                                 uno::UNO_QUERY_THROW);
 
     // limit the range the XEnumeration has to walk over (see fdo#45337).
-    uno::Reference<table::XCellRange> xCR(xSheet0->getCellRangeByName("A1:A4"), uno::UNO_SET_THROW);
+    uno::Reference<table::XCellRange> xCR(xSheet0->getCellRangeByName(u"A1:A4"_ustr),
+                                          uno::UNO_SET_THROW);
 
     uno::Reference<table::XColumnRowRange> xColRowRange(xCR, uno::UNO_QUERY_THROW);
     uno::Reference<table::XTableRows> xTableRows(xColRowRange->getRows(), uno::UNO_SET_THROW);
@@ -72,7 +73,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_TableRowsEnumeration::init()
 void ScIndexEnumeration_TableRowsEnumeration::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScIndexEnumeration_TableRowsEnumeration);

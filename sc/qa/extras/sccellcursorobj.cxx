@@ -156,7 +156,7 @@ public:
 };
 
 ScCellCursorObj::ScCellCursorObj():
-    UnoApiTest("/sc/qa/extras/testdocuments"),
+    UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr),
     apitest::XCellSeries(0, 0),
     apitest::XFormulaQuery(table::CellRangeAddress(0, 15, 15, 15, 15), table::CellRangeAddress(0, 0, 15, 0, 15))
 {
@@ -169,14 +169,14 @@ uno::Reference< uno::XInterface > ScCellCursorObj::init()
     uno::Reference<container::XIndexAccess> xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), UNO_QUERY_THROW);
 
-    uno::Reference<table::XCellRange> xCellRange = xSheet->getCellRangeByName("$A$1:$D$4");
+    uno::Reference<table::XCellRange> xCellRange = xSheet->getCellRangeByName(u"$A$1:$D$4"_ustr);
     uno::Reference<sheet::XSheetCellRange> xSheetCellRange(xCellRange, UNO_QUERY_THROW);
     uno::Reference<table::XCellCursor> xCellCursor(xSheet->createCursorByRange(xSheetCellRange), UNO_QUERY_THROW);
 
     xSheet->getCellByPosition(1, 1)->setValue(1);
     xSheet->getCellByPosition(4, 5)->setValue(1);
-    xSheet->getCellByPosition(3, 2)->setFormula("xTextDoc");
-    xSheet->getCellByPosition(3, 3)->setFormula("xTextDoc");
+    xSheet->getCellByPosition(3, 2)->setFormula(u"xTextDoc"_ustr);
+    xSheet->getCellByPosition(3, 3)->setFormula(u"xTextDoc"_ustr);
 
     return xCellCursor;
 }

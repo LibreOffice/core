@@ -78,11 +78,11 @@ private:
 };
 
 ScDataPilotItemsObj::ScDataPilotItemsObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XElementAccess(cppu::UnoType<beans::XPropertySet>::get())
     , XIndexAccess(5)
-    , XNameAccess("2")
-    , XServiceInfo("ScDataPilotItemsObj", "com.sun.star.sheet.DataPilotItems")
+    , XNameAccess(u"2"_ustr)
+    , XServiceInfo(u"ScDataPilotItemsObj"_ustr, u"com.sun.star.sheet.DataPilotItems"_ustr)
 {
 }
 
@@ -94,7 +94,7 @@ uno::Reference<uno::XInterface> ScDataPilotItemsObj::init()
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIA(xSheets, uno::UNO_QUERY_THROW);
-    xSheets->insertNewByName("Some Sheet", 0);
+    xSheets->insertNewByName(u"Some Sheet"_ustr, 0);
 
     uno::Reference<sheet::XSpreadsheet> xSheet0(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet1(xIA->getByIndex(1), uno::UNO_QUERY_THROW);
@@ -128,10 +128,11 @@ uno::Reference<uno::XInterface> ScDataPilotItemsObj::init()
 
     uno::Reference<beans::XPropertySet> xPropertySet(xDPD->getDataPilotFields()->getByIndex(1),
                                                      uno::UNO_QUERY_THROW);
-    xPropertySet->setPropertyValue("Function", uno::Any(sheet::GeneralFunction_SUM));
-    xPropertySet->setPropertyValue("Orientation", uno::Any(sheet::DataPilotFieldOrientation_DATA));
+    xPropertySet->setPropertyValue(u"Function"_ustr, uno::Any(sheet::GeneralFunction_SUM));
+    xPropertySet->setPropertyValue(u"Orientation"_ustr,
+                                   uno::Any(sheet::DataPilotFieldOrientation_DATA));
 
-    xDPT->insertNewByName("DataPilotTable", aCellAddress, xDPD);
+    xDPT->insertNewByName(u"DataPilotTable"_ustr, aCellAddress, xDPD);
 
     uno::Reference<container::XIndexAccess> xIA_DPF(xDPD->getDataPilotFields(), uno::UNO_SET_THROW);
     uno::Reference<sheet::XDataPilotField> xDPF(xIA_DPF->getByIndex(0), uno::UNO_QUERY_THROW);
@@ -143,7 +144,7 @@ void ScDataPilotItemsObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDataPilotItemsObj);

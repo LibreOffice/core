@@ -80,11 +80,11 @@ public:
 };
 
 ScAutoFormatObj::ScAutoFormatObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XElementAccess(cppu::UnoType<beans::XPropertySet>::get())
     , XIndexAccess(16)
-    , XNamed("Default")
-    , XServiceInfo("ScAutoFormatObj", "com.sun.star.sheet.TableAutoFormat")
+    , XNamed(u"Default"_ustr)
+    , XServiceInfo(u"ScAutoFormatObj"_ustr, u"com.sun.star.sheet.TableAutoFormat"_ustr)
 {
 }
 
@@ -94,7 +94,7 @@ uno::Reference<uno::XInterface> ScAutoFormatObj::init()
 
     uno::Reference<lang::XMultiServiceFactory> xMSF(xDoc, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIA(
-        xMSF->createInstance("com.sun.star.sheet.TableAutoFormats"), uno::UNO_QUERY_THROW);
+        xMSF->createInstance(u"com.sun.star.sheet.TableAutoFormats"_ustr), uno::UNO_QUERY_THROW);
 
     uno::Reference<beans::XPropertySet> xTableAutoFormat(xIA->getByIndex(xIA->getCount() - 1),
                                                          uno::UNO_QUERY_THROW);
@@ -104,7 +104,7 @@ uno::Reference<uno::XInterface> ScAutoFormatObj::init()
 void ScAutoFormatObj::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScAutoFormatObj);

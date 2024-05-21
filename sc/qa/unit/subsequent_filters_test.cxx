@@ -46,16 +46,16 @@ void testRangeNameImpl(const ScDocument& rDoc)
 {
     //check one range data per sheet and one global more detailed
     //add some more checks here
-    ScRangeData* pRangeData = rDoc.GetRangeName()->findByUpperName(OUString("GLOBAL1"));
+    ScRangeData* pRangeData = rDoc.GetRangeName()->findByUpperName(u"GLOBAL1"_ustr);
     CPPUNIT_ASSERT_MESSAGE("range name Global1 not found", pRangeData);
     double aValue = rDoc.GetValue(1, 0, 0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("range name Global1 should reference Sheet1.A1", 1.0, aValue);
-    pRangeData = rDoc.GetRangeName(0)->findByUpperName(OUString("LOCAL1"));
+    pRangeData = rDoc.GetRangeName(0)->findByUpperName(u"LOCAL1"_ustr);
     CPPUNIT_ASSERT_MESSAGE("range name Sheet1.Local1 not found", pRangeData);
     aValue = rDoc.GetValue(1, 2, 0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("range name Sheet1.Local1 should reference Sheet1.A3", 3.0,
                                  aValue);
-    pRangeData = rDoc.GetRangeName(1)->findByUpperName(OUString("LOCAL2"));
+    pRangeData = rDoc.GetRangeName(1)->findByUpperName(u"LOCAL2"_ustr);
     CPPUNIT_ASSERT_MESSAGE("range name Sheet2.Local2 not found", pRangeData);
     aValue = rDoc.GetValue(1, 1, 1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("range name Sheet2.Local2 should reference Sheet2.A2", 7.0,
@@ -87,9 +87,9 @@ void testContentImpl(ScDocument& rDoc, bool bCheckMergedCells)
     OUString aString = rDoc.GetString(1, 0, 0);
 
     //check string import
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("string imported not correctly", OUString("String1"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("string imported not correctly", u"String1"_ustr, aString);
     aString = rDoc.GetString(1, 1, 0);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("string not imported correctly", OUString("String2"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("string not imported correctly", u"String2"_ustr, aString);
 
     //check basic formula import
     // in case of DIF it just contains values
@@ -115,7 +115,7 @@ void testContentImpl(ScDocument& rDoc, bool bCheckMergedCells)
         ScAddress aAddress(7, 2, 0);
         ScPostIt* pNote = rDoc.GetNote(aAddress);
         CPPUNIT_ASSERT_MESSAGE("note not imported", pNote);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("note text not imported correctly", OUString("Test"),
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("note text not imported correctly", u"Test"_ustr,
                                      pNote->GetText());
     }
 
@@ -323,8 +323,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf139934)
     // Without the fix in place, this test would have failed with
     // - Expected: 1/20/2021
     // - Actual  : 44216
-    CPPUNIT_ASSERT_EQUAL(OUString("1/20/2021"), pDoc->GetString(0, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("11/25/2020"), pDoc->GetString(0, 61, 0));
+    CPPUNIT_ASSERT_EQUAL(u"1/20/2021"_ustr, pDoc->GetString(0, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"11/25/2020"_ustr, pDoc->GetString(0, 61, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf150452)
@@ -334,8 +334,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf150452)
 
     ScDocument* pDoc = getScDoc();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("1-GDUSF"), pDoc->GetString(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("1-GE41L"), pDoc->GetString(0, 3998, 0));
+    CPPUNIT_ASSERT_EQUAL(u"1-GDUSF"_ustr, pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"1-GE41L"_ustr, pDoc->GetString(0, 3998, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf48731)
@@ -344,23 +344,23 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf48731)
 
     ScDocument* pDoc = getScDoc();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("'"), pDoc->GetString(1, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("''"), pDoc->GetString(1, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("'''"), pDoc->GetString(1, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(u"'"_ustr, pDoc->GetString(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"''"_ustr, pDoc->GetString(1, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"'''"_ustr, pDoc->GetString(1, 3, 0));
 
     // Without the fix in place, this test would have failed with
     // - Expected: '3
     // - Actual  : 3
-    CPPUNIT_ASSERT_EQUAL(OUString("'3"), pDoc->GetString(1, 4, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("'word"), pDoc->GetString(1, 5, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("'mword"), pDoc->GetString(1, 6, 0));
+    CPPUNIT_ASSERT_EQUAL(u"'3"_ustr, pDoc->GetString(1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(u"'word"_ustr, pDoc->GetString(1, 5, 0));
+    CPPUNIT_ASSERT_EQUAL(u"'mword"_ustr, pDoc->GetString(1, 6, 0));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("'"), pDoc->GetString(1, 9, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("''"), pDoc->GetString(1, 10, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("'''"), pDoc->GetString(1, 11, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("'3"), pDoc->GetString(1, 12, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("'word"), pDoc->GetString(1, 13, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("'mword"), pDoc->GetString(1, 14, 0));
+    CPPUNIT_ASSERT_EQUAL(u"'"_ustr, pDoc->GetString(1, 9, 0));
+    CPPUNIT_ASSERT_EQUAL(u"''"_ustr, pDoc->GetString(1, 10, 0));
+    CPPUNIT_ASSERT_EQUAL(u"'''"_ustr, pDoc->GetString(1, 11, 0));
+    CPPUNIT_ASSERT_EQUAL(u"'3"_ustr, pDoc->GetString(1, 12, 0));
+    CPPUNIT_ASSERT_EQUAL(u"'word"_ustr, pDoc->GetString(1, 13, 0));
+    CPPUNIT_ASSERT_EQUAL(u"'mword"_ustr, pDoc->GetString(1, 14, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCondFormatFormulaIsXLSX)
@@ -515,11 +515,11 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testBasicCellContentODS)
 
     ScDocument* pDoc = getScDoc();
     OUString aStr = pDoc->GetString(1, 1, 0); // B2
-    CPPUNIT_ASSERT_EQUAL(OUString("LibreOffice Calc"), aStr);
+    CPPUNIT_ASSERT_EQUAL(u"LibreOffice Calc"_ustr, aStr);
     double fVal = pDoc->GetValue(1, 2, 0); // B3
     CPPUNIT_ASSERT_EQUAL(12345.0, fVal);
     aStr = pDoc->GetString(1, 3, 0); // B4
-    CPPUNIT_ASSERT_EQUAL(OUString("A < B"), aStr);
+    CPPUNIT_ASSERT_EQUAL(u"A < B"_ustr, aStr);
 
     // Numeric value of 0.
     ScRefCellValue aCell;
@@ -551,19 +551,18 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf143809)
     ScDocument* pDoc = getScDoc();
 
     OUString aFormula = pDoc->GetFormula(0, 0, 0);
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUMPRODUCT(IFERROR(CEILING.MATH(DURATIONS,300),0))"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(u"=SUMPRODUCT(IFERROR(CEILING.MATH(DURATIONS,300),0))"_ustr, aFormula);
 
     // Without the fix in place, this test would have failed with
     // - Expected: 53700
     // - Actual  : Err:502
-    CPPUNIT_ASSERT_EQUAL(OUString("53700"), pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"53700"_ustr, pDoc->GetString(0, 0, 0));
 
     aFormula = pDoc->GetFormula(0, 1, 0);
     CPPUNIT_ASSERT_EQUAL(
-        OUString(
-            "=SUMPRODUCT(IFERROR(CEILING(SUMIFS(DURATIONS,IDS,IDS),300)/COUNTIFS(IDS,IDS),0))"),
+        u"=SUMPRODUCT(IFERROR(CEILING(SUMIFS(DURATIONS,IDS,IDS),300)/COUNTIFS(IDS,IDS),0))"_ustr,
         aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("51900"), pDoc->GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"51900"_ustr, pDoc->GetString(0, 1, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf76310)
@@ -578,7 +577,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf76310)
     // +
     // 2
     // - Actual  : =1 + 2
-    CPPUNIT_ASSERT_EQUAL(OUString("=1\n+\n2"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(u"=1\n+\n2"_ustr, aFormula);
     ASSERT_DOUBLES_EQUAL(3.0, pDoc->GetValue(0, 0, 0));
 }
 
@@ -608,11 +607,11 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testRangeNameLocalXLS)
     CPPUNIT_ASSERT_EQUAL(size_t(2), pRangeName->size());
 
     OUString aFormula = pDoc->GetFormula(3, 11, 0);
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(local_name2)"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(local_name2)"_ustr, aFormula);
     ASSERT_DOUBLES_EQUAL(14.0, pDoc->GetValue(3, 11, 0));
 
     aFormula = pDoc->GetFormula(6, 4, 0);
-    CPPUNIT_ASSERT_EQUAL(OUString("=local_name1"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(u"=local_name1"_ustr, aFormula);
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testRangeNameXLSX)
@@ -645,12 +644,12 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenRangeNameODS)
     ScDocument* pDoc = getScDoc();
 
     // This named range is set to "hidden"
-    ScRangeData* pRangeData1 = pDoc->GetRangeName()->findByUpperName(OUString("NAMEDRANGE1"));
+    ScRangeData* pRangeData1 = pDoc->GetRangeName()->findByUpperName(u"NAMEDRANGE1"_ustr);
     CPPUNIT_ASSERT(pRangeData1);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(sheet::NamedRangeFlag::HIDDEN),
                          pRangeData1->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
     // This named range is visible
-    ScRangeData* pRangeData2 = pDoc->GetRangeName()->findByUpperName(OUString("NAMEDRANGE2"));
+    ScRangeData* pRangeData2 = pDoc->GetRangeName()->findByUpperName(u"NAMEDRANGE2"_ustr);
     CPPUNIT_ASSERT(pRangeData2);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0),
                          pRangeData2->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
@@ -661,13 +660,13 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenRangeNameODS)
                          pRangeData2->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
 
     // Check if both named ranges are hidden after saving and reloading
-    saveAndReload("calc8");
+    saveAndReload(u"calc8"_ustr);
     pDoc = getScDoc();
-    pRangeData1 = pDoc->GetRangeName()->findByUpperName(OUString("NAMEDRANGE1"));
+    pRangeData1 = pDoc->GetRangeName()->findByUpperName(u"NAMEDRANGE1"_ustr);
     CPPUNIT_ASSERT(pRangeData1);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(sheet::NamedRangeFlag::HIDDEN),
                          pRangeData1->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
-    pRangeData2 = pDoc->GetRangeName()->findByUpperName(OUString("NAMEDRANGE2"));
+    pRangeData2 = pDoc->GetRangeName()->findByUpperName(u"NAMEDRANGE2"_ustr);
     CPPUNIT_ASSERT(pRangeData2);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(sheet::NamedRangeFlag::HIDDEN),
                          pRangeData2->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
@@ -679,24 +678,24 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenRangeNameXLSX)
     ScDocument* pDoc = getScDoc();
 
     // This named range is set to "hidden"
-    ScRangeData* pRangeData1 = pDoc->GetRangeName()->findByUpperName(OUString("NAMEDRANGE1"));
+    ScRangeData* pRangeData1 = pDoc->GetRangeName()->findByUpperName(u"NAMEDRANGE1"_ustr);
     CPPUNIT_ASSERT(pRangeData1);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(sheet::NamedRangeFlag::HIDDEN),
                          pRangeData1->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
     // This named range is visible
-    ScRangeData* pRangeData2 = pDoc->GetRangeName()->findByUpperName(OUString("NAMEDRANGE2"));
+    ScRangeData* pRangeData2 = pDoc->GetRangeName()->findByUpperName(u"NAMEDRANGE2"_ustr);
     CPPUNIT_ASSERT(pRangeData2);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0),
                          pRangeData2->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
 
     // Save as ODS and test if the named ranges are still with the correct hidden flag
-    saveAndReload("calc8");
+    saveAndReload(u"calc8"_ustr);
     pDoc = getScDoc();
-    pRangeData1 = pDoc->GetRangeName()->findByUpperName(OUString("NAMEDRANGE1"));
+    pRangeData1 = pDoc->GetRangeName()->findByUpperName(u"NAMEDRANGE1"_ustr);
     CPPUNIT_ASSERT(pRangeData1);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(sheet::NamedRangeFlag::HIDDEN),
                          pRangeData1->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
-    pRangeData2 = pDoc->GetRangeName()->findByUpperName(OUString("NAMEDRANGE2"));
+    pRangeData2 = pDoc->GetRangeName()->findByUpperName(u"NAMEDRANGE2"_ustr);
     CPPUNIT_ASSERT(pRangeData2);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0),
                          pRangeData2->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
@@ -709,39 +708,39 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenNamedExpression)
 
     // Adds two hidden named expressions and two non-hidden named expressions
     ScRangeName* pNamedRanges = pDoc->GetRangeName();
-    ScRangeData* pRangeData1 = new ScRangeData(*pDoc, "NAME1", "100");
+    ScRangeData* pRangeData1 = new ScRangeData(*pDoc, u"NAME1"_ustr, u"100"_ustr);
     pRangeData1->AddType(ScRangeData::Type::Hidden);
     pNamedRanges->insert(pRangeData1);
-    ScRangeData* pRangeData2 = new ScRangeData(*pDoc, "NAME2", "text1");
+    ScRangeData* pRangeData2 = new ScRangeData(*pDoc, u"NAME2"_ustr, u"text1"_ustr);
     pRangeData2->AddType(ScRangeData::Type::Hidden);
     pNamedRanges->insert(pRangeData2);
-    ScRangeData* pRangeData3 = new ScRangeData(*pDoc, "NAME3", "200");
+    ScRangeData* pRangeData3 = new ScRangeData(*pDoc, u"NAME3"_ustr, u"200"_ustr);
     pNamedRanges->insert(pRangeData3);
-    ScRangeData* pRangeData4 = new ScRangeData(*pDoc, "NAME4", "text2");
+    ScRangeData* pRangeData4 = new ScRangeData(*pDoc, u"NAME4"_ustr, u"text2"_ustr);
     pNamedRanges->insert(pRangeData4);
     CPPUNIT_ASSERT_EQUAL(size_t(4), pNamedRanges->size());
 
     // Save and reload to test whether the named expressions retain the hidden  where applicable
-    saveAndReload("calc8");
+    saveAndReload(u"calc8"_ustr);
     pDoc = getScDoc();
     pNamedRanges = pDoc->GetRangeName();
     CPPUNIT_ASSERT_EQUAL(size_t(4), pNamedRanges->size());
-    pRangeData1 = pNamedRanges->findByUpperName(OUString("NAME1"));
+    pRangeData1 = pNamedRanges->findByUpperName(u"NAME1"_ustr);
     CPPUNIT_ASSERT(pRangeData1);
     CPPUNIT_ASSERT_EQUAL(ScRangeData::Type::Hidden, pRangeData1->GetType());
-    CPPUNIT_ASSERT_EQUAL(OUString("100"), pRangeData1->GetSymbol());
-    pRangeData2 = pNamedRanges->findByUpperName(OUString("NAME2"));
+    CPPUNIT_ASSERT_EQUAL(u"100"_ustr, pRangeData1->GetSymbol());
+    pRangeData2 = pNamedRanges->findByUpperName(u"NAME2"_ustr);
     CPPUNIT_ASSERT(pRangeData2);
     CPPUNIT_ASSERT_EQUAL(ScRangeData::Type::Hidden, pRangeData2->GetType());
-    CPPUNIT_ASSERT_EQUAL(OUString("text1"), pRangeData2->GetSymbol());
-    pRangeData3 = pNamedRanges->findByUpperName(OUString("NAME3"));
+    CPPUNIT_ASSERT_EQUAL(u"text1"_ustr, pRangeData2->GetSymbol());
+    pRangeData3 = pNamedRanges->findByUpperName(u"NAME3"_ustr);
     CPPUNIT_ASSERT(pRangeData3);
     CPPUNIT_ASSERT_EQUAL(ScRangeData::Type::Name, pRangeData3->GetType());
-    CPPUNIT_ASSERT_EQUAL(OUString("200"), pRangeData3->GetSymbol());
-    pRangeData4 = pNamedRanges->findByUpperName(OUString("NAME4"));
+    CPPUNIT_ASSERT_EQUAL(u"200"_ustr, pRangeData3->GetSymbol());
+    pRangeData4 = pNamedRanges->findByUpperName(u"NAME4"_ustr);
     CPPUNIT_ASSERT(pRangeData4);
     CPPUNIT_ASSERT_EQUAL(ScRangeData::Type::Name, pRangeData4->GetType());
-    CPPUNIT_ASSERT_EQUAL(OUString("text2"), pRangeData4->GetSymbol());
+    CPPUNIT_ASSERT_EQUAL(u"text2"_ustr, pRangeData4->GetSymbol());
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenNamedExpressionODS)
@@ -751,14 +750,14 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenNamedExpressionODS)
 
     // The document has 2 named expressions; the first is hidden; the second is visible
     ScRangeName* pNamedRanges = pDoc->GetRangeName();
-    ScRangeData* pRangeData1 = pNamedRanges->findByUpperName(OUString("NAME1"));
+    ScRangeData* pRangeData1 = pNamedRanges->findByUpperName(u"NAME1"_ustr);
     CPPUNIT_ASSERT(pRangeData1);
     CPPUNIT_ASSERT_EQUAL(ScRangeData::Type::Hidden, pRangeData1->GetType());
-    CPPUNIT_ASSERT_EQUAL(OUString("100"), pRangeData1->GetSymbol());
-    ScRangeData* pRangeData2 = pNamedRanges->findByUpperName(OUString("NAME2"));
+    CPPUNIT_ASSERT_EQUAL(u"100"_ustr, pRangeData1->GetSymbol());
+    ScRangeData* pRangeData2 = pNamedRanges->findByUpperName(u"NAME2"_ustr);
     CPPUNIT_ASSERT(pRangeData2);
     CPPUNIT_ASSERT_EQUAL(ScRangeData::Type::Name, pRangeData2->GetType());
-    CPPUNIT_ASSERT_EQUAL(OUString("200"), pRangeData2->GetSymbol());
+    CPPUNIT_ASSERT_EQUAL(u"200"_ustr, pRangeData2->GetSymbol());
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHyperlinksXLSX)
@@ -766,9 +765,9 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHyperlinksXLSX)
     createScDoc("xlsx/hyperlinks.xlsx");
     ScDocument* pDoc = getScDoc();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("10:ABC10"), pDoc->GetString(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("10:ABC11"), pDoc->GetString(ScAddress(0, 2, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("10:ABC12"), pDoc->GetString(ScAddress(0, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"10:ABC10"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"10:ABC11"_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"10:ABC12"_ustr, pDoc->GetString(ScAddress(0, 3, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHardRecalcODS)
@@ -907,14 +906,14 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCachedFormulaResultsODS)
                                     + OUString::number(nRow) + ")";
                 pDoc->SetString(nCol, nRow + 2, 2, aFormula);
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(
-                    OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8).getStr(), OUString("TRUE"),
+                    OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8).getStr(), u"TRUE"_ustr,
                     pDoc->GetString(nCol, nRow + 2, 2));
 
                 OUString aIsTextFormula = "=ISTEXT("
                                           + OUString::number(static_cast<char>('A' + nCol))
                                           + OUString::number(nRow) + ")";
                 pDoc->SetString(nCol, nRow + 4, 2, aIsTextFormula);
-                CPPUNIT_ASSERT_EQUAL(OUString("FALSE"), pDoc->GetString(nCol, nRow + 4, 2));
+                CPPUNIT_ASSERT_EQUAL(u"FALSE"_ustr, pDoc->GetString(nCol, nRow + 4, 2));
             }
         }
     }
@@ -945,7 +944,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCachedMatrixFormulaResultsODS)
 
     // fdo#59293 with cached value import error formulas require special
     // treatment
-    pDoc->SetString(2, 5, 2, "=ISERROR(A6)");
+    pDoc->SetString(2, 5, 2, u"=ISERROR(A6)"_ustr);
     double nVal = pDoc->GetValue(2, 5, 2);
     CPPUNIT_ASSERT_EQUAL(1.0, nVal);
 }
@@ -1348,11 +1347,12 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testBugFixesODS)
 
     {
         // fdo#40426
-        ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByUpperName("DBRANGE1");
+        ScDBData* pDBData
+            = pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"DBRANGE1"_ustr);
         CPPUNIT_ASSERT(pDBData);
         CPPUNIT_ASSERT(pDBData->HasHeader());
         // no header
-        pDBData = pDoc->GetDBCollection()->getNamedDBs().findByUpperName("DBRANGE2");
+        pDBData = pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"DBRANGE2"_ustr);
         CPPUNIT_ASSERT(pDBData);
         CPPUNIT_ASSERT(!pDBData->HasHeader());
     }
@@ -1552,19 +1552,19 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDataValidityODS)
     ScAddress aValBaseAddr3(2, 2, 2); //sheet3
 
     //sheet1's expected Data Validation Entry values
-    ValDataTestParams aVDTParams1(SC_VALID_DECIMAL, ScConditionMode::Greater, "3.14", OUString(),
-                                  *pDoc, aValBaseAddr1, "Too small",
-                                  "The number you are trying to enter is not greater than 3.14! "
-                                  "Are you sure you want to enter it anyway?",
+    ValDataTestParams aVDTParams1(SC_VALID_DECIMAL, ScConditionMode::Greater, u"3.14"_ustr,
+                                  OUString(), *pDoc, aValBaseAddr1, u"Too small"_ustr,
+                                  u"The number you are trying to enter is not greater than 3.14! "
+                                  "Are you sure you want to enter it anyway?"_ustr,
                                   SC_VALERR_WARNING, 1);
     //sheet2's expected Data Validation Entry values
-    ValDataTestParams aVDTParams2(SC_VALID_WHOLE, ScConditionMode::Between, "1", "10", *pDoc,
-                                  aValBaseAddr2, "Error sheet 2",
-                                  "Must be a whole number between 1 and 10.", SC_VALERR_STOP, 2);
+    ValDataTestParams aVDTParams2(
+        SC_VALID_WHOLE, ScConditionMode::Between, u"1"_ustr, u"10"_ustr, *pDoc, aValBaseAddr2,
+        u"Error sheet 2"_ustr, u"Must be a whole number between 1 and 10."_ustr, SC_VALERR_STOP, 2);
     //sheet3's expected Data Validation Entry values
-    ValDataTestParams aVDTParams3(SC_VALID_CUSTOM, ScConditionMode::Direct, "ISTEXT(C3)",
-                                  OUString(), *pDoc, aValBaseAddr3, "Error sheet 3",
-                                  "Must not be a numerical value.", SC_VALERR_STOP, 3);
+    ValDataTestParams aVDTParams3(SC_VALID_CUSTOM, ScConditionMode::Direct, u"ISTEXT(C3)"_ustr,
+                                  OUString(), *pDoc, aValBaseAddr3, u"Error sheet 3"_ustr,
+                                  u"Must not be a numerical value."_ustr, SC_VALERR_STOP, 3);
     //check each sheet's Data Validation Entries
     checkValiditationEntries(aVDTParams1);
     checkValiditationEntries(aVDTParams2);
@@ -1619,36 +1619,36 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDataTableMortgageXLS)
 
     // One-variable table
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=PMT(B3/12,B4,-B5)"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", u"=PMT(B3/12,B4,-B5)"_ustr,
                                  pDoc->GetFormula(3, 1, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=MULTIPLE.OPERATIONS(D$2,$B$3,$C3)"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", u"=MULTIPLE.OPERATIONS(D$2,$B$3,$C3)"_ustr,
                                  pDoc->GetFormula(3, 2, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=MULTIPLE.OPERATIONS(D$2,$B$3,$C4)"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", u"=MULTIPLE.OPERATIONS(D$2,$B$3,$C4)"_ustr,
                                  pDoc->GetFormula(3, 3, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=MULTIPLE.OPERATIONS(D$2,$B$3,$C5)"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", u"=MULTIPLE.OPERATIONS(D$2,$B$3,$C5)"_ustr,
                                  pDoc->GetFormula(3, 4, 0));
 
     // Two-variable table
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=PMT(B9/12,B10,-B11)"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", u"=PMT(B9/12,B10,-B11)"_ustr,
                                  pDoc->GetFormula(2, 7, 0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!",
-                                 OUString("=MULTIPLE.OPERATIONS($C$8,$B$9,$C9,$B$10,D$8)"),
+                                 u"=MULTIPLE.OPERATIONS($C$8,$B$9,$C9,$B$10,D$8)"_ustr,
                                  pDoc->GetFormula(3, 8, 0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!",
-                                 OUString("=MULTIPLE.OPERATIONS($C$8,$B$9,$C10,$B$10,D$8)"),
+                                 u"=MULTIPLE.OPERATIONS($C$8,$B$9,$C10,$B$10,D$8)"_ustr,
                                  pDoc->GetFormula(3, 9, 0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!",
-                                 OUString("=MULTIPLE.OPERATIONS($C$8,$B$9,$C11,$B$10,D$8)"),
+                                 u"=MULTIPLE.OPERATIONS($C$8,$B$9,$C11,$B$10,D$8)"_ustr,
                                  pDoc->GetFormula(3, 10, 0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!",
-                                 OUString("=MULTIPLE.OPERATIONS($C$8,$B$9,$C9,$B$10,E$8)"),
+                                 u"=MULTIPLE.OPERATIONS($C$8,$B$9,$C9,$B$10,E$8)"_ustr,
                                  pDoc->GetFormula(4, 8, 0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!",
-                                 OUString("=MULTIPLE.OPERATIONS($C$8,$B$9,$C10,$B$10,E$8)"),
+                                 u"=MULTIPLE.OPERATIONS($C$8,$B$9,$C10,$B$10,E$8)"_ustr,
                                  pDoc->GetFormula(4, 9, 0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!",
-                                 OUString("=MULTIPLE.OPERATIONS($C$8,$B$9,$C11,$B$10,E$8)"),
+                                 u"=MULTIPLE.OPERATIONS($C$8,$B$9,$C11,$B$10,E$8)"_ustr,
                                  pDoc->GetFormula(4, 10, 0));
 }
 
@@ -1666,12 +1666,12 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDataTableOneVarXLSX)
     // B5:B11 should have multiple operations formula cells.  Just check the
     // top and bottom cells.
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=MULTIPLE.OPERATIONS(B$4,$A$2,$A5)"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", u"=MULTIPLE.OPERATIONS(B$4,$A$2,$A5)"_ustr,
                                  pDoc->GetFormula(1, 4, 0));
 
     CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(1, 4, 0)));
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=MULTIPLE.OPERATIONS(B$4,$A$2,$A11)"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", u"=MULTIPLE.OPERATIONS(B$4,$A$2,$A11)"_ustr,
                                  pDoc->GetFormula(1, 10, 0));
 
     CPPUNIT_ASSERT_EQUAL(14.0, pDoc->GetValue(ScAddress(1, 10, 0)));
@@ -1679,12 +1679,12 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDataTableOneVarXLSX)
     // Likewise, E5:I5 should have multiple operations formula cells.  Just
     // check the left- and right-most cells.
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=MULTIPLE.OPERATIONS($D5,$B$2,E$4)"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", u"=MULTIPLE.OPERATIONS($D5,$B$2,E$4)"_ustr,
                                  pDoc->GetFormula(4, 4, 0));
 
     CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(4, 4, 0)));
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=MULTIPLE.OPERATIONS($D5,$B$2,I$4)"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", u"=MULTIPLE.OPERATIONS($D5,$B$2,I$4)"_ustr,
                                  pDoc->GetFormula(8, 4, 0));
 
     CPPUNIT_ASSERT_EQUAL(50.0, pDoc->GetValue(ScAddress(8, 4, 0)));
@@ -1705,13 +1705,13 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDataTableMultiTableXLSX)
     // the top-left and bottom-right ones.
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!",
-                                 OUString("=MULTIPLE.OPERATIONS($A$3,$E$1,$A4,$D$1,B$3)"),
+                                 u"=MULTIPLE.OPERATIONS($A$3,$E$1,$A4,$D$1,B$3)"_ustr,
                                  pDoc->GetFormula(1, 3, 0));
 
     CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(1, 3, 0)));
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!",
-                                 OUString("=MULTIPLE.OPERATIONS($A$3,$E$1,$A15,$D$1,M$3)"),
+                                 u"=MULTIPLE.OPERATIONS($A$3,$E$1,$A15,$D$1,M$3)"_ustr,
                                  pDoc->GetFormula(12, 14, 0));
 
     CPPUNIT_ASSERT_EQUAL(144.0, pDoc->GetValue(ScAddress(12, 14, 0)));
@@ -1749,26 +1749,26 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testRowIndex1BasedXLSX)
 
     // A1
     OUString aStr = pDoc->GetString(ScAddress(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Action Plan.Name"), aStr);
+    CPPUNIT_ASSERT_EQUAL(u"Action Plan.Name"_ustr, aStr);
 
     // B1
     aStr = pDoc->GetString(ScAddress(1, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Action Plan.Description"), aStr);
+    CPPUNIT_ASSERT_EQUAL(u"Action Plan.Description"_ustr, aStr);
 
     // A2
     aStr = pDoc->GetString(ScAddress(0, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Jerry"), aStr);
+    CPPUNIT_ASSERT_EQUAL(u"Jerry"_ustr, aStr);
 
     // B2 - multi-line text.
     const EditTextObject* pText = pDoc->GetEditText(ScAddress(1, 1, 0));
     CPPUNIT_ASSERT(pText);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), pText->GetParagraphCount());
     aStr = pText->GetText(0);
-    CPPUNIT_ASSERT_EQUAL(OUString("This is a longer Text."), aStr);
+    CPPUNIT_ASSERT_EQUAL(u"This is a longer Text."_ustr, aStr);
     aStr = pText->GetText(1);
-    CPPUNIT_ASSERT_EQUAL(OUString("Second line."), aStr);
+    CPPUNIT_ASSERT_EQUAL(u"Second line."_ustr, aStr);
     aStr = pText->GetText(2);
-    CPPUNIT_ASSERT_EQUAL(OUString("Third line."), aStr);
+    CPPUNIT_ASSERT_EQUAL(u"Third line."_ustr, aStr);
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCondFormatCfvoScaleValueXLSX)
@@ -1793,7 +1793,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCondFormatCfvoScaleValueXLSX)
 }
 
 ScFiltersTest::ScFiltersTest()
-    : ScModelTestBase("sc/qa/unit/data")
+    : ScModelTestBase(u"sc/qa/unit/data"_ustr)
 {
 }
 

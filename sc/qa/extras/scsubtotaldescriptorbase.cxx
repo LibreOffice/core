@@ -85,10 +85,10 @@ public:
 };
 
 ScSubTotalDescriptorBase::ScSubTotalDescriptorBase()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XElementAccess(cppu::UnoType<sheet::XSubTotalField>::get())
     , XIndexAccess(1)
-    , XServiceInfo("ScSubTotalDescriptorBase", "com.sun.star.sheet.SubTotalDescriptor")
+    , XServiceInfo(u"ScSubTotalDescriptorBase"_ustr, u"com.sun.star.sheet.SubTotalDescriptor"_ustr)
 {
 }
 
@@ -113,7 +113,7 @@ void ScSubTotalDescriptorBase::setUp()
 {
     UnoApiTest::setUp();
     // create calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScSubTotalDescriptorBase);

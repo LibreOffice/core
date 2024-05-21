@@ -81,13 +81,14 @@ public:
 };
 
 ScAutoFormatsObj::ScAutoFormatsObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XElementAccess(cppu::UnoType<container::XNamed>::get())
     , XIndexAccess(2)
-    , XNameAccess("Default")
-    , XNameContainer("ScAutoFormatsObj")
-    , XNameReplace("ScAutoFormatsObj")
-    , XServiceInfo("stardiv.StarCalc.ScAutoFormatsObj", "com.sun.star.sheet.TableAutoFormats")
+    , XNameAccess(u"Default"_ustr)
+    , XNameContainer(u"ScAutoFormatsObj"_ustr)
+    , XNameReplace(u"ScAutoFormatsObj"_ustr)
+    , XServiceInfo(u"stardiv.StarCalc.ScAutoFormatsObj"_ustr,
+                   u"com.sun.star.sheet.TableAutoFormats"_ustr)
 {
 }
 
@@ -95,19 +96,21 @@ uno::Reference<uno::XInterface> ScAutoFormatsObj::init()
 {
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<uno::XInterface> xTAF(
-        xMSF->createInstance("com.sun.star.sheet.TableAutoFormats"), uno::UNO_SET_THROW);
+        xMSF->createInstance(u"com.sun.star.sheet.TableAutoFormats"_ustr), uno::UNO_SET_THROW);
 
     uno::Reference<container::XNameContainer> xNC(xTAF, uno::UNO_QUERY_THROW);
-    if (!xNC->hasByName("ScAutoFormatsObj"))
+    if (!xNC->hasByName(u"ScAutoFormatsObj"_ustr))
     {
-        xNC->insertByName("ScAutoFormatsObj",
-                          uno::Any(xMSF->createInstance("com.sun.star.sheet.TableAutoFormat")));
+        xNC->insertByName(
+            u"ScAutoFormatsObj"_ustr,
+            uno::Any(xMSF->createInstance(u"com.sun.star.sheet.TableAutoFormat"_ustr)));
     }
     // XNameContainer
     XNameContainer::setElement(
-        uno::Any(xMSF->createInstance("com.sun.star.sheet.TableAutoFormat")));
+        uno::Any(xMSF->createInstance(u"com.sun.star.sheet.TableAutoFormat"_ustr)));
     // XNameReplace
-    XNameReplace::setElement(uno::Any(xMSF->createInstance("com.sun.star.sheet.TableAutoFormat")));
+    XNameReplace::setElement(
+        uno::Any(xMSF->createInstance(u"com.sun.star.sheet.TableAutoFormat"_ustr)));
 
     return xTAF;
 }
@@ -116,7 +119,7 @@ void ScAutoFormatsObj::setUp()
 {
     UnoApiTest::setUp();
     // create calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScAutoFormatsObj);

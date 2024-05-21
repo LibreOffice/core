@@ -67,9 +67,9 @@ public:
 };
 
 ScCellSearchObj::ScCellSearchObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
-    , XServiceInfo("ScCellSearchObj",
-                   { "com.sun.star.util.ReplaceDescriptor", "com.sun.star.util.SearchDescriptor" })
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
+    , XServiceInfo(u"ScCellSearchObj"_ustr, { u"com.sun.star.util.ReplaceDescriptor"_ustr,
+                                              u"com.sun.star.util.SearchDescriptor"_ustr })
 {
 }
 
@@ -88,7 +88,7 @@ void ScCellSearchObj::setUp()
 {
     UnoApiTest::setUp();
     // create calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCellSearchObj);

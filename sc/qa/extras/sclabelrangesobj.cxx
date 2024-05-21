@@ -63,7 +63,7 @@ public:
 };
 
 ScLabelRangesObj::ScLabelRangesObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XElementAccess(cppu::UnoType<sheet::XLabelRange>::get())
     , XIndexAccess(1)
 {
@@ -74,8 +74,8 @@ uno::Reference<uno::XInterface> ScLabelRangesObj::init()
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
     uno::Reference<beans::XPropertySet> xProp(xDoc, uno::UNO_QUERY_THROW);
-    uno::Reference<sheet::XLabelRanges> xLabelRanges(xProp->getPropertyValue("ColumnLabelRanges"),
-                                                     uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XLabelRanges> xLabelRanges(
+        xProp->getPropertyValue(u"ColumnLabelRanges"_ustr), uno::UNO_QUERY_THROW);
 
     table::CellRangeAddress aCellRanageAddr1(0, 0, 1, 0, 6);
     table::CellRangeAddress aCellRanageAddr2(0, 0, 0, 0, 1);
@@ -88,7 +88,7 @@ void ScLabelRangesObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScLabelRangesObj);

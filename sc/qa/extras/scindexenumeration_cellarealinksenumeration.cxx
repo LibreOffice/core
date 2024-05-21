@@ -42,7 +42,7 @@ public:
 };
 
 ScIndexEnumeration_CellAreaLinksEnumeration::ScIndexEnumeration_CellAreaLinksEnumeration()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
 {
 }
 
@@ -53,9 +53,10 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_CellAreaLinksEnumeration::ini
 
     uno::Reference<beans::XPropertySet> xPropertySet(xDoc, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XAreaLinks> xAL;
-    CPPUNIT_ASSERT(xPropertySet->getPropertyValue("AreaLinks") >>= xAL);
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue(u"AreaLinks"_ustr) >>= xAL);
     xAL->insertAtPosition(table::CellAddress(1, 2, 3),
-                          "ScIndexEnumeration_CellAreaLinksEnumeration.ods", "A2:B5", "", "");
+                          u"ScIndexEnumeration_CellAreaLinksEnumeration.ods"_ustr, u"A2:B5"_ustr,
+                          u""_ustr, u""_ustr);
 
     uno::Reference<container::XEnumerationAccess> xEA(xAL, uno::UNO_QUERY_THROW);
 
@@ -65,7 +66,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_CellAreaLinksEnumeration::ini
 void ScIndexEnumeration_CellAreaLinksEnumeration::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScIndexEnumeration_CellAreaLinksEnumeration);

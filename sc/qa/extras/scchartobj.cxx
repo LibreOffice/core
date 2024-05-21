@@ -75,9 +75,9 @@ public:
 };
 
 ScChartObj::ScChartObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
-    , XNamed("ScChartObj")
-    , XServiceInfo("ScChartObj", "com.sun.star.table.TableChart")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
+    , XNamed(u"ScChartObj"_ustr)
+    , XServiceInfo(u"ScChartObj"_ustr, u"com.sun.star.table.TableChart"_ustr)
 {
 }
 
@@ -88,21 +88,21 @@ uno::Reference<uno::XInterface> ScChartObj::init()
     uno::Reference<container::XIndexAccess> xIA(xSheets, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet0(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
 
-    xSheet0->getCellByPosition(1, 0)->setFormula("JAN");
-    xSheet0->getCellByPosition(2, 0)->setFormula("FEB");
-    xSheet0->getCellByPosition(3, 0)->setFormula("MAR");
-    xSheet0->getCellByPosition(4, 0)->setFormula("APR");
-    xSheet0->getCellByPosition(5, 0)->setFormula("MAY");
-    xSheet0->getCellByPosition(6, 0)->setFormula("JUN");
-    xSheet0->getCellByPosition(7, 0)->setFormula("JUL");
-    xSheet0->getCellByPosition(8, 0)->setFormula("AUG");
-    xSheet0->getCellByPosition(9, 0)->setFormula("SEP");
-    xSheet0->getCellByPosition(10, 0)->setFormula("OCT");
-    xSheet0->getCellByPosition(11, 0)->setFormula("NOV");
-    xSheet0->getCellByPosition(12, 0)->setFormula("DEC");
-    xSheet0->getCellByPosition(13, 0)->setFormula("SUM");
+    xSheet0->getCellByPosition(1, 0)->setFormula(u"JAN"_ustr);
+    xSheet0->getCellByPosition(2, 0)->setFormula(u"FEB"_ustr);
+    xSheet0->getCellByPosition(3, 0)->setFormula(u"MAR"_ustr);
+    xSheet0->getCellByPosition(4, 0)->setFormula(u"APR"_ustr);
+    xSheet0->getCellByPosition(5, 0)->setFormula(u"MAY"_ustr);
+    xSheet0->getCellByPosition(6, 0)->setFormula(u"JUN"_ustr);
+    xSheet0->getCellByPosition(7, 0)->setFormula(u"JUL"_ustr);
+    xSheet0->getCellByPosition(8, 0)->setFormula(u"AUG"_ustr);
+    xSheet0->getCellByPosition(9, 0)->setFormula(u"SEP"_ustr);
+    xSheet0->getCellByPosition(10, 0)->setFormula(u"OCT"_ustr);
+    xSheet0->getCellByPosition(11, 0)->setFormula(u"NOV"_ustr);
+    xSheet0->getCellByPosition(12, 0)->setFormula(u"DEC"_ustr);
+    xSheet0->getCellByPosition(13, 0)->setFormula(u"SUM"_ustr);
 
-    xSheet0->getCellByPosition(0, 1)->setFormula("Smith");
+    xSheet0->getCellByPosition(0, 1)->setFormula(u"Smith"_ustr);
     xSheet0->getCellByPosition(1, 1)->setValue(42);
     xSheet0->getCellByPosition(2, 1)->setValue(58.9);
     xSheet0->getCellByPosition(3, 1)->setValue(-66.5);
@@ -115,9 +115,9 @@ uno::Reference<uno::XInterface> ScChartObj::init()
     xSheet0->getCellByPosition(10, 1)->setValue(-97.3);
     xSheet0->getCellByPosition(11, 1)->setValue(22.4);
     xSheet0->getCellByPosition(11, 1)->setValue(23.5);
-    xSheet0->getCellByPosition(13, 1)->setFormula("SUM(B2:M2");
+    xSheet0->getCellByPosition(13, 1)->setFormula(u"SUM(B2:M2"_ustr);
 
-    xSheet0->getCellByPosition(0, 2)->setFormula("Jones");
+    xSheet0->getCellByPosition(0, 2)->setFormula(u"Jones"_ustr);
     xSheet0->getCellByPosition(1, 2)->setValue(21);
     xSheet0->getCellByPosition(2, 2)->setValue(40.9);
     xSheet0->getCellByPosition(3, 2)->setValue(-57.5);
@@ -130,9 +130,9 @@ uno::Reference<uno::XInterface> ScChartObj::init()
     xSheet0->getCellByPosition(10, 2)->setValue(57.3);
     xSheet0->getCellByPosition(11, 2)->setValue(25.4);
     xSheet0->getCellByPosition(11, 2)->setValue(28.5);
-    xSheet0->getCellByPosition(13, 2)->setFormula("SUM(B3:M3");
+    xSheet0->getCellByPosition(13, 2)->setFormula(u"SUM(B3:M3"_ustr);
 
-    xSheet0->getCellByPosition(0, 3)->setFormula("Brown");
+    xSheet0->getCellByPosition(0, 3)->setFormula(u"Brown"_ustr);
     xSheet0->getCellByPosition(1, 3)->setValue(31.45);
     xSheet0->getCellByPosition(2, 3)->setValue(-20.9);
     xSheet0->getCellByPosition(3, 3)->setValue(-117.5);
@@ -145,10 +145,10 @@ uno::Reference<uno::XInterface> ScChartObj::init()
     xSheet0->getCellByPosition(10, 3)->setValue(71.3);
     xSheet0->getCellByPosition(11, 3)->setValue(25.4);
     xSheet0->getCellByPosition(11, 3)->setValue(38.5);
-    xSheet0->getCellByPosition(13, 3)->setFormula("SUM(A4:L4");
+    xSheet0->getCellByPosition(13, 3)->setFormula(u"SUM(A4:L4"_ustr);
 
     uno::Reference<table::XCellRange> xCellRange0(xSheet0, uno::UNO_QUERY_THROW);
-    uno::Reference<table::XCellRange> xCellRange1(xCellRange0->getCellRangeByName("A1:N4"),
+    uno::Reference<table::XCellRange> xCellRange1(xCellRange0->getCellRangeByName(u"A1:N4"_ustr),
                                                   uno::UNO_SET_THROW);
     uno::Reference<sheet::XCellRangeAddressable> xCRA(xCellRange1, uno::UNO_QUERY_THROW);
 
@@ -156,10 +156,12 @@ uno::Reference<uno::XInterface> ScChartObj::init()
 
     uno::Reference<table::XTableChartsSupplier> xTCS(xSheet0, uno::UNO_QUERY_THROW);
     uno::Reference<table::XTableCharts> xTC = xTCS->getCharts();
-    xTC->addNewByName("ScChartObj", awt::Rectangle(500, 3000, 25000, 11000), aCRA, true, true);
+    xTC->addNewByName(u"ScChartObj"_ustr, awt::Rectangle(500, 3000, 25000, 11000), aCRA, true,
+                      true);
 
     uno::Reference<container::XNameAccess> xNA(xTC, uno::UNO_QUERY_THROW);
-    uno::Reference<table::XTableChart> xChart(xNA->getByName("ScChartObj"), uno::UNO_QUERY_THROW);
+    uno::Reference<table::XTableChart> xChart(xNA->getByName(u"ScChartObj"_ustr),
+                                              uno::UNO_QUERY_THROW);
     return xChart;
 }
 
@@ -167,7 +169,7 @@ void ScChartObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScChartObj);

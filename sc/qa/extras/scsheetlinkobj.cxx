@@ -56,7 +56,7 @@ public:
 };
 
 ScSheetLinkObj::ScSheetLinkObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XNamed(m_directories.getURLFromSrc(u"/sc/qa/extras/testdocuments/ScSheetLinkObj.ods"))
 {
 }
@@ -71,11 +71,11 @@ uno::Reference<uno::XInterface> ScSheetLinkObj::init()
 
     uno::Reference<sheet::XSheetLinkable> xSL(xSheet, uno::UNO_QUERY_THROW);
     xSL->link(m_directories.getURLFromSrc(u"/sc/qa/extras/testdocuments/ScSheetLinkObj.ods"),
-              "Sheet1", "", "", sheet::SheetLinkMode_VALUE);
+              u"Sheet1"_ustr, u""_ustr, u""_ustr, sheet::SheetLinkMode_VALUE);
 
     uno::Reference<beans::XPropertySet> xPropSet(xDoc, uno::UNO_QUERY_THROW);
     uno::Reference<container::XNameAccess> sheetLinks;
-    CPPUNIT_ASSERT(xPropSet->getPropertyValue("SheetLinks") >>= sheetLinks);
+    CPPUNIT_ASSERT(xPropSet->getPropertyValue(u"SheetLinks"_ustr) >>= sheetLinks);
     CPPUNIT_ASSERT(sheetLinks.is());
 
     uno::Any aAny = sheetLinks->getByName(sheetLinks->getElementNames()[0]);
@@ -88,7 +88,7 @@ void ScSheetLinkObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScSheetLinkObj);

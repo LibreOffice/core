@@ -25,7 +25,7 @@ class ScParallelismTest : public ScModelTestBase
 {
 public:
     ScParallelismTest()
-        : ScModelTestBase("sc/qa/unit/data")
+        : ScModelTestBase(u"sc/qa/unit/data"_ustr)
     {
     }
 

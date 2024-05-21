@@ -56,10 +56,10 @@ public:
 };
 
 ScSpreadsheetSettings::ScSpreadsheetSettings()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
-    , XPropertySet({ "LinkUpdateMode", "UsePrinterMetrics", "UserLists" })
-    , XServiceInfo("stardiv.StarCalc.ScSpreadsheetSettings",
-                   "com.sun.star.sheet.GlobalSheetSettings")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
+    , XPropertySet({ u"LinkUpdateMode"_ustr, u"UsePrinterMetrics"_ustr, u"UserLists"_ustr })
+    , XServiceInfo(u"stardiv.StarCalc.ScSpreadsheetSettings"_ustr,
+                   u"com.sun.star.sheet.GlobalSheetSettings"_ustr)
 {
 }
 
@@ -67,14 +67,14 @@ uno::Reference<uno::XInterface> ScSpreadsheetSettings::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference<lang::XMultiServiceFactory> xMSF(xDoc, UNO_QUERY_THROW);
-    return xMSF->createInstance("com.sun.star.sheet.GlobalSheetSettings");
+    return xMSF->createInstance(u"com.sun.star.sheet.GlobalSheetSettings"_ustr);
 }
 
 void ScSpreadsheetSettings::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScSpreadsheetSettings);

@@ -42,7 +42,7 @@ public:
 };
 
 ScSortDescriptorBaseObj::ScSortDescriptorBaseObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
 {
 }
 
@@ -61,7 +61,7 @@ void ScSortDescriptorBaseObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScSortDescriptorBaseObj);

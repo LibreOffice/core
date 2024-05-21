@@ -73,9 +73,9 @@ public:
 };
 
 ScTableValidationObj::ScTableValidationObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
-    , XPropertySet({ "Type", "ErrorAlertStyle" })
-    , XServiceInfo("ScTableValidationObj", "com.sun.star.sheet.TableValidation")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
+    , XPropertySet({ u"Type"_ustr, u"ErrorAlertStyle"_ustr })
+    , XServiceInfo(u"ScTableValidationObj"_ustr, u"com.sun.star.sheet.TableValidation"_ustr)
 {
 }
 
@@ -92,7 +92,7 @@ uno::Reference<uno::XInterface> ScTableValidationObj::init()
 
     uno::Reference<beans::XPropertySet> xPropSet(xSheet, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCondition> xSheetCondition;
-    CPPUNIT_ASSERT(xPropSet->getPropertyValue("Validation") >>= xSheetCondition);
+    CPPUNIT_ASSERT(xPropSet->getPropertyValue(u"Validation"_ustr) >>= xSheetCondition);
 
     return xSheetCondition;
 }
@@ -101,7 +101,7 @@ void ScTableValidationObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScTableValidationObj);

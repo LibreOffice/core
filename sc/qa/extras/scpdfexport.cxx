@@ -93,7 +93,7 @@ public:
 };
 
 ScPDFExportTest::ScPDFExportTest()
-    : UnoApiTest("sc/qa/extras/testdocuments/")
+    : UnoApiTest(u"sc/qa/extras/testdocuments/"_ustr)
 {
 }
 
@@ -158,17 +158,17 @@ void ScPDFExportTest::exportToPDF(const uno::Reference<frame::XModel>& xModel, c
 
     // init special pdf export params
     css::uno::Sequence<css::beans::PropertyValue> aFilterData{
-        comphelper::makePropertyValue("Selection", xCellRange),
-        comphelper::makePropertyValue("Printing", sal_Int32(2)),
-        comphelper::makePropertyValue("ViewPDFAfterExport", true),
-        comphelper::makePropertyValue("PDFUACompliance", true)
+        comphelper::makePropertyValue(u"Selection"_ustr, xCellRange),
+        comphelper::makePropertyValue(u"Printing"_ustr, sal_Int32(2)),
+        comphelper::makePropertyValue(u"ViewPDFAfterExport"_ustr, true),
+        comphelper::makePropertyValue(u"PDFUACompliance"_ustr, true)
     };
 
     // init set of params for storeToURL() call
     css::uno::Sequence<css::beans::PropertyValue> seqArguments{
-        comphelper::makePropertyValue("FilterData", aFilterData),
-        comphelper::makePropertyValue("FilterName", OUString("calc_pdf_Export")),
-        comphelper::makePropertyValue("URL", maTempFile.GetURL())
+        comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"calc_pdf_Export"_ustr),
+        comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL())
     };
 
     // call storeToURL()
@@ -181,19 +181,19 @@ void ScPDFExportTest::exportToPDFWithUnoCommands(const OUString& rRange)
 {
     uno::Sequence<beans::PropertyValue> aArgs
         = comphelper::InitPropertySequence({ { "ToPoint", uno::Any(rRange) } });
-    dispatchCommand(mxComponent, ".uno:GoToCell", aArgs);
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aArgs);
 
-    dispatchCommand(mxComponent, ".uno:DefinePrintArea", {});
+    dispatchCommand(mxComponent, u".uno:DefinePrintArea"_ustr, {});
 
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
         { { "ViewPDFAfterExport", uno::Any(true) }, { "Printing", uno::Any(sal_Int32(2)) } }));
 
     uno::Sequence<beans::PropertyValue> aDescriptor(
-        comphelper::InitPropertySequence({ { "FilterName", uno::Any(OUString("calc_pdf_Export")) },
+        comphelper::InitPropertySequence({ { "FilterName", uno::Any(u"calc_pdf_Export"_ustr) },
                                            { "FilterData", uno::Any(aFilterData) },
                                            { "URL", uno::Any(maTempFile.GetURL()) } }));
 
-    dispatchCommand(mxComponent, ".uno:ExportToPDF", aDescriptor);
+    dispatchCommand(mxComponent, u".uno:ExportToPDF"_ustr, aDescriptor);
 }
 
 void ScPDFExportTest::setFont(ScFieldEditEngine& rEE, sal_Int32 nStart, sal_Int32 nEnd,
@@ -205,7 +205,7 @@ void ScPDFExportTest::setFont(ScFieldEditEngine& rEE, sal_Int32 nStart, sal_Int3
     aSel.nEndPos = nEnd;
 
     SfxItemSet aItemSet = rEE.GetEmptyItemSet();
-    SvxFontItem aItem(FAMILY_MODERN, rFontName, "", PITCH_VARIABLE, RTL_TEXTENCODING_UTF8,
+    SvxFontItem aItem(FAMILY_MODERN, rFontName, u""_ustr, PITCH_VARIABLE, RTL_TEXTENCODING_UTF8,
                       EE_CHAR_FONTINFO);
     aItemSet.Put(aItem);
     rEE.QuickSetAttribs(aItemSet, aSel);
@@ -227,12 +227,12 @@ void ScPDFExportTest::testMediaShapeScreen_Tdf159094()
 void ScPDFExportTest::testExportRange_Tdf120161()
 {
     // create test document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(xModel, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xSheets, uno::UNO_QUERY_THROW);
-    xSheets->insertNewByName("First Sheet", 0);
+    xSheets->insertNewByName(u"First Sheet"_ustr, 0);
     uno::Reference<sheet::XSpreadsheet> rSheet(xIndex->getByIndex(0), UNO_QUERY_THROW);
 
     // 2. Setup data
@@ -251,8 +251,8 @@ void ScPDFExportTest::testExportRange_Tdf120161()
         // set "Text" to H1 cell with "DejaVuSans" font
         ScFieldEditEngine& rEE = rDoc.GetEditEngine();
         rEE.Clear();
-        rEE.SetTextCurrentDefaults("Text");
-        setFont(rEE, 0, 4, "DejaVuSans"); // set font for first 4 chars
+        rEE.SetTextCurrentDefaults(u"Text"_ustr);
+        setFont(rEE, 0, 4, u"DejaVuSans"_ustr); // set font for first 4 chars
         rDoc.SetEditText(ScAddress(7, 0, 0), rEE.CreateTextObject());
     }
 
@@ -287,12 +287,12 @@ void ScPDFExportTest::testExportRange_Tdf120161()
 void ScPDFExportTest::testExportFitToPage_Tdf103516()
 {
     // create test document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(xModel, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xSheets, uno::UNO_QUERY_THROW);
-    xSheets->insertNewByName("First Sheet", 0);
+    xSheets->insertNewByName(u"First Sheet"_ustr, 0);
     uno::Reference<sheet::XSpreadsheet> rSheet(xIndex->getByIndex(0), UNO_QUERY_THROW);
 
     // 2. Setup data
@@ -331,20 +331,20 @@ void ScPDFExportTest::testExportFitToPage_Tdf103516()
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamSupp(xDoc, UNO_QUERY_THROW);
     uno::Reference<container::XNameAccess> xStyleFamiliesNames(xStyleFamSupp->getStyleFamilies(),
                                                                UNO_SET_THROW);
-    uno::Reference<container::XNameAccess> xPageStyles(xStyleFamiliesNames->getByName("PageStyles"),
-                                                       UNO_QUERY_THROW);
-    uno::Any aDefaultStyle = xPageStyles->getByName("Default");
+    uno::Reference<container::XNameAccess> xPageStyles(
+        xStyleFamiliesNames->getByName(u"PageStyles"_ustr), UNO_QUERY_THROW);
+    uno::Any aDefaultStyle = xPageStyles->getByName(u"Default"_ustr);
     uno::Reference<beans::XPropertySet> xProp(aDefaultStyle, UNO_QUERY_THROW);
 
     uno::Any aScaleX, aScaleY;
     sal_Int16 nScale;
     aScaleX <<= static_cast<sal_Int16>(1);
-    xProp->setPropertyValue("ScaleToPagesX", aScaleX);
-    aScaleX = xProp->getPropertyValue("ScaleToPagesX");
+    xProp->setPropertyValue(u"ScaleToPagesX"_ustr, aScaleX);
+    aScaleX = xProp->getPropertyValue(u"ScaleToPagesX"_ustr);
     aScaleX >>= nScale;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nScale);
 
-    aScaleY = xProp->getPropertyValue("ScaleToPagesY");
+    aScaleY = xProp->getPropertyValue(u"ScaleToPagesY"_ustr);
     aScaleY >>= nScale;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nScale);
 
@@ -373,7 +373,7 @@ void ScPDFExportTest::testUnoCommands_Tdf120161()
 
     // A1:G1
     {
-        exportToPDFWithUnoCommands("A1:G1");
+        exportToPDFWithUnoCommands(u"A1:G1"_ustr);
         bool bFound = false;
         CPPUNIT_ASSERT(hasTextInPdf("DejaVuSans", bFound));
         CPPUNIT_ASSERT_EQUAL(false, bFound);
@@ -381,7 +381,7 @@ void ScPDFExportTest::testUnoCommands_Tdf120161()
 
     // G1:H1
     {
-        exportToPDFWithUnoCommands("G1:H1");
+        exportToPDFWithUnoCommands(u"G1:H1"_ustr);
         bool bFound = false;
         CPPUNIT_ASSERT(hasTextInPdf("DejaVuSans", bFound));
         CPPUNIT_ASSERT_EQUAL(true, bFound);
@@ -389,7 +389,7 @@ void ScPDFExportTest::testUnoCommands_Tdf120161()
 
     // H1:I1
     {
-        exportToPDFWithUnoCommands("H1:I1");
+        exportToPDFWithUnoCommands(u"H1:I1"_ustr);
         bool bFound = false;
         CPPUNIT_ASSERT(hasTextInPdf("DejaVuSans", bFound));
         CPPUNIT_ASSERT_EQUAL(true, bFound);
@@ -725,14 +725,14 @@ void ScPDFExportTest::testTdf143978()
     // - Actual  : Dies ist vie
     std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject1 = pPdfPage->getObject(0);
     OUString sText1 = pPageObject1->getText(pTextPage);
-    CPPUNIT_ASSERT_EQUAL(OUString("Dies ist viel zu viel Text"), sText1);
+    CPPUNIT_ASSERT_EQUAL(u"Dies ist viel zu viel Text"_ustr, sText1);
 
     // and it would also have failed with
     // - Expected: 2021-11-17
     // - Actual  : ###
     std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject2 = pPdfPage->getObject(1);
     OUString sText2 = pPageObject2->getText(pTextPage);
-    CPPUNIT_ASSERT_EQUAL(OUString("2021-11-17"), sText2);
+    CPPUNIT_ASSERT_EQUAL(u"2021-11-17"_ustr, sText2);
 }
 
 void ScPDFExportTest::testTdf120190()
@@ -743,7 +743,7 @@ void ScPDFExportTest::testTdf120190()
         return;
     }
 
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
@@ -753,13 +753,13 @@ void ScPDFExportTest::testTdf120190()
     uno::Reference<container::XIndexAccess> xIA(xSheets, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet0(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
 
-    xSheet0->getCellByPosition(0, 0)->setFormula("=5&CHAR(10)&6");
+    xSheet0->getCellByPosition(0, 0)->setFormula(u"=5&CHAR(10)&6"_ustr);
 
     uno::Sequence<beans::PropertyValue> aArgs
-        = comphelper::InitPropertySequence({ { "ToPoint", uno::Any(OUString("A1")) } });
-    dispatchCommand(mxComponent, ".uno:GoToCell", aArgs);
+        = comphelper::InitPropertySequence({ { "ToPoint", uno::Any(u"A1"_ustr) } });
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aArgs);
 
-    dispatchCommand(mxComponent, ".uno:ConvertFormulaToValue", {});
+    dispatchCommand(mxComponent, u".uno:ConvertFormulaToValue"_ustr, {});
 
     // A1
     ScRange range1(0, 0, 0, 0, 0, 0);
@@ -779,15 +779,15 @@ void ScPDFExportTest::testTdf120190()
 
     std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject1 = pPdfPage->getObject(0);
     OUString sText1 = pPageObject1->getText(pTextPage);
-    CPPUNIT_ASSERT_EQUAL(OUString("Sheet1"), sText1);
+    CPPUNIT_ASSERT_EQUAL(u"Sheet1"_ustr, sText1);
 
     std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject2 = pPdfPage->getObject(1);
     OUString sText2 = pPageObject2->getText(pTextPage);
-    CPPUNIT_ASSERT_EQUAL(OUString("Page "), sText2);
+    CPPUNIT_ASSERT_EQUAL(u"Page "_ustr, sText2);
 
     std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject3 = pPdfPage->getObject(2);
     OUString sText3 = pPageObject3->getText(pTextPage);
-    CPPUNIT_ASSERT_EQUAL(OUString("1"), sText3);
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, sText3);
 
     std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject4 = pPdfPage->getObject(3);
     OUString sText4 = pPageObject4->getText(pTextPage);
@@ -795,11 +795,11 @@ void ScPDFExportTest::testTdf120190()
     // Without the fix in place, this test would have failed with
     // - Expected: 5
     // - Actual  : 56
-    CPPUNIT_ASSERT_EQUAL(OUString("5"), sText4);
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, sText4);
 
     std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject5 = pPdfPage->getObject(4);
     OUString sText5 = pPageObject5->getText(pTextPage);
-    CPPUNIT_ASSERT_EQUAL(OUString("6"), sText5);
+    CPPUNIT_ASSERT_EQUAL(u"6"_ustr, sText5);
 }
 
 void ScPDFExportTest::testTdf84012()
@@ -834,7 +834,7 @@ void ScPDFExportTest::testTdf84012()
     // Without the fix in place, this test would have failed with
     // - Expected: Blah blah (blah, blah)
     // - Actual  : Blah blah
-    CPPUNIT_ASSERT_EQUAL(OUString("Blah blah (blah, blah)"), aActualText);
+    CPPUNIT_ASSERT_EQUAL(u"Blah blah (blah, blah)"_ustr, aActualText);
 }
 
 void ScPDFExportTest::testTdf78897()
@@ -869,7 +869,7 @@ void ScPDFExportTest::testTdf78897()
     // Without the fix in place, this test would have failed with
     // - Expected:  11.00 11.00
     // - Actual  :  11.00 ###
-    CPPUNIT_ASSERT_EQUAL(OUString(" 11.00 11.00 "), aActualText);
+    CPPUNIT_ASSERT_EQUAL(u" 11.00 11.00 "_ustr, aActualText);
 }
 
 // just needs to not crash on export to pdf

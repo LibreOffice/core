@@ -94,19 +94,19 @@ public:
 };
 
 ScNamedRangesObj::ScNamedRangesObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XElementAccess(cppu::UnoType<sheet::XNamedRange>::get())
     , XIndexAccess(4)
-    , XNameAccess("initial1")
-    , XServiceInfo("ScNamedRangesObj", "com.sun.star.sheet.NamedRanges")
+    , XNameAccess(u"initial1"_ustr)
+    , XServiceInfo(u"ScNamedRangesObj"_ustr, u"com.sun.star.sheet.NamedRanges"_ustr)
 {
 }
 
 uno::Reference<uno::XInterface> ScNamedRangesObj::init()
 {
     uno::Reference<beans::XPropertySet> xPropSet(mxComponent, UNO_QUERY_THROW);
-    uno::Reference<sheet::XNamedRanges> xNamedRanges(xPropSet->getPropertyValue("NamedRanges"),
-                                                     UNO_QUERY_THROW);
+    uno::Reference<sheet::XNamedRanges> xNamedRanges(
+        xPropSet->getPropertyValue(u"NamedRanges"_ustr), UNO_QUERY_THROW);
 
     //set value from xnamedranges.hxx
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
@@ -119,8 +119,8 @@ uno::Reference<uno::XInterface> ScNamedRangesObj::init()
 uno::Reference<uno::XInterface> ScNamedRangesObj::getXNamedRanges(sal_Int32 nSheet)
 {
     uno::Reference<beans::XPropertySet> xPropSet(mxComponent, UNO_QUERY_THROW);
-    uno::Reference<sheet::XNamedRanges> xNamedRanges(xPropSet->getPropertyValue("NamedRanges"),
-                                                     UNO_QUERY_THROW);
+    uno::Reference<sheet::XNamedRanges> xNamedRanges(
+        xPropSet->getPropertyValue(u"NamedRanges"_ustr), UNO_QUERY_THROW);
 
     //set value from xnamedranges.hxx
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);

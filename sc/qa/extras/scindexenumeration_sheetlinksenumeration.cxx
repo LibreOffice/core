@@ -47,7 +47,7 @@ public:
 };
 
 ScIndexEnumeration_SheetLinksEnumeration::ScIndexEnumeration_SheetLinksEnumeration()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
 {
 }
 
@@ -61,12 +61,12 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_SheetLinksEnumeration::init()
     uno::Reference<sheet::XSpreadsheet> xSheet0(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
 
     uno::Reference<sheet::XSheetLinkable> xSL(xSheet0, uno::UNO_QUERY_THROW);
-    xSL->link("ScIndexEnumeration_SheetLinksEnumeration.ods", "Sheet1", "", "",
-              sheet::SheetLinkMode_VALUE);
+    xSL->link(u"ScIndexEnumeration_SheetLinksEnumeration.ods"_ustr, u"Sheet1"_ustr, u""_ustr,
+              u""_ustr, sheet::SheetLinkMode_VALUE);
 
     uno::Reference<beans::XPropertySet> xPropertySet(xDoc, uno::UNO_QUERY_THROW);
     uno::Reference<container::XNameAccess> xSheetLinks;
-    CPPUNIT_ASSERT(xPropertySet->getPropertyValue("SheetLinks") >>= xSheetLinks);
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue(u"SheetLinks"_ustr) >>= xSheetLinks);
 
     uno::Reference<container::XEnumerationAccess> xEA(xSheetLinks, uno::UNO_QUERY_THROW);
 
@@ -76,7 +76,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_SheetLinksEnumeration::init()
 void ScIndexEnumeration_SheetLinksEnumeration::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScIndexEnumeration_SheetLinksEnumeration);

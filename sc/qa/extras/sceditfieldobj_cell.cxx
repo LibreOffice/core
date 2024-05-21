@@ -90,7 +90,7 @@ private:
 uno::Reference<text::XTextField> ScEditFieldObj_Cell::mxField;
 
 ScEditFieldObj_Cell::ScEditFieldObj_Cell()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , TextContent(text::TextContentAnchorType_AS_CHARACTER,
                   text::TextContentAnchorType_AS_CHARACTER, text::WrapTextMode_NONE,
                   text::WrapTextMode_NONE)
@@ -101,7 +101,7 @@ void ScEditFieldObj_Cell::setUp()
 {
     UnoApiTest::setUp();
     // Load an empty document.
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 void ScEditFieldObj_Cell::tearDown()
@@ -114,11 +114,11 @@ namespace
 {
 uno::Reference<text::XTextField> getNewField(const uno::Reference<lang::XMultiServiceFactory>& xSM)
 {
-    uno::Reference<text::XTextField> xField(xSM->createInstance("com.sun.star.text.TextField.URL"),
-                                            uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextField> xField(
+        xSM->createInstance(u"com.sun.star.text.TextField.URL"_ustr), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropSet(xField, uno::UNO_QUERY_THROW);
-    xPropSet->setPropertyValue("Representation", uno::Any(OUString("LibreOffice")));
-    xPropSet->setPropertyValue("URL", uno::Any(OUString("http://www.libreoffice.org/")));
+    xPropSet->setPropertyValue(u"Representation"_ustr, uno::Any(u"LibreOffice"_ustr));
+    xPropSet->setPropertyValue(u"URL"_ustr, uno::Any(u"http://www.libreoffice.org/"_ustr));
     return xField;
 }
 
@@ -178,27 +178,29 @@ void ScEditFieldObj_Cell::testEditFieldProperties()
     {
         // Test properties of date time field.
         uno::Reference<text::XTextField> xField(
-            xSM->createInstance("com.sun.star.text.textfield.DateTime"), uno::UNO_QUERY_THROW);
+            xSM->createInstance(u"com.sun.star.text.textfield.DateTime"_ustr),
+            uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xPropSet(xField, uno::UNO_QUERY_THROW);
 
         uno::Reference<beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
         CPPUNIT_ASSERT_MESSAGE("failed to retrieve property set info.", xInfo.is());
 
         CPPUNIT_ASSERT_MESSAGE("Calc's date time field should have 'IsFixed' property.",
-                               xInfo->hasPropertyByName("IsFixed"));
+                               xInfo->hasPropertyByName(u"IsFixed"_ustr));
     }
 
     {
         // Test properties of document title field.
         uno::Reference<text::XTextField> xField(
-            xSM->createInstance("com.sun.star.text.textfield.docinfo.Title"), uno::UNO_QUERY_THROW);
+            xSM->createInstance(u"com.sun.star.text.textfield.docinfo.Title"_ustr),
+            uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xPropSet(xField, uno::UNO_QUERY_THROW);
 
         uno::Reference<beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
         CPPUNIT_ASSERT_MESSAGE("failed to retrieve property set info.", xInfo.is());
 
         CPPUNIT_ASSERT_MESSAGE("Calc's title field shouldn't have 'IsFixed' property.",
-                               !xInfo->hasPropertyByName("IsFixed"));
+                               !xInfo->hasPropertyByName(u"IsFixed"_ustr));
     }
 }
 

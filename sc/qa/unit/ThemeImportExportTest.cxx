@@ -27,14 +27,14 @@ class ThemeImportExportTest : public ScModelTestBase
 {
 public:
     ThemeImportExportTest()
-        : ScModelTestBase("sc/qa/unit/data")
+        : ScModelTestBase(u"sc/qa/unit/data"_ustr)
     {
     }
 };
 
 CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testThemeExportAndImport)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
     {
         uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY_THROW);
 
@@ -54,29 +54,29 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testThemeExportAndImport)
         pColorSet->add(model::ThemeColorType::FollowedHyperlink, 0xcccccc);
         pTheme->setColorSet(pColorSet);
 
-        xPropertySet->setPropertyValue("Theme", uno::Any(model::theme::createXTheme(pTheme)));
+        xPropertySet->setPropertyValue(u"Theme"_ustr, uno::Any(model::theme::createXTheme(pTheme)));
     }
 
     // Check the "Theme" property
     {
         uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY_THROW);
-        uno::Reference<util::XTheme> xTheme(xPropertySet->getPropertyValue("Theme"),
+        uno::Reference<util::XTheme> xTheme(xPropertySet->getPropertyValue(u"Theme"_ustr),
                                             uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xTheme.is());
         auto* pUnoTheme = dynamic_cast<UnoTheme*>(xTheme.get());
         CPPUNIT_ASSERT(pUnoTheme);
         auto pTheme = pUnoTheme->getTheme();
 
-        CPPUNIT_ASSERT_EQUAL(OUString("MyTheme"), pTheme->GetName());
-        CPPUNIT_ASSERT_EQUAL(OUString("MyColorSet"), pTheme->getColorSet()->getName());
-        CPPUNIT_ASSERT_EQUAL(OUString("Office"), pTheme->getFontScheme().getName());
-        CPPUNIT_ASSERT_EQUAL(OUString(""), pTheme->getFormatScheme().getName());
+        CPPUNIT_ASSERT_EQUAL(u"MyTheme"_ustr, pTheme->GetName());
+        CPPUNIT_ASSERT_EQUAL(u"MyColorSet"_ustr, pTheme->getColorSet()->getName());
+        CPPUNIT_ASSERT_EQUAL(u"Office"_ustr, pTheme->getFontScheme().getName());
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, pTheme->getFormatScheme().getName());
     }
 
-    saveAndReload("calc8");
+    saveAndReload(u"calc8"_ustr);
 
     {
-        xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
+        xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
         static constexpr OString sThemePath = "//office:styles/loext:theme"_ostr;
         assertXPath(pXmlDoc, sThemePath, 1);
         assertXPath(pXmlDoc, sThemePath + "[@loext:name='MyTheme']");
@@ -85,28 +85,28 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testThemeExportAndImport)
         assertXPath(pXmlDoc, sThemeColorsPath + "[@loext:name='MyColorSet']");
         const OString sThemeColorPath = sThemeColorsPath + "/loext:color";
         assertXPath(pXmlDoc, sThemeColorPath, 12);
-        assertXPath(pXmlDoc, sThemeColorPath + "[3]", "name"_ostr, "dark2");
-        assertXPath(pXmlDoc, sThemeColorPath + "[3]", "color"_ostr, "#333333");
-        assertXPath(pXmlDoc, sThemeColorPath + "[9]", "name"_ostr, "accent5");
-        assertXPath(pXmlDoc, sThemeColorPath + "[9]", "color"_ostr, "#999999");
-        assertXPath(pXmlDoc, sThemeColorPath + "[12]", "name"_ostr, "followed-hyperlink");
-        assertXPath(pXmlDoc, sThemeColorPath + "[12]", "color"_ostr, "#cccccc");
+        assertXPath(pXmlDoc, sThemeColorPath + "[3]", "name"_ostr, u"dark2"_ustr);
+        assertXPath(pXmlDoc, sThemeColorPath + "[3]", "color"_ostr, u"#333333"_ustr);
+        assertXPath(pXmlDoc, sThemeColorPath + "[9]", "name"_ostr, u"accent5"_ustr);
+        assertXPath(pXmlDoc, sThemeColorPath + "[9]", "color"_ostr, u"#999999"_ustr);
+        assertXPath(pXmlDoc, sThemeColorPath + "[12]", "name"_ostr, u"followed-hyperlink"_ustr);
+        assertXPath(pXmlDoc, sThemeColorPath + "[12]", "color"_ostr, u"#cccccc"_ustr);
     }
 
     // Check the theme after import/export cycle
     {
         uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY_THROW);
-        uno::Reference<util::XTheme> xTheme(xPropertySet->getPropertyValue("Theme"),
+        uno::Reference<util::XTheme> xTheme(xPropertySet->getPropertyValue(u"Theme"_ustr),
                                             uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xTheme.is());
         auto* pUnoTheme = dynamic_cast<UnoTheme*>(xTheme.get());
         CPPUNIT_ASSERT(pUnoTheme);
         auto pTheme = pUnoTheme->getTheme();
 
-        CPPUNIT_ASSERT_EQUAL(OUString("MyTheme"), pTheme->GetName());
-        CPPUNIT_ASSERT_EQUAL(OUString("MyColorSet"), pTheme->getColorSet()->getName());
-        CPPUNIT_ASSERT_EQUAL(OUString("Office"), pTheme->getFontScheme().getName());
-        CPPUNIT_ASSERT_EQUAL(OUString(""), pTheme->getFormatScheme().getName());
+        CPPUNIT_ASSERT_EQUAL(u"MyTheme"_ustr, pTheme->GetName());
+        CPPUNIT_ASSERT_EQUAL(u"MyColorSet"_ustr, pTheme->getColorSet()->getName());
+        CPPUNIT_ASSERT_EQUAL(u"Office"_ustr, pTheme->getFontScheme().getName());
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, pTheme->getFormatScheme().getName());
     }
 }
 
@@ -114,46 +114,46 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testThemeExportOOXML)
 {
     loadFromFile(u"xlsx/CalcThemeTest.xlsx");
 
-    save("Calc Office Open XML");
+    save(u"Calc Office Open XML"_ustr);
 
     {
-        xmlDocUniquePtr pXmlDoc = parseExport("xl/theme/theme1.xml");
+        xmlDocUniquePtr pXmlDoc = parseExport(u"xl/theme/theme1.xml"_ustr);
         OString aClrScheme = "/a:theme/a:themeElements/a:clrScheme"_ostr;
-        assertXPath(pXmlDoc, aClrScheme, "name"_ostr, "Office");
-        assertXPath(pXmlDoc, aClrScheme + "/a:dk1/a:srgbClr", "val"_ostr, "000000");
-        assertXPath(pXmlDoc, aClrScheme + "/a:lt1/a:srgbClr", "val"_ostr, "ffffff");
-        assertXPath(pXmlDoc, aClrScheme + "/a:dk2/a:srgbClr", "val"_ostr, "44546a");
-        assertXPath(pXmlDoc, aClrScheme + "/a:lt2/a:srgbClr", "val"_ostr, "e7e6e6");
-        assertXPath(pXmlDoc, aClrScheme + "/a:accent1/a:srgbClr", "val"_ostr, "4472c4");
-        assertXPath(pXmlDoc, aClrScheme + "/a:accent2/a:srgbClr", "val"_ostr, "ed7d31");
-        assertXPath(pXmlDoc, aClrScheme + "/a:accent3/a:srgbClr", "val"_ostr, "a5a5a5");
-        assertXPath(pXmlDoc, aClrScheme + "/a:accent4/a:srgbClr", "val"_ostr, "ffc000");
-        assertXPath(pXmlDoc, aClrScheme + "/a:accent5/a:srgbClr", "val"_ostr, "5b9bd5");
-        assertXPath(pXmlDoc, aClrScheme + "/a:accent6/a:srgbClr", "val"_ostr, "70ad47");
-        assertXPath(pXmlDoc, aClrScheme + "/a:hlink/a:srgbClr", "val"_ostr, "0563c1");
-        assertXPath(pXmlDoc, aClrScheme + "/a:folHlink/a:srgbClr", "val"_ostr, "954f72");
+        assertXPath(pXmlDoc, aClrScheme, "name"_ostr, u"Office"_ustr);
+        assertXPath(pXmlDoc, aClrScheme + "/a:dk1/a:srgbClr", "val"_ostr, u"000000"_ustr);
+        assertXPath(pXmlDoc, aClrScheme + "/a:lt1/a:srgbClr", "val"_ostr, u"ffffff"_ustr);
+        assertXPath(pXmlDoc, aClrScheme + "/a:dk2/a:srgbClr", "val"_ostr, u"44546a"_ustr);
+        assertXPath(pXmlDoc, aClrScheme + "/a:lt2/a:srgbClr", "val"_ostr, u"e7e6e6"_ustr);
+        assertXPath(pXmlDoc, aClrScheme + "/a:accent1/a:srgbClr", "val"_ostr, u"4472c4"_ustr);
+        assertXPath(pXmlDoc, aClrScheme + "/a:accent2/a:srgbClr", "val"_ostr, u"ed7d31"_ustr);
+        assertXPath(pXmlDoc, aClrScheme + "/a:accent3/a:srgbClr", "val"_ostr, u"a5a5a5"_ustr);
+        assertXPath(pXmlDoc, aClrScheme + "/a:accent4/a:srgbClr", "val"_ostr, u"ffc000"_ustr);
+        assertXPath(pXmlDoc, aClrScheme + "/a:accent5/a:srgbClr", "val"_ostr, u"5b9bd5"_ustr);
+        assertXPath(pXmlDoc, aClrScheme + "/a:accent6/a:srgbClr", "val"_ostr, u"70ad47"_ustr);
+        assertXPath(pXmlDoc, aClrScheme + "/a:hlink/a:srgbClr", "val"_ostr, u"0563c1"_ustr);
+        assertXPath(pXmlDoc, aClrScheme + "/a:folHlink/a:srgbClr", "val"_ostr, u"954f72"_ustr);
     }
 
     {
-        xmlDocUniquePtr pXmlDoc = parseExport("xl/styles.xml");
+        xmlDocUniquePtr pXmlDoc = parseExport(u"xl/styles.xml"_ustr);
 
         assertXPath(pXmlDoc, "/x:styleSheet"_ostr, 1);
 
         // Fonts
         OString aFont = "/x:styleSheet/x:fonts/x:font"_ostr;
         assertXPath(pXmlDoc, aFont, 6);
-        assertXPath(pXmlDoc, aFont + "[5]/x:color", "theme"_ostr, "7");
-        assertXPath(pXmlDoc, aFont + "[6]/x:color", "rgb"_ostr, "FF9C5700");
+        assertXPath(pXmlDoc, aFont + "[5]/x:color", "theme"_ostr, u"7"_ustr);
+        assertXPath(pXmlDoc, aFont + "[6]/x:color", "rgb"_ostr, u"FF9C5700"_ustr);
 
         // Fills
         OString aFill = "/x:styleSheet/x:fills/x:fill"_ostr;
         assertXPath(pXmlDoc, aFill, 4);
-        assertXPath(pXmlDoc, aFill + "[1]/x:patternFill", "patternType"_ostr, "none");
-        assertXPath(pXmlDoc, aFill + "[2]/x:patternFill", "patternType"_ostr, "gray125");
-        assertXPath(pXmlDoc, aFill + "[3]/x:patternFill", "patternType"_ostr, "solid");
-        assertXPath(pXmlDoc, aFill + "[3]/x:patternFill/x:fgColor", "rgb"_ostr, "FFFFEB9C");
-        assertXPath(pXmlDoc, aFill + "[4]/x:patternFill", "patternType"_ostr, "solid");
-        assertXPath(pXmlDoc, aFill + "[4]/x:patternFill/x:fgColor", "theme"_ostr, "4");
+        assertXPath(pXmlDoc, aFill + "[1]/x:patternFill", "patternType"_ostr, u"none"_ustr);
+        assertXPath(pXmlDoc, aFill + "[2]/x:patternFill", "patternType"_ostr, u"gray125"_ustr);
+        assertXPath(pXmlDoc, aFill + "[3]/x:patternFill", "patternType"_ostr, u"solid"_ustr);
+        assertXPath(pXmlDoc, aFill + "[3]/x:patternFill/x:fgColor", "rgb"_ostr, u"FFFFEB9C"_ustr);
+        assertXPath(pXmlDoc, aFill + "[4]/x:patternFill", "patternType"_ostr, u"solid"_ustr);
+        assertXPath(pXmlDoc, aFill + "[4]/x:patternFill/x:fgColor", "theme"_ostr, u"4"_ustr);
     }
 }
 
@@ -220,7 +220,7 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testCellBackgroundThemeColorOOXML)
 {
     loadFromFile(u"xlsx/Test_ThemeColor_Text_Background_Border.xlsx");
     checkCellBackgroundThemeColor(getScDoc());
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
     checkCellBackgroundThemeColor(getScDoc());
 }
 
@@ -229,7 +229,7 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testCellBackgroundThemeColorODF)
     // Open the OOXML source
     loadFromFile(u"xlsx/Test_ThemeColor_Text_Background_Border.xlsx");
     // Save as ODF and load again - checks import / export cycle
-    saveAndReload("calc8");
+    saveAndReload(u"calc8"_ustr);
     // Check the values and show that the document is unchanged and all the data preserved
     checkCellBackgroundThemeColor(getScDoc());
 }
@@ -291,7 +291,7 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testCellTextThemeColor)
 {
     loadFromFile(u"xlsx/Test_ThemeColor_Text_Background_Border.xlsx");
     checkCellTextThemeColor(getScDoc());
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
     checkCellTextThemeColor(getScDoc());
 }
 
@@ -300,7 +300,7 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testCellTextThemeColorODF)
     // Open the OOXML source
     loadFromFile(u"xlsx/Test_ThemeColor_Text_Background_Border.xlsx");
     // Save as ODF and load again - checks import / export cycle
-    saveAndReload("calc8");
+    saveAndReload(u"calc8"_ustr);
     // Check the values and show that the document is unchanged and all the data preserved
     checkCellTextThemeColor(getScDoc());
 }
@@ -420,7 +420,7 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testCellBorderThemeColor)
 {
     loadFromFile(u"xlsx/Test_ThemeColor_Text_Background_Border.xlsx");
     checkCellBorderThemeColor(getScDoc());
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
     checkCellBorderThemeColor(getScDoc());
 }
 
@@ -429,7 +429,7 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testCellBorderThemeColorODF)
     // Open the OOXML source
     loadFromFile(u"xlsx/Test_ThemeColor_Text_Background_Border.xlsx");
     // Save as ODF and load again - checks import / export cycle
-    saveAndReload("calc8");
+    saveAndReload(u"calc8"_ustr);
     // Check the values and show that the document is unchanged and all the data preserved
     checkCellBorderThemeColor(getScDoc());
 }

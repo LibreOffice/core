@@ -48,7 +48,7 @@ public:
 };
 
 ScIndexEnumeration_DataPilotFieldsEnumeration::ScIndexEnumeration_DataPilotFieldsEnumeration()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
 {
 }
 
@@ -76,7 +76,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_DataPilotFieldsEnumeration::i
     uno::Reference<sheet::XDataPilotDescriptor> xDPD(xDPT->createDataPilotDescriptor(),
                                                      uno::UNO_SET_THROW);
     xDPD->setSourceRange(table::CellRangeAddress(0, 0, 0, 4, 4));
-    xDPT->insertNewByName("DataPilotTable", table::CellAddress(0, 5, 5), xDPD);
+    xDPT->insertNewByName(u"DataPilotTable"_ustr, table::CellAddress(0, 5, 5), xDPD);
 
     uno::Reference<container::XEnumerationAccess> xEA(xDPD->getDataPilotFields(),
                                                       uno::UNO_QUERY_THROW);
@@ -87,7 +87,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_DataPilotFieldsEnumeration::i
 void ScIndexEnumeration_DataPilotFieldsEnumeration::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScIndexEnumeration_DataPilotFieldsEnumeration);

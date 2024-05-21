@@ -91,7 +91,7 @@ public:
 };
 
 ScCellObj::ScCellObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , apitest::XFormulaQuery(table::CellRangeAddress(0, 2, 3, 2, 3),
                              table::CellRangeAddress(0, 0, 0, 3, 0), 0, 0)
 {
@@ -108,7 +108,7 @@ uno::Reference<uno::XInterface> ScCellObj::init()
     uno::Reference<sheet::XSheetAnnotationsSupplier> xSheetAnnosSupplier(xSheet, UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetAnnotations> xSheetAnnos(xSheetAnnosSupplier->getAnnotations(),
                                                          UNO_SET_THROW);
-    xSheetAnnos->insertNew(table::CellAddress(0, 2, 3), "xSheetAnnotation");
+    xSheetAnnos->insertNew(table::CellAddress(0, 2, 3), u"xSheetAnnotation"_ustr);
 
     return xSheet->getCellByPosition(2, 3);
 }
@@ -129,7 +129,7 @@ uno::Reference<uno::XInterface> ScCellObj::getXSpreadsheet()
 void ScCellObj::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCellObj);

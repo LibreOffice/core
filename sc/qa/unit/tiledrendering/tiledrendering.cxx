@@ -113,7 +113,7 @@ public:
 };
 
 ScTiledRenderingTest::ScTiledRenderingTest()
-    : UnoApiXmlTest("/sc/qa/unit/tiledrendering/data/"),
+    : UnoApiXmlTest(u"/sc/qa/unit/tiledrendering/data/"_ustr),
     m_callbackWrapper(&callback, this)
 {
 }
@@ -190,7 +190,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
             { "Row", uno::Any(sal_Int32(5 - 1)) },
             { "Modifier", uno::Any(sal_uInt16(0)) }
         }));
-    dispatchCommand(mxComponent, ".uno:SelectRow", aArgs);
+    dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
 
     // Check if it is selected
     OString aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8"_ostr);
@@ -200,7 +200,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
     // Select the 10th row with shift modifier
     aArgs = comphelper::InitPropertySequence({ { "Row", uno::Any(static_cast<sal_Int32>(10 - 1)) },
                                                { "Modifier", uno::Any(KEY_SHIFT) } });
-    dispatchCommand(mxComponent, ".uno:SelectRow", aArgs);
+    dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
 
     // Check if all the rows from 5th to 10th get selected
     aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8"_ostr);
@@ -210,7 +210,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
     // Select the 10th row with ctrl modifier
     aArgs = comphelper::InitPropertySequence({ { "Row", uno::Any(static_cast<sal_Int32>(13 - 1)) },
                                                { "Modifier", uno::Any(KEY_MOD1) } });
-    dispatchCommand(mxComponent, ".uno:SelectRow", aArgs);
+    dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
 
     // When we copy this, we don't get anything useful, but we must not crash
     // (used to happen)
@@ -222,7 +222,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
     // Select Column 5 with ctrl modifier
     aArgs = comphelper::InitPropertySequence({ { "Col", uno::Any(static_cast<sal_Int32>(5 - 1)) },
                                                { "Modifier", uno::Any(KEY_MOD1) } });
-    dispatchCommand(mxComponent, ".uno:SelectColumn", aArgs);
+    dispatchCommand(mxComponent, u".uno:SelectColumn"_ustr, aArgs);
 
     // When we copy this, we don't get anything useful, but we must not crash
     // (used to happen)
@@ -235,17 +235,17 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
     // First Deselect Row 13 because copy doesn't work for multiple selections
     aArgs = comphelper::InitPropertySequence({ { "Row", uno::Any(static_cast<sal_Int32>(13 - 1)) },
                                                { "Modifier", uno::Any(KEY_MOD1) } });
-    dispatchCommand(mxComponent, ".uno:SelectRow", aArgs);
+    dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
 
     // Deselect row 10
     aArgs = comphelper::InitPropertySequence({ { "Row", uno::Any(static_cast<sal_Int32>(10 - 1)) },
                                                { "Modifier", uno::Any(KEY_MOD1) } });
-    dispatchCommand(mxComponent, ".uno:SelectRow", aArgs);
+    dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
 
     // Click at row 6 holding shift
     aArgs = comphelper::InitPropertySequence({ { "Row", uno::Any(static_cast<sal_Int32>(6 - 1)) },
                                                { "Modifier", uno::Any(KEY_SHIFT) } });
-    dispatchCommand(mxComponent, ".uno:SelectRow", aArgs);
+    dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
 
     //  only row 5 should remain selected
     aResult = apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8"_ostr);
@@ -305,7 +305,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEmptyColumnSelection)
                 { "Col", uno::Any(sal_Int32(1000 - 1)) },
                 { "Modifier", uno::Any(sal_uInt16(0)) }
         }));
-    dispatchCommand(mxComponent, ".uno:SelectColumn", aArgs);
+    dispatchCommand(mxComponent, u".uno:SelectColumn"_ustr, aArgs);
 
     // should be an empty string
     CPPUNIT_ASSERT_EQUAL(OString(), apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8"_ostr));
@@ -675,7 +675,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSpellOnlineRenderParameter)
 
     uno::Sequence<beans::PropertyValue> aPropertyValues =
     {
-        comphelper::makePropertyValue(".uno:SpellOnline", uno::Any(!bSet)),
+        comphelper::makePropertyValue(u".uno:SpellOnline"_ustr, uno::Any(!bSet)),
     };
     pModelObj->initializeForTiledRendering(aPropertyValues);
 
@@ -693,7 +693,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextViewSelection)
 
     // Create a selection on two cells in the second view, that's a text selection in LOK terms.
     aView1.m_bTextViewSelectionInvalidated = false;
-    dispatchCommand(mxComponent, ".uno:GoRightSel", {});
+    dispatchCommand(mxComponent, u".uno:GoRightSel"_ustr, {});
     // Make sure the first view got its notification.
     CPPUNIT_ASSERT(aView1.m_bTextViewSelectionInvalidated);
 }
@@ -707,9 +707,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDocumentSizeChanged)
     // Go to the A30 cell -- that will extend the document size.
     uno::Sequence<beans::PropertyValue> aPropertyValues =
     {
-        comphelper::makePropertyValue("ToPoint", OUString("$A$30")),
+        comphelper::makePropertyValue(u"ToPoint"_ustr, u"$A$30"_ustr),
     };
-    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aPropertyValues);
     // Assert that the size in the payload is not 0.
     CPPUNIT_ASSERT(m_aDocumentSize.getWidth() > 0);
     CPPUNIT_ASSERT(m_aDocumentSize.getHeight() > 0);
@@ -784,7 +784,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testMoveShapeHandle)
             {"NewPosX", uno::Any(x+1)},
             {"NewPosY", uno::Any(y+1)}
         }));
-        dispatchCommand(mxComponent, ".uno:MoveShapeHandle", aPropertyValues);
+        dispatchCommand(mxComponent, u".uno:MoveShapeHandle"_ustr, aPropertyValues);
         CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());
         lcl_extractHandleParameters(aView1.m_ShapeSelection, id, x ,y);
         CPPUNIT_ASSERT_EQUAL(x-1, oldX);
@@ -810,7 +810,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testColRowResize)
             { "ColumnWidth", uno::Any(sal_uInt16(4000)) }, // 4cm
             { "Column", uno::Any(sal_Int16(3)) }
         }));
-    dispatchCommand(mxComponent, ".uno:ColumnWidth", aArgs);
+    dispatchCommand(mxComponent, u".uno:ColumnWidth"_ustr, aArgs);
 
     sal_uInt16 nWidth = o3tl::convert(rDoc.GetColWidth(static_cast<SCCOL>(2), static_cast<SCTAB>(0), false), o3tl::Length::twip, o3tl::Length::mm100);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4001), nWidth);
@@ -820,7 +820,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testColRowResize)
             { "RowHeight", uno::Any(sal_uInt16(2000)) },
             { "Row", uno::Any(sal_Int16(5)) },
         }));
-    dispatchCommand(mxComponent, ".uno:RowHeight", aArgs2);
+    dispatchCommand(mxComponent, u".uno:RowHeight"_ustr, aArgs2);
 
     sal_uInt16 nHeight = o3tl::convert(rDoc.GetRowHeight(static_cast<SCROW>(4), static_cast<SCTAB>(0), false), o3tl::Length::twip, o3tl::Length::mm100);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(2000), nHeight);
@@ -830,7 +830,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoShells)
 {
     ScModelObj* pModelObj = createDoc("small.ods");
     // Clear the currently selected cell.
-    dispatchCommand(mxComponent, ".uno:ClearContents", {});
+    dispatchCommand(mxComponent, u".uno:ClearContents"_ustr, {});
 
     auto pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     CPPUNIT_ASSERT(pDocShell);
@@ -1009,7 +1009,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testAutoSum)
     ViewCallback aView;
 
     uno::Sequence<beans::PropertyValue> aArgs;
-    dispatchCommand(mxComponent, ".uno:AutoSum", aArgs);
+    dispatchCommand(mxComponent, u".uno:AutoSum"_ustr, aArgs);
     CPPUNIT_ASSERT(aView.m_sCellFormula.startsWith("=SUM("));
 }
 
@@ -1021,21 +1021,21 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testHideColRow)
                 { "Col", uno::Any(sal_Int32(2 - 1)) },
                 { "Modifier", uno::Any(KEY_SHIFT) }
             }));
-        dispatchCommand(mxComponent, ".uno:SelectColumn", aArgs);
+        dispatchCommand(mxComponent, u".uno:SelectColumn"_ustr, aArgs);
 
         uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
                 { "Col", uno::Any(sal_Int32(3 - 1)) },
                 { "Modifier", uno::Any(sal_uInt16(0)) }
             }));
 
-        dispatchCommand(mxComponent, ".uno:SelectColumn", aArgs2);
+        dispatchCommand(mxComponent, u".uno:SelectColumn"_ustr, aArgs2);
     }
 
     SCCOL nOldCurX = ScDocShell::GetViewData()->GetCurX();
     SCROW nOldCurY = ScDocShell::GetViewData()->GetCurY();
     {
         uno::Sequence<beans::PropertyValue> aArgs;
-        dispatchCommand(mxComponent, ".uno:HideColumn", aArgs);
+        dispatchCommand(mxComponent, u".uno:HideColumn"_ustr, aArgs);
     }
 
     SCCOL nNewCurX = ScDocShell::GetViewData()->GetCurX();
@@ -1047,20 +1047,20 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testHideColRow)
                 { "Row", uno::Any(sal_Int32(6 - 1)) },
                 { "Modifier", uno::Any(KEY_SHIFT) }
             }));
-        dispatchCommand(mxComponent, ".uno:SelectRow", aArgs);
+        dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
 
         uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
                 { "Row", uno::Any(sal_Int32(7 - 1)) },
                 { "Modifier", uno::Any(sal_uInt16(0)) }
             }));
-        dispatchCommand(mxComponent, ".uno:SelectRow", aArgs2);
+        dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs2);
     }
 
     nOldCurX = ScDocShell::GetViewData()->GetCurX();
     nOldCurY = ScDocShell::GetViewData()->GetCurY();
     {
         uno::Sequence<beans::PropertyValue> aArgs;
-        dispatchCommand(mxComponent, ".uno:HideRow", aArgs);
+        dispatchCommand(mxComponent, u".uno:HideRow"_ustr, aArgs);
     }
     nNewCurX = ScDocShell::GetViewData()->GetCurX();
     nNewCurY = ScDocShell::GetViewData()->GetCurY();
@@ -1085,7 +1085,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateOnCopyPasteCells)
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT | KEY_SHIFT);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RIGHT | KEY_SHIFT);
     Scheduler::ProcessEventsToIdle();
-    dispatchCommand(mxComponent, ".uno:Copy", aArgs);
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, aArgs);
 
     // move to destination cell
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
@@ -1098,7 +1098,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateOnCopyPasteCells)
 
     // paste cells
     aView.m_bInvalidateTiles = false;
-    dispatchCommand(mxComponent, ".uno:Paste", aArgs);
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, aArgs);
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
 }
 
@@ -1122,7 +1122,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateOnInserRowCol)
     // insert row
     aView.m_bInvalidateTiles = false;
     aView.m_aInvalidations.clear();
-    dispatchCommand(mxComponent, ".uno:InsertRows", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertRows"_ustr, aArgs);
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aView.m_aInvalidations.size());
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(-75, 51240, 32212230, 63990), aView.m_aInvalidations[0]);
@@ -1138,7 +1138,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateOnInserRowCol)
     // insert column
     aView.m_bInvalidateTiles = false;
     aView.m_aInvalidations.clear();
-    dispatchCommand(mxComponent, ".uno:InsertColumns", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertColumns"_ustr, aArgs);
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aView.m_aInvalidations.size());
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(254925, -15, 32212230, 63990), aView.m_aInvalidations[0]);
@@ -1171,10 +1171,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
         // Add a new comment
         uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         {
-            {"Text", uno::Any(OUString("Comment"))},
-            {"Author", uno::Any(OUString("LOK User1"))},
+            {"Text", uno::Any(u"Comment"_ustr)},
+            {"Author", uno::Any(u"LOK User1"_ustr)},
         }));
-        dispatchCommand(mxComponent, ".uno:InsertAnnotation", aArgs);
+        dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
         // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
         CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
@@ -1194,7 +1194,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
         if (pTabViewShell)
             pTabViewShell->SetCursor(2, 2);
 
-        dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+        dispatchCommand(mxComponent, u".uno:DeleteRows"_ustr, {});
         Scheduler::ProcessEventsToIdle();
         CPPUNIT_ASSERT_EQUAL(std::string("4 3 4 3"), aView1.m_aCommentCallbackResult.get<std::string>("cellRange"));
         CPPUNIT_ASSERT_EQUAL(std::string("4 3 4 3"), aView2.m_aCommentCallbackResult.get<std::string>("cellRange"));
@@ -1203,7 +1203,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
         if (pTabViewShell)
             pTabViewShell->SetCursor(2, 2);
 
-        dispatchCommand(mxComponent, ".uno:DeleteColumns", {});
+        dispatchCommand(mxComponent, u".uno:DeleteColumns"_ustr, {});
         Scheduler::ProcessEventsToIdle();
         CPPUNIT_ASSERT_EQUAL(std::string("3 3 3 3"), aView1.m_aCommentCallbackResult.get<std::string>("cellRange"));
         CPPUNIT_ASSERT_EQUAL(std::string("3 3 3 3"), aView2.m_aCommentCallbackResult.get<std::string>("cellRange"));
@@ -1218,10 +1218,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
         aArgs = comphelper::InitPropertySequence(
         {
             {"Id", uno::Any(OUString::createFromAscii(aCommentId))},
-            {"Text", uno::Any(OUString("Edited comment"))},
-            {"Author", uno::Any(OUString("LOK User2"))},
+            {"Text", uno::Any(u"Edited comment"_ustr)},
+            {"Author", uno::Any(u"LOK User2"_ustr)},
         });
-        dispatchCommand(mxComponent, ".uno:EditAnnotation", aArgs);
+        dispatchCommand(mxComponent, u".uno:EditAnnotation"_ustr, aArgs);
 
         // We received a LOK_CALLBACK_COMMENT callback with comment 'Modify' action
         CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
@@ -1242,7 +1242,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
         {
             {"Id", uno::Any(OUString::createFromAscii(aCommentId))}
         });
-        dispatchCommand(mxComponent, ".uno:DeleteNote", aArgs);
+        dispatchCommand(mxComponent, u".uno:DeleteNote"_ustr, aArgs);
 
         // We received a LOK_CALLBACK_COMMENT callback with comment 'Remove' action
         CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
@@ -1285,13 +1285,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoLimiting)
 
     // try to execute undo in view #2
     SfxLokHelper::setView(nView2);
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     // check that undo has not been executed on view #2
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
 
     // try to execute undo in view #1
     SfxLokHelper::setView(nView1);
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     // check that undo has been executed on view #1
     CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetUndoActionCount());
 
@@ -1300,13 +1300,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoLimiting)
 
     // try to execute redo in view #2
     SfxLokHelper::setView(nView2);
-    dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
     // check that redo has not been executed on view #2
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetRedoActionCount());
 
     // try to execute redo in view #1
     SfxLokHelper::setView(nView1);
-    dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
     // check that redo has been executed on view #1
     CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetRedoActionCount());
 }
@@ -1343,7 +1343,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoRepairDispatch)
 
     // try to execute undo in view #2
     SfxLokHelper::setView(nView2);
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     // check that undo has not been executed on view #2
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
 
@@ -1353,7 +1353,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoRepairDispatch)
     {
         {"Repair", uno::Any(true)}
     }));
-    dispatchCommand(mxComponent, ".uno:Undo", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, aPropertyValues);
     // check that undo has been executed on view #2 in repair mode
     CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetUndoActionCount());
 }
@@ -1382,13 +1382,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertGraphicInvalidations)
     uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
             { "FileName", uno::Any(createFileURL(u"smile.png")) }
         }));
-    dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
 
     // undo image insertion in view and see if both views are invalidated
     aView.m_bInvalidateTiles = false;
     uno::Sequence<beans::PropertyValue> aArgs2;
-    dispatchCommand(mxComponent, ".uno:Undo", aArgs2);
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, aArgs2);
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
 }
 
@@ -1581,7 +1581,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLanguageStatus)
     }
 
     {
-        SfxStringItem aLangString(SID_LANGUAGE_STATUS, "Default_Spanish (Bolivia)");
+        SfxStringItem aLangString(SID_LANGUAGE_STATUS, u"Default_Spanish (Bolivia)"_ustr);
         pView1->GetViewFrame().GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS,
             SfxCallMode::SYNCHRON, { &aLangString });
     }
@@ -1611,8 +1611,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testMultiViewCopyPaste)
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
-    pDoc->SetString(ScAddress(0, 0, 0), "TestCopy1");
-    pDoc->SetString(ScAddress(1, 0, 0), "TestCopy2");
+    pDoc->SetString(ScAddress(0, 0, 0), u"TestCopy1"_ustr);
+    pDoc->SetString(ScAddress(1, 0, 0), u"TestCopy2"_ustr);
 
     // view #1
     ScTabViewShell* pView1 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
@@ -1646,8 +1646,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testMultiViewCopyPaste)
     pView2->SetCursor(1, 1);
     pView2->GetViewFrame().GetBindings().Execute(SID_PASTE);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("TestCopy1"), pDoc->GetString(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("TestCopy2"), pDoc->GetString(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"TestCopy1"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"TestCopy2"_ustr, pDoc->GetString(ScAddress(1, 1, 0)));
 
     SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
     SfxLokHelper::setView(nView1);
@@ -1675,7 +1675,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testIMESupport)
     {
         pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, aInput);
     }
-    pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
+    pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, u""_ustr);
 
     // commit the string to the cell
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
@@ -1767,17 +1767,17 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSpellOnlineParameter)
 
     uno::Sequence<beans::PropertyValue> params =
     {
-        comphelper::makePropertyValue("Enable", uno::Any(!bSet)),
+        comphelper::makePropertyValue(u"Enable"_ustr, uno::Any(!bSet)),
     };
-    dispatchCommand(mxComponent, ".uno:SpellOnline", params);
+    dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, params);
     CPPUNIT_ASSERT_EQUAL(!bSet, pView->IsAutoSpell());
 
     // set the same state as now and we don't expect any change (no-toggle)
     params =
     {
-        comphelper::makePropertyValue("Enable", uno::Any(!bSet)),
+        comphelper::makePropertyValue(u"Enable"_ustr, uno::Any(!bSet)),
     };
-    dispatchCommand(mxComponent, ".uno:SpellOnline", params);
+    dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, params);
     CPPUNIT_ASSERT_EQUAL(!bSet, pView->IsAutoSpell());
 }
 
@@ -1794,7 +1794,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVbaRangeCopyPaste)
 
     SfxObjectShell::CallXScript(
         mxComponent,
-        "vnd.sun.Star.script:Standard.Module1.Test_RangeCopyPaste?language=Basic&location=document",
+        u"vnd.sun.Star.script:Standard.Module1.Test_RangeCopyPaste?language=Basic&location=document"_ustr,
         aParams, aRet, aOutParamIndex, aOutParam);
 
     CPPUNIT_ASSERT(!pDocShell->GetClipData().is());
@@ -1961,10 +1961,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertDeletePageInvalidation)
     aView1.m_aInvalidations.clear();
 
     uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-            { "Name", uno::Any(OUString("")) },
+            { "Name", uno::Any(u""_ustr) },
             { "Index", uno::Any(sal_Int32(1)) }
         }));
-    dispatchCommand(mxComponent, ".uno:Insert", aArgs);
+    dispatchCommand(mxComponent, u".uno:Insert"_ustr, aArgs);
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(2), aView1.m_aInvalidations.size());
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1000000000, 1000000000), aView1.m_aInvalidations[0]);
@@ -1976,7 +1976,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertDeletePageInvalidation)
     uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
             { "Index", uno::Any(sal_Int32(1)) }
         }));
-    dispatchCommand(mxComponent, ".uno:Remove", aArgs2);
+    dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs2);
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidations.size());
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1000000000, 1000000000), aView1.m_aInvalidations[0]);
@@ -2517,7 +2517,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPasteIntoWrapTextCell)
     CPPUNIT_ASSERT(pView);
 
     // create source text in A1
-    OUString sCopyContent("Very long text to copy");
+    OUString sCopyContent(u"Very long text to copy"_ustr);
     pDoc->SetString(0, 0, 0, sCopyContent);
 
     // copy A1
@@ -2548,7 +2548,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPasteIntoWrapTextCell)
     CPPUNIT_ASSERT_EQUAL("rows sizes"_ostr, aView.m_sInvalidateSheetGeometry);
 
     // create new source text in A2
-    OUString sCopyContent2("Very long text to copy 2");
+    OUString sCopyContent2(u"Very long text to copy 2"_ustr);
     pDoc->SetString(0, 1, 0, sCopyContent2);
     Scheduler::ProcessEventsToIdle();
 
@@ -2598,7 +2598,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSortAscendingDescending)
 
     // sort ascending
     uno::Sequence<beans::PropertyValue> aArgs;
-    dispatchCommand(mxComponent, ".uno:SortAscending", aArgs);
+    dispatchCommand(mxComponent, u".uno:SortAscending"_ustr, aArgs);
 
     // check it's sorted
     for (SCROW r = 0; r < 6; ++r)
@@ -2611,7 +2611,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSortAscendingDescending)
 
     aView.m_sInvalidateSheetGeometry = ""_ostr;
     // sort descending
-    dispatchCommand(mxComponent, ".uno:SortDescending", aArgs);
+    dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, aArgs);
 
     // check it's sorted
     for (SCROW r = 0; r < 6; ++r)
@@ -2636,29 +2636,29 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testAutoInputStringBlock)
     CPPUNIT_ASSERT(pView);
     ScDocument* pDoc = pModelObj->GetDocument();
 
-    pDoc->SetString(ScAddress(0, 3, 0), "ABC");  // A4
-    pDoc->SetString(ScAddress(0, 4, 0), "BAC");  // A5
+    pDoc->SetString(ScAddress(0, 3, 0), u"ABC"_ustr);  // A4
+    pDoc->SetString(ScAddress(0, 4, 0), u"BAC"_ustr);  // A5
     ScFieldEditEngine& rEE = pDoc->GetEditEngine();
-    rEE.SetText("XYZ");
+    rEE.SetText(u"XYZ"_ustr);
     pDoc->SetEditText(ScAddress(0, 5, 0), rEE.CreateTextObject()); // A6
     pDoc->SetValue(ScAddress(0, 6, 0), 123);
-    pDoc->SetString(ScAddress(0, 7, 0), "ZZZ");  // A8
+    pDoc->SetString(ScAddress(0, 7, 0), u"ZZZ"_ustr);  // A8
 
     ScAddress aA1(0, 0, 0);
     lcl_typeCharsInCell("X", aA1.Col(), aA1.Row(), pView, pModelObj); // Type 'X' in A1
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("A1 should autocomplete", OUString("XYZ"), pDoc->GetString(aA1));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A1 should autocomplete", u"XYZ"_ustr, pDoc->GetString(aA1));
 
     ScAddress aA3(0, 2, 0); // Adjacent to the string "superblock" A4:A8
     lcl_typeCharsInCell("X", aA3.Col(), aA3.Row(), pView, pModelObj); // Type 'X' in A3
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("A3 should autocomplete", OUString("XYZ"), pDoc->GetString(aA3));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A3 should autocomplete", u"XYZ"_ustr, pDoc->GetString(aA3));
 
     ScAddress aA9(0, 8, 0); // Adjacent to the string "superblock" A4:A8
     lcl_typeCharsInCell("X", aA9.Col(), aA9.Row(), pView, pModelObj); // Type 'X' in A9
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("A9 should autocomplete", OUString("XYZ"), pDoc->GetString(aA9));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A9 should autocomplete", u"XYZ"_ustr, pDoc->GetString(aA9));
 
     ScAddress aA11(0, 10, 0);
     lcl_typeCharsInCell("X", aA11.Col(), aA11.Row(), pView, pModelObj); // Type 'X' in A11
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("A11 should autocomplete", OUString("XYZ"), pDoc->GetString(aA11));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A11 should autocomplete", u"XYZ"_ustr, pDoc->GetString(aA11));
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testAutoInputExactMatch)
@@ -2669,43 +2669,43 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testAutoInputExactMatch)
     CPPUNIT_ASSERT(pView);
     ScDocument* pDoc = pModelObj->GetDocument();
 
-    pDoc->SetString(ScAddress(0, 1, 0), "Simple");  // A2
-    pDoc->SetString(ScAddress(0, 2, 0), "Simple");  // A3
-    pDoc->SetString(ScAddress(0, 3, 0), "Sing");  // A4
+    pDoc->SetString(ScAddress(0, 1, 0), u"Simple"_ustr);  // A2
+    pDoc->SetString(ScAddress(0, 2, 0), u"Simple"_ustr);  // A3
+    pDoc->SetString(ScAddress(0, 3, 0), u"Sing"_ustr);  // A4
     ScFieldEditEngine& rEE = pDoc->GetEditEngine();
-    rEE.SetText("Case");
+    rEE.SetText(u"Case"_ustr);
     pDoc->SetEditText(ScAddress(0, 4, 0), rEE.CreateTextObject()); // A5
-    pDoc->SetString(ScAddress(0, 5, 0), "Time");  // A6
-    pDoc->SetString(ScAddress(0, 6, 0), "Castle");  // A7
+    pDoc->SetString(ScAddress(0, 5, 0), u"Time"_ustr);  // A6
+    pDoc->SetString(ScAddress(0, 6, 0), u"Castle"_ustr);  // A7
 
     ScAddress aA8(0, 7, 0);
     lcl_typeCharsInCell("S", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "S" in A8
     // Should show the partial completion "i".
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("1: A8 should have partial completion Si", OUString("Si"), pDoc->GetString(aA8));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("1: A8 should have partial completion Si", u"Si"_ustr, pDoc->GetString(aA8));
 
     lcl_typeCharsInCell("Si", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "Si" in A8
     // Should not show any suggestions.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("2: A8 should not show suggestions", OUString("Si"), pDoc->GetString(aA8));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("2: A8 should not show suggestions", u"Si"_ustr, pDoc->GetString(aA8));
 
     lcl_typeCharsInCell("Sim", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "Sim" in A8
     // Should autocomplete to "Simple" which is the only match.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("3: A8 should autocomplete", OUString("Simple"), pDoc->GetString(aA8));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("3: A8 should autocomplete", u"Simple"_ustr, pDoc->GetString(aA8));
 
     lcl_typeCharsInCell("Sin", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "Sin" in A8
     // Should autocomplete to "Sing" which is the only match.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("4: A8 should autocomplete", OUString("Sing"), pDoc->GetString(aA8));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("4: A8 should autocomplete", u"Sing"_ustr, pDoc->GetString(aA8));
 
     lcl_typeCharsInCell("C", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "C" in A8
     // Should show the partial completion "as".
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("5: A8 should have partial completion Cas", OUString("Cas"), pDoc->GetString(aA8));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("5: A8 should have partial completion Cas", u"Cas"_ustr, pDoc->GetString(aA8));
 
     lcl_typeCharsInCell("Cast", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "Cast" in A8
     // Should autocomplete to "Castle" which is the only match.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("6: A8 should autocomplete", OUString("Castle"), pDoc->GetString(aA8));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("6: A8 should autocomplete", u"Castle"_ustr, pDoc->GetString(aA8));
 
     lcl_typeCharsInCell("T", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "T" in A8
     // Should autocomplete to "Time" which is the only match.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("7: A8 should autocomplete", OUString("Time"), pDoc->GetString(aA8));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("7: A8 should autocomplete", u"Time"_ustr, pDoc->GetString(aA8));
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEditCursorBounds)
@@ -2810,10 +2810,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetViewDataCrash)
     // Imitate online while creating a new sheet on empty.ods.
     uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({
-            { "Name",  uno::Any(OUString("NewSheet")) },
+            { "Name",  uno::Any(u"NewSheet"_ustr) },
             { "Index", uno::Any(sal_Int32(2)) }
         }));
-    dispatchCommand(mxComponent, ".uno:Insert", aArgs);
+    dispatchCommand(mxComponent, u".uno:Insert"_ustr, aArgs);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
@@ -2847,7 +2847,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextBoxInsert)
         comphelper::InitPropertySequence({
             { "CreateDirectly",  uno::Any(true) }
         }));
-    dispatchCommand(mxComponent, ".uno:DrawText", aArgs);
+    dispatchCommand(mxComponent, u".uno:DrawText"_ustr, aArgs);
 
     // check if we have textbox selected
     CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());
@@ -2881,10 +2881,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
         // Add a new comment
         uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         {
-            {"Text", uno::Any(OUString("LOK Comment Cell B2"))},
-            {"Author", uno::Any(OUString("LOK Client"))},
+            {"Text", uno::Any(u"LOK Comment Cell B2"_ustr)},
+            {"Author", uno::Any(u"LOK Client"_ustr)},
         }));
-        dispatchCommand(mxComponent, ".uno:InsertAnnotation", aArgs);
+        dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
         // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
         CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView.m_aCommentCallbackResult.get<std::string>("action"));
@@ -2900,11 +2900,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
 
         // Single cell(with comment) copy paste test
         {
-            dispatchCommand(mxComponent, ".uno:Copy", aCopyPasteArgs);
+            dispatchCommand(mxComponent, u".uno:Copy"_ustr, aCopyPasteArgs);
 
             pTabViewShell->SetCursor(1, 49);
             Scheduler::ProcessEventsToIdle();
-            dispatchCommand(mxComponent, ".uno:Paste", aCopyPasteArgs); // Paste to cell B50
+            dispatchCommand(mxComponent, u".uno:Paste"_ustr, aCopyPasteArgs); // Paste to cell B50
 
             // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
             CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView.m_aCommentCallbackResult.get<std::string>("action"));
@@ -2930,11 +2930,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
             pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RIGHT | KEY_SHIFT);
             Scheduler::ProcessEventsToIdle();
 
-            dispatchCommand(mxComponent, ".uno:Copy", aCopyPasteArgs);
+            dispatchCommand(mxComponent, u".uno:Copy"_ustr, aCopyPasteArgs);
 
             pTabViewShell->SetCursor(3, 49);
             Scheduler::ProcessEventsToIdle();
-            dispatchCommand(mxComponent, ".uno:Paste", aCopyPasteArgs); // Paste to cell D50
+            dispatchCommand(mxComponent, u".uno:Paste"_ustr, aCopyPasteArgs); // Paste to cell D50
 
             // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
             CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView.m_aCommentCallbackResult.get<std::string>("action"));
@@ -2953,7 +2953,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidEntrySave)
     loadFromFile(u"validity.xlsx");
 
     // .uno:Save modifies the original file, make a copy first
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
@@ -2973,7 +2973,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidEntrySave)
         false /* bInEdit */, false /* bCommit */); // Type "7/8" in A8
 
     uno::Sequence<beans::PropertyValue> aArgs;
-    dispatchCommand(mxComponent, ".uno:Save", aArgs);
+    dispatchCommand(mxComponent, u".uno:Save"_ustr, aArgs);
 
     CPPUNIT_ASSERT_MESSAGE("Should not be marked modified after save", !pDocSh->IsModified());
 
@@ -3036,13 +3036,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReordering)
 
     // try to execute undo in view #1
     SfxLokHelper::setView(nView1);
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     // check that undo has been executed on view #1
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
 
     // try to execute undo in view #2
     SfxLokHelper::setView(nView2);
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     // check that undo has been executed on view #2
     CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetUndoActionCount());
 }
@@ -3090,8 +3090,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingRedo)
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(std::size_t(2), pUndoManager->GetUndoActionCount());
-    CPPUNIT_ASSERT_EQUAL(OUString("xx"), pDoc->GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("yy"), pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"xx"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"yy"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
 
     // text edit a different cell in view #2
     SfxLokHelper::setView(nView2);
@@ -3105,17 +3105,17 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingRedo)
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(std::size_t(3), pUndoManager->GetUndoActionCount());
-    CPPUNIT_ASSERT_EQUAL(OUString("xx"), pDoc->GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("yy"), pDoc->GetString(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("CC"), pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"xx"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"yy"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"CC"_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
 
     // View 1 presses undo, and the second cell is erased
     SfxLokHelper::setView(nView1);
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(std::size_t(2), pUndoManager->GetUndoActionCount());
-    CPPUNIT_ASSERT_EQUAL(OUString("xx"), pDoc->GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("CC"), pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"xx"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"CC"_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
 
     // Verify that the UNDO buttons/actions are still enabled
     {
@@ -3130,11 +3130,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingRedo)
     }
 
     // View 1 presses undo again, and the first cell is erased
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
-    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("CC"), pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"CC"_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingMulti)
@@ -3180,8 +3180,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingMulti)
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(std::size_t(2), pUndoManager->GetUndoActionCount());
-    CPPUNIT_ASSERT_EQUAL(OUString("xx"), pDoc->GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("CC"), pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"xx"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"CC"_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
 
     // and another cell in view #2
     pView2->SetCursor(0, 3);
@@ -3193,17 +3193,17 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingMulti)
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(std::size_t(3), pUndoManager->GetUndoActionCount());
-    CPPUNIT_ASSERT_EQUAL(OUString("xx"), pDoc->GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("CC"), pDoc->GetString(ScAddress(0, 2, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("DD"), pDoc->GetString(ScAddress(0, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"xx"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"CC"_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"DD"_ustr, pDoc->GetString(ScAddress(0, 3, 0)));
 
     // View 1 presses undo
     SfxLokHelper::setView(nView1);
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(std::size_t(2), pUndoManager->GetUndoActionCount());
-    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("CC"), pDoc->GetString(ScAddress(0, 2, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("DD"), pDoc->GetString(ScAddress(0, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"CC"_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"DD"_ustr, pDoc->GetString(ScAddress(0, 3, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetViewRenderState)
@@ -3226,10 +3226,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetViewRenderState)
     {
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", uno::Any(OUString("Dark")) },
+                { "NewTheme", uno::Any(u"Dark"_ustr) },
             }
         );
-        dispatchCommand(mxComponent, ".uno:ChangeTheme", aPropertyValues);
+        dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr, aPropertyValues);
     }
     CPPUNIT_ASSERT_EQUAL("S;Dark"_ostr, pModelObj->getViewRenderState());
 
@@ -3274,7 +3274,7 @@ void testInvalidateOnTextEditWithDifferentZoomLevels::TestBody(const ColRowZoom&
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
-    OUString sZoomUnoCmd = ".uno:ZoomPlus";
+    OUString sZoomUnoCmd = u".uno:ZoomPlus"_ustr;
     int nZoomLevel = rData.zoom;
     if (nZoomLevel < 0)
     {
@@ -3400,7 +3400,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNoInvalidateOnSave)
     loadFromFile(u"invalidate-on-save.ods");
 
     // .uno:Save modifies the original file, make a copy first
-    saveAndReload("calc8");
+    saveAndReload(u"calc8"_ustr);
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
@@ -3414,7 +3414,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNoInvalidateOnSave)
     ViewCallback aView;
 
     uno::Sequence<beans::PropertyValue> aArgs;
-    dispatchCommand(mxComponent, ".uno:Save", aArgs);
+    dispatchCommand(mxComponent, u".uno:Save"_ustr, aArgs);
 
     Scheduler::ProcessEventsToIdle();
 
@@ -3500,12 +3500,12 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellMinimalInvalidations)
     {
         pView->SetCursor(aD4.Col(), aD4.Row());
         uno::Sequence<beans::PropertyValue> aArgs;
-        dispatchCommand(mxComponent, ".uno:Copy", aArgs);
+        dispatchCommand(mxComponent, u".uno:Copy"_ustr, aArgs);
         pView->SetCursor(aA8.Col(), aA8.Row());
         Scheduler::ProcessEventsToIdle();
 
         ViewCallback aView;
-        dispatchCommand(mxComponent, ".uno:Paste", aArgs);
+        dispatchCommand(mxComponent, u".uno:Paste"_ustr, aArgs);
         Scheduler::ProcessEventsToIdle();
 
         checkSampleInvalidation(aView, false);
@@ -3687,7 +3687,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testStatusBarLocale)
     SfxLokHelper::createView();
     ViewCallback aView2;
     SfxViewShell* pView2 = SfxViewShell::Current();
-    pView2->SetLOKLocale("de-DE");
+    pView2->SetLOKLocale(u"de-DE"_ustr);
     {
         SfxViewFrame& rFrame = pView2->GetViewFrame();
         SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool(&rFrame);
@@ -3702,7 +3702,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testStatusBarLocale)
 
     // When creating a cell selection in the 2nd view and processing jobs with the 1st view set to
     // active:
-    comphelper::dispatchCommand(".uno:GoDownSel", {});
+    comphelper::dispatchCommand(u".uno:GoDownSel"_ustr, {});
     SfxLokHelper::setView(nView1);
     pView2->GetViewFrame().GetBindings().GetTimer().Invoke();
     // Once more to hit the pImpl->bMsgDirty = false case in SfxBindings::NextJob_Impl().
@@ -3895,8 +3895,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNumberFormatLocaleMultiUser)
     {
         // setup core language to FR as it will be the first session
         SvtSysLocaleOptions aLocalOptions;
-        aLocalOptions.SetLocaleConfigString("fr-FR");
-        aLocalOptions.SetUILocaleConfigString("fr-FR");
+        aLocalOptions.SetLocaleConfigString(u"fr-FR"_ustr);
+        aLocalOptions.SetUILocaleConfigString(u"fr-FR"_ustr);
         aLocalOptions.Commit();
 
         loadFromFile(u"numlocale.xlsx");
@@ -3910,7 +3910,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNumberFormatLocaleMultiUser)
         int nViewFR = SfxLokHelper::getView();
         ViewCallback aView1;
         SfxViewShell* pViewFR = SfxViewShell::Current();
-        pViewFR->SetLOKLocale("fr-FR");
+        pViewFR->SetLOKLocale(u"fr-FR"_ustr);
 
         // modify G12 with FR and use French keywords in the format
         SfxLokHelper::setView(nViewFR);
@@ -3918,7 +3918,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNumberFormatLocaleMultiUser)
         sal_Int32 nCheckPos;
         SvNumFormatType nType;
         sal_uInt32 nFormat;
-        OUString aNumberFormat("JJ/MM/AAAA");
+        OUString aNumberFormat(u"JJ/MM/AAAA"_ustr);
         SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
         pFormatter->PutEntry(aNumberFormat, nCheckPos, nType, nFormat);
         ScAddress aCellPos1(/*nColP=*/6, /*nRowP=*/11, /*nTabP=*/0);
@@ -3930,13 +3930,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNumberFormatLocaleMultiUser)
     {
         // now setup DE language in core
         SvtSysLocaleOptions aLocalOptions;
-        aLocalOptions.SetLocaleConfigString("de-DE");
-        aLocalOptions.SetUILocaleConfigString("de-DE");
+        aLocalOptions.SetLocaleConfigString(u"de-DE"_ustr);
+        aLocalOptions.SetUILocaleConfigString(u"de-DE"_ustr);
         aLocalOptions.Commit();
 
         // save and reopen
         // .uno:Save modifies the original file, make a copy first
-        saveAndReload("Calc MS Excel 2007 VBA XML");
+        saveAndReload(u"Calc MS Excel 2007 VBA XML"_ustr);
 
         ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
         CPPUNIT_ASSERT(pModelObj);
@@ -3947,7 +3947,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNumberFormatLocaleMultiUser)
         Scheduler::ProcessEventsToIdle();
 
         uno::Sequence<beans::PropertyValue> aArgs;
-        dispatchCommand(mxComponent, ".uno:Save", aArgs);
+        dispatchCommand(mxComponent, u".uno:Save"_ustr, aArgs);
 
         Scheduler::ProcessEventsToIdle();
 
@@ -3956,7 +3956,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNumberFormatLocaleMultiUser)
         // verify that format is correct (German), doesn't have any "string" inside
         sal_uInt32 nNumberFormat = pDoc->GetNumberFormat(/*col=*/6, /*row=*/11, /*tab=*/0);
         const SvNumberformat* pNumberFormat = pDoc->GetFormatTable()->GetEntry(nNumberFormat);
-        CPPUNIT_ASSERT_EQUAL(OUString("TT.MM.JJ"), pNumberFormat->GetFormatstring());
+        CPPUNIT_ASSERT_EQUAL(u"TT.MM.JJ"_ustr, pNumberFormat->GetFormatstring());
     }
 }
 

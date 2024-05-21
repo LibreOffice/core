@@ -44,7 +44,7 @@ public:
 };
 
 ScIndexEnumeration_NamedRangesEnumeration::ScIndexEnumeration_NamedRangesEnumeration()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
 {
 }
 
@@ -55,12 +55,12 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_NamedRangesEnumeration::init(
 
     uno::Reference<beans::XPropertySet> xPropertySet(xDoc, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XNamedRanges> xNR;
-    CPPUNIT_ASSERT(xPropertySet->getPropertyValue("NamedRanges") >>= xNR);
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue(u"NamedRanges"_ustr) >>= xNR);
 
     table::CellRangeAddress aCellRangeAddr(0, 0, 0, 2, 2);
     table::CellAddress aBaseAddr(aCellRangeAddr.Sheet, aCellRangeAddr.StartColumn,
                                  aCellRangeAddr.StartRow);
-    xNR->addNewByName("ANamedRange", "A1:B2", aBaseAddr, 0);
+    xNR->addNewByName(u"ANamedRange"_ustr, u"A1:B2"_ustr, aBaseAddr, 0);
     xNR->outputList(table::CellAddress(0, 1, 1));
 
     uno::Reference<container::XEnumerationAccess> xEA(xNR, uno::UNO_QUERY_THROW);
@@ -71,7 +71,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_NamedRangesEnumeration::init(
 void ScIndexEnumeration_NamedRangesEnumeration::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScIndexEnumeration_NamedRangesEnumeration);

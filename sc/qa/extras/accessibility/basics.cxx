@@ -58,7 +58,8 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestCalcMenu)
     std::cout << "A1 (value): " << value << std::endl;
     uno::Reference<util::XNumberFormatsSupplier> xSupplier(mxDocument, uno::UNO_QUERY_THROW);
     util::Date nullDate;
-    CPPUNIT_ASSERT(xSupplier->getNumberFormatSettings()->getPropertyValue("NullDate") >>= nullDate);
+    CPPUNIT_ASSERT(xSupplier->getNumberFormatSettings()->getPropertyValue(u"NullDate"_ustr)
+                   >>= nullDate);
     const Date afterDate(Date::SYSTEM);
     CPPUNIT_ASSERT_GREATEREQUAL(double(beforeDate - nullDate), value);
     CPPUNIT_ASSERT_LESSEQUAL(double(afterDate - nullDate), value);

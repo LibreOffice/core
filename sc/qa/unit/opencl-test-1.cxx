@@ -2095,7 +2095,7 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaGammaDist)
 }
 
 ScOpenCLTest1::ScOpenCLTest1()
-      : ScModelTestBase( "sc/qa/unit/data" )
+      : ScModelTestBase( u"sc/qa/unit/data"_ustr )
 {
 }
 

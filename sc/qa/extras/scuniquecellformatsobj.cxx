@@ -57,7 +57,7 @@ public:
 };
 
 ScUniqueCellFormatsObj::ScUniqueCellFormatsObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XElementAccess(cppu::UnoType<sheet::XSheetCellRangeContainer>::get())
     , XIndexAccess(1)
 {
@@ -79,7 +79,7 @@ uno::Reference<uno::XInterface> ScUniqueCellFormatsObj::init()
 void ScUniqueCellFormatsObj::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScUniqueCellFormatsObj);

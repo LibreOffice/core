@@ -41,10 +41,10 @@ static void lcl_createAndCheckDataProvider(ScDocument& rDoc, const OUString& cel
     CPPUNIT_ASSERT(xDataProvider.is());
 
     uno::Sequence<beans::PropertyValue> aArgs{
-        comphelper::makePropertyValue("CellRangeRepresentation", cellRange),
-        comphelper::makePropertyValue("HasCategories", hasCategories),
-        comphelper::makePropertyValue("FirstCellAsLabel", firstCellAsLabel),
-        comphelper::makePropertyValue("DataRowSource", chart::ChartDataRowSource_COLUMNS)
+        comphelper::makePropertyValue(u"CellRangeRepresentation"_ustr, cellRange),
+        comphelper::makePropertyValue(u"HasCategories"_ustr, hasCategories),
+        comphelper::makePropertyValue(u"FirstCellAsLabel"_ustr, firstCellAsLabel),
+        comphelper::makePropertyValue(u"DataRowSource"_ustr, chart::ChartDataRowSource_COLUMNS)
     };
 
     uno::Reference<chart2::data::XDataSource> xDataSource = xDataProvider->createDataSource(aArgs);
@@ -73,16 +73,16 @@ void ScChart2DataProviderTest::testHeaderExpansion()
 
     ScDocument* pDoc = getScDoc();
 
-    lcl_createAndCheckDataProvider(*pDoc, "$Sheet1.$A$1:$D$4", false, false, 4, 4);
-    lcl_createAndCheckDataProvider(*pDoc, "$Sheet1.$A$1:$D$4", true, true, 4, 3);
+    lcl_createAndCheckDataProvider(*pDoc, u"$Sheet1.$A$1:$D$4"_ustr, false, false, 4, 4);
+    lcl_createAndCheckDataProvider(*pDoc, u"$Sheet1.$A$1:$D$4"_ustr, true, true, 4, 3);
 
-    lcl_createAndCheckDataProvider(*pDoc, "$Sheet1.$A$17:$D$20", true, true, 3, 2);
+    lcl_createAndCheckDataProvider(*pDoc, u"$Sheet1.$A$17:$D$20"_ustr, true, true, 3, 2);
 
-    lcl_createAndCheckDataProvider(*pDoc, "$Sheet1.$A$25:$D$28", true, true, 4, 2);
+    lcl_createAndCheckDataProvider(*pDoc, u"$Sheet1.$A$25:$D$28"_ustr, true, true, 4, 2);
 }
 
 ScChart2DataProviderTest::ScChart2DataProviderTest()
-    : ScModelTestBase("sc/qa/unit/data")
+    : ScModelTestBase(u"sc/qa/unit/data"_ustr)
 {
 }
 

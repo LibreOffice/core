@@ -46,7 +46,7 @@ public:
 };
 
 ScIndexEnumeration_SubTotalFieldsEnumeration::ScIndexEnumeration_SubTotalFieldsEnumeration()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
 {
 }
 
@@ -74,7 +74,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_SubTotalFieldsEnumeration::in
 void ScIndexEnumeration_SubTotalFieldsEnumeration::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScIndexEnumeration_SubTotalFieldsEnumeration);

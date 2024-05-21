@@ -54,7 +54,7 @@ private:
 };
 
 ScIndexEnumeration_DataPilotItemsEnumeration::ScIndexEnumeration_DataPilotItemsEnumeration()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
 {
 }
 
@@ -68,7 +68,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_DataPilotItemsEnumeration::in
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
 
     uno::Reference<container::XIndexAccess> xIA(xSheets, uno::UNO_QUERY_THROW);
-    xSheets->insertNewByName("Some Sheet", 0);
+    xSheets->insertNewByName(u"Some Sheet"_ustr, 0);
 
     uno::Reference<sheet::XSpreadsheet> xSheet0(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet1(xIA->getByIndex(1), uno::UNO_QUERY_THROW);
@@ -104,11 +104,11 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_DataPilotItemsEnumeration::in
     uno::Reference<beans::XPropertySet> xPropertySet(xDPD->getDataPilotFields()->getByIndex(0),
                                                      uno::UNO_QUERY_THROW);
     aValue <<= sheet::DataPilotFieldOrientation_DATA;
-    xPropertySet->setPropertyValue("Orientation", aValue);
+    xPropertySet->setPropertyValue(u"Orientation"_ustr, aValue);
     aValue <<= sheet::GeneralFunction_SUM;
-    xPropertySet->setPropertyValue("Function", aValue);
+    xPropertySet->setPropertyValue(u"Function"_ustr, aValue);
 
-    xDPT->insertNewByName("DataPilotTable", aCellAddress, xDPD);
+    xDPT->insertNewByName(u"DataPilotTable"_ustr, aCellAddress, xDPD);
 
     uno::Reference<sheet::XDataPilotField> xDPF(xDPD->getDataPilotFields()->getByIndex(0),
                                                 uno::UNO_QUERY_THROW);
@@ -120,7 +120,7 @@ void ScIndexEnumeration_DataPilotItemsEnumeration::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScIndexEnumeration_DataPilotItemsEnumeration);

@@ -87,11 +87,12 @@ public:
 };
 
 ScTableConditionalFormat::ScTableConditionalFormat()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XElementAccess(cppu::UnoType<sheet::XSheetConditionalEntry>::get())
     , XIndexAccess(2)
-    , XNameAccess("Entry1")
-    , XServiceInfo("ScTableConditionalFormat", "com.sun.star.sheet.TableConditionalFormat")
+    , XNameAccess(u"Entry1"_ustr)
+    , XServiceInfo(u"ScTableConditionalFormat"_ustr,
+                   u"com.sun.star.sheet.TableConditionalFormat"_ustr)
 {
 }
 
@@ -120,9 +121,9 @@ uno::Reference<uno::XInterface> ScTableConditionalFormat::init()
 uno::Sequence<beans::PropertyValue> ScTableConditionalFormat::createCondition(const sal_Int32 nr)
 {
     uno::Sequence<beans::PropertyValue> aPropValue{
-        comphelper::makePropertyValue(SC_UNONAME_STYLENAME, OUString("Result2")),
+        comphelper::makePropertyValue(SC_UNONAME_STYLENAME, u"Result2"_ustr),
         comphelper::makePropertyValue(SC_UNONAME_FORMULA1, "$Sheet1.$B$" + OUString::number(nr)),
-        comphelper::makePropertyValue(SC_UNONAME_FORMULA2, OUString("")),
+        comphelper::makePropertyValue(SC_UNONAME_FORMULA2, u""_ustr),
         comphelper::makePropertyValue(SC_UNONAME_OPERATOR, sheet::ConditionOperator_EQUAL),
         comphelper::makePropertyValue(SC_UNONAME_SOURCEPOS, table::CellAddress(0, 1, 5))
     };
@@ -134,7 +135,7 @@ void ScTableConditionalFormat::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScTableConditionalFormat);

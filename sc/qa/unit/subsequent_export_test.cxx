@@ -50,7 +50,7 @@ protected:
 
 public:
     ScExportTest()
-        : ScModelTestBase("sc/qa/unit/data")
+        : ScModelTestBase(u"sc/qa/unit/data"_ustr)
     {
     }
 };
@@ -63,7 +63,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testExport)
 
     pDoc->SetValue(0, 0, 0, 1.0);
 
-    saveAndReload("calc8");
+    saveAndReload(u"calc8"_ustr);
 
     pDoc = getScDoc();
     double aVal = pDoc->GetValue(0, 0, 0);
@@ -80,7 +80,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testDefaultFontHeight)
     pPool->SetUserDefaultItem(SvxFontHeightItem(400, 100, ATTR_CJK_FONT_HEIGHT));
     pPool->SetUserDefaultItem(SvxFontHeightItem(400, 100, ATTR_CTL_FONT_HEIGHT));
 
-    saveAndReload("calc8");
+    saveAndReload(u"calc8"_ustr);
 
     pDoc = getScDoc();
     pPool = pDoc->GetPool();
@@ -96,13 +96,13 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf139167)
 {
     createScDoc("xlsx/tdf139167.xlsx");
 
-    save("Calc Office Open XML");
-    xmlDocUniquePtr pDoc = parseExport("xl/styles.xml");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pDoc = parseExport(u"xl/styles.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "/x:styleSheet/x:cellStyles"_ostr, "count"_ostr, "6");
+    assertXPath(pDoc, "/x:styleSheet/x:cellStyles"_ostr, "count"_ostr, u"6"_ustr);
     assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf/x:fill/x:patternFill/x:bgColor"_ostr, "rgb"_ostr,
-                "FFFFFF00");
+                u"FFFFFF00"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testFontColorWithMultipleAttributesDefined)
@@ -114,102 +114,102 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testFontColorWithMultipleAttributesDefined)
 
     createScDoc("xlsx/tdf113271.xlsx");
 
-    save("Calc Office Open XML");
-    xmlDocUniquePtr pDoc = parseExport("xl/styles.xml");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pDoc = parseExport(u"xl/styles.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "/x:styleSheet/x:fonts"_ostr, "count"_ostr, "6");
+    assertXPath(pDoc, "/x:styleSheet/x:fonts"_ostr, "count"_ostr, u"6"_ustr);
 
     // Expect "theme" attribute to be set correctly
-    assertXPath(pDoc, "/x:styleSheet/x:fonts/x:font[1]/x:color"_ostr, "theme"_ostr, "1");
+    assertXPath(pDoc, "/x:styleSheet/x:fonts/x:font[1]/x:color"_ostr, "theme"_ostr, u"1"_ustr);
     // We don't export "rgb" attribute
     assertXPathNoAttribute(pDoc, "/x:styleSheet/x:fonts/x:font[1]/x:color"_ostr, "rgb"_ostr);
     // Just making sure the checked font is the correct one
-    assertXPath(pDoc, "/x:styleSheet/x:fonts/x:font[1]/x:name"_ostr, "val"_ostr, "Calibri");
+    assertXPath(pDoc, "/x:styleSheet/x:fonts/x:font[1]/x:name"_ostr, "val"_ostr, u"Calibri"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf139394)
 {
     createScDoc("xlsx/tdf139394.xlsx");
 
-    save("Calc Office Open XML");
-    xmlDocUniquePtr pDoc = parseExport("xl/worksheets/sheet1.xml");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPathContent(
         pDoc,
         "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[1]/"
         "x14:cfRule/xm:f"_ostr,
-        "LEFT(A1,LEN(\"+\"))=\"+\"");
+        u"LEFT(A1,LEN(\"+\"))=\"+\""_ustr);
     assertXPathContent(
         pDoc,
         "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[2]/"
         "x14:cfRule/xm:f"_ostr,
-        "RIGHT(A2,LEN(\"-\"))=\"-\"");
+        u"RIGHT(A2,LEN(\"-\"))=\"-\""_ustr);
     assertXPathContent(
         pDoc,
         "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[3]/"
         "x14:cfRule/xm:f"_ostr,
-        "LEFT(A3,LEN($B$3))=$B$3");
+        u"LEFT(A3,LEN($B$3))=$B$3"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testExtCondFormatXLSX)
 {
     createScDoc("xlsx/tdf139021.xlsx");
 
-    save("Calc Office Open XML");
-    xmlDocUniquePtr pDoc = parseExport("xl/worksheets/sheet1.xml");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(
         pDoc,
         "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[1]/"
         "x14:cfRule"_ostr,
-        "type"_ostr, "containsText");
+        "type"_ostr, u"containsText"_ustr);
     assertXPathContent(
         pDoc,
         "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[1]/"
         "x14:cfRule/xm:f[1]"_ostr,
-        "NOT(ISERROR(SEARCH($B$1,A1)))");
+        u"NOT(ISERROR(SEARCH($B$1,A1)))"_ustr);
     assertXPathContent(
         pDoc,
         "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[1]/"
         "x14:cfRule/xm:f[2]"_ostr,
-        "$B$1");
+        u"$B$1"_ustr);
     assertXPath(
         pDoc,
         "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[2]/"
         "x14:cfRule"_ostr,
-        "type"_ostr, "notContainsText");
+        "type"_ostr, u"notContainsText"_ustr);
     assertXPathContent(
         pDoc,
         "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[2]/"
         "x14:cfRule/xm:f[1]"_ostr,
-        "ISERROR(SEARCH($B$2,A2))");
+        u"ISERROR(SEARCH($B$2,A2))"_ustr);
     assertXPathContent(
         pDoc,
         "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[2]/"
         "x14:cfRule/xm:f[2]"_ostr,
-        "$B$2");
+        u"$B$2"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf90104)
 {
     createScDoc("xlsx/tdf90104.xlsx");
 
-    save("Calc Office Open XML");
+    save(u"Calc Office Open XML"_ustr);
 
-    xmlDocUniquePtr pDoc = parseExport("xl/worksheets/sheet1.xml");
+    xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPathContent(pDoc,
                        "/x:worksheet/x:dataValidations/x:dataValidation/mc:AlternateContent"
                        "/mc:Choice/x12ac:list"_ostr,
-                       "1,\"2,3\",4,\"5,6\"");
+                       u"1,\"2,3\",4,\"5,6\""_ustr);
     assertXPathContent(pDoc,
                        "/x:worksheet/x:dataValidations/x:dataValidation/mc:AlternateContent"
                        "/mc:Fallback/x:formula1"_ostr,
-                       "\"1,2,3,4,5,6\"");
+                       u"\"1,2,3,4,5,6\""_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf111876)
@@ -218,8 +218,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf111876)
 
     createScDoc("xlsx/tdf111876.xlsx");
 
-    save("Calc Office Open XML");
-    xmlDocUniquePtr pDoc = parseExport("xl/worksheets/_rels/sheet1.xml.rels");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/_rels/sheet1.xml.rels"_ustr);
     CPPUNIT_ASSERT(pDoc);
     OUString sTarget = getXPath(pDoc, "/rels:Relationships/rels:Relationship"_ostr, "Target"_ostr);
 
@@ -229,7 +229,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf111876)
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testPasswordExport)
 {
-    std::vector<OUString> aFilterNames{ "calc8", "MS Excel 97", "Calc Office Open XML" };
+    std::vector<OUString> aFilterNames{ u"calc8"_ustr, u"MS Excel 97"_ustr,
+                                        u"Calc Office Open XML"_ustr };
 
     for (size_t i = 0; i < aFilterNames.size(); ++i)
     {
@@ -257,7 +258,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf134332)
 
     ASSERT_DOUBLES_EQUAL(238.0, pDoc->GetValue(ScAddress(0, 10144, 0)));
 
-    saveAndReload("calc8", /*pPassword*/ "test");
+    saveAndReload(u"calc8"_ustr, /*pPassword*/ "test");
 
     // Without the fixes in place, it would have failed here
     pDoc = getScDoc();
@@ -270,7 +271,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testConditionalFormatExportODS)
 {
     createScDoc("ods/new_cond_format_test_export.ods");
 
-    saveAndReload("calc8");
+    saveAndReload(u"calc8"_ustr);
     ScDocument* pDoc = getScDoc();
     OUString aCSVPath = createFilePath(u"contentCSV/new_cond_format_test_export.csv");
     testCondFile(aCSVPath, &*pDoc, 0);
@@ -279,7 +280,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testConditionalFormatExportODS)
 CPPUNIT_TEST_FIXTURE(ScExportTest, testCondFormatExportCellIs)
 {
     createScDoc("xlsx/condFormat_cellis.xlsx");
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
 
     ScDocument* pDoc = getScDoc();
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetCondFormList(0)->size());
@@ -295,7 +296,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCondFormatExportCellIs)
     CPPUNIT_ASSERT_EQUAL(ScConditionMode::Equal, pCondition->GetOperation());
 
     OUString aStr = pCondition->GetExpression(ScAddress(0, 0, 0), 0);
-    CPPUNIT_ASSERT_EQUAL(OUString("$Sheet2.$A$2"), aStr);
+    CPPUNIT_ASSERT_EQUAL(u"$Sheet2.$A$2"_ustr, aStr);
 
     pEntry = pFormat->GetEntry(1);
     CPPUNIT_ASSERT(pEntry);
@@ -305,14 +306,14 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCondFormatExportCellIs)
     CPPUNIT_ASSERT_EQUAL(ScConditionMode::Equal, pCondition->GetOperation());
 
     aStr = pCondition->GetExpression(ScAddress(0, 0, 0), 0);
-    CPPUNIT_ASSERT_EQUAL(OUString("$Sheet2.$A$1"), aStr);
+    CPPUNIT_ASSERT_EQUAL(u"$Sheet2.$A$1"_ustr, aStr);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testConditionalFormatExportXLSX)
 {
     createScDoc("xlsx/new_cond_format_test_export.xlsx");
 
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
     ScDocument* pDoc = getScDoc();
     {
         OUString aCSVPath = createFilePath(u"contentCSV/new_cond_format_test_export.csv");
@@ -328,7 +329,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf99856_dataValidationTest)
 {
     createScDoc("ods/tdf99856_dataValidationTest.ods");
 
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
 
     ScDocument* pDoc = getScDoc();
     const ScValidationData* pData = pDoc->GetValidationEntry(2);
@@ -338,7 +339,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf99856_dataValidationTest)
     std::vector<ScTypedStrData> aList;
     pData->FillSelectionList(aList, ScAddress(0, 1, 1));
     CPPUNIT_ASSERT_EQUAL(size_t(18), aList.size());
-    CPPUNIT_ASSERT_EQUAL(OUString("18 Missis"), aList[17].GetString());
+    CPPUNIT_ASSERT_EQUAL(u"18 Missis"_ustr, aList[17].GetString());
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testProtectionKeyODS_UTF16LErtlSHA1)
@@ -355,8 +356,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testProtectionKeyODS_UTF16LErtlSHA1)
 
     // we can't assume that the user entered the password; check that we
     // round-trip the password as-is
-    save("calc8");
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    save(u"calc8"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(
         pXmlDoc,
         "//office:spreadsheet[@table:structure-protected='true' and "
@@ -383,8 +384,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testProtectionKeyODS_UTF8SHA1)
 
     // we can't assume that the user entered the password; check that we
     // round-trip the password as-is
-    save("calc8");
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    save(u"calc8"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(
         pXmlDoc,
         "//office:spreadsheet[@table:structure-protected='true' and "
@@ -411,8 +412,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testProtectionKeyODS_UTF8SHA256ODF12)
 
     // we can't assume that the user entered the password; check that we
     // round-trip the password as-is
-    save("calc8");
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    save(u"calc8"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(
         pXmlDoc,
         "//office:spreadsheet[@table:structure-protected='true' and "
@@ -439,8 +440,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testProtectionKeyODS_UTF8SHA256W3C)
 
     // we can't assume that the user entered the password; check that we
     // round-trip the password as-is
-    save("calc8");
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    save(u"calc8"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(
         pXmlDoc,
         "//office:spreadsheet[@table:structure-protected='true' and "
@@ -467,8 +468,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testProtectionKeyODS_XL_SHA1)
 
     // we can't assume that the user entered the password; check that we
     // round-trip the password as-is
-    save("calc8");
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    save(u"calc8"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(
         pXmlDoc,
         "//office:spreadsheet[@table:structure-protected='true' and "
@@ -489,7 +490,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testColorScaleExportODS)
 {
     createScDoc("ods/colorscale.ods");
 
-    saveAndReload("calc8");
+    saveAndReload(u"calc8"_ustr);
 
     ScDocument* pDoc = getScDoc();
 
@@ -501,7 +502,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testColorScaleExportXLSX)
 {
     createScDoc("xlsx/colorscale.xlsx");
 
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
 
     ScDocument* pDoc = getScDoc();
 
@@ -513,7 +514,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testDataBarExportODS)
 {
     createScDoc("ods/databar.ods");
 
-    saveAndReload("calc8");
+    saveAndReload(u"calc8"_ustr);
 
     ScDocument* pDoc = getScDoc();
 
@@ -524,7 +525,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testFormatExportODS)
 {
     createScDoc("ods/formats.ods");
 
-    saveAndReload("calc8");
+    saveAndReload(u"calc8"_ustr);
 
     ScDocument* pDoc = getScDoc();
 
@@ -536,31 +537,31 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCommentExportXLSX)
     //tdf#104729 FILESAVE OpenOffice do not save author of the comment during export to .xlsx
     createScDoc("ods/comment.ods");
 
-    save("Calc Office Open XML");
-    xmlDocUniquePtr pComments = parseExport("xl/comments1.xml");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pComments = parseExport(u"xl/comments1.xml"_ustr);
     CPPUNIT_ASSERT(pComments);
 
-    assertXPathContent(pComments, "/x:comments/x:authors/x:author[1]"_ostr, "BAKO");
+    assertXPathContent(pComments, "/x:comments/x:authors/x:author[1]"_ostr, u"BAKO"_ustr);
     assertXPath(pComments, "/x:comments/x:authors/x:author"_ostr, 1);
 
     assertXPathContent(pComments, "/x:comments/x:commentList/x:comment/x:text/x:r/x:t"_ostr,
-                       "Komentarz");
+                       u"Komentarz"_ustr);
 
-    xmlDocUniquePtr pVmlDrawing = parseExport("xl/drawings/vmlDrawing1.vml");
+    xmlDocUniquePtr pVmlDrawing = parseExport(u"xl/drawings/vmlDrawing1.vml"_ustr);
     CPPUNIT_ASSERT(pVmlDrawing);
 
     //assertXPath(pVmlDrawing, "/xml/v:shapetype", "coordsize", "21600,21600");
-    assertXPath(pVmlDrawing, "/xml/v:shapetype"_ostr, "spt"_ostr, "202");
-    assertXPath(pVmlDrawing, "/xml/v:shapetype/v:stroke"_ostr, "joinstyle"_ostr, "miter");
+    assertXPath(pVmlDrawing, "/xml/v:shapetype"_ostr, "spt"_ostr, u"202"_ustr);
+    assertXPath(pVmlDrawing, "/xml/v:shapetype/v:stroke"_ostr, "joinstyle"_ostr, u"miter"_ustr);
     const OUString sShapeTypeId = "#" + getXPath(pVmlDrawing, "/xml/v:shapetype"_ostr, "id"_ostr);
 
     assertXPath(pVmlDrawing, "/xml/v:shape"_ostr, "type"_ostr, sShapeTypeId);
-    assertXPath(pVmlDrawing, "/xml/v:shape/v:shadow"_ostr, "color"_ostr, "black");
-    assertXPath(pVmlDrawing, "/xml/v:shape/v:shadow"_ostr, "obscured"_ostr, "t");
+    assertXPath(pVmlDrawing, "/xml/v:shape/v:shadow"_ostr, "color"_ostr, u"black"_ustr);
+    assertXPath(pVmlDrawing, "/xml/v:shape/v:shadow"_ostr, "obscured"_ostr, u"t"_ustr);
 
     //tdf#117274 fix MSO interoperability with the secret VML shape type id
-    assertXPath(pVmlDrawing, "/xml/v:shapetype"_ostr, "id"_ostr, "_x0000_t202");
-    assertXPath(pVmlDrawing, "/xml/v:shape"_ostr, "type"_ostr, "#_x0000_t202");
+    assertXPath(pVmlDrawing, "/xml/v:shapetype"_ostr, "id"_ostr, u"_x0000_t202"_ustr);
+    assertXPath(pVmlDrawing, "/xml/v:shape"_ostr, "type"_ostr, u"#_x0000_t202"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testCommentExportXLSX_2_XLSX)
@@ -577,14 +578,14 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCommentExportXLSX_2_XLSX)
 
     pNote->ShowCaption(aPosC9, true);
 
-    save("Calc Office Open XML");
-    xmlDocUniquePtr pComments = parseExport("xl/comments1.xml");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pComments = parseExport(u"xl/comments1.xml"_ustr);
     CPPUNIT_ASSERT(pComments);
 
     assertXPathContent(pComments, "/x:comments/x:commentList/x:comment/x:text/x:r/x:t"_ostr,
-                       "visible comment");
+                       u"visible comment"_ustr);
 
-    xmlDocUniquePtr pVmlDrawing = parseExport("xl/drawings/vmlDrawing1.vml");
+    xmlDocUniquePtr pVmlDrawing = parseExport(u"xl/drawings/vmlDrawing1.vml"_ustr);
     CPPUNIT_ASSERT(pVmlDrawing);
 
     assertXPath(pVmlDrawing, "/xml/v:shape/x:ClientData/x:Visible"_ostr, 0);
@@ -596,8 +597,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCustomColumnWidthExportXLSX)
     //tdf#100946 FILESAVE Excel on macOS ignored column widths in XLSX last saved by LO
     createScDoc("ods/custom_column_width.ods");
 
-    save("Calc Office Open XML");
-    xmlDocUniquePtr pSheet = parseExport("xl/worksheets/sheet1.xml");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
 
     // tdf#124741: check that we export default width, otherwise the skipped columns would have
@@ -609,57 +610,59 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCustomColumnWidthExportXLSX)
     // First column, has everything default (width in Calc: 1280), skipped
 
     // Second column, has custom width (width in Calc: 1225)
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "hidden"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "outlineLevel"_ostr, "0");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "customWidth"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "min"_ostr, "2");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "max"_ostr, "2");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "hidden"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "outlineLevel"_ostr, u"0"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "customWidth"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "min"_ostr, u"2"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "max"_ostr, u"2"_ustr);
 
     // Third column, has everything default (width in Calc: 1280), skipped
 
     // Fourth column has custom width. Columns from 4 to 7 are hidden
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "hidden"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "outlineLevel"_ostr, "0");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "customWidth"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "min"_ostr, "4");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "max"_ostr, "4");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "hidden"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "outlineLevel"_ostr, u"0"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "customWidth"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "min"_ostr, u"4"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "max"_ostr, u"4"_ustr);
 
     // 5th column has custom width. Columns from 4 to 7 are hidden
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "hidden"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "outlineLevel"_ostr, "0");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "customWidth"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "min"_ostr, "5");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "max"_ostr, "5");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "hidden"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "outlineLevel"_ostr, u"0"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "customWidth"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "min"_ostr, u"5"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "max"_ostr, u"5"_ustr);
 
     // 6th and 7th columns have default width and they are hidden
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "hidden"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "outlineLevel"_ostr, "0");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "customWidth"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "min"_ostr, "6");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "max"_ostr, "7");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "hidden"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "outlineLevel"_ostr, u"0"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "customWidth"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "min"_ostr, u"6"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "max"_ostr, u"7"_ustr);
 
     // 8th column has everything default - skipped
 
     // 9th column has custom width
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "hidden"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "outlineLevel"_ostr, "0");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "customWidth"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "min"_ostr, "9");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "max"_ostr, "9");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "hidden"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "outlineLevel"_ostr, u"0"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "customWidth"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "min"_ostr, u"9"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "max"_ostr, u"9"_ustr);
 
     // We expected that exactly 5 unique Nodes will be produced
     assertXPath(pSheet, "/x:worksheet/x:cols/x:col"_ostr, 5);
 
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]"_ostr, "hidden"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]"_ostr, "outlineLevel"_ostr, "0");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]"_ostr, "customFormat"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]"_ostr, "customHeight"_ostr, "false");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]"_ostr, "hidden"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]"_ostr, "outlineLevel"_ostr, u"0"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]"_ostr, "customFormat"_ostr,
+                u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]"_ostr, "customHeight"_ostr,
+                u"false"_ustr);
 }
 #endif
 
@@ -668,8 +671,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testXfDefaultValuesXLSX)
     //tdf#70565 FORMATTING: User Defined Custom Formatting is not applied during importing XLSX documents
     createScDoc("xlsx/xf_default_values.xlsx");
 
-    save("Calc Office Open XML");
-    xmlDocUniquePtr pSheet = parseExport("xl/styles.xml");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/styles.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
 
     // cellStyleXfs don't need xfId, so we need to make sure it is not saved
@@ -677,10 +680,10 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testXfDefaultValuesXLSX)
 
     // Because numFmtId fontId fillId borderId xfId are not existing during import
     // it should be created during export, with values set to "0"
-    assertXPath(pSheet, "/x:styleSheet/x:cellXfs/x:xf[1]"_ostr, "xfId"_ostr, "0");
-    assertXPath(pSheet, "/x:styleSheet/x:cellXfs/x:xf[2]"_ostr, "xfId"_ostr, "0");
-    assertXPath(pSheet, "/x:styleSheet/x:cellXfs/x:xf[3]"_ostr, "xfId"_ostr, "0");
-    assertXPath(pSheet, "/x:styleSheet/x:cellXfs/x:xf[4]"_ostr, "xfId"_ostr, "0");
+    assertXPath(pSheet, "/x:styleSheet/x:cellXfs/x:xf[1]"_ostr, "xfId"_ostr, u"0"_ustr);
+    assertXPath(pSheet, "/x:styleSheet/x:cellXfs/x:xf[2]"_ostr, "xfId"_ostr, u"0"_ustr);
+    assertXPath(pSheet, "/x:styleSheet/x:cellXfs/x:xf[3]"_ostr, "xfId"_ostr, u"0"_ustr);
+    assertXPath(pSheet, "/x:styleSheet/x:cellXfs/x:xf[4]"_ostr, "xfId"_ostr, u"0"_ustr);
 
     // We expected that exactly 15 cellXfs:xf Nodes will be produced
     assertXPath(pSheet, "/x:styleSheet/x:cellXfs/x:xf"_ostr, 14);
@@ -728,14 +731,14 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testODF13)
         // FIXME: Error: unexpected attribute "loext:scale-to-X"
         skipValidation();
 
-        saveAndReload("calc8");
+        saveAndReload(u"calc8"_ustr);
         pDoc = getScDoc();
 
         // check XML
-        xmlDocUniquePtr pContentXml = parseExport("content.xml");
+        xmlDocUniquePtr pContentXml = parseExport(u"content.xml"_ustr);
         assertXPath(pContentXml, "/office:document-content/office:automatic-styles/style:style/"
                                  "style:table-properties[@table:tab-color='#ff3838']"_ostr);
-        xmlDocUniquePtr pStylesXml = parseExport("styles.xml");
+        xmlDocUniquePtr pStylesXml = parseExport(u"styles.xml"_ustr);
         assertXPath(pStylesXml, "/office:document-styles/office:automatic-styles/style:page-layout/"
                                 "style:page-layout-properties[@style:scale-to-X='2']"_ostr);
         assertXPath(pStylesXml, "/office:document-styles/office:automatic-styles/style:page-layout/"
@@ -751,14 +754,14 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testODF13)
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(9, pBatch);
         pBatch->commit();
 
-        saveAndReload("calc8");
+        saveAndReload(u"calc8"_ustr);
         pDoc = getScDoc();
 
         // check XML
-        xmlDocUniquePtr pContentXml = parseExport("content.xml");
+        xmlDocUniquePtr pContentXml = parseExport(u"content.xml"_ustr);
         assertXPath(pContentXml, "/office:document-content/office:automatic-styles/style:style/"
                                  "style:table-properties[@tableooo:tab-color='#ff3838']"_ostr);
-        xmlDocUniquePtr pStylesXml = parseExport("styles.xml");
+        xmlDocUniquePtr pStylesXml = parseExport(u"styles.xml"_ustr);
         assertXPath(pStylesXml, "/office:document-styles/office:automatic-styles/style:page-layout/"
                                 "style:page-layout-properties[@loext:scale-to-X='2']"_ostr);
         assertXPath(pStylesXml, "/office:document-styles/office:automatic-styles/style:page-layout/"
@@ -774,15 +777,15 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testODF13)
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(4, pBatch);
         pBatch->commit();
 
-        save("calc8");
+        save(u"calc8"_ustr);
 
         // check XML
-        xmlDocUniquePtr pContentXml = parseExport("content.xml");
+        xmlDocUniquePtr pContentXml = parseExport(u"content.xml"_ustr);
         assertXPathNoAttribute(
             pContentXml,
             "/office:document-content/office:automatic-styles/style:style/style:table-properties"_ostr,
             "tab-color"_ostr);
-        xmlDocUniquePtr pStylesXml = parseExport("styles.xml");
+        xmlDocUniquePtr pStylesXml = parseExport(u"styles.xml"_ustr);
         assertXPathNoAttribute(pStylesXml,
                                "/office:document-styles/office:automatic-styles/"
                                "style:page-layout[1]/style:page-layout-properties"_ostr,
@@ -802,29 +805,29 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testColumnWidthResaveXLSX)
     // Test if after resave .xlsx file, columns width is identical with previous one
     createScDoc("xlsx/different-column-width-excel2010.xlsx");
 
-    save("Calc Office Open XML");
-    xmlDocUniquePtr pSheet = parseExport("xl/worksheets/sheet1.xml");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
 
     // In original Excel document the width is "24"
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "width"_ostr, "24");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "customWidth"_ostr, "true");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "width"_ostr, u"24"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "customWidth"_ostr, u"true"_ustr);
 
     // In original Excel document the width is "12"
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "width"_ostr, "12");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "customWidth"_ostr, "true");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "width"_ostr, u"12"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "customWidth"_ostr, u"true"_ustr);
 
     // In original Excel document the width is "6"
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "width"_ostr, "6");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "customWidth"_ostr, "true");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "width"_ostr, u"6"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "customWidth"_ostr, u"true"_ustr);
 
     // In original Excel document the width is "1"
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "width"_ostr, "1");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "customWidth"_ostr, "true");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "width"_ostr, u"1"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "customWidth"_ostr, u"true"_ustr);
 
     // In original Excel document the width is "250"
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "width"_ostr, "250");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "customWidth"_ostr, "true");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "width"_ostr, u"250"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "customWidth"_ostr, u"true"_ustr);
 
     assertXPath(pSheet, "/x:worksheet/x:cols/x:col"_ostr, 5);
 }
@@ -868,7 +871,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testColumnWidthExportFromODStoXLSX)
     // Export to .xlsx and compare column width with the .ods
     // We expect that column width from .ods will be exactly the same as imported from .xlsx
 
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
 
     pDoc = getScDoc();
 
@@ -901,141 +904,141 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testOutlineExportXLSX)
     //tdf#51524  FILESAVE .xlsx and.xls looses width information for hidden/collapsed grouped columns
     createScDoc("ods/outline.ods");
 
-    save("Calc Office Open XML");
-    xmlDocUniquePtr pSheet = parseExport("xl/worksheets/sheet1.xml");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
 
     // Maximum Outline Row is 4 for this document
-    assertXPath(pSheet, "/x:worksheet/x:sheetFormatPr"_ostr, "outlineLevelRow"_ostr, "4");
+    assertXPath(pSheet, "/x:worksheet/x:sheetFormatPr"_ostr, "outlineLevelRow"_ostr, u"4"_ustr);
     // Maximum Outline Column is 4 for this document
-    assertXPath(pSheet, "/x:worksheet/x:sheetFormatPr"_ostr, "outlineLevelCol"_ostr, "4");
+    assertXPath(pSheet, "/x:worksheet/x:sheetFormatPr"_ostr, "outlineLevelCol"_ostr, u"4"_ustr);
 
     // First XML node, creates two columns (from min=1 to max=2)
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "hidden"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "outlineLevel"_ostr, "1");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "min"_ostr, "1");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "max"_ostr, "2");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "hidden"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "outlineLevel"_ostr, u"1"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "min"_ostr, u"1"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]"_ostr, "max"_ostr, u"2"_ustr);
 
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "hidden"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "outlineLevel"_ostr, "2");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "min"_ostr, "3");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "max"_ostr, "3");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "hidden"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "outlineLevel"_ostr, u"2"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "min"_ostr, u"3"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]"_ostr, "max"_ostr, u"3"_ustr);
 
     // Column 4 has custom width and it is hidden. We need to make sure that it is created
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "hidden"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "outlineLevel"_ostr, "2");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "min"_ostr, "4");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "max"_ostr, "4");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "hidden"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "outlineLevel"_ostr, u"2"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "min"_ostr, u"4"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]"_ostr, "max"_ostr, u"4"_ustr);
 
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "hidden"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "outlineLevel"_ostr, "3");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "min"_ostr, "5");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "max"_ostr, "6");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "hidden"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "outlineLevel"_ostr, u"3"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "min"_ostr, u"5"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]"_ostr, "max"_ostr, u"6"_ustr);
 
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "hidden"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "outlineLevel"_ostr, "4");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "min"_ostr, "7");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "max"_ostr, "7");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "hidden"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "outlineLevel"_ostr, u"4"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "min"_ostr, u"7"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]"_ostr, "max"_ostr, u"7"_ustr);
 
     // Column 8 has custom width and it is hidden. We need to make sure that it is created
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[6]"_ostr, "hidden"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[6]"_ostr, "outlineLevel"_ostr, "4");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[6]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[6]"_ostr, "min"_ostr, "8");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[6]"_ostr, "max"_ostr, "8");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[6]"_ostr, "hidden"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[6]"_ostr, "outlineLevel"_ostr, u"4"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[6]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[6]"_ostr, "min"_ostr, u"8"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[6]"_ostr, "max"_ostr, u"8"_ustr);
 
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[7]"_ostr, "hidden"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[7]"_ostr, "outlineLevel"_ostr, "4");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[7]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[7]"_ostr, "min"_ostr, "9");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[7]"_ostr, "max"_ostr, "19");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[7]"_ostr, "hidden"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[7]"_ostr, "outlineLevel"_ostr, u"4"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[7]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[7]"_ostr, "min"_ostr, u"9"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[7]"_ostr, "max"_ostr, u"19"_ustr);
 
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[8]"_ostr, "hidden"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[8]"_ostr, "outlineLevel"_ostr, "3");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[8]"_ostr, "collapsed"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[8]"_ostr, "min"_ostr, "20");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[8]"_ostr, "max"_ostr, "20");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[8]"_ostr, "hidden"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[8]"_ostr, "outlineLevel"_ostr, u"3"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[8]"_ostr, "collapsed"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[8]"_ostr, "min"_ostr, u"20"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[8]"_ostr, "max"_ostr, u"20"_ustr);
 
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[9]"_ostr, "hidden"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[9]"_ostr, "outlineLevel"_ostr, "3");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[9]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[9]"_ostr, "min"_ostr, "21");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[9]"_ostr, "max"_ostr, "21");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[9]"_ostr, "hidden"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[9]"_ostr, "outlineLevel"_ostr, u"3"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[9]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[9]"_ostr, "min"_ostr, u"21"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[9]"_ostr, "max"_ostr, u"21"_ustr);
 
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[10]"_ostr, "hidden"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[10]"_ostr, "outlineLevel"_ostr, "2");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[10]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[10]"_ostr, "min"_ostr, "22");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[10]"_ostr, "max"_ostr, "23");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[10]"_ostr, "hidden"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[10]"_ostr, "outlineLevel"_ostr, u"2"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[10]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[10]"_ostr, "min"_ostr, u"22"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[10]"_ostr, "max"_ostr, u"23"_ustr);
 
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[11]"_ostr, "hidden"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[11]"_ostr, "outlineLevel"_ostr, "1");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[11]"_ostr, "collapsed"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[11]"_ostr, "min"_ostr, "24");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[11]"_ostr, "max"_ostr, "24");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[11]"_ostr, "hidden"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[11]"_ostr, "outlineLevel"_ostr, u"1"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[11]"_ostr, "collapsed"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[11]"_ostr, "min"_ostr, u"24"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[11]"_ostr, "max"_ostr, u"24"_ustr);
 
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[12]"_ostr, "hidden"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[12]"_ostr, "outlineLevel"_ostr, "1");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[12]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[12]"_ostr, "min"_ostr, "25");
-    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[12]"_ostr, "max"_ostr, "26");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[12]"_ostr, "hidden"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[12]"_ostr, "outlineLevel"_ostr, u"1"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[12]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[12]"_ostr, "min"_ostr, u"25"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[12]"_ostr, "max"_ostr, u"26"_ustr);
 
     // We expected that exactly 12 unique Nodes will be produced
     assertXPath(pSheet, "/x:worksheet/x:cols/x:col"_ostr, 12);
 
     // First row is empty and default so it is not written into XML file
     // so we need to save 29 rows, as it provides information about outLineLevel
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]"_ostr, "r"_ostr, "2");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]"_ostr, "hidden"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]"_ostr, "outlineLevel"_ostr, "1");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]"_ostr, "r"_ostr, "3");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]"_ostr, "hidden"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]"_ostr, "outlineLevel"_ostr, "2");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[3]"_ostr, "r"_ostr, "4");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[3]"_ostr, "hidden"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[3]"_ostr, "outlineLevel"_ostr, "2");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[3]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]"_ostr, "r"_ostr, "5");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]"_ostr, "hidden"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]"_ostr, "outlineLevel"_ostr, "3");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[5]"_ostr, "r"_ostr, "6");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[5]"_ostr, "hidden"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[5]"_ostr, "outlineLevel"_ostr, "3");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[5]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[6]"_ostr, "r"_ostr, "7");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[6]"_ostr, "hidden"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[6]"_ostr, "outlineLevel"_ostr, "4");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[6]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[7]"_ostr, "r"_ostr, "8");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[7]"_ostr, "hidden"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[7]"_ostr, "outlineLevel"_ostr, "4");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[7]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[8]"_ostr, "r"_ostr, "9");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[8]"_ostr, "hidden"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[8]"_ostr, "outlineLevel"_ostr, "4");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[8]"_ostr, "collapsed"_ostr, "false");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]"_ostr, "r"_ostr, u"2"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]"_ostr, "hidden"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]"_ostr, "outlineLevel"_ostr, u"1"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]"_ostr, "r"_ostr, u"3"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]"_ostr, "hidden"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]"_ostr, "outlineLevel"_ostr, u"2"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[3]"_ostr, "r"_ostr, u"4"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[3]"_ostr, "hidden"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[3]"_ostr, "outlineLevel"_ostr, u"2"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[3]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]"_ostr, "r"_ostr, u"5"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]"_ostr, "hidden"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]"_ostr, "outlineLevel"_ostr, u"3"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[5]"_ostr, "r"_ostr, u"6"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[5]"_ostr, "hidden"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[5]"_ostr, "outlineLevel"_ostr, u"3"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[5]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[6]"_ostr, "r"_ostr, u"7"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[6]"_ostr, "hidden"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[6]"_ostr, "outlineLevel"_ostr, u"4"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[6]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[7]"_ostr, "r"_ostr, u"8"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[7]"_ostr, "hidden"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[7]"_ostr, "outlineLevel"_ostr, u"4"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[7]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[8]"_ostr, "r"_ostr, u"9"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[8]"_ostr, "hidden"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[8]"_ostr, "outlineLevel"_ostr, u"4"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[8]"_ostr, "collapsed"_ostr, u"false"_ustr);
     // Next rows are the same as the previous one but it needs to be preserved,
     // as they contain information about outlineLevel
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[20]"_ostr, "r"_ostr, "21");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[20]"_ostr, "hidden"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[20]"_ostr, "outlineLevel"_ostr, "4");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[20]"_ostr, "collapsed"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[21]"_ostr, "r"_ostr, "22");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[21]"_ostr, "hidden"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[21]"_ostr, "outlineLevel"_ostr, "3");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[21]"_ostr, "collapsed"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[22]"_ostr, "r"_ostr, "23");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[22]"_ostr, "hidden"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[22]"_ostr, "outlineLevel"_ostr, "3");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[22]"_ostr, "collapsed"_ostr, "false");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[20]"_ostr, "r"_ostr, u"21"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[20]"_ostr, "hidden"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[20]"_ostr, "outlineLevel"_ostr, u"4"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[20]"_ostr, "collapsed"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[21]"_ostr, "r"_ostr, u"22"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[21]"_ostr, "hidden"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[21]"_ostr, "outlineLevel"_ostr, u"3"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[21]"_ostr, "collapsed"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[22]"_ostr, "r"_ostr, u"23"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[22]"_ostr, "hidden"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[22]"_ostr, "outlineLevel"_ostr, u"3"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[22]"_ostr, "collapsed"_ostr, u"false"_ustr);
 
     // We expected that exactly 29 Row Nodes will be produced
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row"_ostr, 29);
@@ -1045,10 +1048,10 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testAllRowsHiddenXLSX)
 {
     createScDoc("xlsx/tdf105840_allRowsHidden.xlsx");
 
-    save("Calc Office Open XML");
-    xmlDocUniquePtr pSheet = parseExport("xl/worksheets/sheet1.xml");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
-    assertXPath(pSheet, "/x:worksheet/x:sheetFormatPr"_ostr, "zeroHeight"_ostr, "true");
+    assertXPath(pSheet, "/x:worksheet/x:sheetFormatPr"_ostr, "zeroHeight"_ostr, u"true"_ustr);
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row"_ostr, 0);
 }
 
@@ -1057,15 +1060,15 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testHiddenEmptyRowsXLSX)
     //tdf#98106 FILESAVE: Hidden and empty rows became visible when export to .XLSX
     createScDoc("ods/hidden-empty-rows.ods");
 
-    save("Calc Office Open XML");
-    xmlDocUniquePtr pSheet = parseExport("xl/worksheets/sheet1.xml");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
 
-    assertXPath(pSheet, "/x:worksheet/x:sheetFormatPr"_ostr, "zeroHeight"_ostr, "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]"_ostr, "hidden"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]"_ostr, "hidden"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[3]"_ostr, "hidden"_ostr, "true");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]"_ostr, "hidden"_ostr, "false");
+    assertXPath(pSheet, "/x:worksheet/x:sheetFormatPr"_ostr, "zeroHeight"_ostr, u"false"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]"_ostr, "hidden"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]"_ostr, "hidden"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[3]"_ostr, "hidden"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]"_ostr, "hidden"_ostr, u"false"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testHiddenEmptyColsODS)
@@ -1073,12 +1076,12 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testHiddenEmptyColsODS)
     //tdf#98106 FILESAVE: Hidden and empty rows became visible when export to .XLSX
     createScDoc("ods/tdf128895_emptyHiddenCols.ods");
 
-    save("calc8");
-    xmlDocUniquePtr pSheet = parseExport("content.xml");
+    save(u"calc8"_ustr);
+    xmlDocUniquePtr pSheet = parseExport(u"content.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
     assertXPath(pSheet, "//table:table/table:table-column[2]"_ostr);
     assertXPath(pSheet, "//table:table/table:table-column[2]"_ostr, "number-columns-repeated"_ostr,
-                "1017");
+                u"1017"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testLandscapeOrientationXLSX)
@@ -1086,20 +1089,20 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testLandscapeOrientationXLSX)
     //tdf#48767 - Landscape page orientation is not loaded from .xlsx format with MS Excel, after export with Libre Office
     createScDoc("ods/hidden-empty-rows.ods");
 
-    save("Calc Office Open XML");
-    xmlDocUniquePtr pSheet = parseExport("xl/worksheets/sheet1.xml");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
 
     // the usePrinterDefaults cannot be saved to allow opening sheets in Landscape mode via MS Excel
     assertXPathNoAttribute(pSheet, "/x:worksheet/x:pageSetup"_ostr, "usePrinterDefaults"_ostr);
-    assertXPath(pSheet, "/x:worksheet/x:pageSetup"_ostr, "orientation"_ostr, "landscape");
+    assertXPath(pSheet, "/x:worksheet/x:pageSetup"_ostr, "orientation"_ostr, u"landscape"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testDataBarExportXLSX)
 {
     createScDoc("xlsx/databar.xlsx");
 
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
 
     ScDocument* pDoc = getScDoc();
 
@@ -1132,16 +1135,17 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testMiscRowHeightExport)
         // additionally there is effectively a default row height ( 5.29 mm ). So we test the
         // unset rows at the end of the document to ensure the effective xlsx default height
         // is set there too.
-        { u"xlsx/miscrowheights.xlsx", "Calc Office Open XML", SAL_N_ELEMENTS(DfltRowData),
+        { u"xlsx/miscrowheights.xlsx", u"Calc Office Open XML"_ustr, SAL_N_ELEMENTS(DfltRowData),
           DfltRowData },
         // Checks that some distributed ( non-empty ) heights remain set after export (to xls)
-        { u"xlsx/miscrowheights.xlsx", "MS Excel 97", SAL_N_ELEMENTS(DfltRowData), DfltRowData },
+        { u"xlsx/miscrowheights.xlsx", u"MS Excel 97"_ustr, SAL_N_ELEMENTS(DfltRowData),
+          DfltRowData },
         // Checks that repreated rows ( of various heights ) remain set after export ( to xlsx )
-        { u"ods/miscemptyrepeatedrowheights.ods", "Calc Office Open XML",
+        { u"ods/miscemptyrepeatedrowheights.ods", u"Calc Office Open XML"_ustr,
           SAL_N_ELEMENTS(EmptyRepeatRowData), EmptyRepeatRowData },
         // Checks that repreated rows ( of various heights ) remain set after export ( to xls )
-        { u"ods/miscemptyrepeatedrowheights.ods", "MS Excel 97", SAL_N_ELEMENTS(EmptyRepeatRowData),
-          EmptyRepeatRowData },
+        { u"ods/miscemptyrepeatedrowheights.ods", u"MS Excel 97"_ustr,
+          SAL_N_ELEMENTS(EmptyRepeatRowData), EmptyRepeatRowData },
     };
     miscRowHeightsTest(aTestValues, SAL_N_ELEMENTS(aTestValues));
 }
@@ -1214,7 +1218,7 @@ void setFont(ScFieldEditEngine& rEE, sal_Int32 nPara, sal_Int32 nStart, sal_Int3
     aSel.nEndPos = nEnd;
 
     SfxItemSet aItemSet = rEE.GetEmptyItemSet();
-    SvxFontItem aItem(FAMILY_MODERN, rFontName, "", PITCH_VARIABLE, RTL_TEXTENCODING_UTF8,
+    SvxFontItem aItem(FAMILY_MODERN, rFontName, u""_ustr, PITCH_VARIABLE, RTL_TEXTENCODING_UTF8,
                       EE_CHAR_FONTINFO);
     aItemSet.Put(aItem);
     rEE.QuickSetAttribs(aItemSet, aSel);
@@ -1247,7 +1251,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testNamedRangeBugfdo62729)
     pDoc->DeleteTab(0);
     //should be still a single named range
     CPPUNIT_ASSERT_EQUAL(size_t(1), pNames->size());
-    saveAndReload("calc8");
+    saveAndReload(u"calc8"_ustr);
 
     pDoc = getScDoc();
 
@@ -1261,27 +1265,27 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testBuiltinRangesXLSX)
 {
     createScDoc("xlsx/built-in_ranges.xlsx");
 
-    save("Calc Office Open XML");
-    xmlDocUniquePtr pDoc = parseExport("xl/workbook.xml");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pDoc = parseExport(u"xl/workbook.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
     //assert the existing OOXML built-in names are still there
     assertXPathContent(pDoc,
                        "/x:workbook/x:definedNames/"
                        "x:definedName[@name='_xlnm._FilterDatabase'][@localSheetId='0']"_ostr,
-                       "'Sheet1 Test'!$A$1:$A$5");
+                       u"'Sheet1 Test'!$A$1:$A$5"_ustr);
     assertXPathContent(pDoc,
                        "/x:workbook/x:definedNames/"
                        "x:definedName[@name='_xlnm._FilterDatabase'][@localSheetId='1']"_ostr,
-                       "'Sheet2 Test'!$K$10:$K$14");
+                       u"'Sheet2 Test'!$K$10:$K$14"_ustr);
     assertXPathContent(
         pDoc,
         "/x:workbook/x:definedNames/x:definedName[@name='_xlnm.Print_Area'][@localSheetId='0']"_ostr,
-        "'Sheet1 Test'!$A$1:$A$5");
+        u"'Sheet1 Test'!$A$1:$A$5"_ustr);
     assertXPathContent(
         pDoc,
         "/x:workbook/x:definedNames/x:definedName[@name='_xlnm.Print_Area'][@localSheetId='1']"_ostr,
-        "'Sheet2 Test'!$K$10:$M$18");
+        u"'Sheet2 Test'!$K$10:$M$18"_ustr);
 
     //...and that no extra ones are added (see tdf#112571)
     assertXPath(pDoc,
@@ -1529,7 +1533,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testRichTextExportODS)
             if (pAttr->mnParagraph != 0 || pAttr->mnStart != 0 || pAttr->mnEnd != 5)
                 return false;
 
-            if (pAttr->maAttributes.size() != 1 || !isFont(*pAttr, "Courier"))
+            if (pAttr->maAttributes.size() != 1 || !isFont(*pAttr, u"Courier"_ustr))
                 return false;
 
             // Last section should have "Luxi Mono" applied.
@@ -1537,7 +1541,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testRichTextExportODS)
             if (pAttr->mnParagraph != 0 || pAttr->mnStart != 10 || pAttr->mnEnd != 15)
                 return false;
 
-            if (pAttr->maAttributes.size() != 1 || !isFont(*pAttr, "Luxi Mono"))
+            if (pAttr->maAttributes.size() != 1 || !isFont(*pAttr, u"Luxi Mono"_ustr))
                 return false;
 
             return true;
@@ -1653,7 +1657,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testRichTextExportODS)
 
         // Insert an edit text cell.
         ScFieldEditEngine* pEE = &pDoc->GetEditEngine();
-        pEE->SetTextCurrentDefaults("Bold and Italic");
+        pEE->SetTextCurrentDefaults(u"Bold and Italic"_ustr);
         // Set the 'Bold' part bold.
         setAttribute(*pEE, 0, 0, 4, EE_CHAR_WEIGHT);
         // Set the 'Italic' part italic.
@@ -1668,7 +1672,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testRichTextExportODS)
     }
 
     // Now, save and reload this document.
-    saveAndReload("calc8");
+    saveAndReload(u"calc8"_ustr);
     {
         ScDocument* pDoc = getScDoc();
         CPPUNIT_ASSERT_MESSAGE("Reloaded document should at least have one sheet.",
@@ -1681,14 +1685,14 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testRichTextExportODS)
 
         // Insert a multi-line content to B4.
         pEE->Clear();
-        pEE->SetTextCurrentDefaults("One\nTwo\nThree");
+        pEE->SetTextCurrentDefaults(u"One\nTwo\nThree"_ustr);
         pDoc->SetEditText(ScAddress(1, 3, 0), pEE->CreateTextObject());
         pEditText = pDoc->GetEditText(ScAddress(1, 3, 0));
         CPPUNIT_ASSERT_MESSAGE("Incorrect B4 value.", aCheckFunc.checkB4(pEditText));
     }
 
     // Reload the doc again, and check the content of B2 and B4.
-    saveAndReload("calc8");
+    saveAndReload(u"calc8"_ustr);
     {
         ScDocument* pDoc = getScDoc();
         ScFieldEditEngine* pEE = &pDoc->GetEditEngine();
@@ -1700,14 +1704,14 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testRichTextExportODS)
 
         // Insert a multi-line content to B5, but this time, set some empty paragraphs.
         pEE->Clear();
-        pEE->SetTextCurrentDefaults("\nTwo\nThree\n\nFive\n");
+        pEE->SetTextCurrentDefaults(u"\nTwo\nThree\n\nFive\n"_ustr);
         pDoc->SetEditText(ScAddress(1, 4, 0), pEE->CreateTextObject());
         pEditText = pDoc->GetEditText(ScAddress(1, 4, 0));
         CPPUNIT_ASSERT_MESSAGE("Incorrect B5 value.", aCheckFunc.checkB5(pEditText));
 
         // Insert a text with strikethrough in B6.
         pEE->Clear();
-        pEE->SetTextCurrentDefaults("Strike Me");
+        pEE->SetTextCurrentDefaults(u"Strike Me"_ustr);
         // Set the 'Strike' part strikethrough.
         setAttribute(*pEE, 0, 0, 6, EE_CHAR_STRIKEOUT);
         pDoc->SetEditText(ScAddress(1, 5, 0), pEE->CreateTextObject());
@@ -1716,16 +1720,16 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testRichTextExportODS)
 
         // Insert a text with different font segments in B7.
         pEE->Clear();
-        pEE->SetTextCurrentDefaults("Font1 and Font2");
-        setFont(*pEE, 0, 0, 5, "Courier");
-        setFont(*pEE, 0, 10, 15, "Luxi Mono");
+        pEE->SetTextCurrentDefaults(u"Font1 and Font2"_ustr);
+        setFont(*pEE, 0, 0, 5, u"Courier"_ustr);
+        setFont(*pEE, 0, 10, 15, u"Luxi Mono"_ustr);
         pDoc->SetEditText(ScAddress(1, 6, 0), pEE->CreateTextObject());
         pEditText = pDoc->GetEditText(ScAddress(1, 6, 0));
         CPPUNIT_ASSERT_MESSAGE("Incorrect B7 value.", aCheckFunc.checkB7(pEditText));
 
         // Insert a text with overline and underline in B8.
         pEE->Clear();
-        pEE->SetTextCurrentDefaults("Over and Under");
+        pEE->SetTextCurrentDefaults(u"Over and Under"_ustr);
         setAttribute(*pEE, 0, 0, 4, EE_CHAR_OVERLINE);
         setAttribute(*pEE, 0, 9, 14, EE_CHAR_UNDERLINE);
         pDoc->SetEditText(ScAddress(1, 7, 0), pEE->CreateTextObject());
@@ -1733,7 +1737,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testRichTextExportODS)
         CPPUNIT_ASSERT_MESSAGE("Incorrect B8 value.", aCheckFunc.checkB8(pEditText));
 
         pEE->Clear();
-        pEE->SetTextCurrentDefaults("Sub and Super");
+        pEE->SetTextCurrentDefaults(u"Sub and Super"_ustr);
         setEscapement(*pEE, 0, 0, 3, 32, 64);
         setEscapement(*pEE, 0, 8, 13, -32, 66);
         pDoc->SetEditText(ScAddress(1, 8, 0), pEE->CreateTextObject());
@@ -1745,7 +1749,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testRichTextExportODS)
         // Set font color of B10 to blue.
         pDoc->ApplyPattern(1, 9, 0, aCellFontColor);
         pEE->Clear();
-        pEE->SetTextCurrentDefaults("BLUE AUTO");
+        pEE->SetTextCurrentDefaults(u"BLUE AUTO"_ustr);
         // Set the color of the string "AUTO" to automatic color.
         setAttribute(*pEE, 0, 5, 9, EE_CHAR_COLOR, COL_AUTO);
         pDoc->SetEditText(ScAddress(1, 9, 0), pEE->CreateTextObject());
@@ -1754,7 +1758,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testRichTextExportODS)
     }
 
     // Reload the doc again, and check the content of B2, B4, B6 and B7.
-    saveAndReload("calc8");
+    saveAndReload(u"calc8"_ustr);
     ScDocument* pDoc = getScDoc();
 
     pEditText = pDoc->GetEditText(ScAddress(1, 1, 0));
@@ -1784,21 +1788,21 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testRichTextCellFormatXLSX)
 {
     createScDoc("xls/cellformat.xls");
 
-    save("Calc Office Open XML");
-    xmlDocUniquePtr pSheet = parseExport("xl/worksheets/sheet1.xml");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
 
     // make sure the only cell in this doc is assigned some formatting record
     OUString aCellFormat = getXPath(pSheet, "/x:worksheet/x:sheetData/x:row/x:c"_ostr, "s"_ostr);
     CPPUNIT_ASSERT_MESSAGE("Cell format is missing", !aCellFormat.isEmpty());
 
-    xmlDocUniquePtr pStyles = parseExport("xl/styles.xml");
+    xmlDocUniquePtr pStyles = parseExport(u"xl/styles.xml"_ustr);
     CPPUNIT_ASSERT(pStyles);
 
     OString nFormatIdx = OString::number(aCellFormat.toInt32() + 1);
     const OString aXPath1("/x:styleSheet/x:cellXfs/x:xf[" + nFormatIdx + "]/x:alignment");
     // formatting record is set to wrap text
-    assertXPath(pStyles, aXPath1, "wrapText"_ostr, "true");
+    assertXPath(pStyles, aXPath1, "wrapText"_ostr, u"true"_ustr);
 
     // see what font it references
     const OString aXPath2("/x:styleSheet/x:cellXfs/x:xf[" + nFormatIdx + "]");
@@ -1807,34 +1811,34 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testRichTextCellFormatXLSX)
 
     // that font should be bold
     const OString aXPath3("/x:styleSheet/x:fonts/x:font[" + nFontIdx + "]/x:b");
-    assertXPath(pStyles, aXPath3, "val"_ostr, "true");
+    assertXPath(pStyles, aXPath3, "val"_ostr, u"true"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testWrapText)
 {
     createScDoc("xlsx/wrap-text.xlsx");
 
-    save("Calc Office Open XML");
+    save(u"Calc Office Open XML"_ustr);
 
-    xmlDocUniquePtr pStyles = parseExport("xl/styles.xml");
+    xmlDocUniquePtr pStyles = parseExport(u"xl/styles.xml"_ustr);
     CPPUNIT_ASSERT(pStyles);
 
-    assertXPath(pStyles, "/x:styleSheet/x:cellXfs"_ostr, "count"_ostr, "7");
+    assertXPath(pStyles, "/x:styleSheet/x:cellXfs"_ostr, "count"_ostr, u"7"_ustr);
 
     assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[1]/x:alignment"_ostr, "wrapText"_ostr,
-                "false");
+                u"false"_ustr);
     assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment"_ostr, "wrapText"_ostr,
-                "false");
+                u"false"_ustr);
     assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment"_ostr, "wrapText"_ostr,
-                "false");
+                u"false"_ustr);
     assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[4]/x:alignment"_ostr, "wrapText"_ostr,
-                "false");
+                u"false"_ustr);
     assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[5]/x:alignment"_ostr, "wrapText"_ostr,
-                "true");
+                u"true"_ustr);
     assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[6]/x:alignment"_ostr, "wrapText"_ostr,
-                "true");
+                u"true"_ustr);
     assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[7]/x:alignment"_ostr, "wrapText"_ostr,
-                "true");
+                u"true"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testFormulaRefSheetNameODS)
@@ -1844,18 +1848,18 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testFormulaRefSheetNameODS)
         ScDocument* pDoc = getScDoc();
 
         sc::AutoCalcSwitch aACSwitch(*pDoc, true); // turn on auto calc.
-        pDoc->SetString(ScAddress(1, 1, 0), "='90''s Data'.B2");
+        pDoc->SetString(ScAddress(1, 1, 0), u"='90''s Data'.B2"_ustr);
         CPPUNIT_ASSERT_EQUAL(1.1, pDoc->GetValue(ScAddress(1, 1, 0)));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula", OUString("='90''s Data'.B2"),
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula", u"='90''s Data'.B2"_ustr,
                                      pDoc->GetFormula(1, 1, 0));
     }
     // Now, save and reload this document.
-    saveAndReload("calc8");
+    saveAndReload(u"calc8"_ustr);
 
     ScDocument* pDoc = getScDoc();
     pDoc->CalcAll();
     CPPUNIT_ASSERT_EQUAL(1.1, pDoc->GetValue(ScAddress(1, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula", OUString("='90''s Data'.B2"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula", u"='90''s Data'.B2"_ustr,
                                  pDoc->GetFormula(1, 1, 0));
 }
 
@@ -1874,24 +1878,24 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCellValuesExportODS)
         // set a formula
         pDoc->SetValue(ScAddress(2, 0, 0), 3.0); // C1
         pDoc->SetValue(ScAddress(3, 0, 0), 3); // D1
-        pDoc->SetString(ScAddress(4, 0, 0), "=10*C1/4"); // E1
+        pDoc->SetString(ScAddress(4, 0, 0), u"=10*C1/4"_ustr); // E1
         pDoc->SetValue(ScAddress(5, 0, 0), 3.0); // F1
-        pDoc->SetString(ScAddress(7, 0, 0), "=SUM(C1:F1)"); //H1
+        pDoc->SetString(ScAddress(7, 0, 0), u"=SUM(C1:F1)"_ustr); //H1
 
         // set a string
-        pDoc->SetString(ScAddress(0, 2, 0), "a simple line"); //A3
+        pDoc->SetString(ScAddress(0, 2, 0), u"a simple line"_ustr); //A3
 
         // set a digit string
-        pDoc->SetString(ScAddress(0, 4, 0), "'12"); //A5
+        pDoc->SetString(ScAddress(0, 4, 0), u"'12"_ustr); //A5
         // set a contiguous value
         pDoc->SetValue(ScAddress(0, 5, 0), 12.0); //A6
         // set a contiguous string
-        pDoc->SetString(ScAddress(0, 6, 0), "a string"); //A7
+        pDoc->SetString(ScAddress(0, 6, 0), u"a string"_ustr); //A7
         // set a contiguous formula
-        pDoc->SetString(ScAddress(0, 7, 0), "=$A$6"); //A8
+        pDoc->SetString(ScAddress(0, 7, 0), u"=$A$6"_ustr); //A8
     }
     // save and reload
-    saveAndReload("calc8");
+    saveAndReload(u"calc8"_ustr);
     ScDocument* pDoc = getScDoc();
     CPPUNIT_ASSERT_MESSAGE("Reloaded document should at least have one sheet.",
                            pDoc->GetTableCount() > 0);
@@ -1904,9 +1908,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCellValuesExportODS)
     CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(5, 0, 0));
 
     // check formula
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula =10*C1/4", OUString("=10*C1/4"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula =10*C1/4", u"=10*C1/4"_ustr,
                                  pDoc->GetFormula(4, 0, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula =SUM(C1:F1)", OUString("=SUM(C1:F1)"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula =SUM(C1:F1)", u"=SUM(C1:F1)"_ustr,
                                  pDoc->GetFormula(7, 0, 0));
     CPPUNIT_ASSERT_EQUAL(16.5, pDoc->GetValue(7, 0, 0));
 
@@ -1925,9 +1929,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCellValuesExportODS)
 
     //check contiguous values
     CPPUNIT_ASSERT_EQUAL(12.0, pDoc->GetValue(0, 5, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("a string"), pDoc->GetString(0, 6, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula =$A$6", OUString("=$A$6"),
-                                 pDoc->GetFormula(0, 7, 0));
+    CPPUNIT_ASSERT_EQUAL(u"a string"_ustr, pDoc->GetString(0, 6, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula =$A$6", u"=$A$6"_ustr, pDoc->GetFormula(0, 7, 0));
     CPPUNIT_ASSERT_EQUAL(pDoc->GetValue(0, 5, 0), pDoc->GetValue(0, 7, 0));
 }
 
@@ -1942,12 +1945,12 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCellNoteExportODS)
 
         aPos.IncRow(); // Move to A2.
         ScPostIt* pNote = pDoc->GetOrCreateNote(aPos);
-        pNote->SetText(aPos, "Note One");
-        pNote->SetAuthor("Author One");
+        pNote->SetText(aPos, u"Note One"_ustr);
+        pNote->SetAuthor(u"Author One"_ustr);
         CPPUNIT_ASSERT_MESSAGE("There should be a note at A2.", pDoc->HasNote(aPos));
     }
     // save and reload
-    saveAndReload("calc8");
+    saveAndReload(u"calc8"_ustr);
     ScDocument* pDoc = getScDoc();
 
     aPos.SetRow(0); // Move back to A1.
@@ -1979,7 +1982,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCellNoteExportXLS)
         CPPUNIT_ASSERT(pDoc->HasNote(ScAddress(0, 2, 2)));
     }
     // save and reload as XLS.
-    saveAndReload("MS Excel 97");
+    saveAndReload(u"MS Excel 97"_ustr);
     {
         ScDocument* pDoc = getScDoc();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("This document should have 3 sheets.", SCTAB(3),
@@ -2029,7 +2032,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testInlineArrayXLS)
 {
     createScDoc("xls/inline-array.xls");
 
-    saveAndReload("MS Excel 97");
+    saveAndReload(u"MS Excel 97"_ustr);
 
     ScDocument* pDoc = getScDoc();
 
@@ -2047,29 +2050,29 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testEmbeddedChartODS)
 {
     createScDoc("xls/embedded-chart.xls");
 
-    save("calc8");
+    save(u"calc8"_ustr);
 
-    xmlDocUniquePtr pDoc = parseExport("content.xml");
+    xmlDocUniquePtr pDoc = parseExport(u"content.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc,
                 "/office:document-content/office:body/office:spreadsheet/table:table[2]/"
                 "table:table-row[7]/table:table-cell[2]/draw:frame/draw:object"_ostr,
                 "notify-on-update-of-ranges"_ostr,
-                "Chart1.B3:Chart1.B5 Chart1.C2:Chart1.C2 Chart1.C3:Chart1.C5");
+                u"Chart1.B3:Chart1.B5 Chart1.C2:Chart1.C2 Chart1.C3:Chart1.C5"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testEmbeddedChartXLS)
 {
     createScDoc("xls/embedded-chart.xls");
 
-    saveAndReload("MS Excel 97");
+    saveAndReload(u"MS Excel 97"_ustr);
 
     ScDocument* pDoc = getScDoc();
 
     // Make sure the 2nd sheet is named 'Chart1'.
     OUString aName;
     pDoc->GetName(1, aName);
-    CPPUNIT_ASSERT_EQUAL(OUString("Chart1"), aName);
+    CPPUNIT_ASSERT_EQUAL(u"Chart1"_ustr, aName);
 
     const SdrOle2Obj* pOleObj = getSingleChartObject(*pDoc, 1);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve a chart object from the 2nd sheet.", pOleObj);
@@ -2086,7 +2089,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCellAnchoredGroupXLS)
 {
     createScDoc("xls/cell-anchored-group.xls");
 
-    saveAndReload("calc8");
+    saveAndReload(u"calc8"_ustr);
 
     // the document contains a group anchored on the first cell, make sure it's there in the right place
     ScDocument* pDoc = getScDoc();
@@ -2109,25 +2112,25 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testFormulaReferenceXLS)
 {
     createScDoc("xls/formula-reference.xls");
 
-    saveAndReload("MS Excel 97");
+    saveAndReload(u"MS Excel 97"_ustr);
 
     ScDocument* pDoc = getScDoc();
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D2", OUString("=$A$2+$B$2+$C$2"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D2", u"=$A$2+$B$2+$C$2"_ustr,
                                  pDoc->GetFormula(3, 1, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D3", OUString("=A3+B3+C3"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D3", u"=A3+B3+C3"_ustr,
                                  pDoc->GetFormula(3, 2, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D6", OUString("=SUM($A$6:$C$6)"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D6", u"=SUM($A$6:$C$6)"_ustr,
                                  pDoc->GetFormula(3, 5, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D7", OUString("=SUM(A7:C7)"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D7", u"=SUM(A7:C7)"_ustr,
                                  pDoc->GetFormula(3, 6, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D10", OUString("=$Two.$A$2+$Two.$B$2+$Two.$C$2"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D10", u"=$Two.$A$2+$Two.$B$2+$Two.$C$2"_ustr,
                                  pDoc->GetFormula(3, 9, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D11", OUString("=$Two.A3+$Two.B3+$Two.C3"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D11", u"=$Two.A3+$Two.B3+$Two.C3"_ustr,
                                  pDoc->GetFormula(3, 10, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D14", OUString("=MIN($Two.$A$2:$C$2)"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D14", u"=MIN($Two.$A$2:$C$2)"_ustr,
                                  pDoc->GetFormula(3, 13, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D15", OUString("=MAX($Two.A3:C3)"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula in D15", u"=MAX($Two.A3:C3)"_ustr,
                                  pDoc->GetFormula(3, 14, 0));
 }
 
@@ -2135,7 +2138,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testSheetProtectionXLSX)
 {
     createScDoc("xlsx/ProtecteSheet1234Pass.xlsx");
 
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
 
     ScDocument* pDoc = getScDoc();
     const ScTableProtection* pTabProtect = pDoc->GetTabProtection(0);
@@ -2156,7 +2159,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testSheetProtectionXLSB)
 {
     createScDoc("xlsb/tdf108017_calcProtection.xlsb");
 
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
 
     ScDocument* pDoc = getScDoc();
     const ScTableProtection* pTabProtect = pDoc->GetTabProtection(0);
@@ -2176,12 +2179,12 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testConditionalFormatNumberInTextRule)
     ScRange aCondFormatRange(aAddress);
     ScRangeList aRangeList(aCondFormatRange);
     pFormat->SetRange(aRangeList);
-    ScCondFormatEntry* pEntry
-        = new ScCondFormatEntry(ScConditionMode::BeginsWith, "15", "", *pDocument, aAddress, "");
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::BeginsWith, u"15"_ustr,
+                                                      u""_ustr, *pDocument, aAddress, u""_ustr);
     pFormat->AddEntry(pEntry);
     pDocument->AddCondFormat(std::move(pFormat), 0);
 
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
     pDocument = getScDoc();
 
     ScConditionalFormat* pCondFormat = pDocument->GetCondFormat(0, 0, 0);
@@ -2193,7 +2196,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testConditionalFormatNumberInTextRule)
     const ScConditionEntry* pConditionEntry
         = static_cast<const ScConditionEntry*>(pCondFormatEntry);
     CPPUNIT_ASSERT_EQUAL(ScConditionMode::BeginsWith, pConditionEntry->GetOperation());
-    CPPUNIT_ASSERT_EQUAL(OUString("\"15\""), pConditionEntry->GetExpression(aAddress, 0));
+    CPPUNIT_ASSERT_EQUAL(u"\"15\""_ustr, pConditionEntry->GetExpression(aAddress, 0));
 }
 
 namespace
@@ -2275,36 +2278,36 @@ void ScExportTest::testExcelCellBorders(const OUString& sFormatType)
 CPPUNIT_TEST_FIXTURE(ScExportTest, testCellBordersXLS)
 {
     createScDoc("xls/cell-borders.xls");
-    testExcelCellBorders("MS Excel 97");
+    testExcelCellBorders(u"MS Excel 97"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testCellBordersXLSX)
 {
     createScDoc("xlsx/cell-borders.xlsx");
-    testExcelCellBorders("Calc Office Open XML");
+    testExcelCellBorders(u"Calc Office Open XML"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf155368)
 {
     createScDoc("ods/tdf155368.ods");
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:WrapText", {});
+    dispatchCommand(mxComponent, u".uno:WrapText"_ustr, {});
 
-    save("Calc Office Open XML");
+    save(u"Calc Office Open XML"_ustr);
 
-    xmlDocUniquePtr pStyles = parseExport("xl/styles.xml");
+    xmlDocUniquePtr pStyles = parseExport(u"xl/styles.xml"_ustr);
     CPPUNIT_ASSERT(pStyles);
 
     assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[1]/x:alignment"_ostr, "wrapText"_ostr,
-                "false");
+                u"false"_ustr);
 
     // Without the fix in place, this test would have failed with
     // - Expected: false
     // - Actual  : true
     assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment"_ostr, "wrapText"_ostr,
-                "false");
+                u"false"_ustr);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

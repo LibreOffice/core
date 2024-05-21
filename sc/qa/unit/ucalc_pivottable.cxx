@@ -203,8 +203,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTable)
     /**
      * Basic test for pivot tables.
      */
-    m_pDoc->InsertTab(0, "Data");
-    m_pDoc->InsertTab(1, "Table");
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
@@ -359,7 +359,7 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTable)
     // Insert a brand new pivot table object once again, but this time, don't
     // create the output to avoid creating a data cache.
     m_pDoc->DeleteTab(1);
-    m_pDoc->InsertTab(1, "Table");
+    m_pDoc->InsertTab(1, u"Table"_ustr);
 
     pDPObj = createDPFromRange(
         m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, false);
@@ -391,8 +391,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableLabels)
      * Test against unwanted automatic format detection on field names and
      * field members in pivot tables.
      */
-    m_pDoc->InsertTab(0, "Data");
-    m_pDoc->InsertTab(1, "Table");
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
@@ -451,8 +451,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableDateLabels)
      * rather than text cells.  Grouping by date or number functionality
      * depends on this.
      */
-    m_pDoc->InsertTab(0, "Data");
-    m_pDoc->InsertTab(1, "Table");
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
@@ -529,8 +529,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableFilters)
     /**
      * Test for pivot table's filtering functionality by page fields.
      */
-    m_pDoc->InsertTab(0, "Data");
-    m_pDoc->InsertTab(1, "Table");
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
@@ -590,7 +590,7 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableFilters)
     ScAddress aFormulaAddr = aOutRange.aEnd;
     aFormulaAddr.IncRow(2);
     m_pDoc->SetString(aFormulaAddr.Col(), aFormulaAddr.Row(), aFormulaAddr.Tab(),
-                      "=B6");
+                      u"=B6"_ustr);
     double fTest = m_pDoc->GetValue(aFormulaAddr);
     ASSERT_DOUBLES_EQUAL_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", 80.0, fTest);
 
@@ -598,9 +598,9 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableFilters)
     pDPObj->BuildAllDimensionMembers();
     ScDPSaveData aSaveData(*pDPObj->GetSaveData());
     ScDPSaveDimension* pPageDim = aSaveData.GetDimensionByName(
-        "Group2");
+        u"Group2"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Dimension not found", pPageDim);
-    OUString aPage("A");
+    OUString aPage(u"A"_ustr);
     pPageDim->SetCurrentPage(&aPage);
     pDPObj->SetSaveData(aSaveData);
     aOutRange = refresh(pDPObj);
@@ -684,8 +684,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNamedSource)
     /**
      * Test for pivot table's named source range.
      */
-    m_pDoc->InsertTab(0, "Data");
-    m_pDoc->InsertTab(1, "Table");
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
@@ -712,7 +712,7 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNamedSource)
     OUString aRangeStr(aSrcRange.Format(*m_pDoc, ScRefFlags::RANGE_ABS_3D));
 
     // Name this range.
-    OUString aRangeName("MyData");
+    OUString aRangeName(u"MyData"_ustr);
     ScRangeName* pNames = m_pDoc->GetRangeName();
     CPPUNIT_ASSERT_MESSAGE("Failed to get global range name container.", pNames);
     ScRangeData* pName = new ScRangeData(
@@ -759,7 +759,7 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNamedSource)
     m_pDoc->MoveTab(1, 0);
     OUString aTabName;
     m_pDoc->GetName(0, aTabName);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Wrong sheet name.", OUString("Table"), aTabName);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Wrong sheet name.", u"Table"_ustr, aTabName);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Pivot table output is on the wrong sheet!",
                            static_cast<SCTAB>(0), pDPObj->GetOutRange().aStart.Tab());
 
@@ -791,7 +791,7 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableCache)
      * Test for pivot table cache.  Each dimension in the pivot cache stores
      * only unique values that are sorted in ascending order.
      */
-    m_pDoc->InsertTab(0, "Data");
+    m_pDoc->InsertTab(0, u"Data"_ustr);
 
     // Raw data
     const std::vector<std::vector<const char*>> aData = {
@@ -813,11 +813,11 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableCache)
     tools::Long nDimCount = aCache.GetColumnCount();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension count.", tools::Long(3), nDimCount);
     OUString aDimName = aCache.GetDimensionName(0);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension name", OUString("F1"), aDimName);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension name", u"F1"_ustr, aDimName);
     aDimName = aCache.GetDimensionName(1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension name", OUString("F2"), aDimName);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension name", u"F2"_ustr, aDimName);
     aDimName = aCache.GetDimensionName(2);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension name", OUString("F3"), aDimName);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension name", u"F3"_ustr, aDimName);
 
     // In each dimension, member ID values also represent their sort order (in
     // source dimensions only, not in group dimensions). Value items are
@@ -836,27 +836,27 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableCache)
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
-                           OUString("A"), pItem->GetString());
+                           u"A"_ustr, pItem->GetString());
     pItem = aCache.GetItemDataById(0, 2);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
-                           OUString("F"), pItem->GetString());
+                           u"F"_ustr, pItem->GetString());
     pItem = aCache.GetItemDataById(0, 3);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
-                           OUString("R"), pItem->GetString());
+                           u"R"_ustr, pItem->GetString());
     pItem = aCache.GetItemDataById(0, 4);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
-                           OUString("Y"), pItem->GetString());
+                           u"Y"_ustr, pItem->GetString());
     pItem = aCache.GetItemDataById(0, 5);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
-                           OUString("Z"), pItem->GetString());
+                           u"Z"_ustr, pItem->GetString());
     pItem = aCache.GetItemDataById(0, 6);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", !pItem);
 
@@ -867,17 +867,17 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableCache)
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
-                           OUString("A"), pItem->GetString());
+                           u"A"_ustr, pItem->GetString());
     pItem = aCache.GetItemDataById(1, 1);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
-                           OUString("B"), pItem->GetString());
+                           u"B"_ustr, pItem->GetString());
     pItem = aCache.GetItemDataById(1, 2);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value", ScDPItemData::String, pItem->GetType());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong item value",
-                           OUString("C"), pItem->GetString());
+                           u"C"_ustr, pItem->GetString());
     pItem = aCache.GetItemDataById(1, 3);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", !pItem);
 
@@ -1000,8 +1000,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableDuplicateDataFields)
      * Test for pivot table containing data fields that reference the same
      * source field but different functions.
      */
-    m_pDoc->InsertTab(0, "Data");
-    m_pDoc->InsertTab(1, "Table");
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
 
     // Raw data
     const std::vector<std::vector<const char*>> aData = {
@@ -1095,8 +1095,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableDuplicateDataFields)
 
 CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNormalGrouping)
 {
-    m_pDoc->InsertTab(0, "Data");
-    m_pDoc->InsertTab(1, "Table");
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
 
     // Raw data
     const std::vector<std::vector<const char*>> aData = {
@@ -1153,8 +1153,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNormalGrouping)
     ScDPDimensionSaveData* pDimData = pSaveData->GetDimensionData();
     CPPUNIT_ASSERT_MESSAGE("Failed to create dimension data.", pDimData);
 
-    OUString aGroupPrefix("Group");
-    OUString aBaseDimName("Name");
+    OUString aGroupPrefix(u"Group"_ustr);
+    OUString aBaseDimName(u"Name"_ustr);
     OUString aGroupDimName =
         pDimData->CreateGroupDimName(aBaseDimName, *pDPObj, false, nullptr);
 
@@ -1162,12 +1162,12 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNormalGrouping)
         // Group A, B and C together.
         ScDPSaveGroupDimension aGroupDim(aBaseDimName, aGroupDimName);
         OUString aGroupName = aGroupDim.CreateGroupName(aGroupPrefix);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected group name", OUString("Group1"), aGroupName);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected group name", u"Group1"_ustr, aGroupName);
 
         ScDPSaveGroupItem aGroup(aGroupName);
-        aGroup.AddElement("A");
-        aGroup.AddElement("B");
-        aGroup.AddElement("C");
+        aGroup.AddElement(u"A"_ustr);
+        aGroup.AddElement(u"B"_ustr);
+        aGroup.AddElement(u"C"_ustr);
         aGroupDim.AddGroupItem(aGroup);
         pDimData->AddGroupDimension(aGroupDim);
 
@@ -1204,12 +1204,12 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNormalGrouping)
         ScDPSaveGroupDimension* pGroupDim = pDimData->GetGroupDimAccForBase(aBaseDimName);
         CPPUNIT_ASSERT_MESSAGE("There should be an existing group dimension.", pGroupDim);
         OUString aGroupName = pGroupDim->CreateGroupName(aGroupPrefix);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected group name", OUString("Group2"), aGroupName);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected group name", u"Group2"_ustr, aGroupName);
 
         ScDPSaveGroupItem aGroup(aGroupName);
-        aGroup.AddElement("D");
-        aGroup.AddElement("E");
-        aGroup.AddElement("F");
+        aGroup.AddElement(u"D"_ustr);
+        aGroup.AddElement(u"E"_ustr);
+        aGroup.AddElement(u"F"_ustr);
         pGroupDim->AddGroupItem(aGroup);
     }
 
@@ -1244,8 +1244,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNormalGrouping)
 
 CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNumberGrouping)
 {
-    m_pDoc->InsertTab(0, "Data");
-    m_pDoc->InsertTab(1, "Table");
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
 
     // Raw data
     const std::vector<std::vector<const char*>> aData = {
@@ -1304,7 +1304,7 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNumberGrouping)
         aInfo.mfStart = 30;
         aInfo.mfEnd = 60;
         aInfo.mfStep = 10;
-        ScDPSaveNumGroupDimension aGroup("Order", aInfo);
+        ScDPSaveNumGroupDimension aGroup(u"Order"_ustr, aInfo);
         pDimData->AddNumGroupDimension(aGroup);
     }
 
@@ -1337,8 +1337,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNumberGrouping)
 
 CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableDateGrouping)
 {
-    m_pDoc->InsertTab(0, "Data");
-    m_pDoc->InsertTab(1, "Table");
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
 
     // Raw data
     const std::vector<std::vector<const char*>> aData = {
@@ -1377,7 +1377,7 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableDateGrouping)
     ScDPDimensionSaveData* pDimData = pSaveData->GetDimensionData();
     CPPUNIT_ASSERT_MESSAGE("No dimension data !?", pDimData);
 
-    OUString aBaseDimName("Date");
+    OUString aBaseDimName(u"Date"_ustr);
 
     ScDPNumGroupInfo aInfo;
     aInfo.mbEnable = true;
@@ -1444,9 +1444,9 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableDateGrouping)
     {
         // Let's hide year 2012.
         pSaveData = pDPObj->GetSaveData();
-        ScDPSaveDimension* pDim = pSaveData->GetDimensionByName("Years");
+        ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(u"Years"_ustr);
         CPPUNIT_ASSERT_MESSAGE("Years dimension should exist.", pDim);
-        ScDPSaveMember* pMem = pDim->GetMemberByName("2012");
+        ScDPSaveMember* pMem = pDim->GetMemberByName(u"2012"_ustr);
         CPPUNIT_ASSERT_MESSAGE("Member should exist.", pMem);
         pMem->SetIsVisible(false);
     }
@@ -1509,8 +1509,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableDateGrouping)
 
 CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableEmptyRows)
 {
-    m_pDoc->InsertTab(0, "Data");
-    m_pDoc->InsertTab(1, "Table");
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
 
     // Raw data
     const std::vector<std::vector<const char*>> aData = {
@@ -1584,7 +1584,7 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableEmptyRows)
     }
 
     // Modify the source to remove member 'A', then refresh the table.
-    m_pDoc->SetString(1, 2, 0, "B");
+    m_pDoc->SetString(1, 2, 0, u"B"_ustr);
 
     o3tl::sorted_vector<ScDPObject*> aRefs;
     TranslateId pErr = pDPs->ReloadCache(pDPObj, aRefs);
@@ -1622,8 +1622,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableEmptyRows)
 
 CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableTextNumber)
 {
-    m_pDoc->InsertTab(0, "Data");
-    m_pDoc->InsertTab(1, "Table");
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
 
     // Raw data
     const char* aData[][2] = {
@@ -1693,7 +1693,7 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableTextNumber)
     ScDPSaveDimension* pDim = aSaveData.GetExistingDimensionByName(u"Name");
     CPPUNIT_ASSERT(pDim);
     pDim->SetOrientation(sheet::DataPilotFieldOrientation_PAGE);
-    OUString aVisiblePage("0004");
+    OUString aVisiblePage(u"0004"_ustr);
     pDim->SetCurrentPage(&aVisiblePage);
     pDPObj->SetSaveData(aSaveData);
 
@@ -1727,8 +1727,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableCaseInsensitiveStrings)
      * Test for checking that pivot table treats strings in a case insensitive
      * manner.
      */
-    m_pDoc->InsertTab(0, "Data");
-    m_pDoc->InsertTab(1, "Table");
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
 
     // Raw data
     const std::vector<std::vector<const char*>> aData = {
@@ -1821,16 +1821,16 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNumStability)
         { "Total", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
-    m_pDoc->InsertTab(0, "Data");
-    m_pDoc->InsertTab(1, "Table");
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
 
     ScAddress aPos(1,1,0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
 
     // Insert formulas to manually calculate sums for each name.
-    m_pDoc->SetString(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+1, aDataRange.aStart.Tab(), "=SUMIF(R[-23]C:R[-1]C;\"Dennis\";R[-23]C[3]:R[-1]C[3])");
-    m_pDoc->SetString(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+2, aDataRange.aStart.Tab(), "=SUMIF(R[-24]C:R[-2]C;\"Mike\";R[-24]C[3]:R[-2]C[3])");
-    m_pDoc->SetString(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+3, aDataRange.aStart.Tab(), "=SUMIF(R[-25]C:R[-3]C;\"Sam\";R[-25]C[3]:R[-3]C[3])");
+    m_pDoc->SetString(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+1, aDataRange.aStart.Tab(), u"=SUMIF(R[-23]C:R[-1]C;\"Dennis\";R[-23]C[3]:R[-1]C[3])"_ustr);
+    m_pDoc->SetString(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+2, aDataRange.aStart.Tab(), u"=SUMIF(R[-24]C:R[-2]C;\"Mike\";R[-24]C[3]:R[-2]C[3])"_ustr);
+    m_pDoc->SetString(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+3, aDataRange.aStart.Tab(), u"=SUMIF(R[-25]C:R[-3]C;\"Sam\";R[-25]C[3]:R[-3]C[3])"_ustr);
 
     m_pDoc->CalcAll();
 
@@ -1891,8 +1891,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableFieldReference)
      * Test for pivot table that include field with various non-default field
      * references.
      */
-    m_pDoc->InsertTab(0, "Data");
-    m_pDoc->InsertTab(1, "Table");
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
 
     // Raw data
     const std::vector<std::vector<const char*>> aData = {
@@ -1945,7 +1945,7 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableFieldReference)
     aFieldRef.ReferenceField = "Name";
     aFieldRef.ReferenceItemType = sheet::DataPilotFieldReferenceItemType::NAMED;
     aFieldRef.ReferenceItemName = "A";
-    ScDPSaveDimension* pDim = aSaveData.GetDimensionByName("Value");
+    ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(u"Value"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve dimension 'Value'.", pDim);
     pDim->SetReferenceValue(&aFieldRef);
     pDPObj->SetSaveData(aSaveData);
@@ -2060,8 +2060,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableDocFunc)
     /**
      * Test pivot table functionality performed via ScDBDocFunc.
      */
-    m_pDoc->InsertTab(0, "Data");
-    m_pDoc->InsertTab(1, "Table");
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
 
     // Raw data
     const std::vector<std::vector<const char*>> aData = {
@@ -2128,8 +2128,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableDocFunc)
 
 CPPUNIT_TEST_FIXTURE(TestPivottable, testFuncGETPIVOTDATA)
 {
-    m_pDoc->InsertTab(0, "Data");
-    m_pDoc->InsertTab(1, "Table");
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
 
     // Raw data
     const std::vector<std::vector<const char*>> aData = {
@@ -2284,8 +2284,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testFuncGETPIVOTDATA)
 
 CPPUNIT_TEST_FIXTURE(TestPivottable, testFuncGETPIVOTDATALeafAccess)
 {
-    m_pDoc->InsertTab(0, "Data");
-    m_pDoc->InsertTab(1, "Table");
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
 
     // Raw data
     const std::vector<std::vector<const char*>> aData = {
@@ -2377,8 +2377,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableRepeatItemLabels)
     /**
      * Test pivot table per-field repeat item labels functionality
      */
-    m_pDoc->InsertTab(0, "Data");
-    m_pDoc->InsertTab(1, "Table");
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
@@ -2457,8 +2457,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableDPCollection)
     /**
      * Test DPCollection public methods
      */
-    m_pDoc->InsertTab(0, "Data");
-    m_pDoc->InsertTab(1, "Table");
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
 
     // Dimension definition
     static const DPFieldDef aFields[] = {
@@ -2495,13 +2495,13 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableDPCollection)
     // Add 2 DP objects
     ScDPObject* pDPObj = createDPFromRange(m_pDoc, aDataRange , aFields, nFieldCount, false);
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
-    pDPObj->SetName("DP1"); // set custom name
+    pDPObj->SetName(u"DP1"_ustr); // set custom name
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.", size_t(1), pDPs->GetCount());
 
     ScDPObject* pDPObj2 = createDPFromRange(m_pDoc, aDataRange, aFields, nFieldCount, false);
     pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj2));
-    pDPObj2->SetName("DP2"); // set custom name
+    pDPObj2->SetName(u"DP2"_ustr); // set custom name
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be two DP tables", size_t(2), pDPs->GetCount());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("should return first DPObject",
@@ -2546,8 +2546,8 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableMedianFunc)
     /**
     * Test pivot table median function
     */
-    m_pDoc->InsertTab(0, "Data");
-    m_pDoc->InsertTab(1, "Table");
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
 
     // Raw data
     const std::vector<std::vector<const char*>> aData = {

@@ -177,12 +177,12 @@ public:
 };
 
 ScCellRangeObj::ScCellRangeObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XCellSeries(2, 1)
     , XFormulaQuery(table::CellRangeAddress(0, 15, 15, 15, 15),
                     table::CellRangeAddress(0, 0, 15, 0, 15))
-    , XReplaceable("15", "35")
-    , XSearchable("15", 1)
+    , XReplaceable(u"15"_ustr, u"35"_ustr)
+    , XSearchable(u"15"_ustr, 1)
 {
 }
 

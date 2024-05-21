@@ -80,8 +80,8 @@ public:
 };
 
 ScAnnontationObj::ScAnnontationObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
-    , XServiceInfo("ScAnnotationObj", "com.sun.star.sheet.CellAnnotation")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
+    , XServiceInfo(u"ScAnnotationObj"_ustr, u"com.sun.star.sheet.CellAnnotation"_ustr)
 {
 }
 

@@ -74,7 +74,7 @@ ScScreenshotTest::ScScreenshotTest()
     mxDocSh(),
     mpViewShell(nullptr),
     mpFact(nullptr),
-    mCsv("some, strings, here, separated, by, commas"),
+    mCsv(u"some, strings, here, separated, by, commas"_ustr),
     mpStream(),
     mpItemSet()
 {
@@ -85,7 +85,7 @@ void ScScreenshotTest::initialize()
     if (mxComponent.is())
         mxComponent->dispose();
     // use new, empty doc to avoid file locking
-    mxComponent = loadFromDesktop("private:factory/scalc", "com.sun.star.sheet.SpreadsheetDocument");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr, u"com.sun.star.sheet.SpreadsheetDocument"_ustr);
 
     mpFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", mpFoundShell);
@@ -195,7 +195,7 @@ VclPtr<VclAbstractDialog> ScScreenshotTest::createDialogByID(sal_uInt32 nID)
         {
             pReturnDialog = mpFact->CreateScStringInputDlg(mpViewShell->GetFrameWeld(),
                                 ScResId(SCSTR_APDTABLE), ScResId(SCSTR_NAME),
-                                aDefaultSheetName, "modules/scalc/ui/inputstringdialog/InputStringDialog", "" );
+                                aDefaultSheetName, u"modules/scalc/ui/inputstringdialog/InputStringDialog"_ustr, u""_ustr );
             break;
         }
 

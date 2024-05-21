@@ -59,7 +59,7 @@ public:
 };
 
 ScAnchorTest::ScAnchorTest()
-    : UnoApiTest("sc/qa/unit/data/ods")
+    : UnoApiTest(u"sc/qa/unit/data/ods"_ustr)
 {
 }
 
@@ -159,7 +159,7 @@ void ScAnchorTest::testUndoAnchor()
 
 void ScAnchorTest::testTdf76183()
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
     ScDocument& rDoc = pDocSh->GetDocument();
@@ -181,7 +181,7 @@ void ScAnchorTest::testTdf76183()
     uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<text::XText> xText(xSheet->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
-    xText->setString("first\nsecond\nthird");
+    xText->setString(u"first\nsecond\nthird"_ustr);
 
     // The resize of first row must have moved the object down after its anchor cell
     CPPUNIT_ASSERT(aOrigRect.Top() < rNewRect.Top());
@@ -253,13 +253,13 @@ void ScAnchorTest::testCopyColumnWithImages()
     {
         // 1. Copy source range
         ScRange aSrcRange;
-        aSrcRange.Parse("A1:A11", *pDoc, pDoc->GetAddressConvention());
+        aSrcRange.Parse(u"A1:A11"_ustr, *pDoc, pDoc->GetAddressConvention());
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
         pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, true, false);
 
         // 2. Paste to target range
         ScRange aDstRange;
-        aDstRange.Parse("D1:D11", *pDoc, pDoc->GetAddressConvention());
+        aDstRange.Parse(u"D1:D11"_ustr, *pDoc, pDoc->GetAddressConvention());
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aDstRange);
         pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
 
@@ -276,13 +276,13 @@ void ScAnchorTest::testCopyColumnWithImages()
     {
         // 1. Copy source cells
         ScRange aSrcRange;
-        aSrcRange.Parse("A3:B3", *pDoc, pDoc->GetAddressConvention());
+        aSrcRange.Parse(u"A3:B3"_ustr, *pDoc, pDoc->GetAddressConvention());
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
         pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, true, false);
 
         // 2. Paste to target cells
         ScRange aDstRange;
-        aDstRange.Parse("G3:H3", *pDoc, pDoc->GetAddressConvention());
+        aDstRange.Parse(u"G3:H3"_ustr, *pDoc, pDoc->GetAddressConvention());
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aDstRange);
         pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
 
@@ -318,7 +318,7 @@ void ScAnchorTest::testCutWithImages()
     {
         // Cut source range
         ScRange aSrcRange;
-        aSrcRange.Parse("A1:A11", *pDoc, pDoc->GetAddressConvention());
+        aSrcRange.Parse(u"A1:A11"_ustr, *pDoc, pDoc->GetAddressConvention());
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
         pViewShell->GetViewData().GetView()->CutToClip();
 
@@ -336,7 +336,7 @@ void ScAnchorTest::testCutWithImages()
     {
         // Cut source cells
         ScRange aSrcRange;
-        aSrcRange.Parse("A3:B3", *pDoc, pDoc->GetAddressConvention());
+        aSrcRange.Parse(u"A3:B3"_ustr, *pDoc, pDoc->GetAddressConvention());
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
         pViewShell->GetViewData().GetView()->CutToClip();
 

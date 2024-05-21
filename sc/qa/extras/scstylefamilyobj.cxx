@@ -83,13 +83,13 @@ public:
 constexpr sal_Int32 kScStyleFamilyObjCount = 20;
 
 ScStyleFamilyObj::ScStyleFamilyObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XElementAccess(cppu::UnoType<style::XStyle>::get())
     , XIndexAccess(kScStyleFamilyObjCount)
-    , XNameAccess("ScStyleFamilyObj")
-    , XNameContainer("ScStyleFamilyObj")
-    , XNameReplace("ScStyleFamilyObj")
-    , XServiceInfo("ScStyleFamilyObj", "com.sun.star.style.StyleFamily")
+    , XNameAccess(u"ScStyleFamilyObj"_ustr)
+    , XNameContainer(u"ScStyleFamilyObj"_ustr)
+    , XNameReplace(u"ScStyleFamilyObj"_ustr)
+    , XServiceInfo(u"ScStyleFamilyObj"_ustr, u"com.sun.star.style.StyleFamily"_ustr)
 {
 }
 
@@ -103,15 +103,16 @@ uno::Reference<uno::XInterface> ScStyleFamilyObj::init()
     uno::Reference<container::XNameAccess> xNA_SF(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
 
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<uno::XInterface> xCS(xMSF->createInstance("com.sun.star.style.CellStyle"),
+    uno::Reference<uno::XInterface> xCS(xMSF->createInstance(u"com.sun.star.style.CellStyle"_ustr),
                                         uno::UNO_SET_THROW);
     // XNameContainer
-    XNameContainer::setElement(uno::Any(xMSF->createInstance("com.sun.star.style.CellStyle")));
+    XNameContainer::setElement(
+        uno::Any(xMSF->createInstance(u"com.sun.star.style.CellStyle"_ustr)));
     // XNameReplace
-    XNameReplace::setElement(uno::Any(xMSF->createInstance("com.sun.star.style.CellStyle")));
+    XNameReplace::setElement(uno::Any(xMSF->createInstance(u"com.sun.star.style.CellStyle"_ustr)));
 
     uno::Reference<container::XNameContainer> xNC(xNA_SF, uno::UNO_QUERY_THROW);
-    xNC->insertByName("ScStyleFamilyObj", uno::Any(xCS));
+    xNC->insertByName(u"ScStyleFamilyObj"_ustr, uno::Any(xCS));
 
     return xNA_SF;
 }
@@ -120,7 +121,7 @@ void ScStyleFamilyObj::setUp()
 {
     UnoApiTest::setUp();
     // create calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScStyleFamilyObj);

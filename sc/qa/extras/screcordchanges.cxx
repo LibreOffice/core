@@ -35,7 +35,7 @@ public:
 
 void ScRecordChangesTest::testSetRecordChanges()
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xDocSettingsPropSet(xDoc, UNO_QUERY_THROW);
@@ -43,8 +43,9 @@ void ScRecordChangesTest::testSetRecordChanges()
     bool recordChangesValue = true;
     bool protectionValue = true;
 
-    CPPUNIT_ASSERT(xDocSettingsPropSet->getPropertyValue("RecordChanges") >>= recordChangesValue);
-    CPPUNIT_ASSERT(xDocSettingsPropSet->getPropertyValue("IsRecordChangesProtected")
+    CPPUNIT_ASSERT(xDocSettingsPropSet->getPropertyValue(u"RecordChanges"_ustr)
+                   >>= recordChangesValue);
+    CPPUNIT_ASSERT(xDocSettingsPropSet->getPropertyValue(u"IsRecordChangesProtected"_ustr)
                    >>= protectionValue);
 
     CPPUNIT_ASSERT_MESSAGE("a new document does not record changes", !recordChangesValue);
@@ -53,9 +54,10 @@ void ScRecordChangesTest::testSetRecordChanges()
     // now activate recording
     uno::Any aValue;
     aValue <<= true;
-    xDocSettingsPropSet->setPropertyValue("RecordChanges", aValue);
+    xDocSettingsPropSet->setPropertyValue(u"RecordChanges"_ustr, aValue);
 
-    CPPUNIT_ASSERT(xDocSettingsPropSet->getPropertyValue("RecordChanges") >>= recordChangesValue);
+    CPPUNIT_ASSERT(xDocSettingsPropSet->getPropertyValue(u"RecordChanges"_ustr)
+                   >>= recordChangesValue);
     CPPUNIT_ASSERT_MESSAGE("the document should record changes", recordChangesValue);
 }
 
@@ -70,8 +72,9 @@ void ScRecordChangesTest::testCheckRecordChangesProtection()
     bool recordChangesValue = false;
     bool protectionValue = false;
 
-    CPPUNIT_ASSERT(xDocSettingsPropSet->getPropertyValue("RecordChanges") >>= recordChangesValue);
-    CPPUNIT_ASSERT(xDocSettingsPropSet->getPropertyValue("IsRecordChangesProtected")
+    CPPUNIT_ASSERT(xDocSettingsPropSet->getPropertyValue(u"RecordChanges"_ustr)
+                   >>= recordChangesValue);
+    CPPUNIT_ASSERT(xDocSettingsPropSet->getPropertyValue(u"IsRecordChangesProtected"_ustr)
                    >>= protectionValue);
 
     CPPUNIT_ASSERT_MESSAGE("the document should be recording changes", recordChangesValue);
@@ -80,10 +83,11 @@ void ScRecordChangesTest::testCheckRecordChangesProtection()
     // try to de-activate recording
     uno::Any aValue;
     aValue <<= false;
-    xDocSettingsPropSet->setPropertyValue("RecordChanges", aValue);
+    xDocSettingsPropSet->setPropertyValue(u"RecordChanges"_ustr, aValue);
 
-    CPPUNIT_ASSERT(xDocSettingsPropSet->getPropertyValue("RecordChanges") >>= recordChangesValue);
-    CPPUNIT_ASSERT(xDocSettingsPropSet->getPropertyValue("IsRecordChangesProtected")
+    CPPUNIT_ASSERT(xDocSettingsPropSet->getPropertyValue(u"RecordChanges"_ustr)
+                   >>= recordChangesValue);
+    CPPUNIT_ASSERT(xDocSettingsPropSet->getPropertyValue(u"IsRecordChangesProtected"_ustr)
                    >>= protectionValue);
 
     // this document should still record changes as protection is set
@@ -92,7 +96,7 @@ void ScRecordChangesTest::testCheckRecordChangesProtection()
 }
 
 ScRecordChangesTest::ScRecordChangesTest()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
 {
 }
 

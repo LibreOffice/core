@@ -75,7 +75,7 @@ public:
 };
 
 ScFunctionListObj::ScFunctionListObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XElementAccess(cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get())
     , XIndexAccess(403)
     , XNameAccess("IF")
@@ -87,14 +87,14 @@ uno::Reference<uno::XInterface> ScFunctionListObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference<lang::XMultiServiceFactory> xMSF(xDoc, UNO_QUERY_THROW);
-    return xMSF->createInstance("com.sun.star.sheet.FunctionDescriptions");
+    return xMSF->createInstance(u"com.sun.star.sheet.FunctionDescriptions"_ustr);
 }
 
 void ScFunctionListObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScFunctionListObj);

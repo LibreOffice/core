@@ -46,7 +46,7 @@ public:
 };
 
 ScIndexEnumeration_ScenariosEnumeration::ScIndexEnumeration_ScenariosEnumeration()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
 {
 }
 
@@ -65,12 +65,12 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_ScenariosEnumeration::init()
 
     uno::Reference<sheet::XScenariosSupplier> xScenariosSupplier(xSheet0, uno::UNO_QUERY_THROW);
     uno::Reference<table::XCellRange> xCellRange0(xSheet0, uno::UNO_QUERY_THROW);
-    uno::Reference<table::XCellRange> xCellRange1(xCellRange0->getCellRangeByName("A1:N4"),
+    uno::Reference<table::XCellRange> xCellRange1(xCellRange0->getCellRangeByName(u"A1:N4"_ustr),
                                                   uno::UNO_SET_THROW);
     uno::Reference<sheet::XCellRangeAddressable> xCRA(xCellRange1, uno::UNO_QUERY_THROW);
 
-    xScenariosSupplier->getScenarios()->addNewByName("ScScenario", { xCRA->getRangeAddress() },
-                                                     "Range");
+    xScenariosSupplier->getScenarios()->addNewByName(u"ScScenario"_ustr,
+                                                     { xCRA->getRangeAddress() }, u"Range"_ustr);
     uno::Reference<container::XEnumerationAccess> xEA(xScenariosSupplier->getScenarios(),
                                                       uno::UNO_QUERY_THROW);
 
@@ -80,7 +80,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_ScenariosEnumeration::init()
 void ScIndexEnumeration_ScenariosEnumeration::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScIndexEnumeration_ScenariosEnumeration);

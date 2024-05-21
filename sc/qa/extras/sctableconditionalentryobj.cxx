@@ -60,7 +60,7 @@ public:
 };
 
 ScTableConditionalEntryObj::ScTableConditionalEntryObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
 {
 }
 
@@ -81,9 +81,9 @@ uno::Reference<uno::XInterface> ScTableConditionalEntryObj::init()
                                  uno::UNO_QUERY_THROW);
 
     uno::Sequence<beans::PropertyValue> aPropValue{
-        comphelper::makePropertyValue(SC_UNONAME_STYLENAME, OUString("Result2")),
-        comphelper::makePropertyValue(SC_UNONAME_FORMULA1, OUString("$Sheet1.$B$5")),
-        comphelper::makePropertyValue(SC_UNONAME_FORMULA2, OUString("")),
+        comphelper::makePropertyValue(SC_UNONAME_STYLENAME, u"Result2"_ustr),
+        comphelper::makePropertyValue(SC_UNONAME_FORMULA1, u"$Sheet1.$B$5"_ustr),
+        comphelper::makePropertyValue(SC_UNONAME_FORMULA2, u""_ustr),
         comphelper::makePropertyValue(SC_UNONAME_OPERATOR, sheet::ConditionOperator_EQUAL),
         comphelper::makePropertyValue(SC_UNONAME_SOURCEPOS, table::CellAddress(0, 1, 5))
     };
@@ -98,7 +98,7 @@ void ScTableConditionalEntryObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScTableConditionalEntryObj);

@@ -67,7 +67,7 @@ public:
 };
 
 ScAreaLinkObj::ScAreaLinkObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , CellAreaLink(m_directories.getURLFromSrc(u"/sc/qa/extras/testdocuments/scarealinkobj.ods"))
 {
 }
@@ -77,13 +77,13 @@ uno::Reference<uno::XInterface> ScAreaLinkObj::init()
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
     uno::Reference<beans::XPropertySet> xPropSet(xDoc, uno::UNO_QUERY_THROW);
-    uno::Reference<sheet::XAreaLinks> xLinks(xPropSet->getPropertyValue("AreaLinks"),
+    uno::Reference<sheet::XAreaLinks> xLinks(xPropSet->getPropertyValue(u"AreaLinks"_ustr),
                                              uno::UNO_QUERY_THROW);
 
     table::CellAddress aCellAddress(1, 2, 3);
     xLinks->insertAtPosition(
         aCellAddress, m_directories.getURLFromSrc(u"/sc/qa/extras/testdocuments/scarealinkobj.ods"),
-        "a2:b5", "", "");
+        u"a2:b5"_ustr, u""_ustr, u""_ustr);
 
     uno::Reference<sheet::XAreaLink> xLink(xLinks->getByIndex(0), uno::UNO_QUERY_THROW);
     return xLink;
@@ -92,7 +92,7 @@ uno::Reference<uno::XInterface> ScAreaLinkObj::init()
 void ScAreaLinkObj::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScAreaLinkObj);

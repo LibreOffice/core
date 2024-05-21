@@ -43,7 +43,7 @@ public:
 };
 
 ScFunctionDescriptionObj::ScFunctionDescriptionObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
 {
 }
 
@@ -53,7 +53,7 @@ uno::Sequence<beans::PropertyValue> ScFunctionDescriptionObj::init()
 
     uno::Reference<lang::XMultiServiceFactory> xMSF(xDoc, UNO_QUERY_THROW);
     uno::Reference<sheet::XFunctionDescriptions> xFDs(
-        xMSF->createInstance("com.sun.star.sheet.FunctionDescriptions"), UNO_QUERY_THROW);
+        xMSF->createInstance(u"com.sun.star.sheet.FunctionDescriptions"_ustr), UNO_QUERY_THROW);
 
     uno::Reference<container::XNameAccess> xNA(xFDs, UNO_QUERY_THROW);
     uno::Sequence<OUString> names = xNA->getElementNames();
@@ -67,7 +67,7 @@ void ScFunctionDescriptionObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScFunctionDescriptionObj);

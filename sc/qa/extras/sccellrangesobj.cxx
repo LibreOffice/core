@@ -80,7 +80,7 @@ public:
 };
 
 ScCellRangesObj::ScCellRangesObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , apitest::XFormulaQuery(table::CellRangeAddress(0, 4, 1, 5, 4),
                              table::CellRangeAddress(0, 4, 1, 5, 4))
 {
@@ -94,17 +94,17 @@ uno::Reference<uno::XInterface> ScCellRangesObj::init()
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<lang::XMultiServiceFactory> xMSF(xDoc, uno::UNO_QUERY_THROW);
     uno::Reference<container::XNameContainer> xRanges(
-        xMSF->createInstance("com.sun.star.sheet.SheetCellRanges"), uno::UNO_QUERY_THROW);
+        xMSF->createInstance(u"com.sun.star.sheet.SheetCellRanges"_ustr), uno::UNO_QUERY_THROW);
 
     uno::Any xCellRange;
-    xCellRange <<= xSheet->getCellRangeByName("C1:D4");
-    xRanges->insertByName("Range1", xCellRange);
-    xCellRange <<= xSheet->getCellRangeByName("E2:F5");
-    xRanges->insertByName("Range2", xCellRange);
-    xCellRange <<= xSheet->getCellRangeByName("G2:H3");
-    xRanges->insertByName("Range3", xCellRange);
-    xCellRange <<= xSheet->getCellRangeByName("I7:J8");
-    xRanges->insertByName("Range4", xCellRange);
+    xCellRange <<= xSheet->getCellRangeByName(u"C1:D4"_ustr);
+    xRanges->insertByName(u"Range1"_ustr, xCellRange);
+    xCellRange <<= xSheet->getCellRangeByName(u"E2:F5"_ustr);
+    xRanges->insertByName(u"Range2"_ustr, xCellRange);
+    xCellRange <<= xSheet->getCellRangeByName(u"G2:H3"_ustr);
+    xRanges->insertByName(u"Range3"_ustr, xCellRange);
+    xCellRange <<= xSheet->getCellRangeByName(u"I7:J8"_ustr);
+    xRanges->insertByName(u"Range4"_ustr, xCellRange);
 
     for (int i = 0; i < 10; i++)
     {
@@ -134,7 +134,7 @@ void ScCellRangesObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCellRangesObj);

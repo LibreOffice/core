@@ -44,14 +44,14 @@ CPPUNIT_TEST_FIXTURE(ScRangeTest, testOverlap)
 CPPUNIT_TEST_FIXTURE(ScRangeTest, testRangeParsing)
 {
     ScRange aRange;
-    ScRefFlags nRes = aRange.Parse(":1", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    ScRefFlags nRes = aRange.Parse(u":1"_ustr, *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 }
 
 CPPUNIT_TEST_FIXTURE(ScRangeTest, testAddressParsing)
 {
     ScAddress aAddr;
-    ScRefFlags nRes = aAddr.Parse("1", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    ScRefFlags nRes = aAddr.Parse(u"1"_ustr, *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 }
 
@@ -59,7 +59,7 @@ CPPUNIT_TEST_FIXTURE(ScRangeTest, testTdf147451)
 {
     ScAddress aAddr;
     // "Sheet1" is technically a valid address like "XF1", but it should overflow.
-    ScRefFlags nRes = aAddr.Parse("Sheet1", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    ScRefFlags nRes = aAddr.Parse(u"Sheet1"_ustr, *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 }
 

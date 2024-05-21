@@ -16,8 +16,8 @@ public:
 void FinancialFunctionsTest::testFinancialFormulasFODS()
 {
     OUString aDirectoryURL = m_directories.getURLFromSrc(u"/sc/qa/unit/data/functions/financial/fods/");
-    recursiveScan(test::pass, "OpenDocument Spreadsheet Flat XML", aDirectoryURL,
-            "com.sun.star.comp.filter.OdfFlatXml,,com.sun.star.comp.Calc.XMLOasisImporter,com.sun.star.comp.Calc.XMLOasisExporter,,,true",
+    recursiveScan(test::pass, u"OpenDocument Spreadsheet Flat XML"_ustr, aDirectoryURL,
+            u"com.sun.star.comp.filter.OdfFlatXml,,com.sun.star.comp.Calc.XMLOasisImporter,com.sun.star.comp.Calc.XMLOasisExporter,,,true"_ustr,
             FODS_FORMAT_TYPE, SotClipboardFormatId::NONE, 0, false);
 }
 

@@ -108,13 +108,13 @@ public:
 };
 
 ScTableSheetsObj::ScTableSheetsObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , ::apitest::XElementAccess(cppu::UnoType<sheet::XSpreadsheet>::get())
     , ::apitest::XIndexAccess(3)
-    , ::apitest::XNameAccess("Sheet1")
-    , ::apitest::XNameContainer("Sheet2")
-    , ::apitest::XNameReplace("Sheet2")
-    , ::apitest::XServiceInfo("ScTableSheetsObj", "com.sun.star.sheet.Spreadsheets")
+    , ::apitest::XNameAccess(u"Sheet1"_ustr)
+    , ::apitest::XNameContainer(u"Sheet2"_ustr)
+    , ::apitest::XNameReplace(u"Sheet2"_ustr)
+    , ::apitest::XServiceInfo(u"ScTableSheetsObj"_ustr, u"com.sun.star.sheet.Spreadsheets"_ustr)
 {
 }
 
@@ -130,9 +130,11 @@ uno::Reference<uno::XInterface> ScTableSheetsObj::init()
     uno::Reference<uno::XInterface> xReturn(xDocument->getSheets(), UNO_QUERY_THROW);
 
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY_THROW);
-    XNameContainer::setElement(uno::Any(xMSF->createInstance("com.sun.star.sheet.Spreadsheet")));
+    XNameContainer::setElement(
+        uno::Any(xMSF->createInstance(u"com.sun.star.sheet.Spreadsheet"_ustr)));
     // XNameReplace
-    XNameReplace::setElement(uno::Any(xMSF->createInstance("com.sun.star.sheet.Spreadsheet")));
+    XNameReplace::setElement(
+        uno::Any(xMSF->createInstance(u"com.sun.star.sheet.Spreadsheet"_ustr)));
 
     return xReturn;
 }

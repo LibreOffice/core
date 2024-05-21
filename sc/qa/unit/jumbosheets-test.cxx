@@ -90,7 +90,7 @@ void ScJumboSheetsTest::testRoundtripColumn2000(std::u16string_view name, const 
         // Check the value at BXX1 (2000th column).
         CPPUNIT_ASSERT_EQUAL(-5.0, pDoc->GetValue(1999, 0, 0));
         // Check the formula referencing the value.
-        CPPUNIT_ASSERT_EQUAL(OUString("=BXX1"), pDoc->GetFormula(0, 0, 0));
+        CPPUNIT_ASSERT_EQUAL(u"=BXX1"_ustr, pDoc->GetFormula(0, 0, 0));
         // Recalc and check value in the reference.
         pDoc->CalcAll();
         CPPUNIT_ASSERT_EQUAL(-5.0, pDoc->GetValue(0, 0, 0));
@@ -104,7 +104,7 @@ void ScJumboSheetsTest::testRoundtripColumn2000(std::u16string_view name, const 
         ScDocument* pDoc = pModelObj->GetDocument();
         // Check again.
         CPPUNIT_ASSERT_EQUAL(-5.0, pDoc->GetValue(1999, 0, 0));
-        CPPUNIT_ASSERT_EQUAL(OUString("=BXX1"), pDoc->GetFormula(0, 0, 0));
+        CPPUNIT_ASSERT_EQUAL(u"=BXX1"_ustr, pDoc->GetFormula(0, 0, 0));
         pDoc->CalcAll();
         CPPUNIT_ASSERT_EQUAL(-5.0, pDoc->GetValue(0, 0, 0));
     }
@@ -118,49 +118,49 @@ void ScJumboSheetsTest::testRoundtripColumnRangeOds()
         CPPUNIT_ASSERT(pModelObj);
         ScDocument* pDoc = pModelObj->GetDocument();
         // Check the formula referencing the whole-row range.
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(2:2)"), pDoc->GetFormula(0, 0, 0));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(2:2)"_ustr, pDoc->GetFormula(0, 0, 0));
         // Check the formula referencing the whole-column range.
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C:C)"), pDoc->GetFormula(1, 0, 0));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(C:C)"_ustr, pDoc->GetFormula(1, 0, 0));
     }
 
-    saveAndReload("calc8");
+    saveAndReload(u"calc8"_ustr);
     {
         ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
         CPPUNIT_ASSERT(pModelObj);
 
         ScDocument* pDoc = pModelObj->GetDocument();
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(2:2)"), pDoc->GetFormula(0, 0, 0));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C:C)"), pDoc->GetFormula(1, 0, 0));
-        xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(2:2)"_ustr, pDoc->GetFormula(0, 0, 0));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(C:C)"_ustr, pDoc->GetFormula(1, 0, 0));
+        xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
         CPPUNIT_ASSERT(pXmlDoc);
         assertXPath(pXmlDoc,
                     "/office:document-content/office:body/office:spreadsheet/table:table/"
                     "table:table-row[1]/table:table-cell[1]"_ostr,
-                    "formula"_ostr, "of:=SUM([.2:.2])");
+                    "formula"_ostr, u"of:=SUM([.2:.2])"_ustr);
         assertXPath(pXmlDoc,
                     "/office:document-content/office:body/office:spreadsheet/table:table/"
                     "table:table-row[1]/table:table-cell[2]"_ostr,
-                    "formula"_ostr, "of:=SUM([.C:.C])");
+                    "formula"_ostr, u"of:=SUM([.C:.C])"_ustr);
     }
 }
 
 void ScJumboSheetsTest::testRoundtripColumnRangeXlsx()
 {
     loadFromFile(u"ods/sum-whole-column-row.ods");
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
     {
         ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
         CPPUNIT_ASSERT(pModelObj);
 
         ScDocument* pDoc = pModelObj->GetDocument();
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(2:2)"), pDoc->GetFormula(0, 0, 0));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C:C)"), pDoc->GetFormula(1, 0, 0));
-        xmlDocUniquePtr pXmlDoc = parseExport("xl/worksheets/sheet1.xml");
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(2:2)"_ustr, pDoc->GetFormula(0, 0, 0));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(C:C)"_ustr, pDoc->GetFormula(1, 0, 0));
+        xmlDocUniquePtr pXmlDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
         CPPUNIT_ASSERT(pXmlDoc);
         assertXPathContent(pXmlDoc, "/x:worksheet/x:sheetData/x:row[1]/x:c[1]/x:f"_ostr,
-                           "SUM(2:2)");
+                           u"SUM(2:2)"_ustr);
         assertXPathContent(pXmlDoc, "/x:worksheet/x:sheetData/x:row[1]/x:c[2]/x:f"_ostr,
-                           "SUM(C:C)");
+                           u"SUM(C:C)"_ustr);
     }
 }
 
@@ -267,11 +267,11 @@ void ScJumboSheetsTest::testTdf134553()
     ScTabViewShell* pViewShell = ScDocShell::GetViewData()->GetViewShell();
     pViewShell->SelectObject(u"Diagram 1");
 
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     pOleObj = pPage->GetObj(0);
     CPPUNIT_ASSERT(pOleObj);
@@ -298,34 +298,34 @@ void ScJumboSheetsTest::testTdf134392()
 
 void ScJumboSheetsTest::testTdf147509()
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
 
     ScDocument* pDoc = pModelObj->GetDocument();
 
-    pDoc->SetString(0, 0, 0, "A");
-    pDoc->SetString(1, 0, 0, "B");
+    pDoc->SetString(0, 0, 0, u"A"_ustr);
+    pDoc->SetString(1, 0, 0, u"B"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), ScDocShell::GetViewData()->GetCurX());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), ScDocShell::GetViewData()->GetCurY());
 
-    dispatchCommand(mxComponent, ".uno:SelectColumn", {});
+    dispatchCommand(mxComponent, u".uno:SelectColumn"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:InsertColumnsAfter", {});
+    dispatchCommand(mxComponent, u".uno:InsertColumnsAfter"_ustr, {});
 
-    CPPUNIT_ASSERT_EQUAL(OUString("A"), pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"A"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
 
     // Without the fix in place, this test would have failed with
     // - Expected:
     // - Actual  : B
-    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(1, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("B"), pDoc->GetString(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"B"_ustr, pDoc->GetString(ScAddress(2, 0, 0)));
 }
 
 void ScJumboSheetsTest::testTdf133033()
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
 
@@ -350,7 +350,7 @@ void ScJumboSheetsTest::testTdf109061()
 }
 
 ScJumboSheetsTest::ScJumboSheetsTest()
-    : UnoApiXmlTest("/sc/qa/unit/data/")
+    : UnoApiXmlTest(u"/sc/qa/unit/data/"_ustr)
 {
 }
 

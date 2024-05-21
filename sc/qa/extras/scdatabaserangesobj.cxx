@@ -76,11 +76,11 @@ public:
 };
 
 ScDatabaseRangesObj::ScDatabaseRangesObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XElementAccess(cppu::UnoType<sheet::XDatabaseRange>::get())
     , XIndexAccess(1)
-    , XNameAccess("DbRange")
-    , XServiceInfo("ScDatabaseRangesObj", "com.sun.star.sheet.DatabaseRanges")
+    , XNameAccess(u"DbRange"_ustr)
+    , XServiceInfo(u"ScDatabaseRangesObj"_ustr, u"com.sun.star.sheet.DatabaseRanges"_ustr)
 {
 }
 
@@ -89,11 +89,11 @@ uno::Reference<uno::XInterface> ScDatabaseRangesObj::init()
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
 
     uno::Reference<beans::XPropertySet> xPropSet(xDoc, UNO_QUERY_THROW);
-    uno::Reference<sheet::XDatabaseRanges> xDbRanges(xPropSet->getPropertyValue("DatabaseRanges"),
-                                                     UNO_QUERY_THROW);
+    uno::Reference<sheet::XDatabaseRanges> xDbRanges(
+        xPropSet->getPropertyValue(u"DatabaseRanges"_ustr), UNO_QUERY_THROW);
 
-    if (!xDbRanges->hasByName("DbRange"))
-        xDbRanges->addNewByName("DbRange", table::CellRangeAddress(0, 2, 4, 5, 6));
+    if (!xDbRanges->hasByName(u"DbRange"_ustr))
+        xDbRanges->addNewByName(u"DbRange"_ustr, table::CellRangeAddress(0, 2, 4, 5, 6));
 
     return xDbRanges;
 }
@@ -102,7 +102,7 @@ void ScDatabaseRangesObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDatabaseRangesObj);

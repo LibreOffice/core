@@ -219,7 +219,7 @@ void ScModelTestBase::testFormats(ScDocument* pDoc,std::u16string_view sFormat)
         CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(4153), pDoc->GetColWidth(6,1) ); //2.8839in
         //test case for i53253 where a cell has text with different styles and space between the text.
         OUString aTestStr = pDoc->GetString(3,0,1);
-        OUString aKnownGoodStr("text14 space");
+        OUString aKnownGoodStr(u"text14 space"_ustr);
         CPPUNIT_ASSERT_EQUAL( aKnownGoodStr, aTestStr );
         //test case for cell text with line breaks.
         aTestStr = pDoc->GetString(3,5,1);
@@ -251,7 +251,7 @@ void ScModelTestBase::testFormats(ScDocument* pDoc,std::u16string_view sFormat)
             pPattern = pDoc->GetPattern(1,1,3);
             ScStyleSheet* pStyleSheet = const_cast<ScStyleSheet*>(pPattern->GetStyleSheet());
             // check parent style name
-            OUString sExpected("Excel Built-in Date");
+            OUString sExpected(u"Excel Built-in Date"_ustr);
             OUString sResult = pStyleSheet->GetName();
             CPPUNIT_ASSERT_EQUAL_MESSAGE("parent style for Sheet4.B2 is 'Excel Built-in Date'", sExpected, sResult);
             // check  align of style
@@ -287,7 +287,7 @@ void ScModelTestBase::goToCell(const OUString& rCell)
 {
     uno::Sequence<beans::PropertyValue> aArgs
         = comphelper::InitPropertySequence({ { "ToPoint", uno::Any(rCell) } });
-    dispatchCommand(mxComponent, ".uno:GoToCell", aArgs);
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aArgs);
 }
 
 void ScModelTestBase::typeString(const std::u16string_view& rStr)
@@ -330,15 +330,15 @@ void ScModelTestBase::insertNewSheet(ScDocument& rDoc)
     sal_Int32 nTabs = static_cast<sal_Int32>(rDoc.GetTableCount());
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Name", uno::Any(OUString("NewTab")) }, { "Index", uno::Any(nTabs + 1) } }));
-    dispatchCommand(mxComponent, ".uno:Insert", aArgs);
+        { { "Name", uno::Any(u"NewTab"_ustr) }, { "Index", uno::Any(nTabs + 1) } }));
+    dispatchCommand(mxComponent, u".uno:Insert"_ustr, aArgs);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(nTabs + 1), rDoc.GetTableCount());
 }
 
 void ScModelTestBase::executeAutoSum()
 {
-    dispatchCommand(mxComponent, ".uno:AutoSum", {});
+    dispatchCommand(mxComponent, u".uno:AutoSum"_ustr, {});
 
     // Use RETURN key to exit autosum edit view
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
@@ -572,12 +572,12 @@ void ScUcalcTestBase::tearDown()
 void ScModelTestBase::createScDoc(const char* pName, const char* pPassword, bool bCheckWarningError)
 {
     if (!pName)
-        load("private:factory/scalc");
+        load(u"private:factory/scalc"_ustr);
     else
         loadFromFile(OUString::createFromAscii(pName), pPassword);
 
     uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"));
+    CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr));
 
     if (bCheckWarningError)
         CPPUNIT_ASSERT(!getScDocShell()->GetMedium()->GetWarningError());
@@ -683,7 +683,7 @@ void ScModelTestBase::initTestEnv(std::u16string_view fileName)
 
     // Open the document with OpenCL disabled
     mxComponent = mxDesktop->loadComponentFromURL(
-        createFileURL(fileName), "_default", 0, comphelper::containerToSequence(args));
+        createFileURL(fileName), u"_default"_ustr, 0, comphelper::containerToSequence(args));
 
     enableOpenCL();
     CPPUNIT_ASSERT(ScCalcConfig::isOpenCLEnabled());
@@ -693,7 +693,7 @@ void ScModelTestBase::initTestEnv(std::u16string_view fileName)
 
     // Open the document with OpenCL enabled
     mxComponent2 = mxDesktop->loadComponentFromURL(
-        maTempFile.GetURL(), "_default", 0, comphelper::containerToSequence(args));
+        maTempFile.GetURL(), u"_default"_ustr, 0, comphelper::containerToSequence(args));
 
     // Check there are 2 documents
     uno::Reference<frame::XFrames> xFrames = mxDesktop->getFrames();

@@ -87,7 +87,7 @@ uno::Reference<text::XTextField> ScEditFieldObj_Header::mxField;
 uno::Reference<text::XText> ScEditFieldObj_Header::mxRightText;
 
 ScEditFieldObj_Header::ScEditFieldObj_Header()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , TextContent(text::TextContentAnchorType_AS_CHARACTER,
                   text::TextContentAnchorType_AS_CHARACTER, text::WrapTextMode_NONE,
                   text::WrapTextMode_NONE)
@@ -98,7 +98,7 @@ void ScEditFieldObj_Header::setUp()
 {
     UnoApiTest::setUp();
     // Load an empty document.
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 void ScEditFieldObj_Header::tearDown()
@@ -118,18 +118,19 @@ uno::Reference<uno::XInterface> ScEditFieldObj_Header::init()
         uno::Reference<lang::XMultiServiceFactory> xSM(mxComponent, uno::UNO_QUERY_THROW);
 
         // Create a new URL field object, and populate it with name and URL.
-        mxField.set(xSM->createInstance("com.sun.star.text.TextField.Time"), uno::UNO_QUERY_THROW);
+        mxField.set(xSM->createInstance(u"com.sun.star.text.TextField.Time"_ustr),
+                    uno::UNO_QUERY_THROW);
 
         uno::Reference<style::XStyleFamiliesSupplier> xSFS(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<container::XNameAccess> xStyleFamilies(xSFS->getStyleFamilies(),
                                                               uno::UNO_SET_THROW);
-        uno::Reference<container::XNameAccess> xPageStyles(xStyleFamilies->getByName("PageStyles"),
-                                                           uno::UNO_QUERY_THROW);
-        uno::Reference<beans::XPropertySet> xPropSet(xPageStyles->getByName("Default"),
+        uno::Reference<container::XNameAccess> xPageStyles(
+            xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xPropSet(xPageStyles->getByName(u"Default"_ustr),
                                                      uno::UNO_QUERY_THROW);
 
         uno::Reference<sheet::XHeaderFooterContent> xHeaderContent(
-            xPropSet->getPropertyValue("RightPageHeaderContent"), uno::UNO_QUERY_THROW);
+            xPropSet->getPropertyValue(u"RightPageHeaderContent"_ustr), uno::UNO_QUERY_THROW);
 
         // Use the left header text.
         uno::Reference<text::XText> xText = xHeaderContent->getLeftText();
@@ -138,7 +139,7 @@ uno::Reference<uno::XInterface> ScEditFieldObj_Header::init()
         uno::Reference<text::XTextContent> xContent(mxField, uno::UNO_QUERY_THROW);
         xText->insertTextContent(xRange, xContent, false);
 
-        xPropSet->setPropertyValue("RightPageHeaderContent", uno::Any(xHeaderContent));
+        xPropSet->setPropertyValue(u"RightPageHeaderContent"_ustr, uno::Any(xHeaderContent));
 
         mxRightText = xHeaderContent->getRightText();
     }
@@ -151,7 +152,7 @@ uno::Reference<text::XTextContent> ScEditFieldObj_Header::getTextContent()
     // Return a field object that's not yet inserted.
     uno::Reference<lang::XMultiServiceFactory> xSM(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<text::XTextContent> xField(
-        xSM->createInstance("com.sun.star.text.TextField.Date"), uno::UNO_QUERY_THROW);
+        xSM->createInstance(u"com.sun.star.text.TextField.Date"_ustr), uno::UNO_QUERY_THROW);
     return xField;
 }
 

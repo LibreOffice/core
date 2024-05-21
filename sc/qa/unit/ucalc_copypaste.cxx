@@ -233,8 +233,8 @@ void TestCopyPaste::prepareUndoAfterPaste(ScDocumentUniquePtr& pPasteUndoDoc,
 
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPaste)
 {
-    m_pDoc->InsertTab(0, "Sheet1");
-    m_pDoc->InsertTab(1, "Sheet2");
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    m_pDoc->InsertTab(1, u"Sheet2"_ustr);
 
     // We need a drawing layer in order to create caption objects.
     m_pDoc->InitDrawLayer(m_xDocShell.get());
@@ -247,19 +247,19 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPaste)
     m_pDoc->SetValue(3, 1, 0, 1);
     m_pDoc->SetValue(3, 2, 0, 2);
     m_pDoc->SetValue(3, 3, 0, 3);
-    m_pDoc->SetString(2, 0, 0, "test");
+    m_pDoc->SetString(2, 0, 0, u"test"_ustr);
     ScAddress aAdr(0, 0, 0);
 
     //create some range names, local and global
-    ScRangeData* pLocal1 = new ScRangeData(*m_pDoc, "local1", aAdr);
-    ScRangeData* pLocal2 = new ScRangeData(*m_pDoc, "local2", aAdr);
-    ScRangeData* pLocal3 = new ScRangeData(*m_pDoc, "local3", "$Sheet1.$A$1");
-    ScRangeData* pLocal4 = new ScRangeData(*m_pDoc, "local4", "Sheet1.$A$1");
-    ScRangeData* pLocal5
-        = new ScRangeData(*m_pDoc, "local5", "$A$1"); // implicit relative sheet reference
-    ScRangeData* pGlobal = new ScRangeData(*m_pDoc, "global", aAdr);
+    ScRangeData* pLocal1 = new ScRangeData(*m_pDoc, u"local1"_ustr, aAdr);
+    ScRangeData* pLocal2 = new ScRangeData(*m_pDoc, u"local2"_ustr, aAdr);
+    ScRangeData* pLocal3 = new ScRangeData(*m_pDoc, u"local3"_ustr, u"$Sheet1.$A$1"_ustr);
+    ScRangeData* pLocal4 = new ScRangeData(*m_pDoc, u"local4"_ustr, u"Sheet1.$A$1"_ustr);
+    ScRangeData* pLocal5 = new ScRangeData(*m_pDoc, u"local5"_ustr,
+                                           u"$A$1"_ustr); // implicit relative sheet reference
+    ScRangeData* pGlobal = new ScRangeData(*m_pDoc, u"global"_ustr, aAdr);
     constexpr OUString aGlobal2Symbol(u"$Sheet1.$A$1:$A$23"_ustr);
-    ScRangeData* pGlobal2 = new ScRangeData(*m_pDoc, "global2", aGlobal2Symbol);
+    ScRangeData* pGlobal2 = new ScRangeData(*m_pDoc, u"global2"_ustr, aGlobal2Symbol);
     std::unique_ptr<ScRangeName> pGlobalRangeName(new ScRangeName());
     pGlobalRangeName->insert(pGlobal);
     pGlobalRangeName->insert(pGlobal2);
@@ -273,16 +273,16 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPaste)
     m_pDoc->SetRangeName(0, std::move(pLocalRangeName1));
 
     // Add formula to B1.
-    OUString aFormulaString("=local1+global+SUM($C$1:$D$4)+local3+local4+local5");
+    OUString aFormulaString(u"=local1+global+SUM($C$1:$D$4)+local3+local4+local5"_ustr);
     m_pDoc->SetString(1, 0, 0, aFormulaString);
 
     double fValue = m_pDoc->GetValue(ScAddress(1, 0, 0));
     ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 11", 11, fValue);
 
     // add notes to A1:C1
-    setNote(0, 0, 0, "Hello world in A1"); // empty cell content
-    setNote(1, 0, 0, "Hello world in B1"); // formula cell content
-    setNote(2, 0, 0, "Hello world in C1"); // string cell content
+    setNote(0, 0, 0, u"Hello world in A1"_ustr); // empty cell content
+    setNote(1, 0, 0, u"Hello world in B1"_ustr); // formula cell content
+    setNote(2, 0, 0, u"Hello world in C1"_ustr); // string cell content
 
     //copy Sheet1.A1:C1 to Sheet2.A2:C2
     ScRange aRange(0, 0, 0, 2, 0, 0);
@@ -311,7 +311,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPaste)
     ScRange aSheet2A1(0, 0, 1, 0, 0, 1);
 
     //check local range name after copying
-    pLocal1 = m_pDoc->GetRangeName(1)->findByUpperName(OUString("LOCAL1"));
+    pLocal1 = m_pDoc->GetRangeName(1)->findByUpperName(u"LOCAL1"_ustr);
     CPPUNIT_ASSERT_MESSAGE("local range name 1 should be copied", pLocal1);
     ScRange aRangeLocal1;
     bool bIsValidRef1 = pLocal1->IsValidReference(aRangeLocal1);
@@ -319,10 +319,10 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPaste)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("local range 1 should now point to Sheet2.A1", aSheet2A1,
                                  aRangeLocal1);
 
-    pLocal2 = m_pDoc->GetRangeName(1)->findByUpperName(OUString("LOCAL2"));
+    pLocal2 = m_pDoc->GetRangeName(1)->findByUpperName(u"LOCAL2"_ustr);
     CPPUNIT_ASSERT_MESSAGE("local2 should not be copied", !pLocal2);
 
-    pLocal3 = m_pDoc->GetRangeName(1)->findByUpperName(OUString("LOCAL3"));
+    pLocal3 = m_pDoc->GetRangeName(1)->findByUpperName(u"LOCAL3"_ustr);
     CPPUNIT_ASSERT_MESSAGE("local range name 3 should be copied", pLocal3);
     ScRange aRangeLocal3;
     bool bIsValidRef3 = pLocal3->IsValidReference(aRangeLocal3);
@@ -330,7 +330,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPaste)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("local range 3 should now point to Sheet2.A1", aSheet2A1,
                                  aRangeLocal3);
 
-    pLocal4 = m_pDoc->GetRangeName(1)->findByUpperName(OUString("LOCAL4"));
+    pLocal4 = m_pDoc->GetRangeName(1)->findByUpperName(u"LOCAL4"_ustr);
     CPPUNIT_ASSERT_MESSAGE("local range name 4 should be copied", pLocal4);
     ScRange aRangeLocal4;
     bool bIsValidRef4 = pLocal4->IsValidReference(aRangeLocal4);
@@ -338,7 +338,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPaste)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("local range 4 should now point to Sheet2.A1", aSheet2A1,
                                  aRangeLocal4);
 
-    pLocal5 = m_pDoc->GetRangeName(1)->findByUpperName(OUString("LOCAL5"));
+    pLocal5 = m_pDoc->GetRangeName(1)->findByUpperName(u"LOCAL5"_ustr);
     CPPUNIT_ASSERT_MESSAGE("local range name 5 should be copied", pLocal5);
     ScRange aRangeLocal5;
     bool bIsValidRef5 = pLocal5->IsValidReference(aRangeLocal5);
@@ -374,7 +374,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPaste)
     fValue = m_pDoc->GetValue(ScAddress(1, 1, 1));
     ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 1 after redo", 1.0, fValue);
     aString = m_pDoc->GetString(2, 1, 1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell Sheet2.C2 should contain: test", OUString("test"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell Sheet2.C2 should contain: test", u"test"_ustr, aString);
     aString = m_pDoc->GetFormula(1, 1, 1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula should be correct again", aFormulaString, aString);
 
@@ -401,7 +401,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPaste)
     m_pDoc->CopyFromClip(aRange, aMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc2);
 
     // The global2 range must not have changed.
-    pGlobal2 = m_pDoc->GetRangeName()->findByUpperName("GLOBAL2");
+    pGlobal2 = m_pDoc->GetRangeName()->findByUpperName(u"GLOBAL2"_ustr);
     CPPUNIT_ASSERT_MESSAGE("GLOBAL2 name not found", pGlobal2);
     OUString aSymbol = pGlobal2->GetSymbol();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("GLOBAL2 named range changed", aGlobal2Symbol, aSymbol);
@@ -414,8 +414,8 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteAsLink)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // Turn on auto calc.
 
-    m_pDoc->InsertTab(0, "Sheet1");
-    m_pDoc->InsertTab(1, "Sheet2");
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    m_pDoc->InsertTab(1, u"Sheet2"_ustr);
 
     m_pDoc->SetValue(ScAddress(0, 0, 0), 1); // A1
     m_pDoc->SetValue(ScAddress(0, 1, 0), 2); // A2
@@ -451,22 +451,22 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteAsLink)
 
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteTranspose)
 {
-    m_pDoc->InsertTab(0, "Sheet1");
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
 
     // We need a drawing layer in order to create caption objects.
     m_pDoc->InitDrawLayer(m_xDocShell.get());
 
     m_pDoc->SetValue(0, 0, 0, 1);
-    m_pDoc->SetString(1, 0, 0, "=A1+1");
-    m_pDoc->SetString(2, 0, 0, "test");
+    m_pDoc->SetString(1, 0, 0, u"=A1+1"_ustr);
+    m_pDoc->SetString(2, 0, 0, u"test"_ustr);
 
     // add notes to A1:C1
-    setNote(0, 0, 0, "Hello world in A1"); // numerical cell content
-    setNote(1, 0, 0, "Hello world in B1"); // formula cell content
-    setNote(2, 0, 0, "Hello world in C1"); // string cell content
+    setNote(0, 0, 0, u"Hello world in A1"_ustr); // numerical cell content
+    setNote(1, 0, 0, u"Hello world in B1"_ustr); // formula cell content
+    setNote(2, 0, 0, u"Hello world in C1"_ustr); // string cell content
 
     // transpose clipboard, paste and check on Sheet2
-    m_pDoc->InsertTab(1, "Sheet2");
+    m_pDoc->InsertTab(1, u"Sheet2"_ustr);
 
     ScRange aSrcRange(0, 0, 0, 2, 0, 0);
     ScDocument aNewClipDoc(SCDOCMODE_CLIP);
@@ -483,13 +483,13 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteTranspose)
 
     //check cell content after transposed copy/paste
     OUString aString = m_pDoc->GetString(3, 3, 1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell Sheet2.D4 should contain: test", OUString("test"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell Sheet2.D4 should contain: test", u"test"_ustr, aString);
     double fValue = m_pDoc->GetValue(ScAddress(3, 1, 1));
     ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell should return 1", 1, fValue);
     fValue = m_pDoc->GetValue(ScAddress(3, 2, 1));
     ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula should return 2", 2, fValue);
     aString = m_pDoc->GetFormula(3, 2, 1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula should point on Sheet2.D2", OUString("=D2+1"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed formula should point on Sheet2.D2", u"=D2+1"_ustr,
                                  aString);
 
     // check notes after transposed copy/paste
@@ -514,8 +514,8 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMergedCellsTranspose)
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // Turn on auto calc.
 
-    m_pDoc->InsertTab(srcSheet, "Sheet1");
-    m_pDoc->InsertTab(destSheet, "Sheet2");
+    m_pDoc->InsertTab(srcSheet, u"Sheet1"_ustr);
+    m_pDoc->InsertTab(destSheet, u"Sheet2"_ustr);
 
     m_pDoc->SetValue(0, 0, srcSheet, 1); // A1
     m_pDoc->SetValue(0, 1, srcSheet, 2); // A2
@@ -583,8 +583,8 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMergedCellsFilteredTrans
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // Turn on auto calc.
 
-    m_pDoc->InsertTab(srcSheet, "Sheet1");
-    m_pDoc->InsertTab(destSheet, "Sheet2");
+    m_pDoc->InsertTab(srcSheet, u"Sheet1"_ustr);
+    m_pDoc->InsertTab(destSheet, u"Sheet2"_ustr);
 
     m_pDoc->SetValue(0, 0, srcSheet, 1); // A1
     m_pDoc->SetValue(0, 1, srcSheet, 2); // A2
@@ -595,7 +595,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMergedCellsFilteredTrans
     m_pDoc->DoMerge(0, 2, 1, 2, srcSheet, false); // Merge A3 and B3
 
     // Filter row 1
-    ScDBData* pDBData = new ScDBData("TRANSPOSE_TEST_DATA", srcSheet, 0, 0, 0, 3);
+    ScDBData* pDBData = new ScDBData(u"TRANSPOSE_TEST_DATA"_ustr, srcSheet, 0, 0, 0, 3);
     m_pDoc->SetAnonymousDBData(0, std::unique_ptr<ScDBData>(pDBData));
 
     pDBData->SetAutoFilter(true);
@@ -674,8 +674,8 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialAsLinkTranspose)
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // Turn on auto calc.
 
-    m_pDoc->InsertTab(srcSheet, "Sheet1");
-    m_pDoc->InsertTab(destSheet, "Sheet2");
+    m_pDoc->InsertTab(srcSheet, u"Sheet1"_ustr);
+    m_pDoc->InsertTab(destSheet, u"Sheet2"_ustr);
 
     m_pDoc->SetValue(0, 0, srcSheet, 1); // A1
     m_pDoc->SetValue(0, 1, srcSheet, 2); // A2
@@ -699,13 +699,13 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialAsLinkTranspose)
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B2.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", OUString("=$Sheet1.$A$1"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", u"=$Sheet1.$A$1"_ustr,
                                  m_pDoc->GetFormula(1, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(1.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C2", OUString("=$Sheet1.$A$2"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C2", u"=$Sheet1.$A$2"_ustr,
                                  m_pDoc->GetFormula(2, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(2.0, pFC->GetValue());
 
@@ -714,7 +714,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialAsLinkTranspose)
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(4, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E2", OUString("=$Sheet1.$A$4"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E2", u"=$Sheet1.$A$4"_ustr,
                                  m_pDoc->GetFormula(4, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(4.0, pFC->GetValue());
 
@@ -730,15 +730,15 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialAsLinkFilteredTranspose)
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // Turn on auto calc.
 
-    m_pDoc->InsertTab(srcSheet, "Sheet1");
-    m_pDoc->InsertTab(destSheet, "Sheet2");
+    m_pDoc->InsertTab(srcSheet, u"Sheet1"_ustr);
+    m_pDoc->InsertTab(destSheet, u"Sheet2"_ustr);
 
     m_pDoc->SetValue(0, 0, srcSheet, 1); // A1
     m_pDoc->SetValue(0, 1, srcSheet, 2); // A2
     m_pDoc->SetValue(0, 3, srcSheet, 4); // A4
 
     // Filter row 1
-    ScDBData* pDBData = new ScDBData("TRANSPOSE_TEST_DATA", srcSheet, 0, 0, 0, 3);
+    ScDBData* pDBData = new ScDBData(u"TRANSPOSE_TEST_DATA"_ustr, srcSheet, 0, 0, 0, 3);
     m_pDoc->SetAnonymousDBData(0, std::unique_ptr<ScDBData>(pDBData));
 
     pDBData->SetAutoFilter(true);
@@ -792,7 +792,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialAsLinkFilteredTranspose)
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B2.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", OUString("=$Sheet1.$A$1"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", u"=$Sheet1.$A$1"_ustr,
                                  m_pDoc->GetFormula(1, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(1.0, pFC->GetValue());
 
@@ -801,7 +801,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialAsLinkFilteredTranspose)
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(3, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", OUString("=$Sheet1.$A$4"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", u"=$Sheet1.$A$4"_ustr,
                                  m_pDoc->GetFormula(3, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(4.0, pFC->GetValue());
 
@@ -818,8 +818,8 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeRowAsLinkTrans
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // Turn on auto calc.
 
-    m_pDoc->InsertTab(srcSheet, "Sheet1");
-    m_pDoc->InsertTab(destSheet, "Sheet2");
+    m_pDoc->InsertTab(srcSheet, u"Sheet1"_ustr);
+    m_pDoc->InsertTab(destSheet, u"Sheet2"_ustr);
 
     m_pDoc->SetValue(0, 0, srcSheet, 1); // A1
     m_pDoc->SetValue(1, 0, srcSheet, 2); // B1
@@ -854,13 +854,13 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeRowAsLinkTrans
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B2.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", OUString("=$Sheet1.$A$1"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", u"=$Sheet1.$A$1"_ustr,
                                  m_pDoc->GetFormula(1, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(1.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(1, 2, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B3.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B3", OUString("=$Sheet1.$B$1"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B3", u"=$Sheet1.$B$1"_ustr,
                                  m_pDoc->GetFormula(1, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(2.0, pFC->GetValue());
 
@@ -869,19 +869,19 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeRowAsLinkTrans
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(1, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B5", OUString("=$Sheet1.$D$1"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B5", u"=$Sheet1.$D$1"_ustr,
                                  m_pDoc->GetFormula(1, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(4.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell C2.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C2", OUString("=$Sheet1.$A$3"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C2", u"=$Sheet1.$A$3"_ustr,
                                  m_pDoc->GetFormula(2, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(11.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 2, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell C3.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C3", OUString("=$Sheet1.$B$3"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C3", u"=$Sheet1.$B$3"_ustr,
                                  m_pDoc->GetFormula(2, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(12.0, pFC->GetValue());
 
@@ -890,7 +890,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeRowAsLinkTrans
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C5", OUString("=$Sheet1.$D$3"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C5", u"=$Sheet1.$D$3"_ustr,
                                  m_pDoc->GetFormula(2, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(14.0, pFC->GetValue());
 
@@ -907,8 +907,8 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeRowAsLinkFilte
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // Turn on auto calc.
 
-    m_pDoc->InsertTab(srcSheet, "Sheet1");
-    m_pDoc->InsertTab(destSheet, "Sheet2");
+    m_pDoc->InsertTab(srcSheet, u"Sheet1"_ustr);
+    m_pDoc->InsertTab(destSheet, u"Sheet2"_ustr);
 
     m_pDoc->SetValue(0, 0, srcSheet, 1); // A1
     m_pDoc->SetValue(1, 0, srcSheet, 2); // B1
@@ -931,7 +931,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeRowAsLinkFilte
     m_pDoc->SetValue(3, 5, srcSheet, 114); // D6
 
     // Filter row 1
-    ScDBData* pDBData = new ScDBData("TRANSPOSE_TEST_DATA", srcSheet, 0, 0, 3, 3);
+    ScDBData* pDBData = new ScDBData(u"TRANSPOSE_TEST_DATA"_ustr, srcSheet, 0, 0, 3, 3);
     m_pDoc->SetAnonymousDBData(0, std::unique_ptr<ScDBData>(pDBData));
 
     pDBData->SetAutoFilter(true);
@@ -984,13 +984,13 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeRowAsLinkFilte
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B2.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", OUString("=$Sheet1.$A$1"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", u"=$Sheet1.$A$1"_ustr,
                                  m_pDoc->GetFormula(1, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(1.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(1, 2, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B3.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B3", OUString("=$Sheet1.$B$1"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B3", u"=$Sheet1.$B$1"_ustr,
                                  m_pDoc->GetFormula(1, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(2.0, pFC->GetValue());
 
@@ -999,19 +999,19 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeRowAsLinkFilte
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(1, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B5", OUString("=$Sheet1.$D$1"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B5", u"=$Sheet1.$D$1"_ustr,
                                  m_pDoc->GetFormula(1, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(4.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell C2.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C2", OUString("=$Sheet1.$A$3"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C2", u"=$Sheet1.$A$3"_ustr,
                                  m_pDoc->GetFormula(2, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(11.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 2, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell C3.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C3", OUString("=$Sheet1.$B$3"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C3", u"=$Sheet1.$B$3"_ustr,
                                  m_pDoc->GetFormula(2, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(12.0, pFC->GetValue());
 
@@ -1020,19 +1020,19 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeRowAsLinkFilte
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C5", OUString("=$Sheet1.$D$3"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C5", u"=$Sheet1.$D$3"_ustr,
                                  m_pDoc->GetFormula(2, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(14.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(3, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell D2.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", OUString("=$Sheet1.$A$6"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", u"=$Sheet1.$A$6"_ustr,
                                  m_pDoc->GetFormula(3, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(111.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(3, 2, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell D3.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D3", OUString("=$Sheet1.$B$6"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D3", u"=$Sheet1.$B$6"_ustr,
                                  m_pDoc->GetFormula(3, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(112.0, pFC->GetValue());
 
@@ -1041,7 +1041,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeRowAsLinkFilte
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(3, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D5", OUString("=$Sheet1.$D$6"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D5", u"=$Sheet1.$D$6"_ustr,
                                  m_pDoc->GetFormula(3, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(114.0, pFC->GetValue());
 
@@ -1058,8 +1058,8 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeColAsLinkTrans
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // Turn on auto calc.
 
-    m_pDoc->InsertTab(srcSheet, "Sheet1");
-    m_pDoc->InsertTab(destSheet, "Sheet2");
+    m_pDoc->InsertTab(srcSheet, u"Sheet1"_ustr);
+    m_pDoc->InsertTab(destSheet, u"Sheet2"_ustr);
 
     m_pDoc->SetValue(0, 0, srcSheet, 1); // A1
     m_pDoc->SetValue(0, 1, srcSheet, 2); // A2
@@ -1094,13 +1094,13 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeColAsLinkTrans
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B2.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", OUString("=$Sheet1.$A$1"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", u"=$Sheet1.$A$1"_ustr,
                                  m_pDoc->GetFormula(1, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(1.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell C2.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C2", OUString("=$Sheet1.$A$2"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C2", u"=$Sheet1.$A$2"_ustr,
                                  m_pDoc->GetFormula(2, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(2.0, pFC->GetValue());
 
@@ -1109,19 +1109,19 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeColAsLinkTrans
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(4, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E2", OUString("=$Sheet1.$A$4"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E2", u"=$Sheet1.$A$4"_ustr,
                                  m_pDoc->GetFormula(4, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(4.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(1, 2, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B3.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B3", OUString("=$Sheet1.$C$1"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B3", u"=$Sheet1.$C$1"_ustr,
                                  m_pDoc->GetFormula(1, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(11.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 2, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell C3.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C3", OUString("=$Sheet1.$C$2"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C3", u"=$Sheet1.$C$2"_ustr,
                                  m_pDoc->GetFormula(2, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(12.0, pFC->GetValue());
 
@@ -1130,7 +1130,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeColAsLinkTrans
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(4, 2, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E3", OUString("=$Sheet1.$C$4"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E3", u"=$Sheet1.$C$4"_ustr,
                                  m_pDoc->GetFormula(4, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(14.0, pFC->GetValue());
 
@@ -1147,8 +1147,8 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeColAsLinkFilte
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // Turn on auto calc.
 
-    m_pDoc->InsertTab(srcSheet, "Sheet1");
-    m_pDoc->InsertTab(destSheet, "Sheet2");
+    m_pDoc->InsertTab(srcSheet, u"Sheet1"_ustr);
+    m_pDoc->InsertTab(destSheet, u"Sheet2"_ustr);
 
     m_pDoc->SetValue(0, 0, srcSheet, 1); // A1
     m_pDoc->SetValue(0, 1, srcSheet, 2); // A2
@@ -1159,7 +1159,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeColAsLinkFilte
     m_pDoc->SetValue(2, 3, srcSheet, 14); // C4
 
     // Filter row 1
-    ScDBData* pDBData = new ScDBData("TRANSPOSE_TEST_DATA", srcSheet, 0, 0, 0, 3);
+    ScDBData* pDBData = new ScDBData(u"TRANSPOSE_TEST_DATA"_ustr, srcSheet, 0, 0, 0, 3);
     m_pDoc->SetAnonymousDBData(0, std::unique_ptr<ScDBData>(pDBData));
 
     pDBData->SetAutoFilter(true);
@@ -1207,7 +1207,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeColAsLinkFilte
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B2.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", OUString("=$Sheet1.$A$1"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", u"=$Sheet1.$A$1"_ustr,
                                  m_pDoc->GetFormula(1, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(1.0, pFC->GetValue());
 
@@ -1216,13 +1216,13 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeColAsLinkFilte
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(3, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", OUString("=$Sheet1.$A$4"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", u"=$Sheet1.$A$4"_ustr,
                                  m_pDoc->GetFormula(3, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(4.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(1, 2, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B3.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B3", OUString("=$Sheet1.$C$1"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B3", u"=$Sheet1.$C$1"_ustr,
                                  m_pDoc->GetFormula(1, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(11.0, pFC->GetValue());
 
@@ -1231,7 +1231,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeColAsLinkFilte
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(3, 2, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D3", OUString("=$Sheet1.$C$4"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D3", u"=$Sheet1.$C$4"_ustr,
                                  m_pDoc->GetFormula(3, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(14.0, pFC->GetValue());
 
@@ -1247,8 +1247,8 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialAllAsLinkTranspose)
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // Turn on auto calc.
 
-    m_pDoc->InsertTab(srcSheet, "Sheet1");
-    m_pDoc->InsertTab(destSheet, "Sheet2");
+    m_pDoc->InsertTab(srcSheet, u"Sheet1"_ustr);
+    m_pDoc->InsertTab(destSheet, u"Sheet2"_ustr);
 
     m_pDoc->SetValue(0, 0, srcSheet, 1); // A1
     m_pDoc->SetValue(0, 1, srcSheet, 2); // A2
@@ -1272,25 +1272,25 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialAllAsLinkTranspose)
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B2.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", OUString("=$Sheet1.$A$1"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", u"=$Sheet1.$A$1"_ustr,
                                  m_pDoc->GetFormula(1, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(1.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C2", OUString("=$Sheet1.$A$2"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C2", u"=$Sheet1.$A$2"_ustr,
                                  m_pDoc->GetFormula(2, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(2.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(3, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", OUString("=$Sheet1.$A$3"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", u"=$Sheet1.$A$3"_ustr,
                                  m_pDoc->GetFormula(3, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(0.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(4, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E2", OUString("=$Sheet1.$A$4"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E2", u"=$Sheet1.$A$4"_ustr,
                                  m_pDoc->GetFormula(4, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(4.0, pFC->GetValue());
 
@@ -1306,15 +1306,15 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialAllAsLinkFilteredTranspo
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // Turn on auto calc.
 
-    m_pDoc->InsertTab(srcSheet, "Sheet1");
-    m_pDoc->InsertTab(destSheet, "Sheet2");
+    m_pDoc->InsertTab(srcSheet, u"Sheet1"_ustr);
+    m_pDoc->InsertTab(destSheet, u"Sheet2"_ustr);
 
     m_pDoc->SetValue(0, 0, srcSheet, 1); // A1
     m_pDoc->SetValue(0, 1, srcSheet, 2); // A2
     m_pDoc->SetValue(0, 3, srcSheet, 4); // A4
 
     // Filter row 1
-    ScDBData* pDBData = new ScDBData("TRANSPOSE_TEST_DATA", srcSheet, 0, 0, 0, 3);
+    ScDBData* pDBData = new ScDBData(u"TRANSPOSE_TEST_DATA"_ustr, srcSheet, 0, 0, 0, 3);
     m_pDoc->SetAnonymousDBData(0, std::unique_ptr<ScDBData>(pDBData));
 
     pDBData->SetAutoFilter(true);
@@ -1368,19 +1368,19 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialAllAsLinkFilteredTranspo
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell B2.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", OUString("=$Sheet1.$A$1"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B2", u"=$Sheet1.$A$1"_ustr,
                                  m_pDoc->GetFormula(1, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(1.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(2, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C2", OUString("=$Sheet1.$A$3"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C2", u"=$Sheet1.$A$3"_ustr,
                                  m_pDoc->GetFormula(2, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(0.0, pFC->GetValue());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(3, 1, destSheet));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", OUString("=$Sheet1.$A$4"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", u"=$Sheet1.$A$4"_ustr,
                                  m_pDoc->GetFormula(3, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(4.0, pFC->GetValue());
 
@@ -1418,7 +1418,7 @@ void TestCopyPaste::executeCopyPasteSpecial(const SCTAB srcSheet, const SCTAB de
     for (int i = 0; i < srcSheet; ++i)
         m_pDoc->InsertTab(i, "Empty Tab " + OUString::number(i));
 
-    m_pDoc->InsertTab(srcSheet, "SrcSheet");
+    m_pDoc->InsertTab(srcSheet, u"SrcSheet"_ustr);
 
     // We need a drawing layer in order to create caption objects.
     m_pDoc->InitDrawLayer(m_xDocShell.get());
@@ -1480,45 +1480,45 @@ void TestCopyPaste::executeCopyPasteSpecial(const SCTAB srcSheet, const SCTAB de
     m_pDoc->SetValue(1, 4, srcSheet, 3);
     m_pDoc->SetValue(1, 5, srcSheet, 4);
     // col C
-    m_pDoc->SetString(2, 2, srcSheet, "=B3+10");
-    m_pDoc->SetString(2, 3, srcSheet, "=B4+20");
-    m_pDoc->SetString(2, 4, srcSheet, "=E5+30");
-    m_pDoc->SetString(2, 5, srcSheet, "=B4+40");
+    m_pDoc->SetString(2, 2, srcSheet, u"=B3+10"_ustr);
+    m_pDoc->SetString(2, 3, srcSheet, u"=B4+20"_ustr);
+    m_pDoc->SetString(2, 4, srcSheet, u"=E5+30"_ustr);
+    m_pDoc->SetString(2, 5, srcSheet, u"=B4+40"_ustr);
     // col D
-    m_pDoc->SetString(3, 2, srcSheet, "a");
-    m_pDoc->SetString(3, 3, srcSheet, "b");
-    m_pDoc->SetString(3, 4, srcSheet, "c");
-    m_pDoc->SetString(3, 5, srcSheet, "d");
+    m_pDoc->SetString(3, 2, srcSheet, u"a"_ustr);
+    m_pDoc->SetString(3, 3, srcSheet, u"b"_ustr);
+    m_pDoc->SetString(3, 4, srcSheet, u"c"_ustr);
+    m_pDoc->SetString(3, 5, srcSheet, u"d"_ustr);
     // col E
-    rEditEngine.SetTextCurrentDefaults("R1");
+    rEditEngine.SetTextCurrentDefaults(u"R1"_ustr);
     m_pDoc->SetEditText(ScAddress(4, 2, srcSheet), rEditEngine.CreateTextObject());
-    rEditEngine.SetTextCurrentDefaults("R2");
+    rEditEngine.SetTextCurrentDefaults(u"R2"_ustr);
     m_pDoc->SetEditText(ScAddress(4, 3, srcSheet), rEditEngine.CreateTextObject());
     m_pDoc->SetValue(4, 4, srcSheet, 5);
-    rEditEngine.SetTextCurrentDefaults("R4");
+    rEditEngine.SetTextCurrentDefaults(u"R4"_ustr);
     m_pDoc->SetEditText(ScAddress(4, 5, srcSheet), rEditEngine.CreateTextObject());
     // col F
     m_pDoc->SetValue(5, 2, srcSheet, 9);
-    m_pDoc->SetString(5, 2, srcSheet, "=B3+B5+60");
+    m_pDoc->SetString(5, 2, srcSheet, u"=B3+B5+60"_ustr);
     m_pDoc->SetEmptyCell(ScAddress(5, 3, srcSheet));
     m_pDoc->SetEmptyCell(ScAddress(5, 4, srcSheet));
-    m_pDoc->SetString(5, 5, srcSheet, "=B3+B5+70");
+    m_pDoc->SetString(5, 5, srcSheet, u"=B3+B5+70"_ustr);
     // col G
     m_pDoc->SetValue(6, 2, srcSheet, 9);
-    m_pDoc->SetString(6, 2, srcSheet, "=SUMIF(B3:B6;\"<4\")");
+    m_pDoc->SetString(6, 2, srcSheet, u"=SUMIF(B3:B6;\"<4\")"_ustr);
     m_pDoc->SetEmptyCell(ScAddress(6, 3, srcSheet));
     m_pDoc->SetEmptyCell(ScAddress(6, 4, srcSheet));
-    m_pDoc->SetString(6, 5, srcSheet, "=C$3+$B$5+80");
+    m_pDoc->SetString(6, 5, srcSheet, u"=C$3+$B$5+80"_ustr);
 
     const SfxPoolItem* pItem = nullptr;
 
     // row 6, additional row for MultiRange test case, otherwise not selected
     m_pDoc->SetValue(1, 6, srcSheet, 6);
-    m_pDoc->SetString(2, 6, srcSheet, "q");
-    m_pDoc->SetString(3, 6, srcSheet, "r");
-    m_pDoc->SetString(4, 6, srcSheet, "s");
-    m_pDoc->SetString(5, 6, srcSheet, "t");
-    m_pDoc->SetString(6, 6, srcSheet, "u");
+    m_pDoc->SetString(2, 6, srcSheet, u"q"_ustr);
+    m_pDoc->SetString(3, 6, srcSheet, u"r"_ustr);
+    m_pDoc->SetString(4, 6, srcSheet, u"s"_ustr);
+    m_pDoc->SetString(5, 6, srcSheet, u"t"_ustr);
+    m_pDoc->SetString(6, 6, srcSheet, u"u"_ustr);
 
     // row 7, not selected
     m_pDoc->SetValue(1, 7, srcSheet, -1);
@@ -1569,43 +1569,50 @@ void TestCopyPaste::executeCopyPasteSpecial(const SCTAB srcSheet, const SCTAB de
     m_pDoc->SetValue(9, 7, srcSheet, 136);
 
     // row 16, refs to copied/cut range
-    m_pDoc->SetString(1, 16, srcSheet, "=C5");
-    m_pDoc->SetString(2, 16, srcSheet, "=$C$5");
-    m_pDoc->SetString(3, 16, srcSheet, "=$C5");
-    m_pDoc->SetString(4, 16, srcSheet, "=C$5");
-    m_pDoc->SetString(5, 16, srcSheet, "=SUM(C5:C5)");
-    m_pDoc->SetString(6, 16, srcSheet, "=SUM($C$5:$C$5)");
-    m_pDoc->SetString(7, 16, srcSheet, "=SUM($C5:$C5)");
-    m_pDoc->SetString(8, 16, srcSheet, "=SUM(C$5:C$5)");
-    m_pDoc->SetString(9, 16, srcSheet, "=SUM($B$3:$B$6)");
-    m_pDoc->SetString(10, 16, srcSheet, "=SUM($B$3:$B$10)");
+    m_pDoc->SetString(1, 16, srcSheet, u"=C5"_ustr);
+    m_pDoc->SetString(2, 16, srcSheet, u"=$C$5"_ustr);
+    m_pDoc->SetString(3, 16, srcSheet, u"=$C5"_ustr);
+    m_pDoc->SetString(4, 16, srcSheet, u"=C$5"_ustr);
+    m_pDoc->SetString(5, 16, srcSheet, u"=SUM(C5:C5)"_ustr);
+    m_pDoc->SetString(6, 16, srcSheet, u"=SUM($C$5:$C$5)"_ustr);
+    m_pDoc->SetString(7, 16, srcSheet, u"=SUM($C5:$C5)"_ustr);
+    m_pDoc->SetString(8, 16, srcSheet, u"=SUM(C$5:C$5)"_ustr);
+    m_pDoc->SetString(9, 16, srcSheet, u"=SUM($B$3:$B$6)"_ustr);
+    m_pDoc->SetString(10, 16, srcSheet, u"=SUM($B$3:$B$10)"_ustr);
 
     // Cell position is used for ranges relative to current position
     ScAddress cellC6(2, 5, srcSheet);
     ScAddress cellA1(0, 0, srcSheet);
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_C5", cellC6, "$SrcSheet.C5"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_aCa5", cellA1, "$SrcSheet.$C$5"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_aC5", cellC6, "$SrcSheet.$C5"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_Ca5", cellC6, "$SrcSheet.C$5"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_C5_C5", cellC6, "$SrcSheet.C5:C5"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_aCa5_aCa5", cellA1, "$SrcSheet.$C$5:$C$5"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_aC5_aC5", cellC6, "$SrcSheet.$C5:$C5"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_aC5_aC5", cellC6, "$SrcSheet.$C5:$C5"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_Ca5_Ca5", cellC6, "$SrcSheet.C$5:C$5"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_aCa5_aCa8", cellA1, "$SrcSheet.$B$3:$B$6"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_aCa5_aCa10", cellA1, "$SrcSheet.$B$3:$B$10"));
+    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName(u"Range_C5"_ustr, cellC6, u"$SrcSheet.C5"_ustr));
+    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName(u"Range_aCa5"_ustr, cellA1, u"$SrcSheet.$C$5"_ustr));
+    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName(u"Range_aC5"_ustr, cellC6, u"$SrcSheet.$C5"_ustr));
+    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName(u"Range_Ca5"_ustr, cellC6, u"$SrcSheet.C$5"_ustr));
+    CPPUNIT_ASSERT(
+        m_pDoc->InsertNewRangeName(u"Range_C5_C5"_ustr, cellC6, u"$SrcSheet.C5:C5"_ustr));
+    CPPUNIT_ASSERT(
+        m_pDoc->InsertNewRangeName(u"Range_aCa5_aCa5"_ustr, cellA1, u"$SrcSheet.$C$5:$C$5"_ustr));
+    CPPUNIT_ASSERT(
+        m_pDoc->InsertNewRangeName(u"Range_aC5_aC5"_ustr, cellC6, u"$SrcSheet.$C5:$C5"_ustr));
+    CPPUNIT_ASSERT(
+        m_pDoc->InsertNewRangeName(u"Range_aC5_aC5"_ustr, cellC6, u"$SrcSheet.$C5:$C5"_ustr));
+    CPPUNIT_ASSERT(
+        m_pDoc->InsertNewRangeName(u"Range_Ca5_Ca5"_ustr, cellC6, u"$SrcSheet.C$5:C$5"_ustr));
+    CPPUNIT_ASSERT(
+        m_pDoc->InsertNewRangeName(u"Range_aCa5_aCa8"_ustr, cellA1, u"$SrcSheet.$B$3:$B$6"_ustr));
+    CPPUNIT_ASSERT(
+        m_pDoc->InsertNewRangeName(u"Range_aCa5_aCa10"_ustr, cellA1, u"$SrcSheet.$B$3:$B$10"_ustr));
 
     // row 17, refs to copied/cut range using range
-    m_pDoc->SetString(1, 17, srcSheet, "=Range_C5");
-    m_pDoc->SetString(2, 17, srcSheet, "=Range_aCa5");
-    m_pDoc->SetString(3, 17, srcSheet, "=Range_aC5");
-    m_pDoc->SetString(4, 17, srcSheet, "=Range_Ca5");
-    m_pDoc->SetString(5, 17, srcSheet, "=SUM(Range_C5_C5)");
-    m_pDoc->SetString(6, 17, srcSheet, "=SUM(Range_aCa5_aCa5)");
-    m_pDoc->SetString(7, 17, srcSheet, "=SUM(Range_aC5_aC5)");
-    m_pDoc->SetString(8, 17, srcSheet, "=SUM(Range_Ca5_Ca5)");
-    m_pDoc->SetString(9, 17, srcSheet, "=SUM(Range_aCa5_aCa8)");
-    m_pDoc->SetString(10, 17, srcSheet, "=SUM(Range_aCa5_aCa10)");
+    m_pDoc->SetString(1, 17, srcSheet, u"=Range_C5"_ustr);
+    m_pDoc->SetString(2, 17, srcSheet, u"=Range_aCa5"_ustr);
+    m_pDoc->SetString(3, 17, srcSheet, u"=Range_aC5"_ustr);
+    m_pDoc->SetString(4, 17, srcSheet, u"=Range_Ca5"_ustr);
+    m_pDoc->SetString(5, 17, srcSheet, u"=SUM(Range_C5_C5)"_ustr);
+    m_pDoc->SetString(6, 17, srcSheet, u"=SUM(Range_aCa5_aCa5)"_ustr);
+    m_pDoc->SetString(7, 17, srcSheet, u"=SUM(Range_aC5_aC5)"_ustr);
+    m_pDoc->SetString(8, 17, srcSheet, u"=SUM(Range_Ca5_Ca5)"_ustr);
+    m_pDoc->SetString(9, 17, srcSheet, u"=SUM(Range_aCa5_aCa8)"_ustr);
+    m_pDoc->SetString(10, 17, srcSheet, u"=SUM(Range_aCa5_aCa10)"_ustr);
 
     // add patterns
     ScPatternAttr aCellBlueColor(m_pDoc->getCellAttributeHelper());
@@ -1671,39 +1678,39 @@ void TestCopyPaste::executeCopyPasteSpecial(const SCTAB srcSheet, const SCTAB de
     // add notes to B3:F4
 
     // add notes row 2
-    setNote(1, 2, srcSheet, "Note A1");
-    setNote(2, 2, srcSheet, "Note B1");
+    setNote(1, 2, srcSheet, u"Note A1"_ustr);
+    setNote(2, 2, srcSheet, u"Note B1"_ustr);
     // No note on D3
-    setNote(4, 2, srcSheet, "Note D1");
+    setNote(4, 2, srcSheet, u"Note D1"_ustr);
     // No note on F3
     // No note on G3
 
     // add notes row 3
-    setNote(1, 3, srcSheet, "Note A2");
+    setNote(1, 3, srcSheet, u"Note A2"_ustr);
     // No note on C4
-    setNote(3, 3, srcSheet, "Note C2");
-    setNote(4, 3, srcSheet, "Note D2");
-    setNote(5, 4, srcSheet, "Note E2");
-    setNote(6, 3, srcSheet, "Note F2");
+    setNote(3, 3, srcSheet, u"Note C2"_ustr);
+    setNote(4, 3, srcSheet, u"Note D2"_ustr);
+    setNote(5, 4, srcSheet, u"Note E2"_ustr);
+    setNote(6, 3, srcSheet, u"Note F2"_ustr);
 
     // add notes row 4
-    setNote(1, 4, srcSheet, "Note A3");
-    setNote(2, 4, srcSheet, "Note B3");
-    setNote(3, 4, srcSheet, "Note C3");
-    setNote(4, 4, srcSheet, "Note D3");
+    setNote(1, 4, srcSheet, u"Note A3"_ustr);
+    setNote(2, 4, srcSheet, u"Note B3"_ustr);
+    setNote(3, 4, srcSheet, u"Note C3"_ustr);
+    setNote(4, 4, srcSheet, u"Note D3"_ustr);
     // No note on F5
     // No note on G5
 
     // add notes row 5
     // No note on B6
-    setNote(2, 5, srcSheet, "Note B4");
-    setNote(3, 5, srcSheet, "Note C4");
-    setNote(4, 5, srcSheet, "Note D4");
-    setNote(5, 5, srcSheet, "Note E4");
-    setNote(6, 5, srcSheet, "Note F4");
+    setNote(2, 5, srcSheet, u"Note B4"_ustr);
+    setNote(3, 5, srcSheet, u"Note C4"_ustr);
+    setNote(4, 5, srcSheet, u"Note D4"_ustr);
+    setNote(5, 5, srcSheet, u"Note E4"_ustr);
+    setNote(6, 5, srcSheet, u"Note F4"_ustr);
 
     // row 6 for multi range row selection
-    setNote(3, 6, srcSheet, "Note C5");
+    setNote(3, 6, srcSheet, u"Note C5"_ustr);
 
     // Recalc if needed
     if (bMultiRangeSelection && bTranspose && eDirection == ScClipParam::Row
@@ -1716,8 +1723,9 @@ void TestCopyPaste::executeCopyPasteSpecial(const SCTAB srcSheet, const SCTAB de
     // Filter out row 3
     if (bApplyFilter)
     {
-        ScDBData* pDBData = new ScDBData("TRANSPOSE_TEST_DATA", srcSheet, nStartCol, nStartRow,
-                                         nStartCol + nSrcCols - 1, nStartRow + nSrcRows - 1);
+        ScDBData* pDBData
+            = new ScDBData(u"TRANSPOSE_TEST_DATA"_ustr, srcSheet, nStartCol, nStartRow,
+                           nStartCol + nSrcCols - 1, nStartRow + nSrcRows - 1);
         m_pDoc->SetAnonymousDBData(srcSheet, std::unique_ptr<ScDBData>(pDBData));
 
         pDBData->SetAutoFilter(true);
@@ -1759,57 +1767,57 @@ void TestCopyPaste::executeCopyPasteSpecial(const SCTAB srcSheet, const SCTAB de
         m_pDoc->InsertTab(i, "Empty Tab " + OUString::number(i));
 
     if (srcSheet != destSheet)
-        m_pDoc->InsertTab(destSheet, "DestSheet");
+        m_pDoc->InsertTab(destSheet, u"DestSheet"_ustr);
 
-    m_pDoc->SetString(3, 101, srcSheet, "=DestSheet.D1");
-    m_pDoc->SetString(3, 102, srcSheet, "=DestSheet.D2");
-    m_pDoc->SetString(3, 103, srcSheet, "=DestSheet.D3");
-    m_pDoc->SetString(3, 104, srcSheet, "=DestSheet.D4");
-    m_pDoc->SetString(3, 105, srcSheet, "=DestSheet.D5");
-    m_pDoc->SetString(3, 106, srcSheet, "=DestSheet.D6");
-    m_pDoc->SetString(3, 107, srcSheet, "=DestSheet.D7");
-    m_pDoc->SetString(4, 101, srcSheet, "=DestSheet.E1");
-    m_pDoc->SetString(4, 102, srcSheet, "=DestSheet.E2");
-    m_pDoc->SetString(4, 103, srcSheet, "=DestSheet.E3");
-    m_pDoc->SetString(4, 104, srcSheet, "=DestSheet.E4");
-    m_pDoc->SetString(4, 105, srcSheet, "=DestSheet.E5");
-    m_pDoc->SetString(4, 106, srcSheet, "=DestSheet.E6");
-    m_pDoc->SetString(4, 107, srcSheet, "=DestSheet.E7");
-    m_pDoc->SetString(5, 101, srcSheet, "=DestSheet.F1");
-    m_pDoc->SetString(5, 102, srcSheet, "=DestSheet.F2");
-    m_pDoc->SetString(5, 103, srcSheet, "=DestSheet.F3");
-    m_pDoc->SetString(5, 104, srcSheet, "=DestSheet.F4");
-    m_pDoc->SetString(5, 105, srcSheet, "=DestSheet.F5");
-    m_pDoc->SetString(5, 106, srcSheet, "=DestSheet.F6");
-    m_pDoc->SetString(5, 107, srcSheet, "=DestSheet.F7");
-    m_pDoc->SetString(6, 101, srcSheet, "=DestSheet.G1");
-    m_pDoc->SetString(6, 102, srcSheet, "=DestSheet.G2");
-    m_pDoc->SetString(6, 103, srcSheet, "=DestSheet.G3");
-    m_pDoc->SetString(6, 104, srcSheet, "=DestSheet.G4");
-    m_pDoc->SetString(6, 105, srcSheet, "=DestSheet.G5");
-    m_pDoc->SetString(6, 106, srcSheet, "=DestSheet.G6");
-    m_pDoc->SetString(6, 107, srcSheet, "=DestSheet.G7");
-    m_pDoc->SetString(7, 101, srcSheet, "=DestSheet.H1");
-    m_pDoc->SetString(7, 102, srcSheet, "=DestSheet.H2");
-    m_pDoc->SetString(7, 103, srcSheet, "=DestSheet.H3");
-    m_pDoc->SetString(7, 104, srcSheet, "=DestSheet.H4");
-    m_pDoc->SetString(7, 105, srcSheet, "=DestSheet.H5");
-    m_pDoc->SetString(7, 106, srcSheet, "=DestSheet.H6");
-    m_pDoc->SetString(7, 107, srcSheet, "=DestSheet.H7");
-    m_pDoc->SetString(8, 101, srcSheet, "=DestSheet.I1");
-    m_pDoc->SetString(8, 102, srcSheet, "=DestSheet.I2");
-    m_pDoc->SetString(8, 103, srcSheet, "=DestSheet.I3");
-    m_pDoc->SetString(8, 104, srcSheet, "=DestSheet.I4");
-    m_pDoc->SetString(8, 105, srcSheet, "=DestSheet.I5");
-    m_pDoc->SetString(8, 106, srcSheet, "=DestSheet.I6");
-    m_pDoc->SetString(8, 107, srcSheet, "=DestSheet.I7");
-    m_pDoc->SetString(9, 101, srcSheet, "=DestSheet.J1");
-    m_pDoc->SetString(9, 102, srcSheet, "=DestSheet.J2");
-    m_pDoc->SetString(9, 103, srcSheet, "=DestSheet.J3");
-    m_pDoc->SetString(9, 104, srcSheet, "=DestSheet.J4");
-    m_pDoc->SetString(9, 105, srcSheet, "=DestSheet.J5");
-    m_pDoc->SetString(9, 106, srcSheet, "=DestSheet.J6");
-    m_pDoc->SetString(9, 107, srcSheet, "=DestSheet.J7");
+    m_pDoc->SetString(3, 101, srcSheet, u"=DestSheet.D1"_ustr);
+    m_pDoc->SetString(3, 102, srcSheet, u"=DestSheet.D2"_ustr);
+    m_pDoc->SetString(3, 103, srcSheet, u"=DestSheet.D3"_ustr);
+    m_pDoc->SetString(3, 104, srcSheet, u"=DestSheet.D4"_ustr);
+    m_pDoc->SetString(3, 105, srcSheet, u"=DestSheet.D5"_ustr);
+    m_pDoc->SetString(3, 106, srcSheet, u"=DestSheet.D6"_ustr);
+    m_pDoc->SetString(3, 107, srcSheet, u"=DestSheet.D7"_ustr);
+    m_pDoc->SetString(4, 101, srcSheet, u"=DestSheet.E1"_ustr);
+    m_pDoc->SetString(4, 102, srcSheet, u"=DestSheet.E2"_ustr);
+    m_pDoc->SetString(4, 103, srcSheet, u"=DestSheet.E3"_ustr);
+    m_pDoc->SetString(4, 104, srcSheet, u"=DestSheet.E4"_ustr);
+    m_pDoc->SetString(4, 105, srcSheet, u"=DestSheet.E5"_ustr);
+    m_pDoc->SetString(4, 106, srcSheet, u"=DestSheet.E6"_ustr);
+    m_pDoc->SetString(4, 107, srcSheet, u"=DestSheet.E7"_ustr);
+    m_pDoc->SetString(5, 101, srcSheet, u"=DestSheet.F1"_ustr);
+    m_pDoc->SetString(5, 102, srcSheet, u"=DestSheet.F2"_ustr);
+    m_pDoc->SetString(5, 103, srcSheet, u"=DestSheet.F3"_ustr);
+    m_pDoc->SetString(5, 104, srcSheet, u"=DestSheet.F4"_ustr);
+    m_pDoc->SetString(5, 105, srcSheet, u"=DestSheet.F5"_ustr);
+    m_pDoc->SetString(5, 106, srcSheet, u"=DestSheet.F6"_ustr);
+    m_pDoc->SetString(5, 107, srcSheet, u"=DestSheet.F7"_ustr);
+    m_pDoc->SetString(6, 101, srcSheet, u"=DestSheet.G1"_ustr);
+    m_pDoc->SetString(6, 102, srcSheet, u"=DestSheet.G2"_ustr);
+    m_pDoc->SetString(6, 103, srcSheet, u"=DestSheet.G3"_ustr);
+    m_pDoc->SetString(6, 104, srcSheet, u"=DestSheet.G4"_ustr);
+    m_pDoc->SetString(6, 105, srcSheet, u"=DestSheet.G5"_ustr);
+    m_pDoc->SetString(6, 106, srcSheet, u"=DestSheet.G6"_ustr);
+    m_pDoc->SetString(6, 107, srcSheet, u"=DestSheet.G7"_ustr);
+    m_pDoc->SetString(7, 101, srcSheet, u"=DestSheet.H1"_ustr);
+    m_pDoc->SetString(7, 102, srcSheet, u"=DestSheet.H2"_ustr);
+    m_pDoc->SetString(7, 103, srcSheet, u"=DestSheet.H3"_ustr);
+    m_pDoc->SetString(7, 104, srcSheet, u"=DestSheet.H4"_ustr);
+    m_pDoc->SetString(7, 105, srcSheet, u"=DestSheet.H5"_ustr);
+    m_pDoc->SetString(7, 106, srcSheet, u"=DestSheet.H6"_ustr);
+    m_pDoc->SetString(7, 107, srcSheet, u"=DestSheet.H7"_ustr);
+    m_pDoc->SetString(8, 101, srcSheet, u"=DestSheet.I1"_ustr);
+    m_pDoc->SetString(8, 102, srcSheet, u"=DestSheet.I2"_ustr);
+    m_pDoc->SetString(8, 103, srcSheet, u"=DestSheet.I3"_ustr);
+    m_pDoc->SetString(8, 104, srcSheet, u"=DestSheet.I4"_ustr);
+    m_pDoc->SetString(8, 105, srcSheet, u"=DestSheet.I5"_ustr);
+    m_pDoc->SetString(8, 106, srcSheet, u"=DestSheet.I6"_ustr);
+    m_pDoc->SetString(8, 107, srcSheet, u"=DestSheet.I7"_ustr);
+    m_pDoc->SetString(9, 101, srcSheet, u"=DestSheet.J1"_ustr);
+    m_pDoc->SetString(9, 102, srcSheet, u"=DestSheet.J2"_ustr);
+    m_pDoc->SetString(9, 103, srcSheet, u"=DestSheet.J3"_ustr);
+    m_pDoc->SetString(9, 104, srcSheet, u"=DestSheet.J4"_ustr);
+    m_pDoc->SetString(9, 105, srcSheet, u"=DestSheet.J5"_ustr);
+    m_pDoc->SetString(9, 106, srcSheet, u"=DestSheet.J6"_ustr);
+    m_pDoc->SetString(9, 107, srcSheet, u"=DestSheet.J7"_ustr);
 
     // Check precondition
     checkCopyPasteSpecialInitial(srcSheet);
@@ -2385,42 +2393,42 @@ void TestCopyPaste::checkCopyPasteSpecialInitial(const SCTAB srcSheet)
     CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(1, 5, srcSheet));
     // col 2, formulas
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(2, 2, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=B3+10"), m_pDoc->GetFormula(2, 2, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=B4+20"), m_pDoc->GetFormula(2, 3, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=B3+10"_ustr, m_pDoc->GetFormula(2, 2, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=B4+20"_ustr, m_pDoc->GetFormula(2, 3, srcSheet));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(2, 3, srcSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 4, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=E5+30"), m_pDoc->GetFormula(2, 4, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=E5+30"_ustr, m_pDoc->GetFormula(2, 4, srcSheet));
     CPPUNIT_ASSERT_EQUAL(42.0, m_pDoc->GetValue(2, 5, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=B4+40"), m_pDoc->GetFormula(2, 5, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=B4+40"_ustr, m_pDoc->GetFormula(2, 5, srcSheet));
     // col 3, strings
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(3, 2, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("b"), m_pDoc->GetString(3, 3, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("c"), m_pDoc->GetString(3, 4, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("d"), m_pDoc->GetString(3, 5, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"a"_ustr, m_pDoc->GetString(3, 2, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"b"_ustr, m_pDoc->GetString(3, 3, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"c"_ustr, m_pDoc->GetString(3, 4, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"d"_ustr, m_pDoc->GetString(3, 5, srcSheet));
     // col 4, rich text
     pEditObj = m_pDoc->GetEditText(ScAddress(4, 2, srcSheet));
     CPPUNIT_ASSERT(pEditObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("R1"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"R1"_ustr, pEditObj->GetText(0));
     pEditObj = m_pDoc->GetEditText(ScAddress(4, 3, srcSheet));
     CPPUNIT_ASSERT(pEditObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("R2"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"R2"_ustr, pEditObj->GetText(0));
     CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(4, 4, srcSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(4, 5, srcSheet));
     CPPUNIT_ASSERT(pEditObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("R4"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"R4"_ustr, pEditObj->GetText(0));
     // col 5, formulas
-    CPPUNIT_ASSERT_EQUAL(OUString("=B3+B5+60"), m_pDoc->GetFormula(5, 2, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=B3+B5+60"_ustr, m_pDoc->GetFormula(5, 2, srcSheet));
     CPPUNIT_ASSERT_EQUAL(64.0, m_pDoc->GetValue(5, 2, srcSheet));
     CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(5, 3, srcSheet));
     CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(5, 4, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=B3+B5+70"), m_pDoc->GetFormula(5, 5, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=B3+B5+70"_ustr, m_pDoc->GetFormula(5, 5, srcSheet));
     CPPUNIT_ASSERT_EQUAL(74.0, m_pDoc->GetValue(5, 5, srcSheet));
     // col 6, formulas
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(B3:B6;\"<4\")"), m_pDoc->GetFormula(6, 2, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUMIF(B3:B6;\"<4\")"_ustr, m_pDoc->GetFormula(6, 2, srcSheet));
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(6, 2, srcSheet));
     CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(6, 3, srcSheet));
     CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(6, 4, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=C$3+$B$5+80"), m_pDoc->GetFormula(6, 5, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C$3+$B$5+80"_ustr, m_pDoc->GetFormula(6, 5, srcSheet));
     CPPUNIT_ASSERT_EQUAL(94.0, m_pDoc->GetValue(6, 5, srcSheet));
 
     // check patterns
@@ -2511,31 +2519,31 @@ void TestCopyPaste::checkCopyPasteSpecialInitial(const SCTAB srcSheet)
     CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 6, srcSheet));
 
     // check values of notes
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"), getNote(1, 2, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A2"), getNote(1, 3, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"), getNote(1, 4, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"), getNote(2, 2, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"), getNote(2, 4, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C2"), getNote(3, 3, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C3"), getNote(3, 4, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"), getNote(4, 2, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D2"), getNote(4, 3, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"), getNote(4, 4, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(5, 4, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note E4"), getNote(5, 5, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note F2"), getNote(6, 3, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note F4"), getNote(6, 5, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note A1"_ustr, getNote(1, 2, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note A2"_ustr, getNote(1, 3, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note A3"_ustr, getNote(1, 4, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note B1"_ustr, getNote(2, 2, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note B3"_ustr, getNote(2, 4, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note C2"_ustr, getNote(3, 3, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note C3"_ustr, getNote(3, 4, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note D1"_ustr, getNote(4, 2, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note D2"_ustr, getNote(4, 3, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note D3"_ustr, getNote(4, 4, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note E2"_ustr, getNote(5, 4, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note E4"_ustr, getNote(5, 5, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note F2"_ustr, getNote(6, 3, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note F4"_ustr, getNote(6, 5, srcSheet));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=C5"), m_pDoc->GetFormula(1, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C$5"), m_pDoc->GetFormula(2, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C5"), m_pDoc->GetFormula(3, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=C$5"), m_pDoc->GetFormula(4, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C5:C5)"), m_pDoc->GetFormula(5, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C$5:$C$5)"), m_pDoc->GetFormula(6, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C5:$C5)"), m_pDoc->GetFormula(7, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C$5:C$5)"), m_pDoc->GetFormula(8, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$6)"), m_pDoc->GetFormula(9, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$10)"), m_pDoc->GetFormula(10, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C5"_ustr, m_pDoc->GetFormula(1, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=$C$5"_ustr, m_pDoc->GetFormula(2, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=$C5"_ustr, m_pDoc->GetFormula(3, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C$5"_ustr, m_pDoc->GetFormula(4, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C5:C5)"_ustr, m_pDoc->GetFormula(5, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C$5:$C$5)"_ustr, m_pDoc->GetFormula(6, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C5:$C5)"_ustr, m_pDoc->GetFormula(7, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C$5:C$5)"_ustr, m_pDoc->GetFormula(8, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$6)"_ustr, m_pDoc->GetFormula(9, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$10)"_ustr, m_pDoc->GetFormula(10, 16, srcSheet));
 
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 16, srcSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 16, srcSheet));
@@ -2548,16 +2556,16 @@ void TestCopyPaste::checkCopyPasteSpecialInitial(const SCTAB srcSheet)
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(9, 16, srcSheet));
     CPPUNIT_ASSERT_EQUAL(-17.0, m_pDoc->GetValue(10, 16, srcSheet));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C5"), m_pDoc->GetFormula(1, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_aCa5"), m_pDoc->GetFormula(2, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_aC5"), m_pDoc->GetFormula(3, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_Ca5"), m_pDoc->GetFormula(4, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_C5_C5)"), m_pDoc->GetFormula(5, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa5)"), m_pDoc->GetFormula(6, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aC5_aC5)"), m_pDoc->GetFormula(7, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_Ca5_Ca5)"), m_pDoc->GetFormula(8, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa8)"), m_pDoc->GetFormula(9, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa10)"), m_pDoc->GetFormula(10, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C5"_ustr, m_pDoc->GetFormula(1, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_aCa5"_ustr, m_pDoc->GetFormula(2, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_aC5"_ustr, m_pDoc->GetFormula(3, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_Ca5"_ustr, m_pDoc->GetFormula(4, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_C5_C5)"_ustr, m_pDoc->GetFormula(5, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa5)"_ustr, m_pDoc->GetFormula(6, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aC5_aC5)"_ustr, m_pDoc->GetFormula(7, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_Ca5_Ca5)"_ustr, m_pDoc->GetFormula(8, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa8)"_ustr, m_pDoc->GetFormula(9, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa10)"_ustr, m_pDoc->GetFormula(10, 17, srcSheet));
 
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 17, srcSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 17, srcSheet));
@@ -2571,55 +2579,55 @@ void TestCopyPaste::checkCopyPasteSpecialInitial(const SCTAB srcSheet)
     CPPUNIT_ASSERT_EQUAL(-17.0, m_pDoc->GetValue(10, 17, srcSheet));
 
     // Existing references to the destination range must not change
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D1"), m_pDoc->GetFormula(3, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D2"), m_pDoc->GetFormula(3, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D3"), m_pDoc->GetFormula(3, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D4"), m_pDoc->GetFormula(3, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D5"), m_pDoc->GetFormula(3, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D6"), m_pDoc->GetFormula(3, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D7"), m_pDoc->GetFormula(3, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E1"), m_pDoc->GetFormula(4, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E2"), m_pDoc->GetFormula(4, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E3"), m_pDoc->GetFormula(4, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E4"), m_pDoc->GetFormula(4, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E5"), m_pDoc->GetFormula(4, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E6"), m_pDoc->GetFormula(4, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E7"), m_pDoc->GetFormula(4, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F1"), m_pDoc->GetFormula(5, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F2"), m_pDoc->GetFormula(5, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F3"), m_pDoc->GetFormula(5, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F4"), m_pDoc->GetFormula(5, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F5"), m_pDoc->GetFormula(5, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F6"), m_pDoc->GetFormula(5, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F7"), m_pDoc->GetFormula(5, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G1"), m_pDoc->GetFormula(6, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G2"), m_pDoc->GetFormula(6, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G3"), m_pDoc->GetFormula(6, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G4"), m_pDoc->GetFormula(6, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G5"), m_pDoc->GetFormula(6, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G6"), m_pDoc->GetFormula(6, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G7"), m_pDoc->GetFormula(6, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H1"), m_pDoc->GetFormula(7, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H2"), m_pDoc->GetFormula(7, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H3"), m_pDoc->GetFormula(7, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H4"), m_pDoc->GetFormula(7, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H5"), m_pDoc->GetFormula(7, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H6"), m_pDoc->GetFormula(7, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H7"), m_pDoc->GetFormula(7, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I1"), m_pDoc->GetFormula(8, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I2"), m_pDoc->GetFormula(8, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I3"), m_pDoc->GetFormula(8, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I4"), m_pDoc->GetFormula(8, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I5"), m_pDoc->GetFormula(8, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I6"), m_pDoc->GetFormula(8, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I7"), m_pDoc->GetFormula(8, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J1"), m_pDoc->GetFormula(9, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J2"), m_pDoc->GetFormula(9, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J3"), m_pDoc->GetFormula(9, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J4"), m_pDoc->GetFormula(9, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J5"), m_pDoc->GetFormula(9, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J6"), m_pDoc->GetFormula(9, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J7"), m_pDoc->GetFormula(9, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D1"_ustr, m_pDoc->GetFormula(3, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D2"_ustr, m_pDoc->GetFormula(3, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D3"_ustr, m_pDoc->GetFormula(3, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D4"_ustr, m_pDoc->GetFormula(3, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D5"_ustr, m_pDoc->GetFormula(3, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D6"_ustr, m_pDoc->GetFormula(3, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D7"_ustr, m_pDoc->GetFormula(3, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E1"_ustr, m_pDoc->GetFormula(4, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E2"_ustr, m_pDoc->GetFormula(4, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E3"_ustr, m_pDoc->GetFormula(4, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E4"_ustr, m_pDoc->GetFormula(4, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E5"_ustr, m_pDoc->GetFormula(4, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E6"_ustr, m_pDoc->GetFormula(4, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E7"_ustr, m_pDoc->GetFormula(4, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F1"_ustr, m_pDoc->GetFormula(5, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F2"_ustr, m_pDoc->GetFormula(5, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F3"_ustr, m_pDoc->GetFormula(5, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F4"_ustr, m_pDoc->GetFormula(5, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F5"_ustr, m_pDoc->GetFormula(5, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F6"_ustr, m_pDoc->GetFormula(5, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F7"_ustr, m_pDoc->GetFormula(5, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G1"_ustr, m_pDoc->GetFormula(6, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G2"_ustr, m_pDoc->GetFormula(6, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G3"_ustr, m_pDoc->GetFormula(6, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G4"_ustr, m_pDoc->GetFormula(6, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G5"_ustr, m_pDoc->GetFormula(6, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G6"_ustr, m_pDoc->GetFormula(6, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G7"_ustr, m_pDoc->GetFormula(6, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H1"_ustr, m_pDoc->GetFormula(7, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H2"_ustr, m_pDoc->GetFormula(7, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H3"_ustr, m_pDoc->GetFormula(7, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H4"_ustr, m_pDoc->GetFormula(7, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H5"_ustr, m_pDoc->GetFormula(7, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H6"_ustr, m_pDoc->GetFormula(7, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H7"_ustr, m_pDoc->GetFormula(7, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I1"_ustr, m_pDoc->GetFormula(8, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I2"_ustr, m_pDoc->GetFormula(8, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I3"_ustr, m_pDoc->GetFormula(8, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I4"_ustr, m_pDoc->GetFormula(8, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I5"_ustr, m_pDoc->GetFormula(8, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I6"_ustr, m_pDoc->GetFormula(8, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I7"_ustr, m_pDoc->GetFormula(8, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J1"_ustr, m_pDoc->GetFormula(9, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J2"_ustr, m_pDoc->GetFormula(9, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J3"_ustr, m_pDoc->GetFormula(9, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J4"_ustr, m_pDoc->GetFormula(9, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J5"_ustr, m_pDoc->GetFormula(9, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J6"_ustr, m_pDoc->GetFormula(9, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J7"_ustr, m_pDoc->GetFormula(9, 107, srcSheet));
 }
 
 // Base check, nothing filtered, nothing transposed
@@ -2659,44 +2667,44 @@ void TestCopyPaste::checkCopyPasteSpecial(bool bSkipEmpty, bool bCut)
     // col 4, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 0, destSheet));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(4, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), m_pDoc->GetFormula(4, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=D3+20"), m_pDoc->GetFormula(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D2+10"_ustr, m_pDoc->GetFormula(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D3+20"_ustr, m_pDoc->GetFormula(4, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(4, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(4, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=G4+30"), m_pDoc->GetFormula(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=G4+30"_ustr, m_pDoc->GetFormula(4, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(42.0, m_pDoc->GetValue(4, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=D3+40"), m_pDoc->GetFormula(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D3+40"_ustr, m_pDoc->GetFormula(4, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 5, destSheet));
     // col 5, strings
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(5, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(5, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("b"), m_pDoc->GetString(5, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("c"), m_pDoc->GetString(5, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("d"), m_pDoc->GetString(5, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(5, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"a"_ustr, m_pDoc->GetString(5, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"b"_ustr, m_pDoc->GetString(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"c"_ustr, m_pDoc->GetString(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"d"_ustr, m_pDoc->GetString(5, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(5, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(5, 5, destSheet));
     // col 6, rich text
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 0, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 0, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 1, destSheet));
     CPPUNIT_ASSERT(pEditObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("R1"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"R1"_ustr, pEditObj->GetText(0));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 2, destSheet));
     CPPUNIT_ASSERT(pEditObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("R2"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"R2"_ustr, pEditObj->GetText(0));
     CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(6, 3, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 4, destSheet));
     CPPUNIT_ASSERT(pEditObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("R4"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"R4"_ustr, pEditObj->GetText(0));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 5, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 5, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     // col 7, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+D4+60"), m_pDoc->GetFormula(7, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D2+D4+60"_ustr, m_pDoc->GetFormula(7, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(64.0, m_pDoc->GetValue(7, 1, destSheet));
     if (!bSkipEmpty)
     {
@@ -2708,14 +2716,14 @@ void TestCopyPaste::checkCopyPasteSpecial(bool bSkipEmpty, bool bCut)
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 2, destSheet));
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 3, destSheet));
     }
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+D4+70"), m_pDoc->GetFormula(7, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D2+D4+70"_ustr, m_pDoc->GetFormula(7, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(74.0, m_pDoc->GetValue(7, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 5, destSheet));
     // col 8, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(8, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D2:D5;\"<4\")"), m_pDoc->GetFormula(8, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(8, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUMIF(D2:D5;\"<4\")"_ustr, m_pDoc->GetFormula(8, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(8, 1, destSheet));
     if (!bSkipEmpty)
     {
@@ -2731,16 +2739,16 @@ void TestCopyPaste::checkCopyPasteSpecial(bool bSkipEmpty, bool bCut)
     OUString aStr = m_pDoc->GetFormula(8, 4, destSheet);
     if (!bCut)
     {
-        CPPUNIT_ASSERT_EQUAL(OUString("=E$3+$B$5+80"), aStr);
+        CPPUNIT_ASSERT_EQUAL(u"=E$3+$B$5+80"_ustr, aStr);
         CPPUNIT_ASSERT_EQUAL(1102.0, fValue);
     }
     else
     {
-        CPPUNIT_ASSERT_EQUAL(OUString("=E$2+$D$4+80"), aStr);
+        CPPUNIT_ASSERT_EQUAL(u"=E$2+$D$4+80"_ustr, aStr);
         CPPUNIT_ASSERT_EQUAL(94.0, fValue);
     }
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(8, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(8, 5, destSheet));
     // col 9, numbers
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 0, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 1, destSheet));
@@ -2851,87 +2859,87 @@ void TestCopyPaste::checkCopyPasteSpecial(bool bSkipEmpty, bool bCut)
     CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 5, destSheet));
 
     // check values of notes
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"), getNote(3, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A2"), getNote(3, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"), getNote(3, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"), getNote(4, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"), getNote(4, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C2"), getNote(5, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C3"), getNote(5, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"), getNote(6, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D2"), getNote(6, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"), getNote(6, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note A1"_ustr, getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note A2"_ustr, getNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note A3"_ustr, getNote(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note B1"_ustr, getNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note B3"_ustr, getNote(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note C2"_ustr, getNote(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note C3"_ustr, getNote(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note D1"_ustr, getNote(6, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note D2"_ustr, getNote(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note D3"_ustr, getNote(6, 3, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(7, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note E4"), getNote(7, 4, destSheet));
+        CPPUNIT_ASSERT_EQUAL(u"Note E2"_ustr, getNote(7, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note E4"_ustr, getNote(7, 4, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note F2"), getNote(8, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note F4"), getNote(8, 4, destSheet));
+        CPPUNIT_ASSERT_EQUAL(u"Note F2"_ustr, getNote(8, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note F4"_ustr, getNote(8, 4, destSheet));
 
     // Existing references to the destination range must not change
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D1"), m_pDoc->GetFormula(3, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D2"), m_pDoc->GetFormula(3, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D3"), m_pDoc->GetFormula(3, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D4"), m_pDoc->GetFormula(3, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D5"), m_pDoc->GetFormula(3, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D6"), m_pDoc->GetFormula(3, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D7"), m_pDoc->GetFormula(3, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E1"), m_pDoc->GetFormula(4, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E2"), m_pDoc->GetFormula(4, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E3"), m_pDoc->GetFormula(4, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E4"), m_pDoc->GetFormula(4, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E5"), m_pDoc->GetFormula(4, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E6"), m_pDoc->GetFormula(4, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E7"), m_pDoc->GetFormula(4, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F1"), m_pDoc->GetFormula(5, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F2"), m_pDoc->GetFormula(5, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F3"), m_pDoc->GetFormula(5, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F4"), m_pDoc->GetFormula(5, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F5"), m_pDoc->GetFormula(5, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F6"), m_pDoc->GetFormula(5, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F7"), m_pDoc->GetFormula(5, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G1"), m_pDoc->GetFormula(6, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G2"), m_pDoc->GetFormula(6, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G3"), m_pDoc->GetFormula(6, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G4"), m_pDoc->GetFormula(6, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G5"), m_pDoc->GetFormula(6, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G6"), m_pDoc->GetFormula(6, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G7"), m_pDoc->GetFormula(6, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H1"), m_pDoc->GetFormula(7, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H2"), m_pDoc->GetFormula(7, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H3"), m_pDoc->GetFormula(7, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H4"), m_pDoc->GetFormula(7, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H5"), m_pDoc->GetFormula(7, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H6"), m_pDoc->GetFormula(7, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H7"), m_pDoc->GetFormula(7, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I1"), m_pDoc->GetFormula(8, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I2"), m_pDoc->GetFormula(8, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I3"), m_pDoc->GetFormula(8, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I4"), m_pDoc->GetFormula(8, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I5"), m_pDoc->GetFormula(8, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I6"), m_pDoc->GetFormula(8, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I7"), m_pDoc->GetFormula(8, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J1"), m_pDoc->GetFormula(9, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J2"), m_pDoc->GetFormula(9, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J3"), m_pDoc->GetFormula(9, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J4"), m_pDoc->GetFormula(9, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J5"), m_pDoc->GetFormula(9, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J6"), m_pDoc->GetFormula(9, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J7"), m_pDoc->GetFormula(9, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D1"_ustr, m_pDoc->GetFormula(3, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D2"_ustr, m_pDoc->GetFormula(3, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D3"_ustr, m_pDoc->GetFormula(3, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D4"_ustr, m_pDoc->GetFormula(3, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D5"_ustr, m_pDoc->GetFormula(3, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D6"_ustr, m_pDoc->GetFormula(3, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D7"_ustr, m_pDoc->GetFormula(3, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E1"_ustr, m_pDoc->GetFormula(4, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E2"_ustr, m_pDoc->GetFormula(4, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E3"_ustr, m_pDoc->GetFormula(4, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E4"_ustr, m_pDoc->GetFormula(4, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E5"_ustr, m_pDoc->GetFormula(4, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E6"_ustr, m_pDoc->GetFormula(4, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E7"_ustr, m_pDoc->GetFormula(4, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F1"_ustr, m_pDoc->GetFormula(5, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F2"_ustr, m_pDoc->GetFormula(5, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F3"_ustr, m_pDoc->GetFormula(5, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F4"_ustr, m_pDoc->GetFormula(5, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F5"_ustr, m_pDoc->GetFormula(5, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F6"_ustr, m_pDoc->GetFormula(5, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F7"_ustr, m_pDoc->GetFormula(5, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G1"_ustr, m_pDoc->GetFormula(6, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G2"_ustr, m_pDoc->GetFormula(6, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G3"_ustr, m_pDoc->GetFormula(6, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G4"_ustr, m_pDoc->GetFormula(6, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G5"_ustr, m_pDoc->GetFormula(6, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G6"_ustr, m_pDoc->GetFormula(6, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G7"_ustr, m_pDoc->GetFormula(6, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H1"_ustr, m_pDoc->GetFormula(7, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H2"_ustr, m_pDoc->GetFormula(7, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H3"_ustr, m_pDoc->GetFormula(7, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H4"_ustr, m_pDoc->GetFormula(7, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H5"_ustr, m_pDoc->GetFormula(7, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H6"_ustr, m_pDoc->GetFormula(7, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H7"_ustr, m_pDoc->GetFormula(7, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I1"_ustr, m_pDoc->GetFormula(8, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I2"_ustr, m_pDoc->GetFormula(8, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I3"_ustr, m_pDoc->GetFormula(8, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I4"_ustr, m_pDoc->GetFormula(8, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I5"_ustr, m_pDoc->GetFormula(8, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I6"_ustr, m_pDoc->GetFormula(8, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I7"_ustr, m_pDoc->GetFormula(8, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J1"_ustr, m_pDoc->GetFormula(9, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J2"_ustr, m_pDoc->GetFormula(9, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J3"_ustr, m_pDoc->GetFormula(9, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J4"_ustr, m_pDoc->GetFormula(9, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J5"_ustr, m_pDoc->GetFormula(9, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J6"_ustr, m_pDoc->GetFormula(9, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J7"_ustr, m_pDoc->GetFormula(9, 107, srcSheet));
 
     // row 14 on src sheet, refs to copied/cut range
     if (!bCut)
     {
-        CPPUNIT_ASSERT_EQUAL(OUString("=C5"), m_pDoc->GetFormula(1, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=$C$5"), m_pDoc->GetFormula(2, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=$C5"), m_pDoc->GetFormula(3, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=C$5"), m_pDoc->GetFormula(4, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C5:C5)"), m_pDoc->GetFormula(5, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C$5:$C$5)"), m_pDoc->GetFormula(6, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C5:$C5)"), m_pDoc->GetFormula(7, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C$5:C$5)"), m_pDoc->GetFormula(8, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$6)"), m_pDoc->GetFormula(9, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$10)"), m_pDoc->GetFormula(10, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=C5"_ustr, m_pDoc->GetFormula(1, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=$C$5"_ustr, m_pDoc->GetFormula(2, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=$C5"_ustr, m_pDoc->GetFormula(3, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=C$5"_ustr, m_pDoc->GetFormula(4, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(C5:C5)"_ustr, m_pDoc->GetFormula(5, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM($C$5:$C$5)"_ustr, m_pDoc->GetFormula(6, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM($C5:$C5)"_ustr, m_pDoc->GetFormula(7, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(C$5:C$5)"_ustr, m_pDoc->GetFormula(8, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$6)"_ustr, m_pDoc->GetFormula(9, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$10)"_ustr, m_pDoc->GetFormula(10, 16, srcSheet));
 
         CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 16, srcSheet));
         CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 16, srcSheet));
@@ -2944,19 +2952,16 @@ void TestCopyPaste::checkCopyPasteSpecial(bool bSkipEmpty, bool bCut)
         CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(9, 16, srcSheet));
         CPPUNIT_ASSERT_EQUAL(-17.0, m_pDoc->GetValue(10, 16, srcSheet));
 
-        CPPUNIT_ASSERT_EQUAL(OUString("=Range_C5"), m_pDoc->GetFormula(1, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=Range_aCa5"), m_pDoc->GetFormula(2, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=Range_aC5"), m_pDoc->GetFormula(3, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=Range_Ca5"), m_pDoc->GetFormula(4, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_C5_C5)"), m_pDoc->GetFormula(5, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa5)"),
-                             m_pDoc->GetFormula(6, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aC5_aC5)"), m_pDoc->GetFormula(7, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_Ca5_Ca5)"), m_pDoc->GetFormula(8, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa8)"),
-                             m_pDoc->GetFormula(9, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa10)"),
-                             m_pDoc->GetFormula(10, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=Range_C5"_ustr, m_pDoc->GetFormula(1, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=Range_aCa5"_ustr, m_pDoc->GetFormula(2, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=Range_aC5"_ustr, m_pDoc->GetFormula(3, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=Range_Ca5"_ustr, m_pDoc->GetFormula(4, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_C5_C5)"_ustr, m_pDoc->GetFormula(5, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa5)"_ustr, m_pDoc->GetFormula(6, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aC5_aC5)"_ustr, m_pDoc->GetFormula(7, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_Ca5_Ca5)"_ustr, m_pDoc->GetFormula(8, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa8)"_ustr, m_pDoc->GetFormula(9, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa10)"_ustr, m_pDoc->GetFormula(10, 17, srcSheet));
 
         CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 17, srcSheet));
         CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 17, srcSheet));
@@ -2974,21 +2979,18 @@ void TestCopyPaste::checkCopyPasteSpecial(bool bSkipEmpty, bool bCut)
     }
     else
     {
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E4"), m_pDoc->GetFormula(1, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.$E$4"), m_pDoc->GetFormula(2, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.$E4"), m_pDoc->GetFormula(3, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E$4"), m_pDoc->GetFormula(4, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(DestSheet.E4:E4)"),
-                             m_pDoc->GetFormula(5, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(DestSheet.$E$4:$E$4)"),
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E4"_ustr, m_pDoc->GetFormula(1, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.$E$4"_ustr, m_pDoc->GetFormula(2, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.$E4"_ustr, m_pDoc->GetFormula(3, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E$4"_ustr, m_pDoc->GetFormula(4, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(DestSheet.E4:E4)"_ustr, m_pDoc->GetFormula(5, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(DestSheet.$E$4:$E$4)"_ustr,
                              m_pDoc->GetFormula(6, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(DestSheet.$E4:$E4)"),
-                             m_pDoc->GetFormula(7, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(DestSheet.E$4:E$4)"),
-                             m_pDoc->GetFormula(8, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(DestSheet.$D$2:$D$5)"),
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(DestSheet.$E4:$E4)"_ustr, m_pDoc->GetFormula(7, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(DestSheet.E$4:E$4)"_ustr, m_pDoc->GetFormula(8, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(DestSheet.$D$2:$D$5)"_ustr,
                              m_pDoc->GetFormula(9, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$10)"), m_pDoc->GetFormula(10, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$10)"_ustr, m_pDoc->GetFormula(10, 16, srcSheet));
 
         CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 16, srcSheet));
         CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 16, srcSheet));
@@ -3001,19 +3003,16 @@ void TestCopyPaste::checkCopyPasteSpecial(bool bSkipEmpty, bool bCut)
         CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(9, 16, srcSheet));
         CPPUNIT_ASSERT_EQUAL(-27.0, m_pDoc->GetValue(10, 16, srcSheet));
 
-        CPPUNIT_ASSERT_EQUAL(OUString("=Range_C5"), m_pDoc->GetFormula(1, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=Range_aCa5"), m_pDoc->GetFormula(2, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=Range_aC5"), m_pDoc->GetFormula(3, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=Range_Ca5"), m_pDoc->GetFormula(4, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_C5_C5)"), m_pDoc->GetFormula(5, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa5)"),
-                             m_pDoc->GetFormula(6, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aC5_aC5)"), m_pDoc->GetFormula(7, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_Ca5_Ca5)"), m_pDoc->GetFormula(8, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa8)"),
-                             m_pDoc->GetFormula(9, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa10)"),
-                             m_pDoc->GetFormula(10, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=Range_C5"_ustr, m_pDoc->GetFormula(1, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=Range_aCa5"_ustr, m_pDoc->GetFormula(2, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=Range_aC5"_ustr, m_pDoc->GetFormula(3, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=Range_Ca5"_ustr, m_pDoc->GetFormula(4, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_C5_C5)"_ustr, m_pDoc->GetFormula(5, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa5)"_ustr, m_pDoc->GetFormula(6, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aC5_aC5)"_ustr, m_pDoc->GetFormula(7, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_Ca5_Ca5)"_ustr, m_pDoc->GetFormula(8, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa8)"_ustr, m_pDoc->GetFormula(9, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa10)"_ustr, m_pDoc->GetFormula(10, 17, srcSheet));
 
         CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 17, srcSheet));
         CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 17, srcSheet));
@@ -3066,21 +3065,21 @@ void TestCopyPaste::checkCopyPasteSpecialFiltered(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 0, destSheet));
     CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetFormula(4, 0, destSheet));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(4, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), m_pDoc->GetFormula(4, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=G3+30"), m_pDoc->GetFormula(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D2+10"_ustr, m_pDoc->GetFormula(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=G3+30"_ustr, m_pDoc->GetFormula(4, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(4, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+40"), m_pDoc->GetFormula(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D2+40"_ustr, m_pDoc->GetFormula(4, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(41.0, m_pDoc->GetValue(4, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(4, 4, destSheet)); // repeated row 1
-    CPPUNIT_ASSERT_EQUAL(OUString("=D5+10"), m_pDoc->GetFormula(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D5+10"_ustr, m_pDoc->GetFormula(4, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(4, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 5, destSheet));
     // col 5, strings
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(5, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("c"), m_pDoc->GetString(5, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("d"), m_pDoc->GetString(5, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(5, 4, destSheet)); // repeated row 1
+    CPPUNIT_ASSERT_EQUAL(u"a"_ustr, m_pDoc->GetString(5, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"c"_ustr, m_pDoc->GetString(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"d"_ustr, m_pDoc->GetString(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"a"_ustr, m_pDoc->GetString(5, 4, destSheet)); // repeated row 1
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetFormula(4, 5, destSheet));
     // col 6, rich text
@@ -3089,50 +3088,49 @@ void TestCopyPaste::checkCopyPasteSpecialFiltered(bool bSkipEmpty)
     CPPUNIT_ASSERT(pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 1, destSheet));
     CPPUNIT_ASSERT(pEditObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("R1"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"R1"_ustr, pEditObj->GetText(0));
     CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(6, 2, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 3, destSheet));
     CPPUNIT_ASSERT(pEditObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("R4"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"R4"_ustr, pEditObj->GetText(0));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 4, destSheet)); // repeated row 1
     CPPUNIT_ASSERT(pEditObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("R1"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"R1"_ustr, pEditObj->GetText(0));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 5, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 5, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     // col 7, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+D4+60"), m_pDoc->GetFormula(7, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D2+D4+60"_ustr, m_pDoc->GetFormula(7, 1, destSheet));
     // formula is not adjusted due to filter row
     CPPUNIT_ASSERT_EQUAL(65.0, m_pDoc->GetValue(7, 1, destSheet));
     if (!bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(7, 2, destSheet));
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=D1+D3+70"), m_pDoc->GetFormula(7, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D1+D3+70"_ustr, m_pDoc->GetFormula(7, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(1073.0, m_pDoc->GetValue(7, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=D5+D7+60"),
-                         m_pDoc->GetFormula(7, 4, destSheet)); // repeated row 1
+    CPPUNIT_ASSERT_EQUAL(u"=D5+D7+60"_ustr, m_pDoc->GetFormula(7, 4, destSheet)); // repeated row 1
     // formula is not adjusted due to filter row
     CPPUNIT_ASSERT_EQUAL(1061.0, m_pDoc->GetValue(7, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 5, destSheet));
     // col 8, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(8, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D2:D5;\"<4\")"), m_pDoc->GetFormula(8, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(8, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUMIF(D2:D5;\"<4\")"_ustr, m_pDoc->GetFormula(8, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(8, 1, destSheet));
     if (!bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(8, 2, destSheet));
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(1115.0, m_pDoc->GetValue(8, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=E$3+$B$5+80"), m_pDoc->GetFormula(8, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D5:D8;\"<4\")"), m_pDoc->GetFormula(8, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=E$3+$B$5+80"_ustr, m_pDoc->GetFormula(8, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUMIF(D5:D8;\"<4\")"_ustr, m_pDoc->GetFormula(8, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(8, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(8, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(8, 5, destSheet));
     // col 9, numbers
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 0, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 1, destSheet));
@@ -3238,17 +3236,17 @@ void TestCopyPaste::checkCopyPasteSpecialFiltered(bool bSkipEmpty)
     CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 5, destSheet));
 
     // check values of notes
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"), getNote(3, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"), getNote(3, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"), getNote(4, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"), getNote(4, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C3"), getNote(5, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"), getNote(6, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"), getNote(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note A1"_ustr, getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note A3"_ustr, getNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note B1"_ustr, getNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note B3"_ustr, getNote(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note C3"_ustr, getNote(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note D1"_ustr, getNote(6, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note D3"_ustr, getNote(6, 2, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(7, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note E4"), getNote(7, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note F4"), getNote(8, 3, destSheet));
+        CPPUNIT_ASSERT_EQUAL(u"Note E2"_ustr, getNote(7, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note E4"_ustr, getNote(7, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note F4"_ustr, getNote(8, 3, destSheet));
 
     m_pDoc->DeleteTab(destSheet);
     m_pDoc->DeleteTab(srcSheet);
@@ -3294,52 +3292,51 @@ void TestCopyPaste::checkCopyPasteSpecialTranspose(bool bSkipEmpty, bool bCut)
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 1, destSheet));
     // row 2, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D3", OUString("=D2+10"),
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(2, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D3", u"=D2+10"_ustr,
                                  m_pDoc->GetFormula(3, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D3", 11.0, m_pDoc->GetValue(3, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed E3", OUString("=E2+20"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed E3", u"=E2+20"_ustr,
                                  m_pDoc->GetFormula(4, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed E3", 22.0, m_pDoc->GetValue(4, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F3", OUString("=F5+30"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F3", u"=F5+30"_ustr,
                                  m_pDoc->GetFormula(5, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F3", 35.0, m_pDoc->GetValue(5, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G3", OUString("=E2+40"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G3", u"=E2+40"_ustr,
                                  m_pDoc->GetFormula(6, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G3", 42.0, m_pDoc->GetValue(6, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 2, destSheet));
     // row 3, strings
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D4", OUString("a"), m_pDoc->GetString(3, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", OUString("b"), m_pDoc->GetString(4, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", OUString("c"), m_pDoc->GetString(5, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G4", OUString("d"), m_pDoc->GetString(6, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(2, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D4", u"a"_ustr, m_pDoc->GetString(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", u"b"_ustr, m_pDoc->GetString(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", u"c"_ustr, m_pDoc->GetString(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G4", u"d"_ustr, m_pDoc->GetString(6, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 3, destSheet));
     // row 4, rich text
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 4, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(2, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be no edit cell in C5.", pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(3, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be an edit cell in D5.", pEditObj);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong in D5 ", OUString("R1"),
-                                 pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong in D5 ", u"R1"_ustr, pEditObj->GetText(0));
     pEditObj = m_pDoc->GetEditText(ScAddress(4, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be an edit cell in E5.", pEditObj);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong E5.", OUString("R2"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong E5.", u"R2"_ustr, pEditObj->GetText(0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell F5", 5.0, m_pDoc->GetValue(5, 4, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be an edit cell in G5.", pEditObj);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong G5.", OUString("R4"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong G5.", u"R4"_ustr, pEditObj->GetText(0));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 4, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(7, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be no edit cell in H5.", pEditObj == nullptr);
     // row 5, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", OUString("=D2+F2+60"),
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", u"=D2+F2+60"_ustr,
                                  m_pDoc->GetFormula(3, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", 64.0, m_pDoc->GetValue(3, 5, destSheet));
     if (!bSkipEmpty)
@@ -3352,15 +3349,15 @@ void TestCopyPaste::checkCopyPasteSpecialTranspose(bool bSkipEmpty, bool bCut)
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 5, destSheet));
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 5, destSheet));
     }
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G6", OUString("=D2+F2+70"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G6", u"=D2+F2+70"_ustr,
                                  m_pDoc->GetFormula(6, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G6", 74.0, m_pDoc->GetValue(6, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 5, destSheet));
     // row 6, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 6, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 6, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", OUString("=SUMIF(D2:G2;\"<4\")"),
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(2, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", u"=SUMIF(D2:G2;\"<4\")"_ustr,
                                  m_pDoc->GetFormula(3, 6, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", 6.0, m_pDoc->GetValue(3, 6, destSheet));
     if (!bSkipEmpty)
@@ -3377,16 +3374,16 @@ void TestCopyPaste::checkCopyPasteSpecialTranspose(bool bSkipEmpty, bool bCut)
     OUString aStr = m_pDoc->GetFormula(6, 6, destSheet); // G7
     if (!bCut)
     {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G7", OUString("=C$3+$B$5+80"), aStr);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G7", u"=C$3+$B$5+80"_ustr, aStr);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G7", 2080.0, fValue);
     }
     else
     {
-        CPPUNIT_ASSERT_EQUAL(OUString("=D$3+$F$2+80"), aStr);
+        CPPUNIT_ASSERT_EQUAL(u"=D$3+$F$2+80"_ustr, aStr);
         CPPUNIT_ASSERT_EQUAL(94.0, fValue);
     }
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 6, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 6, destSheet));
     // row 7
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 7, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 7, destSheet));
@@ -3524,39 +3521,39 @@ void TestCopyPaste::checkCopyPasteSpecialTranspose(bool bSkipEmpty, bool bCut)
     CPPUNIT_ASSERT_MESSAGE("H8: no note", !m_pDoc->HasNote(7, 7, destSheet));
 
     // check values of notes
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", OUString("Note A1"), getNote(3, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E2", OUString("Note A2"), getNote(4, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F2", OUString("Note A3"), getNote(5, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", u"Note A1"_ustr, getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E2", u"Note A2"_ustr, getNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F2", u"Note A3"_ustr, getNote(5, 1, destSheet));
     // G2 has no note
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D3", OUString("Note B1"), getNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D3", u"Note B1"_ustr, getNote(3, 2, destSheet));
     // E3 has no note
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F3", OUString("Note B3"), getNote(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F3", u"Note B3"_ustr, getNote(5, 2, destSheet));
     // D4 has no note
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", OUString("Note C2"), getNote(4, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", OUString("Note C3"), getNote(5, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D5", OUString("Note D1"), getNote(3, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E5", OUString("Note D2"), getNote(4, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F5", OUString("Note D3"), getNote(5, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", u"Note C2"_ustr, getNote(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", u"Note C3"_ustr, getNote(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D5", u"Note D1"_ustr, getNote(3, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E5", u"Note D2"_ustr, getNote(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F5", u"Note D3"_ustr, getNote(5, 4, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(5, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G6", OUString("Note E4"), getNote(6, 5, destSheet));
+        CPPUNIT_ASSERT_EQUAL(u"Note E2"_ustr, getNote(5, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G6", u"Note E4"_ustr, getNote(6, 5, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E7", OUString("Note F2"), getNote(4, 6, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G7", OUString("Note F4"), getNote(6, 6, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E7", u"Note F2"_ustr, getNote(4, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G7", u"Note F4"_ustr, getNote(6, 6, destSheet));
 
     // row 14 on src sheet, refs to copied/cut range
     if (!bCut)
     {
-        CPPUNIT_ASSERT_EQUAL(OUString("=C5"), m_pDoc->GetFormula(1, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=$C$5"), m_pDoc->GetFormula(2, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=$C5"), m_pDoc->GetFormula(3, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=C$5"), m_pDoc->GetFormula(4, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C5:C5)"), m_pDoc->GetFormula(5, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C$5:$C$5)"), m_pDoc->GetFormula(6, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C5:$C5)"), m_pDoc->GetFormula(7, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C$5:C$5)"), m_pDoc->GetFormula(8, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$6)"), m_pDoc->GetFormula(9, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$10)"), m_pDoc->GetFormula(10, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=C5"_ustr, m_pDoc->GetFormula(1, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=$C$5"_ustr, m_pDoc->GetFormula(2, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=$C5"_ustr, m_pDoc->GetFormula(3, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=C$5"_ustr, m_pDoc->GetFormula(4, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(C5:C5)"_ustr, m_pDoc->GetFormula(5, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM($C$5:$C$5)"_ustr, m_pDoc->GetFormula(6, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM($C5:$C5)"_ustr, m_pDoc->GetFormula(7, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(C$5:C$5)"_ustr, m_pDoc->GetFormula(8, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$6)"_ustr, m_pDoc->GetFormula(9, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$10)"_ustr, m_pDoc->GetFormula(10, 16, srcSheet));
 
         CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 16, srcSheet));
         CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 16, srcSheet));
@@ -3569,19 +3566,16 @@ void TestCopyPaste::checkCopyPasteSpecialTranspose(bool bSkipEmpty, bool bCut)
         CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(9, 16, srcSheet));
         CPPUNIT_ASSERT_EQUAL(-17.0, m_pDoc->GetValue(10, 16, srcSheet));
 
-        CPPUNIT_ASSERT_EQUAL(OUString("=Range_C5"), m_pDoc->GetFormula(1, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=Range_aCa5"), m_pDoc->GetFormula(2, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=Range_aC5"), m_pDoc->GetFormula(3, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=Range_Ca5"), m_pDoc->GetFormula(4, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_C5_C5)"), m_pDoc->GetFormula(5, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa5)"),
-                             m_pDoc->GetFormula(6, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aC5_aC5)"), m_pDoc->GetFormula(7, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_Ca5_Ca5)"), m_pDoc->GetFormula(8, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa8)"),
-                             m_pDoc->GetFormula(9, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa10)"),
-                             m_pDoc->GetFormula(10, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=Range_C5"_ustr, m_pDoc->GetFormula(1, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=Range_aCa5"_ustr, m_pDoc->GetFormula(2, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=Range_aC5"_ustr, m_pDoc->GetFormula(3, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=Range_Ca5"_ustr, m_pDoc->GetFormula(4, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_C5_C5)"_ustr, m_pDoc->GetFormula(5, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa5)"_ustr, m_pDoc->GetFormula(6, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aC5_aC5)"_ustr, m_pDoc->GetFormula(7, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_Ca5_Ca5)"_ustr, m_pDoc->GetFormula(8, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa8)"_ustr, m_pDoc->GetFormula(9, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa10)"_ustr, m_pDoc->GetFormula(10, 17, srcSheet));
 
         CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 17, srcSheet));
         CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 17, srcSheet));
@@ -3595,76 +3589,73 @@ void TestCopyPaste::checkCopyPasteSpecialTranspose(bool bSkipEmpty, bool bCut)
         CPPUNIT_ASSERT_EQUAL(-17.0, m_pDoc->GetValue(10, 17, srcSheet));
 
         // Existing references to the destination range must not change
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D1"), m_pDoc->GetFormula(3, 101, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D2"), m_pDoc->GetFormula(3, 102, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D3"), m_pDoc->GetFormula(3, 103, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D4"), m_pDoc->GetFormula(3, 104, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D5"), m_pDoc->GetFormula(3, 105, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D6"), m_pDoc->GetFormula(3, 106, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D7"), m_pDoc->GetFormula(3, 107, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E1"), m_pDoc->GetFormula(4, 101, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E2"), m_pDoc->GetFormula(4, 102, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E3"), m_pDoc->GetFormula(4, 103, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E4"), m_pDoc->GetFormula(4, 104, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E5"), m_pDoc->GetFormula(4, 105, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E6"), m_pDoc->GetFormula(4, 106, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E7"), m_pDoc->GetFormula(4, 107, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F1"), m_pDoc->GetFormula(5, 101, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F2"), m_pDoc->GetFormula(5, 102, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F3"), m_pDoc->GetFormula(5, 103, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F4"), m_pDoc->GetFormula(5, 104, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F5"), m_pDoc->GetFormula(5, 105, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F6"), m_pDoc->GetFormula(5, 106, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F7"), m_pDoc->GetFormula(5, 107, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G1"), m_pDoc->GetFormula(6, 101, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G2"), m_pDoc->GetFormula(6, 102, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G3"), m_pDoc->GetFormula(6, 103, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G4"), m_pDoc->GetFormula(6, 104, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G5"), m_pDoc->GetFormula(6, 105, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G6"), m_pDoc->GetFormula(6, 106, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G7"), m_pDoc->GetFormula(6, 107, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H1"), m_pDoc->GetFormula(7, 101, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H2"), m_pDoc->GetFormula(7, 102, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H3"), m_pDoc->GetFormula(7, 103, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H4"), m_pDoc->GetFormula(7, 104, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H5"), m_pDoc->GetFormula(7, 105, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H6"), m_pDoc->GetFormula(7, 106, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H7"), m_pDoc->GetFormula(7, 107, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I1"), m_pDoc->GetFormula(8, 101, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I2"), m_pDoc->GetFormula(8, 102, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I3"), m_pDoc->GetFormula(8, 103, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I4"), m_pDoc->GetFormula(8, 104, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I5"), m_pDoc->GetFormula(8, 105, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I6"), m_pDoc->GetFormula(8, 106, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I7"), m_pDoc->GetFormula(8, 107, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J1"), m_pDoc->GetFormula(9, 101, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J2"), m_pDoc->GetFormula(9, 102, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J3"), m_pDoc->GetFormula(9, 103, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J4"), m_pDoc->GetFormula(9, 104, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J5"), m_pDoc->GetFormula(9, 105, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J6"), m_pDoc->GetFormula(9, 106, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J7"), m_pDoc->GetFormula(9, 107, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D1"_ustr, m_pDoc->GetFormula(3, 101, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D2"_ustr, m_pDoc->GetFormula(3, 102, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D3"_ustr, m_pDoc->GetFormula(3, 103, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D4"_ustr, m_pDoc->GetFormula(3, 104, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D5"_ustr, m_pDoc->GetFormula(3, 105, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D6"_ustr, m_pDoc->GetFormula(3, 106, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D7"_ustr, m_pDoc->GetFormula(3, 107, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E1"_ustr, m_pDoc->GetFormula(4, 101, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E2"_ustr, m_pDoc->GetFormula(4, 102, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E3"_ustr, m_pDoc->GetFormula(4, 103, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E4"_ustr, m_pDoc->GetFormula(4, 104, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E5"_ustr, m_pDoc->GetFormula(4, 105, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E6"_ustr, m_pDoc->GetFormula(4, 106, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E7"_ustr, m_pDoc->GetFormula(4, 107, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F1"_ustr, m_pDoc->GetFormula(5, 101, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F2"_ustr, m_pDoc->GetFormula(5, 102, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F3"_ustr, m_pDoc->GetFormula(5, 103, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F4"_ustr, m_pDoc->GetFormula(5, 104, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F5"_ustr, m_pDoc->GetFormula(5, 105, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F6"_ustr, m_pDoc->GetFormula(5, 106, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F7"_ustr, m_pDoc->GetFormula(5, 107, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G1"_ustr, m_pDoc->GetFormula(6, 101, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G2"_ustr, m_pDoc->GetFormula(6, 102, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G3"_ustr, m_pDoc->GetFormula(6, 103, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G4"_ustr, m_pDoc->GetFormula(6, 104, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G5"_ustr, m_pDoc->GetFormula(6, 105, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G6"_ustr, m_pDoc->GetFormula(6, 106, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G7"_ustr, m_pDoc->GetFormula(6, 107, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H1"_ustr, m_pDoc->GetFormula(7, 101, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H2"_ustr, m_pDoc->GetFormula(7, 102, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H3"_ustr, m_pDoc->GetFormula(7, 103, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H4"_ustr, m_pDoc->GetFormula(7, 104, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H5"_ustr, m_pDoc->GetFormula(7, 105, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H6"_ustr, m_pDoc->GetFormula(7, 106, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H7"_ustr, m_pDoc->GetFormula(7, 107, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I1"_ustr, m_pDoc->GetFormula(8, 101, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I2"_ustr, m_pDoc->GetFormula(8, 102, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I3"_ustr, m_pDoc->GetFormula(8, 103, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I4"_ustr, m_pDoc->GetFormula(8, 104, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I5"_ustr, m_pDoc->GetFormula(8, 105, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I6"_ustr, m_pDoc->GetFormula(8, 106, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I7"_ustr, m_pDoc->GetFormula(8, 107, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J1"_ustr, m_pDoc->GetFormula(9, 101, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J2"_ustr, m_pDoc->GetFormula(9, 102, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J3"_ustr, m_pDoc->GetFormula(9, 103, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J4"_ustr, m_pDoc->GetFormula(9, 104, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J5"_ustr, m_pDoc->GetFormula(9, 105, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J6"_ustr, m_pDoc->GetFormula(9, 106, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J7"_ustr, m_pDoc->GetFormula(9, 107, srcSheet));
 
         m_pDoc->DeleteTab(destSheet);
         m_pDoc->DeleteTab(srcSheet);
     }
     else
     {
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F3"), m_pDoc->GetFormula(1, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.$F$3"), m_pDoc->GetFormula(2, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.$F3"), m_pDoc->GetFormula(3, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F$3"), m_pDoc->GetFormula(4, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(DestSheet.F3:F3)"),
-                             m_pDoc->GetFormula(5, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(DestSheet.$F$3:$F$3)"),
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F3"_ustr, m_pDoc->GetFormula(1, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.$F$3"_ustr, m_pDoc->GetFormula(2, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.$F3"_ustr, m_pDoc->GetFormula(3, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F$3"_ustr, m_pDoc->GetFormula(4, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(DestSheet.F3:F3)"_ustr, m_pDoc->GetFormula(5, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(DestSheet.$F$3:$F$3)"_ustr,
                              m_pDoc->GetFormula(6, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(DestSheet.$F3:$F3)"),
-                             m_pDoc->GetFormula(7, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(DestSheet.F$3:F$3)"),
-                             m_pDoc->GetFormula(8, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(DestSheet.$D$2:$G$2)"),
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(DestSheet.$F3:$F3)"_ustr, m_pDoc->GetFormula(7, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(DestSheet.F$3:F$3)"_ustr, m_pDoc->GetFormula(8, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(DestSheet.$D$2:$G$2)"_ustr,
                              m_pDoc->GetFormula(9, 16, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$10)"), m_pDoc->GetFormula(10, 16, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$10)"_ustr, m_pDoc->GetFormula(10, 16, srcSheet));
 
         CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 16, srcSheet));
         CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 16, srcSheet));
@@ -3677,19 +3668,16 @@ void TestCopyPaste::checkCopyPasteSpecialTranspose(bool bSkipEmpty, bool bCut)
         CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(9, 16, srcSheet));
         CPPUNIT_ASSERT_EQUAL(-27.0, m_pDoc->GetValue(10, 16, srcSheet));
 
-        CPPUNIT_ASSERT_EQUAL(OUString("=Range_C5"), m_pDoc->GetFormula(1, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=Range_aCa5"), m_pDoc->GetFormula(2, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=Range_aC5"), m_pDoc->GetFormula(3, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=Range_Ca5"), m_pDoc->GetFormula(4, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_C5_C5)"), m_pDoc->GetFormula(5, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa5)"),
-                             m_pDoc->GetFormula(6, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aC5_aC5)"), m_pDoc->GetFormula(7, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_Ca5_Ca5)"), m_pDoc->GetFormula(8, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa8)"),
-                             m_pDoc->GetFormula(9, 17, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa10)"),
-                             m_pDoc->GetFormula(10, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=Range_C5"_ustr, m_pDoc->GetFormula(1, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=Range_aCa5"_ustr, m_pDoc->GetFormula(2, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=Range_aC5"_ustr, m_pDoc->GetFormula(3, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=Range_Ca5"_ustr, m_pDoc->GetFormula(4, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_C5_C5)"_ustr, m_pDoc->GetFormula(5, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa5)"_ustr, m_pDoc->GetFormula(6, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aC5_aC5)"_ustr, m_pDoc->GetFormula(7, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_Ca5_Ca5)"_ustr, m_pDoc->GetFormula(8, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa8)"_ustr, m_pDoc->GetFormula(9, 17, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa10)"_ustr, m_pDoc->GetFormula(10, 17, srcSheet));
 
         CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 17, srcSheet));
         CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 17, srcSheet));
@@ -3703,55 +3691,55 @@ void TestCopyPaste::checkCopyPasteSpecialTranspose(bool bSkipEmpty, bool bCut)
         CPPUNIT_ASSERT_EQUAL(-27.0, m_pDoc->GetValue(10, 17, srcSheet));
 
         // Existing references to the destination range must not change
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D1"), m_pDoc->GetFormula(3, 101, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D2"), m_pDoc->GetFormula(3, 102, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D3"), m_pDoc->GetFormula(3, 103, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D4"), m_pDoc->GetFormula(3, 104, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D5"), m_pDoc->GetFormula(3, 105, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D6"), m_pDoc->GetFormula(3, 106, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D7"), m_pDoc->GetFormula(3, 107, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E1"), m_pDoc->GetFormula(4, 101, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E2"), m_pDoc->GetFormula(4, 102, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E3"), m_pDoc->GetFormula(4, 103, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E4"), m_pDoc->GetFormula(4, 104, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E5"), m_pDoc->GetFormula(4, 105, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E6"), m_pDoc->GetFormula(4, 106, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E7"), m_pDoc->GetFormula(4, 107, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F1"), m_pDoc->GetFormula(5, 101, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F2"), m_pDoc->GetFormula(5, 102, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F3"), m_pDoc->GetFormula(5, 103, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F4"), m_pDoc->GetFormula(5, 104, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F5"), m_pDoc->GetFormula(5, 105, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F6"), m_pDoc->GetFormula(5, 106, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F7"), m_pDoc->GetFormula(5, 107, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G1"), m_pDoc->GetFormula(6, 101, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G2"), m_pDoc->GetFormula(6, 102, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G3"), m_pDoc->GetFormula(6, 103, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G4"), m_pDoc->GetFormula(6, 104, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G5"), m_pDoc->GetFormula(6, 105, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G6"), m_pDoc->GetFormula(6, 106, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G7"), m_pDoc->GetFormula(6, 107, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H1"), m_pDoc->GetFormula(7, 101, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H2"), m_pDoc->GetFormula(7, 102, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H3"), m_pDoc->GetFormula(7, 103, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H4"), m_pDoc->GetFormula(7, 104, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H5"), m_pDoc->GetFormula(7, 105, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H6"), m_pDoc->GetFormula(7, 106, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H7"), m_pDoc->GetFormula(7, 107, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I1"), m_pDoc->GetFormula(8, 101, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I2"), m_pDoc->GetFormula(8, 102, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I3"), m_pDoc->GetFormula(8, 103, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I4"), m_pDoc->GetFormula(8, 104, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I5"), m_pDoc->GetFormula(8, 105, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I6"), m_pDoc->GetFormula(8, 106, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I7"), m_pDoc->GetFormula(8, 107, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J1"), m_pDoc->GetFormula(9, 101, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J2"), m_pDoc->GetFormula(9, 102, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J3"), m_pDoc->GetFormula(9, 103, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J4"), m_pDoc->GetFormula(9, 104, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J5"), m_pDoc->GetFormula(9, 105, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J6"), m_pDoc->GetFormula(9, 106, srcSheet));
-        CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J7"), m_pDoc->GetFormula(9, 107, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D1"_ustr, m_pDoc->GetFormula(3, 101, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D2"_ustr, m_pDoc->GetFormula(3, 102, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D3"_ustr, m_pDoc->GetFormula(3, 103, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D4"_ustr, m_pDoc->GetFormula(3, 104, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D5"_ustr, m_pDoc->GetFormula(3, 105, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D6"_ustr, m_pDoc->GetFormula(3, 106, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D7"_ustr, m_pDoc->GetFormula(3, 107, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E1"_ustr, m_pDoc->GetFormula(4, 101, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E2"_ustr, m_pDoc->GetFormula(4, 102, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E3"_ustr, m_pDoc->GetFormula(4, 103, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E4"_ustr, m_pDoc->GetFormula(4, 104, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E5"_ustr, m_pDoc->GetFormula(4, 105, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E6"_ustr, m_pDoc->GetFormula(4, 106, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E7"_ustr, m_pDoc->GetFormula(4, 107, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F1"_ustr, m_pDoc->GetFormula(5, 101, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F2"_ustr, m_pDoc->GetFormula(5, 102, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F3"_ustr, m_pDoc->GetFormula(5, 103, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F4"_ustr, m_pDoc->GetFormula(5, 104, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F5"_ustr, m_pDoc->GetFormula(5, 105, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F6"_ustr, m_pDoc->GetFormula(5, 106, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F7"_ustr, m_pDoc->GetFormula(5, 107, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G1"_ustr, m_pDoc->GetFormula(6, 101, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G2"_ustr, m_pDoc->GetFormula(6, 102, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G3"_ustr, m_pDoc->GetFormula(6, 103, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G4"_ustr, m_pDoc->GetFormula(6, 104, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G5"_ustr, m_pDoc->GetFormula(6, 105, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G6"_ustr, m_pDoc->GetFormula(6, 106, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G7"_ustr, m_pDoc->GetFormula(6, 107, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H1"_ustr, m_pDoc->GetFormula(7, 101, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H2"_ustr, m_pDoc->GetFormula(7, 102, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H3"_ustr, m_pDoc->GetFormula(7, 103, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H4"_ustr, m_pDoc->GetFormula(7, 104, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H5"_ustr, m_pDoc->GetFormula(7, 105, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H6"_ustr, m_pDoc->GetFormula(7, 106, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H7"_ustr, m_pDoc->GetFormula(7, 107, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I1"_ustr, m_pDoc->GetFormula(8, 101, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I2"_ustr, m_pDoc->GetFormula(8, 102, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I3"_ustr, m_pDoc->GetFormula(8, 103, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I4"_ustr, m_pDoc->GetFormula(8, 104, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I5"_ustr, m_pDoc->GetFormula(8, 105, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I6"_ustr, m_pDoc->GetFormula(8, 106, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I7"_ustr, m_pDoc->GetFormula(8, 107, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J1"_ustr, m_pDoc->GetFormula(9, 101, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J2"_ustr, m_pDoc->GetFormula(9, 102, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J3"_ustr, m_pDoc->GetFormula(9, 103, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J4"_ustr, m_pDoc->GetFormula(9, 104, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J5"_ustr, m_pDoc->GetFormula(9, 105, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J6"_ustr, m_pDoc->GetFormula(9, 106, srcSheet));
+        CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J7"_ustr, m_pDoc->GetFormula(9, 107, srcSheet));
     }
 }
 
@@ -3789,64 +3777,63 @@ void TestCopyPaste::checkCopyPasteSpecialFilteredTranspose(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 0, destSheet));
     // row 1, numbers
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(2, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell D2", 1.0, m_pDoc->GetValue(3, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell E2", 3.0, m_pDoc->GetValue(4, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell F2", 4.0, m_pDoc->GetValue(5, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell G2 (repetition of D2)", 1.0,
                                  m_pDoc->GetValue(6, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 1, destSheet));
     // row 2, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(2, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D3", 11.0, m_pDoc->GetValue(3, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D3", OUString("=D2+10"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D3", u"=D2+10"_ustr,
                                  m_pDoc->GetFormula(3, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed E3", OUString("=E5+30"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed E3", u"=E5+30"_ustr,
                                  m_pDoc->GetFormula(4, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed E3", 35.0, m_pDoc->GetValue(4, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F3", OUString("=D2+40"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F3", u"=D2+40"_ustr,
                                  m_pDoc->GetFormula(5, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F3", 41.0, m_pDoc->GetValue(5, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F3", 11.0, m_pDoc->GetValue(6, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G3 (repetition of D3)", OUString("=G2+10"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G3 (repetition of D3)", u"=G2+10"_ustr,
                                  m_pDoc->GetFormula(6, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 2, destSheet));
     // row 3, strings
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D4", OUString("a"), m_pDoc->GetString(3, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", OUString("c"), m_pDoc->GetString(4, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", OUString("d"), m_pDoc->GetString(5, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G4 (repetition of D4)", OUString("a"),
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(2, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D4", u"a"_ustr, m_pDoc->GetString(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", u"c"_ustr, m_pDoc->GetString(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", u"d"_ustr, m_pDoc->GetString(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G4 (repetition of D4)", u"a"_ustr,
                                  m_pDoc->GetString(6, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 3, destSheet));
     // row 4, rich text
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 4, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(2, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be no edit cell in C5.", pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(3, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be an edit cell in D5.", pEditObj);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong in D5 ", OUString("R1"),
-                                 pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong in D5 ", u"R1"_ustr, pEditObj->GetText(0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell E5", 5.0, m_pDoc->GetValue(4, 4, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(5, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be an edit cell in F5.", pEditObj);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong F5.", OUString("R4"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong F5.", u"R4"_ustr, pEditObj->GetText(0));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be an edit cell in G5. (repetition of D5)", pEditObj);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong G5. (repetition of D5)", OUString("R1"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong G5. (repetition of D5)", u"R1"_ustr,
                                  pEditObj->GetText(0));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 4, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(7, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be no edit cell in H5.", pEditObj == nullptr);
     // row 5, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", OUString("=D2+F2+60"),
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", u"=D2+F2+60"_ustr,
                                  m_pDoc->GetFormula(3, 5, destSheet));
     // formulas over filtered rows are not adjusted
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", 65.0,
@@ -3855,37 +3842,36 @@ void TestCopyPaste::checkCopyPasteSpecialFilteredTranspose(bool bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", OUString(), m_pDoc->GetString(4, 5, destSheet));
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F6", OUString("=C2+E2+70"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F6", u"=C2+E2+70"_ustr,
                                  m_pDoc->GetFormula(5, 5, destSheet));
     // F6,  formulas over filtered rows are not adjusted
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F6", 1073.0,
                                  m_pDoc->GetValue(ScAddress(5, 5, destSheet)));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G6 (repetition of D6)", OUString("=G2+I2+60"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G6 (repetition of D6)", u"=G2+I2+60"_ustr,
                                  m_pDoc->GetFormula(6, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G6 (repetition of D6)", 1061.0,
                                  m_pDoc->GetValue(6, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 5, destSheet));
     // row 6, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 6, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 6, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", OUString("=SUMIF(D2:G2;\"<4\")"),
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(2, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", u"=SUMIF(D2:G2;\"<4\")"_ustr,
                                  m_pDoc->GetFormula(3, 6, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", 5.0, m_pDoc->GetValue(3, 6, destSheet));
     if (!bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", OUString(), m_pDoc->GetString(4, 6, destSheet));
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 6, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F7", OUString("=B$3+$B$5+80"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F7", u"=B$3+$B$5+80"_ustr,
                                  m_pDoc->GetFormula(5, 6, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F6", 2080.0, m_pDoc->GetValue(5, 6, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G7 (repetition of D7)",
-                                 OUString("=SUMIF(G2:J2;\"<4\")"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G7 (repetition of D7)", u"=SUMIF(G2:J2;\"<4\")"_ustr,
                                  m_pDoc->GetFormula(6, 6, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed G7 (repetition of D7)", 1061.0,
                                  m_pDoc->GetValue(6, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 6, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 6, destSheet));
 
     // row
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 7, destSheet));
@@ -4020,38 +4006,38 @@ void TestCopyPaste::checkCopyPasteSpecialFilteredTranspose(bool bSkipEmpty)
     CPPUNIT_ASSERT_MESSAGE("H8: no note", !m_pDoc->HasNote(7, 7, destSheet));
 
     // check values of notes
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", OUString("Note A1"), getNote(3, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E2", OUString("Note A3"), getNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", u"Note A1"_ustr, getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E2", u"Note A3"_ustr, getNote(4, 1, destSheet));
     // F2 has no note
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G2", OUString("Note A1"), getNote(6, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D3", OUString("Note B1"), getNote(3, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E3", OUString("Note B3"), getNote(4, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F3", OUString("Note B4"), getNote(5, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G3", OUString("Note B1"), getNote(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G2", u"Note A1"_ustr, getNote(6, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D3", u"Note B1"_ustr, getNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E3", u"Note B3"_ustr, getNote(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F3", u"Note B4"_ustr, getNote(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G3", u"Note B1"_ustr, getNote(6, 2, destSheet));
     // D4 has no note
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", OUString("Note C3"), getNote(4, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", OUString("Note C4"), getNote(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", u"Note C3"_ustr, getNote(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", u"Note C4"_ustr, getNote(5, 3, destSheet));
     // G4 has no note
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D5", OUString("Note D1"), getNote(3, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E5", OUString("Note D3"), getNote(4, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F5", OUString("Note D4"), getNote(5, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G5", OUString("Note D1"), getNote(6, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D5", u"Note D1"_ustr, getNote(3, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E5", u"Note D3"_ustr, getNote(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F5", u"Note D4"_ustr, getNote(5, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G5", u"Note D1"_ustr, getNote(6, 4, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(4, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F6", OUString("Note E4"), getNote(5, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F7", OUString("Note F4"), getNote(5, 6, destSheet));
+        CPPUNIT_ASSERT_EQUAL(u"Note E2"_ustr, getNote(4, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F6", u"Note E4"_ustr, getNote(5, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F7", u"Note F4"_ustr, getNote(5, 6, destSheet));
 
     // check row 16 on src sheet, refs to copied/cut range
-    CPPUNIT_ASSERT_EQUAL(OUString("=C5"), m_pDoc->GetFormula(1, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C$5"), m_pDoc->GetFormula(2, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C5"), m_pDoc->GetFormula(3, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=C$5"), m_pDoc->GetFormula(4, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C5:C5)"), m_pDoc->GetFormula(5, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C$5:$C$5)"), m_pDoc->GetFormula(6, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C5:$C5)"), m_pDoc->GetFormula(7, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C$5:C$5)"), m_pDoc->GetFormula(8, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$6)"), m_pDoc->GetFormula(9, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$10)"), m_pDoc->GetFormula(10, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C5"_ustr, m_pDoc->GetFormula(1, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=$C$5"_ustr, m_pDoc->GetFormula(2, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=$C5"_ustr, m_pDoc->GetFormula(3, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C$5"_ustr, m_pDoc->GetFormula(4, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C5:C5)"_ustr, m_pDoc->GetFormula(5, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C$5:$C$5)"_ustr, m_pDoc->GetFormula(6, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C5:$C5)"_ustr, m_pDoc->GetFormula(7, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C$5:C$5)"_ustr, m_pDoc->GetFormula(8, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$6)"_ustr, m_pDoc->GetFormula(9, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$10)"_ustr, m_pDoc->GetFormula(10, 16, srcSheet));
 
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 16, srcSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 16, srcSheet));
@@ -4064,16 +4050,16 @@ void TestCopyPaste::checkCopyPasteSpecialFilteredTranspose(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(9, 16, srcSheet));
     CPPUNIT_ASSERT_EQUAL(-17.0, m_pDoc->GetValue(10, 16, srcSheet));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C5"), m_pDoc->GetFormula(1, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_aCa5"), m_pDoc->GetFormula(2, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_aC5"), m_pDoc->GetFormula(3, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_Ca5"), m_pDoc->GetFormula(4, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_C5_C5)"), m_pDoc->GetFormula(5, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa5)"), m_pDoc->GetFormula(6, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aC5_aC5)"), m_pDoc->GetFormula(7, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_Ca5_Ca5)"), m_pDoc->GetFormula(8, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa8)"), m_pDoc->GetFormula(9, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa10)"), m_pDoc->GetFormula(10, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C5"_ustr, m_pDoc->GetFormula(1, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_aCa5"_ustr, m_pDoc->GetFormula(2, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_aC5"_ustr, m_pDoc->GetFormula(3, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_Ca5"_ustr, m_pDoc->GetFormula(4, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_C5_C5)"_ustr, m_pDoc->GetFormula(5, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa5)"_ustr, m_pDoc->GetFormula(6, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aC5_aC5)"_ustr, m_pDoc->GetFormula(7, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_Ca5_Ca5)"_ustr, m_pDoc->GetFormula(8, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa8)"_ustr, m_pDoc->GetFormula(9, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa10)"_ustr, m_pDoc->GetFormula(10, 17, srcSheet));
 
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 17, srcSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 17, srcSheet));
@@ -4087,55 +4073,55 @@ void TestCopyPaste::checkCopyPasteSpecialFilteredTranspose(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(-17.0, m_pDoc->GetValue(10, 17, srcSheet));
 
     // Existing references to the destination range must not change
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D1"), m_pDoc->GetFormula(3, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D2"), m_pDoc->GetFormula(3, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D3"), m_pDoc->GetFormula(3, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D4"), m_pDoc->GetFormula(3, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D5"), m_pDoc->GetFormula(3, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D6"), m_pDoc->GetFormula(3, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D7"), m_pDoc->GetFormula(3, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E1"), m_pDoc->GetFormula(4, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E2"), m_pDoc->GetFormula(4, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E3"), m_pDoc->GetFormula(4, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E4"), m_pDoc->GetFormula(4, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E5"), m_pDoc->GetFormula(4, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E6"), m_pDoc->GetFormula(4, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E7"), m_pDoc->GetFormula(4, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F1"), m_pDoc->GetFormula(5, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F2"), m_pDoc->GetFormula(5, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F3"), m_pDoc->GetFormula(5, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F4"), m_pDoc->GetFormula(5, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F5"), m_pDoc->GetFormula(5, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F6"), m_pDoc->GetFormula(5, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F7"), m_pDoc->GetFormula(5, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G1"), m_pDoc->GetFormula(6, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G2"), m_pDoc->GetFormula(6, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G3"), m_pDoc->GetFormula(6, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G4"), m_pDoc->GetFormula(6, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G5"), m_pDoc->GetFormula(6, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G6"), m_pDoc->GetFormula(6, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G7"), m_pDoc->GetFormula(6, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H1"), m_pDoc->GetFormula(7, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H2"), m_pDoc->GetFormula(7, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H3"), m_pDoc->GetFormula(7, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H4"), m_pDoc->GetFormula(7, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H5"), m_pDoc->GetFormula(7, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H6"), m_pDoc->GetFormula(7, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H7"), m_pDoc->GetFormula(7, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I1"), m_pDoc->GetFormula(8, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I2"), m_pDoc->GetFormula(8, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I3"), m_pDoc->GetFormula(8, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I4"), m_pDoc->GetFormula(8, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I5"), m_pDoc->GetFormula(8, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I6"), m_pDoc->GetFormula(8, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I7"), m_pDoc->GetFormula(8, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J1"), m_pDoc->GetFormula(9, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J2"), m_pDoc->GetFormula(9, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J3"), m_pDoc->GetFormula(9, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J4"), m_pDoc->GetFormula(9, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J5"), m_pDoc->GetFormula(9, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J6"), m_pDoc->GetFormula(9, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J7"), m_pDoc->GetFormula(9, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D1"_ustr, m_pDoc->GetFormula(3, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D2"_ustr, m_pDoc->GetFormula(3, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D3"_ustr, m_pDoc->GetFormula(3, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D4"_ustr, m_pDoc->GetFormula(3, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D5"_ustr, m_pDoc->GetFormula(3, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D6"_ustr, m_pDoc->GetFormula(3, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D7"_ustr, m_pDoc->GetFormula(3, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E1"_ustr, m_pDoc->GetFormula(4, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E2"_ustr, m_pDoc->GetFormula(4, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E3"_ustr, m_pDoc->GetFormula(4, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E4"_ustr, m_pDoc->GetFormula(4, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E5"_ustr, m_pDoc->GetFormula(4, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E6"_ustr, m_pDoc->GetFormula(4, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E7"_ustr, m_pDoc->GetFormula(4, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F1"_ustr, m_pDoc->GetFormula(5, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F2"_ustr, m_pDoc->GetFormula(5, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F3"_ustr, m_pDoc->GetFormula(5, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F4"_ustr, m_pDoc->GetFormula(5, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F5"_ustr, m_pDoc->GetFormula(5, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F6"_ustr, m_pDoc->GetFormula(5, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F7"_ustr, m_pDoc->GetFormula(5, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G1"_ustr, m_pDoc->GetFormula(6, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G2"_ustr, m_pDoc->GetFormula(6, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G3"_ustr, m_pDoc->GetFormula(6, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G4"_ustr, m_pDoc->GetFormula(6, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G5"_ustr, m_pDoc->GetFormula(6, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G6"_ustr, m_pDoc->GetFormula(6, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G7"_ustr, m_pDoc->GetFormula(6, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H1"_ustr, m_pDoc->GetFormula(7, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H2"_ustr, m_pDoc->GetFormula(7, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H3"_ustr, m_pDoc->GetFormula(7, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H4"_ustr, m_pDoc->GetFormula(7, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H5"_ustr, m_pDoc->GetFormula(7, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H6"_ustr, m_pDoc->GetFormula(7, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H7"_ustr, m_pDoc->GetFormula(7, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I1"_ustr, m_pDoc->GetFormula(8, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I2"_ustr, m_pDoc->GetFormula(8, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I3"_ustr, m_pDoc->GetFormula(8, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I4"_ustr, m_pDoc->GetFormula(8, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I5"_ustr, m_pDoc->GetFormula(8, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I6"_ustr, m_pDoc->GetFormula(8, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I7"_ustr, m_pDoc->GetFormula(8, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J1"_ustr, m_pDoc->GetFormula(9, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J2"_ustr, m_pDoc->GetFormula(9, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J3"_ustr, m_pDoc->GetFormula(9, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J4"_ustr, m_pDoc->GetFormula(9, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J5"_ustr, m_pDoc->GetFormula(9, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J6"_ustr, m_pDoc->GetFormula(9, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J7"_ustr, m_pDoc->GetFormula(9, 107, srcSheet));
 
     m_pDoc->DeleteTab(destSheet);
     m_pDoc->DeleteTab(srcSheet);
@@ -4179,18 +4165,18 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeCol(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 5, destSheet));
     // col 4, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(4, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(4, 0, destSheet));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(4, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), m_pDoc->GetFormula(4, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=D3+20"), m_pDoc->GetFormula(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D2+10"_ustr, m_pDoc->GetFormula(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D3+20"_ustr, m_pDoc->GetFormula(4, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(4, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=G4+30"), m_pDoc->GetFormula(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=G4+30"_ustr, m_pDoc->GetFormula(4, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(bSkipEmpty ? 1030.0 : 30.0,
                          m_pDoc->GetValue(4, 3, destSheet)); // It was 35
-    CPPUNIT_ASSERT_EQUAL(OUString("=D3+40"), m_pDoc->GetFormula(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D3+40"_ustr, m_pDoc->GetFormula(4, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(42.0, m_pDoc->GetValue(4, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(4, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(4, 5, destSheet));
     // col 5, strings are not selected
     // col 5, rich text
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 0, destSheet));
@@ -4198,21 +4184,21 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeCol(bool bSkipEmpty)
     CPPUNIT_ASSERT(pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(5, 1, destSheet));
     CPPUNIT_ASSERT(pEditObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("R1"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"R1"_ustr, pEditObj->GetText(0));
     pEditObj = m_pDoc->GetEditText(ScAddress(5, 2, destSheet));
     CPPUNIT_ASSERT(pEditObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("R2"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"R2"_ustr, pEditObj->GetText(0));
     CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(5, 3, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(5, 4, destSheet));
     CPPUNIT_ASSERT(pEditObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("R4"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"R4"_ustr, pEditObj->GetText(0));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 5, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(5, 5, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     // col 6, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(6, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=C2+C4+60"), m_pDoc->GetFormula(6, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(6, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C2+C4+60"_ustr, m_pDoc->GetFormula(6, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(2060.0, m_pDoc->GetValue(6, 1, destSheet)); // It was 64
     if (!bSkipEmpty)
     {
@@ -4224,14 +4210,14 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeCol(bool bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 2, destSheet));
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 3, destSheet));
     }
-    CPPUNIT_ASSERT_EQUAL(OUString("=C2+C4+70"), m_pDoc->GetFormula(6, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C2+C4+70"_ustr, m_pDoc->GetFormula(6, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(2070.0, m_pDoc->GetValue(6, 4, destSheet)); // It was 74
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(6, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(6, 5, destSheet));
     // col 7, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(C2:C5;\"<4\")"), m_pDoc->GetFormula(7, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUMIF(C2:C5;\"<4\")"_ustr, m_pDoc->GetFormula(7, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(7, 1, destSheet)); // It was 6
     if (!bSkipEmpty)
     {
@@ -4244,9 +4230,9 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeCol(bool bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 3, destSheet));
     }
     CPPUNIT_ASSERT_EQUAL(1082.0, m_pDoc->GetValue(7, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=D$3+$B$5+80"), m_pDoc->GetFormula(7, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D$3+$B$5+80"_ustr, m_pDoc->GetFormula(7, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 5, destSheet));
     // col 8, numbers
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 0, destSheet));
     CPPUNIT_ASSERT_EQUAL(121.0, m_pDoc->GetValue(8, 1, destSheet));
@@ -4358,32 +4344,32 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeCol(bool bSkipEmpty)
     CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 5, destSheet));
 
     // check values of notes
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"), getNote(3, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A2"), getNote(3, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"), getNote(3, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"), getNote(4, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"), getNote(4, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"), getNote(5, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D2"), getNote(5, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"), getNote(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note A1"_ustr, getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note A2"_ustr, getNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note A3"_ustr, getNote(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note B1"_ustr, getNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note B3"_ustr, getNote(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note D1"_ustr, getNote(5, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note D2"_ustr, getNote(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note D3"_ustr, getNote(5, 3, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(6, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note E4"), getNote(6, 4, destSheet));
+        CPPUNIT_ASSERT_EQUAL(u"Note E2"_ustr, getNote(6, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note E4"_ustr, getNote(6, 4, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note F2"), getNote(7, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note F4"), getNote(7, 4, destSheet));
+        CPPUNIT_ASSERT_EQUAL(u"Note F2"_ustr, getNote(7, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note F4"_ustr, getNote(7, 4, destSheet));
 
     // check row 16 on src sheet, refs to copied/cut range
-    CPPUNIT_ASSERT_EQUAL(OUString("=C5"), m_pDoc->GetFormula(1, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C$5"), m_pDoc->GetFormula(2, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C5"), m_pDoc->GetFormula(3, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=C$5"), m_pDoc->GetFormula(4, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C5:C5)"), m_pDoc->GetFormula(5, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C$5:$C$5)"), m_pDoc->GetFormula(6, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C5:$C5)"), m_pDoc->GetFormula(7, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C$5:C$5)"), m_pDoc->GetFormula(8, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$6)"), m_pDoc->GetFormula(9, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$10)"), m_pDoc->GetFormula(10, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C5"_ustr, m_pDoc->GetFormula(1, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=$C$5"_ustr, m_pDoc->GetFormula(2, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=$C5"_ustr, m_pDoc->GetFormula(3, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C$5"_ustr, m_pDoc->GetFormula(4, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C5:C5)"_ustr, m_pDoc->GetFormula(5, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C$5:$C$5)"_ustr, m_pDoc->GetFormula(6, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C5:$C5)"_ustr, m_pDoc->GetFormula(7, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C$5:C$5)"_ustr, m_pDoc->GetFormula(8, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$6)"_ustr, m_pDoc->GetFormula(9, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$10)"_ustr, m_pDoc->GetFormula(10, 16, srcSheet));
 
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 16, srcSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 16, srcSheet));
@@ -4396,16 +4382,16 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeCol(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(9, 16, srcSheet));
     CPPUNIT_ASSERT_EQUAL(-17.0, m_pDoc->GetValue(10, 16, srcSheet));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C5"), m_pDoc->GetFormula(1, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_aCa5"), m_pDoc->GetFormula(2, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_aC5"), m_pDoc->GetFormula(3, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_Ca5"), m_pDoc->GetFormula(4, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_C5_C5)"), m_pDoc->GetFormula(5, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa5)"), m_pDoc->GetFormula(6, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aC5_aC5)"), m_pDoc->GetFormula(7, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_Ca5_Ca5)"), m_pDoc->GetFormula(8, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa8)"), m_pDoc->GetFormula(9, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa10)"), m_pDoc->GetFormula(10, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C5"_ustr, m_pDoc->GetFormula(1, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_aCa5"_ustr, m_pDoc->GetFormula(2, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_aC5"_ustr, m_pDoc->GetFormula(3, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_Ca5"_ustr, m_pDoc->GetFormula(4, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_C5_C5)"_ustr, m_pDoc->GetFormula(5, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa5)"_ustr, m_pDoc->GetFormula(6, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aC5_aC5)"_ustr, m_pDoc->GetFormula(7, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_Ca5_Ca5)"_ustr, m_pDoc->GetFormula(8, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa8)"_ustr, m_pDoc->GetFormula(9, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa10)"_ustr, m_pDoc->GetFormula(10, 17, srcSheet));
 
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 17, srcSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 17, srcSheet));
@@ -4419,55 +4405,55 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeCol(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(-17.0, m_pDoc->GetValue(10, 17, srcSheet));
 
     // Existing references to the destination range must not change
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D1"), m_pDoc->GetFormula(3, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D2"), m_pDoc->GetFormula(3, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D3"), m_pDoc->GetFormula(3, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D4"), m_pDoc->GetFormula(3, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D5"), m_pDoc->GetFormula(3, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D6"), m_pDoc->GetFormula(3, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D7"), m_pDoc->GetFormula(3, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E1"), m_pDoc->GetFormula(4, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E2"), m_pDoc->GetFormula(4, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E3"), m_pDoc->GetFormula(4, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E4"), m_pDoc->GetFormula(4, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E5"), m_pDoc->GetFormula(4, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E6"), m_pDoc->GetFormula(4, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E7"), m_pDoc->GetFormula(4, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F1"), m_pDoc->GetFormula(5, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F2"), m_pDoc->GetFormula(5, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F3"), m_pDoc->GetFormula(5, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F4"), m_pDoc->GetFormula(5, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F5"), m_pDoc->GetFormula(5, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F6"), m_pDoc->GetFormula(5, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F7"), m_pDoc->GetFormula(5, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G1"), m_pDoc->GetFormula(6, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G2"), m_pDoc->GetFormula(6, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G3"), m_pDoc->GetFormula(6, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G4"), m_pDoc->GetFormula(6, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G5"), m_pDoc->GetFormula(6, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G6"), m_pDoc->GetFormula(6, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G7"), m_pDoc->GetFormula(6, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H1"), m_pDoc->GetFormula(7, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H2"), m_pDoc->GetFormula(7, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H3"), m_pDoc->GetFormula(7, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H4"), m_pDoc->GetFormula(7, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H5"), m_pDoc->GetFormula(7, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H6"), m_pDoc->GetFormula(7, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H7"), m_pDoc->GetFormula(7, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I1"), m_pDoc->GetFormula(8, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I2"), m_pDoc->GetFormula(8, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I3"), m_pDoc->GetFormula(8, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I4"), m_pDoc->GetFormula(8, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I5"), m_pDoc->GetFormula(8, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I6"), m_pDoc->GetFormula(8, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I7"), m_pDoc->GetFormula(8, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J1"), m_pDoc->GetFormula(9, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J2"), m_pDoc->GetFormula(9, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J3"), m_pDoc->GetFormula(9, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J4"), m_pDoc->GetFormula(9, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J5"), m_pDoc->GetFormula(9, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J6"), m_pDoc->GetFormula(9, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J7"), m_pDoc->GetFormula(9, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D1"_ustr, m_pDoc->GetFormula(3, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D2"_ustr, m_pDoc->GetFormula(3, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D3"_ustr, m_pDoc->GetFormula(3, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D4"_ustr, m_pDoc->GetFormula(3, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D5"_ustr, m_pDoc->GetFormula(3, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D6"_ustr, m_pDoc->GetFormula(3, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D7"_ustr, m_pDoc->GetFormula(3, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E1"_ustr, m_pDoc->GetFormula(4, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E2"_ustr, m_pDoc->GetFormula(4, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E3"_ustr, m_pDoc->GetFormula(4, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E4"_ustr, m_pDoc->GetFormula(4, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E5"_ustr, m_pDoc->GetFormula(4, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E6"_ustr, m_pDoc->GetFormula(4, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E7"_ustr, m_pDoc->GetFormula(4, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F1"_ustr, m_pDoc->GetFormula(5, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F2"_ustr, m_pDoc->GetFormula(5, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F3"_ustr, m_pDoc->GetFormula(5, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F4"_ustr, m_pDoc->GetFormula(5, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F5"_ustr, m_pDoc->GetFormula(5, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F6"_ustr, m_pDoc->GetFormula(5, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F7"_ustr, m_pDoc->GetFormula(5, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G1"_ustr, m_pDoc->GetFormula(6, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G2"_ustr, m_pDoc->GetFormula(6, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G3"_ustr, m_pDoc->GetFormula(6, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G4"_ustr, m_pDoc->GetFormula(6, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G5"_ustr, m_pDoc->GetFormula(6, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G6"_ustr, m_pDoc->GetFormula(6, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G7"_ustr, m_pDoc->GetFormula(6, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H1"_ustr, m_pDoc->GetFormula(7, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H2"_ustr, m_pDoc->GetFormula(7, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H3"_ustr, m_pDoc->GetFormula(7, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H4"_ustr, m_pDoc->GetFormula(7, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H5"_ustr, m_pDoc->GetFormula(7, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H6"_ustr, m_pDoc->GetFormula(7, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H7"_ustr, m_pDoc->GetFormula(7, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I1"_ustr, m_pDoc->GetFormula(8, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I2"_ustr, m_pDoc->GetFormula(8, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I3"_ustr, m_pDoc->GetFormula(8, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I4"_ustr, m_pDoc->GetFormula(8, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I5"_ustr, m_pDoc->GetFormula(8, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I6"_ustr, m_pDoc->GetFormula(8, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I7"_ustr, m_pDoc->GetFormula(8, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J1"_ustr, m_pDoc->GetFormula(9, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J2"_ustr, m_pDoc->GetFormula(9, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J3"_ustr, m_pDoc->GetFormula(9, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J4"_ustr, m_pDoc->GetFormula(9, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J5"_ustr, m_pDoc->GetFormula(9, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J6"_ustr, m_pDoc->GetFormula(9, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J7"_ustr, m_pDoc->GetFormula(9, 107, srcSheet));
 
     m_pDoc->DeleteTab(destSheet);
     m_pDoc->DeleteTab(srcSheet);
@@ -4511,12 +4497,12 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFiltered(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 0, destSheet));
     CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetFormula(4, 0, destSheet));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(4, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), m_pDoc->GetFormula(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D2+10"_ustr, m_pDoc->GetFormula(4, 1, destSheet));
     // references over selection gaps are not adjusted
-    CPPUNIT_ASSERT_EQUAL(OUString("=G3+30"), m_pDoc->GetFormula(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=G3+30"_ustr, m_pDoc->GetFormula(4, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(bSkipEmpty ? 1030.0 : 30.0,
                          m_pDoc->GetValue(4, 2, destSheet)); // It was 35
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+40"), m_pDoc->GetFormula(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D2+40"_ustr, m_pDoc->GetFormula(4, 3, destSheet));
     // was originally 42, not adjusted by filtering
     CPPUNIT_ASSERT_EQUAL(41.0, m_pDoc->GetValue(4, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 4, destSheet));
@@ -4528,38 +4514,38 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFiltered(bool bSkipEmpty)
     CPPUNIT_ASSERT(pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(5, 1, destSheet));
     CPPUNIT_ASSERT(pEditObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("R1"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"R1"_ustr, pEditObj->GetText(0));
     CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(5, 2, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(5, 3, destSheet));
     CPPUNIT_ASSERT(pEditObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("R4"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"R4"_ustr, pEditObj->GetText(0));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 4, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(5, 4, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     // col 6, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 0, destSheet));
     CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetFormula(6, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=C2+C4+60"), m_pDoc->GetFormula(6, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C2+C4+60"_ustr, m_pDoc->GetFormula(6, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(2060.0, m_pDoc->GetValue(6, 1, destSheet)); // It was 64
     if (!bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(6, 2, destSheet));
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=C1+C3+70"), m_pDoc->GetFormula(6, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C1+C3+70"_ustr, m_pDoc->GetFormula(6, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(2070.0, m_pDoc->GetValue(6, 3, destSheet)); // It was 74
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetFormula(6, 4, destSheet));
     // col 7, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 0, destSheet));
     CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetFormula(7, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(C2:C5;\"<4\")"), m_pDoc->GetFormula(7, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUMIF(C2:C5;\"<4\")"_ustr, m_pDoc->GetFormula(7, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(7, 1, destSheet)); // It was 6
     if (!bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(7, 2, destSheet));
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(1083.0, m_pDoc->GetValue(7, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=D$3+$B$5+80"), m_pDoc->GetFormula(7, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D$3+$B$5+80"_ustr, m_pDoc->GetFormula(7, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetFormula(7, 4, destSheet));
     // col 8, numbers
@@ -4656,28 +4642,28 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFiltered(bool bSkipEmpty)
     CPPUNIT_ASSERT(!m_pDoc->HasNote(8, 4, destSheet));
 
     // check values of notes
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"), getNote(3, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"), getNote(3, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"), getNote(4, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"), getNote(4, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"), getNote(5, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"), getNote(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note A1"_ustr, getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note A3"_ustr, getNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note B1"_ustr, getNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note B3"_ustr, getNote(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note D1"_ustr, getNote(5, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note D3"_ustr, getNote(5, 2, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(6, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note E4"), getNote(6, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note F4"), getNote(7, 3, destSheet));
+        CPPUNIT_ASSERT_EQUAL(u"Note E2"_ustr, getNote(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note E4"_ustr, getNote(6, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note F4"_ustr, getNote(7, 3, destSheet));
 
     // check row 16 on src sheet, refs to copied/cut range
-    CPPUNIT_ASSERT_EQUAL(OUString("=C5"), m_pDoc->GetFormula(1, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C$5"), m_pDoc->GetFormula(2, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C5"), m_pDoc->GetFormula(3, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=C$5"), m_pDoc->GetFormula(4, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C5:C5)"), m_pDoc->GetFormula(5, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C$5:$C$5)"), m_pDoc->GetFormula(6, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C5:$C5)"), m_pDoc->GetFormula(7, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C$5:C$5)"), m_pDoc->GetFormula(8, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$6)"), m_pDoc->GetFormula(9, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$10)"), m_pDoc->GetFormula(10, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C5"_ustr, m_pDoc->GetFormula(1, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=$C$5"_ustr, m_pDoc->GetFormula(2, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=$C5"_ustr, m_pDoc->GetFormula(3, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C$5"_ustr, m_pDoc->GetFormula(4, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C5:C5)"_ustr, m_pDoc->GetFormula(5, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C$5:$C$5)"_ustr, m_pDoc->GetFormula(6, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C5:$C5)"_ustr, m_pDoc->GetFormula(7, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C$5:C$5)"_ustr, m_pDoc->GetFormula(8, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$6)"_ustr, m_pDoc->GetFormula(9, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$10)"_ustr, m_pDoc->GetFormula(10, 16, srcSheet));
 
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 16, srcSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 16, srcSheet));
@@ -4690,16 +4676,16 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFiltered(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(9, 16, srcSheet));
     CPPUNIT_ASSERT_EQUAL(-17.0, m_pDoc->GetValue(10, 16, srcSheet));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C5"), m_pDoc->GetFormula(1, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_aCa5"), m_pDoc->GetFormula(2, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_aC5"), m_pDoc->GetFormula(3, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_Ca5"), m_pDoc->GetFormula(4, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_C5_C5)"), m_pDoc->GetFormula(5, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa5)"), m_pDoc->GetFormula(6, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aC5_aC5)"), m_pDoc->GetFormula(7, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_Ca5_Ca5)"), m_pDoc->GetFormula(8, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa8)"), m_pDoc->GetFormula(9, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa10)"), m_pDoc->GetFormula(10, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C5"_ustr, m_pDoc->GetFormula(1, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_aCa5"_ustr, m_pDoc->GetFormula(2, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_aC5"_ustr, m_pDoc->GetFormula(3, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_Ca5"_ustr, m_pDoc->GetFormula(4, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_C5_C5)"_ustr, m_pDoc->GetFormula(5, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa5)"_ustr, m_pDoc->GetFormula(6, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aC5_aC5)"_ustr, m_pDoc->GetFormula(7, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_Ca5_Ca5)"_ustr, m_pDoc->GetFormula(8, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa8)"_ustr, m_pDoc->GetFormula(9, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa10)"_ustr, m_pDoc->GetFormula(10, 17, srcSheet));
 
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 17, srcSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 17, srcSheet));
@@ -4713,55 +4699,55 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFiltered(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(-17.0, m_pDoc->GetValue(10, 17, srcSheet));
 
     // Existing references to the destination range must not change
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D1"), m_pDoc->GetFormula(3, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D2"), m_pDoc->GetFormula(3, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D3"), m_pDoc->GetFormula(3, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D4"), m_pDoc->GetFormula(3, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D5"), m_pDoc->GetFormula(3, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D6"), m_pDoc->GetFormula(3, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D7"), m_pDoc->GetFormula(3, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E1"), m_pDoc->GetFormula(4, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E2"), m_pDoc->GetFormula(4, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E3"), m_pDoc->GetFormula(4, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E4"), m_pDoc->GetFormula(4, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E5"), m_pDoc->GetFormula(4, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E6"), m_pDoc->GetFormula(4, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E7"), m_pDoc->GetFormula(4, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F1"), m_pDoc->GetFormula(5, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F2"), m_pDoc->GetFormula(5, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F3"), m_pDoc->GetFormula(5, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F4"), m_pDoc->GetFormula(5, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F5"), m_pDoc->GetFormula(5, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F6"), m_pDoc->GetFormula(5, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F7"), m_pDoc->GetFormula(5, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G1"), m_pDoc->GetFormula(6, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G2"), m_pDoc->GetFormula(6, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G3"), m_pDoc->GetFormula(6, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G4"), m_pDoc->GetFormula(6, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G5"), m_pDoc->GetFormula(6, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G6"), m_pDoc->GetFormula(6, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G7"), m_pDoc->GetFormula(6, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H1"), m_pDoc->GetFormula(7, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H2"), m_pDoc->GetFormula(7, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H3"), m_pDoc->GetFormula(7, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H4"), m_pDoc->GetFormula(7, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H5"), m_pDoc->GetFormula(7, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H6"), m_pDoc->GetFormula(7, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H7"), m_pDoc->GetFormula(7, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I1"), m_pDoc->GetFormula(8, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I2"), m_pDoc->GetFormula(8, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I3"), m_pDoc->GetFormula(8, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I4"), m_pDoc->GetFormula(8, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I5"), m_pDoc->GetFormula(8, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I6"), m_pDoc->GetFormula(8, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I7"), m_pDoc->GetFormula(8, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J1"), m_pDoc->GetFormula(9, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J2"), m_pDoc->GetFormula(9, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J3"), m_pDoc->GetFormula(9, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J4"), m_pDoc->GetFormula(9, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J5"), m_pDoc->GetFormula(9, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J6"), m_pDoc->GetFormula(9, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J7"), m_pDoc->GetFormula(9, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D1"_ustr, m_pDoc->GetFormula(3, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D2"_ustr, m_pDoc->GetFormula(3, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D3"_ustr, m_pDoc->GetFormula(3, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D4"_ustr, m_pDoc->GetFormula(3, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D5"_ustr, m_pDoc->GetFormula(3, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D6"_ustr, m_pDoc->GetFormula(3, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D7"_ustr, m_pDoc->GetFormula(3, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E1"_ustr, m_pDoc->GetFormula(4, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E2"_ustr, m_pDoc->GetFormula(4, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E3"_ustr, m_pDoc->GetFormula(4, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E4"_ustr, m_pDoc->GetFormula(4, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E5"_ustr, m_pDoc->GetFormula(4, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E6"_ustr, m_pDoc->GetFormula(4, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E7"_ustr, m_pDoc->GetFormula(4, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F1"_ustr, m_pDoc->GetFormula(5, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F2"_ustr, m_pDoc->GetFormula(5, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F3"_ustr, m_pDoc->GetFormula(5, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F4"_ustr, m_pDoc->GetFormula(5, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F5"_ustr, m_pDoc->GetFormula(5, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F6"_ustr, m_pDoc->GetFormula(5, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F7"_ustr, m_pDoc->GetFormula(5, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G1"_ustr, m_pDoc->GetFormula(6, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G2"_ustr, m_pDoc->GetFormula(6, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G3"_ustr, m_pDoc->GetFormula(6, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G4"_ustr, m_pDoc->GetFormula(6, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G5"_ustr, m_pDoc->GetFormula(6, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G6"_ustr, m_pDoc->GetFormula(6, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G7"_ustr, m_pDoc->GetFormula(6, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H1"_ustr, m_pDoc->GetFormula(7, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H2"_ustr, m_pDoc->GetFormula(7, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H3"_ustr, m_pDoc->GetFormula(7, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H4"_ustr, m_pDoc->GetFormula(7, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H5"_ustr, m_pDoc->GetFormula(7, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H6"_ustr, m_pDoc->GetFormula(7, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H7"_ustr, m_pDoc->GetFormula(7, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I1"_ustr, m_pDoc->GetFormula(8, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I2"_ustr, m_pDoc->GetFormula(8, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I3"_ustr, m_pDoc->GetFormula(8, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I4"_ustr, m_pDoc->GetFormula(8, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I5"_ustr, m_pDoc->GetFormula(8, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I6"_ustr, m_pDoc->GetFormula(8, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I7"_ustr, m_pDoc->GetFormula(8, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J1"_ustr, m_pDoc->GetFormula(9, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J2"_ustr, m_pDoc->GetFormula(9, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J3"_ustr, m_pDoc->GetFormula(9, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J4"_ustr, m_pDoc->GetFormula(9, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J5"_ustr, m_pDoc->GetFormula(9, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J6"_ustr, m_pDoc->GetFormula(9, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J7"_ustr, m_pDoc->GetFormula(9, 107, srcSheet));
 
     m_pDoc->DeleteTab(destSheet);
     m_pDoc->DeleteTab(srcSheet);
@@ -4806,18 +4792,18 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColTranspose(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 1, destSheet));
     // row 2, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(2, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(3, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), m_pDoc->GetFormula(3, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=E2+20"), m_pDoc->GetFormula(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D2+10"_ustr, m_pDoc->GetFormula(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=E2+20"_ustr, m_pDoc->GetFormula(4, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(4, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=F5+30"), m_pDoc->GetFormula(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=F5+30"_ustr, m_pDoc->GetFormula(5, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(bSkipEmpty ? 1030.0 : 30.0,
                          m_pDoc->GetValue(5, 2, destSheet)); // It was 35
-    CPPUNIT_ASSERT_EQUAL(OUString("=E2+40"), m_pDoc->GetFormula(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=E2+40"_ustr, m_pDoc->GetFormula(6, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(42.0, m_pDoc->GetValue(6, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 2, destSheet));
     // row 3, strings was not selected in multi range selection
     // row 3, rich text
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 3, destSheet));
@@ -4825,21 +4811,21 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColTranspose(bool bSkipEmpty)
     CPPUNIT_ASSERT(pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(3, 3, destSheet));
     CPPUNIT_ASSERT(pEditObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("R1"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"R1"_ustr, pEditObj->GetText(0));
     pEditObj = m_pDoc->GetEditText(ScAddress(4, 3, destSheet));
     CPPUNIT_ASSERT(pEditObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("R2"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"R2"_ustr, pEditObj->GetText(0));
     CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(5, 3, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 3, destSheet));
     CPPUNIT_ASSERT(pEditObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("R4"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"R4"_ustr, pEditObj->GetText(0));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 3, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(7, 3, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     // row 4, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=D1+F1+60"), m_pDoc->GetFormula(3, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(2, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D1+F1+60"_ustr, m_pDoc->GetFormula(3, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(2060.0, m_pDoc->GetValue(3, 4, destSheet)); // It was 64
     if (!bSkipEmpty)
     {
@@ -4851,14 +4837,14 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColTranspose(bool bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 4, destSheet));
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 4, destSheet));
     }
-    CPPUNIT_ASSERT_EQUAL(OUString("=D1+F1+70"), m_pDoc->GetFormula(6, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D1+F1+70"_ustr, m_pDoc->GetFormula(6, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(2070.0, m_pDoc->GetValue(6, 4, destSheet)); // It was 74
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 4, destSheet));
     // row 5, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D1:G1;\"<4\")"), m_pDoc->GetFormula(3, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUMIF(D1:G1;\"<4\")"_ustr, m_pDoc->GetFormula(3, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(3, 5, destSheet)); // It was 6
     if (!bSkipEmpty)
     {
@@ -4871,10 +4857,10 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColTranspose(bool bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 5, destSheet));
     }
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=C$3+$B$5+80"), m_pDoc->GetFormula(6, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C$3+$B$5+80"_ustr, m_pDoc->GetFormula(6, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL(2080.0, m_pDoc->GetValue(6, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 5, destSheet));
     // row 6, numbers
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 6, destSheet));
     CPPUNIT_ASSERT_EQUAL(121.0, m_pDoc->GetValue(3, 6, destSheet));
@@ -4991,32 +4977,32 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColTranspose(bool bSkipEmpty)
     CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 6, destSheet));
     CPPUNIT_ASSERT(!m_pDoc->HasNote(7, 6, destSheet));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"), getNote(3, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A2"), getNote(4, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"), getNote(5, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"), getNote(3, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"), getNote(5, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"), getNote(3, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D2"), getNote(4, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"), getNote(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note A1"_ustr, getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note A2"_ustr, getNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note A3"_ustr, getNote(5, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note B1"_ustr, getNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note B3"_ustr, getNote(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note D1"_ustr, getNote(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note D2"_ustr, getNote(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note D3"_ustr, getNote(5, 3, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(5, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note E4"), getNote(6, 4, destSheet));
+        CPPUNIT_ASSERT_EQUAL(u"Note E2"_ustr, getNote(5, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note E4"_ustr, getNote(6, 4, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note F2"), getNote(4, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note F4"), getNote(6, 5, destSheet));
+        CPPUNIT_ASSERT_EQUAL(u"Note F2"_ustr, getNote(4, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note F4"_ustr, getNote(6, 5, destSheet));
 
     // check row 16 on src sheet, refs to copied/cut range
-    CPPUNIT_ASSERT_EQUAL(OUString("=C5"), m_pDoc->GetFormula(1, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C$5"), m_pDoc->GetFormula(2, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C5"), m_pDoc->GetFormula(3, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=C$5"), m_pDoc->GetFormula(4, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C5:C5)"), m_pDoc->GetFormula(5, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C$5:$C$5)"), m_pDoc->GetFormula(6, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C5:$C5)"), m_pDoc->GetFormula(7, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C$5:C$5)"), m_pDoc->GetFormula(8, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$6)"), m_pDoc->GetFormula(9, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$10)"), m_pDoc->GetFormula(10, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C5"_ustr, m_pDoc->GetFormula(1, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=$C$5"_ustr, m_pDoc->GetFormula(2, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=$C5"_ustr, m_pDoc->GetFormula(3, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C$5"_ustr, m_pDoc->GetFormula(4, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C5:C5)"_ustr, m_pDoc->GetFormula(5, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C$5:$C$5)"_ustr, m_pDoc->GetFormula(6, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C5:$C5)"_ustr, m_pDoc->GetFormula(7, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C$5:C$5)"_ustr, m_pDoc->GetFormula(8, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$6)"_ustr, m_pDoc->GetFormula(9, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$10)"_ustr, m_pDoc->GetFormula(10, 16, srcSheet));
 
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 16, srcSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 16, srcSheet));
@@ -5029,16 +5015,16 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColTranspose(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(9, 16, srcSheet));
     CPPUNIT_ASSERT_EQUAL(-17.0, m_pDoc->GetValue(10, 16, srcSheet));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C5"), m_pDoc->GetFormula(1, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_aCa5"), m_pDoc->GetFormula(2, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_aC5"), m_pDoc->GetFormula(3, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_Ca5"), m_pDoc->GetFormula(4, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_C5_C5)"), m_pDoc->GetFormula(5, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa5)"), m_pDoc->GetFormula(6, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aC5_aC5)"), m_pDoc->GetFormula(7, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_Ca5_Ca5)"), m_pDoc->GetFormula(8, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa8)"), m_pDoc->GetFormula(9, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa10)"), m_pDoc->GetFormula(10, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C5"_ustr, m_pDoc->GetFormula(1, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_aCa5"_ustr, m_pDoc->GetFormula(2, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_aC5"_ustr, m_pDoc->GetFormula(3, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_Ca5"_ustr, m_pDoc->GetFormula(4, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_C5_C5)"_ustr, m_pDoc->GetFormula(5, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa5)"_ustr, m_pDoc->GetFormula(6, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aC5_aC5)"_ustr, m_pDoc->GetFormula(7, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_Ca5_Ca5)"_ustr, m_pDoc->GetFormula(8, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa8)"_ustr, m_pDoc->GetFormula(9, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa10)"_ustr, m_pDoc->GetFormula(10, 17, srcSheet));
 
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 17, srcSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 17, srcSheet));
@@ -5052,55 +5038,55 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColTranspose(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(-17.0, m_pDoc->GetValue(10, 17, srcSheet));
 
     // Existing references to the destination range must not change
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D1"), m_pDoc->GetFormula(3, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D2"), m_pDoc->GetFormula(3, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D3"), m_pDoc->GetFormula(3, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D4"), m_pDoc->GetFormula(3, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D5"), m_pDoc->GetFormula(3, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D6"), m_pDoc->GetFormula(3, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D7"), m_pDoc->GetFormula(3, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E1"), m_pDoc->GetFormula(4, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E2"), m_pDoc->GetFormula(4, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E3"), m_pDoc->GetFormula(4, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E4"), m_pDoc->GetFormula(4, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E5"), m_pDoc->GetFormula(4, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E6"), m_pDoc->GetFormula(4, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E7"), m_pDoc->GetFormula(4, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F1"), m_pDoc->GetFormula(5, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F2"), m_pDoc->GetFormula(5, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F3"), m_pDoc->GetFormula(5, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F4"), m_pDoc->GetFormula(5, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F5"), m_pDoc->GetFormula(5, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F6"), m_pDoc->GetFormula(5, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F7"), m_pDoc->GetFormula(5, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G1"), m_pDoc->GetFormula(6, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G2"), m_pDoc->GetFormula(6, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G3"), m_pDoc->GetFormula(6, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G4"), m_pDoc->GetFormula(6, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G5"), m_pDoc->GetFormula(6, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G6"), m_pDoc->GetFormula(6, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G7"), m_pDoc->GetFormula(6, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H1"), m_pDoc->GetFormula(7, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H2"), m_pDoc->GetFormula(7, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H3"), m_pDoc->GetFormula(7, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H4"), m_pDoc->GetFormula(7, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H5"), m_pDoc->GetFormula(7, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H6"), m_pDoc->GetFormula(7, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H7"), m_pDoc->GetFormula(7, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I1"), m_pDoc->GetFormula(8, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I2"), m_pDoc->GetFormula(8, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I3"), m_pDoc->GetFormula(8, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I4"), m_pDoc->GetFormula(8, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I5"), m_pDoc->GetFormula(8, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I6"), m_pDoc->GetFormula(8, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I7"), m_pDoc->GetFormula(8, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J1"), m_pDoc->GetFormula(9, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J2"), m_pDoc->GetFormula(9, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J3"), m_pDoc->GetFormula(9, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J4"), m_pDoc->GetFormula(9, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J5"), m_pDoc->GetFormula(9, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J6"), m_pDoc->GetFormula(9, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J7"), m_pDoc->GetFormula(9, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D1"_ustr, m_pDoc->GetFormula(3, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D2"_ustr, m_pDoc->GetFormula(3, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D3"_ustr, m_pDoc->GetFormula(3, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D4"_ustr, m_pDoc->GetFormula(3, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D5"_ustr, m_pDoc->GetFormula(3, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D6"_ustr, m_pDoc->GetFormula(3, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D7"_ustr, m_pDoc->GetFormula(3, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E1"_ustr, m_pDoc->GetFormula(4, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E2"_ustr, m_pDoc->GetFormula(4, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E3"_ustr, m_pDoc->GetFormula(4, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E4"_ustr, m_pDoc->GetFormula(4, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E5"_ustr, m_pDoc->GetFormula(4, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E6"_ustr, m_pDoc->GetFormula(4, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E7"_ustr, m_pDoc->GetFormula(4, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F1"_ustr, m_pDoc->GetFormula(5, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F2"_ustr, m_pDoc->GetFormula(5, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F3"_ustr, m_pDoc->GetFormula(5, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F4"_ustr, m_pDoc->GetFormula(5, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F5"_ustr, m_pDoc->GetFormula(5, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F6"_ustr, m_pDoc->GetFormula(5, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F7"_ustr, m_pDoc->GetFormula(5, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G1"_ustr, m_pDoc->GetFormula(6, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G2"_ustr, m_pDoc->GetFormula(6, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G3"_ustr, m_pDoc->GetFormula(6, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G4"_ustr, m_pDoc->GetFormula(6, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G5"_ustr, m_pDoc->GetFormula(6, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G6"_ustr, m_pDoc->GetFormula(6, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G7"_ustr, m_pDoc->GetFormula(6, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H1"_ustr, m_pDoc->GetFormula(7, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H2"_ustr, m_pDoc->GetFormula(7, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H3"_ustr, m_pDoc->GetFormula(7, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H4"_ustr, m_pDoc->GetFormula(7, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H5"_ustr, m_pDoc->GetFormula(7, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H6"_ustr, m_pDoc->GetFormula(7, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H7"_ustr, m_pDoc->GetFormula(7, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I1"_ustr, m_pDoc->GetFormula(8, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I2"_ustr, m_pDoc->GetFormula(8, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I3"_ustr, m_pDoc->GetFormula(8, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I4"_ustr, m_pDoc->GetFormula(8, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I5"_ustr, m_pDoc->GetFormula(8, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I6"_ustr, m_pDoc->GetFormula(8, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I7"_ustr, m_pDoc->GetFormula(8, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J1"_ustr, m_pDoc->GetFormula(9, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J2"_ustr, m_pDoc->GetFormula(9, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J3"_ustr, m_pDoc->GetFormula(9, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J4"_ustr, m_pDoc->GetFormula(9, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J5"_ustr, m_pDoc->GetFormula(9, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J6"_ustr, m_pDoc->GetFormula(9, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J7"_ustr, m_pDoc->GetFormula(9, 107, srcSheet));
 
     m_pDoc->DeleteTab(destSheet);
     m_pDoc->DeleteTab(srcSheet);
@@ -5148,17 +5134,17 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFilteredTranspose(bool bSk
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 1, destSheet));
     // row 2, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(2, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(3, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), m_pDoc->GetFormula(3, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=E5+30"), m_pDoc->GetFormula(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D2+10"_ustr, m_pDoc->GetFormula(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=E5+30"_ustr, m_pDoc->GetFormula(4, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(bSkipEmpty ? 1030.0 : 30.0,
                          m_pDoc->GetValue(4, 2, destSheet)); // It was 35
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+40"), m_pDoc->GetFormula(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D2+40"_ustr, m_pDoc->GetFormula(5, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(
         41.0, m_pDoc->GetValue(5, 2, destSheet)); // was originally 42, not adjusted by filtering
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(6, 2, destSheet));
     // row 3, strings was not selected in multi range selection
     // row 3, rich text
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 3, destSheet));
@@ -5166,42 +5152,42 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFilteredTranspose(bool bSk
     CPPUNIT_ASSERT(pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(3, 3, destSheet));
     CPPUNIT_ASSERT(pEditObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("R1"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"R1"_ustr, pEditObj->GetText(0));
     CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(4, 3, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(5, 3, destSheet));
     CPPUNIT_ASSERT(pEditObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("R4"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"R4"_ustr, pEditObj->GetText(0));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 3, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 3, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     // row 4, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(2, 4, destSheet));
     // formulas over filtered rows are not adjusted
-    CPPUNIT_ASSERT_EQUAL(OUString("=D1+F1+60"), m_pDoc->GetFormula(3, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D1+F1+60"_ustr, m_pDoc->GetFormula(3, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(2060.0, m_pDoc->GetValue(3, 4, destSheet)); // It was 64
     if (!bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(4, 4, destSheet));
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=C1+E1+70"), m_pDoc->GetFormula(5, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C1+E1+70"_ustr, m_pDoc->GetFormula(5, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(2070.0, m_pDoc->GetValue(5, 4, destSheet)); // It was 74
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(6, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(6, 4, destSheet));
     // row 5, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(2, 5, destSheet));
     // formulas over filtered rows are not adjusted
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D1:G1;\"<4\")"), m_pDoc->GetFormula(3, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUMIF(D1:G1;\"<4\")"_ustr, m_pDoc->GetFormula(3, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(3, 5, destSheet)); // It was 6
     if (!bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E6", OUString(), m_pDoc->GetString(4, 5, destSheet));
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=B$3+$B$5+80"), m_pDoc->GetFormula(5, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=B$3+$B$5+80"_ustr, m_pDoc->GetFormula(5, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL(2080.0, m_pDoc->GetValue(5, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(6, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(6, 5, destSheet));
     // row 6, numbers
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 6, destSheet));
     CPPUNIT_ASSERT_EQUAL(121.0, m_pDoc->GetValue(3, 6, destSheet));
@@ -5308,28 +5294,28 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFilteredTranspose(bool bSk
     CPPUNIT_ASSERT(!m_pDoc->HasNote(5, 6, destSheet));
     CPPUNIT_ASSERT(!m_pDoc->HasNote(6, 6, destSheet));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"), getNote(3, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"), getNote(4, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"), getNote(3, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"), getNote(4, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"), getNote(3, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"), getNote(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note A1"_ustr, getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note A3"_ustr, getNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note B1"_ustr, getNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note B3"_ustr, getNote(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note D1"_ustr, getNote(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note D3"_ustr, getNote(4, 3, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(4, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note E4"), getNote(5, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note F4"), getNote(5, 5, destSheet));
+        CPPUNIT_ASSERT_EQUAL(u"Note E2"_ustr, getNote(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note E4"_ustr, getNote(5, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note F4"_ustr, getNote(5, 5, destSheet));
 
     // check row 16 on src sheet, refs to copied/cut range
-    CPPUNIT_ASSERT_EQUAL(OUString("=C5"), m_pDoc->GetFormula(1, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C$5"), m_pDoc->GetFormula(2, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C5"), m_pDoc->GetFormula(3, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=C$5"), m_pDoc->GetFormula(4, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C5:C5)"), m_pDoc->GetFormula(5, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C$5:$C$5)"), m_pDoc->GetFormula(6, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C5:$C5)"), m_pDoc->GetFormula(7, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C$5:C$5)"), m_pDoc->GetFormula(8, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$6)"), m_pDoc->GetFormula(9, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$10)"), m_pDoc->GetFormula(10, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C5"_ustr, m_pDoc->GetFormula(1, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=$C$5"_ustr, m_pDoc->GetFormula(2, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=$C5"_ustr, m_pDoc->GetFormula(3, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C$5"_ustr, m_pDoc->GetFormula(4, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C5:C5)"_ustr, m_pDoc->GetFormula(5, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C$5:$C$5)"_ustr, m_pDoc->GetFormula(6, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C5:$C5)"_ustr, m_pDoc->GetFormula(7, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C$5:C$5)"_ustr, m_pDoc->GetFormula(8, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$6)"_ustr, m_pDoc->GetFormula(9, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$10)"_ustr, m_pDoc->GetFormula(10, 16, srcSheet));
 
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 16, srcSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 16, srcSheet));
@@ -5342,16 +5328,16 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFilteredTranspose(bool bSk
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(9, 16, srcSheet));
     CPPUNIT_ASSERT_EQUAL(-17.0, m_pDoc->GetValue(10, 16, srcSheet));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C5"), m_pDoc->GetFormula(1, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_aCa5"), m_pDoc->GetFormula(2, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_aC5"), m_pDoc->GetFormula(3, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_Ca5"), m_pDoc->GetFormula(4, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_C5_C5)"), m_pDoc->GetFormula(5, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa5)"), m_pDoc->GetFormula(6, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aC5_aC5)"), m_pDoc->GetFormula(7, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_Ca5_Ca5)"), m_pDoc->GetFormula(8, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa8)"), m_pDoc->GetFormula(9, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa10)"), m_pDoc->GetFormula(10, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C5"_ustr, m_pDoc->GetFormula(1, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_aCa5"_ustr, m_pDoc->GetFormula(2, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_aC5"_ustr, m_pDoc->GetFormula(3, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_Ca5"_ustr, m_pDoc->GetFormula(4, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_C5_C5)"_ustr, m_pDoc->GetFormula(5, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa5)"_ustr, m_pDoc->GetFormula(6, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aC5_aC5)"_ustr, m_pDoc->GetFormula(7, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_Ca5_Ca5)"_ustr, m_pDoc->GetFormula(8, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa8)"_ustr, m_pDoc->GetFormula(9, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa10)"_ustr, m_pDoc->GetFormula(10, 17, srcSheet));
 
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 17, srcSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 17, srcSheet));
@@ -5365,55 +5351,55 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeColFilteredTranspose(bool bSk
     CPPUNIT_ASSERT_EQUAL(-17.0, m_pDoc->GetValue(10, 17, srcSheet));
 
     // Existing references to the destination range must not change
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D1"), m_pDoc->GetFormula(3, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D2"), m_pDoc->GetFormula(3, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D3"), m_pDoc->GetFormula(3, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D4"), m_pDoc->GetFormula(3, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D5"), m_pDoc->GetFormula(3, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D6"), m_pDoc->GetFormula(3, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D7"), m_pDoc->GetFormula(3, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E1"), m_pDoc->GetFormula(4, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E2"), m_pDoc->GetFormula(4, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E3"), m_pDoc->GetFormula(4, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E4"), m_pDoc->GetFormula(4, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E5"), m_pDoc->GetFormula(4, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E6"), m_pDoc->GetFormula(4, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E7"), m_pDoc->GetFormula(4, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F1"), m_pDoc->GetFormula(5, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F2"), m_pDoc->GetFormula(5, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F3"), m_pDoc->GetFormula(5, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F4"), m_pDoc->GetFormula(5, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F5"), m_pDoc->GetFormula(5, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F6"), m_pDoc->GetFormula(5, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F7"), m_pDoc->GetFormula(5, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G1"), m_pDoc->GetFormula(6, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G2"), m_pDoc->GetFormula(6, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G3"), m_pDoc->GetFormula(6, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G4"), m_pDoc->GetFormula(6, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G5"), m_pDoc->GetFormula(6, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G6"), m_pDoc->GetFormula(6, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G7"), m_pDoc->GetFormula(6, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H1"), m_pDoc->GetFormula(7, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H2"), m_pDoc->GetFormula(7, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H3"), m_pDoc->GetFormula(7, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H4"), m_pDoc->GetFormula(7, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H5"), m_pDoc->GetFormula(7, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H6"), m_pDoc->GetFormula(7, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H7"), m_pDoc->GetFormula(7, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I1"), m_pDoc->GetFormula(8, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I2"), m_pDoc->GetFormula(8, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I3"), m_pDoc->GetFormula(8, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I4"), m_pDoc->GetFormula(8, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I5"), m_pDoc->GetFormula(8, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I6"), m_pDoc->GetFormula(8, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I7"), m_pDoc->GetFormula(8, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J1"), m_pDoc->GetFormula(9, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J2"), m_pDoc->GetFormula(9, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J3"), m_pDoc->GetFormula(9, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J4"), m_pDoc->GetFormula(9, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J5"), m_pDoc->GetFormula(9, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J6"), m_pDoc->GetFormula(9, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J7"), m_pDoc->GetFormula(9, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D1"_ustr, m_pDoc->GetFormula(3, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D2"_ustr, m_pDoc->GetFormula(3, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D3"_ustr, m_pDoc->GetFormula(3, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D4"_ustr, m_pDoc->GetFormula(3, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D5"_ustr, m_pDoc->GetFormula(3, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D6"_ustr, m_pDoc->GetFormula(3, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D7"_ustr, m_pDoc->GetFormula(3, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E1"_ustr, m_pDoc->GetFormula(4, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E2"_ustr, m_pDoc->GetFormula(4, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E3"_ustr, m_pDoc->GetFormula(4, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E4"_ustr, m_pDoc->GetFormula(4, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E5"_ustr, m_pDoc->GetFormula(4, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E6"_ustr, m_pDoc->GetFormula(4, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E7"_ustr, m_pDoc->GetFormula(4, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F1"_ustr, m_pDoc->GetFormula(5, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F2"_ustr, m_pDoc->GetFormula(5, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F3"_ustr, m_pDoc->GetFormula(5, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F4"_ustr, m_pDoc->GetFormula(5, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F5"_ustr, m_pDoc->GetFormula(5, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F6"_ustr, m_pDoc->GetFormula(5, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F7"_ustr, m_pDoc->GetFormula(5, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G1"_ustr, m_pDoc->GetFormula(6, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G2"_ustr, m_pDoc->GetFormula(6, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G3"_ustr, m_pDoc->GetFormula(6, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G4"_ustr, m_pDoc->GetFormula(6, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G5"_ustr, m_pDoc->GetFormula(6, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G6"_ustr, m_pDoc->GetFormula(6, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G7"_ustr, m_pDoc->GetFormula(6, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H1"_ustr, m_pDoc->GetFormula(7, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H2"_ustr, m_pDoc->GetFormula(7, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H3"_ustr, m_pDoc->GetFormula(7, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H4"_ustr, m_pDoc->GetFormula(7, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H5"_ustr, m_pDoc->GetFormula(7, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H6"_ustr, m_pDoc->GetFormula(7, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H7"_ustr, m_pDoc->GetFormula(7, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I1"_ustr, m_pDoc->GetFormula(8, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I2"_ustr, m_pDoc->GetFormula(8, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I3"_ustr, m_pDoc->GetFormula(8, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I4"_ustr, m_pDoc->GetFormula(8, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I5"_ustr, m_pDoc->GetFormula(8, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I6"_ustr, m_pDoc->GetFormula(8, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I7"_ustr, m_pDoc->GetFormula(8, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J1"_ustr, m_pDoc->GetFormula(9, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J2"_ustr, m_pDoc->GetFormula(9, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J3"_ustr, m_pDoc->GetFormula(9, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J4"_ustr, m_pDoc->GetFormula(9, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J5"_ustr, m_pDoc->GetFormula(9, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J6"_ustr, m_pDoc->GetFormula(9, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J7"_ustr, m_pDoc->GetFormula(9, 107, srcSheet));
 
     m_pDoc->DeleteTab(destSheet);
     m_pDoc->DeleteTab(srcSheet);
@@ -5457,47 +5443,47 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRow(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 6, destSheet));
     // col 4, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(4, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(4, 0, destSheet));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(4, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), m_pDoc->GetFormula(4, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=D3+20"), m_pDoc->GetFormula(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D2+10"_ustr, m_pDoc->GetFormula(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D3+20"_ustr, m_pDoc->GetFormula(4, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(4, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=G4+30"), m_pDoc->GetFormula(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=G4+30"_ustr, m_pDoc->GetFormula(4, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(4, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("q"), m_pDoc->GetString(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"q"_ustr, m_pDoc->GetString(4, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(-12.0, m_pDoc->GetValue(4, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 6, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(4, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(4, 6, destSheet));
     // col 5, strings
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(5, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(5, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("b"), m_pDoc->GetString(5, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("c"), m_pDoc->GetString(5, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("r"), m_pDoc->GetString(5, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(5, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"a"_ustr, m_pDoc->GetString(5, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"b"_ustr, m_pDoc->GetString(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"c"_ustr, m_pDoc->GetString(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"r"_ustr, m_pDoc->GetString(5, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(-13.0, m_pDoc->GetValue(5, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 6, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(5, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(5, 6, destSheet));
     // col 6, rich text
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 0, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 0, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 1, destSheet));
     CPPUNIT_ASSERT(pEditObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("R1"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"R1"_ustr, pEditObj->GetText(0));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 2, destSheet));
     CPPUNIT_ASSERT(pEditObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("R2"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"R2"_ustr, pEditObj->GetText(0));
     CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(6, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("s"), m_pDoc->GetString(6, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"s"_ustr, m_pDoc->GetString(6, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(-14.0, m_pDoc->GetValue(6, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 6, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 6, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     // col 7, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+D4+60"), m_pDoc->GetFormula(7, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D2+D4+60"_ustr, m_pDoc->GetFormula(7, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(64.0, m_pDoc->GetValue(7, 1, destSheet));
     if (!bSkipEmpty)
     {
@@ -5509,14 +5495,14 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRow(bool bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 2, destSheet));
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 3, destSheet));
     }
-    CPPUNIT_ASSERT_EQUAL(OUString("t"), m_pDoc->GetString(7, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"t"_ustr, m_pDoc->GetString(7, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(-15.0, m_pDoc->GetValue(7, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 6, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 6, destSheet));
     // col 8, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D2:D5;\"<4\")"), m_pDoc->GetFormula(8, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUMIF(D2:D5;\"<4\")"_ustr, m_pDoc->GetFormula(8, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(8, 1, destSheet));
     if (!bSkipEmpty)
     {
@@ -5528,10 +5514,10 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRow(bool bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 2, destSheet));
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 3, destSheet));
     }
-    CPPUNIT_ASSERT_EQUAL(OUString("u"), m_pDoc->GetString(8, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"u"_ustr, m_pDoc->GetString(8, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(-16.0, m_pDoc->GetValue(8, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 6, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(8, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(8, 6, destSheet));
     // col 9
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 0, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 1, destSheet));
@@ -5683,33 +5669,33 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRow(bool bSkipEmpty)
     CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 5, destSheet));
 
     // check values of notes
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"), getNote(3, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A2"), getNote(3, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"), getNote(3, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"), getNote(4, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"), getNote(4, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C2"), getNote(5, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C3"), getNote(5, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"), getNote(6, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D2"), getNote(6, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"), getNote(6, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note A1"_ustr, getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note A2"_ustr, getNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note A3"_ustr, getNote(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note B1"_ustr, getNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note B3"_ustr, getNote(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note C2"_ustr, getNote(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note C3"_ustr, getNote(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note D1"_ustr, getNote(6, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note D2"_ustr, getNote(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note D3"_ustr, getNote(6, 3, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(7, 3, destSheet));
+        CPPUNIT_ASSERT_EQUAL(u"Note E2"_ustr, getNote(7, 3, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note F2"), getNote(8, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C5"), getNote(5, 4, destSheet));
+        CPPUNIT_ASSERT_EQUAL(u"Note F2"_ustr, getNote(8, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note C5"_ustr, getNote(5, 4, destSheet));
 
     // check row 16 on src sheet, refs to copied/cut range
-    CPPUNIT_ASSERT_EQUAL(OUString("=C5"), m_pDoc->GetFormula(1, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C$5"), m_pDoc->GetFormula(2, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C5"), m_pDoc->GetFormula(3, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=C$5"), m_pDoc->GetFormula(4, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C5:C5)"), m_pDoc->GetFormula(5, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C$5:$C$5)"), m_pDoc->GetFormula(6, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C5:$C5)"), m_pDoc->GetFormula(7, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C$5:C$5)"), m_pDoc->GetFormula(8, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$6)"), m_pDoc->GetFormula(9, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$10)"), m_pDoc->GetFormula(10, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C5"_ustr, m_pDoc->GetFormula(1, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=$C$5"_ustr, m_pDoc->GetFormula(2, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=$C5"_ustr, m_pDoc->GetFormula(3, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C$5"_ustr, m_pDoc->GetFormula(4, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C5:C5)"_ustr, m_pDoc->GetFormula(5, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C$5:$C$5)"_ustr, m_pDoc->GetFormula(6, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C5:$C5)"_ustr, m_pDoc->GetFormula(7, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C$5:C$5)"_ustr, m_pDoc->GetFormula(8, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$6)"_ustr, m_pDoc->GetFormula(9, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$10)"_ustr, m_pDoc->GetFormula(10, 16, srcSheet));
 
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 16, srcSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 16, srcSheet));
@@ -5722,16 +5708,16 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRow(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(9, 16, srcSheet));
     CPPUNIT_ASSERT_EQUAL(-17.0, m_pDoc->GetValue(10, 16, srcSheet));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C5"), m_pDoc->GetFormula(1, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_aCa5"), m_pDoc->GetFormula(2, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_aC5"), m_pDoc->GetFormula(3, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_Ca5"), m_pDoc->GetFormula(4, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_C5_C5)"), m_pDoc->GetFormula(5, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa5)"), m_pDoc->GetFormula(6, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aC5_aC5)"), m_pDoc->GetFormula(7, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_Ca5_Ca5)"), m_pDoc->GetFormula(8, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa8)"), m_pDoc->GetFormula(9, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa10)"), m_pDoc->GetFormula(10, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C5"_ustr, m_pDoc->GetFormula(1, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_aCa5"_ustr, m_pDoc->GetFormula(2, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_aC5"_ustr, m_pDoc->GetFormula(3, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_Ca5"_ustr, m_pDoc->GetFormula(4, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_C5_C5)"_ustr, m_pDoc->GetFormula(5, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa5)"_ustr, m_pDoc->GetFormula(6, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aC5_aC5)"_ustr, m_pDoc->GetFormula(7, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_Ca5_Ca5)"_ustr, m_pDoc->GetFormula(8, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa8)"_ustr, m_pDoc->GetFormula(9, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa10)"_ustr, m_pDoc->GetFormula(10, 17, srcSheet));
 
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 17, srcSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 17, srcSheet));
@@ -5745,55 +5731,55 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRow(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(-17.0, m_pDoc->GetValue(10, 17, srcSheet));
 
     // Existing references to the destination range must not change
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D1"), m_pDoc->GetFormula(3, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D2"), m_pDoc->GetFormula(3, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D3"), m_pDoc->GetFormula(3, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D4"), m_pDoc->GetFormula(3, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D5"), m_pDoc->GetFormula(3, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D6"), m_pDoc->GetFormula(3, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D7"), m_pDoc->GetFormula(3, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E1"), m_pDoc->GetFormula(4, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E2"), m_pDoc->GetFormula(4, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E3"), m_pDoc->GetFormula(4, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E4"), m_pDoc->GetFormula(4, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E5"), m_pDoc->GetFormula(4, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E6"), m_pDoc->GetFormula(4, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E7"), m_pDoc->GetFormula(4, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F1"), m_pDoc->GetFormula(5, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F2"), m_pDoc->GetFormula(5, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F3"), m_pDoc->GetFormula(5, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F4"), m_pDoc->GetFormula(5, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F5"), m_pDoc->GetFormula(5, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F6"), m_pDoc->GetFormula(5, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F7"), m_pDoc->GetFormula(5, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G1"), m_pDoc->GetFormula(6, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G2"), m_pDoc->GetFormula(6, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G3"), m_pDoc->GetFormula(6, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G4"), m_pDoc->GetFormula(6, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G5"), m_pDoc->GetFormula(6, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G6"), m_pDoc->GetFormula(6, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G7"), m_pDoc->GetFormula(6, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H1"), m_pDoc->GetFormula(7, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H2"), m_pDoc->GetFormula(7, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H3"), m_pDoc->GetFormula(7, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H4"), m_pDoc->GetFormula(7, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H5"), m_pDoc->GetFormula(7, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H6"), m_pDoc->GetFormula(7, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H7"), m_pDoc->GetFormula(7, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I1"), m_pDoc->GetFormula(8, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I2"), m_pDoc->GetFormula(8, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I3"), m_pDoc->GetFormula(8, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I4"), m_pDoc->GetFormula(8, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I5"), m_pDoc->GetFormula(8, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I6"), m_pDoc->GetFormula(8, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I7"), m_pDoc->GetFormula(8, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J1"), m_pDoc->GetFormula(9, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J2"), m_pDoc->GetFormula(9, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J3"), m_pDoc->GetFormula(9, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J4"), m_pDoc->GetFormula(9, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J5"), m_pDoc->GetFormula(9, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J6"), m_pDoc->GetFormula(9, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J7"), m_pDoc->GetFormula(9, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D1"_ustr, m_pDoc->GetFormula(3, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D2"_ustr, m_pDoc->GetFormula(3, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D3"_ustr, m_pDoc->GetFormula(3, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D4"_ustr, m_pDoc->GetFormula(3, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D5"_ustr, m_pDoc->GetFormula(3, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D6"_ustr, m_pDoc->GetFormula(3, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D7"_ustr, m_pDoc->GetFormula(3, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E1"_ustr, m_pDoc->GetFormula(4, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E2"_ustr, m_pDoc->GetFormula(4, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E3"_ustr, m_pDoc->GetFormula(4, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E4"_ustr, m_pDoc->GetFormula(4, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E5"_ustr, m_pDoc->GetFormula(4, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E6"_ustr, m_pDoc->GetFormula(4, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E7"_ustr, m_pDoc->GetFormula(4, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F1"_ustr, m_pDoc->GetFormula(5, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F2"_ustr, m_pDoc->GetFormula(5, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F3"_ustr, m_pDoc->GetFormula(5, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F4"_ustr, m_pDoc->GetFormula(5, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F5"_ustr, m_pDoc->GetFormula(5, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F6"_ustr, m_pDoc->GetFormula(5, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F7"_ustr, m_pDoc->GetFormula(5, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G1"_ustr, m_pDoc->GetFormula(6, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G2"_ustr, m_pDoc->GetFormula(6, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G3"_ustr, m_pDoc->GetFormula(6, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G4"_ustr, m_pDoc->GetFormula(6, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G5"_ustr, m_pDoc->GetFormula(6, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G6"_ustr, m_pDoc->GetFormula(6, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G7"_ustr, m_pDoc->GetFormula(6, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H1"_ustr, m_pDoc->GetFormula(7, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H2"_ustr, m_pDoc->GetFormula(7, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H3"_ustr, m_pDoc->GetFormula(7, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H4"_ustr, m_pDoc->GetFormula(7, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H5"_ustr, m_pDoc->GetFormula(7, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H6"_ustr, m_pDoc->GetFormula(7, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H7"_ustr, m_pDoc->GetFormula(7, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I1"_ustr, m_pDoc->GetFormula(8, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I2"_ustr, m_pDoc->GetFormula(8, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I3"_ustr, m_pDoc->GetFormula(8, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I4"_ustr, m_pDoc->GetFormula(8, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I5"_ustr, m_pDoc->GetFormula(8, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I6"_ustr, m_pDoc->GetFormula(8, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I7"_ustr, m_pDoc->GetFormula(8, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J1"_ustr, m_pDoc->GetFormula(9, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J2"_ustr, m_pDoc->GetFormula(9, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J3"_ustr, m_pDoc->GetFormula(9, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J4"_ustr, m_pDoc->GetFormula(9, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J5"_ustr, m_pDoc->GetFormula(9, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J6"_ustr, m_pDoc->GetFormula(9, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J7"_ustr, m_pDoc->GetFormula(9, 107, srcSheet));
 
     m_pDoc->DeleteTab(destSheet);
     m_pDoc->DeleteTab(srcSheet);
@@ -5835,63 +5821,63 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFiltered(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 5, destSheet));
     // col 4, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(4, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(4, 0, destSheet));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(4, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+10"), m_pDoc->GetFormula(4, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=G3+30"), m_pDoc->GetFormula(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D2+10"_ustr, m_pDoc->GetFormula(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=G3+30"_ustr, m_pDoc->GetFormula(4, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(4, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("q"), m_pDoc->GetString(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"q"_ustr, m_pDoc->GetString(4, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(-12.0, m_pDoc->GetValue(4, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(4, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(4, 5, destSheet));
     // col 5, strings
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(5, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(5, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("c"), m_pDoc->GetString(5, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("r"), m_pDoc->GetString(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(5, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"a"_ustr, m_pDoc->GetString(5, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"c"_ustr, m_pDoc->GetString(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"r"_ustr, m_pDoc->GetString(5, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(-13.0, m_pDoc->GetValue(5, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(5, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(5, 5, destSheet));
     // col 6, rich text
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 0, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 0, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 1, destSheet));
     CPPUNIT_ASSERT(pEditObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("R1"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"R1"_ustr, pEditObj->GetText(0));
     CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(6, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("s"), m_pDoc->GetString(6, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"s"_ustr, m_pDoc->GetString(6, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(-14.0, m_pDoc->GetValue(6, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(6, 5, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(6, 5, destSheet));
     CPPUNIT_ASSERT(pEditObj == nullptr);
     // col 7, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2+D4+60"), m_pDoc->GetFormula(7, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=D2+D4+60"_ustr, m_pDoc->GetFormula(7, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(67.0, m_pDoc->GetValue(7, 1, destSheet));
     if (!bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(7, 2, destSheet));
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("t"), m_pDoc->GetString(7, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"t"_ustr, m_pDoc->GetString(7, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(-15.0, m_pDoc->GetValue(7, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 5, destSheet));
     // col 8, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(8, 0, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIF(D2:D5;\"<4\")"), m_pDoc->GetFormula(8, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(8, 0, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUMIF(D2:D5;\"<4\")"_ustr, m_pDoc->GetFormula(8, 1, destSheet));
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(8, 1, destSheet));
     if (!bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(8, 2, destSheet));
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("u"), m_pDoc->GetString(8, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"u"_ustr, m_pDoc->GetString(8, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(-16.0, m_pDoc->GetValue(8, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(8, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(8, 5, destSheet));
     // col 9
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 0, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(9, 1, destSheet));
@@ -6026,28 +6012,28 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFiltered(bool bSkipEmpty)
     CPPUNIT_ASSERT(!m_pDoc->HasNote(9, 4, destSheet));
 
     // check values of notes
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A1"), getNote(3, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note A3"), getNote(3, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B1"), getNote(4, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note B3"), getNote(4, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C3"), getNote(5, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D1"), getNote(6, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note D3"), getNote(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note A1"_ustr, getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note A3"_ustr, getNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note B1"_ustr, getNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note B3"_ustr, getNote(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note C3"_ustr, getNote(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note D1"_ustr, getNote(6, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note D3"_ustr, getNote(6, 2, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(7, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C5"), getNote(5, 3, destSheet));
+        CPPUNIT_ASSERT_EQUAL(u"Note E2"_ustr, getNote(7, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note C5"_ustr, getNote(5, 3, destSheet));
 
     // check row 16 on src sheet, refs to copied/cut range
-    CPPUNIT_ASSERT_EQUAL(OUString("=C5"), m_pDoc->GetFormula(1, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C$5"), m_pDoc->GetFormula(2, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C5"), m_pDoc->GetFormula(3, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=C$5"), m_pDoc->GetFormula(4, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C5:C5)"), m_pDoc->GetFormula(5, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C$5:$C$5)"), m_pDoc->GetFormula(6, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C5:$C5)"), m_pDoc->GetFormula(7, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C$5:C$5)"), m_pDoc->GetFormula(8, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$6)"), m_pDoc->GetFormula(9, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$10)"), m_pDoc->GetFormula(10, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C5"_ustr, m_pDoc->GetFormula(1, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=$C$5"_ustr, m_pDoc->GetFormula(2, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=$C5"_ustr, m_pDoc->GetFormula(3, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C$5"_ustr, m_pDoc->GetFormula(4, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C5:C5)"_ustr, m_pDoc->GetFormula(5, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C$5:$C$5)"_ustr, m_pDoc->GetFormula(6, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C5:$C5)"_ustr, m_pDoc->GetFormula(7, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C$5:C$5)"_ustr, m_pDoc->GetFormula(8, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$6)"_ustr, m_pDoc->GetFormula(9, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$10)"_ustr, m_pDoc->GetFormula(10, 16, srcSheet));
 
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 16, srcSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 16, srcSheet));
@@ -6060,16 +6046,16 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFiltered(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(9, 16, srcSheet));
     CPPUNIT_ASSERT_EQUAL(-17.0, m_pDoc->GetValue(10, 16, srcSheet));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C5"), m_pDoc->GetFormula(1, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_aCa5"), m_pDoc->GetFormula(2, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_aC5"), m_pDoc->GetFormula(3, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_Ca5"), m_pDoc->GetFormula(4, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_C5_C5)"), m_pDoc->GetFormula(5, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa5)"), m_pDoc->GetFormula(6, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aC5_aC5)"), m_pDoc->GetFormula(7, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_Ca5_Ca5)"), m_pDoc->GetFormula(8, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa8)"), m_pDoc->GetFormula(9, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa10)"), m_pDoc->GetFormula(10, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C5"_ustr, m_pDoc->GetFormula(1, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_aCa5"_ustr, m_pDoc->GetFormula(2, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_aC5"_ustr, m_pDoc->GetFormula(3, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_Ca5"_ustr, m_pDoc->GetFormula(4, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_C5_C5)"_ustr, m_pDoc->GetFormula(5, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa5)"_ustr, m_pDoc->GetFormula(6, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aC5_aC5)"_ustr, m_pDoc->GetFormula(7, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_Ca5_Ca5)"_ustr, m_pDoc->GetFormula(8, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa8)"_ustr, m_pDoc->GetFormula(9, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa10)"_ustr, m_pDoc->GetFormula(10, 17, srcSheet));
 
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 17, srcSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 17, srcSheet));
@@ -6083,55 +6069,55 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFiltered(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(-17.0, m_pDoc->GetValue(10, 17, srcSheet));
 
     // Existing references to the destination range must not change
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D1"), m_pDoc->GetFormula(3, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D2"), m_pDoc->GetFormula(3, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D3"), m_pDoc->GetFormula(3, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D4"), m_pDoc->GetFormula(3, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D5"), m_pDoc->GetFormula(3, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D6"), m_pDoc->GetFormula(3, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D7"), m_pDoc->GetFormula(3, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E1"), m_pDoc->GetFormula(4, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E2"), m_pDoc->GetFormula(4, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E3"), m_pDoc->GetFormula(4, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E4"), m_pDoc->GetFormula(4, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E5"), m_pDoc->GetFormula(4, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E6"), m_pDoc->GetFormula(4, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E7"), m_pDoc->GetFormula(4, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F1"), m_pDoc->GetFormula(5, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F2"), m_pDoc->GetFormula(5, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F3"), m_pDoc->GetFormula(5, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F4"), m_pDoc->GetFormula(5, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F5"), m_pDoc->GetFormula(5, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F6"), m_pDoc->GetFormula(5, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F7"), m_pDoc->GetFormula(5, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G1"), m_pDoc->GetFormula(6, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G2"), m_pDoc->GetFormula(6, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G3"), m_pDoc->GetFormula(6, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G4"), m_pDoc->GetFormula(6, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G5"), m_pDoc->GetFormula(6, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G6"), m_pDoc->GetFormula(6, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G7"), m_pDoc->GetFormula(6, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H1"), m_pDoc->GetFormula(7, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H2"), m_pDoc->GetFormula(7, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H3"), m_pDoc->GetFormula(7, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H4"), m_pDoc->GetFormula(7, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H5"), m_pDoc->GetFormula(7, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H6"), m_pDoc->GetFormula(7, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H7"), m_pDoc->GetFormula(7, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I1"), m_pDoc->GetFormula(8, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I2"), m_pDoc->GetFormula(8, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I3"), m_pDoc->GetFormula(8, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I4"), m_pDoc->GetFormula(8, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I5"), m_pDoc->GetFormula(8, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I6"), m_pDoc->GetFormula(8, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I7"), m_pDoc->GetFormula(8, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J1"), m_pDoc->GetFormula(9, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J2"), m_pDoc->GetFormula(9, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J3"), m_pDoc->GetFormula(9, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J4"), m_pDoc->GetFormula(9, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J5"), m_pDoc->GetFormula(9, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J6"), m_pDoc->GetFormula(9, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J7"), m_pDoc->GetFormula(9, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D1"_ustr, m_pDoc->GetFormula(3, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D2"_ustr, m_pDoc->GetFormula(3, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D3"_ustr, m_pDoc->GetFormula(3, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D4"_ustr, m_pDoc->GetFormula(3, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D5"_ustr, m_pDoc->GetFormula(3, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D6"_ustr, m_pDoc->GetFormula(3, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D7"_ustr, m_pDoc->GetFormula(3, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E1"_ustr, m_pDoc->GetFormula(4, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E2"_ustr, m_pDoc->GetFormula(4, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E3"_ustr, m_pDoc->GetFormula(4, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E4"_ustr, m_pDoc->GetFormula(4, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E5"_ustr, m_pDoc->GetFormula(4, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E6"_ustr, m_pDoc->GetFormula(4, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E7"_ustr, m_pDoc->GetFormula(4, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F1"_ustr, m_pDoc->GetFormula(5, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F2"_ustr, m_pDoc->GetFormula(5, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F3"_ustr, m_pDoc->GetFormula(5, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F4"_ustr, m_pDoc->GetFormula(5, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F5"_ustr, m_pDoc->GetFormula(5, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F6"_ustr, m_pDoc->GetFormula(5, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F7"_ustr, m_pDoc->GetFormula(5, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G1"_ustr, m_pDoc->GetFormula(6, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G2"_ustr, m_pDoc->GetFormula(6, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G3"_ustr, m_pDoc->GetFormula(6, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G4"_ustr, m_pDoc->GetFormula(6, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G5"_ustr, m_pDoc->GetFormula(6, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G6"_ustr, m_pDoc->GetFormula(6, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G7"_ustr, m_pDoc->GetFormula(6, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H1"_ustr, m_pDoc->GetFormula(7, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H2"_ustr, m_pDoc->GetFormula(7, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H3"_ustr, m_pDoc->GetFormula(7, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H4"_ustr, m_pDoc->GetFormula(7, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H5"_ustr, m_pDoc->GetFormula(7, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H6"_ustr, m_pDoc->GetFormula(7, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H7"_ustr, m_pDoc->GetFormula(7, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I1"_ustr, m_pDoc->GetFormula(8, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I2"_ustr, m_pDoc->GetFormula(8, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I3"_ustr, m_pDoc->GetFormula(8, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I4"_ustr, m_pDoc->GetFormula(8, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I5"_ustr, m_pDoc->GetFormula(8, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I6"_ustr, m_pDoc->GetFormula(8, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I7"_ustr, m_pDoc->GetFormula(8, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J1"_ustr, m_pDoc->GetFormula(9, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J2"_ustr, m_pDoc->GetFormula(9, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J3"_ustr, m_pDoc->GetFormula(9, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J4"_ustr, m_pDoc->GetFormula(9, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J5"_ustr, m_pDoc->GetFormula(9, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J6"_ustr, m_pDoc->GetFormula(9, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J7"_ustr, m_pDoc->GetFormula(9, 107, srcSheet));
 
     m_pDoc->DeleteTab(destSheet);
     m_pDoc->DeleteTab(srcSheet);
@@ -6178,51 +6164,50 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowTranspose(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell I2", 1000.0, m_pDoc->GetValue(8, 1, destSheet));
     // row 2, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(2, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D3", 11.0, m_pDoc->GetValue(3, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D3", OUString("=D2+10"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D3", u"=D2+10"_ustr,
                                  m_pDoc->GetFormula(3, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed E3", OUString("=E2+20"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed E3", u"=E2+20"_ustr,
                                  m_pDoc->GetFormula(4, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed E3", 22.0, m_pDoc->GetValue(4, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F3", 35.0, m_pDoc->GetValue(5, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F3", OUString("=F5+30"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed F3", u"=F5+30"_ustr,
                                  m_pDoc->GetFormula(5, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G4", OUString("q"), m_pDoc->GetString(6, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G4", u"q"_ustr, m_pDoc->GetString(6, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(-12.0, m_pDoc->GetValue(7, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(8, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(8, 2, destSheet));
     // row 3, strings
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D4", OUString("a"), m_pDoc->GetString(3, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", OUString("b"), m_pDoc->GetString(4, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", OUString("c"), m_pDoc->GetString(5, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G4", OUString("r"), m_pDoc->GetString(6, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(2, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D4", u"a"_ustr, m_pDoc->GetString(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", u"b"_ustr, m_pDoc->GetString(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", u"c"_ustr, m_pDoc->GetString(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G4", u"r"_ustr, m_pDoc->GetString(6, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(-13.0, m_pDoc->GetValue(7, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(8, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(8, 3, destSheet));
     // row 4, rich text
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 4, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(2, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be no edit cell in C5.", pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(3, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be an edit cell in D5.", pEditObj);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong in D5 ", OUString("R1"),
-                                 pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong in D5 ", u"R1"_ustr, pEditObj->GetText(0));
     pEditObj = m_pDoc->GetEditText(ScAddress(4, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be an edit cell in E5.", pEditObj);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong E5.", OUString("R2"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong E5.", u"R2"_ustr, pEditObj->GetText(0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell F5", 5.0, m_pDoc->GetValue(5, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G5", OUString("s"), m_pDoc->GetString(6, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G5", u"s"_ustr, m_pDoc->GetString(6, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(-14.0, m_pDoc->GetValue(7, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 4, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(8, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be no edit cell in I5.", pEditObj == nullptr);
     // row 5, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", OUString("=D2+F2+60"),
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", u"=D2+F2+60"_ustr,
                                  m_pDoc->GetFormula(3, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", 64.0, m_pDoc->GetValue(3, 5, destSheet));
     if (!bSkipEmpty)
@@ -6235,14 +6220,14 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowTranspose(bool bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 5, destSheet));
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 5, destSheet));
     }
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G6", OUString("t"), m_pDoc->GetString(6, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G6", u"t"_ustr, m_pDoc->GetString(6, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL(-15.0, m_pDoc->GetValue(7, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(8, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(8, 5, destSheet));
     // row 6, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 6, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 6, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", OUString("=SUMIF(D2:G2;\"<4\")"),
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(2, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", u"=SUMIF(D2:G2;\"<4\")"_ustr,
                                  m_pDoc->GetFormula(3, 6, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", 6.0, m_pDoc->GetValue(3, 6, destSheet));
     if (!bSkipEmpty)
@@ -6255,10 +6240,10 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowTranspose(bool bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 6, destSheet));
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(5, 6, destSheet));
     }
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G7", OUString("u"), m_pDoc->GetString(6, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell G7", u"u"_ustr, m_pDoc->GetString(6, 6, destSheet));
     CPPUNIT_ASSERT_EQUAL(-16.0, m_pDoc->GetValue(7, 6, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(8, 6, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(8, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(8, 6, destSheet));
     // row 7
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 7, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 7, destSheet));
@@ -6395,36 +6380,36 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowTranspose(bool bSkipEmpty)
     CPPUNIT_ASSERT_MESSAGE("H8: no note", !m_pDoc->HasNote(7, 7, destSheet));
 
     // check values of notes
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", OUString("Note A1"), getNote(3, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E2", OUString("Note A2"), getNote(4, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F2", OUString("Note A3"), getNote(5, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", u"Note A1"_ustr, getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E2", u"Note A2"_ustr, getNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F2", u"Note A3"_ustr, getNote(5, 1, destSheet));
     // G2 has no note
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D3", OUString("Note B1"), getNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D3", u"Note B1"_ustr, getNote(3, 2, destSheet));
     // E3 has no note
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F3", OUString("Note B3"), getNote(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F3", u"Note B3"_ustr, getNote(5, 2, destSheet));
     // D4 has no note
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", OUString("Note C2"), getNote(4, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", OUString("Note C3"), getNote(5, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D5", OUString("Note D1"), getNote(3, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E5", OUString("Note D2"), getNote(4, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F5", OUString("Note D3"), getNote(5, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", u"Note C2"_ustr, getNote(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", u"Note C3"_ustr, getNote(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D5", u"Note D1"_ustr, getNote(3, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E5", u"Note D2"_ustr, getNote(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F5", u"Note D3"_ustr, getNote(5, 4, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(5, 5, destSheet));
+        CPPUNIT_ASSERT_EQUAL(u"Note E2"_ustr, getNote(5, 5, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E7", OUString("Note F2"), getNote(4, 6, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C5"), getNote(6, 3, destSheet));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E7", u"Note F2"_ustr, getNote(4, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note C5"_ustr, getNote(6, 3, destSheet));
 
     // check row 16 on src sheet, refs to copied/cut range
-    CPPUNIT_ASSERT_EQUAL(OUString("=C5"), m_pDoc->GetFormula(1, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C$5"), m_pDoc->GetFormula(2, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C5"), m_pDoc->GetFormula(3, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=C$5"), m_pDoc->GetFormula(4, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C5:C5)"), m_pDoc->GetFormula(5, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C$5:$C$5)"), m_pDoc->GetFormula(6, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C5:$C5)"), m_pDoc->GetFormula(7, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C$5:C$5)"), m_pDoc->GetFormula(8, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$6)"), m_pDoc->GetFormula(9, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$10)"), m_pDoc->GetFormula(10, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C5"_ustr, m_pDoc->GetFormula(1, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=$C$5"_ustr, m_pDoc->GetFormula(2, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=$C5"_ustr, m_pDoc->GetFormula(3, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C$5"_ustr, m_pDoc->GetFormula(4, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C5:C5)"_ustr, m_pDoc->GetFormula(5, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C$5:$C$5)"_ustr, m_pDoc->GetFormula(6, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C5:$C5)"_ustr, m_pDoc->GetFormula(7, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C$5:C$5)"_ustr, m_pDoc->GetFormula(8, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$6)"_ustr, m_pDoc->GetFormula(9, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$10)"_ustr, m_pDoc->GetFormula(10, 16, srcSheet));
 
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 16, srcSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 16, srcSheet));
@@ -6437,16 +6422,16 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowTranspose(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(9, 16, srcSheet));
     CPPUNIT_ASSERT_EQUAL(-17.0, m_pDoc->GetValue(10, 16, srcSheet));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C5"), m_pDoc->GetFormula(1, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_aCa5"), m_pDoc->GetFormula(2, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_aC5"), m_pDoc->GetFormula(3, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_Ca5"), m_pDoc->GetFormula(4, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_C5_C5)"), m_pDoc->GetFormula(5, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa5)"), m_pDoc->GetFormula(6, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aC5_aC5)"), m_pDoc->GetFormula(7, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_Ca5_Ca5)"), m_pDoc->GetFormula(8, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa8)"), m_pDoc->GetFormula(9, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa10)"), m_pDoc->GetFormula(10, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C5"_ustr, m_pDoc->GetFormula(1, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_aCa5"_ustr, m_pDoc->GetFormula(2, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_aC5"_ustr, m_pDoc->GetFormula(3, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_Ca5"_ustr, m_pDoc->GetFormula(4, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_C5_C5)"_ustr, m_pDoc->GetFormula(5, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa5)"_ustr, m_pDoc->GetFormula(6, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aC5_aC5)"_ustr, m_pDoc->GetFormula(7, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_Ca5_Ca5)"_ustr, m_pDoc->GetFormula(8, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa8)"_ustr, m_pDoc->GetFormula(9, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa10)"_ustr, m_pDoc->GetFormula(10, 17, srcSheet));
 
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 17, srcSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 17, srcSheet));
@@ -6460,55 +6445,55 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowTranspose(bool bSkipEmpty)
     CPPUNIT_ASSERT_EQUAL(-17.0, m_pDoc->GetValue(10, 17, srcSheet));
 
     // Existing references to the destination range must not change
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D1"), m_pDoc->GetFormula(3, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D2"), m_pDoc->GetFormula(3, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D3"), m_pDoc->GetFormula(3, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D4"), m_pDoc->GetFormula(3, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D5"), m_pDoc->GetFormula(3, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D6"), m_pDoc->GetFormula(3, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D7"), m_pDoc->GetFormula(3, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E1"), m_pDoc->GetFormula(4, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E2"), m_pDoc->GetFormula(4, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E3"), m_pDoc->GetFormula(4, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E4"), m_pDoc->GetFormula(4, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E5"), m_pDoc->GetFormula(4, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E6"), m_pDoc->GetFormula(4, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E7"), m_pDoc->GetFormula(4, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F1"), m_pDoc->GetFormula(5, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F2"), m_pDoc->GetFormula(5, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F3"), m_pDoc->GetFormula(5, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F4"), m_pDoc->GetFormula(5, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F5"), m_pDoc->GetFormula(5, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F6"), m_pDoc->GetFormula(5, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F7"), m_pDoc->GetFormula(5, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G1"), m_pDoc->GetFormula(6, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G2"), m_pDoc->GetFormula(6, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G3"), m_pDoc->GetFormula(6, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G4"), m_pDoc->GetFormula(6, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G5"), m_pDoc->GetFormula(6, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G6"), m_pDoc->GetFormula(6, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G7"), m_pDoc->GetFormula(6, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H1"), m_pDoc->GetFormula(7, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H2"), m_pDoc->GetFormula(7, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H3"), m_pDoc->GetFormula(7, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H4"), m_pDoc->GetFormula(7, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H5"), m_pDoc->GetFormula(7, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H6"), m_pDoc->GetFormula(7, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H7"), m_pDoc->GetFormula(7, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I1"), m_pDoc->GetFormula(8, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I2"), m_pDoc->GetFormula(8, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I3"), m_pDoc->GetFormula(8, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I4"), m_pDoc->GetFormula(8, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I5"), m_pDoc->GetFormula(8, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I6"), m_pDoc->GetFormula(8, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I7"), m_pDoc->GetFormula(8, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J1"), m_pDoc->GetFormula(9, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J2"), m_pDoc->GetFormula(9, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J3"), m_pDoc->GetFormula(9, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J4"), m_pDoc->GetFormula(9, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J5"), m_pDoc->GetFormula(9, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J6"), m_pDoc->GetFormula(9, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J7"), m_pDoc->GetFormula(9, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D1"_ustr, m_pDoc->GetFormula(3, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D2"_ustr, m_pDoc->GetFormula(3, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D3"_ustr, m_pDoc->GetFormula(3, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D4"_ustr, m_pDoc->GetFormula(3, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D5"_ustr, m_pDoc->GetFormula(3, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D6"_ustr, m_pDoc->GetFormula(3, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D7"_ustr, m_pDoc->GetFormula(3, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E1"_ustr, m_pDoc->GetFormula(4, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E2"_ustr, m_pDoc->GetFormula(4, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E3"_ustr, m_pDoc->GetFormula(4, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E4"_ustr, m_pDoc->GetFormula(4, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E5"_ustr, m_pDoc->GetFormula(4, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E6"_ustr, m_pDoc->GetFormula(4, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E7"_ustr, m_pDoc->GetFormula(4, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F1"_ustr, m_pDoc->GetFormula(5, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F2"_ustr, m_pDoc->GetFormula(5, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F3"_ustr, m_pDoc->GetFormula(5, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F4"_ustr, m_pDoc->GetFormula(5, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F5"_ustr, m_pDoc->GetFormula(5, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F6"_ustr, m_pDoc->GetFormula(5, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F7"_ustr, m_pDoc->GetFormula(5, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G1"_ustr, m_pDoc->GetFormula(6, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G2"_ustr, m_pDoc->GetFormula(6, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G3"_ustr, m_pDoc->GetFormula(6, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G4"_ustr, m_pDoc->GetFormula(6, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G5"_ustr, m_pDoc->GetFormula(6, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G6"_ustr, m_pDoc->GetFormula(6, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G7"_ustr, m_pDoc->GetFormula(6, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H1"_ustr, m_pDoc->GetFormula(7, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H2"_ustr, m_pDoc->GetFormula(7, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H3"_ustr, m_pDoc->GetFormula(7, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H4"_ustr, m_pDoc->GetFormula(7, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H5"_ustr, m_pDoc->GetFormula(7, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H6"_ustr, m_pDoc->GetFormula(7, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H7"_ustr, m_pDoc->GetFormula(7, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I1"_ustr, m_pDoc->GetFormula(8, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I2"_ustr, m_pDoc->GetFormula(8, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I3"_ustr, m_pDoc->GetFormula(8, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I4"_ustr, m_pDoc->GetFormula(8, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I5"_ustr, m_pDoc->GetFormula(8, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I6"_ustr, m_pDoc->GetFormula(8, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I7"_ustr, m_pDoc->GetFormula(8, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J1"_ustr, m_pDoc->GetFormula(9, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J2"_ustr, m_pDoc->GetFormula(9, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J3"_ustr, m_pDoc->GetFormula(9, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J4"_ustr, m_pDoc->GetFormula(9, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J5"_ustr, m_pDoc->GetFormula(9, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J6"_ustr, m_pDoc->GetFormula(9, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J7"_ustr, m_pDoc->GetFormula(9, 107, srcSheet));
 
     m_pDoc->DeleteTab(destSheet);
     m_pDoc->DeleteTab(srcSheet);
@@ -6554,44 +6539,43 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFilteredTranspose(bool bSk
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell H2", 1000.0, m_pDoc->GetValue(7, 1, destSheet));
     // row 2, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(2, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D3", 11.0, m_pDoc->GetValue(3, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D3", OUString("=D2+10"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D3", u"=D2+10"_ustr,
                                  m_pDoc->GetFormula(3, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed E3", 35.0, m_pDoc->GetValue(4, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed E3", OUString("=E5+30"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed E3", u"=E5+30"_ustr,
                                  m_pDoc->GetFormula(4, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", OUString("q"), m_pDoc->GetString(5, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", u"q"_ustr, m_pDoc->GetString(5, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(-12.0, m_pDoc->GetValue(6, 2, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 2, destSheet));
     // row 3, strings
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D4", OUString("a"), m_pDoc->GetString(3, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", OUString("c"), m_pDoc->GetString(4, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", OUString("r"), m_pDoc->GetString(5, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(2, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D4", u"a"_ustr, m_pDoc->GetString(3, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", u"c"_ustr, m_pDoc->GetString(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F4", u"r"_ustr, m_pDoc->GetString(5, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(-13.0, m_pDoc->GetValue(6, 3, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 3, destSheet));
     // row 4, rich text
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 4, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(2, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be no edit cell in C5.", pEditObj == nullptr);
     pEditObj = m_pDoc->GetEditText(ScAddress(3, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be an edit cell in D5.", pEditObj);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong in D5 ", OUString("R1"),
-                                 pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Edit cell value wrong in D5 ", u"R1"_ustr, pEditObj->GetText(0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed cell E5", 5.0, m_pDoc->GetValue(4, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F5", OUString("s"), m_pDoc->GetString(5, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F5", u"s"_ustr, m_pDoc->GetString(5, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(-14.0, m_pDoc->GetValue(6, 4, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 4, destSheet));
     pEditObj = m_pDoc->GetEditText(ScAddress(7, 4, destSheet));
     CPPUNIT_ASSERT_MESSAGE("There should be no edit cell in H5.", pEditObj == nullptr);
     // row 5, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", OUString("=D2+F2+60"),
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(2, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", u"=D2+F2+60"_ustr,
                                  m_pDoc->GetFormula(3, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D6", 67.0, m_pDoc->GetValue(3, 5, destSheet));
     if (!bSkipEmpty)
@@ -6600,24 +6584,24 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFilteredTranspose(bool bSk
     }
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F6", OUString("t"), m_pDoc->GetString(5, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F6", u"t"_ustr, m_pDoc->GetString(5, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL(-15.0, m_pDoc->GetValue(6, 5, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 5, destSheet));
     // row 6, formulas
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 6, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(2, 6, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", OUString("=SUMIF(D2:G2;\"<4\")"),
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(2, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", u"=SUMIF(D2:G2;\"<4\")"_ustr,
                                  m_pDoc->GetFormula(3, 6, destSheet));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("transposed D7", -7.0, m_pDoc->GetValue(3, 6, destSheet));
     if (!bSkipEmpty)
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E7", OUString(), m_pDoc->GetString(4, 6, destSheet));
     else
         CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(4, 6, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F7", OUString("u"), m_pDoc->GetString(5, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell F7", u"u"_ustr, m_pDoc->GetString(5, 6, destSheet));
     CPPUNIT_ASSERT_EQUAL(-16.0, m_pDoc->GetValue(6, 6, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(7, 6, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), m_pDoc->GetString(7, 6, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, m_pDoc->GetString(7, 6, destSheet));
     // row 7
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(2, 7, destSheet));
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(3, 7, destSheet));
@@ -6756,28 +6740,28 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFilteredTranspose(bool bSk
     CPPUNIT_ASSERT_MESSAGE("G8: no note", !m_pDoc->HasNote(6, 7, destSheet));
 
     // check values of notes
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", OUString("Note A1"), getNote(3, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E2", OUString("Note A3"), getNote(4, 1, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D3", OUString("Note B1"), getNote(3, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E3", OUString("Note B3"), getNote(4, 2, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", OUString("Note C3"), getNote(4, 3, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D5", OUString("Note D1"), getNote(3, 4, destSheet));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E5", OUString("Note D3"), getNote(4, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D2", u"Note A1"_ustr, getNote(3, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E2", u"Note A3"_ustr, getNote(4, 1, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D3", u"Note B1"_ustr, getNote(3, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E3", u"Note B3"_ustr, getNote(4, 2, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E4", u"Note C3"_ustr, getNote(4, 3, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D5", u"Note D1"_ustr, getNote(3, 4, destSheet));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell E5", u"Note D3"_ustr, getNote(4, 4, destSheet));
     if (!bSkipEmpty)
-        CPPUNIT_ASSERT_EQUAL(OUString("Note E2"), getNote(4, 5, destSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("Note C5"), getNote(5, 3, destSheet));
+        CPPUNIT_ASSERT_EQUAL(u"Note E2"_ustr, getNote(4, 5, destSheet));
+    CPPUNIT_ASSERT_EQUAL(u"Note C5"_ustr, getNote(5, 3, destSheet));
 
     // check row 16 on src sheet, refs to copied/cut range
-    CPPUNIT_ASSERT_EQUAL(OUString("=C5"), m_pDoc->GetFormula(1, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C$5"), m_pDoc->GetFormula(2, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C5"), m_pDoc->GetFormula(3, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=C$5"), m_pDoc->GetFormula(4, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C5:C5)"), m_pDoc->GetFormula(5, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C$5:$C$5)"), m_pDoc->GetFormula(6, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C5:$C5)"), m_pDoc->GetFormula(7, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C$5:C$5)"), m_pDoc->GetFormula(8, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$6)"), m_pDoc->GetFormula(9, 16, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$B$10)"), m_pDoc->GetFormula(10, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C5"_ustr, m_pDoc->GetFormula(1, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=$C$5"_ustr, m_pDoc->GetFormula(2, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=$C5"_ustr, m_pDoc->GetFormula(3, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=C$5"_ustr, m_pDoc->GetFormula(4, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C5:C5)"_ustr, m_pDoc->GetFormula(5, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C$5:$C$5)"_ustr, m_pDoc->GetFormula(6, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C5:$C5)"_ustr, m_pDoc->GetFormula(7, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C$5:C$5)"_ustr, m_pDoc->GetFormula(8, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$6)"_ustr, m_pDoc->GetFormula(9, 16, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$B$10)"_ustr, m_pDoc->GetFormula(10, 16, srcSheet));
 
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 16, srcSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 16, srcSheet));
@@ -6790,16 +6774,16 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFilteredTranspose(bool bSk
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(9, 16, srcSheet));
     CPPUNIT_ASSERT_EQUAL(-17.0, m_pDoc->GetValue(10, 16, srcSheet));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C5"), m_pDoc->GetFormula(1, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_aCa5"), m_pDoc->GetFormula(2, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_aC5"), m_pDoc->GetFormula(3, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_Ca5"), m_pDoc->GetFormula(4, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_C5_C5)"), m_pDoc->GetFormula(5, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa5)"), m_pDoc->GetFormula(6, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aC5_aC5)"), m_pDoc->GetFormula(7, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_Ca5_Ca5)"), m_pDoc->GetFormula(8, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa8)"), m_pDoc->GetFormula(9, 17, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_aCa5_aCa10)"), m_pDoc->GetFormula(10, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C5"_ustr, m_pDoc->GetFormula(1, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_aCa5"_ustr, m_pDoc->GetFormula(2, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_aC5"_ustr, m_pDoc->GetFormula(3, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=Range_Ca5"_ustr, m_pDoc->GetFormula(4, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_C5_C5)"_ustr, m_pDoc->GetFormula(5, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa5)"_ustr, m_pDoc->GetFormula(6, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aC5_aC5)"_ustr, m_pDoc->GetFormula(7, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_Ca5_Ca5)"_ustr, m_pDoc->GetFormula(8, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa8)"_ustr, m_pDoc->GetFormula(9, 17, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_aCa5_aCa10)"_ustr, m_pDoc->GetFormula(10, 17, srcSheet));
 
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(1, 17, srcSheet));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 17, srcSheet));
@@ -6813,55 +6797,55 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFilteredTranspose(bool bSk
     CPPUNIT_ASSERT_EQUAL(-17.0, m_pDoc->GetValue(10, 17, srcSheet));
 
     // Existing references to the destination range must not change
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D1"), m_pDoc->GetFormula(3, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D2"), m_pDoc->GetFormula(3, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D3"), m_pDoc->GetFormula(3, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D4"), m_pDoc->GetFormula(3, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D5"), m_pDoc->GetFormula(3, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D6"), m_pDoc->GetFormula(3, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.D7"), m_pDoc->GetFormula(3, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E1"), m_pDoc->GetFormula(4, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E2"), m_pDoc->GetFormula(4, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E3"), m_pDoc->GetFormula(4, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E4"), m_pDoc->GetFormula(4, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E5"), m_pDoc->GetFormula(4, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E6"), m_pDoc->GetFormula(4, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.E7"), m_pDoc->GetFormula(4, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F1"), m_pDoc->GetFormula(5, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F2"), m_pDoc->GetFormula(5, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F3"), m_pDoc->GetFormula(5, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F4"), m_pDoc->GetFormula(5, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F5"), m_pDoc->GetFormula(5, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F6"), m_pDoc->GetFormula(5, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.F7"), m_pDoc->GetFormula(5, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G1"), m_pDoc->GetFormula(6, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G2"), m_pDoc->GetFormula(6, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G3"), m_pDoc->GetFormula(6, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G4"), m_pDoc->GetFormula(6, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G5"), m_pDoc->GetFormula(6, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G6"), m_pDoc->GetFormula(6, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.G7"), m_pDoc->GetFormula(6, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H1"), m_pDoc->GetFormula(7, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H2"), m_pDoc->GetFormula(7, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H3"), m_pDoc->GetFormula(7, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H4"), m_pDoc->GetFormula(7, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H5"), m_pDoc->GetFormula(7, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H6"), m_pDoc->GetFormula(7, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.H7"), m_pDoc->GetFormula(7, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I1"), m_pDoc->GetFormula(8, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I2"), m_pDoc->GetFormula(8, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I3"), m_pDoc->GetFormula(8, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I4"), m_pDoc->GetFormula(8, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I5"), m_pDoc->GetFormula(8, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I6"), m_pDoc->GetFormula(8, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.I7"), m_pDoc->GetFormula(8, 107, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J1"), m_pDoc->GetFormula(9, 101, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J2"), m_pDoc->GetFormula(9, 102, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J3"), m_pDoc->GetFormula(9, 103, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J4"), m_pDoc->GetFormula(9, 104, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J5"), m_pDoc->GetFormula(9, 105, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J6"), m_pDoc->GetFormula(9, 106, srcSheet));
-    CPPUNIT_ASSERT_EQUAL(OUString("=DestSheet.J7"), m_pDoc->GetFormula(9, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D1"_ustr, m_pDoc->GetFormula(3, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D2"_ustr, m_pDoc->GetFormula(3, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D3"_ustr, m_pDoc->GetFormula(3, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D4"_ustr, m_pDoc->GetFormula(3, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D5"_ustr, m_pDoc->GetFormula(3, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D6"_ustr, m_pDoc->GetFormula(3, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.D7"_ustr, m_pDoc->GetFormula(3, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E1"_ustr, m_pDoc->GetFormula(4, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E2"_ustr, m_pDoc->GetFormula(4, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E3"_ustr, m_pDoc->GetFormula(4, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E4"_ustr, m_pDoc->GetFormula(4, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E5"_ustr, m_pDoc->GetFormula(4, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E6"_ustr, m_pDoc->GetFormula(4, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.E7"_ustr, m_pDoc->GetFormula(4, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F1"_ustr, m_pDoc->GetFormula(5, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F2"_ustr, m_pDoc->GetFormula(5, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F3"_ustr, m_pDoc->GetFormula(5, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F4"_ustr, m_pDoc->GetFormula(5, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F5"_ustr, m_pDoc->GetFormula(5, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F6"_ustr, m_pDoc->GetFormula(5, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.F7"_ustr, m_pDoc->GetFormula(5, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G1"_ustr, m_pDoc->GetFormula(6, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G2"_ustr, m_pDoc->GetFormula(6, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G3"_ustr, m_pDoc->GetFormula(6, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G4"_ustr, m_pDoc->GetFormula(6, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G5"_ustr, m_pDoc->GetFormula(6, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G6"_ustr, m_pDoc->GetFormula(6, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.G7"_ustr, m_pDoc->GetFormula(6, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H1"_ustr, m_pDoc->GetFormula(7, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H2"_ustr, m_pDoc->GetFormula(7, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H3"_ustr, m_pDoc->GetFormula(7, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H4"_ustr, m_pDoc->GetFormula(7, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H5"_ustr, m_pDoc->GetFormula(7, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H6"_ustr, m_pDoc->GetFormula(7, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.H7"_ustr, m_pDoc->GetFormula(7, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I1"_ustr, m_pDoc->GetFormula(8, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I2"_ustr, m_pDoc->GetFormula(8, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I3"_ustr, m_pDoc->GetFormula(8, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I4"_ustr, m_pDoc->GetFormula(8, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I5"_ustr, m_pDoc->GetFormula(8, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I6"_ustr, m_pDoc->GetFormula(8, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.I7"_ustr, m_pDoc->GetFormula(8, 107, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J1"_ustr, m_pDoc->GetFormula(9, 101, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J2"_ustr, m_pDoc->GetFormula(9, 102, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J3"_ustr, m_pDoc->GetFormula(9, 103, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J4"_ustr, m_pDoc->GetFormula(9, 104, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J5"_ustr, m_pDoc->GetFormula(9, 105, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J6"_ustr, m_pDoc->GetFormula(9, 106, srcSheet));
+    CPPUNIT_ASSERT_EQUAL(u"=DestSheet.J7"_ustr, m_pDoc->GetFormula(9, 107, srcSheet));
 
     m_pDoc->DeleteTab(destSheet);
     m_pDoc->DeleteTab(srcSheet);
@@ -6870,17 +6854,17 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFilteredTranspose(bool bSk
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf142201Row)
 {
     const SCTAB nTab = 0;
-    m_pDoc->InsertTab(nTab, "Test");
+    m_pDoc->InsertTab(nTab, u"Test"_ustr);
 
     m_pDoc->SetValue(0, 0, nTab, 1.0); // A1
     m_pDoc->SetValue(0, 1, nTab, 2.0); // A2
     m_pDoc->SetValue(1, 0, nTab, 11.0); // B1
     m_pDoc->SetValue(1, 1, nTab, 12.0); // B2
 
-    m_pDoc->SetString(0, 3, nTab, "=A1"); // A4
-    m_pDoc->SetString(0, 4, nTab, "=A2"); // A5
-    m_pDoc->SetString(1, 3, nTab, "=B1"); // B4
-    m_pDoc->SetString(1, 4, nTab, "=B2"); // B5
+    m_pDoc->SetString(0, 3, nTab, u"=A1"_ustr); // A4
+    m_pDoc->SetString(0, 4, nTab, u"=A2"_ustr); // A5
+    m_pDoc->SetString(1, 3, nTab, u"=B1"_ustr); // B4
+    m_pDoc->SetString(1, 4, nTab, u"=B2"_ustr); // B5
 
     // Check precondition
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0, 3, nTab));
@@ -6936,26 +6920,26 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf142201Row)
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(1, 3, nTab));
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(1, 4, nTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=B7"), m_pDoc->GetFormula(0, 3, nTab));
-    CPPUNIT_ASSERT_EQUAL(OUString("=C7"), m_pDoc->GetFormula(0, 4, nTab));
-    CPPUNIT_ASSERT_EQUAL(OUString("=B1"), m_pDoc->GetFormula(1, 3, nTab));
-    CPPUNIT_ASSERT_EQUAL(OUString("=B2"), m_pDoc->GetFormula(1, 4, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=B7"_ustr, m_pDoc->GetFormula(0, 3, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=C7"_ustr, m_pDoc->GetFormula(0, 4, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=B1"_ustr, m_pDoc->GetFormula(1, 3, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=B2"_ustr, m_pDoc->GetFormula(1, 4, nTab));
 }
 
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf142201ColRel)
 {
     const SCTAB nTab = 0;
-    m_pDoc->InsertTab(nTab, "Test");
+    m_pDoc->InsertTab(nTab, u"Test"_ustr);
 
     m_pDoc->SetValue(0, 0, nTab, 1.0); // A1
     m_pDoc->SetValue(0, 1, nTab, 2.0); // A2
     m_pDoc->SetValue(1, 0, nTab, 11.0); // B1
     m_pDoc->SetValue(1, 1, nTab, 12.0); // B2
 
-    m_pDoc->SetString(0, 3, nTab, "=A1"); // A4
-    m_pDoc->SetString(0, 4, nTab, "=A2"); // A5
-    m_pDoc->SetString(1, 3, nTab, "=B1"); // B4
-    m_pDoc->SetString(1, 4, nTab, "=B2"); // B5
+    m_pDoc->SetString(0, 3, nTab, u"=A1"_ustr); // A4
+    m_pDoc->SetString(0, 4, nTab, u"=A2"_ustr); // A5
+    m_pDoc->SetString(1, 3, nTab, u"=B1"_ustr); // B4
+    m_pDoc->SetString(1, 4, nTab, u"=B2"_ustr); // B5
 
     // Check precondition
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0, 3, nTab));
@@ -7011,26 +6995,26 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf142201ColRel)
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(1, 3, nTab));
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(1, 4, nTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=B7"), m_pDoc->GetFormula(0, 3, nTab));
-    CPPUNIT_ASSERT_EQUAL(OUString("=A2"), m_pDoc->GetFormula(0, 4, nTab));
-    CPPUNIT_ASSERT_EQUAL(OUString("=B8"), m_pDoc->GetFormula(1, 3, nTab));
-    CPPUNIT_ASSERT_EQUAL(OUString("=B2"), m_pDoc->GetFormula(1, 4, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=B7"_ustr, m_pDoc->GetFormula(0, 3, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=A2"_ustr, m_pDoc->GetFormula(0, 4, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=B8"_ustr, m_pDoc->GetFormula(1, 3, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=B2"_ustr, m_pDoc->GetFormula(1, 4, nTab));
 }
 
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf142201ColAbs)
 {
     const SCTAB nTab = 0;
-    m_pDoc->InsertTab(nTab, "Test");
+    m_pDoc->InsertTab(nTab, u"Test"_ustr);
 
     m_pDoc->SetValue(0, 0, nTab, 1.0); // A1
     m_pDoc->SetValue(0, 1, nTab, 2.0); // A2
     m_pDoc->SetValue(1, 0, nTab, 11.0); // B1
     m_pDoc->SetValue(1, 1, nTab, 12.0); // B2
 
-    m_pDoc->SetString(0, 3, nTab, "=$A$1"); // A4
-    m_pDoc->SetString(0, 4, nTab, "=$A$2"); // A5
-    m_pDoc->SetString(1, 3, nTab, "=$B$1"); // B4
-    m_pDoc->SetString(1, 4, nTab, "=$B$2"); // B5
+    m_pDoc->SetString(0, 3, nTab, u"=$A$1"_ustr); // A4
+    m_pDoc->SetString(0, 4, nTab, u"=$A$2"_ustr); // A5
+    m_pDoc->SetString(1, 3, nTab, u"=$B$1"_ustr); // B4
+    m_pDoc->SetString(1, 4, nTab, u"=$B$2"_ustr); // B5
 
     // Check precondition
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0, 3, nTab));
@@ -7086,10 +7070,10 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf142201ColAbs)
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(1, 3, nTab));
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(1, 4, nTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=$B$7"), m_pDoc->GetFormula(0, 3, nTab));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$A$2"), m_pDoc->GetFormula(0, 4, nTab));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$B$8"), m_pDoc->GetFormula(1, 3, nTab));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$B$2"), m_pDoc->GetFormula(1, 4, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=$B$7"_ustr, m_pDoc->GetFormula(0, 3, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=$A$2"_ustr, m_pDoc->GetFormula(0, 4, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=$B$8"_ustr, m_pDoc->GetFormula(1, 3, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=$B$2"_ustr, m_pDoc->GetFormula(1, 4, nTab));
 }
 
 void TestCopyPaste::checkReferencedCutRangesRowIntitial(const SCTAB nSrcTab, const OUString& rDesc)
@@ -7131,20 +7115,20 @@ void TestCopyPaste::checkReferencedCutRangesRowIntitial(const SCTAB nSrcTab, con
     CPPUNIT_ASSERT_EQUAL(1032.0, m_pDoc->GetValue(22, 3, nSrcTab)); // W4
     CPPUNIT_ASSERT_EQUAL(1033.0, m_pDoc->GetValue(23, 3, nSrcTab)); // X4
     CPPUNIT_ASSERT_EQUAL(1034.0, m_pDoc->GetValue(24, 3, nSrcTab)); // Y4
-    CPPUNIT_ASSERT_EQUAL(OUString("=A1"), m_pDoc->GetFormula(20, 0, nSrcTab)); // U1
-    CPPUNIT_ASSERT_EQUAL(OUString("=B1"), m_pDoc->GetFormula(21, 0, nSrcTab)); // V1
-    CPPUNIT_ASSERT_EQUAL(OUString("=C1"), m_pDoc->GetFormula(22, 0, nSrcTab)); // W1
-    CPPUNIT_ASSERT_EQUAL(OUString("=D1"), m_pDoc->GetFormula(23, 0, nSrcTab)); // X1
-    CPPUNIT_ASSERT_EQUAL(OUString("=E1"), m_pDoc->GetFormula(24, 0, nSrcTab)); // Y1
-    CPPUNIT_ASSERT_EQUAL(OUString("=A2"), m_pDoc->GetFormula(20, 1, nSrcTab)); // U2
-    CPPUNIT_ASSERT_EQUAL(OUString("=E2"), m_pDoc->GetFormula(24, 1, nSrcTab)); // Y2
-    CPPUNIT_ASSERT_EQUAL(OUString("=A3"), m_pDoc->GetFormula(20, 2, nSrcTab)); // U3
-    CPPUNIT_ASSERT_EQUAL(OUString("=E3"), m_pDoc->GetFormula(24, 2, nSrcTab)); // Y3
-    CPPUNIT_ASSERT_EQUAL(OUString("=A4"), m_pDoc->GetFormula(20, 3, nSrcTab)); // U4
-    CPPUNIT_ASSERT_EQUAL(OUString("=B4"), m_pDoc->GetFormula(21, 3, nSrcTab)); // B4
-    CPPUNIT_ASSERT_EQUAL(OUString("=C4"), m_pDoc->GetFormula(22, 3, nSrcTab)); // W4
-    CPPUNIT_ASSERT_EQUAL(OUString("=D4"), m_pDoc->GetFormula(23, 3, nSrcTab)); // X4
-    CPPUNIT_ASSERT_EQUAL(OUString("=E4"), m_pDoc->GetFormula(24, 3, nSrcTab)); // Y4
+    CPPUNIT_ASSERT_EQUAL(u"=A1"_ustr, m_pDoc->GetFormula(20, 0, nSrcTab)); // U1
+    CPPUNIT_ASSERT_EQUAL(u"=B1"_ustr, m_pDoc->GetFormula(21, 0, nSrcTab)); // V1
+    CPPUNIT_ASSERT_EQUAL(u"=C1"_ustr, m_pDoc->GetFormula(22, 0, nSrcTab)); // W1
+    CPPUNIT_ASSERT_EQUAL(u"=D1"_ustr, m_pDoc->GetFormula(23, 0, nSrcTab)); // X1
+    CPPUNIT_ASSERT_EQUAL(u"=E1"_ustr, m_pDoc->GetFormula(24, 0, nSrcTab)); // Y1
+    CPPUNIT_ASSERT_EQUAL(u"=A2"_ustr, m_pDoc->GetFormula(20, 1, nSrcTab)); // U2
+    CPPUNIT_ASSERT_EQUAL(u"=E2"_ustr, m_pDoc->GetFormula(24, 1, nSrcTab)); // Y2
+    CPPUNIT_ASSERT_EQUAL(u"=A3"_ustr, m_pDoc->GetFormula(20, 2, nSrcTab)); // U3
+    CPPUNIT_ASSERT_EQUAL(u"=E3"_ustr, m_pDoc->GetFormula(24, 2, nSrcTab)); // Y3
+    CPPUNIT_ASSERT_EQUAL(u"=A4"_ustr, m_pDoc->GetFormula(20, 3, nSrcTab)); // U4
+    CPPUNIT_ASSERT_EQUAL(u"=B4"_ustr, m_pDoc->GetFormula(21, 3, nSrcTab)); // B4
+    CPPUNIT_ASSERT_EQUAL(u"=C4"_ustr, m_pDoc->GetFormula(22, 3, nSrcTab)); // W4
+    CPPUNIT_ASSERT_EQUAL(u"=D4"_ustr, m_pDoc->GetFormula(23, 3, nSrcTab)); // X4
+    CPPUNIT_ASSERT_EQUAL(u"=E4"_ustr, m_pDoc->GetFormula(24, 3, nSrcTab)); // Y4
 
     for (int i = 10; i < 20; ++i)
         for (int j = 0; j < 10; ++j)
@@ -7155,12 +7139,12 @@ void TestCopyPaste::checkReferencedCutRangesRowIntitial(const SCTAB nSrcTab, con
 
     printValuesAndFormulasInRange(m_pDoc, ScRange(0, 20, nSrcTab, 2, 21, nSrcTab),
                                   rDesc.toUtf8() + ": Relative references");
-    CPPUNIT_ASSERT_EQUAL(OUString("=B2"), m_pDoc->GetFormula(0, 20, nSrcTab)); // A21
-    CPPUNIT_ASSERT_EQUAL(OUString("=C2"), m_pDoc->GetFormula(1, 20, nSrcTab)); // B21
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2"), m_pDoc->GetFormula(2, 20, nSrcTab)); // C21
-    CPPUNIT_ASSERT_EQUAL(OUString("=B3"), m_pDoc->GetFormula(0, 21, nSrcTab)); // A22
-    CPPUNIT_ASSERT_EQUAL(OUString("=C3"), m_pDoc->GetFormula(1, 21, nSrcTab)); // B22
-    CPPUNIT_ASSERT_EQUAL(OUString("=D3"), m_pDoc->GetFormula(2, 21, nSrcTab)); // C22
+    CPPUNIT_ASSERT_EQUAL(u"=B2"_ustr, m_pDoc->GetFormula(0, 20, nSrcTab)); // A21
+    CPPUNIT_ASSERT_EQUAL(u"=C2"_ustr, m_pDoc->GetFormula(1, 20, nSrcTab)); // B21
+    CPPUNIT_ASSERT_EQUAL(u"=D2"_ustr, m_pDoc->GetFormula(2, 20, nSrcTab)); // C21
+    CPPUNIT_ASSERT_EQUAL(u"=B3"_ustr, m_pDoc->GetFormula(0, 21, nSrcTab)); // A22
+    CPPUNIT_ASSERT_EQUAL(u"=C3"_ustr, m_pDoc->GetFormula(1, 21, nSrcTab)); // B22
+    CPPUNIT_ASSERT_EQUAL(u"=D3"_ustr, m_pDoc->GetFormula(2, 21, nSrcTab)); // C22
     CPPUNIT_ASSERT_EQUAL(01.0, m_pDoc->GetValue(0, 20, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(1, 20, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(2, 20, nSrcTab));
@@ -7170,12 +7154,12 @@ void TestCopyPaste::checkReferencedCutRangesRowIntitial(const SCTAB nSrcTab, con
 
     printValuesAndFormulasInRange(m_pDoc, ScRange(0, 30, nSrcTab, 2, 31, nSrcTab),
                                   rDesc.toUtf8() + ": Absolute references");
-    CPPUNIT_ASSERT_EQUAL(OUString("=$B$2"), m_pDoc->GetFormula(0, 30, nSrcTab)); // A31
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C$2"), m_pDoc->GetFormula(1, 30, nSrcTab)); // B31
-    CPPUNIT_ASSERT_EQUAL(OUString("=$D$2"), m_pDoc->GetFormula(2, 30, nSrcTab)); // C31
-    CPPUNIT_ASSERT_EQUAL(OUString("=$B$3"), m_pDoc->GetFormula(0, 31, nSrcTab)); // A32
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C$3"), m_pDoc->GetFormula(1, 31, nSrcTab)); // B32
-    CPPUNIT_ASSERT_EQUAL(OUString("=$D$3"), m_pDoc->GetFormula(2, 31, nSrcTab)); // C32
+    CPPUNIT_ASSERT_EQUAL(u"=$B$2"_ustr, m_pDoc->GetFormula(0, 30, nSrcTab)); // A31
+    CPPUNIT_ASSERT_EQUAL(u"=$C$2"_ustr, m_pDoc->GetFormula(1, 30, nSrcTab)); // B31
+    CPPUNIT_ASSERT_EQUAL(u"=$D$2"_ustr, m_pDoc->GetFormula(2, 30, nSrcTab)); // C31
+    CPPUNIT_ASSERT_EQUAL(u"=$B$3"_ustr, m_pDoc->GetFormula(0, 31, nSrcTab)); // A32
+    CPPUNIT_ASSERT_EQUAL(u"=$C$3"_ustr, m_pDoc->GetFormula(1, 31, nSrcTab)); // B32
+    CPPUNIT_ASSERT_EQUAL(u"=$D$3"_ustr, m_pDoc->GetFormula(2, 31, nSrcTab)); // C32
     CPPUNIT_ASSERT_EQUAL(01.0, m_pDoc->GetValue(0, 30, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(1, 30, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(2, 30, nSrcTab));
@@ -7183,25 +7167,25 @@ void TestCopyPaste::checkReferencedCutRangesRowIntitial(const SCTAB nSrcTab, con
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(1, 31, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(2, 31, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$2"), getRangeByName("Range_B2"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$C$2"), getRangeByName("Range_C2"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$D$2"), getRangeByName("Range_D2"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$3"), getRangeByName("Range_B3"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$C$3"), getRangeByName("Range_C3"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$D$3"), getRangeByName("Range_D3"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$2:$D$2"), getRangeByName("Range_B2_D2"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$3:$D$3"), getRangeByName("Range_B3_D3"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$2:$D$3"), getRangeByName("Range_B2_D3"));
-    CPPUNIT_ASSERT_EQUAL(OUString("B2"), getRangeByName("RelRange_Cm20_R0"));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$B$2"_ustr, getRangeByName(u"Range_B2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$C$2"_ustr, getRangeByName(u"Range_C2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$D$2"_ustr, getRangeByName(u"Range_D2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$B$3"_ustr, getRangeByName(u"Range_B3"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$C$3"_ustr, getRangeByName(u"Range_C3"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$D$3"_ustr, getRangeByName(u"Range_D3"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$B$2:$D$2"_ustr, getRangeByName(u"Range_B2_D2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$B$3:$D$3"_ustr, getRangeByName(u"Range_B3_D3"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$B$2:$D$3"_ustr, getRangeByName(u"Range_B2_D3"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"B2"_ustr, getRangeByName(u"RelRange_Cm20_R0"_ustr));
 
     printValuesAndFormulasInRange(m_pDoc, ScRange(0, 40, nSrcTab, 2, 41, nSrcTab),
                                   rDesc.toUtf8() + ": Absolute ranges");
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_B2"), m_pDoc->GetFormula(0, 40, nSrcTab)); // A41
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C2"), m_pDoc->GetFormula(1, 40, nSrcTab)); // B41
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_D2"), m_pDoc->GetFormula(2, 40, nSrcTab)); // C41
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_B3"), m_pDoc->GetFormula(0, 41, nSrcTab)); // A42
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C3"), m_pDoc->GetFormula(1, 41, nSrcTab)); // B42
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_D3"), m_pDoc->GetFormula(2, 41, nSrcTab)); // C42
+    CPPUNIT_ASSERT_EQUAL(u"=Range_B2"_ustr, m_pDoc->GetFormula(0, 40, nSrcTab)); // A41
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C2"_ustr, m_pDoc->GetFormula(1, 40, nSrcTab)); // B41
+    CPPUNIT_ASSERT_EQUAL(u"=Range_D2"_ustr, m_pDoc->GetFormula(2, 40, nSrcTab)); // C41
+    CPPUNIT_ASSERT_EQUAL(u"=Range_B3"_ustr, m_pDoc->GetFormula(0, 41, nSrcTab)); // A42
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C3"_ustr, m_pDoc->GetFormula(1, 41, nSrcTab)); // B42
+    CPPUNIT_ASSERT_EQUAL(u"=Range_D3"_ustr, m_pDoc->GetFormula(2, 41, nSrcTab)); // C42
     CPPUNIT_ASSERT_EQUAL(01.0, m_pDoc->GetValue(0, 40, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(1, 40, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(2, 40, nSrcTab));
@@ -7211,12 +7195,12 @@ void TestCopyPaste::checkReferencedCutRangesRowIntitial(const SCTAB nSrcTab, con
 
     printValuesAndFormulasInRange(m_pDoc, ScRange(0, 50, nSrcTab, 2, 51, nSrcTab),
                                   rDesc.toUtf8() + ": Relative ranges");
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(0, 50, nSrcTab)); // A51
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(1, 50, nSrcTab)); // B51
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(2, 50, nSrcTab)); // C51
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(0, 51, nSrcTab)); // A52
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(1, 51, nSrcTab)); // B52
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(2, 51, nSrcTab)); // C52
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(0, 50, nSrcTab)); // A51
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(1, 50, nSrcTab)); // B51
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(2, 50, nSrcTab)); // C51
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(0, 51, nSrcTab)); // A52
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(1, 51, nSrcTab)); // B52
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(2, 51, nSrcTab)); // C52
     CPPUNIT_ASSERT_EQUAL(01.0, m_pDoc->GetValue(0, 50, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(1, 50, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(2, 50, nSrcTab));
@@ -7226,12 +7210,12 @@ void TestCopyPaste::checkReferencedCutRangesRowIntitial(const SCTAB nSrcTab, con
 
     printValuesAndFormulasInRange(m_pDoc, ScRange(0, 60, nSrcTab, 2, 61, nSrcTab),
                                   rDesc.toUtf8() + ": Relative sum");
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B2:D2)"), m_pDoc->GetFormula(0, 60, nSrcTab)); // A61
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B2:D2)"), m_pDoc->GetFormula(1, 60, nSrcTab)); // B61
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B2:D2)"), m_pDoc->GetFormula(2, 60, nSrcTab)); // C61
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B3:D3)"), m_pDoc->GetFormula(0, 61, nSrcTab)); // A62
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B3:D3)"), m_pDoc->GetFormula(1, 61, nSrcTab)); // B62
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B3:D3)"), m_pDoc->GetFormula(2, 61, nSrcTab)); // C62
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(B2:D2)"_ustr, m_pDoc->GetFormula(0, 60, nSrcTab)); // A61
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(B2:D2)"_ustr, m_pDoc->GetFormula(1, 60, nSrcTab)); // B61
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(B2:D2)"_ustr, m_pDoc->GetFormula(2, 60, nSrcTab)); // C61
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(B3:D3)"_ustr, m_pDoc->GetFormula(0, 61, nSrcTab)); // A62
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(B3:D3)"_ustr, m_pDoc->GetFormula(1, 61, nSrcTab)); // B62
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(B3:D3)"_ustr, m_pDoc->GetFormula(2, 61, nSrcTab)); // C62
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 60, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(1, 60, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(2, 60, nSrcTab));
@@ -7241,12 +7225,12 @@ void TestCopyPaste::checkReferencedCutRangesRowIntitial(const SCTAB nSrcTab, con
 
     printValuesAndFormulasInRange(m_pDoc, ScRange(0, 70, nSrcTab, 2, 71, nSrcTab),
                                   rDesc.toUtf8() + ": Absolute sum");
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$2)"), m_pDoc->GetFormula(0, 70, nSrcTab)); // A71
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$2)"), m_pDoc->GetFormula(1, 70, nSrcTab)); // B71
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$2)"), m_pDoc->GetFormula(2, 70, nSrcTab)); // C71
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$D$3)"), m_pDoc->GetFormula(0, 71, nSrcTab)); // A72
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$D$3)"), m_pDoc->GetFormula(1, 71, nSrcTab)); // B72
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$D$3)"), m_pDoc->GetFormula(2, 71, nSrcTab)); // C72
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$D$2)"_ustr, m_pDoc->GetFormula(0, 70, nSrcTab)); // A71
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$D$2)"_ustr, m_pDoc->GetFormula(1, 70, nSrcTab)); // B71
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$D$2)"_ustr, m_pDoc->GetFormula(2, 70, nSrcTab)); // C71
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$D$3)"_ustr, m_pDoc->GetFormula(0, 71, nSrcTab)); // A72
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$D$3)"_ustr, m_pDoc->GetFormula(1, 71, nSrcTab)); // B72
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$D$3)"_ustr, m_pDoc->GetFormula(2, 71, nSrcTab)); // C72
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 70, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(1, 70, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(2, 70, nSrcTab));
@@ -7256,12 +7240,12 @@ void TestCopyPaste::checkReferencedCutRangesRowIntitial(const SCTAB nSrcTab, con
 
     printValuesAndFormulasInRange(m_pDoc, ScRange(0, 80, nSrcTab, 2, 81, nSrcTab),
                                   rDesc.toUtf8() + ": Relative range sum");
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D2)"), m_pDoc->GetFormula(0, 80, nSrcTab)); // A81
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D2)"), m_pDoc->GetFormula(1, 80, nSrcTab)); // B81
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D2)"), m_pDoc->GetFormula(2, 80, nSrcTab)); // C81
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B3_D3)"), m_pDoc->GetFormula(0, 81, nSrcTab)); // A82
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B3_D3)"), m_pDoc->GetFormula(1, 81, nSrcTab)); // B82
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B3_D3)"), m_pDoc->GetFormula(2, 81, nSrcTab)); // C82
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D2)"_ustr, m_pDoc->GetFormula(0, 80, nSrcTab)); // A81
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D2)"_ustr, m_pDoc->GetFormula(1, 80, nSrcTab)); // B81
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D2)"_ustr, m_pDoc->GetFormula(2, 80, nSrcTab)); // C81
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B3_D3)"_ustr, m_pDoc->GetFormula(0, 81, nSrcTab)); // A82
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B3_D3)"_ustr, m_pDoc->GetFormula(1, 81, nSrcTab)); // B82
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B3_D3)"_ustr, m_pDoc->GetFormula(2, 81, nSrcTab)); // C82
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 80, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(1, 80, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(2, 80, nSrcTab));
@@ -7271,12 +7255,12 @@ void TestCopyPaste::checkReferencedCutRangesRowIntitial(const SCTAB nSrcTab, con
 
     printValuesAndFormulasInRange(m_pDoc, ScRange(0, 90, nSrcTab, 2, 91, nSrcTab),
                                   rDesc.toUtf8() + ": Absolute sum");
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$3)"), m_pDoc->GetFormula(0, 90, nSrcTab)); // A91
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$3)"), m_pDoc->GetFormula(1, 90, nSrcTab)); // B91
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$3)"), m_pDoc->GetFormula(2, 90, nSrcTab)); // C91
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$3)"), m_pDoc->GetFormula(0, 91, nSrcTab)); // A92
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$3)"), m_pDoc->GetFormula(1, 91, nSrcTab)); // B92
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$3)"), m_pDoc->GetFormula(2, 91, nSrcTab)); // C92
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$D$3)"_ustr, m_pDoc->GetFormula(0, 90, nSrcTab)); // A91
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$D$3)"_ustr, m_pDoc->GetFormula(1, 90, nSrcTab)); // B91
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$D$3)"_ustr, m_pDoc->GetFormula(2, 90, nSrcTab)); // C91
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$D$3)"_ustr, m_pDoc->GetFormula(0, 91, nSrcTab)); // A92
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$D$3)"_ustr, m_pDoc->GetFormula(1, 91, nSrcTab)); // B92
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$D$3)"_ustr, m_pDoc->GetFormula(2, 91, nSrcTab)); // C92
     CPPUNIT_ASSERT_EQUAL(69.0, m_pDoc->GetValue(0, 90, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(69.0, m_pDoc->GetValue(1, 90, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(69.0, m_pDoc->GetValue(2, 90, nSrcTab));
@@ -7286,18 +7270,12 @@ void TestCopyPaste::checkReferencedCutRangesRowIntitial(const SCTAB nSrcTab, con
 
     printValuesAndFormulasInRange(m_pDoc, ScRange(0, 100, nSrcTab, 2, 101, nSrcTab),
                                   rDesc.toUtf8() + ": Relative range sum");
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D3)"),
-                         m_pDoc->GetFormula(0, 100, nSrcTab)); // A101
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D3)"),
-                         m_pDoc->GetFormula(1, 100, nSrcTab)); // B101
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D3)"),
-                         m_pDoc->GetFormula(2, 100, nSrcTab)); // C101
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D3)"),
-                         m_pDoc->GetFormula(0, 101, nSrcTab)); // A102
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D3)"),
-                         m_pDoc->GetFormula(1, 101, nSrcTab)); // B102
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D3)"),
-                         m_pDoc->GetFormula(2, 101, nSrcTab)); // C102
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D3)"_ustr, m_pDoc->GetFormula(0, 100, nSrcTab)); // A101
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D3)"_ustr, m_pDoc->GetFormula(1, 100, nSrcTab)); // B101
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D3)"_ustr, m_pDoc->GetFormula(2, 100, nSrcTab)); // C101
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D3)"_ustr, m_pDoc->GetFormula(0, 101, nSrcTab)); // A102
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D3)"_ustr, m_pDoc->GetFormula(1, 101, nSrcTab)); // B102
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D3)"_ustr, m_pDoc->GetFormula(2, 101, nSrcTab)); // C102
     CPPUNIT_ASSERT_EQUAL(69.0, m_pDoc->GetValue(0, 100, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(69.0, m_pDoc->GetValue(1, 100, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(69.0, m_pDoc->GetValue(2, 100, nSrcTab));
@@ -7315,7 +7293,7 @@ void TestCopyPaste::executeReferencedCutRangesRow(const bool bTransposed, const 
 
     for (int i = 0; i < nSrcTab; ++i)
         m_pDoc->InsertTab(i, "Empty Tab " + OUString::number(i));
-    m_pDoc->InsertTab(nSrcTab, "Test");
+    m_pDoc->InsertTab(nSrcTab, u"Test"_ustr);
 
     m_pDoc->SetValue(1, 1, nSrcTab, 01.0); // B2  \.
     m_pDoc->SetValue(2, 1, nSrcTab, 11.0); // C2   | cut
@@ -7341,99 +7319,103 @@ void TestCopyPaste::executeReferencedCutRangesRow(const bool bTransposed, const 
     m_pDoc->SetValue(3, 3, nSrcTab, 1033.0); // D4
     m_pDoc->SetValue(4, 3, nSrcTab, 1034.0); // E4
 
-    m_pDoc->SetString(20, 0, nSrcTab, "=A1"); // U1
-    m_pDoc->SetString(21, 0, nSrcTab, "=B1"); // V1
-    m_pDoc->SetString(22, 0, nSrcTab, "=C1"); // W1
-    m_pDoc->SetString(23, 0, nSrcTab, "=D1"); // X1
-    m_pDoc->SetString(24, 0, nSrcTab, "=E1"); // Y1
-    m_pDoc->SetString(20, 1, nSrcTab, "=A2"); // U2
-    m_pDoc->SetString(24, 1, nSrcTab, "=E2"); // Y2
-    m_pDoc->SetString(20, 2, nSrcTab, "=A3"); // U3
-    m_pDoc->SetString(24, 2, nSrcTab, "=E3"); // Y3
-    m_pDoc->SetString(20, 3, nSrcTab, "=A4"); // U4
-    m_pDoc->SetString(21, 3, nSrcTab, "=B4"); // B4
-    m_pDoc->SetString(22, 3, nSrcTab, "=C4"); // W4
-    m_pDoc->SetString(23, 3, nSrcTab, "=D4"); // X4
-    m_pDoc->SetString(24, 3, nSrcTab, "=E4"); // Y4
+    m_pDoc->SetString(20, 0, nSrcTab, u"=A1"_ustr); // U1
+    m_pDoc->SetString(21, 0, nSrcTab, u"=B1"_ustr); // V1
+    m_pDoc->SetString(22, 0, nSrcTab, u"=C1"_ustr); // W1
+    m_pDoc->SetString(23, 0, nSrcTab, u"=D1"_ustr); // X1
+    m_pDoc->SetString(24, 0, nSrcTab, u"=E1"_ustr); // Y1
+    m_pDoc->SetString(20, 1, nSrcTab, u"=A2"_ustr); // U2
+    m_pDoc->SetString(24, 1, nSrcTab, u"=E2"_ustr); // Y2
+    m_pDoc->SetString(20, 2, nSrcTab, u"=A3"_ustr); // U3
+    m_pDoc->SetString(24, 2, nSrcTab, u"=E3"_ustr); // Y3
+    m_pDoc->SetString(20, 3, nSrcTab, u"=A4"_ustr); // U4
+    m_pDoc->SetString(21, 3, nSrcTab, u"=B4"_ustr); // B4
+    m_pDoc->SetString(22, 3, nSrcTab, u"=C4"_ustr); // W4
+    m_pDoc->SetString(23, 3, nSrcTab, u"=D4"_ustr); // X4
+    m_pDoc->SetString(24, 3, nSrcTab, u"=E4"_ustr); // Y4
 
     // Cell position is used for ranges relative to current position
     ScAddress cellA1(0, 0, nSrcTab);
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_B2", cellA1, "$Test.$B$2"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_C2", cellA1, "$Test.$C$2"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_D2", cellA1, "$Test.$D$2"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_B3", cellA1, "$Test.$B$3"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_C3", cellA1, "$Test.$C$3"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_D3", cellA1, "$Test.$D$3"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_B2_D2", cellA1, "$Test.$B$2:$D$2"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_B3_D3", cellA1, "$Test.$B$3:$D$3"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_B2_D3", cellA1, "$Test.$B$2:$D$3"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("RelRange_Cm20_R0", ScAddress(1, 21, nSrcTab), "B2"));
+    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName(u"Range_B2"_ustr, cellA1, u"$Test.$B$2"_ustr));
+    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName(u"Range_C2"_ustr, cellA1, u"$Test.$C$2"_ustr));
+    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName(u"Range_D2"_ustr, cellA1, u"$Test.$D$2"_ustr));
+    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName(u"Range_B3"_ustr, cellA1, u"$Test.$B$3"_ustr));
+    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName(u"Range_C3"_ustr, cellA1, u"$Test.$C$3"_ustr));
+    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName(u"Range_D3"_ustr, cellA1, u"$Test.$D$3"_ustr));
+    CPPUNIT_ASSERT(
+        m_pDoc->InsertNewRangeName(u"Range_B2_D2"_ustr, cellA1, u"$Test.$B$2:$D$2"_ustr));
+    CPPUNIT_ASSERT(
+        m_pDoc->InsertNewRangeName(u"Range_B3_D3"_ustr, cellA1, u"$Test.$B$3:$D$3"_ustr));
+    CPPUNIT_ASSERT(
+        m_pDoc->InsertNewRangeName(u"Range_B2_D3"_ustr, cellA1, u"$Test.$B$2:$D$3"_ustr));
+    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName(u"RelRange_Cm20_R0"_ustr, ScAddress(1, 21, nSrcTab),
+                                              u"B2"_ustr));
 
-    m_pDoc->SetString(0, 20, nSrcTab, "=B2"); // A21
-    m_pDoc->SetString(1, 20, nSrcTab, "=C2"); // B21
-    m_pDoc->SetString(2, 20, nSrcTab, "=D2"); // C21
-    m_pDoc->SetString(0, 21, nSrcTab, "=B3"); // A22
-    m_pDoc->SetString(1, 21, nSrcTab, "=C3"); // B22
-    m_pDoc->SetString(2, 21, nSrcTab, "=D3"); // C22
+    m_pDoc->SetString(0, 20, nSrcTab, u"=B2"_ustr); // A21
+    m_pDoc->SetString(1, 20, nSrcTab, u"=C2"_ustr); // B21
+    m_pDoc->SetString(2, 20, nSrcTab, u"=D2"_ustr); // C21
+    m_pDoc->SetString(0, 21, nSrcTab, u"=B3"_ustr); // A22
+    m_pDoc->SetString(1, 21, nSrcTab, u"=C3"_ustr); // B22
+    m_pDoc->SetString(2, 21, nSrcTab, u"=D3"_ustr); // C22
 
-    m_pDoc->SetString(0, 30, nSrcTab, "=$B$2"); // A31
-    m_pDoc->SetString(1, 30, nSrcTab, "=$C$2"); // B31
-    m_pDoc->SetString(2, 30, nSrcTab, "=$D$2"); // C31
-    m_pDoc->SetString(0, 31, nSrcTab, "=$B$3"); // A32
-    m_pDoc->SetString(1, 31, nSrcTab, "=$C$3"); // B32
-    m_pDoc->SetString(2, 31, nSrcTab, "=$D$3"); // C32
+    m_pDoc->SetString(0, 30, nSrcTab, u"=$B$2"_ustr); // A31
+    m_pDoc->SetString(1, 30, nSrcTab, u"=$C$2"_ustr); // B31
+    m_pDoc->SetString(2, 30, nSrcTab, u"=$D$2"_ustr); // C31
+    m_pDoc->SetString(0, 31, nSrcTab, u"=$B$3"_ustr); // A32
+    m_pDoc->SetString(1, 31, nSrcTab, u"=$C$3"_ustr); // B32
+    m_pDoc->SetString(2, 31, nSrcTab, u"=$D$3"_ustr); // C32
 
-    m_pDoc->SetString(0, 40, nSrcTab, "=Range_B2"); // A41
-    m_pDoc->SetString(1, 40, nSrcTab, "=Range_C2"); // B41
-    m_pDoc->SetString(2, 40, nSrcTab, "=Range_D2"); // C41
-    m_pDoc->SetString(0, 41, nSrcTab, "=Range_B3"); // A42
-    m_pDoc->SetString(1, 41, nSrcTab, "=Range_C3"); // B42
-    m_pDoc->SetString(2, 41, nSrcTab, "=Range_D3"); // C42
+    m_pDoc->SetString(0, 40, nSrcTab, u"=Range_B2"_ustr); // A41
+    m_pDoc->SetString(1, 40, nSrcTab, u"=Range_C2"_ustr); // B41
+    m_pDoc->SetString(2, 40, nSrcTab, u"=Range_D2"_ustr); // C41
+    m_pDoc->SetString(0, 41, nSrcTab, u"=Range_B3"_ustr); // A42
+    m_pDoc->SetString(1, 41, nSrcTab, u"=Range_C3"_ustr); // B42
+    m_pDoc->SetString(2, 41, nSrcTab, u"=Range_D3"_ustr); // C42
 
-    m_pDoc->SetString(0, 50, nSrcTab, "=RelRange_Cm20_R0"); // A51
-    m_pDoc->SetString(1, 50, nSrcTab, "=RelRange_Cm20_R0"); // B51
-    m_pDoc->SetString(2, 50, nSrcTab, "=RelRange_Cm20_R0"); // C51
-    m_pDoc->SetString(0, 51, nSrcTab, "=RelRange_Cm20_R0"); // A52
-    m_pDoc->SetString(1, 51, nSrcTab, "=RelRange_Cm20_R0"); // B52
-    m_pDoc->SetString(2, 51, nSrcTab, "=RelRange_Cm20_R0"); // C52
+    m_pDoc->SetString(0, 50, nSrcTab, u"=RelRange_Cm20_R0"_ustr); // A51
+    m_pDoc->SetString(1, 50, nSrcTab, u"=RelRange_Cm20_R0"_ustr); // B51
+    m_pDoc->SetString(2, 50, nSrcTab, u"=RelRange_Cm20_R0"_ustr); // C51
+    m_pDoc->SetString(0, 51, nSrcTab, u"=RelRange_Cm20_R0"_ustr); // A52
+    m_pDoc->SetString(1, 51, nSrcTab, u"=RelRange_Cm20_R0"_ustr); // B52
+    m_pDoc->SetString(2, 51, nSrcTab, u"=RelRange_Cm20_R0"_ustr); // C52
 
-    m_pDoc->SetString(0, 60, nSrcTab, "=SUM(B2:D2)"); // A61
-    m_pDoc->SetString(1, 60, nSrcTab, "=SUM(B2:D2)"); // B61
-    m_pDoc->SetString(2, 60, nSrcTab, "=SUM(B2:D2)"); // C61
-    m_pDoc->SetString(0, 61, nSrcTab, "=SUM(B3:D3)"); // A62
-    m_pDoc->SetString(1, 61, nSrcTab, "=SUM(B3:D3)"); // B62
-    m_pDoc->SetString(2, 61, nSrcTab, "=SUM(B3:D3)"); // C62
+    m_pDoc->SetString(0, 60, nSrcTab, u"=SUM(B2:D2)"_ustr); // A61
+    m_pDoc->SetString(1, 60, nSrcTab, u"=SUM(B2:D2)"_ustr); // B61
+    m_pDoc->SetString(2, 60, nSrcTab, u"=SUM(B2:D2)"_ustr); // C61
+    m_pDoc->SetString(0, 61, nSrcTab, u"=SUM(B3:D3)"_ustr); // A62
+    m_pDoc->SetString(1, 61, nSrcTab, u"=SUM(B3:D3)"_ustr); // B62
+    m_pDoc->SetString(2, 61, nSrcTab, u"=SUM(B3:D3)"_ustr); // C62
 
-    m_pDoc->SetString(0, 70, nSrcTab, "=SUM($B$2:$D$2)"); // A71
-    m_pDoc->SetString(1, 70, nSrcTab, "=SUM($B$2:$D$2)"); // B71
-    m_pDoc->SetString(2, 70, nSrcTab, "=SUM($B$2:$D$2)"); // C71
-    m_pDoc->SetString(0, 71, nSrcTab, "=SUM($B$3:$D$3)"); // A72
-    m_pDoc->SetString(1, 71, nSrcTab, "=SUM($B$3:$D$3)"); // B72
-    m_pDoc->SetString(2, 71, nSrcTab, "=SUM($B$3:$D$3)"); // C72
+    m_pDoc->SetString(0, 70, nSrcTab, u"=SUM($B$2:$D$2)"_ustr); // A71
+    m_pDoc->SetString(1, 70, nSrcTab, u"=SUM($B$2:$D$2)"_ustr); // B71
+    m_pDoc->SetString(2, 70, nSrcTab, u"=SUM($B$2:$D$2)"_ustr); // C71
+    m_pDoc->SetString(0, 71, nSrcTab, u"=SUM($B$3:$D$3)"_ustr); // A72
+    m_pDoc->SetString(1, 71, nSrcTab, u"=SUM($B$3:$D$3)"_ustr); // B72
+    m_pDoc->SetString(2, 71, nSrcTab, u"=SUM($B$3:$D$3)"_ustr); // C72
 
-    m_pDoc->SetString(0, 80, nSrcTab, "=SUM(Range_B2_D2)"); // A81
-    m_pDoc->SetString(1, 80, nSrcTab, "=SUM(Range_B2_D2)"); // B81
-    m_pDoc->SetString(2, 80, nSrcTab, "=SUM(Range_B2_D2)"); // C81
-    m_pDoc->SetString(0, 81, nSrcTab, "=SUM(Range_B3_D3)"); // A82
-    m_pDoc->SetString(1, 81, nSrcTab, "=SUM(Range_B3_D3)"); // B82
-    m_pDoc->SetString(2, 81, nSrcTab, "=SUM(Range_B3_D3)"); // C82
+    m_pDoc->SetString(0, 80, nSrcTab, u"=SUM(Range_B2_D2)"_ustr); // A81
+    m_pDoc->SetString(1, 80, nSrcTab, u"=SUM(Range_B2_D2)"_ustr); // B81
+    m_pDoc->SetString(2, 80, nSrcTab, u"=SUM(Range_B2_D2)"_ustr); // C81
+    m_pDoc->SetString(0, 81, nSrcTab, u"=SUM(Range_B3_D3)"_ustr); // A82
+    m_pDoc->SetString(1, 81, nSrcTab, u"=SUM(Range_B3_D3)"_ustr); // B82
+    m_pDoc->SetString(2, 81, nSrcTab, u"=SUM(Range_B3_D3)"_ustr); // C82
 
-    m_pDoc->SetString(0, 90, nSrcTab, "=SUM($B$2:$D$3)"); // A91
-    m_pDoc->SetString(1, 90, nSrcTab, "=SUM($B$2:$D$3)"); // B91
-    m_pDoc->SetString(2, 90, nSrcTab, "=SUM($B$2:$D$3)"); // C91
-    m_pDoc->SetString(0, 91, nSrcTab, "=SUM($B$2:$D$3)"); // A92
-    m_pDoc->SetString(1, 91, nSrcTab, "=SUM($B$2:$D$3)"); // B92
-    m_pDoc->SetString(2, 91, nSrcTab, "=SUM($B$2:$D$3)"); // C92
+    m_pDoc->SetString(0, 90, nSrcTab, u"=SUM($B$2:$D$3)"_ustr); // A91
+    m_pDoc->SetString(1, 90, nSrcTab, u"=SUM($B$2:$D$3)"_ustr); // B91
+    m_pDoc->SetString(2, 90, nSrcTab, u"=SUM($B$2:$D$3)"_ustr); // C91
+    m_pDoc->SetString(0, 91, nSrcTab, u"=SUM($B$2:$D$3)"_ustr); // A92
+    m_pDoc->SetString(1, 91, nSrcTab, u"=SUM($B$2:$D$3)"_ustr); // B92
+    m_pDoc->SetString(2, 91, nSrcTab, u"=SUM($B$2:$D$3)"_ustr); // C92
 
-    m_pDoc->SetString(0, 100, nSrcTab, "=SUM(Range_B2_D3)"); // A101
-    m_pDoc->SetString(1, 100, nSrcTab, "=SUM(Range_B2_D3)"); // B101
-    m_pDoc->SetString(2, 100, nSrcTab, "=SUM(Range_B2_D3)"); // C101
-    m_pDoc->SetString(0, 101, nSrcTab, "=SUM(Range_B2_D3)"); // A102
-    m_pDoc->SetString(1, 101, nSrcTab, "=SUM(Range_B2_D3)"); // B102
-    m_pDoc->SetString(2, 101, nSrcTab, "=SUM(Range_B2_D3)"); // C102
+    m_pDoc->SetString(0, 100, nSrcTab, u"=SUM(Range_B2_D3)"_ustr); // A101
+    m_pDoc->SetString(1, 100, nSrcTab, u"=SUM(Range_B2_D3)"_ustr); // B101
+    m_pDoc->SetString(2, 100, nSrcTab, u"=SUM(Range_B2_D3)"_ustr); // C101
+    m_pDoc->SetString(0, 101, nSrcTab, u"=SUM(Range_B2_D3)"_ustr); // A102
+    m_pDoc->SetString(1, 101, nSrcTab, u"=SUM(Range_B2_D3)"_ustr); // B102
+    m_pDoc->SetString(2, 101, nSrcTab, u"=SUM(Range_B2_D3)"_ustr); // C102
 
     // Check precondition
-    checkReferencedCutRangesRowIntitial(nSrcTab, "Initial");
+    checkReferencedCutRangesRowIntitial(nSrcTab, u"Initial"_ustr);
 
     // Cut values B2:D2 to the clip document.
     ScDocument aClipDoc(SCDOCMODE_CLIP);
@@ -7447,9 +7429,9 @@ void TestCopyPaste::executeReferencedCutRangesRow(const bool bTransposed, const 
         m_pDoc->InsertTab(i, "Empty Tab " + OUString::number(i));
 
     if (nSrcTab < nDestTab)
-        m_pDoc->InsertTab(nDestTab, "Dest");
+        m_pDoc->InsertTab(nDestTab, u"Dest"_ustr);
     else if (nSrcTab > nDestTab)
-        m_pDoc->RenameTab(nDestTab, "Dest");
+        m_pDoc->RenameTab(nDestTab, u"Dest"_ustr);
 
     int nTabCount = m_pDoc->GetTableCount();
     for (int i = nTabCount; i < nTabCount + 2; ++i)
@@ -7514,7 +7496,7 @@ void TestCopyPaste::checkReferencedCutRangesRow(const SCTAB nSrcTab, const SCTAB
 {
     // Cut B2:D2 and pasted to C12:E12
 
-    OUString aFBase("=");
+    OUString aFBase(u"="_ustr);
     if (nSrcTab != nDestTab)
         aFBase += "Dest.";
 
@@ -7555,29 +7537,29 @@ void TestCopyPaste::checkReferencedCutRangesRow(const SCTAB nSrcTab, const SCTAB
     CPPUNIT_ASSERT_EQUAL(1032.0, m_pDoc->GetValue(22, 3, nSrcTab)); // W4
     CPPUNIT_ASSERT_EQUAL(1033.0, m_pDoc->GetValue(23, 3, nSrcTab)); // X4
     CPPUNIT_ASSERT_EQUAL(1034.0, m_pDoc->GetValue(24, 3, nSrcTab)); // Y4
-    CPPUNIT_ASSERT_EQUAL(OUString("=A1"), m_pDoc->GetFormula(20, 0, nSrcTab)); // U1
-    CPPUNIT_ASSERT_EQUAL(OUString("=B1"), m_pDoc->GetFormula(21, 0, nSrcTab)); // V1
-    CPPUNIT_ASSERT_EQUAL(OUString("=C1"), m_pDoc->GetFormula(22, 0, nSrcTab)); // W1
-    CPPUNIT_ASSERT_EQUAL(OUString("=D1"), m_pDoc->GetFormula(23, 0, nSrcTab)); // X1
-    CPPUNIT_ASSERT_EQUAL(OUString("=E1"), m_pDoc->GetFormula(24, 0, nSrcTab)); // Y1
-    CPPUNIT_ASSERT_EQUAL(OUString("=A2"), m_pDoc->GetFormula(20, 1, nSrcTab)); // U2
-    CPPUNIT_ASSERT_EQUAL(OUString("=E2"), m_pDoc->GetFormula(24, 1, nSrcTab)); // Y2
-    CPPUNIT_ASSERT_EQUAL(OUString("=A3"), m_pDoc->GetFormula(20, 2, nSrcTab)); // U3
-    CPPUNIT_ASSERT_EQUAL(OUString("=E3"), m_pDoc->GetFormula(24, 2, nSrcTab)); // Y3
-    CPPUNIT_ASSERT_EQUAL(OUString("=A4"), m_pDoc->GetFormula(20, 3, nSrcTab)); // U4
-    CPPUNIT_ASSERT_EQUAL(OUString("=B4"), m_pDoc->GetFormula(21, 3, nSrcTab)); // B4
-    CPPUNIT_ASSERT_EQUAL(OUString("=C4"), m_pDoc->GetFormula(22, 3, nSrcTab)); // W4
-    CPPUNIT_ASSERT_EQUAL(OUString("=D4"), m_pDoc->GetFormula(23, 3, nSrcTab)); // X4
-    CPPUNIT_ASSERT_EQUAL(OUString("=E4"), m_pDoc->GetFormula(24, 3, nSrcTab)); // Y4
+    CPPUNIT_ASSERT_EQUAL(u"=A1"_ustr, m_pDoc->GetFormula(20, 0, nSrcTab)); // U1
+    CPPUNIT_ASSERT_EQUAL(u"=B1"_ustr, m_pDoc->GetFormula(21, 0, nSrcTab)); // V1
+    CPPUNIT_ASSERT_EQUAL(u"=C1"_ustr, m_pDoc->GetFormula(22, 0, nSrcTab)); // W1
+    CPPUNIT_ASSERT_EQUAL(u"=D1"_ustr, m_pDoc->GetFormula(23, 0, nSrcTab)); // X1
+    CPPUNIT_ASSERT_EQUAL(u"=E1"_ustr, m_pDoc->GetFormula(24, 0, nSrcTab)); // Y1
+    CPPUNIT_ASSERT_EQUAL(u"=A2"_ustr, m_pDoc->GetFormula(20, 1, nSrcTab)); // U2
+    CPPUNIT_ASSERT_EQUAL(u"=E2"_ustr, m_pDoc->GetFormula(24, 1, nSrcTab)); // Y2
+    CPPUNIT_ASSERT_EQUAL(u"=A3"_ustr, m_pDoc->GetFormula(20, 2, nSrcTab)); // U3
+    CPPUNIT_ASSERT_EQUAL(u"=E3"_ustr, m_pDoc->GetFormula(24, 2, nSrcTab)); // Y3
+    CPPUNIT_ASSERT_EQUAL(u"=A4"_ustr, m_pDoc->GetFormula(20, 3, nSrcTab)); // U4
+    CPPUNIT_ASSERT_EQUAL(u"=B4"_ustr, m_pDoc->GetFormula(21, 3, nSrcTab)); // B4
+    CPPUNIT_ASSERT_EQUAL(u"=C4"_ustr, m_pDoc->GetFormula(22, 3, nSrcTab)); // W4
+    CPPUNIT_ASSERT_EQUAL(u"=D4"_ustr, m_pDoc->GetFormula(23, 3, nSrcTab)); // X4
+    CPPUNIT_ASSERT_EQUAL(u"=E4"_ustr, m_pDoc->GetFormula(24, 3, nSrcTab)); // Y4
 
     // Note: Values (mostly) remain the same
 
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "C12"), m_pDoc->GetFormula(0, 20, nSrcTab)); // A21
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "D12"), m_pDoc->GetFormula(1, 20, nSrcTab)); // B21
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "E12"), m_pDoc->GetFormula(2, 20, nSrcTab)); // C21
-    CPPUNIT_ASSERT_EQUAL(OUString("=B3"), m_pDoc->GetFormula(0, 21, nSrcTab)); // A22
-    CPPUNIT_ASSERT_EQUAL(OUString("=C3"), m_pDoc->GetFormula(1, 21, nSrcTab)); // B22
-    CPPUNIT_ASSERT_EQUAL(OUString("=D3"), m_pDoc->GetFormula(2, 21, nSrcTab)); // C22
+    CPPUNIT_ASSERT_EQUAL(u"=B3"_ustr, m_pDoc->GetFormula(0, 21, nSrcTab)); // A22
+    CPPUNIT_ASSERT_EQUAL(u"=C3"_ustr, m_pDoc->GetFormula(1, 21, nSrcTab)); // B22
+    CPPUNIT_ASSERT_EQUAL(u"=D3"_ustr, m_pDoc->GetFormula(2, 21, nSrcTab)); // C22
     CPPUNIT_ASSERT_EQUAL(01.0, m_pDoc->GetValue(0, 20, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(1, 20, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(2, 20, nSrcTab));
@@ -7588,9 +7570,9 @@ void TestCopyPaste::checkReferencedCutRangesRow(const SCTAB nSrcTab, const SCTAB
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "$C$12"), m_pDoc->GetFormula(0, 30, nSrcTab)); // A31
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "$D$12"), m_pDoc->GetFormula(1, 30, nSrcTab)); // B31
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "$E$12"), m_pDoc->GetFormula(2, 30, nSrcTab)); // C31
-    CPPUNIT_ASSERT_EQUAL(OUString("=$B$3"), m_pDoc->GetFormula(0, 31, nSrcTab)); // A32
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C$3"), m_pDoc->GetFormula(1, 31, nSrcTab)); // B32
-    CPPUNIT_ASSERT_EQUAL(OUString("=$D$3"), m_pDoc->GetFormula(2, 31, nSrcTab)); // C32
+    CPPUNIT_ASSERT_EQUAL(u"=$B$3"_ustr, m_pDoc->GetFormula(0, 31, nSrcTab)); // A32
+    CPPUNIT_ASSERT_EQUAL(u"=$C$3"_ustr, m_pDoc->GetFormula(1, 31, nSrcTab)); // B32
+    CPPUNIT_ASSERT_EQUAL(u"=$D$3"_ustr, m_pDoc->GetFormula(2, 31, nSrcTab)); // C32
     CPPUNIT_ASSERT_EQUAL(01.0, m_pDoc->GetValue(0, 30, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(1, 30, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(2, 30, nSrcTab));
@@ -7598,28 +7580,28 @@ void TestCopyPaste::checkReferencedCutRangesRow(const SCTAB nSrcTab, const SCTAB
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(1, 31, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(2, 31, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("$Dest.$C$12") : OUString("$Test.$C$12"),
-                         getRangeByName("Range_B2"));
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("$Dest.$D$12") : OUString("$Test.$D$12"),
-                         getRangeByName("Range_C2"));
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("$Dest.$E$12") : OUString("$Test.$E$12"),
-                         getRangeByName("Range_D2"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$3"), getRangeByName("Range_B3")); // no change
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$C$3"), getRangeByName("Range_C3")); // no change
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$D$3"), getRangeByName("Range_D3")); // no change
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("$Dest.$C$12:$E$12")
-                                             : OUString("$Test.$C$12:$E$12"),
-                         getRangeByName("Range_B2_D2"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$3:$D$3"), getRangeByName("Range_B3_D3")); // no change
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$2:$D$3"), getRangeByName("Range_B2_D3")); // no change
-    CPPUNIT_ASSERT_EQUAL(OUString("B2"), getRangeByName("RelRange_Cm20_R0")); // no change
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"$Dest.$C$12"_ustr : u"$Test.$C$12"_ustr,
+                         getRangeByName(u"Range_B2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"$Dest.$D$12"_ustr : u"$Test.$D$12"_ustr,
+                         getRangeByName(u"Range_C2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"$Dest.$E$12"_ustr : u"$Test.$E$12"_ustr,
+                         getRangeByName(u"Range_D2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$B$3"_ustr, getRangeByName(u"Range_B3"_ustr)); // no change
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$C$3"_ustr, getRangeByName(u"Range_C3"_ustr)); // no change
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$D$3"_ustr, getRangeByName(u"Range_D3"_ustr)); // no change
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"$Dest.$C$12:$E$12"_ustr
+                                             : u"$Test.$C$12:$E$12"_ustr,
+                         getRangeByName(u"Range_B2_D2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$B$3:$D$3"_ustr, getRangeByName(u"Range_B3_D3"_ustr)); // no change
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$B$2:$D$3"_ustr, getRangeByName(u"Range_B2_D3"_ustr)); // no change
+    CPPUNIT_ASSERT_EQUAL(u"B2"_ustr, getRangeByName(u"RelRange_Cm20_R0"_ustr)); // no change
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_B2"), m_pDoc->GetFormula(0, 40, nSrcTab)); // A41
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C2"), m_pDoc->GetFormula(1, 40, nSrcTab)); // B41
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_D2"), m_pDoc->GetFormula(2, 40, nSrcTab)); // C41
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_B3"), m_pDoc->GetFormula(0, 41, nSrcTab)); // A42
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C3"), m_pDoc->GetFormula(1, 41, nSrcTab)); // B42
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_D3"), m_pDoc->GetFormula(2, 41, nSrcTab)); // C42
+    CPPUNIT_ASSERT_EQUAL(u"=Range_B2"_ustr, m_pDoc->GetFormula(0, 40, nSrcTab)); // A41
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C2"_ustr, m_pDoc->GetFormula(1, 40, nSrcTab)); // B41
+    CPPUNIT_ASSERT_EQUAL(u"=Range_D2"_ustr, m_pDoc->GetFormula(2, 40, nSrcTab)); // C41
+    CPPUNIT_ASSERT_EQUAL(u"=Range_B3"_ustr, m_pDoc->GetFormula(0, 41, nSrcTab)); // A42
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C3"_ustr, m_pDoc->GetFormula(1, 41, nSrcTab)); // B42
+    CPPUNIT_ASSERT_EQUAL(u"=Range_D3"_ustr, m_pDoc->GetFormula(2, 41, nSrcTab)); // C42
     CPPUNIT_ASSERT_EQUAL(01.0, m_pDoc->GetValue(0, 40, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(1, 40, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(2, 40, nSrcTab));
@@ -7627,12 +7609,12 @@ void TestCopyPaste::checkReferencedCutRangesRow(const SCTAB nSrcTab, const SCTAB
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(1, 41, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(2, 41, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(0, 50, nSrcTab)); // A51
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(1, 50, nSrcTab)); // B51
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(2, 50, nSrcTab)); // C51
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(0, 51, nSrcTab)); // A52
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(1, 51, nSrcTab)); // B52
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(2, 51, nSrcTab)); // C52
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(0, 50, nSrcTab)); // A51
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(1, 50, nSrcTab)); // B51
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(2, 50, nSrcTab)); // C51
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(0, 51, nSrcTab)); // A52
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(1, 51, nSrcTab)); // B52
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(2, 51, nSrcTab)); // C52
     CPPUNIT_ASSERT_EQUAL(01.0, m_pDoc->GetValue(0, 50, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(1, 50, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(2, 50, nSrcTab));
@@ -7640,18 +7622,15 @@ void TestCopyPaste::checkReferencedCutRangesRow(const SCTAB nSrcTab, const SCTAB
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(1, 51, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(2, 51, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.C12:E12)")
-                                             : OUString("=SUM(C12:E12)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.C12:E12)"_ustr : u"=SUM(C12:E12)"_ustr,
                          m_pDoc->GetFormula(0, 60, nSrcTab)); // A61
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.C12:E12)")
-                                             : OUString("=SUM(C12:E12)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.C12:E12)"_ustr : u"=SUM(C12:E12)"_ustr,
                          m_pDoc->GetFormula(1, 60, nSrcTab)); // B61
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.C12:E12)")
-                                             : OUString("=SUM(C12:E12)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.C12:E12)"_ustr : u"=SUM(C12:E12)"_ustr,
                          m_pDoc->GetFormula(2, 60, nSrcTab)); // C61
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B3:D3)"), m_pDoc->GetFormula(0, 61, nSrcTab)); // A62
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B3:D3)"), m_pDoc->GetFormula(1, 61, nSrcTab)); // B62
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B3:D3)"), m_pDoc->GetFormula(2, 61, nSrcTab)); // C62
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(B3:D3)"_ustr, m_pDoc->GetFormula(0, 61, nSrcTab)); // A62
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(B3:D3)"_ustr, m_pDoc->GetFormula(1, 61, nSrcTab)); // B62
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(B3:D3)"_ustr, m_pDoc->GetFormula(2, 61, nSrcTab)); // C62
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 60, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(1, 60, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(2, 60, nSrcTab));
@@ -7659,18 +7638,18 @@ void TestCopyPaste::checkReferencedCutRangesRow(const SCTAB nSrcTab, const SCTAB
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 61, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(2, 61, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.$C$12:$E$12)")
-                                             : OUString("=SUM($C$12:$E$12)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.$C$12:$E$12)"_ustr
+                                             : u"=SUM($C$12:$E$12)"_ustr,
                          m_pDoc->GetFormula(0, 70, nSrcTab)); // A71
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.$C$12:$E$12)")
-                                             : OUString("=SUM($C$12:$E$12)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.$C$12:$E$12)"_ustr
+                                             : u"=SUM($C$12:$E$12)"_ustr,
                          m_pDoc->GetFormula(1, 70, nSrcTab)); // B71
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.$C$12:$E$12)")
-                                             : OUString("=SUM($C$12:$E$12)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.$C$12:$E$12)"_ustr
+                                             : u"=SUM($C$12:$E$12)"_ustr,
                          m_pDoc->GetFormula(2, 70, nSrcTab)); // C71
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$D$3)"), m_pDoc->GetFormula(0, 71, nSrcTab)); // A72
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$D$3)"), m_pDoc->GetFormula(1, 71, nSrcTab)); // B72
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$D$3)"), m_pDoc->GetFormula(2, 71, nSrcTab)); // C72
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$D$3)"_ustr, m_pDoc->GetFormula(0, 71, nSrcTab)); // A72
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$D$3)"_ustr, m_pDoc->GetFormula(1, 71, nSrcTab)); // B72
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$D$3)"_ustr, m_pDoc->GetFormula(2, 71, nSrcTab)); // C72
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 70, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(1, 70, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(2, 70, nSrcTab));
@@ -7678,12 +7657,12 @@ void TestCopyPaste::checkReferencedCutRangesRow(const SCTAB nSrcTab, const SCTAB
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 71, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(2, 71, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D2)"), m_pDoc->GetFormula(0, 80, nSrcTab)); // A81
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D2)"), m_pDoc->GetFormula(1, 80, nSrcTab)); // B81
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D2)"), m_pDoc->GetFormula(2, 80, nSrcTab)); // C81
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B3_D3)"), m_pDoc->GetFormula(0, 81, nSrcTab)); // A82
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B3_D3)"), m_pDoc->GetFormula(1, 81, nSrcTab)); // B82
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B3_D3)"), m_pDoc->GetFormula(2, 81, nSrcTab)); // C82
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D2)"_ustr, m_pDoc->GetFormula(0, 80, nSrcTab)); // A81
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D2)"_ustr, m_pDoc->GetFormula(1, 80, nSrcTab)); // B81
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D2)"_ustr, m_pDoc->GetFormula(2, 80, nSrcTab)); // C81
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B3_D3)"_ustr, m_pDoc->GetFormula(0, 81, nSrcTab)); // A82
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B3_D3)"_ustr, m_pDoc->GetFormula(1, 81, nSrcTab)); // B82
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B3_D3)"_ustr, m_pDoc->GetFormula(2, 81, nSrcTab)); // C82
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 80, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(1, 80, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(2, 80, nSrcTab));
@@ -7692,12 +7671,12 @@ void TestCopyPaste::checkReferencedCutRangesRow(const SCTAB nSrcTab, const SCTAB
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(2, 81, nSrcTab));
 
     // no change in formula after cut
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$3)"), m_pDoc->GetFormula(0, 90, nSrcTab)); // A91
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$3)"), m_pDoc->GetFormula(1, 90, nSrcTab)); // B91
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$3)"), m_pDoc->GetFormula(2, 90, nSrcTab)); // C91
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$3)"), m_pDoc->GetFormula(0, 91, nSrcTab)); // A92
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$3)"), m_pDoc->GetFormula(1, 91, nSrcTab)); // B92
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$3)"), m_pDoc->GetFormula(2, 91, nSrcTab)); // C92
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$D$3)"_ustr, m_pDoc->GetFormula(0, 90, nSrcTab)); // A91
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$D$3)"_ustr, m_pDoc->GetFormula(1, 90, nSrcTab)); // B91
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$D$3)"_ustr, m_pDoc->GetFormula(2, 90, nSrcTab)); // C91
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$D$3)"_ustr, m_pDoc->GetFormula(0, 91, nSrcTab)); // A92
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$D$3)"_ustr, m_pDoc->GetFormula(1, 91, nSrcTab)); // B92
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$D$3)"_ustr, m_pDoc->GetFormula(2, 91, nSrcTab)); // C92
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(0, 90, nSrcTab)); // only 2nd row
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 90, nSrcTab)); // only 2nd row
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(2, 90, nSrcTab)); // only 2nd row
@@ -7705,18 +7684,12 @@ void TestCopyPaste::checkReferencedCutRangesRow(const SCTAB nSrcTab, const SCTAB
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 91, nSrcTab)); // only 2nd row
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(2, 91, nSrcTab)); // only 2nd row
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D3)"),
-                         m_pDoc->GetFormula(0, 100, nSrcTab)); // A101
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D3)"),
-                         m_pDoc->GetFormula(1, 100, nSrcTab)); // B101
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D3)"),
-                         m_pDoc->GetFormula(2, 100, nSrcTab)); // C101
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D3)"),
-                         m_pDoc->GetFormula(0, 101, nSrcTab)); // A102
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D3)"),
-                         m_pDoc->GetFormula(1, 101, nSrcTab)); // B102
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D3)"),
-                         m_pDoc->GetFormula(2, 101, nSrcTab)); // C102
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D3)"_ustr, m_pDoc->GetFormula(0, 100, nSrcTab)); // A101
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D3)"_ustr, m_pDoc->GetFormula(1, 100, nSrcTab)); // B101
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D3)"_ustr, m_pDoc->GetFormula(2, 100, nSrcTab)); // C101
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D3)"_ustr, m_pDoc->GetFormula(0, 101, nSrcTab)); // A102
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D3)"_ustr, m_pDoc->GetFormula(1, 101, nSrcTab)); // B102
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D3)"_ustr, m_pDoc->GetFormula(2, 101, nSrcTab)); // C102
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(0, 100, nSrcTab)); // only 2nd row
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 100, nSrcTab)); // only 2nd row
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(2, 100, nSrcTab)); // only 2nd row
@@ -7729,7 +7702,7 @@ void TestCopyPaste::checkReferencedCutTransposedRangesRow(const SCTAB nSrcTab, c
 {
     // Cut B2:D2 and pasted transposed to C12:C14
 
-    OUString aFBase("=");
+    OUString aFBase(u"="_ustr);
     if (nSrcTab != nDestTab)
         aFBase += "Dest.";
 
@@ -7770,20 +7743,20 @@ void TestCopyPaste::checkReferencedCutTransposedRangesRow(const SCTAB nSrcTab, c
     CPPUNIT_ASSERT_EQUAL(1032.0, m_pDoc->GetValue(22, 3, nSrcTab)); // W4
     CPPUNIT_ASSERT_EQUAL(1033.0, m_pDoc->GetValue(23, 3, nSrcTab)); // X4
     CPPUNIT_ASSERT_EQUAL(1034.0, m_pDoc->GetValue(24, 3, nSrcTab)); // Y4
-    CPPUNIT_ASSERT_EQUAL(OUString("=A1"), m_pDoc->GetFormula(20, 0, nSrcTab)); // U1
-    CPPUNIT_ASSERT_EQUAL(OUString("=B1"), m_pDoc->GetFormula(21, 0, nSrcTab)); // V1
-    CPPUNIT_ASSERT_EQUAL(OUString("=C1"), m_pDoc->GetFormula(22, 0, nSrcTab)); // W1
-    CPPUNIT_ASSERT_EQUAL(OUString("=D1"), m_pDoc->GetFormula(23, 0, nSrcTab)); // X1
-    CPPUNIT_ASSERT_EQUAL(OUString("=E1"), m_pDoc->GetFormula(24, 0, nSrcTab)); // Y1
-    CPPUNIT_ASSERT_EQUAL(OUString("=A2"), m_pDoc->GetFormula(20, 1, nSrcTab)); // U2
-    CPPUNIT_ASSERT_EQUAL(OUString("=E2"), m_pDoc->GetFormula(24, 1, nSrcTab)); // Y2
-    CPPUNIT_ASSERT_EQUAL(OUString("=A3"), m_pDoc->GetFormula(20, 2, nSrcTab)); // U3
-    CPPUNIT_ASSERT_EQUAL(OUString("=E3"), m_pDoc->GetFormula(24, 2, nSrcTab)); // Y3
-    CPPUNIT_ASSERT_EQUAL(OUString("=A4"), m_pDoc->GetFormula(20, 3, nSrcTab)); // U4
-    CPPUNIT_ASSERT_EQUAL(OUString("=B4"), m_pDoc->GetFormula(21, 3, nSrcTab)); // B4
-    CPPUNIT_ASSERT_EQUAL(OUString("=C4"), m_pDoc->GetFormula(22, 3, nSrcTab)); // W4
-    CPPUNIT_ASSERT_EQUAL(OUString("=D4"), m_pDoc->GetFormula(23, 3, nSrcTab)); // X4
-    CPPUNIT_ASSERT_EQUAL(OUString("=E4"), m_pDoc->GetFormula(24, 3, nSrcTab)); // Y4
+    CPPUNIT_ASSERT_EQUAL(u"=A1"_ustr, m_pDoc->GetFormula(20, 0, nSrcTab)); // U1
+    CPPUNIT_ASSERT_EQUAL(u"=B1"_ustr, m_pDoc->GetFormula(21, 0, nSrcTab)); // V1
+    CPPUNIT_ASSERT_EQUAL(u"=C1"_ustr, m_pDoc->GetFormula(22, 0, nSrcTab)); // W1
+    CPPUNIT_ASSERT_EQUAL(u"=D1"_ustr, m_pDoc->GetFormula(23, 0, nSrcTab)); // X1
+    CPPUNIT_ASSERT_EQUAL(u"=E1"_ustr, m_pDoc->GetFormula(24, 0, nSrcTab)); // Y1
+    CPPUNIT_ASSERT_EQUAL(u"=A2"_ustr, m_pDoc->GetFormula(20, 1, nSrcTab)); // U2
+    CPPUNIT_ASSERT_EQUAL(u"=E2"_ustr, m_pDoc->GetFormula(24, 1, nSrcTab)); // Y2
+    CPPUNIT_ASSERT_EQUAL(u"=A3"_ustr, m_pDoc->GetFormula(20, 2, nSrcTab)); // U3
+    CPPUNIT_ASSERT_EQUAL(u"=E3"_ustr, m_pDoc->GetFormula(24, 2, nSrcTab)); // Y3
+    CPPUNIT_ASSERT_EQUAL(u"=A4"_ustr, m_pDoc->GetFormula(20, 3, nSrcTab)); // U4
+    CPPUNIT_ASSERT_EQUAL(u"=B4"_ustr, m_pDoc->GetFormula(21, 3, nSrcTab)); // B4
+    CPPUNIT_ASSERT_EQUAL(u"=C4"_ustr, m_pDoc->GetFormula(22, 3, nSrcTab)); // W4
+    CPPUNIT_ASSERT_EQUAL(u"=D4"_ustr, m_pDoc->GetFormula(23, 3, nSrcTab)); // X4
+    CPPUNIT_ASSERT_EQUAL(u"=E4"_ustr, m_pDoc->GetFormula(24, 3, nSrcTab)); // Y4
 
     // Note: Values (mostly) remain the same
 
@@ -7798,9 +7771,9 @@ void TestCopyPaste::checkReferencedCutTransposedRangesRow(const SCTAB nSrcTab, c
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "C12"), m_pDoc->GetFormula(0, 20, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "C13"), m_pDoc->GetFormula(1, 20, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "C14"), m_pDoc->GetFormula(2, 20, nSrcTab));
-    CPPUNIT_ASSERT_EQUAL(OUString("=B3"), m_pDoc->GetFormula(0, 21, nSrcTab));
-    CPPUNIT_ASSERT_EQUAL(OUString("=C3"), m_pDoc->GetFormula(1, 21, nSrcTab));
-    CPPUNIT_ASSERT_EQUAL(OUString("=D3"), m_pDoc->GetFormula(2, 21, nSrcTab));
+    CPPUNIT_ASSERT_EQUAL(u"=B3"_ustr, m_pDoc->GetFormula(0, 21, nSrcTab));
+    CPPUNIT_ASSERT_EQUAL(u"=C3"_ustr, m_pDoc->GetFormula(1, 21, nSrcTab));
+    CPPUNIT_ASSERT_EQUAL(u"=D3"_ustr, m_pDoc->GetFormula(2, 21, nSrcTab));
 
     CPPUNIT_ASSERT_EQUAL(01.0, m_pDoc->GetValue(0, 30, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(1, 30, nSrcTab));
@@ -7812,32 +7785,32 @@ void TestCopyPaste::checkReferencedCutTransposedRangesRow(const SCTAB nSrcTab, c
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "$C$12"), m_pDoc->GetFormula(0, 30, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "$C$13"), m_pDoc->GetFormula(1, 30, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "$C$14"), m_pDoc->GetFormula(2, 30, nSrcTab));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$B$3"), m_pDoc->GetFormula(0, 31, nSrcTab));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C$3"), m_pDoc->GetFormula(1, 31, nSrcTab));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$D$3"), m_pDoc->GetFormula(2, 31, nSrcTab));
+    CPPUNIT_ASSERT_EQUAL(u"=$B$3"_ustr, m_pDoc->GetFormula(0, 31, nSrcTab));
+    CPPUNIT_ASSERT_EQUAL(u"=$C$3"_ustr, m_pDoc->GetFormula(1, 31, nSrcTab));
+    CPPUNIT_ASSERT_EQUAL(u"=$D$3"_ustr, m_pDoc->GetFormula(2, 31, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("$Dest.$C$12") : OUString("$Test.$C$12"),
-                         getRangeByName("Range_B2"));
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("$Dest.$C$13") : OUString("$Test.$C$13"),
-                         getRangeByName("Range_C2"));
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("$Dest.$C$14") : OUString("$Test.$C$14"),
-                         getRangeByName("Range_D2"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$3"), getRangeByName("Range_B3")); // no change
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$C$3"), getRangeByName("Range_C3")); // no change
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$D$3"), getRangeByName("Range_D3")); // no change
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("$Dest.$C$12:$C$14")
-                                             : OUString("$Test.$C$12:$C$14"),
-                         getRangeByName("Range_B2_D2"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$3:$D$3"), getRangeByName("Range_B3_D3")); // no change
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$2:$D$3"), getRangeByName("Range_B2_D3")); // no change
-    CPPUNIT_ASSERT_EQUAL(OUString("B2"), getRangeByName("RelRange_Cm20_R0")); // no change
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"$Dest.$C$12"_ustr : u"$Test.$C$12"_ustr,
+                         getRangeByName(u"Range_B2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"$Dest.$C$13"_ustr : u"$Test.$C$13"_ustr,
+                         getRangeByName(u"Range_C2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"$Dest.$C$14"_ustr : u"$Test.$C$14"_ustr,
+                         getRangeByName(u"Range_D2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$B$3"_ustr, getRangeByName(u"Range_B3"_ustr)); // no change
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$C$3"_ustr, getRangeByName(u"Range_C3"_ustr)); // no change
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$D$3"_ustr, getRangeByName(u"Range_D3"_ustr)); // no change
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"$Dest.$C$12:$C$14"_ustr
+                                             : u"$Test.$C$12:$C$14"_ustr,
+                         getRangeByName(u"Range_B2_D2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$B$3:$D$3"_ustr, getRangeByName(u"Range_B3_D3"_ustr)); // no change
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$B$2:$D$3"_ustr, getRangeByName(u"Range_B2_D3"_ustr)); // no change
+    CPPUNIT_ASSERT_EQUAL(u"B2"_ustr, getRangeByName(u"RelRange_Cm20_R0"_ustr)); // no change
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_B2"), m_pDoc->GetFormula(0, 40, nSrcTab)); // A41
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C2"), m_pDoc->GetFormula(1, 40, nSrcTab)); // B41
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_D2"), m_pDoc->GetFormula(2, 40, nSrcTab)); // C41
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_B3"), m_pDoc->GetFormula(0, 41, nSrcTab)); // A42
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C3"), m_pDoc->GetFormula(1, 41, nSrcTab)); // B42
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_D3"), m_pDoc->GetFormula(2, 41, nSrcTab)); // C42
+    CPPUNIT_ASSERT_EQUAL(u"=Range_B2"_ustr, m_pDoc->GetFormula(0, 40, nSrcTab)); // A41
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C2"_ustr, m_pDoc->GetFormula(1, 40, nSrcTab)); // B41
+    CPPUNIT_ASSERT_EQUAL(u"=Range_D2"_ustr, m_pDoc->GetFormula(2, 40, nSrcTab)); // C41
+    CPPUNIT_ASSERT_EQUAL(u"=Range_B3"_ustr, m_pDoc->GetFormula(0, 41, nSrcTab)); // A42
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C3"_ustr, m_pDoc->GetFormula(1, 41, nSrcTab)); // B42
+    CPPUNIT_ASSERT_EQUAL(u"=Range_D3"_ustr, m_pDoc->GetFormula(2, 41, nSrcTab)); // C42
     CPPUNIT_ASSERT_EQUAL(01.0, m_pDoc->GetValue(0, 40, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(1, 40, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(2, 40, nSrcTab));
@@ -7845,12 +7818,12 @@ void TestCopyPaste::checkReferencedCutTransposedRangesRow(const SCTAB nSrcTab, c
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(1, 41, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(2, 41, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(0, 50, nSrcTab)); // A51
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(1, 50, nSrcTab)); // B51
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(2, 50, nSrcTab)); // C51
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(0, 51, nSrcTab)); // A52
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(1, 51, nSrcTab)); // B52
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(2, 51, nSrcTab)); // C52
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(0, 50, nSrcTab)); // A51
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(1, 50, nSrcTab)); // B51
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(2, 50, nSrcTab)); // C51
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(0, 51, nSrcTab)); // A52
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(1, 51, nSrcTab)); // B52
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(2, 51, nSrcTab)); // C52
     CPPUNIT_ASSERT_EQUAL(01.0, m_pDoc->GetValue(0, 50, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(1, 50, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(2, 50, nSrcTab));
@@ -7858,18 +7831,15 @@ void TestCopyPaste::checkReferencedCutTransposedRangesRow(const SCTAB nSrcTab, c
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(1, 51, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(2, 51, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.C12:C14)")
-                                             : OUString("=SUM(C12:C14)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.C12:C14)"_ustr : u"=SUM(C12:C14)"_ustr,
                          m_pDoc->GetFormula(0, 60, nSrcTab)); // A61
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.C12:C14)")
-                                             : OUString("=SUM(C12:C14)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.C12:C14)"_ustr : u"=SUM(C12:C14)"_ustr,
                          m_pDoc->GetFormula(1, 60, nSrcTab)); // B61
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.C12:C14)")
-                                             : OUString("=SUM(C12:C14)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.C12:C14)"_ustr : u"=SUM(C12:C14)"_ustr,
                          m_pDoc->GetFormula(2, 60, nSrcTab)); // C61
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B3:D3)"), m_pDoc->GetFormula(0, 61, nSrcTab)); // A62
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B3:D3)"), m_pDoc->GetFormula(1, 61, nSrcTab)); // B62
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B3:D3)"), m_pDoc->GetFormula(2, 61, nSrcTab)); // C62
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(B3:D3)"_ustr, m_pDoc->GetFormula(0, 61, nSrcTab)); // A62
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(B3:D3)"_ustr, m_pDoc->GetFormula(1, 61, nSrcTab)); // B62
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(B3:D3)"_ustr, m_pDoc->GetFormula(2, 61, nSrcTab)); // C62
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 60, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(1, 60, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(2, 60, nSrcTab));
@@ -7877,18 +7847,18 @@ void TestCopyPaste::checkReferencedCutTransposedRangesRow(const SCTAB nSrcTab, c
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 61, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(2, 61, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.$C$12:$C$14)")
-                                             : OUString("=SUM($C$12:$C$14)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.$C$12:$C$14)"_ustr
+                                             : u"=SUM($C$12:$C$14)"_ustr,
                          m_pDoc->GetFormula(0, 70, nSrcTab)); // A71
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.$C$12:$C$14)")
-                                             : OUString("=SUM($C$12:$C$14)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.$C$12:$C$14)"_ustr
+                                             : u"=SUM($C$12:$C$14)"_ustr,
                          m_pDoc->GetFormula(1, 70, nSrcTab)); // B71
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.$C$12:$C$14)")
-                                             : OUString("=SUM($C$12:$C$14)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.$C$12:$C$14)"_ustr
+                                             : u"=SUM($C$12:$C$14)"_ustr,
                          m_pDoc->GetFormula(2, 70, nSrcTab)); // C71
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$D$3)"), m_pDoc->GetFormula(0, 71, nSrcTab)); // A72
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$D$3)"), m_pDoc->GetFormula(1, 71, nSrcTab)); // B72
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$3:$D$3)"), m_pDoc->GetFormula(2, 71, nSrcTab)); // C72
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$D$3)"_ustr, m_pDoc->GetFormula(0, 71, nSrcTab)); // A72
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$D$3)"_ustr, m_pDoc->GetFormula(1, 71, nSrcTab)); // B72
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$3:$D$3)"_ustr, m_pDoc->GetFormula(2, 71, nSrcTab)); // C72
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 70, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(1, 70, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(2, 70, nSrcTab));
@@ -7896,12 +7866,12 @@ void TestCopyPaste::checkReferencedCutTransposedRangesRow(const SCTAB nSrcTab, c
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 71, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(2, 71, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D2)"), m_pDoc->GetFormula(0, 80, nSrcTab)); // A81
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D2)"), m_pDoc->GetFormula(1, 80, nSrcTab)); // B81
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D2)"), m_pDoc->GetFormula(2, 80, nSrcTab)); // C81
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B3_D3)"), m_pDoc->GetFormula(0, 81, nSrcTab)); // A82
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B3_D3)"), m_pDoc->GetFormula(1, 81, nSrcTab)); // B82
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B3_D3)"), m_pDoc->GetFormula(2, 81, nSrcTab)); // C82
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D2)"_ustr, m_pDoc->GetFormula(0, 80, nSrcTab)); // A81
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D2)"_ustr, m_pDoc->GetFormula(1, 80, nSrcTab)); // B81
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D2)"_ustr, m_pDoc->GetFormula(2, 80, nSrcTab)); // C81
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B3_D3)"_ustr, m_pDoc->GetFormula(0, 81, nSrcTab)); // A82
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B3_D3)"_ustr, m_pDoc->GetFormula(1, 81, nSrcTab)); // B82
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B3_D3)"_ustr, m_pDoc->GetFormula(2, 81, nSrcTab)); // C82
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 80, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(1, 80, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(2, 80, nSrcTab));
@@ -7910,12 +7880,12 @@ void TestCopyPaste::checkReferencedCutTransposedRangesRow(const SCTAB nSrcTab, c
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(2, 81, nSrcTab));
 
     // no change in formula after cut
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$3)"), m_pDoc->GetFormula(0, 90, nSrcTab)); // A91
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$3)"), m_pDoc->GetFormula(1, 90, nSrcTab)); // B91
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$3)"), m_pDoc->GetFormula(2, 90, nSrcTab)); // C91
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$3)"), m_pDoc->GetFormula(0, 91, nSrcTab)); // A92
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$3)"), m_pDoc->GetFormula(1, 91, nSrcTab)); // B92
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$D$3)"), m_pDoc->GetFormula(2, 91, nSrcTab)); // C92
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$D$3)"_ustr, m_pDoc->GetFormula(0, 90, nSrcTab)); // A91
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$D$3)"_ustr, m_pDoc->GetFormula(1, 90, nSrcTab)); // B91
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$D$3)"_ustr, m_pDoc->GetFormula(2, 90, nSrcTab)); // C91
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$D$3)"_ustr, m_pDoc->GetFormula(0, 91, nSrcTab)); // A92
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$D$3)"_ustr, m_pDoc->GetFormula(1, 91, nSrcTab)); // B92
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$D$3)"_ustr, m_pDoc->GetFormula(2, 91, nSrcTab)); // C92
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(0, 90, nSrcTab)); // only 2nd row
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 90, nSrcTab)); // only 2nd row
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(2, 90, nSrcTab)); // only 2nd row
@@ -7923,18 +7893,12 @@ void TestCopyPaste::checkReferencedCutTransposedRangesRow(const SCTAB nSrcTab, c
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 91, nSrcTab)); // only 2nd row
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(2, 91, nSrcTab)); // only 2nd row
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D3)"),
-                         m_pDoc->GetFormula(0, 100, nSrcTab)); // A101
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D3)"),
-                         m_pDoc->GetFormula(1, 100, nSrcTab)); // B101
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D3)"),
-                         m_pDoc->GetFormula(2, 100, nSrcTab)); // C101
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D3)"),
-                         m_pDoc->GetFormula(0, 101, nSrcTab)); // A102
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D3)"),
-                         m_pDoc->GetFormula(1, 101, nSrcTab)); // B102
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_D3)"),
-                         m_pDoc->GetFormula(2, 101, nSrcTab)); // C102
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D3)"_ustr, m_pDoc->GetFormula(0, 100, nSrcTab)); // A101
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D3)"_ustr, m_pDoc->GetFormula(1, 100, nSrcTab)); // B101
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D3)"_ustr, m_pDoc->GetFormula(2, 100, nSrcTab)); // C101
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D3)"_ustr, m_pDoc->GetFormula(0, 101, nSrcTab)); // A102
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D3)"_ustr, m_pDoc->GetFormula(1, 101, nSrcTab)); // B102
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_D3)"_ustr, m_pDoc->GetFormula(2, 101, nSrcTab)); // C102
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(0, 100, nSrcTab)); // only 2nd row
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 100, nSrcTab)); // only 2nd row
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(2, 100, nSrcTab)); // only 2nd row
@@ -7954,7 +7918,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testReferencedCutRangesRow)
 
     pUndoPaste->Undo();
     pUndoCut->Undo();
-    checkReferencedCutRangesRowIntitial(nSrcTab, "After undo");
+    checkReferencedCutRangesRowIntitial(nSrcTab, u"After undo"_ustr);
 
     pUndoCut->Redo();
     pUndoPaste->Redo();
@@ -7962,7 +7926,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testReferencedCutRangesRow)
 
     pUndoPaste->Undo();
     pUndoCut->Undo();
-    checkReferencedCutRangesRowIntitial(nSrcTab, "After undo");
+    checkReferencedCutRangesRowIntitial(nSrcTab, u"After undo"_ustr);
 
     pUndoPaste.reset();
     pUndoCut.reset();
@@ -8006,7 +7970,7 @@ void TestCopyPaste::checkReferencedCutTransposedRangesRowUndo(const SCTAB nSrcTa
 
     pUndoPaste->Undo();
     pUndoCut->Undo();
-    checkReferencedCutRangesRowIntitial(nSrcTab, "After undo");
+    checkReferencedCutRangesRowIntitial(nSrcTab, u"After undo"_ustr);
 
     pUndoCut->Redo();
     pUndoPaste->Redo();
@@ -8014,7 +7978,7 @@ void TestCopyPaste::checkReferencedCutTransposedRangesRowUndo(const SCTAB nSrcTa
 
     pUndoPaste->Undo();
     pUndoCut->Undo();
-    checkReferencedCutRangesRowIntitial(nSrcTab, "After undo");
+    checkReferencedCutRangesRowIntitial(nSrcTab, u"After undo"_ustr);
 
     pUndoPaste.reset();
     pUndoCut.reset();
@@ -8063,20 +8027,20 @@ void TestCopyPaste::checkReferencedCutRangesColIntitial(const SCTAB nSrcTab, con
     CPPUNIT_ASSERT_EQUAL(1032.0, m_pDoc->GetValue(23, 2, nSrcTab)); // X3
     CPPUNIT_ASSERT_EQUAL(1033.0, m_pDoc->GetValue(23, 3, nSrcTab)); // X4
     CPPUNIT_ASSERT_EQUAL(1034.0, m_pDoc->GetValue(23, 4, nSrcTab)); // X5
-    CPPUNIT_ASSERT_EQUAL(OUString("=A1"), m_pDoc->GetFormula(20, 0, nSrcTab)); // U1
-    CPPUNIT_ASSERT_EQUAL(OUString("=A2"), m_pDoc->GetFormula(20, 1, nSrcTab)); // U2
-    CPPUNIT_ASSERT_EQUAL(OUString("=A3"), m_pDoc->GetFormula(20, 2, nSrcTab)); // U3
-    CPPUNIT_ASSERT_EQUAL(OUString("=A4"), m_pDoc->GetFormula(20, 3, nSrcTab)); // U4
-    CPPUNIT_ASSERT_EQUAL(OUString("=A5"), m_pDoc->GetFormula(20, 4, nSrcTab)); // U5
-    CPPUNIT_ASSERT_EQUAL(OUString("=B1"), m_pDoc->GetFormula(21, 0, nSrcTab)); // V1
-    CPPUNIT_ASSERT_EQUAL(OUString("=B5"), m_pDoc->GetFormula(21, 4, nSrcTab)); // V5
-    CPPUNIT_ASSERT_EQUAL(OUString("=C1"), m_pDoc->GetFormula(22, 0, nSrcTab)); // W1
-    CPPUNIT_ASSERT_EQUAL(OUString("=C5"), m_pDoc->GetFormula(22, 4, nSrcTab)); // W5
-    CPPUNIT_ASSERT_EQUAL(OUString("=D1"), m_pDoc->GetFormula(23, 0, nSrcTab)); // X1
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2"), m_pDoc->GetFormula(23, 1, nSrcTab)); // X2
-    CPPUNIT_ASSERT_EQUAL(OUString("=D3"), m_pDoc->GetFormula(23, 2, nSrcTab)); // X3
-    CPPUNIT_ASSERT_EQUAL(OUString("=D4"), m_pDoc->GetFormula(23, 3, nSrcTab)); // X4
-    CPPUNIT_ASSERT_EQUAL(OUString("=D5"), m_pDoc->GetFormula(23, 4, nSrcTab)); // X5
+    CPPUNIT_ASSERT_EQUAL(u"=A1"_ustr, m_pDoc->GetFormula(20, 0, nSrcTab)); // U1
+    CPPUNIT_ASSERT_EQUAL(u"=A2"_ustr, m_pDoc->GetFormula(20, 1, nSrcTab)); // U2
+    CPPUNIT_ASSERT_EQUAL(u"=A3"_ustr, m_pDoc->GetFormula(20, 2, nSrcTab)); // U3
+    CPPUNIT_ASSERT_EQUAL(u"=A4"_ustr, m_pDoc->GetFormula(20, 3, nSrcTab)); // U4
+    CPPUNIT_ASSERT_EQUAL(u"=A5"_ustr, m_pDoc->GetFormula(20, 4, nSrcTab)); // U5
+    CPPUNIT_ASSERT_EQUAL(u"=B1"_ustr, m_pDoc->GetFormula(21, 0, nSrcTab)); // V1
+    CPPUNIT_ASSERT_EQUAL(u"=B5"_ustr, m_pDoc->GetFormula(21, 4, nSrcTab)); // V5
+    CPPUNIT_ASSERT_EQUAL(u"=C1"_ustr, m_pDoc->GetFormula(22, 0, nSrcTab)); // W1
+    CPPUNIT_ASSERT_EQUAL(u"=C5"_ustr, m_pDoc->GetFormula(22, 4, nSrcTab)); // W5
+    CPPUNIT_ASSERT_EQUAL(u"=D1"_ustr, m_pDoc->GetFormula(23, 0, nSrcTab)); // X1
+    CPPUNIT_ASSERT_EQUAL(u"=D2"_ustr, m_pDoc->GetFormula(23, 1, nSrcTab)); // X2
+    CPPUNIT_ASSERT_EQUAL(u"=D3"_ustr, m_pDoc->GetFormula(23, 2, nSrcTab)); // X3
+    CPPUNIT_ASSERT_EQUAL(u"=D4"_ustr, m_pDoc->GetFormula(23, 3, nSrcTab)); // X4
+    CPPUNIT_ASSERT_EQUAL(u"=D5"_ustr, m_pDoc->GetFormula(23, 4, nSrcTab)); // X5
 
     for (int i = 10; i < 20; ++i)
         for (int j = 0; j < 10; ++j)
@@ -8087,12 +8051,12 @@ void TestCopyPaste::checkReferencedCutRangesColIntitial(const SCTAB nSrcTab, con
 
     printValuesAndFormulasInRange(m_pDoc, ScRange(0, 20, nSrcTab, 1, 22, nSrcTab),
                                   rDesc.toUtf8() + ": Relative references");
-    CPPUNIT_ASSERT_EQUAL(OUString("=B2"), m_pDoc->GetFormula(0, 20, nSrcTab)); // A21
-    CPPUNIT_ASSERT_EQUAL(OUString("=B3"), m_pDoc->GetFormula(0, 21, nSrcTab)); // A22
-    CPPUNIT_ASSERT_EQUAL(OUString("=B4"), m_pDoc->GetFormula(0, 22, nSrcTab)); // A23
-    CPPUNIT_ASSERT_EQUAL(OUString("=C2"), m_pDoc->GetFormula(1, 20, nSrcTab)); // B21
-    CPPUNIT_ASSERT_EQUAL(OUString("=C3"), m_pDoc->GetFormula(1, 21, nSrcTab)); // B22
-    CPPUNIT_ASSERT_EQUAL(OUString("=C4"), m_pDoc->GetFormula(1, 22, nSrcTab)); // B23
+    CPPUNIT_ASSERT_EQUAL(u"=B2"_ustr, m_pDoc->GetFormula(0, 20, nSrcTab)); // A21
+    CPPUNIT_ASSERT_EQUAL(u"=B3"_ustr, m_pDoc->GetFormula(0, 21, nSrcTab)); // A22
+    CPPUNIT_ASSERT_EQUAL(u"=B4"_ustr, m_pDoc->GetFormula(0, 22, nSrcTab)); // A23
+    CPPUNIT_ASSERT_EQUAL(u"=C2"_ustr, m_pDoc->GetFormula(1, 20, nSrcTab)); // B21
+    CPPUNIT_ASSERT_EQUAL(u"=C3"_ustr, m_pDoc->GetFormula(1, 21, nSrcTab)); // B22
+    CPPUNIT_ASSERT_EQUAL(u"=C4"_ustr, m_pDoc->GetFormula(1, 22, nSrcTab)); // B23
     CPPUNIT_ASSERT_EQUAL(01.0, m_pDoc->GetValue(0, 20, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(0, 21, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(0, 22, nSrcTab));
@@ -8102,12 +8066,12 @@ void TestCopyPaste::checkReferencedCutRangesColIntitial(const SCTAB nSrcTab, con
 
     printValuesAndFormulasInRange(m_pDoc, ScRange(0, 30, nSrcTab, 1, 32, nSrcTab),
                                   rDesc.toUtf8() + ": Absolute references");
-    CPPUNIT_ASSERT_EQUAL(OUString("=$B$2"), m_pDoc->GetFormula(0, 30, nSrcTab)); // A31
-    CPPUNIT_ASSERT_EQUAL(OUString("=$B$3"), m_pDoc->GetFormula(0, 31, nSrcTab)); // A32
-    CPPUNIT_ASSERT_EQUAL(OUString("=$B$4"), m_pDoc->GetFormula(0, 32, nSrcTab)); // A33
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C$2"), m_pDoc->GetFormula(1, 30, nSrcTab)); // B31
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C$3"), m_pDoc->GetFormula(1, 31, nSrcTab)); // B32
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C$4"), m_pDoc->GetFormula(1, 32, nSrcTab)); // B33
+    CPPUNIT_ASSERT_EQUAL(u"=$B$2"_ustr, m_pDoc->GetFormula(0, 30, nSrcTab)); // A31
+    CPPUNIT_ASSERT_EQUAL(u"=$B$3"_ustr, m_pDoc->GetFormula(0, 31, nSrcTab)); // A32
+    CPPUNIT_ASSERT_EQUAL(u"=$B$4"_ustr, m_pDoc->GetFormula(0, 32, nSrcTab)); // A33
+    CPPUNIT_ASSERT_EQUAL(u"=$C$2"_ustr, m_pDoc->GetFormula(1, 30, nSrcTab)); // B31
+    CPPUNIT_ASSERT_EQUAL(u"=$C$3"_ustr, m_pDoc->GetFormula(1, 31, nSrcTab)); // B32
+    CPPUNIT_ASSERT_EQUAL(u"=$C$4"_ustr, m_pDoc->GetFormula(1, 32, nSrcTab)); // B33
     CPPUNIT_ASSERT_EQUAL(01.0, m_pDoc->GetValue(0, 30, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(0, 31, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(0, 32, nSrcTab));
@@ -8115,25 +8079,25 @@ void TestCopyPaste::checkReferencedCutRangesColIntitial(const SCTAB nSrcTab, con
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(1, 31, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(1, 32, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$2"), getRangeByName("Range_B2"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$3"), getRangeByName("Range_B3"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$4"), getRangeByName("Range_B4"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$C$2"), getRangeByName("Range_C2"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$C$3"), getRangeByName("Range_C3"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$C$4"), getRangeByName("Range_C4"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$2:$B$4"), getRangeByName("Range_B2_B4"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$C$2:$C$4"), getRangeByName("Range_C2_C4"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$2:$C$4"), getRangeByName("Range_B2_C4"));
-    CPPUNIT_ASSERT_EQUAL(OUString("B2"), getRangeByName("RelRange_Cm20_R0"));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$B$2"_ustr, getRangeByName(u"Range_B2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$B$3"_ustr, getRangeByName(u"Range_B3"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$B$4"_ustr, getRangeByName(u"Range_B4"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$C$2"_ustr, getRangeByName(u"Range_C2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$C$3"_ustr, getRangeByName(u"Range_C3"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$C$4"_ustr, getRangeByName(u"Range_C4"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$B$2:$B$4"_ustr, getRangeByName(u"Range_B2_B4"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$C$2:$C$4"_ustr, getRangeByName(u"Range_C2_C4"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$B$2:$C$4"_ustr, getRangeByName(u"Range_B2_C4"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"B2"_ustr, getRangeByName(u"RelRange_Cm20_R0"_ustr));
 
     printValuesAndFormulasInRange(m_pDoc, ScRange(0, 40, nSrcTab, 1, 42, nSrcTab),
                                   rDesc.toUtf8() + ": Absolute ranges");
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_B2"), m_pDoc->GetFormula(0, 40, nSrcTab)); // A41
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_B3"), m_pDoc->GetFormula(0, 41, nSrcTab)); // A42
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_B4"), m_pDoc->GetFormula(0, 42, nSrcTab)); // A43
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C2"), m_pDoc->GetFormula(1, 40, nSrcTab)); // B41
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C3"), m_pDoc->GetFormula(1, 41, nSrcTab)); // B42
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C4"), m_pDoc->GetFormula(1, 42, nSrcTab)); // B43
+    CPPUNIT_ASSERT_EQUAL(u"=Range_B2"_ustr, m_pDoc->GetFormula(0, 40, nSrcTab)); // A41
+    CPPUNIT_ASSERT_EQUAL(u"=Range_B3"_ustr, m_pDoc->GetFormula(0, 41, nSrcTab)); // A42
+    CPPUNIT_ASSERT_EQUAL(u"=Range_B4"_ustr, m_pDoc->GetFormula(0, 42, nSrcTab)); // A43
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C2"_ustr, m_pDoc->GetFormula(1, 40, nSrcTab)); // B41
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C3"_ustr, m_pDoc->GetFormula(1, 41, nSrcTab)); // B42
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C4"_ustr, m_pDoc->GetFormula(1, 42, nSrcTab)); // B43
     CPPUNIT_ASSERT_EQUAL(01.0, m_pDoc->GetValue(0, 40, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(0, 41, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(0, 42, nSrcTab));
@@ -8143,12 +8107,12 @@ void TestCopyPaste::checkReferencedCutRangesColIntitial(const SCTAB nSrcTab, con
 
     printValuesAndFormulasInRange(m_pDoc, ScRange(0, 50, nSrcTab, 1, 52, nSrcTab),
                                   rDesc.toUtf8() + ": Relative ranges");
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(0, 50, nSrcTab)); // A51
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(0, 51, nSrcTab)); // A52
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(0, 52, nSrcTab)); // A53
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(1, 50, nSrcTab)); // B51
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(1, 51, nSrcTab)); // B52
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(1, 52, nSrcTab)); // B53
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(0, 50, nSrcTab)); // A51
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(0, 51, nSrcTab)); // A52
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(0, 52, nSrcTab)); // A53
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(1, 50, nSrcTab)); // B51
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(1, 51, nSrcTab)); // B52
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(1, 52, nSrcTab)); // B53
     CPPUNIT_ASSERT_EQUAL(01.0, m_pDoc->GetValue(0, 50, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(0, 51, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(0, 52, nSrcTab));
@@ -8158,12 +8122,12 @@ void TestCopyPaste::checkReferencedCutRangesColIntitial(const SCTAB nSrcTab, con
 
     printValuesAndFormulasInRange(m_pDoc, ScRange(0, 60, nSrcTab, 1, 62, nSrcTab),
                                   rDesc.toUtf8() + ": Relative sum");
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B2:B4)"), m_pDoc->GetFormula(0, 60, nSrcTab)); // A61
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B2:B4)"), m_pDoc->GetFormula(0, 61, nSrcTab)); // A62
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B2:B4)"), m_pDoc->GetFormula(0, 62, nSrcTab)); // A63
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C2:C4)"), m_pDoc->GetFormula(1, 60, nSrcTab)); // B61
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C2:C4)"), m_pDoc->GetFormula(1, 61, nSrcTab)); // B62
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C2:C4)"), m_pDoc->GetFormula(1, 62, nSrcTab)); // B63
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(B2:B4)"_ustr, m_pDoc->GetFormula(0, 60, nSrcTab)); // A61
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(B2:B4)"_ustr, m_pDoc->GetFormula(0, 61, nSrcTab)); // A62
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(B2:B4)"_ustr, m_pDoc->GetFormula(0, 62, nSrcTab)); // A63
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C2:C4)"_ustr, m_pDoc->GetFormula(1, 60, nSrcTab)); // B61
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C2:C4)"_ustr, m_pDoc->GetFormula(1, 61, nSrcTab)); // B62
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C2:C4)"_ustr, m_pDoc->GetFormula(1, 62, nSrcTab)); // B63
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 60, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 61, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 62, nSrcTab));
@@ -8173,12 +8137,12 @@ void TestCopyPaste::checkReferencedCutRangesColIntitial(const SCTAB nSrcTab, con
 
     printValuesAndFormulasInRange(m_pDoc, ScRange(0, 70, nSrcTab, 1, 72, nSrcTab),
                                   rDesc.toUtf8() + ": Absolute sum");
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$B$4)"), m_pDoc->GetFormula(0, 70, nSrcTab)); // A71
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$B$4)"), m_pDoc->GetFormula(0, 71, nSrcTab)); // A72
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$B$4)"), m_pDoc->GetFormula(0, 72, nSrcTab)); // A73
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C$2:$C$4)"), m_pDoc->GetFormula(1, 70, nSrcTab)); // B71
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C$2:$C$4)"), m_pDoc->GetFormula(1, 71, nSrcTab)); // B72
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C$2:$C$4)"), m_pDoc->GetFormula(1, 72, nSrcTab)); // B73
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$B$4)"_ustr, m_pDoc->GetFormula(0, 70, nSrcTab)); // A71
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$B$4)"_ustr, m_pDoc->GetFormula(0, 71, nSrcTab)); // A72
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$B$4)"_ustr, m_pDoc->GetFormula(0, 72, nSrcTab)); // A73
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C$2:$C$4)"_ustr, m_pDoc->GetFormula(1, 70, nSrcTab)); // B71
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C$2:$C$4)"_ustr, m_pDoc->GetFormula(1, 71, nSrcTab)); // B72
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C$2:$C$4)"_ustr, m_pDoc->GetFormula(1, 72, nSrcTab)); // B73
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 70, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 71, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 72, nSrcTab));
@@ -8188,12 +8152,12 @@ void TestCopyPaste::checkReferencedCutRangesColIntitial(const SCTAB nSrcTab, con
 
     printValuesAndFormulasInRange(m_pDoc, ScRange(0, 80, nSrcTab, 1, 82, nSrcTab),
                                   rDesc.toUtf8() + ": Relative range sum");
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_B4)"), m_pDoc->GetFormula(0, 80, nSrcTab)); // A81
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_B4)"), m_pDoc->GetFormula(0, 81, nSrcTab)); // A82
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_B4)"), m_pDoc->GetFormula(0, 82, nSrcTab)); // A83
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_C2_C4)"), m_pDoc->GetFormula(1, 80, nSrcTab)); // B81
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_C2_C4)"), m_pDoc->GetFormula(1, 81, nSrcTab)); // B82
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_C2_C4)"), m_pDoc->GetFormula(1, 82, nSrcTab)); // B83
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_B4)"_ustr, m_pDoc->GetFormula(0, 80, nSrcTab)); // A81
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_B4)"_ustr, m_pDoc->GetFormula(0, 81, nSrcTab)); // A82
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_B4)"_ustr, m_pDoc->GetFormula(0, 82, nSrcTab)); // A83
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_C2_C4)"_ustr, m_pDoc->GetFormula(1, 80, nSrcTab)); // B81
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_C2_C4)"_ustr, m_pDoc->GetFormula(1, 81, nSrcTab)); // B82
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_C2_C4)"_ustr, m_pDoc->GetFormula(1, 82, nSrcTab)); // B83
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 80, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 81, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 82, nSrcTab));
@@ -8203,12 +8167,12 @@ void TestCopyPaste::checkReferencedCutRangesColIntitial(const SCTAB nSrcTab, con
 
     printValuesAndFormulasInRange(m_pDoc, ScRange(0, 90, nSrcTab, 1, 92, nSrcTab),
                                   rDesc.toUtf8() + ": Absolute sum");
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$C$4)"), m_pDoc->GetFormula(0, 90, nSrcTab)); // A91
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$C$4)"), m_pDoc->GetFormula(0, 91, nSrcTab)); // A92
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$C$4)"), m_pDoc->GetFormula(0, 92, nSrcTab)); // A93
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$C$4)"), m_pDoc->GetFormula(1, 90, nSrcTab)); // B91
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$C$4)"), m_pDoc->GetFormula(1, 91, nSrcTab)); // B92
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$C$4)"), m_pDoc->GetFormula(1, 92, nSrcTab)); // B93
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$C$4)"_ustr, m_pDoc->GetFormula(0, 90, nSrcTab)); // A91
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$C$4)"_ustr, m_pDoc->GetFormula(0, 91, nSrcTab)); // A92
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$C$4)"_ustr, m_pDoc->GetFormula(0, 92, nSrcTab)); // A93
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$C$4)"_ustr, m_pDoc->GetFormula(1, 90, nSrcTab)); // B91
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$C$4)"_ustr, m_pDoc->GetFormula(1, 91, nSrcTab)); // B92
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$C$4)"_ustr, m_pDoc->GetFormula(1, 92, nSrcTab)); // B93
     CPPUNIT_ASSERT_EQUAL(69.0, m_pDoc->GetValue(0, 90, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(69.0, m_pDoc->GetValue(0, 91, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(69.0, m_pDoc->GetValue(0, 92, nSrcTab));
@@ -8218,18 +8182,12 @@ void TestCopyPaste::checkReferencedCutRangesColIntitial(const SCTAB nSrcTab, con
 
     printValuesAndFormulasInRange(m_pDoc, ScRange(0, 100, nSrcTab, 1, 102, nSrcTab),
                                   rDesc.toUtf8() + ": Relative range sum");
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_C4)"),
-                         m_pDoc->GetFormula(0, 100, nSrcTab)); // A101
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_C4)"),
-                         m_pDoc->GetFormula(0, 101, nSrcTab)); // A102
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_C4)"),
-                         m_pDoc->GetFormula(0, 102, nSrcTab)); // A103
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_C4)"),
-                         m_pDoc->GetFormula(1, 100, nSrcTab)); // B101
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_C4)"),
-                         m_pDoc->GetFormula(1, 101, nSrcTab)); // B102
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_C4)"),
-                         m_pDoc->GetFormula(1, 102, nSrcTab)); // B103
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_C4)"_ustr, m_pDoc->GetFormula(0, 100, nSrcTab)); // A101
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_C4)"_ustr, m_pDoc->GetFormula(0, 101, nSrcTab)); // A102
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_C4)"_ustr, m_pDoc->GetFormula(0, 102, nSrcTab)); // A103
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_C4)"_ustr, m_pDoc->GetFormula(1, 100, nSrcTab)); // B101
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_C4)"_ustr, m_pDoc->GetFormula(1, 101, nSrcTab)); // B102
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_C4)"_ustr, m_pDoc->GetFormula(1, 102, nSrcTab)); // B103
     CPPUNIT_ASSERT_EQUAL(69.0, m_pDoc->GetValue(0, 100, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(69.0, m_pDoc->GetValue(0, 101, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(69.0, m_pDoc->GetValue(0, 102, nSrcTab));
@@ -8238,7 +8196,7 @@ void TestCopyPaste::checkReferencedCutRangesColIntitial(const SCTAB nSrcTab, con
     CPPUNIT_ASSERT_EQUAL(69.0, m_pDoc->GetValue(1, 102, nSrcTab));
 
     // References to the dest range
-    OUString aFBase("=");
+    OUString aFBase(u"="_ustr);
     if (nSrcTab != nDestTab)
         aFBase += "Dest.";
 
@@ -8263,7 +8221,7 @@ void TestCopyPaste::executeReferencedCutRangesCol(const bool bTransposed, const 
 
     for (int i = 0; i < nSrcTab; ++i)
         m_pDoc->InsertTab(i, "Empty Tab " + OUString::number(i));
-    m_pDoc->InsertTab(nSrcTab, "Test");
+    m_pDoc->InsertTab(nSrcTab, u"Test"_ustr);
 
     m_pDoc->SetValue(1, 1, nSrcTab, 01.0); // B2  \.
     m_pDoc->SetValue(1, 2, nSrcTab, 11.0); // B3   | cut
@@ -8289,104 +8247,108 @@ void TestCopyPaste::executeReferencedCutRangesCol(const bool bTransposed, const 
     m_pDoc->SetValue(3, 3, nSrcTab, 1033.0); // D4
     m_pDoc->SetValue(3, 4, nSrcTab, 1034.0); // D5
 
-    m_pDoc->SetString(20, 0, nSrcTab, "=A1"); // U1
-    m_pDoc->SetString(20, 1, nSrcTab, "=A2"); // U2
-    m_pDoc->SetString(20, 2, nSrcTab, "=A3"); // U3
-    m_pDoc->SetString(20, 3, nSrcTab, "=A4"); // U4
-    m_pDoc->SetString(20, 4, nSrcTab, "=A5"); // U5
-    m_pDoc->SetString(21, 0, nSrcTab, "=B1"); // V1
-    m_pDoc->SetString(21, 4, nSrcTab, "=B5"); // V5
-    m_pDoc->SetString(22, 0, nSrcTab, "=C1"); // W1
-    m_pDoc->SetString(22, 4, nSrcTab, "=C5"); // W5
-    m_pDoc->SetString(23, 0, nSrcTab, "=D1"); // X1
-    m_pDoc->SetString(23, 1, nSrcTab, "=D2"); // X2
-    m_pDoc->SetString(23, 2, nSrcTab, "=D3"); // X3
-    m_pDoc->SetString(23, 3, nSrcTab, "=D4"); // X4
-    m_pDoc->SetString(23, 4, nSrcTab, "=D5"); // X5
+    m_pDoc->SetString(20, 0, nSrcTab, u"=A1"_ustr); // U1
+    m_pDoc->SetString(20, 1, nSrcTab, u"=A2"_ustr); // U2
+    m_pDoc->SetString(20, 2, nSrcTab, u"=A3"_ustr); // U3
+    m_pDoc->SetString(20, 3, nSrcTab, u"=A4"_ustr); // U4
+    m_pDoc->SetString(20, 4, nSrcTab, u"=A5"_ustr); // U5
+    m_pDoc->SetString(21, 0, nSrcTab, u"=B1"_ustr); // V1
+    m_pDoc->SetString(21, 4, nSrcTab, u"=B5"_ustr); // V5
+    m_pDoc->SetString(22, 0, nSrcTab, u"=C1"_ustr); // W1
+    m_pDoc->SetString(22, 4, nSrcTab, u"=C5"_ustr); // W5
+    m_pDoc->SetString(23, 0, nSrcTab, u"=D1"_ustr); // X1
+    m_pDoc->SetString(23, 1, nSrcTab, u"=D2"_ustr); // X2
+    m_pDoc->SetString(23, 2, nSrcTab, u"=D3"_ustr); // X3
+    m_pDoc->SetString(23, 3, nSrcTab, u"=D4"_ustr); // X4
+    m_pDoc->SetString(23, 4, nSrcTab, u"=D5"_ustr); // X5
 
     // Cell position is used for ranges relative to current position
     ScAddress cellA1(0, 0, nSrcTab);
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_B2", cellA1, "$Test.$B$2"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_B3", cellA1, "$Test.$B$3"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_B4", cellA1, "$Test.$B$4"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_C2", cellA1, "$Test.$C$2"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_C3", cellA1, "$Test.$C$3"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_C4", cellA1, "$Test.$C$4"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_B2_B4", cellA1, "$Test.$B$2:$B$4"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_C2_C4", cellA1, "$Test.$C$2:$C$4"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("Range_B2_C4", cellA1, "$Test.$B$2:$C$4"));
-    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName("RelRange_Cm20_R0", ScAddress(1, 21, nSrcTab), "B2"));
+    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName(u"Range_B2"_ustr, cellA1, u"$Test.$B$2"_ustr));
+    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName(u"Range_B3"_ustr, cellA1, u"$Test.$B$3"_ustr));
+    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName(u"Range_B4"_ustr, cellA1, u"$Test.$B$4"_ustr));
+    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName(u"Range_C2"_ustr, cellA1, u"$Test.$C$2"_ustr));
+    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName(u"Range_C3"_ustr, cellA1, u"$Test.$C$3"_ustr));
+    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName(u"Range_C4"_ustr, cellA1, u"$Test.$C$4"_ustr));
+    CPPUNIT_ASSERT(
+        m_pDoc->InsertNewRangeName(u"Range_B2_B4"_ustr, cellA1, u"$Test.$B$2:$B$4"_ustr));
+    CPPUNIT_ASSERT(
+        m_pDoc->InsertNewRangeName(u"Range_C2_C4"_ustr, cellA1, u"$Test.$C$2:$C$4"_ustr));
+    CPPUNIT_ASSERT(
+        m_pDoc->InsertNewRangeName(u"Range_B2_C4"_ustr, cellA1, u"$Test.$B$2:$C$4"_ustr));
+    CPPUNIT_ASSERT(m_pDoc->InsertNewRangeName(u"RelRange_Cm20_R0"_ustr, ScAddress(1, 21, nSrcTab),
+                                              u"B2"_ustr));
 
-    m_pDoc->SetString(0, 20, nSrcTab, "=B2"); // A21
-    m_pDoc->SetString(0, 21, nSrcTab, "=B3"); // A22
-    m_pDoc->SetString(0, 22, nSrcTab, "=B4"); // A23
-    m_pDoc->SetString(1, 20, nSrcTab, "=C2"); // B21
-    m_pDoc->SetString(1, 21, nSrcTab, "=C3"); // B22
-    m_pDoc->SetString(1, 22, nSrcTab, "=C4"); // B23
+    m_pDoc->SetString(0, 20, nSrcTab, u"=B2"_ustr); // A21
+    m_pDoc->SetString(0, 21, nSrcTab, u"=B3"_ustr); // A22
+    m_pDoc->SetString(0, 22, nSrcTab, u"=B4"_ustr); // A23
+    m_pDoc->SetString(1, 20, nSrcTab, u"=C2"_ustr); // B21
+    m_pDoc->SetString(1, 21, nSrcTab, u"=C3"_ustr); // B22
+    m_pDoc->SetString(1, 22, nSrcTab, u"=C4"_ustr); // B23
 
-    m_pDoc->SetString(0, 30, nSrcTab, "=$B$2"); // A31
-    m_pDoc->SetString(0, 31, nSrcTab, "=$B$3"); // A32
-    m_pDoc->SetString(0, 32, nSrcTab, "=$B$4"); // A33
-    m_pDoc->SetString(1, 30, nSrcTab, "=$C$2"); // B31
-    m_pDoc->SetString(1, 31, nSrcTab, "=$C$3"); // B32
-    m_pDoc->SetString(1, 32, nSrcTab, "=$C$4"); // B33
+    m_pDoc->SetString(0, 30, nSrcTab, u"=$B$2"_ustr); // A31
+    m_pDoc->SetString(0, 31, nSrcTab, u"=$B$3"_ustr); // A32
+    m_pDoc->SetString(0, 32, nSrcTab, u"=$B$4"_ustr); // A33
+    m_pDoc->SetString(1, 30, nSrcTab, u"=$C$2"_ustr); // B31
+    m_pDoc->SetString(1, 31, nSrcTab, u"=$C$3"_ustr); // B32
+    m_pDoc->SetString(1, 32, nSrcTab, u"=$C$4"_ustr); // B33
 
-    m_pDoc->SetString(0, 40, nSrcTab, "=Range_B2"); // A41
-    m_pDoc->SetString(0, 41, nSrcTab, "=Range_B3"); // A42
-    m_pDoc->SetString(0, 42, nSrcTab, "=Range_B4"); // A43
-    m_pDoc->SetString(1, 40, nSrcTab, "=Range_C2"); // B41
-    m_pDoc->SetString(1, 41, nSrcTab, "=Range_C3"); // B42
-    m_pDoc->SetString(1, 42, nSrcTab, "=Range_C4"); // B43
+    m_pDoc->SetString(0, 40, nSrcTab, u"=Range_B2"_ustr); // A41
+    m_pDoc->SetString(0, 41, nSrcTab, u"=Range_B3"_ustr); // A42
+    m_pDoc->SetString(0, 42, nSrcTab, u"=Range_B4"_ustr); // A43
+    m_pDoc->SetString(1, 40, nSrcTab, u"=Range_C2"_ustr); // B41
+    m_pDoc->SetString(1, 41, nSrcTab, u"=Range_C3"_ustr); // B42
+    m_pDoc->SetString(1, 42, nSrcTab, u"=Range_C4"_ustr); // B43
 
-    m_pDoc->SetString(0, 50, nSrcTab, "=RelRange_Cm20_R0"); // A51
-    m_pDoc->SetString(0, 51, nSrcTab, "=RelRange_Cm20_R0"); // A52
-    m_pDoc->SetString(0, 52, nSrcTab, "=RelRange_Cm20_R0"); // A53
-    m_pDoc->SetString(1, 50, nSrcTab, "=RelRange_Cm20_R0"); // B51
-    m_pDoc->SetString(1, 51, nSrcTab, "=RelRange_Cm20_R0"); // B52
-    m_pDoc->SetString(1, 52, nSrcTab, "=RelRange_Cm20_R0"); // B53
+    m_pDoc->SetString(0, 50, nSrcTab, u"=RelRange_Cm20_R0"_ustr); // A51
+    m_pDoc->SetString(0, 51, nSrcTab, u"=RelRange_Cm20_R0"_ustr); // A52
+    m_pDoc->SetString(0, 52, nSrcTab, u"=RelRange_Cm20_R0"_ustr); // A53
+    m_pDoc->SetString(1, 50, nSrcTab, u"=RelRange_Cm20_R0"_ustr); // B51
+    m_pDoc->SetString(1, 51, nSrcTab, u"=RelRange_Cm20_R0"_ustr); // B52
+    m_pDoc->SetString(1, 52, nSrcTab, u"=RelRange_Cm20_R0"_ustr); // B53
 
-    m_pDoc->SetString(0, 60, nSrcTab, "=SUM(B2:B4"); // A61
-    m_pDoc->SetString(0, 61, nSrcTab, "=SUM(B2:B4"); // A62
-    m_pDoc->SetString(0, 62, nSrcTab, "=SUM(B2:B4"); // A63
-    m_pDoc->SetString(1, 60, nSrcTab, "=SUM(C2:C4"); // B61
-    m_pDoc->SetString(1, 61, nSrcTab, "=SUM(C2:C4"); // B62
-    m_pDoc->SetString(1, 62, nSrcTab, "=SUM(C2:C4"); // B63
+    m_pDoc->SetString(0, 60, nSrcTab, u"=SUM(B2:B4"_ustr); // A61
+    m_pDoc->SetString(0, 61, nSrcTab, u"=SUM(B2:B4"_ustr); // A62
+    m_pDoc->SetString(0, 62, nSrcTab, u"=SUM(B2:B4"_ustr); // A63
+    m_pDoc->SetString(1, 60, nSrcTab, u"=SUM(C2:C4"_ustr); // B61
+    m_pDoc->SetString(1, 61, nSrcTab, u"=SUM(C2:C4"_ustr); // B62
+    m_pDoc->SetString(1, 62, nSrcTab, u"=SUM(C2:C4"_ustr); // B63
 
-    m_pDoc->SetString(0, 70, nSrcTab, "=SUM($B$2:$B$4"); // A71
-    m_pDoc->SetString(0, 71, nSrcTab, "=SUM($B$2:$B$4"); // A72
-    m_pDoc->SetString(0, 72, nSrcTab, "=SUM($B$2:$B$4"); // A73
-    m_pDoc->SetString(1, 70, nSrcTab, "=SUM($C$2:$C$4"); // B71
-    m_pDoc->SetString(1, 71, nSrcTab, "=SUM($C$2:$C$4"); // B72
-    m_pDoc->SetString(1, 72, nSrcTab, "=SUM($C$2:$C$4"); // B73
+    m_pDoc->SetString(0, 70, nSrcTab, u"=SUM($B$2:$B$4"_ustr); // A71
+    m_pDoc->SetString(0, 71, nSrcTab, u"=SUM($B$2:$B$4"_ustr); // A72
+    m_pDoc->SetString(0, 72, nSrcTab, u"=SUM($B$2:$B$4"_ustr); // A73
+    m_pDoc->SetString(1, 70, nSrcTab, u"=SUM($C$2:$C$4"_ustr); // B71
+    m_pDoc->SetString(1, 71, nSrcTab, u"=SUM($C$2:$C$4"_ustr); // B72
+    m_pDoc->SetString(1, 72, nSrcTab, u"=SUM($C$2:$C$4"_ustr); // B73
 
-    m_pDoc->SetString(0, 80, nSrcTab, "=SUM(Range_B2_B4)"); // A81
-    m_pDoc->SetString(0, 81, nSrcTab, "=SUM(Range_B2_B4)"); // A82
-    m_pDoc->SetString(0, 82, nSrcTab, "=SUM(Range_B2_B4)"); // A83
-    m_pDoc->SetString(1, 80, nSrcTab, "=SUM(Range_C2_C4)"); // B81
-    m_pDoc->SetString(1, 81, nSrcTab, "=SUM(Range_C2_C4)"); // B82
-    m_pDoc->SetString(1, 82, nSrcTab, "=SUM(Range_C2_C4)"); // B83
+    m_pDoc->SetString(0, 80, nSrcTab, u"=SUM(Range_B2_B4)"_ustr); // A81
+    m_pDoc->SetString(0, 81, nSrcTab, u"=SUM(Range_B2_B4)"_ustr); // A82
+    m_pDoc->SetString(0, 82, nSrcTab, u"=SUM(Range_B2_B4)"_ustr); // A83
+    m_pDoc->SetString(1, 80, nSrcTab, u"=SUM(Range_C2_C4)"_ustr); // B81
+    m_pDoc->SetString(1, 81, nSrcTab, u"=SUM(Range_C2_C4)"_ustr); // B82
+    m_pDoc->SetString(1, 82, nSrcTab, u"=SUM(Range_C2_C4)"_ustr); // B83
 
-    m_pDoc->SetString(0, 90, nSrcTab, "=SUM($B$2:$C$4"); // A91
-    m_pDoc->SetString(0, 91, nSrcTab, "=SUM($B$2:$C$4"); // A92
-    m_pDoc->SetString(0, 92, nSrcTab, "=SUM($B$2:$C$4"); // A93
-    m_pDoc->SetString(1, 90, nSrcTab, "=SUM($B$2:$C$4"); // B91
-    m_pDoc->SetString(1, 91, nSrcTab, "=SUM($B$2:$C$4"); // B92
-    m_pDoc->SetString(1, 92, nSrcTab, "=SUM($B$2:$C$4"); // B93
+    m_pDoc->SetString(0, 90, nSrcTab, u"=SUM($B$2:$C$4"_ustr); // A91
+    m_pDoc->SetString(0, 91, nSrcTab, u"=SUM($B$2:$C$4"_ustr); // A92
+    m_pDoc->SetString(0, 92, nSrcTab, u"=SUM($B$2:$C$4"_ustr); // A93
+    m_pDoc->SetString(1, 90, nSrcTab, u"=SUM($B$2:$C$4"_ustr); // B91
+    m_pDoc->SetString(1, 91, nSrcTab, u"=SUM($B$2:$C$4"_ustr); // B92
+    m_pDoc->SetString(1, 92, nSrcTab, u"=SUM($B$2:$C$4"_ustr); // B93
 
-    m_pDoc->SetString(0, 100, nSrcTab, "=SUM(Range_B2_C4"); // A101
-    m_pDoc->SetString(0, 101, nSrcTab, "=SUM(Range_B2_C4"); // A102
-    m_pDoc->SetString(0, 102, nSrcTab, "=SUM(Range_B2_C4"); // A103
-    m_pDoc->SetString(1, 100, nSrcTab, "=SUM(Range_B2_C4"); // B101
-    m_pDoc->SetString(1, 101, nSrcTab, "=SUM(Range_B2_C4"); // B102
-    m_pDoc->SetString(1, 102, nSrcTab, "=SUM(Range_B2_C4"); // B103
+    m_pDoc->SetString(0, 100, nSrcTab, u"=SUM(Range_B2_C4"_ustr); // A101
+    m_pDoc->SetString(0, 101, nSrcTab, u"=SUM(Range_B2_C4"_ustr); // A102
+    m_pDoc->SetString(0, 102, nSrcTab, u"=SUM(Range_B2_C4"_ustr); // A103
+    m_pDoc->SetString(1, 100, nSrcTab, u"=SUM(Range_B2_C4"_ustr); // B101
+    m_pDoc->SetString(1, 101, nSrcTab, u"=SUM(Range_B2_C4"_ustr); // B102
+    m_pDoc->SetString(1, 102, nSrcTab, u"=SUM(Range_B2_C4"_ustr); // B103
 
     for (int i = nSrcTab + 1; i < nDestTab; ++i)
         m_pDoc->InsertTab(i, "Empty Tab " + OUString::number(i));
 
     if (nSrcTab < nDestTab)
-        m_pDoc->InsertTab(nDestTab, "Dest");
+        m_pDoc->InsertTab(nDestTab, u"Dest"_ustr);
     else if (nSrcTab > nDestTab)
-        m_pDoc->RenameTab(nDestTab, "Dest");
+        m_pDoc->RenameTab(nDestTab, u"Dest"_ustr);
 
     int nTabCount = m_pDoc->GetTableCount();
     for (int i = nTabCount; i < nTabCount + 2; ++i)
@@ -8394,7 +8356,7 @@ void TestCopyPaste::executeReferencedCutRangesCol(const bool bTransposed, const 
     nTabCount = m_pDoc->GetTableCount();
 
     // References to the dest range
-    OUString aFBase("=");
+    OUString aFBase(u"="_ustr);
     if (nSrcTab != nDestTab)
         aFBase += "Dest.";
 
@@ -8409,7 +8371,7 @@ void TestCopyPaste::executeReferencedCutRangesCol(const bool bTransposed, const 
     m_pDoc->SetString(2, 114, nSrcTab, OUString(aFBase + "E14"));
 
     // Check precondition
-    checkReferencedCutRangesColIntitial(nSrcTab, nDestTab, "Initial");
+    checkReferencedCutRangesColIntitial(nSrcTab, nDestTab, u"Initial"_ustr);
 
     // Cut values B2:B4 to the clip document.
     ScDocument aClipDoc(SCDOCMODE_CLIP);
@@ -8478,7 +8440,7 @@ void TestCopyPaste::checkReferencedCutRangesCol(const SCTAB nSrcTab, const SCTAB
 {
     // Cut B2:B4 and pasted to C12:C14
 
-    OUString aFBase("=");
+    OUString aFBase(u"="_ustr);
     if (nSrcTab != nDestTab)
         aFBase += "Dest.";
 
@@ -8519,29 +8481,29 @@ void TestCopyPaste::checkReferencedCutRangesCol(const SCTAB nSrcTab, const SCTAB
     CPPUNIT_ASSERT_EQUAL(1032.0, m_pDoc->GetValue(23, 2, nSrcTab)); // X3
     CPPUNIT_ASSERT_EQUAL(1033.0, m_pDoc->GetValue(23, 3, nSrcTab)); // X4
     CPPUNIT_ASSERT_EQUAL(1034.0, m_pDoc->GetValue(23, 4, nSrcTab)); // X5
-    CPPUNIT_ASSERT_EQUAL(OUString("=A1"), m_pDoc->GetFormula(20, 0, nSrcTab)); // U1
-    CPPUNIT_ASSERT_EQUAL(OUString("=A2"), m_pDoc->GetFormula(20, 1, nSrcTab)); // U2
-    CPPUNIT_ASSERT_EQUAL(OUString("=A3"), m_pDoc->GetFormula(20, 2, nSrcTab)); // U3
-    CPPUNIT_ASSERT_EQUAL(OUString("=A4"), m_pDoc->GetFormula(20, 3, nSrcTab)); // U4
-    CPPUNIT_ASSERT_EQUAL(OUString("=A5"), m_pDoc->GetFormula(20, 4, nSrcTab)); // U5
-    CPPUNIT_ASSERT_EQUAL(OUString("=B1"), m_pDoc->GetFormula(21, 0, nSrcTab)); // V1
-    CPPUNIT_ASSERT_EQUAL(OUString("=B5"), m_pDoc->GetFormula(21, 4, nSrcTab)); // V5
-    CPPUNIT_ASSERT_EQUAL(OUString("=C1"), m_pDoc->GetFormula(22, 0, nSrcTab)); // W1
-    CPPUNIT_ASSERT_EQUAL(OUString("=C5"), m_pDoc->GetFormula(22, 4, nSrcTab)); // W5
-    CPPUNIT_ASSERT_EQUAL(OUString("=D1"), m_pDoc->GetFormula(23, 0, nSrcTab)); // X1
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2"), m_pDoc->GetFormula(23, 1, nSrcTab)); // X2
-    CPPUNIT_ASSERT_EQUAL(OUString("=D3"), m_pDoc->GetFormula(23, 2, nSrcTab)); // X3
-    CPPUNIT_ASSERT_EQUAL(OUString("=D4"), m_pDoc->GetFormula(23, 3, nSrcTab)); // X4
-    CPPUNIT_ASSERT_EQUAL(OUString("=D5"), m_pDoc->GetFormula(23, 4, nSrcTab)); // X5
+    CPPUNIT_ASSERT_EQUAL(u"=A1"_ustr, m_pDoc->GetFormula(20, 0, nSrcTab)); // U1
+    CPPUNIT_ASSERT_EQUAL(u"=A2"_ustr, m_pDoc->GetFormula(20, 1, nSrcTab)); // U2
+    CPPUNIT_ASSERT_EQUAL(u"=A3"_ustr, m_pDoc->GetFormula(20, 2, nSrcTab)); // U3
+    CPPUNIT_ASSERT_EQUAL(u"=A4"_ustr, m_pDoc->GetFormula(20, 3, nSrcTab)); // U4
+    CPPUNIT_ASSERT_EQUAL(u"=A5"_ustr, m_pDoc->GetFormula(20, 4, nSrcTab)); // U5
+    CPPUNIT_ASSERT_EQUAL(u"=B1"_ustr, m_pDoc->GetFormula(21, 0, nSrcTab)); // V1
+    CPPUNIT_ASSERT_EQUAL(u"=B5"_ustr, m_pDoc->GetFormula(21, 4, nSrcTab)); // V5
+    CPPUNIT_ASSERT_EQUAL(u"=C1"_ustr, m_pDoc->GetFormula(22, 0, nSrcTab)); // W1
+    CPPUNIT_ASSERT_EQUAL(u"=C5"_ustr, m_pDoc->GetFormula(22, 4, nSrcTab)); // W5
+    CPPUNIT_ASSERT_EQUAL(u"=D1"_ustr, m_pDoc->GetFormula(23, 0, nSrcTab)); // X1
+    CPPUNIT_ASSERT_EQUAL(u"=D2"_ustr, m_pDoc->GetFormula(23, 1, nSrcTab)); // X2
+    CPPUNIT_ASSERT_EQUAL(u"=D3"_ustr, m_pDoc->GetFormula(23, 2, nSrcTab)); // X3
+    CPPUNIT_ASSERT_EQUAL(u"=D4"_ustr, m_pDoc->GetFormula(23, 3, nSrcTab)); // X4
+    CPPUNIT_ASSERT_EQUAL(u"=D5"_ustr, m_pDoc->GetFormula(23, 4, nSrcTab)); // X5
 
     // Note: Values (mostly) remain the same
 
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "C12"), m_pDoc->GetFormula(0, 20, nSrcTab)); // A21
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "C13"), m_pDoc->GetFormula(0, 21, nSrcTab)); // A22
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "C14"), m_pDoc->GetFormula(0, 22, nSrcTab)); // A23
-    CPPUNIT_ASSERT_EQUAL(OUString("=C2"), m_pDoc->GetFormula(1, 20, nSrcTab)); // B21
-    CPPUNIT_ASSERT_EQUAL(OUString("=C3"), m_pDoc->GetFormula(1, 21, nSrcTab)); // B22
-    CPPUNIT_ASSERT_EQUAL(OUString("=C4"), m_pDoc->GetFormula(1, 22, nSrcTab)); // B23
+    CPPUNIT_ASSERT_EQUAL(u"=C2"_ustr, m_pDoc->GetFormula(1, 20, nSrcTab)); // B21
+    CPPUNIT_ASSERT_EQUAL(u"=C3"_ustr, m_pDoc->GetFormula(1, 21, nSrcTab)); // B22
+    CPPUNIT_ASSERT_EQUAL(u"=C4"_ustr, m_pDoc->GetFormula(1, 22, nSrcTab)); // B23
     CPPUNIT_ASSERT_EQUAL(01.0, m_pDoc->GetValue(0, 20, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(0, 21, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(0, 22, nSrcTab));
@@ -8552,9 +8514,9 @@ void TestCopyPaste::checkReferencedCutRangesCol(const SCTAB nSrcTab, const SCTAB
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "$C$12"), m_pDoc->GetFormula(0, 30, nSrcTab)); // A31
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "$C$13"), m_pDoc->GetFormula(0, 31, nSrcTab)); // A32
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "$C$14"), m_pDoc->GetFormula(0, 32, nSrcTab)); // A33
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C$2"), m_pDoc->GetFormula(1, 30, nSrcTab)); // B31
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C$3"), m_pDoc->GetFormula(1, 31, nSrcTab)); // B32
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C$4"), m_pDoc->GetFormula(1, 32, nSrcTab)); // B33
+    CPPUNIT_ASSERT_EQUAL(u"=$C$2"_ustr, m_pDoc->GetFormula(1, 30, nSrcTab)); // B31
+    CPPUNIT_ASSERT_EQUAL(u"=$C$3"_ustr, m_pDoc->GetFormula(1, 31, nSrcTab)); // B32
+    CPPUNIT_ASSERT_EQUAL(u"=$C$4"_ustr, m_pDoc->GetFormula(1, 32, nSrcTab)); // B33
     CPPUNIT_ASSERT_EQUAL(01.0, m_pDoc->GetValue(0, 30, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(0, 31, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(0, 32, nSrcTab));
@@ -8562,28 +8524,28 @@ void TestCopyPaste::checkReferencedCutRangesCol(const SCTAB nSrcTab, const SCTAB
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(1, 31, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(1, 32, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("$Dest.$C$12") : OUString("$Test.$C$12"),
-                         getRangeByName("Range_B2"));
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("$Dest.$C$13") : OUString("$Test.$C$13"),
-                         getRangeByName("Range_B3"));
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("$Dest.$C$14") : OUString("$Test.$C$14"),
-                         getRangeByName("Range_B4"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$C$2"), getRangeByName("Range_C2"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$C$3"), getRangeByName("Range_C3"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$C$4"), getRangeByName("Range_C4"));
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("$Dest.$C$12:$C$14")
-                                             : OUString("$Test.$C$12:$C$14"),
-                         getRangeByName("Range_B2_B4"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$C$2:$C$4"), getRangeByName("Range_C2_C4"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$2:$C$4"), getRangeByName("Range_B2_C4"));
-    CPPUNIT_ASSERT_EQUAL(OUString("B2"), getRangeByName("RelRange_Cm20_R0"));
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"$Dest.$C$12"_ustr : u"$Test.$C$12"_ustr,
+                         getRangeByName(u"Range_B2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"$Dest.$C$13"_ustr : u"$Test.$C$13"_ustr,
+                         getRangeByName(u"Range_B3"_ustr));
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"$Dest.$C$14"_ustr : u"$Test.$C$14"_ustr,
+                         getRangeByName(u"Range_B4"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$C$2"_ustr, getRangeByName(u"Range_C2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$C$3"_ustr, getRangeByName(u"Range_C3"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$C$4"_ustr, getRangeByName(u"Range_C4"_ustr));
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"$Dest.$C$12:$C$14"_ustr
+                                             : u"$Test.$C$12:$C$14"_ustr,
+                         getRangeByName(u"Range_B2_B4"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$C$2:$C$4"_ustr, getRangeByName(u"Range_C2_C4"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$B$2:$C$4"_ustr, getRangeByName(u"Range_B2_C4"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"B2"_ustr, getRangeByName(u"RelRange_Cm20_R0"_ustr));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_B2"), m_pDoc->GetFormula(0, 40, nSrcTab)); // A41
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_B3"), m_pDoc->GetFormula(0, 41, nSrcTab)); // A42
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_B4"), m_pDoc->GetFormula(0, 42, nSrcTab)); // A43
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C2"), m_pDoc->GetFormula(1, 40, nSrcTab)); // B41
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C3"), m_pDoc->GetFormula(1, 41, nSrcTab)); // B42
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C4"), m_pDoc->GetFormula(1, 42, nSrcTab)); // B43
+    CPPUNIT_ASSERT_EQUAL(u"=Range_B2"_ustr, m_pDoc->GetFormula(0, 40, nSrcTab)); // A41
+    CPPUNIT_ASSERT_EQUAL(u"=Range_B3"_ustr, m_pDoc->GetFormula(0, 41, nSrcTab)); // A42
+    CPPUNIT_ASSERT_EQUAL(u"=Range_B4"_ustr, m_pDoc->GetFormula(0, 42, nSrcTab)); // A43
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C2"_ustr, m_pDoc->GetFormula(1, 40, nSrcTab)); // B41
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C3"_ustr, m_pDoc->GetFormula(1, 41, nSrcTab)); // B42
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C4"_ustr, m_pDoc->GetFormula(1, 42, nSrcTab)); // B43
     CPPUNIT_ASSERT_EQUAL(01.0, m_pDoc->GetValue(0, 40, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(0, 41, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(0, 42, nSrcTab));
@@ -8591,12 +8553,12 @@ void TestCopyPaste::checkReferencedCutRangesCol(const SCTAB nSrcTab, const SCTAB
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(1, 41, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(1, 42, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(0, 50, nSrcTab)); // A51
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(0, 51, nSrcTab)); // A52
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(0, 52, nSrcTab)); // A53
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(1, 50, nSrcTab)); // B51
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(1, 51, nSrcTab)); // B52
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(1, 52, nSrcTab)); // B53
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(0, 50, nSrcTab)); // A51
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(0, 51, nSrcTab)); // A52
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(0, 52, nSrcTab)); // A53
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(1, 50, nSrcTab)); // B51
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(1, 51, nSrcTab)); // B52
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(1, 52, nSrcTab)); // B53
     CPPUNIT_ASSERT_EQUAL(01.0, m_pDoc->GetValue(0, 50, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(0, 51, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(0, 52, nSrcTab));
@@ -8604,18 +8566,15 @@ void TestCopyPaste::checkReferencedCutRangesCol(const SCTAB nSrcTab, const SCTAB
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(1, 51, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(1, 52, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.C12:C14)")
-                                             : OUString("=SUM(C12:C14)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.C12:C14)"_ustr : u"=SUM(C12:C14)"_ustr,
                          m_pDoc->GetFormula(0, 60, nSrcTab)); // A61
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.C12:C14)")
-                                             : OUString("=SUM(C12:C14)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.C12:C14)"_ustr : u"=SUM(C12:C14)"_ustr,
                          m_pDoc->GetFormula(0, 61, nSrcTab)); // A62
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.C12:C14)")
-                                             : OUString("=SUM(C12:C14)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.C12:C14)"_ustr : u"=SUM(C12:C14)"_ustr,
                          m_pDoc->GetFormula(0, 62, nSrcTab)); // A63
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C2:C4)"), m_pDoc->GetFormula(1, 60, nSrcTab)); // B61
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C2:C4)"), m_pDoc->GetFormula(1, 61, nSrcTab)); // B62
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C2:C4)"), m_pDoc->GetFormula(1, 62, nSrcTab)); // B63
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C2:C4)"_ustr, m_pDoc->GetFormula(1, 60, nSrcTab)); // B61
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C2:C4)"_ustr, m_pDoc->GetFormula(1, 61, nSrcTab)); // B62
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C2:C4)"_ustr, m_pDoc->GetFormula(1, 62, nSrcTab)); // B63
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 60, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 61, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 62, nSrcTab));
@@ -8623,18 +8582,18 @@ void TestCopyPaste::checkReferencedCutRangesCol(const SCTAB nSrcTab, const SCTAB
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 61, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 62, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.$C$12:$C$14)")
-                                             : OUString("=SUM($C$12:$C$14)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.$C$12:$C$14)"_ustr
+                                             : u"=SUM($C$12:$C$14)"_ustr,
                          m_pDoc->GetFormula(0, 70, nSrcTab)); // A71
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.$C$12:$C$14)")
-                                             : OUString("=SUM($C$12:$C$14)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.$C$12:$C$14)"_ustr
+                                             : u"=SUM($C$12:$C$14)"_ustr,
                          m_pDoc->GetFormula(0, 71, nSrcTab)); // A72
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.$C$12:$C$14)")
-                                             : OUString("=SUM($C$12:$C$14)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.$C$12:$C$14)"_ustr
+                                             : u"=SUM($C$12:$C$14)"_ustr,
                          m_pDoc->GetFormula(0, 72, nSrcTab)); // A73
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C$2:$C$4)"), m_pDoc->GetFormula(1, 70, nSrcTab)); // B71
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C$2:$C$4)"), m_pDoc->GetFormula(1, 71, nSrcTab)); // B72
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C$2:$C$4)"), m_pDoc->GetFormula(1, 72, nSrcTab)); // B73
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C$2:$C$4)"_ustr, m_pDoc->GetFormula(1, 70, nSrcTab)); // B71
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C$2:$C$4)"_ustr, m_pDoc->GetFormula(1, 71, nSrcTab)); // B72
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C$2:$C$4)"_ustr, m_pDoc->GetFormula(1, 72, nSrcTab)); // B73
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 70, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 71, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 72, nSrcTab));
@@ -8642,12 +8601,12 @@ void TestCopyPaste::checkReferencedCutRangesCol(const SCTAB nSrcTab, const SCTAB
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 71, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 72, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_B4)"), m_pDoc->GetFormula(0, 80, nSrcTab)); // A81
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_B4)"), m_pDoc->GetFormula(0, 81, nSrcTab)); // A82
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_B4)"), m_pDoc->GetFormula(0, 82, nSrcTab)); // A83
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_C2_C4)"), m_pDoc->GetFormula(1, 80, nSrcTab)); // B81
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_C2_C4)"), m_pDoc->GetFormula(1, 81, nSrcTab)); // B82
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_C2_C4)"), m_pDoc->GetFormula(1, 82, nSrcTab)); // B83
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_B4)"_ustr, m_pDoc->GetFormula(0, 80, nSrcTab)); // A81
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_B4)"_ustr, m_pDoc->GetFormula(0, 81, nSrcTab)); // A82
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_B4)"_ustr, m_pDoc->GetFormula(0, 82, nSrcTab)); // A83
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_C2_C4)"_ustr, m_pDoc->GetFormula(1, 80, nSrcTab)); // B81
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_C2_C4)"_ustr, m_pDoc->GetFormula(1, 81, nSrcTab)); // B82
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_C2_C4)"_ustr, m_pDoc->GetFormula(1, 82, nSrcTab)); // B83
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 80, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 81, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 82, nSrcTab));
@@ -8655,12 +8614,12 @@ void TestCopyPaste::checkReferencedCutRangesCol(const SCTAB nSrcTab, const SCTAB
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 81, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 82, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$C$4)"), m_pDoc->GetFormula(0, 90, nSrcTab)); // A91
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$C$4)"), m_pDoc->GetFormula(0, 91, nSrcTab)); // A92
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$C$4)"), m_pDoc->GetFormula(0, 92, nSrcTab)); // A93
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$C$4)"), m_pDoc->GetFormula(1, 90, nSrcTab)); // B91
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$C$4)"), m_pDoc->GetFormula(1, 91, nSrcTab)); // B92
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$C$4)"), m_pDoc->GetFormula(1, 92, nSrcTab)); // B93
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$C$4)"_ustr, m_pDoc->GetFormula(0, 90, nSrcTab)); // A91
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$C$4)"_ustr, m_pDoc->GetFormula(0, 91, nSrcTab)); // A92
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$C$4)"_ustr, m_pDoc->GetFormula(0, 92, nSrcTab)); // A93
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$C$4)"_ustr, m_pDoc->GetFormula(1, 90, nSrcTab)); // B91
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$C$4)"_ustr, m_pDoc->GetFormula(1, 91, nSrcTab)); // B92
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$C$4)"_ustr, m_pDoc->GetFormula(1, 92, nSrcTab)); // B93
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(0, 90, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(0, 91, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(0, 92, nSrcTab));
@@ -8668,18 +8627,12 @@ void TestCopyPaste::checkReferencedCutRangesCol(const SCTAB nSrcTab, const SCTAB
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 91, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 92, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_C4)"),
-                         m_pDoc->GetFormula(0, 100, nSrcTab)); // A101
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_C4)"),
-                         m_pDoc->GetFormula(0, 101, nSrcTab)); // A102
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_C4)"),
-                         m_pDoc->GetFormula(0, 102, nSrcTab)); // A103
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_C4)"),
-                         m_pDoc->GetFormula(1, 100, nSrcTab)); // B101
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_C4)"),
-                         m_pDoc->GetFormula(1, 101, nSrcTab)); // B102
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_C4)"),
-                         m_pDoc->GetFormula(1, 102, nSrcTab)); // B103
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_C4)"_ustr, m_pDoc->GetFormula(0, 100, nSrcTab)); // A101
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_C4)"_ustr, m_pDoc->GetFormula(0, 101, nSrcTab)); // A102
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_C4)"_ustr, m_pDoc->GetFormula(0, 102, nSrcTab)); // A103
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_C4)"_ustr, m_pDoc->GetFormula(1, 100, nSrcTab)); // B101
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_C4)"_ustr, m_pDoc->GetFormula(1, 101, nSrcTab)); // B102
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_C4)"_ustr, m_pDoc->GetFormula(1, 102, nSrcTab)); // B103
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(0, 100, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(0, 101, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(0, 102, nSrcTab));
@@ -8703,7 +8656,7 @@ void TestCopyPaste::checkReferencedCutTransposedRangesCol(const SCTAB nSrcTab, c
 {
     // Cut B2:D2 and pasted transposed to C12:E12
 
-    OUString aFBase("=");
+    OUString aFBase(u"="_ustr);
     if (nSrcTab != nDestTab)
         aFBase += "Dest.";
 
@@ -8744,27 +8697,27 @@ void TestCopyPaste::checkReferencedCutTransposedRangesCol(const SCTAB nSrcTab, c
     CPPUNIT_ASSERT_EQUAL(1032.0, m_pDoc->GetValue(23, 2, nSrcTab)); // X3
     CPPUNIT_ASSERT_EQUAL(1033.0, m_pDoc->GetValue(23, 3, nSrcTab)); // X4
     CPPUNIT_ASSERT_EQUAL(1034.0, m_pDoc->GetValue(23, 4, nSrcTab)); // X5
-    CPPUNIT_ASSERT_EQUAL(OUString("=A1"), m_pDoc->GetFormula(20, 0, nSrcTab)); // U1
-    CPPUNIT_ASSERT_EQUAL(OUString("=A2"), m_pDoc->GetFormula(20, 1, nSrcTab)); // U2
-    CPPUNIT_ASSERT_EQUAL(OUString("=A3"), m_pDoc->GetFormula(20, 2, nSrcTab)); // U3
-    CPPUNIT_ASSERT_EQUAL(OUString("=A4"), m_pDoc->GetFormula(20, 3, nSrcTab)); // U4
-    CPPUNIT_ASSERT_EQUAL(OUString("=A5"), m_pDoc->GetFormula(20, 4, nSrcTab)); // U5
-    CPPUNIT_ASSERT_EQUAL(OUString("=B1"), m_pDoc->GetFormula(21, 0, nSrcTab)); // V1
-    CPPUNIT_ASSERT_EQUAL(OUString("=B5"), m_pDoc->GetFormula(21, 4, nSrcTab)); // V5
-    CPPUNIT_ASSERT_EQUAL(OUString("=C1"), m_pDoc->GetFormula(22, 0, nSrcTab)); // W1
-    CPPUNIT_ASSERT_EQUAL(OUString("=C5"), m_pDoc->GetFormula(22, 4, nSrcTab)); // W5
-    CPPUNIT_ASSERT_EQUAL(OUString("=D1"), m_pDoc->GetFormula(23, 0, nSrcTab)); // X1
-    CPPUNIT_ASSERT_EQUAL(OUString("=D2"), m_pDoc->GetFormula(23, 1, nSrcTab)); // X2
-    CPPUNIT_ASSERT_EQUAL(OUString("=D3"), m_pDoc->GetFormula(23, 2, nSrcTab)); // X3
-    CPPUNIT_ASSERT_EQUAL(OUString("=D4"), m_pDoc->GetFormula(23, 3, nSrcTab)); // X4
-    CPPUNIT_ASSERT_EQUAL(OUString("=D5"), m_pDoc->GetFormula(23, 4, nSrcTab)); // X5
+    CPPUNIT_ASSERT_EQUAL(u"=A1"_ustr, m_pDoc->GetFormula(20, 0, nSrcTab)); // U1
+    CPPUNIT_ASSERT_EQUAL(u"=A2"_ustr, m_pDoc->GetFormula(20, 1, nSrcTab)); // U2
+    CPPUNIT_ASSERT_EQUAL(u"=A3"_ustr, m_pDoc->GetFormula(20, 2, nSrcTab)); // U3
+    CPPUNIT_ASSERT_EQUAL(u"=A4"_ustr, m_pDoc->GetFormula(20, 3, nSrcTab)); // U4
+    CPPUNIT_ASSERT_EQUAL(u"=A5"_ustr, m_pDoc->GetFormula(20, 4, nSrcTab)); // U5
+    CPPUNIT_ASSERT_EQUAL(u"=B1"_ustr, m_pDoc->GetFormula(21, 0, nSrcTab)); // V1
+    CPPUNIT_ASSERT_EQUAL(u"=B5"_ustr, m_pDoc->GetFormula(21, 4, nSrcTab)); // V5
+    CPPUNIT_ASSERT_EQUAL(u"=C1"_ustr, m_pDoc->GetFormula(22, 0, nSrcTab)); // W1
+    CPPUNIT_ASSERT_EQUAL(u"=C5"_ustr, m_pDoc->GetFormula(22, 4, nSrcTab)); // W5
+    CPPUNIT_ASSERT_EQUAL(u"=D1"_ustr, m_pDoc->GetFormula(23, 0, nSrcTab)); // X1
+    CPPUNIT_ASSERT_EQUAL(u"=D2"_ustr, m_pDoc->GetFormula(23, 1, nSrcTab)); // X2
+    CPPUNIT_ASSERT_EQUAL(u"=D3"_ustr, m_pDoc->GetFormula(23, 2, nSrcTab)); // X3
+    CPPUNIT_ASSERT_EQUAL(u"=D4"_ustr, m_pDoc->GetFormula(23, 3, nSrcTab)); // X4
+    CPPUNIT_ASSERT_EQUAL(u"=D5"_ustr, m_pDoc->GetFormula(23, 4, nSrcTab)); // X5
 
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "C12"), m_pDoc->GetFormula(0, 20, nSrcTab)); // A21
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "D12"), m_pDoc->GetFormula(0, 21, nSrcTab)); // A22
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "E12"), m_pDoc->GetFormula(0, 22, nSrcTab)); // A23
-    CPPUNIT_ASSERT_EQUAL(OUString("=C2"), m_pDoc->GetFormula(1, 20, nSrcTab)); // B21
-    CPPUNIT_ASSERT_EQUAL(OUString("=C3"), m_pDoc->GetFormula(1, 21, nSrcTab)); // B22
-    CPPUNIT_ASSERT_EQUAL(OUString("=C4"), m_pDoc->GetFormula(1, 22, nSrcTab)); // B23
+    CPPUNIT_ASSERT_EQUAL(u"=C2"_ustr, m_pDoc->GetFormula(1, 20, nSrcTab)); // B21
+    CPPUNIT_ASSERT_EQUAL(u"=C3"_ustr, m_pDoc->GetFormula(1, 21, nSrcTab)); // B22
+    CPPUNIT_ASSERT_EQUAL(u"=C4"_ustr, m_pDoc->GetFormula(1, 22, nSrcTab)); // B23
     CPPUNIT_ASSERT_EQUAL(01.0, m_pDoc->GetValue(0, 20, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(0, 21, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(0, 22, nSrcTab));
@@ -8775,9 +8728,9 @@ void TestCopyPaste::checkReferencedCutTransposedRangesCol(const SCTAB nSrcTab, c
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "$C$12"), m_pDoc->GetFormula(0, 30, nSrcTab)); // A31
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "$D$12"), m_pDoc->GetFormula(0, 31, nSrcTab)); // A32
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "$E$12"), m_pDoc->GetFormula(0, 32, nSrcTab)); // A33
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C$2"), m_pDoc->GetFormula(1, 30, nSrcTab)); // B31
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C$3"), m_pDoc->GetFormula(1, 31, nSrcTab)); // B32
-    CPPUNIT_ASSERT_EQUAL(OUString("=$C$4"), m_pDoc->GetFormula(1, 32, nSrcTab)); // B33
+    CPPUNIT_ASSERT_EQUAL(u"=$C$2"_ustr, m_pDoc->GetFormula(1, 30, nSrcTab)); // B31
+    CPPUNIT_ASSERT_EQUAL(u"=$C$3"_ustr, m_pDoc->GetFormula(1, 31, nSrcTab)); // B32
+    CPPUNIT_ASSERT_EQUAL(u"=$C$4"_ustr, m_pDoc->GetFormula(1, 32, nSrcTab)); // B33
     CPPUNIT_ASSERT_EQUAL(01.0, m_pDoc->GetValue(0, 30, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(0, 31, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(0, 32, nSrcTab));
@@ -8785,28 +8738,28 @@ void TestCopyPaste::checkReferencedCutTransposedRangesCol(const SCTAB nSrcTab, c
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(1, 31, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(1, 32, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("$Dest.$C$12") : OUString("$Test.$C$12"),
-                         getRangeByName("Range_B2"));
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("$Dest.$D$12") : OUString("$Test.$D$12"),
-                         getRangeByName("Range_B3"));
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("$Dest.$E$12") : OUString("$Test.$E$12"),
-                         getRangeByName("Range_B4"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$C$2"), getRangeByName("Range_C2"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$C$3"), getRangeByName("Range_C3"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$C$4"), getRangeByName("Range_C4"));
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("$Dest.$C$12:$E$12")
-                                             : OUString("$Test.$C$12:$E$12"),
-                         getRangeByName("Range_B2_B4"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$C$2:$C$4"), getRangeByName("Range_C2_C4"));
-    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$2:$C$4"), getRangeByName("Range_B2_C4"));
-    CPPUNIT_ASSERT_EQUAL(OUString("B2"), getRangeByName("RelRange_Cm20_R0"));
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"$Dest.$C$12"_ustr : u"$Test.$C$12"_ustr,
+                         getRangeByName(u"Range_B2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"$Dest.$D$12"_ustr : u"$Test.$D$12"_ustr,
+                         getRangeByName(u"Range_B3"_ustr));
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"$Dest.$E$12"_ustr : u"$Test.$E$12"_ustr,
+                         getRangeByName(u"Range_B4"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$C$2"_ustr, getRangeByName(u"Range_C2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$C$3"_ustr, getRangeByName(u"Range_C3"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$C$4"_ustr, getRangeByName(u"Range_C4"_ustr));
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"$Dest.$C$12:$E$12"_ustr
+                                             : u"$Test.$C$12:$E$12"_ustr,
+                         getRangeByName(u"Range_B2_B4"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$C$2:$C$4"_ustr, getRangeByName(u"Range_C2_C4"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$Test.$B$2:$C$4"_ustr, getRangeByName(u"Range_B2_C4"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"B2"_ustr, getRangeByName(u"RelRange_Cm20_R0"_ustr));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_B2"), m_pDoc->GetFormula(0, 40, nSrcTab)); // A41
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_B3"), m_pDoc->GetFormula(0, 41, nSrcTab)); // A42
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_B4"), m_pDoc->GetFormula(0, 42, nSrcTab)); // A43
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C2"), m_pDoc->GetFormula(1, 40, nSrcTab)); // B41
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C3"), m_pDoc->GetFormula(1, 41, nSrcTab)); // B42
-    CPPUNIT_ASSERT_EQUAL(OUString("=Range_C4"), m_pDoc->GetFormula(1, 42, nSrcTab)); // B43
+    CPPUNIT_ASSERT_EQUAL(u"=Range_B2"_ustr, m_pDoc->GetFormula(0, 40, nSrcTab)); // A41
+    CPPUNIT_ASSERT_EQUAL(u"=Range_B3"_ustr, m_pDoc->GetFormula(0, 41, nSrcTab)); // A42
+    CPPUNIT_ASSERT_EQUAL(u"=Range_B4"_ustr, m_pDoc->GetFormula(0, 42, nSrcTab)); // A43
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C2"_ustr, m_pDoc->GetFormula(1, 40, nSrcTab)); // B41
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C3"_ustr, m_pDoc->GetFormula(1, 41, nSrcTab)); // B42
+    CPPUNIT_ASSERT_EQUAL(u"=Range_C4"_ustr, m_pDoc->GetFormula(1, 42, nSrcTab)); // B43
     CPPUNIT_ASSERT_EQUAL(01.0, m_pDoc->GetValue(0, 40, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(0, 41, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(0, 42, nSrcTab));
@@ -8814,12 +8767,12 @@ void TestCopyPaste::checkReferencedCutTransposedRangesCol(const SCTAB nSrcTab, c
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(1, 41, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(1, 42, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(0, 50, nSrcTab)); // A51
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(0, 51, nSrcTab)); // A52
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(0, 52, nSrcTab)); // A53
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(1, 50, nSrcTab)); // B51
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(1, 51, nSrcTab)); // B52
-    CPPUNIT_ASSERT_EQUAL(OUString("=RelRange_Cm20_R0"), m_pDoc->GetFormula(1, 52, nSrcTab)); // B53
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(0, 50, nSrcTab)); // A51
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(0, 51, nSrcTab)); // A52
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(0, 52, nSrcTab)); // A53
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(1, 50, nSrcTab)); // B51
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(1, 51, nSrcTab)); // B52
+    CPPUNIT_ASSERT_EQUAL(u"=RelRange_Cm20_R0"_ustr, m_pDoc->GetFormula(1, 52, nSrcTab)); // B53
     CPPUNIT_ASSERT_EQUAL(01.0, m_pDoc->GetValue(0, 50, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(0, 51, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(0, 52, nSrcTab));
@@ -8827,18 +8780,15 @@ void TestCopyPaste::checkReferencedCutTransposedRangesCol(const SCTAB nSrcTab, c
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(1, 51, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(1, 52, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.C12:E12)")
-                                             : OUString("=SUM(C12:E12)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.C12:E12)"_ustr : u"=SUM(C12:E12)"_ustr,
                          m_pDoc->GetFormula(0, 60, nSrcTab)); // A61
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.C12:E12)")
-                                             : OUString("=SUM(C12:E12)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.C12:E12)"_ustr : u"=SUM(C12:E12)"_ustr,
                          m_pDoc->GetFormula(0, 61, nSrcTab)); // A62
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.C12:E12)")
-                                             : OUString("=SUM(C12:E12)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.C12:E12)"_ustr : u"=SUM(C12:E12)"_ustr,
                          m_pDoc->GetFormula(0, 62, nSrcTab)); // A63
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C2:C4)"), m_pDoc->GetFormula(1, 60, nSrcTab)); // B61
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C2:C4)"), m_pDoc->GetFormula(1, 61, nSrcTab)); // B62
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C2:C4)"), m_pDoc->GetFormula(1, 62, nSrcTab)); // B63
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C2:C4)"_ustr, m_pDoc->GetFormula(1, 60, nSrcTab)); // B61
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C2:C4)"_ustr, m_pDoc->GetFormula(1, 61, nSrcTab)); // B62
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(C2:C4)"_ustr, m_pDoc->GetFormula(1, 62, nSrcTab)); // B63
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 60, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 61, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 62, nSrcTab));
@@ -8846,18 +8796,18 @@ void TestCopyPaste::checkReferencedCutTransposedRangesCol(const SCTAB nSrcTab, c
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 61, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 62, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.$C$12:$E$12)")
-                                             : OUString("=SUM($C$12:$E$12)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.$C$12:$E$12)"_ustr
+                                             : u"=SUM($C$12:$E$12)"_ustr,
                          m_pDoc->GetFormula(0, 70, nSrcTab)); // A71
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.$C$12:$E$12)")
-                                             : OUString("=SUM($C$12:$E$12)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.$C$12:$E$12)"_ustr
+                                             : u"=SUM($C$12:$E$12)"_ustr,
                          m_pDoc->GetFormula(0, 71, nSrcTab)); // A72
-    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? OUString("=SUM(Dest.$C$12:$E$12)")
-                                             : OUString("=SUM($C$12:$E$12)"),
+    CPPUNIT_ASSERT_EQUAL(nSrcTab != nDestTab ? u"=SUM(Dest.$C$12:$E$12)"_ustr
+                                             : u"=SUM($C$12:$E$12)"_ustr,
                          m_pDoc->GetFormula(0, 72, nSrcTab)); // A73
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C$2:$C$4)"), m_pDoc->GetFormula(1, 70, nSrcTab)); // B71
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C$2:$C$4)"), m_pDoc->GetFormula(1, 71, nSrcTab)); // B72
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($C$2:$C$4)"), m_pDoc->GetFormula(1, 72, nSrcTab)); // B73
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C$2:$C$4)"_ustr, m_pDoc->GetFormula(1, 70, nSrcTab)); // B71
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C$2:$C$4)"_ustr, m_pDoc->GetFormula(1, 71, nSrcTab)); // B72
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($C$2:$C$4)"_ustr, m_pDoc->GetFormula(1, 72, nSrcTab)); // B73
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 70, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 71, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 72, nSrcTab));
@@ -8865,12 +8815,12 @@ void TestCopyPaste::checkReferencedCutTransposedRangesCol(const SCTAB nSrcTab, c
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 71, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 72, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_B4)"), m_pDoc->GetFormula(0, 80, nSrcTab)); // A81
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_B4)"), m_pDoc->GetFormula(0, 81, nSrcTab)); // A82
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_B4)"), m_pDoc->GetFormula(0, 82, nSrcTab)); // A83
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_C2_C4)"), m_pDoc->GetFormula(1, 80, nSrcTab)); // B81
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_C2_C4)"), m_pDoc->GetFormula(1, 81, nSrcTab)); // B82
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_C2_C4)"), m_pDoc->GetFormula(1, 82, nSrcTab)); // B83
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_B4)"_ustr, m_pDoc->GetFormula(0, 80, nSrcTab)); // A81
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_B4)"_ustr, m_pDoc->GetFormula(0, 81, nSrcTab)); // A82
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_B4)"_ustr, m_pDoc->GetFormula(0, 82, nSrcTab)); // A83
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_C2_C4)"_ustr, m_pDoc->GetFormula(1, 80, nSrcTab)); // B81
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_C2_C4)"_ustr, m_pDoc->GetFormula(1, 81, nSrcTab)); // B82
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_C2_C4)"_ustr, m_pDoc->GetFormula(1, 82, nSrcTab)); // B83
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 80, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 81, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(0, 82, nSrcTab));
@@ -8878,12 +8828,12 @@ void TestCopyPaste::checkReferencedCutTransposedRangesCol(const SCTAB nSrcTab, c
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 81, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 82, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$C$4)"), m_pDoc->GetFormula(0, 90, nSrcTab)); // A91
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$C$4)"), m_pDoc->GetFormula(0, 91, nSrcTab)); // A92
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$C$4)"), m_pDoc->GetFormula(0, 92, nSrcTab)); // A93
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$C$4)"), m_pDoc->GetFormula(1, 90, nSrcTab)); // B91
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$C$4)"), m_pDoc->GetFormula(1, 91, nSrcTab)); // B92
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM($B$2:$C$4)"), m_pDoc->GetFormula(1, 92, nSrcTab)); // B93
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$C$4)"_ustr, m_pDoc->GetFormula(0, 90, nSrcTab)); // A91
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$C$4)"_ustr, m_pDoc->GetFormula(0, 91, nSrcTab)); // A92
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$C$4)"_ustr, m_pDoc->GetFormula(0, 92, nSrcTab)); // A93
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$C$4)"_ustr, m_pDoc->GetFormula(1, 90, nSrcTab)); // B91
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$C$4)"_ustr, m_pDoc->GetFormula(1, 91, nSrcTab)); // B92
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($B$2:$C$4)"_ustr, m_pDoc->GetFormula(1, 92, nSrcTab)); // B93
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(0, 90, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(0, 91, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(0, 92, nSrcTab));
@@ -8891,18 +8841,12 @@ void TestCopyPaste::checkReferencedCutTransposedRangesCol(const SCTAB nSrcTab, c
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 91, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(1, 92, nSrcTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_C4)"),
-                         m_pDoc->GetFormula(0, 100, nSrcTab)); // A101
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_C4)"),
-                         m_pDoc->GetFormula(0, 101, nSrcTab)); // A102
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_C4)"),
-                         m_pDoc->GetFormula(0, 102, nSrcTab)); // A103
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_C4)"),
-                         m_pDoc->GetFormula(1, 100, nSrcTab)); // B101
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_C4)"),
-                         m_pDoc->GetFormula(1, 101, nSrcTab)); // B102
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(Range_B2_C4)"),
-                         m_pDoc->GetFormula(1, 102, nSrcTab)); // B103
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_C4)"_ustr, m_pDoc->GetFormula(0, 100, nSrcTab)); // A101
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_C4)"_ustr, m_pDoc->GetFormula(0, 101, nSrcTab)); // A102
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_C4)"_ustr, m_pDoc->GetFormula(0, 102, nSrcTab)); // A103
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_C4)"_ustr, m_pDoc->GetFormula(1, 100, nSrcTab)); // B101
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_C4)"_ustr, m_pDoc->GetFormula(1, 101, nSrcTab)); // B102
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Range_B2_C4)"_ustr, m_pDoc->GetFormula(1, 102, nSrcTab)); // B103
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(0, 100, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(0, 101, nSrcTab));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(0, 102, nSrcTab));
@@ -8933,7 +8877,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testReferencedCutRangesCol)
 
     pUndoPaste->Undo();
     pUndoCut->Undo();
-    checkReferencedCutRangesColIntitial(nSrcTab, nDestTab, "After undo");
+    checkReferencedCutRangesColIntitial(nSrcTab, nDestTab, u"After undo"_ustr);
 
     pUndoCut->Redo();
     pUndoPaste->Redo();
@@ -8941,7 +8885,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testReferencedCutRangesCol)
 
     pUndoPaste->Undo();
     pUndoCut->Undo();
-    checkReferencedCutRangesColIntitial(nSrcTab, nDestTab, "After undo");
+    checkReferencedCutRangesColIntitial(nSrcTab, nDestTab, u"After undo"_ustr);
 
     pUndoPaste.reset();
     pUndoCut.reset();
@@ -8985,7 +8929,7 @@ void TestCopyPaste::checkReferencedCutTransposedRangesColUndo(const SCTAB nSrcTa
 
     pUndoPaste->Undo();
     pUndoCut->Undo();
-    checkReferencedCutRangesColIntitial(nSrcTab, nDestTab, "After undo");
+    checkReferencedCutRangesColIntitial(nSrcTab, nDestTab, u"After undo"_ustr);
 
     pUndoCut->Redo();
     pUndoPaste->Redo();
@@ -8993,7 +8937,7 @@ void TestCopyPaste::checkReferencedCutTransposedRangesColUndo(const SCTAB nSrcTa
 
     pUndoPaste->Undo();
     pUndoCut->Undo();
-    checkReferencedCutRangesColIntitial(nSrcTab, nDestTab, "After undo");
+    checkReferencedCutRangesColIntitial(nSrcTab, nDestTab, u"After undo"_ustr);
 
     pUndoPaste.reset();
     pUndoCut.reset();
@@ -9005,17 +8949,17 @@ void TestCopyPaste::checkReferencedCutTransposedRangesColUndo(const SCTAB nSrcTa
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCutTransposedFormulas)
 {
     const SCTAB nTab = 0;
-    m_pDoc->InsertTab(nTab, "Test");
+    m_pDoc->InsertTab(nTab, u"Test"_ustr);
 
     m_pDoc->SetValue(0, 0, nTab, 1.0); // A1
     m_pDoc->SetValue(1, 0, nTab, 2.0); // B1
 
-    m_pDoc->SetString(1, 1, nTab, "=A1"); // B2
-    m_pDoc->SetString(2, 1, nTab, "=B1"); // C2
-    m_pDoc->SetString(3, 1, nTab, "=SUM(A1:B1)"); // D2
-    m_pDoc->SetString(4, 1, nTab, "=$B$1"); // E2
-    m_pDoc->SetString(5, 1, nTab, "=$B1"); // F2
-    m_pDoc->SetString(6, 1, nTab, "=B$1"); // G2
+    m_pDoc->SetString(1, 1, nTab, u"=A1"_ustr); // B2
+    m_pDoc->SetString(2, 1, nTab, u"=B1"_ustr); // C2
+    m_pDoc->SetString(3, 1, nTab, u"=SUM(A1:B1)"_ustr); // D2
+    m_pDoc->SetString(4, 1, nTab, u"=$B$1"_ustr); // E2
+    m_pDoc->SetString(5, 1, nTab, u"=$B1"_ustr); // F2
+    m_pDoc->SetString(6, 1, nTab, u"=B$1"_ustr); // G2
 
     // Check precondition
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(3, 1, nTab));
@@ -9040,29 +8984,29 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCutTransposedFormulas)
     m_pDoc->UpdateTranspose(aDestRange.aStart, pOrigClipDoc, aDestMark, nullptr);
     pTransClip.reset();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=A1"), m_pDoc->GetFormula(2, 2, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=A1"_ustr, m_pDoc->GetFormula(2, 2, nTab));
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(2, 2, nTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=B1"), m_pDoc->GetFormula(2, 3, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=B1"_ustr, m_pDoc->GetFormula(2, 3, nTab));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(2, 3, nTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A1:B1)"), m_pDoc->GetFormula(2, 4, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(A1:B1)"_ustr, m_pDoc->GetFormula(2, 4, nTab));
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(2, 4, nTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=$B$1"), m_pDoc->GetFormula(2, 5, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=$B$1"_ustr, m_pDoc->GetFormula(2, 5, nTab));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(2, 5, nTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=$B1"), m_pDoc->GetFormula(2, 6, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=$B1"_ustr, m_pDoc->GetFormula(2, 6, nTab));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(2, 6, nTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=B$1"), m_pDoc->GetFormula(2, 7, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=B$1"_ustr, m_pDoc->GetFormula(2, 7, nTab));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(2, 7, nTab));
 }
 
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCutTransposedFormulasSquare)
 {
     const SCTAB nTab = 0;
-    m_pDoc->InsertTab(nTab, "Test");
+    m_pDoc->InsertTab(nTab, u"Test"_ustr);
 
     m_pDoc->SetValue(0, 0, nTab, 1.0); // A1
     m_pDoc->SetValue(0, 1, nTab, 2.0); // A2
@@ -9071,12 +9015,12 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCutTransposedFormulasSquare)
     m_pDoc->SetValue(2, 0, nTab, 21.0); // C1
     m_pDoc->SetValue(2, 1, nTab, 22.0); // C2
 
-    m_pDoc->SetString(0, 3, nTab, "=A1"); // A4
-    m_pDoc->SetString(0, 4, nTab, "=A2"); // A5
-    m_pDoc->SetString(1, 3, nTab, "=B1"); // B4
-    m_pDoc->SetString(1, 4, nTab, "=B2"); // B5
-    m_pDoc->SetString(2, 3, nTab, "=C1"); // C4
-    m_pDoc->SetString(2, 4, nTab, "=C2"); // C5
+    m_pDoc->SetString(0, 3, nTab, u"=A1"_ustr); // A4
+    m_pDoc->SetString(0, 4, nTab, u"=A2"_ustr); // A5
+    m_pDoc->SetString(1, 3, nTab, u"=B1"_ustr); // B4
+    m_pDoc->SetString(1, 4, nTab, u"=B2"_ustr); // B5
+    m_pDoc->SetString(2, 3, nTab, u"=C1"_ustr); // C4
+    m_pDoc->SetString(2, 4, nTab, u"=C2"_ustr); // C5
 
     // Check precondition
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0, 3, nTab));
@@ -9121,25 +9065,25 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCutTransposedFormulasSquare)
     CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(1, 8, nTab));
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(2, 8, nTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=A1"), m_pDoc->GetFormula(1, 6, nTab));
-    CPPUNIT_ASSERT_EQUAL(OUString("=A2"), m_pDoc->GetFormula(2, 6, nTab));
-    CPPUNIT_ASSERT_EQUAL(OUString("=B1"), m_pDoc->GetFormula(1, 7, nTab));
-    CPPUNIT_ASSERT_EQUAL(OUString("=B2"), m_pDoc->GetFormula(2, 7, nTab));
-    CPPUNIT_ASSERT_EQUAL(OUString("=C1"), m_pDoc->GetFormula(1, 8, nTab));
-    CPPUNIT_ASSERT_EQUAL(OUString("=C2"), m_pDoc->GetFormula(2, 8, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=A1"_ustr, m_pDoc->GetFormula(1, 6, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=A2"_ustr, m_pDoc->GetFormula(2, 6, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=B1"_ustr, m_pDoc->GetFormula(1, 7, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=B2"_ustr, m_pDoc->GetFormula(2, 7, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=C1"_ustr, m_pDoc->GetFormula(1, 8, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=C2"_ustr, m_pDoc->GetFormula(2, 8, nTab));
 }
 
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf142065)
 {
     const SCTAB nTab = 0;
-    m_pDoc->InsertTab(nTab, "Test");
+    m_pDoc->InsertTab(nTab, u"Test"_ustr);
 
     m_pDoc->SetValue(0, 0, nTab, 1.0); // A1
-    m_pDoc->SetString(1, 0, nTab, "=A1"); // B1
-    m_pDoc->SetString(2, 0, nTab, "=SUM(A1:B1)"); // C1
-    m_pDoc->SetString(3, 0, nTab, "=$A$1"); // D1
-    m_pDoc->SetString(4, 0, nTab, "=$A1"); // E1
-    m_pDoc->SetString(5, 0, nTab, "=A$1"); // F1
+    m_pDoc->SetString(1, 0, nTab, u"=A1"_ustr); // B1
+    m_pDoc->SetString(2, 0, nTab, u"=SUM(A1:B1)"_ustr); // C1
+    m_pDoc->SetString(3, 0, nTab, u"=$A$1"_ustr); // D1
+    m_pDoc->SetString(4, 0, nTab, u"=$A1"_ustr); // E1
+    m_pDoc->SetString(5, 0, nTab, u"=A$1"_ustr); // F1
 
     // Check precondition
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(2, 0, nTab));
@@ -9183,7 +9127,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf142065)
     // Without the fix in place, this would have failed with
     // - Expected: =A3
     // - Actual  : =#REF!#REF!
-    CPPUNIT_ASSERT_EQUAL(OUString("=A3"), m_pDoc->GetFormula(0, 3, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=A3"_ustr, m_pDoc->GetFormula(0, 3, nTab));
     // Without the fix in place, this would have failed with
     // - Expected: 1
     // - Actual  : #REF!
@@ -9191,25 +9135,25 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf142065)
     // Without the fix in place, this would have failed with
     // - Expected: =SUM(A3:A4)
     // - Actual  : =SUM(#REF!#REF!:#REF!#REF!)
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A3:A4)"), m_pDoc->GetFormula(0, 4, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(A3:A4)"_ustr, m_pDoc->GetFormula(0, 4, nTab));
     // Without the fix in place, this would have failed with
     // - Expected: 2
     // - Actual  : #REF!
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(0, 4, nTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=$A$3"), m_pDoc->GetFormula(0, 5, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=$A$3"_ustr, m_pDoc->GetFormula(0, 5, nTab));
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0, 5, nTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=$A3"), m_pDoc->GetFormula(0, 6, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=$A3"_ustr, m_pDoc->GetFormula(0, 6, nTab));
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0, 6, nTab));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("=A$3"), m_pDoc->GetFormula(0, 7, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=A$3"_ustr, m_pDoc->GetFormula(0, 7, nTab));
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0, 7, nTab));
 }
 
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteMultiRange)
 {
-    m_pDoc->InsertTab(0, "Test");
+    m_pDoc->InsertTab(0, u"Test"_ustr);
 
     // Fill A2:B6 with numbers.
     for (SCROW nRow = 1; nRow <= 5; ++nRow)
@@ -9327,7 +9271,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSkipEmpty)
 
     } aTest(m_pDoc);
 
-    m_pDoc->InsertTab(0, "Test");
+    m_pDoc->InsertTab(0, u"Test"_ustr);
     m_pDoc->InitDrawLayer(m_xDocShell.get()); // for cell note objects.
 
     ScRange aSrcRange(0, 0, 0, 0, 4, 0);
@@ -9337,11 +9281,11 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSkipEmpty)
     aMark.SetMarkArea(aDestRange);
 
     // Put some texts in B1:B5.
-    m_pDoc->SetString(ScAddress(1, 0, 0), "A");
-    m_pDoc->SetString(ScAddress(1, 1, 0), "B");
-    m_pDoc->SetString(ScAddress(1, 2, 0), "C");
-    m_pDoc->SetString(ScAddress(1, 3, 0), "D");
-    m_pDoc->SetString(ScAddress(1, 4, 0), "E");
+    m_pDoc->SetString(ScAddress(1, 0, 0), u"A"_ustr);
+    m_pDoc->SetString(ScAddress(1, 1, 0), u"B"_ustr);
+    m_pDoc->SetString(ScAddress(1, 2, 0), u"C"_ustr);
+    m_pDoc->SetString(ScAddress(1, 3, 0), u"D"_ustr);
+    m_pDoc->SetString(ScAddress(1, 4, 0), u"E"_ustr);
 
     // Set the background color of B1:B5 to blue.
     ScPatternAttr aCellBackColor(m_pDoc->getCellAttributeHelper());
@@ -9360,9 +9304,9 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSkipEmpty)
     aClipDoc.ResetClip(m_pDoc, &aMark);
     ScClipParam aParam(aSrcRange, false);
     aClipDoc.SetClipParam(aParam);
-    aClipDoc.SetString(ScAddress(0, 0, 0), "Clip1");
-    aClipDoc.SetString(ScAddress(0, 2, 0), "Clip2");
-    aClipDoc.SetString(ScAddress(0, 4, 0), "Clip3");
+    aClipDoc.SetString(ScAddress(0, 0, 0), u"Clip1"_ustr);
+    aClipDoc.SetString(ScAddress(0, 2, 0), u"Clip2"_ustr);
+    aClipDoc.SetString(ScAddress(0, 4, 0), u"Clip3"_ustr);
 
     // Set the background color of A1:A5 to yellow.
     aCellBackColor.GetItemSet().Put(SvxBrushItem(COL_YELLOW, ATTR_BACKGROUND));
@@ -9452,10 +9396,10 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSkipEmpty)
 
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSkipEmpty2)
 {
-    m_pDoc->InsertTab(0, "Test");
+    m_pDoc->InsertTab(0, u"Test"_ustr);
 
-    m_pDoc->SetString(ScAddress(0, 0, 0), "A");
-    m_pDoc->SetString(ScAddress(2, 0, 0), "C");
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"A"_ustr);
+    m_pDoc->SetString(ScAddress(2, 0, 0), u"C"_ustr);
 
     // Copy A1:C1 to clipboard.
     ScDocument aClipDoc(SCDOCMODE_CLIP);
@@ -9469,10 +9413,10 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSkipEmpty2)
     m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc, false,
                          false, true, true);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("A"), m_pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"A"_ustr, m_pDoc->GetString(ScAddress(0, 2, 0)));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("B3 should be empty.", CELLTYPE_NONE,
                                  m_pDoc->GetCellType(ScAddress(1, 2, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("C"), m_pDoc->GetString(ScAddress(2, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"C"_ustr, m_pDoc->GetString(ScAddress(2, 2, 0)));
 
     m_pDoc->DeleteTab(0);
 }
@@ -9485,10 +9429,10 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCutPasteRefUndo)
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
-    m_pDoc->InsertTab(0, "Test");
+    m_pDoc->InsertTab(0, u"Test"_ustr);
 
     // A2 references B2.
-    m_pDoc->SetString(ScAddress(0, 1, 0), "=B2");
+    m_pDoc->SetString(ScAddress(0, 1, 0), u"=B2"_ustr);
 
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
@@ -9509,19 +9453,19 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCutPasteRefUndo)
                          &aClipDoc);
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(0, 1, 0));
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("A2 should be referencing C2.", OUString("=C2"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A2 should be referencing C2.", u"=C2"_ustr,
                                  m_pDoc->GetFormula(0, 1, 0));
 
     // At this point, the ref undo document should contain a formula cell at A2 that references B2.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("A2 in the undo document should be referencing B2.",
-                                 OUString("=B2"), pUndoDoc->GetFormula(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A2 in the undo document should be referencing B2.", u"=B2"_ustr,
+                                 pUndoDoc->GetFormula(0, 1, 0));
 
     ScUndoPaste aUndo(m_xDocShell.get(), ScRange(2, 1, 0), aMark, std::move(pUndoDoc), nullptr,
                       InsertDeleteFlags::CONTENTS, nullptr, false, nullptr);
     aUndo.Undo();
 
     // Now A2 should be referencing B2 once again.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("A2 should be referencing B2 after undo.", OUString("=B2"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A2 should be referencing B2 after undo.", u"=B2"_ustr,
                                  m_pDoc->GetFormula(0, 1, 0));
 
     m_pDoc->DeleteTab(0);
@@ -9534,7 +9478,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCutPasteGroupRefUndo)
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
-    m_pDoc->InsertTab(0, "Test");
+    m_pDoc->InsertTab(0, u"Test"_ustr);
 
     // Formula data in A1:A9
     std::vector<std::vector<const char*>> aData
@@ -9638,22 +9582,22 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMoveRefBetweenSheets)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
-    m_pDoc->InsertTab(0, "Test1");
-    m_pDoc->InsertTab(1, "Test2");
+    m_pDoc->InsertTab(0, u"Test1"_ustr);
+    m_pDoc->InsertTab(1, u"Test2"_ustr);
 
     m_pDoc->SetValue(ScAddress(0, 0, 0), 12.0);
     m_pDoc->SetValue(ScAddress(1, 0, 0), 10.0);
     m_pDoc->SetValue(ScAddress(2, 0, 0), 8.0);
-    m_pDoc->SetString(ScAddress(0, 1, 0), "=A1");
-    m_pDoc->SetString(ScAddress(0, 2, 0), "=SUM(A1:C1)");
+    m_pDoc->SetString(ScAddress(0, 1, 0), u"=A1"_ustr);
+    m_pDoc->SetString(ScAddress(0, 2, 0), u"=SUM(A1:C1)"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
     CPPUNIT_ASSERT_EQUAL(30.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
 
     // These formulas should not display the sheet name.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=A1"), m_pDoc->GetFormula(0, 1, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=SUM(A1:C1)"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", u"=A1"_ustr, m_pDoc->GetFormula(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", u"=SUM(A1:C1)"_ustr,
                                  m_pDoc->GetFormula(0, 2, 0));
 
     // Move Test1.A2:A3 to Test2.A2:A3.
@@ -9668,9 +9612,8 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMoveRefBetweenSheets)
     ASSERT_DOUBLES_EQUAL(30.0, m_pDoc->GetValue(ScAddress(0, 2, 1)));
 
     // The reference in the pasted formula should display sheet name after the move.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=Test1.A1"),
-                                 m_pDoc->GetFormula(0, 1, 1));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", OUString("=SUM(Test1.A1:C1)"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", u"=Test1.A1"_ustr, m_pDoc->GetFormula(0, 1, 1));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula!", u"=SUM(Test1.A1:C1)"_ustr,
                                  m_pDoc->GetFormula(0, 2, 1));
 
     m_pDoc->DeleteTab(1);
@@ -9679,7 +9622,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMoveRefBetweenSheets)
 
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testUndoCut)
 {
-    m_pDoc->InsertTab(0, "Test");
+    m_pDoc->InsertTab(0, u"Test"_ustr);
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -9689,7 +9632,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testUndoCut)
     m_pDoc->SetValue(ScAddress(0, 2, 0), 100.0);
 
     // SUM in A4.
-    m_pDoc->SetString(ScAddress(0, 3, 0), "=SUM(A1:A3)");
+    m_pDoc->SetString(ScAddress(0, 3, 0), u"=SUM(A1:A3)"_ustr);
     CPPUNIT_ASSERT_EQUAL(111.0, m_pDoc->GetValue(0, 3, 0));
 
     // Select A1:A3.
@@ -9732,19 +9675,19 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testUndoCut)
 
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMoveBlock)
 {
-    m_pDoc->InsertTab(0, "SheetNotes");
+    m_pDoc->InsertTab(0, u"SheetNotes"_ustr);
 
     // We need a drawing layer in order to create caption objects.
     m_pDoc->InitDrawLayer(m_xDocShell.get());
 
     m_pDoc->SetValue(0, 0, 0, 1);
-    m_pDoc->SetString(1, 0, 0, "=A1+1");
-    m_pDoc->SetString(2, 0, 0, "test");
+    m_pDoc->SetString(1, 0, 0, u"=A1+1"_ustr);
+    m_pDoc->SetString(2, 0, 0, u"test"_ustr);
 
     // add notes to A1:C1
-    ScAddress aAddrA1 = setNote(0, 0, 0, "Hello world in A1");
-    ScAddress aAddrB1 = setNote(1, 0, 0, "Hello world in B1");
-    ScAddress aAddrC1 = setNote(2, 0, 0, "Hello world in C1");
+    ScAddress aAddrA1 = setNote(0, 0, 0, u"Hello world in A1"_ustr);
+    ScAddress aAddrB1 = setNote(1, 0, 0, u"Hello world in B1"_ustr);
+    ScAddress aAddrC1 = setNote(2, 0, 0, u"Hello world in C1"_ustr);
     ScAddress aAddrD1(3, 0, 0);
 
     // previous tests on cell note content are ok. this one fails !!! :(
@@ -9759,9 +9702,9 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMoveBlock)
 
     //check cell content
     OUString aString = m_pDoc->GetString(3, 0, 0);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D1 should contain: test", OUString("test"), aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell D1 should contain: test", u"test"_ustr, aString);
     aString = m_pDoc->GetFormula(2, 0, 0);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C1 should contain an updated formula", OUString("=B1+1"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C1 should contain an updated formula", u"=B1+1"_ustr,
                                  aString);
     double fValue = m_pDoc->GetValue(aAddrB1);
     ASSERT_DOUBLES_EQUAL_MESSAGE("Cell B1 should contain 1", 1, fValue);
@@ -9786,7 +9729,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMoveBlock)
 
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteRelativeFormula)
 {
-    m_pDoc->InsertTab(0, "Formula");
+    m_pDoc->InsertTab(0, u"Formula"_ustr);
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
 
@@ -9795,7 +9738,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteRelativeFormula)
     m_pDoc->SetValue(ScAddress(0, 3, 0), 2);
 
     // Insert formula to B4.
-    m_pDoc->SetString(ScAddress(1, 3, 0), "=A4");
+    m_pDoc->SetString(ScAddress(1, 3, 0), u"=A4"_ustr);
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1, 3, 0)));
 
     // Select and copy B3:B4 to the clipboard.
@@ -9820,7 +9763,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteRelativeFormula)
     clearSheet(&aClipDoc, 0);
 
     // Insert a single formula cell in A1.
-    m_pDoc->SetString(ScAddress(0, 0, 0), "=ROW()");
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"=ROW()"_ustr);
     const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
     CPPUNIT_ASSERT(pFC);
     CPPUNIT_ASSERT(!pFC->IsShared()); // single formula cell is never shared.
@@ -9853,7 +9796,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteRepeatOneFormula)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
 
-    m_pDoc->InsertTab(0, "Test");
+    m_pDoc->InsertTab(0, u"Test"_ustr);
 
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     ScMarkData aMark(m_pDoc->GetSheetLimits());
@@ -9867,7 +9810,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteRepeatOneFormula)
 
     // Insert a formula in C1.
     ScAddress aPos(2, 0, 0); // C1
-    m_pDoc->SetString(aPos, "=SUM(A1:B1)");
+    m_pDoc->SetString(aPos, u"=SUM(A1:B1)"_ustr);
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(aPos));
 
     // This check makes only sense if group listeners are activated.
@@ -9974,15 +9917,14 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteRepeatOneFormula)
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteMixedReferenceFormula)
 {
     sc::AutoCalcSwitch aAC(*m_pDoc, true); // turn on auto calc.
-    m_pDoc->InsertTab(0, "Test");
+    m_pDoc->InsertTab(0, u"Test"_ustr);
 
     // Insert value to C3
     m_pDoc->SetValue(2, 2, 0, 1.0);
 
     // Insert formula to A1 with mixed relative/absolute addressing.
-    m_pDoc->SetString(0, 0, 0, "=SUM(B:$C)");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", OUString("=SUM(B:$C)"),
-                                 m_pDoc->GetFormula(0, 0, 0));
+    m_pDoc->SetString(0, 0, 0, u"=SUM(B:$C)"_ustr);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", u"=SUM(B:$C)"_ustr, m_pDoc->GetFormula(0, 0, 0));
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0, 0, 0));
 
     // Copy formula in A1 to clipboard.
@@ -9993,33 +9935,32 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteMixedReferenceFormula)
     // Paste formula to B1.
     aRange = ScAddress(1, 0, 0);
     pasteFromClip(m_pDoc, aRange, &aClipDoc);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", OUString("=SUM(C:$C)"),
-                                 m_pDoc->GetFormula(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", u"=SUM(C:$C)"_ustr, m_pDoc->GetFormula(1, 0, 0));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(0, 0, 0));
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(1, 0, 0));
 
     // Paste formula to C1. All three results now must be circular reference.
     aRange = ScAddress(2, 0, 0);
     pasteFromClip(m_pDoc, aRange, &aClipDoc);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", OUString("=SUM($C:D)"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", u"=SUM($C:D)"_ustr,
                                  m_pDoc->GetFormula(2, 0, 0)); // reference put in order
-    CPPUNIT_ASSERT_EQUAL(OUString("Err:522"), m_pDoc->GetString(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Err:522"), m_pDoc->GetString(1, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Err:522"), m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Err:522"_ustr, m_pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Err:522"_ustr, m_pDoc->GetString(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Err:522"_ustr, m_pDoc->GetString(2, 0, 0));
 
     m_pDoc->DeleteTab(0);
 }
 
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteFormulas)
 {
-    m_pDoc->InsertTab(0, "Sheet1");
-    m_pDoc->InsertTab(1, "Sheet2");
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    m_pDoc->InsertTab(1, u"Sheet2"_ustr);
 
-    m_pDoc->SetString(0, 0, 0, "=COLUMN($A$1)");
-    m_pDoc->SetString(0, 1, 0, "=$A$1+B2");
-    m_pDoc->SetString(0, 2, 0, "=$Sheet2.A1");
-    m_pDoc->SetString(0, 3, 0, "=$Sheet2.$A$1");
-    m_pDoc->SetString(0, 4, 0, "=$Sheet2.A$1");
+    m_pDoc->SetString(0, 0, 0, u"=COLUMN($A$1)"_ustr);
+    m_pDoc->SetString(0, 1, 0, u"=$A$1+B2"_ustr);
+    m_pDoc->SetString(0, 2, 0, u"=$Sheet2.A1"_ustr);
+    m_pDoc->SetString(0, 3, 0, u"=$Sheet2.$A$1"_ustr);
+    m_pDoc->SetString(0, 4, 0, u"=$Sheet2.A$1"_ustr);
 
     // to prevent ScEditableTester in ScDocFunc::MoveBlock
     ASSERT_DOUBLES_EQUAL(1.0, m_pDoc->GetValue(0, 0, 0));
@@ -10032,16 +9973,16 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteFormulas)
     CPPUNIT_ASSERT(bMoveDone);
     ASSERT_DOUBLES_EQUAL(1.0, m_pDoc->GetValue(10, 10, 0));
     ASSERT_DOUBLES_EQUAL(1.0, m_pDoc->GetValue(10, 11, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("=COLUMN($A$1)"), m_pDoc->GetFormula(10, 10, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$A$1+L12"), m_pDoc->GetFormula(10, 11, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$Sheet2.K11"), m_pDoc->GetFormula(10, 12, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$Sheet2.$A$1"), m_pDoc->GetFormula(10, 13, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("=$Sheet2.K$1"), m_pDoc->GetFormula(10, 14, 0));
+    CPPUNIT_ASSERT_EQUAL(u"=COLUMN($A$1)"_ustr, m_pDoc->GetFormula(10, 10, 0));
+    CPPUNIT_ASSERT_EQUAL(u"=$A$1+L12"_ustr, m_pDoc->GetFormula(10, 11, 0));
+    CPPUNIT_ASSERT_EQUAL(u"=$Sheet2.K11"_ustr, m_pDoc->GetFormula(10, 12, 0));
+    CPPUNIT_ASSERT_EQUAL(u"=$Sheet2.$A$1"_ustr, m_pDoc->GetFormula(10, 13, 0));
+    CPPUNIT_ASSERT_EQUAL(u"=$Sheet2.K$1"_ustr, m_pDoc->GetFormula(10, 14, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteFormulasExternalDoc)
 {
-    SfxMedium* pMedium = new SfxMedium("file:///source.fake", StreamMode::STD_READWRITE);
+    SfxMedium* pMedium = new SfxMedium(u"file:///source.fake"_ustr, StreamMode::STD_READWRITE);
     m_xDocShell->DoLoad(pMedium);
 
     ScDocShellRef xExtDocSh = new ScDocShell;
@@ -10052,18 +9993,18 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteFormulasExternalDoc)
                            findLoadedDocShellByName(aExtDocName) != nullptr);
 
     ScDocument& rExtDoc = xExtDocSh->GetDocument();
-    rExtDoc.InsertTab(0, "ExtSheet1");
-    rExtDoc.InsertTab(1, "ExtSheet2");
+    rExtDoc.InsertTab(0, u"ExtSheet1"_ustr);
+    rExtDoc.InsertTab(1, u"ExtSheet2"_ustr);
 
-    m_pDoc->InsertTab(0, "Sheet1");
-    m_pDoc->InsertTab(1, "Sheet2");
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    m_pDoc->InsertTab(1, u"Sheet2"_ustr);
 
-    m_pDoc->SetString(0, 0, 0, "=COLUMN($A$1)");
-    m_pDoc->SetString(0, 1, 0, "=$A$1+B2");
-    m_pDoc->SetString(0, 2, 0, "=$Sheet2.A1");
-    m_pDoc->SetString(0, 3, 0, "=$Sheet2.$A$1");
-    m_pDoc->SetString(0, 4, 0, "=$Sheet2.A$1");
-    m_pDoc->SetString(0, 5, 0, "=$Sheet1.$A$1");
+    m_pDoc->SetString(0, 0, 0, u"=COLUMN($A$1)"_ustr);
+    m_pDoc->SetString(0, 1, 0, u"=$A$1+B2"_ustr);
+    m_pDoc->SetString(0, 2, 0, u"=$Sheet2.A1"_ustr);
+    m_pDoc->SetString(0, 3, 0, u"=$Sheet2.$A$1"_ustr);
+    m_pDoc->SetString(0, 4, 0, u"=$Sheet2.A$1"_ustr);
+    m_pDoc->SetString(0, 5, 0, u"=$Sheet1.$A$1"_ustr);
 
     ScRange aRange(0, 0, 0, 0, 5, 0);
     ScClipParam aClipParam(aRange, false);
@@ -10079,41 +10020,41 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteFormulasExternalDoc)
 
     OUString aFormula = rExtDoc.GetFormula(1, 1, 1);
     //adjust absolute refs pointing to the copy area
-    CPPUNIT_ASSERT_EQUAL(OUString("=COLUMN($B$2)"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(u"=COLUMN($B$2)"_ustr, aFormula);
     aFormula = rExtDoc.GetFormula(1, 2, 1);
     //adjust absolute refs and keep relative refs
-    CPPUNIT_ASSERT_EQUAL(OUString("=$B$2+C3"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(u"=$B$2+C3"_ustr, aFormula);
     aFormula = rExtDoc.GetFormula(1, 3, 1);
     // make absolute sheet refs external refs
-    CPPUNIT_ASSERT_EQUAL(OUString("='file:///source.fake'#$Sheet2.B2"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(u"='file:///source.fake'#$Sheet2.B2"_ustr, aFormula);
     aFormula = rExtDoc.GetFormula(1, 4, 1);
-    CPPUNIT_ASSERT_EQUAL(OUString("='file:///source.fake'#$Sheet2.$A$1"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(u"='file:///source.fake'#$Sheet2.$A$1"_ustr, aFormula);
     aFormula = rExtDoc.GetFormula(1, 5, 1);
-    CPPUNIT_ASSERT_EQUAL(OUString("='file:///source.fake'#$Sheet2.B$1"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(u"='file:///source.fake'#$Sheet2.B$1"_ustr, aFormula);
     aFormula = rExtDoc.GetFormula(1, 6, 1);
-    CPPUNIT_ASSERT_EQUAL(OUString("=$ExtSheet2.$B$2"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(u"=$ExtSheet2.$B$2"_ustr, aFormula);
 
     xExtDocSh->DoClose();
 }
 
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteReferencesExternalDoc)
 {
-    SfxMedium* pMedium = new SfxMedium("file:///source.fake", StreamMode::STD_READWRITE);
+    SfxMedium* pMedium = new SfxMedium(u"file:///source.fake"_ustr, StreamMode::STD_READWRITE);
     m_xDocShell->DoLoad(pMedium);
 
     ScDocShellRef xExtDocSh = new ScDocShell;
-    OUString aExtDocName("file:///extdata.fake");
+    OUString aExtDocName(u"file:///extdata.fake"_ustr);
     SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
     xExtDocSh->DoLoad(pMed);
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
                            findLoadedDocShellByName(aExtDocName) != nullptr);
 
     ScDocument& rExtDoc = xExtDocSh->GetDocument();
-    rExtDoc.InsertTab(0, "ExtSheet1");
+    rExtDoc.InsertTab(0, u"ExtSheet1"_ustr);
 
-    m_pDoc->InsertTab(0, "Sheet1");
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
 
-    m_pDoc->SetString(0, 5, 0, "=SUM($Sheet1.A1:A5)");
+    m_pDoc->SetString(0, 5, 0, u"=SUM($Sheet1.A1:A5)"_ustr);
 
     ScRange aRange(0, 2, 0, 0, 5, 0);
     ScClipParam aClipParam(aRange, false);
@@ -10129,7 +10070,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteReferencesExternalDoc)
 
     OUString aFormula = rExtDoc.GetFormula(0, 3, 0);
     //adjust absolute refs pointing to the copy area
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM('file:///source.fake'#$Sheet1.A#REF!:A3)"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(u"=SUM('file:///source.fake'#$Sheet1.A#REF!:A3)"_ustr, aFormula);
 
     xExtDocSh->DoClose();
 }
@@ -10137,10 +10078,10 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteReferencesExternalDoc)
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf68976)
 {
     const SCTAB nTab = 0;
-    m_pDoc->InsertTab(nTab, "Test");
+    m_pDoc->InsertTab(nTab, u"Test"_ustr);
 
     m_pDoc->SetValue(0, 0, nTab, 1.0); // A1
-    m_pDoc->SetString(0, 1, nTab, "=$A$1"); // A2
+    m_pDoc->SetString(0, 1, nTab, u"=$A$1"_ustr); // A2
     m_pDoc->SetValue(0, 2, nTab, 1000.0); // A3
 
     // Cut A3 to the clip document.
@@ -10167,8 +10108,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf68976)
     // Without the fix in place, this would have failed with
     // - Expected: =$A$1
     // - Actual  : =$B$4
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula", OUString("=$A$1"),
-                                 m_pDoc->GetFormula(0, 1, nTab));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula", u"=$A$1"_ustr, m_pDoc->GetFormula(0, 1, nTab));
     // Without the fix in place, this would have failed with
     // - Expected: 1
     // - Actual  : 1000
@@ -10180,10 +10120,10 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf68976)
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf71058)
 {
     const SCTAB nTab = 0;
-    m_pDoc->InsertTab(nTab, "Test");
+    m_pDoc->InsertTab(nTab, u"Test"_ustr);
 
-    m_pDoc->SetString(2, 2, nTab, "=C4"); // C3
-    m_pDoc->SetString(3, 2, nTab, "=D4"); // D3
+    m_pDoc->SetString(2, 2, nTab, u"=C4"_ustr); // C3
+    m_pDoc->SetString(3, 2, nTab, u"=D4"_ustr); // D3
     m_pDoc->SetValue(2, 3, nTab, 1.0); // C4
     m_pDoc->SetValue(3, 3, nTab, 2.0); // D4
 
@@ -10215,7 +10155,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf71058)
     // Without the fix in place, this would have failed with
     // - Expected: =E6
     // - Actual  : =C4
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula", OUString("=E6"), m_pDoc->GetFormula(2, 2, nTab));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula", u"=E6"_ustr, m_pDoc->GetFormula(2, 2, nTab));
     // Without the fix in place, this would have failed with
     // - Expected: 1
     // - Actual  : 0
@@ -10224,7 +10164,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf71058)
     // Without the fix in place, this would have failed with
     // - Expected: =E7
     // - Actual  : =D4
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula", OUString("=E7"), m_pDoc->GetFormula(3, 2, nTab));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula", u"=E7"_ustr, m_pDoc->GetFormula(3, 2, nTab));
     // Without the fix in place, this would have failed with
     // - Expected: 2
     // - Actual  : 0
@@ -10234,7 +10174,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf71058)
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf149554)
 {
     const SCTAB nTab = 0;
-    m_pDoc->InsertTab(nTab, "Test");
+    m_pDoc->InsertTab(nTab, u"Test"_ustr);
 
     // Cut C4:C5 to the clip document.
     ScDocument aClipDoc(SCDOCMODE_CLIP);
@@ -10261,7 +10201,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf149554)
 
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMixData)
 {
-    m_pDoc->InsertTab(0, "Test");
+    m_pDoc->InsertTab(0, u"Test"_ustr);
 
     m_pDoc->SetValue(ScAddress(1, 0, 0), 2.0); // B1
     m_pDoc->SetValue(ScAddress(0, 1, 0), 3.0); // A2
@@ -10320,7 +10260,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMixDataAsLinkTdf116413)
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
 
     const SCTAB nTab = 0;
-    m_pDoc->InsertTab(nTab, "Test");
+    m_pDoc->InsertTab(nTab, u"Test"_ustr);
 
     // Scenario 1: Past "As Link" and "Add" operation (as described in tdf#116413)
     m_pDoc->SetValue(0, 0, nTab, 1.0); // A1
@@ -10344,7 +10284,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMixDataAsLinkTdf116413)
 
     // Test precondition
     CPPUNIT_ASSERT_EQUAL(1001.0, m_pDoc->GetValue(0, 1, nTab)); // A2
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), m_pDoc->GetFormula(0, 1, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=1000+($Test.$A$1)"_ustr, m_pDoc->GetFormula(0, 1, nTab));
 
     // Change A1 from 1.0 to 2.0 (auto calculation is triggered)
     m_pDoc->SetValue(0, 0, nTab, 2.0); // A1
@@ -10353,7 +10293,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMixDataAsLinkTdf116413)
     // - Expected: =1002
     // - Actual  : =1001
     CPPUNIT_ASSERT_EQUAL(1002.0, m_pDoc->GetValue(0, 1, nTab)); // A2
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), m_pDoc->GetFormula(0, 1, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=1000+($Test.$A$1)"_ustr, m_pDoc->GetFormula(0, 1, nTab));
 
     // Clear everything and start over.
     clearSheet(m_pDoc, nTab);
@@ -10361,7 +10301,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMixDataAsLinkTdf116413)
     clearSheet(&aMixDoc, nTab);
 
     // Scenario 2: Like Scenario 1, but with a range (3 columns)
-    m_pDoc->InsertTab(nTab, "Test");
+    m_pDoc->InsertTab(nTab, u"Test"_ustr);
 
     m_pDoc->SetValue(0, 0, nTab, 1.0); // A1
     m_pDoc->SetValue(0, 1, nTab, 1000.0); // A2
@@ -10386,13 +10326,13 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMixDataAsLinkTdf116413)
 
     // Test precondition
     CPPUNIT_ASSERT_EQUAL(1001.0, m_pDoc->GetValue(0, 1, nTab)); // A2
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), m_pDoc->GetFormula(0, 1, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=1000+($Test.$A$1)"_ustr, m_pDoc->GetFormula(0, 1, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1001.0, m_pDoc->GetValue(1, 1, nTab)); // B2
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$B$1)"), m_pDoc->GetFormula(1, 1, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=1000+($Test.$B$1)"_ustr, m_pDoc->GetFormula(1, 1, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1001.0, m_pDoc->GetValue(2, 1, nTab)); // C2
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$C$1)"), m_pDoc->GetFormula(2, 1, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=1000+($Test.$C$1)"_ustr, m_pDoc->GetFormula(2, 1, nTab));
 
     // Change A1:C1 from 1.0 to 2.0 (auto calculation is triggered)
     m_pDoc->SetValue(0, 0, nTab, 2.0); // A1
@@ -10403,16 +10343,16 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMixDataAsLinkTdf116413)
     // - Expected: =1002
     // - Actual  : =1001
     CPPUNIT_ASSERT_EQUAL(1002.0, m_pDoc->GetValue(0, 1, nTab)); // A2
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), m_pDoc->GetFormula(0, 1, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=1000+($Test.$A$1)"_ustr, m_pDoc->GetFormula(0, 1, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1002.0, m_pDoc->GetValue(1, 1, nTab)); // B2
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$B$1)"), m_pDoc->GetFormula(1, 1, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=1000+($Test.$B$1)"_ustr, m_pDoc->GetFormula(1, 1, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1002.0, m_pDoc->GetValue(2, 1, nTab)); // C2
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$C$1)"), m_pDoc->GetFormula(2, 1, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=1000+($Test.$C$1)"_ustr, m_pDoc->GetFormula(2, 1, nTab));
 
     // Scenario 3: Like Scenario 2, but transposed
-    m_pDoc->InsertTab(nTab, "Test");
+    m_pDoc->InsertTab(nTab, u"Test"_ustr);
 
     m_pDoc->SetValue(0, 0, nTab, 1.0); // A1
     m_pDoc->SetValue(1, 0, nTab, 1000.0); // B1
@@ -10437,13 +10377,13 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMixDataAsLinkTdf116413)
 
     // Test precondition
     CPPUNIT_ASSERT_EQUAL(1001.0, m_pDoc->GetValue(1, 0, nTab)); // B1
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), m_pDoc->GetFormula(1, 0, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=1000+($Test.$A$1)"_ustr, m_pDoc->GetFormula(1, 0, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1001.0, m_pDoc->GetValue(1, 1, nTab)); // B2
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$2)"), m_pDoc->GetFormula(1, 1, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=1000+($Test.$A$2)"_ustr, m_pDoc->GetFormula(1, 1, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1001.0, m_pDoc->GetValue(1, 2, nTab)); // B3
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$3)"), m_pDoc->GetFormula(1, 2, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=1000+($Test.$A$3)"_ustr, m_pDoc->GetFormula(1, 2, nTab));
 
     // Change A1:C1 from 1.0 to 2.0 (auto calculation is triggered)
     m_pDoc->SetValue(0, 0, nTab, 2.0); // A1
@@ -10454,13 +10394,13 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMixDataAsLinkTdf116413)
     // - Expected: =1002
     // - Actual  : =1001
     CPPUNIT_ASSERT_EQUAL(1002.0, m_pDoc->GetValue(1, 0, nTab)); // B1
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$1)"), m_pDoc->GetFormula(1, 0, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=1000+($Test.$A$1)"_ustr, m_pDoc->GetFormula(1, 0, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1002.0, m_pDoc->GetValue(1, 1, nTab)); // B2
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$2)"), m_pDoc->GetFormula(1, 1, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=1000+($Test.$A$2)"_ustr, m_pDoc->GetFormula(1, 1, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1002.0, m_pDoc->GetValue(1, 2, nTab)); // B3
-    CPPUNIT_ASSERT_EQUAL(OUString("=1000+($Test.$A$3)"), m_pDoc->GetFormula(1, 2, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=1000+($Test.$A$3)"_ustr, m_pDoc->GetFormula(1, 2, nTab));
 
     m_pDoc->DeleteTab(nTab);
 }
@@ -10470,14 +10410,14 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMixDataWithFormulaTdf116413)
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
 
     const SCTAB nTab = 0;
-    m_pDoc->InsertTab(nTab, "Test");
+    m_pDoc->InsertTab(nTab, u"Test"_ustr);
 
     // Scenario 1: There is already a reference in destination cell
-    m_pDoc->InsertTab(nTab, "Test");
+    m_pDoc->InsertTab(nTab, u"Test"_ustr);
 
     m_pDoc->SetValue(0, 0, nTab, 100.0); // A1
     m_pDoc->SetValue(0, 1, nTab, 1.0); // A2
-    m_pDoc->SetString(0, 2, nTab, "=A2"); // A3
+    m_pDoc->SetString(0, 2, nTab, u"=A2"_ustr); // A3
 
     // Copy A1 to the clip document.
     ScDocument aClipDoc(SCDOCMODE_CLIP);
@@ -10494,7 +10434,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMixDataWithFormulaTdf116413)
 
     // Test precondition
     CPPUNIT_ASSERT_EQUAL(101.0, m_pDoc->GetValue(0, 2, nTab)); // A3
-    CPPUNIT_ASSERT_EQUAL(OUString("=(A2)+100"), m_pDoc->GetFormula(0, 2, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=(A2)+100"_ustr, m_pDoc->GetFormula(0, 2, nTab));
 
     // Change A2 from 1.0 to 2.0 (auto calculation is triggered)
     m_pDoc->SetValue(0, 1, nTab, 2.0); // A2
@@ -10503,7 +10443,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMixDataWithFormulaTdf116413)
     // - Expected: =102
     // - Actual  : =101
     CPPUNIT_ASSERT_EQUAL(102.0, m_pDoc->GetValue(0, 2, nTab)); // A3
-    CPPUNIT_ASSERT_EQUAL(OUString("=(A2)+100"), m_pDoc->GetFormula(0, 2, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=(A2)+100"_ustr, m_pDoc->GetFormula(0, 2, nTab));
 
     // Clear everything and start over.
     clearSheet(m_pDoc, nTab);
@@ -10511,7 +10451,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMixDataWithFormulaTdf116413)
     clearSheet(&aMixDoc, nTab);
 
     // Scenario 2: Similar to scenario 1, but a range of 4 cells and 2 of them have references
-    m_pDoc->InsertTab(nTab, "Test");
+    m_pDoc->InsertTab(nTab, u"Test"_ustr);
 
     m_pDoc->SetValue(0, 0, nTab, 100.0); // A1
     m_pDoc->SetValue(0, 1, nTab, 1.0); // A2
@@ -10519,11 +10459,11 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMixDataWithFormulaTdf116413)
 
     m_pDoc->SetValue(1, 0, nTab, 100.0); // B1
     m_pDoc->SetValue(1, 1, nTab, 1.0); // B2
-    m_pDoc->SetString(1, 2, nTab, "=B2"); // B3
+    m_pDoc->SetString(1, 2, nTab, u"=B2"_ustr); // B3
 
     m_pDoc->SetValue(2, 0, nTab, 100.0); // C1
     m_pDoc->SetValue(2, 1, nTab, 1.0); // C2
-    m_pDoc->SetString(2, 2, nTab, "=C2"); // C3
+    m_pDoc->SetString(2, 2, nTab, u"=C2"_ustr); // C3
 
     m_pDoc->SetValue(3, 0, nTab, 100.0); // D1
     m_pDoc->SetValue(3, 1, nTab, 1.0); // D2
@@ -10545,10 +10485,10 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMixDataWithFormulaTdf116413)
     CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetFormula(0, 2, nTab));
 
     CPPUNIT_ASSERT_EQUAL(101.0, m_pDoc->GetValue(1, 2, nTab)); // B3
-    CPPUNIT_ASSERT_EQUAL(OUString("=(B2)+100"), m_pDoc->GetFormula(1, 2, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=(B2)+100"_ustr, m_pDoc->GetFormula(1, 2, nTab));
 
     CPPUNIT_ASSERT_EQUAL(101.0, m_pDoc->GetValue(2, 2, nTab)); // C3
-    CPPUNIT_ASSERT_EQUAL(OUString("=(C2)+100"), m_pDoc->GetFormula(2, 2, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=(C2)+100"_ustr, m_pDoc->GetFormula(2, 2, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(3, 2, nTab)); // D3
     CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetFormula(3, 2, nTab));
@@ -10566,16 +10506,16 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMixDataWithFormulaTdf116413)
     // - Expected: =102
     // - Actual  : =101
     CPPUNIT_ASSERT_EQUAL(102.0, m_pDoc->GetValue(1, 2, nTab)); // B3
-    CPPUNIT_ASSERT_EQUAL(OUString("=(B2)+100"), m_pDoc->GetFormula(1, 2, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=(B2)+100"_ustr, m_pDoc->GetFormula(1, 2, nTab));
 
     CPPUNIT_ASSERT_EQUAL(102.0, m_pDoc->GetValue(2, 2, nTab)); // C3
-    CPPUNIT_ASSERT_EQUAL(OUString("=(C2)+100"), m_pDoc->GetFormula(2, 2, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=(C2)+100"_ustr, m_pDoc->GetFormula(2, 2, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(3, 2, nTab)); // D3
     CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetFormula(3, 2, nTab));
 
     // Scenario 3: Similar to scenario 2, but transposed
-    m_pDoc->InsertTab(nTab, "Test");
+    m_pDoc->InsertTab(nTab, u"Test"_ustr);
 
     m_pDoc->SetValue(0, 0, nTab, 100.0); // A1
     m_pDoc->SetValue(1, 0, nTab, 1.0); // B1
@@ -10583,11 +10523,11 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMixDataWithFormulaTdf116413)
 
     m_pDoc->SetValue(0, 1, nTab, 100.0); // A2
     m_pDoc->SetValue(1, 1, nTab, 1.0); // B2
-    m_pDoc->SetString(2, 1, nTab, "=B2"); // C2
+    m_pDoc->SetString(2, 1, nTab, u"=B2"_ustr); // C2
 
     m_pDoc->SetValue(0, 2, nTab, 100.0); // A3
     m_pDoc->SetValue(1, 2, nTab, 1.0); // B3
-    m_pDoc->SetString(2, 2, nTab, "=B3"); // C3
+    m_pDoc->SetString(2, 2, nTab, u"=B3"_ustr); // C3
 
     m_pDoc->SetValue(0, 3, nTab, 100.0); // A4
     m_pDoc->SetValue(1, 3, nTab, 1.0); // B4
@@ -10609,10 +10549,10 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMixDataWithFormulaTdf116413)
     CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetFormula(2, 0, nTab));
 
     CPPUNIT_ASSERT_EQUAL(101.0, m_pDoc->GetValue(2, 1, nTab)); // C2
-    CPPUNIT_ASSERT_EQUAL(OUString("=(B2)+100"), m_pDoc->GetFormula(2, 1, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=(B2)+100"_ustr, m_pDoc->GetFormula(2, 1, nTab));
 
     CPPUNIT_ASSERT_EQUAL(101.0, m_pDoc->GetValue(2, 2, nTab)); // C3
-    CPPUNIT_ASSERT_EQUAL(OUString("=(B3)+100"), m_pDoc->GetFormula(2, 2, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=(B3)+100"_ustr, m_pDoc->GetFormula(2, 2, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(2, 3, nTab)); // C4
     CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetFormula(2, 3, nTab));
@@ -10630,10 +10570,10 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMixDataWithFormulaTdf116413)
     // - Expected: =102
     // - Actual  : =101
     CPPUNIT_ASSERT_EQUAL(102.0, m_pDoc->GetValue(2, 1, nTab)); // C2
-    CPPUNIT_ASSERT_EQUAL(OUString("=(B2)+100"), m_pDoc->GetFormula(2, 1, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=(B2)+100"_ustr, m_pDoc->GetFormula(2, 1, nTab));
 
     CPPUNIT_ASSERT_EQUAL(102.0, m_pDoc->GetValue(2, 2, nTab)); // C3
-    CPPUNIT_ASSERT_EQUAL(OUString("=(B3)+100"), m_pDoc->GetFormula(2, 2, nTab));
+    CPPUNIT_ASSERT_EQUAL(u"=(B3)+100"_ustr, m_pDoc->GetFormula(2, 2, nTab));
 
     CPPUNIT_ASSERT_EQUAL(1100.0, m_pDoc->GetValue(2, 3, nTab)); // C4
     CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetFormula(2, 3, nTab));
@@ -10644,7 +10584,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMixDataWithFormulaTdf116413)
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteMatrixFormula)
 {
     // tdf#80137
-    m_pDoc->InsertTab(0, "hcv");
+    m_pDoc->InsertTab(0, u"hcv"_ustr);
 
     // Set Values to B1, C1, D1
     m_pDoc->SetValue(ScAddress(1, 0, 0), 2.0); // B1
@@ -10652,9 +10592,9 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteMatrixFormula)
     m_pDoc->SetValue(ScAddress(3, 0, 0), 3.0); // D1
 
     // Set Values to B2, C2
-    m_pDoc->SetString(ScAddress(1, 1, 0), "B2"); // B2
+    m_pDoc->SetString(ScAddress(1, 1, 0), u"B2"_ustr); // B2
     //m_pDoc->SetString(ScAddress(2,1,0), "C2");  // C2
-    m_pDoc->SetString(ScAddress(3, 1, 0), "D2"); // D2
+    m_pDoc->SetString(ScAddress(3, 1, 0), u"D2"_ustr); // D2
 
     // Set Values to D3
     //m_pDoc->SetValue(ScAddress(1,2,0), 9.0);    // B3
@@ -10664,7 +10604,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteMatrixFormula)
     // Insert matrix formula to A1
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
-    m_pDoc->InsertMatrixFormula(0, 0, 0, 0, aMark, "=COUNTIF(ISBLANK(B1:D1);TRUE())");
+    m_pDoc->InsertMatrixFormula(0, 0, 0, 0, aMark, u"=COUNTIF(ISBLANK(B1:D1);TRUE())"_ustr);
     m_pDoc->CalcAll();
     // A1 should contain 0
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(0, 0, 0))); // A1
@@ -10711,7 +10651,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteMatrixFormula)
 
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testUndoBackgroundColor)
 {
-    m_pDoc->InsertTab(0, "Table1");
+    m_pDoc->InsertTab(0, u"Table1"_ustr);
 
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     ScMarkData aMark(m_pDoc->GetSheetLimits());
@@ -10753,11 +10693,11 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testUndoBackgroundColor)
 
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMergedHyperlink)
 {
-    m_pDoc->InsertTab(0, "Table1");
+    m_pDoc->InsertTab(0, u"Table1"_ustr);
     m_pDoc->InitDrawLayer(m_xDocShell.get());
 
     ScFieldEditEngine& pEE = m_pDoc->GetEditEngine();
-    pEE.SetTextCurrentDefaults("https://libreoffice.org/");
+    pEE.SetTextCurrentDefaults(u"https://libreoffice.org/"_ustr);
     m_pDoc->SetEditText(ScAddress(1, 0, 0), pEE.CreateTextObject()); // B1
 
     m_pDoc->DoMergeContents(0, 0, 1, 0, 0); // A1:B1
@@ -10765,7 +10705,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMergedHyperlink)
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, m_pDoc->GetCellType(ScAddress(0, 0, 0))); // A1
     const EditTextObject* pEditObj = m_pDoc->GetEditText(ScAddress(0, 0, 0)); // A1
     CPPUNIT_ASSERT(pEditObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("https://libreoffice.org/"), pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"https://libreoffice.org/"_ustr, pEditObj->GetText(0));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

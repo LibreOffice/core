@@ -73,9 +73,9 @@ public:
 };
 
 ScFilterDescriptorBase::ScFilterDescriptorBase()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
-    , XPropertySet({ "Orientation", "OutputPosition" })
-    , XServiceInfo("ScFilterDescriptorBase", "com.sun.star.sheet.SheetFilterDescriptor")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
+    , XPropertySet({ u"Orientation"_ustr, u"OutputPosition"_ustr })
+    , XServiceInfo(u"ScFilterDescriptorBase"_ustr, u"com.sun.star.sheet.SheetFilterDescriptor"_ustr)
 {
 }
 
@@ -99,7 +99,7 @@ void ScFilterDescriptorBase::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScFilterDescriptorBase);

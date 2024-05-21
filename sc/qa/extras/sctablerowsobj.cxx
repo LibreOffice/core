@@ -74,10 +74,10 @@ public:
 };
 
 ScTableRowsObj::ScTableRowsObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XElementAccess(cppu::UnoType<table::XCellRange>::get())
     , XIndexAccess(ScSheetLimits::CreateDefault().GetMaxRowCount())
-    , XServiceInfo("ScTableRowsObj", "com.sun.star.table.TableRows")
+    , XServiceInfo(u"ScTableRowsObj"_ustr, u"com.sun.star.table.TableRows"_ustr)
 {
 }
 
@@ -114,7 +114,7 @@ uno::Reference<uno::XInterface> ScTableRowsObj::getXCellRange()
 void ScTableRowsObj::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScTableRowsObj);

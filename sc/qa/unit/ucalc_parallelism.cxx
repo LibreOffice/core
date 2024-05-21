@@ -66,7 +66,7 @@ void ScParallelismTest::tearDown()
 
 CPPUNIT_TEST_FIXTURE(ScParallelismTest, testSUMIFS)
 {
-    m_pDoc->InsertTab(0, "1");
+    m_pDoc->InsertTab(0, u"1"_ustr);
 
     m_pDoc->SetValue(0, 0, 0, 1001);
 
@@ -145,7 +145,7 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testSUMIFS)
 
 CPPUNIT_TEST_FIXTURE(ScParallelismTest, testDivision)
 {
-    m_pDoc->InsertTab(0, "1");
+    m_pDoc->InsertTab(0, u"1"_ustr);
 
     for (auto i = 1; i < 1000; i++)
     {
@@ -164,7 +164,7 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testDivision)
         if (i%10)
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(sMessage.getStr(), static_cast<double>(i)/(i%10), m_pDoc->GetValue(2, i, 0), 1e-10);
         else
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), OUString("#DIV/0!"), m_pDoc->GetString(2, i, 0));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), u"#DIV/0!"_ustr, m_pDoc->GetString(2, i, 0));
     }
 
     m_pDoc->DeleteTab(0);
@@ -172,7 +172,7 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testDivision)
 
 CPPUNIT_TEST_FIXTURE(ScParallelismTest, testVLOOKUP)
 {
-    m_pDoc->InsertTab(0, "1");
+    m_pDoc->InsertTab(0, u"1"_ustr);
 
     for (auto i = 1; i < 2000; i++)
     {
@@ -200,13 +200,13 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testVLOOKUP)
         {
             if (i == 1042)
                 m_pDoc->SetFormula(ScAddress(2, i, 0),
-                                   "=VLOOKUP(1042.42; "
-                                   "A$2:B$2000; 2; 0)",
+                                   u"=VLOOKUP(1042.42; "
+                                   "A$2:B$2000; 2; 0)"_ustr,
                                    formula::FormulaGrammar::GRAM_NATIVE_UI);
             else
                 m_pDoc->SetFormula(ScAddress(2, i, 0),
-                                   "=VLOOKUP(1.234; "
-                                   "A$2:B$2000; 2; 0)",
+                                   u"=VLOOKUP(1.234; "
+                                   "A$2:B$2000; 2; 0)"_ustr,
                                    formula::FormulaGrammar::GRAM_NATIVE_UI);
         }
     }
@@ -228,7 +228,7 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testVLOOKUP)
             else
             {
                 // The corresponding value in A is i+0.1
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), OUString("#N/A"), m_pDoc->GetString(2, i, 0));
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), u"#N/A"_ustr, m_pDoc->GetString(2, i, 0));
             }
         }
         else
@@ -236,7 +236,7 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testVLOOKUP)
             if (i == 1042)
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), OUString("N" + OUString::number(i*10)), m_pDoc->GetString(2, i, 0));
             else
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), OUString("#N/A"), m_pDoc->GetString(2, i, 0));
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), u"#N/A"_ustr, m_pDoc->GetString(2, i, 0));
         }
     }
 
@@ -245,7 +245,7 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testVLOOKUP)
 
 CPPUNIT_TEST_FIXTURE(ScParallelismTest, testVLOOKUPSUM)
 {
-    m_pDoc->InsertTab(0, "1");
+    m_pDoc->InsertTab(0, u"1"_ustr);
 
     const size_t nNumRows = 2048;
     OUString aTableRef = "$A$1:$B$" + OUString::number(nNumRows);
@@ -275,7 +275,7 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testVLOOKUPSUM)
 
 CPPUNIT_TEST_FIXTURE(ScParallelismTest, testSingleRef)
 {
-    m_pDoc->InsertTab(0, "1");
+    m_pDoc->InsertTab(0, u"1"_ustr);
 
     const size_t nNumRows = 200;
     for (size_t i = 0; i < nNumRows; ++i)
@@ -296,13 +296,13 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testSingleRef)
 
 CPPUNIT_TEST_FIXTURE(ScParallelismTest, testTdf147905)
 {
-    m_pDoc->InsertTab(0, "1");
+    m_pDoc->InsertTab(0, u"1"_ustr);
 
     OUString aFormula;
     const size_t nNumRows = 500;
     for (size_t i = 0; i < nNumRows; ++i)
     {
-        m_pDoc->SetString(0, i, 0, "AAAAAAAA");
+        m_pDoc->SetString(0, i, 0, u"AAAAAAAA"_ustr);
         aFormula = "=PROPER($A" + OUString::number(i+1) + ")";
         m_pDoc->SetFormula(ScAddress(1, i, 0),
                            aFormula,
@@ -314,10 +314,10 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testTdf147905)
     for (size_t i = 0; i < nNumRows; ++i)
     {
         OString aMsg = "At row " + OString::number(i);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), OUString("AAAAAAAA"), m_pDoc->GetString(0, i, 0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), u"AAAAAAAA"_ustr, m_pDoc->GetString(0, i, 0));
 
         // Without the fix in place, this test would have failed here
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), OUString("Aaaaaaaa"), m_pDoc->GetString(1, i, 0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), u"Aaaaaaaa"_ustr, m_pDoc->GetString(1, i, 0));
     }
     m_pDoc->DeleteTab(0);
 }
@@ -338,7 +338,7 @@ static void lcl_setupCommon(ScDocument* pDoc, size_t nNumRows, size_t nConstCell
 CPPUNIT_TEST_FIXTURE(ScParallelismTest, testSUMIFImplicitRange)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
-    m_pDoc->InsertTab(0, "1");
+    m_pDoc->InsertTab(0, u"1"_ustr);
 
     const size_t nNumRows = 1048;
     const size_t nConstCellValue = 20;
@@ -368,14 +368,14 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testSUMIFImplicitRange)
 CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFGCycleWithPlainFormulaCell1)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
-    m_pDoc->InsertTab(0, "1");
+    m_pDoc->InsertTab(0, u"1"_ustr);
     const size_t nNumRows = 1048;
     // Column A contains no formula-group
     // A1 = 100
     m_pDoc->SetValue(0, 0, 0, 100.0);
     // A500 = B499 + 1
     m_pDoc->SetFormula(ScAddress(0, 499, 0),
-                       "=$B499 + 1",
+                       u"=$B499 + 1"_ustr,
                        formula::FormulaGrammar::GRAM_NATIVE_UI);
     // Column B has a formula-group referencing column A.
     OUString aFormula;
@@ -406,7 +406,7 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFGCycleWithPlainFormulaCell1)
 CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFGCycleWithPlainFormulaCell2)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
-    m_pDoc->InsertTab(0, "1");
+    m_pDoc->InsertTab(0, u"1"_ustr);
     const size_t nNumRows = 1048;
     // Column A
     OUString aFormula;
@@ -428,7 +428,7 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFGCycleWithPlainFormulaCell2)
 
     // Column C has no FG but a cell at C500 that references A499
     m_pDoc->SetFormula(ScAddress(2, 499, 0), // C500
-                       "=$A499 + 1",
+                       u"=$A499 + 1"_ustr,
                        formula::FormulaGrammar::GRAM_NATIVE_UI);
     m_xDocShell->DoHardRecalc();
 
@@ -488,7 +488,7 @@ static void lcl_setupMultipleFGColumn(ScDocument* pDocument, size_t nNumRowsInBl
 CPPUNIT_TEST_FIXTURE(ScParallelismTest, testMultipleFGColumn)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
-    m_pDoc->InsertTab(0, "1");
+    m_pDoc->InsertTab(0, u"1"_ustr);
 
     constexpr size_t nNumRowsInBlock = 200;
     constexpr size_t nNumFG = 50;
@@ -518,7 +518,7 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testMultipleFGColumn)
 CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFormulaGroupSpanEval)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
-    m_pDoc->InsertTab(0, "1");
+    m_pDoc->InsertTab(0, u"1"_ustr);
 
     constexpr size_t nFGLen = 2048;
     OUString aFormula;
@@ -589,7 +589,7 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFormulaGroupSpanEval)
 CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFormulaGroupSpanEvalNonGroup)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
-    m_pDoc->InsertTab(0, "1");
+    m_pDoc->InsertTab(0, u"1"_ustr);
 
     constexpr size_t nFGLen = 2048;
     OUString aFormula;
@@ -638,7 +638,7 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFormulaGroupSpanEvalNonGroup)
 CPPUNIT_TEST_FIXTURE(ScParallelismTest, testArrayFormulaGroup)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
-    m_pDoc->InsertTab(0, "1");
+    m_pDoc->InsertTab(0, u"1"_ustr);
 
     m_pDoc->SetValue(1, 0, 0, 2.0);  // B1 <== 2
     m_pDoc->SetValue(2, 0, 0, 1.0);  // C1 <== 1
@@ -675,7 +675,7 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testArrayFormulaGroup)
 CPPUNIT_TEST_FIXTURE(ScParallelismTest, testDependentFormulaGroupCollection)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
-    m_pDoc->InsertTab(0, "1");
+    m_pDoc->InsertTab(0, u"1"_ustr);
 
     OUString aFormula;
 
@@ -728,7 +728,7 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testDependentFormulaGroupCollection)
 CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFormulaGroupWithForwardSelfReference)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
-    m_pDoc->InsertTab(0, "1");
+    m_pDoc->InsertTab(0, u"1"_ustr);
 
     OUString aFormula;
     m_pDoc->SetValue(2, 4, 0, 10.0);  // C5 <== 10
@@ -766,7 +766,7 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFormulaGroupWithForwardSelfReference
 CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFormulaGroupsInCyclesAndWithSelfReference)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
-    m_pDoc->InsertTab(0, "1");
+    m_pDoc->InsertTab(0, u"1"_ustr);
 
     m_pDoc->SetValue(1, 0, 0, 1.0); // B1 <== 1
     m_pDoc->SetValue(3, 0, 0, 2.0); // D1 <== 2
@@ -835,7 +835,7 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFormulaGroupsInCyclesAndWithSelfRefe
 CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFormulaGroupsInCyclesAndWithSelfReference2)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
-    m_pDoc->InsertTab(0, "1");
+    m_pDoc->InsertTab(0, u"1"_ustr);
 
     m_pDoc->SetValue(1, 0, 0, 1.0); // B1 <== 1
     m_pDoc->SetValue(3, 0, 0, 2.0); // D1 <== 2
@@ -901,7 +901,7 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFormulaGroupsInCyclesAndWithSelfRefe
 CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFormulaGroupsInCyclesAndWithSelfReference3)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
-    m_pDoc->InsertTab(0, "1");
+    m_pDoc->InsertTab(0, u"1"_ustr);
 
     m_pDoc->SetValue(1, 1, 0, 2.0); // B2 <== 2
     for (size_t nRow = 1; nRow < 105; ++nRow)
@@ -923,7 +923,7 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFormulaGroupsInCyclesAndWithSelfRefe
     // What happens with tdf#132451 is that the copy&paste C6->C5 really just sets the dirty flag
     // for C5 and all the cells that depend on it (D5,B6,C6,D6,B7,...), and it also resets
     // flags marking the C formula group as disabled for parallel calculation because of the cycle.
-    m_pDoc->SetFormula(ScAddress(2, 4, 0), "=B5*1.01011", formula::FormulaGrammar::GRAM_NATIVE_UI);
+    m_pDoc->SetFormula(ScAddress(2, 4, 0), u"=B5*1.01011"_ustr, formula::FormulaGrammar::GRAM_NATIVE_UI);
     m_pDoc->GetFormulaCell(ScAddress(2,4,0))->GetCellGroup()->mbPartOfCycle = false;
     m_pDoc->GetFormulaCell(ScAddress(2,4,0))->GetCellGroup()->meCalcState = sc::GroupCalcEnabled;
 

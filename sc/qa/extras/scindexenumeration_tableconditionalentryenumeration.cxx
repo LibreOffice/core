@@ -53,7 +53,7 @@ public:
 
 ScIndexEnumeration_TableConditionalEntryEnumeration::
     ScIndexEnumeration_TableConditionalEntryEnumeration()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
 {
 }
 
@@ -71,21 +71,21 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_TableConditionalEntryEnumerat
     xSheet0->getCellByPosition(2, 0)->setValue(-5.15);
 
     uno::Sequence<beans::PropertyValue> aConditions{
-        comphelper::makePropertyValue("StyleName", OUString("Result2")),
-        comphelper::makePropertyValue("Formula1", OUString("$Sheet1.$B$5")),
-        comphelper::makePropertyValue("Formula2", OUString("")),
-        comphelper::makePropertyValue("Operator", sheet::ConditionOperator_EQUAL),
-        comphelper::makePropertyValue("SourcePosition", table::CellAddress(0, 1, 5))
+        comphelper::makePropertyValue(u"StyleName"_ustr, u"Result2"_ustr),
+        comphelper::makePropertyValue(u"Formula1"_ustr, u"$Sheet1.$B$5"_ustr),
+        comphelper::makePropertyValue(u"Formula2"_ustr, u""_ustr),
+        comphelper::makePropertyValue(u"Operator"_ustr, sheet::ConditionOperator_EQUAL),
+        comphelper::makePropertyValue(u"SourcePosition"_ustr, table::CellAddress(0, 1, 5))
     };
 
     uno::Reference<beans::XPropertySet> xPropertySet(xSheet0, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetConditionalEntries> xSCE(
-        xPropertySet->getPropertyValue("ConditionalFormat"), uno::UNO_QUERY_THROW);
+        xPropertySet->getPropertyValue(u"ConditionalFormat"_ustr), uno::UNO_QUERY_THROW);
     xSCE->addNew(aConditions);
 
     uno::Any aProperty;
     aProperty <<= xSCE;
-    xPropertySet->setPropertyValue("ConditionalFormat", aProperty);
+    xPropertySet->setPropertyValue(u"ConditionalFormat"_ustr, aProperty);
 
     uno::Reference<container::XEnumerationAccess> xEA(xSCE, uno::UNO_QUERY_THROW);
 
@@ -95,7 +95,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_TableConditionalEntryEnumerat
 void ScIndexEnumeration_TableConditionalEntryEnumeration::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScIndexEnumeration_TableConditionalEntryEnumeration);

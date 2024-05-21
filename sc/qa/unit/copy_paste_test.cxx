@@ -82,7 +82,7 @@ void ScCopyPasteTest::testCopyPasteXLS()
 
     // 2. Highlight B2:C5
     ScRange aSrcRange;
-    ScRefFlags nRes = aSrcRange.Parse("B2:C5", *pDoc, pDoc->GetAddressConvention());
+    ScRefFlags nRes = aSrcRange.Parse(u"B2:C5"_ustr, *pDoc, pDoc->GetAddressConvention());
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
 
     ScMarkData aMark(pDoc->GetSheetLimits());
@@ -99,7 +99,7 @@ void ScCopyPasteTest::testCopyPasteXLS()
     mxComponent.clear();
 
     // Open a new document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 
     // Get the document controller
     pViewShell = ScDocShell::GetViewData()->GetViewShell();
@@ -143,7 +143,7 @@ void lcl_copy( const OUString& rSrcRange, const OUString& rDstRange, ScDocument&
 
 void ScCopyPasteTest::testTdf84411()
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
@@ -157,11 +157,11 @@ void ScCopyPasteTest::testTdf84411()
         for (unsigned int c = 0; c <= 14; ++c)
             pDoc->SetValue( ScAddress(c,r,0), (r+1)*(c+1) );
 
-    pDoc->SetString(ScAddress(15,10000,0), "=AVERAGE(A10001:O10001)");
-    pDoc->SetString(ScAddress(16,10000,0), "=MIN(A10001:O10001)");
-    pDoc->SetString(ScAddress(17,10000,0), "=MAX(A10001:O10001)");
+    pDoc->SetString(ScAddress(15,10000,0), u"=AVERAGE(A10001:O10001)"_ustr);
+    pDoc->SetString(ScAddress(16,10000,0), u"=MIN(A10001:O10001)"_ustr);
+    pDoc->SetString(ScAddress(17,10000,0), u"=MAX(A10001:O10001)"_ustr);
 
-    lcl_copy("P10001:R10001", "P10002:R12500", *pDoc, pViewShell);
+    lcl_copy(u"P10001:R10001"_ustr, u"P10002:R12500"_ustr, *pDoc, pViewShell);
 
 
     // 3. Disable OpenCL
@@ -172,11 +172,11 @@ void ScCopyPasteTest::testTdf84411()
 
 
     // 4. Copy and Paste
-    lcl_copy("A1:O2500", "A10001:O12500", *pDoc, pViewShell);
+    lcl_copy(u"A1:O2500"_ustr, u"A10001:O12500"_ustr, *pDoc, pViewShell);
 
-    lcl_copy("A2501:O5000", "A12501:O15000", *pDoc, pViewShell);
+    lcl_copy(u"A2501:O5000"_ustr, u"A12501:O15000"_ustr, *pDoc, pViewShell);
 
-    lcl_copy("P10001:R10001", "P12501:R15000", *pDoc, pViewShell);
+    lcl_copy(u"P10001:R10001"_ustr, u"P12501:R15000"_ustr, *pDoc, pViewShell);
 
 
     // 5. Close the document (Ctrl-W)
@@ -185,7 +185,7 @@ void ScCopyPasteTest::testTdf84411()
 
 void ScCopyPasteTest::testTdf124565()
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
@@ -194,7 +194,7 @@ void ScCopyPasteTest::testTdf124565()
     ScTabViewShell* pViewShell = ScDocShell::GetViewData()->GetViewShell();
 
     // Set content and height of first row
-    pDoc->SetString(ScAddress(0, 0, 0), "Test");
+    pDoc->SetString(ScAddress(0, 0, 0), u"Test"_ustr);
     pDoc->SetRowHeight(0, 0, 500);
     pDoc->SetManualHeight(0, 0, 0, true);
 
@@ -214,7 +214,7 @@ void ScCopyPasteTest::testTdf124565()
     pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
 
     // Copy-pasted?
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("String was not pasted!", OUString("Test"), pDoc->GetString(nCol, nRow, nTab));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("String was not pasted!", u"Test"_ustr, pDoc->GetString(nCol, nRow, nTab));
 
     // And height same as in source?
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Row#2 height is invalid!", sal_uInt16(500), pDoc->GetRowHeight(nRow, nTab));
@@ -224,7 +224,7 @@ void ScCopyPasteTest::testTdf124565()
 
 void ScCopyPasteTest::testTdf126421()
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
@@ -252,7 +252,7 @@ void ScCopyPasteTest::testTdf126421()
 
 void ScCopyPasteTest::testTdf107394()
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
@@ -271,8 +271,8 @@ void ScCopyPasteTest::testTdf107394()
     aStream.Seek(0);
     CPPUNIT_ASSERT(aObj.ImportStream(aStream, OUString(), SotClipboardFormatId::HTML));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("First"), pDoc->GetString(ScAddress(0,0,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Very long sentence."), pDoc->GetString(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(u"First"_ustr, pDoc->GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(u"Very long sentence."_ustr, pDoc->GetString(ScAddress(0,1,0)));
 
     nFirstRowHeight = pDoc->GetRowHeight(0, 0);
     nSecondRowHeight = pDoc->GetRowHeight(1, 0);
@@ -381,7 +381,7 @@ void ScCopyPasteTest::testTdf40993_fillMergedCells()
     ScTabViewShell* pViewShell = ScDocShell::GetViewData()->GetViewShell();
 
     // check content of the merged cell H11:I11
-    CPPUNIT_ASSERT_EQUAL(OUString("1.5"), pDoc->GetString(ScAddress(7, 10, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"1.5"_ustr, pDoc->GetString(ScAddress(7, 10, 0)));
 
     // fill operation on the merged cell should clone ATTR_MERGE and ATTR_MERGE_FLAG
     // (as long as ATTR_MERGE_FLAG has only ScMF::Hor or ScMF::Ver)
@@ -624,8 +624,8 @@ void ScCopyPasteTest::tdf137653_137654_autofillUserlist()
 
     // delete every userlist to make sure there won't be any string that is in 2 different userlist
     ScGlobal::GetUserList().clear();
-    addToUserList({ "January,February,March,April,May,June,July,August,September,October,November,December" });
-    const ScUserListData* pListData = ScGlobal::GetUserList().GetData("January");
+    addToUserList({ u"January,February,March,April,May,June,July,August,September,October,November,December"_ustr });
+    const ScUserListData* pListData = ScGlobal::GetUserList().GetData(u"January"_ustr);
     sal_uInt16 nIdx1 = 0, nIdx2 = 0;
     bool bHasIdx1, bHasIdx2;
     bool bMatchCase = false;
@@ -734,8 +734,8 @@ void ScCopyPasteTest::tdf137625_autofillMergedUserlist()
 
     // delete every userlist to make sure there won't be any string that is in 2 different userlist
     ScGlobal::GetUserList().clear();
-    addToUserList({ "January,February,March,April,May,June,July,August,September,October,November,December" });
-    const ScUserListData* pListData = ScGlobal::GetUserList().GetData("January");
+    addToUserList({ u"January,February,March,April,May,June,July,August,September,October,November,December"_ustr });
+    const ScUserListData* pListData = ScGlobal::GetUserList().GetData(u"January"_ustr);
     sal_uInt16 nIdx1 = 0, nIdx2 = 0;
     bool bHasIdx1, bHasIdx2;
     bool bMatchCase = false;
@@ -795,7 +795,7 @@ void ScCopyPasteTest::tdf137624_autofillMergedMixed()
     // add 1aa,2bb,3cc,4dd,5ee,6ff to userlist, to test that autofill won't confuse it with 1aa,3aa
     // delete every userlist to make sure there won't be any string that is in 2 different userlist
     ScGlobal::GetUserList().clear();
-    addToUserList({ "1aa,2bb,3cc,4dd,5ee,6ff" });
+    addToUserList({ u"1aa,2bb,3cc,4dd,5ee,6ff"_ustr });
 
     // fillauto mixed (string + number), these areas contain only merged cells
     pViewShell->FillAuto(FILL_TO_RIGHT, 7, 5, 12, 7, 6);   //H6:M8
@@ -836,7 +836,7 @@ void ScCopyPasteTest::tdf137624_autofillMergedMixed()
 }
 
 ScCopyPasteTest::ScCopyPasteTest()
-      : UnoApiTest("/sc/qa/unit/data/")
+      : UnoApiTest(u"/sc/qa/unit/data/"_ustr)
 {
 }
 

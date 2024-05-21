@@ -70,7 +70,7 @@ private:
 };
 
 ScUniqueCellFormatsEnumeration::ScUniqueCellFormatsEnumeration()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
 {
 }
 
@@ -83,13 +83,13 @@ uno::Reference<uno::XInterface> ScUniqueCellFormatsEnumeration::init()
     uno::Reference<container::XIndexAccess> xIA(xSheets, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet0(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
 
-    changeColor(xSheet0, "A1:A5", RGBColor(0, 255, 0));
-    changeColor(xSheet0, "A6:B10", RGBColor(255, 0, 0));
-    changeColor(xSheet0, "B1:B6", RGBColor(0, 0, 255));
-    changeColor(xSheet0, "B7", RGBColor(0, 255, 0));
-    changeColor(xSheet0, "B8:B10", RGBColor(0, 0, 255));
-    changeColor(xSheet0, "C1:C10", RGBColor(0, 0, 255));
-    changeColor(xSheet0, "D1:D10", RGBColor(0, 255, 0));
+    changeColor(xSheet0, u"A1:A5"_ustr, RGBColor(0, 255, 0));
+    changeColor(xSheet0, u"A6:B10"_ustr, RGBColor(255, 0, 0));
+    changeColor(xSheet0, u"B1:B6"_ustr, RGBColor(0, 0, 255));
+    changeColor(xSheet0, u"B7"_ustr, RGBColor(0, 255, 0));
+    changeColor(xSheet0, u"B8:B10"_ustr, RGBColor(0, 0, 255));
+    changeColor(xSheet0, u"C1:C10"_ustr, RGBColor(0, 0, 255));
+    changeColor(xSheet0, u"D1:D10"_ustr, RGBColor(0, 255, 0));
 
     uno::Reference<sheet::XUniqueCellFormatRangesSupplier> xUCFRS(xSheet0, uno::UNO_QUERY_THROW);
     uno::Reference<container::XEnumerationAccess> xEA(xUCFRS->getUniqueCellFormatRanges(),
@@ -100,7 +100,7 @@ uno::Reference<uno::XInterface> ScUniqueCellFormatsEnumeration::init()
 void ScUniqueCellFormatsEnumeration::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 void ScUniqueCellFormatsEnumeration::changeColor(const uno::Reference<sheet::XSpreadsheet>& xSheet,
@@ -113,7 +113,7 @@ void ScUniqueCellFormatsEnumeration::changeColor(const uno::Reference<sheet::XSp
     sal_Int32 nColor = 16777216 + rgb.hashCode();
     uno::Any aValue;
     aValue <<= nColor;
-    xPropertySet->setPropertyValue("CellBackColor", aValue);
+    xPropertySet->setPropertyValue(u"CellBackColor"_ustr, aValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScUniqueCellFormatsEnumeration);

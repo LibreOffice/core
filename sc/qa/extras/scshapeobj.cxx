@@ -71,8 +71,8 @@ public:
 };
 
 ScShapeObj::ScShapeObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
-    , XShapeDescriptor("com.sun.star.drawing.RectangleShape")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
+    , XShapeDescriptor(u"com.sun.star.drawing.RectangleShape"_ustr)
 {
 }
 
@@ -82,7 +82,7 @@ uno::Reference<uno::XInterface> ScShapeObj::init()
 
     uno::Reference<lang::XMultiServiceFactory> xMSF(xDoc, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XShape> xShape(
-        xMSF->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY_THROW);
+        xMSF->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY_THROW);
     xShape->setPosition(awt::Point(5000, 3500));
     xShape->setSize(awt::Size(7500, 5000));
 
@@ -112,7 +112,7 @@ void ScShapeObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScShapeObj);

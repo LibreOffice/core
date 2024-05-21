@@ -72,49 +72,49 @@ public:
 };
 
 ScTableColumnObj::ScTableColumnObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
-    , XCellRange("K1:K1")
-    , XNamed("K")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
+    , XCellRange(u"K1:K1"_ustr)
+    , XNamed(u"K"_ustr)
     , XPropertySet({
-          "BottomBorder",
-          "BottomBorder2",
-          "BottomBorderComplexColor",
-          "CellProtection",
-          "CharLocale",
-          "CharLocaleAsian",
-          "CharLocaleComplex",
-          "CharPosture",
-          "CharPostureAsian",
-          "CharPostureComplex",
-          "ConditionalFormat",
-          "ConditionalFormatLocal",
-          "ConditionalFormatXML",
-          "DiagonalBLTR",
-          "DiagonalBLTR2",
-          "DiagonalTLBR",
-          "DiagonalTLBR2",
-          "HoriJustify",
-          "LeftBorder",
-          "LeftBorder2",
-          "LeftBorderComplexColor",
-          "NumberingRules",
-          "Orientation",
-          "RightBorder",
-          "RightBorder2",
-          "RightBorderComplexColor",
-          "ShadowFormat",
-          "TableBorder",
-          "TableBorder2",
-          "TopBorder",
-          "TopBorder2",
-          "TopBorderComplexColor",
-          "UserDefinedAttributes",
-          "Validation",
-          "ValidationLocal",
-          "ValidationXML",
-          "WritingMode",
+          u"BottomBorder"_ustr,
+          u"BottomBorder2"_ustr,
+          u"BottomBorderComplexColor"_ustr,
+          u"CellProtection"_ustr,
+          u"CharLocale"_ustr,
+          u"CharLocaleAsian"_ustr,
+          u"CharLocaleComplex"_ustr,
+          u"CharPosture"_ustr,
+          u"CharPostureAsian"_ustr,
+          u"CharPostureComplex"_ustr,
+          u"ConditionalFormat"_ustr,
+          u"ConditionalFormatLocal"_ustr,
+          u"ConditionalFormatXML"_ustr,
+          u"DiagonalBLTR"_ustr,
+          u"DiagonalBLTR2"_ustr,
+          u"DiagonalTLBR"_ustr,
+          u"DiagonalTLBR2"_ustr,
+          u"HoriJustify"_ustr,
+          u"LeftBorder"_ustr,
+          u"LeftBorder2"_ustr,
+          u"LeftBorderComplexColor"_ustr,
+          u"NumberingRules"_ustr,
+          u"Orientation"_ustr,
+          u"RightBorder"_ustr,
+          u"RightBorder2"_ustr,
+          u"RightBorderComplexColor"_ustr,
+          u"ShadowFormat"_ustr,
+          u"TableBorder"_ustr,
+          u"TableBorder2"_ustr,
+          u"TopBorder"_ustr,
+          u"TopBorder2"_ustr,
+          u"TopBorderComplexColor"_ustr,
+          u"UserDefinedAttributes"_ustr,
+          u"Validation"_ustr,
+          u"ValidationLocal"_ustr,
+          u"ValidationXML"_ustr,
+          u"WritingMode"_ustr,
       })
-    , XServiceInfo("ScTableColumnObj", "com.sun.star.table.TableColumn")
+    , XServiceInfo(u"ScTableColumnObj"_ustr, u"com.sun.star.table.TableColumn"_ustr)
 {
 }
 
@@ -138,7 +138,7 @@ void ScTableColumnObj::setUp()
 {
     UnoApiTest::setUp();
     // create calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScTableColumnObj);

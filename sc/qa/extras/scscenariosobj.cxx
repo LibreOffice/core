@@ -81,11 +81,11 @@ public:
 };
 
 ScScenariosObj::ScScenariosObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XElementAccess(cppu::UnoType<sheet::XScenario>::get())
-    , XNameAccess("ScScenarios")
+    , XNameAccess(u"ScScenarios"_ustr)
     , XIndexAccess(1)
-    , XServiceInfo("ScScenariosObj", "com.sun.star.sheet.Scenarios")
+    , XServiceInfo(u"ScScenariosObj"_ustr, u"com.sun.star.sheet.Scenarios"_ustr)
 {
 }
 
@@ -101,12 +101,12 @@ uno::Reference<uno::XInterface> ScScenariosObj::init()
     xSheet->getCellByPosition(2, 0)->setValue(-5.15);
 
     uno::Reference<table::XCellRange> xCellRange(xSheet, uno::UNO_QUERY_THROW);
-    uno::Reference<table::XCellRange> xCellRange2 = xCellRange->getCellRangeByName("A1:N4");
+    uno::Reference<table::XCellRange> xCellRange2 = xCellRange->getCellRangeByName(u"A1:N4"_ustr);
     uno::Reference<sheet::XCellRangeAddressable> xCRAddressable(xCellRange2, uno::UNO_QUERY_THROW);
     table::CellRangeAddress aCellRangeAddr = xCRAddressable->getRangeAddress();
 
     uno::Reference<sheet::XScenariosSupplier> xSupplier(xSheet, uno::UNO_QUERY_THROW);
-    xSupplier->getScenarios()->addNewByName("ScScenarios", { aCellRangeAddr }, "Range");
+    xSupplier->getScenarios()->addNewByName(u"ScScenarios"_ustr, { aCellRangeAddr }, u"Range"_ustr);
 
     return xSupplier->getScenarios();
 }
@@ -115,7 +115,7 @@ void ScScenariosObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScScenariosObj);

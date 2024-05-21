@@ -53,47 +53,47 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testColumnRemove)
 
 CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testColumnSplit)
 {
-    m_pDoc->SetString(2, 0, 0, "Test1,Test2");
-    m_pDoc->SetString(2, 1, 0, "Test1,");
-    m_pDoc->SetString(2, 2, 0, ",Test1");
-    m_pDoc->SetString(2, 3, 0, "Test1,Test2,Test3");
-    m_pDoc->SetString(3, 0, 0, "AnotherString");
+    m_pDoc->SetString(2, 0, 0, u"Test1,Test2"_ustr);
+    m_pDoc->SetString(2, 1, 0, u"Test1,"_ustr);
+    m_pDoc->SetString(2, 2, 0, u",Test1"_ustr);
+    m_pDoc->SetString(2, 3, 0, u"Test1,Test2,Test3"_ustr);
+    m_pDoc->SetString(3, 0, 0, u"AnotherString"_ustr);
 
     sc::SplitColumnTransformation aTransform(2, ',');
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("AnotherString"), m_pDoc->GetString(4, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"AnotherString"_ustr, m_pDoc->GetString(4, 0, 0));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Test1"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Test1"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), m_pDoc->GetString(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Test1"), m_pDoc->GetString(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Test1"_ustr, m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Test1"_ustr, m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Test1"_ustr, m_pDoc->GetString(2, 3, 0));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Test2"), m_pDoc->GetString(3, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), m_pDoc->GetString(3, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Test1"), m_pDoc->GetString(3, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Test2,Test3"), m_pDoc->GetString(3, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Test2"_ustr, m_pDoc->GetString(3, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, m_pDoc->GetString(3, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Test1"_ustr, m_pDoc->GetString(3, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Test2,Test3"_ustr, m_pDoc->GetString(3, 3, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testColumnMerge)
 {
-    m_pDoc->SetString(2, 0, 0, "Berlin");
-    m_pDoc->SetString(2, 1, 0, "Brussels");
-    m_pDoc->SetString(2, 2, 0, "Paris");
-    m_pDoc->SetString(2, 3, 0, "Peking");
+    m_pDoc->SetString(2, 0, 0, u"Berlin"_ustr);
+    m_pDoc->SetString(2, 1, 0, u"Brussels"_ustr);
+    m_pDoc->SetString(2, 2, 0, u"Paris"_ustr);
+    m_pDoc->SetString(2, 3, 0, u"Peking"_ustr);
 
-    m_pDoc->SetString(4, 0, 0, "Germany");
-    m_pDoc->SetString(4, 1, 0, "Belgium");
-    m_pDoc->SetString(4, 2, 0, "France");
-    m_pDoc->SetString(4, 3, 0, "China");
+    m_pDoc->SetString(4, 0, 0, u"Germany"_ustr);
+    m_pDoc->SetString(4, 1, 0, u"Belgium"_ustr);
+    m_pDoc->SetString(4, 2, 0, u"France"_ustr);
+    m_pDoc->SetString(4, 3, 0, u"China"_ustr);
 
-    sc::MergeColumnTransformation aTransform({2, 4}, ", ");
+    sc::MergeColumnTransformation aTransform({2, 4}, u", "_ustr);
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Berlin, Germany"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Brussels, Belgium"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paris, France"), m_pDoc->GetString(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Peking, China"), m_pDoc->GetString(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Berlin, Germany"_ustr, m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Brussels, Belgium"_ustr, m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Paris, France"_ustr, m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Peking, China"_ustr, m_pDoc->GetString(2, 3, 0));
 
     for (SCROW nRow = 0; nRow <= 3; ++nRow)
     {
@@ -103,64 +103,64 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testColumnMerge)
 
 CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testTextToLower)
 {
-    m_pDoc->SetString(2, 0, 0, "Berlin");
-    m_pDoc->SetString(2, 1, 0, "Brussels");
-    m_pDoc->SetString(2, 2, 0, "Paris");
-    m_pDoc->SetString(2, 3, 0, "Peking");
+    m_pDoc->SetString(2, 0, 0, u"Berlin"_ustr);
+    m_pDoc->SetString(2, 1, 0, u"Brussels"_ustr);
+    m_pDoc->SetString(2, 2, 0, u"Paris"_ustr);
+    m_pDoc->SetString(2, 3, 0, u"Peking"_ustr);
 
     sc::TextTransformation aTransform({2}, sc::TEXT_TRANSFORM_TYPE::TO_LOWER);
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("berlin"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("brussels"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("paris"), m_pDoc->GetString(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("peking"), m_pDoc->GetString(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(u"berlin"_ustr, m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"brussels"_ustr, m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"paris"_ustr, m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"peking"_ustr, m_pDoc->GetString(2, 3, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testTextToUpper)
 {
-    m_pDoc->SetString(2, 0, 0, "Berlin");
-    m_pDoc->SetString(2, 1, 0, "Brussels");
-    m_pDoc->SetString(2, 2, 0, "Paris");
-    m_pDoc->SetString(2, 3, 0, "Peking");
+    m_pDoc->SetString(2, 0, 0, u"Berlin"_ustr);
+    m_pDoc->SetString(2, 1, 0, u"Brussels"_ustr);
+    m_pDoc->SetString(2, 2, 0, u"Paris"_ustr);
+    m_pDoc->SetString(2, 3, 0, u"Peking"_ustr);
 
     sc::TextTransformation aTransform({2}, sc::TEXT_TRANSFORM_TYPE::TO_UPPER);
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("BERLIN"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("BRUSSELS"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("PARIS"), m_pDoc->GetString(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("PEKING"), m_pDoc->GetString(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(u"BERLIN"_ustr, m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"BRUSSELS"_ustr, m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"PARIS"_ustr, m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"PEKING"_ustr, m_pDoc->GetString(2, 3, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testTextCapitalize)
 {
-    m_pDoc->SetString(2, 0, 0, "hello woRlD");
-    m_pDoc->SetString(2, 1, 0, "qUe vA");
-    m_pDoc->SetString(2, 2, 0, "si tu la ves");
-    m_pDoc->SetString(2, 3, 0, "cUaNdO mE EnAmOro");
+    m_pDoc->SetString(2, 0, 0, u"hello woRlD"_ustr);
+    m_pDoc->SetString(2, 1, 0, u"qUe vA"_ustr);
+    m_pDoc->SetString(2, 2, 0, u"si tu la ves"_ustr);
+    m_pDoc->SetString(2, 3, 0, u"cUaNdO mE EnAmOro"_ustr);
 
     sc::TextTransformation aTransform({2}, sc::TEXT_TRANSFORM_TYPE::CAPITALIZE);
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Hello World"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Que Va"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Si Tu La Ves"), m_pDoc->GetString(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Cuando Me Enamoro"), m_pDoc->GetString(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Hello World"_ustr, m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Que Va"_ustr, m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Si Tu La Ves"_ustr, m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Cuando Me Enamoro"_ustr, m_pDoc->GetString(2, 3, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testTextTrim)
 {
-    m_pDoc->SetString(2, 0, 0, " Berlin");
-    m_pDoc->SetString(2, 1, 0, "Brussels ");
-    m_pDoc->SetString(2, 2, 0, " Paris ");
+    m_pDoc->SetString(2, 0, 0, u" Berlin"_ustr);
+    m_pDoc->SetString(2, 1, 0, u"Brussels "_ustr);
+    m_pDoc->SetString(2, 2, 0, u" Paris "_ustr);
 
     sc::TextTransformation aTransform({2}, sc::TEXT_TRANSFORM_TYPE::TRIM);
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Berlin"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Brussels"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Paris"), m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Berlin"_ustr, m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Brussels"_ustr, m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Paris"_ustr, m_pDoc->GetString(2, 2, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testAggregateSum)
@@ -310,7 +310,7 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testNumberLogE)
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0, m_pDoc->GetValue(2, 0, 0), 1e-10);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.60943791243, m_pDoc->GetValue(2, 1, 0), 1e-10);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, m_pDoc->GetString(2, 2, 0));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(6.21460809842, m_pDoc->GetValue(2, 3, 0), 1e-10);
 }
 
@@ -426,18 +426,18 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testNumberSign)
 
 CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testReplaceNull)
 {
-    m_pDoc->SetString(2, 0, 0, "Berlin");
-    m_pDoc->SetString(2, 1, 0, "");
-    m_pDoc->SetString(2, 2, 0, "");
-    m_pDoc->SetString(2, 3, 0, "Peking");
+    m_pDoc->SetString(2, 0, 0, u"Berlin"_ustr);
+    m_pDoc->SetString(2, 1, 0, u""_ustr);
+    m_pDoc->SetString(2, 2, 0, u""_ustr);
+    m_pDoc->SetString(2, 3, 0, u"Peking"_ustr);
 
-    sc::ReplaceNullTransformation aTransform({2}, "Empty");
+    sc::ReplaceNullTransformation aTransform({2}, u"Empty"_ustr);
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Berlin"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Empty"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Empty"), m_pDoc->GetString(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Peking"), m_pDoc->GetString(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Berlin"_ustr, m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Empty"_ustr, m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Empty"_ustr, m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Peking"_ustr, m_pDoc->GetString(2, 3, 0));
 
 }
 
@@ -462,10 +462,10 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetDateString)
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::DATE_STRING   );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("01/25/11"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("10/12/94"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("09/23/96"), m_pDoc->GetString(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("08/15/47"), m_pDoc->GetString(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(u"01/25/11"_ustr, m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"10/12/94"_ustr, m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"09/23/96"_ustr, m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"08/15/47"_ustr, m_pDoc->GetString(2, 3, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetYear)
@@ -516,10 +516,10 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetStartOfYear)
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::START_OF_YEAR   );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("01/01/11"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("01/01/94"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("01/01/96"), m_pDoc->GetString(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("01/01/47"), m_pDoc->GetString(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(u"01/01/11"_ustr, m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"01/01/94"_ustr, m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"01/01/96"_ustr, m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"01/01/47"_ustr, m_pDoc->GetString(2, 3, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetEndOfYear)
@@ -543,10 +543,10 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetEndOfYear)
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::END_OF_YEAR   );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("12/31/11"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("12/31/94"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("12/31/96"), m_pDoc->GetString(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("12/31/47"), m_pDoc->GetString(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(u"12/31/11"_ustr, m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"12/31/94"_ustr, m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"12/31/96"_ustr, m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"12/31/47"_ustr, m_pDoc->GetString(2, 3, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetMonth)
@@ -597,10 +597,10 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetMonthName)
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::MONTH_NAME);
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("January"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("October"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("September"), m_pDoc->GetString(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("August"), m_pDoc->GetString(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(u"January"_ustr, m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"October"_ustr, m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"September"_ustr, m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"August"_ustr, m_pDoc->GetString(2, 3, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetStartOfMonth)
@@ -624,10 +624,10 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetStartOfMonth)
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::START_OF_MONTH   );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("01/01/11"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("10/01/94"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("09/01/96"), m_pDoc->GetString(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("08/01/47"), m_pDoc->GetString(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(u"01/01/11"_ustr, m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"10/01/94"_ustr, m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"09/01/96"_ustr, m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"08/01/47"_ustr, m_pDoc->GetString(2, 3, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetEndOfMonth)
@@ -651,10 +651,10 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetEndOfMonth)
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::END_OF_MONTH   );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("01/31/11"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("10/31/94"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("09/30/96"), m_pDoc->GetString(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("08/31/47"), m_pDoc->GetString(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(u"01/31/11"_ustr, m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"10/31/94"_ustr, m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"09/30/96"_ustr, m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"08/31/47"_ustr, m_pDoc->GetString(2, 3, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetDay)
@@ -786,10 +786,10 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetStartOfQuarter)
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::START_OF_QUARTER   );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("01/01/11"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("10/01/94"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("07/01/96"), m_pDoc->GetString(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("07/01/47"), m_pDoc->GetString(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(u"01/01/11"_ustr, m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"10/01/94"_ustr, m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"07/01/96"_ustr, m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"07/01/47"_ustr, m_pDoc->GetString(2, 3, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetEndOfQuarter)
@@ -813,10 +813,10 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetEndOfQuarter)
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::END_OF_QUARTER   );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("03/31/11"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("12/31/94"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("09/30/96"), m_pDoc->GetString(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("09/30/47"), m_pDoc->GetString(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(u"03/31/11"_ustr, m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"12/31/94"_ustr, m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"09/30/96"_ustr, m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"09/30/47"_ustr, m_pDoc->GetString(2, 3, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetTime)
@@ -834,10 +834,10 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetTime)
     sc:: DateTimeTransformation aTransform({2}, sc::DATETIME_TRANSFORMATION_TYPE::TIME  );
     aTransform.Transform(*m_pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("05:30:12 AM"), m_pDoc->GetString(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("07:23:09 AM"), m_pDoc->GetString(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("09:34:40 AM"), m_pDoc->GetString(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("10:09:49 PM"), m_pDoc->GetString(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(u"05:30:12 AM"_ustr, m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"07:23:09 AM"_ustr, m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"09:34:40 AM"_ustr, m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"10:09:49 PM"_ustr, m_pDoc->GetString(2, 3, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetHour)
@@ -906,7 +906,7 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetSecond)
 void ScDataTransformationTest::setUp()
 {
     ScUcalcTestBase::setUp();
-    m_pDoc->InsertTab(0, "Tab");
+    m_pDoc->InsertTab(0, u"Tab"_ustr);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

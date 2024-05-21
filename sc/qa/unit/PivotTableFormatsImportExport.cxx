@@ -30,7 +30,7 @@ public:
 };
 
 ScPivotTableFormatsImportExport::ScPivotTableFormatsImportExport()
-    : ScModelTestBase("sc/qa/unit/data")
+    : ScModelTestBase(u"sc/qa/unit/data"_ustr)
 {
 }
 
@@ -94,7 +94,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
 {
     createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_1_DataFieldInRow_RowLabelColor.xlsx");
     assertDataFieldInRow_RowLabelColor(*getScDoc());
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
     assertDataFieldInRow_RowLabelColor(*getScDoc());
 }
 
@@ -116,7 +116,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     createScDoc(
         "xlsx/pivot-table/PivotTableCellFormatsTest_2_DataFieldInRow_ColumnLabelColor.xlsx");
     assertDataFieldInRow_ColumnLabelColor(*getScDoc());
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
     assertDataFieldInRow_ColumnLabelColor(*getScDoc());
 }
 
@@ -139,7 +139,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     createScDoc(
         "xlsx/pivot-table/PivotTableCellFormatsTest_3_DataFieldInColumn_ColumnLabelColor.xlsx");
     assertDataFieldInColumn_ColumnLabelColor(*getScDoc());
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
     assertDataFieldInColumn_ColumnLabelColor(*getScDoc());
 }
 
@@ -160,7 +160,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
 {
     createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_4_DataFieldInColumn_DataColor.xlsx");
     assertDataFieldInColumn_DataColor(*getScDoc());
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
     assertDataFieldInColumn_DataColor(*getScDoc());
 }
 
@@ -187,7 +187,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     createScDoc("xlsx/pivot-table//"
                 "PivotTableCellFormatsTest_5_DataFieldInColumnAndTwoRowFields_DataColor.xlsx");
     assertDataFieldInColumnAndTwoRowFields_DataColor(*getScDoc());
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
     assertDataFieldInColumnAndTwoRowFields_DataColor(*getScDoc());
 }
 
@@ -203,7 +203,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     createScDoc(
         "xlsx/pivot-table//PivotTableCellFormatsTest_6_SingleDataFieldInColumn_DataColor.xlsx");
     assertSingleDataFieldInColumn_DataColor(*getScDoc());
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
     assertSingleDataFieldInColumn_DataColor(*getScDoc());
 }
 
@@ -223,7 +223,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     createScDoc(
         "xlsx/pivot-table//PivotTableCellFormatsTest_7_TwoRowTwoColumnFields_DataColor.xlsx");
     assertTwoRowTwoColumnFields_DataColor(*getScDoc());
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
     assertTwoRowTwoColumnFields_DataColor(*getScDoc());
 }
 
@@ -245,7 +245,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
 {
     createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_8_DataFieldInRow_DataColor.xlsx");
     assertDataFieldInRow_DataColor(*getScDoc());
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
     assertDataFieldInRow_DataColor(*getScDoc());
 }
 
@@ -261,7 +261,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
 {
     createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_9_MultipleSelections.xlsx");
     assertMultipleSelections(*getScDoc());
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
     assertMultipleSelections(*getScDoc());
 }
 
@@ -309,7 +309,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
 {
     createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_11_WholeDataColumnSelected.xlsx");
     assertWholeDataColumnSelected(*getScDoc());
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
     assertWholeDataColumnSelected(*getScDoc());
 }
 
@@ -335,7 +335,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
 {
     createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_12_WholeLabelColumnSelected.xlsx");
     assertWholeLabelColumnSelected(*getScDoc());
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
     assertWholeLabelColumnSelected(*getScDoc());
 }
 
@@ -357,7 +357,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
 {
     createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_13_SelectionInLabelAndData.xlsx");
     assertSelectionInLabelAndData(*getScDoc());
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
     assertSelectionInLabelAndData(*getScDoc());
 }
 
@@ -384,7 +384,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     createScDoc("xlsx/pivot-table/"
                 "PivotTableCellFormatsTest_14_TwoRowsDataFieldInColumn_LabelColor.xlsx");
     assertTwoRowsDataFieldInColumn_LabelColor(*getScDoc());
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
     assertTwoRowsDataFieldInColumn_LabelColor(*getScDoc());
 }
 
@@ -412,7 +412,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     createScDoc("xlsx/pivot-table/"
                 "PivotTableCellFormatsTest_15_TwoDataFieldColumns_WholeDataColumnSelected.xlsx");
     assertTwoDataFieldColumns_WholeDataColumnSelected(*getScDoc());
-    saveAndReload("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
     assertTwoDataFieldColumns_WholeDataColumnSelected(*getScDoc());
 }
 

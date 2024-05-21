@@ -63,10 +63,10 @@ public:
 };
 
 ScDrawPagesObj::ScDrawPagesObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XElementAccess(cppu::UnoType<drawing::XDrawPage>::get())
     , XIndexAccess(3)
-    , XServiceInfo("ScDrawPagesObj", "com.sun.star.drawing.DrawPages")
+    , XServiceInfo(u"ScDrawPagesObj"_ustr, u"com.sun.star.drawing.DrawPages"_ustr)
 {
 }
 
@@ -87,7 +87,7 @@ void ScDrawPagesObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDrawPagesObj);

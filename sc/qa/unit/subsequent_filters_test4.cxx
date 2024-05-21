@@ -72,7 +72,7 @@ class ScFiltersTest4 : public ScModelTestBase
 {
 public:
     ScFiltersTest4()
-        : ScModelTestBase("sc/qa/unit/data")
+        : ScModelTestBase(u"sc/qa/unit/data"_ustr)
     {
     }
 
@@ -129,7 +129,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf131575)
     loadWithParams(createFileURL(u"xlsx/tdf131575.xlsx"), aParams);
     ScDocument* pDoc = getScDoc();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("ETAT DES SORTIES"), pDoc->GetString(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"ETAT DES SORTIES"_ustr, pDoc->GetString(1, 0, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf76115)
@@ -143,7 +143,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf76115)
     loadWithParams(createFileURL(u"xlsx/tdf76115.xlsx"), aParams);
     ScDocument* pDoc = getScDoc();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Filial"), pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Filial"_ustr, pDoc->GetString(0, 0, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testLegacyOptionButtonGroupBox)
@@ -162,8 +162,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testLegacyOptionButtonGroupBox)
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(),
                                                      uno::UNO_QUERY_THROW);
     // The radio buttons are grouped by GroupBoxes - so the name comes from the group shape name
-    xPropertySet->getPropertyValue("GroupName") >>= sGroupName;
-    CPPUNIT_ASSERT_EQUAL(OUString("Casella di gruppo 1"), sGroupName);
+    xPropertySet->getPropertyValue(u"GroupName"_ustr) >>= sGroupName;
+    CPPUNIT_ASSERT_EQUAL(u"Casella di gruppo 1"_ustr, sGroupName);
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testActiveXOptionButtonGroup)
@@ -181,34 +181,34 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testActiveXOptionButtonGroup)
                                                          UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(),
                                                      uno::UNO_QUERY_THROW);
-    xPropertySet->getPropertyValue("GroupName") >>= sGroupName;
-    CPPUNIT_ASSERT_EQUAL(OUString("Sheet1"), sGroupName);
+    xPropertySet->getPropertyValue(u"GroupName"_ustr) >>= sGroupName;
+    CPPUNIT_ASSERT_EQUAL(u"Sheet1"_ustr, sGroupName);
 
     // Optionbuttons (without Group names) were not grouped.
     // The two optionbuttons should have the same auto-generated group name.
     OUString sGroupName2; //ActiveX controls
     xControlShape.set(xIA_DrawPage->getByIndex(2), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY_THROW);
-    xPropertySet->getPropertyValue("GroupName") >>= sGroupName2;
+    xPropertySet->getPropertyValue(u"GroupName"_ustr) >>= sGroupName2;
     CPPUNIT_ASSERT_EQUAL(false, sGroupName2.isEmpty());
 
     OUString sGroupName3;
     xControlShape.set(xIA_DrawPage->getByIndex(3), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY_THROW);
-    xPropertySet->getPropertyValue("GroupName") >>= sGroupName3;
+    xPropertySet->getPropertyValue(u"GroupName"_ustr) >>= sGroupName3;
     CPPUNIT_ASSERT_EQUAL(sGroupName2, sGroupName3);
     CPPUNIT_ASSERT(sGroupName != sGroupName3);
 
     OUString sGroupName4; //Form controls
     xControlShape.set(xIA_DrawPage->getByIndex(4), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY_THROW);
-    xPropertySet->getPropertyValue("GroupName") >>= sGroupName4;
+    xPropertySet->getPropertyValue(u"GroupName"_ustr) >>= sGroupName4;
     CPPUNIT_ASSERT_EQUAL(false, sGroupName4.isEmpty());
 
     OUString sGroupName5;
     xControlShape.set(xIA_DrawPage->getByIndex(5), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY_THROW);
-    xPropertySet->getPropertyValue("GroupName") >>= sGroupName5;
+    xPropertySet->getPropertyValue(u"GroupName"_ustr) >>= sGroupName5;
     CPPUNIT_ASSERT_EQUAL(sGroupName4, sGroupName5);
     CPPUNIT_ASSERT(sGroupName2 != sGroupName5);
     CPPUNIT_ASSERT(sGroupName != sGroupName5);
@@ -216,13 +216,13 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testActiveXOptionButtonGroup)
     OUString sGroupName7; //Form radiobutton autogrouped by GroupBox
     xControlShape.set(xIA_DrawPage->getByIndex(7), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY_THROW);
-    xPropertySet->getPropertyValue("GroupName") >>= sGroupName7;
-    CPPUNIT_ASSERT_EQUAL(OUString("autoGroup_Group Box 7"), sGroupName7);
+    xPropertySet->getPropertyValue(u"GroupName"_ustr) >>= sGroupName7;
+    CPPUNIT_ASSERT_EQUAL(u"autoGroup_Group Box 7"_ustr, sGroupName7);
 
     OUString sGroupName8;
     xControlShape.set(xIA_DrawPage->getByIndex(8), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY_THROW);
-    xPropertySet->getPropertyValue("GroupName") >>= sGroupName8;
+    xPropertySet->getPropertyValue(u"GroupName"_ustr) >>= sGroupName8;
     CPPUNIT_ASSERT_EQUAL(sGroupName7, sGroupName8);
     CPPUNIT_ASSERT(sGroupName4 != sGroupName8);
     CPPUNIT_ASSERT(sGroupName2 != sGroupName8);
@@ -231,13 +231,13 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testActiveXOptionButtonGroup)
     OUString sGroupName9; //Form radiobutton not fully inside GroupBox
     xControlShape.set(xIA_DrawPage->getByIndex(9), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY_THROW);
-    xPropertySet->getPropertyValue("GroupName") >>= sGroupName9;
+    xPropertySet->getPropertyValue(u"GroupName"_ustr) >>= sGroupName9;
     CPPUNIT_ASSERT_EQUAL(sGroupName4, sGroupName9);
 
     OUString sGroupName10; //ActiveX unaffected by GroupBox
     xControlShape.set(xIA_DrawPage->getByIndex(10), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY_THROW);
-    xPropertySet->getPropertyValue("GroupName") >>= sGroupName10;
+    xPropertySet->getPropertyValue(u"GroupName"_ustr) >>= sGroupName10;
     CPPUNIT_ASSERT_EQUAL(sGroupName, sGroupName10);
 }
 
@@ -252,13 +252,13 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testChartImportODS)
                                  pDoc->GetTableCount());
     OUString aName;
     pDoc->GetName(0, aName);
-    CPPUNIT_ASSERT_EQUAL(OUString("Empty"), aName);
+    CPPUNIT_ASSERT_EQUAL(u"Empty"_ustr, aName);
     pDoc->GetName(1, aName);
-    CPPUNIT_ASSERT_EQUAL(OUString("Chart"), aName);
+    CPPUNIT_ASSERT_EQUAL(u"Chart"_ustr, aName);
     pDoc->GetName(2, aName);
-    CPPUNIT_ASSERT_EQUAL(OUString("Data"), aName);
+    CPPUNIT_ASSERT_EQUAL(u"Data"_ustr, aName);
     pDoc->GetName(3, aName);
-    CPPUNIT_ASSERT_EQUAL(OUString("Title"), aName);
+    CPPUNIT_ASSERT_EQUAL(u"Title"_ustr, aName);
 
     // Retrieve the chart object instance from the 2nd page (for the 2nd sheet).
     const SdrOle2Obj* pOleObj = getSingleChartObject(*pDoc, 1);
@@ -292,17 +292,17 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testChartImportXLS)
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testNumberFormatHTML)
 {
-    setImportFilterName("calc_HTML_WebQuery");
+    setImportFilterName(u"calc_HTML_WebQuery"_ustr);
     createScDoc("html/numberformat.html");
 
     ScDocument* pDoc = getScDoc();
 
     // Check the header just in case.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell value is not as expected", OUString("Product"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell value is not as expected", u"Product"_ustr,
                                  pDoc->GetString(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell value is not as expected", OUString("Price"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell value is not as expected", u"Price"_ustr,
                                  pDoc->GetString(1, 0, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell value is not as expected", OUString("Note"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell value is not as expected", u"Note"_ustr,
                                  pDoc->GetString(2, 0, 0));
 
     // B2 should be imported as a value cell.
@@ -318,11 +318,11 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testNumberFormatCSV)
     ScDocument* pDoc = getScDoc();
 
     // Check the header just in case.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell value is not as expected", OUString("Product"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell value is not as expected", u"Product"_ustr,
                                  pDoc->GetString(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell value is not as expected", OUString("Price"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell value is not as expected", u"Price"_ustr,
                                  pDoc->GetString(1, 0, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell value is not as expected", OUString("Note"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell value is not as expected", u"Note"_ustr,
                                  pDoc->GetString(2, 0, 0));
 
     // B2 should be imported as a value cell.
@@ -433,14 +433,13 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRichTextContentODS)
     // Normal simple string with no formatting.
     aPos.IncRow();
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, pDoc->GetCellType(aPos));
-    CPPUNIT_ASSERT_EQUAL(OUString("Normal"), pDoc->GetString(aPos.Col(), aPos.Row(), aPos.Tab()));
+    CPPUNIT_ASSERT_EQUAL(u"Normal"_ustr, pDoc->GetString(aPos.Col(), aPos.Row(), aPos.Tab()));
 
     // Normal string with bold applied to the whole cell.
     {
         aPos.IncRow();
         CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, pDoc->GetCellType(aPos));
-        CPPUNIT_ASSERT_EQUAL(OUString("All bold"),
-                             pDoc->GetString(aPos.Col(), aPos.Row(), aPos.Tab()));
+        CPPUNIT_ASSERT_EQUAL(u"All bold"_ustr, pDoc->GetString(aPos.Col(), aPos.Row(), aPos.Tab()));
         const ScPatternAttr* pAttr = pDoc->GetPattern(aPos.Col(), aPos.Row(), aPos.Tab());
         CPPUNIT_ASSERT_MESSAGE("Failed to get cell attribute.", pAttr);
         const SvxWeightItem& rWeightItem = pAttr->GetItem(ATTR_FONT_WEIGHT);
@@ -455,11 +454,11 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRichTextContentODS)
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), pEditText->GetParagraphCount());
     OUString aParaText = pEditText->GetText(0);
-    CPPUNIT_ASSERT_EQUAL(OUString("one"), aParaText);
+    CPPUNIT_ASSERT_EQUAL(u"one"_ustr, aParaText);
     aParaText = pEditText->GetText(1);
-    CPPUNIT_ASSERT_EQUAL(OUString("two"), aParaText);
+    CPPUNIT_ASSERT_EQUAL(u"two"_ustr, aParaText);
     aParaText = pEditText->GetText(2);
-    CPPUNIT_ASSERT_EQUAL(OUString("three"), aParaText);
+    CPPUNIT_ASSERT_EQUAL(u"three"_ustr, aParaText);
 
     // Cell with sheet name field item.
     aPos.IncRow();
@@ -471,8 +470,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRichTextContentODS)
     CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.startsWith("Sheet name is "));
     CPPUNIT_ASSERT_MESSAGE("Sheet name field item not found.",
                            pEditText->HasField(text::textfield::Type::TABLE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Sheet name is Test."), ScEditUtil::GetString(*pEditText, pDoc));
-    CPPUNIT_ASSERT_EQUAL(OUString("Sheet name is ?."), ScEditUtil::GetString(*pEditText, nullptr));
+    CPPUNIT_ASSERT_EQUAL(u"Sheet name is Test."_ustr, ScEditUtil::GetString(*pEditText, pDoc));
+    CPPUNIT_ASSERT_EQUAL(u"Sheet name is ?."_ustr, ScEditUtil::GetString(*pEditText, nullptr));
 
     // Cell with URL field item.
     aPos.IncRow();
@@ -484,9 +483,9 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRichTextContentODS)
     CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.startsWith("URL: "));
     CPPUNIT_ASSERT_MESSAGE("URL field item not found.",
                            pEditText->HasField(text::textfield::Type::URL));
-    CPPUNIT_ASSERT_EQUAL(OUString("URL: http://libreoffice.org"),
+    CPPUNIT_ASSERT_EQUAL(u"URL: http://libreoffice.org"_ustr,
                          ScEditUtil::GetString(*pEditText, pDoc));
-    CPPUNIT_ASSERT_EQUAL(OUString("URL: http://libreoffice.org"),
+    CPPUNIT_ASSERT_EQUAL(u"URL: http://libreoffice.org"_ustr,
                          ScEditUtil::GetString(*pEditText, nullptr));
 
     // Cell with Date field item.
@@ -514,8 +513,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRichTextContentODS)
     CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.startsWith("Title: "));
     CPPUNIT_ASSERT_MESSAGE("DocInfo title field item not found.",
                            pEditText->HasField(text::textfield::Type::DOCINFO_TITLE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Title: Test Document"), ScEditUtil::GetString(*pEditText, pDoc));
-    CPPUNIT_ASSERT_EQUAL(OUString("Title: ?"), ScEditUtil::GetString(*pEditText, nullptr));
+    CPPUNIT_ASSERT_EQUAL(u"Title: Test Document"_ustr, ScEditUtil::GetString(*pEditText, pDoc));
+    CPPUNIT_ASSERT_EQUAL(u"Title: ?"_ustr, ScEditUtil::GetString(*pEditText, nullptr));
 
     // Cell with sentence with both bold and italic sequences.
     aPos.IncRow();
@@ -524,7 +523,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRichTextContentODS)
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pEditText->GetParagraphCount());
     aParaText = pEditText->GetText(0);
-    CPPUNIT_ASSERT_EQUAL(OUString("Sentence with bold and italic."), aParaText);
+    CPPUNIT_ASSERT_EQUAL(u"Sentence with bold and italic."_ustr, aParaText);
     std::vector<EECharAttrib> aAttribs;
     pEditText->GetCharAttribs(0, aAttribs);
     {
@@ -557,11 +556,11 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRichTextContentODS)
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), pEditText->GetParagraphCount());
     aParaText = pEditText->GetText(0);
-    CPPUNIT_ASSERT_EQUAL(OUString("bold"), aParaText);
+    CPPUNIT_ASSERT_EQUAL(u"bold"_ustr, aParaText);
     aParaText = pEditText->GetText(1);
-    CPPUNIT_ASSERT_EQUAL(OUString("italic"), aParaText);
+    CPPUNIT_ASSERT_EQUAL(u"italic"_ustr, aParaText);
     aParaText = pEditText->GetText(2);
-    CPPUNIT_ASSERT_EQUAL(OUString("underlined"), aParaText);
+    CPPUNIT_ASSERT_EQUAL(u"underlined"_ustr, aParaText);
 
     // first line is bold.
     pEditText->GetCharAttribs(0, aAttribs);
@@ -640,13 +639,12 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRichTextContentODS)
     // Embedded spaces as <text:s text:c='4' />, normal text
     aPos.IncRow();
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, pDoc->GetCellType(aPos));
-    CPPUNIT_ASSERT_EQUAL(OUString("one     two"),
-                         pDoc->GetString(aPos.Col(), aPos.Row(), aPos.Tab()));
+    CPPUNIT_ASSERT_EQUAL(u"one     two"_ustr, pDoc->GetString(aPos.Col(), aPos.Row(), aPos.Tab()));
 
     // Leading space as <text:s />.
     aPos.IncRow();
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, pDoc->GetCellType(aPos));
-    CPPUNIT_ASSERT_EQUAL(OUString(" =3+4"), pDoc->GetString(aPos.Col(), aPos.Row(), aPos.Tab()));
+    CPPUNIT_ASSERT_EQUAL(u" =3+4"_ustr, pDoc->GetString(aPos.Col(), aPos.Row(), aPos.Tab()));
 
     // Embedded spaces with <text:s text:c='4' /> inside a <text:span>, text
     // partly bold.
@@ -656,7 +654,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRichTextContentODS)
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pEditText->GetParagraphCount());
     aParaText = pEditText->GetText(0);
-    CPPUNIT_ASSERT_EQUAL(OUString("one     two"), aParaText);
+    CPPUNIT_ASSERT_EQUAL(u"one     two"_ustr, aParaText);
     pEditText->GetCharAttribs(0, aAttribs);
     {
         auto it = std::find_if(aAttribs.begin(), aAttribs.end(), [](const EECharAttrib& rAttrib) {
@@ -667,7 +665,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRichTextContentODS)
         if (bHasBold)
         {
             OUString aSeg = aParaText.copy(it->nStart, it->nEnd - it->nStart);
-            CPPUNIT_ASSERT_EQUAL(OUString("e     t"), aSeg);
+            CPPUNIT_ASSERT_EQUAL(u"e     t"_ustr, aSeg);
         }
         CPPUNIT_ASSERT_MESSAGE("Expected a bold sequence.", bHasBold);
     }
@@ -745,7 +743,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testCondFormatImportCellIs)
     CPPUNIT_ASSERT_EQUAL(ScConditionMode::Equal, pCondition->GetOperation());
 
     OUString aStr = pCondition->GetExpression(ScAddress(0, 0, 0), 0);
-    CPPUNIT_ASSERT_EQUAL(OUString("$Sheet2.$A$2"), aStr);
+    CPPUNIT_ASSERT_EQUAL(u"$Sheet2.$A$2"_ustr, aStr);
 
     pEntry = pFormat->GetEntry(1);
     CPPUNIT_ASSERT(pEntry);
@@ -755,7 +753,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testCondFormatImportCellIs)
     CPPUNIT_ASSERT_EQUAL(ScConditionMode::Equal, pCondition->GetOperation());
 
     aStr = pCondition->GetExpression(ScAddress(0, 0, 0), 0);
-    CPPUNIT_ASSERT_EQUAL(OUString("$Sheet2.$A$1"), aStr);
+    CPPUNIT_ASSERT_EQUAL(u"$Sheet2.$A$1"_ustr, aStr);
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testCondFormatThemeColorXLSX)
@@ -1043,7 +1041,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testColorScaleNumWithRefXLSX)
     CPPUNIT_ASSERT(pColorScale);
 
     const ScColorScaleEntry* pColorScaleEntry = pColorScale->GetEntry(1);
-    CPPUNIT_ASSERT_EQUAL(OUString("=$A$1"),
+    CPPUNIT_ASSERT_EQUAL(u"=$A$1"_ustr,
                          pColorScaleEntry->GetFormula(formula::FormulaGrammar::GRAM_NATIVE));
 }
 
@@ -1060,25 +1058,25 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf153514)
 
     ScStyleSheet* pStyleSheet;
     // Case sensitive tests
-    pStyleSheet = pStyleSheetPool->FindCaseIns("aBcD", SfxStyleFamily::Para);
-    CPPUNIT_ASSERT_EQUAL(OUString("aBcD"), pStyleSheet->GetName());
-    pStyleSheet = pStyleSheetPool->FindCaseIns("abCd", SfxStyleFamily::Para);
-    CPPUNIT_ASSERT_EQUAL(OUString("abCd"), pStyleSheet->GetName());
-    pStyleSheet = pStyleSheetPool->FindCaseIns("Abcd", SfxStyleFamily::Para);
-    CPPUNIT_ASSERT_EQUAL(OUString("Abcd"), pStyleSheet->GetName());
-    pStyleSheet = pStyleSheetPool->FindCaseIns("ABCD", SfxStyleFamily::Para);
-    CPPUNIT_ASSERT_EQUAL(OUString("ABCD"), pStyleSheet->GetName());
+    pStyleSheet = pStyleSheetPool->FindCaseIns(u"aBcD"_ustr, SfxStyleFamily::Para);
+    CPPUNIT_ASSERT_EQUAL(u"aBcD"_ustr, pStyleSheet->GetName());
+    pStyleSheet = pStyleSheetPool->FindCaseIns(u"abCd"_ustr, SfxStyleFamily::Para);
+    CPPUNIT_ASSERT_EQUAL(u"abCd"_ustr, pStyleSheet->GetName());
+    pStyleSheet = pStyleSheetPool->FindCaseIns(u"Abcd"_ustr, SfxStyleFamily::Para);
+    CPPUNIT_ASSERT_EQUAL(u"Abcd"_ustr, pStyleSheet->GetName());
+    pStyleSheet = pStyleSheetPool->FindCaseIns(u"ABCD"_ustr, SfxStyleFamily::Para);
+    CPPUNIT_ASSERT_EQUAL(u"ABCD"_ustr, pStyleSheet->GetName());
     // Case insensitive tests
-    pStyleSheet = pStyleSheetPool->FindCaseIns("abcd", SfxStyleFamily::Para);
+    pStyleSheet = pStyleSheetPool->FindCaseIns(u"abcd"_ustr, SfxStyleFamily::Para);
     CPPUNIT_ASSERT(pStyleSheet);
     CPPUNIT_ASSERT(pStyleSheet->GetName().equalsIgnoreAsciiCase("abcd"));
     CPPUNIT_ASSERT(pStyleSheet->GetName() != "abcd");
-    pStyleSheet = pStyleSheetPool->FindCaseIns("ABCd", SfxStyleFamily::Para);
+    pStyleSheet = pStyleSheetPool->FindCaseIns(u"ABCd"_ustr, SfxStyleFamily::Para);
     CPPUNIT_ASSERT(pStyleSheet);
     CPPUNIT_ASSERT(pStyleSheet->GetName().equalsIgnoreAsciiCase("ABCd"));
     CPPUNIT_ASSERT(pStyleSheet->GetName() != "ABCd");
     // Not match tests
-    pStyleSheet = pStyleSheetPool->FindCaseIns("NotFound", SfxStyleFamily::Para);
+    pStyleSheet = pStyleSheetPool->FindCaseIns(u"NotFound"_ustr, SfxStyleFamily::Para);
     CPPUNIT_ASSERT(!pStyleSheet);
 }
 
@@ -1096,7 +1094,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testOrcusODSStyleInterface)
     /* Test cases for Style "Name1"
      * Has Border and Fill.
      */
-    ScStyleSheet* pStyleSheet = pStyleSheetPool->FindCaseIns("Name1", SfxStyleFamily::Para);
+    ScStyleSheet* pStyleSheet = pStyleSheetPool->FindCaseIns(u"Name1"_ustr, SfxStyleFamily::Para);
     const SfxPoolItem* pItem = nullptr;
 
     CPPUNIT_ASSERT_MESSAGE("Style Name1 : Doesn't have Attribute background, but it should have.",
@@ -1130,7 +1128,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testOrcusODSStyleInterface)
     /* Test for Style "Name2"
      * Has 4 sided borders + Diagonal borders.
      */
-    pStyleSheet = pStyleSheetPool->FindCaseIns("Name2", SfxStyleFamily::Para);
+    pStyleSheet = pStyleSheetPool->FindCaseIns(u"Name2"_ustr, SfxStyleFamily::Para);
 
     CPPUNIT_ASSERT_MESSAGE("Style Name2 : Doesn't have Attribute background, but it should have.",
                            pStyleSheet->GetItemSet().HasItem(ATTR_BORDER, &pItem));
@@ -1173,7 +1171,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testOrcusODSStyleInterface)
     /* Test for Style "Name3"
      * Hidden, protected and content is printed.
      */
-    pStyleSheet = pStyleSheetPool->FindCaseIns("Name3", SfxStyleFamily::Para);
+    pStyleSheet = pStyleSheetPool->FindCaseIns(u"Name3"_ustr, SfxStyleFamily::Para);
     CPPUNIT_ASSERT_MESSAGE("Style Name3 : Doesn't have Attribute Protection, but it should have.",
                            pStyleSheet->GetItemSet().HasItem(ATTR_PROTECTION, &pItem));
 
@@ -1183,7 +1181,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testOrcusODSStyleInterface)
     /* Test for Style "Name4"
      * Hidden, protected and content is printed.
      */
-    pStyleSheet = pStyleSheetPool->FindCaseIns("Name4", SfxStyleFamily::Para);
+    pStyleSheet = pStyleSheetPool->FindCaseIns(u"Name4"_ustr, SfxStyleFamily::Para);
     CPPUNIT_ASSERT_MESSAGE("Style Name4 : Doesn't have Attribute Protection, but it should have.",
                            pStyleSheet->GetItemSet().HasItem(ATTR_PROTECTION, &pItem));
 
@@ -1193,7 +1191,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testOrcusODSStyleInterface)
     /* Test for Style "Name5"
      * Hidden, protected and content is printed.
      */
-    pStyleSheet = pStyleSheetPool->FindCaseIns("Name5", SfxStyleFamily::Para);
+    pStyleSheet = pStyleSheetPool->FindCaseIns(u"Name5"_ustr, SfxStyleFamily::Para);
     CPPUNIT_ASSERT_MESSAGE("Style Name5 : Doesn't have Attribute Protection, but it should have.",
                            pStyleSheet->GetItemSet().HasItem(ATTR_PROTECTION, &pItem));
 
@@ -1212,12 +1210,12 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testOrcusODSStyleInterface)
     /* Test for Style "Name6"
      * Has Font name, posture, weight, color, height
      */
-    pStyleSheet = pStyleSheetPool->FindCaseIns("Name6", SfxStyleFamily::Para);
+    pStyleSheet = pStyleSheetPool->FindCaseIns(u"Name6"_ustr, SfxStyleFamily::Para);
     CPPUNIT_ASSERT_MESSAGE("Style Name6 : Doesn't have Attribute Font, but it should have.",
                            pStyleSheet->GetItemSet().HasItem(ATTR_FONT, &pItem));
 
     const SvxFontItem* pFontItem = static_cast<const SvxFontItem*>(pItem);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Style Name6 :Error with Font name", OUString("Liberation Sans"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Style Name6 :Error with Font name", u"Liberation Sans"_ustr,
                                  pFontItem->GetStyleName());
 
     CPPUNIT_ASSERT_MESSAGE("Style Name6 : Doesn't have Attribute Font Height, but it should have.",
@@ -1260,7 +1258,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testOrcusODSStyleInterface)
     /* Test for Style Name "7"
      * Has strikethrough single
      */
-    pStyleSheet = pStyleSheetPool->FindCaseIns("Name7", SfxStyleFamily::Para);
+    pStyleSheet = pStyleSheetPool->FindCaseIns(u"Name7"_ustr, SfxStyleFamily::Para);
     CPPUNIT_ASSERT_MESSAGE("Style Name7 : Doesn't have Attribute Strikeout, but it should have.",
                            pStyleSheet->GetItemSet().HasItem(ATTR_FONT_CROSSEDOUT, &pItem));
 
@@ -1271,7 +1269,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testOrcusODSStyleInterface)
     /* Test for Style Name "8"
      * Has strikethrough bold
      */
-    pStyleSheet = pStyleSheetPool->FindCaseIns("Name8", SfxStyleFamily::Para);
+    pStyleSheet = pStyleSheetPool->FindCaseIns(u"Name8"_ustr, SfxStyleFamily::Para);
     CPPUNIT_ASSERT_MESSAGE("Style Name8 : Doesn't have Attribute Strikeout, but it should have.",
                            pStyleSheet->GetItemSet().HasItem(ATTR_FONT_CROSSEDOUT, &pItem));
 
@@ -1282,7 +1280,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testOrcusODSStyleInterface)
     /* Test for Style Name "9"
      * Has strikethrough slash
      */
-    pStyleSheet = pStyleSheetPool->FindCaseIns("Name9", SfxStyleFamily::Para);
+    pStyleSheet = pStyleSheetPool->FindCaseIns(u"Name9"_ustr, SfxStyleFamily::Para);
     CPPUNIT_ASSERT_MESSAGE("Style Name9 : Doesn't have Attribute Strikeout, but it should have.",
                            pStyleSheet->GetItemSet().HasItem(ATTR_FONT_CROSSEDOUT, &pItem));
 
@@ -1294,7 +1292,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testOrcusODSStyleInterface)
      * Has ver align, and hor align
      */
 
-    pStyleSheet = pStyleSheetPool->FindCaseIns("Name10", SfxStyleFamily::Para);
+    pStyleSheet = pStyleSheetPool->FindCaseIns(u"Name10"_ustr, SfxStyleFamily::Para);
     CPPUNIT_ASSERT_MESSAGE("Style Name10 : Doesn't have Attribute hor justify, but it should have.",
                            pStyleSheet->GetItemSet().HasItem(ATTR_HOR_JUSTIFY, &pItem));
 
@@ -1302,7 +1300,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testOrcusODSStyleInterface)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Style Name10 :Error with hor justify", SvxCellHorJustify::Right,
                                  pHorJustify->GetValue());
 
-    pStyleSheet = pStyleSheetPool->FindCaseIns("Name10", SfxStyleFamily::Para);
+    pStyleSheet = pStyleSheetPool->FindCaseIns(u"Name10"_ustr, SfxStyleFamily::Para);
     CPPUNIT_ASSERT_MESSAGE("Style Name10 : Doesn't have Attribute ver justify, but it should have.",
                            pStyleSheet->GetItemSet().HasItem(ATTR_VER_JUSTIFY, &pItem));
 
@@ -1332,10 +1330,10 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testOrcusODSStyleInterface)
         }
     };
 
-    checkFontWeight("Accent", WEIGHT_BOLD);
-    checkFontWeight("Accent 1", WEIGHT_BOLD); // inherits from 'Accent'
-    checkFontWeight("Accent 2", WEIGHT_BOLD); // inherits from 'Accent'
-    checkFontWeight("Accent 3", WEIGHT_BOLD); // inherits from 'Accent'
+    checkFontWeight(u"Accent"_ustr, WEIGHT_BOLD);
+    checkFontWeight(u"Accent 1"_ustr, WEIGHT_BOLD); // inherits from 'Accent'
+    checkFontWeight(u"Accent 2"_ustr, WEIGHT_BOLD); // inherits from 'Accent'
+    checkFontWeight(u"Accent 3"_ustr, WEIGHT_BOLD); // inherits from 'Accent'
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testLiteralInFormulaXLS)
@@ -1452,23 +1450,23 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf129681)
 
     ScDocument* pDoc = getScDoc();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Lamb"), pDoc->GetString(ScAddress(4, 2, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Beef"), pDoc->GetString(ScAddress(4, 3, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Pork"), pDoc->GetString(ScAddress(4, 4, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Goat"), pDoc->GetString(ScAddress(4, 5, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Goat"), pDoc->GetString(ScAddress(4, 6, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), pDoc->GetString(ScAddress(4, 7, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), pDoc->GetString(ScAddress(4, 8, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Deer"), pDoc->GetString(ScAddress(4, 9, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Lamb"_ustr, pDoc->GetString(ScAddress(4, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Beef"_ustr, pDoc->GetString(ScAddress(4, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Pork"_ustr, pDoc->GetString(ScAddress(4, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Goat"_ustr, pDoc->GetString(ScAddress(4, 5, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Goat"_ustr, pDoc->GetString(ScAddress(4, 6, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(ScAddress(4, 7, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(ScAddress(4, 8, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Deer"_ustr, pDoc->GetString(ScAddress(4, 9, 0)));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("1"), pDoc->GetString(ScAddress(6, 2, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("2"), pDoc->GetString(ScAddress(6, 3, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("3"), pDoc->GetString(ScAddress(6, 4, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("5"), pDoc->GetString(ScAddress(6, 5, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("8"), pDoc->GetString(ScAddress(6, 6, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), pDoc->GetString(ScAddress(6, 7, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), pDoc->GetString(ScAddress(6, 8, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), pDoc->GetString(ScAddress(6, 9, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pDoc->GetString(ScAddress(6, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"2"_ustr, pDoc->GetString(ScAddress(6, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pDoc->GetString(ScAddress(6, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pDoc->GetString(ScAddress(6, 5, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"8"_ustr, pDoc->GetString(ScAddress(6, 6, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(ScAddress(6, 7, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(ScAddress(6, 8, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(ScAddress(6, 9, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf149484)
@@ -1479,7 +1477,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf149484)
     // Without the fix in place, this test would have failed with
     // - Expected: -TRUE-
     // - Actual  : TRUE
-    CPPUNIT_ASSERT_EQUAL(OUString("-TRUE-"), pDoc->GetString(0, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"-TRUE-"_ustr, pDoc->GetString(0, 2, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testEscapedUnicodeXLSX)
@@ -1488,7 +1486,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testEscapedUnicodeXLSX)
     ScDocument* pDoc = getScDoc();
 
     // Without the fix, there would be "_x000D_" after every new-line char.
-    CPPUNIT_ASSERT_EQUAL(OUString("Line 1\nLine 2\nLine 3\nLine 4"), pDoc->GetString(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Line 1\nLine 2\nLine 3\nLine 4"_ustr, pDoc->GetString(1, 1, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf144758_DBDataDefaultOrientation)
@@ -1536,16 +1534,16 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testSharedFormulaXLS)
     pDoc = getScDoc();
     pDoc->CalcAll();
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", OUString("=A1*20"), pDoc->GetFormula(1, 0, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", OUString("=A2*20"), pDoc->GetFormula(1, 1, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", OUString("=A3*20"), pDoc->GetFormula(1, 2, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", u"=A1*20"_ustr, pDoc->GetFormula(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", u"=A2*20"_ustr, pDoc->GetFormula(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", u"=A3*20"_ustr, pDoc->GetFormula(1, 2, 0));
 
     // There is an intentional gap at row 4.
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", OUString("=A5*20"), pDoc->GetFormula(1, 4, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", OUString("=A6*20"), pDoc->GetFormula(1, 5, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", OUString("=A7*20"), pDoc->GetFormula(1, 6, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", OUString("=A8*20"), pDoc->GetFormula(1, 7, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", u"=A5*20"_ustr, pDoc->GetFormula(1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", u"=A6*20"_ustr, pDoc->GetFormula(1, 5, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", u"=A7*20"_ustr, pDoc->GetFormula(1, 6, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", u"=A8*20"_ustr, pDoc->GetFormula(1, 7, 0));
 
     // We re-group formula cells on load. Let's check that as well.
 
@@ -1640,11 +1638,11 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testSheetNamesXLSX)
     std::vector<OUString> aTabNames = pDoc->GetAllTableNames();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The document should have 5 sheets in total.", size_t(5),
                                  aTabNames.size());
-    CPPUNIT_ASSERT_EQUAL(OUString("S&P"), aTabNames[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Sam's Club"), aTabNames[1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("\"The Sheet\""), aTabNames[2]);
-    CPPUNIT_ASSERT_EQUAL(OUString("A<B"), aTabNames[3]);
-    CPPUNIT_ASSERT_EQUAL(OUString("C>D"), aTabNames[4]);
+    CPPUNIT_ASSERT_EQUAL(u"S&P"_ustr, aTabNames[0]);
+    CPPUNIT_ASSERT_EQUAL(u"Sam's Club"_ustr, aTabNames[1]);
+    CPPUNIT_ASSERT_EQUAL(u"\"The Sheet\""_ustr, aTabNames[2]);
+    CPPUNIT_ASSERT_EQUAL(u"A<B"_ustr, aTabNames[3]);
+    CPPUNIT_ASSERT_EQUAL(u"C>D"_ustr, aTabNames[4]);
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf155046)
@@ -1655,7 +1653,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf155046)
     // Without the fix in place, this test would have failed with
     // - Expected: TRUE
     // - Actual  : FALSE
-    CPPUNIT_ASSERT_EQUAL(OUString("TRUE"), pDoc->GetString(ScAddress(2, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"TRUE"_ustr, pDoc->GetString(ScAddress(2, 2, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf150599)
@@ -1666,8 +1664,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf150599)
     // Without the fix in place, this test would have failed with
     // - Expected: 1
     // - Actual  : #IND:?
-    CPPUNIT_ASSERT_EQUAL(OUString("1"), pDoc->GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("32"), pDoc->GetString(ScAddress(31, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"32"_ustr, pDoc->GetString(ScAddress(31, 0, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testCommentSize)
@@ -1693,7 +1691,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testCommentSize)
     CPPUNIT_ASSERT_EQUAL(tools::Long(2899), rOldRect.getOpenWidth());
     CPPUNIT_ASSERT_EQUAL(tools::Long(939), rOldRect.getOpenHeight());
 
-    pNote->SetText(aPos, "first\nsecond\nthird");
+    pNote->SetText(aPos, u"first\nsecond\nthird"_ustr);
 
     const tools::Rectangle& rNewRect = pCaption->GetLogicRect();
     CPPUNIT_ASSERT_EQUAL(rOldRect.getOpenWidth(), rNewRect.getOpenWidth());
@@ -1972,7 +1970,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf155402)
     OUString aFilename = pDoc->GetString(1, 0, 0);
     sal_Int32 nPos = aFilename.lastIndexOf('/');
     aFilename = OUString::Concat(aFilename.subView(nPos));
-    CPPUNIT_ASSERT_EQUAL(OUString("/[tdf155402.xlsx]Sheet1"), aFilename);
+    CPPUNIT_ASSERT_EQUAL(u"/[tdf155402.xlsx]Sheet1"_ustr, aFilename);
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf142905)
@@ -1984,7 +1982,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf142905)
     // After recalculation it is fixed.
     // - Expected: "     3M   "
     // - Actual  : "3M"
-    CPPUNIT_ASSERT_EQUAL(OUString("     3M   "), pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"     3M   "_ustr, pDoc->GetString(2, 0, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf125580)

@@ -44,7 +44,7 @@ public:
 
 ScIndexEnumeration_SpreadsheetViewPanesEnumeration::
     ScIndexEnumeration_SpreadsheetViewPanesEnumeration()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
 {
 }
 
@@ -67,7 +67,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_SpreadsheetViewPanesEnumerati
 void ScIndexEnumeration_SpreadsheetViewPanesEnumeration::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScIndexEnumeration_SpreadsheetViewPanesEnumeration);

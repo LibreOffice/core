@@ -29,7 +29,7 @@ namespace
 CPPUNIT_TEST_FIXTURE(DocumentThemesTest, testGetTheme)
 {
     m_pDoc->InitDrawLayer();
-    m_pDoc->InsertTab(0, "Test");
+    m_pDoc->InsertTab(0, u"Test"_ustr);
 
     ScDrawLayer* pDrawLayer = m_pDoc->GetDrawLayer();
     CPPUNIT_ASSERT(pDrawLayer);
@@ -40,7 +40,7 @@ CPPUNIT_TEST_FIXTURE(DocumentThemesTest, testGetTheme)
 CPPUNIT_TEST_FIXTURE(DocumentThemesTest, testChangeTheme)
 {
     m_pDoc->InitDrawLayer();
-    m_pDoc->InsertTab(0, "Test");
+    m_pDoc->InsertTab(0, u"Test"_ustr);
 
     ScDrawLayer* pDrawLayer = m_pDoc->GetDrawLayer();
     CPPUNIT_ASSERT(pDrawLayer);

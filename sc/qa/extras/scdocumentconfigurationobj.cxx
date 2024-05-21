@@ -40,7 +40,7 @@ public:
 };
 
 ScDocumentConfigurationObj::ScDocumentConfigurationObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
 {
 }
 
@@ -48,14 +48,14 @@ uno::Reference<uno::XInterface> ScDocumentConfigurationObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference<lang::XMultiServiceFactory> xMSF(xDoc, UNO_QUERY_THROW);
-    return xMSF->createInstance("com.sun.star.sheet.DocumentSettings");
+    return xMSF->createInstance(u"com.sun.star.sheet.DocumentSettings"_ustr);
 }
 
 void ScDocumentConfigurationObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDocumentConfigurationObj);

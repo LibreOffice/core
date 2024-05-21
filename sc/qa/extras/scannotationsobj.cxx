@@ -67,7 +67,7 @@ public:
 
 
 ScAnnontationsObj::ScAnnontationsObj()
-       : UnoApiTest("/sc/qa/extras/testdocuments")
+       : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
        , XElementAccess(cppu::UnoType<sheet::XSheetAnnotation>::get())
        , XIndexAccess(1)
 {

@@ -75,8 +75,8 @@ public:
 };
 
 ScViewPaneObj::ScViewPaneObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
-    , XServiceInfo("ScViewPaneObj", "com.sun.star.sheet.SpreadsheetViewPane")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
+    , XServiceInfo(u"ScViewPaneObj"_ustr, u"com.sun.star.sheet.SpreadsheetViewPane"_ustr)
 {
 }
 
@@ -105,7 +105,7 @@ uno::Reference<uno::XInterface> ScViewPaneObj::init()
     uno::Reference<container::XNameContainer> xNC(xFS->getForms(), uno::UNO_SET_THROW);
 
     // XFormLayerAccess
-    uno::Reference<form::XForm> xForm(xNC->getByName("Form"), uno::UNO_QUERY_THROW);
+    uno::Reference<form::XForm> xForm(xNC->getByName(u"Form"_ustr), uno::UNO_QUERY_THROW);
     setForm(xForm);
     // XCellRangeReferrer
     setCellRange(xViewPane->getVisibleRange());
@@ -117,7 +117,7 @@ void ScViewPaneObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScViewPaneObj);

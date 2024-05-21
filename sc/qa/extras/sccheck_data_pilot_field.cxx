@@ -65,8 +65,8 @@ bool CheckDataPilotField::isPropertyIgnored(const OUString& rName)
 }
 
 CheckDataPilotField::CheckDataPilotField()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
-    , apitest::XNamed("Col1")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
+    , apitest::XNamed(u"Col1"_ustr)
 {
 }
 
@@ -75,7 +75,7 @@ uno::Reference<uno::XInterface> CheckDataPilotField::init()
     // create a calc document
     if (!mxComponent.is())
         // Load an empty document.
-        mxComponent = loadFromDesktop("private:factory/scalc");
+        mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
     else
         return mxObject;
 
@@ -99,7 +99,7 @@ uno::Reference<uno::XInterface> CheckDataPilotField::init()
     uno::Reference<container::XIndexAccess> oIndexAccess(xSpreadsheets, uno::UNO_QUERY_THROW);
 
     // Per default there's now just one sheet, make sure we have at least two, then
-    xSpreadsheets->insertNewByName("Some Sheet", 0);
+    xSpreadsheets->insertNewByName(u"Some Sheet"_ustr, 0);
     uno::Any aAny = oIndexAccess->getByIndex(0);
     uno::Reference<sheet::XSpreadsheet> oSheet;
     CPPUNIT_ASSERT(aAny >>= oSheet);
@@ -146,16 +146,16 @@ uno::Reference<uno::XInterface> CheckDataPilotField::init()
 
     uno::Any sum;
     sum <<= sheet::GeneralFunction_SUM;
-    fieldPropSet->setPropertyValue("Function", sum);
+    fieldPropSet->setPropertyValue(u"Function"_ustr, sum);
 
     uno::Any data;
     data <<= sheet::DataPilotFieldOrientation_DATA;
-    fieldPropSet->setPropertyValue("Orientation", data);
+    fieldPropSet->setPropertyValue(u"Orientation"_ustr, data);
 
     //Insert the DataPilotTable
-    if (DPT->hasByName("DataPilotField"))
-        DPT->removeByName("DataPilotField");
-    DPT->insertNewByName("DataPilotTField", sCellAddress, DPDsc);
+    if (DPT->hasByName(u"DataPilotField"_ustr))
+        DPT->removeByName(u"DataPilotField"_ustr);
+    DPT->insertNewByName(u"DataPilotTField"_ustr, sCellAddress, DPDsc);
 
     uno::Reference<container::XIndexAccess> IA = DPDsc->getDataPilotFields();
     uno::Reference<uno::XInterface> xDataPilotFieldObject;

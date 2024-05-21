@@ -45,7 +45,7 @@ public:
 };
 
 ScHeaderFooterContentObj::ScHeaderFooterContentObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
 {
 }
 
@@ -56,23 +56,23 @@ uno::Reference<uno::XInterface> ScHeaderFooterContentObj::init()
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamSupp(xDoc, UNO_QUERY_THROW);
     uno::Reference<container::XNameAccess> xStyleFamiliesNames(xStyleFamSupp->getStyleFamilies(),
                                                                UNO_SET_THROW);
-    uno::Reference<container::XNameAccess> xPageStyles(xStyleFamiliesNames->getByName("PageStyles"),
-                                                       UNO_QUERY_THROW);
-    uno::Any aDefaultStyle = xPageStyles->getByName("Default");
+    uno::Reference<container::XNameAccess> xPageStyles(
+        xStyleFamiliesNames->getByName(u"PageStyles"_ustr), UNO_QUERY_THROW);
+    uno::Any aDefaultStyle = xPageStyles->getByName(u"Default"_ustr);
     uno::Reference<beans::XPropertySet> xProp(aDefaultStyle, UNO_QUERY_THROW);
 
-    uno::Any aHFC = xProp->getPropertyValue("RightPageHeaderContent");
+    uno::Any aHFC = xProp->getPropertyValue(u"RightPageHeaderContent"_ustr);
     uno::Reference<sheet::XHeaderFooterContent> xHFC(aHFC, UNO_QUERY_THROW);
 
     uno::Reference<text::XText> xTxtCenter = xHFC->getCenterText();
     uno::Reference<text::XText> xTxtLeft = xHFC->getLeftText();
     uno::Reference<text::XText> xTxtRight = xHFC->getRightText();
 
-    xTxtCenter->setString("CENTER");
-    xTxtLeft->setString("LEFT");
-    xTxtRight->setString("RIGHT");
+    xTxtCenter->setString(u"CENTER"_ustr);
+    xTxtLeft->setString(u"LEFT"_ustr);
+    xTxtRight->setString(u"RIGHT"_ustr);
 
-    xProp->setPropertyValue("RightPageHeaderContent", aHFC);
+    xProp->setPropertyValue(u"RightPageHeaderContent"_ustr, aHFC);
 
     return xHFC;
 }
@@ -81,7 +81,7 @@ void ScHeaderFooterContentObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScHeaderFooterContentObj);

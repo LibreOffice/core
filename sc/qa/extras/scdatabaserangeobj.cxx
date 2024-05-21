@@ -67,13 +67,13 @@ public:
 };
 
 ScDatabaseRangeObj::ScDatabaseRangeObj()
-      : UnoApiTest("/sc/qa/extras/testdocuments")
+      : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
 {
 }
 
 uno::Reference<uno::XInterface> ScDatabaseRangeObj::init()
 {
-    return init("DataArea");
+    return init(u"DataArea"_ustr);
 }
 
 uno::Reference< uno::XInterface > ScDatabaseRangeObj::init( const OUString& rDBName )
@@ -81,7 +81,7 @@ uno::Reference< uno::XInterface > ScDatabaseRangeObj::init( const OUString& rDBN
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
 
     uno::Reference< beans::XPropertySet > xPropSet(xDoc, UNO_QUERY_THROW);
-    uno::Reference< container::XNameAccess > xNameAccess( xPropSet->getPropertyValue("DatabaseRanges"), UNO_QUERY_THROW);
+    uno::Reference< container::XNameAccess > xNameAccess( xPropSet->getPropertyValue(u"DatabaseRanges"_ustr), UNO_QUERY_THROW);
 
     uno::Reference<sheet::XCellRangeReferrer> xCRR(xNameAccess->getByName(rDBName), UNO_QUERY_THROW);
     uno::Reference<sheet::XCellRangeAddressable> xCRA(xCRR->getReferredCells(), UNO_QUERY_THROW);

@@ -29,7 +29,7 @@ class Test : public ScModelTestBase, public HtmlTestTools
 {
 public:
     Test()
-        : ScModelTestBase("/sc/qa/filter/html/data/")
+        : ScModelTestBase(u"/sc/qa/filter/html/data/"_ustr)
     {
     }
 };
@@ -41,8 +41,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdAsText)
 
     // When loading that document to Calc:
     uno::Sequence<beans::PropertyValue> aParams = {
-        comphelper::makePropertyValue("DocumentService",
-                                      OUString("com.sun.star.sheet.SpreadsheetDocument")),
+        comphelper::makePropertyValue(u"DocumentService"_ustr,
+                                      u"com.sun.star.sheet.SpreadsheetDocument"_ustr),
     };
     loadWithParams(aURL, aParams);
 
@@ -52,7 +52,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdAsText)
     uno::Reference<table::XCellRange> xSheet(xSheets->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xCell(xSheet->getCellByPosition(0, 1), uno::UNO_QUERY);
     table::CellContentType eType{};
-    xCell->getPropertyValue("CellContentType") >>= eType;
+    xCell->getPropertyValue(u"CellContentType"_ustr) >>= eType;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2 (TEXT)
     // - Actual  : 1 (VALUE)
@@ -107,12 +107,12 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteTdAsBools)
     // - Expected: BOOLEAN
     // - Actual  : General
     // i.e. data-sheets-value's bool case was ignored.
-    CPPUNIT_ASSERT_EQUAL(OUString("BOOLEAN"), pNumberFormat->GetFormatstring());
+    CPPUNIT_ASSERT_EQUAL(u"BOOLEAN"_ustr, pNumberFormat->GetFormatstring());
     CPPUNIT_ASSERT_EQUAL(static_cast<double>(1), pDoc->GetValue(/*col=*/0, /*row=*/0, /*tab=*/0));
     // And make sure A2's type is bool, value is true:
     nNumberFormat = pDoc->GetNumberFormat(/*col=*/0, /*row=*/1, /*tab=*/0);
     pNumberFormat = pDoc->GetFormatTable()->GetEntry(nNumberFormat);
-    CPPUNIT_ASSERT_EQUAL(OUString("BOOLEAN"), pNumberFormat->GetFormatstring());
+    CPPUNIT_ASSERT_EQUAL(u"BOOLEAN"_ustr, pNumberFormat->GetFormatstring());
     CPPUNIT_ASSERT_EQUAL(static_cast<double>(0), pDoc->GetValue(/*col=*/0, /*row=*/1, /*tab=*/0));
 }
 
@@ -138,7 +138,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteTdAsFormattedNumber)
     // - Expected: #,##0.00
     // - Actual  : General
     // i.e. the number was wasted without a matching number format.
-    CPPUNIT_ASSERT_EQUAL(OUString("#,##0.00"), pNumberFormat->GetFormatstring());
+    CPPUNIT_ASSERT_EQUAL(u"#,##0.00"_ustr, pNumberFormat->GetFormatstring());
     CPPUNIT_ASSERT_EQUAL(static_cast<double>(1000),
                          pDoc->GetValue(/*col=*/0, /*row=*/0, /*tab=*/0));
 }
@@ -163,8 +163,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteTdAsFormula)
     // - Expected: =SUM(A1:B1)
     // - Actual  :
     // i.e. only the formula result was imported, not the formula.
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A1:B1)"),
-                         pDoc->GetFormula(/*col=*/2, /*row=*/0, /*tab=*/0));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(A1:B1)"_ustr, pDoc->GetFormula(/*col=*/2, /*row=*/0, /*tab=*/0));
     CPPUNIT_ASSERT_EQUAL(static_cast<double>(3), pDoc->GetValue(/*col=*/2, /*row=*/0, /*tab=*/0));
 }
 
@@ -187,8 +186,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteSingleCell)
     // - Expected: =SUM(A1:B1)
     // - Actual  :
     // i.e. data-sheets-* on <td> worked, but not on <span>.
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A1:B1)"),
-                         pDoc->GetFormula(/*col=*/2, /*row=*/0, /*tab=*/0));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(A1:B1)"_ustr, pDoc->GetFormula(/*col=*/2, /*row=*/0, /*tab=*/0));
     CPPUNIT_ASSERT_EQUAL(static_cast<double>(3), pDoc->GetValue(/*col=*/2, /*row=*/0, /*tab=*/0));
 }
 
@@ -198,7 +196,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyText)
     createScDoc();
     ScDocument* pDoc = getScDoc();
     ScAddress aCellPos(/*nColP=*/0, /*nRowP=*/0, /*nTabP=*/0);
-    pDoc->SetString(aCellPos, "'01");
+    pDoc->SetString(aCellPos, u"'01"_ustr);
 
     // When copying that text from A1:
     ScImportExport aExporter(*pDoc, aCellPos);
@@ -211,7 +209,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyText)
     // i.e. metadata was missing to avoid converting 01 to 1 (number).
     aStream.Seek(0);
     htmlDocUniquePtr pHtmlDoc = parseHtmlStream(&aStream);
-    assertXPath(pHtmlDoc, "//td"_ostr, "data-sheets-value"_ostr, "{ \"1\": 2, \"2\": \"01\"}");
+    assertXPath(pHtmlDoc, "//td"_ostr, "data-sheets-value"_ostr,
+                u"{ \"1\": 2, \"2\": \"01\"}"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCopyBoolean)
@@ -220,9 +219,9 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyBoolean)
     createScDoc();
     ScDocument* pDoc = getScDoc();
     ScAddress aCellPos1(/*nColP=*/0, /*nRowP=*/0, /*nTabP=*/0);
-    pDoc->SetString(aCellPos1, "TRUE");
+    pDoc->SetString(aCellPos1, u"TRUE"_ustr);
     ScAddress aCellPos2(/*nColP=*/0, /*nRowP=*/1, /*nTabP=*/0);
-    pDoc->SetString(aCellPos2, "FALSE");
+    pDoc->SetString(aCellPos2, u"FALSE"_ustr);
 
     // When copying those values:
     ScImportExport aExporter(*pDoc, ScRange(aCellPos1, aCellPos2));
@@ -235,8 +234,10 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyBoolean)
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//td' no attribute 'data-sheets-value' exist
     // i.e. metadata was missing to avoid converting TRUE to text.
-    assertXPath(pHtmlDoc, "(//td)[1]"_ostr, "data-sheets-value"_ostr, "{ \"1\": 4, \"4\": 1}");
-    assertXPath(pHtmlDoc, "(//td)[2]"_ostr, "data-sheets-value"_ostr, "{ \"1\": 4, \"4\": 0}");
+    assertXPath(pHtmlDoc, "(//td)[1]"_ostr, "data-sheets-value"_ostr,
+                u"{ \"1\": 4, \"4\": 1}"_ustr);
+    assertXPath(pHtmlDoc, "(//td)[2]"_ostr, "data-sheets-value"_ostr,
+                u"{ \"1\": 4, \"4\": 0}"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCopyFormattedNumber)
@@ -247,15 +248,15 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyFormattedNumber)
     sal_Int32 nCheckPos;
     SvNumFormatType nType;
     sal_uInt32 nFormat;
-    OUString aNumberFormat("#,##0.00");
+    OUString aNumberFormat(u"#,##0.00"_ustr);
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
     pFormatter->PutEntry(aNumberFormat, nCheckPos, nType, nFormat);
     ScAddress aCellPos1(/*nColP=*/0, /*nRowP=*/0, /*nTabP=*/0);
     pDoc->SetNumberFormat(aCellPos1, nFormat);
-    pDoc->SetString(aCellPos1, "1000");
+    pDoc->SetString(aCellPos1, u"1000"_ustr);
     ScAddress aCellPos2(/*nColP=*/0, /*nRowP=*/1, /*nTabP=*/0);
     pDoc->SetNumberFormat(aCellPos2, nFormat);
-    pDoc->SetString(aCellPos2, "2000");
+    pDoc->SetString(aCellPos2, u"2000"_ustr);
 
     // When copying those values:
     ScImportExport aExporter(*pDoc, ScRange(aCellPos1, aCellPos2));
@@ -268,12 +269,14 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyFormattedNumber)
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '(//td)[1]' no attribute 'data-sheets-value' exist
     // i.e. only a formatted number string was written, without a float value.
-    assertXPath(pHtmlDoc, "(//td)[1]"_ostr, "data-sheets-value"_ostr, "{ \"1\": 3, \"3\": 1000}");
+    assertXPath(pHtmlDoc, "(//td)[1]"_ostr, "data-sheets-value"_ostr,
+                u"{ \"1\": 3, \"3\": 1000}"_ustr);
     assertXPath(pHtmlDoc, "(//td)[1]"_ostr, "data-sheets-numberformat"_ostr,
-                "{ \"1\": 2, \"2\": \"#,##0.00\", \"3\": 1}");
-    assertXPath(pHtmlDoc, "(//td)[2]"_ostr, "data-sheets-value"_ostr, "{ \"1\": 3, \"3\": 2000}");
+                u"{ \"1\": 2, \"2\": \"#,##0.00\", \"3\": 1}"_ustr);
+    assertXPath(pHtmlDoc, "(//td)[2]"_ostr, "data-sheets-value"_ostr,
+                u"{ \"1\": 3, \"3\": 2000}"_ustr);
     assertXPath(pHtmlDoc, "(//td)[2]"_ostr, "data-sheets-numberformat"_ostr,
-                "{ \"1\": 2, \"2\": \"#,##0.00\", \"3\": 1}");
+                u"{ \"1\": 2, \"2\": \"#,##0.00\", \"3\": 1}"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCopyFormula)
@@ -282,11 +285,11 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyFormula)
     createScDoc();
     ScDocument* pDoc = getScDoc();
     ScAddress aCellPos1(/*nColP=*/0, /*nRowP=*/0, /*nTabP=*/0);
-    pDoc->SetString(aCellPos1, "1000");
+    pDoc->SetString(aCellPos1, u"1000"_ustr);
     ScAddress aCellPos2(/*nColP=*/0, /*nRowP=*/1, /*nTabP=*/0);
-    pDoc->SetString(aCellPos2, "2000");
+    pDoc->SetString(aCellPos2, u"2000"_ustr);
     ScAddress aCellPos3(/*nColP=*/0, /*nRowP=*/2, /*nTabP=*/0);
-    pDoc->SetFormula(aCellPos3, "=SUM(A1:A2)", pDoc->GetGrammar());
+    pDoc->SetFormula(aCellPos3, u"=SUM(A1:A2)"_ustr, pDoc->GetGrammar());
 
     // When copying those cells:
     ScImportExport aExporter(*pDoc, ScRange(aCellPos1, aCellPos3));
@@ -299,7 +302,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyFormula)
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '(//td)[3]' no attribute 'data-sheets-formula' exist
     // i.e. only the formula result was exported, not the formula.
-    assertXPath(pHtmlDoc, "(//td)[3]"_ostr, "data-sheets-formula"_ostr, "=SUM(R[-2]C:R[-1]C)");
+    assertXPath(pHtmlDoc, "(//td)[3]"_ostr, "data-sheets-formula"_ostr,
+                u"=SUM(R[-2]C:R[-1]C)"_ustr);
 }
 }
 

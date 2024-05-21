@@ -1866,7 +1866,7 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest2, testTdf149940_VLookup)
 }
 
 ScOpenCLTest2::ScOpenCLTest2()
-      : ScModelTestBase( "sc/qa/unit/data" )
+      : ScModelTestBase( u"sc/qa/unit/data"_ustr )
 {
 }
 

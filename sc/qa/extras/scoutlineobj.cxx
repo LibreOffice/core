@@ -42,7 +42,7 @@ public:
 };
 
 ScOutlineObj::ScOutlineObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
 {
 }
 

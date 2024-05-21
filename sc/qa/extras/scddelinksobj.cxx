@@ -79,12 +79,12 @@ public:
 };
 
 ScDDELinksObj::ScDDELinksObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XDDELinks(createFileURL(u"ScDDELinksObj.ods"))
     , XElementAccess(cppu::UnoType<sheet::XDDELink>::get())
     , XIndexAccess(1)
     , XNameAccess("soffice|" + createFileURL(u"ScDDELinksObj.ods") + "!Sheet1.A1")
-    , XServiceInfo("ScDDELinksObj", "com.sun.star.sheet.DDELinks")
+    , XServiceInfo(u"ScDDELinksObj"_ustr, u"com.sun.star.sheet.DDELinks"_ustr)
 {
 }
 
@@ -106,7 +106,7 @@ uno::Reference<uno::XInterface> ScDDELinksObj::init()
                                                 + "\";\"Sheet1.A1\")");
 
     uno::Reference<beans::XPropertySet> xPropSet(xDoc, uno::UNO_QUERY_THROW);
-    uno::Any aDDELinks = xPropSet->getPropertyValue("DDELinks");
+    uno::Any aDDELinks = xPropSet->getPropertyValue(u"DDELinks"_ustr);
     uno::Reference<sheet::XDDELinks> xDDELinks(aDDELinks, uno::UNO_QUERY_THROW);
 
     return xDDELinks;
@@ -114,10 +114,10 @@ uno::Reference<uno::XInterface> ScDDELinksObj::init()
 
 void ScDDELinksObj::setUp()
 {
-    Application::SetAppName("soffice"); // Enable DDE
+    Application::SetAppName(u"soffice"_ustr); // Enable DDE
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDDELinksObj);

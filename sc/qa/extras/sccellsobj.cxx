@@ -53,7 +53,7 @@ public:
 };
 
 ScCellsObj::ScCellsObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XElementAccess(cppu::UnoType<table::XCell>::get())
 {
 }
@@ -69,14 +69,14 @@ uno::Reference<uno::XInterface> ScCellsObj::init()
 
     uno::Reference<table::XCell> xCell0(xCellRange->getCellByPosition(0, 0), uno::UNO_SET_THROW);
     uno::Reference<text::XTextRange> xTextRange0(xCell0, uno::UNO_QUERY_THROW);
-    xTextRange0->setString("ScCellsObj test 1");
+    xTextRange0->setString(u"ScCellsObj test 1"_ustr);
 
     uno::Reference<table::XCell> xCell1(xCellRange->getCellByPosition(5, 1), uno::UNO_SET_THROW);
     xCell1->setValue(15);
 
     uno::Reference<table::XCell> xCell2(xCellRange->getCellByPosition(3, 9), uno::UNO_SET_THROW);
     uno::Reference<text::XTextRange> xTextRange2(xCell2, uno::UNO_QUERY_THROW);
-    xTextRange2->setString("ScCellsObj test 2");
+    xTextRange2->setString(u"ScCellsObj test 2"_ustr);
 
     uno::Reference<sheet::XCellRangesQuery> xCRQ(xCellRange, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xSCR(xCRQ->queryVisibleCells(), uno::UNO_SET_THROW);
@@ -87,7 +87,7 @@ uno::Reference<uno::XInterface> ScCellsObj::init()
 void ScCellsObj::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCellsObj);

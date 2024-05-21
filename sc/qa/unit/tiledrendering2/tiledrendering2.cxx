@@ -39,7 +39,7 @@ public:
 };
 
 Test::Test()
-    : UnoApiXmlTest("/sc/qa/unit/tiledrendering2/data/")
+    : UnoApiXmlTest(u"/sc/qa/unit/tiledrendering2/data/"_ustr)
 {
 }
 
@@ -157,11 +157,11 @@ CPPUNIT_TEST_FIXTURE(Test, testSidebarLocale)
     int nView1 = SfxLokHelper::getView();
     ViewCallback aView1;
     SfxViewShell* pView1 = SfxViewShell::Current();
-    pView1->SetLOKLocale("en-US");
+    pView1->SetLOKLocale(u"en-US"_ustr);
     SfxLokHelper::createView();
     ViewCallback aView2;
     SfxViewShell* pView2 = SfxViewShell::Current();
-    pView2->SetLOKLocale("de-DE");
+    pView2->SetLOKLocale(u"de-DE"_ustr);
     TestLokCallbackWrapper::InitializeSidebar();
     Scheduler::ProcessEventsToIdle();
     aView2.m_aStateChanges.clear();
@@ -186,15 +186,15 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyMultiSelection)
     ViewCallback aView1;
     // Get the center of A3:
     uno::Sequence<beans::PropertyValue> aPropertyValues = {
-        comphelper::makePropertyValue("ToPoint", OUString("$A$3")),
+        comphelper::makePropertyValue(u"ToPoint"_ustr, u"$A$3"_ustr),
     };
-    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aPropertyValues);
     Point aPoint = aView1.m_aCellCursorBounds.Center();
     // Go to A1:
     aPropertyValues = {
-        comphelper::makePropertyValue("ToPoint", OUString("$A$1")),
+        comphelper::makePropertyValue(u"ToPoint"_ustr, u"$A$1"_ustr),
     };
-    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aPropertyValues);
     // Ctrl-click on A3:
     int nCtrl = KEY_MOD1;
     pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aPoint.getX(), aPoint.getY(), 1,

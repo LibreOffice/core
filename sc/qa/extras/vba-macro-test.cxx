@@ -42,7 +42,7 @@ class VBAMacroTest : public UnoApiTest
 {
 public:
     VBAMacroTest()
-        : UnoApiTest("/sc/qa/extras/testdocuments")
+        : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     {
     }
 };
@@ -71,7 +71,8 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testSimpleCopyAndPaste)
     CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(1, 4, 0)));
     CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(1, 5, 0)));
 
-    executeMacro("vnd.sun.Star.script:VBAProject.Module1.test?language=Basic&location=document");
+    executeMacro(
+        u"vnd.sun.Star.script:VBAProject.Module1.test?language=Basic&location=document"_ustr);
 
     // Copy from C4-C6
     CPPUNIT_ASSERT_EQUAL(10.0, rDoc.GetValue(ScAddress(2, 3, 0)));
@@ -111,7 +112,8 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testMultiDocumentCopyAndPaste)
     CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(1, 2, 0)));
     CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(1, 3, 0)));
 
-    executeMacro("vnd.sun.Star.script:VBAProject.Module1.test?language=Basic&location=document");
+    executeMacro(
+        u"vnd.sun.Star.script:VBAProject.Module1.test?language=Basic&location=document"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(200.0, rDoc.GetValue(ScAddress(1, 1, 0)));
     CPPUNIT_ASSERT_EQUAL(100.0, rDoc.GetValue(ScAddress(1, 2, 0)));
@@ -145,7 +147,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testSheetAndColumnSelectAndHide)
     CPPUNIT_ASSERT(!rDoc.ColHidden(4, 2));
 
     executeMacro(
-        "vnd.sun.Star.script:VBAProject.ThisWorkbook.testHide?language=Basic&location=document");
+        u"vnd.sun.Star.script:VBAProject.ThisWorkbook.testHide?language=Basic&location=document"_ustr);
 
     CPPUNIT_ASSERT(!rDoc.ColHidden(0, 1));
     CPPUNIT_ASSERT(rDoc.ColHidden(1, 1));
@@ -162,7 +164,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testSheetAndColumnSelectAndHide)
     CPPUNIT_ASSERT_EQUAL(SCTAB(0), rViewData.GetTabNo());
 
     executeMacro(
-        "vnd.sun.Star.script:VBAProject.ThisWorkbook.testUnhide?language=Basic&location=document");
+        u"vnd.sun.Star.script:VBAProject.ThisWorkbook.testUnhide?language=Basic&location=document"_ustr);
 
     CPPUNIT_ASSERT(!rDoc.ColHidden(0, 1));
     CPPUNIT_ASSERT(!rDoc.ColHidden(1, 1));
@@ -195,8 +197,8 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testPrintArea)
         CPPUNIT_ASSERT_EQUAL(false, aSequence.hasElements());
     }
 
-    executeMacro("vnd.sun.Star.script:VBAProject.ThisWorkbook.testPrintArea?language=Basic&"
-                 "location=document");
+    executeMacro(u"vnd.sun.Star.script:VBAProject.ThisWorkbook.testPrintArea?language=Basic&"
+                 "location=document"_ustr);
 
     {
         const uno::Sequence<table::CellRangeAddress> aSequence = xPrintAreas->getPrintAreas();
@@ -219,8 +221,8 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testSelectAllChaged)
     auto const& pViewData = pView->GetViewData();
     CPPUNIT_ASSERT_EQUAL(ScRange(), pViewData.GetMarkData().GetMarkArea());
 
-    executeMacro("vnd.sun.Star.script:VBAProject.ThisWorkbook.testSelectAll?language=Basic&"
-                 "location=document");
+    executeMacro(u"vnd.sun.Star.script:VBAProject.ThisWorkbook.testSelectAll?language=Basic&"
+                 "location=document"_ustr);
 
     // A1:E1048576
     CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 4, MAXROW, 0), pViewData.GetMarkData().GetMarkArea());
@@ -241,8 +243,8 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testRangeSelect)
     auto const& pViewData = pView->GetViewData();
     CPPUNIT_ASSERT_EQUAL(ScRange(), pViewData.GetMarkData().GetMarkArea());
 
-    executeMacro("vnd.sun.Star.script:VBAProject.ThisWorkbook.testRangeSelect?language=Basic&"
-                 "location=document");
+    executeMacro(u"vnd.sun.Star.script:VBAProject.ThisWorkbook.testRangeSelect?language=Basic&"
+                 "location=document"_ustr);
 
     // B2:E5
     CPPUNIT_ASSERT_EQUAL(ScRange(1, 1, 0, 4, 1, 0), pViewData.GetMarkData().GetMarkArea());
@@ -255,8 +257,8 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testWindowState)
     // Application.WindowState = xlNormal
     loadFromFile(u"VariousTestMacros.xlsm");
 
-    executeMacro("vnd.sun.Star.script:VBAProject.ThisWorkbook.testWindowState?language=Basic&"
-                 "location=document");
+    executeMacro(u"vnd.sun.Star.script:VBAProject.ThisWorkbook.testWindowState?language=Basic&"
+                 "location=document"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testScroll)
@@ -279,7 +281,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testScroll)
     CPPUNIT_ASSERT_EQUAL(SCROW(0), rViewData.GetPosY(ScVSplitPos::SC_SPLIT_BOTTOM));
 
     executeMacro(
-        "vnd.sun.Star.script:VBAProject.ThisWorkbook.testScroll?language=Basic&location=document");
+        u"vnd.sun.Star.script:VBAProject.ThisWorkbook.testScroll?language=Basic&location=document"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(ScSplitPos::SC_SPLIT_BOTTOMLEFT, rViewData.GetActivePart());
     CPPUNIT_ASSERT_EQUAL(SCCOL(29), rViewData.GetPosX(ScHSplitPos::SC_SPLIT_LEFT));
@@ -307,8 +309,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testMacroKeyBinding)
     aCtrlU.Modifiers = css::awt::KeyModifier::MOD1;
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString(
-            "vnd.sun.star.script:VBAProject.ThisWorkbook.key_U?language=Basic&location=document"),
+        u"vnd.sun.star.script:VBAProject.ThisWorkbook.key_U?language=Basic&location=document"_ustr,
         xAccelerator->getCommandByKeyEvent(aCtrlU));
 
     awt::KeyEvent aCtrlT;
@@ -316,8 +317,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testMacroKeyBinding)
     aCtrlT.Modifiers = css::awt::KeyModifier::MOD1;
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString(
-            "vnd.sun.star.script:VBAProject.ThisWorkbook.key_T?language=Basic&location=document"),
+        u"vnd.sun.star.script:VBAProject.ThisWorkbook.key_T?language=Basic&location=document"_ustr,
         xAccelerator->getCommandByKeyEvent(aCtrlT));
 }
 
@@ -328,35 +328,26 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVba)
     if (!IsDefaultDPI())
         return;
     TestMacroInfo testInfo[] = {
-        { OUString("TestAddress.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
+        { u"TestAddress.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
         {
-            OUString("vba.xls"),
-            OUString(
-                "vnd.sun.Star.script:VBAProject.Modul1.Modul1?language=Basic&location=document"),
+            u"vba.xls"_ustr,
+            u"vnd.sun.Star.script:VBAProject.Modul1.Modul1?language=Basic&location=document"_ustr,
         },
-        { OUString("MiscRangeTests.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("bytearraystring.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacro.test?language=Basic&location=document") },
-        { OUString("AutoFilter.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("CalcFont.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("TestIntersection.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("TestUnion.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("range-4.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
+        { u"MiscRangeTests.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+        { u"bytearraystring.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacro.test?language=Basic&location=document"_ustr },
+        { u"AutoFilter.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+        { u"CalcFont.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+        { u"TestIntersection.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+        { u"TestUnion.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+        { u"range-4.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
 // FIXME: sometimes it fails on Windows with
 // Failed:  : Test change event for Range.Clear set:
 // Failed:  : Test change event for Range.ClearContents set:
@@ -365,70 +356,52 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVba)
 // Tests passed: 4
 // Tests failed: 4
 #if !defined(_WIN32)
-        { OUString("Ranges-3.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
+        { u"Ranges-3.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
 #endif
-        { OUString("TestCalc_Rangetest.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("TestCalc_Rangetest2.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("Ranges-2.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("pagesetup.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("Window.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("window2.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("PageBreaks.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("Shapes.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("Ranges.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("CheckOptionToggleValue.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("GeneratedEventTest.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("MiscControlTests.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("Workbooks.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("Names.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("NamesSheetLocal.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("vba_endFunction.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("vba_findFunction.xls"),
-          OUString(
-              "vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document") },
-        { OUString("BGR-RGBTest.xls"),
-          OUString("vnd.sun.Star.script:VBAProject.Module1.test?language=Basic&location=document") }
+        { u"TestCalc_Rangetest.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+        { u"TestCalc_Rangetest2.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+        { u"Ranges-2.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+        { u"pagesetup.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+        { u"Window.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+        { u"window2.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+        { u"PageBreaks.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+        { u"Shapes.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+        { u"Ranges.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+        { u"CheckOptionToggleValue.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+        { u"GeneratedEventTest.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+        { u"MiscControlTests.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+        { u"Workbooks.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+        { u"Names.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+        { u"NamesSheetLocal.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+        { u"vba_endFunction.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+        { u"vba_findFunction.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+        { u"BGR-RGBTest.xls"_ustr,
+          u"vnd.sun.Star.script:VBAProject.Module1.test?language=Basic&location=document"_ustr }
     };
     OUString sTempDir;
     OUString sTempDirURL;
     osl::FileBase::getTempDirURL(sTempDirURL);
     osl::FileBase::getSystemPathFromFileURL(sTempDirURL, sTempDir);
     sTempDir += OUStringChar(SAL_PATHDELIMITER);
-    OUString sTestFileName("My Test WorkBook.xls");
+    OUString sTestFileName(u"My Test WorkBook.xls"_ustr);
     uno::Sequence<uno::Any> aParams;
     for (const auto& rTestInfo : testInfo)
     {
@@ -457,7 +430,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVba)
             OUString("script reported failure in file " + rTestInfo.sFileBaseName)
                 .toUtf8()
                 .getStr(),
-            OUString("OK"), aStringRes);
+            u"OK"_ustr, aStringRes);
 
         if (bWorkbooksHandling)
         {
@@ -472,16 +445,15 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVba)
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf149579)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 
     css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, uno::UNO_QUERY_THROW);
     auto xLibs = xDocScr->getBasicLibraries();
-    auto xLibrary = xLibs->createLibrary("TestLibrary");
-    xLibrary->insertByName("TestModule",
-                           uno::Any(OUString("Option VBASupport 1\n"
-                                             "Sub TestTdf149579\n"
-                                             "Range(\"A1\").Sort Key1:=Range(\"A1\")\n"
-                                             "End Sub\n")));
+    auto xLibrary = xLibs->createLibrary(u"TestLibrary"_ustr);
+    xLibrary->insertByName(u"TestModule"_ustr, uno::Any(u"Option VBASupport 1\n"
+                                                        "Sub TestTdf149579\n"
+                                                        "Range(\"A1\").Sort Key1:=Range(\"A1\")\n"
+                                                        "End Sub\n"_ustr));
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
@@ -493,8 +465,9 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf149579)
     rDoc.SetValue(ScAddress(0, 2, 0), 1.0);
 
     // Without the fix in place, this call would have crashed in debug builds with failed assertion
-    executeMacro("vnd.sun.Star.script:TestLibrary.TestModule.TestTdf149579?language=Basic&location="
-                 "document");
+    executeMacro(
+        u"vnd.sun.Star.script:TestLibrary.TestModule.TestTdf149579?language=Basic&location="
+        "document"_ustr);
     // Without the fix in place, this test would have failed with
     // - Expected: 1
     // - Actual  : 5
@@ -505,17 +478,17 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf149579)
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVbaRangeSort)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 
     css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, uno::UNO_QUERY_THROW);
     auto xLibs = xDocScr->getBasicLibraries();
-    auto xLibrary = xLibs->createLibrary("TestLibrary");
-    xLibrary->insertByName("TestModule",
-                           uno::Any(OUString("Option VBASupport 1\n"
-                                             "Sub TestRangeSort\n"
-                                             "  Range(Cells(1, 1), Cells(3, 1)).Select\n"
-                                             "  Selection.Sort Key1:=Range(\"A1\"), Header:=False\n"
-                                             "End Sub\n")));
+    auto xLibrary = xLibs->createLibrary(u"TestLibrary"_ustr);
+    xLibrary->insertByName(u"TestModule"_ustr,
+                           uno::Any(u"Option VBASupport 1\n"
+                                    "Sub TestRangeSort\n"
+                                    "  Range(Cells(1, 1), Cells(3, 1)).Select\n"
+                                    "  Selection.Sort Key1:=Range(\"A1\"), Header:=False\n"
+                                    "End Sub\n"_ustr));
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
@@ -527,8 +500,9 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVbaRangeSort)
     rDoc.SetValue(ScAddress(0, 2, 0), 2.0);
 
     // Without the fix in place, this call would have crashed in debug builds with failed assertion
-    executeMacro("vnd.sun.Star.script:TestLibrary.TestModule.TestRangeSort?language=Basic&location="
-                 "document");
+    executeMacro(
+        u"vnd.sun.Star.script:TestLibrary.TestModule.TestRangeSort?language=Basic&location="
+        "document"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(0.5, rDoc.GetValue(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(ScAddress(0, 1, 0)));
@@ -540,8 +514,9 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVbaRangeSort)
     aParam.maKeyState[0].bAscending = false;
     rDoc.SetSortParam(aParam, 0);
 
-    executeMacro("vnd.sun.Star.script:TestLibrary.TestModule.TestRangeSort?language=Basic&location="
-                 "document");
+    executeMacro(
+        u"vnd.sun.Star.script:TestLibrary.TestModule.TestRangeSort?language=Basic&location="
+        "document"_ustr);
 
     // Without the fix in place, this test would have failed in non-debug builds with
     // - Expected: 2
@@ -568,7 +543,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf107885)
 
     // Call auto filter macro using a string condition
     executeMacro(
-        "vnd.sun.Star.script:VBAProject.Module1.AFString?language=Basic&location=document");
+        u"vnd.sun.Star.script:VBAProject.Module1.AFString?language=Basic&location=document"_ustr);
 
     //Without the fix in place, all rows in autofilter would have been hidden
     CPPUNIT_ASSERT(rDoc.RowHidden(1, 0));
@@ -578,7 +553,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf107885)
 
     // Call auto filter macro using a numeric condition without any locale
     executeMacro(
-        "vnd.sun.Star.script:VBAProject.Module1.AFNumeric?language=Basic&location=document");
+        u"vnd.sun.Star.script:VBAProject.Module1.AFNumeric?language=Basic&location=document"_ustr);
 
     CPPUNIT_ASSERT(rDoc.RowHidden(1, 0));
     CPPUNIT_ASSERT(rDoc.RowHidden(2, 0));
@@ -596,15 +571,15 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf131562)
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
     ScDocument& rDoc = pDocSh->GetDocument();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("1"), rDoc.GetString(ScAddress(0, 2, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), rDoc.GetString(ScAddress(0, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, rDoc.GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, rDoc.GetString(ScAddress(0, 3, 0)));
 
     executeMacro(
-        "vnd.sun.Star.script:VBAProject.Munka1.numberconcat?language=Basic&location=document");
+        u"vnd.sun.Star.script:VBAProject.Munka1.numberconcat?language=Basic&location=document"_ustr);
 
     //Without the fix in place, the macro wouldn't have concatenated 1 and " ."
-    CPPUNIT_ASSERT_EQUAL(OUString("1 ."), rDoc.GetString(ScAddress(0, 2, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1 .cat"), rDoc.GetString(ScAddress(0, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"1 ."_ustr, rDoc.GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"1 .cat"_ustr, rDoc.GetString(ScAddress(0, 3, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf52602)
@@ -618,21 +593,21 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf52602)
     ScDocument& rDoc = pDocSh->GetDocument();
 
     //Without the fix in place, it would have failed with 'Unexpected dialog:  Error: BASIC runtime error.'
-    executeMacro("vnd.sun.Star.script:VBAProject.Modul1.Test_NumberFormat_DateTime?language=Basic&"
-                 "location=document");
+    executeMacro(u"vnd.sun.Star.script:VBAProject.Modul1.Test_NumberFormat_DateTime?language=Basic&"
+                 "location=document"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("15:20"), rDoc.GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("15:20"), rDoc.GetString(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("03/01/2012 15:20"), rDoc.GetString(ScAddress(1, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("03/01/2012 15:20"), rDoc.GetString(ScAddress(1, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("03/01/2012 15:20:00"), rDoc.GetString(ScAddress(2, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("03/01/2012 15:20:00"), rDoc.GetString(ScAddress(2, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1/3/12 15:20"), rDoc.GetString(ScAddress(3, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1/3/12 15:20"), rDoc.GetString(ScAddress(3, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1/ March 2012"), rDoc.GetString(ScAddress(4, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1/ March 2012"), rDoc.GetString(ScAddress(4, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1/ Mar 2012"), rDoc.GetString(ScAddress(5, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("1/ Mar 2012"), rDoc.GetString(ScAddress(5, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"15:20"_ustr, rDoc.GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"15:20"_ustr, rDoc.GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"03/01/2012 15:20"_ustr, rDoc.GetString(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"03/01/2012 15:20"_ustr, rDoc.GetString(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"03/01/2012 15:20:00"_ustr, rDoc.GetString(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"03/01/2012 15:20:00"_ustr, rDoc.GetString(ScAddress(2, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"1/3/12 15:20"_ustr, rDoc.GetString(ScAddress(3, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"1/3/12 15:20"_ustr, rDoc.GetString(ScAddress(3, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"1/ March 2012"_ustr, rDoc.GetString(ScAddress(4, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"1/ March 2012"_ustr, rDoc.GetString(ScAddress(4, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"1/ Mar 2012"_ustr, rDoc.GetString(ScAddress(5, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"1/ Mar 2012"_ustr, rDoc.GetString(ScAddress(5, 1, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf107902)
@@ -646,7 +621,8 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf107902)
     ScDocument& rDoc = pDocSh->GetDocument();
 
     //Without the fix in place, it would have failed with 'Unexpected dialog:  Error: BASIC runtime error.'
-    executeMacro("vnd.sun.Star.script:VBAProject.Module1.AF?language=Basic&location=document");
+    executeMacro(
+        u"vnd.sun.Star.script:VBAProject.Module1.AF?language=Basic&location=document"_ustr);
 
     //Check the autofilter was created
     const ScPatternAttr* pPattern = rDoc.GetPattern(0, 0, 0);
@@ -670,7 +646,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf90278)
     // Without the fix in place, changing the border weight
     // would cause a Basic exception/error in the following script.
     uno::Any aRet = executeMacro(
-        "vnd.sun.Star.script:VBAProject.Module1.BorderWeight?language=Basic&location=document");
+        u"vnd.sun.Star.script:VBAProject.Module1.BorderWeight?language=Basic&location=document"_ustr);
 
     // Check the border weight of the corresponding cell in the test document
     sal_Int32 aReturnValue;
@@ -692,8 +668,8 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf149531)
     {
         // Without the fix in place, this test would have crashed
         // also check the test doesn't crash when the macro is executed a few times in a row
-        executeMacro("vnd.sun.Star.script:VBAProject.Module1.SetColumnWidth?language=Basic&"
-                     "location=document");
+        executeMacro(u"vnd.sun.Star.script:VBAProject.Module1.SetColumnWidth?language=Basic&"
+                     "location=document"_ustr);
     }
 
     sal_uInt16 nWidth
@@ -706,12 +682,12 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf118247)
     loadFromFile(u"tdf118247.xlsm");
 
     uno::Any aRet = executeMacro(
-        "vnd.sun.Star.script:VBAProject.Module1.testXlSpecialCellsValuesConstantsEmpty?"
-        "language=Basic&location=document");
+        u"vnd.sun.Star.script:VBAProject.Module1.testXlSpecialCellsValuesConstantsEmpty?"
+        "language=Basic&location=document"_ustr);
 
     OUString aReturnValue;
     aRet >>= aReturnValue;
-    CPPUNIT_ASSERT_EQUAL(OUString("$A$1:$A$3"), aReturnValue);
+    CPPUNIT_ASSERT_EQUAL(u"$A$1:$A$3"_ustr, aReturnValue);
 
     const std::vector<std::pair<sal_Int32, OUString>> aTestParams(
         { { excel::XlSpecialCellsValue::xlNumbers, "$A$1:$A$2" },
@@ -723,8 +699,8 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf118247)
     {
         uno::Sequence<uno::Any> aParams = { uno::Any(nXlSpecialCellsValue) };
         aRet = executeMacro(
-            "vnd.sun.Star.script:VBAProject.Module1.testXlSpecialCellsValuesConstants?"
-            "language=Basic&location=document",
+            u"vnd.sun.Star.script:VBAProject.Module1.testXlSpecialCellsValuesConstants?"
+            "language=Basic&location=document"_ustr,
             aParams);
         aRet >>= aReturnValue;
         CPPUNIT_ASSERT_EQUAL(sRange, aReturnValue);
@@ -733,42 +709,42 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf118247)
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf126457)
 {
-    auto xComponent = loadFromDesktop("private:factory/scalc");
+    auto xComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 
     // Save a copy of the file to get its URL
     uno::Reference<frame::XStorable> xDocStorable(xComponent, uno::UNO_QUERY);
     utl::TempFileNamed aTempFile(u"testWindowsActivate", true, u".ods");
     aTempFile.EnableKillingFile();
     uno::Sequence<beans::PropertyValue> descSaveAs(
-        comphelper::InitPropertySequence({ { "FilterName", uno::Any(OUString("calc8")) } }));
+        comphelper::InitPropertySequence({ { "FilterName", uno::Any(u"calc8"_ustr) } }));
     xDocStorable->storeAsURL(aTempFile.GetURL(), descSaveAs);
 
     // Insert initial library
     css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(xComponent, uno::UNO_QUERY_THROW);
     auto xLibs = xDocScr->getBasicLibraries();
-    auto xLibrary = xLibs->createLibrary("TestLibrary");
+    auto xLibrary = xLibs->createLibrary(u"TestLibrary"_ustr);
     xLibrary->insertByName(
-        "TestModule",
-        uno::Any(OUString("Option VBASupport 1\n"
-                          "Function TestWindowsActivate\n"
-                          "  dirName = Workbooks(1).Path\n"
-                          "  workbookName = Workbooks(1).Name\n"
-                          "  fileName = dirName + Application.PathSeparator + workbookName\n"
-                          "  Workbooks.Open Filename := fileName\n"
-                          "  On Error Goto handler\n"
-                          // activate window using its URL
-                          "  Windows(fileName).Activate\n"
-                          // activate window using its caption name
-                          "  Windows(workbookName).Activate\n"
-                          // activate window using a newly generated window caption
-                          "  newCaption = \"New Window Caption\"\n"
-                          "  Windows(fileName).Caption = newCaption\n"
-                          "  Windows(newCaption).Activate\n"
-                          "  TestWindowsActivate = 0\n"
-                          "  Exit Function\n"
-                          "handler:\n"
-                          "  TestWindowsActivate = 1\n"
-                          "End Function\n")));
+        u"TestModule"_ustr,
+        uno::Any(u"Option VBASupport 1\n"
+                 "Function TestWindowsActivate\n"
+                 "  dirName = Workbooks(1).Path\n"
+                 "  workbookName = Workbooks(1).Name\n"
+                 "  fileName = dirName + Application.PathSeparator + workbookName\n"
+                 "  Workbooks.Open Filename := fileName\n"
+                 "  On Error Goto handler\n"
+                 // activate window using its URL
+                 "  Windows(fileName).Activate\n"
+                 // activate window using its caption name
+                 "  Windows(workbookName).Activate\n"
+                 // activate window using a newly generated window caption
+                 "  newCaption = \"New Window Caption\"\n"
+                 "  Windows(fileName).Caption = newCaption\n"
+                 "  Windows(newCaption).Activate\n"
+                 "  TestWindowsActivate = 0\n"
+                 "  Exit Function\n"
+                 "handler:\n"
+                 "  TestWindowsActivate = 1\n"
+                 "End Function\n"_ustr));
 
     uno::Any aRet;
     uno::Sequence<sal_Int16> aOutParamIndex;
@@ -780,8 +756,8 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf126457)
 
     ErrCode result
         = SfxObjectShell::CallXScript(xComponent,
-                                      "vnd.sun.Star.script:TestLibrary.TestModule."
-                                      "TestWindowsActivate?language=Basic&location=document",
+                                      u"vnd.sun.Star.script:TestLibrary.TestModule."
+                                      "TestWindowsActivate?language=Basic&location=document"_ustr,
                                       {}, aRet, aOutParamIndex, aOutParam);
 
     // Without the fix in place, the windows could not be activated in the macro
@@ -795,14 +771,14 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf126457)
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVbaPDFExport)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 
     // Save a copy of the file to get its URL
     uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
     utl::TempFileNamed aTempFile(u"testVBA_PDF_Export", true, u".ods");
     aTempFile.EnableKillingFile();
     uno::Sequence<beans::PropertyValue> descSaveAs(
-        comphelper::InitPropertySequence({ { "FilterName", uno::Any(OUString("calc8")) } }));
+        comphelper::InitPropertySequence({ { "FilterName", uno::Any(u"calc8"_ustr) } }));
     xDocStorable->storeAsURL(aTempFile.GetURL(), descSaveAs);
 
     utl::TempFileNamed aTempPdfFile(u"exportedfile", true, u".pdf");
@@ -810,7 +786,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVbaPDFExport)
 
     css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, uno::UNO_QUERY_THROW);
     auto xLibs = xDocScr->getBasicLibraries();
-    auto xLibrary = xLibs->createLibrary("TestLibrary");
+    auto xLibrary = xLibs->createLibrary(u"TestLibrary"_ustr);
     OUString sMacro = "Option VBASupport 1\n"
                       "Sub ExportAsPDF\n"
                       "  fileName = \""
@@ -819,10 +795,10 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVbaPDFExport)
                         "FileName:=fileName, Quality:=xlQualityStandard, "
                         "IncludeDocProperties:=True, OpenAfterPublish:=False\n"
                         "End Sub\n";
-    xLibrary->insertByName("TestModule", uno::Any(sMacro));
+    xLibrary->insertByName(u"TestModule"_ustr, uno::Any(sMacro));
 
-    executeMacro("vnd.sun.Star.script:TestLibrary.TestModule.ExportAsPDF?language=Basic&location="
-                 "document");
+    executeMacro(u"vnd.sun.Star.script:TestLibrary.TestModule.ExportAsPDF?language=Basic&location="
+                 "document"_ustr);
 
     // Parse the export result.
     vcl::filter::PDFDocument aDocument;
@@ -839,9 +815,9 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testForEachInSelection)
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
     ScDocument& rDoc = pDocSh->GetDocument();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("foo"), rDoc.GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("bar"), rDoc.GetString(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("baz"), rDoc.GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, rDoc.GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"bar"_ustr, rDoc.GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"baz"_ustr, rDoc.GetString(ScAddress(0, 2, 0)));
 
     // tdf#153724: without the fix, this would fail with
     // assertion failed
@@ -849,12 +825,12 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testForEachInSelection)
     // - Unexpected dialog:  Error: BASIC runtime error.
     // '13'
     // Data type mismatch.
-    executeMacro("vnd.sun.Star.script:Standard.Module1.TestForEachInSelection?"
-                 "language=Basic&location=document");
+    executeMacro(u"vnd.sun.Star.script:Standard.Module1.TestForEachInSelection?"
+                 "language=Basic&location=document"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("oof"), rDoc.GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("rab"), rDoc.GetString(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("zab"), rDoc.GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"oof"_ustr, rDoc.GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"rab"_ustr, rDoc.GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"zab"_ustr, rDoc.GetString(ScAddress(0, 2, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testNonAsciiMacroIRI)
@@ -866,9 +842,9 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testNonAsciiMacroIRI)
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
     ScDocument& rDoc = pDocSh->GetDocument();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("foo"), rDoc.GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("bar"), rDoc.GetString(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("baz"), rDoc.GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, rDoc.GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"bar"_ustr, rDoc.GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"baz"_ustr, rDoc.GetString(ScAddress(0, 2, 0)));
 
     auto ret
         = dispatchCommand(mxComponent, u"macro://./Standard.Module1.NonAsciiName_αβγ"_ustr, {});
@@ -880,9 +856,9 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testNonAsciiMacroIRI)
     // - Actual  : 0
     CPPUNIT_ASSERT_EQUAL(css::frame::DispatchResultState::SUCCESS, retEvent.State);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("oof"), rDoc.GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("rab"), rDoc.GetString(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("zab"), rDoc.GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"oof"_ustr, rDoc.GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"rab"_ustr, rDoc.GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"zab"_ustr, rDoc.GetString(ScAddress(0, 2, 0)));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

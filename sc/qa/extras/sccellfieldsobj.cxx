@@ -60,7 +60,7 @@ public:
 };
 
 ScCellFieldsObj::ScCellFieldsObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XElementAccess(cppu::UnoType<text::XTextField>::get())
 {
 }
@@ -71,8 +71,8 @@ uno::Reference<uno::XInterface> ScCellFieldsObj::init()
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     uno::Reference<lang::XMultiServiceFactory> xMSF(xDoc, uno::UNO_QUERY_THROW);
-    uno::Reference<text::XTextContent> xTC(xMSF->createInstance("com.sun.star.text.TextField.URL"),
-                                           uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextContent> xTC(
+        xMSF->createInstance(u"com.sun.star.text.TextField.URL"_ustr), uno::UNO_QUERY_THROW);
 
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
     uno::Reference<container::XIndexAccess> xIA(xSheets, uno::UNO_QUERY_THROW);
@@ -89,7 +89,7 @@ uno::Reference<uno::XInterface> ScCellFieldsObj::init()
 void ScCellFieldsObj::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCellFieldsObj);

@@ -51,7 +51,7 @@ public:
 };
 
 ScConditionalFormatTest::ScConditionalFormatTest()
-    : UnoApiTest("sc/qa/extras/testdocuments/")
+    : UnoApiTest(u"sc/qa/extras/testdocuments/"_ustr)
 {
 }
 
@@ -69,7 +69,7 @@ void ScConditionalFormatTest::testRequestCondFormatListFromSheet()
 {
     uno::Reference<sheet::XSpreadsheet> xSheet(init(), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xProps(xSheet, uno::UNO_QUERY_THROW);
-    uno::Any aAny = xProps->getPropertyValue("ConditionalFormats");
+    uno::Any aAny = xProps->getPropertyValue(u"ConditionalFormats"_ustr);
     uno::Reference<sheet::XConditionalFormats> xCondFormats;
     CPPUNIT_ASSERT(aAny >>= xCondFormats);
     CPPUNIT_ASSERT(xCondFormats.is());
@@ -81,7 +81,7 @@ uno::Reference<sheet::XConditionalFormats> getConditionalFormatList(uno::Referen
 {
     uno::Reference<sheet::XSpreadsheet> xSheet(xInterface, uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xProps(xSheet, uno::UNO_QUERY_THROW);
-    uno::Any aAny = xProps->getPropertyValue("ConditionalFormats");
+    uno::Any aAny = xProps->getPropertyValue(u"ConditionalFormats"_ustr);
     uno::Reference<sheet::XConditionalFormats> xCondFormats;
     CPPUNIT_ASSERT(aAny >>= xCondFormats);
     CPPUNIT_ASSERT(xCondFormats.is());
@@ -124,7 +124,7 @@ void ScConditionalFormatTest::testCondFormatProperties()
     uno::Reference<sheet::XConditionalFormat> xCondFormat = xCondFormats[0];
     CPPUNIT_ASSERT(xCondFormat.is());
     uno::Reference<beans::XPropertySet> xPropSet(xCondFormat, uno::UNO_QUERY_THROW);
-    uno::Any aAny = xPropSet->getPropertyValue("Range");
+    uno::Any aAny = xPropSet->getPropertyValue(u"Range"_ustr);
     uno::Reference<sheet::XSheetCellRanges> xCellRanges;
     CPPUNIT_ASSERT(aAny >>= xCellRanges);
     CPPUNIT_ASSERT(xCellRanges.is());
@@ -151,7 +151,7 @@ void ScConditionalFormatTest::testCondFormatXIndex()
     CPPUNIT_ASSERT(xCondFormat.is());
 
     uno::Type aType = xCondFormat->getElementType();
-    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.beans.XPropertySet"), aType.getTypeName());
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.beans.XPropertySet"_ustr, aType.getTypeName());
 
     CPPUNIT_ASSERT(xCondFormat->hasElements());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xCondFormat->getCount());
@@ -165,7 +165,7 @@ namespace {
 void testAxisPosition(uno::Reference<beans::XPropertySet> const & xPropSet, sal_Int32 ePos)
 {
     sal_Int32 eAxisPos;
-    uno::Any aAny = xPropSet->getPropertyValue("AxisPosition");
+    uno::Any aAny = xPropSet->getPropertyValue(u"AxisPosition"_ustr);
     CPPUNIT_ASSERT(aAny >>= eAxisPos);
     CPPUNIT_ASSERT_EQUAL(ePos, eAxisPos);
 }
@@ -173,7 +173,7 @@ void testAxisPosition(uno::Reference<beans::XPropertySet> const & xPropSet, sal_
 void testShowValue(uno::Reference<beans::XPropertySet> const & xPropSet, bool bShowVal)
 {
     bool bShow;
-    uno::Any aAny = xPropSet->getPropertyValue("ShowValue");
+    uno::Any aAny = xPropSet->getPropertyValue(u"ShowValue"_ustr);
     CPPUNIT_ASSERT(aAny >>= bShow);
     CPPUNIT_ASSERT_EQUAL(bShowVal, bShow);
 }
@@ -181,7 +181,7 @@ void testShowValue(uno::Reference<beans::XPropertySet> const & xPropSet, bool bS
 void testUseGradient(uno::Reference<beans::XPropertySet> const & xPropSet, bool bUseGradient)
 {
     bool bGradient;
-    uno::Any aAny = xPropSet->getPropertyValue("UseGradient");
+    uno::Any aAny = xPropSet->getPropertyValue(u"UseGradient"_ustr);
     CPPUNIT_ASSERT(aAny >>= bGradient);
     CPPUNIT_ASSERT_EQUAL(bUseGradient, bGradient);
 }
@@ -189,7 +189,7 @@ void testUseGradient(uno::Reference<beans::XPropertySet> const & xPropSet, bool 
 void testPositiveColor(uno::Reference<beans::XPropertySet> const & xPropSet, Color aColor)
 {
     ::Color nColor;
-    uno::Any aAny = xPropSet->getPropertyValue("Color");
+    uno::Any aAny = xPropSet->getPropertyValue(u"Color"_ustr);
     CPPUNIT_ASSERT(aAny >>= nColor);
     CPPUNIT_ASSERT_EQUAL(aColor, nColor);
 }
@@ -197,7 +197,7 @@ void testPositiveColor(uno::Reference<beans::XPropertySet> const & xPropSet, Col
 void testNegativeColor(uno::Reference<beans::XPropertySet> const & xPropSet, Color aColor)
 {
     ::Color nColor;
-    uno::Any aAny = xPropSet->getPropertyValue("NegativeColor");
+    uno::Any aAny = xPropSet->getPropertyValue(u"NegativeColor"_ustr);
     CPPUNIT_ASSERT(aAny >>= nColor);
     CPPUNIT_ASSERT_EQUAL(aColor, nColor);
 }
@@ -205,7 +205,7 @@ void testNegativeColor(uno::Reference<beans::XPropertySet> const & xPropSet, Col
 void testAxisColor(uno::Reference<beans::XPropertySet> const & xPropSet, Color aColor)
 {
     ::Color nColor;
-    uno::Any aAny = xPropSet->getPropertyValue("AxisColor");
+    uno::Any aAny = xPropSet->getPropertyValue(u"AxisColor"_ustr);
     CPPUNIT_ASSERT(aAny >>= nColor);
     CPPUNIT_ASSERT_EQUAL(aColor, nColor);
 }
@@ -233,7 +233,7 @@ void testDataBarEntries(uno::Reference<beans::XPropertySet> const & xPropSet,
         const OUString& rExpectedMinString, sal_Int32 nExpectedMinType,
         const OUString& rExpectedMaxString, sal_Int32 nExpectedMaxType)
 {
-    uno::Any aAny = xPropSet->getPropertyValue("DataBarEntries");
+    uno::Any aAny = xPropSet->getPropertyValue(u"DataBarEntries"_ustr);
     uno::Sequence<uno::Reference<sheet::XDataBarEntry> > aEntries;
     CPPUNIT_ASSERT(aAny >>= aEntries);
 
@@ -264,7 +264,7 @@ void ScConditionalFormatTest::testDataBarProperties()
     CPPUNIT_ASSERT(xCondFormat.is());
 
     uno::Type aType = xCondFormat->getElementType();
-    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.beans.XPropertySet"), aType.getTypeName());
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.beans.XPropertySet"_ustr, aType.getTypeName());
 
     CPPUNIT_ASSERT(xCondFormat->hasElements());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xCondFormat->getCount());
@@ -280,8 +280,8 @@ void ScConditionalFormatTest::testDataBarProperties()
         testPositiveColor(xPropSet, COL_LIGHTBLUE);
         testNegativeColor(xPropSet, COL_LIGHTRED);
         testAxisColor(xPropSet, COL_BLACK);
-        testDataBarEntries(xPropSet, "", sheet::DataBarEntryType::DATABAR_AUTO,
-                "", sheet::DataBarEntryType::DATABAR_MAX);
+        testDataBarEntries(xPropSet, u""_ustr, sheet::DataBarEntryType::DATABAR_AUTO,
+                u""_ustr, sheet::DataBarEntryType::DATABAR_MAX);
     }
     {
         uno::Any aAny = xCondFormat->getByIndex(1);
@@ -293,8 +293,8 @@ void ScConditionalFormatTest::testDataBarProperties()
         testPositiveColor(xPropSet, COL_LIGHTBLUE);
         testNegativeColor(xPropSet, COL_LIGHTRED);
         testAxisColor(xPropSet, COL_BLACK);
-        testDataBarEntries(xPropSet, "", sheet::DataBarEntryType::DATABAR_MIN,
-                "90", sheet::DataBarEntryType::DATABAR_PERCENTILE);
+        testDataBarEntries(xPropSet, u""_ustr, sheet::DataBarEntryType::DATABAR_MIN,
+                u"90"_ustr, sheet::DataBarEntryType::DATABAR_PERCENTILE);
     }
     {
         uno::Any aAny = xCondFormat->getByIndex(2);
@@ -306,8 +306,8 @@ void ScConditionalFormatTest::testDataBarProperties()
         testPositiveColor(xPropSet, COL_LIGHTBLUE);
         testNegativeColor(xPropSet, COL_LIGHTRED);
         testAxisColor(xPropSet, COL_BLACK);
-        testDataBarEntries(xPropSet, "2", sheet::DataBarEntryType::DATABAR_VALUE,
-                "80", sheet::DataBarEntryType::DATABAR_PERCENT);
+        testDataBarEntries(xPropSet, u"2"_ustr, sheet::DataBarEntryType::DATABAR_VALUE,
+                u"80"_ustr, sheet::DataBarEntryType::DATABAR_PERCENT);
     }
     {
         uno::Any aAny = xCondFormat->getByIndex(3);
@@ -335,8 +335,8 @@ void ScConditionalFormatTest::testDataBarProperties()
         testPositiveColor(xPropSet, sal_uInt32(10092390));
         testNegativeColor(xPropSet, sal_uInt32(52428));
         testAxisColor(xPropSet, sal_uInt32(16777113));
-        testDataBarEntries(xPropSet, "", sheet::DataBarEntryType::DATABAR_AUTO,
-                "", sheet::DataBarEntryType::DATABAR_AUTO);
+        testDataBarEntries(xPropSet, u""_ustr, sheet::DataBarEntryType::DATABAR_AUTO,
+                u""_ustr, sheet::DataBarEntryType::DATABAR_AUTO);
     }
 }
 
@@ -367,7 +367,7 @@ void testColorScaleEntries(uno::Reference<beans::XPropertySet> const & xPropSet,
         sal_Int32 nMediumType, const OUString& rMediumString, Color nMediumColor,
         sal_Int32 nMaxType, const OUString& rMaxString, Color nMaxColor)
 {
-    uno::Any aAny = xPropSet->getPropertyValue("ColorScaleEntries");
+    uno::Any aAny = xPropSet->getPropertyValue(u"ColorScaleEntries"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
     uno::Sequence<uno::Reference<sheet::XColorScaleEntry> > aEntries;
     CPPUNIT_ASSERT(aAny >>= aEntries);
@@ -398,7 +398,7 @@ void ScConditionalFormatTest::testColorScaleProperties()
     CPPUNIT_ASSERT(xCondFormat.is());
 
     uno::Type aType = xCondFormat->getElementType();
-    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.beans.XPropertySet"), aType.getTypeName());
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.beans.XPropertySet"_ustr, aType.getTypeName());
 
     CPPUNIT_ASSERT(xCondFormat->hasElements());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xCondFormat->getCount());
@@ -408,25 +408,25 @@ void ScConditionalFormatTest::testColorScaleProperties()
         uno::Any aAny = xCondFormat->getByIndex(0);
         CPPUNIT_ASSERT(aAny.hasValue());
         CPPUNIT_ASSERT(aAny >>= xPropSet);
-        testColorScaleEntries(xPropSet, 3, sheet::ColorScaleEntryType::COLORSCALE_MIN, "", sal_uInt32(16777113),
-                sheet::ColorScaleEntryType::COLORSCALE_PERCENTILE, "50", sal_uInt32(16737792),
-                sheet::ColorScaleEntryType::COLORSCALE_MAX, "", sal_uInt32(16724787));
+        testColorScaleEntries(xPropSet, 3, sheet::ColorScaleEntryType::COLORSCALE_MIN, u""_ustr, sal_uInt32(16777113),
+                sheet::ColorScaleEntryType::COLORSCALE_PERCENTILE, u"50"_ustr, sal_uInt32(16737792),
+                sheet::ColorScaleEntryType::COLORSCALE_MAX, u""_ustr, sal_uInt32(16724787));
     }
     {
         uno::Any aAny = xCondFormat->getByIndex(1);
         CPPUNIT_ASSERT(aAny.hasValue());
         CPPUNIT_ASSERT(aAny >>= xPropSet);
-        testColorScaleEntries(xPropSet, 3, sheet::ColorScaleEntryType::COLORSCALE_VALUE, "0", sal_uInt32(16711680),
-                sheet::ColorScaleEntryType::COLORSCALE_PERCENTILE, "50", sal_uInt32(10092390),
-                sheet::ColorScaleEntryType::COLORSCALE_PERCENT, "90", sal_uInt32(255));
+        testColorScaleEntries(xPropSet, 3, sheet::ColorScaleEntryType::COLORSCALE_VALUE, u"0"_ustr, sal_uInt32(16711680),
+                sheet::ColorScaleEntryType::COLORSCALE_PERCENTILE, u"50"_ustr, sal_uInt32(10092390),
+                sheet::ColorScaleEntryType::COLORSCALE_PERCENT, u"90"_ustr, sal_uInt32(255));
     }
     {
         uno::Any aAny = xCondFormat->getByIndex(2);
         CPPUNIT_ASSERT(aAny.hasValue());
         CPPUNIT_ASSERT(aAny >>= xPropSet);
-        testColorScaleEntries(xPropSet, 2, sheet::ColorScaleEntryType::COLORSCALE_FORMULA, "=A1", COL_WHITE,
-                sheet::ColorScaleEntryType::COLORSCALE_PERCENTILE, "not used", sal_uInt32(1),
-                sheet::ColorScaleEntryType::COLORSCALE_VALUE, "10", COL_BLACK);
+        testColorScaleEntries(xPropSet, 2, sheet::ColorScaleEntryType::COLORSCALE_FORMULA, u"=A1"_ustr, COL_WHITE,
+                sheet::ColorScaleEntryType::COLORSCALE_PERCENTILE, u"not used"_ustr, sal_uInt32(1),
+                sheet::ColorScaleEntryType::COLORSCALE_VALUE, u"10"_ustr, COL_BLACK);
     }
 }
 

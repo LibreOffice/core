@@ -80,11 +80,11 @@ private:
 };
 
 ScStyleFamiliesObj::ScStyleFamiliesObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XElementAccess(cppu::UnoType<container::XNameContainer>::get())
     , XIndexAccess(3)
-    , XNameAccess("CellStyles")
-    , XServiceInfo("ScStyleFamiliesObj", "com.sun.star.style.StyleFamilies")
+    , XNameAccess(u"CellStyles"_ustr)
+    , XServiceInfo(u"ScStyleFamiliesObj"_ustr, u"com.sun.star.style.StyleFamilies"_ustr)
 {
 }
 
@@ -118,7 +118,7 @@ void ScStyleFamiliesObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 
     m_xSrcComponent = loadFromDesktop(getTestURL());
 }

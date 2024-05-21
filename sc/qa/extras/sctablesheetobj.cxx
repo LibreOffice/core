@@ -246,14 +246,14 @@ private:
 };
 
 ScTableSheetObj::ScTableSheetObj():
-    UnoApiTest("/sc/qa/extras/testdocuments"),
+    UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr),
     apitest::XCellSeries(1, 0),
     apitest::XFormulaQuery(
         table::CellRangeAddress(0, 0, 0, ScSheetLimits::CreateDefault().MaxCol(), ScSheetLimits::CreateDefault().MaxRow()),
         table::CellRangeAddress(0, 0, 0, ScSheetLimits::CreateDefault().MaxCol(), ScSheetLimits::CreateDefault().MaxRow()),
         0, 0),
-    apitest::XReplaceable("searchReplaceString", "replaceReplaceString"),
-    apitest::XSearchable("test", 4)
+    apitest::XReplaceable(u"searchReplaceString"_ustr, u"replaceReplaceString"_ustr),
+    apitest::XSearchable(u"test"_ustr, 4)
 {
 }
 
@@ -267,18 +267,18 @@ uno::Reference< uno::XInterface > ScTableSheetObj::init()
 
     xSheet->getCellByPosition(5 ,5)->setValue(15);
     xSheet->getCellByPosition(2 ,0)->setValue(-5.15);
-    xSheet->getCellByPosition(2 ,0)->setFormula("= B5 + C1");
+    xSheet->getCellByPosition(2 ,0)->setFormula(u"= B5 + C1"_ustr);
 
     xSheet->getCellByPosition(6, 6)->setValue(3);
     xSheet->getCellByPosition(7, 6)->setValue(3);
-    xSheet->getCellByPosition(8, 6)->setFormula("= SUM(G7:H7)");
-    xSheet->getCellByPosition(9, 6)->setFormula("= G7*I7");
+    xSheet->getCellByPosition(8, 6)->setFormula(u"= SUM(G7:H7)"_ustr);
+    xSheet->getCellByPosition(9, 6)->setFormula(u"= G7*I7"_ustr);
 
     uno::Sequence<table::CellRangeAddress> aCellRangeAddr { { 0, 0, 0, 10, 10 } };
 
     uno::Reference<sheet::XScenariosSupplier> xScence(xSheet, UNO_QUERY_THROW);
-    xScence->getScenarios()->addNewByName("Scenario", aCellRangeAddr, "Comment");
-    xSheets->getByName("Scenario");
+    xScence->getScenarios()->addNewByName(u"Scenario"_ustr, aCellRangeAddr, u"Comment"_ustr);
+    xSheets->getByName(u"Scenario"_ustr);
 
     return xSheet;
 }
@@ -304,18 +304,18 @@ uno::Reference<uno::XInterface> ScTableSheetObj::getScenarioSpreadsheet()
 
     xSheet->getCellByPosition(5 ,5)->setValue(15);
     xSheet->getCellByPosition(2 ,0)->setValue(-5.15);
-    xSheet->getCellByPosition(2 ,0)->setFormula("= B5 + C1");
+    xSheet->getCellByPosition(2 ,0)->setFormula(u"= B5 + C1"_ustr);
 
     xSheet->getCellByPosition(6, 6)->setValue(3);
     xSheet->getCellByPosition(7, 6)->setValue(3);
-    xSheet->getCellByPosition(8, 6)->setFormula("= SUM(G7:H7)");
-    xSheet->getCellByPosition(9, 6)->setFormula("= G7*I7");
+    xSheet->getCellByPosition(8, 6)->setFormula(u"= SUM(G7:H7)"_ustr);
+    xSheet->getCellByPosition(9, 6)->setFormula(u"= G7*I7"_ustr);
 
     uno::Sequence<table::CellRangeAddress> aCellRangeAddr { { 0, 0, 0, 10, 10 } };
 
     uno::Reference<sheet::XScenariosSupplier> xScence(xSheet, UNO_QUERY_THROW);
-    xScence->getScenarios()->addNewByName("Scenario", aCellRangeAddr, "Comment");
-    uno::Reference<sheet::XSpreadsheet> sSheet(xSheets->getByName("Scenario"), UNO_QUERY_THROW);
+    xScence->getScenarios()->addNewByName(u"Scenario"_ustr, aCellRangeAddr, u"Comment"_ustr);
+    uno::Reference<sheet::XSpreadsheet> sSheet(xSheets->getByName(u"Scenario"_ustr), UNO_QUERY_THROW);
 
     return sSheet;
 }
@@ -330,17 +330,17 @@ uno::Reference< uno::XInterface > ScTableSheetObj::getXSpreadsheet()
 
     xSheet->getCellByPosition(5 ,5)->setValue(15);
     xSheet->getCellByPosition(2 ,0)->setValue(-5.15);
-    xSheet->getCellByPosition(2 ,0)->setFormula("= B5 + C1");
+    xSheet->getCellByPosition(2 ,0)->setFormula(u"= B5 + C1"_ustr);
 
     xSheet->getCellByPosition(6, 6)->setValue(3);
     xSheet->getCellByPosition(7, 6)->setValue(3);
-    xSheet->getCellByPosition(8, 6)->setFormula("= SUM(G7:H7)");
-    xSheet->getCellByPosition(9, 6)->setFormula("= G7*I7");
+    xSheet->getCellByPosition(8, 6)->setFormula(u"= SUM(G7:H7)"_ustr);
+    xSheet->getCellByPosition(9, 6)->setFormula(u"= G7*I7"_ustr);
 
     uno::Sequence<table::CellRangeAddress> aCellRangeAddr { {0, 0, 0, 10, 10} };
     uno::Reference<sheet::XScenariosSupplier> xScence(xSheet, UNO_QUERY_THROW);
-    xScence->getScenarios()->addNewByName("Scenario", aCellRangeAddr, "Comment");
-    xSheets->getByName("Scenario");
+    xScence->getScenarios()->addNewByName(u"Scenario"_ustr, aCellRangeAddr, u"Comment"_ustr);
+    xSheets->getByName(u"Scenario"_ustr);
 
     setXCell(xSheet->getCellByPosition(15, 15));
     return xSheet;

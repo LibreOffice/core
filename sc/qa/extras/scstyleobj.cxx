@@ -56,38 +56,38 @@ public:
 };
 
 ScStyleObj::ScStyleObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
-    , XNamed("ScStyleObj")
-    , XPropertySet({ "BottomBorder",
-                     "BottomBorder2",
-                     "BottomBorderComplexColor",
-                     "CellProtection",
-                     "CharLocale",
-                     "CharLocaleAsian",
-                     "CharLocaleComplex",
-                     "CharPosture",
-                     "CharPostureAsian",
-                     "CharPostureComplex",
-                     "DiagonalBLTR",
-                     "DiagonalBLTR2",
-                     "DiagonalTLBR",
-                     "DiagonalTLBR2",
-                     "HoriJustify",
-                     "LeftBorder",
-                     "LeftBorder2",
-                     "LeftBorderComplexColor",
-                     "NumberFormat",
-                     "Orientation",
-                     "RightBorder",
-                     "RightBorder2",
-                     "RightBorderComplexColor",
-                     "ShadowFormat",
-                     "TableBorder",
-                     "TopBorder",
-                     "TopBorder2",
-                     "TopBorderComplexColor",
-                     "UserDefinedAttributes",
-                     "CellBackgroundComplexColor" })
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
+    , XNamed(u"ScStyleObj"_ustr)
+    , XPropertySet({ u"BottomBorder"_ustr,
+                     u"BottomBorder2"_ustr,
+                     u"BottomBorderComplexColor"_ustr,
+                     u"CellProtection"_ustr,
+                     u"CharLocale"_ustr,
+                     u"CharLocaleAsian"_ustr,
+                     u"CharLocaleComplex"_ustr,
+                     u"CharPosture"_ustr,
+                     u"CharPostureAsian"_ustr,
+                     u"CharPostureComplex"_ustr,
+                     u"DiagonalBLTR"_ustr,
+                     u"DiagonalBLTR2"_ustr,
+                     u"DiagonalTLBR"_ustr,
+                     u"DiagonalTLBR2"_ustr,
+                     u"HoriJustify"_ustr,
+                     u"LeftBorder"_ustr,
+                     u"LeftBorder2"_ustr,
+                     u"LeftBorderComplexColor"_ustr,
+                     u"NumberFormat"_ustr,
+                     u"Orientation"_ustr,
+                     u"RightBorder"_ustr,
+                     u"RightBorder2"_ustr,
+                     u"RightBorderComplexColor"_ustr,
+                     u"ShadowFormat"_ustr,
+                     u"TableBorder"_ustr,
+                     u"TopBorder"_ustr,
+                     u"TopBorder2"_ustr,
+                     u"TopBorderComplexColor"_ustr,
+                     u"UserDefinedAttributes"_ustr,
+                     u"CellBackgroundComplexColor"_ustr })
 {
 }
 
@@ -104,20 +104,20 @@ uno::Reference<uno::XInterface> ScStyleObj::init()
                                                            uno::UNO_QUERY_THROW);
 
     uno::Reference<lang::XMultiServiceFactory> xMSF(xDoc, uno::UNO_QUERY_THROW);
-    uno::Reference<style::XStyle> xStyle(xMSF->createInstance("com.sun.star.style.CellStyle"),
+    uno::Reference<style::XStyle> xStyle(xMSF->createInstance(u"com.sun.star.style.CellStyle"_ustr),
                                          uno::UNO_QUERY_THROW);
     uno::Reference<container::XNameContainer> xNC(xNA_StyleFamily, uno::UNO_QUERY_THROW);
-    if (xNC->hasByName("ScStyleObj"))
+    if (xNC->hasByName(u"ScStyleObj"_ustr))
     {
-        xNC->removeByName("ScStyleObj");
+        xNC->removeByName(u"ScStyleObj"_ustr);
     }
-    xNC->insertByName("ScStyleObj", uno::Any(xStyle));
+    xNC->insertByName(u"ScStyleObj"_ustr, uno::Any(xStyle));
 
     uno::Reference<container::XIndexAccess> xIA_sheets(xDoc->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet0(xIA_sheets->getByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<table::XCell> xCell = xSheet0->getCellByPosition(2, 3);
     uno::Reference<beans::XPropertySet> xPS(xCell, uno::UNO_QUERY_THROW);
-    xPS->setPropertyValue("CellStyle", uno::Any(xStyle->getName()));
+    xPS->setPropertyValue(u"CellStyle"_ustr, uno::Any(xStyle->getName()));
 
     return xStyle;
 }
@@ -126,7 +126,7 @@ void ScStyleObj::setUp()
 {
     UnoApiTest::setUp();
     // create calc document
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScStyleObj);

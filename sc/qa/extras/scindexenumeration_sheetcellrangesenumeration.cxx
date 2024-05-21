@@ -47,7 +47,7 @@ public:
 };
 
 ScIndexEnumeration_SheetCellRangesEnumeration::ScIndexEnumeration_SheetCellRangesEnumeration()
-    : UnoApiTest("/sc/qa/extras/testdocuments")
+    : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
 {
 }
 
@@ -62,25 +62,25 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_SheetCellRangesEnumeration::i
 
     uno::Reference<lang::XMultiServiceFactory> xMSF(xDoc, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xSCR(
-        xMSF->createInstance("com.sun.star.sheet.SheetCellRanges"), uno::UNO_QUERY_THROW);
+        xMSF->createInstance(u"com.sun.star.sheet.SheetCellRanges"_ustr), uno::UNO_QUERY_THROW);
     uno::Reference<container::XNameContainer> xNC(xSCR, uno::UNO_QUERY_THROW);
 
     uno::Any aRange;
 
-    aRange <<= xSheet0->getCellRangeByName("C1:D4");
-    xNC->insertByName("Range1", aRange);
-    aRange <<= xSheet0->getCellRangeByName("E2:F5");
-    xNC->insertByName("Range2", aRange);
-    aRange <<= xSheet0->getCellRangeByName("G2:H3");
-    xNC->insertByName("Range3", aRange);
-    aRange <<= xSheet0->getCellRangeByName("I7:J8");
-    xNC->insertByName("Range4", aRange);
+    aRange <<= xSheet0->getCellRangeByName(u"C1:D4"_ustr);
+    xNC->insertByName(u"Range1"_ustr, aRange);
+    aRange <<= xSheet0->getCellRangeByName(u"E2:F5"_ustr);
+    xNC->insertByName(u"Range2"_ustr, aRange);
+    aRange <<= xSheet0->getCellRangeByName(u"G2:H3"_ustr);
+    xNC->insertByName(u"Range3"_ustr, aRange);
+    aRange <<= xSheet0->getCellRangeByName(u"I7:J8"_ustr);
+    xNC->insertByName(u"Range4"_ustr, aRange);
 
     for (auto x = 0; x < 10; ++x)
     {
         for (auto y = 0; y < 5; ++y)
         {
-            xSheet0->getCellByPosition(x, y)->setFormula("a");
+            xSheet0->getCellByPosition(x, y)->setFormula(u"a"_ustr);
         }
     }
     for (auto x = 0; x < 10; ++x)
@@ -98,7 +98,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_SheetCellRangesEnumeration::i
 void ScIndexEnumeration_SheetCellRangesEnumeration::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScIndexEnumeration_SheetCellRangesEnumeration);
