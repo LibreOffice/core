@@ -1050,6 +1050,12 @@ interface BaseText
         StateMethod = StateField ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+    FN_CONVERT_SEL_FIELD
+    [
+        ExecMethod = ExecField ;
+        StateMethod = StateField ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
     FN_GLOSSARY_DLG // status()
     [
         ExecMethod = ExecGlossary ;

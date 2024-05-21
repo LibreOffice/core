@@ -23,6 +23,7 @@
   <menu:menuitem menu:id=".uno:RemoveTableOf"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FieldDialog"/>
+  <menu:menuitem menu:id=".uno:ConvertSelectedField"/>
   <menu:menuitem menu:id=".uno:ContentControlProperties"/>
   <menu:menuitem menu:id=".uno:EditFootnote"/>
   <menu:menuitem menu:id=".uno:IndexEntryDialog"/>

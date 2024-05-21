@@ -406,6 +406,7 @@ public:
     bool InsertField(SwField const &, const bool bForceExpandHints);
 
     SW_DLLPUBLIC void UpdateOneField(SwField &);   ///< One single field.
+    SW_DLLPUBLIC void ConvertOneFieldToText(SwField& rField);
 
     SW_DLLPUBLIC size_t GetFieldTypeCount(SwFieldIds nResId = SwFieldIds::Unknown) const;
     SW_DLLPUBLIC SwFieldType* GetFieldType(size_t nField, SwFieldIds nResId = SwFieldIds::Unknown) const;

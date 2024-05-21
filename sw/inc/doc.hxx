@@ -1460,6 +1460,7 @@ public:
 
     // Replace fields by text - mailmerge support
     bool ConvertFieldsToText(SwRootFrame const& rLayout);
+    bool ConvertFieldToText(SwField& rField, SwRootFrame const& rLayout);
 
     // Create sub-documents according to given collection.
     // If no collection is given, use chapter styles for 1st level.
