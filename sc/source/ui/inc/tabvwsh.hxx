@@ -367,7 +367,7 @@ public:
 
     void            DeactivateOle();
 
-    SC_DLLPUBLIC static ScTabViewShell* GetActiveViewShell();
+    SAL_RET_MAYBENULL SC_DLLPUBLIC static ScTabViewShell* GetActiveViewShell();
 
     std::shared_ptr<SfxModelessDialogController> CreateRefDialogController(SfxBindings* pB, SfxChildWindow* pCW,
                                                     SfxChildWinInfo* pInfo,
