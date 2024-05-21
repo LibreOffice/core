@@ -1075,7 +1075,7 @@ void ScTabViewShell::SetDrawTextUndo( SfxUndoManager* pNewUndoMgr )
 
 ScTabViewShell* ScTabViewShell::GetActiveViewShell()
 {
-    return dynamic_cast< ScTabViewShell *>( Current() );
+    return dynamic_cast< ScTabViewShell *>( SfxViewShell::Current() );
 }
 
 SfxPrinter* ScTabViewShell::GetPrinter( bool bCreate )

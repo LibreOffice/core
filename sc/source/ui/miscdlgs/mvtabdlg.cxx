@@ -191,9 +191,9 @@ void ScMoveTableDlg::Init()
     m_xEdTabName->connect_changed(LINK(this, ScMoveTableDlg, CheckNameHdl));
 
     // tdf#96854 - remember last used option for copy/move sheet
-    const bool bIsCopyActive
-        = ScTabViewShell::GetActiveViewShell()->GetViewData().GetOptions().GetOption(
-            VOPT_COPY_SHEET);
+    bool bIsCopyActive = false;
+    if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
+        bIsCopyActive = pViewSh->GetViewData().GetOptions().GetOption(VOPT_COPY_SHEET);
     m_xBtnMove->set_active(!bIsCopyActive);
     m_xBtnCopy->set_active(bIsCopyActive);
     m_xEdTabName->set_sensitive(false);
@@ -251,10 +251,12 @@ void ScMoveTableDlg::SetOkBtnLabel()
     // tdf#139464 Write "Copy" or "Move" on OK button
     m_xBtnOk->set_label(bIsCopyActive ? m_xBtnCopy->get_label() : m_xBtnMove->get_label());
     // tdf#96854 - remember last used option for copy/move sheet
-    ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
-    ScViewOptions aViewOpt(pScViewShell->GetViewData().GetOptions());
-    aViewOpt.SetOption(VOPT_COPY_SHEET, bIsCopyActive);
-    pScViewShell->GetViewData().SetOptions(aViewOpt);
+    if (ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell())
+    {
+        ScViewOptions aViewOpt(pScViewShell->GetViewData().GetOptions());
+        aViewOpt.SetOption(VOPT_COPY_SHEET, bIsCopyActive);
+        pScViewShell->GetViewData().SetOptions(aViewOpt);
+    }
 }
 
 // Handler:
