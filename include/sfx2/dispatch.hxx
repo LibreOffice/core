@@ -132,12 +132,12 @@ public:
 
     bool                IsActive( const SfxShell& rShell );
     sal_uInt16          GetShellLevel( const SfxShell &rShell );
-    SfxBindings*        GetBindings() const;
+    SAL_RET_MAYBENULL SfxBindings* GetBindings() const;
 
     void                Push( SfxShell& rShell );
     void                Pop( SfxShell& rShell, SfxDispatcherPopFlags nMode = SfxDispatcherPopFlags::NONE );
 
-    SfxShell*           GetShell(sal_uInt16 nIdx) const;
+    SAL_RET_MAYBENULL SfxShell* GetShell(sal_uInt16 nIdx) const;
     SfxViewFrame*       GetFrame() const;
     SfxModule*          GetModule() const;
 
