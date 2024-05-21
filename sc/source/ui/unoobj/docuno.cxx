@@ -2384,7 +2384,7 @@ static void lcl_SetMediaScreen(const uno::Reference<drawing::XShape>& xMediaShap
         pPDF->SetScreenURL(nScreenId, sMediaURL);
 }
 
-static void lcl_PDFExportMediaShapeScreen(const OutputDevice* pDev, const ScPrintState& rState,
+static void lcl_PDFExportMediaShapeScreen(const OutputDevice* pDev, const std::unique_ptr<ScPrintState>& rState,
                                           ScDocument& rDoc, SCTAB nTab, tools::Long nStartPage,
                                           bool bSinglePageSheets)
 {
@@ -2434,12 +2434,12 @@ static void lcl_PDFExportMediaShapeScreen(const OutputDevice* pDev, const ScPrin
                         if (bTopDown) // top-bottom page order
                         {
                             nX1 = 0;
-                            for (size_t i = 0; i < rState.m_aRanges.m_nPagesX; ++i)
+                            for (size_t i = 0; i < rState->m_aRanges.m_nPagesX; ++i)
                             {
-                                nX2 = (*rState.m_aRanges.m_xPageEndX)[i];
-                                for (size_t j = 0; j < rState.m_aRanges.m_nPagesY; ++j)
+                                nX2 = (*rState->m_aRanges.m_xPageEndX)[i];
+                                for (size_t j = 0; j < rState->m_aRanges.m_nPagesY; ++j)
                                 {
-                                    auto& rPageRow = (*rState.m_aRanges.m_xPageRows)[j];
+                                    auto& rPageRow = (*rState->m_aRanges.m_xPageRows)[j];
                                     nY1 = rPageRow.GetStartRow();
                                     nY2 = rPageRow.GetEndRow();
 
@@ -2459,15 +2459,15 @@ static void lcl_PDFExportMediaShapeScreen(const OutputDevice* pDev, const ScPrin
                         }
                         else // left to right page order
                         {
-                            for (size_t i = 0; i < rState.m_aRanges.m_nPagesY; ++i)
+                            for (size_t i = 0; i < rState->m_aRanges.m_nPagesY; ++i)
                             {
-                                auto& rPageRow = (*rState.m_aRanges.m_xPageRows)[i];
+                                auto& rPageRow = (*rState->m_aRanges.m_xPageRows)[i];
                                 nY1 = rPageRow.GetStartRow();
                                 nY2 = rPageRow.GetEndRow();
                                 nX1 = 0;
-                                for (size_t j = 0; j < rState.m_aRanges.m_nPagesX; ++j)
+                                for (size_t j = 0; j < rState->m_aRanges.m_nPagesX; ++j)
                                 {
-                                    nX2 = (*rState.m_aRanges.m_xPageEndX)[j];
+                                    nX2 = (*rState->m_aRanges.m_xPageEndX)[j];
 
                                     tools::Rectangle aPageRect(rDoc.GetMMRect(nX1, nY1, nX2, nY2, nTab));
                                     tools::Rectangle aTmpRect(aPageRect.GetIntersection(pObj->GetCurrentBoundRect()));
@@ -2590,7 +2590,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     tools::Long nTabStart = pPrintFuncCache->GetTabStart(nTab);
 
     if (nRenderer == nTabStart)
-        lcl_PDFExportMediaShapeScreen(pDev, *m_pPrintState, rDoc, nTab, nTabStart, bSinglePageSheets);
+        lcl_PDFExportMediaShapeScreen(pDev, m_pPrintState, rDoc, nTab, nTabStart, bSinglePageSheets);
 
     ScRange aRange;
     const ScRange* pSelRange = nullptr;
