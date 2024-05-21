@@ -1408,12 +1408,12 @@ SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg)
 
             if(mxPage.get() == &rMasterPage)
             {
-                if(!pUndoGroup)
+                if(!m_pUndoGroup)
                 {
-                    pUndoGroup.reset( new SdrUndoGroup(m_rMod) );
+                    m_pUndoGroup.reset( new SdrUndoGroup(m_rMod) );
                 }
 
-                pUndoGroup->AddAction(m_rMod.GetSdrUndoFactory().CreateUndoPageRemoveMasterPage(*pDrawPage));
+                m_pUndoGroup->AddAction(m_rMod.GetSdrUndoFactory().CreateUndoPageRemoveMasterPage(*pDrawPage));
             }
         }
     }
@@ -1428,10 +1428,10 @@ void SdrUndoDelPage::Undo()
     if (bool(mpFillBitmapItem))
         restoreFillBitmap();
     ImpInsertPage(nPageNum);
-    if (pUndoGroup!=nullptr)
+    if (m_pUndoGroup!=nullptr)
     {
         // recover master page relationships
-        pUndoGroup->Undo();
+        m_pUndoGroup->Undo();
     }
 }
 

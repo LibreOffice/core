@@ -594,7 +594,7 @@ class SVXCORE_DLLPUBLIC SdrUndoDelPage final : public SdrUndoPageList
 {
     // When deleting a MasterPage, we remember all relations of the
     // Character Page with the MasterPage in this UndoGroup.
-    std::unique_ptr<SdrUndoGroup> pUndoGroup;
+    std::unique_ptr<SdrUndoGroup> m_pUndoGroup;
     std::unique_ptr<SfxPoolItem> mpFillBitmapItem;
     bool mbHasFillBitmap;
 
