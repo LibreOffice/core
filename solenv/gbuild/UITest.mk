@@ -41,6 +41,9 @@ gb_UITest_COMMAND = $(ICECREAM_RUN) $(gb_CppunitTest_coredumpctl_run) $(gb_Cppun
 
 gb_TEST_ENV_VARS += LIBO_LANG=C
 
+# GNUPGHOME is needed for tests using the LibreOffice GPG features.
+gb_TEST_ENV_VARS += GNUPGHOME="$(SRCDIR)/test/signing-keys"
+
 .PHONY : $(call gb_UITest_get_clean_target,%)
 $(call gb_UITest_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
