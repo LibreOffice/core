@@ -333,6 +333,7 @@ void WriterFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDo
     // rely on default for HyphenateURLs=false
     // rely on default for APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH=true
     xSettings->setPropertyValue("DoNotMirrorRtlDrawObjs", uno::Any(true));
+    xSettings->setPropertyValue("ContinuousEndnotes", uno::Any(true));
 }
 
 void WriterFilter::setSourceDocument(const uno::Reference<lang::XComponent>& xDoc)
