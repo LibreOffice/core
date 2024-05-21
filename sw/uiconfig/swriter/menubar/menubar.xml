@@ -791,6 +791,7 @@
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:Repaginate"/>
           <menu:menuitem menu:id=".uno:UpdateSelectedField"/>
+          <menu:menuitem menu:id=".uno:ConvertSelectedField"/>
           <menu:menuitem menu:id=".uno:UpdateFields"/>
           <menu:menuitem menu:id=".uno:UpdateAllIndexes"/>
           <menu:menuitem menu:id=".uno:UpdateCurIndex"/>

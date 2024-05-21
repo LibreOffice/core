@@ -129,6 +129,7 @@
   <menu:menuitem menu:id=".uno:InsertFormula"/>
   <menu:menuitem menu:id=".uno:InsertAnnotation"/>
   <menu:menuitem menu:id=".uno:UpdateSelectedField"/>
+  <menu:menuitem menu:id=".uno:ConvertSelectedField"/>
   <menu:menuitem menu:id=".uno:FieldDialog"/>
   <menu:menuitem menu:id=".uno:AcceptTrackedChange"/>
   <menu:menuitem menu:id=".uno:RejectTrackedChange"/>

@@ -46,7 +46,7 @@ class SwUINumRuleItem;
 #define FN_FRAME                (SID_SW_START + 1300)
 #define FN_INSERT2              (SID_SW_START + 1400)
 #define FN_FORMAT2              (SID_SW_START + 1600)
-//#define FN_EDIT2                (SID_SW_START + 1800) defined in svxids.hrc
+//#define FN_EDIT2                (SID_SW_START + 1800) defined in sfxsids.hrc
 #define FN_QUERY2               (SID_SW_START + 2000)
 #define FN_EXTRA2               (SID_SW_START + 2200)
 #define FN_PARAM2               (SID_SW_START + 2400)
@@ -153,6 +153,7 @@ class SwUINumRuleItem;
 #define FN_REDLINE_REJECT_TONEXT     (FN_EDIT2 + 46)    /* Redlining Reject and jump to next*/
 #define FN_TRANSFORM_DOCUMENT_STRUCTURE (FN_EDIT2 + 47) /* overwrite text of content control, and more*/
 #define FN_COPY_FIELD                (FN_EDIT2 + 48)    /* show field content in readonly documents to copy content*/
+#define FN_CONVERT_SEL_FIELD         (FN_EDIT2 + 49)    /* convert selected field to text */
 
 // Region: View
 #define FN_DRAW_WRAP_DLG        TypedWhichId<SfxInt16Item>(FN_VIEW + 3)   /* Draw wrapping dlg */

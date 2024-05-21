@@ -71,6 +71,7 @@
   <menu:menuitem menu:id=".uno:OutlineBullet"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FieldDialog"/>
+  <menu:menuitem menu:id=".uno:ConvertSelectedField"/>
   <menu:menuitem menu:id=".uno:EditFootnote"/>
   <menu:menuitem menu:id=".uno:IndexEntryDialog"/>
   <menu:menuitem menu:id=".uno:AuthoritiesEntryDialog"/>

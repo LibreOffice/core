@@ -229,6 +229,15 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             }
             break;
         }
+        case FN_CONVERT_SEL_FIELD:
+        {
+            SwField* pField = rSh.GetCurField();
+            if (pField)
+            {
+               rSh.ConvertOneFieldToText(*pField);
+            }
+            break;
+        }
         case FN_EXECUTE_MACROFIELD:
         {
             SwField* pField = rSh.GetCurField();
@@ -1631,11 +1640,31 @@ void SwTextShell::StateField( SfxItemSet &rSet )
         case FN_UPDATE_SEL_FIELD:
             {
                 pField = rSh.GetCurField();
-
                 if (!pField)
                     rSet.DisableItem( nWhich );
             }
-
+            break;
+        case FN_CONVERT_SEL_FIELD:
+            {
+                pField = rSh.GetCurField();
+                SwFieldIds eFieldIds = pField ? pField->GetTyp()->Which() : SwFieldIds::Unknown;
+                bool bInHeaderFooter = rSh.IsInHeaderFooter();
+                if (!pField ||
+                    eFieldIds == SwFieldIds::Postit ||
+                    eFieldIds == SwFieldIds::SetRef ||
+                    eFieldIds == SwFieldIds::SetExp ||
+                    eFieldIds == SwFieldIds::RefPageSet||
+                    eFieldIds == SwFieldIds::Input ||
+                    eFieldIds == SwFieldIds::JumpEdit ||
+                    (bInHeaderFooter &&
+                        (eFieldIds == SwFieldIds::PageNumber ||
+                        eFieldIds == SwFieldIds::Chapter ||
+                        eFieldIds == SwFieldIds::GetExp ||
+                        eFieldIds == SwFieldIds::RefPageGet ||
+                        eFieldIds == SwFieldIds::GetRef
+                        )))
+                    rSet.DisableItem( nWhich );
+            }
             break;
 
         case FN_EXECUTE_MACROFIELD:

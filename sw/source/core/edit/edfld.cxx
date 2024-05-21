@@ -291,6 +291,14 @@ void SwEditShell::UpdateOneField(SwField &rField)
     EndAllAction();
 }
 
+void SwEditShell::ConvertOneFieldToText(SwField& rField)
+{
+    CurrShell aCurr( this );
+    StartAllAction();
+    GetDoc()->ConvertFieldToText(rField, *GetLayout());
+    EndAllAction();
+}
+
 SwDBData const & SwEditShell::GetDBData() const
 {
     return GetDoc()->GetDBData();
