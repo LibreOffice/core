@@ -513,7 +513,8 @@ void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemS
                 if (pViewShell)
                 {
                     const ScViewRenderingOptions& rViewRenderingOptions = pViewShell->GetViewRenderingData();
-                    aBackColor = rViewRenderingOptions.GetDocColor();
+                    aBackColor = eAutoMode == ScAutoFontColorMode::Print ? COL_WHITE :
+                        rViewRenderingOptions.GetDocColor();
                 }
             }
         }
