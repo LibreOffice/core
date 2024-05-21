@@ -1409,17 +1409,45 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
         {
             const SwFrame *pUp = pFly->GetAnchorFrame()->GetUpper();
             SwRectFnSet aRectFnSet(pFly->GetAnchorFrame());
+            bool bOnlyCellFrame = pUp->IsCellFrame();
             while( pUp->IsColumnFrame() || pUp->IsSctFrame() || pUp->IsColBodyFrame())
                 pUp = pUp->GetUpper();
             rRect = pUp->getFrameArea();
             if( !pUp->IsBodyFrame() )
             {
-                rRect += pUp->getFramePrintArea().Pos();
-                rRect.SSize( pUp->getFramePrintArea().SSize() );
-                if ( pUp->IsCellFrame() )
+                bool bCropByFixedHeightCell = false;
+                // allow zoom image cropped by fixed height table cell
+                if ( bOnlyCellFrame && pUp->IsCellFrame() && pUp->GetUpper() &&
+                     // is a fixed height table row?
+                     pUp->GetUpper()->IsRowFrame() && SwFrameSize::Fixed ==
+                         pUp->GetUpper()->GetAttrSet()->GetFrameSize().GetHeightSizeType() )
                 {
-                    const SwFrame *pTab = pUp->FindTabFrame();
-                    aRectFnSet.SetBottom( rRect, aRectFnSet.GetPrtBottom(*pTab->GetUpper()) );
+                    // is image anchored as character?
+                    if ( const SwContact* pC = GetUserCall(pSdrObj) )
+                    {
+                        const SwFrameFormat* pFormat = pC->GetFormat();
+                        const SwFormatAnchor& rAnch = pFormat->GetAnchor();
+                        if ( RndStdIds::FLY_AS_CHAR == rAnch.GetAnchorId() )
+                        {
+                            const SwPageFrame *pPageFrame = pFly->FindPageFrame();
+                            Size aSize( pPageFrame->getFramePrintArea().SSize() );
+                            // TODO doubled print area is still cropped by full page size, yet
+                            rRect.SSize(Size(aSize.getWidth() * 2, aSize.getHeight() * 2));
+                            bCropByFixedHeightCell = true;
+                        }
+                    }
+                }
+
+                if ( !bCropByFixedHeightCell )
+                {
+                    rRect += pUp->getFramePrintArea().Pos();
+                    rRect.SSize( pUp->getFramePrintArea().SSize() );
+
+                    if ( pUp->IsCellFrame() )
+                    {
+                        const SwFrame *pTab = pUp->FindTabFrame();
+                        aRectFnSet.SetBottom( rRect, aRectFnSet.GetPrtBottom(*pTab->GetUpper()) );
+                    }
                 }
             }
             else if ( pUp->GetUpper()->IsPageFrame() )
