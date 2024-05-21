@@ -971,29 +971,29 @@ static bool lcl_fillNativeSymbols( FormulaCompiler::NonConstOpCodeMapPtr& xMap, 
 
     if (comphelper::LibreOfficeKit::isActive())
     {
-        OUString langauge = comphelper::LibreOfficeKit::getLanguageTag().getLanguage();
+        OUString language = comphelper::LibreOfficeKit::getLanguageTag().getLanguage();
         if (eWhat == FormulaCompiler::InitSymbols::ASK)
         {
-            return aLocaleSymbolMap.contains(langauge)
-                   && bool(aLocaleSymbolMap[langauge].mxSymbolMap);
+            return aLocaleSymbolMap.contains(language)
+                   && bool(aLocaleSymbolMap[language].mxSymbolMap);
         }
         else if (eWhat == FormulaCompiler::InitSymbols::DESTROY)
         {
-            aLocaleSymbolMap[langauge].mxSymbolMap.reset();
+            aLocaleSymbolMap[language].mxSymbolMap.reset();
         }
-        else if (!aLocaleSymbolMap[langauge].mxSymbolMap)
+        else if (!aLocaleSymbolMap[language].mxSymbolMap)
         {
             // Core
-            aLocaleSymbolMap[langauge].mxSymbolMap = std::make_shared<FormulaCompiler::OpCodeMap>(
+            aLocaleSymbolMap[language].mxSymbolMap = std::make_shared<FormulaCompiler::OpCodeMap>(
                 SC_OPCODE_LAST_OPCODE_ID + 1, true, FormulaGrammar::GRAM_NATIVE_UI);
             OpCodeList aOpCodeListSymbols(RID_STRLIST_FUNCTION_NAMES_SYMBOLS,
-                                          aLocaleSymbolMap[langauge].mxSymbolMap);
+                                          aLocaleSymbolMap[language].mxSymbolMap);
             OpCodeList aOpCodeListNative(RID_STRLIST_FUNCTION_NAMES,
-                                         aLocaleSymbolMap[langauge].mxSymbolMap);
+                                         aLocaleSymbolMap[language].mxSymbolMap);
             // No AddInMap for native core mapping.
         }
 
-        xMap = aLocaleSymbolMap[langauge].mxSymbolMap;
+        xMap = aLocaleSymbolMap[language].mxSymbolMap;
     }
     else
     {
