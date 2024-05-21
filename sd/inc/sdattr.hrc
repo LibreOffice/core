@@ -102,8 +102,7 @@ class XColorItem;
 #define ATTR_OPTIONS_START              ATTR_SNAPLINE_END + 1
 #define ATTR_OPTIONS_LAYOUT             ATTR_OPTIONS_START + 1
 #define ATTR_OPTIONS_MISC               TypedWhichId<SdOptionsMiscItem>(ATTR_OPTIONS_START + 2)
-#define ATTR_OPTIONS_SNAP               ATTR_OPTIONS_START + 3
-#define ATTR_OPTIONS_PRINT              TypedWhichId<SdOptionsPrintItem>(ATTR_OPTIONS_START + 4)
+#define ATTR_OPTIONS_PRINT              TypedWhichId<SdOptionsPrintItem>(ATTR_OPTIONS_START + 3)
 #define ATTR_OPTIONS_END                ATTR_OPTIONS_PRINT
 
 #define ATTR_OPTIONS_SCALE_START        ATTR_OPTIONS_END + 1
