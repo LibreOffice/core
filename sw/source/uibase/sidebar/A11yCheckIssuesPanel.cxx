@@ -22,6 +22,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/AccessibilityIssue.hxx>
 #include <unotools/configmgr.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <vcl/svapp.hxx>
 #include <o3tl/enumrange.hxx>
 #include <comphelper/lok.hxx>
