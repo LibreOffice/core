@@ -286,11 +286,6 @@ rtl::Reference<SotStorageStream> XclRoot::OpenStream(const OUString& rStrmName) 
     return OpenStream( GetRootStorage(), rStrmName );
 }
 
-ScDocument& XclRoot::GetDoc() const
-{
-    return mrData.mrDoc;
-}
-
 ScDocShell* XclRoot::GetDocShell() const
 {
     return GetDoc().GetDocumentShell();

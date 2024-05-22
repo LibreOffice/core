@@ -198,7 +198,7 @@ public:
     rtl::Reference<SotStorageStream> OpenStream(const OUString& rStrmName) const;
 
     /** Returns reference to the destination document (import) or source document (export). */
-    ScDocument& GetDoc() const;
+    ScDocument& GetDoc() const { return mrData.mrDoc; }
 
     /** Returns the object shell of the Calc document. May be 0 (i.e. import from clipboard). */
     ScDocShell*         GetDocShell() const;
