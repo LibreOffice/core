@@ -70,6 +70,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/string_view.hxx>
+#include <rtl/math.hxx>
 
 #include <wrtsh.hxx>
 #include <view.hxx>
@@ -2845,9 +2846,9 @@ Size SwFlyFrame::CalcRel( const SwFormatFrameSize &rSz ) const
         }
 
         if ( rSz.GetWidthPercent() && rSz.GetWidthPercent() != SwFormatFrameSize::SYNCED )
-            aRet.setWidth( nRelWidth * rSz.GetWidthPercent() / 100 );
+            aRet.setWidth(rtl::math::round(double(nRelWidth) * rSz.GetWidthPercent() / 100));
         if ( rSz.GetHeightPercent() && rSz.GetHeightPercent() != SwFormatFrameSize::SYNCED )
-            aRet.setHeight( nRelHeight * rSz.GetHeightPercent() / 100 );
+            aRet.setHeight(rtl::math::round(double(nRelHeight) * rSz.GetHeightPercent() / 100));
 
         if ( rSz.GetHeight() && rSz.GetWidthPercent() == SwFormatFrameSize::SYNCED )
         {

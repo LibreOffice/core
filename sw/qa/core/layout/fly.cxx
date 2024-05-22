@@ -86,6 +86,31 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNegativeHeight)
         }
     }
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFlyRelWithRounding)
+{
+    // Given a document where page width is 21.001cm (11906 twips), and the image width is 48% of
+    // the page width:
+    createSwDoc("fly-rel-width-rounding.odt");
+
+    // When laying out that document:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+
+    // Then make sure that we calculate the width of the fly correctly:
+    auto pPage = pLayout->GetLower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage->GetSortedObjs());
+    SwSortedObjs& rPageObjs = *pPage->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
+    auto pFly = rPageObjs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+    CPPUNIT_ASSERT(pFly);
+    tools::Long nFlyWidth = pFly->getFrameArea().Width();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 5715
+    // - Actual  : 5714
+    // i.e. 5714.88 was truncated, not rounded.
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(5715), nFlyWidth);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
