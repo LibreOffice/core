@@ -1722,6 +1722,7 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
     if (m_xEditView)
     {
         ScModule* pScMod = SC_MOD();
+        ScTabViewShell* pStartViewSh = ScTabViewShell::GetActiveViewShell();
 
         // don't modify the font defaults here - the right defaults are
         // already set in StartEditEngine when the EditEngine is created
@@ -1739,7 +1740,6 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
         {
             // Is dragged onto another View?
             ScTabViewShell* pEndViewSh = ScTabViewShell::GetActiveViewShell();
-            ScTabViewShell* pStartViewSh = ScTabViewShell::GetActiveViewShell();
             if ( pEndViewSh != pStartViewSh && pStartViewSh != nullptr )
             {
                 ScViewData& rViewData = pStartViewSh->GetViewData();
