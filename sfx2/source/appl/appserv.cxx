@@ -749,15 +749,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             bDone = true;
             break;
         }
-        case SID_WHATSNEWDLG:
-        {
-            const bool bWelcome = !officecfg::Setup::Product::ooSetupLastVersion::get().has_value();
-            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateWhatsNewDialog(rReq.GetFrameWeld(), bWelcome));
-            pDlg->StartExecuteAsync(nullptr);
-            bDone = true;
-            break;
-        }
 #endif
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_WIDGET_TEST_DIALOG:

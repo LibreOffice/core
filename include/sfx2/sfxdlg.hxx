@@ -147,8 +147,6 @@ public:
 
     virtual VclPtr<VclAbstractDialog> CreateAboutDialog(weld::Window* _pParent) = 0;
 
-    virtual VclPtr<VclAbstractDialog> CreateWhatsNewDialog(weld::Window* _pParent, const bool bWelcome) = 0;
-
     virtual VclPtr<VclAbstractDialog> CreateTipOfTheDayDialog(weld::Window* _pParent) = 0;
 
     virtual VclPtr<VclAbstractDialog> CreateToolbarmodeDialog(weld::Window* _pParent) = 0;

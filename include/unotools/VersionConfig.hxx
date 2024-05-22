@@ -9,13 +9,8 @@
  */
 #pragma once
 
-#include <officecfg/Setup.hxx>
 #include <unotools/configmgr.hxx>
 #include <o3tl/string_view.hxx>
-#include <rtl/ustring.hxx>
-#include <sal/log.hxx>
-
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 namespace utl
 {

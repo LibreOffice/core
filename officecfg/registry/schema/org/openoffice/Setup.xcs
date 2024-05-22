@@ -307,7 +307,7 @@
         </info>
         <value>true</value>
     </prop>
-  </group>
+    </group>
     <group oor:name="Office">
       <!--The default must be written by the setup.-->
       <info>

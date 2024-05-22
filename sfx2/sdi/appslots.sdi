@@ -148,10 +148,6 @@ interface Application
     [
         ExecMethod = MiscExec_Impl ;
     ]
-    SID_WHATSNEWDLG
-    [
-        ExecMethod = MiscExec_Impl ;
-    ]
     SID_HYPHENATIONMISSING
     [
         ExecMethod = MiscExec_Impl ;

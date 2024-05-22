@@ -1448,7 +1448,8 @@ bool SfxApplication::IsHeadlessOrUITest()
     if (Application::IsHeadlessModeEnabled())
         return true;
 
-    bool bIsUITest = false; //uitest.uicheck fails when the dialog is open
+    bool bIsUITest = getenv("LO_TESTNAME") == nullptr; //uitest.uicheck fails when the dialog is open
+
     for (sal_uInt16 i = 0, nCount = Application::GetCommandLineParamCount(); i < nCount; ++i)
     {
         if (Application::GetCommandLineParam(i) == "--nologo")
@@ -1623,129 +1624,133 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 }
 
 #if !ENABLE_WASM_STRIP_PINGUSER
-                bool bIsHeadlessOrUITest = SfxApplication::IsHeadlessOrUITest(); //uitest.uicheck fails when the dialog is open
-                bool bIsWhatsNewShown = false; //suppress tipoftheday if whatsnew is shown
-
-                //what's new dialog
-                if (utl::isProductVersionUpgraded())
+                if (!SfxApplication::IsHeadlessOrUITest()) //uitest.uicheck fails when the dialog is open
                 {
-                    const bool bShowWhatsNew = officecfg::Setup::Product::WhatsNew::get();
-                    const bool bIsUnitTestMode = getenv("LO_TESTNAME") != nullptr;
+                    bool bIsWhatsNewShown = false; //suppress tipoftheday if whatsnew was shown
 
-                    if (!bIsHeadlessOrUITest && !bIsUnitTestMode && bShowWhatsNew)
+                    //what's new dialog
+                    if (utl::isProductVersionUpgraded() && !IsInModalMode())
                     {
-                        const auto xCurrentFrame = GetFrame().GetFrameInterface();
-                        SfxUnoFrameItem aDocFrame(SID_FILLFRAME, xCurrentFrame);
-                        GetDispatcher()->ExecuteList(SID_WHATSNEWDLG, SfxCallMode::SLOT, {},
-                                                    { &aDocFrame });
-                        bIsWhatsNewShown = true;
+                        if (officecfg::Setup::Product::WhatsNew::get())
+                        {
+                            VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("whatsnew", "", SfxResId(STR_WHATSNEW_TEXT), InfobarType::INFO);
+                            if (pInfoBar)
+                            {
+                                weld::Button& rWhatsNewButton = pInfoBar->addButton();
+                                rWhatsNewButton.set_label(SfxResId(STR_WHATSNEW_BUTTON));
+                                rWhatsNewButton.connect_clicked(LINK(this, SfxViewFrame, WhatsNewHandler));
+                            }
+                            bIsInfobarShown = true;
+                            bIsWhatsNewShown = true;
+                        }
+
+                        //update lastversion
+                        OUString sSetupVersion = utl::ConfigManager::getProductVersion();
+                        try
+                        {
+                            std::shared_ptr<comphelper::ConfigurationChanges> batch(
+                                comphelper::ConfigurationChanges::create());
+                            officecfg::Setup::Product::ooSetupLastVersion::set(sSetupVersion, batch);
+                            batch->commit();
+                        }
+                        catch (css::lang::IllegalArgumentException&)
+                        { //If the value was readOnly.
+                            SAL_WARN("desktop.updater", "Updating property ooSetupLastVersion to version "
+                                                            << sSetupVersion
+                                                            << " failed (read-only property?)");
+                        }
                     }
 
-                    //update lastversion
-                    OUString sSetupVersion = utl::ConfigManager::getProductVersion();
-                    try
+                    // show tip-of-the-day dialog if it due, but not if there is the impress modal template dialog
+                    // open where SdModule::ExecuteNewDocument will launch it instead when that dialog is dismissed
+                    if (SfxApplication::IsTipOfTheDayDue() && !IsInModalMode() && !bIsWhatsNewShown)
                     {
-                        std::shared_ptr<comphelper::ConfigurationChanges> batch(
-                            comphelper::ConfigurationChanges::create());
-                        officecfg::Setup::Product::ooSetupLastVersion::set(sSetupVersion, batch);
+                        bool bIsBaseFormOpen = false;
+
+                        const auto xCurrentFrame = GetFrame().GetFrameInterface();
+                        const auto xContext = comphelper::getProcessComponentContext();
+                        const auto xModuleManager = css::frame::ModuleManager::create(xContext);
+                        switch (vcl::EnumContext::GetApplicationEnum(
+                            vcl::CommandInfoProvider::GetModuleIdentifier(xCurrentFrame)))
+                        {
+                            case vcl::EnumContext::Application::WriterForm:
+                            case vcl::EnumContext::Application::WriterReport:
+                                bIsBaseFormOpen = true;
+                                break;
+                            default:
+                                break;
+                        }
+                        if (!bIsBaseFormOpen)
+                        {
+                            // tdf#127946 pass in argument for dialog parent
+                            SfxUnoFrameItem aDocFrame(SID_FILLFRAME, xCurrentFrame);
+                            GetDispatcher()->ExecuteList(SID_TIPOFTHEDAY, SfxCallMode::SLOT, {},
+                                                        { &aDocFrame });
+                        }
+                    }
+
+                    // inform about the community involvement
+                    const auto t0 = std::chrono::system_clock::now().time_since_epoch();
+                    const sal_Int64 nLastGetInvolvedShown = officecfg::Setup::Product::LastTimeGetInvolvedShown::get();
+                    const sal_Int64 nNow = std::chrono::duration_cast<std::chrono::seconds>(t0).count();
+                    const sal_Int64 nPeriodSec(60 * 60 * 24 * 180); // 180 days in seconds
+                    bool bUpdateLastTimeGetInvolvedShown = false;
+
+                    if (nLastGetInvolvedShown == 0)
+                        bUpdateLastTimeGetInvolvedShown = true;
+                    else if (!bIsInfobarShown && nPeriodSec < nNow && nLastGetInvolvedShown < (nNow + nPeriodSec/2) - nPeriodSec) // 90d alternating with donation
+                    {
+                        bUpdateLastTimeGetInvolvedShown = true;
+
+                        VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar(u"getinvolved"_ustr, u""_ustr, SfxResId(STR_GET_INVOLVED_TEXT), InfobarType::INFO);
+                        bIsInfobarShown = true;
+                        if (pInfoBar)
+                        {
+                            weld::Button& rGetInvolvedButton = pInfoBar->addButton();
+                            rGetInvolvedButton.set_label(SfxResId(STR_GET_INVOLVED_BUTTON));
+                            rGetInvolvedButton.connect_clicked(LINK(this, SfxViewFrame, GetInvolvedHandler));
+                        }
+                    }
+
+                    if (bUpdateLastTimeGetInvolvedShown
+                        && !officecfg::Setup::Product::LastTimeGetInvolvedShown::isReadOnly())
+                    {
+                        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+                        officecfg::Setup::Product::LastTimeGetInvolvedShown::set(nNow, batch);
                         batch->commit();
                     }
-                    catch (css::lang::IllegalArgumentException&)
-                    { //If the value was readOnly.
-                        SAL_WARN("desktop.updater", "Updating property ooSetupLastVersion to version "
-                                                        << sSetupVersion
-                                                        << " failed (read-only property?)");
-                    }
-                }
 
-                // show tip-of-the-day dialog if it due, but not if there is the impress modal template dialog
-                // open where SdModule::ExecuteNewDocument will launch it instead when that dialog is dismissed
-                if (SfxApplication::IsTipOfTheDayDue() && !bIsHeadlessOrUITest && !IsInModalMode() && !bIsWhatsNewShown)
-                {
-                    bool bIsBaseFormOpen = false;
+                    // inform about donations
+                    const sal_Int64 nLastDonateShown = officecfg::Setup::Product::LastTimeDonateShown::get();
+                    bool bUpdateLastTimeDonateShown = false;
 
-                    const auto xCurrentFrame = GetFrame().GetFrameInterface();
-                    const auto xContext = comphelper::getProcessComponentContext();
-                    const auto xModuleManager = css::frame::ModuleManager::create(xContext);
-                    switch (vcl::EnumContext::GetApplicationEnum(
-                        vcl::CommandInfoProvider::GetModuleIdentifier(xCurrentFrame)))
+                    if (nLastDonateShown == 0)
+                        bUpdateLastTimeDonateShown = true;
+                    else if (!bIsInfobarShown && nPeriodSec < nNow && nLastDonateShown < nNow - nPeriodSec) // 90d alternating with getinvolved
                     {
-                        case vcl::EnumContext::Application::WriterForm:
-                        case vcl::EnumContext::Application::WriterReport:
-                            bIsBaseFormOpen = true;
-                            break;
-                        default:
-                            break;
+                        bUpdateLastTimeDonateShown = true;
+
+                        VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar(u"donate"_ustr, u""_ustr, SfxResId(STR_DONATE_TEXT), InfobarType::INFO);
+                        if (pInfoBar)
+                        {
+                            weld::Button& rDonateButton = pInfoBar->addButton();
+                            rDonateButton.set_label(SfxResId(STR_DONATE_BUTTON));
+                            rDonateButton.connect_clicked(LINK(this, SfxViewFrame, DonationHandler));
+                        }
                     }
-                    if (!bIsBaseFormOpen)
+
+                    if (bUpdateLastTimeDonateShown
+                        && !officecfg::Setup::Product::LastTimeDonateShown::isReadOnly())
                     {
-                        // tdf#127946 pass in argument for dialog parent
-                        SfxUnoFrameItem aDocFrame(SID_FILLFRAME, xCurrentFrame);
-                        GetDispatcher()->ExecuteList(SID_TIPOFTHEDAY, SfxCallMode::SLOT, {},
-                                                     { &aDocFrame });
+                        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+                        officecfg::Setup::Product::LastTimeDonateShown::set(nNow, batch);
+                        batch->commit();
                     }
-                }
-
-                // inform about the community involvement
-                const auto t0 = std::chrono::system_clock::now().time_since_epoch();
-                const sal_Int64 nLastGetInvolvedShown = officecfg::Setup::Product::LastTimeGetInvolvedShown::get();
-                const sal_Int64 nNow = std::chrono::duration_cast<std::chrono::seconds>(t0).count();
-                const sal_Int64 nPeriodSec(60 * 60 * 24 * 180); // 180 days in seconds
-                bool bUpdateLastTimeGetInvolvedShown = false;
-
-                if (nLastGetInvolvedShown == 0)
-                    bUpdateLastTimeGetInvolvedShown = true;
-                else if (!bIsInfobarShown && nPeriodSec < nNow && nLastGetInvolvedShown < (nNow + nPeriodSec/2) - nPeriodSec) // 90d alternating with donation
-                {
-                    bUpdateLastTimeGetInvolvedShown = true;
-
-                    VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar(u"getinvolved"_ustr, u""_ustr, SfxResId(STR_GET_INVOLVED_TEXT), InfobarType::INFO);
-                    bIsInfobarShown = true;
-                    if (pInfoBar)
-                    {
-                        weld::Button& rGetInvolvedButton = pInfoBar->addButton();
-                        rGetInvolvedButton.set_label(SfxResId(STR_GET_INVOLVED_BUTTON));
-                        rGetInvolvedButton.connect_clicked(LINK(this, SfxViewFrame, GetInvolvedHandler));
-                    }
-                }
-
-                if (bUpdateLastTimeGetInvolvedShown
-                    && !officecfg::Setup::Product::LastTimeGetInvolvedShown::isReadOnly())
-                {
-                    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-                    officecfg::Setup::Product::LastTimeGetInvolvedShown::set(nNow, batch);
-                    batch->commit();
-                }
-
-                // inform about donations
-                const sal_Int64 nLastDonateShown = officecfg::Setup::Product::LastTimeDonateShown::get();
-                bool bUpdateLastTimeDonateShown = false;
-
-                if (nLastDonateShown == 0)
-                    bUpdateLastTimeDonateShown = true;
-                else if (!bIsInfobarShown && nPeriodSec < nNow && nLastDonateShown < nNow - nPeriodSec) // 90d alternating with getinvolved
-                {
-                    bUpdateLastTimeDonateShown = true;
-
-                    VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar(u"donate"_ustr, u""_ustr, SfxResId(STR_DONATE_TEXT), InfobarType::INFO);
-                    if (pInfoBar)
-                    {
-                        weld::Button& rDonateButton = pInfoBar->addButton();
-                        rDonateButton.set_label(SfxResId(STR_DONATE_BUTTON));
-                        rDonateButton.connect_clicked(LINK(this, SfxViewFrame, DonationHandler));
-                    }
-                }
-
-                if (bUpdateLastTimeDonateShown
-                    && !officecfg::Setup::Product::LastTimeDonateShown::isReadOnly())
-                {
-                    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-                    officecfg::Setup::Product::LastTimeDonateShown::set(nNow, batch);
-                    batch->commit();
-                }
 #else
                 (void) bIsInfobarShown;
 #endif
+
+                }
 
                 break;
             }
@@ -1833,6 +1838,11 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 }
 
 #if !ENABLE_WASM_STRIP_PINGUSER
+IMPL_LINK_NOARG(SfxViewFrame, WhatsNewHandler, weld::Button&, void)
+{
+    GetDispatcher()->Execute(SID_WHATSNEW);
+}
+
 IMPL_LINK_NOARG(SfxViewFrame, GetInvolvedHandler, weld::Button&, void)
 {
     GetDispatcher()->Execute(SID_GETINVOLVED);
