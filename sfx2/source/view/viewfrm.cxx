@@ -1093,8 +1093,8 @@ void SfxViewFrame::PopShellAndSubShells_Impl( SfxViewShell& i_rViewShell )
         if ( nLevel )
         {
             // more sub shells on the stack, which were not affected by PopSubShells_Impl
-            SfxShell *pSubShell = m_pDispatcher->GetShell( nLevel-1 );
-            m_pDispatcher->Pop( *pSubShell, SfxDispatcherPopFlags::POP_UNTIL | SfxDispatcherPopFlags::POP_DELETE );
+            if (SfxShell *pSubShell = m_pDispatcher->GetShell( nLevel-1 ))
+                m_pDispatcher->Pop( *pSubShell, SfxDispatcherPopFlags::POP_UNTIL | SfxDispatcherPopFlags::POP_DELETE );
         }
         m_pDispatcher->Pop( i_rViewShell );
         m_pDispatcher->Flush();
