@@ -404,13 +404,13 @@ bool SdOptionsMisc::WriteData( Any* pValues ) const
 \************************************************************************/
 
 SdOptionsMiscItem::SdOptionsMiscItem()
-:   SfxPoolItem     ( ATTR_OPTIONS_MISC )
+:   SfxPoolItem     ( ATTR_OPTIONS_MISC, SfxItemType::SdOptionsMiscItemType )
 ,   maOptionsMisc   ( false, false )
 {
 }
 
 SdOptionsMiscItem::SdOptionsMiscItem( SdOptions const * pOpts, ::sd::FrameView const * pView )
-:   SfxPoolItem     ( ATTR_OPTIONS_MISC )
+:   SfxPoolItem     ( ATTR_OPTIONS_MISC, SfxItemType::SdOptionsMiscItemType )
 ,   maOptionsMisc   ( false, false )
 {
     if( pOpts )
@@ -839,13 +839,13 @@ bool SdOptionsPrint::WriteData( Any* pValues ) const
 \************************************************************************/
 
 SdOptionsPrintItem::SdOptionsPrintItem()
-:   SfxPoolItem     ( ATTR_OPTIONS_PRINT )
+:   SfxPoolItem     ( ATTR_OPTIONS_PRINT, SfxItemType::SdOptionsPrintItemType )
 ,   maOptionsPrint  ( false, false )
 {
 }
 
 SdOptionsPrintItem::SdOptionsPrintItem( SdOptions const * pOpts )
-:   SfxPoolItem     ( ATTR_OPTIONS_PRINT )
+:   SfxPoolItem     ( ATTR_OPTIONS_PRINT, SfxItemType::SdOptionsPrintItemType )
 ,   maOptionsPrint  ( false, false )
 {
     if( !pOpts )

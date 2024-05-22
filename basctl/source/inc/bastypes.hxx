@@ -238,9 +238,9 @@ public:
 
     virtual void OnNewDocument ();
     virtual OUString GetHid () const = 0;
-    virtual ItemType GetType () const = 0;
+    virtual SbxItemType GetSbxType () const = 0;
     void InsertLibInfo () const;
-    bool Is (ScriptDocument const&, std::u16string_view, std::u16string_view, ItemType, bool bFindSuspended);
+    bool Is (ScriptDocument const&, std::u16string_view, std::u16string_view, SbxItemType, bool bFindSuspended);
     virtual bool HasActiveEditor () const;
 };
 
@@ -252,7 +252,7 @@ public:
     LibInfo ();
     ~LibInfo ();
 public:
-    void InsertInfo (ScriptDocument const&, OUString const& rLibName, OUString const& rCurrentName, ItemType eCurrentType);
+    void InsertInfo (ScriptDocument const&, OUString const& rLibName, OUString const& rCurrentName, SbxItemType eCurrentType);
     void RemoveInfoFor (ScriptDocument const&);
     Item const* GetInfo (ScriptDocument const&, OUString const& rLibName);
 
@@ -279,12 +279,12 @@ public:
     {
     private:
         OUString        m_aCurrentName;
-        ItemType        m_eCurrentType;
+        SbxItemType     m_eCurrentType;
 
     public:
-        Item (OUString aCurrentName, ItemType eCurrentType);
+        Item (OUString aCurrentName, SbxItemType eCurrentType);
         const OUString& GetCurrentName()        const { return m_aCurrentName; }
-        ItemType        GetCurrentType()        const { return m_eCurrentType; }
+        SbxItemType     GetCurrentType()        const { return m_eCurrentType; }
     };
 private:
     typedef std::unordered_map<Key, Item, Key::Hash> Map;

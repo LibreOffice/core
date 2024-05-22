@@ -29,7 +29,7 @@
 class SAL_DLLPUBLIC_RTTI SdrGrafModeItem_Base: public SfxEnumItem<GraphicDrawMode> {
 protected:
     SdrGrafModeItem_Base(GraphicDrawMode eMode):
-        SfxEnumItem(SDRATTR_GRAFMODE, eMode) {}
+        SfxEnumItem(SDRATTR_GRAFMODE, SfxItemType::SdrGrafModeItem_Base, eMode) {}
 };
 
 class SVXCORE_DLLPUBLIC SdrGrafModeItem final : public SdrGrafModeItem_Base

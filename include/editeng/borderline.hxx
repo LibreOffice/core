@@ -28,6 +28,7 @@
 #include <editeng/editengdllapi.h>
 #include <svtools/borderline.hxx>
 #include <docmodel/color/ComplexColor.hxx>
+#include <o3tl/hash_combine.hxx>
 
 class IntlWrapper;
 
@@ -253,6 +254,21 @@ public:
     static Color threeDDarkColor( Color aMain );
 
     static BorderWidthImpl getWidthImpl( SvxBorderLineStyle nStyle );
+
+    std::size_t getHash() const
+    {
+        std::size_t seed = 0;
+        o3tl::hash_combine(seed, m_nWidth);
+        o3tl::hash_combine(seed, m_nMult);
+        o3tl::hash_combine(seed, m_nDiv);
+        o3tl::hash_combine(seed, m_aWidthImpl.getHash());
+        o3tl::hash_combine(seed, m_aColor.operator::sal_uInt32());
+        o3tl::hash_combine(seed, m_aComplexColor.getHash());
+        o3tl::hash_combine(seed, m_nStyle);
+        o3tl::hash_combine(seed, m_bMirrorWidths);
+        o3tl::hash_combine(seed, m_bUseLeftTop);
+        return seed;
+    }
 };
 
 EDITENG_DLLPUBLIC bool operator!=( const SvxBorderLine& rLeft, const SvxBorderLine& rRight );

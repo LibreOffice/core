@@ -23,12 +23,12 @@
 SfxPoolItem* SfxVoidItem::CreateDefault() { return new SfxVoidItem(0); }
 
 SfxVoidItem::SfxVoidItem(sal_uInt16 which)
-    : SfxPoolItem(which)
+    : SfxPoolItem(which, SfxItemType::SfxVoidItemType)
 {
 }
 
 SfxVoidItem::SfxVoidItem(const SfxVoidItem& rCopy)
-    : SfxPoolItem(rCopy.Which())
+    : SfxPoolItem(rCopy.Which(), SfxItemType::SfxVoidItemType)
 {
 }
 

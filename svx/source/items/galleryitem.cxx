@@ -32,7 +32,8 @@
 SfxPoolItem* SvxGalleryItem::CreateDefault() { return new SvxGalleryItem; }
 
 SvxGalleryItem::SvxGalleryItem()
-    : m_nType( css::gallery::GalleryItemType::EMPTY )
+    : SfxPoolItem( 0, SfxItemType::SvxGalleryItemType )
+    , m_nType( css::gallery::GalleryItemType::EMPTY )
 {
 }
 

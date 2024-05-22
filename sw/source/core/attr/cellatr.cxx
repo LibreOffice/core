@@ -54,7 +54,7 @@ SwTableBoxNumFormat* SwTableBoxNumFormat::Clone( SfxItemPool* ) const
 }
 
 SwTableBoxFormula::SwTableBoxFormula( const OUString& rFormula )
-    : SfxPoolItem( RES_BOXATR_FORMULA ),
+    : SfxPoolItem( RES_BOXATR_FORMULA, SfxItemType::SwTableFormulaType ),
     SwTableFormula( rFormula ),
     m_pDefinedIn( nullptr )
 {
@@ -156,12 +156,12 @@ void SwTableBoxFormula::Calc( SwTableCalcPara& rCalcPara, double& rValue )
 }
 
 SwTableBoxValue::SwTableBoxValue()
-    : SfxPoolItem( RES_BOXATR_VALUE ), m_nValue( 0 )
+    : SfxPoolItem( RES_BOXATR_VALUE, SfxItemType::SwTableBoxValueType ), m_nValue( 0 )
 {
 }
 
 SwTableBoxValue::SwTableBoxValue( const double nVal )
-    : SfxPoolItem( RES_BOXATR_VALUE ), m_nValue( nVal )
+    : SfxPoolItem( RES_BOXATR_VALUE, SfxItemType::SwTableBoxValueType ), m_nValue( nVal )
 {
 }
 

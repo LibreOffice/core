@@ -26,7 +26,7 @@ namespace svx
 {
 
     DatabaseMapItem::DatabaseMapItem( sal_uInt16 _nId, DatabaseRegistrations&& _rRegistrations )
-        :SfxPoolItem( _nId )
+        :SfxPoolItem( _nId, SfxItemType::DatabaseMapItemType )
         ,m_aRegistrations( std::move(_rRegistrations) )
     {
     }

@@ -646,9 +646,9 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             const OUString& aName( rSbxItem.GetName() );
             if ( m_aCurLibName.isEmpty() || ( aDocument == m_aCurDocument && aLibName == m_aCurLibName ) )
             {
-                if ( rSbxItem.GetType() == TYPE_MODULE )
+                if ( rSbxItem.GetSbxType() == SBX_TYPE_MODULE )
                     FindBasWin( aDocument, aLibName, aName, true );
-                else if ( rSbxItem.GetType() == TYPE_DIALOG )
+                else if ( rSbxItem.GetSbxType() == SBX_TYPE_DIALOG )
                     FindDlgWin( aDocument, aLibName, aName, true );
             }
         }
@@ -658,7 +658,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             const SbxItem& rSbxItem = rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX );
             const ScriptDocument& aDocument( rSbxItem.GetDocument() );
-            VclPtr<BaseWindow> pWin = FindWindow( aDocument, rSbxItem.GetLibName(), rSbxItem.GetName(), rSbxItem.GetType(), true );
+            VclPtr<BaseWindow> pWin = FindWindow( aDocument, rSbxItem.GetLibName(), rSbxItem.GetName(), rSbxItem.GetSbxType(), true );
             if ( pWin )
                 RemoveWindow( pWin, true );
         }
@@ -672,15 +672,15 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             const OUString& aName( rSbxItem.GetName() );
             SetCurLib( aDocument, aLibName );
             BaseWindow* pWin = nullptr;
-            if ( rSbxItem.GetType() == TYPE_DIALOG )
+            if ( rSbxItem.GetSbxType() == SBX_TYPE_DIALOG )
             {
                 pWin = FindDlgWin( aDocument, aLibName, aName, true );
             }
-            else if ( rSbxItem.GetType() == TYPE_MODULE )
+            else if ( rSbxItem.GetSbxType() == SBX_TYPE_MODULE )
             {
                 pWin = FindBasWin( aDocument, aLibName, aName, true );
             }
-            else if ( rSbxItem.GetType() == TYPE_METHOD )
+            else if ( rSbxItem.GetSbxType() == SBX_TYPE_METHOD )
             {
                 pWin = FindBasWin( aDocument, aLibName, aName, true );
                 static_cast<ModulWindow*>(pWin)->EditMacro( rSbxItem.GetMethodName() );
@@ -1354,7 +1354,7 @@ void Shell::SetCurWindow( BaseWindow* pNewWin, bool bUpdateTabBar, bool bRemembe
         pLayout->Deactivating();
     if (pCurWin)
     {
-        if (pCurWin->GetType() == TYPE_MODULE)
+        if (pCurWin->GetSbxType() == SBX_TYPE_MODULE)
             pLayout = pModulLayout.get();
         else
             pLayout = pDialogLayout.get();
@@ -1461,19 +1461,19 @@ void Shell::ManageToolbars()
 
 VclPtr<BaseWindow> Shell::FindApplicationWindow()
 {
-    return FindWindow( ScriptDocument::getApplicationScriptDocument(), u"", u"", TYPE_UNKNOWN );
+    return FindWindow( ScriptDocument::getApplicationScriptDocument(), u"", u"", SBX_TYPE_UNKNOWN );
 }
 
 VclPtr<BaseWindow> Shell::FindWindow(
     ScriptDocument const& rDocument,
     std::u16string_view rLibName, std::u16string_view rName,
-    ItemType eType, bool bFindSuspended
+    SbxItemType eSbxItemType, bool bFindSuspended
 )
 {
     for (auto const& window : aWindowTable)
     {
         BaseWindow* const pWin = window.second;
-        if (pWin->Is(rDocument, rLibName, rName, eType, bFindSuspended))
+        if (pWin->Is(rDocument, rLibName, rName, eSbxItemType, bFindSuspended))
             return pWin;
     }
     return nullptr;

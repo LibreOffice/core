@@ -42,7 +42,7 @@ class SW_DLLPUBLIC SwMirrorGrf final : public SfxEnumItem<MirrorGraph>
 
 public:
     SwMirrorGrf( MirrorGraph eMiro = MirrorGraph::Dont )
-        : SfxEnumItem( RES_GRFATR_MIRRORGRF, eMiro ), m_bGrfToggle( false )
+        : SfxEnumItem( RES_GRFATR_MIRRORGRF, SfxItemType::SwMirrorGrfType, eMiro ), m_bGrfToggle( false )
     {}
 
     // pure virtual methods of SfxPoolItem
@@ -88,7 +88,7 @@ private:
 
 public:
     SwRotationGrf()
-        : SfxUInt16Item( RES_GRFATR_ROTATION, 0 )
+        : SfxUInt16Item( RES_GRFATR_ROTATION, 0, SfxItemType::SwRotationGrfType )
     {}
     SwRotationGrf( Degree10 nVal, const Size& rSz );
 
@@ -187,11 +187,11 @@ class SW_DLLPUBLIC SwGammaGrf final : public SfxPoolItem
 {
     double m_nValue;
 public:
-    SwGammaGrf() : SfxPoolItem( RES_GRFATR_GAMMA ), m_nValue( 1.0 )
+    SwGammaGrf() : SfxPoolItem( RES_GRFATR_GAMMA, SfxItemType::SwGammaGrfType ), m_nValue( 1.0 )
     {}
 
     SwGammaGrf( const double& rVal )
-        : SfxPoolItem( RES_GRFATR_GAMMA ), m_nValue( rVal )
+        : SfxPoolItem( RES_GRFATR_GAMMA, SfxItemType::SwGammaGrfType ), m_nValue( rVal )
     {}
 
     // pure virtual methods from SfxEnumItem
@@ -215,7 +215,7 @@ class SwInvertGrf final : public SfxBoolItem
 {
 public:
     SwInvertGrf( bool bVal = false )
-        : SfxBoolItem( RES_GRFATR_INVERT, bVal )
+        : SfxBoolItem( RES_GRFATR_INVERT, bVal, SfxItemType::SwInvertGrfType )
     {}
 
     // pure virtual methods from SfxInt16Item
@@ -231,7 +231,7 @@ class SwTransparencyGrf final : public SfxByteItem
 {
 public:
     SwTransparencyGrf( sal_Int8 nVal = 0 )
-        : SfxByteItem( RES_GRFATR_TRANSPARENCY, nVal )
+        : SfxByteItem( RES_GRFATR_TRANSPARENCY, nVal, SfxItemType::SwTransparencyGrfType )
     {}
 
     // pure virtual methods from SfxInt16Item
@@ -251,7 +251,7 @@ public:
 class SwDrawModeGrf_Base: public SfxEnumItem<GraphicDrawMode> {
 protected:
     SwDrawModeGrf_Base(GraphicDrawMode nMode):
-        SfxEnumItem(RES_GRFATR_DRAWMODE, nMode) {}
+        SfxEnumItem(RES_GRFATR_DRAWMODE, SfxItemType::SwDrawModeGrf_BaseType, nMode) {}
 };
 
 class SW_DLLPUBLIC SwDrawModeGrf final : public SwDrawModeGrf_Base

@@ -1339,7 +1339,7 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
             if (xDlgPersLibContainer.is())
                 xDlgPersLibContainer->storeLibraries();
 
-            SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
+            SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, SBX_TYPE_MODULE );
             if (SfxDispatcher* pDispatcher = GetDispatcher())
                 pDispatcher->ExecuteList(SID_BASICIDE_SBXINSERTED,
                                       SfxCallMode::SYNCHRON, { &aSbxItem });

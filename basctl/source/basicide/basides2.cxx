@@ -208,7 +208,7 @@ VclPtr<ModulWindow> Shell::FindBasWin (
     bool bCreateIfNotExist, bool bFindSuspended
 )
 {
-    if (VclPtr<BaseWindow> pWin = FindWindow(rDocument, rLibName, rName, TYPE_MODULE, bFindSuspended))
+    if (VclPtr<BaseWindow> pWin = FindWindow(rDocument, rLibName, rName, SBX_TYPE_MODULE, bFindSuspended))
         return VclPtr<ModulWindow>(static_cast<ModulWindow*>(pWin.get()));
     return bCreateIfNotExist ? CreateBasWin(rDocument, rLibName, rName) : nullptr;
 }

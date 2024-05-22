@@ -79,7 +79,8 @@ class SFX2_DLLPUBLIC SfxLinkItem final : public SfxPoolItem
 {
     Link<SfxPoolItem const *, void> aLink;
 public:
-    SfxLinkItem( sal_uInt16 nWhichId, const Link<SfxPoolItem const *, void>& rValue ) : SfxPoolItem( nWhichId )
+    SfxLinkItem( sal_uInt16 nWhichId, const Link<SfxPoolItem const *, void>& rValue )
+        : SfxPoolItem( nWhichId, SfxItemType::SfxLinkItemType )
     {   aLink = rValue; }
 
     virtual SfxLinkItem*     Clone( SfxItemPool* = nullptr ) const override

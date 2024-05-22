@@ -135,7 +135,7 @@ private:
 };
 
 inline SvxMacroItem::SvxMacroItem( const sal_uInt16 nId )
-    : SfxPoolItem( nId )
+    : SfxPoolItem( nId, SfxItemType::SvxMacroItemType )
 {}
 
 inline bool SvxMacroItem::HasMacro( SvMacroItemId nEvent ) const

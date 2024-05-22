@@ -279,22 +279,22 @@ void BaseWindow::OnNewDocument ()
 void BaseWindow::InsertLibInfo () const
 {
     if (ExtraData* pData = GetExtraData())
-        pData->GetLibInfo().InsertInfo(m_aDocument, m_aLibName, m_aName, GetType());
+        pData->GetLibInfo().InsertInfo(m_aDocument, m_aLibName, m_aName, GetSbxType());
 }
 
 bool BaseWindow::Is (
     ScriptDocument const& rDocument,
     std::u16string_view rLibName, std::u16string_view rName,
-    ItemType eType, bool bFindSuspended
+    SbxItemType eSbxType, bool bFindSuspended
 )
 {
     if (bFindSuspended || !IsSuspended())
     {
         // any non-suspended window is ok
-        if (rLibName.empty() || rName.empty() || eType == TYPE_UNKNOWN)
+        if (rLibName.empty() || rName.empty() || eSbxType == SBX_TYPE_UNKNOWN)
             return true;
         // ok if the parameters match
-        if (m_aDocument == rDocument && m_aLibName == rLibName && m_aName == rName && GetType() == eType)
+        if (m_aDocument == rDocument && m_aLibName == rLibName && m_aName == rName && GetSbxType() == eSbxType)
             return true;
     }
     return false;
@@ -694,7 +694,7 @@ void LibInfo::InsertInfo (
     ScriptDocument const& rDocument,
     OUString const& rLibName,
     OUString const& rCurrentName,
-    ItemType eCurrentType
+    SbxItemType eCurrentType
 )
 {
     Key aKey(rDocument, rLibName);
@@ -737,7 +737,7 @@ size_t LibInfo::Key::Hash::operator () (Key const& rKey) const
 
 LibInfo::Item::Item (
     OUString aCurrentName,
-    ItemType eCurrentType
+    SbxItemType eCurrentType
 ) :
     m_aCurrentName(std::move(aCurrentName)),
     m_eCurrentType(eCurrentType)

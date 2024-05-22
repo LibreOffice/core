@@ -32,7 +32,8 @@ enum class SdrCaptionEscDir { Horizontal, Vertical, BestFit };
 
 class SVXCORE_DLLPUBLIC SdrCaptionEscDirItem final : public SfxEnumItem<SdrCaptionEscDir> {
 public:
-    SdrCaptionEscDirItem(SdrCaptionEscDir eDir=SdrCaptionEscDir::Horizontal): SfxEnumItem(SDRATTR_CAPTIONESCDIR, eDir) {}
+    SdrCaptionEscDirItem(SdrCaptionEscDir eDir=SdrCaptionEscDir::Horizontal)
+        : SfxEnumItem(SDRATTR_CAPTIONESCDIR, SfxItemType::SdrCaptionEscDirItemType, eDir) {}
     SAL_DLLPRIVATE virtual SdrCaptionEscDirItem* Clone(SfxItemPool* pPool=nullptr) const override;
     SAL_DLLPRIVATE virtual sal_uInt16       GetValueCount() const override; // { return 3; }
 

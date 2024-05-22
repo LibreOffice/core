@@ -29,11 +29,11 @@ using namespace com::sun::star;
 
 
 SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem()
-:   SfxPoolItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )
+:   SfxPoolItem( SDRATTR_CUSTOMSHAPE_GEOMETRY, SfxItemType::SdrCustomShapeGeometryItemType )
 {}
 
 SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem( const uno::Sequence< beans::PropertyValue >& rVal )
-:   SfxPoolItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )
+:   SfxPoolItem( SDRATTR_CUSTOMSHAPE_GEOMETRY, SfxItemType::SdrCustomShapeGeometryItemType )
 {
     SetPropSeq( rVal );
 }

@@ -78,7 +78,8 @@ enum class SdrTextAniKind {
 
 class SVXCORE_DLLPUBLIC SdrTextAniKindItem final : public SfxEnumItem<SdrTextAniKind> {
 public:
-    SdrTextAniKindItem(SdrTextAniKind eKind=SdrTextAniKind::NONE): SfxEnumItem(SDRATTR_TEXT_ANIKIND, eKind) {}
+    SdrTextAniKindItem(SdrTextAniKind eKind=SdrTextAniKind::NONE)
+    : SfxEnumItem(SDRATTR_TEXT_ANIKIND, SfxItemType::SdrTextAniKindItemType, eKind) {}
     virtual SdrTextAniKindItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual sal_uInt16        GetValueCount() const override; // { return 5; }
 

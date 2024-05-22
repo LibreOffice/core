@@ -24,7 +24,7 @@
 
 
 SwDocDisplayItem::SwDocDisplayItem() :
-        SfxPoolItem(FN_PARAM_DOCDISP)
+        SfxPoolItem(FN_PARAM_DOCDISP, SfxItemType::SwDocDisplayItemType)
 {
     m_bParagraphEnd       =
     m_bTab                =
@@ -39,7 +39,7 @@ SwDocDisplayItem::SwDocDisplayItem() :
 
 // Item for the Settings dialog, page document view
 SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt ) :
-            SfxPoolItem( FN_PARAM_DOCDISP )
+            SfxPoolItem( FN_PARAM_DOCDISP, SfxItemType::SwDocDisplayItemType )
 {
     m_bParagraphEnd       = rVOpt.IsParagraph(true);
     m_bTab                = rVOpt.IsTab(true);
@@ -88,7 +88,7 @@ void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
 }
 
 SwElemItem::SwElemItem() :
-    SfxPoolItem(FN_PARAM_ELEM)
+    SfxPoolItem(FN_PARAM_ELEM, SfxItemType::SwElemItemType)
 {
     m_bVertRuler     =
     m_bVertRulerRight=
@@ -107,7 +107,7 @@ SwElemItem::SwElemItem() :
 }
 
 SwElemItem::SwElemItem(const SwViewOption& rVOpt) :
-            SfxPoolItem( FN_PARAM_ELEM )
+            SfxPoolItem( FN_PARAM_ELEM, SfxItemType::SwElemItemType )
 {
     m_bVertRuler      = rVOpt.IsViewVRuler(true);
     m_bVertRulerRight = rVOpt.IsVRulerRight();
@@ -173,13 +173,13 @@ void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
 
 // CTOR for empty Item
 SwAddPrinterItem::SwAddPrinterItem():
-                SfxPoolItem(FN_PARAM_ADDPRINTER)
+                SfxPoolItem(FN_PARAM_ADDPRINTER, SfxItemType::SwAddPrinterItemType)
 {
 }
 
 // CTOR from SwPrintOptions
 SwAddPrinterItem::SwAddPrinterItem( const SwPrintData& rPrtData ) :
-    SfxPoolItem(FN_PARAM_ADDPRINTER)
+    SfxPoolItem(FN_PARAM_ADDPRINTER, SfxItemType::SwAddPrinterItemType)
 {
     SwPrintData::operator=(rPrtData);
 }
@@ -200,14 +200,14 @@ bool SwAddPrinterItem::operator==( const SfxPoolItem& rAttr ) const
 
 // Item for Settings dialog, ShadowCursorPage
 SwShadowCursorItem::SwShadowCursorItem()
-    : SfxPoolItem( FN_PARAM_SHADOWCURSOR ),
+    : SfxPoolItem( FN_PARAM_SHADOWCURSOR, SfxItemType::SwShadowCursorItemType ),
     m_eMode( SwFillMode::Tab )
     ,m_bOn( false )
 {
 }
 
 SwShadowCursorItem::SwShadowCursorItem( const SwViewOption& rVOpt )
-    : SfxPoolItem( FN_PARAM_SHADOWCURSOR ),
+    : SfxPoolItem( FN_PARAM_SHADOWCURSOR, SfxItemType::SwShadowCursorItemType ),
     m_eMode( rVOpt.GetShdwCursorFillMode() )
     ,m_bOn( rVOpt.IsShadowCursor() )
 
@@ -233,13 +233,13 @@ void SwShadowCursorItem::FillViewOptions( SwViewOption& rVOpt ) const
 }
 
 SwFmtAidsAutoComplItem::SwFmtAidsAutoComplItem()
-    : SfxPoolItem(FN_PARAM_FMT_AIDS_AUTOCOMPL)
+    : SfxPoolItem(FN_PARAM_FMT_AIDS_AUTOCOMPL, SfxItemType::SwFmtAidsAutoComplItemType)
     , m_bEncloseWithCharactersOn(true)
 {
 }
 
 SwFmtAidsAutoComplItem::SwFmtAidsAutoComplItem(const SwViewOption& rVOpt)
-    : SfxPoolItem(FN_PARAM_FMT_AIDS_AUTOCOMPL)
+    : SfxPoolItem(FN_PARAM_FMT_AIDS_AUTOCOMPL, SfxItemType::SwFmtAidsAutoComplItemType)
     , m_bEncloseWithCharactersOn(rVOpt.IsEncloseWithCharactersOn())
 {
 }

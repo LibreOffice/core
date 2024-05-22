@@ -40,7 +40,7 @@ bool ScDefaultsOptions::operator==( const ScDefaultsOptions& rOpt ) const
 }
 
 ScTpDefaultsItem::ScTpDefaultsItem( ScDefaultsOptions aOpt ) :
-    SfxPoolItem ( SID_SCDEFAULTSOPTIONS ),
+    SfxPoolItem ( SID_SCDEFAULTSOPTIONS, SfxItemType::ScTpDefaultsItemType ),
     theOptions  (std::move( aOpt ))
 {
 }

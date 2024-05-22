@@ -41,7 +41,7 @@ SvxZoomItem::SvxZoomItem
     sal_uInt16      nVal,
     TypedWhichId<SvxZoomItem>      _nWhich
 )
-:   SfxUInt16Item( _nWhich, nVal ),
+:   SfxUInt16Item( _nWhich, nVal, SfxItemType::SfxZoomItemType ),
     nValueSet( SvxZoomEnableFlags::ALL ),
     eType( eZoomType )
 {

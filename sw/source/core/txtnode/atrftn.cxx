@@ -124,7 +124,7 @@ namespace {
 }
 
 SwFormatFootnote::SwFormatFootnote( bool bEndNote )
-    : SfxPoolItem( RES_TXTATR_FTN )
+    : SfxPoolItem( RES_TXTATR_FTN, SfxItemType::SwFormatFootnoteType )
     , sw::BroadcastingModify()
     , m_pTextAttr(nullptr)
     , m_nNumber(0)

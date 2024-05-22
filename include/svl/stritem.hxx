@@ -29,10 +29,11 @@ class SVL_DLLPUBLIC SfxStringItem: public CntUnencodedStringItem
 public:
     static SfxPoolItem* CreateDefault();
 
-    SfxStringItem(sal_uInt16 which = 0): CntUnencodedStringItem(which) {}
+    SfxStringItem(sal_uInt16 which = 0, SfxItemType eItemType = SfxItemType::SfxStringItemType)
+        : CntUnencodedStringItem(which, eItemType) {}
 
-    SfxStringItem(sal_uInt16 which, const OUString & rValue):
-        CntUnencodedStringItem(which, rValue) {}
+    SfxStringItem(sal_uInt16 which, const OUString & rValue, SfxItemType eItemType = SfxItemType::SfxStringItemType):
+        CntUnencodedStringItem(which, rValue, eItemType) {}
 
     virtual SfxStringItem* Clone(SfxItemPool * = nullptr) const override;
 

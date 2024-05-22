@@ -31,7 +31,8 @@ class SVL_DLLPUBLIC SfxFlagItem: public SfxPoolItem
 
 public:
 
-    explicit                 SfxFlagItem( sal_uInt16 nWhich = 0, sal_uInt16 nValue = 0 );
+    explicit                 SfxFlagItem( sal_uInt16 nWhich = 0, sal_uInt16 nValue = 0,
+                                 SfxItemType eItemType = SfxItemType::SfxFlagItemType );
 
     virtual sal_uInt8        GetFlagCount() const;
 

@@ -276,13 +276,13 @@ MetaAction* SvxFieldData::createEndComment()
 
 
 SvxFieldItem::SvxFieldItem( std::unique_ptr<SvxFieldData> pField, const sal_uInt16 nId ) :
-    SfxPoolItem( nId )
+    SfxPoolItem( nId, SfxItemType::SvxFieldItemType )
     , mpField( std::move(pField) )
 {
 }
 
 SvxFieldItem::SvxFieldItem( const SvxFieldData& rField, const sal_uInt16 nId ) :
-    SfxPoolItem( nId )
+    SfxPoolItem( nId, SfxItemType::SvxFieldItemType )
     , mpField( rField.Clone() )
 {
 }

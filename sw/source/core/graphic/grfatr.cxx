@@ -134,11 +134,11 @@ bool SwMirrorGrf::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 }
 
 SwCropGrf::SwCropGrf()
-    : SvxGrfCrop( RES_GRFATR_CROPGRF )
+    : SvxGrfCrop( RES_GRFATR_CROPGRF, SfxItemType::SwCropGrfType )
 {}
 
 SwCropGrf::SwCropGrf(sal_Int32 nL, sal_Int32 nR, sal_Int32 nT, sal_Int32 nB )
-    : SvxGrfCrop( nL, nR, nT, nB, RES_GRFATR_CROPGRF )
+    : SvxGrfCrop( nL, nR, nT, nB, RES_GRFATR_CROPGRF, SfxItemType::SwCropGrfType )
 {}
 
 SwCropGrf* SwCropGrf::Clone( SfxItemPool* ) const
@@ -166,7 +166,7 @@ Degree10 SwRotationGrf::checkAndCorrectValue(Degree10 nValue)
 
 SwRotationGrf::SwRotationGrf( Degree10 nVal, const Size& rSz )
     // tdf#115529 check and evtl. correct value
-:   SfxUInt16Item( RES_GRFATR_ROTATION, checkAndCorrectValue(nVal).get() ),
+:   SfxUInt16Item( RES_GRFATR_ROTATION, checkAndCorrectValue(nVal).get(), SfxItemType::SwRotationGrfType ),
     m_aUnrotatedSize( rSz )
 {
 }

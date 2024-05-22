@@ -31,12 +31,13 @@ SfxPoolItem* SfxRectangleItem::CreateDefault() { return new SfxRectangleItem; }
 
 
 SfxRectangleItem::SfxRectangleItem()
+    : SfxPoolItem( 0, SfxItemType::SfxRectangleItemType )
 {
 }
 
 
 SfxRectangleItem::SfxRectangleItem( sal_uInt16 nW, const tools::Rectangle& rVal ) :
-    SfxPoolItem( nW ),
+    SfxPoolItem( nW, SfxItemType::SfxRectangleItemType ),
     maVal( rVal )
 {
 }

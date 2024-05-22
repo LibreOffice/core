@@ -98,13 +98,13 @@ using namespace ::com::sun::star;
 typedef std::map<OUString, OUString> StringMap;
 
 NameOrIndex::NameOrIndex(TypedWhichId<NameOrIndex> _nWhich, sal_Int32 nIndex) :
-    SfxStringItem(_nWhich, OUString()),
+    SfxStringItem(_nWhich, OUString(), SfxItemType::NameOrIndexType),
     m_nPalIndex(nIndex)
 {
 }
 
 NameOrIndex::NameOrIndex(TypedWhichId<NameOrIndex> _nWhich, const OUString& rName) :
-    SfxStringItem(_nWhich, rName),
+    SfxStringItem(_nWhich, rName, SfxItemType::NameOrIndexType),
     m_nPalIndex(-1)
 {
 }
@@ -420,7 +420,7 @@ void XColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 SfxPoolItem* XLineStyleItem::CreateDefault() { return new XLineStyleItem; }
 
 XLineStyleItem::XLineStyleItem(css::drawing::LineStyle eTheLineStyle) :
-    SfxEnumItem(XATTR_LINESTYLE, eTheLineStyle)
+    SfxEnumItem(XATTR_LINESTYLE, SfxItemType::XLineStyleItemType, eTheLineStyle)
 {
 }
 
@@ -976,7 +976,7 @@ std::unique_ptr<XLineDashItem> XLineDashItem::checkForUniqueItem( SdrModel* pMod
 SfxPoolItem* XLineWidthItem::CreateDefault() {return new XLineWidthItem;}
 
 XLineWidthItem::XLineWidthItem(tools::Long nWidth) :
-    SfxMetricItem(XATTR_LINEWIDTH, nWidth)
+    SfxMetricItem(XATTR_LINEWIDTH, nWidth, SfxItemType::XLineWidthItemType)
 {
 }
 
@@ -1728,7 +1728,7 @@ bool XLineEndItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 }
 
 XLineStartWidthItem::XLineStartWidthItem(tools::Long nWidth) :
-    SfxMetricItem(XATTR_LINESTARTWIDTH, nWidth)
+    SfxMetricItem(XATTR_LINESTARTWIDTH, nWidth, SfxItemType::XLineStartWidthItemType)
 {
 }
 
@@ -1766,7 +1766,7 @@ bool XLineStartWidthItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemb
 }
 
 XLineEndWidthItem::XLineEndWidthItem(tools::Long nWidth) :
-   SfxMetricItem(XATTR_LINEENDWIDTH, nWidth)
+   SfxMetricItem(XATTR_LINEENDWIDTH, nWidth, SfxItemType::XLineEndWidthItemType)
 {
 }
 
@@ -1804,7 +1804,7 @@ bool XLineEndWidthItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMember
 }
 
 XLineStartCenterItem::XLineStartCenterItem(bool bStartCenter) :
-    SfxBoolItem(XATTR_LINESTARTCENTER, bStartCenter)
+    SfxBoolItem(XATTR_LINESTARTCENTER, bStartCenter, SfxItemType::XLineStartCenterItem)
 {
 }
 
@@ -1843,7 +1843,7 @@ bool XLineStartCenterItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMem
 }
 
 XLineEndCenterItem::XLineEndCenterItem(bool bEndCenter) :
-    SfxBoolItem(XATTR_LINEENDCENTER, bEndCenter)
+    SfxBoolItem(XATTR_LINEENDCENTER, bEndCenter, SfxItemType::XLineEndCenterItemType)
 {
 }
 
@@ -1887,7 +1887,7 @@ bool XLineEndCenterItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMembe
 SfxPoolItem* XFillStyleItem::CreateDefault() { return new XFillStyleItem; }
 
 XFillStyleItem::XFillStyleItem(drawing::FillStyle eFillStyle) :
-    SfxEnumItem(XATTR_FILLSTYLE, eFillStyle)
+    SfxEnumItem(XATTR_FILLSTYLE, SfxItemType::XFillStyleItemType, eFillStyle)
 {
 }
 
@@ -2897,7 +2897,7 @@ std::unique_ptr<XFillHatchItem> XFillHatchItem::checkForUniqueItem( SdrModel* pM
 SfxPoolItem* XFormTextStyleItem::CreateDefault() { return new XFormTextStyleItem; }
 
 XFormTextStyleItem::XFormTextStyleItem(XFormTextStyle eTheStyle) :
-    SfxEnumItem(XATTR_FORMTXTSTYLE, eTheStyle)
+    SfxEnumItem(XATTR_FORMTXTSTYLE, SfxItemType::XFormTextStyleItemType, eTheStyle)
 {
 }
 
@@ -2930,7 +2930,7 @@ bool XFormTextStyleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
 SfxPoolItem* XFormTextAdjustItem::CreateDefault() { return new XFormTextAdjustItem; }
 
 XFormTextAdjustItem::XFormTextAdjustItem(XFormTextAdjust eTheAdjust) :
-    SfxEnumItem(XATTR_FORMTXTADJUST, eTheAdjust)
+    SfxEnumItem(XATTR_FORMTXTADJUST, SfxItemType::XFormTextAdjustItemType, eTheAdjust)
 {
 }
 
@@ -2963,7 +2963,7 @@ bool XFormTextAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*
 SfxPoolItem* XFormTextDistanceItem::CreateDefault() { return new XFormTextDistanceItem; }
 
 XFormTextDistanceItem::XFormTextDistanceItem(tools::Long nDist) :
-    SfxMetricItem(XATTR_FORMTXTDISTANCE, nDist)
+    SfxMetricItem(XATTR_FORMTXTDISTANCE, nDist, SfxItemType::XFormTextDistanceItemType)
 {
 }
 
@@ -2975,7 +2975,7 @@ XFormTextDistanceItem* XFormTextDistanceItem::Clone(SfxItemPool* /*pPool*/) cons
 SfxPoolItem* XFormTextStartItem::CreateDefault() { return new XFormTextStartItem; }
 
 XFormTextStartItem::XFormTextStartItem(tools::Long nStart) :
-    SfxMetricItem(XATTR_FORMTXTSTART, nStart)
+    SfxMetricItem(XATTR_FORMTXTSTART, nStart, SfxItemType::XFormTextStartItemType)
 {
 }
 
@@ -2987,7 +2987,7 @@ XFormTextStartItem* XFormTextStartItem::Clone(SfxItemPool* /*pPool*/) const
 SfxPoolItem* XFormTextMirrorItem::CreateDefault() { return new XFormTextMirrorItem; }
 
 XFormTextMirrorItem::XFormTextMirrorItem(bool bMirror) :
-    SfxBoolItem(XATTR_FORMTXTMIRROR, bMirror)
+    SfxBoolItem(XATTR_FORMTXTMIRROR, bMirror, SfxItemType::XFormTextMirrorItem)
 {
 }
 
@@ -2999,7 +2999,7 @@ XFormTextMirrorItem* XFormTextMirrorItem::Clone(SfxItemPool* /*pPool*/) const
 SfxPoolItem* XFormTextOutlineItem::CreateDefault() { return new XFormTextOutlineItem; }
 
 XFormTextOutlineItem::XFormTextOutlineItem(bool bOutline) :
-    SfxBoolItem(XATTR_FORMTXTOUTLINE, bOutline)
+    SfxBoolItem(XATTR_FORMTXTOUTLINE, bOutline, SfxItemType::XFormTextOutlineItemType)
 {
 }
 
@@ -3011,7 +3011,7 @@ XFormTextOutlineItem* XFormTextOutlineItem::Clone(SfxItemPool* /*pPool*/) const
 SfxPoolItem* XFormTextShadowItem::CreateDefault() { return new XFormTextShadowItem; }
 
 XFormTextShadowItem::XFormTextShadowItem(XFormTextShadow eFormTextShadow) :
-    SfxEnumItem(XATTR_FORMTXTSHADOW, eFormTextShadow)
+    SfxEnumItem(XATTR_FORMTXTSHADOW, SfxItemType::XFormTextShadowItemType, eFormTextShadow)
 {
 }
 
@@ -3057,7 +3057,7 @@ XFormTextShadowColorItem* XFormTextShadowColorItem::Clone(SfxItemPool* /*pPool*/
 SfxPoolItem* XFormTextShadowXValItem::CreateDefault() { return new XFormTextShadowXValItem; }
 
 XFormTextShadowXValItem::XFormTextShadowXValItem(tools::Long nVal) :
-    SfxMetricItem(XATTR_FORMTXTSHDWXVAL, nVal)
+    SfxMetricItem(XATTR_FORMTXTSHDWXVAL, nVal, SfxItemType::XFormTextShadowXValItemType)
 {
 }
 
@@ -3069,7 +3069,7 @@ XFormTextShadowXValItem* XFormTextShadowXValItem::Clone(SfxItemPool* /*pPool*/) 
 SfxPoolItem* XFormTextShadowYValItem::CreateDefault() { return new XFormTextShadowYValItem; }
 
 XFormTextShadowYValItem::XFormTextShadowYValItem(tools::Long nVal) :
-    SfxMetricItem(XATTR_FORMTXTSHDWYVAL, nVal)
+    SfxMetricItem(XATTR_FORMTXTSHDWYVAL, nVal, SfxItemType::XFormTextShadowYValItemType)
 {
 }
 
@@ -3081,7 +3081,7 @@ XFormTextShadowYValItem* XFormTextShadowYValItem::Clone(SfxItemPool* /*pPool*/) 
 SfxPoolItem* XFormTextHideFormItem::CreateDefault() { return new XFormTextHideFormItem; }
 
 XFormTextHideFormItem::XFormTextHideFormItem(bool bHide) :
-    SfxBoolItem(XATTR_FORMTXTHIDEFORM, bHide)
+    SfxBoolItem(XATTR_FORMTXTHIDEFORM, bHide, SfxItemType::XFormTextHideFormItemType)
 {
 }
 
@@ -3095,13 +3095,14 @@ XFormTextHideFormItem* XFormTextHideFormItem::Clone(SfxItemPool* /*pPool*/) cons
 
 /// a line attribute set item
 XLineAttrSetItem::XLineAttrSetItem( SfxItemSet&& pItemSet ) :
-    SfxSetItem( XATTRSET_LINE, std::move(pItemSet))
+    SfxSetItem( XATTRSET_LINE, std::move(pItemSet), SfxItemType::XLineAttrSetItemType)
 {
 }
 
 XLineAttrSetItem::XLineAttrSetItem( SfxItemPool* pItemPool ) :
     SfxSetItem( XATTRSET_LINE,
-        SfxItemSetFixed<XATTR_LINE_FIRST, XATTR_LINE_LAST>( *pItemPool ))
+        SfxItemSetFixed<XATTR_LINE_FIRST, XATTR_LINE_LAST>( *pItemPool ),
+        SfxItemType::XLineAttrSetItemType)
 {
 }
 
@@ -3123,13 +3124,14 @@ XLineAttrSetItem* XLineAttrSetItem::Clone( SfxItemPool* pPool ) const
 
 /// fill attribute set item
 XFillAttrSetItem::XFillAttrSetItem( SfxItemSet&& pItemSet ) :
-    SfxSetItem( XATTRSET_FILL, std::move(pItemSet))
+    SfxSetItem( XATTRSET_FILL, std::move(pItemSet), SfxItemType::XFillAttrSetItemType)
 {
 }
 
 XFillAttrSetItem::XFillAttrSetItem( SfxItemPool* pItemPool ) :
     SfxSetItem( XATTRSET_FILL,
-        SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST>( *pItemPool ))
+        SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST>( *pItemPool ),
+        SfxItemType::XFillAttrSetItemType)
 {
 }
 

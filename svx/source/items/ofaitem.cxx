@@ -23,7 +23,8 @@
 #include <utility>
 
 OfaPtrItem::OfaPtrItem( sal_uInt16 _nWhich, void *_pPtr )
-    : SfxPoolItem( _nWhich ), pPtr( _pPtr )
+    : SfxPoolItem( _nWhich, SfxItemType::OfaPtrItemType )
+    , pPtr( _pPtr )
 {
 
 }
@@ -40,7 +41,8 @@ OfaPtrItem* OfaPtrItem::Clone( SfxItemPool * ) const
 }
 
 OfaXColorListItem::OfaXColorListItem( sal_uInt16 _nWhich, rtl::Reference<XColorList> xRef )
-    : SfxPoolItem( _nWhich ), mxRef(std::move( xRef ))
+    : SfxPoolItem( _nWhich, SfxItemType::OfaXColorListItemType )
+    , mxRef(std::move( xRef ))
 {}
 
 bool OfaXColorListItem::operator==( const SfxPoolItem& rItem ) const

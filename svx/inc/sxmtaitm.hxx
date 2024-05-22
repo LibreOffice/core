@@ -27,7 +27,8 @@
 // TextUpsideDown stays active and turns the text again if sal_True.
 class SdrMeasureTextAutoAngleItem final : public SdrYesNoItem {
 public:
-    SdrMeasureTextAutoAngleItem(bool bOn=true): SdrYesNoItem(SDRATTR_MEASURETEXTAUTOANGLE,bOn) {}
+    SdrMeasureTextAutoAngleItem(bool bOn=true):
+        SdrYesNoItem(SDRATTR_MEASURETEXTAUTOANGLE,bOn, SfxItemType::SdrMeasureTextAutoAngleItemType) {}
     virtual SdrMeasureTextAutoAngleItem* Clone(SfxItemPool*) const override
     {
         return new SdrMeasureTextAutoAngleItem(*this);
@@ -38,7 +39,8 @@ public:
 // Angle in 1/100deg from viewpoint of the user.
 class SdrMeasureTextAutoAngleViewItem final : public SdrAngleItem {
 public:
-    SdrMeasureTextAutoAngleViewItem(Degree100 nVal=31500_deg100): SdrAngleItem(SDRATTR_MEASURETEXTAUTOANGLEVIEW,nVal)  {}
+    SdrMeasureTextAutoAngleViewItem(Degree100 nVal=31500_deg100)
+        : SdrAngleItem(SDRATTR_MEASURETEXTAUTOANGLEVIEW,nVal, SfxItemType::SdrMeasureTextAutoAngleViewItemType)  {}
     virtual SdrMeasureTextAutoAngleViewItem* Clone(SfxItemPool*) const override
     {
         return new SdrMeasureTextAutoAngleViewItem(*this);

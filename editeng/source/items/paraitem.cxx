@@ -78,7 +78,7 @@ enum class SvxSpecialLineSpace
 }
 
 SvxLineSpacingItem::SvxLineSpacingItem( sal_uInt16 nHeight, const sal_uInt16 nId )
-    : SfxEnumItemInterface( nId )
+    : SfxEnumItemInterface( nId, SfxItemType::SvxLineSpacingItemType )
 {
     nPropLineSpace = 100;
     nInterLineSpace = 0;
@@ -346,7 +346,7 @@ ItemInstanceManager* SvxAdjustItem::getItemInstanceManager() const
 }
 
 SvxAdjustItem::SvxAdjustItem(const SvxAdjust eAdjst, const sal_uInt16 nId )
-    : SfxEnumItemInterface( nId ),
+    : SfxEnumItemInterface( nId, SfxItemType::SvxAdjustItemType ),
     bOneBlock( false ), bLastCenter( false ), bLastBlock( false )
 {
     SetAdjust( eAdjst );
@@ -471,7 +471,7 @@ void SvxAdjustItem::SetEnumValue( sal_uInt16 nVal )
 // class SvxWidowsItem ---------------------------------------------------
 
 SvxWidowsItem::SvxWidowsItem(const sal_uInt8 nL, const sal_uInt16 nId ) :
-    SfxByteItem( nId, nL )
+    SfxByteItem( nId, nL, SfxItemType::SvxWidowsItemType )
 {
 }
 
@@ -515,7 +515,7 @@ bool SvxWidowsItem::GetPresentation
 // class SvxOrphansItem --------------------------------------------------
 
 SvxOrphansItem::SvxOrphansItem(const sal_uInt8 nL, const sal_uInt16 nId ) :
-    SfxByteItem( nId, nL )
+    SfxByteItem( nId, nL, SfxItemType::SvxOrphansItemType )
 {
 }
 
@@ -559,7 +559,7 @@ bool SvxOrphansItem::GetPresentation
 // class SvxHyphenZoneItem -----------------------------------------------
 
 SvxHyphenZoneItem::SvxHyphenZoneItem( const bool bHyph, const sal_uInt16 nId ) :
-    SfxPoolItem( nId ),
+    SfxPoolItem( nId, SfxItemType::SvxHyphenZoneItem ),
     bHyphen(bHyph),
     bKeep(false),
     bNoCapsHyphenation(false),
@@ -833,7 +833,7 @@ void SvxTabStop::dumpAsXml(xmlTextWriterPtr pWriter) const
 // class SvxTabStopItem --------------------------------------------------
 
 SvxTabStopItem::SvxTabStopItem( sal_uInt16 _nWhich ) :
-    SfxPoolItem( _nWhich )
+    SfxPoolItem( _nWhich, SfxItemType::SvxTabStopItemType )
 {
     const sal_uInt16 nTabs = SVX_TAB_DEFCOUNT, nDist = SVX_TAB_DEFDIST;
     const SvxTabAdjust eAdjst= SvxTabAdjust::Default;
@@ -850,7 +850,7 @@ SvxTabStopItem::SvxTabStopItem( const sal_uInt16 nTabs,
                                 const sal_uInt16 nDist,
                                 const SvxTabAdjust eAdjst,
                                 sal_uInt16 _nWhich ) :
-    SfxPoolItem( _nWhich )
+    SfxPoolItem( _nWhich, SfxItemType::SvxTabStopItemType )
 {
     for ( sal_uInt16 i = 0; i < nTabs; ++i )
     {
@@ -1224,7 +1224,7 @@ bool SvxPageModelItem::GetPresentation
 
 
 SvxScriptSpaceItem::SvxScriptSpaceItem( bool bOn, const sal_uInt16 nId )
-    : SfxBoolItem( nId, bOn )
+    : SfxBoolItem( nId, bOn, SfxItemType::SvxScriptSpaceItemType )
 {
 }
 
@@ -1247,7 +1247,7 @@ bool SvxScriptSpaceItem::GetPresentation(
 
 SvxHangingPunctuationItem::SvxHangingPunctuationItem(
                                     bool bOn, const sal_uInt16 nId )
-    : SfxBoolItem( nId, bOn )
+    : SfxBoolItem( nId, bOn, SfxItemType::SvxHangingPunctuationItemType )
 {
 }
 
@@ -1270,7 +1270,7 @@ bool SvxHangingPunctuationItem::GetPresentation(
 
 SvxForbiddenRuleItem::SvxForbiddenRuleItem(
                                     bool bOn, const sal_uInt16 nId )
-    : SfxBoolItem( nId, bOn )
+    : SfxBoolItem( nId, bOn, SfxItemType::SvxForbiddenRuleItemType )
 {
 }
 
@@ -1296,7 +1296,7 @@ bool SvxForbiddenRuleItem::GetPresentation(
 
 SvxParaVertAlignItem::SvxParaVertAlignItem( Align nValue,
     TypedWhichId<SvxParaVertAlignItem> nW )
-    : SfxUInt16Item( nW, static_cast<sal_uInt16>(nValue) )
+    : SfxUInt16Item( nW, static_cast<sal_uInt16>(nValue), SfxItemType::SvxParaVertAlignItemType )
 {
 }
 
@@ -1344,7 +1344,7 @@ bool SvxParaVertAlignItem::PutValue( const css::uno::Any& rVal,
 }
 
 SvxParaGridItem::SvxParaGridItem( bool bOn, const sal_uInt16 nId )
-    : SfxBoolItem( nId, bOn )
+    : SfxBoolItem( nId, bOn, SfxItemType::SvxParaGridItemType )
 {
 }
 

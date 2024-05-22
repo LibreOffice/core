@@ -516,9 +516,10 @@ void DefaultItemInstanceManager::remove(const SfxPoolItem& rItem) { maRegistered
 
 ItemInstanceManager* SfxPoolItem::getItemInstanceManager() const { return nullptr; }
 
-SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
+SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich, SfxItemType eType)
     : m_nRefCount(0)
     , m_nWhich(nWhich)
+    , m_eItemType(eType)
 #ifdef DBG_UTIL
     , m_nSerialNumber(nUsedSfxPoolItemCount)
 #endif
@@ -550,11 +551,10 @@ SfxPoolItem::~SfxPoolItem()
 
 bool SfxPoolItem::operator==(const SfxPoolItem& rCmp) const
 {
-    SAL_WARN_IF(typeid(rCmp) != typeid(*this), "svl",
+    SAL_WARN_IF(rCmp.ItemType() != ItemType(), "svl",
                 "comparing different pool item subclasses " << typeid(rCmp).name() << " && "
                                                             << typeid(*this).name());
-    assert(typeid(rCmp) == typeid(*this) && "comparing different pool item subclasses");
-    (void)rCmp;
+    assert(rCmp.ItemType() == ItemType() && "comparing different pool item subclasses");
     return true;
 }
 
@@ -682,10 +682,8 @@ bool SfxPoolItem::areSame(const SfxPoolItem* pItem1, const SfxPoolItem* pItem2)
         // WhichIDs differ (fast)
         return false;
 
-    if (typeid(*pItem1) != typeid(*pItem2))
+    if (pItem1->ItemType() != pItem2->ItemType())
         // types differ (fast)
-        // NOTE: we can now use typeid since we do not have (-1)
-        // anymore for Invalid state -> safe
         return false;
 
     // return content compare using operator== at last
@@ -704,10 +702,8 @@ bool SfxPoolItem::areSame(const SfxPoolItem& rItem1, const SfxPoolItem& rItem2)
         // WhichIDs differ (fast)
         return false;
 
-    if (typeid(rItem1) != typeid(rItem2))
+    if (rItem1.ItemType() != rItem2.ItemType())
         // types differ (fast)
-        // NOTE: we can now use typeid since we do not have (-1)
-        // anymore for Invalid state -> safe
         return false;
 
     // return content compare using operator== at last
@@ -724,7 +720,11 @@ class InvalidOrDisabledItem final : public SfxPoolItem
 public:
     // make it StaticDefaultItem to process similar to these
     // which is plausible (never change and are not allowed to)
-    InvalidOrDisabledItem() { setStaticDefault(); }
+    InvalidOrDisabledItem()
+        : SfxPoolItem(0, SfxItemType::InvalidOrDisabledItemType)
+    {
+        setStaticDefault();
+    }
 };
 InvalidOrDisabledItem aInvalidItem;
 InvalidOrDisabledItem aDisabledItem;

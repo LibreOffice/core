@@ -46,7 +46,7 @@ namespace offapp
 
 
     DriverPoolingSettingsItem::DriverPoolingSettingsItem( sal_uInt16 _nId, DriverPoolingSettings _aSettings )
-        :SfxPoolItem(_nId)
+        :SfxPoolItem(_nId, SfxItemType::DriverPoolingSettingsItemType)
         ,m_aSettings(std::move(_aSettings))
     {
     }

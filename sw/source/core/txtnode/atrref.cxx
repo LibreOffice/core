@@ -41,7 +41,7 @@ SwFormatRefMark::~SwFormatRefMark( )
 }
 
 SwFormatRefMark::SwFormatRefMark( OUString aName )
-    : SfxPoolItem(RES_TXTATR_REFMARK)
+    : SfxPoolItem(RES_TXTATR_REFMARK, SfxItemType::SwFormatRefMarkType)
     , sw::BroadcastingModify()
     , m_pTextAttr(nullptr)
     , m_aRefName(std::move(aName))
@@ -50,7 +50,7 @@ SwFormatRefMark::SwFormatRefMark( OUString aName )
 }
 
 SwFormatRefMark::SwFormatRefMark( const SwFormatRefMark& rAttr )
-    : SfxPoolItem(RES_TXTATR_REFMARK)
+    : SfxPoolItem(RES_TXTATR_REFMARK, SfxItemType::SwFormatRefMarkType)
     , sw::BroadcastingModify()
     , m_pTextAttr(nullptr)
     , m_aRefName(rAttr.m_aRefName)

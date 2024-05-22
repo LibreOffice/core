@@ -26,7 +26,7 @@
 class SVL_DLLPUBLIC SfxEnumItemInterface: public SfxPoolItem
 {
 protected:
-    explicit SfxEnumItemInterface(sal_uInt16 which): SfxPoolItem(which) {}
+    explicit SfxEnumItemInterface(sal_uInt16 which, SfxItemType eItemType): SfxPoolItem(which, eItemType) {}
 
     SfxEnumItemInterface(const SfxEnumItemInterface &) = default;
 

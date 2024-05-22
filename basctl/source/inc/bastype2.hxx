@@ -220,7 +220,7 @@ public:
     bool            FindEntry(std::u16string_view rText, EntryType eType, weld::TreeIter& rIter);
     EntryDescriptor GetEntryDescriptor(const weld::TreeIter* pEntry);
 
-    static ItemType ConvertType (EntryType eType);
+    static SbxItemType ConvertType (EntryType eType);
     bool            IsValidEntry(const weld::TreeIter& rEntry);
     void AddEntry(const OUString& rText, const OUString& rImage,
                   const weld::TreeIter* pParent, bool bChildrenOnDemand,

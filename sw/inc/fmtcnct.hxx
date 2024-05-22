@@ -34,7 +34,7 @@ class SW_DLLPUBLIC SwFormatChain final : public SfxPoolItem
              m_aNext; ///< Next SwFlyFrameFormat (if existent).
 
 public:
-    SwFormatChain() : SfxPoolItem( RES_CHAIN ) {}
+    SwFormatChain() : SfxPoolItem( RES_CHAIN, SfxItemType::SwFormatChainType ) {}
     SwFormatChain( const SwFormatChain &rCpy );
 
     inline SwFormatChain &operator=( const SwFormatChain& );
