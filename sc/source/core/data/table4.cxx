@@ -2684,7 +2684,7 @@ void ScTable::AutoFormatArea(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
 }
 
 void ScTable::AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                            sal_uInt16 nFormatNo )
+                            sal_uInt16 nFormatNo, ScProgress* pProgress )
 {
     if (!(ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow)))
         return;
@@ -2814,6 +2814,9 @@ void ScTable::AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW
                     nIndex = 6;
                 else
                     nIndex = 5;
+                if (pProgress)
+                    pProgress->SetStateOnPercent(nCol);
+
             } // for nCol
         } // if not equal Column
     } // if not all equal

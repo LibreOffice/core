@@ -55,6 +55,8 @@
 #include <inputopt.hxx>
 #include <chartlis.hxx>
 #include <sc.hrc>
+#include <globstr.hrc>
+#include <scresid.hxx>
 #include <hints.hxx>
 #include <dpobject.hxx>
 #include <drwlayer.hxx>
@@ -70,7 +72,7 @@
 #include <scopetools.hxx>
 #include <filterentries.hxx>
 #include <queryparam.hxx>
-
+#include <progress.hxx>
 #include <globalnames.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
@@ -1190,6 +1192,7 @@ OUString ScDocument::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SC
 void ScDocument::AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     sal_uInt16 nFormatNo, const ScMarkData& rMark )
 {
+    ScProgress aProgress(GetDocumentShell(), ScResId(STR_UNDO_AUTOFORMAT), nEndCol - nStartCol + 1, true);
     PutInOrder( nStartCol, nEndCol );
     PutInOrder( nStartRow, nEndRow );
     SCTAB nMax = maTabs.size();
@@ -1198,7 +1201,7 @@ void ScDocument::AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
         if (rTab >= nMax)
             break;
         if (maTabs[rTab])
-            maTabs[rTab]->AutoFormat( nStartCol, nStartRow, nEndCol, nEndRow, nFormatNo );
+            maTabs[rTab]->AutoFormat( nStartCol, nStartRow, nEndCol, nEndRow, nFormatNo, &aProgress );
     }
 }
 
