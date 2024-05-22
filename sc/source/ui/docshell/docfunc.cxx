@@ -117,6 +117,8 @@
 using namespace com::sun::star;
 using ::std::vector;
 
+#define AUTOFORMAT_WARN_SIZE 0x10ffffUL
+
 void ScDocFunc::NotifyDrawUndo( std::unique_ptr<SdrUndoAction> pUndoAction)
 {
     // #i101118# if drawing layer collects the undo actions, add it there
@@ -4256,6 +4258,15 @@ bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
         weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
         bool bSize = pAutoFormat->findByIndex(nFormatNo)->GetIncludeWidthHeight();
+        if (sal_uInt64(nEndCol - nStartCol + 1) * sal_uInt64(nEndRow - nStartRow + 1) > AUTOFORMAT_WARN_SIZE)
+        {
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(ScDocShell::GetActiveDialogParent(),
+                                                           VclMessageType::Warning, VclButtonsType::YesNo,
+                                                           ScResId(STR_AUTOFORMAT_WAIT_WARNING)));
+            xQueryBox->set_default_response(RET_NO);
+            if (xQueryBox->run() != RET_YES)
+                return false;
+        }
 
         SCTAB nTabCount = rDoc.GetTableCount();
         ScDocumentUniquePtr pUndoDoc;
