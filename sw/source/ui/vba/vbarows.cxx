@@ -85,7 +85,7 @@ SwVbaRows::SwVbaRows( const uno::Reference< XHelperInterface >& xParent, const u
 {
     sal_Int16 nAlignment = text::HoriOrientation::LEFT;
     uno::Reference< beans::XPropertySet > xTableProps( mxTextTable, uno::UNO_QUERY_THROW );
-    xTableProps->getPropertyValue("HoriOrient") >>= nAlignment;
+    xTableProps->getPropertyValue(u"HoriOrient"_ustr) >>= nAlignment;
     sal_Int32 nRet = 0;
     switch( nAlignment )
     {
@@ -128,7 +128,7 @@ void SAL_CALL SwVbaRows::setAlignment( ::sal_Int32 _alignment )
         }
     }
     uno::Reference< beans::XPropertySet > xTableProps( mxTextTable, uno::UNO_QUERY_THROW );
-    xTableProps->setPropertyValue("HoriOrient", uno::Any( nAlignment ) );
+    xTableProps->setPropertyValue(u"HoriOrient"_ustr, uno::Any( nAlignment ) );
 }
 
 uno::Any SAL_CALL SwVbaRows::getAllowBreakAcrossPages()
@@ -139,7 +139,7 @@ uno::Any SAL_CALL SwVbaRows::getAllowBreakAcrossPages()
     {
         uno::Reference< beans::XPropertySet > xRowProps( xRowsAccess->getByIndex( index ), uno::UNO_QUERY_THROW );
         bool bSplit = false;
-        xRowProps->getPropertyValue("IsSplitAllowed") >>= bSplit;
+        xRowProps->getPropertyValue(u"IsSplitAllowed"_ustr) >>= bSplit;
         if( index == 0 )
         {
             bAllowBreak = bSplit;
@@ -160,7 +160,7 @@ void SAL_CALL SwVbaRows::setAllowBreakAcrossPages( const uno::Any& _allowbreakac
     for( sal_Int32 index = mnStartRowIndex; index <= mnEndRowIndex; ++index )
     {
         uno::Reference< beans::XPropertySet > xRowProps( xRowsAccess->getByIndex( index ), uno::UNO_QUERY_THROW );
-        xRowProps->setPropertyValue("IsSplitAllowed", uno::Any( bAllowBreak ) );
+        xRowProps->setPropertyValue(u"IsSplitAllowed"_ustr, uno::Any( bAllowBreak ) );
     }
 }
 
@@ -171,8 +171,8 @@ float SAL_CALL SwVbaRows::getSpaceBetweenColumns()
     uno::Reference< beans::XPropertySet > xCellProps( xCellRange->getCellByPosition( 0, mnStartRowIndex ), uno::UNO_QUERY_THROW );
     sal_Int32 nLeftBorderDistance = 0;
     sal_Int32 nRightBorderDistance = 0;
-    xCellProps->getPropertyValue("LeftBorderDistance") >>= nLeftBorderDistance;
-    xCellProps->getPropertyValue("RightBorderDistance") >>= nRightBorderDistance;
+    xCellProps->getPropertyValue(u"LeftBorderDistance"_ustr) >>= nLeftBorderDistance;
+    xCellProps->getPropertyValue(u"RightBorderDistance"_ustr) >>= nRightBorderDistance;
     return static_cast< float >( Millimeter::getInPoints( nLeftBorderDistance + nRightBorderDistance ) );
 }
 
@@ -188,8 +188,8 @@ void SAL_CALL SwVbaRows::setSpaceBetweenColumns( float _spacebetweencolumns )
         for( sal_Int32 column = 0; column < nColumns; ++column )
         {
             uno::Reference< beans::XPropertySet > xCellProps( xCellRange->getCellByPosition( column, row ), uno::UNO_QUERY_THROW );
-            xCellProps->setPropertyValue("LeftBorderDistance", uno::Any( nSpace ) );
-            xCellProps->setPropertyValue("RightBorderDistance", uno::Any( nSpace ) );
+            xCellProps->setPropertyValue(u"LeftBorderDistance"_ustr, uno::Any( nSpace ) );
+            xCellProps->setPropertyValue(u"RightBorderDistance"_ustr, uno::Any( nSpace ) );
         }
     }
 }
@@ -236,9 +236,9 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent )
 {
     uno::Reference< beans::XPropertySet > xTableProps( mxTextTable, uno::UNO_QUERY_THROW );
     sal_Int32 nMargin = 0;
-    xTableProps->getPropertyValue("LeftMargin") >>= nMargin;
+    xTableProps->getPropertyValue(u"LeftMargin"_ustr) >>= nMargin;
     nMargin += indent;
-    xTableProps->setPropertyValue("LeftMargin", uno::Any( nMargin ) );
+    xTableProps->setPropertyValue(u"LeftMargin"_ustr, uno::Any( nMargin ) );
 }
 
  void SwVbaRows::setIndentWithAdjustFirstColumn( const uno::Reference< word::XColumns >& xColumns, sal_Int32 indent )
@@ -259,13 +259,13 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent )
     // calculate the new width and get the proportion between old and new
     uno::Reference< beans::XPropertySet > xTableProps( mxTextTable, uno::UNO_QUERY_THROW );
     sal_Int32 nWidth = 0;
-    xTableProps->getPropertyValue("Width") >>= nWidth;
+    xTableProps->getPropertyValue(u"Width"_ustr) >>= nWidth;
     sal_Int32 nNewWidth = nWidth - indent;
     if ((nNewWidth <= 0) || (nWidth <= 0))
     {
         throw uno::RuntimeException(
-            "Pb with width, in SwVbaRows::setIndentWithAdjustProportional "
-            "(nNewWidth <= 0) || (nWidth <= 0)"
+            u"Pb with width, in SwVbaRows::setIndentWithAdjustProportional "
+            "(nNewWidth <= 0) || (nWidth <= 0)"_ustr
         );
     }
     double propFactor = static_cast<double>(nNewWidth)/static_cast<double>(nWidth);
@@ -283,7 +283,7 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent )
 
     // set the width and position of the table
     setIndentWithAdjustNone( indent );
-    xTableProps->setPropertyValue("Width", uno::Any( nNewWidth ) );
+    xTableProps->setPropertyValue(u"Width"_ustr, uno::Any( nNewWidth ) );
  }
 
  void SwVbaRows::setIndentWithAdjustSameWidth( const uno::Reference< word::XColumns >& xColumns, sal_Int32 indent )
@@ -291,7 +291,7 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent )
     // calculate the new width and get the width of all columns
     uno::Reference< beans::XPropertySet > xTableProps( mxTextTable, uno::UNO_QUERY_THROW );
     sal_Int32 nWidth = 0;
-    xTableProps->getPropertyValue("Width") >>= nWidth;
+    xTableProps->getPropertyValue(u"Width"_ustr) >>= nWidth;
     sal_Int32 nNewWidth = nWidth - indent;
 
     // get all columns, calculate and set the new width of the columns
@@ -306,7 +306,7 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent )
 
     // set the width and position of the table
     setIndentWithAdjustNone( indent );
-    xTableProps->setPropertyValue("Width", uno::Any( nNewWidth ) );
+    xTableProps->setPropertyValue(u"Width"_ustr, uno::Any( nNewWidth ) );
  }
 
 void SAL_CALL SwVbaRows::Select(  )
@@ -326,11 +326,11 @@ uno::Any SAL_CALL SwVbaRows::Item( const uno::Any& Index1, const uno::Any& /*not
     {
         if( nIndex <= 0 || nIndex > getCount() )
         {
-            throw  lang::IndexOutOfBoundsException("Index out of bounds" );
+            throw  lang::IndexOutOfBoundsException(u"Index out of bounds"_ustr );
         }
         return uno::Any( uno::Reference< word::XRow >( new SwVbaRow( this, mxContext, mxTextTable, nIndex - 1 ) ) );
     }
-    throw  uno::RuntimeException("Index out of bounds" );
+    throw  uno::RuntimeException(u"Index out of bounds"_ustr );
 }
 
 // XEnumerationAccess
@@ -354,7 +354,7 @@ SwVbaRows::createCollectionObject( const uno::Any& aSource )
 OUString
 SwVbaRows::getServiceImplName()
 {
-    return "SwVbaRows";
+    return u"SwVbaRows"_ustr;
 }
 
 uno::Sequence<OUString>
@@ -362,7 +362,7 @@ SwVbaRows::getServiceNames()
 {
     static uno::Sequence< OUString > const sNames
     {
-        "ooo.vba.word.Rows"
+        u"ooo.vba.word.Rows"_ustr
     };
     return sNames;
 }

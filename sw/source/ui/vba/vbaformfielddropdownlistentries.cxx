@@ -150,12 +150,12 @@ uno::Any SwVbaFormFieldDropDownListEntries::createCollectionObject(const uno::An
 
 OUString SwVbaFormFieldDropDownListEntries::getServiceImplName()
 {
-    return "SwVbaFormFieldDropDownListEntries";
+    return u"SwVbaFormFieldDropDownListEntries"_ustr;
 }
 
 uno::Sequence<OUString> SwVbaFormFieldDropDownListEntries::getServiceNames()
 {
-    static uno::Sequence<OUString> const sNames{ "ooo.vba.word.ListEntries" };
+    static uno::Sequence<OUString> const sNames{ u"ooo.vba.word.ListEntries"_ustr };
     return sNames;
 }
 

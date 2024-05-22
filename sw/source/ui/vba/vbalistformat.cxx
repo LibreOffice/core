@@ -84,16 +84,16 @@ void SAL_CALL SwVbaListFormat::ApplyListTemplate( const css::uno::Reference< wor
         if( isFirstElement )
         {
             bool isNumberingRestart = !bContinuePreviousList;
-            xProps->setPropertyValue("ParaIsNumberingRestart", uno::Any( isNumberingRestart ) );
+            xProps->setPropertyValue(u"ParaIsNumberingRestart"_ustr, uno::Any( isNumberingRestart ) );
             if( isNumberingRestart )
             {
-                xProps->setPropertyValue("NumberingStartValue", uno::Any( sal_Int16(1) ) );
+                xProps->setPropertyValue(u"NumberingStartValue"_ustr, uno::Any( sal_Int16(1) ) );
             }
             isFirstElement = false;
         }
         else
         {
-            xProps->setPropertyValue("ParaIsNumberingRestart", uno::Any( false ) );
+            xProps->setPropertyValue(u"ParaIsNumberingRestart"_ustr, uno::Any( false ) );
         }
         rListTemplate.applyListTemplate( xProps );
     }
@@ -106,11 +106,11 @@ static void addParagraphsToList(const Ref& a,
 {
     if (css::uno::Reference<css::lang::XServiceInfo> xInfo{ a, css::uno::UNO_QUERY })
     {
-        if (xInfo->supportsService("com.sun.star.text.Paragraph"))
+        if (xInfo->supportsService(u"com.sun.star.text.Paragraph"_ustr))
         {
             rList.emplace_back(xInfo, css::uno::UNO_QUERY_THROW);
         }
-        else if (xInfo->supportsService("com.sun.star.text.TextTable"))
+        else if (xInfo->supportsService(u"com.sun.star.text.TextTable"_ustr))
         {
             css::uno::Reference<css::text::XTextTable> xTable(xInfo, css::uno::UNO_QUERY_THROW);
             const auto aNames = xTable->getCellNames();
@@ -135,7 +135,7 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
     css::uno::Reference<css::document::XUndoManagerSupplier> xUndoSupplier(
         xModel, css::uno::UNO_QUERY_THROW);
     css::uno::Reference<css::document::XUndoManager> xUndoManager(xUndoSupplier->getUndoManager());
-    xUndoManager->enterUndoContext("ConvertNumbersToText");
+    xUndoManager->enterUndoContext(u"ConvertNumbersToText"_ustr);
     xModel->lockControllers();
     comphelper::ScopeGuard g([xModel, xUndoManager]() {
         xModel->unlockControllers();
@@ -149,11 +149,11 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
     for (auto iter = aParagraphs.rbegin(); iter != aParagraphs.rend(); ++iter)
     {
         auto& rPropertySet = *iter;
-        if (bool bNumber; (rPropertySet->getPropertyValue("NumberingIsNumber") >>= bNumber) && bNumber)
+        if (bool bNumber; (rPropertySet->getPropertyValue(u"NumberingIsNumber"_ustr) >>= bNumber) && bNumber)
         {
             css::uno::Reference<css::text::XTextRange> xRange(rPropertySet, css::uno::UNO_QUERY_THROW);
             OUString sLabelString;
-            rPropertySet->getPropertyValue("ListLabelString") >>= sLabelString;
+            rPropertySet->getPropertyValue(u"ListLabelString"_ustr) >>= sLabelString;
             // sal_Int16 nAdjust = SAL_MAX_INT16; // TODO?
             sal_Int16 nNumberingType = SAL_MAX_INT16; // css::style::NumberingType
             sal_Int16 nPositionAndSpaceMode = SAL_MAX_INT16;
@@ -172,31 +172,31 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
 
             {
                 sal_uInt16 nLevel = SAL_MAX_UINT16;
-                rPropertySet->getPropertyValue("NumberingLevel") >>= nLevel;
+                rPropertySet->getPropertyValue(u"NumberingLevel"_ustr) >>= nLevel;
                 css::uno::Reference<css::container::XIndexAccess> xNumberingRules;
-                rPropertySet->getPropertyValue("NumberingRules") >>= xNumberingRules;
+                rPropertySet->getPropertyValue(u"NumberingRules"_ustr) >>= xNumberingRules;
                 comphelper::SequenceAsHashMap aLevelRule(xNumberingRules->getByIndex(nLevel));
 
                 // See offapi/com/sun/star/text/NumberingLevel.idl
-                aLevelRule["CharStyleName"] >>= sCharStyleName;
-                aLevelRule["NumberingType"] >>= nNumberingType;
+                aLevelRule[u"CharStyleName"_ustr] >>= sCharStyleName;
+                aLevelRule[u"NumberingType"_ustr] >>= nNumberingType;
                 // TODO: aLevelRule["Adjust"] >>= nAdjust; // HoriOrientation::LEFT/RIGHT/CENTER
-                aLevelRule["PositionAndSpaceMode"] >>= nPositionAndSpaceMode;
+                aLevelRule[u"PositionAndSpaceMode"_ustr] >>= nPositionAndSpaceMode;
 
                 // for css::text::PositionAndSpaceMode::LABEL_ALIGNMENT
-                aLevelRule["LabelFollowedBy"] >>= nLabelFollowedBy;
-                aLevelRule["ListtabStopPosition"] >>= nListtabStopPosition;
-                aLevelRule["FirstLineIndent"] >>= nFirstLineIndent;
-                aLevelRule["IndentAt"] >>= nIndentAt;
+                aLevelRule[u"LabelFollowedBy"_ustr] >>= nLabelFollowedBy;
+                aLevelRule[u"ListtabStopPosition"_ustr] >>= nListtabStopPosition;
+                aLevelRule[u"FirstLineIndent"_ustr] >>= nFirstLineIndent;
+                aLevelRule[u"IndentAt"_ustr] >>= nIndentAt;
 
                 // for css::text::PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION
-                aLevelRule["LeftMargin"] >>= nLeftMargin;
-                aLevelRule["SymbolTextDistance"] >>= nSymbolTextDistance;
-                aLevelRule["FirstLineOffset"] >>= nFirstLineOffset;
+                aLevelRule[u"LeftMargin"_ustr] >>= nLeftMargin;
+                aLevelRule[u"SymbolTextDistance"_ustr] >>= nSymbolTextDistance;
+                aLevelRule[u"FirstLineOffset"_ustr] >>= nFirstLineOffset;
 
-                aLevelRule["BulletChar"] >>= sBulletChar;
-                bHasFont = (aLevelRule["BulletFont"] >>= aBulletFont);
-                bHasColor = (aLevelRule["BulletColor"] >>= aBulletColor);
+                aLevelRule[u"BulletChar"_ustr] >>= sBulletChar;
+                bHasFont = (aLevelRule[u"BulletFont"_ustr] >>= aBulletFont);
+                bHasColor = (aLevelRule[u"BulletColor"_ustr] >>= aBulletColor);
             }
 
             if (nNumberingType != css::style::NumberingType::BITMAP) // TODO
@@ -228,7 +228,7 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
                 css::uno::Reference<css::beans::XPropertySet> xNumberProps(
                     xNumberText, css::uno::UNO_QUERY_THROW);
                 if (!sCharStyleName.isEmpty())
-                    xNumberProps->setPropertyValue("CharStyleName", css::uno::Any(sCharStyleName));
+                    xNumberProps->setPropertyValue(u"CharStyleName"_ustr, css::uno::Any(sCharStyleName));
 
                 if (nNumberingType == css::style::NumberingType::CHAR_SPECIAL)
                 {
@@ -253,11 +253,11 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
                                                   std::round(aBulletFont.Orientation * 10))) },
                             });
                         if (aBulletFont.Height)
-                            aNameValues["CharHeight"] <<= aBulletFont.Height;
+                            aNameValues[u"CharHeight"_ustr] <<= aBulletFont.Height;
                     }
                     if (bHasColor)
                     {
-                        aNameValues["CharColor"] <<= aBulletColor;
+                        aNameValues[u"CharColor"_ustr] <<= aBulletColor;
                     }
 
                     if (css::uno::Reference<css::beans::XMultiPropertySet> xBulletMultiProps{
@@ -280,17 +280,17 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
                     // TODO: css::style::NumberingType::BITMAP
                 }
 
-                rPropertySet->setPropertyValue("ParaLeftMargin", css::uno::Any(nIndentAt));
-                rPropertySet->setPropertyValue("ParaFirstLineIndent", css::uno::Any(nFirstLineIndent));
+                rPropertySet->setPropertyValue(u"ParaLeftMargin"_ustr, css::uno::Any(nIndentAt));
+                rPropertySet->setPropertyValue(u"ParaFirstLineIndent"_ustr, css::uno::Any(nFirstLineIndent));
                 if (nLabelFollowedBy == SvxNumberFormat::LabelFollowedBy::LISTTAB)
                 {
                     css::uno::Sequence<css::style::TabStop> stops;
-                    rPropertySet->getPropertyValue("ParaTabStops") >>= stops;
+                    rPropertySet->getPropertyValue(u"ParaTabStops"_ustr) >>= stops;
                     css::style::TabStop tabStop{};
                     tabStop.Position = nListtabStopPosition;
                     tabStop.Alignment = com::sun::star::style::TabAlign::TabAlign_LEFT;
                     tabStop.FillChar = ' ';
-                    rPropertySet->setPropertyValue("ParaTabStops",
+                    rPropertySet->setPropertyValue(u"ParaTabStops"_ustr,
                                     css::uno::Any(comphelper::combineSequences({ tabStop }, stops)));
                     // FIXME: What if added tap stop is greater than already defined ones?
                 }
@@ -301,9 +301,9 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
             }
 
             // In case of higher outline levels, each assignment of empty value just sets level 1
-            while (rPropertySet->getPropertyValue("NumberingRules") != css::uno::Any())
+            while (rPropertySet->getPropertyValue(u"NumberingRules"_ustr) != css::uno::Any())
             {
-                rPropertySet->setPropertyValue("NumberingRules", css::uno::Any());
+                rPropertySet->setPropertyValue(u"NumberingRules"_ustr, css::uno::Any());
             }
         }
     }
@@ -312,7 +312,7 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
 OUString
 SwVbaListFormat::getServiceImplName()
 {
-    return "SwVbaListFormat";
+    return u"SwVbaListFormat"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -320,7 +320,7 @@ SwVbaListFormat::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.ListFormat"
+        u"ooo.vba.word.ListFormat"_ustr
     };
     return aServiceNames;
 }

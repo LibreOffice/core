@@ -72,7 +72,7 @@ void SwVbaRange::initialize( const uno::Reference< text::XTextRange >& rStart, c
 
     mxTextCursor = SwVbaRangeHelper::initCursor( rStart, mxText );
     if( !mxTextCursor.is() )
-        throw uno::RuntimeException("Fails to create text cursor" );
+        throw uno::RuntimeException(u"Fails to create text cursor"_ustr );
     mxTextCursor->collapseToStart();
 
     if( rEnd.is() )
@@ -207,7 +207,7 @@ void SAL_CALL SwVbaRange::InsertBreak(const uno::Any& _breakType)
         }
 
         uno::Reference< beans::XPropertySet > xProp( mxTextCursor, uno::UNO_QUERY_THROW );
-        xProp->setPropertyValue("BreakType", uno::Any( eBreakType ) );
+        xProp->setPropertyValue(u"BreakType"_ustr, uno::Any( eBreakType ) );
     }
 }
 
@@ -223,7 +223,7 @@ SwVbaRange::Select()
 void SAL_CALL
 SwVbaRange::InsertParagraph()
 {
-    mxTextCursor->setString( "" );
+    mxTextCursor->setString( u""_ustr );
     InsertParagraphBefore();
 }
 
@@ -252,17 +252,17 @@ SwVbaRange::getParagraphFormat()
 void SAL_CALL
 SwVbaRange::setParagraphFormat( const uno::Reference< word::XParagraphFormat >& /*rParagraphFormat*/ )
 {
-    throw uno::RuntimeException("Not implemented" );
+    throw uno::RuntimeException(u"Not implemented"_ustr );
 }
 
 void SwVbaRange::GetStyleInfo(OUString& aStyleName, OUString& aStyleType )
 {
     uno::Reference< beans::XPropertySet > xProp( mxTextCursor, uno::UNO_QUERY_THROW );
-    if( ( xProp->getPropertyValue("CharStyleName") >>= aStyleName ) && !aStyleName.isEmpty() )
+    if( ( xProp->getPropertyValue(u"CharStyleName"_ustr) >>= aStyleName ) && !aStyleName.isEmpty() )
     {
         aStyleType = "CharacterStyles";
     }
-    else if( ( xProp->getPropertyValue("ParaStyleName") >>= aStyleName ) && !aStyleName.isEmpty() )
+    else if( ( xProp->getPropertyValue(u"ParaStyleName"_ustr) >>= aStyleName ) && !aStyleName.isEmpty() )
     {
         aStyleType = "ParagraphStyles";
     }
@@ -331,10 +331,10 @@ SwVbaRange::PageSetup( )
     uno::Reference< beans::XPropertySet > xParaProps( mxTextCursor, uno::UNO_QUERY_THROW );
     uno::Reference< frame::XModel > xModel( mxTextDocument, uno::UNO_QUERY_THROW );
     OUString aPageStyleName;
-    xParaProps->getPropertyValue("PageStyleName") >>= aPageStyleName;
+    xParaProps->getPropertyValue(u"PageStyleName"_ustr) >>= aPageStyleName;
     uno::Reference< style::XStyleFamiliesSupplier > xSytleFamSupp( xModel, uno::UNO_QUERY_THROW );
     uno::Reference< container::XNameAccess > xSytleFamNames( xSytleFamSupp->getStyleFamilies(), uno::UNO_SET_THROW );
-    uno::Reference< container::XNameAccess > xPageStyles( xSytleFamNames->getByName("PageStyles"), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameAccess > xPageStyles( xSytleFamNames->getByName(u"PageStyles"_ustr), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xPageProps( xPageStyles->getByName( aPageStyleName ), uno::UNO_QUERY_THROW );
     return uno::Any( uno::Reference< word::XPageSetup >( new SwVbaPageSetup( this, mxContext, xModel, xPageProps ) ) );
 }
@@ -418,7 +418,7 @@ SwVbaRange::Fields( const uno::Any& index )
 OUString
 SwVbaRange::getServiceImplName()
 {
-    return "SwVbaRange";
+    return u"SwVbaRange"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -426,7 +426,7 @@ SwVbaRange::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.Range"
+        u"ooo.vba.word.Range"_ustr
     };
     return aServiceNames;
 }

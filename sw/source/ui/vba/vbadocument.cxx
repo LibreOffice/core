@@ -223,7 +223,7 @@ SwVbaDocument::Bookmarks( const uno::Any& rIndex )
 uno::Any SwVbaDocument::ContentControls(const uno::Any& index)
 {
     uno::Reference<XCollection> xContentControls(
-        new SwVbaContentControls(this, mxContext, mxTextDocument, "", ""));
+        new SwVbaContentControls(this, mxContext, mxTextDocument, u""_ustr, u""_ustr));
     if (index.hasValue())
     {
         try
@@ -252,7 +252,7 @@ uno::Any SwVbaDocument::SelectContentControlsByTag(const uno::Any& index)
     OUString sTag;
     index >>= sTag;
     return uno::Any(uno::Reference<XCollection>(
-                        new SwVbaContentControls(this, mxContext, mxTextDocument, sTag, "")));
+                        new SwVbaContentControls(this, mxContext, mxTextDocument, sTag, u""_ustr)));
 }
 
 uno::Any SwVbaDocument::SelectContentControlsByTitle(const uno::Any& index)
@@ -260,7 +260,7 @@ uno::Any SwVbaDocument::SelectContentControlsByTitle(const uno::Any& index)
     OUString sTitle;
     index >>= sTitle;
     return uno::Any(uno::Reference<XCollection>(
-                        new SwVbaContentControls(this, mxContext, mxTextDocument, "", sTitle)));
+                        new SwVbaContentControls(this, mxContext, mxTextDocument, u""_ustr, sTitle)));
 }
 
 uno::Reference<word::XWindow> SwVbaDocument::getActiveWindow()
@@ -368,7 +368,7 @@ SwVbaDocument::PageSetup( )
 OUString
 SwVbaDocument::getServiceImplName()
 {
-    return "SwVbaDocument";
+    return u"SwVbaDocument"_ustr;
 }
 
 uno::Any SAL_CALL
@@ -449,7 +449,7 @@ sal_Bool SAL_CALL SwVbaDocument::getAutoHyphenation()
     // check this property only in default paragraph style
     bool IsAutoHyphenation = false;
     uno::Reference< beans::XPropertySet > xParaProps( word::getDefaultParagraphStyle( getModel() ), uno::UNO_QUERY_THROW );
-    xParaProps->getPropertyValue("ParaIsHyphenation") >>= IsAutoHyphenation;
+    xParaProps->getPropertyValue(u"ParaIsHyphenation"_ustr) >>= IsAutoHyphenation;
     return IsAutoHyphenation;
 }
 
@@ -457,7 +457,7 @@ void SAL_CALL SwVbaDocument::setAutoHyphenation( sal_Bool _autohyphenation )
 {
     //TODO
     uno::Reference< beans::XPropertySet > xParaProps( word::getDefaultParagraphStyle( getModel() ), uno::UNO_QUERY_THROW );
-    xParaProps->setPropertyValue("ParaIsHyphenation", uno::Any( _autohyphenation ) );
+    xParaProps->setPropertyValue(u"ParaIsHyphenation"_ustr, uno::Any( _autohyphenation ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaDocument::getHyphenationZone()
@@ -476,7 +476,7 @@ void SAL_CALL SwVbaDocument::setHyphenationZone( ::sal_Int32 /*_hyphenationzone*
     //TODO
     sal_Int16 nHyphensLimit = 0;
     uno::Reference< beans::XPropertySet > xParaProps( word::getDefaultParagraphStyle( getModel() ), uno::UNO_QUERY_THROW );
-    xParaProps->getPropertyValue("ParaHyphenationMaxHyphens") >>= nHyphensLimit;
+    xParaProps->getPropertyValue(u"ParaHyphenationMaxHyphens"_ustr) >>= nHyphensLimit;
     return nHyphensLimit;
 }
 
@@ -484,7 +484,7 @@ void SAL_CALL SwVbaDocument::setConsecutiveHyphensLimit( ::sal_Int32 _consecutiv
 {
     sal_Int16 nHyphensLimit = static_cast< sal_Int16 >( _consecutivehyphenslimit );
     uno::Reference< beans::XPropertySet > xParaProps( word::getDefaultParagraphStyle( getModel() ), uno::UNO_QUERY_THROW );
-    xParaProps->setPropertyValue("ParaHyphenationMaxHyphens", uno::Any( nHyphensLimit ) );
+    xParaProps->setPropertyValue(u"ParaHyphenationMaxHyphens"_ustr, uno::Any( nHyphensLimit ) );
 }
 
 uno::Reference< ooo::vba::word::XMailMerge > SAL_CALL SwVbaDocument::getMailMerge()
@@ -505,12 +505,12 @@ void SAL_CALL SwVbaDocument::PrintOut( const uno::Any& /*Background*/, const uno
 
 void SAL_CALL SwVbaDocument::PrintPreview(  )
 {
-    dispatchRequests( mxModel,".uno:PrintPreview" );
+    dispatchRequests( mxModel,u".uno:PrintPreview"_ustr );
 }
 
 void SAL_CALL SwVbaDocument::ClosePrintPreview(  )
 {
-    dispatchRequests( mxModel,".uno:ClosePreview" );
+    dispatchRequests( mxModel,u".uno:ClosePreview"_ustr );
 }
 
 uno::Any SAL_CALL
@@ -560,7 +560,7 @@ SwVbaDocument::SaveAs2000( const uno::Any& FileName, const uno::Any& FileFormat,
             // Based on SwVbaOptions::getValueEvent()
             uno::Reference< util::XPathSettings > xPathSettings = util::thePathSettings::get( comphelper::getProcessComponentContext() );
             OUString sPathUrl;
-            xPathSettings->getPropertyValue( "Work" ) >>= sPathUrl;
+            xPathSettings->getPropertyValue( u"Work"_ustr ) >>= sPathUrl;
             // Path could be a multipath, Microsoft doesn't support this feature in Word currently.
             // Only the last path is from interest.
             sal_Int32 nIndex = sPathUrl.lastIndexOf( ';' );
@@ -583,7 +583,7 @@ SwVbaDocument::SaveAs2000( const uno::Any& FileName, const uno::Any& FileFormat,
     sal_Int32 nFileFormat = word::WdSaveFormat::wdFormatDocument;
     FileFormat >>= nFileFormat;
 
-    uno::Sequence storeProps{ comphelper::makePropertyValue("FilterName", uno::Any()) };
+    uno::Sequence storeProps{ comphelper::makePropertyValue(u"FilterName"_ustr, uno::Any()) };
 
     setFilterPropsFromFormat( nFileFormat, storeProps );
 
@@ -611,8 +611,8 @@ SwVbaDocument::SavePreviewPngAs( const uno::Any& FileName )
     OUString sURL;
     osl::FileBase::getFileURLFromSystemPath( sFileName, sURL );
 
-    uno::Sequence storeProps{ comphelper::makePropertyValue("FilterName",
-                                                            OUString("writer_png_Export")) };
+    uno::Sequence storeProps{ comphelper::makePropertyValue(u"FilterName"_ustr,
+                                                            u"writer_png_Export"_ustr) };
 
     uno::Reference< frame::XStorable > xStor( getModel(), uno::UNO_QUERY_THROW );
     xStor->storeToURL( sURL, storeProps );
@@ -666,7 +666,7 @@ SwVbaDocument::getValue( const OUString& aPropertyName )
     uno::Reference< drawing::XControlShape > xControlShape( getControlShape( aPropertyName ), uno::UNO_QUERY_THROW );
 
     uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
-    uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext("ooo.vba.ControlProvider", mxContext ), uno::UNO_QUERY_THROW );
+    uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext(u"ooo.vba.ControlProvider"_ustr, mxContext ), uno::UNO_QUERY_THROW );
     uno::Reference< msforms::XControl > xControl( xControlProvider->createControl(  xControlShape, getModel() ) );
     return uno::Any( xControl );
 }
@@ -711,7 +711,7 @@ SwVbaDocument::getFormControls() const
 OUString SAL_CALL
 SwVbaDocument::getIID()
 {
-    return "{82154424-0FBF-11d4-8313-005004526AB4}";
+    return u"{82154424-0FBF-11d4-8313-005004526AB4}"_ustr;
 }
 
 // XConnectable
@@ -719,7 +719,7 @@ SwVbaDocument::getIID()
 OUString SAL_CALL
 SwVbaDocument::GetIIDForClassItselfNotCoclass()
 {
-    return "{82154428-0FBF-11D4-8313-005004526AB4}";
+    return u"{82154428-0FBF-11D4-8313-005004526AB4}"_ustr;
 }
 
 TypeAndIID SAL_CALL
@@ -727,7 +727,7 @@ SwVbaDocument::GetConnectionPoint()
 {
     TypeAndIID aResult =
         { cppu::UnoType<word::XDocumentOutgoing>::get(),
-          "{82154429-0FBF-11D4-8313-005004526AB4}"
+          u"{82154429-0FBF-11D4-8313-005004526AB4}"_ustr
         };
 
     return aResult;
@@ -778,7 +778,7 @@ SwVbaDocument::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.Document"
+        u"ooo.vba.word.Document"_ustr
     };
     return aServiceNames;
 }

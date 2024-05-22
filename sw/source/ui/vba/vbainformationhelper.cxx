@@ -48,7 +48,7 @@ double SwVbaInformationHelper::handleWdVerticalPositionRelativeToPage( const css
     xTVCursor->collapseToStart();
     uno::Reference< beans::XPropertySet > xStyleProps( word::getCurrentPageStyle( xModel ), uno::UNO_QUERY_THROW );
     sal_Int32 nTopMargin = 0;
-    xStyleProps->getPropertyValue( "TopMargin" ) >>= nTopMargin;
+    xStyleProps->getPropertyValue( u"TopMargin"_ustr ) >>= nTopMargin;
     sal_Int32 nCurrentPos = xTVCursor->getPosition().Y;
 
     sal_Int32 nCurrentPage = handleWdActiveEndPageNumber( xTVCursor );

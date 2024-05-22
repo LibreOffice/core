@@ -79,7 +79,7 @@ SwVbaVariables::Add( const OUString& rName, const uno::Any& rValue )
 OUString
 SwVbaVariables::getServiceImplName()
 {
-    return "SwVbaVariables";
+    return u"SwVbaVariables"_ustr;
 }
 
 css::uno::Sequence<OUString>
@@ -87,7 +87,7 @@ SwVbaVariables::getServiceNames()
 {
     static uno::Sequence< OUString > const sNames
     {
-        "ooo.vba.word.Variables"
+        u"ooo.vba.word.Variables"_ustr
     };
     return sNames;
 }

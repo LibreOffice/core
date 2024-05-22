@@ -125,7 +125,7 @@ SwVbaHeadersFooters::createCollectionObject( const uno::Any& aSource )
 OUString
 SwVbaHeadersFooters::getServiceImplName()
 {
-    return "SwVbaHeadersFooters";
+    return u"SwVbaHeadersFooters"_ustr;
 }
 
 uno::Sequence<OUString>
@@ -133,7 +133,7 @@ SwVbaHeadersFooters::getServiceNames()
 {
     static uno::Sequence< OUString > const sNames
     {
-        "ooo.vba.word.HeadersFooters"
+        u"ooo.vba.word.HeadersFooters"_ustr
     };
     return sNames;
 }

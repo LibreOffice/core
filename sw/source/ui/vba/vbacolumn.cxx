@@ -75,7 +75,7 @@ void SwVbaColumn::SelectColumn( const uno::Reference< frame::XModel >& xModel, c
 OUString
 SwVbaColumn::getServiceImplName()
 {
-    return "SwVbaColumn";
+    return u"SwVbaColumn"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -83,7 +83,7 @@ SwVbaColumn::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.Column"
+        u"ooo.vba.word.Column"_ustr
     };
     return aServiceNames;
 }

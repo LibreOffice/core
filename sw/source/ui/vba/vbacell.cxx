@@ -86,7 +86,7 @@ void SAL_CALL SwVbaCell::SetHeight( float height, sal_Int32 heightrule )
 OUString
 SwVbaCell::getServiceImplName()
 {
-    return "SwVbaCell";
+    return u"SwVbaCell"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -94,7 +94,7 @@ SwVbaCell::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.Cell"
+        u"ooo.vba.word.Cell"_ustr
     };
     return aServiceNames;
 }

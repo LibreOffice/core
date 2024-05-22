@@ -68,7 +68,7 @@ public:
     {
         uno::Reference< style::XStyleFamiliesSupplier > xSytleFamSupp( mxModel, uno::UNO_QUERY_THROW );
         uno::Reference< container::XNameAccess > xSytleFamNames( xSytleFamSupp->getStyleFamilies(), uno::UNO_SET_THROW );
-        uno::Reference< container::XIndexAccess > xPageStyles( xSytleFamNames->getByName("PageStyles"), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XIndexAccess > xPageStyles( xSytleFamNames->getByName(u"PageStyles"_ustr), uno::UNO_QUERY_THROW );
         sal_Int32 nCount = xPageStyles->getCount();
         for( sal_Int32 index = 0; index < nCount; ++index )
         {
@@ -153,7 +153,7 @@ SwVbaSections::PageSetup( )
         uno::Reference< word::XSection > xSection( m_xIndexAccess->getByIndex( 0 ), uno::UNO_QUERY_THROW );
         return xSection->PageSetup();
     }
-    throw uno::RuntimeException("There is no section" );
+    throw uno::RuntimeException(u"There is no section"_ustr );
 }
 
 // XEnumerationAccess
@@ -179,7 +179,7 @@ SwVbaSections::createCollectionObject( const css::uno::Any& aSource )
 OUString
 SwVbaSections::getServiceImplName()
 {
-    return "SwVbaSections";
+    return u"SwVbaSections"_ustr;
 }
 
 css::uno::Sequence<OUString>
@@ -187,7 +187,7 @@ SwVbaSections::getServiceNames()
 {
     static uno::Sequence< OUString > const sNames
     {
-        "ooo.vba.word.Sections"
+        u"ooo.vba.word.Sections"_ustr
     };
     return sNames;
 }

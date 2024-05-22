@@ -79,7 +79,7 @@ SwVbaRevision::Reject( )
 OUString
 SwVbaRevision::getServiceImplName()
 {
-    return "SwVbaRevision";
+    return u"SwVbaRevision"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -87,7 +87,7 @@ SwVbaRevision::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.Revision"
+        u"ooo.vba.word.Revision"_ustr
     };
     return aServiceNames;
 }

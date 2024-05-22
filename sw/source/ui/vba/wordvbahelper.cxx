@@ -69,10 +69,10 @@ uno::Reference< style::XStyle > getCurrentPageStyle( const uno::Reference< frame
 uno::Reference< style::XStyle > getCurrentPageStyle( const uno::Reference< frame::XModel >& xModel, const uno::Reference< beans::XPropertySet >& xProps )
 {
     OUString aPageStyleName;
-    xProps->getPropertyValue("PageStyleName") >>= aPageStyleName;
+    xProps->getPropertyValue(u"PageStyleName"_ustr) >>= aPageStyleName;
     uno::Reference< style::XStyleFamiliesSupplier > xSytleFamSupp( xModel, uno::UNO_QUERY_THROW );
     uno::Reference< container::XNameAccess > xSytleFamNames( xSytleFamSupp->getStyleFamilies(), uno::UNO_SET_THROW );
-    uno::Reference< container::XNameAccess > xPageStyles( xSytleFamNames->getByName("PageStyles"), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameAccess > xPageStyles( xSytleFamNames->getByName(u"PageStyles"_ustr), uno::UNO_QUERY_THROW );
     uno::Reference< style::XStyle > xStyle( xPageStyles->getByName( aPageStyleName ), uno::UNO_QUERY_THROW );
 
     return xStyle;
@@ -89,8 +89,8 @@ uno::Reference< style::XStyle > getDefaultParagraphStyle( const uno::Reference< 
 {
     uno::Reference< style::XStyleFamiliesSupplier > xSytleFamSupp( xModel, uno::UNO_QUERY_THROW );
     uno::Reference< container::XNameAccess > xSytleFamNames( xSytleFamSupp->getStyleFamilies(), uno::UNO_SET_THROW );
-    uno::Reference< container::XNameAccess > xParaStyles( xSytleFamNames->getByName("ParagraphStyles"), uno::UNO_QUERY_THROW );
-    uno::Reference< style::XStyle > xStyle( xParaStyles->getByName("Standard"), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameAccess > xParaStyles( xSytleFamNames->getByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY_THROW );
+    uno::Reference< style::XStyle > xStyle( xParaStyles->getByName(u"Standard"_ustr), uno::UNO_QUERY_THROW );
 
     return xStyle;
 }
@@ -104,7 +104,7 @@ uno::Reference< text::XTextRange > getFirstObjectPosition( const uno::Reference<
     if( xParaEnum->hasMoreElements() )
     {
         uno::Reference< lang::XServiceInfo > xServiceInfo( xParaEnum->nextElement(), uno::UNO_QUERY_THROW );
-        if( xServiceInfo->supportsService("com.sun.star.text.TextTable") )
+        if( xServiceInfo->supportsService(u"com.sun.star.text.TextTable"_ustr) )
         {
             uno::Reference< table::XCellRange > xCellRange( xServiceInfo, uno::UNO_QUERY_THROW );
             uno::Reference< text::XText> xFirstCellText( xCellRange->getCellByPosition(0, 0), uno::UNO_QUERY_THROW );
@@ -145,14 +145,14 @@ uno::Reference< text::XText > getCurrentXText( const uno::Reference< frame::XMod
         //catch exception "no text selection"
     }
     uno::Reference< beans::XPropertySet > xVCProps( xTextRange, uno::UNO_QUERY_THROW );
-    while( xVCProps->getPropertyValue("TextTable") >>= xTextContent )
+    while( xVCProps->getPropertyValue(u"TextTable"_ustr) >>= xTextContent )
     {
         xText = xTextContent->getAnchor()->getText();
         xVCProps.set( xText->createTextCursor(), uno::UNO_QUERY_THROW );
     }
 
     if( !xText.is() )
-        throw  uno::RuntimeException("no text selection" );
+        throw  uno::RuntimeException(u"no text selection"_ustr );
 
     return xText;
 }

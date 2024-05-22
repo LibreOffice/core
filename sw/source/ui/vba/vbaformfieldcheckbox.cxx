@@ -31,7 +31,7 @@ SwVbaFormFieldCheckBox::SwVbaFormFieldCheckBox(
 
 SwVbaFormFieldCheckBox::~SwVbaFormFieldCheckBox() {}
 
-OUString SwVbaFormFieldCheckBox::getDefaultPropertyName() { return "Valid"; }
+OUString SwVbaFormFieldCheckBox::getDefaultPropertyName() { return u"Valid"_ustr; }
 
 sal_Bool SwVbaFormFieldCheckBox::getValid()
 {
@@ -106,11 +106,11 @@ void SwVbaFormFieldCheckBox::setValue(sal_Bool bSet)
     m_pCheckBox->SetChecked(bSet);
 }
 
-OUString SwVbaFormFieldCheckBox::getServiceImplName() { return "SwVbaFormFieldCheckBox"; }
+OUString SwVbaFormFieldCheckBox::getServiceImplName() { return u"SwVbaFormFieldCheckBox"_ustr; }
 
 uno::Sequence<OUString> SwVbaFormFieldCheckBox::getServiceNames()
 {
-    static uno::Sequence<OUString> const aServiceNames{ "ooo.vba.word.CheckBox" };
+    static uno::Sequence<OUString> const aServiceNames{ u"ooo.vba.word.CheckBox"_ustr };
     return aServiceNames;
 }
 

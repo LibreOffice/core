@@ -44,12 +44,12 @@ void SwVbaFormFieldDropDownListEntry::Delete() { m_rDropDown.DelContent(m_nZInde
 // XHelperInterface
 OUString SwVbaFormFieldDropDownListEntry::getServiceImplName()
 {
-    return "SwVbaFormFieldDropDownListEntry";
+    return u"SwVbaFormFieldDropDownListEntry"_ustr;
 }
 
 uno::Sequence<OUString> SwVbaFormFieldDropDownListEntry::getServiceNames()
 {
-    static uno::Sequence<OUString> const aServiceNames{ "ooo.vba.word.ListEntry" };
+    static uno::Sequence<OUString> const aServiceNames{ u"ooo.vba.word.ListEntry"_ustr };
     return aServiceNames;
 }
 

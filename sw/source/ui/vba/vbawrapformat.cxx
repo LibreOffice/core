@@ -66,13 +66,13 @@ void SwVbaWrapFormat::makeWrap()
             case word::WdWrapType::wdWrapSquare:
             {
                 eTextMode = text::WrapTextMode_PARALLEL;
-                m_xPropertySet->setPropertyValue("SurroundContour", uno::Any( false ) );
+                m_xPropertySet->setPropertyValue(u"SurroundContour"_ustr, uno::Any( false ) );
                 break;
             }
             case word::WdWrapType::wdWrapTight:
             {
                 eTextMode = text::WrapTextMode_PARALLEL;
-                m_xPropertySet->setPropertyValue("SurroundContour", uno::Any( true ) );
+                m_xPropertySet->setPropertyValue(u"SurroundContour"_ustr, uno::Any( true ) );
                 break;
             }
             default:
@@ -81,14 +81,14 @@ void SwVbaWrapFormat::makeWrap()
             }
         }
     }
-    m_xPropertySet->setPropertyValue("TextWrap", uno::Any( eTextMode ) );
+    m_xPropertySet->setPropertyValue(u"TextWrap"_ustr, uno::Any( eTextMode ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaWrapFormat::getType()
 {
     sal_Int32 nType = word::WdWrapType::wdWrapSquare;
     text::WrapTextMode eTextMode;
-    m_xPropertySet->getPropertyValue("TextWrap") >>= eTextMode;
+    m_xPropertySet->getPropertyValue(u"TextWrap"_ustr) >>= eTextMode;
     switch( eTextMode )
     {
         case text::WrapTextMode_NONE:
@@ -104,7 +104,7 @@ void SwVbaWrapFormat::makeWrap()
         case text::WrapTextMode_PARALLEL:
         {
             bool bContour = false;
-            m_xPropertySet->getPropertyValue("SurroundContour") >>= bContour;
+            m_xPropertySet->getPropertyValue(u"SurroundContour"_ustr) >>= bContour;
             if( bContour )
                 nType = word::WdWrapType::wdWrapTight;
             else
@@ -136,7 +136,7 @@ void SAL_CALL SwVbaWrapFormat::setType( ::sal_Int32 _type )
 {
     sal_Int32 nSide = word::WdWrapSideType::wdWrapBoth;
     text::WrapTextMode eTextMode;
-    m_xPropertySet->getPropertyValue("TextWrap") >>= eTextMode;
+    m_xPropertySet->getPropertyValue(u"TextWrap"_ustr) >>= eTextMode;
     switch( eTextMode )
     {
         case text::WrapTextMode_LEFT:
@@ -178,48 +178,48 @@ void SwVbaWrapFormat::setDistance( const OUString& sName, float _distance )
 
 float SAL_CALL SwVbaWrapFormat::getDistanceTop()
 {
-    return getDistance( "TopMargin" );
+    return getDistance( u"TopMargin"_ustr );
 }
 
 void SAL_CALL SwVbaWrapFormat::setDistanceTop( float _distancetop )
 {
-    setDistance( "TopMargin", _distancetop );
+    setDistance( u"TopMargin"_ustr, _distancetop );
 }
 
 float SAL_CALL SwVbaWrapFormat::getDistanceBottom()
 {
-    return getDistance( "BottomMargin" );
+    return getDistance( u"BottomMargin"_ustr );
 }
 
 void SAL_CALL SwVbaWrapFormat::setDistanceBottom( float _distancebottom )
 {
-    setDistance( "BottomMargin", _distancebottom );
+    setDistance( u"BottomMargin"_ustr, _distancebottom );
 }
 
 float SAL_CALL SwVbaWrapFormat::getDistanceLeft()
 {
-    return getDistance( "LeftMargin" );
+    return getDistance( u"LeftMargin"_ustr );
 }
 
 void SAL_CALL SwVbaWrapFormat::setDistanceLeft( float _distanceleft )
 {
-    setDistance( "LeftMargin", _distanceleft );
+    setDistance( u"LeftMargin"_ustr, _distanceleft );
 }
 
 float SAL_CALL SwVbaWrapFormat::getDistanceRight()
 {
-    return getDistance( "RightMargin" );
+    return getDistance( u"RightMargin"_ustr );
 }
 
 void SAL_CALL SwVbaWrapFormat::setDistanceRight( float _distanceright )
 {
-    setDistance( "RightMargin", _distanceright );
+    setDistance( u"RightMargin"_ustr, _distanceright );
 }
 
 OUString
 SwVbaWrapFormat::getServiceImplName()
 {
-    return "SwVbaWrapFormat";
+    return u"SwVbaWrapFormat"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -227,7 +227,7 @@ SwVbaWrapFormat::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.WrapFormat"
+        u"ooo.vba.word.WrapFormat"_ustr
     };
     return aServiceNames;
 }

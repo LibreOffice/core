@@ -241,181 +241,181 @@ void SwVbaContentControl::setColor(sal_Int32 nWdColor)
     switch (nWdColor)
     {
         case word::WdColor::wdColorAqua:
-            m_pCC->SetColor("wdColorAqua");
+            m_pCC->SetColor(u"wdColorAqua"_ustr);
             break;
         case word::WdColor::wdColorAutomatic:
-            m_pCC->SetColor("wdColorAutomatic");
+            m_pCC->SetColor(u"wdColorAutomatic"_ustr);
             break;
         case word::WdColor::wdColorBlack:
-            m_pCC->SetColor("wdColorBlack");
+            m_pCC->SetColor(u"wdColorBlack"_ustr);
             break;
         case word::WdColor::wdColorBlue:
-            m_pCC->SetColor("wdColorBlue");
+            m_pCC->SetColor(u"wdColorBlue"_ustr);
             break;
         case word::WdColor::wdColorBlueGray:
-            m_pCC->SetColor("wdColorBlueGray");
+            m_pCC->SetColor(u"wdColorBlueGray"_ustr);
             break;
         case word::WdColor::wdColorBrightGreen:
-            m_pCC->SetColor("wdColorBrightGreen");
+            m_pCC->SetColor(u"wdColorBrightGreen"_ustr);
             break;
         case word::WdColor::wdColorBrown:
-            m_pCC->SetColor("wdColorBrown");
+            m_pCC->SetColor(u"wdColorBrown"_ustr);
             break;
         case word::WdColor::wdColorDarkBlue:
-            m_pCC->SetColor("wdColorDarkBlue");
+            m_pCC->SetColor(u"wdColorDarkBlue"_ustr);
             break;
         case word::WdColor::wdColorDarkGreen:
-            m_pCC->SetColor("wdColorDarkGreen");
+            m_pCC->SetColor(u"wdColorDarkGreen"_ustr);
             break;
         case word::WdColor::wdColorDarkRed:
-            m_pCC->SetColor("wdColorDarkRed");
+            m_pCC->SetColor(u"wdColorDarkRed"_ustr);
             break;
         case word::WdColor::wdColorDarkTeal:
-            m_pCC->SetColor("wdColorDarkTeal");
+            m_pCC->SetColor(u"wdColorDarkTeal"_ustr);
             break;
         case word::WdColor::wdColorDarkYellow:
-            m_pCC->SetColor("wdColorDarkYellow");
+            m_pCC->SetColor(u"wdColorDarkYellow"_ustr);
             break;
         case word::WdColor::wdColorGold:
-            m_pCC->SetColor("wdColorGold");
+            m_pCC->SetColor(u"wdColorGold"_ustr);
             break;
         case word::WdColor::wdColorGray05:
-            m_pCC->SetColor("wdColorGray05");
+            m_pCC->SetColor(u"wdColorGray05"_ustr);
             break;
         case word::WdColor::wdColorGray10:
-            m_pCC->SetColor("wdColorGray10");
+            m_pCC->SetColor(u"wdColorGray10"_ustr);
             break;
         case word::WdColor::wdColorGray125:
-            m_pCC->SetColor("wdColorGray125");
+            m_pCC->SetColor(u"wdColorGray125"_ustr);
             break;
         case word::WdColor::wdColorGray15:
-            m_pCC->SetColor("wdColorGray15");
+            m_pCC->SetColor(u"wdColorGray15"_ustr);
             break;
         case word::WdColor::wdColorGray20:
-            m_pCC->SetColor("wdColorGray20");
+            m_pCC->SetColor(u"wdColorGray20"_ustr);
             break;
         case word::WdColor::wdColorGray25:
-            m_pCC->SetColor("wdColorGray25");
+            m_pCC->SetColor(u"wdColorGray25"_ustr);
             break;
         case word::WdColor::wdColorGray30:
-            m_pCC->SetColor("wdColorGray30");
+            m_pCC->SetColor(u"wdColorGray30"_ustr);
             break;
         case word::WdColor::wdColorGray35:
-            m_pCC->SetColor("wdColorGray35");
+            m_pCC->SetColor(u"wdColorGray35"_ustr);
             break;
         case word::WdColor::wdColorGray375:
-            m_pCC->SetColor("wdColorGray375");
+            m_pCC->SetColor(u"wdColorGray375"_ustr);
             break;
         case word::WdColor::wdColorGray40:
-            m_pCC->SetColor("wdColorGray40");
+            m_pCC->SetColor(u"wdColorGray40"_ustr);
             break;
         case word::WdColor::wdColorGray45:
-            m_pCC->SetColor("wdColorGray45");
+            m_pCC->SetColor(u"wdColorGray45"_ustr);
             break;
         case word::WdColor::wdColorGray50:
-            m_pCC->SetColor("wdColorGray50");
+            m_pCC->SetColor(u"wdColorGray50"_ustr);
             break;
         case word::WdColor::wdColorGray55:
-            m_pCC->SetColor("wdColorGray55");
+            m_pCC->SetColor(u"wdColorGray55"_ustr);
             break;
         case word::WdColor::wdColorGray60:
-            m_pCC->SetColor("wdColorGray60");
+            m_pCC->SetColor(u"wdColorGray60"_ustr);
             break;
         case word::WdColor::wdColorGray625:
-            m_pCC->SetColor("wdColorGray625");
+            m_pCC->SetColor(u"wdColorGray625"_ustr);
             break;
         case word::WdColor::wdColorGray65:
-            m_pCC->SetColor("wdColorGray65");
+            m_pCC->SetColor(u"wdColorGray65"_ustr);
             break;
         case word::WdColor::wdColorGray70:
-            m_pCC->SetColor("wdColorGray70");
+            m_pCC->SetColor(u"wdColorGray70"_ustr);
             break;
         case word::WdColor::wdColorGray75:
-            m_pCC->SetColor("wdColorGray75");
+            m_pCC->SetColor(u"wdColorGray75"_ustr);
             break;
         case word::WdColor::wdColorGray80:
-            m_pCC->SetColor("wdColorGray80");
+            m_pCC->SetColor(u"wdColorGray80"_ustr);
             break;
         case word::WdColor::wdColorGray85:
-            m_pCC->SetColor("wdColorGray85");
+            m_pCC->SetColor(u"wdColorGray85"_ustr);
             break;
         case word::WdColor::wdColorGray875:
-            m_pCC->SetColor("wdColorGray875");
+            m_pCC->SetColor(u"wdColorGray875"_ustr);
             break;
         case word::WdColor::wdColorGray90:
-            m_pCC->SetColor("wdColorGray90");
+            m_pCC->SetColor(u"wdColorGray90"_ustr);
             break;
         case word::WdColor::wdColorGray95:
-            m_pCC->SetColor("wdColorGray95");
+            m_pCC->SetColor(u"wdColorGray95"_ustr);
             break;
         case word::WdColor::wdColorGreen:
-            m_pCC->SetColor("wdColorGreen");
+            m_pCC->SetColor(u"wdColorGreen"_ustr);
             break;
         case word::WdColor::wdColorIndigo:
-            m_pCC->SetColor("wdColorIndigo");
+            m_pCC->SetColor(u"wdColorIndigo"_ustr);
             break;
         case word::WdColor::wdColorLavender:
-            m_pCC->SetColor("wdColorLavender");
+            m_pCC->SetColor(u"wdColorLavender"_ustr);
             break;
         case word::WdColor::wdColorLightBlue:
-            m_pCC->SetColor("wdColorLightBlue");
+            m_pCC->SetColor(u"wdColorLightBlue"_ustr);
             break;
         case word::WdColor::wdColorLightGreen:
-            m_pCC->SetColor("wdColorLightGreen");
+            m_pCC->SetColor(u"wdColorLightGreen"_ustr);
             break;
         case word::WdColor::wdColorLightOrange:
-            m_pCC->SetColor("wdColorLightOrange");
+            m_pCC->SetColor(u"wdColorLightOrange"_ustr);
             break;
         case word::WdColor::wdColorLightTurquoise:
-            m_pCC->SetColor("wdColorLightTurquoise");
+            m_pCC->SetColor(u"wdColorLightTurquoise"_ustr);
             break;
         case word::WdColor::wdColorLightYellow:
-            m_pCC->SetColor("wdColorLightYellow");
+            m_pCC->SetColor(u"wdColorLightYellow"_ustr);
             break;
         case word::WdColor::wdColorLime:
-            m_pCC->SetColor("wdColorLime");
+            m_pCC->SetColor(u"wdColorLime"_ustr);
             break;
         case word::WdColor::wdColorOliveGreen:
-            m_pCC->SetColor("wdColorOliveGreen");
+            m_pCC->SetColor(u"wdColorOliveGreen"_ustr);
             break;
         case word::WdColor::wdColorOrange:
-            m_pCC->SetColor("wdColorOrange");
+            m_pCC->SetColor(u"wdColorOrange"_ustr);
             break;
         case word::WdColor::wdColorPaleBlue:
-            m_pCC->SetColor("wdColorPaleBlue");
+            m_pCC->SetColor(u"wdColorPaleBlue"_ustr);
             break;
         case word::WdColor::wdColorPink:
-            m_pCC->SetColor("wdColorPink");
+            m_pCC->SetColor(u"wdColorPink"_ustr);
             break;
         case word::WdColor::wdColorPlum:
-            m_pCC->SetColor("wdColorPlum");
+            m_pCC->SetColor(u"wdColorPlum"_ustr);
             break;
         case word::WdColor::wdColorRed:
-            m_pCC->SetColor("wdColorRed");
+            m_pCC->SetColor(u"wdColorRed"_ustr);
             break;
         case word::WdColor::wdColorRose:
-            m_pCC->SetColor("wdColorRose");
+            m_pCC->SetColor(u"wdColorRose"_ustr);
             break;
         case word::WdColor::wdColorSeaGreen:
-            m_pCC->SetColor("wdColorSeaGreen");
+            m_pCC->SetColor(u"wdColorSeaGreen"_ustr);
             break;
         case word::WdColor::wdColorSkyBlue:
-            m_pCC->SetColor("wdColorSkyBlue");
+            m_pCC->SetColor(u"wdColorSkyBlue"_ustr);
             break;
         case word::WdColor::wdColorTan:
-            m_pCC->SetColor("wdColorTan");
+            m_pCC->SetColor(u"wdColorTan"_ustr);
             break;
         case word::WdColor::wdColorTeal:
-            m_pCC->SetColor("wdColorTeal");
+            m_pCC->SetColor(u"wdColorTeal"_ustr);
             break;
         case word::WdColor::wdColorTurquoise:
-            m_pCC->SetColor("wdColorTurquoise");
+            m_pCC->SetColor(u"wdColorTurquoise"_ustr);
             break;
         case word::WdColor::wdColorViolet:
-            m_pCC->SetColor("wdColorViolet");
+            m_pCC->SetColor(u"wdColorViolet"_ustr);
             break;
         case word::WdColor::wdColorWhite:
-            m_pCC->SetColor("wdColorWhite");
+            m_pCC->SetColor(u"wdColorWhite"_ustr);
             break;
         default:;
     }
@@ -732,7 +732,7 @@ void SwVbaContentControl::SetPlaceholderText(const uno::Any& BuildingBlock, cons
     else
     {
         // Remove placeholder text.
-        m_pCC->SetPlaceholderDocPart("");
+        m_pCC->SetPlaceholderDocPart(u""_ustr);
     }
     if (m_pCC->GetShowingPlaceHolder() && !getLockContents() && m_pCC->GetTextAttr())
     {
@@ -742,11 +742,11 @@ void SwVbaContentControl::SetPlaceholderText(const uno::Any& BuildingBlock, cons
 
 void SwVbaContentControl::Ungroup() { SAL_INFO("sw.vba", "SwVbaContentControl::UnGroup stub"); }
 
-OUString SwVbaContentControl::getServiceImplName() { return "SwVbaContentControl"; }
+OUString SwVbaContentControl::getServiceImplName() { return u"SwVbaContentControl"_ustr; }
 
 uno::Sequence<OUString> SwVbaContentControl::getServiceNames()
 {
-    static uno::Sequence<OUString> const aServiceNames{ "ooo.vba.word.ContentControl" };
+    static uno::Sequence<OUString> const aServiceNames{ u"ooo.vba.word.ContentControl"_ustr };
     return aServiceNames;
 }
 

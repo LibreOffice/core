@@ -43,7 +43,7 @@ SwVbaBookmark::~SwVbaBookmark()
 void SwVbaBookmark::checkVality()
 {
     if( !mbValid )
-        throw uno::RuntimeException("The bookmark is not valid" );
+        throw uno::RuntimeException(u"The bookmark is not valid"_ustr );
 }
 
 void SAL_CALL SwVbaBookmark::Delete()
@@ -83,7 +83,7 @@ uno::Any SAL_CALL SwVbaBookmark::Range()
 OUString
 SwVbaBookmark::getServiceImplName()
 {
-    return "SwVbaBookmark";
+    return u"SwVbaBookmark"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -91,7 +91,7 @@ SwVbaBookmark::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.Bookmark"
+        u"ooo.vba.word.Bookmark"_ustr
     };
     return aServiceNames;
 }

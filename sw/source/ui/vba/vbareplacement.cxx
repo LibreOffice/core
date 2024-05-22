@@ -51,7 +51,7 @@ void SAL_CALL SwVbaReplacement::ClearFormatting( )
 OUString
 SwVbaReplacement::getServiceImplName()
 {
-    return "SwVbaReplacement";
+    return u"SwVbaReplacement"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -59,7 +59,7 @@ SwVbaReplacement::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.Replacement"
+        u"ooo.vba.word.Replacement"_ustr
     };
     return aServiceNames;
 }

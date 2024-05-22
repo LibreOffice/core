@@ -68,7 +68,7 @@ uno::Any SAL_CALL SwVbaListLevels::Item( const uno::Any& Index1, const uno::Any&
     if( !( Index1 >>= nIndex ) )
         throw uno::RuntimeException();
     if( nIndex <=0 || nIndex > getCount() )
-        throw  uno::RuntimeException("Index out of bounds" );
+        throw  uno::RuntimeException(u"Index out of bounds"_ustr );
 
     return uno::Any( uno::Reference< word::XListLevel >( new SwVbaListLevel( this, mxContext, m_pListHelper, nIndex - 1 ) ) );
 }
@@ -95,7 +95,7 @@ SwVbaListLevels::createCollectionObject( const css::uno::Any& aSource )
 OUString
 SwVbaListLevels::getServiceImplName()
 {
-    return "SwVbaListLevels";
+    return u"SwVbaListLevels"_ustr;
 }
 
 css::uno::Sequence<OUString>
@@ -103,7 +103,7 @@ SwVbaListLevels::getServiceNames()
 {
     static uno::Sequence< OUString > const sNames
     {
-        "ooo.vba.word.ListLevels"
+        u"ooo.vba.word.ListLevels"_ustr
     };
     return sNames;
 }

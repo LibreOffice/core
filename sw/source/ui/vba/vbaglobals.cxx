@@ -193,13 +193,13 @@ float SAL_CALL SwVbaGlobals::PointsToPicas( float Points )
 OUString
 SwVbaGlobals::getServiceImplName()
 {
-    return "SwVbaGlobals";
+    return u"SwVbaGlobals"_ustr;
 }
 
 uno::Sequence< OUString >
 SwVbaGlobals::getServiceNames()
 {
-    return { "ooo.vba.word.Globals" };
+    return { u"ooo.vba.word.Globals"_ustr };
 }
 
 uno::Sequence< OUString >
@@ -207,10 +207,10 @@ SwVbaGlobals::getAvailableServiceNames(  )
 {
     static const uno::Sequence<OUString> serviceNames = comphelper::concatSequences(
         SwVbaGlobals_BASE::getAvailableServiceNames(),
-        uno::Sequence<OUString>{ "ooo.vba.word.Document",
+        uno::Sequence<OUString>{ u"ooo.vba.word.Document"_ustr,
                                  // "ooo.vba.word.Globals",
                                  // "ooo.vba.word.WrapFormat",
-                                 "com.sun.star.script.vba.VBATextEventProcessor" });
+                                 u"com.sun.star.script.vba.VBATextEventProcessor"_ustr });
     return serviceNames;
 }
 

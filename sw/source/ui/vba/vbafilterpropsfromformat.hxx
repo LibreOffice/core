@@ -40,7 +40,7 @@ inline bool setFilterPropsFromFormat(sal_Int32 nFormat,
         switch (nFormat)
         {
             case ooo::vba::word::WdSaveFormat::wdFormatDocument:
-                pProp->Value <<= OUString("MS Word 97");
+                pProp->Value <<= u"MS Word 97"_ustr;
                 break;
             // Just save all the text formats as "Text"
             case ooo::vba::word::WdSaveFormat::wdFormatDOSText:
@@ -48,22 +48,22 @@ inline bool setFilterPropsFromFormat(sal_Int32 nFormat,
             case ooo::vba::word::WdSaveFormat::wdFormatEncodedText:
             case ooo::vba::word::WdSaveFormat::wdFormatText:
             case ooo::vba::word::WdSaveFormat::wdFormatTextLineBreaks:
-                pProp->Value <<= OUString("Text");
+                pProp->Value <<= u"Text"_ustr;
                 break;
             case ooo::vba::word::WdSaveFormat::wdFormatFilteredHTML:
             case ooo::vba::word::WdSaveFormat::wdFormatHTML:
-                pProp->Value <<= OUString("HTML");
+                pProp->Value <<= u"HTML"_ustr;
                 break;
             case ooo::vba::word::WdSaveFormat::wdFormatRTF:
-                pProp->Value <<= OUString("Rich Text Format");
+                pProp->Value <<= u"Rich Text Format"_ustr;
                 break;
             case ooo::vba::word::WdSaveFormat::wdFormatTemplate:
-                pProp->Value <<= OUString("MS Word 97 Vorlage");
+                pProp->Value <<= u"MS Word 97 Vorlage"_ustr;
                 break;
 
             // Default to "MS Word 97"
             default:
-                pProp->Value <<= OUString("MS Word 97");
+                pProp->Value <<= u"MS Word 97"_ustr;
                 break;
         }
         return true;

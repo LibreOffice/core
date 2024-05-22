@@ -37,13 +37,13 @@ SwVbaTableOfContents::~SwVbaTableOfContents()
 ::sal_Int32 SAL_CALL SwVbaTableOfContents::getLowerHeadingLevel()
 {
     sal_Int16 nLevel = 0;
-    mxTocProps->getPropertyValue("Level") >>= nLevel;
+    mxTocProps->getPropertyValue(u"Level"_ustr) >>= nLevel;
     return nLevel;
 }
 
 void SAL_CALL SwVbaTableOfContents::setLowerHeadingLevel( ::sal_Int32 _lowerheadinglevel )
 {
-    mxTocProps->setPropertyValue("Level", uno::Any( sal_Int8( _lowerheadinglevel ) ) );
+    mxTocProps->setPropertyValue(u"Level"_ustr, uno::Any( sal_Int8( _lowerheadinglevel ) ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaTableOfContents::getTabLeader()
@@ -60,25 +60,25 @@ void SAL_CALL SwVbaTableOfContents::setTabLeader( ::sal_Int32 /*_tableader*/ )
 sal_Bool SAL_CALL SwVbaTableOfContents::getUseFields()
 {
     bool bUseFields = false;
-    mxTocProps->getPropertyValue("CreateFromMarks") >>= bUseFields;
+    mxTocProps->getPropertyValue(u"CreateFromMarks"_ustr) >>= bUseFields;
     return bUseFields;
 }
 
 void SAL_CALL SwVbaTableOfContents::setUseFields( sal_Bool _useFields )
 {
-    mxTocProps->setPropertyValue("CreateFromMarks", uno::Any( _useFields ) );
+    mxTocProps->setPropertyValue(u"CreateFromMarks"_ustr, uno::Any( _useFields ) );
 }
 
 sal_Bool SAL_CALL SwVbaTableOfContents::getUseOutlineLevels()
 {
     bool bUseOutlineLevels = false;
-    mxTocProps->getPropertyValue("CreateFromOutline") >>= bUseOutlineLevels;
+    mxTocProps->getPropertyValue(u"CreateFromOutline"_ustr) >>= bUseOutlineLevels;
     return bUseOutlineLevels;
 }
 
 void SAL_CALL SwVbaTableOfContents::setUseOutlineLevels( sal_Bool _useOutlineLevels )
 {
-    mxTocProps->setPropertyValue("CreateFromOutline", uno::Any( _useOutlineLevels ) );
+    mxTocProps->setPropertyValue(u"CreateFromOutline"_ustr, uno::Any( _useOutlineLevels ) );
 }
 
 void SAL_CALL SwVbaTableOfContents::Delete(  )
@@ -95,7 +95,7 @@ void SAL_CALL SwVbaTableOfContents::Update(  )
 OUString
 SwVbaTableOfContents::getServiceImplName()
 {
-    return "SwVbaTableOfContents";
+    return u"SwVbaTableOfContents"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -103,7 +103,7 @@ SwVbaTableOfContents::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.TableOfContents"
+        u"ooo.vba.word.TableOfContents"_ustr
     };
     return aServiceNames;
 }

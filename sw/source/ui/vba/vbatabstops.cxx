@@ -34,14 +34,14 @@ using namespace ::com::sun::star;
 static uno::Sequence< style::TabStop > lcl_getTabStops( const uno::Reference< beans::XPropertySet >& xParaProps )
 {
     uno::Sequence< style::TabStop > aSeq;
-    xParaProps->getPropertyValue("ParaTabStops") >>= aSeq;
+    xParaProps->getPropertyValue(u"ParaTabStops"_ustr) >>= aSeq;
     return aSeq;
 }
 
 /// @throws uno::RuntimeException
 static void lcl_setTabStops( const uno::Reference< beans::XPropertySet >& xParaProps, const uno::Sequence< style::TabStop >& aSeq )
 {
-    xParaProps->setPropertyValue("ParaTabStops", uno::Any( aSeq ) );
+    xParaProps->setPropertyValue(u"ParaTabStops"_ustr, uno::Any( aSeq ) );
 }
 
 namespace {
@@ -254,7 +254,7 @@ SwVbaTabStops::createCollectionObject( const css::uno::Any& aSource )
 OUString
 SwVbaTabStops::getServiceImplName()
 {
-    return "SwVbaTabStops";
+    return u"SwVbaTabStops"_ustr;
 }
 
 css::uno::Sequence<OUString>
@@ -262,7 +262,7 @@ SwVbaTabStops::getServiceNames()
 {
     static uno::Sequence< OUString > const sNames
     {
-        "ooo.vba.word.TabStops"
+        u"ooo.vba.word.TabStops"_ustr
     };
     return sNames;
 }

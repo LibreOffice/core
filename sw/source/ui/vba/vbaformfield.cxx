@@ -132,7 +132,7 @@ uno::Reference<word::XRange> SwVbaFormField::Range()
     return xRet;
 }
 
-OUString SwVbaFormField::getDefaultPropertyName() { return "Type"; }
+OUString SwVbaFormField::getDefaultPropertyName() { return u"Type"_ustr; }
 
 sal_Int32 SwVbaFormField::getType()
 {
@@ -169,25 +169,25 @@ void SwVbaFormField::setEnabled(sal_Bool /*bSet*/)
 OUString SwVbaFormField::getEntryMacro()
 {
     OUString sMacro;
-    (*m_rFormField.GetParameters())["EntryMacro"] >>= sMacro;
+    (*m_rFormField.GetParameters())[u"EntryMacro"_ustr] >>= sMacro;
     return sMacro;
 }
 
 void SwVbaFormField::setEntryMacro(const OUString& rSet)
 {
-    (*m_rFormField.GetParameters())["EntryMacro"] <<= rSet;
+    (*m_rFormField.GetParameters())[u"EntryMacro"_ustr] <<= rSet;
 }
 
 OUString SwVbaFormField::getExitMacro()
 {
     OUString sMacro;
-    (*m_rFormField.GetParameters())["ExitMacro"] >>= sMacro;
+    (*m_rFormField.GetParameters())[u"ExitMacro"_ustr] >>= sMacro;
     return sMacro;
 }
 
 void SwVbaFormField::setExitMacro(const OUString& rSet)
 {
-    (*m_rFormField.GetParameters())["ExitMacro"] <<= rSet;
+    (*m_rFormField.GetParameters())[u"ExitMacro"_ustr] <<= rSet;
 }
 
 OUString SwVbaFormField::getHelpText() { return m_rFormField.GetFieldHelptext(); }
@@ -217,7 +217,7 @@ OUString SwVbaFormField::getResult() { return m_rFormField.GetContent(); }
 void SwVbaFormField::setResult(const OUString& rSet)
 {
     if (dynamic_cast<sw::mark::ICheckboxFieldmark*>(&m_rFormField))
-        m_rFormField.ReplaceContent("false");
+        m_rFormField.ReplaceContent(u"false"_ustr);
     else
         m_rFormField.ReplaceContent(rSet);
 }
@@ -244,11 +244,11 @@ void SwVbaFormField::setOwnStatus(sal_Bool /*bSet*/)
     SAL_INFO("sw.vba", "SwVbaFormField::setOwnStatus stub");
 }
 
-OUString SwVbaFormField::getServiceImplName() { return "SwVbaFormField"; }
+OUString SwVbaFormField::getServiceImplName() { return u"SwVbaFormField"_ustr; }
 
 uno::Sequence<OUString> SwVbaFormField::getServiceNames()
 {
-    static uno::Sequence<OUString> const aServiceNames{ "ooo.vba.word.FormField" };
+    static uno::Sequence<OUString> const aServiceNames{ u"ooo.vba.word.FormField"_ustr };
     return aServiceNames;
 }
 

@@ -257,11 +257,11 @@ uno::Reference<container::XEnumeration> SwVbaContentControls::createEnumeration(
 
 uno::Any SwVbaContentControls::createCollectionObject(const uno::Any& aSource) { return aSource; }
 
-OUString SwVbaContentControls::getServiceImplName() { return "SwVbaContentControls"; }
+OUString SwVbaContentControls::getServiceImplName() { return u"SwVbaContentControls"_ustr; }
 
 uno::Sequence<OUString> SwVbaContentControls::getServiceNames()
 {
-    static uno::Sequence<OUString> const sNames{ "ooo.vba.word.ContentControls" };
+    static uno::Sequence<OUString> const sNames{ u"ooo.vba.word.ContentControls"_ustr };
     return sNames;
 }
 

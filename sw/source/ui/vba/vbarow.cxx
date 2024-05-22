@@ -47,7 +47,7 @@ uno::Any SAL_CALL SwVbaRow::getHeight()
         return uno::Any( sal_Int32( word::WdConstants::wdUndefined ) );
 
     sal_Int32 nHeight = 0;
-    mxRowProps->getPropertyValue("Height") >>= nHeight;
+    mxRowProps->getPropertyValue(u"Height"_ustr) >>= nHeight;
     return uno::Any( static_cast<float>(Millimeter::getInPoints( nHeight )) );
 }
 
@@ -57,20 +57,20 @@ void SAL_CALL SwVbaRow::setHeight( const uno::Any& _height )
     _height >>= height;
 
     sal_Int32 nHeight = Millimeter::getInHundredthsOfOneMillimeter( height );
-    mxRowProps->setPropertyValue("Height", uno::Any( nHeight ) );
+    mxRowProps->setPropertyValue(u"Height"_ustr, uno::Any( nHeight ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaRow::getHeightRule()
 {
     bool isAutoHeight = false;
-    mxRowProps->getPropertyValue("IsAutoHeight") >>= isAutoHeight;
+    mxRowProps->getPropertyValue(u"IsAutoHeight"_ustr) >>= isAutoHeight;
     return isAutoHeight ? word::WdRowHeightRule::wdRowHeightAuto : word::WdRowHeightRule::wdRowHeightExactly;
 }
 
 void SAL_CALL SwVbaRow::setHeightRule( ::sal_Int32 _heightrule )
 {
     bool isAutoHeight = ( _heightrule == word::WdRowHeightRule::wdRowHeightAuto );
-    mxRowProps->setPropertyValue("IsAutoHeight", uno::Any( isAutoHeight ) );
+    mxRowProps->setPropertyValue(u"IsAutoHeight"_ustr, uno::Any( isAutoHeight ) );
 }
 
 void SAL_CALL
@@ -105,7 +105,7 @@ void SAL_CALL SwVbaRow::SetHeight( float height, sal_Int32 heightrule )
 OUString
 SwVbaRow::getServiceImplName()
 {
-    return "SwVbaRow";
+    return u"SwVbaRow"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -113,7 +113,7 @@ SwVbaRow::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.Row"
+        u"ooo.vba.word.Row"_ustr
     };
     return aServiceNames;
 }

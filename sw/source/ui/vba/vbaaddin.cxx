@@ -44,7 +44,7 @@ OUString SAL_CALL SwVbaAddin::getName()
 void SAL_CALL
 SwVbaAddin::setName( const OUString& )
 {
-    throw uno::RuntimeException(" Fail to set name" );
+    throw uno::RuntimeException(u" Fail to set name"_ustr );
 }
 
 OUString SAL_CALL SwVbaAddin::getPath()
@@ -76,7 +76,7 @@ void SAL_CALL SwVbaAddin::setInstalled( sal_Bool _installed )
 OUString
 SwVbaAddin::getServiceImplName()
 {
-    return "SwVbaAddin";
+    return u"SwVbaAddin"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -84,7 +84,7 @@ SwVbaAddin::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.Addin"
+        u"ooo.vba.word.Addin"_ustr
     };
     return aServiceNames;
 }

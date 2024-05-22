@@ -42,7 +42,7 @@ void SAL_CALL SwVbaFrame::Select()
 OUString
 SwVbaFrame::getServiceImplName()
 {
-    return "SwVbaFrame";
+    return u"SwVbaFrame"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -50,7 +50,7 @@ SwVbaFrame::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.Frame"
+        u"ooo.vba.word.Frame"_ustr
     };
     return aServiceNames;
 }

@@ -87,7 +87,7 @@ SwVbaTemplate::AutoTextEntries( const uno::Any& index )
     uno::Reference< text::XAutoTextContainer2 > xAutoTextContainer = text::AutoTextContainer::create( xContext );
 
     // the default template is "Normal.dot" in Word.
-    OUString sGroup("Normal");
+    OUString sGroup(u"Normal"_ustr);
     OUString sName = getName();
     sal_Int32 nIndex = sName.lastIndexOf( '.' );
     if( nIndex > 0 )
@@ -99,7 +99,7 @@ SwVbaTemplate::AutoTextEntries( const uno::Any& index )
     uno::Reference< container::XIndexAccess > xGroup;
     if( !xAutoTextContainer->hasByName( sNewGroup ) )
     {
-        throw uno::RuntimeException("Auto Text Entry doesn't exist" );
+        throw uno::RuntimeException(u"Auto Text Entry doesn't exist"_ustr );
     }
 
     xGroup.set( xAutoTextContainer->getByName( sNewGroup ), uno::UNO_QUERY_THROW );
@@ -113,7 +113,7 @@ SwVbaTemplate::AutoTextEntries( const uno::Any& index )
 OUString
 SwVbaTemplate::getServiceImplName()
 {
-    return "SwVbaTemplate";
+    return u"SwVbaTemplate"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -121,7 +121,7 @@ SwVbaTemplate::getServiceNames()
 {
         static uno::Sequence< OUString > const aServiceNames
         {
-            "ooo.vba.word.Template"
+            u"ooo.vba.word.Template"_ustr
         };
         return aServiceNames;
 }

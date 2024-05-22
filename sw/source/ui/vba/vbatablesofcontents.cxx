@@ -117,10 +117,10 @@ uno::Reference< word::XTableOfContents > SAL_CALL
 SwVbaTablesOfContents::Add( const uno::Reference< word::XRange >& Range, const uno::Any& /*UseHeadingStyles*/, const uno::Any& /*UpperHeadingLevel*/, const uno::Any& LowerHeadingLevel, const uno::Any& UseFields, const uno::Any& /*TableID*/, const uno::Any& /*RightAlignPageNumbers*/, const uno::Any& /*IncludePageNumbers*/, const uno::Any& /*AddedStyles*/, const uno::Any& /*UseHyperlinks*/, const uno::Any& /*HidePageNumbersInWeb*/, const uno::Any& /*UseOutlineLevels*/ )
 {
     uno::Reference< lang::XMultiServiceFactory > xDocMSF( mxTextDocument, uno::UNO_QUERY_THROW );
-    uno::Reference< text::XDocumentIndex > xDocumentIndex( xDocMSF->createInstance("com.sun.star.text.ContentIndex"), uno::UNO_QUERY_THROW );
+    uno::Reference< text::XDocumentIndex > xDocumentIndex( xDocMSF->createInstance(u"com.sun.star.text.ContentIndex"_ustr), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySet > xTocProps( xDocumentIndex, uno::UNO_QUERY_THROW );
-    xTocProps->setPropertyValue("IsProtected", uno::Any( false ) );
+    xTocProps->setPropertyValue(u"IsProtected"_ustr, uno::Any( false ) );
 
     uno::Reference< word::XTableOfContents > xToc( new SwVbaTableOfContents( this, mxContext, mxTextDocument, xDocumentIndex ) );
 
@@ -170,7 +170,7 @@ SwVbaTablesOfContents::createCollectionObject( const uno::Any& aSource )
 OUString
 SwVbaTablesOfContents::getServiceImplName()
 {
-    return "SwVbaTablesOfContents";
+    return u"SwVbaTablesOfContents"_ustr;
 }
 
 uno::Sequence<OUString>
@@ -178,7 +178,7 @@ SwVbaTablesOfContents::getServiceNames()
 {
     static uno::Sequence< OUString > const sNames
     {
-        "ooo.vba.word.TablesOfContents"
+        u"ooo.vba.word.TablesOfContents"_ustr
     };
     return sNames;
 }

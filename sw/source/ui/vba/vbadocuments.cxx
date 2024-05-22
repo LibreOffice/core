@@ -145,7 +145,7 @@ SwVbaDocuments::OpenOld( const OUString& FileName, const uno::Any& ConfirmConver
 OUString
 SwVbaDocuments::getServiceImplName()
 {
-    return "SwVbaDocuments";
+    return u"SwVbaDocuments"_ustr;
 }
 
 uno::Sequence<OUString>
@@ -153,7 +153,7 @@ SwVbaDocuments::getServiceNames()
 {
     static uno::Sequence< OUString > const sNames
     {
-        "ooo.vba.word.Documents"
+        u"ooo.vba.word.Documents"_ustr
     };
     return sNames;
 }

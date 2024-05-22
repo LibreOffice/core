@@ -44,7 +44,7 @@ SwVbaListGallery::ListTemplates( const uno::Any& index )
 OUString
 SwVbaListGallery::getServiceImplName()
 {
-    return "SwVbaListGallery";
+    return u"SwVbaListGallery"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -52,7 +52,7 @@ SwVbaListGallery::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.ListGallery"
+        u"ooo.vba.word.ListGallery"_ustr
     };
     return aServiceNames;
 }

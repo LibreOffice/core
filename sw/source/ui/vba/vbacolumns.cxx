@@ -105,11 +105,11 @@ uno::Any SAL_CALL SwVbaColumns::Item( const uno::Any& Index1, const uno::Any& /*
     {
         if( nIndex <= 0 || nIndex > getCount() )
         {
-            throw  lang::IndexOutOfBoundsException("Index out of bounds" );
+            throw  lang::IndexOutOfBoundsException(u"Index out of bounds"_ustr );
         }
         return uno::Any( uno::Reference< word::XColumn >( new SwVbaColumn( this, mxContext, mxTextTable, nIndex - 1 ) ) );
     }
-    throw  uno::RuntimeException("Index out of bounds" );
+    throw  uno::RuntimeException(u"Index out of bounds"_ustr );
 }
 
 // XEnumerationAccess
@@ -133,7 +133,7 @@ SwVbaColumns::createCollectionObject( const uno::Any& aSource )
 OUString
 SwVbaColumns::getServiceImplName()
 {
-    return "SwVbaColumns";
+    return u"SwVbaColumns"_ustr;
 }
 
 uno::Sequence<OUString>
@@ -141,7 +141,7 @@ SwVbaColumns::getServiceNames()
 {
     static uno::Sequence< OUString > const sNames
     {
-        "ooo.vba.word.Columns"
+        u"ooo.vba.word.Columns"_ustr
     };
     return sNames;
 }

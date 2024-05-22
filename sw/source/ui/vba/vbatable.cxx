@@ -100,7 +100,7 @@ SwVbaTable::getBottomPadding()
 {
     uno::Reference< beans::XPropertySet > xPropertySet( mxTextTable, uno::UNO_QUERY_THROW);
     table::TableBorderDistances aTableBorderDistances;
-    xPropertySet->getPropertyValue("TableBorderDistances") >>= aTableBorderDistances;
+    xPropertySet->getPropertyValue(u"TableBorderDistances"_ustr) >>= aTableBorderDistances;
     return convertMm100ToPoint(aTableBorderDistances.BottomDistance);
 }
 
@@ -111,7 +111,7 @@ SwVbaTable::setBottomPadding( double fValue )
     table::TableBorderDistances aTableBorderDistances;
     aTableBorderDistances.IsBottomDistanceValid = true;
     aTableBorderDistances.BottomDistance = convertPointToMm100(fValue);
-    xPropertySet->setPropertyValue( "TableBorderDistances", uno::Any( aTableBorderDistances ) );
+    xPropertySet->setPropertyValue( u"TableBorderDistances"_ustr, uno::Any( aTableBorderDistances ) );
 }
 
 double SAL_CALL
@@ -119,7 +119,7 @@ SwVbaTable::getLeftPadding()
 {
     uno::Reference< beans::XPropertySet > xPropertySet( mxTextTable, uno::UNO_QUERY_THROW);
     table::TableBorderDistances aTableBorderDistances;
-    xPropertySet->getPropertyValue("TableBorderDistances") >>= aTableBorderDistances;
+    xPropertySet->getPropertyValue(u"TableBorderDistances"_ustr) >>= aTableBorderDistances;
     return convertMm100ToPoint(aTableBorderDistances.LeftDistance);
 }
 
@@ -130,7 +130,7 @@ SwVbaTable::setLeftPadding( double fValue )
     table::TableBorderDistances aTableBorderDistances;
     aTableBorderDistances.IsLeftDistanceValid = true;
     aTableBorderDistances.LeftDistance = convertPointToMm100(fValue);
-    xPropertySet->setPropertyValue( "TableBorderDistances", uno::Any( aTableBorderDistances ) );
+    xPropertySet->setPropertyValue( u"TableBorderDistances"_ustr, uno::Any( aTableBorderDistances ) );
 }
 
 double SAL_CALL
@@ -138,7 +138,7 @@ SwVbaTable::getRightPadding()
 {
     uno::Reference< beans::XPropertySet > xPropertySet( mxTextTable, uno::UNO_QUERY_THROW);
     table::TableBorderDistances aTableBorderDistances;
-    xPropertySet->getPropertyValue("TableBorderDistances") >>= aTableBorderDistances;
+    xPropertySet->getPropertyValue(u"TableBorderDistances"_ustr) >>= aTableBorderDistances;
     return convertMm100ToPoint(aTableBorderDistances.RightDistance);
 }
 
@@ -149,7 +149,7 @@ SwVbaTable::setRightPadding( double fValue )
     table::TableBorderDistances aTableBorderDistances;
     aTableBorderDistances.IsRightDistanceValid = true;
     aTableBorderDistances.RightDistance = convertPointToMm100(fValue);
-    xPropertySet->setPropertyValue( "TableBorderDistances", uno::Any( aTableBorderDistances ) );
+    xPropertySet->setPropertyValue( u"TableBorderDistances"_ustr, uno::Any( aTableBorderDistances ) );
 }
 
 double SAL_CALL
@@ -157,7 +157,7 @@ SwVbaTable::getTopPadding()
 {
     uno::Reference< beans::XPropertySet > xPropertySet( mxTextTable, uno::UNO_QUERY_THROW);
     table::TableBorderDistances aTableBorderDistances;
-    xPropertySet->getPropertyValue("TableBorderDistances") >>= aTableBorderDistances;
+    xPropertySet->getPropertyValue(u"TableBorderDistances"_ustr) >>= aTableBorderDistances;
     return convertMm100ToPoint(aTableBorderDistances.TopDistance);
 }
 
@@ -168,7 +168,7 @@ SwVbaTable::setTopPadding( double fValue )
     table::TableBorderDistances aTableBorderDistances;
     aTableBorderDistances.IsTopDistanceValid = true;
     aTableBorderDistances.TopDistance = convertPointToMm100(fValue);
-    xPropertySet->setPropertyValue( "TableBorderDistances", uno::Any( aTableBorderDistances ) );
+    xPropertySet->setPropertyValue( u"TableBorderDistances"_ustr, uno::Any( aTableBorderDistances ) );
 }
 
 uno::Any SAL_CALL
@@ -195,7 +195,7 @@ SwVbaTable::Columns( const uno::Any& index )
 OUString
 SwVbaTable::getServiceImplName()
 {
-    return "SwVbaTable";
+    return u"SwVbaTable"_ustr;
 }
 
 uno::Sequence<OUString>
@@ -203,7 +203,7 @@ SwVbaTable::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.Table"
+        u"ooo.vba.word.Table"_ustr
     };
     return aServiceNames;
 }

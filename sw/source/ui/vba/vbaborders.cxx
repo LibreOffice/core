@@ -50,7 +50,7 @@ private:
     void setBorderLine( table::BorderLine const & rBorderLine )
     {
         table::TableBorder aTableBorder;
-        m_xProps->getPropertyValue( "TableBorder" ) >>= aTableBorder;
+        m_xProps->getPropertyValue( u"TableBorder"_ustr ) >>= aTableBorder;
 
         switch ( m_LineType )
         {
@@ -87,13 +87,13 @@ private:
             default:
                 return;
         }
-        m_xProps->setPropertyValue( "TableBorder", uno::Any(aTableBorder) );
+        m_xProps->setPropertyValue( u"TableBorder"_ustr, uno::Any(aTableBorder) );
     }
 
     bool getBorderLine( table::BorderLine& rBorderLine )
     {
         table::TableBorder aTableBorder;
-        m_xProps->getPropertyValue( "TableBorder" ) >>= aTableBorder;
+        m_xProps->getPropertyValue( u"TableBorder"_ustr ) >>= aTableBorder;
         switch ( m_LineType )
         {
             case word::WdBorderType::wdBorderLeft:
@@ -135,14 +135,14 @@ private:
 protected:
     virtual OUString getServiceImplName() override
     {
-        return "SwVbaBorder";
+        return u"SwVbaBorder"_ustr;
     }
 
     virtual css::uno::Sequence<OUString> getServiceNames() override
     {
         static uno::Sequence< OUString > const aServiceNames
         {
-            "ooo.vba.word.Border"
+            u"ooo.vba.word.Border"_ustr
         };
         return aServiceNames;
     }
@@ -178,7 +178,7 @@ public:
         _linestyle >>= nLineStyle;
         table::BorderLine aBorderLine;
         if ( !getBorderLine( aBorderLine ) )
-            throw uno::RuntimeException("Method failed" );
+            throw uno::RuntimeException(u"Method failed"_ustr );
 
         switch ( nLineStyle )
         {
@@ -218,7 +218,7 @@ public:
                 break;
             }
             default:
-                throw uno::RuntimeException("Bad param" );
+                throw uno::RuntimeException(u"Bad param"_ustr );
         }
         setBorderLine( aBorderLine );
 
@@ -350,7 +350,7 @@ void SAL_CALL SwVbaBorders::setShadow( sal_Bool /*_shadow*/ )
 OUString
 SwVbaBorders::getServiceImplName()
 {
-    return "SwVbaBorders";
+    return u"SwVbaBorders"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -358,7 +358,7 @@ SwVbaBorders::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.Borders"
+        u"ooo.vba.word.Borders"_ustr
     };
     return aServiceNames;
 }

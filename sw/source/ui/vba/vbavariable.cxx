@@ -43,7 +43,7 @@ SwVbaVariable::getName()
 void SAL_CALL
 SwVbaVariable::setName( const OUString& )
 {
-    throw uno::RuntimeException(" Fail to set name" );
+    throw uno::RuntimeException(u" Fail to set name"_ustr );
 }
 
 uno::Any SAL_CALL
@@ -76,7 +76,7 @@ SwVbaVariable::getIndex()
 OUString
 SwVbaVariable::getServiceImplName()
 {
-    return "SwVbaVariable";
+    return u"SwVbaVariable"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -84,7 +84,7 @@ SwVbaVariable::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.Variable"
+        u"ooo.vba.word.Variable"_ustr
     };
     return aServiceNames;
 }

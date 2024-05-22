@@ -169,7 +169,7 @@ void SAL_CALL SwVbaRevisions::RejectAll(  )
 OUString
 SwVbaRevisions::getServiceImplName()
 {
-    return "SwVbaRevisions";
+    return u"SwVbaRevisions"_ustr;
 }
 
 css::uno::Sequence<OUString>
@@ -177,7 +177,7 @@ SwVbaRevisions::getServiceNames()
 {
     static uno::Sequence< OUString > const sNames
     {
-        "ooo.vba.word.Revisions"
+        u"ooo.vba.word.Revisions"_ustr
     };
     return sNames;
 }

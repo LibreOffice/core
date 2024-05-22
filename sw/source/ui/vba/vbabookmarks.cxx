@@ -145,7 +145,7 @@ void SwVbaBookmarks::removeBookmarkByName( const OUString& rName )
 void SwVbaBookmarks::addBookmarkByName( const uno::Reference< frame::XModel >& xModel, const OUString& rName, const uno::Reference< text::XTextRange >& rTextRange )
 {
     uno::Reference< lang::XMultiServiceFactory > xDocMSF( xModel, uno::UNO_QUERY_THROW );
-    uno::Reference< text::XTextContent > xBookmark( xDocMSF->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY_THROW );
+    uno::Reference< text::XTextContent > xBookmark( xDocMSF->createInstance(u"com.sun.star.text.Bookmark"_ustr), uno::UNO_QUERY_THROW );
     uno::Reference< container::XNamed > xNamed( xBookmark, uno::UNO_QUERY_THROW );
     xNamed->setName( rName );
     rTextRange->getText()->insertTextContent( rTextRange, xBookmark, false );
@@ -211,7 +211,7 @@ SwVbaBookmarks::Exists( const OUString& rName )
 OUString
 SwVbaBookmarks::getServiceImplName()
 {
-    return "SwVbaBookmarks";
+    return u"SwVbaBookmarks"_ustr;
 }
 
 css::uno::Sequence<OUString>
@@ -219,7 +219,7 @@ SwVbaBookmarks::getServiceNames()
 {
     static uno::Sequence< OUString > const sNames
     {
-        "ooo.vba.word.Bookmarks"
+        u"ooo.vba.word.Bookmarks"_ustr
     };
     return sNames;
 }

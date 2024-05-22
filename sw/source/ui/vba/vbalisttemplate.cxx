@@ -44,13 +44,13 @@ SwVbaListTemplate::ListLevels( const uno::Any& index )
 void SwVbaListTemplate::applyListTemplate( uno::Reference< beans::XPropertySet > const & xProps )
 {
     uno::Reference< container::XIndexReplace > xNumberingRules = m_pListHelper->getNumberingRules();
-    xProps->setPropertyValue("NumberingRules", uno::Any( xNumberingRules ) );
+    xProps->setPropertyValue(u"NumberingRules"_ustr, uno::Any( xNumberingRules ) );
 }
 
 OUString
 SwVbaListTemplate::getServiceImplName()
 {
-    return "SwVbaListTemplate";
+    return u"SwVbaListTemplate"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -58,7 +58,7 @@ SwVbaListTemplate::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.ListTemplate"
+        u"ooo.vba.word.ListTemplate"_ustr
     };
     return aServiceNames;
 }

@@ -32,7 +32,7 @@ SwVbaTabStop::~SwVbaTabStop()
 OUString
 SwVbaTabStop::getServiceImplName()
 {
-    return "SwVbaTabStop";
+    return u"SwVbaTabStop"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -40,7 +40,7 @@ SwVbaTabStop::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.TabStop"
+        u"ooo.vba.word.TabStop"_ustr
     };
     return aServiceNames;
 }

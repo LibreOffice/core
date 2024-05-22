@@ -43,13 +43,13 @@ SwVbaPane::View()
 void SAL_CALL
 SwVbaPane::Close( )
 {
-    dispatchRequests( mxModel,".uno:CloseWin" );
+    dispatchRequests( mxModel,u".uno:CloseWin"_ustr );
 }
 
 OUString
 SwVbaPane::getServiceImplName()
 {
-    return "SwVbaPane";
+    return u"SwVbaPane"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -57,7 +57,7 @@ SwVbaPane::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.Pane"
+        u"ooo.vba.word.Pane"_ustr
     };
     return aServiceNames;
 }

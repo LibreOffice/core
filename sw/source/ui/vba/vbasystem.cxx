@@ -110,7 +110,7 @@ uno::Any PrivateProfileStringListener::getValueEvent()
             }
         }
 #else
-        throw uno::RuntimeException("Only support on Windows" );
+        throw uno::RuntimeException(u"Only support on Windows"_ustr );
 #endif
     }
 
@@ -152,7 +152,7 @@ void PrivateProfileStringListener::setValueEvent( const css::uno::Any& value )
         }
         return;
 #else
-        throw uno::RuntimeException("Not implemented" );
+        throw uno::RuntimeException(u"Not implemented"_ustr );
 #endif
     }
 
@@ -222,7 +222,7 @@ SwVbaSystem::setCursor( sal_Int32 _cursor )
                 break;
             }
             default:
-                throw uno::RuntimeException("Unknown value for Cursor pointer" );
+                throw uno::RuntimeException(u"Unknown value for Cursor pointer"_ustr );
                 // TODO: isn't this a flaw in the API? It should be allowed to throw an
                 // IllegalArgumentException, or so
         }
@@ -259,7 +259,7 @@ SwVbaSystem::PrivateProfileString( const OUString& rFilename, const OUString& rS
 OUString
 SwVbaSystem::getServiceImplName()
 {
-    return "SwVbaSystem";
+    return u"SwVbaSystem"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -267,7 +267,7 @@ SwVbaSystem::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.System"
+        u"ooo.vba.word.System"_ustr
     };
     return aServiceNames;
 }

@@ -32,7 +32,7 @@ SwVbaFormFieldDropDown::SwVbaFormFieldDropDown(
 
 SwVbaFormFieldDropDown::~SwVbaFormFieldDropDown() {}
 
-OUString SwVbaFormFieldDropDown::getDefaultPropertyName() { return "Valid"; }
+OUString SwVbaFormFieldDropDown::getDefaultPropertyName() { return u"Valid"_ustr; }
 
 sal_Bool SwVbaFormFieldDropDown::getValid()
 {
@@ -88,11 +88,11 @@ uno::Any SwVbaFormFieldDropDown::ListEntries(const uno::Any& rIndex)
     return uno::Any(xCol);
 }
 
-OUString SwVbaFormFieldDropDown::getServiceImplName() { return "SwVbaFormFieldDropDown"; }
+OUString SwVbaFormFieldDropDown::getServiceImplName() { return u"SwVbaFormFieldDropDown"_ustr; }
 
 uno::Sequence<OUString> SwVbaFormFieldDropDown::getServiceNames()
 {
-    static uno::Sequence<OUString> const aServiceNames{ "ooo.vba.word.DropDown" };
+    static uno::Sequence<OUString> const aServiceNames{ u"ooo.vba.word.DropDown"_ustr };
     return aServiceNames;
 }
 

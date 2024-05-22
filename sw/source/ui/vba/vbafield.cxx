@@ -54,7 +54,7 @@ sal_Bool SAL_CALL SwVbaField::Update()
 OUString
 SwVbaField::getServiceImplName()
 {
-    return "SwVbaField";
+    return u"SwVbaField"_ustr;
 }
 
 uno::Sequence<OUString>
@@ -62,7 +62,7 @@ SwVbaField::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.Field"
+        u"ooo.vba.word.Field"_ustr
     };
     return aServiceNames;
 }
@@ -337,7 +337,7 @@ SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, 
     }
     else
     {
-        throw uno::RuntimeException("Not implemented" );
+        throw uno::RuntimeException(u"Not implemented"_ustr );
     }
 
     SwVbaRange& rVbaRange = dynamic_cast<SwVbaRange&>(*Range);
@@ -349,7 +349,7 @@ SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, 
 
 uno::Reference< text::XTextField > SwVbaFields::Create_Field_FileName( const OUString& _text )
 {
-    uno::Reference< text::XTextField > xTextField( mxMSF->createInstance("com.sun.star.text.TextField.FileName"), uno::UNO_QUERY_THROW );
+    uno::Reference< text::XTextField > xTextField( mxMSF->createInstance(u"com.sun.star.text.TextField.FileName"_ustr), uno::UNO_QUERY_THROW );
     sal_Int16 nFileFormat = text::FilenameDisplayFormat::NAME_AND_EXT;
     if( !_text.isEmpty() )
     {
@@ -374,7 +374,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_FileName( const OUS
     }
 
     uno::Reference< beans::XPropertySet > xProps( xTextField, uno::UNO_QUERY_THROW );
-    xProps->setPropertyValue("FileFormat", uno::Any( nFileFormat ) );
+    xProps->setPropertyValue(u"FileFormat"_ustr, uno::Any( nFileFormat ) );
 
     return xTextField;
 }
@@ -466,7 +466,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
     }
     else if( sFieldService.isEmpty() )
     {
-        throw uno::RuntimeException("Not implemented" );
+        throw uno::RuntimeException(u"Not implemented"_ustr );
     }
 
     uno::Reference< text::XTextField > xTextField( mxMSF->createInstance( sFieldService ), uno::UNO_QUERY_THROW );
@@ -474,7 +474,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
     if( bCustom )
     {
         uno::Reference< beans::XPropertySet > xProps( xTextField, uno::UNO_QUERY_THROW );
-        xProps->setPropertyValue("Name", uno::Any( aDocProperty ) );
+        xProps->setPropertyValue(u"Name"_ustr, uno::Any( aDocProperty ) );
     }
 
     return xTextField;
@@ -515,7 +515,7 @@ sal_Int32 SAL_CALL SwVbaFields::Update()
 OUString
 SwVbaFields::getServiceImplName()
 {
-    return "SwVbaFields";
+    return u"SwVbaFields"_ustr;
 }
 
 // XEnumerationAccess
@@ -530,7 +530,7 @@ SwVbaFields::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.Fields"
+        u"ooo.vba.word.Fields"_ustr
     };
     return aServiceNames;
 }

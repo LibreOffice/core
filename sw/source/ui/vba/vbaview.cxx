@@ -64,13 +64,13 @@ SwVbaView::~SwVbaView()
 sal_Bool SwVbaView::getShowAll()
 {
     bool bShowFormattingMarks = false;
-    mxViewSettings->getPropertyValue("ShowNonprintingCharacters") >>= bShowFormattingMarks;
+    mxViewSettings->getPropertyValue(u"ShowNonprintingCharacters"_ustr) >>= bShowFormattingMarks;
     return bShowFormattingMarks;
 }
 
 void SwVbaView::setShowAll(sal_Bool bSet)
 {
-    mxViewSettings->setPropertyValue("ShowNonprintingCharacters", uno::Any(bSet));
+    mxViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, uno::Any(bSet));
 }
 
 ::sal_Int32 SAL_CALL
@@ -81,7 +81,7 @@ SwVbaView::getSeekView()
     uno::Reference< text::XText > xCurrentText = mxViewCursor->getText();
     uno::Reference< beans::XPropertySet > xCursorProps( mxViewCursor, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextContent > xTextContent;
-    while( xCursorProps->getPropertyValue("TextTable") >>= xTextContent )
+    while( xCursorProps->getPropertyValue(u"TextTable"_ustr) >>= xTextContent )
     {
         xCurrentText = xTextContent->getAnchor()->getText();
         xCursorProps.set( xCurrentText->createTextCursor(), uno::UNO_QUERY_THROW );
@@ -115,7 +115,7 @@ SwVbaView::getSeekView()
     }
     else if ( aImplName == "SwXFootnote" )
     {
-        if( xServiceInfo->supportsService("com.sun.star.text.Endnote") )
+        if( xServiceInfo->supportsService(u"com.sun.star.text.Endnote"_ustr) )
             return word::WdSeekView::wdSeekEndnotes;
         else
             return word::WdSeekView::wdSeekFootnotes;
@@ -203,14 +203,14 @@ sal_Bool SAL_CALL
 SwVbaView::getTableGridLines()
 {
     bool bShowTableGridLine = false;
-    mxViewSettings->getPropertyValue("ShowTableBoundaries") >>= bShowTableGridLine;
+    mxViewSettings->getPropertyValue(u"ShowTableBoundaries"_ustr) >>= bShowTableGridLine;
     return bShowTableGridLine;
 }
 
 void SAL_CALL
 SwVbaView::setTableGridLines( sal_Bool _tablegridlines )
 {
-    mxViewSettings->setPropertyValue("ShowTableBoundaries", uno::Any( _tablegridlines ) );
+    mxViewSettings->setPropertyValue(u"ShowTableBoundaries"_ustr, uno::Any( _tablegridlines ) );
 }
 
 ::sal_Int32 SAL_CALL
@@ -218,7 +218,7 @@ SwVbaView::getType()
 {
     // FIXME: handle wdPrintPreview type
     bool bOnlineLayout = false;
-    mxViewSettings->getPropertyValue("ShowOnlineLayout") >>= bOnlineLayout;
+    mxViewSettings->getPropertyValue(u"ShowOnlineLayout"_ustr) >>= bOnlineLayout;
     return bOnlineLayout ? word::WdViewType::wdWebView : word::WdViewType::wdPrintView;
 }
 
@@ -231,12 +231,12 @@ SwVbaView::setType( ::sal_Int32 _type )
         case word::WdViewType::wdPrintView:
         case word::WdViewType::wdNormalView:
         {
-            mxViewSettings->setPropertyValue("ShowOnlineLayout", uno::Any( false ) );
+            mxViewSettings->setPropertyValue(u"ShowOnlineLayout"_ustr, uno::Any( false ) );
             break;
         }
         case word::WdViewType::wdWebView:
         {
-            mxViewSettings->setPropertyValue("ShowOnlineLayout", uno::Any( true ) );
+            mxViewSettings->setPropertyValue(u"ShowOnlineLayout"_ustr, uno::Any( true ) );
             break;
         }
         case word::WdViewType::wdPrintPreview:
@@ -313,7 +313,7 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType )
             // an even page number
             uno::Reference< beans::XPropertySet > xCursorProps( mxViewCursor, uno::UNO_QUERY_THROW );
             OUString aPageStyleName;
-            xCursorProps->getPropertyValue("PageStyleName") >>= aPageStyleName;
+            xCursorProps->getPropertyValue(u"PageStyleName"_ustr) >>= aPageStyleName;
             if ( aPageStyleName == "First Page" )
             {
                 // go to the beginning of where the next style is used
@@ -383,7 +383,7 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType )
 OUString
 SwVbaView::getServiceImplName()
 {
-    return "SwVbaView";
+    return u"SwVbaView"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -391,7 +391,7 @@ SwVbaView::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.View"
+        u"ooo.vba.word.View"_ustr
     };
     return aServiceNames;
 }

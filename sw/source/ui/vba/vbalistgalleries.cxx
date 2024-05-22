@@ -67,7 +67,7 @@ uno::Any SAL_CALL SwVbaListGalleries::Item( const uno::Any& Index1, const uno::A
             || nIndex == word::WdListGalleryType::wdOutlineNumberGallery )
             return uno::Any( uno::Reference< word::XListGallery >( new SwVbaListGallery( this, mxContext, mxTextDocument, nIndex ) ) );
     }
-    throw  uno::RuntimeException("Index out of bounds" );
+    throw  uno::RuntimeException(u"Index out of bounds"_ustr );
 }
 
 // XEnumerationAccess
@@ -92,7 +92,7 @@ SwVbaListGalleries::createCollectionObject( const css::uno::Any& aSource )
 OUString
 SwVbaListGalleries::getServiceImplName()
 {
-    return "SwVbaListGalleries";
+    return u"SwVbaListGalleries"_ustr;
 }
 
 css::uno::Sequence<OUString>
@@ -100,7 +100,7 @@ SwVbaListGalleries::getServiceNames()
 {
     static uno::Sequence< OUString > const sNames
     {
-        "ooo.vba.word.ListGalleries"
+        u"ooo.vba.word.ListGalleries"_ustr
     };
     return sNames;
 }

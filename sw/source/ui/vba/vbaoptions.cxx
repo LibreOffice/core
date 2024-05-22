@@ -258,7 +258,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatApplyBulletedLists( sal_Bool /*_autofor
 OUString
 SwVbaOptions::getServiceImplName()
 {
-    return "SwVbaOptions";
+    return u"SwVbaOptions"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -266,7 +266,7 @@ SwVbaOptions::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.Options"
+        u"ooo.vba.word.Options"_ustr
     };
     return aServiceNames;
 }

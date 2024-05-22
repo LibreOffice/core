@@ -107,7 +107,7 @@ SwVbaApplication::RemoveSink( sal_uInt32 nNumber )
 OUString SAL_CALL
 SwVbaApplication::getName()
 {
-    return "Microsoft Word";
+    return u"Microsoft Word"_ustr;
 }
 
 uno::Reference< word::XDocument > SAL_CALL
@@ -314,7 +314,7 @@ void SAL_CALL SwVbaApplication::setTop( sal_Int32 _top )
 
 OUString SAL_CALL SwVbaApplication::getStatusBar()
 {
-    return "";
+    return u""_ustr;
 }
 
 uno::Any SAL_CALL SwVbaApplication::getCustomizationContext()
@@ -443,7 +443,7 @@ void SAL_CALL SwVbaApplication::Move( sal_Int32 Left, sal_Int32 Top )
 OUString SAL_CALL
 SwVbaApplication::getIID()
 {
-    return "{82154421-0FBF-11d4-8313-005004526AB4}";
+    return u"{82154421-0FBF-11d4-8313-005004526AB4}"_ustr;
 }
 
 // XConnectable
@@ -451,7 +451,7 @@ SwVbaApplication::getIID()
 OUString SAL_CALL
 SwVbaApplication::GetIIDForClassItselfNotCoclass()
 {
-    return "{82154423-0FBF-11D4-8313-005004526AB4}";
+    return u"{82154423-0FBF-11D4-8313-005004526AB4}"_ustr;
 }
 
 TypeAndIID SAL_CALL
@@ -459,7 +459,7 @@ SwVbaApplication::GetConnectionPoint()
 {
     TypeAndIID aResult =
         { cppu::UnoType<word::XApplicationOutgoing>::get(),
-          "{82154422-0FBF-11D4-8313-005004526AB4}"
+          u"{82154422-0FBF-11D4-8313-005004526AB4}"_ustr
         };
 
     return aResult;
@@ -475,7 +475,7 @@ SwVbaApplication::FindConnectionPoint()
 OUString
 SwVbaApplication::getServiceImplName()
 {
-    return "SwVbaApplication";
+    return u"SwVbaApplication"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -483,7 +483,7 @@ SwVbaApplication::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.Application"
+        u"ooo.vba.word.Application"_ustr
     };
     return aServiceNames;
 }

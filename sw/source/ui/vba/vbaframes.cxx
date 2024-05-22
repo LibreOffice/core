@@ -84,7 +84,7 @@ SwVbaFrames::createCollectionObject( const css::uno::Any& aSource )
 OUString
 SwVbaFrames::getServiceImplName()
 {
-    return "SwVbaFrames";
+    return u"SwVbaFrames"_ustr;
 }
 
 css::uno::Sequence<OUString>
@@ -92,7 +92,7 @@ SwVbaFrames::getServiceNames()
 {
     static uno::Sequence< OUString > const sNames
     {
-        "ooo.vba.word.Frames"
+        u"ooo.vba.word.Frames"_ustr
     };
     return sNames;
 }

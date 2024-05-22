@@ -149,12 +149,14 @@ void SwVbaContentControlListEntry::Select()
 // XHelperInterface
 OUString SwVbaContentControlListEntry::getServiceImplName()
 {
-    return "SwVbaContentControlListEntry";
+    return u"SwVbaContentControlListEntry"_ustr;
 }
 
 uno::Sequence<OUString> SwVbaContentControlListEntry::getServiceNames()
 {
-    static uno::Sequence<OUString> const aServiceNames{ "ooo.vba.word.ContentControlListEntry" };
+    static uno::Sequence<OUString> const aServiceNames{
+        u"ooo.vba.word.ContentControlListEntry"_ustr
+    };
     return aServiceNames;
 }
 

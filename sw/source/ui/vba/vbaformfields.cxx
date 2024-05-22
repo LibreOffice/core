@@ -224,11 +224,11 @@ uno::Reference<container::XEnumeration> SwVbaFormFields::createEnumeration()
 
 uno::Any SwVbaFormFields::createCollectionObject(const uno::Any& aSource) { return aSource; }
 
-OUString SwVbaFormFields::getServiceImplName() { return "SwVbaFormFields"; }
+OUString SwVbaFormFields::getServiceImplName() { return u"SwVbaFormFields"_ustr; }
 
 uno::Sequence<OUString> SwVbaFormFields::getServiceNames()
 {
-    static uno::Sequence<OUString> const sNames{ "ooo.vba.word.FormFields" };
+    static uno::Sequence<OUString> const sNames{ u"ooo.vba.word.FormFields"_ustr };
     return sNames;
 }
 

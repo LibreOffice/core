@@ -72,7 +72,7 @@ public:
     virtual css::uno::Reference< ooo::vba::word::XListFormat > SAL_CALL getListFormat() override;
 
     //XDefaultProperty
-    virtual OUString SAL_CALL getDefaultPropertyName() override { return "Text"; }
+    virtual OUString SAL_CALL getDefaultPropertyName() override { return u"Text"_ustr; }
 
     // Methods
     virtual void SAL_CALL InsertBreak(const css::uno::Any& _breakType) override;

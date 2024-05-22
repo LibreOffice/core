@@ -66,13 +66,13 @@ OUString SwVbaEventsHelper::implGetDocumentModuleName( const EventHandlerInfo& /
         const uno::Sequence< uno::Any >& /*rArgs*/ ) const
 {
     // TODO: get actual codename from document
-    return "ThisDocument";
+    return u"ThisDocument"_ustr;
 }
 
     // XServiceInfo
 OUString SwVbaEventsHelper::getImplementationName()
 {
-    return "SwVbaEventsHelper";
+    return u"SwVbaEventsHelper"_ustr;
 }
 sal_Bool SwVbaEventsHelper::supportsService( const OUString& ServiceName )
 {
@@ -80,7 +80,7 @@ sal_Bool SwVbaEventsHelper::supportsService( const OUString& ServiceName )
 }
 css::uno::Sequence< OUString > SwVbaEventsHelper::getSupportedServiceNames()
 {
-    return { "com.sun.star.script.vba.VBATextEventProcessor" };
+    return { u"com.sun.star.script.vba.VBATextEventProcessor"_ustr };
 }
 
 

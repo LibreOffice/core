@@ -80,7 +80,7 @@ SwVbaAddins::createCollectionObject( const css::uno::Any& aSource )
 OUString
 SwVbaAddins::getServiceImplName()
 {
-    return "SwVbaAddins";
+    return u"SwVbaAddins"_ustr;
 }
 
 css::uno::Sequence<OUString>
@@ -88,7 +88,7 @@ SwVbaAddins::getServiceNames()
 {
     static uno::Sequence< OUString > const sNames
     {
-        "ooo.vba.word.Addins"
+        u"ooo.vba.word.Addins"_ustr
     };
     return sNames;
 }

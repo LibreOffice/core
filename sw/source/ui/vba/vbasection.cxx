@@ -68,7 +68,7 @@ SwVbaSection::PageSetup( )
 OUString
 SwVbaSection::getServiceImplName()
 {
-    return "SwVbaSection";
+    return u"SwVbaSection"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -76,7 +76,7 @@ SwVbaSection::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.Section"
+        u"ooo.vba.word.Section"_ustr
     };
     return aServiceNames;
 }

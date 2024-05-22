@@ -73,7 +73,7 @@ void SAL_CALL SwWordBasic::FileOpen(const OUString& Name, const uno::Any& Confir
 void SAL_CALL SwWordBasic::FileSave()
 {
     uno::Reference<frame::XModel> xModel(mpApp->getCurrentDocument(), uno::UNO_SET_THROW);
-    dispatchRequests(xModel, ".uno:Save");
+    dispatchRequests(xModel, u".uno:Save"_ustr);
 }
 
 void SAL_CALL SwWordBasic::FileSaveAs(
@@ -110,7 +110,7 @@ void SAL_CALL SwWordBasic::FileSaveAs(
             uno::Reference<util::XPathSettings> xPathSettings
                 = util::thePathSettings::get(comphelper::getProcessComponentContext());
             OUString sPathUrl;
-            xPathSettings->getPropertyValue("Work") >>= sPathUrl;
+            xPathSettings->getPropertyValue(u"Work"_ustr) >>= sPathUrl;
             // Path could be a multipath, Microsoft doesn't support this feature in Word currently.
             // Only the last path is from interest.
             // No idea if this crack is relevant for WordBasic or not.
@@ -132,12 +132,12 @@ void SAL_CALL SwWordBasic::FileSaveAs(
     sal_Int32 nFileFormat = word::WdSaveFormat::wdFormatDocument;
     Format >>= nFileFormat;
 
-    uno::Sequence aProps{ comphelper::makePropertyValue("FilterName", css::uno::Any()),
-                          comphelper::makePropertyValue("FileName", sURL) };
+    uno::Sequence aProps{ comphelper::makePropertyValue(u"FilterName"_ustr, css::uno::Any()),
+                          comphelper::makePropertyValue(u"FileName"_ustr, sURL) };
 
     setFilterPropsFromFormat(nFileFormat, aProps);
 
-    dispatchRequests(xModel, ".uno:SaveAs", aProps);
+    dispatchRequests(xModel, u".uno:SaveAs"_ustr, aProps);
 }
 
 void SAL_CALL SwWordBasic::FileClose(const css::uno::Any& Save)
@@ -155,7 +155,7 @@ void SAL_CALL SwWordBasic::FileClose(const css::uno::Any& Save)
     // FIXME: Error handling. If there is no current document, return some kind of error? But for
     // now, just ignore errors. This code is written to work for a very specific customer use case
     // anyway, not for an arbitrary sequence of COM calls to the "VBA" API.
-    dispatchRequests(xModel, ".uno:CloseDoc");
+    dispatchRequests(xModel, u".uno:CloseDoc"_ustr);
 }
 
 void SAL_CALL SwWordBasic::ToolsOptionsView(

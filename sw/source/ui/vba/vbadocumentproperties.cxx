@@ -463,7 +463,7 @@ public:
     virtual OUString SAL_CALL getLinkSource(  ) override;
     virtual void SAL_CALL setLinkSource( const OUString& LinkSource ) override;
     //XDefaultProperty
-    virtual OUString SAL_CALL getDefaultPropertyName(  ) override { return "Value"; }
+    virtual OUString SAL_CALL getDefaultPropertyName(  ) override { return u"Value"_ustr; }
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual uno::Sequence<OUString> getServiceNames() override;
@@ -622,7 +622,7 @@ SwVbaBuiltInDocumentProperty::setLinkSource( const OUString& /*LinkSource*/ )
 OUString
 SwVbaBuiltInDocumentProperty::getServiceImplName()
 {
-    return "SwVbaBuiltinDocumentProperty";
+    return u"SwVbaBuiltinDocumentProperty"_ustr;
 }
 
 uno::Sequence<OUString>
@@ -630,7 +630,7 @@ SwVbaBuiltInDocumentProperty::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.DocumentProperty"
+        u"ooo.vba.word.DocumentProperty"_ustr
     };
     return aServiceNames;
 }
@@ -751,7 +751,7 @@ SwVbaBuiltinDocumentProperties::SwVbaBuiltinDocumentProperties( const uno::Refer
 uno::Reference< XDocumentProperty > SAL_CALL
 SwVbaBuiltinDocumentProperties::Add( const OUString& /*Name*/, sal_Bool /*LinkToContent*/, ::sal_Int8 /*Type*/, const uno::Any& /*value*/, const uno::Any& /*LinkSource*/ )
 {
-    throw uno::RuntimeException( "not supported for Builtin properties" );
+    throw uno::RuntimeException( u"not supported for Builtin properties"_ustr );
 }
 
 // XEnumerationAccess
@@ -780,7 +780,7 @@ SwVbaBuiltinDocumentProperties::createCollectionObject( const uno::Any& aSource 
 OUString
 SwVbaBuiltinDocumentProperties::getServiceImplName()
 {
-    return "SwVbaBuiltinDocumentProperties";
+    return u"SwVbaBuiltinDocumentProperties"_ustr;
 }
 
 uno::Sequence<OUString>
@@ -788,7 +788,7 @@ SwVbaBuiltinDocumentProperties::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.DocumentProperties"
+        u"ooo.vba.word.DocumentProperties"_ustr
     };
     return aServiceNames;
 }
@@ -915,7 +915,7 @@ SwVbaCustomDocumentProperties::Add( const OUString& Name, sal_Bool LinkToContent
 OUString
 SwVbaCustomDocumentProperties::getServiceImplName()
 {
-    return "SwVbaCustomDocumentProperties";
+    return u"SwVbaCustomDocumentProperties"_ustr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

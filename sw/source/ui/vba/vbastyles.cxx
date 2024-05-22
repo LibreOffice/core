@@ -181,7 +181,7 @@ public:
         // we only concern about the Paragraph styles
         uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( _xModel, uno::UNO_QUERY_THROW);
         uno::Reference< container::XNameAccess > xStyleFamilies = xStyleSupplier->getStyleFamilies();
-        mxParaStyles.set( xStyleFamilies->getByName("ParagraphStyles"), uno::UNO_QUERY_THROW  );
+        mxParaStyles.set( xStyleFamilies->getByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY_THROW  );
     }
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<style::XStyle>::get(); }
@@ -251,7 +251,7 @@ public:
     // XEnumerationAccess
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) override
     {
-        throw uno::RuntimeException("Not implemented" );
+        throw uno::RuntimeException(u"Not implemented"_ustr );
     }
 };
 
@@ -344,14 +344,14 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 )
                     // set the property "NumberingStyleName" if it is a listbullet
                     if( pTable->wdStyleType == word::WdStyleType::wdStyleTypeList )
                     {
-                        xStyleProps->setPropertyValue("NumberingStyleName", uno::Any( aStyleName ) );
+                        xStyleProps->setPropertyValue(u"NumberingStyleName"_ustr, uno::Any( aStyleName ) );
                     }
                     return uno::Any( uno::Reference< word::XStyle >( new SwVbaStyle( this, mxContext, mxModel, xStyleProps ) ) );
                 }
                 else
                 {
                     SAL_WARN("sw.vba", "the builtin style type is not implemented");
-                    throw uno::RuntimeException("Not implemented" );
+                    throw uno::RuntimeException(u"Not implemented"_ustr );
                 }
             }
         }
@@ -362,7 +362,7 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 )
 OUString
 SwVbaStyles::getServiceImplName()
 {
-    return "SwVbaStyles";
+    return u"SwVbaStyles"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -370,7 +370,7 @@ SwVbaStyles::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.XStyles"
+        u"ooo.vba.word.XStyles"_ustr
     };
     return aServiceNames;
 }

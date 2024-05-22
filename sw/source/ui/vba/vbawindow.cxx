@@ -118,14 +118,14 @@ SwVbaWindow::getCaption()
 {
     SwView* pView = word::getView( m_xModel );
     if( !pView )
-        return "";
+        return u""_ustr;
 
     uno::Reference< css::beans::XPropertySet > xFrameProps( pView->GetViewFrame().GetFrame().GetFrameInterface()->getController()->getFrame(), uno::UNO_QUERY );
     if( !xFrameProps.is() )
-        return "";
+        return u""_ustr;
 
     OUString sTitle;
-    xFrameProps->getPropertyValue( "Title" ) >>= sTitle;
+    xFrameProps->getPropertyValue( u"Title"_ustr ) >>= sTitle;
 
     return sTitle;
 }
@@ -141,7 +141,7 @@ SwVbaWindow::setCaption( const OUString& _caption )
     if( !xFrameProps.is() )
         return;
 
-    xFrameProps->setPropertyValue( "Title", uno::Any( _caption ) );
+    xFrameProps->setPropertyValue( u"Title"_ustr, uno::Any( _caption ) );
 }
 
 uno::Any SAL_CALL
@@ -163,7 +163,7 @@ SwVbaWindow::ActivePane()
 OUString
 SwVbaWindow::getServiceImplName()
 {
-    return "SwVbaWindow";
+    return u"SwVbaWindow"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -171,7 +171,7 @@ SwVbaWindow::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.Window"
+        u"ooo.vba.word.Window"_ustr
     };
     return aServiceNames;
 }

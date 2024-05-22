@@ -66,7 +66,7 @@ public:
     virtual ::sal_Int32 SAL_CALL getListLevelNumber() override;
 
     //XDefaultProperty
-    virtual OUString SAL_CALL getDefaultPropertyName(  ) override { return "Name"; }
+    virtual OUString SAL_CALL getDefaultPropertyName(  ) override { return u"Name"_ustr; }
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

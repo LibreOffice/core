@@ -57,7 +57,7 @@ SwVbaDialog::mapIndexToName( sal_Int32 nIndex )
 OUString
 SwVbaDialog::getServiceImplName()
 {
-    return "SwVbaDialog";
+    return u"SwVbaDialog"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -65,7 +65,7 @@ SwVbaDialog::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.Dialog"
+        u"ooo.vba.word.Dialog"_ustr
     };
     return aServiceNames;
 }

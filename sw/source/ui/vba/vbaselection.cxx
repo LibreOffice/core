@@ -80,9 +80,9 @@ uno::Reference< text::XTextRange > SwVbaSelection::GetSelectedRange()
 {
     uno::Reference< text::XTextRange > xTextRange;
     uno::Reference< lang::XServiceInfo > xServiceInfo( mxModel->getCurrentSelection(), uno::UNO_QUERY_THROW );
-    if( !xServiceInfo->supportsService("com.sun.star.text.TextRanges") )
+    if( !xServiceInfo->supportsService(u"com.sun.star.text.TextRanges"_ustr) )
     {
-        throw uno::RuntimeException("Not implemented" );
+        throw uno::RuntimeException(u"Not implemented"_ustr );
     }
 
     uno::Reference< container::XIndexAccess > xTextRanges( xServiceInfo, uno::UNO_QUERY_THROW );
@@ -152,7 +152,7 @@ SwVbaSelection::HomeKey( const uno::Any& _unit, const uno::Any& _extend )
         }
         default:
         {
-            throw uno::RuntimeException("Not implemented" );
+            throw uno::RuntimeException(u"Not implemented"_ustr );
         }
     }
 }
@@ -187,7 +187,7 @@ SwVbaSelection::EndKey( const uno::Any& _unit, const uno::Any& _extend )
         }
         default:
         {
-            throw uno::RuntimeException("Not implemented" );
+            throw uno::RuntimeException(u"Not implemented"_ustr );
         }
     }
 }
@@ -213,11 +213,11 @@ SwVbaSelection::Delete( const uno::Any& _unit, const uno::Any& _count )
             }
             default:
             {
-                throw uno::RuntimeException("Not implemented" );
+                throw uno::RuntimeException(u"Not implemented"_ustr );
             }
         }
     }
-    dispatchRequests( mxModel,".uno:Delete" );
+    dispatchRequests( mxModel,u".uno:Delete"_ustr );
 }
 
 void
@@ -255,7 +255,7 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
         {
             if( eDirection == word::MOVE_LEFT || eDirection == word::MOVE_RIGHT )
             {
-                throw uno::RuntimeException("Not implemented" );
+                throw uno::RuntimeException(u"Not implemented"_ustr );
             }
             uno::Reference< view::XViewCursor > xViewCursor( mxTextViewCursor, uno::UNO_QUERY_THROW );
             if( eDirection == word::MOVE_UP )
@@ -268,7 +268,7 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
         {
             if( eDirection == word::MOVE_UP || eDirection == word::MOVE_DOWN )
             {
-                throw uno::RuntimeException("Not implemented" );
+                throw uno::RuntimeException(u"Not implemented"_ustr );
             }
             if( word::gotoSelectedObjectAnchor( mxModel ) )
             {
@@ -284,7 +284,7 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
                 {
                     uno::Reference< beans::XPropertySet > xCursorProps( mxTextViewCursor, uno::UNO_QUERY_THROW );
                     uno::Reference< text::XTextTable > xTextTable;
-                    xCursorProps->getPropertyValue("TextTable") >>= xTextTable;
+                    xCursorProps->getPropertyValue(u"TextTable"_ustr) >>= xTextTable;
                     if( xTextTable.is() )
                     {
                         uno::Reference< text::XTextRange > xRange( xTextTable->getCellByName( xTextTableCursor->getRangeName()), uno::UNO_QUERY_THROW );
@@ -308,7 +308,7 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
             {
                 if( eDirection == word::MOVE_LEFT || eDirection == word::MOVE_RIGHT )
                 {
-                    throw uno::RuntimeException("Not implemented" );
+                    throw uno::RuntimeException(u"Not implemented"_ustr );
                 }
                 uno::Reference< text::XParagraphCursor > xParagraphCursor( xTextCursor, uno::UNO_QUERY_THROW );
                 for( sal_Int32 i=0; i<nCount; i++ )
@@ -323,7 +323,7 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
             {
                 if( eDirection == word::MOVE_UP || eDirection == word::MOVE_DOWN )
                 {
-                    throw uno::RuntimeException("Not implemented" );
+                    throw uno::RuntimeException(u"Not implemented"_ustr );
                 }
                 uno::Reference< text::XWordCursor > xWordCursor( xTextCursor, uno::UNO_QUERY_THROW );
                 for( sal_Int32 i=0; i<nCount; i++ )
@@ -340,7 +340,7 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
         }
         default:
         {
-            throw uno::RuntimeException("Not implemented" );
+            throw uno::RuntimeException(u"Not implemented"_ustr );
         }
     }
 }
@@ -350,8 +350,8 @@ void SwVbaSelection::NextCell(sal_Int32 nCount, word::E_DIRECTION eDirection)
     uno::Reference< beans::XPropertySet > xCursorProps( mxTextViewCursor, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextTable > xTextTable;
     uno::Reference< table::XCell > xCell;
-    xCursorProps->getPropertyValue("TextTable") >>= xTextTable;
-    xCursorProps->getPropertyValue("Cell") >>= xCell;
+    xCursorProps->getPropertyValue(u"TextTable"_ustr) >>= xTextTable;
+    xCursorProps->getPropertyValue(u"Cell"_ustr) >>= xCell;
     if( !xTextTable.is() || !xCell.is() )
     {
         DebugHelper::basicexception(ERRCODE_BASIC_BAD_ARGUMENT, {});
@@ -359,7 +359,7 @@ void SwVbaSelection::NextCell(sal_Int32 nCount, word::E_DIRECTION eDirection)
     }
     uno::Reference< beans::XPropertySet > xCellProps( xCell, uno::UNO_QUERY_THROW );
     OUString aCellName;
-    xCellProps->getPropertyValue("CellName") >>= aCellName;
+    xCellProps->getPropertyValue(u"CellName"_ustr) >>= aCellName;
     uno::Reference< text::XTextTableCursor > xTextTableCursor = xTextTable->createCursorByCellName( aCellName );
     // move the table cursor
     switch( eDirection )
@@ -554,7 +554,7 @@ SwVbaSelection::getFont()
 void SAL_CALL
 SwVbaSelection::TypeBackspace()
 {
-    dispatchRequests( mxModel,".uno:SwBackspace" );
+    dispatchRequests( mxModel,u".uno:SwBackspace"_ustr );
 }
 
 uno::Reference< word::XRange > SAL_CALL SwVbaSelection::GoTo( const uno::Any& _what, const uno::Any& _which, const uno::Any& _count, const uno::Any& _name )
@@ -651,12 +651,12 @@ uno::Reference< word::XRange > SAL_CALL SwVbaSelection::GoTo( const uno::Any& _w
                }
             }
             if( nPage == 0 )
-                throw uno::RuntimeException("Not implemented" );
+                throw uno::RuntimeException(u"Not implemented"_ustr );
             xPageCursor->jumpToPage( static_cast<sal_Int16>(nPage) );
             break;
         }
         default:
-            throw uno::RuntimeException("Not implemented" );
+            throw uno::RuntimeException(u"Not implemented"_ustr );
     }
     return getRange();
 }
@@ -695,7 +695,7 @@ uno::Any SAL_CALL SwVbaSelection::Information( sal_Int32 _type )
         {
             uno::Reference< beans::XPropertySet > xCursorProps( mxTextViewCursor, uno::UNO_QUERY_THROW );
             uno::Reference< text::XTextTable > xTextTable;
-            xCursorProps->getPropertyValue("TextTable") >>= xTextTable;
+            xCursorProps->getPropertyValue(u"TextTable"_ustr) >>= xTextTable;
             result <<= xTextTable.is();
             break;
         }
@@ -736,7 +736,7 @@ uno::Any SAL_CALL SwVbaSelection::Information( sal_Int32 _type )
                 {
                     uno::Reference< beans::XPropertySet > xCursorProps( mxTextViewCursor, uno::UNO_QUERY_THROW );
                     OUString aPageStyleName;
-                    xCursorProps->getPropertyValue("PageStyleName") >>= aPageStyleName;
+                    xCursorProps->getPropertyValue(u"PageStyleName"_ustr) >>= aPageStyleName;
                     bool bFirstPage = false;
                     if ( aPageStyleName == "First Page" )
                         bFirstPage = true;
@@ -765,7 +765,7 @@ uno::Any SAL_CALL SwVbaSelection::Information( sal_Int32 _type )
             break;
         }
         default:
-            throw uno::RuntimeException("Not implemented" );
+            throw uno::RuntimeException(u"Not implemented"_ustr );
     }
     return result;
 }
@@ -793,7 +793,7 @@ SwVbaSelection::Tables( const uno::Any& aIndex )
 
     uno::Reference< beans::XPropertySet > xCursorProps( mxTextViewCursor, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextTable > xTextTable;
-    xCursorProps->getPropertyValue("TextTable") >>= xTextTable;
+    xCursorProps->getPropertyValue(u"TextTable"_ustr) >>= xTextTable;
     if( xTextTable.is() )
     {
             uno::Reference< css::text::XTextDocument > xTextDoc( mxModel, uno::UNO_QUERY_THROW );
@@ -952,7 +952,7 @@ uno::Reference< text::XTextTable > SwVbaSelection::GetXTextTable() const
 {
     uno::Reference< beans::XPropertySet > xCursorProps( mxTextViewCursor, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextTable > xTextTable;
-    xCursorProps->getPropertyValue("TextTable") >>= xTextTable;
+    xCursorProps->getPropertyValue(u"TextTable"_ustr) >>= xTextTable;
     return xTextTable;
 }
 
@@ -974,7 +974,7 @@ void SwVbaSelection::GetSelectedCellRange( OUString& sTLName, OUString& sBRName 
 {
     uno::Reference< beans::XPropertySet > xCursorProps( mxTextViewCursor, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextTable > xTextTable;
-    xCursorProps->getPropertyValue("TextTable") >>= xTextTable;
+    xCursorProps->getPropertyValue(u"TextTable"_ustr) >>= xTextTable;
     if( !xTextTable.is() )
         throw uno::RuntimeException( );
 
@@ -992,13 +992,13 @@ void SwVbaSelection::GetSelectedCellRange( OUString& sTLName, OUString& sBRName 
     if( sTLName.isEmpty() )
     {
         uno::Reference< table::XCell > xCell;
-        xCursorProps->getPropertyValue("Cell") >>= xCell;
+        xCursorProps->getPropertyValue(u"Cell"_ustr) >>= xCell;
         if( !xCell.is() )
         {
             throw uno::RuntimeException( );
         }
         uno::Reference< beans::XPropertySet > xCellProps( xCell, uno::UNO_QUERY_THROW );
-        xCellProps->getPropertyValue("CellName") >>= sTLName;
+        xCellProps->getPropertyValue(u"CellName"_ustr) >>= sTLName;
     }
 }
 
@@ -1035,7 +1035,7 @@ uno::Any SAL_CALL SwVbaSelection::Cells( const uno::Any& index )
 
 void SAL_CALL SwVbaSelection::Copy(  )
 {
-    dispatchRequests( mxModel,".uno:Copy" );
+    dispatchRequests( mxModel,u".uno:Copy"_ustr );
 }
 
 void SAL_CALL SwVbaSelection::CopyAsPicture(  )
@@ -1046,7 +1046,7 @@ void SAL_CALL SwVbaSelection::CopyAsPicture(  )
 
 void SAL_CALL SwVbaSelection::Paste(  )
 {
-    dispatchRequests( mxModel,".uno:Paste" );
+    dispatchRequests( mxModel,u".uno:Paste"_ustr );
 }
 
 void SAL_CALL SwVbaSelection::Collapse( const uno::Any& Direction )
@@ -1093,7 +1093,7 @@ void SAL_CALL SwVbaSelection::WholeStory(  )
             // insert an empty line
             uno::Reference< text::XTextRange > xFirstCellRange = word::getFirstObjectPosition( xText );
             mxTextViewCursor->gotoRange( xFirstCellRange, false );
-            dispatchRequests( mxModel,".uno:InsertPara" );
+            dispatchRequests( mxModel,u".uno:InsertPara"_ustr );
         }
     }
     uno::Reference< text::XTextRange > xStart = xText->getStart();
@@ -1153,7 +1153,7 @@ SwVbaSelection::Paragraphs( const uno::Any& aIndex )
 OUString
 SwVbaSelection::getServiceImplName()
 {
-    return "SwVbaSelection";
+    return u"SwVbaSelection"_ustr;
 }
 
 uno::Sequence< OUString >
@@ -1161,7 +1161,7 @@ SwVbaSelection::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.Selection"
+        u"ooo.vba.word.Selection"_ustr
     };
     return aServiceNames;
 }

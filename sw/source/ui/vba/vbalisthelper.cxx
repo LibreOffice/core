@@ -82,25 +82,25 @@ void SwVbaListHelper::Init()
 
     // get the numbering style
     uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( mxTextDocument, uno::UNO_QUERY_THROW );
-    mxStyleFamily.set( xStyleSupplier->getStyleFamilies()->getByName("NumberingStyles"), uno::UNO_QUERY_THROW );
+    mxStyleFamily.set( xStyleSupplier->getStyleFamilies()->getByName(u"NumberingStyles"_ustr), uno::UNO_QUERY_THROW );
     SAL_INFO("sw.vba", "numbering style name: " << msStyleName );
     if( mxStyleFamily->hasByName( msStyleName ) )
     {
         mxStyleProps.set( mxStyleFamily->getByName( msStyleName ), uno::UNO_QUERY_THROW );
-        mxNumberingRules.set( mxStyleProps->getPropertyValue("NumberingRules"), uno::UNO_QUERY_THROW );
+        mxNumberingRules.set( mxStyleProps->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY_THROW );
     }
     else
     {
         // create new numbering style
         uno::Reference< lang::XMultiServiceFactory > xDocMSF( mxTextDocument, uno::UNO_QUERY_THROW );
-        mxStyleProps.set( xDocMSF->createInstance("com.sun.star.style.NumberingStyle"), uno::UNO_QUERY_THROW );
+        mxStyleProps.set( xDocMSF->createInstance(u"com.sun.star.style.NumberingStyle"_ustr), uno::UNO_QUERY_THROW );
         // insert this style into style family, or the property NumberingRules doesn't exist.
         mxStyleFamily->insertByName( msStyleName, uno::Any( mxStyleProps ) );
-        mxStyleProps->getPropertyValue("NumberingRules") >>= mxNumberingRules;
+        mxStyleProps->getPropertyValue(u"NumberingRules"_ustr) >>= mxNumberingRules;
 
         CreateListTemplate();
 
-        mxStyleProps->setPropertyValue("NumberingRules", uno::Any( mxNumberingRules ) );
+        mxStyleProps->setPropertyValue(u"NumberingRules"_ustr, uno::Any( mxNumberingRules ) );
     }
 }
 
@@ -136,7 +136,7 @@ void SwVbaListHelper::CreateBulletListTemplate()
     sal_Int32 nLevel = 0;
     uno::Sequence< beans::PropertyValue > aPropertyValues;
     mxNumberingRules->getByIndex( nLevel ) >>= aPropertyValues;
-    setOrAppendPropertyValue( aPropertyValues, UNO_NAME_CHAR_STYLE_NAME, uno::Any( OUString( "Bullet Symbols" ) ) );
+    setOrAppendPropertyValue( aPropertyValues, UNO_NAME_CHAR_STYLE_NAME, uno::Any( u"Bullet Symbols"_ustr ) );
     setOrAppendPropertyValue( aPropertyValues, UNO_NAME_NUMBERING_TYPE, uno::Any( sal_Int16(style::NumberingType::CHAR_SPECIAL) ) );
 
     OUString aBulletChar;
@@ -406,7 +406,7 @@ void SwVbaListHelper::CreateOutlineNumberForType3()
     {
         mxNumberingRules->getByIndex( nLevel ) >>= aPropertyValues;
         setOrAppendPropertyValue( aPropertyValues, UNO_NAME_NUMBERING_TYPE, uno::Any( sal_Int16(style::NumberingType::CHAR_SPECIAL) ) );
-        setOrAppendPropertyValue( aPropertyValues, UNO_NAME_CHAR_STYLE_NAME, uno::Any( OUString("Bullet Symbols") ) );
+        setOrAppendPropertyValue( aPropertyValues, UNO_NAME_CHAR_STYLE_NAME, uno::Any( u"Bullet Symbols"_ustr ) );
         switch( nLevel )
         {
             case 0:
@@ -637,7 +637,7 @@ void SwVbaListHelper::CreateOutlineNumberForType7()
     {
         mxNumberingRules->getByIndex( nLevel ) >>= aPropertyValues;
         setOrAppendPropertyValue( aPropertyValues, UNO_NAME_NUMBERING_TYPE, uno::Any( sal_Int16(style::NumberingType::ARABIC) ) );
-        setOrAppendPropertyValue( aPropertyValues, UNO_NAME_PREFIX, uno::Any( OUString("Chapter ") ) );
+        setOrAppendPropertyValue( aPropertyValues, UNO_NAME_PREFIX, uno::Any( u"Chapter "_ustr ) );
         mxNumberingRules->replaceByIndex( nLevel, uno::Any( aPropertyValues ) );
     }
 }
@@ -655,7 +655,7 @@ void SwVbaListHelper::setPropertyValueWithNameAndLevel( sal_Int32 nLevel, const 
     mxNumberingRules->getByIndex( nLevel ) >>= aPropertyValues;
     setOrAppendPropertyValue( aPropertyValues, sName, aValue );
     mxNumberingRules->replaceByIndex( nLevel, uno::Any( aPropertyValues ) );
-    mxStyleProps->setPropertyValue("NumberingRules", uno::Any( mxNumberingRules ) );
+    mxStyleProps->setPropertyValue(u"NumberingRules"_ustr, uno::Any( mxNumberingRules ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

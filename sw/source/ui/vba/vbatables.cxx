@@ -182,7 +182,7 @@ SwVbaTables::Add( const uno::Reference< word::XRange >& Range, const uno::Any& N
     uno::Reference< text::XTextRange > xTextRange = pVbaRange->getXTextRange();
 
     uno::Reference< text::XTextTable > xTable;
-    xTable.set( xMsf->createInstance("com.sun.star.text.TextTable"), uno::UNO_QUERY_THROW );
+    xTable.set( xMsf->createInstance(u"com.sun.star.text.TextTable"_ustr), uno::UNO_QUERY_THROW );
 
     xTable->initialize( nRows, nCols );
     uno::Reference< text::XText > xText = xTextRange->getText();
@@ -216,7 +216,7 @@ SwVbaTables::createCollectionObject( const uno::Any& aSource )
 OUString
 SwVbaTables::getServiceImplName()
 {
-    return "SwVbaTables";
+    return u"SwVbaTables"_ustr;
 }
 
 // XEnumerationAccess
@@ -231,7 +231,7 @@ SwVbaTables::getServiceNames()
 {
     static uno::Sequence< OUString > const aServiceNames
     {
-        "ooo.vba.word.Tables"
+        u"ooo.vba.word.Tables"_ustr
     };
     return aServiceNames;
 }
