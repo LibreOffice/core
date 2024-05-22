@@ -174,36 +174,36 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         Reference<XDataSource> const & xDataSource,
         Reference<sdbcx::XColumnsSupplier> const & xColSupp,
         SwDBData aData )
-    : SfxDialogController(rView.GetWindow()->GetFrameWeld(), "modules/swriter/ui/insertdbcolumnsdialog.ui", "InsertDbColumnsDialog")
-    , ConfigItem("Office.Writer/InsertData/DataSet", ConfigItemMode::NONE)
+    : SfxDialogController(rView.GetWindow()->GetFrameWeld(), u"modules/swriter/ui/insertdbcolumnsdialog.ui"_ustr, u"InsertDbColumnsDialog"_ustr)
+    , ConfigItem(u"Office.Writer/InsertData/DataSet"_ustr, ConfigItemMode::NONE)
     , m_aDBData(std::move(aData))
     , m_sNoTmpl(SwResId(SW_STR_NONE))
     , m_pView(&rView)
-    , m_xRbAsTable(m_xBuilder->weld_radio_button("astable"))
-    , m_xRbAsField(m_xBuilder->weld_radio_button("asfields"))
-    , m_xRbAsText(m_xBuilder->weld_radio_button("astext"))
-    , m_xHeadFrame(m_xBuilder->weld_frame("dbframe"))
-    , m_xLbTableDbColumn(m_xBuilder->weld_tree_view("tabledbcols"))
-    , m_xLbTextDbColumn(m_xBuilder->weld_tree_view("tabletxtcols"))
-    , m_xFormatFrame(m_xBuilder->weld_frame("formatframe"))
-    , m_xRbDbFormatFromDb(m_xBuilder->weld_radio_button("fromdatabase"))
-    , m_xRbDbFormatFromUsr(m_xBuilder->weld_radio_button("userdefined"))
-    , m_xLbDbFormatFromUsr(new NumFormatListBox(m_xBuilder->weld_combo_box("numformat")))
-    , m_xIbDbcolToEdit(m_xBuilder->weld_button("toedit"))
-    , m_xEdDbText(m_xBuilder->weld_text_view("textview"))
-    , m_xFtDbParaColl(m_xBuilder->weld_label("parastylelabel"))
-    , m_xLbDbParaColl(m_xBuilder->weld_combo_box("parastyle"))
-    , m_xIbDbcolAllTo(m_xBuilder->weld_button("oneright"))
-    , m_xIbDbcolOneTo(m_xBuilder->weld_button("allright"))
-    , m_xIbDbcolOneFrom(m_xBuilder->weld_button("oneleft"))
-    , m_xIbDbcolAllFrom(m_xBuilder->weld_button("allleft"))
-    , m_xFtTableCol(m_xBuilder->weld_label("tablecolft"))
-    , m_xLbTableCol(m_xBuilder->weld_tree_view("tablecols"))
-    , m_xCbTableHeadon(m_xBuilder->weld_check_button("tableheading"))
-    , m_xRbHeadlColnms(m_xBuilder->weld_radio_button("columnname"))
-    , m_xRbHeadlEmpty(m_xBuilder->weld_radio_button("rowonly"))
-    , m_xPbTableFormat(m_xBuilder->weld_button("tableformat"))
-    , m_xPbTableAutofmt(m_xBuilder->weld_button("autoformat"))
+    , m_xRbAsTable(m_xBuilder->weld_radio_button(u"astable"_ustr))
+    , m_xRbAsField(m_xBuilder->weld_radio_button(u"asfields"_ustr))
+    , m_xRbAsText(m_xBuilder->weld_radio_button(u"astext"_ustr))
+    , m_xHeadFrame(m_xBuilder->weld_frame(u"dbframe"_ustr))
+    , m_xLbTableDbColumn(m_xBuilder->weld_tree_view(u"tabledbcols"_ustr))
+    , m_xLbTextDbColumn(m_xBuilder->weld_tree_view(u"tabletxtcols"_ustr))
+    , m_xFormatFrame(m_xBuilder->weld_frame(u"formatframe"_ustr))
+    , m_xRbDbFormatFromDb(m_xBuilder->weld_radio_button(u"fromdatabase"_ustr))
+    , m_xRbDbFormatFromUsr(m_xBuilder->weld_radio_button(u"userdefined"_ustr))
+    , m_xLbDbFormatFromUsr(new NumFormatListBox(m_xBuilder->weld_combo_box(u"numformat"_ustr)))
+    , m_xIbDbcolToEdit(m_xBuilder->weld_button(u"toedit"_ustr))
+    , m_xEdDbText(m_xBuilder->weld_text_view(u"textview"_ustr))
+    , m_xFtDbParaColl(m_xBuilder->weld_label(u"parastylelabel"_ustr))
+    , m_xLbDbParaColl(m_xBuilder->weld_combo_box(u"parastyle"_ustr))
+    , m_xIbDbcolAllTo(m_xBuilder->weld_button(u"oneright"_ustr))
+    , m_xIbDbcolOneTo(m_xBuilder->weld_button(u"allright"_ustr))
+    , m_xIbDbcolOneFrom(m_xBuilder->weld_button(u"oneleft"_ustr))
+    , m_xIbDbcolAllFrom(m_xBuilder->weld_button(u"allleft"_ustr))
+    , m_xFtTableCol(m_xBuilder->weld_label(u"tablecolft"_ustr))
+    , m_xLbTableCol(m_xBuilder->weld_tree_view(u"tablecols"_ustr))
+    , m_xCbTableHeadon(m_xBuilder->weld_check_button(u"tableheading"_ustr))
+    , m_xRbHeadlColnms(m_xBuilder->weld_radio_button(u"columnname"_ustr))
+    , m_xRbHeadlEmpty(m_xBuilder->weld_radio_button(u"rowonly"_ustr))
+    , m_xPbTableFormat(m_xBuilder->weld_button(u"tableformat"_ustr))
+    , m_xPbTableAutofmt(m_xBuilder->weld_button(u"autoformat"_ustr))
 {
     m_xEdDbText->set_size_request(m_xEdDbText->get_approximate_digit_width() * 40, -1);
     m_xLbDbParaColl->make_sorted();
@@ -222,7 +222,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         Reference< util::XNumberFormats > xNumberFormats;
         if(xSourceProps.is())
         {
-            Any aFormats = xSourceProps->getPropertyValue("NumberFormatsSupplier");
+            Any aFormats = xSourceProps->getPropertyValue(u"NumberFormatsSupplier"_ustr);
             if(aFormats.hasValue())
             {
                 Reference< util::XNumberFormatsSupplier> xSuppl;
@@ -241,7 +241,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
             Any aCol = xCols->getByName(rColName);
             Reference <XPropertySet> xCol;
             aCol >>= xCol;
-            Any aType = xCol->getPropertyValue("Type");
+            Any aType = xCol->getPropertyValue(u"Type"_ustr);
             sal_Int32 eDataType = 0;
             aType >>= eDataType;
             switch(eDataType)
@@ -262,7 +262,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                 case DataType::TIMESTAMP:
                 {
                     pNew->bHasFormat = true;
-                    Any aFormat = xCol->getPropertyValue("FormatKey");
+                    Any aFormat = xCol->getPropertyValue(u"FormatKey"_ustr);
                     if(aFormat.hasValue())
                     {
                         sal_Int32 nFormat = 0;
@@ -272,8 +272,8 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                             try
                             {
                                 Reference<XPropertySet> xNumProps = xNumberFormats->getByKey( nFormat );
-                                Any aFormatVal = xNumProps->getPropertyValue("FormatString");
-                                Any aLocale = xNumProps->getPropertyValue("Locale");
+                                Any aFormatVal = xNumProps->getPropertyValue(u"FormatString"_ustr);
+                                Any aLocale = xNumProps->getPropertyValue(u"Locale"_ustr);
                                 OUString sFormat;
                                 aFormatVal >>= sFormat;
                                 lang::Locale aLoc;
@@ -795,7 +795,7 @@ IMPL_LINK(SwInsertDBColAutoPilot, TVSelectHdl, weld::TreeView&, rBox, void)
         // to know later on, what ListBox was the "active", a Flag
         // is remembered in the 1st entry
         if (&rBox == m_xLbTableCol.get())
-            m_xLbTableCol->set_id(0, "tablecols");
+            m_xLbTableCol->set_id(0, u"tablecols"_ustr);
         else
             m_xLbTableCol->set_id(0, OUString());
     }
@@ -1067,7 +1067,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 sal_Int32 eDataType = 0;
                 if( xColumnProps.is() )
                 {
-                    Any aType = xColumnProps->getPropertyValue("Type");
+                    Any aType = xColumnProps->getPropertyValue(u"Type"_ustr);
                     aType >>= eDataType;
                 }
                 try
@@ -1199,7 +1199,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             Reference<XPropertySet> xSourceProps(xSource, UNO_QUERY);
             if(xSourceProps.is())
             {
-              Any aFormats = xSourceProps->getPropertyValue("NumberFormatsSupplier");
+              Any aFormats = xSourceProps->getPropertyValue(u"NumberFormatsSupplier"_ustr);
               if(aFormats.hasValue())
               {
                   Reference< util::XNumberFormatsSupplier> xSuppl;
@@ -1207,7 +1207,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                   if(xSuppl.is())
                   {
                         Reference< XPropertySet > xSettings = xSuppl->getNumberFormatSettings();
-                        Any aNull = xSettings->getPropertyValue("NullDate");
+                        Any aNull = xSettings->getPropertyValue(u"NullDate"_ustr);
                         aNull >>= aDBFormatData.aNullDate;
                         if(aDBFormatData.xFormatter.is())
                             aDBFormatData.xFormatter->attachNumberFormatsSupplier(xSuppl);
@@ -1217,7 +1217,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             aDBFormatData.aLocale = LanguageTag( rSh.GetCurLang() ).getLocale();
             SwDBNextSetField aNxtDBField( static_cast<SwDBNextSetFieldType*>(rSh.
                                             GetFieldType( 0, SwFieldIds::DbNextSet )),
-                                        "1", m_aDBData );
+                                        u"1"_ustr, m_aDBData );
 
             bool bSetCursor = true;
             const size_t nCols = aColArr.size();
@@ -1275,7 +1275,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                                                 &nValue ) );
                             if( DBL_MAX != nValue )
                             {
-                                Any aType = xColumnProps->getPropertyValue("Type");
+                                Any aType = xColumnProps->getPropertyValue(u"Type"_ustr);
                                 sal_Int32 eDataType = 0;
                                 aType >>= eDataType;
                                 if( DataType::DATE == eDataType  || DataType::TIME == eDataType  ||

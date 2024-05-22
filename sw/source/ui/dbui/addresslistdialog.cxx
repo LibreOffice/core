@@ -87,13 +87,13 @@ static OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet> const & xSou
     if(xSourceProperties.is())
     {
         OUString sDBURL;
-        xSourceProperties->getPropertyValue("URL") >>= sDBURL;
+        xSourceProperties->getPropertyValue(u"URL"_ustr) >>= sDBURL;
         if (sDBURL.startsWith("sdbc:flat:"))
         {
             uno::Sequence<OUString> aFilters;
-            xSourceProperties->getPropertyValue("TableFilter") >>= aFilters;
+            xSourceProperties->getPropertyValue(u"TableFilter"_ustr) >>= aFilters;
             uno::Sequence<PropertyValue> aInfo;
-            xSourceProperties->getPropertyValue("Info") >>= aInfo;
+            xSourceProperties->getPropertyValue(u"Info"_ustr) >>= aInfo;
             if(aFilters.getLength() == 1 && aInfo.hasElements() )
             {
                 OUString sExtension;
@@ -118,19 +118,19 @@ static OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet> const & xSou
 }
 
 SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
-    : SfxDialogController(pParent->GetWizard()->getDialog(), "modules/swriter/ui/selectaddressdialog.ui", "SelectAddressDialog")
+    : SfxDialogController(pParent->GetWizard()->getDialog(), u"modules/swriter/ui/selectaddressdialog.ui"_ustr, u"SelectAddressDialog"_ustr)
     , m_bInSelectHdl(false)
     , m_pAddressPage(pParent)
-    , m_xDescriptionFI(m_xBuilder->weld_label("desc"))
-    , m_xConnecting(m_xBuilder->weld_label("connecting"))
-    , m_xListLB(m_xBuilder->weld_tree_view("sources"))
-    , m_xLoadListPB(m_xBuilder->weld_button("add"))
-    , m_xRemovePB(m_xBuilder->weld_button("remove"))
-    , m_xCreateListPB(m_xBuilder->weld_button("create"))
-    , m_xFilterPB(m_xBuilder->weld_button("filter"))
-    , m_xEditPB(m_xBuilder->weld_button("edit"))
-    , m_xTablePB(m_xBuilder->weld_button("changetable"))
-    , m_xOK(m_xBuilder->weld_button("ok"))
+    , m_xDescriptionFI(m_xBuilder->weld_label(u"desc"_ustr))
+    , m_xConnecting(m_xBuilder->weld_label(u"connecting"_ustr))
+    , m_xListLB(m_xBuilder->weld_tree_view(u"sources"_ustr))
+    , m_xLoadListPB(m_xBuilder->weld_button(u"add"_ustr))
+    , m_xRemovePB(m_xBuilder->weld_button(u"remove"_ustr))
+    , m_xCreateListPB(m_xBuilder->weld_button(u"create"_ustr))
+    , m_xFilterPB(m_xBuilder->weld_button(u"filter"_ustr))
+    , m_xEditPB(m_xBuilder->weld_button(u"edit"_ustr))
+    , m_xTablePB(m_xBuilder->weld_button(u"changetable"_ustr))
+    , m_xOK(m_xBuilder->weld_button(u"ok"_ustr))
     , m_xIter(m_xListLB->make_iterator())
 {
     m_sConnecting = m_xConnecting->get_label();
@@ -245,20 +245,20 @@ IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl, weld::Button&, void)
     {
         uno::Reference<lang::XMultiServiceFactory> xConnectFactory(pUserData->xConnection, UNO_QUERY_THROW);
         uno::Reference<XSingleSelectQueryComposer> xComposer(
-                xConnectFactory->createInstance("com.sun.star.sdb.SingleSelectQueryComposer"), UNO_QUERY_THROW);
+                xConnectFactory->createInstance(u"com.sun.star.sdb.SingleSelectQueryComposer"_ustr), UNO_QUERY_THROW);
 
         uno::Reference<XRowSet> xRowSet(
-                xMgr->createInstance("com.sun.star.sdb.RowSet"), UNO_QUERY);
+                xMgr->createInstance(u"com.sun.star.sdb.RowSet"_ustr), UNO_QUERY);
         uno::Reference<XPropertySet> xRowProperties(xRowSet, UNO_QUERY);
-        xRowProperties->setPropertyValue("DataSourceName",
+        xRowProperties->setPropertyValue(u"DataSourceName"_ustr,
                 Any(m_xListLB->get_text(nSelect, 0)));
-        xRowProperties->setPropertyValue("Command", Any(sCommand));
-        xRowProperties->setPropertyValue("CommandType", Any(pUserData->nCommandType));
-        xRowProperties->setPropertyValue("ActiveConnection", Any(pUserData->xConnection.getTyped()));
+        xRowProperties->setPropertyValue(u"Command"_ustr, Any(sCommand));
+        xRowProperties->setPropertyValue(u"CommandType"_ustr, Any(pUserData->nCommandType));
+        xRowProperties->setPropertyValue(u"ActiveConnection"_ustr, Any(pUserData->xConnection.getTyped()));
         xRowSet->execute();
 
         OUString sQuery;
-        xRowProperties->getPropertyValue("ActiveCommand")>>= sQuery;
+        xRowProperties->getPropertyValue(u"ActiveCommand"_ustr)>>= sQuery;
         xComposer->setQuery(sQuery);
         if(!pUserData->sFilter.isEmpty())
             xComposer->setFilter(pUserData->sFilter);
@@ -351,19 +351,19 @@ IMPL_LINK_NOARG(SwAddressListDialog, CreateHdl_Impl, weld::Button&, void)
         aTempURL.removeSegment();
         aTempURL.removeFinalSlash();
         const OUString sDBURL("sdbc:flat:" + aTempURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
-        xDataProperties->setPropertyValue("URL", Any(sDBURL));
+        xDataProperties->setPropertyValue(u"URL"_ustr, Any(sDBURL));
         //set the filter to the file name without extension
         uno::Sequence<OUString> aFilters { sNewName };
-        xDataProperties->setPropertyValue("TableFilter", Any(aFilters));
+        xDataProperties->setPropertyValue(u"TableFilter"_ustr, Any(aFilters));
 
         uno::Sequence<PropertyValue> aInfo
         {
-            comphelper::makePropertyValue("FieldDelimiter", OUString('\t')),
-            comphelper::makePropertyValue("StringDelimiter", OUString('"')),
-            comphelper::makePropertyValue("Extension", aURL.getExtension()), //"csv
-            comphelper::makePropertyValue("CharSet", OUString("UTF-8"))
+            comphelper::makePropertyValue(u"FieldDelimiter"_ustr, OUString('\t')),
+            comphelper::makePropertyValue(u"StringDelimiter"_ustr, OUString('"')),
+            comphelper::makePropertyValue(u"Extension"_ustr, aURL.getExtension()), //"csv
+            comphelper::makePropertyValue(u"CharSet"_ustr, u"UTF-8"_ustr)
         };
-        xDataProperties->setPropertyValue("Info", Any(aInfo));
+        xDataProperties->setPropertyValue(u"Info"_ustr, Any(aInfo));
 
         uno::Reference<sdb::XDocumentDataSource> xDS(xNewInstance, UNO_QUERY_THROW);
         uno::Reference<frame::XStorable> xStore(xDS->getDatabaseDocument(), UNO_QUERY_THROW);

@@ -68,24 +68,24 @@ constexpr tools::Long DEFAULT_ADDRESS_WIDTH = o3tl::toTwips(75, o3tl::Length::mm
 constexpr tools::Long DEFAULT_ADDRESS_HEIGHT = o3tl::toTwips(35, o3tl::Length::mm); // 3,5cm
 
 SwMailMergeLayoutPage::SwMailMergeLayoutPage(weld::Container* pPage, SwMailMergeWizard* pWizard)
-    : vcl::OWizardPage(pPage, pWizard, "modules/swriter/ui/mmlayoutpage.ui", "MMLayoutPage")
+    : vcl::OWizardPage(pPage, pWizard, u"modules/swriter/ui/mmlayoutpage.ui"_ustr, u"MMLayoutPage"_ustr)
     , m_pExampleWrtShell(nullptr)
     , m_pAddressBlockFormat(nullptr)
     , m_bIsGreetingInserted(false)
     , m_pWizard(pWizard)
-    , m_xPosition(m_xBuilder->weld_container("addresspos"))
-    , m_xAlignToBodyCB(m_xBuilder->weld_check_button("align"))
-    , m_xLeftFT(m_xBuilder->weld_label("leftft"))
-    , m_xLeftMF(m_xBuilder->weld_metric_spin_button("left", FieldUnit::CM))
-    , m_xTopMF(m_xBuilder->weld_metric_spin_button("top", FieldUnit::CM))
-    , m_xGreetingLine(m_xBuilder->weld_container("greetingspos"))
-    , m_xUpPB(m_xBuilder->weld_button("up"))
-    , m_xDownPB(m_xBuilder->weld_button("down"))
-    , m_xZoomLB(m_xBuilder->weld_combo_box("zoom"))
+    , m_xPosition(m_xBuilder->weld_container(u"addresspos"_ustr))
+    , m_xAlignToBodyCB(m_xBuilder->weld_check_button(u"align"_ustr))
+    , m_xLeftFT(m_xBuilder->weld_label(u"leftft"_ustr))
+    , m_xLeftMF(m_xBuilder->weld_metric_spin_button(u"left"_ustr, FieldUnit::CM))
+    , m_xTopMF(m_xBuilder->weld_metric_spin_button(u"top"_ustr, FieldUnit::CM))
+    , m_xGreetingLine(m_xBuilder->weld_container(u"greetingspos"_ustr))
+    , m_xUpPB(m_xBuilder->weld_button(u"up"_ustr))
+    , m_xDownPB(m_xBuilder->weld_button(u"down"_ustr))
+    , m_xZoomLB(m_xBuilder->weld_combo_box(u"zoom"_ustr))
 {
     std::shared_ptr<const SfxFilter> pSfxFlt =
             SwDocShell::Factory().GetFilterContainer()->
-            GetFilter4FilterName("writer8", SfxFilterFlags::EXPORT);
+            GetFilter4FilterName(u"writer8"_ustr, SfxFilterFlags::EXPORT);
 
     //save the current document into a temporary file
     {
@@ -101,8 +101,8 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage(weld::Container* pPage, SwMailMerge
     // Don't save embedded data set! It would steal it from current document.
     uno::Sequence< beans::PropertyValue > aValues =
     {
-        comphelper::makePropertyValue("FilterName", pSfxFlt->GetFilterName()),
-        comphelper::makePropertyValue("NoEmbDataSet", true)
+        comphelper::makePropertyValue(u"FilterName"_ustr, pSfxFlt->GetFilterName()),
+        comphelper::makePropertyValue(u"NoEmbDataSet"_ustr, true)
     };
 
     uno::Reference< frame::XStorable > xStore( pView->GetDocShell()->GetModel(), uno::UNO_QUERY);
@@ -110,7 +110,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage(weld::Container* pPage, SwMailMerge
 
     Link<SwOneExampleFrame&,void> aLink(LINK(this, SwMailMergeLayoutPage, PreviewLoadedHdl_Impl));
     m_xExampleFrame.reset(new SwOneExampleFrame(EX_SHOW_DEFAULT_PAGE, &aLink, &m_sExampleURL));
-    m_xExampleContainerWIN.reset(new weld::CustomWeld(*m_xBuilder, "example", *m_xExampleFrame));
+    m_xExampleContainerWIN.reset(new weld::CustomWeld(*m_xBuilder, u"example"_ustr, *m_xExampleFrame));
 
     Size aSize = m_xExampleFrame->GetDrawingArea()->get_ref_device().LogicToPixel(
             Size(124, 159), MapMode(MapUnit::MapAppFont));
@@ -348,7 +348,7 @@ SwFrameFormat* SwMailMergeLayoutPage::InsertAddressFrame(
                     }
                     else
                     {
-                        SwInsertField_Data aData(SwFieldTypesEnum::HiddenParagraph, 0, "", "", 0, &rShell );
+                        SwInsertField_Data aData(SwFieldTypesEnum::HiddenParagraph, 0, u""_ustr, u""_ustr, 0, &rShell );
                         aFieldMgr.InsertField( aData );
                     }
                 }

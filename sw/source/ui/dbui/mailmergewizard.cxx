@@ -100,23 +100,23 @@ std::unique_ptr<BuilderPage> SwMailMergeWizard::createPage(WizardState _nState)
             so that when by default the focus is on the left side pane of
             the wizard the relevant help page is displayed when hitting
             the Help / F1 button */
-            SetRoadmapHelpId("modules/swriter/ui/mmselectpage/MMSelectPage");
+            SetRoadmapHelpId(u"modules/swriter/ui/mmselectpage/MMSelectPage"_ustr);
         break;
         case MM_OUTPUTTYPETPAGE    :
             xRet = std::make_unique<SwMailMergeOutputTypePage>(pPageContainer, this);
-            SetRoadmapHelpId("modules/swriter/ui/mmoutputtypepage/MMOutputTypePage");
+            SetRoadmapHelpId(u"modules/swriter/ui/mmoutputtypepage/MMOutputTypePage"_ustr);
         break;
         case MM_ADDRESSBLOCKPAGE   :
             xRet = std::make_unique<SwMailMergeAddressBlockPage>(pPageContainer, this);
-            SetRoadmapHelpId("modules/swriter/ui/mmaddressblockpage/MMAddressBlockPage");
+            SetRoadmapHelpId(u"modules/swriter/ui/mmaddressblockpage/MMAddressBlockPage"_ustr);
         break;
         case MM_GREETINGSPAGE      :
             xRet = std::make_unique<SwMailMergeGreetingsPage>(pPageContainer, this);
-            SetRoadmapHelpId("modules/swriter/ui/mmsalutationpage/MMSalutationPage");
+            SetRoadmapHelpId(u"modules/swriter/ui/mmsalutationpage/MMSalutationPage"_ustr);
         break;
         case MM_LAYOUTPAGE         :
             xRet = std::make_unique<SwMailMergeLayoutPage>(pPageContainer, this);
-            SetRoadmapHelpId("modules/swriter/ui/mmlayoutpage/MMLayoutPage");
+            SetRoadmapHelpId(u"modules/swriter/ui/mmlayoutpage/MMLayoutPage"_ustr);
         break;
     }
 

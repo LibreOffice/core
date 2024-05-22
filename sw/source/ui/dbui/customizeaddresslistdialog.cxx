@@ -22,15 +22,15 @@
 
 SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(
         weld::Window* pParent, const SwCSVData& rOldData)
-    : SfxDialogController(pParent, "modules/swriter/ui/customizeaddrlistdialog.ui",
-                          "CustomizeAddrListDialog")
+    : SfxDialogController(pParent, u"modules/swriter/ui/customizeaddrlistdialog.ui"_ustr,
+                          u"CustomizeAddrListDialog"_ustr)
     , m_xNewData(new SwCSVData(rOldData))
-    , m_xFieldsLB(m_xBuilder->weld_tree_view("treeview"))
-    , m_xAddPB(m_xBuilder->weld_button("add"))
-    , m_xDeletePB(m_xBuilder->weld_button("delete"))
-    , m_xRenamePB(m_xBuilder->weld_button("rename"))
-    , m_xUpPB(m_xBuilder->weld_button("up"))
-    , m_xDownPB(m_xBuilder->weld_button("down"))
+    , m_xFieldsLB(m_xBuilder->weld_tree_view(u"treeview"_ustr))
+    , m_xAddPB(m_xBuilder->weld_button(u"add"_ustr))
+    , m_xDeletePB(m_xBuilder->weld_button(u"delete"_ustr))
+    , m_xRenamePB(m_xBuilder->weld_button(u"rename"_ustr))
+    , m_xUpPB(m_xBuilder->weld_button(u"up"_ustr))
+    , m_xDownPB(m_xBuilder->weld_button(u"down"_ustr))
 {
     m_xFieldsLB->set_size_request(-1, m_xFieldsLB->get_height_rows(14));
 
@@ -158,8 +158,8 @@ SwAddRenameEntryDialog::SwAddRenameEntryDialog(
         const std::vector< OUString >& rCSVHeader)
     : SfxDialogController(pParent, rUIXMLDescription, rID)
     , m_rCSVHeader(rCSVHeader)
-    , m_xFieldNameED(m_xBuilder->weld_entry("entry"))
-    , m_xOK(m_xBuilder->weld_button("ok"))
+    , m_xFieldNameED(m_xBuilder->weld_entry(u"entry"_ustr))
+    , m_xOK(m_xBuilder->weld_button(u"ok"_ustr))
 {
     m_xFieldNameED->connect_changed(LINK(this, SwAddRenameEntryDialog, ModifyHdl_Impl));
     ModifyHdl_Impl(*m_xFieldNameED);

@@ -70,8 +70,8 @@ class SwAddEntryDialog : public SwAddRenameEntryDialog
 {
 public:
     SwAddEntryDialog(weld::Window* pParent, const std::vector< OUString >& rCSVHeader)
-        : SwAddRenameEntryDialog(pParent, "modules/swriter/ui/addentrydialog.ui",
-                                 "AddEntryDialog", rCSVHeader)
+        : SwAddRenameEntryDialog(pParent, u"modules/swriter/ui/addentrydialog.ui"_ustr,
+                                 u"AddEntryDialog"_ustr, rCSVHeader)
     {
     }
 };
@@ -80,8 +80,8 @@ class SwRenameEntryDialog : public SwAddRenameEntryDialog
 {
 public:
     SwRenameEntryDialog(weld::Window* pParent, const std::vector< OUString >& rCSVHeader)
-        : SwAddRenameEntryDialog(pParent, "modules/swriter/ui/renameentrydialog.ui",
-                                 "RenameEntryDialog", rCSVHeader)
+        : SwAddRenameEntryDialog(pParent, u"modules/swriter/ui/renameentrydialog.ui"_ustr,
+                                 u"RenameEntryDialog"_ustr, rCSVHeader)
     {
     }
 };

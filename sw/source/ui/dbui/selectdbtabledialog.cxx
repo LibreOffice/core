@@ -43,10 +43,11 @@ using namespace ::com::sun::star::beans;
 
 SwSelectDBTableDialog::SwSelectDBTableDialog(weld::Window* pParent,
                                              uno::Reference<sdbc::XConnection> xConnection)
-    : SfxDialogController(pParent, "modules/swriter/ui/selecttabledialog.ui", "SelectTableDialog")
+    : SfxDialogController(pParent, u"modules/swriter/ui/selecttabledialog.ui"_ustr,
+                          u"SelectTableDialog"_ustr)
     , m_xConnection(std::move(xConnection))
-    , m_xTable(m_xBuilder->weld_tree_view("table"))
-    , m_xPreviewPB(m_xBuilder->weld_button("preview"))
+    , m_xTable(m_xBuilder->weld_tree_view(u"table"_ustr))
+    , m_xPreviewPB(m_xBuilder->weld_button(u"preview"_ustr))
 {
     m_xTable->set_size_request(m_xTable->get_approximate_digit_width() * 60,
                                m_xTable->get_height_rows(6));
@@ -102,15 +103,15 @@ IMPL_LINK_NOARG(SwSelectDBTableDialog, PreviewHdl, weld::Button&, void)
     {
         Reference<XDataSource> xSource(xChild->getParent(), UNO_QUERY);
         Reference<XPropertySet> xPrSet(xSource, UNO_QUERY);
-        xPrSet->getPropertyValue("Name") >>= sDataSourceName;
+        xPrSet->getPropertyValue(u"Name"_ustr) >>= sDataSourceName;
     }
     OSL_ENSURE(!sDataSourceName.isEmpty(), "no data source found");
     Sequence<PropertyValue> aProperties{
-        comphelper::makePropertyValue("DataSourceName", sDataSourceName),
-        comphelper::makePropertyValue("Command", sTableOrQuery),
-        comphelper::makePropertyValue("CommandType", nCommandType),
-        comphelper::makePropertyValue("ShowTreeView", false),
-        comphelper::makePropertyValue("ShowTreeViewButton", false)
+        comphelper::makePropertyValue(u"DataSourceName"_ustr, sDataSourceName),
+        comphelper::makePropertyValue(u"Command"_ustr, sTableOrQuery),
+        comphelper::makePropertyValue(u"CommandType"_ustr, nCommandType),
+        comphelper::makePropertyValue(u"ShowTreeView"_ustr, false),
+        comphelper::makePropertyValue(u"ShowTreeViewButton"_ustr, false)
     };
 
     SwDBTablePreviewDialog aDlg(m_xDialog.get(), aProperties);

@@ -40,12 +40,12 @@
 using namespace ::com::sun::star;
 
 SwMailMergeOutputTypePage::SwMailMergeOutputTypePage(weld::Container* pPage, SwMailMergeWizard* pWizard)
-    : vcl::OWizardPage(pPage, pWizard, "modules/swriter/ui/mmoutputtypepage.ui", "MMOutputTypePage")
+    : vcl::OWizardPage(pPage, pWizard, u"modules/swriter/ui/mmoutputtypepage.ui"_ustr, u"MMOutputTypePage"_ustr)
     , m_pWizard(pWizard)
-    , m_xLetterRB(m_xBuilder->weld_radio_button("letter"))
-    , m_xMailRB(m_xBuilder->weld_radio_button("email"))
-    , m_xLetterHint(m_xBuilder->weld_label("letterft"))
-    , m_xMailHint(m_xBuilder->weld_label("emailft"))
+    , m_xLetterRB(m_xBuilder->weld_radio_button(u"letter"_ustr))
+    , m_xMailRB(m_xBuilder->weld_radio_button(u"email"_ustr))
+    , m_xLetterHint(m_xBuilder->weld_label(u"letterft"_ustr))
+    , m_xMailHint(m_xBuilder->weld_label(u"emailft"_ustr))
 {
     Link<weld::Toggleable&,void> aLink = LINK(this, SwMailMergeOutputTypePage, TypeHdl_Impl);
     m_xLetterRB->connect_toggled(aLink);
@@ -175,7 +175,7 @@ void SwMailDispatcherListener_Impl::DeleteAttachments( uno::Reference< mail::XMa
         {
             uno::Reference< beans::XPropertySet > xTransferableProperties( rAttachment.Data, uno::UNO_QUERY_THROW);
             OUString sURL;
-            xTransferableProperties->getPropertyValue("URL") >>= sURL;
+            xTransferableProperties->getPropertyValue(u"URL"_ustr) >>= sURL;
             if(!sURL.isEmpty())
                 SWUnoHelper::UCB_DeleteFile( sURL );
         }
@@ -192,8 +192,8 @@ class SwSendWarningBox_Impl : public weld::MessageDialogController
     std::unique_ptr<weld::TextView> m_xDetailED;
 public:
     SwSendWarningBox_Impl(weld::Window* pParent, const OUString& rDetails)
-        : MessageDialogController(pParent, "modules/swriter/ui/warnemaildialog.ui", "WarnEmailDialog", "grid")
-        , m_xDetailED(m_xBuilder->weld_text_view("errors"))
+        : MessageDialogController(pParent, u"modules/swriter/ui/warnemaildialog.ui"_ustr, u"WarnEmailDialog"_ustr, u"grid"_ustr)
+        , m_xDetailED(m_xBuilder->weld_text_view(u"errors"_ustr))
     {
         m_xDetailED->set_size_request(80 * m_xDetailED->get_approximate_digit_width(),
                                       8 * m_xDetailED->get_text_height());
@@ -204,7 +204,7 @@ public:
 }
 
 SwSendMailDialog::SwSendMailDialog(weld::Window *pParent, SwMailMergeConfigItem& rConfigItem)
-    : GenericDialogController(pParent, "modules/swriter/ui/mmsendmails.ui", "SendMailsDialog")
+    : GenericDialogController(pParent, u"modules/swriter/ui/mmsendmails.ui"_ustr, u"SendMailsDialog"_ustr)
     , m_sContinue(SwResId( ST_CONTINUE ))
     , m_sClose(SwResId(ST_CLOSE_DIALOG))
     , m_sSendingTo(   SwResId(ST_SENDINGTO ))
@@ -218,13 +218,13 @@ SwSendMailDialog::SwSendMailDialog(weld::Window *pParent, SwMailMergeConfigItem&
     , m_nExpectedCount(0)
     , m_nProcessedCount(0)
     , m_nErrorCount(0)
-    , m_xTransferStatus(m_xBuilder->weld_label("transferstatus"))
-    , m_xPaused(m_xBuilder->weld_label("paused"))
-    , m_xProgressBar(m_xBuilder->weld_progress_bar("progress"))
-    , m_xErrorStatus(m_xBuilder->weld_label("errorstatus"))
-    , m_xStatus(m_xBuilder->weld_tree_view("container"))
-    , m_xStop(m_xBuilder->weld_button("stop"))
-    , m_xCancel(m_xBuilder->weld_button("cancel"))
+    , m_xTransferStatus(m_xBuilder->weld_label(u"transferstatus"_ustr))
+    , m_xPaused(m_xBuilder->weld_label(u"paused"_ustr))
+    , m_xProgressBar(m_xBuilder->weld_progress_bar(u"progress"_ustr))
+    , m_xErrorStatus(m_xBuilder->weld_label(u"errorstatus"_ustr))
+    , m_xStatus(m_xBuilder->weld_tree_view(u"container"_ustr))
+    , m_xStop(m_xBuilder->weld_button(u"stop"_ustr))
+    , m_xCancel(m_xBuilder->weld_button(u"cancel"_ustr))
 {
     m_sStop = m_xStop->get_label();
     m_sTransferStatus = m_xTransferStatus->get_label();

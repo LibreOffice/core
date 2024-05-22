@@ -190,8 +190,8 @@ public:
 }
 
 SwSaveWarningBox_Impl::SwSaveWarningBox_Impl(weld::Window* pParent, const OUString& rFileName)
-    : SwMessageAndEditDialog(pParent, "AlreadyExistsDialog",
-        "modules/swriter/ui/alreadyexistsdialog.ui")
+    : SwMessageAndEditDialog(pParent, u"AlreadyExistsDialog"_ustr,
+        u"modules/swriter/ui/alreadyexistsdialog.ui"_ustr)
 {
     m_xEdit->set_text(rFileName);
     m_xEdit->connect_changed(LINK(this, SwSaveWarningBox_Impl, ModifyHdl));
@@ -231,9 +231,9 @@ class SwCopyToDialog : public SfxDialogController
 
 public:
     explicit SwCopyToDialog(weld::Window* pParent)
-        : SfxDialogController(pParent, "modules/swriter/ui/ccdialog.ui", "CCDialog")
-        , m_xCCED(m_xBuilder->weld_entry("cc"))
-        , m_xBCCED(m_xBuilder->weld_entry("bcc"))
+        : SfxDialogController(pParent, u"modules/swriter/ui/ccdialog.ui"_ustr, u"CCDialog"_ustr)
+        , m_xCCED(m_xBuilder->weld_entry(u"cc"_ustr))
+        , m_xBCCED(m_xBuilder->weld_entry(u"bcc"_ustr))
     {
     }
 
@@ -247,15 +247,15 @@ public:
 }
 
 SwMMResultSaveDialog::SwMMResultSaveDialog(weld::Window* pParent)
-    : SfxDialogController(pParent, "modules/swriter/ui/mmresultsavedialog.ui", "MMResultSaveDialog")
+    : SfxDialogController(pParent, u"modules/swriter/ui/mmresultsavedialog.ui"_ustr, u"MMResultSaveDialog"_ustr)
     , m_bCancelSaving(false)
-    , m_xSaveAsOneRB(m_xBuilder->weld_radio_button("singlerb"))
-    , m_xSaveIndividualRB(m_xBuilder->weld_radio_button("individualrb"))
-    , m_xFromRB(m_xBuilder->weld_check_button("fromrb"))
-    , m_xFromNF(m_xBuilder->weld_spin_button("from"))
-    , m_xToFT(m_xBuilder->weld_label("toft"))
-    , m_xToNF(m_xBuilder->weld_spin_button("to"))
-    , m_xOKButton(m_xBuilder->weld_button("ok"))
+    , m_xSaveAsOneRB(m_xBuilder->weld_radio_button(u"singlerb"_ustr))
+    , m_xSaveIndividualRB(m_xBuilder->weld_radio_button(u"individualrb"_ustr))
+    , m_xFromRB(m_xBuilder->weld_check_button(u"fromrb"_ustr))
+    , m_xFromNF(m_xBuilder->weld_spin_button(u"from"_ustr))
+    , m_xToFT(m_xBuilder->weld_label(u"toft"_ustr))
+    , m_xToNF(m_xBuilder->weld_spin_button(u"to"_ustr))
+    , m_xOKButton(m_xBuilder->weld_button(u"ok"_ustr))
 {
     Link<weld::Toggleable&,void> aLink = LINK(this, SwMMResultSaveDialog, DocumentSelectionHdl_Impl);
     m_xSaveAsOneRB->connect_toggled(aLink);
@@ -281,15 +281,15 @@ SwMMResultSaveDialog::~SwMMResultSaveDialog()
 }
 
 SwMMResultPrintDialog::SwMMResultPrintDialog(weld::Window* pParent)
-    : SfxDialogController(pParent, "modules/swriter/ui/mmresultprintdialog.ui", "MMResultPrintDialog")
-    , m_xPrinterLB(m_xBuilder->weld_combo_box("printers"))
-    , m_xPrinterSettingsPB(m_xBuilder->weld_button("printersettings"))
-    , m_xPrintAllRB(m_xBuilder->weld_radio_button("printallrb"))
-    , m_xFromRB(m_xBuilder->weld_radio_button("fromrb"))
-    , m_xFromNF(m_xBuilder->weld_spin_button("from"))
-    , m_xToFT(m_xBuilder->weld_label("toft"))
-    , m_xToNF(m_xBuilder->weld_spin_button("to"))
-    , m_xOKButton(m_xBuilder->weld_button("ok"))
+    : SfxDialogController(pParent, u"modules/swriter/ui/mmresultprintdialog.ui"_ustr, u"MMResultPrintDialog"_ustr)
+    , m_xPrinterLB(m_xBuilder->weld_combo_box(u"printers"_ustr))
+    , m_xPrinterSettingsPB(m_xBuilder->weld_button(u"printersettings"_ustr))
+    , m_xPrintAllRB(m_xBuilder->weld_radio_button(u"printallrb"_ustr))
+    , m_xFromRB(m_xBuilder->weld_radio_button(u"fromrb"_ustr))
+    , m_xFromNF(m_xBuilder->weld_spin_button(u"from"_ustr))
+    , m_xToFT(m_xBuilder->weld_label(u"toft"_ustr))
+    , m_xToNF(m_xBuilder->weld_spin_button(u"to"_ustr))
+    , m_xOKButton(m_xBuilder->weld_button(u"ok"_ustr))
 {
     m_xPrinterLB->make_sorted();
 
@@ -312,24 +312,24 @@ SwMMResultPrintDialog::~SwMMResultPrintDialog()
 }
 
 SwMMResultEmailDialog::SwMMResultEmailDialog(weld::Window* pParent)
-    : SfxDialogController(pParent, "modules/swriter/ui/mmresultemaildialog.ui", "MMResultEmailDialog")
+    : SfxDialogController(pParent, u"modules/swriter/ui/mmresultemaildialog.ui"_ustr, u"MMResultEmailDialog"_ustr)
     , m_sConfigureMail(SwResId(ST_CONFIGUREMAIL))
-    , m_xMailToLB(m_xBuilder->weld_combo_box("mailto"))
-    , m_xCopyToPB(m_xBuilder->weld_button("copyto"))
-    , m_xSubjectED(m_xBuilder->weld_entry("subject"))
-    , m_xSendAsLB(m_xBuilder->weld_combo_box("sendas"))
-    , m_xSendAsPB(m_xBuilder->weld_button("sendassettings"))
-    , m_xAttachmentGroup(m_xBuilder->weld_widget("attachgroup"))
-    , m_xAttachmentED(m_xBuilder->weld_entry("attach"))
-    , m_xPasswordFT(m_xBuilder->weld_label("passwordft"))
-    , m_xPasswordLB(m_xBuilder->weld_combo_box("password"))
-    , m_xPasswordCB(m_xBuilder->weld_check_button("passwordcb"))
-    , m_xSendAllRB(m_xBuilder->weld_radio_button("sendallrb"))
-    , m_xFromRB(m_xBuilder->weld_radio_button("fromrb"))
-    , m_xFromNF(m_xBuilder->weld_spin_button("from"))
-    , m_xToFT(m_xBuilder->weld_label("toft"))
-    , m_xToNF(m_xBuilder->weld_spin_button("to"))
-    , m_xOKButton(m_xBuilder->weld_button("ok"))
+    , m_xMailToLB(m_xBuilder->weld_combo_box(u"mailto"_ustr))
+    , m_xCopyToPB(m_xBuilder->weld_button(u"copyto"_ustr))
+    , m_xSubjectED(m_xBuilder->weld_entry(u"subject"_ustr))
+    , m_xSendAsLB(m_xBuilder->weld_combo_box(u"sendas"_ustr))
+    , m_xSendAsPB(m_xBuilder->weld_button(u"sendassettings"_ustr))
+    , m_xAttachmentGroup(m_xBuilder->weld_widget(u"attachgroup"_ustr))
+    , m_xAttachmentED(m_xBuilder->weld_entry(u"attach"_ustr))
+    , m_xPasswordFT(m_xBuilder->weld_label(u"passwordft"_ustr))
+    , m_xPasswordLB(m_xBuilder->weld_combo_box(u"password"_ustr))
+    , m_xPasswordCB(m_xBuilder->weld_check_button(u"passwordcb"_ustr))
+    , m_xSendAllRB(m_xBuilder->weld_radio_button(u"sendallrb"_ustr))
+    , m_xFromRB(m_xBuilder->weld_radio_button(u"fromrb"_ustr))
+    , m_xFromNF(m_xBuilder->weld_spin_button(u"from"_ustr))
+    , m_xToFT(m_xBuilder->weld_label(u"toft"_ustr))
+    , m_xToNF(m_xBuilder->weld_spin_button(u"to"_ustr))
+    , m_xOKButton(m_xBuilder->weld_button(u"ok"_ustr))
 {
     m_xCopyToPB->connect_clicked(LINK(this, SwMMResultEmailDialog, CopyToHdl_Impl));
     m_xSendAsPB->connect_clicked(LINK(this, SwMMResultEmailDialog, SendAsHdl_Impl));
@@ -587,7 +587,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
 
     if (m_xSaveAsOneRB->get_active())
     {
-        uno::Sequence< beans::PropertyValue > aValues { comphelper::makePropertyValue("FilterName", sFilter) };
+        uno::Sequence< beans::PropertyValue > aValues { comphelper::makePropertyValue(u"FilterName"_ustr, sFilter) };
 
         uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
         ErrCode nErrorCode = ERRCODE_NONE;
@@ -690,8 +690,8 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
             uno::Reference<beans::XPropertySet> const xRetSet(
                 pTempView->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
             uno::Sequence<beans::PropertyValue> aInteropGrabBag;
-            xThisSet->getPropertyValue("InteropGrabBag") >>= aInteropGrabBag;
-            xRetSet->setPropertyValue("InteropGrabBag", uno::Any(aInteropGrabBag));
+            xThisSet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aInteropGrabBag;
+            xRetSet->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aInteropGrabBag));
 
             pTargetView->GetWrtShell().PastePages(
                 pTempView->GetWrtShell(), documentStartPageNumber(xConfigItem.get(), nDoc, false),
@@ -835,8 +835,8 @@ IMPL_LINK_NOARG(SwMMResultPrintDialog, PrintHdl_Impl, weld::Button&, void)
     SfxObjectShell* pObjSh = pTargetView->GetViewFrame().GetObjectShell();
     SfxGetpApp()->NotifyEvent(SfxEventHint(SfxEventHintId::SwMailMerge, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), pObjSh));
 
-    uno::Sequence aProps{ comphelper::makePropertyValue("MonitorVisible", true),
-                          comphelper::makePropertyValue("Pages", sPages) };
+    uno::Sequence aProps{ comphelper::makePropertyValue(u"MonitorVisible"_ustr, true),
+                          comphelper::makePropertyValue(u"Pages"_ustr, sPages) };
 
     pTargetView->ExecPrint( aProps, false, true );
     SfxGetpApp()->NotifyEvent(SfxEventHint(SfxEventHintId::SwMailMergeEnd, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), pObjSh));
@@ -973,14 +973,14 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
             //Make sure we don't pick e.g. the flat xml filter
             //for this format
             pSfxFlt = pFilterContainer->GetFilter4FilterName(
-                "writer8",
+                u"writer8"_ustr,
                 SfxFilterFlags::EXPORT);
         }
         break;
         case MM_DOCTYPE_PDF:
         {
             pSfxFlt = pFilterContainer->GetFilter4FilterName(
-                "writer_pdf_Export",
+                u"writer_pdf_Export"_ustr,
                 SfxFilterFlags::EXPORT);
         }
         break;
@@ -1013,7 +1013,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
         {
             bAsBody = true;
             pSfxFlt = pFilterContainer->GetFilter4FilterName(
-                "Text (encoded)", SfxFilterFlags::EXPORT);
+                u"Text (encoded)"_ustr, SfxFilterFlags::EXPORT);
         }
         break;
     }
@@ -1029,10 +1029,10 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
 
     if (m_xSubjectED->get_text().isEmpty())
     {
-        std::unique_ptr<SwSendQueryBox_Impl> xQuery(new SwSendQueryBox_Impl(m_xDialog.get(), "SubjectDialog",
-                                                         "modules/swriter/ui/subjectdialog.ui"));
+        std::unique_ptr<SwSendQueryBox_Impl> xQuery(new SwSendQueryBox_Impl(m_xDialog.get(), u"SubjectDialog"_ustr,
+                                                         u"modules/swriter/ui/subjectdialog.ui"_ustr));
         xQuery->SetIsEmptyTextAllowed(true);
-        xQuery->SetValue("");
+        xQuery->SetValue(u""_ustr);
         if(RET_OK == xQuery->run())
         {
             if (!xQuery->GetValue().isEmpty())
@@ -1043,8 +1043,8 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
     }
     if(!bAsBody && m_xAttachmentED->get_text().isEmpty())
     {
-        std::unique_ptr<SwSendQueryBox_Impl> xQuery(new SwSendQueryBox_Impl(m_xDialog.get(), "AttachNameDialog",
-                                                         "modules/swriter/ui/attachnamedialog.ui"));
+        std::unique_ptr<SwSendQueryBox_Impl> xQuery(new SwSendQueryBox_Impl(m_xDialog.get(), u"AttachNameDialog"_ustr,
+                                                         u"modules/swriter/ui/attachnamedialog.ui"_ustr));
         xQuery->SetIsEmptyTextAllowed(false);
         if (RET_OK == xQuery->run())
         {
@@ -1103,7 +1103,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
             FILTER_XML,
             SwDocShell::Factory().GetFilterContainer() );
 
-    uno::Sequence< beans::PropertyValue > aValues { comphelper::makePropertyValue("FilterName", pTargetSfxFlt->GetFilterName()) };
+    uno::Sequence< beans::PropertyValue > aValues { comphelper::makePropertyValue(u"FilterName"_ustr, pTargetSfxFlt->GetFilterName()) };
 
     uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
     xStore->storeToURL( sTargetTempURL, aValues   );

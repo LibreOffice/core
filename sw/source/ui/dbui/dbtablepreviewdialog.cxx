@@ -61,9 +61,9 @@ public:
 };
 
 SwDBTablePreviewDialog::SwDBTablePreviewDialog(weld::Window* pParent, uno::Sequence< beans::PropertyValue> const & rValues)
-    : SfxDialogController(pParent, "modules/swriter/ui/tablepreviewdialog.ui", "TablePreviewDialog")
-    , m_xDescriptionFI(m_xBuilder->weld_label("description"))
-    , m_xBeamerWIN(m_xBuilder->weld_container("beamer"))
+    : SfxDialogController(pParent, u"modules/swriter/ui/tablepreviewdialog.ui"_ustr, u"TablePreviewDialog"_ustr)
+    , m_xDescriptionFI(m_xBuilder->weld_label(u"description"_ustr))
+    , m_xBeamerWIN(m_xBuilder->weld_container(u"beamer"_ustr))
 {
     Size aSize(m_xBeamerWIN->get_approximate_digit_width() * 80,
                m_xBeamerWIN->get_text_height() * 18);
@@ -98,7 +98,7 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(weld::Window* pParent, uno::Seque
 
     util::URL aURL;
     aURL.Complete = ".component:DB/DataSourceBrowser";
-    uno::Reference<frame::XDispatch> xD = xFrame->queryDispatch(aURL, "",
+    uno::Reference<frame::XDispatch> xD = xFrame->queryDispatch(aURL, u""_ustr,
             css::frame::FrameSearchFlag::CHILDREN | css::frame::FrameSearchFlag::CREATE);
     if (xD.is())
     {
