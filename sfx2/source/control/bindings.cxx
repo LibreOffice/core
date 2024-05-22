@@ -876,7 +876,7 @@ bool SfxBindings::Execute( sal_uInt16 nId, const SfxPoolItem** ppItems, SfxCallM
 }
 
 SfxPoolItemHolder SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem** ppItems, sal_uInt16 nModi, SfxCallMode nCallMode,
-                        const SfxPoolItem **ppInternalArgs, bool bGlobalOnly )
+                        const SfxPoolItem **ppInternalArgs )
 {
     SfxStateCache *pCache = GetStateCache( nId );
     if ( !pCache )
@@ -885,7 +885,7 @@ SfxPoolItemHolder SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem**
         while ( pBind )
         {
             if ( pBind->GetStateCache( nId ) )
-                return pBind->Execute_Impl( nId, ppItems, nModi, nCallMode, ppInternalArgs, bGlobalOnly );
+                return pBind->Execute_Impl( nId, ppItems, nModi, nCallMode, ppInternalArgs );
             pBind = pBind->pImpl->pSubBindings;
         }
     }
@@ -943,10 +943,6 @@ SfxPoolItemHolder SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem**
         pShell = rDispatcher.GetShell( pServer->GetShellLevel() );
         pSlot = pServer->GetSlot();
     }
-
-    if ( bGlobalOnly )
-        if ( dynamic_cast< const SfxModule *>( pShell ) == nullptr && dynamic_cast< const SfxApplication *>( pShell ) == nullptr && dynamic_cast< const SfxViewFrame *>( pShell ) == nullptr )
-            return SfxPoolItemHolder();
 
     SfxItemPool &rPool = pShell->GetPool();
     SfxRequest aReq( nId, nCallMode, rPool );
