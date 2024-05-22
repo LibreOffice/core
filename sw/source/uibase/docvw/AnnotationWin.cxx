@@ -119,9 +119,12 @@ SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
     }
 
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
-    mrMgr.ConnectSidebarWinToFrame( *(mrSidebarItem.maLayoutInfo.mpAnchorFrame),
-                                  mrSidebarItem.GetFormatField(),
-                                  *this );
+    if (rSidebarItem.maLayoutInfo.mpAnchorFrame)
+    {
+        mrMgr.ConnectSidebarWinToFrame( *(rSidebarItem.maLayoutInfo.mpAnchorFrame),
+                                      mrSidebarItem.GetFormatField(),
+                                      *this );
+    }
 #endif
 
     if (SupportsDoubleBuffering())
