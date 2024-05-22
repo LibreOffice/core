@@ -947,6 +947,9 @@ SfxPoolItemHolder SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem**
     if (!pShell)
         return SfxPoolItemHolder();
 
+    if (!pShell)
+        return SfxPoolItemHolder();
+
     SfxItemPool &rPool = pShell->GetPool();
     SfxRequest aReq( nId, nCallMode, rPool );
     aReq.SetModifier( nModi );
