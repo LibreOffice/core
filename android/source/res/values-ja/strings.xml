@@ -72,4 +72,8 @@
     <string name="insert_table">表の挿入</string>
     <string name="action_add_slide">スライドを追加</string>
     <string name="tabhost_character">文字</string>
+    <string name="unable_to_export_pdf">PDFにエクスポートできません</string>
+    <string name="tabhost_style">スタイル</string>
+    <string name="UNO_commands_string_value_hint">値</string>
+    <string name="unable_to_save">ファイルを保存できません</string>
 </resources>
