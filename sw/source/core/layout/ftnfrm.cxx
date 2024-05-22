@@ -42,8 +42,40 @@
 #include <sal/log.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <flyfrm.hxx>
+#include <IDocumentStylePoolAccess.hxx>
+#include <docsh.hxx>
+#include <poolfmt.hxx>
+#include <swfntcch.hxx>
+#include <wrtsh.hxx>
 
 #define ENDNOTE 0x80000000
+
+namespace
+{
+/// Calculates the height of the line that hosts the separator line (the top margin of the
+/// container), based on the default paragraph style in rDoc.
+bool FootnoteSeparatorHeightFromParagraph(SwDoc& rDoc, SwTwips& rHeight)
+{
+        const SwTextFormatColl* pDefaultParaFormat
+            = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD);
+        if (!pDefaultParaFormat)
+        {
+            return false;
+        }
+
+        SwViewShell* pSh = rDoc.GetDocShell()->GetWrtShell();
+        if (!pSh)
+        {
+            return false;
+        }
+
+        SwFontAccess aFontAccess(pDefaultParaFormat, pSh);
+        SwFont aFont(aFontAccess.Get()->GetFont());
+        OutputDevice& rOut = pSh->GetRefDev();
+        rHeight = aFont.GetHeight(pSh, rOut);
+        return true;
+}
+}
 
 /// Search the position of an attribute in the FootnoteArray at the document,
 /// because all footnotes are located there, ordered by their index.
@@ -222,8 +254,20 @@ static tools::Long lcl_Undersize( const SwFrame* pFrame )
 
 namespace sw {
 
-SwTwips FootnoteSeparatorHeight(SwPageFootnoteInfo const& rInf)
+SwTwips FootnoteSeparatorHeight(SwDoc& rDoc, SwPageFootnoteInfo const& rInf)
 {
+    const IDocumentSettingAccess& rIDSA = rDoc.getIDocumentSettingAccess();
+    if (rIDSA.get(DocumentSettingId::CONTINUOUS_ENDNOTES))
+    {
+        // Word style: try to calculate the height from the default para format.
+        SwTwips nHeight{};
+        if (FootnoteSeparatorHeightFromParagraph(rDoc, nHeight))
+        {
+            return nHeight;
+        }
+    }
+
+    // Writer style: calculate from the page style.
     return rInf.GetTopDist() + rInf.GetBottomDist() + rInf.GetLineWidth();
 }
 
@@ -235,7 +279,8 @@ void SwFootnoteContFrame::Format( vcl::RenderContext* /*pRenderContext*/, const 
     // calculate total border, only one distance to the top
     const SwPageFrame* pPage = FindPageFrame();
     const SwPageFootnoteInfo &rInf = pPage->GetPageDesc()->GetFootnoteInfo();
-    const SwTwips nBorder = sw::FootnoteSeparatorHeight(rInf);
+    SwDoc* pDoc = getRootFrame()->GetCurrShell()->GetDoc();
+    const SwTwips nBorder = sw::FootnoteSeparatorHeight(*pDoc, rInf);
     SwRectFnSet aRectFnSet(this);
 
     if ( !isFramePrintAreaValid() )
