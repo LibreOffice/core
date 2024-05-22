@@ -727,7 +727,7 @@ public:
     void UpdateSelectionFunction( ScFunctionData& rData, const ScMarkData& rMark );
 
     void        AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                                    sal_uInt16 nFormatNo );
+                                    sal_uInt16 nFormatNo, ScProgress* pProgress );
     void        GetAutoFormatData(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, ScAutoFormatData& rData);
     bool        SearchAndReplace(
         const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark,
