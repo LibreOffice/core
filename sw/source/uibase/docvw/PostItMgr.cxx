@@ -1854,6 +1854,11 @@ SwPostItField* SwPostItMgr::GetLatestPostItField()
     return static_cast<SwPostItField*>(mvPostItFields.back()->GetFormatField().GetField());
 }
 
+sw::annotation::SwAnnotationWin* SwPostItMgr::GetOrCreateAnnotationWindowForLatestPostItField()
+{
+    return GetOrCreateAnnotationWindow(*mvPostItFields.back());
+}
+
 SwAnnotationWin* SwPostItMgr::GetNextPostIt( sal_uInt16 aDirection,
                                           SwAnnotationWin* aPostIt )
 {
