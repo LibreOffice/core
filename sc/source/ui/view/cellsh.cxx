@@ -315,6 +315,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                     bNeedEdit = false;
                 break;
 
+            case FID_CURRENTVALIDATION:
             case FID_VALIDATION:
                 {
                     if ( pDocShell && pDocShell->IsDocShared() )
