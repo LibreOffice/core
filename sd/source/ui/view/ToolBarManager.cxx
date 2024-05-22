@@ -1044,47 +1044,44 @@ void ToolBarRules::SelectionHasChanged (
 
     mpToolBarManager->ResetToolBars(ToolBarManager::ToolBarGroup::Function);
 
-    if (!sfx2::SfxNotebookBar::IsActive())
+    switch (rView.GetContext())
     {
-        switch (rView.GetContext())
-        {
-            case SdrViewContext::Graphic:
-                if (!bTextEdit)
-                    mpToolBarManager->SetToolBarShell(ToolBarManager::ToolBarGroup::Function,
-                                                      ToolbarId::Draw_Graf_Toolbox);
-                break;
-
-            case SdrViewContext::Media:
-                if (!bTextEdit)
-                    mpToolBarManager->SetToolBarShell(ToolBarManager::ToolBarGroup::Function,
-                                                      ToolbarId::Draw_Media_Toolbox);
-                break;
-
-            case SdrViewContext::Table:
+        case SdrViewContext::Graphic:
+            if (!bTextEdit)
                 mpToolBarManager->SetToolBarShell(ToolBarManager::ToolBarGroup::Function,
-                                                  ToolbarId::Draw_Table_Toolbox);
-                bTextEdit = true;
-                break;
+                                                  ToolbarId::Draw_Graf_Toolbox);
+            break;
 
-            case SdrViewContext::Standard:
-            default:
-                if (!bTextEdit)
+        case SdrViewContext::Media:
+            if (!bTextEdit)
+                mpToolBarManager->SetToolBarShell(ToolBarManager::ToolBarGroup::Function,
+                                                  ToolbarId::Draw_Media_Toolbox);
+            break;
+
+        case SdrViewContext::Table:
+            mpToolBarManager->SetToolBarShell(ToolBarManager::ToolBarGroup::Function,
+                                              ToolbarId::Draw_Table_Toolbox);
+            bTextEdit = true;
+            break;
+
+        case SdrViewContext::Standard:
+        default:
+            if (!bTextEdit)
+            {
+                switch(rViewShell.GetShellType())
                 {
-                    switch(rViewShell.GetShellType())
-                    {
-                        case ::sd::ViewShell::ST_IMPRESS:
-                        case ::sd::ViewShell::ST_DRAW:
-                        case ::sd::ViewShell::ST_NOTES:
-                        case ::sd::ViewShell::ST_HANDOUT:
-                            mpToolBarManager->SetToolBar(ToolBarManager::ToolBarGroup::Function,
-                                                         ToolBarManager::msDrawingObjectToolBar);
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
+                    case ::sd::ViewShell::ST_IMPRESS:
+                    case ::sd::ViewShell::ST_DRAW:
+                    case ::sd::ViewShell::ST_NOTES:
+                    case ::sd::ViewShell::ST_HANDOUT:
+                        mpToolBarManager->SetToolBar(ToolBarManager::ToolBarGroup::Function,
+                                                     ToolBarManager::msDrawingObjectToolBar);
+                        break;
+                    default:
+                        break;
                 }
-        }
+                break;
+            }
     }
 
     if( bTextEdit )
