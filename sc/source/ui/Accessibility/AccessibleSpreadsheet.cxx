@@ -1282,13 +1282,13 @@ void ScAccessibleSpreadsheet::AddMarkedRange(const ScRange& rRange)
 
 OUString SAL_CALL ScAccessibleSpreadsheet::getImplementationName()
 {
-    return "ScAccessibleSpreadsheet";
+    return u"ScAccessibleSpreadsheet"_ustr;
 }
 
 uno::Sequence< OUString> SAL_CALL
     ScAccessibleSpreadsheet::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.AccessibleSpreadsheet" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.AccessibleSpreadsheet"_ustr };
     return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
 }
 

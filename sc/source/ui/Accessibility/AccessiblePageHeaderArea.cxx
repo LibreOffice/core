@@ -161,13 +161,13 @@ sal_Int64 SAL_CALL ScAccessiblePageHeaderArea::getAccessibleStateSet()
 OUString SAL_CALL
        ScAccessiblePageHeaderArea::getImplementationName()
 {
-    return "ScAccessiblePageHeaderArea";
+    return u"ScAccessiblePageHeaderArea"_ustr;
 }
 
 uno::Sequence< OUString> SAL_CALL
        ScAccessiblePageHeaderArea::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.sheet.AccessiblePageHeaderFooterAreasView" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.sheet.AccessiblePageHeaderFooterAreasView"_ustr };
     return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
 }
 

@@ -237,13 +237,13 @@ static void lcl_FillFontAttributes( Sequence< PropertyValue >& rSeq, const vcl::
 
     sal_Int32 nIndex = lcl_ExpandSequence( rSeq, 7 );
     auto pSeq = rSeq.getArray();
-    lcl_FillProperty( pSeq[ nIndex++ ], "CharFontName",      aFontItem,   MID_FONT_FAMILY_NAME );
-    lcl_FillProperty( pSeq[ nIndex++ ], "CharFontFamily",    aFontItem,   MID_FONT_FAMILY );
-    lcl_FillProperty( pSeq[ nIndex++ ], "CharFontStyleName", aFontItem,   MID_FONT_STYLE_NAME );
-    lcl_FillProperty( pSeq[ nIndex++ ], "CharFontCharSet",   aFontItem,   MID_FONT_PITCH );
-    lcl_FillProperty( pSeq[ nIndex++ ], "CharFontPitch",     aFontItem,   MID_FONT_CHAR_SET );
-    lcl_FillProperty( pSeq[ nIndex++ ], "CharHeight",        aHeightItem, MID_FONTHEIGHT );
-    lcl_FillProperty( pSeq[ nIndex++ ], "CharLocale",        aLangItem,   MID_LANG_LOCALE );
+    lcl_FillProperty( pSeq[ nIndex++ ], u"CharFontName"_ustr,      aFontItem,   MID_FONT_FAMILY_NAME );
+    lcl_FillProperty( pSeq[ nIndex++ ], u"CharFontFamily"_ustr,    aFontItem,   MID_FONT_FAMILY );
+    lcl_FillProperty( pSeq[ nIndex++ ], u"CharFontStyleName"_ustr, aFontItem,   MID_FONT_STYLE_NAME );
+    lcl_FillProperty( pSeq[ nIndex++ ], u"CharFontCharSet"_ustr,   aFontItem,   MID_FONT_PITCH );
+    lcl_FillProperty( pSeq[ nIndex++ ], u"CharFontPitch"_ustr,     aFontItem,   MID_FONT_CHAR_SET );
+    lcl_FillProperty( pSeq[ nIndex++ ], u"CharHeight"_ustr,        aHeightItem, MID_FONTHEIGHT );
+    lcl_FillProperty( pSeq[ nIndex++ ], u"CharLocale"_ustr,        aLangItem,   MID_LANG_LOCALE );
 }
 
 ScAccessibleCsvRuler::ScAccessibleCsvRuler(ScCsvRuler& rRuler)

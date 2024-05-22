@@ -269,7 +269,7 @@ uno::Any SAL_CALL
 
 OUString SAL_CALL ScAccessibleCellBase::getImplementationName()
 {
-    return "ScAccessibleCellBase";
+    return u"ScAccessibleCellBase"_ustr;
 }
 
     //=====  XTypeProvider  ===================================================
@@ -374,9 +374,9 @@ OUString ScAccessibleCellBase::getShadowAttrs() const
         }
     }
     //construct shadow attributes string
-    OUString sShadowAttrs("Shadow:");
-    OUString sInnerSplit(",");
-    OUString sOuterSplit(";");
+    OUString sShadowAttrs(u"Shadow:"_ustr);
+    OUString sInnerSplit(u","_ustr);
+    OUString sOuterSplit(u";"_ustr);
     sal_Int32 nLocationVal = 0;
     switch( aShadowFmt.Location )
     {
@@ -479,8 +479,8 @@ OUString ScAccessibleCellBase::getBorderAttrs()
 
     //construct border attributes string
     OUString sBorderAttrs;
-    OUString sInnerSplit(",");
-    OUString sOuterSplit(";");
+    OUString sInnerSplit(u","_ustr);
+    OUString sOuterSplit(u";"_ustr);
     //top border
     //if top of the cell has no border
     if ( aTopBorder.InnerLineWidth == 0 && aTopBorder.OuterLineWidth == 0 )

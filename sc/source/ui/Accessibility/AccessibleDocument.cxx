@@ -1181,7 +1181,7 @@ void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, b
     uno::Reference< beans::XPropertySet > xShapeProp(xShape, uno::UNO_QUERY);
     if (xShapeProp.is())
     {
-        uno::Any aPropAny = xShapeProp->getPropertyValue("LayerID");
+        uno::Any aPropAny = xShapeProp->getPropertyValue(u"LayerID"_ustr);
         sal_Int16 nLayerID = 0;
         if( aPropAny >>= nLayerID )
         {
@@ -1947,13 +1947,13 @@ void SAL_CALL
 OUString SAL_CALL
     ScAccessibleDocument::getImplementationName()
 {
-    return "ScAccessibleDocument";
+    return u"ScAccessibleDocument"_ustr;
 }
 
 uno::Sequence< OUString> SAL_CALL
     ScAccessibleDocument::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.AccessibleSpreadsheetDocumentView" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.AccessibleSpreadsheetDocumentView"_ustr };
     return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
 }
 

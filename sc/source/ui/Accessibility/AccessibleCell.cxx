@@ -300,13 +300,13 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
 
 OUString SAL_CALL ScAccessibleCell::getImplementationName()
 {
-    return "ScAccessibleCell";
+    return u"ScAccessibleCell"_ustr;
 }
 
 uno::Sequence< OUString> SAL_CALL
     ScAccessibleCell::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.sheet.AccessibleCell" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.sheet.AccessibleCell"_ustr };
     return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
 }
 

@@ -416,7 +416,7 @@ void SAL_CALL
 // XServiceInfo
 OUString SAL_CALL ScAccessibleContextBase::getImplementationName()
 {
-    return "ScAccessibleContextBase";
+    return u"ScAccessibleContextBase"_ustr;
 }
 
 sal_Bool SAL_CALL ScAccessibleContextBase::supportsService(const OUString& sServiceName)
@@ -427,8 +427,8 @@ sal_Bool SAL_CALL ScAccessibleContextBase::supportsService(const OUString& sServ
 uno::Sequence< OUString> SAL_CALL
        ScAccessibleContextBase::getSupportedServiceNames()
 {
-    return {"com.sun.star.accessibility.Accessible",
-            "com.sun.star.accessibility.AccessibleContext"};
+    return {u"com.sun.star.accessibility.Accessible"_ustr,
+            u"com.sun.star.accessibility.AccessibleContext"_ustr};
 }
 
 //=====  internal  ============================================================

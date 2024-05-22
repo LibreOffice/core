@@ -1451,12 +1451,12 @@ sal_Int64 SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleStateSet()
 
 OUString SAL_CALL ScAccessibleDocumentPagePreview::getImplementationName()
 {
-    return "ScAccessibleDocumentPagePreview";
+    return u"ScAccessibleDocumentPagePreview"_ustr;
 }
 
 uno::Sequence< OUString> SAL_CALL ScAccessibleDocumentPagePreview::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.AccessibleSpreadsheetPageView" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.AccessibleSpreadsheetPageView"_ustr };
     return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
 }
 

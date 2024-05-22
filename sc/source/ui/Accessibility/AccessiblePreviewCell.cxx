@@ -172,12 +172,12 @@ sal_Int64 SAL_CALL ScAccessiblePreviewCell::getAccessibleStateSet()
 
 OUString SAL_CALL ScAccessiblePreviewCell::getImplementationName()
 {
-    return "ScAccessiblePreviewCell";
+    return u"ScAccessiblePreviewCell"_ustr;
 }
 
 uno::Sequence<OUString> SAL_CALL ScAccessiblePreviewCell::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { "com.sun.star.table.AccessibleCellView" };
+    const css::uno::Sequence<OUString> vals { u"com.sun.star.table.AccessibleCellView"_ustr };
     return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
 }
 

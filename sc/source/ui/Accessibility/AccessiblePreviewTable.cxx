@@ -526,7 +526,7 @@ sal_Int64 SAL_CALL ScAccessiblePreviewTable::getAccessibleStateSet()
 
 OUString SAL_CALL ScAccessiblePreviewTable::getImplementationName()
 {
-    return "ScAccessiblePreviewTable";
+    return u"ScAccessiblePreviewTable"_ustr;
 }
 
 uno::Sequence<OUString> SAL_CALL ScAccessiblePreviewTable::getSupportedServiceNames()

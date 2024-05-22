@@ -410,7 +410,7 @@ void SAL_CALL ScAccessibleTableBase::deselectAccessibleChild( sal_Int64 /* nSele
 
 OUString SAL_CALL ScAccessibleTableBase::getImplementationName()
 {
-    return "ScAccessibleTableBase";
+    return u"ScAccessibleTableBase"_ustr;
 }
 
     //=====  XTypeProvider  ===================================================
