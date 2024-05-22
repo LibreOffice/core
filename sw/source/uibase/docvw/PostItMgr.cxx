@@ -698,6 +698,28 @@ void SwPostItMgr::PreparePageContainer()
     }
 }
 
+VclPtr<SwAnnotationWin> SwPostItMgr::GetOrCreateAnnotationWindow(SwSidebarItem& rItem)
+{
+    VclPtr<SwAnnotationWin> pPostIt = rItem.mpPostIt;
+    if (!pPostIt)
+    {
+        pPostIt = rItem.GetSidebarWindow( mpView->GetEditWin(),
+                                          *this );
+        pPostIt->InitControls();
+        pPostIt->SetReadonly(mbReadOnly);
+        rItem.mpPostIt = pPostIt;
+        if (mpAnswer)
+        {
+            if (pPostIt->GetPostItField()->GetParentPostItId() != 0) //do we really have another note in front of this one
+            {
+                pPostIt->InitAnswer(*mpAnswer);
+            }
+            mpAnswer.reset();
+        }
+    }
+    return rItem.mpPostIt;
+}
+
 void SwPostItMgr::LayoutPostIts()
 {
     const bool bLoKitActive = comphelper::LibreOfficeKit::isActive();
@@ -727,24 +749,9 @@ void SwPostItMgr::LayoutPostIts()
 
                 for (auto const& pItem : pPage->mvSidebarItems)
                 {
-                    VclPtr<SwAnnotationWin> pPostIt = pItem->mpPostIt;
-
                     if (pItem->mbShow)
                     {
-                        if (!pPostIt)
-                        {
-                            pPostIt = pItem->GetSidebarWindow( mpView->GetEditWin(),
-                                                              *this );
-                            pPostIt->InitControls();
-                            pPostIt->SetReadonly(mbReadOnly);
-                            pItem->mpPostIt = pPostIt;
-                            if (mpAnswer)
-                            {
-                                if (pPostIt->GetPostItField()->GetParentPostItId() != 0) //do we really have another note in front of this one
-                                    pPostIt->InitAnswer(*mpAnswer);
-                                mpAnswer.reset();
-                            }
-                        }
+                        VclPtr<SwAnnotationWin> pPostIt = GetOrCreateAnnotationWindow(*pItem);
 
                         pPostIt->SetChangeTracking(
                             pItem->mLayoutStatus,
@@ -811,6 +818,7 @@ void SwPostItMgr::LayoutPostIts()
                     }
                     else // we don't want to see it
                     {
+                        VclPtr<SwAnnotationWin> pPostIt = pItem->mpPostIt;
                         if (pPostIt)
                             pPostIt->HideNote();
                     }
