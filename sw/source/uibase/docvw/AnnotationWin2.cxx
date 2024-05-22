@@ -1053,6 +1053,7 @@ void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
         case FN_POSTIT:
         case FN_REPLY:
         {
+            const bool bReply = nSlot == FN_REPLY;
             // if this note is empty, it will be deleted once losing the focus, so no reply, but only a new note
             // will be created
             if (!mpOutliner->GetEditEngine().GetText().isEmpty())
@@ -1063,16 +1064,35 @@ void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
             if (mrMgr.HasActiveSidebarWin())
                 mrMgr.SetActiveSidebarWin(nullptr);
             SwitchToFieldPos();
+
+            SwDocShell* pShell = mrView.GetDocShell();
+            if (bReply)
+                pShell->GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::START, nullptr);
+
+            // synchronous dispatch
             mrView.GetViewFrame().GetDispatcher()->Execute(FN_POSTIT);
 
-            if (nSlot == FN_REPLY)
+            if (bReply)
             {
+                SwUndoId nUndoId(SwUndoId::END);
+                mrView.GetWrtShell().GetLastUndoInfo(nullptr, &nUndoId);
+
                 // Get newly created SwPostItField and set its paraIdParent
                 auto pPostItField = mrMgr.GetLatestPostItField();
                 pPostItField->SetParentId(GetTopReplyNote()->GetParaId());
                 pPostItField->SetParentPostItId(GetTopReplyNote()->GetPostItField()->GetPostItId());
                 this->GeneratePostItName();
                 pPostItField->SetParentName(GetTopReplyNote()->GetPostItField()->GetName());
+
+                // In this case, force generating the associated window
+                // synchronously so we can bundle its use of the registered
+                // "Answer" into the same undo group that the synchronous
+                // FN_POSTIT was put in
+                mrMgr.GetOrCreateAnnotationWindowForLatestPostItField();
+
+                SwRewriter aRewriter;
+                aRewriter.AddRule(UndoArg1, pPostItField->GetDescription());
+                pShell->GetDoc()->GetIDocumentUndoRedo().EndUndo(nUndoId, &aRewriter);
             }
             break;
         }
