@@ -839,7 +839,7 @@ void ObjectPage::NewDialog()
         if ( !aDocument.createDialog( aLibName, aDlgName, xISP ) )
             return;
 
-        SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDocument, aLibName, aDlgName, TYPE_DIALOG );
+        SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDocument, aLibName, aDlgName, SBX_TYPE_DIALOG );
         if (SfxDispatcher* pDispatcher = GetDispatcher())
         {
             pDispatcher->ExecuteList( SID_BASICIDE_SBXINSERTED,
@@ -987,7 +987,7 @@ SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
             StarBASIC* pBasic = pBasMgr? pBasMgr->GetLib( aLibName ) : nullptr;
             if ( pBasic )
                 pModule = pBasic->FindModule( aModName );
-            SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
+            SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, SBX_TYPE_MODULE );
             if (SfxDispatcher* pDispatcher = GetDispatcher())
             {
                 pDispatcher->ExecuteList( SID_BASICIDE_SBXINSERTED,

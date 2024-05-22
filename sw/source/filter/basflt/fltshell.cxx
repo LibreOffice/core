@@ -850,14 +850,16 @@ void SwFltControlStack::Delete(const SwPaM &rPam)
 
 // methods of SwFltAnchor follow
 SwFltAnchor::SwFltAnchor(SwFrameFormat* pFormat) :
-    SfxPoolItem(RES_FLTR_ANCHOR), m_pFrameFormat(pFormat)
+    SfxPoolItem(RES_FLTR_ANCHOR, SfxItemType::SwFltAnchorType)
+    , m_pFrameFormat(pFormat)
 {
     m_pListener.reset(new SwFltAnchorListener(this));
     m_pListener->StartListening(m_pFrameFormat->GetNotifier());
 }
 
 SwFltAnchor::SwFltAnchor(const SwFltAnchor& rCpy) :
-    SfxPoolItem(RES_FLTR_ANCHOR), m_pFrameFormat(rCpy.m_pFrameFormat)
+    SfxPoolItem(RES_FLTR_ANCHOR, SfxItemType::SwFltAnchorType)
+    , m_pFrameFormat(rCpy.m_pFrameFormat)
 {
     m_pListener.reset(new SwFltAnchorListener(this));
     m_pListener->StartListening(m_pFrameFormat->GetNotifier());
@@ -926,7 +928,7 @@ SwFltRedline* SwFltRedline::Clone( SfxItemPool* ) const
 // methods of SwFltBookmark follow
 SwFltBookmark::SwFltBookmark( const OUString& rNa, OUString aVa,
                               tools::Long nHand, const bool bIsTOCBookmark )
-    : SfxPoolItem( RES_FLTR_BOOKMARK )
+    : SfxPoolItem( RES_FLTR_BOOKMARK, SfxItemType::SwFltBookmarkType )
     , mnHandle( nHand )
     , maName( rNa )
     , maVal(std::move( aVa ))
@@ -958,7 +960,7 @@ SwFltBookmark* SwFltBookmark::Clone(SfxItemPool*) const
 }
 
 SwFltRDFMark::SwFltRDFMark()
-    : SfxPoolItem(RES_FLTR_RDFMARK),
+    : SfxPoolItem(RES_FLTR_RDFMARK, SfxItemType::SwFltRDFMarkType),
       m_nHandle(0)
 {
 }
@@ -1000,7 +1002,8 @@ const std::vector< std::pair<OUString, OUString> >& SwFltRDFMark::GetAttributes(
 
 // methods of SwFltTOX follow
 SwFltTOX::SwFltTOX(std::shared_ptr<SwTOXBase> xBase)
-    : SfxPoolItem(RES_FLTR_TOX), m_xTOXBase(std::move(xBase)),
+    : SfxPoolItem(RES_FLTR_TOX, SfxItemType::SwFltTOXType)
+    , m_xTOXBase(std::move(xBase)),
       m_bHadBreakItem( false ), m_bHadPageDescItem( false )
 {
 }

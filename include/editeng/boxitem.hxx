@@ -138,6 +138,7 @@ public:
     sal_uInt16  GetSmallestDistance() const;
 
     bool IsRemoveAdjacentCellBorder() const { return mbRemoveAdjCellBorder; }
+    const std::array<model::ComplexColor, 4>& GetTempComplexColors() const {return maTempComplexColors;}
 
     void    SetDistance( sal_Int16 nNew, SvxBoxItemLine nLine );
     void SetAllDistances(sal_Int16 nNew)

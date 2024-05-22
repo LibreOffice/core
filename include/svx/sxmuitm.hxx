@@ -28,7 +28,8 @@
 // (based on the facts of the MapUnit of the model). This unity is displayed if necessary.
 class SVXCORE_DLLPUBLIC SdrMeasureUnitItem final : public SfxEnumItem<FieldUnit> {
 public:
-    SdrMeasureUnitItem(FieldUnit eUnit=FieldUnit::NONE): SfxEnumItem(SDRATTR_MEASUREUNIT, eUnit) {}
+    SdrMeasureUnitItem(FieldUnit eUnit=FieldUnit::NONE)
+        : SfxEnumItem(SDRATTR_MEASUREUNIT, SfxItemType::SdrMeasureUnitItemType, eUnit) {}
     virtual SdrMeasureUnitItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual sal_uInt16   GetValueCount() const override; // { return 14; }
 

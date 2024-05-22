@@ -83,7 +83,7 @@ struct MediaItem::Impl
 
 
 MediaItem::MediaItem( sal_uInt16 i_nWhich, AVMediaSetMask nMaskSet )
-    : SfxPoolItem( i_nWhich )
+    : SfxPoolItem( i_nWhich, SfxItemType::MediaItemType )
     , m_pImpl( new Impl(nMaskSet) )
 {
 }

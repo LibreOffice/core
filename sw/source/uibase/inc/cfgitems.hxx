@@ -153,7 +153,7 @@ class SW_DLLPUBLIC SwTestItem final : public SfxPoolItem
     bool    m_bTest10:1;
 
 public:
-                            SwTestItem() : SfxPoolItem(FN_PARAM_SWTEST) {};
+                            SwTestItem() : SfxPoolItem(FN_PARAM_SWTEST, SfxItemType::SwTestItemType) {};
 
     virtual SwTestItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;

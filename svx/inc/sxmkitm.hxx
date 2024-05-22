@@ -28,7 +28,8 @@ enum SdrMeasureKind     {SDRMEASURE_STD,SDRMEASURE_RADIUS}; // n.i.
 
 class SdrMeasureKindItem final : public SfxEnumItem<SdrMeasureKind> {
 public:
-    SdrMeasureKindItem() : SfxEnumItem(SDRATTR_MEASUREKIND, SDRMEASURE_STD) {}
+    SdrMeasureKindItem()
+        : SfxEnumItem(SDRATTR_MEASUREKIND, SfxItemType::SdrMeasureKindItemType, SDRMEASURE_STD) {}
     virtual SdrMeasureKindItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual sal_uInt16     GetValueCount() const override; // { return 2; }
 

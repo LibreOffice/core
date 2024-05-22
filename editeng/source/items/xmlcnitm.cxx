@@ -34,7 +34,7 @@ using namespace ::com::sun::star::xml;
 
 
 SvXMLAttrContainerItem::SvXMLAttrContainerItem( sal_uInt16 _nWhich ) :
-    SfxPoolItem( _nWhich )
+    SfxPoolItem( _nWhich, SfxItemType::SvXMLAttrContainerItemType )
 {
 }
 

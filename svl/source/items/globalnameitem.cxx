@@ -30,13 +30,14 @@
 SfxPoolItem* SfxGlobalNameItem::CreateDefault() { return new SfxGlobalNameItem; }
 
 
-SfxGlobalNameItem::SfxGlobalNameItem()
+SfxGlobalNameItem::SfxGlobalNameItem() :
+    SfxPoolItem(0, SfxItemType::SfxGlobalNameItemType)
 {
 }
 
 
 SfxGlobalNameItem::SfxGlobalNameItem( sal_uInt16 nW, const SvGlobalName& rName )
-:   SfxPoolItem( nW ),
+:   SfxPoolItem( nW, SfxItemType::SfxGlobalNameItemType ),
     m_aName( rName )
 {
 }

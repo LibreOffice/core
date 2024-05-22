@@ -34,8 +34,10 @@ enum SdrTextVertAdjust {SDRTEXTVERTADJUST_TOP,      // aligned to top (normally 
 
 class SVXCORE_DLLPUBLIC SdrTextVertAdjustItem final : public SfxEnumItem<SdrTextVertAdjust> {
 public:
-    SdrTextVertAdjustItem(SdrTextVertAdjust eAdj=SDRTEXTVERTADJUST_TOP): SfxEnumItem(SDRATTR_TEXT_VERTADJUST, eAdj) {}
-    SdrTextVertAdjustItem(SdrTextVertAdjust eAdj, TypedWhichId<SdrTextVertAdjustItem> nWhich): SfxEnumItem(nWhich, eAdj) {}
+    SdrTextVertAdjustItem(SdrTextVertAdjust eAdj=SDRTEXTVERTADJUST_TOP):
+        SfxEnumItem(SDRATTR_TEXT_VERTADJUST, SfxItemType::SdrTextVertAdjustType, eAdj) {}
+    SdrTextVertAdjustItem(SdrTextVertAdjust eAdj, TypedWhichId<SdrTextVertAdjustItem> nWhich)
+        : SfxEnumItem(nWhich, SfxItemType::SdrTextVertAdjustType, eAdj) {}
     virtual SdrTextVertAdjustItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual sal_uInt16        GetValueCount() const override; // { return 5; }
 
@@ -58,7 +60,8 @@ enum SdrTextHorzAdjust {SDRTEXTHORZADJUST_LEFT,     // left adjusted
 
 class SVXCORE_DLLPUBLIC SdrTextHorzAdjustItem final : public SfxEnumItem<SdrTextHorzAdjust> {
 public:
-    SdrTextHorzAdjustItem(SdrTextHorzAdjust eAdj=SDRTEXTHORZADJUST_BLOCK): SfxEnumItem(SDRATTR_TEXT_HORZADJUST, eAdj) {}
+    SdrTextHorzAdjustItem(SdrTextHorzAdjust eAdj=SDRTEXTHORZADJUST_BLOCK):
+        SfxEnumItem(SDRATTR_TEXT_HORZADJUST, SfxItemType::SdrTextHorzAdjustType, eAdj) {}
     virtual SdrTextHorzAdjustItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual sal_uInt16        GetValueCount() const override;
 

@@ -24,14 +24,14 @@
 namespace basctl
 {
 
-enum ItemType
+enum SbxItemType
 {
-    TYPE_UNKNOWN,
-    TYPE_SHELL,
-    TYPE_LIBRARY,
-    TYPE_MODULE,
-    TYPE_DIALOG,
-    TYPE_METHOD
+    SBX_TYPE_UNKNOWN,
+    SBX_TYPE_SHELL,
+    SBX_TYPE_LIBRARY,
+    SBX_TYPE_MODULE,
+    SBX_TYPE_DIALOG,
+    SBX_TYPE_METHOD
 };
 
 class SbxItem : public SfxPoolItem
@@ -40,12 +40,12 @@ class SbxItem : public SfxPoolItem
     const OUString          m_aLibName;
     const OUString          m_aName;
     const OUString          m_aMethodName;
-    ItemType                m_eType;
+    SbxItemType             m_eSbxType;
 
 public:
     static SfxPoolItem* CreateDefault();
-    SbxItem(sal_uInt16 nWhich, ScriptDocument aDocument, OUString aLibName, OUString aName, ItemType);
-    SbxItem(sal_uInt16 nWhich, ScriptDocument aDocument, OUString aLibName, OUString aName, OUString aMethodName, ItemType eType);
+    SbxItem(sal_uInt16 nWhich, ScriptDocument aDocument, OUString aLibName, OUString aName, SbxItemType);
+    SbxItem(sal_uInt16 nWhich, ScriptDocument aDocument, OUString aLibName, OUString aName, OUString aMethodName, SbxItemType eSbxType);
 
     virtual SbxItem* Clone(SfxItemPool *pPool = nullptr) const override;
     virtual bool operator==(const SfxPoolItem&) const override;
@@ -54,7 +54,7 @@ public:
     OUString const& GetLibName () const { return m_aLibName; }
     OUString const& GetName () const { return m_aName; }
     OUString const& GetMethodName () const { return m_aMethodName; }
-    ItemType GetType () const { return m_eType; }
+    SbxItemType GetSbxType () const { return m_eSbxType; }
 };
 
 } // namespace basctl

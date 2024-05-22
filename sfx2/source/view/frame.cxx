@@ -378,19 +378,19 @@ void SfxFrame::RemoveTopFrame_Impl( SfxFrame* pFrame )
 }
 
 SfxFrameItem::SfxFrameItem( sal_uInt16 nWhichId, SfxViewFrame const *p )
-    : SfxPoolItem( nWhichId ), pFrame( p ? &p->GetFrame() : nullptr )
+    : SfxPoolItem( nWhichId, SfxItemType::SfxFrameItemType ), pFrame( p ? &p->GetFrame() : nullptr )
 {
     wFrame = pFrame;
 }
 
 SfxFrameItem::SfxFrameItem( sal_uInt16 nWhichId, SfxFrame *p ):
-    SfxPoolItem( nWhichId ),
+    SfxPoolItem( nWhichId, SfxItemType::SfxFrameItemType ),
     pFrame( p ), wFrame( p )
 {
 }
 
 SfxFrameItem::SfxFrameItem( SfxFrame *p ):
-    SfxPoolItem( 0 ),
+    SfxPoolItem( 0, SfxItemType::SfxFrameItemType ),
     pFrame( p ), wFrame( p )
 {
 }
@@ -444,7 +444,7 @@ bool SfxFrameItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
 
 
 SfxUnoAnyItem::SfxUnoAnyItem( sal_uInt16 nWhichId, const css::uno::Any& rAny )
-    : SfxPoolItem( nWhichId )
+    : SfxPoolItem( nWhichId, SfxItemType::SfxUnoAnyItemType )
 {
     aValue = rAny;
 }
@@ -473,11 +473,12 @@ bool SfxUnoAnyItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/
 }
 
 SfxUnoFrameItem::SfxUnoFrameItem()
+    : SfxPoolItem( 0, SfxItemType::SfxUnoFrameItemType)
 {
 }
 
 SfxUnoFrameItem::SfxUnoFrameItem( sal_uInt16 nWhichId, css::uno::Reference< css::frame::XFrame > i_xFrame )
-    : SfxPoolItem( nWhichId )
+    : SfxPoolItem( nWhichId, SfxItemType::SfxUnoFrameItemType )
     , m_xFrame(std::move( i_xFrame ))
 {
 }

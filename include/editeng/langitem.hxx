@@ -33,8 +33,8 @@
 // MSVC hack:
 class SAL_DLLPUBLIC_RTTI SvxLanguageItem_Base: public SfxEnumItem<LanguageType> {
 protected:
-    explicit SvxLanguageItem_Base(sal_uInt16 nWhich, LanguageType nValue):
-        SfxEnumItem(nWhich, nValue)
+    explicit SvxLanguageItem_Base(sal_uInt16 nWhich, SfxItemType eItemType, LanguageType nValue):
+        SfxEnumItem(nWhich, eItemType, nValue)
     {}
 };
 

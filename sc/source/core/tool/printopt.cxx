@@ -48,7 +48,7 @@ bool ScPrintOptions::operator==( const ScPrintOptions& rOpt ) const
 }
 
 ScTpPrintItem::ScTpPrintItem( const ScPrintOptions& rOpt ) :
-    SfxPoolItem ( SID_SCPRINTOPTIONS ),
+    SfxPoolItem ( SID_SCPRINTOPTIONS, SfxItemType::ScTpPrintItemType ),
     theOptions  ( rOpt )
 {
 }

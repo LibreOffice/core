@@ -127,7 +127,7 @@ bool ScFormulaOptions::operator!=( const ScFormulaOptions& rOpt ) const
 }
 
 ScTpFormulaItem::ScTpFormulaItem( ScFormulaOptions aOpt ) :
-    SfxPoolItem ( SID_SCFORMULAOPTIONS ),
+    SfxPoolItem ( SID_SCFORMULAOPTIONS, SfxItemType::ScTpFormulaItemType ),
     theOptions  (std::move( aOpt ))
 {
 }

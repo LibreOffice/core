@@ -31,8 +31,10 @@ class SVL_DLLPUBLIC SfxSetItem : public SfxPoolItem
     SfxSetItem& operator=(const SfxSetItem&) = delete;
 
 public:
-    SfxSetItem(sal_uInt16 nWhich, SfxItemSet&& pSet);
-    SfxSetItem(sal_uInt16 nWhich, const SfxItemSet& rSet);
+    SfxSetItem(sal_uInt16 nWhich, SfxItemSet&& pSet,
+               SfxItemType eItemType = SfxItemType::SfxSetItemType);
+    SfxSetItem(sal_uInt16 nWhich, const SfxItemSet& rSet,
+               SfxItemType eItemType = SfxItemType::SfxSetItemType);
     SfxSetItem(const SfxSetItem&, SfxItemPool* pPool = nullptr);
 
     virtual bool operator==(const SfxPoolItem&) const override;

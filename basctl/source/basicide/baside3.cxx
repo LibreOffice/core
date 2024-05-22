@@ -1190,9 +1190,9 @@ OUString DialogWindow::GetHid () const
     return HID_BASICIDE_DIALOGWINDOW;
 }
 
-ItemType DialogWindow::GetType () const
+SbxItemType DialogWindow::GetSbxType () const
 {
-    return TYPE_DIALOG;
+    return SBX_TYPE_DIALOG;
 }
 
 

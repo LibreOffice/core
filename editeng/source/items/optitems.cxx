@@ -26,7 +26,7 @@
 
 SfxHyphenRegionItem::SfxHyphenRegionItem( const sal_uInt16 nId ) :
 
-    SfxPoolItem( nId )
+    SfxPoolItem( nId, SfxItemType::SfxRegionItemType )
 {
     nMinLead = nMinTrail = 0;
 }

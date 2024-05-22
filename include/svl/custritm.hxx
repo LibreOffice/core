@@ -31,11 +31,12 @@ class SVL_DLLPUBLIC CntUnencodedStringItem: public SfxPoolItem
 
 public:
 
-    CntUnencodedStringItem(sal_uInt16 which): SfxPoolItem(which)
+    CntUnencodedStringItem(sal_uInt16 which, SfxItemType eItemType = SfxItemType::CntUnencodedStringItemType)
+        : SfxPoolItem(which, eItemType)
     {}
 
-    CntUnencodedStringItem(sal_uInt16 which, OUString aTheValue):
-        SfxPoolItem(which), m_aValue(std::move(aTheValue))
+    CntUnencodedStringItem(sal_uInt16 which, OUString aTheValue, SfxItemType eItemType = SfxItemType::CntUnencodedStringItemType):
+        SfxPoolItem(which, eItemType), m_aValue(std::move(aTheValue))
     {}
 
     virtual bool operator ==(const SfxPoolItem & rItem) const override;

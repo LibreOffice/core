@@ -191,7 +191,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
         const uno::Sequence<document::CmisProperty>& i_cmisProps,
         bool bIs, bool _bIs )
-    : SfxStringItem( SID_DOCINFO, rFile )
+    : SfxStringItem( SID_DOCINFO, rFile, SfxItemType::SfxDocumentInfoItemType )
     , m_AutoloadDelay( i_xDocProps->getAutoloadSecs() )
     , m_AutoloadURL( i_xDocProps->getAutoloadURL() )
     , m_isAutoloadEnabled( (m_AutoloadDelay > 0) || !m_AutoloadURL.isEmpty() )

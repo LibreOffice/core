@@ -33,12 +33,13 @@ SfxPoolItem* SvxDashListItem::CreateDefault() { return new   SvxDashListItem ;}
 SfxPoolItem* SvxLineEndListItem::CreateDefault() { return new   SvxLineEndListItem ;}
 
 SvxColorListItem::SvxColorListItem()
+    : SfxPoolItem( 0, SfxItemType::SvxColorListItemType)
 {
 }
 
 
 SvxColorListItem::SvxColorListItem( XColorListRef pTable, TypedWhichId<SvxColorListItem> nW ) :
-    SfxPoolItem( nW ),
+    SfxPoolItem( nW, SfxItemType::SvxColorListItemType ),
     pColorList(std::move( pTable ))
 {
 }
@@ -94,11 +95,12 @@ bool svtype::PutValue( const css::uno::Any& rVal, sal_uInt8 ) \
 QUERY_PUT_IMPL( SvxColorListItem, ColorList )
 
 SvxGradientListItem::SvxGradientListItem()
+    : SfxPoolItem( 0, SfxItemType::SvxGradientListItemType)
 {
 }
 
 SvxGradientListItem::SvxGradientListItem( XGradientListRef pList, TypedWhichId<SvxGradientListItem> nW ) :
-    SfxPoolItem( nW ),
+    SfxPoolItem( nW, SfxItemType::SvxGradientListItemType ),
     pGradientList(std::move( pList ))
 {
 }
@@ -138,12 +140,13 @@ SvxGradientListItem* SvxGradientListItem::Clone( SfxItemPool * ) const
 QUERY_PUT_IMPL( SvxGradientListItem, GradientList )
 
 SvxHatchListItem::SvxHatchListItem()
+    : SfxPoolItem( 0, SfxItemType::SvxHatchListItemType)
 {
 }
 
 
 SvxHatchListItem::SvxHatchListItem( XHatchListRef pList, TypedWhichId<SvxHatchListItem> nW ) :
-    SfxPoolItem( nW ),
+    SfxPoolItem( nW, SfxItemType::SvxHatchListItemType ),
     pHatchList(std::move( pList ))
 {
 }
@@ -183,11 +186,12 @@ SvxHatchListItem* SvxHatchListItem::Clone( SfxItemPool * ) const
 QUERY_PUT_IMPL( SvxHatchListItem, HatchList )
 
 SvxBitmapListItem::SvxBitmapListItem()
+    : SfxPoolItem( 0, SfxItemType::SvxBitmapListItemType )
 {
 }
 
 SvxBitmapListItem::SvxBitmapListItem( XBitmapListRef pList, TypedWhichId<SvxBitmapListItem> nW ) :
-    SfxPoolItem( nW ),
+    SfxPoolItem( nW, SfxItemType::SvxBitmapListItemType ),
     pBitmapList(std::move( pList ))
 {
 }
@@ -224,11 +228,12 @@ SvxBitmapListItem* SvxBitmapListItem::Clone( SfxItemPool * ) const
 QUERY_PUT_IMPL( SvxBitmapListItem, BitmapList )
 
 SvxPatternListItem::SvxPatternListItem()
+    : SfxPoolItem( 0, SfxItemType::SvxPatternListItemType )
 {
 }
 
 SvxPatternListItem::SvxPatternListItem( XPatternListRef pList, TypedWhichId<SvxPatternListItem> nW ) :
-    SfxPoolItem( nW ),
+    SfxPoolItem( nW, SfxItemType::SvxPatternListItemType ),
     pPatternList(std::move( pList ))
 {
 }
@@ -265,11 +270,12 @@ SvxPatternListItem* SvxPatternListItem::Clone( SfxItemPool * ) const
 QUERY_PUT_IMPL( SvxPatternListItem, PatternList )
 
 SvxDashListItem::SvxDashListItem()
+    : SfxPoolItem( 0, SfxItemType::SvxDashListItemType )
 {
 }
 
 SvxDashListItem::SvxDashListItem( XDashListRef pList, TypedWhichId<SvxDashListItem> nW ) :
-    SfxPoolItem( nW ),
+    SfxPoolItem( nW, SfxItemType::SvxDashListItemType ),
     pDashList(std::move( pList ))
 {
 }
@@ -306,11 +312,12 @@ SvxDashListItem* SvxDashListItem::Clone( SfxItemPool * ) const
 QUERY_PUT_IMPL( SvxDashListItem, DashList )
 
 SvxLineEndListItem::SvxLineEndListItem()
+    : SfxPoolItem( 0, SfxItemType::SvxLineEndListItemType )
 {
 }
 
 SvxLineEndListItem::SvxLineEndListItem( XLineEndListRef pList, TypedWhichId<SvxLineEndListItem>  nW ) :
-    SfxPoolItem( nW ),
+    SfxPoolItem( nW, SfxItemType::SvxLineEndListItemType ),
     pLineEndList(std::move( pList ))
 {
 }

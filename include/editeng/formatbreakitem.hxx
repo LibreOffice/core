@@ -62,7 +62,7 @@ public:
 
 inline SvxFormatBreakItem::SvxFormatBreakItem( const SvxBreak eBreak,
                                          const sal_uInt16 _nWhich ) :
-    SfxEnumItem( _nWhich, eBreak )
+    SfxEnumItem( _nWhich, SfxItemType::SvxFormatBreakItemType, eBreak )
 {}
 
 

@@ -48,7 +48,7 @@ class SW_DLLPUBLIC SwFormatFootnoteEndAtTextEnd : public SfxEnumItem<SwFootnoteE
 
 protected:
     SwFormatFootnoteEndAtTextEnd( sal_uInt16 nWhichL, SwFootnoteEndPosEnum ePos )
-        : SfxEnumItem( nWhichL, ePos ), m_nOffset( 0 )
+        : SfxEnumItem( nWhichL, SfxItemType::SwFormatFootnoteEndAtTextEndType, ePos ), m_nOffset( 0 )
     {}
 
 public:

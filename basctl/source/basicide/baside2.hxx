@@ -388,7 +388,7 @@ public:
 
     virtual void OnNewDocument () override;
     virtual OUString GetHid () const override;
-    virtual ItemType GetType () const override;
+    virtual SbxItemType GetSbxType () const override;
     virtual bool HasActiveEditor () const override;
 
     void UpdateModule ();

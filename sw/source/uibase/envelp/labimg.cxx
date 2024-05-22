@@ -33,7 +33,7 @@ using namespace ::com::sun::star::uno;
 
 SwLabItem::SwLabItem() :
 
-    SfxPoolItem(FN_LABEL),
+    SfxPoolItem(FN_LABEL, SfxItemType::SwLabItemType),
     m_lLeft (0),
     m_lUpper(0),
     m_nCols (1),

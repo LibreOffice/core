@@ -278,13 +278,13 @@ bool SdOptionsLayout::WriteData( Any* pValues ) const
 \************************************************************************/
 
 SdOptionsLayoutItem::SdOptionsLayoutItem()
-:   SfxPoolItem     ( ATTR_OPTIONS_LAYOUT )
+:   SfxPoolItem     ( ATTR_OPTIONS_LAYOUT, SfxItemType::SdOptionsLayoutItemType)
 ,   maOptionsLayout ( false, false )
 {
 }
 
 SdOptionsLayoutItem::SdOptionsLayoutItem( SdOptions const * pOpts, ::sd::FrameView const * pView )
-:   SfxPoolItem     ( ATTR_OPTIONS_LAYOUT )
+:   SfxPoolItem     ( ATTR_OPTIONS_LAYOUT, SfxItemType::SdOptionsLayoutItemType )
 ,   maOptionsLayout ( false, false )
 {
     if( pOpts )
@@ -611,13 +611,13 @@ bool SdOptionsMisc::WriteData( Any* pValues ) const
 \************************************************************************/
 
 SdOptionsMiscItem::SdOptionsMiscItem()
-:   SfxPoolItem     ( ATTR_OPTIONS_MISC )
+:   SfxPoolItem     ( ATTR_OPTIONS_MISC, SfxItemType::SdOptionsMiscItemType )
 ,   maOptionsMisc   ( false, false )
 {
 }
 
 SdOptionsMiscItem::SdOptionsMiscItem( SdOptions const * pOpts, ::sd::FrameView const * pView )
-:   SfxPoolItem     ( ATTR_OPTIONS_MISC )
+:   SfxPoolItem     ( ATTR_OPTIONS_MISC, SfxItemType::SdOptionsMiscItemType )
 ,   maOptionsMisc   ( false, false )
 {
     if( pOpts )
@@ -822,13 +822,13 @@ bool SdOptionsSnap::WriteData( Any* pValues ) const
 \************************************************************************/
 
 SdOptionsSnapItem::SdOptionsSnapItem()
-:   SfxPoolItem     ( ATTR_OPTIONS_SNAP )
+:   SfxPoolItem     ( ATTR_OPTIONS_SNAP, SfxItemType::SdOptionsSnapItemType )
 ,   maOptionsSnap   ( false, false )
 {
 }
 
 SdOptionsSnapItem::SdOptionsSnapItem( SdOptions const * pOpts, ::sd::FrameView const * pView )
-:   SfxPoolItem     ( ATTR_OPTIONS_SNAP )
+:   SfxPoolItem     ( ATTR_OPTIONS_SNAP, SfxItemType::SdOptionsSnapItemType )
 ,   maOptionsSnap   ( false, false )
 {
     if( pView )
@@ -1264,13 +1264,13 @@ bool SdOptionsPrint::WriteData( Any* pValues ) const
 \************************************************************************/
 
 SdOptionsPrintItem::SdOptionsPrintItem()
-:   SfxPoolItem     ( ATTR_OPTIONS_PRINT )
+:   SfxPoolItem     ( ATTR_OPTIONS_PRINT, SfxItemType::SdOptionsPrintItemType )
 ,   maOptionsPrint  ( false, false )
 {
 }
 
 SdOptionsPrintItem::SdOptionsPrintItem( SdOptions const * pOpts )
-:   SfxPoolItem     ( ATTR_OPTIONS_PRINT )
+:   SfxPoolItem     ( ATTR_OPTIONS_PRINT, SfxItemType::SdOptionsPrintItemType )
 ,   maOptionsPrint  ( false, false )
 {
     if( !pOpts )

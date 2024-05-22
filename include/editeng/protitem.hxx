@@ -66,7 +66,7 @@ public:
 };
 
 inline SvxProtectItem::SvxProtectItem( const sal_uInt16 nId )
-    : SfxPoolItem( nId )
+    : SfxPoolItem( nId, SfxItemType::SvxProtectItemType )
 {
     bCntnt = bSize = bPos = false;
 }

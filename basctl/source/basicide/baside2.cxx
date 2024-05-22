@@ -1400,9 +1400,9 @@ OUString ModulWindow::GetHid () const
 {
     return HID_BASICIDE_MODULWINDOW;
 }
-ItemType ModulWindow::GetType () const
+SbxItemType ModulWindow::GetSbxType () const
 {
-    return TYPE_MODULE;
+    return SBX_TYPE_MODULE;
 }
 
 bool ModulWindow::HasActiveEditor () const

@@ -47,14 +47,14 @@ SwFormatContentControl* SwFormatContentControl::CreatePoolDefault(sal_uInt16 nWh
 }
 
 SwFormatContentControl::SwFormatContentControl(sal_uInt16 nWhich)
-    : SfxPoolItem(nWhich)
+    : SfxPoolItem(nWhich, SfxItemType::SwFormatContentControlType)
     , m_pTextAttr(nullptr)
 {
 }
 
 SwFormatContentControl::SwFormatContentControl(
     const std::shared_ptr<SwContentControl>& pContentControl, sal_uInt16 nWhich)
-    : SfxPoolItem(nWhich)
+    : SfxPoolItem(nWhich, SfxItemType::SwFormatContentControlType)
     , m_pContentControl(pContentControl)
     , m_pTextAttr(nullptr)
 {

@@ -136,7 +136,7 @@ void SwAttrSetChg::ClearItem( sal_uInt16 nWhch )
 #endif
 
 SwMsgPoolItem::SwMsgPoolItem( sal_uInt16 nWhch )
-    : SfxPoolItem( nWhch )
+    : SfxPoolItem( nWhch, SfxItemType::SwMsgPoolItemType )
 {
 }
 

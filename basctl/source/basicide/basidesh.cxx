@@ -715,7 +715,7 @@ void Shell::UpdateWindows()
                                 if ( !pWin )
                                     pWin = CreateBasWin( doc, aLibName, aModName );
                                 if ( !pNextActiveWindow && pLibInfoItem && pLibInfoItem->GetCurrentName() == aModName &&
-                                     pLibInfoItem->GetCurrentType() == TYPE_MODULE )
+                                     pLibInfoItem->GetCurrentType() == SBX_TYPE_MODULE )
                                 {
                                     pNextActiveWindow = pWin;
                                 }
@@ -747,7 +747,7 @@ void Shell::UpdateWindows()
                                 if ( !pWin )
                                     pWin = CreateDlgWin( doc, aLibName, aDlgName );
                                 if ( !pNextActiveWindow && pLibInfoItem && pLibInfoItem->GetCurrentName() == aDlgName &&
-                                     pLibInfoItem->GetCurrentType() == TYPE_DIALOG )
+                                     pLibInfoItem->GetCurrentType() == SBX_TYPE_DIALOG )
                                 {
                                     pNextActiveWindow = pWin;
                                 }

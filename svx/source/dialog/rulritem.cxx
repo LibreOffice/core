@@ -135,13 +135,13 @@ SvxLongLRSpaceItem* SvxLongLRSpaceItem::Clone(SfxItemPool *) const
 }
 
 SvxLongLRSpaceItem::SvxLongLRSpaceItem(tools::Long lLeft, tools::Long lRight, TypedWhichId<SvxLongLRSpaceItem> nId) :
-    SfxPoolItem (nId),
+    SfxPoolItem (nId, SfxItemType::SvxLongLRSpaceItemType),
     mlLeft      (lLeft),
     mlRight     (lRight)
 {}
 
 SvxLongLRSpaceItem::SvxLongLRSpaceItem() :
-    SfxPoolItem (0),
+    SfxPoolItem (0, SfxItemType::SvxLongLRSpaceItemType),
     mlLeft      (0),
     mlRight     (0)
 {}
@@ -254,13 +254,13 @@ SvxLongULSpaceItem* SvxLongULSpaceItem::Clone(SfxItemPool *) const
 }
 
 SvxLongULSpaceItem::SvxLongULSpaceItem(tools::Long lLeft, tools::Long lRight, TypedWhichId<SvxLongULSpaceItem> nId) :
-    SfxPoolItem (nId),
+    SfxPoolItem (nId, SfxItemType::SvxLongULSpaceItemType),
     mlLeft       (lLeft),
     mlRight      (lRight)
 {}
 
 SvxLongULSpaceItem::SvxLongULSpaceItem() :
-    SfxPoolItem (0),
+    SfxPoolItem (0, SfxItemType::SvxLongULSpaceItemType),
     mlLeft      (0),
     mlRight     (0)
 {}
@@ -369,14 +369,14 @@ SvxPagePosSizeItem* SvxPagePosSizeItem::Clone(SfxItemPool *) const
 }
 
 SvxPagePosSizeItem::SvxPagePosSizeItem(const Point &rP, tools::Long lW, tools::Long lH) :
-    SfxPoolItem (SID_RULER_PAGE_POS),
+    SfxPoolItem (SID_RULER_PAGE_POS, SfxItemType::SvxPagePosSizeItemType),
     aPos        (rP),
     lWidth      (lW),
     lHeight     (lH)
 {}
 
 SvxPagePosSizeItem::SvxPagePosSizeItem() :
-    SfxPoolItem (0),
+    SfxPoolItem (0, SfxItemType::SvxPagePosSizeItemType),
     aPos        (0, 0),
     lWidth      (0),
     lHeight     (0)
@@ -404,7 +404,7 @@ bool SvxColumnItem::operator==(const SfxPoolItem& rCmp) const
 }
 
 SvxColumnItem::SvxColumnItem( sal_uInt16 nAct ) :
-    SfxPoolItem (SID_RULER_BORDERS),
+    SfxPoolItem (SID_RULER_BORDERS, SfxItemType::SvxColumnItemType ),
     nLeft       (0),
     nRight      (0),
     nActColumn  (nAct),
@@ -414,7 +414,7 @@ SvxColumnItem::SvxColumnItem( sal_uInt16 nAct ) :
 {}
 
 SvxColumnItem::SvxColumnItem( sal_uInt16 nActCol, sal_uInt16 left, sal_uInt16 right ) :
-    SfxPoolItem (SID_RULER_BORDERS),
+    SfxPoolItem (SID_RULER_BORDERS, SfxItemType::SvxColumnItemType),
     nLeft       (left),
     nRight      (right),
     nActColumn  (nActCol),
@@ -648,7 +648,7 @@ SvxObjectItem* SvxObjectItem::Clone(SfxItemPool *) const
 
 SvxObjectItem::SvxObjectItem( tools::Long nSX, tools::Long nEX,
                               tools::Long nSY, tools::Long nEY ) :
-    SfxPoolItem (SID_RULER_OBJECT),
+    SfxPoolItem (SID_RULER_OBJECT, SfxItemType::SvxObjectItemType),
     nStartX     (nSX),
     nEndX       (nEX),
     nStartY     (nSY),

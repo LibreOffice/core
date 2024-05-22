@@ -24,8 +24,9 @@
 #include <svl/setitem.hxx>
 #include <svl/poolitem.hxx>
 
-SfxSetItem::SfxSetItem( sal_uInt16 which, const SfxItemSet &rSet) :
-    SfxPoolItem(which),
+SfxSetItem::SfxSetItem( sal_uInt16 which, const SfxItemSet &rSet,
+        SfxItemType eItemType) :
+    SfxPoolItem(which, eItemType),
     maSet(rSet)
 {
     assert(!dynamic_cast<const SfxAllItemSet*>(&rSet) && "cannot handle SfxAllItemSet here");
@@ -33,8 +34,9 @@ SfxSetItem::SfxSetItem( sal_uInt16 which, const SfxItemSet &rSet) :
 }
 
 
-SfxSetItem::SfxSetItem( sal_uInt16 which, SfxItemSet &&pS) :
-    SfxPoolItem(which),
+SfxSetItem::SfxSetItem( sal_uInt16 which, SfxItemSet &&pS,
+        SfxItemType eItemType) :
+    SfxPoolItem(which, eItemType),
     maSet(pS)
 {
     assert(!dynamic_cast<SfxAllItemSet*>(&pS) && "cannot handle SfxAllItemSet here");

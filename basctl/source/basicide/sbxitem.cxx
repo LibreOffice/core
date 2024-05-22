@@ -29,13 +29,13 @@ SbxItem::SbxItem (
     ScriptDocument aDocument,
     OUString aLibName,
     OUString aName,
-    ItemType eType
+    SbxItemType eSbxType
 ) :
-    SfxPoolItem(nWhichItem),
+    SfxPoolItem(nWhichItem, SfxItemType::SbxItemType),
     m_aDocument(std::move(aDocument)),
     m_aLibName(std::move(aLibName)),
     m_aName(std::move(aName)),
-    m_eType(eType)
+    m_eSbxType(eSbxType)
 { }
 
 SbxItem::SbxItem (
@@ -44,14 +44,14 @@ SbxItem::SbxItem (
     OUString aLibName,
     OUString aName,
     OUString aMethodName,
-    ItemType eType
+    SbxItemType eSbxType
 ) :
-    SfxPoolItem(nWhichItem),
+    SfxPoolItem(nWhichItem, SfxItemType::SbxItemType),
     m_aDocument(std::move(aDocument)),
     m_aLibName(std::move(aLibName)),
     m_aName(std::move(aName)),
     m_aMethodName(std::move(aMethodName)),
-    m_eType(eType)
+    m_eSbxType(eSbxType)
 { }
 
 SbxItem* SbxItem::Clone(SfxItemPool*) const
@@ -68,7 +68,7 @@ bool SbxItem::operator==(const SfxPoolItem& rCmp) const
         m_aLibName == pSbxItem->m_aLibName &&
         m_aName == pSbxItem->m_aName &&
         m_aMethodName == pSbxItem->m_aMethodName &&
-        m_eType == pSbxItem->m_eType;
+        m_eSbxType == pSbxItem->m_eSbxType;
 }
 
 } // namespace basctl

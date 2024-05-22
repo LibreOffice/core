@@ -12,7 +12,7 @@
 #include <comphelper/propertysequence.hxx>
 
 SfxWatermarkItem::SfxWatermarkItem()
-: SfxPoolItem( SID_WATERMARK )
+: SfxPoolItem( SID_WATERMARK, SfxItemType::SfxWatermarkItemType )
 , m_aText( "" )
 , m_aFont( "Liberation Sans" )
 , m_nAngle( 45 )

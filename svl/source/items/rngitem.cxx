@@ -23,7 +23,7 @@
 
 
 SfxRangeItem::SfxRangeItem( sal_uInt16 which, sal_uInt16 from, sal_uInt16 to ):
-    SfxPoolItem( which ),
+    SfxPoolItem( which, SfxItemType::SfxRangeItemType ),
     nFrom( from ),
     nTo( to )
 {

@@ -200,7 +200,8 @@ public:
     SwFltRedline(RedlineType   eType_,
                  std::size_t     nAutorNo_,
                  const DateTime& rStamp_)
-        : SfxPoolItem(RES_FLTR_REDLINE), m_aStamp(rStamp_),
+        : SfxPoolItem(RES_FLTR_REDLINE, SfxItemType::SwFltRedlineType)
+        , m_aStamp(rStamp_),
         m_eType(eType_),
         m_nAutorNo(nAutorNo_)
     {

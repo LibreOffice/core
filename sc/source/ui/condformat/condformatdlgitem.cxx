@@ -15,7 +15,7 @@
 
 ScCondFormatDlgItem::ScCondFormatDlgItem(std::shared_ptr<ScConditionalFormatList> pCondFormats,
         sal_Int32 nItem, bool bManaged):
-    SfxPoolItem(SCITEM_CONDFORMATDLGDATA),
+    SfxPoolItem(SCITEM_CONDFORMATDLGDATA, SfxItemType::ScCondFormatDlgItemType),
     mpCondFormats(std::move(pCondFormats)),
     mnItem(nItem),
     meDialogType(condformat::dialog::CONDITION),

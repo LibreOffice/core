@@ -919,12 +919,12 @@ public:
                             static SfxPoolItem* CreateDefault();
 
                             SfxObjectShellItem() :
-                                SfxPoolItem( 0 ),
+                                SfxPoolItem( 0, SfxItemType::SfxObjectShellItemType ),
                                 pObjSh( nullptr )
                             {}
                             SfxObjectShellItem( sal_uInt16 nWhichId,
                                                 SfxObjectShell *pObjShell ):
-                                SfxPoolItem( nWhichId ),
+                                SfxPoolItem( nWhichId, SfxItemType::SfxObjectShellItemType ),
                                 pObjSh( pObjShell )
                             {}
 

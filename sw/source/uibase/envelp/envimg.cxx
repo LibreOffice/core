@@ -88,7 +88,7 @@ OUString MakeSender()
 }
 
 SwEnvItem::SwEnvItem() :
-    SfxPoolItem(FN_ENVELOP)
+    SfxPoolItem(FN_ENVELOP, SfxItemType::SwEnvItemType)
 {
     m_bSend           = true;
     m_aSendText       = MakeSender();

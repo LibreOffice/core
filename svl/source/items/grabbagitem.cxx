@@ -16,10 +16,13 @@
 
 using namespace com::sun::star;
 
-SfxGrabBagItem::SfxGrabBagItem() = default;
+SfxGrabBagItem::SfxGrabBagItem()
+    : SfxPoolItem(0, SfxItemType::SfxGrabBagItemType)
+{
+}
 
 SfxGrabBagItem::SfxGrabBagItem(sal_uInt16 nWhich)
-    : SfxPoolItem(nWhich)
+    : SfxPoolItem(nWhich, SfxItemType::SfxGrabBagItemType)
 {
 }
 
