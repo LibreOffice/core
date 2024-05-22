@@ -127,7 +127,7 @@ void DocxTableStyleExport::TableStyles(sal_Int32 nCountStylesToWrite)
     uno::Reference<beans::XPropertySet> xPropertySet(
         m_pImpl->getDoc().GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;
-    xPropertySet->getPropertyValue("InteropGrabBag") >>= aInteropGrabBag;
+    xPropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aInteropGrabBag;
     uno::Sequence<beans::PropertyValue> aTableStyles;
     auto pProp = std::find_if(
         std::cbegin(aInteropGrabBag), std::cend(aInteropGrabBag),
@@ -167,8 +167,9 @@ void DocxTableStyleExport::Impl::tableStyleTableCellMar(
             comphelper::SequenceAsHashMap aMap(
                 rProp.Value.get<uno::Sequence<beans::PropertyValue>>());
             m_pSerializer->singleElementNS(XML_w, nToken, FSNS(XML_w, XML_w),
-                                           OString::number(aMap["w"].get<sal_Int32>()),
-                                           FSNS(XML_w, XML_type), aMap["type"].get<OUString>());
+                                           OString::number(aMap[u"w"_ustr].get<sal_Int32>()),
+                                           FSNS(XML_w, XML_type),
+                                           aMap[u"type"_ustr].get<OUString>());
         }
     }
     m_pSerializer->endElementNS(XML_w, nType);

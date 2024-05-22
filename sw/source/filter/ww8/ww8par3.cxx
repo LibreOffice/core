@@ -161,21 +161,21 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
             m_aFieldStack.back().SetBookmarkName(aBookmarkName);
             m_aFieldStack.back().SetBookmarkType(ODF_FORMTEXT);
             if ( aFormula.msToolTip.getLength() < 139 )
-                m_aFieldStack.back().getParameters()["Description"] <<= aFormula.msToolTip;
-            m_aFieldStack.back().getParameters()["Name"] <<= aFormula.msTitle;
+                m_aFieldStack.back().getParameters()[u"Description"_ustr] <<= aFormula.msToolTip;
+            m_aFieldStack.back().getParameters()[u"Name"_ustr] <<= aFormula.msTitle;
             if (aFormula.mnMaxLen && aFormula.mnMaxLen < 32768 )
-                m_aFieldStack.back().getParameters()["MaxLength"] <<= aFormula.mnMaxLen;
+                m_aFieldStack.back().getParameters()[u"MaxLength"_ustr] <<= aFormula.mnMaxLen;
 
             if ( aFormula.mfType == 1 )
-                m_aFieldStack.back().getParameters()["Type"] <<= OUString("number");
+                m_aFieldStack.back().getParameters()[u"Type"_ustr] <<= u"number"_ustr;
             else if ( aFormula.mfType == 2 )
-                m_aFieldStack.back().getParameters()["Type"] <<= OUString("date");
+                m_aFieldStack.back().getParameters()[u"Type"_ustr] <<= u"date"_ustr;
             else if ( aFormula.mfType == 3 )
-                m_aFieldStack.back().getParameters()["Type"] <<= OUString("currentTime");
+                m_aFieldStack.back().getParameters()[u"Type"_ustr] <<= u"currentTime"_ustr;
             else if ( aFormula.mfType == 4 )
-                m_aFieldStack.back().getParameters()["Type"] <<= OUString("currentDate");
+                m_aFieldStack.back().getParameters()[u"Type"_ustr] <<= u"currentDate"_ustr;
             else if ( aFormula.mfType == 5 )
-                m_aFieldStack.back().getParameters()["Type"] <<= OUString("calculated");
+                m_aFieldStack.back().getParameters()[u"Type"_ustr] <<= u"calculated"_ustr;
         }
         return eF_ResT::TEXT;
     }
@@ -2406,7 +2406,7 @@ bool WW8FormulaListBox::Import(const uno::Reference <
     lang::XMultiServiceFactory> &rServiceFactory,
     uno::Reference <form::XFormComponent> &rFComp,awt::Size &rSz )
 {
-    uno::Reference<uno::XInterface> xCreate = rServiceFactory->createInstance("com.sun.star.form.component.ComboBox");
+    uno::Reference<uno::XInterface> xCreate = rServiceFactory->createInstance(u"com.sun.star.form.component.ComboBox"_ustr);
     if( !xCreate.is() )
         return false;
 
@@ -2421,15 +2421,15 @@ bool WW8FormulaListBox::Import(const uno::Reference <
         aTmp <<= msTitle;
     else
         aTmp <<= msName;
-    xPropSet->setPropertyValue("Name", aTmp );
+    xPropSet->setPropertyValue(u"Name"_ustr, aTmp );
 
     if (!msToolTip.isEmpty())
     {
         aTmp <<= msToolTip;
-        xPropSet->setPropertyValue("HelpText", aTmp );
+        xPropSet->setPropertyValue(u"HelpText"_ustr, aTmp );
     }
 
-    xPropSet->setPropertyValue("Dropdown", css::uno::Any(true));
+    xPropSet->setPropertyValue(u"Dropdown"_ustr, css::uno::Any(true));
 
     if (!maListEntries.empty())
     {
@@ -2439,7 +2439,7 @@ bool WW8FormulaListBox::Import(const uno::Reference <
         for (sal_uInt32 nI = 0; nI < nLen; ++nI)
             aListSourceRange[nI] = maListEntries[nI];
         aTmp <<= aListSource;
-        xPropSet->setPropertyValue("StringItemList", aTmp );
+        xPropSet->setPropertyValue(u"StringItemList"_ustr, aTmp );
 
         if (mfDropdownIndex < nLen)
         {
@@ -2450,7 +2450,7 @@ bool WW8FormulaListBox::Import(const uno::Reference <
             aTmp <<= aListSource[0];
         }
 
-        xPropSet->setPropertyValue("DefaultText", aTmp );
+        xPropSet->setPropertyValue(u"DefaultText"_ustr, aTmp );
 
         rSz = mrRdr.MiserableDropDownFormHack(maListEntries[0], xPropSet);
     }
@@ -2496,7 +2496,7 @@ bool WW8FormulaCheckBox::Import(const uno::Reference <
     lang::XMultiServiceFactory> &rServiceFactory,
     uno::Reference <form::XFormComponent> &rFComp,awt::Size &rSz )
 {
-    uno::Reference< uno::XInterface > xCreate = rServiceFactory->createInstance("com.sun.star.form.component.CheckBox");
+    uno::Reference< uno::XInterface > xCreate = rServiceFactory->createInstance(u"com.sun.star.form.component.CheckBox"_ustr);
     if( !xCreate.is() )
         return false;
 
@@ -2514,16 +2514,16 @@ bool WW8FormulaCheckBox::Import(const uno::Reference <
         aTmp <<= msTitle;
     else
         aTmp <<= msName;
-    xPropSet->setPropertyValue("Name", aTmp );
+    xPropSet->setPropertyValue(u"Name"_ustr, aTmp );
 
     aTmp <<= static_cast<sal_Int16>(mnChecked);
-    xPropSet->setPropertyValue("DefaultState", aTmp);
+    xPropSet->setPropertyValue(u"DefaultState"_ustr, aTmp);
 
     if (!msToolTip.isEmpty())
-        lcl_AddToPropertyContainer(xPropSet, "HelpText", msToolTip);
+        lcl_AddToPropertyContainer(xPropSet, u"HelpText"_ustr, msToolTip);
 
     if (!msHelp.isEmpty())
-        lcl_AddToPropertyContainer(xPropSet, "HelpF1Text", msHelp);
+        lcl_AddToPropertyContainer(xPropSet, u"HelpF1Text"_ustr, msHelp);
 
     return true;
 
@@ -2549,7 +2549,7 @@ bool SwMSConvertControls::InsertControl(
         return false;
 
     uno::Reference< uno::XInterface > xCreate = rServiceFactory->createInstance(
-        "com.sun.star.drawing.ControlShape");
+        u"com.sun.star.drawing.ControlShape"_ustr);
     if( !xCreate.is() )
         return false;
 
@@ -2569,16 +2569,16 @@ bool SwMSConvertControls::InsertControl(
     else
         nTemp = text::TextContentAnchorType_AS_CHARACTER;
 
-    xShapePropSet->setPropertyValue("AnchorType", uno::Any(static_cast<sal_Int16>(nTemp)) );
+    xShapePropSet->setPropertyValue(u"AnchorType"_ustr, uno::Any(static_cast<sal_Int16>(nTemp)) );
 
-    xShapePropSet->setPropertyValue("VertOrient", uno::Any(sal_Int16(text::VertOrientation::TOP)) );
+    xShapePropSet->setPropertyValue(u"VertOrient"_ustr, uno::Any(sal_Int16(text::VertOrientation::TOP)) );
 
     uno::Reference< text::XText >  xDummyTextRef;
     uno::Reference< text::XTextRange >  xTextRg =
         new SwXTextRange( *m_pPaM, xDummyTextRef );
 
     aTmp <<= xTextRg;
-    xShapePropSet->setPropertyValue("TextRange", aTmp );
+    xShapePropSet->setPropertyValue(u"TextRange"_ustr, aTmp );
 
     // Set the Control-Model for the Control-Shape
     uno::Reference< drawing::XControlShape >  xControlShape( xShape,

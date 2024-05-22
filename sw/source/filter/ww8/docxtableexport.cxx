@@ -221,12 +221,12 @@ void DocxAttributeOutput::TableDefinition(
 
     rtl::Reference<SwXTextTable> xPropertySet = SwXTextTables::GetObject(*pTable->GetFrameFormat());
     bool isWidthRelative = false;
-    xPropertySet->getPropertyValue("IsWidthRelative") >>= isWidthRelative;
+    xPropertySet->getPropertyValue(u"IsWidthRelative"_ustr) >>= isWidthRelative;
     if (!isWidthRelative && !nWidthPercent)
     {
         // The best fit for "automatic" table placement is relative 100%
         short nHoriOrient = -1;
-        xPropertySet->getPropertyValue("HoriOrient") >>= nHoriOrient;
+        xPropertySet->getPropertyValue(u"HoriOrient"_ustr) >>= nHoriOrient;
         isWidthRelative = nHoriOrient == text::HoriOrientation::FULL;
         if (isWidthRelative)
             nWidthPercent = 100;
@@ -576,7 +576,7 @@ void DocxAttributeOutput::TableBackgrounds(
         = pFormat->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG)->GetGrabBag();
 
     OString sOriginalColor;
-    auto aGrabBagIt = rGrabBag.find("originalColor");
+    auto aGrabBagIt = rGrabBag.find(u"originalColor"_ustr);
     if (aGrabBagIt != rGrabBag.end())
         sOriginalColor
             = OUStringToOString(aGrabBagIt->second.get<OUString>(), RTL_TEXTENCODING_UTF8);

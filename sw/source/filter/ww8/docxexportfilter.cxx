@@ -126,7 +126,7 @@ bool DocxExportFilter::exportDocument()
 
 OUString DocxExportFilter::getImplementationName()
 {
-    return "com.sun.star.comp.Writer.DocxExport";
+    return u"com.sun.star.comp.Writer.DocxExport"_ustr;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*

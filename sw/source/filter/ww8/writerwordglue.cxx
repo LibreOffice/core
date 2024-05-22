@@ -329,7 +329,7 @@ namespace myImplHelpers
     static OUString FindBestMSSubstituteFont(std::u16string_view rFont)
     {
         if (IsOpenSymbol(rFont))
-            return "Arial Unicode MS";
+            return u"Arial Unicode MS"_ustr;
         return GetSubsFontName(rFont, SubsFontFlags::ONLYONE | SubsFontFlags::MS);
     }
 

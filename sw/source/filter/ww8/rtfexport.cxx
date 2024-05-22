@@ -262,7 +262,7 @@ void RtfExport::WriteRevTab()
         return;
 
     // RTF always seems to use Unknown as the default first entry
-    GetRedline("Unknown");
+    GetRedline(u"Unknown"_ustr);
 
     for (SwRangeRedline* pRedl : m_rDoc.getIDocumentRedlineAccess().GetRedlineTable())
     {
@@ -544,10 +544,10 @@ void RtfExport::WriteInfo()
             uno::Reference<beans::XPropertySetInfo> xPropertySetInfo
                 = xPropertySet->getPropertySetInfo();
             // Do we have explicit markup in RTF for this property name?
-            if (xPropertySetInfo->hasPropertyByName("Company"))
+            if (xPropertySetInfo->hasPropertyByName(u"Company"_ustr))
             {
                 OUString aValue;
-                xPropertySet->getPropertyValue("Company") >>= aValue;
+                xPropertySet->getPropertyValue(u"Company"_ustr) >>= aValue;
                 OutUnicode(OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_COMPANY, aValue);
             }
         }
@@ -712,7 +712,7 @@ void RtfExport::WriteDocVars()
 
         OUString aKey = rMasterName.copy(aPrefix.getLength());
         OUString aValue;
-        xField->getPropertyValue("Content") >>= aValue;
+        xField->getPropertyValue(u"Content"_ustr) >>= aValue;
 
         Strm().WriteChar('{').WriteOString(
             OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_DOCVAR);

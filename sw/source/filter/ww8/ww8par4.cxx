@@ -79,7 +79,7 @@ static bool SwWw8ReadScaling(tools::Long& rX, tools::Long& rY, rtl::Reference<So
     //      0x2c, 0x30 scaling x,y in per thousand
     //      0x34, 0x38, 0x3c, 0x40 Crop Left, Top, Right, Bot in tw
 
-    rtl::Reference<SotStorageStream> xSrc3 = rSrc1->OpenSotStream( "\3PIC",
+    rtl::Reference<SotStorageStream> xSrc3 = rSrc1->OpenSotStream( u"\3PIC"_ustr,
         StreamMode::STD_READ );
     SotStorageStream* pS = xSrc3.get();
     pS->SetEndian( SvStreamEndian::LITTLE );
@@ -123,7 +123,7 @@ static bool SwWw8ReadScaling(tools::Long& rX, tools::Long& rY, rtl::Reference<So
 static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
                                 rtl::Reference<SotStorage> const& rSrc1)
 {
-    rtl::Reference<SotStorageStream> xSrc2 = rSrc1->OpenSotStream( "\3META",
+    rtl::Reference<SotStorageStream> xSrc2 = rSrc1->OpenSotStream( u"\3META"_ustr,
         StreamMode::STD_READ );
     SotStorageStream* pSt = xSrc2.get();
     pSt->SetEndian( SvStreamEndian::LITTLE );
@@ -177,7 +177,7 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
 static bool SwWw6ReadMacPICTStream(Graphic& rGraph, rtl::Reference<SotStorage> const& rSrc1)
 {
     // 03-META-stream does not exist. Maybe a 03-PICT?
-    rtl::Reference<SotStorageStream> xSrc4 = rSrc1->OpenSotStream("\3PICT");
+    rtl::Reference<SotStorageStream> xSrc4 = rSrc1->OpenSotStream(u"\3PICT"_ustr);
     SotStorageStream* pStp = xSrc4.get();
     pStp->SetEndian( SvStreamEndian::LITTLE );
     sal_uInt8 aTestA[10];        // Does the 01Ole-stream even exist?
@@ -414,7 +414,7 @@ rtl::Reference<SdrObject> SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
             sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
 
             {
-                rtl::Reference<SotStorageStream> xObjInfoSrc = xSrc1->OpenSotStream("\3ObjInfo",
+                rtl::Reference<SotStorageStream> xObjInfoSrc = xSrc1->OpenSotStream(u"\3ObjInfo"_ustr,
                     StreamMode::STD_READ );
                 if ( xObjInfoSrc.is() && !xObjInfoSrc->GetError() )
                 {

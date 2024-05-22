@@ -2330,9 +2330,9 @@ static auto GetSeparatorForLocale() -> OUString
         case sal_uInt16(LANGUAGE_GERMAN_LIECHTENSTEIN):
         case sal_uInt16(LANGUAGE_GERMAN_LUXEMBOURG):
         case sal_uInt16(LANGUAGE_GERMAN_SWISS):
-            return ";";
+            return u";"_ustr;
         default:
-            return ",";
+            return u","_ustr;
     }
 }
 
@@ -2813,7 +2813,7 @@ OUString FieldString(ww::eField eIndex)
 {
     if (const char *pField = ww::GetEnglishFieldName(eIndex))
         return " " + OUString::createFromAscii(pField) + " ";
-    return "  ";
+    return u"  "_ustr;
 }
 
 void WW8AttributeOutput::HiddenField( const SwField& rField )
@@ -3339,7 +3339,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                     break;
             }
 
-            OUString sExtraFlags = "\\h "; // by default, include a hyperlink
+            OUString sExtraFlags = u"\\h "_ustr; // by default, include a hyperlink
 
             switch (eField)
             {
@@ -6001,7 +6001,7 @@ void AttributeOutputBase::CharBackgroundBase( const SvxBrushItem& rBrush )
     {
         const SfxGrabBagItem aGrabBag = static_cast< const SfxGrabBagItem& >(*pItem);
         const std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
-        auto aIterator = rMap.find("CharShadingMarker");
+        auto aIterator = rMap.find(u"CharShadingMarker"_ustr);
         if( aIterator != rMap.end() )
         {
             aIterator->second >>= bHasShadingMarker;

@@ -580,10 +580,10 @@ static void SetBaseAnlv(SwNumFormat &rNum, WW8_ANLV const &rAV, sal_uInt8 nSwLev
     if( rAV.nfc == 5 || rAV.nfc == 7 )
     {
         OUString sP = "." + rNum.GetSuffix();
-        rNum.SetListFormat("", sP, nSwLevel); // ordinal number
+        rNum.SetListFormat(u""_ustr, sP, nSwLevel); // ordinal number
     }
     else
-        rNum.SetListFormat("", "", nSwLevel);
+        rNum.SetListFormat(u""_ustr, u""_ustr, nSwLevel);
 }
 
 void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, int nLevel, WW8_ANLV const &rAV,
@@ -708,7 +708,7 @@ void SwWW8ImplReader::SetAnld(SwNumRule* pNumR, WW8_ANLD const * pAD, sal_uInt8 
     bool bOutLine)
 {
     SwNumFormat aNF;
-    aNF.SetListFormat("", "", nSwLevel);
+    aNF.SetListFormat(u""_ustr, u""_ustr, nSwLevel);
     if (pAD)
     {                                                       // there is an Anld-Sprm
         m_bCurrentAND_fNumberAcross = 0 != pAD->fNumberAcross;

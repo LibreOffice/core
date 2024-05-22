@@ -242,7 +242,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
         m_oOLEExp->ExportOLEObject( aObjRef, *xOleStg );
         if ( nAspect == embed::Aspects::MSOLE_ICON )
         {
-            OUString aObjInfo( "\3ObjInfo" );
+            OUString aObjInfo( u"\3ObjInfo"_ustr );
             if ( !xOleStg->IsStream( aObjInfo ) )
             {
                 const sal_uInt8 pObjInfoData[] = { 0x40, 0x00, 0x03, 0x00 };
@@ -316,7 +316,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
 void WW8Export::OutputLinkedOLE( const OUString& rOleId )
 {
     uno::Reference< embed::XStorage > xDocStg = m_rDoc.GetDocStorage();
-    uno::Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement( "OLELinks", embed::ElementModes::READ );
+    uno::Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement( u"OLELinks"_ustr, embed::ElementModes::READ );
     rtl::Reference<SotStorage> xObjSrc = SotStorage::OpenOLEStorage( xOleStg, rOleId, StreamMode::READ );
 
     rtl::Reference<SotStorage> xObjStg = GetWriter().GetStorage().OpenSotStorage(SL::aObjectPool);

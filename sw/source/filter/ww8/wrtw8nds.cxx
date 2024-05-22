@@ -124,19 +124,19 @@ static OUString lcl_getFieldCode( const IFieldmark* pFieldmark )
     assert(pFieldmark);
 
     if ( pFieldmark->GetFieldname( ) == ODF_FORMTEXT )
-        return " FORMTEXT ";
+        return u" FORMTEXT "_ustr;
     if ( pFieldmark->GetFieldname( ) == ODF_FORMDROPDOWN )
-        return " FORMDROPDOWN ";
+        return u" FORMDROPDOWN "_ustr;
     if ( pFieldmark->GetFieldname( ) == ODF_FORMCHECKBOX )
-        return " FORMCHECKBOX ";
+        return u" FORMCHECKBOX "_ustr;
     if ( pFieldmark->GetFieldname( ) == ODF_FORMDATE )
-        return " ODFFORMDATE ";
+        return u" ODFFORMDATE "_ustr;
     if ( pFieldmark->GetFieldname( ) == ODF_TOC )
-        return " TOC ";
+        return u" TOC "_ustr;
     if ( pFieldmark->GetFieldname( ) == ODF_HYPERLINK )
-        return " HYPERLINK ";
+        return u" HYPERLINK "_ustr;
     if ( pFieldmark->GetFieldname( ) == ODF_PAGEREF )
-        return " PAGEREF ";
+        return u" PAGEREF "_ustr;
     return pFieldmark->GetFieldname();
 }
 
@@ -166,14 +166,14 @@ lcl_getLinkChainName(const uno::Reference<beans::XPropertySet>& rPropertySet,
                      const uno::Reference<beans::XPropertySetInfo>& rPropertySetInfo)
 {
     OUString sLinkChainName;
-    if (rPropertySetInfo->hasPropertyByName("LinkDisplayName"))
+    if (rPropertySetInfo->hasPropertyByName(u"LinkDisplayName"_ustr))
     {
-        rPropertySet->getPropertyValue("LinkDisplayName") >>= sLinkChainName;
+        rPropertySet->getPropertyValue(u"LinkDisplayName"_ustr) >>= sLinkChainName;
         if (!sLinkChainName.isEmpty())
             return sLinkChainName;
     }
-    if (rPropertySetInfo->hasPropertyByName("ChainName"))
-        rPropertySet->getPropertyValue("ChainName") >>= sLinkChainName;
+    if (rPropertySetInfo->hasPropertyByName(u"ChainName"_ustr))
+        rPropertySet->getPropertyValue(u"ChainName"_ustr) >>= sLinkChainName;
     return sLinkChainName;
 }
 
@@ -773,10 +773,10 @@ FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
 
             const OUString sLinkChainName = lcl_getLinkChainName(xPropertySet, xPropertySetInfo);
 
-            if( xPropertySetInfo->hasPropertyByName("ChainNextName") )
-                xPropertySet->getPropertyValue("ChainNextName") >>= aLinkedTextboxInfo.sNextChain;
-            if( xPropertySetInfo->hasPropertyByName("ChainPrevName") )
-                xPropertySet->getPropertyValue("ChainPrevName") >>= aLinkedTextboxInfo.sPrevChain;
+            if( xPropertySetInfo->hasPropertyByName(u"ChainNextName"_ustr) )
+                xPropertySet->getPropertyValue(u"ChainNextName"_ustr) >>= aLinkedTextboxInfo.sNextChain;
+            if( xPropertySetInfo->hasPropertyByName(u"ChainPrevName"_ustr) )
+                xPropertySet->getPropertyValue(u"ChainPrevName"_ustr) >>= aLinkedTextboxInfo.sPrevChain;
 
             //collect a list of linked textboxes: those with a NEXT or PREVIOUS link
             if( !aLinkedTextboxInfo.sNextChain.isEmpty() || !aLinkedTextboxInfo.sPrevChain.isEmpty() )
@@ -3477,8 +3477,8 @@ void MSWordExportBase::UpdateTocSectionNodeProperties(const SwSectionNode& rSect
     {
         uno::Sequence<beans::PropertyValue> aDocPropertyValues(comphelper::InitPropertySequence(
         {
-            {"ooxml:CT_SdtDocPart_docPartGallery", uno::Any(OUString("Table of Contents"))},
-            {"ooxml:CT_SdtDocPart_docPartUnique",  uno::Any(OUString("true"))},
+            {"ooxml:CT_SdtDocPart_docPartGallery", uno::Any(u"Table of Contents"_ustr)},
+            {"ooxml:CT_SdtDocPart_docPartUnique",  uno::Any(u"true"_ustr)},
         }));
 
         uno::Sequence<beans::PropertyValue> aSdtPrPropertyValues(comphelper::InitPropertySequence(
@@ -3487,7 +3487,7 @@ void MSWordExportBase::UpdateTocSectionNodeProperties(const SwSectionNode& rSect
         }));
 
         SfxGrabBagItem aGrabBag(RES_PARATR_GRABBAG);
-        aGrabBag.GetGrabBag()["SdtPr"] <<= aSdtPrPropertyValues;
+        aGrabBag.GetGrabBag()[u"SdtPr"_ustr] <<= aSdtPrPropertyValues;
 
         // create temp attr set
         SwAttrSet aSet(pNode->GetSwAttrSet());
@@ -3507,7 +3507,7 @@ void MSWordExportBase::UpdateTocSectionNodeProperties(const SwSectionNode& rSect
         if (pNodeAfterToc)
         {
             SfxGrabBagItem aGrabBag(RES_PARATR_GRABBAG);
-            aGrabBag.GetGrabBag()["ParaSdtEndBefore"] <<= true;
+            aGrabBag.GetGrabBag()[u"ParaSdtEndBefore"_ustr] <<= true;
 
             // create temp attr set
             SwAttrSet aSet(pNodeAfterToc->GetSwAttrSet());

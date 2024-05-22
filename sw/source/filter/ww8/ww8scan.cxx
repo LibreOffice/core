@@ -4478,7 +4478,7 @@ OUString WW8PLCFx_Book::GetBookmark(tools::Long nStart,tools::Long nEnd, sal_uIn
 
 OUString WW8PLCFx_Book::GetUniqueBookmarkName(const OUString &rSuggestedName)
 {
-    OUString aRet(rSuggestedName.isEmpty() ? OUString("Unnamed") : rSuggestedName);
+    OUString aRet(rSuggestedName.isEmpty() ? u"Unnamed"_ustr : rSuggestedName);
     size_t i = 0;
     while (i < m_aBookNames.size())
     {

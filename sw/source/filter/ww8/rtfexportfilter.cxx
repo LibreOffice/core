@@ -96,7 +96,10 @@ void RtfExportFilter::setSourceDocument(const uno::Reference<lang::XComponent>& 
     m_xSrcDoc = xDoc;
 }
 
-OUString RtfExportFilter::getImplementationName() { return "com.sun.star.comp.Writer.RtfExport"; }
+OUString RtfExportFilter::getImplementationName()
+{
+    return u"com.sun.star.comp.Writer.RtfExport"_ustr;
+}
 
 sal_Bool RtfExportFilter::supportsService(OUString const& ServiceName)
 {
@@ -105,7 +108,7 @@ sal_Bool RtfExportFilter::supportsService(OUString const& ServiceName)
 
 css::uno::Sequence<OUString> RtfExportFilter::getSupportedServiceNames()
 {
-    return { "com.sun.star.comp.Writer.RtfExport" };
+    return { u"com.sun.star.comp.Writer.RtfExport"_ustr };
 }
 
 // UNO helpers

@@ -517,8 +517,8 @@ static void WriteDop( WW8Export& rWrt )
         // so round-trip it since protection is still enabled.
         if ( rDop.lKeyProtDoc == 0 && xProps.is() )
         {
-            comphelper::SequenceAsHashMap aPropMap( xProps->getPropertyValue("InteropGrabBag"));
-            aPropMap.getValue("FormPasswordHash") >>= rDop.lKeyProtDoc;
+            comphelper::SequenceAsHashMap aPropMap( xProps->getPropertyValue(u"InteropGrabBag"_ustr));
+            aPropMap.getValue(u"FormPasswordHash"_ustr) >>= rDop.lKeyProtDoc;
         }
     }
     else
@@ -1484,7 +1484,7 @@ void WW8Export::AppendAnnotationMarks(const SwWW8AttrIter& rAttrs, sal_Int32 nCu
 
 void WW8Export::AppendSmartTags(SwTextNode& rTextNode)
 {
-    std::map<OUString, OUString> aStatements = SwRDFHelper::getTextNodeStatements("urn:bails", rTextNode);
+    std::map<OUString, OUString> aStatements = SwRDFHelper::getTextNodeStatements(u"urn:bails"_ustr, rTextNode);
     if (!aStatements.empty())
     {
         WW8_CP nCP = Fc2Cp(Strm().Tell());
@@ -1590,7 +1590,7 @@ void WW8Export::ExportGrfBullet(const SwTextNode& rNd)
     if (nCount > 0)
     {
         SwPosition aPos(rNd);
-        OUString aPicBullets("_PictureBullets");
+        OUString aPicBullets(u"_PictureBullets"_ustr);
         AppendBookmark(aPicBullets);
         for (int i = 0; i < nCount; i++)
         {
@@ -1665,7 +1665,7 @@ sal_uInt16 WW8Export::AddRedlineAuthor( std::size_t nId )
     if( !m_pRedlAuthors )
     {
         m_pRedlAuthors.reset(new WW8_WrtRedlineAuthor);
-        m_pRedlAuthors->AddName("Unknown");
+        m_pRedlAuthors->AddName(u"Unknown"_ustr);
     }
     return m_pRedlAuthors->AddName( SW_MOD()->GetRedlineAuthor( nId ) );
 }
@@ -3527,7 +3527,7 @@ bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec 
                 sal_uInt8 pDocId[ 16 ];
                 if (rtl_random_getBytes(nullptr, pDocId, 16) != rtl_Random_E_None)
                 {
-                    throw uno::RuntimeException("rtl_random_getBytes failed");
+                    throw uno::RuntimeException(u"rtl_random_getBytes failed"_ustr);
                 }
 
                 sal_uInt16 aPassword[16] = {};
@@ -3772,7 +3772,7 @@ void WW8Export::PrepareStorage()
 
     SvGlobalName aGName(MSO_WW8_CLASSID);
     GetWriter().GetStorage().SetClass(
-        aGName, SotClipboardFormatId::NONE, "Microsoft Word-Document");
+        aGName, SotClipboardFormatId::NONE, u"Microsoft Word-Document"_ustr);
     rtl::Reference<SotStorageStream> xStor(GetWriter().GetStorage().OpenSotStream(sCompObj));
     xStor->WriteBytes(pData, sizeof(pData));
 
@@ -3815,13 +3815,13 @@ ErrCodeMsg SwWW8Writer::WriteStorage()
         if (pEncryptionDataItem && (pEncryptionDataItem->GetValue() >>= aEncryptionData))
         {
             ::comphelper::SequenceAsHashMap aHashData(aEncryptionData);
-            OUString sCryptoType = aHashData.getUnpackedValueOrDefault("CryptoType", OUString());
+            OUString sCryptoType = aHashData.getUnpackedValueOrDefault(u"CryptoType"_ustr, OUString());
 
             if (sCryptoType.getLength())
             {
                 uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
                 uno::Sequence<uno::Any> aArguments{
-                    uno::Any(beans::NamedValue("Binary", uno::Any(true))) };
+                    uno::Any(beans::NamedValue(u"Binary"_ustr, uno::Any(true))) };
                 xPackageEncryption.set(
                     xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                         "com.sun.star.comp.oox.crypto." + sCryptoType, aArguments, xComponentContext), uno::UNO_QUERY);
@@ -4252,7 +4252,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     OUString ffexitmcr;
 
     ::sw::mark::IFieldmark::parameter_map_t::const_iterator pParameter
-        = rFieldmark.GetParameters()->find("Type");
+        = rFieldmark.GetParameters()->find(u"Type"_ustr);
     if (type == 0) // iTypeText
     {
         sal_uInt16 nType = 0;
@@ -4270,7 +4270,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
 
         if ( nType < 3 || nType == 5 )  // not currentTime or currentDate
         {
-            pParameter = rFieldmark.GetParameters()->find("Content");
+            pParameter = rFieldmark.GetParameters()->find(u"Content"_ustr);
             if ( pParameter != rFieldmark.GetParameters()->end() )
             {
                 OUString aDefaultText;
@@ -4280,7 +4280,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
             }
         }
 
-        pParameter = rFieldmark.GetParameters()->find("MaxLength");
+        pParameter = rFieldmark.GetParameters()->find(u"MaxLength"_ustr);
         if ( pParameter != rFieldmark.GetParameters()->end() )
         {
             sal_uInt16 nLength = 0;
@@ -4289,7 +4289,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
             aFieldHeader.cch = nLength;
         }
 
-        pParameter = rFieldmark.GetParameters()->find("Format");
+        pParameter = rFieldmark.GetParameters()->find(u"Format"_ustr);
         if ( pParameter != rFieldmark.GetParameters()->end() )
         {
             OUString aFormat;
@@ -4299,7 +4299,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         }
     }
 
-    pParameter = rFieldmark.GetParameters()->find("Help"); //help
+    pParameter = rFieldmark.GetParameters()->find(u"Help"_ustr); //help
     if ( ffhelptext.isEmpty() && pParameter != rFieldmark.GetParameters()->end() )
     {
         OUString aHelpText;
@@ -4310,9 +4310,9 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     if ( !ffhelptext.isEmpty() )
         aFieldHeader.bits |= 0x1<<7;
 
-    pParameter = rFieldmark.GetParameters()->find("Description"); // doc tooltip
+    pParameter = rFieldmark.GetParameters()->find(u"Description"_ustr); // doc tooltip
     if ( pParameter == rFieldmark.GetParameters()->end() )
-        pParameter = rFieldmark.GetParameters()->find("Hint"); //docx tooltip
+        pParameter = rFieldmark.GetParameters()->find(u"Hint"_ustr); //docx tooltip
     if ( pParameter != rFieldmark.GetParameters()->end() )
     {
         OUString aStatusText;
@@ -4323,7 +4323,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     if ( !ffstattext.isEmpty() )
         aFieldHeader.bits |= 0x1<<8;
 
-    pParameter = rFieldmark.GetParameters()->find("EntryMacro");
+    pParameter = rFieldmark.GetParameters()->find(u"EntryMacro"_ustr);
     if ( pParameter != rFieldmark.GetParameters()->end() )
     {
         OUString aEntryMacro;
@@ -4332,7 +4332,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         ffentrymcr = aEntryMacro.copy (0, nLen);
     }
 
-    pParameter = rFieldmark.GetParameters()->find("ExitMacro");
+    pParameter = rFieldmark.GetParameters()->find(u"ExitMacro"_ustr);
     if ( pParameter != rFieldmark.GetParameters()->end() )
     {
         OUString aExitMacro;

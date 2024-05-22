@@ -391,7 +391,7 @@ void MSWordStyles::BuildWwNames()
     assert(!m_aStyles.empty());
     assert(!m_aStyles[0].format || m_aStyles[0].ww_id == ww::stiNormal);
     m_aStyles[0].ww_name = "Normal";
-    aUsed.insert("normal");
+    aUsed.insert(u"normal"_ustr);
 
     // 1. Handle styles having special wwIds, and thus pre-defined names
     for (auto& entry : m_aStyles)
@@ -2352,7 +2352,7 @@ bool WW8_WrPlcSubDoc::WriteGenericText( WW8Export& rWrt, sal_uInt8 nTTyp,
                                     // Additional paragraph containing a space to
                                     // assure that by WW created RTF from written WW8
                                     // does not crash WW.
-                                    rWrt.WriteStringAsPara( " " );
+                                    rWrt.WriteStringAsPara( u" "_ustr );
                                 }
                             }
                         }

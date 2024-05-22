@@ -2312,7 +2312,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                         uno::Reference<beans::XPropertySetInfo> xPropSetInfo
                             = xPropSet->getPropertySetInfo();
                         OUString sName;
-                        if (xInfo->supportsService("com.sun.star.form.component.CheckBox"))
+                        if (xInfo->supportsService(u"com.sun.star.form.component.CheckBox"_ustr))
                         {
                             m_aRun->append(OUStringToOString(FieldString(ww::eFORMCHECKBOX),
                                                              m_rExport.GetCurrentEncoding()));
@@ -2361,10 +2361,10 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                             }
 
                             sal_Int16 nTemp = 0;
-                            xPropSet->getPropertyValue("DefaultState") >>= nTemp;
+                            xPropSet->getPropertyValue(u"DefaultState"_ustr) >>= nTemp;
                             m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFDEFRES);
                             m_aRun->append(static_cast<sal_Int32>(nTemp));
-                            xPropSet->getPropertyValue("State") >>= nTemp;
+                            xPropSet->getPropertyValue(u"State"_ustr) >>= nTemp;
                             m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFRES);
                             m_aRun->append(static_cast<sal_Int32>(nTemp));
 
@@ -2373,7 +2373,8 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                             // field result is empty, ffres already contains the form result
                             m_aRun->append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
                         }
-                        else if (xInfo->supportsService("com.sun.star.form.component.TextField"))
+                        else if (xInfo->supportsService(
+                                     u"com.sun.star.form.component.TextField"_ustr))
                         {
                             OStringBuffer aBuf;
                             OString aStr;
@@ -2387,11 +2388,11 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                 " ");
                             for (int i = 0; i < 8; i++)
                                 aBuf.append(char(0x00));
-                            xPropSet->getPropertyValue("Name") >>= aTmp;
+                            xPropSet->getPropertyValue(u"Name"_ustr) >>= aTmp;
                             aStr = OUStringToOString(aTmp, m_rExport.GetCurrentEncoding());
                             aBuf.append(OStringChar(static_cast<char>(aStr.getLength())) + aStr
                                         + OStringChar(char(0x00)));
-                            xPropSet->getPropertyValue("DefaultText") >>= aTmp;
+                            xPropSet->getPropertyValue(u"DefaultText"_ustr) >>= aTmp;
                             aStr = OUStringToOString(aTmp, m_rExport.GetCurrentEncoding());
                             aBuf.append(static_cast<char>(aStr.getLength()));
                             aBuf.append(aStr);
@@ -2403,7 +2404,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                 m_aRun->append(msfilter::rtfutil::OutHex(*pStr, 2));
                             m_aRun->append('}');
                             m_aRun->append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
-                            xPropSet->getPropertyValue("Text") >>= aTmp;
+                            xPropSet->getPropertyValue(u"Text"_ustr) >>= aTmp;
                             m_aRun->append(OUStringToOString(aTmp, m_rExport.GetCurrentEncoding()));
                             m_aRun->append('}');
                             m_aRun->append(
@@ -2434,7 +2435,8 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                             }
                             m_aRun->append("}");
                         }
-                        else if (xInfo->supportsService("com.sun.star.form.component.ListBox"))
+                        else if (xInfo->supportsService(
+                                     u"com.sun.star.form.component.ListBox"_ustr))
                         {
                             OUString aStr;
                             uno::Sequence<sal_Int16> aIntSeq;
@@ -2448,7 +2450,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                             m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFTYPE "2"); // 2 = list
                             m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFHASLISTBOX);
 
-                            xPropSet->getPropertyValue("DefaultSelection") >>= aIntSeq;
+                            xPropSet->getPropertyValue(u"DefaultSelection"_ustr) >>= aIntSeq;
                             if (aIntSeq.hasElements())
                             {
                                 m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFDEFRES);
@@ -2456,7 +2458,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                 m_aRun->append(static_cast<sal_Int32>(aIntSeq[0]));
                             }
 
-                            xPropSet->getPropertyValue("SelectedItems") >>= aIntSeq;
+                            xPropSet->getPropertyValue(u"SelectedItems"_ustr) >>= aIntSeq;
                             if (aIntSeq.hasElements())
                             {
                                 m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFRES);
@@ -2500,7 +2502,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                 m_aRun->append('}');
                             }
 
-                            xPropSet->getPropertyValue("StringItemList") >>= aStrSeq;
+                            xPropSet->getPropertyValue(u"StringItemList"_ustr) >>= aStrSeq;
                             for (const auto& rStr : aStrSeq)
                                 m_aRun->append(
                                     "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFL " "
@@ -4105,7 +4107,7 @@ bool RtfAttributeOutput::PlaceholderField(const SwField* pField)
 }
 
 RtfAttributeOutput::RtfAttributeOutput(RtfExport& rExport)
-    : AttributeOutputBase("") // ConvertURL isn't used now in RTF output
+    : AttributeOutputBase(u""_ustr) // ConvertURL isn't used now in RTF output
     , m_rExport(rExport)
     , m_pPrevPageDesc(nullptr)
     , m_nStyleId(0)
@@ -4646,7 +4648,7 @@ void RtfAttributeOutput::TextLineBreak(const SwFormatLineBreak& rLineBreak)
     m_aStyles.append(static_cast<sal_Int32>(rLineBreak.GetEnumValue()));
 
     // Write the linebreak itself.
-    RunText("\x0b");
+    RunText(u"\x0b"_ustr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

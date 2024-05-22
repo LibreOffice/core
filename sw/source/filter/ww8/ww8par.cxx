@@ -380,7 +380,7 @@ bool BasicProjImportHelper::import( const uno::Reference< io::XInputStream >& rx
     try
     {
         oox::ole::OleStorage root( mxCtx, rxIn, false );
-        oox::StorageRef vbaStg = root.openSubStorage( "Macros" , false );
+        oox::StorageRef vbaStg = root.openSubStorage( u"Macros"_ustr , false );
         if ( vbaStg )
         {
             oox::ole::VbaProject aVbaPrj( mxCtx, mrDocShell.GetModel(), u"Writer" );
@@ -396,13 +396,13 @@ bool BasicProjImportHelper::import( const uno::Reference< io::XInputStream >& rx
 
 OUString BasicProjImportHelper::getProjectName() const
 {
-    OUString sProjName( "Standard" );
+    OUString sProjName( u"Standard"_ustr );
     uno::Reference< beans::XPropertySet > xProps( mrDocShell.GetModel(), uno::UNO_QUERY );
     if ( xProps.is() )
     {
         try
         {
-            uno::Reference< script::vba::XVBACompatibility > xVBA( xProps->getPropertyValue( "BasicLibraries" ), uno::UNO_QUERY_THROW  );
+            uno::Reference< script::vba::XVBACompatibility > xVBA( xProps->getPropertyValue( u"BasicLibraries"_ustr ), uno::UNO_QUERY_THROW  );
             sProjName = xVBA->getProjectName();
 
         }
@@ -1968,24 +1968,24 @@ void SwWW8ImplReader::ImportDop()
         uno::Reference<beans::XPropertySetInfo> xInfo = xDocProps->getPropertySetInfo();
         if (xInfo.is())
         {
-            if (xInfo->hasPropertyByName("ApplyFormDesignMode"))
-                xDocProps->setPropertyValue("ApplyFormDesignMode", css::uno::Any(false));
+            if (xInfo->hasPropertyByName(u"ApplyFormDesignMode"_ustr))
+                xDocProps->setPropertyValue(u"ApplyFormDesignMode"_ustr, css::uno::Any(false));
         }
 
         // for the benefit of DOCX - if this is ever saved in that format.
-        comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue("InteropGrabBag"));
+        comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(u"InteropGrabBag"_ustr));
         uno::Sequence<beans::PropertyValue> aCompatSetting( comphelper::InitPropertySequence({
-                { "name", uno::Any(OUString("compatibilityMode")) },
-                { "uri", uno::Any(OUString("http://schemas.microsoft.com/office/word")) },
-                { "val", uno::Any(OUString("11")) }  //11: Use features specified in MS-DOC.
+                { "name", uno::Any(u"compatibilityMode"_ustr) },
+                { "uri", uno::Any(u"http://schemas.microsoft.com/office/word"_ustr) },
+                { "val", uno::Any(u"11"_ustr) }  //11: Use features specified in MS-DOC.
         }));
 
         uno::Sequence< beans::PropertyValue > aValue(comphelper::InitPropertySequence({
             { "compatSetting", uno::Any(aCompatSetting) }
         }));
 
-        aGrabBag["CompatSettings"] <<= aValue;
-        xDocProps->setPropertyValue("InteropGrabBag", uno::Any(aGrabBag.getAsConstPropertyValueList()));
+        aGrabBag[u"CompatSettings"_ustr] <<= aValue;
+        xDocProps->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aGrabBag.getAsConstPropertyValueList()));
     }
 
     // The password can force read-only, comments-only, fill-in-form-only, or require track-changes.
@@ -1996,9 +1996,9 @@ void SwWW8ImplReader::ImportDop()
         m_pDocShell->SetModifyPasswordHash(m_xWDop->lKeyProtDoc);
     else if ( xDocProps.is() )
     {
-        comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue("InteropGrabBag"));
-        aGrabBag["FormPasswordHash"] <<= m_xWDop->lKeyProtDoc;
-        xDocProps->setPropertyValue("InteropGrabBag", uno::Any(aGrabBag.getAsConstPropertyValueList()));
+        comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(u"InteropGrabBag"_ustr));
+        aGrabBag[u"FormPasswordHash"_ustr] <<= m_xWDop->lKeyProtDoc;
+        xDocProps->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aGrabBag.getAsConstPropertyValueList()));
     }
 
     if (officecfg::Office::Common::Filter::Microsoft::Import::ImportWWFieldsAsEnhancedFields::get())
@@ -4257,7 +4257,7 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_aSectionManager(*this)
     , m_aExtraneousParas(rD)
     , m_aInsertedTables(rD)
-    , m_aSectionNameGenerator(rD, "WW")
+    , m_aSectionNameGenerator(rD, u"WW"_ustr)
     , m_aGrfNameGenerator(bNewDoc, OUString('G'))
     , m_aParaStyleMapper(rD)
     , m_aCharStyleMapper(rD)
@@ -4836,10 +4836,10 @@ void SwWW8ImplReader::ReadDocVars()
         }
         else
         {
-            xMaster.set(xTextFactory->createInstance("com.sun.star.text.FieldMaster.User"), uno::UNO_QUERY_THROW);
-            xMaster->setPropertyValue("Name", uno::Any(rName));
+            xMaster.set(xTextFactory->createInstance(u"com.sun.star.text.FieldMaster.User"_ustr), uno::UNO_QUERY_THROW);
+            xMaster->setPropertyValue(u"Name"_ustr, uno::Any(rName));
         }
-        xMaster->setPropertyValue("Content", aValue);
+        xMaster->setPropertyValue(u"Content"_ustr, aValue);
     }
 }
 
@@ -5005,7 +5005,7 @@ void SwWW8ImplReader::ReadGlobalTemplateSettings( std::u16string_view sCreatedFr
         aBasicImporter.import( m_pDocShell->GetMedium()->GetInputStream() );
         lcl_createTemplateToProjectEntry( xPrjNameCache, aURL, aBasicImporter.getProjectName() );
         // Read toolbars & menus
-        rtl::Reference<SotStorageStream> refMainStream = rRoot->OpenSotStream("WordDocument");
+        rtl::Reference<SotStorageStream> refMainStream = rRoot->OpenSotStream(u"WordDocument"_ustr);
         refMainStream->SetEndian(SvStreamEndian::LITTLE);
         WW8Fib aWwFib( *refMainStream, 8 );
         rtl::Reference<SotStorageStream> xTableStream =
@@ -5263,7 +5263,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
             uno::Reference< container::XNameContainer > xPrjNameCache;
             uno::Reference< lang::XMultiServiceFactory> xSF(m_pDocShell->GetModel(), uno::UNO_QUERY);
             if ( xSF.is() )
-                xPrjNameCache.set( xSF->createInstance( "ooo.vba.VBAProjectNameProvider" ), uno::UNO_QUERY );
+                xPrjNameCache.set( xSF->createInstance( u"ooo.vba.VBAProjectNameProvider"_ustr ), uno::UNO_QUERY );
 
             // Read Global templates
             ReadGlobalTemplateSettings( sCreatedFrom, xPrjNameCache );
@@ -5273,7 +5273,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
             uno::Sequence< uno::Any > aArgs{ uno::Any(m_pDocShell->GetModel()) };
             try
             {
-                aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( "ooo.vba.word.Globals", aArgs );
+                aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( u"ooo.vba.word.Globals"_ustr, aArgs );
             }
             catch (const uno::Exception&)
             {
@@ -5285,7 +5285,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
             {
                 BasicManager *pBasicMan = m_pDocShell->GetBasicManager();
                 if (pBasicMan)
-                    pBasicMan->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
+                    pBasicMan->SetGlobalUNOConstant( u"VBAGlobals"_ustr, aGlobs );
             }
 #endif
             BasicProjImportHelper aBasicImporter( *m_pDocShell );
@@ -5419,7 +5419,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
         IDocumentMarkAccess* const pMarkAccess = m_rDoc.getIDocumentMarkAccess();
         if ( pMarkAccess )
         {
-            IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findBookmark( "_PictureBullets" );
+            IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findBookmark( u"_PictureBullets"_ustr );
             if ( ppBkmk != pMarkAccess->getBookmarksEnd() &&
                        IDocumentMarkAccess::GetType(**ppBkmk) == IDocumentMarkAccess::MarkType::BOOKMARK )
             {
@@ -5669,7 +5669,7 @@ namespace
                 sal_uInt8 pDocId[ 16 ];
                 if (rtl_random_getBytes(nullptr, pDocId, 16) != rtl_Random_E_None)
                 {
-                    throw uno::RuntimeException("rtl_random_getBytes failed");
+                    throw uno::RuntimeException(u"rtl_random_getBytes failed"_ustr);
                 }
 
                 sal_uInt16 pStd97Pass[16] = {};
@@ -6371,24 +6371,24 @@ bool TestImportDOC(SvStream &rStream, const OUString &rFltName)
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportWW8(SvStream &rStream)
 {
-    return TestImportDOC(rStream, "CWW8");
+    return TestImportDOC(rStream, u"CWW8"_ustr);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportWW6(SvStream &rStream)
 {
-    return TestImportDOC(rStream, "CWW6");
+    return TestImportDOC(rStream, u"CWW6"_ustr);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportWW2(SvStream &rStream)
 {
-    return TestImportDOC(rStream, "WW6");
+    return TestImportDOC(rStream, u"WW6"_ustr);
 }
 
 ErrCode WW8Reader::OpenMainStream(rtl::Reference<SotStorageStream>& rRef, sal_uInt16& rBuffSize)
 {
     ErrCode nRet = ERR_SWG_READ_ERROR;
     OSL_ENSURE(m_pStorage, "Where is my Storage?");
-    rRef = m_pStorage->OpenSotStream( "WordDocument", StreamMode::READ | StreamMode::SHARE_DENYALL);
+    rRef = m_pStorage->OpenSotStream( u"WordDocument"_ustr, StreamMode::READ | StreamMode::SHARE_DENYALL);
 
     if( rRef.is() )
     {
@@ -6441,7 +6441,7 @@ ErrCode WW8Reader::DecryptDRMPackage()
     uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference< packages::XPackageEncryption > xPackageEncryption(
         xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            "com.sun.star.comp.oox.crypto.DRMDataSpace", aArguments, xComponentContext), uno::UNO_QUERY);
+            u"com.sun.star.comp.oox.crypto.DRMDataSpace"_ustr, aArguments, xComponentContext), uno::UNO_QUERY);
 
     if (!xPackageEncryption.is())
     {
@@ -6460,7 +6460,7 @@ ErrCode WW8Reader::DecryptDRMPackage()
             return ERRCODE_IO_ACCESSDENIED;
         }
 
-        rtl::Reference<SotStorageStream> rContentStream = m_pStorage->OpenSotStream("\011DRMContent", StreamMode::READ | StreamMode::SHARE_DENYALL);
+        rtl::Reference<SotStorageStream> rContentStream = m_pStorage->OpenSotStream(u"\011DRMContent"_ustr, StreamMode::READ | StreamMode::SHARE_DENYALL);
         if (!rContentStream.is())
         {
             return ERRCODE_IO_NOTEXISTS;
@@ -6483,7 +6483,7 @@ ErrCode WW8Reader::DecryptDRMPackage()
         m_pStorage = new SotStorage(*mDecodedStream);
 
         // Set the media descriptor data
-        uno::Sequence<beans::NamedValue> aEncryptionData = xPackageEncryption->createEncryptionData("");
+        uno::Sequence<beans::NamedValue> aEncryptionData = xPackageEncryption->createEncryptionData(u""_ustr);
         m_pMedium->GetItemSet().Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, uno::Any(aEncryptionData)));
     }
     catch (const std::exception&)
@@ -6526,7 +6526,7 @@ ErrCodeMsg WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
         if( m_pStorage.is() )
         {
             // Check if we have special encrypted content
-            rtl::Reference<SotStorageStream> rRef = m_pStorage->OpenSotStream("\006DataSpaces/DataSpaceInfo/\011DRMDataSpace", StreamMode::READ | StreamMode::SHARE_DENYALL);
+            rtl::Reference<SotStorageStream> rRef = m_pStorage->OpenSotStream(u"\006DataSpaces/DataSpaceInfo/\011DRMDataSpace"_ustr, StreamMode::READ | StreamMode::SHARE_DENYALL);
             if (rRef.is())
             {
                 nRet = DecryptDRMPackage();

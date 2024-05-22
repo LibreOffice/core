@@ -482,7 +482,7 @@ static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutpu
         const SfxGrabBagItem* pTableGrabBag = pTableFormat->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG);
         const std::map<OUString, css::uno::Any> & rTableGrabBag = pTableGrabBag->GetGrabBag();
         // no grabbag?
-        if (rTableGrabBag.find("TablePosition") == rTableGrabBag.end())
+        if (rTableGrabBag.find(u"TablePosition"_ustr) == rTableGrabBag.end())
         {
             if (pFrameFormat->GetFlySplit().GetValue())
             {
@@ -577,7 +577,7 @@ sal_Int32 DocxAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t p
             {
                 const SfxGrabBagItem& rParaGrabBag = static_cast<const SfxGrabBagItem&>(*pItem);
                 const std::map<OUString, css::uno::Any>& rMap = rParaGrabBag.GetGrabBag();
-                bEndParaSdt = m_aParagraphSdt.m_bStartedSdt && rMap.contains("ParaSdtEndBefore");
+                bEndParaSdt = m_aParagraphSdt.m_bStartedSdt && rMap.contains(u"ParaSdtEndBefore"_ustr);
             }
         }
     }
@@ -1110,12 +1110,12 @@ bool DocxAttributeOutput::TextBoxIsFramePr(const SwFrameFormat& rFrameFormat)
         return false;
 
     uno::Reference<beans::XPropertySetInfo> xPropSetInfo(xPropertySet->getPropertySetInfo());
-    if (!xPropSetInfo.is() || !xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
+    if (!xPropSetInfo.is() || !xPropSetInfo->hasPropertyByName(u"FrameInteropGrabBag"_ustr))
         return false;
 
     bool bRet = false;
     uno::Sequence<beans::PropertyValue> propList;
-    xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= propList;
+    xPropertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= propList;
     auto pProp = std::find_if(std::cbegin(propList), std::cend(propList),
         [](const beans::PropertyValue& rProp) { return rProp.Name == "ParaFrameProperties"; });
     if (pProp != std::cend(propList))
@@ -1718,7 +1718,7 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
     SwTextNode* pTextNode = m_rExport.m_pCurPam->GetPointNode().GetTextNode();
     std::map<OUString, OUString> aStatements;
     if (pTextNode)
-        aStatements = SwRDFHelper::getTextNodeStatements("urn:bails", *pTextNode);
+        aStatements = SwRDFHelper::getTextNodeStatements(u"urn:bails"_ustr, *pTextNode);
     if (!aStatements.empty())
     {
         m_pSerializer->startElementNS(XML_w, XML_smartTag,
@@ -2042,7 +2042,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
     m_pSerializer->startElementNS(XML_w, XML_r);
     if(GetExport().m_bTabInTOC && m_pHyperlinkAttrList.is())
     {
-        RunText("\t") ;
+        RunText(u"\t"_ustr) ;
     }
     m_pSerializer->mergeTopMarks(Tag_EndRun_1, sax_fastparser::MergeMarks::PREPEND); // merges with "postponed run start", see above
 
@@ -2464,15 +2464,15 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
     FieldMarkParamsHelper params( rFieldmark );
 
     OUString sEntryMacro;
-    params.extractParam("EntryMacro", sEntryMacro);
+    params.extractParam(u"EntryMacro"_ustr, sEntryMacro);
     OUString sExitMacro;
-    params.extractParam("ExitMacro", sExitMacro);
+    params.extractParam(u"ExitMacro"_ustr, sExitMacro);
     OUString sHelp;
-    params.extractParam("Help", sHelp);
+    params.extractParam(u"Help"_ustr, sHelp);
     OUString sHint;
-    params.extractParam("Hint", sHint); // .docx StatusText
+    params.extractParam(u"Hint"_ustr, sHint); // .docx StatusText
     if ( sHint.isEmpty() )
-        params.extractParam("Description", sHint); // .doc StatusText
+        params.extractParam(u"Description"_ustr, sHint); // .doc StatusText
 
     if ( rInfos.eType == ww::eFORMDROPDOWN )
     {
@@ -2509,13 +2509,13 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
     else if ( rInfos.eType == ww::eFORMTEXT )
     {
         OUString sType;
-        params.extractParam("Type", sType);
+        params.extractParam(u"Type"_ustr, sType);
         OUString sDefaultText;
-        params.extractParam("Content", sDefaultText);
+        params.extractParam(u"Content"_ustr, sDefaultText);
         sal_uInt16 nMaxLength = 0;
-        params.extractParam("MaxLength", nMaxLength);
+        params.extractParam(u"MaxLength"_ustr, nMaxLength);
         OUString sFormat;
-        params.extractParam("Format", sFormat);
+        params.extractParam(u"Format"_ustr, sFormat);
         FFDataWriterHelper ffdataOut( m_pSerializer );
         ffdataOut.WriteFormText( params.getName(), sEntryMacro, sExitMacro, sHelp, sHint,
                                  sType, sDefaultText, nMaxLength, sFormat );
@@ -3029,11 +3029,11 @@ void DocxAttributeOutput::CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos
                 {
                     OUString sActualFormula = sToken.trim();
                     const std::map<OUString, uno::Any>& rGrabBag = pItem->GetGrabBag();
-                    std::map<OUString, uno::Any>::const_iterator aStoredFormula = rGrabBag.find("CellFormulaConverted");
+                    std::map<OUString, uno::Any>::const_iterator aStoredFormula = rGrabBag.find(u"CellFormulaConverted"_ustr);
                     if ( aStoredFormula != rGrabBag.end() && sActualFormula.indexOf('=') == 0 &&
                                     o3tl::trim(sActualFormula.subView(1)) == o3tl::trim(aStoredFormula->second.get<OUString>()) )
                     {
-                        aStoredFormula = rGrabBag.find("CellFormula");
+                        aStoredFormula = rGrabBag.find(u"CellFormula"_ustr);
                         if ( aStoredFormula != rGrabBag.end() )
                         {
                             sToken = " =" + aStoredFormula->second.get<OUString>();
@@ -3061,7 +3061,7 @@ void DocxAttributeOutput::CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos
 
         // Replace tabs by </instrText><tab/><instrText>
         if ( nIdx > 0 ) // Is another token expected?
-            RunText( "\t" );
+            RunText( u"\t"_ustr );
     }
 
     if ( bWriteRun )
@@ -3379,90 +3379,90 @@ struct NameToId
 
 const NameToId constNameToIdMapping[] =
 {
-    { OUString("glow"),         FSNS( XML_w14, XML_glow ) },
-    { OUString("shadow"),       FSNS( XML_w14, XML_shadow ) },
-    { OUString("reflection"),   FSNS( XML_w14, XML_reflection ) },
-    { OUString("textOutline"),  FSNS( XML_w14, XML_textOutline ) },
-    { OUString("textFill"),     FSNS( XML_w14, XML_textFill ) },
-    { OUString("scene3d"),      FSNS( XML_w14, XML_scene3d ) },
-    { OUString("props3d"),      FSNS( XML_w14, XML_props3d ) },
-    { OUString("ligatures"),    FSNS( XML_w14, XML_ligatures ) },
-    { OUString("numForm"),      FSNS( XML_w14, XML_numForm ) },
-    { OUString("numSpacing"),   FSNS( XML_w14, XML_numSpacing ) },
-    { OUString("stylisticSets"),FSNS( XML_w14, XML_stylisticSets ) },
-    { OUString("cntxtAlts"),    FSNS( XML_w14, XML_cntxtAlts ) },
+    { u"glow"_ustr,         FSNS( XML_w14, XML_glow ) },
+    { u"shadow"_ustr,       FSNS( XML_w14, XML_shadow ) },
+    { u"reflection"_ustr,   FSNS( XML_w14, XML_reflection ) },
+    { u"textOutline"_ustr,  FSNS( XML_w14, XML_textOutline ) },
+    { u"textFill"_ustr,     FSNS( XML_w14, XML_textFill ) },
+    { u"scene3d"_ustr,      FSNS( XML_w14, XML_scene3d ) },
+    { u"props3d"_ustr,      FSNS( XML_w14, XML_props3d ) },
+    { u"ligatures"_ustr,    FSNS( XML_w14, XML_ligatures ) },
+    { u"numForm"_ustr,      FSNS( XML_w14, XML_numForm ) },
+    { u"numSpacing"_ustr,   FSNS( XML_w14, XML_numSpacing ) },
+    { u"stylisticSets"_ustr,FSNS( XML_w14, XML_stylisticSets ) },
+    { u"cntxtAlts"_ustr,    FSNS( XML_w14, XML_cntxtAlts ) },
 
-    { OUString("val"),          FSNS( XML_w14, XML_val ) },
-    { OUString("rad"),          FSNS( XML_w14, XML_rad ) },
-    { OUString("blurRad"),      FSNS( XML_w14, XML_blurRad ) },
-    { OUString("stA"),          FSNS( XML_w14, XML_stA ) },
-    { OUString("stPos"),        FSNS( XML_w14, XML_stPos ) },
-    { OUString("endA"),         FSNS( XML_w14, XML_endA ) },
-    { OUString("endPos"),       FSNS( XML_w14, XML_endPos ) },
-    { OUString("dist"),         FSNS( XML_w14, XML_dist ) },
-    { OUString("dir"),          FSNS( XML_w14, XML_dir ) },
-    { OUString("fadeDir"),      FSNS( XML_w14, XML_fadeDir ) },
-    { OUString("sx"),           FSNS( XML_w14, XML_sx ) },
-    { OUString("sy"),           FSNS( XML_w14, XML_sy ) },
-    { OUString("kx"),           FSNS( XML_w14, XML_kx ) },
-    { OUString("ky"),           FSNS( XML_w14, XML_ky ) },
-    { OUString("algn"),         FSNS( XML_w14, XML_algn ) },
-    { OUString("w"),            FSNS( XML_w14, XML_w ) },
-    { OUString("cap"),          FSNS( XML_w14, XML_cap ) },
-    { OUString("cmpd"),         FSNS( XML_w14, XML_cmpd ) },
-    { OUString("pos"),          FSNS( XML_w14, XML_pos ) },
-    { OUString("ang"),          FSNS( XML_w14, XML_ang ) },
-    { OUString("scaled"),       FSNS( XML_w14, XML_scaled ) },
-    { OUString("path"),         FSNS( XML_w14, XML_path ) },
-    { OUString("l"),            FSNS( XML_w14, XML_l ) },
-    { OUString("t"),            FSNS( XML_w14, XML_t ) },
-    { OUString("r"),            FSNS( XML_w14, XML_r ) },
-    { OUString("b"),            FSNS( XML_w14, XML_b ) },
-    { OUString("lim"),          FSNS( XML_w14, XML_lim ) },
-    { OUString("prst"),         FSNS( XML_w14, XML_prst ) },
-    { OUString("rig"),          FSNS( XML_w14, XML_rig ) },
-    { OUString("lat"),          FSNS( XML_w14, XML_lat ) },
-    { OUString("lon"),          FSNS( XML_w14, XML_lon ) },
-    { OUString("rev"),          FSNS( XML_w14, XML_rev ) },
-    { OUString("h"),            FSNS( XML_w14, XML_h ) },
-    { OUString("extrusionH"),   FSNS( XML_w14, XML_extrusionH ) },
-    { OUString("contourW"),     FSNS( XML_w14, XML_contourW ) },
-    { OUString("prstMaterial"), FSNS( XML_w14, XML_prstMaterial ) },
-    { OUString("id"),           FSNS( XML_w14, XML_id ) },
+    { u"val"_ustr,          FSNS( XML_w14, XML_val ) },
+    { u"rad"_ustr,          FSNS( XML_w14, XML_rad ) },
+    { u"blurRad"_ustr,      FSNS( XML_w14, XML_blurRad ) },
+    { u"stA"_ustr,          FSNS( XML_w14, XML_stA ) },
+    { u"stPos"_ustr,        FSNS( XML_w14, XML_stPos ) },
+    { u"endA"_ustr,         FSNS( XML_w14, XML_endA ) },
+    { u"endPos"_ustr,       FSNS( XML_w14, XML_endPos ) },
+    { u"dist"_ustr,         FSNS( XML_w14, XML_dist ) },
+    { u"dir"_ustr,          FSNS( XML_w14, XML_dir ) },
+    { u"fadeDir"_ustr,      FSNS( XML_w14, XML_fadeDir ) },
+    { u"sx"_ustr,           FSNS( XML_w14, XML_sx ) },
+    { u"sy"_ustr,           FSNS( XML_w14, XML_sy ) },
+    { u"kx"_ustr,           FSNS( XML_w14, XML_kx ) },
+    { u"ky"_ustr,           FSNS( XML_w14, XML_ky ) },
+    { u"algn"_ustr,         FSNS( XML_w14, XML_algn ) },
+    { u"w"_ustr,            FSNS( XML_w14, XML_w ) },
+    { u"cap"_ustr,          FSNS( XML_w14, XML_cap ) },
+    { u"cmpd"_ustr,         FSNS( XML_w14, XML_cmpd ) },
+    { u"pos"_ustr,          FSNS( XML_w14, XML_pos ) },
+    { u"ang"_ustr,          FSNS( XML_w14, XML_ang ) },
+    { u"scaled"_ustr,       FSNS( XML_w14, XML_scaled ) },
+    { u"path"_ustr,         FSNS( XML_w14, XML_path ) },
+    { u"l"_ustr,            FSNS( XML_w14, XML_l ) },
+    { u"t"_ustr,            FSNS( XML_w14, XML_t ) },
+    { u"r"_ustr,            FSNS( XML_w14, XML_r ) },
+    { u"b"_ustr,            FSNS( XML_w14, XML_b ) },
+    { u"lim"_ustr,          FSNS( XML_w14, XML_lim ) },
+    { u"prst"_ustr,         FSNS( XML_w14, XML_prst ) },
+    { u"rig"_ustr,          FSNS( XML_w14, XML_rig ) },
+    { u"lat"_ustr,          FSNS( XML_w14, XML_lat ) },
+    { u"lon"_ustr,          FSNS( XML_w14, XML_lon ) },
+    { u"rev"_ustr,          FSNS( XML_w14, XML_rev ) },
+    { u"h"_ustr,            FSNS( XML_w14, XML_h ) },
+    { u"extrusionH"_ustr,   FSNS( XML_w14, XML_extrusionH ) },
+    { u"contourW"_ustr,     FSNS( XML_w14, XML_contourW ) },
+    { u"prstMaterial"_ustr, FSNS( XML_w14, XML_prstMaterial ) },
+    { u"id"_ustr,           FSNS( XML_w14, XML_id ) },
 
-    { OUString("schemeClr"),    FSNS( XML_w14, XML_schemeClr ) },
-    { OUString("srgbClr"),      FSNS( XML_w14, XML_srgbClr ) },
-    { OUString("tint"),         FSNS( XML_w14, XML_tint ) },
-    { OUString("shade"),        FSNS( XML_w14, XML_shade ) },
-    { OUString("alpha"),        FSNS( XML_w14, XML_alpha ) },
-    { OUString("hueMod"),       FSNS( XML_w14, XML_hueMod ) },
-    { OUString("sat"),          FSNS( XML_w14, XML_sat ) },
-    { OUString("satOff"),       FSNS( XML_w14, XML_satOff ) },
-    { OUString("satMod"),       FSNS( XML_w14, XML_satMod ) },
-    { OUString("lum"),          FSNS( XML_w14, XML_lum ) },
-    { OUString("lumOff"),       FSNS( XML_w14, XML_lumOff ) },
-    { OUString("lumMod"),       FSNS( XML_w14, XML_lumMod ) },
-    { OUString("noFill"),       FSNS( XML_w14, XML_noFill ) },
-    { OUString("solidFill"),    FSNS( XML_w14, XML_solidFill ) },
-    { OUString("gradFill"),     FSNS( XML_w14, XML_gradFill ) },
-    { OUString("gsLst"),        FSNS( XML_w14, XML_gsLst ) },
-    { OUString("gs"),           FSNS( XML_w14, XML_gs ) },
-    { OUString("pos"),          FSNS( XML_w14, XML_pos ) },
-    { OUString("lin"),          FSNS( XML_w14, XML_lin ) },
-    { OUString("path"),         FSNS( XML_w14, XML_path ) },
-    { OUString("fillToRect"),   FSNS( XML_w14, XML_fillToRect ) },
-    { OUString("prstDash"),     FSNS( XML_w14, XML_prstDash ) },
-    { OUString("round"),        FSNS( XML_w14, XML_round ) },
-    { OUString("bevel"),        FSNS( XML_w14, XML_bevel ) },
-    { OUString("miter"),        FSNS( XML_w14, XML_miter ) },
-    { OUString("camera"),       FSNS( XML_w14, XML_camera ) },
-    { OUString("lightRig"),     FSNS( XML_w14, XML_lightRig ) },
-    { OUString("rot"),          FSNS( XML_w14, XML_rot ) },
-    { OUString("bevelT"),       FSNS( XML_w14, XML_bevelT ) },
-    { OUString("bevelB"),       FSNS( XML_w14, XML_bevelB ) },
-    { OUString("extrusionClr"), FSNS( XML_w14, XML_extrusionClr ) },
-    { OUString("contourClr"),   FSNS( XML_w14, XML_contourClr ) },
-    { OUString("styleSet"),     FSNS( XML_w14, XML_styleSet ) },
+    { u"schemeClr"_ustr,    FSNS( XML_w14, XML_schemeClr ) },
+    { u"srgbClr"_ustr,      FSNS( XML_w14, XML_srgbClr ) },
+    { u"tint"_ustr,         FSNS( XML_w14, XML_tint ) },
+    { u"shade"_ustr,        FSNS( XML_w14, XML_shade ) },
+    { u"alpha"_ustr,        FSNS( XML_w14, XML_alpha ) },
+    { u"hueMod"_ustr,       FSNS( XML_w14, XML_hueMod ) },
+    { u"sat"_ustr,          FSNS( XML_w14, XML_sat ) },
+    { u"satOff"_ustr,       FSNS( XML_w14, XML_satOff ) },
+    { u"satMod"_ustr,       FSNS( XML_w14, XML_satMod ) },
+    { u"lum"_ustr,          FSNS( XML_w14, XML_lum ) },
+    { u"lumOff"_ustr,       FSNS( XML_w14, XML_lumOff ) },
+    { u"lumMod"_ustr,       FSNS( XML_w14, XML_lumMod ) },
+    { u"noFill"_ustr,       FSNS( XML_w14, XML_noFill ) },
+    { u"solidFill"_ustr,    FSNS( XML_w14, XML_solidFill ) },
+    { u"gradFill"_ustr,     FSNS( XML_w14, XML_gradFill ) },
+    { u"gsLst"_ustr,        FSNS( XML_w14, XML_gsLst ) },
+    { u"gs"_ustr,           FSNS( XML_w14, XML_gs ) },
+    { u"pos"_ustr,          FSNS( XML_w14, XML_pos ) },
+    { u"lin"_ustr,          FSNS( XML_w14, XML_lin ) },
+    { u"path"_ustr,         FSNS( XML_w14, XML_path ) },
+    { u"fillToRect"_ustr,   FSNS( XML_w14, XML_fillToRect ) },
+    { u"prstDash"_ustr,     FSNS( XML_w14, XML_prstDash ) },
+    { u"round"_ustr,        FSNS( XML_w14, XML_round ) },
+    { u"bevel"_ustr,        FSNS( XML_w14, XML_bevel ) },
+    { u"miter"_ustr,        FSNS( XML_w14, XML_miter ) },
+    { u"camera"_ustr,       FSNS( XML_w14, XML_camera ) },
+    { u"lightRig"_ustr,     FSNS( XML_w14, XML_lightRig ) },
+    { u"rot"_ustr,          FSNS( XML_w14, XML_rot ) },
+    { u"bevelT"_ustr,       FSNS( XML_w14, XML_bevelT ) },
+    { u"bevelB"_ustr,       FSNS( XML_w14, XML_bevelB ) },
+    { u"extrusionClr"_ustr, FSNS( XML_w14, XML_extrusionClr ) },
+    { u"contourClr"_ustr,   FSNS( XML_w14, XML_contourClr ) },
+    { u"styleSet"_ustr,     FSNS( XML_w14, XML_styleSet ) },
 };
 
 std::optional<sal_Int32> lclGetElementIdForName(std::u16string_view rName)
@@ -3636,13 +3636,13 @@ void DocxAttributeOutput::GetSdtEndBefore(const SdrObject* pSdrObj)
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     uno::Sequence< beans::PropertyValue > aGrabBag;
-    if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
+    if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"FrameInteropGrabBag"_ustr))
     {
-        xPropSet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
+        xPropSet->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= aGrabBag;
     }
-    else if(xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("InteropGrabBag"))
+    else if(xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"InteropGrabBag"_ustr))
     {
-        xPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+        xPropSet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
     }
 
     auto pProp = std::find_if(std::cbegin(aGrabBag), std::cend(aGrabBag),
@@ -4621,7 +4621,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     if (const SfxGrabBagItem* pItem = pTableBox->GetFrameFormat()->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG))
     {
         const std::map<OUString, uno::Any>& rGrabBag = pItem->GetGrabBag();
-        std::map<OUString, uno::Any>::const_iterator it = rGrabBag.find("CellCnfStyle");
+        std::map<OUString, uno::Any>::const_iterator it = rGrabBag.find(u"CellCnfStyle"_ustr);
         if (it != rGrabBag.end())
         {
             uno::Sequence<beans::PropertyValue> aAttributes = it->second.get< uno::Sequence<beans::PropertyValue> >();
@@ -4733,7 +4733,7 @@ void DocxAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t c
     if (const SfxGrabBagItem* pItem = pTableLine->GetFrameFormat()->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG))
     {
         const std::map<OUString, uno::Any>& rGrabBag = pItem->GetGrabBag();
-        std::map<OUString, uno::Any>::const_iterator it = rGrabBag.find("RowCnfStyle");
+        std::map<OUString, uno::Any>::const_iterator it = rGrabBag.find(u"RowCnfStyle"_ustr);
         if (it != rGrabBag.end())
         {
             uno::Sequence<beans::PropertyValue> aAttributes = it->second.get< uno::Sequence<beans::PropertyValue> >();
@@ -4841,7 +4841,7 @@ void DocxAttributeOutput::LatentStyles()
     // Do we have latent styles available?
     uno::Reference<beans::XPropertySet> xPropertySet(m_rExport.m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;
-    xPropertySet->getPropertyValue("InteropGrabBag") >>= aInteropGrabBag;
+    xPropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aInteropGrabBag;
     uno::Sequence<beans::PropertyValue> aLatentStyles;
     auto pProp = std::find_if(std::cbegin(aInteropGrabBag), std::cend(aInteropGrabBag),
         [](const beans::PropertyValue& rProp) { return rProp.Name == "latentStyles"; });
@@ -5112,7 +5112,7 @@ void DocxAttributeOutput::WriteSrcRect(
     const SwFrameFormat* pFrameFormat)
 {
     uno::Reference<graphic::XGraphic> xGraphic;
-    xShapePropSet->getPropertyValue("Graphic") >>= xGraphic;
+    xShapePropSet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
     const Graphic aGraphic(xGraphic);
 
     Size aOriginalSize(aGraphic.GetPrefSize());
@@ -5125,7 +5125,7 @@ void DocxAttributeOutput::WriteSrcRect(
     }
 
     css::text::GraphicCrop aGraphicCropStruct;
-    xShapePropSet->getPropertyValue("GraphicCrop") >>= aGraphicCropStruct;
+    xShapePropSet->getPropertyValue(u"GraphicCrop"_ustr) >>= aGraphicCropStruct;
     sal_Int32 nCropL = aGraphicCropStruct.Left;
     sal_Int32 nCropR = aGraphicCropStruct.Right;
     sal_Int32 nCropT = aGraphicCropStruct.Top;
@@ -5286,7 +5286,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     // and only use passed frame size as fallback.
     if (xShapePropSet)
     {
-        if (css::awt::Size val; xShapePropSet->getPropertyValue("Size") >>= val)
+        if (css::awt::Size val; xShapePropSet->getPropertyValue(u"Size"_ustr) >>= val)
             aSize = Size(o3tl::toTwips(val.Width, o3tl::Length::mm100), o3tl::toTwips(val.Height, o3tl::Length::mm100));
     }
 
@@ -5302,7 +5302,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     OUString sURL, sRelId;
     if (xShapePropSet)
     {
-        xShapePropSet->getPropertyValue("HyperLinkURL") >>= sURL;
+        xShapePropSet->getPropertyValue(u"HyperLinkURL"_ustr) >>= sURL;
         if(!sURL.isEmpty())
         {
             if (sURL.startsWith("#") && sURL.indexOf(' ') != -1 && !sURL.endsWith("|outline") && !sURL.endsWith("|table") &&
@@ -5449,7 +5449,7 @@ bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& r
         return false;
 
     OUString clsid; // why is the property of type string, not sequence<byte>?
-    xPropSet->getPropertyValue("CLSID") >>= clsid;
+    xPropSet->getPropertyValue(u"CLSID"_ustr) >>= clsid;
     assert(!clsid.isEmpty());
     SvGlobalName aClassID;
     bool const isValid(aClassID.MakeId(clsid));
@@ -5478,7 +5478,7 @@ void DocxAttributeOutput::WritePostponedChart()
         {
             uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
             if( xPropSet.is() )
-                xChartDoc.set( xPropSet->getPropertyValue( "Model" ), uno::UNO_QUERY );
+                xChartDoc.set( xPropSet->getPropertyValue( u"Model"_ustr ), uno::UNO_QUERY );
         }
 
         if( xChartDoc.is() )
@@ -5487,15 +5487,15 @@ void DocxAttributeOutput::WritePostponedChart()
 
             m_rExport.SdrExporter().startDMLAnchorInline(rChart.frame, rChart.size);
 
-            OUString sName("Object 1");
+            OUString sName(u"Object 1"_ustr);
             uno::Reference< container::XNamed > xNamed( xShape, uno::UNO_QUERY );
             if( xNamed.is() )
                 sName = xNamed->getName();
 
             // tdf#153203  export a11y related properties
             uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-            OUString const title(xShapeProps->getPropertyValue("Title").get<OUString>());
-            OUString const descr(xShapeProps->getPropertyValue("Description").get<OUString>());
+            OUString const title(xShapeProps->getPropertyValue(u"Title"_ustr).get<OUString>());
+            OUString const descr(xShapeProps->getPropertyValue(u"Description"_ustr).get<OUString>());
 
             /* If there is a scenario where a chart is followed by a shape
                which is being exported as an alternate content then, the
@@ -5595,7 +5595,7 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
     if (!xInfo.is())
         return;
 
-    if (xInfo->supportsService("com.sun.star.form.component.DateField"))
+    if (xInfo->supportsService(u"com.sun.star.form.component.DateField"_ustr))
     {
         // gather component properties
 
@@ -5606,7 +5606,7 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
         OUString aContentText;
         bool bHasDate = false;
         css::util::Date aUNODate;
-        if (xPropertySet->getPropertyValue("Date") >>= aUNODate)
+        if (xPropertySet->getPropertyValue(u"Date"_ustr) >>= aUNODate)
         {
             bHasDate = true;
             Date aDate(aUNODate.Day, aUNODate.Month, aUNODate.Year);
@@ -5616,7 +5616,7 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
         }
         else
         {
-            aContentText = xPropertySet->getPropertyValue("HelpText").get<OUString>();
+            aContentText = xPropertySet->getPropertyValue(u"HelpText"_ustr).get<OUString>();
             if(sDateFormat.isEmpty())
                 sDateFormat = "dd/MM/yyyy"; // Need to set date format even if there is no date set
         }
@@ -5651,13 +5651,13 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
 
         m_pSerializer->endElementNS(XML_w, XML_sdt);
     }
-    else if (xInfo->supportsService("com.sun.star.form.component.ComboBox"))
+    else if (xInfo->supportsService(u"com.sun.star.form.component.ComboBox"_ustr))
     {
         // gather component properties
 
         uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
-        OUString sText = xPropertySet->getPropertyValue("Text").get<OUString>();
-        const uno::Sequence<OUString> aItems = xPropertySet->getPropertyValue("StringItemList").get< uno::Sequence<OUString> >();
+        OUString sText = xPropertySet->getPropertyValue(u"Text"_ustr).get<OUString>();
+        const uno::Sequence<OUString> aItems = xPropertySet->getPropertyValue(u"StringItemList"_ustr).get< uno::Sequence<OUString> >();
 
         // output component
 
@@ -5789,8 +5789,8 @@ bool DocxAttributeOutput::ExportAsActiveXControl(const SdrObject* pObject) const
 
     // See WritePostponedFormControl
     // By now date field and combobox is handled on a different way, so let's not interfere with the other method.
-    if(xInfo->supportsService("com.sun.star.form.component.DateField") ||
-       xInfo->supportsService("com.sun.star.form.component.ComboBox"))
+    if(xInfo->supportsService(u"com.sun.star.form.component.DateField"_ustr) ||
+       xInfo->supportsService(u"com.sun.star.form.component.ComboBox"_ustr))
         return false;
 
     oox::ole::OleFormCtrlExportHelper exportHelper(comphelper::getProcessComponentContext(), xModel, xControlModel);
@@ -6671,16 +6671,16 @@ static bool lcl_guessQFormat(const OUString& rName, sal_uInt16 nWwId)
 
     static o3tl::sorted_vector<OUString, OUStringIgnoreCase> const aAllowlist
     {
-        "No Spacing",
-        "List Paragraph",
-        "Quote",
-        "Intense Quote",
-        "Subtle Emphasis",
-        "Intense Emphasis",
-        "Subtle Reference",
-        "Intense Reference",
-        "Book Title",
-        "TOC Heading",
+        u"No Spacing"_ustr,
+        u"List Paragraph"_ustr,
+        u"Quote"_ustr,
+        u"Intense Quote"_ustr,
+        u"Subtle Emphasis"_ustr,
+        u"Intense Emphasis"_ustr,
+        u"Subtle Reference"_ustr,
+        u"Intense Reference"_ustr,
+        u"Book Title"_ustr,
+        u"TOC Heading"_ustr,
     };
     // Not custom style? Then we have a list of standard styles which should be qFormat.
     return aAllowlist.find(rName) != aAllowlist.end();
@@ -7403,7 +7403,7 @@ bool DocxAttributeOutput::EmbedFontStyle(std::u16string_view name, int tag, Font
             return false;
         uno::Reference< css::io::XOutputStream > xOutStream = m_rExport.GetFilter().openFragmentStream(
             "word/fonts/font" + OUString::number(m_nextFontId) + ".odttf",
-            "application/vnd.openxmlformats-officedocument.obfuscatedFont" );
+            u"application/vnd.openxmlformats-officedocument.obfuscatedFont"_ustr );
         // Not much point in trying hard with the obfuscation key, whoever reads the spec can read the font anyway,
         // so just alter the first and last part of the key.
         char fontKeyStr[] = "{00014A78-CABC-4EF0-12AC-5CD89AEFDE00}";
@@ -9733,7 +9733,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
                     uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY );
                     uno::Reference< beans::XPropertySet > xPropertySet( xShape, uno::UNO_QUERY );
                     m_rDrawingML.SetFS(m_pSerializer);
-                    m_rDrawingML.WriteBlipFill(xPropertySet, "BackGraphic");
+                    m_rDrawingML.WriteBlipFill(xPropertySet, u"BackGraphic"_ustr);
                 }
             }
         }

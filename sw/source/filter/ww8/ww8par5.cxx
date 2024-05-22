@@ -205,7 +205,7 @@ tools::Long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
             if( bSetAsHex )
             {
                 //all Hex-Numbers with \x before
-                OUString sTmp( "\\x" );
+                OUString sTmp( u"\\x"_ustr );
                 if( cChar < 0x10 )
                     sTmp += "0";
                 sTmp += OUString::number( cChar, 16 );
@@ -707,7 +707,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                             if (xDocStg.is())
                             {
                                 uno::Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement(
-                                        "OLELinks", embed::ElementModes::WRITE );
+                                        u"OLELinks"_ustr, embed::ElementModes::WRITE );
                                 rtl::Reference<SotStorage> xObjDst = SotStorage::OpenOLEStorage( xOleStg, sOleId );
 
                                 if ( xObjDst.is() )
@@ -1147,7 +1147,7 @@ void SwWW8ImplReader::MakeTagString( OUString& rStr, const OUString& rOrg )
         if( bSetAsHex )
         {
             //all Hex-Numbers with \x before
-            OUString sTmp( "\\x" );
+            OUString sTmp( u"\\x"_ustr );
             if( cChar < 0x10 )
                 sTmp += "0";
             sTmp += OUString::number( cChar, 16 );
@@ -1162,7 +1162,7 @@ void SwWW8ImplReader::MakeTagString( OUString& rStr, const OUString& rOrg )
 
 void SwWW8ImplReader::InsertTagField( const sal_uInt16 nId, const OUString& rTagText )
 {
-    OUString aName("WwFieldTag");
+    OUString aName(u"WwFieldTag"_ustr);
     if( SwFltGetFlag( m_nFieldFlags, SwFltControlStack::TAGS_DO_ID ) ) // Number?
         aName += OUString::number( nId );                    // return it?
 
@@ -1473,7 +1473,7 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, OUString& rStr )
 eF_ResT SwWW8ImplReader::Read_F_ANumber( WW8FieldDesc*, OUString& rStr )
 {
     if( !m_pNumFieldType ){     // 1st time
-        SwSetExpFieldType aT( &m_rDoc, "AutoNr", nsSwGetSetExpType::GSE_SEQ );
+        SwSetExpFieldType aT( &m_rDoc, u"AutoNr"_ustr, nsSwGetSetExpType::GSE_SEQ );
         m_pNumFieldType = static_cast<SwSetExpFieldType*>(m_rDoc.getIDocumentFieldsAccess().InsertFieldType( aT ));
     }
     SwSetExpField aField( m_pNumFieldType, OUString(), GetNumberPara( rStr ) );
@@ -2066,7 +2066,7 @@ eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, OUString& rStr )
     }
     else
     {
-        m_rDoc.getIDocumentContentOperations().InsertString(*m_pPaM, "###");
+        m_rDoc.getIDocumentContentOperations().InsertString(*m_pPaM, u"###"_ustr);
     }
 
     return eF_ResT::OK;
@@ -2198,7 +2198,7 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, OUString& rStr )
 
     SwGetRefField aField(
         static_cast<SwGetRefFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )),
-        sBkmName,"",REF_BOOKMARK,0,0,eFormat);
+        sBkmName,u""_ustr,REF_BOOKMARK,0,0,eFormat);
 
     if (eFormat == REF_CONTENT)
     {
@@ -2253,14 +2253,14 @@ eF_ResT SwWW8ImplReader::Read_F_NoteReference( WW8FieldDesc*, OUString& rStr )
     // set Sequence No of corresponding Foot-/Endnote to Zero
     // (will be corrected in
     SwGetRefField aField( static_cast<SwGetRefFieldType*>(
-        m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )), aBkmName, "", REF_FOOTNOTE, 0, 0,
+        m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )), aBkmName, u""_ustr, REF_FOOTNOTE, 0, 0,
         REF_ONLYNUMBER );
     m_xReffingStck->NewAttr(*m_pPaM->GetPoint(), SwFormatField(aField));
     m_xReffingStck->SetAttr(*m_pPaM->GetPoint(), RES_TXTATR_FIELD);
     if (bAboveBelow)
     {
         SwGetRefField aField2( static_cast<SwGetRefFieldType*>(
-            m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )),aBkmName, "", REF_FOOTNOTE, 0, 0,
+            m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )),aBkmName, u""_ustr, REF_FOOTNOTE, 0, 0,
             REF_UPDOWN );
         m_xReffingStck->NewAttr(*m_pPaM->GetPoint(), SwFormatField(aField2));
         m_xReffingStck->SetAttr(*m_pPaM->GetPoint(), RES_TXTATR_FIELD);
@@ -2308,7 +2308,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
                 sBookmarkName = sName;
             }
             OUString sURL = "#" + sBookmarkName;
-            SwFormatINetFormat aURL( sURL, "" );
+            SwFormatINetFormat aURL( sURL, u""_ustr );
             static constexpr OUString sLinkStyle(u"Index Link"_ustr);
             const sal_uInt16 nPoolId =
                 SwStyleNameMapper::GetPoolIdFromUIName( sLinkStyle, SwGetPoolIdFromName::ChrFmt );
@@ -2333,7 +2333,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
         sPageRefBookmarkName = sName;
     }
     SwGetRefField aField( static_cast<SwGetRefFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )),
-                        sPageRefBookmarkName, "", REF_BOOKMARK, 0, 0, REF_PAGE );
+                        sPageRefBookmarkName, u""_ustr, REF_BOOKMARK, 0, 0, REF_PAGE );
     m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
 
     return eF_ResT::OK;
@@ -2465,7 +2465,7 @@ bool CanUseRemoteLink(const OUString &rGrfName)
         if ( !INetURLObject( rGrfName ).isAnyKnownWebDAVScheme() )
         {
             OUString   aTitle;
-            aCnt.getPropertyValue("Title") >>= aTitle;
+            aCnt.getPropertyValue(u"Title"_ustr) >>= aTitle;
             bUseRemote = !aTitle.isEmpty();
         }
         else
@@ -2473,7 +2473,7 @@ bool CanUseRemoteLink(const OUString &rGrfName)
             // is a link to a WebDAV resource
             // need to use MediaType to check for link usability
             OUString   aMediaType;
-            aCnt.getPropertyValue("MediaType") >>= aMediaType;
+            aCnt.getPropertyValue(u"MediaType"_ustr) >>= aMediaType;
             bUseRemote = !aMediaType.isEmpty();
         }
     }
@@ -3628,7 +3628,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
     // If on loading TOC field, change the default style into the "index link"
     if (m_bLoadingTOXCache)
     {
-        OUString sLinkStyle("Index Link");
+        OUString sLinkStyle(u"Index Link"_ustr);
         sal_uInt16 nPoolId =
             SwStyleNameMapper::GetPoolIdFromUIName( sLinkStyle, SwGetPoolIdFromName::ChrFmt );
         aURL.SetVisitedFormatAndId( sLinkStyle, nPoolId );

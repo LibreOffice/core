@@ -494,7 +494,7 @@ void RtfSdrExport::impl_writeGraphic()
 
     try
     {
-        xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
+        xPropertySet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
     }
     catch (beans::UnknownPropertyException const&)
     {
