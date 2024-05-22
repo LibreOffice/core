@@ -3100,7 +3100,7 @@ bool SwTable::SetRowHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eTy
                     for( auto n = nStt; n < nEnd; ++n )
                     {
                         SwLayoutFrame* pLineFrame = GetRowFrame( *(*pLines)[ n ] );
-                        OSL_ENSURE( pLineFrame, "Where is the Frame from the SwTableLine??" );
+                        assert(pLineFrame && "Where is the Frame from the SwTableLine??");
                         aParam.nMaxSpace += CalcRowRstHeight( pLineFrame );
                         aParam.nMaxHeight += pLineFrame->getFrameArea().Height();
                     }
