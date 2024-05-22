@@ -6409,8 +6409,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Po
     /// support that feature, instead it postponed and exported
     /// later when the original shape closed.
 
-    if (rFrame.GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR
-        || rFrame.IsInline())
+    if (rFrame.IsInline())
     {
         m_nEmbedFlyLevel++;
         WriteFlyFrame(rFrame);
