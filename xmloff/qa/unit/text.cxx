@@ -505,11 +505,11 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRelativeWidth)
 
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     // Without the accompanying fix in place, this failed with:
-    // - Expected: 3.1492in (8cm)
+    // - Expected: 3.15in (8cm)
     // - Actual  : 0.0161in (0.04 cm)
     // i.e. the fallback width value wasn't the expected half of the body frame width, but a smaller
     // value.
-    assertXPath(pXmlDoc, "//draw:frame"_ostr, "width"_ostr, "3.1492in");
+    assertXPath(pXmlDoc, "//draw:frame"_ostr, "width"_ostr, "3.15in");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testScaleWidthAndHeight)
