@@ -102,4 +102,24 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineEndnoteAndSection)
     CPPUNIT_ASSERT_EQUAL(2, nToplevelSections);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testInlineEndnotePosition)
+{
+    // Given a document, ContinuousEndnotes is true:
+    createSwDoc("inline-endnote-position.docx");
+
+    // When laying out that document:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Then make sure the endnote separator (line + spacing around it) is large enough, so the
+    // endnote text below the separator has the correct position:
+    sal_Int32 nEndnoteContTopMargin
+        = parseDump("//column/ftncont/infos/prtBounds"_ostr, "top"_ostr).toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 269
+    // - Actual  : 124
+    // i.e. the top margin wasn't the default font size with its spacing, but the Writer default,
+    // which shifted endnote text up, incorrectly.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(269), nEndnoteContTopMargin);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
