@@ -64,6 +64,7 @@ class LOKitTileProvider implements TileProvider {
         mMessageCallback = messageCallback;
 
         LibreOfficeKit.putenv("SAL_LOG=+WARN+INFO");
+        LibreOfficeKit.putenv("SAL_LOK_OPTIONS=compact_fonts");
         LibreOfficeKit.init(mContext);
 
         mOffice = new Office(LibreOfficeKit.getLibreOfficeKitHandle());

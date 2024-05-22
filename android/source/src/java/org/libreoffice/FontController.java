@@ -19,8 +19,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 
 public class FontController implements AdapterView.OnItemSelectedListener {
 
@@ -32,7 +30,6 @@ public class FontController implements AdapterView.OnItemSelectedListener {
     private final LibreOfficeMainActivity mActivity;
     private final ArrayList<String> mFontList = new ArrayList<>();
     private final ArrayList<String> mFontSizes = new ArrayList<>();
-    private final HashMap<String, ArrayList<String>> mAllFontSizes = new HashMap<>();
 
     private String mCurrentFontSelected = null;
     private String mCurrentFontSizeSelected = null;
@@ -210,21 +207,17 @@ public class FontController implements AdapterView.OnItemSelectedListener {
 
     public void parseJson(String json) {
         mFontList.clear();
-        mAllFontSizes.clear();
+        mFontSizes.clear();
         try {
             JSONObject jObject = new JSONObject(json);
-            JSONObject jObject2 = jObject.getJSONObject("commandValues");
-            Iterator<String> keys = jObject2.keys();
-            ArrayList<String> fontSizes;
-            while (keys.hasNext()) {
-                String key = keys.next();
-                mFontList.add(key);
-                JSONArray array = jObject2.getJSONArray(key);
-                fontSizes = new ArrayList<>();
-                for (int i = 0; i < array.length(); i++) {
-                    fontSizes.add(array.getString(i));
-                }
-                mAllFontSizes.put(key, fontSizes);
+            final JSONArray fontNameArray = jObject.getJSONArray("FontNames");
+            for (int i = 0; i < fontNameArray.length(); i++) {
+                mFontList.add(fontNameArray.getString(i));
+            }
+
+            final JSONArray fontSizeArray = jObject.getJSONArray("FontSizes");
+            for (int i = 0; i < fontSizeArray.length(); i++) {
+                mFontSizes.add(fontSizeArray.getString(i));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -404,18 +397,6 @@ public class FontController implements AdapterView.OnItemSelectedListener {
         if (position != -1) {
             mCurrentFontSelected = fontName;
             spinner.setSelection(position,false);
-        }
-
-        resetFontSizes(fontName);
-    }
-
-    private void resetFontSizes(String fontName) {
-        if (mAllFontSizes.get(fontName) != null) {
-            mFontSizes.clear();
-            mFontSizes.addAll(mAllFontSizes.get(fontName));
-            Spinner spinner = mActivity.findViewById(R.id.font_size_spinner);
-            ArrayAdapter<?> arrayAdapter = (ArrayAdapter<?>)spinner.getAdapter();
-            arrayAdapter.notifyDataSetChanged();
         }
     }
 
