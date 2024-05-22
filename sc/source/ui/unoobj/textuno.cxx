@@ -820,7 +820,15 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
         {
             sal_uInt32 nFormat = rDoc.GetNumberFormat(aCellPos);
             OUString aText = ScCellFormat::GetInputString(aCell, nFormat, nullptr, rDoc);
-            if (!aText.isEmpty())
+            // tdf#157568 check if edit engine already has text
+            // If the input string is empty but the edit engine's existing
+            // text is not empty, force update of the edit engine's text.
+            // Otherwise, the edit engine will still to be set to its
+            // existing text.
+            // Note: CppunitTest_sc_macros_test testTdf116127 will fail if
+            // pEditEngine->SetTextNewDefaults() is passed an empty string
+            // and pEditEngine->GetText() is empty string.
+            if (!aText.isEmpty() || !pEditEngine->GetText().isEmpty())
                 pEditEngine->SetTextNewDefaults(aText, aDefaults);
             else
                 pEditEngine->SetDefaults(aDefaults);

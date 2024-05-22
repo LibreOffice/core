@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sal/config.h>
+#include <unotools/weakref.hxx>
 
 #include <rtl/ref.hxx>
 
@@ -267,6 +268,7 @@ private:
     OUString      m_strCurCellValue;
     ScRangeList   m_LastMarkedRanges;
     OUString      m_strOldTabName;
+    std::map<ScAddress, unotools::WeakReference<ScAccessibleCell>> m_mapCells;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

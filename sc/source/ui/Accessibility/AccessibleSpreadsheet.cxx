@@ -316,6 +316,7 @@ void SAL_CALL ScAccessibleSpreadsheet::disposing()
     m_mapSelectionSend.clear();
     m_mapFormulaSelectionSend.clear();
     m_pAccFormulaCell.clear();
+    m_mapCells.clear();
 
     ScAccessibleTableBase::disposing();
 }
@@ -681,7 +682,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                     if (pScDoc)
                     {
                         OUString valStr(pScDoc->GetString(aNewCell.Col(),aNewCell.Row(),aNewCell.Tab()));
-                        if(m_strCurCellValue != valStr)
+                        if(mpAccCell.is() && m_strCurCellValue != valStr)
                         {
                             uno::Any aOldValue;
                             uno::Any aNewValue;
@@ -769,6 +770,43 @@ void ScAccessibleSpreadsheet::CommitFocusCell(const ScAddress &aNewCell)
     {
         return ;
     }
+
+    // Related tdf#158914: check if focussed cell has changed
+    // Some accessiblity tools, such as NVDA on Windows, appear to need
+    // a value changed notification before it will refetch a cell's
+    // accessible text. While Notify() is able to fire text and value changed
+    // notifications, it seems to be rarely called and when it is called,
+    // such as when undoing a cell, it can be called before the cell's
+    // accessible taxt has been updated.
+    // So before a cell loses focus, check if any accessible text changes
+    // have occurred and fire text and value changed notifications if needed.
+    ScDocument* pScDoc= GetDocument(mpViewShell);
+    if (pScDoc && mpAccCell.is())
+    {
+        const ScAddress aOldActiveCell = mpAccCell->GetCellAddress();
+        OUString valStr(pScDoc->GetString(aOldActiveCell.Col(),aOldActiveCell.Row(),aOldActiveCell.Tab()));
+        if(m_strCurCellValue != valStr)
+        {
+            uno::Any aOldValue;
+            uno::Any aNewValue;
+            (void)comphelper::OCommonAccessibleText::implInitTextChangedEvent(m_strCurCellValue, valStr, aOldValue, aNewValue);
+            AccessibleEventObject aTextChangedEvent;
+            aTextChangedEvent.EventId = AccessibleEventId::TEXT_CHANGED;
+            aTextChangedEvent.OldValue = aOldValue;
+            aTextChangedEvent.NewValue = aNewValue;
+            mpAccCell->CommitChange(aTextChangedEvent);
+
+            if (pScDoc->HasValueData(maActiveCell))
+            {
+                AccessibleEventObject aEvent;
+                aEvent.EventId = AccessibleEventId::VALUE_CHANGED;
+                mpAccCell->CommitChange(aEvent);
+            }
+
+            m_strCurCellValue = valStr;
+        }
+    }
+
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
     aEvent.Source = uno::Reference< XAccessible >(this);
@@ -777,7 +815,6 @@ void ScAccessibleSpreadsheet::CommitFocusCell(const ScAddress &aNewCell)
     mpAccCell = GetAccessibleCellAt(aNewCell.Row(), aNewCell.Col());
     aEvent.NewValue <<= uno::Reference<XAccessible>(mpAccCell);
     maActiveCell = aNewCell;
-    ScDocument* pScDoc= GetDocument(mpViewShell);
     if (pScDoc)
     {
         m_strCurCellValue = pScDoc->GetString(maActiveCell.Col(),maActiveCell.Row(),maActiveCell.Tab());
@@ -945,7 +982,23 @@ rtl::Reference<ScAccessibleCell> ScAccessibleSpreadsheet::GetAccessibleCellAt(sa
         }
         else
         {
-            return ScAccessibleCell::create(this, mpViewShell, aCellAddress, getAccessibleIndex(nRow, nColumn), meSplitPos, mpAccDoc);
+            // tdf#158914 add back reusing weakly cached ScAccessibleCells
+            // While commit 8e886993f32b7db11a99bdecf06451e6de6c3842
+            // fixed tdf#157568, moving the selected cell rapidly creates
+            // a large number of stale ScAccessibleCell instances that
+            // aren't deleted until the Calc document is closed. So reduce
+            // memory usage by adding back the ScAccessibleCell cache that
+            // was in commit f22cb3dfab413a2917cd810b8e1b8f644a016327 now
+            // that a new fix for tdf#157568 has been implemented.
+            rtl::Reference<ScAccessibleCell> xCell;
+            auto it = m_mapCells.find(aCellAddress);
+            if (it != m_mapCells.end())
+                xCell = it->second.get();
+            if (xCell)
+                return xCell;
+            xCell = ScAccessibleCell::create(this, mpViewShell, aCellAddress, getAccessibleIndex(nRow, nColumn), meSplitPos, mpAccDoc);
+            m_mapCells.insert(std::make_pair(aCellAddress, xCell));
+            return xCell;
         }
     }
 }
