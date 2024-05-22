@@ -1009,6 +1009,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf61154)
     const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
     pWrtShell->UpdateTableOf(*pTOXBase);
     SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
     SwTextNode* pTitleNode = pShell->GetCursor()->GetPointNode().GetTextNode();
     SwNodeIndex aIdx(*pTitleNode);
 
@@ -1058,6 +1059,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf100691)
     const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
     pWrtShell->UpdateTableOf(*pTOXBase);
     SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
     SwTextNode* pTitleNode = pShell->GetCursor()->GetPointNode().GetTextNode();
     SwNodeIndex aIdx(*pTitleNode);
 

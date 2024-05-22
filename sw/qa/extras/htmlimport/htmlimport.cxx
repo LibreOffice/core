@@ -49,7 +49,9 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testPictureImport)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     // The document contains two pictures stored as a link.
-    sfx2::LinkManager& rLinkManager = pTextDoc->GetDocShell()->GetDoc()->GetEditShell()->GetLinkManager();
+    SwEditShell* const pEditShell(pTextDoc->GetDocShell()->GetDoc()->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
+    sfx2::LinkManager& rLinkManager = pEditShell->GetLinkManager();
     CPPUNIT_ASSERT_EQUAL(size_t(2), rLinkManager.GetLinks().size());
     rLinkManager.Remove(0,2);
     CPPUNIT_ASSERT_EQUAL(size_t(0), rLinkManager.GetLinks().size());
@@ -106,8 +108,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testInlinedImagesPageAndParagraph)
 
     // The document contains embedded pictures inlined for PageBackground and
     // ParagraphBackground, check for their existence after import
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-    SwEditShell* pEditShell = pDoc->GetEditShell();
+    SwEditShell* const pEditShell(pTextDoc->GetDocShell()->GetDoc()->GetEditShell());
     CPPUNIT_ASSERT(pEditShell);
 
     // images are not linked, check for zero links
@@ -210,8 +211,9 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageWidthAuto)
     createSwWebDoc("image-width-auto.html");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
-    SwTextAttr const*const pAttr(pTextDoc->GetDocShell()->GetDoc()->GetEditShell()->
-        GetCursor()->GetPointNode().GetTextNode()->GetTextAttrForCharAt(0, RES_TXTATR_FLYCNT));
+    SwEditShell* const pEditShell(pTextDoc->GetDocShell()->GetDoc()->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
+    SwTextAttr const*const pAttr(pEditShell->GetCursor()->GetPointNode().GetTextNode()->GetTextAttrForCharAt(0, RES_TXTATR_FLYCNT));
     CPPUNIT_ASSERT(pAttr);
     SwFrameFormat const*const pFmt(pAttr->GetFlyCnt().GetFrameFormat());
     SwFormatFrameSize const& rSize(pFmt->GetFormatAttr(RES_FRM_SIZE));

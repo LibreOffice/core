@@ -840,6 +840,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149711_importDOCXMoveToParagraphMar
 
     // reject tracked insertion (moveTo)
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
     pEditShell->RejectRedline(1);
 
@@ -903,6 +904,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf151954)
 
     // accept tracked insertion (moveTo)
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(3), pEditShell->GetRedlineCount());
     pEditShell->AcceptRedline(0);
 
@@ -1014,6 +1016,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMoving)
 
     // create a 3-element list without change tracking
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     pEditShell->RejectRedline(0);
     pEditShell->AcceptRedline(0);
 
@@ -1042,6 +1045,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMoving2)
 
     // create a 3-element list without change tracking
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     pEditShell->RejectRedline(0);
     pEditShell->AcceptRedline(0);
 
@@ -1075,6 +1079,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMovingDOCX)
     SwDocShell* pShell = pDoc->GetDocShell();
 
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     // This was 2 (moveFrom and moveTo joined other redlines)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(5), pEditShell->GetRedlineCount());
 
@@ -1207,6 +1212,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf145225_RedlineMovingWithBadInsertio
     // create a 3-element list without change tracking
     // (because the fixed problem depends on the own changes)
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     pEditShell->RejectRedline(0);
     pEditShell->AcceptRedline(0);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(0), pEditShell->GetRedlineCount());
@@ -1257,6 +1263,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf146964_ReappearingMovedTextInHideCh
     dispatchCommand(mxComponent, ".uno:Paste", {});
 
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();

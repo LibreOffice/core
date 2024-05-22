@@ -806,12 +806,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf140731)
     dispatchCommand(mxComponent, ".uno:TrackChanges", {});
 
     SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
 
     pShell->SelectTextModel(1, 500);
 
     dispatchCommand(mxComponent, ".uno:ChangeCaseToTitleCase", {});
 
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(120),
                          pEditShell->GetRedlineCount());
 
@@ -1052,6 +1054,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf152964)
 
     SwDoc* pDoc = getSwDoc();
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pEditShell->GetRedlineCount());
     dispatchCommand(mxComponent, ".uno:GoDown", {});
     dispatchCommand(mxComponent, ".uno:DeleteRows", {});
@@ -2354,6 +2357,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf127652)
     // moving up to the previous page would not work any more
     sal_uInt16 assertPage = 3;
     SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
     sal_uInt16 currentPage = pShell->GetPageNumSeqNonEmpty();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("We are on the wrong page!", assertPage, currentPage);
 }
@@ -2824,7 +2828,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf97899)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+    SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
+    SwPaM* pCursor = pShell->GetCursor();
+
     IDocumentContentOperations& rIDCO(pDoc->getIDocumentContentOperations());
 
     // Create an Ordered List

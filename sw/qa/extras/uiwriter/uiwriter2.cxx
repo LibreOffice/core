@@ -1316,6 +1316,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf145311_move_over_empty_paragraphs)
         dispatchCommand(mxComponent, ".uno:MoveDown", {});
 
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     // This was 3 (bad conversion of the empty item to a tracked insertion)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
 

@@ -213,7 +213,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTextSearch)
     // Create a new empty Writer document
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+    SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
+    SwPaM* pCursor = pShell->GetCursor();
     IDocumentContentOperations& rIDCO(pDoc->getIDocumentContentOperations());
     // Insert some text
     rIDCO.InsertString(*pCursor, "Hello World This is a test");
@@ -590,7 +592,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf72788)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+    SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
+    SwPaM* pCursor = pShell->GetCursor();
     IDocumentContentOperations& rIDCO(pDoc->getIDocumentContentOperations());
     //Insert some text - two paragraphs
     rIDCO.InsertString(*pCursor, "this is text");
@@ -654,7 +658,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf60967)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+    SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
+    SwPaM* pCursor = pShell->GetCursor();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     pWrtShell->ChangeHeaderOrFooter(u"Default Page Style", true, true, true);
     //Inserting table
@@ -806,7 +812,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77342)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+    SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
+    SwPaM* pCursor = pShell->GetCursor();
     //inserting first footnote
     pWrtShell->InsertFootnote("");
     SwFieldType* pField = pWrtShell->GetFieldType(0, SwFieldIds::GetRef);
@@ -1060,7 +1068,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf63553)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+    SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
+    SwPaM* pCursor = pShell->GetCursor();
     //inserting sequence field 1
     SwSetExpFieldType* pSeqType = static_cast<SwSetExpFieldType*>(
         pWrtShell->GetFieldType(SwFieldIds::SetExp, "Illustration"));
@@ -1639,7 +1649,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf83798)
     pWrtShell->GotoNextTOXBase();
     const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
     pWrtShell->UpdateTableOf(*pTOXBase);
-    SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+    SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
+    SwPaM* pCursor = pShell->GetCursor();
     pCursor->SetMark();
     pCursor->Move(fnMoveForward, GoInNode);
     pCursor->Move(fnMoveBackward, GoInContent);
@@ -1891,6 +1903,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testUndoDelAsCharTdf107512)
     sw::UndoManager& rUndoManager(pDoc->GetUndoManager());
     IDocumentContentOperations& rIDCO(pDoc->getIDocumentContentOperations());
     SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
     SfxItemSet frameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>);
     SfxItemSet grfSet(pDoc->GetAttrPool(), svl::Items<RES_GRFATR_BEGIN, RES_GRFATR_END - 1>);
     rIDCO.InsertString(*pShell->GetCursor(), "foo");
@@ -2043,7 +2056,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testUndoCharAttribute)
     // Create a new empty Writer document
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+    SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
+    SwPaM* pCursor = pShell->GetCursor();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     IDocumentContentOperations& rIDCO(pDoc->getIDocumentContentOperations());
     // Insert some text
@@ -2082,6 +2097,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testUndoDelAsChar)
     sw::UndoManager& rUndoManager(pDoc->GetUndoManager());
     IDocumentContentOperations& rIDCO(pDoc->getIDocumentContentOperations());
     SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
     SfxItemSet frameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>);
     SfxItemSet grfSet(pDoc->GetAttrPool(), svl::Items<RES_GRFATR_BEGIN, RES_GRFATR_END - 1>);
     SwFormatAnchor anchor(RndStdIds::FLY_AS_CHAR);
@@ -2275,6 +2291,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf127635)
     emulateTyping(*pXTextDocument, u"c d");
 
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     // accept all redlines
     while (pEditShell->GetRedlineCount())
         pEditShell->AcceptRedline(0);
@@ -2339,7 +2356,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf94804)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     //get cursor for making bookmark at a particular location
-    SwPaM* pCrsr = pDoc->GetEditShell()->GetCursor();
+    SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
+    SwPaM* pCrsr = pShell->GetCursor();
     IDocumentMarkAccess* pIDMAccess(pDoc->getIDocumentMarkAccess());
     //make first bookmark, CROSSREF_HEADING, with *empty* name
     sw::mark::IMark* pMark1(

@@ -58,6 +58,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testTdf130179)
     SwDoc* pDoc = getSwDoc();
     IDocumentContentOperations& rIDCO = pDoc->getIDocumentContentOperations();
     SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
     SfxItemSet aFrameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>);
     SfxItemSet aGrfSet(pDoc->GetAttrPool(), svl::Items<RES_GRFATR_BEGIN, RES_GRFATR_END - 1>);
     SwFormatAnchor aAnchor(RndStdIds::FLY_AT_PARA);
@@ -1056,7 +1057,9 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateSelectedField)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+    SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
+    SwPaM* pCursor = pShell->GetCursor();
 
     // Insert a time field and select it:
     dispatchCommand(mxComponent, ".uno:InsertTimeFieldVar", {});

@@ -578,6 +578,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf50447_keep_hints)
     // multiple format redlines for the multiple hints
 
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     // This was 1.
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(7), pEditShell->GetRedlineCount());
 
@@ -1027,6 +1028,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf125916_redline_restart_numbering)
     // Accept the first inline moveFrom redline before accepting the remaining ones
     // to leave a paragraph long deletion to test the fix for tdf#125916.
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     CPPUNIT_ASSERT(pEditShell->GetRedlineCount() > 0);
     pEditShell->AcceptRedline(0);
 
@@ -1784,6 +1786,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletion)
 
     // accept the deletion of the content of the first cell
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
     pEditShell->AcceptRedline(0);
 
@@ -1896,6 +1899,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150976)
 
     // deleted text content
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     // This was 1 before fixing tdf#151478 (testSelectRowWithNestedTable)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(3), pEditShell->GetRedlineCount());
 
@@ -1949,6 +1953,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf151657)
 
     // deleted text content
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     // This was 1 before fixing tdf#151478 (testSelectRowWithNestedTable)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(3), pEditShell->GetRedlineCount());
 
@@ -2107,6 +2112,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithExport)
 
     // accept the deletion of the content of the first cell
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
     pEditShell->AcceptRedline(0);
 
@@ -2163,6 +2169,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithDOCXExport)
 
     // accept the deletion of the content of the first cell
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
     pEditShell->AcceptRedline(0);
 
@@ -2195,6 +2202,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineDOCXTableInsertion)
     // reject the text insertions of the table cells (also reject deletion of the tabulated
     // text source of the table, which was used by the tracked text to table conversion)
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(10), pEditShell->GetRedlineCount());
     while (pEditShell->GetRedlineCount())
         pEditShell->RejectRedline(0);
@@ -2249,6 +2257,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf157662_AcceptInsertRedlineCutWithDe
         IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(9), pEditShell->GetRedlineCount());
 
     // Accept the insert that splitted into 3 parts .. accept all 3 of them
@@ -2283,6 +2292,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf157662_RejectInsertRedlineCutWithDe
         IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(9), pEditShell->GetRedlineCount());
 
     // Reject the insert that splitted into 3 parts. reject all 3 of them
@@ -2311,6 +2321,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf157663_RedlineMoveRecognition)
         IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(23), pEditShell->GetRedlineCount());
 
@@ -2569,6 +2580,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf144748)
 
     dispatchCommand(mxComponent, ".uno:Redo", {});
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     // This was 2 (bad extra redline for the empty row of the deleted table)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pEditShell->GetRedlineCount());
 
@@ -2687,6 +2699,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableColumnDeletion)
 
     // accept the deletion
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pEditShell->GetRedlineCount());
     pEditShell->AcceptRedline(0);
 
@@ -3061,6 +3074,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150673_RedlineTableColumnDeletionWi
 
     // accept the deletion of the content of the first cell
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pEditShell->GetRedlineCount());
     pEditShell->AcceptRedline(0);
 
@@ -3147,6 +3161,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableColumnDeletionWithDOCXExpo
 
     // accept the deletion of the content of the first cell
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pEditShell->GetRedlineCount());
     pEditShell->AcceptRedline(0);
 
@@ -3193,6 +3208,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf155341_RedlineTableColumnInsertionW
 
     // reject the insertion of the hidden content of the cell
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pEditShell->GetRedlineCount());
     pEditShell->RejectRedline(0);
 
@@ -3272,6 +3288,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithReject)
     // reject the deletion of the content of the first cell
     // HasTextChangesOnly property of the table row will be true
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
     pEditShell->RejectRedline(0);
 
@@ -3337,6 +3354,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowInsertionWithReject)
     dispatchCommand(mxComponent, ".uno:InsertRowsAfter", {});
 
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     // This was 0 (not tracked row insertion)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
 
@@ -3397,6 +3415,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145089_RedlineTableRowInsertionDOCX
     // reject redlines
     SwDoc* pDOCXDoc(pTextDoc->GetDocShell()->GetDoc());
     SwEditShell* const pEditShell(pDOCXDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
     pEditShell->RejectRedline(0);
     pEditShell->RejectRedline(0);
@@ -3559,6 +3578,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145091)
 
     // reject all redlines
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(3), pEditShell->GetRedlineCount());
     while (pEditShell->GetRedlineCount() > 0)
         pEditShell->RejectRedline(0);

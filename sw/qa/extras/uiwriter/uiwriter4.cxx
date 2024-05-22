@@ -1249,6 +1249,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf135260)
     }
 
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     // accept all redlines
     while (pEditShell->GetRedlineCount())
         pEditShell->AcceptRedline(0);
@@ -1634,6 +1635,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf104814)
     SwDoc* pDoc1 = getSwDoc();
 
     SwEditShell* const pEditShell(pDoc1->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
 
     // accept all redlines
     while (pEditShell->GetRedlineCount())
@@ -1746,6 +1748,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableRemoveHasTextChangesOnly2)
 
     // check redline count
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(14), pEditShell->GetRedlineCount());
 
     // 4 rows in Show Changes mode
@@ -1799,6 +1802,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf147182_AcceptAllChangesInTableSelec
 
     // check redline count
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(14), pEditShell->GetRedlineCount());
 
     // 4 rows in Show Changes mode

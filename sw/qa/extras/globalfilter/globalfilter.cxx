@@ -199,7 +199,9 @@ void Test::testLinkedGraphicRT()
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_uLong(864900), aGraphic.GetSizeBytes());
 
         // Check if linked graphic is registered in LinkManager
-        sfx2::LinkManager& rLinkManager = pTextDoc->GetDocShell()->GetDoc()->GetEditShell()->GetLinkManager();
+        SwEditShell* const pEditShell(pTextDoc->GetDocShell()->GetDoc()->GetEditShell());
+        CPPUNIT_ASSERT(pEditShell);
+        sfx2::LinkManager& rLinkManager = pEditShell->GetLinkManager();
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), size_t(1), rLinkManager.GetLinks().size());
         const tools::SvRef<sfx2::SvBaseLink> & rLink = rLinkManager.GetLinks()[0];
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), rLink->GetLinkSourceName().indexOf("linked_graphic.jpg") >= 0);

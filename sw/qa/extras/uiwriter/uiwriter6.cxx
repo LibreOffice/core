@@ -580,6 +580,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf99689TableOfContents)
     const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
     pWrtShell->UpdateTableOf(*pTOXBase);
     SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
     SwTextNode* pTitleNode = pShell->GetCursor()->GetPointNode().GetTextNode();
     SwNodeIndex aIdx(*pTitleNode);
     // skip the title
@@ -608,6 +609,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf99689TableOfFigures)
     const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
     pWrtShell->UpdateTableOf(*pTOXBase);
     SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
     SwTextNode* pTitleNode = pShell->GetCursor()->GetPointNode().GetTextNode();
     SwNodeIndex aIdx(*pTitleNode);
 
@@ -634,6 +636,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf99689TableOfTables)
     const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
     pWrtShell->UpdateTableOf(*pTOXBase);
     SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
     SwTextNode* pTitleNode = pShell->GetCursor()->GetPointNode().GetTextNode();
     SwNodeIndex aIdx(*pTitleNode);
 
@@ -963,7 +966,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115013)
     CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
-    SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+    SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
+    SwPaM* pCursor = pShell->GetCursor();
     CPPUNIT_ASSERT(pCursor);
 
     // Get the field at the beginning of the document
@@ -2023,6 +2028,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf124603)
         SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
         emulateTyping(*pTextDoc, u"the ");
         SwCursorShell* pShell(pDoc->GetEditShell());
+        CPPUNIT_ASSERT(pShell);
         SwTextNode* pNode = pShell->GetCursor()->GetPointNode().GetTextNode();
         // no bad word
         CPPUNIT_ASSERT_EQUAL(static_cast<SwWrongList*>(nullptr), pNode->GetWrong());
@@ -2076,6 +2082,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf45949)
         SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
         emulateTyping(*pTextDoc, u"baaad http://www.baaad.org baaad");
         SwCursorShell* pShell(pDoc->GetEditShell());
+        CPPUNIT_ASSERT(pShell);
         SwTextNode* pNode = pShell->GetCursor()->GetPointNode().GetTextNode();
 
         // tdf#152492: Without the fix in place, this test would have failed with
@@ -2132,6 +2139,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157442)
         SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
         emulateTyping(*pTextDoc, u"ErrorError Treee2 ");
         SwCursorShell* pShell(pDoc->GetEditShell());
+        CPPUNIT_ASSERT(pShell);
         SwTextNode* pNode = pShell->GetCursor()->GetPointNode().GetTextNode();
 
         // Without the fix in place, this test would have crashed because GetWrong() returns nullptr
@@ -3113,7 +3121,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf146178)
 
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+    SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
+    SwPaM* pCursor = pShell->GetCursor();
 
     // insert two fields
     dispatchCommand(mxComponent, ".uno:InsertTimeField", {});
@@ -3142,7 +3152,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf106663HeaderTextFrameGoToNextPlacem
     createSwDoc("testTdf106663.odt");
 
     SwDoc* pDoc = getSwDoc();
-    SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+    SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
+    SwPaM* pCursor = pShell->GetCursor();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     // Move the cursor into the fly frame of the document's header

@@ -1037,6 +1037,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkPosition)
         createSwDoc("watermark-position.odt");
         SwDoc* pDoc = getSwDoc();
         SwEditShell* pEditShell = pDoc->GetEditShell();
+        CPPUNIT_ASSERT(pEditShell);
         SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
         uno::Reference<frame::XModel> xModel = pDoc->GetDocShell()->GetBaseModel();
         uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
@@ -1487,6 +1488,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testMergeDoc)
     SwDoc* const pDoc2(pxDoc2Document->GetDocShell()->GetDoc());
 
     SwEditShell* const pEditShell(pDoc1->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     pEditShell->MergeDoc(*pDoc2);
 
     // accept all redlines

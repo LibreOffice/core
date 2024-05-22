@@ -267,6 +267,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142003)
     CPPUNIT_ASSERT(pTextDoc);
 
     SwEditShell* const pEditShell(pTextDoc->GetDocShell()->GetDoc()->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     pEditShell->AcceptRedline(0);
 
     //The changes were offset from where they should have been

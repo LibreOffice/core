@@ -3490,6 +3490,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144347)
 
     // remove first table
     SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pEditShell);
     for (int i = 0; i < 12; ++i)
         pEditShell->AcceptRedline(0);
 
