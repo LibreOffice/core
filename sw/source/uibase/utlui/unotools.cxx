@@ -408,7 +408,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
         if (pDoc)
         {
             SwEditShell* pSh = pDoc->GetEditShell();
-            if( pSh->ActionCount() )
+            if( pSh && pSh->ActionCount() )
             {
                 pSh->EndAllAction();
                 pSh->UnlockPaint();
