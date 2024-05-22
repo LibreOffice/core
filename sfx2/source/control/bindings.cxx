@@ -947,6 +947,9 @@ SfxPoolItemHolder SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem**
         if ( dynamic_cast< const SfxModule *>( pShell ) == nullptr && dynamic_cast< const SfxApplication *>( pShell ) == nullptr && dynamic_cast< const SfxViewFrame *>( pShell ) == nullptr )
             return SfxPoolItemHolder();
 
+    if (!pShell)
+        return SfxPoolItemHolder();
+
     SfxItemPool &rPool = pShell->GetPool();
     SfxRequest aReq( nId, nCallMode, rPool );
     aReq.SetModifier( nModi );

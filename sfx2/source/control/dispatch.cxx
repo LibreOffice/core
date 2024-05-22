@@ -707,7 +707,7 @@ bool SfxDispatcher::GetShellAndSlot_Impl(sal_uInt16 nSlot, SfxShell** ppShell,
 
         *ppShell = GetShell(aSvr.GetShellLevel());
         *ppSlot = aSvr.GetSlot();
-        if ( nullptr == (*ppSlot)->GetExecFnc() && bRealSlot )
+        if ( nullptr == (*ppSlot)->GetExecFnc() && bRealSlot && *ppShell )
             *ppSlot = (*ppShell)->GetInterface()->GetRealSlot(*ppSlot);
         // Check only real slots as enum slots don't have an execute function!
         return !bRealSlot || ((nullptr != *ppSlot) && (nullptr != (*ppSlot)->GetExecFnc()) );
@@ -986,13 +986,15 @@ void SfxDispatcher::PostMsgHandler(std::unique_ptr<SfxRequest> pReq)
         SfxSlotServer aSvr;
         if ( FindServer_(pReq->GetSlot(), aSvr ) ) // HACK(x), whatever that was supposed to mean
         {
-            const SfxSlot *pSlot = aSvr.GetSlot();
-            SfxShell *pSh = GetShell(aSvr.GetShellLevel());
+            if (SfxShell *pSh = GetShell(aSvr.GetShellLevel()))
+            {
+                const SfxSlot *pSlot = aSvr.GetSlot();
 
-            // When the pSlot is a "Pseudoslot" for macros or Verbs, it can
-            // be destroyed in the Call_Impl, thus do not use it anymore!
-            pReq->SetSynchronCall( false );
-            Call_Impl( *pSh, *pSlot, *pReq, pReq->AllowsRecording() ); //! why bRecord?
+                // When the pSlot is a "Pseudoslot" for macros or Verbs, it can
+                // be destroyed in the Call_Impl, thus do not use it anymore!
+                pReq->SetSynchronCall( false );
+                Call_Impl( *pSh, *pSlot, *pReq, pReq->AllowsRecording() ); //! why bRecord?
+            }
         }
     }
     else
