@@ -1724,7 +1724,7 @@ void XclImpXFRangeColumn::SetDefaultXF( const XclImpXFIndex& rXFIndex, const Xcl
     OSL_ENSURE( maIndexList.empty(), "XclImpXFRangeColumn::SetDefaultXF - Setting Default Column XF is not empty" );
 
     // insert a complete row range with one insert.
-    maIndexList.push_back( std::make_unique<XclImpXFRange>( 0, rRoot.GetDoc().MaxRow(), rXFIndex ) );
+    maIndexList.push_back( XclImpXFRange( 0, rRoot.GetDoc().MaxRow(), rXFIndex ) );
 }
 
 void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
@@ -1748,7 +1748,7 @@ void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
             SCROW nLastScRow = pPrevRange->mnScRow2;
             sal_uLong nIndex = nNextIndex - 1;
             XclImpXFRange* pThisRange = pPrevRange;
-            pPrevRange = (nIndex > 0 && nIndex <= maIndexList.size()) ? maIndexList[ nIndex - 1 ].get() : nullptr;
+            pPrevRange = (nIndex > 0 && nIndex <= maIndexList.size()) ? &maIndexList[ nIndex - 1 ] : nullptr;
 
             if( nFirstScRow == nLastScRow )         // replace solely XF
             {
@@ -1761,20 +1761,20 @@ void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
                 ++(pThisRange->mnScRow1);
                 // try to concatenate with previous of this
                 if( !pPrevRange || !pPrevRange->Expand( nScRow, rXFIndex ) )
-                    Insert( new XclImpXFRange( nScRow, rXFIndex ), nIndex );
+                    Insert( XclImpXFRange( nScRow, rXFIndex ), nIndex );
             }
             else if( nLastScRow == nScRow )         // replace last XF
             {
                 --(pThisRange->mnScRow2);
                 if( !pNextRange || !pNextRange->Expand( nScRow, rXFIndex ) )
-                    Insert( new XclImpXFRange( nScRow, rXFIndex ), nNextIndex );
+                    Insert( XclImpXFRange( nScRow, rXFIndex ), nNextIndex );
             }
             else                                    // insert in the middle of the range
             {
                 pThisRange->mnScRow1 = nScRow + 1;
                 // List::Insert() moves entries towards end of list, so insert twice at nIndex
-                Insert( new XclImpXFRange( nScRow, rXFIndex ), nIndex );
-                Insert( new XclImpXFRange( nFirstScRow, nScRow - 1, pThisRange->maXFIndex ), nIndex );
+                Insert( XclImpXFRange( nScRow, rXFIndex ), nIndex );
+                Insert( XclImpXFRange( nFirstScRow, nScRow - 1, pThisRange->maXFIndex ), nIndex );
             }
             return;
         }
@@ -1790,12 +1790,12 @@ void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
         return;
 
     // create new range
-    Insert( new XclImpXFRange( nScRow, rXFIndex ), nNextIndex );
+    Insert( XclImpXFRange( nScRow, rXFIndex ), nNextIndex );
 }
 
-void XclImpXFRangeColumn::Insert(XclImpXFRange* pXFRange, sal_uLong nIndex)
+void XclImpXFRangeColumn::Insert(XclImpXFRange aXFRange, sal_uLong nIndex)
 {
-    maIndexList.insert( maIndexList.begin() + nIndex, std::unique_ptr<XclImpXFRange>(pXFRange) );
+    maIndexList.insert( maIndexList.begin() + nIndex, std::move(aXFRange) );
 }
 
 void XclImpXFRangeColumn::Find(
@@ -1811,8 +1811,8 @@ void XclImpXFRangeColumn::Find(
         return;
     }
 
-    rpPrevRange = maIndexList.front().get();
-    rpNextRange = maIndexList.back().get();
+    rpPrevRange = &maIndexList.front();
+    rpNextRange = &maIndexList.back();
 
     // test whether row is at end of list (contained in or behind last range)
     // rpPrevRange will contain a possible existing row
@@ -1843,7 +1843,7 @@ void XclImpXFRangeColumn::Find(
     while( ((rnNextIndex - nPrevIndex) > 1) && (rpPrevRange->mnScRow2 < nScRow) )
     {
         nMidIndex = (nPrevIndex + rnNextIndex) / 2;
-        pMidRange = maIndexList[nMidIndex].get();
+        pMidRange = &maIndexList[nMidIndex];
         assert(pMidRange && "XclImpXFRangeColumn::Find - missing XF index range");
         if( nScRow < pMidRange->mnScRow1 )      // row is really before pMidRange
         {
@@ -1861,7 +1861,7 @@ void XclImpXFRangeColumn::Find(
     if( nScRow <= rpPrevRange->mnScRow2 )
     {
         rnNextIndex = nPrevIndex + 1;
-        rpNextRange = maIndexList[rnNextIndex].get();
+        rpNextRange = &maIndexList[rnNextIndex];
     }
 }
 
@@ -1870,8 +1870,8 @@ void XclImpXFRangeColumn::TryConcatPrev( sal_uLong nIndex )
     if( !nIndex || nIndex >= maIndexList.size() )
         return;
 
-    XclImpXFRange& prevRange = *maIndexList[ nIndex - 1 ];
-    XclImpXFRange& nextRange = *maIndexList[ nIndex ];
+    XclImpXFRange& prevRange = maIndexList[ nIndex - 1 ];
+    XclImpXFRange& nextRange = maIndexList[ nIndex ];
 
     if( prevRange.Expand( nextRange ) )
         maIndexList.erase( maIndexList.begin() + nIndex );
@@ -2004,9 +2004,8 @@ void XclImpXFRangeBuffer::Finalize()
             std::vector<ScAttrEntry> aAttrs;
             aAttrs.reserve(rColumn.end() - rColumn.begin());
 
-            for (const auto& rxStyle : rColumn)
+            for (const auto& rStyle : rColumn)
             {
-                XclImpXFRange& rStyle = *rxStyle;
                 const XclImpXFIndex& rXFIndex = rStyle.maXFIndex;
                 XclImpXF* pXF = rXFBuffer.GetXF( rXFIndex.GetXFIndex() );
                 if (!pXF)

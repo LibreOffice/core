@@ -569,7 +569,7 @@ public:
     XclImpXFRangeColumn(const XclImpXFRangeColumn&) = delete;
     const XclImpXFRangeColumn& operator=(const XclImpXFRangeColumn&) = delete;
 
-    typedef std::vector< std::unique_ptr<XclImpXFRange> > IndexList;
+    typedef std::vector< XclImpXFRange > IndexList;
 
     explicit     XclImpXFRangeColumn() {}
 
@@ -597,7 +597,7 @@ private:
     void                TryConcatPrev( sal_uLong nIndex );
 
     /** Insert a range into the list at the specified index. */
-    void                Insert(XclImpXFRange* pXFRange, sal_uLong nIndex);
+    void                Insert(XclImpXFRange aXFRange, sal_uLong nIndex);
 
 private:
     IndexList maIndexList;    /// The list of XF index range.
