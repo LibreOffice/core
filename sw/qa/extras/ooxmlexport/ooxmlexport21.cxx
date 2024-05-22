@@ -553,6 +553,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154369, "tdf154369.docx")
                 "color"_ostr, "00527d55");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testEmptyObjectRange)
+{
+    // Before the fix, this failed an assertion like this:
+    // Assertion failed: isBetween(n, (SAL_MIN_INT64 + d / 2) / m, (SAL_MAX_INT64 - d / 2) / m),
+    // file C:\lo\core\include\o3tl/unit_conversion.hxx, line 75
+    loadAndSave("cloud.docx");
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

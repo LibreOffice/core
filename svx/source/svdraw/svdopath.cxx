@@ -2850,11 +2850,14 @@ bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
                 // itself, else this method will no longer return the full polygon information (curve will
                 // be lost)
                 const basegfx::B2DRange aPolyRangeNoCurve(basegfx::utils::getRange(rPolyPolygon));
-                aScale = aPolyRangeNoCurve.getRange();
-                aTranslate = aPolyRangeNoCurve.getMinimum();
+                if (!aPolyRangeNoCurve.isEmpty())
+                {
+                    aScale = aPolyRangeNoCurve.getRange();
+                    aTranslate = aPolyRangeNoCurve.getMinimum();
 
-                // define matrix for move polygon to zero point
-                aMoveToZeroMatrix.translate(-aTranslate.getX(), -aTranslate.getY());
+                    // define matrix for move polygon to zero point
+                    aMoveToZeroMatrix.translate(-aTranslate.getX(), -aTranslate.getY());
+                }
             }
         }
 
