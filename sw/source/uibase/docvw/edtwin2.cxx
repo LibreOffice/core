@@ -333,9 +333,10 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
     if(bQuickBalloon && !rSh.GetViewOptions()->IsShowContentTips())
         return;
     bool bContinue = true;
+    bool bScreenTip = false;
     CurrShell aCurr(&rSh);
     OUString sText;
-    Point aPos( PixelToLogic( ScreenToOutputPixel( rEvt.GetMousePosPixel() ) ));
+    Point aPt( PixelToLogic( ScreenToOutputPixel( rEvt.GetMousePosPixel() ) ));
     bool bBalloon = bool(rEvt.GetMode() & HelpEventMode::BALLOON);
 
     SdrView *pSdrView = rSh.GetDrawView();
@@ -365,7 +366,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                     IsAttrAtPos::TableRedline |
                                     IsAttrAtPos::TableColRedline );
 
-        if( rSh.GetContentAtPos( aPos, aContentAtPos, false, &aFieldRect ) )
+        if( rSh.GetContentAtPos( aPt, aContentAtPos, false, &aFieldRect ) )
         {
             QuickHelpFlags nStyle = QuickHelpFlags::NONE; // style of quick help
             switch( aContentAtPos.eContentAtPos )
@@ -445,6 +446,27 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 if ( !bExecHyperlinks )
                 {
                     sText = SfxHelp::GetURLHelpText(sText);
+
+                    SwPosition aPos(rSh.GetDoc()->GetNodes());
+                    rSh.GetLayout()->GetModelPositionForViewPoint(&aPos, aPt);
+                    rtl::Reference<SwXTextRange> xRange(SwXTextRange::CreateXTextRange(
+                        *(m_rView.GetDocShell()->GetDoc()), aPos, &aPos));
+
+                    OUString sName;
+                    xRange->getPropertyValue("HyperLinkName") >>= sName;
+                    if (!sName.isEmpty())
+                    {
+                        bScreenTip = true;
+                        OUStringBuffer sStrBuffer(sName);
+                        sal_Int32 nTextLen = sText.getLength();
+                        sal_Int32 nNameLen = sName.getLength();
+                        if (nNameLen > nTextLen)
+                        {
+                            for (sal_Int32 i = nTextLen - 1; i < nNameLen; i += nTextLen)
+                                sStrBuffer.insert(i + 1, std::u16string_view(u"\n"));
+                        }
+                        sText = sStrBuffer.makeStringAndClear() + "\n" + sText;
+                    }
                 }
                 break;
             }
@@ -620,7 +642,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         if ( bShowTrackChanges && bShowInlineTooltips )
                         {
                             aContentAtPos.eContentAtPos = IsAttrAtPos::Redline;
-                            if( rSh.GetContentAtPos( aPos, aContentAtPos, false, &aFieldRect ) )
+                            if( rSh.GetContentAtPos( aPt, aContentAtPos, false, &aFieldRect ) )
                                 sText = lcl_GetRedlineHelp(*aContentAtPos.aFnd.pRedl, bBalloon, /*bTableChange=*/false, /*bTableColChange=*/false);
                         }
                     }
@@ -636,12 +658,12 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 else
                 {
                     tools::Rectangle aRect(aFieldRect.SVRect());
-                    Point aPt(OutputToScreenPixel(LogicToPixel(aRect.TopLeft())));
-                    aRect.SetLeft(aPt.X());
-                    aRect.SetTop(aPt.Y());
-                    aPt = OutputToScreenPixel(LogicToPixel(aRect.BottomRight()));
-                    aRect.SetRight(aPt.X());
-                    aRect.SetBottom(aPt.Y());
+                    Point aRectPt(OutputToScreenPixel(LogicToPixel(aRect.TopLeft())));
+                    aRect.SetLeft(aRectPt.X());
+                    aRect.SetTop(aRectPt.Y());
+                    aRectPt = OutputToScreenPixel(LogicToPixel(aRect.BottomRight()));
+                    aRect.SetRight(aRectPt.X());
+                    aRect.SetBottom(aRectPt.Y());
 
                     // tdf#136336 ensure tooltip area surrounds the current mouse position with at least a pixel margin
                     aRect.Union(tools::Rectangle(rEvt.GetMousePosPixel(), Size(1, 1)));
@@ -655,7 +677,9 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     else
                     {
                         // the show the help
-                        OUString sDisplayText(ClipLongToolTip(sText));
+                        OUString sDisplayText(sText);
+                        if (!bScreenTip)
+                            sDisplayText = ClipLongToolTip(sText);
                         Help::ShowQuickHelp(this, aRect, sDisplayText, nStyle);
                     }
                 }

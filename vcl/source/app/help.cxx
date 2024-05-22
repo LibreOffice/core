@@ -341,7 +341,11 @@ void HelpTextWindow::SetHelpText( const OUString& rHelpText )
     }
     else // HELPWINSTYLE_BALLOON
     {
-        sal_Int32 nCharsInLine = 35 + ((maHelpText.getLength()/100)*5);
+        sal_Int32 nCharsInLine;
+        if (mnHelpWinStyle == HELPWINSTYLE_QUICK)
+            nCharsInLine = maHelpText.getLength();
+        else
+            nCharsInLine = 35 + ((maHelpText.getLength() / 100) * 5);
         // average width to have all windows consistent
         OUStringBuffer aBuf(nCharsInLine);
         comphelper::string::padToLength(aBuf, nCharsInLine, 'x');
