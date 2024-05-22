@@ -2,9 +2,9 @@ disable protocols nobody needs in MSVC build
 
 --- curl/lib/config-win32.h.orig	2017-08-09 16:43:29.464000000 +0200
 +++ curl/lib/config-win32.h	2017-08-09 16:47:38.549200000 +0200
-@@ -654,4 +654,20 @@
- #  define ENABLE_IPV6 1
- #endif
+@@ -509,4 +509,20 @@
+ /* If you want to build curl with the built-in manual */
+ #define USE_MANUAL 1
  
 +#define CURL_DISABLE_DICT 1
 +#define CURL_DISABLE_FILE 1
