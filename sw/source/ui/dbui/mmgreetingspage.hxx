@@ -119,7 +119,8 @@ class SwMailBodyDialog : public SfxDialogController, public SwGreetingsHandler
     DECL_LINK(OKHdl, weld::Button&, void);
 
 public:
-    SwMailBodyDialog(weld::Window* pParent);
+    SwMailBodyDialog(weld::Window* pParent,
+                     std::shared_ptr<SwMailMergeConfigItem> const& rConfigItem);
     virtual ~SwMailBodyDialog() override;
 
     void SetBody(const OUString& rBody) { m_xBodyMLE->set_text(rBody); }

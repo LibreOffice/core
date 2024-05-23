@@ -337,9 +337,9 @@ IMPL_LINK(SwMailMergeGreetingsPage, InsertDataHdl_Impl, weld::Button&, rButton, 
     m_xDocumentIndexFI->set_label(m_sDocument.replaceFirst("%1", OUString::number(nPos)));
 }
 
-SwMailBodyDialog::SwMailBodyDialog(weld::Window* pParent)
+SwMailBodyDialog::SwMailBodyDialog(weld::Window* pParent, std::shared_ptr<SwMailMergeConfigItem> const & rConfigItem)
     : SfxDialogController(pParent, u"modules/swriter/ui/mmmailbody.ui"_ustr, u"MailBodyDialog"_ustr)
-    , SwGreetingsHandler(*GetActiveView()->GetMailMergeConfigItem(), *m_xBuilder)
+    , SwGreetingsHandler(*rConfigItem, *m_xBuilder)
     , m_xBodyMLE(m_xBuilder->weld_text_view(u"bodymle"_ustr))
     , m_xOK(m_xBuilder->weld_button(u"ok"_ustr))
 {

@@ -3156,9 +3156,8 @@ bool SwContentTree::FillTransferData(TransferDataContainer& rTransfer)
                 SfxMedium* pMedium = pDocShell->GetMedium();
                 sUrl = pMedium->GetURLObject().GetURLNoMark();
             }
-            else if (State::CONSTANT == m_eState
-                     && (!::GetActiveView()
-                         || m_pActiveShell != ::GetActiveView()->GetWrtShellPtr()))
+            else if (SwView* pView = GetActiveView(); State::CONSTANT == m_eState
+                     && (!pView || m_pActiveShell != pView->GetWrtShellPtr()))
             {
                 // Urls of inactive views cannot dragged without
                 // file names, also.

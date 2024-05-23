@@ -892,17 +892,14 @@ IMPL_LINK(SwMMResultEmailDialog, SendTypeHdl_Impl, weld::ComboBox&, rBox, void)
 
 IMPL_LINK_NOARG(SwMMResultEmailDialog, SendAsHdl_Impl, weld::Button&, void)
 {
-    // work around crash when calling constructor with no active view
-    if (!GetActiveView())
+    if (SwView* pView = GetActiveView())
     {
-        SAL_WARN("sw", "ignoring SendAs button click, because no active view");
-        return;
-    }
-    SwMailBodyDialog aDlg(m_xDialog.get());
-    aDlg.SetBody(m_sBody);
-    if (RET_OK == aDlg.run())
-    {
-        m_sBody = aDlg.GetBody();
+        SwMailBodyDialog aDlg(m_xDialog.get(), pView->GetMailMergeConfigItem());
+        aDlg.SetBody(m_sBody);
+        if (RET_OK == aDlg.run())
+        {
+            m_sBody = aDlg.GetBody();
+        }
     }
 }
 
