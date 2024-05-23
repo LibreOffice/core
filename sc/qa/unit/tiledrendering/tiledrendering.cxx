@@ -727,6 +727,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testViewLock)
     // Begin text edit in the second view and assert that the first gets a lock
     // notification.
     const ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
     SdrModel* pDrawModel = pViewData->GetDocument().GetDrawLayer();
@@ -953,6 +954,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCreateViewGraphicSelection)
 
     // Mark the graphic in the first view.
     const ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
     SdrModel* pDrawModel = pViewData->GetDocument().GetDrawLayer();
@@ -1031,15 +1033,17 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testHideColRow)
         dispatchCommand(mxComponent, u".uno:SelectColumn"_ustr, aArgs2);
     }
 
-    SCCOL nOldCurX = ScDocShell::GetViewData()->GetCurX();
-    SCROW nOldCurY = ScDocShell::GetViewData()->GetCurY();
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    SCCOL nOldCurX = pViewData->GetCurX();
+    SCROW nOldCurY = pViewData->GetCurY();
     {
         uno::Sequence<beans::PropertyValue> aArgs;
         dispatchCommand(mxComponent, u".uno:HideColumn"_ustr, aArgs);
     }
 
-    SCCOL nNewCurX = ScDocShell::GetViewData()->GetCurX();
-    SCROW nNewCurY = ScDocShell::GetViewData()->GetCurY();
+    SCCOL nNewCurX = pViewData->GetCurX();
+    SCROW nNewCurY = pViewData->GetCurY();
     CPPUNIT_ASSERT(nNewCurX > nOldCurX);
     CPPUNIT_ASSERT_EQUAL(nOldCurY, nNewCurY);
     {
@@ -1056,14 +1060,14 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testHideColRow)
         dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs2);
     }
 
-    nOldCurX = ScDocShell::GetViewData()->GetCurX();
-    nOldCurY = ScDocShell::GetViewData()->GetCurY();
+    nOldCurX = pViewData->GetCurX();
+    nOldCurY = pViewData->GetCurY();
     {
         uno::Sequence<beans::PropertyValue> aArgs;
         dispatchCommand(mxComponent, u".uno:HideRow"_ustr, aArgs);
     }
-    nNewCurX = ScDocShell::GetViewData()->GetCurX();
-    nNewCurY = ScDocShell::GetViewData()->GetCurY();
+    nNewCurX = pViewData->GetCurX();
+    nNewCurY = pViewData->GetCurY();
     CPPUNIT_ASSERT(nNewCurY > nOldCurY);
     CPPUNIT_ASSERT_EQUAL(nOldCurX, nNewCurX);
 }

@@ -78,7 +78,9 @@ void ScCopyPasteTest::testCopyPasteXLS()
     ScDocument* pDoc = pModelObj->GetDocument();
 
     // Get the document controller
-    ScTabViewShell* pViewShell = ScDocShell::GetViewData()->GetViewShell();
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
 
     // 2. Highlight B2:C5
     ScRange aSrcRange;
@@ -102,7 +104,9 @@ void ScCopyPasteTest::testCopyPasteXLS()
     mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
 
     // Get the document controller
-    pViewShell = ScDocShell::GetViewData()->GetViewShell();
+    pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    pViewShell = pViewData->GetViewShell();
 
     // 6. Paste
     pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
@@ -150,7 +154,9 @@ void ScCopyPasteTest::testTdf84411()
     ScDocument* pDoc = pModelObj->GetDocument();
 
     // Get the document controller
-    ScTabViewShell* pViewShell = ScDocShell::GetViewData()->GetViewShell();
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
 
     // 2. Setup data and formulas
     for (unsigned int r = 0; r <= 4991; ++r)
@@ -191,7 +197,9 @@ void ScCopyPasteTest::testTdf124565()
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
 
-    ScTabViewShell* pViewShell = ScDocShell::GetViewData()->GetViewShell();
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
 
     // Set content and height of first row
     pDoc->SetString(ScAddress(0, 0, 0), u"Test"_ustr);
@@ -231,7 +239,9 @@ void ScCopyPasteTest::testTdf126421()
     ScDocument* pDoc = pModelObj->GetDocument();
 
     // Get the document controller
-    ScTabViewShell* pViewShell = ScDocShell::GetViewData()->GetViewShell();
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
 
     // 2. Setup data
     for (int r = 0; r < 2; ++r)
@@ -317,16 +327,18 @@ void ScCopyPasteTest::testTdf53431_fillOnAutofilter()
     ScDocument* pDoc = pModelObj->GetDocument();
 
     // Get the document controller
-    ScTabViewShell* pViewShell = ScDocShell::GetViewData()->GetViewShell();
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
 
     //Fill should not clone Autofilter button
-    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(ScRange(1, 1, 0, 2, 4, 0));
+    pViewData->GetMarkData().SetMarkArea(ScRange(1, 1, 0, 2, 4, 0));
     pViewShell->FillSimple(FILL_TO_BOTTOM);
     CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(*pDoc, 1, 1, 0) & ScMF::Auto));
     CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(*pDoc, 2, 1, 0) & ScMF::Auto));
     CPPUNIT_ASSERT(!(lcl_getMergeFlagOfCell(*pDoc, 1, 4, 0) & ScMF::Auto));
 
-    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(ScRange(1, 1, 0, 4, 4, 0));
+    pViewData->GetMarkData().SetMarkArea(ScRange(1, 1, 0, 4, 4, 0));
     pViewShell->FillSimple(FILL_TO_RIGHT);
     CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(*pDoc, 1, 1, 0) & ScMF::Auto));
     CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(*pDoc, 2, 1, 0) & ScMF::Auto));
@@ -335,20 +347,20 @@ void ScCopyPasteTest::testTdf53431_fillOnAutofilter()
     CPPUNIT_ASSERT(!(lcl_getMergeFlagOfCell(*pDoc, 4, 4, 0) & ScMF::Auto));
 
     //Fill should not delete Autofilter buttons
-    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(ScRange(0, 0, 0, 2, 4, 0));
+    pViewData->GetMarkData().SetMarkArea(ScRange(0, 0, 0, 2, 4, 0));
     pViewShell->FillSimple(FILL_TO_TOP);
     CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(*pDoc, 1, 1, 0) & ScMF::Auto));
     CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(*pDoc, 2, 1, 0) & ScMF::Auto));
     CPPUNIT_ASSERT(!(lcl_getMergeFlagOfCell(*pDoc, 1, 0, 0) & ScMF::Auto));
 
     //Fill should not clone Autofilter button
-    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(ScRange(1, 1, 0, 2, 4, 0));
+    pViewData->GetMarkData().SetMarkArea(ScRange(1, 1, 0, 2, 4, 0));
     pViewShell->FillSimple(FILL_TO_BOTTOM);
     CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(*pDoc, 1, 1, 0) & ScMF::Auto));
     CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(*pDoc, 2, 1, 0) & ScMF::Auto));
     CPPUNIT_ASSERT(!(lcl_getMergeFlagOfCell(*pDoc, 1, 4, 0) & ScMF::Auto));
 
-    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(ScRange(1, 1, 0, 4, 4, 0));
+    pViewData->GetMarkData().SetMarkArea(ScRange(1, 1, 0, 4, 4, 0));
     pViewShell->FillSimple(FILL_TO_RIGHT);
     CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(*pDoc, 1, 1, 0) & ScMF::Auto));
     CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(*pDoc, 2, 1, 0) & ScMF::Auto));
@@ -357,13 +369,13 @@ void ScCopyPasteTest::testTdf53431_fillOnAutofilter()
     CPPUNIT_ASSERT(!(lcl_getMergeFlagOfCell(*pDoc, 4, 4, 0) & ScMF::Auto));
 
     //Fill should not delete Autofilter buttons
-    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(ScRange(0, 0, 0, 2, 4, 0));
+    pViewData->GetMarkData().SetMarkArea(ScRange(0, 0, 0, 2, 4, 0));
     pViewShell->FillSimple(FILL_TO_TOP);
     CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(*pDoc, 1, 1, 0) & ScMF::Auto));
     CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(*pDoc, 2, 1, 0) & ScMF::Auto));
     CPPUNIT_ASSERT(!(lcl_getMergeFlagOfCell(*pDoc, 1, 0, 0) & ScMF::Auto));
 
-    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(ScRange(0, 0, 0, 4, 4, 0));
+    pViewData->GetMarkData().SetMarkArea(ScRange(0, 0, 0, 4, 4, 0));
     pViewShell->FillSimple(FILL_TO_LEFT);
     CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(*pDoc, 1, 1, 0) & ScMF::Auto));
     CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(*pDoc, 2, 1, 0) & ScMF::Auto));
@@ -378,7 +390,9 @@ void ScCopyPasteTest::testTdf40993_fillMergedCells()
     ScDocument* pDoc = pModelObj->GetDocument();
 
     // Get the document controller
-    ScTabViewShell* pViewShell = ScDocShell::GetViewData()->GetViewShell();
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
 
     // check content of the merged cell H11:I11
     CPPUNIT_ASSERT_EQUAL(u"1.5"_ustr, pDoc->GetString(ScAddress(7, 10, 0)));
@@ -387,7 +401,7 @@ void ScCopyPasteTest::testTdf40993_fillMergedCells()
     // (as long as ATTR_MERGE_FLAG has only ScMF::Hor or ScMF::Ver)
     //
     // select merged cell
-    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(ScRange(7, 10, 0, 8, 10, 0));
+    pViewData->GetMarkData().SetMarkArea(ScRange(7, 10, 0, 8, 10, 0));
     // copy its content in the next ten rows
     pViewShell->FillAuto(FILL_TO_BOTTOM, 7, 10, 8, 10, 10);
     for (int i = 7; i < 9; i++)
@@ -420,9 +434,9 @@ void ScCopyPasteTest::testTdf40993_fillMergedCells()
                     lcl_getMergeSizeOfCell(*pDoc, 8, 10, 0));
 
     // area A6:E9 with various merged cells copied vertically and horizontally
-    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(ScRange(0, 5, 0, 4, 8, 0));
+    pViewData->GetMarkData().SetMarkArea(ScRange(0, 5, 0, 4, 8, 0));
     pViewShell->FillAuto(FILL_TO_BOTTOM, 0, 5, 4, 8, 12);
-    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(ScRange(0, 5, 0, 4, 8, 0));
+    pViewData->GetMarkData().SetMarkArea(ScRange(0, 5, 0, 4, 8, 0));
     pViewShell->FillAuto(FILL_TO_RIGHT, 0, 5, 4, 8, 10);
     for (int i = 0; i < 5; i++)
     {
@@ -452,9 +466,11 @@ void ScCopyPasteTest::testTdf40993_fillMergedCells()
 static void lcl_clickAndCheckCurrentArea(SCCOL nCol, SCROW nRow, SCCOL nCol2, SCROW nRow2)
 {
     ScRange aRange;
-    ScDocShell::GetViewData()->SetCurX(nCol);
-    ScDocShell::GetViewData()->SetCurY(nRow);
-    ScDocShell::GetViewData()->GetSimpleArea(aRange);
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    pViewData->SetCurX(nCol);
+    pViewData->SetCurY(nRow);
+    pViewData->GetSimpleArea(aRange);
     CPPUNIT_ASSERT_EQUAL(aRange, ScRange(nCol, nRow, 0, nCol2, nRow2, 0));
 }
 
@@ -487,12 +503,14 @@ void ScCopyPasteTest::testTdf88782_autofillLinearNumbersInMergedCells()
     ScDocument* pDoc = pModelObj->GetDocument();
 
     // Get the document controller
-    ScTabViewShell* pViewShell = ScDocShell::GetViewData()->GetViewShell();
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
 
     // merge the yellow cells
     ScCellMergeOption aMergeOptions(9, 11, 10, 13);     //J12:K14
     aMergeOptions.maTabs.insert(0);
-    ScDocShell* pDocSh = ScDocShell::GetViewData()->GetDocShell();
+    ScDocShell* pDocSh = pViewData->GetDocShell();
     pDocSh->GetDocFunc().MergeCells(aMergeOptions, false, true, true, false);
 
     // fillauto numbers, these areas contain mostly merged cells
@@ -549,7 +567,9 @@ void ScCopyPasteTest::tdf137621_autofillMergedBool()
     ScDocument* pDoc = pModelObj->GetDocument();
 
     // Get the document controller
-    ScTabViewShell* pViewShell = ScDocShell::GetViewData()->GetViewShell();
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
 
     // fillauto booleans, these areas contain only merged cells
     pViewShell->FillAuto(FILL_TO_RIGHT, 0, 4, 3, 5, 8);   //A5:D6
@@ -582,7 +602,9 @@ void ScCopyPasteTest::tdf137205_autofillDatesInMergedCells()
     ScDocument* pDoc = pModelObj->GetDocument();
 
     // Get the document controller
-    ScTabViewShell* pViewShell = ScDocShell::GetViewData()->GetViewShell();
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
 
     // fillauto dates, this areas contain only merged cells
     pViewShell->FillAuto(FILL_TO_RIGHT, 1, 5, 4, 7, 8);   //B6:E8
@@ -620,7 +642,9 @@ void ScCopyPasteTest::tdf137653_137654_autofillUserlist()
     ScDocument* pDoc = pModelObj->GetDocument();
 
     // Get the document controller
-    ScTabViewShell* pViewShell = ScDocShell::GetViewData()->GetViewShell();
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
 
     // delete every userlist to make sure there won't be any string that is in 2 different userlist
     ScGlobal::GetUserList().clear();
@@ -680,7 +704,9 @@ void ScCopyPasteTest::tdf113500_autofillMixed()
     ScDocument* pDoc = pModelObj->GetDocument();
 
     // Get the document controller
-    ScTabViewShell* pViewShell = ScDocShell::GetViewData()->GetViewShell();
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
 
     // fillauto userlist, these areas contain only merged cells
     pViewShell->FillAuto(FILL_TO_RIGHT, 4, 5, 6, 7, 3);   //E6:G8
@@ -730,7 +756,9 @@ void ScCopyPasteTest::tdf137625_autofillMergedUserlist()
     ScDocument* pDoc = pModelObj->GetDocument();
 
     // Get the document controller
-    ScTabViewShell* pViewShell = ScDocShell::GetViewData()->GetViewShell();
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
 
     // delete every userlist to make sure there won't be any string that is in 2 different userlist
     ScGlobal::GetUserList().clear();
@@ -790,7 +818,9 @@ void ScCopyPasteTest::tdf137624_autofillMergedMixed()
     ScDocument* pDoc = pModelObj->GetDocument();
 
     // Get the document controller
-    ScTabViewShell* pViewShell = ScDocShell::GetViewData()->GetViewShell();
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
 
     // add 1aa,2bb,3cc,4dd,5ee,6ff to userlist, to test that autofill won't confuse it with 1aa,3aa
     // delete every userlist to make sure there won't be any string that is in 2 different userlist

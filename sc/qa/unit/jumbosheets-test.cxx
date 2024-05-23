@@ -264,7 +264,9 @@ void ScJumboSheetsTest::testTdf134553()
     CPPUNIT_ASSERT_EQUAL(tools::Long(4574), pOleObj->GetLogicRect().getX());
     CPPUNIT_ASSERT_EQUAL(tools::Long(437), pOleObj->GetLogicRect().getY());
 
-    ScTabViewShell* pViewShell = ScDocShell::GetViewData()->GetViewShell();
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
     pViewShell->SelectObject(u"Diagram 1");
 
     dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
@@ -307,8 +309,10 @@ void ScJumboSheetsTest::testTdf147509()
     pDoc->SetString(0, 0, 0, u"A"_ustr);
     pDoc->SetString(1, 0, 0, u"B"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), ScDocShell::GetViewData()->GetCurX());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), ScDocShell::GetViewData()->GetCurY());
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), pViewData->GetCurX());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pViewData->GetCurY());
 
     dispatchCommand(mxComponent, u".uno:SelectColumn"_ustr, {});
 
@@ -332,8 +336,10 @@ void ScJumboSheetsTest::testTdf133033()
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), ScDocShell::GetViewData()->GetCurX());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(16777215), ScDocShell::GetViewData()->GetCurY());
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), pViewData->GetCurX());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(16777215), pViewData->GetCurY());
 }
 
 void ScJumboSheetsTest::testTdf109061()
