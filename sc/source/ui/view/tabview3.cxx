@@ -2211,14 +2211,15 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
                 // MapMode must be set after HideCursor
                 pGridWin[i]->SetMapMode(aViewData.GetLogicMode());
 
-                aViewData.SetEditEngine( static_cast<ScSplitPos>(i), pEngine, pGridWin[i], nCol, nRow );
-
                 if ( !bPosVisible )
                 {
                     //  move the edit view area to the real (possibly negative) position,
                     //  or hide if completely above or left of the window
                     pGridWin[i]->UpdateEditViewPos();
                 }
+
+                aViewData.SetEditEngine(static_cast<ScSplitPos>(i), pEngine, pGridWin[i], nCol,
+                                        nRow);
             }
         }
     }
