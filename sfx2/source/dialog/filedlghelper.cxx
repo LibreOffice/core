@@ -282,6 +282,7 @@ void FileDialogHelper_Impl::handleControlStateChanged( const FilePickerEvent& aE
         case CommonFilePickerElementIds::LISTBOX_FILTER:
             updateFilterOptionsBox();
             enablePasswordBox( false );
+            enableGpgEncrBox( false );
             updateSelectionBox();
             // only use it for export and with our own dialog
             if ( mbExport && !mbSystemPicker )
@@ -535,6 +536,37 @@ void FileDialogHelper_Impl::enablePasswordBox( bool bInit )
         bool bPassWord = false;
         mbPwdCheckBoxState = ( aValue >>= bPassWord ) && bPassWord;
         xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, Any( false ) );
+    }
+}
+
+void FileDialogHelper_Impl::enableGpgEncrBox( bool bInit )
+{
+    if ( ! mbHasPassword )  // CHECKBOX_GPGENCRYPTION is visible if CHECKBOX_PASSWORD is visible
+        return;
+
+    // in case of initialization assume previous state to be false
+    bool bWasEnabled = !bInit && mbIsGpgEncrEnabled;
+
+    std::shared_ptr<const SfxFilter> pCurrentFilter = getCurrentSfxFilter();
+    mbIsGpgEncrEnabled = updateExtendedControl(
+        ExtendedFilePickerElementIds::CHECKBOX_GPGENCRYPTION,
+        pCurrentFilter && ( pCurrentFilter->GetFilterFlags() & SfxFilterFlags::GPGENCRYPTION )
+    );
+
+    if( !bWasEnabled && mbIsGpgEncrEnabled )
+    {
+        uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+        if( mbGpgCheckBoxState )
+            xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_GPGENCRYPTION, 0, Any( true ) );
+    }
+    else if( bWasEnabled && !mbIsGpgEncrEnabled )
+    {
+        // remember user settings until checkbox is enabled
+        uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+        Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_GPGENCRYPTION, 0 );
+        bool bGpgEncryption = false;
+        mbGpgCheckBoxState = ( aValue >>= bGpgEncryption ) && bGpgEncryption;
+        xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_GPGENCRYPTION, 0, Any( false ) );
     }
 }
 
@@ -888,6 +920,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mbHasPassword           = false;
     m_bHaveFilterOptions    = false;
     mbIsPwdEnabled          = true;
+    mbIsGpgEncrEnabled      = true;
     mbHasVersions           = false;
     mbHasPreview            = false;
     mbShowPreview           = false;
@@ -898,6 +931,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mbExport                = bool(nFlags & FileDialogFlags::Export);
     mbIsSaveDlg             = false;
     mbPwdCheckBoxState      = false;
+    mbGpgCheckBoxState      = false;
     mbSelection             = false;
     mbSelectionEnabled      = true;
     mbHasSelectionBox       = false;
@@ -1220,6 +1254,7 @@ IMPL_LINK_NOARG( FileDialogHelper_Impl, InitControls, void*, void )
 {
     mnPostUserEventId = nullptr;
     enablePasswordBox( true );
+    enableGpgEncrBox( true );
     updateFilterOptionsBox( );
     updateSelectionBox( );
 }
@@ -1243,6 +1278,7 @@ void FileDialogHelper_Impl::preExecute()
     // However, the macOS implementation's pickers run modally in execute and so the event doesn't
     // get through in time... so we call the methods directly
     enablePasswordBox( true );
+    enableGpgEncrBox( true );
     updateFilterOptionsBox( );
     updateSelectionBox( );
 #endif
