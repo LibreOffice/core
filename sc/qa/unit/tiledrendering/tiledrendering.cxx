@@ -185,6 +185,7 @@ public:
     void testEditShapeText();
     void testCopyMultiSelection();
     void testNumberFormatLocaleMultiUser();
+    void testLeftOverflowEdit();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
@@ -268,6 +269,7 @@ public:
     CPPUNIT_TEST(testEditShapeText);
     CPPUNIT_TEST(testCopyMultiSelection);
     CPPUNIT_TEST(testNumberFormatLocaleMultiUser);
+    CPPUNIT_TEST(testLeftOverflowEdit);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4235,6 +4237,34 @@ void ScTiledRenderingTest::testNumberFormatLocaleMultiUser()
         const SvNumberformat* pNumberFormat = pDoc->GetFormatTable()->GetEntry(nNumberFormat);
         CPPUNIT_ASSERT_EQUAL(OUString("TT.MM.JJ"), pNumberFormat->GetFormatstring());
     }
+}
+
+void ScTiledRenderingTest::testLeftOverflowEdit()
+{
+    comphelper::LibreOfficeKit::setCompatFlag(comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+    ScModelObj* pModelObj = createDoc("right-aligned-with-overflow.ods");
+    ViewCallback aView;
+
+    // Go to Cell B5000
+    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+        comphelper::makePropertyValue("ToPoint", OUString("$B$5000")),
+    };
+    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+
+    // Enter edit mode and select all text.
+    aView.m_aTextSelectionResult.clear();
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::F2);
+    Scheduler::ProcessEventsToIdle();
+    // CTRL + A
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | awt::Key::A);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | awt::Key::A);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the accompanying fix this would fail with
+    // - Expected: 20
+    // - Actual  : 1300
+    CPPUNIT_ASSERT_EQUAL(tools::Long(20), aView.m_aTextSelectionResult.m_aRefPoint.getX());
 }
 
 }
