@@ -307,9 +307,10 @@ tools::Long ScColumn::GetNeededSize(
         {
             //  SetFont is moved up
 
-            Size aSize( pDev->GetTextWidth( aValStr ), pDev->GetTextHeight() );
+            Size aSize;
             if ( eOrient != SvxCellOrientation::Standard )
             {
+                aSize = Size( pDev->GetTextWidth( aValStr ), pDev->GetTextHeight() );
                 tools::Long nTemp = aSize.Width();
                 aSize.setWidth( aSize.Height() );
                 aSize.setHeight( nTemp );
@@ -318,6 +319,7 @@ tools::Long ScColumn::GetNeededSize(
             {
                 //TODO: take different X/Y scaling into consideration
 
+                aSize = Size( pDev->GetTextWidth( aValStr ), pDev->GetTextHeight() );
                 double nRealOrient = toRadians(nRotate);
                 double nCosAbs = fabs( cos( nRealOrient ) );
                 double nSinAbs = fabs( sin( nRealOrient ) );
@@ -347,8 +349,13 @@ tools::Long ScColumn::GetNeededSize(
                 }
 
                 aSize = Size( nWidth, nHeight );
+                nValue = bWidth ? aSize.Width() : aSize.Height();
             }
-            nValue = bWidth ? aSize.Width() : aSize.Height();
+            else if (bBreak && !bWidth)
+                aSize = Size( pDev->GetTextWidth( aValStr ), pDev->GetTextHeight() );
+            else
+                // in the common case (height), avoid calling the expensive GetTextWidth
+                nValue = bWidth ? pDev->GetTextWidth( aValStr ) : pDev->GetTextHeight();
 
             if ( bAddMargin )
             {
