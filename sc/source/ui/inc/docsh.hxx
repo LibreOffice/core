@@ -378,9 +378,9 @@ public:
 
     const OUString& GetDdeTextFmt() const { return m_aDdeTextFmt; }
 
-    SfxBindings*    GetViewBindings();
+    SAL_RET_MAYBENULL SfxBindings* GetViewBindings();
 
-    SC_DLLPUBLIC ScTabViewShell* GetBestViewShell( bool bOnlyVisible = true );
+    SAL_RET_MAYBENULL SC_DLLPUBLIC ScTabViewShell* GetBestViewShell( bool bOnlyVisible = true );
 
     void            SetDocumentModifiedPending( bool bVal )
                         { m_bDocumentModifiedPending = bVal; }
@@ -397,10 +397,10 @@ public:
 
     OutputDevice*   GetRefDevice(); // WYSIWYG: Printer, otherwise VirtualDevice...
 
-    SC_DLLPUBLIC static ScViewData* GetViewData();
+    SAL_RET_MAYBENULL SC_DLLPUBLIC static ScViewData* GetViewData();
     SC_DLLPUBLIC static SCTAB       GetCurTab();
 
-    static ScDocShell* GetShellByNum( sal_uInt16 nDocNo );
+    SAL_RET_MAYBENULL static ScDocShell* GetShellByNum( sal_uInt16 nDocNo );
     static OUString   GetOwnFilterName();
     static OUString   GetHtmlFilterName();
     static OUString   GetWebQueryFilterName();
