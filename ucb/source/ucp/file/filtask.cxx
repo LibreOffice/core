@@ -45,6 +45,7 @@
 #include <com/sun/star/ucb/Store.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <rtl/uri.hxx>
 

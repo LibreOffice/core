@@ -24,6 +24,7 @@
 #include <memory>
 
 #include <elements.hxx>
+#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/file.hxx>
 #include <fwkutil.hxx>

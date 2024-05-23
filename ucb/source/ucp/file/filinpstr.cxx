@@ -22,6 +22,8 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
+#include <osl/diagnose.h>
+
 #include "filinpstr.hxx"
 #include "filerror.hxx"
 

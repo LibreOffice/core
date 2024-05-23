@@ -27,6 +27,7 @@
 
 #include <osl/module.hxx>
 #include <osl/thread.h>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 

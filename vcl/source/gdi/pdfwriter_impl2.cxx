@@ -45,6 +45,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <osl/diagnose.h>
 #include <vcl/skia/SkiaHelper.hxx>
 
 #include <sal/log.hxx>

@@ -21,6 +21,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <libxml/xpathInternals.h>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
 #include <o3tl/string_view.hxx>

@@ -24,6 +24,7 @@
 #include <windows.h>
 #endif
 
+#include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/file.hxx>
 #include <osl/process.h>

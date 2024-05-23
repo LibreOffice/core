@@ -18,6 +18,7 @@
  */
 
 
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 
 #include <vendorbase.hxx>

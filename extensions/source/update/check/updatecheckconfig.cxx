@@ -26,6 +26,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/security.hxx>
 #include <osl/time.h>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <sal/macros.h>
 #include <o3tl/char16_t2wchar_t.hxx>

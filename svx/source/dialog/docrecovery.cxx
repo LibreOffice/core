@@ -38,6 +38,7 @@
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <unotools/pathoptions.hxx>
 

@@ -23,6 +23,7 @@
 
 #include <dp_misc.h>
 #include <dp_persmap.h>
+#include <osl/diagnose.h>
 #include <o3tl/safeint.hxx>
 #include <rtl/byteseq.hxx>
 #include <rtl/strbuf.hxx>

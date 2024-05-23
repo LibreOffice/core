@@ -38,6 +38,7 @@
 #include <scmod.hxx>
 
 #include <o3tl/safeint.hxx>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>

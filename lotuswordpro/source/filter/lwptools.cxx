@@ -63,6 +63,7 @@
 #include <o3tl/string_view.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

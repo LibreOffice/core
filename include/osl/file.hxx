@@ -35,7 +35,6 @@
 #include "rtl/ustring.hxx"
 
 #include "osl/file.h"
-#include "osl/diagnose.h"
 
 namespace rtl { class ByteSequence; }
 

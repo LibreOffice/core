@@ -20,6 +20,7 @@
 #include <config_features.h>
 #include <config_version.h>
 
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
 #include <osl/module.hxx>

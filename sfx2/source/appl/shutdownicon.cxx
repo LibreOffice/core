@@ -52,6 +52,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <rtl/ref.hxx>

@@ -27,6 +27,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/xmlencode.hxx>
 #include <o3tl/safeint.hxx>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <sfx2/frmhtmlw.hxx>

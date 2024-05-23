@@ -23,6 +23,7 @@
 #include <cstring>
 #include <string_view>
 
+#include <osl/diagnose.h>
 #include <codemaker/codemaker.hxx>
 #include <codemaker/commonjava.hxx>
 #include <codemaker/global.hxx>

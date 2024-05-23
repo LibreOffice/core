@@ -21,6 +21,7 @@
 #include "dp_gui_updatedata.hxx"
 
 #include <sal/config.h>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <utility>

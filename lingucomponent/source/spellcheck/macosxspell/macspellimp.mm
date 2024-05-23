@@ -34,6 +34,7 @@
 #include <linguistic/spelldta.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>

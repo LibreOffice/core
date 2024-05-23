@@ -29,6 +29,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>

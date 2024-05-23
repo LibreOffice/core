@@ -33,6 +33,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/urlobj.hxx>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <unotools/pathoptions.hxx>

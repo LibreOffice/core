@@ -43,6 +43,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 
 #include <utility>

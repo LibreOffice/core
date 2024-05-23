@@ -48,6 +48,7 @@
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
 #include <editeng/boxitem.hxx>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <vcl/settings.hxx>
 #include <unoprnms.hxx>

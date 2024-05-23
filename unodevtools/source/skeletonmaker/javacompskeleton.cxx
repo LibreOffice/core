@@ -21,6 +21,7 @@
 
 #include <codemaker/commonjava.hxx>
 #include <codemaker/global.hxx>
+#include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
 
 #include "skeletoncommon.hxx"

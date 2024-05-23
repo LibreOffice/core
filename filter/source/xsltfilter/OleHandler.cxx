@@ -9,6 +9,7 @@
  */
 
 
+#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 
 #include <package/Inflater.hxx>

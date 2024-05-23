@@ -22,6 +22,7 @@
 #include <codemaker/typemanager.hxx>
 #include <sal/main.h>
 #include <rtl/process.h>
+#include <osl/diagnose.h>
 #include <options.hxx>
 #include <unoidl/unoidl.hxx>
 

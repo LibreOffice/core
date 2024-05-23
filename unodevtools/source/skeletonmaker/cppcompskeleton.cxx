@@ -21,6 +21,7 @@
 
 #include <codemaker/commoncpp.hxx>
 #include <codemaker/global.hxx>
+#include <osl/diagnose.h>
 
 #include "skeletoncommon.hxx"
 #include "skeletoncpp.hxx"

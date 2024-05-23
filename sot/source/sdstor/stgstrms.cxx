@@ -22,6 +22,7 @@
 #include <string.h>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <unotools/tempfile.hxx>
 

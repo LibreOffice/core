@@ -55,6 +55,7 @@
 #include <sal/log.hxx>
 
 #include <unotools/tempfile.hxx>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>

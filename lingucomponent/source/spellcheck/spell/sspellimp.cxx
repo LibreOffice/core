@@ -41,6 +41,7 @@
 #include <svtools/strings.hrc>
 #include <unotools/lingucfg.hxx>
 #include <unotools/resmgr.hxx>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/textenc.h>

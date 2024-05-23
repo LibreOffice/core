@@ -22,6 +22,7 @@
 #include <math.h>
 #include <string_view>
 
+#include <osl/diagnose.h>
 #include <o3tl/float_int_conversion.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>

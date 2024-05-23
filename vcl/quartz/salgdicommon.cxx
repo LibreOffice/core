@@ -28,6 +28,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <osl/endian.h>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <sal/types.h>
 #include <tools/long.hxx>

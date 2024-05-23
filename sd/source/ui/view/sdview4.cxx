@@ -22,6 +22,7 @@
 #include <View.hxx>
 
 #include <comphelper/propertyvalue.hxx>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>

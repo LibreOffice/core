@@ -28,6 +28,7 @@
 #include <globals.hxx>
 #include <slot.hxx>
 #include <rtl/strbuf.hxx>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 
 

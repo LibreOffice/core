@@ -31,6 +31,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <unotools/bootstrap.hxx>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/pipe.hxx>
 #include <osl/security.hxx>

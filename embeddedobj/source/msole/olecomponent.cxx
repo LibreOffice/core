@@ -38,6 +38,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/windowserrorstring.hxx>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <rtl/ref.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>

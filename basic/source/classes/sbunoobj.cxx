@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <osl/diagnose.h>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
 #include <utility>

@@ -29,6 +29,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <rtl/bootstrap.h>

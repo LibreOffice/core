@@ -29,6 +29,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "secimpl.hxx"
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 

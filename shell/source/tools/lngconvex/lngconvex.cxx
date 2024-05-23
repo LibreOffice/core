@@ -35,6 +35,7 @@ typedef unsigned short WORD;
 #include <comphelper/string.hxx>
 #include <osl/thread.h>
 #include <osl/process.h>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <sal/main.h>
 

@@ -47,6 +47,7 @@
 #include <o3tl/safeint.hxx>
 #include <o3tl/temporary.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <rtl/crc.h>

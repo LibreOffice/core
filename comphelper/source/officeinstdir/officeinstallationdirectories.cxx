@@ -27,6 +27,7 @@
 
  *************************************************************************/
 
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <comphelper/fileurl.hxx>

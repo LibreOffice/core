@@ -19,6 +19,7 @@
 
 
 #include <cppuhelper/exc_hlp.hxx>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

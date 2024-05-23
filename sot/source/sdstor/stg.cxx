@@ -19,6 +19,7 @@
 
 
 #include <sot/storinfo.hxx>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <unotools/tempfile.hxx>
 #include <tools/stream.hxx>

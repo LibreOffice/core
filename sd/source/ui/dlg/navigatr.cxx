@@ -20,6 +20,7 @@
 #include <memory>
 #include <sal/config.h>
 
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/fcontnr.hxx>
