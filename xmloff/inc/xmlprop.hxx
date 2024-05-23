@@ -526,6 +526,7 @@ inline constexpr OUString PROP_PolynomialDegree = u"PolynomialDegree"_ustr;
 inline constexpr OUString PROP_PositionProtected = u"PositionProtected"_ustr;
 inline constexpr OUString PROP_PositiveError = u"PositiveError"_ustr;
 inline constexpr OUString PROP_Print = u"Print"_ustr;
+inline constexpr OUString PROP_Printable = u"Printable"_ustr;
 inline constexpr OUString PROP_PrintAnnotations = u"PrintAnnotations"_ustr;
 inline constexpr OUString PROP_PrintCharts = u"PrintCharts"_ustr;
 inline constexpr OUString PROP_PrintDownFirst = u"PrintDownFirst"_ustr;
