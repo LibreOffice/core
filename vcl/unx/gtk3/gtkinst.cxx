@@ -21368,6 +21368,29 @@ private:
             //is what the vcl case does, to ease the transition a little
             gtk_widget_grab_focus(m_pEntry);
             enable_notify_events();
+
+            // tdf#160971: For some reason, the tree view in the no longer visible
+            // popup still incorrectly assumes it has focus in addition to the now
+            // actually focused entry.
+            // That would cause it to send invalid active-descendant-changed a11y events when
+            // the selected entry changes, e.g. breaking focus tracking by the Orca screen reader.
+            // Manually unset focus to avoid that
+            assert(!gtk_widget_is_visible(GTK_WIDGET(m_pTreeView)));
+            const bool bTreeViewFocus = gtk_widget_has_focus(GTK_WIDGET(m_pTreeView));
+            if (bTreeViewFocus)
+            {
+                SAL_WARN("vcl.gtk", "No more visible tree view in combobox still incorrectly "
+                                    "claims having focus - unsetting manually.");
+                GdkWindow* pWindow = gtk_widget_get_window(GTK_WIDGET(m_pTreeView));
+                GdkEvent* pEvent = gdk_event_new(GDK_FOCUS_CHANGE);
+                pEvent->focus_change.type = GDK_FOCUS_CHANGE;
+                pEvent->focus_change.window = pWindow;
+                if (pWindow)
+                    g_object_ref(pWindow);
+                pEvent->focus_change.in = 0;
+                gtk_widget_send_focus_change(GTK_WIDGET(m_pTreeView), pEvent);
+                gdk_event_free(pEvent);
+            }
         }
     }
 
