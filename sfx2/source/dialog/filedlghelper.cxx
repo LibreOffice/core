@@ -513,7 +513,8 @@ void FileDialogHelper_Impl::enablePasswordBox( bool bInit )
     if ( ! mbHasPassword )
         return;
 
-    bool bWasEnabled = mbIsPwdEnabled;
+    // in case of initialization assume previous state to be false
+    bool bWasEnabled = !bInit && mbIsPwdEnabled;
 
     std::shared_ptr<const SfxFilter> pCurrentFilter = getCurrentSfxFilter();
     mbIsPwdEnabled = updateExtendedControl(
@@ -521,17 +522,7 @@ void FileDialogHelper_Impl::enablePasswordBox( bool bInit )
         pCurrentFilter && ( pCurrentFilter->GetFilterFlags() & SfxFilterFlags::ENCRYPTION )
     );
 
-    if( bInit )
-    {
-        // in case of initialization previous state is not interesting
-        if( mbIsPwdEnabled )
-        {
-            uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
-            if( mbPwdCheckBoxState )
-                xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, Any( true ) );
-        }
-    }
-    else if( !bWasEnabled && mbIsPwdEnabled )
+    if( !bWasEnabled && mbIsPwdEnabled )
     {
         uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
         if( mbPwdCheckBoxState )
