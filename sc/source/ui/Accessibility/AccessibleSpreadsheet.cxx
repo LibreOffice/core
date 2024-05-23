@@ -310,7 +310,11 @@ void SAL_CALL ScAccessibleSpreadsheet::disposing()
         mpViewShell->RemoveAccessibilityObject(*this);
         mpViewShell = nullptr;
     }
+
     mpAccCell.clear();
+    m_mapSelectionSend.clear();
+    m_mapFormulaSelectionSend.clear();
+    m_pAccFormulaCell.clear();
 
     ScAccessibleTableBase::disposing();
 }
