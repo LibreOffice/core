@@ -722,11 +722,11 @@ static HCERTSTORE getCertStoreForIntermediatCerts(
     if (store == nullptr)
         return nullptr;
 
-    for (int i = 0; i < seqCerts.getLength(); i++)
+    for (const auto& i : seqCerts)
     {
-        SAL_INFO("xmlsecurity.xmlsec", "Added temporary certificate: " << seqCerts[i]->getSubjectName());
+        SAL_INFO("xmlsecurity.xmlsec", "Added temporary certificate: " << i->getSubjectName());
 
-        uno::Sequence<sal_Int8> data = seqCerts[i]->getEncoded();
+        uno::Sequence<sal_Int8> data = i->getEncoded();
         PCCERT_CONTEXT cert = CertCreateCertificateContext(
             X509_ASN_ENCODING, reinterpret_cast<const BYTE*>(&data[0]), data.getLength());
         //Adding the certificate creates a copy and not just increases the ref count
