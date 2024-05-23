@@ -677,7 +677,7 @@ bool SwHiddenTextPortion::Format( SwTextFormatInfo &rInf )
 bool SwControlCharPortion::DoPaint(SwTextPaintInfo const& rTextPaintInfo,
         OUString & rOutString, SwFont & rTmpFont, int &) const
 {
-    if (mcChar == CHAR_WJ || !rTextPaintInfo.GetOpt().IsFieldShadings())
+    if (mcChar == CHAR_WJ || !rTextPaintInfo.GetOpt().IsViewMetaChars())
     {
         return false;
     }
@@ -696,6 +696,7 @@ bool SwControlCharPortion::DoPaint(SwTextPaintInfo const& rTextPaintInfo,
     }
 
     rTmpFont.SetEscapement( CHAR_ZWSP == mcChar ? DFLT_ESC_AUTO_SUB : -25 );
+    rTmpFont.SetColor( NON_PRINTING_CHARACTER_COLOR );
     const sal_uInt16 nProp = 40;
     rTmpFont.SetProportion( nProp );  // a smaller font
 

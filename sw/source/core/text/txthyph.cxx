@@ -431,10 +431,23 @@ sal_uInt16 SwSoftHyphPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
  */
 void SwSoftHyphPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
-    if( Width() )
+    if ( Width() && rInf.GetOpt().IsViewMetaChars())
     {
         rInf.DrawViewOpt( *this, PortionType::SoftHyphen );
         SwExpandPortion::Paint( rInf );
+
+        OUString aMarker = u"-"_ustr;
+        SwTextPaintInfo aInf(rInf, &aMarker);
+        SwTextPortion aMarkerPor;
+        SwPosSize aMarkerSize(rInf.GetTextSize(aMarker));
+        aMarkerPor.Width(aMarkerSize.Width());
+        aMarkerPor.Height(aMarkerSize.Height());
+        aMarkerPor.SetAscent(GetAscent());
+
+        Color colorBackup = aInf.GetFont()->GetColor();
+        aInf.GetFont()->SetColor(NON_PRINTING_CHARACTER_COLOR);
+        aInf.DrawText(aMarkerPor, TextFrameIndex(aMarker.getLength()), true);
+        aInf.GetFont()->SetColor(colorBackup);
     }
 }
 
