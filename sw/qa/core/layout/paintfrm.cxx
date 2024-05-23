@@ -158,6 +158,26 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitTableMergedBorder)
     // bottom border.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aHorizontalBorderEnds.size());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testInlineEndnoteSeparatorPosition)
+{
+    // Given a document with a Word-style endnote separator:
+    createSwDoc("inline-endnote-position.docx");
+    SwDocShell* pDocShell = getSwDocShell();
+
+    // When rendering that document:
+    std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
+
+    // Then make sure the separator upper spacing is 60% of all space, matching Word:
+    MetafileXmlDump aDumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
+    auto nEndnoteSeparatorY = getXPath(pXmlDoc, "//polygon/point[1]"_ostr, "y"_ostr).toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2164
+    // - Actual  : 2060
+    // i.e. the upper spacing was too low.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2164), nEndnoteSeparatorY);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
