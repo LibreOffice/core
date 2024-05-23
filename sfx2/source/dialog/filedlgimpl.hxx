@@ -74,8 +74,8 @@ namespace sfx2
 
         FileDialogHelper::Context   meContext;
 
-        bool                    mbHasPassword           : 1;
-        bool                    mbIsPwdEnabled          : 1;
+        bool                    mbHasPassword           : 1;  // checkbox is visible
+        bool                    mbIsPwdEnabled          : 1;  // password checkbox is not grayed out
         bool                    m_bHaveFilterOptions    : 1;
         bool                    mbHasVersions           : 1;
         bool                    mbHasAutoExt            : 1;

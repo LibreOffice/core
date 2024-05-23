@@ -1417,6 +1417,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
         if( mbHasPassword )
         {
             const SfxBoolItem* pPassItem = SfxItemSet::GetItem<SfxBoolItem>(&*rpSet, SID_PASSWORDINTERACTION, false);
+            // TODO: tdf#158839 problem: Is also true if the file is GPG encrypted. (not with a password)
             mbPwdCheckBoxState = ( pPassItem != nullptr && pPassItem->GetValue() );
 
             // in case the document has password to modify, the dialog should be shown
@@ -1535,6 +1536,8 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                 {
                     // ask for a password
                     OUString aDocName(rpURLList[0]);
+                    // TODO: tdf#158839 problem: Also asks for a password if CHECKBOX_GPGENCRYPTION && CHECKBOX_PASSWORD
+                    //       are checked. But only encrypts using GPG and discards the password.
                     ErrCode errCode = RequestPassword(pCurrentFilter, aDocName, &*rpSet, GetFrameInterface());
                     if (errCode != ERRCODE_NONE)
                         return errCode;

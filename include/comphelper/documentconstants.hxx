@@ -111,7 +111,7 @@ enum class SfxFilterFlags
     EXOTIC            = 0x00200000,
     COMBINED          = 0x00800000,
 
-    ENCRYPTION        = 0x01000000,
+    ENCRYPTION        = 0x01000000,  // password encryption
     PASSWORDTOMODIFY  = 0x02000000,
     GPGENCRYPTION     = 0x04000000,
     PREFERED          = 0x10000000,
