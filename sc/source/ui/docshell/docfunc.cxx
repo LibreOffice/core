@@ -180,7 +180,7 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint, bool bApi )
             while (pViewShell)
             {
                 ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-                if (pTabViewShell && pTabViewShell->GetDocId() == pSomeViewForThisDoc->GetDocId())
+                if (pTabViewShell && pSomeViewForThisDoc && pTabViewShell->GetDocId() == pSomeViewForThisDoc->GetDocId())
                 {
                     if (ScPositionHelper* pPosHelper = pTabViewShell->GetViewData().GetLOKHeightHelper(nTab))
                         pPosHelper->invalidateByIndex(nStartRow);
