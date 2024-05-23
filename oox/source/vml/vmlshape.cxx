@@ -878,7 +878,11 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
                 aPropertySet.setAnyProperty(PROP_VertOrientPosition, Any(aShapeRect.Y));
             }
         }
-
+        if (!maTypeModel.mbVisible)
+        {
+            aPropertySet.setAnyProperty(PROP_Visible, uno::Any(false));
+            aPropertySet.setAnyProperty(PROP_Printable, uno::Any(false));
+        }
         // custom shape geometry attributes
         std::vector<css::beans::PropertyValue> aPropVec;
 
