@@ -53,133 +53,191 @@ public:
     }
 };
 
-DECLARE_RTFEXPORT_TEST(testTdf155663, "piccrop.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf155663)
 {
-    auto const xShape(getShape(1));
-    if (!isExported())
-    {
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(2004), xShape->getSize().Height);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(2004), xShape->getSize().Width);
-    }
-    else // bit of rounding loss?
-    {
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(2013), xShape->getSize().Height);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(2013), xShape->getSize().Width);
-    }
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(123), getProperty<text::GraphicCrop>(xShape, "GraphicCrop").Top);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(123),
-                         getProperty<text::GraphicCrop>(xShape, "GraphicCrop").Bottom);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(123),
-                         getProperty<text::GraphicCrop>(xShape, "GraphicCrop").Left);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(123),
-                         getProperty<text::GraphicCrop>(xShape, "GraphicCrop").Right);
+    auto verify = [this]() {
+        auto const xShape(getShape(1));
+        if (!isExported())
+        {
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(2004), xShape->getSize().Height);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(2004), xShape->getSize().Width);
+        }
+        else // bit of rounding loss?
+        {
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(2013), xShape->getSize().Height);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(2013), xShape->getSize().Width);
+        }
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(123),
+                             getProperty<text::GraphicCrop>(xShape, "GraphicCrop").Top);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(123),
+                             getProperty<text::GraphicCrop>(xShape, "GraphicCrop").Bottom);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(123),
+                             getProperty<text::GraphicCrop>(xShape, "GraphicCrop").Left);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(123),
+                             getProperty<text::GraphicCrop>(xShape, "GraphicCrop").Right);
+    };
+    createSwDoc("piccrop.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf158586_0, "tdf158586_pageBreak0.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf158586_0)
 {
-    // The specified page break must be lost because it is in a text frame
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
-    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+    auto verify = [this]() {
+        // The specified page break must be lost because it is in a text frame
+        CPPUNIT_ASSERT_EQUAL(1, getPages());
+        CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
 
-    // There should be no empty paragraph at the start
-    xmlDocUniquePtr pLayout = parseLayoutDump();
-    assertXPath(pLayout, "//anchored"_ostr, 1);
-    assertXPathContent(pLayout, "/root/page[1]/body//txt"_ostr, "First page");
+        // There should be no empty paragraph at the start
+        xmlDocUniquePtr pLayout = parseLayoutDump();
+        assertXPath(pLayout, "//anchored"_ostr, 1);
+        assertXPathContent(pLayout, "/root/page[1]/body//txt"_ostr, "First page");
+    };
+    createSwDoc("tdf158586_pageBreak0.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf158586_0B, "tdf158586_pageBreak0B.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf158586_0B)
 {
-    // The specified page break must be lost because it is in a text frame
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
-    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+    auto verify = [this]() {
+        // The specified page break must be lost because it is in a text frame
+        CPPUNIT_ASSERT_EQUAL(1, getPages());
+        CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
 
-    // There should be no empty paragraph at the start
-    xmlDocUniquePtr pLayout = parseLayoutDump();
-    assertXPath(pLayout, "//anchored"_ostr, 1);
-    assertXPathContent(pLayout, "/root/page[1]/body//txt"_ostr, "First page");
+        // There should be no empty paragraph at the start
+        xmlDocUniquePtr pLayout = parseLayoutDump();
+        assertXPath(pLayout, "//anchored"_ostr, 1);
+        assertXPathContent(pLayout, "/root/page[1]/body//txt"_ostr, "First page");
+    };
+    createSwDoc("tdf158586_pageBreak0B.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf158586_1, "tdf158586_pageBreak1.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf158586_1)
 {
-    // None of the specified text frame settings initiates a real text frame - page break not lost
-    CPPUNIT_ASSERT_EQUAL(2, getPages());
-    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+    auto verify = [this]() {
+        // None of the specified text frame settings initiates a real text frame - page break not lost
+        CPPUNIT_ASSERT_EQUAL(2, getPages());
+        CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
 
-    // There should be no empty carriage return at the start of the second page
-    xmlDocUniquePtr pLayout = parseLayoutDump();
-    // on import there is a section on page 2; on reimport there is no section
-    // (probably not an important difference?)
-    assertXPathContent(pLayout, "/root/page[2]/body//txt"_ostr, "Second page");
+        // There should be no empty carriage return at the start of the second page
+        xmlDocUniquePtr pLayout = parseLayoutDump();
+        // on import there is a section on page 2; on reimport there is no section
+        // (probably not an important difference?)
+        assertXPathContent(pLayout, "/root/page[2]/body//txt"_ostr, "Second page");
+    };
+    createSwDoc("tdf158586_pageBreak1.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf158586_1header, "tdf158586_pageBreak1_header.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf158586_1header)
 {
-    // None of the specified text frame settings initiates a real text frame - page break not lost
-    CPPUNIT_ASSERT_EQUAL(2, getPages());
-    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+    auto verify = [this]() {
+        // None of the specified text frame settings initiates a real text frame - page break not lost
+        CPPUNIT_ASSERT_EQUAL(2, getPages());
+        CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
 
-    // There should be no empty carriage return at the start of the second page
-    xmlDocUniquePtr pLayout = parseLayoutDump();
-    // on import there is a section on page 2; on reimport there is no section
-    // (probably not an important difference?)
-    assertXPathContent(pLayout, "/root/page[2]/body//txt"_ostr, "Second page");
+        // There should be no empty carriage return at the start of the second page
+        xmlDocUniquePtr pLayout = parseLayoutDump();
+        // on import there is a section on page 2; on reimport there is no section
+        // (probably not an important difference?)
+        assertXPathContent(pLayout, "/root/page[2]/body//txt"_ostr, "Second page");
+    };
+    createSwDoc("tdf158586_pageBreak1_header.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf158586_lostFrame, "tdf158586_lostFrame.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf158586_lostFrame)
 {
-    // The anchor and align properties are sufficient to define a frame
-    xmlDocUniquePtr pLayout = parseLayoutDump();
-    assertXPath(pLayout, "//anchored"_ostr, 1);
-    assertXPathContent(pLayout, "//page[1]/body//txt"_ostr, "1st page");
-    assertXPathContent(pLayout, "//page[2]/body//txt"_ostr, "2nd page");
+    auto verify = [this]() {
+        // The anchor and align properties are sufficient to define a frame
+        xmlDocUniquePtr pLayout = parseLayoutDump();
+        assertXPath(pLayout, "//anchored"_ostr, 1);
+        assertXPathContent(pLayout, "//page[1]/body//txt"_ostr, "1st page");
+        assertXPathContent(pLayout, "//page[2]/body//txt"_ostr, "2nd page");
 
-    CPPUNIT_ASSERT_EQUAL(2, getPages());
+        CPPUNIT_ASSERT_EQUAL(2, getPages());
+    };
+    createSwDoc("tdf158586_lostFrame.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf158983, "fdo55504-1-min.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf158983)
 {
-    // the problem was that the page break was missing and the shapes were
-    // all anchored to the same node
+    auto verify = [this]() {
+        // the problem was that the page break was missing and the shapes were
+        // all anchored to the same node
 
-    xmlDocUniquePtr pLayout = parseLayoutDump();
-    assertXPath(pLayout, "/root/page[1]/body/section/txt"_ostr, 1);
-    assertXPath(pLayout, "/root/page[1]/body/section/txt/anchored/fly"_ostr, 1);
-    // Word shows these shapes anchored in the fly, not body, but at least they are not lost
-    assertXPath(pLayout, "/root/page[1]/body/section/txt/anchored/SwAnchoredDrawObject"_ostr, 2);
-    // page break, paragraph break, section break.
-    assertXPath(pLayout, "/root/page[2]/body/section[1]/txt"_ostr, 1);
-    assertXPath(pLayout, "/root/page[2]/body/section[1]/txt/anchored"_ostr, 0);
-    assertXPath(pLayout, "/root/page[2]/body/section[2]/txt"_ostr, 1);
-    assertXPath(pLayout, "/root/page[2]/body/section[2]/txt/anchored/fly"_ostr, 1);
-    // Word shows these shapes anchored in the fly, not body, but at least they are not lost
-    assertXPath(pLayout, "/root/page[2]/body/section[2]/txt/anchored/SwAnchoredDrawObject"_ostr, 2);
+        xmlDocUniquePtr pLayout = parseLayoutDump();
+        assertXPath(pLayout, "/root/page[1]/body/section/txt"_ostr, 1);
+        assertXPath(pLayout, "/root/page[1]/body/section/txt/anchored/fly"_ostr, 1);
+        // Word shows these shapes anchored in the fly, not body, but at least they are not lost
+        assertXPath(pLayout, "/root/page[1]/body/section/txt/anchored/SwAnchoredDrawObject"_ostr,
+                    2);
+        // page break, paragraph break, section break.
+        assertXPath(pLayout, "/root/page[2]/body/section[1]/txt"_ostr, 1);
+        assertXPath(pLayout, "/root/page[2]/body/section[1]/txt/anchored"_ostr, 0);
+        assertXPath(pLayout, "/root/page[2]/body/section[2]/txt"_ostr, 1);
+        assertXPath(pLayout, "/root/page[2]/body/section[2]/txt/anchored/fly"_ostr, 1);
+        // Word shows these shapes anchored in the fly, not body, but at least they are not lost
+        assertXPath(pLayout, "/root/page[2]/body/section[2]/txt/anchored/SwAnchoredDrawObject"_ostr,
+                    2);
 
-    CPPUNIT_ASSERT_EQUAL(2, getPages());
+        CPPUNIT_ASSERT_EQUAL(2, getPages());
+    };
+    createSwDoc("fdo55504-1-min.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testAnnotationPar, "tdf136445-1-min.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testAnnotationPar)
 {
-    // the problem was that the paragraph break following annotation was missing
-    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
-    CPPUNIT_ASSERT_EQUAL(
-        OUString("Annotation"),
-        getProperty<OUString>(
-            getRun(getParagraph(1, "I ax xoixx xuxixx xxe xixxx. (Xaxxexx 1989 x.x. xaxax a)"), 2),
-            "TextPortionType"));
-    CPPUNIT_ASSERT(
-        !getProperty<OUString>(getParagraph(2, "Xix\txaxa\tx-a\t\t\txix\tx xi = xa."), "ListId")
-             .isEmpty());
+    auto verify = [this]() {
+        // the problem was that the paragraph break following annotation was missing
+        CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+        CPPUNIT_ASSERT_EQUAL(
+            OUString("Annotation"),
+            getProperty<OUString>(
+                getRun(getParagraph(1, "I ax xoixx xuxixx xxe xixxx. (Xaxxexx 1989 x.x. xaxax a)"),
+                       2),
+                "TextPortionType"));
+        CPPUNIT_ASSERT(
+            !getProperty<OUString>(getParagraph(2, "Xix\txaxa\tx-a\t\t\txix\tx xi = xa."), "ListId")
+                 .isEmpty());
+    };
+    createSwDoc("tdf136445-1-min.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf158826_extraCR, "tdf158826_extraCR.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf158826_extraCR)
 {
-    // Note: this is a hand-minimized sample, and very likely doesn't follow RTF { } rules...
+    auto verify = [this]() {
+        // Note: this is a hand-minimized sample, and very likely doesn't follow RTF { } rules...
 
-    // The page break defined before the document content should not cause a page break
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
+        // The page break defined before the document content should not cause a page break
+        CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    // There is a two-column floating table
-    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY_THROW);
+        // There is a two-column floating table
+        uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY_THROW);
+    };
+    createSwDoc("tdf158826_extraCR.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf159824_axialGradient)
@@ -203,141 +261,187 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159824_axialGradient)
     CPPUNIT_ASSERT_EQUAL(aColB, Color(ColorTransparency, aGradient.EndColor));
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf159824_gradientAngle1, "tdf159824_gradientAngle1.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf159824_gradientAngle1)
 {
-    // given a frame with a white (top) to lime (bottom) linear gradient at an RTF 1° angle
-    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
-                                                         uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
-                         getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
-    awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
+    auto verify = [this]() {
+        // given a frame with a white (top) to lime (bottom) linear gradient at an RTF 1° angle
+        uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
+                                                             uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
+                             getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
+        awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
 
-    // MCGR: Use the completely imported transparency gradient to check for correctness
-    basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
+        // MCGR: Use the completely imported transparency gradient to check for correctness
+        basegfx::BColorStops aColorStops
+            = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
-    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_WHITE), aGradient.StartColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(8508442), aGradient.EndColor);
-    // RTF 1° angle (in 1/60,000 degree units = 60,000) == LO 1° (in 1/10 degree units)
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(10), aGradient.Angle);
+        CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
+        CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_WHITE), aGradient.StartColor);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8508442), aGradient.EndColor);
+        // RTF 1° angle (in 1/60,000 degree units = 60,000) == LO 1° (in 1/10 degree units)
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(10), aGradient.Angle);
+    };
+    createSwDoc("tdf159824_gradientAngle1.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf159824_gradientAngle2, "tdf159824_gradientAngle2.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf159824_gradientAngle2)
 {
-    // This file is identical to gradientAngle1 except that the fillAngle is -2° instead of 1°.
+    auto verify = [this]() {
+        // This file is identical to gradientAngle1 except that the fillAngle is -2° instead of 1°.
 
-    // given a frame with a lime (top) to white (bottom) linear gradient at an RTF -2° angle.
-    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
-                                                         uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
-                         getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
-    awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
+        // given a frame with a lime (top) to white (bottom) linear gradient at an RTF -2° angle.
+        uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
+                                                             uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
+                             getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
+        awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
 
-    // MCGR: Use the completely imported transparency gradient to check for correctness
-    basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
-    // because of the negative angle, the colors were swapped compared to gradientAngle1.rtf
-    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(8508442), aGradient.StartColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_WHITE), aGradient.EndColor);
-    // RTF -2° angle (in 1/60,000 degree units = -120,000) == LO 358° (in 1/10 degree units)
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(3580), aGradient.Angle);
+        // MCGR: Use the completely imported transparency gradient to check for correctness
+        basegfx::BColorStops aColorStops
+            = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
+        CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
+        // because of the negative angle, the colors were swapped compared to gradientAngle1.rtf
+        CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8508442), aGradient.StartColor);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_WHITE), aGradient.EndColor);
+        // RTF -2° angle (in 1/60,000 degree units = -120,000) == LO 358° (in 1/10 degree units)
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(3580), aGradient.Angle);
+    };
+    createSwDoc("tdf159824_gradientAngle2.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf159824_gradientAngle3, "tdf159824_gradientAngle3.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf159824_gradientAngle3)
 {
-    // This file is identical to gradientAngle1 except that the fillAngle is 181° instead of 1°.
+    auto verify = [this]() {
+        // This file is identical to gradientAngle1 except that the fillAngle is 181° instead of 1°.
 
-    // given a frame with a lime (top) to white (bottom) linear gradient at an RTF 181° angle.
-    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
-                                                         uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
-                         getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
-    awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
+        // given a frame with a lime (top) to white (bottom) linear gradient at an RTF 181° angle.
+        uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
+                                                             uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
+                             getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
+        awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
 
-    // MCGR: Use the completely imported transparency gradient to check for correctness
-    basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
-    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_WHITE), aGradient.StartColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(8508442), aGradient.EndColor);
-    // RTF 181° angle (in 1/60,000 degree units) == LO 181° (in 1/10 degree units)
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(1810), aGradient.Angle);
+        // MCGR: Use the completely imported transparency gradient to check for correctness
+        basegfx::BColorStops aColorStops
+            = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
+        CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
+        CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_WHITE), aGradient.StartColor);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8508442), aGradient.EndColor);
+        // RTF 181° angle (in 1/60,000 degree units) == LO 181° (in 1/10 degree units)
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(1810), aGradient.Angle);
+    };
+    createSwDoc("tdf159824_gradientAngle3.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf159824_gradientAngle4, "tdf159824_gradientAngle4.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf159824_gradientAngle4)
 {
-    // This file is identical to gradientAngle1 except that the fillAngle is -90° instead of 1°.
+    auto verify = [this]() {
+        // This file is identical to gradientAngle1 except that the fillAngle is -90° instead of 1°.
 
-    // given a frame with a white (left) to lime (right) linear gradient at an RTF -90° angle
-    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
-                                                         uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
-                         getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
-    awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
+        // given a frame with a white (left) to lime (right) linear gradient at an RTF -90° angle
+        uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
+                                                             uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
+                             getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
+        awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
 
-    // MCGR: Use the completely imported transparency gradient to check for correctness
-    basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
-    // because of the negative angle, the colors were swapped compared to gradientAngle1.rtf
-    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(8508442), aGradient.StartColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_WHITE), aGradient.EndColor);
-    // RTF -90° angle (in 1/60,000 degree units) == LO 270° (in 1/10 degree units)
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2700), aGradient.Angle);
+        // MCGR: Use the completely imported transparency gradient to check for correctness
+        basegfx::BColorStops aColorStops
+            = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
+        CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
+        // because of the negative angle, the colors were swapped compared to gradientAngle1.rtf
+        CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8508442), aGradient.StartColor);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_WHITE), aGradient.EndColor);
+        // RTF -90° angle (in 1/60,000 degree units) == LO 270° (in 1/10 degree units)
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(2700), aGradient.Angle);
+    };
+    createSwDoc("tdf159824_gradientAngle4.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf158830, "tdf158830.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf158830)
 {
-    //check centered text in table
-    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
-                                                    uno::UNO_QUERY);
-    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xPara = getParagraphOfText(1, xCell->getText());
-    CPPUNIT_ASSERT_EQUAL(
-        style::ParagraphAdjust_CENTER,
-        static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, "ParaAdjust")));
+    auto verify = [this]() {
+        //check centered text in table
+        uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                        uno::UNO_QUERY);
+        uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xPara = getParagraphOfText(1, xCell->getText());
+        CPPUNIT_ASSERT_EQUAL(
+            style::ParagraphAdjust_CENTER,
+            static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, "ParaAdjust")));
+    };
+    createSwDoc("tdf158830.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf158978, "tdf158978.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf158978)
 {
-    //check right alignment in table1 or table3
-    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
-                                                    uno::UNO_QUERY);
-    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xPara = getParagraphOfText(1, xCell->getText());
-    CPPUNIT_ASSERT_EQUAL(
-        style::ParagraphAdjust_RIGHT,
-        static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, "ParaAdjust")));
+    auto verify = [this]() {
+        //check right alignment in table1 or table3
+        uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                        uno::UNO_QUERY);
+        uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xPara = getParagraphOfText(1, xCell->getText());
+        CPPUNIT_ASSERT_EQUAL(
+            style::ParagraphAdjust_RIGHT,
+            static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, "ParaAdjust")));
+    };
+    createSwDoc("tdf158978.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf158982, "tdf158982.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf158982)
 {
-    //check table count == 6
-    // check left margin in a cell of the last table
-    //
-    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
-                                                    uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTables->getCount());
-    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(5), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A2"), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xPara = getParagraphOfText(1, xCell->getText());
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(508),
-                         getProperty<sal_Int32>(xPara, "ParaLeftMargin"));
+    auto verify = [this]() {
+        //check table count == 6
+        // check left margin in a cell of the last table
+        //
+        uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                        uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTables->getCount());
+        uno::Reference<text::XTextTable> xTable(xTables->getByIndex(5), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A2"), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xPara = getParagraphOfText(1, xCell->getText());
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(508),
+                             getProperty<sal_Int32>(xPara, "ParaLeftMargin"));
+    };
+    createSwDoc("tdf158982.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
 } // end of anonymous namespace
