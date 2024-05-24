@@ -11,6 +11,7 @@
 
 #include <QtCore/QUrl>
 #include <QtMultimedia/QAudioOutput>
+#include <QtMultimedia/QMediaMetaData>
 #include <QtMultimediaWidgets/QVideoWidget>
 #include <QtWidgets/QLayout>
 
@@ -178,8 +179,16 @@ awt::Size SAL_CALL QtPlayer::getPreferredPlayerWindowSize()
 {
     osl::MutexGuard aGuard(m_aMutex);
 
-    awt::Size aSize(0, 0);
-    return aSize;
+    assert(m_xMediaPlayer);
+    const QMediaMetaData aMetaData = m_xMediaPlayer->metaData();
+    const QVariant aResolutionVariant = aMetaData.value(QMediaMetaData::Resolution);
+    if (aResolutionVariant.canConvert<QSize>())
+    {
+        const QSize aResolution = aResolutionVariant.value<QSize>();
+        return awt::Size(aResolution.width(), aResolution.height());
+    }
+
+    return awt::Size(0, 0);
 }
 
 uno::Reference<::media::XPlayerWindow>
