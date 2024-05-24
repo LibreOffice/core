@@ -111,7 +111,10 @@ public:
     // get the configured value - if bSmart is set the default color setting is provided
     // instead of the automatic color
     ColorConfigValue        GetColorValue(ColorConfigEntry eEntry, bool bSmart = true) const;
-    static Color            GetDefaultColor(ColorConfigEntry eEntry);
+    // -1 gets the default color on current mod.
+    //  0 gets the default color on light mod.
+    //  1 gets the default color on dark mod.
+    static Color            GetDefaultColor(ColorConfigEntry eEntry, int nMod = -1);
     static const OUString& GetCurrentSchemeName();
 };
 

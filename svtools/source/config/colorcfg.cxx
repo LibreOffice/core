@@ -382,7 +382,7 @@ ColorConfig::~ColorConfig()
     }
 }
 
-Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
+Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry, int nMod)
 {
     enum ColorType { clLight = 0,
                      clDark,
@@ -463,20 +463,28 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
 
         default:
             int nAppMod;
-            switch (MiscSettings::GetAppColorMode()) {
-                default:
-                    if (MiscSettings::GetUseDarkMode())
-                        nAppMod = clDark;
-                    else
-                        nAppMod = clLight;
-                    break;
-                case 1: nAppMod = clLight; break;
-                case 2: nAppMod = clDark; break;
+
+            if(nMod == 0)
+                nAppMod = clLight;
+            else if(nMod == 1)
+                nAppMod = clDark;
+            else
+            {
+                switch (MiscSettings::GetAppColorMode()) {
+                    default:
+                        if (MiscSettings::GetUseDarkMode())
+                            nAppMod = clDark;
+                        else
+                            nAppMod = clLight;
+                        break;
+                    case 1: nAppMod = clLight; break;
+                    case 2: nAppMod = clDark; break;
+                }
             }
             aRet = cAutoColors[eEntry][nAppMod];
     }
     // fdo#71511: if in a11y HC mode, do pull background color from theme
-    if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
+    if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() && nMod == -1)
     {
         switch(eEntry)
         {
