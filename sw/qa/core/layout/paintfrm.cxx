@@ -177,6 +177,16 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineEndnoteSeparatorPosition)
     // - Actual  : 2060
     // i.e. the upper spacing was too low.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2164), nEndnoteSeparatorY);
+
+    // Also make sure the separator length is correct:
+    auto nEndnoteSeparatorStart = getXPath(pXmlDoc, "//polygon/point[1]"_ostr, "x"_ostr).toInt32();
+    auto nEndnoteSeparatorEnd = getXPath(pXmlDoc, "//polygon/point[2]"_ostr, "x"_ostr).toInt32();
+    sal_Int32 nEndnoteSeparatorLength = nEndnoteSeparatorEnd - nEndnoteSeparatorStart;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2880
+    // - Actual  : 2340
+    // i.e. the separator wasn't 2 inches long, but was shorter vs Word.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2880), nEndnoteSeparatorLength);
 }
 }
 
