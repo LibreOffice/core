@@ -17,13 +17,13 @@ $(eval $(call gb_CppunitTest_use_externals,sw_writerfilter_rtftok,\
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_writerfilter_rtftok, \
-    sw/qa/writerfilter/cppunittests/rtftok/rtfdispatchflag \
-    sw/qa/writerfilter/cppunittests/rtftok/rtfdispatchsymbol \
-    sw/qa/writerfilter/cppunittests/rtftok/rtfdispatchvalue \
-    sw/qa/writerfilter/cppunittests/rtftok/rtfdocumentimpl \
-    sw/qa/writerfilter/cppunittests/rtftok/rtfsdrimport \
-    sw/qa/writerfilter/cppunittests/rtftok/rtfsprm \
-    sw/qa/writerfilter/cppunittests/rtftok/rtftokenizer \
+    sw/qa/writerfilter/rtftok/rtfdispatchflag \
+    sw/qa/writerfilter/rtftok/rtfdispatchsymbol \
+    sw/qa/writerfilter/rtftok/rtfdispatchvalue \
+    sw/qa/writerfilter/rtftok/rtfdocumentimpl \
+    sw/qa/writerfilter/rtftok/rtfsdrimport \
+    sw/qa/writerfilter/rtftok/rtfsprm \
+    sw/qa/writerfilter/rtftok/rtftokenizer \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sw_writerfilter_rtftok, \

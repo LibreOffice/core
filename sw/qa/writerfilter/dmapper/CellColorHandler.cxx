@@ -22,7 +22,7 @@ class Test : public UnoApiTest
 {
 public:
     Test()
-        : UnoApiTest("/sw/qa/writerfilter/cppunittests/dmapper/data/")
+        : UnoApiTest("/sw/qa/writerfilter/dmapper/data/")
     {
     }
 };

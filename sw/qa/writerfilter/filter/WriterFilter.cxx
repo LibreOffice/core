@@ -24,7 +24,7 @@ class Test : public UnoApiXmlTest
 {
 public:
     Test()
-        : UnoApiXmlTest("/sw/qa/writerfilter/cppunittests/filter/data/")
+        : UnoApiXmlTest("/sw/qa/writerfilter/filter/data/")
     {
     }
 };

@@ -14,7 +14,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,sw_writerfilter_filters_test))
 $(eval $(call gb_CppunitTest_use_external,sw_writerfilter_filters_test,boost_headers))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_writerfilter_filters_test, \
-	sw/qa/writerfilter/cppunittests/filters-test/filters-test \
+	sw/qa/writerfilter/filters-test/filters-test \
 ))
 
 ifeq ($(DISABLE_CVE_TESTS),TRUE)

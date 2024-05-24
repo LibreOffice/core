@@ -17,17 +17,17 @@ $(eval $(call gb_CppunitTest_use_externals,sw_writerfilter_dmapper,\
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_writerfilter_dmapper, \
-    sw/qa/writerfilter/cppunittests/dmapper/CellColorHandler \
-    sw/qa/writerfilter/cppunittests/dmapper/DomainMapperTableHandler \
-    sw/qa/writerfilter/cppunittests/dmapper/DomainMapperTableManager \
-    sw/qa/writerfilter/cppunittests/dmapper/DomainMapper \
-    sw/qa/writerfilter/cppunittests/dmapper/DomainMapper_Impl \
-    sw/qa/writerfilter/cppunittests/dmapper/GraphicImport \
-    sw/qa/writerfilter/cppunittests/dmapper/TableManager \
-    sw/qa/writerfilter/cppunittests/dmapper/TextEffectsHandler \
-    sw/qa/writerfilter/cppunittests/dmapper/PropertyMap \
-    sw/qa/writerfilter/cppunittests/dmapper/SdtHelper \
-    sw/qa/writerfilter/cppunittests/dmapper/SettingsTable \
+    sw/qa/writerfilter/dmapper/CellColorHandler \
+    sw/qa/writerfilter/dmapper/DomainMapperTableHandler \
+    sw/qa/writerfilter/dmapper/DomainMapperTableManager \
+    sw/qa/writerfilter/dmapper/DomainMapper \
+    sw/qa/writerfilter/dmapper/DomainMapper_Impl \
+    sw/qa/writerfilter/dmapper/GraphicImport \
+    sw/qa/writerfilter/dmapper/TableManager \
+    sw/qa/writerfilter/dmapper/TextEffectsHandler \
+    sw/qa/writerfilter/dmapper/PropertyMap \
+    sw/qa/writerfilter/dmapper/SdtHelper \
+    sw/qa/writerfilter/dmapper/SettingsTable \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sw_writerfilter_dmapper, \

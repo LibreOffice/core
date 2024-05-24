@@ -69,8 +69,7 @@ bool RtfTest::load(const OUString&, const OUString& rURL, const OUString&, SfxFi
 CPPUNIT_TEST_FIXTURE(RtfTest, testFilter)
 {
 #ifndef DISABLE_CVE_TESTS
-    testDir(OUString(),
-            m_directories.getURLFromSrc(u"/sw/qa/writerfilter/cppunittests/filters-test/data/"));
+    testDir(OUString(), m_directories.getURLFromSrc(u"/sw/qa/writerfilter/filters-test/data/"));
 #endif
 }
 
