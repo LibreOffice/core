@@ -307,26 +307,33 @@ tools::Long ScColumn::GetNeededSize(
         {
             //  SetFont is moved up
 
-            Size aSize;
+            tools::Long nWidth = 0;
             if ( eOrient != SvxCellOrientation::Standard )
             {
-                aSize = Size( pDev->GetTextWidth( aValStr ), pDev->GetTextHeight() );
-                tools::Long nTemp = aSize.Width();
-                aSize.setWidth( aSize.Height() );
-                aSize.setHeight( nTemp );
+                nWidth = pDev->GetTextHeight();
             }
             else if ( nRotate )
             {
                 //TODO: take different X/Y scaling into consideration
 
-                aSize = Size( pDev->GetTextWidth( aValStr ), pDev->GetTextHeight() );
+                // avoid calling the expensive GetTextWidth when not needed
+                auto TextWidth = [&, w = std::optional<tools::Long>()]() mutable
+                {
+                    if (!w)
+                        w = pDev->GetTextWidth(aValStr);
+                    return *w;
+                };
+                auto TextHeight = [&, h = std::optional<tools::Long>()]() mutable
+                {
+                    if (!h)
+                        h = pDev->GetTextHeight();
+                    return *h;
+                };
                 double nRealOrient = toRadians(nRotate);
                 double nCosAbs = fabs( cos( nRealOrient ) );
                 double nSinAbs = fabs( sin( nRealOrient ) );
-                tools::Long nHeight = static_cast<tools::Long>( aSize.Height() * nCosAbs + aSize.Width() * nSinAbs );
-                tools::Long nWidth;
                 if ( eRotMode == SVX_ROTATE_MODE_STANDARD )
-                    nWidth  = static_cast<tools::Long>( aSize.Width() * nCosAbs + aSize.Height() * nSinAbs );
+                    nWidth  = static_cast<tools::Long>( TextWidth() * nCosAbs + TextHeight() * nSinAbs );
                 else if ( rOptions.bTotalSize )
                 {
                     nWidth = conditionalScaleFunc(rDocument.GetColWidth( nCol,nTab ), nPPT);
@@ -338,21 +345,25 @@ tools::Long ScColumn::GetNeededSize(
                                             (bInPrintTwips ? 1.0 : nPPT) * nCosAbs / nSinAbs );
                 }
                 else
-                    nWidth  = static_cast<tools::Long>( aSize.Height() / nSinAbs );   //TODO: limit?
+                    nWidth  = static_cast<tools::Long>( TextHeight() / nSinAbs );   //TODO: limit?
 
-                if ( bBreak && !rOptions.bTotalSize )
+                if (bWidth)
+                    nValue = nWidth;
+                else
                 {
-                    //  limit size for line break
-                    tools::Long nCmp = pDev->GetFont().GetFontSize().Height() * SC_ROT_BREAK_FACTOR;
-                    if ( nHeight > nCmp )
-                        nHeight = nCmp;
+                    tools::Long nHeight = static_cast<tools::Long>( TextHeight() * nCosAbs + TextWidth() * nSinAbs );
+                    if ( bBreak && !rOptions.bTotalSize )
+                    {
+                        //  limit size for line break
+                        tools::Long nCmp = pDev->GetFont().GetFontSize().Height() * SC_ROT_BREAK_FACTOR;
+                        if ( nHeight > nCmp )
+                            nHeight = nCmp;
+                    }
+                    nValue = nHeight;
                 }
-
-                aSize = Size( nWidth, nHeight );
-                nValue = bWidth ? aSize.Width() : aSize.Height();
             }
             else if (bBreak && !bWidth)
-                aSize = Size( pDev->GetTextWidth( aValStr ), pDev->GetTextHeight() );
+                nWidth = pDev->GetTextWidth(aValStr);
             else
                 // in the common case (height), avoid calling the expensive GetTextWidth
                 nValue = bWidth ? pDev->GetTextWidth( aValStr ) : pDev->GetTextHeight();
@@ -382,7 +393,7 @@ tools::Long ScColumn::GetNeededSize(
                                     pMargin->GetLeftMargin() - pMargin->GetRightMargin() -
                                     nIndent), nPPTX);
                 nDocSize = (nDocSize * 9) / 10;           // for safety
-                if ( aSize.Width() > nDocSize )
+                if (nWidth > nDocSize)
                     bEditEngine = true;
             }
         }
