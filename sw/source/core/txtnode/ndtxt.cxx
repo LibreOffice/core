@@ -1455,7 +1455,7 @@ void SwTextNode::Update(
     if (!(eMode & UpdateMode::Negative) && !(eMode & UpdateMode::Delete))
     {
         std::vector<SwRangeRedline*> vMyRedlines;
-        // walk the list of SwIndex attached to me and see if any of them are redlines
+        // walk the list of SwContentIndex attached to me and see if any of them are redlines
         const SwContentIndex* pContentNodeIndex = GetFirstIndex();
         while (pContentNodeIndex)
         {

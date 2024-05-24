@@ -44,7 +44,7 @@ private:
     SwContentIndex * m_pNext;
     SwContentIndex * m_pPrev;
 
-    /// points to the SwRangeRedline (if any) that contains this SwIndex, via SwPosition and SwPaM
+    /// points to the SwRangeRedline (if any) that contains this SwContentIndex, via SwPosition and SwPaM
     SwRangeRedline * m_pRangeRedline = nullptr;
 
     /// Pointer to a mark that owns this position to allow fast lookup of marks of an SwContentIndexReg.

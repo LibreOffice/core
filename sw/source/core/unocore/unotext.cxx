@@ -1579,7 +1579,7 @@ SwXText::convertToTextFrame(
             (pStartStartNode != GetStartNode()))
         {
             // if not - remove the additional paragraphs and throw
-            oAnchorCheckPam.reset(); // clear SwIndex before deleting nodes
+            oAnchorCheckPam.reset(); // clear SwContentIndex before deleting nodes
             if (bParaBeforeInserted)
             {
                 SwCursor aDelete(*pStartPam->GetPoint(), nullptr);
@@ -1653,7 +1653,7 @@ SwXText::convertToTextFrame(
             }
         }
     }
-    oAnchorCheckPam.reset(); // clear SwIndex before deleting nodes
+    oAnchorCheckPam.reset(); // clear SwContentIndex before deleting nodes
 
     const rtl::Reference<SwXTextFrame> xNewFrame =
             SwXTextFrame::CreateXTextFrame(*m_pImpl->m_pDoc, nullptr);
