@@ -296,7 +296,7 @@ STDMETHODIMP CAPNDataObject::EnumDAdvise( IEnumSTATDATA ** ppenumAdvise )
 
 HRESULT CAPNDataObject::MarshalIDataObjectIntoCurrentApartment( IDataObject** ppIDataObj )
 {
-    assert(nullptr && ppIDataObj);
+    assert(ppIDataObj);
 
     *ppIDataObj = nullptr;
     HRESULT hr = E_FAIL;
