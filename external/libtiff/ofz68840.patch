@@ -1,0 +1,17 @@
+--- a/libtiff/tif_tile.c
++++ b/libtiff/tif_tile.c
+@@ -233,7 +233,13 @@
+             _TIFFMultiply64(tif, samplingrow_size, samplingblocks_ver, module));
+     }
+     else
+-        return (_TIFFMultiply64(tif, nrows, TIFFTileRowSize64(tif), module));
++    {
++        uint64_t row_size = TIFFTileRowSize64(tif);
++        /* I think the way this works the expectation is there are always even num of samples */
++        if (td->td_photometric == PHOTOMETRIC_YCBCR)
++            row_size = TIFFroundup_64(row_size, 2);
++        return (_TIFFMultiply64(tif, nrows, row_size, module));
++    }
+ }
+ tmsize_t TIFFVTileSize(TIFF *tif, uint32_t nrows)
+ {
