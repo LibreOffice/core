@@ -6589,7 +6589,8 @@ void ScGridWindow::UpdateCursorOverlay()
             tools::Long nSizeYPix;
             mrViewData.GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
 
-            const double nAdjustBorder(mrViewData.GetZoomX() * 3);
+            // tdf#143733 Make cell outline wider than the cell
+            const double nAdjustBorder(2 + mrViewData.GetZoomX());
             aScrPos.AdjustX(-nAdjustBorder);
             aScrPos.AdjustY(-nAdjustBorder);
 
@@ -6888,12 +6889,27 @@ void ScGridWindow::UpdateAutoFillOverlay()
     tools::Long nSizeYPix;
     mrViewData.GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
 
-    if (bLayoutRTL && !comphelper::LibreOfficeKit::isActive())
-        aFillPos.AdjustX( -(nSizeXPix - 2 + (aFillHandleSize.Width() / 2)) );
-    else
-        aFillPos.AdjustX(nSizeXPix - (aFillHandleSize.Width() / 2) );
+    // tdf#161234 Make AutoFill handle follow cell outline. This happens only when the
+    // autofill handle is in the same cell as the outline. Note that nAdjustBorder needs
+    // to be calculated the same way as in ScGridWindow::UpdateCursorOverlay()
+    double nAdjustBorder(0);
+    SCCOL nX2 = mrViewData.GetCurX();
+    SCCOL nY2 = mrViewData.GetCurY();
+    const ScMergeAttr* pMerge = rDoc.GetAttr(nX2, nY2, nTab, ATTR_MERGE);
+    if (pMerge->GetColMerge() >= 1 || pMerge->GetRowMerge() >= 1)
+    {
+        nX2 += pMerge->GetColMerge() - 1;
+        nY2 += pMerge->GetRowMerge() - 1;
+    }
+    if (nX == nX2 && nY == nY2)
+        nAdjustBorder = 2 + static_cast<double>(mrViewData.GetZoomX());
 
-    aFillPos.AdjustY(nSizeYPix );
+    if (bLayoutRTL && !comphelper::LibreOfficeKit::isActive())
+        aFillPos.AdjustX( -(nSizeXPix + nAdjustBorder + (aFillHandleSize.Width() / 2)) );
+    else
+        aFillPos.AdjustX(nSizeXPix + nAdjustBorder - (aFillHandleSize.Width() / 2) );
+
+    aFillPos.AdjustY(nSizeYPix + nAdjustBorder);
     aFillPos.AdjustY( -(aFillHandleSize.Height() / 2) );
 
     tools::Rectangle aFillRect(aFillPos, aFillHandleSize);
