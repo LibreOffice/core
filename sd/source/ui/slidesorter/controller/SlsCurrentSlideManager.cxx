@@ -28,6 +28,8 @@
 #include <ViewShellBase.hxx>
 #include <ViewShell.hxx>
 #include <DrawViewShell.hxx>
+#include <DrawController.hxx>
+#include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <FrameView.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -166,7 +168,29 @@ void CurrentSlideManager::SetCurrentSlideAtViewShellBase (const SharedPageDescri
     OSL_ASSERT(rpDescriptor);
 
     ViewShellBase* pBase = mrSlideSorter.GetViewShellBase();
-    if (pBase != nullptr)
+    if(!pBase)
+        return;
+
+    if (mrSlideSorter.GetViewShell() && mrSlideSorter.GetViewShell()->IsMainViewShell())
+    {
+        SdDrawDocument* pDoc = pBase->GetDocument();
+        if (!pDoc)
+            return;
+
+        // deselect all pages
+        for (sal_uInt16 i = 0; i < pDoc->GetSdPageCount(PageKind::Standard); i++)
+            pDoc->SetSelected(pDoc->GetSdPage(i, PageKind::Standard), false);
+
+        // select the given page
+        pDoc->SetSelected(rpDescriptor->GetPage(), true);
+        DrawController* pDrawController = pBase->GetDrawController();
+        if (!pDrawController)
+            return;
+
+        pDrawController->FireSelectionChangeListener();
+        pDrawController->FireSwitchCurrentPage(rpDescriptor->GetPage());
+    }
+    else
     {
         DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(
             pBase->GetMainViewShell().get());
@@ -245,9 +269,7 @@ IMPL_LINK_NOARG(CurrentSlideManager, SwitchPageCallback, Timer *, void)
         // it does not work always correctly (after some kinds of model
         // changes).  Therefore, we call DrawViewShell::SwitchPage(),
         // too.
-        ViewShell* pViewShell = mrSlideSorter.GetViewShell();
-        if (pViewShell==nullptr || ! pViewShell->IsMainViewShell())
-            SetCurrentSlideAtViewShellBase(mpCurrentSlide);
+        SetCurrentSlideAtViewShellBase(mpCurrentSlide);
         SetCurrentSlideAtXController(mpCurrentSlide);
     }
 }
