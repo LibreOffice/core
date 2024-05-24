@@ -1419,7 +1419,7 @@ bool NotesPanelViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 {
     bool bReturn = false;
 
-    if (pWin == nullptr && HasCurrentFunction())
+    if (HasCurrentFunction())
     {
         bReturn = GetCurrentFunction()->KeyInput(rKEvt);
     }
@@ -1438,7 +1438,6 @@ bool NotesPanelViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
     Invalidate(SID_STYLE_WATERCAN);
     Invalidate(SID_STYLE_FAMILY5);
 
-    vcl::KeyCode aKeyGroup(rKEvt.GetKeyCode().GetGroup());
     return bReturn;
 }
 
