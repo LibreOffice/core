@@ -23,9 +23,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <condition_variable>
-#include <mutex>
-#include <salhelper/thread.hxx>
 
 namespace com::sun::star::util
 {
@@ -34,19 +31,17 @@ class XUpdatable;
 
 namespace framework
 {
-class WakeUpThread final : public salhelper::Thread
+/// Provides a regular callback to @updatable roughly every 25ms while running
+class WakeUpThread final
 {
-    css::uno::WeakReference<css::util::XUpdatable> updatable_;
-    std::condition_variable condition_;
-    std::mutex mutex_;
-    bool terminate_;
-
-    void execute() override;
+    css::uno::Reference<css::util::XUpdatable> _updatable;
 
 public:
     WakeUpThread(css::uno::Reference<css::util::XUpdatable> const& updatable);
-
     void stop();
+
+    static void joinThread();
+    static void startThread();
 };
 }
 
