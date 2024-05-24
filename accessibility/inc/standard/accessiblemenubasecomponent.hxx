@@ -45,9 +45,7 @@ class OAccessibleMenuBaseComponent : public cppu::ImplInheritanceHelper<
     friend class VCLXAccessibleMenu;
 
 protected:
-    typedef std::vector< rtl::Reference< OAccessibleMenuItemComponent > > AccessibleChildren;
-
-    AccessibleChildren      m_aAccessibleChildren1;
+    std::vector<rtl::Reference<OAccessibleMenuItemComponent>> m_aAccessibleChildren1;
     VclPtr<Menu>            m_pMenu;
 
     bool                    m_bEnabled;
