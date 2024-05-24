@@ -44,6 +44,7 @@ class SwFramePage final : public SfxTabPage
     bool            m_bFormat;
     bool            m_bNew;
     bool            m_bNoModifyHdl;
+    bool m_bIgnoreFixedRatio = false;
     bool            m_bIsVerticalFrame;  //current frame is in vertical environment - strings are exchanged
     // #mongolianlayout#
     bool            m_bIsVerticalL2R;

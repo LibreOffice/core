@@ -150,4 +150,24 @@ class Test(UITestCase):
             # complexity.
             self.assertEqual(visible, "false")
 
+    def test_keep_aspect_ratio_init(self):
+        # Change from inch to pt to hit the rounding error. 6 means Point, see
+        # officecfg/registry/schema/org/openoffice/Office/Writer.xcs.
+        with self.ui_test.set_config('/org.openoffice.Office.Writer/Layout/Other/MeasureUnit', 6):
+            # Given a document with an image, width is relative:
+            with self.ui_test.load_file(get_url_for_data_file("keep-aspect-ratio.odt")) as xComponent:
+                xComponent.CurrentController.select(xComponent.DrawPage[0])
+                # Wait until SwTextShell is replaced with SwDrawShell after 120 ms, as set in the SwView
+                # ctor.
+                time.sleep(0.2)
+                # When opening the image properties dialog:
+                with self.ui_test.execute_dialog_through_command(".uno:FrameDialog") as xDialog:
+                    xWidth = xDialog.getChild("width")
+                    frame_width = get_state_as_dict(xWidth)["Value"]
+                # Then make sure the width is 48%:
+                # Without the accompanying fix in place, this test would have failed with:
+                # AssertionError: '5' != '48'
+                # i.e. the reported size was close to zero instead of ~half of the page width.
+                self.assertEqual(frame_width, "48")
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

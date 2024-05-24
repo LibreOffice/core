@@ -2182,7 +2182,7 @@ IMPL_LINK( SwFramePage, ModifyHdl, weld::MetricSpinButton&, rEdit, void )
 {
     SwTwips nWidth  = static_cast< SwTwips >(m_xWidthED->DenormalizePercent(m_xWidthED->get_value(FieldUnit::TWIP)));
     SwTwips nHeight = static_cast< SwTwips >(m_xHeightED->DenormalizePercent(m_xHeightED->get_value(FieldUnit::TWIP)));
-    if (m_xFixedRatioCB->get_active())
+    if (m_xFixedRatioCB->get_active() && !m_bIgnoreFixedRatio)
     {
         if (&rEdit == m_xWidthED->get())
         {
@@ -2385,14 +2385,18 @@ void SwFramePage::Init(const SfxItemSet& rSet)
         !m_xRelWidthCB->get_active())
     {
         m_xRelWidthCB->set_active(true);
+        m_bIgnoreFixedRatio = true;
         RelSizeClickHdl(*m_xRelWidthCB);
+        m_bIgnoreFixedRatio = false;
         m_xWidthED->set_value(rSize.GetWidthPercent(), FieldUnit::PERCENT);
     }
     if (rSize.GetHeightPercent() && rSize.GetHeightPercent() != SwFormatFrameSize::SYNCED &&
         !m_xRelHeightCB->get_active())
     {
         m_xRelHeightCB->set_active(true);
+        m_bIgnoreFixedRatio = true;
         RelSizeClickHdl(*m_xRelHeightCB);
+        m_bIgnoreFixedRatio = false;
         m_xHeightED->set_value(rSize.GetHeightPercent(), FieldUnit::PERCENT);
     }
     m_xRelWidthCB->save_state();
