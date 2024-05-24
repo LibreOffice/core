@@ -732,7 +732,24 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             Invalidate(FN_CHANGE_THEME);
             break;
         }
+        case FN_INVERT_BACKGROUND:
+        {
+            svtools::EditableColorConfig aColorConfig;
+            ::Color aCurrentColor = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+            ::Color aDefLightColor = svtools::ColorConfig::GetDefaultColor(svtools::DOCCOLOR, 0);
+            ::Color aDefDarkColor = svtools::ColorConfig::GetDefaultColor(svtools::DOCCOLOR, 1);
 
+            svtools::ColorConfigValue aValue;
+            aValue.bIsVisible = true;
+
+            if(aCurrentColor == aDefLightColor)
+                aValue.nColor = aDefDarkColor;
+            else
+                aValue.nColor = aDefLightColor;
+
+            aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
+            break;
+        }
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_HELPINDEX:
         {

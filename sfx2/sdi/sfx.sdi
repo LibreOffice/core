@@ -5928,3 +5928,17 @@ SfxVoidItem ChangeTheme FN_CHANGE_THEME
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Application;
 ]
+
+SfxVoidItem InvertBackground FN_INVERT_BACKGROUND
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    GroupId = SfxGroupId::Application;
+]
