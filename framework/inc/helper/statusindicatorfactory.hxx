@@ -39,6 +39,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <comphelper/lok.hxx>
 #include <rtl/ref.hxx>
 
 namespace framework{
@@ -120,7 +121,8 @@ class StatusIndicatorFactory final : public  ::cppu::WeakImplHelper<
                                              css::lang::XServiceInfo
                                            , css::lang::XInitialization
                                            , css::task::XStatusIndicatorFactory
-                                           , css::util::XUpdatable >
+                                           , css::util::XUpdatable >,
+                                     public comphelper::LibreOfficeKit::ThreadJoinable
 {
 
     // member
@@ -210,6 +212,11 @@ class StatusIndicatorFactory final : public  ::cppu::WeakImplHelper<
 
         void setValue(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
                                              sal_Int32                                           nValue);
+
+        // comphelper::LibreOfficeKit::ThreadJoinable
+        virtual bool joinThreads() override;
+
+        virtual void startThreads() override;
 
     // specials
 

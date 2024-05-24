@@ -3391,9 +3391,6 @@ static int lo_joinThreads(LibreOfficeKit* /* pThis */)
     comphelper::ThreadPool &pool = comphelper::ThreadPool::getSharedOptimalPool();
     pool.joinThreadsIfIdle();
 
-//    if (comphelper::getWorkerCount() > 0)
-//        return 0;
-
     // Grammar checker thread
     css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv =
         css::linguistic2::LinguServiceManager::create(xContext);
@@ -3405,6 +3402,12 @@ static int lo_joinThreads(LibreOfficeKit* /* pThis */)
     auto ucpWebdav = xContext->getServiceManager()->createInstanceWithContext(
         "com.sun.star.ucb.WebDAVManager", xContext);
     joinable = dynamic_cast<comphelper::LibreOfficeKit::ThreadJoinable *>(ucpWebdav.get());
+    if (joinable && !joinable->joinThreads())
+        return 0;
+
+    auto progressThread = xContext->getServiceManager()->createInstanceWithContext(
+        "com.sun.star.task.StatusIndicatorFactory", xContext);
+    joinable = dynamic_cast<comphelper::LibreOfficeKit::ThreadJoinable *>(progressThread.get());
     if (joinable && !joinable->joinThreads())
         return 0;
 
@@ -3422,6 +3425,12 @@ static void lo_startThreads(LibreOfficeKit* /* pThis */)
     auto ucpWebdav = xContext->getServiceManager()->createInstanceWithContext(
         "com.sun.star.ucb.WebDAVManager", xContext);
     auto joinable = dynamic_cast<comphelper::LibreOfficeKit::ThreadJoinable *>(ucpWebdav.get());
+    if (joinable)
+        joinable->startThreads();
+
+    auto progressThread = xContext->getServiceManager()->createInstanceWithContext(
+        "com.sun.star.task.StatusIndicatorFactory", xContext);
+    joinable = dynamic_cast<comphelper::LibreOfficeKit::ThreadJoinable *>(progressThread.get());
     if (joinable)
         joinable->startThreads();
 }
