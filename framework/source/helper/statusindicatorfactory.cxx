@@ -286,6 +286,17 @@ void StatusIndicatorFactory::setValue( const css::uno::Reference< css::task::XSt
     impl_reschedule(false);
 }
 
+bool StatusIndicatorFactory::joinThreads()
+{
+    WakeUpThread::joinThread();
+    return true;
+}
+
+void StatusIndicatorFactory::startThreads()
+{
+    WakeUpThread::startThread();
+}
+
 void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
 {
     css::uno::Reference< css::frame::XFrame > xFrame;
