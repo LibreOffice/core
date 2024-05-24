@@ -85,30 +85,7 @@ const sal_uInt16 SidArray[] = {
 void FuOutlineText::UpdateForKeyPress (const KeyEvent& rEvent)
 {
     FuSimpleOutlinerText::UpdateForKeyPress(rEvent);
-
-    bool bUpdatePreview = true;
-    switch (rEvent.GetKeyCode().GetCode())
-    {
-        // When just the cursor has been moved the preview only changes when
-        // it moved to entries of another page.  To prevent unnecessary
-        // updates we check this here.  This is an early rejection test, so
-        // missing a key is not a problem.
-        case KEY_UP:
-        case KEY_DOWN:
-        case KEY_LEFT:
-        case KEY_RIGHT:
-        case KEY_HOME:
-        case KEY_END:
-        case KEY_PAGEUP:
-        case KEY_PAGEDOWN:
-        {
-            SdPage* pCurrentPage = pOutlineViewShell->GetActualPage();
-            bUpdatePreview = (pCurrentPage != pOutlineViewShell->GetActualPage());
-        }
-        break;
-    }
-    if (bUpdatePreview)
-        pOutlineViewShell->UpdatePreview (pOutlineViewShell->GetActualPage());
+    pOutlineViewShell->UpdatePreview(pOutlineViewShell->GetActualPage());
 }
 
 /**
