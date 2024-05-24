@@ -115,6 +115,7 @@ QtObjectWidget::QtObjectWidget(QtObject& rParent)
 
     // set layout, used for video playback, see QtPlayer::createPlayerWindow
     QVBoxLayout* layout = new QVBoxLayout;
+    layout->setContentsMargins(0, 0, 0, 0);
     setLayout(layout);
 }
 
