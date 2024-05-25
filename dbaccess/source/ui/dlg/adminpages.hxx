@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <osl/diagnose.h>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/wizardmachine.hxx>
 #include <curledit.hxx>

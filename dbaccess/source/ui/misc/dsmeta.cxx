@@ -21,6 +21,7 @@
 #include <connectivity/DriversConfig.hxx>
 #include <dsntypes.hxx>
 #include <comphelper/processfactory.hxx>
+#include <osl/diagnose.h>
 
 #include <map>
 #include <utility>
