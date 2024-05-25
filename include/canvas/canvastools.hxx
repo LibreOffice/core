@@ -22,7 +22,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
@@ -470,7 +469,7 @@ namespace canvas
                     {
                         SAL_WARN("canvas", "ValueMap::ValueMap(): Map is not sorted, keys are wrong, "
                                   << pMap[0].maKey << " and " << pMap[1].maKey);
-                        OSL_FAIL( "ValueMap::ValueMap(): Map is not sorted" );
+                        SAL_WARN("canvas", "ValueMap::ValueMap(): Map is not sorted" );
                     }
 
                     const OString aStr2( pMap[1].maKey );
