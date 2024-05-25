@@ -144,17 +144,14 @@ using namespace ::com::sun::star::uno;
     id nativeRole = [ AquaA11yRoleHelper simpleMapNativeRoleFrom: accessibleContext ];
     if ( accessibleContext -> getAccessibleRole() == AccessibleRole::LABEL ) {
         if ( accessibleContext -> getAccessibleChildCount() > 0 ) {
-            [ nativeRole release ];
             nativeRole = NSAccessibilityOutlineRole;
         } else if ( accessibleContext -> getAccessibleParent().is() ) {
             Reference < XAccessibleContext > rxParentContext = accessibleContext -> getAccessibleParent() -> getAccessibleContext();
             if ( rxParentContext.is() ) {
                 NSString * roleParent = static_cast<NSString *>([ AquaA11yRoleHelper simpleMapNativeRoleFrom: rxParentContext.get() ]);
                 if ( [ roleParent isEqualToString: NSAccessibilityOutlineRole ] ) {
-                    [ nativeRole release ];
                     nativeRole = NSAccessibilityRowRole;
                 }
-                [ roleParent release ];
             }
         }
     } else if ( accessibleContext -> getAccessibleRole() == AccessibleRole::COMBO_BOX ) {
@@ -165,7 +162,6 @@ using namespace ::com::sun::star::uno;
                 if ( rxAccessibleContext.is() && rxAccessibleContext -> getAccessibleRole() == AccessibleRole::TEXT ) {
                     sal_Int64 nStateSet = rxAccessibleContext -> getAccessibleStateSet();
                     if ( !(nStateSet & AccessibleStateType::EDITABLE ) ) {
-                        [ nativeRole release ];
                         nativeRole = NSAccessibilityPopUpButtonRole;
                     }
                 }

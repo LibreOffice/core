@@ -67,6 +67,7 @@ struct ReferenceWrapper
     ReferenceWrapper maReferenceWrapper;
     BOOL mActsAsRadioGroup;
     BOOL mIsTableCell;
+    BOOL mIsDisposed;
 }
 // NSAccessibility Protocol
 -(id)accessibilityAttributeValue:(NSString *)attribute;
@@ -101,6 +102,7 @@ struct ReferenceWrapper
 -(NSWindow*)windowForParent;
 -(id)init;
 -(id)initWithAccessibleContext: (css::uno::Reference < css::accessibility::XAccessibleContext >) anAccessibleContext;
+-(void)setDisposed;
 -(void) setDefaults: (css::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext;
 +(void)setPopupMenuOpen:(BOOL)popupMenuOpen;
 -(css::accessibility::XAccessibleAction *)accessibleAction;

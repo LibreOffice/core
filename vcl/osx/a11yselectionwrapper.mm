@@ -34,9 +34,12 @@ using namespace ::com::sun::star::uno;
     Reference< XAccessibleSelection > xAccessibleSelection = [ wrapper accessibleSelection ];
     if( xAccessibleSelection.is() )
     {
-        NSMutableArray * children = [ [ NSMutableArray alloc ] init ];
         try {
             sal_Int64 n = xAccessibleSelection -> getSelectedAccessibleChildCount();
+
+            // Related tdf#158914: implicitly call autorelease selector
+            // Callers expect this selector to return an autoreleased object.
+            NSMutableArray * children = [ NSMutableArray arrayWithCapacity: n ];
 
             // Fix hanging when selecting a column or row in Calc
             // When a Calc column is selected, the child count will be
@@ -49,7 +52,12 @@ using namespace ::com::sun::star::uno;
                 n = MAXIMUM_ACCESSIBLE_TABLE_CELLS;
 
             for ( sal_Int64 i=0 ; i < n ; ++i ) {
-                [ children addObject: [ AquaA11yFactory wrapperForAccessible: xAccessibleSelection -> getSelectedAccessibleChild( i ) ] ];
+                // Related tdf#158914: explicitly call release selector
+                // [ AquaA11yFactory wrapperForAccessible: ] is not a getter.
+                // It expects the caller to release the returned object.
+                id child_wrapper = [ AquaA11yFactory wrapperForAccessible: xAccessibleSelection -> getSelectedAccessibleChild( i ) ];
+                [ children addObject: child_wrapper ];
+                [ child_wrapper release ];
             }
 
             return children;
