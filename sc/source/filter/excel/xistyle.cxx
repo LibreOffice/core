@@ -1772,9 +1772,10 @@ void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
             else                                    // insert in the middle of the range
             {
                 pThisRange->mnScRow1 = nScRow + 1;
+                XclImpXFIndex aXFIndex(pThisRange->maXFIndex);
                 // List::Insert() moves entries towards end of list, so insert twice at nIndex
                 Insert( XclImpXFRange( nScRow, rXFIndex ), nIndex );
-                Insert( XclImpXFRange( nFirstScRow, nScRow - 1, pThisRange->maXFIndex ), nIndex );
+                Insert( XclImpXFRange( nFirstScRow, nScRow - 1, aXFIndex ), nIndex );
             }
             return;
         }
