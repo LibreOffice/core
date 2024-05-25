@@ -140,7 +140,6 @@ static bool enabled = false;
         } else {
             aWrapper = [ [ AquaA11yWrapper alloc ] initWithAccessibleContext: rxAccessibleContext ];
         }
-        [ nativeRole release ];
         [ aWrapper setActsAsRadioGroup: asRadioGroup ];
         #if 0
         /* #i102033# NSAccessibility does not seemt to know an equivalent for transient children.
@@ -169,8 +168,8 @@ static bool enabled = false;
     // TODO: when RADIO_BUTTON search for associated RadioGroup-wrapper and delete that as well
     AquaA11yWrapper * theWrapper = [ AquaA11yFactory wrapperForAccessibleContext: rxAccessibleContext createIfNotExists: NO ];
     if ( theWrapper != nil ) {
-        NSAccessibilityPostNotification( theWrapper, NSAccessibilityUIElementDestroyedNotification );
         [ [ AquaA11yFactory allWrapper ] removeObjectForKey: [ AquaA11yFactory keyForAccessibleContext: rxAccessibleContext ] ];
+        [ theWrapper setDisposed ];
         [ theWrapper release ];
     }
 }
