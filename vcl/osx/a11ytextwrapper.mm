@@ -39,7 +39,10 @@ using namespace ::com::sun::star::uno;
 @implementation AquaA11yTextWrapper : NSObject
 
 +(id)valueAttributeForElement:(AquaA11yWrapper *)wrapper {
-    return CreateNSString ( [ wrapper accessibleText ] -> getText() );
+    // Related tdf#158914: explicitly call autorelease selector
+    // CreateNSString() is not a getter. It expects the caller to
+    // release the returned string.
+    return [ CreateNSString ( [ wrapper accessibleText ] -> getText() ) autorelease ];
 }
 
 +(void)setValueAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value
@@ -54,7 +57,10 @@ using namespace ::com::sun::star::uno;
 }
 
 +(id)selectedTextAttributeForElement:(AquaA11yWrapper *)wrapper {
-    return CreateNSString ( [ wrapper accessibleText ] -> getSelectedText() );
+    // Related tdf#158914: explicitly call autorelease selector
+    // CreateNSString() is not a getter. It expects the caller to
+    // release the returned string.
+    return [ CreateNSString ( [ wrapper accessibleText ] -> getSelectedText() ) autorelease ];
 }
 
 +(void)setSelectedTextAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value {
@@ -175,9 +181,12 @@ using namespace ::com::sun::star::uno;
 +(id)stringForRangeAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)range {
     int loc = [ range rangeValue ].location;
     int len = [ range rangeValue ].length;
-    NSMutableString * textRange = [ [ NSMutableString alloc ] init ];
+    NSMutableString * textRange = [ NSMutableString string ];
     try {
-        [ textRange appendString: CreateNSString ( [ wrapper accessibleText ] -> getTextRange ( loc, loc + len ) ) ];
+        // Related tdf#158914: explicitly call autorelease selector
+        // CreateNSString() is not a getter. It expects the caller to
+        // release the returned string.
+        [ textRange appendString: [ CreateNSString ( [ wrapper accessibleText ] -> getTextRange ( loc, loc + len ) ) autorelease ] ];
     } catch ( IndexOutOfBoundsException & ) {
         // empty
     }

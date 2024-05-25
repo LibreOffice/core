@@ -39,6 +39,8 @@
 -(BOOL)accessibilityIsAttributeSettable:(NSString *)attribute {
     // Related: tdf#148453 Acquire solar mutex during native accessibility calls
     SolarMutexGuard aGuard;
+    if ( mIsDisposed )
+        return NO;
 
     if ( [ attribute isEqualToString: NSAccessibilityValueAttribute ] ) {
         return NO;
@@ -49,6 +51,8 @@
 -(NSArray *)accessibilityAttributeNames {
     // Related: tdf#148453 Acquire solar mutex during native accessibility calls
     SolarMutexGuard aGuard;
+    if ( mIsDisposed )
+        return [ NSArray array ];
 
     // Default Attributes
     NSMutableArray * attributeNames = [ NSMutableArray arrayWithArray: [ super accessibilityAttributeNames ] ];

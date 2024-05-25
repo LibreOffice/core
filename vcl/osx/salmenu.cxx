@@ -163,6 +163,7 @@ static void initAppMenu()
     pNewItem = [pAppMenu addItemWithTitle: pString
         action: nil
         keyEquivalent: @""];
+    [pString release];
     NSMenu *servicesMenu = [[[NSMenu alloc] initWithTitle:@"Services"] autorelease];
     [pNewItem setSubmenu: servicesMenu];
     [NSApp setServicesMenu: servicesMenu];

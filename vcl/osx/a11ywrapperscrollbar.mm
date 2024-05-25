@@ -34,6 +34,8 @@ using namespace ::com::sun::star::accessibility;
 -(NSArray *)accessibilityAttributeNames {
     // Related: tdf#148453 Acquire solar mutex during native accessibility calls
     SolarMutexGuard aGuard;
+    if ( mIsDisposed )
+        return [ NSArray array ];
 
     // Default Attributes
     NSMutableArray * attributeNames = [ NSMutableArray arrayWithArray: [ super accessibilityAttributeNames ] ];

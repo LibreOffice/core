@@ -113,6 +113,8 @@ using namespace ::com::sun::star::uno;
 -(BOOL)accessibilityIsAttributeSettable:(NSString *)attribute {
     // Related: tdf#148453 Acquire solar mutex during native accessibility calls
     SolarMutexGuard aGuard;
+    if ( mIsDisposed )
+        return NO;
 
     if ( [ self textArea ] != nil && (
          [ attribute isEqualToString: NSAccessibilitySelectedTextAttribute ]
@@ -126,6 +128,8 @@ using namespace ::com::sun::star::uno;
 -(void)accessibilitySetValue:(id)value forAttribute:(NSString *)attribute {
     // Related: tdf#148453 Acquire solar mutex during native accessibility calls
     SolarMutexGuard aGuard;
+    if ( mIsDisposed )
+        return;
 
     if ( [ self textArea ] != nil && (
          [ attribute isEqualToString: NSAccessibilitySelectedTextAttribute ]
@@ -139,6 +143,8 @@ using namespace ::com::sun::star::uno;
 -(NSArray *)accessibilityAttributeNames {
     // Related: tdf#148453 Acquire solar mutex during native accessibility calls
     SolarMutexGuard aGuard;
+    if ( mIsDisposed )
+        return [ NSArray array ];
 
     // Default Attributes
     NSMutableArray * attributeNames = [ NSMutableArray arrayWithArray: [ super accessibilityAttributeNames ] ];
