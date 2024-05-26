@@ -1527,8 +1527,8 @@ bool FormulaCompiler::GetToken()
             }
             else if (pSpacesToken && FormulaGrammar::isExcelSyntax( meGrammar) &&
                     mpLastToken && mpToken &&
-                    isPotentialRangeType( mpLastToken.get(), false, false) &&
-                    isPotentialRangeType( mpToken.get(), false, true))
+                    isPotentialRangeType( mpToken.get(), false, true) &&
+                    (mpLastToken->GetOpCode() == ocClose || isPotentialRangeType( mpLastToken.get(), false, false)))
             {
                 // Let IntersectionLine() <- Factor() decide how to treat this,
                 // once the actual arguments are determined in RPN.
