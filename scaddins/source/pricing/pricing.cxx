@@ -98,7 +98,7 @@ ScaPricingAddIn::~ScaPricingAddIn()
 
 static const char*  pLang[] = { "en" };
 static const char*  pCoun[] = { "US" };
-const sal_uInt32 nNumOfLoc = SAL_N_ELEMENTS( pLang );
+constexpr sal_uInt32 nNumOfLoc = std::size( pLang );
 
 void ScaPricingAddIn::InitDefLocales()
 {

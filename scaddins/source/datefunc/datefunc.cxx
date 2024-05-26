@@ -102,7 +102,7 @@ ScaDateAddIn::ScaDateAddIn()
 
 static const char*  pLang[] = { "de", "en" };
 static const char*  pCoun[] = { "DE", "US" };
-const sal_uInt32 nNumOfLoc = SAL_N_ELEMENTS( pLang );
+constexpr sal_uInt32 nNumOfLoc = std::size( pLang );
 
 void ScaDateAddIn::InitDefLocales()
 {
