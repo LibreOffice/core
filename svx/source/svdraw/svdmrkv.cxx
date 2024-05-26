@@ -2398,10 +2398,7 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
         nTol2*=2;
     }
 
-    aRect.AdjustLeft( -nTol2 ); // add 1 tolerance for all objects
-    aRect.AdjustTop( -nTol2 );
-    aRect.AdjustRight(nTol2 );
-    aRect.AdjustBottom(nTol2 );
+    aRect.expand(nTol2); // add 1 tolerance for all objects
 
     if (aRect.Contains(rPnt))
     {
