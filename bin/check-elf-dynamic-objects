@@ -192,6 +192,11 @@ local file="$1"
         */libpostgresql-sdbc-impllo.so)
             allowlist="${allowlist} ${kerberosallowlist}"
         ;;
+        */libmysqlclo.so)
+            if [ "$WITH_GSSAPI" = TRUE ]; then
+                allowlist="${allowlist} ${kerberosallowlist}"
+            fi
+        ;;
         */libconfigmgrlo.so)
             if [ "$ENABLE_DCONF" = TRUE ]; then
                 allowlist="${allowlist} ${dconfallowlist}"
