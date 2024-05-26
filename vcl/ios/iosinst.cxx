@@ -157,7 +157,7 @@ int IosSalSystem::ShowNativeDialog( const OUString& rTitle,
 {
     (void)rButtons;
 
-    NSLog(@"%@: %@", CreateNSString(rTitle), CreateNSString(rMessage));
+    NSLog(@"%@: %@", [CreateNSString(rTitle) autorelease], [CreateNSString(rMessage) autorelease]);
 
     return 0;
 }
