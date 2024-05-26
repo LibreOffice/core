@@ -42,6 +42,8 @@
 void ScfTools::ReadLongDouble(SvStream& rStrm, double& fResult)
 
 #ifdef __SIMPLE_FUNC                // for <=VC 1.5
+
+#error PRESUMABLY_NEVER_USED
 {
     long double fRet;
     bool bOk = 10 == rStrm.Read(&fRet, 10);
