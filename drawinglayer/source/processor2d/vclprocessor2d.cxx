@@ -409,25 +409,29 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                 const basegfx::B2DPoint aPoint(aLocalTransform * basegfx::B2DPoint(0.0, 0.0));
                 double aPointX = aPoint.getX(), aPointY = aPoint.getY();
 
-                // aFont has an integer size; we must scale a bit for precision
-                double nFontScalingFixY = aFontScaling.getY() / aResultFontSize.Height();
-                double nFontScalingFixX = aFontScaling.getX()
-                                          / (aResultFontSize.Width() ? aResultFontSize.Width()
-                                                                     : aResultFontSize.Height());
-
-                if (!rtl_math_approxEqual(nFontScalingFixY, 1.0)
-                    || !rtl_math_approxEqual(nFontScalingFixX, 1.0))
+                if (!comphelper::LibreOfficeKit::isActive())
                 {
-                    MapMode aMapMode = mpOutputDevice->GetMapMode();
-                    aMapMode.SetScaleX(aMapMode.GetScaleX() * nFontScalingFixX);
-                    aMapMode.SetScaleY(aMapMode.GetScaleY() * nFontScalingFixY);
+                    // aFont has an integer size; we must scale a bit for precision
+                    double nFontScalingFixY = aFontScaling.getY() / aResultFontSize.Height();
+                    double nFontScalingFixX
+                        = aFontScaling.getX()
+                          / (aResultFontSize.Width() ? aResultFontSize.Width()
+                                                     : aResultFontSize.Height());
 
-                    mpOutputDevice->Push(vcl::PushFlags::MAPMODE);
-                    mpOutputDevice->SetRelativeMapMode(aMapMode);
-                    bChangeMapMode = true;
+                    if (!rtl_math_approxEqual(nFontScalingFixY, 1.0)
+                        || !rtl_math_approxEqual(nFontScalingFixX, 1.0))
+                    {
+                        MapMode aMapMode = mpOutputDevice->GetMapMode();
+                        aMapMode.SetScaleX(aMapMode.GetScaleX() * nFontScalingFixX);
+                        aMapMode.SetScaleY(aMapMode.GetScaleY() * nFontScalingFixY);
 
-                    aPointX /= nFontScalingFixX;
-                    aPointY /= nFontScalingFixY;
+                        mpOutputDevice->Push(vcl::PushFlags::MAPMODE);
+                        mpOutputDevice->SetRelativeMapMode(aMapMode);
+                        bChangeMapMode = true;
+
+                        aPointX /= nFontScalingFixX;
+                        aPointY /= nFontScalingFixY;
+                    }
                 }
 
                 aStartPoint = Point(basegfx::fround<tools::Long>(aPointX),
