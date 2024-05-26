@@ -1446,7 +1446,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                     if ( pUp->IsCellFrame() )
                     {
                         const SwFrame *pTab = pUp->FindTabFrame();
-                        aRectFnSet.SetBottom( rRect, aRectFnSet.GetPrtBottom(*pTab->GetUpper()) ); // set botto?m
+                        aRectFnSet.SetBottom( rRect, aRectFnSet.GetPrtBottom(*pTab->GetUpper()) ); // set bottom
                     }
                 }
             }
