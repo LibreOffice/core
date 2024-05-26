@@ -372,6 +372,9 @@ MetaArcAction::MetaArcAction( const tools::Rectangle& rRect,
 
 void MetaArcAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowRect(pOut->LogicToPixel(maRect)))
+        return;
+
     pOut->DrawArc( maRect, maStartPt, maEndPt );
 }
 
