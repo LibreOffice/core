@@ -56,6 +56,7 @@ void ImplResetUtf8ToUnicodeContext(void * pContext)
 {
     if (pContext != nullptr)
     {
+        static_cast< ImplUtf8ToUnicodeContext * >(pContext)->nBytes = int();
         static_cast< ImplUtf8ToUnicodeContext * >(pContext)->nShift = -1;
         static_cast< ImplUtf8ToUnicodeContext * >(pContext)->bCheckBom = true;
     }
