@@ -627,6 +627,24 @@ void VerticalTabControl::SetPageText(std::u16string_view rPageId, const OUString
     pData->pEntry->SetText(rText);
 }
 
+Size VerticalTabControl::GetOptimalSize() const
+{
+    // re-calculate size - we might have replaced dummy tab pages with
+    // actual content
+    Size aOptimalPageSize(m_xBox->get_preferred_size());
+
+    for (auto const& item : maPageList)
+    {
+        Size aPagePrefSize(item->xPage->get_preferred_size());
+        if (aPagePrefSize.Width() > aOptimalPageSize.Width())
+            aOptimalPageSize.setWidth( aPagePrefSize.Width() );
+        if (aPagePrefSize.Height() > aOptimalPageSize.Height())
+            aOptimalPageSize.setHeight( aPagePrefSize.Height() );
+    }
+
+    return aOptimalPageSize;
+}
+
 void VerticalTabControl::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     rJsonWriter.put("id", get_id());

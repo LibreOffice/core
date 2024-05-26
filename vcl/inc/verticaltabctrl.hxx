@@ -80,6 +80,7 @@ public:
 
     vcl::Window* GetPageParent() { return m_xBox.get(); }
 
+    virtual Size GetOptimalSize() const override;
     virtual void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 
     virtual FactoryFunction GetUITestFactory() const override;
