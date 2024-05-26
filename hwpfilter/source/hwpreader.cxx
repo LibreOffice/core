@@ -2013,19 +2013,19 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
                     OUString::createFromAscii(ArrowShape[hdo->property.line_tstyle].name) );
                 if( hdo->property.line_width > 100 )
                          mxList->addAttribute(u"draw:marker-start-width"_ustr, sXML_CDATA,
-                              OUString::number( WTMM(hdo->property.line_width * 3)) + "mm");
+                              OUString::number( WTMM(hdo->property.line_width * 3.0)) + "mm");
                 else if( hdo->property.line_width > 80 )
                          mxList->addAttribute(u"draw:marker-start-width"_ustr, sXML_CDATA,
-                              OUString::number( WTMM(hdo->property.line_width * 4)) + "mm");
+                              OUString::number( WTMM(hdo->property.line_width * 4.0)) + "mm");
                 else if( hdo->property.line_width > 60 )
                          mxList->addAttribute(u"draw:marker-start-width"_ustr, sXML_CDATA,
-                              OUString::number( WTMM(hdo->property.line_width * 5)) + "mm");
+                              OUString::number( WTMM(hdo->property.line_width * 5.0)) + "mm");
                 else if( hdo->property.line_width > 40 )
                          mxList->addAttribute(u"draw:marker-start-width"_ustr, sXML_CDATA,
-                              OUString::number( WTMM(hdo->property.line_width * 6)) + "mm");
+                              OUString::number( WTMM(hdo->property.line_width * 6.0)) + "mm");
                 else
                          mxList->addAttribute(u"draw:marker-start-width"_ustr, sXML_CDATA,
-                              OUString::number( WTMM(hdo->property.line_width * 7)) + "mm");
+                              OUString::number( WTMM(hdo->property.line_width * 7.0)) + "mm");
             }
 
             if( hdo->property.line_hstyle > 0 &&
@@ -2035,19 +2035,19 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
                     OUString::createFromAscii(ArrowShape[hdo->property.line_hstyle].name) );
                 if( hdo->property.line_width > 100 )
                          mxList->addAttribute(u"draw:marker-end-width"_ustr, sXML_CDATA,
-                              OUString::number( WTMM(hdo->property.line_width * 3)) + "mm");
+                              OUString::number( WTMM(hdo->property.line_width * 3.0)) + "mm");
                 else if( hdo->property.line_width > 80 )
                          mxList->addAttribute(u"draw:marker-end-width"_ustr, sXML_CDATA,
-                              OUString::number( WTMM(hdo->property.line_width * 4)) + "mm");
+                              OUString::number( WTMM(hdo->property.line_width * 4.0)) + "mm");
                 else if( hdo->property.line_width > 60 )
                          mxList->addAttribute(u"draw:marker-end-width"_ustr, sXML_CDATA,
-                              OUString::number( WTMM(hdo->property.line_width * 5)) + "mm");
+                              OUString::number( WTMM(hdo->property.line_width * 5.0)) + "mm");
                 else if( hdo->property.line_width > 40 )
                          mxList->addAttribute(u"draw:marker-end-width"_ustr, sXML_CDATA,
-                              OUString::number( WTMM(hdo->property.line_width * 6)) + "mm");
+                              OUString::number( WTMM(hdo->property.line_width * 6.0)) + "mm");
                 else
                          mxList->addAttribute(u"draw:marker-end-width"_ustr, sXML_CDATA,
-                              OUString::number( WTMM(hdo->property.line_width * 7)) + "mm");
+                              OUString::number( WTMM(hdo->property.line_width * 7.0)) + "mm");
             }
         }
 
