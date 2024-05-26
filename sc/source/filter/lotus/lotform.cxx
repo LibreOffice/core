@@ -479,7 +479,7 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
             }
             case FT_ConstFloat:
             {
-                double  fDouble;
+                double fDouble(0.0);
                 Read( fDouble );
                 aStack << aPool.Store( fDouble );
                 break;
@@ -638,7 +638,7 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
             }
             case FT_Const10Float:
             {
-                double fValue;
+                double fValue(0.0);
                 if (bWK123)
                     Read(fValue);
                 else
