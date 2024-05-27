@@ -283,9 +283,9 @@ private:
     bool startShowImpl(
         const css::uno::Sequence< css::beans::PropertyValue >& aProperties );
 
-    SfxViewFrame* getViewFrame() const;
-    SfxDispatcher* getDispatcher() const;
-    SfxBindings* getBindings() const;
+    SAL_RET_MAYBENULL SfxViewFrame* getViewFrame() const;
+    SAL_RET_MAYBENULL SfxDispatcher* getDispatcher() const;
+    SAL_RET_MAYBENULL SfxBindings* getBindings() const;
 
     sal_Int32 getSlideNumberForBookmark( const OUString& rStrBookmark );
 
