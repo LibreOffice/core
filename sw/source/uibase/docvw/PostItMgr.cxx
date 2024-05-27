@@ -447,8 +447,9 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
         }
     }
-    else if ( const SfxStyleSheetModifiedHint * pStyleHint = dynamic_cast<const SfxStyleSheetModifiedHint*>(&rHint) )
+    else if ( rHint.GetId() == SfxHintId::StyleSheetModifiedExtended )
     {
+        const SfxStyleSheetModifiedHint * pStyleHint = static_cast<const SfxStyleSheetModifiedHint*>(&rHint);
         for (const auto& postItField : mvPostItFields)
         {
             auto pField = static_cast<SwPostItField*>(postItField->GetFormatField().GetField());
