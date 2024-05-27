@@ -134,7 +134,7 @@ const sal_Unicode MinusChar[] = {
     0xFF0D, // Full Width
     0xFF0D, // Chinese Lower
     0x8D1F, // S. Chinese Upper
-    0x5069, // T. Chinese Upper
+    0x8CA0, // T. Chinese Upper
     0x2212, // Japanese Modern
     0x2212, // Japanese Trad.
     0xFF0D, // Korean Lower
