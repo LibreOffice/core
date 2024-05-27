@@ -3664,18 +3664,24 @@ void SwContentTree::SetConstantShell(SwWrtShell* pSh)
 
 void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
 {
-    SfxViewEventHint const*const pVEHint(dynamic_cast<SfxViewEventHint const*>(&rHint));
-    SwXTextView* pDyingShell = nullptr;
-    if (m_pActiveShell && pVEHint && pVEHint->GetEventName() == "OnViewClosed")
-        pDyingShell = dynamic_cast<SwXTextView*>(pVEHint->GetController().get());
-    if (pDyingShell && pDyingShell->GetView() == &m_pActiveShell->GetView())
+    if (rHint.GetId() == SfxHintId::ThisIsAnSfxEventHint)
     {
-        SetActiveShell(nullptr); // our view is dying, clear our pointers to it
+        const SfxEventHint* pEventHint = static_cast<const SfxEventHint*>(&rHint);
+        if (pEventHint->GetEventId() == SfxEventHintId::CloseView)
+        {
+            SfxViewEventHint const*const pVEHint(static_cast<SfxViewEventHint const*>(&rHint));
+            if (m_pActiveShell)
+            {
+                SwXTextView* pDyingShell = dynamic_cast<SwXTextView*>(pVEHint->GetController().get());
+                if (pDyingShell && pDyingShell->GetView() == &m_pActiveShell->GetView())
+                {
+                    SetActiveShell(nullptr); // our view is dying, clear our pointers to it
+                }
+            }
+            return;
+        }
     }
-    else
-    {
-        SfxListener::Notify(rBC, rHint);
-    }
+    SfxListener::Notify(rBC, rHint);
     switch (rHint.GetId())
     {
         case SfxHintId::SwNavigatorUpdateTracking:

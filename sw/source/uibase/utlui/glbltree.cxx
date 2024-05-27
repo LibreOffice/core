@@ -1164,21 +1164,27 @@ IMPL_LINK( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, vo
 
 void SwGlobalTree::Notify(SfxBroadcaster& rBC, SfxHint const& rHint)
 {
-    SfxViewEventHint const*const pVEHint(dynamic_cast<SfxViewEventHint const*>(&rHint));
-    SwXTextView* pDyingShell = nullptr;
-    if (m_pActiveShell && pVEHint && pVEHint->GetEventName() == "OnViewClosed")
-        pDyingShell = dynamic_cast<SwXTextView*>(pVEHint->GetController().get());
-    if (pDyingShell && pDyingShell->GetView() == &m_pActiveShell->GetView())
+    if (rHint.GetId() == SfxHintId::ThisIsAnSfxEventHint)
     {
-        EndListening(*m_pActiveShell->GetView().GetDocShell());
-        m_pActiveShell = nullptr;
+        const SfxEventHint* pEventHint = static_cast<const SfxEventHint*>(&rHint);
+        if (pEventHint->GetEventId() == SfxEventHintId::CloseView)
+        {
+            SfxViewEventHint const*const pVEHint(static_cast<SfxViewEventHint const*>(&rHint));
+            if (m_pActiveShell)
+            {
+                SwXTextView* pDyingShell = dynamic_cast<SwXTextView*>(pVEHint->GetController().get());
+                if (pDyingShell && pDyingShell->GetView() == &m_pActiveShell->GetView())
+                {
+                    EndListening(*m_pActiveShell->GetView().GetDocShell());
+                    m_pActiveShell = nullptr;
+                }
+            }
+            return;
+        }
     }
-    else
-    {
-        SfxListener::Notify(rBC, rHint);
-        if (rHint.GetId() == SfxHintId::SwNavigatorUpdateTracking)
-            UpdateTracking();
-    }
+    SfxListener::Notify(rBC, rHint);
+    if (rHint.GetId() == SfxHintId::SwNavigatorUpdateTracking)
+        UpdateTracking();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
