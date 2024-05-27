@@ -119,7 +119,7 @@ using namespace ::com::sun::star::form::runtime;
 using namespace ::svxform;
 
 FmDesignModeChangedHint::FmDesignModeChangedHint( bool bDesMode )
-    :m_bDesignMode( bDesMode )
+    :SfxHint(SfxHintId::FmDesignModeChanged), m_bDesignMode( bDesMode )
 {
 }
 

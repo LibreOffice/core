@@ -1731,103 +1731,101 @@ SwGlossaryHdl* SwView::GetGlosHdl()
 void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     bool bCallBase = true;
-    if(auto pChangedHint = dynamic_cast<const FmDesignModeChangedHint*>(&rHint))
+    SfxHintId nId = rHint.GetId();
+    switch ( nId )
     {
-        bool bDesignMode = pChangedHint->GetDesignMode();
-        if (!bDesignMode && GetDrawFuncPtr())
+        case SfxHintId::FmDesignModeChanged:
         {
-            GetDrawFuncPtr()->Deactivate();
-            SetDrawFuncPtr(nullptr);
-            LeaveDrawCreate();
-            AttrChangedNotify(nullptr);
+            auto pChangedHint = static_cast<const FmDesignModeChangedHint*>(&rHint);
+            bool bDesignMode = pChangedHint->GetDesignMode();
+            if (!bDesignMode && GetDrawFuncPtr())
+            {
+                GetDrawFuncPtr()->Deactivate();
+                SetDrawFuncPtr(nullptr);
+                LeaveDrawCreate();
+                AttrChangedNotify(nullptr);
+            }
+            break;
         }
-    }
-    else
-    {
-        SfxHintId nId = rHint.GetId();
-
-        switch ( nId )
-        {
-            // sub shells will be destroyed by the
-            // dispatcher, if the view frame is dying. Thus, reset member <pShell>.
-            case SfxHintId::Dying:
+        // sub shells will be destroyed by the
+        // dispatcher, if the view frame is dying. Thus, reset member <pShell>.
+        case SfxHintId::Dying:
+            {
+                if ( &rBC == &GetViewFrame() )
                 {
-                    if ( &rBC == &GetViewFrame() )
+                    ResetSubShell();
+                }
+            }
+            break;
+        case SfxHintId::ModeChanged:
+            {
+                // Modal mode change-over?
+                bool bModal = GetDocShell()->IsInModalMode();
+                m_pHRuler->SetActive( !bModal );
+                m_pVRuler->SetActive( !bModal );
+            }
+
+            [[fallthrough]];
+
+        case SfxHintId::TitleChanged:
+            if ( GetDocShell()->IsReadOnly() != GetWrtShell().GetViewOptions()->IsReadonly() )
+            {
+                SwWrtShell &rSh = GetWrtShell();
+                rSh.SetReadonlyOption( GetDocShell()->IsReadOnly() );
+
+                if ( rSh.GetViewOptions()->IsViewVRuler() )
+                    CreateVRuler();
+                else
+                    KillVRuler();
+                if ( rSh.GetViewOptions()->IsViewHRuler() )
+                    CreateTab();
+                else
+                    KillTab();
+                bool bReadonly = GetDocShell()->IsReadOnly();
+                // if document is to be opened in alive-mode then this has to be
+                // regarded while switching from readonly-mode to edit-mode
+                if( !bReadonly )
+                {
+                    SwDrawModel * pDrawDoc = GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
+                    if (pDrawDoc)
                     {
-                        ResetSubShell();
+                        if( !pDrawDoc->GetOpenInDesignMode() )
+                            break;// don't touch the design mode
                     }
                 }
-                break;
-            case SfxHintId::ModeChanged:
+                SfxBoolItem aItem( SID_FM_DESIGN_MODE, !bReadonly);
+                GetDispatcher().ExecuteList(SID_FM_DESIGN_MODE,
+                        SfxCallMode::ASYNCHRON, { &aItem });
+            }
+            break;
+
+        case SfxHintId::SwDrawViewsCreated:
+            {
+                bCallBase = false;
+                if ( GetFormShell() )
                 {
-                    // Modal mode change-over?
-                    bool bModal = GetDocShell()->IsInModalMode();
-                    m_pHRuler->SetActive( !bModal );
-                    m_pVRuler->SetActive( !bModal );
-                }
-
-                [[fallthrough]];
-
-            case SfxHintId::TitleChanged:
-                if ( GetDocShell()->IsReadOnly() != GetWrtShell().GetViewOptions()->IsReadonly() )
-                {
-                    SwWrtShell &rSh = GetWrtShell();
-                    rSh.SetReadonlyOption( GetDocShell()->IsReadOnly() );
-
-                    if ( rSh.GetViewOptions()->IsViewVRuler() )
-                        CreateVRuler();
-                    else
-                        KillVRuler();
-                    if ( rSh.GetViewOptions()->IsViewHRuler() )
-                        CreateTab();
-                    else
-                        KillTab();
-                    bool bReadonly = GetDocShell()->IsReadOnly();
-                    // if document is to be opened in alive-mode then this has to be
-                    // regarded while switching from readonly-mode to edit-mode
-                    if( !bReadonly )
-                    {
-                        SwDrawModel * pDrawDoc = GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
-                        if (pDrawDoc)
-                        {
-                            if( !pDrawDoc->GetOpenInDesignMode() )
-                                break;// don't touch the design mode
-                        }
-                    }
-                    SfxBoolItem aItem( SID_FM_DESIGN_MODE, !bReadonly);
+                    GetFormShell()->SetView(dynamic_cast<FmFormView*>(GetWrtShell().GetDrawView()));
+                    SfxBoolItem aItem( SID_FM_DESIGN_MODE, !GetDocShell()->IsReadOnly());
                     GetDispatcher().ExecuteList(SID_FM_DESIGN_MODE,
-                            SfxCallMode::ASYNCHRON, { &aItem });
+                            SfxCallMode::SYNCHRON, { &aItem });
                 }
-                break;
-
-            case SfxHintId::SwDrawViewsCreated:
-                {
-                    bCallBase = false;
-                    if ( GetFormShell() )
-                    {
-                        GetFormShell()->SetView(dynamic_cast<FmFormView*>(GetWrtShell().GetDrawView()));
-                        SfxBoolItem aItem( SID_FM_DESIGN_MODE, !GetDocShell()->IsReadOnly());
-                        GetDispatcher().ExecuteList(SID_FM_DESIGN_MODE,
-                                SfxCallMode::SYNCHRON, { &aItem });
-                    }
-                }
-                break;
-            case SfxHintId::RedlineChanged:
-                {
-                    static sal_uInt16 const aSlotRedLine[] = {
-                        FN_REDLINE_ACCEPT_DIRECT,
-                        FN_REDLINE_REJECT_DIRECT,
-                        FN_REDLINE_NEXT_CHANGE,
-                        FN_REDLINE_PREV_CHANGE,
-                        FN_REDLINE_ACCEPT_ALL,
-                        FN_REDLINE_REJECT_ALL,
-                        0
-                    };
-                    GetViewFrame().GetBindings().Invalidate(aSlotRedLine);
-                }
-                break;
-            default: break;
-        }
+            }
+            break;
+        case SfxHintId::RedlineChanged:
+            {
+                static sal_uInt16 const aSlotRedLine[] = {
+                    FN_REDLINE_ACCEPT_DIRECT,
+                    FN_REDLINE_REJECT_DIRECT,
+                    FN_REDLINE_NEXT_CHANGE,
+                    FN_REDLINE_PREV_CHANGE,
+                    FN_REDLINE_ACCEPT_ALL,
+                    FN_REDLINE_REJECT_ALL,
+                    0
+                };
+                GetViewFrame().GetBindings().Invalidate(aSlotRedLine);
+            }
+            break;
+        default: break;
     }
 
     if ( bCallBase )
