@@ -51,6 +51,11 @@ struct ErrorManagerStruct
 {
     jpeg_error_mgr pub;
     jmp_buf setjmp_buffer;
+
+    ErrorManagerStruct()
+    {
+        pub.msg_parm = {};
+    }
 };
 
 }
