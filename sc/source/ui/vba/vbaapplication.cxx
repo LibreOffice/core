@@ -664,11 +664,14 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll )
     OUString sRangeName;
     if( Reference >>= sRangeName )
     {
+        ScTabViewShell* pShell = excel::getCurrentBestViewShell( mxContext );
+        if (!pShell)
+            return;
+
         uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_SET_THROW );
         uno::Reference< sheet::XSpreadsheetView > xSpreadsheet(
                 xModel->getCurrentController(), uno::UNO_QUERY_THROW );
 
-        ScTabViewShell* pShell = excel::getCurrentBestViewShell( mxContext );
         ScGridWindow* gridWindow = static_cast<ScGridWindow*>(pShell->GetWindow());
         try
         {
@@ -709,8 +712,11 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll )
     uno::Reference< excel::XRange > xRange;
     if( Reference >>= xRange )
     {
-        uno::Reference< excel::XRange > xVbaRange( Reference, uno::UNO_QUERY );
         ScTabViewShell* pShell = excel::getCurrentBestViewShell( mxContext );
+        if (!pShell)
+            return;
+
+        uno::Reference< excel::XRange > xVbaRange( Reference, uno::UNO_QUERY );
         ScGridWindow* gridWindow = static_cast<ScGridWindow*>(pShell->GetWindow());
         if ( xVbaRange.is() )
         {

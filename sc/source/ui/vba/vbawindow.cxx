@@ -380,15 +380,17 @@ ScVbaWindow::getWindowState()
 {
     sal_Int32 nwindowState = xlNormal;
     // !! TODO !! get view shell from controller
-    ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
-    SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
-    WorkWindow* pWork = static_cast<WorkWindow*>( rViewFrame.GetFrame().GetSystemWindow() );
-    if ( pWork )
+    if (ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel ))
     {
-        if ( pWork -> IsMaximized())
-            nwindowState = xlMaximized;
-        else if (pWork -> IsMinimized())
-            nwindowState = xlMinimized;
+        SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
+        WorkWindow* pWork = static_cast<WorkWindow*>( rViewFrame.GetFrame().GetSystemWindow() );
+        if ( pWork )
+        {
+            if ( pWork -> IsMaximized())
+                nwindowState = xlMaximized;
+            else if (pWork -> IsMinimized())
+                nwindowState = xlMinimized;
+        }
     }
     return uno::Any( nwindowState );
 }
@@ -399,19 +401,21 @@ ScVbaWindow::setWindowState( const uno::Any& _windowstate )
     sal_Int32 nwindowState = xlMaximized;
     _windowstate >>= nwindowState;
     // !! TODO !! get view shell from controller
-    ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
-    SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
-    WorkWindow* pWork = static_cast<WorkWindow*>( rViewFrame.GetFrame().GetSystemWindow() );
-    if ( pWork )
+    if (ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel ))
     {
-        if ( nwindowState == xlMaximized)
-            pWork -> Maximize();
-        else if (nwindowState == xlMinimized)
-            pWork -> Minimize();
-        else if (nwindowState == xlNormal)
-            pWork -> Restore();
-        else
-            throw uno::RuntimeException(u"Invalid Parameter"_ustr );
+        SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
+        WorkWindow* pWork = static_cast<WorkWindow*>( rViewFrame.GetFrame().GetSystemWindow() );
+        if ( pWork )
+        {
+            if ( nwindowState == xlMaximized)
+                pWork -> Maximize();
+            else if (nwindowState == xlMinimized)
+                pWork -> Minimize();
+            else if (nwindowState == xlNormal)
+                pWork -> Restore();
+            else
+                throw uno::RuntimeException(u"Invalid Parameter"_ustr );
+        }
     }
 }
 
