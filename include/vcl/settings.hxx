@@ -209,6 +209,7 @@ enum class ToolbarIconSize
 enum class ComboBoxTextSelectionMode
 {
     SelectText, // select the whole text of the new entry
+    CursorToStart, // don't select text, put text cursor to start of text
     CursorToEnd // don't select text, put text cursor to end of text
 };
 

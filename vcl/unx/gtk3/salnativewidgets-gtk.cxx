@@ -2579,6 +2579,10 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     }
 #endif
 
+    // match native GtkComboBox behavior of putting text cursor to start of text
+    // without text selection when combobox entry is selected
+    aStyleSet.SetComboBoxTextSelectionMode(ComboBoxTextSelectionMode::CursorToStart);
+
     // get cursor blink time
     gboolean blink = false;
 

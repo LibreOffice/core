@@ -384,9 +384,17 @@ IMPL_LINK_NOARG(ComboBox, ImplSelectHdl, LinkParamNone*, void)
                 m_pSubEdit->SetSelection(aNewSelection);
                 break;
             }
+            case ComboBoxTextSelectionMode::CursorToStart:
+            {
+                Selection aNewSelection(0, 0);
+                m_pSubEdit->SetSelection(aNewSelection);
+                break;
+            }
             case ComboBoxTextSelectionMode::CursorToEnd:
+            {
                 m_pSubEdit->SetCursorAtLast();
                 break;
+            }
             default:
                 assert(false && "Unhandled ComboBoxTextSelectionMode case");
                 break;
