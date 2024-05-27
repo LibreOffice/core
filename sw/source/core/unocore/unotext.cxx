@@ -1664,7 +1664,7 @@ SwXText::convertToTextFrame(
             xNewFrame->SwXFrame::setPropertyValue(rValue.Name, rValue.Value);
         }
 
-        {   // has to be in a block to remove the SwIndexes before
+        {   // has to be in a block to remove the SwContentIndexes before
             // DelFullPara is called
             const uno::Reference< text::XTextRange> xInsertTextRange =
                 new SwXTextRange(*pStartPam, this);
@@ -1677,7 +1677,7 @@ SwXText::convertToTextFrame(
         assert(pTextNode);
         if (!pTextNode || !pTextNode->Len()) // don't remove if it contains text!
         {
-            {   // has to be in a block to remove the SwIndexes before
+            {   // has to be in a block to remove the SwContentIndexes before
                 // DelFullPara is called
                 SwPaM aMovePam( pStartPam->GetPointNode() );
                 if (aMovePam.Move( fnMoveForward, GoInContent ))

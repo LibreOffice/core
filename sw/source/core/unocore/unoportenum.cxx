@@ -200,7 +200,7 @@ namespace
 
         SwTextNode* pTextNode = rUnoCursor.GetPoint()->GetNode().GetTextNode();
         assert(pTextNode);
-        // A text node already knows its marks via its SwIndexes.
+        // A text node already knows its marks via its SwContentIndexes.
         o3tl::sorted_vector<const sw::mark::IMark*> aSeenMarks;
         for (const SwContentIndex* pIndex = pTextNode->GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
         {
