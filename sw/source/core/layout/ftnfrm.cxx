@@ -1601,7 +1601,9 @@ void SwFootnoteBossFrame::AppendFootnote( SwContentFrame *pRef, SwTextFootnote *
                 pEndnoteSection = pPage->GetEndNoteSection();
             }
             // If there are no endnotes sections yet, create one at the end of the document.
-            if (!pEndnoteSection)
+            // Ignore sections which are already marked for deletion, they don't have an SwSection
+            // anymore, so not usable for us.
+            if (!pEndnoteSection || !pEndnoteSection->GetSection())
             {
                 SwSection* pSwSection = pDoc->GetEndNoteInfo().GetSwSection(*pDoc);
                 pEndnoteSection = new SwSectionFrame(*pSwSection, pPage);

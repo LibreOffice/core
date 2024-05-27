@@ -17,6 +17,8 @@
 #include <rootfrm.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
+#include <bodyfrm.hxx>
+#include <sectfrm.hxx>
 
 /// Covers sw/source/core/layout/ftnfrm.cxx fixes.
 class Test : public SwModelTestBase
@@ -120,6 +122,35 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineEndnotePosition)
     // i.e. the top margin wasn't the default font size with its spacing, but the Writer default,
     // which shifted endnote text up, incorrectly.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(269), nEndnoteContTopMargin);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testInlineEndnoteSectionDelete)
+{
+    // Given a document, ContinuousEndnotes is true, 3 pages, endnodes start on page 2:
+    // When laying out that document:
+    createSwDoc("inline-endnote-section-delete.docx");
+
+    // First page: just body text:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage->GetLower()->IsBodyFrame());
+    auto pBodyFrame = static_cast<SwBodyFrame*>(pPage->GetLower());
+    CPPUNIT_ASSERT(!pBodyFrame->GetLastLower()->IsSctFrame());
+    // Second page: ends with endnotes:
+    pPage = pPage->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage->GetLower()->IsBodyFrame());
+    pBodyFrame = static_cast<SwBodyFrame*>(pPage->GetLower());
+    CPPUNIT_ASSERT(pBodyFrame->GetLastLower()->IsSctFrame());
+    auto pSection = static_cast<SwSectionFrame*>(pBodyFrame->GetLastLower());
+    CPPUNIT_ASSERT(pSection->IsEndNoteSection());
+    // Third page: just endnotes:
+    pPage = pPage->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage->GetLower()->IsBodyFrame());
+    pBodyFrame = static_cast<SwBodyFrame*>(pPage->GetLower());
+    CPPUNIT_ASSERT(pBodyFrame->GetLower()->IsSctFrame());
+    pSection = static_cast<SwSectionFrame*>(pBodyFrame->GetLower());
+    CPPUNIT_ASSERT(pSection->IsEndNoteSection());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
