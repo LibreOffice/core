@@ -111,7 +111,7 @@ public:
     SfxBindings&            GetBindings() { return *m_pBindings; }
     const SfxBindings&      GetBindings() const  { return *m_pBindings; }
     vcl::Window&            GetWindow() const;
-    weld::Window*           GetFrameWeld() const;
+    SAL_RET_MAYBENULL weld::Window* GetFrameWeld() const;
 
     SAL_DLLPRIVATE SfxProgress* GetProgress() const;
 
