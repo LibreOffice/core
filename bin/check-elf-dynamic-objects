@@ -98,7 +98,7 @@ gstreamerallowlist="libgsttag-1.0.so.0 libgstaudio-1.0.so.0 libgstpbutils-1.0.so
 gtk3allowlist="libgtk-3.so.0 libgdk-3.so.0 libcairo-gobject.so.2 libpangocairo-1.0.so.0 libfribidi.so.0 libatk-1.0.so.0 libcairo.so.2 libpangoft2-1.0.so.0 libpango-1.0.so.0 libfontconfig.so.1 libfreetype.so.6 libgdk_pixbuf-2.0.so.0 libharfbuzz.so.0 ${gioallowlist}"
 gtk4allowlist="libgtk-4.so.1 libcairo-gobject.so.2 libpangocairo-1.0.so.0 libatk-1.0.so.0 libcairo.so.2 libpango-1.0.so.0 libgdk_pixbuf-2.0.so.0 libharfbuzz.so.0 libgraphene-1.0.so.0 ${gioallowlist}"
 qt5allowlist="libQt5Core.so.5 libQt5Gui.so.5 libQt5Network.so.5 libQt5Widgets.so.5 libQt5X11Extras.so.5 libcairo.so.2 libxcb.so.1 libxcb-icccm.so.4 ${gobjectallowlist}"
-qt6allowlist="libQt6Core.so.6 libQt6Gui.so.6 libQt6Network.so.6 libQt6Widgets.so.6 libxcb.so.1"
+qt6allowlist="libQt6Core.so.6 libQt6Gui.so.6 libQt6Multimedia.so.6 libQt6MultimediaWidgets.so.6 libQt6Network.so.6 libQt6Widgets.so.6 libxcb.so.1"
 kf5allowlist="libKF5ConfigCore.so.5 libKF5CoreAddons.so.5 libKF5I18n.so.5 libKF5KIOCore.so.5 libKF5KIOFileWidgets.so.5 libKF5KIOWidgets.so.5 libKF5WindowSystem.so.5"
 avahiallowlist="libavahi-common.so.3 libavahi-client.so.3 ${gdbusallowlist}"
 kerberosallowlist="libgssapi_krb5.so.2 libcom_err.so.2 libkrb5.so.3"
@@ -132,6 +132,9 @@ local file="$1"
         ;;
         */libavmediagtk.so)
             allowlist="${allowlist} ${gtk4allowlist}"
+        ;;
+        */libavmediaqt6.so)
+            allowlist="${allowlist} ${qt6allowlist}"
         ;;
         */libvclplug_kf5lo.so|*/libkf5be1lo.so)
             if [ "$ENABLE_KF5" = TRUE ]; then
