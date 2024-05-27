@@ -72,8 +72,8 @@ FmFormView::FmFormView(
 
 void FmFormView::Init()
 {
-    pFormShell = nullptr;
-    pImpl = new FmXFormView(this);
+    m_pFormShell = nullptr;
+    m_pImpl = new FmXFormView(this);
 
     // set model
     SdrModel* pModel = &GetModel();
@@ -114,10 +114,10 @@ void FmFormView::Init()
 
 FmFormView::~FmFormView()
 {
-    if (pFormShell)
-        suppress_fun_call_w_exception(pFormShell->SetView(nullptr));
+    if (m_pFormShell)
+        suppress_fun_call_w_exception(m_pFormShell->SetView(nullptr));
 
-    pImpl->notifyViewDying();
+    m_pImpl->notifyViewDying();
 }
 
 FmFormPage* FmFormView::GetCurPage()
@@ -131,23 +131,23 @@ void FmFormView::MarkListHasChanged()
 {
     E3dView::MarkListHasChanged();
 
-    if ( !(pFormShell && IsDesignMode()) )
+    if ( !(m_pFormShell && IsDesignMode()) )
         return;
 
     FmFormObj* pObj = getMarkedGrid();
-    if ( pImpl->m_pMarkedGrid && pImpl->m_pMarkedGrid != pObj )
+    if ( m_pImpl->m_pMarkedGrid && m_pImpl->m_pMarkedGrid != pObj )
     {
-        pImpl->m_pMarkedGrid = nullptr;
-        if ( pImpl->m_xWindow.is() )
+        m_pImpl->m_pMarkedGrid = nullptr;
+        if ( m_pImpl->m_xWindow.is() )
         {
-            pImpl->m_xWindow->removeFocusListener(pImpl);
-            pImpl->m_xWindow = nullptr;
+            m_pImpl->m_xWindow->removeFocusListener(m_pImpl);
+            m_pImpl->m_xWindow = nullptr;
         }
         SetMoveOutside(false);
         //OLMRefreshAllIAOManagers();
     }
 
-    pFormShell->GetImpl()->SetSelectionDelayed_Lock();
+    m_pFormShell->GetImpl()->SetSelectionDelayed_Lock();
 }
 
 namespace
@@ -179,7 +179,7 @@ void FmFormView::AddDeviceToPaintView(OutputDevice& rNewDev, vcl::Window* pWindo
     // #i39269# / 2004-12-20 / frank.schoenheit@sun.com
     const SdrPageWindow* pPageWindow = findPageWindow( this, &rNewDev );
     if ( pPageWindow )
-        pImpl->addWindow( *pPageWindow );
+        m_pImpl->addWindow( *pPageWindow );
 }
 
 
@@ -187,7 +187,7 @@ void FmFormView::DeleteDeviceFromPaintView(OutputDevice& rNewDev)
 {
     const SdrPageWindow* pPageWindow = findPageWindow( this, &rNewDev );
     if ( pPageWindow )
-        pImpl->removeWindow( pPageWindow->GetControlContainer() );
+        m_pImpl->removeWindow( pPageWindow->GetControlContainer() );
 
     E3dView::DeleteDeviceFromPaintView(rNewDev);
 }
@@ -211,10 +211,10 @@ void FmFormView::ChangeDesignMode(bool bDesign)
         DeactivateControls( GetSdrPageView() );
 
     // --- 2. simulate a deactivation (the shell will handle some things there ...?)
-    if ( pFormShell && pFormShell->GetImpl() )
-        pFormShell->GetImpl()->viewDeactivated_Lock(*this);
+    if ( m_pFormShell && m_pFormShell->GetImpl() )
+        m_pFormShell->GetImpl()->viewDeactivated_Lock(*this);
     else
-        pImpl->Deactivate();
+        m_pImpl->Deactivate();
 
     // --- 3. activate all controls, if we're switching to alive mode
     if ( !bDesign )
@@ -224,19 +224,19 @@ void FmFormView::ChangeDesignMode(bool bDesign)
     FmFormPage*  pCurPage = GetCurPage();
     if ( pCurPage )
     {
-        if ( pFormShell && pFormShell->GetImpl() )
-            pFormShell->GetImpl()->loadForms_Lock(pCurPage, (bDesign ? LoadFormsFlags::Unload : LoadFormsFlags::Load));
+        if ( m_pFormShell && m_pFormShell->GetImpl() )
+            m_pFormShell->GetImpl()->loadForms_Lock(pCurPage, (bDesign ? LoadFormsFlags::Unload : LoadFormsFlags::Load));
     }
 
     // --- 5. base class functionality
     SetDesignMode( bDesign );
 
     // --- 6. simulate an activation (the shell will handle some things there ...?)
-    OSL_PRECOND( pFormShell && pFormShell->GetImpl(), "FmFormView::ChangeDesignMode: is this really allowed? No shell?" );
-    if ( pFormShell && pFormShell->GetImpl() )
-        pFormShell->GetImpl()->viewActivated_Lock(*this);
+    OSL_PRECOND( m_pFormShell && m_pFormShell->GetImpl(), "FmFormView::ChangeDesignMode: is this really allowed? No shell?" );
+    if ( m_pFormShell && m_pFormShell->GetImpl() )
+        m_pFormShell->GetImpl()->viewActivated_Lock(*this);
     else
-        pImpl->Activate();
+        m_pImpl->Activate();
 
     if ( pCurPage )
     {
@@ -269,7 +269,7 @@ void FmFormView::ChangeDesignMode(bool bDesign)
             // set the auto focus to the first control (if indicated by the model to do so)
             bool bForceControlFocus = pModel && pModel->GetAutoControlFocus();
             if (bForceControlFocus)
-                pImpl->AutoFocus();
+                m_pImpl->AutoFocus();
         }
     }
 
@@ -282,7 +282,7 @@ void FmFormView::ChangeDesignMode(bool bDesign)
 void FmFormView::GrabFirstControlFocus()
 {
     if ( !IsDesignMode() )
-        pImpl->AutoFocus();
+        m_pImpl->AutoFocus();
 }
 
 
@@ -300,23 +300,23 @@ SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage)
             // Deselect all
             UnmarkAll();
         }
-        else if ( pFormShell && pFormShell->IsDesignMode() )
+        else if ( m_pFormShell && m_pFormShell->IsDesignMode() )
         {
-            FmXFormShell* pFormShellImpl = pFormShell->GetImpl();
+            FmXFormShell* pFormShellImpl = m_pFormShell->GetImpl();
             pFormShellImpl->UpdateForms_Lock(true);
 
             // so that the form navigator can react to the pagechange
-            pFormShell->GetViewShell()->GetViewFrame().GetBindings().Invalidate(SID_FM_FMEXPLORER_CONTROL, true);
+            m_pFormShell->GetViewShell()->GetViewFrame().GetBindings().Invalidate(SID_FM_FMEXPLORER_CONTROL, true);
 
             pFormShellImpl->SetSelection_Lock(GetMarkedObjectList());
         }
     }
 
     // notify our shell that we have been activated
-    if ( pFormShell && pFormShell->GetImpl() )
-        pFormShell->GetImpl()->viewActivated_Lock(*this);
+    if ( m_pFormShell && m_pFormShell->GetImpl() )
+        m_pFormShell->GetImpl()->viewActivated_Lock(*this);
     else
-        pImpl->Activate();
+        m_pImpl->Activate();
 
     return pPV;
 }
@@ -329,10 +329,10 @@ void FmFormView::HideSdrPage()
         DeactivateControls(GetSdrPageView());
 
     // --- 2. tell the shell the view is (going to be) deactivated
-    if ( pFormShell && pFormShell->GetImpl() )
-        pFormShell->GetImpl()->viewDeactivated_Lock(*this);
+    if ( m_pFormShell && m_pFormShell->GetImpl() )
+        m_pFormShell->GetImpl()->viewDeactivated_Lock(*this);
     else
-        pImpl->Deactivate();
+        m_pImpl->Deactivate();
 
     // --- 3. base class behavior
     E3dView::HideSdrPage();
@@ -347,7 +347,7 @@ void FmFormView::ActivateControls(SdrPageView const * pPageView)
     for (sal_uInt32 i = 0; i < pPageView->PageWindowCount(); ++i)
     {
         const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(i);
-        pImpl->addWindow(rPageWindow);
+        m_pImpl->addWindow(rPageWindow);
     }
 }
 
@@ -360,20 +360,20 @@ void FmFormView::DeactivateControls(SdrPageView const * pPageView)
     for (sal_uInt32 i = 0; i < pPageView->PageWindowCount(); ++i)
     {
         const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(i);
-        pImpl->removeWindow(rPageWindow.GetControlContainer() );
+        m_pImpl->removeWindow(rPageWindow.GetControlContainer() );
     }
 }
 
 
 rtl::Reference<SdrObject> FmFormView::CreateFieldControl( const ODataAccessDescriptor& _rColumnDescriptor )
 {
-    return pImpl->implCreateFieldControl( _rColumnDescriptor );
+    return m_pImpl->implCreateFieldControl( _rColumnDescriptor );
 }
 
 
 rtl::Reference<SdrObject> FmFormView::CreateXFormsControl( const OXFormsDescriptor &_rDesc )
 {
-    return pImpl->implCreateXFormsControl(_rDesc);
+    return m_pImpl->implCreateXFormsControl(_rDesc);
 }
 
 
@@ -394,7 +394,7 @@ rtl::Reference<SdrObject> FmFormView::CreateFieldControl(std::u16string_view rFi
     aColumnDescriptor[ DataAccessDescriptorProperty::CommandType ]      <<= nObjectType;
     aColumnDescriptor[ DataAccessDescriptorProperty::ColumnName ]       <<= sFieldName;
 
-    return pImpl->implCreateFieldControl( aColumnDescriptor );
+    return m_pImpl->implCreateFieldControl( aColumnDescriptor );
 }
 
 
@@ -413,7 +413,7 @@ void FmFormView::InsertControlContainer(const Reference< css::awt::XControlConta
 
         if( rPageWindow.GetControlContainer( false ) == xCC )
         {
-            pImpl->addWindow(rPageWindow);
+            m_pImpl->addWindow(rPageWindow);
             break;
         }
     }
@@ -424,7 +424,7 @@ void FmFormView::RemoveControlContainer(const Reference< css::awt::XControlConta
 {
     if( !IsDesignMode() )
     {
-        pImpl->removeWindow( xCC );
+        m_pImpl->removeWindow( xCC );
     }
 }
 
@@ -432,7 +432,7 @@ void FmFormView::RemoveControlContainer(const Reference< css::awt::XControlConta
 SdrPaintWindow* FmFormView::BeginCompleteRedraw(OutputDevice* pOut)
 {
     SdrPaintWindow* pPaintWindow = E3dView::BeginCompleteRedraw( pOut );
-    pImpl->suspendTabOrderUpdate();
+    m_pImpl->suspendTabOrderUpdate();
     return pPaintWindow;
 }
 
@@ -440,7 +440,7 @@ SdrPaintWindow* FmFormView::BeginCompleteRedraw(OutputDevice* pOut)
 void FmFormView::EndCompleteRedraw( SdrPaintWindow& rPaintWindow, bool bPaintFormLayer )
 {
     E3dView::EndCompleteRedraw( rPaintWindow, bPaintFormLayer );
-    pImpl->resumeTabOrderUpdate();
+    m_pImpl->resumeTabOrderUpdate();
 }
 
 
@@ -465,10 +465,10 @@ bool FmFormView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
                 Reference< awt::XWindow > xWindow( pObj->GetUnoControl( *this, *pWin->GetOutDev() ), UNO_QUERY );
                 if ( xWindow.is() )
                 {
-                    pImpl->m_pMarkedGrid = pObj;
-                    pImpl->m_xWindow = xWindow;
+                    m_pImpl->m_pMarkedGrid = pObj;
+                    m_pImpl->m_xWindow = xWindow;
                     // add as listener to get notified when ESC will be pressed inside the grid
-                    pImpl->m_xWindow->addFocusListener(pImpl);
+                    m_pImpl->m_xWindow->addFocusListener(m_pImpl);
                     SetMoveOutside(true);
                     //OLMRefreshAllIAOManagers();
                     xWindow->setFocus();
@@ -477,14 +477,14 @@ bool FmFormView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
             }
         }
         // Alt-RETURN alone shows the properties of the selection
-        if  (   pFormShell
-            &&  pFormShell->GetImpl()
+        if  (   m_pFormShell
+            &&  m_pFormShell->GetImpl()
             &&  !rKeyCode.IsShift()
             &&  !rKeyCode.IsMod1()
             &&   rKeyCode.IsMod2()
             )
         {
-            pFormShell->GetImpl()->handleShowPropertiesRequest_Lock();
+            m_pFormShell->GetImpl()->handleShowPropertiesRequest_Lock();
         }
 
     }
@@ -523,7 +523,7 @@ bool FmFormView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
 
 bool FmFormView::checkUnMarkAll(const Reference< XInterface >& _xSource)
 {
-    Reference< css::awt::XControl> xControl(pImpl->m_xWindow,UNO_QUERY);
+    Reference< css::awt::XControl> xControl(m_pImpl->m_xWindow,UNO_QUERY);
     bool bRet = !xControl.is() || !_xSource.is() || _xSource != xControl->getModel();
     if ( bRet )
         UnmarkAll();
@@ -536,11 +536,11 @@ bool FmFormView::MouseButtonDown( const MouseEvent& _rMEvt, OutputDevice* _pWin 
 {
     bool bReturn = E3dView::MouseButtonDown( _rMEvt, _pWin );
 
-    if ( pFormShell && pFormShell->GetImpl() )
+    if ( m_pFormShell && m_pFormShell->GetImpl() )
     {
         SdrViewEvent aViewEvent;
         PickAnything( _rMEvt, SdrMouseEventKind::BUTTONDOWN, aViewEvent );
-        pFormShell->GetImpl()->handleMouseButtonDown_Lock(aViewEvent);
+        m_pFormShell->GetImpl()->handleMouseButtonDown_Lock(aViewEvent);
     }
 
     return bReturn;
@@ -586,7 +586,7 @@ void FmFormView::createControlLabelPair( OutputDevice const * _pOutDev, sal_Int3
 
 Reference< runtime::XFormController > FmFormView::GetFormController( const Reference< XForm >& _rxForm, const OutputDevice& _rDevice ) const
 {
-    return pImpl->getFormController( _rxForm, _rDevice );
+    return m_pImpl->getFormController( _rxForm, _rDevice );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
