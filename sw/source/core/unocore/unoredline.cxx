@@ -490,7 +490,10 @@ void SwXRedline::Notify( const SfxHint& rHint )
     {
         m_pDoc = nullptr;
         m_pRedline = nullptr;
-    } else if(auto pHint = dynamic_cast<const sw::FindRedlineHint*>(&rHint)) {
+    }
+    else if(rHint.GetId() == SfxHintId::SwFindRedline)
+    {
+        auto pHint = static_cast<const sw::FindRedlineHint*>(&rHint);
         if(!*pHint->m_ppXRedline && &pHint->m_rRedline == GetRedline())
             *pHint->m_ppXRedline = this;
     }
