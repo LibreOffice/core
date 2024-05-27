@@ -152,16 +152,16 @@ public:
             When the specified shell is currently not active then NULL is
             returned.
     */
-    SfxShell* GetShell(ShellId nId) const;
+    SAL_RET_MAYBENULL SfxShell* GetShell(ShellId nId) const;
 
     /** Return the top-most shell on the SFX shell stack regardless of
         whether that is a view shell or a sub shell.
     */
-    SfxShell* GetTopShell() const;
+    SAL_RET_MAYBENULL SfxShell* GetTopShell() const;
 
     /** Return the top-most active view shell on the internal shell stack.
     */
-    SfxShell* GetTopViewShell() const;
+    SAL_RET_MAYBENULL SfxShell* GetTopViewShell() const;
 
     /** Use this class to safely lock updates of the view shell stack.
     */
