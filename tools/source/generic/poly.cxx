@@ -179,8 +179,7 @@ ImplPolygon::ImplPolygon( const Point& rCenter, tools::Long nRadX, tools::Long n
         if (!bOverflow)
         {
             nPoints = std::clamp(
-                ( M_PI * ( 1.5 * ( nRadX + nRadY ) -
-                           sqrt( static_cast<double>(std::abs(nRadXY)) ) ) ),
+                ( M_PI * ( 1.5 * ( nRadX + nRadY ) - sqrt( std::fabs(nRadXY) ) ) ),
                 32.0, 256.0 );
         }
         else
@@ -245,8 +244,7 @@ ImplPolygon::ImplPolygon(const tools::Rectangle& rBound, const Point& rStart, co
         if (!bOverflow)
         {
             nPoints = std::clamp(
-                ( M_PI * ( 1.5 * ( nRadX + nRadY ) -
-                           sqrt( static_cast<double>(std::abs(nRadXY)) ) ) ),
+                ( M_PI * ( 1.5 * ( nRadX + nRadY ) - sqrt( std::fabs(nRadXY) ) ) ),
                 32.0, 256.0 );
         }
         else
