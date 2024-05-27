@@ -479,8 +479,9 @@ IMPL_LINK_NOARG(ViewOverlayManager, UpdateTagsHdl, void*, void)
     bool bChanges = DisposeTags();
     bChanges |= CreateTags();
 
-    if( bChanges && mrBase.GetDrawView() )
-        static_cast< ::sd::View* >( mrBase.GetDrawView() )->updateHandles();
+    SdrView* pDrawView = mrBase.GetDrawView();
+    if( bChanges && pDrawView )
+        static_cast< ::sd::View* >( pDrawView )->updateHandles();
 }
 
 bool ViewOverlayManager::CreateTags()
@@ -490,14 +491,15 @@ bool ViewOverlayManager::CreateTags()
     std::shared_ptr<ViewShell> aMainShell = mrBase.GetMainViewShell();
 
     SdPage* pPage = aMainShell ? aMainShell->getCurrentPage() : nullptr;
+    SdrView* pDrawView = mrBase.GetDrawView();
 
-    if( pPage && !pPage->IsMasterPage() && (pPage->GetPageKind() == PageKind::Standard) )
+    if( pDrawView && pPage && !pPage->IsMasterPage() && (pPage->GetPageKind() == PageKind::Standard) )
     {
         const std::list< SdrObject* >& rShapes = pPage->GetPresentationShapeList().getList();
 
         for( SdrObject* pShape : rShapes )
         {
-            if( pShape->IsEmptyPresObj() && (pShape->GetObjIdentifier() == SdrObjKind::OutlineText) && (mrBase.GetDrawView()->GetTextEditObject() != pShape) )
+            if( pShape->IsEmptyPresObj() && (pShape->GetObjIdentifier() == SdrObjKind::OutlineText) && (pDrawView->GetTextEditObject() != pShape) )
             {
                 rtl::Reference< SmartTag > xTag( new ChangePlaceholderTag( *mrBase.GetMainViewShell()->GetView(), *pShape ) );
                 maTagVector.push_back(xTag);
