@@ -136,11 +136,12 @@ public:
 
     void Notify(SfxBroadcaster&, const SfxHint& rHint) override
     {
-        auto pHint = dynamic_cast<const SfxStyleSheetHint*>(&rHint);
-        if (!pHint)
+        auto nId = rHint.GetId();
+        if (nId != SfxHintId::StyleSheetModified && nId != SfxHintId::StyleSheetModifiedExtended
+            && nId != SfxHintId::StyleSheetErased)
             return;
+        auto pHint = static_cast<const SfxStyleSheetHint*>(&rHint);
 
-        auto nId = pHint->GetId();
         auto pDocStyleSheet = pHint->GetStyleSheet();
         const SfxStyleSheetModifiedHint* pExtendedHint = nullptr;
         if (nId == SfxHintId::StyleSheetModifiedExtended)
@@ -3367,10 +3368,9 @@ void SwStyleSheetIterator::InvalidateIterator()
 void SwStyleSheetIterator::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     // search and remove from View-List!!
-    const SfxStyleSheetHint* pStyleSheetHint = dynamic_cast<const SfxStyleSheetHint*>(&rHint);
-    if( pStyleSheetHint &&
-        SfxHintId::StyleSheetErased == pStyleSheetHint->GetId() )
+    if( SfxHintId::StyleSheetErased == rHint.GetId() )
     {
+        const SfxStyleSheetHint* pStyleSheetHint = static_cast<const SfxStyleSheetHint*>(&rHint);
         SfxStyleSheetBase* pStyle = pStyleSheetHint->GetStyleSheet();
 
         if (pStyle)
