@@ -1146,7 +1146,7 @@ void WW8AttributeOutput::WriteBookmarkInActParagraph( const OUString& rName, sal
     m_aBookmarksOfParagraphEnd.insert(std::pair<sal_Int32, OUString>(nLastRunPos, rName));
 }
 
-bool WW8AttributeOutput::StartURL( const OUString &rUrl, const OUString &rTarget )
+bool WW8AttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget, const OUString& /*rName*/)
 {
     INetURLObject aURL( rUrl );
     OUString sURL;
@@ -1489,7 +1489,7 @@ int SwWW8AttrIter::OutAttrWithRange(const SwTextNode& rNode, sal_Int32 nPos)
                     if ( nPos == pHt->GetStart() )
                     {
                         const SwFormatINetFormat *rINet = static_cast< const SwFormatINetFormat* >( pItem );
-                        if ( m_rExport.AttrOutput().StartURL( rINet->GetValue(), rINet->GetTargetFrame() ) )
+                        if (m_rExport.AttrOutput().StartURL(rINet->GetValue(), rINet->GetTargetFrame(), rINet->GetName()))
                             ++nRet;
                     }
                     pEnd = pHt->End();

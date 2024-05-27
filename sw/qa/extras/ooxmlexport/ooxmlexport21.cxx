@@ -572,6 +572,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154369, "tdf154369.docx")
                 "color"_ostr, "00527d55");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testScreenTip)
+{
+    loadAndSave("tdf159897.docx");
+
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+
+    // Hyperlink with ScreenTip
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:hyperlink"_ostr, "tooltip"_ostr,
+                "This is a hyperlink");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testEmptyObjectRange)
 {
     // Before the fix, this failed an assertion like this:

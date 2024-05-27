@@ -253,7 +253,7 @@ public:
     virtual void EndRuby(const SwTextNode& rNode, sal_Int32 nPos) override;
 
     /// Output URL start.
-    virtual bool StartURL( const OUString& rUrl, const OUString& rTarget ) override;
+    virtual bool StartURL( const OUString& rUrl, const OUString& rTarget, const OUString& rName = OUString() ) override;
 
     /// Output URL end.
     virtual bool EndURL(bool) override;

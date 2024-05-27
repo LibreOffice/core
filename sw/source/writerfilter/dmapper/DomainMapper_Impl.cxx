@@ -7842,6 +7842,7 @@ void DomainMapper_Impl::CloseFieldCommand()
 
                     OUString sURL;
                     OUString sTarget;
+                    OUString sName;
 
                     while (aPartIt != aItEnd)
                     {
@@ -7857,7 +7858,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         else if (*aPartIt == "\\m" || *aPartIt == "\\n" || *aPartIt == "\\h")
                         {
                         }
-                        else if ( *aPartIt == "\\o" || *aPartIt == "\\t" )
+                        else if (*aPartIt == "\\t")
                         {
                             ++aPartIt;
 
@@ -7865,6 +7866,15 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 break;
 
                             sTarget = *aPartIt;
+                        }
+                        else if (*aPartIt == "\\o")
+                        {
+                            ++aPartIt;
+
+                            if (aPartIt == aItEnd)
+                                break;
+
+                            sName = *aPartIt;
                         }
                         else
                         {
@@ -7905,6 +7915,8 @@ void DomainMapper_Impl::CloseFieldCommand()
 
                     if (!sTarget.isEmpty())
                         pContext->SetHyperlinkTarget(sTarget);
+                    else if (!sName.isEmpty())
+                        pContext->SetHyperlinkName(sName);
                 }
                 break;
                 case FIELD_IF:
@@ -8798,6 +8810,8 @@ void DomainMapper_Impl::PopFieldContext()
 
                                 if (!pContext->GetHyperlinkTarget().isEmpty())
                                     xCrsrProperties->setPropertyValue(u"HyperLinkTarget"_ustr, uno::Any(pContext->GetHyperlinkTarget()));
+                                else if (!pContext->GetHyperlinkName().isEmpty())
+                                    xCrsrProperties->setPropertyValue(u"HyperLinkName"_ustr, uno::Any(pContext->GetHyperlinkName()));
 
                                 if (IsInTOC())
                                 {

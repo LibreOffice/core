@@ -3911,7 +3911,7 @@ void DocxAttributeOutput::WriteBookmarkInActParagraph( const OUString& rName, sa
     m_aBookmarksOfParagraphEnd.insert(std::pair<sal_Int32, OUString>(nLastRunPos, rName));
 }
 
-bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarget )
+bool DocxAttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget, const OUString& rName)
 {
     OUString sMark;
     OUString sUrl;
@@ -3982,6 +3982,10 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
         if ( !rTarget.isEmpty() )
         {
             m_pHyperlinkAttrList->add(FSNS(XML_w, XML_tgtFrame), rTarget);
+        }
+        else if (!rName.isEmpty())
+        {
+            m_pHyperlinkAttrList->add(FSNS(XML_w, XML_tooltip), rName);
         }
     }
 

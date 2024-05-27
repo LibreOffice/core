@@ -102,7 +102,8 @@ public:
     void EndRuby(const SwTextNode& rNode, sal_Int32 nPos) override;
 
     /// Output URL start.
-    bool StartURL(const OUString& rUrl, const OUString& rTarget) override;
+    bool StartURL(const OUString& rUrl, const OUString& rTarget,
+                  const OUString& rName = OUString()) override;
 
     /// Output URL end.
     bool EndURL(bool isAtEndOfParagraph) override;

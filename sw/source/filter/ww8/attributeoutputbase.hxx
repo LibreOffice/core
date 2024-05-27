@@ -203,7 +203,7 @@ public:
     virtual void EndRuby( const SwTextNode& rNode, sal_Int32 nPos ) = 0;
 
     /// Output URL start.
-    virtual bool StartURL( const OUString& rUrl, const OUString& rTarget ) = 0;
+    virtual bool StartURL(const OUString& rUrl, const OUString& rTarget, const OUString& rName = OUString()) = 0;
 
     /// Output URL end.
     virtual bool EndURL(bool isAtEndOfParagraph) = 0;
