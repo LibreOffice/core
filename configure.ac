@@ -14439,6 +14439,12 @@ if test -d "$SRC_ROOT/translations/source"; then
             WITH_POOR_HELP_LOCALIZATIONS="$WITH_POOR_HELP_LOCALIZATIONS $l"
         fi
     done
+    if test "$OS" = WNT; then
+        # We want to include only English (US), French, German, Italian and Spanish help
+        # packs in our Windows distribution. Others are probably not needed and digital
+        # signature of MSI packages is expensive. Some other languages are available online.
+        WITH_POOR_HELP_LOCALIZATIONS="ab af am an ar as ast az be bg bn bn-IN bo br brx bs ca ca-valencia ckb cs cy da dgo dsb dz el en-GB en-ZA eo et eu fa fi fur fy ga gd gl gu gug he hi hr hsb hu hy id is ja jv ka kab kk kl km kmr-Latn kn ko kok ks ky lb lo lt lv mai mk ml mn mni mr my nb ne nl nn nr nso oc om or pa-IN pl pt pt-BR ro ru rw sa-IN sah sat sd si sid sk sl sq sr sr-Latn ss st sv sw-TZ szl ta te tg th ti tn tr ts tt ug uk ur uz ve vec vi xh zh-CN zh-TW zu"
+    fi
 fi
 AC_SUBST(WITH_POOR_HELP_LOCALIZATIONS)
 
