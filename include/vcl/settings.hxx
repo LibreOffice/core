@@ -205,6 +205,13 @@ enum class ToolbarIconSize
     Size32       = 3,
 };
 
+/** Text selection behavior when selecting an entry in an editable combobox. */
+enum class ComboBoxTextSelectionMode
+{
+    SelectText, // select the whole text of the new entry
+    CursorToEnd // don't select text, put text cursor to end of text
+};
+
 #define STYLE_CURSOR_NOBLINKTIME    SAL_MAX_UINT64
 
 class VCL_DLLPUBLIC StyleSettings
@@ -626,6 +633,9 @@ public:
 
     // the default LineWidth for ListBox UI previews (LineStyle, LineDash, LineStartEnd). Default is 1.
     static sal_uInt16               GetListBoxPreviewDefaultLineWidth();
+
+    void SetComboBoxTextSelectionMode(ComboBoxTextSelectionMode eMode);
+    ComboBoxTextSelectionMode GetComboBoxTextSelectionMode() const;
 
     // defines if previews which contain potentially transparent objects (e.g. the dash/line/LineStartEnd previews and others)
     // use the default transparent visualization background (checkered background) as it has got standard in graphic programs nowadays

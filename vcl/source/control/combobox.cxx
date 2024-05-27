@@ -374,10 +374,23 @@ IMPL_LINK_NOARG(ComboBox, ImplSelectHdl, LinkParamNone*, void)
 
         m_pSubEdit->SetText( aText );
 
-        Selection aNewSelection( 0, aText.getLength() );
-        if (IsMultiSelectionEnabled())
-            aNewSelection.Min() = aText.getLength();
-        m_pSubEdit->SetSelection( aNewSelection );
+        switch (GetSettings().GetStyleSettings().GetComboBoxTextSelectionMode())
+        {
+            case ComboBoxTextSelectionMode::SelectText:
+            {
+                Selection aNewSelection(0, aText.getLength());
+                if (IsMultiSelectionEnabled())
+                    aNewSelection.Min() = aText.getLength();
+                m_pSubEdit->SetSelection(aNewSelection);
+                break;
+            }
+            case ComboBoxTextSelectionMode::CursorToEnd:
+                m_pSubEdit->SetCursorAtLast();
+                break;
+            default:
+                assert(false && "Unhandled ComboBoxTextSelectionMode case");
+                break;
+        }
 
         bCallSelect = true;
     }

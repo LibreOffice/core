@@ -210,6 +210,7 @@ struct ImplStyleData
     sal_uInt16                      mnColorValueSetColumnCount;
     Size                            maListBoxPreviewDefaultLogicSize;
     Size                            maListBoxPreviewDefaultPixelSize;
+    ComboBoxTextSelectionMode       meComboBoxTextSelectionMode;
     bool                            mbPreviewUsesCheckeredBackground;
 
     OUString                        maPersonaHeaderFooter; ///< Cache the settings to detect changes.
@@ -500,6 +501,7 @@ ImplStyleData::ImplStyleData() :
     maListBoxPreviewDefaultLogicSize(Size(15, 7)),
 #endif
     maListBoxPreviewDefaultPixelSize(Size(0, 0)), // on-demand calculated in GetListBoxPreviewDefaultPixelSize(),
+    meComboBoxTextSelectionMode(ComboBoxTextSelectionMode::SelectText),
     mbPreviewUsesCheckeredBackground(true)
 {
     SetStandardStyles();
@@ -627,6 +629,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnColorValueSetColumnCount(rData.mnColorValueSetColumnCount),
     maListBoxPreviewDefaultLogicSize(rData.maListBoxPreviewDefaultLogicSize),
     maListBoxPreviewDefaultPixelSize(rData.maListBoxPreviewDefaultPixelSize),
+    meComboBoxTextSelectionMode(rData.meComboBoxTextSelectionMode),
     mbPreviewUsesCheckeredBackground(rData.mbPreviewUsesCheckeredBackground),
     maPersonaHeaderFooter( rData.maPersonaHeaderFooter ),
     maPersonaHeaderBitmap( rData.maPersonaHeaderBitmap ),
@@ -2275,6 +2278,17 @@ sal_uInt16
 StyleSettings::GetListBoxPreviewDefaultLineWidth()
 {
     return 1;
+}
+
+void StyleSettings::SetComboBoxTextSelectionMode(
+    ComboBoxTextSelectionMode eMode)
+{
+    mxData->meComboBoxTextSelectionMode = eMode;
+}
+
+ComboBoxTextSelectionMode StyleSettings::GetComboBoxTextSelectionMode() const
+{
+    return mxData->meComboBoxTextSelectionMode;
 }
 
 void
