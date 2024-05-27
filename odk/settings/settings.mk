@@ -319,7 +319,7 @@ SHAREDLIB_EXT=so
 SHAREDLIB_PRE=lib
 SHAREDLIB_OUT=$(OUT_LIB)
 
-GCC_VERSION=$(shell $(CC) -dumpversion)
+GCC_VERSION:=$(shell $(CC) -dumpversion)
 
 COMID=gcc3
 CPPU_ENV=gcc3
@@ -530,7 +530,7 @@ SHAREDLIB_EXT=so
 SHAREDLIB_PRE=lib
 SHAREDLIB_OUT=$(OUT_LIB)
 
-GCC_VERSION=$(shell $(CC) -dumpversion)
+GCC_VERSION:=$(shell $(CC) -dumpversion)
 
 COMID=gcc3
 CPPU_ENV=gcc3
