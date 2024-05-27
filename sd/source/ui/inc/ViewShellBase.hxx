@@ -153,7 +153,7 @@ public:
     virtual bool PrepareClose (bool bUI = true) override;
     virtual void WriteUserData (OUString&, bool bBrowse = false) override;
     virtual void ReadUserData (const OUString&, bool bBrowse = false) override;
-    virtual SdrView* GetDrawView() const override;
+    SAL_RET_MAYBENULL virtual SdrView* GetDrawView() const override;
 
     /** When <TRUE/> is given, then the mouse shape is set to hour glass (or
         whatever the busy shape looks like on the system.)

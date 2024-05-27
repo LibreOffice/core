@@ -816,8 +816,8 @@ SdrView* ViewShellBase::GetDrawView() const
     ViewShell* pShell = GetMainViewShell().get();
     if (pShell != nullptr)
         return pShell->GetDrawView ();
-    else
-        return SfxViewShell::GetDrawView();
+
+    return nullptr;
 }
 
 void ViewShellBase::SetBusyState (bool bBusy)
