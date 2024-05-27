@@ -33,9 +33,10 @@ public:
     bool TraverseCXXMethodDecl(const CXXMethodDecl * decl);
 
     bool VisitCXXThisExpr(const CXXThisExpr *) { bVisitedThis = true; return true; }
-    // these two indicate that we hit something that makes our analysis unreliable
+    // these three indicate that we hit something that makes our analysis unreliable
     bool VisitUnresolvedMemberExpr(const UnresolvedMemberExpr *) { bVisitedThis = true; return true; }
     bool VisitCXXDependentScopeMemberExpr(const CXXDependentScopeMemberExpr *) { bVisitedThis = true; return true; }
+    bool VisitDependentScopeDeclRefExpr(const DependentScopeDeclRefExpr *) { bVisitedThis = true; return true; }
 private:
     StringRef getFilename(SourceLocation loc);
 };
