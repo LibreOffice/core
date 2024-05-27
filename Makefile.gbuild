@@ -43,12 +43,26 @@ create-update-info:
 	mkdir -p $(MAR_DIR)/language
 	MAR=$(INSTDIR)/program/mar $(if $(filter WNT,$(OS)),$(shell cygpath -u $(SRCDIR)/bin/update/create_full_mar.py),$(SRCDIR)/bin/update/create_full_mar.py) "$(PRODUCTNAME)" "$(WORKDIR)" "$(MAR_NAME_PREFIX)" "$(ONLINEUPDATE_MAR_CERTIFICATEPATH)" "$(ONLINEUPDATE_MAR_CERTIFICATENAME)" "$(ONLINEUPDATE_MAR_BASEURL)" '$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)'
 
-create-partial-info:
-	$(eval BUILDID := $(shell git -C $(SRCDIR) log -1 --format=%H))
-	$(eval VERSION := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX))
-	$(eval PLATFORM := $(RTL_OS)_$(RTL_ARCH))
-	$(eval MAR_NAME_PREFIX := $(PRODUCTNAME)_$(VERSION)_$(PLATFORM)_$(BUILDID))
-	MBSDIFF=$(WORKDIR)/LinkTarget/Executable/mbsdiff MAR=$(INSTDIR)/program/mar $(if $(filter WNT,$(OS)),$(shell cygpath -u $(SRCDIR)/bin/update/create_partial_update.py),$(SRCDIR)/bin/update/create_partial_update.py) "$(WORKDIR)" "$(MAR_NAME_PREFIX)" LOOnlineUpdater "$(ONLINEUPDATE_MAR_CERTIFICATEPATH)" "$(ONLINEUPDATE_MAR_CERTIFICATENAME)" "$(ONLINEUPDATE_MAR_BASEURL)" "$(PRODUCTNAME)" '$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)' "$(ONLINEUPDATE_MAR_OLDMSI)"
+# target-variables also will apply to the target's prerequisites (i.e. the individual platform targets)
+# arch is taken from the stem of the rule
+# MSIDIR and OLD_VER are expected to be specified on the make commandline but others like VERSION,
+# BUILDID, ONLINEUPDATE_MAR_NEWMSI and ONLINEUPDATE_MAR_OLDMSI can be overridden as well if needed.
+# If VERSION is specified on the commandline, BUILDID defaults to the corresponding libreoffice tag
+create-partial-info: export ARCH = $*
+create-partial-info: PLATFORM = $(RTL_OS)_$(ARCH)
+create-partial-info: VERSION := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)
+create-partial-info: VERSION_FULL := $(VERSION)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX)
+create-partial-info: BUILDID := $(shell git -C $(SRCDIR) log -1 --format=%H$(if $(filter command line,$(origin VERSION)), libreoffice-$(VERSION)))
+create-partial-info: MAR_NAME_PREFIX = $(PRODUCTNAME)_$(VERSION_FULL)_$(PLATFORM)_$(BUILDID)
+create-partial-info: ONLINEUPDATE_MAR_OLDMSI = $(MSIDIR)$(PRODUCTNAME)_$(OLD_VER)_Win_$(subst AARCH64,aarch64,$(subst X86_64,x86-64,$(ARCH))).msi
+create-partial-info: ONLINEUPDATE_MAR_NEWMSI = $(MSIDIR)$(PRODUCTNAME)_$(VERSION)_Win_$(subst AARCH64,aarch64,$(subst X86_64,x86-64,$(ARCH))).msi
+create-partial-info: export MBSDIFF := $(WORKDIR)/LinkTarget/Executable/mbsdiff
+create-partial-info: export MAR := $(INSTDIR)/program/mar
+
+create-partial-info: create-partial-info-AARCH64 create-partial-info-X86_64 create-partial-info-x86
+
+create-partial-info-%:
+	$(if $(filter WNT,$(OS)),$(shell cygpath -u $(SRCDIR)/bin/update/create_partial_update.py),$(SRCDIR)/bin/update/create_partial_update.py) "$(WORKDIR)" "$(MAR_NAME_PREFIX)" LOOnlineUpdater "$(ONLINEUPDATE_MAR_CERTIFICATEPATH)" "$(ONLINEUPDATE_MAR_CERTIFICATENAME)" "$(ONLINEUPDATE_MAR_BASEURL)$(VERSION)/" "$(PRODUCTNAME)" '$(VERSION)' "$(ONLINEUPDATE_MAR_OLDMSI)" "$(ONLINEUPDATE_MAR_NEWMSI)"
 
 # also possible to bypass the dependencies/the gbuild processing by just running
 # LD_LIBRARY_PATH=instdir/program make cmd cmd='ALL_LANGS="$(ALL_LANGS)" workdir/LinkTarget/Executable/pocheck'
