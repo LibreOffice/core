@@ -532,6 +532,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf126533_pageBitmap, "tdf126533_pageBitmap.docx")
                 "/rels:Relationships/rels:Relationship[@Target='media/image1.jpeg']"_ostr, 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf131098_imageFill, "tdf131098_imageFill.docx")
+{
+    if (isExported())
+        return;
+
+    // given a document with an image background transparency (blue-white)
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
+                         getProperty<drawing::FillStyle>(getShape(1), "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x729fcf), getProperty<Color>(getShape(1), "FillColor"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf154369, "tdf154369.docx")
 {
     //Unit test for bug fix in tdf#154369

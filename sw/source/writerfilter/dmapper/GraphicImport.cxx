@@ -1953,8 +1953,56 @@ rtl::Reference<SwXTextGraphicObject> GraphicImport::createGraphicObject(uno::Ref
                     uno::Any(m_pImpl->m_eColorMode));
             }
 
-            xGraphicObject->setPropertyValue(getPropertyName( PROP_BACK_COLOR ),
-                uno::Any( GraphicImport_Impl::nFillColor ));
+            // copy the image fill area properties
+            xGraphicObject->setPropertyValue("FillBackground",
+                                             xShapeProps->getPropertyValue("FillBackground"));
+            xGraphicObject->setPropertyValue("FillBitmap",
+                                             xShapeProps->getPropertyValue("FillBitmap"));
+            xGraphicObject->setPropertyValue(
+                "FillBitmapLogicalSize", xShapeProps->getPropertyValue("FillBitmapLogicalSize"));
+            xGraphicObject->setPropertyValue("FillBitmapMode",
+                                             xShapeProps->getPropertyValue("FillBitmapMode"));
+            xGraphicObject->setPropertyValue("FillBitmapOffsetX",
+                                             xShapeProps->getPropertyValue("FillBitmapOffsetX"));
+            xGraphicObject->setPropertyValue(
+                "FillBitmapPositionOffsetX",
+                xShapeProps->getPropertyValue("FillBitmapPositionOffsetX"));
+            xGraphicObject->setPropertyValue(
+                "FillBitmapPositionOffsetY",
+                xShapeProps->getPropertyValue("FillBitmapPositionOffsetY"));
+            xGraphicObject->setPropertyValue(
+                "FillBitmapRectanglePoint",
+                xShapeProps->getPropertyValue("FillBitmapRectanglePoint"));
+            xGraphicObject->setPropertyValue("FillBitmapSizeX",
+                                             xShapeProps->getPropertyValue("FillBitmapSizeX"));
+            xGraphicObject->setPropertyValue("FillBitmapSizeY",
+                                             xShapeProps->getPropertyValue("FillBitmapSizeY"));
+            xGraphicObject->setPropertyValue("FillBitmapStretch",
+                                             xShapeProps->getPropertyValue("FillBitmapStretch"));
+            xGraphicObject->setPropertyValue("FillBitmapTile",
+                                             xShapeProps->getPropertyValue("FillBitmapTile"));
+            xGraphicObject->setPropertyValue("FillBitmapURL",
+                                             xShapeProps->getPropertyValue("FillBitmapURL"));
+            xGraphicObject->setPropertyValue("FillColor",
+                                             xShapeProps->getPropertyValue("FillColor"));
+            xGraphicObject->setPropertyValue("FillColor2",
+                                             xShapeProps->getPropertyValue("FillColor2"));
+            xGraphicObject->setPropertyValue("FillComplexColor",
+                                             xShapeProps->getPropertyValue("FillComplexColor"));
+            xGraphicObject->setPropertyValue("FillGradient",
+                                             xShapeProps->getPropertyValue("FillGradient"));
+            xGraphicObject->setPropertyValue(
+                "FillGradientStepCount", xShapeProps->getPropertyValue("FillGradientStepCount"));
+            xGraphicObject->setPropertyValue("FillHatch",
+                                             xShapeProps->getPropertyValue("FillHatch"));
+            xGraphicObject->setPropertyValue("FillStyle",
+                                             xShapeProps->getPropertyValue("FillStyle"));
+            xGraphicObject->setPropertyValue("FillTransparence",
+                                             xShapeProps->getPropertyValue("FillTransparence"));
+            xGraphicObject->setPropertyValue(
+                "FillTransparenceGradient",
+                xShapeProps->getPropertyValue("FillTransparenceGradient"));
+
             m_pImpl->applyZOrder(xGraphicObject);
 
             //there seems to be no way to detect the original size via _real_ API
