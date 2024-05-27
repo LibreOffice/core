@@ -78,7 +78,7 @@ namespace sw
     };
     struct ModifyChangedHint final: SfxHint
     {
-        ModifyChangedHint(const SwModify* pNew) : m_pNew(pNew) {};
+        ModifyChangedHint(const SwModify* pNew) : SfxHint(SfxHintId::SwModifyChanged), m_pNew(pNew) {};
         const SwModify* m_pNew;
     };
     // Observer pattern using svl implementation

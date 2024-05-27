@@ -159,6 +159,7 @@ enum class SfxHintId {
     SwAutoFormatUsedHint,
     SwFormatField,
     SwFindRedline,
+    SwModifyChanged,
 
     ThisIsAnSdrHint,
     ThisIsAnSfxEventHint
@@ -250,6 +251,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
     case SfxHintId::SwCollectTextTOXMarksForLayout: return stream << "SwCollectTextTOXMarksForLayout";
     case SfxHintId::SwFormatField: return stream << "SwFormatField";
     case SfxHintId::SwFindRedline: return stream << "SwFindRedline";
+    case SfxHintId::SwModifyChanged: return stream << "SwModifyChanged";
     case SfxHintId::ThisIsAnSdrHint: return stream << "SdrHint";
     default: return stream << "unk(" << std::to_string(int(id)) << ")";
     }

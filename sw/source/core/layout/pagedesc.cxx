@@ -304,8 +304,9 @@ void SwPageDesc::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
         m_FirstMaster.SwClientNotify(rModify, rHint);
         m_FirstLeft.SwClientNotify(rModify, rHint);
     }
-    else if (auto pModifyChangedHint = dynamic_cast<const sw::ModifyChangedHint*>(&rHint))
+    else if(rHint.GetId() == SfxHintId::SwModifyChanged)
     {
+        auto pModifyChangedHint = static_cast<const sw::ModifyChangedHint*>(&rHint);
         if(m_pTextFormatColl == &rModify)
             m_pTextFormatColl = static_cast<const SwTextFormatColl*>(pModifyChangedHint->m_pNew);
         else

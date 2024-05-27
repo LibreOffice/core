@@ -117,8 +117,9 @@ void SwDDETable::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
     {
         pGatherDdeTablesHint->m_rvTables.push_back(this);
     }
-    else if (auto pModifyChangedHint = dynamic_cast<const sw::ModifyChangedHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwModifyChanged)
     {
+        auto pModifyChangedHint = static_cast<const sw::ModifyChangedHint*>(&rHint);
         if(m_pDDEType == &rModify)
             m_pDDEType = const_cast<SwDDEFieldType*>(static_cast<const SwDDEFieldType*>(pModifyChangedHint->m_pNew));
     }

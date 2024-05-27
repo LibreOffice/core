@@ -1608,8 +1608,9 @@ void SwXDocumentIndexMark::Impl::Invalidate()
 
 void SwXDocumentIndexMark::Impl::Notify(const SfxHint& rHint)
 {
-    if(auto pModifyChangedHint = dynamic_cast<const sw::ModifyChangedHint*>(&rHint))
+    if(rHint.GetId() == SfxHintId::SwModifyChanged)
     {
+        auto pModifyChangedHint = static_cast<const sw::ModifyChangedHint*>(&rHint);
         if(auto pNewType = dynamic_cast<const SwTOXType*>(pModifyChangedHint->m_pNew))
             m_pTOXType = pNewType;
 
