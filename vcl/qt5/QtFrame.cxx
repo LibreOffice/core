@@ -1242,6 +1242,10 @@ void QtFrame::UpdateSettings(AllSettings& rSettings)
     style.SetShadowColor(toColor(pal.color(QPalette::Disabled, QPalette::WindowText)));
     style.SetDarkShadowColor(toColor(pal.color(QPalette::Inactive, QPalette::WindowText)));
 
+    // match native QComboBox behavior of putting text cursor to end of text
+    // without text selection when combobox entry is selected
+    style.SetComboBoxTextSelectionMode(ComboBoxTextSelectionMode::CursorToEnd);
+
     // Cursor blink interval
     int nFlashTime = QApplication::cursorFlashTime();
     style.SetCursorBlinkTime(nFlashTime != 0 ? nFlashTime / 2 : STYLE_CURSOR_NOBLINKTIME);
