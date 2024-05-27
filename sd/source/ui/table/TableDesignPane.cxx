@@ -379,9 +379,13 @@ void TableDesignWidget::EditStyle(const OUString& rCommand)
         aBoxInfoItem.SetTable(false);
         aNewAttr.Put(aBoxInfoItem);
 
+        SdrView* pDrawView = mrBase.GetDrawView();
+        if (!pDrawView)
+            return;
+
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSvxFormatCellsDialog(
-            mrBase.GetFrameWeld(), aNewAttr, mrBase.GetDrawView()->GetModel(), true) : nullptr);
+            mrBase.GetFrameWeld(), aNewAttr, pDrawView->GetModel(), true) : nullptr);
         if (pDlg && pDlg->Execute() == RET_OK)
         {
             endTextEditForStyle(xTableStyle);
@@ -452,10 +456,9 @@ void TableDesignWidget::ApplyStyle()
         if( sStyleName.isEmpty() )
             return;
 
-        SdrView* pView = mrBase.GetDrawView();
         if( mxSelectedTable.is() )
         {
-            if( pView )
+            if (SdrView* pView = mrBase.GetDrawView())
             {
                 if (pView->IsTextEdit())
                     pView->SdrEndTextEdit();
@@ -693,8 +696,9 @@ void TableDesignWidget::endTextEditForStyle(const Reference<XInterface>& rStyle)
     if (xTableStyle != rStyle)
         return;
 
-    if (mrBase.GetDrawView()->IsTextEdit())
-        mrBase.GetDrawView()->SdrEndTextEdit();
+    SdrView* pDrawView = mrBase.GetDrawView();
+    if (pDrawView && pDrawView->IsTextEdit())
+        pDrawView->SdrEndTextEdit();
 }
 
 void TableDesignWidget::addListener()
