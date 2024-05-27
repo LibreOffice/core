@@ -2366,7 +2366,36 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             }
         }
         else
+        {
             mrViewData.GetDispatcher().Execute( FID_FILL_AUTO, SfxCallMode::SLOT | SfxCallMode::RECORD );
+
+            // prepare AutoFill menu items for "Copy Cells" and "Fill Series"
+            ScTabViewShell* pViewShell = mrViewData.GetViewShell();
+            boost::property_tree::ptree aMenu;
+            boost::property_tree::ptree aItemTree;
+
+            aItemTree.put("text", "~Copy Cells");
+            aItemTree.put("type", "command");
+            aItemTree.put("command", ".uno:AutoFill?Copy:bool=true");
+            aItemTree.put("enabled", "true");
+            aMenu.push_back(std::make_pair("", aItemTree));
+
+            aItemTree.put("text", "~Fill Series");
+            aItemTree.put("type", "command");
+            aItemTree.put("command", ".uno:AutoFill?Copy:bool=false");
+            aItemTree.put("enabled", "true");
+            aMenu.push_back(std::make_pair("", aItemTree));
+            aItemTree.clear();
+
+            boost::property_tree::ptree aRoot;
+            aRoot.add_child("menu", aMenu);
+
+            std::stringstream aStream;
+            boost::property_tree::write_json(aStream, aRoot, true);
+
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CONTEXT_MENU,
+                                                   OString(aStream.str()));
+        }
     }
     else if (mrViewData.GetFillMode() == ScFillMode::MATRIX)
     {
