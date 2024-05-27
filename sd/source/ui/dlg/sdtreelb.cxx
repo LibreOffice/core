@@ -1120,11 +1120,13 @@ void SdPageObjsTLV::SetSdNavigator(SdNavigatorWin* pNavigator)
 
 void SdPageObjsTLV::SetViewFrame(const SfxViewFrame* pViewFrame)
 {
-    sd::ViewShellBase* pBase = sd::ViewShellBase::GetViewShellBase(pViewFrame);
-    std::shared_ptr<sd::ViewShell> xViewShell = pBase->GetMainViewShell();
-    SAL_WARN_IF(!xViewShell, "sd", "null pBaseViewFrame");
-    const css::uno::Reference< css::frame::XFrame > xFrame = xViewShell ? xViewShell->GetViewFrame()->GetFrame().GetFrameInterface() : nullptr;
-    m_xAccel->init(::comphelper::getProcessComponentContext(), xFrame);
+    if (sd::ViewShellBase* pBase = sd::ViewShellBase::GetViewShellBase(pViewFrame))
+    {
+        std::shared_ptr<sd::ViewShell> xViewShell = pBase->GetMainViewShell();
+        SAL_WARN_IF(!xViewShell, "sd", "null pBaseViewFrame");
+        const css::uno::Reference< css::frame::XFrame > xFrame = xViewShell ? xViewShell->GetViewFrame()->GetFrame().GetFrameInterface() : nullptr;
+        m_xAccel->init(::comphelper::getProcessComponentContext(), xFrame);
+    }
 }
 
 /**
