@@ -121,7 +121,7 @@ private:
 
     void initializeDocument();
 
-    sd::DrawViewShell* GetViewShell();
+    SAL_RET_MAYBENULL sd::DrawViewShell* GetViewShell();
 
     /** abstract SdrModel provider */
     virtual SdrModel& getSdrModelFromUnoModel() const override;
