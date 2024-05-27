@@ -45,13 +45,27 @@ bool FunctionsTest::load(const OUString& rFilter, const OUString& rURL,
                 // the formula text.
                 if(rDoc.HasStringData(2, row, tab) || !rDoc.HasData(2, row, tab))
                     continue;
-                if(!rtl::math::approxEqual(1.0, rDoc.GetValue(2, row, 1)))
-                    CPPUNIT_FAIL( OUString( "Testing " + rURL + " failed, "
-                        + rDoc.GetAllTableNames()[tab] + ".A" + OUString::number(row+1)
-                        + " \'" + rDoc.GetString(3, row, 1) + "\'"
-                          " result: " + OUString::number(rDoc.GetValue(0, row, 1))
-                        + ", expected: " + OUString::number(rDoc.GetValue(1, row, 1)))
-                        .toUtf8().getStr());
+                if (!rtl::math::approxEqual(1.0, rDoc.GetValue(2, row, tab)))
+                {
+                    if (rDoc.HasValueData(1, row, tab))
+                    {
+                        CPPUNIT_FAIL( OUString( "Testing " + rURL + " failed, "
+                                    + rDoc.GetAllTableNames()[tab] + ".A" + OUString::number(row+1)
+                                    + " \'" + rDoc.GetString(3, row, tab) + "\'"
+                                    " result: " + OUString::number(rDoc.GetValue(0, row, tab))
+                                    + ", expected: " + OUString::number(rDoc.GetValue(1, row, tab)))
+                                .toUtf8().getStr());
+                    }
+                    else
+                    {
+                        CPPUNIT_FAIL( OUString( "Testing " + rURL + " failed, "
+                                    + rDoc.GetAllTableNames()[tab] + ".A" + OUString::number(row+1)
+                                    + " \'" + rDoc.GetString(3, row, tab) + "\'"
+                                    " result: " + rDoc.GetString(0, row, tab)
+                                    + ", expected: " + rDoc.GetString(1, row, tab))
+                                .toUtf8().getStr());
+                    }
+                }
             }
         }
     }
