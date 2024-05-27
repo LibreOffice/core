@@ -868,14 +868,13 @@ void SAL_CALL
 ScVbaWorksheet::ShowDataForm( )
 {
     uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_SET_THROW );
-    ScTabViewShell* pTabViewShell = excel::getBestViewShell( xModel );
-
-    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-
-    ScopedVclPtr<AbstractScDataFormDlg> pDlg(pFact->CreateScDataFormDlg(pTabViewShell->GetFrameWeld(),
+    if (ScTabViewShell* pTabViewShell = excel::getBestViewShell( xModel ))
+    {
+        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+        ScopedVclPtr<AbstractScDataFormDlg> pDlg(pFact->CreateScDataFormDlg(pTabViewShell->GetFrameWeld(),
                                                                         pTabViewShell));
-
-    pDlg->Execute();
+        pDlg->Execute();
+    }
 }
 
 uno::Any SAL_CALL
