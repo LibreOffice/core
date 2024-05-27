@@ -51,10 +51,10 @@ void implnCopy( const css::uno::Reference< css::frame::XModel>& xModel );
 void implnPaste ( const css::uno::Reference< css::frame::XModel>& xModel );
 void implnCut( const css::uno::Reference< css::frame::XModel>& xModel );
 void implnPasteSpecial( const css::uno::Reference< css::frame::XModel>& xModel, InsertDeleteFlags nFlags, ScPasteFunc nFunction, bool bSkipEmpty, bool bTranspose);
-ScTabViewShell* getBestViewShell( const css::uno::Reference< css::frame::XModel>& xModel ) ;
-ScDocShell* getDocShell( const css::uno::Reference< css::frame::XModel>& xModel ) ;
-ScTabViewShell* getCurrentBestViewShell( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-SfxViewFrame* getViewFrame( const css::uno::Reference< css::frame::XModel >& xModel );
+SAL_RET_MAYBENULL ScTabViewShell* getBestViewShell( const css::uno::Reference< css::frame::XModel>& xModel ) ;
+SAL_RET_MAYBENULL ScDocShell* getDocShell( const css::uno::Reference< css::frame::XModel>& xModel ) ;
+SAL_RET_MAYBENULL ScTabViewShell* getCurrentBestViewShell( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+SAL_RET_MAYBENULL SfxViewFrame* getViewFrame( const css::uno::Reference< css::frame::XModel >& xModel );
 
 /// @throws css::uno::RuntimeException
 css::uno::Reference< css::sheet::XUnnamedDatabaseRanges > GetUnnamedDataBaseRanges( const ScDocShell* pShell );
