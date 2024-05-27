@@ -355,8 +355,9 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
         }
     }
-    else if ( const SwFormatFieldHint * pFormatHint = dynamic_cast<const SwFormatFieldHint*>(&rHint) )
+    else if ( rHint.GetId() == SfxHintId::SwFormatField )
     {
+        const SwFormatFieldHint * pFormatHint = static_cast<const SwFormatFieldHint*>(&rHint);
         SwFormatField* pField = const_cast <SwFormatField*>( pFormatHint->GetField() );
         switch ( pFormatHint->Which() )
         {
@@ -1470,9 +1471,9 @@ class FieldDocWatchingStack : public SfxListener
 
     virtual void Notify(SfxBroadcaster&, const SfxHint& rHint) override
     {
-        const SwFormatFieldHint* pHint = dynamic_cast<const SwFormatFieldHint*>(&rHint);
-        if (!pHint)
+        if ( rHint.GetId() != SfxHintId::SwFormatField )
             return;
+        const SwFormatFieldHint* pHint = static_cast<const SwFormatFieldHint*>(&rHint);
 
         bool bAllInvalidated = false;
         if (pHint->Which() == SwFormatFieldHintWhich::REMOVED)

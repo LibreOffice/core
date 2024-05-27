@@ -196,7 +196,8 @@ class SW_DLLPUBLIC SwFormatFieldHint final : public SfxHint
 
 public:
     SwFormatFieldHint( const SwFormatField* pField, SwFormatFieldHintWhich nWhich, const SwView* pView = nullptr)
-        : m_pField(pField)
+        : SfxHint(SfxHintId::SwFormatField)
+        , m_pField(pField)
         , m_nWhich(nWhich)
         , m_pView(pView)
     {}

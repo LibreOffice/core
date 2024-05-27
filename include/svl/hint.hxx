@@ -157,6 +157,7 @@ enum class SfxHintId {
     SwTableHeadingChange,
     SwVirtPageNumHint,
     SwAutoFormatUsedHint,
+    SwFormatField,
 
     ThisIsAnSdrHint,
     ThisIsAnSfxEventHint
@@ -246,6 +247,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
         return stream << "SwNavigatorSelectOutlinesWithSelections";
     case SfxHintId::SwCollectTextMarks: return stream << "SwCollectTextMarks";
     case SfxHintId::SwCollectTextTOXMarksForLayout: return stream << "SwCollectTextTOXMarksForLayout";
+    case SfxHintId::SwFormatField: return stream << "SwFormatField";
     case SfxHintId::ThisIsAnSdrHint: return stream << "SdrHint";
     default: return stream << "unk(" << std::to_string(int(id)) << ")";
     }
