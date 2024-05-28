@@ -1613,7 +1613,7 @@ int Desktop::Main()
 
         // FIXME: move this somewhere sensible.
 #if HAVE_FEATURE_OPENCL
-        m_aOpenCLCheckThread = std::thread(CheckOpenCLCompute, xDesktop);
+        CheckOpenCLCompute(xDesktop);
 #endif
 
 #if !defined(EMSCRIPTEN)
@@ -1669,9 +1669,6 @@ int Desktop::doShutdown()
 
     if (m_aUpdateThread.joinable())
         m_aUpdateThread.join();
-
-    if (m_aOpenCLCheckThread.joinable())
-        m_aOpenCLCheckThread.join();
 
     if (pExecGlobals->xJVMloadThread.is())
     {

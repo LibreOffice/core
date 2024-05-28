@@ -169,7 +169,6 @@ class Desktop final : public Application
         std::unique_ptr<Lockfile> m_xLockfile;
         Timer                   m_firstRunTimer;
         std::thread             m_aUpdateThread;
-        std::thread             m_aOpenCLCheckThread;
 };
 
 OUString GetURL_Impl(
