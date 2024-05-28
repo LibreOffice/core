@@ -932,8 +932,6 @@ bool SwRedlineTable::isMovedImpl(size_type rPos, bool bTryCombined) const
         // only deleted or inserted text can be moved
         return false;
 
-    bool bDeletePaM = false;
-    SwPaM* pPaM = nullptr;
     OUString sTrimmed;
     SwRedlineTable::size_type nPosStart = rPos;
     SwRedlineTable::size_type nPosEnd = rPos;
@@ -950,16 +948,14 @@ bool SwRedlineTable::isMovedImpl(size_type rPos, bool bTryCombined) const
         // if this redline is visible the content is in this PaM
         if (nullptr == pRedline->GetContentIdx())
         {
-            pPaM = pRedline;
+            sTrimmed = pRedline->GetText().trim();
         }
         else // otherwise it is saved in pContentSect, e.g. during ODT import
         {
-            pPaM = new SwPaM(pRedline->GetContentIdx()->GetNode(),
+            SwPaM aTmpPaM(pRedline->GetContentIdx()->GetNode(),
                              *pRedline->GetContentIdx()->GetNode().EndOfSectionNode());
-            bDeletePaM = true;
+            sTrimmed = aTmpPaM.GetText().trim();
         }
-
-        sTrimmed = pPaM->GetText().trim();
     }
 
     // detection of move needs at least 6 characters with an inner
@@ -968,8 +964,6 @@ bool SwRedlineTable::isMovedImpl(size_type rPos, bool bTryCombined) const
     // word parts, e.g. 'the' and 'of a' to detect as text moving
     if (sTrimmed.getLength() < 6 || sTrimmed.indexOf(' ') == -1)
     {
-        if (bDeletePaM)
-            delete pPaM;
         return false;
     }
 
@@ -995,9 +989,6 @@ bool SwRedlineTable::isMovedImpl(size_type rPos, bool bTryCombined) const
                 continue;
             }
 
-            bool bDeletePairPaM = false;
-            SwPaM* pPairPaM = nullptr;
-
             OUString sPairTrimmed = "";
             SwRedlineTable::size_type nPairStart = nPosAct;
             SwRedlineTable::size_type nPairEnd = nPosAct;
@@ -1007,17 +998,15 @@ bool SwRedlineTable::isMovedImpl(size_type rPos, bool bTryCombined) const
                 // if this redline is visible the content is in this PaM
                 if (nullptr == pPair->GetContentIdx())
                 {
-                    pPairPaM = pPair;
+                    sPairTrimmed = o3tl::trim(pPair->GetText());
                 }
                 else // otherwise it is saved in pContentSect, e.g. during ODT import
                 {
                     // saved in pContentSect, e.g. during ODT import
-                    pPairPaM = new SwPaM(pPair->GetContentIdx()->GetNode(),
+                    SwPaM aPairPaM(pPair->GetContentIdx()->GetNode(),
                                          *pPair->GetContentIdx()->GetNode().EndOfSectionNode());
-                    bDeletePairPaM = true;
+                    sPairTrimmed = o3tl::trim(aPairPaM.GetText());
                 }
-
-                sPairTrimmed = o3tl::trim(pPairPaM->GetText());
             }
             else
             {
@@ -1053,17 +1042,11 @@ bool SwRedlineTable::isMovedImpl(size_type rPos, bool bTryCombined) const
                 bRet = true;
             }
 
-            if (bDeletePairPaM)
-                delete pPairPaM;
-
             //we can skip the combined redlines
             if (nPass == 1)
                 nPosAct = nPairEnd;
         }
     }
-
-    if ( bDeletePaM )
-        delete pPaM;
 
     return bRet;
 }
