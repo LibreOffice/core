@@ -218,6 +218,8 @@ public:
 
 class DocumentDyingHint final : public SfxHint
 {
+public:
+    DocumentDyingHint() : SfxHint(SfxHintId::SwDocumentDying) {}
 };
 
 class TableLineFormatChanged final : public SfxHint
