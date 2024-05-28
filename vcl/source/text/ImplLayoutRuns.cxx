@@ -20,30 +20,39 @@
 #include <ImplLayoutRuns.hxx>
 #include <algorithm>
 
+ImplLayoutRuns::Run::Run(int nMinRunPos, int nEndRunPos, bool bRTL)
+    : m_nMinRunPos(nMinRunPos)
+    , m_nEndRunPos(nEndRunPos)
+    , m_bRTL(bRTL)
+{
+}
+
+bool ImplLayoutRuns::Run::Contains(int nCharPos) const
+{
+    return (m_nMinRunPos <= nCharPos) && (nCharPos < m_nEndRunPos);
+}
+
 void ImplLayoutRuns::AddPos( int nCharPos, bool bRTL )
 {
     // check if charpos could extend current run
-    int nIndex = maRuns.size();
-    if( nIndex >= 2 )
+    if (!maRuns.empty())
     {
-        int nRunPos0 = maRuns[ nIndex-2 ];
-        int nRunPos1 = maRuns[ nIndex-1 ];
-        if( ((nCharPos + int(bRTL)) == nRunPos1) && ((nRunPos0 > nRunPos1) == bRTL) )
+        auto& rLastRun = maRuns.back();
+        if (bRTL == rLastRun.m_bRTL && nCharPos == rLastRun.m_nEndRunPos)
         {
             // extend current run by new charpos
-            maRuns[ nIndex-1 ] = nCharPos + int(!bRTL);
+            ++rLastRun.m_nEndRunPos;
             return;
         }
         // ignore new charpos when it is in current run
-        if( (nRunPos0 <= nCharPos) && (nCharPos < nRunPos1) )
+        if ((rLastRun.m_nMinRunPos <= nCharPos) && (nCharPos < rLastRun.m_nEndRunPos))
+        {
             return;
-        if( (nRunPos1 <= nCharPos) && (nCharPos < nRunPos0) )
-            return;
+        }
     }
 
     // else append a new run consisting of the new charpos
-    maRuns.push_back( nCharPos + (bRTL ? 1 : 0) );
-    maRuns.push_back( nCharPos + (bRTL ? 0 : 1) );
+    maRuns.emplace_back(nCharPos, nCharPos + 1, bRTL);
 }
 
 void ImplLayoutRuns::AddRun( int nCharPos0, int nCharPos1, bool bRTL )
@@ -51,19 +60,23 @@ void ImplLayoutRuns::AddRun( int nCharPos0, int nCharPos1, bool bRTL )
     if( nCharPos0 == nCharPos1 )
         return;
 
-    // swap if needed
-    if( bRTL == (nCharPos0 < nCharPos1) )
-        std::swap( nCharPos0, nCharPos1 );
+    auto nOrderedCharPos0 = std::min(nCharPos0, nCharPos1);
+    auto nOrderedCharPos1 = std::max(nCharPos0, nCharPos1);
 
-    if (maRuns.size() >= 2 && nCharPos0 == maRuns[maRuns.size() - 2] && nCharPos1 == maRuns[maRuns.size() - 1])
+    if (!maRuns.empty())
     {
-        //this run is the same as the last
-        return;
+        auto& rLastRun = maRuns.back();
+        if ((rLastRun.m_nMinRunPos <= nOrderedCharPos0)
+            && (nOrderedCharPos0 <= rLastRun.m_nEndRunPos)
+            && (nOrderedCharPos0 < rLastRun.m_nEndRunPos || bRTL == rLastRun.m_bRTL))
+        {
+            rLastRun.m_nEndRunPos = std::max(rLastRun.m_nEndRunPos, nOrderedCharPos1);
+            return;
+        }
     }
 
     // append new run
-    maRuns.push_back( nCharPos0 );
-    maRuns.push_back( nCharPos1 );
+    maRuns.emplace_back(nOrderedCharPos0, nOrderedCharPos1, bRTL);
 }
 
 bool ImplLayoutRuns::PosIsInRun( int nCharPos ) const
@@ -71,37 +84,13 @@ bool ImplLayoutRuns::PosIsInRun( int nCharPos ) const
     if( mnRunIndex >= static_cast<int>(maRuns.size()) )
         return false;
 
-    int nMinCharPos = maRuns[ mnRunIndex+0 ];
-    int nEndCharPos = maRuns[ mnRunIndex+1 ];
-    if( nMinCharPos > nEndCharPos ) // reversed in RTL case
-        std::swap( nMinCharPos, nEndCharPos );
-
-    if( nCharPos < nMinCharPos )
-        return false;
-    if( nCharPos >= nEndCharPos )
-        return false;
-    return true;
+    return maRuns.at(mnRunIndex).Contains(nCharPos);
 }
 
 bool ImplLayoutRuns::PosIsInAnyRun( int nCharPos ) const
 {
-    bool bRet = false;
-    int nRunIndex = mnRunIndex;
-
-    ImplLayoutRuns *pThis = const_cast<ImplLayoutRuns*>(this);
-
-    pThis->ResetPos();
-
-    for (size_t i = 0; i < maRuns.size(); i+=2)
-    {
-        bRet = PosIsInRun( nCharPos );
-        if( bRet )
-            break;
-        pThis->NextRun();
-    }
-
-    pThis->mnRunIndex = nRunIndex;
-    return bRet;
+    return std::any_of(maRuns.begin(), maRuns.end(),
+                       [nCharPos](const auto& rRun) { return rRun.Contains(nCharPos); });
 }
 
 bool ImplLayoutRuns::GetNextPos( int* nCharPos, bool* bRightToLeft )
@@ -114,36 +103,32 @@ bool ImplLayoutRuns::GetNextPos( int* nCharPos, bool* bRightToLeft )
     if( mnRunIndex >= static_cast<int>(maRuns.size()) )
         return false;
 
-    int nRunPos0 = maRuns[ mnRunIndex+0 ];
-    int nRunPos1 = maRuns[ mnRunIndex+1 ];
-    *bRightToLeft = (nRunPos0 > nRunPos1);
+    const auto& rRun = maRuns.at(mnRunIndex);
 
     if( *nCharPos < 0 )
     {
         // get first valid nCharPos in run
-        *nCharPos = nRunPos0;
+        *nCharPos = rRun.m_nMinRunPos;
     }
     else
     {
-        // advance to next nCharPos for LTR case
-        if( !*bRightToLeft )
-            ++(*nCharPos);
+        // advance to next nCharPos
+        ++(*nCharPos);
 
         // advance to next run if current run is completed
-        if( *nCharPos == nRunPos1 )
+        if (*nCharPos == rRun.m_nEndRunPos)
         {
-            if( (mnRunIndex += 2) >= static_cast<int>(maRuns.size()) )
+            ++mnRunIndex;
+            if (mnRunIndex >= static_cast<int>(maRuns.size()))
+            {
                 return false;
-            nRunPos0 = maRuns[ mnRunIndex+0 ];
-            nRunPos1 = maRuns[ mnRunIndex+1 ];
-            *bRightToLeft = (nRunPos0 > nRunPos1);
-            *nCharPos = nRunPos0;
+            }
+
+            const auto& rNextRun = maRuns.at(mnRunIndex);
+            *nCharPos = rNextRun.m_nMinRunPos;
+            *bRightToLeft = rNextRun.m_bRTL;
         }
     }
-
-    // advance to next nCharPos for RTL case
-    if( *bRightToLeft )
-        --(*nCharPos);
 
     return true;
 }
@@ -153,19 +138,10 @@ bool ImplLayoutRuns::GetRun( int* nMinRunPos, int* nEndRunPos, bool* bRightToLef
     if( mnRunIndex >= static_cast<int>(maRuns.size()) )
         return false;
 
-    int nRunPos0 = maRuns[ mnRunIndex+0 ];
-    int nRunPos1 = maRuns[ mnRunIndex+1 ];
-    *bRightToLeft = (nRunPos1 < nRunPos0) ;
-    if( !*bRightToLeft )
-    {
-        *nMinRunPos = nRunPos0;
-        *nEndRunPos = nRunPos1;
-    }
-    else
-    {
-        *nMinRunPos = nRunPos1;
-        *nEndRunPos = nRunPos0;
-    }
+    const auto& rRun = maRuns.at(mnRunIndex);
+    *nMinRunPos = rRun.m_nMinRunPos;
+    *nEndRunPos = rRun.m_nEndRunPos;
+    *bRightToLeft = rRun.m_bRTL;
     return true;
 }
 

@@ -152,7 +152,8 @@ private:
     SAL_DLLPRIVATE void GetCharWidths(std::vector<double>& rCharWidths,
                                   const OUString& rStr) const;
 
-    SAL_DLLPRIVATE void SetNeedFallback(vcl::text::ImplLayoutArgs&, sal_Int32, bool);
+    SAL_DLLPRIVATE void SetNeedFallback(vcl::text::ImplLayoutArgs& rArgs, sal_Int32 nCharPos,
+                                        sal_Int32 nCharEnd, bool bRightToLeft);
 
     SAL_DLLPRIVATE bool HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aNextChar);
 

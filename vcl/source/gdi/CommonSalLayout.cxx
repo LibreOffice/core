@@ -234,9 +234,10 @@ SalLayoutGlyphs GenericSalLayout::GetGlyphs() const
     return glyphs;
 }
 
-void GenericSalLayout::SetNeedFallback(vcl::text::ImplLayoutArgs& rArgs, sal_Int32 nCharPos, bool bRightToLeft)
+void GenericSalLayout::SetNeedFallback(vcl::text::ImplLayoutArgs& rArgs, sal_Int32 nCharPos,
+                                       sal_Int32 nCharEnd, bool bRightToLeft)
 {
-    if (nCharPos < 0 || mbFuzzing)
+    if (nCharPos < 0 || nCharPos == nCharEnd || mbFuzzing)
         return;
 
     using namespace ::com::sun::star;
@@ -250,9 +251,8 @@ void GenericSalLayout::SetNeedFallback(vcl::text::ImplLayoutArgs& rArgs, sal_Int
     //mark all glyphs as missing so the whole thing is rendered with the same
     //font
     sal_Int32 nDone;
-    int nGraphemeEndPos =
-        mxBreak->nextCharacters(rArgs.mrStr, nCharPos, aLocale,
-            i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+    int nGraphemeEndPos = mxBreak->nextCharacters(rArgs.mrStr, nCharEnd - 1, aLocale,
+                                                  i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
     // Safely advance nCharPos in case it is a non-BMP character.
     rArgs.mrStr.iterateCodePoints(&nCharPos);
     int nGraphemeStartPos =
@@ -354,13 +354,22 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
     if (rArgs.mnEndCharPos - rArgs.mnMinCharPos <= 0)
         return true;
 
+    ImplLayoutRuns aFallbackRuns;
+
     if (pGlyphs)
     {
         // Work with pre-computed glyph items.
         m_GlyphItems = *pGlyphs;
+
         for(const GlyphItem& item : m_GlyphItems)
             if(!item.glyphId())
-                SetNeedFallback(rArgs, item.charPos(), item.IsRTLGlyph());
+                aFallbackRuns.AddPos(item.charPos(), item.IsRTLGlyph());
+
+        for (const auto& rRun : aFallbackRuns)
+        {
+            SetNeedFallback(rArgs, rRun.m_nMinRunPos, rRun.m_nEndRunPos, rRun.m_bRTL);
+        }
+
         // Some flags are set as a side effect of text layout, restore them here.
         rArgs.mnFlags |= pGlyphs->GetFlags();
         return true;
@@ -646,7 +655,7 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                     // Only request fallback for grapheme clusters that are drawn
                     if (nCharPos >= rArgs.mnDrawMinCharPos && nCharPos < rArgs.mnDrawEndCharPos)
                     {
-                        SetNeedFallback(rArgs, nCharPos, bRightToLeft);
+                        aFallbackRuns.AddPos(nCharPos, bRightToLeft);
                         if (SalLayoutFlags::ForFallback & rArgs.mnFlags)
                             continue;
                     }
@@ -734,6 +743,11 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
     }
 
     hb_buffer_destroy(pHbBuffer);
+
+    for (const auto& rRun : aFallbackRuns)
+    {
+        SetNeedFallback(rArgs, rRun.m_nMinRunPos, rRun.m_nEndRunPos, rRun.m_bRTL);
+    }
 
     // Some flags are set as a side effect of text layout, save them here.
     if (rArgs.mnFlags & SalLayoutFlags::GlyphItemsOnly)

@@ -189,43 +189,12 @@ bool ImplLayoutArgs::PrepareFallback(const SalLayoutGlyphsImpl* pGlyphsImpl)
         return false;
     }
 
-    // convert the fallback requests to layout requests
-    bool bRTL;
-    int nMin, nEnd;
-
-    // get the individual fallback requests
-    std::vector<int> aPosVector;
-    aPosVector.reserve(mrStr.getLength());
-    maFallbackRuns.ResetPos();
-    for (; maFallbackRuns.GetRun(&nMin, &nEnd, &bRTL); maFallbackRuns.NextRun())
-        for (int i = nMin; i < nEnd; ++i)
-            aPosVector.push_back(i);
+    // the fallback runs already have the same order and limits of the original runs
+    std::swap(maRuns, maFallbackRuns);
     maFallbackRuns.Clear();
-
-    // sort the individual fallback requests
-    std::sort(aPosVector.begin(), aPosVector.end());
-
-    // adjust fallback runs to have the same order and limits of the original runs
-    ImplLayoutRuns aNewRuns;
+    maFallbackRuns.ResetPos();
     maRuns.ResetPos();
-    for (; maRuns.GetRun(&nMin, &nEnd, &bRTL); maRuns.NextRun())
-    {
-        if (!bRTL)
-        {
-            auto it = std::lower_bound(aPosVector.begin(), aPosVector.end(), nMin);
-            for (; (it != aPosVector.end()) && (*it < nEnd); ++it)
-                aNewRuns.AddPos(*it, bRTL);
-        }
-        else
-        {
-            auto it = std::upper_bound(aPosVector.begin(), aPosVector.end(), nEnd);
-            while ((it != aPosVector.begin()) && (*--it >= nMin))
-                aNewRuns.AddPos(*it, bRTL);
-        }
-    }
 
-    maRuns = aNewRuns; // TODO: use vector<>::swap()
-    maRuns.ResetPos();
     return true;
 }
 
