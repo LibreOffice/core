@@ -184,6 +184,7 @@
         <property name="can-focus">True</property>
         <property name="receives-default">False</property>
         <property name="no-show-all">True</property>
+        <property name="halign">start</property>
         <property name="use-underline">True</property>
         <property name="draw-indicator">True</property>
       </object>
@@ -399,6 +400,7 @@
         <property name="can-focus">True</property>
         <property name="receives-default">False</property>
         <property name="no-show-all">True</property>
+        <property name="halign">start</property>
         <property name="draw-indicator">True</property>
       </object>
       <packing>
@@ -410,65 +412,71 @@
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="halign">start</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
         <child>
           <object class="GtkCheckButton" id="image-preferred-dpi-checkbutton">
             <property name="label" translatable="yes" context="documentinfopage|image-preferred-dpi-checkbutton">Preferred resolution for images:</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
+            <property name="halign">start</property>
             <property name="margin-end">6</property>
             <property name="draw-indicator">True</property>
-            <accessibility>
-              <relation type="label-for" target="image-preferred-dpi-combobox"/>
-            </accessibility>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
-          <object class="GtkComboBoxText" id="image-preferred-dpi-combobox">
+          <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="has-entry">True</property>
-            <items>
-              <item>96</item>
-              <item>150</item>
-              <item>200</item>
-              <item>300</item>
-              <item>600</item>
-            </items>
-            <child internal-child="entry">
-              <object class="GtkEntry">
-                <property name="truncate-multiline">True</property>
+            <property name="halign">start</property>
+            <property name="margin-start">24</property>
+            <property name="spacing">3</property>
+            <child>
+              <object class="GtkComboBoxText" id="image-preferred-dpi-combobox">
+                <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="has-entry">True</property>
+                <items>
+                  <item>96</item>
+                  <item>150</item>
+                  <item>200</item>
+                  <item>300</item>
+                  <item>600</item>
+                </items>
               </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
             </child>
-            <accessibility>
-              <relation type="labelled-by" target="image-preferred-dpi-checkbutton"/>
-            </accessibility>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="lbUnit">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-start">6</property>
-            <property name="margin-end">6</property>
-            <property name="label" translatable="yes" context="documentinfopage|image-preferred-ppi-unit">ppi</property>
+            <child>
+              <object class="GtkLabel" id="lbUnit">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="margin-start">6</property>
+                <property name="margin-end">6</property>
+                <property name="label" translatable="yes" context="documentinfopage|image-preferred-ppi-unit">ppi</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="position">1</property>
           </packing>
         </child>
       </object>

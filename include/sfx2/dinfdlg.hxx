@@ -244,15 +244,30 @@ private:
     std::unique_ptr<weld::Entry> m_xTitleEd;
     std::unique_ptr<weld::Entry> m_xThemaEd;
     std::unique_ptr<weld::Entry> m_xKeywordsEd;
-    std::unique_ptr<weld::Entry> m_xContributorEd;
-    std::unique_ptr<weld::Entry> m_xCoverageEd;
-    std::unique_ptr<weld::Entry> m_xIdentifierEd;
-    std::unique_ptr<weld::Entry> m_xPublisherEd;
-    std::unique_ptr<weld::Entry> m_xRelationEd;
-    std::unique_ptr<weld::Entry> m_xRightsEd;
-    std::unique_ptr<weld::Entry> m_xSourceEd;
-    std::unique_ptr<weld::Entry> m_xTypeEd;
+    std::unique_ptr<weld::ComboBox> m_xMoreTypes;
+    std::unique_ptr<weld::Entry> m_xMoreValue;
     std::unique_ptr<weld::TextView> m_xCommentEd;
+
+    DECL_LINK(MoreTypesHdl, weld::ComboBox&, void);
+    DECL_LINK(MoreValueHdl, weld::Entry&, void);
+
+    OUString m_sMoreValue_Contributor;
+    OUString m_sMoreValue_Coverage;
+    OUString m_sMoreValue_Identifier;
+    OUString m_sMoreValue_Publisher;
+    OUString m_sMoreValue_Relation;
+    OUString m_sMoreValue_Rights;
+    OUString m_sMoreValue_Source;
+    OUString m_sMoreValue_Type;
+
+    OUString m_sMoreValue_Contributor_Stored;
+    OUString m_sMoreValue_Coverage_Stored;
+    OUString m_sMoreValue_Identifier_Stored;
+    OUString m_sMoreValue_Publisher_Stored;
+    OUString m_sMoreValue_Relation_Stored;
+    OUString m_sMoreValue_Rights_Stored;
+    OUString m_sMoreValue_Source_Stored;
+    OUString m_sMoreValue_Type_Stored;
 
     virtual bool            FillItemSet( SfxItemSet* ) override;
     virtual void            Reset( const SfxItemSet* ) override;

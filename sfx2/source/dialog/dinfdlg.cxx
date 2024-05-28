@@ -624,18 +624,14 @@ SfxDocumentDescPage::SfxDocumentDescPage(weld::Container* pPage, weld::DialogCon
     , m_xTitleEd(m_xBuilder->weld_entry(u"title"_ustr))
     , m_xThemaEd(m_xBuilder->weld_entry(u"subject"_ustr))
     , m_xKeywordsEd(m_xBuilder->weld_entry(u"keywords"_ustr))
-    , m_xContributorEd(m_xBuilder->weld_entry(u"contributor"_ustr))
-    , m_xCoverageEd(m_xBuilder->weld_entry(u"coverage"_ustr))
-    , m_xIdentifierEd(m_xBuilder->weld_entry(u"identifier"_ustr))
-    , m_xPublisherEd(m_xBuilder->weld_entry(u"publisher"_ustr))
-    , m_xRelationEd(m_xBuilder->weld_entry(u"relation"_ustr))
-    , m_xRightsEd(m_xBuilder->weld_entry(u"rights"_ustr))
-    , m_xSourceEd(m_xBuilder->weld_entry(u"source"_ustr))
-    , m_xTypeEd(m_xBuilder->weld_entry(u"type"_ustr))
+    , m_xMoreTypes(m_xBuilder->weld_combo_box("cbMoreTypes"))
+    , m_xMoreValue(m_xBuilder->weld_entry("edMoreValue"))
     , m_xCommentEd(m_xBuilder->weld_text_view(u"comments"_ustr))
 {
-    m_xCommentEd->set_size_request(m_xKeywordsEd->get_preferred_size().Width(),
-                                   m_xCommentEd->get_height_rows(16));
+    m_xCommentEd->set_size_request(-1, //m_xKeywordsEd->get_preferred_size().Width(),
+                                   m_xCommentEd->get_height_rows(8));
+    m_xMoreTypes->connect_changed(LINK(this, SfxDocumentDescPage, MoreTypesHdl));
+    m_xMoreValue->connect_changed(LINK(this, SfxDocumentDescPage, MoreValueHdl));
 }
 
 SfxDocumentDescPage::~SfxDocumentDescPage()
@@ -653,14 +649,16 @@ bool SfxDocumentDescPage::FillItemSet(SfxItemSet *rSet)
     const bool bTitleMod = m_xTitleEd->get_value_changed_from_saved();
     const bool bThemeMod = m_xThemaEd->get_value_changed_from_saved();
     const bool bKeywordsMod = m_xKeywordsEd->get_value_changed_from_saved();
-    const bool bContributorMod = m_xContributorEd->get_value_changed_from_saved();
-    const bool bCoverageMod = m_xCoverageEd->get_value_changed_from_saved();
-    const bool bIdentifierMod = m_xIdentifierEd->get_value_changed_from_saved();
-    const bool bPublisherMod = m_xPublisherEd->get_value_changed_from_saved();
-    const bool bRelationMod = m_xRelationEd->get_value_changed_from_saved();
-    const bool bRightsMod = m_xRightsEd->get_value_changed_from_saved();
-    const bool bSourceMod = m_xSourceEd->get_value_changed_from_saved();
-    const bool bTypeMod = m_xTypeEd->get_value_changed_from_saved();
+
+    const bool bContributorMod = m_sMoreValue_Contributor != m_sMoreValue_Contributor_Stored;
+    const bool bCoverageMod = m_sMoreValue_Coverage != m_sMoreValue_Coverage_Stored;
+    const bool bIdentifierMod = m_sMoreValue_Identifier != m_sMoreValue_Identifier_Stored;
+    const bool bPublisherMod = m_sMoreValue_Publisher != m_sMoreValue_Publisher_Stored;
+    const bool bRelationMod = m_sMoreValue_Relation != m_sMoreValue_Relation_Stored;
+    const bool bRightsMod = m_sMoreValue_Rights != m_sMoreValue_Rights_Stored;
+    const bool bSourceMod = m_sMoreValue_Source != m_sMoreValue_Source_Stored;
+    const bool bTypeMod = m_sMoreValue_Type != m_sMoreValue_Type_Stored;
+
     const bool bCommentMod = m_xCommentEd->get_value_changed_from_saved();
     if (!(bTitleMod || bThemeMod || bKeywordsMod || bTitleMod || bThemeMod || bKeywordsMod
           || bContributorMod || bCoverageMod || bIdentifierMod || bPublisherMod || bRelationMod
@@ -699,35 +697,35 @@ bool SfxDocumentDescPage::FillItemSet(SfxItemSet *rSet)
     }
     if (bContributorMod)
     {
-        pInfo->setContributor(m_xContributorEd->get_text());
+        pInfo->setContributor(m_sMoreValue_Contributor);
     }
     if (bCoverageMod)
     {
-        pInfo->setCoverage(m_xCoverageEd->get_text());
+        pInfo->setCoverage(m_sMoreValue_Coverage);
     }
     if (bIdentifierMod)
     {
-        pInfo->setIdentifier(m_xIdentifierEd->get_text());
+        pInfo->setIdentifier(m_sMoreValue_Identifier);
     }
     if (bPublisherMod)
     {
-        pInfo->setPublisher(m_xPublisherEd->get_text());
+        pInfo->setPublisher(m_sMoreValue_Publisher);
     }
     if (bRelationMod)
     {
-        pInfo->setRelation(m_xRelationEd->get_text());
+        pInfo->setRelation(m_sMoreValue_Relation);
     }
     if (bRightsMod)
     {
-        pInfo->setRights(m_xRightsEd->get_text());
+        pInfo->setRights(m_sMoreValue_Rights);
     }
     if (bSourceMod)
     {
-        pInfo->setSource(m_xSourceEd->get_text());
+        pInfo->setSource(m_sMoreValue_Source);
     }
     if (bTypeMod)
     {
-        pInfo->setType(m_xTypeEd->get_text());
+        pInfo->setType(m_sMoreValue_Type);
     }
     if ( bCommentMod )
     {
@@ -750,27 +748,32 @@ void SfxDocumentDescPage::Reset(const SfxItemSet *rSet)
     m_xTitleEd->set_text(m_pInfoItem->getTitle());
     m_xThemaEd->set_text(m_pInfoItem->getSubject());
     m_xKeywordsEd->set_text(m_pInfoItem->getKeywords());
-    m_xContributorEd->set_text(m_pInfoItem->getContributor());
-    m_xCoverageEd->set_text(m_pInfoItem->getCoverage());
-    m_xIdentifierEd->set_text(m_pInfoItem->getIdentifier());
-    m_xPublisherEd->set_text(m_pInfoItem->getPublisher());
-    m_xRelationEd->set_text(m_pInfoItem->getRelation());
-    m_xRightsEd->set_text(m_pInfoItem->getRights());
-    m_xSourceEd->set_text(m_pInfoItem->getSource());
-    m_xTypeEd->set_text(m_pInfoItem->getType());
+
+    m_sMoreValue_Contributor = m_pInfoItem->getContributor();
+    m_sMoreValue_Coverage = m_pInfoItem->getCoverage();
+    m_sMoreValue_Identifier = m_pInfoItem->getIdentifier();
+    m_sMoreValue_Publisher = m_pInfoItem->getPublisher();
+    m_sMoreValue_Relation = m_pInfoItem->getRelation();
+    m_sMoreValue_Rights = m_pInfoItem->getRights();
+    m_sMoreValue_Source = m_pInfoItem->getSource();
+    m_sMoreValue_Type = m_pInfoItem->getType();
     m_xCommentEd->set_text(m_pInfoItem->getDescription());
+
+    MoreTypesHdl(*m_xMoreTypes); //triggers m_xMoreValue update
 
     m_xTitleEd->save_value();
     m_xThemaEd->save_value();
     m_xKeywordsEd->save_value();
-    m_xContributorEd->save_value();
-    m_xCoverageEd->save_value();
-    m_xIdentifierEd->save_value();
-    m_xPublisherEd->save_value();
-    m_xRelationEd->save_value();
-    m_xRightsEd->save_value();
-    m_xSourceEd->save_value();
-    m_xTypeEd->save_value();
+
+    m_sMoreValue_Contributor_Stored = m_sMoreValue_Contributor;
+    m_sMoreValue_Coverage_Stored = m_sMoreValue_Coverage;
+    m_sMoreValue_Identifier_Stored = m_sMoreValue_Identifier;
+    m_sMoreValue_Publisher_Stored = m_sMoreValue_Publisher;
+    m_sMoreValue_Relation_Stored = m_sMoreValue_Relation;
+    m_sMoreValue_Rights_Stored = m_sMoreValue_Rights;
+    m_sMoreValue_Source_Stored = m_sMoreValue_Source;
+    m_sMoreValue_Type_Stored = m_sMoreValue_Type;
+
     m_xCommentEd->save_value();
 
     const SfxBoolItem* pROItem = SfxItemSet::GetItem<SfxBoolItem>(rSet, SID_DOC_READONLY, false);
@@ -779,15 +782,42 @@ void SfxDocumentDescPage::Reset(const SfxItemSet *rSet)
         m_xTitleEd->set_editable(false);
         m_xThemaEd->set_editable(false);
         m_xKeywordsEd->set_editable(false);
-        m_xContributorEd->set_editable(false);
-        m_xCoverageEd->set_editable(false);
-        m_xIdentifierEd->set_editable(false);
-        m_xPublisherEd->set_editable(false);
-        m_xRelationEd->set_editable(false);
-        m_xRightsEd->set_editable(false);
-        m_xSourceEd->set_editable(false);
-        m_xTypeEd->set_editable(false);
+        m_xMoreValue->set_editable(false);
         m_xCommentEd->set_editable(false);
+    }
+}
+
+IMPL_LINK_NOARG(SfxDocumentDescPage, MoreValueHdl, weld::Entry&, void)
+{
+    switch (m_xMoreTypes->get_active())
+    {
+        case 0: m_sMoreValue_Contributor = m_xMoreValue->get_text(); break;
+        case 1: m_sMoreValue_Coverage = m_xMoreValue->get_text(); break;
+        case 2: m_sMoreValue_Identifier = m_xMoreValue->get_text(); break;
+        case 3: m_sMoreValue_Publisher = m_xMoreValue->get_text(); break;
+        case 4: m_sMoreValue_Relation = m_xMoreValue->get_text(); break;
+        case 5: m_sMoreValue_Rights = m_xMoreValue->get_text(); break;
+        case 6: m_sMoreValue_Source = m_xMoreValue->get_text(); break;
+        case 7: m_sMoreValue_Type = m_xMoreValue->get_text(); break;
+        default:
+            DBG_ASSERT(true, "MoreValueHdl out of range");
+    }
+}
+
+IMPL_LINK_NOARG(SfxDocumentDescPage, MoreTypesHdl, weld::ComboBox&, void)
+{
+    switch (m_xMoreTypes->get_active())
+    {
+        case 0: m_xMoreValue->set_text(m_sMoreValue_Contributor); break;
+        case 1: m_xMoreValue->set_text(m_sMoreValue_Coverage); break;
+        case 2: m_xMoreValue->set_text(m_sMoreValue_Identifier); break;
+        case 3: m_xMoreValue->set_text(m_sMoreValue_Publisher); break;
+        case 4: m_xMoreValue->set_text(m_sMoreValue_Relation); break;
+        case 5: m_xMoreValue->set_text(m_sMoreValue_Rights); break;
+        case 6: m_xMoreValue->set_text(m_sMoreValue_Source); break;
+        case 7: m_xMoreValue->set_text(m_sMoreValue_Type); break;
+        default:
+            DBG_ASSERT(true, "MoreTypesHdl out of range");
     }
 }
 
