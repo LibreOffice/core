@@ -3043,9 +3043,9 @@ void SwContentTree::Display( bool bActive )
             // set_cursor unselects all entries, makes passed entry visible, and selects it
             m_xTreeView->set_cursor(*xSelEntry);
         }
-    }
 
-    Select();
+        UpdateContentFunctionsToolbar();
+    }
 
     if (!m_bIgnoreDocChange && GetEntryCount() == nOldEntryCount)
     {
@@ -3723,7 +3723,7 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
                     if (m_xTreeView->get_cursor(xEntry.get()))
                     {
                         m_xTreeView->select(*xEntry);
-                        Select();
+                        UpdateContentFunctionsToolbar();
                     }
                     else
                         m_xTreeView->unselect_all();
@@ -4038,7 +4038,7 @@ static void lcl_SelectByContentTypeAndAddress(SwContentTree* pThis, weld::TreeVi
     if (!ptr)
     {
         rContentTree.set_cursor(-1);
-        pThis->Select();
+        pThis->UpdateContentFunctionsToolbar();
         return;
     }
 
@@ -4058,7 +4058,7 @@ static void lcl_SelectByContentTypeAndAddress(SwContentTree* pThis, weld::TreeVi
     if (!bFoundEntry)
     {
         rContentTree.set_cursor(-1);
-        pThis->Select();
+        pThis->UpdateContentFunctionsToolbar();
         return;
     }
 
@@ -4115,14 +4115,14 @@ static void lcl_SelectByContentTypeAndAddress(SwContentTree* pThis, weld::TreeVi
             {
                 // unselect all entries and make passed entry visible and selected
                 rContentTree.set_cursor(*xIter);
-                pThis->Select();
+                pThis->UpdateContentFunctionsToolbar();
             }
             return;
         }
     }
 
     rContentTree.set_cursor(-1);
-    pThis->Select();
+    pThis->UpdateContentFunctionsToolbar();
     return;
 }
 
@@ -4155,14 +4155,15 @@ static void lcl_SelectByContentTypeAndName(SwContentTree* pThis, weld::TreeView&
             {
                 // unselect all entries and make passed entry visible and selected
                 rContentTree.set_cursor(*xIter);
-                pThis->Select();
+                pThis->UpdateContentFunctionsToolbar();
             }
             break;
         }
     }
 }
 
-static void lcl_SelectDrawObjectByName(weld::TreeView& rContentTree, std::u16string_view rName)
+static void lcl_SelectDrawObjectByName(SwContentTree* pThis, weld::TreeView& rContentTree,
+                                       std::u16string_view rName)
 {
     if (rName.empty())
         return;
@@ -4184,6 +4185,7 @@ static void lcl_SelectDrawObjectByName(weld::TreeView& rContentTree, std::u16str
                 {
                     rContentTree.select(*xIter);
                     rContentTree.scroll_to_row(*xIter);
+                    pThis->UpdateContentFunctionsToolbar();
                 }
                 break;
             }
@@ -4324,15 +4326,15 @@ void SwContentTree::UpdateTracking()
                         SdrObject* pSelected = pSdrView->GetMarkedObjectList().GetMark(nIdx)->GetMarkedSdrObj();
                         OUString aName(pSelected->GetName());
                         if (!aName.isEmpty())
-                            lcl_SelectDrawObjectByName(*m_xTreeView, aName);
+                            lcl_SelectDrawObjectByName(this, *m_xTreeView, aName);
                     }
                 }
                 else
                 {
                     // clear treeview selections
                     m_xTreeView->unselect_all();
+                    UpdateContentFunctionsToolbar();
                 }
-                Select();
             }
             return;
         }
@@ -4494,7 +4496,7 @@ void SwContentTree::UpdateTracking()
                         }
                         // unselect all entries, make pEntry visible, and select
                         m_xTreeView->set_cursor(rEntry);
-                        Select();
+                        UpdateContentFunctionsToolbar();
 
                         // tdf#149279 show at least two outline entries before the set cursor entry
                         std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator(&rEntry));
@@ -4584,8 +4586,263 @@ void SwContentTree::UpdateTracking()
     {
         m_xTreeView->unselect_all();
         m_xTreeView->set_cursor(-1);
-        Select();
+        UpdateContentFunctionsToolbar();
     }
+}
+
+static bool lcl_IsSelectedCompareByContentTypeAndAddress(const weld::TreeIter& rEntry,
+                                                         weld::TreeView& rContentTree,
+                                                         ContentTypeId eContentType,
+                                                         const void* ptr)
+{
+    if (!ptr)
+        return false;
+
+    std::unique_ptr<weld::TreeIter> xIter(rContentTree.make_iterator());
+
+    // find content type entry
+    bool bFoundEntry = rContentTree.get_iter_first(*xIter);
+    while (bFoundEntry)
+    {
+        assert(dynamic_cast<SwContentType*>(weld::fromId<SwTypeNumber*>(rContentTree.get_id(*xIter))));
+        SwContentType* pContentType = weld::fromId<SwContentType*>(rContentTree.get_id(*xIter));
+        if (eContentType == pContentType->GetType())
+            break;
+        bFoundEntry = rContentTree.iter_next_sibling(*xIter);
+    }
+
+    if (!bFoundEntry)
+        return false;
+
+    // find content type content entry and compare it to the passed entry
+    const void* p = nullptr;
+    while (rContentTree.iter_next(*xIter) && lcl_IsContent(*xIter, rContentTree))
+    {
+        assert(dynamic_cast<SwContent*>(weld::fromId<SwTypeNumber*>(rContentTree.get_id(*xIter))));
+        SwContent* pContent = weld::fromId<SwContent*>(rContentTree.get_id(*xIter));
+        switch (eContentType)
+        {
+            case ContentTypeId::FOOTNOTE:
+            case ContentTypeId::ENDNOTE:
+            {
+                assert(dynamic_cast<SwTextFootnoteContent*>(static_cast<SwTypeNumber*>(pContent)));
+                SwTextFootnoteContent* pCnt = static_cast<SwTextFootnoteContent*>(pContent);
+                p = pCnt->GetTextFootnote();
+                break;
+            }
+            case ContentTypeId::URLFIELD:
+            {
+                assert(dynamic_cast<SwURLFieldContent*>(static_cast<SwTypeNumber*>(pContent)));
+                SwURLFieldContent* pCnt = static_cast<SwURLFieldContent*>(pContent);
+                p = static_cast<const SwTextAttr*>(pCnt->GetINetAttr());
+                break;
+            }
+            case ContentTypeId::TEXTFIELD:
+            {
+                assert(dynamic_cast<SwTextFieldContent*>(static_cast<SwTypeNumber*>(pContent)));
+                SwTextFieldContent* pCnt = static_cast<SwTextFieldContent*>(pContent);
+                p = pCnt->GetFormatField()->GetField();
+                break;
+            }
+            case ContentTypeId::POSTIT:
+            {
+                assert(dynamic_cast<SwPostItContent*>(static_cast<SwTypeNumber*>(pContent)));
+                SwPostItContent* pCnt = static_cast<SwPostItContent*>(pContent);
+                p = pCnt->GetPostIt()->GetField();
+                break;
+            }
+            case ContentTypeId::INDEX:
+            {
+                assert(dynamic_cast<SwTOXBaseContent*>(static_cast<SwTypeNumber*>(pContent)));
+                SwTOXBaseContent* pCnt = static_cast<SwTOXBaseContent*>(pContent);
+                p = pCnt->GetTOXBase();
+                break;
+            }
+            default:
+                break;
+        }
+        if (ptr == p)
+            return rContentTree.iter_compare(*xIter, rEntry) == 0;
+    }
+    return false;
+}
+
+static bool lcl_IsSelectedCompareByContentTypeAndName(const weld::TreeIter& rEntry,
+                                                      weld::TreeView& rContentTree,
+                                                      ContentTypeId eContentType,
+                                                      std::u16string_view rName)
+{
+    std::unique_ptr<weld::TreeIter> xIter(rContentTree.make_iterator());
+
+    // find content type entry
+    bool bFoundEntry = rContentTree.get_iter_first(*xIter);
+    while (bFoundEntry)
+    {
+        assert(dynamic_cast<SwContentType*>(weld::fromId<SwTypeNumber*>(rContentTree.get_id(*xIter))));
+        SwContentType* pContentType = weld::fromId<SwContentType*>(rContentTree.get_id(*xIter));
+        if (eContentType == pContentType->GetType())
+            break;
+        bFoundEntry = rContentTree.iter_next_sibling(*xIter);
+    }
+
+    if (!bFoundEntry)
+        return false;
+
+    // find content type content entry and compare it to the passed entry
+    while (rContentTree.iter_next(*xIter))
+    {
+        if (rName == rContentTree.get_text(*xIter))
+        {
+            if (rContentTree.iter_compare(*xIter, rEntry) == 0)
+                return true;
+        }
+    }
+    return false;
+}
+
+bool SwContentTree::IsSelectedEntryCurrentDocCursorPosition(const weld::TreeIter& rEntry)
+{
+    if (State::HIDDEN == m_eState || !m_pActiveShell)
+        return false;
+
+    // table
+    if (m_pActiveShell->IsCursorInTable())
+    {
+        return lcl_IsSelectedCompareByContentTypeAndName(
+            rEntry, *m_xTreeView, ContentTypeId::TABLE,
+            m_pActiveShell->GetTableFormat()->GetName());
+    }
+    // graphic, frame, and ole
+    if (m_pActiveShell->GetSelectionType()
+        & (SelectionType::Graphic | SelectionType::Frame | SelectionType::Ole))
+    {
+        ContentTypeId eContentTypeId;
+        if (m_pActiveShell->GetSelectionType() == SelectionType::Graphic)
+            eContentTypeId = ContentTypeId::GRAPHIC;
+        else if (m_pActiveShell->GetSelectionType() == SelectionType::Frame)
+            eContentTypeId = ContentTypeId::FRAME;
+        else if (m_pActiveShell->GetSelectionType() == SelectionType::Ole)
+            eContentTypeId = ContentTypeId::OLE;
+        else // to quiet compiler warning/error
+            return false;
+        return lcl_IsSelectedCompareByContentTypeAndName(rEntry, *m_xTreeView, eContentTypeId,
+                                                         m_pActiveShell->GetFlyName());
+    }
+    // hyperlinks
+    // not in ToxContent tdf#148312 <- does this apply here?
+    if (const SwSection* pSection = m_pActiveShell->GetCurrSection();
+        !pSection || (pSection && pSection->GetType() != SectionType::ToxContent))
+    {
+        if (SwContentAtPos aContentAtPos(IsAttrAtPos::InetAttr);
+            m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos))
+        {
+            // Because hyperlink item names do not need to be unique, finding the corresponding
+            // item in the tree by name may result in incorrect selection. Find the item in the
+            // tree by comparing the SwTextINetFormat pointer at the document cursor position to
+            // that stored in the item SwURLFieldContent.
+            return lcl_IsSelectedCompareByContentTypeAndAddress(
+                rEntry, *m_xTreeView, ContentTypeId::URLFIELD, aContentAtPos.pFndTextAttr);
+        }
+    }
+    // references
+    if (SwContentAtPos aContentAtPos(IsAttrAtPos::RefMark);
+        m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos)
+        && aContentAtPos.pFndTextAttr)
+    {
+        const SwFormatRefMark& rRefMark = aContentAtPos.pFndTextAttr->GetRefMark();
+        return lcl_IsSelectedCompareByContentTypeAndName(
+            rEntry, *m_xTreeView, ContentTypeId::REFERENCE, rRefMark.GetRefName());
+    }
+    // indexes
+    if (const SwTOXBase* pTOXBase = m_pActiveShell->GetCurTOX())
+    {
+        return lcl_IsSelectedCompareByContentTypeAndAddress(rEntry, *m_xTreeView,
+                                                            ContentTypeId::INDEX, pTOXBase);
+        // alternatively:
+        //   return lcl_IsSelectedCompareByContentTypeAndName(rEntry, *m_xTreeView,
+        //                                                    ContentTypeId::INDEX,
+        //                                                    pTOX->GetTOXName());
+    }
+    // fields, comments
+    if (SwField* pField = m_pActiveShell->GetCurField())
+    {
+        ContentTypeId eContentTypeId = pField->GetTypeId() == SwFieldTypesEnum::Postit
+                                           ? ContentTypeId::POSTIT
+                                           : ContentTypeId::TEXTFIELD;
+        return lcl_IsSelectedCompareByContentTypeAndAddress(rEntry, *m_xTreeView, eContentTypeId,
+                                                            pField);
+    }
+    // drawing
+    if (m_pActiveShell->GetSelectionType()
+        & (SelectionType::DrawObject | SelectionType::DrawObjectEditMode | SelectionType::DbForm))
+    {
+        SdrView* pSdrView = m_pActiveShell->GetDrawView();
+        if (!pSdrView)
+            return false;
+        // ONLY CHECKS FIRST MARKED OBJECT
+        for (size_t nIdx = 0; nIdx < pSdrView->GetMarkedObjectList().GetMarkCount(); nIdx++)
+        {
+            SdrObject* pObject = pSdrView->GetMarkedObjectList().GetMark(nIdx)->GetMarkedSdrObj();
+            if (lcl_IsSelectedCompareByContentTypeAndName(
+                    rEntry, *m_xTreeView, ContentTypeId::DRAWOBJECT, pObject->GetName()))
+                return true;
+        }
+        return false;
+    }
+    // footnotes and endnotes
+    if (SwContentAtPos aContentAtPos(IsAttrAtPos::Ftn);
+        m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos)
+        && aContentAtPos.pFndTextAttr)
+    {
+        ContentTypeId eContentTypeId = aContentAtPos.pFndTextAttr->GetFootnote().IsEndNote()
+                                           ? ContentTypeId::ENDNOTE
+                                           : ContentTypeId::FOOTNOTE;
+        return lcl_IsSelectedCompareByContentTypeAndAddress(rEntry, *m_xTreeView, eContentTypeId,
+                                                            aContentAtPos.pFndTextAttr);
+    }
+    // section
+    if (const SwSection* pSection = m_pActiveShell->GetCurrSection())
+    {
+        return lcl_IsSelectedCompareByContentTypeAndName(
+            rEntry, *m_xTreeView, ContentTypeId::REGION, pSection->GetSectionName());
+    }
+    // bookmark (unsure about this)
+    if (m_pActiveShell->GetSelectionType() & SelectionType::Text)
+    {
+        SwPaM* pCursor = m_pActiveShell->GetCursor();
+        IDocumentMarkAccess* const pMarkAccess = m_pActiveShell->getIDocumentMarkAccess();
+        IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
+        if (pCursor && ppBookmark != pMarkAccess->getBookmarksEnd())
+        {
+            OUString sBookmarkName;
+            SwPosition* pCursorPoint = pCursor->GetPoint();
+            while (ppBookmark != pMarkAccess->getBookmarksEnd())
+            {
+                if (lcl_IsUiVisibleBookmark(*ppBookmark)
+                    && *pCursorPoint >= (*ppBookmark)->GetMarkStart()
+                    && *pCursorPoint <= (*ppBookmark)->GetMarkEnd())
+                {
+                    sBookmarkName = (*ppBookmark)->GetName();
+                    // keep previously selected bookmark instead
+                    // of selecting a different bookmark inside of it
+                    if (sBookmarkName == m_sSelectedItem)
+                        return lcl_IsSelectedCompareByContentTypeAndName(
+                            rEntry, *m_xTreeView, ContentTypeId::BOOKMARK, sBookmarkName);
+                }
+                else if (!sBookmarkName.isEmpty() && *pCursorPoint < (*ppBookmark)->GetMarkStart())
+                {
+                    // don't search a different bookmark inside the
+                    // previous one, if the starting position of the next bookmarks
+                    // is after the cursor position (assuming that the
+                    // bookmark iterator jumps inside the same text by positions)
+                    return lcl_IsSelectedCompareByContentTypeAndName(
+                        rEntry, *m_xTreeView, ContentTypeId::BOOKMARK, sBookmarkName);
+                }
+                ++ppBookmark;
+            }
+        }
+    }
+    return false;
 }
 
 void SwContentTree::SelectOutlinesWithSelection()
@@ -4639,7 +4896,7 @@ void SwContentTree::SelectOutlinesWithSelection()
         });
     }
 
-    Select();
+    UpdateContentFunctionsToolbar();
 }
 
 void SwContentTree::MoveOutline(SwOutlineNodes::size_type nTargetPos)
@@ -5034,17 +5291,6 @@ IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
 
 void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry)
 {
-
-    if(rSelectedPopupEntry == "showcomments")
-    {
-            m_pActiveShell->GetView().GetViewFrame().GetDispatcher()->Execute(SID_TOGGLE_NOTES);
-            return;
-    }
-    if(rSelectedPopupEntry == "showresolvedcomments")
-    {
-            m_pActiveShell->GetView().GetViewFrame().GetDispatcher()->Execute(SID_TOGGLE_RESOLVED_NOTES);
-            return;
-    }
     if (rSelectedPopupEntry == "copy")
     {
         CopyOutlineSelections();
@@ -5477,7 +5723,7 @@ IMPL_LINK_NOARG(SwContentTree, SelectHdl, weld::TreeView&, void)
         ContentDoubleClickHdl(*m_xTreeView);
         grab_focus();
     }
-    Select();
+    UpdateContentFunctionsToolbar();
     if (m_bIsRoot)
         return;
     // Select the content type in the Navigate By control
@@ -5489,32 +5735,11 @@ IMPL_LINK_NOARG(SwContentTree, SelectHdl, weld::TreeView&, void)
     m_pDialog->SelectNavigateByContentType(m_xTreeView->get_text(*xEntry));
 }
 
-// Here the buttons for moving outlines are en-/disabled.
-// The buttons for moving outlines are disabled when the Navigator is in "Zoom" mode or when
-// the document is in read-only mode or when the outline content is displayed alphabetically
-// sorted or when the selected entry is not outline content.
-void SwContentTree::Select()
+void SwContentTree::UpdateContentFunctionsToolbar()
 {
     SwNavigationPI* pNavi = GetParentWindow();
-
-    bool bEnable = false;
-
-    if (!pNavi->IsZoomedIn() && !m_bIsLastReadOnly)
-    {
-        std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-        if (m_xTreeView->get_selected(xEntry.get()) && lcl_IsContent(*xEntry, *m_xTreeView))
-        {
-            const SwContentType* pCntType =
-                    weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry))->GetParent();
-            if (pCntType->GetType() == ContentTypeId::OUTLINE && !pCntType->IsAlphabeticSort())
-                bEnable = true;
-        }
-    }
-
-    pNavi->m_xContent6ToolBox->set_item_sensitive(u"chapterup"_ustr,  bEnable);
-    pNavi->m_xContent6ToolBox->set_item_sensitive(u"chapterdown"_ustr, bEnable);
-    pNavi->m_xContent6ToolBox->set_item_sensitive(u"promote"_ustr, bEnable);
-    pNavi->m_xContent6ToolBox->set_item_sensitive(u"demote"_ustr, bEnable);
+    if (pNavi)
+        pNavi->UpdateContentFunctionsToolbar();
 }
 
 void SwContentTree::SetRootType(ContentTypeId nType)
@@ -6308,8 +6533,7 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
             if(m_pActiveShell->GotoINetAttr(
                             *static_cast<const SwURLFieldContent*>(pCnt)->GetINetAttr() ))
             {
-                m_pActiveShell->Right( SwCursorSkipMode::Chars, true, 1, false);
-                m_pActiveShell->SwCursorShell::SelectTextAttr( RES_TXTATR_INETFMT, true );
+                m_pActiveShell->Right(SwCursorSkipMode::Chars, false, 1, false);
             }
         }
         break;
@@ -6391,6 +6615,8 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
             rView.SetVisArea(aPoint);
         }
     }
+
+    UpdateContentFunctionsToolbar();
 }
 
 NaviContentBookmark::NaviContentBookmark() :
@@ -6449,7 +6675,7 @@ void SwContentTree::SelectContentType(std::u16string_view rContentTypeName)
         if (m_xTreeView->get_text(*xIter) == rContentTypeName)
         {
             m_xTreeView->set_cursor(*xIter);
-            Select();
+            UpdateContentFunctionsToolbar();
             break;
         }
     } while (m_xTreeView->iter_next_sibling(*xIter));

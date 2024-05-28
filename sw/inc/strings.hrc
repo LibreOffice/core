@@ -717,6 +717,8 @@
 #define STR_NEW_FILE                            NC_("STR_NEW_FILE", "New Document")
 #define STR_INSERT_TEXT                         NC_("STR_INSERT_TEXT", "Text")
 #define STR_DELETE                              NC_("STR_DELETE", "Delete")
+#define STR_DELETE_CONTENT_TYPE                 NC_("STR_DELETE_CONTENT_TYPE", "Delete All %1")
+#define STR_DELETE_CONTENT                      NC_("STR_DELETE_CONTENT", "Delete %1")
 #define STR_DELETE_ENTRY                        NC_("STR_DELETE_ENTRY", "~Delete")
 #define STR_UPDATE_SEL                          NC_("STR_UPDATE_SEL", "Selection")
 #define STR_UPDATE_INDEX                        NC_("STR_UPDATE_INDEX", "Indexes")

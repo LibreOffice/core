@@ -30,6 +30,7 @@ chart2/res/selectrange.png formula/res/refinp1.png
 
 # cmd
 # ==============================================
+cmd/sc_endnotedialog.png cmd/sc_footnotedialog.png
 
 # Add
 cmd/32/adddatefield.png cmd/32/datefield.png

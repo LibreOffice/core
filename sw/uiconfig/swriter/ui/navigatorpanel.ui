@@ -515,116 +515,812 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolbar" id="content6">
+                  <object class="GtkBox">
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="toolbar-style">icons</property>
+                    <property name="can-focus">False</property>
                     <child>
-                      <object class="GtkToggleToolButton" id="listbox">
+                      <object class="GtkToolbar" id="content6">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="tooltip-text" translatable="yes" context="navigatorpanel|listbox|tooltip_text">List Box On/Off</property>
-                        <property name="icon-name">sw/res/sc20233.png</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="listbox-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes" context="navigatorpanel|listbox|accessible_name">List Box On/Off</property>
-                            <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|listbox">Shows or hides the Navigator list.</property>
+                        <property name="can-focus">True</property>
+                        <property name="halign">start</property>
+                        <property name="valign">start</property>
+                        <property name="toolbar-style">icons</property>
+                        <child>
+                          <object class="GtkToggleToolButton" id="listbox">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="tooltip-text" translatable="yes" context="navigatorpanel|listbox|tooltip_text">List Box On/Off</property>
+                            <property name="icon-name">sw/res/sc20233.png</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="listbox-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="navigatorpanel|listbox|accessible_name">List Box On/Off</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|listbox">Shows or hides the Navigator list.</property>
+                              </object>
+                            </child>
                           </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">False</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSeparatorToolItem" id="separator6">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">False</property>
+                          </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="homogeneous">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSeparatorToolItem" id="separator6">
+                      <object class="GtkBox" id="ContentFunctionsBox">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="homogeneous">False</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkToolButton" id="promote">
-                        <property name="visible">True</property>
-                        <property name="sensitive">False</property>
-                        <property name="can-focus">False</property>
-                        <property name="tooltip-text" translatable="yes" context="navigatorpanel|promote|tooltip_text">Promote Outline Level</property>
-                        <property name="icon-name">sw/res/sc20172.png</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="promote-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes" context="navigatorpanel|promote|accessible_name">Promote Outline Level</property>
-                            <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|promote">Increases the outline level of the selected heading, and the headings that occur below the heading, by one. To only increase the outline level of the selected heading, hold down Ctrl, and then click this icon.</property>
+                        <child>
+                          <object class="GtkToolbar" id="HeadingsContentFunctionButtonsToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="promote">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="tooltip-text" translatable="yes" context="contenttreefunctionbuttons|promote|tooltip_text">Promote Outline Level</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                                <property name="icon-name">sw/res/sc20172.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="demote">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="tooltip-text" translatable="yes" context="contenttreefunctionbuttons|demote|tooltip_text">Demote Outline Level</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                                <property name="icon-name">sw/res/sc20173.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="chapterup">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="tooltip-text" translatable="yes" context="contenttreefunctionbuttons|chaptermoveup|tooltip_text">Move Heading Up</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                                <property name="icon-name">sw/res/sc20174.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="chapterdown">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="tooltip-text" translatable="yes" context="contenttreefunctionbuttons|chaptermovedown|tooltip_text">Move Heading Down</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                                <property name="icon-name">sw/res/sc20171.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
                           </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="TablesContentTypeUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="TablesContentUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id=".uno:TableDialog">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id=".uno:AutoFormat">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id=".uno:DeleteTable">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="FramesContentTypeUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="FramesContentUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id=".uno:FrameDialog">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="ImagesContentTypeUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">5</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="ImagesContentUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id=".uno:GraphicDialog">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">6</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="OLEobjectsContentTypeUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">7</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="OLEobjectsContentUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id=".uno:FrameDialog-more">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">8</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="BookmarksContentTypeUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">9</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="BookmarksContentUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id=".uno:EditBookmark">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">10</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="SectionsContentTypeUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">11</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="SectionsContentUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id=".uno:EditRegion">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">12</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="HyperlinksContentTypeUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">13</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="HyperlinksContentUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id=".uno:OpenHyperlinkOnCursor">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id=".uno:EditHyperlink">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">14</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="ReferencesContentTypeUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">15</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="ReferencesContentUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">16</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="IndexesContentTypeUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id=".uno:UpdateAllIndexes">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">17</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="IndexesContentUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id=".uno:InsertMultiIndex">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id=".uno:RemoveTableOf">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">18</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="CommentsContentTypeUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id=".uno:DeleteAllNotes">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">19</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="CommentsContentUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">20</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="DrawingobjectsContentTypeUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">21</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="DrawingobjectsContentUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id=".uno:InsertCaptionDialog">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">22</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="FieldsContentTypeUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id=".uno:UpdateFields">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">23</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="FieldsContentUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id=".uno:FieldDialog">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">24</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="FootnotesContentTypeUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id=".uno:FootnoteDialog">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">25</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="FootnotesContentUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">26</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="EndnotesContentTypeUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id=".uno:EndnoteDialog">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">27</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="EndnotesContentUnoToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">28</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolbar" id="DeleteFunctionButtonToolbar">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <property name="toolbar-style">icons</property>
+                            <property name="show-arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="delete">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="tooltip-text" translatable="yes" context="contenttreefunctionbuttons|delete|tooltip_text">Delete</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                                <property name="icon-name">cmd/sc_delete.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">29</property>
+                          </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="homogeneous">False</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkToolButton" id="demote">
-                        <property name="visible">True</property>
-                        <property name="sensitive">False</property>
-                        <property name="can-focus">False</property>
-                        <property name="tooltip-text" translatable="yes" context="navigatorpanel|demote|tooltip_text">Demote Outline Level</property>
-                        <property name="icon-name">sw/res/sc20173.png</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="demote-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes" context="navigatorpanel|demote|accessible_name">Demote Outline Level</property>
-                            <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|demote">Decreases the outline level of the selected heading, and the headings that occur below the heading, by one. To only decrease the outline level of the selected heading, hold down Ctrl, and then click this icon.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="homogeneous">False</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkToolButton" id="chapterup">
-                        <property name="visible">True</property>
-                        <property name="sensitive">False</property>
-                        <property name="can-focus">False</property>
-                        <property name="tooltip-text" translatable="yes" context="navigatorpanel|chapterup|tooltip_text">Move Heading Up</property>
-                        <property name="icon-name">sw/res/sc20174.png</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="chapterup-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes" context="navigatorpanel|chapterup|accessible_name">Move Heading Up</property>
-                            <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|chapterup">Moves the selected heading, and the text below the heading, up one heading position in the Navigator and in the document. To move only the selected heading and not the text associated with the heading, hold down Ctrl, and then click this icon.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="homogeneous">False</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkToolButton" id="chapterdown">
-                        <property name="visible">True</property>
-                        <property name="sensitive">False</property>
-                        <property name="can-focus">False</property>
-                        <property name="tooltip-text" translatable="yes" context="navigatorpanel|chapterdown|tooltip_text">Move Heading Down</property>
-                        <property name="icon-name">sw/res/sc20171.png</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="chapterdown-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes" context="navigatorpanel|chapterdown|accessible_name">Move Heading Down</property>
-                            <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|chapterdown">Moves the selected heading, and the text below the heading, down one heading position in the Navigator and in the document. To move only the selected heading and not the text associated with the heading, hold down Ctrl, and then click this icon.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="homogeneous">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>

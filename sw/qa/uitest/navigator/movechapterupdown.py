@@ -62,8 +62,8 @@ class movechapterupdown(UITestCase):
 
             # Click on the 'Move chapter up' button in the Navigator tool box
             xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
-            xToolBarContent6 = xNavigatorPanel.getChild("content6")
-            xToolBarContent6.executeAction("CLICK", mkPropertyValues({"POS": "4"}))
+            xToolBar = xNavigatorPanel.getChild("HeadingsContentFunctionButtonsToolbar")
+            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "2"}))
 
             # Expected chapter order:
                 # 2. Two (H1)
@@ -104,8 +104,8 @@ class movechapterupdown(UITestCase):
 
             # Click on the 'Move chapter down' button in the Navigator tool box
             xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
-            xToolBarContent6 = xNavigatorPanel.getChild("content6")
-            xToolBarContent6.executeAction("CLICK", mkPropertyValues({"POS": "5"}))
+            xToolBar = xNavigatorPanel.getChild("HeadingsContentFunctionButtonsToolbar")
+            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "3"}))
 
             # Expected chapter order is the original order
             xNavigatorPanelContentTreeHeadings = xNavigatorPanelContentTree.getChild('0')
@@ -146,8 +146,8 @@ class movechapterupdown(UITestCase):
 
             # Click on the 'Move chapter down' button in the Navigator tool box
             xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
-            xToolBarContent6 = xNavigatorPanel.getChild("content6")
-            xToolBarContent6.executeAction("CLICK", mkPropertyValues({"POS": "5"}))
+            xToolBar = xNavigatorPanel.getChild("HeadingsContentFunctionButtonsToolbar")
+            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "3"}))
 
             # Expected chapter order:
                 # 1. One (H1)
@@ -188,8 +188,8 @@ class movechapterupdown(UITestCase):
 
             # Click on the 'Move chapter up' button in the Navigator tool box
             xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
-            xToolBarContent6 = xNavigatorPanel.getChild("content6")
-            xToolBarContent6.executeAction("CLICK", mkPropertyValues({"POS": "4"}))
+            xToolBar = xNavigatorPanel.getChild("HeadingsContentFunctionButtonsToolbar")
+            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "2"}))
 
             # Expected chapter order is the original order
             xNavigatorPanelContentTreeHeadings = xNavigatorPanelContentTree.getChild('0')
@@ -231,8 +231,8 @@ class movechapterupdown(UITestCase):
 
             # Click on the 'Move chapter up' button in the Navigator tool box
             xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
-            xToolBarContent6 = xNavigatorPanel.getChild("content6")
-            xToolBarContent6.executeAction("CLICK", mkPropertyValues({"POS": "4"}))
+            xToolBar = xNavigatorPanel.getChild("HeadingsContentFunctionButtonsToolbar")
+            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "2"}))
 
             # Expected chapter order:
                 # 1. One H1
@@ -275,8 +275,8 @@ class movechapterupdown(UITestCase):
 
             # Click on the 'Move chapter down' button in the Navigator tool box
             xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
-            xToolBarContent6 = xNavigatorPanel.getChild("content6")
-            xToolBarContent6.executeAction("CLICK", mkPropertyValues({"POS": "5"}))
+            xToolBar = xNavigatorPanel.getChild("HeadingsContentFunctionButtonsToolbar")
+            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "3"}))
 
             # Expected chapter order:
                 # 1. One H1
@@ -327,13 +327,13 @@ class movechapterupdown(UITestCase):
 
             # Click on the 'Move chapter up' button in the Navigator tool box
             xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
-            xToolBarContent6 = xNavigatorPanel.getChild("content6")
-            xToolBarContent6.executeAction("CLICK", mkPropertyValues({"POS": "4"}))
+            xToolBar = xNavigatorPanel.getChild("HeadingsContentFunctionButtonsToolbar")
+            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "2"}))
 
             # Click on the 'Move chapter up' button in the Navigator tool box
             xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
-            xToolBarContent6 = xNavigatorPanel.getChild("content6")
-            xToolBarContent6.executeAction("CLICK", mkPropertyValues({"POS": "4"}))
+            xToolBar = xNavigatorPanel.getChild("HeadingsContentFunctionButtonsToolbar")
+            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "2"}))
 
             # Expected chapter order:
                 # 1. One H1
@@ -384,8 +384,8 @@ class movechapterupdown(UITestCase):
 
             # Click on the 'Move chapter down' button in the Navigator tool box
             xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
-            xToolBarContent6 = xNavigatorPanel.getChild("content6")
-            xToolBarContent6.executeAction("CLICK", mkPropertyValues({"POS": "5"}))
+            xToolBar = xNavigatorPanel.getChild("HeadingsContentFunctionButtonsToolbar")
+            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "3"}))
 
             # Expected chapter order is the original order
             xNavigatorPanelContentTreeHeadings = xNavigatorPanelContentTree.getChild('0')
@@ -427,8 +427,8 @@ class movechapterupdown(UITestCase):
 
             # Click on the 'Move chapter up' button in the Navigator tool box
             xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
-            xToolBarContent6 = xNavigatorPanel.getChild("content6")
-            xToolBarContent6.executeAction("CLICK", mkPropertyValues({"POS": "4"}))
+            xToolBar = xNavigatorPanel.getChild("HeadingsContentFunctionButtonsToolbar")
+            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "2"}))
 
             # Expected chapter order:
                 #   1.1. One_A (H2)
@@ -470,8 +470,8 @@ class movechapterupdown(UITestCase):
 
             # Click on the 'Move chapter down' button in the Navigator tool box
             xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
-            xToolBarContent6 = xNavigatorPanel.getChild("content6")
-            xToolBarContent6.executeAction("CLICK", mkPropertyValues({"POS": "5"}))
+            xToolBar = xNavigatorPanel.getChild("HeadingsContentFunctionButtonsToolbar")
+            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "3"}))
 
             # Expected chapter order is the original order
             xNavigatorPanelContentTreeHeadings = xNavigatorPanelContentTree.getChild('0')

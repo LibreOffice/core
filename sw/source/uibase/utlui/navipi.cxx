@@ -51,6 +51,9 @@
 
 #include <comphelper/lok.hxx>
 
+#include <swcont.hxx>
+#include <content.hxx>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
@@ -273,23 +276,12 @@ IMPL_LINK(SwNavigationPI, ToolBoxSelectHdl, const OUString&, rCommand, void)
     {
         rSh.GetView().GetViewFrame().GetDispatcher()->Execute(FN_SET_REMINDER, SfxCallMode::ASYNCHRON);
     }
-    else if (rCommand == "chapterdown" ||
-             rCommand == "movedown" ||
-             rCommand == "chapterup" ||
+    else if (rCommand == "movedown" ||
              rCommand == "moveup" ||
-             rCommand == "promote" ||
-             rCommand == "demote" ||
              rCommand == "edit")
     {
         if (IsGlobalMode())
             m_xGlobalTree->ExecCommand(rCommand);
-        else
-        {
-            // Standard: sublevels are taken
-            // do not take sublevels with Ctrl
-            bool bOutlineWithChildren = (KEY_MOD1 != m_xContent6ToolBox->get_modifier_state());
-            m_xContentTree->ExecCommand(rCommand, bOutlineWithChildren);
-        }
     }
     else if (rCommand == "contenttoggle" || rCommand == "globaltoggle")
     {
@@ -371,7 +363,7 @@ void SwNavigationPI::ZoomOut()
     pNav->SetMinOutputSizePixel(aOptimalSize);
     pNav->SetOutputSizePixel(aNewSize);
 
-    m_xContentTree->Select(); // Enable toolbox
+    m_xContentTree->UpdateContentFunctionsToolbar(); // Enable toolbox
     m_pConfig->SetSmall(false);
     m_xContent6ToolBox->set_item_active(u"listbox"_ustr, true);
 }
@@ -400,7 +392,7 @@ void SwNavigationPI::ZoomIn()
     pNav->SetMinOutputSizePixel(aOptimalSize);
     pNav->SetOutputSizePixel(aNewSize);
 
-    m_xContentTree->Select(); // Enable toolbox
+    m_xContentTree->UpdateContentFunctionsToolbar(); // Enable toolbox
 
     m_pConfig->SetSmall(true);
     m_xContent6ToolBox->set_item_active(u"listbox"_ustr, false);
@@ -426,6 +418,7 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     , m_aDocFullName(SID_DOCFULLNAME, *_pBindings, *this)
     , m_aPageStats(FN_STAT_PAGE, *_pBindings, *this)
     , m_aNavElement(FN_NAV_ELEMENT, *_pBindings, *this)
+    , m_xFrame(rxFrame)
     , m_xContent1ToolBox(m_xBuilder->weld_toolbar(u"content1"_ustr))
     , m_xContent2ToolBox(m_xBuilder->weld_toolbar(u"content2"_ustr))
     , m_xContent3ToolBox(m_xBuilder->weld_toolbar(u"content3"_ustr))
@@ -454,6 +447,8 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     , m_bIsZoomedIn(false)
     , m_bGlobalMode(false)
 {
+    InitContentFunctionsToolbar();
+
     m_xContainer->connect_container_focus_changed(LINK(this, SwNavigationPI, SetFocusChildHdl));
 
     Reference<XToolbarController> xController =
@@ -581,6 +576,182 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
         {
             pView->m_nNaviExpandedStatus = 1;
             m_xContentTree->ExpandAllHeadings();
+        }
+    }
+}
+
+void SwNavigationPI::InitContentFunctionsToolbar()
+{
+    m_xHeadingsContentFunctionsToolbar
+        = m_xBuilder->weld_toolbar("HeadingsContentFunctionButtonsToolbar");
+    m_xDeleteFunctionToolbar = m_xBuilder->weld_toolbar("DeleteFunctionButtonToolbar");
+
+    const OUString sContentTypes[]
+        = { "Headings",  "Tables",         "Frames",     "Images",     "OLEobjects",
+            "Bookmarks", "Sections",       "Hyperlinks", "References", "Indexes",
+            "Comments",  "Drawingobjects", "Fields",     "Footnotes",  "Endnotes" };
+
+    for (ContentTypeId eContentTypeId : o3tl::enumrange<ContentTypeId>())
+    {
+        if (eContentTypeId == ContentTypeId::OUTLINE)
+            continue;
+        m_aContentTypeUnoToolbarMap[eContentTypeId] = m_xBuilder->weld_toolbar(
+            sContentTypes[static_cast<int>(eContentTypeId)] + "ContentTypeUnoToolbar");
+        m_aContentTypeToolbarUnoDispatcherMap[eContentTypeId]
+            = std::make_unique<ToolbarUnoDispatcher>(*m_aContentTypeUnoToolbarMap[eContentTypeId],
+                                                     *m_xBuilder, m_xFrame);
+        m_aContentUnoToolbarMap[eContentTypeId] = m_xBuilder->weld_toolbar(
+            sContentTypes[static_cast<int>(eContentTypeId)] + "ContentUnoToolbar");
+        m_aContentToolbarUnoDispatcherMap[eContentTypeId] = std::make_unique<ToolbarUnoDispatcher>(
+            *m_aContentUnoToolbarMap[eContentTypeId], *m_xBuilder, m_xFrame);
+    }
+
+    Link<const OUString&, void> aLink
+        = LINK(this,SwNavigationPI, ContentFunctionsToolbarSelectHdl);
+    m_xHeadingsContentFunctionsToolbar->connect_clicked(aLink);
+    m_xDeleteFunctionToolbar->connect_clicked(aLink);
+}
+
+namespace
+{
+bool lcl_ToolbarHasItemWithIdent(weld::Toolbar& rToolbar, std::u16string_view rIdent)
+{
+    for (auto i = 0; i < rToolbar.get_n_items(); i++)
+    {
+        if (rToolbar.get_item_ident(i) == rIdent)
+            return true;
+    }
+    return false;
+}
+}
+
+void SwNavigationPI::UpdateContentFunctionsToolbar()
+{
+    m_xHeadingsContentFunctionsToolbar->hide();
+    for (ContentTypeId eContentTypeId : o3tl::enumrange<ContentTypeId>())
+    {
+        if (eContentTypeId == ContentTypeId::OUTLINE)
+            continue;
+        m_aContentTypeUnoToolbarMap[eContentTypeId]->hide();
+        m_aContentUnoToolbarMap[eContentTypeId]->hide();
+    }
+    m_xDeleteFunctionToolbar->hide();
+
+    weld::TreeView& rTreeView = m_xContentTree->get_widget();
+
+    if (IsZoomedIn() || !rTreeView.is_visible())
+        return;
+
+    std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
+    if (!rTreeView.get_selected(xEntry.get()))
+        return;
+
+    bool bUseDeleteFunctionsToolbar = true;
+    OUString aContentTypeName; // used in creation of delete button tooltip
+
+    const bool bContentType
+        = weld::fromId<const SwTypeNumber*>(rTreeView.get_id(*xEntry))->GetTypeId() == 1;
+
+    if (bContentType)
+    {
+        const SwContentType* pContentType = weld::fromId<SwContentType*>(rTreeView.get_id(*xEntry));
+
+        aContentTypeName = pContentType->GetName();
+
+        ContentTypeId eContentTypeId = pContentType->GetType();
+        if (eContentTypeId == ContentTypeId::OUTLINE)
+            return;
+        weld::Toolbar& rContentTypeToolbar = *m_aContentTypeUnoToolbarMap[eContentTypeId];
+        if (rContentTypeToolbar.get_n_items())
+        {
+            if (eContentTypeId == ContentTypeId::POSTIT)
+            {
+                // prefer .uno:DeleteAllNotes over delete functions toolbar
+                bUseDeleteFunctionsToolbar
+                    = !lcl_ToolbarHasItemWithIdent(rContentTypeToolbar, u".uno:DeleteAllNotes");
+            }
+            rContentTypeToolbar.show();
+        }
+    }
+    else
+    {
+        const SwContentType* pContentType
+            = weld::fromId<SwContent*>(rTreeView.get_id(*xEntry))->GetParent();
+
+        aContentTypeName = pContentType->GetSingleName();
+
+        ContentTypeId eContentTypeId = pContentType->GetType();
+        if (eContentTypeId == ContentTypeId::OUTLINE)
+        {
+            m_xHeadingsContentFunctionsToolbar->show();
+        }
+        else if (m_xContentTree->IsSelectedEntryCurrentDocCursorPosition(*xEntry))
+        {
+            weld::Toolbar& rContentTypeToolbar = *m_aContentUnoToolbarMap[eContentTypeId];
+            if (rContentTypeToolbar.get_n_items())
+            {
+                if (eContentTypeId == ContentTypeId::TABLE)
+                {
+                    // prefer .uno:DeleteTable over delete functions toolbar
+                    bUseDeleteFunctionsToolbar
+                        = !lcl_ToolbarHasItemWithIdent(rContentTypeToolbar, u".uno:DeleteTable");
+                }
+                else if (eContentTypeId == ContentTypeId::INDEX)
+                {
+                    // prefer .uno:RemoveTableOf over delete functions toolbar
+                    bUseDeleteFunctionsToolbar
+                        = !lcl_ToolbarHasItemWithIdent(rContentTypeToolbar, u".uno:RemoveTableOf");
+                }
+                rContentTypeToolbar.show();
+            }
+        }
+    }
+
+    if (bUseDeleteFunctionsToolbar && m_xContentTree->IsDeletable(*xEntry))
+    {
+        OUString sToolTip = SwResId(bContentType ? STR_DELETE_CONTENT_TYPE : STR_DELETE_CONTENT);
+        sToolTip = sToolTip.replaceFirst("%1", aContentTypeName);
+        m_xDeleteFunctionToolbar->set_item_tooltip_text("delete", sToolTip);
+        m_xDeleteFunctionToolbar->show();
+    }
+}
+
+IMPL_LINK(SwNavigationPI, ContentFunctionsToolbarSelectHdl, const OUString&, rCommand, void)
+{
+    weld::TreeView& rTreeView = m_xContentTree->get_widget();
+
+    std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
+    if (!rTreeView.get_selected(xEntry.get()))
+        return;
+
+    const bool bContentEntry
+        = weld::fromId<const SwTypeNumber*>(rTreeView.get_id(*xEntry))->GetTypeId() == 0;
+
+    if (bContentEntry)
+    {
+        SwContent* pContent = weld::fromId<SwContent*>(rTreeView.get_id(*xEntry));
+        if (pContent)
+            m_xContentTree->GotoContent(pContent);
+    }
+
+    if (rCommand == "chapterdown" || rCommand == "chapterup" || rCommand == "promote"
+        || rCommand == "demote")
+    {
+        // Get MouseModifier for Outline-Move
+        // Standard: sublevels are taken
+        // do not take sublevels with Ctrl
+        bool bOutlineWithChildren = (KEY_MOD1 != m_xContent6ToolBox->get_modifier_state());
+        m_xContentTree->ExecCommand(rCommand, bOutlineWithChildren);
+    }
+    else if (rCommand == "delete")
+    {
+        if (!bContentEntry)
+        {
+            m_xContentTree->DeleteAllContentOfEntryContentType(*xEntry);
+        }
+        else
+        {
+            m_xContentTree->EditEntry(*xEntry, EditEntryMode::DELETE);
         }
     }
 }

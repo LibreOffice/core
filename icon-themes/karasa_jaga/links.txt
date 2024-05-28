@@ -1283,6 +1283,7 @@ cmd/sc_editregion.png cmd/sc_insertsection.png
 cmd/sc_editselectmenu.png cmd/sc_selecttables.png
 cmd/sc_ellipse.png cmd/sc_basicshapes.ellipse.png
 cmd/sc_ellipsetoolbox.png cmd/sc_basicshapes.ellipse.png
+cmd/sc_endnotedialog.png cmd/sc_footnotedialog.png
 cmd/sc_exitsearch.png cmd/sc_closepreview.png
 cmd/sc_exportasgraphic.png cmd/sc_graphic.png
 cmd/sc_exportasmenu.png cmd/sc_exportto.png

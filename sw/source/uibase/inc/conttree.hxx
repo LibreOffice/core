@@ -88,6 +88,8 @@ public:
 /** TreeListBox for content indicator */
 class SwContentTree final : public SfxListener
 {
+    friend class SwNavigationPI;
+
     std::unique_ptr<weld::TreeView> m_xTreeView;
     SwContentTreeDropTarget m_aDropTargetHelper;
     SwNavigationPI*     m_pDialog;
@@ -203,6 +205,8 @@ class SwContentTree final : public SfxListener
     bool IsDeletable(const SwContent* pContent);
     void DeleteAllContentOfEntryContentType(const weld::TreeIter& rEntry);
 
+    bool IsSelectedEntryCurrentDocCursorPosition(const weld::TreeIter& rEntry);
+
     /** Expand - Remember the state for content types */
     DECL_LINK(ExpandHdl, const weld::TreeIter&, bool);
     /** Collapse - Remember the state for content types. */
@@ -270,7 +274,7 @@ public:
     const SwWrtShell*   GetActiveWrtShell() const {return m_pActiveShell;}
     SwWrtShell*         GetHiddenWrtShell() {return m_pHiddenShell;}
 
-    void Select();
+    void UpdateContentFunctionsToolbar();
 
     void UpdateTracking();
     void SelectOutlinesWithSelection();

@@ -41,8 +41,8 @@ class tdf151051(UITestCase):
             self.assertEqual('0', get_state_as_dict(xChild)['Children'])
 
             xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
-            xToolBar = xNavigatorPanel.getChild("content6")
-            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "2"})) # 'promote' button
+            xToolBar = xNavigatorPanel.getChild("HeadingsContentFunctionButtonsToolbar")
+            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "0"})) # 'promote' button
 
             xHeadings = xContentTree.getChild('0')
             xHeadings.executeAction("EXPAND", tuple())

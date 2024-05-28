@@ -60,6 +60,7 @@ cmd/sc_insertmenulegend.png cmd/sc_legend.png
 
 # cmd
 # ==============================================
+cmd/sc_endnotedialog.png cmd/sc_footnotedialog.png
 
 # Add
 cmd/32/adddatefield.png cmd/32/datefield.png

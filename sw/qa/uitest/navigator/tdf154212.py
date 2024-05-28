@@ -48,8 +48,8 @@ class tdf154212(UITestCase):
 
             # click on the 'move chapter down' button in the Navigator tool box
             xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
-            xToolBarContent6 = xNavigatorPanel.getChild("content6")
-            xToolBarContent6.executeAction("CLICK", mkPropertyValues({"POS": "5"}))
+            xToolBar = xNavigatorPanel.getChild("HeadingsContentFunctionButtonsToolbar")
+            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "3"}))
 
             self.ui_test.wait_until_property_is_updated(xNavigatorPanelContentTree, "SelectEntryText", "MOVE THIS Heading level 2")
 
@@ -62,8 +62,8 @@ class tdf154212(UITestCase):
 
             # click on the 'move chapter up' button in the Navigator tool box
             xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
-            xToolBarContent6 = xNavigatorPanel.getChild("content6")
-            xToolBarContent6.executeAction("CLICK", mkPropertyValues({"POS": "4"}))
+            xToolBar = xNavigatorPanel.getChild("HeadingsContentFunctionButtonsToolbar")
+            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "2"}))
 
             self.ui_test.wait_until_property_is_updated(xNavigatorPanelContentTree, "SelectEntryText", "MOVE THIS Heading level 2")
 

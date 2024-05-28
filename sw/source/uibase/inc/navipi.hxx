@@ -51,6 +51,8 @@ class SwNavigationPI final : public PanelLayout
     ::sfx2::sidebar::ControllerItem m_aPageStats;
     ::sfx2::sidebar::ControllerItem m_aNavElement;
 
+    css::uno::Reference<css::frame::XFrame> m_xFrame;
+
     std::unique_ptr<weld::Toolbar> m_xContent1ToolBox;
     std::unique_ptr<weld::Toolbar> m_xContent2ToolBox;
     std::unique_ptr<weld::Toolbar> m_xContent3ToolBox;
@@ -88,6 +90,16 @@ class SwNavigationPI final : public PanelLayout
     bool    m_bGlobalMode : 1;
 
     weld::ComboBox* m_pNavigateByComboBox;
+
+    std::unique_ptr<weld::Toolbar> m_xHeadingsContentFunctionsToolbar;
+    std::unique_ptr<weld::Toolbar> m_xDeleteFunctionToolbar;
+    std::unordered_map<ContentTypeId, std::unique_ptr<weld::Toolbar>> m_aContentTypeUnoToolbarMap;
+    std::unordered_map<ContentTypeId, std::unique_ptr<ToolbarUnoDispatcher>> m_aContentTypeToolbarUnoDispatcherMap;
+    std::unordered_map<ContentTypeId, std::unique_ptr<weld::Toolbar>> m_aContentUnoToolbarMap;
+    std::unordered_map<ContentTypeId, std::unique_ptr<ToolbarUnoDispatcher>> m_aContentToolbarUnoDispatcherMap;
+    void InitContentFunctionsToolbar();
+    void UpdateContentFunctionsToolbar();
+    DECL_LINK(ContentFunctionsToolbarSelectHdl, const OUString&, void );
 
     bool IsZoomedIn() const {return m_bIsZoomedIn;}
     void ZoomOut();
