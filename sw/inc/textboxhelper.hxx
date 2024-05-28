@@ -122,10 +122,11 @@ public:
      *
      * @see isTextBox
      */
-    static SwFrameFormat* getOtherTextBoxFormat(const SwFrameFormat* pFormat, sal_uInt16 nType,
-                                                const SdrObject* pObject = nullptr);
+    SAL_RET_MAYBENULL static SwFrameFormat*
+    getOtherTextBoxFormat(const SwFrameFormat* pFormat, sal_uInt16 nType,
+                          const SdrObject* pObject = nullptr);
     /// If we have an associated TextFrame, then return that.
-    static SwFrameFormat*
+    SAL_RET_MAYBENULL static SwFrameFormat*
     getOtherTextBoxFormat(css::uno::Reference<css::drawing::XShape> const& xShape);
     /// If we have an associated TextFrame, then return its XTextFrame.
     static css::uno::Reference<css::text::XTextFrame>
