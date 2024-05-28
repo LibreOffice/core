@@ -110,6 +110,7 @@ public:
     }
 
     virtual SwFormatEndAtTextEnd* Clone( SfxItemPool *pPool = nullptr ) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 inline const SwFormatFootnoteAtTextEnd &SwAttrSet::GetFootnoteAtTextEnd(bool bInP) const

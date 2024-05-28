@@ -1993,6 +1993,14 @@ SwFormatEditInReadonly* SwFormatEditInReadonly::Clone( SfxItemPool* ) const
     return new SwFormatEditInReadonly( *this );
 }
 
+void SwFormatEndAtTextEnd::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatEndAtTextEnd"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 SwFormatLayoutSplit* SwFormatLayoutSplit::Clone( SfxItemPool* ) const
 {
     return new SwFormatLayoutSplit( *this );
