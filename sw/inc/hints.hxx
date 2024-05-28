@@ -186,6 +186,8 @@ public:
 
 class PostGraphicArrivedHint final : public SfxHint
 {
+public:
+    PostGraphicArrivedHint() : SfxHint(SfxHintId::SwPostGraphicArrived) {}
 };
 
 class GraphicPieceArrivedHint final : public SfxHint

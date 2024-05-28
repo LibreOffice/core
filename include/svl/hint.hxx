@@ -121,6 +121,7 @@ enum class SfxHintId {
     SwNavigatorUpdateTracking,
     SwNavigatorSelectOutlinesWithSelections,
     SwPreGraphicArrived,
+    SwPostGraphicArrived,
     SwGraphicPieceArrived,
     SwLinkedGraphicStreamArrived,
     SwLegacyModify,

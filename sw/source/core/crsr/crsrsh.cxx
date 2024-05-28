@@ -2848,7 +2848,7 @@ SwContentFrame *SwCursorShell::GetCurrFrame( const bool bCalcFrame ) const
 */
 void SwCursorShell::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if(dynamic_cast<const sw::PostGraphicArrivedHint*>(&rHint) && m_aGrfArrivedLnk.IsSet())
+    if (rHint.GetId() == SfxHintId::SwPostGraphicArrived && m_aGrfArrivedLnk.IsSet())
     {
         m_aGrfArrivedLnk.Call(*this);
         return;
