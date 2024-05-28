@@ -3853,6 +3853,7 @@ static void doc_iniUnoCommands ()
         u".uno:CellProtection"_ustr,
         u".uno:MoveKeepInsertMode"_ustr,
         u".uno:ToggleSheetGrid"_ustr,
+        u".uno:ChangeBezier"_ustr,
     };
 
     util::URL aCommandURL;
