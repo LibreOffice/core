@@ -11,7 +11,7 @@ include $(GBUILDDIR)/platform/unxgcc.mk
 
 gb_RUN_CONFIGURE := $(SRCDIR)/solenv/bin/run-configure
 # avoid -s SAFE_HEAP=1 - c.f. gh#8584 this breaks source maps
-gb_EMSCRIPTEN_CPPFLAGS := -pthread -s USE_PTHREADS=1 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE
+gb_EMSCRIPTEN_CPPFLAGS := -pthread -s USE_PTHREADS=1 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -s SUPPORT_LONGJMP=wasm
 gb_EMSCRIPTEN_LDFLAGS := $(gb_EMSCRIPTEN_CPPFLAGS)
 
 # Initial memory size and worker thread pool
@@ -24,26 +24,13 @@ gb_EMSCRIPTEN_LDFLAGS += --bind -s FORCE_FILESYSTEM=1 -s WASM_BIGINT=1 -s ERROR_
 gb_EMSCRIPTEN_QTDEFS := -DQT_NO_LINKED_LIST -DQT_NO_JAVA_STYLE_ITERATORS -DQT_NO_EXCEPTIONS -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 
 gb_Executable_EXT := .html
-ifeq ($(ENABLE_WASM_EXCEPTIONS),TRUE)
-# Note that to really use WASM exceptions everywhere, you most probably want to also use
-# CC=emcc -pthread -s USE_PTHREADS=1 -fwasm-exceptions -s SUPPORT_LONGJMP=wasm
-# and CXX=em++ -pthread -s USE_PTHREADS=1 -fwasm-exceptions -s SUPPORT_LONGJMP=wasm
-# in your autogen.input. Otherwise these flags won't propagate to all external libraries, I fear.
 gb_EMSCRIPTEN_EXCEPT = -fwasm-exceptions -s SUPPORT_LONGJMP=wasm
-gb_EMSCRIPTEN_CPPFLAGS += -s SUPPORT_LONGJMP=wasm
-else
-gb_EMSCRIPTEN_EXCEPT = -s DISABLE_EXCEPTION_CATCHING=0
-endif
 
 gb_CXXFLAGS += $(gb_EMSCRIPTEN_CPPFLAGS)
 
-ifeq ($(ENABLE_WASM_EXCEPTIONS),TRUE)
 # Here we don't use += because gb_LinkTarget_EXCEPTIONFLAGS from com_GCC_defs.mk contains -fexceptions and
 # gb_EMSCRIPTEN_EXCEPT already has -fwasm-exceptions
 gb_LinkTarget_EXCEPTIONFLAGS = $(gb_EMSCRIPTEN_EXCEPT)
-else
-gb_LinkTarget_EXCEPTIONFLAGS += $(gb_EMSCRIPTEN_EXCEPT)
-endif
 
 gb_LinkTarget_CFLAGS += $(gb_EMSCRIPTEN_CPPFLAGS)
 gb_LinkTarget_CXXFLAGS += $(gb_EMSCRIPTEN_CPPFLAGS) $(gb_EMSCRIPTEN_EXCEPT)

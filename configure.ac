@@ -1431,9 +1431,9 @@ dnl ===================================================================
 dnl Sanity checks for Emscripten SDK setup
 dnl ===================================================================
 
-EMSCRIPTEN_MIN_MAJOR=2
-EMSCRIPTEN_MIN_MINOR=0
-EMSCRIPTEN_MIN_TINY=32
+EMSCRIPTEN_MIN_MAJOR=3
+EMSCRIPTEN_MIN_MINOR=1
+EMSCRIPTEN_MIN_TINY=3
 EMSCRIPTEN_MIN_VERSION="${EMSCRIPTEN_MIN_MAJOR}.${EMSCRIPTEN_MIN_MINOR}.${EMSCRIPTEN_MIN_TINY}"
 
 if test "$_os" = "Emscripten"; then
@@ -2146,13 +2146,6 @@ AC_ARG_WITH(main-module,
     AS_HELP_STRING([--with-main-module=<writer/calc>],
         [Specify which main module to build for wasm.
         Default value is 'writer'.]),
-,)
-
-AC_ARG_ENABLE(wasm-exceptions,
-    AS_HELP_STRING([--enable-wasm-exceptions],
-        [Build with native WASM exceptions (AKA -fwasm-exceptions),
-        matter of fact, this is currently not finished by any implementation)
-        (see https://webassembly.org/roadmap/ for the current state]),
 ,)
 
 AC_ARG_ENABLE(xmlhelp,
@@ -3248,23 +3241,6 @@ if test "$enable_wasm_strip" = "yes"; then
     AC_DEFINE(ENABLE_WASM_STRIP_SWEXPORTS)
     AC_DEFINE(ENABLE_WASM_STRIP_SCEXPORTS)
 fi
-
-EMSCRIPTEN_NEH_MAJOR=3
-EMSCRIPTEN_NEH_MINOR=1
-EMSCRIPTEN_NEH_TINY=3
-EMSCRIPTEN_NEH_VERSION="${EMSCRIPTEN_NEH_MAJOR}.${EMSCRIPTEN_NEH_MINOR}.${EMSCRIPTEN_NEH_TINY}"
-
-if test "$enable_wasm_exceptions" = yes; then
-    AC_MSG_CHECKING([if Emscripten version is at least $EMSCRIPTEN_NEH_VERSION for SjLj + native EH])
-    check_semantic_version_three_prefixed EMSCRIPTEN NEH
-    if test $? -ne 0; then
-        AC_MSG_ERROR([no, found $EMSCRIPTEN_VERSION])
-    else
-        AC_MSG_RESULT([yes ($EMSCRIPTEN_VERSION)])
-    fi
-    ENABLE_WASM_EXCEPTIONS=TRUE
-fi
-AC_SUBST(ENABLE_WASM_EXCEPTIONS)
 
 # Whether to build "avmedia" functionality or not.
 
@@ -6407,7 +6383,7 @@ if test -z "$enable_pch"; then
         enable_pch=no
     fi
 fi
-if test "$enable_pch" != no -a "$_os" = Emscripten -a "$ENABLE_WASM_EXCEPTIONS" = TRUE; then
+if test "$enable_pch" != no -a "$_os" = Emscripten; then
     AC_MSG_ERROR([PCH currently isn't supported for Emscripten with native EH (nEH) because of missing Sj/Lj support with nEH in clang.])
 fi
 if test "$enable_pch" != "no" -a "$_os" != "WINNT" -a "$GCC" != "yes" ; then
@@ -13368,11 +13344,8 @@ then
             AC_MSG_ERROR([No Qt5 WASM libQt5Gui.a in ${qt5_libdir}])
         fi
         QT5_WASM_SJLJ="`${EMSDK_LLVM_NM} "${qt5_libdir}"/libQt5Gui.a 2>/dev/null | $GREP emscripten_longjmp`"
-        if test "$ENABLE_WASM_EXCEPTIONS" = TRUE -a -n "$QT5_WASM_SJLJ"; then
+        if test -n "$QT5_WASM_SJLJ"; then
             AC_MSG_ERROR(['emscripten_longjmp' symbol found in libQt5Gui.a (missing '-s SUPPORT_LONGJMP=wasm'). See static/README.wasm.md.])
-        fi
-        if test "$ENABLE_WASM_EXCEPTIONS" != TRUE -a -z "$QT5_WASM_SJLJ"; then
-            AC_MSG_ERROR(['emscripten_longjmp' symbol not found in libQt5Gui.a. You probably use an incompatible Qt build with '-s SUPPORT_LONGJMP=wasm'.])
         fi
     fi
 
