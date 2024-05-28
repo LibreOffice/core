@@ -895,6 +895,7 @@ public:
     bool IsProtected() const;
 
     virtual bool IsHiddenNow() const;
+    void MakeValidZeroHeight();
 
     bool IsColLocked()  const { return mbColLocked; }
     virtual bool IsDeleteForbidden() const { return mnForbidDelete > 0; }

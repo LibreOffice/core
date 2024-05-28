@@ -1258,7 +1258,7 @@ void SwSectionFrame::SimpleFormat()
     SwTwips nDeadLine = aRectFnSet.GetPrtBottom(*GetUpper());
     // OD 22.10.2002 #97265# - call always method <lcl_ColumnRefresh(..)>, in
     // order to get calculated lowers, not only if there space left in its upper.
-    if( aRectFnSet.BottomDist( getFrameArea(), nDeadLine ) >= 0 )
+    if (aRectFnSet.BottomDist(getFrameArea(), nDeadLine) >= 0)
     {
         {
             SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
