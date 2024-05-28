@@ -16,12 +16,12 @@
 #include <strings.hrc>
 
 ScSortKeyItem::ScSortKeyItem(weld::Container* pParent)
-    : m_xBuilder(Application::CreateBuilder(pParent, "modules/scalc/ui/sortkey.ui"))
-    , m_xFrame(m_xBuilder->weld_frame("SortKeyFrame"))
-    , m_xLbSort(m_xBuilder->weld_combo_box("sortlb"))
-    , m_xBtnUp(m_xBuilder->weld_radio_button("up"))
-    , m_xBtnDown(m_xBuilder->weld_radio_button("down"))
-    , m_xLabel(m_xBuilder->weld_label("lbColRow"))
+    : m_xBuilder(Application::CreateBuilder(pParent, u"modules/scalc/ui/sortkey.ui"_ustr))
+    , m_xFrame(m_xBuilder->weld_frame(u"SortKeyFrame"_ustr))
+    , m_xLbSort(m_xBuilder->weld_combo_box(u"sortlb"_ustr))
+    , m_xBtnUp(m_xBuilder->weld_radio_button(u"up"_ustr))
+    , m_xBtnDown(m_xBuilder->weld_radio_button(u"down"_ustr))
+    , m_xLabel(m_xBuilder->weld_label(u"lbColRow"_ustr))
     , m_pParent(pParent)
 {
     // tdf#136155 let the other elements in the dialog determine the width of the

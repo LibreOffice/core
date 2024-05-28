@@ -23,14 +23,14 @@
 #include <comphelper/lok.hxx>
 
 ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg(weld::Window* pParent, bool bEnableExternal)
-    : GenericDialogController(pParent, "modules/scalc/ui/selectsource.ui", "SelectSourceDialog")
-    , m_xBtnSelection(m_xBuilder->weld_radio_button("selection"))
-    , m_xBtnNamedRange(m_xBuilder->weld_radio_button("namedrange"))
-    , m_xBtnDatabase(m_xBuilder->weld_radio_button("database"))
-    , m_xBtnExternal(m_xBuilder->weld_radio_button("external"))
-    , m_xLbNamedRange(m_xBuilder->weld_combo_box("rangelb"))
-    , m_xBtnOk(m_xBuilder->weld_button("ok")) // for LOK jsdialog
-    , m_xBtnCancel(m_xBuilder->weld_button("cancel")) // for LOK jsdialog
+    : GenericDialogController(pParent, u"modules/scalc/ui/selectsource.ui"_ustr, u"SelectSourceDialog"_ustr)
+    , m_xBtnSelection(m_xBuilder->weld_radio_button(u"selection"_ustr))
+    , m_xBtnNamedRange(m_xBuilder->weld_radio_button(u"namedrange"_ustr))
+    , m_xBtnDatabase(m_xBuilder->weld_radio_button(u"database"_ustr))
+    , m_xBtnExternal(m_xBuilder->weld_radio_button(u"external"_ustr))
+    , m_xLbNamedRange(m_xBuilder->weld_combo_box(u"rangelb"_ustr))
+    , m_xBtnOk(m_xBuilder->weld_button(u"ok"_ustr)) // for LOK jsdialog
+    , m_xBtnCancel(m_xBuilder->weld_button(u"cancel"_ustr)) // for LOK jsdialog
 {
     m_xBtnSelection->connect_toggled( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
     m_xBtnNamedRange->connect_toggled( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
@@ -105,12 +105,12 @@ IMPL_LINK_NOARG(ScDataPilotSourceTypeDlg, RadioClickHdl, weld::Toggleable&, void
 }
 
 ScDataPilotServiceDlg::ScDataPilotServiceDlg(weld::Window* pParent, const std::vector<OUString>& rServices)
-    : GenericDialogController(pParent, "modules/scalc/ui/dapiservicedialog.ui", "DapiserviceDialog")
-    , m_xLbService(m_xBuilder->weld_combo_box("service"))
-    , m_xEdSource(m_xBuilder->weld_entry("source"))
-    , m_xEdName(m_xBuilder->weld_entry("name"))
-    , m_xEdUser(m_xBuilder->weld_entry("user"))
-    , m_xEdPasswd(m_xBuilder->weld_entry("password"))
+    : GenericDialogController(pParent, u"modules/scalc/ui/dapiservicedialog.ui"_ustr, u"DapiserviceDialog"_ustr)
+    , m_xLbService(m_xBuilder->weld_combo_box(u"service"_ustr))
+    , m_xEdSource(m_xBuilder->weld_entry(u"source"_ustr))
+    , m_xEdName(m_xBuilder->weld_entry(u"name"_ustr))
+    , m_xEdUser(m_xBuilder->weld_entry(u"user"_ustr))
+    , m_xEdPasswd(m_xBuilder->weld_entry(u"password"_ustr))
 {
     for (const OUString& aName : rServices)
     {

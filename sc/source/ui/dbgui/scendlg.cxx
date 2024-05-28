@@ -35,20 +35,20 @@
 #include <scendlg.hxx>
 
 ScNewScenarioDlg::ScNewScenarioDlg(weld::Window* pParent, const OUString& rName, bool bEdit, bool bSheetProtected)
-    : GenericDialogController(pParent, "modules/scalc/ui/scenariodialog.ui", "ScenarioDialog")
+    : GenericDialogController(pParent, u"modules/scalc/ui/scenariodialog.ui"_ustr, u"ScenarioDialog"_ustr)
     , aDefScenarioName(rName)
     , bIsEdit(bEdit)
-    , m_xEdName(m_xBuilder->weld_entry("name"))
-    , m_xEdComment(m_xBuilder->weld_text_view("comment"))
-    , m_xCbShowFrame(m_xBuilder->weld_check_button("showframe"))
-    , m_xLbColor(new ColorListBox(m_xBuilder->weld_menu_button("bordercolor"), [this] { return m_xDialog.get(); }))
-    , m_xCbTwoWay(m_xBuilder->weld_check_button("copyback"))
-    , m_xCbCopyAll(m_xBuilder->weld_check_button("copysheet"))
-    , m_xCbProtect(m_xBuilder->weld_check_button("preventchanges"))
-    , m_xBtnOk(m_xBuilder->weld_button("ok"))
-    , m_xAltTitle(m_xBuilder->weld_label("alttitle"))
-    , m_xCreatedFt(m_xBuilder->weld_label("createdft"))
-    , m_xOnFt(m_xBuilder->weld_label("onft"))
+    , m_xEdName(m_xBuilder->weld_entry(u"name"_ustr))
+    , m_xEdComment(m_xBuilder->weld_text_view(u"comment"_ustr))
+    , m_xCbShowFrame(m_xBuilder->weld_check_button(u"showframe"_ustr))
+    , m_xLbColor(new ColorListBox(m_xBuilder->weld_menu_button(u"bordercolor"_ustr), [this] { return m_xDialog.get(); }))
+    , m_xCbTwoWay(m_xBuilder->weld_check_button(u"copyback"_ustr))
+    , m_xCbCopyAll(m_xBuilder->weld_check_button(u"copysheet"_ustr))
+    , m_xCbProtect(m_xBuilder->weld_check_button(u"preventchanges"_ustr))
+    , m_xBtnOk(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xAltTitle(m_xBuilder->weld_label(u"alttitle"_ustr))
+    , m_xCreatedFt(m_xBuilder->weld_label(u"createdft"_ustr))
+    , m_xOnFt(m_xBuilder->weld_label(u"onft"_ustr))
 {
     m_xEdComment->set_size_request(m_xEdComment->get_approximate_digit_width() * 60,
                                    m_xEdComment->get_height_rows(6));

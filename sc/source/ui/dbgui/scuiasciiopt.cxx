@@ -87,19 +87,19 @@ enum CSVImportOptionsIndex
 // If not, options are neither loaded nor saved.
 const ::std::vector<OUString> CSVImportOptionNames =
 {
-    "MergeDelimiters",
-    "Separators",
-    "TextSeparators",
-    "FixedWidth",
-    "RemoveSpace",
-    "EvaluateFormulas",
-    "FromRow",
-    "CharSet",
-    "QuotedFieldAsText",
-    "DetectSpecialNumbers",
-    "DetectScientificNumbers",
-    "Language",
-    "SkipEmptyCells"
+    u"MergeDelimiters"_ustr,
+    u"Separators"_ustr,
+    u"TextSeparators"_ustr,
+    u"FixedWidth"_ustr,
+    u"RemoveSpace"_ustr,
+    u"EvaluateFormulas"_ustr,
+    u"FromRow"_ustr,
+    u"CharSet"_ustr,
+    u"QuotedFieldAsText"_ustr,
+    u"DetectSpecialNumbers"_ustr,
+    u"DetectScientificNumbers"_ustr,
+    u"Language"_ustr,
+    u"SkipEmptyCells"_ustr
 };
 constexpr OUStringLiteral aSep_Path =           u"Office.Calc/Dialogs/CSVImport";
 constexpr OUStringLiteral aSep_Path_Clpbrd =    u"Office.Calc/Dialogs/ClipboardTextImport";
@@ -318,38 +318,38 @@ static void lcl_SaveSeparators(
 ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aDatName,
                                    SvStream* pInStream, ScImportAsciiCall eCall,
                                    const ScAsciiOptions* aOptions)
-    : GenericDialogController(pParent, "modules/scalc/ui/textimportcsv.ui", "TextImportCsvDialog")
+    : GenericDialogController(pParent, u"modules/scalc/ui/textimportcsv.ui"_ustr, u"TextImportCsvDialog"_ustr)
     , mpDatStream(pInStream)
     , mnStreamPos(pInStream ? pInStream->Tell() : 0)
     , mnRowPosCount(0)
     , mcTextSep(ScAsciiOptions::cDefaultTextSep)
     , meCall(eCall)
     , mbDetectSep(eCall != SC_TEXTTOCOLUMNS)
-    , mxFtCharSet(m_xBuilder->weld_label("textcharset"))
-    , mxLbCharSet(new SvxTextEncodingBox(m_xBuilder->weld_combo_box("charset")))
-    , mxFtCustomLang(m_xBuilder->weld_label("textlanguage"))
-    , mxLbCustomLang(new SvxLanguageBox(m_xBuilder->weld_combo_box("language")))
-    , mxFtRow(m_xBuilder->weld_label("textfromrow"))
-    , mxNfRow(m_xBuilder->weld_spin_button("fromrow"))
-    , mxRbFixed(m_xBuilder->weld_radio_button("tofixedwidth"))
-    , mxRbSeparated(m_xBuilder->weld_radio_button("toseparatedby"))
-    , mxCkbTab(m_xBuilder->weld_check_button("tab"))
-    , mxCkbSemicolon(m_xBuilder->weld_check_button("semicolon"))
-    , mxCkbComma(m_xBuilder->weld_check_button("comma"))
-    , mxCkbRemoveSpace(m_xBuilder->weld_check_button("removespace"))
-    , mxCkbSpace(m_xBuilder->weld_check_button("space"))
-    , mxCkbOther(m_xBuilder->weld_check_button("other"))
-    , mxEdOther(m_xBuilder->weld_entry("inputother"))
-    , mxCkbAsOnce(m_xBuilder->weld_check_button("mergedelimiters"))
-    , mxFtTextSep(m_xBuilder->weld_label("texttextdelimiter"))
-    , mxCbTextSep(m_xBuilder->weld_combo_box("textdelimiter"))
-    , mxCkbQuotedAsText(m_xBuilder->weld_check_button("quotedfieldastext"))
-    , mxCkbDetectNumber(m_xBuilder->weld_check_button("detectspecialnumbers"))
-    , mxCkbDetectScientificNumber(m_xBuilder->weld_check_button("detectscientificnumbers"))
-    , mxCkbEvaluateFormulas(m_xBuilder->weld_check_button("evaluateformulas"))
-    , mxCkbSkipEmptyCells(m_xBuilder->weld_check_button("skipemptycells"))
-    , mxLbType(m_xBuilder->weld_combo_box("columntype"))
-    , mxAltTitle(m_xBuilder->weld_label("textalttitle"))
+    , mxFtCharSet(m_xBuilder->weld_label(u"textcharset"_ustr))
+    , mxLbCharSet(new SvxTextEncodingBox(m_xBuilder->weld_combo_box(u"charset"_ustr)))
+    , mxFtCustomLang(m_xBuilder->weld_label(u"textlanguage"_ustr))
+    , mxLbCustomLang(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"language"_ustr)))
+    , mxFtRow(m_xBuilder->weld_label(u"textfromrow"_ustr))
+    , mxNfRow(m_xBuilder->weld_spin_button(u"fromrow"_ustr))
+    , mxRbFixed(m_xBuilder->weld_radio_button(u"tofixedwidth"_ustr))
+    , mxRbSeparated(m_xBuilder->weld_radio_button(u"toseparatedby"_ustr))
+    , mxCkbTab(m_xBuilder->weld_check_button(u"tab"_ustr))
+    , mxCkbSemicolon(m_xBuilder->weld_check_button(u"semicolon"_ustr))
+    , mxCkbComma(m_xBuilder->weld_check_button(u"comma"_ustr))
+    , mxCkbRemoveSpace(m_xBuilder->weld_check_button(u"removespace"_ustr))
+    , mxCkbSpace(m_xBuilder->weld_check_button(u"space"_ustr))
+    , mxCkbOther(m_xBuilder->weld_check_button(u"other"_ustr))
+    , mxEdOther(m_xBuilder->weld_entry(u"inputother"_ustr))
+    , mxCkbAsOnce(m_xBuilder->weld_check_button(u"mergedelimiters"_ustr))
+    , mxFtTextSep(m_xBuilder->weld_label(u"texttextdelimiter"_ustr))
+    , mxCbTextSep(m_xBuilder->weld_combo_box(u"textdelimiter"_ustr))
+    , mxCkbQuotedAsText(m_xBuilder->weld_check_button(u"quotedfieldastext"_ustr))
+    , mxCkbDetectNumber(m_xBuilder->weld_check_button(u"detectspecialnumbers"_ustr))
+    , mxCkbDetectScientificNumber(m_xBuilder->weld_check_button(u"detectscientificnumbers"_ustr))
+    , mxCkbEvaluateFormulas(m_xBuilder->weld_check_button(u"evaluateformulas"_ustr))
+    , mxCkbSkipEmptyCells(m_xBuilder->weld_check_button(u"skipemptycells"_ustr))
+    , mxLbType(m_xBuilder->weld_combo_box(u"columntype"_ustr))
+    , mxAltTitle(m_xBuilder->weld_label(u"textalttitle"_ustr))
     , mxTableBox(new ScCsvTableBox(*m_xBuilder))
 {
     OUString aName = m_xDialog->get_title();
@@ -373,7 +373,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     bool bIsTSV = (o3tl::endsWithIgnoreAsciiCase(aDatName, ".tsv") || o3tl::endsWithIgnoreAsciiCase(aDatName, ".tab"));
 
     // Default options are set in officecfg/registry/schema/org/openoffice/Office/Calc.xcs
-    OUString sFieldSeparators(",;\t");
+    OUString sFieldSeparators(u",;\t"_ustr);
     OUString sTextSeparators(mcTextSep);
     bool bMergeDelimiters = false;
     bool bFixedWidth = false;
@@ -630,7 +630,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     }
 
     if (comphelper::LibreOfficeKit::isActive())
-        m_xBuilder->weld_button("cancel")->hide();
+        m_xBuilder->weld_button(u"cancel"_ustr)->hide();
     m_xDialog->SetInstallLOKNotifierHdl(LINK(this, ScImportAsciiDlg, InstallLOKNotifierHdl));
 }
 

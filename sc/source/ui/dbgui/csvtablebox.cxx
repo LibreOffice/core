@@ -22,10 +22,10 @@
 
 ScCsvTableBox::ScCsvTableBox(weld::Builder& rBuilder)
     : mxRuler(new ScCsvRuler(maData, this))
-    , mxGrid(new ScCsvGrid(maData, rBuilder.weld_menu("popup"), this))
-    , mxScroll(rBuilder.weld_scrolled_window("scrolledwindow", true))
-    , mxRulerWeld(new weld::CustomWeld(rBuilder, "csvruler", *mxRuler))
-    , mxGridWeld(new weld::CustomWeld(rBuilder, "csvgrid", *mxGrid))
+    , mxGrid(new ScCsvGrid(maData, rBuilder.weld_menu(u"popup"_ustr), this))
+    , mxScroll(rBuilder.weld_scrolled_window(u"scrolledwindow"_ustr, true))
+    , mxRulerWeld(new weld::CustomWeld(rBuilder, u"csvruler"_ustr, *mxRuler))
+    , mxGridWeld(new weld::CustomWeld(rBuilder, u"csvgrid"_ustr, *mxGrid))
     , maEndScrollIdle("ScCsvTableBox maEndScrollIdle")
 {
     Size aSize(mxScroll->get_approximate_digit_width() * 67,

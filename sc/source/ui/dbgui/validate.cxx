@@ -89,21 +89,21 @@ static bool isLOKMobilePhone()
 ScValidationDlg::ScValidationDlg(weld::Window* pParent, const SfxItemSet* pArgSet,
     ScTabViewShell *pTabViewSh)
     : ScValidationDlgBase(pParent,
-        "modules/scalc/ui/validationdialog.ui", "ValidationDialog", pArgSet, nullptr)
+        u"modules/scalc/ui/validationdialog.ui"_ustr, u"ValidationDialog"_ustr, pArgSet, nullptr)
     , m_pTabVwSh(pTabViewSh)
-    , m_sValuePageId("criteria")
+    , m_sValuePageId(u"criteria"_ustr)
     , m_bOwnRefHdlr(false)
     , m_bRefInputting(false)
-    , m_xHBox(m_xBuilder->weld_container("refinputbox"))
+    , m_xHBox(m_xBuilder->weld_container(u"refinputbox"_ustr))
 {
     AddTabPage(m_sValuePageId, ScTPValidationValue::Create, nullptr);
-    AddTabPage("inputhelp", ScTPValidationHelp::Create, nullptr);
-    AddTabPage("erroralert", ScTPValidationError::Create, nullptr);
+    AddTabPage(u"inputhelp"_ustr, ScTPValidationHelp::Create, nullptr);
+    AddTabPage(u"erroralert"_ustr, ScTPValidationError::Create, nullptr);
 
     if (isLOKMobilePhone())
     {
-        m_xBuilder->weld_button("cancel")->hide();
-        m_xBuilder->weld_button("help")->hide();
+        m_xBuilder->weld_button(u"cancel"_ustr)->hide();
+        m_xBuilder->weld_button(u"help"_ustr)->hide();
     }
 }
 
@@ -353,8 +353,8 @@ bool lclGetStringListFromFormula( OUString& rStringList, const OUString& rFmlaSt
 } // namespace
 
 ScTPValidationValue::ScTPValidationValue(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet)
-    : SfxTabPage(pPage, pController, "modules/scalc/ui/validationcriteriapage.ui",
-                 "ValidationCriteriaPage", &rArgSet)
+    : SfxTabPage(pPage, pController, u"modules/scalc/ui/validationcriteriapage.ui"_ustr,
+                 u"ValidationCriteriaPage"_ustr, &rArgSet)
     , maStrMin(ScResId(SCSTR_VALID_MINIMUM))
     , maStrMax(ScResId(SCSTR_VALID_MAXIMUM))
     , maStrValue(ScResId(SCSTR_VALID_VALUE))
@@ -712,10 +712,10 @@ IMPL_LINK_NOARG(ScTPValidationValue, CheckHdl, weld::Toggleable&, void)
 // Input Help Page
 
 ScTPValidationHelp::ScTPValidationHelp(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet)
-    : SfxTabPage(pPage, pController, "modules/scalc/ui/validationhelptabpage.ui", "ValidationHelpTabPage", &rArgSet)
-    , m_xTsbHelp(m_xBuilder->weld_check_button("tsbhelp"))
-    , m_xEdtTitle(m_xBuilder->weld_entry("title"))
-    , m_xEdInputHelp(m_xBuilder->weld_text_view("inputhelp_text"))
+    : SfxTabPage(pPage, pController, u"modules/scalc/ui/validationhelptabpage.ui"_ustr, u"ValidationHelpTabPage"_ustr, &rArgSet)
+    , m_xTsbHelp(m_xBuilder->weld_check_button(u"tsbhelp"_ustr))
+    , m_xEdtTitle(m_xBuilder->weld_entry(u"title"_ustr))
+    , m_xEdInputHelp(m_xBuilder->weld_text_view(u"inputhelp_text"_ustr))
 {
     m_xEdInputHelp->set_size_request(m_xEdInputHelp->get_approximate_digit_width() * 40, m_xEdInputHelp->get_height_rows(13));
 }
@@ -763,14 +763,14 @@ ScTPValidationError::ScTPValidationError(weld::Container* pPage, weld::DialogCon
                                          const SfxItemSet& rArgSet)
 
     :   SfxTabPage      ( pPage, pController,
-                          "modules/scalc/ui/erroralerttabpage.ui", "ErrorAlertTabPage",
+                          u"modules/scalc/ui/erroralerttabpage.ui"_ustr, u"ErrorAlertTabPage"_ustr,
                           &rArgSet )
-    , m_xTsbShow(m_xBuilder->weld_check_button("tsbshow"))
-    , m_xLbAction(m_xBuilder->weld_combo_box("actionCB"))
-    , m_xBtnSearch(m_xBuilder->weld_button("browseBtn"))
-    , m_xEdtTitle(m_xBuilder->weld_entry("erroralert_title"))
-    , m_xFtError(m_xBuilder->weld_label("errormsg_label"))
-    , m_xEdError(m_xBuilder->weld_text_view("errorMsg"))
+    , m_xTsbShow(m_xBuilder->weld_check_button(u"tsbshow"_ustr))
+    , m_xLbAction(m_xBuilder->weld_combo_box(u"actionCB"_ustr))
+    , m_xBtnSearch(m_xBuilder->weld_button(u"browseBtn"_ustr))
+    , m_xEdtTitle(m_xBuilder->weld_entry(u"erroralert_title"_ustr))
+    , m_xFtError(m_xBuilder->weld_label(u"errormsg_label"_ustr))
+    , m_xEdError(m_xBuilder->weld_text_view(u"errorMsg"_ustr))
 {
     m_xEdError->set_size_request(m_xEdError->get_approximate_digit_width() * 40, m_xEdError->get_height_rows(12));
     Init();

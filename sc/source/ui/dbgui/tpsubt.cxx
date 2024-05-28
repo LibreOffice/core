@@ -39,7 +39,7 @@
 // Subtotals group tabpage:
 
 ScTpSubTotalGroup::ScTpSubTotalGroup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet, const sal_uInt16& rTabNumber)
-    : SfxTabPage(pPage, pController, "modules/scalc/ui/subtotalgrppage.ui", "SubTotalGrpPage", &rArgSet)
+    : SfxTabPage(pPage, pController, u"modules/scalc/ui/subtotalgrppage.ui"_ustr, u"SubTotalGrpPage"_ustr, &rArgSet)
     , aStrNone(ScResId(SCSTR_NONE))
     , aStrColumn(ScResId(SCSTR_COLUMN_LETTER))
     , pViewData(nullptr)
@@ -47,10 +47,10 @@ ScTpSubTotalGroup::ScTpSubTotalGroup(weld::Container* pPage, weld::DialogControl
     , nWhichSubTotals(rArgSet.GetPool()->GetWhichIDFromSlotID(SID_SUBTOTALS))
     , rSubTotalData(rArgSet.Get(nWhichSubTotals).GetSubTotalData())
     , nFieldCount(0)
-    , mxLbGroup(m_xBuilder->weld_combo_box("group_by"))
-    , mxLbColumns(m_xBuilder->weld_tree_view("columns"))
-    , mxLbFunctions(m_xBuilder->weld_tree_view("functions"))
-    , mxLbSelectAllColumns(m_xBuilder->weld_check_button("select_all_columns_button"))
+    , mxLbGroup(m_xBuilder->weld_combo_box(u"group_by"_ustr))
+    , mxLbColumns(m_xBuilder->weld_tree_view(u"columns"_ustr))
+    , mxLbFunctions(m_xBuilder->weld_tree_view(u"functions"_ustr))
+    , mxLbSelectAllColumns(m_xBuilder->weld_check_button(u"select_all_columns_button"_ustr))
 {
     for (size_t i = 0; i < SAL_N_ELEMENTS(SCSTR_SUBTOTALS); ++i)
         mxLbFunctions->append_text(ScResId(SCSTR_SUBTOTALS[i]));
@@ -124,7 +124,7 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
     for (int nLbEntry = 0, nCount = mxLbColumns->n_children(); nLbEntry < nCount; ++nLbEntry)
     {
         mxLbColumns->set_toggle(nLbEntry, TRISTATE_FALSE);
-        mxLbColumns->set_id(nLbEntry, "0");
+        mxLbColumns->set_id(nLbEntry, u"0"_ustr);
     }
     mxLbFunctions->select(0);
 
@@ -271,7 +271,7 @@ void ScTpSubTotalGroup::FillListBoxes()
         mxLbColumns->insert(i);
         mxLbColumns->set_toggle(i, TRISTATE_FALSE);
         mxLbColumns->set_text(i, aFieldName, 0);
-        mxLbColumns->set_id(i, "0");
+        mxLbColumns->set_id(i, u"0"_ustr);
         i++;
     }
     mxLbColumns->thaw();
@@ -438,21 +438,21 @@ bool ScTpSubTotalGroup3::FillItemSet( SfxItemSet* rArgSet ) { return FILLSET(3);
 ScTpSubTotalOptions::ScTpSubTotalOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet)
 
         :   SfxTabPage      ( pPage, pController,
-                              "modules/scalc/ui/subtotaloptionspage.ui", "SubTotalOptionsPage",
+                              u"modules/scalc/ui/subtotaloptionspage.ui"_ustr, u"SubTotalOptionsPage"_ustr,
                               &rArgSet ),
             pViewData       ( nullptr ),
             pDoc            ( nullptr ),
             nWhichSubTotals ( rArgSet.GetPool()->GetWhichIDFromSlotID( SID_SUBTOTALS ) ),
             rSubTotalData   ( rArgSet.Get( nWhichSubTotals ).GetSubTotalData() )
-    , m_xBtnPagebreak(m_xBuilder->weld_check_button("pagebreak"))
-    , m_xBtnCase(m_xBuilder->weld_check_button("case"))
-    , m_xBtnSort(m_xBuilder->weld_check_button("sort"))
-    , m_xFlSort(m_xBuilder->weld_label("label2"))
-    , m_xBtnAscending(m_xBuilder->weld_radio_button("ascending"))
-    , m_xBtnDescending(m_xBuilder->weld_radio_button("descending"))
-    , m_xBtnFormats(m_xBuilder->weld_check_button("formats"))
-    , m_xBtnUserDef(m_xBuilder->weld_check_button("btnuserdef"))
-    , m_xLbUserDef(m_xBuilder->weld_combo_box("lbuserdef"))
+    , m_xBtnPagebreak(m_xBuilder->weld_check_button(u"pagebreak"_ustr))
+    , m_xBtnCase(m_xBuilder->weld_check_button(u"case"_ustr))
+    , m_xBtnSort(m_xBuilder->weld_check_button(u"sort"_ustr))
+    , m_xFlSort(m_xBuilder->weld_label(u"label2"_ustr))
+    , m_xBtnAscending(m_xBuilder->weld_radio_button(u"ascending"_ustr))
+    , m_xBtnDescending(m_xBuilder->weld_radio_button(u"descending"_ustr))
+    , m_xBtnFormats(m_xBuilder->weld_check_button(u"formats"_ustr))
+    , m_xBtnUserDef(m_xBuilder->weld_check_button(u"btnuserdef"_ustr))
+    , m_xLbUserDef(m_xBuilder->weld_combo_box(u"lbuserdef"_ustr))
 {
     m_xLbUserDef->set_accessible_description(ScResId(STR_A11Y_DESC_USERDEF));
     m_xBtnUserDef->set_accessible_description(ScResId(STR_A11Y_DESC_USERDEF));

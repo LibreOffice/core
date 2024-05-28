@@ -40,10 +40,10 @@ using namespace com::sun::star;
 #define DP_TYPELIST_SQLNAT  3
 
 ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg(weld::Window* pParent)
-    : GenericDialogController(pParent, "modules/scalc/ui/selectdatasource.ui", "SelectDataSourceDialog")
-    , m_xLbDatabase(m_xBuilder->weld_combo_box("database"))
-    , m_xCbObject(m_xBuilder->weld_combo_box("datasource"))
-    , m_xLbType(m_xBuilder->weld_combo_box("type"))
+    : GenericDialogController(pParent, u"modules/scalc/ui/selectdatasource.ui"_ustr, u"SelectDataSourceDialog"_ustr)
+    , m_xLbDatabase(m_xBuilder->weld_combo_box(u"database"_ustr))
+    , m_xCbObject(m_xBuilder->weld_combo_box(u"datasource"_ustr))
+    , m_xLbType(m_xBuilder->weld_combo_box(u"type"_ustr))
 {
     weld::WaitObject aWait(pParent);       // initializing the database service the first time takes a while
 
