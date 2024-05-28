@@ -965,6 +965,9 @@ void SwLayoutFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     const SwLayNotify aNotify( this );
     bool bVert = IsVertical();
 
+    if (IsHiddenNow())
+        MakeValidZeroHeight();
+
     SwRectFn fnRect = ( IsNeighbourFrame() == bVert )? fnRectHori : ( IsVertLR() ? (IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert );
 
     std::optional<SwBorderAttrAccess> oAccess;
@@ -1280,6 +1283,9 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         OSL_FAIL( "Format for locked TextFrame." );
         return;
     }
+
+    if (IsHiddenNow())
+        MakeValidZeroHeight();
 
     std::optional<SwFrameDeleteGuard> oDeleteGuard(std::in_place, this);
     LockJoin();

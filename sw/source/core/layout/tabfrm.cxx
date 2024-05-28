@@ -2239,6 +2239,9 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         }
     }
 
+    if (IsHiddenNow())
+        MakeValidZeroHeight();
+
     int nUnSplitted = 5; // Just another loop control :-(
     int nThrowAwayValidLayoutLimit = 5; // And another one :-(
     SwRectFnSet aRectFnSet(this);
@@ -3185,6 +3188,16 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                                tools::Long& rRightOffset,
                                SwTwips *const pSpaceBelowBottom) const
 {
+    if (IsHiddenNow())
+    {
+        rUpper = 0;
+        rLeftOffset = 0;
+        rRightOffset = 0;
+        if (pSpaceBelowBottom)
+            *pSpaceBelowBottom = 0;
+        return false;
+    }
+
     bool bInvalidatePrtArea = false;
     const SwPageFrame *pPage = FindPageFrame();
     const SwFlyFrame* pMyFly = FindFlyFrame();
