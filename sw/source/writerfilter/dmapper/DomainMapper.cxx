@@ -147,7 +147,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
 
         // Enable only for new documents, since pasting from clipboard can influence existing doc
         m_pImpl->SetDocumentSettingsProperty("NoNumberingShowFollowBy", uno::Any(true));
-        //paint backgound frames after header/footer when anchored in body
+        //paint background frames after header/footer when anchored in body
         m_pImpl->SetDocumentSettingsProperty("PaintHellOverHeaderFooter",uno::Any(true));
     }
 
