@@ -1381,6 +1381,9 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                                    const SwFrame* pPr,
                                    const bool _bConsiderGrid ) const
 {
+    if (m_rThis.IsHiddenNow())
+        return 0;
+
     // OD 2004-03-10 #i11860# - use new method <GetPrevFrameForUpperSpaceCalc(..)>
     const SwFrame* pPrevFrame = GetPrevFrameForUpperSpaceCalc_( pPr );
 
@@ -1657,6 +1660,9 @@ SwTwips SwFlowFrame::GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid() cons
 */
 SwTwips SwFlowFrame::CalcLowerSpace( const SwBorderAttrs* _pAttrs ) const
 {
+    if (m_rThis.IsHiddenNow())
+        return 0;
+
     SwTwips nLowerSpace = 0;
 
     std::unique_ptr<SwBorderAttrAccess> pAttrAccess;
@@ -1705,6 +1711,9 @@ SwTwips SwFlowFrame::CalcLowerSpace( const SwBorderAttrs* _pAttrs ) const
 SwTwips SwFlowFrame::CalcAddLowerSpaceAsLastInTableCell(
                                             const SwBorderAttrs* _pAttrs ) const
 {
+    if (m_rThis.IsHiddenNow())
+        return 0;
+
     SwTwips nAdditionalLowerSpace = 0;
 
     IDocumentSettingAccess const& rIDSA(m_rThis.GetUpper()->GetFormat()->getIDocumentSettingAccess());

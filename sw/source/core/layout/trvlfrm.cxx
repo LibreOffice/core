@@ -1693,6 +1693,22 @@ bool SwFrame::IsHiddenNow() const
     return false;
 }
 
+void SwFrame::MakeValidZeroHeight()
+{
+    SwRectFnSet aRectFnSet(this);
+    {
+        SwFrameAreaDefinition::FrameAreaWriteAccess area(*this);
+        aRectFnSet.SetHeight(area, 0);
+    }
+    {
+        SwFrameAreaDefinition::FramePrintAreaWriteAccess area(*this);
+        aRectFnSet.SetHeight(area, 0);
+    }
+    setFrameAreaSizeValid(true);
+    setFramePrintAreaValid(true);
+    setFrameAreaPositionValid(false);
+}
+
 /** @return the physical page number */
 sal_uInt16 SwFrame::GetPhyPageNum() const
 {
