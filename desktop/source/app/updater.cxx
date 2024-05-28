@@ -48,6 +48,8 @@
 
 #include <officecfg/Setup.hxx>
 
+#include <vcl/svapp.hxx>
+
 #include <functional>
 #include <memory>
 #include <set>
@@ -70,12 +72,6 @@ public:
         return maStr.getStr();
     }
 };
-
-#ifdef UNX
-static const char kUserAgent[] = "LibreOffice UpdateChecker/1.0 (Linux)";
-#else
-static const char kUserAgent[] = "LibreOffice UpdateChecker/1.0 (unknown platform)";
-#endif
 
 #ifdef UNX
 const char* const pUpdaterName = "updater";
@@ -562,10 +558,14 @@ std::string download_content(const OString& rURL, bool bFile, OUString& rHash)
     if (!curl)
         return std::string();
 
+    static const OUString kUserAgent
+        = u"LibreOffice UpdateChecker/1.0 (os_version)"_ustr.replaceFirst(
+            "os_version", Application::GetOSVersion());
+
     ::InitCurl_easy(curl.get());
 
     curl_easy_setopt(curl.get(), CURLOPT_URL, rURL.getStr());
-    curl_easy_setopt(curl.get(), CURLOPT_USERAGENT, kUserAgent);
+    curl_easy_setopt(curl.get(), CURLOPT_USERAGENT, kUserAgent.toUtf8().getStr());
     bool bUseProxy = false;
     if (bUseProxy)
     {
