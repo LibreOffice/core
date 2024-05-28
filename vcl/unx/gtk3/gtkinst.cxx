@@ -20101,8 +20101,8 @@ private:
         else
             tree_view_set_cursor(nActive);
 #endif
-        enable_notify_events();
 //        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pToggleButton), false);
+        enable_notify_events();
         fire_signal_changed();
         update_mru();
     }
@@ -21887,8 +21887,8 @@ private:
         else
             tree_view_set_cursor(nActive);
         enable_notify_events();
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pToggleButton), false);
         fire_signal_changed();
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pToggleButton), false);
         update_mru();
     }
 
