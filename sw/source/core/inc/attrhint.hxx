@@ -24,6 +24,11 @@
 
 class SwAttrHint final : public SfxHint
 {
+public:
+    SwAttrHint()
+        : SfxHint(SfxHintId::SwAttr)
+    {
+    }
 };
 
 #endif

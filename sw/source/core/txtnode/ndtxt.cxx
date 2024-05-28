@@ -5552,7 +5552,7 @@ void SwTextNode::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
         auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
         TriggerNodeUpdate(*pLegacyHint);
     }
-    else if (dynamic_cast<const SwAttrHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwAttr)
     {
         if (&rModify == GetRegisteredIn())
             ChkCondColl();
