@@ -872,33 +872,29 @@ OUString SwRedlineTable::getTextOfArea(size_type rPosStart, size_type rPosEnd) c
         SwRangeRedline* pRedline = (*this)[nIdx];
         bool bStartWithNonTextNode = false;
 
-        SwPaM *pPaM;
-        bool bDeletePaM = false;
+        OUString sNew;
         if (nullptr == pRedline->GetContentIdx())
         {
-            pPaM = pRedline;
+            sNew = pRedline->GetText();
         }
         else // otherwise it is saved in pContentSect, e.g. during ODT import
         {
-            pPaM = new SwPaM(pRedline->GetContentIdx()->GetNode(),
+            SwPaM aTmpPaM(pRedline->GetContentIdx()->GetNode(),
                               *pRedline->GetContentIdx()->GetNode().EndOfSectionNode());
-            if (!pPaM->Start()->nNode.GetNode().GetTextNode())
+            if (!aTmpPaM.Start()->nNode.GetNode().GetTextNode())
             {
                 bStartWithNonTextNode = true;
             }
-            bDeletePaM = true;
+            sNew = aTmpPaM.GetText();
         }
-        const OUString sNew = pPaM->GetText();
 
         if (bStartWithNonTextNode &&
             sNew[0] == CH_TXTATR_NEWLINE)
         {
-            sRet += pPaM->GetText().subView(1);
+            sRet += sNew.subView(1);
         }
         else
-            sRet += pPaM->GetText();
-        if (bDeletePaM)
-            delete pPaM;
+            sRet += sNew;
     }
 
     return sRet;
