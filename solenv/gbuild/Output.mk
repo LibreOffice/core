@@ -52,7 +52,8 @@ gb_Output_BELL := $(shell echo|awk 'BEGIN { printf "%c", 7 }' -)
 ifeq ($(origin gb_COLOR),undefined)
 ifneq ($(MAKE_TERMOUT),)
 # Cygwin mintty has issues where gb_Output_error is swallowed
-ifneq ($(OS),WNT)
+# but git-bash/wsl-as-helper seems fine with it
+ifneq ($(OS)$(MSYSTEM),WNT)
 gb_COLOR=$(true)
 endif
 endif
