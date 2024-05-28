@@ -9,12 +9,16 @@
 
 #include <sal/config.h>
 
+#include <exception>
+#include <typeinfo>
 #include <vector>
 
 #include <alloca.h>
 
+#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
+#include <o3tl/runtimetooustring.hxx>
 #include <o3tl/unreachable.hxx>
 #include <rtl/strbuf.hxx>
 #include <typelib/typeclass.h>
@@ -27,8 +31,9 @@
 #include <types.hxx>
 #include <unointerfaceproxy.hxx>
 #include <vtables.hxx>
-
 #include <wasm/callvirtualfunction.hxx>
+
+#include "abi.hxx"
 
 using namespace ::com::sun::star::uno;
 
@@ -245,14 +250,32 @@ void call(bridges::cpp_uno::shared::UnoInterfaceProxy* proxy,
     }
     try
     {
-        callVirtualFunction(sig, (*thisPtr)[slot.index], args.data(), ret);
+        try
+        {
+            callVirtualFunction(sig, (*thisPtr)[slot.index], args.data(), ret);
+        }
+        catch (css::uno::Exception&)
+        {
+            throw;
+        }
+        catch (std::exception& e)
+        {
+            throw css::uno::RuntimeException("C++ code threw "
+                                             + o3tl::runtimeToOUString(typeid(e).name()) + ": "
+                                             + o3tl::runtimeToOUString(e.what()));
+        }
+        catch (...)
+        {
+            throw css::uno::RuntimeException("C++ code threw unknown exception");
+        }
     }
-    catch (...)
+    catch (css::uno::Exception&)
     {
-        css::uno::RuntimeException TODO("Wasm bridge TODO");
-        uno_type_any_construct(*exception, &TODO,
-                               cppu::UnoType<css::uno::RuntimeException>::get().getTypeLibType(),
-                               nullptr);
+        __cxxabiv1::__cxa_exception* header
+            = reinterpret_cast<__cxxabiv1::__cxa_eh_globals*>(__cxxabiv1::__cxa_get_globals())
+                  ->caughtExceptions;
+        abi_wasm::mapException(header, __cxxabiv1::__cxa_current_exception_type(), *exception,
+                               proxy->getBridge()->getCpp2Uno());
         for (sal_Int32 i = 0; i != count; ++i)
         {
             if (cppArgs[i] != nullptr)
