@@ -749,7 +749,7 @@ void SectionPropertyMap::DontBalanceTextColumns()
     }
 }
 
-void SectionPropertyMap::ApplySectionProperties( const uno::Reference< beans::XPropertySet >& xSection, DomainMapper_Impl& /*rDM_Impl*/ )
+void SectionPropertyMap::ApplySectionProperties( const uno::Reference< beans::XPropertySet >& xSection, DomainMapper_Impl& rDM_Impl )
 {
     try
     {
@@ -758,6 +758,11 @@ void SectionPropertyMap::ApplySectionProperties( const uno::Reference< beans::XP
             std::optional< PropertyMap::Property > pProp = getProperty( PROP_WRITING_MODE );
             if ( pProp )
                 xSection->setPropertyValue( "WritingMode", pProp->second );
+
+            if (rDM_Impl.GetSettingsTable()->GetEndnoteIsCollectAtSectionEnd())
+            {
+                xSection->setPropertyValue("EndnoteIsCollectAtTextEnd", uno::Any(true));
+            }
         }
     }
     catch ( uno::Exception& )

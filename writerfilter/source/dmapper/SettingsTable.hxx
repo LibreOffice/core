@@ -99,6 +99,8 @@ public:
 
     bool GetRecordChanges() const;
 
+    bool GetEndnoteIsCollectAtSectionEnd() const;
+
 private:
     // Properties
     virtual void lcl_attribute(Id Name, Value& val) override;
