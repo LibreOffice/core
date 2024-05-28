@@ -27,7 +27,7 @@
 
 using namespace ::com::sun::star;
 
-SC_SIMPLE_SERVICE_INFO( ScSheetEventsObj, "ScSheetEventsObj", "com.sun.star.document.Events" )
+SC_SIMPLE_SERVICE_INFO( ScSheetEventsObj, u"ScSheetEventsObj"_ustr, u"com.sun.star.document.Events"_ustr )
 
 ScSheetEventsObj::ScSheetEventsObj(ScDocShell* pDocSh, SCTAB nT) :
     mpDocShell( pDocSh ),
@@ -132,7 +132,7 @@ uno::Any SAL_CALL ScSheetEventsObj::getByName( const OUString& aName )
     if (pScript)
     {
         uno::Sequence<beans::PropertyValue> aPropSeq( comphelper::InitPropertySequence({
-                { "EventType", uno::Any( OUString("Script") ) },
+                { "EventType", uno::Any( u"Script"_ustr ) },
                 { "Script", uno::Any( *pScript ) }
             }));
         aRet <<= aPropSeq;

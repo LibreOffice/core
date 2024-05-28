@@ -175,17 +175,17 @@ bool lclCheckMinMaxStep( const DataPilotFieldGroupInfo& rInfo )
 
 } // namespace
 
-SC_SIMPLE_SERVICE_INFO( ScDataPilotDescriptor, "ScDataPilotDescriptor", "stardiv::one::sheet::DataPilotDescriptor" )
-SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldObj, "ScDataPilotFieldObj", "com.sun.star.sheet.DataPilotField" )
-SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldsObj, "ScDataPilotFieldsObj", "com.sun.star.sheet.DataPilotFields" )
-SC_SIMPLE_SERVICE_INFO( ScDataPilotTableObj, "ScDataPilotTableObj", "com.sun.star.sheet.DataPilotTable" )
-SC_SIMPLE_SERVICE_INFO( ScDataPilotTablesObj, "ScDataPilotTablesObj", "com.sun.star.sheet.DataPilotTables" )
-SC_SIMPLE_SERVICE_INFO( ScDataPilotItemsObj, "ScDataPilotItemsObj", "com.sun.star.sheet.DataPilotItems" )
-SC_SIMPLE_SERVICE_INFO( ScDataPilotItemObj, "ScDataPilotItemObj", "com.sun.star.sheet.DataPilotItem" )
+SC_SIMPLE_SERVICE_INFO( ScDataPilotDescriptor, u"ScDataPilotDescriptor"_ustr, u"stardiv::one::sheet::DataPilotDescriptor"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldObj, u"ScDataPilotFieldObj"_ustr, u"com.sun.star.sheet.DataPilotField"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldsObj, u"ScDataPilotFieldsObj"_ustr, u"com.sun.star.sheet.DataPilotFields"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScDataPilotTableObj, u"ScDataPilotTableObj"_ustr, u"com.sun.star.sheet.DataPilotTable"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScDataPilotTablesObj, u"ScDataPilotTablesObj"_ustr, u"com.sun.star.sheet.DataPilotTables"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScDataPilotItemsObj, u"ScDataPilotItemsObj"_ustr, u"com.sun.star.sheet.DataPilotItems"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScDataPilotItemObj, u"ScDataPilotItemObj"_ustr, u"com.sun.star.sheet.DataPilotItem"_ustr )
 
-SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldGroupsObj, "ScDataPilotFieldGroupsObj", "com.sun.star.sheet.DataPilotFieldGroups" )
-SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldGroupObj, "ScDataPilotFieldGroupObj", "com.sun.star.sheet.DataPilotFieldGroup" )
-SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldGroupItemObj, "ScDataPilotFieldGroupItemObj", "com.sun.star.sheet.DataPilotFieldGroupItem" )
+SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldGroupsObj, u"ScDataPilotFieldGroupsObj"_ustr, u"com.sun.star.sheet.DataPilotFieldGroups"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldGroupObj, u"ScDataPilotFieldGroupObj"_ustr, u"com.sun.star.sheet.DataPilotFieldGroup"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldGroupItemObj, u"ScDataPilotFieldGroupItemObj"_ustr, u"com.sun.star.sheet.DataPilotFieldGroupItem"_ustr )
 
 // name that is used in the API for the data layout field
 constexpr OUString SC_DATALAYOUT_NAME = u"Data"_ustr;
@@ -412,15 +412,15 @@ void SAL_CALL ScDataPilotTablesObj::insertNewByName( const OUString& aNewName,
         throw IllegalArgumentException("Name \"" + aNewName + "\" already exists", getXWeak(), 0);
 
     if (!pDocShell)
-        throw RuntimeException("DocShell is null", getXWeak());
+        throw RuntimeException(u"DocShell is null"_ustr, getXWeak());
 
     auto pImp = dynamic_cast<ScDataPilotDescriptorBase*>( xDescriptor.get() );
     if (!pImp)
-        throw RuntimeException("Failed to get ScDataPilotDescriptor", getXWeak());
+        throw RuntimeException(u"Failed to get ScDataPilotDescriptor"_ustr, getXWeak());
 
     ScDPObject* pNewObj = pImp->GetDPObject();
     if (!pNewObj)
-        throw RuntimeException("Failed to get DPObject", getXWeak());
+        throw RuntimeException(u"Failed to get DPObject"_ustr, getXWeak());
 
     ScRange aOutputRange(static_cast<SCCOL>(aOutputAddress.Column), static_cast<SCROW>(aOutputAddress.Row), static_cast<SCTAB>(aOutputAddress.Sheet),
                         static_cast<SCCOL>(aOutputAddress.Column), static_cast<SCROW>(aOutputAddress.Row), static_cast<SCTAB>(aOutputAddress.Sheet));
@@ -436,7 +436,7 @@ void SAL_CALL ScDataPilotTablesObj::insertNewByName( const OUString& aNewName,
 
     ScDBDocFunc aFunc(*pDocShell);
     if (!aFunc.CreatePivotTable(*pNewObj, true, true))
-        throw RuntimeException("Failed to create pivot table", getXWeak());
+        throw RuntimeException(u"Failed to create pivot table"_ustr, getXWeak());
 }
 
 void SAL_CALL ScDataPilotTablesObj::removeByName( const OUString& aName )
@@ -456,7 +456,7 @@ void SAL_CALL ScDataPilotTablesObj::removeByName( const OUString& aName )
 Reference< XEnumeration > SAL_CALL ScDataPilotTablesObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.sheet.DataPilotTablesEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.sheet.DataPilotTablesEnumeration"_ustr);
 }
 
 // XIndexAccess
@@ -610,7 +610,7 @@ CellRangeAddress SAL_CALL ScDataPilotDescriptorBase::getSourceRange()
 
     ScDPObject* pDPObject(GetDPObject());
     if (!pDPObject)
-        throw RuntimeException("Failed to get DPObject", getXWeak());
+        throw RuntimeException(u"Failed to get DPObject"_ustr, getXWeak());
 
     CellRangeAddress aRet;
     if (pDPObject->IsSheetData())
@@ -624,7 +624,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setSourceRange( const CellRangeAddress&
 
     ScDPObject* pDPObject = GetDPObject();
     if (!pDPObject)
-        throw RuntimeException("Failed to get DPObject", getXWeak());
+        throw RuntimeException(u"Failed to get DPObject"_ustr, getXWeak());
 
     ScSheetSourceDesc aSheetDesc(&pDocShell->GetDocument());
     if (pDPObject->IsSheetData())
@@ -768,7 +768,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
             OUString aStrVal;
             if ( aValue >>= aStrVal )
             {
-                ScDPServiceDesc aServiceDesc("", "", "", "", "");
+                ScDPServiceDesc aServiceDesc(u""_ustr, u""_ustr, u""_ustr, u""_ustr, u""_ustr);
 
                 const ScDPServiceDesc* pOldDesc = pDPObject->GetDPServiceDesc();
                 if (pOldDesc)
@@ -784,7 +784,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
             uno::Sequence<beans::PropertyValue> aArgSeq;
             if ( aValue >>= aArgSeq )
             {
-                ScDPServiceDesc aServiceDesc("", "", "", "", "");
+                ScDPServiceDesc aServiceDesc(u""_ustr, u""_ustr, u""_ustr, u""_ustr, u""_ustr);
 
                 const ScDPServiceDesc* pOldDesc = pDPObject->GetDPServiceDesc();
                 if (pOldDesc)
@@ -1127,7 +1127,7 @@ Sequence< Sequence<Any> > SAL_CALL ScDataPilotTableObj::getDrillDownData(const C
     ScAddress aAddr2(static_cast<SCCOL>(aAddr.Column), static_cast<SCROW>(aAddr.Row), aAddr.Sheet);
     ScDPObject* pObj = GetDPObject();
     if (!pObj)
-        throw RuntimeException("Failed to get DPObject", getXWeak());
+        throw RuntimeException(u"Failed to get DPObject"_ustr, getXWeak());
 
     pObj->GetDrillDownData(aAddr2, aTabData);
     return aTabData;
@@ -1140,7 +1140,7 @@ DataPilotTablePositionData SAL_CALL ScDataPilotTableObj::getPositionData(const C
     ScAddress aAddr2(static_cast<SCCOL>(aAddr.Column), static_cast<SCROW>(aAddr.Row), aAddr.Sheet);
     ScDPObject* pObj = GetDPObject();
     if (!pObj)
-        throw RuntimeException("Failed to get DPObject", getXWeak());
+        throw RuntimeException(u"Failed to get DPObject"_ustr, getXWeak());
 
     pObj->GetPositionData(aAddr2, aPosData);
     return aPosData;
@@ -1151,10 +1151,10 @@ void SAL_CALL ScDataPilotTableObj::insertDrillDownSheet(const CellAddress& aAddr
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = GetDPObject();
     if (!pDPObj)
-        throw RuntimeException("Failed to get DPObject", getXWeak());
+        throw RuntimeException(u"Failed to get DPObject"_ustr, getXWeak());
     ScTabViewShell* pViewSh = GetDocShell()->GetBestViewShell();
     if (!pViewSh)
-        throw RuntimeException("Failed to get ViewShell", getXWeak());
+        throw RuntimeException(u"Failed to get ViewShell"_ustr, getXWeak());
 
     Sequence<DataPilotFieldFilter> aFilters;
     pDPObj->GetDataFieldPositionData(
@@ -1542,7 +1542,7 @@ rtl::Reference<ScDataPilotFieldObj> ScDataPilotFieldsObj::GetObjectByName_Impl(c
 Reference<XEnumeration> SAL_CALL ScDataPilotFieldsObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.sheet.DataPilotFieldsEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.sheet.DataPilotFieldsEnumeration"_ustr);
 }
 
 // XIndexAccess
@@ -2386,13 +2386,13 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
     SolarMutexGuard aGuard;
 
     if( !rItems.hasElements() )
-        throw IllegalArgumentException("rItems is empty", getXWeak(), 0);
+        throw IllegalArgumentException(u"rItems is empty"_ustr, getXWeak(), 0);
 
     Reference< XMembersAccess > xMembers = GetMembers();
     if (!xMembers.is())
     {
         SAL_WARN("sc.ui", "Cannot access members of the field object.");
-        throw RuntimeException("Cannot access members of the field object", getXWeak());
+        throw RuntimeException(u"Cannot access members of the field object"_ustr, getXWeak());
     }
 
     for (const OUString& aEntryName : rItems)
@@ -2554,9 +2554,9 @@ Reference < XDataPilotField > SAL_CALL ScDataPilotFieldObj::createDateGroup( con
     using namespace ::com::sun::star::sheet::DataPilotFieldGroupBy;
 
     if( !rInfo.HasDateValues )
-        throw IllegalArgumentException("HasDateValues is not set", getXWeak(), 0);
+        throw IllegalArgumentException(u"HasDateValues is not set"_ustr, getXWeak(), 0);
     if( !lclCheckMinMaxStep( rInfo ) )
-        throw IllegalArgumentException("min/max/step", getXWeak(), 0);
+        throw IllegalArgumentException(u"min/max/step"_ustr, getXWeak(), 0);
 
     // only a single date flag is allowed
     if( (rInfo.GroupBy == 0) || (rInfo.GroupBy > YEARS) || ((rInfo.GroupBy & (rInfo.GroupBy - 1)) != 0) )
@@ -2754,7 +2754,7 @@ void SAL_CALL ScDataPilotFieldGroupsObj::replaceByName( const OUString& rName, c
     SolarMutexGuard aGuard;
 
     if( rName.isEmpty() )
-        throw IllegalArgumentException("Name is empty", getXWeak(), 0);
+        throw IllegalArgumentException(u"Name is empty"_ustr, getXWeak(), 0);
 
     ScFieldGroups::iterator aIt = implFindByName( rName );
     if( aIt == maGroups.end() )
@@ -2763,7 +2763,7 @@ void SAL_CALL ScDataPilotFieldGroupsObj::replaceByName( const OUString& rName, c
     // read all item names provided by the passed object
     ScFieldGroupMembers aMembers;
     if( !lclExtractGroupMembers( aMembers, rElement ) )
-        throw IllegalArgumentException("Invalid element object", getXWeak(), 0);
+        throw IllegalArgumentException(u"Invalid element object"_ustr, getXWeak(), 0);
 
     // copy and forget, faster than vector assignment
     aIt->maMembers.swap( aMembers );
@@ -2776,7 +2776,7 @@ void SAL_CALL ScDataPilotFieldGroupsObj::insertByName( const OUString& rName, co
     SolarMutexGuard aGuard;
 
     if( rName.isEmpty() )
-        throw IllegalArgumentException("Name is empty", getXWeak(), 0);
+        throw IllegalArgumentException(u"Name is empty"_ustr, getXWeak(), 0);
 
     ScFieldGroups::iterator aIt = implFindByName( rName );
     if( aIt != maGroups.end() )
@@ -2785,7 +2785,7 @@ void SAL_CALL ScDataPilotFieldGroupsObj::insertByName( const OUString& rName, co
     // read all item names provided by the passed object
     ScFieldGroupMembers aMembers;
     if( !lclExtractGroupMembers( aMembers, rElement ) )
-        throw IllegalArgumentException("Invalid element object", getXWeak(), 0);
+        throw IllegalArgumentException(u"Invalid element object"_ustr, getXWeak(), 0);
 
     // create the new entry if no error has been occurred
     maGroups.emplace_back();
@@ -2799,7 +2799,7 @@ void SAL_CALL ScDataPilotFieldGroupsObj::removeByName( const OUString& rName )
     SolarMutexGuard aGuard;
 
     if( rName.isEmpty() )
-        throw IllegalArgumentException("Name is empty", getXWeak(), 0);
+        throw IllegalArgumentException(u"Name is empty"_ustr, getXWeak(), 0);
 
     ScFieldGroups::iterator aIt = implFindByName( rName );
     if( aIt == maGroups.end() )
@@ -2829,7 +2829,7 @@ Any SAL_CALL ScDataPilotFieldGroupsObj::getByIndex( sal_Int32 nIndex )
 Reference<XEnumeration> SAL_CALL ScDataPilotFieldGroupsObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration( this, "com.sun.star.sheet.DataPilotFieldGroupsEnumeration" );
+    return new ScIndexEnumeration( this, u"com.sun.star.sheet.DataPilotFieldGroupsEnumeration"_ustr );
 }
 
 // XElementAccess
@@ -2935,7 +2935,7 @@ void SAL_CALL ScDataPilotFieldGroupObj::replaceByName( const OUString& rName, co
     // it should be possible to quickly rename an item -> accept string or XNamed
     OUString aNewName = lclExtractMember( rElement );
     if( rName.isEmpty() || aNewName.isEmpty() )
-        throw IllegalArgumentException("Name is empty", getXWeak(), 0);
+        throw IllegalArgumentException(u"Name is empty"_ustr, getXWeak(), 0);
     if( rName == aNewName )
         return;
 
@@ -2957,7 +2957,7 @@ void SAL_CALL ScDataPilotFieldGroupObj::insertByName( const OUString& rName, con
 
     // we will ignore the passed element and just try to insert the name
     if( rName.isEmpty() )
-        throw IllegalArgumentException("Name is empty", getXWeak(), 0);
+        throw IllegalArgumentException(u"Name is empty"_ustr, getXWeak(), 0);
 
     ScFieldGroupMembers& rMembers = mxParent->getFieldGroup( maGroupName ).maMembers;
     ScFieldGroupMembers::iterator aIt = ::std::find( rMembers.begin(), rMembers.end(), rName );
@@ -2971,7 +2971,7 @@ void SAL_CALL ScDataPilotFieldGroupObj::removeByName( const OUString& rName )
     SolarMutexGuard aGuard;
 
     if( rName.isEmpty() )
-        throw IllegalArgumentException("Name is empty", getXWeak(), 0);
+        throw IllegalArgumentException(u"Name is empty"_ustr, getXWeak(), 0);
     ScFieldGroupMembers& rMembers = mxParent->getFieldGroup( maGroupName ).maMembers;
     ScFieldGroupMembers::iterator aIt = ::std::find( rMembers.begin(), rMembers.end(), rName );
     if( aIt == rMembers.end() )
@@ -3001,7 +3001,7 @@ Any SAL_CALL ScDataPilotFieldGroupObj::getByIndex( sal_Int32 nIndex )
 Reference< XEnumeration > SAL_CALL ScDataPilotFieldGroupObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration( this, "com.sun.star.sheet.DataPilotFieldGroupEnumeration" );
+    return new ScIndexEnumeration( this, u"com.sun.star.sheet.DataPilotFieldGroupEnumeration"_ustr );
 }
 
 // XElementAccess
@@ -3137,7 +3137,7 @@ sal_Bool SAL_CALL ScDataPilotItemsObj::hasByName( const OUString& aName )
 Reference<XEnumeration> SAL_CALL ScDataPilotItemsObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.sheet.DataPilotItemsEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.sheet.DataPilotItemsEnumeration"_ustr);
 }
 
 // XIndexAccess

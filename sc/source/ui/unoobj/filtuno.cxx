@@ -374,8 +374,8 @@ void SAL_CALL ScFilterOptionsObj::setSourceDocument( const uno::Reference<lang::
 void SAL_CALL ScFilterOptionsObj::initialize(const uno::Sequence<uno::Any>& rArguments)
 {
     ::comphelper::NamedValueCollection aProperties(rArguments);
-    if (aProperties.has("ParentWindow"))
-        aProperties.get("ParentWindow") >>= xDialogParent;
+    if (aProperties.has(u"ParentWindow"_ustr))
+        aProperties.get(u"ParentWindow"_ustr) >>= xDialogParent;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

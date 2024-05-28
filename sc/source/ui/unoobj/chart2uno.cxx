@@ -62,12 +62,12 @@
 
 #include <limits>
 
-SC_SIMPLE_SERVICE_INFO( ScChart2DataProvider, "ScChart2DataProvider",
-        "com.sun.star.chart2.data.DataProvider")
-SC_SIMPLE_SERVICE_INFO( ScChart2DataSource, "ScChart2DataSource",
-        "com.sun.star.chart2.data.DataSource")
-SC_SIMPLE_SERVICE_INFO( ScChart2DataSequence, "ScChart2DataSequence",
-        "com.sun.star.chart2.data.DataSequence")
+SC_SIMPLE_SERVICE_INFO( ScChart2DataProvider, u"ScChart2DataProvider"_ustr,
+        u"com.sun.star.chart2.data.DataProvider"_ustr)
+SC_SIMPLE_SERVICE_INFO( ScChart2DataSource, u"ScChart2DataSource"_ustr,
+        u"com.sun.star.chart2.data.DataSource"_ustr)
+SC_SIMPLE_SERVICE_INFO( ScChart2DataSequence, u"ScChart2DataSequence"_ustr,
+        u"com.sun.star.chart2.data.DataSequence"_ustr)
 
 using namespace ::com::sun::star;
 using namespace ::formula;
@@ -1803,7 +1803,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                 {
                     uno::Reference< beans::XPropertySet > xSeqProp( xLS->getValues(), uno::UNO_QUERY );
                     OUString aRole;
-                    if( xSeqProp.is() && (xSeqProp->getPropertyValue("Role") >>= aRole) &&
+                    if( xSeqProp.is() && (xSeqProp->getPropertyValue(u"Role"_ustr) >>= aRole) &&
                         aRole == "categories" )
                         bThisIsCategories = bHasCategories = true;
                 }

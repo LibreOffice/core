@@ -31,7 +31,7 @@ using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
-SC_SIMPLE_SERVICE_INFO( ScNameToIndexAccess, "ScNameToIndexAccess", "stardiv.unknown" )
+SC_SIMPLE_SERVICE_INFO( ScNameToIndexAccess, u"ScNameToIndexAccess"_ustr, u"stardiv.unknown"_ustr )
 
 bool ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPropertySet>& xProp,
                                             const OUString& rName, bool bDefault )
@@ -224,7 +224,7 @@ uno::Any SAL_CALL ScIndexEnumeration::nextElement()
 
 OUString SAL_CALL ScIndexEnumeration::getImplementationName()
 {
-    return "ScIndexEnumeration";
+    return u"ScIndexEnumeration"_ustr;
 }
 
 sal_Bool SAL_CALL ScIndexEnumeration::supportsService( const OUString& ServiceName )

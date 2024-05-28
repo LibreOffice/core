@@ -82,9 +82,9 @@ constexpr OUString SCFUNCTIONLISTOBJ_SERVICE = u"com.sun.star.sheet.FunctionDesc
 constexpr OUString SCRECENTFUNCTIONSOBJ_SERVICE = u"com.sun.star.sheet.RecentFunctions"_ustr;
 constexpr OUString SCSPREADSHEETSETTINGS_SERVICE = u"com.sun.star.sheet.GlobalSheetSettings"_ustr;
 
-SC_SIMPLE_SERVICE_INFO( ScFunctionListObj, "stardiv.StarCalc.ScFunctionListObj", SCFUNCTIONLISTOBJ_SERVICE )
-SC_SIMPLE_SERVICE_INFO( ScRecentFunctionsObj, "stardiv.StarCalc.ScRecentFunctionsObj", SCRECENTFUNCTIONSOBJ_SERVICE )
-SC_SIMPLE_SERVICE_INFO( ScSpreadsheetSettings, "stardiv.StarCalc.ScSpreadsheetSettings", SCSPREADSHEETSETTINGS_SERVICE )
+SC_SIMPLE_SERVICE_INFO( ScFunctionListObj, u"stardiv.StarCalc.ScFunctionListObj"_ustr, SCFUNCTIONLISTOBJ_SERVICE )
+SC_SIMPLE_SERVICE_INFO( ScRecentFunctionsObj, u"stardiv.StarCalc.ScRecentFunctionsObj"_ustr, SCRECENTFUNCTIONSOBJ_SERVICE )
+SC_SIMPLE_SERVICE_INFO( ScSpreadsheetSettings, u"stardiv.StarCalc.ScSpreadsheetSettings"_ustr, SCSPREADSHEETSETTINGS_SERVICE )
 
 
 ScSpreadsheetSettings::ScSpreadsheetSettings() :
@@ -173,8 +173,8 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
         if (!(aValue >>= n) || n < 0 || n >= ScLkUpdMode::LM_UNKNOWN)
         {
             throw css::lang::IllegalArgumentException(
-                ("LinkUpdateMode property value must be a SHORT with a value in the range of 0--2"
-                 " as documented for css::sheet::XGlobalSheetSettings attribute LinkUpdateMode"),
+                (u"LinkUpdateMode property value must be a SHORT with a value in the range of 0--2"
+                 " as documented for css::sheet::XGlobalSheetSettings attribute LinkUpdateMode"_ustr),
                 css::uno::Reference<css::uno::XInterface>(), -1);
         }
         aAppOpt.SetLinkMode( static_cast<ScLkUpdMode>(n) );
@@ -556,7 +556,7 @@ uno::Any SAL_CALL ScFunctionListObj::getByIndex( sal_Int32 nIndex )
 uno::Reference<container::XEnumeration> SAL_CALL ScFunctionListObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.sheet.FunctionDescriptionEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.sheet.FunctionDescriptionEnumeration"_ustr);
 }
 
 // XElementAccess

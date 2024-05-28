@@ -130,7 +130,7 @@ std::vector<OUString> lcl_getVisiblePageMembers(const uno::Reference<uno::XInter
 
 } // end anonymous namespace
 
-SC_SIMPLE_SERVICE_INFO(PivotTableDataProvider, "PivotTableDataProvider", SC_SERVICENAME_CHART_PIVOTTABLE_DATAPROVIDER)
+SC_SIMPLE_SERVICE_INFO(PivotTableDataProvider, u"PivotTableDataProvider"_ustr, SC_SERVICENAME_CHART_PIVOTTABLE_DATAPROVIDER)
 
 // DataProvider ==============================================================
 
@@ -255,7 +255,7 @@ PivotTableDataProvider::createCategoriesDataSource(bool bOrientationIsColumn)
         uno::Reference<chart2::data::XLabeledDataSequence> xResult = newLabeledDataSequence();
         rtl::Reference<PivotTableDataSequence> pSequence(new PivotTableDataSequence(m_pDocument,
                                                    lcl_identifierForCategories(), std::vector(rCategories)));
-        pSequence->setRole("categories");
+        pSequence->setRole(u"categories"_ustr);
         xResult->setValues(uno::Reference<chart2::data::XDataSequence>(pSequence));
 
         aLabeledSequences.push_back(xResult);
@@ -585,7 +585,7 @@ PivotTableDataProvider::assignValuesToDataSequence(size_t nIndex)
 
     std::vector<ValueAndFormat> const & rRowOfData = m_aDataRowVector[nIndex];
     rtl::Reference<PivotTableDataSequence> pSequence(new PivotTableDataSequence(m_pDocument, sDataID, std::vector(rRowOfData)));
-    pSequence->setRole("values-y");
+    pSequence->setRole(u"values-y"_ustr);
     xDataSequence = pSequence;
     return xDataSequence;
 }
@@ -624,7 +624,7 @@ PivotTableDataProvider::assignLabelsToDataSequence(size_t nIndex)
 
     rtl::Reference<PivotTableDataSequence> pSequence(new PivotTableDataSequence(m_pDocument,
                                                std::move(sLabelID), std::move(aLabelVector)));
-    pSequence->setRole("values-y");
+    pSequence->setRole(u"values-y"_ustr);
     xDataSequence = pSequence;
     return xDataSequence;
 }
@@ -641,7 +641,7 @@ css::uno::Reference<css::chart2::data::XDataSequence>
 
     rtl::Reference<PivotTableDataSequence> pSequence(new PivotTableDataSequence(m_pDocument,
                                                lcl_identifierForCategories(), std::vector(rCategories)));
-    pSequence->setRole("categories");
+    pSequence->setRole(u"categories"_ustr);
     xDataSequence = pSequence;
 
     return xDataSequence;
@@ -686,7 +686,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL PivotTableDataProvider::detectArgum
         return uno::Sequence<beans::PropertyValue>();
 
     return comphelper::InitPropertySequence({
-        { "CellRangeRepresentation", uno::Any(OUString("PivotChart")) },
+        { "CellRangeRepresentation", uno::Any(u"PivotChart"_ustr) },
         { "DataRowSource", uno::Any(chart::ChartDataRowSource_COLUMNS) },
         { "FirstCellAsLabel", uno::Any(false) },
         { "HasCategories", uno::Any(true) }

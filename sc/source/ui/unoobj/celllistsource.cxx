@@ -56,7 +56,7 @@ namespace calc
 
         // register our property at the base class
         registerPropertyNoMember(
-            "CellRange",
+            u"CellRange"_ustr,
             PROP_HANDLE_RANGE_ADDRESS,
             PropertyAttribute::BOUND | PropertyAttribute::READONLY,
             cppu::UnoType<CellRangeAddress>::get(),
@@ -121,12 +121,12 @@ namespace calc
     void OCellListSource::checkInitialized()
     {
         if ( !m_bInitialized )
-            throw NotInitializedException("CellListSource is not initialized", getXWeak());
+            throw NotInitializedException(u"CellListSource is not initialized"_ustr, getXWeak());
     }
 
     OUString SAL_CALL OCellListSource::getImplementationName(  )
     {
-        return "com.sun.star.comp.sheet.OCellListSource";
+        return u"com.sun.star.comp.sheet.OCellListSource"_ustr;
     }
 
     sal_Bool SAL_CALL OCellListSource::supportsService( const OUString& _rServiceName )
@@ -136,8 +136,8 @@ namespace calc
 
     Sequence< OUString > SAL_CALL OCellListSource::getSupportedServiceNames(  )
     {
-        return {"com.sun.star.table.CellRangeListSource",
-                "com.sun.star.form.binding.ListEntrySource"};
+        return {u"com.sun.star.table.CellRangeListSource"_ustr,
+                u"com.sun.star.form.binding.ListEntrySource"_ustr};
     }
 
     CellRangeAddress OCellListSource::getRangeAddress( ) const
@@ -193,7 +193,7 @@ namespace calc
                         if (xProp.is())
                         {
                             sal_Int32 nResultType;
-                            if ((xProp->getPropertyValue("FormulaResultType2") >>= nResultType) &&
+                            if ((xProp->getPropertyValue(u"FormulaResultType2"_ustr) >>= nResultType) &&
                                     nResultType == FormulaResult::VALUE)
                                 *pAny <<= xCell->getValue();
                             else
@@ -339,7 +339,7 @@ namespace calc
     void SAL_CALL OCellListSource::initialize( const Sequence< Any >& _rArguments )
     {
         if ( m_bInitialized )
-            throw RuntimeException("CellListSource is already initialized", getXWeak());
+            throw RuntimeException(u"CellListSource is already initialized"_ustr, getXWeak());
 
         // get the cell address
         CellRangeAddress aRangeAddress;
@@ -362,7 +362,7 @@ namespace calc
         }
 
         if ( !bFoundAddress )
-            throw RuntimeException("Cell not found", getXWeak());
+            throw RuntimeException(u"Cell not found"_ustr, getXWeak());
 
         // determine the range we're bound to
         try
@@ -396,7 +396,7 @@ namespace calc
         }
 
         if ( !m_xRange.is() )
-            throw RuntimeException("Failed to retrieve cell range", getXWeak());
+            throw RuntimeException(u"Failed to retrieve cell range"_ustr, getXWeak());
 
         Reference<XModifyBroadcaster> xBroadcaster( m_xRange, UNO_QUERY );
         if ( xBroadcaster.is() )

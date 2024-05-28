@@ -137,8 +137,8 @@ sal_Int16 lcl_SvxToUnoFileFormat( SvxFileFormat nSvxValue )
 
 }
 
-SC_SIMPLE_SERVICE_INFO( ScCellFieldsObj, "ScCellFieldsObj", "com.sun.star.text.TextFields" )
-SC_SIMPLE_SERVICE_INFO( ScHeaderFieldsObj, "ScHeaderFieldsObj", "com.sun.star.text.TextFields" )
+SC_SIMPLE_SERVICE_INFO( ScCellFieldsObj, u"ScCellFieldsObj"_ustr, u"com.sun.star.text.TextFields"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScHeaderFieldsObj, u"ScHeaderFieldsObj"_ustr, u"com.sun.star.text.TextFields"_ustr )
 
 namespace {
 
@@ -367,7 +367,7 @@ sal_Bool SAL_CALL ScCellFieldsObj::hasElements()
 uno::Reference<container::XEnumeration> SAL_CALL ScCellFieldsObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.text.TextFieldEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.text.TextFieldEnumeration"_ustr);
 }
 
 void SAL_CALL ScCellFieldsObj::addContainerListener(
@@ -451,7 +451,7 @@ uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_In
     uno::Reference<text::XTextRange> xTextRange;
     uno::Reference<sheet::XHeaderFooterContent> xContentObj = mrData.GetContentObj();
     if (!xContentObj.is())
-        throw uno::RuntimeException("");
+        throw uno::RuntimeException(u""_ustr);
 
     rtl::Reference<ScHeaderFooterContentObj> pContentObj = ScHeaderFooterContentObj::getImplementation(xContentObj);
     uno::Reference<text::XText> xText;
@@ -515,7 +515,7 @@ sal_Bool SAL_CALL ScHeaderFieldsObj::hasElements()
 uno::Reference<container::XEnumeration> SAL_CALL ScHeaderFieldsObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.text.TextFieldEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.text.TextFieldEnumeration"_ustr);
 }
 
 void SAL_CALL ScHeaderFieldsObj::addContainerListener(
@@ -1254,7 +1254,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScEditFieldObj )
 
 OUString SAL_CALL ScEditFieldObj::getImplementationName()
 {
-    return "ScEditFieldObj";
+    return u"ScEditFieldObj"_ustr;
 }
 
 sal_Bool SAL_CALL ScEditFieldObj::supportsService( const OUString& rServiceName )
@@ -1264,8 +1264,8 @@ sal_Bool SAL_CALL ScEditFieldObj::supportsService( const OUString& rServiceName 
 
 uno::Sequence<OUString> SAL_CALL ScEditFieldObj::getSupportedServiceNames()
 {
-    return {"com.sun.star.text.TextField",
-            "com.sun.star.text.TextContent"};
+    return {u"com.sun.star.text.TextField"_ustr,
+            u"com.sun.star.text.TextContent"_ustr};
 }
 
 uno::Sequence<uno::Type> SAL_CALL ScEditFieldObj::getTypes()

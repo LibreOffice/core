@@ -131,11 +131,11 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetDBRangePropertyMap()
     return aDBRangePropertyMap_Impl;
 }
 
-SC_SIMPLE_SERVICE_INFO( ScConsolidationDescriptor, "ScConsolidationDescriptor", "com.sun.star.sheet.ConsolidationDescriptor" )
-SC_SIMPLE_SERVICE_INFO( ScDatabaseRangesObj, "ScDatabaseRangesObj", "com.sun.star.sheet.DatabaseRanges" )
-SC_SIMPLE_SERVICE_INFO( ScFilterDescriptorBase, "ScFilterDescriptorBase", "com.sun.star.sheet.SheetFilterDescriptor" )
-SC_SIMPLE_SERVICE_INFO( ScSubTotalDescriptorBase, "ScSubTotalDescriptorBase", "com.sun.star.sheet.SubTotalDescriptor" )
-SC_SIMPLE_SERVICE_INFO( ScSubTotalFieldObj, "ScSubTotalFieldObj", "com.sun.star.sheet.SubTotalField" )
+SC_SIMPLE_SERVICE_INFO( ScConsolidationDescriptor, u"ScConsolidationDescriptor"_ustr, u"com.sun.star.sheet.ConsolidationDescriptor"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScDatabaseRangesObj, u"ScDatabaseRangesObj"_ustr, u"com.sun.star.sheet.DatabaseRanges"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScFilterDescriptorBase, u"ScFilterDescriptorBase"_ustr, u"com.sun.star.sheet.SheetFilterDescriptor"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScSubTotalDescriptorBase, u"ScSubTotalDescriptorBase"_ustr, u"com.sun.star.sheet.SubTotalDescriptor"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScSubTotalFieldObj, u"ScSubTotalFieldObj"_ustr, u"com.sun.star.sheet.SubTotalField"_ustr )
 
 sheet::GeneralFunction  ScDataUnoConversion::SubTotalToGeneral( ScSubTotalFunc eSubTotal )
 {
@@ -612,7 +612,7 @@ void SAL_CALL ScSubTotalDescriptorBase::addNew(
 uno::Reference<container::XEnumeration> SAL_CALL ScSubTotalDescriptorBase::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.sheet.SubTotalFieldsEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.sheet.SubTotalFieldsEnumeration"_ustr);
 }
 
 // XIndexAccess
@@ -2106,7 +2106,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDatabaseRangeObj )
 // XServiceInfo
 OUString SAL_CALL ScDatabaseRangeObj::getImplementationName()
 {
-    return "ScDatabaseRangeObj";
+    return u"ScDatabaseRangeObj"_ustr;
 }
 
 sal_Bool SAL_CALL ScDatabaseRangeObj::supportsService( const OUString& rServiceName )
@@ -2116,7 +2116,7 @@ sal_Bool SAL_CALL ScDatabaseRangeObj::supportsService( const OUString& rServiceN
 
 uno::Sequence<OUString> SAL_CALL ScDatabaseRangeObj::getSupportedServiceNames()
 {
-    return {"com.sun.star.sheet.DatabaseRange",
+    return {u"com.sun.star.sheet.DatabaseRange"_ustr,
             SCLINKTARGET_SERVICE};
 }
 
@@ -2208,7 +2208,7 @@ void SAL_CALL ScDatabaseRangesObj::removeByName( const OUString& aName )
 uno::Reference<container::XEnumeration> SAL_CALL ScDatabaseRangesObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.sheet.DatabaseRangesEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.sheet.DatabaseRangesEnumeration"_ustr);
 }
 
 // XIndexAccess

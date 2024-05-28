@@ -70,7 +70,7 @@ const formula::FormulaGrammar::AddressConvention aConvMap[] = {
 constexpr sal_Int16 nConvMapCount = SAL_N_ELEMENTS(aConvMap);
 
 
-SC_SIMPLE_SERVICE_INFO( ScFormulaParserObj, "ScFormulaParserObj", SC_SERVICENAME_FORMULAPARS )
+SC_SIMPLE_SERVICE_INFO( ScFormulaParserObj, u"ScFormulaParserObj"_ustr, SC_SERVICENAME_FORMULAPARS )
 
 ScFormulaParserObj::ScFormulaParserObj(ScDocShell* pDocSh) :
     mpDocShell( pDocSh ),

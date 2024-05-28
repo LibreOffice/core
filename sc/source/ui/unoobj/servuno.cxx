@@ -251,45 +251,45 @@ struct ProvNamesId_Type
 
 const ProvNamesId_Type aProvNamesId[] =
 {
-    { "com.sun.star.sheet.Spreadsheet",                 Type::SHEET },
-    { "com.sun.star.text.TextField.URL",                Type::URLFIELD },
-    { "com.sun.star.text.TextField.PageNumber",         Type::PAGEFIELD },
-    { "com.sun.star.text.TextField.PageCount",          Type::PAGESFIELD },
-    { "com.sun.star.text.TextField.Date",               Type::DATEFIELD },
-    { "com.sun.star.text.TextField.Time",               Type::TIMEFIELD },
-    { "com.sun.star.text.TextField.DateTime",           Type::EXT_TIMEFIELD },
-    { "com.sun.star.text.TextField.DocInfo.Title",      Type::TITLEFIELD },
-    { "com.sun.star.text.TextField.FileName",           Type::FILEFIELD },
-    { "com.sun.star.text.TextField.SheetName",          Type::SHEETFIELD },
-    { "com.sun.star.style.CellStyle",                   Type::CELLSTYLE },
-    { "com.sun.star.style.PageStyle",                   Type::PAGESTYLE },
-    { "com.sun.star.style.GraphicStyle",                Type::GRAPHICSTYLE },
-    { "com.sun.star.sheet.TableAutoFormat",             Type::AUTOFORMAT },
-    { "com.sun.star.sheet.TableAutoFormats",            Type::AUTOFORMATS },
-    { "com.sun.star.sheet.SheetCellRanges",             Type::CELLRANGES },
-    { "com.sun.star.sheet.FunctionDescriptions",        Type::FUNCTIONDESCRIPTIONS },
-    { "com.sun.star.sheet.GlobalSheetSettings",         Type::GLOBALSHEETSETTINGS },
-    { "com.sun.star.sheet.RecentFunctions",             Type::RECENTFUNCTIONS },
-    { "com.sun.star.drawing.GradientTable",             Type::GRADTAB },
-    { "com.sun.star.drawing.HatchTable",                Type::HATCHTAB },
-    { "com.sun.star.drawing.BitmapTable",               Type::BITMAPTAB },
-    { "com.sun.star.drawing.TransparencyGradientTable", Type::TRGRADTAB },
-    { "com.sun.star.drawing.MarkerTable",               Type::MARKERTAB },
-    { "com.sun.star.drawing.DashTable",                 Type::DASHTAB },
-    { "com.sun.star.text.NumberingRules",               Type::NUMRULES },
-    { "com.sun.star.sheet.Defaults",                    Type::DOCDEFLTS },
-    { "com.sun.star.drawing.Defaults",                  Type::DRAWDEFLTS },
-    { "com.sun.star.comp.SpreadsheetSettings",          Type::DOCSPRSETT },
-    { "com.sun.star.document.Settings",                 Type::DOCCONF },
-    { "com.sun.star.image.ImageMapRectangleObject",     Type::IMAP_RECT },
-    { "com.sun.star.image.ImageMapCircleObject",        Type::IMAP_CIRC },
-    { "com.sun.star.image.ImageMapPolygonObject",       Type::IMAP_POLY },
+    { u"com.sun.star.sheet.Spreadsheet"_ustr,                 Type::SHEET },
+    { u"com.sun.star.text.TextField.URL"_ustr,                Type::URLFIELD },
+    { u"com.sun.star.text.TextField.PageNumber"_ustr,         Type::PAGEFIELD },
+    { u"com.sun.star.text.TextField.PageCount"_ustr,          Type::PAGESFIELD },
+    { u"com.sun.star.text.TextField.Date"_ustr,               Type::DATEFIELD },
+    { u"com.sun.star.text.TextField.Time"_ustr,               Type::TIMEFIELD },
+    { u"com.sun.star.text.TextField.DateTime"_ustr,           Type::EXT_TIMEFIELD },
+    { u"com.sun.star.text.TextField.DocInfo.Title"_ustr,      Type::TITLEFIELD },
+    { u"com.sun.star.text.TextField.FileName"_ustr,           Type::FILEFIELD },
+    { u"com.sun.star.text.TextField.SheetName"_ustr,          Type::SHEETFIELD },
+    { u"com.sun.star.style.CellStyle"_ustr,                   Type::CELLSTYLE },
+    { u"com.sun.star.style.PageStyle"_ustr,                   Type::PAGESTYLE },
+    { u"com.sun.star.style.GraphicStyle"_ustr,                Type::GRAPHICSTYLE },
+    { u"com.sun.star.sheet.TableAutoFormat"_ustr,             Type::AUTOFORMAT },
+    { u"com.sun.star.sheet.TableAutoFormats"_ustr,            Type::AUTOFORMATS },
+    { u"com.sun.star.sheet.SheetCellRanges"_ustr,             Type::CELLRANGES },
+    { u"com.sun.star.sheet.FunctionDescriptions"_ustr,        Type::FUNCTIONDESCRIPTIONS },
+    { u"com.sun.star.sheet.GlobalSheetSettings"_ustr,         Type::GLOBALSHEETSETTINGS },
+    { u"com.sun.star.sheet.RecentFunctions"_ustr,             Type::RECENTFUNCTIONS },
+    { u"com.sun.star.drawing.GradientTable"_ustr,             Type::GRADTAB },
+    { u"com.sun.star.drawing.HatchTable"_ustr,                Type::HATCHTAB },
+    { u"com.sun.star.drawing.BitmapTable"_ustr,               Type::BITMAPTAB },
+    { u"com.sun.star.drawing.TransparencyGradientTable"_ustr, Type::TRGRADTAB },
+    { u"com.sun.star.drawing.MarkerTable"_ustr,               Type::MARKERTAB },
+    { u"com.sun.star.drawing.DashTable"_ustr,                 Type::DASHTAB },
+    { u"com.sun.star.text.NumberingRules"_ustr,               Type::NUMRULES },
+    { u"com.sun.star.sheet.Defaults"_ustr,                    Type::DOCDEFLTS },
+    { u"com.sun.star.drawing.Defaults"_ustr,                  Type::DRAWDEFLTS },
+    { u"com.sun.star.comp.SpreadsheetSettings"_ustr,          Type::DOCSPRSETT },
+    { u"com.sun.star.document.Settings"_ustr,                 Type::DOCCONF },
+    { u"com.sun.star.image.ImageMapRectangleObject"_ustr,     Type::IMAP_RECT },
+    { u"com.sun.star.image.ImageMapCircleObject"_ustr,        Type::IMAP_CIRC },
+    { u"com.sun.star.image.ImageMapPolygonObject"_ustr,       Type::IMAP_POLY },
 
     // Support creation of GraphicStorageHandler and EmbeddedObjectResolver
-    { "com.sun.star.document.ExportGraphicStorageHandler",  Type::EXPORT_GRAPHIC_STORAGE_HANDLER },
-    { "com.sun.star.document.ImportGraphicStorageHandler",  Type::IMPORT_GRAPHIC_STORAGE_HANDLER },
-    { "com.sun.star.document.ExportEmbeddedObjectResolver", Type::EXPORT_EOR },
-    { "com.sun.star.document.ImportEmbeddedObjectResolver", Type::IMPORT_EOR },
+    { u"com.sun.star.document.ExportGraphicStorageHandler"_ustr,  Type::EXPORT_GRAPHIC_STORAGE_HANDLER },
+    { u"com.sun.star.document.ImportGraphicStorageHandler"_ustr,  Type::IMPORT_GRAPHIC_STORAGE_HANDLER },
+    { u"com.sun.star.document.ExportEmbeddedObjectResolver"_ustr, Type::EXPORT_EOR },
+    { u"com.sun.star.document.ImportEmbeddedObjectResolver"_ustr, Type::IMPORT_EOR },
 
     { SC_SERVICENAME_VALBIND,               Type::VALBIND },
     { SC_SERVICENAME_LISTCELLBIND,          Type::LISTCELLBIND },
@@ -297,43 +297,43 @@ const ProvNamesId_Type aProvNamesId[] =
     { SC_SERVICENAME_CELLADDRESS,           Type::CELLADDRESS },
     { SC_SERVICENAME_RANGEADDRESS,          Type::RANGEADDRESS },
 
-    { "com.sun.star.sheet.DocumentSettings",Type::SHEETDOCSET },
+    { u"com.sun.star.sheet.DocumentSettings"_ustr,Type::SHEETDOCSET },
 
     { SC_SERVICENAME_CHDATAPROV,            Type::CHDATAPROV },
     { SC_SERVICENAME_CHART_PIVOTTABLE_DATAPROVIDER, Type::CHART_PIVOTTABLE_DATAPROVIDER },
     { SC_SERVICENAME_FORMULAPARS,           Type::FORMULAPARS },
     { SC_SERVICENAME_OPCODEMAPPER,          Type::OPCODEMAPPER },
-    { "ooo.vba.VBAObjectModuleObjectProvider", Type::VBAOBJECTPROVIDER },
-    { "ooo.vba.VBACodeNameProvider",        Type::VBACODENAMEPROVIDER },
-    { "ooo.vba.VBAGlobals",                 Type::VBAGLOBALS },
+    { u"ooo.vba.VBAObjectModuleObjectProvider"_ustr, Type::VBAOBJECTPROVIDER },
+    { u"ooo.vba.VBACodeNameProvider"_ustr,        Type::VBACODENAMEPROVIDER },
+    { u"ooo.vba.VBAGlobals"_ustr,                 Type::VBAGLOBALS },
 
     // case-correct versions of the service names (#i102468#)
-    { "com.sun.star.text.textfield.URL",                Type::URLFIELD },
-    { "com.sun.star.text.textfield.PageNumber",         Type::PAGEFIELD },
-    { "com.sun.star.text.textfield.PageCount",          Type::PAGESFIELD },
-    { "com.sun.star.text.textfield.Date",               Type::DATEFIELD },
-    { "com.sun.star.text.textfield.Time",               Type::TIMEFIELD },
-    { "com.sun.star.text.textfield.DateTime",           Type::EXT_TIMEFIELD },
-    { "com.sun.star.text.textfield.docinfo.Title",      Type::TITLEFIELD },
-    { "com.sun.star.text.textfield.FileName",           Type::FILEFIELD },
-    { "com.sun.star.text.textfield.SheetName",          Type::SHEETFIELD },
-    { "ooo.vba.VBAGlobals",                             Type::VBAGLOBALS },
+    { u"com.sun.star.text.textfield.URL"_ustr,                Type::URLFIELD },
+    { u"com.sun.star.text.textfield.PageNumber"_ustr,         Type::PAGEFIELD },
+    { u"com.sun.star.text.textfield.PageCount"_ustr,          Type::PAGESFIELD },
+    { u"com.sun.star.text.textfield.Date"_ustr,               Type::DATEFIELD },
+    { u"com.sun.star.text.textfield.Time"_ustr,               Type::TIMEFIELD },
+    { u"com.sun.star.text.textfield.DateTime"_ustr,           Type::EXT_TIMEFIELD },
+    { u"com.sun.star.text.textfield.docinfo.Title"_ustr,      Type::TITLEFIELD },
+    { u"com.sun.star.text.textfield.FileName"_ustr,           Type::FILEFIELD },
+    { u"com.sun.star.text.textfield.SheetName"_ustr,          Type::SHEETFIELD },
+    { u"ooo.vba.VBAGlobals"_ustr,                             Type::VBAGLOBALS },
 };
 
 //  old service names that were in 567 still work in createInstance,
 //  in case some macro is still using them
 const ProvNamesId_Type aOldNames[] =
 {
-    { "stardiv.one.text.TextField.URL",           Type::URLFIELD },
-    { "stardiv.one.text.TextField.PageNumber",    Type::PAGEFIELD },
-    { "stardiv.one.text.TextField.PageCount",     Type::PAGESFIELD },
-    { "stardiv.one.text.TextField.Date",          Type::DATEFIELD },
-    { "stardiv.one.text.TextField.Time",          Type::TIMEFIELD },
-    { "stardiv.one.text.TextField.DocumentTitle", Type::TITLEFIELD },
-    { "stardiv.one.text.TextField.FileName",      Type::FILEFIELD },
-    { "stardiv.one.text.TextField.SheetName",     Type::SHEETFIELD },
-    { "stardiv.one.style.CellStyle",              Type::CELLSTYLE },
-    { "stardiv.one.style.PageStyle",              Type::PAGESTYLE },
+    { u"stardiv.one.text.TextField.URL"_ustr,           Type::URLFIELD },
+    { u"stardiv.one.text.TextField.PageNumber"_ustr,    Type::PAGEFIELD },
+    { u"stardiv.one.text.TextField.PageCount"_ustr,     Type::PAGESFIELD },
+    { u"stardiv.one.text.TextField.Date"_ustr,          Type::DATEFIELD },
+    { u"stardiv.one.text.TextField.Time"_ustr,          Type::TIMEFIELD },
+    { u"stardiv.one.text.TextField.DocumentTitle"_ustr, Type::TITLEFIELD },
+    { u"stardiv.one.text.TextField.FileName"_ustr,      Type::FILEFIELD },
+    { u"stardiv.one.text.TextField.SheetName"_ustr,     Type::SHEETFIELD },
+    { u"stardiv.one.style.CellStyle"_ustr,              Type::CELLSTYLE },
+    { u"stardiv.one.style.PageStyle"_ustr,              Type::PAGESTYLE },
 };
 
 sal_Int32 getFieldType(ScServiceProvider::Type nOldType)
@@ -586,14 +586,14 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             if (pDocShell)
             {
                 uno::Any aGlobs;
-                if ( !pDocShell->GetBasicManager()->GetGlobalUNOConstant( "VBAGlobals", aGlobs ) )
+                if ( !pDocShell->GetBasicManager()->GetGlobalUNOConstant( u"VBAGlobals"_ustr, aGlobs ) )
                 {
                     uno::Sequence< uno::Any > aArgs{ uno::Any(uno::Reference(static_cast<css::sheet::XSpreadsheetDocument*>(pDocShell->GetModel()))) };
-                    xRet = ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( "ooo.vba.excel.Globals", aArgs );
-                    pDocShell->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", uno::Any( xRet ) );
+                    xRet = ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( u"ooo.vba.excel.Globals"_ustr, aArgs );
+                    pDocShell->GetBasicManager()->SetGlobalUNOConstant( u"VBAGlobals"_ustr, uno::Any( xRet ) );
                     BasicManager* pAppMgr = SfxApplication::GetBasicManager();
                     if ( pAppMgr )
-                        pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[ 0 ] );
+                        pAppMgr->SetGlobalUNOConstant( u"ThisExcelDoc"_ustr, aArgs[ 0 ] );
 
                     // create the VBA document event processor
                     uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents(

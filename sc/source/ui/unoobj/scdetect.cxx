@@ -316,7 +316,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
     else
         return OUString();
 
-    SfxFilterMatcher aMatcher("scalc");
+    SfxFilterMatcher aMatcher(u"scalc"_ustr);
     std::shared_ptr<const SfxFilter> pFilter = aMatcher.GetFilter4FilterName(OUString::createFromAscii(pSearchFilterName));
 
     if (!pFilter)
@@ -329,7 +329,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
 
 OUString SAL_CALL ScFilterDetect::getImplementationName()
 {
-    return "com.sun.star.comp.calc.FormatDetector";
+    return u"com.sun.star.comp.calc.FormatDetector"_ustr;
 }
 
 sal_Bool ScFilterDetect::supportsService( const OUString& sServiceName )
@@ -339,7 +339,7 @@ sal_Bool ScFilterDetect::supportsService( const OUString& sServiceName )
 
 css::uno::Sequence<OUString> ScFilterDetect::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ExtendedTypeDetection" };
+    return { u"com.sun.star.frame.ExtendedTypeDetection"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

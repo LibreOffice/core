@@ -44,7 +44,7 @@ uno::Reference<drawing::XShape > ScPageObj::CreateShape( SdrObject *pObj ) const
 
 OUString SAL_CALL ScPageObj::getImplementationName()
 {
-    return "ScPageObj";
+    return u"ScPageObj"_ustr;
 }
 
 sal_Bool SAL_CALL ScPageObj::supportsService( const OUString& rServiceName )
@@ -54,7 +54,7 @@ sal_Bool SAL_CALL ScPageObj::supportsService( const OUString& rServiceName )
 
 uno::Sequence<OUString> SAL_CALL ScPageObj::getSupportedServiceNames()
 {
-    return { "com.sun.star.sheet.SpreadsheetDrawPage" };
+    return { u"com.sun.star.sheet.SpreadsheetDrawPage"_ustr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

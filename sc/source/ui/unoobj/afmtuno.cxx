@@ -122,9 +122,9 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetAutoFieldMap()
 
 constexpr OUString SCAUTOFORMATSOBJ_SERVICE = u"com.sun.star.sheet.TableAutoFormats"_ustr;
 
-SC_SIMPLE_SERVICE_INFO( ScAutoFormatFieldObj, "ScAutoFormatFieldObj", "com.sun.star.sheet.TableAutoFormatField" )
-SC_SIMPLE_SERVICE_INFO( ScAutoFormatObj, "ScAutoFormatObj", "com.sun.star.sheet.TableAutoFormat" )
-SC_SIMPLE_SERVICE_INFO( ScAutoFormatsObj, "stardiv.StarCalc.ScAutoFormatsObj", SCAUTOFORMATSOBJ_SERVICE )
+SC_SIMPLE_SERVICE_INFO( ScAutoFormatFieldObj, u"ScAutoFormatFieldObj"_ustr, u"com.sun.star.sheet.TableAutoFormatField"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScAutoFormatObj, u"ScAutoFormatObj"_ustr, u"com.sun.star.sheet.TableAutoFormat"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScAutoFormatsObj, u"stardiv.StarCalc.ScAutoFormatsObj"_ustr, SCAUTOFORMATSOBJ_SERVICE )
 
 static bool lcl_FindAutoFormatIndex( const ScAutoFormat& rFormats, std::u16string_view rName, sal_uInt16& rOutIndex )
 {
@@ -261,7 +261,7 @@ void SAL_CALL ScAutoFormatsObj::removeByName( const OUString& aName )
 uno::Reference<container::XEnumeration> SAL_CALL ScAutoFormatsObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.sheet.TableAutoFormatEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.sheet.TableAutoFormatEnumeration"_ustr);
 }
 
 // container::XIndexAccess
@@ -368,7 +368,7 @@ rtl::Reference<ScAutoFormatFieldObj> ScAutoFormatObj::GetObjectByIndex_Impl(sal_
 uno::Reference<container::XEnumeration> SAL_CALL ScAutoFormatObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.sheet.TableAutoFormatEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.sheet.TableAutoFormatEnumeration"_ustr);
 }
 
 // container::XIndexAccess

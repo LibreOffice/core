@@ -475,8 +475,8 @@ void ScCondFormatObj::createEntry(const sal_Int32 nType, const sal_Int32 nPos)
     switch (nType)
     {
         case sheet::ConditionEntryType::CONDITION:
-            pNewEntry = new ScCondFormatEntry(ScConditionMode::Equal, "", "",
-                    rDoc, pFormat->GetRange().GetTopLeftCorner(), "");
+            pNewEntry = new ScCondFormatEntry(ScConditionMode::Equal, u""_ustr, u""_ustr,
+                    rDoc, pFormat->GetRange().GetTopLeftCorner(), u""_ustr);
         break;
         case sheet::ConditionEntryType::COLORSCALE:
             pNewEntry = new ScColorScaleFormat(&rDoc);

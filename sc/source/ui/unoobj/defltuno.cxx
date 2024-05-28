@@ -69,7 +69,7 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetDocDefaultsMap()
 
 using sc::TwipsToEvenHMM;
 
-SC_SIMPLE_SERVICE_INFO( ScDocDefaultsObj, "ScDocDefaultsObj", "com.sun.star.sheet.Defaults" )
+SC_SIMPLE_SERVICE_INFO( ScDocDefaultsObj, u"ScDocDefaultsObj"_ustr, u"com.sun.star.sheet.Defaults"_ustr )
 
 ScDocDefaultsObj::ScDocDefaultsObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh ),

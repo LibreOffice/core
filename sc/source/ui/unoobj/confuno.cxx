@@ -178,8 +178,8 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 n > css::document::LinkUpdateModes::GLOBAL_SETTING)
         {
             throw css::lang::IllegalArgumentException(
-                ("LinkUpdateMode property value must be a SHORT with a value in"
-                 " the range of the css::document::LinkUpdateModes constants"),
+                (u"LinkUpdateMode property value must be a SHORT with a value in"
+                 " the range of the css::document::LinkUpdateModes constants"_ustr),
                 css::uno::Reference<css::uno::XInterface>(), -1);
         }
         ScLkUpdMode eMode;
@@ -336,23 +336,23 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
         uno::Sequence< beans::PropertyValue > aInfo;
         if ( !( aValue >>= aInfo ) )
             throw lang::IllegalArgumentException(
-                "Value of type Sequence<PropertyValue> expected!",
+                u"Value of type Sequence<PropertyValue> expected!"_ustr,
                 uno::Reference< uno::XInterface >(),
                 2 );
 
         if ( !pDocShell->SetModifyPasswordInfo( aInfo ) )
             throw beans::PropertyVetoException(
-                "The hash is not allowed to be changed now!" );
+                u"The hash is not allowed to be changed now!"_ustr );
     }
     else if (aPropertyName == SC_UNO_MODIFYPASSWORDHASH)
     {
         sal_Int32 nHash;
         if (!(aValue >>= nHash))
-            throw lang::IllegalArgumentException("Value of type sal_Int32 expected!",
+            throw lang::IllegalArgumentException(u"Value of type sal_Int32 expected!"_ustr,
                                                  uno::Reference<uno::XInterface>(), 2);
 
         if (!pDocShell->SetModifyPasswordHash(nHash))
-            throw beans::PropertyVetoException("The hash is not allowed to be changed now!");
+            throw beans::PropertyVetoException(u"The hash is not allowed to be changed now!"_ustr);
     }
     else if (aPropertyName == SC_UNO_EMBED_FONTS)
     {
@@ -649,7 +649,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDocumentConfiguration )
 // XServiceInfo
 OUString SAL_CALL ScDocumentConfiguration::getImplementationName()
 {
-    return "ScDocumentConfiguration";
+    return u"ScDocumentConfiguration"_ustr;
 }
 
 sal_Bool SAL_CALL ScDocumentConfiguration::supportsService( const OUString& rServiceName )
@@ -659,8 +659,8 @@ sal_Bool SAL_CALL ScDocumentConfiguration::supportsService( const OUString& rSer
 
 uno::Sequence<OUString> SAL_CALL ScDocumentConfiguration::getSupportedServiceNames()
 {
-    return {"com.sun.star.comp.SpreadsheetSettings",
-            "com.sun.star.document.Settings"};
+    return {u"com.sun.star.comp.SpreadsheetSettings"_ustr,
+            u"com.sun.star.document.Settings"_ustr};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

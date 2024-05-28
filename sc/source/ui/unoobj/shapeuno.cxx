@@ -255,7 +255,7 @@ static bool lcl_GetCaptionPoint( const uno::Reference< drawing::XShape >& xShape
         uno::Reference < beans::XPropertySet > xShapeProp (xShape, uno::UNO_QUERY);
         if (xShapeProp.is())
         {
-            xShapeProp->getPropertyValue("CaptionPoint") >>= rCaptionPoint;
+            xShapeProp->getPropertyValue(u"CaptionPoint"_ustr) >>= rCaptionPoint;
             bReturn = true;
         }
     }
@@ -316,7 +316,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
     {
         uno::Reference<sheet::XCellRangeAddressable> xRangeAdd(aValue, uno::UNO_QUERY);
         if (!xRangeAdd.is())
-            throw lang::IllegalArgumentException("only XCell or XSpreadsheet objects allowed", getXWeak(), 0);
+            throw lang::IllegalArgumentException(u"only XCell or XSpreadsheet objects allowed"_ustr, getXWeak(), 0);
 
         SdrObject *pObj = GetSdrObject();
         if (pObj)
@@ -1436,7 +1436,7 @@ ScShapeObj::getEvents(  )
 
 OUString SAL_CALL ScShapeObj::getImplementationName(  )
 {
-    return "com.sun.star.comp.sc.ScShapeObj";
+    return u"com.sun.star.comp.sc.ScShapeObj"_ustr;
 }
 
 sal_Bool SAL_CALL ScShapeObj::supportsService( const OUString& ServiceName )

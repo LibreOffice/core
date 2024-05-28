@@ -30,7 +30,7 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-SC_SIMPLE_SERVICE_INFO( ScChartRangeSelectionListener, "ScChartRangeSelectionListener",
+SC_SIMPLE_SERVICE_INFO( ScChartRangeSelectionListener, u"ScChartRangeSelectionListener"_ustr,
                         SC_SERVICENAME_CHRANGEHILIGHT )
 
 ScChartRangeSelectionListener::ScChartRangeSelectionListener( ScTabViewShell * pViewShell ) :

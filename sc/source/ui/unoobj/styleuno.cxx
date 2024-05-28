@@ -415,8 +415,8 @@ constexpr OUString SCCELLSTYLE_SERVICE = u"com.sun.star.style.CellStyle"_ustr;
 constexpr OUString SCPAGESTYLE_SERVICE = u"com.sun.star.style.PageStyle"_ustr;
 constexpr OUString SCGRAPHICSTYLE_SERVICE = u"com.sun.star.style.GraphicStyle"_ustr;
 
-SC_SIMPLE_SERVICE_INFO( ScStyleFamiliesObj, "ScStyleFamiliesObj", "com.sun.star.style.StyleFamilies" )
-SC_SIMPLE_SERVICE_INFO( ScStyleFamilyObj, "ScStyleFamilyObj", "com.sun.star.style.StyleFamily" )
+SC_SIMPLE_SERVICE_INFO( ScStyleFamiliesObj, u"ScStyleFamiliesObj"_ustr, u"com.sun.star.style.StyleFamilies"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScStyleFamilyObj, u"ScStyleFamilyObj"_ustr, u"com.sun.star.style.StyleFamily"_ustr )
 
 constexpr OUString SC_PAPERBIN_DEFAULTNAME = u"[From printer settings]"_ustr;
 
@@ -564,8 +564,8 @@ void SAL_CALL ScStyleFamiliesObj::loadStylesFromURL( const OUString& aURL,
                 if (!xInputStream.is())
                 {
                     throw lang::IllegalArgumentException(
-                        "Parameter 'InputStream' could not be converted "
-                        "to type 'com::sun::star::io::XInputStream'",
+                        u"Parameter 'InputStream' could not be converted "
+                        "to type 'com::sun::star::io::XInputStream'"_ustr,
                         nullptr, 0);
                 }
                 break;
@@ -2047,7 +2047,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScStyleObj )
 
 OUString SAL_CALL ScStyleObj::getImplementationName()
 {
-    return "ScStyleObj";
+    return u"ScStyleObj"_ustr;
 }
 
 sal_Bool SAL_CALL ScStyleObj::supportsService( const OUString& rServiceName )

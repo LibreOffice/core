@@ -27,7 +27,7 @@ ScExcelBiffDetect::~ScExcelBiffDetect() {}
 
 OUString ScExcelBiffDetect::getImplementationName()
 {
-    return "com.sun.star.comp.calc.ExcelBiffFormatDetector";
+    return u"com.sun.star.comp.calc.ExcelBiffFormatDetector"_ustr;
 }
 
 sal_Bool ScExcelBiffDetect::supportsService( const OUString& aName )
@@ -37,7 +37,7 @@ sal_Bool ScExcelBiffDetect::supportsService( const OUString& aName )
 
 uno::Sequence<OUString> ScExcelBiffDetect::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ExtendedTypeDetection" };
+    return { u"com.sun.star.frame.ExtendedTypeDetection"_ustr };
 }
 
 namespace {
@@ -145,29 +145,29 @@ OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescri
     if (aType == "calc_MS_Excel_97" || aType == "calc_MS_Excel_97_VorlageTemplate")
     {
         // See if this stream is an Excel 97/XP/2003 (BIFF8) stream.
-        if (!hasStream(xInStream, "Workbook"))
+        if (!hasStream(xInStream, u"Workbook"_ustr))
             // BIFF8 is expected to contain a stream named "Workbook".
             return OUString();
 
-        aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= isTemplate(aType) ? OUString("MS Excel 97 Vorlage/Template") : OUString("MS Excel 97");
+        aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= isTemplate(aType) ? u"MS Excel 97 Vorlage/Template"_ustr : u"MS Excel 97"_ustr;
     }
 
     else if (aType == "calc_MS_Excel_95" || aType == "calc_MS_Excel_95_VorlageTemplate")
     {
         // See if this stream is an Excel 95 (BIFF5) stream.
-        if (!hasStream(xInStream, "Book"))
+        if (!hasStream(xInStream, u"Book"_ustr))
             return OUString();
 
-        aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= isTemplate(aType) ? OUString("MS Excel 95 Vorlage/Template") : OUString("MS Excel 95");
+        aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= isTemplate(aType) ? u"MS Excel 95 Vorlage/Template"_ustr : u"MS Excel 95"_ustr;
     }
 
     else if (aType == "calc_MS_Excel_5095" || aType == "calc_MS_Excel_5095_VorlageTemplate")
     {
         // See if this stream is an Excel 5.0/95 stream.
-        if (!hasStream(xInStream, "Book"))
+        if (!hasStream(xInStream, u"Book"_ustr))
             return OUString();
 
-        aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= isTemplate(aType) ? OUString("MS Excel 5.0/95 Vorlage/Template") : OUString("MS Excel 5.0/95");
+        aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= isTemplate(aType) ? u"MS Excel 5.0/95 Vorlage/Template"_ustr : u"MS Excel 5.0/95"_ustr;
     }
 
     else if (aType == "calc_MS_Excel_40" || aType == "calc_MS_Excel_40_VorlageTemplate")
@@ -176,7 +176,7 @@ OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescri
         if (!isExcel40(xInStream))
             return OUString();
 
-        aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= isTemplate(aType) ? OUString("MS Excel 4.0 Vorlage/Template") : OUString("MS Excel 4.0");
+        aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= isTemplate(aType) ? u"MS Excel 4.0 Vorlage/Template"_ustr : u"MS Excel 4.0"_ustr;
     }
 
     else

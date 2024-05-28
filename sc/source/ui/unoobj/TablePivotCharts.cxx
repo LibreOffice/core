@@ -42,7 +42,7 @@ using namespace css;
 namespace sc
 {
 
-SC_SIMPLE_SERVICE_INFO(TablePivotCharts, "TablePivotCharts", "com.sun.star.table.TablePivotCharts")
+SC_SIMPLE_SERVICE_INFO(TablePivotCharts, u"TablePivotCharts"_ustr, u"com.sun.star.table.TablePivotCharts"_ustr)
 
 TablePivotCharts::TablePivotCharts(ScDocShell* pDocShell, SCTAB nTab)
     : m_pDocShell(pDocShell)

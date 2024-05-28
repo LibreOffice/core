@@ -39,7 +39,7 @@ bool ScWarnPassword::WarningOnPassword( SfxMedium& rMedium )
     Reference< XInteractionHandler > xHandler( rMedium.GetInteractionHandler());
     if( xHandler.is() )
     {
-        Any aException( InteractiveAppException("",
+        Any aException( InteractiveAppException(u""_ustr,
                 Reference <XInterface> (),
                 InteractionClassification_QUERY,
                 sal_uInt32(ERRCODE_SVX_EXPORT_FILTER_CRYPT)));

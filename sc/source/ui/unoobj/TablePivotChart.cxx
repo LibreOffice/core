@@ -26,7 +26,7 @@ using namespace css;
 namespace sc
 {
 
-SC_SIMPLE_SERVICE_INFO(TablePivotChart, "TablePivotChart", "com.sun.star.table.TablePivotChart")
+SC_SIMPLE_SERVICE_INFO(TablePivotChart, u"TablePivotChart"_ustr, u"com.sun.star.table.TablePivotChart"_ustr)
 
 TablePivotChart::TablePivotChart(ScDocShell* pDocShell, SCTAB nTab, OUString aName)
     : m_pDocShell(pDocShell)

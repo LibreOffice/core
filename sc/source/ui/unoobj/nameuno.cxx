@@ -71,9 +71,9 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetNamedRangesMap()
 
 constexpr OUString SCNAMEDRANGEOBJ_SERVICE = u"com.sun.star.sheet.NamedRange"_ustr;
 
-SC_SIMPLE_SERVICE_INFO( ScLabelRangeObj, "ScLabelRangeObj", "com.sun.star.sheet.LabelRange" )
-SC_SIMPLE_SERVICE_INFO( ScLabelRangesObj, "ScLabelRangesObj", "com.sun.star.sheet.LabelRanges" )
-SC_SIMPLE_SERVICE_INFO( ScNamedRangesObj, "ScNamedRangesObj", "com.sun.star.sheet.NamedRanges" )
+SC_SIMPLE_SERVICE_INFO( ScLabelRangeObj, u"ScLabelRangeObj"_ustr, u"com.sun.star.sheet.LabelRange"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScLabelRangesObj, u"ScLabelRangesObj"_ustr, u"com.sun.star.sheet.LabelRanges"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScNamedRangesObj, u"ScNamedRangesObj"_ustr, u"com.sun.star.sheet.NamedRanges"_ustr )
 
 // Database named ranges are not considered by getCount, hasByName, removeByName and getElementNames
 // Note that hidden named ranges are considered by these methods
@@ -409,7 +409,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScNamedRangeObj )
 
 OUString SAL_CALL ScNamedRangeObj::getImplementationName()
 {
-    return "ScNamedRangeObj";
+    return u"ScNamedRangeObj"_ustr;
 }
 
 sal_Bool SAL_CALL ScNamedRangeObj::supportsService( const OUString& rServiceName )
@@ -472,12 +472,12 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const OUString& aName,
         {
             case ScRangeData::IsNameValidType::NAME_INVALID_CELL_REF:
                 throw uno::RuntimeException(
-                    "Invalid name. Reference to a cell, or a range of cells not allowed",
+                    u"Invalid name. Reference to a cell, or a range of cells not allowed"_ustr,
                     getXWeak());
                 break;
             case ScRangeData::IsNameValidType::NAME_INVALID_BAD_STRING:
                 throw uno::RuntimeException(
-                    "Invalid name. Start with a letter, use only letters, numbers and underscore",
+                    u"Invalid name. Start with a letter, use only letters, numbers and underscore"_ustr,
                     getXWeak());
                 break;
             case ScRangeData::IsNameValidType::NAME_VALID:
@@ -567,7 +567,7 @@ void SAL_CALL ScNamedRangesObj::outputList( const table::CellAddress& aOutputPos
 uno::Reference<container::XEnumeration> SAL_CALL ScNamedRangesObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.sheet.NamedRangesEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.sheet.NamedRangesEnumeration"_ustr);
 }
 
 // container::XIndexAccess
@@ -1105,7 +1105,7 @@ void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )
 uno::Reference<container::XEnumeration> SAL_CALL ScLabelRangesObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.sheet.LabelRangesEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.sheet.LabelRangesEnumeration"_ustr);
 }
 
 // container::XIndexAccess

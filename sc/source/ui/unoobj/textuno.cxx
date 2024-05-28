@@ -80,8 +80,8 @@ static const SvxItemPropertySet * lcl_GetHdFtPropertySet()
     return &aHdFtPropertySet_Impl;
 }
 
-SC_SIMPLE_SERVICE_INFO( ScHeaderFooterContentObj, "ScHeaderFooterContentObj", "com.sun.star.sheet.HeaderFooterContent" )
-SC_SIMPLE_SERVICE_INFO( ScHeaderFooterTextObj, "ScHeaderFooterTextObj", "stardiv.one.Text.Text" )
+SC_SIMPLE_SERVICE_INFO( ScHeaderFooterContentObj, u"ScHeaderFooterContentObj"_ustr, u"com.sun.star.sheet.HeaderFooterContent"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScHeaderFooterTextObj, u"ScHeaderFooterTextObj"_ustr, u"stardiv.one.Text.Text"_ustr )
 
 ScHeaderFooterContentObj::ScHeaderFooterContentObj()
 {
@@ -284,7 +284,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScHeaderFooterTextObj::createTextCurs
 
 void ScHeaderFooterTextObj::FillDummyFieldData( ScHeaderFieldData& rData )
 {
-    OUString aDummy("???");
+    OUString aDummy(u"???"_ustr);
     rData.aTitle        = aDummy;
     rData.aLongDocName  = aDummy;
     rData.aShortDocName = aDummy;
@@ -302,7 +302,7 @@ OUString SAL_CALL ScHeaderFooterTextObj::getString()
     uno::Reference<css::sheet::XHeaderFooterContent> xContentObj = aTextData.GetContentObj();
     if (!xContentObj.is())
         throw css::uno::RuntimeException(
-            "ScHeaderFooterTextObj::getString: no ContentObj");
+            u"ScHeaderFooterTextObj::getString: no ContentObj"_ustr);
 
     rtl::Reference<ScHeaderFooterContentObj> pObj = ScHeaderFooterContentObj::getImplementation(xContentObj);
 

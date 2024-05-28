@@ -433,7 +433,7 @@ uno::Reference<table::XCellRange> SAL_CALL ScCellCursorObj::getCellRangeByName(
 
 OUString SAL_CALL ScCellCursorObj::getImplementationName()
 {
-    return "ScCellCursorObj";
+    return u"ScCellCursorObj"_ustr;
 }
 
 sal_Bool SAL_CALL ScCellCursorObj::supportsService( const OUString& rServiceName )

@@ -63,9 +63,9 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetValidatePropertyMap()
     return aValidatePropertyMap_Impl;
 }
 
-SC_SIMPLE_SERVICE_INFO( ScTableConditionalEntry, "ScTableConditionalEntry", "com.sun.star.sheet.TableConditionalEntry" )
-SC_SIMPLE_SERVICE_INFO( ScTableConditionalFormat, "ScTableConditionalFormat", "com.sun.star.sheet.TableConditionalFormat" )
-SC_SIMPLE_SERVICE_INFO( ScTableValidationObj, "ScTableValidationObj", "com.sun.star.sheet.TableValidation" )
+SC_SIMPLE_SERVICE_INFO( ScTableConditionalEntry, u"ScTableConditionalEntry"_ustr, u"com.sun.star.sheet.TableConditionalEntry"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScTableConditionalFormat, u"ScTableConditionalFormat"_ustr, u"com.sun.star.sheet.TableConditionalFormat"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScTableValidationObj, u"ScTableValidationObj"_ustr, u"com.sun.star.sheet.TableValidation"_ustr )
 
 static sal_Int32 lcl_ConditionModeToOperatorNew( ScConditionMode eMode )
 {
@@ -361,7 +361,7 @@ void SAL_CALL ScTableConditionalFormat::clear()
 uno::Reference<container::XEnumeration> SAL_CALL ScTableConditionalFormat::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.sheet.TableConditionalEntryEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.sheet.TableConditionalEntryEnumeration"_ustr);
 }
 
 // XIndexAccess

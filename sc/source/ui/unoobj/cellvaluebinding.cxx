@@ -60,7 +60,7 @@ namespace calc
     {
         // register our property at the base class
         registerPropertyNoMember(
-            "BoundCell",
+            u"BoundCell"_ustr,
             PROP_HANDLE_BOUND_CELL,
             PropertyAttribute::BOUND | PropertyAttribute::READONLY,
             cppu::UnoType<CellAddress>::get(),
@@ -219,7 +219,7 @@ namespace calc
                         if ( xProp.is() )
                         {
                             sal_Int32 nResultType;
-                            if ( (xProp->getPropertyValue("FormulaResultType2") >>= nResultType)
+                            if ( (xProp->getPropertyValue(u"FormulaResultType2"_ustr) >>= nResultType)
                                     && nResultType == FormulaResult::VALUE )
                                 bHasValue = true;
                         }
@@ -380,7 +380,7 @@ namespace calc
     {
         // set boolean number format if not already set
 
-        OUString sPropName( "NumberFormat" );
+        OUString sPropName( u"NumberFormat"_ustr );
         Reference<XPropertySet> xCellProp( m_xCell, UNO_QUERY );
         Reference<XNumberFormatsSupplier> xSupplier( m_xDocument, UNO_QUERY );
         if ( !(xSupplier.is() && xCellProp.is()) )
@@ -407,10 +407,10 @@ namespace calc
         if ( xOldFormat.is() )
         {
             // use the locale of the existing format
-            xOldFormat->getPropertyValue("Locale") >>= aLocale;
+            xOldFormat->getPropertyValue(u"Locale"_ustr) >>= aLocale;
 
             sal_Int16 nOldType = ::comphelper::getINT16(
-                xOldFormat->getPropertyValue("Type") );
+                xOldFormat->getPropertyValue(u"Type"_ustr) );
             if ( nOldType & NumberFormat::LOGICAL )
                 bWasBoolean = true;
         }
@@ -425,7 +425,7 @@ namespace calc
     void OCellValueBinding::checkInitialized()
     {
         if ( !m_bInitialized )
-            throw NotInitializedException("CellValueBinding is not initialized", getXWeak());
+            throw NotInitializedException(u"CellValueBinding is not initialized"_ustr, getXWeak());
     }
 
     void OCellValueBinding::checkValueType( std::unique_lock<std::mutex>& rGuard, const Type& _rType ) const
@@ -444,7 +444,7 @@ namespace calc
 
     OUString SAL_CALL OCellValueBinding::getImplementationName(  )
     {
-        return "com.sun.star.comp.sheet.OCellValueBinding";
+        return u"com.sun.star.comp.sheet.OCellValueBinding"_ustr;
     }
 
     sal_Bool SAL_CALL OCellValueBinding::supportsService( const OUString& _rServiceName )
@@ -524,7 +524,7 @@ namespace calc
     void SAL_CALL OCellValueBinding::initialize( const Sequence< Any >& _rArguments )
     {
         if ( m_bInitialized )
-            throw RuntimeException("CellValueBinding is already initialized", getXWeak());
+            throw RuntimeException(u"CellValueBinding is already initialized"_ustr, getXWeak());
 
         // get the cell address
         CellAddress aAddress;
@@ -547,7 +547,7 @@ namespace calc
         }
 
         if ( !bFoundAddress )
-            throw RuntimeException("Cell not found", getXWeak());
+            throw RuntimeException(u"Cell not found"_ustr, getXWeak());
 
         // get the cell object
         try
@@ -579,7 +579,7 @@ namespace calc
         }
 
         if ( !m_xCell.is() )
-            throw RuntimeException("Failed to retrieve cell object", getXWeak());
+            throw RuntimeException(u"Failed to retrieve cell object"_ustr, getXWeak());
 
         m_xCellText.set(m_xCell, css::uno::UNO_QUERY);
 

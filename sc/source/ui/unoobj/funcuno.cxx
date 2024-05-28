@@ -232,7 +232,7 @@ ScFunctionAccess_get_implementation(css::uno::XComponentContext*, css::uno::Sequ
 // XServiceInfo
 OUString SAL_CALL ScFunctionAccess::getImplementationName()
 {
-    return "stardiv.StarCalc.ScFunctionAccess";
+    return u"stardiv.StarCalc.ScFunctionAccess"_ustr;
 }
 
 sal_Bool SAL_CALL ScFunctionAccess::supportsService( const OUString& rServiceName )

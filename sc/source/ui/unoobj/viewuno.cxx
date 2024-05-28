@@ -123,7 +123,7 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetViewOptPropertyMap()
 constexpr OUString SCTABVIEWOBJ_SERVICE = u"com.sun.star.sheet.SpreadsheetView"_ustr;
 constexpr OUString SCVIEWSETTINGS_SERVICE = u"com.sun.star.sheet.SpreadsheetViewSettings"_ustr;
 
-SC_SIMPLE_SERVICE_INFO( ScViewPaneBase, "ScViewPaneObj", "com.sun.star.sheet.SpreadsheetViewPane" )
+SC_SIMPLE_SERVICE_INFO( ScViewPaneBase, u"ScViewPaneObj"_ustr, u"com.sun.star.sheet.SpreadsheetViewPane"_ustr )
 
 ScViewPaneBase::ScViewPaneBase(ScTabViewShell* pViewSh, sal_uInt16 nP) :
     pViewShell( pViewSh ),
@@ -988,7 +988,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelectionFromString( const OUString& aStrRang
 uno::Reference<container::XEnumeration> SAL_CALL ScTabViewObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.sheet.SpreadsheetViewPanesEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.sheet.SpreadsheetViewPanesEnumeration"_ustr);
 }
 
 // XIndexAccess
@@ -2102,7 +2102,7 @@ void ScTabViewObj::RangeSelChanged( const OUString& rText )
 // XServiceInfo
 OUString SAL_CALL ScTabViewObj::getImplementationName()
 {
-    return "ScTabViewObj";
+    return u"ScTabViewObj"_ustr;
 }
 
 sal_Bool SAL_CALL ScTabViewObj::supportsService( const OUString& rServiceName )

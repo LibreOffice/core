@@ -66,12 +66,12 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetSheetLinkMap()
     return aSheetLinkMap_Impl;
 }
 
-SC_SIMPLE_SERVICE_INFO( ScAreaLinkObj, "ScAreaLinkObj", "com.sun.star.sheet.CellAreaLink" )
-SC_SIMPLE_SERVICE_INFO( ScAreaLinksObj, "ScAreaLinksObj", "com.sun.star.sheet.CellAreaLinks" )
-SC_SIMPLE_SERVICE_INFO( ScDDELinkObj, "ScDDELinkObj", "com.sun.star.sheet.DDELink" )
-SC_SIMPLE_SERVICE_INFO( ScDDELinksObj, "ScDDELinksObj", "com.sun.star.sheet.DDELinks" )
-SC_SIMPLE_SERVICE_INFO( ScSheetLinkObj, "ScSheetLinkObj", "com.sun.star.sheet.SheetLink" )
-SC_SIMPLE_SERVICE_INFO( ScSheetLinksObj, "ScSheetLinksObj", "com.sun.star.sheet.SheetLinks" )
+SC_SIMPLE_SERVICE_INFO( ScAreaLinkObj, u"ScAreaLinkObj"_ustr, u"com.sun.star.sheet.CellAreaLink"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScAreaLinksObj, u"ScAreaLinksObj"_ustr, u"com.sun.star.sheet.CellAreaLinks"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScDDELinkObj, u"ScDDELinkObj"_ustr, u"com.sun.star.sheet.DDELink"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScDDELinksObj, u"ScDDELinksObj"_ustr, u"com.sun.star.sheet.DDELinks"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScSheetLinkObj, u"ScSheetLinkObj"_ustr, u"com.sun.star.sheet.SheetLink"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScSheetLinksObj, u"ScSheetLinksObj"_ustr, u"com.sun.star.sheet.SheetLinks"_ustr )
 
 ScSheetLinkObj::ScSheetLinkObj(ScDocShell* pDocSh, OUString aName) :
     aPropSet( lcl_GetSheetLinkMap() ),
@@ -436,7 +436,7 @@ rtl::Reference<ScSheetLinkObj> ScSheetLinksObj::GetObjectByName_Impl(const OUStr
 uno::Reference<container::XEnumeration> SAL_CALL ScSheetLinksObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.sheet.SheetLinksEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.sheet.SheetLinksEnumeration"_ustr);
 }
 
 // XIndexAccess
@@ -942,7 +942,7 @@ void SAL_CALL ScAreaLinksObj::removeByIndex( sal_Int32 nIndex )
 uno::Reference<container::XEnumeration> SAL_CALL ScAreaLinksObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.sheet.CellAreaLinksEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.sheet.CellAreaLinksEnumeration"_ustr);
 }
 
 // XIndexAccess
@@ -1140,7 +1140,7 @@ uno::Sequence< uno::Sequence< uno::Any > > ScDDELinkObj::getResults(  )
     if ( !bSuccess )
     {
         throw uno::RuntimeException(
-            "ScDDELinkObj::getResults: failed to get results!" );
+            u"ScDDELinkObj::getResults: failed to get results!"_ustr );
     }
 
     return aReturn;
@@ -1165,7 +1165,7 @@ void ScDDELinkObj::setResults( const uno::Sequence< uno::Sequence< uno::Any > >&
     if ( !bSuccess )
     {
         throw uno::RuntimeException(
-            "ScDDELinkObj::setResults: failed to set results!" );
+            u"ScDDELinkObj::setResults: failed to set results!"_ustr );
     }
 }
 
@@ -1237,7 +1237,7 @@ rtl::Reference<ScDDELinkObj> ScDDELinksObj::GetObjectByName_Impl(std::u16string_
 uno::Reference<container::XEnumeration> SAL_CALL ScDDELinksObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.sheet.DDELinksEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.sheet.DDELinksEnumeration"_ustr);
 }
 
 // XIndexAccess
@@ -1369,7 +1369,7 @@ uno::Reference< sheet::XDDELink > ScDDELinksObj::addDDELink(
     if ( !xLink.is() )
     {
         throw uno::RuntimeException(
-            "ScDDELinksObj::addDDELink: cannot add DDE link!" );
+            u"ScDDELinksObj::addDDELink: cannot add DDE link!"_ustr );
     }
 
     return xLink;
@@ -1569,7 +1569,7 @@ uno::Reference< container::XEnumeration > SAL_CALL ScExternalDocLinkObj::createE
 {
     SolarMutexGuard aGuard;
     uno::Reference< container::XEnumeration > aRef(
-        new ScIndexEnumeration(this, "com.sun.star.sheet.ExternalDocLink"));
+        new ScIndexEnumeration(this, u"com.sun.star.sheet.ExternalDocLink"_ustr));
     return aRef;
 }
 
@@ -1670,7 +1670,7 @@ uno::Reference< container::XEnumeration > SAL_CALL ScExternalDocLinksObj::create
 {
     SolarMutexGuard aGuard;
     uno::Reference< container::XEnumeration > aRef(
-        new ScIndexEnumeration(this, "com.sun.star.sheet.ExternalDocLinks"));
+        new ScIndexEnumeration(this, u"com.sun.star.sheet.ExternalDocLinks"_ustr));
     return aRef;
 }
 

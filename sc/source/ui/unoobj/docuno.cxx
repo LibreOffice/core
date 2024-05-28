@@ -239,13 +239,13 @@ constexpr OUString SCMODELOBJ_SERVICE = u"com.sun.star.sheet.SpreadsheetDocument
 constexpr OUString SCDOCSETTINGS_SERVICE = u"com.sun.star.sheet.SpreadsheetDocumentSettings"_ustr;
 constexpr OUString SCDOC_SERVICE = u"com.sun.star.document.OfficeDocument"_ustr;
 
-SC_SIMPLE_SERVICE_INFO( ScAnnotationsObj, "ScAnnotationsObj", "com.sun.star.sheet.CellAnnotations" )
-SC_SIMPLE_SERVICE_INFO( ScDrawPagesObj, "ScDrawPagesObj", "com.sun.star.drawing.DrawPages" )
-SC_SIMPLE_SERVICE_INFO( ScScenariosObj, "ScScenariosObj", "com.sun.star.sheet.Scenarios" )
-SC_SIMPLE_SERVICE_INFO( ScSpreadsheetSettingsObj, "ScSpreadsheetSettingsObj", "com.sun.star.sheet.SpreadsheetDocumentSettings" )
-SC_SIMPLE_SERVICE_INFO( ScTableColumnsObj, "ScTableColumnsObj", "com.sun.star.table.TableColumns" )
-SC_SIMPLE_SERVICE_INFO( ScTableRowsObj, "ScTableRowsObj", "com.sun.star.table.TableRows" )
-SC_SIMPLE_SERVICE_INFO( ScTableSheetsObj, "ScTableSheetsObj", "com.sun.star.sheet.Spreadsheets" )
+SC_SIMPLE_SERVICE_INFO( ScAnnotationsObj, u"ScAnnotationsObj"_ustr, u"com.sun.star.sheet.CellAnnotations"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScDrawPagesObj, u"ScDrawPagesObj"_ustr, u"com.sun.star.drawing.DrawPages"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScScenariosObj, u"ScScenariosObj"_ustr, u"com.sun.star.sheet.Scenarios"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScSpreadsheetSettingsObj, u"ScSpreadsheetSettingsObj"_ustr, u"com.sun.star.sheet.SpreadsheetDocumentSettings"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScTableColumnsObj, u"ScTableColumnsObj"_ustr, u"com.sun.star.table.TableColumns"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScTableRowsObj, u"ScTableRowsObj"_ustr, u"com.sun.star.table.TableRows"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScTableSheetsObj, u"ScTableSheetsObj"_ustr, u"com.sun.star.sheet.Spreadsheets"_ustr )
 
 class ScPrintUIOptions : public vcl::PrinterOptionsHelper
 {
@@ -266,26 +266,26 @@ ScPrintUIOptions::ScPrintUIOptions()
 
     // load the writer PrinterOptions into the custom tab
     m_aUIProperties[nIdx].Name = "OptionsUIFile";
-    m_aUIProperties[nIdx++].Value <<= OUString("modules/scalc/ui/printeroptions.ui");
+    m_aUIProperties[nIdx++].Value <<= u"modules/scalc/ui/printeroptions.ui"_ustr;
 
     // create Section for spreadsheet (results in an extra tab page in dialog)
     SvtModuleOptions aOpt;
     OUString aAppGroupname( ScResId( SCSTR_PRINTOPT_PRODNAME ) );
     aAppGroupname = aAppGroupname.replaceFirst( "%s", aOpt.GetModuleName( SvtModuleOptions::EModule::CALC ) );
-    m_aUIProperties[nIdx++].Value = setGroupControlOpt("tabcontrol-page2", aAppGroupname, OUString());
+    m_aUIProperties[nIdx++].Value = setGroupControlOpt(u"tabcontrol-page2"_ustr, aAppGroupname, OUString());
 
     // show subgroup for pages
-    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("pages", ScResId( SCSTR_PRINTOPT_PAGES ), OUString());
+    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt(u"pages"_ustr, ScResId( SCSTR_PRINTOPT_PAGES ), OUString());
 
     // create a bool option for empty pages
-    m_aUIProperties[nIdx++].Value = setBoolControlOpt("suppressemptypages", ScResId( SCSTR_PRINTOPT_SUPPRESSEMPTY ),
-                                                  ".HelpID:vcl:PrintDialog:IsSuppressEmptyPages:CheckBox",
-                                                  "IsSuppressEmptyPages",
+    m_aUIProperties[nIdx++].Value = setBoolControlOpt(u"suppressemptypages"_ustr, ScResId( SCSTR_PRINTOPT_SUPPRESSEMPTY ),
+                                                  u".HelpID:vcl:PrintDialog:IsSuppressEmptyPages:CheckBox"_ustr,
+                                                  u"IsSuppressEmptyPages"_ustr,
                                                   bSuppress);
     // show Subgroup for print content
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
     aPrintRangeOpt.maGroupHint = "PrintRange";
-    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("printrange", ScResId( SCSTR_PRINTOPT_PAGES ),
+    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt(u"printrange"_ustr, ScResId( SCSTR_PRINTOPT_PAGES ),
                                                       OUString(),
                                                       aPrintRangeOpt);
 
@@ -295,23 +295,23 @@ ScPrintUIOptions::ScPrintUIOptions()
         ScResId( SCSTR_PRINTOPT_SELECTEDSHEETS ),
         ScResId( SCSTR_PRINTOPT_SELECTEDCELLS )};
     uno::Sequence< OUString > aHelpIds{
-        ".HelpID:vcl:PrintDialog:PrintContent:ListBox"};
-    m_aUIProperties[nIdx++].Value = setChoiceListControlOpt( "printextrabox", OUString(),
-                                                    aHelpIds, "PrintContent",
+        u".HelpID:vcl:PrintDialog:PrintContent:ListBox"_ustr};
+    m_aUIProperties[nIdx++].Value = setChoiceListControlOpt( u"printextrabox"_ustr, OUString(),
+                                                    aHelpIds, u"PrintContent"_ustr,
                                                     aChoices, nContent );
 
     // show Subgroup for print range
     aPrintRangeOpt.mbInternalOnly = true;
-    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("fromwhich", ScResId( SCSTR_PRINTOPT_FROMWHICH ),
+    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt(u"fromwhich"_ustr, ScResId( SCSTR_PRINTOPT_FROMWHICH ),
                                                       OUString(),
                                                       aPrintRangeOpt);
 
     // create a choice for the range to print
-    OUString aPrintRangeName( "PrintRange" );
+    OUString aPrintRangeName( u"PrintRange"_ustr );
     aChoices = { ScResId( SCSTR_PRINTOPT_PRINTALLPAGES ), ScResId( SCSTR_PRINTOPT_PRINTPAGES ) };
-    aHelpIds = { ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:0",
-                 ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:1" };
-    uno::Sequence< OUString > aWidgetIds{ "rbAllPages", "rbRangePages" };
+    aHelpIds = { u".HelpID:vcl:PrintDialog:PrintRange:RadioButton:0"_ustr,
+                 u".HelpID:vcl:PrintDialog:PrintRange:RadioButton:1"_ustr };
+    uno::Sequence< OUString > aWidgetIds{ u"rbAllPages"_ustr, u"rbRangePages"_ustr };
     m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                                     aHelpIds,
                                                     aPrintRangeName,
@@ -320,15 +320,15 @@ ScPrintUIOptions::ScPrintUIOptions()
 
     // create an Edit dependent on "Pages" selected
     vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, true );
-    m_aUIProperties[nIdx++].Value = setEditControlOpt("pagerange", OUString(),
-                                                      ".HelpID:vcl:PrintDialog:PageRange:Edit",
-                                                      "PageRange", OUString(), aPageRangeOpt);
+    m_aUIProperties[nIdx++].Value = setEditControlOpt(u"pagerange"_ustr, OUString(),
+                                                      u".HelpID:vcl:PrintDialog:PageRange:Edit"_ustr,
+                                                      u"PageRange"_ustr, OUString(), aPageRangeOpt);
 
     vcl::PrinterOptionsHelper::UIControlOptions aEvenOddOpt(aPrintRangeName, 0, true);
-    m_aUIProperties[ nIdx++ ].Value = setChoiceListControlOpt("evenoddbox",
+    m_aUIProperties[ nIdx++ ].Value = setChoiceListControlOpt(u"evenoddbox"_ustr,
                                                            OUString(),
                                                            uno::Sequence<OUString>(),
-                                                           "EvenOdd",
+                                                           u"EvenOdd"_ustr,
                                                            uno::Sequence<OUString>(),
                                                            0,
                                                            uno::Sequence< sal_Bool >(),
@@ -1350,7 +1350,7 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
         {
             { "NewTheme", uno::Any(sThemeName) }
         }));
-        comphelper::dispatchCommand(".uno:ChangeTheme", aPropertyValues);
+        comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, aPropertyValues);
     }
 }
 
@@ -2226,7 +2226,7 @@ static void lcl_PDFExportHelper(const OutputDevice* pDev, const OUString& rTabNa
         if (pPDF->GetIsExportTaggedPDF())
         {
             if (bIsFirstPage)
-                pPDF->WrapBeginStructureElement(vcl::PDFWriter::Document, "Workbook");
+                pPDF->WrapBeginStructureElement(vcl::PDFWriter::Document, u"Workbook"_ustr);
             else
             {   // if there is a new worksheet(not first), delete and add new ScPDFState
                 assert(pPDF->GetScPDFState());
@@ -2353,7 +2353,7 @@ static void lcl_SetMediaScreen(const uno::Reference<drawing::XShape>& xMediaShap
 {
     OUString sMediaURL;
     uno::Reference<beans::XPropertySet> xPropSet(xMediaShape, uno::UNO_QUERY);
-    xPropSet->getPropertyValue("MediaURL") >>= sMediaURL;
+    xPropSet->getPropertyValue(u"MediaURL"_ustr) >>= sMediaURL;
     if (sMediaURL.isEmpty())
         return;
     vcl::PDFExtOutDevData* pPDF = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
@@ -2361,23 +2361,23 @@ static void lcl_SetMediaScreen(const uno::Reference<drawing::XShape>& xMediaShap
         return;
 
     OUString sTitle;
-    xPropSet->getPropertyValue("Title") >>= sTitle;
+    xPropSet->getPropertyValue(u"Title"_ustr) >>= sTitle;
     OUString sDescription;
-    xPropSet->getPropertyValue("Description") >>= sDescription;
+    xPropSet->getPropertyValue(u"Description"_ustr) >>= sDescription;
     OUString const altText(sTitle.isEmpty() ? sDescription
                            : sDescription.isEmpty()
                                ? sTitle
                                : OUString::Concat(sTitle) + OUString::Concat("\n")
                                      + OUString::Concat(sDescription));
 
-    OUString const mimeType(xPropSet->getPropertyValue("MediaMimeType").get<OUString>());
+    OUString const mimeType(xPropSet->getPropertyValue(u"MediaMimeType"_ustr).get<OUString>());
     SdrObject* pSdrObj(SdrObject::getSdrObjectFromXShape(xMediaShape));
     sal_Int32 nScreenId = pPDF->CreateScreen(aRect, altText, mimeType, nPageNumb, pSdrObj);
     if (sMediaURL.startsWith("vnd.sun.star.Package:"))
     {
         // Embedded media
         OUString aTempFileURL;
-        xPropSet->getPropertyValue("PrivateTempFileURL") >>= aTempFileURL;
+        xPropSet->getPropertyValue(u"PrivateTempFileURL"_ustr) >>= aTempFileURL;
         pPDF->SetScreenStream(nScreenId, aTempFileURL);
     }
     else // Linked media
@@ -3359,7 +3359,7 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const OUString& aPropertyName )
                 That constant will be equivalent to 'ThisComponent' but for
                 each application, so e.g. a 'ThisExcelDoc' and a 'ThisWordDoc'
                 constant can co-exist, as required by VBA. */
-            aRet <<= OUString( "ThisExcelDoc" );
+            aRet <<= u"ThisExcelDoc"_ustr;
         }
         else if ( aPropertyName == SC_UNO_RUNTIMEUID )
         {
@@ -3561,7 +3561,7 @@ uno::Sequence<OUString> SAL_CALL ScModelObj::getAvailableServiceNames()
 // XServiceInfo
 OUString SAL_CALL ScModelObj::getImplementationName()
 {
-    return "ScModelObj";
+    return u"ScModelObj"_ustr;
     /* // Matching the .component information:
        return OUString( "com.sun.star.comp.Calc.SpreadsheetDocument" );
     */
@@ -4176,7 +4176,7 @@ void SAL_CALL ScTableSheetsObj::insertNewByName( const OUString& aName, sal_Int1
         bDone = pDocShell->GetDocFunc().InsertTable( nPosition, aName, true, true );
     }
     if (!bDone)
-        throw uno::RuntimeException("ScTableSheetsObj::insertNewByName(): Illegal object name or bad index. Duplicate name?");      // no other exceptions specified
+        throw uno::RuntimeException(u"ScTableSheetsObj::insertNewByName(): Illegal object name or bad index. Duplicate name?"_ustr);      // no other exceptions specified
 }
 
 void SAL_CALL ScTableSheetsObj::moveByName( const OUString& aName, sal_Int16 nDestination )
@@ -4218,7 +4218,7 @@ void SAL_CALL ScTableSheetsObj::copyByName( const OUString& aName,
         }
     }
     if (!bDone)
-        throw uno::RuntimeException("ScTableSheetsObj::copyByName(): Illegal object name or bad index. Duplicate name?");      // no other exceptions specified
+        throw uno::RuntimeException(u"ScTableSheetsObj::copyByName(): Illegal object name or bad index. Duplicate name?"_ustr);      // no other exceptions specified
 }
 
 void SAL_CALL ScTableSheetsObj::insertByName( const OUString& aName, const uno::Any& aElement )
@@ -4414,7 +4414,7 @@ uno::Sequence < uno::Reference< table::XCellRange > > SAL_CALL ScTableSheetsObj:
 uno::Reference<container::XEnumeration> SAL_CALL ScTableSheetsObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.sheet.SpreadsheetsEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.sheet.SpreadsheetsEnumeration"_ustr);
 }
 
 // XIndexAccess
@@ -4587,7 +4587,7 @@ void SAL_CALL ScTableColumnsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCou
 uno::Reference<container::XEnumeration> SAL_CALL ScTableColumnsObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.table.TableColumnsEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.table.TableColumnsEnumeration"_ustr);
 }
 
 // XIndexAccess
@@ -4829,7 +4829,7 @@ void SAL_CALL ScTableRowsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCount 
 uno::Reference<container::XEnumeration> SAL_CALL ScTableRowsObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.table.TableRowsEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.table.TableRowsEnumeration"_ustr);
 }
 
 // XIndexAccess
@@ -5131,7 +5131,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScAnnotationsObj::createEnumera
     //! iterate directly (more efficiently)?
 
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.sheet.CellAnnotationsEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.sheet.CellAnnotationsEnumeration"_ustr);
 }
 
 // XIndexAccess
@@ -5277,7 +5277,7 @@ void SAL_CALL ScScenariosObj::removeByName( const OUString& aName )
 uno::Reference<container::XEnumeration> SAL_CALL ScScenariosObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.sheet.ScenariosEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.sheet.ScenariosEnumeration"_ustr);
 }
 
 // XIndexAccess

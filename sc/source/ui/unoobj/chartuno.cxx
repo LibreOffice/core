@@ -54,8 +54,8 @@ using namespace css;
 
 #define PROP_HANDLE_RELATED_CELLRANGES  1
 
-SC_SIMPLE_SERVICE_INFO( ScChartObj, "ScChartObj", "com.sun.star.table.TableChart" )
-SC_SIMPLE_SERVICE_INFO( ScChartsObj, "ScChartsObj", "com.sun.star.table.TableCharts" )
+SC_SIMPLE_SERVICE_INFO( ScChartObj, u"ScChartObj"_ustr, u"com.sun.star.table.TableChart"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScChartsObj, u"ScChartsObj"_ustr, u"com.sun.star.table.TableCharts"_ustr )
 
 ScChartsObj::ScChartsObj(ScDocShell* pDocSh, SCTAB nT) :
     pDocShell( pDocSh ),
@@ -228,16 +228,16 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
         // set arguments
         uno::Sequence< beans::PropertyValue > aArgs{
             beans::PropertyValue(
-                    "CellRangeRepresentation", -1,
+                    u"CellRangeRepresentation"_ustr, -1,
                     uno::Any( sRangeStr ), beans::PropertyState_DIRECT_VALUE ),
             beans::PropertyValue(
-                    "HasCategories", -1,
+                    u"HasCategories"_ustr, -1,
                     uno::Any( bRowHeaders ), beans::PropertyState_DIRECT_VALUE ),
             beans::PropertyValue(
-                    "FirstCellAsLabel", -1,
+                    u"FirstCellAsLabel"_ustr, -1,
                     uno::Any( bColumnHeaders ), beans::PropertyState_DIRECT_VALUE ),
             beans::PropertyValue(
-                    "DataRowSource", -1,
+                    u"DataRowSource"_ustr, -1,
                     uno::Any( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE )
         };
         xReceiver->setArguments( aArgs );
@@ -289,7 +289,7 @@ void SAL_CALL ScChartsObj::removeByName( const OUString& aName )
 uno::Reference<container::XEnumeration> SAL_CALL ScChartsObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.table.TableChartsEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.table.TableChartsEnumeration"_ustr);
 }
 
 // XIndexAccess
@@ -412,7 +412,7 @@ ScChartObj::ScChartObj(ScDocShell* pDocSh, SCTAB nT, OUString aN)
 {
     pDocShell->GetDocument().AddUnoObject(*this);
 
-    registerPropertyNoMember( "RelatedCellRanges",
+    registerPropertyNoMember( u"RelatedCellRanges"_ustr,
         PROP_HANDLE_RELATED_CELLRANGES, beans::PropertyAttribute::MAYBEVOID,
         cppu::UnoType<uno::Sequence<table::CellRangeAddress>>::get(),
         css::uno::Any(uno::Sequence<table::CellRangeAddress>()) );

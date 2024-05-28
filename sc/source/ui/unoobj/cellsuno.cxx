@@ -818,15 +818,15 @@ constexpr OUString SCSHEETCELLRANGE_SERVICE = u"com.sun.star.sheet.SheetCellRang
 constexpr OUString SCSPREADSHEET_SERVICE = u"com.sun.star.sheet.Spreadsheet"_ustr;
 constexpr OUString SCSHEETCELL_SERVICE = u"com.sun.star.sheet.SheetCell"_ustr;
 
-SC_SIMPLE_SERVICE_INFO( ScCellFormatsEnumeration, "ScCellFormatsEnumeration", "com.sun.star.sheet.CellFormatRangesEnumeration" )
-SC_SIMPLE_SERVICE_INFO( ScCellFormatsObj, "ScCellFormatsObj", "com.sun.star.sheet.CellFormatRanges" )
-SC_SIMPLE_SERVICE_INFO( ScUniqueCellFormatsEnumeration, "ScUniqueCellFormatsEnumeration", "com.sun.star.sheet.UniqueCellFormatRangesEnumeration" )
-SC_SIMPLE_SERVICE_INFO( ScUniqueCellFormatsObj, "ScUniqueCellFormatsObj", "com.sun.star.sheet.UniqueCellFormatRanges" )
-SC_SIMPLE_SERVICE_INFO( ScCellRangesBase, "ScCellRangesBase", "stardiv.unknown" )
-SC_SIMPLE_SERVICE_INFO( ScCellsEnumeration, "ScCellsEnumeration", "com.sun.star.sheet.CellsEnumeration" )
-SC_SIMPLE_SERVICE_INFO( ScCellsObj, "ScCellsObj", "com.sun.star.sheet.Cells" )
-SC_SIMPLE_SERVICE_INFO( ScTableColumnObj, "ScTableColumnObj", "com.sun.star.table.TableColumn" )
-SC_SIMPLE_SERVICE_INFO( ScTableRowObj, "ScTableRowObj", "com.sun.star.table.TableRow" )
+SC_SIMPLE_SERVICE_INFO( ScCellFormatsEnumeration, u"ScCellFormatsEnumeration"_ustr, u"com.sun.star.sheet.CellFormatRangesEnumeration"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScCellFormatsObj, u"ScCellFormatsObj"_ustr, u"com.sun.star.sheet.CellFormatRanges"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScUniqueCellFormatsEnumeration, u"ScUniqueCellFormatsEnumeration"_ustr, u"com.sun.star.sheet.UniqueCellFormatRangesEnumeration"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScUniqueCellFormatsObj, u"ScUniqueCellFormatsObj"_ustr, u"com.sun.star.sheet.UniqueCellFormatRanges"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScCellRangesBase, u"ScCellRangesBase"_ustr, u"stardiv.unknown"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScCellsEnumeration, u"ScCellsEnumeration"_ustr, u"com.sun.star.sheet.CellsEnumeration"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScCellsObj, u"ScCellsObj"_ustr, u"com.sun.star.sheet.Cells"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScTableColumnObj, u"ScTableColumnObj"_ustr, u"com.sun.star.table.TableColumn"_ustr )
+SC_SIMPLE_SERVICE_INFO( ScTableRowObj, u"ScTableRowObj"_ustr, u"com.sun.star.table.TableRow"_ustr )
 
 //! move ScLinkListener into another file !!!
 
@@ -4422,7 +4422,7 @@ sal_Bool SAL_CALL ScCellRangesObj::hasByName( const OUString& aName )
 uno::Reference<container::XEnumeration> SAL_CALL ScCellRangesObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, "com.sun.star.sheet.SheetCellRangesEnumeration");
+    return new ScIndexEnumeration(this, u"com.sun.star.sheet.SheetCellRangesEnumeration"_ustr);
 }
 
 // XIndexAccess
@@ -4460,7 +4460,7 @@ sal_Bool SAL_CALL ScCellRangesObj::hasElements()
 // XServiceInfo
 OUString SAL_CALL ScCellRangesObj::getImplementationName()
 {
-    return "ScCellRangesObj";
+    return u"ScCellRangesObj"_ustr;
 }
 
 sal_Bool SAL_CALL ScCellRangesObj::supportsService( const OUString& rServiceName )
@@ -5680,7 +5680,7 @@ const SfxItemPropertyMap& ScCellRangeObj::GetItemPropertyMap()
 
 OUString SAL_CALL ScCellRangeObj::getImplementationName()
 {
-    return "ScCellRangeObj";
+    return u"ScCellRangeObj"_ustr;
 }
 
 sal_Bool SAL_CALL ScCellRangeObj::supportsService( const OUString& rServiceName )
@@ -6382,7 +6382,7 @@ const SfxItemPropertyMap& ScCellObj::GetItemPropertyMap()
 
 OUString SAL_CALL ScCellObj::getImplementationName()
 {
-    return "ScCellObj";
+    return u"ScCellObj"_ustr;
 }
 
 sal_Bool SAL_CALL ScCellObj::supportsService( const OUString& rServiceName )
@@ -7229,7 +7229,7 @@ void SAL_CALL ScTableSheetObj::setLinkMode( sheet::SheetLinkMode nLinkMode )
     OUString aUrl(getLinkUrl());
     OUString aSheet(getLinkSheetName());
 
-    link( aUrl, aSheet, "", "", nLinkMode );
+    link( aUrl, aSheet, u""_ustr, u""_ustr, nLinkMode );
 }
 
 OUString SAL_CALL ScTableSheetObj::getLinkUrl()
@@ -7251,7 +7251,7 @@ void SAL_CALL ScTableSheetObj::setLinkUrl( const OUString& aLinkUrl )
     sheet::SheetLinkMode eMode = getLinkMode();
     OUString aSheet(getLinkSheetName());
 
-    link( aLinkUrl, aSheet, "", "", eMode );
+    link( aLinkUrl, aSheet, u""_ustr, u""_ustr, eMode );
 }
 
 OUString SAL_CALL ScTableSheetObj::getLinkSheetName()
@@ -7273,7 +7273,7 @@ void SAL_CALL ScTableSheetObj::setLinkSheetName( const OUString& aLinkSheetName 
     sheet::SheetLinkMode eMode = getLinkMode();
     OUString aUrl(getLinkUrl());
 
-    link( aUrl, aLinkSheetName, "", "", eMode );
+    link( aUrl, aLinkSheetName, u""_ustr, u""_ustr, eMode );
 }
 
 void SAL_CALL ScTableSheetObj::link( const OUString& aUrl, const OUString& aSheetName,
@@ -8214,7 +8214,7 @@ const SfxItemPropertyMap& ScTableSheetObj::GetItemPropertyMap()
 
 OUString SAL_CALL ScTableSheetObj::getImplementationName()
 {
-    return "ScTableSheetObj";
+    return u"ScTableSheetObj"_ustr;
 }
 
 sal_Bool SAL_CALL ScTableSheetObj::supportsService( const OUString& rServiceName )
