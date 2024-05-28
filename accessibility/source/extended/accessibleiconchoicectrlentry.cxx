@@ -297,6 +297,7 @@ namespace accessibility
 
         if ( IsAlive_Impl() )
         {
+            nStateSet |= AccessibleStateType::FOCUSABLE;
             nStateSet |= AccessibleStateType::TRANSIENT;
             nStateSet |= AccessibleStateType::SELECTABLE;
             nStateSet |= AccessibleStateType::ENABLED;
@@ -308,7 +309,11 @@ namespace accessibility
             }
 
             if ( m_pIconCtrl && m_pIconCtrl->GetCursor() == m_pIconCtrl->GetEntry( m_nIndex ) )
+            {
                 nStateSet |=  AccessibleStateType::SELECTED;
+                if (m_pIconCtrl->HasChildPathFocus())
+                    nStateSet |= AccessibleStateType::FOCUSED;
+            }
         }
         else
             nStateSet |=  AccessibleStateType::DEFUNC;
