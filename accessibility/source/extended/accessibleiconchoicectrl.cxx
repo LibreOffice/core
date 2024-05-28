@@ -194,10 +194,7 @@ namespace accessibility
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
-        OUString sName = getCtrl()->GetAccessibleName();
-        if ( sName.isEmpty() )
-            sName = "IconChoiceControl";
-        return sName;
+        return getCtrl()->GetAccessibleName();
     }
 
     // XAccessibleSelection
