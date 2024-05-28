@@ -5597,21 +5597,8 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
             }
             else if(nMode == EditEntryMode::DELETE)
             {
-                m_pActiveShell->StartAction();
-                OUString sTable = SwResId(STR_TABLE_NAME);
-                SwRewriter aRewriterTableName;
-                aRewriterTableName.AddRule(UndoArg1, SwResId(STR_START_QUOTE));
-                aRewriterTableName.AddRule(UndoArg2, pCnt->GetName());
-                aRewriterTableName.AddRule(UndoArg3, SwResId(STR_END_QUOTE));
-                sTable = aRewriterTableName.Apply(sTable);
-
-                SwRewriter aRewriter;
-                aRewriter.AddRule(UndoArg1, sTable);
-                m_pActiveShell->StartUndo(SwUndoId::DELETE, &aRewriter);
-                m_pActiveShell->GetView().GetViewFrame().GetDispatcher()->Execute(FN_TABLE_SELECT_ALL);
-                m_pActiveShell->DeleteRow();
-                m_pActiveShell->EndUndo();
-                m_pActiveShell->EndAction();
+                m_pActiveShell->SelTable();
+                m_pActiveShell->DeleteTable();
             }
             else if(nMode == EditEntryMode::RENAME)
             {
