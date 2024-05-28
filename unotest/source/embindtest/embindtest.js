@@ -635,20 +635,10 @@ Module.addOnPostRun(function() {
         test.throwRuntimeException();
         console.assert(false);
     } catch (e) {
-        incrementExceptionRefcount(e);
-            //TODO, needed when building with JS-based -fexceptions, see
-            // <https://github.com/emscripten-core/emscripten/issues/17115> "[EH] Fix inconsistency
-            // of refcounting in Emscripten EH vs. Wasm EH"
-        //TODO: The recommended way to obtain the exception's type and message would reportedly
-        // (<https://emscripten.org/docs/porting/exceptions.html#
-        // handling-c-exceptions-from-javascript>) be
-        //   const [type, message] = getExceptionMessage(e);
-        // but that causes a "RuntimeError: memory access out of bounds" from within
-        // getExceptionMessage -> getExceptionMessageCommon -> __get_exception_message at least with
-        // emsdk 3.1.46:
-        console.assert(e.name === 'com::sun::star::uno::RuntimeException');
-        console.assert(e.message === undefined); //TODO
-        //TODO: console.assert(e.Message.startsWith('test'));
+        const [type, message] = getExceptionMessage(e);
+        console.assert(type === 'com::sun::star::uno::RuntimeException');
+        console.assert(message === undefined); //TODO
+        //TODO: verify css.uno.RuntimeException's Message startsWith('test')
         decrementExceptionRefcount(e);
     }
     const obj = {

@@ -63,7 +63,7 @@ With "-opensource -confirm-license" you agree to the open source license.
     cd qt5
     git checkout v5.15.2+wasm
     ./init-repository --module-subset=qtbase
-    ./configure -opensource -confirm-license -xplatform wasm-emscripten -feature-thread -prefix <whatever>
+    ./configure -opensource -confirm-license -xplatform wasm-emscripten -feature-thread -prefix <whatever> QMAKE_CFLAGS+=-sSUPPORT_LONGJMP=wasm QMAKE_CXXFLAGS+=-sSUPPORT_LONGJMP=wasm
     make -j<CORES> module-qtbase
 
 Optionally you can add the configure flag "-compile-examples". But then you also have to
@@ -115,25 +115,6 @@ Recommended configure setup is thusly:
 FWIW: it's also possible to build an almost static Linux LibreOffice by just using
 --disable-dynloading --enable-customtarget-components. System externals are still
 linked dynamically, but everything else is static.
-
-#### Experimental (AKA currently broken) WASM exception + SjLj build
-
-You can build LO with WASM exceptions, which should be "much" faster then the JS
-based Emscripten EH handling. For setjmp / longjmp (SjLj) used by the PNG and JPEG
-libraries error handling, this needs Emscripten 3.1.3+. That builds, but execution
-still fails early with a signature mismatch call to Task::UpdateMinPeriod in LO's
-job scheduler code (concretely: the call to `pSchedulerData->mpTask->UpdateMinPeriod` in
-`Scheduler::CallbackTaskScheduling` in vcl/source/app/scheduler.cxx being a pure virtual call on a
-destroyed `desktop::Desktop::m_firstRunTimer` instance, because `desktop::Desktop aDesktop` in
-`soffice_main` in desktop/source/app/sofficemain.cxx gets destroyed early, for unclear reasons).
-Unfortunately the build also needs a Qt build with
-"-s SUPPORT_LONGJMP=wasm", which is incompatible with the JS EH + SjLj.
-
-The LO configure flag is simply an additional --enable-wasm-exceptions. Qt5 can
-be patched in qtbase/mkspecs/wasm-emscripten/qmake.conf with the addition of
-
-    QMAKE_CFLAGS += -s SUPPORT_LONGJMP=wasm
-    QMAKE_CXXFLAGS += -s SUPPORT_LONGJMP=wasm
 
 ### "Deploying" soffice.wasm
 
