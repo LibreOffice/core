@@ -83,8 +83,7 @@ bridge_exception_objects := cpp2uno uno2cpp
 bridge_noopt_objects := except
 else ifeq ($(OS),EMSCRIPTEN)
 bridges_SELECTED_BRIDGE := gcc3_wasm
-bridge_exception_objects := abi
-bridge_noopt_objects := cpp2uno except uno2cpp
+bridge_exception_objects := abi cpp2uno uno2cpp
 $(eval $(call gb_Library_add_generated_asmobjects,$(CPPU_ENV)_uno, \
     CustomTarget/bridges/gcc3_wasm/callvirtualfunction-impls \
 ))
