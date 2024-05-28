@@ -120,6 +120,8 @@ struct SettingsTable_Impl
     bool m_bGutterAtTop = false;
     bool m_bDoNotBreakWrappedTables = false;
     bool m_bAllowTextAfterFloatingTableBreak = false;
+    /// Endnotes at section end, not at document end.
+    bool m_bEndnoteIsCollectAtSectionEnd = false;
 
     SettingsTable_Impl() :
       m_nDefaultTabStop( 720 ) //default is 1/2 in
@@ -437,6 +439,12 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
         break;
     case NS_ooxml::LN_CT_Compat_doNotBreakWrappedTables:
         m_pImpl->m_bDoNotBreakWrappedTables = nIntValue != 0;
+        break;
+    case NS_ooxml::LN_CT_EdnProps_pos:
+        if (nIntValue == NS_ooxml::LN_Value_ST_EdnPos_sectEnd)
+        {
+            m_pImpl->m_bEndnoteIsCollectAtSectionEnd = true;
+        }
         break;
     default:
     {
@@ -803,6 +811,11 @@ bool SettingsTable::GetNoLeading() const
 bool SettingsTable::GetGutterAtTop() const { return m_pImpl->m_bGutterAtTop; }
 
 bool SettingsTable::GetRecordChanges() const { return m_pImpl->m_bRecordChanges; }
+
+bool SettingsTable::GetEndnoteIsCollectAtSectionEnd() const
+{
+    return m_pImpl->m_bEndnoteIsCollectAtSectionEnd;
+}
 
 }//namespace dmapper
 } //namespace writerfilter

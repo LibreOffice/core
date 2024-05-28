@@ -11,6 +11,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/qa/XDumper.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 
 #include <test/xmldocptr.hxx>
 
@@ -86,6 +87,27 @@ CPPUNIT_TEST_FIXTURE(Test, testAddVerticalFrameOffsetsRTF)
     // - Actual  : 1449
     // i.e. table top should be ~2748, but was less, leading to an overlap.
     CPPUNIT_ASSERT_GREATER(nFlyBottom, nTableTop);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testEndnoteAtSectionEnd)
+{
+    // Given a document with at-section-end endnotes enabled:
+    loadFromFile(u"endnote-at-section-end.docx");
+
+    // Go to the second paragraph, which is inside Word's second section:
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    xParaEnum->nextElement();
+    uno::Reference<beans::XPropertySet> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xSection;
+    xPara->getPropertyValue("TextSection") >>= xSection;
+    bool bEndnoteIsCollectAtTextEnd = false;
+    xSection->getPropertyValue("EndnoteIsCollectAtTextEnd") >>= bEndnoteIsCollectAtTextEnd;
+    // Without the accompanying fix in place, this test would have failed, endnotes were always at
+    // document end.
+    CPPUNIT_ASSERT(bEndnoteIsCollectAtTextEnd);
 }
 }
 

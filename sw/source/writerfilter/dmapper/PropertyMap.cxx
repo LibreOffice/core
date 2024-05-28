@@ -74,6 +74,8 @@
 #include <frozen/bits/elsa_std.h>
 #include <frozen/unordered_set.h>
 
+#include <unoprnms.hxx>
+
 using namespace com::sun::star;
 
 namespace writerfilter::dmapper {
@@ -756,7 +758,7 @@ void SectionPropertyMap::DontBalanceTextColumns()
     }
 }
 
-void SectionPropertyMap::ApplySectionProperties( const uno::Reference< beans::XPropertySet >& xSection, DomainMapper_Impl& /*rDM_Impl*/ )
+void SectionPropertyMap::ApplySectionProperties( const uno::Reference< beans::XPropertySet >& xSection, DomainMapper_Impl& rDM_Impl )
 {
     try
     {
@@ -765,6 +767,11 @@ void SectionPropertyMap::ApplySectionProperties( const uno::Reference< beans::XP
             std::optional< PropertyMap::Property > pProp = getProperty( PROP_WRITING_MODE );
             if ( pProp )
                 xSection->setPropertyValue( "WritingMode", pProp->second );
+
+            if (rDM_Impl.GetSettingsTable()->GetEndnoteIsCollectAtSectionEnd())
+            {
+                xSection->setPropertyValue(UNO_NAME_ENDNOTE_IS_COLLECT_AT_TEXT_END, uno::Any(true));
+            }
         }
     }
     catch ( uno::Exception& )
