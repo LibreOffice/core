@@ -199,6 +199,10 @@ class SwContentTree final : public SfxListener
 
     void UpdateLastSelType();
 
+    bool IsDeletable(const weld::TreeIter& rEntry);
+    bool IsDeletable(const SwContent* pContent);
+    void DeleteAllContentOfEntryContentType(const weld::TreeIter& rEntry);
+
     /** Expand - Remember the state for content types */
     DECL_LINK(ExpandHdl, const weld::TreeIter&, bool);
     /** Collapse - Remember the state for content types. */

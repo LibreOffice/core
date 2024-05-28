@@ -1833,9 +1833,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             const bool bEditable
                 = !bReadonly && pType->IsEditable()
                   && ((bVisible && !bProtected) || ContentTypeId::REGION == nContentType);
-            const bool bDeletable = !bReadonly && pType->IsDeletable()
-                                    && ((bVisible && !bProtected && !bProtectBM)
-                                        || ContentTypeId::REGION == nContentType);
+            const bool bDeletable = pType->IsDeletable() && IsDeletable(*xEntry);
             const bool bRenamable
                 = !bReadonly
                   && (pType->IsRenamable()
@@ -1848,9 +1846,6 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 {
                     case ContentTypeId::OUTLINE:
                         bRemoveDeleteChapterEntry = false;
-                    break;
-                    case ContentTypeId::TABLE:
-                        bRemoveDeleteTableEntry = false;
                     break;
                     case ContentTypeId::FRAME:
                         bRemoveDeleteFrameEntry = false;
@@ -1933,11 +1928,13 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                     bRemoveSelectEntry = false;
                     bRemoveEditEntry = false;
                     bRemoveUnprotectEntry = false;
+                    bRemoveDeleteTableEntry = false;
                     bool bFull = false;
                     OUString sTableName = weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry))->GetName();
                     bool bProt = m_pActiveShell->HasTableAnyProtection( &sTableName, &bFull );
                     xPop->set_sensitive(OUString::number(403), !bFull);
                     xPop->set_sensitive(OUString::number(404), bProt);
+                    xPop->set_sensitive(u"deletetable"_ustr, !bFull);
                 }
                 else if(ContentTypeId::REGION == nContentType)
                 {
@@ -4798,7 +4795,7 @@ IMPL_LINK(SwContentTree, KeyInputHdl, const KeyEvent&, rEvent, bool)
                         && (pContentType->GetType() == ContentTypeId::FOOTNOTE
                             || pContentType->GetType() == ContentTypeId::ENDNOTE))
                 {
-                    ExecuteContextMenuAction(u"deleteallfootnotes"_ustr);
+                    DeleteAllContentOfEntryContentType(*xEntry);
                 }
             }
         }
@@ -5098,46 +5095,7 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
 
     if (rSelectedPopupEntry == "deleteallfootnotes" || rSelectedPopupEntry == "deleteallendnotes")
     {
-        if (!lcl_IsContentType(*xFirst, *m_xTreeView))
-            return;
-
-        //MakeAllOutlineContentTemporarilyVisible a(m_pActiveShell->GetDoc());
-
-        m_pActiveShell->AssureStdMode();
-
-        SwCursor* pCursor = m_pActiveShell->getShellCursor(true);
-
-        SwContentType* pCntType = weld::fromId<SwContentType*>(m_xTreeView->get_id(*xFirst));
-        const auto nCount = pCntType->GetMemberCount();
-
-        m_pActiveShell->StartAction();
-        m_pActiveShell->EnterAddMode();
-        for (size_t i = 0; i < nCount; i++)
-        {
-            const SwTextFootnoteContent* pTextFootnoteCnt =
-                    static_cast<const SwTextFootnoteContent*>(pCntType->GetMember(i));
-            if (pTextFootnoteCnt && !pTextFootnoteCnt->IsInvisible())
-            {
-                if (const SwTextAttr* pTextAttr = pTextFootnoteCnt->GetTextFootnote())
-                {
-                    const SwTextFootnote* pTextFootnote = pTextAttr->GetFootnote().GetTextFootnote();
-                    if (!pTextFootnote)
-                        continue;
-                    const SwTextNode& rTextNode = pTextFootnote->GetTextNode();
-                    auto nStart = pTextAttr->GetStart();
-                    pCursor->GetPoint()->Assign(rTextNode, nStart + 1);
-                    m_pActiveShell->SetMark();
-                    m_pActiveShell->SttSelect();
-                    pCursor->GetPoint()->Assign(rTextNode, nStart);
-                    m_pActiveShell->EndSelect();
-                }
-            }
-        }
-        m_pActiveShell->LeaveAddMode();
-        m_pActiveShell->EndAction();
-
-        m_pActiveShell->DelRight();
-
+        DeleteAllContentOfEntryContentType(*xFirst);
         return;
     }
 
@@ -5607,8 +5565,7 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
             }
             else if(nMode == EditEntryMode::DELETE)
             {
-                m_pActiveShell->SelTable();
-                m_pActiveShell->DeleteTable();
+                nSlot = FN_TABLE_DELETE_TABLE;
             }
             else if(nMode == EditEntryMode::RENAME)
             {
@@ -5865,6 +5822,342 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
         TimerUpdate(&m_aUpdTimer);
         grab_focus();
         m_xTreeView->vadjustment_set_value(nPos);
+    }
+}
+
+bool SwContentTree::IsDeletable(const weld::TreeIter& rEntry)
+{
+    if (lcl_IsContentType(rEntry, *m_xTreeView))
+    {
+        if (State::HIDDEN == m_eState || !m_pActiveShell)
+            return false;
+        if (m_pActiveShell->GetView().GetDocShell()->IsReadOnly())
+            return false;
+        SwContentType* pContentType
+            = weld::fromId<SwContentType*>(m_xTreeView->get_id(rEntry));
+        auto nCount = pContentType->GetMemberCount();
+        if (nCount == 0)
+            return false;
+        for (size_t i = 0; i < nCount; i++)
+        {
+            const SwContent* pContent = pContentType->GetMember(i);
+            if (IsDeletable(pContent))
+                return true;
+        }
+        return false;
+    }
+    return IsDeletable(weld::fromId<SwContent*>(m_xTreeView->get_id(rEntry)));
+}
+
+bool SwContentTree::IsDeletable(const SwContent* pContent)
+{
+    if (State::HIDDEN == m_eState || !m_pActiveShell)
+        return false;
+    if (m_pActiveShell->GetView().GetDocShell()->IsReadOnly())
+        return false;
+    if (pContent->IsInvisible() || pContent->IsProtect())
+        return false;
+
+    ContentTypeId eContentTypeId = pContent->GetParent()->GetType();
+
+    // table
+    if (eContentTypeId == ContentTypeId::TABLE)
+    {
+        bool bFull;
+        m_pActiveShell->HasTableAnyProtection(&pContent->GetName(), &bFull);
+        return !bFull;
+    }
+    // bookmark
+    if (eContentTypeId == ContentTypeId::BOOKMARK)
+        return !m_pActiveShell->getIDocumentSettingAccess().get(
+            DocumentSettingId::PROTECT_BOOKMARKS);
+    // index
+    if (eContentTypeId == ContentTypeId::INDEX)
+    {
+        const SwTOXBase* pBase = static_cast<const SwTOXBaseContent*>(pContent)->GetTOXBase();
+        return !SwEditShell::IsTOXBaseReadonly(*pBase);
+    }
+
+    return true;
+}
+
+void SwContentTree::DeleteAllContentOfEntryContentType(const weld::TreeIter& rEntry)
+{
+    weld::WaitObject aWait(m_xTreeView.get());
+
+    SwContentType* pContentType;
+    if (lcl_IsContentType(rEntry, *m_xTreeView))
+    {
+        assert(dynamic_cast<SwContentType*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(rEntry))));
+        pContentType = weld::fromId<SwContentType*>(m_xTreeView->get_id(rEntry));
+    }
+    else
+    {
+        assert(dynamic_cast<SwContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(rEntry))));
+        pContentType = const_cast<SwContentType*>(
+            weld::fromId<SwContent*>(m_xTreeView->get_id(rEntry))->GetParent());
+    }
+
+    const ContentTypeId eContentTypeId = pContentType->GetType();
+    if (eContentTypeId == ContentTypeId::TABLE)
+    {
+        m_pActiveShell->AssureStdMode();
+
+        const auto nCount = pContentType->GetMemberCount();
+
+        m_pActiveShell->StartAction();
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UndoArg1, pContentType->GetName());
+        m_pActiveShell->StartUndo(SwUndoId::DELETE, &aRewriter);
+        for (size_t i = 0; i < nCount; i++)
+        {
+            const SwContent* pContent = pContentType->GetMember(i);
+            m_pActiveShell->GotoTable(pContent->GetName());
+            m_pActiveShell->SelTable();
+            m_pActiveShell->DeleteTable();
+        }
+        m_pActiveShell->EndUndo();
+        m_pActiveShell->EndAction();
+    }
+    else if (eContentTypeId == ContentTypeId::FRAME
+             || eContentTypeId == ContentTypeId::GRAPHIC
+             || eContentTypeId == ContentTypeId::OLE)
+    {
+        m_pActiveShell->AssureStdMode();
+
+        const auto nCount = pContentType->GetMemberCount();
+
+        m_pActiveShell->LockView(true);
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UndoArg1, pContentType->GetName());
+        m_pActiveShell->StartUndo(SwUndoId::DELETE, &aRewriter);
+        for (size_t i = 0; i < nCount; i++)
+        {
+            const OUString& rName(pContentType->GetMember(i)->GetName());
+            m_pActiveShell->GotoFly(rName);
+            m_pActiveShell->DelRight();
+        }
+        m_pActiveShell->EndUndo();
+        m_pActiveShell->LockView(false);
+    }
+    else if (eContentTypeId == ContentTypeId::BOOKMARK)
+    {
+        m_pActiveShell->AssureStdMode();
+
+        const auto nCount = pContentType->GetMemberCount();
+
+        IDocumentMarkAccess* const pMarkAccess = m_pActiveShell->getIDocumentMarkAccess();
+
+        m_pActiveShell->StartAction();
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UndoArg1, pContentType->GetName());
+        m_pActiveShell->StartUndo(SwUndoId::DELETE, &aRewriter);
+        for (size_t i = 0; i < nCount; i++)
+        {
+            const OUString& rName(pContentType->GetMember(i)->GetName());
+            pMarkAccess->deleteMark(pMarkAccess->findMark(rName), false);
+        }
+        m_pActiveShell->EndUndo();
+        m_pActiveShell->EndAction();
+    }
+    else if (eContentTypeId == ContentTypeId::REGION)
+    {
+        const auto nCount = pContentType->GetMemberCount();
+
+        m_pActiveShell->StartAction();
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UndoArg1, pContentType->GetName());
+        m_pActiveShell->StartUndo(SwUndoId::DELETE, &aRewriter);
+        for (size_t i = 0; i < nCount; i++)
+        {
+            const SwRegionContent* pRegionContent
+                    = static_cast<const SwRegionContent*>(pContentType->GetMember(i));
+            SwSectionFormat* pSectionFormat
+                    = const_cast<SwSectionFormat*>(pRegionContent->GetSectionFormat());
+            m_pActiveShell->GetDoc()->DelSectionFormat(pSectionFormat, false);
+        }
+        m_pActiveShell->EndUndo();
+        m_pActiveShell->EndAction();
+    }
+    else if (eContentTypeId == ContentTypeId::URLFIELD) // hyperlinks
+    {
+        m_pActiveShell->AssureStdMode();
+
+        const auto nCount = pContentType->GetMemberCount();
+
+        m_pActiveShell->LockView(true);
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UndoArg1, pContentType->GetName());
+        m_pActiveShell->StartUndo(SwUndoId::DELETE, &aRewriter);
+        for (size_t i = 0; i < nCount; i++)
+        {
+            if (m_pActiveShell->GotoINetAttr(*static_cast<const SwURLFieldContent*>(
+                                                pContentType->GetMember(i))->GetINetAttr()))
+            {
+                m_pActiveShell->Right(SwCursorSkipMode::Chars, false, 1, false);
+                m_pActiveShell->SwCursorShell::SelectTextAttr(RES_TXTATR_INETFMT, true);
+                m_pActiveShell->DelRight();
+            }
+        }
+        m_pActiveShell->EndUndo();
+        m_pActiveShell->LockView(false);
+    }
+    else if (eContentTypeId == ContentTypeId::REFERENCE )
+    {
+        m_pActiveShell->AssureStdMode();
+
+        const auto nCount = pContentType->GetMemberCount();
+
+        m_pActiveShell->StartAction();
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UndoArg1, pContentType->GetName());
+        m_pActiveShell->StartUndo(SwUndoId::DELETE, &aRewriter);
+        for (size_t i = 0; i < nCount; i++)
+        {
+            const OUString& rName = pContentType->GetMember(i)->GetName();
+            ItemSurrogates aSurrogates;
+            m_pActiveShell->GetDoc()->GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_REFMARK);
+            for (const SfxPoolItem* pItem : aSurrogates)
+            {
+                assert(dynamic_cast<const SwFormatRefMark*>(pItem));
+                const auto pFormatRefMark = static_cast<const SwFormatRefMark*>(pItem);
+                if (!pFormatRefMark)
+                    continue;
+                const SwTextRefMark* pTextRef = pFormatRefMark->GetTextRefMark();
+                if (pTextRef && &pTextRef->GetTextNode().GetNodes() ==
+                        &m_pActiveShell->GetNodes() && rName == pFormatRefMark->GetRefName())
+                {
+                    m_pActiveShell->GetDoc()->DeleteFormatRefMark(pFormatRefMark);
+                    break;
+                }
+            }
+        }
+        m_pActiveShell->SwViewShell::UpdateFields();
+        m_pActiveShell->EndUndo();
+        m_pActiveShell->EndAction();
+    }
+    else if (eContentTypeId == ContentTypeId::INDEX)
+    {
+        m_pActiveShell->AssureStdMode();
+
+        const auto nCount = pContentType->GetMemberCount();
+
+        m_pActiveShell->StartAction();
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UndoArg1, pContentType->GetName());
+        m_pActiveShell->StartUndo(SwUndoId::DELETE, &aRewriter);
+        for (size_t i = 0; i < nCount; i++)
+        {
+            SwContent* pContent = const_cast<SwContent*>(pContentType->GetMember(i));
+            const SwTOXBase* pBase
+                    = static_cast<SwTOXBaseContent*>(pContent)->GetTOXBase();
+            if (pBase)
+                m_pActiveShell->DeleteTOX(*pBase, true);
+        }
+        m_pActiveShell->EndUndo();
+        m_pActiveShell->EndAction();
+    }
+    else if (eContentTypeId == ContentTypeId::POSTIT)
+    {
+        m_pActiveShell->AssureStdMode();
+
+        const auto nCount = pContentType->GetMemberCount();
+
+        m_pActiveShell->StartAction();
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UndoArg1, pContentType->GetName());
+        m_pActiveShell->StartUndo(SwUndoId::DELETE, &aRewriter);
+        for (size_t i = 0; i < nCount; i++)
+        {
+            const SwPostItContent* pPostItContent
+                    = static_cast<const SwPostItContent*>(pContentType->GetMember(i));
+            m_pActiveShell->GotoFormatField(*pPostItContent->GetPostIt());
+            m_pActiveShell->DelRight();
+        }
+        m_pActiveShell->EndUndo();
+        m_pActiveShell->EndAction();
+    }
+    else if (eContentTypeId == ContentTypeId::DRAWOBJECT)
+    {
+        m_pActiveShell->AssureStdMode();
+
+        const auto nCount = pContentType->GetMemberCount();
+
+        m_pActiveShell->StartAction();
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UndoArg1, pContentType->GetName());
+        m_pActiveShell->StartUndo(SwUndoId::DELETE, &aRewriter);
+        for (size_t i = 0; i < nCount; i++)
+        {
+            const OUString& rName(pContentType->GetMember(i)->GetName());
+            m_pActiveShell->GotoDrawingObject(rName);
+            m_pActiveShell->DelRight();
+            //m_pActiveShell->DelSelectedObj();
+        }
+        m_pActiveShell->EndUndo();
+        m_pActiveShell->EndAction();
+    }
+    else if (eContentTypeId == ContentTypeId::TEXTFIELD)
+    {
+        m_pActiveShell->AssureStdMode();
+
+        const auto nCount = pContentType->GetMemberCount();
+
+        m_pActiveShell->StartAction();
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UndoArg1, pContentType->GetName());
+        m_pActiveShell->StartUndo(SwUndoId::DELETE, &aRewriter);
+        for (size_t i = 0; i < nCount; i++)
+        {
+            const SwTextFieldContent* pTextFieldContent =
+                    static_cast<const SwTextFieldContent*>(pContentType->GetMember(i));
+            const SwTextField* pTextField = pTextFieldContent->GetFormatField()->GetTextField();
+            SwTextField::DeleteTextField(*pTextField);
+        }
+        m_pActiveShell->EndUndo();
+        m_pActiveShell->EndAction();
+    }
+    else if (eContentTypeId == ContentTypeId::FOOTNOTE || eContentTypeId == ContentTypeId::ENDNOTE)
+    {
+        //MakeAllOutlineContentTemporarilyVisible a(m_pActiveShell->GetDoc());
+
+        m_pActiveShell->AssureStdMode();
+
+        SwCursor* pCursor = m_pActiveShell->getShellCursor(true);
+
+        const auto nCount = pContentType->GetMemberCount();
+
+        m_pActiveShell->StartAction();
+        m_pActiveShell->EnterAddMode();
+        for (size_t i = 0; i < nCount; i++)
+        {
+            const SwTextFootnoteContent* pTextFootnoteCnt =
+                    static_cast<const SwTextFootnoteContent*>(pContentType->GetMember(i));
+            if (pTextFootnoteCnt && !pTextFootnoteCnt->IsInvisible())
+            {
+                if (const SwTextAttr* pTextAttr = pTextFootnoteCnt->GetTextFootnote())
+                {
+                    const SwTextFootnote* pTextFootnote = pTextAttr->GetFootnote().GetTextFootnote();
+                    if (!pTextFootnote)
+                        continue;
+                    const SwTextNode& rTextNode = pTextFootnote->GetTextNode();
+                    auto nStart = pTextAttr->GetStart();
+                    pCursor->GetPoint()->Assign(rTextNode, nStart + 1);
+                    m_pActiveShell->SetMark();
+                    m_pActiveShell->SttSelect();
+                    pCursor->GetPoint()->Assign(rTextNode, nStart);
+                    m_pActiveShell->EndSelect();
+                }
+            }
+        }
+        m_pActiveShell->LeaveAddMode();
+        m_pActiveShell->EndAction();
+
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UndoArg1, pContentType->GetName());
+        m_pActiveShell->StartUndo(SwUndoId::DELETE, &aRewriter);
+        m_pActiveShell->DelRight();
+        m_pActiveShell->EndUndo();
     }
 }
 
