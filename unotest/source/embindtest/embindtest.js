@@ -1094,6 +1094,25 @@ Module.addOnPostRun(function() {
         outparam.val.delete();
         outparam.delete();
     }
+    {
+        const params = new Module.uno_Sequence_any(0, Module.uno_Sequence.FromSize);
+        const outparamindex = new Module.uno_InOutParam_sequence_short;
+        const outparam = new Module.uno_InOutParam_sequence_any;
+        try {
+            const ret = invoke.invoke('throwRuntimeException', params, outparamindex, outparam);
+            console.assert(false);
+            ret.delete();
+        } catch (e) {
+            const [type, message] = getExceptionMessage(e);
+            console.assert(type === 'com::sun::star::reflection::InvocationTargetException');
+            console.assert(message === undefined); //TODO
+            //TODO: inspect wrapped css.uno.RuntimeException
+            decrementExceptionRefcount(e);
+        }
+        params.delete();
+        outparamindex.delete();
+        outparam.delete();
+    }
 });
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
