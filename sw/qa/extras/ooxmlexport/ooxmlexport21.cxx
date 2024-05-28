@@ -534,9 +534,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf126533_pageBitmap, "tdf126533_pageBitmap.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf131098_imageFill, "tdf131098_imageFill.docx")
 {
-    if (isExported())
-        return;
-
     // given a document with an image background transparency (blue-white)
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
                          getProperty<drawing::FillStyle>(getShape(1), "FillStyle"));

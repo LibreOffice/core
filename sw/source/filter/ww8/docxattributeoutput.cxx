@@ -5411,6 +5411,10 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     m_pSerializer->singleElementNS(XML_a, XML_avLst);
     m_pSerializer->endElementNS( XML_a, XML_prstGeom );
 
+    m_rDrawingML.SetFS(m_pSerializer); // to be sure that we write to the right stream
+    if (xShapePropSet)
+        m_rDrawingML.WriteFill(xShapePropSet, awt::Size(aSize.Width(), aSize.Height()));
+
     const SvxBoxItem& rBoxItem = pFrameFormat->GetBox();
     const SvxBorderLine* pLeft = rBoxItem.GetLine(SvxBoxItemLine::LEFT);
     const SvxBorderLine* pRight = rBoxItem.GetLine(SvxBoxItemLine::RIGHT);
