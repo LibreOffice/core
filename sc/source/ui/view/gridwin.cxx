@@ -6200,6 +6200,7 @@ void ScGridWindow::CursorChanged()
     // now, just re-create them
 
     UpdateCursorOverlay();
+    UpdateAutoFillOverlay();
     UpdateSparklineGroupOverlay();
 }
 
