@@ -3361,7 +3361,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         !GetView().GetViewFrame().GetDispatcher()->IsLocked())
                     {
                         // Test if there is a draw object at that position and if it should be selected.
-                        bool bShould = rSh.ShouldObjectBeSelected(aDocPos);
+                        bool bSelectFrameInsteadOfCroppedImage = false;
+                        bool bShould = rSh.ShouldObjectBeSelected(aDocPos, &bSelectFrameInsteadOfCroppedImage);
 
                         if(bShould)
                         {
@@ -3372,6 +3373,14 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             rSh.LockView( true );
                             bool bSelObj
                                 = rSh.SelectObj(aDocPos, aMEvt.IsMod1() ? SW_ENTER_GROUP : 0);
+                            if ( bSelObj && bSelectFrameInsteadOfCroppedImage )
+                            {
+                                bool bWrapped(false);
+                                const SdrObject* pFly = rSh.GetBestObject(false, GotoObjFlags::FlyAny, true, nullptr, &bWrapped);
+                                pSdrView->UnmarkAllObj();
+                                bSelObj =
+                                    rSh.SelectObj(aDocPos, aMEvt.IsMod1() ? SW_ENTER_GROUP : 0, const_cast<SdrObject*>(pFly));
+                            }
                             if( bUnLockView )
                                 rSh.LockView( false );
 
