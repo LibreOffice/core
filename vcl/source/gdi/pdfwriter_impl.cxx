@@ -10813,13 +10813,10 @@ sal_Int32 PDFWriterImpl::ensureStructureElement()
         return -1;
 
     sal_Int32 nNewId = sal_Int32(m_aStructure.size());
-    m_aStructure.emplace_back();
-    PDFStructureElement& rEle = m_aStructure.back();
-    // leave rEle.m_oType uninitialised
-    rEle.m_nOwnElement      = nNewId;
-    // temporary parent
-    rEle.m_nParentElement   = m_nCurrentStructElement;
-    rEle.m_nFirstPageObject = m_aPages[ m_nCurrentPage ].m_nPageObject;
+
+    // use m_nCurrentStructElement as temporary parent
+    m_aStructure.emplace_back(nNewId, m_nCurrentStructElement, m_aPages[m_nCurrentPage].m_nPageObject);
+
     m_aStructure[ m_nCurrentStructElement ].m_aChildren.push_back( nNewId );
     return nNewId;
 }

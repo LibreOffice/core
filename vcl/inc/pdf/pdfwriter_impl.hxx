@@ -603,6 +603,14 @@ struct PDFStructureElement
     {
     }
 
+    PDFStructureElement(sal_Int32 nOwnElement, sal_Int32 nParentElement, sal_Int32 nFirstPageObject)
+        : m_nObject(0)
+        , m_nOwnElement(nOwnElement)
+        , m_nParentElement(nParentElement)
+        , m_nFirstPageObject(nFirstPageObject)
+        , m_bOpenMCSeq(false )
+    {
+    }
 };
 
 // helper structure for drawLayout and friends

@@ -1486,7 +1486,7 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
         if (!bReopenTag)
         {
             sal_Int32 nId = pPDF->EnsureStructureElement(nullptr);
-            pPDF->InitStructureElement(nId, vcl::PDFWriter::Table, "Table");
+            pPDF->InitStructureElement(nId, vcl::PDFWriter::Table, u"Table"_ustr);
             pPDF->BeginStructureElement(nId);
             pPDF->GetScPDFState()->m_TableId = nId;
         }
@@ -1565,7 +1565,7 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
                 if (!bReopenTag)
                 {
                     sal_Int32 nId = pPDF->EnsureStructureElement(nullptr);
-                    pPDF->InitStructureElement(nId, vcl::PDFWriter::TableRow, "TR");
+                    pPDF->InitStructureElement(nId, vcl::PDFWriter::TableRow, u"TR"_ustr);
                     pPDF->BeginStructureElement(nId);
                     pPDF->GetScPDFState()->m_TableRowMap.emplace(nY, nId);
                 }
@@ -1577,7 +1577,7 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
             for (SCCOL nX=nLoopStartX; nX<=nX2; nX++)
             {
                 if (bTaggedPDF)
-                    pPDF->WrapBeginStructureElement(vcl::PDFWriter::TableData, "TD");
+                    pPDF->WrapBeginStructureElement(vcl::PDFWriter::TableData, u"TD"_ustr);
 
                 bool bMergeEmpty = false;
                 const ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
@@ -2123,7 +2123,7 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
                         if (!aString.isEmpty())
                         {
                             if (bTaggedPDF)
-                                pPDF->WrapBeginStructureElement(vcl::PDFWriter::Paragraph, "P");
+                                pPDF->WrapBeginStructureElement(vcl::PDFWriter::Paragraph, u"P"_ustr);
 
                             // If the string is clipped, make it shorter for
                             // better performance since drawing by HarfBuzz is
