@@ -31,6 +31,8 @@ void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rC
                                 std::unique_ptr<SwTableAutoFormat>& prTAFormat )
 {
     SwInsertTableFlags nInsMode = SwInsertTableFlags::NONE;
+    if (comphelper::LibreOfficeKit::isActive())
+        nInsMode = SwInsertTableFlags::DefaultBorder;
     rName = m_xNameEdit->get_text();
     rRow = m_xRowSpinButton->get_value();
     rCol = m_xColSpinButton->get_value();
@@ -43,7 +45,7 @@ void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rC
         rInsTableOpts.mnRowsToRepeat = 0;
     if (!m_xDontSplitCB->get_active())
         nInsMode |= SwInsertTableFlags::SplitLayout;
-    if( m_xTAutoFormat )
+    if (m_xTAutoFormat && !comphelper::LibreOfficeKit::isActive())
     {
         prTAFormat.reset(new SwTableAutoFormat( *m_xTAutoFormat ));
         rAutoName = prTAFormat->GetName();
@@ -151,8 +153,8 @@ void SwInsTableDlg::InitAutoTableFormat()
     // 1 means default table style
     // unfortunately when the table has a style sw/qa/uitest/writer_tests4/tdf115573.py fails
     // because tables that have pre-applied style resets the style of the elements in their cells
-    // when a new row is inserted and the ui test above relies on that. For now this is LOK only
-    m_lbIndex = comphelper::LibreOfficeKit::isActive() ? 1 : 0;
+    // when a new row is inserted and the ui test above relies on that.
+    m_lbIndex = 0;
     m_xLbFormat->select(m_lbIndex);
     m_tbIndex = lbIndexToTableIndex(m_lbIndex);
 
