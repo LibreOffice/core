@@ -11,6 +11,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
+#include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <vcl/event.hxx>
 #include <vcl/scheduler.hxx>
 #include <editeng/fontitem.hxx>
@@ -2636,6 +2637,174 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf160526)
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     auto pExportDump = parseLayoutDump();
     assertXPath(pExportDump, "//page[2]/body/txt/anchored/SwAnchoredDrawObject"_ostr);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf160958_page_break)
+{
+    // Given a document with a section with the first paragraph having a page break
+    createSwDoc("tdf160958_page_break.fodt");
+    auto pExportDump = parseLayoutDump();
+    assertXPath(pExportDump, "//page"_ostr, 2);
+    // A single paragraph on the first page, with 6 lines
+    assertXPath(pExportDump, "//page[1]/body/txt"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt/SwParaPortion/SwLineLayout"_ostr, 6);
+    // A section with 7 paragraphs, and two more paragraphs after the section
+    assertXPath(pExportDump, "//page[2]/body/section"_ostr, 1);
+    assertXPath(pExportDump, "//page[2]/body/section/txt"_ostr, 7);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[1]/SwParaPortion"_ostr, 0);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[2]/SwParaPortion"_ostr, 0);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[3]/SwParaPortion"_ostr, 0);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[4]/SwParaPortion/SwLineLayout"_ostr, 5);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[5]/SwParaPortion"_ostr, 0);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[6]/SwParaPortion"_ostr, 0);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[7]/SwParaPortion"_ostr, 0);
+    assertXPath(pExportDump, "//page[2]/body/txt"_ostr, 2);
+    assertXPath(pExportDump, "//page[2]/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, 7);
+    assertXPath(pExportDump, "//page[2]/body/txt[2]/SwParaPortion"_ostr, 0);
+
+    // Hide the section
+    auto xTextSectionsSupplier = mxComponent.queryThrow<css::text::XTextSectionsSupplier>();
+    auto xSections = xTextSectionsSupplier->getTextSections();
+    CPPUNIT_ASSERT(xSections);
+    auto xSection = xSections->getByName(u"Section1"_ustr).queryThrow<css::beans::XPropertySet>();
+    xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(false));
+
+    discardDumpedLayout();
+    calcLayout();
+    pExportDump = parseLayoutDump();
+    assertXPath(pExportDump, "//page"_ostr, 1);
+    // Three paragraphs and a hidden section on the first page
+    assertXPath(pExportDump, "//page/body/txt"_ostr, 3);
+    assertXPath(pExportDump, "//page/body/section"_ostr, 1);
+
+    assertXPath(pExportDump, "//page/body/section/infos/bounds"_ostr, "height"_ostr, "0");
+    assertXPath(pExportDump, "//page/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, 6);
+    assertXPath(pExportDump, "//page/body/section/txt"_ostr, 7);
+    assertXPath(pExportDump, "//page/body/section/txt[1]/SwParaPortion"_ostr, 0);
+    assertXPath(pExportDump, "//page/body/section/txt[2]/SwParaPortion"_ostr, 0);
+    assertXPath(pExportDump, "//page/body/section/txt[3]/SwParaPortion"_ostr, 0);
+    assertXPath(pExportDump, "//page/body/section/txt[4]/SwParaPortion/SwLineLayout"_ostr, 5);
+    assertXPath(pExportDump, "//page/body/section/txt[5]/SwParaPortion"_ostr, 0);
+    assertXPath(pExportDump, "//page/body/section/txt[6]/SwParaPortion"_ostr, 0);
+    assertXPath(pExportDump, "//page/body/section/txt[7]/SwParaPortion"_ostr, 0);
+
+    assertXPath(pExportDump, "//page/body/txt[2]/SwParaPortion/SwLineLayout"_ostr, 7);
+    assertXPath(pExportDump, "//page/body/txt[3]/SwParaPortion"_ostr, 0);
+
+    // Show the section again
+    xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(true));
+
+    // Check that the layout has been restored
+    discardDumpedLayout();
+    calcLayout();
+    pExportDump = parseLayoutDump();
+    assertXPath(pExportDump, "//page"_ostr, 2);
+    assertXPath(pExportDump, "//page[1]/body/txt"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt/SwParaPortion/SwLineLayout"_ostr, 6);
+    assertXPath(pExportDump, "//page[2]/body/section"_ostr, 1);
+    assertXPath(pExportDump, "//page[2]/body/section/txt"_ostr, 7);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[1]/SwParaPortion"_ostr, 0);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[2]/SwParaPortion"_ostr, 0);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[3]/SwParaPortion"_ostr, 0);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[4]/SwParaPortion/SwLineLayout"_ostr, 5);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[5]/SwParaPortion"_ostr, 0);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[6]/SwParaPortion"_ostr, 0);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[7]/SwParaPortion"_ostr, 0);
+    assertXPath(pExportDump, "//page[2]/body/txt"_ostr, 2);
+    assertXPath(pExportDump, "//page[2]/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, 7);
+    assertXPath(pExportDump, "//page[2]/body/txt[2]/SwParaPortion"_ostr, 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf160958_orphans)
+{
+    // Given a document with a section which moves to the next page as a whole, because of orphans
+    createSwDoc("tdf160958_orphans_move_section.fodt");
+    auto pExportDump = parseLayoutDump();
+    assertXPath(pExportDump, "//page"_ostr, 2);
+    // 21 paragraphs on the first page
+    assertXPath(pExportDump, "//page[1]/body/txt"_ostr, 21);
+    assertXPath(pExportDump, "//page[1]/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, 6);
+    assertXPath(pExportDump, "//page[1]/body/txt[2]/SwParaPortion/SwLineLayout"_ostr, 5);
+    assertXPath(pExportDump, "//page[1]/body/txt[3]/SwParaPortion/SwLineLayout"_ostr, 7);
+    assertXPath(pExportDump, "//page[1]/body/txt[4]/SwParaPortion/SwLineLayout"_ostr, 16);
+    assertXPath(pExportDump, "//page[1]/body/txt[5]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[6]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[7]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[8]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[9]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[10]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[11]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[12]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[13]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[14]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[15]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[16]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[17]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[18]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[19]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[20]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[21]/SwParaPortion/SwLineLayout"_ostr, 1);
+    // A section and one more paragraph after the section
+    assertXPath(pExportDump, "//page[2]/body/section"_ostr, 1);
+    assertXPath(pExportDump, "//page[2]/body/section/txt"_ostr, 3);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[1]/SwParaPortion/SwLineLayout"_ostr, 6);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[2]/SwParaPortion/SwLineLayout"_ostr, 5);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[3]/SwParaPortion/SwLineLayout"_ostr, 7);
+    assertXPath(pExportDump, "//page[2]/body/txt"_ostr, 1);
+    assertXPath(pExportDump, "//page[2]/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, 1);
+
+    // Hide the section
+    auto xTextSectionsSupplier = mxComponent.queryThrow<css::text::XTextSectionsSupplier>();
+    auto xSections = xTextSectionsSupplier->getTextSections();
+    CPPUNIT_ASSERT(xSections);
+    auto xSection = xSections->getByName(u"Section1"_ustr).queryThrow<css::beans::XPropertySet>();
+    xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(false));
+
+    discardDumpedLayout();
+    calcLayout();
+    pExportDump = parseLayoutDump();
+    assertXPath(pExportDump, "//page"_ostr, 1);
+    assertXPath(pExportDump, "//page/body/txt"_ostr, 22);
+    assertXPath(pExportDump, "//page/body/section"_ostr, 1);
+    assertXPath(pExportDump, "//page/body/section/infos/bounds"_ostr, "height"_ostr, "0");
+
+    // Show the section again
+    xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(true));
+
+    // Check that the layout has been restored
+    discardDumpedLayout();
+    calcLayout();
+    pExportDump = parseLayoutDump();
+    assertXPath(pExportDump, "//page"_ostr, 2);
+    assertXPath(pExportDump, "//page[1]/body/txt"_ostr, 21);
+    assertXPath(pExportDump, "//page[1]/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, 6);
+    assertXPath(pExportDump, "//page[1]/body/txt[2]/SwParaPortion/SwLineLayout"_ostr, 5);
+    assertXPath(pExportDump, "//page[1]/body/txt[3]/SwParaPortion/SwLineLayout"_ostr, 7);
+    assertXPath(pExportDump, "//page[1]/body/txt[4]/SwParaPortion/SwLineLayout"_ostr, 16);
+    assertXPath(pExportDump, "//page[1]/body/txt[5]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[6]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[7]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[8]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[9]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[10]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[11]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[12]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[13]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[14]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[15]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[16]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[17]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[18]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[19]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[20]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[21]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[2]/body/section"_ostr, 1);
+    assertXPath(pExportDump, "//page[2]/body/section/txt"_ostr, 3);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[1]/SwParaPortion/SwLineLayout"_ostr, 6);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[2]/SwParaPortion/SwLineLayout"_ostr, 5);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[3]/SwParaPortion/SwLineLayout"_ostr, 7);
+    assertXPath(pExportDump, "//page[2]/body/txt"_ostr, 1);
+    assertXPath(pExportDump, "//page[2]/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, 1);
 }
 
 } // end of anonymous namespace
