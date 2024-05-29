@@ -81,6 +81,20 @@ once a feature works there, then implement the Android part, with its slower
 development iteration (slow uploading to the device, the need to link all
 object files into a single `.so`, etc).
 
+### LOK API guidelines
+
+Introducing explicit new API under `include/LibreOfficeKit/` adds type safety but listing each &
+every micro-feature in those headers don't scale. Before extending those headers, consider using one
+of the following alternatives, which require no changes to these headers:
+
+- LOK client → core direction: use `postUnoCommand()` to dispatch an UNO command, optionally with
+  parameters.
+- core → LOK client direction:
+  - Use `getCommandValues()` when this is initiated by the LOK client.
+  - Use `LOK_CALLBACK_STATE_CHANGED` with a JSON payload when this is initiated by core.
+
+It's useful to stick to these if possible, only add new C++ API when these are not a good fit.
+
 * Debugging with gdb and `gtktiledviewer`
 
 To run `gtktiledviewer`:
