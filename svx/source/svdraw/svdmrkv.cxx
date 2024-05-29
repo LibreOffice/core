@@ -2727,7 +2727,7 @@ OUString SdrMarkView::ImpGetDescriptionString(TranslateId pStrCacheID, ImpGetDes
     {
         if(nOpt == ImpGetDescriptionOptions::POINTS)
         {
-            sStr = sStr.replaceAt(nPos, 2, GetDescriptionOfMarkedPoints());
+            sStr = sStr.replaceAt(nPos, 2, GetMarkedObjectList().GetPointMarkDescription());
         }
         else if(nOpt == ImpGetDescriptionOptions::GLUEPOINTS)
         {
