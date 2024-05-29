@@ -89,7 +89,7 @@ void DrawViewShell::ScannerEvent()
                     ::tools::Rectangle   aRect( aPnt, aBmpSize );
                     bool        bInsertNewObject = true;
 
-                    if( GetView()->AreObjectsMarked() )
+                    if( GetView()->GetMarkedObjectList().GetMarkCount() != 0 )
                     {
                         const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
 

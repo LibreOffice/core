@@ -100,7 +100,7 @@ void ScAnchorTest::testUndoAnchor()
 
     // Select graphic object
     pDrawView->MarkNextObj();
-    CPPUNIT_ASSERT(pDrawView->AreObjectsMarked());
+    CPPUNIT_ASSERT(pDrawView->GetMarkedObjectList().GetMarkCount() != 0);
 
     // Set Cell Anchor
     ScDrawLayer::SetCellAnchoredFromPosition(*pObject, rDoc, 0, false);

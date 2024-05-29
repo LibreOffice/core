@@ -196,7 +196,7 @@ void FuText::DoExecute( SfxRequest& )
 
         mxTextObj = DynCastSdrTextObj( aVEvt.mpObj );
     }
-    else if (mpView->AreObjectsMarked())
+    else if (mpView->GetMarkedObjectList().GetMarkCount() != 0)
     {
         const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
@@ -208,7 +208,7 @@ void FuText::DoExecute( SfxRequest& )
     }
 
     // check for table
-    if (mpView->AreObjectsMarked())
+    if (mpView->GetMarkedObjectList().GetMarkCount() != 0)
     {
         const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
@@ -719,7 +719,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
     ForcePointer(&rMEvt);
     mpWindow->ReleaseMouse();
 
-    if ( mpView && !mpView->AreObjectsMarked() )
+    if ( mpView && mpView->GetMarkedObjectList().GetMarkCount() == 0 )
     {
         sal_uInt16 nDrgLog1 = sal_uInt16 ( mpWindow->PixelToLogic(Size(mpView->GetDragThresholdPixels(),0)).Width() );
         if ( std::abs(aMDPos.X() - aPnt.X()) < nDrgLog1 &&
@@ -1234,7 +1234,7 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
             }
         }
     }
-    else if (mpView->AreObjectsMarked())
+    else if (mpView->GetMarkedObjectList().GetMarkCount() != 0)
     {
         const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 

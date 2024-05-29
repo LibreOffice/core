@@ -144,7 +144,7 @@ bool SdrUndoGroup::CanSdrRepeat(SdrView& rView) const
     switch (eFunction)
     {
     case SdrRepeatFunc::NONE           :  return false;
-    case SdrRepeatFunc::Delete         :  return rView.AreObjectsMarked();
+    case SdrRepeatFunc::Delete         :  return rView.GetMarkedObjectList().GetMarkCount() != 0;
     case SdrRepeatFunc::CombinePolyPoly:  return rView.IsCombinePossible();
     case SdrRepeatFunc::CombineOnePoly :  return rView.IsCombinePossible(true);
     case SdrRepeatFunc::DismantlePolys :  return rView.IsDismantlePossible();
@@ -544,7 +544,7 @@ void SdrUndoMoveObj::SdrRepeat(SdrView& rView)
 
 bool SdrUndoMoveObj::CanSdrRepeat(SdrView& rView) const
 {
-    return rView.AreObjectsMarked();
+    return rView.GetMarkedObjectList().GetMarkCount() != 0;
 }
 
 OUString SdrUndoMoveObj::GetSdrRepeatComment() const
@@ -806,7 +806,7 @@ void SdrUndoDelObj::SdrRepeat(SdrView& rView)
 
 bool SdrUndoDelObj::CanSdrRepeat(SdrView& rView) const
 {
-    return rView.AreObjectsMarked();
+    return rView.GetMarkedObjectList().GetMarkCount() != 0;
 }
 
 OUString SdrUndoDelObj::GetSdrRepeatComment() const
@@ -1105,7 +1105,7 @@ OUString SdrUndoObjSetText::GetSdrRepeatComment() const
 
 void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
 {
-    if (!(bNewTextAvailable && rView.AreObjectsMarked()))
+    if (!(bNewTextAvailable && rView.GetMarkedObjectList().GetMarkCount() != 0))
         return;
 
     const SdrMarkList& rML=rView.GetMarkedObjectList();
@@ -1138,7 +1138,7 @@ void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
 bool SdrUndoObjSetText::CanSdrRepeat(SdrView& rView) const
 {
     bool bOk = false;
-    if (bNewTextAvailable && rView.AreObjectsMarked()) {
+    if (bNewTextAvailable && rView.GetMarkedObjectList().GetMarkCount() != 0) {
         bOk=true;
     }
     return bOk;

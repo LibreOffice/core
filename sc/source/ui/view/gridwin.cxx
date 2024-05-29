@@ -3461,7 +3461,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             //  Is a draw object selected?
 
             SdrView* pDrawView = pViewSh->GetScDrawView();
-            if (pDrawView && pDrawView->AreObjectsMarked())
+            if (pDrawView && pDrawView->GetMarkedObjectList().GetMarkCount() != 0)
             {
                 // #100442#; the context menu should open in the middle of the selected objects
                 tools::Rectangle aSelectRect(LogicToPixel(pDrawView->GetAllMarkedBoundRect()));
@@ -3609,7 +3609,7 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCCOL nCellX, S
     if ( bHitSelected )
         return;
 
-    bool bWasDraw = ( pDrawView && pDrawView->AreObjectsMarked() );
+    bool bWasDraw = ( pDrawView && pDrawView->GetMarkedObjectList().GetMarkCount() != 0 );
     bool bHitDraw = false;
     if ( pDrawView )
     {

@@ -66,7 +66,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
 
         SdrView* pDrView = GetDrawView();
 
-        if( pDrView->AreObjectsMarked() )
+        if( pDrView->GetMarkedObjectList().GetMarkCount() != 0 )
         {
             SfxStyleSheet* pStyleSheet = pDrView->GetStyleSheet();
             if( pStyleSheet )

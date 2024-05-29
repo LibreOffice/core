@@ -316,7 +316,7 @@ void SwFEShell::ShellGetFocus()
     {
         if (!comphelper::LibreOfficeKit::isActive())
             Imp()->GetDrawView()->showMarkHandles();
-        if ( Imp()->GetDrawView()->AreObjectsMarked() )
+        if ( Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() != 0 )
             FrameNotify( this, FLY_DRAG_START );
     }
 }
@@ -325,7 +325,7 @@ void SwFEShell::ShellLoseFocus()
 {
     SwCursorShell::ShellLoseFocus();
 
-    if ( HasDrawView() && Imp()->GetDrawView()->AreObjectsMarked() )
+    if ( HasDrawView() && Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() != 0 )
     {
         if (!comphelper::LibreOfficeKit::isActive())
             Imp()->GetDrawView()->hideMarkHandles();
@@ -1336,7 +1336,7 @@ void SwFEShell::MoveObjectIfActive( svt::EmbeddedObjectRef&, const Point& )
 void SwFEShell::ToggleHeaderFooterEdit()
 {
     // Clear objects selection
-    if ( Imp()->GetDrawView()->AreObjectsMarked() )
+    if ( Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() != 0 )
     {
         Imp()->GetDrawView()->UnmarkAll();
         ClearMark();

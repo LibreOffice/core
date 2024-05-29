@@ -642,7 +642,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
         else
         {
             // is something selected?
-            if (mpDrawView->AreObjectsMarked() &&
+            if (mpDrawView->GetMarkedObjectList().GetMarkCount() != 0 &&
                 mpDrawView->GetMarkedObjectList().GetMarkCount() == 1 )
             {
                 pObj = mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
@@ -781,7 +781,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             }
 
             // multiple selection
-            else if (mpDrawView->AreObjectsMarked() &&
+            else if (mpDrawView->GetMarkedObjectList().GetMarkCount() != 0 &&
                 mpDrawView->GetMarkedObjectList().GetMarkCount() > 1 )
             {
                 aPopupId = "multiselect";
@@ -809,7 +809,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                         ,GetActiveWindow()->GetSizePixel().Height()/2);
 
                 //middle of the bounding rect if something is marked
-                if( mpDrawView->AreObjectsMarked() && mpDrawView->GetMarkedObjectList().GetMarkCount() >= 1 )
+                if( mpDrawView->GetMarkedObjectList().GetMarkCount() != 0 && mpDrawView->GetMarkedObjectList().GetMarkCount() >= 1 )
                 {
                     ::tools::Rectangle aMarkRect;
                     mpDrawView->GetMarkedObjectList().TakeBoundRect(nullptr,aMarkRect);

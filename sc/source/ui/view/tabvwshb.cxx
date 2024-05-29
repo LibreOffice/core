@@ -497,7 +497,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                     const SfxRectangleItem& rRect = rReq.GetArgs()->Get(SID_OBJECTRESIZE);
                     tools::Rectangle aRect( pWin->PixelToLogic( rRect.GetValue() ) );
 
-                    if ( pView->AreObjectsMarked() )
+                    if ( pView->GetMarkedObjectList().GetMarkCount() != 0 )
                     {
                         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 

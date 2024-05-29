@@ -91,7 +91,7 @@ bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
             mpView->BegDragObj(aMDPos, nullptr, pHdl, nDrgLog);
             bReturn = true;
         }
-        else if ( mpView->AreObjectsMarked() )
+        else if ( mpView->GetMarkedObjectList().GetMarkCount() != 0 )
         {
             mpView->UnmarkAll();
             bReturn = true;
@@ -166,7 +166,7 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
         mpWindow->ReleaseMouse();
         sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(mpView->GetDragThresholdPixels(),0)).Width() );
 
-        if ( !mpView->AreObjectsMarked() )
+        if ( mpView->GetMarkedObjectList().GetMarkCount() == 0 )
         {
             SdrPageView* pPV;
             sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );

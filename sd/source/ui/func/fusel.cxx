@@ -568,7 +568,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 if ( ! rMEvt.IsRight())
                     mpView->BegDragObj(aMDPos, nullptr, aVEvt.mpHdl, nDrgLog);
             }
-            else if (mpView->AreObjectsMarked())
+            else if (mpView->GetMarkedObjectList().GetMarkCount() != 0)
             {
                 /**************************************************************
                 * Select gluepoint

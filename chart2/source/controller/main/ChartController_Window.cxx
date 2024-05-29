@@ -785,7 +785,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                     // don't want the positioning Undo action to appear in the UI
                 impl_switchDiagramPositioningToExcludingPositioning();
             }
-            if ( pDrawViewWrapper->AreObjectsMarked() )
+            if ( pDrawViewWrapper->GetMarkedObjectList().GetMarkCount() != 0 )
             {
                 if ( pDrawViewWrapper->GetCurrentObjIdentifier() == SdrObjKind::Text )
                 {

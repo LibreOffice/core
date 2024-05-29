@@ -353,7 +353,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
         SdrView* pDrawView = rWrtShell.GetDrawView();
         if(pDrawView)
         {
-            if( pDrawView->AreObjectsMarked() )
+            if( pDrawView->GetMarkedObjectList().GetMarkCount() != 0 )
             {
                 pItemSet_TextAttr = std::make_unique<SfxItemSet>( pDrawView->GetAttrFromMarked(true/*bOnlyHardAttr*/) );
                 //remove attributes defining the type/data of custom shapes

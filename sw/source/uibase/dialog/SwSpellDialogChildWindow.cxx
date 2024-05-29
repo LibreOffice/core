@@ -683,7 +683,7 @@ void SwSpellDialogChildWindow::MakeTextSelection_Impl(SwWrtShell& rShell, ShellM
             else if ( rShell.HasSelection() || rView.IsDrawMode() )
             {
                 SdrView *pSdrView = rShell.GetDrawView();
-                if(pSdrView && pSdrView->AreObjectsMarked() &&
+                if(pSdrView && pSdrView->GetMarkedObjectList().GetMarkCount() != 0 &&
                     pSdrView->GetHdlList().GetFocusHdl())
                 {
                     const_cast<SdrHdlList&>(pSdrView->GetHdlList()).ResetFocusHdl();

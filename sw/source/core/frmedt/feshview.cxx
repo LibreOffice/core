@@ -733,7 +733,7 @@ void SwFEShell::StartCropImage()
 void SwFEShell::BeginDrag( const Point* pPt, bool bIsShift)
 {
     SdrView *pView = Imp()->GetDrawView();
-    if ( pView && pView->AreObjectsMarked() )
+    if ( pView && pView->GetMarkedObjectList().GetMarkCount() != 0 )
     {
         m_pChainFrom.reset();
         m_pChainTo.reset();

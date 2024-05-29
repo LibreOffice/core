@@ -1412,7 +1412,7 @@ void SdOutliner::ShowEndOfSearchDialog()
     }
 
     OUString aString;
-    if (mpView->AreObjectsMarked())
+    if (mpView->GetMarkedObjectList().GetMarkCount() != 0)
         aString = SdResId(STR_END_SPELLING_OBJ);
     else
         aString = SdResId(STR_END_SPELLING);
@@ -1770,7 +1770,7 @@ void SdOutliner::SetViewShell (const std::shared_ptr<sd::ViewShell>& rpViewShell
 void SdOutliner::HandleChangedSelection()
 {
     maMarkListCopy.clear();
-    mbRestrictSearchToSelection = mpView->AreObjectsMarked();
+    mbRestrictSearchToSelection = mpView->GetMarkedObjectList().GetMarkCount() != 0;
     if (!mbRestrictSearchToSelection)
         return;
 

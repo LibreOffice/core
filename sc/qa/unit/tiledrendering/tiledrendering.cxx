@@ -3870,7 +3870,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEditShapeText)
     const bool bShapeSelected = pView->SelectObject(u"Shape 1");
     CPPUNIT_ASSERT(bShapeSelected);
 
-    CPPUNIT_ASSERT(ScDocShell::GetViewData()->GetScDrawView()->AreObjectsMarked());
+    CPPUNIT_ASSERT(ScDocShell::GetViewData()->GetScDrawView()->GetMarkedObjectList().GetMarkCount() != 0);
 
     Scheduler::ProcessEventsToIdle();
 

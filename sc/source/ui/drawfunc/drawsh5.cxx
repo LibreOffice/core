@@ -709,7 +709,7 @@ void ScDrawShell::ExecFormatPaintbrush( const SfxRequest& rReq )
             bLock = pArgs->Get(SID_FORMATPAINTBRUSH).GetValue();
 
         ScDrawView* pDrawView = rViewData.GetScDrawView();
-        if ( pDrawView && pDrawView->AreObjectsMarked() )
+        if ( pDrawView && pDrawView->GetMarkedObjectList().GetMarkCount() != 0 )
         {
             std::unique_ptr<SfxItemSet> pItemSet(new SfxItemSet( pDrawView->GetAttrFromMarked(true/*bOnlyHardAttr*/) ));
             pView->SetDrawBrushSet( std::move(pItemSet), bLock );
@@ -720,7 +720,7 @@ void ScDrawShell::ExecFormatPaintbrush( const SfxRequest& rReq )
 void ScDrawShell::StateFormatPaintbrush( SfxItemSet& rSet )
 {
     ScDrawView* pDrawView = rViewData.GetScDrawView();
-    bool bSelection = pDrawView && pDrawView->AreObjectsMarked();
+    bool bSelection = pDrawView && pDrawView->GetMarkedObjectList().GetMarkCount() != 0;
     bool bHasPaintBrush = rViewData.GetView()->HasPaintBrush();
 
     if ( !bHasPaintBrush && !bSelection )

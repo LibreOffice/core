@@ -118,7 +118,7 @@ void SwDrawBaseShell::Execute(SfxRequest& rReq)
     {
         case FN_DRAW_WRAP_DLG:
         {
-            if(pSdrView->AreObjectsMarked())
+            if(pSdrView->GetMarkedObjectList().GetMarkCount() != 0)
             {
                 if(!pArgs)
                 {
@@ -174,7 +174,7 @@ void SwDrawBaseShell::Execute(SfxRequest& rReq)
 
         case SID_ATTR_TRANSFORM:
         {
-            if(pSdrView->AreObjectsMarked())
+            if(pSdrView->GetMarkedObjectList().GetMarkCount() != 0)
             {
                 if(!pArgs)
                 {

@@ -449,7 +449,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                     {
                         if (nResult == RET_OK)
                         {
-                            if (m_pSdrView->AreObjectsMarked())
+                            if (m_pSdrView->GetMarkedObjectList().GetMarkCount() != 0)
                             {
                                 m_pSdrView->SetAttributes(*pDlg->GetOutputItemSet());
                                 xRequest->Done(*(pDlg->GetOutputItemSet()));
@@ -465,7 +465,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
         case SID_TABLE_VERT_BOTTOM:
             {
                 sal_uInt16 nSId = rReq.GetSlot();
-                if (m_pSdrView->AreObjectsMarked())
+                if (m_pSdrView->GetMarkedObjectList().GetMarkCount() != 0)
                 {
                     SdrTextVertAdjust eTVA = SDRTEXTVERTADJUST_TOP;
                     if (nSId == SID_TABLE_VERT_CENTER)

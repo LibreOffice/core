@@ -69,7 +69,7 @@ void FuThesaurus::DoExecute(SfxRequest& rReq)
     {
         SdrTextObj* pTextObj = nullptr;
 
-        if ( mpView->AreObjectsMarked() )
+        if ( mpView->GetMarkedObjectList().GetMarkCount() != 0 )
         {
             const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 

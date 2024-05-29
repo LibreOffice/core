@@ -64,7 +64,7 @@ void FuLine::DoExecute( SfxRequest& rReq )
     SfxItemSet aNewAttr( mpDoc->GetPool() );
     mpView->GetAttributes( aNewAttr );
 
-    bool bHasMarked = mpView->AreObjectsMarked();
+    bool bHasMarked = mpView->GetMarkedObjectList().GetMarkCount() != 0;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     VclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSvxLineTabDialog(mpViewShell->GetFrameWeld(), &aNewAttr, mpDoc, pObj, bHasMarked) );
 

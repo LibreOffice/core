@@ -62,7 +62,7 @@ rtl::Reference<FuPoor> FuCopy::Create( ViewShell* pViewSh, ::sd::Window* pWin, :
 
 void FuCopy::DoExecute( SfxRequest& rReq )
 {
-    if( !mpView->AreObjectsMarked() )
+    if( mpView->GetMarkedObjectList().GetMarkCount() == 0 )
         return;
 
     // Undo

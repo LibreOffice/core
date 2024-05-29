@@ -479,7 +479,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SfxStyleSheet* pStyleSheet = mpDrawView->GetStyleSheet();
                 if( pStyleSheet )
                 {
-                    if( nSlotId != SID_STYLE_APPLY && !mpDrawView->AreObjectsMarked() )
+                    if( nSlotId != SID_STYLE_APPLY && mpDrawView->GetMarkedObjectList().GetMarkCount() == 0 )
                     {
                         SfxTemplateItem aTmpItem( nWhich, OUString() );
                         aAllSet.Put( aTmpItem );
@@ -581,7 +581,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                     }
                     else if (static_cast<SfxStyleFamily>(pFamilyItem->GetValue()) == SfxStyleFamily::Para)
                     {
-                        if (!mpDrawView->AreObjectsMarked())
+                        if (mpDrawView->GetMarkedObjectList().GetMarkCount() == 0)
                         {
                             rSet.DisableItem(nWhich);
                         }
@@ -591,7 +591,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 // view state; an actual set family can not be considered
                 else
                 {
-                    if (!mpDrawView->AreObjectsMarked())
+                    if (mpDrawView->GetMarkedObjectList().GetMarkCount() == 0)
                     {
                         rSet.DisableItem(nWhich);
                     }
@@ -601,7 +601,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
             case SID_STYLE_UPDATE_BY_EXAMPLE:
             {
-                if (!mpDrawView->AreObjectsMarked())
+                if (mpDrawView->GetMarkedObjectList().GetMarkCount() == 0)
                 {
                     rSet.DisableItem(nWhich);
                 }
@@ -731,7 +731,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
     // if the view owns selected objects, corresponding items have to be
     // changed from SfxItemState::DEFAULT (_ON) to SfxItemState::DISABLED
-    if( mpDrawView->AreObjectsMarked() )
+    if( mpDrawView->GetMarkedObjectList().GetMarkCount() != 0 )
     {
         SfxWhichIter aNewIter( *pSet );
         nWhich = aNewIter.FirstWhich();

@@ -57,7 +57,7 @@ Point aDragStartDiff;
 
 void ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
 {
-    if ( !AreObjectsMarked() )
+    if ( GetMarkedObjectList().GetMarkCount() == 0 )
         return;
 
     BrkAction();

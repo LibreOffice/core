@@ -167,7 +167,7 @@ void DrawViewShell::SelectionHasChanged()
 
     SdrOle2Obj* pOleObj = nullptr;
 
-    if ( mpDrawView->AreObjectsMarked() )
+    if ( mpDrawView->GetMarkedObjectList().GetMarkCount() != 0 )
     {
         const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
 
@@ -753,7 +753,7 @@ void DrawViewShell::ResetActualPage()
  */
 ErrCode DrawViewShell::DoVerb(sal_Int32 nVerb)
 {
-    if ( mpDrawView->AreObjectsMarked() )
+    if ( mpDrawView->GetMarkedObjectList().GetMarkCount() != 0 )
     {
         const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
 

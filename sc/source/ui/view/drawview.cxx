@@ -211,7 +211,7 @@ void ScDrawView::InvalidateDrawTextAttrs()
 
 void ScDrawView::SetMarkedToLayer( SdrLayerID nLayerNo )
 {
-    if (!AreObjectsMarked())
+    if (GetMarkedObjectList().GetMarkCount() == 0)
         return;
 
     //  #i11702# use SdrUndoObjectLayerChange for undo

@@ -600,14 +600,14 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     // CTRL-SID_OBJECT_SELECT -> select first draw object if none is selected yet
     if(SID_OBJECT_SELECT == nSId && HasCurrentFunction() && (rReq.GetModifier() & KEY_MOD1))
     {
-        if(!GetView()->AreObjectsMarked())
+        if(GetView()->GetMarkedObjectList().GetMarkCount() == 0)
         {
             // select first object
             GetView()->UnmarkAllObj();
             GetView()->MarkNextObj(true);
 
             // ...and make it visible
-            if(GetView()->AreObjectsMarked())
+            if(GetView()->GetMarkedObjectList().GetMarkCount() != 0)
                 GetView()->MakeVisible(GetView()->GetAllMarkedRect(), *GetActiveWindow());
         }
     }
@@ -1253,7 +1253,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_SIZE_OPTIMAL:  // BASIC
         {
             mbZoomOnPage = false;
-            if ( mpDrawView->AreObjectsMarked() )
+            if ( mpDrawView->GetMarkedObjectList().GetMarkCount() != 0 )
             {
                 maMarkRect = mpDrawView->GetAllMarkedRect();
                 ::tools::Long nW = static_cast<::tools::Long>(maMarkRect.GetWidth()  * 1.03);

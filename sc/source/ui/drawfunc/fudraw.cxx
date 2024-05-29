@@ -209,7 +209,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 rViewData.GetDispatcher().Execute(SID_OBJECT_SELECT, SfxCallMode::SLOT | SfxCallMode::RECORD);
                 bReturn = true;
             }
-            else if ( pView->AreObjectsMarked() )
+            else if ( pView->GetMarkedObjectList().GetMarkCount() != 0 )
             {
                 // III
                 SdrHdlList& rHdlList = const_cast< SdrHdlList& >( pView->GetHdlList() );
@@ -219,7 +219,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     pView->UnmarkAll();
 
                 //  while bezier editing, object is selected
-                if (!pView->AreObjectsMarked())
+                if (pView->GetMarkedObjectList().GetMarkCount() == 0)
                     rViewShell.SetDrawShell( false );
 
                 bReturn = true;
@@ -287,7 +287,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         {
             // in calc do NOT start draw object selection using TAB/SHIFT-TAB when
             // there is not yet an object selected
-            if(pView->AreObjectsMarked())
+            if(pView->GetMarkedObjectList().GetMarkCount() != 0)
             {
                 vcl::KeyCode aCode = rKEvt.GetKeyCode();
 
@@ -307,7 +307,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     }
 
                     // II
-                    if(pView->AreObjectsMarked())
+                    if(pView->GetMarkedObjectList().GetMarkCount() != 0)
                         pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
                     bReturn = true;
@@ -343,7 +343,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         {
             // in calc do NOT select the last draw object when
             // there is not yet an object selected
-            if(pView->AreObjectsMarked())
+            if(pView->GetMarkedObjectList().GetMarkCount() != 0)
             {
                 vcl::KeyCode aCode = rKEvt.GetKeyCode();
 
@@ -354,7 +354,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     pView->MarkNextObj();
 
                     // II
-                    if(pView->AreObjectsMarked())
+                    if(pView->GetMarkedObjectList().GetMarkCount() != 0)
                         pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
                     bReturn = true;
@@ -367,7 +367,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         {
             // in calc do NOT select the first draw object when
             // there is not yet an object selected
-            if(pView->AreObjectsMarked())
+            if(pView->GetMarkedObjectList().GetMarkCount() != 0)
             {
                 vcl::KeyCode aCode = rKEvt.GetKeyCode();
 
@@ -378,7 +378,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     pView->MarkNextObj(true);
 
                     // II
-                    if(pView->AreObjectsMarked())
+                    if(pView->GetMarkedObjectList().GetMarkCount() != 0)
                         pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
                     bReturn = true;
@@ -394,7 +394,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         {
             // in calc do cursor travelling of draw objects only when
             // there is an object selected yet
-            if(pView->AreObjectsMarked())
+            if(pView->GetMarkedObjectList().GetMarkCount() != 0)
             {
 
                 const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
@@ -562,7 +562,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         case KEY_SPACE:
         {
             // in calc do only something when draw objects are selected
-            if(pView->AreObjectsMarked())
+            if(pView->GetMarkedObjectList().GetMarkCount() != 0)
             {
                 const SdrHdlList& rHdlList = pView->GetHdlList();
                 SdrHdl* pHdl = rHdlList.GetFocusHdl();

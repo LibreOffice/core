@@ -369,7 +369,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 if(!mpView->MarkNextObj( !aCode.IsShift() ))
                 {
                     //If there is only one object, don't do the UnmarkAllObj() & MarkNextObj().
-                    if ( mpView->HasMultipleMarkableObjects() && mpView->AreObjectsMarked() )
+                    if ( mpView->HasMultipleMarkableObjects() && mpView->GetMarkedObjectList().GetMarkCount() != 0 )
                     {
                         // No next object: go over open end and get first from
                         // the other side
@@ -378,7 +378,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     }
                 }
 
-                if(mpView->AreObjectsMarked())
+                if(mpView->GetMarkedObjectList().GetMarkCount() != 0)
                     mpView->MakeVisible(mpView->GetAllMarkedRect(), *mpWindow);
 
                 bReturn = true;
@@ -396,7 +396,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 mpView->UnmarkAllObj();
                 mpView->MarkNextObj();
 
-                if(mpView->AreObjectsMarked())
+                if(mpView->GetMarkedObjectList().GetMarkCount() != 0)
                     mpView->MakeVisible(mpView->GetAllMarkedRect(), *mpWindow);
 
                 bReturn = true;
@@ -414,7 +414,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 mpView->UnmarkAllObj();
                 mpView->MarkNextObj(true);
 
-                if(mpView->AreObjectsMarked())
+                if(mpView->GetMarkedObjectList().GetMarkCount() != 0)
                     mpView->MakeVisible(mpView->GetAllMarkedRect(), *mpWindow);
 
                 bReturn = true;
@@ -628,7 +628,7 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
 {
     sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
 
-    if ( mpView->AreObjectsMarked() )
+    if ( mpView->GetMarkedObjectList().GetMarkCount() != 0 )
     {
         const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
@@ -790,7 +790,7 @@ bool FuDraw::cancel()
         rBindings.Invalidate( SID_PARASPACE_INCREASE );
         rBindings.Invalidate( SID_PARASPACE_DECREASE );
     }
-    else if ( mpView->AreObjectsMarked() )
+    else if ( mpView->GetMarkedObjectList().GetMarkCount() != 0 )
     {
         const SdrHdlList& rHdlList = mpView->GetHdlList();
         SdrHdl* pHdl = rHdlList.GetFocusHdl();

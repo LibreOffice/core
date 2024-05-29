@@ -1218,7 +1218,7 @@ void SwView::Execute(SfxRequest &rReq)
             else if ( m_pWrtShell->HasSelection() || IsDrawMode() )
             {
                 SdrView *pSdrView = m_pWrtShell->HasDrawView() ? m_pWrtShell->GetDrawView() : nullptr;
-                if(pSdrView && pSdrView->AreObjectsMarked() &&
+                if(pSdrView && pSdrView->GetMarkedObjectList().GetMarkCount() != 0 &&
                     pSdrView->GetHdlList().GetFocusHdl())
                 {
                     const_cast<SdrHdlList&>(pSdrView->GetHdlList()).ResetFocusHdl();

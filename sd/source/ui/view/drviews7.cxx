@@ -219,7 +219,7 @@ void DrawViewShell::GetDrawAttrState(SfxItemSet& rSet)
         return nullptr;
 
     //when there is one object selected
-    if (!mpDrawView->AreObjectsMarked() || (mpDrawView->GetMarkedObjectList().GetMarkCount() != 1))
+    if (mpDrawView->GetMarkedObjectList().GetMarkCount() == 0 || (mpDrawView->GetMarkedObjectList().GetMarkCount() != 1))
         return nullptr;
 
     //and we are editing the outline object
@@ -286,7 +286,7 @@ bool DrawViewShell::ShouldDisableEditHyperlink() const
 {
     if (!mpDrawView)
         return true;
-    if (!mpDrawView->AreObjectsMarked())
+    if (mpDrawView->GetMarkedObjectList().GetMarkCount() == 0)
        return true;
     if (mpDrawView->GetMarkedObjectList().GetMarkCount() != 1)
         return true;
@@ -1364,7 +1364,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     bool bSingleGraphicSelected = false;
 
-    if (!mpDrawView->AreObjectsMarked())
+    if (mpDrawView->GetMarkedObjectList().GetMarkCount() == 0)
     {
         rSet.DisableItem (SID_CONVERT_TO_METAFILE);
         rSet.DisableItem (SID_CONVERT_TO_BITMAP);

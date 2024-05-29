@@ -64,7 +64,7 @@ void setUndo(::sd::View* pView, const SfxItemSet* pArgs, bool addPageMargin)
 
 void FuTransform::DoExecute( SfxRequest& rReq )
 {
-    if (!mpView->AreObjectsMarked())
+    if (mpView->GetMarkedObjectList().GetMarkCount() == 0)
         return;
 
     const SfxItemSet* pArgs = rReq.GetArgs();

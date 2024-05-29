@@ -812,7 +812,7 @@ void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, bool bExtrude
 
 void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1, const basegfx::B2DPoint& rPnt2)
 {
-    if(!AreObjectsMarked())
+    if(GetMarkedObjectList().GetMarkCount() == 0)
         return;
 
     // Create undo
@@ -1368,7 +1368,7 @@ void E3dView::Start3DCreation()
     SetMarkHandles(nullptr);
 
     //HMHif (bVis) ShowMarkHdl();
-    if (AreObjectsMarked()) MarkListHasChanged();
+    if (GetMarkedObjectList().GetMarkCount() != 0) MarkListHasChanged();
 
     // Show mirror polygon IMMEDIATELY
     const SdrHdlList &aHdlList = GetHdlList();
@@ -1424,7 +1424,7 @@ void E3dView::End3DCreation(bool bUseDefaultValuesForMirrorAxes)
 {
     ResetCreationActive();
 
-    if(!AreObjectsMarked())
+    if(GetMarkedObjectList().GetMarkCount() == 0)
         return;
 
     if(bUseDefaultValuesForMirrorAxes)

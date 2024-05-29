@@ -430,7 +430,7 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked, const
 {
     BitmapEx aBmp;
 
-    if( AreObjectsMarked() )
+    if( GetMarkedObjectList().GetMarkCount() != 0 )
     {
         if(1 == GetMarkedObjectList().GetMarkCount())
         {
@@ -521,7 +521,7 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) co
 {
     GDIMetaFile aMtf;
 
-    if( AreObjectsMarked() )
+    if( GetMarkedObjectList().GetMarkCount() != 0 )
     {
         tools::Rectangle   aBound( GetMarkedObjBoundRect() );
         Size        aBoundSize( aBound.GetWidth(), aBound.GetHeight() );
@@ -582,7 +582,7 @@ Graphic SdrExchangeView::GetAllMarkedGraphic() const
 {
     Graphic aRet;
 
-    if( AreObjectsMarked() )
+    if( GetMarkedObjectList().GetMarkCount() != 0 )
     {
         if( ( 1 == GetMarkedObjectList().GetMarkCount() ) && GetMarkedObjectList().GetMark( 0 ) )
             aRet = SdrExchangeView::GetObjGraphic(*GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());

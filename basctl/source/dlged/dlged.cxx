@@ -641,7 +641,7 @@ static void implCopyStreamToByteSequence( const Reference< XInputStream >& xStre
 
 void DlgEditor::Copy()
 {
-    if( !pDlgEdView->AreObjectsMarked() )
+    if( pDlgEdView->GetMarkedObjectList().GetMarkCount() == 0 )
         return;
 
     // stop all drawing actions
@@ -959,7 +959,7 @@ void DlgEditor::Paste()
 
 void DlgEditor::Delete()
 {
-    if( !pDlgEdView->AreObjectsMarked() )
+    if( pDlgEdView->GetMarkedObjectList().GetMarkCount() == 0 )
         return;
 
     // remove control models of marked objects from dialog model

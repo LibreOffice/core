@@ -238,7 +238,7 @@ void DlgEdFunc::checkTwoClicks(const MouseEvent& rMEvt)
     if ( !(nClicks == 2 && rMEvt.IsLeft()) )
         return;
 
-    if ( m_rView.AreObjectsMarked() )
+    if ( m_rView.GetMarkedObjectList().GetMarkCount() != 0 )
     {
         const SdrMarkList& rMarkList = m_rView.GetMarkedObjectList();
         if (rMarkList.GetMarkCount() == 1)
@@ -287,7 +287,7 @@ bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
                     m_rView.SdrEndTextEdit();
                     bReturn = true;
                 }
-                else if ( m_rView.AreObjectsMarked() )
+                else if ( m_rView.GetMarkedObjectList().GetMarkCount() != 0 )
                 {
                     const SdrHdlList& rHdlList = m_rView.GetHdlList();
                     SdrHdl* pHdl = rHdlList.GetFocusHdl();
@@ -317,7 +317,7 @@ bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
                         m_rView.MarkNextObj( !rCode.IsShift() );
                     }
 
-                    if ( m_rView.AreObjectsMarked() )
+                    if ( m_rView.GetMarkedObjectList().GetMarkCount() != 0 )
                         m_rView.MakeVisible( m_rView.GetAllMarkedRect(), *m_pParent);
 
                     bReturn = true;
@@ -702,12 +702,12 @@ bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
 
         m_rView.EndCreateObj(SdrCreateCmd::ForceEnd);
 
-        if ( !m_rView.AreObjectsMarked() )
+        if ( m_rView.GetMarkedObjectList().GetMarkCount() == 0 )
         {
             m_rView.MarkObj(aPos, nHitLog);
         }
 
-        bReturn = m_rView.AreObjectsMarked();
+        bReturn = m_rView.GetMarkedObjectList().GetMarkCount() != 0;
         if ( bReturn )
         {
             OReportController& rController = m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->getController();
@@ -726,7 +726,7 @@ bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
     else
         checkMovementAllowed(rMEvt);
 
-    if ( !m_rView.AreObjectsMarked() &&
+    if ( m_rView.GetMarkedObjectList().GetMarkCount() == 0 &&
          std::abs(m_aMDPos.X() - aPos.X()) < nHitLog &&
          std::abs(m_aMDPos.Y() - aPos.Y()) < nHitLog &&
          !rMEvt.IsShift() && !rMEvt.IsMod2() )

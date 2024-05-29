@@ -549,7 +549,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     }
                 }
 
-                if ( mpView->AreObjectsMarked() )
+                if ( mpView->GetMarkedObjectList().GetMarkCount() != 0 )
                 {
                     // as an empty OLE object available?
                     const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();

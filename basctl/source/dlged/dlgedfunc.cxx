@@ -120,7 +120,7 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                 rView.BrkAction();
                 bReturn = true;
             }
-            else if ( rView.AreObjectsMarked() )
+            else if ( rView.GetMarkedObjectList().GetMarkCount() != 0 )
             {
                 const SdrHdlList& rHdlList = rView.GetHdlList();
                 SdrHdl* pHdl = rHdlList.GetFocusHdl();
@@ -145,7 +145,7 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                     rView.MarkNextObj( !aCode.IsShift() );
                 }
 
-                if ( rView.AreObjectsMarked() )
+                if ( rView.GetMarkedObjectList().GetMarkCount() != 0 )
                     rView.MakeVisible( rView.GetAllMarkedRect(), rWindow );
 
                 bReturn = true;
@@ -201,7 +201,7 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                 nY =  0;
             }
 
-            if ( rView.AreObjectsMarked() && !aCode.IsMod1() )
+            if ( rView.GetMarkedObjectList().GetMarkCount() != 0 && !aCode.IsMod1() )
             {
                 if ( aCode.IsMod2() )
                 {
@@ -357,7 +357,7 @@ void DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
         // if selected object was hit, drag object
         if ( pHdl!=nullptr || rView.IsMarkedHit(aPos, nHitLog) )
             rView.BegDragObj(aPos, nullptr, pHdl, nDrgLog);
-        else if ( rView.AreObjectsMarked() )
+        else if ( rView.GetMarkedObjectList().GetMarkCount() != 0 )
             rView.UnmarkAll();
 
         // if no action, create object
@@ -387,14 +387,14 @@ bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
     {
         rView.EndCreateObj(SdrCreateCmd::ForceEnd);
 
-        if ( !rView.AreObjectsMarked() )
+        if ( rView.GetMarkedObjectList().GetMarkCount() == 0 )
         {
             sal_uInt16 nHitLog = static_cast<sal_uInt16>(rWindow.PixelToLogic(Size(3, 0)).Width());
             Point aPos( rWindow.PixelToLogic( rMEvt.GetPosPixel() ) );
             rView.MarkObj(aPos, nHitLog);
         }
 
-        return rView.AreObjectsMarked();
+        return rView.GetMarkedObjectList().GetMarkCount() != 0;
     }
     else
     {

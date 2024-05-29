@@ -310,7 +310,7 @@ bool GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                     pView->BrkAction();
                     bProc = true;
                 }
-                else if ( pView->AreObjectsMarked() )
+                else if ( pView->GetMarkedObjectList().GetMarkCount() != 0 )
                 {
                     pView->UnmarkAllObj();
                     bProc = true;
@@ -410,7 +410,7 @@ bool GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                 nY = 0;
             }
 
-            if (pView->AreObjectsMarked() && !aCode.IsMod1() )
+            if (pView->GetMarkedObjectList().GetMarkCount() != 0 && !aCode.IsMod1() )
             {
                 if(aCode.IsMod2())
                 {

@@ -993,7 +993,7 @@ void SdrEditView::DistributeMarkedObjects(sal_uInt16 SlotID)
 void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
 {
     // #i73441# check content
-    if(!AreObjectsMarked())
+    if(GetMarkedObjectList().GetMarkCount() == 0)
         return;
 
     SdrMarkList aRemove;
@@ -1019,7 +1019,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
     // mechanisms. In a next step the polygon clipper will even be able to clip curves...
     // ConvertMarkedToPolyObj(true);
     ConvertMarkedToPathObj(true);
-    OSL_ENSURE(AreObjectsMarked(), "no more objects selected after preparations (!)");
+    OSL_ENSURE(GetMarkedObjectList().GetMarkCount() != 0, "no more objects selected after preparations (!)");
 
     for(size_t a=0; a<GetMarkedObjectList().GetMarkCount(); ++a)
     {
@@ -1781,7 +1781,7 @@ void SdrEditView::DismantleMarkedObjects(bool bMakeLines)
 
 void SdrEditView::GroupMarked()
 {
-    if (!AreObjectsMarked())
+    if (GetMarkedObjectList().GetMarkCount() == 0)
         return;
 
     GetMarkedObjectList().ForceSort();
@@ -2031,7 +2031,8 @@ rtl::Reference<SdrObject> SdrEditView::ImpConvertOneObj(SdrObject* pObj, bool bP
 
 void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea)
 {
-    if (!AreObjectsMarked())        return;
+    if (GetMarkedObjectList().GetMarkCount() == 0)
+        return;
 
     bool bMrkChg = false;
     const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();

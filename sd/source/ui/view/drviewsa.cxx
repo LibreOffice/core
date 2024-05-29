@@ -650,7 +650,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         }
         else
         {
-            if ( mpDrawView->AreObjectsMarked() )
+            if ( mpDrawView->GetMarkedObjectList().GetMarkCount() != 0 )
             {
                 ::tools::Rectangle aRect = mpDrawView->GetAllMarkedRect();
                 pPageView->LogicToPagePos(aRect);

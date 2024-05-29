@@ -258,7 +258,6 @@ protected:
 public:
     // all available const methods for read access to selection
     const SdrMarkList& GetMarkedObjectList() const { return maSdrViewSelection.GetMarkedObjectList(); }
-    bool AreObjectsMarked() const { return 0 != GetMarkedObjectList().GetMarkCount(); }
 
     // Get a list of all those links which are connected to marked nodes,
     // but which are not marked themselves.

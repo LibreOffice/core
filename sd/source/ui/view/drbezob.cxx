@@ -273,7 +273,7 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
                 }
             }
 
-            if( (pIPPEC == mpView) && !mpView->AreObjectsMarked() )
+            if( (pIPPEC == mpView) && mpView->GetMarkedObjectList().GetMarkCount() == 0 )
                 mpViewSh->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
 
             rReq.Ignore();

@@ -157,7 +157,7 @@ void SdTPAction::Construct()
     SdrGrafObj* pGrafObj = nullptr;
     bool        bOLEAction = false;
 
-    if ( mpView->AreObjectsMarked() )
+    if ( mpView->GetMarkedObjectList().GetMarkCount() != 0 )
     {
         const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
         if (rMarkList.GetMarkCount() == 1)

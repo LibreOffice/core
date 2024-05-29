@@ -1061,7 +1061,7 @@ std::vector<sal_uInt16> GetAllCharPropIds(std::span< const SfxPoolItem* const > 
 
 void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
 {
-    if (!AreObjectsMarked())
+    if (GetMarkedObjectList().GetMarkCount() == 0)
         return;
 
 #ifdef DBG_UTIL
@@ -1293,7 +1293,7 @@ SfxStyleSheet* SdrEditView::GetStyleSheetFromMarked() const
 
 void SdrEditView::SetStyleSheetToMarked(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
 {
-    if (!AreObjectsMarked())
+    if (GetMarkedObjectList().GetMarkCount() == 0)
         return;
 
     const bool bUndo = IsUndoEnabled();
@@ -1375,7 +1375,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
             SID_ATTR_TRANSFORM_POS_X, SID_ATTR_TRANSFORM_ANGLE,
             SID_ATTR_TRANSFORM_PROTECT_POS, SID_ATTR_TRANSFORM_AUTOHEIGHT>);
 
-    if (AreObjectsMarked())
+    if (GetMarkedObjectList().GetMarkCount() != 0)
     {
         SfxItemSet aMarkAttr(GetAttrFromMarked(false)); // because of AutoGrowHeight and corner radius
         tools::Rectangle aRect(GetMarkedObjRect());

@@ -576,7 +576,7 @@ bool ChartController::isObjectDeleteable( const uno::Any& rSelection )
 bool ChartController::isShapeContext() const
 {
     return m_aSelection.isAdditionalShapeSelected() ||
-         ( m_pDrawViewWrapper && m_pDrawViewWrapper->AreObjectsMarked() &&
+         ( m_pDrawViewWrapper && m_pDrawViewWrapper->GetMarkedObjectList().GetMarkCount() != 0 &&
            ( m_pDrawViewWrapper->GetCurrentObjIdentifier() == SdrObjKind::Text ) );
 }
 

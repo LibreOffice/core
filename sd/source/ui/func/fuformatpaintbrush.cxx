@@ -175,7 +175,7 @@ bool FuFormatPaintBrush::MouseMove(const MouseEvent& rMEvt)
 
 bool FuFormatPaintBrush::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    if( mxItemSet && mpView && mpView->AreObjectsMarked() )
+    if( mxItemSet && mpView && mpView->GetMarkedObjectList().GetMarkCount() != 0 )
     {
         OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 

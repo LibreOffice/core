@@ -263,7 +263,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
         fUIScale  = double(mpView->GetModel().GetUIScale());
 
 
-        if (mpView->AreObjectsMarked())
+        if (mpView->GetMarkedObjectList().GetMarkCount() != 0)
         {
             SfxItemSet rGeoAttr(mpView->GetGeoAttrFromMarked());
             transfWidth = static_cast<double>(GetItem( rGeoAttr, SID_ATTR_TRANSFORM_WIDTH )->GetValue());

@@ -577,7 +577,7 @@ void ScTabViewShell::UpdateDrawShell()
     // Remove DrawShell if nothing is selected.
 
     SdrView* pDrView = GetScDrawView();
-    if ( pDrView && !pDrView->AreObjectsMarked() && !IsDrawSelMode() )
+    if ( pDrView && pDrView->GetMarkedObjectList().GetMarkCount() == 0 && !IsDrawSelMode() )
         SetDrawShell( false );
 }
 

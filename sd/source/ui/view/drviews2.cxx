@@ -1477,7 +1477,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             SetCurrentFunction( FuTransform::Create( this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq ) );
             // tdf#138963 conditions tested for here must be the same as those
             // of the early returns from FuTransform::DoExecute
-            if (rReq.GetArgs() || !mpDrawView->AreObjectsMarked())
+            if (rReq.GetArgs() || mpDrawView->GetMarkedObjectList().GetMarkCount() == 0)
             {
                 Invalidate(SID_RULER_OBJECT);
                 Cancel();

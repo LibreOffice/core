@@ -261,7 +261,7 @@ void SwFEShell::SelectFlyFrame( SwFlyFrame& rFrame )
     if( rFrame.IsFlyInContentFrame() && rFrame.GetAnchorFrame() )
          rFrame.GetAnchorFrame()->SetCompletePaint();
 
-    if( pImpl->GetDrawView()->AreObjectsMarked() )
+    if( pImpl->GetDrawView()->GetMarkedObjectList().GetMarkCount() != 0 )
         pImpl->GetDrawView()->UnmarkAll();
 
     pImpl->GetDrawView()->MarkObj( rFrame.GetVirtDrawObj(),

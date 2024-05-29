@@ -348,7 +348,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     rReq.GetArgs()->Get(SID_OBJECTRESIZE);
                 ::tools::Rectangle aRect( GetActiveWindow()->PixelToLogic( rRect.GetValue() ) );
 
-                if ( mpDrawView->AreObjectsMarked() )
+                if ( mpDrawView->GetMarkedObjectList().GetMarkCount() != 0 )
                 {
                     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
 
@@ -929,7 +929,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
     const bool bRTL = GetDoc() && GetDoc()->GetDefaultWritingMode() == css::text::WritingMode_RL_TB;
     rSet.Put(SfxBoolItem(SID_RULER_TEXT_RIGHT_TO_LEFT, bRTL));
 
-    if( mpDrawView->AreObjectsMarked() )
+    if( mpDrawView->GetMarkedObjectList().GetMarkCount() != 0 )
     {
         if( mpDrawView->IsTextEdit() )
         {

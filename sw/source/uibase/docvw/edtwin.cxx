@@ -1843,7 +1843,7 @@ KEYINPUT_CHECKTABLE:
                     {
                         if(!pFlyFormat && SwKeyState::KeyToView != eFlyState &&
                             (rSh.GetSelectionType() & (SelectionType::DrawObject|SelectionType::DbForm))  &&
-                                rSh.GetDrawView()->AreObjectsMarked())
+                                rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() != 0)
                             eKeyState = SwKeyState::Draw_Change;
 
                         if( pFlyFormat )
@@ -1863,7 +1863,7 @@ KEYINPUT_CHECKTABLE:
                     if ( ( pFlyFormat
                            && ( nSelectionType & (SelectionType::Frame|SelectionType::Ole|SelectionType::Graphic) ) )
                          || ( ( nSelectionType & (SelectionType::DrawObject|SelectionType::DbForm) )
-                              && rSh.GetDrawView()->AreObjectsMarked() ) )
+                              && rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() != 0 ) )
                     {
                         eKeyState = pFlyFormat ? SwKeyState::Fly_Change : SwKeyState::Draw_Change;
                         if (nSelectionType & SelectionType::DrawObject)
@@ -1936,7 +1936,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     if(SwKeyState::KeyToView != eFlyState)
                     {
                         if((nSelectionType & (SelectionType::DrawObject|SelectionType::DbForm))  &&
-                                rSh.GetDrawView()->AreObjectsMarked())
+                                rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() != 0)
                             eKeyState = SwKeyState::Draw_Change;
                         else if(nSelectionType & (SelectionType::Frame|SelectionType::Ole|SelectionType::Graphic))
                             eKeyState = SwKeyState::Fly_Change;
@@ -2267,7 +2267,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         else if((rSh.GetSelectionType() &
                                     (SelectionType::DrawObject|SelectionType::DbForm|
                                         SelectionType::Frame|SelectionType::Ole|SelectionType::Graphic))  &&
-                                rSh.GetDrawView()->AreObjectsMarked())
+                                rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() != 0)
                             eKeyState = SwKeyState::EnterDrawHandleMode;
                         else
                         {
@@ -2290,7 +2290,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         }
                         else if((rSh.GetSelectionType() & (SelectionType::DrawObject|SelectionType::DbForm|
                                         SelectionType::Frame|SelectionType::Ole|SelectionType::Graphic)) &&
-                                rSh.GetDrawView()->AreObjectsMarked())
+                                rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() != 0)
                         {
                             eKeyState = SwKeyState::EnterDrawHandleMode;
                         }
@@ -4391,7 +4391,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 if ( m_bIsInMove || IsMinMove( m_aStartPos, aPixPt ) )
                 {
                     // event processing for resizing
-                    if (pSdrView && pSdrView->AreObjectsMarked())
+                    if (pSdrView && pSdrView->GetMarkedObjectList().GetMarkCount() != 0)
                     {
                         const Point aSttPt( PixelToLogic( m_aStartPos ) );
 

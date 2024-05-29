@@ -157,7 +157,7 @@ void OSectionView::ObjectRemovedInAliveMode( const SdrObject* _pObject )
 
 void OSectionView::SetMarkedToLayer( SdrLayerID _nLayerNo )
 {
-    if (!AreObjectsMarked())
+    if (GetMarkedObjectList().GetMarkCount() == 0)
         return;
 
     //  #i11702# use SdrUndoObjectLayerChange for undo

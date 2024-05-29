@@ -437,12 +437,12 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             SetInEditMode();
 
                 // leave mode when sole click (-> fuconstr)
-            if ( !pView->AreObjectsMarked() )
+            if ( pView->GetMarkedObjectList().GetMarkCount() == 0 )
             {
                 pView->MarkObj(aPnt, -2, false, rMEvt.IsMod1());
 
                 SfxDispatcher& rDisp = rViewShell.GetViewData().GetDispatcher();
-                if ( pView->AreObjectsMarked() )
+                if ( pView->GetMarkedObjectList().GetMarkCount() != 0 )
                     rDisp.Execute(SID_OBJECT_SELECT, SfxCallMode::SLOT | SfxCallMode::RECORD);
                 else
                     rDisp.Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT | SfxCallMode::RECORD);
@@ -457,12 +457,12 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
     {
         pWindow->ReleaseMouse();
 
-        if ( !pView->AreObjectsMarked() && rMEvt.GetClicks() < 2 )
+        if ( pView->GetMarkedObjectList().GetMarkCount() == 0 && rMEvt.GetClicks() < 2 )
         {
             pView->MarkObj(aPnt, -2, false, rMEvt.IsMod1());
 
             SfxDispatcher& rDisp = rViewShell.GetViewData().GetDispatcher();
-            if ( pView->AreObjectsMarked() )
+            if ( pView->GetMarkedObjectList().GetMarkCount() != 0 )
                 rDisp.Execute(SID_OBJECT_SELECT, SfxCallMode::SLOT | SfxCallMode::RECORD);
             else
                 rDisp.Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT | SfxCallMode::RECORD);
@@ -541,7 +541,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
     if ( pObj && (pObj->GetLayer() == SC_LAYER_INTERN) )
         pView->UnlockInternalLayer();
 
-    if ( !pObj && pView->AreObjectsMarked() )
+    if ( !pObj && pView->GetMarkedObjectList().GetMarkCount() != 0 )
     {
         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         if (rMarkList.GetMarkCount() == 1)

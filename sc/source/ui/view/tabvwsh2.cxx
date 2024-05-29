@@ -166,14 +166,14 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     if ( bSelectFirst )
     {
         // select first draw object if none is selected yet
-        if(!pView->AreObjectsMarked())
+        if(pView->GetMarkedObjectList().GetMarkCount() == 0)
         {
             // select first object
             pView->UnmarkAllObj();
             pView->MarkNextObj(true);
 
             // ...and make it visible
-            if(pView->AreObjectsMarked())
+            if(pView->GetMarkedObjectList().GetMarkCount() != 0)
                 pView->MakeVisible(pView->GetAllMarkedRect(), *pWin);
         }
     }

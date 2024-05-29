@@ -1584,7 +1584,7 @@ void SdrMarkView::SetDragMode(SdrDragMode eMode)
         ForceRefToMarked();
         SetMarkHandles(nullptr);
         {
-            if (AreObjectsMarked()) MarkListHasChanged();
+            if (GetMarkedObjectList().GetMarkCount() != 0) MarkListHasChanged();
         }
     }
 }

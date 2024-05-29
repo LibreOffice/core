@@ -180,12 +180,12 @@ bool ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
     if (pDrView && pDraw && !mrViewData.IsRefMode())
     {
         pDraw->SetWindow( this );
-        bool bOldMarked = pDrView->AreObjectsMarked();
+        bool bOldMarked = pDrView->GetMarkedObjectList().GetMarkCount() != 0;
         if (pDraw->KeyInput( rKEvt ))
         {
             bool bLeaveDraw = false;
             bool bUsed = true;
-            bool bNewMarked = pDrView->AreObjectsMarked();
+            bool bNewMarked = pDrView->GetMarkedObjectList().GetMarkCount() != 0;
             if ( !mrViewData.GetView()->IsDrawSelMode() )
                 if ( !bNewMarked )
                 {
@@ -363,7 +363,7 @@ void ScGridWindow::UpdateStatusPosSize()
     }
     if ( !bActionItem )
     {
-        if ( pDrView->AreObjectsMarked() ) // selected objects
+        if ( pDrView->GetMarkedObjectList().GetMarkCount() != 0 ) // selected objects
         {
             tools::Rectangle aRect = pDrView->GetAllMarkedRect();
             pPV->LogicToPagePos(aRect);
@@ -386,7 +386,7 @@ void ScGridWindow::UpdateStatusPosSize()
 bool ScGridWindow::DrawHasMarkedObj()
 {
     ScDrawView* p = mrViewData.GetScDrawView();
-    return p && p->AreObjectsMarked();
+    return p && p->GetMarkedObjectList().GetMarkCount() != 0;
 }
 
 void ScGridWindow::DrawMarkDropObj( SdrObject* pObj )

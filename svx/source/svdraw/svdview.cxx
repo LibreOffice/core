@@ -1201,7 +1201,7 @@ OUString SdrView::GetStatusText()
     }
     else if(IsMarkObj())
     {
-        if(AreObjectsMarked())
+        if(GetMarkedObjectList().GetMarkCount() != 0)
         {
             aStr = SvxResId(STR_ViewMarkMoreObjs);
         }
@@ -1274,7 +1274,7 @@ OUString SdrView::GetStatusText()
 
     if(aStr == STR_NOTHING)
     {
-        if (AreObjectsMarked()) {
+        if (GetMarkedObjectList().GetMarkCount() != 0) {
             aStr = ImpGetDescriptionString(STR_ViewMarked);
             if (IsGluePointEditMode()) {
                 if (HasMarkedGluePoints()) {

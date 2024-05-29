@@ -173,7 +173,7 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
                 // move object
                 mpView->BegDragObj(aMDPos, nullptr, aVEvt.mpHdl, nDrgLog);
             }
-            else if (mpView->AreObjectsMarked())
+            else if (mpView->GetMarkedObjectList().GetMarkCount() != 0)
             {
                 // select gluepoint
                 if (!rMEvt.IsShift())

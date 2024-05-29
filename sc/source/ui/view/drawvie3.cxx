@@ -64,7 +64,7 @@ ScDrawView::ScDrawView(
 
 void ScDrawView::SetPageAnchored()
 {
-    if( !AreObjectsMarked() )
+    if( GetMarkedObjectList().GetMarkCount() == 0 )
         return;
 
     const SdrMarkList* pMark = &GetMarkedObjectList();
@@ -89,7 +89,7 @@ void ScDrawView::SetPageAnchored()
 
 void ScDrawView::SetCellAnchored(bool bResizeWithCell)
 {
-    if( !AreObjectsMarked() )
+    if( GetMarkedObjectList().GetMarkCount() == 0 )
         return;
 
     const SdrMarkList* pMark = &GetMarkedObjectList();
@@ -118,7 +118,7 @@ ScAnchorType ScDrawView::GetAnchorType() const
     bool bPage = false;
     bool bCell = false;
     bool bCellResize = false;
-    if( AreObjectsMarked() )
+    if( GetMarkedObjectList().GetMarkCount() != 0 )
     {
         const SdrMarkList* pMark = &GetMarkedObjectList();
         const size_t nCount = pMark->GetMarkCount();

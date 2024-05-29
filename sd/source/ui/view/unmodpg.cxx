@@ -92,7 +92,7 @@ void ModifyPageUndoAction::Undo()
     SdrViewIter::ForAllViews(mpPage,
         [] (SdrView* pView)
         {
-            if(pView->AreObjectsMarked())
+            if(pView->GetMarkedObjectList().GetMarkCount() != 0)
                 pView->UnmarkAll();
         });
 
@@ -136,7 +136,7 @@ void ModifyPageUndoAction::Redo()
     SdrViewIter::ForAllViews(mpPage,
         [] (SdrView* pView)
         {
-            if(pView->AreObjectsMarked())
+            if(pView->GetMarkedObjectList().GetMarkCount() != 0)
                 pView->UnmarkAll();
         });
 

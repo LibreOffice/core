@@ -242,7 +242,7 @@ void View::DoCut()
 
     if( pOLV )
         const_cast<OutlinerView*>(pOLV)->Cut();
-    else if( AreObjectsMarked() )
+    else if( GetMarkedObjectList().GetMarkCount() != 0 )
     {
         OUString aStr(SdResId(STR_UNDO_CUT));
 
@@ -259,7 +259,7 @@ void View::DoCopy()
 
     if( pOLV )
         const_cast<OutlinerView*>(pOLV)->Copy();
-    else if( AreObjectsMarked() )
+    else if( GetMarkedObjectList().GetMarkCount() != 0 )
     {
         BrkAction();
         CreateClipboardDataObject();
@@ -341,7 +341,7 @@ void View::DoPaste (::sd::Window* pWindow)
 
 void View::StartDrag( const Point& rStartPos, vcl::Window* pWindow )
 {
-    if (!AreObjectsMarked() || !IsAction() || !mpViewSh || !pWindow)
+    if (GetMarkedObjectList().GetMarkCount() == 0 || !IsAction() || !mpViewSh || !pWindow)
         return;
 
     BrkAction();

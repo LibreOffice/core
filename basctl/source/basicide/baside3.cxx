@@ -204,7 +204,7 @@ void DialogWindow::Command( const CommandEvent& rCEvt )
         if (GetDispatcher())
         {
             SdrView& rView = GetView();
-            if( !rCEvt.IsMouseEvent() && rView.AreObjectsMarked() )
+            if( !rCEvt.IsMouseEvent() && rView.GetMarkedObjectList().GetMarkCount() != 0 )
             {
                 tools::Rectangle aMarkedRect( rView.GetMarkedRect() );
                 Point MarkedCenter( aMarkedRect.Center() );
@@ -271,7 +271,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
             case SID_COPY:
             {
                 // any object selected?
-                if ( !m_pEditor->GetView().AreObjectsMarked() )
+                if ( m_pEditor->GetView().GetMarkedObjectList().GetMarkCount() == 0 )
                     rSet.DisableItem( nWh );
             }
             break;
@@ -280,7 +280,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
             case SID_BACKSPACE:
             {
                 // any object selected?
-                if ( !m_pEditor->GetView().AreObjectsMarked() )
+                if ( m_pEditor->GetView().GetMarkedObjectList().GetMarkCount() == 0 )
                     rSet.DisableItem( nWh );
 
                 if ( IsReadOnly() )
@@ -314,7 +314,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
             {
                 Shell* pShell = GetShell();
                 SfxViewFrame* pViewFrame = pShell ? &pShell->GetViewFrame() : nullptr;
-                if ( pViewFrame && !pViewFrame->HasChildWindow( SID_SHOW_PROPERTYBROWSER ) && !m_pEditor->GetView().AreObjectsMarked() )
+                if ( pViewFrame && !pViewFrame->HasChildWindow( SID_SHOW_PROPERTYBROWSER ) && m_pEditor->GetView().GetMarkedObjectList().GetMarkCount() == 0 )
                     rSet.DisableItem( nWh );
 
                 if ( IsReadOnly() )

@@ -71,7 +71,7 @@ bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
             pView->BegDragObj(aMDPos, nullptr, pHdl, 1);
             bReturn = true;
         }
-        else if ( pView->AreObjectsMarked() )
+        else if ( pView->GetMarkedObjectList().GetMarkCount() != 0 )
         {
             pView->UnmarkAll();
             bReturn = true;
@@ -136,7 +136,7 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
     sal_uInt16 nClicks = rMEvt.GetClicks();
     if ( nClicks == 2 && rMEvt.IsLeft() )
     {
-        if ( pView->AreObjectsMarked() )
+        if ( pView->GetMarkedObjectList().GetMarkCount() != 0 )
         {
             const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
             if (rMarkList.GetMarkCount() == 1)
@@ -199,12 +199,12 @@ bool FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
     {
         pWindow->ReleaseMouse();
 
-        if ( !pView->AreObjectsMarked() && rMEvt.GetClicks() < 2 )
+        if ( pView->GetMarkedObjectList().GetMarkCount() == 0 && rMEvt.GetClicks() < 2 )
         {
             pView->MarkObj(aPnt, -2, false, rMEvt.IsMod1());
 
             SfxDispatcher& rDisp = rViewShell.GetViewData().GetDispatcher();
-            if ( pView->AreObjectsMarked() )
+            if ( pView->GetMarkedObjectList().GetMarkCount() != 0 )
                 rDisp.Execute(SID_OBJECT_SELECT, SfxCallMode::SLOT | SfxCallMode::RECORD);
             else
                 rDisp.Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT | SfxCallMode::RECORD);

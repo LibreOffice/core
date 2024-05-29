@@ -127,7 +127,7 @@ void DrawViewShell::ExecGallery(SfxRequest const & rReq)
 
         bool bInsertNewObject = true;
 
-        if ( mpDrawView->AreObjectsMarked() )
+        if ( mpDrawView->GetMarkedObjectList().GetMarkCount() != 0 )
         {
             // is there an empty graphic object?
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();

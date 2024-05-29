@@ -711,7 +711,7 @@ bool SdrDragView::EndInsObjPoint(SdrCreateCmd eCmd)
 bool SdrDragView::IsInsGluePointPossible() const
 {
     bool bRet=false;
-    if (IsInsGluePointMode() && AreObjectsMarked())
+    if (IsInsGluePointMode() && GetMarkedObjectList().GetMarkCount() != 0)
     {
         if (GetMarkedObjectList().GetMarkCount()==1)
         {

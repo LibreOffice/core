@@ -392,7 +392,7 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
     vcl::Window*     pWindow     = rViewData.GetActiveWin();
     ScDrawView* pDrView     = rViewData.GetScDrawView();
     Point       aPos        = pWindow->PixelToLogic(aMousePos);
-    bool        bHasMarked  = pDrView->AreObjectsMarked();
+    bool        bHasMarked  = pDrView->GetMarkedObjectList().GetMarkCount() != 0;
 
     if( bHasMarked )
     {
@@ -448,7 +448,7 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
     if ( bActionItem )
         return;
 
-    if ( pDrView->AreObjectsMarked() )      // selected objects
+    if ( pDrView->GetMarkedObjectList().GetMarkCount() != 0 )      // selected objects
     {
         tools::Rectangle aRect = pDrView->GetAllMarkedRect();
         pPV->LogicToPagePos(aRect);

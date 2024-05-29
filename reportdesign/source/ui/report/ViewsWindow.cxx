@@ -348,7 +348,7 @@ void OViewsWindow::SetMode( DlgEdMode eNewMode )
 bool OViewsWindow::HasSelection() const
 {
     return std::any_of(m_aSections.begin(), m_aSections.end(),
-        [](const VclPtr<OSectionWindow>& rxSection) { return rxSection->getReportSection().getSectionView().AreObjectsMarked(); });
+        [](const VclPtr<OSectionWindow>& rxSection) { return rxSection->getReportSection().getSectionView().GetMarkedObjectList().GetMarkCount() != 0; });
 }
 
 void OViewsWindow::Delete()
@@ -539,7 +539,7 @@ void OViewsWindow::MouseButtonUp( const MouseEvent& rMEvt )
         return;
 
     auto aIter = std::find_if(m_aSections.begin(), m_aSections.end(),
-        [](const VclPtr<OSectionWindow>& rxSection) { return rxSection->getReportSection().getSectionView().AreObjectsMarked(); });
+        [](const VclPtr<OSectionWindow>& rxSection) { return rxSection->getReportSection().getSectionView().GetMarkedObjectList().GetMarkCount() != 0; });
     if (aIter != m_aSections.end())
     {
         (*aIter)->getReportSection().MouseButtonUp(rMEvt);
@@ -625,7 +625,7 @@ void OViewsWindow::collectRectangles(TRectangleMap& _rSortRectangles)
     for (const auto& rxSection : m_aSections)
     {
         OSectionView& rView = rxSection->getReportSection().getSectionView();
-        if ( rView.AreObjectsMarked() )
+        if ( rView.GetMarkedObjectList().GetMarkCount() != 0 )
         {
             rView.GetMarkedObjectList().ForceSort();
             const size_t nCount = rView.GetMarkedObjectList().GetMarkCount();
@@ -1022,7 +1022,7 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
 
         OSectionView& rView = rReportSection.getSectionView();
 
-        if ( rView.AreObjectsMarked() )
+        if ( rView.GetMarkedObjectList().GetMarkCount() != 0 )
         {
             const size_t nCount = rView.GetMarkedObjectList().GetMarkCount();
             for (size_t i=0; i < nCount; ++i)
@@ -1402,7 +1402,7 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
         else if ( nCode == KEY_RIGHT )
             nX =  1;
 
-        if ( rReportSection.getSectionView().AreObjectsMarked() )
+        if ( rReportSection.getSectionView().GetMarkedObjectList().GetMarkCount() != 0 )
         {
             if ( _rCode.IsMod2() )
             {

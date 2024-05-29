@@ -416,7 +416,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             // unlock internal layer to include note captions
             pView->UnlockInternalLayer();
             pView->EndAction();
-            if ( pView->AreObjectsMarked() )
+            if ( pView->GetMarkedObjectList().GetMarkCount() != 0 )
             {
                 bReturn = true;
 
@@ -464,7 +464,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     sal_uInt16 nClicks = rMEvt.GetClicks();
     if (pView && nClicks == 2 && rMEvt.IsLeft())
     {
-        if ( pView->AreObjectsMarked() )
+        if ( pView->GetMarkedObjectList().GetMarkCount() != 0 )
         {
             const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
             if (rMarkList.GetMarkCount() == 1)

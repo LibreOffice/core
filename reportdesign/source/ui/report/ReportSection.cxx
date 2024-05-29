@@ -287,7 +287,7 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
 
 void OReportSection::Delete()
 {
-    if( !m_pView->AreObjectsMarked() )
+    if( m_pView->GetMarkedObjectList().GetMarkCount() == 0 )
         return;
 
     m_pView->BrkAction();
@@ -320,7 +320,7 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
 void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedObjects,bool _bEraseAnddNoClone)
 {
     OSL_ENSURE(m_xSection.is(),"Why is the section here NULL!");
-    if( !m_pView->AreObjectsMarked() || !m_xSection.is() )
+    if( m_pView->GetMarkedObjectList().GetMarkCount() == 0 || !m_xSection.is() )
         return;
 
     // insert control models of marked objects into clipboard dialog model

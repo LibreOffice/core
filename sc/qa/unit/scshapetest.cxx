@@ -932,7 +932,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testFitToCellSize)
 
     // Select the shape
     pDrawView->MarkNextObj();
-    CPPUNIT_ASSERT(pDrawView->AreObjectsMarked());
+    CPPUNIT_ASSERT(pDrawView->GetMarkedObjectList().GetMarkCount() != 0);
 
     // Fit selected shape into cell
     pViewShell->GetViewData().GetDispatcher().Execute(SID_FITCELLSIZE);

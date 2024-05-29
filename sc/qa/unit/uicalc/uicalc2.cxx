@@ -69,7 +69,8 @@ static void lcl_SelectObjectByName(ScTabViewShell& rViewShell, std::u16string_vi
         OString(OUStringToOString(rObjName, RTL_TEXTENCODING_UTF8) + " not found.").getStr(),
         bFound);
 
-    CPPUNIT_ASSERT(rViewShell.GetViewData().GetScDrawView()->AreObjectsMarked());
+    CPPUNIT_ASSERT(rViewShell.GetViewData().GetScDrawView()->GetMarkedObjectList().GetMarkCount()
+                   != 0);
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf150499)
