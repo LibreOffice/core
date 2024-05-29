@@ -23,6 +23,7 @@
 #include "flyenum.hxx"
 #include "pam.hxx"
 
+#include <optional>
 #include <map>
 #include <string_view>
 
@@ -232,7 +233,7 @@ namespace SwUnoCursorHelper
     SW_DLLPUBLIC void GetSelectableFromAny(
         css::uno::Reference<css::uno::XInterface> const& xIfc,
         SwDoc & rTargetDoc,
-        SwPaM *& o_rpPaM, std::pair<OUString, FlyCntType> & o_rFrame,
+        std::optional<SwPaM>& o_rpPaM, std::pair<OUString, FlyCntType> & o_rFrame,
         OUString & o_rTableName, SwUnoTableCursor const*& o_rpTableCursor,
         ::sw::mark::IMark const*& o_rpMark,
         std::vector<SdrObject *> & o_rSdrObjects);

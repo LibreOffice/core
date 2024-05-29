@@ -151,7 +151,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface)
     }
     else
     {
-        SwPaM * pPaM(nullptr);
+        std::optional<SwPaM> pPaM;
         std::pair<OUString, FlyCntType> frame;
         OUString tableName;
         SwUnoTableCursor const* pTableCursor(nullptr);
@@ -163,12 +163,12 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface)
             rSh.EnterStdMode();
             rSh.SetSelection(*pPaM);
             // the pPaM has been copied - delete it
-            while (pPaM->GetNext() != pPaM)
+            while (pPaM->GetNext() != &*pPaM)
             {
                 // coverity[deref_arg] - the SwPaM delete moves a new entry into GetNext()
                 delete pPaM->GetNext();
             }
-            delete pPaM;
+            pPaM.reset();
             return true;
         }
         else if (!frame.first.isEmpty())

@@ -105,16 +105,15 @@ using namespace ::com::sun::star::lang;
 namespace SwUnoCursorHelper
 {
 
-static SwPaM* lcl_createPamCopy(const SwPaM& rPam)
+static void lcl_createPamCopy(std::optional<SwPaM>& o_rpPam, const SwPaM& rPam)
 {
-    SwPaM *const pRet = new SwPaM(*rPam.GetPoint());
-    ::sw::DeepCopyPaM(rPam, *pRet);
-    return pRet;
+    o_rpPam.emplace(*rPam.GetPoint());
+    ::sw::DeepCopyPaM(rPam, *o_rpPam);
 }
 
 void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         SwDoc & rTargetDoc,
-        SwPaM *& o_rpPaM, std::pair<OUString, FlyCntType> & o_rFrame,
+        std::optional<SwPaM>& o_rpPaM, std::pair<OUString, FlyCntType> & o_rFrame,
         OUString & o_rTableName, SwUnoTableCursor const*& o_rpTableCursor,
         ::sw::mark::IMark const*& o_rpMark,
         std::vector<SdrObject *> & o_rSdrObjects)
@@ -166,7 +165,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
     {
         if (pCursor->GetDoc() == &rTargetDoc)
         {
-            o_rpPaM = lcl_createPamCopy(*pCursor->GetPaM());
+            lcl_createPamCopy(o_rpPaM, *pCursor->GetPaM());
         }
         return;
     }
@@ -177,7 +176,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         SwUnoCursor const* pUnoCursor = pRanges->GetCursor();
         if (pUnoCursor && &pUnoCursor->GetDoc() == &rTargetDoc)
         {
-            o_rpPaM = lcl_createPamCopy(*pUnoCursor);
+            lcl_createPamCopy(o_rpPaM, *pUnoCursor);
         }
         return;
     }
@@ -220,7 +219,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
             {
                 SwPaM aPam(*pBox->GetSttNd());
                 aPam.Move(fnMoveForward, GoInNode);
-                o_rpPaM = lcl_createPamCopy(aPam);
+                lcl_createPamCopy(o_rpPaM, aPam);
             }
         }
         return;
@@ -232,7 +231,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         SwUnoInternalPaM aPam(rTargetDoc);
         if (::sw::XTextRangeToSwPaM(aPam, xTextRange))
         {
-            o_rpPaM = lcl_createPamCopy(aPam);
+            lcl_createPamCopy(o_rpPaM, aPam);
         }
         return;
     }
