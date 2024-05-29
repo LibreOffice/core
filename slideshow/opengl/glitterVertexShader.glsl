@@ -25,7 +25,6 @@ varying vec3 v_normal;
 
 attribute vec3 center;
 uniform float time;
-uniform ivec2 numTiles;
 uniform sampler2D permTexture;
 varying float angle;
 

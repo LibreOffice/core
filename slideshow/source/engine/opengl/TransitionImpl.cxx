@@ -1997,12 +1997,6 @@ void GlitterTransition::prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int3
     PermTextureTransition::prepareTransition( glLeavingSlideTex, glEnteringSlideTex, pContext );
     CHECK_GL_ERROR();
 
-    GLint nNumTilesLocation = glGetUniformLocation(m_nProgramObject, "numTiles");
-    if (nNumTilesLocation != -1) {
-        glUniform2iv(nNumTilesLocation, 1, glm::value_ptr(glm::ivec2(41, 41 * 4 / 3)));
-        CHECK_GL_ERROR();
-    }
-
     glGenBuffers(1, &maBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, maBuffer);
 
