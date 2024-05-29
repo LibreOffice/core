@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Serif" svg:font-family="&apos;Liberation Serif&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="paragraph">
+   <style:paragraph-properties fo:orphans="2" fo:widows="2"/>
+   <style:text-properties style:font-name="Liberation Serif" fo:font-size="12pt"/>
+  </style:default-style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="297mm" style:print-orientation="portrait" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum consequat mi quis pretium semper. Proin luctus orci ac neque venenatis, quis commodo dolor posuere. Curabitur dignissim sapien quis cursus egestas. Donec blandit auctor arcu, nec pellentesque eros molestie eget. In consectetur aliquam hendrerit. Sed cursus mauris vitae ligula pellentesque, non pellentesque urna aliquet. Fusce placerat mauris enim, nec rutrum purus semper vel. Praesent tincidunt neque eu pellentesque pharetra. Fusce pellentesque est orci.</text:p>
+   <text:p>Integer sodales tincidunt tristique. Sed a metus posuere, adipiscing nunc et, viverra odio. Donec auctor molestie sem, sit amet tristique lectus hendrerit sed. Cras sodales nisl sed orci mattis iaculis. Nunc eget dolor accumsan, pharetra risus a, vestibulum mauris. Nunc vulputate lobortis mollis. Vivamus nec tellus faucibus, tempor magna nec, facilisis felis. Donec commodo enim a vehicula pellentesque. Nullam vehicula vestibulum est vel ultricies.</text:p>
+   <text:p>Aliquam velit massa, laoreet vel leo nec, volutpat facilisis eros. Donec consequat arcu ut diam tempor luctus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Praesent vitae lacus vel leo sodales pharetra a a nibh. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam luctus tempus nibh, fringilla dictum augue consectetur eget. Curabitur at ante sit amet tortor pharetra molestie eu nec ante. Mauris tincidunt, nibh eu sollicitudin molestie, dolor sapien congue tortor, a pulvinar sapien turpis sed ante. Donec nec est elementum, euismod nulla in, mollis nunc.</text:p>
+   <text:p>He heard quiet steps behind him. That didn&apos;t bode well. Who could be following him this late at night and in this deadbeat part of town? And at this particular moment, just after he pulled off the big time and was making off with the greenbacks. Was there another crook who&apos;d had the same idea, and was now watching him and waiting for a chance to grab the fruit of his labor? Or did the steps behind him mean that one of many law officers in town was on to him and just waiting to pounce and snap those cuffs on his wrists? He nervously looked all around. Suddenly he saw the alley. Like lightning he darted off to the left and disappeared between the two warehouses almost falling over the trash can lying in the middle of the sidewalk. He tried to nervously tap his way along in the inky darkness and suddenly stiffened: it was a dead-end, he would have to go back the way he had come. The steps got louder and louder, he saw the black outline of a figure coming around the corner. Is this the end of the line? he thought pressing himself back against the wall trying to make himself invisible in the dark, was all that planning and energy wasted? He was dripping with sweat now, cold and wet, he could smell the fear coming off his clothes. Suddenly next to him, with a barely noticeable squeak, a door swung quietly to and fro in the night&apos;s breeze. Could this be the haven he&apos;d prayed for? Slowly he slid toward the door, pressing himself more and more into the wall, into the dark, away from his enemy. Would this door save his hide?</text:p>
+   <text:p>foo</text:p>
+   <text:p>bar</text:p>
+   <text:p>baz</text:p>
+   <text:p>foo</text:p>
+   <text:p>bar</text:p>
+   <text:p>baz</text:p>
+   <text:p>foo</text:p>
+   <text:p>bar</text:p>
+   <text:p>baz</text:p>
+   <text:p>foo</text:p>
+   <text:p>bar</text:p>
+   <text:p>baz</text:p>
+   <text:p>foo</text:p>
+   <text:p>bar</text:p>
+   <text:p>baz</text:p>
+   <text:p>foo</text:p>
+   <text:p>bar</text:p>
+   <text:section text:name="Section1">
+    <text:p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum consequat mi quis pretium semper. Proin luctus orci ac neque venenatis, quis commodo dolor posuere. Curabitur dignissim sapien quis cursus egestas. Donec blandit auctor arcu, nec pellentesque eros molestie eget. In consectetur aliquam hendrerit. Sed cursus mauris vitae ligula pellentesque, non pellentesque urna aliquet. Fusce placerat mauris enim, nec rutrum purus semper vel. Praesent tincidunt neque eu pellentesque pharetra. Fusce pellentesque est orci.</text:p>
+    <text:p>Integer sodales tincidunt tristique. Sed a metus posuere, adipiscing nunc et, viverra odio. Donec auctor molestie sem, sit amet tristique lectus hendrerit sed. Cras sodales nisl sed orci mattis iaculis. Nunc eget dolor accumsan, pharetra risus a, vestibulum mauris. Nunc vulputate lobortis mollis. Vivamus nec tellus faucibus, tempor magna nec, facilisis felis. Donec commodo enim a vehicula pellentesque. Nullam vehicula vestibulum est vel ultricies.</text:p>
+    <text:p>Aliquam velit massa, laoreet vel leo nec, volutpat facilisis eros. Donec consequat arcu ut diam tempor luctus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Praesent vitae lacus vel leo sodales pharetra a a nibh. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam luctus tempus nibh, fringilla dictum augue consectetur eget. Curabitur at ante sit amet tortor pharetra molestie eu nec ante. Mauris tincidunt, nibh eu sollicitudin molestie, dolor sapien congue tortor, a pulvinar sapien turpis sed ante. Donec nec est elementum, euismod nulla in, mollis nunc.</text:p>
+   </text:section>
+   <text:p>baz</text:p>
+  </office:text>
+ </office:body>
+</office:document>
