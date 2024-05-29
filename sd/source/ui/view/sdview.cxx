@@ -503,7 +503,7 @@ void View::MarkListHasChanged()
 {
     FmFormView::MarkListHasChanged();
 
-    if( GetMarkedObjectCount() > 0 )
+    if( GetMarkedObjectList().GetMarkCount() > 0 )
         maSmartTags.deselect();
 }
 
@@ -865,7 +865,7 @@ bool View::RestoreDefaultText( SdrTextObj* pTextObj )
 void View::SetMarkedOriginalSize()
 {
     std::unique_ptr<SdrUndoGroup> pUndoGroup(new SdrUndoGroup(mrDoc));
-    const size_t nCount = GetMarkedObjectCount();
+    const size_t nCount = GetMarkedObjectList().GetMarkCount();
     bool            bOK = false;
 
     for( size_t i = 0; i < nCount; ++i )
@@ -1196,7 +1196,7 @@ bool View::ShouldToggleOn(
 
     bool bToggleOn = false;
     std::unique_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OutlinerMode::TextObject, rSdrModel));
-    const size_t nMarkCount = GetMarkedObjectCount();
+    const size_t nMarkCount = GetMarkedObjectList().GetMarkCount();
     for (size_t nIndex = 0; nIndex < nMarkCount && !bToggleOn; ++nIndex)
     {
         SdrTextObj* pTextObj = DynCastSdrTextObj(GetMarkedObjectByIndex(nIndex));
@@ -1267,7 +1267,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
     std::unique_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OutlinerMode::TextObject, rSdrModel));
     OutlinerView aOutlinerView(pOutliner.get(), pWindow);
 
-    const size_t nMarkCount = GetMarkedObjectCount();
+    const size_t nMarkCount = GetMarkedObjectList().GetMarkCount();
     for (size_t nIndex = 0; nIndex < nMarkCount; ++nIndex)
     {
         SdrTextObj* pTextObj = DynCastSdrTextObj(GetMarkedObjectByIndex(nIndex));

@@ -506,7 +506,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
         case SID_RENAME_OBJECT:
             {
-                if(1 == pView->GetMarkedObjectCount())
+                if(1 == pView->GetMarkedObjectList().GetMarkCount())
                 {
                     // #i68101#
                     SdrObject* pSelected = pView->GetMarkedObjectByIndex(0);
@@ -580,7 +580,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
         // #i68101#
         case SID_TITLE_DESCRIPTION_OBJECT:
             {
-                if(1 == pView->GetMarkedObjectCount())
+                if(1 == pView->GetMarkedObjectList().GetMarkCount())
                 {
                     SdrObject* pSelected = pView->GetMarkedObjectByIndex(0);
                     assert(pSelected && "ScDrawShell::ExecDrawFunc: nMarkCount, but no object (!)");

@@ -36,7 +36,7 @@ void E3dView::ConvertMarkedToPolyObj()
 {
     rtl::Reference<SdrObject> pNewObj;
 
-    if (GetMarkedObjectCount() == 1)
+    if (GetMarkedObjectList().GetMarkCount() == 1)
     {
         SdrObject* pObj = GetMarkedObjectByIndex(0);
 

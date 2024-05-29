@@ -604,7 +604,7 @@ void SwDrawBaseShell::Execute(SfxRequest& rReq)
         {
             bDone = true;
 
-            if(1 == pSdrView->GetMarkedObjectCount())
+            if(1 == pSdrView->GetMarkedObjectList().GetMarkCount())
             {
                 // #i68101#
                 rtl::Reference<SdrObject> pSelected = pSdrView->GetMarkedObjectByIndex(0);
@@ -649,7 +649,7 @@ void SwDrawBaseShell::Execute(SfxRequest& rReq)
         {
             bDone = true;
 
-            if(1 == pSdrView->GetMarkedObjectCount())
+            if(1 == pSdrView->GetMarkedObjectList().GetMarkCount())
             {
                 rtl::Reference<SdrObject> pSelected = pSdrView->GetMarkedObjectByIndex(0);
                 assert(pSelected && "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
@@ -909,7 +909,7 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
 
             case FN_NAME_SHAPE :
                 {
-                    if(1 != pSdrView->GetMarkedObjectCount())
+                    if(1 != pSdrView->GetMarkedObjectList().GetMarkCount())
                     {
                         rSet.DisableItem( nWhich );
                     }
@@ -921,7 +921,7 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                 {
                     const bool bIsWebView(nullptr != dynamic_cast<SwWebView*>(&GetView()));
 
-                    if(!bIsWebView && 1 != pSdrView->GetMarkedObjectCount())
+                    if(!bIsWebView && 1 != pSdrView->GetMarkedObjectList().GetMarkCount())
                     {
                         rSet.DisableItem( nWhich );
                     }
@@ -934,7 +934,7 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
             case SID_REMOVE_HYPERLINK:
             case SID_COPY_HYPERLINK_LOCATION:
             {
-                if (pSdrView->GetMarkedObjectCount() != 1)
+                if (pSdrView->GetMarkedObjectList().GetMarkCount() != 1)
                 {
                     rSet.DisableItem(nWhich);
                     break;

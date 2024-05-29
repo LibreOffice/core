@@ -4317,7 +4317,7 @@ void SwContentTree::UpdateTracking()
                 SdrView* pSdrView = m_pActiveShell->GetDrawView();
                 if (pSdrView)
                 {
-                    for (size_t nIdx(0); nIdx < pSdrView->GetMarkedObjectCount(); nIdx++)
+                    for (size_t nIdx(0); nIdx < pSdrView->GetMarkedObjectList().GetMarkCount(); nIdx++)
                     {
                         SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(nIdx);
                         OUString aName(pSelected->GetName());

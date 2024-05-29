@@ -924,7 +924,7 @@ void SdPageNameControllerItem::StateChangedAtToolBoxControl( sal_uInt16 nSId,
     if (pInfo->GetDrawDocShell() && pInfo->GetDrawDocShell()->GetViewShell())
     {
         const SdrView* pDrawView = pInfo->GetDrawDocShell()->GetViewShell()->GetDrawView();
-        if (pDrawView && pDrawView->GetMarkedObjectCount())
+        if (pDrawView && pDrawView->GetMarkedObjectList().GetMarkCount())
             bDrawViewHasMarkedObjects = true;
     }
 

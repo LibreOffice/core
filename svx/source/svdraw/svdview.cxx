@@ -856,10 +856,10 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
                 bRet=MarkNextObj(aLogicPos, mnHitTolLog, rVEvt.mbMarkPrev);
             } else {
                 SortMarkedObjects();
-                const size_t nCount0=GetMarkedObjectCount();
+                const size_t nCount0=GetMarkedObjectList().GetMarkCount();
                 bRet=MarkObj(aLogicPos, mnHitTolLog, rVEvt.mbAddMark);
                 SortMarkedObjects();
-                const size_t nCount1=GetMarkedObjectCount();
+                const size_t nCount1=GetMarkedObjectList().GetMarkCount();
                 bUnmark=nCount1<nCount0;
             }
             if (!bUnmark) {
@@ -1077,7 +1077,7 @@ PointerStyle SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDe
 
                 // are 3D objects selected?
                 bool b3DObjSelected = false;
-                for (size_t a=0; !b3DObjSelected && a<GetMarkedObjectCount(); ++a) {
+                for (size_t a=0; !b3DObjSelected && a<GetMarkedObjectList().GetMarkCount(); ++a) {
                     SdrObject* pObj = GetMarkedObjectByIndex(a);
                     if(DynCastE3dObject(pObj))
                         b3DObjSelected = true;
@@ -1307,7 +1307,7 @@ SdrViewContext SdrView::GetContext() const
     if( IsGluePointEditMode() )
         return SdrViewContext::GluePointEdit;
 
-    const size_t nMarkCount = GetMarkedObjectCount();
+    const size_t nMarkCount = GetMarkedObjectList().GetMarkCount();
 
     if( HasMarkablePoints() && !IsFrameHandles() )
     {
@@ -1320,7 +1320,7 @@ SdrViewContext SdrView::GetContext() const
             return SdrViewContext::PointEdit;
     }
 
-    if( GetMarkedObjectCount() )
+    if( GetMarkedObjectList().GetMarkCount() )
     {
         bool bGraf = true, bMedia = true, bTable = true;
 

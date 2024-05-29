@@ -71,7 +71,7 @@ void SdrEditView::ObjOrderChanged(SdrObject* /*pObj*/, size_t /*nOldPos*/, size_
 
 void SdrEditView::MovMarkedToTop()
 {
-    const size_t nCount=GetMarkedObjectCount();
+    const size_t nCount=GetMarkedObjectList().GetMarkCount();
     if (nCount==0)
         return;
 
@@ -159,7 +159,7 @@ void SdrEditView::MovMarkedToTop()
 
 void SdrEditView::MovMarkedToBtm()
 {
-    const size_t nCount=GetMarkedObjectCount();
+    const size_t nCount=GetMarkedObjectList().GetMarkCount();
     if (nCount==0)
         return;
 
@@ -255,7 +255,7 @@ void SdrEditView::PutMarkedToTop()
 
 void SdrEditView::PutMarkedInFrontOfObj(const SdrObject* pRefObj)
 {
-    const size_t nCount=GetMarkedObjectCount();
+    const size_t nCount=GetMarkedObjectList().GetMarkCount();
     if (nCount==0)
         return;
 
@@ -356,7 +356,7 @@ void SdrEditView::PutMarkedToBtm()
 
 void SdrEditView::PutMarkedBehindObj(const SdrObject* pRefObj)
 {
-    const size_t nCount=GetMarkedObjectCount();
+    const size_t nCount=GetMarkedObjectList().GetMarkCount();
     if (nCount==0)
         return;
 
@@ -437,7 +437,7 @@ void SdrEditView::PutMarkedBehindObj(const SdrObject* pRefObj)
 void SdrEditView::ReverseOrderOfMarked()
 {
     SortMarkedObjects();
-    const size_t nMarkCount=GetMarkedObjectCount();
+    const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
     if (nMarkCount<=0)
         return;
 
@@ -488,7 +488,7 @@ void SdrEditView::ReverseOrderOfMarked()
 
 void SdrEditView::ImpCheckToTopBtmPossible()
 {
-    const size_t nCount=GetMarkedObjectCount();
+    const size_t nCount=GetMarkedObjectList().GetMarkCount();
     if (nCount==0)
         return;
     if (nCount==1)
@@ -773,7 +773,7 @@ typedef std::vector<ImpDistributeEntry> ImpDistributeEntryList;
 
 void SdrEditView::DistributeMarkedObjects(sal_uInt16 SlotID)
 {
-    const size_t nMark(GetMarkedObjectCount());
+    const size_t nMark(GetMarkedObjectList().GetMarkCount());
 
     if(nMark <= 2)
         return;
@@ -1021,7 +1021,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
     ConvertMarkedToPathObj(true);
     OSL_ENSURE(AreObjectsMarked(), "no more objects selected after preparations (!)");
 
-    for(size_t a=0; a<GetMarkedObjectCount(); ++a)
+    for(size_t a=0; a<GetMarkedObjectList().GetMarkCount(); ++a)
     {
         SdrMark* pM = GetMarkedObjectList().GetMark(a);
         SdrObject* pObj = pM->GetMarkedSdrObj();
@@ -1268,7 +1268,7 @@ void SdrEditView::CombineMarkedTextObjects()
     MarkListHasChanged();
     AdjustMarkHdl();
 
-    if ( GetMarkedObjectCount() > 1 )
+    if ( GetMarkedObjectList().GetMarkCount() > 1 )
     {
         rtl::Reference<SdrRectObj> pReplacement = new SdrRectObj( getSdrModelFromSdrView(), SdrObjKind::Text );
         pReplacement->SetOutlinerParaObject( rDrawOutliner.CreateParaObject() );
@@ -1333,7 +1333,7 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
     SdrPageView* pInsPV = nullptr;
     const SdrObject* pAttrObj = nullptr;
 
-    for(size_t a = GetMarkedObjectCount(); a; )
+    for(size_t a = GetMarkedObjectList().GetMarkCount(); a; )
     {
         --a;
         SdrMark* pM = GetMarkedObjectList().GetMark(a);
@@ -1737,7 +1737,7 @@ void SdrEditView::DismantleMarkedObjects(bool bMakeLines)
     SdrObjList* pOL0=nullptr;
     const bool bWasLocked = GetModel().isLocked();
     GetModel().setLock(true);
-    for (size_t nm=GetMarkedObjectCount(); nm>0;) {
+    for (size_t nm=GetMarkedObjectList().GetMarkCount(); nm>0;) {
         --nm;
         SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
@@ -1791,7 +1791,7 @@ void SdrEditView::GroupMarked()
     {
         BegUndo(SvxResId(STR_EditGroup),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::Group);
 
-        for(size_t nm = GetMarkedObjectCount(); nm>0; )
+        for(size_t nm = GetMarkedObjectList().GetMarkCount(); nm>0; )
         {
             // add UndoActions for all affected objects
             --nm;
@@ -1819,7 +1819,7 @@ void SdrEditView::GroupMarked()
         // the group object is the last one in the list.
         size_t      nInsPos=pSrcLst->GetObjCount();
         bool        bNeedInsPos=true;
-        for (size_t nm=GetMarkedObjectCount(); nm>0;)
+        for (size_t nm=GetMarkedObjectList().GetMarkCount(); nm>0;)
         {
             --nm;
             SdrMark* pM=GetMarkedObjectList().GetMark(nm);
@@ -1892,7 +1892,7 @@ void SdrEditView::UnGroupMarked()
     OUString aName1;
     OUString aName;
     bool bNameOk=false;
-    for (size_t nm=GetMarkedObjectCount(); nm>0;) {
+    for (size_t nm=GetMarkedObjectList().GetMarkCount(); nm>0;) {
         --nm;
         SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pGrp=pM->GetMarkedSdrObj();
@@ -2034,7 +2034,7 @@ void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea)
     if (!AreObjectsMarked())        return;
 
     bool bMrkChg = false;
-    const size_t nMarkCount=GetMarkedObjectCount();
+    const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
     TranslateId pDscrID;
     if(bLineToArea)
     {
@@ -2117,7 +2117,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
     SortMarkedObjects();
     SdrMarkList aForTheDescription;
     SdrMarkList aNewMarked;
-    for (size_t nm =GetMarkedObjectCount(); nm > 0; )
+    for (size_t nm =GetMarkedObjectList().GetMarkCount(); nm > 0; )
     {
         // create Undo objects for all new objects
         // check for cancellation between the metafiles

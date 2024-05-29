@@ -155,7 +155,7 @@ bool SwView::isSignatureLineSelected() const
     if (!pSdrView)
         return false;
 
-    if (pSdrView->GetMarkedObjectCount() != 1)
+    if (pSdrView->GetMarkedObjectList().GetMarkCount() != 1)
         return false;
 
     SdrObject* pPickObj = pSdrView->GetMarkedObjectByIndex(0);
@@ -176,7 +176,7 @@ bool SwView::isSignatureLineSigned() const
     if (!pSdrView)
         return false;
 
-    if (pSdrView->GetMarkedObjectCount() != 1)
+    if (pSdrView->GetMarkedObjectList().GetMarkCount() != 1)
         return false;
 
     SdrObject* pPickObj = pSdrView->GetMarkedObjectByIndex(0);
@@ -197,7 +197,7 @@ bool SwView::isQRCodeSelected() const
     if (!pSdrView)
         return false;
 
-    if (pSdrView->GetMarkedObjectCount() != 1)
+    if (pSdrView->GetMarkedObjectList().GetMarkCount() != 1)
         return false;
 
     SdrObject* pPickObj = pSdrView->GetMarkedObjectByIndex(0);

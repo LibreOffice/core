@@ -1137,7 +1137,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         // exception to get good results for Svgs. This is how the code gets more
                         // and more crowded, at last I made a remark for myself to change this
                         // as one of the next tasks.
-                        if(1 == mpDrawView->GetMarkedObjectCount())
+                        if(1 == mpDrawView->GetMarkedObjectList().GetMarkCount())
                         {
                             const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(mpDrawView->GetMarkedObjectByIndex(0));
 
@@ -2662,7 +2662,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             // only allow for single object selection since the name of an object needs
             // to be unique
-            if(1 == mpDrawView->GetMarkedObjectCount())
+            if(1 == mpDrawView->GetMarkedObjectList().GetMarkCount())
             {
                 // #i68101#
                 rtl::Reference<SdrObject> pSelected = mpDrawView->GetMarkedObjectByIndex(0);
@@ -2701,7 +2701,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         // #i68101#
         case SID_OBJECT_TITLE_DESCRIPTION:
         {
-            if(1 == mpDrawView->GetMarkedObjectCount())
+            if(1 == mpDrawView->GetMarkedObjectList().GetMarkCount())
             {
                 rtl::Reference<SdrObject> pSelected = mpDrawView->GetMarkedObjectByIndex(0);
                 OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");

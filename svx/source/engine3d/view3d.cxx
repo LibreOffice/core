@@ -88,7 +88,7 @@ public:
 
 Impl3DMirrorConstructOverlay::Impl3DMirrorConstructOverlay(const E3dView& rView)
 :   mrView(rView),
-    mnCount(rView.GetMarkedObjectCount()),
+    mnCount(rView.GetMarkedObjectList().GetMarkCount()),
     mpPolygons(nullptr)
 {
     if(!mnCount)
@@ -217,7 +217,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
     bool bSpecialHandling = false;
     E3dScene *pScene = nullptr;
 
-    const size_t nCnt = GetMarkedObjectCount();
+    const size_t nCnt = GetMarkedObjectList().GetMarkCount();
     for(size_t nObjs = 0; nObjs < nCnt; ++nObjs)
     {
         SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
@@ -313,7 +313,7 @@ std::unique_ptr<SdrModel> E3dView::CreateMarkedObjModel() const
 {
     // Does 3D objects exist which scenes are not selected?
     bool bSpecialHandling(false);
-    const size_t nCount(GetMarkedObjectCount());
+    const size_t nCount(GetMarkedObjectList().GetMarkCount());
     E3dScene *pScene = nullptr;
 
     for(size_t nObjs = 0; nObjs < nCount; ++nObjs)
@@ -585,7 +585,7 @@ bool E3dView::IsConvertTo3DObjPossible() const
     bool bGroupSelected(false);
     bool bRetval(true);
 
-    for(size_t a=0; !bAny3D && a<GetMarkedObjectCount(); ++a)
+    for(size_t a=0; !bAny3D && a<GetMarkedObjectList().GetMarkCount(); ++a)
     {
         SdrObject *pObj = GetMarkedObjectByIndex(a);
         if(pObj)
@@ -877,7 +877,7 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
         aInvLatheMat.invert();
 
         // SnapRect extension enables mirroring in the axis of rotation
-        for(size_t a=0; a<GetMarkedObjectCount(); ++a)
+        for(size_t a=0; a<GetMarkedObjectList().GetMarkCount(); ++a)
         {
             SdrMark* pMark = GetMarkedObjectList().GetMark(a);
             SdrObject* pObj = pMark->GetMarkedSdrObj();
@@ -917,7 +917,7 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
 
     // Walk through the selection and convert it into 3D, complete with
     // Conversion to SdrPathObject, also fonts
-    for(size_t a=0; a<GetMarkedObjectCount(); ++a)
+    for(size_t a=0; a<GetMarkedObjectList().GetMarkCount(); ++a)
     {
         SdrMark* pMark = GetMarkedObjectList().GetMark(a);
         SdrObject* pObj = pMark->GetMarkedSdrObj();
@@ -1135,7 +1135,7 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
     SdrHdl* pHdl, short nMinMov,
     SdrDragMethod* pForcedMeth)
 {
-    if(Is3DRotationCreationActive() && GetMarkedObjectCount())
+    if(Is3DRotationCreationActive() && GetMarkedObjectList().GetMarkCount())
     {
         // Determine all selected polygons and return the mirrored helper overlay
         mpMirrorOverlay->SetMirrorAxis(maRef1, maRef2);
@@ -1156,12 +1156,12 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
            bOwnActionNecessary = false;
         }
 
-        if(bOwnActionNecessary && GetMarkedObjectCount() > 0)
+        if(bOwnActionNecessary && GetMarkedObjectList().GetMarkCount() > 0)
         {
             E3dDragConstraint eConstraint = E3dDragConstraint::XYZ;
             bool bThereAreRootScenes = false;
             bool bThereAre3DObjects = false;
-            const size_t nCnt = GetMarkedObjectCount();
+            const size_t nCnt = GetMarkedObjectList().GetMarkCount();
             for(size_t nObjs = 0; nObjs < nCnt; ++nObjs)
             {
                 SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
@@ -1284,7 +1284,7 @@ void E3dView::InitScene(E3dScene* pScene, double fW, double fH, double fCamZ)
 
 void E3dView::Start3DCreation()
 {
-    if (!GetMarkedObjectCount())
+    if (!GetMarkedObjectList().GetMarkCount())
         return;
 
     //positioned
@@ -1324,7 +1324,7 @@ void E3dView::Start3DCreation()
 
     // and then attach the marks at the top and bottom of the object
     basegfx::B2DRange aR;
-    for(size_t nMark = 0; nMark < GetMarkedObjectCount(); ++nMark)
+    for(size_t nMark = 0; nMark < GetMarkedObjectList().GetMarkCount(); ++nMark)
     {
         SdrObject* pMark = GetMarkedObjectByIndex(nMark);
         basegfx::B2DPolyPolygon aXPP(pMark->TakeXorPoly());
@@ -1468,7 +1468,7 @@ void E3dView::InitView ()
 
 bool E3dView::IsBreak3DObjPossible() const
 {
-    const size_t nCount = GetMarkedObjectCount();
+    const size_t nCount = GetMarkedObjectList().GetMarkCount();
 
     if (nCount > 0)
     {
@@ -1501,7 +1501,7 @@ void E3dView::Break3DObj()
         return;
 
     // ALL selected objects are changed
-    const size_t nCount = GetMarkedObjectCount();
+    const size_t nCount = GetMarkedObjectList().GetMarkCount();
 
     BegUndo(SvxResId(RID_SVX_3D_UNDO_BREAK_LATHE));
     for(size_t a=0; a<nCount; ++a)
@@ -1549,7 +1549,7 @@ void E3dView::CheckPossibilities()
     if(!(m_bGroupPossible || m_bUnGroupPossible || m_bGrpEnterPossible))
         return;
 
-    const size_t nMarkCnt = GetMarkedObjectCount();
+    const size_t nMarkCnt = GetMarkedObjectList().GetMarkCount();
     bool bCompound = false;
     bool b3DObject = false;
     for(size_t nObjs = 0; (nObjs < nMarkCnt) && !bCompound; ++nObjs)

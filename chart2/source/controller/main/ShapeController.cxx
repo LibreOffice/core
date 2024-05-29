@@ -397,7 +397,7 @@ void ShapeController::executeDispatch_ObjectTitleDescription()
         return;
 
     DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
-    if ( !(pDrawViewWrapper && pDrawViewWrapper->GetMarkedObjectCount() == 1) )
+    if ( !(pDrawViewWrapper && pDrawViewWrapper->GetMarkedObjectList().GetMarkCount() == 1) )
         return;
 
     SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedObject();
@@ -432,7 +432,7 @@ void ShapeController::executeDispatch_RenameObject()
         return;
 
     DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
-    if ( !(pDrawViewWrapper && pDrawViewWrapper->GetMarkedObjectCount() == 1) )
+    if ( !(pDrawViewWrapper && pDrawViewWrapper->GetMarkedObjectList().GetMarkCount() == 1) )
         return;
 
     SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedObject();

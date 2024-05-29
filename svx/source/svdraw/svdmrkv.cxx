@@ -238,7 +238,7 @@ void SdrMarkView::ModelHasChanged()
 
 void SdrMarkView::modelHasChangedLOKit()
 {
-    if (GetMarkedObjectCount() <= 0)
+    if (GetMarkedObjectList().GetMarkCount() <= 0)
         return;
 
     //TODO: Is MarkedObjRect valid at this point?
@@ -601,7 +601,7 @@ void SdrMarkView::showMarkHandles()
 
 bool SdrMarkView::ImpIsFrameHandles() const
 {
-    const size_t nMarkCount=GetMarkedObjectCount();
+    const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
     bool bFrmHdl=nMarkCount>static_cast<size_t>(mnFrameHandlesLimit) || mbForceFrameHandles;
     bool bStdDrag=meDragMode==SdrDragMode::Move;
     if (nMarkCount==1 && bStdDrag && bFrmHdl)
@@ -902,7 +902,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
 
         SdrPageView* pPageView = GetSdrPageView();
 
-        if (GetMarkedObjectCount())
+        if (GetMarkedObjectList().GetMarkCount())
         {
             SdrMark* pM = GetMarkedObjectList().GetMark(0);
             SdrObject* pO = pM->GetMarkedSdrObj();
@@ -1271,7 +1271,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
     // There can be multiple mark views, but we're only interested in the one that has a window associated.
     const bool bTiledRendering = comphelper::LibreOfficeKit::isActive() && GetFirstOutputDevice() && GetFirstOutputDevice()->GetOutDevType() == OUTDEV_WINDOW;
 
-    const size_t nMarkCount=GetMarkedObjectCount();
+    const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
     bool bStdDrag=meDragMode==SdrDragMode::Move;
     bool bSingleTextObjMark=false;
     bool bLimitedRotation(false);
@@ -1619,7 +1619,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
         case SdrDragMode::Transparence:
         {
             // add interactive transparency handle
-            const size_t nMarkCount = GetMarkedObjectCount();
+            const size_t nMarkCount = GetMarkedObjectList().GetMarkCount();
             if(nMarkCount == 1)
             {
                 SdrObject* pObj = GetMarkedObjectByIndex(0);
@@ -1681,7 +1681,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
         case SdrDragMode::Gradient:
         {
             // add interactive gradient handle
-            const size_t nMarkCount = GetMarkedObjectCount();
+            const size_t nMarkCount = GetMarkedObjectList().GetMarkCount();
             if(nMarkCount == 1)
             {
                 SdrObject* pObj = GetMarkedObjectByIndex(0);
@@ -1905,7 +1905,7 @@ SfxViewShell* SdrMarkView::GetSfxViewShell() const
 
 void SdrMarkView::CheckMarked()
 {
-    for (size_t nm=GetMarkedObjectCount(); nm>0;) {
+    for (size_t nm=GetMarkedObjectList().GetMarkCount(); nm>0;) {
         --nm;
         SdrMark* pM = GetMarkedObjectList().GetMark(nm);
         SdrObject* pObj = pM->GetMarkedSdrObj();
@@ -1990,7 +1990,7 @@ bool SdrMarkView::IsMarkedObjHit(const Point& rPnt, short nTol) const
 {
     bool bRet=false;
     nTol=ImpGetHitTolLogic(nTol,nullptr);
-    for (size_t nm=0; nm<GetMarkedObjectCount() && !bRet; ++nm) {
+    for (size_t nm=0; nm<GetMarkedObjectList().GetMarkCount() && !bRet; ++nm) {
         SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         bRet = nullptr != CheckSingleSdrObjectHit(rPnt,sal_uInt16(nTol),pM->GetMarkedSdrObj(),pM->GetPageView(),SdrSearchOptions::NONE,nullptr);
     }
@@ -2029,7 +2029,7 @@ bool SdrMarkView::MarkNextObj(bool bPrev)
     }
 
     SortMarkedObjects();
-    const size_t nMarkCount=GetMarkedObjectCount();
+    const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
     size_t nChgMarkNum = SAL_MAX_SIZE; // number of the MarkEntry we want to replace
     size_t nSearchObjNum = bPrev ? 0 : SAL_MAX_SIZE;
     if (nMarkCount!=0) {
@@ -2083,7 +2083,7 @@ bool SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, bool bPrev)
     size_t nTopMarkHit=0;
     size_t nBtmMarkHit=0;
     // find topmost of the selected objects that is hit by rPnt
-    const size_t nMarkCount=GetMarkedObjectCount();
+    const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
     for (size_t nm=nMarkCount; nm>0 && pTopMarkHit==nullptr;) {
         --nm;
         SdrMark* pM=GetMarkedObjectList().GetMark(nm);
@@ -2508,7 +2508,7 @@ SdrObject* SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrPageView*& rpP
         pPV=static_cast<const SdrObjEditView*>(this)->GetTextEditPageView();
     }
     if (bMarked) {
-        const size_t nMrkCnt=GetMarkedObjectCount();
+        const size_t nMrkCnt=GetMarkedObjectList().GetMarkCount();
         size_t nMrkNum=nMrkCnt;
         while (pHitObj==nullptr && nMrkNum>0) {
             nMrkNum--;
@@ -2595,7 +2595,7 @@ bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageVie
     const bool bBoundCheckOn2ndPass(nOptions & SdrSearchOptions::PASS2BOUND);
     rpObj=nullptr;
     rpPV=nullptr;
-    const size_t nMarkCount=GetMarkedObjectCount();
+    const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
     for (size_t nMarkNum=nMarkCount; nMarkNum>0;) {
         --nMarkNum;
         SdrMark* pM=GetMarkedObjectList().GetMark(nMarkNum);
@@ -2631,7 +2631,7 @@ bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageVie
 
 void SdrMarkView::UnmarkAllObj(SdrPageView const * pPV)
 {
-    if (GetMarkedObjectCount()==0)
+    if (GetMarkedObjectList().GetMarkCount()==0)
         return;
 
     BrkAction();
@@ -2670,7 +2670,7 @@ void SdrMarkView::MarkAllObj(SdrPageView* pPV)
         }
     }
 
-    if(GetMarkedObjectCount())
+    if(GetMarkedObjectList().GetMarkCount())
     {
         AdjustMarkHdl();
     }
@@ -2687,7 +2687,7 @@ void SdrMarkView::AdjustMarkHdl(SfxViewShell* pOtherShell)
 tools::Rectangle SdrMarkView::GetMarkedObjBoundRect() const
 {
     tools::Rectangle aRect;
-    for (size_t nm=0; nm<GetMarkedObjectCount(); ++nm) {
+    for (size_t nm=0; nm<GetMarkedObjectList().GetMarkCount(); ++nm) {
         SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
         tools::Rectangle aR1(pO->GetCurrentBoundRect());
@@ -2703,7 +2703,7 @@ const tools::Rectangle& SdrMarkView::GetMarkedObjRect() const
     if (mbMarkedObjRectDirty) {
         const_cast<SdrMarkView*>(this)->mbMarkedObjRectDirty=false;
         tools::Rectangle aRect;
-        for (size_t nm=0; nm<GetMarkedObjectCount(); ++nm) {
+        for (size_t nm=0; nm<GetMarkedObjectList().GetMarkCount(); ++nm) {
             SdrMark* pM=GetMarkedObjectList().GetMark(nm);
             SdrObject* pO = pM->GetMarkedSdrObj();
             if (!pO)
@@ -2754,7 +2754,7 @@ void SdrMarkView::EnterMarkedGroup()
         return;
 
     bool bEnter=false;
-    for (size_t nm = GetMarkedObjectCount(); nm > 0 && !bEnter;)
+    for (size_t nm = GetMarkedObjectList().GetMarkCount(); nm > 0 && !bEnter;)
     {
         --nm;
         SdrMark* pM=GetMarkedObjectList().GetMark(nm);
@@ -2778,7 +2778,7 @@ void SdrMarkView::MarkListHasChanged()
     mbMarkedObjRectDirty=true;
     mbMarkedPointsRectsDirty=true;
     bool bOneEdgeMarked=false;
-    if (GetMarkedObjectCount()==1) {
+    if (GetMarkedObjectList().GetMarkCount()==1) {
         const SdrObject* pObj=GetMarkedObjectByIndex(0);
         if (pObj->GetObjInventor()==SdrInventor::Default) {
             bOneEdgeMarked = pObj->GetObjIdentifier() == SdrObjKind::Edge;

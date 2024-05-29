@@ -646,7 +646,7 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
                 break;
 
             case SID_INSERT_SIGNATURELINE:
-                if ( bTabProt || bShared || (pSdrView && pSdrView->GetMarkedObjectCount() != 0))
+                if ( bTabProt || bShared || (pSdrView && pSdrView->GetMarkedObjectList().GetMarkCount() != 0))
                     rSet.DisableItem( nWhich );
                 break;
             case SID_EDIT_SIGNATURELINE:
@@ -656,7 +656,7 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
                 break;
 
             case SID_INSERT_QRCODE:
-                if ( bTabProt || bShared || (pSdrView && pSdrView->GetMarkedObjectCount() != 0))
+                if ( bTabProt || bShared || (pSdrView && pSdrView->GetMarkedObjectList().GetMarkCount() != 0))
                     rSet.DisableItem( nWhich );
                 break;
             case SID_EDIT_QRCODE:
@@ -704,7 +704,7 @@ bool ScTabViewShell::IsSignatureLineSelected()
     if (!pSdrView)
         return false;
 
-    if (pSdrView->GetMarkedObjectCount() != 1)
+    if (pSdrView->GetMarkedObjectList().GetMarkCount() != 1)
         return false;
 
     SdrObject* pPickObj = pSdrView->GetMarkedObjectByIndex(0);
@@ -724,7 +724,7 @@ bool ScTabViewShell::IsQRCodeSelected()
     if (!pSdrView)
         return false;
 
-    if (pSdrView->GetMarkedObjectCount() != 1)
+    if (pSdrView->GetMarkedObjectList().GetMarkCount() != 1)
         return false;
 
     SdrObject* pPickObj = pSdrView->GetMarkedObjectByIndex(0);
@@ -750,7 +750,7 @@ bool ScTabViewShell::IsSignatureLineSigned()
     if (!pSdrView)
         return false;
 
-    if (pSdrView->GetMarkedObjectCount() != 1)
+    if (pSdrView->GetMarkedObjectList().GetMarkCount() != 1)
         return false;
 
     SdrObject* pPickObj = pSdrView->GetMarkedObjectByIndex(0);

@@ -361,7 +361,7 @@ void SdrDragMethod::insertNewlyCreatedOverlayObjectForSdrDragMethod(
 
 void SdrDragMethod::createSdrDragEntries_SolidDrag()
 {
-    const size_t nMarkCount(getSdrDragView().GetMarkedObjectCount());
+    const size_t nMarkCount(getSdrDragView().GetMarkedObjectList().GetMarkCount());
     SdrPageView* pPV = getSdrDragView().GetSdrPageView();
 
     if(!pPV)
@@ -420,7 +420,7 @@ void SdrDragMethod::createSdrDragEntries_SolidDrag()
 
 void SdrDragMethod::createSdrDragEntries_PolygonDrag()
 {
-    const size_t nMarkCount(getSdrDragView().GetMarkedObjectCount());
+    const size_t nMarkCount(getSdrDragView().GetMarkedObjectList().GetMarkCount());
     bool bNoPolygons(getSdrDragView().IsNoDragXorPolys() || nMarkCount > SdrDragView::GetDragXorPolyLimit());
     basegfx::B2DPolyPolygon aResult;
     sal_uInt32 nPointCount(0);
@@ -467,7 +467,7 @@ void SdrDragMethod::createSdrDragEntries_PolygonDrag()
 
 void SdrDragMethod::createSdrDragEntries_PointDrag()
 {
-    const size_t nMarkCount(getSdrDragView().GetMarkedObjectCount());
+    const size_t nMarkCount(getSdrDragView().GetMarkedObjectList().GetMarkCount());
     std::vector< basegfx::B2DPoint > aPositions;
 
     for(size_t nm = 0; nm < nMarkCount; ++nm)
@@ -512,7 +512,7 @@ void SdrDragMethod::createSdrDragEntries_PointDrag()
 
 void SdrDragMethod::createSdrDragEntries_GlueDrag()
 {
-    const size_t nMarkCount(getSdrDragView().GetMarkedObjectCount());
+    const size_t nMarkCount(getSdrDragView().GetMarkedObjectList().GetMarkCount());
     std::vector< basegfx::B2DPoint > aPositions;
 
     for(size_t nm = 0; nm < nMarkCount; ++nm)

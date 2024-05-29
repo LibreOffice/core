@@ -104,7 +104,7 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateClipboardDat
         pNewPage->SetLayoutName( pOldPage->GetLayoutName() );
     }
 
-    if( GetMarkedObjectCount() == 1 )
+    if( GetMarkedObjectList().GetMarkCount() == 1 )
     {
         SdrObject* pObj = GetMarkedObjectByIndex(0);
 
@@ -150,7 +150,7 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateDragDataObje
     OUString                        aDisplayName;
     SdrOle2Obj*                     pSdrOleObj = nullptr;
 
-    if( GetMarkedObjectCount() == 1 )
+    if( GetMarkedObjectList().GetMarkCount() == 1 )
     {
         SdrObject* pObj = GetMarkedObjectByIndex( 0 );
 
@@ -451,7 +451,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
         {
             ::tools::Rectangle aRect( pOLV->GetOutputArea() );
 
-            if (GetMarkedObjectCount() == 1)
+            if (GetMarkedObjectList().GetMarkCount() == 1)
             {
                 SdrMark* pMark = GetMarkedObjectList().GetMark(0);
                 SdrObject* pObj = pMark->GetMarkedSdrObj();
@@ -632,7 +632,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
         {
             ::tools::Rectangle aRect( pOLV->GetOutputArea() );
 
-            if( GetMarkedObjectCount() == 1 )
+            if( GetMarkedObjectList().GetMarkCount() == 1 )
             {
                 SdrMark* pMark = GetMarkedObjectList().GetMark(0);
                 SdrObject* pObj = pMark->GetMarkedSdrObj();

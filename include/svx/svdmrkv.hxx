@@ -261,7 +261,6 @@ public:
     // returns SAL_MAX_SIZE if not found
     SdrPageView* GetSdrPageViewOfMarkedByIndex(size_t nNum) const { return GetMarkedObjectList().GetMark(nNum)->GetPageView(); }
     SdrObject* GetMarkedObjectByIndex(size_t nNum) const { return GetMarkedObjectList().GetMark(nNum)->GetMarkedSdrObj(); }
-    size_t GetMarkedObjectCount() const { return GetMarkedObjectList().GetMarkCount(); }
     void SortMarkedObjects() const { GetMarkedObjectList().ForceSort(); }
     bool AreObjectsMarked() const { return 0 != GetMarkedObjectList().GetMarkCount(); }
     OUString const & GetDescriptionOfMarkedObjects() const { return GetMarkedObjectList().GetMarkDescription(); }

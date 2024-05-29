@@ -144,7 +144,7 @@ bool SdrDragView::TakeDragObjAnchorPos(Point& rPos, bool bTR ) const
     tools::Rectangle aR;
     TakeActionRect(aR);
     rPos = bTR ? aR.TopRight() : aR.TopLeft();
-    if (GetMarkedObjectCount()==1 && IsDragObj() && // only on single selection
+    if (GetMarkedObjectList().GetMarkCount()==1 && IsDragObj() && // only on single selection
         !IsDraggingPoints() && !IsDraggingGluePoints() && // not when moving points
         dynamic_cast<const SdrDragMovHdl*>( mpCurrentSdrDragMethod.get() ) ==  nullptr) // not when moving handles
     {
@@ -267,7 +267,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                         {
                             // are 3D objects selected?
                             bool b3DObjSelected = false;
-                            for(size_t a=0; !b3DObjSelected && a<GetMarkedObjectCount(); ++a)
+                            for(size_t a=0; !b3DObjSelected && a<GetMarkedObjectList().GetMarkCount(); ++a)
                             {
                                 SdrObject* pObj = GetMarkedObjectByIndex(a);
                                 if(DynCastE3dObject(pObj))
@@ -415,7 +415,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                                 }
 
                                 bool bSingleTextObjMark = false;    // SJ: #i100490#
-                                if ( GetMarkedObjectCount() == 1 )
+                                if ( GetMarkedObjectList().GetMarkCount() == 1 )
                                 {
                                     mpMarkedObj=GetMarkedObjectByIndex(0);
                                     if ( mpMarkedObj &&
@@ -433,7 +433,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                         {
                             if(SdrHdlKind::Move == meDragHdl)
                             {
-                                const bool bCustomShapeSelected(1 == GetMarkedObjectCount() && dynamic_cast<const SdrObjCustomShape*>(GetMarkedObjectByIndex(0)) != nullptr);
+                                const bool bCustomShapeSelected(1 == GetMarkedObjectList().GetMarkCount() && dynamic_cast<const SdrObjCustomShape*>(GetMarkedObjectByIndex(0)) != nullptr);
 
                                 if(bCustomShapeSelected)
                                 {
@@ -442,7 +442,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                             }
                             else if(SdrHdlKind::Poly == meDragHdl)
                             {
-                                const bool bConnectorSelected(1 == GetMarkedObjectCount() && dynamic_cast<const SdrEdgeObj*>(GetMarkedObjectByIndex(0)) != nullptr);
+                                const bool bConnectorSelected(1 == GetMarkedObjectList().GetMarkCount() && dynamic_cast<const SdrEdgeObj*>(GetMarkedObjectByIndex(0)) != nullptr);
 
                                 if(bConnectorSelected)
                                 {
@@ -713,7 +713,7 @@ bool SdrDragView::IsInsGluePointPossible() const
     bool bRet=false;
     if (IsInsGluePointMode() && AreObjectsMarked())
     {
-        if (GetMarkedObjectCount()==1)
+        if (GetMarkedObjectList().GetMarkCount()==1)
         {
             // return sal_False, if only 1 object which is a connector.
             const SdrObject* pObj=GetMarkedObjectByIndex(0);

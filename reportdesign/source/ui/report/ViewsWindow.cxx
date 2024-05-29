@@ -628,7 +628,7 @@ void OViewsWindow::collectRectangles(TRectangleMap& _rSortRectangles)
         if ( rView.AreObjectsMarked() )
         {
             rView.SortMarkedObjects();
-            const size_t nCount = rView.GetMarkedObjectCount();
+            const size_t nCount = rView.GetMarkedObjectList().GetMarkCount();
             for (size_t i=0; i < nCount; ++i)
             {
                 const SdrMark* pM = rView.GetMarkedObjectList().GetMark(i);
@@ -1024,7 +1024,7 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
 
         if ( rView.AreObjectsMarked() )
         {
-            const size_t nCount = rView.GetMarkedObjectCount();
+            const size_t nCount = rView.GetMarkedObjectList().GetMarkCount();
             for (size_t i=0; i < nCount; ++i)
             {
                 const SdrMark* pM = rView.GetMarkedObjectList().GetMark(i);
@@ -1367,7 +1367,7 @@ sal_uInt32 OViewsWindow::getMarkedObjectCount() const
 {
     return std::accumulate(m_aSections.begin(), m_aSections.end(), sal_uInt32(0),
         [](const sal_uInt32 nCount, const VclPtr<OSectionWindow>& rxSection) {
-            return nCount + static_cast<sal_uInt32>(rxSection->getReportSection().getSectionView().GetMarkedObjectCount()); });
+            return nCount + static_cast<sal_uInt32>(rxSection->getReportSection().getSectionView().GetMarkedObjectList().GetMarkCount()); });
 }
 
 void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)

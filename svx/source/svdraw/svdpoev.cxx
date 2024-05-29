@@ -60,7 +60,7 @@ SdrPolyEditView::~SdrPolyEditView()
 void SdrPolyEditView::ImpCheckPolyPossibilities()
 {
     ImpResetPolyPossibilityFlags();
-    const size_t nMarkCount(GetMarkedObjectCount());
+    const size_t nMarkCount(GetMarkedObjectList().GetMarkCount());
 
     if(!nMarkCount || ImpIsFrameHandles())
         return;
@@ -197,7 +197,7 @@ void SdrPolyEditView::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
         BegUndo(SvxResId(STR_EditSetPointsSmooth), GetDescriptionOfMarkedPoints());
-    const size_t nMarkCount(GetMarkedObjectCount());
+    const size_t nMarkCount(GetMarkedObjectList().GetMarkCount());
 
     for(size_t nMarkNum(nMarkCount); nMarkNum > 0;)
     {
@@ -231,7 +231,7 @@ void SdrPolyEditView::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
         BegUndo(SvxResId(STR_EditSetSegmentsKind), GetDescriptionOfMarkedPoints());
-    const size_t nMarkCount(GetMarkedObjectCount());
+    const size_t nMarkCount(GetMarkedObjectList().GetMarkCount());
 
     for(size_t nMarkNum=nMarkCount; nMarkNum > 0;)
     {
@@ -290,7 +290,7 @@ void SdrPolyEditView::DeleteMarkedPoints()
 
     BrkAction();
     SortMarkedObjects();
-    const size_t nMarkCount=GetMarkedObjectCount();
+    const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
 
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
@@ -338,7 +338,7 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
         return;
 
     SortMarkedObjects();
-    const size_t nMarkCount(GetMarkedObjectCount());
+    const size_t nMarkCount(GetMarkedObjectList().GetMarkCount());
 
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
@@ -410,7 +410,7 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
 bool SdrPolyEditView::IsRipUpAtMarkedPointsPossible() const
 {
     bool bRetval(false);
-    const size_t nMarkCount(GetMarkedObjectCount());
+    const size_t nMarkCount(GetMarkedObjectList().GetMarkCount());
 
     for(size_t a = 0; a < nMarkCount; ++a)
     {
@@ -450,7 +450,7 @@ bool SdrPolyEditView::IsRipUpAtMarkedPointsPossible() const
 bool SdrPolyEditView::IsOpenCloseMarkedObjectsPossible() const
 {
     bool bRetval(false);
-    const size_t nMarkCount(GetMarkedObjectCount());
+    const size_t nMarkCount(GetMarkedObjectList().GetMarkCount());
 
     for(size_t a = 0; a < nMarkCount; ++a)
     {
@@ -481,7 +481,7 @@ SdrObjClosedKind SdrPolyEditView::GetMarkedObjectsClosedState() const
 {
     bool bOpen(false);
     bool bClosed(false);
-    const size_t nMarkCount(GetMarkedObjectCount());
+    const size_t nMarkCount(GetMarkedObjectList().GetMarkCount());
 
     for(size_t a = 0; !(bOpen && bClosed) && a < nMarkCount; ++a)
     {
@@ -519,7 +519,7 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
 {
     const bool bUndo = IsUndoEnabled();
 
-    const size_t nMarkCount=GetMarkedObjectCount();
+    const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
     for (size_t nm=0; nm<nMarkCount; ++nm)
     {
         SdrMark* pM=GetMarkedObjectList().GetMark(nm);

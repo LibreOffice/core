@@ -658,7 +658,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             bUpdateMgr = false;
             SdrView* pSdrView = rSh.GetDrawViewWithValidMarkList();
             if ( pSdrView &&
-                 pSdrView->GetMarkedObjectCount() == 1 )
+                 pSdrView->GetMarkedObjectList().GetMarkCount() == 1 )
             {
                 OUString aName(rSh.GetFlyName());
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -682,7 +682,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             bUpdateMgr = false;
             SdrView* pSdrView = rSh.GetDrawViewWithValidMarkList();
             if ( pSdrView &&
-                 pSdrView->GetMarkedObjectCount() == 1 )
+                 pSdrView->GetMarkedObjectList().GetMarkCount() == 1 )
             {
                 OUString aDescription(rSh.GetObjDescription());
                 OUString aTitle(rSh.GetObjTitle());
@@ -1022,7 +1022,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 SwWrtShell &rWrtSh = GetShell();
                 SdrView* pSdrView = rWrtSh.GetDrawViewWithValidMarkList();
                 if ( !pSdrView ||
-                     pSdrView->GetMarkedObjectCount() != 1 )
+                     pSdrView->GetMarkedObjectList().GetMarkCount() != 1 )
                 {
                     rSet.DisableItem( nWhich );
                 }

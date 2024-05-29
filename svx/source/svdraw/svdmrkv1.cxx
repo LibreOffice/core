@@ -31,7 +31,7 @@ bool SdrMarkView::HasMarkablePoints() const
     ForceUndirtyMrkPnt();
     bool bRet=false;
     if (!ImpIsFrameHandles()) {
-        const size_t nMarkCount=GetMarkedObjectCount();
+        const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
         if (nMarkCount<=static_cast<size_t>(mnFrameHandlesLimit)) {
             for (size_t nMarkNum=0; nMarkNum<nMarkCount && !bRet; ++nMarkNum) {
                 const SdrMark* pM=GetMarkedObjectList().GetMark(nMarkNum);
@@ -48,7 +48,7 @@ sal_Int32 SdrMarkView::GetMarkablePointCount() const
     ForceUndirtyMrkPnt();
     sal_Int32 nCount=0;
     if (!ImpIsFrameHandles()) {
-        const size_t nMarkCount=GetMarkedObjectCount();
+        const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
         if (nMarkCount<=static_cast<size_t>(mnFrameHandlesLimit)) {
             for (size_t nMarkNum=0; nMarkNum<nMarkCount; ++nMarkNum) {
                 const SdrMark* pM=GetMarkedObjectList().GetMark(nMarkNum);
@@ -67,7 +67,7 @@ bool SdrMarkView::HasMarkedPoints() const
     ForceUndirtyMrkPnt();
     bool bRet=false;
     if (!ImpIsFrameHandles()) {
-        const size_t nMarkCount=GetMarkedObjectCount();
+        const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
         if (nMarkCount<=static_cast<size_t>(mnFrameHandlesLimit)) {
             for (size_t nMarkNum=0; nMarkNum<nMarkCount && !bRet; ++nMarkNum) {
                 const SdrMark* pM=GetMarkedObjectList().GetMark(nMarkNum);
@@ -288,7 +288,7 @@ void SdrMarkView::ImpSetPointsRects() const
 void SdrMarkView::UndirtyMrkPnt() const
 {
     bool bChg=false;
-    const size_t nMarkCount=GetMarkedObjectCount();
+    const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
     for (size_t nMarkNum=0; nMarkNum<nMarkCount; ++nMarkNum) {
         SdrMark* pM=GetMarkedObjectList().GetMark(nMarkNum);
         const SdrObject* pObj=pM->GetMarkedSdrObj();
@@ -355,7 +355,7 @@ bool SdrMarkView::HasMarkableGluePoints() const
     bool bRet=false;
     if (IsGluePointEditMode()) {
         ForceUndirtyMrkPnt();
-        const size_t nMarkCount=GetMarkedObjectCount();
+        const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
         for (size_t nMarkNum=0; nMarkNum<nMarkCount && !bRet; ++nMarkNum) {
             const SdrMark* pM=GetMarkedObjectList().GetMark(nMarkNum);
             const SdrObject* pObj=pM->GetMarkedSdrObj();
@@ -381,7 +381,7 @@ bool SdrMarkView::HasMarkedGluePoints() const
 {
     ForceUndirtyMrkPnt();
     bool bRet=false;
-    const size_t nMarkCount=GetMarkedObjectCount();
+    const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
     for (size_t nMarkNum=0; nMarkNum<nMarkCount && !bRet; ++nMarkNum) {
         const SdrMark* pM=GetMarkedObjectList().GetMark(nMarkNum);
         const SdrUShortCont& rPts = pM->GetMarkedGluePoints();
@@ -396,7 +396,7 @@ bool SdrMarkView::MarkGluePoints(const tools::Rectangle* pRect, bool bUnmark)
     ForceUndirtyMrkPnt();
     bool bChgd=false;
     SortMarkedObjects();
-    const size_t nMarkCount=GetMarkedObjectCount();
+    const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
     for (size_t nMarkNum=0; nMarkNum<nMarkCount; ++nMarkNum) {
         SdrMark* pM=GetMarkedObjectList().GetMark(nMarkNum);
         const SdrObject* pObj=pM->GetMarkedSdrObj();
@@ -448,7 +448,7 @@ bool SdrMarkView::PickGluePoint(const Point& rPnt, SdrObject*& rpObj, sal_uInt16
     if (pOut==nullptr) pOut=GetFirstOutputDevice();
     if (pOut==nullptr) return false;
     SortMarkedObjects();
-    const size_t nMarkCount=GetMarkedObjectCount();
+    const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
     size_t nMarkNum=nMarkCount;
     while (nMarkNum>0) {
         nMarkNum--;

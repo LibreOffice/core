@@ -403,7 +403,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         pOwnData->SetInternalMove( true );
                         SortMarkedObjects();
 
-                        for( size_t nM = 0; nM < GetMarkedObjectCount(); ++nM )
+                        for( size_t nM = 0; nM < GetMarkedObjectList().GetMarkCount(); ++nM )
                         {
                             SdrMark*    pM = GetMarkedObjectList().GetMark( nM );
                             SdrObject*  pO = pM->GetMarkedSdrObj();

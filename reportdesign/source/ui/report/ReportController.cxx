@@ -468,7 +468,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             if ( aReturn.bEnabled )
             {
                 OSectionView* pSectionView = getCurrentSectionView();
-                aReturn.bEnabled = pSectionView && pSectionView->GetMarkedObjectCount() > 2;
+                aReturn.bEnabled = pSectionView && pSectionView->GetMarkedObjectList().GetMarkCount() > 2;
             }
             break;
         case SID_ARRANGEMENU:

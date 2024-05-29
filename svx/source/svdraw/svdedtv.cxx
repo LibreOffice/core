@@ -492,7 +492,7 @@ void SdrEditView::CheckPossibilities()
 
     ImpResetPossibilityFlags();
     SortMarkedObjects();
-    const size_t nMarkCount = GetMarkedObjectCount();
+    const size_t nMarkCount = GetMarkedObjectList().GetMarkCount();
     if (nMarkCount != 0)
     {
         m_bReverseOrderPossible = (nMarkCount >= 2);
@@ -686,7 +686,7 @@ void SdrEditView::CheckPossibilities()
 void SdrEditView::ForceMarkedObjToAnotherPage()
 {
     bool bFlg=false;
-    for (size_t nm=0; nm<GetMarkedObjectCount(); ++nm) {
+    for (size_t nm=0; nm<GetMarkedObjectList().GetMarkCount(); ++nm) {
         SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         tools::Rectangle aObjRect(pObj->GetCurrentBoundRect());
@@ -797,7 +797,7 @@ static void lcl_LazyDelete(std::vector<rtl::Reference<SdrObject>> & rLazyDelete)
 void SdrEditView::DeleteMarkedObj()
 {
     // #i110981# return when nothing is to be done at all
-    if(!GetMarkedObjectCount())
+    if(!GetMarkedObjectList().GetMarkCount())
     {
         return;
     }
@@ -809,7 +809,7 @@ void SdrEditView::DeleteMarkedObj()
     std::vector<rtl::Reference<SdrObject>> lazyDeleteObjects;
     // remove as long as something is selected. This allows to schedule objects for
     // removal for a next run as needed
-    while(GetMarkedObjectCount())
+    while(GetMarkedObjectList().GetMarkCount())
     {
         // vector to remember the parents which may be empty after object removal
         std::vector< SdrObject* > aParents;
@@ -872,7 +872,7 @@ void SdrEditView::DeleteMarkedObj()
         GetMarkedObjectListWriteAccess().Clear();
         maHdlList.Clear();
 
-        while(!aParents.empty() && !GetMarkedObjectCount())
+        while(!aParents.empty() && !GetMarkedObjectList().GetMarkCount())
         {
             // iterate over remembered parents
             SdrObject* pParent = aParents.back();

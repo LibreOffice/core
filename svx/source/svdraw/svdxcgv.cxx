@@ -432,7 +432,7 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked, const
 
     if( AreObjectsMarked() )
     {
-        if(1 == GetMarkedObjectCount())
+        if(1 == GetMarkedObjectList().GetMarkCount())
         {
             if(bNoVDevIfOneBmpMarked)
             {
@@ -530,7 +530,7 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) co
         if( bNoVDevIfOneMtfMarked )
         {
             SdrObject*  pGrafObjTmp = GetMarkedObjectByIndex( 0 );
-            SdrGrafObj* pGrafObj = ( GetMarkedObjectCount() ==1 ) ? dynamic_cast<SdrGrafObj*>( pGrafObjTmp  ) : nullptr;
+            SdrGrafObj* pGrafObj = ( GetMarkedObjectList().GetMarkCount() ==1 ) ? dynamic_cast<SdrGrafObj*>( pGrafObjTmp  ) : nullptr;
 
             if( pGrafObj )
             {
@@ -584,7 +584,7 @@ Graphic SdrExchangeView::GetAllMarkedGraphic() const
 
     if( AreObjectsMarked() )
     {
-        if( ( 1 == GetMarkedObjectCount() ) && GetMarkedObjectList().GetMark( 0 ) )
+        if( ( 1 == GetMarkedObjectList().GetMarkCount() ) && GetMarkedObjectList().GetMark( 0 ) )
             aRet = SdrExchangeView::GetObjGraphic(*GetMarkedObjectByIndex(0));
         else
             aRet = GetMarkedObjMetaFile();
@@ -686,7 +686,7 @@ Graphic SdrExchangeView::GetObjGraphic(const SdrObject& rSdrObject, bool bSVG)
     const SdrLayerAdmin& rLayerAdmin = GetModel().GetLayerAdmin();
     const SdrLayerID                            nControlLayerId = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName() );
 
-    for( size_t n = 0, nCount = GetMarkedObjectCount(); n < nCount; ++n )
+    for( size_t n = 0, nCount = GetMarkedObjectList().GetMarkCount(); n < nCount; ++n )
     {
         SdrMark* pMark = GetMarkedObjectList().GetMark( n );
 

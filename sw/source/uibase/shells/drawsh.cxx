@@ -81,7 +81,7 @@ SdrObject* SwDrawShell::IsSingleFillableNonOLESelected()
         return nullptr;
     }
 
-    if(1 != pSdrView->GetMarkedObjectCount())
+    if(1 != pSdrView->GetMarkedObjectList().GetMarkCount())
     {
         return nullptr;
     }
