@@ -438,6 +438,13 @@ void ScGridWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::R
     bIsInPaint = false;
 }
 
+void ScGridWindow::Resize()
+{
+    // tdf#159348 update highlight overlay when window is resized
+    if (officecfg::Office::Calc::Content::Display::ColumnRowHighlighting::get())
+        UpdateHighlightOverlay();
+}
+
 void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMode eMode )
 {
     ScDocument& rDoc = mrViewData.GetDocument();

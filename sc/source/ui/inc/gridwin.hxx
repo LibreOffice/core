@@ -439,6 +439,7 @@ public:
     using Window::Draw;
     void            Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                           ScUpdateMode eMode );
+    void Resize() override;
 
     /// Draw content of the gridwindow; shared between the desktop and the tiled rendering.
     void DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableInfo, ScOutputData& aOutputData, bool bLogicText);
