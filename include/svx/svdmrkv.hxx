@@ -265,7 +265,6 @@ public:
     bool AreObjectsMarked() const { return 0 != GetMarkedObjectList().GetMarkCount(); }
     OUString const & GetDescriptionOfMarkedObjects() const { return GetMarkedObjectList().GetMarkDescription(); }
     OUString const & GetDescriptionOfMarkedPoints() const { return GetMarkedObjectList().GetPointMarkDescription(); }
-    OUString const & GetDescriptionOfMarkedGluePoints() const { return GetMarkedObjectList().GetGluePointMarkDescription(); }
 
     // Get a list of all those links which are connected to marked nodes,
     // but which are not marked themselves.
