@@ -1380,10 +1380,21 @@ namespace
         aBoundsProvider.GetStartIndexAndPosition(nStartIndex, nStartPosPx); ++nStartIndex;
         aBoundsProvider.GetEndIndexAndPosition(nEndIndex, nEndPosPx);
 
-        nTopLeftTileOffset = nTileStartPosPx - nStartPosPx;
-        nTopLeftTileOrigin = nStartPosPx;
-        nTopLeftTileIndex = nStartIndex;
-        nBottomRightTileIndex = nEndIndex;
+        bool reverse = nStartIndex > nEndIndex;
+        if (reverse)
+        {
+            nTopLeftTileOffset = nTileEndPosPx - nEndPosPx;
+            nTopLeftTileOrigin = nEndPosPx;
+            nTopLeftTileIndex = nEndIndex;
+            nBottomRightTileIndex = nStartIndex;
+        }
+        else {
+            nTopLeftTileOffset = nTileStartPosPx - nStartPosPx;
+            nTopLeftTileOrigin = nStartPosPx;
+            nTopLeftTileIndex = nStartIndex;
+            nBottomRightTileIndex = nEndIndex;
+        }
+
     }
 
     void lcl_RTLAdjustTileColOffset(ScViewData& rViewData, sal_Int32& nTileColOffset,
