@@ -312,14 +312,14 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
     }
 
-    SwPaM* pRedlPam = nullptr;
+    std::optional<SwPaM> pRedlPam;
     SwUndoRedlineSort* pRedlUndo = nullptr;
     SwUndoSort* pUndoSort = nullptr;
 
     // To-Do - add 'SwExtraRedlineTable' also ?
     if( getIDocumentRedlineAccess().IsRedlineOn() || (!getIDocumentRedlineAccess().IsIgnoreRedline() && !getIDocumentRedlineAccess().GetRedlineTable().empty() ))
     {
-        pRedlPam = new SwPaM( pStart->GetNode(), pEnd->GetNode(), SwNodeOffset(-1), SwNodeOffset(1) );
+        pRedlPam.emplace( pStart->GetNode(), pEnd->GetNode(), SwNodeOffset(-1), SwNodeOffset(1) );
         SwContentNode* pCNd = pRedlPam->GetMarkContentNode();
         if( pCNd )
             pRedlPam->GetMark()->SetContent( pCNd->Len() );
@@ -362,8 +362,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         else
         {
             getIDocumentRedlineAccess().DeleteRedline( *pRedlPam, true, RedlineType::Any );
-            delete pRedlPam;
-            pRedlPam = nullptr;
+            pRedlPam.reset();
         }
     }
 
@@ -447,8 +446,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
             pRedlUndo->SetValues( *pRedlPam );
         }
 
-        delete pRedlPam;
-        pRedlPam = nullptr;
+        pRedlPam.reset();
     }
     GetIDocumentUndoRedo().DoUndo( bUndo );
     if( bUndo )

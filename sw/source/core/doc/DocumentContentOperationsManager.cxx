@@ -95,6 +95,7 @@
 
 #include <tuple>
 #include <memory>
+#include <optional>
 
 using namespace ::com::sun::star::i18n;
 
@@ -2051,10 +2052,10 @@ bool DocumentContentOperationsManager::CopyRange(SwPaM& rPam, SwPosition& rPos,
         }
     }
 
-    SwPaM* pRedlineRange = nullptr;
+    std::optional<SwPaM> pRedlineRange;
     if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() ||
         (!rDoc.getIDocumentRedlineAccess().IsIgnoreRedline() && !rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() ) )
-        pRedlineRange = new SwPaM( rPos );
+        pRedlineRange.emplace( rPos );
 
     RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
 
@@ -2062,7 +2063,7 @@ bool DocumentContentOperationsManager::CopyRange(SwPaM& rPam, SwPosition& rPos,
 
     if( &rDoc != &m_rDoc )
     {   // ordinary copy
-        bRet = CopyImpl(rPam, rPos, flags & ~SwCopyFlags::CheckPosInFly, pRedlineRange);
+        bRet = CopyImpl(rPam, rPos, flags & ~SwCopyFlags::CheckPosInFly, pRedlineRange ? &*pRedlineRange : nullptr);
     }
     else if( ! ( *pStt <= rPos && rPos < *pEnd &&
             ( pStt->GetNode() != pEnd->GetNode() ||
@@ -2070,7 +2071,7 @@ bool DocumentContentOperationsManager::CopyRange(SwPaM& rPam, SwPosition& rPos,
     {
         // Copy to a position outside of the area, or copy a single TextNode
         // Do an ordinary copy
-        bRet = CopyImpl(rPam, rPos, flags & ~SwCopyFlags::CheckPosInFly, pRedlineRange);
+        bRet = CopyImpl(rPam, rPos, flags & ~SwCopyFlags::CheckPosInFly, pRedlineRange ? &*pRedlineRange : nullptr);
     }
     else
     {
@@ -2086,7 +2087,7 @@ bool DocumentContentOperationsManager::CopyRange(SwPaM& rPam, SwPosition& rPos,
                 new SwRangeRedline(RedlineType::Insert, *pRedlineRange, nMovedID), true);
         else
             rDoc.getIDocumentRedlineAccess().SplitRedline( *pRedlineRange );
-        delete pRedlineRange;
+        pRedlineRange.reset();
     }
 
     return bRet;
