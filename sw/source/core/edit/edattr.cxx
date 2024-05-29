@@ -293,7 +293,6 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
         sal_Int32 nSttCnt = rCurrentPaM.Start()->GetContentIndex();
         sal_Int32 nEndCnt = rCurrentPaM.End()->GetContentIndex();
 
-        SwPaM* pNewPaM = nullptr;
         const SfxPoolItem* pItem = nullptr;
 
         // for all the nodes in the current selection
@@ -320,9 +319,8 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
                 // item from attribute set
                 if( pTextNd->HasSwAttrSet() )
                 {
-                    pNewPaM = new SwPaM(*pNd, nStt, *pNd, nEnd);
                     pItem = pTextNd->GetSwAttrSet().GetItem( nWhich );
-                    vItem.emplace_back( pItem, std::unique_ptr<SwPaM>(pNewPaM) );
+                    vItem.emplace_back( pItem, std::make_unique<SwPaM>(*pNd, nStt, *pNd, nEnd) );
                 }
 
                 if( !pTextNd->HasHints() )
@@ -368,8 +366,7 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
                                         nStop = nEnd;
                                     else
                                         nStop = *pAttrEnd;
-                                    pNewPaM = new SwPaM(*pNd, nStart, *pNd, nStop);
-                                    vItem.emplace_back( pItem, std::unique_ptr<SwPaM>(pNewPaM) );
+                                    vItem.emplace_back( pItem, std::make_unique<SwPaM>(*pNd, nStart, *pNd, nStop) );
                                     break;
                                 }
                                 pItem = aItemIter.NextItem();
@@ -377,9 +374,8 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
                             // default item
                             if( !pItem && !pTextNd->HasSwAttrSet() )
                             {
-                                pNewPaM = new SwPaM(*pNd, nStt, *pNd, nEnd);
                                 pItem = pAutoSet->GetPool()->GetUserDefaultItem( nWhich );
-                                vItem.emplace_back( pItem,  std::unique_ptr<SwPaM>(pNewPaM) );
+                                vItem.emplace_back( pItem,  std::make_unique<SwPaM>(*pNd, nStt, *pNd, nEnd) );
                             }
                         }
                     }
