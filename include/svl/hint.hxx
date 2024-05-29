@@ -163,6 +163,9 @@ enum class SfxHintId {
     SwModifyChanged,
     SwAttr,
     SwDocumentDying,
+    SwRedlineDelText,
+    SwRedlineUnDelText,
+    SwMoveText,
 
     ThisIsAnSdrHint,
     ThisIsAnSfxEventHint
@@ -257,6 +260,9 @@ inline std::basic_ostream<charT, traits> & operator <<(
     case SfxHintId::SwModifyChanged: return stream << "SwModifyChanged";
     case SfxHintId::SwAttr: return stream << "SwAttr";
     case SfxHintId::SwDocumentDying: return stream << "SwDocumentDying";
+    case SfxHintId::SwRedlineDelText: return stream << "SwRedlineDelText";
+    case SfxHintId::SwRedlineUnDelText: return stream << "SwRedlineUnDelText";
+    case SfxHintId::SwMoveText: return stream << "SwMoveText";
     case SfxHintId::ThisIsAnSdrHint: return stream << "SdrHint";
     default: return stream << "unk(" << std::to_string(int(id)) << ")";
     }

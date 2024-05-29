@@ -2159,17 +2159,17 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             pPage->UpdateVirtPageNumInfo(rVirtPageNumHint, this);
         return;
     }
-    else if (auto const pHt = dynamic_cast<sw::MoveText const*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwMoveText)
     {
-        pMoveText = pHt;
+        pMoveText = static_cast<sw::MoveText const*>(&rHint);
     }
-    else if (auto const pHynt = dynamic_cast<sw::RedlineDelText const*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwRedlineDelText)
     {
-        pRedlineDelText = pHynt;
+        pRedlineDelText = static_cast<sw::RedlineDelText const*>(&rHint);
     }
-    else if (auto const pHnt = dynamic_cast<sw::RedlineUnDelText const*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwRedlineUnDelText)
     {
-        pRedlineUnDelText = pHnt;
+        pRedlineUnDelText = static_cast<sw::RedlineUnDelText const*>(&rHint);
     }
     else
     {

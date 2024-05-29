@@ -37,11 +37,6 @@ SwFormatChg::SwFormatChg( SwFormat* pFormat )
 
 namespace sw {
 
-MoveText::MoveText(SwTextNode *const pD, sal_Int32 const nD, sal_Int32 const nS, sal_Int32 const nL)
-    : pDestNode(pD), nDestStart(nD), nSourceStart(nS), nLen(nL)
-{
-}
-
 InsertText::InsertText(const sal_Int32 nP, const sal_Int32 nL, const bool isInFMCommand, const bool isInFMResult)
     : SfxHint( SfxHintId::SwInsertText )
     , nPos( nP ), nLen( nL )
@@ -57,16 +52,6 @@ DeleteText::DeleteText( const sal_Int32 nS, const sal_Int32 nL )
 
 DeleteChar::DeleteChar( const sal_Int32 nPos )
     : SfxHint( SfxHintId::SwDeleteChar ), m_nPos( nPos )
-{
-}
-
-RedlineDelText::RedlineDelText(sal_Int32 const nS, sal_Int32 const nL)
-    : nStart(nS), nLen(nL)
-{
-}
-
-RedlineUnDelText::RedlineUnDelText(sal_Int32 const nS, sal_Int32 const nL)
-    : nStart(nS), nLen(nL)
 {
 }
 

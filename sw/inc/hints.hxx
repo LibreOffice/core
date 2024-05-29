@@ -92,7 +92,8 @@ public:
     sal_Int32 nSourceStart;
     sal_Int32 nLen;
 
-    MoveText(SwTextNode *pD, sal_Int32 nD, sal_Int32 nS, sal_Int32 nL);
+    MoveText(SwTextNode *pD, sal_Int32 nD, sal_Int32 nS, sal_Int32 nL)
+        : SfxHint(SfxHintId::SwMoveText), pDestNode(pD), nDestStart(nD), nSourceStart(nS), nLen(nL) {}
 };
 
 class InsertText final : public SfxHint
@@ -130,7 +131,7 @@ public:
     sal_Int32 nStart;
     sal_Int32 nLen;
 
-    RedlineDelText(sal_Int32 nS, sal_Int32 nL);
+    RedlineDelText(sal_Int32 nS, sal_Int32 nL) : SfxHint(SfxHintId::SwRedlineDelText), nStart(nS), nLen(nL) {}
 };
 
 /// delete redline is removed
@@ -140,7 +141,7 @@ public:
     sal_Int32 nStart;
     sal_Int32 nLen;
 
-    RedlineUnDelText(sal_Int32 nS, sal_Int32 nL);
+    RedlineUnDelText(sal_Int32 nS, sal_Int32 nL) : SfxHint(SfxHintId::SwRedlineUnDelText), nStart(nS), nLen(nL) {}
 };
 
 /** DocPosUpdate is sent to signal that only the frames from or to a specified document-global position
