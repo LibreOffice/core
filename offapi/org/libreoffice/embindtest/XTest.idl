@@ -129,6 +129,7 @@ interface XTest {
     void passJob([in] com::sun::star::task::XJob object);
     void passJobExecutor([in] com::sun::star::task::XJobExecutor object);
     void passInterface([in] com::sun::star::uno::XInterface object);
+    [attribute] string StringAttribute;
 };
 
 }; }; };

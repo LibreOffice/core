@@ -594,6 +594,12 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
         css::uno::Reference<css::task::XJobExecutor>(object, css::uno::UNO_QUERY_THROW)
             ->trigger(u"queried executor"_ustr);
     }
+
+    OUString SAL_CALL getStringAttribute() override { return stringAttribute_; }
+
+    void SAL_CALL setStringAttribute(OUString const& value) override { stringAttribute_ = value; }
+
+    OUString stringAttribute_;
 };
 }
 
