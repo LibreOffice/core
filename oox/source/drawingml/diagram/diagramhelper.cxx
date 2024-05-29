@@ -42,8 +42,9 @@ bool AdvancedDiagramHelper::hasDiagramData() const
 AdvancedDiagramHelper::AdvancedDiagramHelper(
     std::shared_ptr< Diagram > xDiagramPtr,
     std::shared_ptr<::oox::drawingml::Theme> xTheme,
-    css::awt::Size aImportSize)
-: svx::diagram::IDiagramHelper()
+    css::awt::Size aImportSize,
+    bool bSelfCreated)
+: svx::diagram::IDiagramHelper(bSelfCreated)
 , mpDiagramPtr(std::move(xDiagramPtr))
 , mpThemePtr(std::move(xTheme))
 , maImportSize(aImportSize)
@@ -74,7 +75,7 @@ void AdvancedDiagramHelper::reLayout(SdrObjGroup& rTarget)
     pShapePtr->setSize(maImportSize);
 
     // Re-create the oox::Shapes for the diagram content
-    mpDiagramPtr->addTo(pShapePtr);
+    mpDiagramPtr->addTo(pShapePtr, true);
 
     // Delete all existing shapes in that group to prepare re-creation
     rTarget.getChildrenOfSdrObject()->ClearSdrObjList();
@@ -104,7 +105,8 @@ void AdvancedDiagramHelper::reLayout(SdrObjGroup& rTarget)
 
     // set oox::Theme at Filter. All LineStyle/FillStyle/Colors/Attributes
     // will be taken from there
-    if(UseDiagramThemeData())
+    // also need to use theme when geometry gets self-created the first time
+    if(UseDiagramThemeData() || !isSelfCreated())
         xFilter->setCurrentTheme(getOrCreateThemePtr(xFilter));
 
     css::uno::Reference< css::lang::XComponent > aComponentModel( rUnoModel, uno::UNO_QUERY );
@@ -131,9 +133,21 @@ void AdvancedDiagramHelper::reLayout(SdrObjGroup& rTarget)
     // sync FontHeights
     mpDiagramPtr->syncDiagramFontHeights();
 
-    // re-apply secured data from ModelData
-    if(UseDiagramModelData())
-        mpDiagramPtr->getData()->restoreDataFromShapeToModelAfterDiagramImport(*pShapePtr);
+    if (isSelfCreated())
+    {
+        // already secured at import, re-apply secured data from ModelData
+        if(UseDiagramModelData())
+            mpDiagramPtr->getData()->restoreDataFromShapeToModelAfterDiagramImport(*pShapePtr);
+    }
+    else
+    {
+        // secure data from ModelData for the 1st time for shapes except BackgroundShape
+        if(UseDiagramModelData())
+            mpDiagramPtr->getData()->secureDataFromShapeToModelAfterDiagramImport(*pShapePtr);
+
+        // note that shapes are now self-created
+        setSelfCreated();
+    }
 
     // Re-apply remembered geometry
     rTarget.TRSetBaseGeometry(aTransformation, aPolyPolygon);

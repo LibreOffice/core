@@ -104,7 +104,7 @@ static void removeUnneededGroupShapes(const ShapePtr& pShape)
 }
 
 
-void Diagram::addTo( const ShapePtr & pParentShape )
+void Diagram::addTo( const ShapePtr & pParentShape, bool bCreate )
 {
     if (pParentShape->getSize().Width == 0 || pParentShape->getSize().Height == 0)
         SAL_WARN("oox.drawingml", "Diagram cannot be correctly laid out. Size: "
@@ -113,7 +113,7 @@ void Diagram::addTo( const ShapePtr & pParentShape )
     pParentShape->setChildSize(pParentShape->getSize());
 
     const svx::diagram::Point* pRootPoint = mpData->getRootPoint();
-    if (mpLayout->getNode() && pRootPoint)
+    if (bCreate && mpLayout->getNode() && pRootPoint)
     {
         // create Shape hierarchy
         ShapeCreationVisitor aCreationVisitor(*this, pRootPoint, pParentShape);
@@ -357,41 +357,38 @@ void loadDiagram( ShapePtr const & pShape,
             }
         }
 
-        // extLst is present, lets bet on that and ignore the rest of the data from here
-        if( pShape->getExtDrawings().empty() )
+        // Layout: always import to allow editing in the future. It's needed for
+        // AdvancedDiagramHelper::reLayout to re-create the oox::Shape(s) for the
+        // model. Without importing these the diagram model will be not complete.
+        // NOTE: This also adds the DomMaps to rMainDomMap, so the lines
+        //     DiagramDomMap& rMainDomMap = pDiagram->getDomMap();
+        //     rMainDomMap[u"OOXLayout"_ustr] = loadFragment(rFilter,rLayoutPath);
+        //     rMainDomMap[u"OOXStyle"_ustr] = loadFragment(rFilter,rQStylePath);
+        // which were used before if !pShape->getExtDrawings().empty() are not
+        // needed
+        if (!rLayoutPath.isEmpty())
         {
-            // layout
-            if( !rLayoutPath.isEmpty() )
-            {
-                rtl::Reference< core::FragmentHandler > xRefLayout(
-                        new DiagramLayoutFragmentHandler( rFilter, rLayoutPath, pLayout ));
+            rtl::Reference< core::FragmentHandler > xRefLayout(
+                    new DiagramLayoutFragmentHandler( rFilter, rLayoutPath, pLayout ));
 
-                importFragment(rFilter,
-                        loadFragment(rFilter,xRefLayout),
-                        u"OOXLayout"_ustr,
-                        pDiagram,
-                        xRefLayout);
-            }
-
-            // style
-            if( !rQStylePath.isEmpty() )
-            {
-                rtl::Reference< core::FragmentHandler > xRefQStyle(
-                        new DiagramQStylesFragmentHandler( rFilter, rQStylePath, pDiagram->getStyles() ));
-
-                importFragment(rFilter,
-                        loadFragment(rFilter,xRefQStyle),
-                        u"OOXStyle"_ustr,
-                        pDiagram,
-                        xRefQStyle);
-            }
+            importFragment(rFilter,
+                    loadFragment(rFilter,xRefLayout),
+                    u"OOXLayout"_ustr,
+                    pDiagram,
+                    xRefLayout);
         }
-        else
+
+        // Style: same as for Layout (above)
+        if( !rQStylePath.isEmpty() )
         {
-            // We still want to add the XDocuments to the DiagramDomMap
-            DiagramDomMap& rMainDomMap = pDiagram->getDomMap();
-            rMainDomMap[u"OOXLayout"_ustr] = loadFragment(rFilter,rLayoutPath);
-            rMainDomMap[u"OOXStyle"_ustr] = loadFragment(rFilter,rQStylePath);
+            rtl::Reference< core::FragmentHandler > xRefQStyle(
+                    new DiagramQStylesFragmentHandler( rFilter, rQStylePath, pDiagram->getStyles() ));
+
+            importFragment(rFilter,
+                    loadFragment(rFilter,xRefQStyle),
+                    u"OOXStyle"_ustr,
+                    pDiagram,
+                    xRefQStyle);
         }
 
         // colors
@@ -423,7 +420,15 @@ void loadDiagram( ShapePtr const & pShape,
         pData->buildDiagramDataModel(false);
 
         // diagram loaded. now lump together & attach to shape
-        pDiagram->addTo(pShape);
+        // create own geometry if extLst is not present (no geometric
+        // representation is available in file). This will - if false -
+        // just create the BackgroundShape.
+        // NOTE: Need to use pShape->getExtDrawings() here, this is the
+        // already *filtered* version, see usage of DiagramShapeCounter
+        // above. Moving to local bool, there might more coditions show
+        // up
+        const bool bCreate(pShape->getExtDrawings().empty());
+        pDiagram->addTo(pShape, bCreate);
         pShape->setDiagramDoms(pDiagram->getDomsAsPropertyValues());
 
         // Get the oox::Theme definition and - if available - move/secure the
@@ -433,7 +438,7 @@ void loadDiagram( ShapePtr const & pShape,
             pData->setThemeDocument(aTheme->getFragment()); //getTempFile());
 
         // Prepare support for the advanced DiagramHelper using Diagram & Theme data
-        pShape->prepareDiagramHelper(pDiagram, rFilter.getCurrentThemePtr());
+        pShape->prepareDiagramHelper(pDiagram, rFilter.getCurrentThemePtr(), bCreate);
     }
     catch (...)
     {

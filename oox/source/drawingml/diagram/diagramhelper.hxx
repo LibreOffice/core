@@ -60,7 +60,8 @@ public:
     AdvancedDiagramHelper(
         std::shared_ptr< Diagram > xDiagramPtr,
         std::shared_ptr<::oox::drawingml::Theme> xTheme,
-        css::awt::Size aImportSize);
+        css::awt::Size aImportSize,
+        bool bSelfCreated);
     virtual ~AdvancedDiagramHelper();
 
     // re-create XShapes

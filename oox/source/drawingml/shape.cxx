@@ -247,7 +247,8 @@ Shape::~Shape()
 
 void Shape::prepareDiagramHelper(
     const std::shared_ptr< Diagram >& rDiagramPtr,
-    const std::shared_ptr<::oox::drawingml::Theme>& rTheme)
+    const std::shared_ptr<::oox::drawingml::Theme>& rTheme,
+    bool bSelfCreated)
 {
     // Prepare Diagram data collecting for this Shape
     if( nullptr == mpDiagramHelper && FRAMETYPE_DIAGRAM == meFrameType )
@@ -255,7 +256,8 @@ void Shape::prepareDiagramHelper(
         mpDiagramHelper = new AdvancedDiagramHelper(
             rDiagramPtr,
             rTheme,
-            getSize());
+            getSize(),
+            bSelfCreated);
     }
 }
 

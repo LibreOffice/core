@@ -403,10 +403,11 @@ DiagramFrameHdl::DiagramFrameHdl(const basegfx::B2DHomMatrix& rTransformation)
 {
 }
 
-IDiagramHelper::IDiagramHelper()
+IDiagramHelper::IDiagramHelper(bool bSelfCreated)
 : mbUseDiagramThemeData(false)
 , mbUseDiagramModelData(true)
 , mbForceThemePtrRecreation(false)
+, mbSelfCreated(bSelfCreated)
 {
 }
 

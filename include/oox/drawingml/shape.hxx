@@ -266,7 +266,10 @@ public:
 
     // Allows preparation of a local Diagram helper && propagate an eventually
     // existing one to the data holder object later
-    SAL_DLLPRIVATE void prepareDiagramHelper(const std::shared_ptr< Diagram >& rDiagramPtr, const std::shared_ptr<::oox::drawingml::Theme>& rTheme);
+    SAL_DLLPRIVATE void prepareDiagramHelper(
+        const std::shared_ptr< Diagram >& rDiagramPtr,
+        const std::shared_ptr<::oox::drawingml::Theme>& rTheme,
+        bool bSelfCreated);
     SAL_DLLPRIVATE void propagateDiagramHelper();
 
     // for Writer it is necessary to migrate an existing helper to a new Shape
