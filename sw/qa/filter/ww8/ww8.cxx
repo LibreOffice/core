@@ -32,6 +32,7 @@
 #include <tabfrm.hxx>
 #include <cntfrm.hxx>
 #include <colfrm.hxx>
+#include <fmtftntx.hxx>
 
 namespace
 {
@@ -563,6 +564,35 @@ CPPUNIT_TEST_FIXTURE(Test, testNullPointerDereference)
     // Without the accompanying fix in place, this test would have crashed due to null pointer access
     createSwDoc("null-pointer-dereference.doc");
     CPPUNIT_ASSERT_EQUAL(6, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testEndnotesAtSectEnd)
+{
+    // Given a document, endnotes at collected at section end:
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SplitNode();
+    pWrtShell->Up(/*bSelect=*/false);
+    pWrtShell->Insert("x");
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    SwSectionData aSection(SectionType::Content, pWrtShell->GetUniqueSectionName());
+    pWrtShell->StartAction();
+    SfxItemSetFixed<RES_FTN_AT_TXTEND, RES_FRAMEDIR> aSet(pWrtShell->GetAttrPool());
+    aSet.Put(SwFormatEndAtTextEnd(FTNEND_ATTXTEND));
+    pWrtShell->InsertSection(aSection, &aSet);
+    pWrtShell->EndAction();
+    pWrtShell->InsertFootnote(OUString(), /*bEndNote=*/true);
+
+    // When saving to DOCX:
+    save("Office Open XML Text");
+
+    // Then make sure the endnote position is section end:
+    xmlDocUniquePtr pXmlDoc = parseExport("word/settings.xml");
+    OUString aPos = getXPath(pXmlDoc, "/w:settings/w:endnotePr/w:pos"_ostr, "val"_ostr);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '/w:settings/w:endnotePr/w:pos' number of nodes is incorrect
+    // i.e. the default position was used: document end.
+    CPPUNIT_ASSERT_EQUAL(OUString("sectEnd"), aPos);
 }
 }
 
