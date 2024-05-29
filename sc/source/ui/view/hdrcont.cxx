@@ -628,9 +628,6 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
 
 SCCOLROW ScHeaderControl::GetMousePos(const Point& rPos, bool& rBorder) const
 {
-    // #define nHitArea 5
-    const int nHitArea( officecfg::Office::Common::Misc::ExperimentalMode::get() ? 5 : 2 );
-
     bool        bFound = false;
     SCCOLROW    nPos = GetPos();
     SCCOLROW    nHitNo = nPos;
@@ -654,7 +651,7 @@ SCCOLROW ScHeaderControl::GetMousePos(const Point& rPos, bool& rBorder) const
             nScrPos += GetEntrySize( nEntryNo - 1 ) * nLayoutSign;      //! GetHiddenCount() ??
 
         nDif = nMousePos - nScrPos;
-        if (nDif >= -nHitArea && nDif <= +nHitArea)
+        if (nDif >= -5 && nDif <= 5)
         {
             bFound = true;
             nHitNo=nEntryNo-1;
