@@ -79,4 +79,12 @@
     <string name="calc_optimal_width">最適な幅</string>
     <string name="calc_optimal_height">最適な高さ</string>
     <string name="select_photo_title">写真を選択</string>
+    <string name="app_description">LibreOffice Viewerは、LibreOfficeを元にしたドキュメントビューアーです。</string>
+    <string name="calc_show">表示</string>
+    <string name="calc_hide">非表示</string>
+    <string name="select_file_to_open">開くファイルを選択</string>
+    <string name="file_icon_desc">ファイルアイコン</string>
+    <string name="action_text_copied">テキストをクリップボードにコピーしました</string>
+    <string name="about_notice">お知らせを表示</string>
+    <string name="calc_optimal_length">最適な長さ</string>
 </resources>
