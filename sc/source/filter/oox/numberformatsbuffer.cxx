@@ -1933,6 +1933,16 @@ void NumberFormat::setFormatCode( std::u16string_view aFmtCode )
         }  // tdf#81939 preserve other escape characters
         nPosEscape = lclPosToken( aFmtCode, u";", nPosEscape ); // skip to next format
     }
+
+    // tdf#161301 There may be a lone single stray leading "[$]" garbage, strip it.
+    if (sFormat.getLength() >= 3 && sFormat[0] == '[' && sFormat[1] == '$' && sFormat[2] == ']')
+    {
+        SAL_WARN("sc.filter",
+                "NumberFormat::setFormatCode: stripping leading [$] maybe due to x16r2:formatCode16 also being present: "
+                << sFormat.toString());
+        sFormat.remove(0, 3);
+    }
+
     maModel.maFmtCode = sFormat.makeStringAndClear();
 }
 
@@ -2005,6 +2015,12 @@ NumberFormatRef NumberFormatsBuffer::importNumFmt( const AttributeList& rAttribs
 {
     sal_Int32 nNumFmtId = rAttribs.getInteger( XML_numFmtId, -1 );
     OUString aFmtCode = rAttribs.getXString( XML_formatCode, OUString() );
+    /* TODO: there may be a x16r2:formatCode16 attribute that would take
+     * precedence over the formatCode attribute, see
+     * https://learn.microsoft.com/en-us/openspecs/office_standards/ms-xlsx/8c82391e-f128-499a-80a1-734b8504f60e
+     * The number format scanner would have to handle the
+     * [$<currency string>-<culture info>[,<calendar type and numeral system>]]
+     * part.*/
     return createNumFmt( nNumFmtId, aFmtCode );
 }
 
