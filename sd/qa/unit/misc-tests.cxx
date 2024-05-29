@@ -795,7 +795,8 @@ void SdMiscTest::testTdf130988()
     pView->MarkNextObj();
     pView->ConvertMarkedObjTo3D(false, basegfx::B2DPoint(8000.0, -3000.0),
                                 basegfx::B2DPoint(3000.0, -8000.0));
-    E3dScene* pObj = dynamic_cast<E3dScene*>(pView->GetMarkedObjectByIndex(0));
+    E3dScene* pObj
+        = dynamic_cast<E3dScene*>(pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
     CPPUNIT_ASSERT(pObj);
 
     // Error was, that the created 3D object had a wrong path. Instead examining
@@ -820,7 +821,8 @@ void SdMiscTest::testTdf131033()
     pView->MarkNextObj();
     pView->ConvertMarkedObjTo3D(false, basegfx::B2DPoint(11000.0, -5000.0),
                                 basegfx::B2DPoint(11000.0, -9000.0));
-    E3dScene* pObj = dynamic_cast<E3dScene*>(pView->GetMarkedObjectByIndex(0));
+    E3dScene* pObj
+        = dynamic_cast<E3dScene*>(pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
     CPPUNIT_ASSERT(pObj);
 
     // Error was, that the 2D representation of the scene did not contain the default 20°

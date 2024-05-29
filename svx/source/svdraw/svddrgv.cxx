@@ -148,7 +148,7 @@ bool SdrDragView::TakeDragObjAnchorPos(Point& rPos, bool bTR ) const
         !IsDraggingPoints() && !IsDraggingGluePoints() && // not when moving points
         dynamic_cast<const SdrDragMovHdl*>( mpCurrentSdrDragMethod.get() ) ==  nullptr) // not when moving handles
     {
-        SdrObject* pObj=GetMarkedObjectByIndex(0);
+        SdrObject* pObj=GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
         if (auto pCaptionObj = dynamic_cast<SdrCaptionObj*>(pObj))
         {
             Point aPt(pCaptionObj->GetTailPos());
@@ -210,7 +210,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
         // Coordinate maybe affected by GridOffset, so we may need to
         // adapt to Model-coordinates here
         if((comphelper::LibreOfficeKit::isActive() && mpMarkedObj
-            && getPossibleGridOffsetForSdrObject(aGridOffset, GetMarkedObjectByIndex(0), GetSdrPageView()))
+            && getPossibleGridOffsetForSdrObject(aGridOffset, GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj(), GetSdrPageView()))
             || (getPossibleGridOffsetForPosition(
             aGridOffset,
             basegfx::B2DPoint(aPnt.X(), aPnt.Y()),
@@ -269,7 +269,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                             bool b3DObjSelected = false;
                             for(size_t a=0; !b3DObjSelected && a<GetMarkedObjectList().GetMarkCount(); ++a)
                             {
-                                SdrObject* pObj = GetMarkedObjectByIndex(a);
+                                SdrObject* pObj = GetMarkedObjectList().GetMark(a)->GetMarkedSdrObj();
                                 if(DynCastE3dObject(pObj))
                                     b3DObjSelected = true;
                             }
@@ -417,7 +417,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                                 bool bSingleTextObjMark = false;    // SJ: #i100490#
                                 if ( GetMarkedObjectList().GetMarkCount() == 1 )
                                 {
-                                    mpMarkedObj=GetMarkedObjectByIndex(0);
+                                    mpMarkedObj=GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                                     if ( mpMarkedObj &&
                                         DynCastSdrTextObj( mpMarkedObj) !=  nullptr &&
                                         static_cast<SdrTextObj*>(mpMarkedObj)->IsTextFrame() )
@@ -433,7 +433,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                         {
                             if(SdrHdlKind::Move == meDragHdl)
                             {
-                                const bool bCustomShapeSelected(1 == GetMarkedObjectList().GetMarkCount() && dynamic_cast<const SdrObjCustomShape*>(GetMarkedObjectByIndex(0)) != nullptr);
+                                const bool bCustomShapeSelected(1 == GetMarkedObjectList().GetMarkCount() && dynamic_cast<const SdrObjCustomShape*>(GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj()) != nullptr);
 
                                 if(bCustomShapeSelected)
                                 {
@@ -442,7 +442,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                             }
                             else if(SdrHdlKind::Poly == meDragHdl)
                             {
-                                const bool bConnectorSelected(1 == GetMarkedObjectList().GetMarkCount() && dynamic_cast<const SdrEdgeObj*>(GetMarkedObjectByIndex(0)) != nullptr);
+                                const bool bConnectorSelected(1 == GetMarkedObjectList().GetMarkCount() && dynamic_cast<const SdrEdgeObj*>(GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj()) != nullptr);
 
                                 if(bConnectorSelected)
                                 {
@@ -514,7 +514,7 @@ void SdrDragView::MovDragObj(const Point& rPnt)
     // Coordinate maybe affected by GridOffset, so we may need to
     // adapt to Model-coordinates here
     if((comphelper::LibreOfficeKit::isActive() && mpMarkedObj
-        && getPossibleGridOffsetForSdrObject(aGridOffset, GetMarkedObjectByIndex(0), GetSdrPageView()))
+        && getPossibleGridOffsetForSdrObject(aGridOffset, GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj(), GetSdrPageView()))
         || (getPossibleGridOffsetForPosition(
         aGridOffset,
         basegfx::B2DPoint(aPnt.X(), aPnt.Y()),
@@ -716,7 +716,7 @@ bool SdrDragView::IsInsGluePointPossible() const
         if (GetMarkedObjectList().GetMarkCount()==1)
         {
             // return sal_False, if only 1 object which is a connector.
-            const SdrObject* pObj=GetMarkedObjectByIndex(0);
+            const SdrObject* pObj=GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
             if (dynamic_cast<const SdrEdgeObj *>(pObj) == nullptr)
             {
                bRet=true;

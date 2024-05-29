@@ -38,7 +38,7 @@ void E3dView::ConvertMarkedToPolyObj()
 
     if (GetMarkedObjectList().GetMarkCount() == 1)
     {
-        SdrObject* pObj = GetMarkedObjectByIndex(0);
+        SdrObject* pObj = GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
 
         if (pObj)
         {
@@ -107,7 +107,7 @@ SfxItemSet E3dView::Get3DAttributes() const
 
     for(size_t a = 0; a < nMarkCnt; ++a)
     {
-        SdrObject* pObj = GetMarkedObjectByIndex(a);
+        SdrObject* pObj = GetMarkedObjectList().GetMark(a)->GetMarkedSdrObj();
         Imp_E3dView_InorderRun3DObjects(*pObj, nSelectedItems);
     }
 
@@ -150,7 +150,7 @@ void E3dView::Set3DAttributes( const SfxItemSet& rAttr)
 
     for(size_t a = 0; a < nMarkCnt; ++a)
     {
-        SdrObject* pObj = GetMarkedObjectByIndex(a);
+        SdrObject* pObj = GetMarkedObjectList().GetMark(a)->GetMarkedSdrObj();
         Imp_E3dView_InorderRun3DObjects(*pObj, nSelectedItems);
     }
 

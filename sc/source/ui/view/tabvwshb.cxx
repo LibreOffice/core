@@ -707,7 +707,7 @@ bool ScTabViewShell::IsSignatureLineSelected()
     if (pSdrView->GetMarkedObjectList().GetMarkCount() != 1)
         return false;
 
-    SdrObject* pPickObj = pSdrView->GetMarkedObjectByIndex(0);
+    SdrObject* pPickObj = pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
     if (!pPickObj)
         return false;
 
@@ -727,7 +727,7 @@ bool ScTabViewShell::IsQRCodeSelected()
     if (pSdrView->GetMarkedObjectList().GetMarkCount() != 1)
         return false;
 
-    SdrObject* pPickObj = pSdrView->GetMarkedObjectByIndex(0);
+    SdrObject* pPickObj = pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
     if (!pPickObj)
         return false;
 
@@ -753,7 +753,7 @@ bool ScTabViewShell::IsSignatureLineSigned()
     if (pSdrView->GetMarkedObjectList().GetMarkCount() != 1)
         return false;
 
-    SdrObject* pPickObj = pSdrView->GetMarkedObjectByIndex(0);
+    SdrObject* pPickObj = pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
     if (!pPickObj)
         return false;
 

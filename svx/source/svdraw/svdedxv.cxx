@@ -2324,7 +2324,8 @@ SvtScriptType SdrObjEditView::GetScriptType() const
 
         for (size_t i = 0; i < nMarkCount; ++i)
         {
-            OutlinerParaObject* pParaObj = GetMarkedObjectByIndex(i)->GetOutlinerParaObject();
+            OutlinerParaObject* pParaObj
+                = GetMarkedObjectList().GetMark(i)->GetMarkedSdrObj()->GetOutlinerParaObject();
 
             if (pParaObj)
             {
@@ -2366,7 +2367,8 @@ void SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) c
             rTargetSet.Put(mpTextEditOutlinerView->GetAttribs(), false);
         }
 
-        if (GetMarkedObjectList().GetMarkCount() == 1 && GetMarkedObjectByIndex(0) == pText.get())
+        if (GetMarkedObjectList().GetMarkCount() == 1
+            && GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj() == pText.get())
         {
             MergeNotPersistAttrFromMarked(rTargetSet);
         }
@@ -2496,7 +2498,7 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
                 pTextEditObj->SetMergedItemSetAndBroadcast(aSet, bReplaceAll);
 
                 if (GetMarkedObjectList().GetMarkCount() == 1
-                    && GetMarkedObjectByIndex(0) == pTextEditObj.get())
+                    && GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj() == pTextEditObj.get())
                 {
                     SetNotPersistAttrToMarked(aSet);
                 }

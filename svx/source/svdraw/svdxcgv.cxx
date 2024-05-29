@@ -436,7 +436,7 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked, const
         {
             if(bNoVDevIfOneBmpMarked)
             {
-                SdrObject*  pGrafObjTmp = GetMarkedObjectByIndex( 0 );
+                SdrObject*  pGrafObjTmp = GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                 SdrGrafObj* pGrafObj = dynamic_cast<SdrGrafObj*>( pGrafObjTmp  );
 
                 if( pGrafObj && ( pGrafObj->GetGraphicType() == GraphicType::Bitmap ) )
@@ -446,7 +446,7 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked, const
             }
             else
             {
-                const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(GetMarkedObjectByIndex(0));
+                const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
 
                 if(pSdrGrafObj && pSdrGrafObj->isEmbeddedVectorGraphicData())
                 {
@@ -529,7 +529,7 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) co
 
         if( bNoVDevIfOneMtfMarked )
         {
-            SdrObject*  pGrafObjTmp = GetMarkedObjectByIndex( 0 );
+            SdrObject*  pGrafObjTmp = GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
             SdrGrafObj* pGrafObj = ( GetMarkedObjectList().GetMarkCount() ==1 ) ? dynamic_cast<SdrGrafObj*>( pGrafObjTmp  ) : nullptr;
 
             if( pGrafObj )
@@ -585,7 +585,7 @@ Graphic SdrExchangeView::GetAllMarkedGraphic() const
     if( AreObjectsMarked() )
     {
         if( ( 1 == GetMarkedObjectList().GetMarkCount() ) && GetMarkedObjectList().GetMark( 0 ) )
-            aRet = SdrExchangeView::GetObjGraphic(*GetMarkedObjectByIndex(0));
+            aRet = SdrExchangeView::GetObjGraphic(*GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
         else
             aRet = GetMarkedObjMetaFile();
     }

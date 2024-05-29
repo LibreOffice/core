@@ -870,7 +870,7 @@ void View::SetMarkedOriginalSize()
 
     for( size_t i = 0; i < nCount; ++i )
     {
-        SdrObject* pObj = GetMarkedObjectByIndex(i);
+        SdrObject* pObj = GetMarkedObjectList().GetMark(i)->GetMarkedSdrObj();
 
         if( pObj->GetObjInventor() == SdrInventor::Default )
         {
@@ -1199,7 +1199,7 @@ bool View::ShouldToggleOn(
     const size_t nMarkCount = GetMarkedObjectList().GetMarkCount();
     for (size_t nIndex = 0; nIndex < nMarkCount && !bToggleOn; ++nIndex)
     {
-        SdrTextObj* pTextObj = DynCastSdrTextObj(GetMarkedObjectByIndex(nIndex));
+        SdrTextObj* pTextObj = DynCastSdrTextObj(GetMarkedObjectList().GetMark(nIndex)->GetMarkedSdrObj());
         if (!pTextObj || pTextObj->IsTextEditActive())
             continue;
         if( dynamic_cast< const SdrTableObj *>( pTextObj ) !=  nullptr)
@@ -1270,7 +1270,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
     const size_t nMarkCount = GetMarkedObjectList().GetMarkCount();
     for (size_t nIndex = 0; nIndex < nMarkCount; ++nIndex)
     {
-        SdrTextObj* pTextObj = DynCastSdrTextObj(GetMarkedObjectByIndex(nIndex));
+        SdrTextObj* pTextObj = DynCastSdrTextObj(GetMarkedObjectList().GetMark(nIndex)->GetMarkedSdrObj());
         if (!pTextObj || pTextObj->IsTextEditActive())
             continue;
         if( dynamic_cast< SdrTableObj *>( pTextObj ) !=  nullptr)

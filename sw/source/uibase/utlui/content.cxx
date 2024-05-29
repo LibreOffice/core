@@ -4319,7 +4319,7 @@ void SwContentTree::UpdateTracking()
                 {
                     for (size_t nIdx(0); nIdx < pSdrView->GetMarkedObjectList().GetMarkCount(); nIdx++)
                     {
-                        SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(nIdx);
+                        SdrObject* pSelected = pSdrView->GetMarkedObjectList().GetMark(nIdx)->GetMarkedSdrObj();
                         OUString aName(pSelected->GetName());
                         if (!aName.isEmpty())
                             lcl_SelectDrawObjectByName(*m_xTreeView, aName);

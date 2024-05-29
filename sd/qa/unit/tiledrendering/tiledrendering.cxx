@@ -1428,7 +1428,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf118354)
     Scheduler::ProcessEventsToIdle();
 
     SdrView* pView = pViewShell->GetView();
-    auto pMarkedObj = dynamic_cast<sdr::table::SdrTableObj*>(pView->GetMarkedObjectByIndex(0));
+    auto pMarkedObj = dynamic_cast<sdr::table::SdrTableObj*>(pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
     CPPUNIT_ASSERT_EQUAL(pMarkedObj, pTableObject);
 }
 

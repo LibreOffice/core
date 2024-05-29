@@ -131,7 +131,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     // style for other objects
     if(pDrawView && 1 == pDrawView->GetMarkedObjectList().GetMarkCount())
     {
-        SdrObject* pPickObj = pDrawView->GetMarkedObjectByIndex(0);
+        SdrObject* pPickObj = pDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
 
         if(pPickObj)
         {

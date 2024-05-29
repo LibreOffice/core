@@ -910,7 +910,7 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
     for(size_t a = 0; a < nMarkCount; ++a)
     {
         // #80277# merging was done wrong in the prev version
-        SdrObject *pObj = GetMarkedObjectByIndex(a);
+        SdrObject *pObj = GetMarkedObjectList().GetMark(a)->GetMarkedSdrObj();
         if (!pObj)
         {
             continue;
@@ -1941,7 +1941,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
     {
         if (nMarkCount==1)
         {   // align single object to page
-            const SdrObject* pObj=GetMarkedObjectByIndex(0);
+            const SdrObject* pObj=GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
             const SdrPage* pPage=pObj->getSdrPageFromSdrObject();
             const SdrPageGridFrameList* pGFL=pPage->GetGridFrameList(GetMarkedObjectList().GetMark(0)->GetPageView(),&(pObj->GetSnapRect()));
             const SdrPageGridFrame* pFrame=nullptr;

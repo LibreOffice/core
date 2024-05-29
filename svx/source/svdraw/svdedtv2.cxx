@@ -83,7 +83,7 @@ void SdrEditView::MovMarkedToTop()
     GetMarkedObjectList().ForceSort();
     for (size_t nm=0; nm<nCount; ++nm)
     { // All Ordnums have to be correct!
-        GetMarkedObjectByIndex(nm)->GetOrdNum();
+        GetMarkedObjectList().GetMark(nm)->GetMarkedSdrObj()->GetOrdNum();
     }
     bool bChg=false;
     SdrObjList* pOL0=nullptr;
@@ -171,7 +171,7 @@ void SdrEditView::MovMarkedToBtm()
     GetMarkedObjectList().ForceSort();
     for (size_t nm=0; nm<nCount; ++nm)
     { // All Ordnums have to be correct!
-        GetMarkedObjectByIndex(nm)->GetOrdNum();
+        GetMarkedObjectList().GetMark(nm)->GetMarkedSdrObj()->GetOrdNum();
     }
 
     bool bChg=false;
@@ -285,7 +285,7 @@ void SdrEditView::PutMarkedInFrontOfObj(const SdrObject* pRefObj)
     }
     for (size_t nm=0; nm<nCount; ++nm)
     { // All Ordnums have to be correct!
-        GetMarkedObjectByIndex(nm)->GetOrdNum();
+        GetMarkedObjectList().GetMark(nm)->GetMarkedSdrObj()->GetOrdNum();
     }
     bool bChg=false;
     SdrObjList* pOL0=nullptr;
@@ -385,7 +385,7 @@ void SdrEditView::PutMarkedBehindObj(const SdrObject* pRefObj)
         }
     }
     for (size_t nm=0; nm<nCount; ++nm) { // All Ordnums have to be correct!
-        GetMarkedObjectByIndex(nm)->GetOrdNum();
+        GetMarkedObjectList().GetMark(nm)->GetMarkedSdrObj()->GetOrdNum();
     }
     bool bChg=false;
     SdrObjList* pOL0=nullptr;
@@ -456,11 +456,11 @@ void SdrEditView::ReverseOrderOfMarked()
         SdrObjList* pOL=GetMarkedObjectList().GetMark(a)->GetPageView()->GetObjList();
         size_t c=b;
         if (a<c) { // make sure OrdNums aren't dirty
-            GetMarkedObjectByIndex(a)->GetOrdNum();
+            GetMarkedObjectList().GetMark(a)->GetMarkedSdrObj()->GetOrdNum();
         }
         while (a<c) {
-            SdrObject* pObj1=GetMarkedObjectByIndex(a);
-            SdrObject* pObj2=GetMarkedObjectByIndex(c);
+            SdrObject* pObj1=GetMarkedObjectList().GetMark(a)->GetMarkedSdrObj();
+            SdrObject* pObj2=GetMarkedObjectList().GetMark(c)->GetMarkedSdrObj();
             const size_t nOrd1=pObj1->GetOrdNumDirect();
             const size_t nOrd2=pObj2->GetOrdNumDirect();
             if( bUndo )
@@ -493,7 +493,7 @@ void SdrEditView::ImpCheckToTopBtmPossible()
         return;
     if (nCount==1)
     { // special-casing for single selection
-        SdrObject* pObj=GetMarkedObjectByIndex(0);
+        SdrObject* pObj=GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
         SdrObjList* pOL=pObj->getParentSdrObjListFromSdrObject();
         SAL_WARN_IF(!pOL, "svx", "Object somehow has no ObjList");
         size_t nMax = pOL ? pOL->GetObjCount() : 0;
@@ -515,7 +515,7 @@ void SdrEditView::ImpCheckToTopBtmPossible()
         SdrObjList* pOL0=nullptr;
         size_t nPos0 = 0;
         for (size_t nm = 0; !m_bToBtmPossible && nm<nCount; ++nm) { // check 'send to background'
-            SdrObject* pObj=GetMarkedObjectByIndex(nm);
+            SdrObject* pObj=GetMarkedObjectList().GetMark(nm)->GetMarkedSdrObj();
             SdrObjList* pOL=pObj->getParentSdrObjListFromSdrObject();
             if (pOL!=pOL0) {
                 nPos0 = 0;
@@ -530,7 +530,7 @@ void SdrEditView::ImpCheckToTopBtmPossible()
         nPos0 = SAL_MAX_SIZE;
         for (size_t nm=nCount; !m_bToTopPossible && nm>0; ) { // check 'bring to front'
             --nm;
-            SdrObject* pObj=GetMarkedObjectByIndex(nm);
+            SdrObject* pObj=GetMarkedObjectList().GetMark(nm)->GetMarkedSdrObj();
             SdrObjList* pOL=pObj->getParentSdrObjListFromSdrObject();
             if (pOL!=pOL0) {
                 nPos0=pOL->GetObjCount();

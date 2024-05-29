@@ -86,7 +86,7 @@ SdrObject* SwDrawShell::IsSingleFillableNonOLESelected()
         return nullptr;
     }
 
-    SdrObject* pPickObj = pSdrView->GetMarkedObjectByIndex(0);
+    SdrObject* pPickObj = pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
 
     if(!pPickObj)
     {

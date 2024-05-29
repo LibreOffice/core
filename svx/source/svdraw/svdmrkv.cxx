@@ -606,7 +606,7 @@ bool SdrMarkView::ImpIsFrameHandles() const
     bool bStdDrag=meDragMode==SdrDragMode::Move;
     if (nMarkCount==1 && bStdDrag && bFrmHdl)
     {
-        const SdrObject* pObj=GetMarkedObjectByIndex(0);
+        const SdrObject* pObj=GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
         if (pObj && pObj->GetObjInventor()==SdrInventor::Default)
         {
             SdrObjKind nIdent=pObj->GetObjIdentifier();
@@ -716,7 +716,7 @@ bool SdrMarkView::dumpGluePointsToJSON(boost::property_tree::ptree& rTree)
         {
             if (!pObj)
                 continue;
-            if (pObj == GetMarkedObjectByIndex(0))
+            if (pObj == GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj())
                 continue;
             const SdrGluePointList* pGPL = pObj->GetGluePointList();
             bool VertexObject = !(pGPL && pGPL->GetCount());
@@ -934,7 +934,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             // whether the shape is rotated or not, we will always have the correct gridOffset
             // Note that the gridOffset is calculated from the first selected obj
             basegfx::B2DVector aGridOffset(0.0, 0.0);
-            if(getPossibleGridOffsetForSdrObject(aGridOffset, GetMarkedObjectByIndex(0), pPageView))
+            if(getPossibleGridOffsetForSdrObject(aGridOffset, GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj(), pPageView))
             {
                 Point p(aGridOffset.getX(), aGridOffset.getY());
                 if (convertMapMode)
@@ -1278,7 +1278,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
 
     if (nMarkCount==1)
     {
-        mpMarkedObj=GetMarkedObjectByIndex(0);
+        mpMarkedObj=GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
 
         if(nullptr != mpMarkedObj)
         {
@@ -1622,7 +1622,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
             const size_t nMarkCount = GetMarkedObjectList().GetMarkCount();
             if(nMarkCount == 1)
             {
-                SdrObject* pObj = GetMarkedObjectByIndex(0);
+                SdrObject* pObj = GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                 SdrModel& rModel = GetModel();
                 const SfxItemSet& rSet = pObj->GetMergedItemSet();
 
@@ -1684,7 +1684,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
             const size_t nMarkCount = GetMarkedObjectList().GetMarkCount();
             if(nMarkCount == 1)
             {
-                SdrObject* pObj = GetMarkedObjectByIndex(0);
+                SdrObject* pObj = GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                 const SfxItemSet& rSet = pObj->GetMergedItemSet();
                 drawing::FillStyle eFillStyle = rSet.Get(XATTR_FILLSTYLE).GetValue();
 
@@ -2779,7 +2779,7 @@ void SdrMarkView::MarkListHasChanged()
     mbMarkedPointsRectsDirty=true;
     bool bOneEdgeMarked=false;
     if (GetMarkedObjectList().GetMarkCount()==1) {
-        const SdrObject* pObj=GetMarkedObjectByIndex(0);
+        const SdrObject* pObj=GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
         if (pObj->GetObjInventor()==SdrInventor::Default) {
             bOneEdgeMarked = pObj->GetObjIdentifier() == SdrObjKind::Edge;
         }

@@ -509,7 +509,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                 if(1 == pView->GetMarkedObjectList().GetMarkCount())
                 {
                     // #i68101#
-                    SdrObject* pSelected = pView->GetMarkedObjectByIndex(0);
+                    SdrObject* pSelected = pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                     assert(pSelected && "ScDrawShell::ExecDrawFunc: nMarkCount, but no object (!)");
 
                     if(SC_LAYER_INTERN != pSelected->GetLayer())
@@ -582,7 +582,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             {
                 if(1 == pView->GetMarkedObjectList().GetMarkCount())
                 {
-                    SdrObject* pSelected = pView->GetMarkedObjectByIndex(0);
+                    SdrObject* pSelected = pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                     assert(pSelected && "ScDrawShell::ExecDrawFunc: nMarkCount, but no object (!)");
 
                     if(SC_LAYER_INTERN != pSelected->GetLayer())

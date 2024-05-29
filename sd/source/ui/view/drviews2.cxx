@@ -1139,7 +1139,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         // as one of the next tasks.
                         if(1 == mpDrawView->GetMarkedObjectList().GetMarkCount())
                         {
-                            const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(mpDrawView->GetMarkedObjectByIndex(0));
+                            const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
 
                             if(pSdrGrafObj && pSdrGrafObj->isEmbeddedVectorGraphicData())
                             {
@@ -2665,7 +2665,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if(1 == mpDrawView->GetMarkedObjectList().GetMarkCount())
             {
                 // #i68101#
-                rtl::Reference<SdrObject> pSelected = mpDrawView->GetMarkedObjectByIndex(0);
+                rtl::Reference<SdrObject> pSelected = mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                 OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 OUString aName(pSelected->GetName());
 
@@ -2703,7 +2703,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             if(1 == mpDrawView->GetMarkedObjectList().GetMarkCount())
             {
-                rtl::Reference<SdrObject> pSelected = mpDrawView->GetMarkedObjectByIndex(0);
+                rtl::Reference<SdrObject> pSelected = mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                 OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 OUString aTitle(pSelected->GetTitle());
                 OUString aDescription(pSelected->GetDescription());

@@ -1078,7 +1078,7 @@ PointerStyle SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDe
                 // are 3D objects selected?
                 bool b3DObjSelected = false;
                 for (size_t a=0; !b3DObjSelected && a<GetMarkedObjectList().GetMarkCount(); ++a) {
-                    SdrObject* pObj = GetMarkedObjectByIndex(a);
+                    SdrObject* pObj = GetMarkedObjectList().GetMark(a)->GetMarkedSdrObj();
                     if(DynCastE3dObject(pObj))
                         b3DObjSelected = true;
                 }
@@ -1313,7 +1313,7 @@ SdrViewContext SdrView::GetContext() const
     {
         bool bPath=true;
         for( size_t nMarkNum = 0; nMarkNum < nMarkCount && bPath; ++nMarkNum )
-            if (dynamic_cast<const SdrPathObj*>(GetMarkedObjectByIndex(nMarkNum)) == nullptr)
+            if (dynamic_cast<const SdrPathObj*>(GetMarkedObjectList().GetMark(nMarkNum)->GetMarkedSdrObj()) == nullptr)
                 bPath=false;
 
         if( bPath )
@@ -1326,7 +1326,7 @@ SdrViewContext SdrView::GetContext() const
 
         for( size_t nMarkNum = 0; nMarkNum < nMarkCount && ( bGraf || bMedia ); ++nMarkNum )
         {
-            const SdrObject* pMarkObj = GetMarkedObjectByIndex( nMarkNum );
+            const SdrObject* pMarkObj = GetMarkedObjectList().GetMark(nMarkNum)->GetMarkedSdrObj();
             DBG_ASSERT( pMarkObj, "SdrView::GetContext(), null pointer in mark list!" );
 
             if( !pMarkObj )

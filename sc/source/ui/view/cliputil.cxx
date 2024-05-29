@@ -87,7 +87,7 @@ void ScClipUtil::PasteFromClipboard( ScViewData& rViewData, ScTabViewShell* pTab
             ScDrawView* pDrawView = pTabViewShell->GetScDrawView();
             if(pDrawView && 1 == pDrawView->GetMarkedObjectList().GetMarkCount())
             {
-                SdrObject* pPickObj = pDrawView->GetMarkedObjectByIndex(0);
+                SdrObject* pPickObj = pDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                 if(pPickObj)
                 {
                     ScDrawLayer::SetCellAnchoredFromPosition( *pPickObj,  rThisDoc, nThisTab, false );

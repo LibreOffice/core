@@ -504,7 +504,7 @@ void SdrEditView::CheckPossibilities()
         {
             // check bCombinePossible more thoroughly
             // still missing ...
-            const SdrObject* pObj=GetMarkedObjectByIndex(0);
+            const SdrObject* pObj=GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
             //const SdrPathObj* pPath=dynamic_cast<SdrPathObj*>( pObj );
             bool bGroup=pObj->GetSubList()!=nullptr;
             bool bHasText=pObj->GetOutlinerParaObject()!=nullptr;
@@ -663,7 +663,7 @@ void SdrEditView::CheckPossibilities()
     // Don't allow moving glued connectors.
     // Currently only implemented for single selection.
     if (nMarkCount==1) {
-        SdrObject* pObj=GetMarkedObjectByIndex(0);
+        SdrObject* pObj=GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
         SdrEdgeObj* pEdge=dynamic_cast<SdrEdgeObj*>( pObj );
         if (pEdge!=nullptr) {
             SdrObject* pNode1=pEdge->GetConnectedNode(true);
@@ -675,7 +675,7 @@ void SdrEditView::CheckPossibilities()
     // Don't allow enter Diagrams
     if (1 == nMarkCount && m_bGrpEnterPossible)
     {
-        SdrObject* pCandidate(GetMarkedObjectByIndex(0));
+        SdrObject* pCandidate(GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
 
         if(nullptr != pCandidate && pCandidate->isDiagram())
             m_bGrpEnterPossible = false;

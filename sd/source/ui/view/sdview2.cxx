@@ -106,7 +106,7 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateClipboardDat
 
     if( GetMarkedObjectList().GetMarkCount() == 1 )
     {
-        SdrObject* pObj = GetMarkedObjectByIndex(0);
+        SdrObject* pObj = GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
 
         if( auto pOle2Obj = dynamic_cast<SdrOle2Obj *>( pObj ) )
             if( pOle2Obj->GetObjRef() )
@@ -152,7 +152,7 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateDragDataObje
 
     if( GetMarkedObjectList().GetMarkCount() == 1 )
     {
-        SdrObject* pObj = GetMarkedObjectByIndex( 0 );
+        SdrObject* pObj = GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
 
         if( auto pOle2Obj = dynamic_cast<SdrOle2Obj *>( pObj ) )
             if( pOle2Obj->GetObjRef() )
