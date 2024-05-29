@@ -56,6 +56,7 @@ void ImplResetUtf8ToUnicodeContext(void * pContext)
 {
     if (pContext != nullptr)
     {
+        static_cast< ImplUtf8ToUnicodeContext * >(pContext)->nBytes = 1;
         static_cast< ImplUtf8ToUnicodeContext * >(pContext)->nShift = -1;
         static_cast< ImplUtf8ToUnicodeContext * >(pContext)->bCheckBom = true;
     }
@@ -73,7 +74,7 @@ sal_Size ImplConvertUtf8ToUnicode(
 {
     bool bJavaUtf8 = pData != nullptr;
     sal_uInt32 nUtf32 = 0;
-    int nBytes = int();
+    int nBytes = 1;
     int nShift = -1;
     bool bCheckBom = true;
     sal_uInt32 nInfo = 0;
