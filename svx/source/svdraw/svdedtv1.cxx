@@ -1943,7 +1943,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
         {   // align single object to page
             const SdrObject* pObj=GetMarkedObjectByIndex(0);
             const SdrPage* pPage=pObj->getSdrPageFromSdrObject();
-            const SdrPageGridFrameList* pGFL=pPage->GetGridFrameList(GetSdrPageViewOfMarkedByIndex(0),&(pObj->GetSnapRect()));
+            const SdrPageGridFrameList* pGFL=pPage->GetGridFrameList(GetMarkedObjectList().GetMark(0)->GetPageView(),&(pObj->GetSnapRect()));
             const SdrPageGridFrame* pFrame=nullptr;
             if (pGFL!=nullptr && pGFL->GetCount()!=0)
             { // Writer

@@ -945,12 +945,16 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
 
         // Insert scene instead of the first selected object and throw away
         // all the old objects
-        SdrObject* pRepObj = GetMarkedObjectByIndex(0);
-        SdrPageView* pPV = GetSdrPageViewOfMarkedByIndex(0);
-        MarkObj(pRepObj, pPV, true);
-        ReplaceObjectAtView(pRepObj, *pPV, pScene.get(), false);
-        DeleteMarked();
-        MarkObj(pScene.get(), pPV);
+        SdrMark* pMark = GetMarkedObjectList().GetMark(0);
+        if (pMark)
+        {
+            SdrObject* pRepObj = pMark->GetMarkedSdrObj();
+            SdrPageView* pPV = pMark->GetPageView();
+            MarkObj(pRepObj, pPV, true);
+            ReplaceObjectAtView(pRepObj, *pPV, pScene.get(), false);
+            DeleteMarked();
+            MarkObj(pScene.get(), pPV);
+        }
 
         // Rotate Rotation body around the axis of rotation
         if(!bExtrude && fRot3D != 0.0)

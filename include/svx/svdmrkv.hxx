@@ -258,8 +258,6 @@ protected:
 public:
     // all available const methods for read access to selection
     const SdrMarkList& GetMarkedObjectList() const { return maSdrViewSelection.GetMarkedObjectList(); }
-    // returns SAL_MAX_SIZE if not found
-    SdrPageView* GetSdrPageViewOfMarkedByIndex(size_t nNum) const { return GetMarkedObjectList().GetMark(nNum)->GetPageView(); }
     SdrObject* GetMarkedObjectByIndex(size_t nNum) const { return GetMarkedObjectList().GetMark(nNum)->GetMarkedSdrObj(); }
     bool AreObjectsMarked() const { return 0 != GetMarkedObjectList().GetMarkCount(); }
 

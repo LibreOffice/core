@@ -1295,7 +1295,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
 
     if (nMarkCount>0)
     {
-        mpMarkedPV=GetSdrPageViewOfMarkedByIndex(0);
+        mpMarkedPV=GetMarkedObjectList().GetMark(0)->GetPageView();
 
         for (size_t nMarkNum=0; nMarkNum<nMarkCount && (mpMarkedPV!=nullptr || !bFrmHdl); ++nMarkNum)
         {

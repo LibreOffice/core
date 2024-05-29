@@ -451,9 +451,9 @@ void SdrEditView::ReverseOrderOfMarked()
     do {
         // take into account selection across multiple PageViews
         size_t b=a+1;
-        while (b<nMarkCount && GetSdrPageViewOfMarkedByIndex(b) == GetSdrPageViewOfMarkedByIndex(a)) ++b;
+        while (b<nMarkCount && GetMarkedObjectList().GetMark(b)->GetPageView() == GetMarkedObjectList().GetMark(a)->GetPageView()) ++b;
         --b;
-        SdrObjList* pOL=GetSdrPageViewOfMarkedByIndex(a)->GetObjList();
+        SdrObjList* pOL=GetMarkedObjectList().GetMark(a)->GetPageView()->GetObjList();
         size_t c=b;
         if (a<c) { // make sure OrdNums aren't dirty
             GetMarkedObjectByIndex(a)->GetOrdNum();
