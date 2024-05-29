@@ -805,6 +805,42 @@ void SwSectionFrame::MakeAll(vcl::RenderContext* pRenderContext)
         setFramePrintAreaValid(true);
         return;
     }
+
+    if (!GetPrev() && !IsFollow() && IsInDocBody() && IsHiddenNow())
+    {
+        // This may be the first frame on a page, and it may had moved to that page because its
+        // content required that (a page break in the first paragraph, or a tall first line, or
+        // "do not break paragraph" setting, or the like). Try to move back, to allow following
+        // frames to move back, if possible. Sections cannot move back; workaround by a call to
+        // GetPrevSctLeaf(), which may return a candidate upper frame on a previous page, or it
+        // may create a new master for this at the end of the previous page. Cut and paste this
+        // appropriately; then drop the temporary, if needed.
+        if (SwLayoutFrame* moveBackPos = GetPrevSctLeaf())
+        {
+            SwLayoutFrame* newUpper = moveBackPos;
+            SwFrame* newSibling = nullptr;
+            const bool temporaryMasterCreated = IsFollow();
+            if (temporaryMasterCreated)
+            {
+                assert(moveBackPos == &GetPrecede()->GetFrame());
+                newUpper = moveBackPos->GetUpper();
+                newSibling = moveBackPos->GetNext(); // actually, will be also nullptr
+            }
+            if (newUpper != GetUpper())
+            {
+                // Can't use MoveSubTree, because the move needs to fire events to re-layout
+                Cut();
+                Paste(newUpper, newSibling);
+            }
+            if (temporaryMasterCreated)
+            {
+                moveBackPos->Cut();
+                DestroyFrame(moveBackPos);
+            }
+            assert(!IsFollow());
+        }
+    }
+
     LockJoin(); // I don't let myself to be destroyed on the way
 
     while( GetNext() && GetNext() == GetFollow() )
@@ -813,6 +849,17 @@ void SwSectionFrame::MakeAll(vcl::RenderContext* pRenderContext)
         MergeNext( static_cast<SwSectionFrame*>(GetNext()) );
         if( pFoll == GetFollow() )
             break;
+    }
+
+    if (GetFollow() && IsHiddenNow())
+    {
+        // Merge all the follows of this hidden section
+        while (auto* follow = GetFollow())
+        {
+            MergeNext(follow);
+            if (GetFollow() == follow) // failed to merge
+                break; // avoid endless loop
+        }
     }
 
     // OD 2004-03-15 #116561# - In online layout join the follows, if section
@@ -2616,6 +2663,11 @@ void SwSectionFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     {
         InvalidateAll();
         InvalidateObjs(false);
+        {
+            // Set it to a huge positive value, to make sure a recalculation fires
+            SwFrameAreaDefinition::FrameAreaWriteAccess area(*this);
+            SwRectFnSet(this).SetHeight(area, std::numeric_limits<sal_uLong>::max());
+        }
 
         for (SwFrame* pLowerFrame = Lower(); pLowerFrame; pLowerFrame = pLowerFrame->GetNext())
         {

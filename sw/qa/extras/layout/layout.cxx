@@ -4219,6 +4219,167 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testPageBreakInHiddenSection)
     assertXPath(pXmlDoc, "//page[4]/body/section/infos/bounds", "height", u"0");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf160958_page_break)
+{
+    // Given a document with a section with the first paragraph having a page break
+    createDoc("tdf160958_page_break.fodt");
+    auto pExportDump = parseLayoutDump();
+    assertXPath(pExportDump, "//page", 2);
+    // A single paragraph on the first page, with 6 lines
+    assertXPath(pExportDump, "//page[1]/body/txt", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt/LineBreak", 6);
+    // A section with 7 paragraphs, and two more paragraphs after the section
+    assertXPath(pExportDump, "//page[2]/body/section", 1);
+    assertXPath(pExportDump, "//page[2]/body/section/txt", 7);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[1]/SwParaPortion", 0);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[2]/SwParaPortion", 0);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[3]/SwParaPortion", 0);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[4]/LineBreak", 5);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[5]/SwParaPortion", 0);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[6]/SwParaPortion", 0);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[7]/SwParaPortion", 0);
+    assertXPath(pExportDump, "//page[2]/body/txt", 2);
+    assertXPath(pExportDump, "//page[2]/body/txt[1]/LineBreak", 7);
+    assertXPath(pExportDump, "//page[2]/body/txt[2]/SwParaPortion", 0);
+
+    // Hide the section
+    uno::Reference<css::text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    auto xSections = xTextSectionsSupplier->getTextSections();
+    CPPUNIT_ASSERT(xSections);
+    uno::Reference<css::beans::XPropertySet> xSection(xSections->getByName(u"Section1"), uno::UNO_QUERY_THROW);
+    xSection->setPropertyValue(u"IsVisible", css::uno::Any(false));
+
+    discardDumpedLayout();
+    calcLayout();
+    pExportDump = parseLayoutDump();
+    assertXPath(pExportDump, "//page", 1);
+    // Three paragraphs and a hidden section on the first page
+    assertXPath(pExportDump, "//page/body/txt", 3);
+    assertXPath(pExportDump, "//page/body/section", 1);
+
+    assertXPath(pExportDump, "//page/body/section/infos/bounds", "height", "0");
+    assertXPath(pExportDump, "//page/body/txt[1]/LineBreak", 6);
+    assertXPath(pExportDump, "//page/body/section/txt", 7);
+
+    assertXPath(pExportDump, "//page/body/txt[2]/LineBreak", 7);
+    assertXPath(pExportDump, "//page/body/txt[3]/SwParaPortion", 0);
+
+    // Show the section again
+    xSection->setPropertyValue(u"IsVisible", css::uno::Any(true));
+
+    // Check that the layout has been restored
+    discardDumpedLayout();
+    calcLayout();
+    pExportDump = parseLayoutDump();
+    assertXPath(pExportDump, "//page", 2);
+    assertXPath(pExportDump, "//page[1]/body/txt", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt/LineBreak", 6);
+    assertXPath(pExportDump, "//page[2]/body/section", 1);
+    assertXPath(pExportDump, "//page[2]/body/section/txt", 7);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[1]/SwParaPortion", 0);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[2]/SwParaPortion", 0);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[3]/SwParaPortion", 0);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[4]/LineBreak", 5);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[5]/SwParaPortion", 0);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[6]/SwParaPortion", 0);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[7]/SwParaPortion", 0);
+    assertXPath(pExportDump, "//page[2]/body/txt", 2);
+    assertXPath(pExportDump, "//page[2]/body/txt[1]/LineBreak", 7);
+    assertXPath(pExportDump, "//page[2]/body/txt[2]/SwParaPortion", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf160958_orphans)
+{
+    // Given a document with a section which moves to the next page as a whole, because of orphans
+    createDoc("tdf160958_orphans_move_section.fodt");
+    auto pExportDump = parseLayoutDump();
+    assertXPath(pExportDump, "//page", 2);
+    // 21 paragraphs on the first page
+    assertXPath(pExportDump, "//page[1]/body/txt", 21);
+    assertXPath(pExportDump, "//page[1]/body/txt[1]/LineBreak", 6);
+    assertXPath(pExportDump, "//page[1]/body/txt[2]/LineBreak", 5);
+    assertXPath(pExportDump, "//page[1]/body/txt[3]/LineBreak", 7);
+    assertXPath(pExportDump, "//page[1]/body/txt[4]/LineBreak", 16);
+    assertXPath(pExportDump, "//page[1]/body/txt[5]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[6]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[7]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[8]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[9]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[10]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[11]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[12]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[13]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[14]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[15]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[16]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[17]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[18]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[19]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[20]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[21]/LineBreak", 1);
+    // A section and one more paragraph after the section
+    assertXPath(pExportDump, "//page[2]/body/section", 1);
+    assertXPath(pExportDump, "//page[2]/body/section/txt", 3);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[1]/LineBreak", 6);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[2]/LineBreak", 5);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[3]/LineBreak", 7);
+    assertXPath(pExportDump, "//page[2]/body/txt", 1);
+    assertXPath(pExportDump, "//page[2]/body/txt[1]/LineBreak", 1);
+
+    // Hide the section
+    uno::Reference<css::text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    auto xSections = xTextSectionsSupplier->getTextSections();
+    CPPUNIT_ASSERT(xSections);
+    uno::Reference<css::beans::XPropertySet> xSection(xSections->getByName(u"Section1"), uno::UNO_QUERY_THROW);
+    xSection->setPropertyValue(u"IsVisible", css::uno::Any(false));
+
+    discardDumpedLayout();
+    calcLayout();
+    pExportDump = parseLayoutDump();
+    assertXPath(pExportDump, "//page", 1);
+    assertXPath(pExportDump, "//page/body/txt", 22);
+    assertXPath(pExportDump, "//page/body/section", 1);
+    assertXPath(pExportDump, "//page/body/section/infos/bounds", "height", "0");
+
+    // Show the section again
+    xSection->setPropertyValue(u"IsVisible", css::uno::Any(true));
+
+    // Check that the layout has been restored
+    discardDumpedLayout();
+    calcLayout();
+    pExportDump = parseLayoutDump();
+    assertXPath(pExportDump, "//page", 2);
+    assertXPath(pExportDump, "//page[1]/body/txt", 21);
+    assertXPath(pExportDump, "//page[1]/body/txt[1]/LineBreak", 6);
+    assertXPath(pExportDump, "//page[1]/body/txt[2]/LineBreak", 5);
+    assertXPath(pExportDump, "//page[1]/body/txt[3]/LineBreak", 7);
+    assertXPath(pExportDump, "//page[1]/body/txt[4]/LineBreak", 16);
+    assertXPath(pExportDump, "//page[1]/body/txt[5]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[6]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[7]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[8]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[9]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[10]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[11]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[12]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[13]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[14]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[15]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[16]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[17]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[18]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[19]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[20]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[21]/LineBreak", 1);
+    assertXPath(pExportDump, "//page[2]/body/section", 1);
+    assertXPath(pExportDump, "//page[2]/body/section/txt", 3);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[1]/LineBreak", 6);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[2]/LineBreak", 5);
+    assertXPath(pExportDump, "//page[2]/body/section/txt[3]/LineBreak", 7);
+    assertXPath(pExportDump, "//page[2]/body/txt", 1);
+    assertXPath(pExportDump, "//page[2]/body/txt[1]/LineBreak", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
