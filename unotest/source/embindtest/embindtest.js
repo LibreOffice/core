@@ -1113,6 +1113,14 @@ Module.addOnPostRun(function() {
         outparamindex.delete();
         outparam.delete();
     }
+    {
+        let a = new Module.uno_Any(Module.uno_Type.String(), 'hä');
+        invoke.setValue('StringAttribute', a);
+        a.delete();
+        const ret = invoke.getValue('StringAttribute');
+        console.assert(ret.get() === 'hä');
+        ret.delete();
+    }
 });
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

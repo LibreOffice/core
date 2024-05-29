@@ -18,7 +18,9 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
+#include <cppu/unotype.hxx>
 #include <o3tl/runtimetooustring.hxx>
+#include <o3tl/temporary.hxx>
 #include <o3tl/unreachable.hxx>
 #include <rtl/strbuf.hxx>
 #include <typelib/typeclass.h>
@@ -324,7 +326,21 @@ void unoInterfaceProxyDispatch(uno_Interface* pUnoI, const typelib_TypeDescripti
     {
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
         {
-            std::abort();
+            auto const atd
+                = reinterpret_cast<typelib_InterfaceAttributeTypeDescription const*>(pMemberDescr);
+            VtableSlot slot(getVtableSlot(atd));
+            if (pReturn == nullptr)
+            {
+                slot.index += 1;
+                call(pThis, slot, cppu::UnoType<void>::get().getTypeLibType(), 1,
+                     &o3tl::temporary(
+                         typelib_MethodParameter{ nullptr, atd->pAttributeTypeRef, true, false }),
+                     pReturn, pArgs, ppException);
+            }
+            else
+            {
+                call(pThis, slot, atd->pAttributeTypeRef, 0, nullptr, pReturn, pArgs, ppException);
+            }
             break;
         }
         case typelib_TypeClass_INTERFACE_METHOD:
