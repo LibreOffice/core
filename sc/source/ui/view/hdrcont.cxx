@@ -321,7 +321,12 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
 
     if ( nLineEnd * nLayoutSign >= nInitScrPos * nLayoutSign )
     {
-        GetOutDev()->SetFillColor( rStyleSettings.GetFaceColor() );
+        Color aFaceColor(rStyleSettings.GetFaceColor());
+        if (bDark)
+            aFaceColor.IncreaseLuminance(20);
+        else
+            aFaceColor.DecreaseLuminance(20);
+        GetOutDev()->SetFillColor( aFaceColor );
         if ( bVertical )
             aFillRect = tools::Rectangle( 0, nInitScrPos, nBarSize-1, nLineEnd );
         else
@@ -374,26 +379,16 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
             }
         }
 
-        GetOutDev()->SetLineColor( rStyleSettings.GetDarkShadowColor() );
+        GetOutDev()->SetLineColor( rStyleSettings.GetShadowColor() );
         if (bVertical)
         {
-            tools::Long nDarkPos = bMirrored ? 0 : nBarSize-1;
-            GetOutDev()->DrawLine( Point( nDarkPos, nPStart ), Point( nDarkPos, nLineEnd ) );
+            GetOutDev()->DrawLine( Point( 0, nPStart ), Point( 0, nLineEnd ) ); //left
+            GetOutDev()->DrawLine( Point( nBarSize-1, nPStart ), Point( nBarSize-1, nLineEnd ) ); //right
         }
         else
-            GetOutDev()->DrawLine( Point( nPStart, nBarSize-1 ), Point( nLineEnd, nBarSize-1 ) );
-
-        // line in different color for selection
-        if ( nTransEnd * nLayoutSign >= nTransStart * nLayoutSign && !bHighContrast )
         {
-            GetOutDev()->SetLineColor(aSelLineColor);
-            if (bVertical)
-            {
-                tools::Long nDarkPos = bMirrored ? 0 : nBarSize-1;
-                GetOutDev()->DrawLine( Point( nDarkPos, nTransStart ), Point( nDarkPos, nTransEnd ) );
-            }
-            else
-                GetOutDev()->DrawLine( Point( nTransStart, nBarSize-1 ), Point( nTransEnd, nBarSize-1 ) );
+            GetOutDev()->DrawLine( Point( nPStart, nBarSize-1 ), Point( nLineEnd, nBarSize-1 ) ); //bottom
+            GetOutDev()->DrawLine( Point( nPStart, 0 ), Point( nLineEnd, 0 ) ); //top
         }
     }
 
@@ -464,10 +459,10 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
         {
             case SC_HDRPAINT_SEL_BOTTOM:
                 // same as non-selected for high contrast
-                GetOutDev()->SetLineColor( bHighContrast ? rStyleSettings.GetDarkShadowColor() : aSelLineColor );
+                GetOutDev()->SetLineColor( bHighContrast ? rStyleSettings.GetShadowColor() : aSelLineColor );
                 break;
             case SC_HDRPAINT_BOTTOM:
-                GetOutDev()->SetLineColor( rStyleSettings.GetDarkShadowColor() );
+                GetOutDev()->SetLineColor( rStyleSettings.GetShadowColor() );
                 break;
             case SC_HDRPAINT_TEXT:
                 // DrawSelectionBackground is used only for high contrast on light background

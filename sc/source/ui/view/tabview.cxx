@@ -101,7 +101,7 @@ void ScCornerButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     tools::Long nDarkX = bLayoutRTL ? 0 : nPosX;
 
     //  both buttons have the same look now - only dark right/bottom lines
-    rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
+    rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
     rRenderContext.DrawLine(Point(0, nPosY), Point(nPosX, nPosY));
     rRenderContext.DrawLine(Point(nDarkX, 0), Point(nDarkX, nPosY));
 }
