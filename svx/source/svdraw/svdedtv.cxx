@@ -491,7 +491,7 @@ void SdrEditView::CheckPossibilities()
         return;
 
     ImpResetPossibilityFlags();
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
     const size_t nMarkCount = GetMarkedObjectList().GetMarkCount();
     if (nMarkCount != 0)
     {
@@ -904,7 +904,7 @@ void SdrEditView::DeleteMarkedObj()
 
 void SdrEditView::CopyMarkedObj()
 {
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
 
     SdrMarkList aSourceObjectsForCopy(GetMarkedObjectList());
     // The following loop is used instead of MarkList::Merge(), to be

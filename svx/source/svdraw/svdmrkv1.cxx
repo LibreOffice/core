@@ -187,7 +187,7 @@ bool SdrMarkView::MarkPoints(const tools::Rectangle* pRect, bool bUnmark)
 {
     ForceUndirtyMrkPnt();
     bool bChgd=false;
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
     const SdrObject* pObj0=nullptr;
     const SdrPageView* pPV0=nullptr;
     SdrMark* pM=nullptr;
@@ -231,7 +231,7 @@ bool SdrMarkView::MarkPoints(const tools::Rectangle* pRect, bool bUnmark)
 void SdrMarkView::MarkNextPoint()
 {
     ForceUndirtyMrkPnt();
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
 }
 
 const tools::Rectangle& SdrMarkView::GetMarkedPointsRect() const
@@ -395,7 +395,7 @@ bool SdrMarkView::MarkGluePoints(const tools::Rectangle* pRect, bool bUnmark)
     if (!IsGluePointEditMode() && !bUnmark) return false;
     ForceUndirtyMrkPnt();
     bool bChgd=false;
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
     const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
     for (size_t nMarkNum=0; nMarkNum<nMarkCount; ++nMarkNum) {
         SdrMark* pM=GetMarkedObjectList().GetMark(nMarkNum);
@@ -447,7 +447,7 @@ bool SdrMarkView::PickGluePoint(const Point& rPnt, SdrObject*& rpObj, sal_uInt16
     OutputDevice* pOut=mpActualOutDev.get();
     if (pOut==nullptr) pOut=GetFirstOutputDevice();
     if (pOut==nullptr) return false;
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
     const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
     size_t nMarkNum=nMarkCount;
     while (nMarkNum>0) {
@@ -535,7 +535,7 @@ SdrHdl* SdrMarkView::GetGluePointHdl(const SdrObject* pObj, sal_uInt16 nId) cons
 void SdrMarkView::MarkNextGluePoint()
 {
     ForceUndirtyMrkPnt();
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
 }
 
 const tools::Rectangle& SdrMarkView::GetMarkedGluePointsRect() const

@@ -855,10 +855,10 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
             if (rVEvt.mbPrevNextMark) {
                 bRet=MarkNextObj(aLogicPos, mnHitTolLog, rVEvt.mbMarkPrev);
             } else {
-                SortMarkedObjects();
+                GetMarkedObjectList().ForceSort();
                 const size_t nCount0=GetMarkedObjectList().GetMarkCount();
                 bRet=MarkObj(aLogicPos, mnHitTolLog, rVEvt.mbAddMark);
-                SortMarkedObjects();
+                GetMarkedObjectList().ForceSort();
                 const size_t nCount1=GetMarkedObjectList().GetMarkCount();
                 bUnmark=nCount1<nCount0;
             }

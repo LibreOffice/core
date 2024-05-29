@@ -401,7 +401,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     if( !pPV->IsLayerLocked( aLayer ) )
                     {
                         pOwnData->SetInternalMove( true );
-                        SortMarkedObjects();
+                        GetMarkedObjectList().ForceSort();
 
                         for( size_t nM = 0; nM < GetMarkedObjectList().GetMarkCount(); ++nM )
                         {

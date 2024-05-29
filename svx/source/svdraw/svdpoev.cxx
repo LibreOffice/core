@@ -192,7 +192,7 @@ void SdrPolyEditView::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
     if(!HasMarkedPoints())
         return;
 
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
 
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
@@ -226,7 +226,7 @@ void SdrPolyEditView::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)
     if(!HasMarkedPoints())
         return;
 
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
 
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
@@ -289,7 +289,7 @@ void SdrPolyEditView::DeleteMarkedPoints()
         return;
 
     BrkAction();
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
     const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
 
     const bool bUndo = IsUndoEnabled();
@@ -337,7 +337,7 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
     if(!HasMarkedPoints())
         return;
 
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
     const size_t nMarkCount(GetMarkedObjectList().GetMarkCount());
 
     const bool bUndo = IsUndoEnabled();

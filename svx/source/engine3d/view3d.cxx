@@ -276,7 +276,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
         if(nullptr != pScene)
         {
             // code from parent
-            SortMarkedObjects();
+            GetMarkedObjectList().ForceSort();
 
             pScene->SetDrawOnlySelected(true);
             pScene->SingleObjectPainter(rOut);

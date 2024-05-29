@@ -1869,7 +1869,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
     if (eHor==SdrHorAlign::NONE && eVert==SdrVertAlign::NONE)
         return;
 
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
     if (!GetMarkedObjectList().GetMarkCount())
         return;
 

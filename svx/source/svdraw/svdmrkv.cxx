@@ -224,7 +224,7 @@ void SdrMarkView::ModelHasChanged()
     // In another View 2, the ObjOrder is changed (e. g. MovToTop())
     // Then we need to re-sort MarkList.
     GetMarkedObjectListWriteAccess().SetUnsorted();
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
     mbMrkPntDirty=true;
     UndirtyMrkPnt();
     SdrView* pV=static_cast<SdrView*>(this);
@@ -2028,7 +2028,7 @@ bool SdrMarkView::MarkNextObj(bool bPrev)
         return false;
     }
 
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
     const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
     size_t nChgMarkNum = SAL_MAX_SIZE; // number of the MarkEntry we want to replace
     size_t nSearchObjNum = bPrev ? 0 : SAL_MAX_SIZE;
@@ -2076,7 +2076,7 @@ bool SdrMarkView::MarkNextObj(bool bPrev)
 
 bool SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, bool bPrev)
 {
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
     nTol=ImpGetHitTolLogic(nTol,nullptr);
     SdrMark* pTopMarkHit=nullptr;
     SdrMark* pBtmMarkHit=nullptr;
@@ -2216,7 +2216,7 @@ void SdrMarkView::MarkObj(const tools::Rectangle& rRect, bool bUnmark)
         }
     }
     if (bFnd) {
-        SortMarkedObjects();
+        GetMarkedObjectList().ForceSort();
         MarkListHasChanged();
         AdjustMarkHdl();
     }
@@ -2488,7 +2488,7 @@ SdrObject* SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrPageView*& rpP
 
 SdrObject* SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrPageView*& rpPV, SdrSearchOptions nOptions, SdrObject** ppRootObj, bool* pbHitPassDirect) const
 { // TODO: lacks a Pass2,Pass3
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
     if (ppRootObj!=nullptr) *ppRootObj=nullptr;
     if (pbHitPassDirect!=nullptr) *pbHitPassDirect=true;
     SdrObject* pRet = nullptr;
@@ -2591,7 +2591,7 @@ SdrObject* SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrPageView*& rpP
 
 bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageView*& rpPV, SdrSearchOptions nOptions) const
 {
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
     const bool bBoundCheckOn2ndPass(nOptions & SdrSearchOptions::PASS2BOUND);
     rpObj=nullptr;
     rpPV=nullptr;

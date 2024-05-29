@@ -973,7 +973,7 @@ void SwDrawView::ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView )
         aMarkedObjs.pop_back();
     }
     // sort marked list in order to assure consistent state in drawing layer
-    _rMarkView.SortMarkedObjects();
+    _rMarkView.GetMarkedObjectList().ForceSort();
 }
 
 SfxViewShell* SwDrawView::GetSfxViewShell() const

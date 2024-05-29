@@ -627,7 +627,7 @@ void OViewsWindow::collectRectangles(TRectangleMap& _rSortRectangles)
         OSectionView& rView = rxSection->getReportSection().getSectionView();
         if ( rView.AreObjectsMarked() )
         {
-            rView.SortMarkedObjects();
+            rView.GetMarkedObjectList().ForceSort();
             const size_t nCount = rView.GetMarkedObjectList().GetMarkCount();
             for (size_t i=0; i < nCount; ++i)
             {

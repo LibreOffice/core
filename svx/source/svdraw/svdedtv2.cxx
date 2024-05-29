@@ -80,7 +80,7 @@ void SdrEditView::MovMarkedToTop()
     if( bUndo )
         BegUndo(SvxResId(STR_EditMovToTop),GetMarkedObjectList().GetMarkDescription(),SdrRepeatFunc::MoveToTop);
 
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
     for (size_t nm=0; nm<nCount; ++nm)
     { // All Ordnums have to be correct!
         GetMarkedObjectByIndex(nm)->GetOrdNum();
@@ -168,7 +168,7 @@ void SdrEditView::MovMarkedToBtm()
     if( bUndo )
         BegUndo(SvxResId(STR_EditMovToBtm),GetMarkedObjectList().GetMarkDescription(),SdrRepeatFunc::MoveToBottom);
 
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
     for (size_t nm=0; nm<nCount; ++nm)
     { // All Ordnums have to be correct!
         GetMarkedObjectByIndex(nm)->GetOrdNum();
@@ -263,7 +263,7 @@ void SdrEditView::PutMarkedInFrontOfObj(const SdrObject* pRefObj)
     if( bUndo )
         BegUndo(SvxResId(STR_EditPutToTop),GetMarkedObjectList().GetMarkDescription(),SdrRepeatFunc::PutToTop);
 
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
 
     if (pRefObj!=nullptr)
     {
@@ -280,7 +280,7 @@ void SdrEditView::PutMarkedInFrontOfObj(const SdrObject* pRefObj)
         if (nRefMark!=SAL_MAX_SIZE)
         {
             GetMarkedObjectListWriteAccess().InsertEntry(aRefMark);
-            SortMarkedObjects();
+            GetMarkedObjectList().ForceSort();
         }
     }
     for (size_t nm=0; nm<nCount; ++nm)
@@ -365,7 +365,7 @@ void SdrEditView::PutMarkedBehindObj(const SdrObject* pRefObj)
     if( bUndo )
         BegUndo(SvxResId(STR_EditPutToBtm),GetMarkedObjectList().GetMarkDescription(),SdrRepeatFunc::PutToBottom);
 
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
     if (pRefObj!=nullptr)
     {
         // Make "behind the object" work, even if the
@@ -381,7 +381,7 @@ void SdrEditView::PutMarkedBehindObj(const SdrObject* pRefObj)
         if (nRefMark!=SAL_MAX_SIZE)
         {
             GetMarkedObjectListWriteAccess().InsertEntry(aRefMark);
-            SortMarkedObjects();
+            GetMarkedObjectList().ForceSort();
         }
     }
     for (size_t nm=0; nm<nCount; ++nm) { // All Ordnums have to be correct!
@@ -436,7 +436,7 @@ void SdrEditView::PutMarkedBehindObj(const SdrObject* pRefObj)
 
 void SdrEditView::ReverseOrderOfMarked()
 {
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
     const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
     if (nMarkCount<=0)
         return;
@@ -997,7 +997,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
         return;
 
     SdrMarkList aRemove;
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
 
     const bool bUndo = IsUndoEnabled();
 
@@ -1327,7 +1327,7 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
     SdrObjList* pCurrentOL = nullptr;
     SdrMarkList aRemoveBuffer;
 
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
     size_t nInsPos = SAL_MAX_SIZE;
     SdrObjList* pInsOL = nullptr;
     SdrPageView* pInsPV = nullptr;
@@ -1724,7 +1724,7 @@ void SdrEditView::DismantleMarkedObjects(bool bMakeLines)
     // temporary MarkList
     SdrMarkList aRemoveBuffer;
 
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
 
     const bool bUndo = IsUndoEnabled();
 
@@ -1784,7 +1784,7 @@ void SdrEditView::GroupMarked()
     if (!AreObjectsMarked())
         return;
 
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
 
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
@@ -2114,7 +2114,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
     if( bUndo )
         BegUndo(u""_ustr, u""_ustr, SdrRepeatFunc::ImportMtf);
 
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
     SdrMarkList aForTheDescription;
     SdrMarkList aNewMarked;
     for (size_t nm =GetMarkedObjectList().GetMarkCount(); nm > 0; )
@@ -2228,7 +2228,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
             GetMarkedObjectListWriteAccess().InsertEntry(*aNewMarked.GetMark(a));
         }
 
-        SortMarkedObjects();
+        GetMarkedObjectList().ForceSort();
     }
 
     if (bUndo)

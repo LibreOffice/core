@@ -677,7 +677,7 @@ Graphic SdrExchangeView::GetObjGraphic(const SdrObject& rSdrObject, bool bSVG)
 
 ::std::vector< SdrObject* > SdrExchangeView::GetMarkedObjects() const
 {
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
     ::std::vector< SdrObject* > aRetval;
 
     ::std::vector< ::std::vector< SdrMark* > >  aObjVectors( 2 );
@@ -727,7 +727,7 @@ std::unique_ptr<SdrModel> SdrExchangeView::CreateMarkedObjModel() const
 {
     // Sorting the MarkList here might be problematic in the future, so
     // use a copy.
-    SortMarkedObjects();
+    GetMarkedObjectList().ForceSort();
     std::unique_ptr<SdrModel> pNewModel(GetModel().AllocModel());
     rtl::Reference<SdrPage> pNewPage = pNewModel->AllocPage(false);
     pNewModel->InsertPage(pNewPage.get());
