@@ -490,9 +490,10 @@ void SdrEditView::CheckPossibilities()
     if (!m_bPossibilitiesDirty)
         return;
 
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
     ImpResetPossibilityFlags();
-    GetMarkedObjectList().ForceSort();
-    const size_t nMarkCount = GetMarkedObjectList().GetMarkCount();
+    rMarkList.ForceSort();
+    const size_t nMarkCount = rMarkList.GetMarkCount();
     if (nMarkCount != 0)
     {
         m_bReverseOrderPossible = (nMarkCount >= 2);
@@ -504,7 +505,7 @@ void SdrEditView::CheckPossibilities()
         {
             // check bCombinePossible more thoroughly
             // still missing ...
-            const SdrObject* pObj=GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+            const SdrObject* pObj=rMarkList.GetMark(0)->GetMarkedSdrObj();
             //const SdrPathObj* pPath=dynamic_cast<SdrPathObj*>( pObj );
             bool bGroup=pObj->GetSubList()!=nullptr;
             bool bHasText=pObj->GetOutlinerParaObject()!=nullptr;
@@ -534,7 +535,7 @@ void SdrEditView::CheckPossibilities()
         if(m_bGradientAllowed)
         {
             // gradient depends on fill style
-            const SdrMark* pM = GetMarkedObjectList().GetMark(0);
+            const SdrMark* pM = rMarkList.GetMark(0);
             const SdrObject* pObj = pM->GetMarkedSdrObj();
 
             // may be group object, so get merged ItemSet
@@ -557,7 +558,7 @@ void SdrEditView::CheckPossibilities()
         const SdrPageView* pPV0=nullptr;
 
         for (size_t nm=0; nm<nMarkCount; ++nm) {
-            const SdrMark* pM=GetMarkedObjectList().GetMark(nm);
+            const SdrMark* pM=rMarkList.GetMark(nm);
             const SdrObject* pObj=pM->GetMarkedSdrObj();
             const SdrPageView* pPV=pM->GetPageView();
             if (pPV!=pPV0) {
@@ -663,7 +664,7 @@ void SdrEditView::CheckPossibilities()
     // Don't allow moving glued connectors.
     // Currently only implemented for single selection.
     if (nMarkCount==1) {
-        SdrObject* pObj=GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+        SdrObject* pObj=rMarkList.GetMark(0)->GetMarkedSdrObj();
         SdrEdgeObj* pEdge=dynamic_cast<SdrEdgeObj*>( pObj );
         if (pEdge!=nullptr) {
             SdrObject* pNode1=pEdge->GetConnectedNode(true);
@@ -675,7 +676,7 @@ void SdrEditView::CheckPossibilities()
     // Don't allow enter Diagrams
     if (1 == nMarkCount && m_bGrpEnterPossible)
     {
-        SdrObject* pCandidate(GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
+        SdrObject* pCandidate(rMarkList.GetMark(0)->GetMarkedSdrObj());
 
         if(nullptr != pCandidate && pCandidate->isDiagram())
             m_bGrpEnterPossible = false;
@@ -685,9 +686,10 @@ void SdrEditView::CheckPossibilities()
 
 void SdrEditView::ForceMarkedObjToAnotherPage()
 {
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
     bool bFlg=false;
-    for (size_t nm=0; nm<GetMarkedObjectList().GetMarkCount(); ++nm) {
-        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
+    for (size_t nm=0; nm<rMarkList.GetMarkCount(); ++nm) {
+        SdrMark* pM=rMarkList.GetMark(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         tools::Rectangle aObjRect(pObj->GetCurrentBoundRect());
         tools::Rectangle aPgRect(pM->GetPageView()->GetPageRect());
@@ -796,26 +798,26 @@ static void lcl_LazyDelete(std::vector<rtl::Reference<SdrObject>> & rLazyDelete)
 
 void SdrEditView::DeleteMarkedObj()
 {
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
     // #i110981# return when nothing is to be done at all
-    if(!GetMarkedObjectList().GetMarkCount())
+    if(!rMarkList.GetMarkCount())
     {
         return;
     }
 
     // moved breaking action and undo start outside loop
     BrkAction();
-    BegUndo(SvxResId(STR_EditDelete),GetMarkedObjectList().GetMarkDescription(),SdrRepeatFunc::Delete);
+    BegUndo(SvxResId(STR_EditDelete),rMarkList.GetMarkDescription(),SdrRepeatFunc::Delete);
 
     std::vector<rtl::Reference<SdrObject>> lazyDeleteObjects;
     // remove as long as something is selected. This allows to schedule objects for
     // removal for a next run as needed
-    while(GetMarkedObjectList().GetMarkCount())
+    while(rMarkList.GetMarkCount())
     {
         // vector to remember the parents which may be empty after object removal
         std::vector< SdrObject* > aParents;
 
         {
-            const SdrMarkList& rMarkList = GetMarkedObjectList();
             const size_t nCount(rMarkList.GetMarkCount());
 
             for(size_t a = 0; a < nCount; ++a)
@@ -867,12 +869,12 @@ void SdrEditView::DeleteMarkedObj()
 
         // original stuff: remove selected objects. Handle clear will
         // do something only once
-        auto temp(DeleteMarkedList(GetMarkedObjectList()));
+        auto temp(DeleteMarkedList(rMarkList));
         lazyDeleteObjects.insert(lazyDeleteObjects.end(), temp.begin(), temp.end());
         GetMarkedObjectListWriteAccess().Clear();
         maHdlList.Clear();
 
-        while(!aParents.empty() && !GetMarkedObjectList().GetMarkCount())
+        while(!aParents.empty() && !rMarkList.GetMarkCount())
         {
             // iterate over remembered parents
             SdrObject* pParent = aParents.back();
@@ -904,9 +906,10 @@ void SdrEditView::DeleteMarkedObj()
 
 void SdrEditView::CopyMarkedObj()
 {
-    GetMarkedObjectList().ForceSort();
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    rMarkList.ForceSort();
 
-    SdrMarkList aSourceObjectsForCopy(GetMarkedObjectList());
+    SdrMarkList aSourceObjectsForCopy(rMarkList);
     // The following loop is used instead of MarkList::Merge(), to be
     // able to flag the MarkEntries.
     const size_t nEdgeCnt = GetEdgesOfMarkedNodes().GetMarkCount();

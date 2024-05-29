@@ -430,13 +430,14 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked, const
 {
     BitmapEx aBmp;
 
-    if( GetMarkedObjectList().GetMarkCount() != 0 )
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    if( rMarkList.GetMarkCount() != 0 )
     {
-        if(1 == GetMarkedObjectList().GetMarkCount())
+        if(1 == rMarkList.GetMarkCount())
         {
             if(bNoVDevIfOneBmpMarked)
             {
-                SdrObject*  pGrafObjTmp = GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+                SdrObject*  pGrafObjTmp = rMarkList.GetMark(0)->GetMarkedSdrObj();
                 SdrGrafObj* pGrafObj = dynamic_cast<SdrGrafObj*>( pGrafObjTmp  );
 
                 if( pGrafObj && ( pGrafObj->GetGraphicType() == GraphicType::Bitmap ) )
@@ -446,7 +447,7 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked, const
             }
             else
             {
-                const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
+                const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(rMarkList.GetMark(0)->GetMarkedSdrObj());
 
                 if(pSdrGrafObj && pSdrGrafObj->isEmbeddedVectorGraphicData())
                 {
@@ -521,7 +522,8 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) co
 {
     GDIMetaFile aMtf;
 
-    if( GetMarkedObjectList().GetMarkCount() != 0 )
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    if( rMarkList.GetMarkCount() != 0 )
     {
         tools::Rectangle   aBound( GetMarkedObjBoundRect() );
         Size        aBoundSize( aBound.GetWidth(), aBound.GetHeight() );
@@ -529,8 +531,8 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) co
 
         if( bNoVDevIfOneMtfMarked )
         {
-            SdrObject*  pGrafObjTmp = GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
-            SdrGrafObj* pGrafObj = ( GetMarkedObjectList().GetMarkCount() ==1 ) ? dynamic_cast<SdrGrafObj*>( pGrafObjTmp  ) : nullptr;
+            SdrObject*  pGrafObjTmp = rMarkList.GetMark(0)->GetMarkedSdrObj();
+            SdrGrafObj* pGrafObj = ( rMarkList.GetMarkCount() ==1 ) ? dynamic_cast<SdrGrafObj*>( pGrafObjTmp  ) : nullptr;
 
             if( pGrafObj )
             {
@@ -582,10 +584,11 @@ Graphic SdrExchangeView::GetAllMarkedGraphic() const
 {
     Graphic aRet;
 
-    if( GetMarkedObjectList().GetMarkCount() != 0 )
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    if( rMarkList.GetMarkCount() != 0 )
     {
-        if( ( 1 == GetMarkedObjectList().GetMarkCount() ) && GetMarkedObjectList().GetMark( 0 ) )
-            aRet = SdrExchangeView::GetObjGraphic(*GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
+        if( ( 1 == rMarkList.GetMarkCount() ) && rMarkList.GetMark( 0 ) )
+            aRet = SdrExchangeView::GetObjGraphic(*rMarkList.GetMark(0)->GetMarkedSdrObj());
         else
             aRet = GetMarkedObjMetaFile();
     }
@@ -677,7 +680,8 @@ Graphic SdrExchangeView::GetObjGraphic(const SdrObject& rSdrObject, bool bSVG)
 
 ::std::vector< SdrObject* > SdrExchangeView::GetMarkedObjects() const
 {
-    GetMarkedObjectList().ForceSort();
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    rMarkList.ForceSort();
     ::std::vector< SdrObject* > aRetval;
 
     ::std::vector< ::std::vector< SdrMark* > >  aObjVectors( 2 );
@@ -686,9 +690,9 @@ Graphic SdrExchangeView::GetObjGraphic(const SdrObject& rSdrObject, bool bSVG)
     const SdrLayerAdmin& rLayerAdmin = GetModel().GetLayerAdmin();
     const SdrLayerID                            nControlLayerId = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName() );
 
-    for( size_t n = 0, nCount = GetMarkedObjectList().GetMarkCount(); n < nCount; ++n )
+    for( size_t n = 0, nCount = rMarkList.GetMarkCount(); n < nCount; ++n )
     {
-        SdrMark* pMark = GetMarkedObjectList().GetMark( n );
+        SdrMark* pMark = rMarkList.GetMark( n );
 
         // paint objects on control layer on top of all other objects
         if( nControlLayerId == pMark->GetMarkedSdrObj()->GetLayer() )
@@ -727,7 +731,8 @@ std::unique_ptr<SdrModel> SdrExchangeView::CreateMarkedObjModel() const
 {
     // Sorting the MarkList here might be problematic in the future, so
     // use a copy.
-    GetMarkedObjectList().ForceSort();
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    rMarkList.ForceSort();
     std::unique_ptr<SdrModel> pNewModel(GetModel().AllocModel());
     rtl::Reference<SdrPage> pNewPage = pNewModel->AllocPage(false);
     pNewModel->InsertPage(pNewPage.get());

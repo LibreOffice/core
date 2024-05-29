@@ -361,7 +361,8 @@ void SdrDragMethod::insertNewlyCreatedOverlayObjectForSdrDragMethod(
 
 void SdrDragMethod::createSdrDragEntries_SolidDrag()
 {
-    const size_t nMarkCount(getSdrDragView().GetMarkedObjectList().GetMarkCount());
+    const SdrMarkList& rMarkList = getSdrDragView().GetMarkedObjectList();
+    const size_t nMarkCount(rMarkList.GetMarkCount());
     SdrPageView* pPV = getSdrDragView().GetSdrPageView();
 
     if(!pPV)
@@ -369,7 +370,7 @@ void SdrDragMethod::createSdrDragEntries_SolidDrag()
 
     for(size_t a = 0; a < nMarkCount; ++a)
     {
-        SdrMark* pM = getSdrDragView().GetMarkedObjectList().GetMark(a);
+        SdrMark* pM = rMarkList.GetMark(a);
 
         if(pM->GetPageView() == pPV)
         {
@@ -420,14 +421,15 @@ void SdrDragMethod::createSdrDragEntries_SolidDrag()
 
 void SdrDragMethod::createSdrDragEntries_PolygonDrag()
 {
-    const size_t nMarkCount(getSdrDragView().GetMarkedObjectList().GetMarkCount());
+    const SdrMarkList& rMarkList = getSdrDragView().GetMarkedObjectList();
+    const size_t nMarkCount(rMarkList.GetMarkCount());
     bool bNoPolygons(getSdrDragView().IsNoDragXorPolys() || nMarkCount > SdrDragView::GetDragXorPolyLimit());
     basegfx::B2DPolyPolygon aResult;
     sal_uInt32 nPointCount(0);
 
     for(size_t a = 0; !bNoPolygons && a < nMarkCount; ++a)
     {
-        SdrMark* pM = getSdrDragView().GetMarkedObjectList().GetMark(a);
+        SdrMark* pM = rMarkList.GetMark(a);
 
         if(pM->GetPageView() == getSdrDragView().GetSdrPageView())
         {
@@ -467,12 +469,13 @@ void SdrDragMethod::createSdrDragEntries_PolygonDrag()
 
 void SdrDragMethod::createSdrDragEntries_PointDrag()
 {
-    const size_t nMarkCount(getSdrDragView().GetMarkedObjectList().GetMarkCount());
+    const SdrMarkList& rMarkList = getSdrDragView().GetMarkedObjectList();
+    const size_t nMarkCount(rMarkList.GetMarkCount());
     std::vector< basegfx::B2DPoint > aPositions;
 
     for(size_t nm = 0; nm < nMarkCount; ++nm)
     {
-        SdrMark* pM = getSdrDragView().GetMarkedObjectList().GetMark(nm);
+        SdrMark* pM = rMarkList.GetMark(nm);
 
         if(pM->GetPageView() == getSdrDragView().GetSdrPageView())
         {
@@ -512,12 +515,13 @@ void SdrDragMethod::createSdrDragEntries_PointDrag()
 
 void SdrDragMethod::createSdrDragEntries_GlueDrag()
 {
-    const size_t nMarkCount(getSdrDragView().GetMarkedObjectList().GetMarkCount());
+    const SdrMarkList& rMarkList = getSdrDragView().GetMarkedObjectList();
+    const size_t nMarkCount(rMarkList.GetMarkCount());
     std::vector< basegfx::B2DPoint > aPositions;
 
     for(size_t nm = 0; nm < nMarkCount; ++nm)
     {
-        SdrMark* pM = getSdrDragView().GetMarkedObjectList().GetMark(nm);
+        SdrMark* pM = rMarkList.GetMark(nm);
 
         if(pM->GetPageView() == getSdrDragView().GetSdrPageView())
         {
@@ -1628,12 +1632,12 @@ void SdrDragMove::MoveSdrDrag(const Point& rNoSnapPnt_)
     if (getSdrDragView().IsDraggingGluePoints())
     { // restrict gluepoints to the BoundRect of the Obj
         aPt1-=DragStat().GetStart();
-        const SdrMarkList& rML=GetMarkedObjectList();
-        const size_t nMarkCount=rML.GetMarkCount();
+        const SdrMarkList& rMarkList = GetMarkedObjectList();
+        const size_t nMarkCount = rMarkList.GetMarkCount();
 
         for (size_t nMarkNum=0; nMarkNum<nMarkCount; ++nMarkNum)
         {
-            const SdrMark* pM=rML.GetMark(nMarkNum);
+            const SdrMark* pM = rMarkList.GetMark(nMarkNum);
             const SdrUShortCont& rPts = pM->GetMarkedGluePoints();
 
             if (!rPts.empty())
@@ -2712,7 +2716,8 @@ void SdrDragGradient::MoveSdrDrag(const Point& rPnt)
     }
 
     // new state
-    pIAOHandle->FromIAOToItem(getSdrDragView().GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj(), false, false);
+    const SdrMarkList& rMarkList = getSdrDragView().GetMarkedObjectList();
+    pIAOHandle->FromIAOToItem(rMarkList.GetMark(0)->GetMarkedSdrObj(), false, false);
 }
 
 bool SdrDragGradient::EndSdrDrag(bool /*bCopy*/)
@@ -2721,7 +2726,8 @@ bool SdrDragGradient::EndSdrDrag(bool /*bCopy*/)
     Ref2() = pIAOHandle->Get2ndPos();
 
     // new state
-    pIAOHandle->FromIAOToItem(getSdrDragView().GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj(), true, true);
+    const SdrMarkList& rMarkList = getSdrDragView().GetMarkedObjectList();
+    pIAOHandle->FromIAOToItem(rMarkList.GetMark(0)->GetMarkedSdrObj(), true, true);
 
     return true;
 }
@@ -2739,7 +2745,8 @@ void SdrDragGradient::CancelSdrDrag()
         pIAOHandle->GetColorHdl2()->SetPos(DragStat().GetRef2());
 
     // new state
-    pIAOHandle->FromIAOToItem(getSdrDragView().GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj(), true, false);
+    const SdrMarkList& rMarkList = getSdrDragView().GetMarkedObjectList();
+    pIAOHandle->FromIAOToItem(rMarkList.GetMark(0)->GetMarkedSdrObj(), true, false);
 }
 
 PointerStyle SdrDragGradient::GetSdrDragPointer() const
@@ -3335,11 +3342,12 @@ bool SdrDragCrook::EndSdrDrag(bool bCopy)
                 if (bCopy)
                     getSdrDragView().CopyMarkedObj();
 
-                const size_t nMarkCount=getSdrDragView().GetMarkedObjectList().GetMarkCount();
+                const SdrMarkList& rMarkList = getSdrDragView().GetMarkedObjectList();
+                const size_t nMarkCount=rMarkList.GetMarkCount();
 
                 for (size_t nm=0; nm<nMarkCount; ++nm)
                 {
-                    SdrMark* pM=getSdrDragView().GetMarkedObjectList().GetMark(nm);
+                    SdrMark* pM=rMarkList.GetMark(nm);
                     SdrObject* pO=pM->GetMarkedSdrObj();
                     Point aCtr0(pO->GetSnapRect().Center());
                     Point aCtr1(aCtr0);

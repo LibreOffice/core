@@ -504,7 +504,7 @@ bool IMapWindow::Command(const CommandEvent& rCEvt)
         mxPopupMenu->set_sensitive(u"url"_ustr, false);
         mxPopupMenu->set_sensitive(u"active"_ustr, false);
         mxPopupMenu->set_sensitive(u"macro"_ustr, false);
-        mxPopupMenu->set_sensitive(u"selectall"_ustr, pModel->GetPage(0)->GetObjCount() != pView->GetMarkedObjectList().GetMarkCount());
+        mxPopupMenu->set_sensitive(u"selectall"_ustr, pModel->GetPage(0)->GetObjCount() != rMarkList.GetMarkCount());
 
         if ( !nMarked )
         {

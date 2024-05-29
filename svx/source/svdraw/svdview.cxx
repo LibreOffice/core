@@ -855,11 +855,12 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
             if (rVEvt.mbPrevNextMark) {
                 bRet=MarkNextObj(aLogicPos, mnHitTolLog, rVEvt.mbMarkPrev);
             } else {
-                GetMarkedObjectList().ForceSort();
-                const size_t nCount0=GetMarkedObjectList().GetMarkCount();
+                const SdrMarkList& rMarkList = GetMarkedObjectList();
+                rMarkList.ForceSort();
+                const size_t nCount0=rMarkList.GetMarkCount();
                 bRet=MarkObj(aLogicPos, mnHitTolLog, rVEvt.mbAddMark);
-                GetMarkedObjectList().ForceSort();
-                const size_t nCount1=GetMarkedObjectList().GetMarkCount();
+                rMarkList.ForceSort();
+                const size_t nCount1=rMarkList.GetMarkCount();
                 bUnmark=nCount1<nCount0;
             }
             if (!bUnmark) {
@@ -1077,8 +1078,9 @@ PointerStyle SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDe
 
                 // are 3D objects selected?
                 bool b3DObjSelected = false;
-                for (size_t a=0; !b3DObjSelected && a<GetMarkedObjectList().GetMarkCount(); ++a) {
-                    SdrObject* pObj = GetMarkedObjectList().GetMark(a)->GetMarkedSdrObj();
+                const SdrMarkList& rMarkList = GetMarkedObjectList();
+                for (size_t a=0; !b3DObjSelected && a<rMarkList.GetMarkCount(); ++a) {
+                    SdrObject* pObj = rMarkList.GetMark(a)->GetMarkedSdrObj();
                     if(DynCastE3dObject(pObj))
                         b3DObjSelected = true;
                 }
@@ -1201,7 +1203,8 @@ OUString SdrView::GetStatusText()
     }
     else if(IsMarkObj())
     {
-        if(GetMarkedObjectList().GetMarkCount() != 0)
+        const SdrMarkList& rMarkList = GetMarkedObjectList();
+        if(rMarkList.GetMarkCount() != 0)
         {
             aStr = SvxResId(STR_ViewMarkMoreObjs);
         }
@@ -1274,7 +1277,8 @@ OUString SdrView::GetStatusText()
 
     if(aStr == STR_NOTHING)
     {
-        if (GetMarkedObjectList().GetMarkCount() != 0) {
+        const SdrMarkList& rMarkList = GetMarkedObjectList();
+        if (rMarkList.GetMarkCount() != 0) {
             aStr = ImpGetDescriptionString(STR_ViewMarked);
             if (IsGluePointEditMode()) {
                 if (HasMarkedGluePoints()) {
@@ -1307,26 +1311,27 @@ SdrViewContext SdrView::GetContext() const
     if( IsGluePointEditMode() )
         return SdrViewContext::GluePointEdit;
 
-    const size_t nMarkCount = GetMarkedObjectList().GetMarkCount();
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    const size_t nMarkCount = rMarkList.GetMarkCount();
 
     if( HasMarkablePoints() && !IsFrameHandles() )
     {
         bool bPath=true;
         for( size_t nMarkNum = 0; nMarkNum < nMarkCount && bPath; ++nMarkNum )
-            if (dynamic_cast<const SdrPathObj*>(GetMarkedObjectList().GetMark(nMarkNum)->GetMarkedSdrObj()) == nullptr)
+            if (dynamic_cast<const SdrPathObj*>(rMarkList.GetMark(nMarkNum)->GetMarkedSdrObj()) == nullptr)
                 bPath=false;
 
         if( bPath )
             return SdrViewContext::PointEdit;
     }
 
-    if( GetMarkedObjectList().GetMarkCount() )
+    if( rMarkList.GetMarkCount() )
     {
         bool bGraf = true, bMedia = true, bTable = true;
 
         for( size_t nMarkNum = 0; nMarkNum < nMarkCount && ( bGraf || bMedia ); ++nMarkNum )
         {
-            const SdrObject* pMarkObj = GetMarkedObjectList().GetMark(nMarkNum)->GetMarkedSdrObj();
+            const SdrObject* pMarkObj = rMarkList.GetMark(nMarkNum)->GetMarkedSdrObj();
             DBG_ASSERT( pMarkObj, "SdrView::GetContext(), null pointer in mark list!" );
 
             if( !pMarkObj )
@@ -1459,7 +1464,8 @@ bool SdrView::MoveShapeHandle(const sal_uInt32 handleNum, const Point& aEndPoint
     if (GetHdlList().IsMoveOutside())
         return false;
 
-    if (!GetMarkedObjectList().GetMarkCount())
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    if (!rMarkList.GetMarkCount())
         return false;
 
     SdrHdl * pHdl = GetHdlList().GetHdl(handleNum);

@@ -41,9 +41,10 @@ SdrGlueEditView::~SdrGlueEditView()
 
 void SdrGlueEditView::ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, bool bConst, const void* p1, const void* p2, const void* p3, const void* p4)
 {
-    const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    const size_t nMarkCount=rMarkList.GetMarkCount();
     for (size_t nm=0; nm<nMarkCount; ++nm) {
-        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
+        SdrMark* pM=rMarkList.GetMark(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         const SdrUShortCont& rPts = pM->GetMarkedGluePoints();
         if (!rPts.empty())
@@ -119,7 +120,8 @@ static void ImpSetEscDir(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const voi
 void SdrGlueEditView::SetMarkedGluePointsEscDir(SdrEscapeDirection nThisEsc, bool bOn)
 {
     ForceUndirtyMrkPnt();
-    BegUndo(SvxResId(STR_EditSetGlueEscDir),GetMarkedObjectList().GetGluePointMarkDescription());
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    BegUndo(SvxResId(STR_EditSetGlueEscDir),rMarkList.GetGluePointMarkDescription());
     ImpDoMarkedGluePoints(ImpSetEscDir,false,&nThisEsc,&bOn);
     EndUndo();
 }
@@ -159,7 +161,8 @@ static void ImpSetPercent(SdrGluePoint& rGP, const SdrObject* pObj, const void* 
 void SdrGlueEditView::SetMarkedGluePointsPercent(bool bOn)
 {
     ForceUndirtyMrkPnt();
-    BegUndo(SvxResId(STR_EditSetGluePercent),GetMarkedObjectList().GetGluePointMarkDescription());
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    BegUndo(SvxResId(STR_EditSetGluePercent),rMarkList.GetGluePointMarkDescription());
     ImpDoMarkedGluePoints(ImpSetPercent,false,&bOn);
     EndUndo();
 }
@@ -215,7 +218,8 @@ static void ImpSetAlign(SdrGluePoint& rGP, const SdrObject* pObj, const void* pb
 void SdrGlueEditView::SetMarkedGluePointsAlign(bool bVert, SdrAlign nAlign)
 {
     ForceUndirtyMrkPnt();
-    BegUndo(SvxResId(STR_EditSetGlueAlign),GetMarkedObjectList().GetGluePointMarkDescription());
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    BegUndo(SvxResId(STR_EditSetGlueAlign),rMarkList.GetGluePointMarkDescription());
     ImpDoMarkedGluePoints(ImpSetAlign,false,&bVert,&nAlign);
     EndUndo();
 }
@@ -225,13 +229,14 @@ void SdrGlueEditView::DeleteMarkedGluePoints()
     BrkAction();
     ForceUndirtyMrkPnt();
     const bool bUndo = IsUndoEnabled();
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
     if( bUndo )
-        BegUndo(SvxResId(STR_EditDelete),GetMarkedObjectList().GetGluePointMarkDescription(),SdrRepeatFunc::Delete);
+        BegUndo(SvxResId(STR_EditDelete),rMarkList.GetGluePointMarkDescription(),SdrRepeatFunc::Delete);
 
-    const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
+    const size_t nMarkCount=rMarkList.GetMarkCount();
     for (size_t nm=0; nm<nMarkCount; ++nm)
     {
-        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
+        SdrMark* pM=rMarkList.GetMark(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         const SdrUShortCont& rPts = pM->GetMarkedGluePoints();
         if (!rPts.empty())
@@ -270,10 +275,11 @@ void SdrGlueEditView::ImpCopyMarkedGluePoints()
     if( bUndo )
         BegUndo();
 
-    const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    const size_t nMarkCount=rMarkList.GetMarkCount();
     for (size_t nm=0; nm<nMarkCount; ++nm)
     {
-        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
+        SdrMark* pM=rMarkList.GetMark(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         SdrUShortCont& rPts = pM->GetMarkedGluePoints();
         SdrGluePointList* pGPL=pObj->ForceGluePointList();
@@ -311,9 +317,10 @@ void SdrGlueEditView::ImpCopyMarkedGluePoints()
 
 void SdrGlueEditView::ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const void* p1, const void* p2, const void* p3, const void* p4)
 {
-    const size_t nMarkCount=GetMarkedObjectList().GetMarkCount();
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    const size_t nMarkCount=rMarkList.GetMarkCount();
     for (size_t nm=0; nm<nMarkCount; ++nm) {
-        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
+        SdrMark* pM=rMarkList.GetMark(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         const SdrUShortCont& rPts = pM->GetMarkedGluePoints();
         if (!rPts.empty()) {
@@ -354,7 +361,8 @@ void SdrGlueEditView::MoveMarkedGluePoints(const Size& rSiz, bool bCopy)
     ForceUndirtyMrkPnt();
     OUString aStr(SvxResId(STR_EditMove));
     if (bCopy) aStr += SvxResId(STR_EditWithCopy);
-    BegUndo(aStr,GetMarkedObjectList().GetGluePointMarkDescription(),SdrRepeatFunc::Move);
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    BegUndo(aStr,rMarkList.GetGluePointMarkDescription(),SdrRepeatFunc::Move);
     if (bCopy) ImpCopyMarkedGluePoints();
     ImpTransformMarkedGluePoints(ImpMove,&rSiz);
     EndUndo();
@@ -372,7 +380,8 @@ void SdrGlueEditView::ResizeMarkedGluePoints(const Point& rRef, const Fraction& 
     ForceUndirtyMrkPnt();
     OUString aStr(SvxResId(STR_EditResize));
     if (bCopy) aStr+=SvxResId(STR_EditWithCopy);
-    BegUndo(aStr,GetMarkedObjectList().GetGluePointMarkDescription(),SdrRepeatFunc::Resize);
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    BegUndo(aStr,rMarkList.GetGluePointMarkDescription(),SdrRepeatFunc::Resize);
     if (bCopy) ImpCopyMarkedGluePoints();
     ImpTransformMarkedGluePoints(ImpResize,&rRef,&xFact,&yFact);
     EndUndo();
@@ -390,7 +399,8 @@ void SdrGlueEditView::RotateMarkedGluePoints(const Point& rRef, Degree100 nAngle
     ForceUndirtyMrkPnt();
     OUString aStr(SvxResId(STR_EditRotate));
     if (bCopy) aStr+=SvxResId(STR_EditWithCopy);
-    BegUndo(aStr,GetMarkedObjectList().GetGluePointMarkDescription(),SdrRepeatFunc::Rotate);
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    BegUndo(aStr,rMarkList.GetGluePointMarkDescription(),SdrRepeatFunc::Rotate);
     if (bCopy) ImpCopyMarkedGluePoints();
     double nSin = sin(toRadians(nAngle));
     double nCos = cos(toRadians(nAngle));
