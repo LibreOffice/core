@@ -2735,7 +2735,7 @@ OUString SdrMarkView::ImpGetDescriptionString(TranslateId pStrCacheID, ImpGetDes
         }
         else
         {
-            sStr = sStr.replaceAt(nPos, 2, GetDescriptionOfMarkedObjects());
+            sStr = sStr.replaceAt(nPos, 2, GetMarkedObjectList().GetMarkDescription());
         }
     }
 

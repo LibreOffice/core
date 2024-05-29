@@ -191,7 +191,7 @@ void SdrExternalToolEdit::Update(Graphic & rGraphic)
     rtl::Reference<SdrGrafObj> pNewObj = SdrObject::Clone(*m_pObj, m_pObj->getSdrModelFromSdrObject());
     assert(pNewObj);
     OUString const description =
-        m_pView->GetDescriptionOfMarkedObjects() + " External Edit";
+        m_pView->GetMarkedObjectList().GetMarkDescription() + " External Edit";
     m_pView->BegUndo(description);
     pNewObj->SetGraphicObject(rGraphic);
     // set to new object before ReplaceObjectAtView() so that Notify() will

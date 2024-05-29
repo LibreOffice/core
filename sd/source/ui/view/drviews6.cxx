@@ -297,7 +297,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest const & rReq )
                         xNewObj->SetEmptyPresObj(false);
                         xNewObj->SetGraphic(pBmpMask->Mask(xNewObj->GetGraphic()));
 
-                        OUString aStr = mpDrawView->GetDescriptionOfMarkedObjects() +
+                        OUString aStr = mpDrawView->GetMarkedObjectList().GetMarkDescription() +
                             " " + SdResId(STR_EYEDROPPER);
 
                         mpDrawView->BegUndo( aStr );

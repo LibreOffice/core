@@ -66,7 +66,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         return;
 
     // Undo
-    OUString aString = mpView->GetDescriptionOfMarkedObjects() +
+    OUString aString = mpView->GetMarkedObjectList().GetMarkDescription() +
         " " + SdResId( STR_UNDO_COPYOBJECTS );
     mpView->BegUndo( aString );
 

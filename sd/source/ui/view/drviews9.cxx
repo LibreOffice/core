@@ -151,7 +151,7 @@ void DrawViewShell::ExecGallery(SfxRequest const & rReq)
                         pNewGrafObj->SetOutlinerParaObject(std::nullopt);
                         pNewGrafObj->SetGraphic(aGraphic);
 
-                        OUString aStr = mpDrawView->GetDescriptionOfMarkedObjects() +
+                        OUString aStr = mpDrawView->GetMarkedObjectList().GetMarkDescription() +
                             " " + SdResId(STR_UNDO_REPLACE);
                         mpDrawView->BegUndo(aStr);
                         SdrPageView* pPV = mpDrawView->GetSdrPageView();

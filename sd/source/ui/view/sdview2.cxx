@@ -247,7 +247,7 @@ void View::DoCut()
         OUString aStr(SdResId(STR_UNDO_CUT));
 
         DoCopy();
-        BegUndo(aStr + " " + GetDescriptionOfMarkedObjects());
+        BegUndo(aStr + " " + GetMarkedObjectList().GetMarkDescription());
         DeleteMarked();
         EndUndo();
     }

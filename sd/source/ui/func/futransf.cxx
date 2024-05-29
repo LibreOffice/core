@@ -52,7 +52,7 @@ namespace {
 void setUndo(::sd::View* pView, const SfxItemSet* pArgs, bool addPageMargin)
 {
     // Undo
-    OUString aString = pView->GetDescriptionOfMarkedObjects() +
+    OUString aString = pView->GetMarkedObjectList().GetMarkDescription() +
         " " + SdResId(STR_TRANSFORM);
     pView->BegUndo(aString);
     pView->SetGeoAttrToMarked(*pArgs, addPageMargin);

@@ -116,7 +116,7 @@ void GraphicObjectBar::ExecuteFilter( SfxRequest const & rReq )
                         if (SdrPageView* pPageView = mpView->GetSdrPageView())
                         {
                             rtl::Reference<SdrGrafObj> pFilteredObj = SdrObject::Clone(static_cast<SdrGrafObj&>(*pObj), pObj->getSdrModelFromSdrObject());
-                            OUString aStr = mpView->GetDescriptionOfMarkedObjects() +
+                            OUString aStr = mpView->GetMarkedObjectList().GetMarkDescription() +
                                 " " + SdResId(STR_UNDO_GRAFFILTER);
                             mpView->BegUndo( aStr );
                             pFilteredObj->SetGraphicObject( aFilterObj );

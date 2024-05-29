@@ -804,7 +804,7 @@ void SdrEditView::DeleteMarkedObj()
 
     // moved breaking action and undo start outside loop
     BrkAction();
-    BegUndo(SvxResId(STR_EditDelete),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::Delete);
+    BegUndo(SvxResId(STR_EditDelete),GetMarkedObjectList().GetMarkDescription(),SdrRepeatFunc::Delete);
 
     std::vector<rtl::Reference<SdrObject>> lazyDeleteObjects;
     // remove as long as something is selected. This allows to schedule objects for

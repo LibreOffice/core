@@ -190,7 +190,7 @@ void SdrEditView::MoveMarkedObj(const Size& rSiz, bool bCopy)
         if (bCopy)
             aStr += SvxResId(STR_EditWithCopy);
         // needs its own UndoGroup because of its parameters
-        BegUndo(aStr,GetDescriptionOfMarkedObjects(),SdrRepeatFunc::Move);
+        BegUndo(aStr,GetMarkedObjectList().GetMarkDescription(),SdrRepeatFunc::Move);
     }
 
     if (bCopy)
@@ -1713,7 +1713,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr, bool addPageMargin
 
     ForcePossibilities();
 
-    BegUndo(SvxResId(STR_EditTransform),GetDescriptionOfMarkedObjects());
+    BegUndo(SvxResId(STR_EditTransform),GetMarkedObjectList().GetMarkDescription());
 
     if (bSetAttr) {
         SetAttrToMarked(aSetAttr,false);
@@ -1877,7 +1877,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
     if( bUndo )
     {
         EndTextEditCurrentView();
-        OUString aStr(GetDescriptionOfMarkedObjects());
+        OUString aStr(GetMarkedObjectList().GetMarkDescription());
         if (eHor==SdrHorAlign::NONE)
         {
             switch (eVert)
