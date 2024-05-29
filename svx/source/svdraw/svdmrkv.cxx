@@ -2052,7 +2052,7 @@ bool SdrMarkView::MarkNextObj(bool bPrev)
             SdrObject* pSearchObj = pSearchObjList->GetObjectForNavigationPosition(nSearchObjNum);
             if (IsObjMarkable(pSearchObj,pPageView))
             {
-                if (TryToFindMarkedObject(pSearchObj)==SAL_MAX_SIZE)
+                if (GetMarkedObjectList().FindObject(pSearchObj)==SAL_MAX_SIZE)
                 {
                     pMarkObj=pSearchObj;
                 }
@@ -2165,7 +2165,7 @@ bool SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, bool bPrev)
 
         if (CheckSingleSdrObjectHit(rPnt,sal_uInt16(nTol),pObj,pPV,SdrSearchOptions::TESTMARKABLE,nullptr))
         {
-            if (TryToFindMarkedObject(pObj)==SAL_MAX_SIZE) {
+            if (GetMarkedObjectList().FindObject(pObj)==SAL_MAX_SIZE) {
                 pFndObj=pObj;
             } else {
                 // TODO: for performance reasons set on to Top or Btm, if necessary
@@ -2205,7 +2205,7 @@ void SdrMarkView::MarkObj(const tools::Rectangle& rRect, bool bUnmark)
                         bFnd=true;
                     }
                 } else {
-                    const size_t nPos=TryToFindMarkedObject(pObj.get());
+                    const size_t nPos=GetMarkedObjectList().FindObject(pObj.get());
                     if (nPos!=SAL_MAX_SIZE)
                     {
                         GetMarkedObjectListWriteAccess().DeleteMark(nPos);
@@ -2255,7 +2255,7 @@ void collectUIInformation(const SdrObject* pObj)
     }
     else
     {
-        const size_t nPos=TryToFindMarkedObject(pObj);
+        const size_t nPos=GetMarkedObjectList().FindObject(pObj);
         if (nPos!=SAL_MAX_SIZE)
         {
             GetMarkedObjectListWriteAccess().DeleteMark(nPos);
@@ -2272,7 +2272,7 @@ void collectUIInformation(const SdrObject* pObj)
 
 bool SdrMarkView::IsObjMarked(SdrObject const * pObj) const
 {
-    return TryToFindMarkedObject(pObj)!=SAL_MAX_SIZE;
+    return GetMarkedObjectList().FindObject(pObj)!=SAL_MAX_SIZE;
 }
 
 sal_uInt16 SdrMarkView::GetMarkHdlSizePixel() const

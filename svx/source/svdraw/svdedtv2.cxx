@@ -269,7 +269,7 @@ void SdrEditView::PutMarkedInFrontOfObj(const SdrObject* pRefObj)
     {
         // Make "in front of the object" work, even if the
         // selected objects are already in front of the other object
-        const size_t nRefMark=TryToFindMarkedObject(pRefObj);
+        const size_t nRefMark=GetMarkedObjectList().FindObject(pRefObj);
         SdrMark aRefMark;
         if (nRefMark!=SAL_MAX_SIZE)
         {
@@ -370,7 +370,7 @@ void SdrEditView::PutMarkedBehindObj(const SdrObject* pRefObj)
     {
         // Make "behind the object" work, even if the
         // selected objects are already behind the other object
-        const size_t nRefMark=TryToFindMarkedObject(pRefObj);
+        const size_t nRefMark=GetMarkedObjectList().FindObject(pRefObj);
         SdrMark aRefMark;
         if (nRefMark!=SAL_MAX_SIZE)
         {
@@ -2215,7 +2215,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
                 AddUndo(GetModel().GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
 
             // remove object from selection and delete
-            GetMarkedObjectListWriteAccess().DeleteMark(TryToFindMarkedObject(pObj));
+            GetMarkedObjectListWriteAccess().DeleteMark(GetMarkedObjectList().FindObject(pObj));
             pOL->RemoveObject(nInsPos-1);
         }
     }

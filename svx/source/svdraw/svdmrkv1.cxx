@@ -103,7 +103,7 @@ bool SdrMarkView::ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark)
 
     if (pMark==nullptr)
     {
-        const size_t nMarkNum=TryToFindMarkedObject(pObj);
+        const size_t nMarkNum=GetMarkedObjectList().FindObject(pObj);
         if (nMarkNum==SAL_MAX_SIZE)
             return false;
         pMark=GetMarkedObjectList().GetMark(nMarkNum);
@@ -170,7 +170,7 @@ bool SdrMarkView::MarkPoint(SdrHdl& rHdl, bool bUnmark)
     bool bRet=false;
     const SdrObject* pObj=rHdl.GetObj();
     if (IsPointMarkable(rHdl) && rHdl.IsSelected()==bUnmark) {
-        const size_t nMarkNum=TryToFindMarkedObject(pObj);
+        const size_t nMarkNum=GetMarkedObjectList().FindObject(pObj);
         if (nMarkNum!=SAL_MAX_SIZE) {
             SdrMark* pM=GetMarkedObjectList().GetMark(nMarkNum);
             if (ImpMarkPoint(&rHdl,pM,bUnmark)) {
@@ -200,7 +200,7 @@ bool SdrMarkView::MarkPoints(const tools::Rectangle* pRect, bool bUnmark)
             const SdrObject* pObj=pHdl->GetObj();
             const SdrPageView* pPV=pHdl->GetPageView();
             if (pObj!=pObj0 || pPV!=pPV0 || pM==nullptr) { // This section is for optimization,
-                const size_t nMarkNum=TryToFindMarkedObject(pObj);  // so ImpMarkPoint() doesn't always
+                const size_t nMarkNum=GetMarkedObjectList().FindObject(pObj);  // so ImpMarkPoint() doesn't always
                 if (nMarkNum!=SAL_MAX_SIZE) { // have to search the object in the MarkList.
                     pM=GetMarkedObjectList().GetMark(nMarkNum);
                     pObj0=pObj;
@@ -482,7 +482,7 @@ bool SdrMarkView::MarkGluePoint(const SdrObject* pObj, sal_uInt16 nId, bool bUnm
     ForceUndirtyMrkPnt();
     bool bChgd=false;
     if (pObj!=nullptr) {
-        const size_t nMarkPos=TryToFindMarkedObject(pObj);
+        const size_t nMarkPos=GetMarkedObjectList().FindObject(pObj);
         if (nMarkPos!=SAL_MAX_SIZE) {
             SdrMark* pM=GetMarkedObjectList().GetMark(nMarkPos);
             SdrUShortCont& rPts = pM->GetMarkedGluePoints();
@@ -510,7 +510,7 @@ bool SdrMarkView::IsGluePointMarked(const SdrObject* pObj, sal_uInt16 nId) const
 {
     ForceUndirtyMrkPnt();
     bool bRet=false;
-    const size_t nPos=TryToFindMarkedObject(pObj); // casting to NonConst
+    const size_t nPos=GetMarkedObjectList().FindObject(pObj); // casting to NonConst
     if (nPos!=SAL_MAX_SIZE) {
         const SdrMark* pM=GetMarkedObjectList().GetMark(nPos);
         const SdrUShortCont& rPts = pM->GetMarkedGluePoints();
