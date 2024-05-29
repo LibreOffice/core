@@ -43,7 +43,7 @@ void SdrGlueEditView::ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, bool bConst, co
 {
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount; ++nm) {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         const SdrUShortCont& rPts = pM->GetMarkedGluePoints();
         if (!rPts.empty())
@@ -231,7 +231,7 @@ void SdrGlueEditView::DeleteMarkedGluePoints()
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount; ++nm)
     {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         const SdrUShortCont& rPts = pM->GetMarkedGluePoints();
         if (!rPts.empty())
@@ -273,7 +273,7 @@ void SdrGlueEditView::ImpCopyMarkedGluePoints()
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount; ++nm)
     {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         SdrUShortCont& rPts = pM->GetMarkedGluePoints();
         SdrGluePointList* pGPL=pObj->ForceGluePointList();
@@ -313,7 +313,7 @@ void SdrGlueEditView::ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const vo
 {
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount; ++nm) {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         const SdrUShortCont& rPts = pM->GetMarkedGluePoints();
         if (!rPts.empty()) {

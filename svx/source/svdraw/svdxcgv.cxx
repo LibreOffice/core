@@ -584,7 +584,7 @@ Graphic SdrExchangeView::GetAllMarkedGraphic() const
 
     if( AreObjectsMarked() )
     {
-        if( ( 1 == GetMarkedObjectCount() ) && GetSdrMarkByIndex( 0 ) )
+        if( ( 1 == GetMarkedObjectCount() ) && GetMarkedObjectList().GetMark( 0 ) )
             aRet = SdrExchangeView::GetObjGraphic(*GetMarkedObjectByIndex(0));
         else
             aRet = GetMarkedObjMetaFile();
@@ -688,7 +688,7 @@ Graphic SdrExchangeView::GetObjGraphic(const SdrObject& rSdrObject, bool bSVG)
 
     for( size_t n = 0, nCount = GetMarkedObjectCount(); n < nCount; ++n )
     {
-        SdrMark* pMark = GetSdrMarkByIndex( n );
+        SdrMark* pMark = GetMarkedObjectList().GetMark( n );
 
         // paint objects on control layer on top of all other objects
         if( nControlLayerId == pMark->GetMarkedSdrObj()->GetLayer() )

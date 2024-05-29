@@ -369,7 +369,7 @@ void SdrDragMethod::createSdrDragEntries_SolidDrag()
 
     for(size_t a = 0; a < nMarkCount; ++a)
     {
-        SdrMark* pM = getSdrDragView().GetSdrMarkByIndex(a);
+        SdrMark* pM = getSdrDragView().GetMarkedObjectList().GetMark(a);
 
         if(pM->GetPageView() == pPV)
         {
@@ -427,7 +427,7 @@ void SdrDragMethod::createSdrDragEntries_PolygonDrag()
 
     for(size_t a = 0; !bNoPolygons && a < nMarkCount; ++a)
     {
-        SdrMark* pM = getSdrDragView().GetSdrMarkByIndex(a);
+        SdrMark* pM = getSdrDragView().GetMarkedObjectList().GetMark(a);
 
         if(pM->GetPageView() == getSdrDragView().GetSdrPageView())
         {
@@ -472,7 +472,7 @@ void SdrDragMethod::createSdrDragEntries_PointDrag()
 
     for(size_t nm = 0; nm < nMarkCount; ++nm)
     {
-        SdrMark* pM = getSdrDragView().GetSdrMarkByIndex(nm);
+        SdrMark* pM = getSdrDragView().GetMarkedObjectList().GetMark(nm);
 
         if(pM->GetPageView() == getSdrDragView().GetSdrPageView())
         {
@@ -517,7 +517,7 @@ void SdrDragMethod::createSdrDragEntries_GlueDrag()
 
     for(size_t nm = 0; nm < nMarkCount; ++nm)
     {
-        SdrMark* pM = getSdrDragView().GetSdrMarkByIndex(nm);
+        SdrMark* pM = getSdrDragView().GetMarkedObjectList().GetMark(nm);
 
         if(pM->GetPageView() == getSdrDragView().GetSdrPageView())
         {

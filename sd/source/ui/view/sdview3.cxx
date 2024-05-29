@@ -405,7 +405,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                         for( size_t nM = 0; nM < GetMarkedObjectCount(); ++nM )
                         {
-                            SdrMark*    pM = GetSdrMarkByIndex( nM );
+                            SdrMark*    pM = GetMarkedObjectList().GetMark( nM );
                             SdrObject*  pO = pM->GetMarkedSdrObj();
 
                             if( pO )

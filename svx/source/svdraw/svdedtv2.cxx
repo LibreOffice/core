@@ -91,7 +91,7 @@ void SdrEditView::MovMarkedToTop()
     for (size_t nm=nCount; nm>0;)
     {
         --nm;
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         SdrObjList* pOL=pObj->getParentSdrObjListFromSdrObject();
         if (pOL!=pOL0)
@@ -179,7 +179,7 @@ void SdrEditView::MovMarkedToBtm()
     size_t nNewPos=0;
     for (size_t nm=0; nm<nCount; ++nm)
     {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         SdrObjList* pOL=pObj->getParentSdrObjListFromSdrObject();
         if (pOL!=pOL0)
@@ -273,7 +273,7 @@ void SdrEditView::PutMarkedInFrontOfObj(const SdrObject* pRefObj)
         SdrMark aRefMark;
         if (nRefMark!=SAL_MAX_SIZE)
         {
-            aRefMark=*GetSdrMarkByIndex(nRefMark);
+            aRefMark=*GetMarkedObjectList().GetMark(nRefMark);
             GetMarkedObjectListWriteAccess().DeleteMark(nRefMark);
         }
         PutMarkedToBtm();
@@ -293,7 +293,7 @@ void SdrEditView::PutMarkedInFrontOfObj(const SdrObject* pRefObj)
     for (size_t nm=nCount; nm>0;)
     {
         --nm;
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         if (pObj!=pRefObj)
         {
@@ -374,7 +374,7 @@ void SdrEditView::PutMarkedBehindObj(const SdrObject* pRefObj)
         SdrMark aRefMark;
         if (nRefMark!=SAL_MAX_SIZE)
         {
-            aRefMark=*GetSdrMarkByIndex(nRefMark);
+            aRefMark=*GetMarkedObjectList().GetMark(nRefMark);
             GetMarkedObjectListWriteAccess().DeleteMark(nRefMark);
         }
         PutMarkedToTop();
@@ -391,7 +391,7 @@ void SdrEditView::PutMarkedBehindObj(const SdrObject* pRefObj)
     SdrObjList* pOL0=nullptr;
     size_t nNewPos=0;
     for (size_t nm=0; nm<nCount; ++nm) {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         if (pObj!=pRefObj) {
             SdrObjList* pOL=pObj->getParentSdrObjListFromSdrObject();
@@ -808,7 +808,7 @@ void SdrEditView::DistributeMarkedObjects(sal_uInt16 SlotID)
 
         for( size_t a = 0; a < nMark; ++a )
         {
-            SdrMark* pMark = GetSdrMarkByIndex(a);
+            SdrMark* pMark = GetMarkedObjectList().GetMark(a);
             ImpDistributeEntry aNew;
 
             aNew.mpObj = pMark->GetMarkedSdrObj();
@@ -899,7 +899,7 @@ void SdrEditView::DistributeMarkedObjects(sal_uInt16 SlotID)
 
         for( size_t a = 0; a < nMark; ++a )
         {
-            SdrMark* pMark = GetSdrMarkByIndex(a);
+            SdrMark* pMark = GetMarkedObjectList().GetMark(a);
             ImpDistributeEntry aNew;
 
             aNew.mpObj = pMark->GetMarkedSdrObj();
@@ -1023,7 +1023,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
 
     for(size_t a=0; a<GetMarkedObjectCount(); ++a)
     {
-        SdrMark* pM = GetSdrMarkByIndex(a);
+        SdrMark* pM = GetMarkedObjectList().GetMark(a);
         SdrObject* pObj = pM->GetMarkedSdrObj();
 
         if(ImpCanConvertForCombine(pObj))
@@ -1336,7 +1336,7 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
     for(size_t a = GetMarkedObjectCount(); a; )
     {
         --a;
-        SdrMark* pM = GetSdrMarkByIndex(a);
+        SdrMark* pM = GetMarkedObjectList().GetMark(a);
         SdrObject* pObj = pM->GetMarkedSdrObj();
         SdrObjList* pThisOL = pObj->getParentSdrObjListFromSdrObject();
 
@@ -1739,7 +1739,7 @@ void SdrEditView::DismantleMarkedObjects(bool bMakeLines)
     GetModel().setLock(true);
     for (size_t nm=GetMarkedObjectCount(); nm>0;) {
         --nm;
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         SdrPageView* pPV=pM->GetPageView();
         SdrObjList* pOL=pObj->getParentSdrObjListFromSdrObject();
@@ -1795,7 +1795,7 @@ void SdrEditView::GroupMarked()
         {
             // add UndoActions for all affected objects
             --nm;
-            SdrMark* pM=GetSdrMarkByIndex(nm);
+            SdrMark* pM=GetMarkedObjectList().GetMark(nm);
             SdrObject* pObj = pM->GetMarkedSdrObj();
             AddUndoActions( CreateConnectorUndo( *pObj ) );
             AddUndo(GetModel().GetSdrUndoFactory().CreateUndoRemoveObject( *pObj ));
@@ -1822,7 +1822,7 @@ void SdrEditView::GroupMarked()
         for (size_t nm=GetMarkedObjectCount(); nm>0;)
         {
             --nm;
-            SdrMark* pM=GetSdrMarkByIndex(nm);
+            SdrMark* pM=GetMarkedObjectList().GetMark(nm);
             if (pM->GetPageView()==pPV)
             {
                 SdrObject* pObj=pM->GetMarkedSdrObj();
@@ -1894,7 +1894,7 @@ void SdrEditView::UnGroupMarked()
     bool bNameOk=false;
     for (size_t nm=GetMarkedObjectCount(); nm>0;) {
         --nm;
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pGrp=pM->GetMarkedSdrObj();
         SdrObjList* pSrcLst=pGrp->GetSubList();
         if (pSrcLst!=nullptr) {
@@ -2059,7 +2059,7 @@ void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea)
     }
     for (size_t nm=nMarkCount; nm>0;) {
         --nm;
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         SdrPageView* pPV=pM->GetPageView();
         if (pObj->IsGroupObject() && !pObj->Is3DObj()) {
@@ -2129,7 +2129,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
         }
 
         --nm;
-        SdrMark*     pM=GetSdrMarkByIndex(nm);
+        SdrMark*     pM=GetMarkedObjectList().GetMark(nm);
         SdrObject*   pObj=pM->GetMarkedSdrObj();
         SdrPageView* pPV=pM->GetPageView();
         SdrObjList*  pOL=pObj->getParentSdrObjListFromSdrObject();

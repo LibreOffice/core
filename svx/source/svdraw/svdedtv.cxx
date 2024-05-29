@@ -534,7 +534,7 @@ void SdrEditView::CheckPossibilities()
         if(m_bGradientAllowed)
         {
             // gradient depends on fill style
-            const SdrMark* pM = GetSdrMarkByIndex(0);
+            const SdrMark* pM = GetMarkedObjectList().GetMark(0);
             const SdrObject* pObj = pM->GetMarkedSdrObj();
 
             // may be group object, so get merged ItemSet
@@ -557,7 +557,7 @@ void SdrEditView::CheckPossibilities()
         const SdrPageView* pPV0=nullptr;
 
         for (size_t nm=0; nm<nMarkCount; ++nm) {
-            const SdrMark* pM=GetSdrMarkByIndex(nm);
+            const SdrMark* pM=GetMarkedObjectList().GetMark(nm);
             const SdrObject* pObj=pM->GetMarkedSdrObj();
             const SdrPageView* pPV=pM->GetPageView();
             if (pPV!=pPV0) {
@@ -687,7 +687,7 @@ void SdrEditView::ForceMarkedObjToAnotherPage()
 {
     bool bFlg=false;
     for (size_t nm=0; nm<GetMarkedObjectCount(); ++nm) {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         tools::Rectangle aObjRect(pObj->GetCurrentBoundRect());
         tools::Rectangle aPgRect(pM->GetPageView()->GetPageRect());

@@ -100,7 +100,7 @@ void SdrEditView::SetMarkedObjRect(const tools::Rectangle& rRect)
 
     for (size_t nm=0; nm<nCount; ++nm)
     {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
         if (bUndo)
             AddUndo(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pO));
@@ -199,7 +199,7 @@ void SdrEditView::MoveMarkedObj(const Size& rSiz, bool bCopy)
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount; ++nm)
     {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
         if( bUndo )
         {
@@ -231,7 +231,7 @@ void SdrEditView::ResizeMarkedObj(const Point& rRef, const Fraction& xFact, cons
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount; ++nm)
     {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
         if( bUndo )
         {
@@ -260,7 +260,7 @@ void SdrEditView::ResizeMultMarkedObj(const Point& rRef,
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount; ++nm)
     {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
         if( bUndo )
         {
@@ -286,7 +286,7 @@ Degree100 SdrEditView::GetMarkedObjRotate() const
 
     if(GetMarkedObjectCount())
     {
-        SdrMark* pM = GetSdrMarkByIndex(0);
+        SdrMark* pM = GetMarkedObjectList().GetMark(0);
         SdrObject* pO = pM->GetMarkedSdrObj();
 
         nRetval = pO->GetRotateAngle();
@@ -319,7 +319,7 @@ void SdrEditView::RotateMarkedObj(const Point& rRef, Degree100 nAngle, bool bCop
 
         for(size_t nm = 0; nm < nMarkCount; ++nm)
         {
-            SdrMark* pM = GetSdrMarkByIndex(nm);
+            SdrMark* pM = GetMarkedObjectList().GetMark(nm);
             SdrObject* pO = pM->GetMarkedSdrObj();
 
             if( bUndo )
@@ -383,7 +383,7 @@ void SdrEditView::MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool b
 
         for(size_t nm = 0; nm < nMarkCount; ++nm)
         {
-            SdrMark* pM = GetSdrMarkByIndex(nm);
+            SdrMark* pM = GetMarkedObjectList().GetMark(nm);
             SdrObject* pO = pM->GetMarkedSdrObj();
 
             if( bUndo )
@@ -438,7 +438,7 @@ Degree100 SdrEditView::GetMarkedObjShear() const
     Degree100 nAngle(0);
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount && bOk; ++nm) {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
         Degree100 nAngle2=pO->GetShearAngle();
         if (b1st) nAngle=nAngle2;
@@ -471,7 +471,7 @@ void SdrEditView::ShearMarkedObj(const Point& rRef, Degree100 nAngle, bool bVShe
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount; ++nm)
     {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
         if( bUndo )
         {
@@ -586,7 +586,7 @@ void SdrEditView::CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookM
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount; ++nm)
     {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
         if (bUndo)
             AddUndo(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pO));
@@ -660,7 +660,7 @@ void SdrEditView::DistortMarkedObj(const tools::Rectangle& rRef, const XPolygon&
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount; ++nm)
     {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
         if (bUndo)
             AddUndo(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pO));
@@ -771,7 +771,7 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr)
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount; ++nm)
     {
-        const SdrMark* pM=GetSdrMarkByIndex(nm);
+        const SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         if (bUndo)
             AddUndo(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
@@ -807,7 +807,7 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr) const
     tools::Rectangle aLogicRect;
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount; ++nm) {
-        const SdrMark* pM=GetSdrMarkByIndex(nm);
+        const SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         const SdrObject* pObj=pM->GetMarkedSdrObj();
         if (nm==0) {
             nLayerId=pObj->GetLayer();
@@ -1153,7 +1153,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
 
     for (size_t nm=0; nm<nMarkCount; ++nm)
     {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pObj = pM->GetMarkedSdrObj();
 
         if( bUndo )
@@ -1282,7 +1282,7 @@ SfxStyleSheet* SdrEditView::GetStyleSheetFromMarked() const
     bool b1st=true;
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount; ++nm) {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SfxStyleSheet* pSS=pM->GetMarkedSdrObj()->GetStyleSheet();
         if (b1st) pRet=pSS;
         else if (pRet!=pSS) return nullptr; // different stylesheets
@@ -1312,7 +1312,7 @@ void SdrEditView::SetStyleSheetToMarked(SfxStyleSheet* pStyleSheet, bool bDontRe
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount; ++nm)
     {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         if( bUndo )
         {
             AddUndo(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pM->GetMarkedSdrObj()));
@@ -1926,7 +1926,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
     bool bHasFixed=false;
     for (size_t nm=0; nm<nMarkCount; ++nm)
     {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         SdrObjTransformInfoRec aInfo;
         pObj->TakeObjInfo(aInfo);
@@ -1969,7 +1969,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
     Point aCenter(aBound.Center());
     for (size_t nm=0; nm<nMarkCount; ++nm)
     {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         SdrObjTransformInfoRec aInfo;
         pObj->TakeObjInfo(aInfo);

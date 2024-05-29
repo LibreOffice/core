@@ -453,7 +453,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
 
             if (GetMarkedObjectCount() == 1)
             {
-                SdrMark* pMark = GetSdrMarkByIndex(0);
+                SdrMark* pMark = GetMarkedObjectList().GetMark(0);
                 SdrObject* pObj = pMark->GetMarkedSdrObj();
                 aRect.Union( pObj->GetLogicRect() );
             }
@@ -634,7 +634,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
 
             if( GetMarkedObjectCount() == 1 )
             {
-                SdrMark* pMark = GetSdrMarkByIndex(0);
+                SdrMark* pMark = GetMarkedObjectList().GetMark(0);
                 SdrObject* pObj = pMark->GetMarkedSdrObj();
                 aRect.Union( pObj->GetLogicRect() );
             }

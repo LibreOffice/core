@@ -821,7 +821,7 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
     else
         BegUndo(SvxResId(RID_SVX_3D_UNDO_LATHE));
 
-    SdrModel& rSdrModel(GetSdrMarkByIndex(0)->GetMarkedSdrObj()->getSdrModelFromSdrObject());
+    SdrModel& rSdrModel(GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj()->getSdrModelFromSdrObject());
 
     // Create a new scene for the created 3D object
     rtl::Reference<E3dScene> pScene = new E3dScene(rSdrModel);
@@ -879,7 +879,7 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
         // SnapRect extension enables mirroring in the axis of rotation
         for(size_t a=0; a<GetMarkedObjectCount(); ++a)
         {
-            SdrMark* pMark = GetSdrMarkByIndex(a);
+            SdrMark* pMark = GetMarkedObjectList().GetMark(a);
             SdrObject* pObj = pMark->GetMarkedSdrObj();
             tools::Rectangle aTurnRect = pObj->GetSnapRect();
             basegfx::B2DPoint aRot;
@@ -919,7 +919,7 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
     // Conversion to SdrPathObject, also fonts
     for(size_t a=0; a<GetMarkedObjectCount(); ++a)
     {
-        SdrMark* pMark = GetSdrMarkByIndex(a);
+        SdrMark* pMark = GetMarkedObjectList().GetMark(a);
         SdrObject* pObj = pMark->GetMarkedSdrObj();
 
         ImpCreate3DObject(pScene.get(), pObj, bExtrude, fDepth, aLatheMat);

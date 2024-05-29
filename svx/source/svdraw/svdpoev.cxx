@@ -74,7 +74,7 @@ void SdrPolyEditView::ImpCheckPolyPossibilities()
 
     for(size_t nMarkNum = 0; nMarkNum < nMarkCount; ++nMarkNum)
     {
-        SdrMark* pM = GetSdrMarkByIndex(nMarkNum);
+        SdrMark* pM = GetMarkedObjectList().GetMark(nMarkNum);
         CheckPolyPossibilitiesHelper( pM, b1stSmooth, b1stSegm, bCurve, bSmoothFuz, bSegmFuz, eSmooth );
     }
 }
@@ -202,7 +202,7 @@ void SdrPolyEditView::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
     for(size_t nMarkNum(nMarkCount); nMarkNum > 0;)
     {
         --nMarkNum;
-        SdrMark* pM = GetSdrMarkByIndex(nMarkNum);
+        SdrMark* pM = GetMarkedObjectList().GetMark(nMarkNum);
         SdrPathObj* pPath = dynamic_cast< SdrPathObj* >( pM->GetMarkedSdrObj() );
         if (!pPath)
             continue;
@@ -236,7 +236,7 @@ void SdrPolyEditView::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)
     for(size_t nMarkNum=nMarkCount; nMarkNum > 0;)
     {
         --nMarkNum;
-        SdrMark* pM = GetSdrMarkByIndex(nMarkNum);
+        SdrMark* pM = GetMarkedObjectList().GetMark(nMarkNum);
         SdrPathObj* pPath = dynamic_cast< SdrPathObj* >( pM->GetMarkedSdrObj() );
         if (!pPath)
             continue;
@@ -302,7 +302,7 @@ void SdrPolyEditView::DeleteMarkedPoints()
     for (size_t nMarkNum=nMarkCount; nMarkNum>0;)
     {
         --nMarkNum;
-        SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nMarkNum);
         SdrPathObj* pPath = dynamic_cast< SdrPathObj* >( pM->GetMarkedSdrObj() );
         if (!pPath)
             continue;
@@ -347,7 +347,7 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
     for(size_t nMarkNum = nMarkCount; nMarkNum > 0;)
     {
         --nMarkNum;
-        SdrMark* pM = GetSdrMarkByIndex(nMarkNum);
+        SdrMark* pM = GetMarkedObjectList().GetMark(nMarkNum);
         SdrPathObj* pObj = dynamic_cast<SdrPathObj*>( pM->GetMarkedSdrObj() );
         if (!pObj)
             continue;
@@ -414,7 +414,7 @@ bool SdrPolyEditView::IsRipUpAtMarkedPointsPossible() const
 
     for(size_t a = 0; a < nMarkCount; ++a)
     {
-        const SdrMark* pMark = GetSdrMarkByIndex(a);
+        const SdrMark* pMark = GetMarkedObjectList().GetMark(a);
         const SdrPathObj* pMarkedPathObject = dynamic_cast< const SdrPathObj* >(pMark->GetMarkedSdrObj());
 
         if (!pMarkedPathObject)
@@ -454,7 +454,7 @@ bool SdrPolyEditView::IsOpenCloseMarkedObjectsPossible() const
 
     for(size_t a = 0; a < nMarkCount; ++a)
     {
-        const SdrMark* pMark = GetSdrMarkByIndex(a);
+        const SdrMark* pMark = GetMarkedObjectList().GetMark(a);
         const SdrPathObj* pMarkedPathObject = dynamic_cast< const SdrPathObj* >(pMark->GetMarkedSdrObj());
 
         if(pMarkedPathObject)
@@ -485,7 +485,7 @@ SdrObjClosedKind SdrPolyEditView::GetMarkedObjectsClosedState() const
 
     for(size_t a = 0; !(bOpen && bClosed) && a < nMarkCount; ++a)
     {
-        const SdrMark* pMark = GetSdrMarkByIndex(a);
+        const SdrMark* pMark = GetMarkedObjectList().GetMark(a);
         const SdrPathObj* pMarkedPathObject = dynamic_cast< const SdrPathObj* >(pMark->GetMarkedSdrObj());
 
         if(pMarkedPathObject)
@@ -522,7 +522,7 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount; ++nm)
     {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrMark* pM=GetMarkedObjectList().GetMark(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         SdrPathObj* pPath=dynamic_cast<SdrPathObj*>( pObj );
         if (!pPath)

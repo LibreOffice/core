@@ -631,7 +631,7 @@ void OViewsWindow::collectRectangles(TRectangleMap& _rSortRectangles)
             const size_t nCount = rView.GetMarkedObjectCount();
             for (size_t i=0; i < nCount; ++i)
             {
-                const SdrMark* pM = rView.GetSdrMarkByIndex(i);
+                const SdrMark* pM = rView.GetMarkedObjectList().GetMark(i);
                 SdrObject* pObj = pM->GetMarkedSdrObj();
                 tools::Rectangle aObjRect(pObj->GetSnapRect());
                 _rSortRectangles.emplace(aObjRect,TRectangleMap::mapped_type(pObj,&rView));
@@ -1027,7 +1027,7 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
             const size_t nCount = rView.GetMarkedObjectCount();
             for (size_t i=0; i < nCount; ++i)
             {
-                const SdrMark* pM = rView.GetSdrMarkByIndex(i);
+                const SdrMark* pM = rView.GetMarkedObjectList().GetMark(i);
                 SdrObject* pObj = pM->GetMarkedSdrObj();
                 if (::std::find(m_aBegDragTempList.begin(),m_aBegDragTempList.end(),pObj) == m_aBegDragTempList.end())
                 {
