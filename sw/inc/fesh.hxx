@@ -297,7 +297,7 @@ public:
     /** Test if there is a draw object at that position and if it should be selected.
      The 'should' is aimed at Writer text fly frames which may be in front of
      the draw object. */
-    bool ShouldObjectBeSelected(const Point& rPt);
+    bool ShouldObjectBeSelected(const Point& rPt, bool *pSelectFrameInsteadOfCroppedImage = nullptr);
 
     bool MoveAnchor( SwMove nDir );
 
