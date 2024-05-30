@@ -3145,6 +3145,11 @@ void flushParagraph(
                     SvXMLElementExport Tab(rExport, XML_NAMESPACE_TEXT, XML_TAB, false, false);
                     break;
                 }
+                else if (p->Which() == EE_FEATURE_LINEBR)
+                {
+                    SvXMLElementExport L(rExport, XML_NAMESPACE_TEXT, XML_LINE_BREAK, false, false);
+                    break;
+                }
             }
         }
         else
