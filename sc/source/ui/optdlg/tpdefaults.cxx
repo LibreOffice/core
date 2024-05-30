@@ -18,13 +18,13 @@
 #include <config_features.h>
 
 ScTpDefaultsOptions::ScTpDefaultsOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rCoreSet)
-    : SfxTabPage(pPage, pController, "modules/scalc/ui/optdefaultpage.ui", "OptDefaultPage", &rCoreSet)
-    , m_xEdNSheets(m_xBuilder->weld_spin_button("sheetsnumber"))
-    , m_xEdNSheetsImg(m_xBuilder->weld_widget("locksheetsnumber"))
-    , m_xEdSheetPrefix(m_xBuilder->weld_entry("sheetprefix"))
-    , m_xEdSheetPrefixImg(m_xBuilder->weld_widget("locksheetprefix"))
-    , m_xEdJumboSheets(m_xBuilder->weld_check_button("jumbo_sheets"))
-    , m_xEdJumboSheetsImg(m_xBuilder->weld_widget("lockjumbo_sheets"))
+    : SfxTabPage(pPage, pController, u"modules/scalc/ui/optdefaultpage.ui"_ustr, u"OptDefaultPage"_ustr, &rCoreSet)
+    , m_xEdNSheets(m_xBuilder->weld_spin_button(u"sheetsnumber"_ustr))
+    , m_xEdNSheetsImg(m_xBuilder->weld_widget(u"locksheetsnumber"_ustr))
+    , m_xEdSheetPrefix(m_xBuilder->weld_entry(u"sheetprefix"_ustr))
+    , m_xEdSheetPrefixImg(m_xBuilder->weld_widget(u"locksheetprefix"_ustr))
+    , m_xEdJumboSheets(m_xBuilder->weld_check_button(u"jumbo_sheets"_ustr))
+    , m_xEdJumboSheetsImg(m_xBuilder->weld_widget(u"lockjumbo_sheets"_ustr))
 {
     m_xEdNSheets->connect_changed( LINK(this, ScTpDefaultsOptions, NumModifiedHdl) );
     m_xEdSheetPrefix->connect_changed( LINK(this, ScTpDefaultsOptions, PrefixModifiedHdl) );
@@ -47,7 +47,7 @@ std::unique_ptr<SfxTabPage> ScTpDefaultsOptions::Create(weld::Container* pPage, 
 OUString ScTpDefaultsOptions::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label1", "textsheetsnumber", "textsheetprefix" };
+    OUString labels[] = { u"label1"_ustr, u"textsheetsnumber"_ustr, u"textsheetprefix"_ustr };
 
     for (const auto& label : labels)
     {

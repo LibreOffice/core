@@ -29,13 +29,13 @@
 
 ScTpPrintOptions::ScTpPrintOptions( weld::Container* pPage, weld::DialogController* pController,
                                     const SfxItemSet& rCoreAttrs )
-    : SfxTabPage(pPage, pController, "modules/scalc/ui/optdlg.ui", "optCalcPrintPage", &rCoreAttrs )
-    , m_xSkipEmptyPagesCB(m_xBuilder->weld_check_button("suppressCB"))
-    , m_xSkipEmptyPagesImg(m_xBuilder->weld_widget("locksuppressCB"))
-    , m_xSelectedSheetsCB(m_xBuilder->weld_check_button("printCB"))
-    , m_xSelectedSheetsImg(m_xBuilder->weld_widget("lockprintCB"))
-    , m_xForceBreaksCB(m_xBuilder->weld_check_button("forceBreaksCB"))
-    , m_xForceBreaksImg(m_xBuilder->weld_widget("lockforceBreaksCB"))
+    : SfxTabPage(pPage, pController, u"modules/scalc/ui/optdlg.ui"_ustr, u"optCalcPrintPage"_ustr, &rCoreAttrs )
+    , m_xSkipEmptyPagesCB(m_xBuilder->weld_check_button(u"suppressCB"_ustr))
+    , m_xSkipEmptyPagesImg(m_xBuilder->weld_widget(u"locksuppressCB"_ustr))
+    , m_xSelectedSheetsCB(m_xBuilder->weld_check_button(u"printCB"_ustr))
+    , m_xSelectedSheetsImg(m_xBuilder->weld_widget(u"lockprintCB"_ustr))
+    , m_xForceBreaksCB(m_xBuilder->weld_check_button(u"forceBreaksCB"_ustr))
+    , m_xForceBreaksImg(m_xBuilder->weld_widget(u"lockforceBreaksCB"_ustr))
 {
 }
 
@@ -96,7 +96,7 @@ void ScTpPrintOptions::Reset( const SfxItemSet* rCoreSet )
 OUString ScTpPrintOptions::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label1", "label2" };
+    OUString labels[] = { u"label1"_ustr, u"label2"_ustr };
 
     for (const auto& label : labels)
     {
@@ -104,7 +104,7 @@ OUString ScTpPrintOptions::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString checkButton[] = { "suppressCB", "forceBreaksCB", "printCB" };
+    OUString checkButton[] = { u"suppressCB"_ustr, u"forceBreaksCB"_ustr, u"printCB"_ustr };
 
     for (const auto& check : checkButton)
     {

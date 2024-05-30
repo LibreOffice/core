@@ -33,47 +33,47 @@
 #include <tpcalc.hxx>
 
 ScTpCalcOptions::ScTpCalcOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
-    : SfxTabPage(pPage, pController, "modules/scalc/ui/optcalculatepage.ui", "OptCalculatePage", &rCoreAttrs)
+    : SfxTabPage(pPage, pController, u"modules/scalc/ui/optcalculatepage.ui"_ustr, u"OptCalculatePage"_ustr, &rCoreAttrs)
     , pOldOptions(new ScDocOptions(
         rCoreAttrs.Get(SID_SCDOCOPTIONS).GetDocOptions()))
     , pLocalOptions(new ScDocOptions)
-    , m_xBtnIterate(m_xBuilder->weld_check_button("iterate"))
-    , m_xBtnIterateImg(m_xBuilder->weld_widget("lockiterate"))
-    , m_xFtSteps(m_xBuilder->weld_label("stepsft"))
-    , m_xEdSteps(m_xBuilder->weld_spin_button("steps"))
-    , m_xEdStepsImg(m_xBuilder->weld_widget("locksteps"))
-    , m_xFtEps(m_xBuilder->weld_label("minchangeft"))
-    , m_xEdEps(new ScDoubleField(m_xBuilder->weld_entry("minchange")))
-    , m_xEdEpsImg(m_xBuilder->weld_widget("lockminchange"))
-    , m_xBtnDateStd(m_xBuilder->weld_radio_button("datestd"))
-    , m_xBtnDateSc10(m_xBuilder->weld_radio_button("datesc10"))
-    , m_xBtnDate1904(m_xBuilder->weld_radio_button("date1904"))
-    , m_xDateImg(m_xBuilder->weld_widget("lockdate"))
-    , m_xBtnCase(m_xBuilder->weld_check_button("case"))
-    , m_xBtnCaseImg(m_xBuilder->weld_widget("lockcase"))
-    , m_xBtnCalc(m_xBuilder->weld_check_button("calc"))
-    , m_xBtnCalcImg(m_xBuilder->weld_widget("lockcalc"))
-    , m_xBtnMatch(m_xBuilder->weld_check_button("match"))
-    , m_xBtnMatchImg(m_xBuilder->weld_widget("lockmatch"))
-    , m_xBtnWildcards(m_xBuilder->weld_radio_button("formulawildcards"))
-    , m_xBtnRegex(m_xBuilder->weld_radio_button("formularegex"))
-    , m_xBtnLiteral(m_xBuilder->weld_radio_button("formulaliteral"))
-    , m_xFormulaImg(m_xBuilder->weld_widget("lockformulawild"))
-    , m_xBtnLookUp(m_xBuilder->weld_check_button("lookup"))
-    , m_xBtnLookUpImg(m_xBuilder->weld_widget("locklookup"))
-    , m_xBtnGeneralPrec(m_xBuilder->weld_check_button("generalprec"))
-    , m_xBtnGeneralPrecImg(m_xBuilder->weld_widget("lockgeneralprec"))
-    , m_xFtPrec(m_xBuilder->weld_label("precft"))
-    , m_xEdPrec(m_xBuilder->weld_spin_button("prec"))
-    , m_xEdPrecImg(m_xBuilder->weld_widget("lockprec"))
-    , m_xBtnThread(m_xBuilder->weld_check_button("threadingenabled"))
-    , m_xBtnThreadImg(m_xBuilder->weld_widget("lockthreadingenabled"))
+    , m_xBtnIterate(m_xBuilder->weld_check_button(u"iterate"_ustr))
+    , m_xBtnIterateImg(m_xBuilder->weld_widget(u"lockiterate"_ustr))
+    , m_xFtSteps(m_xBuilder->weld_label(u"stepsft"_ustr))
+    , m_xEdSteps(m_xBuilder->weld_spin_button(u"steps"_ustr))
+    , m_xEdStepsImg(m_xBuilder->weld_widget(u"locksteps"_ustr))
+    , m_xFtEps(m_xBuilder->weld_label(u"minchangeft"_ustr))
+    , m_xEdEps(new ScDoubleField(m_xBuilder->weld_entry(u"minchange"_ustr)))
+    , m_xEdEpsImg(m_xBuilder->weld_widget(u"lockminchange"_ustr))
+    , m_xBtnDateStd(m_xBuilder->weld_radio_button(u"datestd"_ustr))
+    , m_xBtnDateSc10(m_xBuilder->weld_radio_button(u"datesc10"_ustr))
+    , m_xBtnDate1904(m_xBuilder->weld_radio_button(u"date1904"_ustr))
+    , m_xDateImg(m_xBuilder->weld_widget(u"lockdate"_ustr))
+    , m_xBtnCase(m_xBuilder->weld_check_button(u"case"_ustr))
+    , m_xBtnCaseImg(m_xBuilder->weld_widget(u"lockcase"_ustr))
+    , m_xBtnCalc(m_xBuilder->weld_check_button(u"calc"_ustr))
+    , m_xBtnCalcImg(m_xBuilder->weld_widget(u"lockcalc"_ustr))
+    , m_xBtnMatch(m_xBuilder->weld_check_button(u"match"_ustr))
+    , m_xBtnMatchImg(m_xBuilder->weld_widget(u"lockmatch"_ustr))
+    , m_xBtnWildcards(m_xBuilder->weld_radio_button(u"formulawildcards"_ustr))
+    , m_xBtnRegex(m_xBuilder->weld_radio_button(u"formularegex"_ustr))
+    , m_xBtnLiteral(m_xBuilder->weld_radio_button(u"formulaliteral"_ustr))
+    , m_xFormulaImg(m_xBuilder->weld_widget(u"lockformulawild"_ustr))
+    , m_xBtnLookUp(m_xBuilder->weld_check_button(u"lookup"_ustr))
+    , m_xBtnLookUpImg(m_xBuilder->weld_widget(u"locklookup"_ustr))
+    , m_xBtnGeneralPrec(m_xBuilder->weld_check_button(u"generalprec"_ustr))
+    , m_xBtnGeneralPrecImg(m_xBuilder->weld_widget(u"lockgeneralprec"_ustr))
+    , m_xFtPrec(m_xBuilder->weld_label(u"precft"_ustr))
+    , m_xEdPrec(m_xBuilder->weld_spin_button(u"prec"_ustr))
+    , m_xEdPrecImg(m_xBuilder->weld_widget(u"lockprec"_ustr))
+    , m_xBtnThread(m_xBuilder->weld_check_button(u"threadingenabled"_ustr))
+    , m_xBtnThreadImg(m_xBuilder->weld_widget(u"lockthreadingenabled"_ustr))
 {
     Init();
     SetExchangeSupport();
 
     css::uno::Reference < css::uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
-    m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, "*");
+    m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, u"*"_ustr);
 }
 
 ScTpCalcOptions::~ScTpCalcOptions()
@@ -249,7 +249,7 @@ OUString ScTpCalcOptions::GetAllStrings()
 {
     OUString sAllStrings;
     OUString labels[]
-        = { "label5", "label1", "precft", "label2", "stepsft", "minchangeft", "label4", "label3" };
+        = { u"label5"_ustr, u"label1"_ustr, u"precft"_ustr, u"label2"_ustr, u"stepsft"_ustr, u"minchangeft"_ustr, u"label4"_ustr, u"label3"_ustr };
 
     for (const auto& label : labels)
     {
@@ -258,7 +258,7 @@ OUString ScTpCalcOptions::GetAllStrings()
     }
 
     OUString checkButton[]
-        = { "case", "calc", "match", "lookup", "generalprec", "iterate", "threadingenabled" };
+        = { u"case"_ustr, u"calc"_ustr, u"match"_ustr, u"lookup"_ustr, u"generalprec"_ustr, u"iterate"_ustr, u"threadingenabled"_ustr };
 
     for (const auto& check : checkButton)
     {
@@ -266,8 +266,8 @@ OUString ScTpCalcOptions::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString radioButton[] = { "formulawildcards", "formularegex", "formulaliteral",
-                               "datestd",          "datesc10",     "date1904" };
+    OUString radioButton[] = { u"formulawildcards"_ustr, u"formularegex"_ustr, u"formulaliteral"_ustr,
+                               u"datestd"_ustr,          u"datesc10"_ustr,     u"date1904"_ustr };
 
     for (const auto& radio : radioButton)
     {

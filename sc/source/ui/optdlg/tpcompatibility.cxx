@@ -18,11 +18,11 @@
 #include <optutil.hxx>
 
 ScTpCompatOptions::ScTpCompatOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rCoreAttrs)
-    : SfxTabPage(pPage, pController, "modules/scalc/ui/optcompatibilitypage.ui", "OptCompatibilityPage", &rCoreAttrs)
-    , m_xLbKeyBindings(m_xBuilder->weld_combo_box("keybindings"))
-    , m_xLbKeyBindingsImg(m_xBuilder->weld_widget("lockkeybindings"))
-    , m_xBtnLink(m_xBuilder->weld_check_button("cellLinkCB"))
-    , m_xBtnLinkImg(m_xBuilder->weld_widget("lockcellLinkCB"))
+    : SfxTabPage(pPage, pController, u"modules/scalc/ui/optcompatibilitypage.ui"_ustr, u"OptCompatibilityPage"_ustr, &rCoreAttrs)
+    , m_xLbKeyBindings(m_xBuilder->weld_combo_box(u"keybindings"_ustr))
+    , m_xLbKeyBindingsImg(m_xBuilder->weld_widget(u"lockkeybindings"_ustr))
+    , m_xBtnLink(m_xBuilder->weld_check_button(u"cellLinkCB"_ustr))
+    , m_xBtnLinkImg(m_xBuilder->weld_widget(u"lockcellLinkCB"_ustr))
 {
 }
 
@@ -38,7 +38,7 @@ std::unique_ptr<SfxTabPage> ScTpCompatOptions::Create(weld::Container* pPage, we
 OUString ScTpCompatOptions::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label1", "label2" };
+    OUString labels[] = { u"label1"_ustr, u"label2"_ustr };
 
     for (const auto& label : labels)
     {

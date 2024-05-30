@@ -57,14 +57,14 @@ sal_Int32 toSelectedItem( formula::FormulaGrammar::AddressConvention eConv )
 }
 
 ScCalcOptionsDialog::ScCalcOptionsDialog(weld::Window* pParent, const ScCalcConfig& rConfig, bool bWriteConfig)
-    : GenericDialogController(pParent, "modules/scalc/ui/formulacalculationoptions.ui", "FormulaCalculationOptions")
+    : GenericDialogController(pParent, u"modules/scalc/ui/formulacalculationoptions.ui"_ustr, u"FormulaCalculationOptions"_ustr)
     , maConfig(rConfig)
     , mbSelectedEmptyStringAsZero(rConfig.mbEmptyStringAsZero)
     , mbWriteConfig(bWriteConfig)
-    , mxEmptyAsZero(m_xBuilder->weld_check_button("checkEmptyAsZero"))
-    , mxConversion(m_xBuilder->weld_combo_box("comboConversion"))
-    , mxCurrentDocOnly(m_xBuilder->weld_check_button("current_doc"))
-    , mxSyntax(m_xBuilder->weld_combo_box("comboSyntaxRef"))
+    , mxEmptyAsZero(m_xBuilder->weld_check_button(u"checkEmptyAsZero"_ustr))
+    , mxConversion(m_xBuilder->weld_combo_box(u"comboConversion"_ustr))
+    , mxCurrentDocOnly(m_xBuilder->weld_check_button(u"current_doc"_ustr))
+    , mxSyntax(m_xBuilder->weld_combo_box(u"comboSyntaxRef"_ustr))
 {
     mxConversion->set_active(static_cast<int>(rConfig.meStringConversion));
     mxConversion->connect_changed(LINK(this, ScCalcOptionsDialog, ConversionModifiedHdl));

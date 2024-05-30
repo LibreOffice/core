@@ -49,20 +49,20 @@ const sal_Unicode cDelimiter = ',';
 
 ScTpUserLists::ScTpUserLists( weld::Container* pPage, weld::DialogController* pController,
                               const SfxItemSet&     rCoreAttrs )
-    : SfxTabPage(pPage, pController, "modules/scalc/ui/optsortlists.ui", "OptSortLists",
+    : SfxTabPage(pPage, pController, u"modules/scalc/ui/optsortlists.ui"_ustr, u"OptSortLists"_ustr,
                           &rCoreAttrs )
-    , mxFtLists(m_xBuilder->weld_label("listslabel"))
-    , mxLbLists(m_xBuilder->weld_tree_view("lists"))
-    , mxFtEntries(m_xBuilder->weld_label("entrieslabel"))
-    , mxEdEntries(m_xBuilder->weld_text_view("entries"))
-    , mxFtCopyFrom(m_xBuilder->weld_label("copyfromlabel"))
-    , mxEdCopyFrom(m_xBuilder->weld_entry("copyfrom"))
-    , mxBtnNew(m_xBuilder->weld_button("new"))
-    , mxBtnDiscard(m_xBuilder->weld_button("discard"))
-    , mxBtnAdd(m_xBuilder->weld_button("add"))
-    , mxBtnModify(m_xBuilder->weld_button("modify"))
-    , mxBtnRemove(m_xBuilder->weld_button("delete"))
-    , mxBtnCopy(m_xBuilder->weld_button("copy"))
+    , mxFtLists(m_xBuilder->weld_label(u"listslabel"_ustr))
+    , mxLbLists(m_xBuilder->weld_tree_view(u"lists"_ustr))
+    , mxFtEntries(m_xBuilder->weld_label(u"entrieslabel"_ustr))
+    , mxEdEntries(m_xBuilder->weld_text_view(u"entries"_ustr))
+    , mxFtCopyFrom(m_xBuilder->weld_label(u"copyfromlabel"_ustr))
+    , mxEdCopyFrom(m_xBuilder->weld_entry(u"copyfrom"_ustr))
+    , mxBtnNew(m_xBuilder->weld_button(u"new"_ustr))
+    , mxBtnDiscard(m_xBuilder->weld_button(u"discard"_ustr))
+    , mxBtnAdd(m_xBuilder->weld_button(u"add"_ustr))
+    , mxBtnModify(m_xBuilder->weld_button(u"modify"_ustr))
+    , mxBtnRemove(m_xBuilder->weld_button(u"delete"_ustr))
+    , mxBtnCopy(m_xBuilder->weld_button(u"copy"_ustr))
     , aStrQueryRemove ( ScResId( STR_QUERYREMOVE ) )
     , aStrCopyList    ( ScResId( STR_COPYLIST ) )
     , aStrCopyFrom    ( ScResId( STR_COPYFROM ) )
@@ -190,7 +190,7 @@ void ScTpUserLists::Reset( const SfxItemSet* rCoreAttrs )
 OUString ScTpUserLists::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "listslabel", "entrieslabel", "copyfromlabel" };
+    OUString labels[] = { u"listslabel"_ustr, u"entrieslabel"_ustr, u"copyfromlabel"_ustr };
 
     for (const auto& label : labels)
     {
@@ -198,7 +198,7 @@ OUString ScTpUserLists::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString buttons[] = { "new", "discard", "add", "modify", "delete", "copy" };
+    OUString buttons[] = { u"new"_ustr, u"discard"_ustr, u"add"_ustr, u"modify"_ustr, u"delete"_ustr, u"copy"_ustr };
 
     for (const auto& btn : buttons)
     {

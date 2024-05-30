@@ -30,19 +30,19 @@
 #include <opredlin.hxx>
 
 ScRedlineOptionsTabPage::ScRedlineOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "modules/scalc/ui/optchangespage.ui", "OptChangesPage", &rSet)
-    , m_xContentColorLB(new ColorListBox(m_xBuilder->weld_menu_button("changes"),
+    : SfxTabPage(pPage, pController, u"modules/scalc/ui/optchangespage.ui"_ustr, u"OptChangesPage"_ustr, &rSet)
+    , m_xContentColorLB(new ColorListBox(m_xBuilder->weld_menu_button(u"changes"_ustr),
                 [this]{ return GetDialogController()->getDialog(); }))
-    , m_xContentColorImg(m_xBuilder->weld_widget("lockchanges"))
-    , m_xRemoveColorLB(new ColorListBox(m_xBuilder->weld_menu_button("deletions"),
+    , m_xContentColorImg(m_xBuilder->weld_widget(u"lockchanges"_ustr))
+    , m_xRemoveColorLB(new ColorListBox(m_xBuilder->weld_menu_button(u"deletions"_ustr),
                 [this]{ return GetDialogController()->getDialog(); }))
-    , m_xRemoveColorImg(m_xBuilder->weld_widget("lockdeletions"))
-    , m_xInsertColorLB(new ColorListBox(m_xBuilder->weld_menu_button("entries"),
+    , m_xRemoveColorImg(m_xBuilder->weld_widget(u"lockdeletions"_ustr))
+    , m_xInsertColorLB(new ColorListBox(m_xBuilder->weld_menu_button(u"entries"_ustr),
                 [this]{ return GetDialogController()->getDialog(); }))
-    , m_xInsertColorImg(m_xBuilder->weld_widget("lockentries"))
-    , m_xMoveColorLB(new ColorListBox(m_xBuilder->weld_menu_button("insertions"),
+    , m_xInsertColorImg(m_xBuilder->weld_widget(u"lockentries"_ustr))
+    , m_xMoveColorLB(new ColorListBox(m_xBuilder->weld_menu_button(u"insertions"_ustr),
                 [this]{ return GetDialogController()->getDialog(); }))
-    , m_xMoveColorImg(m_xBuilder->weld_widget("lockinsertions"))
+    , m_xMoveColorImg(m_xBuilder->weld_widget(u"lockinsertions"_ustr))
 {
     m_xContentColorLB->SetSlotId(SID_AUTHOR_COLOR);
     m_xRemoveColorLB->SetSlotId(SID_AUTHOR_COLOR);
@@ -66,7 +66,7 @@ std::unique_ptr<SfxTabPage> ScRedlineOptionsTabPage::Create( weld::Container* pP
 OUString ScRedlineOptionsTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label1", "label2", "label3", "label4", "label5" };
+    OUString labels[] = { u"label1"_ustr, u"label2"_ustr, u"label3"_ustr, u"label4"_ustr, u"label5"_ustr };
 
     for (const auto& label : labels)
     {
