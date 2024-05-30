@@ -20,7 +20,7 @@ class SdImportTestSkia : public SdModelTestBase
 {
 public:
     SdImportTestSkia()
-        : SdModelTestBase("/sd/qa/unit/data/")
+        : SdModelTestBase(u"/sd/qa/unit/data/"_ustr)
     {
     }
 };

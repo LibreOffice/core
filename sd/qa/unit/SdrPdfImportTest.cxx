@@ -70,7 +70,7 @@ class SdrPdfImportTest : public UnoApiTest
 {
 public:
     SdrPdfImportTest()
-        : UnoApiTest("/sd/qa/unit/data/")
+        : UnoApiTest(u"/sd/qa/unit/data/"_ustr)
     {
     }
 };
@@ -140,7 +140,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportSimpleText)
     OutlinerParaObject* pOutlinerParagraphObject = pTextObject->GetOutlinerParaObject();
     const EditTextObject& aEdit = pOutlinerParagraphObject->GetTextObject();
     OUString sText = aEdit.GetText(0);
-    CPPUNIT_ASSERT_EQUAL(OUString("This is PDF!"), sText);
+    CPPUNIT_ASSERT_EQUAL(u"This is PDF!"_ustr, sText);
 }
 
 CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
@@ -213,10 +213,10 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
     { // save as PDF and check annotations
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
         utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+        aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
         uno::Sequence<beans::PropertyValue> aFilterData(
             comphelper::InitPropertySequence({ { "ExportBookmarks", uno::Any(true) } }));
-        aMediaDescriptor["FilterData"] <<= aFilterData;
+        aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
         xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
         // Check PDF for annotations
@@ -258,12 +258,12 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
         CPPUNIT_ASSERT_DOUBLES_EQUAL(90.33, xAnnotation->getPosition().X, 1E-3);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(12.07, xAnnotation->getPosition().Y, 1E-3);
 
-        CPPUNIT_ASSERT_EQUAL(OUString("TheAuthor"), xAnnotation->getAuthor());
+        CPPUNIT_ASSERT_EQUAL(u"TheAuthor"_ustr, xAnnotation->getAuthor());
         CPPUNIT_ASSERT_EQUAL(OUString(), xAnnotation->getInitials());
 
         auto xText = xAnnotation->getTextRange();
 
-        CPPUNIT_ASSERT_EQUAL(OUString("This is the annotation text!"), xText->getString());
+        CPPUNIT_ASSERT_EQUAL(u"This is the annotation text!"_ustr, xText->getString());
 
         auto aDateTime = xAnnotation->getDateTime();
         CPPUNIT_ASSERT_EQUAL(sal_Int16(2020), aDateTime.Year);

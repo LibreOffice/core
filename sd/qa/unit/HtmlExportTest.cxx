@@ -16,14 +16,14 @@ class SdHTMLFilterTest : public UnoApiXmlTest, public HtmlTestTools
 {
 public:
     SdHTMLFilterTest()
-        : UnoApiXmlTest("/sd/qa/unit/data/")
+        : UnoApiXmlTest(u"/sd/qa/unit/data/"_ustr)
     {
     }
 
     void testHTMLExport()
     {
         loadFromFile(u"HtmlExportTestDocument.odp");
-        save("impress_html_Export");
+        save(u"impress_html_Export"_ustr);
         htmlDocUniquePtr htmlDoc = parseHtml(maTempFile);
 
         assertXPath(htmlDoc, "/html"_ostr, 1);
@@ -34,17 +34,18 @@ public:
         assertXPath(htmlDoc, "/html/body/ul"_ostr, 1);
         assertXPath(htmlDoc, "/html/body/ul/li"_ostr, 2);
 
-        assertXPath(htmlDoc, "/html/head/meta[1]"_ostr, "content"_ostr, "text/html; charset=utf-8");
-        assertXPath(htmlDoc, "/html/head/meta[2]"_ostr, "name"_ostr, "generator");
-        assertXPath(htmlDoc, "/html/head/meta[3]"_ostr, "name"_ostr, "created");
+        assertXPath(htmlDoc, "/html/head/meta[1]"_ostr, "content"_ostr,
+                    u"text/html; charset=utf-8"_ustr);
+        assertXPath(htmlDoc, "/html/head/meta[2]"_ostr, "name"_ostr, u"generator"_ustr);
+        assertXPath(htmlDoc, "/html/head/meta[3]"_ostr, "name"_ostr, u"created"_ustr);
         assertXPath(htmlDoc, "/html/head/meta[3]"_ostr, "content"_ostr,
-                    "2014-04-09T17:05:41.987922038");
+                    u"2014-04-09T17:05:41.987922038"_ustr);
     }
 
     void testTdf154989()
     {
         loadFromFile(u"tdf154989.odg");
-        save("XHTML Draw File");
+        save(u"XHTML Draw File"_ustr);
         xmlDocUniquePtr pXmlDoc = parseXml(maTempFile);
 
         assertXPath(pXmlDoc, "/xhtml:html"_ostr, 1);
@@ -57,13 +58,13 @@ public:
         // not sure if the order of these is stable?
         assertXPathContent(
             pXmlDoc, "/xhtml:html/xhtml:body/xhtml:div[1]/xhtml:div[2]/xhtml:div/xhtml:p"_ostr,
-            "before");
+            u"before"_ustr);
         assertXPathContent(
             pXmlDoc, "/xhtml:html/xhtml:body/xhtml:div[1]/xhtml:div[3]/xhtml:div/xhtml:p"_ostr,
-            "above");
+            u"above"_ustr);
         assertXPathContent(
             pXmlDoc, "/xhtml:html/xhtml:body/xhtml:div[1]/xhtml:div[4]/xhtml:div/xhtml:p"_ostr,
-            "below");
+            u"below"_ustr);
     }
 
     CPPUNIT_TEST_SUITE(SdHTMLFilterTest);

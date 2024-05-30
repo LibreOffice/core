@@ -31,7 +31,7 @@ public:
 };
 
 Test::Test()
-    : UnoApiXmlTest("/sd/qa/filter/eppt/data/")
+    : UnoApiXmlTest(u"/sd/qa/filter/eppt/data/"_ustr)
 {
 }
 
@@ -39,7 +39,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOOXMLCustomShapeBitmapFill)
 {
     // Save the bugdoc to PPT.
     loadFromFile(u"custom-shape-bitmap-fill.pptx");
-    saveAndReload("MS PowerPoint 97");
+    saveAndReload(u"MS PowerPoint 97"_ustr);
 
     // Check if the bitmap shape was lost.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
@@ -50,14 +50,13 @@ CPPUNIT_TEST_FIXTURE(Test, testOOXMLCustomShapeBitmapFill)
     // - Expected: com.sun.star.drawing.GraphicObjectShape
     // - Actual  : com.sun.star.drawing.CustomShape
     // i.e. the custom shape geometry was kept, but the actual bitmap was lost.
-    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GraphicObjectShape"),
-                         xShape->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.GraphicObjectShape"_ustr, xShape->getShapeType());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
 {
     // Given a document with a master slide and a theme, lt1 is set to 0x000002:
-    mxComponent = loadFromDesktop("private:factory/simpress");
+    mxComponent = loadFromDesktop(u"private:factory/simpress"_ustr);
     {
         uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<drawing::XMasterPageTarget> xDrawPage(
@@ -80,16 +79,16 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
         pColorSet->add(model::ThemeColorType::FollowedHyperlink, 0xcccccc);
         pTheme->setColorSet(pColorSet);
 
-        xMasterPage->setPropertyValue("Theme", uno::Any(model::theme::createXTheme(pTheme)));
+        xMasterPage->setPropertyValue(u"Theme"_ustr, uno::Any(model::theme::createXTheme(pTheme)));
     }
 
     // Export to PPTX and load again:
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
 
     // Verify that this color is not lost:
-    xmlDocUniquePtr pXmlDoc = parseExport("ppt/theme/theme1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/theme/theme1.xml"_ustr);
     assertXPath(pXmlDoc, "//a:clrScheme/a:lt1/a:srgbClr"_ostr, "val"_ostr,
-                "222222"); // expected color 22-22-22
+                u"222222"_ustr); // expected color 22-22-22
 
     // Check the theme after loading again
     {
@@ -97,17 +96,18 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
         uno::Reference<drawing::XMasterPageTarget> xDrawPage(
             xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
-        uno::Reference<util::XTheme> xTheme(xMasterPage->getPropertyValue("Theme"), uno::UNO_QUERY);
+        uno::Reference<util::XTheme> xTheme(xMasterPage->getPropertyValue(u"Theme"_ustr),
+                                            uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(true, xTheme.is());
 
         auto* pUnoTheme = dynamic_cast<UnoTheme*>(xTheme.get());
         CPPUNIT_ASSERT(pUnoTheme);
         auto pTheme = pUnoTheme->getTheme();
 
-        CPPUNIT_ASSERT_EQUAL(OUString("mytheme"), pTheme->GetName());
-        CPPUNIT_ASSERT_EQUAL(OUString("mycolorscheme"), pTheme->getColorSet()->getName());
-        CPPUNIT_ASSERT_EQUAL(OUString("Office"), pTheme->getFontScheme().getName());
-        CPPUNIT_ASSERT_EQUAL(OUString(""), pTheme->getFormatScheme().getName());
+        CPPUNIT_ASSERT_EQUAL(u"mytheme"_ustr, pTheme->GetName());
+        CPPUNIT_ASSERT_EQUAL(u"mycolorscheme"_ustr, pTheme->getColorSet()->getName());
+        CPPUNIT_ASSERT_EQUAL(u"Office"_ustr, pTheme->getFontScheme().getName());
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, pTheme->getFormatScheme().getName());
     }
 }
 
@@ -117,16 +117,16 @@ CPPUNIT_TEST_FIXTURE(Test, testLoopingFromAnimation)
     loadFromFile(u"video-loop.pptx");
 
     // When exporting that to PPTX:
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
     // Then make sure that the "infinite" repeat count is written:
-    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     // Without the fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0
     // - In <>, XPath '//p:cMediaNode/p:cTn' number of nodes is incorrect
     // i.e. the media node was lost on export, the video no longer looped.
-    assertXPath(pXmlDoc, "//p:cMediaNode/p:cTn"_ostr, "repeatCount"_ostr, "indefinite");
+    assertXPath(pXmlDoc, "//p:cMediaNode/p:cTn"_ostr, "repeatCount"_ostr, u"indefinite"_ustr);
 }
 }
 

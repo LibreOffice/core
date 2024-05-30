@@ -98,7 +98,7 @@ protected:
 };
 
 SdTiledRenderingTest::SdTiledRenderingTest()
-    : UnoApiXmlTest("/sd/qa/unit/tiledrendering/data/"),
+    : UnoApiXmlTest(u"/sd/qa/unit/tiledrendering/data/"_ustr),
       m_bFound(true),
       m_nPart(0),
       m_nSelectionBeforeSearchResult(0),
@@ -311,7 +311,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPostKeyEvent)
     SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObject);
     SdrView* pView = pViewShell->GetView();
     pView->MarkObj(pTextObj, pView->GetSdrPageView());
-    SfxStringItem aInputString(SID_ATTR_CHAR, "x");
+    SfxStringItem aInputString(SID_ATTR_CHAR, u"x"_ustr);
     pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_CHAR,
             SfxCallMode::SYNCHRON, { &aInputString });
 
@@ -326,7 +326,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPostKeyEvent)
     ESelection aWordSelection(0, 0, 0, 2); // start para, start char, end para, end char.
     rEditView.SetSelection(aWordSelection);
     // Did we enter the expected character?
-    CPPUNIT_ASSERT_EQUAL(OUString("xx"), rEditView.GetSelected());
+    CPPUNIT_ASSERT_EQUAL(u"xx"_ustr, rEditView.GetSelected());
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPostMouseEvent)
@@ -339,7 +339,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPostMouseEvent)
     SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObject);
     SdrView* pView = pViewShell->GetView();
     pView->MarkObj(pTextObj, pView->GetSdrPageView());
-    SfxStringItem aInputString(SID_ATTR_CHAR, "x");
+    SfxStringItem aInputString(SID_ATTR_CHAR, u"x"_ustr);
     pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_CHAR,
             SfxCallMode::SYNCHRON, { &aInputString });
     CPPUNIT_ASSERT(pView->GetTextEditObject());
@@ -367,7 +367,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSetTextSelection)
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    xShape->setString("Aaa bbb.");
+    xShape->setString(u"Aaa bbb."_ustr);
     // Create a selection on the second word.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -379,7 +379,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSetTextSelection)
     ESelection aWordSelection(0, 4, 0, 7);
     rEditView.SetSelection(aWordSelection);
     // Did we indeed manage to select the second word?
-    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), rEditView.GetSelected());
+    CPPUNIT_ASSERT_EQUAL(u"bbb"_ustr, rEditView.GetSelected());
 
     // Now use setTextSelection() to move the end of the selection 1000 twips right.
     vcl::Cursor* pCursor = rEditView.GetCursor();
@@ -387,7 +387,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSetTextSelection)
     aEnd.setX(aEnd.getX() + 1000);
     pXImpressDocument->setTextSelection(LOK_SETTEXTSELECTION_END, aEnd.getX(), aEnd.getY());
     // The new selection must include the ending dot, too -- but not the first word.
-    CPPUNIT_ASSERT_EQUAL(OUString("bbb."), rEditView.GetSelected());
+    CPPUNIT_ASSERT_EQUAL(u"bbb."_ustr, rEditView.GetSelected());
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testGetTextSelection)
@@ -395,7 +395,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testGetTextSelection)
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    xShape->setString("Shape");
+    xShape->setString(u"Shape"_ustr);
     // Create a selection on the shape text.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -457,7 +457,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testUndoShells)
         {"AttributePageSize.Width", uno::Any(static_cast<sal_Int32>(10000))},
         {"AttributePageSize.Height", uno::Any(static_cast<sal_Int32>(10000))},
     }));
-    dispatchCommand(mxComponent, ".uno:AttributePageSize", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:AttributePageSize"_ustr, aPropertyValues);
 
     // Assert that view shell ID tracking works for SdUndoAction subclasses.
     SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
@@ -473,7 +473,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResetSelection)
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    xShape->setString("Aaa bbb.");
+    xShape->setString(u"Aaa bbb."_ustr);
     // Create a selection on the second word.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -485,7 +485,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResetSelection)
     ESelection aWordSelection(0, 4, 0, 7);
     rEditView.SetSelection(aWordSelection);
     // Did we indeed manage to select the second word?
-    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), rEditView.GetSelected());
+    CPPUNIT_ASSERT_EQUAL(u"bbb"_ustr, rEditView.GetSelected());
 
     // Now use resetSelection() to reset the selection.
     pXImpressDocument->resetSelection();
@@ -522,13 +522,13 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertDeletePage)
 
     std::vector<OUString> aInserted =
     {
-        "Slide 1", "Slide 2", "Slide 3", "Slide 4", "Slide 5",
-        "Slide 6", "Slide 7", "Slide 8", "Slide 9", "Slide 10", "Slide 11"
+        u"Slide 1"_ustr, u"Slide 2"_ustr, u"Slide 3"_ustr, u"Slide 4"_ustr, u"Slide 5"_ustr,
+        u"Slide 6"_ustr, u"Slide 7"_ustr, u"Slide 8"_ustr, u"Slide 9"_ustr, u"Slide 10"_ustr, u"Slide 11"_ustr
     };
 
     std::vector<OUString> aDeleted =
     {
-        "Slide 1"
+        u"Slide 1"_ustr
     };
 
     // the document has 1 slide
@@ -539,7 +539,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertDeletePage)
     // Insert slides
     m_aDocumentSizeCondition.reset();
     for (unsigned it = 1; it <= 10; it++)
-        dispatchCommand(mxComponent, ".uno:InsertPage", aArgs);
+        dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, aArgs);
 
     osl::Condition::Result aResult = m_aDocumentSizeCondition.wait(std::chrono::seconds(2));
     CPPUNIT_ASSERT_EQUAL(osl::Condition::result_ok, aResult);
@@ -556,7 +556,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertDeletePage)
     // Delete slides
     m_aDocumentSizeCondition.reset();
     for (unsigned it = 1; it <= 10; it++)
-        dispatchCommand(mxComponent, ".uno:DeletePage", aArgs);
+        dispatchCommand(mxComponent, u".uno:DeletePage"_ustr, aArgs);
 
     aResult = m_aDocumentSizeCondition.wait(std::chrono::seconds(2));
     CPPUNIT_ASSERT_EQUAL(osl::Condition::result_ok, aResult);
@@ -572,7 +572,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertDeletePage)
     // Undo deleted slides
     m_aDocumentSizeCondition.reset();
     for (unsigned it = 1; it <= 10; it++)
-        dispatchCommand(mxComponent, ".uno:Undo", aArgs);
+        dispatchCommand(mxComponent, u".uno:Undo"_ustr, aArgs);
 
     aResult = m_aDocumentSizeCondition.wait(std::chrono::seconds(2));
     CPPUNIT_ASSERT_EQUAL(osl::Condition::result_ok, aResult);
@@ -588,7 +588,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertDeletePage)
     // Redo deleted slides
     m_aDocumentSizeCondition.reset();
     for (unsigned it = 1; it <= 10; it++)
-        dispatchCommand(mxComponent, ".uno:Redo", aArgs);
+        dispatchCommand(mxComponent, u".uno:Redo"_ustr, aArgs);
 
     aResult = m_aDocumentSizeCondition.wait(std::chrono::seconds(2));
     CPPUNIT_ASSERT_EQUAL(osl::Condition::result_ok, aResult);
@@ -615,7 +615,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertTable)
         { "Columns", uno::Any(sal_Int32(5)) }
     }));
 
-    dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
 
     // get the table
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -640,7 +640,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDeleteTable)
         { "Columns", uno::Any(sal_Int32(5)) }
     }));
 
-    dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdrView* pSdrView = pViewShell->GetView();
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
@@ -687,9 +687,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResizeTable)
     uno::Reference<table::XColumnRowRange> xTable = pTableObject->getTable();
     uno::Reference<container::XIndexAccess> xRows = xTable->getRows();
     uno::Reference<beans::XPropertySet> xRow1(xRows->getByIndex(0), uno::UNO_QUERY);
-    sal_Int32 nExpectedRow1 = xRow1->getPropertyValue("Size").get<sal_Int32>();
+    sal_Int32 nExpectedRow1 = xRow1->getPropertyValue(u"Size"_ustr).get<sal_Int32>();
     uno::Reference<beans::XPropertySet> xRow2(xRows->getByIndex(1), uno::UNO_QUERY);
-    sal_Int32 nExpectedRow2 = xRow2->getPropertyValue("Size").get<sal_Int32>();
+    sal_Int32 nExpectedRow2 = xRow2->getPropertyValue(u"Size"_ustr).get<sal_Int32>();
 
     // Resize the upper row, decrease its height by 1 cm.
     Point aInnerRowEdge = pObject->GetSnapRect().Center();
@@ -697,18 +697,18 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResizeTable)
     pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_END, o3tl::toTwips(aInnerRowEdge.getX(), o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY() - 1000, o3tl::Length::mm100));
 
     // Remember the resized row heights.
-    sal_Int32 nResizedRow1 = xRow1->getPropertyValue("Size").get<sal_Int32>();
+    sal_Int32 nResizedRow1 = xRow1->getPropertyValue(u"Size"_ustr).get<sal_Int32>();
     CPPUNIT_ASSERT(nResizedRow1 < nExpectedRow1);
-    sal_Int32 nResizedRow2 = xRow2->getPropertyValue("Size").get<sal_Int32>();
+    sal_Int32 nResizedRow2 = xRow2->getPropertyValue(u"Size"_ustr).get<sal_Int32>();
     CPPUNIT_ASSERT_EQUAL(nExpectedRow2, nResizedRow2);
 
     // Now undo the resize.
     pXImpressDocument->GetDocShell()->GetUndoManager()->Undo();
 
     // Check the undo result.
-    sal_Int32 nActualRow1 = xRow1->getPropertyValue("Size").get<sal_Int32>();
+    sal_Int32 nActualRow1 = xRow1->getPropertyValue(u"Size"_ustr).get<sal_Int32>();
     CPPUNIT_ASSERT_EQUAL(nExpectedRow1, nActualRow1);
-    sal_Int32 nActualRow2 = xRow2->getPropertyValue("Size").get<sal_Int32>();
+    sal_Int32 nActualRow2 = xRow2->getPropertyValue(u"Size"_ustr).get<sal_Int32>();
     // Expected was 4000, actual was 4572, i.e. the second row after undo was larger than expected.
     CPPUNIT_ASSERT_EQUAL(nExpectedRow2, nActualRow2);
 }
@@ -1387,13 +1387,13 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf102223)
     CPPUNIT_ASSERT(pView->GetTextEditObject());
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
     rEditView.SetSelection(ESelection(0, 0, 0, 3)); // start para, start char, end para, end char.
-    CPPUNIT_ASSERT_EQUAL(OUString("Red"), rEditView.GetSelected());
+    CPPUNIT_ASSERT_EQUAL(u"Red"_ustr, rEditView.GetSelected());
     CPPUNIT_ASSERT_EQUAL(
         int(1411), static_cast<int>(rEditView.GetAttribs().Get(EE_CHAR_FONTHEIGHT).GetHeight()));
 
     // cut contents of cell
     uno::Sequence<beans::PropertyValue> aArgs;
-    dispatchCommand(mxComponent, ".uno:Cut", aArgs);
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, aArgs);
 
     pView->SdrEndTextEdit(false);
     pView->SdrBeginTextEdit(pTableObject);
@@ -1500,16 +1500,16 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf103083)
     CPPUNIT_ASSERT(pView->GetTextEditObject());
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
     rEditView.SetSelection(ESelection(2, 0, 2, 33)); // start para, start char, end para, end char.
-    CPPUNIT_ASSERT_EQUAL(OUString("They have all the same formatting"), rEditView.GetSelected());
+    CPPUNIT_ASSERT_EQUAL(u"They have all the same formatting"_ustr, rEditView.GetSelected());
     SdrOutliner* pOutliner = pView->GetTextEditOutliner();
-    CPPUNIT_ASSERT_EQUAL(OUString("No-Logo Content~LT~Gliederung 2"),
+    CPPUNIT_ASSERT_EQUAL(u"No-Logo Content~LT~Gliederung 2"_ustr,
                          pOutliner->GetStyleSheet(2)->GetName());
     const EditTextObject& aEdit = pTextObject->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem* pNumFmt = aEdit.GetParaAttribs(2).GetItem(EE_PARA_NUMBULLET);
     SvxNumberFormat aNumFmt(pNumFmt->GetNumRule().GetLevel(2));
 
     // cut contents of bullet item
-    dispatchCommand(mxComponent, ".uno:Cut", uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, uno::Sequence<beans::PropertyValue>());
 
     CPPUNIT_ASSERT(pView->GetTextEditObject());
     EditView& rEditView2 = pView->GetTextEditOutlinerView()->GetEditView();
@@ -1517,7 +1517,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf103083)
     CPPUNIT_ASSERT_EQUAL(OUString(), rEditView2.GetSelected());
 
     // paste contents of bullet item
-    dispatchCommand(mxComponent, ".uno:Paste", uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, uno::Sequence<beans::PropertyValue>());
 
     // send an ESC key to trigger the commit of the edit to the main model
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
@@ -1529,8 +1529,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf103083)
     pOutliner = pView->GetTextEditOutliner();
     EditView& rEditView3 = pView->GetTextEditOutlinerView()->GetEditView();
     rEditView3.SetSelection(ESelection(2, 0, 2, 33)); // start para, start char, end para, end char.
-    CPPUNIT_ASSERT_EQUAL(OUString("They have all the same formatting"), rEditView3.GetSelected());
-    CPPUNIT_ASSERT_EQUAL(OUString("No-Logo Content~LT~Gliederung 2"),
+    CPPUNIT_ASSERT_EQUAL(u"They have all the same formatting"_ustr, rEditView3.GetSelected());
+    CPPUNIT_ASSERT_EQUAL(u"No-Logo Content~LT~Gliederung 2"_ustr,
                          pOutliner->GetStyleSheet(2)->GetName());
 
     const EditTextObject& aEdit2 = pTextObject->GetOutlinerParaObject()->GetTextObject();
@@ -1563,8 +1563,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf104405)
     rEditView.SetSelection(ESelection(0, 0, 0, 3)); // start para, start char, end para, end char.
 
     // trigger the clone-formatting/paintbrush command to copy formatting contents of cell
-    uno::Sequence aArgs{ comphelper::makePropertyValue("PersistentCopy", true) };
-    dispatchCommand(mxComponent, ".uno:FormatPaintbrush", aArgs);
+    uno::Sequence aArgs{ comphelper::makePropertyValue(u"PersistentCopy"_ustr, true) };
+    dispatchCommand(mxComponent, u".uno:FormatPaintbrush"_ustr, aArgs);
 
     // now click on the table
     pView->MarkObj(pTableObject, pView->GetSdrPageView());
@@ -1587,7 +1587,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf104405)
     xmlDocUniquePtr pXmlDoc = parseXmlDump();
     // the following name has a compiler-dependent part
     CPPUNIT_ASSERT_EQUAL(
-        OUString("2"),
+        u"2"_ustr,
         getXPath(
             pXmlDoc,
             "/SdDrawDocument/SdrModel/maPages/SdPage/SdrPage/SdrObjList/SdrTableObj/SdrTableObjImpl"
@@ -1605,7 +1605,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf81754)
     SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObject);
     SdrView* pView = pViewShell->GetView();
     pView->MarkObj(pTextObj, pView->GetSdrPageView());
-    SfxStringItem aInputString(SID_ATTR_CHAR, "x");
+    SfxStringItem aInputString(SID_ATTR_CHAR, u"x"_ustr);
     pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_CHAR,
             SfxCallMode::SYNCHRON, { &aInputString });
 
@@ -1614,7 +1614,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf81754)
     Scheduler::ProcessEventsToIdle();
 
     // now save, reload, and assert that we did not lose the edit
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -1655,7 +1655,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf105502)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aLastCell.mnRow);
 
     // Grow font size for the selection.
-    dispatchCommand(mxComponent, ".uno:Grow", {});
+    dispatchCommand(mxComponent, u".uno:Grow"_ustr, {});
 
     // Assert that the selected A1 has now a larger font than the unselected
     // A2.
@@ -1683,7 +1683,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
 
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp", comphelper::InitPropertySequence(
     {
-        {".uno:Author", uno::Any(OUString("LOK User1"))},
+        {".uno:Author", uno::Any(u"LOK User1"_ustr)},
     }));
     ViewCallback aView1;
     int nView1 = SfxLokHelper::getView();
@@ -1691,7 +1691,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     SfxLokHelper::createView();
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        {".uno:Author", uno::Any(OUString("LOK User2"))},
+        {".uno:Author", uno::Any(u"LOK User2"_ustr)},
     }));
     pXImpressDocument->initializeForTiledRendering(aArgs);
     ViewCallback aView2;
@@ -1702,9 +1702,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     // Add a new comment
     aArgs = comphelper::InitPropertySequence(
     {
-        {"Text", uno::Any(OUString("Comment"))},
+        {"Text", uno::Any(u"Comment"_ustr)},
     });
-    dispatchCommand(mxComponent, ".uno:InsertAnnotation", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
     // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
@@ -1726,9 +1726,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     aArgs = comphelper::InitPropertySequence(
     {
         {"Id", uno::Any(OUString::number(nComment1))},
-        {"Text", uno::Any(OUString("Reply to comment"))},
+        {"Text", uno::Any(u"Reply to comment"_ustr)},
     });
-    dispatchCommand(mxComponent, ".uno:ReplyToAnnotation", aArgs);
+    dispatchCommand(mxComponent, u".uno:ReplyToAnnotation"_ustr, aArgs);
 
     // We received a LOK_CALLBACK_COMMENT callback with comment 'Modify' action
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
@@ -1750,9 +1750,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     aArgs = comphelper::InitPropertySequence(
     {
         {"Id", uno::Any(OUString::number(nComment1))},
-        {"Text", uno::Any(OUString("Edited comment"))},
+        {"Text", uno::Any(u"Edited comment"_ustr)},
     });
-    dispatchCommand(mxComponent, ".uno:EditAnnotation", aArgs);
+    dispatchCommand(mxComponent, u".uno:EditAnnotation"_ustr, aArgs);
 
     // We received a LOK_CALLBACK_COMMENT callback with comment 'Modify' action
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
@@ -1769,7 +1769,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     {
         {"Id", uno::Any(OUString::number(nComment1))},
     });
-    dispatchCommand(mxComponent, ".uno:DeleteAnnotation", aArgs);
+    dispatchCommand(mxComponent, u".uno:DeleteAnnotation"_ustr, aArgs);
 
     // We received a LOK_CALLBACK_COMMENT callback with comment 'Remove' action
     CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
@@ -1790,7 +1790,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
 
     createDoc("dummy.odp", comphelper::InitPropertySequence(
     {
-        {".uno:Author", uno::Any(OUString("LOK User1"))},
+        {".uno:Author", uno::Any(u"LOK User1"_ustr)},
     }));
 
     ViewCallback aView1;
@@ -1798,9 +1798,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
     // Add a new comment
     aArgs = comphelper::InitPropertySequence(
     {
-        {"Text", uno::Any(OUString("Comment"))},
+        {"Text", uno::Any(u"Comment"_ustr)},
     });
-    dispatchCommand(mxComponent, ".uno:InsertAnnotation", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
 
@@ -1817,7 +1817,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
         {"PositionX", uno::Any(sal_Int32(10))},
         {"PositionY", uno::Any(sal_Int32(20))}
     });
-    dispatchCommand(mxComponent, ".uno:EditAnnotation", aArgs);
+    dispatchCommand(mxComponent, u".uno:EditAnnotation"_ustr, aArgs);
 
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
@@ -1836,7 +1836,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeDraw)
 
     createDoc("dummy.odg", comphelper::InitPropertySequence(
     {
-        {".uno:Author", uno::Any(OUString("LOK User1"))},
+        {".uno:Author", uno::Any(u"LOK User1"_ustr)},
     }));
 
     ViewCallback aView1;
@@ -1844,9 +1844,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeDraw)
     // Add a new comment
     aArgs = comphelper::InitPropertySequence(
     {
-        {"Text", uno::Any(OUString("Comment"))},
+        {"Text", uno::Any(u"Comment"_ustr)},
     });
-    dispatchCommand(mxComponent, ".uno:InsertAnnotation", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
 
@@ -1863,7 +1863,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeDraw)
         {"PositionX", uno::Any(sal_Int32(10))},
         {"PositionY", uno::Any(sal_Int32(20))}
     });
-    dispatchCommand(mxComponent, ".uno:EditAnnotation", aArgs);
+    dispatchCommand(mxComponent, u".uno:EditAnnotation"_ustr, aArgs);
 
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
@@ -1895,7 +1895,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiViewInsertDeletePage)
 
     // Insert slide in 1st view
     SfxLokHelper::setView(nView1);
-    dispatchCommand(mxComponent, ".uno:InsertPage", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, aArgs);
 
     // See if the current slide number changed in 2nd view too
     SfxLokHelper::setView(nView2);
@@ -1903,7 +1903,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiViewInsertDeletePage)
 
     // Delete the page in 1st view now
     SfxLokHelper::setView(nView1);
-    dispatchCommand(mxComponent, ".uno:DeletePage", aArgs);
+    dispatchCommand(mxComponent, u".uno:DeletePage"_ustr, aArgs);
 
     // See if current slide number changed in 2nd view too
     SfxLokHelper::setView(nView2);
@@ -1956,7 +1956,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiViewInsertDeletePage2)
 
     // Insert slide in 1st view
     SfxLokHelper::setView(nView1);
-    dispatchCommand(mxComponent, ".uno:InsertPage", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, aArgs);
 
     // See if the current slide number changed in 2nd view too
     SfxLokHelper::setView(nView2);
@@ -1964,7 +1964,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiViewInsertDeletePage2)
 
     // Delete the page in 1st view now
     SfxLokHelper::setView(nView1);
-    dispatchCommand(mxComponent, ".uno:DeletePage", aArgs);
+    dispatchCommand(mxComponent, u".uno:DeletePage"_ustr, aArgs);
 
     // See if current slide number changed in 2nd view too
     SfxLokHelper::setView(nView2);
@@ -2123,7 +2123,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testLanguageStatus)
         auto pStringItem = dynamic_cast<const SfxStringItem*>(xItem1.get());
         CPPUNIT_ASSERT(pStringItem);
 
-        CPPUNIT_ASSERT_EQUAL(OUString("English (USA);en-US"), pStringItem->GetValue());
+        CPPUNIT_ASSERT_EQUAL(u"English (USA);en-US"_ustr, pStringItem->GetValue());
 
         CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(xItem2.get()));
     }
@@ -2136,9 +2136,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testLanguageAllText)
 
     // Set the language to English for all text.
     uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence({
-        { "Language", uno::Any(OUString("Default_English (USA)")) },
+        { "Language", uno::Any(u"Default_English (USA)"_ustr) },
     });
-    dispatchCommand(mxComponent, ".uno:LanguageStatus", aArgs);
+    dispatchCommand(mxComponent, u".uno:LanguageStatus"_ustr, aArgs);
 
     // Assert that the shape text language was changed.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
@@ -2147,10 +2147,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testLanguageAllText)
     uno::Reference<text::XTextRange> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xRun(xShape, uno::UNO_QUERY_THROW);
     lang::Locale aLocale;
-    xRun->getPropertyValue("CharLocale") >>= aLocale;
+    xRun->getPropertyValue(u"CharLocale"_ustr) >>= aLocale;
     // Without the accompanying fix in place, this test would have failed with 'Expected: en;
     // Actual: hu', as the shape text language was not set.
-    CPPUNIT_ASSERT_EQUAL(OUString("en"), aLocale.Language);
+    CPPUNIT_ASSERT_EQUAL(u"en"_ustr, aLocale.Language);
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDefaultView)
@@ -2180,7 +2180,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testIMESupport)
     SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObject);
     SdrView* pView = pViewShell->GetView();
     pView->MarkObj(pTextObj, pView->GetSdrPageView());
-    SfxStringItem aInputString(SID_ATTR_CHAR, "x");
+    SfxStringItem aInputString(SID_ATTR_CHAR, u"x"_ustr);
     pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_CHAR,
                                                              SfxCallMode::SYNCHRON, { &aInputString });
 
@@ -2195,7 +2195,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testIMESupport)
     {
         pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, aInput);
     }
-    pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
+    pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, u""_ustr);
 
     // the cursor should be at position 3rd
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
@@ -2230,7 +2230,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf115783)
     uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence({
         { "FontHeight.Height", uno::Any(static_cast<float>(12)) },
     });
-    dispatchCommand(mxComponent, ".uno:FontHeight", aArgs);
+    dispatchCommand(mxComponent, u".uno:FontHeight"_ustr, aArgs);
 
     // Create a text selection on the B1 cell.
     pTableObject->setActiveCell(sdr::table::CellPos(1, 0));
@@ -2238,14 +2238,14 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf115783)
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
     // Start para, start char, end para, end char.
     rEditView.SetSelection(ESelection(0, 0, 0, 5));
-    CPPUNIT_ASSERT_EQUAL(OUString("hello"), rEditView.GetSelected());
+    CPPUNIT_ASSERT_EQUAL(u"hello"_ustr, rEditView.GetSelected());
 
     // Copy selection, paste at the start of the cell.
     aArgs = {};
-    dispatchCommand(mxComponent, ".uno:Copy", aArgs);
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, aArgs);
     rEditView.SetSelection(ESelection(0, 0, 0, 0));
     aArgs = {};
-    dispatchCommand(mxComponent, ".uno:Paste", aArgs);
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, aArgs);
     pView->SdrEndTextEdit();
 
     // And now verify that the cell has the correct font size.
@@ -2263,9 +2263,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf115783)
     CPPUNIT_ASSERT(xPortion.is());
     // This failed, it was only "hello" as the paragraph had 2 portions: a
     // "hello" with 12pt size and a "hello" with 18pt.
-    CPPUNIT_ASSERT_EQUAL(OUString("hellohello"), xPortion->getString());
+    CPPUNIT_ASSERT_EQUAL(u"hellohello"_ustr, xPortion->getString());
     uno::Reference<beans::XPropertySet> xPropertySet(xPortion, uno::UNO_QUERY);
-    int nHeight = xPropertySet->getPropertyValue("CharHeight").get<float>();
+    int nHeight = xPropertySet->getPropertyValue(u"CharHeight"_ustr).get<float>();
     // Make sure that the single font size for the cell is the expected one.
     CPPUNIT_ASSERT_EQUAL(12, nHeight);
 }
@@ -2304,14 +2304,14 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPasteTextOnSlide)
     Scheduler::ProcessEventsToIdle();
 
     // Copy some text
-    dispatchCommand(mxComponent, ".uno:Copy", uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, uno::Sequence<beans::PropertyValue>());
 
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
     Scheduler::ProcessEventsToIdle();
 
     // Paste onto the slide
-    dispatchCommand(mxComponent, ".uno:Paste", uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, uno::Sequence<beans::PropertyValue>());
 
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
@@ -2409,7 +2409,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCutSelectionChange)
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), m_aSelection.size());
 
     // Cut the selected text
-    dispatchCommand(mxComponent, ".uno:Cut", uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, uno::Sequence<beans::PropertyValue>());
 
     // Selection is removed
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0), m_aSelection.size());
@@ -2429,10 +2429,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testGetViewRenderState)
     {
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", uno::Any(OUString("Dark")) },
+                { "NewTheme", uno::Any(u"Dark"_ustr) },
             }
         );
-        dispatchCommand(mxComponent, ".uno:ChangeTheme", aPropertyValues);
+        dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr, aPropertyValues);
     }
     CPPUNIT_ASSERT_EQUAL("S;Dark"_ostr, pXImpressDocument->getViewRenderState());
     // Switch back to the first view, and check that the options string is the same
@@ -2487,10 +2487,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testThemeViewSeparation)
     {
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", uno::Any(OUString("Light")) },
+                { "NewTheme", uno::Any(u"Light"_ustr) },
             }
         );
-        dispatchCommand(mxComponent, ".uno:ChangeTheme", aPropertyValues);
+        dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr, aPropertyValues);
     }
     // First view is at light scheme
     assertTilePixelColor(pXImpressDocument, 255, 255, COL_WHITE);
@@ -2502,10 +2502,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testThemeViewSeparation)
     {
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", uno::Any(OUString("Dark")) },
+                { "NewTheme", uno::Any(u"Dark"_ustr) },
             }
         );
-        dispatchCommand(mxComponent, ".uno:ChangeTheme", aPropertyValues);
+        dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr, aPropertyValues);
     }
     assertTilePixelColor(pXImpressDocument, 255, 255, aDarkColor);
     // First view still in light scheme
@@ -2518,10 +2518,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testThemeViewSeparation)
     {
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", uno::Any(OUString("Light")) },
+                { "NewTheme", uno::Any(u"Light"_ustr) },
             }
         );
-        dispatchCommand(mxComponent, ".uno:ChangeTheme", aPropertyValues);
+        dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr, aPropertyValues);
     }
     // Now in light scheme
     assertTilePixelColor(pXImpressDocument, 255, 255, COL_WHITE);
@@ -2550,7 +2550,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testRegenerateDiagram)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObj(0)->GetSubList()->GetObjCount());
 
     // regenerate diagram
-    dispatchCommand(mxComponent, ".uno:RegenerateDiagram", uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:RegenerateDiagram"_ustr, uno::Sequence<beans::PropertyValue>());
 
     // diagram content (child shape count) should be the same as in the beginning
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), pActualPage->GetObj(0)->GetSubList()->GetObjCount());
@@ -2566,7 +2566,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertDeletePageInvalidation)
     // Insert slide
     aView1.m_bTilesInvalidated = false;
     aView1.m_aInvalidations.clear();
-    dispatchCommand(mxComponent, ".uno:InsertPage", uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, uno::Sequence<beans::PropertyValue>());
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
     CPPUNIT_ASSERT_EQUAL(9, pXImpressDocument->getParts());
     CPPUNIT_ASSERT_EQUAL(size_t(9), aView1.m_aInvalidations.size());
@@ -2574,7 +2574,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertDeletePageInvalidation)
     // Delete slide
     aView1.m_bTilesInvalidated = false;
     aView1.m_aInvalidations.clear();
-    dispatchCommand(mxComponent, ".uno:DeletePage", uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:DeletePage"_ustr, uno::Sequence<beans::PropertyValue>());
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
     CPPUNIT_ASSERT_EQUAL(8, pXImpressDocument->getParts());
     CPPUNIT_ASSERT_EQUAL(size_t(8), aView1.m_aInvalidations.size());
@@ -2613,7 +2613,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideDuplicateUndo)
         SdrObject* pObject = pActualPage->GetObj(1);
         SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObject);
         pView->MarkObj(pTextObj, pView->GetSdrPageView());
-        SfxStringItem aInputString(SID_ATTR_CHAR, "x");
+        SfxStringItem aInputString(SID_ATTR_CHAR, u"x"_ustr);
         pViewShell0->GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_CHAR,
                 SfxCallMode::SYNCHRON, { &aInputString });
         CPPUNIT_ASSERT(pView->IsTextEdit());
@@ -2622,7 +2622,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideDuplicateUndo)
 
     // Duplicate the first slide on view 1 and undo it.
     SfxLokHelper::setView(nView1);
-    dispatchCommand(mxComponent, ".uno:DuplicatePage", {});
+    dispatchCommand(mxComponent, u".uno:DuplicatePage"_ustr, {});
     pXImpressDocument->setPart(0, /*bAllowChangeFocus=*/false);
     pXImpressDocument->setPart(1, /*bAllowChangeFocus=*/false);
     SfxLokHelper::setView(nView0);
@@ -2687,7 +2687,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMoveShapeHandle)
             {"NewPosX", uno::Any(x+1)},
             {"NewPosY", uno::Any(y+1)}
         }));
-        dispatchCommand(mxComponent, ".uno:MoveShapeHandle", aPropertyValues);
+        dispatchCommand(mxComponent, u".uno:MoveShapeHandle"_ustr, aPropertyValues);
         CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());
         lcl_extractHandleParameters(aView1.m_ShapeSelection, id, x ,y);
         CPPUNIT_ASSERT_EQUAL(x-1, oldX);
@@ -2710,11 +2710,11 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPasteUndo)
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
     ESelection aWordSelection(0, 0, 0, 1); // "w" of "world"
     rEditView.SetSelection(aWordSelection);
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
     // When undoing a paste:
-    dispatchCommand(mxComponent, ".uno:Paste", {});
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     // Then make sure the cursor position is still at the beginning:
     ESelection aSelection = rEditView.GetSelection();
@@ -2753,13 +2753,13 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
     SdPage* pPage1 = pViewShell1->GetActualPage();
 
     SdrObject* pTextBoxObject = pPage1->GetObj(0);
-    CPPUNIT_ASSERT_EQUAL(OUString("Text Box"), pTextBoxObject->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"Text Box"_ustr, pTextBoxObject->GetName());
 
     SdrObject* pRectangleObject = pPage1->GetObj(1);
-    CPPUNIT_ASSERT_EQUAL(OUString("Rect"), pRectangleObject->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"Rect"_ustr, pRectangleObject->GetName());
 
     SdrObject* pTableObject = pPage1->GetObj(2);
-    CPPUNIT_ASSERT_EQUAL(OUString("Table1"), pTableObject->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"Table1"_ustr, pTableObject->GetName());
 
     // Scenario 1
     // 2 shapes - "Text Box" and "Rect"
@@ -2775,7 +2775,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
         // Local undo count for View1 is 0
         CPPUNIT_ASSERT_EQUAL(size_t(0), pView1->getViewLocalUndoManager()->GetUndoActionCount());
         // Write 'test' in View1
-        SfxStringItem aInputString(SID_ATTR_CHAR, "test");
+        SfxStringItem aInputString(SID_ATTR_CHAR, u"test"_ustr);
         pViewShell1->GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_CHAR, SfxCallMode::SYNCHRON, { &aInputString });
         // Local undo count for View1 is now 1
         CPPUNIT_ASSERT_EQUAL(size_t(1), pView1->getViewLocalUndoManager()->GetUndoActionCount());
@@ -2848,7 +2848,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
         // Local undo count for View1 is 0
         CPPUNIT_ASSERT_EQUAL(size_t(0), pView1->getViewLocalUndoManager()->GetUndoActionCount());
         // Write 'test' in View1
-        SfxStringItem aInputString(SID_ATTR_CHAR, "test");
+        SfxStringItem aInputString(SID_ATTR_CHAR, u"test"_ustr);
         pViewShell1->GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_CHAR, SfxCallMode::SYNCHRON, { &aInputString });
         // Local undo count for View1 is now 1
         CPPUNIT_ASSERT_EQUAL(size_t(1), pView1->getViewLocalUndoManager()->GetUndoActionCount());
@@ -2921,7 +2921,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
         // Local undo count for View1 is 0
         CPPUNIT_ASSERT_EQUAL(size_t(0), pView1->getViewLocalUndoManager()->GetUndoActionCount());
         // Write 'test' in View1
-        SfxStringItem aInputString(SID_ATTR_CHAR, "test");
+        SfxStringItem aInputString(SID_ATTR_CHAR, u"test"_ustr);
         pViewShell1->GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_CHAR, SfxCallMode::SYNCHRON, { &aInputString });
         // Local undo count for View1 is now 1
         CPPUNIT_ASSERT_EQUAL(size_t(1), pView1->getViewLocalUndoManager()->GetUndoActionCount());
@@ -2974,7 +2974,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarHide)
     aView.m_aStateChanges.clear();
 
     // When hiding the slide layout deck:
-    dispatchCommand(mxComponent, ".uno:ModifyPage", {});
+    dispatchCommand(mxComponent, u".uno:ModifyPage"_ustr, {});
 
     // Then make sure we get a state change for this, in JSON format:
     auto it = aView.m_aStateChanges.find(".uno:ModifyPage");

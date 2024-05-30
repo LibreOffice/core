@@ -23,17 +23,17 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestImpressDefaultStructure)
     load(u"private:factory/simpress"_ustr);
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString("<SHAPE name=\"PageShape: Slide 1\" description=\" \"/>"
-                                       "<SHAPE name=\"PresentationTitle \" description=\" \">"
-                                       "<PARAGRAPH description=\"Paragraph: 0 Click to add Title\">"
-                                       "Click to add Title"
-                                       "</PARAGRAPH>"
-                                       "</SHAPE>"
-                                       "<SHAPE name=\"PresentationSubtitle \" description=\" \">"
-                                       "<PARAGRAPH description=\"Paragraph: 0 Click to add Text\">"
-                                       "Click to add Text"
-                                       "</PARAGRAPH>"
-                                       "</SHAPE>"),
+    CPPUNIT_ASSERT_EQUAL(u"<SHAPE name=\"PageShape: Slide 1\" description=\" \"/>"
+                         "<SHAPE name=\"PresentationTitle \" description=\" \">"
+                         "<PARAGRAPH description=\"Paragraph: 0 Click to add Title\">"
+                         "Click to add Title"
+                         "</PARAGRAPH>"
+                         "</SHAPE>"
+                         "<SHAPE name=\"PresentationSubtitle \" description=\" \">"
+                         "<PARAGRAPH description=\"Paragraph: 0 Click to add Text\">"
+                         "Click to add Text"
+                         "</PARAGRAPH>"
+                         "</SHAPE>"_ustr,
                          collectText());
 }
 
@@ -56,10 +56,10 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestImpressDefaultLayout)
      */
     CPPUNIT_ASSERT_EQUAL(sal_Int64(3), xDocumentContext->getAccessibleChildCount());
     CPPUNIT_ASSERT_EQUAL(
-        OUString("PresentationTitle "),
+        u"PresentationTitle "_ustr,
         xDocumentContext->getAccessibleChild(1)->getAccessibleContext()->getAccessibleName());
     CPPUNIT_ASSERT_EQUAL(
-        OUString("PresentationSubtitle "),
+        u"PresentationSubtitle "_ustr,
         xDocumentContext->getAccessibleChild(2)->getAccessibleContext()->getAccessibleName());
 }
 
@@ -88,66 +88,65 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, tdf150064)
         Scheduler::ProcessEventsToIdle();
 
         CPPUNIT_ASSERT_EQUAL(
-            rtl::OUString("<SHAPE name=\"PageShape: Slide 1\" description=\" \"/>"
-                          "<SHAPE name=\"PresentationTitle \" description=\" \">"
-                          "<PARAGRAPH description=\"Paragraph: 0 P1 title\">P1 title</PARAGRAPH>"
-                          "</SHAPE>"
-                          "<SHAPE name=\"PresentationSubtitle \" description=\" \">"
-                          "<PARAGRAPH description=\"Paragraph: 0 Some text\">Some text</PARAGRAPH>"
-                          "</SHAPE>"
-                          "<TABLE name=\"TableShape \" description=\" \">"
-                          "<TABLE_CELL name=\"A1\">"
-                          "<PARAGRAPH description=\"Paragraph: 0 1\">1</PARAGRAPH>"
-                          "</TABLE_CELL>"
-                          "<TABLE_CELL name=\"B1\">"
-                          "<PARAGRAPH description=\"Paragraph: 0 2\">2</PARAGRAPH>"
-                          "</TABLE_CELL>"
-                          "<TABLE_CELL name=\"C1\">"
-                          "<PARAGRAPH description=\"Paragraph: 0 3\">3</PARAGRAPH>"
-                          "</TABLE_CELL>"
-                          "<TABLE_CELL name=\"D1\">"
-                          "<PARAGRAPH description=\"Paragraph: 0 4\">4</PARAGRAPH>"
-                          "</TABLE_CELL>"
-                          "<TABLE_CELL name=\"E1\">"
-                          "<PARAGRAPH description=\"Paragraph: 0 5\">5</PARAGRAPH>"
-                          "</TABLE_CELL>"
-                          "<TABLE_CELL name=\"A2\">"
-                          "<PARAGRAPH description=\"Paragraph: 0 6\">6</PARAGRAPH>"
-                          "</TABLE_CELL>"
-                          "<TABLE_CELL name=\"B2\">"
-                          "<PARAGRAPH description=\"Paragraph: 0 7\">7</PARAGRAPH>"
-                          "</TABLE_CELL>"
-                          "<TABLE_CELL name=\"C2\">"
-                          "<PARAGRAPH description=\"Paragraph: 0 8\">8</PARAGRAPH>"
-                          "</TABLE_CELL>"
-                          "<TABLE_CELL name=\"D2\">"
-                          "<PARAGRAPH description=\"Paragraph: 0 9\">9</PARAGRAPH>"
-                          "</TABLE_CELL>"
-                          "<TABLE_CELL name=\"E2\">"
-                          "<PARAGRAPH description=\"Paragraph: 0 10\">10</PARAGRAPH>"
-                          "</TABLE_CELL>"
-                          "</TABLE>"),
+            u"<SHAPE name=\"PageShape: Slide 1\" description=\" \"/>"
+            "<SHAPE name=\"PresentationTitle \" description=\" \">"
+            "<PARAGRAPH description=\"Paragraph: 0 P1 title\">P1 title</PARAGRAPH>"
+            "</SHAPE>"
+            "<SHAPE name=\"PresentationSubtitle \" description=\" \">"
+            "<PARAGRAPH description=\"Paragraph: 0 Some text\">Some text</PARAGRAPH>"
+            "</SHAPE>"
+            "<TABLE name=\"TableShape \" description=\" \">"
+            "<TABLE_CELL name=\"A1\">"
+            "<PARAGRAPH description=\"Paragraph: 0 1\">1</PARAGRAPH>"
+            "</TABLE_CELL>"
+            "<TABLE_CELL name=\"B1\">"
+            "<PARAGRAPH description=\"Paragraph: 0 2\">2</PARAGRAPH>"
+            "</TABLE_CELL>"
+            "<TABLE_CELL name=\"C1\">"
+            "<PARAGRAPH description=\"Paragraph: 0 3\">3</PARAGRAPH>"
+            "</TABLE_CELL>"
+            "<TABLE_CELL name=\"D1\">"
+            "<PARAGRAPH description=\"Paragraph: 0 4\">4</PARAGRAPH>"
+            "</TABLE_CELL>"
+            "<TABLE_CELL name=\"E1\">"
+            "<PARAGRAPH description=\"Paragraph: 0 5\">5</PARAGRAPH>"
+            "</TABLE_CELL>"
+            "<TABLE_CELL name=\"A2\">"
+            "<PARAGRAPH description=\"Paragraph: 0 6\">6</PARAGRAPH>"
+            "</TABLE_CELL>"
+            "<TABLE_CELL name=\"B2\">"
+            "<PARAGRAPH description=\"Paragraph: 0 7\">7</PARAGRAPH>"
+            "</TABLE_CELL>"
+            "<TABLE_CELL name=\"C2\">"
+            "<PARAGRAPH description=\"Paragraph: 0 8\">8</PARAGRAPH>"
+            "</TABLE_CELL>"
+            "<TABLE_CELL name=\"D2\">"
+            "<PARAGRAPH description=\"Paragraph: 0 9\">9</PARAGRAPH>"
+            "</TABLE_CELL>"
+            "<TABLE_CELL name=\"E2\">"
+            "<PARAGRAPH description=\"Paragraph: 0 10\">10</PARAGRAPH>"
+            "</TABLE_CELL>"
+            "</TABLE>"_ustr,
             collectText());
 
         CPPUNIT_ASSERT(xDrawPages->getByIndex(1) >>= xDrawPage);
         xDrawView->setCurrentPage(xDrawPage);
         Scheduler::ProcessEventsToIdle();
 
-        CPPUNIT_ASSERT_EQUAL(
-            rtl::OUString("<SHAPE name=\"PageShape: Slide 2\" description=\" \"/>"
-                          "<SHAPE name=\"PresentationTitle \" description=\" \">"
-                          "<PARAGRAPH description=\"Paragraph: 0 P2 title\">P2 title</PARAGRAPH>"
-                          "</SHAPE>"
-                          "<SHAPE name=\"PresentationOutliner \" description=\" \">"
-                          "<PARAGRAPH description=\"Paragraph: 0 1\">1</PARAGRAPH>"
-                          "</SHAPE>"
-                          "<SHAPE name=\"PresentationOutliner \" description=\" \">"
-                          "<PARAGRAPH description=\"Paragraph: 0 2\">2</PARAGRAPH>"
-                          "</SHAPE>"
-                          "<SHAPE name=\"PresentationOutliner \" description=\" \">"
-                          "<PARAGRAPH description=\"Paragraph: 0 3\">3</PARAGRAPH>"
-                          "</SHAPE>"),
-            collectText());
+        CPPUNIT_ASSERT_EQUAL(u"<SHAPE name=\"PageShape: Slide 2\" description=\" \"/>"
+                             "<SHAPE name=\"PresentationTitle \" description=\" \">"
+                             "<PARAGRAPH description=\"Paragraph: 0 P2 title\">P2 title</PARAGRAPH>"
+                             "</SHAPE>"
+                             "<SHAPE name=\"PresentationOutliner \" description=\" \">"
+                             "<PARAGRAPH description=\"Paragraph: 0 1\">1</PARAGRAPH>"
+                             "</SHAPE>"
+                             "<SHAPE name=\"PresentationOutliner \" description=\" \">"
+                             "<PARAGRAPH description=\"Paragraph: 0 2\">2</PARAGRAPH>"
+                             "</SHAPE>"
+                             "<SHAPE name=\"PresentationOutliner \" description=\" \">"
+                             "<PARAGRAPH description=\"Paragraph: 0 3\">3</PARAGRAPH>"
+                             "</SHAPE>"_ustr,
+                             collectText());
     }
 }
 

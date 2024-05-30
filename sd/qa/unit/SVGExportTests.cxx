@@ -70,14 +70,14 @@ class SdSVGFilterTest : public UnoApiXmlTest
 {
 public:
     SdSVGFilterTest()
-        : UnoApiXmlTest("/sd/qa/unit/data/odp/")
+        : UnoApiXmlTest(u"/sd/qa/unit/data/odp/"_ustr)
     {
     }
 
     void testSVGExportTextDecorations()
     {
         loadFromFile(u"svg-export-text-decorations.odp");
-        save("impress_svg_Export");
+        save(u"impress_svg_Export"_ustr);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
@@ -85,22 +85,22 @@ public:
         svgDoc->name = reinterpret_cast<char *>(xmlStrdup(reinterpret_cast<xmlChar const *>(OUStringToOString(maTempFile.GetURL(), RTL_TEXTENCODING_UTF8).getStr())));
 
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG ), 1);
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2] ), "class"_ostr, "SlideGroup");
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G ), "class"_ostr, "Slide");
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[1] ), "class"_ostr, "TitleText");
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[1]/SVG_G/SVG_TEXT ), "class"_ostr, "SVGTextShape");
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[1]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN ), "class"_ostr, "TextPosition");
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[1]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN[1] ), "text-decoration"_ostr, "underline");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2] ), "class"_ostr, u"SlideGroup"_ustr);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G ), "class"_ostr, u"Slide"_ustr);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[1] ), "class"_ostr, u"TitleText"_ustr);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[1]/SVG_G/SVG_TEXT ), "class"_ostr, u"SVGTextShape"_ustr);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[1]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN ), "class"_ostr, u"TextPosition"_ustr);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[1]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN[1] ), "text-decoration"_ostr, u"underline"_ustr);
 
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[2]/SVG_G/SVG_TEXT ), "class"_ostr, "SVGTextShape");
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[2]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN ), "class"_ostr, "TextPosition");
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[2]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "text-decoration"_ostr, "line-through");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[2]/SVG_G/SVG_TEXT ), "class"_ostr, u"SVGTextShape"_ustr);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[2]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN ), "class"_ostr, u"TextPosition"_ustr);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_G[2]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "text-decoration"_ostr, u"line-through"_ustr);
     }
 
     void testSVGExportJavascriptURL()
     {
         loadFromFile(u"textbox-link-javascript.odp");
-        save("impress_svg_Export");
+        save(u"impress_svg_Export"_ustr);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
@@ -115,64 +115,64 @@ public:
     void testSVGExportSlideCustomBackground()
     {
         loadFromFile(u"slide-custom-background.odp");
-        save("impress_svg_Export");
+        save(u"impress_svg_Export"_ustr);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_DEFS ), "class"_ostr, "SlideBackground");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G/SVG_DEFS ), "class"_ostr, u"SlideBackground"_ustr);
     }
 
     void testSVGExportTextFieldsInMasterPage()
     {
         loadFromFile(u"text-fields.odp");
-        save("impress_svg_Export");
+        save(u"impress_svg_Export"_ustr);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2] ), "class"_ostr, "Master_Slide");
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2] ), "class"_ostr, "BackgroundObjects");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2] ), "class"_ostr, u"Master_Slide"_ustr);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2] ), "class"_ostr, u"BackgroundObjects"_ustr);
         // Current Date Field
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[4] ), "class"_ostr, "TextShape");
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[4]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "class"_ostr, "PlaceholderText Date");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[4] ), "class"_ostr, u"TextShape"_ustr);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[4]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "class"_ostr, u"PlaceholderText Date"_ustr);
         // Current Time Field
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[5] ), "class"_ostr, "TextShape");
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[5]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "class"_ostr, "PlaceholderText Time");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[5] ), "class"_ostr, u"TextShape"_ustr);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[5]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "class"_ostr, u"PlaceholderText Time"_ustr);
         // Slide Name Field
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[6] ), "class"_ostr, "TextShape");
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[6]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "class"_ostr, "PlaceholderText PageName");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[6] ), "class"_ostr, u"TextShape"_ustr);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[6]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "class"_ostr, u"PlaceholderText PageName"_ustr);
         // Slide Number Field
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[7] ), "class"_ostr, "TextShape");
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[7]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "class"_ostr, "PlaceholderText PageNumber");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[7] ), "class"_ostr, u"TextShape"_ustr);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[7]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "class"_ostr, u"PlaceholderText PageNumber"_ustr);
     }
 
     void testSVGExportEmbeddedVideo()
     {
         loadFromFile(u"slide-video-thumbnail.odp");
-        save("impress_svg_Export");
+        save(u"impress_svg_Export"_ustr);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG ), 1);
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2] ), "class"_ostr, "SlideGroup");
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1] ), "visibility"_ostr, "hidden");
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G[1] ), "id"_ostr, "container-id1");
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G[1]/SVG_G[1] ), "class"_ostr, "Slide");
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[1] ), "class"_ostr, "Page");
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[1] ), "class"_ostr, "TitleText");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2] ), "class"_ostr, u"SlideGroup"_ustr);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1] ), "visibility"_ostr, u"hidden"_ustr);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G[1] ), "id"_ostr, u"container-id1"_ustr);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G[1]/SVG_G[1] ), "class"_ostr, u"Slide"_ustr);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[1] ), "class"_ostr, u"Page"_ustr);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[1] ), "class"_ostr, u"TitleText"_ustr);
 
         // First one has no valid video, so we just generate the stock thumbnail as an image.
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[2] ), "class"_ostr, "com.sun.star.presentation.MediaShape");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[2] ), "class"_ostr, u"com.sun.star.presentation.MediaShape"_ustr);
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[2]/SVG_G[1]/SVG_IMAGE ), 1);
 
         // The second one is a valid video, with the thumbnail embedded.
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[5] ), "class"_ostr, "com.sun.star.drawing.MediaShape");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[5] ), "class"_ostr, u"com.sun.star.drawing.MediaShape"_ustr);
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[5]/SVG_G[1] ), 1);
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[5]/SVG_G[1]/SVG_FOREIGNOBJECT ), 1);
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[5]/SVG_G[1]/SVG_FOREIGNOBJECT/SVG_BODY ), 1);
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[5]/SVG_G[1]/SVG_FOREIGNOBJECT/SVG_BODY/SVG_VIDEO ), "preload"_ostr, "auto");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[5]/SVG_G[1]/SVG_FOREIGNOBJECT/SVG_BODY/SVG_VIDEO ), "preload"_ostr, u"auto"_ustr);
 
         const OUString poster = getXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[1]/SVG_G[5]/SVG_G[1]/SVG_FOREIGNOBJECT/SVG_BODY/SVG_VIDEO), "poster"_ostr);
         CPPUNIT_ASSERT_MESSAGE("The video poster is invalid", poster.startsWith("data:image/png;base64,"));
@@ -181,12 +181,12 @@ public:
     void testSVGExportSlideBitmapBackground()
     {
         loadFromFile(u"slide-bitmap-background.odp");
-        save("impress_svg_Export");
+        save(u"impress_svg_Export"_ustr);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9] ), "class"_ostr, "BackgroundBitmaps");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9] ), "class"_ostr, u"BackgroundBitmaps"_ustr);
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_IMAGE ), 1);
 
         OUString sImageId = getXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_IMAGE ), "id"_ostr);
@@ -196,7 +196,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE(OString("The exported bitmap has not a valid checksum: " + sImageId.toUtf8()).getStr(), nChecksum != 0);
 
         // single image case
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_DEFS ), "class"_ostr, "SlideBackground");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_DEFS ), "class"_ostr, u"SlideBackground"_ustr);
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_DEFS/SVG_G/SVG_G/SVG_USE ), 1);
         OUString sRef = getXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_DEFS/SVG_G/SVG_G/SVG_USE ), "href"_ostr);
         CPPUNIT_ASSERT_MESSAGE("The <use> element has not a valid href attribute: starting '#' not present.", sRef.startsWith("#"));
@@ -210,17 +210,17 @@ public:
     void testSVGExportSlideTileBitmapBackground()
     {
         loadFromFile(u"slide-tile-background.odp");
-        save("impress_svg_Export");
+        save(u"impress_svg_Export"_ustr);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
         // check the bitmap
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9] ), "class"_ostr, "BackgroundBitmaps");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9] ), "class"_ostr, u"BackgroundBitmaps"_ustr);
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_IMAGE ), 1);
 
         // check the pattern and background rectangle
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[10] ), "class"_ostr, "BackgroundPatterns");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[10] ), "class"_ostr, u"BackgroundPatterns"_ustr);
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[10]/SVG_PATTERN ), 1);
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[10]/SVG_PATTERN/SVG_USE ), 1);
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[10]/SVG_G/SVG_RECT ), 1);
@@ -252,7 +252,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE(OString("The exported tiled background has not a valid id: " + sBackgroundId.toUtf8()).getStr(), isValidTiledBackgroundId(sBackgroundId));
 
         // check <use> element that point to the tiled background
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_DEFS ), "class"_ostr, "SlideBackground");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_DEFS ), "class"_ostr, u"SlideBackground"_ustr);
         assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_DEFS/SVG_G/SVG_USE ), 1);
 
         sRef = getXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_G[2]/SVG_G[1]/SVG_G/SVG_G/SVG_G/SVG_DEFS/SVG_G/SVG_USE ), "href"_ostr);
@@ -275,20 +275,20 @@ public:
         Application::SetSettings(aSettings);
 
         loadFromFile(u"text-fields.odp");
-        save("impress_svg_Export");
+        save(u"impress_svg_Export"_ustr);
 
         xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2] ), "class"_ostr, "Master_Slide");
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2] ), "class"_ostr, "BackgroundObjects");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2] ), "class"_ostr, u"Master_Slide"_ustr);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2] ), "class"_ostr, u"BackgroundObjects"_ustr);
 
         // Slide Name Field
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[6] ), "class"_ostr, "TextShape");
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[6]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "class"_ostr, "PlaceholderText PageName");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[6] ), "class"_ostr, u"TextShape"_ustr);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[6]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "class"_ostr, u"PlaceholderText PageName"_ustr);
         // Slide Number Field
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[7] ), "class"_ostr, "TextShape");
-        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[7]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "class"_ostr, "PlaceholderText PageNumber");
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[7] ), "class"_ostr, u"TextShape"_ustr);
+        assertXPath(svgDoc, SAL_STRINGIFY( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[7]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "class"_ostr, u"PlaceholderText PageNumber"_ustr);
     }
 
     CPPUNIT_TEST_SUITE(SdSVGFilterTest);

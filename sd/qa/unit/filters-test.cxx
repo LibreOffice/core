@@ -68,25 +68,25 @@ bool SdFiltersTest::load(const OUString &rFilter, const OUString &rURL,
 void SdFiltersTest::testCVEs()
 {
 #ifndef DISABLE_CVE_TESTS
-    testDir("MS PowerPoint 97",
+    testDir(u"MS PowerPoint 97"_ustr,
             m_directories.getURLFromSrc(u"/sd/qa/unit/data/ppt/"),
-            "sd");
+            u"sd"_ustr);
 
-    testDir("Impress Office Open XML",
+    testDir(u"Impress Office Open XML"_ustr,
             m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/"),
-            "",  (SfxFilterFlags::IMPORT | SfxFilterFlags::ALIEN | SfxFilterFlags::STARONEFILTER));
+            u""_ustr,  (SfxFilterFlags::IMPORT | SfxFilterFlags::ALIEN | SfxFilterFlags::STARONEFILTER));
 
-    testDir("impress8",
+    testDir(u"impress8"_ustr,
             m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/"),
-            "sd");
+            u"sd"_ustr);
 
-    testDir("draw8",
+    testDir(u"draw8"_ustr,
             m_directories.getURLFromSrc(u"/sd/qa/unit/data/odg/"),
-            "sd");
+            u"sd"_ustr);
 
-    testDir("CGM - Computer Graphics Metafile",
+    testDir(u"CGM - Computer Graphics Metafile"_ustr,
             m_directories.getURLFromSrc(u"/sd/qa/unit/data/cgm/"),
-            "icg");
+            u"icg"_ustr);
 #endif
 }
 
@@ -101,7 +101,7 @@ void SdFiltersTest::setUp()
     // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
     // which is a private symbol to us, gets called
     m_xDrawComponent =
-        getMultiServiceFactory()->createInstance("com.sun.star.comp.Draw.PresentationDocument");
+        getMultiServiceFactory()->createInstance(u"com.sun.star.comp.Draw.PresentationDocument"_ustr);
     CPPUNIT_ASSERT_MESSAGE("no impress component!", m_xDrawComponent.is());
 }
 

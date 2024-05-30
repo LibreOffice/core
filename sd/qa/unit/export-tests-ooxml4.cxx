@@ -33,7 +33,7 @@ class SdOOXMLExportTest4 : public SdModelTestBase
 {
 public:
     SdOOXMLExportTest4()
-        : SdModelTestBase("/sd/qa/unit/data/")
+        : SdModelTestBase(u"/sd/qa/unit/data/"_ustr)
     {
     }
 };
@@ -41,60 +41,61 @@ public:
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSmartArtPreserve)
 {
     createSdImpressDoc("pptx/smartart-preserve.pptx");
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
-    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDoc, "//p:sld/p:cSld/p:spTree/p:graphicFrame/p:nvGraphicFramePr/p:cNvPr"_ostr);
     assertXPath(pXmlDoc,
                 "//p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/a:graphicData/dgm:relIds"_ostr);
     assertXPath(
         pXmlDoc,
         "//p:sld/p:cSld/p:spTree/p:graphicFrame/p:nvGraphicFramePr/p:nvPr/p:extLst/p:ext"_ostr,
-        "uri"_ostr, "{D42A27DB-BD31-4B8C-83A1-F6EECF244321}");
+        "uri"_ostr, u"{D42A27DB-BD31-4B8C-83A1-F6EECF244321}"_ustr);
     assertXPath(pXmlDoc, "//p:sld/p:cSld/p:spTree/p:graphicFrame/p:nvGraphicFramePr/p:nvPr/"
                          "p:extLst/p:ext/p14:modId"_ostr);
 
-    xmlDocUniquePtr pXmlDocRels = parseExport("ppt/slides/_rels/slide1.xml.rels");
+    xmlDocUniquePtr pXmlDocRels = parseExport(u"ppt/slides/_rels/slide1.xml.rels"_ustr);
     assertXPath(
         pXmlDocRels,
         "(/rels:Relationships/rels:Relationship[@Target='../diagrams/layout1.xml'])[1]"_ostr,
         "Type"_ostr,
-        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramLayout");
-    assertXPath(pXmlDocRels,
-                "(/rels:Relationships/rels:Relationship[@Target='../diagrams/data1.xml'])[1]"_ostr,
-                "Type"_ostr,
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramData");
+        u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramLayout"_ustr);
+    assertXPath(
+        pXmlDocRels,
+        "(/rels:Relationships/rels:Relationship[@Target='../diagrams/data1.xml'])[1]"_ostr,
+        "Type"_ostr,
+        u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramData"_ustr);
     assertXPath(
         pXmlDocRels,
         "(/rels:Relationships/rels:Relationship[@Target='../diagrams/colors1.xml'])[1]"_ostr,
         "Type"_ostr,
-        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramColors");
+        u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramColors"_ustr);
     assertXPath(
         pXmlDocRels,
         "(/rels:Relationships/rels:Relationship[@Target='../diagrams/quickStyle1.xml'])[1]"_ostr,
         "Type"_ostr,
-        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramQuickStyle");
+        u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramQuickStyle"_ustr);
 
-    xmlDocUniquePtr pXmlContentType = parseExport("[Content_Types].xml");
+    xmlDocUniquePtr pXmlContentType = parseExport(u"[Content_Types].xml"_ustr);
     assertXPath(
         pXmlContentType,
         "/ContentType:Types/ContentType:Override[@PartName='/ppt/diagrams/layout1.xml']"_ostr,
         "ContentType"_ostr,
-        "application/vnd.openxmlformats-officedocument.drawingml.diagramLayout+xml");
+        u"application/vnd.openxmlformats-officedocument.drawingml.diagramLayout+xml"_ustr);
     assertXPath(pXmlContentType,
                 "/ContentType:Types/ContentType:Override[@PartName='/ppt/diagrams/data1.xml']"_ostr,
                 "ContentType"_ostr,
-                "application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml");
+                u"application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml"_ustr);
     assertXPath(
         pXmlContentType,
         "/ContentType:Types/ContentType:Override[@PartName='/ppt/diagrams/colors1.xml']"_ostr,
         "ContentType"_ostr,
-        "application/vnd.openxmlformats-officedocument.drawingml.diagramColors+xml");
+        u"application/vnd.openxmlformats-officedocument.drawingml.diagramColors+xml"_ustr);
     assertXPath(
         pXmlContentType,
         "/ContentType:Types/ContentType:Override[@PartName='/ppt/diagrams/quickStyle1.xml']"_ostr,
         "ContentType"_ostr,
-        "application/vnd.openxmlformats-officedocument.drawingml.diagramStyle+xml");
+        u"application/vnd.openxmlformats-officedocument.drawingml.diagramStyle+xml"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125346)
@@ -102,17 +103,17 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125346)
     // There are two themes in the test document, make sure we use the right theme
 
     createSdImpressDoc("pptx/tdf125346.pptx");
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_SET_THROW);
 
     drawing::FillStyle aFillStyle(drawing::FillStyle_NONE);
-    xPropSet->getPropertyValue("FillStyle") >>= aFillStyle;
+    xPropSet->getPropertyValue(u"FillStyle"_ustr) >>= aFillStyle;
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, aFillStyle);
 
     Color nFillColor;
-    xPropSet->getPropertyValue("FillColor") >>= nFillColor;
+    xPropSet->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
     CPPUNIT_ASSERT_EQUAL(Color(0x90C226), nFillColor);
 }
 
@@ -122,18 +123,18 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125346_2)
     // Test more slides with different themes
 
     createSdImpressDoc("pptx/tdf125346_2.pptx");
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
     {
         uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
         uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_SET_THROW);
 
         drawing::FillStyle aFillStyle(drawing::FillStyle_NONE);
-        xPropSet->getPropertyValue("FillStyle") >>= aFillStyle;
+        xPropSet->getPropertyValue(u"FillStyle"_ustr) >>= aFillStyle;
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, aFillStyle);
 
         Color nFillColor;
-        xPropSet->getPropertyValue("FillColor") >>= nFillColor;
+        xPropSet->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
         CPPUNIT_ASSERT_EQUAL(Color(0x90C226), nFillColor);
     }
 
@@ -142,11 +143,11 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125346_2)
         uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_SET_THROW);
 
         drawing::FillStyle aFillStyle(drawing::FillStyle_NONE);
-        xPropSet->getPropertyValue("FillStyle") >>= aFillStyle;
+        xPropSet->getPropertyValue(u"FillStyle"_ustr) >>= aFillStyle;
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, aFillStyle);
 
         Color nFillColor;
-        xPropSet->getPropertyValue("FillColor") >>= nFillColor;
+        xPropSet->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
         CPPUNIT_ASSERT_EQUAL(Color(0x052F61), nFillColor);
     }
 
@@ -155,11 +156,11 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125346_2)
         uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_SET_THROW);
 
         drawing::FillStyle aFillStyle(drawing::FillStyle_NONE);
-        xPropSet->getPropertyValue("FillStyle") >>= aFillStyle;
+        xPropSet->getPropertyValue(u"FillStyle"_ustr) >>= aFillStyle;
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, aFillStyle);
 
         Color nFillColor;
-        xPropSet->getPropertyValue("FillColor") >>= nFillColor;
+        xPropSet->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
         CPPUNIT_ASSERT_EQUAL(Color(0x90C226), nFillColor);
     }
 }
@@ -173,14 +174,14 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125360)
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
 
-    xShape->setPropertyValue("FillTransparence", uno::Any(static_cast<sal_Int32>(23)));
+    xShape->setPropertyValue(u"FillTransparence"_ustr, uno::Any(static_cast<sal_Int32>(23)));
 
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
     xShape.set(getShapeFromPage(0, 0));
 
     sal_Int32 nTransparence = 0;
-    xShape->getPropertyValue("FillTransparence") >>= nTransparence;
+    xShape->getPropertyValue(u"FillTransparence"_ustr) >>= nTransparence;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(23), nTransparence);
 }
 
@@ -193,14 +194,14 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125360_1)
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
 
-    xShape->setPropertyValue("FillTransparence", uno::Any(static_cast<sal_Int32>(23)));
+    xShape->setPropertyValue(u"FillTransparence"_ustr, uno::Any(static_cast<sal_Int32>(23)));
 
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
     xShape.set(getShapeFromPage(0, 0));
 
     sal_Int32 nTransparence = 0;
-    xShape->getPropertyValue("FillTransparence") >>= nTransparence;
+    xShape->getPropertyValue(u"FillTransparence"_ustr) >>= nTransparence;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(23), nTransparence);
 }
 
@@ -214,24 +215,24 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125360_2)
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
 
     sal_Int32 nTransparence = 0;
-    xShape->getPropertyValue("FillTransparence") >>= nTransparence;
+    xShape->getPropertyValue(u"FillTransparence"_ustr) >>= nTransparence;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(82), nTransparence);
 
-    xShape->setPropertyValue("FillTransparence", uno::Any(static_cast<sal_Int32>(23)));
+    xShape->setPropertyValue(u"FillTransparence"_ustr, uno::Any(static_cast<sal_Int32>(23)));
 
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
     xShape.set(getShapeFromPage(0, 0));
 
     nTransparence = 0;
-    xShape->getPropertyValue("FillTransparence") >>= nTransparence;
+    xShape->getPropertyValue(u"FillTransparence"_ustr) >>= nTransparence;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(23), nTransparence);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125551)
 {
     createSdImpressDoc("pptx/tdf125551.pptx");
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
     uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShapeBg(xGroupShape->getByIndex(0), uno::UNO_QUERY);
@@ -245,7 +246,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125551)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf136830)
 {
     createSdImpressDoc("pptx/tdf136830.pptx");
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
     // Without the fix in place, the X position of the shapes would have been 0
     uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
@@ -266,7 +267,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf136830)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf126234)
 {
     createSdImpressDoc("pptx/tdf126234.pptx");
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
     // check relative size of the bullet, 400% is a legitimate value for MS Office document
     // Without a fix, it will fail to set the size correctly
@@ -282,7 +283,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf126234)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf126741)
 {
     createSdImpressDoc("pptx/tdf126741.pptx");
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
     // dash dot dot line style import fix
     // The original fixed values are replaced with the percent values, because
@@ -305,10 +306,10 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf126741)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf127372)
 {
     createSdImpressDoc("odp/tdf127372.odp");
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     awt::Gradient2 aTransparenceGradient;
-    xShape->getPropertyValue("FillTransparenceGradient") >>= aTransparenceGradient;
+    xShape->getPropertyValue(u"FillTransparenceGradient"_ustr) >>= aTransparenceGradient;
 
     // MCGR: Use the completely imported gradient to check for correctness
     const basegfx::BColorStops aColorStops
@@ -324,24 +325,24 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf127372)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf127379)
 {
     createSdImpressDoc("odp/tdf127379.odp");
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDoc->getDrawPages()->getCount());
 
     uno::Reference<drawing::XDrawPage> xPage(getPage(0));
     uno::Reference<beans::XPropertySet> xPropSet(xPage, uno::UNO_QUERY);
 
-    uno::Any aAny = xPropSet->getPropertyValue("Background");
+    uno::Any aAny = xPropSet->getPropertyValue(u"Background"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Slide background is missing", aAny.hasValue());
     uno::Reference<beans::XPropertySet> aXBackgroundPropSet;
     aAny >>= aXBackgroundPropSet;
 
     drawing::FillStyle aFillStyle(drawing::FillStyle_NONE);
-    aXBackgroundPropSet->getPropertyValue("FillStyle") >>= aFillStyle;
+    aXBackgroundPropSet->getPropertyValue(u"FillStyle"_ustr) >>= aFillStyle;
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, aFillStyle);
 
     awt::Gradient2 aGradient;
-    CPPUNIT_ASSERT(aXBackgroundPropSet->getPropertyValue("FillGradient") >>= aGradient);
+    CPPUNIT_ASSERT(aXBackgroundPropSet->getPropertyValue(u"FillGradient"_ustr) >>= aGradient);
 
     // MCGR: Use the completely imported gradient to check for correctness
     const basegfx::BColorStops aColorStops
@@ -357,23 +358,23 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf127379)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf98603)
 {
     createSdImpressDoc("pptx/tdf98603.pptx");
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xShape));
     uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
     uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY_THROW);
     css::lang::Locale aLocale;
-    xPropSet->getPropertyValue("CharLocaleComplex") >>= aLocale;
-    CPPUNIT_ASSERT_EQUAL(OUString("he"), aLocale.Language);
-    CPPUNIT_ASSERT_EQUAL(OUString("IL"), aLocale.Country);
+    xPropSet->getPropertyValue(u"CharLocaleComplex"_ustr) >>= aLocale;
+    CPPUNIT_ASSERT_EQUAL(u"he"_ustr, aLocale.Language);
+    CPPUNIT_ASSERT_EQUAL(u"IL"_ustr, aLocale.Country);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf128213)
 {
     createSdImpressDoc("pptx/tdf128213.pptx");
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
-    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPathNoAttribute(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:xfrm"_ostr,
                            "rot"_ostr);
 }
@@ -381,43 +382,43 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf128213)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf79082)
 {
     createSdImpressDoc("pptx/tdf79082.pptx");
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
-    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDocContent,
                 "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[1]"_ostr,
-                "pos"_ostr, "360000");
+                "pos"_ostr, u"360000"_ustr);
     assertXPath(pXmlDocContent,
                 "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[1]"_ostr,
-                "algn"_ostr, "l");
+                "algn"_ostr, u"l"_ustr);
 
     assertXPath(pXmlDocContent,
                 "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[2]"_ostr,
-                "pos"_ostr, "756000");
+                "pos"_ostr, u"756000"_ustr);
     assertXPath(pXmlDocContent,
                 "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[2]"_ostr,
-                "algn"_ostr, "l");
+                "algn"_ostr, u"l"_ustr);
 
     assertXPath(pXmlDocContent,
                 "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[3]"_ostr,
-                "pos"_ostr, "1440000");
+                "pos"_ostr, u"1440000"_ustr);
     assertXPath(pXmlDocContent,
                 "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[3]"_ostr,
-                "algn"_ostr, "ctr");
+                "algn"_ostr, u"ctr"_ustr);
 
     assertXPath(pXmlDocContent,
                 "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[4]"_ostr,
-                "pos"_ostr, "1800000");
+                "pos"_ostr, u"1800000"_ustr);
     assertXPath(pXmlDocContent,
                 "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[4]"_ostr,
-                "algn"_ostr, "r");
+                "algn"_ostr, u"r"_ustr);
 
     assertXPath(pXmlDocContent,
                 "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[5]"_ostr,
-                "pos"_ostr, "3240000");
+                "pos"_ostr, u"3240000"_ustr);
     assertXPath(pXmlDocContent,
                 "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[5]"_ostr,
-                "algn"_ostr, "dec");
+                "algn"_ostr, u"dec"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf129372)
@@ -425,7 +426,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf129372)
     //Without the fix in place, it would crash at import time
 
     createSdImpressDoc("pptx/tdf129372.pptx");
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
     const SdrPage* pPage = GetPage(1);
 
     const SdrObject* pObj = pPage->GetObj(0);
@@ -436,16 +437,16 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf129372)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testShapeGlowEffect)
 {
     createSdImpressDoc("pptx/shape-glow-effect.pptx");
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     sal_Int32 nRadius = -1;
-    xShape->getPropertyValue("GlowEffectRadius") >>= nRadius;
+    xShape->getPropertyValue(u"GlowEffectRadius"_ustr) >>= nRadius;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(388), nRadius); // 139700 EMU = 388.0556 mm/100
     Color nColor;
-    xShape->getPropertyValue("GlowEffectColor") >>= nColor;
+    xShape->getPropertyValue(u"GlowEffectColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0xFFC000), nColor);
     sal_Int16 nTransparency;
-    xShape->getPropertyValue("GlowEffectTransparency") >>= nTransparency;
+    xShape->getPropertyValue(u"GlowEffectTransparency"_ustr) >>= nTransparency;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(60), nTransparency);
 }
 
@@ -459,37 +460,37 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testUnderline)
     uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY_THROW);
 
     Color nColor;
-    xPropSet->getPropertyValue("CharColor") >>= nColor;
+    xPropSet->getPropertyValue(u"CharColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, nColor);
 
-    xPropSet->getPropertyValue("CharUnderlineColor") >>= nColor;
+    xPropSet->getPropertyValue(u"CharUnderlineColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_AUTO, nColor);
 
     sal_Int16 nUnderline;
-    xPropSet->getPropertyValue("CharUnderline") >>= nUnderline;
+    xPropSet->getPropertyValue(u"CharUnderline"_ustr) >>= nUnderline;
     CPPUNIT_ASSERT_EQUAL(awt::FontUnderline::DOUBLE, nUnderline);
 
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
 
     xShape.set(getShapeFromPage(0, 0));
     xParagraph.set(getParagraphFromShape(0, xShape));
     xRun.set(getRunFromParagraph(0, xParagraph));
     xPropSet.set(xRun, uno::UNO_QUERY_THROW);
 
-    xPropSet->getPropertyValue("CharColor") >>= nColor;
+    xPropSet->getPropertyValue(u"CharColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, nColor);
 
-    xPropSet->getPropertyValue("CharUnderlineColor") >>= nColor;
+    xPropSet->getPropertyValue(u"CharUnderlineColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_AUTO, nColor);
 
-    xPropSet->getPropertyValue("CharUnderline") >>= nUnderline;
+    xPropSet->getPropertyValue(u"CharUnderline"_ustr) >>= nUnderline;
     CPPUNIT_ASSERT_EQUAL(awt::FontUnderline::DOUBLE, nUnderline);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf119087)
 {
     createSdImpressDoc("pptx/tdf119087.pptx");
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
     // This would fail both on export validation, and reloading the saved pptx file.
 
     // Get first paragraph of the text
@@ -500,14 +501,14 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf119087)
     uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY_THROW);
 
     Color nColor = COL_AUTO;
-    xPropSet->getPropertyValue("CharColor") >>= nColor;
+    xPropSet->getPropertyValue(u"CharColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0x00B050), nColor);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf131554)
 {
     createSdImpressDoc("pptx/tdf131554.pptx");
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
     uno::Reference<drawing::XShape> xShape(getShapeFromPage(1, 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5622), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(13251), xShape->getPosition().Y);
@@ -516,7 +517,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf131554)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf132282)
 {
     createSdImpressDoc("pptx/tdf132282.pptx");
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
     uno::Reference<drawing::XShape> xShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
     // Without the fix in place, the position would be 0,0, height = 1 and width = 1
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1736), xShape->getPosition().X);
@@ -528,8 +529,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf132282)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf132201EffectOrder)
 {
     createSdImpressDoc("pptx/effectOrder.pptx");
-    save("Impress Office Open XML");
-    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
+    save(u"Impress Office Open XML"_ustr);
+    xmlDocUniquePtr pXmlDocContent = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPathChildren(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[3]/p:spPr/a:effectLst"_ostr,
                         2);
     // The relative order of effects is important: glow must be before shadow
@@ -544,32 +545,32 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf132201EffectOrder)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testShapeSoftEdgeEffect)
 {
     createSdImpressDoc("pptx/shape-soft-edges.pptx");
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
     auto xShapeProps(getShapeFromPage(0, 0));
     sal_Int32 nRadius = -1;
-    xShapeProps->getPropertyValue("SoftEdgeRadius") >>= nRadius;
+    xShapeProps->getPropertyValue(u"SoftEdgeRadius"_ustr) >>= nRadius;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(635), nRadius); // 18 pt
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testShapeShadowBlurEffect)
 {
     createSdImpressDoc("pptx/shape-blur-effect.pptx");
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     bool bHasShadow = false;
-    xShape->getPropertyValue("Shadow") >>= bHasShadow;
+    xShape->getPropertyValue(u"Shadow"_ustr) >>= bHasShadow;
     CPPUNIT_ASSERT(bHasShadow);
     sal_Int32 nRadius = -1;
-    xShape->getPropertyValue("ShadowBlur") >>= nRadius;
+    xShape->getPropertyValue(u"ShadowBlur"_ustr) >>= nRadius;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(388), nRadius); // 11 pt
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf119223)
 {
     createSdImpressDoc("odp/tdf119223.odp");
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
-    xmlDocUniquePtr pXmlDocRels = parseExport("ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocRels = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDocRels, "//p:cNvPr[@name='SomeCustomShape']"_ostr);
 
     assertXPath(pXmlDocRels, "//p:cNvPr[@name='SomePicture']"_ostr);
@@ -588,14 +589,14 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf119223)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf128213ShapeRot)
 {
     createSdImpressDoc("pptx/tdf128213-shaperot.pptx");
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
-    xmlDocUniquePtr pXmlDocRels = parseExport("ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocRels = parseExport(u"ppt/slides/slide1.xml"_ustr);
 
     assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr/a:scene3d"_ostr);
     assertXPath(pXmlDocRels,
                 "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot"_ostr,
-                "rev"_ostr, "5400000");
+                "rev"_ostr, u"5400000"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125560_textDeflate)
@@ -603,13 +604,13 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125560_textDeflate)
     createSdImpressDoc("pptx/ShapePlusImage.pptx");
 
     // This problem did not affect the pptx export, only the ODP so assert that
-    save("impress8");
+    save(u"impress8"_ustr);
 
-    xmlDocUniquePtr pXmlDocRels = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDocRels = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDocRels,
                 "/office:document-content/office:body/office:presentation/draw:page/"
                 "draw:custom-shape/draw:enhanced-geometry"_ostr,
-                "type"_ostr, "mso-spt161");
+                "type"_ostr, u"mso-spt161"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125560_textInflateTop)
@@ -617,28 +618,30 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125560_textInflateTop)
     createSdImpressDoc("pptx/ShapeTextInflateTop.pptx");
 
     // This problem did not affect the pptx export, only the ODP so assert that
-    save("impress8");
+    save(u"impress8"_ustr);
 
-    xmlDocUniquePtr pXmlDocRels = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDocRels = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDocRels,
                 "/office:document-content/office:body/office:presentation/draw:page/"
                 "draw:custom-shape/draw:enhanced-geometry"_ostr,
-                "type"_ostr, "mso-spt164");
+                "type"_ostr, u"mso-spt164"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf142235_TestPlaceholderTextAlignment)
 {
     createSdImpressDoc("odp/placeholder-box-textalignment.odp");
 
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
-    xmlDocUniquePtr pXml1 = parseExport("ppt/slides/slide2.xml");
-    xmlDocUniquePtr pXml2 = parseExport("ppt/slides/slide3.xml");
+    xmlDocUniquePtr pXml1 = parseExport(u"ppt/slides/slide2.xml"_ustr);
+    xmlDocUniquePtr pXml2 = parseExport(u"ppt/slides/slide3.xml"_ustr);
 
     // Without the fix in place many of these asserts failed, because alignment was bad.
 
-    assertXPath(pXml1, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:bodyPr"_ostr, "anchor"_ostr, "t");
-    assertXPath(pXml2, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:bodyPr"_ostr, "anchor"_ostr, "t");
+    assertXPath(pXml1, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:bodyPr"_ostr, "anchor"_ostr,
+                u"t"_ustr);
+    assertXPath(pXml2, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:bodyPr"_ostr, "anchor"_ostr,
+                u"t"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf96061_textHighlight)
@@ -651,28 +654,28 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf96061_textHighlight)
     uno::Reference<beans::XPropertySet> xPropSet1(xRun1, uno::UNO_QUERY_THROW);
 
     Color aColor;
-    xPropSet1->getPropertyValue("CharBackColor") >>= aColor;
+    xPropSet1->getPropertyValue(u"CharBackColor"_ustr) >>= aColor;
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, aColor);
 
     uno::Reference<text::XTextRange> const xParagraph2(getParagraphFromShape(1, xShape));
     uno::Reference<text::XTextRange> xRun2(getRunFromParagraph(0, xParagraph2));
     uno::Reference<beans::XPropertySet> xPropSet2(xRun2, uno::UNO_QUERY_THROW);
-    xPropSet2->getPropertyValue("CharBackColor") >>= aColor;
+    xPropSet2->getPropertyValue(u"CharBackColor"_ustr) >>= aColor;
     CPPUNIT_ASSERT_EQUAL(COL_AUTO, aColor);
 
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
 
     uno::Reference<beans::XPropertySet> xShape2(getShapeFromPage(0, 0));
     uno::Reference<text::XTextRange> const xParagraph3(getParagraphFromShape(0, xShape2));
     uno::Reference<text::XTextRange> xRun3(getRunFromParagraph(0, xParagraph3));
     uno::Reference<beans::XPropertySet> xPropSet3(xRun3, uno::UNO_QUERY_THROW);
-    xPropSet3->getPropertyValue("CharBackColor") >>= aColor;
+    xPropSet3->getPropertyValue(u"CharBackColor"_ustr) >>= aColor;
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, aColor);
 
     uno::Reference<text::XTextRange> const xParagraph4(getParagraphFromShape(1, xShape2));
     uno::Reference<text::XTextRange> xRun4(getRunFromParagraph(0, xParagraph4));
     uno::Reference<beans::XPropertySet> xPropSet4(xRun4, uno::UNO_QUERY_THROW);
-    xPropSet4->getPropertyValue("CharBackColor") >>= aColor;
+    xPropSet4->getPropertyValue(u"CharBackColor"_ustr) >>= aColor;
     CPPUNIT_ASSERT_EQUAL(COL_AUTO, aColor);
 }
 
@@ -691,7 +694,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf143222_embeddedWorksheet)
     CPPUNIT_ASSERT_MESSAGE("no graphic", pGraphic != nullptr);
 
     // Check export of embedded worksheet in slide.
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
 
     pPage = GetPage(1);
     pOleObj = static_cast<SdrOle2Obj*>(pPage->GetObj(0));
@@ -705,9 +708,9 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf143315)
 {
     createSdImpressDoc("ppt/tdf143315-WordartWithoutBullet.ppt");
 
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
-    xmlDocUniquePtr pXml = parseExport("ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXml = parseExport(u"ppt/slides/slide1.xml"_ustr);
 
     // Without the fix in place, this would have failed with
     // - Expected:
@@ -736,12 +739,12 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf147121)
         getRunFromParagraph(2, getParagraphFromShape(0, xShape)), uno::UNO_QUERY_THROW);
 
     // Save the font size
-    const auto nFontSizeBefore = xRun->getPropertyValue("CharHeight").get<float>() * 100;
+    const auto nFontSizeBefore = xRun->getPropertyValue(u"CharHeight"_ustr).get<float>() * 100;
 
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
     // Parse the export
-    xmlDocUniquePtr pXml = parseExport("ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXml = parseExport(u"ppt/slides/slide1.xml"_ustr);
     const auto nFontSizeAfter
         = getXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:br[1]/a:rPr"_ostr, "sz"_ostr)
               .toFloat();
@@ -759,7 +762,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf140912_PicturePlaceholder)
     bool isEmptyPresentationObject = false;
     // Without the fix, it would not be imported as empty presentation object;
     // the text would be treated as its content.
-    xShapeProps->getPropertyValue("IsEmptyPresentationObject") >>= isEmptyPresentationObject;
+    xShapeProps->getPropertyValue(u"IsEmptyPresentationObject"_ustr) >>= isEmptyPresentationObject;
     CPPUNIT_ASSERT(isEmptyPresentationObject);
 
     // If we supported custom prompt text, here we would also test "String" property,
@@ -769,10 +772,10 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf140912_PicturePlaceholder)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testEnhancedPathViewBox)
 {
     createSdImpressDoc("odp/tdf147978_enhancedPath_viewBox.odp");
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
     auto xShapeProps(getShapeFromPage(0, 0));
     awt::Rectangle aBoundRectangle;
-    xShapeProps->getPropertyValue("BoundRect") >>= aBoundRectangle;
+    xShapeProps->getPropertyValue(u"BoundRect"_ustr) >>= aBoundRectangle;
     // The shape has a Bézier curve which does not touch the right edge. Prior to the fix the curve
     // was stretched to touch the edge, resulting in 5098 curve width instead of 2045.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2045), aBoundRectangle.Width);
@@ -781,7 +784,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testEnhancedPathViewBox)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf74670)
 {
     createSdImpressDoc("odp/tdf74670.odp");
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
@@ -806,16 +809,16 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf109169_OctagonBevel)
     // rectangle and thus had 4 points.
 
     createSdImpressDoc("odp/tdf109169_Octagon.odp");
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
 
     auto xPropSet(getShapeFromPage(0, 0));
-    auto aGeomPropSeq = xPropSet->getPropertyValue("CustomShapeGeometry")
+    auto aGeomPropSeq = xPropSet->getPropertyValue(u"CustomShapeGeometry"_ustr)
                             .get<uno::Sequence<beans::PropertyValue>>();
     comphelper::SequenceAsHashMap aCustomShapeGeometry(aGeomPropSeq);
-    auto aPathSeq((aCustomShapeGeometry["Path"]).get<uno::Sequence<beans::PropertyValue>>());
+    auto aPathSeq((aCustomShapeGeometry[u"Path"_ustr]).get<uno::Sequence<beans::PropertyValue>>());
     comphelper::SequenceAsHashMap aPath(aPathSeq);
-    auto aCoordinates(
-        (aPath["Coordinates"]).get<uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>());
+    auto aCoordinates((aPath[u"Coordinates"_ustr])
+                          .get<uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(40), aCoordinates.getLength());
 }
 
@@ -826,16 +829,16 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf109169_DiamondBevel)
     // rectangle and thus had 4 points.
 
     createSdImpressDoc("odp/tdf109169_Diamond.odp");
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
 
     auto xPropSet(getShapeFromPage(0, 0));
-    auto aGeomPropSeq = xPropSet->getPropertyValue("CustomShapeGeometry")
+    auto aGeomPropSeq = xPropSet->getPropertyValue(u"CustomShapeGeometry"_ustr)
                             .get<uno::Sequence<beans::PropertyValue>>();
     comphelper::SequenceAsHashMap aCustomShapeGeometry(aGeomPropSeq);
-    auto aPathSeq((aCustomShapeGeometry["Path"]).get<uno::Sequence<beans::PropertyValue>>());
+    auto aPathSeq((aCustomShapeGeometry[u"Path"_ustr]).get<uno::Sequence<beans::PropertyValue>>());
     comphelper::SequenceAsHashMap aPath(aPathSeq);
-    auto aCoordinates(
-        (aPath["Coordinates"]).get<uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>());
+    auto aCoordinates((aPath[u"Coordinates"_ustr])
+                          .get<uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(20), aCoordinates.getLength());
 }
 
@@ -845,15 +848,16 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf144092_emptyShapeTextProps)
     // text properties contained inside endParaRPr - The import and export
     // of endParaRPr for empty cells and shapes are tested here
     createSdImpressDoc("pptx/tdf144092-emptyShapeTextProps.pptx");
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
 
     Color aColor;
     // check text properties of empty shape
     uno::Reference<beans::XPropertySet> xRectShapeProps(getShapeFromPage(1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Calibri"),
-                         xRectShapeProps->getPropertyValue("CharFontName").get<OUString>());
-    CPPUNIT_ASSERT_EQUAL(float(196), xRectShapeProps->getPropertyValue("CharHeight").get<float>());
-    xRectShapeProps->getPropertyValue("CharColor") >>= aColor;
+    CPPUNIT_ASSERT_EQUAL(u"Calibri"_ustr,
+                         xRectShapeProps->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(float(196),
+                         xRectShapeProps->getPropertyValue(u"CharHeight"_ustr).get<float>());
+    xRectShapeProps->getPropertyValue(u"CharColor"_ustr) >>= aColor;
     CPPUNIT_ASSERT_EQUAL(Color(0x70AD47), aColor);
 
     const SdrPage* pPage = GetPage(1);
@@ -864,13 +868,13 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf144092_emptyShapeTextProps)
 
     // check text properties of empty cells
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
-    xCell->getPropertyValue("CharColor") >>= aColor;
+    xCell->getPropertyValue(u"CharColor"_ustr) >>= aColor;
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, aColor);
 
     xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
-    xCell->getPropertyValue("CharColor") >>= aColor;
+    xCell->getPropertyValue(u"CharColor"_ustr) >>= aColor;
     CPPUNIT_ASSERT_EQUAL(Color(0x70AD47), aColor);
-    CPPUNIT_ASSERT_EQUAL(float(96), xCell->getPropertyValue("CharHeight").get<float>());
+    CPPUNIT_ASSERT_EQUAL(float(96), xCell->getPropertyValue(u"CharHeight"_ustr).get<float>());
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf149551_tbrl90)
@@ -883,23 +887,23 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf149551_tbrl90)
     // Test, that the shape has writing mode TB_RL90.
     uno::Reference<beans::XPropertySet> xShapeProps(getShapeFromPage(0, 0));
     sal_Int16 eWritingMode;
-    xShapeProps->getPropertyValue("WritingMode") >>= eWritingMode;
+    xShapeProps->getPropertyValue(u"WritingMode"_ustr) >>= eWritingMode;
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL90, eWritingMode);
 
     // Test, that it is exported to vert="vert"
-    save("Impress Office Open XML");
-    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
-    assertXPath(pXmlDoc, "//a:bodyPr"_ostr, "vert"_ostr, "vert");
+    save(u"Impress Office Open XML"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:bodyPr"_ostr, "vert"_ostr, u"vert"_ustr);
 
     // Test, that the shape has writing mode TB_RL90 after read from pptx
     uno::Reference<beans::XPropertySet> xShapeProps2(getShapeFromPage(0, 0));
     sal_Int16 eWritingMode2;
-    xShapeProps2->getPropertyValue("WritingMode") >>= eWritingMode2;
+    xShapeProps2->getPropertyValue(u"WritingMode"_ustr) >>= eWritingMode2;
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL90, eWritingMode2);
 
     // Test, that it is written to odp with loext:writing-mode="tb-rl90"
-    save("impress8");
-    pXmlDoc = parseExport("content.xml");
+    save(u"impress8"_ustr);
+    pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(
         pXmlDoc,
         "//style:style[@style:name='gr1']/style:graphic-properties[@loext:writing-mode='tb-rl90']"_ostr);
@@ -915,23 +919,23 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf149551_btlr)
     // Test, that the shape has writing mode BT_LR.
     uno::Reference<beans::XPropertySet> xShapeProps(getShapeFromPage(0, 0));
     sal_Int16 eWritingMode;
-    xShapeProps->getPropertyValue("WritingMode") >>= eWritingMode;
+    xShapeProps->getPropertyValue(u"WritingMode"_ustr) >>= eWritingMode;
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::BT_LR, eWritingMode);
 
     // Test, that it is exported to vert="vert270"
-    save("Impress Office Open XML");
-    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
-    assertXPath(pXmlDoc, "//a:bodyPr"_ostr, "vert"_ostr, "vert270");
+    save(u"Impress Office Open XML"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:bodyPr"_ostr, "vert"_ostr, u"vert270"_ustr);
 
     // Test, that the shape has writing mode BT_LR after read from pptx
     uno::Reference<beans::XPropertySet> xShapeProps2(getShapeFromPage(0, 0));
     sal_Int16 eWritingMode2;
-    xShapeProps2->getPropertyValue("WritingMode") >>= eWritingMode2;
+    xShapeProps2->getPropertyValue(u"WritingMode"_ustr) >>= eWritingMode2;
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::BT_LR, eWritingMode2);
 
     // Test, that it is written to odp with loext:writing-mode="bt-lr"
-    save("impress8");
-    pXmlDoc = parseExport("content.xml");
+    save(u"impress8"_ustr);
+    pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(
         pXmlDoc,
         "//style:style[@style:name='gr1']/style:graphic-properties[@loext:writing-mode='bt-lr']"_ostr);
@@ -948,7 +952,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf94122_autoColor)
 
     createSdImpressDoc("odp/tdf94122_autocolor.odp");
 
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
     // Without the accompanying fix in place, these tests would have failed with:
     // - Expected: 1
@@ -956,23 +960,23 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf94122_autoColor)
     // - In ..., XPath '/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr' number of nodes is incorrect
     // i.e. automatic color wasn't resolved & exported
 
-    xmlDocUniquePtr pXmlDocContent1 = parseExport("ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent1 = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDocContent1,
                 "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr"_ostr,
-                "val"_ostr, "000000");
+                "val"_ostr, u"000000"_ustr);
 
-    xmlDocUniquePtr pXmlDocContent2 = parseExport("ppt/slides/slide2.xml");
+    xmlDocUniquePtr pXmlDocContent2 = parseExport(u"ppt/slides/slide2.xml"_ustr);
     assertXPath(pXmlDocContent2,
                 "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr"_ostr,
-                "val"_ostr, "ffffff");
+                "val"_ostr, u"ffffff"_ustr);
 
-    xmlDocUniquePtr pXmlDocContent3 = parseExport("ppt/slides/slide3.xml");
+    xmlDocUniquePtr pXmlDocContent3 = parseExport(u"ppt/slides/slide3.xml"_ustr);
     assertXPath(pXmlDocContent3,
                 "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr"_ostr,
-                "val"_ostr, "ffffff");
+                "val"_ostr, u"ffffff"_ustr);
     assertXPath(pXmlDocContent3,
                 "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:srgbClr"_ostr,
-                "val"_ostr, "000000");
+                "val"_ostr, u"000000"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf124333)
@@ -985,7 +989,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf124333)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("number of shapes is incorrect", sal_Int32(2),
                                  getPage(0)->getCount());
 
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
 
     // Check number of shapes after export.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("number of shapes is incorrect after export", sal_Int32(2),
@@ -996,35 +1000,35 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testAutofittedTextboxIndent)
 {
     createSdImpressDoc("odp/autofitted-textbox-indent.odp");
 
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
     // Check that the indent hasn't changed and wasn't scaled when exporting
     // (the behaviour changed).
 
-    xmlDocUniquePtr pXmlDocContent1 = parseExport("ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDocContent1 = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p[1]/a:pPr"_ostr,
-                "marL"_ostr, "1080000");
+                "marL"_ostr, u"1080000"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf151622_oleIcon)
 {
     createSdImpressDoc("odp/ole_icon.odp");
 
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
-    xmlDocUniquePtr pXml = parseExport("ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXml = parseExport(u"ppt/slides/slide1.xml"_ustr);
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expression: prop
     // - In ..., XPath '//p:oleObj' no attribute 'showAsIcon' exist
     // i.e. show as icon option wasn't exported.
-    assertXPath(pXml, "//p:oleObj"_ostr, "showAsIcon"_ostr, "1");
+    assertXPath(pXml, "//p:oleObj"_ostr, "showAsIcon"_ostr, u"1"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf152436)
 {
     createSdImpressDoc("pptx/ole-emf_min.pptx");
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
 
     // Check number of shapes after export.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getPage(0)->getCount());
@@ -1034,9 +1038,9 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testLinkedOLE)
 {
     createSdImpressDoc("odp/linked_ole.odp");
 
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
-    xmlDocUniquePtr pXml = parseExport("ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXml = parseExport(u"ppt/slides/slide1.xml"_ustr);
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -1049,7 +1053,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testLinkedOLE)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf102261_testParaTabStopDefaultDistance)
 {
     createSdImpressDoc("pptx/tdf102261_testParaTabStopDefaultDistance.pptx");
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     {
@@ -1057,52 +1061,52 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf102261_testParaTabStopDefaultDis
                                                      uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(
             sal_Int32{ 1270 },
-            xPropSet->getPropertyValue("ParaTabStopDefaultDistance").get<sal_Int32>());
+            xPropSet->getPropertyValue(u"ParaTabStopDefaultDistance"_ustr).get<sal_Int32>());
     }
     {
         uno::Reference<beans::XPropertySet> xPropSet(getParagraphFromShape(1, xShape),
                                                      uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(
             sal_Int32{ 2540 },
-            xPropSet->getPropertyValue("ParaTabStopDefaultDistance").get<sal_Int32>());
+            xPropSet->getPropertyValue(u"ParaTabStopDefaultDistance"_ustr).get<sal_Int32>());
     }
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTableCellVerticalPropertyRoundtrip)
 {
     createSdImpressDoc("pptx/tcPr-vert-roundtrip.pptx");
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
 
-    xmlDocUniquePtr pXml = parseExport("ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXml = parseExport(u"ppt/slides/slide1.xml"_ustr);
 
-    assertXPath(pXml, "(//a:tcPr)[1]"_ostr, "vert"_ostr, "vert");
-    assertXPath(pXml, "(//a:tcPr)[2]"_ostr, "vert"_ostr, "vert270");
-    assertXPath(pXml, "(//a:tcPr)[3]"_ostr, "vert"_ostr, "wordArtVert");
+    assertXPath(pXml, "(//a:tcPr)[1]"_ostr, "vert"_ostr, u"vert"_ustr);
+    assertXPath(pXml, "(//a:tcPr)[2]"_ostr, "vert"_ostr, u"vert270"_ustr);
+    assertXPath(pXml, "(//a:tcPr)[3]"_ostr, "vert"_ostr, u"wordArtVert"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf157740_slideMasters)
 {
     createSdImpressDoc("pptx/tdf157740.pptx");
-    saveAndReload("Impress Office Open XML");
+    saveAndReload(u"Impress Office Open XML"_ustr);
 
     // Test how many slidemaster we have
-    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/presentation.xml");
+    xmlDocUniquePtr pXmlDocContent = parseExport(u"ppt/presentation.xml"_ustr);
     assertXPath(pXmlDocContent, "/p:presentation/p:sldMasterIdLst/p:sldMasterId"_ostr, 7);
 
-    pXmlDocContent = parseExport("ppt/slideMasters/slideMaster1.xml");
+    pXmlDocContent = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
     assertXPath(pXmlDocContent, "/p:sldMaster/p:sldLayoutIdLst/p:sldLayoutId"_ostr, 1);
 
-    pXmlDocContent = parseExport("ppt/slideMasters/slideMaster7.xml");
+    pXmlDocContent = parseExport(u"ppt/slideMasters/slideMaster7.xml"_ustr);
     assertXPath(pXmlDocContent, "/p:sldMaster/p:sldLayoutIdLst/p:sldLayoutId"_ostr, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf159931_slideLayouts)
 {
     createSdImpressDoc("odp/repeatBitmapMode.odp");
-    save("Impress Office Open XML");
+    save(u"Impress Office Open XML"_ustr);
 
-    xmlDocUniquePtr pXmlDocRels1 = parseExport("ppt/slides/_rels/slide1.xml.rels");
-    xmlDocUniquePtr pXmlDocRels2 = parseExport("ppt/slides/_rels/slide2.xml.rels");
+    xmlDocUniquePtr pXmlDocRels1 = parseExport(u"ppt/slides/_rels/slide1.xml.rels"_ustr);
+    xmlDocUniquePtr pXmlDocRels2 = parseExport(u"ppt/slides/_rels/slide2.xml.rels"_ustr);
 
     assertXPath(
         pXmlDocRels1,

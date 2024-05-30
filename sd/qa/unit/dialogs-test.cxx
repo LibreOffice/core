@@ -103,7 +103,7 @@ void SdDialogsTest::setUp()
     ScreenshotTest::setUp();
 
     mpFact = SdAbstractDialogFactory::Create();
-    mxComponent = loadFromDesktop("private:factory/simpress", "com.sun.star.presentation.PresentationDocument");
+    mxComponent = loadFromDesktop(u"private:factory/simpress"_ustr, u"com.sun.star.presentation.PresentationDocument"_ustr);
 
     mpImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(mpImpressDocument);
@@ -351,7 +351,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 getViewShell()->GetFrameWeld(),
                 pDrawDoc,
                 nullptr,
-                "foo");
+                u"foo"_ustr);
             break;
         }
         case 9:

@@ -29,7 +29,7 @@ class SdActiveXControlsTest: public SdModelTestBase
 {
 public:
     SdActiveXControlsTest()
-        : SdModelTestBase("/sd/qa/unit/data/")
+        : SdModelTestBase(u"/sd/qa/unit/data/"_ustr)
     {
     }
 
@@ -107,7 +107,7 @@ void SdActiveXControlsTest::testBackgroundColor()
 
         uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
         Color nColor;
-        xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+        xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
         OString sMessage = "The wrong control's index is: " + OString::number(i);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), vBackgroundColors[i], nColor);
     }
@@ -122,73 +122,73 @@ void SdActiveXControlsTest::testLabelProperties()
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
     OUString sLabel;
-    xPropertySet->getPropertyValue("Label") >>= sLabel;
-    CPPUNIT_ASSERT_EQUAL(OUString("Label1"), sLabel);
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= sLabel;
+    CPPUNIT_ASSERT_EQUAL(u"Label1"_ustr, sLabel);
 
     bool bEnabled;
-    xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
+    xPropertySet->getPropertyValue(u"Enabled"_ustr) >>= bEnabled;
     CPPUNIT_ASSERT_EQUAL(true, bEnabled);
 
     bool bMultiLine;
-    xPropertySet->getPropertyValue("MultiLine") >>= bMultiLine;
+    xPropertySet->getPropertyValue(u"MultiLine"_ustr) >>= bMultiLine;
     CPPUNIT_ASSERT_EQUAL(true, bMultiLine);
 
     Color nColor;
-    xPropertySet->getPropertyValue("TextColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"TextColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, nColor);
 
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, nColor);
 
     sal_Int16 nBorderStyle;
-    xPropertySet->getPropertyValue("Border") >>= nBorderStyle;
+    xPropertySet->getPropertyValue(u"Border"_ustr) >>= nBorderStyle;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nBorderStyle);
 
     sal_Int16 nAlign;
-    xPropertySet->getPropertyValue("Align") >>= nAlign;
+    xPropertySet->getPropertyValue(u"Align"_ustr) >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::LEFT), nAlign);
 
     style::VerticalAlignment eAlign;
-    xPropertySet->getPropertyValue("VerticalAlign") >>= eAlign;
+    xPropertySet->getPropertyValue(u"VerticalAlign"_ustr) >>= eAlign;
     CPPUNIT_ASSERT_EQUAL(style::VerticalAlignment_TOP, eAlign);
 
     // Second control has custom properties
     xControlShape.set(getShapeFromPage(1, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
-    xPropertySet->getPropertyValue("Label") >>= sLabel;
-    CPPUNIT_ASSERT_EQUAL(OUString("Custom Label"), sLabel);
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= sLabel;
+    CPPUNIT_ASSERT_EQUAL(u"Custom Label"_ustr, sLabel);
 
-    xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
+    xPropertySet->getPropertyValue(u"Enabled"_ustr) >>= bEnabled;
     CPPUNIT_ASSERT_EQUAL(false, bEnabled);
 
-    xPropertySet->getPropertyValue("MultiLine") >>= bMultiLine;
+    xPropertySet->getPropertyValue(u"MultiLine"_ustr) >>= bMultiLine;
     CPPUNIT_ASSERT_EQUAL(false, bMultiLine);
 
-    xPropertySet->getPropertyValue("TextColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"TextColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0xE0E0E0), nColor);
 
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, nColor);
 
-    xPropertySet->getPropertyValue("Border") >>= nBorderStyle;
+    xPropertySet->getPropertyValue(u"Border"_ustr) >>= nBorderStyle;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nBorderStyle);
 
     Color nBorderColor;
-    xPropertySet->getPropertyValue("BorderColor") >>= nBorderColor;
+    xPropertySet->getPropertyValue(u"BorderColor"_ustr) >>= nBorderColor;
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, nBorderColor);
 
-    xPropertySet->getPropertyValue("Align") >>= nAlign;
+    xPropertySet->getPropertyValue(u"Align"_ustr) >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::CENTER), nAlign);
 
-    xPropertySet->getPropertyValue("VerticalAlign") >>= eAlign;
+    xPropertySet->getPropertyValue(u"VerticalAlign"_ustr) >>= eAlign;
     CPPUNIT_ASSERT_EQUAL(style::VerticalAlignment_TOP, eAlign);
 
     // Third control has transparent background
     xControlShape.set(getShapeFromPage(2, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
-    CPPUNIT_ASSERT_EQUAL(false, xPropertySet->getPropertyValue("BackgroundColor") >>= nColor);
+    CPPUNIT_ASSERT_EQUAL(false, xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor);
 }
 
 void SdActiveXControlsTest::testTextBoxProperties()
@@ -200,103 +200,103 @@ void SdActiveXControlsTest::testTextBoxProperties()
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
     OUString sText;
-    xPropertySet->getPropertyValue("Text") >>= sText;
+    xPropertySet->getPropertyValue(u"Text"_ustr) >>= sText;
     CPPUNIT_ASSERT_EQUAL(OUString(), sText);
 
     bool bEnabled;
-    xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
+    xPropertySet->getPropertyValue(u"Enabled"_ustr) >>= bEnabled;
     CPPUNIT_ASSERT_EQUAL(true, bEnabled);
 
     bool bMultiLine;
-    xPropertySet->getPropertyValue("MultiLine") >>= bMultiLine;
+    xPropertySet->getPropertyValue(u"MultiLine"_ustr) >>= bMultiLine;
     CPPUNIT_ASSERT_EQUAL(false, bMultiLine);
 
     Color nColor;
-    xPropertySet->getPropertyValue("TextColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"TextColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, nColor);
 
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, nColor);
 
     sal_Int16 nBorderStyle;
-    xPropertySet->getPropertyValue("Border") >>= nBorderStyle;
+    xPropertySet->getPropertyValue(u"Border"_ustr) >>= nBorderStyle;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nBorderStyle);
 
     sal_Int16 nAlign;
-    xPropertySet->getPropertyValue("Align") >>= nAlign;
+    xPropertySet->getPropertyValue(u"Align"_ustr) >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::LEFT), nAlign);
 
     style::VerticalAlignment eAlign;
-    CPPUNIT_ASSERT_EQUAL(false, xPropertySet->getPropertyValue("VerticalAlign") >>= eAlign);
+    CPPUNIT_ASSERT_EQUAL(false, xPropertySet->getPropertyValue(u"VerticalAlign"_ustr) >>= eAlign);
 
     bool bHideSelection;
-    xPropertySet->getPropertyValue("HideInactiveSelection") >>= bHideSelection;
+    xPropertySet->getPropertyValue(u"HideInactiveSelection"_ustr) >>= bHideSelection;
     CPPUNIT_ASSERT_EQUAL(true, bHideSelection);
 
     sal_Int16 nMaxLength;
-    xPropertySet->getPropertyValue("MaxTextLen") >>= nMaxLength;
+    xPropertySet->getPropertyValue(u"MaxTextLen"_ustr) >>= nMaxLength;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nMaxLength);
 
     sal_Int16 nEchoChar;
-    xPropertySet->getPropertyValue("EchoChar") >>= nEchoChar;
+    xPropertySet->getPropertyValue(u"EchoChar"_ustr) >>= nEchoChar;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nEchoChar);
 
     bool bHScroll;
-    xPropertySet->getPropertyValue("HScroll") >>= bHScroll;
+    xPropertySet->getPropertyValue(u"HScroll"_ustr) >>= bHScroll;
     CPPUNIT_ASSERT_EQUAL(false, bHScroll);
 
     bool bVScroll;
-    xPropertySet->getPropertyValue("VScroll") >>= bVScroll;
+    xPropertySet->getPropertyValue(u"VScroll"_ustr) >>= bVScroll;
     CPPUNIT_ASSERT_EQUAL(false, bVScroll);
 
     bool bReadOnly;
-    xPropertySet->getPropertyValue("ReadOnly") >>= bReadOnly;
+    xPropertySet->getPropertyValue(u"ReadOnly"_ustr) >>= bReadOnly;
     CPPUNIT_ASSERT_EQUAL(false, bReadOnly);
 
     // Second control has custom properties
     xControlShape.set(getShapeFromPage(1, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
-    xPropertySet->getPropertyValue("Text") >>= sText;
-    CPPUNIT_ASSERT_EQUAL(OUString("Some Text"), sText);
+    xPropertySet->getPropertyValue(u"Text"_ustr) >>= sText;
+    CPPUNIT_ASSERT_EQUAL(u"Some Text"_ustr, sText);
 
-    xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
+    xPropertySet->getPropertyValue(u"Enabled"_ustr) >>= bEnabled;
     CPPUNIT_ASSERT_EQUAL(false, bEnabled);
 
     // These textfields are not multilines in the pptx testfile
-    xPropertySet->getPropertyValue("MultiLine") >>= bMultiLine;
+    xPropertySet->getPropertyValue(u"MultiLine"_ustr) >>= bMultiLine;
     CPPUNIT_ASSERT_EQUAL(false, bMultiLine);
 
-    xPropertySet->getPropertyValue("TextColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"TextColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0x404040), nColor);
 
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0x00C000), nColor);
 
-    xPropertySet->getPropertyValue("Border") >>= nBorderStyle;
+    xPropertySet->getPropertyValue(u"Border"_ustr) >>= nBorderStyle;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nBorderStyle);
 
-    xPropertySet->getPropertyValue("Align") >>= nAlign;
+    xPropertySet->getPropertyValue(u"Align"_ustr) >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::CENTER), nAlign);
 
-    CPPUNIT_ASSERT_EQUAL(false, xPropertySet->getPropertyValue("VerticalAlign") >>= eAlign);
+    CPPUNIT_ASSERT_EQUAL(false, xPropertySet->getPropertyValue(u"VerticalAlign"_ustr) >>= eAlign);
 
-    xPropertySet->getPropertyValue("HideInactiveSelection") >>= bHideSelection;
+    xPropertySet->getPropertyValue(u"HideInactiveSelection"_ustr) >>= bHideSelection;
     CPPUNIT_ASSERT_EQUAL(false, bHideSelection);
 
-    xPropertySet->getPropertyValue("MaxTextLen") >>= nMaxLength;
+    xPropertySet->getPropertyValue(u"MaxTextLen"_ustr) >>= nMaxLength;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(50), nMaxLength);
 
-    xPropertySet->getPropertyValue("EchoChar") >>= nEchoChar;
+    xPropertySet->getPropertyValue(u"EchoChar"_ustr) >>= nEchoChar;
     CPPUNIT_ASSERT_EQUAL(sal_Int16('x'), nEchoChar);
 
-    xPropertySet->getPropertyValue("HScroll") >>= bHScroll;
+    xPropertySet->getPropertyValue(u"HScroll"_ustr) >>= bHScroll;
     CPPUNIT_ASSERT_EQUAL(true, bHScroll);
 
-    xPropertySet->getPropertyValue("VScroll") >>= bVScroll;
+    xPropertySet->getPropertyValue(u"VScroll"_ustr) >>= bVScroll;
     CPPUNIT_ASSERT_EQUAL(false, bVScroll);
 
-    xPropertySet->getPropertyValue("ReadOnly") >>= bReadOnly;
+    xPropertySet->getPropertyValue(u"ReadOnly"_ustr) >>= bReadOnly;
     CPPUNIT_ASSERT_EQUAL(true, bReadOnly);
 
     // Third shape has some other custom properties
@@ -304,25 +304,25 @@ void SdActiveXControlsTest::testTextBoxProperties()
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     // Transparent background
-    CPPUNIT_ASSERT_EQUAL(false, xPropertySet->getPropertyValue("BackgroundColor") >>= nColor);
+    CPPUNIT_ASSERT_EQUAL(false, xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor);
 
-    xPropertySet->getPropertyValue("Align") >>= nAlign;
+    xPropertySet->getPropertyValue(u"Align"_ustr) >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::RIGHT), nAlign);
 
-    xPropertySet->getPropertyValue("HScroll") >>= bHScroll;
+    xPropertySet->getPropertyValue(u"HScroll"_ustr) >>= bHScroll;
     CPPUNIT_ASSERT_EQUAL(false, bHScroll);
 
-    xPropertySet->getPropertyValue("VScroll") >>= bVScroll;
+    xPropertySet->getPropertyValue(u"VScroll"_ustr) >>= bVScroll;
     CPPUNIT_ASSERT_EQUAL(true, bVScroll);
 
     // Fourth shape has both scroll bar
     xControlShape.set(getShapeFromPage(3, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
-    xPropertySet->getPropertyValue("HScroll") >>= bHScroll;
+    xPropertySet->getPropertyValue(u"HScroll"_ustr) >>= bHScroll;
     CPPUNIT_ASSERT_EQUAL(true, bHScroll);
 
-    xPropertySet->getPropertyValue("VScroll") >>= bVScroll;
+    xPropertySet->getPropertyValue(u"VScroll"_ustr) >>= bVScroll;
     CPPUNIT_ASSERT_EQUAL(true, bVScroll);
 }
 
@@ -335,84 +335,84 @@ void SdActiveXControlsTest::testSpinButtonProperties()
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
     bool bEnabled;
-    xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
+    xPropertySet->getPropertyValue(u"Enabled"_ustr) >>= bEnabled;
     CPPUNIT_ASSERT_EQUAL(true, bEnabled);
 
     Color nColor;
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0xECE9D8), nColor);
 
     sal_Int32 nMax;
-    xPropertySet->getPropertyValue("SpinValueMax") >>= nMax;
+    xPropertySet->getPropertyValue(u"SpinValueMax"_ustr) >>= nMax;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), nMax);
 
     sal_Int32 nMin;
-    xPropertySet->getPropertyValue("SpinValueMin") >>= nMin;
+    xPropertySet->getPropertyValue(u"SpinValueMin"_ustr) >>= nMin;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nMin);
 
     sal_Int32 nIncrement;
-    xPropertySet->getPropertyValue("SpinIncrement") >>= nIncrement;
+    xPropertySet->getPropertyValue(u"SpinIncrement"_ustr) >>= nIncrement;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nIncrement);
 
     bool bRepeat;
-    xPropertySet->getPropertyValue("Repeat") >>= bRepeat;
+    xPropertySet->getPropertyValue(u"Repeat"_ustr) >>= bRepeat;
     CPPUNIT_ASSERT_EQUAL(true, bRepeat);
 
     sal_Int32 nDelay;
-    xPropertySet->getPropertyValue("RepeatDelay") >>= nDelay;
+    xPropertySet->getPropertyValue(u"RepeatDelay"_ustr) >>= nDelay;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(50), nDelay);
 
     Color nArrowColor;
-    xPropertySet->getPropertyValue("SymbolColor") >>= nArrowColor;
+    xPropertySet->getPropertyValue(u"SymbolColor"_ustr) >>= nArrowColor;
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, nArrowColor);
 
     sal_Int32 nOrientation;
-    xPropertySet->getPropertyValue("Orientation") >>= nOrientation;
+    xPropertySet->getPropertyValue(u"Orientation"_ustr) >>= nOrientation;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(awt::ScrollBarOrientation::HORIZONTAL), nOrientation);
 
     sal_Int32 nSpinValue;
-    xPropertySet->getPropertyValue("SpinValue") >>= nSpinValue;
+    xPropertySet->getPropertyValue(u"SpinValue"_ustr) >>= nSpinValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nSpinValue);
 
     // Second control has custom properties
     xControlShape.set(getShapeFromPage(1, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
-    xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
+    xPropertySet->getPropertyValue(u"Enabled"_ustr) >>= bEnabled;
     CPPUNIT_ASSERT_EQUAL(false, bEnabled);
 
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, nColor);
 
-    xPropertySet->getPropertyValue("SpinValueMax") >>= nMax;
+    xPropertySet->getPropertyValue(u"SpinValueMax"_ustr) >>= nMax;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(320), nMax);
 
-    xPropertySet->getPropertyValue("SpinValueMin") >>= nMin;
+    xPropertySet->getPropertyValue(u"SpinValueMin"_ustr) >>= nMin;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(123), nMin);
 
-    xPropertySet->getPropertyValue("SpinIncrement") >>= nIncrement;
+    xPropertySet->getPropertyValue(u"SpinIncrement"_ustr) >>= nIncrement;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), nIncrement);
 
-    xPropertySet->getPropertyValue("Repeat") >>= bRepeat;
+    xPropertySet->getPropertyValue(u"Repeat"_ustr) >>= bRepeat;
     CPPUNIT_ASSERT_EQUAL(true, bRepeat);
 
-    xPropertySet->getPropertyValue("RepeatDelay") >>= nDelay;
+    xPropertySet->getPropertyValue(u"RepeatDelay"_ustr) >>= nDelay;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(123), nDelay);
 
-    xPropertySet->getPropertyValue("SymbolColor") >>= nArrowColor;
+    xPropertySet->getPropertyValue(u"SymbolColor"_ustr) >>= nArrowColor;
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, nArrowColor);
 
-    xPropertySet->getPropertyValue("Orientation") >>= nOrientation;
+    xPropertySet->getPropertyValue(u"Orientation"_ustr) >>= nOrientation;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(awt::ScrollBarOrientation::VERTICAL), nOrientation);
 
-    xPropertySet->getPropertyValue("SpinValue") >>= nSpinValue;
+    xPropertySet->getPropertyValue(u"SpinValue"_ustr) >>= nSpinValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(123), nSpinValue);
 
     // Third control has horizontal orientation
     xControlShape.set(getShapeFromPage(2, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
-    xPropertySet->getPropertyValue("Orientation") >>= nOrientation;
+    xPropertySet->getPropertyValue(u"Orientation"_ustr) >>= nOrientation;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(awt::ScrollBarOrientation::HORIZONTAL), nOrientation);
 }
 
@@ -425,55 +425,55 @@ void SdActiveXControlsTest::testCommandButtonProperties()
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
     OUString sLabel;
-    xPropertySet->getPropertyValue("Label") >>= sLabel;
-    CPPUNIT_ASSERT_EQUAL(OUString("CommandButton1"), sLabel);
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= sLabel;
+    CPPUNIT_ASSERT_EQUAL(u"CommandButton1"_ustr, sLabel);
 
     bool bEnabled;
-    xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
+    xPropertySet->getPropertyValue(u"Enabled"_ustr) >>= bEnabled;
     CPPUNIT_ASSERT_EQUAL(true, bEnabled);
 
     bool bMultiLine;
-    xPropertySet->getPropertyValue("MultiLine") >>= bMultiLine;
+    xPropertySet->getPropertyValue(u"MultiLine"_ustr) >>= bMultiLine;
     CPPUNIT_ASSERT_EQUAL(false, bMultiLine);
 
     Color nColor;
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0xECE9D8), nColor);
 
-    xPropertySet->getPropertyValue("TextColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"TextColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, nColor);
 
     bool bFocusOnClick;
-    xPropertySet->getPropertyValue("FocusOnClick") >>= bFocusOnClick;
+    xPropertySet->getPropertyValue(u"FocusOnClick"_ustr) >>= bFocusOnClick;
     CPPUNIT_ASSERT_EQUAL(true, bFocusOnClick);
 
     bool bRepeat;
-    xPropertySet->getPropertyValue("Repeat") >>= bRepeat;
+    xPropertySet->getPropertyValue(u"Repeat"_ustr) >>= bRepeat;
     CPPUNIT_ASSERT_EQUAL(false, bRepeat);
 
     // Second control has custom properties
     xControlShape.set(getShapeFromPage(1, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
-    xPropertySet->getPropertyValue("Label") >>= sLabel;
-    CPPUNIT_ASSERT_EQUAL(OUString("Custom Caption"), sLabel);
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= sLabel;
+    CPPUNIT_ASSERT_EQUAL(u"Custom Caption"_ustr, sLabel);
 
-    xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
+    xPropertySet->getPropertyValue(u"Enabled"_ustr) >>= bEnabled;
     CPPUNIT_ASSERT_EQUAL(false, bEnabled);
 
-    xPropertySet->getPropertyValue("MultiLine") >>= bMultiLine;
+    xPropertySet->getPropertyValue(u"MultiLine"_ustr) >>= bMultiLine;
     CPPUNIT_ASSERT_EQUAL(true, bMultiLine);
 
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, nColor);
 
-    xPropertySet->getPropertyValue("TextColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"TextColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0xFFFF80), nColor);
 
-    xPropertySet->getPropertyValue("FocusOnClick") >>= bFocusOnClick;
+    xPropertySet->getPropertyValue(u"FocusOnClick"_ustr) >>= bFocusOnClick;
     CPPUNIT_ASSERT_EQUAL(false, bFocusOnClick);
 
-    xPropertySet->getPropertyValue("Repeat") >>= bRepeat;
+    xPropertySet->getPropertyValue(u"Repeat"_ustr) >>= bRepeat;
     CPPUNIT_ASSERT_EQUAL(false, bRepeat);
 
     // Third shape has some other custom properties
@@ -481,7 +481,7 @@ void SdActiveXControlsTest::testCommandButtonProperties()
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     // Transparent background
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, nColor);
 }
 
@@ -494,100 +494,100 @@ void SdActiveXControlsTest::testScrollBarProperties()
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
     bool bEnabled;
-    xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
+    xPropertySet->getPropertyValue(u"Enabled"_ustr) >>= bEnabled;
     CPPUNIT_ASSERT_EQUAL(true, bEnabled);
 
     Color nColor;
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0xECE9D8), nColor);
 
-    xPropertySet->getPropertyValue("SymbolColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"SymbolColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, nColor);
 
     sal_Int32 nDelay;
-    xPropertySet->getPropertyValue("RepeatDelay") >>= nDelay;
+    xPropertySet->getPropertyValue(u"RepeatDelay"_ustr) >>= nDelay;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(50), nDelay);
 
     sal_Int16 nBorderStyle;
-    xPropertySet->getPropertyValue("Border") >>= nBorderStyle;
+    xPropertySet->getPropertyValue(u"Border"_ustr) >>= nBorderStyle;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nBorderStyle);
 
     sal_Int32 nVisibleSize;
-    xPropertySet->getPropertyValue("VisibleSize") >>= nVisibleSize;
+    xPropertySet->getPropertyValue(u"VisibleSize"_ustr) >>= nVisibleSize;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nVisibleSize);
 
     sal_Int32 nScrollValueMin;
-    xPropertySet->getPropertyValue("ScrollValueMin") >>= nScrollValueMin;
+    xPropertySet->getPropertyValue(u"ScrollValueMin"_ustr) >>= nScrollValueMin;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nScrollValueMin);
 
     sal_Int32 nScrollValueMax;
-    xPropertySet->getPropertyValue("ScrollValueMax") >>= nScrollValueMax;
+    xPropertySet->getPropertyValue(u"ScrollValueMax"_ustr) >>= nScrollValueMax;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(32767), nScrollValueMax);
 
     sal_Int32 nScrollValue;
-    xPropertySet->getPropertyValue("DefaultScrollValue") >>= nScrollValue;
+    xPropertySet->getPropertyValue(u"DefaultScrollValue"_ustr) >>= nScrollValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nScrollValue);
 
     sal_Int32 nLineIncrement;
-    xPropertySet->getPropertyValue("LineIncrement") >>= nLineIncrement;
+    xPropertySet->getPropertyValue(u"LineIncrement"_ustr) >>= nLineIncrement;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nLineIncrement);
 
     sal_Int32 nBlockIncrement;
-    xPropertySet->getPropertyValue("BlockIncrement") >>= nBlockIncrement;
+    xPropertySet->getPropertyValue(u"BlockIncrement"_ustr) >>= nBlockIncrement;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nBlockIncrement);
 
     sal_Int32 nOrientation;
-    xPropertySet->getPropertyValue("Orientation") >>= nOrientation;
+    xPropertySet->getPropertyValue(u"Orientation"_ustr) >>= nOrientation;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(awt::ScrollBarOrientation::VERTICAL), nOrientation);
 
     // Second control has custom properties
     xControlShape.set(getShapeFromPage(1, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
-    xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
+    xPropertySet->getPropertyValue(u"Enabled"_ustr) >>= bEnabled;
     CPPUNIT_ASSERT_EQUAL(false, bEnabled);
 
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTCYAN, nColor);
 
-    xPropertySet->getPropertyValue("SymbolColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"SymbolColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, nColor);
 
-    xPropertySet->getPropertyValue("RepeatDelay") >>= nDelay;
+    xPropertySet->getPropertyValue(u"RepeatDelay"_ustr) >>= nDelay;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(230), nDelay);
 
-    xPropertySet->getPropertyValue("Border") >>= nBorderStyle;
+    xPropertySet->getPropertyValue(u"Border"_ustr) >>= nBorderStyle;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nBorderStyle);
 
-    xPropertySet->getPropertyValue("VisibleSize") >>= nVisibleSize;
+    xPropertySet->getPropertyValue(u"VisibleSize"_ustr) >>= nVisibleSize;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nVisibleSize);
 
-    xPropertySet->getPropertyValue("ScrollValueMin") >>= nScrollValueMin;
+    xPropertySet->getPropertyValue(u"ScrollValueMin"_ustr) >>= nScrollValueMin;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(123), nScrollValueMin);
 
-    xPropertySet->getPropertyValue("ScrollValueMax") >>= nScrollValueMax;
+    xPropertySet->getPropertyValue(u"ScrollValueMax"_ustr) >>= nScrollValueMax;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1234567), nScrollValueMax);
 
-    xPropertySet->getPropertyValue("DefaultScrollValue") >>= nScrollValue;
+    xPropertySet->getPropertyValue(u"DefaultScrollValue"_ustr) >>= nScrollValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(125), nScrollValue);
 
-    xPropertySet->getPropertyValue("LineIncrement") >>= nLineIncrement;
+    xPropertySet->getPropertyValue(u"LineIncrement"_ustr) >>= nLineIncrement;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), nLineIncrement);
 
-    xPropertySet->getPropertyValue("BlockIncrement") >>= nBlockIncrement;
+    xPropertySet->getPropertyValue(u"BlockIncrement"_ustr) >>= nBlockIncrement;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), nBlockIncrement);
 
-    xPropertySet->getPropertyValue("Orientation") >>= nOrientation;
+    xPropertySet->getPropertyValue(u"Orientation"_ustr) >>= nOrientation;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(awt::ScrollBarOrientation::VERTICAL), nOrientation);
 
     // Third shape has some other custom properties
     xControlShape.set(getShapeFromPage(2, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
-    xPropertySet->getPropertyValue("Orientation") >>= nOrientation;
+    xPropertySet->getPropertyValue(u"Orientation"_ustr) >>= nOrientation;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(awt::ScrollBarOrientation::HORIZONTAL), nOrientation);
 
-    xPropertySet->getPropertyValue("VisibleSize") >>= nVisibleSize;
+    xPropertySet->getPropertyValue(u"VisibleSize"_ustr) >>= nVisibleSize;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nVisibleSize);
 }
 
@@ -600,86 +600,86 @@ void SdActiveXControlsTest::testCheckBoxProperties()
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
     OUString sLabel;
-    xPropertySet->getPropertyValue("Label") >>= sLabel;
-    CPPUNIT_ASSERT_EQUAL(OUString("CheckBox1"), sLabel);
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= sLabel;
+    CPPUNIT_ASSERT_EQUAL(u"CheckBox1"_ustr, sLabel);
 
     bool bEnabled;
-    xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
+    xPropertySet->getPropertyValue(u"Enabled"_ustr) >>= bEnabled;
     CPPUNIT_ASSERT_EQUAL(true, bEnabled);
 
     Color nColor;
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, nColor);
 
-    xPropertySet->getPropertyValue("TextColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"TextColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, nColor);
 
     bool bMultiLine;
-    xPropertySet->getPropertyValue("MultiLine") >>= bMultiLine;
+    xPropertySet->getPropertyValue(u"MultiLine"_ustr) >>= bMultiLine;
     CPPUNIT_ASSERT_EQUAL(true, bMultiLine);
 
     sal_Int16 nVisualEffect;
-    xPropertySet->getPropertyValue("VisualEffect") >>= nVisualEffect;
+    xPropertySet->getPropertyValue(u"VisualEffect"_ustr) >>= nVisualEffect;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::VisualEffect::LOOK3D), nVisualEffect);
 
     bool bTriState;
-    xPropertySet->getPropertyValue("TriState") >>= bTriState;
+    xPropertySet->getPropertyValue(u"TriState"_ustr) >>= bTriState;
     CPPUNIT_ASSERT_EQUAL(false, bTriState);
 
     sal_Int16 nState;
-    xPropertySet->getPropertyValue("State") >>= nState;
+    xPropertySet->getPropertyValue(u"State"_ustr) >>= nState;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nState);
 
     sal_Int16 nAlign;
-    xPropertySet->getPropertyValue("Align") >>= nAlign;
+    xPropertySet->getPropertyValue(u"Align"_ustr) >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::LEFT), nAlign);
 
     // Second control has custom properties
     xControlShape.set(getShapeFromPage(1, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
-    xPropertySet->getPropertyValue("Label") >>= sLabel;
-    CPPUNIT_ASSERT_EQUAL(OUString("Custom Caption"), sLabel);
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= sLabel;
+    CPPUNIT_ASSERT_EQUAL(u"Custom Caption"_ustr, sLabel);
 
-    xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
+    xPropertySet->getPropertyValue(u"Enabled"_ustr) >>= bEnabled;
     CPPUNIT_ASSERT_EQUAL(false, bEnabled);
 
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, nColor);
 
-    xPropertySet->getPropertyValue("TextColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"TextColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0xFF80FF), nColor);
 
-    xPropertySet->getPropertyValue("MultiLine") >>= bMultiLine;
+    xPropertySet->getPropertyValue(u"MultiLine"_ustr) >>= bMultiLine;
     CPPUNIT_ASSERT_EQUAL(false, bMultiLine);
 
-    xPropertySet->getPropertyValue("VisualEffect") >>= nVisualEffect;
+    xPropertySet->getPropertyValue(u"VisualEffect"_ustr) >>= nVisualEffect;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::VisualEffect::FLAT), nVisualEffect);
 
-    xPropertySet->getPropertyValue("TriState") >>= bTriState;
+    xPropertySet->getPropertyValue(u"TriState"_ustr) >>= bTriState;
     CPPUNIT_ASSERT_EQUAL(true, bTriState);
 
-    xPropertySet->getPropertyValue("State") >>= nState;
+    xPropertySet->getPropertyValue(u"State"_ustr) >>= nState;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nState);
 
-    xPropertySet->getPropertyValue("Align") >>= nAlign;
+    xPropertySet->getPropertyValue(u"Align"_ustr) >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::CENTER), nAlign);
 
     // Third shape has some other custom properties
     xControlShape.set(getShapeFromPage(2, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
-    xPropertySet->getPropertyValue("TriState") >>= bTriState;
+    xPropertySet->getPropertyValue(u"TriState"_ustr) >>= bTriState;
     CPPUNIT_ASSERT_EQUAL(true, bTriState);
 
-    xPropertySet->getPropertyValue("State") >>= nState;
+    xPropertySet->getPropertyValue(u"State"_ustr) >>= nState;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nState);
 
-    xPropertySet->getPropertyValue("Align") >>= nAlign;
+    xPropertySet->getPropertyValue(u"Align"_ustr) >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::RIGHT), nAlign);
 
     // Transparent background
-    CPPUNIT_ASSERT_EQUAL(false, xPropertySet->getPropertyValue("BackgroundColor") >>= nColor);
+    CPPUNIT_ASSERT_EQUAL(false, xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor);
 }
 
 void SdActiveXControlsTest::testOptionButtonProperties()
@@ -691,76 +691,76 @@ void SdActiveXControlsTest::testOptionButtonProperties()
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
     OUString sLabel;
-    xPropertySet->getPropertyValue("Label") >>= sLabel;
-    CPPUNIT_ASSERT_EQUAL(OUString("OptionButton1"), sLabel);
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= sLabel;
+    CPPUNIT_ASSERT_EQUAL(u"OptionButton1"_ustr, sLabel);
 
     bool bEnabled;
-    xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
+    xPropertySet->getPropertyValue(u"Enabled"_ustr) >>= bEnabled;
     CPPUNIT_ASSERT_EQUAL(true, bEnabled);
 
     Color nColor;
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, nColor);
 
-    xPropertySet->getPropertyValue("TextColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"TextColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, nColor);
 
     bool bMultiLine;
-    xPropertySet->getPropertyValue("MultiLine") >>= bMultiLine;
+    xPropertySet->getPropertyValue(u"MultiLine"_ustr) >>= bMultiLine;
     CPPUNIT_ASSERT_EQUAL(true, bMultiLine);
 
     sal_Int16 nVisualEffect;
-    xPropertySet->getPropertyValue("VisualEffect") >>= nVisualEffect;
+    xPropertySet->getPropertyValue(u"VisualEffect"_ustr) >>= nVisualEffect;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::VisualEffect::LOOK3D), nVisualEffect);
 
     sal_Int16 nState;
-    xPropertySet->getPropertyValue("State") >>= nState;
+    xPropertySet->getPropertyValue(u"State"_ustr) >>= nState;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nState);
 
     sal_Int16 nAlign;
-    xPropertySet->getPropertyValue("Align") >>= nAlign;
+    xPropertySet->getPropertyValue(u"Align"_ustr) >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::LEFT), nAlign);
 
     // Second control has custom properties
     xControlShape.set(getShapeFromPage(1, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
-    xPropertySet->getPropertyValue("Label") >>= sLabel;
-    CPPUNIT_ASSERT_EQUAL(OUString("Custom Caption"), sLabel);
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= sLabel;
+    CPPUNIT_ASSERT_EQUAL(u"Custom Caption"_ustr, sLabel);
 
-    xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
+    xPropertySet->getPropertyValue(u"Enabled"_ustr) >>= bEnabled;
     CPPUNIT_ASSERT_EQUAL(false, bEnabled);
 
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTCYAN, nColor);
 
-    xPropertySet->getPropertyValue("TextColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"TextColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, nColor);
 
-    xPropertySet->getPropertyValue("MultiLine") >>= bMultiLine;
+    xPropertySet->getPropertyValue(u"MultiLine"_ustr) >>= bMultiLine;
     CPPUNIT_ASSERT_EQUAL(false, bMultiLine);
 
-    xPropertySet->getPropertyValue("VisualEffect") >>= nVisualEffect;
+    xPropertySet->getPropertyValue(u"VisualEffect"_ustr) >>= nVisualEffect;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::VisualEffect::FLAT), nVisualEffect);
 
-    xPropertySet->getPropertyValue("State") >>= nState;
+    xPropertySet->getPropertyValue(u"State"_ustr) >>= nState;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nState);
 
-    xPropertySet->getPropertyValue("Align") >>= nAlign;
+    xPropertySet->getPropertyValue(u"Align"_ustr) >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::CENTER), nAlign);
 
     // Third shape has some other custom properties
     xControlShape.set(getShapeFromPage(2, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
-    xPropertySet->getPropertyValue("State") >>= nState;
+    xPropertySet->getPropertyValue(u"State"_ustr) >>= nState;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nState); // TriState / undefined imported as unchecked
 
-    xPropertySet->getPropertyValue("Align") >>= nAlign;
+    xPropertySet->getPropertyValue(u"Align"_ustr) >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::RIGHT), nAlign);
 
     // Transparent background
-    CPPUNIT_ASSERT_EQUAL(false, xPropertySet->getPropertyValue("BackgroundColor") >>= nColor);
+    CPPUNIT_ASSERT_EQUAL(false, xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor);
 }
 
 void SdActiveXControlsTest::testComboBoxProperties()
@@ -772,107 +772,107 @@ void SdActiveXControlsTest::testComboBoxProperties()
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
     bool bEnabled;
-    xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
+    xPropertySet->getPropertyValue(u"Enabled"_ustr) >>= bEnabled;
     CPPUNIT_ASSERT_EQUAL(true, bEnabled);
 
     Color nColor;
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, nColor);
 
-    xPropertySet->getPropertyValue("TextColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"TextColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, nColor);
 
     bool bAutocomplete;
-    xPropertySet->getPropertyValue("Autocomplete") >>= bAutocomplete;
+    xPropertySet->getPropertyValue(u"Autocomplete"_ustr) >>= bAutocomplete;
     CPPUNIT_ASSERT_EQUAL(true, bAutocomplete);
 
     sal_Int16 nBorderStyle;
-    xPropertySet->getPropertyValue("Border") >>= nBorderStyle;
+    xPropertySet->getPropertyValue(u"Border"_ustr) >>= nBorderStyle;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nBorderStyle);
 
     Color nBorderColor;
-    xPropertySet->getPropertyValue("BorderColor") >>= nBorderColor;
+    xPropertySet->getPropertyValue(u"BorderColor"_ustr) >>= nBorderColor;
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, nBorderColor);
 
     bool bDropdown;
-    xPropertySet->getPropertyValue("Dropdown") >>= bDropdown;
+    xPropertySet->getPropertyValue(u"Dropdown"_ustr) >>= bDropdown;
     CPPUNIT_ASSERT_EQUAL(true, bDropdown);
 
     bool bHideInactiveSelection;
-    xPropertySet->getPropertyValue("HideInactiveSelection") >>= bHideInactiveSelection;
+    xPropertySet->getPropertyValue(u"HideInactiveSelection"_ustr) >>= bHideInactiveSelection;
     CPPUNIT_ASSERT_EQUAL(true, bHideInactiveSelection);
 
     sal_Int16 nLineCount;
-    xPropertySet->getPropertyValue("LineCount") >>= nLineCount;
+    xPropertySet->getPropertyValue(u"LineCount"_ustr) >>= nLineCount;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(8), nLineCount);
 
     sal_Int16 nMaxTextLen;
-    xPropertySet->getPropertyValue("MaxTextLen") >>= nMaxTextLen;
+    xPropertySet->getPropertyValue(u"MaxTextLen"_ustr) >>= nMaxTextLen;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nMaxTextLen);
 
     bool bReadOnly;
-    xPropertySet->getPropertyValue("ReadOnly") >>= bReadOnly;
+    xPropertySet->getPropertyValue(u"ReadOnly"_ustr) >>= bReadOnly;
     CPPUNIT_ASSERT_EQUAL(false, bReadOnly);
 
     sal_Int16 nAlign;
-    xPropertySet->getPropertyValue("Align") >>= nAlign;
+    xPropertySet->getPropertyValue(u"Align"_ustr) >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::LEFT), nAlign);
 
     // Second control has custom properties
     xControlShape.set(getShapeFromPage(1, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
-    xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
+    xPropertySet->getPropertyValue(u"Enabled"_ustr) >>= bEnabled;
     CPPUNIT_ASSERT_EQUAL(false, bEnabled);
 
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_RED, nColor);
 
-    xPropertySet->getPropertyValue("TextColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"TextColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, nColor);
 
-    xPropertySet->getPropertyValue("Autocomplete") >>= bAutocomplete;
+    xPropertySet->getPropertyValue(u"Autocomplete"_ustr) >>= bAutocomplete;
     CPPUNIT_ASSERT_EQUAL(true, bAutocomplete);
 
-    xPropertySet->getPropertyValue("Border") >>= nBorderStyle;
+    xPropertySet->getPropertyValue(u"Border"_ustr) >>= nBorderStyle;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nBorderStyle);
 
-    xPropertySet->getPropertyValue("BorderColor") >>= nBorderColor;
+    xPropertySet->getPropertyValue(u"BorderColor"_ustr) >>= nBorderColor;
     CPPUNIT_ASSERT_EQUAL(Color(0x404040), nBorderColor);
 
-    xPropertySet->getPropertyValue("Dropdown") >>= bDropdown;
+    xPropertySet->getPropertyValue(u"Dropdown"_ustr) >>= bDropdown;
     CPPUNIT_ASSERT_EQUAL(true, bDropdown);
 
-    xPropertySet->getPropertyValue("HideInactiveSelection") >>= bHideInactiveSelection;
+    xPropertySet->getPropertyValue(u"HideInactiveSelection"_ustr) >>= bHideInactiveSelection;
     CPPUNIT_ASSERT_EQUAL(false, bHideInactiveSelection);
 
-    xPropertySet->getPropertyValue("LineCount") >>= nLineCount;
+    xPropertySet->getPropertyValue(u"LineCount"_ustr) >>= nLineCount;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(12), nLineCount);
 
-    xPropertySet->getPropertyValue("MaxTextLen") >>= nMaxTextLen;
+    xPropertySet->getPropertyValue(u"MaxTextLen"_ustr) >>= nMaxTextLen;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(130), nMaxTextLen);
 
-    xPropertySet->getPropertyValue("ReadOnly") >>= bReadOnly;
+    xPropertySet->getPropertyValue(u"ReadOnly"_ustr) >>= bReadOnly;
     CPPUNIT_ASSERT_EQUAL(false, bReadOnly); // Bogus, should be true (tdf#111417)
 
-    xPropertySet->getPropertyValue("Align") >>= nAlign;
+    xPropertySet->getPropertyValue(u"Align"_ustr) >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::CENTER), nAlign);
 
     // Third shape has some other custom properties
     xControlShape.set(getShapeFromPage(2, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
-    xPropertySet->getPropertyValue("Autocomplete") >>= bAutocomplete;
+    xPropertySet->getPropertyValue(u"Autocomplete"_ustr) >>= bAutocomplete;
     CPPUNIT_ASSERT_EQUAL(false, bAutocomplete);
 
-    xPropertySet->getPropertyValue("Dropdown") >>= bDropdown;
+    xPropertySet->getPropertyValue(u"Dropdown"_ustr) >>= bDropdown;
     CPPUNIT_ASSERT_EQUAL(false, bDropdown);
 
-    xPropertySet->getPropertyValue("Align") >>= nAlign;
+    xPropertySet->getPropertyValue(u"Align"_ustr) >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::RIGHT), nAlign);
 
     // Transparent background
-    CPPUNIT_ASSERT_EQUAL(false, xPropertySet->getPropertyValue("BackgroundColor") >>= nColor);
+    CPPUNIT_ASSERT_EQUAL(false, xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor);
 }
 
 void SdActiveXControlsTest::testListBoxProperties()
@@ -884,80 +884,80 @@ void SdActiveXControlsTest::testListBoxProperties()
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
     bool bEnabled;
-    xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
+    xPropertySet->getPropertyValue(u"Enabled"_ustr) >>= bEnabled;
     CPPUNIT_ASSERT_EQUAL(true, bEnabled);
 
     Color nColor;
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, nColor);
 
-    xPropertySet->getPropertyValue("TextColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"TextColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, nColor);
 
     sal_Int16 nBorderStyle;
-    xPropertySet->getPropertyValue("Border") >>= nBorderStyle;
+    xPropertySet->getPropertyValue(u"Border"_ustr) >>= nBorderStyle;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nBorderStyle);
 
     Color nBorderColor;
-    xPropertySet->getPropertyValue("BorderColor") >>= nBorderColor;
+    xPropertySet->getPropertyValue(u"BorderColor"_ustr) >>= nBorderColor;
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, nBorderColor);
 
     bool bDropdown;
-    xPropertySet->getPropertyValue("Dropdown") >>= bDropdown;
+    xPropertySet->getPropertyValue(u"Dropdown"_ustr) >>= bDropdown;
     CPPUNIT_ASSERT_EQUAL(false, bDropdown);
 
     bool bMultiSelection;
-    xPropertySet->getPropertyValue("MultiSelection") >>= bMultiSelection;
+    xPropertySet->getPropertyValue(u"MultiSelection"_ustr) >>= bMultiSelection;
     CPPUNIT_ASSERT_EQUAL(false, bMultiSelection);
 
     sal_Int16 nLineCount;
-    xPropertySet->getPropertyValue("LineCount") >>= nLineCount;
+    xPropertySet->getPropertyValue(u"LineCount"_ustr) >>= nLineCount;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(5), nLineCount);
 
     bool bReadOnly;
-    xPropertySet->getPropertyValue("ReadOnly") >>= bReadOnly;
+    xPropertySet->getPropertyValue(u"ReadOnly"_ustr) >>= bReadOnly;
     CPPUNIT_ASSERT_EQUAL(false, bReadOnly);
 
     sal_Int16 nAlign;
-    xPropertySet->getPropertyValue("Align") >>= nAlign;
+    xPropertySet->getPropertyValue(u"Align"_ustr) >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::LEFT), nAlign);
 
     // Second control has custom properties
     xControlShape.set(getShapeFromPage(1, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
-    xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
+    xPropertySet->getPropertyValue(u"Enabled"_ustr) >>= bEnabled;
     CPPUNIT_ASSERT_EQUAL(false, bEnabled);
 
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, nColor);
 
-    xPropertySet->getPropertyValue("TextColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"TextColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, nColor);
 
-    xPropertySet->getPropertyValue("Border") >>= nBorderStyle;
+    xPropertySet->getPropertyValue(u"Border"_ustr) >>= nBorderStyle;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nBorderStyle);
 
-    xPropertySet->getPropertyValue("BorderColor") >>= nBorderColor;
+    xPropertySet->getPropertyValue(u"BorderColor"_ustr) >>= nBorderColor;
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTMAGENTA, nBorderColor);
 
-    xPropertySet->getPropertyValue("MultiSelection") >>= bMultiSelection;
+    xPropertySet->getPropertyValue(u"MultiSelection"_ustr) >>= bMultiSelection;
     CPPUNIT_ASSERT_EQUAL(true, bMultiSelection);
 
-    xPropertySet->getPropertyValue("ReadOnly") >>= bReadOnly;
+    xPropertySet->getPropertyValue(u"ReadOnly"_ustr) >>= bReadOnly;
     CPPUNIT_ASSERT_EQUAL(false, bReadOnly); // Bogus, should be true (tdf#111417)
 
-    xPropertySet->getPropertyValue("Align") >>= nAlign;
+    xPropertySet->getPropertyValue(u"Align"_ustr) >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::CENTER), nAlign);
 
     // Third shape has some other custom properties
     xControlShape.set(getShapeFromPage(2, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
-    xPropertySet->getPropertyValue("MultiSelection") >>= bMultiSelection;
+    xPropertySet->getPropertyValue(u"MultiSelection"_ustr) >>= bMultiSelection;
     CPPUNIT_ASSERT_EQUAL(true, bMultiSelection);
 
-    xPropertySet->getPropertyValue("Align") >>= nAlign;
+    xPropertySet->getPropertyValue(u"Align"_ustr) >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::RIGHT), nAlign);
 }
 
@@ -970,76 +970,76 @@ void SdActiveXControlsTest::testToggleButtonProperties()
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
     OUString sLabel;
-    xPropertySet->getPropertyValue("Label") >>= sLabel;
-    CPPUNIT_ASSERT_EQUAL(OUString("ToggleButton1"), sLabel);
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= sLabel;
+    CPPUNIT_ASSERT_EQUAL(u"ToggleButton1"_ustr, sLabel);
 
     bool bEnabled;
-    xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
+    xPropertySet->getPropertyValue(u"Enabled"_ustr) >>= bEnabled;
     CPPUNIT_ASSERT_EQUAL(true, bEnabled);
 
     bool bMultiLine;
-    xPropertySet->getPropertyValue("MultiLine") >>= bMultiLine;
+    xPropertySet->getPropertyValue(u"MultiLine"_ustr) >>= bMultiLine;
     CPPUNIT_ASSERT_EQUAL(true, bMultiLine);
 
     Color nColor;
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0xECE9D8), nColor);
 
-    xPropertySet->getPropertyValue("TextColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"TextColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, nColor);
 
     bool bToggle;
-    xPropertySet->getPropertyValue("Toggle") >>= bToggle;
+    xPropertySet->getPropertyValue(u"Toggle"_ustr) >>= bToggle;
     CPPUNIT_ASSERT_EQUAL(true, bToggle);
 
     sal_Int16 nState;
-    xPropertySet->getPropertyValue("State") >>= nState;
+    xPropertySet->getPropertyValue(u"State"_ustr) >>= nState;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nState);
 
     sal_Int16 nAlign;
-    xPropertySet->getPropertyValue("Align") >>= nAlign;
+    xPropertySet->getPropertyValue(u"Align"_ustr) >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::CENTER), nAlign);
 
     // Second control has custom properties
     xControlShape.set(getShapeFromPage(1, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
-    xPropertySet->getPropertyValue("Label") >>= sLabel;
-    CPPUNIT_ASSERT_EQUAL(OUString("Custom Caption"), sLabel);
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= sLabel;
+    CPPUNIT_ASSERT_EQUAL(u"Custom Caption"_ustr, sLabel);
 
-    xPropertySet->getPropertyValue("Enabled") >>= bEnabled;
+    xPropertySet->getPropertyValue(u"Enabled"_ustr) >>= bEnabled;
     CPPUNIT_ASSERT_EQUAL(false, bEnabled);
 
-    xPropertySet->getPropertyValue("MultiLine") >>= bMultiLine;
+    xPropertySet->getPropertyValue(u"MultiLine"_ustr) >>= bMultiLine;
     CPPUNIT_ASSERT_EQUAL(false, bMultiLine);
 
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0xFF80FF), nColor);
 
-    xPropertySet->getPropertyValue("TextColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"TextColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_GRAY, nColor);
 
-    xPropertySet->getPropertyValue("Toggle") >>= bToggle;
+    xPropertySet->getPropertyValue(u"Toggle"_ustr) >>= bToggle;
     CPPUNIT_ASSERT_EQUAL(true, bToggle);
 
-    xPropertySet->getPropertyValue("State") >>= nState;
+    xPropertySet->getPropertyValue(u"State"_ustr) >>= nState;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nState);
 
-    xPropertySet->getPropertyValue("Align") >>= nAlign;
+    xPropertySet->getPropertyValue(u"Align"_ustr) >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::LEFT), nAlign);
 
     // Third shape has some other custom properties
     xControlShape.set(getShapeFromPage(2, 0), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
-    xPropertySet->getPropertyValue("State") >>= nState;
+    xPropertySet->getPropertyValue(u"State"_ustr) >>= nState;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nState); // Undefined state
 
-    xPropertySet->getPropertyValue("Align") >>= nAlign;
+    xPropertySet->getPropertyValue(u"Align"_ustr) >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::RIGHT), nAlign);
 
     // Transparent background
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    xPropertySet->getPropertyValue(u"BackgroundColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, nColor);
 }
 
@@ -1073,11 +1073,11 @@ void SdActiveXControlsTest::testPictureProperties()
         uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
         uno::Reference<graphic::XGraphic> xGraphic;
-        xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
+        xPropertySet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
         CPPUNIT_ASSERT(xGraphic.is());
 
         sal_Int16 nColor;
-        xPropertySet->getPropertyValue("ImagePosition") >>= nColor;
+        xPropertySet->getPropertyValue(u"ImagePosition"_ustr) >>= nColor;
         OString sMessage = "The wrong control's index is: " + OString::number(i);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), vImagePositions[i], nColor);
     }
@@ -1091,14 +1091,14 @@ void SdActiveXControlsTest::testPictureProperties()
         OString sMessage = "The wrong control's index is: " + OString::number(i);
 
         uno::Reference<graphic::XGraphic> xGraphic;
-        xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
+        xPropertySet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
         if (i == 0) // First control has no image specified
             CPPUNIT_ASSERT_MESSAGE(sMessage.getStr(), !xGraphic.is());
         else
             CPPUNIT_ASSERT_MESSAGE(sMessage.getStr(), xGraphic.is());
 
         sal_Int16 nScaleMode;
-        xPropertySet->getPropertyValue("ScaleMode") >>= nScaleMode;
+        xPropertySet->getPropertyValue(u"ScaleMode"_ustr) >>= nScaleMode;
         if (i == 2) // Stretch mode
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), awt::ImageScaleMode::ANISOTROPIC, nScaleMode);
         else if (i == 3) // Zoom mode
@@ -1125,42 +1125,42 @@ void SdActiveXControlsTest::testFontProperties()
         OString sMessage = "The wrong control's index is: " + OString::number(i);
 
         OUString sFontName;
-        xPropertySet->getPropertyValue("FontName") >>= sFontName;
+        xPropertySet->getPropertyValue(u"FontName"_ustr) >>= sFontName;
         if (i == 4 || i == 5)
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), OUString("Times New Roman"), sFontName);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), u"Times New Roman"_ustr, sFontName);
         else
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), OUString("Arial"), sFontName);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), u"Arial"_ustr, sFontName);
 
         float fFontWeight;
-        xPropertySet->getPropertyValue("FontWeight") >>= fFontWeight;
+        xPropertySet->getPropertyValue(u"FontWeight"_ustr) >>= fFontWeight;
         if (i == 2 || i == 4)
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), awt::FontWeight::BOLD, fFontWeight);
         else
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), awt::FontWeight::NORMAL, fFontWeight);
 
         sal_Int16 nFontSlant;
-        xPropertySet->getPropertyValue("FontSlant") >>= nFontSlant;
+        xPropertySet->getPropertyValue(u"FontSlant"_ustr) >>= nFontSlant;
         if (i == 3 || i == 4)
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), sal_Int16(awt::FontSlant_ITALIC), nFontSlant);
         else
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), sal_Int16(awt::FontSlant_NONE), nFontSlant);
 
         sal_Int16 nFontUnderline;
-        xPropertySet->getPropertyValue("FontUnderline") >>= nFontUnderline;
+        xPropertySet->getPropertyValue(u"FontUnderline"_ustr) >>= nFontUnderline;
         if (i == 7)
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), sal_Int16(awt::FontUnderline::SINGLE), nFontUnderline);
         else
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), sal_Int16(awt::FontUnderline::NONE), nFontUnderline);
 
         sal_Int16 nFontStrikeout;
-        xPropertySet->getPropertyValue("FontStrikeout") >>= nFontStrikeout;
+        xPropertySet->getPropertyValue(u"FontStrikeout"_ustr) >>= nFontStrikeout;
         if (i == 6 || i == 7)
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), sal_Int16(awt::FontStrikeout::SINGLE), nFontStrikeout);
         else
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), sal_Int16(awt::FontStrikeout::NONE), nFontStrikeout);
 
         float fFontHeight;
-        xPropertySet->getPropertyValue("FontHeight") >>= fFontHeight;
+        xPropertySet->getPropertyValue(u"FontHeight"_ustr) >>= fFontHeight;
         if (i == 1)
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), 24.0f, fFontHeight);
         else

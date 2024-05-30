@@ -38,7 +38,7 @@ protected:
 };
 
 Test::Test()
-    : UnoApiXmlTest("/sd/qa/unit/tiledrendering2/data/")
+    : UnoApiXmlTest(u"/sd/qa/unit/tiledrendering2/data/"_ustr)
 {
 }
 
@@ -140,7 +140,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSidebarSwitchDeck)
     aView.m_aStateChanges.clear();
 
     // When switching to the MasterSlidesPanel deck:
-    dispatchCommand(mxComponent, ".uno:MasterSlidesPanel", {});
+    dispatchCommand(mxComponent, u".uno:MasterSlidesPanel"_ustr, {});
 
     // Then make sure notifications are sent for both the old and the new decks:
     auto it = aView.m_aStateChanges.find(".uno:ModifyPage");

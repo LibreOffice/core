@@ -28,7 +28,7 @@ class TextFittingTest : public SdModelTestBase
 {
 public:
     TextFittingTest()
-        : SdModelTestBase("/sd/qa/unit/data/")
+        : SdModelTestBase(u"/sd/qa/unit/data/"_ustr)
     {
     }
 };

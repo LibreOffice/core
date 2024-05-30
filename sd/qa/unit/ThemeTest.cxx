@@ -32,7 +32,7 @@ class ThemeTest : public SdModelTestBase
 {
 public:
     ThemeTest()
-        : SdModelTestBase("/sd/qa/unit/data/")
+        : SdModelTestBase(u"/sd/qa/unit/data/"_ustr)
     {
     }
 };
@@ -48,7 +48,7 @@ Color GetShapeTextColor(const uno::Reference<text::XTextRange>& xShape)
     uno::Reference<beans::XPropertySet> xPortion(xPara->createEnumeration()->nextElement(),
                                                  uno::UNO_QUERY);
     Color nColor{};
-    xPortion->getPropertyValue("CharColor") >>= nColor;
+    xPortion->getPropertyValue(u"CharColor"_ustr) >>= nColor;
     return nColor;
 }
 
@@ -56,7 +56,7 @@ Color GetShapeTextColor(const uno::Reference<text::XTextRange>& xShape)
 Color GetShapeFillColor(const uno::Reference<beans::XPropertySet>& xShape)
 {
     Color nColor{};
-    xShape->getPropertyValue("FillColor") >>= nColor;
+    xShape->getPropertyValue(u"FillColor"_ustr) >>= nColor;
     return nColor;
 }
 
@@ -97,7 +97,7 @@ CPPUNIT_TEST_FIXTURE(ThemeTest, testThemeChange)
     // The theme color of this filled shape is set by the PPTX import:
     {
         uno::Reference<util::XComplexColor> xComplexColor;
-        CPPUNIT_ASSERT(xShape4->getPropertyValue("FillComplexColor") >>= xComplexColor);
+        CPPUNIT_ASSERT(xShape4->getPropertyValue(u"FillComplexColor"_ustr) >>= xComplexColor);
         CPPUNIT_ASSERT(xComplexColor.is());
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
@@ -109,7 +109,7 @@ CPPUNIT_TEST_FIXTURE(ThemeTest, testThemeChange)
     // The theme index, and effects (lum mod, lum off) are set by the PPTX import:
     {
         uno::Reference<util::XComplexColor> xComplexColor;
-        CPPUNIT_ASSERT(xShape5->getPropertyValue("FillComplexColor") >>= xComplexColor);
+        CPPUNIT_ASSERT(xShape5->getPropertyValue(u"FillComplexColor"_ustr) >>= xComplexColor);
         CPPUNIT_ASSERT(xComplexColor.is());
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
@@ -125,10 +125,10 @@ CPPUNIT_TEST_FIXTURE(ThemeTest, testThemeChange)
     uno::Reference<drawing::XMasterPageTarget> xDrawPage2(
         xDrawPagesSupplier->getDrawPages()->getByIndex(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMasterPage2(xDrawPage2->getMasterPage(), uno::UNO_QUERY);
-    uno::Any aTheme = xMasterPage2->getPropertyValue("Theme");
+    uno::Any aTheme = xMasterPage2->getPropertyValue(u"Theme"_ustr);
 
     uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
-    xMasterPage->setPropertyValue("Theme", aTheme);
+    xMasterPage->setPropertyValue(u"Theme"_ustr, aTheme);
 
     css::uno::Reference<css::drawing::XDrawPage> xDrawPageMaster(xMasterPage, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDrawPageMaster.is());
