@@ -34,137 +34,31 @@
 #include <o3tl/sorted_vector.hxx>
 #include <map>
 
-namespace
-{
-struct B2DPointCompare
-{
-    bool operator()(const basegfx::B2DPoint& lhs, const basegfx::B2DPoint& rhs) const
-    {
-        return std::make_pair(lhs.getX(), lhs.getY()) < std::make_pair(rhs.getX(), rhs.getY());
-    }
-};
-
-struct B2DPointCompareYThenX
-{
-    bool operator()(const basegfx::B2DPoint& lhs, const basegfx::B2DPoint& rhs) const
-    {
-        return std::make_pair(lhs.getY(), lhs.getX()) < std::make_pair(rhs.getY(), rhs.getX());
-    }
-};
-
-}
-
 namespace sdr::overlay
 {
 
-    // Combine rectangles geometrically to a single OR'ed polygon.
-    // Algorithm is from
-    //     "Uniqueness of orthogonal connect-the-dots" Joseph O'Rourke 1988
-    // The basic algorithm is:
-    //   Sort points by lowest x, lowest y
-    //   Go through each column and create edges between the vertices 2i and 2i + 1 in that column
-    //   Sort points by lowest y, lowest x
-    //   Go through each row and create edges between the vertices 2i and 2i + 1 in that row.
-    //
-    static basegfx::B2DPolyPolygon impCombineRectanglesToPolyPolygon(const std::vector< basegfx::B2DRange >& rRectangles)
-    {
-        o3tl::sorted_vector<basegfx::B2DPoint, B2DPointCompare> sort_x;
-        for (auto const & rRect : rRectangles)
+        // combine rages geometrically to a single, ORed polygon
+        static basegfx::B2DPolyPolygon impCombineRangesToPolyPolygon(const std::vector< basegfx::B2DRange >& rRanges)
         {
-            auto checkPoint = [&sort_x](double x, double y)
+            const sal_uInt32 nCount(rRanges.size());
+            basegfx::B2DPolyPolygon aRetval;
+
+            for(sal_uInt32 a(0); a < nCount; a++)
             {
-                basegfx::B2DPoint pt(x, y);
-                auto it = sort_x.find(pt);
-                if (it != sort_x.end()) // Shared vertice, remove it.
-                    sort_x.erase(it);
-                else
-                    sort_x.insert(pt);
-            };
-            checkPoint(rRect.getMinX(), rRect.getMinY());
-            checkPoint(rRect.getMinX(), rRect.getMaxY());
-            checkPoint(rRect.getMaxX(), rRect.getMinY());
-            checkPoint(rRect.getMaxX(), rRect.getMaxY());
-        }
+                const basegfx::B2DPolygon aDiscretePolygon(basegfx::utils::createPolygonFromRect(rRanges[a]));
 
-
-        o3tl::sorted_vector<basegfx::B2DPoint, B2DPointCompareYThenX> sort_y;
-        for (auto const & i : sort_x)
-            sort_y.insert(i);
-
-        std::map<basegfx::B2DPoint, basegfx::B2DPoint, B2DPointCompare> edges_h;
-        std::map<basegfx::B2DPoint, basegfx::B2DPoint, B2DPointCompare> edges_v;
-
-        size_t i = 0;
-        while (i < sort_x.size())
-        {
-            auto curr_y = sort_y[i].getY();
-            while (i < sort_x.size() && sort_y[i].getY() == curr_y)
-            {
-                edges_h[sort_y[i]] = sort_y[i + 1];
-                edges_h[sort_y[i + 1]] = sort_y[i];
-                i += 2;
-            }
-        }
-        i = 0;
-        while (i < sort_x.size())
-        {
-            auto curr_x = sort_x[i].getX();
-            while (i < sort_x.size() && sort_x[i].getX() == curr_x)
-            {
-                edges_v[sort_x[i]] = sort_x[i + 1];
-                edges_v[sort_x[i + 1]] = sort_x[i];
-                i += 2;
-            }
-        }
-
-        // Get all the polygons.
-        basegfx::B2DPolyPolygon aPolyPolygon;
-        std::vector<std::tuple<basegfx::B2DPoint, bool>> tmpPolygon;
-        while (!edges_h.empty())
-        {
-            tmpPolygon.clear();
-            // We can start with any point.
-            basegfx::B2DPoint pt = edges_h.begin()->first;
-            edges_h.erase(edges_h.begin());
-            tmpPolygon.push_back({pt, false});
-            for (;;)
-            {
-                auto [curr, e] = tmpPolygon.back();
-                if (!e)
+                if(0 == a)
                 {
-                    auto it = edges_v.find(curr);
-                    auto next_vertex = it->second;
-                    edges_v.erase(it);
-                    tmpPolygon.push_back({next_vertex, true});
+                    aRetval.append(aDiscretePolygon);
                 }
                 else
                 {
-                    auto it = edges_h.find(curr);
-                    auto next_vertex = it->second;
-                    edges_h.erase(it);
-                    tmpPolygon.push_back({next_vertex, false});
-                }
-                if (tmpPolygon.back() == tmpPolygon.front())
-                {
-                    // Closed polygon
-                    break;
+                    aRetval = basegfx::utils::solvePolygonOperationOr(aRetval, basegfx::B2DPolyPolygon(aDiscretePolygon));
                 }
             }
-            for (auto const & pair : tmpPolygon)
-            {
-                auto const & vertex = std::get<0>(pair);
-                edges_h.erase(vertex);
-                edges_v.erase(vertex);
-            }
-            basegfx::B2DPolygon aPoly;
-            aPoly.reserve(tmpPolygon.size());
-            for (auto const & pair : tmpPolygon)
-                aPoly.append(std::get<0>(pair));
-            aPolyPolygon.append(std::move(aPoly));
-        }
 
-        return aPolyPolygon;
-    }
+            return aRetval;
+        }
 
         // check if wanted type OverlayType::Transparent or OverlayType::Solid
         // is possible. If not, fallback to invert mode (classic mode)
@@ -200,70 +94,63 @@ namespace sdr::overlay
         drawinglayer::primitive2d::Primitive2DContainer OverlaySelection::createOverlayObjectPrimitive2DSequence()
         {
             drawinglayer::primitive2d::Primitive2DContainer aRetval;
-            const sal_uInt32 nCount(maRanges.size());
+            const sal_uInt32 nCount(getRanges().size());
 
-            if(!nCount)
-                return aRetval;
-
-            // create range primitives
-            const bool bInvert(OverlayType::Invert == maLastOverlayType);
-            basegfx::BColor aRGBColor(getBaseColor().getBColor());
-            if(bInvert)
+            if(nCount)
             {
-                // force color to white for invert to get a full invert
-                aRGBColor = basegfx::BColor(1.0, 1.0, 1.0);
-            }
+                // create range primitives
+                const bool bInvert(OverlayType::Invert == maLastOverlayType);
+                basegfx::BColor aRGBColor(getBaseColor().getBColor());
+                aRetval.resize(nCount);
 
-            aRetval.resize(nCount);
-            for(sal_uInt32 a(0);a < nCount; a++)
-            {
-                basegfx::B2DPolygon aPolygon(basegfx::utils::createPolygonFromRect(maRanges[a]));
-                aRetval[a] =
-                    new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                        basegfx::B2DPolyPolygon(std::move(aPolygon)),
-                        aRGBColor);
-            }
-
-            basegfx::B2DPolyPolygon aPolyPolygon;
-            aPolyPolygon.reserve(nCount);
-            for(sal_uInt32 a(0);a < nCount; a++)
-                aPolyPolygon.append(basegfx::utils::createPolygonFromRect(maRanges[a]));
-            aRetval.append(
-                new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                    std::move(aPolyPolygon),
-                    aRGBColor));
-
-            if(bInvert)
-            {
-                // embed all in invert primitive
-                aRetval = drawinglayer::primitive2d::Primitive2DContainer {
-                        new drawinglayer::primitive2d::InvertPrimitive2D(
-                            std::move(aRetval))
-                };
-            }
-            else if(OverlayType::Transparent == maLastOverlayType)
-            {
-                // embed all rectangles in transparent paint
-                const double fTransparence(mnLastTransparence / 100.0);
-                drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparence(
-                    new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-                        std::move(aRetval),
-                        fTransparence));
-
-                if(mbBorder)
+                if(bInvert)
                 {
-                    drawinglayer::primitive2d::Primitive2DReference aSelectionOutline(
-                        new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
-                            impCombineRectanglesToPolyPolygon(maRanges),
-                            aRGBColor));
-
-                    // add both to result
-                    aRetval = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparence, aSelectionOutline };
+                    // force color to white for invert to get a full invert
+                    aRGBColor = basegfx::BColor(1.0, 1.0, 1.0);
                 }
-                else
+
+                for(sal_uInt32 a(0);a < nCount; a++)
                 {
-                    // just add transparent part
-                    aRetval = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparence };
+                    const basegfx::B2DPolygon aPolygon(basegfx::utils::createPolygonFromRect(maRanges[a]));
+                    aRetval[a] =
+                        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                            basegfx::B2DPolyPolygon(aPolygon),
+                            aRGBColor);
+                }
+
+                if(bInvert)
+                {
+                    // embed all in invert primitive
+                    aRetval = drawinglayer::primitive2d::Primitive2DContainer {
+                            new drawinglayer::primitive2d::InvertPrimitive2D(
+                                std::move(aRetval))
+                    };
+                }
+                else if(OverlayType::Transparent == maLastOverlayType)
+                {
+                    // embed all rectangles in transparent paint
+                    const double fTransparence(mnLastTransparence / 100.0);
+                    const drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparence(
+                        new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
+                            std::move(aRetval),
+                            fTransparence));
+
+                    if(mbBorder)
+                    {
+                        basegfx::B2DPolyPolygon aPolyPolygon(impCombineRangesToPolyPolygon(getRanges()));
+                        const drawinglayer::primitive2d::Primitive2DReference aSelectionOutline(
+                            new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
+                                std::move(aPolyPolygon),
+                                aRGBColor));
+
+                        // add both to result
+                        aRetval = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparence, aSelectionOutline };
+                    }
+                    else
+                    {
+                        // just add transparent part
+                        aRetval = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparence };
+                    }
                 }
             }
 
