@@ -61,7 +61,7 @@
             [ actionNames addObject: [ AquaA11yActionWrapper nativeActionNameFor: [ CreateNSString ( [ wrapper accessibleAction ] -> getAccessibleActionDescription ( cnt ) ) autorelease ] ] ];
         }
     }
-    return actionNames;
+    return [actionNames autorelease];
 }
 
 +(void)doAction:(NSString *)action ofElement:(AquaA11yWrapper *)wrapper {
