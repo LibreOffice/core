@@ -1043,6 +1043,13 @@ SwTwips SwTextFly::GetMaxBottom(const SwBreakPortion& rPortion, const SwTextForm
             continue;
         }
 
+        const SwFormatSurround& rSurround = pAnchoredObj->GetFrameFormat().GetSurround();
+        if (rSurround.GetValue() == text::WrapTextMode_THROUGH)
+        {
+            // Wrap through has no influence on clearing breaks.
+            continue;
+        }
+
         SwRect aRect(pAnchoredObj->GetObjRectWithSpaces());
 
         if (m_pCurrFrame->IsVertical())
