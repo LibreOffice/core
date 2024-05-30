@@ -47,10 +47,9 @@ namespace uno = css::uno;
 
 namespace
 {
-OUString fromQStringToOUString(QString const& s)
+OUString fromQStringToOUString(const QString& s)
 {
-    // Conversion from QString size()'s int to OUString's sal_Int32 should be non-narrowing:
-    return { reinterpret_cast<char16_t const*>(s.utf16()), s.size() };
+    return OUString(reinterpret_cast<const sal_Unicode*>(s.data()), s.length());
 }
 }
 
