@@ -749,7 +749,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     if ( isPopupMenuOpen ) {
         return NO;
     }
-    BOOL ignored = false;
+    bool ignored = false;
     try {
         sal_Int16 nRole = [ self accessibleContext ] -> getAccessibleRole();
         switch ( nRole ) {
