@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <o3tl/string_view.hxx>
+#include <svtools/DocumentToGraphicRenderer.hxx>
 
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
@@ -187,6 +188,32 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineEndnoteSeparatorPosition)
     // - Actual  : 2340
     // i.e. the separator wasn't 2 inches long, but was shorter vs Word.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2880), nEndnoteSeparatorLength);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testEndnoteContSeparator)
+{
+    // Given a document with a Word-style endnote continuation separator:
+    createSwDoc("endnote-cont-separator.docx");
+
+    // When rendering page 2:
+    sal_Int32 nPage = 2;
+    DocumentToGraphicRenderer aRenderer(mxComponent, /*bSelectionOnly=*/false);
+    Size aSize = aRenderer.getDocumentSizeInPixels(nPage);
+    Graphic aGraphic = aRenderer.renderToGraphic(nPage, aSize, aSize, COL_WHITE,
+                                                 /*bExtOutDevData=*/false);
+    auto& xMetaFile = const_cast<GDIMetaFile&>(aGraphic.GetGDIMetaFile());
+
+    // Then make sure the separator length is correct:
+    MetafileXmlDump aDumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, xMetaFile);
+    auto nEndnoteSeparatorStart = getXPath(pXmlDoc, "//polygon/point[1]"_ostr, "x"_ostr).toInt32();
+    auto nEndnoteSeparatorEnd = getXPath(pXmlDoc, "//polygon/point[2]"_ostr, "x"_ostr).toInt32();
+    sal_Int32 nEndnoteSeparatorLength = nEndnoteSeparatorEnd - nEndnoteSeparatorStart;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 9360 (page print area width)
+    // - Actual  : 2880 (2 inches)
+    // i.e. the separator was too short vs Word.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(9360), nEndnoteSeparatorLength);
 }
 }
 

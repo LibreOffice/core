@@ -51,6 +51,7 @@ public:
     SwFootnoteContFrame( SwFrameFormat*, SwFrame* );
 
     const SwFootnoteFrame* FindFootNote() const;
+    const SwFootnoteFrame* FindEndNote() const;
 
     static inline SwFootnoteFrame* AppendChained(SwFrame* pThis, bool bDefaultFormat);
     static inline SwFootnoteFrame* PrependChained(SwFrame* pThis, bool bDefaultFormat);

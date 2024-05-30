@@ -679,6 +679,17 @@ const SwFootnoteFrame* SwFootnoteContFrame::FindFootNote() const
     return nullptr;
 }
 
+const SwFootnoteFrame* SwFootnoteContFrame::FindEndNote() const
+{
+    auto pRet = static_cast<const SwFootnoteFrame*>(Lower());
+    if (pRet && pRet->GetAttr()->GetFootnote().IsEndNote())
+    {
+        return pRet;
+    }
+
+    return nullptr;
+}
+
 const SwPageFrame* SwRootFrame::GetPageAtPos( const Point& rPt, const Size* pSize, bool bExtend ) const
 {
     const SwPageFrame* pRet = nullptr;
