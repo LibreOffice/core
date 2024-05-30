@@ -37,6 +37,7 @@ $(eval $(call gb_Library_use_libraries,avmediaqt6,\
 
 $(eval $(call gb_Library_add_exception_objects,avmediaqt6,\
 	avmedia/source/qt6/gstwindow \
+	avmedia/source/qt6/QtFrameGrabber \
 	avmedia/source/qt6/QtManager \
 	avmedia/source/qt6/QtPlayer \
 ))

@@ -10,6 +10,7 @@
 $(eval $(call gb_CustomTarget_CustomTarget,avmedia/source/qt6))
 
 $(call gb_CustomTarget_get_target,avmedia/source/qt6) : \
+	$(gb_CustomTarget_workdir)/avmedia/source/qt6/QtFrameGrabber.moc \
 	$(gb_CustomTarget_workdir)/avmedia/source/qt6/QtPlayer.moc
 
 

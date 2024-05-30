@@ -27,6 +27,7 @@
 #include <vcl/timer.hxx>
 
 #include <gstwindow.hxx>
+#include "QtFrameGrabber.hxx"
 #include "QtPlayer.hxx"
 
 #include <QtPlayer.moc>
@@ -229,7 +230,13 @@ uno::Reference<::media::XPlayerWindow>
     return xRet;
 }
 
-uno::Reference<media::XFrameGrabber> SAL_CALL QtPlayer::createFrameGrabber() { return nullptr; }
+uno::Reference<media::XFrameGrabber> SAL_CALL QtPlayer::createFrameGrabber()
+{
+    osl::MutexGuard aGuard(m_aMutex);
+
+    rtl::Reference<QtFrameGrabber> xFrameGrabber = new QtFrameGrabber(m_xMediaPlayer->source());
+    return xFrameGrabber;
+}
 
 void SAL_CALL
 QtPlayer::addPlayerListener(const css::uno::Reference<css::media::XPlayerListener>& rListener)
