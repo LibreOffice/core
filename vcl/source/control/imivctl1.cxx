@@ -92,7 +92,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     aVisRectChangedIdle.SetInvokeHandler(LINK(this,SvxIconChoiceCtrl_Impl,VisRectChangedHdl));
 
     Clear( true );
-    Size gridSize((nWinStyle & WB_DETAILS) ? 200 : 100, (nWinStyle & WB_DETAILS) ?  20 : 70);
+    Size gridSize((nWinStyle & WB_DETAILS) ? 150 : 100, (nWinStyle & WB_DETAILS) ?  20 : 70);
     if(pView->GetDPIScaleFactor() > 1)
     {
       gridSize.setHeight( gridSize.Height() * ( pView->GetDPIScaleFactor()) );
@@ -1942,19 +1942,22 @@ void SvxIconChoiceCtrl_Impl::MakeVisible( const tools::Rectangle& rRect, bool bS
     else
         nDy = 0;
 
-    tools::Long nDx;
-    if( aVirtRect.Left() < aOutputArea.Left() )
+    tools::Long nDx = 0;
+
+    // no horizontal scrolling needed in list mode
+    if (!(nWinBits & WB_DETAILS))
     {
-        // scroll to the left (nDx < 0)
-        nDx = aVirtRect.Left() - aOutputArea.Left();
+        if( aVirtRect.Left() < aOutputArea.Left() )
+        {
+            // scroll to the left (nDx < 0)
+            nDx = aVirtRect.Left() - aOutputArea.Left();
+        }
+        else if( aVirtRect.Right() > aOutputArea.Right() )
+        {
+            // scroll to the right (nDx > 0)
+            nDx = aVirtRect.Right() - aOutputArea.Right();
+        }
     }
-    else if( aVirtRect.Right() > aOutputArea.Right() )
-    {
-        // scroll to the right (nDx > 0)
-        nDx = aVirtRect.Right() - aOutputArea.Right();
-    }
-    else
-        nDx = 0;
 
     aOrigin.AdjustX(nDx );
     aOrigin.AdjustY(nDy );

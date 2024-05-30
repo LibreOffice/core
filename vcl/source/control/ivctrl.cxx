@@ -447,9 +447,9 @@ VerticalTabControl::VerticalTabControl(vcl::Window* pParent, bool bWithIcons)
     SetType(WindowType::VERTICALTABCONTROL);
     m_xChooser->SetSelectionMode(SelectionMode::Single);
     m_xChooser->SetClickHdl(LINK(this, VerticalTabControl, ChosePageHdl_Impl));
-    m_xChooser->set_width_request(110);
+    m_xChooser->set_width_request(150);
     m_xChooser->set_height_request(400);
-    m_xChooser->SetSizePixel(Size(110, 400));
+    m_xChooser->SetSizePixel(Size(150, 400));
     m_xBox->set_vexpand(true);
     m_xBox->set_hexpand(true);
     m_xBox->set_expand(true);
