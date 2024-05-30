@@ -341,7 +341,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         Reference < XAccessibleRelationSet > rxAccessibleRelationSet = [ self accessibleContext ] -> getAccessibleRelationSet();
         AccessibleRelation const relationMemberOf = rxAccessibleRelationSet -> getRelationByType ( AccessibleRelationType::MEMBER_OF );
         if ( relationMemberOf.RelationType == AccessibleRelationType::MEMBER_OF && relationMemberOf.TargetSet.hasElements() ) {
-            for (Reference <XAccessible> rMateAccessible : relationMemberOf.TargetSet ) {
+            for (Reference <XAccessible> const & rMateAccessible : relationMemberOf.TargetSet ) {
                 if ( rMateAccessible.is() ) {
                     Reference< XAccessibleContext > rMateAccessibleContext( rMateAccessible -> getAccessibleContext() );
                     if ( rMateAccessibleContext.is() ) {
@@ -1140,7 +1140,7 @@ static Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
                 if ( relationSet.is() && relationSet -> containsRelation ( AccessibleRelationType::SUB_WINDOW_OF )) {
                     // we have a valid relation to the parent element
                     AccessibleRelation const relation = relationSet -> getRelationByType ( AccessibleRelationType::SUB_WINDOW_OF );
-                    for (Reference<XAccessible> rxAccessible : relation.TargetSet) {
+                    for (Reference<XAccessible> const & rxAccessible : relation.TargetSet) {
                         if ( rxAccessible.is() && rxAccessible -> getAccessibleContext().is() ) {
                             // hit test for children of parent
                             hitChild = hitTestRunner ( hitPoint, rxAccessible -> getAccessibleContext() );
