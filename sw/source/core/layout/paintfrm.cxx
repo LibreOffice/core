@@ -5826,11 +5826,21 @@ void SwFootnoteContFrame::PaintLine( const SwRect& rRect,
             auto nPrintAreaTop = static_cast<double>(getFramePrintArea().Top());
             aPoint.setY(getFrameArea().Pos().Y() + nPrintAreaTop * 0.6);
 
-            // Length is 2 inches, but don't paint outside the container frame.
-            nWidth = o3tl::convert(2, o3tl::Length::in, o3tl::Length::twip);
-            if (nWidth > nPrtWidth)
+            const SwFootnoteFrame* pEndnoteFrame = FindEndNote();
+            bool bEndnoteContinuation = pEndnoteFrame && pEndnoteFrame->GetMaster();
+            if (bEndnoteContinuation)
             {
+                // Endnote continuation separator is print area wide.
                 nWidth = nPrtWidth;
+            }
+            else
+            {
+                // Length is 2 inches, but don't paint outside the container frame.
+                nWidth = o3tl::convert(2, o3tl::Length::in, o3tl::Length::twip);
+                if (nWidth > nPrtWidth)
+                {
+                    nWidth = nPrtWidth;
+                }
             }
         }
         oLineRect.emplace(aPoint, Size(nWidth, rInf.GetLineWidth()));
