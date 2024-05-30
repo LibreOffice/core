@@ -62,7 +62,6 @@ DrawView::DrawView(
     OutputDevice* pOutDev,
     DrawViewShell* pShell)
 :   ::sd::View(*pDocSh->GetDoc(), pOutDev, pShell)
-    ,mpDocShell(pDocSh)
     ,mpDrawViewShell(pShell)
     ,mnPOCHSmph(0)
 {
@@ -491,7 +490,7 @@ bool DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAtt
 
 void DrawView::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector /*=0*/)
 {
-    SdDrawDocument* pDoc = mpDocShell->GetDoc();
+    SdDrawDocument* pDoc = GetDocSh()->GetDoc();
     if( pDoc && pDoc->GetDocumentType() == DocumentType::Impress)
     {
         rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( pDoc ) );

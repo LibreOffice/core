@@ -61,7 +61,6 @@ protected:
     virtual void ModelHasChanged() override;
 
 private:
-    DrawDocShell*   mpDocShell;
     DrawViewShell*  mpDrawViewShell;
 
     sal_uInt16          mnPOCHSmph; ///< for blocking PageOrderChangedHint
