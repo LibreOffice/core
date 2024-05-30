@@ -1,0 +1,10 @@
+--- src/lib/IWORKShape.cpp
++++ src/lib/IWORKShape.cpp
+@@ -12,6 +12,7 @@
+ #include <algorithm>
+ #include <cmath>
+ #include <deque>
++#include <iterator>
+ 
+ #include <glm/glm.hpp>
+ #include <memory>

@@ -24,6 +24,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libetonyek,\
 	external/libetonyek/0002-fix-build-with-MSVC.patch.1 \
 	external/libetonyek/0001-allow-0-size-message.patch.1 \
 	external/libetonyek/enumarith.patch \
+	external/libetonyek/include.patch \
 ))
 
 ifneq ($(OS),MACOSX)
