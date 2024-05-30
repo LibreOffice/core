@@ -10,8 +10,6 @@
 #include <typelib/typedescription.hxx>
 #include <vtablefactory.hxx>
 
-using namespace ::com::sun::star::uno;
-
 using bridges::cpp_uno::shared::VtableFactory;
 
 struct VtableFactory::Slot

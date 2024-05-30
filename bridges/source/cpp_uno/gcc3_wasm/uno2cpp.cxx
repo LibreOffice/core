@@ -37,8 +37,6 @@
 
 #include "abi.hxx"
 
-using namespace ::com::sun::star::uno;
-
 namespace
 {
 enum class StructKind
@@ -361,7 +359,8 @@ void unoInterfaceProxyDispatch(uno_Interface* pUnoI, const typelib_TypeDescripti
                 case 0: // queryInterface() opt
                 {
                     typelib_TypeDescription* pTD = 0;
-                    TYPELIB_DANGER_GET(&pTD, reinterpret_cast<Type*>(pArgs[0])->getTypeLibType());
+                    TYPELIB_DANGER_GET(
+                        &pTD, reinterpret_cast<css::uno::Type*>(pArgs[0])->getTypeLibType());
                     if (pTD)
                     {
                         uno_Interface* pInterface = 0;
@@ -399,7 +398,7 @@ void unoInterfaceProxyDispatch(uno_Interface* pUnoI, const typelib_TypeDescripti
                 "illegal member type description!",
                 ::com::sun::star::uno::Reference<::com::sun::star::uno::XInterface>());
 
-            Type const& rExcType = cppu::UnoType<decltype(aExc)>::get();
+            css::uno::Type const& rExcType = cppu::UnoType<decltype(aExc)>::get();
             // binary identical null reference
             ::uno_type_any_construct(*ppException, &aExc, rExcType.getTypeLibType(), 0);
         }
