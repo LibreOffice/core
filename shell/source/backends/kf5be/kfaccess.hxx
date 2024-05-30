@@ -30,7 +30,7 @@ namespace com::sun::star::uno
 class Any;
 }
 
-namespace kf5access
+namespace kfaccess
 {
 css::beans::Optional<css::uno::Any> getValue(std::u16string_view id);
 }

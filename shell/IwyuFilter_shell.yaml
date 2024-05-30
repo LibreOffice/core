@@ -4,7 +4,7 @@ excludelist:
     shell/source/sessioninstall/SyncDbusSessionHelper.hxx:
     # No hpp->hdl replacement
     - org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp
-    shell/source/backends/kf5be/kf5access.cxx:
+    shell/source/backends/kf5be/kfaccess.cxx:
     # Keep abstract QT headers
     - QtCore/QDir
     - QtCore/QStandardPaths
@@ -12,7 +12,7 @@ excludelist:
     - QtCore/QUrl
     - QtGui/QFont
     - QtGui/QFontDatabase
-    shell/source/backends/kf5be/kf5backend.cxx:
+    shell/source/backends/kf5be/kfbackend.cxx:
     # Keep abstract QT headers
     - QtWidgets/QApplication
     shell/source/backends/localebe/localebackend.cxx:

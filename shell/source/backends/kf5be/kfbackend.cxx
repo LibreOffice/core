@@ -46,7 +46,7 @@
 #include <osl/process.h>
 #include <osl/thread.h>
 
-#include "kf5access.hxx"
+#include "kfaccess.hxx"
 
 namespace
 {
@@ -144,14 +144,14 @@ void readKDESettings(std::map<OUString, css::beans::Optional<css::uno::Any>>& rS
 
     for (const OUString& aKey : aKeys)
     {
-        css::beans::Optional<css::uno::Any> aValue = kf5access::getValue(aKey);
+        css::beans::Optional<css::uno::Any> aValue = kfaccess::getValue(aKey);
         std::pair<OUString, css::beans::Optional<css::uno::Any>> elem
             = std::make_pair(aKey, aValue);
         rSettings.insert(elem);
     }
 }
 
-// init the QApplication when we load the kf5backend into a non-Qt vclplug (e.g. gtk3_kde5)
+// init the QApplication when we load the kfbackend into a non-Qt vclplug (e.g. gtk3_kde5)
 // TODO: use a helper process to read these values without linking to Qt directly?
 // TODO: share this code somehow with Qt5Instance.cxx?
 void initQApp(std::map<OUString, css::beans::Optional<css::uno::Any>>& rSettings)

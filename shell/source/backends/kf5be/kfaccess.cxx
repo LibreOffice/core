@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include "kf5access.hxx"
+#include "kfaccess.hxx"
 
 #include <QtGui/QFont>
 #include <QtCore/QString>
@@ -38,7 +38,7 @@
 #include <osl/file.h>
 #include <rtl/ustring.hxx>
 
-namespace kf5access
+namespace kfaccess
 {
 namespace
 {
