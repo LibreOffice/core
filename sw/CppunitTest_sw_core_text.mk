@@ -20,6 +20,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_core_text, \
     sw/qa/core/text/porlay \
     sw/qa/core/text/porrst \
     sw/qa/core/text/text \
+    sw/qa/core/text/txtfly \
     sw/qa/core/text/widorp \
 ))
 
