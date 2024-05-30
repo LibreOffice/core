@@ -66,11 +66,11 @@ bool ImplImage::loadStockAtScale(SalGraphics* pGraphics, BitmapEx &rBitmapEx)
     if (aIconTheme.endsWith("_svg"))
     {
 #endif
-    if (pGraphics && pGraphics->ShouldDownscaleIconsAtSurface(&fScale)) // scale at the surface
-    {
-        nScalePercentage = fScale * 100.0;
-        eScalingFlags = ImageLoadFlags::IgnoreScalingFactor;
-    }
+        if (pGraphics && pGraphics->ShouldDownscaleIconsAtSurface(&fScale)) // scale at the surface
+        {
+            nScalePercentage = fScale * 100.0;
+            eScalingFlags = ImageLoadFlags::IgnoreScalingFactor;
+        }
 #ifdef MACOSX
     }
 #endif
