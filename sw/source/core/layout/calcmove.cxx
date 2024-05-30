@@ -968,7 +968,7 @@ void SwLayoutFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     if (IsHiddenNow())
         MakeValidZeroHeight();
 
-    SwRectFn fnRect = ( IsNeighbourFrame() == bVert )? fnRectHori : ( IsVertLR() ? (IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert );
+    SwRectFnSet fnRect(IsNeighbourFrame() != bVert, IsVertLR(), IsVertLRBT());
 
     std::optional<SwBorderAttrAccess> oAccess;
     const SwBorderAttrs*pAttrs = nullptr;
@@ -995,7 +995,7 @@ void SwLayoutFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                     // Set FixSize; VarSize is set by Format() after calculating the PrtArea
                     setFramePrintAreaValid(false);
 
-                    SwTwips nPrtWidth = (GetUpper()->getFramePrintArea().*fnRect->fnGetWidth)();
+                    SwTwips nPrtWidth = fnRect.GetWidth(GetUpper()->getFramePrintArea());
                     if( bVert && ( IsBodyFrame() || IsFootnoteContFrame() ) )
                     {
                         SwFrame* pNxt = GetPrev();
@@ -1010,24 +1010,24 @@ void SwLayoutFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                             nPrtWidth -= pNxt->getFrameArea().Height();
                     }
 
-                    const tools::Long nDiff = nPrtWidth - (getFrameArea().*fnRect->fnGetWidth)();
+                    const tools::Long nDiff = nPrtWidth - fnRect.GetWidth(getFrameArea());
                     SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                     // SwRectFn switched between horizontal and vertical when bVert == IsNeighbourFrame().
                     // We pick fnSubLeft or fnAddRight that is correspondent to SwRectFn->fnAddBottom
                     if( ( IsCellFrame() && IsRightToLeft() ) || ( IsColumnFrame() && bVert && !IsVertLR() ) )
                     {
-                        (aFrm.*fnRect->fnSubLeft)( nDiff );
+                        fnRect.SubLeft(aFrm, nDiff);
                     }
                     else
                     {
-                        (aFrm.*fnRect->fnAddRight)( nDiff );
+                        fnRect.AddRight(aFrm, nDiff);
                     }
                 }
                 else
                 {
                     // Don't leave your upper
-                    const SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetPrtBottom)();
-                    if( (getFrameArea().*fnRect->fnOverStep)( nDeadLine ) )
+                    const SwTwips nDeadLine = fnRect.GetPrtBottom(*GetUpper());
+                    if (fnRect.OverStep(getFrameArea(), nDeadLine))
                     {
                         setFrameAreaSizeValid(false);
                     }

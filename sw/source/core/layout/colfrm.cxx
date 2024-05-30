@@ -318,9 +318,7 @@ void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribu
         return;
     }
 
-    const bool bVert = IsVertical();
-
-    SwRectFn fnRect = bVert ? ( IsVertLR() ? (IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert ) : fnRectHori;
+    SwRectFnSet fnRect(this);
 
     //If we have a pointer or we have to configure an attribute, we set the
     //column widths in any case. Otherwise we check if a configuration is needed.
@@ -329,11 +327,11 @@ void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribu
         pAttr = &GetFormat()->GetCol();
         if ( !bAdjustAttributes )
         {
-            tools::Long nAvail = (getFramePrintArea().*fnRect->fnGetWidth)();
+            tools::Long nAvail = fnRect.GetWidth(getFramePrintArea());
             for ( SwLayoutFrame *pCol = static_cast<SwLayoutFrame*>(Lower());
                   pCol;
                   pCol = static_cast<SwLayoutFrame*>(pCol->GetNext()) )
-                nAvail -= (pCol->getFrameArea().*fnRect->fnGetWidth)();
+                nAvail -= fnRect.GetWidth(pCol->getFrameArea());
             if ( !nAvail )
                 return;
         }
@@ -341,7 +339,7 @@ void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribu
 
     //The columns can now be easily adjusted.
     //The widths get counted so we can give the reminder to the last one.
-    SwTwips nAvail = (getFramePrintArea().*fnRect->fnGetWidth)();
+    SwTwips nAvail = fnRect.GetWidth(getFramePrintArea());
     const bool bLine = pAttr->GetLineAdj() != COLADJ_NONE;
     const sal_uInt16 nMin = bLine ? sal_uInt16( 20 + ( pAttr->GetLineWidth() / 2) ) : 0;
 
@@ -360,9 +358,9 @@ void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribu
         {
             const SwTwips nWidth = i == (pAttr->GetNumCols() - 1) ?
                                    nAvail :
-                                   pAttr->CalcColWidth( i, sal_uInt16( (getFramePrintArea().*fnRect->fnGetWidth)() ) );
+                                   pAttr->CalcColWidth( i, sal_uInt16( fnRect.GetWidth(getFramePrintArea()) ) );
 
-            const Size aColSz = bVert ?
+            const Size aColSz = fnRect.IsVert() ?
                                 Size( getFramePrintArea().Width(), nWidth ) :
                                 Size( nWidth, getFramePrintArea().Height() );
 
@@ -445,7 +443,7 @@ void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribu
         if( nWidth < 0 )
             nWidth = 0;
 
-        const Size aColSz = bVert ?
+        const Size aColSz = fnRect.IsVert() ?
                             Size( getFramePrintArea().Width(), nWidth ) :
                             Size( nWidth, getFramePrintArea().Height() );
 

@@ -597,11 +597,9 @@ SwRect SwFrame::GetPaintArea() const
     // NEW TABLES
     // Cell frames may not leave their upper:
     SwRect aRect = IsRowFrame() ? GetUpper()->getFrameArea() : getFrameArea();
-    const bool bVert = IsVertical();
-    SwRectFn fnRect = bVert ? ( IsVertLR() ? (IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert ) : fnRectHori;
     SwRectFnSet aRectFnSet(this);
-    tools::Long nRight = (aRect.*fnRect->fnGetRight)();
-    tools::Long nLeft  = (aRect.*fnRect->fnGetLeft)();
+    tools::Long nRight = aRectFnSet.GetRight(aRect);
+    tools::Long nLeft  = aRectFnSet.GetLeft(aRect);
     const SwFrame* pTmp = this;
     bool bLeft = true;
     bool bRight = true;
@@ -611,15 +609,15 @@ SwRect SwFrame::GetPaintArea() const
         if( pTmp->IsCellFrame() && pTmp->GetUpper() &&
             pTmp->GetUpper()->IsVertical() != pTmp->IsVertical() )
             nRowSpan = static_cast<const SwCellFrame*>(pTmp)->GetTabBox()->getRowSpan();
-        tools::Long nTmpRight = (pTmp->getFrameArea().*fnRect->fnGetRight)();
-        tools::Long nTmpLeft = (pTmp->getFrameArea().*fnRect->fnGetLeft)();
+        tools::Long nTmpRight = aRectFnSet.GetRight(pTmp->getFrameArea());
+        tools::Long nTmpLeft = aRectFnSet.GetLeft(pTmp->getFrameArea());
         if( pTmp->IsRowFrame() && nRowSpan > 1 )
         {
             const SwFrame* pNxt = pTmp;
             while( --nRowSpan > 0 && pNxt->GetNext() )
                 pNxt = pNxt->GetNext();
             if( pTmp->IsVertical() )
-                nTmpLeft = (pNxt->getFrameArea().*fnRect->fnGetLeft)();
+                nTmpLeft = aRectFnSet.GetLeft(pNxt->getFrameArea());
             else
             {
                 // pTmp is a row frame, but it's not vertical.
@@ -627,11 +625,11 @@ SwRect SwFrame::GetPaintArea() const
                 {
                     // This frame cell is OK to expand towards the physical down direction.
                     // Physical down is left.
-                    nTmpLeft = (pNxt->getFrameArea().*fnRect->fnGetLeft)();
+                    nTmpLeft = aRectFnSet.GetLeft(pNxt->getFrameArea());
                 }
                 else
                 {
-                    nTmpRight = (pNxt->getFrameArea().*fnRect->fnGetRight)();
+                    nTmpRight = aRectFnSet.GetRight(pNxt->getFrameArea());
                 }
             }
         }
@@ -668,7 +666,7 @@ SwRect SwFrame::GetPaintArea() const
                 bRight = false;
             }
         }
-        else if( bVert && pTmp->IsBodyFrame() )
+        else if (aRectFnSet.IsVert() && pTmp->IsBodyFrame())
         {
             // Header and footer frames have always horizontal direction and
             // limit the body frame.
@@ -691,8 +689,8 @@ SwRect SwFrame::GetPaintArea() const
         }
         pTmp = pTmp->GetUpper();
     }
-    (aRect.*fnRect->fnSetLeft)( nLeft );
-    (aRect.*fnRect->fnSetRight)( nRight );
+    aRectFnSet.SetLeft(aRect, nLeft);
+    aRectFnSet.SetRight(aRect, nRight);
     return aRect;
 }
 
@@ -702,13 +700,11 @@ SwRect SwFrame::GetPaintArea() const
 |*/
 SwRect SwFrame::UnionFrame( bool bBorder ) const
 {
-    bool bVert = IsVertical();
-    SwRectFn fnRect = bVert ? ( IsVertLR() ? (IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert ) : fnRectHori;
-    tools::Long nLeft = (getFrameArea().*fnRect->fnGetLeft)();
-    tools::Long nWidth = (getFrameArea().*fnRect->fnGetWidth)();
-    tools::Long nPrtLeft = (getFramePrintArea().*fnRect->fnGetLeft)();
-    tools::Long nPrtWidth = (getFramePrintArea().*fnRect->fnGetWidth)();
     SwRectFnSet aRectFnSet(this);
+    tools::Long nLeft = aRectFnSet.GetLeft(getFrameArea());
+    tools::Long nWidth = aRectFnSet.GetWidth(getFrameArea());
+    tools::Long nPrtLeft = aRectFnSet.GetLeft(getFramePrintArea());
+    tools::Long nPrtWidth = aRectFnSet.GetWidth(getFramePrintArea());
     if (aRectFnSet.XInc(nPrtLeft, nPrtWidth) > nWidth)
         nWidth = nPrtLeft + nPrtWidth;
     if( nPrtLeft < 0 )
@@ -746,8 +742,8 @@ SwRect SwFrame::UnionFrame( bool bBorder ) const
     }
     nWidth = aRectFnSet.XDiff(aRectFnSet.XInc(nRight, nAdd), nLeft);
     SwRect aRet( getFrameArea() );
-    (aRet.*fnRect->fnSetLeft)(nLeft);
-    (aRet.*fnRect->fnSetWidth)( nWidth );
+    aRectFnSet.SetLeft(aRet, nLeft);
+    aRectFnSet.SetWidth(aRet, nWidth);
     return aRet;
 }
 

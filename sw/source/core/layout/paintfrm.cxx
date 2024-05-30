@@ -1297,20 +1297,20 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrame *pFrame,
         rRect = pFrame->getFramePrintArea();
         rRect.Pos() += pFrame->getFrameArea().Pos();
 
-        SwRectFn fnRect = pFrame->IsVertical() ? ( pFrame->IsVertLR() ? (pFrame->IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert ) : fnRectHori;
+        SwRectFnSet fnRect(pFrame);
 
         const SvxBoxItem &rBox = rAttrs.GetBox();
-        const bool bTop = 0 != (pFrame->*fnRect->fnGetTopMargin)();
+        const bool bTop = 0 != fnRect.GetTopMargin(*pFrame);
         if ( bTop || rBox.GetTop() )
         {
             SwTwips nDiff = rBox.GetTop() ?
                 rBox.CalcLineSpace( SvxBoxItemLine::TOP, /*bEvenIfNoLine=*/false, /*bAllowNegative=*/true ) :
                 rBox.GetDistance( SvxBoxItemLine::TOP );
             if( nDiff )
-                (rRect.*fnRect->fnSubTop)( nDiff );
+                fnRect.SubTop(rRect, nDiff);
         }
 
-        const bool bBottom = 0 != (pFrame->*fnRect->fnGetBottomMargin)();
+        const bool bBottom = 0 != fnRect.GetBottomMargin(*pFrame);
         if ( bBottom )
         {
             SwTwips nDiff = 0;
@@ -1329,29 +1329,28 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrame *pFrame,
                     rBox.GetDistance( SvxBoxItemLine::BOTTOM );
             }
             if( nDiff )
-                (rRect.*fnRect->fnAddBottom)( nDiff );
+                fnRect.AddBottom(rRect, nDiff);
         }
 
         if ( rBox.GetLeft() )
-            (rRect.*fnRect->fnSubLeft)( rBox.CalcLineSpace( SvxBoxItemLine::LEFT ) );
+            fnRect.SubLeft(rRect, rBox.CalcLineSpace(SvxBoxItemLine::LEFT));
         else
-            (rRect.*fnRect->fnSubLeft)( rBox.GetDistance( SvxBoxItemLine::LEFT ) );
+            fnRect.SubLeft(rRect, rBox.GetDistance(SvxBoxItemLine::LEFT));
 
         if ( rBox.GetRight() )
-            (rRect.*fnRect->fnAddRight)( rBox.CalcLineSpace( SvxBoxItemLine::RIGHT ) );
+            fnRect.AddRight(rRect, rBox.CalcLineSpace(SvxBoxItemLine::RIGHT));
         else
-            (rRect.*fnRect->fnAddRight)( rBox.GetDistance( SvxBoxItemLine::RIGHT ) );
+            fnRect.AddRight(rRect, rBox.GetDistance(SvxBoxItemLine::RIGHT));
 
         if ( bShadow && rAttrs.GetShadow().GetLocation() != SvxShadowLocation::NONE )
         {
             const SvxShadowItem &rShadow = rAttrs.GetShadow();
             if ( bTop )
-                (rRect.*fnRect->fnSubTop)(rShadow.CalcShadowSpace(SvxShadowItemSide::TOP));
-            (rRect.*fnRect->fnSubLeft)(rShadow.CalcShadowSpace(SvxShadowItemSide::LEFT));
+                fnRect.SubTop(rRect, rShadow.CalcShadowSpace(SvxShadowItemSide::TOP));
+            fnRect.SubLeft(rRect, rShadow.CalcShadowSpace(SvxShadowItemSide::LEFT));
             if ( bBottom )
-                (rRect.*fnRect->fnAddBottom)
-                                (rShadow.CalcShadowSpace( SvxShadowItemSide::BOTTOM ));
-            (rRect.*fnRect->fnAddRight)(rShadow.CalcShadowSpace(SvxShadowItemSide::RIGHT));
+                fnRect.AddBottom(rRect, rShadow.CalcShadowSpace(SvxShadowItemSide::BOTTOM));
+            fnRect.AddRight(rRect, rShadow.CalcShadowSpace(SvxShadowItemSide::RIGHT));
         }
     }
 
@@ -5862,13 +5861,13 @@ void SwLayoutFrame::PaintColLines( const SwRect &rRect, const SwFormatCol &rForm
     if ( !pCol || !pCol->IsColumnFrame() )
         return;
 
-    SwRectFn fnRect = pCol->IsVertical() ? ( pCol->IsVertLR() ? (pCol->IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert ) : fnRectHori;
+    SwRectFnSet fnRect(pCol);
 
     SwRect aLineRect = getFramePrintArea();
     aLineRect += getFrameArea().Pos();
 
-    SwTwips nTop = ((aLineRect.*fnRect->fnGetHeight)()*rFormatCol.GetLineHeight())
-                   / 100 - (aLineRect.*fnRect->fnGetHeight)();
+    SwTwips nTop = (fnRect.GetHeight(aLineRect)*rFormatCol.GetLineHeight())
+                   / 100 - fnRect.GetHeight(aLineRect);
     SwTwips nBottom = 0;
 
     switch ( rFormatCol.GetLineAdj() )
@@ -5884,23 +5883,23 @@ void SwLayoutFrame::PaintColLines( const SwRect &rRect, const SwFormatCol &rForm
     }
 
     if( nTop )
-        (aLineRect.*fnRect->fnSubTop)( nTop );
+        fnRect.SubTop(aLineRect, nTop);
     if( nBottom )
-        (aLineRect.*fnRect->fnAddBottom)( nBottom );
+        fnRect.AddBottom(aLineRect, nBottom);
 
     SwTwips nPenHalf = rFormatCol.GetLineWidth();
-    (aLineRect.*fnRect->fnSetWidth)( nPenHalf );
+    fnRect.SetWidth(aLineRect, nPenHalf);
     nPenHalf /= 2;
 
     //We need to be a bit generous here, to not lose something.
     SwRect aRect( rRect );
-    (aRect.*fnRect->fnSubLeft)( nPenHalf + gProp.nSPixelSzW );
-    (aRect.*fnRect->fnAddRight)( nPenHalf + gProp.nSPixelSzW );
-    SwRectGet fnGetX = IsRightToLeft() ? fnRect->fnGetLeft : fnRect->fnGetRight;
+    fnRect.SubLeft(aRect, nPenHalf + gProp.nSPixelSzW);
+    fnRect.AddRight(aRect, nPenHalf + gProp.nSPixelSzW);
     while ( pCol->GetNext() )
     {
-        (aLineRect.*fnRect->fnSetPosX)
-            ( (pCol->getFrameArea().*fnGetX)() - nPenHalf );
+        fnRect.SetPosX(aLineRect, (IsRightToLeft() ? fnRect.GetLeft(pCol->getFrameArea())
+                                                   : fnRect.GetRight(pCol->getFrameArea()))
+                                      - nPenHalf);
         if ( aRect.Overlaps( aLineRect ) )
             PaintBorderLine( aRect, aLineRect , pPage, &rFormatCol.GetLineColor(),
                    rFormatCol.GetLineStyle() );

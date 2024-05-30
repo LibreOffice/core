@@ -1372,19 +1372,17 @@ typedef SwRectFnCollection* SwRectFn;
 extern SwRectFn fnRectHori, fnRectVert, fnRectVertL2R, fnRectVertL2RB2T;
 class SwRectFnSet {
 public:
-    explicit SwRectFnSet(const SwFrame *pFrame)
-        : m_bVert(pFrame->IsVertical())
-        , m_bVertL2R(pFrame->IsVertLR())
-        , m_bVertL2RB2T(pFrame->IsVertLRBT())
-    {
-        m_fnRect = m_bVert ? (m_bVertL2R ? (m_bVertL2RB2T ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert) : fnRectHori;
-    }
+    explicit SwRectFnSet(const SwFrame* pFrame) { Refresh(pFrame); }
 
-    void Refresh(const SwFrame *pFrame)
+    explicit SwRectFnSet(bool vert, bool vL2R, bool vL2RB2T) { Refresh(vert, vL2R, vL2RB2T); }
+
+    void Refresh(const SwFrame* p) { Refresh(p->IsVertical(), p->IsVertLR(), p->IsVertLRBT()); }
+
+    void Refresh(bool vert, bool vL2R, bool vL2RB2T)
     {
-        m_bVert = pFrame->IsVertical();
-        m_bVertL2R = pFrame->IsVertLR();
-        m_bVertL2RB2T = pFrame->IsVertLRBT();
+        m_bVert = vert;
+        m_bVertL2R = vL2R;
+        m_bVertL2RB2T = vL2RB2T;
         m_fnRect = m_bVert ? (m_bVertL2R ? (m_bVertL2RB2T ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert) : fnRectHori;
     }
 
@@ -1438,7 +1436,7 @@ public:
     tools::Long  BottomDist(const SwRect& rRect, tools::Long nPos) const { return (rRect.*m_fnRect->fnBottomDist) (nPos); }
     tools::Long  LeftDist   (const SwRect& rRect, tools::Long nPos) const { return (rRect.*m_fnRect->fnLeftDist)    (nPos); }
     tools::Long  RightDist   (const SwRect& rRect, tools::Long nPos) const { return (rRect.*m_fnRect->fnRightDist)    (nPos); }
-    void  SetLimit (SwFrame& rFrame, tools::Long nNew) const { (rFrame.*m_fnRect->fnSetLimit) (nNew); }
+    bool  SetLimit (SwFrame& rFrame, tools::Long nNew) const { return (rFrame.*m_fnRect->fnSetLimit) (nNew); }
     bool  OverStep  (const SwRect& rRect, tools::Long nPos) const { return (rRect.*m_fnRect->fnOverStep)   (nPos); }
 
     void SetPos(SwRect& rRect, const Point& rNew) const { (rRect.*m_fnRect->fnSetPos)(rNew); }
