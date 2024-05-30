@@ -1532,7 +1532,7 @@ libo_FUZZ_ARG_ENABLE(extensions,
 
 AC_ARG_ENABLE(scripting,
     AS_HELP_STRING([--disable-scripting],
-        [Disable BASIC, Java and Python. Work in progress, use only if you are hacking on it.]),
+        [Disable BASIC, Java, Python and .NET. Work in progress, use only if you are hacking on it.]),
 ,test "${enable_scripting+set}" = set || enable_scripting=yes)
 
 # This is mainly for Android and iOS, but could potentially be used in some
@@ -2157,6 +2157,10 @@ AC_ARG_ENABLE(xmlhelp,
 AC_ARG_ENABLE(customtarget-components,
     AS_HELP_STRING([--enable-customtarget-components],
         [Generates the static UNO object constructor mapping from the build.]))
+
+AC_ARG_ENABLE(dotnet,
+    AS_HELP_STRING([--enable-dotnet],
+        [Enables or disables .NET 8.0 support and bindings generation.]))
 
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
@@ -3560,6 +3564,46 @@ if test "$COMPATH" = "."; then
     COMPATH=`echo $COMPATH | $SED "s@/[[^/:]]*\\\$@@"`
 fi
 COMPATH=`echo $COMPATH | $SED "s@/[[Bb]][[Ii]][[Nn]]\\\$@@"`
+
+dnl ===================================================================
+dnl .NET support
+dnl ===================================================================
+AC_MSG_CHECKING([whether to build with .NET support])
+if test "$enable_dotnet" != "no"; then
+    if test "$DISABLE_SCRIPTING" = TRUE; then
+        AC_MSG_RESULT([no, overridden by --disable-scripting])
+        ENABLE_DOTNET=""
+        enable_dotnet=no
+    else
+        AC_MSG_RESULT([yes])
+        ENABLE_DOTNET="TRUE"
+    fi
+else
+    AC_MSG_RESULT([no])
+    ENABLE_DOTNET=""
+fi
+
+if test "$ENABLE_DOTNET" = TRUE; then
+    AC_PATH_PROG(DOTNET, dotnet)
+    if test "$DOTNET" != ""; then
+        AC_MSG_CHECKING([whether .NET SDK is installed])
+        DOTNET_SDK_VERION=`dotnet --list-sdks`
+        if test "$DOTNET_SDK_VERION" != ""; then
+            AC_MSG_RESULT([yes])
+            AC_DEFINE(HAVE_FEATURE_DOTNET)
+        else
+            AC_MSG_RESULT([no])
+            ENABLE_DOTNET=""
+        fi
+    else
+        ENABLE_DOTNET=""
+    fi
+fi
+
+AC_SUBST(ENABLE_DOTNET)
+
+dnl set ENABLE_DOTNET="TRUE" for build-time and run-time .NET support
+dnl set ENABLE_DOTNET="" for no .NET support at all
 
 dnl ===================================================================
 dnl Java support

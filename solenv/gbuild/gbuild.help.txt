@@ -82,6 +82,7 @@ AVAILABLE TARGETS
            o CppunitTest
            o CustomTarget
            o Dictionary
+           o DotnetLibrary
            o Executable
            o Extension
            o ExternalPackage

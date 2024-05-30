@@ -62,6 +62,8 @@ gb_DescriptionTranslateTarget_get_target = $(WORKDIR)/DescriptionTranslateTarget
 gb_Dictionary_get_target = $(WORKDIR)/Dictionary/$(1).done
 gb_CxxObject_get_target = $(WORKDIR)/CxxObject/$(1).o
 gb_CxxObject_get_dwo_target = $(WORKDIR)/CxxObject/$(1).dwo
+gb_DotnetLibrary_get_target = $(WORKDIR)/DotnetLibrary/$(1).done
+gb_DotnetLibrary_get_workdir = $(WORKDIR)/DotnetLibrary/$(1)
 gb_GenCxxObject_get_target = $(WORKDIR)/GenCxxObject/$(1).o
 gb_GenCxxObject_get_dwo_target = $(WORKDIR)/GenCxxObject/$(1).dwo
 gb_GenAsmObject_get_target = $(WORKDIR)/GenAsmObject/$(1).o
@@ -272,6 +274,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	CustomPackage \
 	DescriptionTranslateTarget \
 	Dictionary \
+	DotnetLibrary \
 	Executable \
 	ExternalPackage \
 	Extension \

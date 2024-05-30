@@ -107,6 +107,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	linguistic \
 	lotuswordpro \
 	$(call gb_Helper_optional,DESKTOP,l10ntools) \
+	net_ure \
 	$(call gb_Helper_optional,NLPSOLVER,nlpsolver) \
 	o3tl \
 	$(call gb_Helper_optional,ODK,odk) \

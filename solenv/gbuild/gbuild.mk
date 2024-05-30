@@ -331,6 +331,7 @@ include $(foreach class, \
 	CliLibrary \
 	CliNativeLibrary \
 	CliUnoApi \
+	DotnetLibrary \
 	Zip \
 	AllLangPackage \
 	Configuration \
