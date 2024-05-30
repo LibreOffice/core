@@ -1067,16 +1067,13 @@ void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
 
             SwDocShell* pShell = mrView.GetDocShell();
             if (bReply)
-                pShell->GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::START, nullptr);
+                pShell->GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
 
             // synchronous dispatch
             mrView.GetViewFrame().GetDispatcher()->Execute(FN_POSTIT);
 
             if (bReply)
             {
-                SwUndoId nUndoId(SwUndoId::END);
-                mrView.GetWrtShell().GetLastUndoInfo(nullptr, &nUndoId);
-
                 // Get newly created SwPostItField and set its paraIdParent
                 auto pPostItField = mrMgr.GetLatestPostItField();
                 pPostItField->SetParentId(GetTopReplyNote()->GetParaId());
@@ -1092,7 +1089,7 @@ void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
 
                 SwRewriter aRewriter;
                 aRewriter.AddRule(UndoArg1, pPostItField->GetDescription());
-                pShell->GetDoc()->GetIDocumentUndoRedo().EndUndo(nUndoId, &aRewriter);
+                pShell->GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, &aRewriter);
             }
             break;
         }
@@ -1420,7 +1417,7 @@ void SwAnnotationWin::ChangeSidebarItem( SwSidebarItem const & rSidebarItem )
 {
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     const bool bAnchorChanged = mpAnchorFrame != rSidebarItem.maLayoutInfo.mpAnchorFrame;
-    if ( bAnchorChanged )
+    if (bAnchorChanged && mpAnchorFrame)
     {
         mrMgr.DisconnectSidebarWinFromFrame( *mpAnchorFrame, *this );
     }
@@ -1428,6 +1425,7 @@ void SwAnnotationWin::ChangeSidebarItem( SwSidebarItem const & rSidebarItem )
 
     mrSidebarItem = rSidebarItem;
     mpAnchorFrame = mrSidebarItem.maLayoutInfo.mpAnchorFrame;
+    assert(mpAnchorFrame);
 
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     if (mxSidebarWinAccessible)
