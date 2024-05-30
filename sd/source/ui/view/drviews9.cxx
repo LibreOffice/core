@@ -127,11 +127,10 @@ void DrawViewShell::ExecGallery(SfxRequest const & rReq)
 
         bool bInsertNewObject = true;
 
-        if ( mpDrawView->GetMarkedObjectList().GetMarkCount() != 0 )
+        const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+        if ( rMarkList.GetMarkCount() != 0 )
         {
             // is there an empty graphic object?
-            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-
             if (rMarkList.GetMarkCount() == 1)
             {
                 SdrMark* pMark = rMarkList.GetMark(0);
@@ -151,7 +150,7 @@ void DrawViewShell::ExecGallery(SfxRequest const & rReq)
                         pNewGrafObj->SetOutlinerParaObject(std::nullopt);
                         pNewGrafObj->SetGraphic(aGraphic);
 
-                        OUString aStr = mpDrawView->GetMarkedObjectList().GetMarkDescription() +
+                        OUString aStr = rMarkList.GetMarkDescription() +
                             " " + SdResId(STR_UNDO_REPLACE);
                         mpDrawView->BegUndo(aStr);
                         SdrPageView* pPV = mpDrawView->GetSdrPageView();

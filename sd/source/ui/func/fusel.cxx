@@ -406,7 +406,8 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         {
                             bool bToggle = false;
 
-                            if (rMEvt.IsShift() && mpView->GetMarkedObjectList().GetMarkCount() > 1)
+                            const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+                            if (rMEvt.IsShift() && rMarkList.GetMarkCount() > 1)
                             {
                                 // No Toggle on single selection
                                 bToggle = true;
@@ -561,6 +562,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 }
             }
 
+            const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
             if (bMarked &&
                 (!rMEvt.IsShift() || eHit == SdrHitKind::MarkedObject))
             {
@@ -568,7 +570,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 if ( ! rMEvt.IsRight())
                     mpView->BegDragObj(aMDPos, nullptr, aVEvt.mpHdl, nDrgLog);
             }
-            else if (mpView->GetMarkedObjectList().GetMarkCount() != 0)
+            else if (rMarkList.GetMarkCount() != 0)
             {
                 /**************************************************************
                 * Select gluepoint
@@ -703,9 +705,10 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 // check for single object selected
                 SdrObject* pSingleObj = nullptr;
 
-                if (mpView->GetMarkedObjectList().GetMarkCount()==1)
+                const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+                if (rMarkList.GetMarkCount()==1)
                 {
-                    pSingleObj = mpView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+                    pSingleObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                 }
 
                 // Check for click on svx::diagram::DiagramFrameHdl
@@ -848,11 +851,12 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         pHdl = nullptr;
         mpWindow->ReleaseMouse();
         SdrObject* pSingleObj = nullptr;
-        const size_t nMarkCount = mpView->GetMarkedObjectList().GetMarkCount();
+        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+        const size_t nMarkCount = rMarkList.GetMarkCount();
 
         if (nMarkCount==1)
         {
-            pSingleObj = mpView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+            pSingleObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         }
 
         if ( (nSlotId != SID_OBJECT_SELECT && nMarkCount==0)                    ||
@@ -1034,7 +1038,8 @@ bool FuSelection::KeyInput(const KeyEvent& rKEvt)
     {
         bReturn = FuDraw::KeyInput(rKEvt);
 
-        if(mpView->GetMarkedObjectList().GetMarkCount() == 0)
+        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+        if(rMarkList.GetMarkCount() == 0)
         {
             mpView->ResetCreationActive();
 

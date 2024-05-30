@@ -317,6 +317,7 @@ bool FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
 bool FuDraw::KeyInput(const KeyEvent& rKEvt)
 {
     bool bReturn = false;
+    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
     switch ( rKEvt.GetKeyCode().GetCode() )
     {
@@ -369,7 +370,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 if(!mpView->MarkNextObj( !aCode.IsShift() ))
                 {
                     //If there is only one object, don't do the UnmarkAllObj() & MarkNextObj().
-                    if ( mpView->HasMultipleMarkableObjects() && mpView->GetMarkedObjectList().GetMarkCount() != 0 )
+                    if ( mpView->HasMultipleMarkableObjects() && rMarkList.GetMarkCount() != 0 )
                     {
                         // No next object: go over open end and get first from
                         // the other side
@@ -378,7 +379,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     }
                 }
 
-                if(mpView->GetMarkedObjectList().GetMarkCount() != 0)
+                if(rMarkList.GetMarkCount() != 0)
                     mpView->MakeVisible(mpView->GetAllMarkedRect(), *mpWindow);
 
                 bReturn = true;
@@ -396,7 +397,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 mpView->UnmarkAllObj();
                 mpView->MarkNextObj();
 
-                if(mpView->GetMarkedObjectList().GetMarkCount() != 0)
+                if(rMarkList.GetMarkCount() != 0)
                     mpView->MakeVisible(mpView->GetAllMarkedRect(), *mpWindow);
 
                 bReturn = true;
@@ -414,7 +415,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 mpView->UnmarkAllObj();
                 mpView->MarkNextObj(true);
 
-                if(mpView->GetMarkedObjectList().GetMarkCount() != 0)
+                if(rMarkList.GetMarkCount() != 0)
                     mpView->MakeVisible(mpView->GetAllMarkedRect(), *mpWindow);
 
                 bReturn = true;
@@ -628,10 +629,9 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
 {
     sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
 
-    if ( mpView->GetMarkedObjectList().GetMarkCount() != 0 )
+    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+    if ( rMarkList.GetMarkCount() != 0 )
     {
-        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-
         if (rMarkList.GetMarkCount() == 1)
         {
             SdrMark* pMark = rMarkList.GetMark(0);
@@ -773,6 +773,7 @@ bool FuDraw::SetHelpText(const SdrObject* pObj, const Point& rPosPixel, const Sd
 bool FuDraw::cancel()
 {
     bool bReturn = false;
+    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
     if ( mpView->IsAction() )
     {
@@ -790,7 +791,7 @@ bool FuDraw::cancel()
         rBindings.Invalidate( SID_PARASPACE_INCREASE );
         rBindings.Invalidate( SID_PARASPACE_DECREASE );
     }
-    else if ( mpView->GetMarkedObjectList().GetMarkCount() != 0 )
+    else if ( rMarkList.GetMarkCount() != 0 )
     {
         const SdrHdlList& rHdlList = mpView->GetHdlList();
         SdrHdl* pHdl = rHdlList.GetFocusHdl();

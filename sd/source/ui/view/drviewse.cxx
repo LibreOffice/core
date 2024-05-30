@@ -321,11 +321,12 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                 rReq.SetSlot( nSlotId );
             }
 
+            const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
             if (nSlotId == SID_OBJECT_CROOK_ROTATE ||
                 nSlotId == SID_OBJECT_CROOK_SLANT ||
                 nSlotId == SID_OBJECT_CROOK_STRETCH)
             {
-                if ( mpDrawView->GetMarkedObjectList().GetMarkCount() > 0 &&
+                if ( rMarkList.GetMarkCount() > 0 &&
                     !mpDrawView->IsCrookAllowed( mpDrawView->IsCrookNoContortion() ) )
                 {
                     if ( mpDrawView->IsPresObjSelected() )
@@ -352,7 +353,6 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             else if (nSlotId == SID_OBJECT_SHEAR)
             {
                 size_t i = 0;
-                const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
                 const size_t nMarkCnt = rMarkList.GetMarkCount();
                 bool b3DObjMarked = false;
 
@@ -600,14 +600,15 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     // CTRL-SID_OBJECT_SELECT -> select first draw object if none is selected yet
     if(SID_OBJECT_SELECT == nSId && HasCurrentFunction() && (rReq.GetModifier() & KEY_MOD1))
     {
-        if(GetView()->GetMarkedObjectList().GetMarkCount() == 0)
+        const SdrMarkList&  rMarkList = GetView()->GetMarkedObjectList();
+        if(rMarkList.GetMarkCount() == 0)
         {
             // select first object
             GetView()->UnmarkAllObj();
             GetView()->MarkNextObj(true);
 
             // ...and make it visible
-            if(GetView()->GetMarkedObjectList().GetMarkCount() != 0)
+            if(rMarkList.GetMarkCount() != 0)
                 GetView()->MakeVisible(GetView()->GetAllMarkedRect(), *GetActiveWindow());
         }
     }
@@ -1253,7 +1254,8 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_SIZE_OPTIMAL:  // BASIC
         {
             mbZoomOnPage = false;
-            if ( mpDrawView->GetMarkedObjectList().GetMarkCount() != 0 )
+            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+            if ( rMarkList.GetMarkCount() != 0 )
             {
                 maMarkRect = mpDrawView->GetAllMarkedRect();
                 ::tools::Long nW = static_cast<::tools::Long>(maMarkRect.GetWidth()  * 1.03);
@@ -1556,9 +1558,10 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
     const OUString sTargetURL( ::URIHelper::SmartRel2Abs( INetURLObject( GetDocSh()->GetMedium()->GetBaseURL() ), rURL, URIHelper::GetMaybeFileHdl(), true, false,
                                                                 INetURLObject::EncodeMechanism::WasEncoded,
                                                                 INetURLObject::DecodeMechanism::Unambiguous ) );
-    if (mpDrawView->GetMarkedObjectList().GetMarkCount() > 0)
+    const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
+    if (rMarkList.GetMarkCount() > 0)
     {
-        SdrObject* pMarkedObj = mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+        SdrObject* pMarkedObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         if( pMarkedObj ) try
         {
             // change first marked object

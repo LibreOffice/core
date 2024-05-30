@@ -600,13 +600,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
     DeactivateCurrentFunction();
 
     sal_uInt16 nSId = rReq.GetSlot();
+    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
 
     switch ( nSId )
     {
         case SID_OUTLINE_TEXT_AUTOFIT:
         {
             SfxUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
-            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             if( rMarkList.GetMarkCount() == 1 )
             {
                 pUndoManager->EnterListAction(u""_ustr, u""_ustr, 0, GetViewShellBase().GetViewShellId());
@@ -1137,9 +1137,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         // exception to get good results for Svgs. This is how the code gets more
                         // and more crowded, at last I made a remark for myself to change this
                         // as one of the next tasks.
-                        if(1 == mpDrawView->GetMarkedObjectList().GetMarkCount())
+                        if(1 == rMarkList.GetMarkCount())
                         {
-                            const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
+                            const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(rMarkList.GetMark(0)->GetMarkedSdrObj());
 
                             if(pSdrGrafObj && pSdrGrafObj->isEmbeddedVectorGraphicData())
                             {
@@ -1164,7 +1164,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     aGraphic);
 
                 // get some necessary info and ensure it
-                const SdrMarkList& rMarkList(mpDrawView->GetMarkedObjectList());
                 const size_t nMarkCount(rMarkList.GetMarkCount());
                 SdrPageView* pPageView = mpDrawView->GetSdrPageView();
                 OSL_ENSURE(nMarkCount, "DrawViewShell::FuTemporary: SID_CONVERT_TO_BITMAP with empty selection (!)");
@@ -1230,7 +1229,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             else
             {
-                const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
                 const size_t nCount = rMarkList.GetMarkCount();
 
                 // For every presentation object a SfxItemSet of hard attributes
@@ -1360,7 +1358,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_SAVE_GRAPHIC:
         {
-            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             if( rMarkList.GetMarkCount() == 1 )
             {
                 const SdrGrafObj* pObj = dynamic_cast<const SdrGrafObj*>(rMarkList.GetMark(0)->GetMarkedSdrObj());
@@ -1399,7 +1396,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_EXTERNAL_EDIT:
         {
-            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             if( rMarkList.GetMarkCount() == 1 )
             {
                 SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
@@ -1420,7 +1416,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_COMPRESS_GRAPHIC:
         {
-            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             if( rMarkList.GetMarkCount() == 1 )
             {
                 SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
@@ -1433,7 +1428,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         {
                             rtl::Reference<SdrGrafObj> pNewObject = dialog.GetCompressedSdrGrafObj();
                             SdrPageView* pPageView = mpDrawView->GetSdrPageView();
-                            OUString aUndoString = mpDrawView->GetMarkedObjectList().GetMarkDescription() + " Compress";
+                            OUString aUndoString = rMarkList.GetMarkDescription() + " Compress";
                             mpDrawView->BegUndo( aUndoString );
                             mpDrawView->ReplaceObjectAtView( pObj, *pPageView, pNewObject.get() );
                             mpDrawView->EndUndo();
@@ -1477,7 +1472,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             SetCurrentFunction( FuTransform::Create( this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq ) );
             // tdf#138963 conditions tested for here must be the same as those
             // of the early returns from FuTransform::DoExecute
-            if (rReq.GetArgs() || mpDrawView->GetMarkedObjectList().GetMarkCount() == 0)
+            if (rReq.GetArgs() || rMarkList.GetMarkCount() == 0)
             {
                 Invalidate(SID_RULER_OBJECT);
                 Cancel();
@@ -2662,10 +2657,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             // only allow for single object selection since the name of an object needs
             // to be unique
-            if(1 == mpDrawView->GetMarkedObjectList().GetMarkCount())
+            if(1 == rMarkList.GetMarkCount())
             {
                 // #i68101#
-                rtl::Reference<SdrObject> pSelected = mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+                rtl::Reference<SdrObject> pSelected = rMarkList.GetMark(0)->GetMarkedSdrObj();
                 OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 OUString aName(pSelected->GetName());
 
@@ -2701,9 +2696,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         // #i68101#
         case SID_OBJECT_TITLE_DESCRIPTION:
         {
-            if(1 == mpDrawView->GetMarkedObjectList().GetMarkCount())
+            if(1 == rMarkList.GetMarkCount())
             {
-                rtl::Reference<SdrObject> pSelected = mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+                rtl::Reference<SdrObject> pSelected = rMarkList.GetMark(0)->GetMarkedSdrObj();
                 OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 OUString aTitle(pSelected->GetTitle());
                 OUString aDescription(pSelected->GetDescription());
@@ -2737,7 +2732,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_SETLAYER:
         {
-            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             const size_t nMarkCount = rMarkList.GetMarkCount();
             if (nMarkCount >= 1 && mpLayerTabBar)
             {
@@ -2994,7 +2988,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             else if ( mpDrawView->IsImportMtfPossible() )
             {
                 weld::WaitObject aWait(GetFrameWeld());
-                const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
                 const size_t nCnt=rMarkList.GetMarkCount();
 
                 // determine the sum of meta objects of all selected meta files
@@ -3274,8 +3267,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( GetViewFrame()->HasChildWindow( nId )
                 && ( ( ViewShell::Implementation::GetImageMapDialog() ) != nullptr ) )
             {
-                const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
-
                 if ( rMarkList.GetMarkCount() == 1 )
                     UpdateIMapDlg( rMarkList.GetMark( 0 )->GetMarkedSdrObj() );
             }

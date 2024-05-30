@@ -650,7 +650,8 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         }
         else
         {
-            if ( mpDrawView->GetMarkedObjectList().GetMarkCount() != 0 )
+            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+            if ( rMarkList.GetMarkCount() != 0 )
             {
                 ::tools::Rectangle aRect = mpDrawView->GetAllMarkedRect();
                 pPageView->LogicToPagePos(aRect);
@@ -806,9 +807,10 @@ OUString const & DrawViewShell::GetSidebarContextName() const
                 eViewType = svx::sidebar::SelectionAnalyzer::ViewType::Standard;
             break;
     }
+    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
     return EnumContext::GetContextName(
         svx::sidebar::SelectionAnalyzer::GetContextForSelection_SD(
-            mpDrawView->GetMarkedObjectList(),
+            rMarkList,
             eViewType));
 }
 

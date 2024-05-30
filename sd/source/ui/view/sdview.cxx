@@ -503,7 +503,8 @@ void View::MarkListHasChanged()
 {
     FmFormView::MarkListHasChanged();
 
-    if( GetMarkedObjectList().GetMarkCount() > 0 )
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    if( rMarkList.GetMarkCount() > 0 )
         maSmartTags.deselect();
 }
 
@@ -865,12 +866,13 @@ bool View::RestoreDefaultText( SdrTextObj* pTextObj )
 void View::SetMarkedOriginalSize()
 {
     std::unique_ptr<SdrUndoGroup> pUndoGroup(new SdrUndoGroup(mrDoc));
-    const size_t nCount = GetMarkedObjectList().GetMarkCount();
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    const size_t nCount = rMarkList.GetMarkCount();
     bool            bOK = false;
 
     for( size_t i = 0; i < nCount; ++i )
     {
-        SdrObject* pObj = GetMarkedObjectList().GetMark(i)->GetMarkedSdrObj();
+        SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
 
         if( pObj->GetObjInventor() == SdrInventor::Default )
         {
@@ -1196,10 +1198,11 @@ bool View::ShouldToggleOn(
 
     bool bToggleOn = false;
     std::unique_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OutlinerMode::TextObject, rSdrModel));
-    const size_t nMarkCount = GetMarkedObjectList().GetMarkCount();
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    const size_t nMarkCount = rMarkList.GetMarkCount();
     for (size_t nIndex = 0; nIndex < nMarkCount && !bToggleOn; ++nIndex)
     {
-        SdrTextObj* pTextObj = DynCastSdrTextObj(GetMarkedObjectList().GetMark(nIndex)->GetMarkedSdrObj());
+        SdrTextObj* pTextObj = DynCastSdrTextObj(rMarkList.GetMark(nIndex)->GetMarkedSdrObj());
         if (!pTextObj || pTextObj->IsTextEditActive())
             continue;
         if( dynamic_cast< const SdrTableObj *>( pTextObj ) !=  nullptr)
@@ -1267,10 +1270,11 @@ void View::ChangeMarkedObjectsBulletsNumbering(
     std::unique_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OutlinerMode::TextObject, rSdrModel));
     OutlinerView aOutlinerView(pOutliner.get(), pWindow);
 
-    const size_t nMarkCount = GetMarkedObjectList().GetMarkCount();
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    const size_t nMarkCount = rMarkList.GetMarkCount();
     for (size_t nIndex = 0; nIndex < nMarkCount; ++nIndex)
     {
-        SdrTextObj* pTextObj = DynCastSdrTextObj(GetMarkedObjectList().GetMark(nIndex)->GetMarkedSdrObj());
+        SdrTextObj* pTextObj = DynCastSdrTextObj(rMarkList.GetMark(nIndex)->GetMarkedSdrObj());
         if (!pTextObj || pTextObj->IsTextEditActive())
             continue;
         if( dynamic_cast< SdrTableObj *>( pTextObj ) !=  nullptr)

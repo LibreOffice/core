@@ -318,8 +318,9 @@ bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& /*rMEvt*/, SmartHd
 
         if( auto pPlaceholder = mxPlaceholderObj.get() )
         {
+            const SdrMarkList& rMarkList = mrView.GetMarkedObjectList();
             // mark placeholder if it is not currently marked (or if also others are marked)
-            if( !mrView.IsObjMarked( pPlaceholder.get() ) || (mrView.GetMarkedObjectList().GetMarkCount() != 1) )
+            if( !mrView.IsObjMarked( pPlaceholder.get() ) || (rMarkList.GetMarkCount() != 1) )
             {
                 SdrPageView* pPV = mrView.GetSdrPageView();
                 mrView.UnmarkAllObj(pPV );

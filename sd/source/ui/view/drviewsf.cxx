@@ -107,11 +107,12 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
         }
         else
         {
-            if (mpDrawView->GetMarkedObjectList().GetMarkCount() > 0)
+            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+            if (rMarkList.GetMarkCount() > 0)
             {
                 bool bFound = false;
 
-                SdrObject* pMarkedObj = mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+                SdrObject* pMarkedObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                 if( pMarkedObj && (SdrInventor::FmForm == pMarkedObj->GetObjInventor()) )
                 {
                     SdrUnoObj* pUnoCtrl = dynamic_cast< SdrUnoObj* >( pMarkedObj );
@@ -265,6 +266,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
     bool    bAttr = false;
     SfxAllItemSet aAllSet( *rSet.GetPool() );
 
+    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
     while ( nWhich )
     {
         sal_uInt16 nSlotId = SfxItemPool::IsWhich(nWhich)
@@ -479,7 +481,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SfxStyleSheet* pStyleSheet = mpDrawView->GetStyleSheet();
                 if( pStyleSheet )
                 {
-                    if( nSlotId != SID_STYLE_APPLY && mpDrawView->GetMarkedObjectList().GetMarkCount() == 0 )
+                    if( nSlotId != SID_STYLE_APPLY && rMarkList.GetMarkCount() == 0 )
                     {
                         SfxTemplateItem aTmpItem( nWhich, OUString() );
                         aAllSet.Put( aTmpItem );
@@ -517,7 +519,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
             case SID_SET_DEFAULT:
             {
-                if( !mpDrawView->GetMarkedObjectList().GetMarkCount() ||
+                if( !rMarkList.GetMarkCount() ||
                     ( !mpDrawView->IsTextEdit() && !mpDrawView->GetStyleSheet() )
                   )
                     rSet.DisableItem( nWhich );
@@ -581,7 +583,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                     }
                     else if (static_cast<SfxStyleFamily>(pFamilyItem->GetValue()) == SfxStyleFamily::Para)
                     {
-                        if (mpDrawView->GetMarkedObjectList().GetMarkCount() == 0)
+                        if (rMarkList.GetMarkCount() == 0)
                         {
                             rSet.DisableItem(nWhich);
                         }
@@ -591,7 +593,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 // view state; an actual set family can not be considered
                 else
                 {
-                    if (mpDrawView->GetMarkedObjectList().GetMarkCount() == 0)
+                    if (rMarkList.GetMarkCount() == 0)
                     {
                         rSet.DisableItem(nWhich);
                     }
@@ -601,7 +603,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
             case SID_STYLE_UPDATE_BY_EXAMPLE:
             {
-                if (mpDrawView->GetMarkedObjectList().GetMarkCount() == 0)
+                if (rMarkList.GetMarkCount() == 0)
                 {
                     rSet.DisableItem(nWhich);
                 }
@@ -684,7 +686,6 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             case FN_NUM_NUMBERING_ON:
             {
                 bool bEnable = false;
-                const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
                 const size_t nMarkCount = rMarkList.GetMarkCount();
                 for (size_t nIndex = 0; nIndex < nMarkCount; ++nIndex)
                 {
@@ -731,7 +732,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
     // if the view owns selected objects, corresponding items have to be
     // changed from SfxItemState::DEFAULT (_ON) to SfxItemState::DISABLED
-    if( mpDrawView->GetMarkedObjectList().GetMarkCount() != 0 )
+    if( rMarkList.GetMarkCount() != 0 )
     {
         SfxWhichIter aNewIter( *pSet );
         nWhich = aNewIter.FirstWhich();
@@ -811,6 +812,7 @@ bool DrawViewShell::HasSelection(bool bText) const
 {
     bool bReturn = false;
 
+    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
     if (bText)
     {
         OutlinerView* pOlView = mpDrawView->GetTextEditOutlinerView();
@@ -820,7 +822,7 @@ bool DrawViewShell::HasSelection(bool bText) const
             bReturn = true;
         }
     }
-    else if (mpDrawView->GetMarkedObjectList().GetMarkCount() != 0)
+    else if (rMarkList.GetMarkCount() != 0)
     {
         bReturn = true;
     }

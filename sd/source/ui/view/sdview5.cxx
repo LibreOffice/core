@@ -60,11 +60,11 @@ SdrObject* View::GetSelectedSingleObject(SdPage const * pPage)
     SdrObject* pRet = nullptr;
     if( pPage )
     {
-        // first try selected shape
-        if ( GetMarkedObjectList().GetMarkCount() != 0 )
-        {
-            const SdrMarkList& rMarkList = GetMarkedObjectList();
+        const SdrMarkList& rMarkList = GetMarkedObjectList();
 
+        // first try selected shape
+        if ( rMarkList.GetMarkCount() != 0 )
+        {
             if (rMarkList.GetMarkCount() == 1)
             {
                 SdrMark* pMark = rMarkList.GetMark(0);

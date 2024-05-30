@@ -132,6 +132,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             }
     }
 
+    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
     //  sal_uInt16 nSlot = rReq.GetSlot();
     switch (nSlot)
     {
@@ -348,10 +349,8 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     rReq.GetArgs()->Get(SID_OBJECTRESIZE);
                 ::tools::Rectangle aRect( GetActiveWindow()->PixelToLogic( rRect.GetValue() ) );
 
-                if ( mpDrawView->GetMarkedObjectList().GetMarkCount() != 0 )
+                if ( rMarkList.GetMarkCount() != 0 )
                 {
-                    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-
                     if (rMarkList.GetMarkCount() == 1)
                     {
                         SdrMark* pMark = rMarkList.GetMark(0);
@@ -487,8 +486,6 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_REGENERATE_DIAGRAM:
         case SID_EDIT_DIAGRAM:
         {
-            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-
             if (1 == rMarkList.GetMarkCount())
             {
                 SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -928,12 +925,13 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 
     const bool bRTL = GetDoc() && GetDoc()->GetDefaultWritingMode() == css::text::WritingMode_RL_TB;
     rSet.Put(SfxBoolItem(SID_RULER_TEXT_RIGHT_TO_LEFT, bRTL));
+    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
 
-    if( mpDrawView->GetMarkedObjectList().GetMarkCount() != 0 )
+    if( rMarkList.GetMarkCount() != 0 )
     {
         if( mpDrawView->IsTextEdit() )
         {
-            SdrObject* pObj = mpDrawView->GetMarkedObjectList().GetMark( 0 )->GetMarkedSdrObj();
+            SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
             if( pObj->GetObjInventor() == SdrInventor::Default)
             {
                 SfxItemSet aEditAttr( GetDoc()->GetPool() );

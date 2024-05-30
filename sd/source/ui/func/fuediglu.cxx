@@ -167,13 +167,14 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
                 }
             }
 
+            const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
             if (bMarked &&
                 (!rMEvt.IsShift() || eHit == SdrHitKind::MarkedObject))
             {
                 // move object
                 mpView->BegDragObj(aMDPos, nullptr, aVEvt.mpHdl, nDrgLog);
             }
-            else if (mpView->GetMarkedObjectList().GetMarkCount() != 0)
+            else if (rMarkList.GetMarkCount() != 0)
             {
                 // select gluepoint
                 if (!rMEvt.IsShift())

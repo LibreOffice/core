@@ -186,6 +186,7 @@ void FuText::DoExecute( SfxRequest& )
 
     MouseEvent aMEvt(mpWindow->GetPointerPosPixel());
 
+    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
     if (nSlotId == SID_TEXTEDIT)
     {
         // Try to select an object
@@ -196,10 +197,8 @@ void FuText::DoExecute( SfxRequest& )
 
         mxTextObj = DynCastSdrTextObj( aVEvt.mpObj );
     }
-    else if (mpView->GetMarkedObjectList().GetMarkCount() != 0)
+    else if (rMarkList.GetMarkCount() != 0)
     {
-        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-
         if (rMarkList.GetMarkCount() == 1)
         {
             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -208,10 +207,8 @@ void FuText::DoExecute( SfxRequest& )
     }
 
     // check for table
-    if (mpView->GetMarkedObjectList().GetMarkCount() != 0)
+    if (rMarkList.GetMarkCount() != 0)
     {
-        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-
         if (rMarkList.GetMarkCount() == 1)
         {
             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -719,7 +716,8 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
     ForcePointer(&rMEvt);
     mpWindow->ReleaseMouse();
 
-    if ( mpView && mpView->GetMarkedObjectList().GetMarkCount() == 0 )
+    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+    if ( mpView && rMarkList.GetMarkCount() == 0 )
     {
         sal_uInt16 nDrgLog1 = sal_uInt16 ( mpWindow->PixelToLogic(Size(mpView->GetDragThresholdPixels(),0)).Width() );
         if ( std::abs(aMDPos.X() - aPnt.X()) < nDrgLog1 &&
@@ -1214,6 +1212,7 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
     MouseEvent aMEvt(mpWindow->GetPointerPosPixel());
 
     mxTextObj = nullptr;
+    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
     if (nSlotId == SID_TEXTEDIT)
     {
@@ -1234,9 +1233,8 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
             }
         }
     }
-    else if (mpView->GetMarkedObjectList().GetMarkCount() != 0)
+    else if (rMarkList.GetMarkCount() != 0)
     {
-        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
         if (rMarkList.GetMarkCount() == 1)
         {

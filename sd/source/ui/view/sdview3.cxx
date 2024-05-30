@@ -401,11 +401,12 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     if( !pPV->IsLayerLocked( aLayer ) )
                     {
                         pOwnData->SetInternalMove( true );
-                        GetMarkedObjectList().ForceSort();
+                        const SdrMarkList& rMarkList = GetMarkedObjectList();
+                        rMarkList.ForceSort();
 
-                        for( size_t nM = 0; nM < GetMarkedObjectList().GetMarkCount(); ++nM )
+                        for( size_t nM = 0; nM < rMarkList.GetMarkCount(); ++nM )
                         {
-                            SdrMark*    pM = GetMarkedObjectList().GetMark( nM );
+                            SdrMark*    pM = rMarkList.GetMark( nM );
                             SdrObject*  pO = pM->GetMarkedSdrObj();
 
                             if( pO )

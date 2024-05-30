@@ -68,11 +68,10 @@ void FuThesaurus::DoExecute(SfxRequest& rReq)
     if (dynamic_cast< DrawViewShell *>( mpViewShell ))
     {
         SdrTextObj* pTextObj = nullptr;
+        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
-        if ( mpView->GetMarkedObjectList().GetMarkCount() != 0 )
+        if ( rMarkList.GetMarkCount() != 0 )
         {
-            const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-
             if ( rMarkList.GetMarkCount() == 1 )
             {
                 SdrMark* pMark = rMarkList.GetMark(0);

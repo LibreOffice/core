@@ -593,7 +593,8 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     nY = 0;
                 }
 
-                if (mpView->GetMarkedObjectList().GetMarkCount() != 0 && !rKEvt.GetKeyCode().IsMod1() &&
+                const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+                if (rMarkList.GetMarkCount() != 0 && !rKEvt.GetKeyCode().IsMod1() &&
                     !mpDocSh->IsReadOnly())
                 {
                     const SdrHdlList& rHdlList = mpView->GetHdlList();
@@ -1085,10 +1086,10 @@ bool FuPoor::doConstructOrthogonal() const
 {
     // Check whether a media object is selected
     bool bResizeKeepRatio = false;
+    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
     // tdf#89758 Avoid interactive crop preview from being proportionally scaled by default.
-    if (mpView->GetMarkedObjectList().GetMarkCount() != 0 && mpView->GetDragMode() != SdrDragMode::Crop)
+    if (rMarkList.GetMarkCount() != 0 && mpView->GetDragMode() != SdrDragMode::Crop)
     {
-        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
         if (rMarkList.GetMarkCount() == 1)
         {
             SdrObjKind aObjIdentifier = rMarkList.GetMark(0)->GetMarkedSdrObj()->GetObjIdentifier();

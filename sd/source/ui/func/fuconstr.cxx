@@ -85,13 +85,14 @@ bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 
         SdrHdl* pHdl = mpView->PickHandle(aMDPos);
 
+        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
         if ( pHdl != nullptr || mpView->IsMarkedHit(aMDPos, nHitLog) )
         {
             sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(mpView->GetDragThresholdPixels(),0)).Width() );
             mpView->BegDragObj(aMDPos, nullptr, pHdl, nDrgLog);
             bReturn = true;
         }
-        else if ( mpView->GetMarkedObjectList().GetMarkCount() != 0 )
+        else if ( rMarkList.GetMarkCount() != 0 )
         {
             mpView->UnmarkAll();
             bReturn = true;
@@ -166,7 +167,8 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
         mpWindow->ReleaseMouse();
         sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(mpView->GetDragThresholdPixels(),0)).Width() );
 
-        if ( mpView->GetMarkedObjectList().GetMarkCount() == 0 )
+        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+        if ( rMarkList.GetMarkCount() == 0 )
         {
             SdrPageView* pPV;
             sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
@@ -187,9 +189,9 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
             // toggle between selection and rotation
             SdrObject* pSingleObj = nullptr;
 
-            if (mpView->GetMarkedObjectList().GetMarkCount()==1)
+            if (rMarkList.GetMarkCount()==1)
             {
-                pSingleObj = mpView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+                pSingleObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
             }
 
             const bool bTiledRendering = comphelper::LibreOfficeKit::isActive();

@@ -262,8 +262,9 @@ void DrawViewShell::ExecBmpMask( SfxRequest const & rReq )
         case SID_BMPMASK_EXEC :
         {
             SdrGrafObj* pObj = nullptr;
-            if( mpDrawView && mpDrawView->GetMarkedObjectList().GetMarkCount() )
-                pObj = dynamic_cast< SdrGrafObj* >( mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj() );
+            const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
+            if( mpDrawView && rMarkList.GetMarkCount() )
+                pObj = dynamic_cast< SdrGrafObj* >( rMarkList.GetMark(0)->GetMarkedSdrObj() );
 
             if ( pObj && !mpDrawView->IsTextEdit() )
             {
@@ -297,7 +298,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest const & rReq )
                         xNewObj->SetEmptyPresObj(false);
                         xNewObj->SetGraphic(pBmpMask->Mask(xNewObj->GetGraphic()));
 
-                        OUString aStr = mpDrawView->GetMarkedObjectList().GetMarkDescription() +
+                        OUString aStr = rMarkList.GetMarkDescription() +
                             " " + SdResId(STR_EYEDROPPER);
 
                         mpDrawView->BegUndo( aStr );

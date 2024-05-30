@@ -596,7 +596,8 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
         case SID_STYLE_UPDATE_BY_EXAMPLE:
         {
-            if ((mpView->GetMarkedObjectList().GetMarkCount() != 0 && mpView->GetMarkedObjectList().GetMarkCount() == 1) ||
+            const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+            if ((rMarkList.GetMarkCount() != 0 && rMarkList.GetMarkCount() == 1) ||
                  dynamic_cast< const OutlineView *>( mpView ) !=  nullptr)
             {
                 pStyleSheet = mpView->GetStyleSheet();

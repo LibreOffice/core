@@ -162,7 +162,7 @@ void FuMorph::DoExecute( SfxRequest& )
 
             ImpMorphPolygons(aPolyPoly1, aPolyPoly2, pDlg->GetFadeSteps(), aPolyPolyList);
 
-            OUString aString = mpView->GetMarkedObjectList().GetMarkDescription() +
+            OUString aString = rMarkList.GetMarkDescription() +
                 " " + SdResId(STR_UNDO_MORPHING);
 
             mpView->BegUndo(aString);

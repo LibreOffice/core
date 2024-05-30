@@ -218,8 +218,10 @@ void DrawViewShell::GetDrawAttrState(SfxItemSet& rSet)
     if( !mpDrawView )
         return nullptr;
 
+    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+
     //when there is one object selected
-    if (mpDrawView->GetMarkedObjectList().GetMarkCount() == 0 || (mpDrawView->GetMarkedObjectList().GetMarkCount() != 1))
+    if (rMarkList.GetMarkCount() == 0 || (rMarkList.GetMarkCount() != 1))
         return nullptr;
 
     //and we are editing the outline object
@@ -286,9 +288,10 @@ bool DrawViewShell::ShouldDisableEditHyperlink() const
 {
     if (!mpDrawView)
         return true;
-    if (mpDrawView->GetMarkedObjectList().GetMarkCount() == 0)
+    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+    if (rMarkList.GetMarkCount() == 0)
        return true;
-    if (mpDrawView->GetMarkedObjectList().GetMarkCount() != 1)
+    if (rMarkList.GetMarkCount() != 1)
         return true;
 
     bool bDisableEditHyperlink = true;
@@ -300,7 +303,7 @@ bool DrawViewShell::ShouldDisableEditHyperlink() const
     }
     else
     {
-        SdrUnoObj* pUnoCtrl = dynamic_cast<SdrUnoObj*>( mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj() );
+        SdrUnoObj* pUnoCtrl = dynamic_cast<SdrUnoObj*>( rMarkList.GetMark(0)->GetMarkedSdrObj() );
 
         if ( pUnoCtrl && SdrInventor::FmForm == pUnoCtrl->GetObjInventor() )
         {
@@ -1364,7 +1367,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     bool bSingleGraphicSelected = false;
 
-    if (mpDrawView->GetMarkedObjectList().GetMarkCount() == 0)
+    if (rMarkList.GetMarkCount() == 0)
     {
         rSet.DisableItem (SID_CONVERT_TO_METAFILE);
         rSet.DisableItem (SID_CONVERT_TO_BITMAP);

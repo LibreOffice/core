@@ -121,7 +121,8 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
     else
     {
         IPolyPolygonEditorController* pIPPEC = nullptr;
-        if( mpView->GetMarkedObjectList().GetMarkCount() )
+        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+        if( rMarkList.GetMarkCount() )
             pIPPEC = mpView;
         else
             pIPPEC = dynamic_cast< IPolyPolygonEditorController* >( mpView->getSmartTags().getSelected().get() );
@@ -273,7 +274,7 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
                 }
             }
 
-            if( (pIPPEC == mpView) && mpView->GetMarkedObjectList().GetMarkCount() == 0 )
+            if( (pIPPEC == mpView) && rMarkList.GetMarkCount() == 0 )
                 mpViewSh->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
 
             rReq.Ignore();

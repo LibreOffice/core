@@ -52,7 +52,8 @@ namespace {
 void setUndo(::sd::View* pView, const SfxItemSet* pArgs, bool addPageMargin)
 {
     // Undo
-    OUString aString = pView->GetMarkedObjectList().GetMarkDescription() +
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    OUString aString = rMarkList.GetMarkDescription() +
         " " + SdResId(STR_TRANSFORM);
     pView->BegUndo(aString);
     pView->SetGeoAttrToMarked(*pArgs, addPageMargin);
@@ -64,7 +65,8 @@ void setUndo(::sd::View* pView, const SfxItemSet* pArgs, bool addPageMargin)
 
 void FuTransform::DoExecute( SfxRequest& rReq )
 {
-    if (mpView->GetMarkedObjectList().GetMarkCount() == 0)
+    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+    if (rMarkList.GetMarkCount() == 0)
         return;
 
     const SfxItemSet* pArgs = rReq.GetArgs();
@@ -82,7 +84,6 @@ void FuTransform::DoExecute( SfxRequest& rReq )
     VclPtr<SfxAbstractTabDialog> pDlg;
 
     bool bWelded = false;
-    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
     if( rMarkList.GetMarkCount() == 1 &&
         pObj->GetObjInventor() == SdrInventor::Default &&

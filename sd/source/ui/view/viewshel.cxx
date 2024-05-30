@@ -450,7 +450,8 @@ bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
     OSL_ASSERT(GetViewShell() != nullptr);
     bReturn = GetViewShell()->KeyInput(rKEvt);
 
-    const size_t OriCount = GetView()->GetMarkedObjectList().GetMarkCount();
+    const SdrMarkList& rMarkList = GetView()->GetMarkedObjectList();
+    const size_t OriCount = rMarkList.GetMarkCount();
     if(!bReturn)
     {
         if(useInputForSlideShow()) //IASS
@@ -486,7 +487,7 @@ bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
             }
         }
     }
-    const size_t EndCount = GetView()->GetMarkedObjectList().GetMarkCount();
+    const size_t EndCount = rMarkList.GetMarkCount();
     // Here, oriCount or endCount must have one value=0, another value > 0, then to switch focus between Document and shape objects
     if(bReturn &&  (OriCount + EndCount > 0) && (OriCount * EndCount == 0))
         SwitchActiveViewFireFocus();

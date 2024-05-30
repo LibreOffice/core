@@ -163,7 +163,8 @@ void SmartTagSet::select( const SmartTagReference& xTag )
     mxSelectedTag = xTag;
     mxSelectedTag->select();
     mrView.SetPossibilitiesDirty();
-    if( mrView.GetMarkedObjectList().GetMarkCount() > 0 )
+    const SdrMarkList& rMarkList = mrView.GetMarkedObjectList();
+    if( rMarkList.GetMarkCount() > 0 )
         mrView.UnmarkAllObj();
     else
         mrView.updateHandles();

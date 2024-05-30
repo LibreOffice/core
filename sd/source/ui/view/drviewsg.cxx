@@ -48,7 +48,8 @@ void DrawViewShell::ExecIMap( SfxRequest const & rReq )
     if ( rReq.GetSlot() != SID_IMAP_EXEC )
         return;
 
-    SdrMark* pMark = mpDrawView->GetMarkedObjectList().GetMark(0);
+    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+    SdrMark* pMark = rMarkList.GetMark(0);
 
     if ( !pMark )
         return;

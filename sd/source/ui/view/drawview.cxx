@@ -541,10 +541,11 @@ void DrawView::DeleteMarked()
     sd::UndoManager* pUndoManager = mrDoc.GetUndoManager();
     DBG_ASSERT( pUndoManager, "sd::DrawView::DeleteMarked(), ui action without undo manager!?" );
 
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
     if( pUndoManager )
     {
         OUString aUndo(SvxResId(STR_EditDelete));
-        aUndo = aUndo.replaceFirst("%1", GetMarkedObjectList().GetMarkDescription());
+        aUndo = aUndo.replaceFirst("%1", rMarkList.GetMarkDescription());
         ViewShellId nViewShellId = mpDrawViewShell ? mpDrawViewShell->GetViewShellBase().GetViewShellId() : ViewShellId(-1);
         pUndoManager->EnterListAction(aUndo, aUndo, 0, nViewShellId);
     }
@@ -552,7 +553,7 @@ void DrawView::DeleteMarked()
     SdPage* pPage = nullptr;
     bool bResetLayout = false;
 
-    const size_t nMarkCount = GetMarkedObjectList().GetMarkCount();
+    const size_t nMarkCount = rMarkList.GetMarkCount();
     if( nMarkCount )
     {
         SdrMarkList aList( GetMarkedObjectList() );

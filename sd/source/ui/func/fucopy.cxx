@@ -62,11 +62,12 @@ rtl::Reference<FuPoor> FuCopy::Create( ViewShell* pViewSh, ::sd::Window* pWin, :
 
 void FuCopy::DoExecute( SfxRequest& rReq )
 {
-    if( mpView->GetMarkedObjectList().GetMarkCount() == 0 )
+    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+    if( rMarkList.GetMarkCount() == 0 )
         return;
 
     // Undo
-    OUString aString = mpView->GetMarkedObjectList().GetMarkDescription() +
+    OUString aString = rMarkList.GetMarkDescription() +
         " " + SdResId( STR_UNDO_COPYOBJECTS );
     mpView->BegUndo( aString );
 
@@ -174,8 +175,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         bWaiting = true;
     }
 
-    const SdrMarkList   aMarkList( mpView->GetMarkedObjectList() );
-    const size_t nMarkCount = aMarkList.GetMarkCount();
+    const size_t nMarkCount = rMarkList.GetMarkCount();
     SdrObject*          pObj = nullptr;
 
     // calculate number of possible copies
@@ -212,8 +212,8 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         mpView->CopyMarked();
 
         // get newly selected objects
-        SdrMarkList aCopyMarkList( mpView->GetMarkedObjectList() );
-        const size_t nCopyMarkCount = aMarkList.GetMarkCount();
+        SdrMarkList aCopyMarkList( rMarkList );
+        const size_t nCopyMarkCount = rMarkList.GetMarkCount();
 
         // set protection flags at marked copies to null
         for( size_t j = 0; j < nCopyMarkCount; ++j )
@@ -244,7 +244,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         {
             for( size_t j = 0; j < nMarkCount; ++j )
             {
-                SdrObject* pSrcObj = aMarkList.GetMark( j )->GetMarkedSdrObj();
+                SdrObject* pSrcObj = rMarkList.GetMark( j )->GetMarkedSdrObj();
                 SdrObject* pDstObj = aCopyMarkList.GetMark( j )->GetMarkedSdrObj();
 
                 if( pSrcObj && pDstObj &&

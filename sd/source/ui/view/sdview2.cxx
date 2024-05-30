@@ -104,9 +104,10 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateClipboardDat
         pNewPage->SetLayoutName( pOldPage->GetLayoutName() );
     }
 
-    if( GetMarkedObjectList().GetMarkCount() == 1 )
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    if( rMarkList.GetMarkCount() == 1 )
     {
-        SdrObject* pObj = GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
         if( auto pOle2Obj = dynamic_cast<SdrOle2Obj *>( pObj ) )
             if( pOle2Obj->GetObjRef() )
@@ -150,9 +151,10 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateDragDataObje
     OUString                        aDisplayName;
     SdrOle2Obj*                     pSdrOleObj = nullptr;
 
-    if( GetMarkedObjectList().GetMarkCount() == 1 )
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    if( rMarkList.GetMarkCount() == 1 )
     {
-        SdrObject* pObj = GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
         if( auto pOle2Obj = dynamic_cast<SdrOle2Obj *>( pObj ) )
             if( pOle2Obj->GetObjRef() )
@@ -217,7 +219,8 @@ void View::UpdateSelectionClipboard() // false case
         return;
     if (!mpViewSh->GetActiveWindow())
         return;
-    if (GetMarkedObjectList().GetMarkCount())
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    if (rMarkList.GetMarkCount())
         CreateSelectionDataObject( this );
     else
         ClearSelectionClipboard();
@@ -240,14 +243,15 @@ void View::DoCut()
 {
     const OutlinerView* pOLV = GetTextEditOutlinerView();
 
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
     if( pOLV )
         const_cast<OutlinerView*>(pOLV)->Cut();
-    else if( GetMarkedObjectList().GetMarkCount() != 0 )
+    else if( rMarkList.GetMarkCount() != 0 )
     {
         OUString aStr(SdResId(STR_UNDO_CUT));
 
         DoCopy();
-        BegUndo(aStr + " " + GetMarkedObjectList().GetMarkDescription());
+        BegUndo(aStr + " " + rMarkList.GetMarkDescription());
         DeleteMarked();
         EndUndo();
     }
@@ -257,9 +261,10 @@ void View::DoCopy()
 {
     const OutlinerView* pOLV = GetTextEditOutlinerView();
 
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
     if( pOLV )
         const_cast<OutlinerView*>(pOLV)->Copy();
-    else if( GetMarkedObjectList().GetMarkCount() != 0 )
+    else if( rMarkList.GetMarkCount() != 0 )
     {
         BrkAction();
         CreateClipboardDataObject();
@@ -341,7 +346,8 @@ void View::DoPaste (::sd::Window* pWindow)
 
 void View::StartDrag( const Point& rStartPos, vcl::Window* pWindow )
 {
-    if (GetMarkedObjectList().GetMarkCount() == 0 || !IsAction() || !mpViewSh || !pWindow)
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    if (rMarkList.GetMarkCount() == 0 || !IsAction() || !mpViewSh || !pWindow)
         return;
 
     BrkAction();
@@ -451,9 +457,10 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
         {
             ::tools::Rectangle aRect( pOLV->GetOutputArea() );
 
-            if (GetMarkedObjectList().GetMarkCount() == 1)
+            const SdrMarkList& rMarkList = GetMarkedObjectList();
+            if (rMarkList.GetMarkCount() == 1)
             {
-                SdrMark* pMark = GetMarkedObjectList().GetMark(0);
+                SdrMark* pMark = rMarkList.GetMark(0);
                 SdrObject* pObj = pMark->GetMarkedSdrObj();
                 aRect.Union( pObj->GetLogicRect() );
             }
@@ -632,9 +639,10 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
         {
             ::tools::Rectangle aRect( pOLV->GetOutputArea() );
 
-            if( GetMarkedObjectList().GetMarkCount() == 1 )
+            const SdrMarkList& rMarkList = GetMarkedObjectList();
+            if( rMarkList.GetMarkCount() == 1 )
             {
-                SdrMark* pMark = GetMarkedObjectList().GetMark(0);
+                SdrMark* pMark = rMarkList.GetMark(0);
                 SdrObject* pObj = pMark->GetMarkedSdrObj();
                 aRect.Union( pObj->GetLogicRect() );
             }
