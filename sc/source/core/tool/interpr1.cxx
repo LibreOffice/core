@@ -48,6 +48,7 @@
 #include <document.hxx>
 #include <dociter.hxx>
 #include <docsh.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <formulacell.hxx>
 #include <scmatrix.hxx>
 #include <docoptio.hxx>
@@ -8915,6 +8916,152 @@ void ScInterpreter::ScUnique()
     {
         PushMatrix(pResMat);
     }
+}
+
+void ScInterpreter::getTokensAtParameter( std::unique_ptr<ScTokenArray>& pTokens, short nPos )
+{
+    sal_uInt16 nOpen = 0;
+    sal_uInt16 nSepCount = 0;
+    formula::FormulaTokenArrayPlainIterator aIter(*pArr);
+    formula::FormulaToken* t = aIter.First();
+    for (t = aIter.NextNoSpaces(); t; t = aIter.NextNoSpaces())
+    {
+        OpCode aOpCode = t->GetOpCode();
+        formula::StackVar aIntType = t->GetType();
+        if ((aOpCode == ocOpen || aOpCode == ocArrayOpen || aOpCode == ocTableRefOpen) && aIntType == formula::StackVar::svSep)
+            nOpen++;
+        else if ((aOpCode == ocClose || aOpCode == ocArrayClose || aOpCode == ocTableRefClose) && aIntType == formula::StackVar::svSep)
+            nOpen--;
+        else if (aOpCode == ocSep && aIntType == formula::StackVar::svSep && nOpen == 1)
+        {
+            nSepCount++;
+            continue;
+        }
+
+        if (nSepCount == nPos && nOpen > 0)
+        {
+            pTokens->AddToken(*t->Clone());
+        }
+    }
+}
+
+void ScInterpreter::replaceNamesToResult( const std::unordered_map<OUString, formula::FormulaToken*> nResultIndexes,
+    std::unique_ptr<ScTokenArray>& pTokens )
+{
+    formula::FormulaTokenArrayPlainIterator aIterResult(*pTokens);
+    for (FormulaToken* t = aIterResult.GetNextStringName(); t; t = aIterResult.GetNextStringName())
+    {
+        auto iRes = nResultIndexes.find(t->GetString().getString());
+        if (iRes != nResultIndexes.end())
+            pTokens->ReplaceToken(aIterResult.GetIndex() - 1, iRes->second->Clone(),
+                FormulaTokenArray::ReplaceMode::CODE_ONLY);
+    }
+}
+
+void ScInterpreter::ScLet()
+{
+    const short* pJump = pCur->GetJump();
+    short nJumpCount = pJump[0];
+    short nOrgJumpCount = nJumpCount;
+
+    if (nJumpCount < 3 || (nJumpCount % 2 != 1))
+    {
+        PushError(FormulaError::ParameterExpected);
+        aCode.Jump(pJump[nOrgJumpCount], pJump[nOrgJumpCount]);
+        return;
+    }
+
+    OUString aStrName;
+    std::unordered_map<OUString, formula::FormulaToken*> nResultIndexes;
+    formula::FormulaTokenArrayPlainIterator aIter(*pArr);
+    unique_ptr<ScTokenArray> pValueTokens(new ScTokenArray(mrDoc));
+
+    // name and function pairs parameter
+    while (nJumpCount > 1)
+    {
+        if (nJumpCount == nOrgJumpCount)
+        {
+            aStrName = GetString().getString();
+        }
+        else if ((nOrgJumpCount - nJumpCount + 1) % 2 == 1)
+        {
+            aIter.Jump(pJump[static_cast<short>(nOrgJumpCount - nJumpCount + 1)] - 1);
+            FormulaToken* t = aIter.NextRPN();
+            aStrName = t->GetString().getString();
+        }
+        else
+        {
+            PushError(FormulaError::ParameterExpected);
+            aCode.Jump(pJump[nOrgJumpCount], pJump[nOrgJumpCount]);
+            return;
+        }
+        nJumpCount--;
+
+        // get value tokens
+        getTokensAtParameter(pValueTokens, nOrgJumpCount - nJumpCount);
+        nJumpCount--;
+
+        // replace names with result tokens
+        replaceNamesToResult(nResultIndexes, pValueTokens);
+
+        // calculate the inner results
+        ScCompiler aComp(mrDoc, aPos, *pValueTokens, mrDoc.GetGrammar(), false, false, &mrContext);
+        aComp.CompileTokenArray();
+        ScInterpreter aInt(mrDoc.GetFormulaCell(aPos), mrDoc, mrContext, aPos, *pValueTokens);
+        sfx2::LinkManager aNewLinkMgr(mrDoc.GetDocumentShell());
+        aInt.SetLinkManager(&aNewLinkMgr);
+        formula::StackVar aIntType = aInt.Interpret();
+
+        if (aIntType == formula::svMatrixCell)
+        {
+            ScConstMatrixRef xMat(aInt.GetResultToken()->GetMatrix());
+            if (!nResultIndexes.insert(std::make_pair(aStrName, new ScMatrixToken(xMat->Clone()))).second)
+                PushIllegalParameter();
+        }
+        else
+        {
+            FormulaConstTokenRef xTok(aInt.GetResultToken());
+            if (!nResultIndexes.insert(std::make_pair(aStrName, xTok->Clone())).second)
+                PushIllegalParameter();
+        }
+        pValueTokens->Clear();
+    }
+
+    // last parameter: calculation
+    getTokensAtParameter(pValueTokens, nOrgJumpCount - nJumpCount);
+    nJumpCount--;
+
+    // replace names with result tokens
+    replaceNamesToResult(nResultIndexes, pValueTokens);
+
+    // calculate the final result
+    ScCompiler aComp(mrDoc, aPos, *pValueTokens, mrDoc.GetGrammar(), false, false, &mrContext);
+    aComp.CompileTokenArray();
+    ScInterpreter aInt(mrDoc.GetFormulaCell(aPos), mrDoc, mrContext, aPos, *pValueTokens);
+    sfx2::LinkManager aNewLinkMgr(mrDoc.GetDocumentShell());
+    aInt.SetLinkManager(&aNewLinkMgr);
+    formula::StackVar aIntType = aInt.Interpret();
+
+    if (aIntType == formula::svMatrixCell)
+    {
+        ScConstMatrixRef xMat(aInt.GetResultToken()->GetMatrix());
+        PushTokenRef(new ScMatrixToken(xMat->Clone()));
+    }
+    else
+    {
+        formula::FormulaConstTokenRef xLambdaResult(aInt.GetResultToken());
+        if (xLambdaResult)
+        {
+            nGlobalError = xLambdaResult->GetError();
+            if (nGlobalError == FormulaError::NONE)
+                PushTokenRef(xLambdaResult);
+            else
+                PushError(nGlobalError);
+        }
+    }
+
+    pValueTokens.reset();
+    aCode.Jump(pJump[nOrgJumpCount], pJump[nOrgJumpCount]);
 }
 
 void ScInterpreter::ScSubTotal()

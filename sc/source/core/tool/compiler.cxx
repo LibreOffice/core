@@ -74,6 +74,8 @@
 #include <scmatrix.hxx>
 #include <tokenstringcontext.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <interpre.hxx>
 
 using namespace formula;
 using namespace ::com::sun::star;
@@ -3651,6 +3653,20 @@ bool ScCompiler::ParseNamedRange( const OUString& rUpperName, bool onlyCheck )
     return false;
 }
 
+bool ScCompiler::ParseLambdaFuncName( const OUString& aOrg, bool bLambdaFunction )
+{
+    if (bLambdaFunction && !aOrg.isEmpty())
+    {
+        OUString aName = aOrg;
+        if (aOrg.startsWithIgnoreAsciiCase(u"_xlpm."))
+            aName = aName.copy(6);
+        svl::SharedString aSS = rDoc.GetSharedStringPool().intern(aName);
+        maRawToken.SetStringName(aSS.getData(), aSS.getDataIgnoreCase());
+        return true;
+    }
+    return false;
+}
+
 bool ScCompiler::ParseExternalNamedRange( const OUString& rSymbol, bool& rbInvalidExternalNameRange )
 {
     /* FIXME: This code currently (2008-12-02T15:41+0100 in CWS mooxlsc)
@@ -4613,6 +4629,9 @@ Label_Rewind:
         if (bMayBeFuncName && ParseOpCode2( aUpper ))
             return true;
 
+        if (ParseLambdaFuncName(aOrg, mLambda.bInLambdaFunction))
+            return true;
+
     } while (mbRewind);
 
     // Last chance: it could be a broken invalidated reference that contains
@@ -4743,6 +4762,12 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
         {
             case ocOpen:
             {
+                if (eLastOp == ocLet)
+                {
+                    mLambda.bInLambdaFunction = true;
+                    mLambda.nBracketPos = nBrackets;
+                }
+
                 ++nBrackets;
                 if (bUseFunctionStack)
                 {
@@ -4765,7 +4790,14 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
                     }
                 }
                 else
+                {
                     nBrackets--;
+                    if (mLambda.bInLambdaFunction && mLambda.nBracketPos == nBrackets)
+                    {
+                        mLambda.bInLambdaFunction = false;
+                        mLambda.nBracketPos = nBrackets;
+                    }
+                }
                 if (bUseFunctionStack && nFunction)
                     --nFunction;
             }
@@ -5031,6 +5063,14 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
 ScRangeData* ScCompiler::GetRangeData( const FormulaToken& rToken ) const
 {
     return rDoc.FindRangeNameBySheetAndIndex( rToken.GetSheet(), rToken.GetIndex());
+}
+
+bool ScCompiler::HandleStringName()
+{
+    ScTokenArray* pNew = new ScTokenArray(rDoc);
+    pNew->AddString(mpToken->GetString());
+    PushTokenArray(pNew, true);
+    return GetToken();
 }
 
 bool ScCompiler::HandleRange()

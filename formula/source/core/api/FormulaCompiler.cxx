@@ -626,6 +626,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
                 SC_OPCODE_IF_ERROR,
                 SC_OPCODE_IF_NA,
                 SC_OPCODE_CHOOSE,
+                SC_OPCODE_LET,
                 SC_OPCODE_AND,
                 SC_OPCODE_OR
             };
@@ -1221,6 +1222,7 @@ bool FormulaCompiler::IsOpCodeJumpCommand( OpCode eOp )
         case ocIfError:
         case ocIfNA:
         case ocChoose:
+        case ocLet:
             return true;
         default:
             ;
@@ -1269,6 +1271,7 @@ bool FormulaCompiler::IsMatrixFunction( OpCode eOpCode )
         case ocSortBy :
         case ocRandArray :
         case ocUnique :
+        case ocLet :
             return true;
         default:
         {
@@ -1565,6 +1568,11 @@ bool FormulaCompiler::GetToken()
             case ocAggregate:
                 glSubTotal = true;
                 break;
+            case ocStringName:
+                if( HandleStringName())
+                    return true;
+                else
+                    return false;
             case ocName:
                 if( HandleRange())
                 {
@@ -1946,6 +1954,9 @@ void FormulaCompiler::Factor()
                 case ocChoose:
                     pFacToken->GetJump()[ 0 ] = FORMULA_MAXJUMPCOUNT + 1;
                     break;
+                case ocLet:
+                    pFacToken->GetJump()[0] = SAL_MAX_UINT8 + 1;
+                    break;
                 case ocIfError:
                 case ocIfNA:
                     pFacToken->GetJump()[ 0 ] = 2;  // if, behind
@@ -1978,6 +1989,9 @@ void FormulaCompiler::Factor()
                 case ocChoose:
                     nJumpMax = FORMULA_MAXJUMPCOUNT;
                     break;
+                case ocLet:
+                    nJumpMax = SAL_MAX_UINT8;
+                    break;
                 case ocIfError:
                 case ocIfNA:
                     nJumpMax = 2;
@@ -1993,7 +2007,7 @@ void FormulaCompiler::Factor()
                     assert(!"FormulaCompiler::Factor: someone forgot to add a jump max case");
             }
             short nJumpCount = 0;
-            while ( (nJumpCount < (FORMULA_MAXJUMPCOUNT - 1)) && (eOp == ocSep)
+            while ( (nJumpCount < (SAL_MAX_UINT8 - 1)) && (eOp == ocSep)
                     && (pArr->GetCodeError() == FormulaError::NONE || !mbStopOnError))
             {
                 if ( ++nJumpCount <= nJumpMax )
@@ -2021,6 +2035,9 @@ void FormulaCompiler::Factor()
                         break;
                     case ocChoose:
                         bLimitOk = (nJumpCount < FORMULA_MAXJUMPCOUNT);
+                        break;
+                    case ocLet:
+                        bLimitOk = (nJumpCount < SAL_MAX_UINT8);
                         break;
                     case ocIfError:
                     case ocIfNA:
@@ -2598,7 +2615,7 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
             break;
 
             case svString:
-                if( eOp == ocBad || eOp == ocStringXML )
+                if( eOp == ocBad || eOp == ocStringXML || eOp == ocStringName )
                     rBuffer.append( t->GetString().getString());
                 else
                     AppendString( rBuffer, t->GetString().getString() );
@@ -2916,6 +2933,11 @@ void FormulaCompiler::PutCode( FormulaTokenRef& p )
 
 
 bool FormulaCompiler::HandleExternalReference( const FormulaToken& /*_aToken*/)
+{
+    return true;
+}
+
+bool FormulaCompiler::HandleStringName()
 {
     return true;
 }

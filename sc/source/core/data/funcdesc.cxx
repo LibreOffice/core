@@ -197,12 +197,12 @@ OUString ScFuncDesc::GetParamList() const
             aSig.append(maDefArgNames[nVarArgsStart]
                 + "1" + sep
                 + maDefArgNames[nVarArgsStart+1]
-                + "1" + sep
+                + (mxFuncName != "LET" ? "1" : "2") + sep
                 + " "
                 + maDefArgNames[nVarArgsStart]
                 + "2" + sep
                 + maDefArgNames[nVarArgsStart+1]
-                + "2" + sep + " ... " );
+                + (mxFuncName != "LET" ? "2" : "3") + sep + " ... " );
         }
     }
 
@@ -394,6 +394,7 @@ ScFunctionList::ScFunctionList( bool bEnglishFunctionNames )
         { SC_OPCODE_IF_ERROR, ENTRY(SC_OPCODE_IF_ERROR_ARY), 0, ID_FUNCTION_GRP_LOGIC, HID_FUNC_IFERROR, 2, { 0, 0 }, 0 },
         { SC_OPCODE_IF_NA, ENTRY(SC_OPCODE_IF_NA_ARY), 0, ID_FUNCTION_GRP_LOGIC, HID_FUNC_IFNA, 2, { 0, 0 }, 0 },
         { SC_OPCODE_CHOOSE, ENTRY(SC_OPCODE_CHOOSE_ARY), 0, ID_FUNCTION_GRP_TABLE, HID_FUNC_WAHL, VAR_ARGS+1, { 0, 0 }, 31 },
+        { SC_OPCODE_LET, ENTRY(SC_OPCODE_LET_ARY), 0, ID_FUNCTION_GRP_TABLE, HID_FUNC_LET_MS, PAIRED_VAR_ARGS + 1, { 0, 0, 0 }, 0 },
         { SC_OPCODE_AND, ENTRY(SC_OPCODE_AND_ARY), 0, ID_FUNCTION_GRP_LOGIC, HID_FUNC_UND, VAR_ARGS, { 0 }, 0 },
         { SC_OPCODE_OR, ENTRY(SC_OPCODE_OR_ARY), 0, ID_FUNCTION_GRP_LOGIC, HID_FUNC_ODER, VAR_ARGS, { 0 }, 0 },
         { SC_OPCODE_PI, ENTRY(SC_OPCODE_PI_ARY), 0, ID_FUNCTION_GRP_MATH, HID_FUNC_PI, 0, { }, 0 },

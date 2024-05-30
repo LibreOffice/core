@@ -70,6 +70,8 @@ https://docs.oasis-open.org/office/OpenDocument/v1.3/os/part4-formula/OpenDocume
 * Information Functions
   * COUNTIF
   * COUNTIFS
+* Lambda Functions
+  * LET
 * Lookup Functions
   * HLOOKUP
   * LOOKUP

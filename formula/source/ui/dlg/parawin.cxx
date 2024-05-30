@@ -27,6 +27,7 @@
 #include <strings.hrc>
 #include <bitmaps.hlst>
 #include <core_resource.hxx>
+#include <rtl/math.hxx>
 
 namespace formula
 {
@@ -150,7 +151,10 @@ void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
         aArgName  = pFuncDesc->getParameterName(nRealArg);
         sal_uInt16 nVarArgsStart = pFuncDesc->getVarArgsStart();
         if ( nArg >= nVarArgsStart )
-            aArgName += OUString::number( (nArg-nVarArgsStart)/2 + 1 );
+        {
+            sal_Int16 nShifted = pFuncDesc->getFunctionName().equalsIgnoreAsciiCase(u"LET") ? nPos / 2 : 0;
+            aArgName += OUString::number( (nArg-nVarArgsStart)/2 + 1 + nShifted );
+        }
         aArgName += " " + ((nArg > (nFix+1) || pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired) ;
     }
 
@@ -209,8 +213,9 @@ void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
         sal_uInt16 nVarArgsStart = pFuncDesc->getVarArgsStart();
         if ( nArg >= nVarArgsStart )
         {
+            sal_Int16 nShifted = pFuncDesc->getFunctionName().equalsIgnoreAsciiCase(u"LET") ? nPos / 2 : 0;
             OUString aArgName = pFuncDesc->getParameterName(nRealArg) +
-                OUString::number( (nArg-nVarArgsStart)/2 + 1 );
+                OUString::number( (nArg-nVarArgsStart)/2 + 1 + nShifted);
             SetArgName( i, aArgName );
         }
         else

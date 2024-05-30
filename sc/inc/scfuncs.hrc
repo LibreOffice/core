@@ -4263,4 +4263,16 @@ const TranslateId SC_OPCODE_UNIQUE_ARY[] =
     NC_("SC_OPCODE_UNIQUE", "Logical value that defines what values are considered unique: TRUE - returns values that occur only once. FALSE or omitted (default) - returns all distinct (different) values in the range or array.")
 };
 
+// -=*# Resource for function LET #*=-
+const TranslateId SC_OPCODE_LET_ARY[] =
+{
+    NC_("SC_OPCODE_LET", "The LET function assigns names to calculation results. This allows storing intermediate calculations, values, or defining names inside a formula. These names only apply within the scope of the LET function."),
+    NC_("SC_OPCODE_LET", "Name 1"),
+    NC_("SC_OPCODE_LET", "The first name to assign. Must start with a letter. Cannot be the output of a formula or conflict with range syntax."),
+    NC_("SC_OPCODE_LET", "Name value "),
+    NC_("SC_OPCODE_LET", "Name value 1, Name value 2,... The value or calculation to assign to Name."),
+    NC_("SC_OPCODE_LET", "Calculation or Name "),
+    NC_("SC_OPCODE_LET", "A calculation that uses all names within the LET function. This must be the last argument in the LET function. Or a second Name to assign to a second Name value. If a second Name is specified, Name value 2 and Calculation or Name 3 become required.")
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

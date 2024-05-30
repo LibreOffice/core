@@ -2917,6 +2917,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
         "HYPERLINK",
         "INDEX",
         "INDIRECT",
+        "LET",
         "LOOKUP",
         "MATCH",
         "OFFSET",

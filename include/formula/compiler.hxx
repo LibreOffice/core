@@ -61,6 +61,8 @@
 #define SC_OPCODE_TABLE_REF_ITEM_THIS_ROW 35
 #define SC_OPCODE_STOP_DIV           36
 #define SC_OPCODE_SKIP               37     /* used to skip raw tokens during string compilation */
+#define SC_OPCODE_STRINGNAME         38     /* special OpCode for lambda function names */
+#define SC_OPCODE_LET                39
 
 /*** error constants #... ***/
 #define SC_OPCODE_START_ERRORS       40

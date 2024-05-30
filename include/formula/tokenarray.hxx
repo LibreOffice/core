@@ -487,6 +487,7 @@ public:
     FormulaToken* AddExternal( const OUString& rStr, OpCode eOp = ocExternal );
     FormulaToken* AddBad( const OUString& rStr );          /// ocBad with OUString
     FormulaToken* AddStringXML( const OUString& rStr );    /// ocStringXML with OUString, temporary during import
+    FormulaToken* AddStringName( const OUString& rStr );   /// ocStringName with OUString - Lambda functions
 
     virtual FormulaToken* MergeArray( );
 
@@ -578,6 +579,7 @@ public:
 
 private:
     SAL_DLLPRIVATE const FormulaToken* GetNonEndOfPathToken( short nIdx ) const;
+    SAL_DLLPRIVATE const FormulaToken* GetNonEndOfPathToken2( short nIdx ) const;
 };
 
 // For use in SAL_INFO, SAL_WARN etc
@@ -639,6 +641,7 @@ public:
     FormulaToken* Next();
     FormulaToken* NextNoSpaces();
     FormulaToken* GetNextName();
+    FormulaToken* GetNextStringName();
     FormulaToken* GetNextReference();
     FormulaToken* GetNextReferenceRPN();
     FormulaToken* GetNextReferenceOrName();

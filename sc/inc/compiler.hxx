@@ -155,6 +155,7 @@ public:
     // since the reference count is cleared!
     void SetOpCode( OpCode eCode );
     void SetString( rtl_uString* pData, rtl_uString* pDataIgnoreCase );
+    void SetStringName( rtl_uString* pData, rtl_uString* pDataIgnoreCase );
     void SetSingleReference( const ScSingleRefData& rRef );
     void SetDoubleReference( const ScComplexRefData& rRef );
     void SetDouble( double fVal );
@@ -358,6 +359,7 @@ private:
     bool ParsePredetectedErrRefReference( const OUString& rName, const OUString* pErrRef );
     bool ParseMacro( const OUString& );
     bool ParseNamedRange( const OUString&, bool onlyCheck = false );
+    bool ParseLambdaFuncName( const OUString&, bool bLambdaFunction = false );
     bool ParseExternalNamedRange( const OUString& rSymbol, bool& rbInvalidExternalNameRange );
     bool ParseDBRange( const OUString& );
     bool ParseColRowName( const OUString& );
@@ -516,6 +518,7 @@ private:
     virtual void fillAddInToken(::std::vector< css::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const override;
 
     virtual bool HandleExternalReference(const formula::FormulaToken& _aToken) override;
+    virtual bool HandleStringName() override;
     virtual bool HandleRange() override;
     virtual bool HandleColRowName() override;
     virtual bool HandleDbData() override;

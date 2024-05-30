@@ -1311,6 +1311,20 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf91332)
     CPPUNIT_ASSERT_EQUAL(Color(0x90cf47), nColor);
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf137543XLSX)
+{
+    // LET function test
+    createScDoc("xlsx/tdf137543.xlsx");
+
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    assertXPathContent(
+        pSheet, "/x:worksheet/x:sheetData/x:row/x:c/x:f"_ostr,
+        u"_xlfn.LET(_xlpm.first,15,_xlpm.second,10,SUM(_xlpm.first,_xlpm.second))"_ustr);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

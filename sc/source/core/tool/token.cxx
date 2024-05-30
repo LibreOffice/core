@@ -221,6 +221,10 @@ void ScRawToken::SetOpCode( OpCode e )
             eType = svJump;
             nJump[ 0 ] = FORMULA_MAXJUMPCOUNT + 1;
             break;
+        case ocLet:
+            eType = svJump;
+            nJump[0] = SAL_MAX_UINT8;
+            break;
         case ocMissing:
             eType = svMissing;
             break;
@@ -250,6 +254,15 @@ void ScRawToken::SetOpCode( OpCode e )
 void ScRawToken::SetString( rtl_uString* pData, rtl_uString* pDataIgnoreCase )
 {
     eOp   = ocPush;
+    eType = svString;
+
+    sharedstring.mpData = pData;
+    sharedstring.mpDataIgnoreCase = pDataIgnoreCase;
+}
+
+void ScRawToken::SetStringName( rtl_uString* pData, rtl_uString* pDataIgnoreCase )
+{
+    eOp = ocStringName;
     eType = svString;
 
     sharedstring.mpData = pData;
@@ -1677,6 +1690,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocIfError:
             case ocIfNA:
             case ocChoose:
+            case ocLet:
                 // Jump commands are now supported.
             break;
         }
@@ -5014,7 +5028,7 @@ void appendTokenByType( ScSheetLimits& rLimits, sc::TokenStringContext& rCxt, OU
         case svString:
         {
             OUString aStr = rToken.GetString().getString();
-            if (eOp == ocBad || eOp == ocStringXML)
+            if (eOp == ocBad || eOp == ocStringXML || eOp == ocStringName)
             {
                 rBuf.append(aStr);
                 return;

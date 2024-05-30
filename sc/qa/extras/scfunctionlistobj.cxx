@@ -77,7 +77,7 @@ public:
 ScFunctionListObj::ScFunctionListObj()
     : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XElementAccess(cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get())
-    , XIndexAccess(403)
+    , XIndexAccess(404)
     , XNameAccess("IF")
     , XServiceInfo("stardiv.StarCalc.ScFunctionListObj", "com.sun.star.sheet.FunctionDescriptions")
 {

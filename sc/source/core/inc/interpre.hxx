@@ -190,6 +190,7 @@ struct FormulaTokenRef_hash
         { return std::hash<const void *>()(static_cast<const void*>(p1)); }
 };
 typedef ::std::unordered_map< const formula::FormulaConstTokenRef, formula::FormulaConstTokenRef, FormulaTokenRef_hash> ScTokenMatrixMap;
+typedef ::std::unordered_map< OUString, const formula::FormulaConstTokenRef> ScResultTokenMap;
 
 class ScInterpreter
 {
@@ -246,6 +247,7 @@ private:
     formula::FormulaConstTokenRef  xResult;
     ScJumpMatrix*   pJumpMatrix;        // currently active array condition, if any
     ScTokenMatrixMap maTokenMatrixMap;  // map FormulaToken* to formula::FormulaTokenRef if in array condition
+    ScResultTokenMap maResultTokenMap;  // Result FormulaToken* to formula::FormulaTokenRef
     ScFormulaCell* pMyFormulaCell;      // the cell of this formula expression
 
     const formula::FormulaToken* pCur;  // current token
@@ -513,6 +515,11 @@ private:
     ScMatrixRef GetMatrix( short & rParam, size_t & rInRefList );
     sc::RangeMatrix GetRangeMatrix();
 
+    // Get tokens at specific parameters for LET (lambda) function
+    void getTokensAtParameter( std::unique_ptr<ScTokenArray>& pTokens, short nPos );
+    static void replaceNamesToResult( const std::unordered_map<OUString, formula::FormulaToken*> nResultIndexes,
+        std::unique_ptr<ScTokenArray>& pTokens );
+
     void ScTableOp();                                       // repeated operations
 
     // common helper functions
@@ -717,6 +724,7 @@ private:
     void ScSort();
     void ScSortBy();
     void ScUnique();
+    void ScLet();
     void ScSubTotal();
 
     // If upon call rMissingField==true then the database field parameter may be

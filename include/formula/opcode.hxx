@@ -38,6 +38,7 @@ enum OpCode : sal_uInt16
         ocIfError           = SC_OPCODE_IF_ERROR,
         ocIfNA              = SC_OPCODE_IF_NA,
         ocChoose            = SC_OPCODE_CHOOSE,
+        ocLet               = SC_OPCODE_LET,
     // Parentheses and separators
         ocOpen              = SC_OPCODE_OPEN,
         ocClose             = SC_OPCODE_CLOSE,
@@ -61,6 +62,7 @@ enum OpCode : sal_uInt16
         ocTableRefItemTotals  = SC_OPCODE_TABLE_REF_ITEM_TOTALS,
         ocTableRefItemThisRow = SC_OPCODE_TABLE_REF_ITEM_THIS_ROW,
         ocSkip              = SC_OPCODE_SKIP,
+        ocStringName        = SC_OPCODE_STRINGNAME,
     // Access commands
         ocDBArea            = SC_OPCODE_DB_AREA,
         ocTableRef          = SC_OPCODE_TABLE_REF,
@@ -553,6 +555,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocMissing: return "Missing";
     case ocBad: return "Bad";
     case ocStringXML: return "StringXML";
+    case ocStringName: return "StringName";
     case ocSpaces: return "Spaces";
     case ocWhitespace: return "Whitespace";
     case ocMatRef: return "MatRef";
@@ -996,6 +999,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocSort: return "Sort";
     case ocSortBy: return "SortBy";
     case ocUnique: return "Unique";
+    case ocLet: return "Let";
     case ocTTT: return "TTT";
     case ocDebugVar: return "DebugVar";
     case ocDataToken1: return "DataToken1";

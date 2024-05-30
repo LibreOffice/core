@@ -57,6 +57,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocIfError,         {{ Array, Reference                                     }, 0, Value }},
     { ocIfNA,            {{ Array, Reference                                     }, 0, Value }},
     { ocChoose,          {{ Array, Reference                                     }, 1, Value }},
+    { ocLet,             {{ Value, ReferenceOrRefArray, ReferenceOrRefArray, }, 2, ForceArrayReturn } },
     // Other specials.
     { ocArrayClose,      {{ Bounds                                               }, 0, Bounds }},
     { ocArrayColSep,     {{ Bounds                                               }, 0, Bounds }},
@@ -76,6 +77,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocSpaces,          {{ Bounds                                               }, 0, Bounds }},
     { ocStop,            {{ Bounds                                               }, 0, Bounds }},
     { ocStringXML,       {{ Bounds                                               }, 0, Bounds }},
+    { ocStringName,      {{ Bounds                                               }, 0, Bounds }},
     { ocTableRef,        {{ Bounds                                               }, 0, Value }},    // or Reference?
     { ocTableRefClose,   {{ Bounds                                               }, 0, Bounds }},
     { ocTableRefItemAll,     {{ Bounds                                           }, 0, Bounds }},
@@ -574,6 +576,7 @@ void ScParameterClassification::GenerateDocumentation()
                     case ocIfError:
                     case ocIfNA:
                     case ocChoose:
+                    case ocLet:
                         aToken.SetByte(2);
                     break;
                     case ocPercentSign:

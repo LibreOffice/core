@@ -435,6 +435,8 @@ bool FormulaTokenArray::AddFormulaToken(
                     AddBad( aStrVal );
                 else if ( eOpCode == ocStringXML )
                     AddStringXML( aStrVal );
+                else if ( eOpCode == ocStringName )
+                    AddStringName( aStrVal );
                 else if ( eOpCode == ocExternal || eOpCode == ocMacro )
                     Add( new formula::FormulaExternalToken( eOpCode, aStrVal ) );
                 else if ( eOpCode == ocWhitespace )
@@ -914,6 +916,10 @@ FormulaToken* FormulaTokenArray::AddStringXML( const OUString& rStr )
     return Add( new FormulaStringOpToken( ocStringXML, svl::SharedString( rStr ) ) );   // string not interned
 }
 
+FormulaToken* FormulaTokenArray::AddStringName( const OUString& rStr )
+{
+    return Add( new FormulaStringOpToken( ocStringName, svl::SharedString( rStr ) ) );   // string not interned
+}
 
 void FormulaTokenArray::AddRecalcMode( ScRecalcMode nBits )
 {
@@ -1576,12 +1582,15 @@ FormulaToken* FormulaTokenArray::AddOpCode( OpCode eOp )
         case ocIfError:
         case ocIfNA:
         case ocChoose:
+        case ocLet:
             {
-                short nJump[FORMULA_MAXJUMPCOUNT + 1];
+                short nJump[SAL_MAX_UINT8 + 1];
                 if ( eOp == ocIf )
                     nJump[ 0 ] = 3;
                 else if ( eOp == ocChoose )
                     nJump[ 0 ] = FORMULA_MAXJUMPCOUNT + 1;
+                else if ( eOp == ocLet )
+                    nJump[0] = SAL_MAX_UINT8 + 1;
                 else
                     nJump[ 0 ] = 2;
                 pRet = new FormulaJumpToken( eOp, nJump );
@@ -1654,6 +1663,20 @@ FormulaToken* FormulaTokenArrayPlainIterator::GetNextName()
         {
             FormulaToken* t = mpFTA->GetArray()[ mnIndex++ ];
             if( t->GetType() == svIndex )
+                return t;
+        }
+    }
+    return nullptr;
+}
+
+FormulaToken* FormulaTokenArrayPlainIterator::GetNextStringName()
+{
+    if (mpFTA->GetArray())
+    {
+        while (mnIndex < mpFTA->GetLen())
+        {
+            FormulaToken* t = mpFTA->GetArray()[mnIndex++];
+            if (t->GetType() == svString && t->GetOpCode() == ocStringName)
                 return t;
         }
     }
