@@ -28,8 +28,6 @@ public:
     static OUString getUpdateChannel();
 
     static void log(const OUString& rMessage);
-    static void log(const OString& rMessage);
-    static void log(const char* pMessage);
 
     static void removeUpdateFiles();
 };
