@@ -611,6 +611,20 @@ Plugin::IdenticalDefaultArgumentsResult Plugin::checkIdenticalDefaultArguments(
                 : IdenticalDefaultArgumentsResult::No;
         }
     }
+    if (auto const lit1 = dyn_cast<clang::UserDefinedLiteral>(
+            argument1->IgnoreImplicit()->IgnoreParens()))
+    {
+        if (auto const lit2 = dyn_cast<clang::UserDefinedLiteral>(
+                argument2->IgnoreImplicit()->IgnoreParens()))
+        {
+            return lit1->getLiteralOperatorKind() == clang::UserDefinedLiteral::LOK_Template
+                && lit2->getLiteralOperatorKind() == clang::UserDefinedLiteral::LOK_Template
+                && lit1->getCalleeDecl()->getCanonicalDecl()
+                   == lit2->getCalleeDecl()->getCanonicalDecl()
+                ? IdenticalDefaultArgumentsResult::Maybe //TODO: obtain content to compare
+                : IdenticalDefaultArgumentsResult::No;
+        }
+    }
     // catch params with defaults like "= OUString()"
     for (Expr const * e1 = desugared1, * e2 = desugared2;;) {
         auto const ce1 = dyn_cast<CXXConstructExpr>(skipImplicit(e1));
