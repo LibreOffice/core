@@ -732,10 +732,7 @@ NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const css::uno::Sequence<c
           const NSString* str = openOfficeToSystemFlavor(flavors[i], bNeedDummyInternalFlavor, bIsSystemClipboard);
 
           if (str != nullptr)
-          {
-              [str retain];
               [array addObject: str];
-          }
       }
   }
 

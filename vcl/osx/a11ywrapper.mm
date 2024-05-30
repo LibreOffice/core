@@ -352,14 +352,15 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
                 }
             }
         }
-        return children;
+        return [children autorelease];
     } else if ( [ self accessibleTable ] )
     {
         AquaA11yTableWrapper* pTable = [self isKindOfClass: [AquaA11yTableWrapper class]] ? static_cast<AquaA11yTableWrapper*>(self) : nil;
         return [ AquaA11yTableWrapper childrenAttributeForElement: pTable ];
     } else {
+        NSMutableArray * children = [ [ NSMutableArray alloc ] init ];
+
         try {
-            NSMutableArray * children = [ [ NSMutableArray alloc ] init ];
             Reference< XAccessibleContext > xContext( [ self accessibleContext ] );
 
             try {
@@ -397,12 +398,13 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
                 }
             }
 
-            [ children autorelease ];
-            return NSAccessibilityUnignoredChildren( children );
+            return NSAccessibilityUnignoredChildren( [ children autorelease ] );
         } catch (const Exception &) {
             // TODO: Log
-            return nil;
         }
+
+        [ children autorelease ];
+        return [NSArray array];
     }
 }
 
