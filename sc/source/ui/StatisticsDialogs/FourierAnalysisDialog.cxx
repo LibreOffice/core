@@ -20,8 +20,8 @@ ScFourierAnalysisDialog::ScFourierAnalysisDialog(SfxBindings* pSfxBindings,
                                                  SfxChildWindow* pChildWindow,
                                                  weld::Window* pParent, ScViewData& rViewData)
     : ScStatisticsInputOutputDialog(pSfxBindings, pChildWindow, pParent, rViewData,
-                                    "modules/scalc/ui/fourieranalysisdialog.ui",
-                                    "FourierAnalysisDialog")
+                                    u"modules/scalc/ui/fourieranalysisdialog.ui"_ustr,
+                                    u"FourierAnalysisDialog"_ustr)
     , maLabelAddr(ScAddress::INITIALIZE_INVALID)
     , maActualInputRange(ScAddress::INITIALIZE_INVALID)
     , mnLen(0)
@@ -31,11 +31,11 @@ ScFourierAnalysisDialog::ScFourierAnalysisDialog(SfxBindings* pSfxBindings,
     , mbWithLabels(false)
     , mbInverse(false)
     , mbPolar(false)
-    , mxWithLabelsCheckBox(m_xBuilder->weld_check_button("withlabels-check"))
-    , mxInverseCheckBox(m_xBuilder->weld_check_button("inverse-check"))
-    , mxPolarCheckBox(m_xBuilder->weld_check_button("polar-check"))
-    , mxMinMagnitudeField(m_xBuilder->weld_spin_button("minmagnitude-spin"))
-    , mxErrorMessage(m_xBuilder->weld_label("error-message"))
+    , mxWithLabelsCheckBox(m_xBuilder->weld_check_button(u"withlabels-check"_ustr))
+    , mxInverseCheckBox(m_xBuilder->weld_check_button(u"inverse-check"_ustr))
+    , mxPolarCheckBox(m_xBuilder->weld_check_button(u"polar-check"_ustr))
+    , mxMinMagnitudeField(m_xBuilder->weld_spin_button(u"minmagnitude-spin"_ustr))
+    , mxErrorMessage(m_xBuilder->weld_label(u"error-message"_ustr))
 {
     m_xDialog->set_title(ScResId(STR_FOURIER_ANALYSIS));
 
@@ -86,7 +86,7 @@ ScRange ScFourierAnalysisDialog::ApplyOutput(ScDocShell* pDocShell)
     }
 
     aOutput.newLine();
-    aTemplate.autoReplaceRange("%INPUTRANGE%", maActualInputRange);
+    aTemplate.autoReplaceRange(u"%INPUTRANGE%"_ustr, maActualInputRange);
 
     OUString aFormula;
     genFormula(aFormula);
@@ -171,7 +171,7 @@ bool ScFourierAnalysisDialog::InputRangesValid()
     }
 
     maActualInputRange = ScRange(aActualStart, mInputRange.aEnd);
-    mxErrorMessage->set_label("");
+    mxErrorMessage->set_label(u""_ustr);
 
     return true;
 }

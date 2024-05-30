@@ -21,7 +21,7 @@ ScZTestDialog::ScZTestDialog(
                     weld::Window* pParent, ScViewData& rViewData ) :
     ScStatisticsTwoVariableDialog(
             pSfxBindings, pChildWindow, pParent, rViewData,
-            "modules/scalc/ui/ztestdialog.ui", "ZTestDialog")
+            u"modules/scalc/ui/ztestdialog.ui"_ustr, u"ZTestDialog"_ustr)
 {
     m_xDialog->set_title(ScResId(STR_ZTEST));
 }
@@ -57,8 +57,8 @@ ScRange ScZTestDialog::ApplyOutput(ScDocShell* pDocShell)
     else
         pVariable2Iterator.reset(new DataRangeByRowIterator(mVariable2Range));
 
-    aTemplate.autoReplaceRange("%VARIABLE1_RANGE%", pVariable1Iterator->get());
-    aTemplate.autoReplaceRange("%VARIABLE2_RANGE%", pVariable2Iterator->get());
+    aTemplate.autoReplaceRange(u"%VARIABLE1_RANGE%"_ustr, pVariable1Iterator->get());
+    aTemplate.autoReplaceRange(u"%VARIABLE2_RANGE%"_ustr, pVariable2Iterator->get());
 
     aOutput.writeBoldString(ScResId(STR_ZTEST));
     aOutput.newLine();
@@ -67,14 +67,14 @@ ScRange ScZTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.writeString(ScResId(STR_LABEL_ALPHA));
     aOutput.nextColumn();
     aOutput.writeValue(0.05);
-    aTemplate.autoReplaceAddress("%ALPHA%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%ALPHA%"_ustr, aOutput.current());
     aOutput.newLine();
 
     // Hypothesized mean difference
     aOutput.writeString(ScResId(STR_HYPOTHESIZED_MEAN_DIFFERENCE_LABEL));
     aOutput.nextColumn();
     aOutput.writeValue(0);
-    aTemplate.autoReplaceAddress("%HYPOTHESIZED_MEAN_DIFFERENCE%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%HYPOTHESIZED_MEAN_DIFFERENCE%"_ustr, aOutput.current());
     aOutput.newLine();
 
     // Variable Label
@@ -88,21 +88,21 @@ ScRange ScZTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.writeString(ScResId(STR_ZTEST_KNOWN_VARIANCE));
     aOutput.nextColumn();
     aOutput.writeValue(0);
-    aTemplate.autoReplaceAddress("%KNOWN_VARIANCE_VARIABLE1%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%KNOWN_VARIANCE_VARIABLE1%"_ustr, aOutput.current());
     aOutput.nextColumn();
     aOutput.writeValue(0);
-    aTemplate.autoReplaceAddress("%KNOWN_VARIANCE_VARIABLE2%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%KNOWN_VARIANCE_VARIABLE2%"_ustr, aOutput.current());
     aOutput.newLine();
 
     // Mean
     aOutput.writeString(ScResId(STRID_CALC_MEAN));
     aOutput.nextColumn();
     aTemplate.setTemplate("=AVERAGE(%VARIABLE1_RANGE%)");
-    aTemplate.autoReplaceAddress("%MEAN_VARIABLE1%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%MEAN_VARIABLE1%"_ustr, aOutput.current());
     aOutput.writeFormula(aTemplate.getTemplate());
     aOutput.nextColumn();
     aTemplate.setTemplate("=AVERAGE(%VARIABLE2_RANGE%)");
-    aTemplate.autoReplaceAddress("%MEAN_VARIABLE2%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%MEAN_VARIABLE2%"_ustr, aOutput.current());
     aOutput.writeFormula(aTemplate.getTemplate());
     aOutput.newLine();
 
@@ -111,11 +111,11 @@ ScRange ScZTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.nextColumn();
     aTemplate.setTemplate("=COUNT(%VARIABLE1_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aTemplate.autoReplaceAddress("%OBSERVATION_VARIABLE1%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%OBSERVATION_VARIABLE1%"_ustr, aOutput.current());
     aOutput.nextColumn();
     aTemplate.setTemplate("=COUNT(%VARIABLE2_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aTemplate.autoReplaceAddress("%OBSERVATION_VARIABLE2%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%OBSERVATION_VARIABLE2%"_ustr, aOutput.current());
     aOutput.newLine();
 
     // Observed mean difference
@@ -123,7 +123,7 @@ ScRange ScZTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.nextColumn();
     aTemplate.setTemplate("=%MEAN_VARIABLE1% - %MEAN_VARIABLE2%");
     aOutput.writeMatrixFormula(aTemplate.getTemplate());
-    aTemplate.autoReplaceAddress("%OBSERVED_MEAN_DIFFERENCE%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%OBSERVED_MEAN_DIFFERENCE%"_ustr, aOutput.current());
     aOutput.newLine();
 
     // z
@@ -131,7 +131,7 @@ ScRange ScZTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.nextColumn();
     aTemplate.setTemplate("=(%OBSERVED_MEAN_DIFFERENCE% - %HYPOTHESIZED_MEAN_DIFFERENCE%) / SQRT( %KNOWN_VARIANCE_VARIABLE1% / %OBSERVATION_VARIABLE1% + %KNOWN_VARIANCE_VARIABLE2% / %OBSERVATION_VARIABLE2% )");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aTemplate.autoReplaceAddress("%Z_STAT%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%Z_STAT%"_ustr, aOutput.current());
     aOutput.newLine();
 
     // P one-tail

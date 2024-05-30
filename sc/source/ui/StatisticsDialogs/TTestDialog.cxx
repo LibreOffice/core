@@ -21,7 +21,7 @@ ScTTestDialog::ScTTestDialog(
                     weld::Window* pParent, ScViewData& rViewData ) :
     ScStatisticsTwoVariableDialog(
             pSfxBindings, pChildWindow, pParent, rViewData,
-            "modules/scalc/ui/ttestdialog.ui", "TTestDialog")
+            u"modules/scalc/ui/ttestdialog.ui"_ustr, u"TTestDialog"_ustr)
 {
     m_xDialog->set_title(ScResId(STR_TTEST));
 }
@@ -57,8 +57,8 @@ ScRange ScTTestDialog::ApplyOutput(ScDocShell* pDocShell)
     else
         pVariable2Iterator.reset(new DataRangeByRowIterator(mVariable2Range));
 
-    aTemplate.autoReplaceRange("%VARIABLE1_RANGE%", pVariable1Iterator->get());
-    aTemplate.autoReplaceRange("%VARIABLE2_RANGE%", pVariable2Iterator->get());
+    aTemplate.autoReplaceRange(u"%VARIABLE1_RANGE%"_ustr, pVariable1Iterator->get());
+    aTemplate.autoReplaceRange(u"%VARIABLE2_RANGE%"_ustr, pVariable2Iterator->get());
 
     aOutput.writeBoldString(ScResId(STR_TTEST_UNDO_NAME));
     aOutput.newLine();
@@ -67,14 +67,14 @@ ScRange ScTTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.writeString(ScResId(STR_LABEL_ALPHA));
     aOutput.nextColumn();
     aOutput.writeValue(0.05);
-    aTemplate.autoReplaceAddress("%ALPHA%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%ALPHA%"_ustr, aOutput.current());
     aOutput.newLine();
 
     // Hypothesized mean difference
     aOutput.writeString(ScResId(STR_HYPOTHESIZED_MEAN_DIFFERENCE_LABEL));
     aOutput.nextColumn();
     aOutput.writeValue(0);
-    aTemplate.autoReplaceAddress("%HYPOTHESIZED_MEAN_DIFFERENCE%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%HYPOTHESIZED_MEAN_DIFFERENCE%"_ustr, aOutput.current());
     aOutput.newLine();
 
     aOutput.nextColumn();
@@ -123,7 +123,7 @@ ScRange ScTTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.nextColumn();
     aTemplate.setTemplate("=AVERAGE(IF(ISODD(IF(ISNUMBER(%VARIABLE1_RANGE%); 1; 0) * IF(ISNUMBER(%VARIABLE2_RANGE%); 1; 0)); %VARIABLE1_RANGE% - %VARIABLE2_RANGE%; \"NA\"))");
     aOutput.writeMatrixFormula(aTemplate.getTemplate());
-    aTemplate.autoReplaceAddress("%OBSERVED_MEAN_DIFFERENCE%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%OBSERVED_MEAN_DIFFERENCE%"_ustr, aOutput.current());
     aOutput.newLine();
 
     // Variance of the Differences
@@ -131,7 +131,7 @@ ScRange ScTTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.nextColumn();
     aTemplate.setTemplate("=VAR(IF(ISODD(IF(ISNUMBER(%VARIABLE1_RANGE%); 1; 0) * IF(ISNUMBER(%VARIABLE2_RANGE%); 1; 0)); %VARIABLE1_RANGE% - %VARIABLE2_RANGE%; \"NA\"))");
     aOutput.writeMatrixFormula(aTemplate.getTemplate());
-    aTemplate.autoReplaceAddress("%VARIANCE_OF_DIFFERENCES%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%VARIANCE_OF_DIFFERENCES%"_ustr, aOutput.current());
     aOutput.newLine();
 
     // df
@@ -139,7 +139,7 @@ ScRange ScTTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.nextColumn();
     aTemplate.setTemplate("=SUM(IF(ISNUMBER(%VARIABLE1_RANGE%); 1; 0) * IF(ISNUMBER(%VARIABLE2_RANGE%); 1; 0)) - 1");
     aOutput.writeMatrixFormula(aTemplate.getTemplate());
-    aTemplate.autoReplaceAddress("%DEGREE_OF_FREEDOM%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%DEGREE_OF_FREEDOM%"_ustr, aOutput.current());
     aOutput.newLine();
 
     // t stat
@@ -147,7 +147,7 @@ ScRange ScTTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.nextColumn();
     aTemplate.setTemplate("=(%OBSERVED_MEAN_DIFFERENCE% - %HYPOTHESIZED_MEAN_DIFFERENCE%) / (%VARIANCE_OF_DIFFERENCES% / ( %DEGREE_OF_FREEDOM% + 1)) ^ 0.5");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aTemplate.autoReplaceAddress("%T_STAT%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%T_STAT%"_ustr, aOutput.current());
     aOutput.newLine();
 
     // P one-tail

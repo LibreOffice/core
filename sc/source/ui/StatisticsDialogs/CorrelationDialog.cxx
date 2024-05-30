@@ -18,7 +18,7 @@ ScCorrelationDialog::ScCorrelationDialog(
                         weld::Window* pParent, ScViewData& rViewData ) :
     ScMatrixComparisonGenerator(
             pSfxBindings, pChildWindow, pParent, rViewData,
-            "modules/scalc/ui/correlationdialog.ui", "CorrelationDialog")
+            u"modules/scalc/ui/correlationdialog.ui"_ustr, u"CorrelationDialog"_ustr)
 {}
 
 void ScCorrelationDialog::Close()
@@ -33,7 +33,7 @@ OUString ScCorrelationDialog::getLabel()
 
 OUString ScCorrelationDialog::getTemplate()
 {
-    return "=CORREL(%VAR1%; %VAR2%)";
+    return u"=CORREL(%VAR1%; %VAR2%)"_ustr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

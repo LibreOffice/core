@@ -18,7 +18,7 @@ ScCovarianceDialog::ScCovarianceDialog(
                         weld::Window* pParent, ScViewData& rViewData ) :
     ScMatrixComparisonGenerator(
             pSfxBindings, pChildWindow, pParent, rViewData,
-            "modules/scalc/ui/covariancedialog.ui", "CovarianceDialog")
+            u"modules/scalc/ui/covariancedialog.ui"_ustr, u"CovarianceDialog"_ustr)
 {}
 
 TranslateId ScCovarianceDialog::GetUndoNameId()
@@ -38,7 +38,7 @@ OUString ScCovarianceDialog::getLabel()
 
 OUString ScCovarianceDialog::getTemplate()
 {
-    return "=COVAR(%VAR1%; %VAR2%)";
+    return u"=COVAR(%VAR1%; %VAR2%)"_ustr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

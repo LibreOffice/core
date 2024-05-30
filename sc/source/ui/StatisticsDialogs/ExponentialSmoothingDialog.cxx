@@ -21,9 +21,9 @@ ScExponentialSmoothingDialog::ScExponentialSmoothingDialog(
                     weld::Window* pParent, ScViewData& rViewData )
     : ScStatisticsInputOutputDialog(
             pSfxBindings, pChildWindow, pParent, rViewData,
-            "modules/scalc/ui/exponentialsmoothingdialog.ui",
-            "ExponentialSmoothingDialog")
-    , mxSmoothingFactor(m_xBuilder->weld_spin_button("smoothing-factor-spin"))
+            u"modules/scalc/ui/exponentialsmoothingdialog.ui"_ustr,
+            u"ExponentialSmoothingDialog"_ustr)
+    , mxSmoothingFactor(m_xBuilder->weld_spin_button(u"smoothing-factor-spin"_ustr))
 {
 }
 

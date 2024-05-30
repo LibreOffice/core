@@ -21,10 +21,10 @@ ScMovingAverageDialog::ScMovingAverageDialog(
                     weld::Window* pParent, ScViewData& rViewData )
     : ScStatisticsInputOutputDialog(
             pSfxBindings, pChildWindow, pParent, rViewData,
-            "modules/scalc/ui/movingaveragedialog.ui",
-            "MovingAverageDialog")
-    , mxTrimRangeCheck(m_xBuilder->weld_check_button("trimrange-check"))
-    , mxIntervalSpin(m_xBuilder->weld_spin_button("interval-spin"))
+            u"modules/scalc/ui/movingaveragedialog.ui"_ustr,
+            u"MovingAverageDialog"_ustr)
+    , mxTrimRangeCheck(m_xBuilder->weld_check_button(u"trimrange-check"_ustr))
+    , mxIntervalSpin(m_xBuilder->weld_spin_button(u"interval-spin"_ustr))
 {
 }
 
@@ -103,7 +103,7 @@ ScRange ScMovingAverageDialog::ApplyOutput(ScDocShell* pDocShell)
             }
             else
             {
-                aFormulas.push_back("=#N/A");
+                aFormulas.push_back(u"=#N/A"_ustr);
             }
         }
 

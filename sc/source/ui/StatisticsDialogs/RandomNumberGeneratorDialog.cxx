@@ -47,26 +47,26 @@ ScRandomNumberGeneratorDialog::ScRandomNumberGeneratorDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
                     weld::Window* pParent, ScViewData& rViewData)
     : ScAnyRefDlgController(pSfxBindings, pChildWindow, pParent,
-                          "modules/scalc/ui/randomnumbergenerator.ui",
-                          "RandomNumberGeneratorDialog")
+                          u"modules/scalc/ui/randomnumbergenerator.ui"_ustr,
+                          u"RandomNumberGeneratorDialog"_ustr)
     , mrViewData(rViewData)
     , mrDoc(rViewData.GetDocument())
     , mbDialogLostFocus(false)
-    , mxInputRangeText(m_xBuilder->weld_label("cell-range-label"))
-    , mxInputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("cell-range-edit")))
-    , mxInputRangeButton(new formula::RefButton(m_xBuilder->weld_button("cell-range-button")))
-    , mxDistributionCombo(m_xBuilder->weld_combo_box("distribution-combo"))
-    , mxParameter1Text(m_xBuilder->weld_label("parameter1-label"))
-    , mxParameter1Value(m_xBuilder->weld_spin_button("parameter1-spin"))
-    , mxParameter2Text(m_xBuilder->weld_label("parameter2-label"))
-    , mxParameter2Value(m_xBuilder->weld_spin_button("parameter2-spin"))
-    , mxSeed(m_xBuilder->weld_spin_button("seed-spin"))
-    , mxEnableSeed(m_xBuilder->weld_check_button("enable-seed-check"))
-    , mxDecimalPlaces(m_xBuilder->weld_spin_button("decimal-places-spin"))
-    , mxEnableRounding(m_xBuilder->weld_check_button("enable-rounding-check"))
-    , mxButtonApply(m_xBuilder->weld_button("apply"))
-    , mxButtonOk(m_xBuilder->weld_button("ok"))
-    , mxButtonClose(m_xBuilder->weld_button("close"))
+    , mxInputRangeText(m_xBuilder->weld_label(u"cell-range-label"_ustr))
+    , mxInputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry(u"cell-range-edit"_ustr)))
+    , mxInputRangeButton(new formula::RefButton(m_xBuilder->weld_button(u"cell-range-button"_ustr)))
+    , mxDistributionCombo(m_xBuilder->weld_combo_box(u"distribution-combo"_ustr))
+    , mxParameter1Text(m_xBuilder->weld_label(u"parameter1-label"_ustr))
+    , mxParameter1Value(m_xBuilder->weld_spin_button(u"parameter1-spin"_ustr))
+    , mxParameter2Text(m_xBuilder->weld_label(u"parameter2-label"_ustr))
+    , mxParameter2Value(m_xBuilder->weld_spin_button(u"parameter2-spin"_ustr))
+    , mxSeed(m_xBuilder->weld_spin_button(u"seed-spin"_ustr))
+    , mxEnableSeed(m_xBuilder->weld_check_button(u"enable-seed-check"_ustr))
+    , mxDecimalPlaces(m_xBuilder->weld_spin_button(u"decimal-places-spin"_ustr))
+    , mxEnableRounding(m_xBuilder->weld_check_button(u"enable-rounding-check"_ustr))
+    , mxButtonApply(m_xBuilder->weld_button(u"apply"_ustr))
+    , mxButtonOk(m_xBuilder->weld_button(u"ok"_ustr))
+    , mxButtonClose(m_xBuilder->weld_button(u"close"_ustr))
 {
     mxInputRangeEdit->SetReferences(this, mxInputRangeText.get());
     mxInputRangeButton->SetReferences(this, mxInputRangeEdit.get());

@@ -112,16 +112,16 @@ namespace
 
     OUString constTemplateLINEST[] =
     {
-        "=LINEST(%VARIABLE2_RANGE% ; %VARIABLE1_RANGE% ; %CALC_INTERCEPT% ; TRUE)",
-        "=LINEST(%VARIABLE2_RANGE% ; LN(%VARIABLE1_RANGE%) ; %CALC_INTERCEPT% ; TRUE)",
-        "=LINEST(LN(%VARIABLE2_RANGE%) ; LN(%VARIABLE1_RANGE%) ; %CALC_INTERCEPT% ; TRUE)"
+        u"=LINEST(%VARIABLE2_RANGE% ; %VARIABLE1_RANGE% ; %CALC_INTERCEPT% ; TRUE)"_ustr,
+        u"=LINEST(%VARIABLE2_RANGE% ; LN(%VARIABLE1_RANGE%) ; %CALC_INTERCEPT% ; TRUE)"_ustr,
+        u"=LINEST(LN(%VARIABLE2_RANGE%) ; LN(%VARIABLE1_RANGE%) ; %CALC_INTERCEPT% ; TRUE)"_ustr
     };
 
     OUString constRegressionFormula[] =
     {
-        "=MMULT(%XDATAMATRIX_RANGE% ; %SLOPES_RANGE%) + %INTERCEPT_ADDR%",
-        "=MMULT(LN(%XDATAMATRIX_RANGE%) ; %SLOPES_RANGE%) + %INTERCEPT_ADDR%",
-        "=EXP(MMULT(LN(%XDATAMATRIX_RANGE%) ; %SLOPES_RANGE%) + %INTERCEPT_ADDR%)"
+        u"=MMULT(%XDATAMATRIX_RANGE% ; %SLOPES_RANGE%) + %INTERCEPT_ADDR%"_ustr,
+        u"=MMULT(LN(%XDATAMATRIX_RANGE%) ; %SLOPES_RANGE%) + %INTERCEPT_ADDR%"_ustr,
+        u"=EXP(MMULT(LN(%XDATAMATRIX_RANGE%) ; %SLOPES_RANGE%) + %INTERCEPT_ADDR%)"_ustr
     };
 
 } // end anonymous namespace
@@ -139,19 +139,19 @@ ScRegressionDialog::ScRegressionDialog(
                     weld::Window* pParent, ScViewData& rViewData )
     : ScStatisticsTwoVariableDialog(
             pSfxBindings, pChildWindow, pParent, rViewData,
-            "modules/scalc/ui/regressiondialog.ui", "RegressionDialog")
+            u"modules/scalc/ui/regressiondialog.ui"_ustr, u"RegressionDialog"_ustr)
     , mbUnivariate(true)
     , mnNumIndependentVars(1)
     , mnNumObservations(0)
     , mbUse3DAddresses(false)
     , mbCalcIntercept(true)
-    , mxWithLabelsCheckBox(m_xBuilder->weld_check_button("withlabels-check"))
-    , mxLinearRadioButton(m_xBuilder->weld_radio_button("linear-radio"))
-    , mxLogarithmicRadioButton(m_xBuilder->weld_radio_button("logarithmic-radio"))
-    , mxErrorMessage(m_xBuilder->weld_label("error-message"))
-    , mxConfidenceLevelField(m_xBuilder->weld_spin_button("confidencelevel-spin"))
-    , mxCalcResidualsCheckBox(m_xBuilder->weld_check_button("calcresiduals-check"))
-    , mxNoInterceptCheckBox(m_xBuilder->weld_check_button("nointercept-check"))
+    , mxWithLabelsCheckBox(m_xBuilder->weld_check_button(u"withlabels-check"_ustr))
+    , mxLinearRadioButton(m_xBuilder->weld_radio_button(u"linear-radio"_ustr))
+    , mxLogarithmicRadioButton(m_xBuilder->weld_radio_button(u"logarithmic-radio"_ustr))
+    , mxErrorMessage(m_xBuilder->weld_label(u"error-message"_ustr))
+    , mxConfidenceLevelField(m_xBuilder->weld_spin_button(u"confidencelevel-spin"_ustr))
+    , mxCalcResidualsCheckBox(m_xBuilder->weld_check_button(u"calcresiduals-check"_ustr))
+    , mxNoInterceptCheckBox(m_xBuilder->weld_check_button(u"nointercept-check"_ustr))
 {
     mxWithLabelsCheckBox->connect_toggled(LINK(this, ScRegressionDialog, CheckBoxHdl));
     mxConfidenceLevelField->connect_value_changed(LINK(this, ScRegressionDialog, NumericFieldHdl));
@@ -190,8 +190,8 @@ ScRange ScRegressionDialog::ApplyOutput(ScDocShell* pDocShell)
     ScRange aXDataRange(GetDataRange(mVariable1Range));
     ScRange aYDataRange(GetDataRange(mVariable2Range));
 
-    aTemplate.autoReplaceRange("%VARIABLE1_RANGE%", aXDataRange);
-    aTemplate.autoReplaceRange("%VARIABLE2_RANGE%", aYDataRange);
+    aTemplate.autoReplaceRange(u"%VARIABLE1_RANGE%"_ustr, aXDataRange);
+    aTemplate.autoReplaceRange(u"%VARIABLE2_RANGE%"_ustr, aYDataRange);
     size_t nRegressionIndex = GetRegressionTypeIndex();
     ScRegType eRegType = static_cast<ScRegType>(nRegressionIndex);
     bool bTakeLogX = eRegType == ScRegType::LOGARITHMIC || eRegType == ScRegType::POWER;
@@ -278,7 +278,7 @@ bool ScRegressionDialog::InputRangesValid()
     mbUse3DAddresses = mVariable1Range.aStart.Tab() != mOutputAddress.Tab() ||
         mVariable2Range.aStart.Tab() != mOutputAddress.Tab();
 
-    mxErrorMessage->set_label("");
+    mxErrorMessage->set_label(u""_ustr);
 
     return true;
 }
@@ -370,20 +370,20 @@ void ScRegressionDialog::WriteRawRegressionResults(AddressWalkerWriter& rOutput,
     // Add LINEST result components to template
     // 1. Add ranges for coefficients and standard errors for independent vars and the intercept.
     // Note that these two are in the reverse order(m_n, m_n-1, ..., m_1, b) w.r.t what we expect.
-    rTemplate.autoReplaceRange("%COEFFICIENTS_REV_RANGE%", ScRange(rOutput.current(), rOutput.current(mnNumIndependentVars)));
-    rTemplate.autoReplaceRange("%SERRORSX_REV_RANGE%", ScRange(rOutput.current(0, 1), rOutput.current(mnNumIndependentVars, 1)));
+    rTemplate.autoReplaceRange(u"%COEFFICIENTS_REV_RANGE%"_ustr, ScRange(rOutput.current(), rOutput.current(mnNumIndependentVars)));
+    rTemplate.autoReplaceRange(u"%SERRORSX_REV_RANGE%"_ustr, ScRange(rOutput.current(0, 1), rOutput.current(mnNumIndependentVars, 1)));
 
     // 2. Add R-squared and standard error for y estimate.
-    rTemplate.autoReplaceAddress("%RSQUARED_ADDR%", rOutput.current(0, 2));
-    rTemplate.autoReplaceAddress("%SERRORY_ADDR%", rOutput.current(1, 2));
+    rTemplate.autoReplaceAddress(u"%RSQUARED_ADDR%"_ustr, rOutput.current(0, 2));
+    rTemplate.autoReplaceAddress(u"%SERRORY_ADDR%"_ustr, rOutput.current(1, 2));
 
     // 3. Add F statistic and degrees of freedom
-    rTemplate.autoReplaceAddress("%FSTATISTIC_ADDR%", rOutput.current(0, 3));
-    rTemplate.autoReplaceAddress("%DoFRESID_ADDR%", rOutput.current(1, 3));
+    rTemplate.autoReplaceAddress(u"%FSTATISTIC_ADDR%"_ustr, rOutput.current(0, 3));
+    rTemplate.autoReplaceAddress(u"%DoFRESID_ADDR%"_ustr, rOutput.current(1, 3));
 
     // 4. Add regression sum of squares and residual sum of squares
-    rTemplate.autoReplaceAddress("%SSREG_ADDR%", rOutput.current(0, 4));
-    rTemplate.autoReplaceAddress("%SSRESID_ADDR%", rOutput.current(1, 4));
+    rTemplate.autoReplaceAddress(u"%SSREG_ADDR%"_ustr, rOutput.current(0, 4));
+    rTemplate.autoReplaceAddress(u"%SSRESID_ADDR%"_ustr, rOutput.current(1, 4));
 
     rOutput.push(0, 4);
     rOutput.newLine();
@@ -406,8 +406,8 @@ void ScRegressionDialog::WriteRegressionStatistics(AddressWalkerWriter& rOutput,
 
     OUString aMeasureFormulas[] =
     {
-        "=%RSQUARED_ADDR%",
-        "=%SERRORY_ADDR%",
+        u"=%RSQUARED_ADDR%"_ustr,
+        u"=%SERRORY_ADDR%"_ustr,
         "=" + OUString::number(mnNumIndependentVars),
         "=" + OUString::number(mnNumObservations),
         OUString::Concat(
@@ -415,8 +415,8 @@ void ScRegressionDialog::WriteRegressionStatistics(AddressWalkerWriter& rOutput,
             (mbCalcIntercept ? std::u16string_view(u" - 1)") : std::u16string_view(u")"))
     };
 
-    rTemplate.autoReplaceAddress("%NUMXVARS_ADDR%", rOutput.current(1, 2));
-    rTemplate.autoReplaceAddress("%NUMOBS_ADDR%", rOutput.current(1, 3));
+    rTemplate.autoReplaceAddress(u"%NUMXVARS_ADDR%"_ustr, rOutput.current(1, 2));
+    rTemplate.autoReplaceAddress(u"%NUMOBS_ADDR%"_ustr, rOutput.current(1, 3));
 
     for (size_t nIdx = 0; nIdx < SAL_N_ELEMENTS(aMeasureNames); ++nIdx)
     {
@@ -439,7 +439,7 @@ void ScRegressionDialog::WriteRegressionANOVAResults(AddressWalkerWriter& rOutpu
     OUString aTable[nRowsInTable][nColsInTable] =
     {
         {
-            "",
+            u""_ustr,
             ScResId(STR_ANOVA_LABEL_DF),
             ScResId(STR_ANOVA_LABEL_SS),
             ScResId(STR_ANOVA_LABEL_MS),
@@ -448,31 +448,31 @@ void ScRegressionDialog::WriteRegressionANOVAResults(AddressWalkerWriter& rOutpu
         },
         {
             ScResId(STR_REGRESSION),
-            "=%NUMXVARS_ADDR%",
-            "=%SSREG_ADDR%",
-            "=%SSREG_ADDR% / %DoFREG_ADDR%",
-            "=%FSTATISTIC_ADDR%",
-            "=FDIST(%FSTATISTIC_ADDR% ; %DoFREG_ADDR% ; %DoFRESID_ADDR%)"
+            u"=%NUMXVARS_ADDR%"_ustr,
+            u"=%SSREG_ADDR%"_ustr,
+            u"=%SSREG_ADDR% / %DoFREG_ADDR%"_ustr,
+            u"=%FSTATISTIC_ADDR%"_ustr,
+            u"=FDIST(%FSTATISTIC_ADDR% ; %DoFREG_ADDR% ; %DoFRESID_ADDR%)"_ustr
         },
         {
             ScResId(STR_LABEL_RESIDUAL),
-            "=%DoFRESID_ADDR%",
-            "=%SSRESID_ADDR%",
-            "=%SSRESID_ADDR% / %DoFRESID_ADDR%",
-            "",
-            ""
+            u"=%DoFRESID_ADDR%"_ustr,
+            u"=%SSRESID_ADDR%"_ustr,
+            u"=%SSRESID_ADDR% / %DoFRESID_ADDR%"_ustr,
+            u""_ustr,
+            u""_ustr
         },
         {
             ScResId(STR_ANOVA_LABEL_TOTAL),
-            "=%DoFREG_ADDR% + %DoFRESID_ADDR%",
-            "=%SSREG_ADDR% + %SSRESID_ADDR%",
-            "",
-            "",
-            ""
+            u"=%DoFREG_ADDR% + %DoFRESID_ADDR%"_ustr,
+            u"=%SSREG_ADDR% + %SSRESID_ADDR%"_ustr,
+            u""_ustr,
+            u""_ustr,
+            u""_ustr
         }
     };
 
-    rTemplate.autoReplaceAddress("%DoFREG_ADDR%", rOutput.current(1, 1));
+    rTemplate.autoReplaceAddress(u"%DoFREG_ADDR%"_ustr, rOutput.current(1, 1));
 
     // Cell getter lambda
     std::function<CellValueGetter> aCellGetterFunc = [&aTable](size_t nRowIdx, size_t nColIdx) -> const OUString&
@@ -503,7 +503,7 @@ void ScRegressionDialog::WriteRegressionANOVAResults(AddressWalkerWriter& rOutpu
     rOutput.writeString(ScResId(STR_LABEL_CONFIDENCE_LEVEL));
     rOutput.nextColumn();
     rOutput.writeValue(mxConfidenceLevelField->get_value() / 100.0);
-    rTemplate.autoReplaceAddress("%CONFIDENCE_LEVEL_ADDR%", rOutput.current());
+    rTemplate.autoReplaceAddress(u"%CONFIDENCE_LEVEL_ADDR%"_ustr, rOutput.current());
     rOutput.newLine();
 }
 
@@ -520,18 +520,18 @@ void ScRegressionDialog::WriteRegressionEstimatesWithCI(AddressWalkerWriter& rOu
     const OUString aStErrAddr( aEnd.Format( eAddrFlag, &mDocument, mDocument.GetAddressConvention()));
 
     // Coefficients & Std.Errors ranges (column vectors) in this table (yet to populate).
-    rTemplate.autoReplaceRange("%COEFFICIENTS_RANGE%",
+    rTemplate.autoReplaceRange(u"%COEFFICIENTS_RANGE%"_ustr,
                                ScRange(rOutput.current(1, 1),
                                        rOutput.current(1, 1 + mnNumIndependentVars)));
-    rTemplate.autoReplaceRange("%SLOPES_RANGE%",  // Excludes the intercept
+    rTemplate.autoReplaceRange(u"%SLOPES_RANGE%"_ustr,  // Excludes the intercept
                                ScRange(rOutput.current(1, 2),
                                        rOutput.current(1, 1 + mnNumIndependentVars)));
-    rTemplate.autoReplaceAddress("%INTERCEPT_ADDR%", rOutput.current(1, 1));
-    rTemplate.autoReplaceRange("%SERRORSX_RANGE%",
+    rTemplate.autoReplaceAddress(u"%INTERCEPT_ADDR%"_ustr, rOutput.current(1, 1));
+    rTemplate.autoReplaceRange(u"%SERRORSX_RANGE%"_ustr,
                                ScRange(rOutput.current(2, 1),
                                        rOutput.current(2, 1 + mnNumIndependentVars)));
     // t-Statistics range in this table (yet to populate)
-    rTemplate.autoReplaceRange("%TSTAT_RANGE%",
+    rTemplate.autoReplaceRange(u"%TSTAT_RANGE%"_ustr,
                                ScRange(rOutput.current(3, 1),
                                        rOutput.current(3, 1 + mnNumIndependentVars)));
 
@@ -540,7 +540,7 @@ void ScRegressionDialog::WriteRegressionEstimatesWithCI(AddressWalkerWriter& rOu
     OUString aTable[nRowsInTable][nColsInTable] =
     {
         {
-            "",
+            u""_ustr,
             ScResId(STR_LABEL_COEFFICIENTS),
             ScResId(STRID_CALC_STD_ERROR),
             ScResId(STR_LABEL_TSTATISTIC),
@@ -555,21 +555,21 @@ void ScRegressionDialog::WriteRegressionEstimatesWithCI(AddressWalkerWriter& rOu
 
         // Following are matrix formulas of size numcols = 1, numrows = (mnNumIndependentVars + 1)
         {
-            "",
+            u""_ustr,
             // This puts the coefficients in the reverse order compared to that in LINEST output.
             "=INDEX(%COEFFICIENTS_REV_RANGE%; 1 ; ROW(" + aCoeffAddr + ")+1 - ROW())",
             // This puts the standard errors in the reverse order compared to that in LINEST output.
             "=INDEX(%SERRORSX_REV_RANGE%; 1 ; ROW(" + aStErrAddr + ")+1 - ROW())",
             // t-Statistic
-            "=%COEFFICIENTS_RANGE% / %SERRORSX_RANGE%",
+            u"=%COEFFICIENTS_RANGE% / %SERRORSX_RANGE%"_ustr,
             // p-Value
-            "=TDIST(ABS(%TSTAT_RANGE%) ; %DoFRESID_ADDR% ; 2 )",
+            u"=TDIST(ABS(%TSTAT_RANGE%) ; %DoFRESID_ADDR% ; 2 )"_ustr,
             // Lower limit of confidence interval
-            "=%COEFFICIENTS_RANGE% - %SERRORSX_RANGE% * "
-            "TINV(1 - %CONFIDENCE_LEVEL_ADDR% ; %DoFRESID_ADDR%)",
+            u"=%COEFFICIENTS_RANGE% - %SERRORSX_RANGE% * "
+            "TINV(1 - %CONFIDENCE_LEVEL_ADDR% ; %DoFRESID_ADDR%)"_ustr,
             // Upper limit of confidence interval
-            "=%COEFFICIENTS_RANGE% + %SERRORSX_RANGE% * "
-            "TINV(1 - %CONFIDENCE_LEVEL_ADDR% ; %DoFRESID_ADDR%)"
+            u"=%COEFFICIENTS_RANGE% + %SERRORSX_RANGE% * "
+            "TINV(1 - %CONFIDENCE_LEVEL_ADDR% ; %DoFRESID_ADDR%)"_ustr
         }
     };
 
@@ -623,7 +623,7 @@ void ScRegressionDialog::WritePredictionsWithResiduals(AddressWalkerWriter& rOut
 
     // Range of X variables with rows as observations and columns as variables.
     ScRange aDataMatrixRange(rOutput.current(0, 1), rOutput.current(mnNumIndependentVars - 1, mnNumObservations));
-    rTemplate.autoReplaceRange("%XDATAMATRIX_RANGE%", aDataMatrixRange);
+    rTemplate.autoReplaceRange(u"%XDATAMATRIX_RANGE%"_ustr, aDataMatrixRange);
 
     // Write X variable names
     for (size_t nXvarIdx = 1; nXvarIdx <= mnNumIndependentVars; ++nXvarIdx)
@@ -636,7 +636,7 @@ void ScRegressionDialog::WritePredictionsWithResiduals(AddressWalkerWriter& rOut
 
     // Write the X data matrix
     rOutput.nextRow();
-    OUString aDataMatrixFormula = bGroupedByColumn ? OUString("=%VARIABLE1_RANGE%") : OUString("=TRANSPOSE(%VARIABLE1_RANGE%)");
+    OUString aDataMatrixFormula = bGroupedByColumn ? u"=%VARIABLE1_RANGE%"_ustr : u"=TRANSPOSE(%VARIABLE1_RANGE%)"_ustr;
     rTemplate.setTemplate(aDataMatrixFormula);
     rOutput.writeMatrixFormula(rTemplate.getTemplate(), mnNumIndependentVars, mnNumObservations);
 
@@ -646,16 +646,16 @@ void ScRegressionDialog::WritePredictionsWithResiduals(AddressWalkerWriter& rOut
     rOutput.nextRow();
     rTemplate.setTemplate(constRegressionFormula[nRegressionIndex]);
     rOutput.writeMatrixFormula(rTemplate.getTemplate(), 1, mnNumObservations);
-    rTemplate.autoReplaceRange("%PREDICTEDY_RANGE%", ScRange(rOutput.current(), rOutput.current(0, mnNumObservations - 1)));
+    rTemplate.autoReplaceRange(u"%PREDICTEDY_RANGE%"_ustr, ScRange(rOutput.current(), rOutput.current(0, mnNumObservations - 1)));
 
     // Write actual Y
     rOutput.push(1, -1);
     rOutput.writeFormula(GetYVariableNameFormula(false));
     rOutput.nextRow();
-    OUString aYVectorFormula = bGroupedByColumn ? OUString("=%VARIABLE2_RANGE%") : OUString("=TRANSPOSE(%VARIABLE2_RANGE%)");
+    OUString aYVectorFormula = bGroupedByColumn ? u"=%VARIABLE2_RANGE%"_ustr : u"=TRANSPOSE(%VARIABLE2_RANGE%)"_ustr;
     rTemplate.setTemplate(aYVectorFormula);
     rOutput.writeMatrixFormula(rTemplate.getTemplate(), 1, mnNumObservations);
-    rTemplate.autoReplaceRange("%ACTUALY_RANGE%", ScRange(rOutput.current(), rOutput.current(0, mnNumObservations - 1)));
+    rTemplate.autoReplaceRange(u"%ACTUALY_RANGE%"_ustr, ScRange(rOutput.current(), rOutput.current(0, mnNumObservations - 1)));
 
     // Write residual
     rOutput.push(1, -1);

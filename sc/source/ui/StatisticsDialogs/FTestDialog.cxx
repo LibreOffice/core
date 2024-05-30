@@ -21,7 +21,7 @@ ScFTestDialog::ScFTestDialog(
                     weld::Window* pParent, ScViewData& rViewData ) :
     ScStatisticsTwoVariableDialog(
             pSfxBindings, pChildWindow, pParent, rViewData,
-            "modules/scalc/ui/ttestdialog.ui", "TTestDialog" )
+            u"modules/scalc/ui/ttestdialog.ui"_ustr, u"TTestDialog"_ustr )
 {
     m_xDialog->set_title(ScResId(STR_FTEST));
 }
@@ -57,8 +57,8 @@ ScRange ScFTestDialog::ApplyOutput(ScDocShell* pDocShell)
     else
         pVariable2Iterator.reset(new DataRangeByRowIterator(mVariable2Range));
 
-    aTemplate.autoReplaceRange("%VARIABLE1_RANGE%", pVariable1Iterator->get());
-    aTemplate.autoReplaceRange("%VARIABLE2_RANGE%", pVariable2Iterator->get());
+    aTemplate.autoReplaceRange(u"%VARIABLE1_RANGE%"_ustr, pVariable1Iterator->get());
+    aTemplate.autoReplaceRange(u"%VARIABLE2_RANGE%"_ustr, pVariable2Iterator->get());
 
     aOutput.writeBoldString(ScResId(STR_FTEST_UNDO_NAME));
     aOutput.newLine();
@@ -67,7 +67,7 @@ ScRange ScFTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.writeString(ScResId(STR_LABEL_ALPHA));
     aOutput.nextColumn();
     aOutput.writeValue(0.05);
-    aTemplate.autoReplaceAddress("%ALPHA%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%ALPHA%"_ustr, aOutput.current());
     aOutput.newLine();
 
     aOutput.nextColumn();
@@ -89,47 +89,47 @@ ScRange ScFTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.nextColumn();
     aTemplate.setTemplate("=VAR(%VARIABLE1_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aTemplate.autoReplaceAddress("%VARIABLE1_VARIANCE%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%VARIABLE1_VARIANCE%"_ustr, aOutput.current());
     aOutput.nextColumn();
     aTemplate.setTemplate("=VAR(%VARIABLE2_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aTemplate.autoReplaceAddress("%VARIABLE2_VARIANCE%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%VARIABLE2_VARIANCE%"_ustr, aOutput.current());
     aOutput.newLine();
 
     aOutput.writeString(ScResId(STR_OBSERVATIONS_LABEL));
     aOutput.nextColumn();
     aTemplate.setTemplate("=COUNT(%VARIABLE1_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aTemplate.autoReplaceAddress("%VARIABLE1_OBSERVATIONS%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%VARIABLE1_OBSERVATIONS%"_ustr, aOutput.current());
     aOutput.nextColumn();
     aTemplate.setTemplate("=COUNT(%VARIABLE2_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aTemplate.autoReplaceAddress("%VARIABLE2_OBSERVATIONS%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%VARIABLE2_OBSERVATIONS%"_ustr, aOutput.current());
     aOutput.newLine();
 
     aOutput.writeString(ScResId(STR_ANOVA_LABEL_DF));
     aOutput.nextColumn();
     aTemplate.setTemplate("=%VARIABLE1_OBSERVATIONS% - 1");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aTemplate.autoReplaceAddress("%VARIABLE1_DEGREE_OF_FREEDOM%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%VARIABLE1_DEGREE_OF_FREEDOM%"_ustr, aOutput.current());
     aOutput.nextColumn();
     aTemplate.setTemplate("=%VARIABLE2_OBSERVATIONS% - 1");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aTemplate.autoReplaceAddress("%VARIABLE2_DEGREE_OF_FREEDOM%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%VARIABLE2_DEGREE_OF_FREEDOM%"_ustr, aOutput.current());
     aOutput.newLine();
 
     aOutput.writeString(ScResId(STR_ANOVA_LABEL_F));
     aOutput.nextColumn();
     aTemplate.setTemplate("=%VARIABLE1_VARIANCE% / %VARIABLE2_VARIANCE%");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aTemplate.autoReplaceAddress("%F_VALUE%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%F_VALUE%"_ustr, aOutput.current());
     aOutput.newLine();
 
     aOutput.writeString(ScResId(STR_FTEST_P_RIGHT_TAIL));
     aOutput.nextColumn();
     aTemplate.setTemplate("=FDIST(%F_VALUE%; %VARIABLE1_DEGREE_OF_FREEDOM%; %VARIABLE2_DEGREE_OF_FREEDOM%)");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aTemplate.autoReplaceAddress("%P_RIGHT_TAIL_VALUE%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%P_RIGHT_TAIL_VALUE%"_ustr, aOutput.current());
     aOutput.newLine();
 
     aOutput.writeString(ScResId(STR_FTEST_F_CRITICAL_RIGHT_TAIL));
@@ -142,7 +142,7 @@ ScRange ScFTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.nextColumn();
     aTemplate.setTemplate("=1 - %P_RIGHT_TAIL_VALUE%");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aTemplate.autoReplaceAddress("%P_LEFT_TAIL_VALUE%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%P_LEFT_TAIL_VALUE%"_ustr, aOutput.current());
     aOutput.newLine();
 
     aOutput.writeString(ScResId(STR_FTEST_F_CRITICAL_LEFT_TAIL));

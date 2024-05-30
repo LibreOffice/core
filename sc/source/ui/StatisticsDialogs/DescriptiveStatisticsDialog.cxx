@@ -51,8 +51,8 @@ ScDescriptiveStatisticsDialog::ScDescriptiveStatisticsDialog(
                     weld::Window* pParent, ScViewData& rViewData ) :
     ScStatisticsInputOutputDialog(
             pSfxBindings, pChildWindow, pParent, rViewData,
-            "modules/scalc/ui/descriptivestatisticsdialog.ui",
-            "DescriptiveStatisticsDialog")
+            u"modules/scalc/ui/descriptivestatisticsdialog.ui"_ustr,
+            u"DescriptiveStatisticsDialog"_ustr)
 {}
 
 ScDescriptiveStatisticsDialog::~ScDescriptiveStatisticsDialog()

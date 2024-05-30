@@ -19,7 +19,7 @@ ScChiSquareTestDialog::ScChiSquareTestDialog(
                     weld::Window* pParent, ScViewData& rViewData ) :
     ScStatisticsInputOutputDialog(
             pSfxBindings, pChildWindow, pParent, rViewData,
-            "modules/scalc/ui/chisquaretestdialog.ui", "ChiSquareTestDialog")
+            u"modules/scalc/ui/chisquaretestdialog.ui"_ustr, u"ChiSquareTestDialog"_ustr)
 {
     m_xDialog->set_title(ScResId(STR_CHI_SQUARE_TEST));
 }
@@ -43,7 +43,7 @@ ScRange ScChiSquareTestDialog::ApplyOutput(ScDocShell* pDocShell)
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
     FormulaTemplate aTemplate(&mDocument);
 
-    aTemplate.autoReplaceRange("%RANGE%", mInputRange);
+    aTemplate.autoReplaceRange(u"%RANGE%"_ustr, mInputRange);
 
     aOutput.writeBoldString(ScResId(STR_CHI_SQUARE_TEST));
     aOutput.newLine();
@@ -52,14 +52,14 @@ ScRange ScChiSquareTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.writeString(ScResId(STR_LABEL_ALPHA));
     aOutput.nextColumn();
     aOutput.writeValue(0.05);
-    aTemplate.autoReplaceAddress("%ALPHA%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%ALPHA%"_ustr, aOutput.current());
     aOutput.newLine();
 
     // DF
     aOutput.writeString(ScResId(STR_DEGREES_OF_FREEDOM_LABEL));
     aOutput.nextColumn();
     aTemplate.setTemplate("=(COLUMNS(%RANGE%) - 1) * (ROWS(%RANGE%) - 1)");
-    aTemplate.autoReplaceAddress("%DEGREES_OF_FREEDOM%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%DEGREES_OF_FREEDOM%"_ustr, aOutput.current());
     aOutput.writeFormula(aTemplate.getTemplate());
     aOutput.newLine();
 
@@ -67,7 +67,7 @@ ScRange ScChiSquareTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.writeString(ScResId(STR_P_VALUE_LABEL));
     aOutput.nextColumn();
     aTemplate.setTemplate("=CHITEST(%RANGE%; MMULT(MMULT(%RANGE%;TRANSPOSE(IF(COLUMN(%RANGE%))));MMULT(TRANSPOSE(IF(ROW(%RANGE%)));%RANGE%)) / SUM(%RANGE%))");
-    aTemplate.autoReplaceAddress("%P_VALUE%", aOutput.current());
+    aTemplate.autoReplaceAddress(u"%P_VALUE%"_ustr, aOutput.current());
     aOutput.writeFormula(aTemplate.getTemplate());
     aOutput.newLine();
 

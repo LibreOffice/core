@@ -90,13 +90,13 @@ ScAnalysisOfVarianceDialog::ScAnalysisOfVarianceDialog(
                     weld::Window* pParent, ScViewData& rViewData )
     : ScStatisticsInputOutputDialog(
             pSfxBindings, pChildWindow, pParent, rViewData,
-            "modules/scalc/ui/analysisofvariancedialog.ui",
-            "AnalysisOfVarianceDialog")
+            u"modules/scalc/ui/analysisofvariancedialog.ui"_ustr,
+            u"AnalysisOfVarianceDialog"_ustr)
     , meFactor(SINGLE_FACTOR)
-    , mxAlphaField(m_xBuilder->weld_spin_button("alpha-spin"))
-    , mxSingleFactorRadio(m_xBuilder->weld_radio_button("radio-single-factor"))
-    , mxTwoFactorRadio(m_xBuilder->weld_radio_button("radio-two-factor"))
-    , mxRowsPerSampleField(m_xBuilder->weld_spin_button("rows-per-sample-spin"))
+    , mxAlphaField(m_xBuilder->weld_spin_button(u"alpha-spin"_ustr))
+    , mxSingleFactorRadio(m_xBuilder->weld_radio_button(u"radio-single-factor"_ustr))
+    , mxTwoFactorRadio(m_xBuilder->weld_radio_button(u"radio-two-factor"_ustr))
+    , mxRowsPerSampleField(m_xBuilder->weld_spin_button(u"rows-per-sample-spin"_ustr))
 {
     mxSingleFactorRadio->connect_toggled( LINK( this, ScAnalysisOfVarianceDialog, FactorChanged ) );
     mxTwoFactorRadio->connect_toggled( LINK( this, ScAnalysisOfVarianceDialog, FactorChanged ) );
@@ -188,7 +188,7 @@ void ScAnalysisOfVarianceDialog::AnovaSingleFactor(AddressWalkerWriter& output, 
     output.writeString(ScResId(STR_LABEL_ALPHA));
     output.nextColumn();
     output.writeValue(aAlphaValue);
-    aTemplate.autoReplaceAddress("%ALPHA%", output.current());
+    aTemplate.autoReplaceAddress(u"%ALPHA%"_ustr, output.current());
     output.newLine();
     output.newLine();
 
@@ -232,7 +232,7 @@ void ScAnalysisOfVarianceDialog::AnovaSingleFactor(AddressWalkerWriter& output, 
     }
     output.nextRow();
 
-    aTemplate.autoReplaceRange("%FIRST_COLUMN%", aRangeList[0]);
+    aTemplate.autoReplaceRange(u"%FIRST_COLUMN%"_ustr, aRangeList[0]);
 
     // Between Groups
     {
@@ -243,26 +243,26 @@ void ScAnalysisOfVarianceDialog::AnovaSingleFactor(AddressWalkerWriter& output, 
 
         // Sum of Squares
         aTemplate.setTemplate("=SUMPRODUCT(%SUM_RANGE%;%MEAN_RANGE%)-SUM(%SUM_RANGE%)^2/SUM(%COUNT_RANGE%)");
-        aTemplate.autoReplaceAddress("%BETWEEN_SS%", output.current());
+        aTemplate.autoReplaceAddress(u"%BETWEEN_SS%"_ustr, output.current());
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
         // Degree of freedom
         aTemplate.setTemplate("=COUNT(%SUM_RANGE%)-1");
-        aTemplate.autoReplaceAddress("%BETWEEN_DF%", output.current());
+        aTemplate.autoReplaceAddress(u"%BETWEEN_DF%"_ustr, output.current());
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
         // MS
         aTemplate.setTemplate("=%BETWEEN_SS% / %BETWEEN_DF%");
-        aTemplate.autoReplaceAddress("%BETWEEN_MS%", output.current());
+        aTemplate.autoReplaceAddress(u"%BETWEEN_MS%"_ustr, output.current());
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
         // F
         aTemplate.setTemplate("=%BETWEEN_MS% / %WITHIN_MS%");
         aTemplate.applyAddress(u"%WITHIN_MS%",  output.current(-1, 1));
-        aTemplate.autoReplaceAddress("%F_VAL%", output.current());
+        aTemplate.autoReplaceAddress(u"%F_VAL%"_ustr, output.current());
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
@@ -287,16 +287,16 @@ void ScAnalysisOfVarianceDialog::AnovaSingleFactor(AddressWalkerWriter& output, 
         output.nextColumn();
 
         // Sum of Squares
-        OUString aSSPart = lclCreateMultiParameterFormula(aRangeList, "DEVSQ(%RANGE%)", strWildcardRange, mDocument, mAddressDetails);
+        OUString aSSPart = lclCreateMultiParameterFormula(aRangeList, u"DEVSQ(%RANGE%)"_ustr, strWildcardRange, mDocument, mAddressDetails);
         aTemplate.setTemplate("=SUM(%RANGE%)");
         aTemplate.applyString(strWildcardRange, aSSPart);
-        aTemplate.autoReplaceAddress("%WITHIN_SS%", output.current());
+        aTemplate.autoReplaceAddress(u"%WITHIN_SS%"_ustr, output.current());
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
         // Degree of freedom
         aTemplate.setTemplate("=SUM(%COUNT_RANGE%)-COUNT(%COUNT_RANGE%)");
-        aTemplate.autoReplaceAddress("%WITHIN_DF%", output.current());
+        aTemplate.autoReplaceAddress(u"%WITHIN_DF%"_ustr, output.current());
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
@@ -335,7 +335,7 @@ void ScAnalysisOfVarianceDialog::AnovaTwoFactor(AddressWalkerWriter& output, For
     output.writeString("Alpha");
     output.nextColumn();
     output.writeValue(aAlphaValue);
-    aTemplate.autoReplaceAddress("%ALPHA%", output.current());
+    aTemplate.autoReplaceAddress(u"%ALPHA%"_ustr, output.current());
     output.newLine();
     output.newLine();
 
@@ -398,8 +398,8 @@ void ScAnalysisOfVarianceDialog::AnovaTwoFactor(AddressWalkerWriter& output, For
 
     // Setup auto-replace strings
     aTemplate.autoReplaceRange(strWildcardRange, mInputRange);
-    aTemplate.autoReplaceRange("%FIRST_COLUMN%", aColumnRangeList[0]);
-    aTemplate.autoReplaceRange("%FIRST_ROW%",    aRowRangeList[0]);
+    aTemplate.autoReplaceRange(u"%FIRST_COLUMN%"_ustr, aColumnRangeList[0]);
+    aTemplate.autoReplaceRange(u"%FIRST_ROW%"_ustr,    aRowRangeList[0]);
 
     // Rows
     {
@@ -410,26 +410,26 @@ void ScAnalysisOfVarianceDialog::AnovaTwoFactor(AddressWalkerWriter& output, For
 
         // Sum of Squares
         aTemplate.setTemplate("=SUMPRODUCT(%SUM_RANGE_ROW%;%MEAN_RANGE_ROW%) - SUM(%RANGE%)^2 / COUNT(%RANGE%)");
-        aTemplate.autoReplaceAddress("%ROW_SS%", output.current());
+        aTemplate.autoReplaceAddress(u"%ROW_SS%"_ustr, output.current());
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
         // Degree of freedom
         aTemplate.setTemplate("=MAX(%COUNT_RANGE_COLUMN%) - 1");
-        aTemplate.autoReplaceAddress("%ROW_DF%", output.current());
+        aTemplate.autoReplaceAddress(u"%ROW_DF%"_ustr, output.current());
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
         // MS
         aTemplate.setTemplate("=%ROW_SS% / %ROW_DF%");
-        aTemplate.autoReplaceAddress("%MS_ROW%", output.current());
+        aTemplate.autoReplaceAddress(u"%MS_ROW%"_ustr, output.current());
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
         // F
         aTemplate.setTemplate("=%MS_ROW% / %MS_ERROR%");
         aTemplate.applyAddress(u"%MS_ERROR%", output.current(-1, 2));
-        aTemplate.autoReplaceAddress("%F_ROW%", output.current());
+        aTemplate.autoReplaceAddress(u"%F_ROW%"_ustr, output.current());
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
@@ -456,26 +456,26 @@ void ScAnalysisOfVarianceDialog::AnovaTwoFactor(AddressWalkerWriter& output, For
 
         // Sum of Squares
         aTemplate.setTemplate("=SUMPRODUCT(%SUM_RANGE_COLUMN%;%MEAN_RANGE_COLUMN%) - SUM(%RANGE%)^2 / COUNT(%RANGE%)");
-        aTemplate.autoReplaceAddress("%COLUMN_SS%", output.current());
+        aTemplate.autoReplaceAddress(u"%COLUMN_SS%"_ustr, output.current());
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
         // Degree of freedom
         aTemplate.setTemplate("=MAX(%COUNT_RANGE_ROW%) - 1");
-        aTemplate.autoReplaceAddress("%COLUMN_DF%", output.current());
+        aTemplate.autoReplaceAddress(u"%COLUMN_DF%"_ustr, output.current());
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
         // MS
         aTemplate.setTemplate("=%COLUMN_SS% / %COLUMN_DF%");
-        aTemplate.autoReplaceAddress("%MS_COLUMN%", output.current());
+        aTemplate.autoReplaceAddress(u"%MS_COLUMN%"_ustr, output.current());
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
         // F
         aTemplate.setTemplate("=%MS_COLUMN% / %MS_ERROR%");
         aTemplate.applyAddress(u"%MS_ERROR%", output.current(-1, 1));
-        aTemplate.autoReplaceAddress("%F_COLUMN%", output.current());
+        aTemplate.autoReplaceAddress(u"%F_COLUMN%"_ustr, output.current());
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
@@ -502,14 +502,14 @@ void ScAnalysisOfVarianceDialog::AnovaTwoFactor(AddressWalkerWriter& output, For
 
         // Sum of Squares
         aTemplate.setTemplate("=SUMSQ(%RANGE%)+SUM(%RANGE%)^2/COUNT(%RANGE%) - (SUMPRODUCT(%SUM_RANGE_ROW%;%MEAN_RANGE_ROW%) + SUMPRODUCT(%SUM_RANGE_COLUMN%;%MEAN_RANGE_COLUMN%))");
-        aTemplate.autoReplaceAddress("%ERROR_SS%", output.current());
+        aTemplate.autoReplaceAddress(u"%ERROR_SS%"_ustr, output.current());
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
         // Degree of freedom
         aTemplate.setTemplate("=%TOTAL_DF% - %ROW_DF% - %COLUMN_DF%");
         aTemplate.applyAddress(u"%TOTAL_DF%", output.current(0,1));
-        aTemplate.autoReplaceAddress("%ERROR_DF%", output.current());
+        aTemplate.autoReplaceAddress(u"%ERROR_DF%"_ustr, output.current());
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
