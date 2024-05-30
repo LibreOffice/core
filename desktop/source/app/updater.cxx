@@ -803,14 +803,6 @@ void update_checker()
     }
 }
 
-OUString Updater::getUpdateInfoLog()
-{
-    OUString aUpdateInfoURL("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/updates/updating.log");
-    rtl::Bootstrap::expandMacros(aUpdateInfoURL);
-
-    return aUpdateInfoURL;
-}
-
 OUString Updater::getPatchDirURL()
 {
     OUString aPatchDirURL("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/updates/0/");
@@ -843,8 +835,10 @@ OUString Updater::getExecutableDirURL()
 void Updater::log(const OUString& rMessage)
 {
     SAL_INFO("desktop.updater", rMessage);
-    OUString aUpdateLog = getUpdateInfoLog();
-    SvFileStream aLog(aUpdateLog, StreamMode::STD_READWRITE);
+    OUString dir("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/updates");
+    rtl::Bootstrap::expandMacros(dir);
+    osl::Directory::create(dir);
+    SvFileStream aLog(dir + "/updating.log", StreamMode::STD_READWRITE);
     aLog.Seek(aLog.Tell() + aLog.remainingSize()); // make sure we are at the end
     aLog.WriteLine(OUStringToOString(rMessage, RTL_TEXTENCODING_UTF8));
 }
