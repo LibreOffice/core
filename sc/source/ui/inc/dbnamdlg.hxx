@@ -83,6 +83,7 @@ private:
     std::unique_ptr<weld::Label> m_xInvalidFT;
 
     std::unique_ptr<weld::Label> m_xFrameLabel;
+    std::unique_ptr<weld::Expander> m_xExpander;
 private:
     void            Init();
     void            UpdateNames();

@@ -246,6 +246,7 @@ ScDPFunctionDlg::ScDPFunctionDlg(
     , mxLbBaseItem(m_xBuilder->weld_combo_box(u"baseitem"_ustr))
     , mxBtnOk(m_xBuilder->weld_button(u"ok"_ustr))
     , mxBtnCancel(m_xBuilder->weld_button(u"cancel"_ustr))
+    , mxExpander(m_xBuilder->weld_expander(u"expander"_ustr))
     , mrLabelVec(rLabelVec)
     , mbEmptyItem(false)
 {

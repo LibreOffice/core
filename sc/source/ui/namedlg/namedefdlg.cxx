@@ -48,6 +48,7 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* 
     , m_xBtnAdd(m_xBuilder->weld_button("add"))
     , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
     , m_xFtInfo(m_xBuilder->weld_label("label"))
+    , m_xExpander(m_xBuilder->weld_expander("more"))
     , m_xFtRange(m_xBuilder->weld_label("label3"))
 {
     m_xEdRange->SetReferences(this, m_xFtRange.get());
