@@ -257,12 +257,15 @@ void SdrMarkView::modelHasChangedLOKit()
             const vcl::Window* pWin = pOut ? pOut->GetOwnerWindow() : nullptr;
             if (pWin && pWin->IsChart())
             {
-                const vcl::Window* pViewShellWindow = GetSfxViewShell()->GetEditWindowForActiveOLEObj();
-                if (pViewShellWindow && pViewShellWindow->IsAncestorOf(*pWin))
+                if (SfxViewShell* pViewShell = GetSfxViewShell())
                 {
-                    Point aOffsetPx = pWin->GetOffsetPixelFrom(*pViewShellWindow);
-                    Point aLogicOffset = pWin->PixelToLogic(aOffsetPx);
-                    aSelection.Move(aLogicOffset.getX(), aLogicOffset.getY());
+                    const vcl::Window* pViewShellWindow = pViewShell->GetEditWindowForActiveOLEObj();
+                    if (pViewShellWindow && pViewShellWindow->IsAncestorOf(*pWin))
+                    {
+                        Point aOffsetPx = pWin->GetOffsetPixelFrom(*pViewShellWindow);
+                        Point aLogicOffset = pWin->PixelToLogic(aOffsetPx);
+                        aSelection.Move(aLogicOffset.getX(), aLogicOffset.getY());
+                    }
                 }
             }
         }
@@ -881,7 +884,8 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
         }
 
         // hide the text selection too
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, ""_ostr);
+        if (pViewShell)
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, ""_ostr);
     }
 
     {
@@ -1022,7 +1026,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                                     + "]");
 
                                 // polygon approximating the pie segment or donut segment
-                                if (pO->GetObjIdentifier() == SdrObjKind::PathFill)
+                                if (pViewShell && pO->GetObjIdentifier() == SdrObjKind::PathFill)
                                 {
                                     const basegfx::B2DPolyPolygon aPolyPolygon(pO->TakeXorPoly());
                                     if (aPolyPolygon.count() == 1)
@@ -1199,7 +1203,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
         {
             sSelectionText = "EMPTY"_ostr;
             sSelectionTextView = "EMPTY"_ostr;
-            if (!pOtherShell)
+            if (!pOtherShell && pViewShell)
                 pViewShell->NotifyOtherViews(LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection"_ostr, OString());
         }
 
@@ -1214,9 +1218,10 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
 
             std::stringstream aStream;
             boost::property_tree::write_json(aStream, aTableJsonTree);
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TABLE_SELECTED, OString(aStream.str()));
+            if (pViewShell)
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TABLE_SELECTED, OString(aStream.str()));
         }
-        else if (!getSdrModelFromSdrView().IsWriter())
+        else if (!getSdrModelFromSdrView().IsWriter() && pViewShell)
         {
             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TABLE_SELECTED, "{}"_ostr);
         }

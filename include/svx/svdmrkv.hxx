@@ -438,7 +438,7 @@ public:
     const Point& GetRef2() const { return maRef2; }
     SAL_DLLPRIVATE void SetRef2(const Point& rPt);
     /// Get access to the view shell owning this draw view, if any.
-    virtual SfxViewShell* GetSfxViewShell() const;
+    SAL_RET_MAYBENULL virtual SfxViewShell* GetSfxViewShell() const;
 };
 
 

@@ -1035,8 +1035,13 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
                 }
 
                 if (!sPayload.isEmpty())
-                    GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                        OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US));
+                {
+                    if (SfxViewShell* pViewShell = GetSfxViewShell())
+                    {
+                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                            OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US));
+                    }
+                }
             }
 
             nWhich = aIter.NextWhich();
