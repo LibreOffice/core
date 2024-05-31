@@ -113,7 +113,9 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineVie
     Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,OutlineView,EventMultiplexerListener) );
     mrOutlineViewShell.GetViewShellBase().GetEventMultiplexer()->AddEventListener(aLink);
 
-    Reference<XFrame> xFrame = mrOutlineViewShell.GetViewShellBase().GetFrame()->GetFrame().GetFrameInterface();
+    Reference<XFrame> xFrame;
+    if (SfxViewFrame* pFrame = mrOutlineViewShell.GetViewShellBase().GetFrame())
+        xFrame = pFrame->GetFrame().GetFrameInterface();
     maSlideImage = vcl::CommandInfoProvider::GetImageForCommand(".uno:ShowSlide", xFrame, vcl::ImageType::Size26);
 
     // Tell undo manager of the document about the undo manager of the

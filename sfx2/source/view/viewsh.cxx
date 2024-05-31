@@ -2441,7 +2441,10 @@ ErrCode SfxViewShell::DoVerb(sal_Int32 /*nVerb*/)
 void SfxViewShell::OutplaceActivated( bool bActive )
 {
     if ( !bActive )
-        GetFrame()->GetFrame().Appear();
+    {
+        if (SfxViewFrame* pFrame = GetFrame())
+            pFrame->GetFrame().Appear();
+    }
 }
 
 void SfxViewShell::UIActivating( SfxInPlaceClient* /*pClient*/ )
