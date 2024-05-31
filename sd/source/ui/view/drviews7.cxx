@@ -1648,9 +1648,11 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
     const bool bIsRunning = SlideShow::IsRunning(GetViewShellBase())
         && !SlideShow::IsInteractiveSlideshow(&GetViewShellBase()); // IASS
 
-    if (GetViewFrame()->GetFrame().IsInPlace() || bIsRunning)
+    SfxViewFrame* pViewFrame = GetViewFrame();
+    const bool bIsInPlace = pViewFrame && pViewFrame->GetFrame().IsInPlace() ? true : false;
+    if (bIsInPlace || bIsRunning)
     {
-        if ( !GetViewFrame()->GetFrame().IsInPlace() )
+        if (!bIsInPlace)
         {
             rSet.ClearItem( SID_DRAWINGMODE );
             rSet.DisableItem( SID_DRAWINGMODE );

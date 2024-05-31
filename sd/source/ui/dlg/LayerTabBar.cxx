@@ -144,8 +144,11 @@ bool LayerTabBar::IsRealNameOfStandardLayer(std::u16string_view rName)
 
 void LayerTabBar::Select()
 {
-    SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
-    pDispatcher->Execute(SID_SWITCHLAYER, SfxCallMode::SYNCHRON);
+    if (SfxViewFrame* pFrame = pDrViewSh->GetViewFrame())
+    {
+        SfxDispatcher* pDispatcher = pFrame->GetDispatcher();
+        pDispatcher->Execute(SID_SWITCHLAYER, SfxCallMode::SYNCHRON);
+    }
 }
 
 void LayerTabBar::MouseMove(const MouseEvent &rMEvt)
@@ -244,10 +247,13 @@ void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
         sal_uInt16 aTabId = GetPageId( PixelToLogic(aPosPixel) );
         if (aTabId == 0)
         {
-            SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
-            pDispatcher->Execute(SID_INSERTLAYER, SfxCallMode::SYNCHRON);
+            if (SfxViewFrame* pFrame = pDrViewSh->GetViewFrame())
+            {
+                SfxDispatcher* pDispatcher = pFrame->GetDispatcher();
+                pDispatcher->Execute(SID_INSERTLAYER, SfxCallMode::SYNCHRON);
 
-            bSetPageID=true;
+                bSetPageID=true;
+            }
         }
         else if (rMEvt.IsMod2())
         {
@@ -348,8 +354,11 @@ void LayerTabBar::DoubleClick()
 {
     if (GetCurPageId() != 0)
     {
-        SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
-        pDispatcher->Execute( SID_MODIFYLAYER, SfxCallMode::SYNCHRON );
+        if (SfxViewFrame* pFrame = pDrViewSh->GetViewFrame())
+        {
+            SfxDispatcher* pDispatcher = pFrame->GetDispatcher();
+            pDispatcher->Execute( SID_MODIFYLAYER, SfxCallMode::SYNCHRON );
+        }
     }
 }
 
@@ -400,8 +409,11 @@ void  LayerTabBar::Command(const CommandEvent& rCEvt)
     if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
         BringLayerObjectsToAttention();
-        SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
-        pDispatcher->ExecutePopup(u"layertab"_ustr);
+        if (SfxViewFrame* pFrame = pDrViewSh->GetViewFrame())
+        {
+            SfxDispatcher* pDispatcher = pFrame->GetDispatcher();
+            pDispatcher->ExecutePopup(u"layertab"_ustr);
+        }
     }
 }
 
@@ -442,12 +454,15 @@ TabBarAllowRenamingReturnCode LayerTabBar::AllowRenaming()
     if (aNewName.isEmpty() ||
         (rLayerAdmin.GetLayer( aNewName ) && aLayerName != aNewName) )
     {
-        // Name already exists.
-        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pDrViewSh->GetViewFrame()->GetFrameWeld(),
-                                                   VclMessageType::Warning, VclButtonsType::Ok,
-                                                   SdResId(STR_WARN_NAME_DUPLICATE)));
-        xWarn->run();
-        bOK = false;
+        if (SfxViewFrame* pFrame = pDrViewSh->GetViewFrame())
+        {
+            // Name already exists.
+            std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pFrame->GetFrameWeld(),
+                                                       VclMessageType::Warning, VclButtonsType::Ok,
+                                                       SdResId(STR_WARN_NAME_DUPLICATE)));
+            xWarn->run();
+            bOK = false;
+        }
     }
 
     if (bOK)
@@ -513,9 +528,11 @@ void LayerTabBar::ActivatePage()
 {
     if (pDrViewSh!=nullptr)
     {
-
-        SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
-        pDispatcher->Execute(SID_SWITCHLAYER, SfxCallMode::ASYNCHRON);
+        if (SfxViewFrame* pFrame = pDrViewSh->GetViewFrame())
+        {
+            SfxDispatcher* pDispatcher = pFrame->GetDispatcher();
+            pDispatcher->Execute(SID_SWITCHLAYER, SfxCallMode::ASYNCHRON);
+        }
     }
 }
 

@@ -114,7 +114,9 @@ void DrawViewShell::ArrangeGUIElements()
     if ( pIPClient && pIPClient->IsObjectInPlaceActive() )
         bClientActive = true;
 
-    bool bInPlaceActive = GetViewFrame()->GetFrame().IsInPlace();
+    bool bInPlaceActive = false;
+    if (SfxViewFrame* pViewFrame = GetViewFrame())
+        bInPlaceActive = pViewFrame->GetFrame().IsInPlace();
 
     if ( mbZoomOnPage && !bInPlaceActive && !bClientActive )
     {

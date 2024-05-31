@@ -107,10 +107,13 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             // First make sure that the sidebar is visible
             mrViewShell.GetDrawView()->SdrEndTextEdit();
             mrViewShell.GetDrawView()->UnmarkAll();
-            mrViewShell.GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
-            sfx2::sidebar::Sidebar::TogglePanel(
-                u"SdLayoutsPanel",
-                mrViewShell.GetViewFrame()->GetFrame().GetFrameInterface());
+            if (SfxViewFrame* pViewFrame = mrViewShell.GetViewFrame())
+            {
+                pViewFrame->ShowChildWindow(SID_SIDEBAR);
+                sfx2::sidebar::Sidebar::TogglePanel(
+                    u"SdLayoutsPanel",
+                    pViewFrame->GetFrame().GetFrameInterface());
+            }
             break;
         }
         else if (pArgs->Count() == 4)

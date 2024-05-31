@@ -229,13 +229,16 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
     case SID_TABLEDESIGN:
     {
         // First make sure that the sidebar is visible
-        GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
-        ::sfx2::sidebar::Sidebar::TogglePanel(
-            u"SdTableDesignPanel",
-            GetViewFrame()->GetFrame().GetFrameInterface());
+        if (SfxViewFrame* pViewFrame = GetViewFrame())
+        {
+            pViewFrame->ShowChildWindow(SID_SIDEBAR);
+            ::sfx2::sidebar::Sidebar::TogglePanel(
+                u"SdTableDesignPanel",
+                pViewFrame->GetFrame().GetFrameInterface());
 
-        Cancel();
-        rReq.Done ();
+            Cancel();
+            rReq.Done ();
+        }
         break;
     }
     default:

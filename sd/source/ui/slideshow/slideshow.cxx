@@ -638,10 +638,14 @@ WorkWindow *SlideShow::GetWorkWindow()
 
     PresentationViewShell* pShell = dynamic_cast<PresentationViewShell*>(mpFullScreenViewShellBase->GetMainViewShell().get());
 
-    if( !pShell || !pShell->GetViewFrame() )
+    if( !pShell)
         return nullptr;
 
-    return dynamic_cast<WorkWindow*>(pShell->GetViewFrame()->GetFrame().GetWindow().GetParent());
+    SfxViewFrame* pFrame = pShell->GetViewFrame();
+    if (!pFrame)
+        return nullptr;
+
+    return dynamic_cast<WorkWindow*>(pFrame->GetFrame().GetWindow().GetParent());
 }
 
 bool SlideShow::IsExitAfterPresenting() const

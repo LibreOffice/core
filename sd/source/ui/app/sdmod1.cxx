@@ -294,26 +294,27 @@ bool SdModule::OutlineToImpress(SfxRequest const & rRequest)
                 // AutoLayouts have to be finished
                 pDoc->StopWorkStartupDelay();
 
-                SfxViewFrame* pViewFrame = pViewSh->GetViewFrame();
-
-                // When the view frame has not been just created we have
-                // to switch synchronously to the outline view.
-                // (Otherwise the request will be ignored anyway.)
-                ::sd::ViewShellBase* pBase
-                    = dynamic_cast< ::sd::ViewShellBase*>(pViewFrame->GetViewShell());
-                if (pBase != nullptr)
+                if (SfxViewFrame* pViewFrame = pViewSh->GetViewFrame())
                 {
-                    std::shared_ptr<FrameworkHelper> pHelper (
-                        FrameworkHelper::Instance(*pBase));
-                    pHelper->RequestView(
-                        FrameworkHelper::msOutlineViewURL,
-                        FrameworkHelper::msCenterPaneURL);
+                    // When the view frame has not been just created we have
+                    // to switch synchronously to the outline view.
+                    // (Otherwise the request will be ignored anyway.)
+                    ::sd::ViewShellBase* pBase
+                        = dynamic_cast< ::sd::ViewShellBase*>(pViewFrame->GetViewShell());
+                    if (pBase != nullptr)
+                    {
+                        std::shared_ptr<FrameworkHelper> pHelper (
+                            FrameworkHelper::Instance(*pBase));
+                        pHelper->RequestView(
+                            FrameworkHelper::msOutlineViewURL,
+                            FrameworkHelper::msCenterPaneURL);
 
-                    pHelper->RunOnResourceActivation(
-                        FrameworkHelper::CreateResourceId(
-                        FrameworkHelper::msOutlineViewURL,
-                        FrameworkHelper::msCenterPaneURL),
-                        OutlineToImpressFinalizer(*pBase, *pDoc, pBytes));
+                        pHelper->RunOnResourceActivation(
+                            FrameworkHelper::CreateResourceId(
+                            FrameworkHelper::msOutlineViewURL,
+                            FrameworkHelper::msCenterPaneURL),
+                            OutlineToImpressFinalizer(*pBase, *pDoc, pBytes));
+                    }
                 }
             }
         }

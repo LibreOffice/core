@@ -725,7 +725,11 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
         if( mpWindow )
             mpWindow->EnterWait();
 
-        css::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(mpViewShell->GetViewFrame()->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY);
+        SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
+        if (!pFrame)
+            return;
+
+        css::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(pFrame->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY);
 
         rtl::Reference<avmedia::PlayerListener> xPlayerListener(new avmedia::PlayerListener(
             [xDispatchProvider, aURL, bLink](const css::uno::Reference<css::media::XPlayer>& rPlayer){

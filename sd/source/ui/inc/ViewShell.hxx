@@ -148,7 +148,7 @@ public:
 
     SdDrawDocument*  GetDoc() const;
 
-    SD_DLLPUBLIC SfxViewFrame* GetViewFrame() const;
+    SAL_RET_MAYBENULL SD_DLLPUBLIC SfxViewFrame* GetViewFrame() const;
 
     /** The active window is usually the mpContentWindow.  When there is a
         show running then the active window is a ShowWindow.
