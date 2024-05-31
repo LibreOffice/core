@@ -635,9 +635,8 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, std::shared_ptr<PrinterControl
     // setup paper sides box
     setupPaperSidesBox();
 
-    // set initial focus to "Number of copies"
-    mxCopyCountField->grab_focus();
-    mxCopyCountField->select_region(0, -1);
+    // set initial focus to "Printer"
+    mxPrinters->grab_focus();
 
     // setup sizes for N-Up
     Size aNupSize( maPController->getPrinter()->PixelToLogic(
