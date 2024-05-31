@@ -5575,7 +5575,8 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                 ScMatrixRef pResultMatrix = QueryMat( pQueryMatrix, aOptions);
                 if (nGlobalError != FormulaError::NONE || !pResultMatrix)
                 {
-                    SetError( FormulaError::IllegalParameter);
+                    PushIllegalParameter();
+                    return;
                 }
 
                 if (pSumExtraMatrix)
@@ -5592,6 +5593,25 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                                 if (pSumExtraMatrix->IsValue( nC, nR))
                                 {
                                     fVal = pSumExtraMatrix->GetDouble( nC, nR);
+                                    ++fCount;
+                                    fSum += fVal;
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (!bSumExtraRange)
+                {
+                    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+                    {
+                        for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+                        {
+                            if (pResultMatrix->IsValue( nCol, nRow) &&
+                                    pResultMatrix->GetDouble( nCol, nRow))
+                            {
+                                if (pQueryMatrix->IsValue( nCol, nRow))
+                                {
+                                    fVal = pQueryMatrix->GetDouble( nCol, nRow);
                                     ++fCount;
                                     fSum += fVal;
                                 }
