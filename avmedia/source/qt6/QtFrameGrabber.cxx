@@ -62,7 +62,7 @@ void QtFrameGrabber::onErrorOccured(QMediaPlayer::Error eError, const QString& r
 {
     std::lock_guard aLock(m_aMutex);
 
-    SAL_WARN("avmedia", "Media playback error occured when trying to grab frame: "
+    SAL_WARN("avmedia", "Media playback error occurred when trying to grab frame: "
                             << toOUString(rErrorString) << ", code: " << eError);
 
     m_bWaitingForFrame = false;
