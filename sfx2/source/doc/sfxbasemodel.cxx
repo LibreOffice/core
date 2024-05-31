@@ -198,7 +198,7 @@ void SAL_CALL SfxDocInfoListener_Impl::disposing( const lang::EventObject& )
 struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
 {
     // counter for SfxBaseModel instances created.
-    static sal_Int64                                           g_nInstanceCounter       ;
+    inline static std::atomic<sal_Int64>                       g_nInstanceCounter = 0   ;
     SfxObjectShellRef                                          m_pObjectShell           ;
     OUString                                                   m_sURL                   ;
     OUString                                                   m_sRuntimeUID            ;
@@ -256,10 +256,8 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             ,   m_bExternalTitle        ( false     )
             ,   m_bDisposing            ( false     )
     {
-        // increase global instance counter.
-        ++g_nInstanceCounter;
-        // set own Runtime UID
-        m_sRuntimeUID = OUString::number( g_nInstanceCounter );
+        // increase global instance counter, and set own Runtime UID
+        m_sRuntimeUID = OUString::number(++g_nInstanceCounter);
     }
 
     virtual ~IMPL_SfxBaseModel_DataContainer()
@@ -339,9 +337,6 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
         }
     }
 };
-
-// static member initialization.
-sal_Int64 IMPL_SfxBaseModel_DataContainer::g_nInstanceCounter = 0;
 
 namespace {
 
