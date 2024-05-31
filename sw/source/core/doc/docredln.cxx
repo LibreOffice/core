@@ -443,7 +443,11 @@ bool SwRedlineTable::Insert(SwRangeRedline*& p)
 
         p->CallDisplayFunc(nP);
         if (rv.second)
+        {
             CheckOverlapping(rv.first);
+            if (!mpMaxEndPos || (*(*rv.first)->End()) > *mpMaxEndPos->End())
+                mpMaxEndPos = *rv.first;
+        }
         return rv.second;
     }
     return InsertWithValidRanges( p );
@@ -482,7 +486,11 @@ bool SwRedlineTable::Insert(SwRangeRedline*& p, size_type& rP)
         rP = rv.first - begin();
         p->CallDisplayFunc(rP);
         if (rv.second)
+        {
             CheckOverlapping(rv.first);
+            if (!mpMaxEndPos || (*(*rv.first)->End()) > *mpMaxEndPos->End())
+                mpMaxEndPos = *rv.first;
+        }
         return rv.second;
     }
     return InsertWithValidRanges( p, &rP );
@@ -683,6 +691,8 @@ void SwRedlineTable::Remove( size_type nP )
     if( !nP && 1 == size() )
         pDoc = &maVector.front()->GetDoc();
 
+    if (mpMaxEndPos == maVector[nP])
+        mpMaxEndPos = nullptr;
     maVector.erase( maVector.begin() + nP );
 
     if( pDoc && !pDoc->IsInDtor() )
@@ -703,6 +713,7 @@ void SwRedlineTable::DeleteAndDestroyAll()
         delete pRedline;
     }
     m_bHasOverlappingElements = false;
+    mpMaxEndPos = nullptr;
 }
 
 void SwRedlineTable::DeleteAndDestroy(size_type const nP)
@@ -711,6 +722,8 @@ void SwRedlineTable::DeleteAndDestroy(size_type const nP)
     maVector.erase(maVector.begin() + nP);
     LOKRedlineNotification(RedlineNotification::Remove, pRedline);
     delete pRedline;
+    if (pRedline == mpMaxEndPos)
+        mpMaxEndPos = nullptr;
 }
 
 SwRedlineTable::size_type SwRedlineTable::FindNextOfSeqNo( size_type nSttPos ) const
@@ -829,6 +842,20 @@ bool lcl_CanCombineWithRange(SwRangeRedline* pOrigin, SwRangeRedline* pActual,
 
     return true;
 }
+}
+
+const SwPosition& SwRedlineTable::GetMaxEndPos() const
+{
+    assert(!empty() && "cannot call this when the redline table is empty");
+    if (mpMaxEndPos)
+        return *mpMaxEndPos->End();
+    for (const SwRangeRedline* i : maVector)
+    {
+        if (!mpMaxEndPos || *i->End() > *mpMaxEndPos->End())
+            mpMaxEndPos = i;
+    }
+    assert(mpMaxEndPos);
+    return *mpMaxEndPos->End();
 }
 
 void SwRedlineTable::getConnectedArea(size_type nPosOrigin, size_type& rPosStart,

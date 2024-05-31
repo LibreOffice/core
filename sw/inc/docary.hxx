@@ -29,6 +29,7 @@
 #include "tox.hxx"
 #include "numrule.hxx"
 #include "fldbas.hxx"
+#include "pam.hxx"
 
 class SwRangeRedline;
 class SwExtraRedline;
@@ -36,7 +37,6 @@ class SwOLENode;
 class SwTable;
 class SwTableLine;
 class SwTableBox;
-struct SwPosition;
 enum class RedlineType : sal_uInt16;
 
 /** provides some methods for generic operations on lists that contain SwFormat* subclasses. */
@@ -227,6 +227,7 @@ private:
     /// fast binary search, or if we have to fall back to a linear search
     bool m_bHasOverlappingElements = false;
     mutable sal_uInt32 m_nMaxMovedID = 1;   //every move-redline pair get a unique ID, so they can find each other.
+    mutable const SwRangeRedline* mpMaxEndPos = nullptr; // the redline with the maximum end pos
 public:
     ~SwRedlineTable();
     bool Contains(const SwRangeRedline* p) const { return maVector.find(p) != maVector.end(); }
@@ -236,6 +237,7 @@ public:
     bool Insert(SwRangeRedline*& p, size_type& rInsPos);
     bool InsertWithValidRanges(SwRangeRedline*& p, size_type* pInsPos = nullptr);
     bool HasOverlappingElements() const { return m_bHasOverlappingElements; }
+    const SwPosition& GetMaxEndPos() const;
 
     void Remove( size_type nPos );
     void Remove( const SwRangeRedline* p );
@@ -276,7 +278,7 @@ public:
     SwRangeRedline*             operator[]( size_type idx ) const { return maVector[idx]; }
     vector_type::const_iterator begin() const { return maVector.begin(); }
     vector_type::const_iterator end() const { return maVector.end(); }
-    void                        Resort() { maVector.Resort(); }
+    void                        Resort() { maVector.Resort(); mpMaxEndPos = nullptr; }
 
     // Notifies all LOK clients when redlines are added/modified/removed
     static void                 LOKRedlineNotification(RedlineNotification eType, SwRangeRedline* pRedline);

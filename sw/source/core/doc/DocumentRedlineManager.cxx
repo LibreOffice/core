@@ -2599,8 +2599,13 @@ void DocumentRedlineManager::CompressRedlines(size_t nStartIndex)
 
 bool DocumentRedlineManager::SplitRedline( const SwPaM& rRange )
 {
-    bool bChg = false;
+    if (maRedlineTable.empty())
+        return false;
     auto [pStt, pEnd] = rRange.StartEnd(); // SwPosition*
+    // tdf#144208 this happens a lot during load of some DOCX files.
+    if (*pEnd > maRedlineTable.GetMaxEndPos())
+        return false;
+    bool bChg = false;
     SwRedlineTable::size_type n = 0;
     //FIXME overlapping problem GetRedline( *pStt, &n );
     for ( ; n < maRedlineTable.size(); ++n)
