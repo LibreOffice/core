@@ -4824,6 +4824,11 @@ void DomainMapper_Impl::HandleLineBreakClear(sal_Int32 nClear)
     }
 }
 
+bool DomainMapper_Impl::HasLineBreakClear() const
+{
+    return m_oLineBreakClear.has_value();
+}
+
 void DomainMapper_Impl::HandleLineBreak(const PropertyMapPtr& pPropertyMap)
 {
     if (!m_oLineBreakClear.has_value())

@@ -411,6 +411,29 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlinedShapeThenSdt)
     CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"),
                          xPortion->getPropertyValue("TextPortionType").get<OUString>());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testClearingBreakSectEnd)
+{
+    // Given a file with a single-paragraph section, ends with a clearing break:
+    // When importing that document:
+    loadFromURL(u"clearing-break-sect-end.docx");
+
+    // Then make sure the clearing break is not lost before a cont sect break:
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xPortionEnumAccess(xParaEnum->nextElement(),
+                                                                     uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortionEnum = xPortionEnumAccess->createEnumeration();
+    uno::Reference<beans::XPropertySet> xPortion(xPortionEnum->nextElement(), uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: LineBreak
+    // - Actual  : Text
+    // i.e. the clearing break at sect end was lost, leading to text overlap.
+    CPPUNIT_ASSERT_EQUAL(OUString("LineBreak"),
+                         xPortion->getPropertyValue("TextPortionType").get<OUString>());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
