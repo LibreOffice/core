@@ -99,7 +99,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label3">
+              <object class="GtkLabel" id="spacetotextlabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="footnoteareapage|label3">Space to text</property>
@@ -190,7 +190,7 @@
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
             <child>
-              <object class="GtkLabel" id="label4">
+              <object class="GtkLabel" id="positionlabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="footnoteareapage|label4">_Position</property>
@@ -246,7 +246,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label8">
+              <object class="GtkLabel" id="lengthlabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="footnoteareapage|label8">_Length</property>
@@ -260,7 +260,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label9">
+              <object class="GtkLabel" id="spacingtocontentslabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="footnoteareapage|label9">_Spacing to footnote contents</property>

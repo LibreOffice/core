@@ -29,6 +29,7 @@
 #include <svx/pageitem.hxx>
 #include <svl/eitem.hxx>
 #include <editeng/ulspitem.hxx>
+#include <svl/grabbagitem.hxx>
 #include <uitool.hxx>
 #include <pagedesc.hxx>
 #include <pgfnote.hxx>
@@ -99,13 +100,17 @@ SwFootNotePage::SwFootNotePage(weld::Container* pPage, weld::DialogController* p
     , m_xMaxHeightPageBtn(m_xBuilder->weld_radio_button("maxheightpage"))
     , m_xMaxHeightBtn(m_xBuilder->weld_radio_button("maxheight"))
     , m_xMaxHeightEdit(m_xBuilder->weld_metric_spin_button("maxheightsb", FieldUnit::CM))
+    , m_xDistLabel(m_xBuilder->weld_label("spacetotextlabel"))
     , m_xDistEdit(m_xBuilder->weld_metric_spin_button("spacetotext", FieldUnit::CM))
+    , m_xLinePosLabel(m_xBuilder->weld_label("positionlabel"))
     , m_xLinePosBox(m_xBuilder->weld_combo_box("position"))
     , m_xLineTypeBox(new SvtLineListBox(m_xBuilder->weld_menu_button("style")))
     , m_xLineWidthEdit(m_xBuilder->weld_metric_spin_button("thickness", FieldUnit::POINT))
     , m_xLineColorBox(new ColorListBox(m_xBuilder->weld_menu_button("color"),
                 [this]{ return GetDialogController()->getDialog(); }))
+    , m_xLineLengthLabel(m_xBuilder->weld_label("lengthlabel"))
     , m_xLineLengthEdit(m_xBuilder->weld_metric_spin_button("length", FieldUnit::PERCENT))
+    , m_xLineDistLabel(m_xBuilder->weld_label("spacingtocontentslabel"))
     , m_xLineDistEdit(m_xBuilder->weld_metric_spin_button("spacingtocontents", FieldUnit::CM))
 {
     SetExchangeSupport();
@@ -116,6 +121,30 @@ SwFootNotePage::SwFootNotePage(weld::Container* pPage, weld::DialogController* p
     MeasurementSystem eSys = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
     tools::Long nHeightValue = MeasurementSystem::Metric != eSys ? 1440 : 1134;
     m_xMaxHeightEdit->set_value(m_xMaxHeightEdit->normalize(nHeightValue),FieldUnit::TWIP);
+
+    bool bContinuousEndnotes = false;
+    if (const SfxGrabBagItem* pGragbagItem = rSet.GetItemIfSet(SID_ATTR_CHAR_GRABBAG))
+    {
+        auto it = pGragbagItem->GetGrabBag().find("ContinuousEndnotes");
+        if (it != pGragbagItem->GetGrabBag().end())
+        {
+            it->second >>= bContinuousEndnotes;
+        }
+    }
+
+    if (bContinuousEndnotes)
+    {
+        // These are ignored in SwFootnoteContFrame::Format() and SwFootnoteContFrame::PaintLine(),
+        // hide them.
+        m_xDistLabel->set_visible(false);
+        m_xDistEdit->set_visible(false);
+        m_xLinePosLabel->set_visible(false);
+        m_xLinePosBox->set_visible(false);
+        m_xLineLengthLabel->set_visible(false);
+        m_xLineLengthEdit->set_visible(false);
+        m_xLineDistLabel->set_visible(false);
+        m_xLineDistEdit->set_visible(false);
+    }
 }
 
 SwFootNotePage::~SwFootNotePage()
