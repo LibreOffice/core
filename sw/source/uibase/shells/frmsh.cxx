@@ -879,7 +879,9 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                                 }
                             }
                         }
-                        OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(GetFrame()->GetFrame().GetFrameInterface()));
+                        OUString aModuleName;
+                        if (SfxViewFrame* pFrame = GetFrame())
+                            aModuleName = vcl::CommandInfoProvider::GetModuleIdentifier(pFrame->GetFrame().GetFrameInterface());
                         switch (nWhich)
                         {
                             case SID_OBJECT_ALIGN_UP :

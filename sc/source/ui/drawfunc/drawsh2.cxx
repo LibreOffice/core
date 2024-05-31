@@ -59,12 +59,14 @@ using namespace com::sun::star;
 
 ScDrawShell::ScDrawShell( ScViewData& rData ) :
     SfxShell(rData.GetViewShell()),
-    rViewData( rData ),
-    mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
-            [this] () { return this->GetSidebarContextName(); },
-            GetFrame()->GetFrame().GetController(),
-            vcl::EnumContext::Context::Cell))
+    rViewData( rData )
 {
+    SfxViewFrame* pFrame = GetFrame();
+    assert(pFrame);
+    mpSelectionChangeHandler = new svx::sidebar::SelectionChangeHandler(
+            [this] () { return this->GetSidebarContextName(); },
+            pFrame->GetFrame().GetController(),
+            vcl::EnumContext::Context::Cell);
     SetPool( &rViewData.GetScDrawView()->GetModel().GetItemPool() );
     SfxUndoManager* pMgr = rViewData.GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
@@ -548,10 +550,13 @@ void ScDrawShell::GetDrawAttrStateForIFBX( SfxItemSet& rSet )
 
 void ScDrawShell::Activate (const bool)
 {
-    ContextChangeEventMultiplexer::NotifyContextChange(
-        GetFrame()->GetFrame().GetController(),
-        vcl::EnumContext::GetContextEnum(
-            GetSidebarContextName()));
+    if (SfxViewFrame* pFrame = GetFrame())
+    {
+        ContextChangeEventMultiplexer::NotifyContextChange(
+            pFrame->GetFrame().GetController(),
+            vcl::EnumContext::GetContextEnum(
+                GetSidebarContextName()));
+    }
 }
 
 const OUString & ScDrawShell::GetSidebarContextName()

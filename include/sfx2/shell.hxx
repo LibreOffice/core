@@ -367,7 +367,7 @@ public:
         The returned pointer is only valid in the immediate context of the method
         call.
         */
-    SfxDispatcher*              GetDispatcher() const;
+    SAL_RET_MAYBENULL SfxDispatcher*              GetDispatcher() const;
 
     /**
         This method returns a pointer to the <SfxViewFrame> to which this SfxShell
@@ -388,7 +388,7 @@ public:
 
         <SfxViewShell::GetViewFrame()const>
         */
-    SfxViewFrame*               GetFrame() const;
+    SAL_RET_MAYBENULL SfxViewFrame*               GetFrame() const;
 
     virtual bool                HasUIFeature(SfxShellFeature nFeature) const;
     void                        UIFeatureChanged();

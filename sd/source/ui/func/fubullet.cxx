@@ -189,7 +189,12 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
             aSet.Put( *pFontItem );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        auto xFrame = mpViewShell ? mpViewShell->GetFrame()->GetFrame().GetFrameInterface() : nullptr;
+        css::uno::Reference<css::frame::XFrame> xFrame;
+        if (mpViewShell)
+        {
+            if (SfxViewFrame* pFrame = mpViewShell->GetFrame())
+                xFrame = pFrame->GetFrame().GetFrameInterface();
+        }
         VclPtr<SfxAbstractDialog> pDlg( pFact->CreateCharMapDialog(mpView->GetViewShell()->GetFrameWeld(), aSet,
             xFrame) );
 
