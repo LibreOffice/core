@@ -191,7 +191,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                            {
                                try
                                {
-                                   aCaller = xProps->getPropertyValue("Name");
+                                   aCaller = xProps->getPropertyValue(u"Name"_ustr);
                                }
                                catch( uno::Exception& ) {}
                            }

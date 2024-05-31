@@ -92,7 +92,7 @@ void ScDrawShell::InitInterface_Impl()
                                             SfxVisibilityFlags::Standard | SfxVisibilityFlags::Server,
                                             ToolbarId::Draw_Objectbar);
 
-    GetStaticInterface()->RegisterPopupMenu("draw");
+    GetStaticInterface()->RegisterPopupMenu(u"draw"_ustr);
 
     GetStaticInterface()->RegisterChildWindow(SvxFontWorkChildWindow::GetChildWindowId());
 }

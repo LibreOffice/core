@@ -33,14 +33,14 @@ void ScOleObjectShell::InitInterface_Impl()
                                             SfxVisibilityFlags::Standard | SfxVisibilityFlags::Server,
                                             ToolbarId::Draw_Objectbar);
 
-    GetStaticInterface()->RegisterPopupMenu("oleobject");
+    GetStaticInterface()->RegisterPopupMenu(u"oleobject"_ustr);
 }
 
 
 ScOleObjectShell::ScOleObjectShell(ScViewData& rData) :
     ScDrawShell(rData)
 {
-    SetName("OleObject");
+    SetName(u"OleObject"_ustr);
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::OLE));
 }
 

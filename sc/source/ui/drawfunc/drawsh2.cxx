@@ -72,7 +72,7 @@ ScDrawShell::ScDrawShell( ScViewData& rData ) :
     {
         pMgr->SetMaxUndoActionCount( 0 );
     }
-    SetName("Drawing");
+    SetName(u"Drawing"_ustr);
 
     mpSelectionChangeHandler->Connect();
 }
@@ -341,12 +341,12 @@ static void setupFillColorForChart(const SfxViewShell* pShell, SfxItemSet& rSet)
     if (!xInfo.is())
         return;
 
-    if (xInfo->hasPropertyByName("FillColor"))
+    if (xInfo->hasPropertyByName(u"FillColor"_ustr))
     {
         sal_uInt32 nFillColor = 0;
-        xPropSet->getPropertyValue("FillColor") >>= nFillColor;
+        xPropSet->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
 
-        XFillColorItem aFillColorItem("", Color(ColorTransparency, nFillColor));
+        XFillColorItem aFillColorItem(u""_ustr, Color(ColorTransparency, nFillColor));
         rSet.Put(aFillColorItem);
 
         if (comphelper::LibreOfficeKit::isActive())
@@ -354,11 +354,11 @@ static void setupFillColorForChart(const SfxViewShell* pShell, SfxItemSet& rSet)
                     (".uno:FillColor=" + OString::number(nFillColor)));
     }
 
-    if (!(comphelper::LibreOfficeKit::isActive() && xInfo->hasPropertyByName("FillGradientName")))
+    if (!(comphelper::LibreOfficeKit::isActive() && xInfo->hasPropertyByName(u"FillGradientName"_ustr)))
         return;
 
     OUString aGradientName;
-    xPropSet->getPropertyValue("FillGradientName") >>= aGradientName;
+    xPropSet->getPropertyValue(u"FillGradientName"_ustr) >>= aGradientName;
 
     ::css::uno::Reference< ::css::frame::XController > xChartController = xChart->getCurrentController();
     if( !xChartController.is() )
@@ -370,7 +370,7 @@ static void setupFillColorForChart(const SfxViewShell* pShell, SfxItemSet& rSet)
         return;
 
     css::uno::Reference<css::container::XNameAccess> xNameAccess(
-        xFact->createInstance("com.sun.star.drawing.GradientTable"), css::uno::UNO_QUERY);
+        xFact->createInstance(u"com.sun.star.drawing.GradientTable"_ustr), css::uno::UNO_QUERY);
 
     if (xNameAccess.is() && xNameAccess->hasByName(aGradientName))
     {

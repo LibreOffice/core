@@ -89,7 +89,7 @@ void ScDrawTextObjectBar::InitInterface_Impl()
                                             SfxVisibilityFlags::Standard | SfxVisibilityFlags::Server,
                                             ToolbarId::Text_Toolbox_Sc);
 
-    GetStaticInterface()->RegisterPopupMenu("drawtext");
+    GetStaticInterface()->RegisterPopupMenu(u"drawtext"_ustr);
 
     GetStaticInterface()->RegisterChildWindow(ScGetFontWorkId());
 }
@@ -124,7 +124,7 @@ ScDrawTextObjectBar::ScDrawTextObjectBar(ScViewData& rData) :
         pMgr->SetMaxUndoActionCount( 0 );
     }
 
-    SetName("DrawText");
+    SetName(u"DrawText"_ustr);
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::DrawText));
 }
 

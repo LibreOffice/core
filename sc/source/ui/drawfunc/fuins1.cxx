@@ -256,7 +256,7 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
         *rData.GetDocument().GetDrawLayer(),
         tools::Rectangle(aInsertPos, aSize));
 
-    pObj->setURL( realURL, ""/*TODO?*/ );
+    pObj->setURL( realURL, u""_ustr/*TODO?*/ );
     pView->InsertObjectAtView( pObj.get(), *pPV, bApi ? SdrInsertFlags::DONTMARK : SdrInsertFlags::NONE );
 }
 #endif
@@ -433,7 +433,7 @@ FuInsertMedia::FuInsertMedia( ScTabViewShell&   rViewSh,
                 avmedia::MediaWindow::dispatchInsertAVMedia(xDispatchProvider, aSize, aURL, bLink);
             }));
 
-        const bool bIsMediaURL = ::avmedia::MediaWindow::isMediaURL(aURL, ""/*TODO?*/, true, xPlayerListener);
+        const bool bIsMediaURL = ::avmedia::MediaWindow::isMediaURL(aURL, u""_ustr/*TODO?*/, true, xPlayerListener);
 
         if( pWin )
             pWin->LeaveWait();

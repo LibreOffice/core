@@ -46,7 +46,7 @@ bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
         mrViewData.GetSfxDocShell(), true));
     if (nSlot == SID_CHAR_DLG_EFFECT)
     {
-        pDlg->SetCurPageId("fonteffects");
+        pDlg->SetCurPageId(u"fonteffects"_ustr);
     }
     bool bRet = ( pDlg->Execute() == RET_OK );
 

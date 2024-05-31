@@ -37,14 +37,14 @@ void ScDrawFormShell::InitInterface_Impl()
                                             SfxVisibilityFlags::Standard | SfxVisibilityFlags::Server,
                                             ToolbarId::Objectbar_Format);
 
-    GetStaticInterface()->RegisterPopupMenu("form");
+    GetStaticInterface()->RegisterPopupMenu(u"form"_ustr);
 }
 
 
 ScDrawFormShell::ScDrawFormShell(ScViewData& rData) :
     ScDrawShell(rData)
 {
-    SetName("DrawForm");
+    SetName(u"DrawForm"_ustr);
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Form));
 }
 

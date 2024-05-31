@@ -199,7 +199,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         case KEY_ESCAPE:
             if ( rViewShell.IsDrawTextShell() || aSfxRequest.GetSlot() == SID_DRAW_NOTEEDIT )
             {
-                collectUIInformation("CLOSE");
+                collectUIInformation(u"CLOSE"_ustr);
                 // if object selected -> normal draw-shell, else turn off drawing
                 rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT | SfxCallMode::RECORD);
                 bReturn = true;

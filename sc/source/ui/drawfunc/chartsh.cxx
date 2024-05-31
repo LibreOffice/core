@@ -61,7 +61,7 @@ void ScChartShell::InitInterface_Impl()
                                             SfxVisibilityFlags::Standard | SfxVisibilityFlags::Server,
                                             ToolbarId::Draw_Objectbar);
 
-    GetStaticInterface()->RegisterPopupMenu("oleobject");
+    GetStaticInterface()->RegisterPopupMenu(u"oleobject"_ustr);
 }
 
 void ScChartShell::Activate(bool bMDI)
@@ -97,7 +97,7 @@ void ScChartShell::Deactivate(bool bMDI)
 ScChartShell::ScChartShell(ScViewData& rData) :
     ScDrawShell(rData)
 {
-    SetName( "ChartObject" );
+    SetName( u"ChartObject"_ustr );
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Chart));
 }
 

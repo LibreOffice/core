@@ -46,14 +46,14 @@ void ScGraphicShell::InitInterface_Impl()
                                             SfxVisibilityFlags::Standard | SfxVisibilityFlags::Server,
                                             ToolbarId::Graphic_Objectbar);
 
-    GetStaticInterface()->RegisterPopupMenu("graphic");
+    GetStaticInterface()->RegisterPopupMenu(u"graphic"_ustr);
 }
 
 
 ScGraphicShell::ScGraphicShell(ScViewData& rData) :
     ScDrawShell(rData)
 {
-    SetName("GraphicObject");
+    SetName(u"GraphicObject"_ustr);
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Graphic));
 }
 
@@ -284,12 +284,12 @@ void ScGraphicShell::ExecuteSaveGraphic( SAL_UNUSED_PARAMETER SfxRequest& /*rReq
 
             if (nState == RET_YES)
             {
-                GraphicHelper::ExportGraphic(pWinFrame, pObj->GetTransformedGraphic(), "");
+                GraphicHelper::ExportGraphic(pWinFrame, pObj->GetTransformedGraphic(), u""_ustr);
             }
             else if (nState == RET_NO)
             {
                 const GraphicObject& aGraphicObject(pObj->GetGraphicObject());
-                GraphicHelper::ExportGraphic(pWinFrame, aGraphicObject.GetGraphic(), "");
+                GraphicHelper::ExportGraphic(pWinFrame, aGraphicObject.GetGraphic(), u""_ustr);
             }
         }
     }

@@ -81,7 +81,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
             uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
             uno::Reference< beans::XPropertySetInfo > xInfo = xPropSet->getPropertySetInfo();
 
-            OUString sPropButtonType( "ButtonType" );
+            OUString sPropButtonType( u"ButtonType"_ustr );
 
             if(xInfo->hasPropertyByName( sPropButtonType ))
             {
@@ -91,7 +91,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
                 {
                     OUString sTmp;
                     // Label
-                    OUString sPropLabel( "Label" );
+                    OUString sPropLabel( u"Label"_ustr );
                     if(xInfo->hasPropertyByName( sPropLabel ))
                     {
                         aAny = xPropSet->getPropertyValue( sPropLabel );
@@ -101,7 +101,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
                         }
                     }
                     // URL
-                    OUString sPropTargetURL( "TargetURL" );
+                    OUString sPropTargetURL( u"TargetURL"_ustr );
                     if(xInfo->hasPropertyByName( sPropTargetURL ))
                     {
                         aAny = xPropSet->getPropertyValue( sPropTargetURL );
@@ -111,7 +111,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
                         }
                     }
                     // Target
-                    OUString sPropTargetFrame( "TargetFrame" );
+                    OUString sPropTargetFrame( u"TargetFrame"_ustr );
                     if(xInfo->hasPropertyByName( sPropTargetFrame ))
                     {
                         aAny = xPropSet->getPropertyValue( sPropTargetFrame );
@@ -168,15 +168,15 @@ void ScDrawShell::ExecuteHLink( const SfxRequest& rReq )
                                 uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
                                 uno::Reference< beans::XPropertySetInfo > xInfo = xPropSet->getPropertySetInfo();
 
-                                OUString sPropTargetURL( "TargetURL" );
+                                OUString sPropTargetURL( u"TargetURL"_ustr );
 
                                 // Is it possible to set a URL in the object?
                                 if (xInfo->hasPropertyByName( sPropTargetURL ))
                                 {
 
-                                    OUString sPropButtonType( "ButtonType");
-                                    OUString sPropTargetFrame( "TargetFrame" );
-                                    OUString sPropLabel( "Label" );
+                                    OUString sPropButtonType( u"ButtonType"_ustr);
+                                    OUString sPropTargetFrame( u"TargetFrame"_ustr );
+                                    OUString sPropLabel( u"Label"_ustr );
 
                                     if ( xInfo->hasPropertyByName( sPropLabel ) )
                                     {

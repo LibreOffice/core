@@ -185,16 +185,16 @@ void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewDa
 
     uno::Sequence< beans::PropertyValue > aArgs{
         beans::PropertyValue(
-            "CellRangeRepresentation", -1,
+            u"CellRangeRepresentation"_ustr, -1,
             uno::Any( aRangeString ), beans::PropertyState_DIRECT_VALUE ),
         beans::PropertyValue(
-            "HasCategories", -1,
+            u"HasCategories"_ustr, -1,
             uno::Any( bHasCategories ), beans::PropertyState_DIRECT_VALUE ),
         beans::PropertyValue(
-            "FirstCellAsLabel", -1,
+            u"FirstCellAsLabel"_ustr, -1,
             uno::Any( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE ),
         beans::PropertyValue(
-            "DataRowSource", -1,
+            u"DataRowSource"_ustr, -1,
             uno::Any( eDataRowSource ), beans::PropertyState_DIRECT_VALUE )
     };
 
@@ -638,7 +638,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
             {
                 css::uno::Reference<css::ui::dialogs::XAsynchronousExecutableDialog> xDialog(
                     xMCF->createInstanceWithContext(
-                        "com.sun.star.comp.chart2.WizardDialog"
+                        u"com.sun.star.comp.chart2.WizardDialog"_ustr
                         , xContext), uno::UNO_QUERY);
                 uno::Reference< lang::XInitialization > xInit( xDialog, uno::UNO_QUERY );
                 if( xChartModel.is() && xInit.is() )
@@ -660,7 +660,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
                         {
                             //get dialog size:
                             awt::Size aDialogAWTSize;
-                            if( xDialogProps->getPropertyValue("Size")
+                            if( xDialogProps->getPropertyValue(u"Size"_ustr)
                                 >>= aDialogAWTSize )
                             {
                                 Size aDialogSize( aDialogAWTSize.Width, aDialogAWTSize.Height );
@@ -668,12 +668,12 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
                                 {
                                     //calculate and set new position
                                     Point aDialogPos = rViewShell.GetChartDialogPos( aDialogSize, aRect );
-                                    xDialogProps->setPropertyValue("Position",
+                                    xDialogProps->setPropertyValue(u"Position"_ustr,
                                         uno::Any( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
                                 }
                             }
                             //tell the dialog to unlock controller
-                            xDialogProps->setPropertyValue("UnlockControllersOnExecute",
+                            xDialogProps->setPropertyValue(u"UnlockControllersOnExecute"_ustr,
                                         uno::Any( true ) );
 
                         }

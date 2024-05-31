@@ -39,7 +39,7 @@ void ScMediaShell::InitInterface_Impl()
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible,
                                             ToolbarId::Media_Objectbar);
 
-    GetStaticInterface()->RegisterPopupMenu("media");
+    GetStaticInterface()->RegisterPopupMenu(u"media"_ustr);
 }
 
 ScMediaShell::ScMediaShell(ScViewData& rData)
