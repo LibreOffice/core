@@ -50,7 +50,12 @@
 #include <tools/UnitConversion.hxx>
 #include <comphelper/lok.hxx>
 #include "rlrcitem.hxx"
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <sfx2/viewfrm.hxx>
 #include <memory>
+
+using namespace css;
 
 #define CTRL_ITEM_COUNT 14
 #define GAP 10
@@ -193,7 +198,6 @@ SvxRuler::SvxRuler(
     bActive(true),
     mbCoarseSnapping(false),
     mbSnapping(true)
-
 {
     /* Constructor; Initialize data buffer; controller items are created */
 
@@ -279,7 +283,6 @@ SvxRuler::SvxRuler(
     ruler_tab_svx.DPIScaleFactor = pParent->GetDPIScaleFactor();
     ruler_tab_svx.height *= ruler_tab_svx.DPIScaleFactor;
     ruler_tab_svx.width  *= ruler_tab_svx.DPIScaleFactor;
-
 }
 
 SvxRuler::~SvxRuler()
@@ -1147,12 +1150,67 @@ void SvxRuler::SetNullOffsetLogic(tools::Long lVal) // Setting of the logic Null
 
 void SvxRuler::CreateJsonNotification(tools::JsonWriter& rJsonWriter)
 {
-    rJsonWriter.put("margin1", convertTwipToMm100(GetMargin1()));
-    rJsonWriter.put("margin2", convertTwipToMm100(GetMargin2()));
-    rJsonWriter.put("leftOffset", convertTwipToMm100(GetNullOffset()));
-    rJsonWriter.put("pageOffset", convertTwipToMm100(GetPageOffset()));
+    tools::Long nMargin1 = 0;
+    tools::Long nMargin2 = 0;
+    tools::Long nNullOffset = 0;
+    tools::Long nPageOffset = 0;
+    tools::Long nPageWidthHeight = 0;
 
-    rJsonWriter.put("pageWidth", convertTwipToMm100(GetPageWidth()));
+    bool bWriter = false;
+
+    // Determine if we are a Ruler for Writer or not
+    if (SfxViewFrame* pFrame = SfxViewFrame::Current())
+    {
+        uno::Reference<frame::XFrame> xFrame = pFrame->GetFrame().GetFrameInterface();
+        uno::Reference<frame::XModel> xModel = xFrame->getController()->getModel();
+        uno::Reference<lang::XServiceInfo> xSI(xModel, uno::UNO_QUERY);
+        if (xSI.is())
+        {
+            bWriter = xSI->supportsService("com.sun.star.text.TextDocument")
+            || xSI->supportsService("com.sun.star.text.WebDocument")
+                || xSI->supportsService("com.sun.star.text.GlobalDocument");
+        }
+    }
+
+    if (bWriter)
+    {
+        // In Writer the ruler values need to be converted first from pixel to twips (default logical unit) and then to 100thmm
+        nMargin1 = convertTwipToMm100(ConvertPosLogic(GetMargin1()));
+        nMargin2 = convertTwipToMm100(ConvertPosLogic(GetMargin2()));
+        nNullOffset = convertTwipToMm100(ConvertPosLogic(GetNullOffset()));
+        nPageOffset = convertTwipToMm100(ConvertPosLogic(GetPageOffset()));
+        nPageWidthHeight = convertTwipToMm100(GetPageWidth());
+    }
+    else
+    {
+        // Only convert from pixel to default logical unit, which is 100thmm for Impress
+        nMargin1 = ConvertPosLogic(GetMargin1());
+        nMargin2 = ConvertPosLogic(GetMargin2());
+        nPageOffset = ConvertPosLogic(GetPageOffset());
+
+        // In LOKit API we expect the ruler 0,0 coordinate is where the document starts.
+        // In Impress and Draw the ruler 0,0 is where the canvas starts, not where the document starts.
+        // The margin to the document is 1 document width (on the left and right) and 0.5 document height
+        // (on the top and bottom).
+        // So the canvas width = 3 * document width, canvas height = 2 * document height
+        if (isHorizontal())
+        {
+            nPageWidthHeight = GetPageWidth() / 3;
+            nNullOffset = ConvertPosLogic(GetNullOffset()) - nPageWidthHeight;
+        }
+        else
+        {
+            nPageWidthHeight = GetPageWidth() / 2;
+            nNullOffset = ConvertPosLogic(GetNullOffset()) - (nPageWidthHeight / 2);
+        }
+    }
+
+    rJsonWriter.put("margin1", nMargin1);
+    rJsonWriter.put("margin2", nMargin2);
+    rJsonWriter.put("leftOffset", nNullOffset);
+    rJsonWriter.put("pageOffset", nPageOffset);
+    rJsonWriter.put("pageWidth", nPageWidthHeight);
+
     {
         auto tabsNode = rJsonWriter.startNode("tabs");
 
