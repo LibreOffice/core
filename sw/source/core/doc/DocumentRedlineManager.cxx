@@ -2823,9 +2823,9 @@ SwRedlineTable::size_type DocumentRedlineManager::GetRedlinePos( const SwNode& r
     }
     else
     {
-        for( SwRedlineTable::size_type n = 0; n < maRedlineTable.size() ; ++n )
+        for( auto it = maRedlineTable.begin(), itEnd = maRedlineTable.end(); it != itEnd; ++it )
         {
-            const SwRangeRedline* pTmp = maRedlineTable[ n ];
+            const SwRangeRedline* pTmp = *it;
             SwNodeOffset nPt = pTmp->GetPoint()->GetNodeIndex(),
                   nMk = pTmp->GetMark()->GetNodeIndex();
             if( nPt < nMk )
@@ -2833,7 +2833,7 @@ SwRedlineTable::size_type DocumentRedlineManager::GetRedlinePos( const SwNode& r
 
             if( ( RedlineType::Any == nType || nType == pTmp->GetType()) &&
                 nMk <= nNdIdx && nNdIdx <= nPt )
-                return n;
+                return std::distance(maRedlineTable.begin(), it);
 
             if( nMk > nNdIdx )
                 break;
