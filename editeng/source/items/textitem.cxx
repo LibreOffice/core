@@ -445,9 +445,61 @@ void SvxFontItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // class SvxPostureItem --------------------------------------------------
 
+typedef std::unordered_map<size_t, const SfxPoolItem*> SvxPostureItemMap;
+
+namespace
+{
+    class SvxPostureItemInstanceManager : public ItemInstanceManager
+    {
+        SvxPostureItemMap  maRegistered;
+
+    public:
+        SvxPostureItemInstanceManager()
+        : ItemInstanceManager(typeid(SvxPostureItem).hash_code())
+        {
+        }
+
+    private:
+        static size_t hashCode(const SfxPoolItem&);
+
+        // standard interface, accessed exclusively
+        // by implCreateItemEntry/implCleanupItemEntry
+        virtual const SfxPoolItem* find(const SfxPoolItem&) const override;
+        virtual void add(const SfxPoolItem&) override;
+        virtual void remove(const SfxPoolItem&) override;
+    };
+
+    size_t SvxPostureItemInstanceManager::hashCode(const SfxPoolItem& rItem)
+    {
+        auto const & rPostureItem = static_cast<const SvxPostureItem&>(rItem);
+        std::size_t seed(0);
+        o3tl::hash_combine(seed, rPostureItem.Which());
+        o3tl::hash_combine(seed, rPostureItem. GetEnumValue());
+        return seed;
+    }
+
+    const SfxPoolItem* SvxPostureItemInstanceManager::find(const SfxPoolItem& rItem) const
+    {
+        auto aHit(maRegistered.find(hashCode(rItem)));
+        if (aHit != maRegistered.end())
+            return aHit->second;
+        return nullptr;
+    }
+
+    void SvxPostureItemInstanceManager::add(const SfxPoolItem& rItem)
+    {
+        maRegistered.insert({hashCode(rItem), &rItem});
+    }
+
+    void SvxPostureItemInstanceManager::remove(const SfxPoolItem& rItem)
+    {
+        maRegistered.erase(hashCode(rItem));
+    }
+}
+
 ItemInstanceManager* SvxPostureItem::getItemInstanceManager() const
 {
-    static DefaultItemInstanceManager aInstanceManager(typeid(SvxPostureItem).hash_code());
+    static SvxPostureItemInstanceManager aInstanceManager;
     return &aInstanceManager;
 }
 
@@ -697,9 +749,63 @@ void SvxWeightItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // class SvxFontHeightItem -----------------------------------------------
 
+typedef std::unordered_map<size_t, const SfxPoolItem*> SvxFontHeightItemMap;
+
+namespace
+{
+    class SvxFontHeightItemInstanceManager : public ItemInstanceManager
+    {
+        SvxFontHeightItemMap  maRegistered;
+
+    public:
+        SvxFontHeightItemInstanceManager()
+        : ItemInstanceManager(typeid(SvxFontHeightItem).hash_code())
+        {
+        }
+
+    private:
+        static size_t hashCode(const SfxPoolItem&);
+
+        // standard interface, accessed exclusively
+        // by implCreateItemEntry/implCleanupItemEntry
+        virtual const SfxPoolItem* find(const SfxPoolItem&) const override;
+        virtual void add(const SfxPoolItem&) override;
+        virtual void remove(const SfxPoolItem&) override;
+    };
+
+    size_t SvxFontHeightItemInstanceManager::hashCode(const SfxPoolItem& rItem)
+    {
+        auto const & rFontHeightItem = static_cast<const SvxFontHeightItem&>(rItem);
+        std::size_t seed(0);
+        o3tl::hash_combine(seed, rFontHeightItem.Which());
+        o3tl::hash_combine(seed, rFontHeightItem.GetHeight());
+        o3tl::hash_combine(seed, rFontHeightItem.GetProp());
+        o3tl::hash_combine(seed, rFontHeightItem.GetPropUnit());
+        return seed;
+    }
+
+    const SfxPoolItem* SvxFontHeightItemInstanceManager::find(const SfxPoolItem& rItem) const
+    {
+        auto aHit(maRegistered.find(hashCode(rItem)));
+        if (aHit != maRegistered.end())
+            return aHit->second;
+        return nullptr;
+    }
+
+    void SvxFontHeightItemInstanceManager::add(const SfxPoolItem& rItem)
+    {
+        maRegistered.insert({hashCode(rItem), &rItem});
+    }
+
+    void SvxFontHeightItemInstanceManager::remove(const SfxPoolItem& rItem)
+    {
+        maRegistered.erase(hashCode(rItem));
+    }
+}
+
 ItemInstanceManager* SvxFontHeightItem::getItemInstanceManager() const
 {
-    static DefaultItemInstanceManager aInstanceManager(typeid(SvxFontHeightItem).hash_code());
+    static SvxFontHeightItemInstanceManager aInstanceManager;
     return &aInstanceManager;
 }
 
@@ -2968,6 +3074,65 @@ void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian, SvxFontItem& rCo
     }
 }
 
+// class SvxRsidItem -----------------------------------------------------
+
+typedef std::unordered_map<size_t, const SfxPoolItem*> SvxRsidItemMap;
+
+namespace
+{
+    class SvxRsidItemInstanceManager : public ItemInstanceManager
+    {
+        SvxRsidItemMap  maRegistered;
+
+    public:
+        SvxRsidItemInstanceManager()
+        : ItemInstanceManager(typeid(SvxRsidItem).hash_code())
+        {
+        }
+
+    private:
+        static size_t hashCode(const SfxPoolItem&);
+
+        // standard interface, accessed exclusively
+        // by implCreateItemEntry/implCleanupItemEntry
+        virtual const SfxPoolItem* find(const SfxPoolItem&) const override;
+        virtual void add(const SfxPoolItem&) override;
+        virtual void remove(const SfxPoolItem&) override;
+    };
+
+    size_t SvxRsidItemInstanceManager::hashCode(const SfxPoolItem& rItem)
+    {
+        auto const & rRsidItem = static_cast<const SvxRsidItem&>(rItem);
+        std::size_t seed(0);
+        o3tl::hash_combine(seed, rRsidItem.Which());
+        o3tl::hash_combine(seed, rRsidItem.GetValue());
+        return seed;
+    }
+
+    const SfxPoolItem* SvxRsidItemInstanceManager::find(const SfxPoolItem& rItem) const
+    {
+        auto aHit(maRegistered.find(hashCode(rItem)));
+        if (aHit != maRegistered.end())
+            return aHit->second;
+        return nullptr;
+    }
+
+    void SvxRsidItemInstanceManager::add(const SfxPoolItem& rItem)
+    {
+        maRegistered.insert({hashCode(rItem), &rItem});
+    }
+
+    void SvxRsidItemInstanceManager::remove(const SfxPoolItem& rItem)
+    {
+        maRegistered.erase(hashCode(rItem));
+    }
+}
+
+ItemInstanceManager* SvxRsidItem::getItemInstanceManager() const
+{
+    static SvxRsidItemInstanceManager aInstanceManager;
+    return &aInstanceManager;
+}
 
 bool SvxRsidItem::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {

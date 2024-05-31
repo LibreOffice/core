@@ -32,6 +32,9 @@ public:
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+
+protected:
+    virtual ItemInstanceManager* getItemInstanceManager() const override;
 };
 
 #endif // INCLUDED_EDITENG_RSIDITEM_HXX
