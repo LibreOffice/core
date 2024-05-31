@@ -82,6 +82,7 @@ private:
     std::unique_ptr<weld::ComboBox>      mxLbBaseItem;
     std::unique_ptr<weld::Button>        mxBtnOk;
     std::unique_ptr<weld::Button>        mxBtnCancel;
+    std::unique_ptr<weld::Expander>      mxExpander;
 
     NameMapType          maBaseFieldNameMap; // cache for base field display -> original name.
     NameMapType          maBaseItemNameMap;  // cache for base item display -> original name.

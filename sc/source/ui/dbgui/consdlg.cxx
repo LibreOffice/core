@@ -88,6 +88,7 @@ ScConsolidateDlg::ScConsolidateDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::W
     , m_xLbDestArea(m_xBuilder->weld_combo_box("lbdestarea"))
     , m_xEdDestArea(new formula::RefEdit(m_xBuilder->weld_entry("eddestarea")))
     , m_xRbDestArea(new formula::RefButton(m_xBuilder->weld_button("rbdestarea")))
+    , m_xExpander(m_xBuilder->weld_expander("more"))
     , m_xBtnByRow(m_xBuilder->weld_check_button("byrow"))
     , m_xBtnByCol(m_xBuilder->weld_check_button("bycol"))
     , m_xBtnRefs(m_xBuilder->weld_check_button("refs"))

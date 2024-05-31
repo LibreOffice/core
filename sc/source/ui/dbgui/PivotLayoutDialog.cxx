@@ -110,6 +110,8 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     , mxSourceLabel(mxSourceFrame->weld_label_widget())
     , mxDestFrame(m_xBuilder->weld_frame("frame1"))
     , mxDestLabel(mxDestFrame->weld_label_widget())
+    , mxOptions(m_xBuilder->weld_expander("options"))
+    , mxMore(m_xBuilder->weld_expander("more"))
 {
     // Source UI
     Link<weld::Toggleable&,void> aLink2 = LINK(this, ScPivotLayoutDialog, ToggleSource);
