@@ -1233,6 +1233,9 @@ public:
     /// Handles <w:br w:clear="...">.
     void HandleLineBreakClear(sal_Int32 nClear);
 
+    /// Checks if we have a pending <w:br w:clear="...">.
+    bool HasLineBreakClear() const;
+
     /// Handles <w:br>.
     void HandleLineBreak(const PropertyMapPtr& pPropertyMap);
 
