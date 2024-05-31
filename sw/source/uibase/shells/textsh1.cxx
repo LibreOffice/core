@@ -1049,11 +1049,16 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 for (sal_uInt16 i = nBegin; i <= nEnd; ++i)
                     aAttribs.insert( i );
             }
-            rWrtSh.ResetAttr( aAttribs );
 
             // also clear the direct formatting flag inside SwTableBox(es)
             if (SwFEShell* pFEShell = GetView().GetDocShell()->GetFEShell())
                 pFEShell->UpdateTableStyleFormatting(nullptr, true);
+
+            // tdf#160801 fix crash by delaying resetting of attributes
+            // Calling SwWrtShell::ResetAttr() will sometimes delete the
+            // current SwTextShell instance so call it after clearing the
+            // direct formatting flag.
+            rWrtSh.ResetAttr( aAttribs );
 
             rReq.Done();
             break;
