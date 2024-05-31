@@ -830,8 +830,9 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         PropertySet(xShape).setAnyProperty(PROP_TextVerticalAdjust, Any(eTextVerticalAdjust));
 
         // tdf#97618
-        if(!maTypeModel.maWrapStyle.isEmpty())
-            PropertySet(xShape).setAnyProperty(PROP_TextWordWrap, Any(maTypeModel.maWrapStyle == "square"));
+        const bool bWrap = maTypeModel.maWrapStyle != "none";
+        PropertySet(xShape).setAnyProperty(PROP_TextWordWrap, Any(bWrap));
+
 
         // tdf#123626
         if (!maShapeModel.maHyperlink.isEmpty())
