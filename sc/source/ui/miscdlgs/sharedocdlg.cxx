@@ -50,15 +50,15 @@ IMPL_LINK(ScShareDocumentDlg, SizeAllocated, const Size&, rSize, void)
 
 
 ScShareDocumentDlg::ScShareDocumentDlg(weld::Window* pParent, const ScViewData* pViewData)
-    : GenericDialogController(pParent, "modules/scalc/ui/sharedocumentdlg.ui",
-                              "ShareDocumentDialog")
+    : GenericDialogController(pParent, u"modules/scalc/ui/sharedocumentdlg.ui"_ustr,
+                              u"ShareDocumentDialog"_ustr)
     , m_aStrNoUserData(ScResId(STR_NO_USER_DATA_AVAILABLE))
     , m_aStrUnknownUser(ScResId(STR_UNKNOWN_USER_CONFLICT))
     , m_aStrExclusiveAccess(ScResId(STR_EXCLUSIVE_ACCESS))
     , mpDocShell(nullptr)
-    , m_xCbShare(m_xBuilder->weld_check_button("share"))
-    , m_xFtWarning(m_xBuilder->weld_label("warning"))
-    , m_xLbUsers(m_xBuilder->weld_tree_view("users"))
+    , m_xCbShare(m_xBuilder->weld_check_button(u"share"_ustr))
+    , m_xFtWarning(m_xBuilder->weld_label(u"warning"_ustr))
+    , m_xLbUsers(m_xBuilder->weld_tree_view(u"users"_ustr))
 {
 
     OSL_ENSURE( pViewData, "ScShareDocumentDlg CTOR: mpViewData is null!" );

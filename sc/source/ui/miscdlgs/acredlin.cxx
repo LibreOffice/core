@@ -70,7 +70,7 @@ ScRedlinData::~ScRedlinData()
 ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
     ScViewData* ptrViewData)
     : SfxModelessDialogController(pB, pCW, pParent,
-        "svx/ui/acceptrejectchangesdialog.ui", "AcceptRejectChangesDialog")
+        u"svx/ui/acceptrejectchangesdialog.ui"_ustr, u"AcceptRejectChangesDialog"_ustr)
     , aSelectionIdle( "ScAcceptChgDlg  aSelectionIdle" )
     , aReOpenIdle("ScAcceptChgDlg ReOpenIdle")
     , pViewData( ptrViewData )
@@ -91,14 +91,14 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Windo
     , aStrChildContent(ScResId(STR_CHG_CHILD_CONTENT))
     , aStrChildOrgContent(ScResId(STR_CHG_CHILD_ORGCONTENT))
     , aStrEmpty(ScResId(STR_CHG_EMPTY))
-    , aUnknown("Unknown")
+    , aUnknown(u"Unknown"_ustr)
     , bIgnoreMsg(false)
     , bNoSelection(false)
     , bHasFilterEntry(false)
     , bUseColor(false)
     , m_xContentArea(m_xDialog->weld_content_area())
-    , m_xPopup(m_xBuilder->weld_menu("calcmenu"))
-    , m_xSortMenu(m_xBuilder->weld_menu("calcsortmenu"))
+    , m_xPopup(m_xBuilder->weld_menu(u"calcmenu"_ustr))
+    , m_xSortMenu(m_xBuilder->weld_menu(u"calcsortmenu"_ustr))
 {
     m_xAcceptChgCtr.reset(new SvxAcceptChgCtr(m_xContentArea.get()));
     nAcceptCount=0;
@@ -1602,7 +1602,7 @@ IMPL_LINK(ScAcceptChgDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
     for (sal_Int32 i = 0; i < 5; ++i)
         m_xSortMenu->set_active("calcsort" + OUString::number(i), i == nSortedCol);
 
-    m_xPopup->set_sensitive("calcedit", false);
+    m_xPopup->set_sensitive(u"calcedit"_ustr, false);
 
     if (pDoc->IsDocEditable() && bEntry)
     {
@@ -1611,7 +1611,7 @@ IMPL_LINK(ScAcceptChgDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
         {
             ScChangeAction* pScChangeAction = static_cast<ScChangeAction*>(pEntryData->pData);
             if (pScChangeAction && !rTreeView.get_iter_depth(*xEntry))
-                m_xPopup->set_sensitive("calcedit", true);
+                m_xPopup->set_sensitive(u"calcedit"_ustr, true);
         }
     }
 

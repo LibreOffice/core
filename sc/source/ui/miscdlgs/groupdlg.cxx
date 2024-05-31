@@ -24,14 +24,14 @@
 ScGroupDlg::ScGroupDlg(weld::Window* pParent, bool bUngroup, bool bRows)
     : GenericDialogController(pParent,
         bUngroup ?
-            OUString("modules/scalc/ui/ungroupdialog.ui") :
-            OUString("modules/scalc/ui/groupdialog.ui")
+            u"modules/scalc/ui/ungroupdialog.ui"_ustr :
+            u"modules/scalc/ui/groupdialog.ui"_ustr
     ,
         bUngroup ?
-            OUString("UngroupDialog") :
-            OUString("GroupDialog"))
-    , m_xBtnRows(m_xBuilder->weld_radio_button("rows"))
-    , m_xBtnCols(m_xBuilder->weld_radio_button("cols"))
+            u"UngroupDialog"_ustr :
+            u"GroupDialog"_ustr)
+    , m_xBtnRows(m_xBuilder->weld_radio_button(u"rows"_ustr))
+    , m_xBtnCols(m_xBuilder->weld_radio_button(u"cols"_ustr))
 {
     if (bRows)
         m_xBtnRows->set_active(true);

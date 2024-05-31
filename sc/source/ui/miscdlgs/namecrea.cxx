@@ -22,11 +22,12 @@
 #include <namecrea.hxx>
 
 ScNameCreateDlg::ScNameCreateDlg(weld::Window* pParent, CreateNameFlags nFlags)
-    : GenericDialogController(pParent, "modules/scalc/ui/createnamesdialog.ui", "CreateNamesDialog")
-    , m_xTopBox(m_xBuilder->weld_check_button("top"))
-    , m_xLeftBox(m_xBuilder->weld_check_button("left"))
-    , m_xBottomBox(m_xBuilder->weld_check_button("bottom"))
-    , m_xRightBox(m_xBuilder->weld_check_button("right"))
+    : GenericDialogController(pParent, u"modules/scalc/ui/createnamesdialog.ui"_ustr,
+                              u"CreateNamesDialog"_ustr)
+    , m_xTopBox(m_xBuilder->weld_check_button(u"top"_ustr))
+    , m_xLeftBox(m_xBuilder->weld_check_button(u"left"_ustr))
+    , m_xBottomBox(m_xBuilder->weld_check_button(u"bottom"_ustr))
+    , m_xRightBox(m_xBuilder->weld_check_button(u"right"_ustr))
 {
     m_xTopBox->set_active(bool(nFlags & CreateNameFlags::Top));
     m_xLeftBox->set_active(bool(nFlags & CreateNameFlags::Left));

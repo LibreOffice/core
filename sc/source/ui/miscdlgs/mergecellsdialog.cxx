@@ -11,10 +11,11 @@
 #include <mergecellsdialog.hxx>
 
 ScMergeCellsDialog::ScMergeCellsDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "modules/scalc/ui/mergecellsdialog.ui", "MergeCellsDialog")
-    , m_xRBMoveContent(m_xBuilder->weld_radio_button("move-cells-radio"))
-    , m_xRBKeepContent(m_xBuilder->weld_radio_button("keep-content-radio"))
-    , m_xRBEmptyContent(m_xBuilder->weld_radio_button("empty-cells-radio"))
+    : GenericDialogController(pParent, u"modules/scalc/ui/mergecellsdialog.ui"_ustr,
+                              u"MergeCellsDialog"_ustr)
+    , m_xRBMoveContent(m_xBuilder->weld_radio_button(u"move-cells-radio"_ustr))
+    , m_xRBKeepContent(m_xBuilder->weld_radio_button(u"keep-content-radio"_ustr))
+    , m_xRBEmptyContent(m_xBuilder->weld_radio_button(u"empty-cells-radio"_ustr))
 {
     m_xRBKeepContent->set_active(true);
 }

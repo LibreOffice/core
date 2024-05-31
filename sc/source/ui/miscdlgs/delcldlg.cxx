@@ -24,11 +24,12 @@
 static sal_uInt8 nDelItemChecked = 0;
 
 ScDeleteCellDlg::ScDeleteCellDlg(weld::Window* pParent, bool bDisallowCellMove)
-    : GenericDialogController(pParent, "modules/scalc/ui/deletecells.ui", "DeleteCellsDialog")
-    , m_xBtnCellsUp(m_xBuilder->weld_radio_button("up"))
-    , m_xBtnCellsLeft(m_xBuilder->weld_radio_button("left"))
-    , m_xBtnDelRows(m_xBuilder->weld_radio_button("rows"))
-    , m_xBtnDelCols(m_xBuilder->weld_radio_button("cols"))
+    : GenericDialogController(pParent, u"modules/scalc/ui/deletecells.ui"_ustr,
+                              u"DeleteCellsDialog"_ustr)
+    , m_xBtnCellsUp(m_xBuilder->weld_radio_button(u"up"_ustr))
+    , m_xBtnCellsLeft(m_xBuilder->weld_radio_button(u"left"_ustr))
+    , m_xBtnDelRows(m_xBuilder->weld_radio_button(u"rows"_ustr))
+    , m_xBtnDelCols(m_xBuilder->weld_radio_button(u"cols"_ustr))
 {
     if (bDisallowCellMove)
     {

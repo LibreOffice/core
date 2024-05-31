@@ -47,9 +47,9 @@
 using namespace com::sun::star;
 
 ScSolverProgressDialog::ScSolverProgressDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "modules/scalc/ui/solverprogressdialog.ui",
-                              "SolverProgressDialog")
-    , m_xFtTime(m_xBuilder->weld_label("progress"))
+    : GenericDialogController(pParent, u"modules/scalc/ui/solverprogressdialog.ui"_ustr,
+                              u"SolverProgressDialog"_ustr)
+    , m_xFtTime(m_xBuilder->weld_label(u"progress"_ustr))
 {
 }
 
@@ -70,8 +70,8 @@ void ScSolverProgressDialog::SetTimeLimit( sal_Int32 nSeconds )
 }
 
 ScSolverNoSolutionDialog::ScSolverNoSolutionDialog(weld::Window* pParent, const OUString& rErrorText)
-    : GenericDialogController(pParent, "modules/scalc/ui/nosolutiondialog.ui", "NoSolutionDialog")
-    , m_xFtErrorText(m_xBuilder->weld_label("error"))
+    : GenericDialogController(pParent, u"modules/scalc/ui/nosolutiondialog.ui"_ustr, u"NoSolutionDialog"_ustr)
+    , m_xFtErrorText(m_xBuilder->weld_label(u"error"_ustr))
 {
     m_xFtErrorText->set_label(rErrorText);
 }
@@ -81,10 +81,10 @@ ScSolverNoSolutionDialog::~ScSolverNoSolutionDialog()
 }
 
 ScSolverSuccessDialog::ScSolverSuccessDialog(weld::Window* pParent, std::u16string_view rSolution)
-    : GenericDialogController(pParent, "modules/scalc/ui/solversuccessdialog.ui", "SolverSuccessDialog")
-    , m_xFtResult(m_xBuilder->weld_label("result"))
-    , m_xBtnOk(m_xBuilder->weld_button("ok"))
-    , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
+    : GenericDialogController(pParent, u"modules/scalc/ui/solversuccessdialog.ui"_ustr, u"SolverSuccessDialog"_ustr)
+    , m_xFtResult(m_xBuilder->weld_label(u"result"_ustr))
+    , m_xBtnOk(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xBtnCancel(m_xBuilder->weld_button(u"cancel"_ustr))
 {
     m_xBtnOk->connect_clicked(LINK(this, ScSolverSuccessDialog, ClickHdl));
     m_xBtnCancel->connect_clicked(LINK(this, ScSolverSuccessDialog, ClickHdl));
@@ -135,7 +135,7 @@ IMPL_LINK(ScCursorRefEdit, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 
 ScOptSolverDlg::ScOptSolverDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
                                ScDocShell* pDocSh, const ScAddress& aCursorPos)
-    : ScAnyRefDlgController(pB, pCW, pParent, "modules/scalc/ui/solverdlg.ui", "SolverDialog")
+    : ScAnyRefDlgController(pB, pCW, pParent, u"modules/scalc/ui/solverdlg.ui"_ustr, u"SolverDialog"_ustr)
     , maInputError(ScResId(STR_INVALIDINPUT))
     , maConditionError(ScResId(STR_INVALIDCONDITION))
 
@@ -145,50 +145,50 @@ ScOptSolverDlg::ScOptSolverDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Windo
     , mbDlgLostFocus(false)
     , nScrollPos(0)
     , mpEdActive(nullptr)
-    , m_xFtObjectiveCell(m_xBuilder->weld_label("targetlabel"))
-    , m_xEdObjectiveCell(new formula::RefEdit(m_xBuilder->weld_entry("targetedit")))
-    , m_xRBObjectiveCell(new formula::RefButton(m_xBuilder->weld_button("targetbutton")))
-    , m_xRbMax(m_xBuilder->weld_radio_button("max"))
-    , m_xRbMin(m_xBuilder->weld_radio_button("min"))
-    , m_xRbValue(m_xBuilder->weld_radio_button("value"))
-    , m_xEdTargetValue(new formula::RefEdit(m_xBuilder->weld_entry("valueedit")))
-    , m_xRBTargetValue(new formula::RefButton(m_xBuilder->weld_button("valuebutton")))
-    , m_xFtVariableCells(m_xBuilder->weld_label("changelabel"))
-    , m_xEdVariableCells(new formula::RefEdit(m_xBuilder->weld_entry("changeedit")))
-    , m_xRBVariableCells(new formula::RefButton(m_xBuilder->weld_button("changebutton")))
-    , m_xFtCellRef(m_xBuilder->weld_label("cellreflabel"))
-    , m_xEdLeft1(new ScCursorRefEdit(m_xBuilder->weld_entry("ref1edit")))
-    , m_xRBLeft1(new formula::RefButton(m_xBuilder->weld_button("ref1button")))
-    , m_xLbOp1(m_xBuilder->weld_combo_box("op1list"))
-    , m_xFtConstraint(m_xBuilder->weld_label("constraintlabel"))
-    , m_xEdRight1(new ScCursorRefEdit(m_xBuilder->weld_entry("val1edit")))
-    , m_xRBRight1(new formula::RefButton(m_xBuilder->weld_button("val1button")))
-    , m_xBtnDel1(m_xBuilder->weld_button("del1"))
-    , m_xEdLeft2(new ScCursorRefEdit(m_xBuilder->weld_entry("ref2edit")))
-    , m_xRBLeft2(new formula::RefButton(m_xBuilder->weld_button("ref2button")))
-    , m_xLbOp2(m_xBuilder->weld_combo_box("op2list"))
-    , m_xEdRight2(new ScCursorRefEdit(m_xBuilder->weld_entry("val2edit")))
-    , m_xRBRight2(new formula::RefButton(m_xBuilder->weld_button("val2button")))
-    , m_xBtnDel2(m_xBuilder->weld_button("del2"))
-    , m_xEdLeft3(new ScCursorRefEdit(m_xBuilder->weld_entry("ref3edit")))
-    , m_xRBLeft3(new formula::RefButton(m_xBuilder->weld_button("ref3button")))
-    , m_xLbOp3(m_xBuilder->weld_combo_box("op3list"))
-    , m_xEdRight3(new ScCursorRefEdit(m_xBuilder->weld_entry("val3edit")))
-    , m_xRBRight3(new formula::RefButton(m_xBuilder->weld_button("val3button")))
-    , m_xBtnDel3(m_xBuilder->weld_button("del3"))
-    , m_xEdLeft4(new ScCursorRefEdit(m_xBuilder->weld_entry("ref4edit")))
-    , m_xRBLeft4(new formula::RefButton(m_xBuilder->weld_button("ref4button")))
-    , m_xLbOp4(m_xBuilder->weld_combo_box("op4list"))
-    , m_xEdRight4(new ScCursorRefEdit(m_xBuilder->weld_entry("val4edit")))
-    , m_xRBRight4(new formula::RefButton(m_xBuilder->weld_button("val4button")))
-    , m_xBtnDel4(m_xBuilder->weld_button("del4"))
-    , m_xScrollBar(m_xBuilder->weld_scrolled_window("scrollbar", true))
-    , m_xBtnOpt(m_xBuilder->weld_button("options"))
-    , m_xBtnClose(m_xBuilder->weld_button("close"))
-    , m_xBtnSolve(m_xBuilder->weld_button("ok"))
-    , m_xBtnResetAll(m_xBuilder->weld_button("resetall"))
-    , m_xResultFT(m_xBuilder->weld_label("result"))
-    , m_xContents(m_xBuilder->weld_widget("grid"))
+    , m_xFtObjectiveCell(m_xBuilder->weld_label(u"targetlabel"_ustr))
+    , m_xEdObjectiveCell(new formula::RefEdit(m_xBuilder->weld_entry(u"targetedit"_ustr)))
+    , m_xRBObjectiveCell(new formula::RefButton(m_xBuilder->weld_button(u"targetbutton"_ustr)))
+    , m_xRbMax(m_xBuilder->weld_radio_button(u"max"_ustr))
+    , m_xRbMin(m_xBuilder->weld_radio_button(u"min"_ustr))
+    , m_xRbValue(m_xBuilder->weld_radio_button(u"value"_ustr))
+    , m_xEdTargetValue(new formula::RefEdit(m_xBuilder->weld_entry(u"valueedit"_ustr)))
+    , m_xRBTargetValue(new formula::RefButton(m_xBuilder->weld_button(u"valuebutton"_ustr)))
+    , m_xFtVariableCells(m_xBuilder->weld_label(u"changelabel"_ustr))
+    , m_xEdVariableCells(new formula::RefEdit(m_xBuilder->weld_entry(u"changeedit"_ustr)))
+    , m_xRBVariableCells(new formula::RefButton(m_xBuilder->weld_button(u"changebutton"_ustr)))
+    , m_xFtCellRef(m_xBuilder->weld_label(u"cellreflabel"_ustr))
+    , m_xEdLeft1(new ScCursorRefEdit(m_xBuilder->weld_entry(u"ref1edit"_ustr)))
+    , m_xRBLeft1(new formula::RefButton(m_xBuilder->weld_button(u"ref1button"_ustr)))
+    , m_xLbOp1(m_xBuilder->weld_combo_box(u"op1list"_ustr))
+    , m_xFtConstraint(m_xBuilder->weld_label(u"constraintlabel"_ustr))
+    , m_xEdRight1(new ScCursorRefEdit(m_xBuilder->weld_entry(u"val1edit"_ustr)))
+    , m_xRBRight1(new formula::RefButton(m_xBuilder->weld_button(u"val1button"_ustr)))
+    , m_xBtnDel1(m_xBuilder->weld_button(u"del1"_ustr))
+    , m_xEdLeft2(new ScCursorRefEdit(m_xBuilder->weld_entry(u"ref2edit"_ustr)))
+    , m_xRBLeft2(new formula::RefButton(m_xBuilder->weld_button(u"ref2button"_ustr)))
+    , m_xLbOp2(m_xBuilder->weld_combo_box(u"op2list"_ustr))
+    , m_xEdRight2(new ScCursorRefEdit(m_xBuilder->weld_entry(u"val2edit"_ustr)))
+    , m_xRBRight2(new formula::RefButton(m_xBuilder->weld_button(u"val2button"_ustr)))
+    , m_xBtnDel2(m_xBuilder->weld_button(u"del2"_ustr))
+    , m_xEdLeft3(new ScCursorRefEdit(m_xBuilder->weld_entry(u"ref3edit"_ustr)))
+    , m_xRBLeft3(new formula::RefButton(m_xBuilder->weld_button(u"ref3button"_ustr)))
+    , m_xLbOp3(m_xBuilder->weld_combo_box(u"op3list"_ustr))
+    , m_xEdRight3(new ScCursorRefEdit(m_xBuilder->weld_entry(u"val3edit"_ustr)))
+    , m_xRBRight3(new formula::RefButton(m_xBuilder->weld_button(u"val3button"_ustr)))
+    , m_xBtnDel3(m_xBuilder->weld_button(u"del3"_ustr))
+    , m_xEdLeft4(new ScCursorRefEdit(m_xBuilder->weld_entry(u"ref4edit"_ustr)))
+    , m_xRBLeft4(new formula::RefButton(m_xBuilder->weld_button(u"ref4button"_ustr)))
+    , m_xLbOp4(m_xBuilder->weld_combo_box(u"op4list"_ustr))
+    , m_xEdRight4(new ScCursorRefEdit(m_xBuilder->weld_entry(u"val4edit"_ustr)))
+    , m_xRBRight4(new formula::RefButton(m_xBuilder->weld_button(u"val4button"_ustr)))
+    , m_xBtnDel4(m_xBuilder->weld_button(u"del4"_ustr))
+    , m_xScrollBar(m_xBuilder->weld_scrolled_window(u"scrollbar"_ustr, true))
+    , m_xBtnOpt(m_xBuilder->weld_button(u"options"_ustr))
+    , m_xBtnClose(m_xBuilder->weld_button(u"close"_ustr))
+    , m_xBtnSolve(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xBtnResetAll(m_xBuilder->weld_button(u"resetall"_ustr))
+    , m_xResultFT(m_xBuilder->weld_label(u"result"_ustr))
+    , m_xContents(m_xBuilder->weld_widget(u"grid"_ustr))
     , m_pSolverSettings(mrDoc.FetchTable(mnCurTab)->GetSolverSettings())
 {
     m_xEdObjectiveCell->SetReferences(this, m_xFtObjectiveCell.get());
@@ -252,7 +252,7 @@ ScOptSolverDlg::~ScOptSolverDlg()
 void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
 {
     uno::Reference<frame::XFrame> xFrame = GetBindings().GetActiveFrame();
-    auto xDelNm = vcl::CommandInfoProvider::GetXGraphicForCommand(".uno:DeleteRows", xFrame);
+    auto xDelNm = vcl::CommandInfoProvider::GetXGraphicForCommand(u".uno:DeleteRows"_ustr, xFrame);
     for (weld::Button* pButton : mpDelButton)
         pButton->set_image(xDelNm);
 

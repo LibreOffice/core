@@ -27,16 +27,16 @@ InsertDeleteFlags ScDeleteContentsDlg::nPreviousChecks   = InsertDeleteFlags::DA
                                                  InsertDeleteFlags::VALUE;
 
 ScDeleteContentsDlg::ScDeleteContentsDlg(weld::Window* pParent)
-    : GenericDialogController(pParent, "modules/scalc/ui/deletecontents.ui", "DeleteContentsDialog")
+    : GenericDialogController(pParent, u"modules/scalc/ui/deletecontents.ui"_ustr, u"DeleteContentsDialog"_ustr)
     , m_bObjectsDisabled(false)
-    , m_xBtnDelAll(m_xBuilder->weld_check_button("deleteall"))
-    , m_xBtnDelStrings(m_xBuilder->weld_check_button("text"))
-    , m_xBtnDelNumbers(m_xBuilder->weld_check_button("numbers"))
-    , m_xBtnDelDateTime(m_xBuilder->weld_check_button("datetime"))
-    , m_xBtnDelFormulas(m_xBuilder->weld_check_button("formulas"))
-    , m_xBtnDelNotes(m_xBuilder->weld_check_button("comments"))
-    , m_xBtnDelAttrs(m_xBuilder->weld_check_button("formats"))
-    , m_xBtnDelObjects(m_xBuilder->weld_check_button("objects"))
+    , m_xBtnDelAll(m_xBuilder->weld_check_button(u"deleteall"_ustr))
+    , m_xBtnDelStrings(m_xBuilder->weld_check_button(u"text"_ustr))
+    , m_xBtnDelNumbers(m_xBuilder->weld_check_button(u"numbers"_ustr))
+    , m_xBtnDelDateTime(m_xBuilder->weld_check_button(u"datetime"_ustr))
+    , m_xBtnDelFormulas(m_xBuilder->weld_check_button(u"formulas"_ustr))
+    , m_xBtnDelNotes(m_xBuilder->weld_check_button(u"comments"_ustr))
+    , m_xBtnDelAttrs(m_xBuilder->weld_check_button(u"formats"_ustr))
+    , m_xBtnDelObjects(m_xBuilder->weld_check_button(u"objects"_ustr))
 {
     m_xBtnDelAll->set_active( ScDeleteContentsDlg::bPreviousAllCheck );
     m_xBtnDelStrings->set_active( bool(InsertDeleteFlags::STRING & ScDeleteContentsDlg::nPreviousChecks) );

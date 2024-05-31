@@ -31,18 +31,18 @@
 #include <svx/flagsdef.hxx>
 
 ScCharDlg::ScCharDlg(weld::Window* pParent, const SfxItemSet* pAttr, const SfxObjectShell* pDocShell, bool bDrawText)
-    : SfxTabDialogController(pParent, "modules/scalc/ui/chardialog.ui", "CharDialog", pAttr)
+    : SfxTabDialogController(pParent, u"modules/scalc/ui/chardialog.ui"_ustr, u"CharDialog"_ustr, pAttr)
     , m_rDocShell(*pDocShell)
     , m_bDrawText(bDrawText)
 {
-    AddTabPage("font", RID_SVXPAGE_CHAR_NAME);
-    AddTabPage("fonteffects", RID_SVXPAGE_CHAR_EFFECTS);
-    AddTabPage("position", RID_SVXPAGE_CHAR_POSITION);
+    AddTabPage(u"font"_ustr, RID_SVXPAGE_CHAR_NAME);
+    AddTabPage(u"fonteffects"_ustr, RID_SVXPAGE_CHAR_EFFECTS);
+    AddTabPage(u"position"_ustr, RID_SVXPAGE_CHAR_POSITION);
 
     if (bDrawText)
-        AddTabPage("background", RID_SVXPAGE_BKG);
+        AddTabPage(u"background"_ustr, RID_SVXPAGE_BKG);
     else
-        RemoveTabPage("background");
+        RemoveTabPage(u"background"_ustr);
 }
 
 void ScCharDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
@@ -71,15 +71,15 @@ void ScCharDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
 }
 
 ScParagraphDlg::ScParagraphDlg(weld::Window* pParent, const SfxItemSet* pAttr)
-    : SfxTabDialogController(pParent, "modules/scalc/ui/paradialog.ui", "ParagraphDialog", pAttr)
+    : SfxTabDialogController(pParent, u"modules/scalc/ui/paradialog.ui"_ustr, u"ParagraphDialog"_ustr, pAttr)
 {
-    AddTabPage("labelTP_PARA_STD", RID_SVXPAGE_STD_PARAGRAPH);
-    AddTabPage("labelTP_PARA_ALIGN", RID_SVXPAGE_ALIGN_PARAGRAPH);
+    AddTabPage(u"labelTP_PARA_STD"_ustr, RID_SVXPAGE_STD_PARAGRAPH);
+    AddTabPage(u"labelTP_PARA_ALIGN"_ustr, RID_SVXPAGE_ALIGN_PARAGRAPH);
     if (SvtCJKOptions::IsAsianTypographyEnabled() )
-        AddTabPage("labelTP_PARA_ASIAN", RID_SVXPAGE_PARA_ASIAN);
+        AddTabPage(u"labelTP_PARA_ASIAN"_ustr, RID_SVXPAGE_PARA_ASIAN);
     else
-        RemoveTabPage("labelTP_PARA_ASIAN");
-    AddTabPage("labelTP_TABULATOR", RID_SVXPAGE_TABULATOR);
+        RemoveTabPage(u"labelTP_PARA_ASIAN"_ustr);
+    AddTabPage(u"labelTP_TABULATOR"_ustr, RID_SVXPAGE_TABULATOR);
 }
 
 void ScParagraphDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)

@@ -60,13 +60,13 @@ ScSolverOptionsDialog::ScSolverOptionsDialog(weld::Window* pParent,
                         const uno::Sequence<OUString>& rDescriptions,
                         OUString aEngine,
                         const uno::Sequence<beans::PropertyValue>& rProperties )
-    : GenericDialogController(pParent, "modules/scalc/ui/solveroptionsdialog.ui", "SolverOptionsDialog")
+    : GenericDialogController(pParent, u"modules/scalc/ui/solveroptionsdialog.ui"_ustr, u"SolverOptionsDialog"_ustr)
     , maImplNames(rImplNames)
     , maEngine(std::move(aEngine))
     , maProperties(rProperties)
-    , m_xLbEngine(m_xBuilder->weld_combo_box("engine"))
-    , m_xLbSettings(m_xBuilder->weld_tree_view("settings"))
-    , m_xBtnEdit(m_xBuilder->weld_button("edit"))
+    , m_xLbEngine(m_xBuilder->weld_combo_box(u"engine"_ustr))
+    , m_xLbSettings(m_xBuilder->weld_tree_view(u"settings"_ustr))
+    , m_xBtnEdit(m_xBuilder->weld_button(u"edit"_ustr))
 {
     m_xLbSettings->set_size_request(m_xLbSettings->get_approximate_digit_width() * 32,
                                     m_xLbSettings->get_height_rows(12));
@@ -341,9 +341,9 @@ IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsSelHdl, weld::TreeView&, void)
 }
 
 ScSolverIntegerDialog::ScSolverIntegerDialog(weld::Window * pParent)
-    : GenericDialogController(pParent, "modules/scalc/ui/integerdialog.ui", "IntegerDialog")
-    , m_xFrame(m_xBuilder->weld_frame("frame"))
-    , m_xNfValue(m_xBuilder->weld_spin_button("value"))
+    : GenericDialogController(pParent, u"modules/scalc/ui/integerdialog.ui"_ustr, u"IntegerDialog"_ustr)
+    , m_xFrame(m_xBuilder->weld_frame(u"frame"_ustr))
+    , m_xNfValue(m_xBuilder->weld_spin_button(u"value"_ustr))
 {
 }
 
@@ -372,9 +372,9 @@ sal_Int32 ScSolverIntegerDialog::GetValue() const
 }
 
 ScSolverValueDialog::ScSolverValueDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "modules/scalc/ui/doubledialog.ui", "DoubleDialog")
-    , m_xFrame(m_xBuilder->weld_frame("frame"))
-    , m_xEdValue(m_xBuilder->weld_entry("value"))
+    : GenericDialogController(pParent, u"modules/scalc/ui/doubledialog.ui"_ustr, u"DoubleDialog"_ustr)
+    , m_xFrame(m_xBuilder->weld_frame(u"frame"_ustr))
+    , m_xEdValue(m_xBuilder->weld_entry(u"value"_ustr))
     , m_fMaxValue(std::numeric_limits<double>::quiet_NaN())
 {
 }

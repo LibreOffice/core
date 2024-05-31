@@ -13,11 +13,12 @@
 #include <gototabdlg.hxx>
 
 ScGoToTabDlg::ScGoToTabDlg(weld::Window* pParent)
-    : GenericDialogController(pParent, "modules/scalc/ui/gotosheetdialog.ui", "GoToSheetDialog")
-    , m_xFrameMask(m_xBuilder->weld_frame("frame-mask"))
-    , m_xEnNameMask(m_xBuilder->weld_entry("entry-mask"))
-    , m_xFrameSheets(m_xBuilder->weld_frame("frame-sheets"))
-    , m_xLb(m_xBuilder->weld_tree_view("treeview"))
+    : GenericDialogController(pParent, u"modules/scalc/ui/gotosheetdialog.ui"_ustr,
+                              u"GoToSheetDialog"_ustr)
+    , m_xFrameMask(m_xBuilder->weld_frame(u"frame-mask"_ustr))
+    , m_xEnNameMask(m_xBuilder->weld_entry(u"entry-mask"_ustr))
+    , m_xFrameSheets(m_xBuilder->weld_frame(u"frame-sheets"_ustr))
+    , m_xLb(m_xBuilder->weld_tree_view(u"treeview"_ustr))
 {
     m_xLb->set_selection_mode(SelectionMode::Single);
     m_xLb->set_size_request(-1, m_xLb->get_height_rows(10));

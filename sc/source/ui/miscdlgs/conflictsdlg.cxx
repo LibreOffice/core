@@ -320,7 +320,7 @@ void ScConflictsResolver::HandleAction( ScChangeAction* pAction, bool bIsSharedA
 
 
 ScConflictsDlg::ScConflictsDlg(weld::Window* pParent, ScViewData* pViewData, ScDocument* pSharedDoc, ScConflictsList& rConflictsList)
-    : GenericDialogController(pParent, "modules/scalc/ui/conflictsdialog.ui", "ConflictsDialog")
+    : GenericDialogController(pParent, u"modules/scalc/ui/conflictsdialog.ui"_ustr, u"ConflictsDialog"_ustr)
     , maStrUnknownUser   ( ScResId( STR_UNKNOWN_USER_CONFLICT ) )
     , mpViewData         ( pViewData )
     , mpOwnDoc           ( nullptr )
@@ -330,11 +330,11 @@ ScConflictsDlg::ScConflictsDlg(weld::Window* pParent, ScViewData* pViewData, ScD
     , mrConflictsList    ( rConflictsList )
     , maSelectionIdle    ( "ScConflictsDlg maSelectionIdle" )
     , mbInSelectHdl      ( false )
-    , m_xBtnKeepMine(m_xBuilder->weld_button("keepmine"))
-    , m_xBtnKeepOther(m_xBuilder->weld_button("keepother"))
-    , m_xBtnKeepAllMine(m_xBuilder->weld_button("keepallmine"))
-    , m_xBtnKeepAllOthers(m_xBuilder->weld_button("keepallothers"))
-    , m_xLbConflicts(new SvxRedlinTable(m_xBuilder->weld_tree_view("container"), nullptr))
+    , m_xBtnKeepMine(m_xBuilder->weld_button(u"keepmine"_ustr))
+    , m_xBtnKeepOther(m_xBuilder->weld_button(u"keepother"_ustr))
+    , m_xBtnKeepAllMine(m_xBuilder->weld_button(u"keepallmine"_ustr))
+    , m_xBtnKeepAllOthers(m_xBuilder->weld_button(u"keepallothers"_ustr))
+    , m_xLbConflicts(new SvxRedlinTable(m_xBuilder->weld_tree_view(u"container"_ustr), nullptr))
 {
     OSL_ENSURE( mpViewData, "ScConflictsDlg CTOR: mpViewData is null!" );
     mpOwnDoc = ( mpViewData ? &mpViewData->GetDocument() : nullptr );

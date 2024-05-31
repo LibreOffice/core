@@ -27,16 +27,16 @@
 
 ScHighlightChgDlg::ScHighlightChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
                                      ScViewData& rViewData)
-    : ScAnyRefDlgController(pB, pCW, pParent, "modules/scalc/ui/showchangesdialog.ui", "ShowChangesDialog")
+    : ScAnyRefDlgController(pB, pCW, pParent, u"modules/scalc/ui/showchangesdialog.ui"_ustr, u"ShowChangesDialog"_ustr)
     , m_rViewData(rViewData)
     , rDoc(rViewData.GetDocument())
-    , m_xHighlightBox(m_xBuilder->weld_check_button("showchanges"))
-    , m_xCbAccept(m_xBuilder->weld_check_button("showaccepted"))
-    , m_xCbReject(m_xBuilder->weld_check_button("showrejected"))
-    , m_xOkButton(m_xBuilder->weld_button("ok"))
-    , m_xEdAssign(new formula::RefEdit(m_xBuilder->weld_entry("range")))
-    , m_xRbAssign(new formula::RefButton(m_xBuilder->weld_button("rangeref")))
-    , m_xBox(m_xBuilder->weld_container("box"))
+    , m_xHighlightBox(m_xBuilder->weld_check_button(u"showchanges"_ustr))
+    , m_xCbAccept(m_xBuilder->weld_check_button(u"showaccepted"_ustr))
+    , m_xCbReject(m_xBuilder->weld_check_button(u"showrejected"_ustr))
+    , m_xOkButton(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xEdAssign(new formula::RefEdit(m_xBuilder->weld_entry(u"range"_ustr)))
+    , m_xRbAssign(new formula::RefButton(m_xBuilder->weld_button(u"rangeref"_ustr)))
+    , m_xBox(m_xBuilder->weld_container(u"box"_ustr))
     , m_xFilterCtr(new SvxTPFilter(m_xBox.get()))
 {
     m_xEdAssign->SetReferences(this, nullptr);

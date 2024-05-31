@@ -18,7 +18,7 @@
 #include <osl/diagnose.h>
 
 ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell* pTabViewShellOri)
-    : GenericDialogController(pParent, "modules/scalc/ui/dataform.ui", "DataFormDialog")
+    : GenericDialogController(pParent, u"modules/scalc/ui/dataform.ui"_ustr, u"DataFormDialog"_ustr)
     , pTabViewShell(pTabViewShellOri)
     , aColLength(0)
     , nCurrentRow(0)
@@ -27,15 +27,15 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell* pTabViewShel
     , nStartRow(0)
     , nEndRow(0)
     , nTab(0)
-    , m_xBtnNew(m_xBuilder->weld_button("new"))
-    , m_xBtnDelete(m_xBuilder->weld_button("delete"))
-    , m_xBtnRestore(m_xBuilder->weld_button("restore"))
-    , m_xBtnPrev(m_xBuilder->weld_button("prev"))
-    , m_xBtnNext(m_xBuilder->weld_button("next"))
-    , m_xBtnClose(m_xBuilder->weld_button("close"))
-    , m_xSlider(m_xBuilder->weld_scrolled_window("scrollbar", true))
-    , m_xGrid(m_xBuilder->weld_container("grid"))
-    , m_xFixedText(m_xBuilder->weld_label("label"))
+    , m_xBtnNew(m_xBuilder->weld_button(u"new"_ustr))
+    , m_xBtnDelete(m_xBuilder->weld_button(u"delete"_ustr))
+    , m_xBtnRestore(m_xBuilder->weld_button(u"restore"_ustr))
+    , m_xBtnPrev(m_xBuilder->weld_button(u"prev"_ustr))
+    , m_xBtnNext(m_xBuilder->weld_button(u"next"_ustr))
+    , m_xBtnClose(m_xBuilder->weld_button(u"close"_ustr))
+    , m_xSlider(m_xBuilder->weld_scrolled_window(u"scrollbar"_ustr, true))
+    , m_xGrid(m_xBuilder->weld_container(u"grid"_ustr))
+    , m_xFixedText(m_xBuilder->weld_label(u"label"_ustr))
 {
     sNewRecord = m_xFixedText->get_label();
 
@@ -341,9 +341,9 @@ void ScDataFormDlg::SetButtonState()
 }
 
 ScDataFormFragment::ScDataFormFragment(weld::Container* pGrid, int nLine)
-    : m_xBuilder(Application::CreateBuilder(pGrid, "modules/scalc/ui/dataformfragment.ui"))
-    , m_xLabel(m_xBuilder->weld_label("label"))
-    , m_xEdit(m_xBuilder->weld_entry("entry"))
+    : m_xBuilder(Application::CreateBuilder(pGrid, u"modules/scalc/ui/dataformfragment.ui"_ustr))
+    , m_xLabel(m_xBuilder->weld_label(u"label"_ustr))
+    , m_xEdit(m_xBuilder->weld_entry(u"entry"_ustr))
 {
     m_xLabel->set_grid_left_attach(0);
     m_xLabel->set_grid_top_attach(nLine);

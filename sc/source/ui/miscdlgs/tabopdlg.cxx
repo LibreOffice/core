@@ -34,8 +34,8 @@
 ScTabOpDlg::ScTabOpDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
                        ScDocument* pDocument,
                        const ScRefAddress& rCursorPos )
-    : ScAnyRefDlgController(pB, pCW, pParent, "modules/scalc/ui/multipleoperationsdialog.ui",
-                            "MultipleOperationsDialog")
+    : ScAnyRefDlgController(pB, pCW, pParent, u"modules/scalc/ui/multipleoperationsdialog.ui"_ustr,
+                            u"MultipleOperationsDialog"_ustr)
     , theFormulaCell(rCursorPos)
     , pDoc(pDocument)
     , nCurTab(theFormulaCell.Tab())
@@ -47,17 +47,17 @@ ScTabOpDlg::ScTabOpDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPare
     , errMsgNoColFormula(ScResId(STR_NOCOLFORMULA))
     , errMsgNoRowFormula(ScResId(STR_NOROWFORMULA))
     , m_pEdActive(nullptr)
-    , m_xFtFormulaRange(m_xBuilder->weld_label("formulasft"))
-    , m_xEdFormulaRange(new formula::RefEdit(m_xBuilder->weld_entry("formulas")))
-    , m_xRBFormulaRange(new formula::RefButton(m_xBuilder->weld_button("formulasref")))
-    , m_xFtRowCell(m_xBuilder->weld_label("rowft"))
-    , m_xEdRowCell(new formula::RefEdit(m_xBuilder->weld_entry("row")))
-    , m_xRBRowCell(new formula::RefButton(m_xBuilder->weld_button("rowref")))
-    , m_xFtColCell(m_xBuilder->weld_label("colft"))
-    , m_xEdColCell(new formula::RefEdit(m_xBuilder->weld_entry("col")))
-    , m_xRBColCell(new formula::RefButton(m_xBuilder->weld_button("colref")))
-    , m_xBtnOk(m_xBuilder->weld_button("ok"))
-    , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
+    , m_xFtFormulaRange(m_xBuilder->weld_label(u"formulasft"_ustr))
+    , m_xEdFormulaRange(new formula::RefEdit(m_xBuilder->weld_entry(u"formulas"_ustr)))
+    , m_xRBFormulaRange(new formula::RefButton(m_xBuilder->weld_button(u"formulasref"_ustr)))
+    , m_xFtRowCell(m_xBuilder->weld_label(u"rowft"_ustr))
+    , m_xEdRowCell(new formula::RefEdit(m_xBuilder->weld_entry(u"row"_ustr)))
+    , m_xRBRowCell(new formula::RefButton(m_xBuilder->weld_button(u"rowref"_ustr)))
+    , m_xFtColCell(m_xBuilder->weld_label(u"colft"_ustr))
+    , m_xEdColCell(new formula::RefEdit(m_xBuilder->weld_entry(u"col"_ustr)))
+    , m_xRBColCell(new formula::RefButton(m_xBuilder->weld_button(u"colref"_ustr)))
+    , m_xBtnOk(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xBtnCancel(m_xBuilder->weld_button(u"cancel"_ustr))
 {
     m_xEdFormulaRange->SetReferences(this, m_xFtFormulaRange.get());
     m_xRBFormulaRange->SetReferences(this, m_xEdFormulaRange.get());

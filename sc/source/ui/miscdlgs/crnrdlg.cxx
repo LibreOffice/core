@@ -60,25 +60,25 @@ ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
                                 weld::Window* pParent,
                                 ScViewData& rViewData )
 
-    : ScAnyRefDlgController(pB, pCW, pParent, "modules/scalc/ui/namerangesdialog.ui", "NameRangesDialog")
+    : ScAnyRefDlgController(pB, pCW, pParent, u"modules/scalc/ui/namerangesdialog.ui"_ustr, u"NameRangesDialog"_ustr)
     , m_rViewData(rViewData)
     , rDoc(rViewData.GetDocument())
     , bDlgLostFocus(false)
     , m_pEdActive(nullptr)
-    , m_xLbRange(m_xBuilder->weld_tree_view("range"))
-    , m_xEdAssign(new formula::RefEdit(m_xBuilder->weld_entry("edassign")))
-    , m_xRbAssign(new formula::RefButton(m_xBuilder->weld_button("rbassign")))
-    , m_xBtnColHead(m_xBuilder->weld_radio_button("colhead"))
-    , m_xBtnRowHead(m_xBuilder->weld_radio_button("rowhead"))
-    , m_xEdAssign2(new formula::RefEdit(m_xBuilder->weld_entry("edassign2")))
-    , m_xRbAssign2(new formula::RefButton(m_xBuilder->weld_button("rbassign2")))
-    , m_xBtnOk(m_xBuilder->weld_button("ok"))
-    , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
-    , m_xBtnAdd(m_xBuilder->weld_button("add"))
-    , m_xBtnRemove(m_xBuilder->weld_button("delete"))
-    , m_xRangeFrame(m_xBuilder->weld_frame("rangeframe"))
+    , m_xLbRange(m_xBuilder->weld_tree_view(u"range"_ustr))
+    , m_xEdAssign(new formula::RefEdit(m_xBuilder->weld_entry(u"edassign"_ustr)))
+    , m_xRbAssign(new formula::RefButton(m_xBuilder->weld_button(u"rbassign"_ustr)))
+    , m_xBtnColHead(m_xBuilder->weld_radio_button(u"colhead"_ustr))
+    , m_xBtnRowHead(m_xBuilder->weld_radio_button(u"rowhead"_ustr))
+    , m_xEdAssign2(new formula::RefEdit(m_xBuilder->weld_entry(u"edassign2"_ustr)))
+    , m_xRbAssign2(new formula::RefButton(m_xBuilder->weld_button(u"rbassign2"_ustr)))
+    , m_xBtnOk(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xBtnCancel(m_xBuilder->weld_button(u"cancel"_ustr))
+    , m_xBtnAdd(m_xBuilder->weld_button(u"add"_ustr))
+    , m_xBtnRemove(m_xBuilder->weld_button(u"delete"_ustr))
+    , m_xRangeFrame(m_xBuilder->weld_frame(u"rangeframe"_ustr))
     , m_xRangeFT(m_xRangeFrame->weld_label_widget())
-    , m_xDataFT(m_xBuilder->weld_label("datarange"))
+    , m_xDataFT(m_xBuilder->weld_label(u"datarange"_ustr))
 {
     m_xRbAssign->SetReferences(this, m_xEdAssign.get());
     m_xEdAssign->SetReferences(this, m_xRangeFT.get());
@@ -353,7 +353,7 @@ void ScColRowNameRangesDlg::UpdateNames()
     OUString rString;
     const ScAddress::Details aDetails(rDoc.GetAddressConvention());
 
-    OUString strDelim(" --- ");
+    OUString strDelim(u" --- "_ustr);
     OUString aString = strDelim + ScResId( STR_COLUMN ) + strDelim;
     m_xLbRange->append(OUString::number(nEntryDataDelim), aString);
     if ( xColNameRanges->size() > 0 )

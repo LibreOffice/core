@@ -25,17 +25,18 @@
 #include <tabprotection.hxx>
 
 ScRetypePassDlg::ScRetypePassDlg(weld::Window* pParent)
-    : GenericDialogController(pParent, "modules/scalc/ui/retypepassdialog.ui", "RetypePass")
+    : GenericDialogController(pParent, u"modules/scalc/ui/retypepassdialog.ui"_ustr,
+                              u"RetypePass"_ustr)
     , maTextNotProtected(ScResId(STR_NOT_PROTECTED))
     , maTextNotPassProtected(ScResId(STR_NOT_PASS_PROTECTED))
     , maTextHashBad(ScResId(STR_HASH_BAD))
     , maTextHashGood(ScResId(STR_HASH_GOOD))
     , meDesiredHash(PASSHASH_SHA1)
-    , mxBtnOk(m_xBuilder->weld_button("ok"))
-    , mxTextDocStatus(m_xBuilder->weld_label("docStatusLabel"))
-    , mxBtnRetypeDoc(m_xBuilder->weld_button("retypeDocButton"))
-    , mxScrolledWindow(m_xBuilder->weld_scrolled_window("scrolledwindow"))
-    , mxSheetsBox(m_xBuilder->weld_container("sheetsBox"))
+    , mxBtnOk(m_xBuilder->weld_button(u"ok"_ustr))
+    , mxTextDocStatus(m_xBuilder->weld_label(u"docStatusLabel"_ustr))
+    , mxBtnRetypeDoc(m_xBuilder->weld_button(u"retypeDocButton"_ustr))
+    , mxScrolledWindow(m_xBuilder->weld_scrolled_window(u"scrolledwindow"_ustr))
+    , mxSheetsBox(m_xBuilder->weld_container(u"sheetsBox"_ustr))
 {
     mxScrolledWindow->set_size_request(mxScrolledWindow->get_approximate_digit_width() * 46,
                                        mxScrolledWindow->get_text_height() * 10);
@@ -54,11 +55,11 @@ short ScRetypePassDlg::run()
 }
 
 PassFragment::PassFragment(weld::Widget* pParent)
-    : m_xBuilder(Application::CreateBuilder(pParent, "modules/scalc/ui/passfragment.ui"))
-    , m_xSheetsBox(m_xBuilder->weld_container("PassEntry"))
-    , m_xName(m_xBuilder->weld_label("name"))
-    , m_xStatus(m_xBuilder->weld_label("status"))
-    , m_xButton(m_xBuilder->weld_button("button"))
+    : m_xBuilder(Application::CreateBuilder(pParent, u"modules/scalc/ui/passfragment.ui"_ustr))
+    , m_xSheetsBox(m_xBuilder->weld_container(u"PassEntry"_ustr))
+    , m_xName(m_xBuilder->weld_label(u"name"_ustr))
+    , m_xStatus(m_xBuilder->weld_label(u"status"_ustr))
+    , m_xButton(m_xBuilder->weld_button(u"button"_ustr))
 {
     m_xButton->set_label(ScResId(STR_RETYPE));
 }
@@ -265,16 +266,16 @@ IMPL_LINK(ScRetypePassDlg, RetypeBtnHdl, weld::Button&, rBtn, void)
 }
 
 ScRetypePassInputDlg::ScRetypePassInputDlg(weld::Window* pParent, ScPassHashProtectable* pProtected)
-    : GenericDialogController(pParent, "modules/scalc/ui/retypepassworddialog.ui",
-                              "RetypePasswordDialog")
+    : GenericDialogController(pParent, u"modules/scalc/ui/retypepassworddialog.ui"_ustr,
+                              u"RetypePasswordDialog"_ustr)
     , m_pProtected(pProtected)
-    , m_xBtnOk(m_xBuilder->weld_button("ok"))
-    , m_xBtnRetypePassword(m_xBuilder->weld_radio_button("retypepassword"))
-    , m_xPasswordGrid(m_xBuilder->weld_widget("passwordgrid"))
-    , m_xPassword1Edit(m_xBuilder->weld_entry("newpassEntry"))
-    , m_xPassword2Edit(m_xBuilder->weld_entry("confirmpassEntry"))
-    , m_xBtnMatchOldPass(m_xBuilder->weld_check_button("mustmatch"))
-    , m_xBtnRemovePassword(m_xBuilder->weld_radio_button("removepassword"))
+    , m_xBtnOk(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xBtnRetypePassword(m_xBuilder->weld_radio_button(u"retypepassword"_ustr))
+    , m_xPasswordGrid(m_xBuilder->weld_widget(u"passwordgrid"_ustr))
+    , m_xPassword1Edit(m_xBuilder->weld_entry(u"newpassEntry"_ustr))
+    , m_xPassword2Edit(m_xBuilder->weld_entry(u"confirmpassEntry"_ustr))
+    , m_xBtnMatchOldPass(m_xBuilder->weld_check_button(u"mustmatch"_ustr))
+    , m_xBtnRemovePassword(m_xBuilder->weld_radio_button(u"removepassword"_ustr))
 {
     Init();
 }

@@ -29,7 +29,8 @@
 #include <tabvwsh.hxx>
 
 ScMoveTableDlg::ScMoveTableDlg(weld::Window* pParent, OUString aDefault)
-    : GenericDialogController(pParent, "modules/scalc/ui/movecopysheet.ui", "MoveCopySheetDialog")
+    : GenericDialogController(pParent, u"modules/scalc/ui/movecopysheet.ui"_ustr,
+                              u"MoveCopySheetDialog"_ustr)
     , maDefaultName(std::move(aDefault))
     , mnCurrentDocPos(0)
     , nDocument(0)
@@ -37,17 +38,17 @@ ScMoveTableDlg::ScMoveTableDlg(weld::Window* pParent, OUString aDefault)
     , bCopyTable(false)
     , bRenameTable(false)
     , mbEverEdited(false)
-    , m_xBtnMove(m_xBuilder->weld_radio_button("move"))
-    , m_xBtnCopy(m_xBuilder->weld_radio_button("copy"))
-    , m_xFtDoc(m_xBuilder->weld_label("toDocumentLabel"))
-    , m_xLbDoc(m_xBuilder->weld_combo_box("toDocument"))
-    , m_xLbTable(m_xBuilder->weld_tree_view("insertBefore"))
-    , m_xEdTabName(m_xBuilder->weld_entry("newName"))
-    , m_xFtWarn(m_xBuilder->weld_label("newNameWarn"))
-    , m_xBtnOk(m_xBuilder->weld_button("ok"))
-    , m_xUnusedLabel(m_xBuilder->weld_label("warnunused"))
-    , m_xEmptyLabel(m_xBuilder->weld_label("warnempty"))
-    , m_xInvalidLabel(m_xBuilder->weld_label("warninvalid"))
+    , m_xBtnMove(m_xBuilder->weld_radio_button(u"move"_ustr))
+    , m_xBtnCopy(m_xBuilder->weld_radio_button(u"copy"_ustr))
+    , m_xFtDoc(m_xBuilder->weld_label(u"toDocumentLabel"_ustr))
+    , m_xLbDoc(m_xBuilder->weld_combo_box(u"toDocument"_ustr))
+    , m_xLbTable(m_xBuilder->weld_tree_view(u"insertBefore"_ustr))
+    , m_xEdTabName(m_xBuilder->weld_entry(u"newName"_ustr))
+    , m_xFtWarn(m_xBuilder->weld_label(u"newNameWarn"_ustr))
+    , m_xBtnOk(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xUnusedLabel(m_xBuilder->weld_label(u"warnunused"_ustr))
+    , m_xEmptyLabel(m_xBuilder->weld_label(u"warnempty"_ustr))
+    , m_xInvalidLabel(m_xBuilder->weld_label(u"warninvalid"_ustr))
 {
     assert(m_xLbDoc->get_count() == 2);
     msCurrentDoc = m_xLbDoc->get_text(0);

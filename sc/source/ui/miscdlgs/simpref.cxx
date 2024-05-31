@@ -22,16 +22,16 @@
 #include <simpref.hxx>
 
 ScSimpleRefDlg::ScSimpleRefDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent)
-    : ScAnyRefDlgController(pB, pCW, pParent, "modules/scalc/ui/simplerefdialog.ui", "SimpleRefDialog")
+    : ScAnyRefDlgController(pB, pCW, pParent, u"modules/scalc/ui/simplerefdialog.ui"_ustr, u"SimpleRefDialog"_ustr)
     , bAutoReOpen(true)
     , bCloseOnButtonUp(false)
     , bSingleCell(false)
     , bMultiSelection(false)
-    , m_xFtAssign(m_xBuilder->weld_label("area"))
-    , m_xEdAssign(new formula::RefEdit(m_xBuilder->weld_entry("assign")))
-    , m_xRbAssign(new formula::RefButton(m_xBuilder->weld_button("assignref")))
-    , m_xBtnOk(m_xBuilder->weld_button("ok"))
-    , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
+    , m_xFtAssign(m_xBuilder->weld_label(u"area"_ustr))
+    , m_xEdAssign(new formula::RefEdit(m_xBuilder->weld_entry(u"assign"_ustr)))
+    , m_xRbAssign(new formula::RefButton(m_xBuilder->weld_button(u"assignref"_ustr)))
+    , m_xBtnOk(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xBtnCancel(m_xBuilder->weld_button(u"cancel"_ustr))
 {
     m_xEdAssign->SetReferences(this, m_xFtAssign.get());
     m_xRbAssign->SetReferences(this, m_xEdAssign.get());

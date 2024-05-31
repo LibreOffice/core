@@ -26,10 +26,10 @@ ScStringInputDlg::ScStringInputDlg(weld::Window* pParent,
                                    const OUString& rEditTitle,
                                    const OUString& rDefault,
                                    const OUString& rHelpId, const OUString& rEditHelpId)
-    : GenericDialogController(pParent, "modules/scalc/ui/inputstringdialog.ui",
-            "InputStringDialog")
-    , m_xLabel(m_xBuilder->weld_label("description_label"))
-    , m_xEdInput(m_xBuilder->weld_entry("name_entry"))
+    : GenericDialogController(pParent, u"modules/scalc/ui/inputstringdialog.ui"_ustr,
+            u"InputStringDialog"_ustr)
+    , m_xLabel(m_xBuilder->weld_label(u"description_label"_ustr))
+    , m_xEdInput(m_xBuilder->weld_entry(u"name_entry"_ustr))
 {
     m_xLabel->set_label(rEditTitle);
     m_xDialog->set_title(rTitle);

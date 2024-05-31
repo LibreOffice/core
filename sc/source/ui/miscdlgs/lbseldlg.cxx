@@ -22,8 +22,8 @@
 #include <lbseldlg.hxx>
 
 ScSelEntryDlg::ScSelEntryDlg(weld::Window* pParent, const std::vector<OUString> &rEntryList)
-    : GenericDialogController(pParent, "modules/scalc/ui/selectrange.ui", "SelectRangeDialog")
-    , m_xLb(m_xBuilder->weld_tree_view("treeview"))
+    : GenericDialogController(pParent, u"modules/scalc/ui/selectrange.ui"_ustr, u"SelectRangeDialog"_ustr)
+    , m_xLb(m_xBuilder->weld_tree_view(u"treeview"_ustr))
 {
     m_xLb->set_size_request(m_xLb->get_approximate_digit_width() * 32,
                             m_xLb->get_height_rows(8));

@@ -27,13 +27,14 @@
 static sal_uInt8 nInsItemChecked = 0;
 
 ScInsertCellDlg::ScInsertCellDlg(weld::Window* pParent, bool bDisallowCellMove)
-    : GenericDialogController(pParent, "modules/scalc/ui/insertcells.ui", "InsertCellsDialog")
-    , m_xBtnCellsDown(m_xBuilder->weld_radio_button("down"))
-    , m_xBtnCellsRight(m_xBuilder->weld_radio_button("right"))
-    , m_xBtnInsRow(m_xBuilder->weld_radio_button("rows"))
-    , m_xBtnInsCol(m_xBuilder->weld_radio_button("cols"))
-    , m_xNumberOfRows(m_xBuilder->weld_spin_button("number_of_rows"))
-    , m_xNumberOfCols(m_xBuilder->weld_spin_button("number_of_columns"))
+    : GenericDialogController(pParent, u"modules/scalc/ui/insertcells.ui"_ustr,
+                              u"InsertCellsDialog"_ustr)
+    , m_xBtnCellsDown(m_xBuilder->weld_radio_button(u"down"_ustr))
+    , m_xBtnCellsRight(m_xBuilder->weld_radio_button(u"right"_ustr))
+    , m_xBtnInsRow(m_xBuilder->weld_radio_button(u"rows"_ustr))
+    , m_xBtnInsCol(m_xBuilder->weld_radio_button(u"cols"_ustr))
+    , m_xNumberOfRows(m_xBuilder->weld_spin_button(u"number_of_rows"_ustr))
+    , m_xNumberOfCols(m_xBuilder->weld_spin_button(u"number_of_columns"_ustr))
 {
     const ScViewData* pViewData = ScDocShell::GetViewData();
     if (pViewData && pViewData->GetDocument().IsLayoutRTL(pViewData->GetTabNo()))

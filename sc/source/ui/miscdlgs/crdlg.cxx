@@ -24,10 +24,11 @@
 
 ScColOrRowDlg::ScColOrRowDlg(weld::Window* pParent, const OUString& rStrTitle,
                              const OUString& rStrLabel)
-    : GenericDialogController(pParent, "modules/scalc/ui/colorrowdialog.ui", "ColOrRowDialog")
-    , m_xFrame(m_xBuilder->weld_frame("frame"))
-    , m_xBtnCols(m_xBuilder->weld_radio_button("columns"))
-    , m_xBtnOk(m_xBuilder->weld_button("ok"))
+    : GenericDialogController(pParent, u"modules/scalc/ui/colorrowdialog.ui"_ustr,
+                              u"ColOrRowDialog"_ustr)
+    , m_xFrame(m_xBuilder->weld_frame(u"frame"_ustr))
+    , m_xBtnCols(m_xBuilder->weld_radio_button(u"columns"_ustr))
+    , m_xBtnOk(m_xBuilder->weld_button(u"ok"_ustr))
 {
     m_xDialog->set_title(rStrTitle);
     m_xFrame->set_label(rStrLabel);

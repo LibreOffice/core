@@ -22,9 +22,10 @@
 #include <shtabdlg.hxx>
 
 ScShowTabDlg::ScShowTabDlg(weld::Window* pParent)
-    : GenericDialogController(pParent, "modules/scalc/ui/showsheetdialog.ui", "ShowSheetDialog")
-    , m_xFrame(m_xBuilder->weld_frame("frame"))
-    , m_xLb(m_xBuilder->weld_tree_view("treeview"))
+    : GenericDialogController(pParent, u"modules/scalc/ui/showsheetdialog.ui"_ustr,
+                              u"ShowSheetDialog"_ustr)
+    , m_xFrame(m_xBuilder->weld_frame(u"frame"_ustr))
+    , m_xLb(m_xBuilder->weld_tree_view(u"treeview"_ustr))
 {
     m_xLb->set_selection_mode(SelectionMode::Multiple);
     m_xLb->set_size_request(-1, m_xLb->get_height_rows(10));

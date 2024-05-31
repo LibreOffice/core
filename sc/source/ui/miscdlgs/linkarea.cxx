@@ -37,14 +37,14 @@
 #include <strings.hrc>
 
 ScLinkedAreaDlg::ScLinkedAreaDlg(weld::Widget* pParent)
-    : GenericDialogController(pParent, "modules/scalc/ui/externaldata.ui", "ExternalDataDialog")
-    , m_xCbUrl(new SvtURLBox(m_xBuilder->weld_combo_box("url")))
-    , m_xBtnBrowse(m_xBuilder->weld_button("browse"))
-    , m_xLbRanges(m_xBuilder->weld_tree_view("ranges"))
-    , m_xBtnReload(m_xBuilder->weld_check_button("reload"))
-    , m_xNfDelay(m_xBuilder->weld_spin_button("delay"))
-    , m_xFtSeconds(m_xBuilder->weld_label("secondsft"))
-    , m_xBtnOk(m_xBuilder->weld_button("ok"))
+    : GenericDialogController(pParent, u"modules/scalc/ui/externaldata.ui"_ustr, u"ExternalDataDialog"_ustr)
+    , m_xCbUrl(new SvtURLBox(m_xBuilder->weld_combo_box(u"url"_ustr)))
+    , m_xBtnBrowse(m_xBuilder->weld_button(u"browse"_ustr))
+    , m_xLbRanges(m_xBuilder->weld_tree_view(u"ranges"_ustr))
+    , m_xBtnReload(m_xBuilder->weld_check_button(u"reload"_ustr))
+    , m_xNfDelay(m_xBuilder->weld_spin_button(u"delay"_ustr))
+    , m_xFtSeconds(m_xBuilder->weld_label(u"secondsft"_ustr))
+    , m_xBtnOk(m_xBuilder->weld_button(u"ok"_ustr))
 {
     m_xLbRanges->set_selection_mode(SelectionMode::Multiple);
 
@@ -243,7 +243,7 @@ void ScLinkedAreaDlg::UpdateSourceRanges()
         if (pFilter && pFilter->GetFilterName() == SC_TEXT_CSV_FILTER_NAME)
         {
             // Insert dummy All range to have something selectable.
-            m_xLbRanges->append_text("CSV_all");
+            m_xLbRanges->append_text(u"CSV_all"_ustr);
         }
 
         // tdf#142600 - list tables in order of their appearance in the document's source

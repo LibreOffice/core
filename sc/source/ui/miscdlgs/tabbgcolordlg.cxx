@@ -28,12 +28,12 @@
 
 ScTabBgColorDlg::ScTabBgColorDlg(weld::Window* pParent, const OUString& rTitle,
     const OUString& rTabBgColorNoColorText, const Color& rDefaultColor)
-    : GenericDialogController(pParent, "modules/scalc/ui/tabcolordialog.ui", "TabColorDialog")
+    : GenericDialogController(pParent, u"modules/scalc/ui/tabcolordialog.ui"_ustr, u"TabColorDialog"_ustr)
     , m_aTabBgColor(rDefaultColor)
-    , m_xSelectPalette(m_xBuilder->weld_combo_box("paletteselector"))
-    , m_xTabBgColorSet(new ScTabBgColorValueSet(m_xBuilder->weld_scrolled_window("colorsetwin", true)))
-    , m_xTabBgColorSetWin(new weld::CustomWeld(*m_xBuilder, "colorset", *m_xTabBgColorSet))
-    , m_xBtnOk(m_xBuilder->weld_button("ok"))
+    , m_xSelectPalette(m_xBuilder->weld_combo_box(u"paletteselector"_ustr))
+    , m_xTabBgColorSet(new ScTabBgColorValueSet(m_xBuilder->weld_scrolled_window(u"colorsetwin"_ustr, true)))
+    , m_xTabBgColorSetWin(new weld::CustomWeld(*m_xBuilder, u"colorset"_ustr, *m_xTabBgColorSet))
+    , m_xBtnOk(m_xBuilder->weld_button(u"ok"_ustr))
 {
     m_xTabBgColorSet->SetDialog(this);
     m_xTabBgColorSet->SetColCount(SvxColorValueSet::getColumnCount());
