@@ -99,7 +99,7 @@ namespace sdr::properties
 
         void PageProperties::SetObjectItemSet(const SfxItemSet& /*rSet*/)
         {
-            assert(!"PageProperties::SetObjectItemSet() should never be called");
+            // This can be called e.g. when positioning the slide using dialog in Notes view
         }
 } // end of namespace
 
