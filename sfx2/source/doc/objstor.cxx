@@ -1022,7 +1022,7 @@ void SfxObjectShell::DetectCsvSeparators(SvStream& stream, rtl_TextEncoding& eCh
 
         nLinesCount ++;
 
-        // For each character count the lines that contain it and different number of occurences.
+        // For each character count the lines that contain it and different number of occurrences.
         // And the global maximum for the first statistic.
         for (auto aCurLineChar=aCharsCount.cbegin(); aCurLineChar != aCharsCount.cend(); aCurLineChar++)
         {
@@ -1041,7 +1041,7 @@ void SfxObjectShell::DetectCsvSeparators(SvStream& stream, rtl_TextEncoding& eCh
                         break;
                 }
                 if (aPrevLineChar == aLinesCharsCount.cend())
-                    aCurStats->second.second ++;// Increment number of different number of occurences.
+                    aCurStats->second.second ++;// Increment number of different number of occurrences.
 
                 // Update the maximum of number of lines that contain the same character. This is a global value.
                 if (nMaxLinesSameChar < aCurStats->second.first)
@@ -1053,14 +1053,14 @@ void SfxObjectShell::DetectCsvSeparators(SvStream& stream, rtl_TextEncoding& eCh
         aLinesCharsCount[aLinesCharsCount.size() - 1].swap(aCharsCount);
     }
 
-    // Compute the global minimum of different number of occurences.
+    // Compute the global minimum of different number of occurrences.
     // But only for characters which occur in a maximum number of lines (previously computed).
     for (auto it=aStats.cbegin(); it != aStats.cend(); it++)
         if (it->second.first == nMaxLinesSameChar && nMinDiffs > it->second.second)
             nMinDiffs = it->second.second;
 
-    // Compute the initial list of separators: those with the maximum lines of occurence and
-    // the minimum of different number of occurences.
+    // Compute the initial list of separators: those with the maximum lines of occurrence and
+    // the minimum of different number of occurrences.
     for (auto it=aStats.cbegin(); it != aStats.cend(); it++)
         if (it->second.first == nMaxLinesSameChar && it->second.second == nMinDiffs)
             sInitSeps += OUStringChar(it->first);
