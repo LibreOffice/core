@@ -70,7 +70,9 @@ void GraphicViewShell::ArrangeGUIElements()
     if (mpLayerTabBar && mpLayerTabBar->IsVisible())
     {
         Size aSize = mpLayerTabBar->GetSizePixel();
-        const Size aFrameSize (GetViewFrame()->GetWindow().GetOutputSizePixel());
+        Size aFrameSize;
+        if (SfxViewFrame* pViewFrame = GetViewFrame())
+            aFrameSize = pViewFrame->GetWindow().GetOutputSizePixel();
 
         aSize.setHeight(GetParentWindow()->GetFont().GetFontHeight() + TAB_HEIGHT_MARGIN);
         aSize.setWidth( aFrameSize.Width() );
