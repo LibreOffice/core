@@ -144,7 +144,7 @@ private:
     void    UpdateSelection();
     void    ContentUpdated(); // stop aContentIdle because content is up to date
 
-    static ScTabViewShell*  GetTabViewShell();
+    SAL_RET_MAYBENULL static ScTabViewShell*  GetTabViewShell();
     static ScNavigatorSettings* GetNavigatorSettings();
     ScViewData*             GetViewData();
 
