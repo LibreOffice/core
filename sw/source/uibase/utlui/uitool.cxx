@@ -68,6 +68,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <strings.hrc>
 #include <docmodel/color/ComplexColor.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 // 50 cm 28350
 #define MAXHEIGHT 28350
@@ -632,6 +633,12 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     {
         oGrabBag->GetGrabBag()["RtlGutter"]
             <<= rMaster.GetAttrSet().GetItem<SfxBoolItem>(RES_RTL_GUTTER)->GetValue();
+    }
+
+    const IDocumentSettingAccess& rIDSA = rMaster.getIDocumentSettingAccess();
+    if (rIDSA.get(DocumentSettingId::CONTINUOUS_ENDNOTES))
+    {
+        oGrabBag->GetGrabBag()["ContinuousEndnotes"] <<= true;
     }
 
     rSet.Put(*oGrabBag);
