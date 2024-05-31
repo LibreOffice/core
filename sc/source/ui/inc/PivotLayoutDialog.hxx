@@ -85,6 +85,9 @@ private:
     std::unique_ptr<weld::Frame> mxDestFrame;
     std::unique_ptr<weld::Label> mxDestLabel;
 
+    std::unique_ptr<weld::Expander> mxOptions;
+    std::unique_ptr<weld::Expander> mxMore;
+
     DECL_LINK(CancelClicked, weld::Button&, void);
     DECL_LINK(OKClicked, weld::Button&, void);
     DECL_LINK(GetEditFocusHandler, formula::RefEdit&, void);

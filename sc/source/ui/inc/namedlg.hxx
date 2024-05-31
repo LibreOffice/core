@@ -68,6 +68,8 @@ private:
 
     std::unique_ptr<weld::Label> m_xFtInfo;
 
+    std::unique_ptr<weld::Expander> m_xExpander;
+
     std::unique_ptr<ScRangeManagerTable> m_xRangeManagerTable;
 
 private:

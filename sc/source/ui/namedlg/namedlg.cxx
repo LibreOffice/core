@@ -72,6 +72,7 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParen
     , m_xBtnOk(m_xBuilder->weld_button("ok"))
     , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
     , m_xFtInfo(m_xBuilder->weld_label("info"))
+    , m_xExpander(m_xBuilder->weld_expander("more"))
 {
     m_xEdAssign->SetReferences(this, m_xFtAssign.get());
     m_xRbAssign->SetReferences(this, m_xEdAssign.get());
