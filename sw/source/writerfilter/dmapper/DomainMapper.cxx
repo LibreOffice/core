@@ -4347,13 +4347,13 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
     else if (len == 1 && sText[0] == '\r')
     {
         // Clear "last" one linebreak at end of section
-        if (m_pImpl->GetIsLastParagraphInSection() && m_pImpl->isBreakDeferred(LINE_BREAK))
+        if (m_pImpl->GetIsLastParagraphInSection() && m_pImpl->isBreakDeferred(LINE_BREAK) && !m_pImpl->HasLineBreakClear())
             m_pImpl->clearDeferredBreak(LINE_BREAK);
         // And emit all other linebreaks
         while (m_pImpl->isBreakDeferred(LINE_BREAK))
         {
             m_pImpl->clearDeferredBreak(LINE_BREAK);
-            m_pImpl->appendTextPortion(u"\n"_ustr, m_pImpl->GetTopContext());
+            m_pImpl->HandleLineBreak(m_pImpl->GetTopContext());
         }
     }
     else if (len == 1 && sText[0] == '\t' )
