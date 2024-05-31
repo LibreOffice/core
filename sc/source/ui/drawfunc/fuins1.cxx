@@ -125,13 +125,14 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
         }
     }
     ScDrawView* pDrawView = rViewSh.GetScDrawView();
+    const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
 
     // #i123922# check if an existing object is selected; if yes, evtl. replace
     // the graphic for a SdrGraphObj (including link state updates) or adapt the fill
     // style for other objects
-    if(pDrawView && 1 == pDrawView->GetMarkedObjectList().GetMarkCount())
+    if(pDrawView && 1 == rMarkList.GetMarkCount())
     {
-        SdrObject* pPickObj = pDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+        SdrObject* pPickObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
         if(pPickObj)
         {

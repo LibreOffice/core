@@ -251,9 +251,9 @@ bool FuPoor::doConstructOrthogonal() const
     }
 
     // Detect image/media and resize proportionally, but don't constrain movement by default
-    if (pView->GetMarkedObjectList().GetMarkCount() != 0)
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    if (rMarkList.GetMarkCount() != 0)
     {
-        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         if (rMarkList.GetMarkCount() == 1)
         {
             SdrObjKind aObjIdentifier = rMarkList.GetMark(0)->GetMarkedSdrObj()->GetObjIdentifier();

@@ -85,12 +85,16 @@ void ScClipUtil::PasteFromClipboard( ScViewData& rViewData, ScTabViewShell* pTab
             pTabViewShell->PasteFromSystem();
             // Anchor To Cell rather than To Page
             ScDrawView* pDrawView = pTabViewShell->GetScDrawView();
-            if(pDrawView && 1 == pDrawView->GetMarkedObjectList().GetMarkCount())
+            if(pDrawView)
             {
-                SdrObject* pPickObj = pDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
-                if(pPickObj)
+                const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
+                if (1 == rMarkList.GetMarkCount())
                 {
-                    ScDrawLayer::SetCellAnchoredFromPosition( *pPickObj,  rThisDoc, nThisTab, false );
+                    SdrObject* pPickObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                    if(pPickObj)
+                    {
+                        ScDrawLayer::SetCellAnchoredFromPosition( *pPickObj,  rThisDoc, nThisTab, false );
+                    }
                 }
             }
         }

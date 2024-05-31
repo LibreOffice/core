@@ -112,12 +112,12 @@ void ScGraphicShell::ExecuteFilter( const SfxRequest& rReq )
             if( pGraphicObj->GetGraphicType() == GraphicType::Bitmap )
             {
                 SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, pGraphicObj->GetGraphicObject(),
-                    [pView, pGraphicObj, pObj] (GraphicObject aFilterObj) -> void
+                    [pView, pGraphicObj, pObj, rMarkList] (GraphicObject aFilterObj) -> void
                     {
                         if( SdrPageView* pPageView = pView->GetSdrPageView() )
                         {
                             rtl::Reference<SdrGrafObj> pFilteredObj = SdrObject::Clone(*pGraphicObj, pGraphicObj->getSdrModelFromSdrObject());
-                            OUString aStr = pView->GetMarkedObjectList().GetMarkDescription() + " " + ScResId(SCSTR_UNDO_GRAFFILTER);
+                            OUString aStr = rMarkList.GetMarkDescription() + " " + ScResId(SCSTR_UNDO_GRAFFILTER);
                             pView->BegUndo( aStr );
                             pFilteredObj->SetGraphicObject( aFilterObj );
                             pView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj.get() );
@@ -208,7 +208,7 @@ void ScGraphicShell::ExecuteCompressGraphic( SAL_UNUSED_PARAMETER SfxRequest& )
                 {
                     rtl::Reference<SdrGrafObj> pNewObject = dialog.GetCompressedSdrGrafObj();
                     SdrPageView* pPageView = pView->GetSdrPageView();
-                    OUString aUndoString = pView->GetMarkedObjectList().GetMarkDescription() + " Compress";
+                    OUString aUndoString = rMarkList.GetMarkDescription() + " Compress";
                     pView->BegUndo( aUndoString );
                     pView->ReplaceObjectAtView( pObj, *pPageView, pNewObject.get() );
                     pView->EndUndo();
@@ -342,7 +342,7 @@ void ScGraphicShell::ExecuteChangePicture( SAL_UNUSED_PARAMETER SfxRequest& /*rR
                         rtl::Reference<SdrGrafObj> pNewObject(SdrObject::Clone(*pGraphicObj, pGraphicObj->getSdrModelFromSdrObject()));
                         pNewObject->SetGraphic( aGraphic );
                         SdrPageView* pPageView = pView->GetSdrPageView();
-                        OUString aUndoString = pView->GetMarkedObjectList().GetMarkDescription() + " Change";
+                        OUString aUndoString = rMarkList.GetMarkDescription() + " Change";
                         pView->BegUndo( aUndoString );
                         pView->ReplaceObjectAtView( pObj, *pPageView, pNewObject.get() );
                         pView->EndUndo();

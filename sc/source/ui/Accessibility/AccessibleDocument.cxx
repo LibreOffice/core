@@ -1007,9 +1007,9 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
         ScDrawView* pScDrawView = mpViewShell->GetViewData().GetScDrawView();
         if( pScDrawView )
         {
-            if( pScDrawView->GetMarkedObjectList().GetMarkCount() == 1 )
+            pMarkList = &(pScDrawView->GetMarkedObjectList());
+            if( pMarkList->GetMarkCount() == 1 )
             {
-                pMarkList = &(pScDrawView->GetMarkedObjectList());
                 pMarkedObj = pMarkList->GetMark(0)->GetMarkedSdrObj();
                 uno::Reference< drawing::XShape > xMarkedXShape (pMarkedObj->getUnoShape(), uno::UNO_QUERY);
                 if( aFocusedItr != aDataEndItr &&

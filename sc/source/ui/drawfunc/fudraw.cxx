@@ -193,6 +193,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
     bool bReturn = false;
     ScViewData& rViewData = rViewShell.GetViewData();
 
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     switch ( rKEvt.GetKeyCode().GetCode() )
     {
         case KEY_ESCAPE:
@@ -209,7 +210,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 rViewData.GetDispatcher().Execute(SID_OBJECT_SELECT, SfxCallMode::SLOT | SfxCallMode::RECORD);
                 bReturn = true;
             }
-            else if ( pView->GetMarkedObjectList().GetMarkCount() != 0 )
+            else if ( rMarkList.GetMarkCount() != 0 )
             {
                 // III
                 SdrHdlList& rHdlList = const_cast< SdrHdlList& >( pView->GetHdlList() );
@@ -219,7 +220,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     pView->UnmarkAll();
 
                 //  while bezier editing, object is selected
-                if (pView->GetMarkedObjectList().GetMarkCount() == 0)
+                if (rMarkList.GetMarkCount() == 0)
                     rViewShell.SetDrawShell( false );
 
                 bReturn = true;
@@ -237,7 +238,6 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
             {
                 // activate OLE object on RETURN for selected object
                 // put selected text object in edit mode
-                const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
                 {
                     bool bOle = rViewShell.GetViewFrame().GetFrame().IsInPlace();
@@ -263,7 +263,6 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
             {
                 // put selected text object in edit mode
                 // (this is not SID_SETINPUTMODE, but F2 hardcoded, like in Writer)
-                const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
                 {
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
@@ -287,7 +286,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         {
             // in calc do NOT start draw object selection using TAB/SHIFT-TAB when
             // there is not yet an object selected
-            if(pView->GetMarkedObjectList().GetMarkCount() != 0)
+            if(rMarkList.GetMarkCount() != 0)
             {
                 vcl::KeyCode aCode = rKEvt.GetKeyCode();
 
@@ -307,7 +306,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     }
 
                     // II
-                    if(pView->GetMarkedObjectList().GetMarkCount() != 0)
+                    if(rMarkList.GetMarkCount() != 0)
                         pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
                     bReturn = true;
@@ -343,7 +342,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         {
             // in calc do NOT select the last draw object when
             // there is not yet an object selected
-            if(pView->GetMarkedObjectList().GetMarkCount() != 0)
+            if(rMarkList.GetMarkCount() != 0)
             {
                 vcl::KeyCode aCode = rKEvt.GetKeyCode();
 
@@ -354,7 +353,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     pView->MarkNextObj();
 
                     // II
-                    if(pView->GetMarkedObjectList().GetMarkCount() != 0)
+                    if(rMarkList.GetMarkCount() != 0)
                         pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
                     bReturn = true;
@@ -367,7 +366,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         {
             // in calc do NOT select the first draw object when
             // there is not yet an object selected
-            if(pView->GetMarkedObjectList().GetMarkCount() != 0)
+            if(rMarkList.GetMarkCount() != 0)
             {
                 vcl::KeyCode aCode = rKEvt.GetKeyCode();
 
@@ -378,7 +377,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     pView->MarkNextObj(true);
 
                     // II
-                    if(pView->GetMarkedObjectList().GetMarkCount() != 0)
+                    if(rMarkList.GetMarkCount() != 0)
                         pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
                     bReturn = true;
@@ -394,10 +393,9 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         {
             // in calc do cursor travelling of draw objects only when
             // there is an object selected yet
-            if(pView->GetMarkedObjectList().GetMarkCount() != 0)
+            if(rMarkList.GetMarkCount() != 0)
             {
 
-                const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if(rMarkList.GetMarkCount() == 1)
                 {
                     // disable cursor travelling on note objects as the tail connector position
@@ -562,7 +560,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         case KEY_SPACE:
         {
             // in calc do only something when draw objects are selected
-            if(pView->GetMarkedObjectList().GetMarkCount() != 0)
+            if(rMarkList.GetMarkCount() != 0)
             {
                 const SdrHdlList& rHdlList = pView->GetHdlList();
                 SdrHdl* pHdl = rHdlList.GetFocusHdl();
@@ -633,7 +631,6 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
     {
         // allow direct typing into a selected text object
 
-        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() && EditEngine::IsSimpleCharInput(rKEvt) )
         {
             SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
@@ -748,10 +745,10 @@ bool FuDraw::IsSizingOrMovingNote( const MouseEvent& rMEvt ) const
     bool bIsSizingOrMoving = false;
     if ( rMEvt.IsLeft() )
     {
-        const SdrMarkList& rNoteMarkList = pView->GetMarkedObjectList();
-        if(rNoteMarkList.GetMarkCount() == 1)
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+        if(rMarkList.GetMarkCount() == 1)
         {
-            SdrObject* pObj = rNoteMarkList.GetMark( 0 )->GetMarkedSdrObj();
+            SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
             if ( ScDrawLayer::IsNoteCaption( pObj ) )
             {
                 Point aMPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );

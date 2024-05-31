@@ -64,16 +64,16 @@ ScDrawView::ScDrawView(
 
 void ScDrawView::SetPageAnchored()
 {
-    if( GetMarkedObjectList().GetMarkCount() == 0 )
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    if( rMarkList.GetMarkCount() == 0 )
         return;
 
-    const SdrMarkList* pMark = &GetMarkedObjectList();
-    const size_t nCount = pMark->GetMarkCount();
+    const size_t nCount = rMarkList.GetMarkCount();
 
     BegUndo(ScResId(SCSTR_UNDO_PAGE_ANCHOR));
     for( size_t i=0; i<nCount; ++i )
     {
-        SdrObject* pObj = pMark->GetMark(i)->GetMarkedSdrObj();
+        SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         AddUndo (std::make_unique<ScUndoAnchorData>( pObj, &rDoc, nTab ));
         ScDrawLayer::SetPageAnchored( *pObj );
     }
@@ -89,16 +89,16 @@ void ScDrawView::SetPageAnchored()
 
 void ScDrawView::SetCellAnchored(bool bResizeWithCell)
 {
-    if( GetMarkedObjectList().GetMarkCount() == 0 )
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    if( rMarkList.GetMarkCount() == 0 )
         return;
 
-    const SdrMarkList* pMark = &GetMarkedObjectList();
-    const size_t nCount = pMark->GetMarkCount();
+    const size_t nCount = rMarkList.GetMarkCount();
 
     BegUndo(ScResId(SCSTR_UNDO_CELL_ANCHOR));
     for( size_t i=0; i<nCount; ++i )
     {
-        SdrObject* pObj = pMark->GetMark(i)->GetMarkedSdrObj();
+        SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         AddUndo (std::make_unique<ScUndoAnchorData>( pObj, &rDoc, nTab ));
         ScDrawLayer::SetCellAnchoredFromPosition(*pObj, rDoc, nTab, bResizeWithCell);
     }
@@ -118,13 +118,13 @@ ScAnchorType ScDrawView::GetAnchorType() const
     bool bPage = false;
     bool bCell = false;
     bool bCellResize = false;
-    if( GetMarkedObjectList().GetMarkCount() != 0 )
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    if( rMarkList.GetMarkCount() != 0 )
     {
-        const SdrMarkList* pMark = &GetMarkedObjectList();
-        const size_t nCount = pMark->GetMarkCount();
+        const size_t nCount = rMarkList.GetMarkCount();
         for( size_t i=0; i<nCount; ++i )
         {
-            const SdrObject* pObj = pMark->GetMark(i)->GetMarkedSdrObj();
+            const SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
             const ScAnchorType aAnchorType = ScDrawLayer::GetAnchorType( *pObj );
             if( aAnchorType == SCA_CELL )
                 bCell =true;

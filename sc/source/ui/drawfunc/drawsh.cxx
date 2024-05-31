@@ -255,7 +255,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
                 }
 
-                if( pView->GetMarkedObjectList().GetMarkCount() != 0 )
+                if( rMarkList.GetMarkCount() != 0 )
                 {
                     std::unique_ptr<SfxItemSet> pNewArgs = rReq.GetArgs()->Clone();
                     lcl_convertStringArguments(*pNewArgs);
@@ -327,7 +327,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
         case SID_ATTR_TRANSFORM:
             {
-                if ( pView->GetMarkedObjectList().GetMarkCount() != 0 )
+                if ( rMarkList.GetMarkCount() != 0 )
                 {
                     const SfxItemSet* pArgs = rReq.GetArgs();
 
@@ -476,9 +476,9 @@ void ScDrawShell::ExecuteMacroAssign(SdrObject* pObj, weld::Window* pWin)
 void ScDrawShell::ExecuteLineDlg( const SfxRequest& rReq )
 {
     ScDrawView*         pView       = rViewData.GetScDrawView();
-    bool                bHasMarked  = pView->GetMarkedObjectList().GetMarkCount() != 0;
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    bool                bHasMarked  = rMarkList.GetMarkCount() != 0;
     const SdrObject*    pObj        = nullptr;
-    const SdrMarkList&  rMarkList   = pView->GetMarkedObjectList();
 
     std::shared_ptr<SfxRequest> xRequest = std::make_shared<SfxRequest>(rReq);
 
@@ -514,7 +514,8 @@ void ScDrawShell::ExecuteLineDlg( const SfxRequest& rReq )
 void ScDrawShell::ExecuteAreaDlg( const SfxRequest& rReq )
 {
     ScDrawView* pView       = rViewData.GetScDrawView();
-    bool        bHasMarked  = pView->GetMarkedObjectList().GetMarkCount() != 0;
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    bool        bHasMarked  = rMarkList.GetMarkCount() != 0;
 
     std::shared_ptr<SfxRequest> xRequest = std::make_shared<SfxRequest>(rReq);
 
@@ -546,7 +547,8 @@ void ScDrawShell::ExecuteAreaDlg( const SfxRequest& rReq )
 void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq )
 {
     ScDrawView* pView       = rViewData.GetScDrawView();
-    bool        bHasMarked  = pView->GetMarkedObjectList().GetMarkCount() != 0;
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    bool        bHasMarked  = rMarkList.GetMarkCount() != 0;
     SfxItemSet  aNewAttr    ( pView->GetDefaultAttr() );
 
     if( bHasMarked )
@@ -573,7 +575,8 @@ void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq )
 void ScDrawShell::ExecuteMeasureDlg( SfxRequest& rReq )
 {
     ScDrawView* pView       = rViewData.GetScDrawView();
-    bool        bHasMarked  = pView->GetMarkedObjectList().GetMarkCount() != 0;
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    bool        bHasMarked  = rMarkList.GetMarkCount() != 0;
     SfxItemSet  aNewAttr    ( pView->GetDefaultAttr() );
 
     if( bHasMarked )

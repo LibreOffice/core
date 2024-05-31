@@ -57,7 +57,8 @@ Point aDragStartDiff;
 
 void ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
 {
-    if ( GetMarkedObjectList().GetMarkCount() == 0 )
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    if ( rMarkList.GetMarkCount() == 0 )
         return;
 
     BrkAction();
@@ -67,7 +68,6 @@ void ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
     aDragStartDiff = rStartPos - aMarkedRect.TopLeft();
 
     bool bAnyOle, bOneOle;
-    const SdrMarkList& rMarkList = GetMarkedObjectList();
     CheckOle( rMarkList, bAnyOle, bOneOle );
 
     ScDocShellRef aDragShellRef;

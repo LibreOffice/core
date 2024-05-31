@@ -163,17 +163,18 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
     pView->LockBackgroundLayer( !bEx );
 
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     if ( bSelectFirst )
     {
         // select first draw object if none is selected yet
-        if(pView->GetMarkedObjectList().GetMarkCount() == 0)
+        if(rMarkList.GetMarkCount() == 0)
         {
             // select first object
             pView->UnmarkAllObj();
             pView->MarkNextObj(true);
 
             // ...and make it visible
-            if(pView->GetMarkedObjectList().GetMarkCount() != 0)
+            if(rMarkList.GetMarkCount() != 0)
                 pView->MakeVisible(pView->GetAllMarkedRect(), *pWin);
         }
     }
@@ -186,7 +187,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         SetDrawTextShell(true);
     else
     {
-        if (bEx || pView->GetMarkedObjectList().GetMarkCount() != 0)
+        if (bEx || rMarkList.GetMarkCount() != 0)
             SetDrawShellOrSub();
         else
             SetDrawShell(false);
@@ -214,7 +215,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     {
         case SID_OBJECT_SELECT:
             // not always switch back
-            if(pView->GetMarkedObjectList().GetMarkCount() == 0) SetDrawShell(bEx);
+            if(rMarkList.GetMarkCount() == 0) SetDrawShell(bEx);
             pTabView->SetDrawFuncPtr(new FuSelection(*this, pWin, pView, &rModel, aNewReq));
             break;
 

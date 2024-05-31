@@ -497,10 +497,9 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                     const SfxRectangleItem& rRect = rReq.GetArgs()->Get(SID_OBJECTRESIZE);
                     tools::Rectangle aRect( pWin->PixelToLogic( rRect.GetValue() ) );
 
-                    if ( pView->GetMarkedObjectList().GetMarkCount() != 0 )
+                    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+                    if ( rMarkList.GetMarkCount() != 0 )
                     {
-                        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-
                         if (rMarkList.GetMarkCount() == 1)
                         {
                             SdrMark* pMark = rMarkList.GetMark(0);
@@ -704,10 +703,11 @@ bool ScTabViewShell::IsSignatureLineSelected()
     if (!pSdrView)
         return false;
 
-    if (pSdrView->GetMarkedObjectList().GetMarkCount() != 1)
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+    if (rMarkList.GetMarkCount() != 1)
         return false;
 
-    SdrObject* pPickObj = pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+    SdrObject* pPickObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
     if (!pPickObj)
         return false;
 
@@ -724,10 +724,11 @@ bool ScTabViewShell::IsQRCodeSelected()
     if (!pSdrView)
         return false;
 
-    if (pSdrView->GetMarkedObjectList().GetMarkCount() != 1)
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+    if (rMarkList.GetMarkCount() != 1)
         return false;
 
-    SdrObject* pPickObj = pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+    SdrObject* pPickObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
     if (!pPickObj)
         return false;
 
@@ -750,10 +751,11 @@ bool ScTabViewShell::IsSignatureLineSigned()
     if (!pSdrView)
         return false;
 
-    if (pSdrView->GetMarkedObjectList().GetMarkCount() != 1)
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+    if (rMarkList.GetMarkCount() != 1)
         return false;
 
-    SdrObject* pPickObj = pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+    SdrObject* pPickObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
     if (!pPickObj)
         return false;
 

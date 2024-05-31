@@ -137,11 +137,11 @@ ScDrawView::~ScDrawView()
 
 void ScDrawView::AddCustomHdl()
 {
-    const SdrMarkList &rMrkList = GetMarkedObjectList();
-    const size_t nCount = rMrkList.GetMarkCount();
+    const SdrMarkList &rMarkList = GetMarkedObjectList();
+    const size_t nCount = rMarkList.GetMarkCount();
     for(size_t nPos=0; nPos<nCount; ++nPos )
     {
-        SdrObject* pObj = rMrkList.GetMark(nPos)->GetMarkedSdrObj();
+        SdrObject* pObj = rMarkList.GetMark(nPos)->GetMarkedSdrObj();
         if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjDataTab(pObj, nTab))
         {
             if (ScTabView* pView = pViewData->GetView())
@@ -211,7 +211,8 @@ void ScDrawView::InvalidateDrawTextAttrs()
 
 void ScDrawView::SetMarkedToLayer( SdrLayerID nLayerNo )
 {
-    if (GetMarkedObjectList().GetMarkCount() == 0)
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    if (rMarkList.GetMarkCount() == 0)
         return;
 
     //  #i11702# use SdrUndoObjectLayerChange for undo
@@ -357,9 +358,10 @@ void ScDrawView::MarkListHasChanged()
     FmFormView::MarkListHasChanged();
 
     ScTabViewShell* pViewSh = pViewData->GetViewShell();
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
 
     // #i110829# remove the cell selection only if drawing objects are selected
-    if ( !bInConstruct && GetMarkedObjectList().GetMarkCount() )
+    if ( !bInConstruct && rMarkList.GetMarkCount() )
     {
         pViewSh->Unmark();      // remove cell selection
 
@@ -385,7 +387,6 @@ void ScDrawView::MarkListHasChanged()
     SdrOle2Obj* pOle2Obj = nullptr;
     SdrGrafObj* pGrafObj = nullptr;
 
-    const SdrMarkList& rMarkList = GetMarkedObjectList();
     const size_t nMarkCount = rMarkList.GetMarkCount();
 
     if ( nMarkCount == 0 && !pViewData->GetViewShell()->IsDrawSelMode() && !bInConstruct )

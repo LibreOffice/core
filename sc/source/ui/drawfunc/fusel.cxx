@@ -376,11 +376,11 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 }
                 if ( pView )
                 {
-                    const SdrMarkList& rSdrMarkList = pView->GetMarkedObjectList();
-                    const size_t nMarkCount = rSdrMarkList.GetMarkCount();
+                    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+                    const size_t nMarkCount = rMarkList.GetMarkCount();
                     for ( size_t i = 0; i < nMarkCount; ++i )
                     {
-                        SdrMark* pMark = rSdrMarkList.GetMark( i );
+                        SdrMark* pMark = rMarkList.GetMark( i );
                         pObj = ( pMark ? pMark->GetMarkedSdrObj() : nullptr );
                         if ( pObj )
                         {
@@ -416,13 +416,13 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             // unlock internal layer to include note captions
             pView->UnlockInternalLayer();
             pView->EndAction();
-            if ( pView->GetMarkedObjectList().GetMarkCount() != 0 )
+            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+            if ( rMarkList.GetMarkCount() != 0 )
             {
                 bReturn = true;
 
                 /*  if multi-selection contains a note caption object, remove
                     all other objects from selection. */
-                const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 const size_t nCount = rMarkList.GetMarkCount();
                 if( nCount > 1 )
                 {
@@ -464,9 +464,9 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     sal_uInt16 nClicks = rMEvt.GetClicks();
     if (pView && nClicks == 2 && rMEvt.IsLeft())
     {
-        if ( pView->GetMarkedObjectList().GetMarkCount() != 0 )
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+        if ( rMarkList.GetMarkCount() != 0 )
         {
-            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
             if (rMarkList.GetMarkCount() == 1)
             {
                 SdrMark* pMark = rMarkList.GetMark(0);

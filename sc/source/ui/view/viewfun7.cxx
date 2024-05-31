@@ -146,11 +146,11 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
                 ScChartHelper::GetChartNames( aExcludedChartNames, pDestPage );
             }
 
-            SdrMarkList aMark = pDragEditView->GetMarkedObjectList();
-            aMark.ForceSort();
-            const size_t nMarkCnt=aMark.GetMarkCount();
+            const SdrMarkList& rMarkList = pDragEditView->GetMarkedObjectList();
+            rMarkList.ForceSort();
+            const size_t nMarkCnt=rMarkList.GetMarkCount();
             for (size_t nm=0; nm<nMarkCnt; ++nm) {
-                const SdrMark* pM=aMark.GetMark(nm);
+                const SdrMark* pM=rMarkList.GetMark(nm);
                 const SdrObject* pObj=pM->GetMarkedSdrObj();
 
                 // Directly Clone to target SdrModel

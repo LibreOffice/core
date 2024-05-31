@@ -4953,10 +4953,11 @@ void ScGridWindow::PasteSelection( const Point& rPosPixel )
     SdrView* pDrawView = mrViewData.GetViewShell()->GetScDrawView();
     if (pDrawView)
     {
-        const size_t nCount = pDrawView->GetMarkedObjectList().GetMarkCount();
+        const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
+        const size_t nCount = rMarkList.GetMarkCount();
         for (size_t i = 0; i < nCount; ++i)
         {
-            SdrObject* pObj = pDrawView->GetMarkedObjectList().GetMark(i)->GetMarkedSdrObj();
+            SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
             if (pObj && pObj->GetLogicRect().Contains(aLogicPos))
             {
                 // Inside an active drawing object.  Bail out.

@@ -506,10 +506,11 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
         case SID_RENAME_OBJECT:
             {
-                if(1 == pView->GetMarkedObjectList().GetMarkCount())
+                const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+                if(1 == rMarkList.GetMarkCount())
                 {
                     // #i68101#
-                    SdrObject* pSelected = pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+                    SdrObject* pSelected = rMarkList.GetMark(0)->GetMarkedSdrObj();
                     assert(pSelected && "ScDrawShell::ExecDrawFunc: nMarkCount, but no object (!)");
 
                     if(SC_LAYER_INTERN != pSelected->GetLayer())
@@ -580,9 +581,10 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
         // #i68101#
         case SID_TITLE_DESCRIPTION_OBJECT:
             {
-                if(1 == pView->GetMarkedObjectList().GetMarkCount())
+                const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+                if(1 == rMarkList.GetMarkCount())
                 {
-                    SdrObject* pSelected = pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+                    SdrObject* pSelected = rMarkList.GetMark(0)->GetMarkedSdrObj();
                     assert(pSelected && "ScDrawShell::ExecDrawFunc: nMarkCount, but no object (!)");
 
                     if(SC_LAYER_INTERN != pSelected->GetLayer())
