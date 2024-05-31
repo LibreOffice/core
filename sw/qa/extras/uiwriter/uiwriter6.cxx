@@ -1683,6 +1683,68 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161332)
     CPPUNIT_ASSERT_EQUAL(SelectionType::Frame, eType2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161360)
+{
+    createSwDoc("tdf160842.fodt");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    // the cursor is not in the table
+    CPPUNIT_ASSERT(!pWrtShell->IsCursorInTable());
+
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage);
+    const SwSortedObjs& rPageObjs = *pPage->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
+    auto pPageFly = dynamic_cast<SwFlyAtContentFrame*>(rPageObjs[0]);
+    CPPUNIT_ASSERT(pPageFly);
+    auto pTable = dynamic_cast<SwTabFrame*>(pPageFly->GetLower());
+    CPPUNIT_ASSERT(pTable);
+    auto pRow1 = pTable->GetLower();
+    CPPUNIT_ASSERT(pRow1->IsRowFrame());
+    auto pCellA1 = pRow1->GetLower();
+    CPPUNIT_ASSERT(pCellA1);
+    const SwRect& rCellA1Rect = pCellA1->getFrameArea();
+    auto nRowHeight = rCellA1Rect.Height();
+
+    // select image by clicking on it at the center of the upper cell
+    Point ptFrom(rCellA1Rect.Left() + rCellA1Rect.Width() / 2, rCellA1Rect.Top() + nRowHeight / 2);
+    vcl::Window& rEditWin = pDoc->GetDocShell()->GetView()->GetEditWin();
+    Point aFrom = rEditWin.LogicToPixel(ptFrom);
+    MouseEvent aClickEvent(aFrom, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+    rEditWin.MouseButtonDown(aClickEvent);
+    rEditWin.MouseButtonUp(aClickEvent);
+
+    // Then make sure that the image is selected:
+    SelectionType eType = pWrtShell->GetSelectionType();
+    CPPUNIT_ASSERT_EQUAL(SelectionType::Graphic, eType);
+
+    // select the text frame instead of the image
+    // by pressing Escape
+    dispatchCommand(mxComponent, ".uno:Escape", {});
+
+    // Then make sure that the cursor in the table:
+    SelectionType eType2 = pWrtShell->GetSelectionType();
+    // This was false (only SelectionType::Text)
+    bool bCursorInTable = eType2 == (SelectionType::Text | SelectionType::Table);
+    CPPUNIT_ASSERT(bCursorInTable);
+
+    // select the text frame by pressing Escape again
+    dispatchCommand(mxComponent, ".uno:Escape", {});
+
+    eType2 = pWrtShell->GetSelectionType();
+    CPPUNIT_ASSERT_EQUAL(SelectionType::Frame, eType2);
+
+    // deselect the text frame by pressing Escape again
+    dispatchCommand(mxComponent, ".uno:Escape", {});
+
+    eType2 = pWrtShell->GetSelectionType();
+    // The text cursor is after the floating table
+    CPPUNIT_ASSERT_EQUAL(SelectionType::Text, eType2);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115132)
 {
     createSwDoc();

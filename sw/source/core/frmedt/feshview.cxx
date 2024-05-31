@@ -191,6 +191,7 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
                     ( pOldSelFly->GetFormat()->GetProtect().IsContentProtected()
                      && !IsReadOnlyAvailable() ))
                 {
+                    SdrObject *pOldObj = rMrkList.GetMark(0)->GetMarkedSdrObj();
                     // If a fly is deselected, which contains graphic, OLE or
                     // otherwise, the cursor should be removed from it.
                     // Similar if a fly with protected content is deselected.
@@ -201,6 +202,29 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
                     bool bUnLockView = !IsViewLocked();
                     LockView( true );
                     SetCursor( aPt, true );
+
+                    // in tables, fix lost position, when the selected image was
+                    // anchored as character at beginning of the table row:
+                    // in this case, the text cursor was positionated after the
+                    // floating table, and not before the image, as in other positions
+                    // in the table row (and if the table wasn't a floating one,
+                    // the text cursor lost completely)
+                    if ( SW_LEAVE_FRAME & nFlag )
+                    {
+                        const SwContact* pContact = GetUserCall(pOldObj);
+                        if ( pContact && pContact->ObjAnchoredAsChar() )
+                        {
+                            const SwNode * pOldNd = pContact->GetAnchorNode().FindTableNode();
+                            // the original image was in a table, but the cursor is not in that
+                            if ( pOldNd && pOldNd != GetCursor()->GetPointNode().FindTableNode() )
+                            {
+                                if ( SwWrtShell* pWrtShell = dynamic_cast<SwWrtShell*>(this) )
+                                    // put the text cursor in the same row
+                                    pWrtShell->SelectTableRowCol( aPt );
+                            }
+                        }
+                    }
+
                     if( bUnLockView )
                         LockView( false );
                 }
