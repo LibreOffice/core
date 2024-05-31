@@ -655,15 +655,19 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     }
     getIDocumentState().SetModified();
 
-    SfxBindings* pBindings =
-        ( GetDocShell() && GetDocShell()->GetDispatcher() ) ? GetDocShell()->GetDispatcher()->GetBindings() : nullptr;
-    if ( pBindings )
+    if (SwDocShell* pShell = GetDocShell())
     {
-        pBindings->Invalidate( SID_ATTR_PAGE_COLUMN );
-        pBindings->Invalidate( SID_ATTR_PAGE );
-        pBindings->Invalidate( SID_ATTR_PAGE_SIZE );
-        pBindings->Invalidate( SID_ATTR_PAGE_ULSPACE );
-        pBindings->Invalidate( SID_ATTR_PAGE_LRSPACE );
+        if (SfxDispatcher* pDispatcher = pShell->GetDispatcher())
+        {
+            if (SfxBindings* pBindings = pDispatcher->GetBindings())
+            {
+                pBindings->Invalidate( SID_ATTR_PAGE_COLUMN );
+                pBindings->Invalidate( SID_ATTR_PAGE );
+                pBindings->Invalidate( SID_ATTR_PAGE_SIZE );
+                pBindings->Invalidate( SID_ATTR_PAGE_ULSPACE );
+                pBindings->Invalidate( SID_ATTR_PAGE_LRSPACE );
+            }
+        }
     }
 
     //h/f of first-left page must not be unique but same as first master or left
