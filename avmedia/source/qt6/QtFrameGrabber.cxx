@@ -93,7 +93,19 @@ css::uno::Reference<css::graphic::XGraphic> SAL_CALL QtFrameGrabber::grabFrame(d
             &QtFrameGrabber::onVideoFrameChanged, Qt::BlockingQueuedConnection);
     m_xMediaPlayer->play();
     while (m_bWaitingForFrame)
-        Scheduler::ProcessEventsToIdle();
+    {
+        // QMediaPlayer::hasVideo() result isn't valid while media is loading
+        if (m_xMediaPlayer->mediaStatus() != QMediaPlayer::LoadingMedia
+            && !m_xMediaPlayer->hasVideo())
+        {
+            // There's no video, don't wait for frame
+            m_bWaitingForFrame = false;
+        }
+        else
+        {
+            Scheduler::ProcessEventsToIdle();
+        }
+    }
     m_xMediaPlayer->stop();
 
     uno::Reference<css::graphic::XGraphic> xGraphic = m_xGraphic;
