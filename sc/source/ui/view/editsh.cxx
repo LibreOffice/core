@@ -91,7 +91,7 @@ SFX_IMPL_INTERFACE(ScEditShell, SfxShell)
 
 void ScEditShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("celledit");
+    GetStaticInterface()->RegisterPopupMenu(u"celledit"_ustr);
 }
 
 ScEditShell::ScEditShell(EditView* pView, ScViewData& rData) :
@@ -102,7 +102,7 @@ ScEditShell::ScEditShell(EditView* pView, ScViewData& rData) :
 {
     SetPool( pEditView->getEditEngine().GetEmptyItemSet().GetPool() );
     SetUndoManager( &pEditView->getEditEngine().GetUndoManager() );
-    SetName("EditCell");
+    SetName(u"EditCell"_ustr);
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::EditCell));
 }
 
@@ -513,7 +513,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     rViewData.GetDialogParent(), &aAttrs, pObjSh, false));
                 if (nSlot == SID_CHAR_DLG_EFFECT)
                 {
-                    pDlg->SetCurPageId("fonteffects");
+                    pDlg->SetCurPageId(u"fonteffects"_ustr);
                 }
                 short nRet = pDlg->Execute();
                 // pDlg is needed below
@@ -1299,7 +1299,7 @@ OUString ScEditShell::GetSelectionText( bool bWholeWord )
             ESelection  aSel = pEditView->GetSelection();
             OUString    aStrCurrentDelimiters = rEngine.GetWordDelimiters();
 
-            rEngine.SetWordDelimiters(" .,;\"'");
+            rEngine.SetWordDelimiters(u" .,;\"'"_ustr);
             aStrSelection = rEngine.GetWord( aSel.nEndPara, aSel.nEndPos );
             rEngine.SetWordDelimiters( aStrCurrentDelimiters );
         }

@@ -892,7 +892,7 @@ void ScViewData::InsertTab( SCTAB nTab )
     UpdateCurrentTab();
     maMarkData.InsertTab(nTab);
 
-    collectUIInformation({{}}, "InsertTab");
+    collectUIInformation({{}}, u"InsertTab"_ustr);
 }
 
 void ScViewData::InsertTabs( SCTAB nTab, SCTAB nNewSheets )

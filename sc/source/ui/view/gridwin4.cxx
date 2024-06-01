@@ -688,7 +688,7 @@ void ScGridWindow::DrawEditView(OutputDevice &rDevice, EditView *pEditView)
     //tdf#100925, rhbz#1283420, Draw some text here, to get
     //X11CairoTextRender::getCairoContext called, so that the forced read
     //from the underlying X Drawable gets it to sync.
-    rDevice.DrawText(aLogicRect.BottomLeft(), " ");
+    rDevice.DrawText(aLogicRect.BottomLeft(), u" "_ustr);
     rDevice.DrawRect(aLogicRect);
 
     // paint the editeng text

@@ -23,7 +23,10 @@ namespace sc
 {
 SFX_IMPL_INTERFACE(SparklineShell, SfxShell)
 
-void SparklineShell::InitInterface_Impl() { GetStaticInterface()->RegisterPopupMenu("sparkline"); }
+void SparklineShell::InitInterface_Impl()
+{
+    GetStaticInterface()->RegisterPopupMenu(u"sparkline"_ustr);
+}
 
 SparklineShell::SparklineShell(ScTabViewShell* pViewShell)
     : SfxShell(pViewShell)
@@ -37,7 +40,7 @@ SparklineShell::SparklineShell(ScTabViewShell* pViewShell)
     {
         pUndoManager->SetMaxUndoActionCount(0);
     }
-    SetName("Sparkline");
+    SetName(u"Sparkline"_ustr);
     SfxShell::SetContextName(
         vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Sparkline));
 }

@@ -558,7 +558,7 @@ void ScViewFunc::EditNote()
 
         ScTabView::OnLOKNoteStateChanged( pNote );
     }
-    collectUIInformation("OPEN");
+    collectUIInformation(u"OPEN"_ustr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

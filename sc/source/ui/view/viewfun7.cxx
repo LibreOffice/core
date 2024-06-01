@@ -372,13 +372,13 @@ bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
 bool ScViewFunc::PasteBitmapEx( const Point& rPos, const BitmapEx& rBmpEx )
 {
     Graphic aGraphic(rBmpEx);
-    return PasteGraphic( rPos, aGraphic, "" );
+    return PasteGraphic( rPos, aGraphic, u""_ustr );
 }
 
 bool ScViewFunc::PasteMetaFile( const Point& rPos, const GDIMetaFile& rMtf )
 {
     Graphic aGraphic(rMtf);
-    return PasteGraphic( rPos, aGraphic, "" );
+    return PasteGraphic( rPos, aGraphic, u""_ustr );
 }
 
 bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,

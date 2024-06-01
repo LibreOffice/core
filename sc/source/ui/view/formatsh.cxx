@@ -130,7 +130,7 @@ ScFormatShell::ScFormatShell(ScViewData& rData) :
     {
         pMgr->SetMaxUndoActionCount( 0 );
     }
-    SetName("Format");
+    SetName(u"Format"_ustr);
 }
 
 ScFormatShell::~ScFormatShell()
@@ -942,7 +942,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_ATTR_CHAR_COLOR:
             case SID_ATTR_CHAR_FONT:
             case SID_ATTR_CHAR_FONTHEIGHT:
-                pTabViewShell->ExecuteCellFormatDlg(rReq, "font");       // when ToolBar is vertical
+                pTabViewShell->ExecuteCellFormatDlg(rReq, u"font"_ustr);       // when ToolBar is vertical
                 break;
 
             case SID_BACKGROUND_COLOR:

@@ -130,7 +130,7 @@ public:
 
         awt::Rectangle xRectangle;
         sal_Int32 dimensionIndex = 0;
-        OUString sPivotTableName("DataPilot1");
+        OUString sPivotTableName(u"DataPilot1"_ustr);
 
         for (beans::PropertyValue const& rProperty : aProperties)
         {
@@ -468,7 +468,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
             case SID_ADDITIONS_DIALOG:
             {
-                OUString sAdditionsTag = "";
+                OUString sAdditionsTag = u""_ustr;
 
                 const SfxStringItem* pStringArg = rReq.GetArg<SfxStringItem>(FN_PARAM_ADDITIONS_TAG);
                 if (pStringArg)

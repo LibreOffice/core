@@ -86,14 +86,14 @@ ScHeaderControl::ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelect
     bAutoFilterSet = false;
 
     Size aSize = LogicToPixel( Size(
-        GetTextWidth("8888"),
+        GetTextWidth(u"8888"_ustr),
         GetTextHeight() ) );
     aSize.AdjustWidth(4 );    // place for highlight border
     aSize.AdjustHeight(3 );
     SetSizePixel( aSize );
 
     nWidth = nSmallWidth = aSize.Width();
-    nBigWidth = LogicToPixel( Size( GetTextWidth("8888888"), 0 ) ).Width() + 5;
+    nBigWidth = LogicToPixel( Size( GetTextWidth(u"8888888"_ustr), 0 ) ).Width() + 5;
 
     aShowHelpTimer.SetInvokeHandler(LINK(this, ScHeaderControl, ShowDragHelpHdl));
     aShowHelpTimer.SetTimeout(GetSettings().GetMouseSettings().GetDoubleClickTime());
@@ -968,7 +968,7 @@ void ScHeaderControl::Command( const CommandEvent& rCEvt )
                     pViewSh->MarkRange( aNewRange );
             }
 
-            pViewSh->GetDispatcher()->ExecutePopup( bVertical ? OUString( "rowheader" ) : OUString( "colheader" ) );
+            pViewSh->GetDispatcher()->ExecutePopup( bVertical ? u"rowheader"_ustr : u"colheader"_ustr );
         }
     }
     else if ( nCmd == CommandEventId::StartDrag )

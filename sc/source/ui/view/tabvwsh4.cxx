@@ -1506,7 +1506,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
 
     EnableAutoSpell(ScModule::GetAutoSpellProperty());
 
-    SetName("View"); // for SBX
+    SetName(u"View"_ustr); // for SBX
     Color aColBlack( COL_BLACK );
     SetPool( &SC_MOD()->GetPool() );
     SetWindow( GetActiveWin() );
@@ -1759,11 +1759,11 @@ ScViewOptiChangesListener::ScViewOptiChangesListener(ScTabViewShell& rViewShell)
 
     uno::Reference<uno::XInterface> xViewConfigurationAccess
         = xConfigurationProvider->createInstanceWithArguments(
-            "com.sun.star.configuration.ConfigurationAccess", { uno::Any(aViewProperty) });
+            u"com.sun.star.configuration.ConfigurationAccess"_ustr, { uno::Any(aViewProperty) });
 
     uno::Reference<uno::XInterface> xColorSchemeConfigurationAccess
         = xConfigurationProvider->createInstanceWithArguments(
-            "com.sun.star.configuration.ConfigurationAccess", { uno::Any(aColorSchemeProperty) });
+            u"com.sun.star.configuration.ConfigurationAccess"_ustr, { uno::Any(aColorSchemeProperty) });
 
     m_xViewChangesNotifier.set(xViewConfigurationAccess, uno::UNO_QUERY);
     m_xColorSchemeChangesNotifier.set(xColorSchemeConfigurationAccess, uno::UNO_QUERY);

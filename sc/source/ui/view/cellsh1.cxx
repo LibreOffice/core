@@ -1704,7 +1704,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 rReq.SetSlot(FID_INS_CELL_CONTENTS);
                 // paste links to values/numbers, strings, formulas and dates
                 // do not paste attributes, notes and objects
-                rReq.AppendItem(SfxStringItem(FID_INS_CELL_CONTENTS, "VSFD"));
+                rReq.AppendItem(SfxStringItem(FID_INS_CELL_CONTENTS, u"VSFD"_ustr));
                 rReq.AppendItem(SfxBoolItem(FN_PARAM_4, true)); // as link
                 ExecuteSlot(rReq, GetInterface());
                 rReq.SetReturnValue(SfxInt16Item(nSlot, 1)); // 1 = success
@@ -1835,9 +1835,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             SfxViewFrame& rViewFrame = pTabViewShell->GetViewFrame();
                             auto xFrame = rViewFrame.GetFrame().GetFrameInterface();
                             const OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
-                            auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:PasteTextImportDialog", aModuleName);
+                            auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(u".uno:PasteTextImportDialog"_ustr, aModuleName);
                             OUString sLabel(vcl::CommandInfoProvider::GetTooltipLabelForCommand(aProperties));
-                            pDlg->InsertUno(".uno:PasteTextImportDialog", sLabel);
+                            pDlg->InsertUno(u".uno:PasteTextImportDialog"_ustr, sLabel);
 
                             TransferableDataHelper aDataHelper(
                                 TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
@@ -2000,7 +2000,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         Reference< ui::dialogs::XExecutableDialog > xDialog(
                                 xMCF->createInstanceWithContext(
-                                    "com.sun.star.linguistic2.ChineseTranslationDialog"
+                                    u"com.sun.star.linguistic2.ChineseTranslationDialog"_ustr
                                     , xContext),
                                 UNO_QUERY);
                         Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
@@ -2026,9 +2026,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 {
                                     try
                                     {
-                                        xProp->getPropertyValue("IsDirectionToSimplified") >>= bToSimplified;
-                                        xProp->getPropertyValue("IsUseCharacterVariants") >>= bUseVariants;
-                                        xProp->getPropertyValue("IsTranslateCommonTerms") >>= bCommonTerms;
+                                        xProp->getPropertyValue(u"IsDirectionToSimplified"_ustr) >>= bToSimplified;
+                                        xProp->getPropertyValue(u"IsUseCharacterVariants"_ustr) >>= bUseVariants;
+                                        xProp->getPropertyValue(u"IsTranslateCommonTerms"_ustr) >>= bCommonTerms;
                                     }
                                     catch( Exception& )
                                     {
@@ -3020,7 +3020,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 const SfxItemSet *pArgs = rReq.GetArgs();
                 const OUString sFunction = pArgs ?
                     static_cast<const SfxStringItem&>( pArgs->Get( SID_AUTO_SUM ) ).GetValue()
-                    : "";
+                    : u""_ustr;
 
                 OpCode eFunction = ocSum;
                 if (sFunction == "average")
@@ -3579,7 +3579,7 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
     aArgSet.Put( ScSubTotalItem( SCITEM_SUBTDATA, &GetViewData(), &aSubTotalParam ) );
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     pDlg.disposeAndReset(pFact->CreateScSubTotalDlg(pTabViewShell->GetFrameWeld(), aArgSet));
-    pDlg->SetCurPageId("1stgroup");
+    pDlg->SetCurPageId(u"1stgroup"_ustr);
 
     short bResult = pDlg->Execute();
 

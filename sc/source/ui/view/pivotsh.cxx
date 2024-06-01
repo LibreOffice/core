@@ -43,7 +43,7 @@ SFX_IMPL_INTERFACE(ScPivotShell, SfxShell)
 
 void ScPivotShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("pivot");
+    GetStaticInterface()->RegisterPopupMenu(u"pivot"_ustr);
 }
 
 ScPivotShell::ScPivotShell( ScTabViewShell* pViewSh ) :
@@ -58,7 +58,7 @@ ScPivotShell::ScPivotShell( ScTabViewShell* pViewSh ) :
     {
         pMgr->SetMaxUndoActionCount( 0 );
     }
-    SetName("Pivot");
+    SetName(u"Pivot"_ustr);
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Pivot));
 }
 

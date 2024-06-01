@@ -602,7 +602,7 @@ bool ScViewFunc::PasteDataFormatSource( SotClipboardFormatId nFormatId,
 
                     embed::InsertedObjectInfo aInfo = xClipboardCreator->createInstanceInitFromClipboard(
                                                         xTmpStor,
-                                                        "DummyName",
+                                                        u"DummyName"_ustr,
                                                         uno::Sequence< beans::PropertyValue >() );
 
                     // TODO/LATER: in future InsertedObjectInfo will be used to get container related information

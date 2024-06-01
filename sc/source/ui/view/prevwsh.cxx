@@ -91,7 +91,7 @@ void ScPreviewShell::InitInterface_Impl()
                                             SfxVisibilityFlags::Standard|SfxVisibilityFlags::Server|SfxVisibilityFlags::ReadonlyDoc,
                                             ToolbarId::Objectbar_Preview);
 
-    GetStaticInterface()->RegisterPopupMenu("preview");
+    GetStaticInterface()->RegisterPopupMenu(u"preview"_ustr);
 }
 
 SFX_IMPL_NAMED_VIEWFACTORY( ScPreviewShell, "PrintPreview" )
@@ -139,7 +139,7 @@ void ScPreviewShell::Construct( vcl::Window* pParent )
 
     pHorScroll->Show( false );
     pVerScroll->Show( false );
-    SetName("Preview");
+    SetName(u"Preview"_ustr);
 }
 
 ScPreviewShell::ScPreviewShell(SfxViewFrame& rViewFrame,
@@ -917,7 +917,7 @@ void ScPreviewShell::ReadUserData(const OUString& rData, bool /* bBrowse */)
 void ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue >& rSeq)
 {
     // tdf#130559: don't export preview view data if active
-    if (comphelper::IsContextFlagActive("NoPreviewData"))
+    if (comphelper::IsContextFlagActive(u"NoPreviewData"_ustr))
         return;
 
     rSeq.realloc(3);

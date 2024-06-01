@@ -491,25 +491,25 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 }
                 else
                 {
-                    pTabViewShell->ExecuteCellFormatDlg( rReq, "" );
+                    pTabViewShell->ExecuteCellFormatDlg( rReq, u""_ustr );
                 }
             }
             break;
 
         case SID_ENABLE_HYPHENATION:
-            pTabViewShell->ExecuteCellFormatDlg(rReq, "alignment");
+            pTabViewShell->ExecuteCellFormatDlg(rReq, u"alignment"_ustr);
             break;
 
         case SID_PROPERTY_PANEL_CELLTEXT_DLG:
-            pTabViewShell->ExecuteCellFormatDlg( rReq, "font" );
+            pTabViewShell->ExecuteCellFormatDlg( rReq, u"font"_ustr );
             break;
 
         case SID_CELL_FORMAT_BORDER:
-            pTabViewShell->ExecuteCellFormatDlg( rReq, "borders" );
+            pTabViewShell->ExecuteCellFormatDlg( rReq, u"borders"_ustr );
             break;
 
         case SID_CHAR_DLG_EFFECT:
-            pTabViewShell->ExecuteCellFormatDlg( rReq, "fonteffects" );
+            pTabViewShell->ExecuteCellFormatDlg( rReq, u"fonteffects"_ustr );
             break;
 
         case SID_OPENDLG_SOLVE:
@@ -707,7 +707,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                                               rData.GetTabNo() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     VclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
-                        pTabViewShell->GetFrameWeld(), "RowHeightDialog", nCurHeight,
+                        pTabViewShell->GetFrameWeld(), u"RowHeightDialog"_ustr, nCurHeight,
                         rData.GetDocument().GetSheetOptimalMinRowHeight(rData.GetTabNo()),
                         eMetric, 2, MAX_ROW_HEIGHT));
 
@@ -748,7 +748,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     VclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
-                        pTabViewShell->GetFrameWeld(), "OptimalRowHeightDialog",
+                        pTabViewShell->GetFrameWeld(), u"OptimalRowHeightDialog"_ustr,
                         ScGlobal::nLastRowHeightExtra, 0, eMetric, 2, MAX_EXTRA_HEIGHT));
 
                     pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){
@@ -813,7 +813,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                                              rData.GetTabNo() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     VclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
-                        pTabViewShell->GetFrameWeld(), "ColWidthDialog", nCurHeight,
+                        pTabViewShell->GetFrameWeld(), u"ColWidthDialog"_ustr, nCurHeight,
                         STD_COL_WIDTH, eMetric, 2, MAX_COL_WIDTH));
 
                     pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){
@@ -853,7 +853,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     VclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
-                        pTabViewShell->GetFrameWeld(), "OptimalColWidthDialog",
+                        pTabViewShell->GetFrameWeld(), u"OptimalColWidthDialog"_ustr,
                         ScGlobal::nLastColWidthExtra, STD_EXTRA_WIDTH, eMetric, 2, MAX_EXTRA_WIDTH));
 
                     pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){

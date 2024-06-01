@@ -558,7 +558,7 @@ void ScPrintFunc::DrawToDev(ScDocument& rDoc, OutputDevice* pDev, double /* nPri
         if (!bReopen)
         {
             sal_Int32 nId = pPDF->EnsureStructureElement(nullptr);
-            pPDF->InitStructureElement(nId, vcl::PDFWriter::Part, "Worksheet");
+            pPDF->InitStructureElement(nId, vcl::PDFWriter::Part, u"Worksheet"_ustr);
             pPDF->BeginStructureElement(nId);
             pPDF->GetScPDFState()->m_WorksheetId = nId;
         }
@@ -1622,7 +1622,7 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
         if (!bReopen)
         {
             sal_Int32 nId = pPDF->EnsureStructureElement(nullptr);
-            pPDF->InitStructureElement(nId, vcl::PDFWriter::Part, "Worksheet");
+            pPDF->InitStructureElement(nId, vcl::PDFWriter::Part, u"Worksheet"_ustr);
             pPDF->BeginStructureElement(nId);
             pPDF->GetScPDFState()->m_WorksheetId = nId;
         }
@@ -1933,7 +1933,7 @@ tools::Long ScPrintFunc::DoNotes( tools::Long nNoteStart, bool bDoPrint, ScPrevi
     ScAutoFontColorMode eColorMode = bUseStyleColor ? ScAutoFontColorMode::Display : ScAutoFontColorMode::Print;
     rDoc.getCellAttributeHelper().getDefaultCellAttribute().fillFont(aMarkFont, eColorMode);
     pDev->SetFont(aMarkFont);
-    tools::Long nMarkLen = pDev->GetTextWidth("GW99999:");
+    tools::Long nMarkLen = pDev->GetTextWidth(u"GW99999:"_ustr);
     // without Space-Char, because it rarely arrives there
 
     Size aDataSize = aPageRect.GetSize();

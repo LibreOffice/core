@@ -194,9 +194,9 @@ bool ScGridWindow::VisibleRange::set(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
 //  ListBox in a FloatingWindow (pParent)
 ScFilterListBox::ScFilterListBox(weld::Window* pParent, ScGridWindow* pGrid,
                                  SCCOL nNewCol, SCROW nNewRow, ScFilterBoxMode eNewMode)
-    : xBuilder(Application::CreateBuilder(pParent, "modules/scalc/ui/filterlist.ui"))
-    , xPopover(xBuilder->weld_popover("FilterList"))
-    , xTreeView(xBuilder->weld_tree_view("list"))
+    : xBuilder(Application::CreateBuilder(pParent, u"modules/scalc/ui/filterlist.ui"_ustr))
+    , xPopover(xBuilder->weld_popover(u"FilterList"_ustr))
+    , xTreeView(xBuilder->weld_tree_view(u"list"_ustr))
     , pGridWin(pGrid)
     , nCol(nNewCol)
     , nRow(nNewRow)
@@ -405,7 +405,7 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData& rData, ScSplitPos 
             m_nDownPosX( -1 ),
             m_nDownPosY( -1 )
 {
-    set_id("grid_window");
+    set_id(u"grid_window"_ustr);
     switch(eWhich)
     {
         case SC_SPLIT_TOPLEFT:
@@ -1132,7 +1132,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     // remember filter rules before modification
     mpAutoFilterPopup->getResult(aSaveAutoFilterResult);
 
-    collectUIInformation(OUString::number(nRow), OUString::number(nCol),"AUTOFILTER");
+    collectUIInformation(OUString::number(nRow), OUString::number(nCol),u"AUTOFILTER"_ustr);
 }
 
 void ScGridWindow::RefreshAutoFilterButton(const ScAddress& rPos)
@@ -1286,12 +1286,12 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
             case AutoFilterMode::Top10:
                 pEntry->eOp = SC_TOPVAL;
                 pEntry->GetQueryItem().meType = ScQueryEntry::ByString;
-                pEntry->GetQueryItem().maString = rPool.intern("10");
+                pEntry->GetQueryItem().maString = rPool.intern(u"10"_ustr);
             break;
             case AutoFilterMode::Bottom10:
                 pEntry->eOp = SC_BOTVAL;
                 pEntry->GetQueryItem().meType = ScQueryEntry::ByString;
-                pEntry->GetQueryItem().maString = rPool.intern("10");
+                pEntry->GetQueryItem().maString = rPool.intern(u"10"_ustr);
             break;
             case AutoFilterMode::Empty:
                 pEntry->SetQueryByEmpty();
@@ -1630,7 +1630,7 @@ void ScGridWindow::LaunchDataSelectMenu(const SCCOL nCol, const SCROW nRow)
 
         mpFilterBox->EndInit();
     }
-    collectUIInformation(OUString::number(nRow), OUString::number(nCol),"SELECTMENU");
+    collectUIInformation(OUString::number(nRow), OUString::number(nCol),u"SELECTMENU"_ustr);
 }
 
 void ScGridWindow::FilterSelect( sal_uLong nSel )
@@ -3416,7 +3416,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             if (pHdl)
                 pHdl->SetModified();
 
-            const OUString sOldText = pHdl ? pHdl->GetEditString() : "";
+            const OUString sOldText = pHdl ? pHdl->GetEditString() : u""_ustr;
 
             // Only done/shown if a misspelled word is actually under the mouse pointer.
             Link<SpellCallbackInfo&,void> aLink = LINK( this, ScGridWindow, PopupSpellingHdl );

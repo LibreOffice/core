@@ -251,7 +251,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 {
                     uno::Reference<frame::XFrame> xFrame = rViewFrame.GetFrame().GetFrameInterface();
                     uno::Reference<frame::XFrame> xBeamerFrame = xFrame->findFrame(
-                                                        "_beamer",
+                                                        u"_beamer"_ustr,
                                                         frame::FrameSearchFlag::CHILDREN);
                     if ( xBeamerFrame.is() )
                         bWasOpen = true;
@@ -526,7 +526,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         std::shared_ptr<ScAsyncTabController> pDlg(pFact->CreateScSortDlg(pTabViewShell->GetFrameWeld(),  &aArgSet));
-                        pDlg->SetCurPageId("criteria");  // 1=sort field tab  2=sort options tab
+                        pDlg->SetCurPageId(u"criteria"_ustr);  // 1=sort field tab  2=sort options tab
 
                         VclAbstractDialog::AsyncContext aContext;
                         aContext.maEndDialogFn = [pDlg, &rData, pTabViewShell](sal_Int32 nResult)
@@ -812,7 +812,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         case SID_DATA_PROVIDER:
         {
             auto xDoc = o3tl::make_shared<ScDocument>();
-            xDoc->InsertTab(0, "test");
+            xDoc->InsertTab(0, u"test"_ustr);
             ScDocument& rDoc = GetViewData().GetDocument();
             ScDataProviderDlg aDialog(pTabViewShell->GetDialogParent(), xDoc, &rDoc);
             if (aDialog.run() == RET_OK)

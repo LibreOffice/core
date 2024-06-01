@@ -584,7 +584,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
 
     // is it a media URL?
 #if HAVE_FEATURE_AVMEDIA
-    if( ::avmedia::MediaWindow::isMediaURL( aStrURL, ""/*TODO?*/ ) )
+    if( ::avmedia::MediaWindow::isMediaURL( aStrURL, u""_ustr/*TODO?*/ ) )
     {
         const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, aStrURL );
         const SfxPoolItemHolder aResult(GetViewData().GetDispatcher().ExecuteList(
@@ -614,7 +614,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
             SfxStringItem aFileNameItem( SID_FILE_NAME, aStrURL );
             SfxStringItem aFilterItem( SID_FILTER_NAME, pFlt->GetName() );
             // #i69524# add target, as in SfxApplication when the Open dialog is used
-            SfxStringItem aTargetItem( SID_TARGETNAME, "_default" );
+            SfxStringItem aTargetItem( SID_TARGETNAME, u"_default"_ustr );
 
             // Open Asynchronously, because it can also happen from D&D
             // and that is not so good for the MAC...
@@ -664,7 +664,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
 
         //TODO/LATER: what about "bLink"?
 
-        uno::Sequence < beans::PropertyValue > aMedium{ comphelper::makePropertyValue("URL",
+        uno::Sequence < beans::PropertyValue > aMedium{ comphelper::makePropertyValue(u"URL"_ustr,
                                                                                       aStrURL) };
 
         comphelper::EmbeddedObjectContainer aCnt( xStorage );

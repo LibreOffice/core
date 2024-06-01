@@ -565,7 +565,7 @@ bool ScDrawStringsVars::SetText( const ScRefCellValue& rCell )
 
 void ScDrawStringsVars::SetHashText()
 {
-    SetAutoText("###");
+    SetAutoText(u"###"_ustr);
 }
 
 void ScDrawStringsVars::RepeatToFill( tools::Long nColWidth )
@@ -3117,7 +3117,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 
         if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
         {
-            SetEngineTextAndGetWidth( rParam, "###", nNeededPixel, ( nLeftM + nRightM ) );
+            SetEngineTextAndGetWidth( rParam, u"###"_ustr, nNeededPixel, ( nLeftM + nRightM ) );
             tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
             ScCellInfo* pClipMarkCell = &rParam.mpThisRowInfo->cellInfo(rParam.mnX);
             SetClipMarks( aAreaParam, pClipMarkCell, eOutHorJust, nLayoutSign );
@@ -3528,7 +3528,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
         }
         if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
         {
-            nEngineWidth = SetEngineTextAndGetWidth( rParam, "###", nNeededPixel, ( nLeftM + nRightM ) );
+            nEngineWidth = SetEngineTextAndGetWidth( rParam, u"###"_ustr, nNeededPixel, ( nLeftM + nRightM ) );
 
             //  No clip marks if "###" doesn't fit (same as in DrawStrings)
         }
@@ -3772,7 +3772,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
         }
         if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
         {
-            nEngineWidth = SetEngineTextAndGetWidth( rParam, "###", nNeededPixel, ( nLeftM + nRightM ) );
+            nEngineWidth = SetEngineTextAndGetWidth( rParam, u"###"_ustr, nNeededPixel, ( nLeftM + nRightM ) );
 
             //  No clip marks if "###" doesn't fit (same as in DrawStrings)
         }
@@ -3993,7 +3993,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
 
         if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
         {
-            nEngineWidth = SetEngineTextAndGetWidth( rParam, "###", nNeededPixel, ( nLeftM + nRightM ) );
+            nEngineWidth = SetEngineTextAndGetWidth( rParam, u"###"_ustr, nNeededPixel, ( nLeftM + nRightM ) );
             tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
             ScCellInfo* pClipMarkCell = &rParam.mpThisRowInfo->cellInfo(rParam.mnX);
             SetClipMarks( aAreaParam, pClipMarkCell, eOutHorJust, nLayoutSign );
@@ -4293,7 +4293,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
     }
     if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
     {
-        nEngineWidth = SetEngineTextAndGetWidth( rParam, "###", nNeededPixel, ( nLeftM + nRightM ) );
+        nEngineWidth = SetEngineTextAndGetWidth( rParam, u"###"_ustr, nNeededPixel, ( nLeftM + nRightM ) );
         tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
         ScCellInfo* pClipMarkCell = &rParam.mpThisRowInfo->cellInfo(rParam.mnX);
         SetClipMarks( aAreaParam, pClipMarkCell, eOutHorJust, nLayoutSign );

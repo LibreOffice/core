@@ -408,7 +408,7 @@ static bool lcl_AddFunction( ScAppOptions& rAppOpt, sal_uInt16 nOpCode )
 namespace HelperNotifyChanges
 {
     static void NotifyIfChangesListeners(const ScDocShell &rDocShell, const ScMarkData& rMark,
-                                         SCCOL nCol, SCROW nRow, const OUString& rType = "cell-change")
+                                         SCCOL nCol, SCROW nRow, const OUString& rType = u"cell-change"_ustr)
     {
         ScModelObj* pModelObj = rDocShell.GetModel();
 
@@ -421,7 +421,7 @@ namespace HelperNotifyChanges
         else
         {
             Notify(*pModelObj, aChangeRanges, isDataAreaInvalidateType(rType)
-                    ? OUString("data-area-invalidate") : OUString("data-area-extend"));
+                    ? u"data-area-invalidate"_ustr : u"data-area-extend"_ustr);
         }
     }
 }
@@ -434,8 +434,8 @@ namespace
         std::unique_ptr<weld::TextView> m_xError;
     public:
         AutoCorrectQuery(weld::Window* pParent, const OUString& rFormula)
-            : weld::MessageDialogController(pParent, "modules/scalc/ui/warnautocorrect.ui", "WarnAutoCorrect", "grid")
-            , m_xError(m_xBuilder->weld_text_view("error"))
+            : weld::MessageDialogController(pParent, u"modules/scalc/ui/warnautocorrect.ui"_ustr, u"WarnAutoCorrect"_ustr, u"grid"_ustr)
+            , m_xError(m_xBuilder->weld_text_view(u"error"_ustr))
         {
             m_xDialog->set_default_response(RET_YES);
 
@@ -1497,7 +1497,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
                 }
             }
         }
-        HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, "attribute", aProperties);
+        HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, u"attribute"_ustr, aProperties);
     }
 
     StartFormatArea();
@@ -1867,8 +1867,8 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste, 
             if ( bInsertCols || bInsertRows )
             {
                 OUString aOperation = bInsertRows ?
-                    OUString("insert-rows"):
-                    OUString("insert-columns");
+                    u"insert-rows"_ustr:
+                    u"insert-columns"_ustr;
                 HelperNotifyChanges::NotifyIfChangesListeners(*pDocSh, aRange, aOperation);
             }
 
@@ -1893,7 +1893,7 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste, 
 
         OUString aStartAddress =  aRange.aStart.GetColRowString();
         OUString aEndAddress = aRange.aEnd.GetColRowString();
-        collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, "INSERT_CELLS");
+        collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, u"INSERT_CELLS"_ustr);
         return bSuccess;
     }
     else
@@ -1946,8 +1946,8 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
         if ( eCmd == DelCellCmd::Rows || eCmd == DelCellCmd::Cols )
         {
             OUString aOperation = ( eCmd == DelCellCmd::Rows) ?
-              OUString("delete-rows"):
-              OUString("delete-columns");
+              u"delete-rows"_ustr:
+              u"delete-columns"_ustr;
             HelperNotifyChanges::NotifyIfChangesListeners(*pDocSh, aRange, aOperation);
         }
 
@@ -1988,7 +1988,7 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
 
     OUString aStartAddress =  aRange.aStart.GetColRowString();
     OUString aEndAddress = aRange.aEnd.GetColRowString();
-    collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, "DELETE_CELLS");
+    collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, u"DELETE_CELLS"_ustr);
 
     Unmark();
 }
@@ -2261,9 +2261,9 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags )
         }
 
         if (HelperNotifyChanges::getMustPropagateChangesModel(pModelObj))
-            HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, "delete-content");
+            HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, u"delete-content"_ustr);
         else if (pModelObj)
-            HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, "data-area-invalidate");
+            HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, u"data-area-invalidate"_ustr);
     }
 
     CellContentChanged();
@@ -2278,7 +2278,7 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags )
     }
     OUString aStartAddress =  aMarkRange.aStart.GetColRowString();
     OUString aEndAddress = aMarkRange.aEnd.GetColRowString();
-    collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, "DELETE");
+    collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, u"DELETE"_ustr);
 }
 
 //  column width/row height (via header) - undo OK
@@ -2601,7 +2601,7 @@ void ScViewFunc::SetWidthOrHeight(
             }
         }
     }
-    HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, "column-resize");
+    HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, u"column-resize"_ustr);
 }
 
 //  column width/row height (via marked range)
@@ -2992,7 +2992,7 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
 
     //! SvNumberformat has a Member bStandard, but doesn't disclose it
     bool bWasStandard = ( nOldFormat == pFormatter->GetStandardIndex( eLanguage ) );
-    OUString sExponentialStandardFormat = "";
+    OUString sExponentialStandardFormat = u""_ustr;
     if (bWasStandard)
     {
         //  with "Standard" the decimal places depend on cell content

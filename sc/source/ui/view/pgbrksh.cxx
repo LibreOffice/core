@@ -31,7 +31,7 @@ SFX_IMPL_INTERFACE(ScPageBreakShell, SfxShell)
 
 void ScPageBreakShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("pagebreak");
+    GetStaticInterface()->RegisterPopupMenu(u"pagebreak"_ustr);
 }
 
 ScPageBreakShell::ScPageBreakShell(ScTabViewShell* pViewSh)
@@ -45,7 +45,7 @@ ScPageBreakShell::ScPageBreakShell(ScTabViewShell* pViewSh)
     {
         pMgr->SetMaxUndoActionCount(0);
     }
-    SetName("PageBreak");
+    SetName(u"PageBreak"_ustr);
 }
 
 ScPageBreakShell::~ScPageBreakShell() {}

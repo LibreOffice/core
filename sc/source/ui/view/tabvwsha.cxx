@@ -1019,7 +1019,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                     css::uno::Reference< css::beans::XPropertySet > xInfo;
                     xStyles->getByName( pNameItem->GetValue() ) >>= xInfo;
                     OUString aUIName;
-                    xInfo->getPropertyValue("DisplayName") >>= aUIName;
+                    xInfo->getPropertyValue(u"DisplayName"_ustr) >>= aUIName;
                     if ( !aUIName.isEmpty() )
                         rReq.AppendItem( SfxStringItem( SID_STYLE_APPLY, aUIName ) );
                 }

@@ -157,7 +157,7 @@ void ScViewFunc::CutToClip()
         OUString aStartAddress =  aRange.aStart.GetColRowString();
         OUString aEndAddress = aRange.aEnd.GetColRowString();
 
-        collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, "CUT");
+        collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, u"CUT"_ustr);
     }
     else
         ErrorMessage( STR_NOMULTISELECT );
@@ -192,7 +192,7 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, bool bCut, bool bApi, bool bI
     if( !bCut ){
         OUString aStartAddress =  aRange.aStart.GetColRowString();
         OUString aEndAddress = aRange.aEnd.GetColRowString();
-        collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, "COPY");
+        collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, u"COPY"_ustr);
     }
     return bDone;
 }
@@ -511,8 +511,8 @@ void ScViewFunc::PasteFromSystem()
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
 
         {
-            SotClipboardFormatId nBiff8 = SotExchange::RegisterFormatName("Biff8");
-            SotClipboardFormatId nBiff5 = SotExchange::RegisterFormatName("Biff5");
+            SotClipboardFormatId nBiff8 = SotExchange::RegisterFormatName(u"Biff8"_ustr);
+            SotClipboardFormatId nBiff5 = SotExchange::RegisterFormatName(u"Biff5"_ustr);
 
             SotClipboardFormatId nFormat; // output param for GetExchangeAction
             sal_uInt8 nEventAction;      // output param for GetExchangeAction
@@ -650,8 +650,8 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
     else
     {
             TransferableDataHelper aDataHelper( rxTransferable );
-            SotClipboardFormatId nBiff8 = SotExchange::RegisterFormatName("Biff8");
-            SotClipboardFormatId nBiff5 = SotExchange::RegisterFormatName("Biff5");
+            SotClipboardFormatId nBiff8 = SotExchange::RegisterFormatName(u"Biff8"_ustr);
+            SotClipboardFormatId nBiff5 = SotExchange::RegisterFormatName(u"Biff5"_ustr);
             SotClipboardFormatId nFormatId = SotClipboardFormatId::NONE;
                 //  first SvDraw-model, then drawing
                 //  (only one drawing is allowed)
@@ -793,7 +793,7 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
 
                 const OUString aBeginUndo(ScResId(STR_UNDO_DRAGDROP));
 
-                if(pScDrawView->ApplyGraphicToObject( rHitObj, aGraphic, aBeginUndo, "" ))
+                if(pScDrawView->ApplyGraphicToObject( rHitObj, aGraphic, aBeginUndo, u""_ustr ))
                 {
                     return true;
                 }
@@ -808,7 +808,7 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
         {
             const OUString aBeginUndo(ScResId(STR_UNDO_DRAGDROP));
 
-            if(pScDrawView->ApplyGraphicToObject( rHitObj, Graphic(aMtf), aBeginUndo, "" ))
+            if(pScDrawView->ApplyGraphicToObject( rHitObj, Graphic(aMtf), aBeginUndo, u""_ustr ))
             {
                 return true;
             }
@@ -823,7 +823,7 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
         {
             const OUString aBeginUndo(ScResId(STR_UNDO_DRAGDROP));
 
-            if(pScDrawView->ApplyGraphicToObject( rHitObj, Graphic(aBmpEx), aBeginUndo, "" ))
+            if(pScDrawView->ApplyGraphicToObject( rHitObj, Graphic(aBmpEx), aBeginUndo, u""_ustr ))
             {
                 return true;
             }
@@ -1487,7 +1487,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     }
     OUString aStartAddress =  aMarkRange.aStart.GetColRowString();
     OUString aEndAddress = aMarkRange.aEnd.GetColRowString();
-    collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, "PASTE");
+    collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}}, u"PASTE"_ustr);
     return true;
 }
 
@@ -1847,9 +1847,9 @@ void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMark
     }
 
     if (HelperNotifyChanges::getMustPropagateChangesModel(pModelObj))
-        HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, "paste");
+        HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, u"paste"_ustr);
     else if (pModelObj)
-        HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, "data-area-invalidate");
+        HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, u"data-area-invalidate"_ustr);
 }
 
 //      D R A G   A N D   D R O P

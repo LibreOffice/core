@@ -94,8 +94,8 @@ IMPL_LINK(ScTabControl, ShowPageList, const CommandEvent &, rEvent, void)
 {
     tools::Rectangle aRect(rEvent.GetMousePosPixel(), Size(1, 1));
     weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "modules/scalc/ui/pagelistmenu.ui"));
-    std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu("menu"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, u"modules/scalc/ui/pagelistmenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu(u"menu"_ustr));
 
     sal_uInt16 nCurPageId = GetCurPageId();
 
@@ -464,7 +464,7 @@ void ScTabControl::Command( const CommandEvent& rCEvt )
 
     //  Popup-Menu:
     //  get Dispatcher from ViewData (ViewFrame) instead of Shell (Frame), so it can't be null
-    pViewData->GetDispatcher().ExecutePopup( "sheettab" );
+    pViewData->GetDispatcher().ExecutePopup( u"sheettab"_ustr );
 }
 
 void ScTabControl::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )

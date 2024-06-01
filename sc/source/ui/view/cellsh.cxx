@@ -67,7 +67,7 @@ void ScCellShell::InitInterface_Impl()
                                             SfxVisibilityFlags::Standard | SfxVisibilityFlags::Server,
                                             ToolbarId::Objectbar_Format);
 
-    GetStaticInterface()->RegisterPopupMenu("cell");
+    GetStaticInterface()->RegisterPopupMenu(u"cell"_ustr);
 }
 
 ScCellShell::ScCellShell(ScViewData& rData, const VclPtr<vcl::Window>& frameWin) :
@@ -76,7 +76,7 @@ ScCellShell::ScCellShell(ScViewData& rData, const VclPtr<vcl::Window>& frameWin)
     bPastePossible(false),
     pFrameWin(frameWin)
 {
-    SetName("Cell");
+    SetName(u"Cell"_ustr);
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Cell));
 }
 
@@ -883,7 +883,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
                     // In interpreter may happen via rescheduled Basic
                     if ( rDoc.IsInInterpreter() )
-                        rSet.Put( SvxStatusItem( SID_TABLE_CELL, "...", StatusCategory::Formula ) );
+                        rSet.Put( SvxStatusItem( SID_TABLE_CELL, u"..."_ustr, StatusCategory::Formula ) );
                     else
                     {
                         FormulaError nErrCode = FormulaError::NONE;
@@ -998,7 +998,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                             rDoc.GetScenarioData( nScTab, aStr, aDummyCol, nFlags );
                             aList.push_back(aStr);
                             // Protection is sal_True if both Sheet and Scenario are protected
-                            aList.push_back((bSheetProtected && (nFlags & ScScenarioFlags::Protected)) ? OUString("1") : OUString("0"));
+                            aList.push_back((bSheetProtected && (nFlags & ScScenarioFlags::Protected)) ? u"1"_ustr : u"0"_ustr);
                             ++nScTab;
                         }
                     }
