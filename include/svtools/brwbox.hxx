@@ -277,7 +277,7 @@ private:
     tools::Long     m_nCornerWidth; // width of scrollbox corner
     tools::Long     m_nActualCornerWidth; // size of scrollbox corner
     sal_uInt16      nTitleLines;    // number of lines in title row
-    sal_uLong       nControlAreaWidth; // width of fixed area beneath hscroll
+    sal_uInt16      nControlAreaWidth; // width of fixed area beneath hscroll
     bool            bColumnCursor;  // single columns and fields selectable
     bool            bMultiSelection;// allow multiple selected rows
     bool            bKeepHighlight; // don't hide selection on LoseFocus

@@ -1124,7 +1124,7 @@ void BrowseBox::UpdateScrollbars()
     }
 
     // adjust position and Width of horizontal scrollbar
-    sal_uLong nHScrX = nControlAreaWidth == USHRT_MAX
+    tools::Long nHScrX = nControlAreaWidth == USHRT_MAX
         ? 0
         : nControlAreaWidth;
 
