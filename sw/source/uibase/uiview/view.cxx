@@ -1430,23 +1430,23 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         if ( rValue.Name == "ViewLeft" )
         {
            rValue.Value >>= nX;
-           nX = o3tl::toTwips(nX, o3tl::Length::mm100);
+           nX = o3tl::convertSaturate(nX, o3tl::Length::mm100, o3tl::Length::twip);
         }
         else if ( rValue.Name == "ViewTop" )
         {
            rValue.Value >>= nY;
-           nY = o3tl::toTwips(nY, o3tl::Length::mm100);
+           nY = o3tl::convertSaturate(nY, o3tl::Length::mm100, o3tl::Length::twip);
         }
         else if ( rValue.Name == "VisibleLeft" )
         {
            rValue.Value >>= nLeft;
-           nLeft = o3tl::toTwips(nLeft, o3tl::Length::mm100);
+           nLeft = o3tl::convertSaturate(nLeft, o3tl::Length::mm100, o3tl::Length::twip);
            bGotVisibleLeft = true;
         }
         else if ( rValue.Name == "VisibleTop" )
         {
            rValue.Value >>= nTop;
-           nTop = o3tl::toTwips(nTop, o3tl::Length::mm100);
+           nTop = o3tl::convertSaturate(nTop, o3tl::Length::mm100, o3tl::Length::twip);
            bGotVisibleTop = true;
         }
         else if ( rValue.Name == "ZoomType" )
