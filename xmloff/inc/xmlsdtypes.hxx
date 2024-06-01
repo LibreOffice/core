@@ -119,6 +119,7 @@
 
 #define XML_SD_TYPE_CELL_ROTATION_ANGLE             (XML_SD_TYPES_START + 79 )
 #define XML_SD_TYPE_WRITINGMODE2                    (XML_SD_TYPES_START + 80 )
+#define XML_SD_TYPE_LATHE_ENDANGLE                  (XML_SD_TYPES_START + 81 )
 
 #define CTF_NUMBERINGRULES          1000
 #define CTF_CONTROLWRITINGMODE      1001

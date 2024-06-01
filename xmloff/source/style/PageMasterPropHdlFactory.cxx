@@ -22,7 +22,7 @@
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmlbahdl.hxx"
+#include <xmlbahdl.hxx>
 #include <xmloff/NamedBoolPropertyHdl.hxx>
 #include <XMLTextColumnsPropertyHandler.hxx>
 #include <xmloff/XMLConstantsPropertyHandler.hxx>

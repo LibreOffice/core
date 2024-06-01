@@ -94,9 +94,19 @@ void XMLHatchStyleImport::importXML(
             case XML_ELEMENT(DRAW, XML_ROTATION):
             case XML_ELEMENT(DRAW_OOO, XML_ROTATION):
             {
-                sal_Int32 nValue;
-                if (::sax::Converter::convertNumber(nValue, aIter.toView(), 0, 3600))
-                    aHatch.Angle = sal_Int16(nValue);
+                // tdf#161327. We keep reading unit-less values as being in 1/10th of a degree for
+                // backward compatibility for now. Values with unit are imported correctly.
+                // For how to make it version dependend see import of XML_GRADIENT_ANGLE, for example.
+                sal_Int16 nAngle;
+                bool const bRet
+                    = ::sax::Converter::convert10thDegAngle(nAngle, aIter.toView(), true);
+                if (bRet)
+                { // limit to valid range [0..3600[
+                    nAngle = nAngle % 3600;
+                    if (nAngle < 0)
+                        nAngle += 3600;
+                    aHatch.Angle = nAngle;
+                }
                 break;
             }
             default:
@@ -166,7 +176,17 @@ void XMLHatchStyleExport::exportXML(
     m_rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISTANCE, aStrValue );
 
     // Angle
-    m_rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ROTATION, OUString::number(aHatch.Angle) );
+    // tdf#161327. Start writing unit deg, when most users have a LO version, that can read angle
+    // units. Write 1/10 of a degree for all versions for backward compatibility till then.
+    // Adapt test when LO writes a new default ODF version.
+    SAL_WARN_IF(
+        SvtSaveOptions::ODFSaneDefaultVersion::ODFSVER_013_EXTENDED
+            < m_rExport.getSaneDefaultVersion(),
+        "xmloff.style",
+        "Check whether parameter isWrongOOo10thDegAngle can be false for newer LO version.");
+    ::sax::Converter::convert10thDegAngle(aOut, aHatch.Angle, true);
+    aStrValue = aOut.makeStringAndClear();
+    m_rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_ROTATION, aStrValue);
 
     // Do Write
     SvXMLElementExport rElem( m_rExport, XML_NAMESPACE_DRAW, XML_HATCH,

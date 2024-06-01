@@ -1040,7 +1040,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testGradientAngle)
     CPPUNIT_ASSERT_EQUAL(sal_Int16(270), gradient.Angle); // 27deg
 
     CPPUNIT_ASSERT(xGradients->getByName(u"Gradient 11"_ustr) >>= gradient);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(1145), gradient.Angle); // 2rad
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1146), gradient.Angle); // 2rad = 114.591deg
 
     CPPUNIT_ASSERT(xGradients->getByName(u"Gradient 12"_ustr) >>= gradient);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(900), gradient.Angle); // 100grad
@@ -1049,7 +1049,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testGradientAngle)
     CPPUNIT_ASSERT_EQUAL(sal_Int16(3599), gradient.Angle); // -1
 
     CPPUNIT_ASSERT(xGradients->getByName(u"Gradient 14"_ustr) >>= gradient);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(3028), gradient.Angle); // -1rad
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(3027), gradient.Angle); // -1rad = -57.295deg -> 302.704deg
 
     CPPUNIT_ASSERT(xGradients->getByName(u"Gradient 15"_ustr) >>= gradient);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(300), gradient.Angle); // 3900
@@ -1071,10 +1071,10 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testGradientAngle)
     CPPUNIT_ASSERT_EQUAL(sal_Int16(900), gradient.Angle); // 90deg
 
     CPPUNIT_ASSERT(xTranspGradients->getByName(u"Transparency 3"_ustr) >>= gradient);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(572), gradient.Angle); // 1.0rad
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(573), gradient.Angle); // 1.0rad = 57.295deg
 
     CPPUNIT_ASSERT(xTranspGradients->getByName(u"Transparency 4"_ustr) >>= gradient);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(1800), gradient.Angle); // 1000grad
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1800), gradient.Angle); // 1000grad = 900deg -> 180deg
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest, testN778859)

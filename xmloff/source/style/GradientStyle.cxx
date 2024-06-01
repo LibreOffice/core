@@ -115,13 +115,24 @@ void XMLGradientStyleImport::importXML(
         case XML_ELEMENT(DRAW, XML_GRADIENT_ANGLE):
             {
                 auto const cmp12(m_rImport.GetODFVersion().compareTo(ODFVER_012_TEXT));
-                bool const bSuccess =
-                    ::sax::Converter::convertAngle(aGradient.Angle, aIter.toView(),
-                        // tdf#89475 try to detect borked OOo angles
-                        (cmp12 < 0) || (cmp12 == 0
-                            && (m_rImport.isGeneratorVersionOlderThan(SvXMLImport::AOO_4x, SvXMLImport::LO_7x)
-                                // also for AOO 4.x, assume there won't ever be a 4.2
-                                || m_rImport.getGeneratorVersion() == SvXMLImport::AOO_4x)));
+                // tdf#89475 try to detect borked OOo angles
+                bool const bIsWrongOOo10thDegAngle(
+                    (cmp12 < 0)
+                    || (cmp12 == 0
+                        && (m_rImport.isGeneratorVersionOlderThan(SvXMLImport::AOO_4x,
+                                                                  SvXMLImport::LO_7x)
+                            // also for AOO 4.x, assume there won't ever be a 4.2
+                            || m_rImport.getGeneratorVersion() == SvXMLImport::AOO_4x)));
+                sal_Int16 nAngle;
+                bool const bSuccess = ::sax::Converter::convert10thDegAngle(
+                    nAngle, aIter.toView(), bIsWrongOOo10thDegAngle);
+                if (bSuccess)
+                { // limit to valid range [0..3600[
+                    nAngle = nAngle % 3600;
+                    if (nAngle < 0)
+                        nAngle += 3600;
+                    aGradient.Angle = nAngle;
+                }
                 SAL_INFO_IF(!bSuccess, "xmloff.style", "failed to import draw:angle");
             }
             break;
@@ -307,7 +318,12 @@ void XMLGradientStyleExport::exportXML(
     // Angle
     if( aGradient.GetGradientStyle() != awt::GradientStyle_RADIAL )
     {
-        ::sax::Converter::convertAngle(aOut, static_cast<sal_Int16>(aGradient.GetAngle()), m_rExport.getSaneDefaultVersion());
+        // true: wrong, but backward compatible with OOo/LO < 4.4
+        // false: OFFICE-3774 tdf#89475 write valid ODF 1.2 angle; needs LO 4.4 to import
+        bool bIsWrongOOo10thDegAngle(m_rExport.getSaneDefaultVersion() < SvtSaveOptions::ODFSVER_012
+            || m_rExport.getSaneDefaultVersion() == SvtSaveOptions::ODFSVER_012_EXT_COMPAT);
+        ::sax::Converter::convert10thDegAngle(aOut, static_cast<sal_Int16>(aGradient.GetAngle()),
+                                              bIsWrongOOo10thDegAngle);
         aStrValue = aOut.makeStringAndClear();
         m_rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_GRADIENT_ANGLE, aStrValue );
     }

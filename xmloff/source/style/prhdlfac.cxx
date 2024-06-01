@@ -30,7 +30,7 @@
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlprhdl.hxx>
-#include "xmlbahdl.hxx"
+#include <xmlbahdl.hxx>
 #include <xmloff/NamedBoolPropertyHdl.hxx>
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
 #include "cdouthdl.hxx"

@@ -65,6 +65,9 @@
 #include <sax/tools/converter.hxx>
 #include <xmlsdtypes.hxx>
 #include <xmlprop.hxx>
+#include <xmlbahdl.hxx>
+#include <climits>
+#include <algorithm>
 
 using ::com::sun::star::uno::Any;
 
@@ -219,7 +222,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( PROP_D3DVerticalSegments,                XML_NAMESPACE_DR3D, XML_VERTICAL_SEGMENTS,      XML_TYPE_NUMBER, 0 ),
     GMAP( PROP_D3DPercentDiagonal,             XML_NAMESPACE_DR3D, XML_EDGE_ROUNDING,          XML_TYPE_PERCENT, 0 ),
     GMAP( PROP_D3DBackscale,                   XML_NAMESPACE_DR3D, XML_BACK_SCALE,             XML_TYPE_PERCENT, 0 ),
-    GMAP( PROP_D3DEndAngle,                        XML_NAMESPACE_DR3D, XML_END_ANGLE,              XML_TYPE_NUMBER, 0 ),
+    GMAP( PROP_D3DEndAngle,                    XML_NAMESPACE_DR3D, XML_END_ANGLE,              XML_SD_TYPE_LATHE_ENDANGLE, 0 ),
     GMAP( PROP_D3DDepth,                       XML_NAMESPACE_DR3D, XML_DEPTH,                  XML_TYPE_MEASURE, 0 ),
     GMAP( PROP_D3DDoubleSided,                 XML_NAMESPACE_DR3D, XML_BACKFACE_CULLING,       XML_SD_TYPE_BACKFACE_CULLING, 0 ),
 
@@ -990,7 +993,61 @@ public:
         return true;
     }
 };
+}
 
+namespace
+{
+class XMLLatheEndAngleHdl : public XMLDoublePropHdl
+{
+public:
+    virtual bool importXML(const OUString& rStrImpValue, css::uno::Any& rValue,
+                           const SvXMLUnitConverter& rUnitConverter) const override;
+    virtual bool exportXML(OUString& rStrExpValue, const css::uno::Any& rValue,
+                           const SvXMLUnitConverter& rUnitConverter) const override;
+};
+}
+
+bool XMLLatheEndAngleHdl::importXML(const OUString& rStrImpValue, uno::Any& rValue,
+                                    const SvXMLUnitConverter& rUC) const
+{
+    // tdf#161327. We keep reading unit-less values as being in 1/10th of a degree for backward
+    // compatibility for now. Values with unit are interpreted correctly.
+    SAL_WARN_IF(
+        SvtSaveOptions::ODFSaneDefaultVersion::ODFSVER_013_EXTENDED < rUC.getSaneDefaultVersion(),
+        "xmloff.draw",
+        "Check whether parameter isWrongOOo10thDegAngle can be false for newer LO version.");
+    sal_Int16 nAngle; // Angles are limited to 'short' in UNO property D3DEndAngle.
+    bool const bRet = ::sax::Converter::convert10thDegAngle(nAngle, rStrImpValue, true);
+    if (bRet)
+    {
+        rValue <<= nAngle;
+        return true;
+    }
+    else
+        return false;
+}
+
+bool XMLLatheEndAngleHdl::exportXML(OUString& rStrExpValue, const uno::Any& rValue,
+                                    const SvXMLUnitConverter& rUC) const
+{
+    sal_Int16 nAngle; // type of D3DEndAngle is 'short'.
+    bool bRet = rValue >>= nAngle;
+    if (bRet)
+    {
+        // tdf#161327. Adapt version to write unit deg, when most users have a LO version, that can
+        // read angle units. Write 1/10 of a degree for all versions for backward compatibility till
+        // then. Adapt test when LO writes a new default ODF version.
+        if (SvtSaveOptions::ODFSaneDefaultVersion::ODFSVER_013_EXTENDED
+            >= rUC.getSaneDefaultVersion())
+            rStrExpValue = OUString::number(nAngle); // wrong, but backward compatible
+        else
+        {
+            SAL_WARN("xmloff.draw", "Check whether writing unit is indeed possible now.");
+            double fAngle = static_cast<double>(nAngle) / 10.0;
+            rStrExpValue = OUString::number(fAngle) + "deg";
+        }
+    }
+    return bRet;
 }
 
 XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > xModel, SvXMLImport& rImport )
@@ -1134,6 +1191,11 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             case XML_SD_TYPE_TEX_MODE:
             {
                 pHdl = new XMLEnumPropertyHdl( aXML_TexMode_EnumMap );
+                break;
+            }
+            case XML_SD_TYPE_LATHE_ENDANGLE:
+            {
+                pHdl = new XMLLatheEndAngleHdl;
                 break;
             }
             case XML_SD_TYPE_NUMBULLET:

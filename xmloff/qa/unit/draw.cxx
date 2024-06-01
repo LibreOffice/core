@@ -14,6 +14,8 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeMetalType.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -820,6 +822,61 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, test_scene3d_ooxml_light)
 
     // Without fix this would have failed with validation error.
     save(u"impress8"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf161327_LatheEndAngle)
+{
+    // Load document with 3D-Scene with 4 rotation objects
+    loadFromFile(u"tdf161327_LatheEndAngle.fodg");
+
+    // get scene object
+    uno::Reference<drawing::XShape> xSceneShape(getShape(0));
+    constexpr OUString sExpected(u"com.sun.star.drawing.Shape3DSceneObject"_ustr);
+    CPPUNIT_ASSERT_EQUAL(sExpected, xSceneShape->getShapeType());
+
+    // Examine child objects
+    // [0] dr3d:end-angle="1512"
+    // [1] dr3d:end-angle="151.2deg"
+    // [2] dr3d:end-angle="168.0grad"
+    // [3] dr3d:end-angle="2.638937829015430rad"
+    // All cases should result in D3DEndAngle = 1512. Without fix, cases [1], [2] and [3]
+    // could not be read and default 3600 was used, although the values are valid in ODF.
+    for (size_t i = 0; i < 4; ++i)
+    {
+        uno::Reference<container::XIndexAccess> xGroup(xSceneShape, uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+        sal_Int16 nEndAngle;
+        xShapeProps->getPropertyValue(u"D3DEndAngle"_ustr) >>= nEndAngle;
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(1512), nEndAngle);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf161327_HatchAngle)
+{
+    // Load document with four rectangles with linear hatch background fill
+    loadFromFile(u"tdf161327_HatchAngle.fodg");
+
+    // The hatch angle is given in file as
+    // [0] 585 unit less
+    // [1] 58.5deg,
+    // [2] 65grad,
+    // [3] 1.01201761241668rad
+    // The resulting angle should be 585 (meaning 1/10 of a degree) in all cases.
+    // Cases [1], [2] and [3] had angle 0 without fix.
+    for (size_t i = 0; i < 4; ++i)
+    {
+        uno::Reference<drawing::XShape> xShape(getShape(i));
+        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+        constexpr css::drawing::FillStyle eExpectedStyle = css::drawing::FillStyle_HATCH;
+        css::drawing::FillStyle aActualStyle;
+        xShapeProps->getPropertyValue(u"FillStyle"_ustr) >>= aActualStyle;
+        CPPUNIT_ASSERT_EQUAL(eExpectedStyle, aActualStyle);
+        sal_Int32 nExpectedAngle = 585; // FillHatch.Angle has data type 'long'
+        css::drawing::Hatch aActualHatch;
+        xShapeProps->getPropertyValue(u"FillHatch"_ustr) >>= aActualHatch;
+        CPPUNIT_ASSERT_EQUAL(nExpectedAngle, aActualHatch.Angle);
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

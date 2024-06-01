@@ -15221,6 +15221,7 @@ xmloff/inc/txtfldi.hxx
 xmloff/inc/txtlists.hxx
 xmloff/inc/txtvfldi.hxx
 xmloff/inc/xexptran.hxx
+xmloff/inc/xmlbahdl.hxx
 xmloff/inc/xmlmultiimagehelper.hxx
 xmloff/inc/xmlsdtypes.hxx
 xmloff/inc/xmltabe.hxx
@@ -15521,7 +15522,6 @@ xmloff/source/style/weighhdl.cxx
 xmloff/source/style/weighhdl.hxx
 xmloff/source/style/xmlaustp.cxx
 xmloff/source/style/xmlbahdl.cxx
-xmloff/source/style/xmlbahdl.hxx
 xmloff/source/style/xmlexppr.cxx
 xmloff/source/style/xmlimppr.cxx
 xmloff/source/style/xmlnume.cxx

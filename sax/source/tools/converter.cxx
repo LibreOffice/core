@@ -725,25 +725,24 @@ bool Converter::convertDouble(double& rValue, std::string_view rString)
 }
 
 /** convert number, 10th of degrees with range [0..3600] to SVG angle */
-void Converter::convertAngle(OUStringBuffer& rBuffer, sal_Int16 const nAngle,
-        SvtSaveOptions::ODFSaneDefaultVersion const nVersion)
+void Converter::convert10thDegAngle(OUStringBuffer& rBuffer, sal_Int16 const nAngle,
+                                    const bool isWrongOOo10thDegAngle)
 {
-    if (nVersion < SvtSaveOptions::ODFSVER_012 || nVersion == SvtSaveOptions::ODFSVER_012_EXT_COMPAT)
+    if (isWrongOOo10thDegAngle)
     {
-        // wrong, but backward compatible with OOo/LO < 4.4
         rBuffer.append(static_cast<sal_Int32>(nAngle));
     }
     else
-    { // OFFICE-3774 tdf#89475 write valid ODF 1.2 angle; needs LO 4.4 to import
+    {
         double fAngle(double(nAngle) / 10.0);
         ::sax::Converter::convertDouble(rBuffer, fAngle);
         rBuffer.append("deg");
     }
 }
 
-/** convert SVG angle to number, 10th of degrees with range [0..3600] */
-bool Converter::convertAngle(sal_Int16& rAngle, std::u16string_view rString,
-        bool const isWrongOOo10thDegAngle)
+/** convert SVG angle to number in 10th of degrees */
+bool Converter::convert10thDegAngle(sal_Int16& rAngle, std::u16string_view rString,
+                                    bool const isWrongOOo10thDegAngle)
 {
     // ODF 1.1 leaves it undefined what the number means, but ODF 1.2 says it's
     // degrees, while OOo has historically used 10th of degrees :(
@@ -751,49 +750,30 @@ bool Converter::convertAngle(sal_Int16& rAngle, std::u16string_view rString,
     // degrees for now for the sake of existing OOo/LO documents, until the
     // new versions that can read "deg" suffix are widely deployed and we can
     // start to write the "deg" suffix.
-    sal_Int32 nValue(0);
-    double fValue(0.0);
-    bool bRet = ::sax::Converter::convertDouble(fValue, rString);
-    if (std::u16string_view::npos != rString.find(u"deg"))
-    {
-        nValue = fValue * 10.0;
-    }
-    else if (std::u16string_view::npos != rString.find(u"grad"))
-    {
-        nValue = (fValue * 9.0 / 10.0) * 10.0;
-    }
-    else if (std::u16string_view::npos != rString.find(u"rad"))
-    {
-        nValue = basegfx::rad2deg<10>(fValue);
-    }
-    else // no explicit unit
-    {
-        if (isWrongOOo10thDegAngle)
-        {
-            nValue = fValue; // wrong, but backward compatible with OOo/LO < 7.0
-        }
-        else
-        {
-            nValue = fValue * 10.0; // ODF 1.2
-        }
-    }
-    // limit to valid range [0..3600]
-    nValue = nValue % 3600;
-    if (nValue < 0)
-    {
-        nValue += 3600;
-    }
-    assert(0 <= nValue && nValue <= 3600);
+    double fAngle(0.0);
+    bool bRet = ::sax::Converter::convertDouble(fAngle, rString);
     if (bRet)
     {
-        rAngle = sal::static_int_cast<sal_Int16>(nValue);
+        if (std::u16string_view::npos != rString.find(u"deg"))
+            fAngle *= 10.0;
+        else if (std::u16string_view::npos != rString.find(u"grad"))
+            fAngle *= 9.0; // 360deg = 400grad
+        else if (std::u16string_view::npos != rString.find(u"rad"))
+            fAngle = basegfx::rad2deg<10>(fAngle);
+        else // no explicit unit
+        { // isWrongOOo10thDegAngle = true: nothing to do here. Wrong, but backward compatible.
+            if (!isWrongOOo10thDegAngle)
+                fAngle *= 10.0; // conform to ODF 1.2 and newer
+        }
+        fAngle = std::clamp<double>(basegfx::fround(fAngle), SHRT_MIN, SHRT_MAX);
+        rAngle = static_cast<sal_Int16>(fAngle);
     }
     return bRet;
 }
 
 /** convert SVG angle to number, 10th of degrees with range [0..3600] */
-bool Converter::convertAngle(sal_Int16& rAngle, std::string_view rString,
-        bool const isWrongOOo10thDegAngle)
+bool Converter::convert10thDegAngle(sal_Int16& rAngle, std::string_view rString,
+                                    bool const isWrongOOo10thDegAngle)
 {
     // ODF 1.1 leaves it undefined what the number means, but ODF 1.2 says it's
     // degrees, while OOo has historically used 10th of degrees :(
@@ -801,42 +781,23 @@ bool Converter::convertAngle(sal_Int16& rAngle, std::string_view rString,
     // degrees for now for the sake of existing OOo/LO documents, until the
     // new versions that can read "deg" suffix are widely deployed and we can
     // start to write the "deg" suffix.
-    sal_Int32 nValue(0);
-    double fValue(0.0);
-    bool bRet = ::sax::Converter::convertDouble(fValue, rString);
-    if (std::string_view::npos != rString.find("deg"))
-    {
-        nValue = fValue * 10.0;
-    }
-    else if (std::string_view::npos != rString.find("grad"))
-    {
-        nValue = (fValue * 9.0 / 10.0) * 10.0;
-    }
-    else if (std::string_view::npos != rString.find("rad"))
-    {
-        nValue = basegfx::rad2deg<10>(fValue);
-    }
-    else // no explicit unit
-    {
-        if (isWrongOOo10thDegAngle)
-        {
-            nValue = fValue; // wrong, but backward compatible with OOo/LO < 7.0
-        }
-        else
-        {
-            nValue = fValue * 10.0; // ODF 1.2
-        }
-    }
-    // limit to valid range [0..3600]
-    nValue = nValue % 3600;
-    if (nValue < 0)
-    {
-        nValue += 3600;
-    }
-    assert(0 <= nValue && nValue <= 3600);
+    double fAngle(0.0);
+    bool bRet = ::sax::Converter::convertDouble(fAngle, rString);
     if (bRet)
     {
-        rAngle = sal::static_int_cast<sal_Int16>(nValue);
+        if (std::string_view::npos != rString.find("deg"))
+            fAngle *= 10.0;
+        else if (std::string_view::npos != rString.find("grad"))
+            fAngle *= 9.0; // 360deg = 400grad
+        else if (std::string_view::npos != rString.find("rad"))
+            fAngle = basegfx::rad2deg<10>(fAngle);
+        else // no explicit unit
+        { // isWrongOOo10thDegAngle = true: nothing to do here. Wrong, but backward compatible.
+            if (!isWrongOOo10thDegAngle)
+                fAngle *= 10.0; // conform to ODF 1.2 and newer
+        }
+        fAngle = std::clamp<double>(basegfx::fround(fAngle), SHRT_MIN, SHRT_MAX);
+        rAngle = static_cast<sal_Int16>(fAngle);
     }
     return bRet;
 }
