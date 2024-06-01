@@ -706,7 +706,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                 {
                     if( !rTableInfo.IsBaseSectionValid() )
                     {
-                        Any aAny = xCell->getPropertyValue("TextSection");
+                        Any aAny = xCell->getPropertyValue(u"TextSection"_ustr);
                         Reference < XTextSection > xTextSection;
                         aAny >>= xTextSection;
                         rTableInfo.SetBaseSection( xTextSection );
@@ -842,7 +842,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
 
                 // value and format (if NumberFormat != -1)
                 sal_Int32 nNumberFormat = 0;
-                Any aAny = xCell->getPropertyValue("NumberFormat");
+                Any aAny = xCell->getPropertyValue(u"NumberFormat"_ustr);
                 aAny >>= nNumberFormat;
 
                 if (static_cast<sal_Int32>(getSwDefaultTextFormat()) == nNumberFormat)
@@ -862,7 +862,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
                 // else: invalid key; ignore
 
                 // cell protection
-                aAny = xCell->getPropertyValue("IsProtected");
+                aAny = xCell->getPropertyValue(u"IsProtected"_ustr);
                 if (*o3tl::doAccess<bool>(aAny))
                 {
                     AddAttribute( XML_NAMESPACE_TABLE, XML_PROTECTED,
@@ -871,7 +871,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
 
                 if( !rTableInfo.IsBaseSectionValid() )
                 {
-                    aAny = xCell->getPropertyValue("TextSection");
+                    aAny = xCell->getPropertyValue(u"TextSection"_ustr);
                     Reference < XTextSection > xTextSection;
                     aAny >>= xTextSection;
                     rTableInfo.SetBaseSection( xTextSection );

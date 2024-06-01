@@ -989,7 +989,7 @@ void SwXMLDDETableContext_Impl::startFastElement(
 // generate a new name for DDE field type (called by lcl_GetDDEFieldType below)
 static OUString lcl_GenerateFieldTypeName(const OUString& sPrefix, SwTableNode* pTableNode)
 {
-    const OUString sPrefixStr(sPrefix.isEmpty() ? OUString("_") : sPrefix);
+    const OUString sPrefixStr(sPrefix.isEmpty() ? u"_"_ustr : sPrefix);
 
     // increase count until we find a name that is not yet taken
     OUString sName;
@@ -1199,7 +1199,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     OSL_ENSURE( xFactory.is(), "factory missing" );
     if( xFactory.is() )
     {
-        Reference<XInterface> xIfc = xFactory->createInstance( "com.sun.star.text.TextTable" );
+        Reference<XInterface> xIfc = xFactory->createInstance( u"com.sun.star.text.TextTable"_ustr );
         OSL_ENSURE( xIfc.is(), "Couldn't create a table" );
 
         if( xIfc.is() )
@@ -1593,7 +1593,7 @@ void SwXMLTableContext::FinishRow()
     // Insert an empty cell at the end of the line if the row is not complete
     if( m_nCurCol < GetColumnCount() )
     {
-        InsertCell( "", 1U, GetColumnCount() - m_nCurCol,
+        InsertCell( u""_ustr, 1U, GetColumnCount() - m_nCurCol,
                     InsertTableSection() );
     }
 
@@ -2240,7 +2240,7 @@ void SwXMLTableContext::MakeTable_( SwTableBox *pBox )
 
     if (m_pRows->empty())
     {
-        InsertCell( "", 1U, nCols, InsertTableSection() );
+        InsertCell( u""_ustr, 1U, nCols, InsertTableSection() );
     }
 
     // TODO: Do we have to keep both values, the relative and the absolute
@@ -2699,7 +2699,7 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
         pStNd = pTextCursor->GetPaM()->GetPointNode().FindTableBoxStartNode();
         m_bFirstSection = false;
         GetImport().GetTextImport()->SetStyleAndAttrs( GetImport(),
-            GetImport().GetTextImport()->GetCursor(), "Standard", true );
+            GetImport().GetTextImport()->GetCursor(), u"Standard"_ustr, true );
     }
     else
     {

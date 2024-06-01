@@ -286,7 +286,7 @@ uno::Reference < style::XStyle > SwXMLTextStyleContext_Impl::Create()
         if( xFactory.is() )
         {
             uno::Reference < uno::XInterface > xIfc =
-                xFactory->createInstance( "com.sun.star.style.ConditionalParagraphStyle" );
+                xFactory->createInstance( u"com.sun.star.style.ConditionalParagraphStyle"_ustr );
             if( xIfc.is() )
                 xNewStyle.set( xIfc, uno::UNO_QUERY );
         }
@@ -909,9 +909,9 @@ uno::Reference < container::XNameContainer > SwXMLStylesContext_Impl::GetStylesC
 OUString SwXMLStylesContext_Impl::GetServiceName( XmlStyleFamily nFamily ) const
 {
     if( XmlStyleFamily::SD_GRAPHICS_ID == nFamily )
-        return "com.sun.star.style.FrameStyle";
+        return u"com.sun.star.style.FrameStyle"_ustr;
     else if( XmlStyleFamily::TABLE_CELL == nFamily )
-        return "com.sun.star.style.CellStyle";
+        return u"com.sun.star.style.CellStyle"_ustr;
 
     return SvXMLStylesContext::GetServiceName( nFamily );
 }

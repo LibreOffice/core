@@ -76,7 +76,7 @@ OString ExtractOLEClassName(const rtl::Reference<SotStorage>& xStorage)
 {
     OString aRet;
 
-    rtl::Reference<SotStorageStream> pCompObj = xStorage->OpenSotStream("\1CompObj");
+    rtl::Reference<SotStorageStream> pCompObj = xStorage->OpenSotStream(u"\1CompObj"_ustr);
     if (!pCompObj)
         return aRet;
 
@@ -108,7 +108,7 @@ bool ParseOLE2Presentation(SvStream& rOle2, sal_uInt32& nWidth, sal_uInt32& nHei
     rOle2.Seek(0);
     rtl::Reference<SotStorage> pStorage = new SotStorage(rOle2);
     rtl::Reference<SotStorageStream> xOle2Presentation
-        = pStorage->OpenSotStream("\002OlePres000", StreamMode::STD_READ);
+        = pStorage->OpenSotStream(u"\002OlePres000"_ustr, StreamMode::STD_READ);
 
     // Read AnsiClipboardFormat.
     sal_uInt32 nMarkerOrLength = 0;
@@ -168,7 +168,7 @@ OString InsertOLE1HeaderFromOle10NativeStream(const rtl::Reference<SotStorage>& 
                                               SwOLENode& rOLENode, SvStream& rOle1)
 {
     rtl::Reference<SotStorageStream> xOle1Stream
-        = xStorage->OpenSotStream("\1Ole10Native", StreamMode::STD_READ);
+        = xStorage->OpenSotStream(u"\1Ole10Native"_ustr, StreamMode::STD_READ);
     sal_uInt32 nOle1Size = 0;
     xOle1Stream->ReadUInt32(nOle1Size);
 
@@ -275,7 +275,7 @@ OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1, sal_uInt32& nWidth, s
     if (xStorage->GetError() != ERRCODE_NONE)
         return {};
 
-    if (xStorage->IsStream("\1Ole10Native"))
+    if (xStorage->IsStream(u"\1Ole10Native"_ustr))
     {
         return InsertOLE1HeaderFromOle10NativeStream(xStorage, rOLENode, rOle1);
     }
@@ -449,7 +449,7 @@ bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf, SwOLENode& rOLENode,
     if (pGraphic)
     {
         uno::Sequence<beans::PropertyValue> aFilterData
-            = { comphelper::makePropertyValue("EmbedEMF", false) };
+            = { comphelper::makePropertyValue(u"EmbedEMF"_ustr, false) };
         FilterConfigItem aConfigItem(&aFilterData);
         if (ConvertGraphicToWMF(*pGraphic, aGraphicStream, &aConfigItem))
         {
@@ -572,7 +572,7 @@ bool WrapGraphicInRtf(const Graphic& rGraphic, const SwFrameFormat& rFormat, SvS
     sal_uInt64 nPresentationData = 0;
     SvMemoryStream aGraphicStream;
     uno::Sequence<beans::PropertyValue> aFilterData
-        = { comphelper::makePropertyValue("EmbedEMF", false) };
+        = { comphelper::makePropertyValue(u"EmbedEMF"_ustr, false) };
     FilterConfigItem aConfigItem(&aFilterData);
     if (ConvertGraphicToWMF(rGraphic, aGraphicStream, &aConfigItem))
     {

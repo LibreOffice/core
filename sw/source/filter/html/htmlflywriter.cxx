@@ -1837,13 +1837,13 @@ static SwHTMLWriter & OutHTML_FrameFormatAsImage( SwHTMLWriter& rWrt, const SwFr
 
     Size aSz( 0, 0 );
     OUString GraphicURL;
-    OUString aMimeType("image/jpeg");
+    OUString aMimeType(u"image/jpeg"_ustr);
     if(!rWrt.mbEmbedImages)
     {
         if( rWrt.GetOrigFileName() )
             GraphicURL = *rWrt.GetOrigFileName();
 
-        OUString aFilterName("JPG");
+        OUString aFilterName(u"JPG"_ustr);
         XOutFlags nFlags = XOutFlags::UseGifIfPossible | XOutFlags::UseNativeIfPossible;
 
         if (rWrt.mbReqIF && !bWritePNGFallback)
@@ -1877,7 +1877,7 @@ static SwHTMLWriter & OutHTML_FrameFormatAsImage( SwHTMLWriter& rWrt, const SwFr
     }
     uno::Reference<beans::XPropertySet> xGraphic(aGraphic.GetXGraphic(), uno::UNO_QUERY);
     if (xGraphic.is() && aMimeType.isEmpty())
-        xGraphic->getPropertyValue("MimeType") >>= aMimeType;
+        xGraphic->getPropertyValue(u"MimeType"_ustr) >>= aMimeType;
 
     OutHTML_ImageOLEStart(rWrt, aGraphic, rFrameFormat);
 
@@ -2023,7 +2023,7 @@ static SwHTMLWriter& OutHTML_FrameFormatGrfNode( SwHTMLWriter& rWrt, const SwFra
     }
     uno::Reference<beans::XPropertySet> xGraphic(aGraphic.GetXGraphic(), uno::UNO_QUERY);
     if (xGraphic.is() && aMimeType.isEmpty())
-        xGraphic->getPropertyValue("MimeType") >>= aMimeType;
+        xGraphic->getPropertyValue(u"MimeType"_ustr) >>= aMimeType;
 
     OutHTML_ImageOLEStart(rWrt, aGraphic, rFrameFormat);
 

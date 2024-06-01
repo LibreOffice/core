@@ -104,7 +104,7 @@ sal_uInt16 SwHTMLWriter::GetDefListLvl( std::u16string_view rNm, sal_uInt16 nPoo
         return 1 | HTML_DLCOLL_DT;
     }
 
-    OUString sDTDD = OOO_STRING_SVTOOLS_HTML_dt " ";
+    OUString sDTDD = u"" OOO_STRING_SVTOOLS_HTML_dt " "_ustr;
     if( o3tl::starts_with(rNm, sDTDD) )
         // DefinitionList - term
         return o3tl::narrowing<sal_uInt16>(o3tl::toInt32(rNm.substr( sDTDD.getLength() ))) | HTML_DLCOLL_DT;

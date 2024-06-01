@@ -216,7 +216,7 @@ void SwCSS1Parser::SetLinkCharFormats()
     OSL_ENSURE( !m_bLinkCharFormatsSet, "Call SetLinkCharFormats unnecessary" );
 
     SvxCSS1MapEntry *pStyleEntry =
-        GetTag( OOO_STRING_SVTOOLS_HTML_anchor );
+        GetTag( u"" OOO_STRING_SVTOOLS_HTML_anchor ""_ustr );
     SwCharFormat *pUnvisited = nullptr, *pVisited = nullptr;
     if( pStyleEntry )
     {
@@ -232,7 +232,7 @@ void SwCSS1Parser::SetLinkCharFormats()
         m_bBodyVLinkSet |= bColorSet;
     }
 
-    OUString sTmp = OOO_STRING_SVTOOLS_HTML_anchor ":link";
+    OUString sTmp = u"" OOO_STRING_SVTOOLS_HTML_anchor ":link"_ustr;
 
     pStyleEntry = GetTag( sTmp );
     if( pStyleEntry )
@@ -1826,7 +1826,7 @@ bool SwCSS1Parser::ParseStyleSheet( const OUString& rIn )
 
     }
 
-    pPageEntry = GetPage( "first", true );
+    pPageEntry = GetPage( u"first"_ustr, true );
     if( pPageEntry )
     {
         SetPageDescAttrs( GetFirstPageDesc(true), pPageEntry->GetItemSet(),
@@ -1834,7 +1834,7 @@ bool SwCSS1Parser::ParseStyleSheet( const OUString& rIn )
         m_bSetFirstPageDesc = true;
     }
 
-    pPageEntry = GetPage( "right", true );
+    pPageEntry = GetPage( u"right"_ustr, true );
     if( pPageEntry )
     {
         SetPageDescAttrs( GetRightPageDesc(true), pPageEntry->GetItemSet(),
@@ -1842,7 +1842,7 @@ bool SwCSS1Parser::ParseStyleSheet( const OUString& rIn )
         m_bSetRightPageDesc = true;
     }
 
-    pPageEntry = GetPage( "left", true );
+    pPageEntry = GetPage( u"left"_ustr, true );
     if( pPageEntry )
         SetPageDescAttrs( GetLeftPageDesc(true), pPageEntry->GetItemSet(),
                           pPageEntry->GetPropertyInfo() );

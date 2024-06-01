@@ -130,53 +130,53 @@ ErrCodeMsg SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
     // create XPropertySet with three properties for status indicator
     static comphelper::PropertyMapEntry const aInfoMap[] =
     {
-        { OUString("ProgressRange"), 0,
+        { u"ProgressRange"_ustr, 0,
               ::cppu::UnoType<sal_Int32>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("ProgressMax"), 0,
+        { u"ProgressMax"_ustr, 0,
               ::cppu::UnoType<sal_Int32>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("ProgressCurrent"), 0,
+        { u"ProgressCurrent"_ustr, 0,
               ::cppu::UnoType<sal_Int32>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("WrittenNumberStyles"), 0,
+        { u"WrittenNumberStyles"_ustr, 0,
               cppu::UnoType<uno::Sequence<sal_Int32>>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("UsePrettyPrinting"), 0,
+        { u"UsePrettyPrinting"_ustr, 0,
               cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("ShowChanges"), 0,
+        { u"ShowChanges"_ustr, 0,
               cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("RedlineProtectionKey"), 0,
+        { u"RedlineProtectionKey"_ustr, 0,
               cppu::UnoType<Sequence<sal_Int8>>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("BaseURI"), 0,
+        { u"BaseURI"_ustr, 0,
               ::cppu::UnoType<OUString>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamRelPath"), 0,
+        { u"StreamRelPath"_ustr, 0,
               ::cppu::UnoType<OUString>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamName"), 0,
+        { u"StreamName"_ustr, 0,
               ::cppu::UnoType<OUString>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("AutoTextMode"), 0,
+        { u"AutoTextMode"_ustr, 0,
               cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StyleNames"), 0,
+        { u"StyleNames"_ustr, 0,
               cppu::UnoType<Sequence<OUString>>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StyleFamilies"), 0,
+        { u"StyleFamilies"_ustr, 0,
               cppu::UnoType<Sequence<sal_Int32>>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         // #i69627#
-        { OUString("OutlineStyleAsNormalListStyle"), 0,
+        { u"OutlineStyleAsNormalListStyle"_ustr, 0,
               cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("TargetStorage"),0, cppu::UnoType<embed::XStorage>::get(),
+        { u"TargetStorage"_ustr,0, cppu::UnoType<embed::XStorage>::get(),
               css::beans::PropertyAttribute::MAYBEVOID, 0 },
         // tdf#144532
-        { OUString("NoEmbDataSet"), 0,
+        { u"NoEmbDataSet"_ustr, 0,
               cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
     };
@@ -184,9 +184,9 @@ ErrCodeMsg SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
                 comphelper::GenericPropertySet_CreateInstance(
                             new comphelper::PropertySetInfo( aInfoMap ) ) );
 
-    xInfoSet->setPropertyValue( "TargetStorage", Any( m_xStg ) );
+    xInfoSet->setPropertyValue( u"TargetStorage"_ustr, Any( m_xStg ) );
 
-    xInfoSet->setPropertyValue("NoEmbDataSet", Any(bNoEmbDS));
+    xInfoSet->setPropertyValue(u"NoEmbDataSet"_ustr, Any(bNoEmbDS));
 
     if (m_bShowProgress)
     {
@@ -197,12 +197,12 @@ ErrCodeMsg SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
             xStatusIndicator->start(SwResId( STR_STATSTR_SWGWRITE),
                                     nProgressRange);
         }
-        xInfoSet->setPropertyValue("ProgressRange", Any(nProgressRange));
+        xInfoSet->setPropertyValue(u"ProgressRange"_ustr, Any(nProgressRange));
 
-        xInfoSet->setPropertyValue("ProgressMax", Any(static_cast < sal_Int32 >( -1 )));
+        xInfoSet->setPropertyValue(u"ProgressMax"_ustr, Any(static_cast < sal_Int32 >( -1 )));
     }
 
-    xInfoSet->setPropertyValue( "UsePrettyPrinting", Any(officecfg::Office::Common::Save::Document::PrettyPrinting::get()) );
+    xInfoSet->setPropertyValue( u"UsePrettyPrinting"_ustr, Any(officecfg::Office::Common::Save::Document::PrettyPrinting::get()) );
 
     uno::Reference<lang::XComponent> const xModelComp(m_pDoc->GetDocShell()->GetModel());
     uno::Reference<drawing::XDrawPageSupplier> const xDPS(xModelComp, uno::UNO_QUERY);
@@ -216,27 +216,27 @@ ErrCodeMsg SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
     // TODO: ideally this would be stored per-view...
     SwRootFrame const*const pLayout(m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
     isShowChanges = pLayout == nullptr || !pLayout->IsHideRedlines();
-    xInfoSet->setPropertyValue("ShowChanges", Any(isShowChanges));
+    xInfoSet->setPropertyValue(u"ShowChanges"_ustr, Any(isShowChanges));
     // ... and hide redlines for export
     nRedlineFlags &= ~RedlineFlags::ShowMask;
     nRedlineFlags |= RedlineFlags::ShowInsert;
     m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags( nRedlineFlags );
 
     // Set base URI
-    xInfoSet->setPropertyValue( "BaseURI", Any( GetBaseURL() ) );
+    xInfoSet->setPropertyValue( u"BaseURI"_ustr, Any( GetBaseURL() ) );
 
     if( SfxObjectCreateMode::EMBEDDED == m_pDoc->GetDocShell()->GetCreateMode() )
     {
         const OUString aName( !aDocHierarchicalName.isEmpty()
             ? aDocHierarchicalName
-            : OUString( "dummyObjectName" ) );
+            : u"dummyObjectName"_ustr );
 
-        xInfoSet->setPropertyValue( "StreamRelPath", Any( aName ) );
+        xInfoSet->setPropertyValue( u"StreamRelPath"_ustr, Any( aName ) );
     }
 
     if( m_bBlock )
     {
-        xInfoSet->setPropertyValue( "AutoTextMode", Any(true) );
+        xInfoSet->setPropertyValue( u"AutoTextMode"_ustr, Any(true) );
     }
 
     // #i69627#
@@ -244,7 +244,7 @@ ErrCodeMsg SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
     if ( bOASIS &&
          docfunc::HasOutlineStyleToBeWrittenAsNormalListStyle( *m_pDoc ) )
     {
-        xInfoSet->setPropertyValue( "OutlineStyleAsNormalListStyle", Any( true ) );
+        xInfoSet->setPropertyValue( u"OutlineStyleAsNormalListStyle"_ustr, Any( true ) );
     }
 
     // filter arguments
@@ -302,7 +302,7 @@ ErrCodeMsg SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
         {
             OUString Version;
             // ODF >= 1.2
-            if ((xPropSet->getPropertyValue("Version") >>= Version)
+            if ((xPropSet->getPropertyValue(u"Version"_ustr) >>= Version)
                 && Version != ODFVER_010_TEXT
                 && Version != ODFVER_011_TEXT)
             {
@@ -400,14 +400,14 @@ ErrCodeMsg SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
     {
         try
         {
-            uno::Reference < io::XStream > xStm = m_xStg->openStreamElement( "layout-cache", embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+            uno::Reference < io::XStream > xStm = m_xStg->openStreamElement( u"layout-cache"_ustr, embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
             std::unique_ptr<SvStream> pStream = utl::UcbStreamHelper::CreateStream( xStm );
             if( !pStream->GetError() )
             {
                 uno::Reference < beans::XPropertySet > xSet( xStm, UNO_QUERY );
                 uno::Any aAny2;
-                aAny2 <<= OUString("application/binary");
-                xSet->setPropertyValue("MediaType", aAny2 );
+                aAny2 <<= u"application/binary"_ustr;
+                xSet->setPropertyValue(u"MediaType"_ustr, aAny2 );
                 m_pDoc->WriteLayoutCache( *pStream );
             }
         }
@@ -503,10 +503,10 @@ bool SwXMLWriter::WriteThroughComponent(
         if( !xSet.is() )
             return false;
 
-        xSet->setPropertyValue("MediaType", Any(OUString("text/xml")) );
+        xSet->setPropertyValue(u"MediaType"_ustr, Any(u"text/xml"_ustr) );
 
         // even plain stream should be encrypted in encrypted documents
-        xSet->setPropertyValue( "UseCommonStoragePasswordEncryption", Any(true) );
+        xSet->setPropertyValue( u"UseCommonStoragePasswordEncryption"_ustr, Any(true) );
 
         // set buffer and create outputstream
         uno::Reference< io::XOutputStream > xOutputStream = xStream->getOutputStream();
@@ -518,7 +518,7 @@ bool SwXMLWriter::WriteThroughComponent(
         OSL_ENSURE( xInfoSet.is(), "missing property set" );
         if( xInfoSet.is() )
         {
-            xInfoSet->setPropertyValue( "StreamName", Any( sStreamName ) );
+            xInfoSet->setPropertyValue( u"StreamName"_ustr, Any( sStreamName ) );
         }
 
         // write the stuff

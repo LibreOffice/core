@@ -59,9 +59,9 @@ OUString SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )
     if (rUserData == FILTER_XML ||
         rUserData == FILTER_XMLV ||
         rUserData == FILTER_XMLVW)
-        return "content.xml";
+        return u"content.xml"_ustr;
     if (rUserData == sWW6 || rUserData == FILTER_WW8)
-        return "WordDocument";
+        return u"WordDocument"_ustr;
     return OUString();
 }
 
@@ -98,7 +98,7 @@ bool SwIoSystem::IsValidStgFilter( const css::uno::Reference < css::embed::XStor
     try
     {
         SotClipboardFormatId nStgFormatId = SotStorage::GetFormatID( rStg );
-        bRet = rStg->isStreamElement( "content.xml" );
+        bRet = rStg->isStreamElement( u"content.xml"_ustr );
         if ( bRet )
             bRet = ( nStgFormatId != SotClipboardFormatId::NONE && ( rFilter.GetFormat() == nStgFormatId ) );
     }
@@ -125,13 +125,13 @@ bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter)
         /* Bug 62703 - and also WinWord Docs w/o ClipBoardId! */
         if (rFilter.GetUserData() == FILTER_WW8 || rFilter.GetUserData() == sWW6)
         {
-            bRet = (rStg.IsContained("0Table")
-                    || rStg.IsContained("1Table"))
+            bRet = (rStg.IsContained(u"0Table"_ustr)
+                    || rStg.IsContained(u"1Table"_ustr))
                 == (rFilter.GetUserData() == FILTER_WW8);
             if (bRet && !rFilter.IsAllowedAsTemplate())
             {
                 rtl::Reference<SotStorageStream> xRef =
-                    rStg.OpenSotStream("WordDocument",
+                    rStg.OpenSotStream(u"WordDocument"_ustr,
                             StreamMode::STD_READ );
                 xRef->Seek(10);
                 sal_uInt8 nByte;

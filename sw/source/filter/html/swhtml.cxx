@@ -453,7 +453,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     }
 
     comphelper::SequenceAsHashMap aLoadMap(pMed->GetArgs());
-    auto it = aLoadMap.find("AllowedRTFOLEMimeTypes");
+    auto it = aLoadMap.find(u"AllowedRTFOLEMimeTypes"_ustr);
     if (it == aLoadMap.end())
     {
         return;
@@ -1607,7 +1607,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
     case HtmlTokenId::NOEMBED_ON:
         m_bInNoEmbed = true;
         m_bCallNextToken = bool(m_xTable);
-        ReadRawData( OOO_STRING_SVTOOLS_HTML_noembed );
+        ReadRawData( u"" OOO_STRING_SVTOOLS_HTML_noembed ""_ustr );
         break;
 
     case HtmlTokenId::DEFLIST_ON:
@@ -5071,7 +5071,7 @@ void SwHTMLParser::InsertSpacer()
             else
             {
                 NewAttr(m_xAttrTab, &m_xAttrTab->pKerning, SvxKerningItem( static_cast<short>(nSize), RES_CHRATR_KERNING ));
-                m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, " " );
+                m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, u" "_ustr );
                 EndAttr( m_xAttrTab->pKerning );
             }
         }
@@ -5200,7 +5200,7 @@ void SwHTMLParser::InsertLineBreak()
         if (eClear == SwLineBreakClear::NONE)
         {
             // If no CLEAR could or should be executed, a line break will be inserted
-            m_xDoc->getIDocumentContentOperations().InsertString(*m_pPam, "\x0A");
+            m_xDoc->getIDocumentContentOperations().InsertString(*m_pPam, u"\x0A"_ustr);
         }
         else
         {

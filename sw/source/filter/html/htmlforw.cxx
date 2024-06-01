@@ -401,7 +401,7 @@ void SwHTMLWriter::OutHiddenForm( const uno::Reference< form::XForm > & rForm )
         if( bHiddenOnly )
         {
             uno::Reference< beans::XPropertySet >  xPropSet( *xFormComp, uno::UNO_QUERY );
-            OUString sPropName("ClassId");
+            OUString sPropName(u"ClassId"_ustr);
             if( xPropSet->getPropertySetInfo()->hasPropertyByName( sPropName ) )
             {
                 uno::Any aAny2 = xPropSet->getPropertyValue( sPropName );
@@ -448,7 +448,7 @@ void SwHTMLWriter::OutForm( bool bOn,
 
     uno::Reference< beans::XPropertySet > xFormPropSet( rFormComps, uno::UNO_QUERY );
 
-    uno::Any aTmp = xFormPropSet->getPropertyValue( "Name" );
+    uno::Any aTmp = xFormPropSet->getPropertyValue( u"Name"_ustr );
     if( auto s = o3tl::tryAccess<OUString>(aTmp) )
     {
         if( !s->isEmpty() )
@@ -460,7 +460,7 @@ void SwHTMLWriter::OutForm( bool bOn,
         }
     }
 
-    aTmp = xFormPropSet->getPropertyValue( "TargetURL" );
+    aTmp = xFormPropSet->getPropertyValue( u"TargetURL"_ustr );
     if( auto s = o3tl::tryAccess<OUString>(aTmp) )
     {
         if ( !s->isEmpty() )
@@ -474,7 +474,7 @@ void SwHTMLWriter::OutForm( bool bOn,
         }
     }
 
-    aTmp = xFormPropSet->getPropertyValue( "SubmitMethod" );
+    aTmp = xFormPropSet->getPropertyValue( u"SubmitMethod"_ustr );
     if( auto eMethod = o3tl::tryAccess<form::FormSubmitMethod>(aTmp) )
     {
         if( form::FormSubmitMethod_POST==*eMethod )
@@ -483,7 +483,7 @@ void SwHTMLWriter::OutForm( bool bOn,
                 OOO_STRING_SVTOOLS_HTML_METHOD_post "\"";
         }
     }
-    aTmp = xFormPropSet->getPropertyValue( "SubmitEncoding" );
+    aTmp = xFormPropSet->getPropertyValue( u"SubmitEncoding"_ustr );
     if( auto eEncType = o3tl::tryAccess<form::FormSubmitEncoding>(aTmp) )
     {
         const char *pStr = nullptr;
@@ -506,7 +506,7 @@ void SwHTMLWriter::OutForm( bool bOn,
         }
     }
 
-    aTmp = xFormPropSet->getPropertyValue( "TargetFrame" );
+    aTmp = xFormPropSet->getPropertyValue( u"TargetFrame"_ustr );
     if( auto s = o3tl::tryAccess<OUString>(aTmp) )
     {
         if (!s->isEmpty() )
@@ -558,7 +558,7 @@ void SwHTMLWriter::OutHiddenControls(
             continue;
         uno::Reference< beans::XPropertySet > xPropSet( *xFC, uno::UNO_QUERY );
 
-        OUString sPropName = "ClassId";
+        OUString sPropName = u"ClassId"_ustr;
         if( !xPropSet->getPropertySetInfo()->hasPropertyByName( sPropName ) )
             continue;
 
@@ -575,7 +575,7 @@ void SwHTMLWriter::OutHiddenControls(
                 OOO_STRING_SVTOOLS_HTML_O_type "=\""
                 OOO_STRING_SVTOOLS_HTML_IT_hidden "\"";
 
-            aTmp = xPropSet->getPropertyValue( "Name" );
+            aTmp = xPropSet->getPropertyValue( u"Name"_ustr );
             if( auto s = o3tl::tryAccess<OUString>(aTmp) )
             {
                 if( !s->isEmpty() )
@@ -586,7 +586,7 @@ void SwHTMLWriter::OutHiddenControls(
                     sOut = "\""_ostr;
                 }
             }
-            aTmp = xPropSet->getPropertyValue( "HiddenValue" );
+            aTmp = xPropSet->getPropertyValue( u"HiddenValue"_ustr );
             if( auto s = o3tl::tryAccess<OUString>(aTmp) )
             {
                 if( !s->isEmpty() )
@@ -632,7 +632,7 @@ const SdrObject *SwHTMLWriter::GetHTMLControl( const SwDrawFrameFormat& rFormat 
 
     uno::Reference< beans::XPropertySet >  xPropSet( xControlModel, uno::UNO_QUERY );
 
-    OUString sPropName("ClassId");
+    OUString sPropName(u"ClassId"_ustr);
     if( !xPropSet->getPropertySetInfo()->hasPropertyByName( sPropName ) )
         return nullptr;
 
@@ -706,7 +706,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
     OUString sValue;
     OString sOptions;
     bool bEmptyValue = false;
-    uno::Any aTmp = xPropSet->getPropertyValue( "ClassId" );
+    uno::Any aTmp = xPropSet->getPropertyValue( u"ClassId"_ustr );
     sal_Int16 nClassId = *o3tl::doAccess<sal_Int16>(aTmp);
     HtmlFrmOpts nFrameOpts = HTML_FRMOPTS_CONTROL;
     switch( nClassId )
@@ -715,7 +715,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
     case form::FormComponentType::RADIOBUTTON:
         eType = (form::FormComponentType::CHECKBOX == nClassId
                     ? TYPE_CHECKBOX : TYPE_RADIO);
-        aTmp = xPropSet->getPropertyValue( "DefaultState" );
+        aTmp = xPropSet->getPropertyValue( u"DefaultState"_ustr );
         if( auto n = o3tl::tryAccess<sal_Int16>(aTmp) )
         {
             if ( TRISTATE_FALSE != *n )
@@ -726,7 +726,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
             }
         }
 
-        aTmp = xPropSet->getPropertyValue( "RefValue" );
+        aTmp = xPropSet->getPropertyValue( u"RefValue"_ustr );
         if( auto rVal = o3tl::tryAccess<OUString>(aTmp) )
 
         {
@@ -740,7 +740,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
     case form::FormComponentType::COMMANDBUTTON:
         {
             form::FormButtonType eButtonType = form::FormButtonType_PUSH;
-            aTmp = xPropSet->getPropertyValue( "ButtonType" );
+            aTmp = xPropSet->getPropertyValue( u"ButtonType"_ustr );
             if( auto t = o3tl::tryAccess<form::FormButtonType>(aTmp) )
                 eButtonType = *t;
 
@@ -757,7 +757,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
                 eType = TYPE_BUTTON;
             }
 
-            aTmp = xPropSet->getPropertyValue( "Label" );
+            aTmp = xPropSet->getPropertyValue( u"Label"_ustr );
             if( auto s = o3tl::tryAccess<OUString>(aTmp) )
             {
                 if( !s->isEmpty() )
@@ -772,7 +772,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
         if (rWrt.IsLFPossible())
             rWrt.OutNewLine( true );
         eTag = TAG_SELECT;
-        aTmp = xPropSet->getPropertyValue( "Dropdown" );
+        aTmp = xPropSet->getPropertyValue( u"Dropdown"_ustr );
         if( auto b1 = o3tl::tryAccess<bool>(aTmp) )
         {
             if( !*b1 )
@@ -787,7 +787,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
                         OString::number(static_cast<sal_Int32>(aSz.Height())) + "\"";
                 }
 
-                auto aTmp2 = xPropSet->getPropertyValue( "MultiSelection" );
+                auto aTmp2 = xPropSet->getPropertyValue( u"MultiSelection"_ustr );
                 if( auto b2 = o3tl::tryAccess<bool>(aTmp2) )
                 {
                     if ( *b2 )
@@ -805,7 +805,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
             GetControlSize( rFormObj, aSz, rWrt.m_pDoc );
 
             bool bMultiLine = false;
-            OUString sMultiLine("MultiLine");
+            OUString sMultiLine(u"MultiLine"_ustr);
             if( xPropSetInfo->hasPropertyByName( sMultiLine ) )
             {
                 aTmp = xPropSet->getPropertyValue( sMultiLine );
@@ -830,13 +830,13 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
                         OString::number(static_cast<sal_Int32>(aSz.Width())) + "\"";
                 }
 
-                aTmp = xPropSet->getPropertyValue( "HScroll" );
+                aTmp = xPropSet->getPropertyValue( u"HScroll"_ustr );
                 if( aTmp.getValueType() == cppu::UnoType<void>::get() ||
                     (aTmp.getValueType() == cppu::UnoType<bool>::get() &&
                     !*o3tl::forceAccess<bool>(aTmp)) )
                 {
                     const char *pWrapStr = nullptr;
-                    auto aTmp2 = xPropSet->getPropertyValue( "HardLineBreaks" );
+                    auto aTmp2 = xPropSet->getPropertyValue( u"HardLineBreaks"_ustr );
                     std::optional<const bool> b = o3tl::tryAccess<bool>(aTmp2);
                     pWrapStr = (b.has_value() && *b) ? OOO_STRING_SVTOOLS_HTML_WW_hard
                                          : OOO_STRING_SVTOOLS_HTML_WW_soft;
@@ -847,7 +847,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
             else
             {
                 eType = TYPE_TEXT;
-                OUString sEchoChar("EchoChar");
+                OUString sEchoChar(u"EchoChar"_ustr);
                 if( xPropSetInfo->hasPropertyByName( sEchoChar ) )
                 {
                     aTmp = xPropSet->getPropertyValue( sEchoChar );
@@ -864,7 +864,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
                         OString::number(static_cast<sal_Int32>(aSz.Width())) + "\"";
                 }
 
-                aTmp = xPropSet->getPropertyValue( "MaxTextLen" );
+                aTmp = xPropSet->getPropertyValue( u"MaxTextLen"_ustr );
                 if( auto n = o3tl::tryAccess<sal_Int16>(aTmp) )
                 {
                     if( *n != 0 )
@@ -874,9 +874,9 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
                     }
                 }
 
-                if( xPropSetInfo->hasPropertyByName( "DefaultText" ) )
+                if( xPropSetInfo->hasPropertyByName( u"DefaultText"_ustr ) )
                 {
-                    aTmp = xPropSet->getPropertyValue( "DefaultText" );
+                    aTmp = xPropSet->getPropertyValue( u"DefaultText"_ustr );
                     if( auto s = o3tl::tryAccess<OUString>(aTmp) )
                     {
                         if( !s->isEmpty() )
@@ -925,7 +925,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
             TypeNames[eType] + "\"";
     }
 
-    aTmp = xPropSet->getPropertyValue("Name");
+    aTmp = xPropSet->getPropertyValue(u"Name"_ustr);
     if( auto s = o3tl::tryAccess<OUString>(aTmp) )
     {
         if( !s->isEmpty() )
@@ -937,7 +937,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
         }
     }
 
-    aTmp = xPropSet->getPropertyValue("Enabled");
+    aTmp = xPropSet->getPropertyValue(u"Enabled"_ustr);
     if( auto b = o3tl::tryAccess<bool>(aTmp) )
     {
         if( !*b )
@@ -958,7 +958,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
 
     if( TYPE_IMAGE == eType )
     {
-        aTmp = xPropSet->getPropertyValue( "ImageURL" );
+        aTmp = xPropSet->getPropertyValue( u"ImageURL"_ustr );
         if( auto s = o3tl::tryAccess<OUString>(aTmp) )
         {
             if( !s->isEmpty() )
@@ -987,7 +987,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
         }
     }
 
-    aTmp = xPropSet->getPropertyValue( "TabIndex" );
+    aTmp = xPropSet->getPropertyValue( u"TabIndex"_ustr );
     if( auto n = o3tl::tryAccess<sal_Int16>(aTmp) )
     {
         sal_Int16 nTabIndex = *n;
@@ -1023,27 +1023,27 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
                      TYPE_TEXT == eType;
 
         SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END> aItemSet( rWrt.m_pDoc->GetAttrPool() );
-        if( xPropSetInfo->hasPropertyByName( "BackgroundColor" ) )
+        if( xPropSetInfo->hasPropertyByName( u"BackgroundColor"_ustr ) )
         {
-            aTmp = xPropSet->getPropertyValue( "BackgroundColor" );
+            aTmp = xPropSet->getPropertyValue( u"BackgroundColor"_ustr );
             if( auto n = o3tl::tryAccess<sal_Int32>(aTmp) )
             {
                 Color aCol(ColorTransparency, *n);
                 aItemSet.Put( SvxBrushItem( aCol, RES_CHRATR_BACKGROUND ) );
             }
         }
-        if( xPropSetInfo->hasPropertyByName( "TextColor" ) )
+        if( xPropSetInfo->hasPropertyByName( u"TextColor"_ustr ) )
         {
-            aTmp = xPropSet->getPropertyValue( "TextColor" );
+            aTmp = xPropSet->getPropertyValue( u"TextColor"_ustr );
             if( auto n = o3tl::tryAccess<sal_Int32>(aTmp) )
             {
                 Color aColor( ColorTransparency, *n );
                 aItemSet.Put( SvxColorItem( aColor, RES_CHRATR_COLOR ) );
             }
         }
-        if( xPropSetInfo->hasPropertyByName( "FontHeight" ) )
+        if( xPropSetInfo->hasPropertyByName( u"FontHeight"_ustr ) )
         {
-            aTmp = xPropSet->getPropertyValue( "FontHeight" );
+            aTmp = xPropSet->getPropertyValue( u"FontHeight"_ustr );
             if( auto nHeight = o3tl::tryAccess<float>(aTmp) )
 
             {
@@ -1051,9 +1051,9 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
                     aItemSet.Put( SvxFontHeightItem( sal_Int16(*nHeight * 20.), 100, RES_CHRATR_FONTSIZE ) );
             }
         }
-        if( xPropSetInfo->hasPropertyByName( "FontName" ) )
+        if( xPropSetInfo->hasPropertyByName( u"FontName"_ustr ) )
         {
-            aTmp = xPropSet->getPropertyValue( "FontName" );
+            aTmp = xPropSet->getPropertyValue( u"FontName"_ustr );
             if( auto aFName = o3tl::tryAccess<OUString>(aTmp) )
             {
                 if( !aFName->isEmpty() )
@@ -1064,9 +1064,9 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
                     if( !bEdit || *aFName != aFixedFont.GetFamilyName() )
                     {
                         FontFamily eFamily = FAMILY_DONTKNOW;
-                        if( xPropSetInfo->hasPropertyByName( "FontFamily" ) )
+                        if( xPropSetInfo->hasPropertyByName( u"FontFamily"_ustr ) )
                         {
-                            auto aTmp2 = xPropSet->getPropertyValue( "FontFamily" );
+                            auto aTmp2 = xPropSet->getPropertyValue( u"FontFamily"_ustr );
                             if( auto n = o3tl::tryAccess<sal_Int16>(aTmp2) )
                                 eFamily = static_cast<FontFamily>(*n);
                         }
@@ -1076,9 +1076,9 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
                 }
             }
         }
-        if( xPropSetInfo->hasPropertyByName( "FontWeight" ) )
+        if( xPropSetInfo->hasPropertyByName( u"FontWeight"_ustr ) )
         {
-            aTmp = xPropSet->getPropertyValue( "FontWeight" );
+            aTmp = xPropSet->getPropertyValue( u"FontWeight"_ustr );
             if( auto x = o3tl::tryAccess<float>(aTmp) )
             {
                 FontWeight eWeight =
@@ -1087,9 +1087,9 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
                     aItemSet.Put( SvxWeightItem( eWeight, RES_CHRATR_WEIGHT ) );
             }
         }
-        if( xPropSetInfo->hasPropertyByName( "FontSlant" ) )
+        if( xPropSetInfo->hasPropertyByName( u"FontSlant"_ustr ) )
         {
-            aTmp = xPropSet->getPropertyValue( "FontSlant" );
+            aTmp = xPropSet->getPropertyValue( u"FontSlant"_ustr );
             if( auto n = o3tl::tryAccess<sal_Int16>(aTmp) )
             {
                 FontItalic eItalic = static_cast<FontItalic>(*n);
@@ -1097,9 +1097,9 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
                     aItemSet.Put( SvxPostureItem( eItalic, RES_CHRATR_POSTURE ) );
             }
         }
-        if( xPropSetInfo->hasPropertyByName( "FontLineStyle" ) )
+        if( xPropSetInfo->hasPropertyByName( u"FontLineStyle"_ustr ) )
         {
-            aTmp = xPropSet->getPropertyValue( "FontLineStyle" );
+            aTmp = xPropSet->getPropertyValue( u"FontLineStyle"_ustr );
             if( auto n = o3tl::tryAccess<sal_Int16>(aTmp) )
             {
                 FontLineStyle eUnderline = static_cast<FontLineStyle>(*n);
@@ -1108,9 +1108,9 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
                     aItemSet.Put( SvxUnderlineItem( eUnderline, RES_CHRATR_UNDERLINE ) );
             }
         }
-        if( xPropSetInfo->hasPropertyByName( "FontStrikeout" ) )
+        if( xPropSetInfo->hasPropertyByName( u"FontStrikeout"_ustr ) )
         {
-            aTmp = xPropSet->getPropertyValue( "FontStrikeout" );
+            aTmp = xPropSet->getPropertyValue( u"FontStrikeout"_ustr );
             if( auto n = o3tl::tryAccess<sal_Int16>(aTmp) )
             {
                 FontStrikeout eStrikeout = static_cast<FontStrikeout>(*n);
@@ -1131,7 +1131,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
 
     if( TAG_SELECT == eTag )
     {
-        aTmp = xPropSet->getPropertyValue( "StringItemList" );
+        aTmp = xPropSet->getPropertyValue( u"StringItemList"_ustr );
         if( auto aList = o3tl::tryAccess<uno::Sequence<OUString>>(aTmp) )
         {
             rWrt.IncIndentLevel(); // the content of Select can be indented
@@ -1140,7 +1140,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
 
             const OUString *pValues = nullptr;
             sal_Int32 nValCnt = 0;
-            auto aTmp2 = xPropSet->getPropertyValue( "ListSource" );
+            auto aTmp2 = xPropSet->getPropertyValue( u"ListSource"_ustr );
             uno::Sequence<OUString> aValList;
             if( auto s = o3tl::tryAccess<uno::Sequence<OUString>>(aTmp2) )
             {
@@ -1149,7 +1149,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
                 pValues = aValList.getConstArray();
             }
 
-            uno::Any aSelTmp = xPropSet->getPropertyValue( "DefaultSelection" );
+            uno::Any aSelTmp = xPropSet->getPropertyValue( u"DefaultSelection"_ustr );
             const sal_Int16 *pSels = nullptr;
             sal_Int32 nSel = 0;
             sal_Int32 nSelCnt = 0;
@@ -1206,7 +1206,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
     {
         // In TextAreas no additional spaces or LF may be exported!
         OUString sVal;
-        aTmp = xPropSet->getPropertyValue( "DefaultText" );
+        aTmp = xPropSet->getPropertyValue( u"DefaultText"_ustr );
         if( auto s = o3tl::tryAccess<OUString>(aTmp) )
         {
             if( !s->isEmpty() )
@@ -1230,7 +1230,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
     }
     else if( TYPE_CHECKBOX == eType || TYPE_RADIO == eType )
     {
-        aTmp = xPropSet->getPropertyValue("Label");
+        aTmp = xPropSet->getPropertyValue(u"Label"_ustr);
         if( auto s = o3tl::tryAccess<OUString>(aTmp) )
         {
             if( !s->isEmpty() )

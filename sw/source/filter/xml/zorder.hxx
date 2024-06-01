@@ -34,9 +34,9 @@ struct GetZOrderLayer
     auto operator()(css::uno::Reference<css::beans::XPropertySet> const& xShape) -> unsigned int
     {
         sal_Int16 nLayerID(0);
-        if (xShape->getPropertySetInfo()->hasPropertyByName("LayerID"))
+        if (xShape->getPropertySetInfo()->hasPropertyByName(u"LayerID"_ustr))
         {
-            xShape->getPropertyValue("LayerID") >>= nLayerID;
+            xShape->getPropertyValue(u"LayerID"_ustr) >>= nLayerID;
             if (nLayerID == m_nHellId || nLayerID == m_nInvisibleHellId)
             {
                 return 0;
@@ -53,7 +53,7 @@ struct GetZOrderLayer
         }
         else // SwXFrame only has "Opaque"
         {
-            if (*o3tl::doAccess<bool>(xShape->getPropertyValue("Opaque")))
+            if (*o3tl::doAccess<bool>(xShape->getPropertyValue(u"Opaque"_ustr)))
             {
                 return 1;
             }

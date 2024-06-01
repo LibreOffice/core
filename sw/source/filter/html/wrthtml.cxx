@@ -206,27 +206,27 @@ void SwHTMLWriter::SetupFilterOptions(std::u16string_view rFilterOptions)
     comphelper::SequenceAsHashMap aStoreMap;
     if (rFilterOptions.find(u"SkipImages") != std::u16string_view::npos)
     {
-        aStoreMap["SkipImages"] <<= true;
+        aStoreMap[u"SkipImages"_ustr] <<= true;
     }
     else if (rFilterOptions.find(u"SkipHeaderFooter") != std::u16string_view::npos)
     {
-        aStoreMap["SkipHeaderFooter"] <<= true;
+        aStoreMap[u"SkipHeaderFooter"_ustr] <<= true;
     }
     else if (rFilterOptions.find(u"EmbedImages") != std::u16string_view::npos)
     {
-        aStoreMap["EmbedImages"] <<= true;
+        aStoreMap[u"EmbedImages"_ustr] <<= true;
     }
 
     // this option can be "on" together with any of above
     if (rFilterOptions.find(u"NoLineLimit") != std::u16string_view::npos)
     {
-        aStoreMap["NoLineLimit"] <<= true;
+        aStoreMap[u"NoLineLimit"_ustr] <<= true;
     }
 
     // this option can be "on" together with any of above
     if (rFilterOptions.find(u"NoPrettyPrint") != std::u16string_view::npos)
     {
-        aStoreMap["NoPrettyPrint"] <<= true;
+        aStoreMap[u"NoPrettyPrint"_ustr] <<= true;
     }
 
     const uno::Sequence<OUString> aOptionSeq
@@ -236,11 +236,11 @@ void SwHTMLWriter::SetupFilterOptions(std::u16string_view rFilterOptions)
     {
         if (rOption == "XHTML")
         {
-            aStoreMap["XHTML"] <<= true;
+            aStoreMap[u"XHTML"_ustr] <<= true;
         }
         else if (rOption.startsWith(aXhtmlNsKey))
         {
-            aStoreMap["XhtmlNs"] <<= rOption.copy(aXhtmlNsKey.getLength());
+            aStoreMap[u"XhtmlNs"_ustr] <<= rOption.copy(aXhtmlNsKey.getLength());
         }
     }
 
@@ -251,25 +251,25 @@ void SwHTMLWriter::SetupFilterFromPropertyValues(
     const css::uno::Sequence<css::beans::PropertyValue>& rPropertyValues)
 {
     comphelper::SequenceAsHashMap aStoreMap(rPropertyValues);
-    auto it = aStoreMap.find("RTFOLEMimeType");
+    auto it = aStoreMap.find(u"RTFOLEMimeType"_ustr);
     if (it != aStoreMap.end())
     {
         it->second >>= m_aRTFOLEMimeType;
     }
 
-    it = aStoreMap.find("ExportImagesAsOLE");
+    it = aStoreMap.find(u"ExportImagesAsOLE"_ustr);
     if (it != aStoreMap.end())
     {
         it->second >>= m_bExportImagesAsOLE;
     }
 
-    it = aStoreMap.find("ExportFormulasAsPDF");
+    it = aStoreMap.find(u"ExportFormulasAsPDF"_ustr);
     if (it != aStoreMap.end())
     {
         it->second >>= m_bExportFormulasAsPDF;
     }
 
-    it = aStoreMap.find("ShapeDPI");
+    it = aStoreMap.find(u"ShapeDPI"_ustr);
     if (it != aStoreMap.end())
     {
         sal_Int32 nVal{};
@@ -277,7 +277,7 @@ void SwHTMLWriter::SetupFilterFromPropertyValues(
         m_nShapeDPI.emplace(nVal);
     }
 
-    it = aStoreMap.find("SkipImages");
+    it = aStoreMap.find(u"SkipImages"_ustr);
     if (it != aStoreMap.end())
     {
         bool bVal{};
@@ -285,7 +285,7 @@ void SwHTMLWriter::SetupFilterFromPropertyValues(
         mbSkipImages = bVal;
     }
 
-    it = aStoreMap.find("SkipHeaderFooter");
+    it = aStoreMap.find(u"SkipHeaderFooter"_ustr);
     if (it != aStoreMap.end())
     {
         bool bVal{};
@@ -294,14 +294,14 @@ void SwHTMLWriter::SetupFilterFromPropertyValues(
     }
 
     // this option can be "on" together with any of above
-    it = aStoreMap.find("NoPrettyPrint");
+    it = aStoreMap.find(u"NoPrettyPrint"_ustr);
     if (it != aStoreMap.end())
     {
         m_nWishLineLen = -1;
         m_bPrettyPrint = false;
     }
 
-    it = aStoreMap.find("EmbedImages");
+    it = aStoreMap.find(u"EmbedImages"_ustr);
     if (it != aStoreMap.end())
     {
         bool bVal{};
@@ -309,7 +309,7 @@ void SwHTMLWriter::SetupFilterFromPropertyValues(
         mbEmbedImages = bVal;
     }
 
-    it = aStoreMap.find("NoLineLimit");
+    it = aStoreMap.find(u"NoLineLimit"_ustr);
     if (it != aStoreMap.end())
     {
         bool bVal{};
@@ -320,7 +320,7 @@ void SwHTMLWriter::SetupFilterFromPropertyValues(
         }
     }
 
-    it = aStoreMap.find("XHTML");
+    it = aStoreMap.find(u"XHTML"_ustr);
     if (it != aStoreMap.end())
     {
         bool bVal{};
@@ -328,7 +328,7 @@ void SwHTMLWriter::SetupFilterFromPropertyValues(
         mbXHTML = bVal;
     }
 
-    it = aStoreMap.find("XhtmlNs");
+    it = aStoreMap.find(u"XhtmlNs"_ustr);
     if (it != aStoreMap.end())
     {
         OUString aVal;
@@ -345,7 +345,7 @@ void SwHTMLWriter::SetupFilterFromPropertyValues(
         mbXHTML = true;
     }
 
-    it = aStoreMap.find("LeadingTabWidth");
+    it = aStoreMap.find(u"LeadingTabWidth"_ustr);
     if (it != aStoreMap.end())
     {
         sal_Int32 nVal{};
@@ -353,7 +353,7 @@ void SwHTMLWriter::SetupFilterFromPropertyValues(
         m_nLeadingTabWidth.emplace(nVal);
     }
 
-    it = aStoreMap.find("PreserveSpaces");
+    it = aStoreMap.find(u"PreserveSpaces"_ustr);
     if (it != aStoreMap.end())
     {
         // Paragraphs with leading/trailing/repeated whitespace will have "white-space: pre-wrap"

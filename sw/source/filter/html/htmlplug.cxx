@@ -552,13 +552,13 @@ bool SwHTMLParser::InsertEmbed()
             if ( xSet.is() )
             {
                 if( bHasURL )
-                    xSet->setPropertyValue("PluginURL", uno::Any( aURL ) );
+                    xSet->setPropertyValue(u"PluginURL"_ustr, uno::Any( aURL ) );
                 if( bHasType )
-                    xSet->setPropertyValue("PluginMimeType", uno::Any( aType ) );
+                    xSet->setPropertyValue(u"PluginMimeType"_ustr, uno::Any( aType ) );
 
                 uno::Sequence < beans::PropertyValue > aProps;
                 aCmdLst.FillSequence( aProps );
-                xSet->setPropertyValue("PluginCommands", uno::Any( aProps ) );
+                xSet->setPropertyValue(u"PluginCommands"_ustr, uno::Any( aProps ) );
 
             }
         }
@@ -596,7 +596,7 @@ bool SwHTMLParser::InsertEmbed()
                     {
                         uno::Sequence<beans::PropertyValue> aMedium = comphelper::InitPropertySequence(
                             { { "InputStream", uno::Any(xInStream) },
-                              { "URL", uno::Any(OUString("private:stream")) },
+                              { "URL", uno::Any(u"private:stream"_ustr) },
                               { "DocumentBaseURL", uno::Any(m_sBaseURL) } });
                         xObj = aCnt.InsertEmbeddedObject(aMedium, aName, &m_sBaseURL);
                     }
@@ -630,7 +630,7 @@ bool SwHTMLParser::InsertEmbed()
                     // Set media type of the native data.
                     uno::Reference<beans::XPropertySet> xOutStreamProps(xOutStream, uno::UNO_QUERY);
                     if (xOutStreamProps.is())
-                        xOutStreamProps->setPropertyValue("MediaType", uno::Any(aType));
+                        xOutStreamProps->setPropertyValue(u"MediaType"_ustr, uno::Any(aType));
                 }
             }
             xObj = aCnt.GetEmbeddedObject(aObjName);
@@ -667,7 +667,7 @@ bool SwHTMLParser::InsertEmbed()
     {
         // Request that the native data of the embedded object is not modified
         // during parsing.
-        uno::Sequence<beans::PropertyValue> aValues{ comphelper::makePropertyValue("StreamReadOnly",
+        uno::Sequence<beans::PropertyValue> aValues{ comphelper::makePropertyValue(u"StreamReadOnly"_ustr,
                                                                                    true) };
         uno::Sequence<uno::Any> aArguments{ uno::Any(aValues) };
         xObjInitialization->initialize(aArguments);
@@ -678,7 +678,7 @@ bool SwHTMLParser::InsertEmbed()
                 &aFrameSet);
     if (xObjInitialization.is())
     {
-        uno::Sequence<beans::PropertyValue> aValues{ comphelper::makePropertyValue("StreamReadOnly",
+        uno::Sequence<beans::PropertyValue> aValues{ comphelper::makePropertyValue(u"StreamReadOnly"_ustr,
                                                                                    false) };
         uno::Sequence<uno::Any> aArguments{ uno::Any(aValues) };
         xObjInitialization->initialize(aArguments);
@@ -1120,23 +1120,23 @@ void SwHTMLParser::InsertFloatingFrame()
                 if (INetURLObject(sHRef).IsExoticProtocol())
                     NotifyMacroEventRead();
 
-                xSet->setPropertyValue("FrameURL", uno::Any( sHRef ) );
-                xSet->setPropertyValue("FrameName", uno::Any( aName ) );
+                xSet->setPropertyValue(u"FrameURL"_ustr, uno::Any( sHRef ) );
+                xSet->setPropertyValue(u"FrameName"_ustr, uno::Any( aName ) );
 
                 if ( eScroll == ScrollingMode::Auto )
-                    xSet->setPropertyValue("FrameIsAutoScroll",
+                    xSet->setPropertyValue(u"FrameIsAutoScroll"_ustr,
                         uno::Any( true ) );
                 else
-                    xSet->setPropertyValue("FrameIsScrollingMode",
+                    xSet->setPropertyValue(u"FrameIsScrollingMode"_ustr,
                         uno::Any( eScroll == ScrollingMode::Yes ) );
 
-                xSet->setPropertyValue("FrameIsBorder",
+                xSet->setPropertyValue(u"FrameIsBorder"_ustr,
                         uno::Any( bHasBorder ) );
 
-                xSet->setPropertyValue("FrameMarginWidth",
+                xSet->setPropertyValue(u"FrameMarginWidth"_ustr,
                     uno::Any( sal_Int32( aMargin.Width() ) ) );
 
-                xSet->setPropertyValue("FrameMarginHeight",
+                xSet->setPropertyValue(u"FrameMarginHeight"_ustr,
                     uno::Any( sal_Int32( aMargin.Height() ) ) );
             }
         }
@@ -1256,7 +1256,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameForma
 
         OUString aStr;
         OUString aURL;
-        aAny = xSet->getPropertyValue("PluginURL");
+        aAny = xSet->getPropertyValue(u"PluginURL"_ustr);
         if( (aAny >>= aStr) && !aStr.isEmpty() )
         {
             aURL = URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(),
@@ -1273,7 +1273,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameForma
         }
 
         OUString aType;
-        aAny = xSet->getPropertyValue("PluginMimeType");
+        aAny = xSet->getPropertyValue(u"PluginMimeType"_ustr);
         if( (aAny >>= aType) && !aType.isEmpty() )
         {
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_type "=\"");
@@ -1305,7 +1305,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameForma
 
         // CODEBASE
         OUString aCd;
-        aAny = xSet->getPropertyValue("AppletCodeBase");
+        aAny = xSet->getPropertyValue(u"AppletCodeBase"_ustr);
         if( (aAny >>= aCd) && !aCd.isEmpty() )
         {
             OUString sCodeBase( URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aCd) );
@@ -1321,7 +1321,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameForma
 
         // CODE
         OUString aClass;
-        aAny = xSet->getPropertyValue("AppletCode");
+        aAny = xSet->getPropertyValue(u"AppletCode"_ustr);
         aAny >>= aClass;
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_code "=\"");
         rWrt.Strm().WriteOString( sOut );
@@ -1331,7 +1331,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameForma
 
         // NAME
         OUString aAppletName;
-        aAny = xSet->getPropertyValue("AppletName");
+        aAny = xSet->getPropertyValue(u"AppletName"_ustr);
         aAny >>= aAppletName;
         if( !aAppletName.isEmpty() )
         {
@@ -1343,7 +1343,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameForma
         }
 
         bool bScript = false;
-        aAny = xSet->getPropertyValue("AppletIsScript");
+        aAny = xSet->getPropertyValue(u"AppletIsScript"_ustr);
         aAny >>= bScript;
         if( bScript )
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_mayscript);
@@ -1382,7 +1382,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameForma
         // and write a </APPLET>
 
         uno::Sequence < beans::PropertyValue > aProps;
-        aAny = xSet->getPropertyValue("AppletCommands");
+        aAny = xSet->getPropertyValue(u"AppletCommands"_ustr);
         aAny >>= aProps;
 
         SvCommandList aCommands;
@@ -1442,7 +1442,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameForma
         // write plug-ins parameters as options
 
         uno::Sequence < beans::PropertyValue > aProps;
-        aAny = xSet->getPropertyValue("PluginCommands");
+        aAny = xSet->getPropertyValue(u"PluginCommands"_ustr);
         aAny >>= aProps;
 
         SvCommandList aCommands;
@@ -1613,9 +1613,9 @@ SwHTMLWriter& OutHTML_FrameFormatOLENodeGrf( SwHTMLWriter& rWrt, const SwFrameFo
         OUString aFilter;
         if (uno::Reference<lang::XServiceInfo> xServiceInfo{ xStorable, uno::UNO_QUERY })
         {
-            if (xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
+            if (xServiceInfo->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr))
                 aFilter = "HTML (StarCalc)";
-            else if (xServiceInfo->supportsService("com.sun.star.text.TextDocument"))
+            else if (xServiceInfo->supportsService(u"com.sun.star.text.TextDocument"_ustr))
                 aFilter = "HTML (StarWriter)";
         }
 
@@ -1627,10 +1627,10 @@ SwHTMLWriter& OutHTML_FrameFormatOLENodeGrf( SwHTMLWriter& rWrt, const SwFrameFo
                 SvMemoryStream aStream;
                 uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
                 utl::MediaDescriptor aMediaDescriptor;
-                aMediaDescriptor["FilterName"] <<= aFilter;
-                aMediaDescriptor["FilterOptions"] <<= OUString("SkipHeaderFooter");
-                aMediaDescriptor["OutputStream"] <<= xOutputStream;
-                xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
+                aMediaDescriptor[u"FilterName"_ustr] <<= aFilter;
+                aMediaDescriptor[u"FilterOptions"_ustr] <<= u"SkipHeaderFooter"_ustr;
+                aMediaDescriptor[u"OutputStream"_ustr] <<= xOutputStream;
+                xStorable->storeToURL(u"private:stream"_ustr, aMediaDescriptor.getAsConstPropertyValueList());
                 SAL_WARN_IF(aStream.GetSize()>=o3tl::make_unsigned(SAL_MAX_INT32), "sw.html", "Stream can't fit in OString");
                 OString aData(static_cast<const char*>(aStream.GetData()), static_cast<sal_Int32>(aStream.GetSize()));
                 // Wrap output in a <span> tag to avoid 'HTML parser error: Unexpected end tag: p'
@@ -1659,7 +1659,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENodeGrf( SwHTMLWriter& rWrt, const SwFrameFo
 
     SwDocShell* pDocSh = rWrt.m_pDoc->GetDocShell();
     bool bObjectOpened = false;
-    OUString aRTFType = "text/rtf";
+    OUString aRTFType = u"text/rtf"_ustr;
     if (!rWrt.m_aRTFOLEMimeType.isEmpty())
     {
         aRTFType = rWrt.m_aRTFOLEMimeType;
@@ -1740,7 +1740,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENodeGrf( SwHTMLWriter& rWrt, const SwFrameFo
 
             uno::Reference<beans::XPropertySet> xOutStreamProps(xInStream, uno::UNO_QUERY);
             if (xOutStreamProps.is())
-                xOutStreamProps->getPropertyValue("MediaType") >>= aFileType;
+                xOutStreamProps->getPropertyValue(u"MediaType"_ustr) >>= aFileType;
             if (!aRTFType.isEmpty())
             {
                 aFileType = aRTFType;

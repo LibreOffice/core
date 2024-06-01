@@ -303,7 +303,7 @@ ErrCodeMsg ReadThroughComponent(
     OSL_ENSURE( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
     {
-        xInfoSet->setPropertyValue( "StreamName", Any( sStreamName ) );
+        xInfoSet->setPropertyValue( u"StreamName"_ustr, Any( sStreamName ) );
     }
 
     try
@@ -312,7 +312,7 @@ ErrCodeMsg ReadThroughComponent(
         uno::Reference <io::XStream> xStream = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
         uno::Reference <beans::XPropertySet > xProps( xStream, uno::UNO_QUERY );
 
-        Any aAny = xProps->getPropertyValue("Encrypted");
+        Any aAny = xProps->getPropertyValue(u"Encrypted"_ustr);
 
         std::optional<const bool> b = o3tl::tryAccess<bool>(aAny);
         bool bEncrypted = b.has_value() && *b;
@@ -519,64 +519,64 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
     // create XPropertySet with three properties for status indicator
     static comphelper::PropertyMapEntry const aInfoMap[] =
     {
-        { OUString("ProgressRange"), 0,
+        { u"ProgressRange"_ustr, 0,
               ::cppu::UnoType<sal_Int32>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("ProgressMax"), 0,
+        { u"ProgressMax"_ustr, 0,
               ::cppu::UnoType<sal_Int32>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("ProgressCurrent"), 0,
+        { u"ProgressCurrent"_ustr, 0,
               ::cppu::UnoType<sal_Int32>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("NumberStyles"), 0,
+        { u"NumberStyles"_ustr, 0,
               cppu::UnoType<container::XNameContainer>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("RecordChanges"), 0,
+        { u"RecordChanges"_ustr, 0,
               cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("ShowChanges"), 0,
+        { u"ShowChanges"_ustr, 0,
               cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("RedlineProtectionKey"), 0,
+        { u"RedlineProtectionKey"_ustr, 0,
               cppu::UnoType<Sequence<sal_Int8>>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("PrivateData"), 0,
+        { u"PrivateData"_ustr, 0,
               cppu::UnoType<XInterface>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("BaseURI"), 0,
+        { u"BaseURI"_ustr, 0,
               ::cppu::UnoType<OUString>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamRelPath"), 0,
+        { u"StreamRelPath"_ustr, 0,
               ::cppu::UnoType<OUString>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamName"), 0,
+        { u"StreamName"_ustr, 0,
               ::cppu::UnoType<OUString>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         // properties for insert modes
-        { OUString("StyleInsertModeFamilies"), 0,
+        { u"StyleInsertModeFamilies"_ustr, 0,
               cppu::UnoType<Sequence<OUString>>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StyleInsertModeOverwrite"), 0,
+        { u"StyleInsertModeOverwrite"_ustr, 0,
               cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("TextInsertModeRange"), 0,
+        { u"TextInsertModeRange"_ustr, 0,
               cppu::UnoType<text::XTextRange>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("AutoTextMode"), 0,
+        { u"AutoTextMode"_ustr, 0,
               cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("OrganizerMode"), 0,
+        { u"OrganizerMode"_ustr, 0,
               cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
 
         // #i28749# - Add property, which indicates, if the
         // shape position attributes are given in horizontal left-to-right layout.
         // This is the case for the OpenOffice.org file format.
-        { OUString("ShapePositionInHoriL2R"), 0,
+        { u"ShapePositionInHoriL2R"_ustr, 0,
               cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
 
-        { OUString("BuildId"), 0,
+        { u"BuildId"_ustr, 0,
               ::cppu::UnoType<OUString>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
 
@@ -586,10 +586,10 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
         //       read using the OpenOffice.org file format. Thus, e.g. for text
         //       documents in StarOffice 5.2 binary file format this property
         //       will be true.
-        { OUString("TextDocInOOoFileFormat"), 0,
+        { u"TextDocInOOoFileFormat"_ustr, 0,
               cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("SourceStorage"), 0, cppu::UnoType<embed::XStorage>::get(),
+        { u"SourceStorage"_ustr, 0, cppu::UnoType<embed::XStorage>::get(),
           css::beans::PropertyAttribute::MAYBEVOID, 0 },
     };
     uno::Reference< beans::XPropertySet > xInfoSet(
@@ -633,12 +633,12 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
     }
     uno::Any aProgRange;
     aProgRange <<= nProgressRange;
-    xInfoSet->setPropertyValue("ProgressRange", aProgRange);
+    xInfoSet->setPropertyValue(u"ProgressRange"_ustr, aProgRange);
 
     Reference< container::XNameAccess > xLateInitSettings( document::NamedPropertyValues::create(xContext), UNO_QUERY_THROW );
-    beans::NamedValue aLateInitSettings( "LateInitSettings", Any( xLateInitSettings ) );
+    beans::NamedValue aLateInitSettings( u"LateInitSettings"_ustr, Any( xLateInitSettings ) );
 
-    xInfoSet->setPropertyValue( "SourceStorage", Any( xStorage ) );
+    xInfoSet->setPropertyValue( u"SourceStorage"_ustr, Any( xStorage ) );
 
     // prepare filter arguments, WARNING: the order is important!
     Sequence<Any> aFilterArgs{  Any(xInfoSet),
@@ -677,16 +677,16 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
             // SfxStyleFamily::Pseudo;
             *pSeq++ = "NumberingStyles";
 
-        xInfoSet->setPropertyValue( "StyleInsertModeFamilies",
+        xInfoSet->setPropertyValue( u"StyleInsertModeFamilies"_ustr,
                                     Any(aFamiliesSeq) );
 
-        xInfoSet->setPropertyValue( "StyleInsertModeOverwrite", Any(!m_aOption.IsMerge()) );
+        xInfoSet->setPropertyValue( u"StyleInsertModeOverwrite"_ustr, Any(!m_aOption.IsMerge()) );
     }
     else if( m_bInsertMode )
     {
         const rtl::Reference<SwXTextRange> xInsertTextRange =
             SwXTextRange::CreateXTextRange(rDoc, *rPaM.GetPoint(), nullptr);
-        xInfoSet->setPropertyValue( "TextInsertModeRange",
+        xInfoSet->setPropertyValue( u"TextInsertModeRange"_ustr,
                                     Any(uno::Reference<text::XTextRange>(xInsertTextRange)) );
     }
     else
@@ -697,11 +697,11 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
 
     if( IsBlockMode() )
     {
-        xInfoSet->setPropertyValue( "AutoTextMode", Any(true) );
+        xInfoSet->setPropertyValue( u"AutoTextMode"_ustr, Any(true) );
     }
     if( IsOrganizerMode() )
     {
-        xInfoSet->setPropertyValue( "OrganizerMode", Any(true) );
+        xInfoSet->setPropertyValue( u"OrganizerMode"_ustr, Any(true) );
     }
 
     // Set base URI
@@ -710,7 +710,7 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
     SfxMedium* pMedDescrMedium = m_pMedium ? m_pMedium : pDocSh->GetMedium();
     OSL_ENSURE( pMedDescrMedium, "There is no medium to get MediaDescriptor from!" );
 
-    xInfoSet->setPropertyValue( "BaseURI", Any( rBaseURL ) );
+    xInfoSet->setPropertyValue( u"BaseURI"_ustr, Any( rBaseURL ) );
 
     // TODO/LATER: separate links from usual embedded objects
     OUString StreamPath;
@@ -730,7 +730,7 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
 
         if( !StreamPath.isEmpty() )
         {
-            xInfoSet->setPropertyValue( "StreamRelPath", Any( StreamPath ) );
+            xInfoSet->setPropertyValue( u"StreamRelPath"_ustr, Any( StreamPath ) );
         }
     }
 
@@ -756,13 +756,13 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
     {
         const bool bShapePositionInHoriL2R = !bOASIS;
         xInfoSet->setPropertyValue(
-                "ShapePositionInHoriL2R",
+                u"ShapePositionInHoriL2R"_ustr,
                 Any( bShapePositionInHoriL2R ) );
     }
     {
         const bool bTextDocInOOoFileFormat = !bOASIS;
         xInfoSet->setPropertyValue(
-                "TextDocInOOoFileFormat",
+                u"TextDocInOOoFileFormat"_ustr,
                 Any( bTextDocInOOoFileFormat ) );
     }
 
@@ -846,7 +846,7 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
     {
         try
         {
-            uno::Reference < io::XStream > xStm = xStorage->openStreamElement( "layout-cache", embed::ElementModes::READ );
+            uno::Reference < io::XStream > xStm = xStorage->openStreamElement( u"layout-cache"_ustr, embed::ElementModes::READ );
             std::unique_ptr<SvStream> pStrm2 = utl::UcbStreamHelper::CreateStream( xStm );
             if( !pStrm2->GetError() )
                 rDoc.ReadLayoutCache( *pStrm2 );

@@ -251,7 +251,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                         { "DefaultParentBaseURL", Any(GetXMLImport().GetBaseURL()) }
                     }));
                 uno::Reference < embed::XEmbeddedObject > xObj( xFactory->createInstanceInitNew(
-                    aClass, OUString(), xStorage, "DummyName", aObjArgs), uno::UNO_QUERY );
+                    aClass, OUString(), xStorage, u"DummyName"_ustr, aObjArgs), uno::UNO_QUERY );
                 if ( xObj.is() )
                 {
                     //TODO/LATER: is it enough to only set the VisAreaSize?
@@ -539,7 +539,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
                 embed::OOoEmbeddedObjectFactory::create(::comphelper::getProcessComponentContext());
 
         uno::Sequence< beans::PropertyValue > aMediaDescriptor{ comphelper::makePropertyValue(
-            "URL", aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE )) };
+            u"URL"_ustr, aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE )) };
 
         if (SfxMedium* pMedium = pDoc->GetDocShell() ? pDoc->GetDocShell()->GetMedium() : nullptr)
         {
@@ -561,7 +561,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
 
         uno::Reference < embed::XEmbeddedObject > xObj(
             xFactory->createInstanceLink(
-                xStorage, "DummyName", aMediaDescriptor, uno::Sequence< beans::PropertyValue >() ),
+                xStorage, u"DummyName"_ustr, aMediaDescriptor, uno::Sequence< beans::PropertyValue >() ),
             uno::UNO_QUERY_THROW );
 
         {
@@ -669,7 +669,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
         uno::Sequence < sal_Int8 > aClass( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence() );
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory =  embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
         uno::Reference < embed::XEmbeddedObject > xObj( xFactory->createInstanceInitNew(
-            aClass, OUString(), xStorage, "DummyName",
+            aClass, OUString(), xStorage, u"DummyName"_ustr,
             uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
 
         // set size to the object
@@ -684,10 +684,10 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
             if ( xSet.is() )
             {
                 if( bValidURL )
-                    xSet->setPropertyValue("PluginURL",
+                    xSet->setPropertyValue(u"PluginURL"_ustr,
                         Any( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) );
                 if( bValidMimeType )
-                    xSet->setPropertyValue("PluginMimeType",
+                    xSet->setPropertyValue(u"PluginMimeType"_ustr,
                         Any( rMimeType ) );
             }
 
@@ -796,7 +796,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
         uno::Sequence < sal_Int8 > aClass( SvGlobalName( SO3_IFRAME_CLASSID ).GetByteSequence() );
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
         uno::Reference < embed::XEmbeddedObject > xObj( xFactory->createInstanceInitNew(
-            aClass, OUString(), xStorage, "DummyName",
+            aClass, OUString(), xStorage, u"DummyName"_ustr,
             uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
 
         // set size to the object
@@ -816,30 +816,30 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
                 if (INetURLObject(sHRef).IsExoticProtocol())
                     GetXMLImport().NotifyMacroEventRead();
 
-                xSet->setPropertyValue("FrameURL",
+                xSet->setPropertyValue(u"FrameURL"_ustr,
                     Any( sHRef ) );
 
-                xSet->setPropertyValue("FrameName",
+                xSet->setPropertyValue(u"FrameName"_ustr,
                     Any( rName ) );
 
                 if ( eScrollMode == ScrollingMode::Auto )
-                    xSet->setPropertyValue("FrameIsAutoScroll",
+                    xSet->setPropertyValue(u"FrameIsAutoScroll"_ustr,
                         Any( true ) );
                 else
-                    xSet->setPropertyValue("FrameIsScrollingMode",
+                    xSet->setPropertyValue(u"FrameIsScrollingMode"_ustr,
                         Any( eScrollMode == ScrollingMode::Yes ) );
 
                 if ( bIsBorderSet )
-                    xSet->setPropertyValue("FrameIsBorder",
+                    xSet->setPropertyValue(u"FrameIsBorder"_ustr,
                         Any( bHasBorder ) );
                 else
-                    xSet->setPropertyValue("FrameIsAutoBorder",
+                    xSet->setPropertyValue(u"FrameIsAutoBorder"_ustr,
                         Any( true ) );
 
-                xSet->setPropertyValue("FrameMarginWidth",
+                xSet->setPropertyValue(u"FrameMarginWidth"_ustr,
                     Any( sal_Int32( aMargin.Width() ) ) );
 
-                xSet->setPropertyValue("FrameMarginHeight",
+                xSet->setPropertyValue(u"FrameMarginHeight"_ustr,
                     Any( sal_Int32( aMargin.Height() ) ) );
             }
 
@@ -901,7 +901,7 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
                    });
 
     // unfortunately the names of the properties are depending on the object
-    OUString aParaName("AppletCommands");
+    OUString aParaName(u"AppletCommands"_ustr);
     try
     {
         xSet->setPropertyValue( aParaName, Any( aCommandSequence ) );

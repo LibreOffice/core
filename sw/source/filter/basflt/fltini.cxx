@@ -130,7 +130,7 @@ oslGenericFunction Filters::GetMswordLibSymbol( const char *pSymbol )
 {
     if (!msword_.is())
     {
-        OUString url("$LO_LIB_DIR/" SVLIBRARY("msword"));
+        OUString url(u"$LO_LIB_DIR/" SVLIBRARY("msword") ""_ustr);
         rtl::Bootstrap::expandMacros(url);
         bool ok = msword_.load( url, SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY );
         SAL_WARN_IF(!ok, "sw", "failed to load msword library");
@@ -214,7 +214,7 @@ bool StgWriter::IsStgWriter() const { return true; }
 
 SwFilterOptions::SwFilterOptions( sal_uInt16 nCnt, const OUString* ppNames,
                                                                 sal_uInt64* pValues )
-    : ConfigItem( "Office.Writer/FilterFlags" )
+    : ConfigItem( u"Office.Writer/FilterFlags"_ustr )
 {
     GetValues( nCnt, ppNames, pValues );
 }
@@ -309,7 +309,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNode& rAnchor,
                     // if the first node don't contained any content, then
                     // insert one char in it calc again and delete once again
                     SwContentIndex aNdIdx( pFirstTextNd );
-                    pFirstTextNd->InsertText("MM", aNdIdx);
+                    pFirstTextNd->InsertText(u"MM"_ustr, aNdIdx);
                     sal_uLong nAbsMinCnts;
                     pFirstTextNd->GetMinMaxSize( pFirstTextNd->GetIndex(),
                                                                     nMinFrame, nMaxFrame, nAbsMinCnts );
