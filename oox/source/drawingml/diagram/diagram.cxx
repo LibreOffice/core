@@ -425,7 +425,7 @@ void loadDiagram( ShapePtr const & pShape,
         // just create the BackgroundShape.
         // NOTE: Need to use pShape->getExtDrawings() here, this is the
         // already *filtered* version, see usage of DiagramShapeCounter
-        // above. Moving to local bool, there might more coditions show
+        // above. Moving to local bool, there might more conditions show
         // up
         const bool bCreate(pShape->getExtDrawings().empty());
         pDiagram->addTo(pShape, bCreate);
