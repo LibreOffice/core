@@ -2043,7 +2043,7 @@
 
       <node oor:name="QuickFindPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">QuickFind</value>
+          <value xml:lang="en-US">Quick Find</value>
         </prop>
         <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
           <value>true</value>
