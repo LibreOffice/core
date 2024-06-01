@@ -147,6 +147,7 @@ sr-Latn  0  2074   # Serbian Latin
 sr-SP    0  3098   # Serbian Cyrillic
 ss       0  1579   # Swazi
 st       0  1072   # Southern Sotho, Sutu
+sun      0  1690   # Sundanese, fake LCID
 sv       0  1053
 sw       0  1089   # Swahili
 sw-TZ    0  1089   # Swahili

@@ -138,6 +138,15 @@ zh-CN \
 zh-TW \
 zu
 
+# languages with low translation percentage, but still wish to have daily builds
+lowcompletion_langs = sun
+ifneq ($(ENABLE_RELEASE_BUILD),TRUE)
+completelangiso += $(lowcompletion_langs)
+else
+# allow to manually specify even in release config
+completelangiso += $(foreach lang,$(WITH_LANG),$(filter $(lang),$(lowcompletion_langs)))
+endif
+
 ifneq ($(WITH_LANG),ALL)
 gb_WITH_LANG=$(WITH_LANG)
 else

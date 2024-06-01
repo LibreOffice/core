@@ -14457,14 +14457,14 @@ dnl ===================================================================
 AC_MSG_CHECKING([which languages to be built])
 # get list of all languages
 # generate shell variable from completelangiso= from solenv/inc/langlist.mk
-# the sed command does the following:
-#   + if a line ends with a backslash, append the next line to it
-#   + adds " on the beginning of the value (after =)
-#   + adds " at the end of the value
-#   + removes en-US; we want to put it on the beginning
-#   + prints just the section starting with 'completelangiso=' and ending with the " at the end of line
-[eval $(sed -e :a -e '/\\$/N; s/\\\n//; ta' -n -e 's/=/="/;s/\([^\\]\)$/\1"/;s/en-US//;/^completelangiso/p' $SRC_ROOT/solenv/inc/langlist.mk)]
-ALL_LANGS="en-US $completelangiso"
+# we want en-US at the beginning
+ALL_LANGS=$($GNUMAKE SRC_ROOT=$SRC_ROOT WITH_LANG="$with_lang" ENABLE_RELEASE_BUILD="$ENABLE_RELEASE_BUILD" -sr -f - <<'EOF' | tr -d '\r'
+include $(SRC_ROOT)/solenv/inc/langlist.mk
+all:
+	$(info en-US $(filter-out en-US,$(sort $(completelangiso))))
+EOF
+)
+
 # check the configured localizations
 WITH_LANG="$with_lang"
 

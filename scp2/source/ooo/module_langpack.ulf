@@ -70,6 +70,12 @@ en-US = "Spanish"
 [STR_DESC_MODULE_LANGPACK_ES]
 en-US = "Installs the Spanish user interface"
 
+[STR_NAME_MODULE_LANGPACK_SUN]
+en-US = "Sundanese"
+
+[STR_DESC_MODULE_LANGPACK_SUN]
+en-US = "Installs the Sundanese user interface"
+
 [STR_NAME_MODULE_LANGPACK_SV]
 en-US = "Swedish"
 
