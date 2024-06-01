@@ -955,7 +955,7 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
             bool bVbaEnabled = m_pDocument->IsInVBAMode();
             if ( bVbaEnabled )
             {
-                OUString aLibName( "Standard" );
+                OUString aLibName( u"Standard"_ustr );
                 Reference< XLibraryContainer > xLibContainer = GetBasicContainer();
                 Reference< XVBACompatibility > xVBACompat( xLibContainer, UNO_QUERY );
 

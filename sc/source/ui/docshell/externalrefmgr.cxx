@@ -2765,7 +2765,7 @@ void ScExternalRefManager::maybeCreateRealFileName(sal_uInt16 nFileId)
 OUString ScExternalRefManager::getOwnDocumentName() const
 {
     if (comphelper::IsFuzzing())
-        return "file:///tmp/document";
+        return u"file:///tmp/document"_ustr;
 
     ScDocShell* pShell = mrDoc.GetDocumentShell();
     if (!pShell)

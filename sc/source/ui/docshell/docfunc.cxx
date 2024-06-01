@@ -3201,7 +3201,7 @@ static uno::Reference< uno::XInterface > GetDocModuleObject( const SfxObjectShel
     uno::Reference< uno::XInterface > xDocModuleApiObject;
     if ( xSF.is() )
     {
-        xVBACodeNamedObjectAccess.set( xSF->createInstance("ooo.vba.VBAObjectModuleObjectProvider"), uno::UNO_QUERY );
+        xVBACodeNamedObjectAccess.set( xSF->createInstance(u"ooo.vba.VBAObjectModuleObjectProvider"_ustr), uno::UNO_QUERY );
         xDocModuleApiObject.set( xVBACodeNamedObjectAccess->getByName( sCodeName ), uno::UNO_QUERY );
     }
     return xDocModuleApiObject;
@@ -3225,7 +3225,7 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sSource )
     uno::Reference< container::XNameContainer > xLib;
     if( xLibContainer.is() )
     {
-        OUString aLibName( "Standard" );
+        OUString aLibName( u"Standard"_ustr );
 #if HAVE_FEATURE_SCRIPTING
         if ( rDocSh.GetBasicManager() && !rDocSh.GetBasicManager()->GetName().isEmpty() )
         {
@@ -3240,7 +3240,7 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sSource )
 
     // if the Module with codename exists then find a new name
     sal_Int32 nNum = 1;
-    OUString genModuleName = "Sheet1";
+    OUString genModuleName = u"Sheet1"_ustr;
     while( xLib->hasByName( genModuleName ) )
         genModuleName = "Sheet" + OUString::number( ++nNum );
 
@@ -3267,7 +3267,7 @@ void VBA_DeleteModule( ScDocShell& rDocSh, const OUString& sModuleName )
     uno::Reference< container::XNameContainer > xLib;
     if( xLibContainer.is() )
     {
-        OUString aLibName( "Standard" );
+        OUString aLibName( u"Standard"_ustr );
 #if HAVE_FEATURE_SCRIPTING
         if ( rDocSh.GetBasicManager() && !rDocSh.GetBasicManager()->GetName().isEmpty() )
         {

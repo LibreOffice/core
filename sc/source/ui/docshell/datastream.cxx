@@ -249,7 +249,7 @@ void DataStream::MakeToolbarVisible()
         return;
 
     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-    xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
+    xPropSet->getPropertyValue(u"LayoutManager"_ustr) >>= xLayoutManager;
     if (!xLayoutManager.is())
         return;
 

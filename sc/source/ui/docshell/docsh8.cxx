@@ -159,7 +159,7 @@ bool ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject&
                             uno::Reference< css::ucb::XCommandEnvironment >(),
                             comphelper::getProcessComponentContext() );
         uno::Reference< css::ucb::XCommandInfo > xInfo = aDestPath.getCommands();
-        OUString aTransferName = "transfer";
+        OUString aTransferName = u"transfer"_ustr;
         if ( xInfo->hasCommandByName( aTransferName ) )
         {
             aDestPath.executeCommand( aTransferName, uno::Any(
@@ -191,7 +191,7 @@ bool ScDocShell::KillFile( const INetURLObject& rURL )
         ::ucbhelper::Content aCnt( rURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),
                         uno::Reference< css::ucb::XCommandEnvironment >(),
                         comphelper::getProcessComponentContext() );
-        aCnt.executeCommand( "delete", css::uno::Any( true ) );
+        aCnt.executeCommand( u"delete"_ustr, css::uno::Any( true ) );
     }
     catch( uno::Exception& )
     {

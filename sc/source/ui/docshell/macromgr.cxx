@@ -131,7 +131,7 @@ void ScMacroManager::InitUserFuncData()
 {
     // Clear unordered_map
     mhFuncToVolatile.clear();
-    OUString sProjectName("Standard");
+    OUString sProjectName(u"Standard"_ustr);
 
     Reference< container::XContainer > xModuleContainer;
     ScDocShell* pShell = mrDoc.GetDocumentShell();

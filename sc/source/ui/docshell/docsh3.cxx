@@ -393,7 +393,7 @@ void ScDocShell::CalcOutputFactor()
     }
 
     OUString aTestString(
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890123456789");
+            u"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890123456789"_ustr);
     tools::Long nPrinterWidth = 0;
     const ScPatternAttr& rPattern(m_pDocument->getCellAttributeHelper().getDefaultCellAttribute());
 
@@ -849,7 +849,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
         return;             //! nothing to do - error notification?
                             //  from here on no return
 
-    ScProgress aProgress( this, "...", nNewActionCount, true );
+    ScProgress aProgress( this, u"..."_ustr, nNewActionCount, true );
 
     sal_uLong nLastMergeAction = pSourceTrack->GetLast()->GetActionNumber();
     // UpdateReference-Undo, valid references for the last common state

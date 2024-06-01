@@ -189,7 +189,7 @@ void ScDocShell::InitInterface_Impl()
 }
 
 //  GlobalName of the current version:
-SFX_IMPL_OBJECTFACTORY( ScDocShell, SvGlobalName(SO3_SC_CLASSID), "scalc" )
+SFX_IMPL_OBJECTFACTORY( ScDocShell, SvGlobalName(SO3_SC_CLASSID), u"scalc"_ustr )
 
 
 void ScDocShell::FillClass( SvGlobalName* pClassName,
@@ -468,8 +468,8 @@ private:
     std::unique_ptr<weld::CheckButton> m_xWarningOnBox;
 public:
     MessageWithCheck(weld::Window *pParent, const OUString& rUIFile, const OUString& rDialogId)
-        : MessageDialogController(pParent, rUIFile, rDialogId, "ask")
-        , m_xWarningOnBox(m_xBuilder->weld_check_button("ask"))
+        : MessageDialogController(pParent, rUIFile, rDialogId, u"ask"_ustr)
+        , m_xWarningOnBox(m_xBuilder->weld_check_button(u"ask"_ustr))
     {
     }
     bool get_active() const { return m_xWarningOnBox->get_active(); }
@@ -519,8 +519,8 @@ bool ScDocShell::GetRecalcRowHeightsMode()
             {
                 // Ask if the user wants to perform full re-calculation.
                 MessageWithCheck aQueryBox(ScDocShell::GetActiveDialogParent(),
-                                           "modules/scalc/ui/recalcquerydialog.ui",
-                                           "RecalcQueryDialog");
+                                           u"modules/scalc/ui/recalcquerydialog.ui"_ustr,
+                                           u"RecalcQueryDialog"_ustr);
                 aQueryBox.set_primary_text(ScResId(STR_QUERY_OPT_ROW_HEIGHT_RECALC_ONLOAD));
                 aQueryBox.set_default_response(RET_YES);
 
@@ -603,7 +603,7 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const css::uno::Reference< css
             // Generator is not LibreOffice.  Ask if the user wants to perform
             // full re-calculation.
             MessageWithCheck aQueryBox(GetActiveDialogParent(),
-                    "modules/scalc/ui/recalcquerydialog.ui", "RecalcQueryDialog");
+                    u"modules/scalc/ui/recalcquerydialog.ui"_ustr, u"RecalcQueryDialog"_ustr);
             aQueryBox.set_primary_text(ScResId(STR_QUERY_FORMULA_RECALC_ONLOAD_ODS));
             aQueryBox.set_default_response(RET_YES);
 
@@ -698,7 +698,7 @@ bool ScDocShell::Load( SfxMedium& rMedium )
 
             /* Create styles that are imported through Orcus */
 
-            OUString aURL("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/calc/styles.xml");
+            OUString aURL(u"$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/calc/styles.xml"_ustr);
             rtl::Bootstrap::expandMacros(aURL);
 
             OUString aPath;
@@ -820,7 +820,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         if ( aAppOptions.GetShowSharedDocumentWarning() )
                         {
                             MessageWithCheck aWarningBox(ScDocShell::GetActiveDialogParent(),
-                                    "modules/scalc/ui/sharedwarningdialog.ui", "SharedWarningDialog");
+                                    u"modules/scalc/ui/sharedwarningdialog.ui"_ustr, u"SharedWarningDialog"_ustr);
                             aWarningBox.run();
 
                             bool bChecked = aWarningBox.get_active();
@@ -846,7 +846,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                             uno::UNO_QUERY_THROW );
                         uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xServiceManager, uno::UNO_QUERY_THROW );
                         uno::Reference< container::XEnumeration> xEnum = xEnumAccess->createContentEnumeration(
-                            "com.sun.star.sheet.SpreadsheetDocumentJob" );
+                            u"com.sun.star.sheet.SpreadsheetDocumentJob"_ustr );
                         if ( xEnum.is() )
                         {
                             while ( xEnum->hasMoreElements() )
@@ -860,7 +860,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                     SfxFrame* pFrame = ( pViewFrame ? &pViewFrame->GetFrame() : nullptr );
                                     uno::Reference< frame::XController > xController = ( pFrame ? pFrame->GetController() : nullptr );
                                     uno::Reference< sheet::XSpreadsheetView > xSpreadsheetView( xController, uno::UNO_QUERY_THROW );
-                                    uno::Sequence< beans::NamedValue > aArgsForJob { { "SpreadsheetView", uno::Any( xSpreadsheetView ) } };
+                                    uno::Sequence< beans::NamedValue > aArgsForJob { { u"SpreadsheetView"_ustr, uno::Any( xSpreadsheetView ) } };
                                     xJob->execute( aArgsForJob );
                                 }
                             }
@@ -1000,7 +1000,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                             // TODO/LATER: More entries from the MediaDescriptor might be interesting for the merge
                                             uno::Sequence< beans::PropertyValue > aValues{
                                                 comphelper::makePropertyValue(
-                                                    "FilterName",
+                                                    u"FilterName"_ustr,
                                                     GetMedium()->GetFilter()->GetFilterName())
                                             };
 
@@ -1165,7 +1165,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 uno::Any aWorkbook;
                 aWorkbook <<= mxAutomationWorkbookObject;
                 uno::Sequence< uno::Any > aArgs{ aWorkbook };
-                SC_MOD()->CallAutomationApplicationEventSinks( "NewWorkbook", aArgs );
+                SC_MOD()->CallAutomationApplicationEventSinks( u"NewWorkbook"_ustr, aArgs );
             }
             break;
         case SfxEventHintId::OpenDoc:
@@ -1173,7 +1173,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 uno::Any aWorkbook;
                 aWorkbook <<= mxAutomationWorkbookObject;
                 uno::Sequence< uno::Any > aArgs{ aWorkbook };
-                SC_MOD()->CallAutomationApplicationEventSinks( "WorkbookOpen", aArgs );
+                SC_MOD()->CallAutomationApplicationEventSinks( u"WorkbookOpen"_ustr, aArgs );
             }
             break;
         default:
@@ -1331,7 +1331,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             if (eError == SCWARN_IMPORT_UNKNOWN_ENCRYPTION)
             {
 
-                m_pImpl->mpDelayedInfobarEntry.push_back({ "UnknownEncryption", ScResId(STR_CONTENT_WITH_UNKNOWN_ENCRYPTION), "", InfobarType::INFO, true });
+                m_pImpl->mpDelayedInfobarEntry.push_back({ u"UnknownEncryption"_ustr, ScResId(STR_CONTENT_WITH_UNKNOWN_ENCRYPTION), u""_ustr, InfobarType::INFO, true });
                 eError = ERRCODE_NONE;
             }
 
@@ -2945,7 +2945,7 @@ std::unique_ptr<ScDocFunc> ScDocShell::CreateDocFunc()
 ScDocShell::ScDocShell( const SfxModelFlags i_nSfxCreationFlags, const std::shared_ptr<ScDocument>& pDoc ) :
     SfxObjectShell( i_nSfxCreationFlags ),
     m_pDocument       ( pDoc ? pDoc : std::make_shared<ScDocument>( SCDOCMODE_DOCUMENT, this )),
-    m_aDdeTextFmt(OUString("TEXT")),
+    m_aDdeTextFmt(u"TEXT"_ustr),
     m_nPrtToScreenFactor( 1.0 ),
     m_pImpl           ( new DocShell_Impl ),
     m_bHeaderOn       ( true ),
@@ -3151,7 +3151,7 @@ std::shared_ptr<SfxDocumentInfoDialog> ScDocShell::CreateDocumentInfoDialog(weld
         ::CreateTabPage ScDocStatPageCreate = pFact->GetTabPageCreatorFunc(SID_SC_TP_STAT);
         OSL_ENSURE(ScDocStatPageCreate, "Tabpage create fail!");
         xDlg->AddFontTabPage();
-        xDlg->AddTabPage("calcstats", ScResId(STR_DOC_STAT), ScDocStatPageCreate);
+        xDlg->AddTabPage(u"calcstats"_ustr, ScResId(STR_DOC_STAT), ScDocStatPageCreate);
     }
     return xDlg;
 }
@@ -3213,7 +3213,7 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
     // Grab the Calc configuration.
     Reference<XUIConfigurationManager> xConfigMgr =
         xModuleCfgSupplier->getUIConfigurationManager(
-            "com.sun.star.sheet.SpreadsheetDocument");
+            u"com.sun.star.sheet.SpreadsheetDocument"_ustr);
 
     if (!xConfigMgr.is())
         return;
@@ -3289,22 +3289,22 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
     switch (eType)
     {
         case ScOptionsUtil::KEY_DEFAULT:
-            xScAccel->setKeyEvent(aDelete, ".uno:ClearContents");
-            xScAccel->setKeyEvent(aBackspace, ".uno:Delete");
-            xScAccel->setKeyEvent(aCtrlD, ".uno:FillDown");
-            xScAccel->setKeyEvent(aAltDown, ".uno:DataSelect");
-            xScAccel->setKeyEvent(aCtrlSpace, ".uno:SelectColumn");
-            xScAccel->setKeyEvent(aCtrlShiftSpace, ".uno:SelectAll");
-            xScAccel->setKeyEvent(aF4, ".uno:ToggleRelative");
-            xScAccel->setKeyEvent(aCtrlShiftF4, ".uno:ViewDataSourceBrowser");
+            xScAccel->setKeyEvent(aDelete, u".uno:ClearContents"_ustr);
+            xScAccel->setKeyEvent(aBackspace, u".uno:Delete"_ustr);
+            xScAccel->setKeyEvent(aCtrlD, u".uno:FillDown"_ustr);
+            xScAccel->setKeyEvent(aAltDown, u".uno:DataSelect"_ustr);
+            xScAccel->setKeyEvent(aCtrlSpace, u".uno:SelectColumn"_ustr);
+            xScAccel->setKeyEvent(aCtrlShiftSpace, u".uno:SelectAll"_ustr);
+            xScAccel->setKeyEvent(aF4, u".uno:ToggleRelative"_ustr);
+            xScAccel->setKeyEvent(aCtrlShiftF4, u".uno:ViewDataSourceBrowser"_ustr);
         break;
         case ScOptionsUtil::KEY_OOO_LEGACY:
-            xScAccel->setKeyEvent(aDelete, ".uno:Delete");
-            xScAccel->setKeyEvent(aBackspace, ".uno:ClearContents");
-            xScAccel->setKeyEvent(aCtrlD, ".uno:DataSelect");
-            xScAccel->setKeyEvent(aCtrlShiftSpace, ".uno:SelectColumn");
-            xScAccel->setKeyEvent(aF4, ".uno:ViewDataSourceBrowser");
-            xScAccel->setKeyEvent(aShiftF4, ".uno:ToggleRelative");
+            xScAccel->setKeyEvent(aDelete, u".uno:Delete"_ustr);
+            xScAccel->setKeyEvent(aBackspace, u".uno:ClearContents"_ustr);
+            xScAccel->setKeyEvent(aCtrlD, u".uno:DataSelect"_ustr);
+            xScAccel->setKeyEvent(aCtrlShiftSpace, u".uno:SelectColumn"_ustr);
+            xScAccel->setKeyEvent(aF4, u".uno:ViewDataSourceBrowser"_ustr);
+            xScAccel->setKeyEvent(aShiftF4, u".uno:ToggleRelative"_ustr);
         break;
         default:
             ;

@@ -1260,7 +1260,7 @@ static bool lcl_PutString(
                     if ( rTransliteration.isEqual( aMStr, xMonths[i].FullName ) ||
                          rTransliteration.isEqual( aMStr, xMonths[i].AbbrevName ) )
                         nMonth = sal::static_int_cast<sal_Int16>( i+1 );
-                    else if ( i == 8 && rTransliteration.isEqual( "SEPT",
+                    else if ( i == 8 && rTransliteration.isEqual( u"SEPT"_ustr,
                                 xMonths[i].AbbrevName ) &&
                             rTransliteration.isEqual( aMStr, aSepShortened ) )
                     {   // correct English abbreviation is SEPT,
@@ -1343,13 +1343,13 @@ static bool lcl_PutString(
                         // strings.
                         if (nHour == 12 &&
                                 (rTransliteration.isEqual( aAmPm, pFormatter->GetLocaleData()->getTimeAM()) ||
-                                 (pSecondTransliteration && pSecondTransliteration->isEqual( aAmPm, "AM"))))
+                                 (pSecondTransliteration && pSecondTransliteration->isEqual( aAmPm, u"AM"_ustr))))
                         {
                             nHour = 0;
                         }
                         else if (nHour < 12 &&
                                 (rTransliteration.isEqual( aAmPm, pFormatter->GetLocaleData()->getTimePM()) ||
-                                 (pSecondTransliteration && pSecondTransliteration->isEqual( aAmPm, "PM"))))
+                                 (pSecondTransliteration && pSecondTransliteration->isEqual( aAmPm, u"PM"_ustr))))
                         {
                             nHour += 12;
                         }

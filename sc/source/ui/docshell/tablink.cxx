@@ -86,7 +86,7 @@ ScTableLink::~ScTableLink()
     SCTAB nCount = rDoc.GetTableCount();
     for (SCTAB nTab=0; nTab<nCount; nTab++)
         if (rDoc.IsLinked(nTab) && aFileName == rDoc.GetLinkDoc(nTab))
-            rDoc.SetLink( nTab, ScLinkMode::NONE, "", "", "", "", 0 );
+            rDoc.SetLink( nTab, ScLinkMode::NONE, u""_ustr, u""_ustr, u""_ustr, u""_ustr, 0 );
 }
 
 void ScTableLink::Edit(weld::Window* pParent, const Link<SvBaseLink&,void>& rEndEditHdl)
@@ -437,7 +437,7 @@ bool ScDocumentLoader::GetFilterName( const OUString& rFileName,
         if ( bWithInteraction )
             pMedium->UseInteractionHandler(true);   // #i73992# no longer called from GuessFilter
 
-        SfxFilterMatcher aMatcher("scalc");
+        SfxFilterMatcher aMatcher(u"scalc"_ustr);
         if( bWithContent )
             aMatcher.GuessFilter( *pMedium, pSfxFilter );
         else

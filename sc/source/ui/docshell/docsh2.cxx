@@ -65,7 +65,7 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 
         /* Create styles that are imported through Orcus */
 
-        OUString aURL("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/calc/styles.xml");
+        OUString aURL(u"$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/calc/styles.xml"_ustr);
         rtl::Bootstrap::expandMacros(aURL);
 
         OUString aPath;

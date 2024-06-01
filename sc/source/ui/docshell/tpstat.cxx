@@ -32,12 +32,12 @@ std::unique_ptr<SfxTabPage> ScDocStatPage::Create( weld::Container* pPage, weld:
 }
 
 ScDocStatPage::ScDocStatPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "modules/scalc/ui/statisticsinfopage.ui", "StatisticsInfoPage", &rSet)
-    , m_xFtTables(m_xBuilder->weld_label("nosheets"))
-    , m_xFtCells(m_xBuilder->weld_label("nocells"))
-    , m_xFtPages(m_xBuilder->weld_label("nopages"))
-    , m_xFtFormula(m_xBuilder->weld_label("noformula"))
-    , m_xFrame(m_xBuilder->weld_frame("StatisticsInfoPage"))
+    : SfxTabPage(pPage, pController, u"modules/scalc/ui/statisticsinfopage.ui"_ustr, u"StatisticsInfoPage"_ustr, &rSet)
+    , m_xFtTables(m_xBuilder->weld_label(u"nosheets"_ustr))
+    , m_xFtCells(m_xBuilder->weld_label(u"nocells"_ustr))
+    , m_xFtPages(m_xBuilder->weld_label(u"nopages"_ustr))
+    , m_xFtFormula(m_xBuilder->weld_label(u"noformula"_ustr))
+    , m_xFrame(m_xBuilder->weld_frame(u"StatisticsInfoPage"_ustr))
 {
     ScDocShell* pDocSh = dynamic_cast<ScDocShell*>( SfxObjectShell::Current()  );
     ScDocStat   aDocStat;

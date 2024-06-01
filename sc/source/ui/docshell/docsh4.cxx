@@ -478,7 +478,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     if (pViewFrame)
                     {
                         pViewFrame->RemoveInfoBar(u"enablecontent");
-                        auto pInfoBar = pViewFrame->AppendInfoBar("enablecontent", SfxResId(RID_SECURITY_WARNING_TITLE),
+                        auto pInfoBar = pViewFrame->AppendInfoBar(u"enablecontent"_ustr, SfxResId(RID_SECURITY_WARNING_TITLE),
                                                                   ScResId(STR_RELOAD_TABLES), InfobarType::WARNING);
                         if (pInfoBar)
                         {
@@ -1124,8 +1124,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
             ScViewData* pViewData = GetViewData();
             if (pViewData)
             {
-                SfxStringItem aApp(SID_DOC_SERVICE, "com.sun.star.sheet.SpreadsheetDocument");
-                SfxStringItem aTarget(SID_TARGETNAME, "_blank");
+                SfxStringItem aApp(SID_DOC_SERVICE, u"com.sun.star.sheet.SpreadsheetDocument"_ustr);
+                SfxStringItem aTarget(SID_TARGETNAME, u"_blank"_ustr);
                 pViewData->GetDispatcher().ExecuteList(
                     SID_OPENDOC, SfxCallMode::API|SfxCallMode::SYNCHRON,
                     { &aApp, &aTarget });
@@ -1137,7 +1137,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
             const SfxStringItem* pFile = rReq.GetArg<SfxStringItem>( SID_NOTEBOOKBAR );
 
             if ( pBindings && sfx2::SfxNotebookBar::IsActive() )
-                sfx2::SfxNotebookBar::ExecMethod(*pBindings, pFile ? pFile->GetValue() : "");
+                sfx2::SfxNotebookBar::ExecMethod(*pBindings, pFile ? pFile->GetValue() : u""_ustr);
             else if ( pBindings )
                 sfx2::SfxNotebookBar::CloseMethod(*pBindings);
         }
@@ -1167,7 +1167,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     if (ScTabViewShell* pSh = GetBestViewShell())
                     {
-                        pSh->ExecuteCellFormatDlg(rReq, "font");
+                        pSh->ExecuteCellFormatDlg(rReq, u"font"_ustr);
                         pBindings->Invalidate(SID_LANGUAGE_STATUS);
                     }
                 }
@@ -2891,7 +2891,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
     {
         SC_MOD()->SetInSharedDocLoading( true );
         uno::Reference< frame::XDesktop2 > xLoader = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
-        uno::Sequence aArgs{ comphelper::makePropertyValue("Hidden", true) };
+        uno::Sequence aArgs{ comphelper::makePropertyValue(u"Hidden"_ustr, true) };
 
         if ( GetMedium() )
         {
@@ -2914,7 +2914,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
         }
 
         xModel.set(
-            xLoader->loadComponentFromURL( GetSharedFileURL(), "_blank", 0, aArgs ),
+            xLoader->loadComponentFromURL( GetSharedFileURL(), u"_blank"_ustr, 0, aArgs ),
             uno::UNO_QUERY_THROW );
         SC_MOD()->SetInSharedDocLoading( false );
     }
