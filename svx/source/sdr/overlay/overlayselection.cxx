@@ -37,7 +37,7 @@
 namespace sdr::overlay
 {
 
-        // combine rages geometrically to a single, ORed polygon
+        // combine ranges geometrically to a single, ORed polygon
         static basegfx::B2DPolyPolygon impCombineRangesToPolyPolygon(const std::vector< basegfx::B2DRange >& rRanges)
         {
             const sal_uInt32 nCount(rRanges.size());
