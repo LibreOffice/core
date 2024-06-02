@@ -34,6 +34,17 @@ PPTX export filter is split into 2 parts. Impress related part is in
 The export filter was written in 2009 IIRC and was not much extended
 feature-wise lately.
 
+## Presenter Console
+The main screen uses a hardware-accelerated
+canvas (e.g. cairo canvas), while the entire secondary screen
+uses a VCL-canvas that is created in
+`sd::framework::FullScreenPane::CreateCanvas()`.
+
+The secondary screen contains 3 `Pane`s which each have
+2 `XWindows` for the border area & the actual content,
+and each content Pane is backed by a `sd::presenter::PresenterCanvas`
+that wraps the `FullScreenPane`'s canvas and does clipping.
+
 ## Future Works
 Add custom shapes export (see below). enhance text
 output, we don't write text style for indentation levels now, need to
