@@ -54,7 +54,8 @@ struct ErrorManagerStruct
 
     ErrorManagerStruct()
     {
-        pub.msg_parm = {};
+        pub = {};
+        memset(&setjmp_buffer, 0, sizeof(setjmp_buffer));
     }
 };
 
