@@ -139,8 +139,7 @@ public:
     SwLinePortion *FindPrevPortion( const SwLinePortion *pRoot );
     SwLinePortion *FindLastPortion();
 
-    /// the parameter is actually SwTwips apparently?
-    virtual TextFrameIndex GetModelPositionForViewPoint(sal_uInt16 nOfst) const;
+    virtual TextFrameIndex GetModelPositionForViewPoint(SwTwips nOfst) const;
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const;
     void CalcTextSize( const SwTextSizeInfo &rInfo );
 
@@ -157,7 +156,7 @@ public:
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const;
 
     // For SwFieldPortion, SwSoftHyphPortion
-    virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const;
+    virtual SwTwips GetViewWidth(const SwTextSizeInfo& rInf) const;
 
     // for text- and multi-portions
     virtual SwTwips CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo &rInf ) const;

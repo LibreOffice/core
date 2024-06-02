@@ -6459,7 +6459,7 @@ static SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrame& rSourceLine )
         const SwFrame *pTmp = pCurrSourceCell->Lower();
         if ( pTmp )
         {
-            SwTwips nTmpHeight = USHRT_MAX;
+            SwTwips nTmpHeight = std::numeric_limits<SwTwips>::max();
             // #i32456# Consider lower row frames
             if ( pTmp->IsRowFrame() )
             {
@@ -6487,7 +6487,7 @@ static SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrame& rSourceLine )
                 nTmpHeight = pTextFrame->FirstLineHeight();
             }
 
-            if ( USHRT_MAX != nTmpHeight )
+            if (std::numeric_limits<SwTwips>::max() != nTmpHeight)
             {
                 const SwCellFrame* pPrevCell = pCurrSourceCell->GetPreviousCell();
                 if ( pPrevCell )
@@ -6565,7 +6565,7 @@ static SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrame& rSourceLine )
             else
             {
                 // maximum
-                if ( nTmpHeight > nHeight && USHRT_MAX != nTmpHeight )
+                if (nTmpHeight > nHeight && std::numeric_limits<SwTwips>::max() != nTmpHeight)
                     nHeight = nTmpHeight;
             }
         }

@@ -466,7 +466,7 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
         {
             // get maximum portion width from info structure, calculated
             // during text formatting
-            sal_uInt16 nMaxWidthDiff = GetInfo().GetMaxWidthDiff( pPos );
+            SwTwips nMaxWidthDiff = GetInfo().GetMaxWidthDiff(pPos);
 
             // check, if information is stored under other key
             if ( !nMaxWidthDiff && pPos == pCurrent->GetFirstPortion() )
@@ -577,10 +577,10 @@ SwMarginPortion *SwTextAdjuster::CalcRightMargin( SwLineLayout *pCurrent,
     SwTwips nReal )
 {
     tools::Long nRealWidth;
-    const sal_uInt16 nRealHeight = GetLineHeight();
-    const sal_uInt16 nLineHeight = pCurrent->Height();
+    const SwTwips nRealHeight = GetLineHeight();
+    const SwTwips nLineHeight = pCurrent->Height();
 
-    sal_uInt16 nPrtWidth = pCurrent->PrtWidth();
+    SwTwips nPrtWidth = pCurrent->PrtWidth();
     SwLinePortion *pLast = pCurrent->FindLastPortion();
 
     if( GetInfo().IsMulti() )
@@ -611,7 +611,7 @@ SwMarginPortion *SwTextAdjuster::CalcRightMargin( SwLineLayout *pCurrent,
     pLast->Append( pRight );
 
     if( tools::Long( nPrtWidth )< nRealWidth )
-        pRight->PrtWidth( sal_uInt16( nRealWidth - nPrtWidth ) );
+        pRight->PrtWidth(nRealWidth - nPrtWidth);
 
     // pCurrent->Width() is set to the real size, because we attach the
     // MarginPortions.
@@ -620,7 +620,7 @@ SwMarginPortion *SwTextAdjuster::CalcRightMargin( SwLineLayout *pCurrent,
     // implicitly. GetLeftMarginAdjust() and IsJustified() think they have a
     // line filled with chars.
 
-    pCurrent->PrtWidth( sal_uInt16( nRealWidth ) );
+    pCurrent->PrtWidth(nRealWidth);
     return pRight;
 }
 
@@ -734,7 +734,7 @@ SwFlyPortion *SwTextAdjuster::CalcFlyPortion( const tools::Long nRealWidth,
 {
     SwTextFly aTextFly( GetTextFrame() );
 
-    const sal_uInt16 nCurrWidth = m_pCurr->PrtWidth();
+    const SwTwips nCurrWidth = m_pCurr->PrtWidth();
     SwFlyPortion *pFlyPortion = nullptr;
 
     SwRect aLineVert( rCurrRect );
@@ -766,7 +766,7 @@ SwFlyPortion *SwTextAdjuster::CalcFlyPortion( const tools::Long nRealWidth,
             aLocal.Width( nRealWidth - aLocal.Left() );
         GetInfo().GetParaPortion()->SetFly();
         pFlyPortion = new SwFlyPortion( aLocal );
-        pFlyPortion->Height( sal_uInt16( rCurrRect.Height() ) );
+        pFlyPortion->Height(rCurrRect.Height());
         // The Width could be smaller than the FixWidth, thus:
         pFlyPortion->AdjFixWidth();
     }

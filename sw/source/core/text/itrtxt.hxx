@@ -144,9 +144,9 @@ private:
           SwTwips mnLeft;
           SwTwips mnRight;
           SwTwips mnFirst;
-          sal_uInt16  mnDropLeft;
-          sal_uInt16  mnDropHeight;
-          sal_uInt16  mnDropDescent;
+          SwTwips mnDropLeft;
+          SwTwips mnDropHeight;
+          SwTwips mnDropDescent;
           sal_uInt16  mnDropLines;
           SvxAdjust  mnAdjust;
           // #i91133#
@@ -188,8 +188,7 @@ public:
     bool IsLastBlock() const { return m_bLastBlock; }
     bool IsLastCenter() const { return m_bLastCenter; }
     SvxAdjust GetAdjust() const { return mnAdjust; }
-    sal_uInt16 GetLineWidth() const
-           { return sal_uInt16( Right() - GetLeftMargin() + 1 ); }
+    SwTwips GetLineWidth() const { return Right() - GetLeftMargin() + 1; }
     SwTwips GetLeftMin() const { return std::min(mnFirst, mnLeft); }
     bool HasNegFirst() const { return mnFirst < mnLeft; }
 
@@ -201,11 +200,11 @@ public:
     // DropCaps
     sal_uInt16 GetDropLines() const { return mnDropLines; }
     void SetDropLines( const sal_uInt16 nNew ) { mnDropLines = nNew; }
-    sal_uInt16 GetDropLeft() const { return mnDropLeft; }
-    sal_uInt16 GetDropHeight() const { return mnDropHeight; }
-    void SetDropHeight( const sal_uInt16 nNew ) { mnDropHeight = nNew; }
-    sal_uInt16 GetDropDescent() const { return mnDropDescent; }
-    void SetDropDescent( const sal_uInt16 nNew ) { mnDropDescent = nNew; }
+    SwTwips GetDropLeft() const { return mnDropLeft; }
+    SwTwips GetDropHeight() const { return mnDropHeight; }
+    void SetDropHeight(const SwTwips nNew) { mnDropHeight = nNew; }
+    SwTwips GetDropDescent() const { return mnDropDescent; }
+    void SetDropDescent(const SwTwips nNew) { mnDropDescent = nNew; }
     void DropInit();
 
     // Returns the TextPos for start and end of the current line without whitespace

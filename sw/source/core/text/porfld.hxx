@@ -41,7 +41,7 @@ protected:
     TextFrameIndex m_nNextScriptChg;
     TextFrameIndex m_nFieldLen; //< Length of field text, 1 for normal fields, any number for input fields
     // TODO ^ do we need this as member or is base class len enough?
-    sal_uInt16  m_nViewWidth;     // Screen width for empty fields
+    SwTwips m_nViewWidth; // Screen width for empty fields
     bool m_bFollow : 1;           // 2nd or later part of a field
     bool m_bLeft : 1;             // Used by SwNumberPortion
     bool m_bHide : 1;             // Used by SwNumberPortion
@@ -76,7 +76,7 @@ public:
     // Empty fields are also allowed
     virtual SwLinePortion *Compress() override;
 
-    virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const override;
+    virtual SwTwips GetViewWidth(const SwTextSizeInfo& rInf) const override;
 
     bool IsFollow() const { return m_bFollow; }
     void SetFollow( bool bNew ) { m_bFollow = bNew; }
@@ -132,19 +132,18 @@ public:
 class SwNumberPortion : public SwFieldPortion
 {
 protected:
-    sal_uInt16  m_nFixWidth;      // See Glues
-    sal_uInt16  m_nMinDist;       // Minimal distance to the text
+    SwTwips m_nFixWidth; // See Glues
+    SwTwips m_nMinDist; // Minimal distance to the text
     bool    mbLabelAlignmentPosAndSpaceModeActive;
 
 public:
     SwNumberPortion( const OUString &rExpand,
                      std::unique_ptr<SwFont> pFnt,
                      const bool bLeft,
-                     const bool bCenter,
-                     const sal_uInt16 nMinDst,
+                     const bool bCenter, const SwTwips nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
-    virtual TextFrameIndex GetModelPositionForViewPoint(sal_uInt16 nOfst) const override;
+    virtual TextFrameIndex GetModelPositionForViewPoint(SwTwips nOfst) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
 
     // Field cloner for SplitGlue
@@ -160,7 +159,7 @@ public:
                      std::unique_ptr<SwFont> pFnt,
                      const bool bLeft,
                      const bool bCenter,
-                     const sal_uInt16 nMinDst,
+                     const SwTwips nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
 };
 
@@ -179,7 +178,7 @@ public:
                      const Size& rGrfSize,
                      const bool bLeft,
                      const bool bCenter,
-                     const sal_uInt16 nMinDst,
+                     const SwTwips nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
     virtual ~SwGrfNumPortion() override;
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
@@ -210,17 +209,17 @@ public:
  */
 class SwCombinedPortion : public SwFieldPortion
 {
-    sal_uInt16 m_aPos[6];     // up to six X positions
-    o3tl::enumarray<SwFontScript,sal_uInt16> m_aWidth; // one width for every scripttype
+    SwTwips m_aPos[6]; // up to six X positions
+    o3tl::enumarray<SwFontScript, SwTwips> m_aWidth; // one width for every scripttype
     SwFontScript m_aScrType[6];  // scripttype of every character
-    sal_uInt16 m_nUpPos;      // the Y position of the upper baseline
-    sal_uInt16 m_nLowPos;     // the Y position of the lower baseline
+    SwTwips m_nUpPos; // the Y position of the upper baseline
+    SwTwips m_nLowPos; // the Y position of the lower baseline
     sal_uInt8 m_nProportion;  // relative font height
 public:
     explicit SwCombinedPortion( const OUString &rExpand );
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
-    virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const override;
+    virtual SwTwips GetViewWidth(const SwTextSizeInfo& rInf) const override;
 };
 
 namespace sw::mark { class IFieldmark; }

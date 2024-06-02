@@ -138,7 +138,7 @@ void SwTextFormatter::Insert( SwLineLayout *pLay )
         m_pCurr = pLay;
 }
 
-sal_uInt16 SwTextFormatter::GetFrameRstHeight() const
+SwTwips SwTextFormatter::GetFrameRstHeight() const
 {
     // We want the rest height relative to the page.
     // If we're in a table, then pFrame->GetUpper() is not the page.
@@ -152,7 +152,7 @@ sal_uInt16 SwTextFormatter::GetFrameRstHeight() const
     if( 0 > nHeight )
         return m_pCurr->Height();
     else
-        return sal_uInt16( nHeight );
+        return nHeight;
 }
 
 bool SwTextFormatter::ClearIfIsFirstOfBorderMerge(const SwLinePortion* pPortion)
@@ -476,7 +476,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
         {
             SwFontScript nNxtActual = rInf.GetFont()->GetActual();
             SwFontScript nLstActual = nNxtActual;
-            sal_uInt16 nLstHeight = o3tl::narrowing<sal_uInt16>(rInf.GetFont()->GetHeight());
+            tools::Long nLstHeight = rInf.GetFont()->GetHeight();
             bool bAllowBehind = false;
             const CharClass& rCC = GetAppCharClass();
 
@@ -519,7 +519,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                         if ( pTmpFnt )
                         {
                             nLstActual = pTmpFnt->GetActual();
-                            nLstHeight = o3tl::narrowing<sal_uInt16>(pTmpFnt->GetHeight());
+                            nLstHeight = pTmpFnt->GetHeight();
                         }
                     }
                 }
@@ -721,7 +721,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
 
                 // calculate size
                 SwLinePortion* pTmpPor = pGridKernPortion->GetNextPortion();
-                sal_uInt16 nSumWidth = pPor->Width();
+                SwTwips nSumWidth = pPor->Width();
                 while ( pTmpPor )
                 {
                     nSumWidth = nSumWidth + pTmpPor->Width();
@@ -1814,7 +1814,7 @@ SwLinePortion *SwTextFormatter::NewPortion(SwTextFormatInfo &rInf,
                              PortionType::TabDecimal == pLastTabPortion->GetWhichPor() )
                         {
                             OSL_ENSURE( rInf.X() >= pLastTabPortion->GetFix(), "Decimal tab stop position cannot be calculated" );
-                            const sal_uInt16 nWidthOfPortionsUpToDecimalPosition = o3tl::narrowing<sal_uInt16>(rInf.X() - pLastTabPortion->GetFix() );
+                            const SwTwips nWidthOfPortionsUpToDecimalPosition = rInf.X() - pLastTabPortion->GetFix();
                             static_cast<SwTabDecimalPortion*>(pLastTabPortion)->SetWidthOfPortionsUpToDecimalPosition( nWidthOfPortionsUpToDecimalPosition );
                             rInf.SetTabDecimal( 0 );
                         }
@@ -2100,7 +2100,7 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
     // the SwLineLayout is wider as well.
     if (GetInfo().GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_OVER_MARGIN))
     {
-        sal_uInt16 nSum = 0;
+        SwTwips nSum = 0;
         SwLinePortion* pPor = m_pCurr->GetFirstPortion();
 
         while (pPor)
@@ -2183,10 +2183,10 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
         const bool bRubyTop = ! pGrid->GetRubyTextBelow();
 
         nLineHeight = nGridWidth + nRubyHeight;
-        const sal_uInt16 nAmpRatio = (m_pCurr->Height() + nLineHeight - 1)/nLineHeight;
+        const auto nAmpRatio = (m_pCurr->Height() + nLineHeight - 1) / nLineHeight;
         nLineHeight *= nAmpRatio;
 
-        const sal_uInt16 nAsc = m_pCurr->GetAscent() +
+        const SwTwips nAsc = m_pCurr->GetAscent() +
                       ( bRubyTop ?
                        ( nLineHeight - m_pCurr->Height() + nRubyHeight ) / 2 :
                        ( nLineHeight - m_pCurr->Height() - nRubyHeight ) / 2 );
@@ -2242,7 +2242,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                             if( !nTmp )
                                 ++nTmp;
                             nLineHeight = nTmp;
-                            sal_uInt16 nAsc = ( 4 * nLineHeight ) / 5;  // 80%
+                            SwTwips nAsc = (4 * nLineHeight) / 5; // 80%
 #if 0
                             // could do clipping here (like Word does)
                             // but at 0.5 its unreadable either way...
@@ -2266,7 +2266,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                 case SvxLineSpaceRule::Fix:
                 {
                     nLineHeight = pSpace->GetLineHeight();
-                    const sal_uInt16 nAsc = ( 4 * nLineHeight ) / 5;  // 80%
+                    const SwTwips nAsc = (4 * nLineHeight) / 5; // 80%
                     if( nAsc < m_pCurr->GetAscent() ||
                         nLineHeight - nAsc < m_pCurr->Height() - m_pCurr->GetAscent() )
                         m_pCurr->SetClipping( true );
@@ -2341,7 +2341,7 @@ void SwTextFormatter::FeedInf( SwTextFormatInfo &rInf ) const
     rInf.First( FirstLeft() );
     rInf.LeftMargin(GetLeftMargin());
 
-    rInf.RealWidth( sal_uInt16(rInf.Right() - GetLeftMargin()) );
+    rInf.RealWidth(rInf.Right() - GetLeftMargin());
     rInf.Width( rInf.RealWidth() );
     if( const_cast<SwTextFormatter*>(this)->GetRedln() )
     {
@@ -2652,7 +2652,7 @@ bool SwTextFormatter::ChkFlyUnderflow( SwTextFormatInfo &rInf ) const
     {
         // First we check, whether a fly overlaps with the line.
         // = GetLineHeight()
-        const sal_uInt16 nHeight = GetCurr()->GetRealHeight();
+        const SwTwips nHeight = GetCurr()->GetRealHeight();
         SwRect aLine( GetLeftMargin(), Y(), rInf.RealWidth(), nHeight );
 
         SwRect aLineVert( aLine );
@@ -2925,7 +2925,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
     if( bForced )
     {
         m_pCurr->SetForcedLeftMargin();
-        rInf.ForcedLeftMargin( o3tl::narrowing<sal_uInt16>(aInter.Width()) );
+        rInf.ForcedLeftMargin(aInter.Width());
     }
 
     if( bFullLine )
@@ -3190,8 +3190,8 @@ void SwTextFormatter::MergeCharacterBorder( SwLinePortion& rPortion, SwLinePorti
         {
             // Calculate maximum height and ascent
             SwLinePortion* pActPor = m_pFirstOfBorderMerge;
-            sal_uInt16 nMaxAscent = 0;
-            sal_uInt16 nMaxHeight = 0;
+            SwTwips nMaxAscent = 0;
+            SwTwips nMaxHeight = 0;
             bool bReachCurrent = false;
             while( pActPor )
             {

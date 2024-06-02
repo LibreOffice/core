@@ -1831,7 +1831,7 @@ void SwRootFrame::ImplCalcBrowseWidth()
             const SwBorderAttrs &rAttrs = *aAccess.Get();
             const SwFormatHoriOrient &rHori = rAttrs.GetAttrSet().GetHoriOrient();
             tools::Long nWidth = rAttrs.GetSize().Width();
-            if ( nWidth < int(USHRT_MAX)-2000 && //-2k, because USHRT_MAX gets missing while trying to resize!  (and cast to int to avoid -Wsign-compare due to broken USHRT_MAX on Android)
+            if ( nWidth < std::numeric_limits<tools::Long>::max()-2000 && //-2k, because it changes while trying to resize!
                  text::HoriOrientation::FULL != rHori.GetHoriOrient() )
             {
                 const SwHTMLTableLayout *pLayoutInfo =

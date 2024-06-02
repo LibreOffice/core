@@ -2012,7 +2012,9 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
                     ( rInf.GetTextFrame()->IsVertical() ?
                       pUpperFrame->getFramePrintArea().Width() :
                       pUpperFrame->getFramePrintArea().Height() ) :
-                    USHRT_MAX;
+                    std::numeric_limits<SwTwips>::max();
+        if (nMaxWidth < 0)
+            nMaxWidth = 0;
     }
     else
         nTmpX = rInf.X();
@@ -2084,8 +2086,8 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
         bRet = false;
         FormatReset( aInf );
         aInf.X( nTmpX );
-        aInf.Width( sal_uInt16(nActWidth) );
-        aInf.RealWidth( sal_uInt16(nActWidth) );
+        aInf.Width(nActWidth);
+        aInf.RealWidth(nActWidth);
         aInf.SetFirstMulti( bFirstMulti );
         aInf.SetNumDone( rInf.IsNumDone() );
         aInf.SetFootnoteDone( rInf.IsFootnoteDone() );

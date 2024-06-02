@@ -38,7 +38,7 @@ class SwDropPortionPart
     std::unique_ptr<SwDropPortionPart> m_pFollow;
     std::unique_ptr<SwFont> m_pFnt;
     TextFrameIndex m_nLen;
-    sal_uInt16 m_nWidth;
+    SwTwips m_nWidth;
     bool m_bJoinBorderWithNext;
     bool m_bJoinBorderWithPrev;
 
@@ -51,8 +51,8 @@ public:
     void SetFollow( std::unique_ptr<SwDropPortionPart> pNew ) { m_pFollow = std::move(pNew); };
     SwFont& GetFont() const { return *m_pFnt; }
     TextFrameIndex GetLen() const { return m_nLen; }
-    sal_uInt16 GetWidth() const { return m_nWidth; }
-    void SetWidth( sal_uInt16 nNew )  { m_nWidth = nNew; }
+    SwTwips GetWidth() const { return m_nWidth; }
+    void SetWidth(SwTwips nNew) { m_nWidth = nNew; }
 
     bool GetJoinBorderWithPrev() const { return m_bJoinBorderWithPrev; }
     bool GetJoinBorderWithNext() const { return m_bJoinBorderWithNext; }
@@ -66,33 +66,33 @@ class SwDropPortion : public SwTextPortion
     friend class SwDropCapCache;
     std::unique_ptr<SwDropPortionPart> m_pPart; // due to script/attribute changes
     sal_uInt16 m_nLines;          // Line count
-    sal_uInt16 m_nDropHeight;     // Height
-    sal_uInt16 m_nDropDescent;    // Distance to the next line
-    sal_uInt16 m_nDistance;       // Distance to the text
-    sal_uInt16 m_nFix;            // Fixed position
-    short m_nY;               // Y Offset
+    SwTwips m_nDropHeight;     // Height
+    SwTwips m_nDropDescent;    // Distance to the next line
+    SwTwips m_nDistance;       // Distance to the text
+    SwTwips m_nFix;            // Fixed position
+    SwTwips m_nY; // Y Offset
 
     bool FormatText( SwTextFormatInfo &rInf );
     void PaintText( const SwTextPaintInfo &rInf ) const;
 
 public:
     SwDropPortion( const sal_uInt16 nLineCnt,
-                   const sal_uInt16 nDropHeight,
-                   const sal_uInt16 nDropDescent,
-                   const sal_uInt16 nDistance );
+                   const SwTwips nDropHeight,
+                   const SwTwips nDropDescent,
+                   const SwTwips nDistance );
     virtual ~SwDropPortion() override;
 
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
             void PaintDrop( const SwTextPaintInfo &rInf ) const;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
-    virtual TextFrameIndex GetModelPositionForViewPoint(sal_uInt16 nOfst) const override;
+    virtual TextFrameIndex GetModelPositionForViewPoint(SwTwips nOfst) const override;
 
     sal_uInt16 GetLines() const { return m_nLines; }
-    sal_uInt16 GetDistance() const { return m_nDistance; }
-    sal_uInt16 GetDropHeight() const { return m_nDropHeight; }
-    sal_uInt16 GetDropDescent() const { return m_nDropDescent; }
-    sal_uInt16 GetDropLeft() const { return Width() + m_nFix; }
+    SwTwips GetDistance() const { return m_nDistance; }
+    SwTwips GetDropHeight() const { return m_nDropHeight; }
+    SwTwips GetDropDescent() const { return m_nDropDescent; }
+    SwTwips GetDropLeft() const { return Width() + m_nFix; }
 
     SwDropPortionPart* GetPart() const { return m_pPart.get(); }
     void SetPart( std::unique_ptr<SwDropPortionPart> pNew ) { m_pPart = std::move(pNew); }

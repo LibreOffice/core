@@ -186,7 +186,7 @@ public:
     void Insert( SwLineLayout *pLine );
 
     // The remaining height to the page border
-    sal_uInt16 GetFrameRstHeight() const;
+    SwTwips GetFrameRstHeight() const;
 
     // How wide would you be without any bounds (Flys etc.)?
     SwTwips CalcFitToContent_( );

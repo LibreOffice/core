@@ -68,7 +68,7 @@ bool SwFlyPortion::Format( SwTextFormatInfo &rInf )
         rInf.X(rInf.X() - blankWidth); // Step back
     }
 
-    PrtWidth( o3tl::narrowing<sal_uInt16>(GetFix() - rInf.X() + PrtWidth()) );
+    PrtWidth(GetFix() - rInf.X() + PrtWidth());
     if( !Width() )
     {
         OSL_ENSURE( Width(), "+SwFlyPortion::Format: a fly is a fly is a fly" );
@@ -92,7 +92,7 @@ bool SwFlyPortion::Format( SwTextFormatInfo &rInf )
         SetLen(TextFrameIndex(1));
     }
 
-    const sal_uInt16 nNewWidth = o3tl::narrowing<sal_uInt16>(rInf.X() + PrtWidth());
+    const SwTwips nNewWidth = rInf.X() + PrtWidth();
     if( rInf.Width() <= nNewWidth )
     {
         Truncate();
@@ -410,7 +410,7 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
         else
         {
             mnAscent = 0;
-            Height( Height() + o3tl::narrowing<sal_uInt16>(nRelPos) );
+            Height(Height() + nRelPos);
         }
     }
     else

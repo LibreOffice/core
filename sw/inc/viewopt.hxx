@@ -28,6 +28,7 @@
 #include <svx/swframetypes.hxx>
 #include <sfx2/zoomitem.hxx>
 #include "swdllapi.h"
+#include "swtypes.hxx"
 
 class SwRect;
 class OutputDevice;
@@ -446,7 +447,7 @@ public:
 
     void PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
                               bool bIsScript ) const;
-    static sal_uInt16 GetPostItsWidth( const OutputDevice *pOut );
+    static SwTwips GetPostItsWidth(const OutputDevice* pOut);
 
     //show/hide tooltips on tracked changes
     bool IsShowInlineTooltips() const

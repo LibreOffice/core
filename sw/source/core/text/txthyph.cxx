@@ -298,7 +298,7 @@ bool SwTextPortion::CreateHyphen( SwTextFormatInfo &rInf, SwTextGuess const &rGu
         pHyphPor->SetLen(TextFrameIndex(1));
 
         static const void* nLastFontCacheId = nullptr;
-        static sal_uInt16 aMiniCacheH = 0, aMiniCacheW = 0;
+        static SwTwips aMiniCacheH = 0, aMiniCacheW = 0;
         const void* nTmpFontCacheId;
         sal_uInt16 nFntIdx;
         rInf.GetFont()->GetFontCacheId( nTmpFontCacheId, nFntIdx, rInf.GetFont()->GetActual() );
@@ -404,7 +404,7 @@ SwSoftHyphPortion::SwSoftHyphPortion() :
     SetWhichPor( PortionType::SoftHyphen );
 }
 
-sal_uInt16 SwSoftHyphPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
+SwTwips SwSoftHyphPortion::GetViewWidth(const SwTextSizeInfo& rInf) const
 {
     // Although we're in the const, nViewWidth should be calculated at
     // the last possible moment

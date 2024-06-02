@@ -665,7 +665,7 @@ public:
     tools::Long GetLineSpace( const bool _bNoPropLineSpacing = false ) const;
 
     /// Returns the first line height
-    sal_uInt16 FirstLineHeight() const;
+    SwTwips FirstLineHeight() const;
 
     /// Rewires FlyInContentFrame, if nEnd > Index >= nStart
     void MoveFlyInCnt(SwTextFrame *pNew, TextFrameIndex nStart, TextFrameIndex nEnd);

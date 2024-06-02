@@ -40,7 +40,7 @@ SwIsoToxPortion::SwIsoToxPortion() : m_nViewWidth(0)
     SetWhichPor( PortionType::IsoTox );
 }
 
-sal_uInt16 SwIsoToxPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
+SwTwips SwIsoToxPortion::GetViewWidth(const SwTextSizeInfo& rInf) const
 {
     // Although we are const, nViewWidth should be calculated in the last
     // moment possible

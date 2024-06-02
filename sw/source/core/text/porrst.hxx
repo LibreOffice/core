@@ -72,8 +72,8 @@ public:
     virtual SwLinePortion *Compress() override;
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
-    virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const override;
-    virtual TextFrameIndex GetModelPositionForViewPoint(sal_uInt16 nOfst) const override;
+    virtual SwTwips GetViewWidth(const SwTextSizeInfo& rInf) const override;
+    virtual TextFrameIndex GetModelPositionForViewPoint(SwTwips nOfst) const override;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
@@ -131,7 +131,7 @@ public:
 // The SwHangingPortion is the corresponding textportion to do that.
 class SwHangingPortion : public SwTextPortion
 {
-    sal_uInt16 m_nInnerWidth;
+    SwTwips m_nInnerWidth;
 public:
     explicit SwHangingPortion( SwPosSize aSize ) : m_nInnerWidth( aSize.Width() )
     {
@@ -140,7 +140,7 @@ public:
         Height( aSize.Height() );
     }
 
-    sal_uInt16 GetInnerWidth() const { return m_nInnerWidth; }
+    SwTwips GetInnerWidth() const { return m_nInnerWidth; }
 };
 
 // Used to hide text
@@ -160,9 +160,9 @@ class SwControlCharPortion : public SwLinePortion
 {
 
 private:
-    mutable sal_uInt16 mnViewWidth;            // used to cache a calculated value
+    mutable SwTwips mnViewWidth; // used to cache a calculated value
 protected:
-    mutable sal_uInt16 mnHalfCharWidth;        // used to cache a calculated value
+    mutable SwTwips mnHalfCharWidth; // used to cache a calculated value
     sal_Unicode mcChar;
 
 public:
@@ -177,7 +177,7 @@ public:
         OUString & rOutString, SwFont & rTmpFont, int & rDeltaY) const;
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
-    virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo& rInf ) const override;
+    virtual SwTwips GetViewWidth(const SwTextSizeInfo& rInf) const override;
 };
 
 /// for showing bookmark starts and ends; note that in contrast to

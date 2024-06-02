@@ -64,7 +64,7 @@ class SwLineInfo
     std::optional<SvxTabStopItem> m_oRuler;
     const SvxLineSpacingItem *m_pSpace;
     SvxParaVertAlignItem::Align m_nVertAlign;
-    sal_uInt16 m_nDefTabStop;
+    SwTwips m_nDefTabStop;
     bool m_bListTabStopIncluded;
     tools::Long m_nListTabStopPosition;
 
@@ -77,8 +77,8 @@ public:
     // #i24363# tab stops relative to indent - returns the tab stop following nSearchPos or NULL
     const SvxTabStop* GetTabStop(const SwTwips nSearchPos, SwTwips& nRight) const;
     const SvxLineSpacingItem *GetLineSpacing() const { return m_pSpace; }
-    sal_uInt16 GetDefTabStop() const { return m_nDefTabStop; }
-    void SetDefTabStop( sal_uInt16 nNew ) const
+    SwTwips GetDefTabStop() const { return m_nDefTabStop; }
+    void SetDefTabStop(SwTwips nNew) const
         { const_cast<SwLineInfo*>(this)->m_nDefTabStop = nNew; }
 
     // vertical alignment
@@ -126,7 +126,7 @@ public:
 class SwTextSizeInfo : public SwTextInfo
 {
 private:
-    typedef std::map< SwLinePortion const *, sal_uInt16 > SwTextPortionMap;
+    typedef std::map<SwLinePortion const*, SwTwips> SwTextPortionMap;
 
 protected:
     // during formatting, a small database is built, mapping portion pointers
@@ -253,7 +253,7 @@ public:
                           = std::nullopt) const;
     void GetTextSize(const SwScriptInfo* pSI, TextFrameIndex nIdx, TextFrameIndex nLen,
                      std::optional<SwLinePortionLayoutContext> nLayoutContext,
-                     const sal_uInt16 nComp, sal_uInt16& nMinSize, sal_uInt16& nMaxSizeDiff,
+                     const sal_uInt16 nComp, SwTwips& nMinSize, tools::Long& nMaxSizeDiff,
                      vcl::text::TextLayoutCache const* = nullptr) const;
     inline SwPosSize GetTextSize(const SwScriptInfo* pSI, TextFrameIndex nIdx,
                                  TextFrameIndex nLen) const;
@@ -304,11 +304,11 @@ public:
     // space among compressed kanas.
     // During formatting, the maximum values of compressible portions are
     // stored in m_aMaxWidth and discarded after a line has been formatted.
-    void SetMaxWidthDiff( const SwLinePortion *nKey, sal_uInt16 nVal )
+    void SetMaxWidthDiff(const SwLinePortion* nKey, SwTwips nVal)
     {
         m_aMaxWidth.insert( std::make_pair( nKey, nVal ) );
     };
-    sal_uInt16 GetMaxWidthDiff( const SwLinePortion *nKey )
+    SwTwips GetMaxWidthDiff(const SwLinePortion* nKey)
     {
         SwTextPortionMap::iterator it = m_aMaxWidth.find( nKey );
 
@@ -501,11 +501,11 @@ class SwTextFormatInfo : public SwTextPaintInfo
     SwTwips m_nFirst;             // EZE
     /// First or left margin, depending on context.
     SwTwips m_nLeftMargin = 0;
-    sal_uInt16 m_nRealWidth;      // "real" line width
-    sal_uInt16 m_nWidth;          // "virtual" line width
-    sal_uInt16 m_nLineHeight;     // Final height after CalcLine
-    sal_uInt16 m_nLineNetHeight; // line height without spacing
-    sal_uInt16 m_nForcedLeftMargin; // Shift of left margin due to frame
+    SwTwips m_nRealWidth; // "real" line width
+    SwTwips m_nWidth; // "virtual" line width
+    SwTwips m_nLineHeight;     // Final height after CalcLine
+    SwTwips m_nLineNetHeight; // line height without spacing
+    SwTwips m_nForcedLeftMargin; // Shift of left margin due to frame
 
     bool m_bFull : 1;             // Line is full
     bool m_bFootnoteDone : 1;          // Footnote already formatted
@@ -558,8 +558,8 @@ public:
     SwTextFormatInfo( const SwTextFormatInfo& rInf, SwLineLayout& rLay,
         SwTwips nActWidth );
 
-    sal_uInt16 Width() const { return m_nWidth; }
-    void Width( const sal_uInt16 nNew ) { m_nWidth = nNew; }
+    SwTwips Width() const { return m_nWidth; }
+    void Width(const SwTwips nNew) { m_nWidth = nNew; }
            void Init();
 
     /**
@@ -579,10 +579,10 @@ public:
     SwTwips First() const { return m_nFirst; }
     void First( const SwTwips nNew ) { m_nFirst = nNew; }
     void LeftMargin( const SwTwips nNew) { m_nLeftMargin = nNew; }
-    sal_uInt16 RealWidth() const { return m_nRealWidth; }
-    void RealWidth( const sal_uInt16 nNew ) { m_nRealWidth = nNew; }
-    sal_uInt16 ForcedLeftMargin() const { return m_nForcedLeftMargin; }
-    void ForcedLeftMargin( const sal_uInt16 nN ) { m_nForcedLeftMargin = nN; }
+    SwTwips RealWidth() const { return m_nRealWidth; }
+    void RealWidth(const SwTwips nNew) { m_nRealWidth = nNew; }
+    SwTwips ForcedLeftMargin() const { return m_nForcedLeftMargin; }
+    void ForcedLeftMargin(const SwTwips nN) { m_nForcedLeftMargin = nN; }
 
     sal_uInt8 &MaxHyph() { return m_nMaxHyph; }
     const sal_uInt8 &MaxHyph() const { return m_nMaxHyph; }
@@ -631,10 +631,10 @@ public:
     void SetLineStart(TextFrameIndex const nNew) { m_nLineStart = nNew; }
 
     // these are used during fly calculation
-    sal_uInt16 GetLineHeight() const { return m_nLineHeight; }
-    void SetLineHeight( const sal_uInt16 nNew ) { m_nLineHeight = nNew; }
-    sal_uInt16 GetLineNetHeight() const { return m_nLineNetHeight; }
-    void SetLineNetHeight( const sal_uInt16 nNew ) { m_nLineNetHeight = nNew; }
+    SwTwips GetLineHeight() const { return m_nLineHeight; }
+    void SetLineHeight(const SwTwips nNew) { m_nLineHeight = nNew; }
+    SwTwips GetLineNetHeight() const { return m_nLineNetHeight; }
+    void SetLineNetHeight(const SwTwips nNew) { m_nLineNetHeight = nNew; }
 
     const SwLinePortion *GetUnderflow() const { return m_pUnderflow; }
     SwLinePortion *GetUnderflow() { return m_pUnderflow; }

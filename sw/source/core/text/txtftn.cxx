@@ -803,11 +803,11 @@ SwFootnotePortion *SwTextFormatter::NewFootnotePortion( SwTextFormatInfo &rInf,
 
     SwSwapIfSwapped swap(m_pFrame);
 
-    sal_uInt16 nReal;
+    SwTwips nReal;
     {
-        sal_uInt16 nOldReal = m_pCurr->GetRealHeight();
-        sal_uInt16 nOldAscent = m_pCurr->GetAscent();
-        sal_uInt16 nOldHeight = m_pCurr->Height();
+        SwTwips nOldReal = m_pCurr->GetRealHeight();
+        SwTwips nOldAscent = m_pCurr->GetAscent();
+        SwTwips nOldHeight = m_pCurr->Height();
         CalcRealHeight();
         nReal = m_pCurr->GetRealHeight();
         if( nReal < nOldReal )
@@ -1114,7 +1114,7 @@ TextFrameIndex SwTextFormatter::FormatQuoVadis(TextFrameIndex const nOffset)
     // position we want to insert the Quovadis text
     // Let's see if it is that bad indeed:
     SwLinePortion *pPor = m_pCurr->GetFirstPortion();
-    sal_uInt16 nLastLeft = 0;
+    SwTwips nLastLeft = 0;
     while( pPor )
     {
         if ( pPor->IsFlyPortion() )
@@ -1126,7 +1126,7 @@ TextFrameIndex SwTextFormatter::FormatQuoVadis(TextFrameIndex const nOffset)
     // The old game all over again: we want the Line to wrap around
     // at a certain point, so we adjust the width.
     // nLastLeft is now basically the right margin
-    const sal_uInt16 nOldRealWidth = rInf.RealWidth();
+    const SwTwips nOldRealWidth = rInf.RealWidth();
     rInf.RealWidth( nOldRealWidth - nLastLeft );
 
     OUString aErgo = lcl_GetPageNumber( pErgoFrame->FindPageFrame() );
@@ -1134,7 +1134,7 @@ TextFrameIndex SwTextFormatter::FormatQuoVadis(TextFrameIndex const nOffset)
     pQuo->SetAscent( rInf.GetAscent()  );
     pQuo->Height( rInf.GetTextHeight() );
     pQuo->Format( rInf );
-    sal_uInt16 nQuoWidth = pQuo->Width();
+    SwTwips nQuoWidth = pQuo->Width();
     SwLinePortion* pCurrPor = pQuo;
 
     while ( rInf.GetRest() )
@@ -1212,12 +1212,12 @@ TextFrameIndex SwTextFormatter::FormatQuoVadis(TextFrameIndex const nOffset)
                     if( nDiff < 0 )
                     {
                         nLastLeft = pQuo->GetAscent();
-                        nQuoWidth = o3tl::narrowing<sal_uInt16>(-nDiff + nLastLeft);
+                        nQuoWidth = -nDiff + nLastLeft;
                     }
                     else
                     {
                         nQuoWidth = 0;
-                        nLastLeft = sal_uInt16(( pQuo->GetAscent() + nDiff ) / 2);
+                        nLastLeft = (pQuo->GetAscent() + nDiff) / 2;
                     }
                     break;
                 }
@@ -1268,7 +1268,7 @@ TextFrameIndex SwTextFormatter::FormatQuoVadis(TextFrameIndex const nOffset)
  */
 void SwTextFormatter::MakeDummyLine()
 {
-    sal_uInt16 nRstHeight = GetFrameRstHeight();
+    SwTwips nRstHeight = GetFrameRstHeight();
     if( m_pCurr && nRstHeight > m_pCurr->Height() )
     {
         SwLineLayout *pLay = new SwLineLayout;
@@ -1369,8 +1369,7 @@ SwFootnoteSave::~SwFootnoteSave() COVERITY_NOEXCEPT_FALSE
     }
 }
 
-SwFootnotePortion::SwFootnotePortion( const OUString &rExpand,
-                            SwTextFootnote *pFootn, sal_uInt16 nReal )
+SwFootnotePortion::SwFootnotePortion(const OUString& rExpand, SwTextFootnote* pFootn, SwTwips nReal)
         : SwFieldPortion( rExpand, nullptr )
         , m_pFootnote(pFootn)
         , m_nOrigHeight( nReal )
@@ -1458,7 +1457,7 @@ bool SwQuoVadisPortion::Format( SwTextFormatInfo &rInf )
         SetLen(TextFrameIndex(0));
         if( bFull  )
             // Third try; we're done: we crush
-            Width( sal_uInt16(rInf.Width() - rInf.X()) );
+            Width(rInf.Width() - rInf.X());
 
         // No multiline Fields for QuoVadis and ErgoSum
         if( rInf.GetRest() )
@@ -1514,7 +1513,7 @@ SwErgoSumPortion::SwErgoSumPortion(const OUString &rExp, std::u16string_view rSt
     SetWhichPor( PortionType::ErgoSum );
 }
 
-TextFrameIndex SwErgoSumPortion::GetModelPositionForViewPoint(const sal_uInt16) const
+TextFrameIndex SwErgoSumPortion::GetModelPositionForViewPoint(const SwTwips) const
 {
     return TextFrameIndex(0);
 }

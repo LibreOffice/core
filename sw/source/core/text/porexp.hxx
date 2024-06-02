@@ -26,7 +26,7 @@ class SwExpandPortion : public SwTextPortion
 public:
     SwExpandPortion() { SetWhichPor( PortionType::Expand ); }
     virtual bool Format( SwTextFormatInfo &rInf ) override;
-    virtual TextFrameIndex GetModelPositionForViewPoint(sal_uInt16 nOfst) const override;
+    virtual TextFrameIndex GetModelPositionForViewPoint(SwTwips nOfst) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
@@ -70,7 +70,7 @@ public:
     explicit SwPostItsPortion( bool bScrpt );
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
-    virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const override;
+    virtual SwTwips GetViewWidth(const SwTextSizeInfo& rInf) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
     bool IsScript() const { return m_bScript; }
 };

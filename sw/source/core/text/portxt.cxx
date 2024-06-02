@@ -221,7 +221,7 @@ void SwTextPortion::BreakCut( SwTextFormatInfo &rInf, const SwTextGuess &rGuess 
     // The word/char is larger than the line
     // Special case 1: The word is larger than the line
     // We truncate ...
-    const sal_uInt16 nLineWidth = o3tl::narrowing<sal_uInt16>(rInf.Width() - rInf.X());
+    const SwTwips nLineWidth = rInf.Width() - rInf.X();
     TextFrameIndex nLen = rGuess.CutPos() - rInf.GetIdx();
     if (nLen > TextFrameIndex(0))
     {
@@ -235,7 +235,7 @@ void SwTextPortion::BreakCut( SwTextFormatInfo &rInf, const SwTextGuess &rGuess 
 
             // changing these values requires also changing them in
             // guess.cxx
-            sal_uInt16 nItalic = 0;
+            SwTwips nItalic = 0;
             if( ITALIC_NONE != rInf.GetFont()->GetItalic() && !rInf.NotEOL() )
             {
                 nItalic = Height() / 12;
@@ -523,7 +523,7 @@ void SwTextPortion::FormatEOL( SwTextFormatInfo &rInf )
 
     // First set ourselves and the insert, because there could be
     // a SwLineLayout
-    sal_uInt16 nBlankSize;
+    SwTwips nBlankSize;
     if( nHoleLen == GetLen() )
         nBlankSize = Width();
     else
@@ -538,7 +538,7 @@ void SwTextPortion::FormatEOL( SwTextFormatInfo &rInf )
 
 }
 
-TextFrameIndex SwTextPortion::GetModelPositionForViewPoint(const sal_uInt16 nOfst) const
+TextFrameIndex SwTextPortion::GetModelPositionForViewPoint(const SwTwips nOfst) const
 {
     OSL_ENSURE( false, "SwTextPortion::GetModelPositionForViewPoint: don't use this method!" );
     return SwLinePortion::GetModelPositionForViewPoint( nOfst );
@@ -742,7 +742,7 @@ void SwTextInputFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
         // highlight empty input field, elsewhere they are completely invisible for the user
         SwRect aIntersect;
         rInf.CalcRect(*this, &aIntersect);
-        const sal_uInt16 aAreaWidth = rInf.GetTextSize(OUString(' ')).Width();
+        const SwTwips aAreaWidth = rInf.GetTextSize(OUString(' ')).Width();
         aIntersect.Left(aIntersect.Left() - aAreaWidth/2);
         aIntersect.Width(aAreaWidth);
 

@@ -209,10 +209,10 @@ void SwViewOption::DrawRectPrinter( OutputDevice *pOut,
     pOut->SetLineColor( aOldColor );
 }
 
-sal_uInt16 SwViewOption::GetPostItsWidth( const OutputDevice *pOut )
+SwTwips SwViewOption::GetPostItsWidth(const OutputDevice* pOut)
 {
     assert(pOut && "no Outdev");
-    return sal_uInt16(pOut->GetTextWidth("  "));
+    return pOut->GetTextWidth("  ");
 }
 
 void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, bool bIsScript ) const
@@ -223,7 +223,7 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, bool b
     Color aOldLineColor( pOut->GetLineColor() );
     pOut->SetLineColor( COL_GRAY );
     // to make it look nice, we subtract two pixels everywhere
-    sal_uInt16 nPix = s_nPixelTwips * 2;
+    SwTwips nPix = s_nPixelTwips * 2;
     if( rRect.Width() <= 2 * nPix || rRect.Height() <= 2 * nPix )
         nPix = 0;
     const Point aTopLeft(  rRect.Left()  + nPix, rRect.Top()    + nPix );
@@ -573,18 +573,15 @@ void SwViewOption::SetAppearanceFlag(ViewOptFlags nFlag, bool bSet, bool bSaveIn
         { ViewOptFlags::FieldShadings     ,   svtools::WRITERFIELDSHADINGS },
         { ViewOptFlags::SectionBoundaries ,   svtools::WRITERSECTIONBOUNDARIES },
         { ViewOptFlags::Shadow            ,   svtools::SHADOWCOLOR },
-        { ViewOptFlags::NONE              ,   svtools::ColorConfigEntryCount }
     };
-    sal_uInt16 nPos = 0;
-    while(aFlags[nPos].nFlag != ViewOptFlags::NONE)
+    for (auto& item : aFlags)
     {
-        if(nFlag & aFlags[nPos].nFlag)
+        if (nFlag & item.nFlag)
         {
-            svtools::ColorConfigValue aValue = aEditableConfig.GetColorValue(aFlags[nPos].eEntry);
+            svtools::ColorConfigValue aValue = aEditableConfig.GetColorValue(item.eEntry);
             aValue.bIsVisible = bSet;
-            aEditableConfig.SetColorValue(aFlags[nPos].eEntry, aValue);
+            aEditableConfig.SetColorValue(item.eEntry, aValue);
         }
-        nPos++;
     }
 }
 

@@ -30,21 +30,21 @@ class SwLineLayout;
 class SwGluePortion : public SwLinePortion
 {
 private:
-    sal_uInt16 m_nFixWidth;
+    SwTwips m_nFixWidth;
 public:
-    explicit SwGluePortion( const sal_uInt16 nInitFixWidth );
+    explicit SwGluePortion(const SwTwips nInitFixWidth);
 
     void Join( SwGluePortion *pVictim );
 
     inline tools::Long GetPrtGlue() const;
-    sal_uInt16 GetFixWidth() const { return m_nFixWidth; }
-    void SetFixWidth( const sal_uInt16 nNew ) { m_nFixWidth = nNew; }
+    SwTwips GetFixWidth() const { return m_nFixWidth; }
+    void SetFixWidth(const SwTwips nNew) { m_nFixWidth = nNew; }
     void MoveGlue( SwGluePortion *pTarget, const tools::Long nPrtGlue );
     inline void MoveAllGlue( SwGluePortion *pTarget );
     inline void MoveHalfGlue( SwGluePortion *pTarget );
     inline void AdjFixWidth();
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
-    virtual TextFrameIndex GetModelPositionForViewPoint(sal_uInt16 nOfst) const override;
+    virtual TextFrameIndex GetModelPositionForViewPoint(SwTwips nOfst) const override;
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
 
@@ -53,12 +53,12 @@ public:
 
 class SwFixPortion : public SwGluePortion
 {
-    sal_uInt16 m_nFix;        // The width offset in the line
+    SwTwips m_nFix; // The width offset in the line
 public:
     explicit SwFixPortion( const SwRect &rFlyRect );
     SwFixPortion();
-    void   SetFix( const sal_uInt16 nNewFix ) { m_nFix = nNewFix; }
-    sal_uInt16 GetFix() const { return m_nFix; }
+    void SetFix(const SwTwips nNewFix) { m_nFix = nNewFix; }
+    SwTwips GetFix() const { return m_nFix; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText, TextFrameIndex& nOffset) const override;
 };

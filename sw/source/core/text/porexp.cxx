@@ -23,7 +23,7 @@
 #include "inftxt.hxx"
 #include "porexp.hxx"
 
-TextFrameIndex SwExpandPortion::GetModelPositionForViewPoint(const sal_uInt16 nOfst) const
+TextFrameIndex SwExpandPortion::GetModelPositionForViewPoint(const SwTwips nOfst) const
 { return SwLinePortion::GetModelPositionForViewPoint( nOfst ); }
 
 bool SwExpandPortion::GetExpText( const SwTextSizeInfo&, OUString &rText ) const
@@ -289,7 +289,7 @@ void SwPostItsPortion::Paint( const SwTextPaintInfo &rInf ) const
         rInf.DrawPostIts( IsScript() );
 }
 
-sal_uInt16 SwPostItsPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
+SwTwips SwPostItsPortion::GetViewWidth(const SwTextSizeInfo& rInf) const
 {
     // Unbelievable: PostIts are always visible
     return rInf.OnWin() ? SwViewOption::GetPostItsWidth( rInf.GetOut() ) : 0;

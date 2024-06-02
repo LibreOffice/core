@@ -2807,6 +2807,20 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf160958_orphans)
     assertXPath(pExportDump, "//page[2]/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf161368)
+{
+    // Given a document with a text body width of 116 mm, greater than 65535 twips (115.6 mm)
+    createSwDoc("tdf161368.fodt");
+    auto pExportDump = parseLayoutDump();
+    // one page, three paragraphs, each one line (it was four pages, each paragraph split into
+    // tens of short (<= 4 mm wide) lines)
+    assertXPath(pExportDump, "//page"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt"_ostr, 3);
+    assertXPath(pExportDump, "//page[1]/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[2]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pExportDump, "//page[1]/body/txt[3]/SwParaPortion/SwLineLayout"_ostr, 1);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -59,10 +59,7 @@ SwLinePortion *SwLinePortion::Compress()
     return GetLen() || Width() ? this : nullptr;
 }
 
-sal_uInt16 SwLinePortion::GetViewWidth( const SwTextSizeInfo & ) const
-{
-    return 0;
-}
+SwTwips SwLinePortion::GetViewWidth(const SwTextSizeInfo&) const { return 0; }
 
 SwLinePortion::SwLinePortion( ) :
     mpNextPortion( nullptr ),
@@ -81,18 +78,18 @@ void SwLinePortion::PrePaint( const SwTextPaintInfo& rInf,
     OSL_ENSURE( rInf.OnWin(), "SwLinePortion::PrePaint: don't prepaint on a printer");
     OSL_ENSURE( !Width(), "SwLinePortion::PrePaint: For Width()==0 only!");
 
-    const sal_uInt16 nViewWidth = GetViewWidth( rInf );
+    const SwTwips nViewWidth = GetViewWidth(rInf);
 
     if( ! nViewWidth )
         return;
 
-    const sal_uInt16 nHalfView = nViewWidth / 2;
-    sal_uInt16 nLastWidth = pLast->Width() + pLast->ExtraBlankWidth();
+    const SwTwips nHalfView = nViewWidth / 2;
+    SwTwips nLastWidth = pLast->Width() + pLast->ExtraBlankWidth();
 
     if ( pLast->InSpaceGrp() && rInf.GetSpaceAdd(/*bShrink=*/true) )
         nLastWidth += pLast->CalcSpacing( rInf.GetSpaceAdd(/*bShrink=*/true), rInf );
 
-    sal_uInt16 nPos;
+    SwTwips nPos;
     SwTextPaintInfo aInf( rInf );
 
     const bool bBidiPor = rInf.GetTextFrame()->IsRightToLeft() !=
@@ -109,22 +106,22 @@ void SwLinePortion::PrePaint( const SwTextPaintInfo& rInf,
         switch (nDir.get())
         {
         case 0:
-            nPos = sal_uInt16( rInf.X() );
+            nPos = rInf.X();
             nPos += nLastWidth - nHalfView;
             aInf.X( nPos );
             break;
         case 900:
-            nPos = sal_uInt16( rInf.Y() );
+            nPos = rInf.Y();
             nPos -= nLastWidth - nHalfView;
             aInf.Y( nPos );
             break;
         case 1800:
-            nPos = sal_uInt16( rInf.X() );
+            nPos = rInf.X();
             nPos -= nLastWidth - nHalfView;
             aInf.X( nPos );
             break;
         case 2700:
-            nPos = sal_uInt16( rInf.Y() );
+            nPos = rInf.Y();
             nPos += nLastWidth - nHalfView;
             aInf.Y( nPos );
             break;
@@ -224,7 +221,7 @@ SwLinePortion *SwLinePortion::FindPrevPortion( const SwLinePortion *pRoot )
     return pPos;
 }
 
-TextFrameIndex SwLinePortion::GetModelPositionForViewPoint(const sal_uInt16 nOfst) const
+TextFrameIndex SwLinePortion::GetModelPositionForViewPoint(const SwTwips nOfst) const
 {
     if( nOfst > ( PrtWidth() / 2 ) )
         return GetLen();
@@ -251,7 +248,7 @@ bool SwLinePortion::Format( SwTextFormatInfo &rInf )
     const SwLinePortion *pLast = rInf.GetLast();
     Height( pLast->Height() );
     SetAscent( pLast->GetAscent() );
-    const sal_uInt16 nNewWidth = o3tl::narrowing<sal_uInt16>(rInf.X() + PrtWidth());
+    const SwTwips nNewWidth = rInf.X() + PrtWidth();
     // Only portions with true width can return true
     // Notes for example never set bFull==true
     if( rInf.Width() <= nNewWidth && PrtWidth() && ! IsKernPortion() )

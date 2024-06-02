@@ -30,14 +30,14 @@ public:
 
 class SwIsoToxPortion : public SwToxPortion
 {
-    sal_uInt16 m_nViewWidth;
+    SwTwips m_nViewWidth;
 
 public:
     SwIsoToxPortion();
     virtual bool Format(SwTextFormatInfo& rInf) override;
     virtual void Paint(const SwTextPaintInfo& rInf) const override;
     virtual SwLinePortion* Compress() override;
-    virtual sal_uInt16 GetViewWidth(const SwTextSizeInfo& rInf) const override;
+    virtual SwTwips GetViewWidth(const SwTextSizeInfo& rInf) const override;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion(SwPortionHandler& rPH) const override;

@@ -35,7 +35,7 @@ public:
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual void FormatEOL( SwTextFormatInfo &rInf ) override;
-    virtual TextFrameIndex GetModelPositionForViewPoint(sal_uInt16 nOfst) const override;
+    virtual TextFrameIndex GetModelPositionForViewPoint(SwTwips nOfst) const override;
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
     virtual SwTwips CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo &rInf ) const override;
@@ -62,11 +62,11 @@ public:
 
 class SwHolePortion : public SwLinePortion
 {
-    sal_uInt16 m_nBlankWidth;
+    SwTwips m_nBlankWidth;
 public:
     explicit SwHolePortion( const SwTextPortion &rPor );
-    sal_uInt16 GetBlankWidth( ) const { return m_nBlankWidth; }
-    void SetBlankWidth( const sal_uInt16 nNew ) { m_nBlankWidth = nNew; }
+    SwTwips GetBlankWidth() const { return m_nBlankWidth; }
+    void SetBlankWidth(const SwTwips nNew) { m_nBlankWidth = nNew; }
     virtual SwLinePortion *Compress() override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual SwPosSize GetTextSize(const SwTextSizeInfo& rInfo) const override;

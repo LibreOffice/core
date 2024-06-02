@@ -128,13 +128,12 @@ SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion, const SwTextAttr*
     m_nTextHeight = 0;
 }
 
-TextFrameIndex SwBreakPortion::GetModelPositionForViewPoint(const sal_uInt16) const
+TextFrameIndex SwBreakPortion::GetModelPositionForViewPoint(const SwTwips) const
 {
     return TextFrameIndex(0);
 }
 
-sal_uInt16 SwBreakPortion::GetViewWidth( const SwTextSizeInfo & ) const
-{ return 0; }
+SwTwips SwBreakPortion::GetViewWidth(const SwTextSizeInfo&) const { return 0; }
 
 SwLinePortion *SwBreakPortion::Compress()
 { return (GetNextPortion() && GetNextPortion()->InTextGrp() ? nullptr : this); }
@@ -329,7 +328,7 @@ SwArrowPortion::SwArrowPortion( const SwLinePortion &rPortion ) :
 SwArrowPortion::SwArrowPortion( const SwTextPaintInfo &rInf )
     : m_bLeft( false )
 {
-    Height( o3tl::narrowing<sal_uInt16>(rInf.GetTextFrame()->getFramePrintArea().Height()) );
+    Height(rInf.GetTextFrame()->getFramePrintArea().Height());
     m_aPos.setX( rInf.GetTextFrame()->getFrameArea().Left() +
                rInf.GetTextFrame()->getFramePrintArea().Right() );
     m_aPos.setY( rInf.GetTextFrame()->getFrameArea().Top() +
@@ -847,13 +846,13 @@ void SwBookmarkPortion::Paint( const SwTextPaintInfo &rInf ) const
         // some |text| here
         //     [[    ]]
         if (m_nStart > 1)
-            aNewPos.AdjustX(static_cast<tools::Long>(mnHalfCharWidth) * -2 * (m_aColors.size() - 1));
+            aNewPos.AdjustX(mnHalfCharWidth * -2 * (m_aColors.size() - 1));
     }
     else if ( m_nStart != 0 && m_nEnd != 0 )
         // both end and start boundary marks: adjust them around the bookmark position
         // |te|xt|
         //  ]] [[
-        aNewPos.AdjustX(static_cast<tools::Long>(mnHalfCharWidth) * -(2 * m_nEnd - 1 + m_nPoint) );
+        aNewPos.AdjustX(mnHalfCharWidth * -(2 * m_nEnd - 1 + m_nPoint) );
 
     const_cast< SwTextPaintInfo& >( rInf ).SetPos( aNewPos );
 
@@ -951,7 +950,7 @@ bool SwControlCharPortion::Format( SwTextFormatInfo &rInf )
     return false;
 }
 
-sal_uInt16 SwControlCharPortion::GetViewWidth( const SwTextSizeInfo& rInf ) const
+SwTwips SwControlCharPortion::GetViewWidth(const SwTextSizeInfo& rInf) const
 {
     if( !mnViewWidth )
         mnViewWidth = rInf.GetTextSize(OUString(' ')).Width();

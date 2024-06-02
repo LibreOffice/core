@@ -82,7 +82,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
     sal_Unicode cDec = 0;
     SvxTabAdjust eAdj;
 
-    sal_uInt16 nNewTabPos;
+    SwTwips nNewTabPos;
     bool bAutoTabStop = true;
     {
         const bool bRTL = m_pFrame->IsRightToLeft();
@@ -180,13 +180,13 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
         }
         else
         {
-            sal_uInt16 nDefTabDist = m_aLineInf.GetDefTabStop();
-            if( USHRT_MAX == nDefTabDist )
+            SwTwips nDefTabDist = m_aLineInf.GetDefTabStop();
+            if (std::numeric_limits<SwTwips>::max() == nDefTabDist)
             {
                 const SvxTabStopItem& rTab =
                     m_pFrame->GetAttrSet()->GetPool()->GetUserOrPoolDefaultItem( RES_PARATR_TABSTOP );
                 if( rTab.Count() )
-                    nDefTabDist = o3tl::narrowing<sal_uInt16>(rTab[0].GetTabPos());
+                    nDefTabDist = rTab[0].GetTabPos();
                 else
                     nDefTabDist = SVX_TAB_DEFDIST;
                 m_aLineInf.SetDefTabStop( nDefTabDist );
@@ -282,7 +282,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
         if (!bAbsoluteNextPos)
             nNextPos += bRTL ? nLinePos - nTabLeft : nTabLeft - nLinePos;
         OSL_ENSURE( nNextPos >= 0, "GetTabStop: Don't go back!" );
-        nNewTabPos = sal_uInt16(nNextPos);
+        nNewTabPos = nNextPos;
     }
 
     SwTabPortion *pTabPor = nullptr;
@@ -329,7 +329,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
 /**
  * The base class is initialized without setting anything
  */
-SwTabPortion::SwTabPortion( const sal_uInt16 nTabPosition, const sal_Unicode cFillChar, const bool bAutoTab )
+SwTabPortion::SwTabPortion( const SwTwips nTabPosition, const sal_Unicode cFillChar, const bool bAutoTab )
     : m_nTabPos(nTabPosition), m_cFill(cFillChar), m_bAutoTabStop( bAutoTab )
 {
     mnLineLength = TextFrameIndex(1);
@@ -358,19 +358,19 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
     OSL_ENSURE( rInf.X() <= GetTabPos(), "SwTabPortion::PreFormat: rush hour" );
 
     // Here we settle down ...
-    SetFix( o3tl::narrowing<sal_uInt16>(rInf.X()) );
+    SetFix(rInf.X());
 
     IDocumentSettingAccess const& rIDSA(rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess());
     const bool bTabCompat = rIDSA.get(DocumentSettingId::TAB_COMPAT);
     const bool bTabOverflow = rIDSA.get(DocumentSettingId::TAB_OVERFLOW);
     const bool bTabOverMargin = rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN);
     const bool bTabOverSpacing = rIDSA.get(DocumentSettingId::TAB_OVER_SPACING);
-    const sal_Int32 nTextFrameWidth = rInf.GetTextFrame()->getFrameArea().Width();
+    const tools::Long nTextFrameWidth = rInf.GetTextFrame()->getFrameArea().Width();
 
     // The minimal width of a tab is one blank at least.
     // #i37686# In compatibility mode, the minimum width
     // should be 1, even for non-left tab stops.
-    sal_uInt16 nMinimumTabWidth = 1;
+    SwTwips nMinimumTabWidth = 1;
     if ( !bTabCompat )
     {
         // #i89179#
@@ -434,7 +434,7 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
                     }
                 }
 
-                PrtWidth( o3tl::narrowing<sal_uInt16>(GetTabPos() - rInf.X()) );
+                PrtWidth(GetTabPos() - rInf.X());
                 bFull = rInf.Width() <= rInf.X() + PrtWidth();
 
                 // In tabulator compatibility mode, we reset the bFull flag
@@ -464,7 +464,7 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
             // line if there is a fly reducing the line width:
             !rInf.GetFly() )
         {
-            PrtWidth( o3tl::narrowing<sal_uInt16>(rInf.Width() - rInf.X()) );
+            PrtWidth(rInf.Width() - rInf.X());
             SetFixWidth( PrtWidth() );
         }
         else
@@ -497,15 +497,15 @@ bool SwTabPortion::PostFormat( SwTextFormatInfo &rInf )
 
     // If the tab position is larger than the right margin, it gets scaled down by default.
     // However, if compat mode enabled, we allow tabs to go over the margin: the rest of the paragraph is not broken into lines.
-    const sal_uInt16 nRight
+    const SwTwips nRight
         = bTabOverMargin
               ? GetTabPos()
               : bTabOverSpacing
-                    ? std::min<long>(GetTabPos(), rInf.GetTextFrame()->getFrameArea().Right())
+                    ? std::min(GetTabPos(), rInf.GetTextFrame()->getFrameArea().Right())
                     : std::min(GetTabPos(), rInf.Width());
     const SwLinePortion *pPor = GetNextPortion();
 
-    sal_uInt16 nPorWidth = 0;
+    SwTwips nPorWidth = 0;
     while( pPor )
     {
         nPorWidth = nPorWidth + pPor->Width();
@@ -523,10 +523,10 @@ bool SwTabPortion::PostFormat( SwTextFormatInfo &rInf )
     // #127428# Abandon dec. tab position if line is full
     if ( bTabCompat && PortionType::TabDecimal == nWhich )
     {
-        sal_uInt16 nPrePorWidth = static_cast<const SwTabDecimalPortion*>(this)->GetWidthOfPortionsUpToDecimalPosition();
+        SwTwips nPrePorWidth = static_cast<const SwTabDecimalPortion*>(this)->GetWidthOfPortionsUpToDecimalPosition();
 
         // no value was set => no decimal character was found
-        if ( USHRT_MAX != nPrePorWidth )
+        if (std::numeric_limits<SwTwips>::max() != nPrePorWidth)
         {
             if ( !bTabOverMargin && nPrePorWidth && nPorWidth - nPrePorWidth > rInf.Width() - nRight )
             {
@@ -541,18 +541,18 @@ bool SwTabPortion::PostFormat( SwTextFormatInfo &rInf )
     {
         // centered tabs are problematic:
         // We have to detect how much fits into the line.
-        sal_uInt16 nNewWidth = nPorWidth /2;
+        SwTwips nNewWidth = nPorWidth / 2;
         if (!bTabOverMargin && !bTabOverSpacing && nNewWidth > rInf.Width() - nRight)
             nNewWidth = nPorWidth - (rInf.Width() - nRight);
         nPorWidth = nNewWidth;
     }
 
-    const sal_uInt16 nDiffWidth = nRight - GetFix();
+    const SwTwips nDiffWidth = nRight - GetFix();
 
     if( nDiffWidth > nPorWidth )
     {
-        const sal_uInt16 nOldWidth = GetFixWidth();
-        const sal_uInt16 nAdjDiff = nDiffWidth - nPorWidth;
+        const SwTwips nOldWidth = GetFixWidth();
+        const SwTwips nAdjDiff = nDiffWidth - nPorWidth;
         if( nAdjDiff > GetFixWidth() )
             PrtWidth( nAdjDiff );
         // Don't be afraid: we have to move rInf further.
@@ -615,13 +615,13 @@ void SwTabPortion::Paint( const SwTextPaintInfo &rInf ) const
     if( rInf.GetFont()->IsPaintBlank() )
     {
         // Tabs with filling/filled tabs
-        const sal_uInt16 nCharWidth = rInf.GetTextSize(OUString(' ')).Width();
+        const SwTwips nCharWidth = rInf.GetTextSize(OUString(' ')).Width();
 
         // Robust:
         if( nCharWidth )
         {
             // Always with kerning, also on printer!
-            sal_uInt16 nChar = Width() / nCharWidth;
+            sal_Int32 nChar = Width() / nCharWidth;
             OUStringBuffer aBuf(nChar);
             comphelper::string::padToLength(aBuf, nChar, ' ');
             rInf.DrawText(aBuf.makeStringAndClear(), *this, TextFrameIndex(0),
@@ -634,14 +634,14 @@ void SwTabPortion::Paint( const SwTextPaintInfo &rInf ) const
         return;
 
     // Tabs with filling/filled tabs
-    const sal_uInt16 nCharWidth = rInf.GetTextSize(OUString(m_cFill)).Width();
+    const SwTwips nCharWidth = rInf.GetTextSize(OUString(m_cFill)).Width();
     OSL_ENSURE( nCharWidth, "!SwTabPortion::Paint: sophisticated tabchar" );
 
     // Robust:
     if( nCharWidth )
     {
         // Always with kerning, also on printer!
-        sal_uInt16 nChar = Width() / nCharWidth;
+        sal_Int32 nChar = Width() / nCharWidth;
         if ( m_cFill == '_' )
             ++nChar; // to avoid gaps
         OUStringBuffer aBuf(nChar);

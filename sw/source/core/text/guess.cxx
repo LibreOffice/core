@@ -77,8 +77,8 @@ bool hasBlanksInLine(const SwTextFormatInfo& rInf, TextFrameIndex end)
 // values, and returns 'false' value that SwTextGuess::Guess should return, to create a
 // trailing SwHolePortion.
 bool maybeAdjustPositionsForBlockAdjust(TextFrameIndex& rCutPos, TextFrameIndex& rBreakPos,
-                                        TextFrameIndex& rBreakStart, sal_uInt16& rBreakWidth,
-                                        sal_uInt16& rExtraBlankWidth, sal_uInt16& rMaxSizeDiff,
+                                        TextFrameIndex& rBreakStart, SwTwips& rBreakWidth,
+                                        SwTwips& rExtraBlankWidth, tools::Long& rMaxSizeDiff,
                                         const SwTextFormatInfo& rInf, const SwScriptInfo& rSI,
                                         sal_uInt16 maxComp,
                                         std::optional<SwLinePortionLayoutContext> nLayoutContext)
@@ -167,7 +167,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
     OSL_ENSURE( nPorHeight, "+SwTextGuess::Guess: no height" );
 
-    sal_uInt16 nMaxSizeDiff;
+    tools::Long nMaxSizeDiff;
 
     const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
 
@@ -420,7 +420,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 #if OSL_DEBUG_LEVEL > 1
         if ( TextFrameIndex(COMPLETE_STRING) != m_nCutPos )
         {
-            sal_uInt16 nMinSize;
+            SwTwips nMinSize;
             rInf.GetTextSize(&rSI, rInf.GetIdx(), m_nCutPos - rInf.GetIdx(), std::nullopt, nMaxComp,
                              nMinSize, nMaxSizeDiff);
             OSL_ENSURE( nMinSize <= nLineWidth, "What a Guess!!!" );

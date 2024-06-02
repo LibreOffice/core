@@ -25,14 +25,14 @@
 #include "porfly.hxx"
 #include <comphelper/string.hxx>
 
-SwGluePortion::SwGluePortion( const sal_uInt16 nInitFixWidth )
+SwGluePortion::SwGluePortion(const SwTwips nInitFixWidth)
     : m_nFixWidth( nInitFixWidth )
 {
     PrtWidth( m_nFixWidth );
     SetWhichPor( PortionType::Glue );
 }
 
-TextFrameIndex SwGluePortion::GetModelPositionForViewPoint(const sal_uInt16 nOfst) const
+TextFrameIndex SwGluePortion::GetModelPositionForViewPoint(const SwTwips nOfst) const
 {
     // FIXME why nOfst > GetLen() ? is that supposed to be > Width() ?
     if( !GetLen() || nOfst > sal_Int32(GetLen()) || !Width() )
@@ -145,9 +145,9 @@ void SwGluePortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
  * We're expecting a frame-local SwRect!
  */
 SwFixPortion::SwFixPortion( const SwRect &rRect )
-       :SwGluePortion( sal_uInt16(rRect.Width()) ), m_nFix( sal_uInt16(rRect.Left()) )
+       :SwGluePortion(rRect.Width()), m_nFix(rRect.Left())
 {
-    Height( sal_uInt16(rRect.Height()) );
+    Height(rRect.Height());
     SetWhichPor( PortionType::Fix );
 }
 

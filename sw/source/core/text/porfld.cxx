@@ -118,7 +118,7 @@ SwFieldPortion::~SwFieldPortion()
     m_pFont.reset();
 }
 
-sal_uInt16 SwFieldPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
+SwTwips SwFieldPortion::GetViewWidth(const SwTextSizeInfo& rInf) const
 {
     // even though this is const, nViewWidth should be computed at the very end:
     SwFieldPortion* pThis = const_cast<SwFieldPortion*>(this);
@@ -223,7 +223,7 @@ void SwFieldPortion::CheckScript( const SwTextSizeInfo &rInf )
         return;
 
     SwFontScript nActual = m_pFont ? m_pFont->GetActual() : rInf.GetFont()->GetActual();
-    sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType( aText, 0 );
+    sal_Int16 nScript = g_pBreakIt->GetBreakIter()->getScriptType( aText, 0 );
     sal_Int32 nChg = 0;
     if( i18n::ScriptType::WEAK == nScript )
     {
@@ -550,8 +550,7 @@ bool SwHiddenPortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) 
 SwNumberPortion::SwNumberPortion( const OUString &rExpand,
                                   std::unique_ptr<SwFont> pFont,
                                   const bool bLft,
-                                  const bool bCntr,
-                                  const sal_uInt16 nMinDst,
+                                  const bool bCntr, const SwTwips nMinDst,
                                   const bool bLabelAlignmentPosAndSpaceModeActive )
     : SwFieldPortion(rExpand, std::move(pFont), TextFrameIndex(0))
     , m_nFixWidth(0)
@@ -564,7 +563,7 @@ SwNumberPortion::SwNumberPortion( const OUString &rExpand,
     SetCenter( bCntr );
 }
 
-TextFrameIndex SwNumberPortion::GetModelPositionForViewPoint(const sal_uInt16) const
+TextFrameIndex SwNumberPortion::GetModelPositionForViewPoint(const SwTwips) const
 {
     return TextFrameIndex(0);
 }
@@ -691,9 +690,9 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
     }
 
     // calculate the width of the number portion, including follows
-    const sal_uInt16 nOldWidth = Width();
-    sal_uInt16 nSumWidth = 0;
-    sal_uInt16 nOffset = 0;
+    const SwTwips nOldWidth = Width();
+    SwTwips nSumWidth = 0;
+    SwTwips nOffset = 0;
 
     const SwLinePortion* pTmp = this;
     while ( pTmp && pTmp->InNumberGrp() )
@@ -741,7 +740,7 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
         // logical const: reset width
         SwNumberPortion *pThis = const_cast<SwNumberPortion*>(this);
         bPaintSpace = bPaintSpace && m_nFixWidth < nOldWidth;
-        sal_uInt16 nSpaceOffs = m_nFixWidth;
+        SwTwips nSpaceOffs = m_nFixWidth;
         pThis->Width( m_nFixWidth );
 
         if( ( IsLeft() && ! rInf.GetTextFrame()->IsRightToLeft() ) ||
@@ -757,7 +756,7 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
                 if( IsCenter() )
                 {
                     /* #110778# a / 2 * 2 == a is not a tautology */
-                    sal_uInt16 nTmpOffset = nOffset;
+                    SwTwips nTmpOffset = nOffset;
                     nOffset /= 2;
                     if( nOffset < m_nMinDist )
                         nOffset = nTmpOffset - m_nMinDist;
@@ -797,7 +796,7 @@ SwBulletPortion::SwBulletPortion( const sal_UCS4 cBullet,
                                   std::unique_ptr<SwFont> pFont,
                                   const bool bLft,
                                   const bool bCntr,
-                                  const sal_uInt16 nMinDst,
+                                 const SwTwips nMinDst,
                                   const bool bLabelAlignmentPosAndSpaceModeActive )
     : SwNumberPortion( OUString(&cBullet, 1) + rBulletFollowedBy,
                        std::move(pFont), bLft, bCntr, nMinDst,
@@ -812,7 +811,7 @@ SwGrfNumPortion::SwGrfNumPortion(
         const OUString& rGraphicFollowedBy,
         const SvxBrushItem* pGrfBrush, OUString const & referer,
         const SwFormatVertOrient* pGrfOrient, const Size& rGrfSize,
-        const bool bLft, const bool bCntr, const sal_uInt16 nMinDst,
+        const bool bLft, const bool bCntr, const SwTwips nMinDst,
         const bool bLabelAlignmentPosAndSpaceModeActive ) :
     SwNumberPortion( rGraphicFollowedBy, nullptr, bLft, bCntr, nMinDst,
                      bLabelAlignmentPosAndSpaceModeActive ),
@@ -843,7 +842,7 @@ SwGrfNumPortion::SwGrfNumPortion(
     Width( rGrfSize.Width() + 2 * GRFNUM_SECURE );
     m_nFixWidth = Width();
     m_nGrfHeight = rGrfSize.Height() + 2 * GRFNUM_SECURE;
-    Height( sal_uInt16(m_nGrfHeight) );
+    Height(m_nGrfHeight);
     m_bNoPaint = false;
 }
 
@@ -872,7 +871,7 @@ bool SwGrfNumPortion::Format( SwTextFormatInfo &rInf )
 {
     SetHide( false );
 //    Width( nFixWidth );
-    sal_uInt16 nFollowedByWidth( 0 );
+    SwTwips nFollowedByWidth(0);
     if ( mbLabelAlignmentPosAndSpaceModeActive )
     {
         SwFieldPortion::Format( rInf );
@@ -955,7 +954,7 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
 
     if( m_nFixWidth < Width() && !bTmpLeft )
     {
-        sal_uInt16 nOffset = Width() - m_nFixWidth;
+        SwTwips nOffset = Width() - m_nFixWidth;
         if( nOffset < m_nMinDist )
             nOffset = 0;
         else
@@ -1121,9 +1120,7 @@ void SwTextFrame::StopAnimation( const OutputDevice* pOut )
  */
 SwCombinedPortion::SwCombinedPortion( const OUString &rText )
     : SwFieldPortion( rText )
-    , m_aWidth{ static_cast<sal_uInt16>(0),
-                static_cast<sal_uInt16>(0),
-                static_cast<sal_uInt16>(0) }
+    , m_aWidth{ 0, 0, 0 }
     , m_nUpPos(0)
     , m_nLowPos(0)
     , m_nProportion(55)
@@ -1228,7 +1225,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
             {
                 rInf.GetOut()->SetFont( rInf.GetFont()->GetFnt( m_aScrType[i] ) );
                 m_aWidth[ m_aScrType[i] ] =
-                        o3tl::narrowing<sal_uInt16>(2 * rInf.GetOut()->GetFontMetric().GetFontSize().Width() / 3);
+                        2 * rInf.GetOut()->GetFontMetric().GetFontSize().Width() / 3;
             }
         }
     }
@@ -1240,7 +1237,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
     m_nProportion = 55;
     // In nMainAscent/Descent we store the ascent and descent
     // of the original surrounding font
-    sal_uInt16 nMaxDescent, nMaxAscent, nMaxWidth;
+    SwTwips nMaxDescent, nMaxAscent, nMaxWidth;
     sal_uInt16 nMainDescent = rInf.GetFont()->GetHeight( pSh, *rInf.GetOut() );
     const sal_uInt16 nMainAscent = rInf.GetFont()->GetAscent( pSh, *rInf.GetOut() );
     nMainDescent = nMainDescent - nMainAscent;
@@ -1275,7 +1272,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
             SwDrawTextInfo aDrawInf(pSh, *rInf.GetOut(), m_aExpand, i, 1);
             Size aSize = aTmpFont.GetTextSize_( aDrawInf );
             const sal_uInt16 nAsc = aTmpFont.GetAscent( pSh, *rInf.GetOut() );
-            m_aPos[ i ] = o3tl::narrowing<sal_uInt16>(aSize.Width());
+            m_aPos[i] = aSize.Width();
             if( i == nTop ) // enter the second line
             {
                 m_nLowPos = nMaxDescent;
@@ -1319,8 +1316,8 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
         Height( nMainAscent + nMainDescent );
 
     // We calculate the x positions of the characters in both lines...
-    sal_uInt16 nTopDiff = 0;
-    sal_uInt16 nBotDiff = 0;
+    SwTwips nTopDiff = 0;
+    SwTwips nBotDiff = 0;
     if( nMaxWidth > Width() )
     {
         nTopDiff = ( nMaxWidth - Width() ) / 2;
@@ -1366,7 +1363,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
     return bFull;
 }
 
-sal_uInt16 SwCombinedPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
+SwTwips SwCombinedPortion::GetViewWidth(const SwTextSizeInfo& rInf) const
 {
     if( !GetLen() ) // for the dummy part at the end of the line, where
         return 0;   // the combined portion doesn't fit.

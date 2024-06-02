@@ -30,14 +30,14 @@ class SwTextFootnote;
 class SwFootnotePortion : public SwFieldPortion
 {
     SwTextFootnote *m_pFootnote;
-    sal_uInt16 m_nOrigHeight;
+    SwTwips m_nOrigHeight;
     // #i98418#
     bool mbPreferredScriptTypeSet;
     SwFontScript mnPreferredScriptType;
 public:
     SwFootnotePortion( const OUString &rExpand, SwTextFootnote *pFootnote,
-                  sal_uInt16 nOrig = USHRT_MAX );
-    sal_uInt16& Orig() { return m_nOrigHeight; }
+                      SwTwips nOrig = std::numeric_limits<SwTwips>::max());
+    SwTwips& Orig() { return m_nOrigHeight; }
 
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
@@ -94,7 +94,7 @@ class SwErgoSumPortion : public SwFieldPortion
 {
 public:
     SwErgoSumPortion( const OUString &rExp, std::u16string_view rStr );
-    virtual TextFrameIndex GetModelPositionForViewPoint(sal_uInt16 nOfst) const override;
+    virtual TextFrameIndex GetModelPositionForViewPoint(SwTwips nOfst) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
 
     // Field cloner for SplitGlue

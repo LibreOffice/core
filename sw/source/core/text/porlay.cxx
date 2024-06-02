@@ -372,7 +372,7 @@ static bool lcl_HasOnlyBlanks(std::u16string_view rText, TextFrameIndex nStt, Te
 // Swapped out from FormatLine()
 void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
 {
-    const sal_uInt16 nLineWidth = rInf.RealWidth();
+    const SwTwips nLineWidth = rInf.RealWidth();
 
     sal_uInt16 nFlyAscent = 0;
     sal_uInt16 nFlyHeight = 0;

@@ -3738,7 +3738,7 @@ static tools::Long lcl_CalcMinColDiff( SwLayoutFrame *pLayFrame )
         if ( pFrame && pFrame->IsTextFrame() )
         {
             const tools::Long nTmp = static_cast<SwTextFrame*>(pFrame)->FirstLineHeight();
-            if ( nTmp != USHRT_MAX )
+            if (nTmp != std::numeric_limits<SwTwips>::max())
             {
                 if ( pCol == pLayFrame->Lower() )
                     nFirstDiff = nTmp;

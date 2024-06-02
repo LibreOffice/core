@@ -37,8 +37,8 @@ class SwTextGuess
     TextFrameIndex m_nBreakPos;       // start index of break position
     TextFrameIndex m_nFieldDiff;      // absolute positions can be wrong if we
                                // a field in the text has been expanded
-    sal_uInt16 m_nBreakWidth;    // width of the broken portion
-    sal_uInt16 m_nExtraBlankWidth;    // width of spaces after the break
+    SwTwips m_nBreakWidth; // width of the broken portion
+    SwTwips m_nExtraBlankWidth; // width of spaces after the break
 public:
     SwTextGuess(): m_nCutPos(0), m_nBreakStart(0),
                    m_nBreakPos(0), m_nFieldDiff(0), m_nBreakWidth(0), m_nExtraBlankWidth(0)
@@ -51,8 +51,8 @@ public:
 
     SwHangingPortion* GetHangingPortion() const { return m_pHanging.get(); }
     SwHangingPortion* ReleaseHangingPortion() { return m_pHanging.release(); }
-    sal_uInt16 BreakWidth() const { return m_nBreakWidth; }
-    sal_uInt16 ExtraBlankWidth() const { return m_nExtraBlankWidth; }
+    SwTwips BreakWidth() const { return m_nBreakWidth; }
+    SwTwips ExtraBlankWidth() const { return m_nExtraBlankWidth; }
     TextFrameIndex CutPos() const { return m_nCutPos; }
     TextFrameIndex BreakStart() const { return m_nBreakStart; }
     TextFrameIndex BreakPos() const {return m_nBreakPos; }
