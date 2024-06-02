@@ -164,8 +164,8 @@ void A11yCheckIssuesPanel::ImplDestroy()
         mpBindings->Invalidate(SID_ACCESSIBILITY_CHECK_ONLINE);
     }
 
-    for (auto& xExapnder : m_xExpanders)
-        xExapnder.reset();
+    for (auto& xExpander : m_xExpanders)
+        xExpander.reset();
 
     for (auto& xBox : m_xBoxes)
         xBox.reset();
