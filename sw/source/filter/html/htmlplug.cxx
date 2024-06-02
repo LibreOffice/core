@@ -453,7 +453,7 @@ bool SwHTMLParser::InsertEmbed()
     SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
     if( HasStyleOptions( aStyle, aId, aClass ) )
-        ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
+        (void)ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
 
     // Convert the default values (except height/width, which is done by SetFrameSize())
     if( eVertOri==text::VertOrientation::NONE && eHoriOri==text::HoriOrientation::NONE )
@@ -834,7 +834,7 @@ void SwHTMLParser::NewObject()
     SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
     if( HasStyleOptions( aStyle, aId, aClass ) )
-        ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
+        (void)ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
 
     SfxItemSet& rFrameSet = m_pAppletImpl->GetItemSet();
     if( !IsNewDoc() )
@@ -964,7 +964,7 @@ void SwHTMLParser::InsertApplet()
     SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
     if( HasStyleOptions( aStyle, aId, aClass ) )
-        ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
+        (void)ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
 
     SfxItemSet& rFrameSet = m_pAppletImpl->GetItemSet();
     if( !IsNewDoc() )
@@ -1148,7 +1148,7 @@ void SwHTMLParser::InsertFloatingFrame()
     SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
     if( HasStyleOptions( aStyle, aId, aClass ) )
-        ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
+        (void)ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
 
     // fetch the ItemSet
     SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END-1> aFrameSet( m_xDoc->GetAttrPool() );

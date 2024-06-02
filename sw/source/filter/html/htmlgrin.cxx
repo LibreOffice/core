@@ -563,7 +563,7 @@ IMAGE_SETEVENT:
     SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
     if( HasStyleOptions( aStyle, aId, aClass ) )
-        ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
+        (void)ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
 
     SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END-1> aFrameSet( m_xDoc->GetAttrPool() );
     if( !IsNewDoc() )
@@ -1093,7 +1093,7 @@ void SwHTMLParser::InsertBodyOptions()
         SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
         OUString aDummy;
-        ParseStyleOptions( aStyle, aDummy, aDummy, aItemSet, aPropInfo, nullptr, &aDir );
+        (void)ParseStyleOptions( aStyle, aDummy, aDummy, aItemSet, aPropInfo, nullptr, &aDir );
 
         // Some attributes have to set on the page style, in fact the ones
         // which aren't inherited
