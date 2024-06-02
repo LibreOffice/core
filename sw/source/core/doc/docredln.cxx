@@ -719,11 +719,11 @@ void SwRedlineTable::DeleteAndDestroyAll()
 void SwRedlineTable::DeleteAndDestroy(size_type const nP)
 {
     auto const pRedline = maVector[nP];
+    if (pRedline == mpMaxEndPos)
+        mpMaxEndPos = nullptr;
     maVector.erase(maVector.begin() + nP);
     LOKRedlineNotification(RedlineNotification::Remove, pRedline);
     delete pRedline;
-    if (pRedline == mpMaxEndPos)
-        mpMaxEndPos = nullptr;
 }
 
 SwRedlineTable::size_type SwRedlineTable::FindNextOfSeqNo( size_type nSttPos ) const
