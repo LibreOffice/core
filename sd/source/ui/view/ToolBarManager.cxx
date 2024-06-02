@@ -287,7 +287,7 @@ public:
     public:
         explicit UpdateLockImplementation (Implementation& rImplementation)
             : mrImplementation(rImplementation) { mrImplementation.LockUpdate();  }
-        ~UpdateLockImplementation() { mrImplementation.UnlockUpdate(); }
+        ~UpdateLockImplementation() { suppress_fun_call_w_exception(mrImplementation.UnlockUpdate()); }
     private:
         Implementation& mrImplementation;
     };
