@@ -1598,7 +1598,7 @@ void ScDBCollection::CopyToTable(SCTAB nOldPos, SCTAB nNewPos)
         std::unique_ptr<ScDBData> pDataCopy = std::make_unique<ScDBData>(newName, *rxNamedDB);
         pDataCopy->UpdateMoveTab(nOldPos, nNewPos);
         pDataCopy->SetIndex(0);
-        maNamedDBs.insert(std::move(pDataCopy));
+        (void)maNamedDBs.insert(std::move(pDataCopy));
     }
 }
 
