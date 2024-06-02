@@ -85,7 +85,7 @@ void WW8Export::OutputGrfNode( const SwGrfNode& /*rNode*/ )
 
 bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet, rtl::Reference<SotStorage> const& xOleStg,
                                     const rtl::Reference<SotStorage>& xObjStg,
-                                    OUString const& rStorageName, SwOLENode* pOLENd)
+                                    OUString const& rStorageName, SwOLENode& rOLENd)
 {
     bool bGraphicNeeded = false;
     SfxItemIter aIter( rSet );
@@ -127,9 +127,7 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet, rtl::Reference<SotSto
         Graphic aGraph(aWMF);
 
         ErrCode nErr = ERRCODE_NONE;
-        sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-        if ( pOLENd )
-            nAspect = pOLENd->GetAspect();
+        sal_Int64 nAspect = rOLENd.GetAspect();
         rtl::Reference<SdrOle2Obj> pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
             *m_rDoc.getIDocumentDrawModelAccess().GetOrCreateDrawModel(),
             rStorageName,
@@ -146,7 +144,7 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet, rtl::Reference<SotSto
 
         if (pRet)
         {
-            uno::Reference< embed::XEmbeddedObject > xObj = pOLENd->GetOLEObj().GetOleRef();
+            uno::Reference< embed::XEmbeddedObject > xObj = rOLENd.GetOLEObj().GetOleRef();
             if ( xObj.is() )
             {
                 std::unique_ptr<SvStream> pGraphicStream;
@@ -288,7 +286,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
                 m_pParentFrame->GetFrameFormat().GetAttrSet();
             bEndCR = false;
             bGraphicNeeded = TestOleNeedsGraphic(rSet,
-                xOleStg, xObjStg, sStorageName, const_cast<SwOLENode*>(&rOLENode));
+                xOleStg, xObjStg, sStorageName, const_cast<SwOLENode&>(rOLENode));
         }
     }
 

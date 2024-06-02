@@ -1090,7 +1090,7 @@ public:
     void OutGrf(const ww8::Frame &rFrame);
     bool TestOleNeedsGraphic(const SwAttrSet& rSet, rtl::Reference<SotStorage> const& xOleStg,
                              const rtl::Reference<SotStorage>& xObjStg, OUString const& rStorageName,
-                             SwOLENode* pOLENd);
+                             SwOLENode& rOLENd);
 
     virtual void AppendBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, sal_Int32 nLen, const SwRedlineData* pRedlineData = nullptr ) override;
     virtual void AppendBookmark( const OUString& rName ) override;
