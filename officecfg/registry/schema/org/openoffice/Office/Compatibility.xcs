@@ -158,6 +158,12 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="ContinuousEndnotes" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Render endnotes at the end of the document inline, rather than on a separate page</desc>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
   </templates>
   <component>

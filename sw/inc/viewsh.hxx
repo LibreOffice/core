@@ -453,6 +453,8 @@ public:
 
     SW_DLLPUBLIC void SetDoNotMirrorRtlDrawObjs(bool bDoNotMirrorRtlDrawObjs);
 
+    SW_DLLPUBLIC void SetContinuousEndnotes(bool bContinuousEndnotes);
+
     // DOCUMENT COMPATIBILITY FLAGS END
 
     // Calls Idle-formatter of Layout.

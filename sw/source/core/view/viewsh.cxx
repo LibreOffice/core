@@ -1094,6 +1094,20 @@ void SwViewShell::SetDoNotMirrorRtlDrawObjs(bool bDoNotMirrorRtlDrawObjs)
     }
 }
 
+void SwViewShell::SetContinuousEndnotes(bool bContinuousEndnotes)
+{
+    IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
+    if (rIDSA.get(DocumentSettingId::CONTINUOUS_ENDNOTES) != bContinuousEndnotes)
+    {
+        SwWait aWait(*GetDoc()->GetDocShell(), true);
+        rIDSA.set(DocumentSettingId::CONTINUOUS_ENDNOTES, bContinuousEndnotes);
+        StartAction();
+        GetLayout()->RemoveFootnotes(/*pPage=*/nullptr, /*pPageOnly=*/false, /*bEndNotes=*/true);
+        EndAction();
+        GetDoc()->getIDocumentState().SetModified();
+    }
+}
+
 void SwViewShell::Reformat()
 {
     SwWait aWait( *GetDoc()->GetDocShell(), true );

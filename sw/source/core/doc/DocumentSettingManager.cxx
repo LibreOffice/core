@@ -141,6 +141,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbTabRelativeToIndent               = aOptions.get(u"TabsRelativeToIndent"_ustr);
         mbTabOverMargin                     = aOptions.get(u"TabOverMargin"_ustr);
         mbDoNotMirrorRtlDrawObjs            = aOptions.get(u"DoNotMirrorRtlDrawObjs"_ustr);
+        mbContinuousEndnotes                = aOptions.get(u"ContinuousEndnotes"_ustr);
     }
     else
     {

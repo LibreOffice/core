@@ -63,6 +63,7 @@ constexpr std::pair<OUString, TranslateId> options_list[]{
     { u"TabsRelativeToIndent"_ustr, STR_COMPAT_OPT_TABSRELATIVETOINDENT },
     { u"TabOverMargin"_ustr, STR_COMPAT_OPT_TABOVERMARGIN },
     { u"DoNotMirrorRtlDrawObjs"_ustr, STR_COMPAT_OPT_DO_NOT_MIRROR_RTL_DRAW_OBJS },
+    { u"ContinuousEndnotes"_ustr, STR_COMPAT_OPT_CONTINUOUS_ENDNOTES },
 };
 
 // DocumentSettingId, negate?
@@ -88,6 +89,7 @@ std::pair<DocumentSettingId, bool> DocumentSettingForOption(const OUString& opti
         { u"TabsRelativeToIndent"_ustr, { DocumentSettingId::TABS_RELATIVE_TO_INDENT, false } },
         { u"TabOverMargin"_ustr, { DocumentSettingId::TAB_OVER_MARGIN, false } },
         { u"DoNotMirrorRtlDrawObjs"_ustr, { DocumentSettingId::DO_NOT_MIRROR_RTL_DRAW_OBJS, false } },
+        { u"ContinuousEndnotes"_ustr, { DocumentSettingId::CONTINUOUS_ENDNOTES, false } },
 //        { u"AddTableLineSpacing"_ustr, { DocumentSettingId::ADD_PARA_LINE_SPACING_TO_TABLE_CELLS, false } },
     };
     return map.at(option);
@@ -322,6 +324,10 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
 
                     case DocumentSettingId::DO_NOT_MIRROR_RTL_DRAW_OBJS:
                         m_pWrtShell->SetDoNotMirrorRtlDrawObjs(bChecked);
+                        break;
+
+                    case DocumentSettingId::CONTINUOUS_ENDNOTES:
+                        m_pWrtShell->SetContinuousEndnotes(bChecked);
                         break;
 
                     default:
