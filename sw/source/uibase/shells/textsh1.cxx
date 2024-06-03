@@ -2855,7 +2855,9 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             break;
             case FN_BUL_GET_DOC_BULLETS:
             {
-                std::vector<OUString> aBullets = rSh.GetUsedBullets();
+                std::set<OUString> aBulletsSet = rSh.GetUsedBullets();
+                std::vector<OUString> aBullets;
+                std::copy(aBulletsSet.begin(), aBulletsSet.end(), std::back_inserter(aBullets));
                 SfxStringListItem aItem(FN_BUL_GET_DOC_BULLETS);
                 uno::Sequence<OUString> aSeq(aBullets.data(),
                                              static_cast<sal_Int32>(aBullets.size()));

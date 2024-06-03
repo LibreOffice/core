@@ -2526,9 +2526,9 @@ sal_uInt16 SwDoc::FindNumRule( std::u16string_view rName ) const
     return USHRT_MAX;
 }
 
-std::vector<OUString> SwDoc::GetUsedBullets()
+std::set<OUString> SwDoc::GetUsedBullets()
 {
-    std::vector<OUString> aUsedBullets;
+    std::set<OUString> aUsedBullets;
     for (size_t nRule = 0; nRule < mpNumRuleTable->size(); ++nRule)
     {
         for (int nLevel=0; nLevel<10; ++nLevel)
@@ -2543,7 +2543,7 @@ std::vector<OUString> SwDoc::GetUsedBullets()
             sal_UCS4 cBullet = rFormat.GetBulletChar();
             OUString sBullet(&cBullet, 1);
             OUString sFontName(aFont.GetFamilyName());
-            aUsedBullets.emplace_back(sBullet + sFontName);
+            aUsedBullets.emplace(sBullet + sFontName);
         }
     }
     return aUsedBullets;

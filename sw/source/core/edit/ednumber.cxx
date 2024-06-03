@@ -876,7 +876,7 @@ const SwNumRule * SwEditShell::SearchNumRule( const bool bNum,
                                     sListId, GetLayout() );
 }
 
-std::vector<OUString> SwEditShell::GetUsedBullets()
+std::set<OUString> SwEditShell::GetUsedBullets()
 {
     return GetDoc()->GetUsedBullets();
 }

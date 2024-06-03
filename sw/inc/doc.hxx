@@ -1102,7 +1102,7 @@ public:
         const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode =
             SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
     sal_uInt16 FindNumRule( std::u16string_view rName ) const;
-    std::vector<OUString> GetUsedBullets();
+    std::set<OUString> GetUsedBullets();
     SW_DLLPUBLIC SwNumRule* FindNumRulePtr( const OUString& rName ) const;
 
     // Deletion only possible if Rule is not used!
