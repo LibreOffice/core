@@ -817,11 +817,15 @@ void DbGridControl::dispose()
 
     m_aBar.disposeAndClear();
 
+    m_aRearrangeIdle.Stop();
+
     EditBrowseBox::dispose();
 }
 
 void DbGridControl::RearrangeAtIdle()
 {
+    if (isDisposed())
+        return;
     m_aRearrangeIdle.Start();
 }
 
@@ -2642,6 +2646,9 @@ IMPL_LINK_NOARG(DbGridControl, OnDelete, void*, void)
 
 IMPL_LINK_NOARG(DbGridControl, RearrangeHdl, Timer*, void)
 {
+    if (isDisposed())
+        return;
+
     // and give it a chance to rearrange
     Point aPoint = GetControlArea().TopLeft();
     sal_uInt16 nX = static_cast<sal_uInt16>(aPoint.X());
