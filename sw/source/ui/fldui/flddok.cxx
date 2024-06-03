@@ -32,24 +32,24 @@
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
 SwFieldDokPage::SwFieldDokPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *const pCoreSet)
-    : SwFieldPage(pPage, pController, "modules/swriter/ui/flddocumentpage.ui",
-                  "FieldDocumentPage", pCoreSet)
+    : SwFieldPage(pPage, pController, u"modules/swriter/ui/flddocumentpage.ui"_ustr,
+                  u"FieldDocumentPage"_ustr, pCoreSet)
     , m_nOldSel(0)
     , m_nOldFormat(0)
-    , m_xTypeLB(m_xBuilder->weld_tree_view("type"))
-    , m_xSelection(m_xBuilder->weld_widget("selectframe"))
-    , m_xSelectionLB(m_xBuilder->weld_tree_view("select"))
-    , m_xValueFT(m_xBuilder->weld_label("valueft"))
-    , m_xValueED(m_xBuilder->weld_entry("value"))
-    , m_xLevelFT(m_xBuilder->weld_label("levelft"))
-    , m_xLevelED(m_xBuilder->weld_combo_box("level"))
-    , m_xDateFT(m_xBuilder->weld_label("daysft"))
-    , m_xTimeFT(m_xBuilder->weld_label("minutesft"))
-    , m_xDateOffsetED(m_xBuilder->weld_spin_button("offset"))
-    , m_xFormat(m_xBuilder->weld_widget("formatframe"))
-    , m_xFormatLB(m_xBuilder->weld_tree_view("format"))
-    , m_xNumFormatLB(new SwNumFormatTreeView(m_xBuilder->weld_tree_view("numformat")))
-    , m_xFixedCB(m_xBuilder->weld_check_button("fixed"))
+    , m_xTypeLB(m_xBuilder->weld_tree_view(u"type"_ustr))
+    , m_xSelection(m_xBuilder->weld_widget(u"selectframe"_ustr))
+    , m_xSelectionLB(m_xBuilder->weld_tree_view(u"select"_ustr))
+    , m_xValueFT(m_xBuilder->weld_label(u"valueft"_ustr))
+    , m_xValueED(m_xBuilder->weld_entry(u"value"_ustr))
+    , m_xLevelFT(m_xBuilder->weld_label(u"levelft"_ustr))
+    , m_xLevelED(m_xBuilder->weld_combo_box(u"level"_ustr))
+    , m_xDateFT(m_xBuilder->weld_label(u"daysft"_ustr))
+    , m_xTimeFT(m_xBuilder->weld_label(u"minutesft"_ustr))
+    , m_xDateOffsetED(m_xBuilder->weld_spin_button(u"offset"_ustr))
+    , m_xFormat(m_xBuilder->weld_widget(u"formatframe"_ustr))
+    , m_xFormatLB(m_xBuilder->weld_tree_view(u"format"_ustr))
+    , m_xNumFormatLB(new SwNumFormatTreeView(m_xBuilder->weld_tree_view(u"numformat"_ustr)))
+    , m_xFixedCB(m_xBuilder->weld_check_button(u"fixed"_ustr))
 {
     m_xTypeLB->make_sorted();
     m_xFormatLB->make_sorted();

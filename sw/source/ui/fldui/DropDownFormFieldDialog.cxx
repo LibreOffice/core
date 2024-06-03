@@ -19,16 +19,16 @@ namespace sw
 {
 DropDownFormFieldDialog::DropDownFormFieldDialog(weld::Widget* pParent,
                                                  mark::IFieldmark* pDropDownField)
-    : GenericDialogController(pParent, "modules/swriter/ui/dropdownformfielddialog.ui",
-                              "DropDownFormFieldDialog")
+    : GenericDialogController(pParent, u"modules/swriter/ui/dropdownformfielddialog.ui"_ustr,
+                              u"DropDownFormFieldDialog"_ustr)
     , m_pDropDownField(pDropDownField)
     , m_bListHasChanged(false)
-    , m_xListItemEntry(m_xBuilder->weld_entry("item_entry"))
-    , m_xListAddButton(m_xBuilder->weld_button("add_button"))
-    , m_xListItemsTreeView(m_xBuilder->weld_tree_view("items_treeview"))
-    , m_xListRemoveButton(m_xBuilder->weld_button("remove_button"))
-    , m_xListUpButton(m_xBuilder->weld_button("up_button"))
-    , m_xListDownButton(m_xBuilder->weld_button("down_button"))
+    , m_xListItemEntry(m_xBuilder->weld_entry(u"item_entry"_ustr))
+    , m_xListAddButton(m_xBuilder->weld_button(u"add_button"_ustr))
+    , m_xListItemsTreeView(m_xBuilder->weld_tree_view(u"items_treeview"_ustr))
+    , m_xListRemoveButton(m_xBuilder->weld_button(u"remove_button"_ustr))
+    , m_xListUpButton(m_xBuilder->weld_button(u"up_button"_ustr))
+    , m_xListDownButton(m_xBuilder->weld_button(u"down_button"_ustr))
 {
     m_xListItemEntry->connect_key_press(LINK(this, DropDownFormFieldDialog, KeyPressedHdl));
     m_xListItemEntry->connect_changed(LINK(this, DropDownFormFieldDialog, EntryChangedHdl));

@@ -28,17 +28,17 @@
 // edit field-insert
 SwFieldInputDlg::SwFieldInputDlg(weld::Widget *pParent, SwWrtShell &rS,
                                  SwField* pField, bool bPrevButton, bool bNextButton)
-    : GenericDialogController(pParent, "modules/swriter/ui/inputfielddialog.ui", "InputFieldDialog")
+    : GenericDialogController(pParent, u"modules/swriter/ui/inputfielddialog.ui"_ustr, u"InputFieldDialog"_ustr)
     , m_rSh( rS )
     , m_pInpField(nullptr)
     , m_pSetField(nullptr)
     , m_pUsrType(nullptr)
     , m_pPressedButton(nullptr)
-    , m_xLabelED(m_xBuilder->weld_entry("name"))
-    , m_xEditED(m_xBuilder->weld_text_view("text"))
-    , m_xPrevBT(m_xBuilder->weld_button("prev"))
-    , m_xNextBT(m_xBuilder->weld_button("next"))
-    , m_xOKBT(m_xBuilder->weld_button("ok"))
+    , m_xLabelED(m_xBuilder->weld_entry(u"name"_ustr))
+    , m_xEditED(m_xBuilder->weld_text_view(u"text"_ustr))
+    , m_xPrevBT(m_xBuilder->weld_button(u"prev"_ustr))
+    , m_xNextBT(m_xBuilder->weld_button(u"next"_ustr))
+    , m_xOKBT(m_xBuilder->weld_button(u"ok"_ustr))
 {
     m_xEditED->set_size_request(-1, m_xEditED->get_height_rows(8));
 

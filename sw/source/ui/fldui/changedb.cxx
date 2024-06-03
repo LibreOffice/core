@@ -41,14 +41,14 @@ using namespace ::com::sun::star::uno;
 
 // edit insert-field
 SwChangeDBDlg::SwChangeDBDlg(SwView const & rVw)
-    : SfxDialogController(rVw.GetViewFrame().GetFrameWeld(), "modules/swriter/ui/exchangedatabases.ui",
-                          "ExchangeDatabasesDialog")
+    : SfxDialogController(rVw.GetViewFrame().GetFrameWeld(), u"modules/swriter/ui/exchangedatabases.ui"_ustr,
+                          u"ExchangeDatabasesDialog"_ustr)
     , m_pSh(rVw.GetWrtShellPtr())
-    , m_xUsedDBTLB(m_xBuilder->weld_tree_view("inuselb"))
-    , m_xAvailDBTLB(new SwDBTreeList(m_xBuilder->weld_tree_view("availablelb")))
-    , m_xAddDBPB(m_xBuilder->weld_button("browse"))
-    , m_xDocDBNameFT(m_xBuilder->weld_label("dbnameft"))
-    , m_xDefineBT(m_xBuilder->weld_button("ok"))
+    , m_xUsedDBTLB(m_xBuilder->weld_tree_view(u"inuselb"_ustr))
+    , m_xAvailDBTLB(new SwDBTreeList(m_xBuilder->weld_tree_view(u"availablelb"_ustr)))
+    , m_xAddDBPB(m_xBuilder->weld_button(u"browse"_ustr))
+    , m_xDocDBNameFT(m_xBuilder->weld_label(u"dbnameft"_ustr))
+    , m_xDefineBT(m_xBuilder->weld_button(u"ok"_ustr))
 {
     int nWidth = m_xUsedDBTLB->get_approximate_digit_width() * 25;
     int nHeight = m_xUsedDBTLB->get_height_rows(8);

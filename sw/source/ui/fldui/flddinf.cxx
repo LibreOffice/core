@@ -51,20 +51,20 @@ void FillFieldSelect(weld::TreeView& rListBox)
 }
 
 SwFieldDokInfPage::SwFieldDokInfPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *const pCoreSet)
-    :  SwFieldPage(pPage, pController, "modules/swriter/ui/flddocinfopage.ui", "FieldDocInfoPage", pCoreSet)
+    :  SwFieldPage(pPage, pController, u"modules/swriter/ui/flddocinfopage.ui"_ustr, u"FieldDocInfoPage"_ustr, pCoreSet)
     , m_nOldSel(0)
     , m_nOldFormat(0)
-    , m_xTypeList(m_xBuilder->weld_tree_view("type-list"))
-    , m_xTypeTree(m_xBuilder->weld_tree_view("type-tree"))
+    , m_xTypeList(m_xBuilder->weld_tree_view(u"type-list"_ustr))
+    , m_xTypeTree(m_xBuilder->weld_tree_view(u"type-tree"_ustr))
     // tdf#104278 have two tree views, one with expander and one without, the one with is only used
     // when there are custom properties which use the expander, so the common case of no custom
     // properties doesn't have an 'unexplained' expander margin
     , m_pTypeView(m_xTypeTree.get())
-    , m_xSelection(m_xBuilder->weld_widget("selectframe"))
-    , m_xSelectionLB(m_xBuilder->weld_tree_view("select"))
-    , m_xFormat(m_xBuilder->weld_widget("formatframe"))
-    , m_xFormatLB(new SwNumFormatTreeView(m_xBuilder->weld_tree_view("format")))
-    , m_xFixedCB(m_xBuilder->weld_check_button("fixed"))
+    , m_xSelection(m_xBuilder->weld_widget(u"selectframe"_ustr))
+    , m_xSelectionLB(m_xBuilder->weld_tree_view(u"select"_ustr))
+    , m_xFormat(m_xBuilder->weld_widget(u"formatframe"_ustr))
+    , m_xFormatLB(new SwNumFormatTreeView(m_xBuilder->weld_tree_view(u"format"_ustr)))
+    , m_xFixedCB(m_xBuilder->weld_check_button(u"fixed"_ustr))
 {
     m_xTypeList->make_sorted();
     m_xTypeTree->make_sorted();
@@ -87,7 +87,7 @@ SwFieldDokInfPage::SwFieldDokInfPage(weld::Container* pPage, weld::DialogControl
         pItem->GetValue() >>= m_xCustomPropertySet;
 
     // uitests
-    m_pTypeView->set_buildable_name("type-docinf");
+    m_pTypeView->set_buildable_name(u"type-docinf"_ustr);
     m_xSelectionLB->set_buildable_name(m_xSelectionLB->get_buildable_name() + "-docinf");
     m_xFormatLB->set_buildable_name(m_xFormatLB->get_buildable_name() + "-docinf");
 }
@@ -110,19 +110,19 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
     if (aCustomProperties.hasElements())
     {
         m_xTypeList->hide();
-        m_xTypeList->set_buildable_name("type-list");
+        m_xTypeList->set_buildable_name(u"type-list"_ustr);
         m_xTypeTree->show();
         m_pTypeView = m_xTypeTree.get();
     }
     else
     {
         m_xTypeTree->hide();
-        m_xTypeTree->set_buildable_name("type-tree");
+        m_xTypeTree->set_buildable_name(u"type-tree"_ustr);
         m_xTypeList->show();
         m_pTypeView = m_xTypeList.get();
     }
 
-    m_pTypeView->set_buildable_name("type-docinf");
+    m_pTypeView->set_buildable_name(u"type-docinf"_ustr);
 
     // initialise TypeListBox
     m_pTypeView->freeze();

@@ -40,24 +40,24 @@
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
 SwFieldVarPage::SwFieldVarPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *const pCoreSet )
-    : SwFieldPage(pPage, pController, "modules/swriter/ui/fldvarpage.ui", "FieldVarPage", pCoreSet)
-    , m_xTypeLB(m_xBuilder->weld_tree_view("type"))
-    , m_xSelection(m_xBuilder->weld_widget("selectframe"))
-    , m_xSelectionLB(m_xBuilder->weld_tree_view("select"))
-    , m_xNameFT(m_xBuilder->weld_label("nameft"))
-    , m_xNameED(m_xBuilder->weld_entry("name"))
-    , m_xValueFT(m_xBuilder->weld_label("valueft"))
-    , m_xValueED(new ConditionEdit<weld::TextView>(m_xBuilder->weld_text_view("value")))
-    , m_xFormat(m_xBuilder->weld_widget("formatframe"))
-    , m_xNumFormatLB(new SwNumFormatTreeView(m_xBuilder->weld_tree_view("numformat")))
-    , m_xFormatLB(m_xBuilder->weld_tree_view("format"))
-    , m_xChapterFrame(m_xBuilder->weld_widget("chapterframe"))
-    , m_xChapterLevelLB(m_xBuilder->weld_combo_box("level"))
-    , m_xInvisibleCB(m_xBuilder->weld_check_button("invisible"))
-    , m_xSeparatorFT(m_xBuilder->weld_label("separatorft"))
-    , m_xSeparatorED(m_xBuilder->weld_entry("separator"))
-    , m_xNewPB(m_xBuilder->weld_button("apply"))
-    , m_xDelPB(m_xBuilder->weld_button("delete"))
+    : SwFieldPage(pPage, pController, u"modules/swriter/ui/fldvarpage.ui"_ustr, u"FieldVarPage"_ustr, pCoreSet)
+    , m_xTypeLB(m_xBuilder->weld_tree_view(u"type"_ustr))
+    , m_xSelection(m_xBuilder->weld_widget(u"selectframe"_ustr))
+    , m_xSelectionLB(m_xBuilder->weld_tree_view(u"select"_ustr))
+    , m_xNameFT(m_xBuilder->weld_label(u"nameft"_ustr))
+    , m_xNameED(m_xBuilder->weld_entry(u"name"_ustr))
+    , m_xValueFT(m_xBuilder->weld_label(u"valueft"_ustr))
+    , m_xValueED(new ConditionEdit<weld::TextView>(m_xBuilder->weld_text_view(u"value"_ustr)))
+    , m_xFormat(m_xBuilder->weld_widget(u"formatframe"_ustr))
+    , m_xNumFormatLB(new SwNumFormatTreeView(m_xBuilder->weld_tree_view(u"numformat"_ustr)))
+    , m_xFormatLB(m_xBuilder->weld_tree_view(u"format"_ustr))
+    , m_xChapterFrame(m_xBuilder->weld_widget(u"chapterframe"_ustr))
+    , m_xChapterLevelLB(m_xBuilder->weld_combo_box(u"level"_ustr))
+    , m_xInvisibleCB(m_xBuilder->weld_check_button(u"invisible"_ustr))
+    , m_xSeparatorFT(m_xBuilder->weld_label(u"separatorft"_ustr))
+    , m_xSeparatorED(m_xBuilder->weld_entry(u"separator"_ustr))
+    , m_xNewPB(m_xBuilder->weld_button(u"apply"_ustr))
+    , m_xDelPB(m_xBuilder->weld_button(u"delete"_ustr))
     , m_nOldFormat(0)
     , m_bInit(true)
 {
@@ -1266,7 +1266,7 @@ sal_uInt16 SwFieldVarPage::GetGroup()
 
 void SwFieldVarPage::FillUserData()
 {
-    OUString sData = USER_DATA_VERSION ";";
+    OUString sData = u"" USER_DATA_VERSION ";"_ustr;
     sal_Int32 nTypeSel = m_xTypeLB->get_selected_index();
     if( -1 == nTypeSel )
         nTypeSel = USHRT_MAX;

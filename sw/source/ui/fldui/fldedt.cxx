@@ -99,11 +99,11 @@ void SwFieldEditDlg::EnsureSelection(SwField *pCurField, SwFieldMgr &rMgr)
 
 SwFieldEditDlg::SwFieldEditDlg(SwView const & rVw)
     : SfxSingleTabDialogController(rVw.GetViewFrame().GetFrameWeld(), nullptr,
-        "modules/swriter/ui/editfielddialog.ui", "EditFieldDialog")
+        u"modules/swriter/ui/editfielddialog.ui"_ustr, u"EditFieldDialog"_ustr)
     , m_pSh(rVw.GetWrtShellPtr())
-    , m_xPrevBT(m_xBuilder->weld_button("prev"))
-    , m_xNextBT(m_xBuilder->weld_button("next"))
-    , m_xAddressBT(m_xBuilder->weld_button("edit"))
+    , m_xPrevBT(m_xBuilder->weld_button(u"prev"_ustr))
+    , m_xNextBT(m_xBuilder->weld_button(u"next"_ustr))
+    , m_xAddressBT(m_xBuilder->weld_button(u"edit"_ustr))
 {
     SwFieldMgr aMgr(m_pSh);
 

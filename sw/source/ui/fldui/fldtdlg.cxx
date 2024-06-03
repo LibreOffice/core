@@ -49,7 +49,7 @@
 
 // carrier of the dialog
 SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, weld::Window *pParent)
-    : SfxTabDialogController(pParent, "modules/swriter/ui/fielddialog.ui", "FieldDialog")
+    : SfxTabDialogController(pParent, u"modules/swriter/ui/fielddialog.ui"_ustr, u"FieldDialog"_ustr)
     , m_pChildWin(pCW)
     , m_pBindings(pB)
     , m_bDataBaseMode(false)
@@ -60,19 +60,19 @@ SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, weld::Window *pP
     GetCancelButton().connect_clicked(LINK(this, SwFieldDlg, CancelHdl));
     GetOKButton().connect_clicked(LINK(this, SwFieldDlg, OKHdl));
 
-    AddTabPage("document", SwFieldDokPage::Create, nullptr);
-    AddTabPage("variables", SwFieldVarPage::Create, nullptr);
-    AddTabPage("docinfo", SwFieldDokInfPage::Create, nullptr);
+    AddTabPage(u"document"_ustr, SwFieldDokPage::Create, nullptr);
+    AddTabPage(u"variables"_ustr, SwFieldVarPage::Create, nullptr);
+    AddTabPage(u"docinfo"_ustr, SwFieldDokInfPage::Create, nullptr);
 
     if (!m_bHtmlMode)
     {
-        AddTabPage("ref", SwFieldRefPage::Create, nullptr);
-        AddTabPage("functions", SwFieldFuncPage::Create, nullptr);
+        AddTabPage(u"ref"_ustr, SwFieldRefPage::Create, nullptr);
+        AddTabPage(u"functions"_ustr, SwFieldFuncPage::Create, nullptr);
 
         utl::OConfigurationTreeRoot aCfgRoot
             = utl::OConfigurationTreeRoot::createWithComponentContext(
                 ::comphelper::getProcessComponentContext(),
-                "/org.openoffice.Office.DataAccess/Policies/Features/Writer",
+                u"/org.openoffice.Office.DataAccess/Policies/Features/Writer"_ustr,
                 -1,
                 utl::OConfigurationTreeRoot::CM_READONLY);
 
@@ -81,20 +81,20 @@ SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, weld::Window *pP
         aCfgRoot.getNodeValue(u"DatabaseFields"_ustr) >>= bDatabaseFields;
 
         if (bDatabaseFields)
-            AddTabPage("database", SwFieldDBPage::Create, nullptr);
+            AddTabPage(u"database"_ustr, SwFieldDBPage::Create, nullptr);
         else
 #endif
-            RemoveTabPage("database");
+            RemoveTabPage(u"database"_ustr);
     }
     else
     {
-        RemoveTabPage("ref");
-        RemoveTabPage("functions");
-        RemoveTabPage("database");
+        RemoveTabPage(u"ref"_ustr);
+        RemoveTabPage(u"functions"_ustr);
+        RemoveTabPage(u"database"_ustr);
     }
 
     if (comphelper::LibreOfficeKit::isActive())
-        RemoveTabPage("database");
+        RemoveTabPage(u"database"_ustr);
 }
 
 SwFieldDlg::~SwFieldDlg()
@@ -265,24 +265,24 @@ void SwFieldDlg::ActivateDatabasePage()
 {
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     m_bDataBaseMode = true;
-    ShowPage("database");
+    ShowPage(u"database"_ustr);
     SfxTabPage* pDBPage = GetTabPage(u"database");
     if( pDBPage )
     {
         static_cast<SwFieldDBPage*>(pDBPage)->ActivateMailMergeAddress();
     }
     //remove all other pages
-    RemoveTabPage("document");
-    RemoveTabPage("variables");
-    RemoveTabPage("docinfo");
-    RemoveTabPage("ref");
-    RemoveTabPage("functions");
+    RemoveTabPage(u"document"_ustr);
+    RemoveTabPage(u"variables"_ustr);
+    RemoveTabPage(u"docinfo"_ustr);
+    RemoveTabPage(u"ref"_ustr);
+    RemoveTabPage(u"functions"_ustr);
 #endif
 }
 
 void SwFieldDlg::ShowReferencePage()
 {
-    ShowPage("ref");
+    ShowPage(u"ref"_ustr);
 }
 
 void SwFieldDlg::PageCreated(const OUString& rId, SfxTabPage& rPage)

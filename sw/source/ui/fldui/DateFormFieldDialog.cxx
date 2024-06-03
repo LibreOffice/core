@@ -19,11 +19,12 @@ namespace sw
 {
 DateFormFieldDialog::DateFormFieldDialog(weld::Widget* pParent,
                                          sw::mark::IDateFieldmark* pDateField, SwDoc& rDoc)
-    : GenericDialogController(pParent, "modules/swriter/ui/dateformfielddialog.ui",
-                              "DateFormFieldDialog")
+    : GenericDialogController(pParent, u"modules/swriter/ui/dateformfielddialog.ui"_ustr,
+                              u"DateFormFieldDialog"_ustr)
     , m_pDateField(pDateField)
     , m_pNumberFormatter(rDoc.GetNumberFormatter())
-    , m_xFormatLB(new SwNumFormatTreeView(m_xBuilder->weld_tree_view("date_formats_treeview")))
+    , m_xFormatLB(
+          new SwNumFormatTreeView(m_xBuilder->weld_tree_view(u"date_formats_treeview"_ustr)))
 {
     m_xFormatLB->SetFormatType(SvNumFormatType::DATE);
     m_xFormatLB->SetAutomaticLanguage(true);

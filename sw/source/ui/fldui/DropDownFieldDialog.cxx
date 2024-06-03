@@ -29,15 +29,15 @@ using namespace ::com::sun::star;
 // edit insert-field
 sw::DropDownFieldDialog::DropDownFieldDialog(weld::Widget *pParent, SwWrtShell &rS,
                               SwField* pField, bool bPrevButton, bool bNextButton)
-    : GenericDialogController(pParent, "modules/swriter/ui/dropdownfielddialog.ui", "DropdownFieldDialog")
+    : GenericDialogController(pParent, u"modules/swriter/ui/dropdownfielddialog.ui"_ustr, u"DropdownFieldDialog"_ustr)
     , m_rSh( rS )
     , m_pDropField(nullptr)
     , m_pPressedButton(nullptr)
-    , m_xListItemsLB(m_xBuilder->weld_tree_view("list"))
-    , m_xOKPB(m_xBuilder->weld_button("ok"))
-    , m_xPrevPB(m_xBuilder->weld_button("prev"))
-    , m_xNextPB(m_xBuilder->weld_button("next"))
-    , m_xEditPB(m_xBuilder->weld_button("edit"))
+    , m_xListItemsLB(m_xBuilder->weld_tree_view(u"list"_ustr))
+    , m_xOKPB(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xPrevPB(m_xBuilder->weld_button(u"prev"_ustr))
+    , m_xNextPB(m_xBuilder->weld_button(u"next"_ustr))
+    , m_xEditPB(m_xBuilder->weld_button(u"edit"_ustr))
 {
     m_xListItemsLB->set_size_request(m_xListItemsLB->get_approximate_digit_width() * 24,
                                      m_xListItemsLB->get_height_rows(12));

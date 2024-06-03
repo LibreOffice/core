@@ -31,21 +31,21 @@
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
 SwFieldDBPage::SwFieldDBPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *const pCoreSet)
-    : SwFieldPage(pPage, pController, "modules/swriter/ui/flddbpage.ui", "FieldDbPage", pCoreSet)
+    : SwFieldPage(pPage, pController, u"modules/swriter/ui/flddbpage.ui"_ustr, u"FieldDbPage"_ustr, pCoreSet)
     , m_nOldFormat(0)
     , m_nOldSubType(0)
-    , m_xTypeLB(m_xBuilder->weld_tree_view("type"))
-    , m_xDatabaseTLB(new SwDBTreeList(m_xBuilder->weld_tree_view("select")))
-    , m_xAddDBPB(m_xBuilder->weld_button("browse"))
-    , m_xCondition(m_xBuilder->weld_widget("condgroup"))
-    , m_xConditionED(new ConditionEdit<weld::Entry>(m_xBuilder->weld_entry("condition")))
-    , m_xValue(m_xBuilder->weld_widget("recgroup"))
-    , m_xValueED(m_xBuilder->weld_entry("recnumber"))
-    , m_xDBFormatRB(m_xBuilder->weld_radio_button("fromdatabasecb"))
-    , m_xNewFormatRB(m_xBuilder->weld_radio_button("userdefinedcb"))
-    , m_xNumFormatLB(new NumFormatListBox(m_xBuilder->weld_combo_box("numformat")))
-    , m_xFormatLB(m_xBuilder->weld_combo_box("format"))
-    , m_xFormat(m_xBuilder->weld_widget("formatframe"))
+    , m_xTypeLB(m_xBuilder->weld_tree_view(u"type"_ustr))
+    , m_xDatabaseTLB(new SwDBTreeList(m_xBuilder->weld_tree_view(u"select"_ustr)))
+    , m_xAddDBPB(m_xBuilder->weld_button(u"browse"_ustr))
+    , m_xCondition(m_xBuilder->weld_widget(u"condgroup"_ustr))
+    , m_xConditionED(new ConditionEdit<weld::Entry>(m_xBuilder->weld_entry(u"condition"_ustr)))
+    , m_xValue(m_xBuilder->weld_widget(u"recgroup"_ustr))
+    , m_xValueED(m_xBuilder->weld_entry(u"recnumber"_ustr))
+    , m_xDBFormatRB(m_xBuilder->weld_radio_button(u"fromdatabasecb"_ustr))
+    , m_xNewFormatRB(m_xBuilder->weld_radio_button(u"userdefinedcb"_ustr))
+    , m_xNumFormatLB(new NumFormatListBox(m_xBuilder->weld_combo_box(u"numformat"_ustr)))
+    , m_xFormatLB(m_xBuilder->weld_combo_box(u"format"_ustr))
+    , m_xFormat(m_xBuilder->weld_widget(u"formatframe"_ustr))
 {
     SetTypeSel(-1); //TODO
 
@@ -402,7 +402,7 @@ void SwFieldDBPage::TypeHdl(const weld::TreeView* pBox)
     {
         m_xValueED->set_text(OUString());
         if (bCond)
-            m_xConditionED->set_text("TRUE");
+            m_xConditionED->set_text(u"TRUE"_ustr);
         else
             m_xConditionED->set_text(OUString());
     }
