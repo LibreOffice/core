@@ -4645,6 +4645,8 @@ void SwTabFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
     const SwViewOption* pViewOption = gProp.pSGlobalShell->GetViewOptions();
     if (pViewOption->IsTable())
     {
+        SwLayoutFrame::PaintSwFrame( rRenderContext, rRect );
+
         // #i29550#
         if ( IsCollapsingBorders() )
         {
@@ -4662,8 +4664,6 @@ void SwTabFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
             SwTabFramePainter aHelper(*this);
             aHelper.PaintLines(rRenderContext, rRect);
         }
-
-        SwLayoutFrame::PaintSwFrame( rRenderContext, rRect );
     }
     // #i6467# - no light grey rectangle for page preview
     else if ( gProp.pSGlobalShell->GetWin() && !gProp.pSGlobalShell->IsPreview() )
