@@ -32,32 +32,32 @@
 #include <osl/diagnose.h>
 
 ScAttrDlg::ScAttrDlg(weld::Window* pParent, const SfxItemSet* pCellAttrs)
-    : SfxTabDialogController(pParent, "modules/scalc/ui/formatcellsdialog.ui",
-                             "FormatCellsDialog", pCellAttrs)
+    : SfxTabDialogController(pParent, u"modules/scalc/ui/formatcellsdialog.ui"_ustr,
+                             u"FormatCellsDialog"_ustr, pCellAttrs)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), "GetTabPageCreatorFunc fail!");
-    AddTabPage( "numbers", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), nullptr );
+    AddTabPage( u"numbers"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), nullptr );
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");
-    AddTabPage( "font", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), nullptr );
+    AddTabPage( u"font"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), nullptr );
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), "GetTabPageCreatorFunc fail!");
-    AddTabPage( "fonteffects", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), nullptr );
+    AddTabPage( u"fonteffects"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), nullptr );
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ), "GetTabPageCreatorFunc fail!");
-    AddTabPage( "alignment", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ),    nullptr );
+    AddTabPage( u"alignment"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ),    nullptr );
 
     if (SvtCJKOptions::IsAsianTypographyEnabled())
     {
         OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageCreatorFunc fail!");
-        AddTabPage( "asiantypography",   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),       nullptr );
+        AddTabPage( u"asiantypography"_ustr,   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),       nullptr );
     }
     else
-        RemoveTabPage( "asiantypography" );
+        RemoveTabPage( u"asiantypography"_ustr );
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
-    AddTabPage( "borders",      pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ),     nullptr );
+    AddTabPage( u"borders"_ustr,      pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ),     nullptr );
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), "GetTabPageCreatorFunc fail!");
-    AddTabPage( "background",  pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr );
-    AddTabPage( "cellprotection" ,  ScTabPageProtection::Create,    nullptr );
+    AddTabPage( u"background"_ustr,  pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr );
+    AddTabPage( u"cellprotection"_ustr ,  ScTabPageProtection::Create,    nullptr );
 }
 
 ScAttrDlg::~ScAttrDlg()

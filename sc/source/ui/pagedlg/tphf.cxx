@@ -45,7 +45,7 @@ ScHFPage::ScHFPage(weld::Container* pPage, weld::DialogController* pController, 
     , aDataSet(*rSet.GetPool(), svl::Items<ATTR_PAGE, ATTR_PAGE, ATTR_PAGE_HEADERLEFT, ATTR_PAGE_FOOTERFIRST>)
     , nPageUsage(SvxPageUsage::All)
     , pStyleDlg(nullptr)
-    , m_xBtnEdit(m_xBuilder->weld_button("buttonEdit"))
+    , m_xBtnEdit(m_xBuilder->weld_button(u"buttonEdit"_ustr))
 {
     SetExchangeSupport();
 

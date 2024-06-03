@@ -54,9 +54,9 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
     try
     {
         const ::comphelper::NamedValueCollection aArguments (rArguments);
-        Reference<frame::XFrame> xFrame (aArguments.getOrDefault("Frame", Reference<frame::XFrame>()));
-        Reference<awt::XWindow> xParentWindow (aArguments.getOrDefault("ParentWindow", Reference<awt::XWindow>()));
-        const sal_uInt64 nBindingsValue (aArguments.getOrDefault("SfxBindings", sal_uInt64(0)));
+        Reference<frame::XFrame> xFrame (aArguments.getOrDefault(u"Frame"_ustr, Reference<frame::XFrame>()));
+        Reference<awt::XWindow> xParentWindow (aArguments.getOrDefault(u"ParentWindow"_ustr, Reference<awt::XWindow>()));
+        const sal_uInt64 nBindingsValue (aArguments.getOrDefault(u"SfxBindings"_ustr, sal_uInt64(0)));
         SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
 
         weld::Widget* pParent(nullptr);
@@ -65,15 +65,15 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
 
         if (!pParent)
             throw RuntimeException(
-                "PanelFactory::createUIElement called without ParentWindow",
+                u"PanelFactory::createUIElement called without ParentWindow"_ustr,
                 nullptr);
         if ( ! xFrame.is())
             throw RuntimeException(
-                "PanelFactory::createUIElement called without Frame",
+                u"PanelFactory::createUIElement called without Frame"_ustr,
                 nullptr);
         if (pBindings == nullptr)
             throw RuntimeException(
-                "PanelFactory::createUIElement called without SfxBindings",
+                u"PanelFactory::createUIElement called without SfxBindings"_ustr,
                 nullptr);
 
         sal_Int32 nMinimumSize = -1;
@@ -110,7 +110,7 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
     {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
-            "ScPanelFactory::createUIElement exception",
+            u"ScPanelFactory::createUIElement exception"_ustr,
             nullptr, anyEx);
     }
 
@@ -119,7 +119,7 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
 
 OUString ScPanelFactory::getImplementationName()
 {
-    return "org.apache.openoffice.comp.sc.sidebar.ScPanelFactory";
+    return u"org.apache.openoffice.comp.sc.sidebar.ScPanelFactory"_ustr;
 }
 
 sal_Bool ScPanelFactory::supportsService(OUString const & ServiceName)
@@ -129,7 +129,7 @@ sal_Bool ScPanelFactory::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> ScPanelFactory::getSupportedServiceNames()
 {
-    return { "com.sun.star.ui.UIElementFactory" };
+    return { u"com.sun.star.ui.UIElementFactory"_ustr };
 }
 
 } // end of namespace sc::sidebar

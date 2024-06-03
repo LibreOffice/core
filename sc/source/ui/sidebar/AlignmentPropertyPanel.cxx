@@ -41,25 +41,25 @@ AlignmentPropertyPanel::AlignmentPropertyPanel(
     weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
-    : PanelLayout(pParent, "AlignmentPropertyPanel", "modules/scalc/ui/sidebaralignment.ui")
-    , mxFTLeftIndent(m_xBuilder->weld_label("leftindentlabel"))
-    , mxMFLeftIndent(m_xBuilder->weld_metric_spin_button("leftindent", FieldUnit::POINT))
-    , mxCBXWrapText(m_xBuilder->weld_check_button("wraptext"))
-    , mxCBXMergeCell(m_xBuilder->weld_check_button("mergecells"))
-    , mxFtRotate(m_xBuilder->weld_label("orientationlabel"))
-    , mxMtrAngle(m_xBuilder->weld_metric_spin_button("orientationdegrees", FieldUnit::DEGREE))
-    , mxRefEdgeBottom(m_xBuilder->weld_toggle_button("bottom"))
-    , mxRefEdgeTop(m_xBuilder->weld_toggle_button("top"))
-    , mxRefEdgeStd(m_xBuilder->weld_toggle_button("standard"))
-    , mxCBStacked(m_xBuilder->weld_check_button("stacked"))
-    , mxTextOrientBox(m_xBuilder->weld_widget("textorientbox"))
-    , mxHorizontalAlign(m_xBuilder->weld_toolbar("horizontalalignment"))
+    : PanelLayout(pParent, u"AlignmentPropertyPanel"_ustr, u"modules/scalc/ui/sidebaralignment.ui"_ustr)
+    , mxFTLeftIndent(m_xBuilder->weld_label(u"leftindentlabel"_ustr))
+    , mxMFLeftIndent(m_xBuilder->weld_metric_spin_button(u"leftindent"_ustr, FieldUnit::POINT))
+    , mxCBXWrapText(m_xBuilder->weld_check_button(u"wraptext"_ustr))
+    , mxCBXMergeCell(m_xBuilder->weld_check_button(u"mergecells"_ustr))
+    , mxFtRotate(m_xBuilder->weld_label(u"orientationlabel"_ustr))
+    , mxMtrAngle(m_xBuilder->weld_metric_spin_button(u"orientationdegrees"_ustr, FieldUnit::DEGREE))
+    , mxRefEdgeBottom(m_xBuilder->weld_toggle_button(u"bottom"_ustr))
+    , mxRefEdgeTop(m_xBuilder->weld_toggle_button(u"top"_ustr))
+    , mxRefEdgeStd(m_xBuilder->weld_toggle_button(u"standard"_ustr))
+    , mxCBStacked(m_xBuilder->weld_check_button(u"stacked"_ustr))
+    , mxTextOrientBox(m_xBuilder->weld_widget(u"textorientbox"_ustr))
+    , mxHorizontalAlign(m_xBuilder->weld_toolbar(u"horizontalalignment"_ustr))
     , mxHorizontalAlignDispatch(new ToolbarUnoDispatcher(*mxHorizontalAlign, *m_xBuilder, rxFrame))
-    , mxVertAlign(m_xBuilder->weld_toolbar("verticalalignment"))
+    , mxVertAlign(m_xBuilder->weld_toolbar(u"verticalalignment"_ustr))
     , mxVertAlignDispatch(new ToolbarUnoDispatcher(*mxVertAlign, *m_xBuilder, rxFrame))
-    , mxWriteDirection(m_xBuilder->weld_toolbar("writedirection"))
+    , mxWriteDirection(m_xBuilder->weld_toolbar(u"writedirection"_ustr))
     , mxWriteDirectionDispatch(new ToolbarUnoDispatcher(*mxWriteDirection, *m_xBuilder, rxFrame))
-    , mxIndentButtons(m_xBuilder->weld_toolbar("indentbuttons"))
+    , mxIndentButtons(m_xBuilder->weld_toolbar(u"indentbuttons"_ustr))
     , mxIndentButtonsDispatch(new ToolbarUnoDispatcher(*mxIndentButtons, *m_xBuilder, rxFrame))
     , maAlignHorControl(SID_H_ALIGNCELL, *pBindings, *this)
     , maLeftIndentControl(SID_ATTR_ALIGN_INDENT, *pBindings, *this)
@@ -197,11 +197,11 @@ std::unique_ptr<PanelLayout> AlignmentPropertyPanel::Create (
     SfxBindings* pBindings)
 {
     if (pParent == nullptr)
-        throw lang::IllegalArgumentException("no parent Window given to AlignmentPropertyPanel::Create", nullptr, 0);
+        throw lang::IllegalArgumentException(u"no parent Window given to AlignmentPropertyPanel::Create"_ustr, nullptr, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to AlignmentPropertyPanel::Create", nullptr, 1);
+        throw lang::IllegalArgumentException(u"no XFrame given to AlignmentPropertyPanel::Create"_ustr, nullptr, 1);
     if (pBindings == nullptr)
-        throw lang::IllegalArgumentException("no SfxBindings given to AlignmentPropertyPanel::Create", nullptr, 2);
+        throw lang::IllegalArgumentException(u"no SfxBindings given to AlignmentPropertyPanel::Create"_ustr, nullptr, 2);
 
     return std::make_unique<AlignmentPropertyPanel>(pParent, rxFrame, pBindings);
 }

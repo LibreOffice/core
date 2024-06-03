@@ -31,11 +31,11 @@ const WhichRangesContainer ScTabPageProtection::pProtectionRanges(
 // Zellschutz-Tabpage:
 
 ScTabPageProtection::ScTabPageProtection(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
-    : SfxTabPage(pPage, pController, "modules/scalc/ui/cellprotectionpage.ui", "CellProtectionPage", &rCoreAttrs)
-    , m_xBtnHideCell(m_xBuilder->weld_check_button("checkHideAll"))
-    , m_xBtnProtect(m_xBuilder->weld_check_button("checkProtected"))
-    , m_xBtnHideFormula(m_xBuilder->weld_check_button("checkHideFormula"))
-    , m_xBtnHidePrint(m_xBuilder->weld_check_button("checkHidePrinting"))
+    : SfxTabPage(pPage, pController, u"modules/scalc/ui/cellprotectionpage.ui"_ustr, u"CellProtectionPage"_ustr, &rCoreAttrs)
+    , m_xBtnHideCell(m_xBuilder->weld_check_button(u"checkHideAll"_ustr))
+    , m_xBtnProtect(m_xBuilder->weld_check_button(u"checkProtected"_ustr))
+    , m_xBtnHideFormula(m_xBuilder->weld_check_button(u"checkHideFormula"_ustr))
+    , m_xBtnHidePrint(m_xBuilder->weld_check_button(u"checkHidePrinting"_ustr))
 {
     // This Page need ExchangeSupport
     SetExchangeSupport();

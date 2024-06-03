@@ -424,24 +424,24 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     weld::Window* pParent, ScViewData* pViewData,
     const std::shared_ptr<ScCondFormatDlgData>& rItem)
         : ScAnyRefDlgController(pB, pCW, pParent,
-                        isLOKMobilePhone()?OUString("modules/scalc/ui/conditionalformatdialogmobile.ui"):OUString("modules/scalc/ui/conditionalformatdialog.ui"),
-                        "ConditionalFormatDialog")
+                        isLOKMobilePhone()?u"modules/scalc/ui/conditionalformatdialogmobile.ui"_ustr:u"modules/scalc/ui/conditionalformatdialog.ui"_ustr,
+                        u"ConditionalFormatDialog"_ustr)
     , mpViewData(pViewData)
     // previous version based on SfxPoolItem used SfxPoolItem::Clone here, so make a copy
     // using copy constructor
     , mpDlgItem(std::make_shared<ScCondFormatDlgData>(*rItem))
     , mpLastEdit(nullptr)
-    , mxBtnOk(m_xBuilder->weld_button("ok"))
-    , mxBtnAdd(m_xBuilder->weld_button("add"))
-    , mxBtnRemove(m_xBuilder->weld_button("delete"))
-    , mxBtnUp(m_xBuilder->weld_button("up"))
-    , mxBtnDown(m_xBuilder->weld_button("down"))
-    , mxBtnCancel(m_xBuilder->weld_button("cancel"))
-    , mxFtRange(m_xBuilder->weld_label("ftassign"))
-    , mxEdRange(new formula::RefEdit(m_xBuilder->weld_entry("edassign")))
-    , mxRbRange(new formula::RefButton(m_xBuilder->weld_button("rbassign")))
-    , mxCondFormList(new ScCondFormatList(this, m_xBuilder->weld_scrolled_window("listwindow"),
-                                          m_xBuilder->weld_container("list")))
+    , mxBtnOk(m_xBuilder->weld_button(u"ok"_ustr))
+    , mxBtnAdd(m_xBuilder->weld_button(u"add"_ustr))
+    , mxBtnRemove(m_xBuilder->weld_button(u"delete"_ustr))
+    , mxBtnUp(m_xBuilder->weld_button(u"up"_ustr))
+    , mxBtnDown(m_xBuilder->weld_button(u"down"_ustr))
+    , mxBtnCancel(m_xBuilder->weld_button(u"cancel"_ustr))
+    , mxFtRange(m_xBuilder->weld_label(u"ftassign"_ustr))
+    , mxEdRange(new formula::RefEdit(m_xBuilder->weld_entry(u"edassign"_ustr)))
+    , mxRbRange(new formula::RefButton(m_xBuilder->weld_button(u"rbassign"_ustr)))
+    , mxCondFormList(new ScCondFormatList(this, m_xBuilder->weld_scrolled_window(u"listwindow"_ustr),
+                                          m_xBuilder->weld_container(u"list"_ustr)))
 {
     mxEdRange->SetReferences(this, mxFtRange.get());
     mxRbRange->SetReferences(this, mxEdRange.get());

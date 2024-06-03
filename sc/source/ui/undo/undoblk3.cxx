@@ -180,7 +180,7 @@ void ScUndoDeleteContents::Undo()
     DoChange( true );
     EndUndo();
 
-    HelperNotifyChanges::NotifyIfChangesListeners(*pDocShell, aRange, "undo");
+    HelperNotifyChanges::NotifyIfChangesListeners(*pDocShell, aRange, u"undo"_ustr);
 }
 
 void ScUndoDeleteContents::Redo()
@@ -189,7 +189,7 @@ void ScUndoDeleteContents::Redo()
     DoChange( false );
     EndRedo();
 
-    HelperNotifyChanges::NotifyIfChangesListeners(*pDocShell, aRange, "redo");
+    HelperNotifyChanges::NotifyIfChangesListeners(*pDocShell, aRange, u"redo"_ustr);
 }
 
 void ScUndoDeleteContents::Repeat(SfxRepeatTarget& rTarget)

@@ -47,7 +47,7 @@
 namespace HelperNotifyChanges
 {
     static void NotifyIfChangesListeners(const ScDocShell& rDocShell, const ScAddress &rPos,
-        const ScUndoEnterData::ValuesType &rOldValues, const OUString& rType = OUString("cell-change"))
+        const ScUndoEnterData::ValuesType &rOldValues, const OUString& rType = u"cell-change"_ustr)
     {
         ScModelObj* pModelObj = rDocShell.GetModel();
         if (pModelObj)
@@ -64,7 +64,7 @@ namespace HelperNotifyChanges
             if (pModelObj) // possibly need to invalidate getCellArea results
             {
                 Notify(*pModelObj, aChangeRanges, isDataAreaInvalidateType(rType)
-                    ? OUString("data-area-invalidate") : OUString("data-area-extend"));
+                    ? u"data-area-invalidate"_ustr : u"data-area-extend"_ustr);
             }
         }
     }
@@ -261,7 +261,7 @@ void ScUndoEnterData::Undo()
     DoChange();
     EndUndo();
 
-    HelperNotifyChanges::NotifyIfChangesListeners(*pDocShell, maPos, maOldValues, "undo");
+    HelperNotifyChanges::NotifyIfChangesListeners(*pDocShell, maPos, maOldValues, u"undo"_ustr);
 }
 
 void ScUndoEnterData::Redo()
@@ -290,7 +290,7 @@ void ScUndoEnterData::Redo()
     DoChange();
     EndRedo();
 
-    HelperNotifyChanges::NotifyIfChangesListeners(*pDocShell, maPos, maOldValues, "redo");
+    HelperNotifyChanges::NotifyIfChangesListeners(*pDocShell, maPos, maOldValues, u"redo"_ustr);
 }
 
 void ScUndoEnterData::Repeat(SfxRepeatTarget& rTarget)

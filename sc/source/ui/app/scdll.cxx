@@ -106,7 +106,7 @@ void ScDLL::Init()
     ScModule* pMod = pUniqueModule.get();
     SfxApplication::SetModule(SfxToolsModule::Calc, std::move(pUniqueModule));
 
-    ScDocShell::Factory().SetDocumentServiceName( "com.sun.star.sheet.SpreadsheetDocument" );
+    ScDocShell::Factory().SetDocumentServiceName( u"com.sun.star.sheet.SpreadsheetDocument"_ustr );
 
     // Not until the ResManager is initialized
     // The AppOptions must be initialized not until after ScGlobal::Init

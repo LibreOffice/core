@@ -23,14 +23,14 @@
 namespace sc {
 
 SearchResultsDlg::SearchResultsDlg(SfxBindings* _pBindings, weld::Window* pParent)
-    : SfxDialogController(pParent, "modules/scalc/ui/searchresults.ui", "SearchResultsDialog")
+    : SfxDialogController(pParent, u"modules/scalc/ui/searchresults.ui"_ustr, u"SearchResultsDialog"_ustr)
     , aSkipped(ScResId(SCSTR_SKIPPED))
     , mpBindings(_pBindings)
     , mpDoc(nullptr)
     , mbSorted(false)
-    , mxList(m_xBuilder->weld_tree_view("results"))
-    , mxSearchResults(m_xBuilder->weld_label("lbSearchResults"))
-    , mxShowDialog(m_xBuilder->weld_check_button("cbShow"))
+    , mxList(m_xBuilder->weld_tree_view(u"results"_ustr))
+    , mxSearchResults(m_xBuilder->weld_label(u"lbSearchResults"_ustr))
+    , mxShowDialog(m_xBuilder->weld_check_button(u"cbShow"_ustr))
 {
     mxList->set_size_request(mxList->get_approximate_digit_width() * 50, mxList->get_height_rows(15));
     mxShowDialog->connect_toggled(LINK(this, SearchResultsDlg, OnShowToggled));

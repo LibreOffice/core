@@ -29,10 +29,11 @@
 #include <compiler.hxx>
 
 ScNamePasteDlg::ScNamePasteDlg(weld::Window* pParent, ScDocShell* pShell)
-    : GenericDialogController(pParent, "modules/scalc/ui/insertname.ui", "InsertNameDialog")
-    , m_xBtnPasteAll(m_xBuilder->weld_button("pasteall"))
-    , m_xBtnPaste(m_xBuilder->weld_button("paste"))
-    , m_xBtnClose(m_xBuilder->weld_button("close"))
+    : GenericDialogController(pParent, u"modules/scalc/ui/insertname.ui"_ustr,
+                              u"InsertNameDialog"_ustr)
+    , m_xBtnPasteAll(m_xBuilder->weld_button(u"pasteall"_ustr))
+    , m_xBtnPaste(m_xBuilder->weld_button(u"paste"_ustr))
+    , m_xBtnClose(m_xBuilder->weld_button(u"close"_ustr))
 {
     ScDocument& rDoc = pShell->GetDocument();
     m_aSheetSep = OUString(rDoc.GetSheetSeparator());
@@ -47,7 +48,7 @@ ScNamePasteDlg::ScNamePasteDlg(weld::Window* pParent, ScDocShell* pShell)
     if (ScViewData* pViewData = ScDocShell::GetViewData())
         aPos = ScAddress(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
 
-    std::unique_ptr<weld::TreeView> xTreeView(m_xBuilder->weld_tree_view("ctrl"));
+    std::unique_ptr<weld::TreeView> xTreeView(m_xBuilder->weld_tree_view(u"ctrl"_ustr));
     xTreeView->set_size_request(xTreeView->get_approximate_digit_width() * 75,
                                 xTreeView->get_height_rows(10));
     m_xTable.reset(new ScRangeManagerTable(std::move(xTreeView), m_RangeMap, aPos));

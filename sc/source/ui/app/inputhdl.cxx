@@ -366,7 +366,7 @@ void ScInputHandler::InitRangeFinder( const OUString& rFormula )
     ScDocument& rDoc = pDocSh->GetDocument();
     const sal_Unicode cSheetSep = rDoc.GetSheetSeparator();
 
-    OUString aDelimiters = ScEditUtil::ModifyDelimiters(" !~%\"\t\n");
+    OUString aDelimiters = ScEditUtil::ModifyDelimiters(u" !~%\"\t\n"_ustr);
         // delimiters (in addition to ScEditUtil): only characters that are
         // allowed in formulas next to references and the quotation mark (so
         // string constants can be skipped)
@@ -1854,7 +1854,7 @@ void ScTabViewShell::SendFormulabarUpdate::Send()
     (*pData)["text"_ostr] = m_aText;
     (*pData)["selection"_ostr] = m_aSelection;
     OUString sWindowId = OUString::number(m_nShellId) + "formulabar";
-    jsdialog::SendAction(sWindowId, "sc_input_window", std::move(pData));
+    jsdialog::SendAction(sWindowId, u"sc_input_window"_ustr, std::move(pData));
 }
 
 // Calculate selection and display as tip help
@@ -3767,12 +3767,12 @@ void ScInputHandler::ClearText()
 
     if (pTableView)
     {
-        pTableView->getEditEngine().SetText( "" );
+        pTableView->getEditEngine().SetText( u""_ustr );
         pTableView->SetSelection( ESelection(0,0, 0,0) );
     }
     if (pTopView)
     {
-        pTopView->getEditEngine().SetText( "" );
+        pTopView->getEditEngine().SetText( u""_ustr );
         pTopView->SetSelection( ESelection(0,0, 0,0) );
     }
 
@@ -4186,12 +4186,12 @@ void ScInputHandler::InputCommand( const CommandEvent& rCEvt )
                     {
                         if (pTableView)
                         {
-                            pTableView->getEditEngine().SetText( "" );
+                            pTableView->getEditEngine().SetText( u""_ustr );
                             pTableView->SetSelection( ESelection(0,0, 0,0) );
                         }
                         if (pTopView)
                         {
-                            pTopView->getEditEngine().SetText( "" );
+                            pTopView->getEditEngine().SetText( u""_ustr );
                             pTopView->SetSelection( ESelection(0,0, 0,0) );
                         }
                     }

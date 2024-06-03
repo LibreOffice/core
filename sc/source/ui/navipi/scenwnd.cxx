@@ -126,8 +126,8 @@ IMPL_LINK(ScScenarioWindow, ContextMenuHdl, const CommandEvent&, rCEvt, bool)
         {
             if (!pEntry->mbProtected)
             {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xLbScenario.get(), "modules/scalc/ui/scenariomenu.ui"));
-                std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu("menu"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xLbScenario.get(), u"modules/scalc/ui/scenariomenu.ui"_ustr));
+                std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu(u"menu"_ustr));
                 OUString sIdent(xPopup->popup_at_rect(m_xLbScenario.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
                 if (sIdent == "delete")
                     DeleteScenario();
@@ -186,8 +186,8 @@ void ScScenarioWindow::DeleteScenario()
 
 ScScenarioWindow::ScScenarioWindow(weld::Builder& rBuilder, const OUString& aQH_List,
                                    const OUString& aQH_Comment)
-    : m_xLbScenario(rBuilder.weld_tree_view("scenariolist"))
-    , m_xEdComment(rBuilder.weld_text_view("scenariotext"))
+    : m_xLbScenario(rBuilder.weld_tree_view(u"scenariolist"_ustr))
+    , m_xEdComment(rBuilder.weld_text_view(u"scenariotext"_ustr))
 {
     m_xLbScenario->set_help_id(HID_SC_SCENWIN_TOP);
     m_xEdComment->set_help_id(HID_SC_SCENWIN_BOTTOM);

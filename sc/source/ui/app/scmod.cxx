@@ -129,7 +129,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     m_bIsInSharedDocSaving( false )
 {
     // The ResManager (DLL data) is not yet initialized in the ctor!
-    SetName("StarCalc"); // for Basic
+    SetName(u"StarCalc"_ustr); // for Basic
 
     ResetDragObject();
 
@@ -364,10 +364,10 @@ void ScModule::Execute( SfxRequest& rReq )
     switch ( nSlot )
     {
         case SID_CHOOSE_DESIGN:
-            SfxApplication::CallAppBasic( "Template.Samples.ShowStyles" );
+            SfxApplication::CallAppBasic( u"Template.Samples.ShowStyles"_ustr );
             break;
         case SID_EURO_CONVERTER:
-            SfxApplication::CallAppBasic( "Euro.ConvertRun.Main" );
+            SfxApplication::CallAppBasic( u"Euro.ConvertRun.Main"_ustr );
             break;
         case SID_AUTOSPELL_CHECK:
             {

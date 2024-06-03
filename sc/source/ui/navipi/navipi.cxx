@@ -214,7 +214,7 @@ IMPL_LINK(ScNavigatorDlg, ToolBoxSelectHdl, const OUString&, rSelId, void)
         UpdateButtons();
     }
     else if (rSelId == "dragmode")
-        m_xTbxCmd2->set_menu_item_active("dragmode", !m_xTbxCmd2->get_menu_item_active("dragmode"));
+        m_xTbxCmd2->set_menu_item_active(u"dragmode"_ustr, !m_xTbxCmd2->get_menu_item_active(u"dragmode"_ustr));
     else
     {
         if (rSelId == "datarange")
@@ -244,13 +244,13 @@ IMPL_LINK(ScNavigatorDlg, ToolBoxDropdownClickHdl, const OUString&, rCommand, vo
     switch (GetDropMode())
     {
         case 0:
-            m_xDragModeMenu->set_active("hyperlink", true);
+            m_xDragModeMenu->set_active(u"hyperlink"_ustr, true);
             break;
         case 1:
-            m_xDragModeMenu->set_active("link", true);
+            m_xDragModeMenu->set_active(u"link"_ustr, true);
             break;
         case 2:
-            m_xDragModeMenu->set_active("copy", true);
+            m_xDragModeMenu->set_active(u"copy"_ustr, true);
             break;
     }
 }
@@ -268,20 +268,20 @@ IMPL_LINK(ScNavigatorDlg, MenuSelectHdl, const OUString&, rIdent, void)
 void ScNavigatorDlg::UpdateButtons()
 {
     NavListMode eMode = eListMode;
-    m_xTbxCmd2->set_item_active("scenarios", eMode == NAV_LMODE_SCENARIOS);
-    m_xTbxCmd1->set_item_active("contents", eMode != NAV_LMODE_NONE);
+    m_xTbxCmd2->set_item_active(u"scenarios"_ustr, eMode == NAV_LMODE_SCENARIOS);
+    m_xTbxCmd1->set_item_active(u"contents"_ustr, eMode != NAV_LMODE_NONE);
 
     // the toggle button:
     if (eMode == NAV_LMODE_SCENARIOS || eMode == NAV_LMODE_NONE)
     {
-        m_xTbxCmd2->set_item_sensitive("toggle", false);
-        m_xTbxCmd2->set_item_active("toggle", false);
+        m_xTbxCmd2->set_item_sensitive(u"toggle"_ustr, false);
+        m_xTbxCmd2->set_item_active(u"toggle"_ustr, false);
     }
     else
     {
-        m_xTbxCmd2->set_item_sensitive("toggle", true);
+        m_xTbxCmd2->set_item_sensitive(u"toggle"_ustr, true);
         bool bRootSet = m_xLbEntries->GetRootType() != ScContentId::ROOT;
-        m_xTbxCmd2->set_item_active("toggle", bRootSet);
+        m_xTbxCmd2->set_item_active(u"toggle"_ustr, bRootSet);
     }
 
     OUString sImageId;
@@ -297,7 +297,7 @@ void ScNavigatorDlg::UpdateButtons()
             sImageId = RID_BMP_DROP_COPY;
             break;
     }
-    m_xTbxCmd2->set_item_icon_name("dragmode", sImageId);
+    m_xTbxCmd2->set_item_icon_name(u"dragmode"_ustr, sImageId);
 }
 
 ScNavigatorSettings::ScNavigatorSettings()
@@ -335,18 +335,18 @@ ScNavigatorWin::ScNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr,
 }
 
 ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, weld::Widget* pParent, SfxNavigator* pNavigatorDlg)
-    : PanelLayout(pParent, "NavigatorPanel", "modules/scalc/ui/navigatorpanel.ui")
+    : PanelLayout(pParent, u"NavigatorPanel"_ustr, u"modules/scalc/ui/navigatorpanel.ui"_ustr)
     , rBindings(*pB)
-    , m_xEdCol(m_xBuilder->weld_spin_button("column"))
-    , m_xEdRow(m_xBuilder->weld_spin_button("row"))
-    , m_xTbxCmd1(m_xBuilder->weld_toolbar("toolbox1"))
-    , m_xTbxCmd2(m_xBuilder->weld_toolbar("toolbox2"))
-    , m_xLbEntries(new ScContentTree(m_xBuilder->weld_tree_view("contentbox"), this))
-    , m_xScenarioBox(m_xBuilder->weld_widget("scenariobox"))
+    , m_xEdCol(m_xBuilder->weld_spin_button(u"column"_ustr))
+    , m_xEdRow(m_xBuilder->weld_spin_button(u"row"_ustr))
+    , m_xTbxCmd1(m_xBuilder->weld_toolbar(u"toolbox1"_ustr))
+    , m_xTbxCmd2(m_xBuilder->weld_toolbar(u"toolbox2"_ustr))
+    , m_xLbEntries(new ScContentTree(m_xBuilder->weld_tree_view(u"contentbox"_ustr), this))
+    , m_xScenarioBox(m_xBuilder->weld_widget(u"scenariobox"_ustr))
     , m_xWndScenarios(new ScScenarioWindow(*m_xBuilder,
         ScResId(SCSTR_QHLP_SCEN_LISTBOX), ScResId(SCSTR_QHLP_SCEN_COMMENT)))
-    , m_xLbDocuments(m_xBuilder->weld_combo_box("documents"))
-    , m_xDragModeMenu(m_xBuilder->weld_menu("dragmodemenu"))
+    , m_xLbDocuments(m_xBuilder->weld_combo_box(u"documents"_ustr))
+    , m_xDragModeMenu(m_xBuilder->weld_menu(u"dragmodemenu"_ustr))
     , m_xNavigatorDlg(pNavigatorDlg)
     , aContentIdle("ScNavigatorDlg aContentIdle")
     , aStrActiveWin(ScResId(SCSTR_ACTIVEWIN))
@@ -371,7 +371,7 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, weld::Widget* pParent, SfxNaviga
     m_xTbxCmd1->connect_clicked(LINK(this, ScNavigatorDlg, ToolBoxSelectHdl));
     m_xTbxCmd2->connect_clicked(LINK(this, ScNavigatorDlg, ToolBoxSelectHdl));
 
-    m_xTbxCmd2->set_item_menu("dragmode", m_xDragModeMenu.get());
+    m_xTbxCmd2->set_item_menu(u"dragmode"_ustr, m_xDragModeMenu.get());
     m_xDragModeMenu->connect_activate(LINK(this, ScNavigatorDlg, MenuSelectHdl));
     m_xTbxCmd2->connect_menu_toggled(LINK(this, ScNavigatorDlg, ToolBoxDropdownClickHdl));
 
@@ -418,14 +418,14 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, weld::Widget* pParent, SfxNaviga
     // if scenario was active, switch on
     NavListMode eNavMode = static_cast<NavListMode>(rCfg.GetListMode());
     if (eNavMode == NAV_LMODE_SCENARIOS)
-        m_xTbxCmd2->set_item_active("scenarios", true);
+        m_xTbxCmd2->set_item_active(u"scenarios"_ustr, true);
     else
         eNavMode = NAV_LMODE_AREAS;
     SetListMode(eNavMode);
 
     if(comphelper::LibreOfficeKit::isActive())
     {
-        m_xBuilder->weld_container("gridbuttons")->hide();
+        m_xBuilder->weld_container(u"gridbuttons"_ustr)->hide();
         m_xLbDocuments->hide();
     }
 }
@@ -453,7 +453,7 @@ void ScNavigatorDlg::UpdateInitShow()
     // When the navigator is displayed in the sidebar, or is otherwise
     // docked, it has the whole deck to fill. Therefore hide the button that
     // hides all controls below the top two rows of buttons.
-    m_xTbxCmd1->set_item_visible("contents", ParentIsFloatingWindow(m_xNavigatorDlg));
+    m_xTbxCmd1->set_item_visible(u"contents"_ustr, ParentIsFloatingWindow(m_xNavigatorDlg));
 }
 
 void ScNavigatorWin::StateChanged(StateChangedType nStateChange)

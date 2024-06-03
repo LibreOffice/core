@@ -52,14 +52,14 @@ static bool isLOKMobilePhone()
 
 ScCondFrmtEntry::ScCondFrmtEntry(ScCondFormatList* pParent, ScDocument* pDoc, const ScAddress& rPos)
     : mpParent(pParent)
-    , mxBuilder(Application::CreateBuilder(pParent->GetContainer(), isLOKMobilePhone()?OUString("modules/scalc/ui/conditionalentrymobile.ui"):OUString("modules/scalc/ui/conditionalentry.ui")))
-    , mxBorder(mxBuilder->weld_widget("border"))
-    , mxGrid(mxBuilder->weld_container("grid"))
-    , mxFtCondNr(mxBuilder->weld_label("number"))
-    , mxFtCondition(mxBuilder->weld_label("condition"))
+    , mxBuilder(Application::CreateBuilder(pParent->GetContainer(), isLOKMobilePhone()?u"modules/scalc/ui/conditionalentrymobile.ui"_ustr:u"modules/scalc/ui/conditionalentry.ui"_ustr))
+    , mxBorder(mxBuilder->weld_widget(u"border"_ustr))
+    , mxGrid(mxBuilder->weld_container(u"grid"_ustr))
+    , mxFtCondNr(mxBuilder->weld_label(u"number"_ustr))
+    , mxFtCondition(mxBuilder->weld_label(u"condition"_ustr))
     , mbActive(false)
     , maStrCondition(ScResId(SCSTR_CONDITION))
-    , mxLbType(mxBuilder->weld_combo_box("type"))
+    , mxLbType(mxBuilder->weld_combo_box(u"type"_ustr))
     , mpDoc(pDoc)
     , maPos(rPos)
 {
@@ -158,14 +158,14 @@ const ScConditionMode ScConditionFrmtEntry::mpEntryToCond[ScConditionFrmtEntry::
 ScConditionFrmtEntry::ScConditionFrmtEntry(ScCondFormatList* pParent, ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
         const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry)
     : ScCondFrmtEntry(pParent, pDoc, rPos)
-    , mxLbCondType(mxBuilder->weld_combo_box("typeis"))
-    , mxEdVal1(new formula::RefEdit(mxBuilder->weld_entry("val1")))
-    , mxEdVal2(new formula::RefEdit(mxBuilder->weld_entry("val2")))
-    , mxFtVal(mxBuilder->weld_label("valueft"))
-    , mxFtStyle(mxBuilder->weld_label("styleft"))
-    , mxLbStyle(mxBuilder->weld_combo_box("style"))
-    , mxWdPreviewWin(mxBuilder->weld_widget("previewwin"))
-    , mxWdPreview(new weld::CustomWeld(*mxBuilder, "preview", maWdPreview))
+    , mxLbCondType(mxBuilder->weld_combo_box(u"typeis"_ustr))
+    , mxEdVal1(new formula::RefEdit(mxBuilder->weld_entry(u"val1"_ustr)))
+    , mxEdVal2(new formula::RefEdit(mxBuilder->weld_entry(u"val2"_ustr)))
+    , mxFtVal(mxBuilder->weld_label(u"valueft"_ustr))
+    , mxFtStyle(mxBuilder->weld_label(u"styleft"_ustr))
+    , mxLbStyle(mxBuilder->weld_combo_box(u"style"_ustr))
+    , mxWdPreviewWin(mxBuilder->weld_widget(u"previewwin"_ustr))
+    , mxWdPreview(new weld::CustomWeld(*mxBuilder, u"preview"_ustr, maWdPreview))
     , mbIsInStyleCreate(false)
 {
     mxLbCondType->set_size_request(CommonWidgetWidth, -1);
@@ -296,7 +296,7 @@ IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, formula::RefEdit&, rRefEdit, void)
     }
 
     rEdit.set_message_type(weld::EntryMessageType::Normal);
-    mxFtVal->set_label("");
+    mxFtVal->set_label(u""_ustr);
 }
 
 void ScConditionFrmtEntry::Select()
@@ -513,11 +513,11 @@ IMPL_LINK_NOARG(ScConditionFrmtEntry, StyleSelectHdl, weld::ComboBox&, void)
 
 ScFormulaFrmtEntry::ScFormulaFrmtEntry(ScCondFormatList* pParent, ScDocument* pDoc, ScCondFormatDlg* pDialogParent, const ScAddress& rPos, const ScCondFormatEntry* pFormat)
     : ScCondFrmtEntry(pParent, pDoc, rPos)
-    , mxFtStyle(mxBuilder->weld_label("styleft"))
-    , mxLbStyle(mxBuilder->weld_combo_box("style"))
-    , mxWdPreviewWin(mxBuilder->weld_widget("previewwin"))
-    , mxWdPreview(new weld::CustomWeld(*mxBuilder, "preview", maWdPreview))
-    , mxEdFormula(new formula::RefEdit(mxBuilder->weld_entry("formula")))
+    , mxFtStyle(mxBuilder->weld_label(u"styleft"_ustr))
+    , mxLbStyle(mxBuilder->weld_combo_box(u"style"_ustr))
+    , mxWdPreviewWin(mxBuilder->weld_widget(u"previewwin"_ustr))
+    , mxWdPreview(new weld::CustomWeld(*mxBuilder, u"preview"_ustr, maWdPreview))
+    , mxEdFormula(new formula::RefEdit(mxBuilder->weld_entry(u"formula"_ustr)))
 {
     mxLbType->set_size_request(CommonWidgetWidth, -1);
     mxWdPreview->set_size_request(-1, mxLbStyle->get_preferred_size().Height());
@@ -739,15 +739,15 @@ ScColorScaleEntry* createColorScaleEntry( const weld::ComboBox& rType, const Col
 
 ScColorScale2FrmtEntry::ScColorScale2FrmtEntry(ScCondFormatList* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat)
     : ScCondFrmtEntry(pParent, pDoc, rPos)
-    , mxLbColorFormat(mxBuilder->weld_combo_box("colorformat"))
-    , mxLbEntryTypeMin(mxBuilder->weld_combo_box("colscalemin"))
-    , mxLbEntryTypeMax(mxBuilder->weld_combo_box("colscalemax"))
-    , mxEdMin(mxBuilder->weld_entry("edcolscalemin"))
-    , mxEdMax(mxBuilder->weld_entry("edcolscalemax"))
-    , mxLbColMin(new ColorListBox(mxBuilder->weld_menu_button("lbcolmin"), [this]{ return mpParent->GetFrameWeld(); }))
-    , mxLbColMax(new ColorListBox(mxBuilder->weld_menu_button("lbcolmax"), [this]{ return mpParent->GetFrameWeld(); }))
-    , mxFtMin(mxBuilder->weld_label("Label_minimum"))
-    , mxFtMax(mxBuilder->weld_label("Label_maximum"))
+    , mxLbColorFormat(mxBuilder->weld_combo_box(u"colorformat"_ustr))
+    , mxLbEntryTypeMin(mxBuilder->weld_combo_box(u"colscalemin"_ustr))
+    , mxLbEntryTypeMax(mxBuilder->weld_combo_box(u"colscalemax"_ustr))
+    , mxEdMin(mxBuilder->weld_entry(u"edcolscalemin"_ustr))
+    , mxEdMax(mxBuilder->weld_entry(u"edcolscalemax"_ustr))
+    , mxLbColMin(new ColorListBox(mxBuilder->weld_menu_button(u"lbcolmin"_ustr), [this]{ return mpParent->GetFrameWeld(); }))
+    , mxLbColMax(new ColorListBox(mxBuilder->weld_menu_button(u"lbcolmax"_ustr), [this]{ return mpParent->GetFrameWeld(); }))
+    , mxFtMin(mxBuilder->weld_label(u"Label_minimum"_ustr))
+    , mxFtMax(mxBuilder->weld_label(u"Label_maximum"_ustr))
 {
     mxLbColorFormat->set_size_request(CommonWidgetWidth, -1);
     mxLbEntryTypeMin->set_size_request(CommonWidgetWidth, -1);
@@ -874,18 +874,18 @@ IMPL_LINK( ScColorScale2FrmtEntry, EntryTypeHdl, weld::ComboBox&, rBox, void )
 
 ScColorScale3FrmtEntry::ScColorScale3FrmtEntry(ScCondFormatList* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat)
     : ScCondFrmtEntry(pParent, pDoc, rPos)
-    , mxLbColorFormat(mxBuilder->weld_combo_box("colorformat"))
-    , mxLbEntryTypeMin(mxBuilder->weld_combo_box("colscalemin"))
-    , mxLbEntryTypeMiddle(mxBuilder->weld_combo_box("colscalemiddle"))
-    , mxLbEntryTypeMax(mxBuilder->weld_combo_box("colscalemax"))
-    , mxEdMin(mxBuilder->weld_entry("edcolscalemin"))
-    , mxEdMiddle(mxBuilder->weld_entry("edcolscalemiddle"))
-    , mxEdMax(mxBuilder->weld_entry("edcolscalemax"))
-    , mxLbColMin(new ColorListBox(mxBuilder->weld_menu_button("lbcolmin"), [this]{ return mpParent->GetFrameWeld(); }))
-    , mxLbColMiddle(new ColorListBox(mxBuilder->weld_menu_button("lbcolmiddle"), [this]{ return mpParent->GetFrameWeld(); }))
-    , mxLbColMax(new ColorListBox(mxBuilder->weld_menu_button("lbcolmax"), [this]{ return mpParent->GetFrameWeld(); }))
-    , mxFtMin(mxBuilder->weld_label("Label_minimum"))
-    , mxFtMax(mxBuilder->weld_label("Label_maximum"))
+    , mxLbColorFormat(mxBuilder->weld_combo_box(u"colorformat"_ustr))
+    , mxLbEntryTypeMin(mxBuilder->weld_combo_box(u"colscalemin"_ustr))
+    , mxLbEntryTypeMiddle(mxBuilder->weld_combo_box(u"colscalemiddle"_ustr))
+    , mxLbEntryTypeMax(mxBuilder->weld_combo_box(u"colscalemax"_ustr))
+    , mxEdMin(mxBuilder->weld_entry(u"edcolscalemin"_ustr))
+    , mxEdMiddle(mxBuilder->weld_entry(u"edcolscalemiddle"_ustr))
+    , mxEdMax(mxBuilder->weld_entry(u"edcolscalemax"_ustr))
+    , mxLbColMin(new ColorListBox(mxBuilder->weld_menu_button(u"lbcolmin"_ustr), [this]{ return mpParent->GetFrameWeld(); }))
+    , mxLbColMiddle(new ColorListBox(mxBuilder->weld_menu_button(u"lbcolmiddle"_ustr), [this]{ return mpParent->GetFrameWeld(); }))
+    , mxLbColMax(new ColorListBox(mxBuilder->weld_menu_button(u"lbcolmax"_ustr), [this]{ return mpParent->GetFrameWeld(); }))
+    , mxFtMin(mxBuilder->weld_label(u"Label_minimum"_ustr))
+    , mxFtMax(mxBuilder->weld_label(u"Label_maximum"_ustr))
 {
     mxLbColorFormat->set_size_request(CommonWidgetWidth, -1);
     mxLbEntryTypeMin->set_size_request(CommonWidgetWidth, -1);
@@ -1087,14 +1087,14 @@ void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, weld::ComboBox& rLbT
 
 ScDataBarFrmtEntry::ScDataBarFrmtEntry(ScCondFormatList* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScDataBarFormat* pFormat)
     : ScCondFrmtEntry(pParent, pDoc, rPos)
-    , mxLbColorFormat(mxBuilder->weld_combo_box("colorformat"))
-    , mxLbDataBarMinType(mxBuilder->weld_combo_box("colscalemin"))
-    , mxLbDataBarMaxType(mxBuilder->weld_combo_box("colscalemax"))
-    , mxEdDataBarMin(mxBuilder->weld_entry("edcolscalemin"))
-    , mxEdDataBarMax(mxBuilder->weld_entry("edcolscalemax"))
-    , mxBtOptions(mxBuilder->weld_button("options"))
-    , mxFtMin(mxBuilder->weld_label("Label_minimum"))
-    , mxFtMax(mxBuilder->weld_label("Label_maximum"))
+    , mxLbColorFormat(mxBuilder->weld_combo_box(u"colorformat"_ustr))
+    , mxLbDataBarMinType(mxBuilder->weld_combo_box(u"colscalemin"_ustr))
+    , mxLbDataBarMaxType(mxBuilder->weld_combo_box(u"colscalemax"_ustr))
+    , mxEdDataBarMin(mxBuilder->weld_entry(u"edcolscalemin"_ustr))
+    , mxEdDataBarMax(mxBuilder->weld_entry(u"edcolscalemax"_ustr))
+    , mxBtOptions(mxBuilder->weld_button(u"options"_ustr))
+    , mxFtMin(mxBuilder->weld_label(u"Label_minimum"_ustr))
+    , mxFtMax(mxBuilder->weld_label(u"Label_maximum"_ustr))
 {
     mxLbColorFormat->set_size_request(CommonWidgetWidth, -1);
     mxLbDataBarMinType->set_size_request(CommonWidgetWidth, -1);
@@ -1227,11 +1227,11 @@ IMPL_LINK_NOARG( ScDataBarFrmtEntry, OptionBtnHdl, weld::Button&, void )
 
 ScDateFrmtEntry::ScDateFrmtEntry(ScCondFormatList* pParent, ScDocument* pDoc, const ScCondDateFormatEntry* pFormat)
     : ScCondFrmtEntry(pParent, pDoc, ScAddress())
-    , mxLbDateEntry(mxBuilder->weld_combo_box("datetype"))
-    , mxFtStyle(mxBuilder->weld_label("styleft"))
-    , mxLbStyle(mxBuilder->weld_combo_box("style"))
-    , mxWdPreviewWin(mxBuilder->weld_widget("previewwin"))
-    , mxWdPreview(new weld::CustomWeld(*mxBuilder, "preview", maWdPreview))
+    , mxLbDateEntry(mxBuilder->weld_combo_box(u"datetype"_ustr))
+    , mxFtStyle(mxBuilder->weld_label(u"styleft"_ustr))
+    , mxLbStyle(mxBuilder->weld_combo_box(u"style"_ustr))
+    , mxWdPreviewWin(mxBuilder->weld_widget(u"previewwin"_ustr))
+    , mxWdPreview(new weld::CustomWeld(*mxBuilder, u"preview"_ustr, maWdPreview))
     , mbIsInStyleCreate(false)
 {
     mxLbDateEntry->set_size_request(CommonWidgetWidth, -1);
@@ -1347,12 +1347,12 @@ public:
 };
 
 ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry(weld::Container* pParent, ScIconSetType eType, const ScDocument* pDoc, sal_Int32 i, const ScColorScaleEntry* pEntry)
-    : mxBuilder(Application::CreateBuilder(pParent, "modules/scalc/ui/conditionaliconset.ui"))
-    , mxGrid(mxBuilder->weld_container("ConditionalIconSet"))
-    , mxImgIcon(mxBuilder->weld_image("icon"))
-    , mxEdEntry(mxBuilder->weld_entry("entry"))
-    , mxLbEntryType(mxBuilder->weld_combo_box("listbox"))
-    , mxConditionMode(mxBuilder->weld_combo_box("conditionMode"))
+    : mxBuilder(Application::CreateBuilder(pParent, u"modules/scalc/ui/conditionaliconset.ui"_ustr))
+    , mxGrid(mxBuilder->weld_container(u"ConditionalIconSet"_ustr))
+    , mxImgIcon(mxBuilder->weld_image(u"icon"_ustr))
+    , mxEdEntry(mxBuilder->weld_entry(u"entry"_ustr))
+    , mxLbEntryType(mxBuilder->weld_combo_box(u"listbox"_ustr))
+    , mxConditionMode(mxBuilder->weld_combo_box(u"conditionMode"_ustr))
     , mpContainer(pParent)
 {
     mxImgIcon->set_from_icon_name(ScIconSetFormat::getIconName(eType, i));
@@ -1436,9 +1436,9 @@ ScColorScaleEntry* ScIconSetFrmtDataEntry::CreateEntry(ScDocument& rDoc, const S
 
 ScIconSetFrmtEntry::ScIconSetFrmtEntry(ScCondFormatList* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScIconSetFormat* pFormat)
     : ScCondFrmtEntry(pParent, pDoc, rPos)
-    , mxLbColorFormat(mxBuilder->weld_combo_box("colorformat"))
-    , mxLbIconSetType(mxBuilder->weld_combo_box("iconsettype"))
-    , mxIconParent(mxBuilder->weld_container("iconparent"))
+    , mxLbColorFormat(mxBuilder->weld_combo_box(u"colorformat"_ustr))
+    , mxLbIconSetType(mxBuilder->weld_combo_box(u"iconsettype"_ustr))
+    , mxIconParent(mxBuilder->weld_container(u"iconparent"_ustr))
 {
     mxLbColorFormat->set_size_request(CommonWidgetWidth, -1);
     mxLbIconSetType->set_size_request(CommonWidgetWidth, -1);

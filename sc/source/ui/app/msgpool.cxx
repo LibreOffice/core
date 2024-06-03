@@ -55,7 +55,7 @@ static ItemInfoPackage& getItemInfoPackageScMessage()
 }
 
 ScMessagePool::ScMessagePool()
-: SfxItemPool("ScMessagePool"),
+: SfxItemPool(u"ScMessagePool"_ustr),
     pDocPool(new ScDocumentPool)
 {
     registerItemInfoPackage(getItemInfoPackageScMessage());

@@ -817,7 +817,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
                         const Color* pColor = nullptr;
                         OUString aResult;
-                        pFormatter->GetPreviewStringGuess("MMMM", nVal, aResult, &pColor, eLanguage);
+                        pFormatter->GetPreviewStringGuess(u"MMMM"_ustr, nVal, aResult, &pColor, eLanguage);
                         rDoc.SetString(rCol, nRow, 0, aResult);
                     }
                 }

@@ -564,25 +564,25 @@ IMPL_LINK(ScContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         case CommandEventId::ContextMenu:
             {
                 //  drag-and-drop mode
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xTreeView.get(), "modules/scalc/ui/dropmenu.ui"));
-                std::unique_ptr<weld::Menu> xPop(xBuilder->weld_menu("contextmenu"));
-                std::unique_ptr<weld::Menu> xDropMenu(xBuilder->weld_menu("dragmodesubmenu"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xTreeView.get(), u"modules/scalc/ui/dropmenu.ui"_ustr));
+                std::unique_ptr<weld::Menu> xPop(xBuilder->weld_menu(u"contextmenu"_ustr));
+                std::unique_ptr<weld::Menu> xDropMenu(xBuilder->weld_menu(u"dragmodesubmenu"_ustr));
 
                 switch (pParentWindow->GetDropMode())
                 {
                     case 0:
-                        xDropMenu->set_active("hyperlink", true);
+                        xDropMenu->set_active(u"hyperlink"_ustr, true);
                         break;
                     case 1:
-                        xDropMenu->set_active("link", true);
+                        xDropMenu->set_active(u"link"_ustr, true);
                         break;
                     case 2:
-                        xDropMenu->set_active("copy", true);
+                        xDropMenu->set_active(u"copy"_ustr, true);
                         break;
                 }
 
                 //  displayed document
-                std::unique_ptr<weld::Menu> xDocMenu(xBuilder->weld_menu("displaymenu"));
+                std::unique_ptr<weld::Menu> xDocMenu(xBuilder->weld_menu(u"displaymenu"_ustr));
                 sal_uInt16 i=0;
                 OUString sActive;
                 OUString sId;
@@ -618,8 +618,8 @@ IMPL_LINK(ScContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 // Edit/Delete Comments are only visible for comments
                 if (nType != ScContentId::NOTE)
                 {
-                    xPop->set_visible("edit", false);
-                    xPop->set_visible("delete", false);
+                    xPop->set_visible(u"edit"_ustr, false);
+                    xPop->set_visible(u"delete"_ustr, false);
                 }
 
                 OUString sIdent = xPop->popup_at_rect(m_xTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1, 1)));

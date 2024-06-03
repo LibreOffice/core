@@ -37,19 +37,19 @@ NumberFormatPropertyPanel::NumberFormatPropertyPanel(
     weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
-    : PanelLayout(pParent,"NumberFormatPropertyPanel", "modules/scalc/ui/sidebarnumberformat.ui")
-    , mxLbCategory(m_xBuilder->weld_combo_box("numberformatcombobox"))
-    , mxTBCategory(m_xBuilder->weld_toolbar("numberformat"))
+    : PanelLayout(pParent,u"NumberFormatPropertyPanel"_ustr, u"modules/scalc/ui/sidebarnumberformat.ui"_ustr)
+    , mxLbCategory(m_xBuilder->weld_combo_box(u"numberformatcombobox"_ustr))
+    , mxTBCategory(m_xBuilder->weld_toolbar(u"numberformat"_ustr))
     , mxCategoryDispatch(new ToolbarUnoDispatcher(*mxTBCategory, *m_xBuilder, rxFrame))
-    , mxFtDecimals(m_xBuilder->weld_label("decimalplaceslabel"))
-    , mxEdDecimals(m_xBuilder->weld_spin_button("decimalplaces"))
-    , mxFtDenominator(m_xBuilder->weld_label("denominatorplaceslabel"))
-    , mxEdDenominator(m_xBuilder->weld_spin_button("denominatorplaces"))
-    , mxFtLeadZeroes(m_xBuilder->weld_label("leadingzeroeslabel"))
-    , mxEdLeadZeroes(m_xBuilder->weld_spin_button("leadingzeroes"))
-    , mxBtnNegRed(m_xBuilder->weld_check_button("negativenumbersred"))
-    , mxBtnThousand(m_xBuilder->weld_check_button("thousandseparator"))
-    , mxBtnEngineering(m_xBuilder->weld_check_button("engineeringnotation"))
+    , mxFtDecimals(m_xBuilder->weld_label(u"decimalplaceslabel"_ustr))
+    , mxEdDecimals(m_xBuilder->weld_spin_button(u"decimalplaces"_ustr))
+    , mxFtDenominator(m_xBuilder->weld_label(u"denominatorplaceslabel"_ustr))
+    , mxEdDenominator(m_xBuilder->weld_spin_button(u"denominatorplaces"_ustr))
+    , mxFtLeadZeroes(m_xBuilder->weld_label(u"leadingzeroeslabel"_ustr))
+    , mxEdLeadZeroes(m_xBuilder->weld_spin_button(u"leadingzeroes"_ustr))
+    , mxBtnNegRed(m_xBuilder->weld_check_button(u"negativenumbersred"_ustr))
+    , mxBtnThousand(m_xBuilder->weld_check_button(u"thousandseparator"_ustr))
+    , mxBtnEngineering(m_xBuilder->weld_check_button(u"engineeringnotation"_ustr))
     , maNumFormatControl(SID_NUMBER_TYPE_FORMAT, *pBindings, *this)
     , maFormatControl(SID_NUMBER_FORMAT, *pBindings, *this)
     , mnCategorySelected(0)
@@ -113,7 +113,7 @@ IMPL_LINK_NOARG( NumberFormatPropertyPanel, NumFormatValueClickHdl, weld::Toggle
 IMPL_LINK_NOARG( NumberFormatPropertyPanel, NumFormatValueHdl, weld::SpinButton&, void )
 {
     OUString    aFormat;
-    OUString    sBreak = ",";
+    OUString    sBreak = u","_ustr;
     bool        bThousand   = ( mxBtnThousand->get_visible() && mxBtnThousand->get_sensitive() && mxBtnThousand->get_active() )
                            || ( mxBtnEngineering->get_visible() && mxBtnEngineering->get_sensitive() && mxBtnEngineering->get_active() );
     bool        bNegRed     =  mxBtnNegRed->get_sensitive() && mxBtnNegRed->get_active();
@@ -151,11 +151,11 @@ std::unique_ptr<PanelLayout> NumberFormatPropertyPanel::Create (
     SfxBindings* pBindings)
 {
     if (pParent == nullptr)
-        throw lang::IllegalArgumentException("no parent Window given to NumberFormatPropertyPanel::Create", nullptr, 0);
+        throw lang::IllegalArgumentException(u"no parent Window given to NumberFormatPropertyPanel::Create"_ustr, nullptr, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to NumberFormatPropertyPanel::Create", nullptr, 1);
+        throw lang::IllegalArgumentException(u"no XFrame given to NumberFormatPropertyPanel::Create"_ustr, nullptr, 1);
     if (pBindings == nullptr)
-        throw lang::IllegalArgumentException("no SfxBindings given to NumberFormatPropertyPanel::Create", nullptr, 2);
+        throw lang::IllegalArgumentException(u"no SfxBindings given to NumberFormatPropertyPanel::Create"_ustr, nullptr, 2);
 
     return std::make_unique<NumberFormatPropertyPanel>(pParent, rxFrame, pBindings);
 }
@@ -271,7 +271,7 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
                 mxBtnEngineering->set_active(bThousand);
             mxBtnNegRed->set_active(bNegRed);
             if ( mxLbCategory->get_active() == 0 )
-                mxEdDecimals->set_text(""); // tdf#44399
+                mxEdDecimals->set_text(u""_ustr); // tdf#44399
             else if ( mxEdDecimals->get_visible() )
                 mxEdDecimals->set_value(nPrecision);
             else if ( mxEdDenominator->get_visible() )

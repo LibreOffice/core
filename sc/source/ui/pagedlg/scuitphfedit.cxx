@@ -42,35 +42,35 @@ ScHFEditPage::ScHFEditPage(weld::Container* pPage, weld::DialogController* pCont
                            const SfxItemSet& rCoreAttrs,
                            TypedWhichId<ScPageHFItem> nWhichId,
                            bool bHeader)
-    : SfxTabPage(pPage, pController, "modules/scalc/ui/headerfootercontent.ui", "HeaderFooterContent", &rCoreAttrs)
+    : SfxTabPage(pPage, pController, u"modules/scalc/ui/headerfootercontent.ui"_ustr, u"HeaderFooterContent"_ustr, &rCoreAttrs)
     , nWhich( nWhichId )
     , m_bDropDownActive(false)
     , m_nTimeToggled(-1)
     , m_xFtDefinedHF(m_xBuilder->weld_label(!bHeader ? "labelFT_F_DEFINED" : "labelFT_H_DEFINED"))
-    , m_xLbDefined(m_xBuilder->weld_combo_box("comboLB_DEFINED"))
+    , m_xLbDefined(m_xBuilder->weld_combo_box(u"comboLB_DEFINED"_ustr))
     , m_xFtCustomHF(m_xBuilder->weld_label(!bHeader ? "labelFT_F_CUSTOM" : "labelFT_H_CUSTOM"))
-    , m_xBtnText(m_xBuilder->weld_button("buttonBTN_TEXT"))
-    , m_xBtnFile(m_xBuilder->weld_menu_button("buttonBTN_FILE"))
-    , m_xBtnTable(m_xBuilder->weld_button("buttonBTN_TABLE"))
-    , m_xBtnPage(m_xBuilder->weld_button("buttonBTN_PAGE"))
-    , m_xBtnLastPage(m_xBuilder->weld_button("buttonBTN_PAGES"))
-    , m_xBtnDate(m_xBuilder->weld_button("buttonBTN_DATE"))
-    , m_xBtnTime(m_xBuilder->weld_button("buttonBTN_TIME"))
-    , m_xFtConfidential(m_xBuilder->weld_label("labelSTR_HF_CONFIDENTIAL"))
-    , m_xFtPage(m_xBuilder->weld_label("labelSTR_PAGE"))
-    , m_xFtOfQuestion(m_xBuilder->weld_label("labelSTR_HF_OF_QUESTION"))
-    , m_xFtOf(m_xBuilder->weld_label("labelSTR_HF_OF"))
-    , m_xFtNone(m_xBuilder->weld_label("labelSTR_HF_NONE_IN_BRACKETS"))
-    , m_xFtCreatedBy(m_xBuilder->weld_label("labelSTR_HF_CREATED_BY"))
-    , m_xFtCustomized(m_xBuilder->weld_label("labelSTR_HF_CUSTOMIZED"))
-    , m_xLeft(m_xBuilder->weld_widget("labelFT_LEFT"))
-    , m_xRight(m_xBuilder->weld_widget("labelFT_RIGHT"))
+    , m_xBtnText(m_xBuilder->weld_button(u"buttonBTN_TEXT"_ustr))
+    , m_xBtnFile(m_xBuilder->weld_menu_button(u"buttonBTN_FILE"_ustr))
+    , m_xBtnTable(m_xBuilder->weld_button(u"buttonBTN_TABLE"_ustr))
+    , m_xBtnPage(m_xBuilder->weld_button(u"buttonBTN_PAGE"_ustr))
+    , m_xBtnLastPage(m_xBuilder->weld_button(u"buttonBTN_PAGES"_ustr))
+    , m_xBtnDate(m_xBuilder->weld_button(u"buttonBTN_DATE"_ustr))
+    , m_xBtnTime(m_xBuilder->weld_button(u"buttonBTN_TIME"_ustr))
+    , m_xFtConfidential(m_xBuilder->weld_label(u"labelSTR_HF_CONFIDENTIAL"_ustr))
+    , m_xFtPage(m_xBuilder->weld_label(u"labelSTR_PAGE"_ustr))
+    , m_xFtOfQuestion(m_xBuilder->weld_label(u"labelSTR_HF_OF_QUESTION"_ustr))
+    , m_xFtOf(m_xBuilder->weld_label(u"labelSTR_HF_OF"_ustr))
+    , m_xFtNone(m_xBuilder->weld_label(u"labelSTR_HF_NONE_IN_BRACKETS"_ustr))
+    , m_xFtCreatedBy(m_xBuilder->weld_label(u"labelSTR_HF_CREATED_BY"_ustr))
+    , m_xFtCustomized(m_xBuilder->weld_label(u"labelSTR_HF_CUSTOMIZED"_ustr))
+    , m_xLeft(m_xBuilder->weld_widget(u"labelFT_LEFT"_ustr))
+    , m_xRight(m_xBuilder->weld_widget(u"labelFT_RIGHT"_ustr))
     , m_xWndLeft(new ScEditWindow(Left, pController->getDialog()))
     , m_xWndCenter(new ScEditWindow(Center, pController->getDialog()))
     , m_xWndRight(new ScEditWindow(Right, pController->getDialog()))
-    , m_xWndLeftWnd(new weld::CustomWeld(*m_xBuilder, "textviewWND_LEFT", *m_xWndLeft))
-    , m_xWndCenterWnd(new weld::CustomWeld(*m_xBuilder, "textviewWND_CENTER", *m_xWndCenter))
-    , m_xWndRightWnd(new weld::CustomWeld(*m_xBuilder, "textviewWND_RIGHT", *m_xWndRight))
+    , m_xWndLeftWnd(new weld::CustomWeld(*m_xBuilder, u"textviewWND_LEFT"_ustr, *m_xWndLeft))
+    , m_xWndCenterWnd(new weld::CustomWeld(*m_xBuilder, u"textviewWND_CENTER"_ustr, *m_xWndCenter))
+    , m_xWndRightWnd(new weld::CustomWeld(*m_xBuilder, u"textviewWND_RIGHT"_ustr, *m_xWndRight))
     , m_pEditFocus(nullptr)
 {
     // tdf#114695 override natural size with a small value
@@ -607,7 +607,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             m_xWndCenter->GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             ++aSel.nEndPos;
 
-            OUString aCommaSpace(", ");
+            OUString aCommaSpace(u", "_ustr);
             m_xWndCenter->GetEditEngine()->QuickInsertText(aCommaSpace,ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             aSel.nEndPos = aSel.nEndPos + aCommaSpace.getLength();
             m_xWndCenter->GetEditEngine()->QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
@@ -627,7 +627,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             aSel.nEndPos = aPageEntry.getLength();
             m_xWndCenter->GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             ++aSel.nEndPos;
-            OUString aCommaSpace(", ");
+            OUString aCommaSpace(u", "_ustr);
             m_xWndCenter->GetEditEngine()->QuickInsertText(aCommaSpace,ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             aSel.nEndPos = aSel.nEndPos + aCommaSpace.getLength();
             m_xWndCenter->GetEditEngine()->QuickInsertField( SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));

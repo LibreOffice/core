@@ -68,82 +68,82 @@ public:
 
     // XGlobalSheetSettings
     virtual sal_Bool SAL_CALL getMoveSelection() override
-        { return getPropertyBool("MoveSelection"); }
+        { return getPropertyBool(u"MoveSelection"_ustr); }
     virtual void SAL_CALL setMoveSelection(sal_Bool p1) override
-        { setProperty("MoveSelection", static_cast<bool>(p1)); }
+        { setProperty(u"MoveSelection"_ustr, static_cast<bool>(p1)); }
     virtual sal_Int16 SAL_CALL getMoveDirection() override
-        { return getPropertyInt16("MoveDirection"); }
+        { return getPropertyInt16(u"MoveDirection"_ustr); }
     virtual void SAL_CALL setMoveDirection(sal_Int16 p1) override
-        { setProperty("MoveDirection", p1); }
+        { setProperty(u"MoveDirection"_ustr, p1); }
     virtual sal_Bool SAL_CALL getEnterEdit() override
-        { return getPropertyBool("EnterEdit"); }
+        { return getPropertyBool(u"EnterEdit"_ustr); }
     virtual void SAL_CALL setEnterEdit(sal_Bool p1) override
-        { setProperty("EnterEdit", static_cast<bool>(p1)); }
+        { setProperty(u"EnterEdit"_ustr, static_cast<bool>(p1)); }
     virtual sal_Bool SAL_CALL getExtendFormat() override
-        { return getPropertyBool("ExtendFormat"); }
+        { return getPropertyBool(u"ExtendFormat"_ustr); }
     virtual void SAL_CALL setExtendFormat(sal_Bool p1) override
-        { setProperty("ExtendFormat", static_cast<bool>(p1)); }
+        { setProperty(u"ExtendFormat"_ustr, static_cast<bool>(p1)); }
     virtual sal_Bool SAL_CALL getRangeFinder() override
-        { return getPropertyBool("RangeFinder"); }
+        { return getPropertyBool(u"RangeFinder"_ustr); }
     virtual void SAL_CALL setRangeFinder(sal_Bool p1) override
-        { setProperty("RangeFinder", static_cast<bool>(p1)); }
+        { setProperty(u"RangeFinder"_ustr, static_cast<bool>(p1)); }
     virtual sal_Bool SAL_CALL getExpandReferences() override
-        { return getPropertyBool("ExpandReferences"); }
+        { return getPropertyBool(u"ExpandReferences"_ustr); }
     virtual void SAL_CALL setExpandReferences(sal_Bool p1) override
-        { setProperty("ExpandReferences", static_cast<bool>(p1)); }
+        { setProperty(u"ExpandReferences"_ustr, static_cast<bool>(p1)); }
     virtual sal_Bool SAL_CALL getMarkHeader() override
-        { return getPropertyBool("MarkHeader"); }
+        { return getPropertyBool(u"MarkHeader"_ustr); }
     virtual void SAL_CALL setMarkHeader(sal_Bool p1) override
-        { setProperty("MarkHeader", static_cast<bool>(p1)); }
+        { setProperty(u"MarkHeader"_ustr, static_cast<bool>(p1)); }
     virtual sal_Bool SAL_CALL getUseTabCol() override
-        { return getPropertyBool("UseTabCol"); }
+        { return getPropertyBool(u"UseTabCol"_ustr); }
     virtual void SAL_CALL setUseTabCol(sal_Bool p1) override
-        { setProperty("UseTabCol", static_cast<bool>(p1)); }
+        { setProperty(u"UseTabCol"_ustr, static_cast<bool>(p1)); }
     virtual sal_Int16 SAL_CALL getMetric() override
-        { return getPropertyInt16("Metric"); }
+        { return getPropertyInt16(u"Metric"_ustr); }
     virtual void SAL_CALL setMetric(sal_Int16 p1) override
-        { setProperty("Metric", p1); }
+        { setProperty(u"Metric"_ustr, p1); }
     virtual sal_Int16 SAL_CALL getScale() override
-        { return getPropertyInt16("Scale"); }
+        { return getPropertyInt16(u"Scale"_ustr); }
     virtual void SAL_CALL setScale(sal_Int16 p1) override
-        { setProperty("Scale", p1); }
+        { setProperty(u"Scale"_ustr, p1); }
     virtual sal_Bool SAL_CALL getDoAutoComplete() override
-        { return getPropertyBool("DoAutoComplete"); }
+        { return getPropertyBool(u"DoAutoComplete"_ustr); }
     virtual void SAL_CALL setDoAutoComplete(sal_Bool p1) override
-        { setProperty("DoAutoComplete", static_cast<bool>(p1)); }
+        { setProperty(u"DoAutoComplete"_ustr, static_cast<bool>(p1)); }
     virtual sal_Int16 SAL_CALL getStatusBarFunction() override
-        { return getPropertyInt16("StatusBarFunction"); }
+        { return getPropertyInt16(u"StatusBarFunction"_ustr); }
     virtual void SAL_CALL setStatusBarFunction(sal_Int16 p1) override
-        { setProperty("StatusBarFunction", p1); }
+        { setProperty(u"StatusBarFunction"_ustr, p1); }
     virtual css::uno::Sequence<OUString> SAL_CALL getUserLists() override
         {
-           css::uno::Any any = getPropertyValue("UserLists");
+           css::uno::Any any = getPropertyValue(u"UserLists"_ustr);
            css::uno::Sequence<OUString> b;
            any >>= b;
            return b;
         }
     virtual void SAL_CALL setUserLists(const css::uno::Sequence<OUString>& p1) override
-        { setPropertyValue( "UserLists", css::uno::Any(p1) ); }
+        { setPropertyValue( u"UserLists"_ustr, css::uno::Any(p1) ); }
     virtual sal_Int16 SAL_CALL getLinkUpdateMode() override
-        { return getPropertyInt16("LinkUpdateMode"); }
+        { return getPropertyInt16(u"LinkUpdateMode"_ustr); }
     virtual void SAL_CALL setLinkUpdateMode(sal_Int16 p1) override
-        { setProperty("LinkUpdateMode", p1); }
+        { setProperty(u"LinkUpdateMode"_ustr, p1); }
     virtual sal_Bool SAL_CALL getPrintAllSheets() override
-        { return getPropertyBool("PrintAllSheets"); }
+        { return getPropertyBool(u"PrintAllSheets"_ustr); }
     virtual void SAL_CALL setPrintAllSheets(sal_Bool p1) override
-        { setProperty("PrintAllSheets", static_cast<bool>(p1)); }
+        { setProperty(u"PrintAllSheets"_ustr, static_cast<bool>(p1)); }
     virtual sal_Bool SAL_CALL getPrintEmptyPages() override
-        { return getPropertyBool("PrintEmptyPages"); }
+        { return getPropertyBool(u"PrintEmptyPages"_ustr); }
     virtual void SAL_CALL setPrintEmptyPages(sal_Bool p1) override
-        { setProperty("PrintEmptyPages", static_cast<bool>(p1)); }
+        { setProperty(u"PrintEmptyPages"_ustr, static_cast<bool>(p1)); }
     virtual sal_Bool SAL_CALL getUsePrinterMetrics() override
-        { return getPropertyBool("UsePrinterMetrics"); }
+        { return getPropertyBool(u"UsePrinterMetrics"_ustr); }
     virtual void SAL_CALL setUsePrinterMetrics(sal_Bool p1) override
-        { setProperty("UsePrinterMetrics", static_cast<bool>(p1)); }
+        { setProperty(u"UsePrinterMetrics"_ustr, static_cast<bool>(p1)); }
     virtual sal_Bool SAL_CALL getReplaceCellsWarning() override
-        { return getPropertyBool("ReplaceCellsWarning"); }
+        { return getPropertyBool(u"ReplaceCellsWarning"_ustr); }
     virtual void SAL_CALL setReplaceCellsWarning(sal_Bool p1) override
-        { setProperty("ReplaceCellsWarning", static_cast<bool>(p1)); }
+        { setProperty(u"ReplaceCellsWarning"_ustr, static_cast<bool>(p1)); }
 
     // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo >

@@ -1186,7 +1186,7 @@ void ScUndoRemoveLink::DoChange( bool bLink ) const
         if (bLink)      // establish link
             rDoc.SetLink( pTabs[i], pModes[i], aDocName, aFltName, aOptions, pTabNames[i], nRefreshDelay );
         else            // remove link
-            rDoc.SetLink( pTabs[i], ScLinkMode::NONE, "", "", "", "", 0 );
+            rDoc.SetLink( pTabs[i], ScLinkMode::NONE, u""_ustr, u""_ustr, u""_ustr, u""_ustr, 0 );
     pDocShell->UpdateLinks();
 }
 

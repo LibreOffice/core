@@ -46,13 +46,13 @@
 #************************************************************************/
 
 ScFunctionWin::ScFunctionWin(weld::Widget* pParent)
-    : PanelLayout(pParent, "FunctionPanel", "modules/scalc/ui/functionpanel.ui")
-    , xCatBox(m_xBuilder->weld_combo_box("category"))
-    , xFuncList(m_xBuilder->weld_tree_view("funclist"))
-    , xInsertButton(m_xBuilder->weld_button("insert"))
-    , xFiFuncDesc(m_xBuilder->weld_text_view("funcdesc"))
-    , m_xSearchString(m_xBuilder->weld_entry("search"))
-    , xConfigListener(new comphelper::ConfigurationListener("/org.openoffice.Office.Calc/Formula/Syntax"))
+    : PanelLayout(pParent, u"FunctionPanel"_ustr, u"modules/scalc/ui/functionpanel.ui"_ustr)
+    , xCatBox(m_xBuilder->weld_combo_box(u"category"_ustr))
+    , xFuncList(m_xBuilder->weld_tree_view(u"funclist"_ustr))
+    , xInsertButton(m_xBuilder->weld_button(u"insert"_ustr))
+    , xFiFuncDesc(m_xBuilder->weld_text_view(u"funcdesc"_ustr))
+    , m_xSearchString(m_xBuilder->weld_entry(u"search"_ustr))
+    , xConfigListener(new comphelper::ConfigurationListener(u"/org.openoffice.Office.Calc/Formula/Syntax"_ustr))
     , xConfigChange(std::make_unique<EnglishFunctionNameChange>(xConfigListener, this))
     , pFuncDesc(nullptr)
 {
@@ -127,7 +127,7 @@ void ScFunctionWin::InitLRUList()
     sal_Int32 nSelPos  = xCatBox->get_active();
 
     if (nSelPos == 0)
-        UpdateFunctionList("");
+        UpdateFunctionList(u""_ustr);
 }
 
 /*************************************************************************
@@ -443,8 +443,8 @@ IMPL_LINK(ScFunctionWin, KeyInputHdl, const KeyEvent&, rEvent, bool)
         break;
     case KEY_ESCAPE:
         {
-            m_xSearchString->set_text("");
-            UpdateFunctionList("");
+            m_xSearchString->set_text(u""_ustr);
+            UpdateFunctionList(u""_ustr);
             bHandled = true;
         }
         break;
@@ -483,9 +483,9 @@ IMPL_LINK(ScFunctionWin, KeyInputHdl, const KeyEvent&, rEvent, bool)
 
 IMPL_LINK_NOARG(ScFunctionWin, SelComboHdl, weld::ComboBox&, void)
 {
-    UpdateFunctionList("");
+    UpdateFunctionList(u""_ustr);
     SetDescription();
-    m_xSearchString->set_text("");
+    m_xSearchString->set_text(u""_ustr);
     m_xSearchString->grab_focus();
 }
 
@@ -523,7 +523,7 @@ void EnglishFunctionNameChange::setProperty(const css::uno::Any &rProperty)
 {
     ConfigurationListenerProperty::setProperty(rProperty);
     m_pFunctionWin->InitLRUList();
-    m_pFunctionWin->UpdateFunctionList("");
+    m_pFunctionWin->UpdateFunctionList(u""_ustr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

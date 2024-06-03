@@ -129,7 +129,7 @@ ScDrawTransferObj::ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDo
                     uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
                     uno::Reference< beans::XPropertySetInfo > xInfo = xPropSet->getPropertySetInfo();
 
-                    OUString sPropButtonType( "ButtonType" );
+                    OUString sPropButtonType( u"ButtonType"_ustr );
 
                     if(xInfo->hasPropertyByName( sPropButtonType ))
                     {
@@ -138,7 +138,7 @@ ScDrawTransferObj::ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDo
                         if ( (aAny >>= eTmp) && eTmp == form::FormButtonType_URL )
                         {
                             // URL
-                            OUString sPropTargetURL( "TargetURL" );
+                            OUString sPropTargetURL( u"TargetURL"_ustr );
                             if(xInfo->hasPropertyByName( sPropTargetURL ))
                             {
                                 aAny = xPropSet->getPropertyValue( sPropTargetURL );
@@ -161,7 +161,7 @@ ScDrawTransferObj::ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDo
 
                                     // Label
                                     OUString aLabel;
-                                    OUString sPropLabel( "Label" );
+                                    OUString sPropLabel( u"Label"_ustr );
                                     if(xInfo->hasPropertyByName( sPropLabel ))
                                     {
                                         aAny = xPropSet->getPropertyValue( sPropLabel );
@@ -489,7 +489,7 @@ bool ScDrawTransferObj::WriteObject( SvStream& rOStm, void* pUserObject, sal_uIn
                     try
                     {
                         uno::Sequence < beans::PropertyValue > aSeq;
-                        OUString aDummyName("Dummy");
+                        OUString aDummyName(u"Dummy"_ustr);
                         xPers->storeToEntry( xWorkStore, aDummyName, aSeq, aSeq );
                         if ( xWorkStore->isStreamElement( aDummyName ) )
                         {

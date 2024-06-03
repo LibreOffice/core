@@ -181,11 +181,11 @@ tools::Long ScZoomSlider::Zoom2Offset( sal_uInt16 nCurrentZoom ) const
 ScZoomSliderWnd::ScZoomSliderWnd( vcl::Window* pParent,
                 const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
                 sal_uInt16 nCurrentZoom ):
-                InterimItemWindow(pParent, "modules/scalc/ui/zoombox.ui", "ZoomBox"),
+                InterimItemWindow(pParent, u"modules/scalc/ui/zoombox.ui"_ustr, u"ZoomBox"_ustr),
                 mxWidget(new ScZoomSlider(rDispatchProvider, nCurrentZoom)),
-                mxPercentage(m_xBuilder->weld_label("current_zoom")),
-                mxLabel(m_xBuilder->weld_label("zoom_label")),
-                mxWeld(new weld::CustomWeld(*m_xBuilder, "zoom", *mxWidget))
+                mxPercentage(m_xBuilder->weld_label(u"current_zoom"_ustr)),
+                mxLabel(m_xBuilder->weld_label(u"zoom_label"_ustr)),
+                mxWeld(new weld::CustomWeld(*m_xBuilder, u"zoom"_ustr, *mxWidget))
 {
     Size aLogicalSize( 115, 40 );
     Size aSliderSize = LogicToPixel(aLogicalSize, MapMode(MapUnit::Map10thMM));
@@ -274,9 +274,9 @@ bool ScZoomSlider::MouseButtonDown( const MouseEvent& rMEvt )
     css::uno::Any  a;
     aZoomSliderItem.QueryValue( a );
 
-    css::uno::Sequence aArgs{ comphelper::makePropertyValue("ScalingFactor", a) };
+    css::uno::Sequence aArgs{ comphelper::makePropertyValue(u"ScalingFactor"_ustr, a) };
 
-    SfxToolBoxControl::Dispatch( m_xDispatchProvider, ".uno:ScalingFactor", aArgs );
+    SfxToolBoxControl::Dispatch( m_xDispatchProvider, u".uno:ScalingFactor"_ustr, aArgs );
 
     mbOmitPaint = false;
 
@@ -309,9 +309,9 @@ bool ScZoomSlider::MouseMove( const MouseEvent& rMEvt )
             css::uno::Any a;
             aZoomSliderItem.QueryValue( a );
 
-            css::uno::Sequence aArgs{ comphelper::makePropertyValue("ScalingFactor", a) };
+            css::uno::Sequence aArgs{ comphelper::makePropertyValue(u"ScalingFactor"_ustr, a) };
 
-            SfxToolBoxControl::Dispatch( m_xDispatchProvider, ".uno:ScalingFactor", aArgs );
+            SfxToolBoxControl::Dispatch( m_xDispatchProvider, u".uno:ScalingFactor"_ustr, aArgs );
 
             mbOmitPaint = false;
         }

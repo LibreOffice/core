@@ -511,7 +511,7 @@ namespace HelperNotifyChanges
     }
 
     inline void Notify(ScModelObj &rModelObj, const ScRangeList &rChangeRanges,
-        const OUString &rType = OUString("cell-change"),
+        const OUString &rType = u"cell-change"_ustr,
         const css::uno::Sequence< css::beans::PropertyValue >& rProperties =
             css::uno::Sequence< css::beans::PropertyValue >())
     {
@@ -519,7 +519,7 @@ namespace HelperNotifyChanges
     }
 
     inline void NotifyIfChangesListeners(const ScDocShell &rDocShell, const ScRange &rRange,
-        const OUString &rType = OUString("cell-change"))
+        const OUString &rType = u"cell-change"_ustr)
     {
         ScModelObj* pModelObj = rDocShell.GetModel();
         ScRangeList aChangeRanges(rRange);
@@ -529,7 +529,7 @@ namespace HelperNotifyChanges
         else if (pModelObj) // possibly need to invalidate getCellArea results
         {
             Notify(*pModelObj, aChangeRanges, isDataAreaInvalidateType(rType)
-                ? OUString("data-area-invalidate") : OUString("data-area-extend"));
+                ? u"data-area-invalidate"_ustr : u"data-area-extend"_ustr);
         }
     }
 };

@@ -661,7 +661,7 @@ OUString ScFormulaDlg::getCurrentFormula() const
     ScFormEditData* pData = m_pViewShell->GetFormEditData();
     if (pData && pData->GetInputHandler())
         return pData->GetInputHandler()->GetFormString();
-    return "";
+    return u""_ustr;
 }
 formula::IFunctionManager* ScFormulaDlg::getFunctionManager()
 {

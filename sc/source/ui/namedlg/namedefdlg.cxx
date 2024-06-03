@@ -27,7 +27,7 @@
 ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
         const ScViewData& rViewData, std::map<OUString, ScRangeName*>&& aRangeMap,
         const ScAddress& aCursorPos, const bool bUndo )
-    : ScAnyRefDlgController( pB, pCW, pParent, "modules/scalc/ui/definename.ui", "DefineNameDialog")
+    : ScAnyRefDlgController( pB, pCW, pParent, u"modules/scalc/ui/definename.ui"_ustr, u"DefineNameDialog"_ustr)
     , mbUndo( bUndo )
     , mrDoc(rViewData.GetDocument())
     , mpDocShell ( rViewData.GetDocShell() )

@@ -248,39 +248,41 @@ private:
     // NonNegative: for MS compatibility, use 1 for selected and 2 for not selected
     typedef std::vector<std::variant<OUString, SolverParameter>> TParamInfo;
     std::map<OUString, TParamInfo> SolverParamNames
-        = { { "Integer", { SP_INTEGER, "solver_int", "bool" } },
-            { "NonNegative", { SP_NON_NEGATIVE, "solver_neg", "bool" } },
-            { "EpsilonLevel", { SP_EPSILON_LEVEL, "solver_eps", "int" } },
-            { "LimitBBDepth", { SP_LIMIT_BBDEPTH, "solver_bbd", "bool" } },
-            { "Timeout", { SP_TIMEOUT, "solver_tim", "int" } },
-            { "Algorithm", { SP_ALGORITHM, "solver_alg", "int" } },
+        = { { u"Integer"_ustr, { SP_INTEGER, "solver_int", "bool" } },
+            { u"NonNegative"_ustr, { SP_NON_NEGATIVE, "solver_neg", "bool" } },
+            { u"EpsilonLevel"_ustr, { SP_EPSILON_LEVEL, "solver_eps", "int" } },
+            { u"LimitBBDepth"_ustr, { SP_LIMIT_BBDEPTH, "solver_bbd", "bool" } },
+            { u"Timeout"_ustr, { SP_TIMEOUT, "solver_tim", "int" } },
+            { u"Algorithm"_ustr, { SP_ALGORITHM, "solver_alg", "int" } },
             // SCO and DEPS
-            { "AssumeNonNegative", { SP_NON_NEGATIVE, "solver_neg", "bool" } },
-            { "SwarmSize", { SP_SWARM_SIZE, "solver_ssz", "int" } },
-            { "LearningCycles", { SP_LEARNING_CYCLES, "solver_lcy", "int" } },
-            { "GuessVariableRange", { SP_GUESS_VARIABLE_RANGE, "solver_gvr", "bool" } },
-            { "VariableRangeThreshold", { SP_VARIABLE_RANGE_THRESHOLD, "solver_vrt", "double" } },
-            { "UseACRComparator", { SP_ACR_COMPARATOR, "solver_acr", "bool" } },
-            { "UseRandomStartingPoint", { SP_RND_STARTING_POINT, "solver_rsp", "bool" } },
-            { "UseStrongerPRNG", { SP_STRONGER_PRNG, "solver_prng", "bool" } },
-            { "StagnationLimit", { SP_STAGNATION_LIMIT, "solver_slim", "int" } },
-            { "Tolerance", { SP_STAGNATION_TOLERANCE, "solver_stol", "double" } },
-            { "EnhancedSolverStatus", { SP_ENHANCED_STATUS, "solver_enst", "bool" } },
+            { u"AssumeNonNegative"_ustr, { SP_NON_NEGATIVE, "solver_neg", "bool" } },
+            { u"SwarmSize"_ustr, { SP_SWARM_SIZE, "solver_ssz", "int" } },
+            { u"LearningCycles"_ustr, { SP_LEARNING_CYCLES, "solver_lcy", "int" } },
+            { u"GuessVariableRange"_ustr, { SP_GUESS_VARIABLE_RANGE, "solver_gvr", "bool" } },
+            { u"VariableRangeThreshold"_ustr,
+              { SP_VARIABLE_RANGE_THRESHOLD, "solver_vrt", "double" } },
+            { u"UseACRComparator"_ustr, { SP_ACR_COMPARATOR, "solver_acr", "bool" } },
+            { u"UseRandomStartingPoint"_ustr, { SP_RND_STARTING_POINT, "solver_rsp", "bool" } },
+            { u"UseStrongerPRNG"_ustr, { SP_STRONGER_PRNG, "solver_prng", "bool" } },
+            { u"StagnationLimit"_ustr, { SP_STAGNATION_LIMIT, "solver_slim", "int" } },
+            { u"Tolerance"_ustr, { SP_STAGNATION_TOLERANCE, "solver_stol", "double" } },
+            { u"EnhancedSolverStatus"_ustr, { SP_ENHANCED_STATUS, "solver_enst", "bool" } },
             // DEPS only
-            { "AgentSwitchRate", { SP_AGENT_SWITCH_RATE, "solver_asr", "double" } },
-            { "DEFactorMin", { SP_SCALING_MIN, "solver_smin", "double" } },
-            { "DEFactorMax", { SP_SCALING_MAX, "solver_smax", "double" } },
-            { "DECR", { SP_CROSSOVER_PROB, "solver_crpb", "double" } },
-            { "PSC1", { SP_COGNITIVE_CONST, "solver_cog", "double" } },
-            { "PSC2", { SP_SOCIAL_CONST, "solver_soc", "double" } },
-            { "PSWeight", { SP_CONSTRICTION_COEFF, "solver_ccoeff", "double" } },
-            { "PSCL", { SP_MUTATION_PROB, "solver_mtpb", "double" } },
+            { u"AgentSwitchRate"_ustr, { SP_AGENT_SWITCH_RATE, "solver_asr", "double" } },
+            { u"DEFactorMin"_ustr, { SP_SCALING_MIN, "solver_smin", "double" } },
+            { u"DEFactorMax"_ustr, { SP_SCALING_MAX, "solver_smax", "double" } },
+            { u"DECR"_ustr, { SP_CROSSOVER_PROB, "solver_crpb", "double" } },
+            { u"PSC1"_ustr, { SP_COGNITIVE_CONST, "solver_cog", "double" } },
+            { u"PSC2"_ustr, { SP_SOCIAL_CONST, "solver_soc", "double" } },
+            { u"PSWeight"_ustr, { SP_CONSTRICTION_COEFF, "solver_ccoeff", "double" } },
+            { u"PSCL"_ustr, { SP_MUTATION_PROB, "solver_mtpb", "double" } },
             // SCO only
-            { "LibrarySize", { SP_LIBRARY_SIZE, "solver_lbsz", "int" } } };
+            { u"LibrarySize"_ustr, { SP_LIBRARY_SIZE, "solver_lbsz", "int" } } };
 
     // Stores the roots used for named ranges of constraint parts
     // Items here must be in the same order as in ConstraintPart enum
-    std::vector<OUString> m_aConstraintParts{ "solver_lhs", "solver_rel", "solver_rhs" };
+    std::vector<OUString> m_aConstraintParts{ u"solver_lhs"_ustr, u"solver_rel"_ustr,
+                                              u"solver_rhs"_ustr };
 
 public:
     /* A SolverSettings object is linked to the ScTable where solver parameters

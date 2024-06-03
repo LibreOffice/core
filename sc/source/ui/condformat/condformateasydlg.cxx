@@ -45,18 +45,19 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
                                                          weld::Window* pParent,
                                                          ScViewData* pViewData)
     : ScAnyRefDlgController(pBindings, pChildWindow, pParent,
-                            "modules/scalc/ui/conditionaleasydialog.ui", "CondFormatEasyDlg")
+                            u"modules/scalc/ui/conditionaleasydialog.ui"_ustr,
+                            u"CondFormatEasyDlg"_ustr)
     , mpViewData(pViewData)
     , mpDocument(&mpViewData->GetDocument())
-    , mxNumberEntry(m_xBuilder->weld_entry("entryNumber"))
-    , mxNumberEntry2(m_xBuilder->weld_entry("entryNumber2"))
-    , mxAllInputs(m_xBuilder->weld_container("allInputs"))
-    , mxRangeEntry(new formula::RefEdit(m_xBuilder->weld_entry("entryRange")))
-    , mxButtonRangeEdit(new formula::RefButton(m_xBuilder->weld_button("rbassign")))
-    , mxStyles(m_xBuilder->weld_combo_box("themeCombo"))
-    , mxDescription(m_xBuilder->weld_label("description"))
-    , mxButtonOk(m_xBuilder->weld_button("ok"))
-    , mxButtonCancel(m_xBuilder->weld_button("cancel"))
+    , mxNumberEntry(m_xBuilder->weld_entry(u"entryNumber"_ustr))
+    , mxNumberEntry2(m_xBuilder->weld_entry(u"entryNumber2"_ustr))
+    , mxAllInputs(m_xBuilder->weld_container(u"allInputs"_ustr))
+    , mxRangeEntry(new formula::RefEdit(m_xBuilder->weld_entry(u"entryRange"_ustr)))
+    , mxButtonRangeEdit(new formula::RefButton(m_xBuilder->weld_button(u"rbassign"_ustr)))
+    , mxStyles(m_xBuilder->weld_combo_box(u"themeCombo"_ustr))
+    , mxDescription(m_xBuilder->weld_label(u"description"_ustr))
+    , mxButtonOk(m_xBuilder->weld_button(u"ok"_ustr))
+    , mxButtonCancel(m_xBuilder->weld_button(u"cancel"_ustr))
 {
     mxButtonRangeEdit->SetReferences(this, mxRangeEntry.get());
     const ScConditionMode* pCurrentMode
@@ -230,11 +231,11 @@ IMPL_LINK(ConditionalFormatEasyDialog, ButtonPressed, weld::Button&, rButton, vo
         OUString sExpression1
             = (mxNumberEntry->get_visible() == true && mxAllInputs->get_visible() == true
                    ? mxNumberEntry->get_text()
-                   : "");
+                   : u""_ustr);
         OUString sExpression2
             = (mxNumberEntry2->get_visible() == true && mxAllInputs->get_visible() == true
                    ? mxNumberEntry2->get_text()
-                   : "");
+                   : u""_ustr);
 
         switch (meMode)
         {

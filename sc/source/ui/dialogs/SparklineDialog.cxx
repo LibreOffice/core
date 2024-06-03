@@ -23,50 +23,50 @@ namespace sc
 SparklineDialog::SparklineDialog(SfxBindings* pBindings, SfxChildWindow* pChildWindow,
                                  weld::Window* pWindow, ScViewData& rViewData)
     : ScAnyRefDlgController(pBindings, pChildWindow, pWindow,
-                            u"modules/scalc/ui/sparklinedialog.ui"_ustr, "SparklineDialog")
+                            u"modules/scalc/ui/sparklinedialog.ui"_ustr, u"SparklineDialog"_ustr)
     , mrViewData(rViewData)
     , mrDocument(rViewData.GetDocument())
     , mpActiveEdit(nullptr)
     , mbDialogLostFocus(false)
-    , mxButtonOk(m_xBuilder->weld_button("ok"))
-    , mxButtonCancel(m_xBuilder->weld_button("cancel"))
-    , mxFrameData(m_xBuilder->weld_frame("frmData"))
-    , mxInputRangeLabel(m_xBuilder->weld_label("lbInputRange"))
-    , mxInputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("edInputRange")))
-    , mxInputRangeButton(new formula::RefButton(m_xBuilder->weld_button("btnInputRange")))
-    , mxOutputRangeLabel(m_xBuilder->weld_label("lbOutputRange"))
-    , mxOutputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("edOutputRange")))
-    , mxOutputRangeButton(new formula::RefButton(m_xBuilder->weld_button("btnOutputRange")))
-    , mxColorSeries(new ColorListBox(m_xBuilder->weld_menu_button("colSeries"),
+    , mxButtonOk(m_xBuilder->weld_button(u"ok"_ustr))
+    , mxButtonCancel(m_xBuilder->weld_button(u"cancel"_ustr))
+    , mxFrameData(m_xBuilder->weld_frame(u"frmData"_ustr))
+    , mxInputRangeLabel(m_xBuilder->weld_label(u"lbInputRange"_ustr))
+    , mxInputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry(u"edInputRange"_ustr)))
+    , mxInputRangeButton(new formula::RefButton(m_xBuilder->weld_button(u"btnInputRange"_ustr)))
+    , mxOutputRangeLabel(m_xBuilder->weld_label(u"lbOutputRange"_ustr))
+    , mxOutputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry(u"edOutputRange"_ustr)))
+    , mxOutputRangeButton(new formula::RefButton(m_xBuilder->weld_button(u"btnOutputRange"_ustr)))
+    , mxColorSeries(new ColorListBox(m_xBuilder->weld_menu_button(u"colSeries"_ustr),
                                      [pWindow] { return pWindow; }))
-    , mxColorNegative(new ColorListBox(m_xBuilder->weld_menu_button("colNegative"),
+    , mxColorNegative(new ColorListBox(m_xBuilder->weld_menu_button(u"colNegative"_ustr),
                                        [pWindow] { return pWindow; }))
-    , mxColorMarker(new ColorListBox(m_xBuilder->weld_menu_button("colMarker"),
+    , mxColorMarker(new ColorListBox(m_xBuilder->weld_menu_button(u"colMarker"_ustr),
                                      [pWindow] { return pWindow; }))
-    , mxColorHigh(
-          new ColorListBox(m_xBuilder->weld_menu_button("colHigh"), [pWindow] { return pWindow; }))
-    , mxColorLow(
-          new ColorListBox(m_xBuilder->weld_menu_button("colLow"), [pWindow] { return pWindow; }))
-    , mxColorFirst(
-          new ColorListBox(m_xBuilder->weld_menu_button("colFirst"), [pWindow] { return pWindow; }))
-    , mxColorLast(
-          new ColorListBox(m_xBuilder->weld_menu_button("colLast"), [pWindow] { return pWindow; }))
-    , mxCheckButtonNegative(m_xBuilder->weld_check_button("cbNegative"))
-    , mxCheckButtonMarker(m_xBuilder->weld_check_button("cbMarker"))
-    , mxCheckButtonHigh(m_xBuilder->weld_check_button("cbHigh"))
-    , mxCheckButtonLow(m_xBuilder->weld_check_button("cbLow"))
-    , mxCheckButtonFirst(m_xBuilder->weld_check_button("cbFirst"))
-    , mxCheckButtonLast(m_xBuilder->weld_check_button("cbLast"))
-    , mxSpinLineWidth(m_xBuilder->weld_spin_button("seLineWidth"))
-    , mxType(m_xBuilder->weld_combo_box("cbType"))
-    , mxCheckDisplayXAxis(m_xBuilder->weld_check_button("cbDisplayXAxis"))
-    , mxCheckDisplayHidden(m_xBuilder->weld_check_button("cbHidden"))
-    , mxCheckRightToLeft(m_xBuilder->weld_check_button("cbRTL"))
-    , mxDisplayEmptyGap(m_xBuilder->weld_combo_box("cbEmptyCells"))
-    , mxComboMinAxisType(m_xBuilder->weld_combo_box("cbMinAxisType"))
-    , mxComboMaxAxisType(m_xBuilder->weld_combo_box("cbMaxAxisType"))
-    , mxSpinCustomMin(m_xBuilder->weld_formatted_spin_button("seMinAxis"))
-    , mxSpinCustomMax(m_xBuilder->weld_formatted_spin_button("seMaxAxis"))
+    , mxColorHigh(new ColorListBox(m_xBuilder->weld_menu_button(u"colHigh"_ustr),
+                                   [pWindow] { return pWindow; }))
+    , mxColorLow(new ColorListBox(m_xBuilder->weld_menu_button(u"colLow"_ustr),
+                                  [pWindow] { return pWindow; }))
+    , mxColorFirst(new ColorListBox(m_xBuilder->weld_menu_button(u"colFirst"_ustr),
+                                    [pWindow] { return pWindow; }))
+    , mxColorLast(new ColorListBox(m_xBuilder->weld_menu_button(u"colLast"_ustr),
+                                   [pWindow] { return pWindow; }))
+    , mxCheckButtonNegative(m_xBuilder->weld_check_button(u"cbNegative"_ustr))
+    , mxCheckButtonMarker(m_xBuilder->weld_check_button(u"cbMarker"_ustr))
+    , mxCheckButtonHigh(m_xBuilder->weld_check_button(u"cbHigh"_ustr))
+    , mxCheckButtonLow(m_xBuilder->weld_check_button(u"cbLow"_ustr))
+    , mxCheckButtonFirst(m_xBuilder->weld_check_button(u"cbFirst"_ustr))
+    , mxCheckButtonLast(m_xBuilder->weld_check_button(u"cbLast"_ustr))
+    , mxSpinLineWidth(m_xBuilder->weld_spin_button(u"seLineWidth"_ustr))
+    , mxType(m_xBuilder->weld_combo_box(u"cbType"_ustr))
+    , mxCheckDisplayXAxis(m_xBuilder->weld_check_button(u"cbDisplayXAxis"_ustr))
+    , mxCheckDisplayHidden(m_xBuilder->weld_check_button(u"cbHidden"_ustr))
+    , mxCheckRightToLeft(m_xBuilder->weld_check_button(u"cbRTL"_ustr))
+    , mxDisplayEmptyGap(m_xBuilder->weld_combo_box(u"cbEmptyCells"_ustr))
+    , mxComboMinAxisType(m_xBuilder->weld_combo_box(u"cbMinAxisType"_ustr))
+    , mxComboMaxAxisType(m_xBuilder->weld_combo_box(u"cbMaxAxisType"_ustr))
+    , mxSpinCustomMin(m_xBuilder->weld_formatted_spin_button(u"seMinAxis"_ustr))
+    , mxSpinCustomMax(m_xBuilder->weld_formatted_spin_button(u"seMaxAxis"_ustr))
     , mbEditMode(false)
 {
     mxInputRangeEdit->SetReferences(this, mxInputRangeLabel.get());

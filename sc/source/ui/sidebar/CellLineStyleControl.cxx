@@ -34,12 +34,12 @@
 namespace sc::sidebar {
 
 CellLineStylePopup::CellLineStylePopup(weld::Toolbar* pParent, const OUString& rId, SfxDispatcher* pDispatcher)
-    : WeldToolbarPopup(nullptr, pParent, "modules/scalc/ui/floatinglinestyle.ui", "FloatingLineStyle")
+    : WeldToolbarPopup(nullptr, pParent, u"modules/scalc/ui/floatinglinestyle.ui"_ustr, u"FloatingLineStyle"_ustr)
     , maToolButton(pParent, rId)
     , mpDispatcher(pDispatcher)
     , mxCellLineStyleValueSet(new sc::sidebar::CellLineStyleValueSet)
-    , mxCellLineStyleValueSetWin(new weld::CustomWeld(*m_xBuilder, "linestylevalueset", *mxCellLineStyleValueSet))
-    , mxPushButtonMoreOptions(m_xBuilder->weld_button("more"))
+    , mxCellLineStyleValueSetWin(new weld::CustomWeld(*m_xBuilder, u"linestylevalueset"_ustr, *mxCellLineStyleValueSet))
+    , mxPushButtonMoreOptions(m_xBuilder->weld_button(u"more"_ustr))
 {
     Initialize();
 }

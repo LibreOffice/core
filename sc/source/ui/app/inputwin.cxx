@@ -414,7 +414,7 @@ void ScInputWindow::StartFormula()
                     nEndPos = nLen;
                     break;
                 default:
-                    mxTextWindow->SetTextString("=", true);
+                    mxTextWindow->SetTextString(u"="_ustr, true);
                     break;
             }
         }
@@ -859,11 +859,11 @@ void ScInputWindow::AutoSum( bool& bRangeFinder, bool& bSubTotal, OpCode eCode )
 }
 
 ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
-    : InterimItemWindow(pParent, "modules/scalc/ui/inputbar.ui", "InputBar", true, reinterpret_cast<sal_uInt64>(pViewSh))
-    , mxBackground(m_xBuilder->weld_container("background"))
+    : InterimItemWindow(pParent, u"modules/scalc/ui/inputbar.ui"_ustr, u"InputBar"_ustr, true, reinterpret_cast<sal_uInt64>(pViewSh))
+    , mxBackground(m_xBuilder->weld_container(u"background"_ustr))
     , mxTextWndGroup(new ScTextWndGroup(*this, pViewSh))
-    , mxButtonUp(m_xBuilder->weld_button("up"))
-    , mxButtonDown(m_xBuilder->weld_button("down"))
+    , mxButtonUp(m_xBuilder->weld_button(u"up"_ustr))
+    , mxButtonDown(m_xBuilder->weld_button(u"down"_ustr))
 {
     InitControlBase(m_xContainer.get());
 
@@ -1073,8 +1073,8 @@ IMPL_LINK_NOARG(ScInputWindow, DropdownClickHdl, ToolBox *, void)
     {
         tools::Rectangle aRect(GetItemRect(SID_INPUT_SUM));
         weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "modules/scalc/ui/autosum.ui"));
-        std::unique_ptr<weld::Menu> xPopMenu(xBuilder->weld_menu("menu"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, u"modules/scalc/ui/autosum.ui"_ustr));
+        std::unique_ptr<weld::Menu> xPopMenu(xBuilder->weld_menu(u"menu"_ustr));
         MenuHdl(xPopMenu->popup_at_rect(pPopupParent, aRect));
     }
 }
@@ -1128,7 +1128,7 @@ void ScInputBarGroup::TriggerToolboxLayout()
 
     if ( xPropSet.is() )
     {
-        css::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
+        css::uno::Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
         aValue >>= xLayoutManager;
     }
 
@@ -1165,15 +1165,15 @@ constexpr tools::Long gnBorderHeight = INPUTLINE_INSET_MARGIN + 1;
 
 ScTextWndGroup::ScTextWndGroup(ScInputBarGroup& rParent, ScTabViewShell* pViewSh)
     : mxTextWnd(new ScTextWnd(*this, pViewSh))
-    , mxScrollWin(rParent.GetBuilder().weld_scrolled_window("scrolledwindow", true))
-    , mxTextWndWin(new weld::CustomWeld(rParent.GetBuilder(), "sc_input_window", *mxTextWnd))
+    , mxScrollWin(rParent.GetBuilder().weld_scrolled_window(u"scrolledwindow"_ustr, true))
+    , mxTextWndWin(new weld::CustomWeld(rParent.GetBuilder(), u"sc_input_window"_ustr, *mxTextWnd))
     , mrParent(rParent)
 {
     mxScrollWin->connect_vadjustment_changed(LINK(this, ScTextWndGroup, Impl_ScrollHdl));
     if (ScTabViewShell* pActiveViewShell = comphelper::LibreOfficeKit::isActive() ?
             dynamic_cast<ScTabViewShell*>(SfxViewShell::Current()) : nullptr)
     {
-        pActiveViewShell->LOKSendFormulabarUpdate(nullptr, "", ESelection());
+        pActiveViewShell->LOKSendFormulabarUpdate(nullptr, u""_ustr, ESelection());
     }
 }
 
@@ -1792,7 +1792,7 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
                 if (IsMouseCaptured())
                     ReleaseMouse();
                 UpdateFocus();
-                pViewFrm->GetDispatcher()->ExecutePopup("formulabar", &mrGroupBar.GetVclParent(), &aPos);
+                pViewFrm->GetDispatcher()->ExecutePopup(u"formulabar"_ustr, &mrGroupBar.GetVclParent(), &aPos);
             }
         }
         else if ( nCommand == CommandEventId::Wheel )
@@ -2251,8 +2251,8 @@ void ScTextWnd::TextGrabFocus()
 
 // Position window
 ScPosWnd::ScPosWnd(vcl::Window* pParent)
-    : InterimItemWindow(pParent, "modules/scalc/ui/posbox.ui", "PosBox")
-    , m_xWidget(m_xBuilder->weld_combo_box("pos_window"))
+    : InterimItemWindow(pParent, u"modules/scalc/ui/posbox.ui"_ustr, u"PosBox"_ustr)
+    , m_xWidget(m_xBuilder->weld_combo_box(u"pos_window"_ustr))
     , m_nAsyncGetFocusId(nullptr)
     , nTipVisible(nullptr)
     , bFormulaMode(false)
@@ -2340,7 +2340,7 @@ void ScPosWnd::FillRangeNames()
         ScDocument& rDoc = pDocShell->GetDocument();
 
         m_xWidget->append_text(ScResId(STR_MANAGE_NAMES));
-        m_xWidget->append_separator("separator");
+        m_xWidget->append_separator(u"separator"_ustr);
 
         ScRange aDummy;
         std::set<OUString> aSet;

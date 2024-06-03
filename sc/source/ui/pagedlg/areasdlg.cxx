@@ -95,25 +95,25 @@ static void printAddressFlags(ScRefFlags nFlag)
 
 
 ScPrintAreasDlg::ScPrintAreasDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent)
-    : ScAnyRefDlgController(pB, pCW, pParent, "modules/scalc/ui/printareasdialog.ui", "PrintAreasDialog")
+    : ScAnyRefDlgController(pB, pCW, pParent, u"modules/scalc/ui/printareasdialog.ui"_ustr, u"PrintAreasDialog"_ustr)
     , bDlgLostFocus(false)
     , pDoc(nullptr)
     , pViewData(nullptr)
     , nCurTab(0)
-    , m_xLbPrintArea(m_xBuilder->weld_combo_box("lbprintarea"))
-    , m_xEdPrintArea(new formula::RefEdit(m_xBuilder->weld_entry("edprintarea")))
-    , m_xRbPrintArea(new formula::RefButton(m_xBuilder->weld_button("rbprintarea")))
-    , m_xLbRepeatRow(m_xBuilder->weld_combo_box("lbrepeatrow"))
-    , m_xEdRepeatRow(new formula::RefEdit(m_xBuilder->weld_entry("edrepeatrow")))
-    , m_xRbRepeatRow(new formula::RefButton(m_xBuilder->weld_button("rbrepeatrow")))
-    , m_xLbRepeatCol(m_xBuilder->weld_combo_box("lbrepeatcol"))
-    , m_xEdRepeatCol(new formula::RefEdit(m_xBuilder->weld_entry("edrepeatcol")))
-    , m_xRbRepeatCol(new formula::RefButton(m_xBuilder->weld_button("rbrepeatcol")))
-    , m_xBtnOk(m_xBuilder->weld_button("ok"))
-    , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
-    , m_xPrintFrame(m_xBuilder->weld_frame("printframe"))
-    , m_xRowFrame(m_xBuilder->weld_frame("rowframe"))
-    , m_xColFrame(m_xBuilder->weld_frame("colframe"))
+    , m_xLbPrintArea(m_xBuilder->weld_combo_box(u"lbprintarea"_ustr))
+    , m_xEdPrintArea(new formula::RefEdit(m_xBuilder->weld_entry(u"edprintarea"_ustr)))
+    , m_xRbPrintArea(new formula::RefButton(m_xBuilder->weld_button(u"rbprintarea"_ustr)))
+    , m_xLbRepeatRow(m_xBuilder->weld_combo_box(u"lbrepeatrow"_ustr))
+    , m_xEdRepeatRow(new formula::RefEdit(m_xBuilder->weld_entry(u"edrepeatrow"_ustr)))
+    , m_xRbRepeatRow(new formula::RefButton(m_xBuilder->weld_button(u"rbrepeatrow"_ustr)))
+    , m_xLbRepeatCol(m_xBuilder->weld_combo_box(u"lbrepeatcol"_ustr))
+    , m_xEdRepeatCol(new formula::RefEdit(m_xBuilder->weld_entry(u"edrepeatcol"_ustr)))
+    , m_xRbRepeatCol(new formula::RefButton(m_xBuilder->weld_button(u"rbrepeatcol"_ustr)))
+    , m_xBtnOk(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xBtnCancel(m_xBuilder->weld_button(u"cancel"_ustr))
+    , m_xPrintFrame(m_xBuilder->weld_frame(u"printframe"_ustr))
+    , m_xRowFrame(m_xBuilder->weld_frame(u"rowframe"_ustr))
+    , m_xColFrame(m_xBuilder->weld_frame(u"colframe"_ustr))
     , m_xPrintFrameFT(m_xPrintFrame->weld_label_widget())
     , m_xRowFrameFT(m_xRowFrame->weld_label_widget())
     , m_xColFrameFT(m_xColFrame->weld_label_widget())
@@ -449,9 +449,9 @@ IMPL_LINK(ScPrintAreasDlg, Impl_BtnHdl, weld::Button&, rBtn, void)
     {
         if ( Impl_CheckRefStrings() )
         {
-            SfxStringItem   aPrintArea( SID_CHANGE_PRINTAREA, "" );
-            SfxStringItem   aRepeatRow( FN_PARAM_2, "" );
-            SfxStringItem   aRepeatCol( FN_PARAM_3, "" );
+            SfxStringItem   aPrintArea( SID_CHANGE_PRINTAREA, u""_ustr );
+            SfxStringItem   aRepeatRow( FN_PARAM_2, u""_ustr );
+            SfxStringItem   aRepeatCol( FN_PARAM_3, u""_ustr );
 
             // Printing area changed?
 

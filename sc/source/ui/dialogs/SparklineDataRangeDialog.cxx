@@ -19,16 +19,16 @@ SparklineDataRangeDialog::SparklineDataRangeDialog(SfxBindings* pBindings,
                                                    weld::Window* pWindow, ScViewData& rViewData)
     : ScAnyRefDlgController(pBindings, pChildWindow, pWindow,
                             u"modules/scalc/ui/sparklinedatarangedialog.ui"_ustr,
-                            "SparklineDataRangeDialog")
+                            u"SparklineDataRangeDialog"_ustr)
     , mrViewData(rViewData)
     , mrDocument(rViewData.GetDocument())
     , mpActiveEdit(nullptr)
     , mbDialogLostFocus(false)
-    , mxButtonOk(m_xBuilder->weld_button("ok"))
-    , mxButtonCancel(m_xBuilder->weld_button("cancel"))
-    , mxDataRangeLabel(m_xBuilder->weld_label("cell-range-label"))
-    , mxDataRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("cell-range-edit")))
-    , mxDataRangeButton(new formula::RefButton(m_xBuilder->weld_button("cell-range-button")))
+    , mxButtonOk(m_xBuilder->weld_button(u"ok"_ustr))
+    , mxButtonCancel(m_xBuilder->weld_button(u"cancel"_ustr))
+    , mxDataRangeLabel(m_xBuilder->weld_label(u"cell-range-label"_ustr))
+    , mxDataRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry(u"cell-range-edit"_ustr)))
+    , mxDataRangeButton(new formula::RefButton(m_xBuilder->weld_button(u"cell-range-button"_ustr)))
 
 {
     mxDataRangeEdit->SetReferences(this, mxDataRangeLabel.get());

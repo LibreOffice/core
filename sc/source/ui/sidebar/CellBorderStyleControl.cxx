@@ -40,13 +40,13 @@ namespace sc::sidebar {
 #define FRM_VALID_ALL       0xff
 
 CellBorderStylePopup::CellBorderStylePopup(weld::Toolbar* pParent, const OUString& rId, SfxDispatcher* pDispatcher)
-    : WeldToolbarPopup(nullptr, pParent, "modules/scalc/ui/floatingborderstyle.ui", "FloatingBorderStyle")
+    : WeldToolbarPopup(nullptr, pParent, u"modules/scalc/ui/floatingborderstyle.ui"_ustr, u"FloatingBorderStyle"_ustr)
     , maToolButton(pParent, rId)
     , mpDispatcher(pDispatcher)
-    , mxTBBorder1(m_xBuilder->weld_toolbar("border1"))
-    , mxTBBorder2(m_xBuilder->weld_toolbar("border2"))
-    , mxTBBorder3(m_xBuilder->weld_toolbar("border3"))
-    , mxTBBorder4(m_xBuilder->weld_toolbar("border4"))
+    , mxTBBorder1(m_xBuilder->weld_toolbar(u"border1"_ustr))
+    , mxTBBorder2(m_xBuilder->weld_toolbar(u"border2"_ustr))
+    , mxTBBorder3(m_xBuilder->weld_toolbar(u"border3"_ustr))
+    , mxTBBorder4(m_xBuilder->weld_toolbar(u"border4"_ustr))
 {
     Initialize();
 }

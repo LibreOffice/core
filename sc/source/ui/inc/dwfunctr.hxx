@@ -33,7 +33,7 @@ protected:
     virtual void setProperty(const css::uno::Any &rProperty) override;
 public:
     EnglishFunctionNameChange(const rtl::Reference<comphelper::ConfigurationListener> &rListener, ScFunctionWin* pFunctionWin)
-        : ConfigurationListenerProperty(rListener, "EnglishFunctionName")
+        : ConfigurationListenerProperty(rListener, u"EnglishFunctionName"_ustr)
         , m_pFunctionWin(pFunctionWin)
     {
     }
