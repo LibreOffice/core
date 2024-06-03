@@ -286,6 +286,19 @@ namespace drawinglayer::attribute
                 aBitmapSize.setX(aBitmapSize.getX() / fRangeWidth);
                 aBitmapSize.setY(aBitmapSize.getY() / fRangeHeight);
             }
+            else if (mpSdrFillGraphicAttribute->getStretch())
+            {
+                //tdf#153008 We may want to calculate crop. (stretch-fillRect case)
+                aBitmapTopLeft.setX(getOffsetPosition().getX() * 0.01);
+                aBitmapTopLeft.setY(getOffsetPosition().getY() * 0.01);
+                if (getSize().getX() != 0.0 && getSize().getY() != 0.0)
+                {
+                    const double fRangeWidth(0.0 != rRange.getWidth() ? rRange.getWidth() : 1.0);
+                    const double fRangeHeight(0.0 != rRange.getHeight() ? rRange.getHeight() : 1.0);
+                    aBitmapSize.setX(getSize().getX() / fRangeWidth);
+                    aBitmapSize.setY(getSize().getY() / fRangeHeight);
+                }
+            }
 
             // get offset in percent
             const double fOffsetX(std::clamp(getOffset().getX() * 0.01, 0.0, 1.0));

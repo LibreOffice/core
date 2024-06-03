@@ -43,6 +43,10 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/xhatch.hxx>
 #include <svx/sdshitm.hxx>
+#include <svx/xflboxy.hxx>
+#include <svx/xflbmsxy.hxx>
+#include <svx/sdgcpitm.hxx>
+#include <svx/xflbstit.hxx>
 #include <comphelper/configuration.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
@@ -2626,6 +2630,29 @@ void EnhancedCustomShape2d::CreateSubPath(
             SfxItemSet aTempSet(*this);
             aTempSet.Put(makeSdrShadowItem(false));
             aTempSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
+
+            // tdf#153008 If it is a stretched bitmap, with crop,
+            // then set crop data into PosOffset and BmpSize
+            // so it can be used at createFillGraphicAttribute to crop the image
+            if (aTempSet.HasItem(SDRATTR_GRAFCROP)
+                && aTempSet.HasItem(XATTR_FILLBITMAP)
+                && aTempSet.HasItem(XATTR_FILLBMP_STRETCH)
+                && aTempSet.Get(XATTR_FILLBMP_STRETCH).GetValue())
+            {
+                const SdrGrafCropItem& rCrop = aTempSet.Get(SDRATTR_GRAFCROP);
+                const Size& aBmpSize
+                    = aTempSet.Get(XATTR_FILLBITMAP).GetGraphicObject().GetPrefSize();
+
+                aTempSet.Put(XFillBmpPosOffsetXItem(rCrop.GetLeft() * 100 / aBmpSize.Width()));
+                aTempSet.Put(XFillBmpPosOffsetYItem(rCrop.GetTop() * 100 / aBmpSize.Height()));
+                aTempSet.Put(
+                    XFillBmpSizeXItem((aBmpSize.Width() - rCrop.GetLeft() - rCrop.GetRight())
+                                      * pFill->GetGeoRect().GetWidth() / aBmpSize.Width()));
+                aTempSet.Put(
+                    XFillBmpSizeYItem((aBmpSize.Height() - rCrop.GetTop() - rCrop.GetBottom())
+                                      * pFill->GetGeoRect().GetHeight() / aBmpSize.Height()));
+            }
+
             pFill->SetMergedItemSet(aTempSet);
             rObjectList.push_back(std::pair< rtl::Reference<SdrPathObj>, double >(std::move(pFill), dBrightness));
         }

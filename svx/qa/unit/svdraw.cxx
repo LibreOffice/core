@@ -52,16 +52,17 @@ public:
     }
 
 protected:
-    SdrPage* getFirstDrawPageWithAssert();
+    SdrPage* getFirstDrawPageWithAssert(sal_Int32 nPageIndex = 0);
 };
 
-SdrPage* SvdrawTest::getFirstDrawPageWithAssert()
+SdrPage* SvdrawTest::getFirstDrawPageWithAssert(sal_Int32 nPageIndex /* = 0*/)
 {
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
                                                                    uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xDrawPagesSupplier.is());
     uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(nPageIndex),
+                                                 uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xDrawPage.is());
 
     auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
@@ -463,6 +464,67 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf148000_CurvedTextWidth)
             CPPUNIT_ASSERT_GREATER(sal_Int32(1500), nX2 - nX4);
         }
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf153008_CropStretchedBitmapFill)
+{
+    loadFromFile(u"tdf153008_crop_stretched_bitmap.pptx");
+
+    SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+
+    xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+
+    // Load Polygon size
+    sal_Int16 nPolyHeight = getXPath(pXmlDoc, "//mask/polypolygon"_ostr, "height"_ostr).toInt32();
+    sal_Int16 nPolyWidth = getXPath(pXmlDoc, "//mask/polypolygon"_ostr, "width"_ostr).toInt32();
+    // polygon position is nearly 0,0
+    // Load Bitmap coordinates (from transformation matrix)
+    sal_Int16 nBmpPosX = getXPath(pXmlDoc, "//bitmap"_ostr, "xy13"_ostr).toInt32();
+    sal_Int16 nBmpPosY = getXPath(pXmlDoc, "//bitmap"_ostr, "xy23"_ostr).toInt32();
+    sal_Int16 nBmpWidth = getXPath(pXmlDoc, "//bitmap"_ostr, "xy11"_ostr).toInt32();
+    sal_Int16 nBmpHeight = getXPath(pXmlDoc, "//bitmap"_ostr, "xy22"_ostr).toInt32();
+
+    // The Bitmap should start nearly in the middle of the polygon.
+    // because of rounding errors we tolerate 2% difference
+    // Before the fix, the bitmap was always stretched to the whole polygon,
+    // that means they had the same size, and position.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nPolyWidth / 2, nBmpPosX, nPolyWidth / 50);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nPolyHeight / 2, nBmpPosY, nPolyHeight / 50);
+    // And should have 1/2 width, and 3/8 height of the polygon.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nPolyWidth / 2, nBmpWidth, nPolyWidth / 50);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nPolyHeight * 3 / 8, nBmpHeight, nPolyHeight / 50);
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf153008_CropStretchedBitmapFillNegativePosition)
+{
+    loadFromFile(u"tdf153008_crop_stretched_bitmap.pptx");
+
+    // get the 2. page
+    SdrPage* pSdrPage = getFirstDrawPageWithAssert(1);
+
+    xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+
+    // Load Polygon size
+    sal_Int16 nPolyHeight = getXPath(pXmlDoc, "//mask/polypolygon"_ostr, "height"_ostr).toInt32();
+    sal_Int16 nPolyWidth = getXPath(pXmlDoc, "//mask/polypolygon"_ostr, "width"_ostr).toInt32();
+    // polygon position is nearly 0,0
+    // Load Bitmap coordinates (from transformation matrix)
+    sal_Int16 nBmpPosX = getXPath(pXmlDoc, "//bitmap"_ostr, "xy13"_ostr).toInt32();
+    sal_Int16 nBmpPosY = getXPath(pXmlDoc, "//bitmap"_ostr, "xy23"_ostr).toInt32();
+    sal_Int16 nBmpWidth = getXPath(pXmlDoc, "//bitmap"_ostr, "xy11"_ostr).toInt32();
+    sal_Int16 nBmpHeight = getXPath(pXmlDoc, "//bitmap"_ostr, "xy22"_ostr).toInt32();
+
+    // The Bitmap should start before the polygon.
+    // At x direction it should start left from the polygon with 3/8 polygon width
+    // At y direction it should start up from the polygon with 3/16 polygon height
+    // Before the fix, negative numbers overflowed to big positive number,
+    // so the bitmap was moved to a far away place where it was not visible
+    // because of rounding errors we tolerate 2% difference
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-nPolyWidth * 3 / 8, nBmpPosX, nPolyWidth / 50);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-nPolyHeight * 3 / 16, nBmpPosY, nPolyHeight / 50);
+    // And should have 3/2 width, and 1/1 height of the polygon.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nPolyWidth * 3 / 2, nBmpWidth, nPolyWidth / 50);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nPolyHeight, nBmpHeight, nPolyHeight / 50);
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testSurfaceMetal)
