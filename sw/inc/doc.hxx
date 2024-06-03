@@ -1103,7 +1103,7 @@ public:
             SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
     sal_uInt16 FindNumRule( std::u16string_view rName ) const;
     SwNumRule* FindNumRulePtr( const OUString& rName ) const;
-    std::vector<OUString> GetUsedBullets();
+    std::set<OUString> GetUsedBullets();
 
     // Deletion only possible if Rule is not used!
     bool RenameNumRule(const OUString & aOldName, const OUString & aNewName,
