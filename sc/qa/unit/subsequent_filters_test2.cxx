@@ -730,6 +730,19 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testErrorOnExternalReferences)
                                  pDoc->GetFormula(0, 0, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf160371)
+{
+    createScDoc("xlsx/tdf160371.xlsx");
+
+    ScDocument* pDoc = getScDoc();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: =INDIRECT(B2)!INDIRECT(B3)
+    // - Actual  : =INDIRECT(B2) INDIRECT(B3)
+    CPPUNIT_ASSERT_EQUAL(u"=INDIRECT(B2)!INDIRECT(B3)"_ustr, pDoc->GetFormula(1, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(1, 3, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf145054)
 {
     createScDoc("xlsx/tdf145054.xlsx");
