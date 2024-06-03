@@ -333,6 +333,7 @@ SvxBulletPickTabPage::SvxBulletPickTabPage(weld::Container* pPage, weld::DialogC
     , m_xExamplesVSWin(new weld::CustomWeld(*m_xBuilder, "valueset", *m_xExamplesVS))
 {
     SetExchangeSupport();
+    m_xBtChangeBullet->set_sensitive(false);
     m_xExamplesVS->init(NumberingPageType::BULLET);
     m_xExamplesVS->SetSelectHdl(LINK(this, SvxBulletPickTabPage, NumSelectHdl_Impl));
     m_xExamplesVS->SetDoubleClickHdl(LINK(this, SvxBulletPickTabPage, DoubleClickHdl_Impl));
@@ -428,6 +429,8 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
 {
     if(!pActNum)
         return;
+
+    m_xBtChangeBullet->set_sensitive(true);
 
     bPreset = false;
     bModified = true;
