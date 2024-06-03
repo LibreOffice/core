@@ -56,7 +56,7 @@ std::unique_ptr<PanelLayout> WriterInspectorTextPanel::Create(weld::Widget* pPar
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException(
-            "no parent Window given to WriterInspectorTextPanel::Create", nullptr, 0);
+            u"no parent Window given to WriterInspectorTextPanel::Create"_ustr, nullptr, 0);
     return std::make_unique<WriterInspectorTextPanel>(pParent);
 }
 
@@ -363,13 +363,14 @@ static svx::sidebar::TreeNode BorderToTreeNode(const OUString& rName, const css:
     aCurNode.sNodeName = PropertyNametoRID(rName);
     aCurNode.NodeType = svx::sidebar::TreeNode::ComplexProperty;
 
-    aCurNode.children
-        = { SimplePropToTreeNode("BorderColor", css::uno::Any(aBorder.Color)),
-            SimplePropToTreeNode("BorderLineWidth", css::uno::Any(aBorder.LineWidth)),
-            SimplePropToTreeNode("BorderLineStyle", css::uno::Any(aBorder.LineStyle)),
-            SimplePropToTreeNode("BorderLineDistance", css::uno::Any(aBorder.LineDistance)),
-            SimplePropToTreeNode("BorderInnerLineWidth", css::uno::Any(aBorder.InnerLineWidth)),
-            SimplePropToTreeNode("BorderOuterLineWidth", css::uno::Any(aBorder.OuterLineWidth)) };
+    aCurNode.children = {
+        SimplePropToTreeNode(u"BorderColor"_ustr, css::uno::Any(aBorder.Color)),
+        SimplePropToTreeNode(u"BorderLineWidth"_ustr, css::uno::Any(aBorder.LineWidth)),
+        SimplePropToTreeNode(u"BorderLineStyle"_ustr, css::uno::Any(aBorder.LineStyle)),
+        SimplePropToTreeNode(u"BorderLineDistance"_ustr, css::uno::Any(aBorder.LineDistance)),
+        SimplePropToTreeNode(u"BorderInnerLineWidth"_ustr, css::uno::Any(aBorder.InnerLineWidth)),
+        SimplePropToTreeNode(u"BorderOuterLineWidth"_ustr, css::uno::Any(aBorder.OuterLineWidth))
+    };
     return aCurNode;
 }
 
@@ -429,11 +430,11 @@ static void MetadataToTreeNode(const css::uno::Reference<css::uno::XInterface>& 
     }
 
     svx::sidebar::TreeNode aCurNode;
-    aCurNode.sNodeName = PropertyNametoRID("MetadataReference");
+    aCurNode.sNodeName = PropertyNametoRID(u"MetadataReference"_ustr);
     aCurNode.NodeType = svx::sidebar::TreeNode::ComplexProperty;
 
     aCurNode.children.push_back(
-        SimplePropToTreeNode("xml:id", uno::Any(xMeta->getMetadataReference().Second)));
+        SimplePropToTreeNode(u"xml:id"_ustr, uno::Any(xMeta->getMetadataReference().Second)));
 
     // list associated (predicate, object) pairs of the actual subject
     // under the tree node "Metadata Reference"
@@ -598,15 +599,15 @@ static void UpdateTree(SwDocShell& rDocSh, SwEditShell& rEditSh,
     OUString sCurrentCharStyle, sCurrentParaStyle, sDisplayName;
 
     uno::Reference<container::XNameAccess> xStyleFamily(
-        xStyleFamilies->getByName("CharacterStyles"), uno::UNO_QUERY_THROW);
-    xRange->getPropertyValue("CharStyleName") >>= sCurrentCharStyle;
-    xRange->getPropertyValue("ParaStyleName") >>= sCurrentParaStyle;
+        xStyleFamilies->getByName(u"CharacterStyles"_ustr), uno::UNO_QUERY_THROW);
+    xRange->getPropertyValue(u"CharStyleName"_ustr) >>= sCurrentCharStyle;
+    xRange->getPropertyValue(u"ParaStyleName"_ustr) >>= sCurrentParaStyle;
 
     if (!sCurrentCharStyle.isEmpty())
     {
         uno::Reference<beans::XPropertySet> xPropertiesSet(
             xStyleFamily->getByName(sCurrentCharStyle), css::uno::UNO_QUERY_THROW);
-        xPropertiesSet->getPropertyValue("DisplayName") >>= sDisplayName;
+        xPropertiesSet->getPropertyValue(u"DisplayName"_ustr) >>= sDisplayName;
         svx::sidebar::TreeNode aCurrentChild;
         aCurrentChild.sNodeName = sDisplayName;
         aCurrentChild.NodeType = svx::sidebar::TreeNode::ComplexProperty;
@@ -628,7 +629,7 @@ static void UpdateTree(SwDocShell& rDocSh, SwEditShell& rEditSh,
                      aFieldsNode);
     }
 
-    xStyleFamily.set(xStyleFamilies->getByName("ParagraphStyles"), uno::UNO_QUERY_THROW);
+    xStyleFamily.set(xStyleFamilies->getByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY_THROW);
 
     while (!sCurrentParaStyle.isEmpty())
     {
@@ -636,7 +637,7 @@ static void UpdateTree(SwDocShell& rDocSh, SwEditShell& rEditSh,
                                                        uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xPropertiesSet(xPropertiesStyle,
                                                            css::uno::UNO_QUERY_THROW);
-        xPropertiesSet->getPropertyValue("DisplayName") >>= sDisplayName;
+        xPropertiesSet->getPropertyValue(u"DisplayName"_ustr) >>= sDisplayName;
         OUString aParentParaStyle = xPropertiesStyle->getParentStyle();
         svx::sidebar::TreeNode aCurrentChild;
         aCurrentChild.sNodeName = sDisplayName;

@@ -56,12 +56,12 @@ VclPtr<vcl::Window> PageMarginPopup::createVclPopupWindow( vcl::Window* pParent 
 
 OUString PageMarginPopup::getImplementationName()
 {
-    return "lo.writer.PageMarginToolBoxControl";
+    return u"lo.writer.PageMarginToolBoxControl"_ustr;
 }
 
 css::uno::Sequence<OUString> PageMarginPopup::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

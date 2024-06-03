@@ -56,12 +56,12 @@ VclPtr<vcl::Window> PageSizePopup::createVclPopupWindow( vcl::Window* pParent )
 
 OUString PageSizePopup::getImplementationName()
 {
-    return "lo.writer.PageSizeToolBoxControl";
+    return u"lo.writer.PageSizeToolBoxControl"_ustr;
 }
 
 css::uno::Sequence<OUString> PageSizePopup::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

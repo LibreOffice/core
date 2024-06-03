@@ -91,17 +91,17 @@ namespace
 namespace sw::sidebar {
 
 PageMarginControl::PageMarginControl(PageMarginPopup* pControl, weld::Widget* pParent)
-    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "modules/swriter/ui/pagemargincontrol.ui", "PageMarginControl")
-    , m_xMoreButton(m_xBuilder->weld_button("moreoptions"))
-    , m_xLeft(m_xBuilder->weld_label("leftLabel"))
-    , m_xRight(m_xBuilder->weld_label("rightLabel"))
-    , m_xInner(m_xBuilder->weld_label("innerLabel"))
-    , m_xOuter(m_xBuilder->weld_label("outerLabel"))
-    , m_xLeftMarginEdit(m_xBuilder->weld_metric_spin_button("left", FieldUnit::CM))
-    , m_xRightMarginEdit(m_xBuilder->weld_metric_spin_button("right", FieldUnit::CM))
-    , m_xTopMarginEdit(m_xBuilder->weld_metric_spin_button("top", FieldUnit::CM))
-    , m_xBottomMarginEdit(m_xBuilder->weld_metric_spin_button("bottom", FieldUnit::CM))
-    , m_xWidthHeightField(m_xBuilder->weld_metric_spin_button("hidden", FieldUnit::CM))
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"modules/swriter/ui/pagemargincontrol.ui"_ustr, u"PageMarginControl"_ustr)
+    , m_xMoreButton(m_xBuilder->weld_button(u"moreoptions"_ustr))
+    , m_xLeft(m_xBuilder->weld_label(u"leftLabel"_ustr))
+    , m_xRight(m_xBuilder->weld_label(u"rightLabel"_ustr))
+    , m_xInner(m_xBuilder->weld_label(u"innerLabel"_ustr))
+    , m_xOuter(m_xBuilder->weld_label(u"outerLabel"_ustr))
+    , m_xLeftMarginEdit(m_xBuilder->weld_metric_spin_button(u"left"_ustr, FieldUnit::CM))
+    , m_xRightMarginEdit(m_xBuilder->weld_metric_spin_button(u"right"_ustr, FieldUnit::CM))
+    , m_xTopMarginEdit(m_xBuilder->weld_metric_spin_button(u"top"_ustr, FieldUnit::CM))
+    , m_xBottomMarginEdit(m_xBuilder->weld_metric_spin_button(u"bottom"_ustr, FieldUnit::CM))
+    , m_xWidthHeightField(m_xBuilder->weld_metric_spin_button(u"hidden"_ustr, FieldUnit::CM))
     , m_xControl(pControl)
     , m_nPageLeftMargin(0)
     , m_nPageRightMargin(0)
@@ -159,19 +159,19 @@ PageMarginControl::PageMarginControl(PageMarginPopup* pControl, weld::Widget* pP
 
     if ( bLandscape )
     {
-        m_xNarrow = m_xBuilder->weld_button("narrowL");
-        m_xNormal = m_xBuilder->weld_button("normalL");
-        m_xWide = m_xBuilder->weld_button("wideL");
-        m_xMirrored = m_xBuilder->weld_button("mirroredL");
-        m_xLast = m_xBuilder->weld_button("lastL");
+        m_xNarrow = m_xBuilder->weld_button(u"narrowL"_ustr);
+        m_xNormal = m_xBuilder->weld_button(u"normalL"_ustr);
+        m_xWide = m_xBuilder->weld_button(u"wideL"_ustr);
+        m_xMirrored = m_xBuilder->weld_button(u"mirroredL"_ustr);
+        m_xLast = m_xBuilder->weld_button(u"lastL"_ustr);
     }
     else
     {
-        m_xNarrow = m_xBuilder->weld_button("narrow");
-        m_xNormal = m_xBuilder->weld_button("normal");
-        m_xWide = m_xBuilder->weld_button("wide");
-        m_xMirrored = m_xBuilder->weld_button("mirrored");
-        m_xLast = m_xBuilder->weld_button("last");
+        m_xNarrow = m_xBuilder->weld_button(u"narrow"_ustr);
+        m_xNormal = m_xBuilder->weld_button(u"normal"_ustr);
+        m_xWide = m_xBuilder->weld_button(u"wide"_ustr);
+        m_xMirrored = m_xBuilder->weld_button(u"mirrored"_ustr);
+        m_xLast = m_xBuilder->weld_button(u"last"_ustr);
     }
 
     m_xNarrow->show();
@@ -407,7 +407,7 @@ IMPL_LINK( PageMarginControl, SelectMarginHdl, weld::Button&, rControl, void )
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     const css::uno::Reference<css::document::XUndoManager> xUndoManager(pViewFrm ? getUndoManager(pViewFrm->GetFrame().GetFrameInterface()) : nullptr);
     if ( xUndoManager.is() )
-        xUndoManager->enterUndoContext( "" );
+        xUndoManager->enterUndoContext( u""_ustr );
 
     ExecuteMarginLRChange( m_nPageLeftMargin, m_nPageRightMargin );
     ExecuteMarginULChange( m_nPageTopMargin, m_nPageBottomMargin );

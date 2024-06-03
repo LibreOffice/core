@@ -29,16 +29,16 @@ namespace sw::sidebar
 std::unique_ptr<PanelLayout> ThemePanel::Create(weld::Widget* pParent)
 {
     if (pParent == nullptr)
-        throw css::lang::IllegalArgumentException("no parent Window given to PagePropertyPanel::Create", nullptr, 0);
+        throw css::lang::IllegalArgumentException(u"no parent Window given to PagePropertyPanel::Create"_ustr, nullptr, 0);
 
     return std::make_unique<ThemePanel>(pParent);
 }
 
 ThemePanel::ThemePanel(weld::Widget* pParent)
-    : PanelLayout(pParent, "ThemePanel", "modules/swriter/ui/sidebartheme.ui")
+    : PanelLayout(pParent, u"ThemePanel"_ustr, u"modules/swriter/ui/sidebartheme.ui"_ustr)
     , mxValueSetColors(new svx::ThemeColorValueSet)
-    , mxValueSetColorsWin(new weld::CustomWeld(*m_xBuilder, "valueset_colors", *mxValueSetColors))
-    , mxApplyButton(m_xBuilder->weld_button("apply"))
+    , mxValueSetColorsWin(new weld::CustomWeld(*m_xBuilder, u"valueset_colors"_ustr, *mxValueSetColors))
+    , mxApplyButton(m_xBuilder->weld_button(u"apply"_ustr))
 {
     mxValueSetColors->SetColCount(2);
     mxValueSetColors->SetLineCount(3);

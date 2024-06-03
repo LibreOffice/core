@@ -68,11 +68,11 @@ namespace
 namespace sw::sidebar {
 
 PageSizeControl::PageSizeControl(PageSizePopup* pControl, weld::Widget* pParent)
-    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "modules/swriter/ui/pagesizecontrol.ui", "PageSizeControl")
-    , mxMoreButton(m_xBuilder->weld_button("moreoptions"))
-    , mxWidthHeightField(m_xBuilder->weld_metric_spin_button("metric", FieldUnit::CM))
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"modules/swriter/ui/pagesizecontrol.ui"_ustr, u"PageSizeControl"_ustr)
+    , mxMoreButton(m_xBuilder->weld_button(u"moreoptions"_ustr))
+    , mxWidthHeightField(m_xBuilder->weld_metric_spin_button(u"metric"_ustr, FieldUnit::CM))
     , mxSizeValueSet(new svx::sidebar::ValueSetWithTextControl)
-    , mxSizeValueSetWin(new weld::CustomWeld(*m_xBuilder, "pagesizevalueset", *mxSizeValueSet))
+    , mxSizeValueSetWin(new weld::CustomWeld(*m_xBuilder, u"pagesizevalueset"_ustr, *mxSizeValueSet))
     , mxControl(pControl)
 {
     mxWidthHeightField->set_unit(FieldUnit::CM);

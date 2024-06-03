@@ -134,15 +134,15 @@ BitmapEx CreatePreview(OUString const & aUrl, OUString const & aName)
 std::unique_ptr<PanelLayout> StylePresetsPanel::Create(weld::Widget* pParent)
 {
     if (pParent == nullptr)
-        throw css::lang::IllegalArgumentException("no parent Window given to StylePresetsPanel::Create", nullptr, 0);
+        throw css::lang::IllegalArgumentException(u"no parent Window given to StylePresetsPanel::Create"_ustr, nullptr, 0);
 
     return std::make_unique<StylePresetsPanel>(pParent);
 }
 
 StylePresetsPanel::StylePresetsPanel(weld::Widget* pParent)
-    : PanelLayout(pParent, "StylePresetsPanel", "modules/swriter/ui/sidebarstylepresets.ui")
+    : PanelLayout(pParent, u"StylePresetsPanel"_ustr, u"modules/swriter/ui/sidebarstylepresets.ui"_ustr)
     , mxValueSet(new ValueSet(nullptr))
-    , mxValueSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxValueSet))
+    , mxValueSetWin(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, *mxValueSet))
 {
     mxValueSet->SetColCount(2);
 

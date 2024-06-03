@@ -32,11 +32,11 @@ namespace sw::sidebar
 {
 AccessibilityCheckEntry::AccessibilityCheckEntry(
     weld::Container* pParent, std::shared_ptr<sfx::AccessibilityIssue> const& rAccessibilityIssue)
-    : m_xBuilder(Application::CreateBuilder(pParent, "svx/ui/accessibilitycheckentry.ui"))
-    , m_xContainer(m_xBuilder->weld_container("accessibilityCheckEntryBox"))
-    , m_xLabel(m_xBuilder->weld_label("accessibilityCheckEntryLabel"))
-    , m_xGotoButton(m_xBuilder->weld_link_button("accessibilityCheckEntryLinkButton"))
-    , m_xFixButton(m_xBuilder->weld_button("accessibilityCheckEntryFixButton"))
+    : m_xBuilder(Application::CreateBuilder(pParent, u"svx/ui/accessibilitycheckentry.ui"_ustr))
+    , m_xContainer(m_xBuilder->weld_container(u"accessibilityCheckEntryBox"_ustr))
+    , m_xLabel(m_xBuilder->weld_label(u"accessibilityCheckEntryLabel"_ustr))
+    , m_xGotoButton(m_xBuilder->weld_link_button(u"accessibilityCheckEntryLinkButton"_ustr))
+    , m_xFixButton(m_xBuilder->weld_button(u"accessibilityCheckEntryFixButton"_ustr))
     , m_pAccessibilityIssue(rAccessibilityIssue)
 {
     // lock in the height as including the button so all rows are the same height
@@ -97,39 +97,40 @@ std::unique_ptr<PanelLayout> A11yCheckIssuesPanel::Create(weld::Widget* pParent,
 {
     if (pParent == nullptr)
         throw ::com::sun::star::lang::IllegalArgumentException(
-            "no parent window given to A11yCheckIssuesPanel::Create", nullptr, 0);
+            u"no parent window given to A11yCheckIssuesPanel::Create"_ustr, nullptr, 0);
     return std::make_unique<A11yCheckIssuesPanel>(pParent, pBindings);
 }
 
 A11yCheckIssuesPanel::A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* pBindings)
-    : PanelLayout(pParent, "A11yCheckIssuesPanel", "modules/swriter/ui/a11ycheckissuespanel.ui")
+    : PanelLayout(pParent, u"A11yCheckIssuesPanel"_ustr,
+                  u"modules/swriter/ui/a11ycheckissuespanel.ui"_ustr)
     , mpBindings(pBindings)
     , mpDoc(nullptr)
     , maA11yCheckController(FN_STAT_ACCESSIBILITY_CHECK, *pBindings, *this)
     , mnIssueCount(0)
     , mbAutomaticCheckEnabled(false)
 {
-    m_xExpanders[0] = m_xBuilder->weld_expander("expand_document");
-    m_xExpanders[1] = m_xBuilder->weld_expander("expand_styles");
-    m_xExpanders[2] = m_xBuilder->weld_expander("expand_linked");
-    m_xExpanders[3] = m_xBuilder->weld_expander("expand_no_alt");
-    m_xExpanders[4] = m_xBuilder->weld_expander("expand_table");
-    m_xExpanders[5] = m_xBuilder->weld_expander("expand_formatting");
-    m_xExpanders[6] = m_xBuilder->weld_expander("expand_hyperlink");
-    m_xExpanders[7] = m_xBuilder->weld_expander("expand_fakes");
-    m_xExpanders[8] = m_xBuilder->weld_expander("expand_numbering");
-    m_xExpanders[9] = m_xBuilder->weld_expander("expand_other");
+    m_xExpanders[0] = m_xBuilder->weld_expander(u"expand_document"_ustr);
+    m_xExpanders[1] = m_xBuilder->weld_expander(u"expand_styles"_ustr);
+    m_xExpanders[2] = m_xBuilder->weld_expander(u"expand_linked"_ustr);
+    m_xExpanders[3] = m_xBuilder->weld_expander(u"expand_no_alt"_ustr);
+    m_xExpanders[4] = m_xBuilder->weld_expander(u"expand_table"_ustr);
+    m_xExpanders[5] = m_xBuilder->weld_expander(u"expand_formatting"_ustr);
+    m_xExpanders[6] = m_xBuilder->weld_expander(u"expand_hyperlink"_ustr);
+    m_xExpanders[7] = m_xBuilder->weld_expander(u"expand_fakes"_ustr);
+    m_xExpanders[8] = m_xBuilder->weld_expander(u"expand_numbering"_ustr);
+    m_xExpanders[9] = m_xBuilder->weld_expander(u"expand_other"_ustr);
 
-    m_xBoxes[0] = m_xBuilder->weld_box("box_document");
-    m_xBoxes[1] = m_xBuilder->weld_box("box_styles");
-    m_xBoxes[2] = m_xBuilder->weld_box("box_linked");
-    m_xBoxes[3] = m_xBuilder->weld_box("box_no_alt");
-    m_xBoxes[4] = m_xBuilder->weld_box("box_table");
-    m_xBoxes[5] = m_xBuilder->weld_box("box_formatting");
-    m_xBoxes[6] = m_xBuilder->weld_box("box_hyperlink");
-    m_xBoxes[7] = m_xBuilder->weld_box("box_fakes");
-    m_xBoxes[8] = m_xBuilder->weld_box("box_numbering");
-    m_xBoxes[9] = m_xBuilder->weld_box("box_other");
+    m_xBoxes[0] = m_xBuilder->weld_box(u"box_document"_ustr);
+    m_xBoxes[1] = m_xBuilder->weld_box(u"box_styles"_ustr);
+    m_xBoxes[2] = m_xBuilder->weld_box(u"box_linked"_ustr);
+    m_xBoxes[3] = m_xBuilder->weld_box(u"box_no_alt"_ustr);
+    m_xBoxes[4] = m_xBuilder->weld_box(u"box_table"_ustr);
+    m_xBoxes[5] = m_xBuilder->weld_box(u"box_formatting"_ustr);
+    m_xBoxes[6] = m_xBuilder->weld_box(u"box_hyperlink"_ustr);
+    m_xBoxes[7] = m_xBuilder->weld_box(u"box_fakes"_ustr);
+    m_xBoxes[8] = m_xBuilder->weld_box(u"box_numbering"_ustr);
+    m_xBoxes[9] = m_xBuilder->weld_box(u"box_other"_ustr);
 
     SwDocShell* pDocSh = dynamic_cast<SwDocShell*>(SfxObjectShell::Current());
     if (!pDocSh)

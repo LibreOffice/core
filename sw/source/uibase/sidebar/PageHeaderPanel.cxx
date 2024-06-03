@@ -39,9 +39,9 @@ std::unique_ptr<PanelLayout> PageHeaderPanel::Create(
     SfxBindings* pBindings)
 {
     if( pParent == nullptr )
-        throw ::com::sun::star::lang::IllegalArgumentException("no parent window given to PageHeaderPanel::Create", nullptr, 0);
+        throw ::com::sun::star::lang::IllegalArgumentException(u"no parent window given to PageHeaderPanel::Create"_ustr, nullptr, 0);
     if( pBindings == nullptr )
-        throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PageHeaderPanel::Create", nullptr, 0);
+        throw ::com::sun::star::lang::IllegalArgumentException(u"no SfxBindings given to PageHeaderPanel::Create"_ustr, nullptr, 0);
 
     return std::make_unique<PageHeaderPanel>(pParent, pBindings);
 }
@@ -56,7 +56,7 @@ PageHeaderPanel::PageHeaderPanel(
     weld::Widget* pParent,
     SfxBindings* pBindings
     ) :
-    PanelLayout(pParent, "PageHeaderPanel", "modules/swriter/ui/pageheaderpanel.ui"),
+    PanelLayout(pParent, u"PageHeaderPanel"_ustr, u"modules/swriter/ui/pageheaderpanel.ui"_ustr),
     mpBindings( pBindings ),
     maHFToggleController(SID_ATTR_PAGE_HEADER, *pBindings, *this),
     maMetricController(SID_ATTR_METRIC, *pBindings,*this),
@@ -68,11 +68,11 @@ PageHeaderPanel::PageHeaderPanel(
     mpHeaderLRMarginItem( new SvxLongLRSpaceItem(0, 0, SID_ATTR_PAGE_HEADER_LRMARGIN)),
     mpHeaderSpacingItem( new SvxLongULSpaceItem(0, 0, SID_ATTR_PAGE_HEADER_SPACING)),
     mpHeaderLayoutItem( new SfxInt16Item(SID_ATTR_PAGE_HEADER_LAYOUT)),
-    mxHeaderToggle(m_xBuilder->weld_check_button("headertoggle")),
-    mxHeaderSpacingLB(m_xBuilder->weld_combo_box("spacingpreset")),
-    mxHeaderMarginPresetLB(m_xBuilder->weld_combo_box("headermarginpreset")),
-    mxHeaderLayoutLB(m_xBuilder->weld_combo_box("samecontentLB")),
-    mxCustomEntry(m_xBuilder->weld_label("customlabel"))
+    mxHeaderToggle(m_xBuilder->weld_check_button(u"headertoggle"_ustr)),
+    mxHeaderSpacingLB(m_xBuilder->weld_combo_box(u"spacingpreset"_ustr)),
+    mxHeaderMarginPresetLB(m_xBuilder->weld_combo_box(u"headermarginpreset"_ustr)),
+    mxHeaderLayoutLB(m_xBuilder->weld_combo_box(u"samecontentLB"_ustr)),
+    mxCustomEntry(m_xBuilder->weld_label(u"customlabel"_ustr))
 {
     Initialize();
 }

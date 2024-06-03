@@ -32,8 +32,8 @@
 namespace sw::sidebar {
 
 PageColumnControl::PageColumnControl(PageColumnPopup* pControl, weld::Widget* pParent)
-    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "modules/swriter/ui/pagecolumncontrol.ui", "PageColumnControl")
-    , m_xMoreButton(m_xBuilder->weld_button("moreoptions"))
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"modules/swriter/ui/pagecolumncontrol.ui"_ustr, u"PageColumnControl"_ustr)
+    , m_xMoreButton(m_xBuilder->weld_button(u"moreoptions"_ustr))
     , m_xControl(pControl)
 {
     bool bLandscape = false;
@@ -47,19 +47,19 @@ PageColumnControl::PageColumnControl(PageColumnPopup* pControl, weld::Widget* pP
 
     if ( bLandscape )
     {
-        m_xOneColumn = m_xBuilder->weld_button("column1L");
-        m_xTwoColumns = m_xBuilder->weld_button("column2L");
-        m_xThreeColumns = m_xBuilder->weld_button("column3L");
-        m_xLeft = m_xBuilder->weld_button("columnleftL");
-        m_xRight = m_xBuilder->weld_button("columnrightL");
+        m_xOneColumn = m_xBuilder->weld_button(u"column1L"_ustr);
+        m_xTwoColumns = m_xBuilder->weld_button(u"column2L"_ustr);
+        m_xThreeColumns = m_xBuilder->weld_button(u"column3L"_ustr);
+        m_xLeft = m_xBuilder->weld_button(u"columnleftL"_ustr);
+        m_xRight = m_xBuilder->weld_button(u"columnrightL"_ustr);
     }
     else
     {
-        m_xOneColumn = m_xBuilder->weld_button("column1");
-        m_xTwoColumns = m_xBuilder->weld_button( "column2");
-        m_xThreeColumns = m_xBuilder->weld_button("column3");
-        m_xLeft = m_xBuilder->weld_button("columnleft");
-        m_xRight = m_xBuilder->weld_button("columnright");
+        m_xOneColumn = m_xBuilder->weld_button(u"column1"_ustr);
+        m_xTwoColumns = m_xBuilder->weld_button( u"column2"_ustr);
+        m_xThreeColumns = m_xBuilder->weld_button(u"column3"_ustr);
+        m_xLeft = m_xBuilder->weld_button(u"columnleft"_ustr);
+        m_xRight = m_xBuilder->weld_button(u"columnright"_ustr);
     }
 
     m_xOneColumn->show();

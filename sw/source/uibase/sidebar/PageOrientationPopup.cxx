@@ -56,12 +56,12 @@ VclPtr<vcl::Window> PageOrientationPopup::createVclPopupWindow( vcl::Window* pPa
 
 OUString PageOrientationPopup::getImplementationName()
 {
-    return "lo.writer.PageOrientationToolBoxControl";
+    return u"lo.writer.PageOrientationToolBoxControl"_ustr;
 }
 
 css::uno::Sequence<OUString> PageOrientationPopup::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

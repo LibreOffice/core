@@ -33,14 +33,14 @@ std::unique_ptr<PanelLayout> QuickFindPanel::Create(weld::Widget* pParent)
 {
     if (pParent == nullptr)
         throw css::lang::IllegalArgumentException(
-            "no parent Window given to QuickFindPanel::Create", nullptr, 0);
+            u"no parent Window given to QuickFindPanel::Create"_ustr, nullptr, 0);
     return std::make_unique<QuickFindPanel>(pParent);
 }
 
 QuickFindPanel::QuickFindPanel(weld::Widget* pParent)
-    : PanelLayout(pParent, "QuickFindPanel", "modules/swriter/ui/sidebarquickfind.ui")
-    , m_xSearchFindEntry(m_xBuilder->weld_entry("Find"))
-    , m_xSearchFindsList(m_xBuilder->weld_tree_view("searchfinds"))
+    : PanelLayout(pParent, u"QuickFindPanel"_ustr, u"modules/swriter/ui/sidebarquickfind.ui"_ustr)
+    , m_xSearchFindEntry(m_xBuilder->weld_entry(u"Find"_ustr))
+    , m_xSearchFindsList(m_xBuilder->weld_tree_view(u"searchfinds"_ustr))
     , m_nRowHeight(m_xSearchFindsList->get_height_rows(4))
     , m_pWrtShell(::GetActiveWrtShell())
 
@@ -147,7 +147,7 @@ void QuickFindPanel::FillSearchFindsList()
         { "SearchItem.Command", css::uno::Any(sal_uInt16(SvxSearchCmd::FIND_ALL)) },
     }));
 
-    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+    comphelper::dispatchCommand(u".uno:ExecuteSearch"_ustr, aPropertyValues);
 
     if (m_pWrtShell->HasMark())
     {

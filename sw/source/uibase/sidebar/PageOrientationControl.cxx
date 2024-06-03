@@ -50,9 +50,9 @@ namespace {
 namespace sw::sidebar {
 
 PageOrientationControl::PageOrientationControl(PageOrientationPopup* pControl, weld::Widget* pParent)
-    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "modules/swriter/ui/pageorientationcontrol.ui", "PageOrientationControl")
-    , m_xPortrait(m_xBuilder->weld_button("portrait"))
-    , m_xLandscape(m_xBuilder->weld_button("landscape"))
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"modules/swriter/ui/pageorientationcontrol.ui"_ustr, u"PageOrientationControl"_ustr)
+    , m_xPortrait(m_xBuilder->weld_button(u"portrait"_ustr))
+    , m_xLandscape(m_xBuilder->weld_button(u"landscape"_ustr))
     , m_xControl(pControl)
     , mpPageItem( new SvxPageItem(SID_ATTR_PAGE) )
     , mpPageSizeItem( new SvxSizeItem(SID_ATTR_PAGE_SIZE) )
@@ -104,7 +104,7 @@ void PageOrientationControl::ExecuteOrientationChange( const bool bLandscape )
                 getUndoManager( pViewFrm->GetFrame().GetFrameInterface() ) );
 
     if ( mxUndoManager.is() )
-        mxUndoManager->enterUndoContext( "" );
+        mxUndoManager->enterUndoContext( u""_ustr );
 
     SfxPoolItemHolder aResult;
     pViewFrm->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_SIZE, aResult);

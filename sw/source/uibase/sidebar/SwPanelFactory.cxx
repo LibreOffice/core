@@ -66,13 +66,13 @@ public:
         const css::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
 
     OUString SAL_CALL getImplementationName() override
-    { return "org.apache.openoffice.comp.sw.sidebar.SwPanelFactory"; }
+    { return u"org.apache.openoffice.comp.sw.sidebar.SwPanelFactory"_ustr; }
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
-    { return {"com.sun.star.ui.UIElementFactory"}; }
+    { return {u"com.sun.star.ui.UIElementFactory"_ustr}; }
 };
 
 SwPanelFactory::SwPanelFactory()
@@ -86,9 +86,9 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     Reference<ui::XUIElement> xElement;
 
     const ::comphelper::NamedValueCollection aArguments (rArguments);
-    Reference<frame::XFrame> xFrame (aArguments.getOrDefault("Frame", Reference<frame::XFrame>()));
-    Reference<awt::XWindow> xParentWindow (aArguments.getOrDefault("ParentWindow", Reference<awt::XWindow>()));
-    const sal_uInt64 nBindingsValue (aArguments.getOrDefault("SfxBindings", sal_uInt64(0)));
+    Reference<frame::XFrame> xFrame (aArguments.getOrDefault(u"Frame"_ustr, Reference<frame::XFrame>()));
+    Reference<awt::XWindow> xParentWindow (aArguments.getOrDefault(u"ParentWindow"_ustr, Reference<awt::XWindow>()));
+    const sal_uInt64 nBindingsValue (aArguments.getOrDefault(u"SfxBindings"_ustr, sal_uInt64(0)));
     SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
 
     weld::Widget* pParent(nullptr);
@@ -97,15 +97,15 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
 
     if (!pParent)
         throw RuntimeException(
-            "PanelFactory::createUIElement called without ParentWindow",
+            u"PanelFactory::createUIElement called without ParentWindow"_ustr,
             nullptr);
     if ( ! xFrame.is())
         throw RuntimeException(
-            "PanelFactory::createUIElement called without Frame",
+            u"PanelFactory::createUIElement called without Frame"_ustr,
             nullptr);
     if (pBindings == nullptr)
         throw RuntimeException(
-            "PanelFactory::createUIElement called without SfxBindings",
+            u"PanelFactory::createUIElement called without SfxBindings"_ustr,
             nullptr);
 
     if(rsResourceURL.endsWith("/PageStylesPanel"))

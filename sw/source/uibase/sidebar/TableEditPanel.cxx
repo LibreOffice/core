@@ -34,9 +34,9 @@ TableEditPanel::Create(weld::Widget* pParent,
 {
     if (pParent == nullptr)
         throw css::lang::IllegalArgumentException(
-            "no parent Window given to TableEditPanel::Create", nullptr, 0);
+            u"no parent Window given to TableEditPanel::Create"_ustr, nullptr, 0);
     if (!rxFrame.is())
-        throw css::lang::IllegalArgumentException("no XFrame given to TableEditPanel::Create",
+        throw css::lang::IllegalArgumentException(u"no XFrame given to TableEditPanel::Create"_ustr,
                                                   nullptr, 1);
 
     return std::make_unique<TableEditPanel>(pParent, rxFrame, pBindings);
@@ -63,7 +63,7 @@ void TableEditPanel::NotifyItemUpdate(const sal_uInt16 nSID, const SfxItemState 
                 }
             }
             else if (eState != SfxItemState::DISABLED)
-                m_aRowHeightEdit.set_text("");
+                m_aRowHeightEdit.set_text(u""_ustr);
 
             break;
         }
@@ -83,7 +83,7 @@ void TableEditPanel::NotifyItemUpdate(const sal_uInt16 nSID, const SfxItemState 
                 }
             }
             else if (eState != SfxItemState::DISABLED)
-                m_aColumnWidthEdit.set_text("");
+                m_aColumnWidthEdit.set_text(u""_ustr);
 
             break;
         }
@@ -129,26 +129,26 @@ void TableEditPanel::NotifyItemUpdate(const sal_uInt16 nSID, const SfxItemState 
 TableEditPanel::TableEditPanel(weld::Widget* pParent,
                                const css::uno::Reference<css::frame::XFrame>& rxFrame,
                                SfxBindings* pBindings)
-    : PanelLayout(pParent, "TableEditPanel", "modules/swriter/ui/sidebartableedit.ui")
+    : PanelLayout(pParent, u"TableEditPanel"_ustr, u"modules/swriter/ui/sidebartableedit.ui"_ustr)
     , m_pBindings(pBindings)
-    , m_aRowHeightEdit(m_xBuilder->weld_metric_spin_button("rowheight", FieldUnit::CM))
-    , m_aColumnWidthEdit(m_xBuilder->weld_metric_spin_button("columnwidth", FieldUnit::CM))
-    , m_xInsert(m_xBuilder->weld_toolbar("insert"))
+    , m_aRowHeightEdit(m_xBuilder->weld_metric_spin_button(u"rowheight"_ustr, FieldUnit::CM))
+    , m_aColumnWidthEdit(m_xBuilder->weld_metric_spin_button(u"columnwidth"_ustr, FieldUnit::CM))
+    , m_xInsert(m_xBuilder->weld_toolbar(u"insert"_ustr))
     , m_xInsertDispatch(new ToolbarUnoDispatcher(*m_xInsert, *m_xBuilder, rxFrame))
-    , m_xSelect(m_xBuilder->weld_toolbar("select"))
+    , m_xSelect(m_xBuilder->weld_toolbar(u"select"_ustr))
     , m_xSelectDispatch(new ToolbarUnoDispatcher(*m_xSelect, *m_xBuilder, rxFrame))
-    , m_xRowSizing(m_xBuilder->weld_toolbar("rowsizing"))
+    , m_xRowSizing(m_xBuilder->weld_toolbar(u"rowsizing"_ustr))
     , m_xRowSizingDispatch(new ToolbarUnoDispatcher(*m_xRowSizing, *m_xBuilder, rxFrame))
-    , m_xColumnSizing(m_xBuilder->weld_toolbar("columnsizing"))
+    , m_xColumnSizing(m_xBuilder->weld_toolbar(u"columnsizing"_ustr))
     , m_xColumnSizingDispatch(new ToolbarUnoDispatcher(*m_xColumnSizing, *m_xBuilder, rxFrame))
-    , m_xDelete(m_xBuilder->weld_toolbar("delete"))
+    , m_xDelete(m_xBuilder->weld_toolbar(u"delete"_ustr))
     , m_xDeleteDispatch(new ToolbarUnoDispatcher(*m_xDelete, *m_xBuilder, rxFrame))
-    , m_xSplitMerge(m_xBuilder->weld_toolbar("split_merge"))
+    , m_xSplitMerge(m_xBuilder->weld_toolbar(u"split_merge"_ustr))
     , m_xSplitMergeDispatch(new ToolbarUnoDispatcher(*m_xSplitMerge, *m_xBuilder, rxFrame))
-    , m_xAlignment(m_xBuilder->weld_combo_box("alignmentLB"))
-    , m_aLeftSpacingEdit(m_xBuilder->weld_metric_spin_button("leftspace", FieldUnit::CM))
-    , m_aRightSpacingEdit(m_xBuilder->weld_metric_spin_button("rightspace", FieldUnit::CM))
-    , m_xMisc(m_xBuilder->weld_toolbar("misc"))
+    , m_xAlignment(m_xBuilder->weld_combo_box(u"alignmentLB"_ustr))
+    , m_aLeftSpacingEdit(m_xBuilder->weld_metric_spin_button(u"leftspace"_ustr, FieldUnit::CM))
+    , m_aRightSpacingEdit(m_xBuilder->weld_metric_spin_button(u"rightspace"_ustr, FieldUnit::CM))
+    , m_xMisc(m_xBuilder->weld_toolbar(u"misc"_ustr))
     , m_xMiscDispatch(new ToolbarUnoDispatcher(*m_xMisc, *m_xBuilder, rxFrame))
     , m_aRowHeightController(SID_ATTR_TABLE_ROW_HEIGHT, *pBindings, *this)
     , m_aColumnWidthController(SID_ATTR_TABLE_COLUMN_WIDTH, *pBindings, *this)
@@ -180,7 +180,7 @@ TableEditPanel::TableEditPanel(weld::Widget* pParent,
     InitColumnWidthToolitem();
     InitAlignmentControls();
     if (comphelper::LibreOfficeKit::isActive())
-        m_xMisc->set_item_visible(".uno:InsertFormula", false);
+        m_xMisc->set_item_visible(u".uno:InsertFormula"_ustr, false);
 }
 
 void TableEditPanel::InitRowHeightToolitem()

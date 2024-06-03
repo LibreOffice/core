@@ -40,11 +40,11 @@ std::unique_ptr<PanelLayout> WrapPropertyPanel::Create (
     SfxBindings* pBindings)
 {
     if (pParent == nullptr)
-        throw css::lang::IllegalArgumentException("no parent Window given to WrapPropertyPanel::Create", nullptr, 0);
+        throw css::lang::IllegalArgumentException(u"no parent Window given to WrapPropertyPanel::Create"_ustr, nullptr, 0);
     if ( ! rxFrame.is())
-        throw css::lang::IllegalArgumentException("no XFrame given to WrapPropertyPanel::Create", nullptr, 1);
+        throw css::lang::IllegalArgumentException(u"no XFrame given to WrapPropertyPanel::Create"_ustr, nullptr, 1);
     if (pBindings == nullptr)
-        throw css::lang::IllegalArgumentException("no SfxBindings given to WrapPropertyPanel::Create", nullptr, 2);
+        throw css::lang::IllegalArgumentException(u"no SfxBindings given to WrapPropertyPanel::Create"_ustr, nullptr, 2);
 
     return std::make_unique<WrapPropertyPanel>(pParent, rxFrame, pBindings);
 }
@@ -53,7 +53,7 @@ WrapPropertyPanel::WrapPropertyPanel(
     weld::Widget* pParent,
     const css::uno::Reference< css::frame::XFrame >& rxFrame,
     SfxBindings* pBindings )
-    : PanelLayout(pParent, "WrapPropertyPanel", "modules/swriter/ui/sidebarwrap.ui")
+    : PanelLayout(pParent, u"WrapPropertyPanel"_ustr, u"modules/swriter/ui/sidebarwrap.ui"_ustr)
     , mpBindings(pBindings)
     // spacing
     , m_nTop(0)
@@ -65,9 +65,9 @@ WrapPropertyPanel::WrapPropertyPanel(
     // controller items
     , maSwLRSpacingControl(SID_ATTR_LRSPACE, *pBindings, *this)
     , maSwULSpacingControl(SID_ATTR_ULSPACE, *pBindings, *this)
-    , mxWrapOptions(m_xBuilder->weld_toolbar("wrapoptions"))
+    , mxWrapOptions(m_xBuilder->weld_toolbar(u"wrapoptions"_ustr))
     , mxWrapOptionsDispatch(new ToolbarUnoDispatcher(*mxWrapOptions, *m_xBuilder, rxFrame))
-    , mxSpacingLB(m_xBuilder->weld_combo_box("spacingLB"))
+    , mxSpacingLB(m_xBuilder->weld_combo_box(u"spacingLB"_ustr))
 {
     FieldUnit eMetric = ::GetDfltMetric(false);
     SpacingListBox::Fill(IsInch(eMetric) ? SpacingType::SPACING_INCH : SpacingType::SPACING_CM, *mxSpacingLB);
