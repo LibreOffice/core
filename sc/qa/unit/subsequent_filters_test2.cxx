@@ -249,6 +249,19 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf153767)
     CPPUNIT_ASSERT_EQUAL(u"FALSE"_ustr, pDoc->GetString(ScAddress(7, 2, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf161301)
+{
+    createScDoc("xlsx/tdf161301.xlsx");
+
+    ScDocument* pDoc = getScDoc();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: CE784年2月20日
+    // - Actual  : 45440
+    CPPUNIT_ASSERT_EQUAL(u"CE784年2月20日"_ustr, pDoc->GetString(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"CE784年2月20日"_ustr, pDoc->GetString(ScAddress(1, 1, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf124454)
 {
     createScDoc("ods/tdf124454.ods");
