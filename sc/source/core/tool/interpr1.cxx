@@ -11722,6 +11722,13 @@ bool ScInterpreter::SearchVectorForValue( VectorSearchArguments& vsa )
             // this mode can only used with XLOOKUP/XMATCH
             if ( vsa.nSearchOpCode == SC_OPCODE_X_LOOKUP || vsa.nSearchOpCode == SC_OPCODE_X_MATCH )
             {
+                // Wildcard search mode with binary search is not allowed
+                if (vsa.eSearchMode == searchbasc || vsa.eSearchMode == searchbdesc)
+                {
+                    PushNoValue();
+                    return false;
+                }
+
                 rEntry.eOp = SC_EQUAL;
                 if ( vsa.isStringSearch )
                 {
