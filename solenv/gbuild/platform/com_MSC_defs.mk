@@ -104,7 +104,7 @@ gb_AFLAGS := $(AFLAGS)
 
 # C4706: assignment within conditional expression
 
-# build-time penalty is to high for ci use/disable when JENKINS_HOME is set
+# build-time penalty is too high for ci use/disable when JENKINS_HOME is set
 MSVC_ANALYZE_FLAGS := $(if $(JENKINS_HOME),,-analyze:ruleset$(SRCDIR)/solenv/vs/LibreOffice.ruleset)
 
 gb_FilterOutClangCFLAGS += $(MSVC_ANALYZE_FLAGS)
