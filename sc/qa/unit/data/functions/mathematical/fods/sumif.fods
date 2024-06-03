@@ -2625,6 +2625,24 @@
      <table:table-cell table:number-columns-repeated="17"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=SUMIF({-10|10|20|30};&quot;&gt;0&quot;)" office:value-type="float" office:value="60" calcext:value-type="float">
+      <text:p>60</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="60" calcext:value-type="float">
+      <text:p>60</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce15" table:formula="of:=[.A31]=[.B31]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce58" table:formula="of:=FORMULA([.A31])" office:value-type="string" office:string-value="=SUMIF({-10;10;20;30};&quot;&gt;0&quot;)" calcext:value-type="string">
+      <text:p>=SUMIF({-10;10;20;30};&quot;&gt;0&quot;)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce45"/>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce62"/>
+     <table:table-cell table:number-columns-repeated="17"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce16"/>
      <table:table-cell table:number-columns-repeated="24"/>
