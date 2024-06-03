@@ -3390,9 +3390,9 @@ const TranslateId SC_OPCODE_X_LOOKUP_ARY[] =
     NC_("SC_OPCODE_X_LOOKUP", "Result if not found"),
     NC_("SC_OPCODE_X_LOOKUP", "If given, return given text, otherwise return #N/A."),
     NC_("SC_OPCODE_X_LOOKUP", "Match Mode"),
-    NC_("SC_OPCODE_X_LOOKUP", "0, -1, 1 or 2 "), // TODO : add explanation of values
+    NC_("SC_OPCODE_X_LOOKUP", "0 - Exact match. Will return #N/A if no match. (default).\n-1 - Exact match or the next smaller item.\n1 - Exact match or the next larger item.\n2 - Wildcard or regular expression match."),
     NC_("SC_OPCODE_X_LOOKUP", "Search Mode"),
-    NC_("SC_OPCODE_X_LOOKUP", "1, -1, 2 or -2 ") // TODO : add explanation of values
+    NC_("SC_OPCODE_X_LOOKUP", "1 - Search from the first value (default).\n-1 - Search from the last value (reverse).\n2 - Binary search values sorted in ascending order.\n-2 - Binary search values sorted in descending order.")
 };
 
 // -=*# Resource for function INDEX #*=-
@@ -3452,9 +3452,9 @@ const TranslateId SC_OPCODE_X_MATCH_ARY[] =
     NC_("SC_OPCODE_X_MATCH", "Search Array"),
     NC_("SC_OPCODE_X_MATCH", "The array or range to search."),
     NC_("SC_OPCODE_X_MATCH", "Match Mode"),
-    NC_("SC_OPCODE_X_MATCH", "0, -1, 1 or 2 "), // TODO : add explanation of values
+    NC_("SC_OPCODE_X_MATCH", "0 - Exact match. Will return #N/A if no match. (default).\n-1 - Exact match or the next smaller item.\n1 - Exact match or the next larger item.\n2 - Wildcard or regular expression match."),
     NC_("SC_OPCODE_X_MATCH", "Search Mode"),
-    NC_("SC_OPCODE_X_MATCH", "1, -1, 2 or -2 ") // TODO : add explanation of values
+    NC_("SC_OPCODE_X_MATCH", "1 - Search from the first value (default).\n-1 - Search from the last value (reverse).\n2 - Binary search values sorted in ascending order.\n-2 - Binary search values sorted in descending order.")
 };
 
 // -=*# Resource for function OFFSET #*=-
