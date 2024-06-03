@@ -48,7 +48,7 @@ class SwNodeIndex;
     multiple base classes since the class tree splits exactly at the branch
     from SwFrame to SwContentFrame and SwLayoutFrame) also virtually from SwFrame as
     well. Unfortunately, this leads - besides problems with compilers and
-    debugging programs - to high additional costs, that we IMHO are not able to
+    debugging programs - too high additional costs, that we IMHO are not able to
     afford nowadays.
 
     Hence, we use another technique: A FlowFrame keeps a reference to a SwFrame
