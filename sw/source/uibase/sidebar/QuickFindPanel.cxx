@@ -161,19 +161,65 @@ void QuickFindPanel::FillSearchFindsList()
             auto nMarkIndex = rPaM.GetMark()->nContent.GetIndex();
             auto nPointIndex = rPaM.GetPoint()->nContent.GetIndex();
 
+            // determine the text node text subview start index for the list entry text
             auto nStartIndex = nMarkIndex - 50;
             if (nStartIndex < 0)
-                nStartIndex = 0;
-            auto nEndIndex = nPointIndex + 50;
-            if (nEndIndex > sNodeText.getLength())
             {
-                nEndIndex = sNodeText.getLength();
+                nStartIndex = 0;
             }
+            else
+            {
+                // tdf#160539 format search finds results also to word boundaries
+                sal_Unicode ch;
+                do
+                {
+                    ch = sNodeText[nStartIndex];
+                } while (++nStartIndex < nMarkIndex && ch != ' ' && ch != '\t');
+                if (nStartIndex < nMarkIndex)
+                {
+                    // move past neighboring space and tab characters
+                    ch = sNodeText[nStartIndex];
+                    while (nStartIndex < nMarkIndex && (ch == ' ' || ch == '\t'))
+                        ch = sNodeText[++nStartIndex];
+                }
+                if (nStartIndex == nMarkIndex) // no white space found
+                    nStartIndex = nMarkIndex - 50;
+            }
+
+            // determine the text node text subview end index for the list entry text
+            auto nEndIndex = nPointIndex + 50;
+            if (nEndIndex >= sNodeText.getLength())
+            {
+                nEndIndex = sNodeText.getLength() - 1;
+            }
+            else
+            {
+                // tdf#160539 format search finds results also to word boundaries
+                sal_Unicode ch;
+                do
+                {
+                    ch = sNodeText[nEndIndex];
+                } while (--nEndIndex > nPointIndex && ch != ' ' && ch != '\t');
+                if (nEndIndex > nPointIndex)
+                {
+                    // move past neighboring space and tab characters
+                    ch = sNodeText[nEndIndex];
+                    while (nEndIndex > nPointIndex && (ch == ' ' || ch == '\t'))
+                        ch = sNodeText[--nEndIndex];
+                }
+                if (nEndIndex == nPointIndex) // no white space found
+                {
+                    nEndIndex = nPointIndex + 50;
+                    if (nEndIndex >= sNodeText.getLength())
+                        nEndIndex = sNodeText.getLength() - 1;
+                }
+            }
+
             auto nCount = nMarkIndex - nStartIndex;
             OUString sTextBeforeFind = OUString::Concat(sNodeText.subView(nStartIndex, nCount));
             auto nCount1 = nPointIndex - nMarkIndex;
             OUString sFind = OUString::Concat(sNodeText.subView(nMarkIndex, nCount1));
-            auto nCount2 = nEndIndex - nPointIndex;
+            auto nCount2 = nEndIndex - nPointIndex + 1;
             OUString sTextAfterFind = OUString::Concat(sNodeText.subView(nPointIndex, nCount2));
             OUString sStr = sTextBeforeFind + "[" + sFind + "]" + sTextAfterFind;
 
