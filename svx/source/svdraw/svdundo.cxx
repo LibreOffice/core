@@ -564,21 +564,21 @@ SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj)
         // this is a group object!
         // If this were 3D scene, we'd only add an Undo for the scene itself
         // (which we do elsewhere).
-        pUndoGroup.reset(new SdrUndoGroup(mxObj->getSdrModelFromSdrObject()));
+        m_pUndoGroup.reset(new SdrUndoGroup(mxObj->getSdrModelFromSdrObject()));
         for (const rtl::Reference<SdrObject>& pObj : *pOL)
-            pUndoGroup->AddAction(std::make_unique<SdrUndoGeoObj>(*pObj));
+            m_pUndoGroup->AddAction(std::make_unique<SdrUndoGeoObj>(*pObj));
     }
     else
     {
-        pUndoGeo = mxObj->GetGeoData();
+        m_pUndoGeo = mxObj->GetGeoData();
     }
 }
 
 SdrUndoGeoObj::~SdrUndoGeoObj()
 {
-    pUndoGeo.reset();
-    pRedoGeo.reset();
-    pUndoGroup.reset();
+    m_pUndoGeo.reset();
+    m_pRedoGeo.reset();
+    m_pUndoGroup.reset();
 }
 
 void SdrUndoGeoObj::Undo()
@@ -586,21 +586,21 @@ void SdrUndoGeoObj::Undo()
     // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 
-    if(pUndoGroup)
+    if(m_pUndoGroup)
     {
-        pUndoGroup->Undo();
+        m_pUndoGroup->Undo();
 
         // only repaint, no objectchange
         mxObj->ActionChanged();
     }
     else
     {
-        pRedoGeo = mxObj->GetGeoData();
+        m_pRedoGeo = mxObj->GetGeoData();
 
         auto pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(mxObj.get());
         if (pTableObj && mbSkipChangeLayout)
             pTableObj->SetSkipChangeLayout(true);
-        mxObj->SetGeoData(*pUndoGeo);
+        mxObj->SetGeoData(*m_pUndoGeo);
         if (pTableObj && mbSkipChangeLayout)
             pTableObj->SetSkipChangeLayout(false);
     }
@@ -608,17 +608,17 @@ void SdrUndoGeoObj::Undo()
 
 void SdrUndoGeoObj::Redo()
 {
-    if(pUndoGroup)
+    if(m_pUndoGroup)
     {
-        pUndoGroup->Redo();
+        m_pUndoGroup->Redo();
 
         // only repaint, no objectchange
         mxObj->ActionChanged();
     }
     else
     {
-        pUndoGeo = mxObj->GetGeoData();
-        mxObj->SetGeoData(*pRedoGeo);
+        m_pUndoGeo = mxObj->GetGeoData();
+        mxObj->SetGeoData(*m_pRedoGeo);
     }
 
     // Trigger PageChangeCall

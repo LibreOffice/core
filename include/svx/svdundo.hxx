@@ -211,10 +211,10 @@ public:
 
 class SVXCORE_DLLPUBLIC SdrUndoGeoObj : public SdrUndoObj
 {
-    std::unique_ptr<SdrObjGeoData> pUndoGeo;
-    std::unique_ptr<SdrObjGeoData> pRedoGeo;
+    std::unique_ptr<SdrObjGeoData> m_pUndoGeo;
+    std::unique_ptr<SdrObjGeoData> m_pRedoGeo;
     // If we have a group object:
-    std::unique_ptr<SdrUndoGroup> pUndoGroup;
+    std::unique_ptr<SdrUndoGroup> m_pUndoGroup;
     /// If we have a table object, should its layout change?
     bool mbSkipChangeLayout;
 
