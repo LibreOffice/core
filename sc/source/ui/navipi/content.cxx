@@ -386,7 +386,7 @@ IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl, weld::TreeView&, bool)
                 pParentWindow->SetCurrentCell( aPos.Col(), aPos.Row() );
                 // Check whether the comment is currently visible and toggle its visibility
                 ScDocument* pSrcDoc = GetSourceDocument();
-                if (ScPostIt* pNote = pSrcDoc->GetNote(aPos.Col(), aPos.Row(), aPos.Tab()))
+                if (ScPostIt* pNote = pSrcDoc ? pSrcDoc->GetNote(aPos.Col(), aPos.Row(), aPos.Tab()) : nullptr)
                 {
                     bool bVisible = pNote->IsCaptionShown();
                     // Effectivelly set the visibility of the comment
