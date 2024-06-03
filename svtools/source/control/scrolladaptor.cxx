@@ -24,6 +24,8 @@ ScrollAdaptor::ScrollAdaptor(vcl::Window* pWin, bool bHoriz)
     , m_xScrollBar(m_xBuilder->weld_scrollbar(bHoriz ? u"horizontal"_ustr : u"vertical"_ustr))
     , m_bHori(bHoriz)
 {
+    // tdf#160844 we don't want scrollbars to be a default target for Ctrl+F6, etc
+    SetStyle(GetStyle() & ~WB_TABSTOP);
     m_xScrollBar->show();
     SetSizePixel(GetOptimalSize());
 }
