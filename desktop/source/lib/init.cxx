@@ -136,6 +136,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/resmgr.hxx>
 #include <tools/fract.hxx>
+#include <tools/hostfilter.hxx>
 #include <tools/json_writer.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/langtab.hxx>
@@ -2785,6 +2786,9 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         */
 
         OutputDevice::StartTrackingFontMappingUse();
+
+        if (const char* pExemptVerifyHost = ::getenv("LOK_EXEMPT_VERIFY_HOST"))
+            HostFilter::setExemptVerifyHost(OUString(pExemptVerifyHost, strlen(pExemptVerifyHost), RTL_TEXTENCODING_UTF8));
 
         const int nThisDocumentId = nDocumentIdCounter++;
         SfxViewShell::SetCurrentDocId(ViewShellDocId(nThisDocumentId));

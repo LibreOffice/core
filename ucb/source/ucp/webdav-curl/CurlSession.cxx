@@ -34,6 +34,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <systools/curlinit.hxx>
+#include <tools/hostfilter.hxx>
 #include <config_version.h>
 
 #include <map>
@@ -694,6 +695,11 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> const& xContext,
         // neon would close the connection from ne_end_request(), this seems
         // to be the equivalent and not CURLOPT_TCP_KEEPALIVE
         rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_FORBID_REUSE, 1L);
+        assert(rc == CURLE_OK);
+    }
+    if (HostFilter::isExemptVerifyHost(m_URI.GetHost()))
+    {
+        rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_SSL_VERIFYHOST, 0L);
         assert(rc == CURLE_OK);
     }
 }

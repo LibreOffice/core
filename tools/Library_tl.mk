@@ -63,6 +63,7 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/generic/poly \
     tools/source/generic/poly2 \
     tools/source/generic/svborder \
+    tools/source/inet/hostfilter \
     tools/source/inet/inetmime \
     tools/source/inet/inetmsg \
     tools/source/inet/inetstrm \
