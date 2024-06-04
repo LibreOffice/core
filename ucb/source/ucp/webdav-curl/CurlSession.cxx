@@ -758,6 +758,11 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> xContext,
         rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_FORBID_REUSE, 1L);
         assert(rc == CURLE_OK);
     }
+    if (HostFilter::isExemptVerifyHost(m_URI.GetHost()))
+    {
+        rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_SSL_VERIFYHOST, 0L);
+        assert(rc == CURLE_OK);
+    }
 }
 
 CurlSession::~CurlSession() {}
