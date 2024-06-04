@@ -13,6 +13,7 @@
 namespace
 {
 static std::regex g_AllowedHostsRegex("");
+static OUString g_ExceptVerifyHost;
 static bool g_AllowedHostsSet = false;
 }
 
@@ -29,6 +30,16 @@ bool HostFilter::isForbidden(const OUString& rHost)
         return false;
 
     return !std::regex_match(rHost.toUtf8().getStr(), g_AllowedHostsRegex);
+}
+
+void HostFilter::setExemptVerifyHost(const OUString& rExemptVerifyHost)
+{
+    g_ExceptVerifyHost = rExemptVerifyHost;
+}
+
+bool HostFilter::isExemptVerifyHost(const std::u16string_view rHost)
+{
+    return rHost == g_ExceptVerifyHost;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
