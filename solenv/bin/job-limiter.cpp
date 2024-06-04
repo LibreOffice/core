@@ -79,12 +79,12 @@ int wmain(int argc, wchar_t* argv[])
         // system. So when it creates a new one to use, and then releases one it would hit the max
         // limit otherwise. This only happens when nothing else is waiting for a slot anymore,
         // i.e. when there are already fewer jobs than imposed by the limiter.
-        // A limit of four (main installer and 3 controlled by this limiter) was chosen because that
+        // A limit of three (main installer + 2 controlled by this limiter) was chosen because that
         // won't affect overall build time (creating the main installer with multiple languages
         // takes much longer than all the helppackages and the single sdk package combined, even
         // when those are limited to three jobs), and seems to be low enough to avoid the random
         // cscript/WiLangId.vbs failures.
-        semaphore_handle = CreateSemaphoreW(NULL, 3, 4, semaphorename);
+        semaphore_handle = CreateSemaphoreW(NULL, 2, 3, semaphorename);
         // keep this process alive for other jobs to grab the semaphore, otherwise it is gone too
         // quickly and everything creates their own semaphore that immediately has enough slots,
         // completely bypassing the point of having a limiter...
