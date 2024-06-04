@@ -21,6 +21,10 @@ public:
     static void setAllowedHostsRegex(const char* sAllowedRegex);
 
     static bool isForbidden(const OUString& rHost);
+
+    static void setExemptVerifyHost(const OUString& rExemptVerifyHost);
+
+    static bool isExemptVerifyHost(const std::u16string_view rHost);
 };
 
 #endif
