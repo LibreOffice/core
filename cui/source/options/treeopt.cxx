@@ -793,7 +793,8 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, SearchUpdateHdl, weld::Entry&, void)
 IMPL_LINK_NOARG(OfaTreeOptionsDialog, ImplUpdateDataHdl, Timer*, void)
 {
     // initializeAllDialogs() can take a long time, show wait cursor and disable input
-    std::unique_ptr<weld::WaitObject> xWait(m_pParent ? new weld::WaitObject(m_pParent) : nullptr);
+    m_xSearchEdit->set_editable(false);
+    m_xSearchEdit->set_busy_cursor(true);
 
     // Pause redraw
     xTreeLB->freeze();
@@ -820,6 +821,9 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, ImplUpdateDataHdl, Timer*, void)
     // select first child of first node after the search done
     if (nMatchFound != -1)
         selectFirstEntry();
+
+    m_xSearchEdit->set_editable(true);
+    m_xSearchEdit->set_busy_cursor(false);
 }
 
 void OfaTreeOptionsDialog::selectFirstEntry()
