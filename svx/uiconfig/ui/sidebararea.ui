@@ -321,8 +321,8 @@
               <item translatable="yes" context="sidebararea|transtype">Axial</item>
               <item translatable="yes" context="sidebararea|transtype">Radial</item>
               <item translatable="yes" context="sidebararea|transtype">Ellipsoid</item>
-              <item translatable="yes" context="sidebararea|transtype">Quadratic</item>
-              <item translatable="yes" context="sidebararea|transtype">Square</item>
+              <item translatable="yes" context="sidebararea|transtype">Square (Quadratic)</item>
+              <item translatable="yes" context="sidebararea|transtype">Rectangular</item>
             </items>
             <child internal-child="accessible">
               <object class="AtkObject" id="transtype-atkobject">
