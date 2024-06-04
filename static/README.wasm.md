@@ -210,35 +210,32 @@ improvement! ;)
 Some usage examples through javascript of the current implementation:
 ```js
 // inserts a string at the start of the Writer document.
-let uno = init_unoembind_uno(Module);
-let css = uno.com.sun.star;
-xModel = Module.getCurrentModelFromViewSh();
-xTextDocument = css.text.XTextDocument.query(xModel);
-xText = xTextDocument.getText();
-xSimpleText = css.text.XSimpleText.query(xText);
-xTextCursor = xSimpleText.createTextCursor();
-xTextRange = css.text.XTextRange.query(xTextCursor);
-xTextRange.setString("string here!");
-xModel.delete(); xTextDocument.delete(); xText.delete(); xSimpleText.delete(); xTextCursor.delete(); xTextRange.delete();
+const uno = init_unoembind_uno(Module);
+const css = uno.com.sun.star;
+const xModel = Module.getCurrentModelFromViewSh();
+const xTextDocument = css.text.XTextDocument.query(xModel);
+const xText = xTextDocument.getText();
+const xTextCursor = xText.createTextCursor();
+xTextCursor.setString("string here!");
 ```
 
 ```js
 // changes each paragraph of the Writer document to a random color.
-let uno = init_unoembind_uno(Module);
-let css = uno.com.sun.star;
-xModel = Module.getCurrentModelFromViewSh();
-xEnumAccess = css.container.XEnumerationAccess.query(xText);
-xParaEnumeration = xEnumAccess.createEnumeration();
-
+const uno = init_unoembind_uno(Module);
+const css = uno.com.sun.star;
+const xModel = Module.getCurrentModelFromViewSh();
+const xTextDocument = css.text.XTextDocument.query(xModel);
+const xText = xTextDocument.getText();
+const xEnumAccess = css.container.XEnumerationAccess.query(xText);
+const xParaEnumeration = xEnumAccess.createEnumeration();
 while (xParaEnumeration.hasMoreElements()) {
-    xParagraph = css.text.XTextRange.query(xParaEnumeration.nextElement().get());
-    if (xParagraph !== null) {
-        xParaProps = css.beans.XPropertySet.query(xParagraph);
-        let color = new Module.uno_Any(
-            Module.uno_Type.Long(), Math.floor(Math.random() * 0xFFFFFF));
-        xParaProps.setPropertyValue("CharColor", color);
-        color.delete();
-    }
+    const next = xParaEnumeration.nextElement();
+    const xParagraph = css.text.XTextRange.query(next.get());
+    const xParaProps = css.beans.XPropertySet.query(xParagraph);
+    const color = new Module.uno_Any(Module.uno_Type.Long(), Math.floor(Math.random() * 0xFFFFFF));
+    xParaProps.setPropertyValue("CharColor", color);
+    next.delete();
+    color.delete();
 }
 ```
 
