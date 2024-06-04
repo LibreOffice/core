@@ -2843,6 +2843,9 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
 
         OutputDevice::StartTrackingFontMappingUse();
 
+        if (const char* pExemptVerifyHost = ::getenv("LOK_EXEMPT_VERIFY_HOST"))
+            HostFilter::setExemptVerifyHost(OUString(pExemptVerifyHost, strlen(pExemptVerifyHost), RTL_TEXTENCODING_UTF8));
+
         const int nThisDocumentId = nDocumentIdCounter++;
         SfxViewShell::SetCurrentDocId(ViewShellDocId(nThisDocumentId));
         uno::Reference<lang::XComponent> xComponent = xComponentLoader->loadComponentFromURL(
