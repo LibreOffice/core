@@ -41,6 +41,7 @@
 
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <o3tl/cppunittraitshelper.hxx>
 #include <swdtflvr.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -1743,6 +1744,61 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161360)
     eType2 = pWrtShell->GetSelectionType();
     // The text cursor is after the floating table
     CPPUNIT_ASSERT_EQUAL(SelectionType::Text, eType2);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157533)
+{
+    // load a table with objects positioned at beginning of text lines
+    createSwDoc("tdf157533.fodt");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    auto pShell = pDoc->GetDocShell()->GetFEShell();
+    CPPUNIT_ASSERT(pShell);
+
+    auto xModel = mxComponent.queryThrow<frame::XModel>();
+    uno::Reference<drawing::XShape> xShape(getShapeByName(u"Objet2"));
+    uno::Reference<view::XSelectionSupplier> xCtrl(xModel->getCurrentController(), uno::UNO_QUERY);
+    xCtrl->select(uno::Any(xShape));
+
+    dispatchCommand(mxComponent, ".uno:Escape", {});
+
+    // Then make sure that the cursor in the table:
+    SelectionType eType2 = pWrtShell->GetSelectionType();
+    // This was false (only SelectionType::Text)
+    bool bCursorInTable = eType2 == (SelectionType::Text | SelectionType::Table);
+    CPPUNIT_ASSERT(bCursorInTable);
+
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    // This was false (not in the same paragraph and cell)
+    CPPUNIT_ASSERT(pTextNode->GetText().indexOf("and the second formula") > -1);
+
+    uno::Reference<drawing::XShape> xShape2(getShapeByName(u"Objet11"));
+    xCtrl->select(uno::Any(xShape2));
+
+    dispatchCommand(mxComponent, ".uno:Escape", {});
+
+    SwTextNode* pTextNode2 = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    // This was false (lost text cursor inside the frame of the formula)
+    CPPUNIT_ASSERT(pTextNode2->GetTableBox());
+    SwTableNode* pTableNode = pWrtShell->GetCursor()->GetPointNode().FindTableNode();
+    SwTable& rTable = pTableNode->GetTable();
+    // cursor in the same cell
+    bool bSameBox = pTextNode2->GetTableBox() == rTable.GetTableBox("A1");
+    CPPUNIT_ASSERT(bSameBox);
+
+    uno::Reference<drawing::XShape> xShape3(getShapeByName(u"Objet10"));
+    xCtrl->select(uno::Any(xShape3));
+
+    dispatchCommand(mxComponent, ".uno:Escape", {});
+
+    SwTextNode* pTextNode3 = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    // This was false (lost text cursor inside the frame of the formula)
+    CPPUNIT_ASSERT(pTextNode3->GetTableBox());
+    // cursor in the same cell
+    bSameBox = pTextNode3->GetTableBox() == rTable.GetTableBox("B1");
+    CPPUNIT_ASSERT(bSameBox);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115132)

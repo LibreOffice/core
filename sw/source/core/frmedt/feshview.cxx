@@ -212,15 +212,29 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
                     if ( SW_LEAVE_FRAME & nFlag )
                     {
                         const SwContact* pContact = GetUserCall(pOldObj);
-                        if ( pContact && pContact->ObjAnchoredAsChar() )
+                        if ( pContact && pContact->ObjAnchoredAsChar() &&
+                                pOldSelFly->GetAnchorFrame() &&
+                                pOldSelFly->GetAnchorFrame()->GetUpper() )
                         {
                             const SwNode * pOldNd = pContact->GetAnchorNode().FindTableNode();
                             // the original image was in a table, but the cursor is not in that
                             if ( pOldNd && pOldNd != GetCursor()->GetPointNode().FindTableNode() )
                             {
+                                const SwRect& rCellFrame =
+                                    pOldSelFly->GetAnchorFrame()->GetUpper()->getFrameArea();
+                                Point aPtCellTopRight( rCellFrame.Pos() );
+                                aPtCellTopRight.setX( aPtCellTopRight.X() + rCellFrame.Width() );
                                 if ( SwWrtShell* pWrtShell = dynamic_cast<SwWrtShell*>(this) )
-                                    // put the text cursor in the same row
-                                    pWrtShell->SelectTableRowCol( aPt );
+                                    // put the text cursor in the same cell
+                                    pWrtShell->SelectTableRowCol( aPtCellTopRight );
+                            }
+                            // same table, but not in the same cell
+                            else if ( pContact->GetAnchorNode().GetTableBox() !=
+                                            GetCursor()->GetPointNode().GetTextNode()->GetTableBox() )
+                            {
+                                aPt.setX( aPt.getX() + 2 + pOldSelFly->getFrameArea().Width() );
+                                // put the text cursor after the object
+                                SetCursor( aPt, true );
                             }
                         }
                     }
