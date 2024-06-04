@@ -353,7 +353,7 @@ public:
      */
     void Init();
 
-    /// Is called by DoIdleJob_(), ExecSpellPopup() and UpDown()
+    /// Is called by DoIdleJob_() and ExecSpellPopup()
     SwRect AutoSpell_(SwTextNode &, sal_Int32);
 
     /// Is called by DoIdleJob_()
