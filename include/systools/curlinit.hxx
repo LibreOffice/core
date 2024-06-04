@@ -34,6 +34,18 @@ static void InitCurl_easy(CURL* const pCURL)
     {
         throw css::uno::RuntimeException("CURLOPT_CAINFO failed");
     }
+
+    // curl: "If you have a CA cert for the server stored someplace else than
+    // in the default bundle, then the CURLOPT_CAPATH option might come handy
+    // for you"
+    if (char const* const capath = getenv("LO_CERTIFICATE_AUTHORITY_PATH"))
+    {
+        rc = curl_easy_setopt(pCURL, CURLOPT_CAPATH, capath);
+        if (rc != CURLE_OK)
+        {
+            throw css::uno::RuntimeException("CURLOPT_CAPATH failed");
+        }
+    }
 #endif
 
     curl_version_info_data const* const pVersion(curl_version_info(CURLVERSION_NOW));
