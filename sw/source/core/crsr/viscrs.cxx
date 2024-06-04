@@ -1069,33 +1069,6 @@ void SwShellCursor::SaveTableBoxContent( const SwPosition* pPos )
 
 bool SwShellCursor::UpDown( bool bUp, sal_uInt16 nCnt )
 {
-    // tdf#124603 trigger pending spell checking of the node
-    if ( nCnt == 1 )
-    {
-        SwTextNode* pNode = GetPoint()->GetNode().GetTextNode();
-        if( pNode && sw::WrongState::PENDING == pNode->GetWrongDirty() )
-        {
-            SwWrtShell* pShell = pNode->GetDoc().GetDocShell()->GetWrtShell();
-            if ( pShell && !pShell->IsSelection() && !pShell->IsSelFrameMode() )
-            {
-                const SwViewOption* pVOpt = pShell->GetViewOptions();
-                if ( pVOpt && pVOpt->IsOnlineSpell() )
-                {
-                    const bool bOldViewLock = pShell->IsViewLocked();
-                    pShell->LockView( true );
-
-                    SwTextFrame* pFrame(
-                        static_cast<SwTextFrame*>(pNode->getLayoutFrame(GetShell()->GetLayout())));
-                    SwRect aRepaint(pFrame->AutoSpell_(*pNode, 0));
-                    if (aRepaint.HasArea())
-                        pShell->InvalidateWindows(aRepaint);
-
-                    pShell->LockView( bOldViewLock );
-                }
-            }
-        }
-    }
-
     return SwCursor::UpDown( bUp, nCnt,
                             &GetPtPos(), GetShell()->GetUpDownX(),
                             *GetShell()->GetLayout());

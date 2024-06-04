@@ -609,6 +609,13 @@ public:
     void GetFirstLastVisPageNumbers(SwVisiblePageNumbers& rVisiblePageNumbers, SwView& rView);
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
+
+    // SwTextFrame::AutoSpell_ calls this, to notify the shell, that a word has a spelling error,
+    // but that couldn't be drawn, because the cursor was in that word (so that the user is not
+    // annoyed while typing). The shell's task is to re-run the spell check (i.e., call LayoutIdle,
+    // which internally does the spell check), when the cursor leaves that word (implemented in
+    // SwCursorShell).
+    virtual void OnSpellWrongStatePending() {}
 };
 
 // manages global ShellPointer
