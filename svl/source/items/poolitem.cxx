@@ -161,8 +161,8 @@
 //        class Svx3DShadeModeItem : public SfxUInt16Item
 //        class SdrEdgeLineDeltaCountItem: public SfxUInt16Item
 //        class SvxViewLayoutItem: public SfxUInt16Item
-//        class XFillBmpPosOffsetXItem : public SfxUInt16Item
-//        class XFillBmpPosOffsetYItem : public SfxUInt16Item
+//        class XFillBmpPosOffsetXItem : public SfxInt32Item
+//        class XFillBmpPosOffsetYItem : public SfxInt32Item
 //        class XFillBmpTileOffsetXItem : public SfxUInt16Item
 //        class XFillBmpTileOffsetYItem : public SfxUInt16Item
 //        class XFillTransparenceItem: public SfxUInt16Item

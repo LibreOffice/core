@@ -631,9 +631,8 @@ void XFillBmpStretchItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-
-XFillBmpPosOffsetXItem::XFillBmpPosOffsetXItem( sal_uInt16 nOffPosX ) :
-            SfxUInt16Item( XATTR_FILLBMP_POSOFFSETX, nOffPosX )
+XFillBmpPosOffsetXItem::XFillBmpPosOffsetXItem(sal_Int32 nOffPosX)
+    : SfxInt32Item(XATTR_FILLBMP_POSOFFSETX, nOffPosX)
 {
 }
 
@@ -654,9 +653,8 @@ bool XFillBmpPosOffsetXItem::GetPresentation
     return true;
 }
 
-
-XFillBmpPosOffsetYItem::XFillBmpPosOffsetYItem( sal_uInt16 nOffPosY ) :
-            SfxUInt16Item( XATTR_FILLBMP_POSOFFSETY, nOffPosY )
+XFillBmpPosOffsetYItem::XFillBmpPosOffsetYItem(sal_Int32 nOffPosY)
+    : SfxInt32Item(XATTR_FILLBMP_POSOFFSETY, nOffPosY)
 {
 }
 
