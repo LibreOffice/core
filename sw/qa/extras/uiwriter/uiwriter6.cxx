@@ -2044,16 +2044,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf124603)
         bool bPending = !pNode->GetWrong() || !pNode->GetWrong()->Count();
         CPPUNIT_ASSERT(bPending);
 
-        // Move right, leave the bad word
+        // Move right, leave the bad word - since the fix for tdf#136294, this triggers the check
 
         pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
-        // tdf#92036 still pending spell checking
-        bPending = !pNode->GetWrong() || !pNode->GetWrong()->Count();
-        CPPUNIT_ASSERT(bPending);
-
-        // Move down to trigger spell checking
-
-        pWrtShell->Down(/*bSelect=*/false, 1);
         Scheduler::ProcessEventsToIdle();
         CPPUNIT_ASSERT(pNode->GetWrong());
         // This was 0 (pending spell checking)
@@ -2102,6 +2095,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf45949)
 
         // Move down to trigger spell checking
         pWrtShell->Down(/*bSelect=*/false, 1);
+        Scheduler::ProcessEventsToIdle();
 
         // Without the fix in place, this test would have failed with
         // - Expected: 3
