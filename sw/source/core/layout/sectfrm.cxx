@@ -2665,8 +2665,9 @@ void SwSectionFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
         InvalidateObjs(false);
         {
             // Set it to a huge positive value, to make sure a recalculation fires
+            constexpr SwTwips HUGE_POSITIVE = 10000 * 1440 / 2.54; // 100m
             SwFrameAreaDefinition::FrameAreaWriteAccess area(*this);
-            SwRectFnSet(this).SetHeight(area, std::numeric_limits<sal_uLong>::max());
+            SwRectFnSet(this).SetHeight(area, HUGE_POSITIVE);
         }
 
         for (SwFrame* pLowerFrame = Lower(); pLowerFrame; pLowerFrame = pLowerFrame->GetNext())
