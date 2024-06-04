@@ -4248,7 +4248,7 @@ const TranslateId SC_OPCODE_RANDARRAY_ARY[] =
     NC_("SC_OPCODE_RANDARRAY", "Max"),
     NC_("SC_OPCODE_RANDARRAY", "The upper limit of the generated numbers."),
     NC_("SC_OPCODE_RANDARRAY", "Integers"),
-    NC_("SC_OPCODE_RANDARRAY", "Return whole numbers (TRUE) or decimal values (FALSE).")
+    NC_("SC_OPCODE_RANDARRAY", "Return integer (TRUE) or decimal (FALSE) values.")
 };
 
 // -=*# Resource for function UNIQUE #*=-

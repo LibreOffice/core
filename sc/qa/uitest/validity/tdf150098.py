@@ -26,7 +26,7 @@ class EvaluateFormulaInputs(UITestCase):
 
             #Select the cells to be validated
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A4"}))
-            #Apply Data > Validity ... > Whole Numbers
+            #Apply Data > Validity ... > Integer
             with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "0")
@@ -35,7 +35,7 @@ class EvaluateFormulaInputs(UITestCase):
                 xdata = xDialog.getChild("data")
                 xmin = xDialog.getChild("min")
 
-                select_by_text(xallow, "Whole Numbers")
+                select_by_text(xallow, "Integer")
                 xallowempty.executeAction("CLICK", tuple())
                 select_by_text(xdata, "equal")
                 xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"A3"}))

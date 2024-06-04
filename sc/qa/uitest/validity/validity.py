@@ -29,7 +29,7 @@ class validity(UITestCase):
                 xmin = xDialog.getChild("min")
                 xmax = xDialog.getChild("max")
 
-                select_by_text(xallow, "Whole Numbers")
+                select_by_text(xallow, "Integer")
                 xallowempty.executeAction("CLICK", tuple())
                 select_by_text(xdata, "valid range")
                 xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
@@ -42,7 +42,7 @@ class validity(UITestCase):
                 xmin = xDialog.getChild("min")
                 xmax = xDialog.getChild("max")
 
-                self.assertEqual(get_state_as_dict(xallow)["SelectEntryText"], "Whole Numbers")
+                self.assertEqual(get_state_as_dict(xallow)["SelectEntryText"], "Integer")
                 self.assertEqual(get_state_as_dict(xallowempty)["Selected"], "false")
                 self.assertEqual(get_state_as_dict(xdata)["SelectEntryText"], "valid range")
                 self.assertEqual(get_state_as_dict(xmin)["Text"], "1")

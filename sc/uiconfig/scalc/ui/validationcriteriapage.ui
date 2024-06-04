@@ -45,7 +45,7 @@
         <property name="can-focus">False</property>
         <items>
           <item id="0" translatable="yes" context="validationcriteriapage|liststore1">All values</item>
-          <item id="1" translatable="yes" context="validationcriteriapage|liststore1">Whole Numbers</item>
+          <item id="1" translatable="yes" context="validationcriteriapage|liststore1">Integer</item>
           <item id="2" translatable="yes" context="validationcriteriapage|liststore1">Decimal</item>
           <item id="3" translatable="yes" context="validationcriteriapage|liststore1">Date</item>
           <item id="4" translatable="yes" context="validationcriteriapage|liststore1">Time</item>
