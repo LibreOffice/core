@@ -49,7 +49,7 @@ SFX_IMPL_INTERFACE(SwOleShell, SwFrameShell)
 
 void SwOleShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("oleobject");
+    GetStaticInterface()->RegisterPopupMenu(u"oleobject"_ustr);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Ole_Toolbox);
 }
@@ -88,7 +88,7 @@ SwOleShell::SwOleShell(SwView &_rView) :
     SwFrameShell(_rView)
 
 {
-    SetName("Object");
+    SetName(u"Object"_ustr);
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::OLE));
 }
 

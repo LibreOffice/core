@@ -37,7 +37,7 @@ SFX_IMPL_INTERFACE(SwMediaShell, SwBaseShell)
 
 void SwMediaShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("media");
+    GetStaticInterface()->RegisterPopupMenu(u"media"_ustr);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible,
                                             ToolbarId::Media_Toolbox);
@@ -92,7 +92,7 @@ void SwMediaShell::GetMediaState(SfxItemSet& rSet)
 SwMediaShell::SwMediaShell(SwView& _rView)
     : SwBaseShell(_rView)
 {
-    SetName("Media Playback");
+    SetName(u"Media Playback"_ustr);
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Media));
 }
 

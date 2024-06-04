@@ -185,13 +185,13 @@ static void sw_CharDialog(SwWrtShell& rWrtSh, bool bUseDialog, bool bApplyToPara
         pDlg.reset(pFact->CreateSwCharDlg(rWrtSh.GetView().GetFrameWeld(), rWrtSh.GetView(), *pCoreSet, SwCharDlgMode::Std));
 
         if (nSlot == FN_INSERT_HYPERLINK)
-            pDlg->SetCurPageId("hyperlink");
+            pDlg->SetCurPageId(u"hyperlink"_ustr);
         else if (nSlot == SID_CHAR_DLG_EFFECT)
-            pDlg->SetCurPageId("fonteffects");
+            pDlg->SetCurPageId(u"fonteffects"_ustr);
         else if (nSlot == SID_CHAR_DLG_POSITION)
-            pDlg->SetCurPageId("position");
+            pDlg->SetCurPageId(u"position"_ustr);
         else if (nSlot == SID_CHAR_DLG_FOR_PARAGRAPH)
-            pDlg->SetCurPageId("font");
+            pDlg->SetCurPageId(u"font"_ustr);
         else if (pReq)
         {
             const SfxStringItem* pItem = (*pReq).GetArg<SfxStringItem>(FN_PARAM_1);
@@ -448,7 +448,7 @@ void UpdateSections(SfxRequest& rReq, SwWrtShell& rWrtSh)
         }
 
         comphelper::SequenceAsHashMap aMap(aSections[nSectionIndex++]);
-        OUString aSectionName = aMap["RegionName"].get<OUString>();
+        OUString aSectionName = aMap[u"RegionName"_ustr].get<OUString>();
         if (aSectionName != pFormat->GetName())
         {
             const_cast<SwSectionFormat*>(pFormat)->SetFormatName(aSectionName, /*bBroadcast=*/true);
@@ -469,7 +469,7 @@ void UpdateSections(SfxRequest& rReq, SwWrtShell& rWrtSh)
             rIDCO.DeleteAndJoin(*pCursorPos);
             rWrtSh.EndSelect();
 
-            OUString aSectionText = aMap["Content"].get<OUString>();
+            OUString aSectionText = aMap[u"Content"_ustr].get<OUString>();
             SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aSectionText.toUtf8());
         }
     }
@@ -563,17 +563,17 @@ void UpdateBookmarks(SfxRequest& rReq, SwWrtShell& rWrtSh)
         }
 
         comphelper::SequenceAsHashMap aMap(aBookmarks[nBookmarkIndex++]);
-        if (aMap["Bookmark"].get<OUString>() != pMark->GetName())
+        if (aMap[u"Bookmark"_ustr].get<OUString>() != pMark->GetName())
         {
-            rIDMA.renameMark(pMark, aMap["Bookmark"].get<OUString>());
+            rIDMA.renameMark(pMark, aMap[u"Bookmark"_ustr].get<OUString>());
         }
 
-        OUString aBookmarkText = aMap["BookmarkText"].get<OUString>();
+        OUString aBookmarkText = aMap[u"BookmarkText"_ustr].get<OUString>();
 
         // Insert markers to remember where the paste positions are.
         SwPaM aMarkers(pMark->GetMarkEnd());
         IDocumentContentOperations& rIDCO = rWrtSh.GetDoc()->getIDocumentContentOperations();
-        bool bSuccess = rIDCO.InsertString(aMarkers, "XY");
+        bool bSuccess = rIDCO.InsertString(aMarkers, u"XY"_ustr);
         if (bSuccess)
         {
             SwPaM aPasteEnd(pMark->GetMarkEnd());
@@ -650,15 +650,15 @@ void UpdateBookmark(SfxRequest& rReq, SwWrtShell& rWrtSh)
 
 
     comphelper::SequenceAsHashMap aMap(aBookmark);
-    if (aMap["Bookmark"].get<OUString>() != pBookmark->GetName())
+    if (aMap[u"Bookmark"_ustr].get<OUString>() != pBookmark->GetName())
     {
-        rIDMA.renameMark(pBookmark, aMap["Bookmark"].get<OUString>());
+        rIDMA.renameMark(pBookmark, aMap[u"Bookmark"_ustr].get<OUString>());
     }
 
     // Insert markers to remember where the paste positions are.
     SwPaM aMarkers(pBookmark->GetMarkEnd());
     IDocumentContentOperations& rIDCO = rWrtSh.GetDoc()->getIDocumentContentOperations();
-    if (!rIDCO.InsertString(aMarkers, "XY"))
+    if (!rIDCO.InsertString(aMarkers, u"XY"_ustr))
     {
         return;
     }
@@ -666,7 +666,7 @@ void UpdateBookmark(SfxRequest& rReq, SwWrtShell& rWrtSh)
     SwPaM aPasteEnd(pBookmark->GetMarkEnd());
     aPasteEnd.Move(fnMoveForward, GoInContent);
 
-    OUString aBookmarkText = aMap["BookmarkText"].get<OUString>();
+    OUString aBookmarkText = aMap[u"BookmarkText"_ustr].get<OUString>();
 
     // Paste HTML content.
     SwPaM* pCursorPos = rWrtSh.GetCursor();
@@ -1660,7 +1660,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         {
                             // MigrateItemSet guarantees unique gradient names
                             SfxItemSetFixed<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT> aMigrateSet(rWrtSh.GetView().GetPool());
-                            aMigrateSet.Put(XFillGradientItem("gradient", pTempGradItem->GetGradientValue()));
+                            aMigrateSet.Put(XFillGradientItem(u"gradient"_ustr, pTempGradItem->GetGradientValue()));
                             SdrModel::MigrateItemSet(&aMigrateSet, pSet, pDrawModel);
                         }
 
@@ -1670,7 +1670,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         if (pTempHatchItem && pTempHatchItem->GetName().isEmpty())
                         {
                             SfxItemSetFixed<XATTR_FILLHATCH, XATTR_FILLHATCH> aMigrateSet(rWrtSh.GetView().GetPool());
-                            aMigrateSet.Put(XFillHatchItem("hatch", pTempHatchItem->GetHatchValue()));
+                            aMigrateSet.Put(XFillHatchItem(u"hatch"_ustr, pTempHatchItem->GetHatchValue()));
                             SdrModel::MigrateItemSet(&aMigrateSet, pSet, pDrawModel);
                         }
 
@@ -1916,7 +1916,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if (pField && pField->GetTyp()->Which() == SwFieldIds::TableOfAuthorities)
             {
                 const auto& rAuthorityField = *static_cast<const SwAuthorityField*>(pField);
-                OUString targetURL = "";
+                OUString targetURL = u""_ustr;
 
                 if (auto targetType = rAuthorityField.GetTargetType();
                     targetType == SwAuthorityField::TargetType::UseDisplayURL
@@ -2253,7 +2253,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     aKeyboardLang = SvtLanguageTable::GetLanguageString( nLang );
 
                 // get the language that is in use
-                OUString aCurrentLang = "*";
+                OUString aCurrentLang = u"*"_ustr;
                 nLang = SwLangHelper::GetCurrentLanguage( rSh );
                 if (nLang != LANGUAGE_DONTKNOW)
                 {
@@ -2526,14 +2526,14 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 std::vector<OUString> aList;
                 static constexpr OUStringLiteral sPhysical(u"IsPhysical");
                 static constexpr OUStringLiteral sDisplay(u"DisplayName");
-                const OUString sHeaderOn(nWhich == FN_INSERT_PAGEHEADER ? OUString("HeaderIsOn") : OUString("FooterIsOn"));
+                const OUString sHeaderOn(nWhich == FN_INSERT_PAGEHEADER ? u"HeaderIsOn"_ustr : u"FooterIsOn"_ustr);
 
                 uno::Reference< XStyleFamiliesSupplier > xSupplier(GetView().GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
                 if (xSupplier.is())
                 {
                     uno::Reference< XNameContainer > xContainer;
                     uno::Reference< XNameAccess > xFamilies = xSupplier->getStyleFamilies();
-                    if (xFamilies->getByName("PageStyles") >>= xContainer)
+                    if (xFamilies->getByName(u"PageStyles"_ustr) >>= xContainer)
                     {
                         const uno::Sequence< OUString > aSeqNames = xContainer->getElementNames();
                         for (const auto& rName : aSeqNames)
@@ -2558,7 +2558,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 }
 
                 if (bAllState && aList.size() > 1)
-                    aList.push_back("_ALL_");
+                    aList.push_back(u"_ALL_"_ustr);
 
                 rSet.Put(SfxStringListItem(nWhich, &aList));
             }

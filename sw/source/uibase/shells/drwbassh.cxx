@@ -249,7 +249,7 @@ void SwDrawBaseShell::Execute(SfxRequest& rReq)
                         if (rIDSA.get(DocumentSettingId::DO_NOT_MIRROR_RTL_DRAW_OBJS))
                         {
                             SfxGrabBagItem aItem(RES_CHRATR_GRABBAG);
-                            aItem.GetGrabBag()["DoNotMirrorRtlDrawObjs"] <<= true;
+                            aItem.GetGrabBag()[u"DoNotMirrorRtlDrawObjs"_ustr] <<= true;
                             aSet.Put(aItem);
                         }
 

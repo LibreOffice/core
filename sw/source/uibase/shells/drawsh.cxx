@@ -62,7 +62,7 @@ SFX_IMPL_INTERFACE(SwDrawShell, SwDrawBaseShell)
 
 void SwDrawShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("draw");
+    GetStaticInterface()->RegisterPopupMenu(u"draw"_ustr);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Draw_Toolbox_Sw);
 
@@ -508,7 +508,7 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                         if (SdrObjCustomShape* pCustomShape = dynamic_cast<SdrObjCustomShape*>( pObj) )
                         {
                             const SdrCustomShapeGeometryItem& rGeometryItem = pCustomShape->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
-                            if (const uno::Any* pAny = rGeometryItem.GetPropertyValueByName("Type"))
+                            if (const uno::Any* pAny = rGeometryItem.GetPropertyValueByName(u"Type"_ustr))
                                 // But still disallow fontwork shapes.
                                 bDisable = pAny->get<OUString>().startsWith("fontwork-");
                         }
@@ -544,7 +544,7 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
 SwDrawShell::SwDrawShell(SwView &_rView) :
     SwDrawBaseShell(_rView)
 {
-    SetName("Draw");
+    SetName(u"Draw"_ustr);
 
     vcl::EnumContext::Context eContext = vcl::EnumContext::Context::Draw;
 

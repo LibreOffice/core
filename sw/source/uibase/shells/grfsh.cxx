@@ -99,7 +99,7 @@ SFX_IMPL_INTERFACE(SwGrfShell, SwBaseShell)
 
 void SwGrfShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("graphic");
+    GetStaticInterface()->RegisterPopupMenu(u"graphic"_ustr);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Grafik_Toolbox);
 }
@@ -405,12 +405,12 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             }
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog("PictureDialog",
+            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog(u"PictureDialog"_ustr,
                                                     GetView().GetViewFrame(),
                                                     GetView().GetFrameWeld(),
                                                     aSet, false));
             if (nSlot == FN_DRAW_WRAP_DLG)
-                pDlg->SetCurPageId("wrap");
+                pDlg->SetCurPageId(u"wrap"_ustr);
 
             if (pDlg->Execute() == RET_OK)
             {
@@ -1012,7 +1012,7 @@ SwGrfShell::~SwGrfShell()
 SwGrfShell::SwGrfShell(SwView &_rView) :
     SwBaseShell(_rView)
 {
-    SetName("Graphic");
+    SetName(u"Graphic"_ustr);
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Graphic));
 }
 

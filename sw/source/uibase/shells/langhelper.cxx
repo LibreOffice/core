@@ -71,7 +71,7 @@ namespace SwLangHelper
             aKeyboardLang = SvtLanguageTable::GetLanguageString( nLang );
 
         // get the language that is in use
-        OUString aCurrentLang("*");
+        OUString aCurrentLang(u"*"_ustr);
         SfxItemSet aSet(pOLV->GetAttribs());
         nLang = SwLangHelper::GetCurrentLanguage( aSet,nScriptType );
         if (nLang != LANGUAGE_DONTKNOW)

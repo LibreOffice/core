@@ -1005,7 +1005,7 @@ FIELD_INSERT:
             }
 
             comphelper::SequenceAsHashMap aMap(aFields[nFieldIndex++]);
-            itParam->second = aMap["FieldCommand"];
+            itParam->second = aMap[u"FieldCommand"_ustr];
             SwPaM aPaM(pFieldmark->GetMarkPos(), pFieldmark->GetOtherMarkPos());
             aPaM.Normalize();
             // Skip field start & separator.
@@ -1014,7 +1014,7 @@ FIELD_INSERT:
             aPaM.GetMark()->AdjustContent(-1);
             rSh.GetDoc()->getIDocumentContentOperations().DeleteAndJoin(aPaM);
             OUString aFieldResult;
-            aMap["FieldResult"] >>= aFieldResult;
+            aMap[u"FieldResult"_ustr] >>= aFieldResult;
             SwTranslateHelper::PasteHTMLToPaM(rSh, &aPaM, aFieldResult.toUtf8());
         }
 
@@ -1292,7 +1292,7 @@ FIELD_INSERT:
                 aMgr.InsertField(aData);
                 if (pDlg->GetIncludePageTotal())
                 {
-                    rDoc->getIDocumentContentOperations().InsertString(*rSh.GetCursor(), " / ");
+                    rDoc->getIDocumentContentOperations().InsertString(*rSh.GetCursor(), u" / "_ustr);
                     SwInsertField_Data aPageTotalData(SwFieldTypesEnum::DocumentStatistics, DS_PAGE,
                                                       OUString(), OUString(), SVX_NUM_PAGEDESC);
                     aMgr.InsertField(aPageTotalData);
@@ -1346,7 +1346,7 @@ FIELD_INSERT:
                     aEvenMgr.InsertField(aData);
                     if (pDlg->GetIncludePageTotal())
                     {
-                        rDoc->getIDocumentContentOperations().InsertString(*rSh.GetCursor(), " / ");
+                        rDoc->getIDocumentContentOperations().InsertString(*rSh.GetCursor(), u" / "_ustr);
                         SwInsertField_Data aPageTotalData(SwFieldTypesEnum::DocumentStatistics,
                                                           DS_PAGE, OUString(), OUString(),
                                                           SVX_NUM_PAGEDESC);
@@ -1424,7 +1424,7 @@ FIELD_INSERT:
         rSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::UPDATE_FORM_FIELD, nullptr);
         rSh.StartAction();
         comphelper::SequenceAsHashMap aMap(aField);
-        itParam->second = aMap["FieldCommand"];
+        itParam->second = aMap[u"FieldCommand"_ustr];
         SwPaM aPaM(pFieldmark->GetMarkPos(), pFieldmark->GetOtherMarkPos());
         aPaM.Normalize();
         // Skip field start & separator.
@@ -1433,7 +1433,7 @@ FIELD_INSERT:
         aPaM.GetMark()->AdjustContent(-1);
         rSh.GetDoc()->getIDocumentContentOperations().DeleteAndJoin(aPaM);
         OUString aFieldResult;
-        aMap["FieldResult"] >>= aFieldResult;
+        aMap[u"FieldResult"_ustr] >>= aFieldResult;
         SwTranslateHelper::PasteHTMLToPaM(rSh, &aPaM, aFieldResult.toUtf8());
 
         rSh.EndAction();

@@ -80,7 +80,7 @@ SFX_IMPL_INTERFACE(SwDrawTextShell, SfxShell)
 
 void SwDrawTextShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("drawtext");
+    GetStaticInterface()->RegisterPopupMenu(u"drawtext"_ustr);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Draw_Text_Toolbox_Sw);
 
@@ -126,7 +126,7 @@ SwDrawTextShell::SwDrawTextShell(SwView &rV) :
     // Initialize and show cursor to start editing.
     Init();
 
-    SetName("ObjectText");
+    SetName(u"ObjectText"_ustr);
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::DrawText));
 }
 
@@ -293,7 +293,7 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest const &rReq)
                 return;
 
             Reference<ui::dialogs::XExecutableDialog> xDialog(
-                    xMCF->createInstanceWithContext("com.sun.star.linguistic2.ChineseTranslationDialog", xContext), UNO_QUERY);
+                    xMCF->createInstanceWithContext(u"com.sun.star.linguistic2.ChineseTranslationDialog"_ustr, xContext), UNO_QUERY);
 
             Reference<lang::XInitialization> xInit(xDialog, UNO_QUERY);
 
@@ -320,9 +320,9 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest const &rReq)
                 {
                     try
                     {
-                        xPropertySet->getPropertyValue("IsDirectionToSimplified") >>= bToSimplified;
-                        xPropertySet->getPropertyValue("IsUseCharacterVariants") >>= bUseVariants;
-                        xPropertySet->getPropertyValue("IsTranslateCommonTerms") >>= bCommonTerms;
+                        xPropertySet->getPropertyValue(u"IsDirectionToSimplified"_ustr) >>= bToSimplified;
+                        xPropertySet->getPropertyValue(u"IsUseCharacterVariants"_ustr) >>= bUseVariants;
+                        xPropertySet->getPropertyValue(u"IsTranslateCommonTerms"_ustr) >>= bCommonTerms;
                     }
                     catch (const Exception&)
                     {

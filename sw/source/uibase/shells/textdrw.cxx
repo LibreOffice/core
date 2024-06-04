@@ -85,7 +85,7 @@ void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget,
             uno::Any aTmp;
 
             aTmp <<= rText;
-            xPropSet->setPropertyValue( "Label", aTmp );
+            xPropSet->setPropertyValue( u"Label"_ustr, aTmp );
 
             SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
             INetURLObject aAbs;
@@ -93,23 +93,23 @@ void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget,
                 aAbs = pMedium->GetURLObject();
 
             aTmp <<= URIHelper::SmartRel2Abs(aAbs, rURL);
-            xPropSet->setPropertyValue( "TargetURL", aTmp );
+            xPropSet->setPropertyValue( u"TargetURL"_ustr, aTmp );
 
             if( !rTarget.isEmpty() )
             {
                 aTmp <<= rTarget;
-                xPropSet->setPropertyValue( "TargetFrame", aTmp );
+                xPropSet->setPropertyValue( u"TargetFrame"_ustr, aTmp );
             }
 
             aTmp <<= form::FormButtonType_URL;
-            xPropSet->setPropertyValue( "ButtonType", aTmp );
+            xPropSet->setPropertyValue( u"ButtonType"_ustr, aTmp );
 
 #if HAVE_FEATURE_AVMEDIA
-            if ( ::avmedia::MediaWindow::isMediaURL( rURL, ""/*TODO?*/ ) )
+            if ( ::avmedia::MediaWindow::isMediaURL( rURL, u""_ustr/*TODO?*/ ) )
             {
                 // #105638# OJ
                 aTmp <<= true;
-                xPropSet->setPropertyValue("DispatchURLInternal", aTmp );
+                xPropSet->setPropertyValue(u"DispatchURLInternal"_ustr, aTmp );
             }
 #endif
         }

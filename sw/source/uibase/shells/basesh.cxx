@@ -834,10 +834,10 @@ bool UpdateFieldContents(SfxRequest& rReq, SwWrtShell& rWrtSh)
             break;
         }
         comphelper::SequenceAsHashMap aMap(aFields[nFieldIndex++]);
-        pRefMark->GetRefName() = aMap["Name"].get<OUString>();
+        pRefMark->GetRefName() = aMap[u"Name"_ustr].get<OUString>();
 
         auto pTextRefMark = const_cast<SwTextRefMark*>(pRefMark->GetTextRefMark());
-        pTextRefMark->UpdateFieldContent(pDoc, rWrtSh, aMap["Content"].get<OUString>());
+        pTextRefMark->UpdateFieldContent(pDoc, rWrtSh, aMap[u"Content"_ustr].get<OUString>());
     }
 
     rWrtSh.EndAction();
@@ -899,9 +899,9 @@ void UpdateFieldContent(SfxRequest& rReq, SwWrtShell& rWrtSh)
         });
 
     comphelper::SequenceAsHashMap aMap(aField);
-    rRefmark.GetRefName() = aMap["Name"].get<OUString>();
+    rRefmark.GetRefName() = aMap[u"Name"_ustr].get<OUString>();
 
-    OUString aContent = aMap["Content"].get<OUString>();
+    OUString aContent = aMap[u"Content"_ustr].get<OUString>();
     auto pTextRefMark = const_cast<SwTextRefMark*>(rRefmark.GetTextRefMark());
     pTextRefMark->UpdateFieldContent(pDoc, rWrtSh, aContent);
 }
@@ -2330,7 +2330,7 @@ SwBaseShell::SwBaseShell(SwView& rVw) :
     SwWrtShell& rWrtSh = m_rView.GetWrtShell();
 
     SetPool(&rWrtSh.GetAttrPool());
-    SetName("Base");
+    SetName(u"Base"_ustr);
     rWrtSh.SetGrfArrivedLnk( LINK( this, SwBaseShell, GraphicArrivedHdl));
 }
 

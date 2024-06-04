@@ -93,7 +93,7 @@ SFX_IMPL_INTERFACE(SwTableShell, SwBaseShell)
 
 void SwTableShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("table");
+    GetStaticInterface()->RegisterPopupMenu(u"table"_ustr);
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Table_Toolbox);
 }
 
@@ -1726,7 +1726,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
 SwTableShell::SwTableShell(SwView &_rView) :
     SwBaseShell(_rView)
 {
-    SetName("Table");
+    SetName(u"Table"_ustr);
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Table));
 }
 

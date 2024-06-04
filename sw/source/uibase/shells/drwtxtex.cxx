@@ -349,15 +349,15 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(rView.GetFrameWeld(), rView, aDlgAttr, SwCharDlgMode::Draw));
                 if (nSlot == SID_CHAR_DLG_EFFECT)
                 {
-                    pDlg->SetCurPageId("fonteffects");
+                    pDlg->SetCurPageId(u"fonteffects"_ustr);
                 }
                 else if (nSlot == SID_CHAR_DLG_POSITION)
                 {
-                    pDlg->SetCurPageId("position");
+                    pDlg->SetCurPageId(u"position"_ustr);
                 }
                 else if (nSlot == SID_CHAR_DLG_FOR_PARAGRAPH)
                 {
-                    pDlg->SetCurPageId("font");
+                    pDlg->SetCurPageId(u"font"_ustr);
                 }
                 else if (pItem)
                 {

@@ -117,7 +117,7 @@ void SwAnnotationShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Text_Toolbox_Sw);
 
-    GetStaticInterface()->RegisterPopupMenu("annotation");
+    GetStaticInterface()->RegisterPopupMenu(u"annotation"_ustr);
 }
 
 
@@ -476,11 +476,11 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(m_rView.GetFrameWeld(), m_rView, aDlgAttr, SwCharDlgMode::Ann));
                 if (nSlot == SID_CHAR_DLG_EFFECT)
                 {
-                    pDlg->SetCurPageId("fonteffects");
+                    pDlg->SetCurPageId(u"fonteffects"_ustr);
                 }
                 if (nSlot == SID_CHAR_DLG_POSITION)
                 {
-                    pDlg->SetCurPageId("position");
+                    pDlg->SetCurPageId(u"position"_ustr);
                 }
                 else if (pItem)
                 {
@@ -1327,7 +1327,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
                     {
                         Reference< ui::dialogs::XExecutableDialog > xDialog(
                                 xMCF->createInstanceWithContext(
-                                    "com.sun.star.linguistic2.ChineseTranslationDialog", xContext),
+                                    u"com.sun.star.linguistic2.ChineseTranslationDialog"_ustr, xContext),
                                 UNO_QUERY);
                         Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
                         if( xInit.is() )
@@ -1352,9 +1352,9 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
                                 {
                                     try
                                     {
-                                        xProp->getPropertyValue( "IsDirectionToSimplified" ) >>= bToSimplified;
-                                        xProp->getPropertyValue( "IsUseCharacterVariants" ) >>= bUseVariants;
-                                        xProp->getPropertyValue( "IsTranslateCommonTerms" ) >>= bCommonTerms;
+                                        xProp->getPropertyValue( u"IsDirectionToSimplified"_ustr ) >>= bToSimplified;
+                                        xProp->getPropertyValue( u"IsUseCharacterVariants"_ustr ) >>= bUseVariants;
+                                        xProp->getPropertyValue( u"IsTranslateCommonTerms"_ustr ) >>= bCommonTerms;
                                     }
                                     catch (const Exception&)
                                     {

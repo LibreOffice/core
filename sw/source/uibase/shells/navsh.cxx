@@ -26,7 +26,7 @@ void SwNavigationShell::InitInterface_Impl() {}
 SwNavigationShell::SwNavigationShell(SwView& _rView)
     : SwBaseShell(_rView)
 {
-    SetName("Navigation");
+    SetName(u"Navigation"_ustr);
 }
 
 void SwNavigationShell::Execute(SfxRequest const& rReq)

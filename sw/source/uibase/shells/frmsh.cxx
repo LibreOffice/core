@@ -86,7 +86,7 @@ SFX_IMPL_INTERFACE(SwFrameShell, SwBaseShell)
 
 void SwFrameShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("frame");
+    GetStaticInterface()->RegisterPopupMenu(u"frame"_ustr);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Frame_Toolbox);
 }
@@ -155,7 +155,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             if (!pArgs)
             {
                 // Frame already exists, open frame dialog for editing.
-                SfxStringItem aDefPage(FN_FORMAT_FRAME_DLG, "columns");
+                SfxStringItem aDefPage(FN_FORMAT_FRAME_DLG, u"columns"_ustr);
                 rSh.GetView().GetViewFrame().GetDispatcher()->ExecuteList(
                         FN_FORMAT_FRAME_DLG,
                         SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
@@ -514,9 +514,9 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric) ));
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog(
-                                                        nSel & SelectionType::Graphic ? OUString("PictureDialog") :
-                                                        nSel & SelectionType::Ole ? OUString("ObjectDialog"):
-                                                                                        OUString("FrameDialog"),
+                                                        nSel & SelectionType::Graphic ? u"PictureDialog"_ustr :
+                                                        nSel & SelectionType::Ole ? u"ObjectDialog"_ustr:
+                                                                                        u"FrameDialog"_ustr,
                                                         GetView().GetViewFrame(),
                                                         GetView().GetFrameWeld(),
                                                         aSet,
@@ -525,7 +525,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                 if ( nSlot == FN_DRAW_WRAP_DLG )
                 {
-                    pDlg->SetCurPageId("wrap");
+                    pDlg->SetCurPageId(u"wrap"_ustr);
                 }
 
                 if ( pDlg->Execute() )
@@ -887,21 +887,21 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                             case SID_OBJECT_ALIGN_UP :
                             case FN_FRAME_ALIGN_VERT_TOP:
                             {
-                                auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:AlignTop", aModuleName);
+                                auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(u".uno:AlignTop"_ustr, aModuleName);
                                 sNewLabel = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
                                 break;
                             }
                             case SID_OBJECT_ALIGN_MIDDLE:
                             case FN_FRAME_ALIGN_VERT_CENTER:
                             {
-                                auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:AlignVerticalCenter", aModuleName);
+                                auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(u".uno:AlignVerticalCenter"_ustr, aModuleName);
                                 sNewLabel = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
                                 break;
                             }
                             case SID_OBJECT_ALIGN_DOWN:
                             case FN_FRAME_ALIGN_VERT_BOTTOM:
                             {
-                                auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:AlignBottom", aModuleName);
+                                auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(u".uno:AlignBottom"_ustr, aModuleName);
                                 sNewLabel = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
                                 break;
                             }
@@ -1062,7 +1062,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
 SwFrameShell::SwFrameShell(SwView &_rView) :
     SwBaseShell( _rView )
 {
-    SetName("Frame");
+    SetName(u"Frame"_ustr);
 
     // #96392# Use this to announce it is the frame shell who creates the selection.
     SwTransferable::CreateSelection( _rView.GetWrtShell(), this );

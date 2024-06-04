@@ -242,7 +242,7 @@ void SwListShell::GetState(SfxItemSet &rSet)
 SwListShell::SwListShell(SwView &_rView) :
     SwBaseShell(_rView)
 {
-    SetName("List");
+    SetName(u"List"_ustr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

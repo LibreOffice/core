@@ -83,7 +83,7 @@ bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
                     avmedia::MediaWindow::dispatchInsertAVMedia(xDispatchProvider, aSize, aURL, bLink);
                 }));
 
-            const bool bIsMediaURL = ::avmedia::MediaWindow::isMediaURL(aURL, "", true, xPlayerListener);
+            const bool bIsMediaURL = ::avmedia::MediaWindow::isMediaURL(aURL, u""_ustr, true, xPlayerListener);
 
             rWindow.LeaveWait();
 
@@ -138,7 +138,7 @@ bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
             *rSh.GetDoc()->getIDocumentDrawModelAccess().GetDrawModel(),
             tools::Rectangle(aPos, aSize));
 
-        pObj->setURL( realURL, "" );
+        pObj->setURL( realURL, u""_ustr );
         rSh.EnterStdMode();
         rSh.SwFEShell::InsertDrawObj( *pObj, aPos );
         bRet = true;

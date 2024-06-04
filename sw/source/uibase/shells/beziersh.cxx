@@ -41,7 +41,7 @@ SFX_IMPL_INTERFACE(SwBezierShell, SwBaseShell)
 
 void SwBezierShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("draw");
+    GetStaticInterface()->RegisterPopupMenu(u"draw"_ustr);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Bezier_Toolbox_Sw);
 }
@@ -50,7 +50,7 @@ void SwBezierShell::InitInterface_Impl()
 SwBezierShell::SwBezierShell(SwView &_rView):
     SwBaseShell( _rView )
 {
-    SetName("Bezier");
+    SetName(u"Bezier"_ustr);
 
     SwWrtShell *pSh = &GetShell();
     SdrView*    pSdrView = pSh->GetDrawView();

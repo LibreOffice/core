@@ -53,7 +53,7 @@ SFX_IMPL_INTERFACE(SwDrawFormShell, SwDrawBaseShell)
 
 void SwDrawFormShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("form");
+    GetStaticInterface()->RegisterPopupMenu(u"form"_ustr);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Text_Toolbox_Sw);
 }
@@ -105,7 +105,7 @@ void SwDrawFormShell::Execute(SfxRequest const &rReq)
                         uno::Reference< beans::XPropertySet >  xPropSet(xControlModel, uno::UNO_QUERY);
 
                         // Can we set a URL to the object?
-                        OUString sTargetURL( "TargetURL" );
+                        OUString sTargetURL( u"TargetURL"_ustr );
                         uno::Reference< beans::XPropertySetInfo >  xPropInfoSet = xPropSet->getPropertySetInfo();
                         if( xPropInfoSet->hasPropertyByName( sTargetURL ))
                         {
@@ -114,7 +114,7 @@ void SwDrawFormShell::Execute(SfxRequest const &rReq)
                             {
                                 uno::Any aTmp;
                                 // Yes!
-                                OUString sLabel("Label");
+                                OUString sLabel(u"Label"_ustr);
                                 if( xPropInfoSet->hasPropertyByName(sLabel) )
                                 {
                                     aTmp <<= rHLinkItem.GetName();
@@ -131,11 +131,11 @@ void SwDrawFormShell::Execute(SfxRequest const &rReq)
                                 if( !rHLinkItem.GetTargetFrame().isEmpty() )
                                 {
                                     aTmp <<= rHLinkItem.GetTargetFrame();
-                                    xPropSet->setPropertyValue( "TargetFrame", aTmp );
+                                    xPropSet->setPropertyValue( u"TargetFrame"_ustr, aTmp );
                                 }
 
                                 aTmp <<= form::FormButtonType_URL;
-                                xPropSet->setPropertyValue( "ButtonType", aTmp );
+                                xPropSet->setPropertyValue( u"ButtonType"_ustr, aTmp );
                             }
                         }
                     }
@@ -181,16 +181,16 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
 
                         uno::Any aTmp;
                         uno::Reference< beans::XPropertySetInfo >  xInfo = xPropSet->getPropertySetInfo();
-                        if(xInfo->hasPropertyByName( "ButtonType" ))
+                        if(xInfo->hasPropertyByName( u"ButtonType"_ustr ))
                         {
                             form::FormButtonType eButtonType = form::FormButtonType_URL;
-                            aTmp = xPropSet->getPropertyValue( "ButtonType" );
+                            aTmp = xPropSet->getPropertyValue( u"ButtonType"_ustr );
                             if( aTmp >>= eButtonType )
                             {
                                 // Label
-                                if(xInfo->hasPropertyByName( "Label" ))
+                                if(xInfo->hasPropertyByName( u"Label"_ustr ))
                                 {
-                                    aTmp = xPropSet->getPropertyValue( "Label" );
+                                    aTmp = xPropSet->getPropertyValue( u"Label"_ustr );
                                     OUString sTmp;
                                     if( (aTmp >>= sTmp) && !sTmp.isEmpty())
                                     {
@@ -199,9 +199,9 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
                                 }
 
                                 // URL
-                                if(xInfo->hasPropertyByName( "TargetURL" ))
+                                if(xInfo->hasPropertyByName( u"TargetURL"_ustr ))
                                 {
-                                    aTmp = xPropSet->getPropertyValue( "TargetURL" );
+                                    aTmp = xPropSet->getPropertyValue( u"TargetURL"_ustr );
                                     OUString sTmp;
                                     if( (aTmp >>= sTmp) && !sTmp.isEmpty())
                                     {
@@ -210,9 +210,9 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
                                 }
 
                                 // Target
-                                if(xInfo->hasPropertyByName( "TargetFrame" ))
+                                if(xInfo->hasPropertyByName( u"TargetFrame"_ustr ))
                                 {
-                                    aTmp = xPropSet->getPropertyValue( "TargetFrame" );
+                                    aTmp = xPropSet->getPropertyValue( u"TargetFrame"_ustr );
                                     OUString sTmp;
                                     if( (aTmp >>= sTmp) && !sTmp.isEmpty())
                                     {
@@ -240,7 +240,7 @@ SwDrawFormShell::SwDrawFormShell(SwView &_rView) :
     SwDrawBaseShell(_rView)
 {
     GetShell().NoEdit();
-    SetName("DrawForm");
+    SetName(u"DrawForm"_ustr);
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Form));
 }
 

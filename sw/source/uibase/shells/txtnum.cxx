@@ -323,7 +323,7 @@ void SwTextShell::ExecSetNumber(SfxRequest const &rReq)
             {
                 // no outline provided: launch dialog to request a specific outline
                 SfxBindings& rBindings = GetView().GetViewFrame().GetBindings();
-                const SfxStringItem aPage(FN_PARAM_1, "outlinenum");
+                const SfxStringItem aPage(FN_PARAM_1, u"outlinenum"_ustr);
                 const SfxPoolItem* aItems[] = { &aPage, nullptr };
                 rBindings.Execute(SID_OUTLINE_BULLET, aItems);
             }
