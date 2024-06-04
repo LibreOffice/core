@@ -2134,11 +2134,6 @@ bool BrowseBox::ReserveControlArea(sal_uInt16 nWidth)
 
 tools::Rectangle BrowseBox::GetControlArea() const
 {
-    if (!aHScroll)
-    {
-        return tools::Rectangle();
-    }
-
     auto nHeight = aHScroll->GetSizePixel().Height();
     auto nEndRight = aHScroll->GetPosPixel().X();
 
