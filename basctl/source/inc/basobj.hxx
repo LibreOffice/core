@@ -46,11 +46,11 @@ namespace basctl
 
     bool            IsValidSbxName( std::u16string_view rName );
 
-    BasicManager*   FindBasicManager( StarBASIC const * pLib );
+    SAL_RET_MAYBENULL BasicManager*   FindBasicManager( StarBASIC const * pLib );
 
-    SfxBindings*    GetBindingsPtr();
+    SAL_RET_MAYBENULL SfxBindings*    GetBindingsPtr();
 
-    SfxDispatcher*  GetDispatcher ();
+    SAL_RET_MAYBENULL SfxDispatcher*  GetDispatcher ();
 
     void            InvalidateDebuggerSlots();
 
