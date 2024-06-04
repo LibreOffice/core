@@ -71,7 +71,7 @@ $(call gb_HelpTranslatePartTarget_get_target,%) : $(gb_HelpTranslatePartTarget_D
 
 clear_HelpTranslatePartTarget:
 	$(call gb_Output_announce,clear HelpTranslatePartTarget,$(false),HPX,1)
-	rm -rf 	$(call gb_HelpTranslatePartTarget_get_workdir)
+	rm -rf 	$(call gb_HelpTranslatePartTarget_workdir)
 
 # Translate a set of .xhp files from one directory.
 #
