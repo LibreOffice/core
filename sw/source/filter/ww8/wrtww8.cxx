@@ -87,6 +87,7 @@
 #include <fmtline.hxx>
 #include <fmtfsize.hxx>
 #include <formatflysplit.hxx>
+#include <fmtftntx.hxx>
 #include "sprmids.hxx"
 
 #include <comphelper/sequenceashashmap.hxx>
@@ -492,6 +493,18 @@ static void WriteDop( WW8Export& rWrt )
     rDop.cPg = static_cast< sal_Int16 >(rDStat.nPage);
     rDop.cParas = rDStat.nPara;
     rDop.cLines = rDStat.nPara;
+
+    SwSectionFormats& rSections = rWrt.m_rDoc.GetSections();
+    if (!rSections.empty())
+    {
+        SwSectionFormat* pFormat = rSections[0];
+        bool bEndnAtEnd = pFormat->GetEndAtTextEnd().IsAtEnd();
+        if (bEndnAtEnd)
+        {
+            // DopBase.epc: this is normally 3 (end of document), change this to end of section.
+            rDop.epc = 0;
+        }
+    }
 
     SwDocShell *pDocShell(rWrt.m_rDoc.GetDocShell());
     OSL_ENSURE(pDocShell, "no SwDocShell");

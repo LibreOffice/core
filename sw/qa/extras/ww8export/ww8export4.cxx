@@ -36,6 +36,7 @@
 #include <frmmgr.hxx>
 #include <formatflysplit.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
+#include <fmtftntx.hxx>
 
 namespace
 {
@@ -120,6 +121,36 @@ DECLARE_WW8EXPORT_TEST(testTdf141649_conditionalText, "tdf141649_conditionalText
     // result is "manual refresh with F9" inside a text field,
     // but for our purposes, a single instance of "trueResult" is appropriate.
     getParagraph(1, "trueResult");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testEndnotesAtSectEndDOC)
+{
+    // Given a document, endnotes at collected at section end:
+    createSwDoc();
+    {
+        SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+        pWrtShell->SplitNode();
+        pWrtShell->Up(/*bSelect=*/false);
+        pWrtShell->Insert("x");
+        pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+        SwSectionData aSection(SectionType::Content, pWrtShell->GetUniqueSectionName());
+        pWrtShell->StartAction();
+        SfxItemSetFixed<RES_FTN_AT_TXTEND, RES_FRAMEDIR> aSet(pWrtShell->GetAttrPool());
+        aSet.Put(SwFormatEndAtTextEnd(FTNEND_ATTXTEND));
+        pWrtShell->InsertSection(aSection, &aSet);
+        pWrtShell->EndAction();
+        pWrtShell->InsertFootnote(OUString(), /*bEndNote=*/true);
+    }
+
+    // When saving to DOC:
+    saveAndReload("MS Word 97");
+
+    // Then make sure the endnote position is section end:
+    SwDoc* pDoc = getSwDoc();
+    SwSectionFormats& rSections = pDoc->GetSections();
+    SwSectionFormat* pFormat = rSections[0];
+    // Without the accompanying fix in place, this test would have failed, endnotes were at doc end.
+    CPPUNIT_ASSERT(pFormat->GetEndAtTextEnd().IsAtEnd());
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf90408, "tdf90408.doc")
