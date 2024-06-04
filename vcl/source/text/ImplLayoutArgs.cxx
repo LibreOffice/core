@@ -189,11 +189,7 @@ bool ImplLayoutArgs::PrepareFallback(const SalLayoutGlyphsImpl* pGlyphsImpl)
         return false;
     }
 
-    // the fallback runs already have the same order and limits of the original runs
-    std::swap(maRuns, maFallbackRuns);
-    maFallbackRuns.Clear();
-    maFallbackRuns.ResetPos();
-    maRuns.ResetPos();
+    ImplLayoutRuns::PrepareFallbackRuns(&maRuns, &maFallbackRuns);
 
     return true;
 }

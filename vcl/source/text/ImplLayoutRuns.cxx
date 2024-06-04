@@ -19,18 +19,7 @@
 
 #include <ImplLayoutRuns.hxx>
 #include <algorithm>
-
-ImplLayoutRuns::Run::Run(int nMinRunPos, int nEndRunPos, bool bRTL)
-    : m_nMinRunPos(nMinRunPos)
-    , m_nEndRunPos(nEndRunPos)
-    , m_bRTL(bRTL)
-{
-}
-
-bool ImplLayoutRuns::Run::Contains(int nCharPos) const
-{
-    return (m_nMinRunPos <= nCharPos) && (nCharPos < m_nEndRunPos);
-}
+#include <tuple>
 
 void ImplLayoutRuns::AddPos( int nCharPos, bool bRTL )
 {
@@ -38,12 +27,21 @@ void ImplLayoutRuns::AddPos( int nCharPos, bool bRTL )
     if (!maRuns.empty())
     {
         auto& rLastRun = maRuns.back();
-        if (bRTL == rLastRun.m_bRTL && nCharPos == rLastRun.m_nEndRunPos)
+        if (bRTL == rLastRun.m_bRTL)
         {
-            // extend current run by new charpos
-            ++rLastRun.m_nEndRunPos;
-            return;
+            if (nCharPos + 1 == rLastRun.m_nMinRunPos)
+            {
+                // extend current run by new charpos
+                rLastRun.m_nMinRunPos = nCharPos;
+            }
+
+            if (nCharPos == rLastRun.m_nEndRunPos)
+            {
+                // extend current run by new charpos
+                ++rLastRun.m_nEndRunPos;
+            }
         }
+
         // ignore new charpos when it is in current run
         if ((rLastRun.m_nMinRunPos <= nCharPos) && (nCharPos < rLastRun.m_nEndRunPos))
         {
@@ -77,6 +75,29 @@ void ImplLayoutRuns::AddRun( int nCharPos0, int nCharPos1, bool bRTL )
 
     // append new run
     maRuns.emplace_back(nOrderedCharPos0, nOrderedCharPos1, bRTL);
+}
+
+void ImplLayoutRuns::Normalize()
+{
+    boost::container::small_vector<Run, 8> aOldRuns;
+    std::swap(aOldRuns, maRuns);
+
+    std::sort(aOldRuns.begin(), aOldRuns.end(),
+              [](const Run& rA, const Run& rB)
+              {
+                  return std::tie(rA.m_nMinRunPos, rA.m_nEndRunPos)
+                         < std::tie(rB.m_nMinRunPos, rB.m_nEndRunPos);
+              });
+
+    for (const auto& rRun : aOldRuns)
+    {
+        AddRun(rRun.m_nMinRunPos, rRun.m_nEndRunPos, false);
+    }
+}
+
+void ImplLayoutRuns::ReverseTail(size_t nTailIndex)
+{
+    std::reverse(maRuns.begin() + nTailIndex, maRuns.end());
 }
 
 bool ImplLayoutRuns::PosIsInRun( int nCharPos ) const
@@ -143,6 +164,48 @@ bool ImplLayoutRuns::GetRun( int* nMinRunPos, int* nEndRunPos, bool* bRightToLef
     *nEndRunPos = rRun.m_nEndRunPos;
     *bRightToLeft = rRun.m_bRTL;
     return true;
+}
+
+void ImplLayoutRuns::PrepareFallbackRuns(ImplLayoutRuns* paRuns, ImplLayoutRuns* paFallbackRuns)
+{
+    // Normalize the input fallback runs. This is required for efficient lookup.
+    paFallbackRuns->Normalize();
+
+    // Adjust fallback runs to have the same order and limits of the original runs.
+    ImplLayoutRuns aNewRuns;
+    for (const auto& rRun : *paRuns)
+    {
+        auto nTailIndex = aNewRuns.size();
+
+        // Search for the first fallback run intersecting this run
+        auto it = std::lower_bound(paFallbackRuns->begin(), paFallbackRuns->end(),
+                                   rRun.m_nMinRunPos, [](const auto& rCompRun, int nValue)
+                                   { return rCompRun.m_nEndRunPos < nValue; });
+        for (; it != paFallbackRuns->end(); ++it)
+        {
+            if (rRun.m_nEndRunPos <= it->m_nMinRunPos)
+            {
+                break;
+            }
+
+            int nSubMin = std::max(rRun.m_nMinRunPos, it->m_nMinRunPos);
+            int nSubMax = std::min(rRun.m_nEndRunPos, it->m_nEndRunPos);
+
+            aNewRuns.AddRun(nSubMin, nSubMax, rRun.m_bRTL);
+        }
+
+        // RTL subruns must be added in reverse order
+        if (rRun.m_bRTL)
+        {
+            aNewRuns.ReverseTail(nTailIndex);
+        }
+    }
+
+    *paRuns = aNewRuns;
+    paRuns->ResetPos();
+
+    paFallbackRuns->Clear();
+    paFallbackRuns->ResetPos();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

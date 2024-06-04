@@ -53,6 +53,11 @@ public:
     }
 };
 
+static std::ostream& operator<<(std::ostream& s, const ImplLayoutRuns::Run& rRun)
+{
+    return s << "{" << rRun.m_nMinRunPos << ", " << rRun.m_nEndRunPos << ", " << rRun.m_bRTL << "}";
+}
+
 // Avoid issues when colorized antialiasing generates slightly tinted rather than truly black
 // pixels:
 static bool isBlack(Color col)
@@ -518,6 +523,174 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testImplLayoutRuns_PosIsInAnyRun)
 
     CPPUNIT_ASSERT(aRuns.PosIsInAnyRun(1));
     CPPUNIT_ASSERT(!aRuns.PosIsInAnyRun(7));
+}
+
+CPPUNIT_TEST_FIXTURE(VclTextTest, testImplLayoutRuns_Normalize)
+{
+    ImplLayoutRuns aRuns;
+    aRuns.AddRun(8, 10, true);
+    aRuns.AddRun(5, 8, false);
+    aRuns.AddRun(2, 5, false);
+    aRuns.AddRun(1, 3, false);
+    aRuns.AddRun(14, 15, false);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(5), aRuns.size());
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(8, 10, true), aRuns.at(0));
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(5, 8, false), aRuns.at(1));
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(2, 5, false), aRuns.at(2));
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(1, 3, false), aRuns.at(3));
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(14, 15, false), aRuns.at(4));
+
+    aRuns.Normalize();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aRuns.size());
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(1, 10, false), aRuns.at(0));
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(14, 15, false), aRuns.at(1));
+}
+
+CPPUNIT_TEST_FIXTURE(VclTextTest, testImplLayoutRuns_PrepareFallbackRuns_LTR)
+{
+    ImplLayoutRuns aRuns;
+    aRuns.AddRun(0, 10, false); // First 5 characters excluded
+    aRuns.AddRun(11, 15, false); // Entire run included
+    aRuns.AddRun(16, 25, false); // First 4 characters included
+    aRuns.AddRun(26, 30, false); // Entire run excluded
+    aRuns.AddRun(31, 35, false); // Exact match
+
+    CPPUNIT_ASSERT_EQUAL(size_t(5), aRuns.size());
+
+    ImplLayoutRuns aFallbackRuns;
+    aFallbackRuns.AddRun(5, 20, false);
+    aFallbackRuns.AddRun(31, 35, false);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aFallbackRuns.size());
+
+    ImplLayoutRuns::PrepareFallbackRuns(&aRuns, &aFallbackRuns);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aFallbackRuns.size());
+
+    CPPUNIT_ASSERT_EQUAL(size_t(4), aRuns.size());
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(5, 10, false), aRuns.at(0));
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(11, 15, false), aRuns.at(1));
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(16, 20, false), aRuns.at(2));
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(31, 35, false), aRuns.at(3));
+}
+
+CPPUNIT_TEST_FIXTURE(VclTextTest, testImplLayoutRuns_PrepareFallbackRuns_LTR_PreservesOrder)
+{
+    ImplLayoutRuns aRuns;
+    aRuns.AddRun(16, 25, false); // First 4 characters included
+    aRuns.AddRun(31, 35, false); // Exact match
+    aRuns.AddRun(0, 10, false); // First 5 characters excluded
+    aRuns.AddRun(26, 30, false); // Entire run excluded
+    aRuns.AddRun(11, 15, false); // Entire run included
+
+    CPPUNIT_ASSERT_EQUAL(size_t(5), aRuns.size());
+
+    ImplLayoutRuns aFallbackRuns;
+    aFallbackRuns.AddRun(5, 20, false);
+    aFallbackRuns.AddRun(31, 35, false);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aFallbackRuns.size());
+
+    ImplLayoutRuns::PrepareFallbackRuns(&aRuns, &aFallbackRuns);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aFallbackRuns.size());
+
+    CPPUNIT_ASSERT_EQUAL(size_t(4), aRuns.size());
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(16, 20, false), aRuns.at(0));
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(31, 35, false), aRuns.at(1));
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(5, 10, false), aRuns.at(2));
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(11, 15, false), aRuns.at(3));
+}
+
+CPPUNIT_TEST_FIXTURE(VclTextTest, testImplLayoutRuns_PrepareFallbackRuns_RTL)
+{
+    ImplLayoutRuns aRuns;
+    aRuns.AddRun(0, 10, false);
+    aRuns.AddRun(10, 90, true);
+    aRuns.AddRun(90, 100, false);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aRuns.size());
+
+    ImplLayoutRuns aFallbackRuns;
+    aFallbackRuns.AddRun(0, 5, false);
+    aFallbackRuns.AddRun(6, 10, false);
+    aFallbackRuns.AddRun(10, 20, true);
+    aFallbackRuns.AddRun(21, 30, true);
+    aFallbackRuns.AddRun(31, 40, true);
+    aFallbackRuns.AddRun(41, 50, true);
+    aFallbackRuns.AddRun(92, 95, false);
+    aFallbackRuns.AddRun(96, 98, false);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(8), aFallbackRuns.size());
+
+    ImplLayoutRuns::PrepareFallbackRuns(&aRuns, &aFallbackRuns);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aFallbackRuns.size());
+
+    CPPUNIT_ASSERT_EQUAL(size_t(8), aRuns.size());
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(0, 5, false), aRuns.at(0));
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(6, 10, false), aRuns.at(1));
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(41, 50, true), aRuns.at(2));
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(31, 40, true), aRuns.at(3));
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(21, 30, true), aRuns.at(4));
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(10, 20, true), aRuns.at(5));
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(92, 95, false), aRuns.at(6));
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(96, 98, false), aRuns.at(7));
+}
+
+CPPUNIT_TEST_FIXTURE(VclTextTest, testImplLayoutRuns_tdf161397)
+{
+    // Fallback run characteristic test from a particular case
+
+    ImplLayoutRuns aRuns;
+    aRuns.AddRun(0, 13, true);
+
+    ImplLayoutRuns aFallbackRuns;
+    aFallbackRuns.AddRun(12, 13, true);
+    aFallbackRuns.AddRun(7, 12, true);
+    aFallbackRuns.AddRun(5, 6, true);
+    aFallbackRuns.AddRun(0, 5, true);
+
+    ImplLayoutRuns::PrepareFallbackRuns(&aRuns, &aFallbackRuns);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aRuns.size());
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(7, 13, true), aRuns.at(0));
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(0, 6, true), aRuns.at(1));
+}
+
+CPPUNIT_TEST_FIXTURE(VclTextTest, testImplLayoutRuns_GrowBidirectional)
+{
+    ImplLayoutRuns aRuns;
+    aRuns.AddPos(16, true);
+    aRuns.AddPos(17, true);
+    aRuns.AddPos(18, true);
+    aRuns.AddPos(15, true);
+    aRuns.AddPos(19, true);
+    aRuns.AddPos(14, true);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aRuns.size());
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(14, 20, true), aRuns.at(0));
+}
+
+CPPUNIT_TEST_FIXTURE(VclTextTest, testImplLayoutRuns_ReverseTail)
+{
+    ImplLayoutRuns aRuns;
+    aRuns.AddRun(10, 20, true);
+    aRuns.AddRun(30, 40, false);
+    aRuns.AddRun(50, 60, true);
+    aRuns.AddRun(70, 80, true);
+    aRuns.AddRun(90, 100, false);
+
+    aRuns.ReverseTail(size_t(2));
+
+    CPPUNIT_ASSERT_EQUAL(size_t(5), aRuns.size());
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(10, 20, true), aRuns.at(0));
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(30, 40, false), aRuns.at(1));
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(90, 100, false), aRuns.at(2));
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(70, 80, true), aRuns.at(3));
+    CPPUNIT_ASSERT_EQUAL(ImplLayoutRuns::Run(50, 60, true), aRuns.at(4));
 }
 
 CPPUNIT_TEST_FIXTURE(VclTextTest, testImplLayoutArgsBiDiStrong)

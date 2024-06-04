@@ -25,17 +25,29 @@
 // used for managing runs e.g. for BiDi, glyph and script fallback
 class VCL_DLLPUBLIC ImplLayoutRuns
 {
-private:
+public:
     struct Run
     {
         int m_nMinRunPos;
         int m_nEndRunPos;
         bool m_bRTL;
 
-        Run(int nMinRunPos, int nEndRunPos, bool bRTL);
-        bool Contains(int nCharPos) const;
+        Run(int nMinRunPos, int nEndRunPos, bool bRTL)
+            : m_nMinRunPos(nMinRunPos)
+            , m_nEndRunPos(nEndRunPos)
+            , m_bRTL(bRTL)
+        {
+        }
+
+        inline bool Contains(int nCharPos) const
+        {
+            return (m_nMinRunPos <= nCharPos) && (nCharPos < m_nEndRunPos);
+        }
+
+        bool operator==(const Run&) const = default;
     };
 
+private:
     int mnRunIndex;
     boost::container::small_vector<Run, 8> maRuns;
 
@@ -45,6 +57,9 @@ public:
     void Clear() { maRuns.clear(); }
     void AddPos(int nCharPos, bool bRTL);
     void AddRun(int nMinRunPos, int nEndRunPos, bool bRTL);
+
+    void Normalize();
+    void ReverseTail(size_t nTailIndex);
 
     bool IsEmpty() const { return maRuns.empty(); }
     void ResetPos() { mnRunIndex = 0; }
@@ -56,6 +71,10 @@ public:
 
     inline auto begin() const { return maRuns.begin(); }
     inline auto end() const { return maRuns.end(); }
+    inline const auto& at(size_t nIndex) const { return maRuns.at(nIndex); }
+    inline auto size() const { return maRuns.size(); }
+
+    static void PrepareFallbackRuns(ImplLayoutRuns* paRuns, ImplLayoutRuns* paFallbackRuns);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
