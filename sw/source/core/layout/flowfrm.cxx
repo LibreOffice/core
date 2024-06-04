@@ -609,7 +609,7 @@ bool SwFlowFrame::PasteTree( SwFrame *pStart, SwLayoutFrame *pParent, SwFrame *p
         else
             bRet = true;
 
-        nGrowVal += aRectFnSet.GetHeight(pFloat->getFrameArea());
+        nGrowVal = o3tl::saturating_add(nGrowVal, aRectFnSet.GetHeight(pFloat->getFrameArea()));
         if ( pFloat->GetNext() )
             pFloat = pFloat->GetNext();
         else
