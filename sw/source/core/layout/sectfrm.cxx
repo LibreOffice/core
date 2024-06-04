@@ -2725,8 +2725,9 @@ void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         InvalidateObjs(false);
         {
             // Set it to a huge positive value, to make sure a recalculation fires
+            constexpr SwTwips HUGE_POSITIVE = o3tl::toTwips(100, o3tl::Length::m);
             SwFrameAreaDefinition::FrameAreaWriteAccess area(*this);
-            SwRectFnSet(this).SetHeight(area, std::numeric_limits<tools::Long>::max());
+            SwRectFnSet(this).SetHeight(area, HUGE_POSITIVE);
         }
 
         for (SwFrame* pLowerFrame = Lower(); pLowerFrame; pLowerFrame = pLowerFrame->GetNext())
