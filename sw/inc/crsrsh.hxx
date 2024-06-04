@@ -23,6 +23,7 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/keycod.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
@@ -243,7 +244,13 @@ private:
 
     bool m_bMacroExecAllowed : 1;
 
+    // SwViewShell::LayoutIdle needs to be called on cursor update to repeat a spell check,
+    // because previous attempt marked a word as pending, because the word had cursor
+    bool m_bNeedLayoutOnCursorUpdate : 1;
+
     SwFrame* m_oldColFrame;
+
+    Idle m_aLayoutIdle; // An idle to schedule another SwViewShell::LayoutIdle call
 
     SAL_DLLPRIVATE void MoveCursorToNum();
 
@@ -285,6 +292,9 @@ private:
     SAL_DLLPRIVATE const SwRangeRedline* GotoRedline_( SwRedlineTable::size_type nArrPos, bool bSelect );
 
     SAL_DLLPRIVATE void sendLOKCursorUpdates();
+
+    DECL_LINK(DoLayoutIdle, Timer*, void); // calls SwViewShell::LayoutIdle
+
 protected:
 
     inline SwMoveFnCollection const & MakeFindRange( SwDocPositions, SwDocPositions, SwPaM* ) const;
@@ -307,6 +317,8 @@ protected:
 
 protected:
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
+
+    virtual void OnSpellWrongStatePending() override { m_bNeedLayoutOnCursorUpdate = true; }
 
 public:
     SwCursorShell( SwDoc& rDoc, vcl::Window *pWin, const SwViewOption *pOpt );
