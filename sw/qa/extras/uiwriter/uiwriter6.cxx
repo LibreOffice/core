@@ -1688,6 +1688,161 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161332)
     CPPUNIT_ASSERT_EQUAL(SelectionType::Frame, eType2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161426)
+{
+    createSwDoc("tdf161426.fodt");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    // the cursor is not in the table
+    CPPUNIT_ASSERT(!pWrtShell->IsCursorInTable());
+
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage);
+    const SwSortedObjs& rPageObjs = *pPage->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
+    auto pPageFly = dynamic_cast<SwFlyAtContentFrame*>(rPageObjs[0]);
+    CPPUNIT_ASSERT(pPageFly);
+    auto pTable = dynamic_cast<SwTabFrame*>(pPageFly->GetLower());
+    CPPUNIT_ASSERT(pTable);
+    auto pRow1 = pTable->GetLower();
+    CPPUNIT_ASSERT(pRow1->IsRowFrame());
+    auto pCellA1 = pRow1->GetLower();
+    CPPUNIT_ASSERT(pCellA1);
+    auto pCellB1 = pCellA1->GetNext();
+    const SwRect& rCellB1Rect = pCellB1->getFrameArea();
+    auto nRowHeight = rCellB1Rect.Height();
+
+    // select text frame by clicking on it at the right side of the upper right cell
+    Point ptFrom(rCellB1Rect.Left() + rCellB1Rect.Width(), rCellB1Rect.Top() + nRowHeight / 2);
+    vcl::Window& rEditWin = pDoc->GetDocShell()->GetView()->GetEditWin();
+    Point aFrom = rEditWin.LogicToPixel(ptFrom);
+    MouseEvent aClickEvent(aFrom, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+    rEditWin.MouseButtonDown(aClickEvent);
+    rEditWin.MouseButtonUp(aClickEvent);
+
+    // Then make sure that the text frame is selected:
+    SelectionType eType = pWrtShell->GetSelectionType();
+    CPPUNIT_ASSERT_EQUAL(SelectionType::Frame, eType);
+
+    // remove selection
+    dispatchCommand(mxComponent, ".uno:Escape", {});
+
+    // select text frame by clicking on it at the right side of the bottom right cell
+    auto pRow2 = pRow1->GetNext();
+    CPPUNIT_ASSERT(pRow2->IsRowFrame());
+    auto pCellA2 = pRow2->GetLower();
+    CPPUNIT_ASSERT(pCellA2);
+    auto pCellB2 = pCellA2->GetNext();
+    CPPUNIT_ASSERT(pCellB2);
+    const SwRect& rCellB2Rect = pCellB2->getFrameArea();
+    auto nRow2Height = rCellB2Rect.Height();
+    Point ptFrom2(rCellB2Rect.Left() + rCellB2Rect.Width(), rCellB2Rect.Top() + nRow2Height / 2);
+    Point aFrom2 = rEditWin.LogicToPixel(ptFrom2);
+    MouseEvent aClickEvent2(aFrom2, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+    rEditWin.MouseButtonDown(aClickEvent2);
+    rEditWin.MouseButtonUp(aClickEvent2);
+
+    // Then make sure that the text frame is selected:
+    SelectionType eType2 = pWrtShell->GetSelectionType();
+    CPPUNIT_ASSERT_EQUAL(SelectionType::Frame, eType2);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161426_content)
+{
+    createSwDoc("tdf161426.fodt");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    // the cursor is not in the table
+    CPPUNIT_ASSERT(!pWrtShell->IsCursorInTable());
+
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage);
+    const SwSortedObjs& rPageObjs = *pPage->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
+    auto pPageFly = dynamic_cast<SwFlyAtContentFrame*>(rPageObjs[0]);
+    CPPUNIT_ASSERT(pPageFly);
+    auto pTable = dynamic_cast<SwTabFrame*>(pPageFly->GetLower());
+    CPPUNIT_ASSERT(pTable);
+    auto pRow1 = pTable->GetLower();
+    CPPUNIT_ASSERT(pRow1->IsRowFrame());
+    auto pCellA1 = pRow1->GetLower();
+    CPPUNIT_ASSERT(pCellA1);
+    auto pCellB1 = pCellA1->GetNext();
+    const SwRect& rCellB1Rect = pCellB1->getFrameArea();
+    auto nRowHeight = rCellB1Rect.Height();
+
+    // select content of the B1 by clicking on the center of it
+    Point ptFrom(rCellB1Rect.Left() + rCellB1Rect.Width() / 2, rCellB1Rect.Top() + nRowHeight / 2);
+    vcl::Window& rEditWin = pDoc->GetDocShell()->GetView()->GetEditWin();
+    Point aFrom = rEditWin.LogicToPixel(ptFrom);
+    MouseEvent aClickEvent(aFrom, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+    rEditWin.MouseButtonDown(aClickEvent);
+    rEditWin.MouseButtonUp(aClickEvent);
+
+    // Then make sure that the cursor in the table:
+    SelectionType eType2 = pWrtShell->GetSelectionType();
+    // This was false
+    bool bCursorInTable = eType2 == (SelectionType::Text | SelectionType::Table);
+    CPPUNIT_ASSERT(bCursorInTable);
+
+    // select content of the B2 by clicking on the center of it
+    auto pRow2 = pRow1->GetNext();
+    CPPUNIT_ASSERT(pRow2->IsRowFrame());
+    auto pCellA2 = pRow2->GetLower();
+    CPPUNIT_ASSERT(pCellA2);
+    auto pCellB2 = pCellA2->GetNext();
+    CPPUNIT_ASSERT(pCellB2);
+    const SwRect& rCellB2Rect = pCellB2->getFrameArea();
+    auto nRow2Height = rCellB2Rect.Height();
+    Point ptFrom2(rCellB2Rect.Left() + rCellB2Rect.Width() / 2,
+                  rCellB2Rect.Top() + nRow2Height / 2);
+    Point aFrom2 = rEditWin.LogicToPixel(ptFrom2);
+    MouseEvent aClickEvent2(aFrom2, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+    rEditWin.MouseButtonDown(aClickEvent2);
+    rEditWin.MouseButtonUp(aClickEvent2);
+
+    // Then make sure that the cursor in the table:
+    SelectionType eType3 = pWrtShell->GetSelectionType();
+    // This was false
+    bCursorInTable = eType3 == (SelectionType::Text | SelectionType::Table);
+    CPPUNIT_ASSERT(bCursorInTable);
+
+    // select content of the A2 by clicking on the center of it
+    const SwRect& rCellA2Rect = pCellA2->getFrameArea();
+    Point ptFrom3(rCellA2Rect.Left() + rCellA2Rect.Width() / 2,
+                  rCellA2Rect.Top() + nRow2Height / 2);
+    Point aFrom3 = rEditWin.LogicToPixel(ptFrom3);
+    MouseEvent aClickEvent3(aFrom3, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+    rEditWin.MouseButtonDown(aClickEvent3);
+    rEditWin.MouseButtonUp(aClickEvent3);
+
+    // Then make sure that the cursor in the table:
+    SelectionType eType4 = pWrtShell->GetSelectionType();
+    // This was false
+    bCursorInTable = eType4 == (SelectionType::Text | SelectionType::Table);
+    CPPUNIT_ASSERT(bCursorInTable);
+
+    // select content of the A1 by clicking on the center of it
+    const SwRect& rCellA1Rect = pCellA1->getFrameArea();
+    auto nRow1Height = rCellA1Rect.Height();
+    Point ptFrom4(rCellA1Rect.Left() + rCellA1Rect.Width() / 2,
+                  rCellA1Rect.Top() + nRow1Height / 2);
+    Point aFrom4 = rEditWin.LogicToPixel(ptFrom4);
+    MouseEvent aClickEvent4(aFrom4, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+    rEditWin.MouseButtonDown(aClickEvent4);
+    rEditWin.MouseButtonUp(aClickEvent4);
+
+    // Then make sure that the text frame is selected:
+    SelectionType eType5 = pWrtShell->GetSelectionType();
+    CPPUNIT_ASSERT_EQUAL(SelectionType::Graphic, eType5);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161360)
 {
     createSwDoc("tdf160842.fodt");
