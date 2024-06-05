@@ -172,20 +172,10 @@ ImplPolygon::ImplPolygon( const Point& rCenter, tools::Long nRadX, tools::Long n
 {
     if( nRadX && nRadY )
     {
-        sal_uInt16 nPoints;
         // Compute default (depends on size)
-        tools::Long nRadXY;
-        const bool bOverflow = o3tl::checked_multiply(nRadX, nRadY, nRadXY);
-        if (!bOverflow)
-        {
-            nPoints = std::clamp(
-                ( M_PI * ( 1.5 * ( nRadX + nRadY ) - sqrt( std::fabs(nRadXY) ) ) ),
-                32.0, 256.0 );
-        }
-        else
-        {
-           nPoints = 256;
-        }
+        sal_uInt16 nPoints = std::clamp(
+            ( M_PI * ( 1.5 * ( nRadX + nRadY ) - sqrt( std::fabs(double(nRadX) * nRadY) ) ) ),
+            32.0, 256.0 );
 
         if( ( nRadX > 32 ) && ( nRadY > 32 ) && ( nRadX + nRadY ) < 8192 )
             nPoints >>= 1;
@@ -237,20 +227,9 @@ ImplPolygon::ImplPolygon(const tools::Rectangle& rBound, const Point& rStart, co
         const auto aBoundTop = rBound.Top() < aCenter.Y() ? rBound.Top() : rBound.Bottom();
         const auto nRadX = o3tl::saturating_sub(aCenter.X(), aBoundLeft);
         const auto nRadY = o3tl::saturating_sub(aCenter.Y(), aBoundTop);
-        sal_uInt16 nPoints;
-
-        tools::Long nRadXY;
-        const bool bOverflow = o3tl::checked_multiply(nRadX, nRadY, nRadXY);
-        if (!bOverflow)
-        {
-            nPoints = std::clamp(
-                ( M_PI * ( 1.5 * ( nRadX + nRadY ) - sqrt( std::fabs(nRadXY) ) ) ),
+        sal_uInt16 nPoints = std::clamp(
+                ( M_PI * ( 1.5 * ( nRadX + nRadY ) - sqrt( std::fabs(double(nRadX) * nRadY) ) ) ),
                 32.0, 256.0 );
-        }
-        else
-        {
-            nPoints = 256;
-        }
 
 
         if (nRadX > 32 && nRadY > 32 && o3tl::saturating_add(nRadX, nRadY) < 8192)
