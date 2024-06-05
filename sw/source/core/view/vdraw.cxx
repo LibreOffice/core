@@ -86,6 +86,7 @@ void SwViewShellImp::UnlockPaint()
 }
 
 void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
+                            SwPrintData const*const pPrintData,
                             SwPageFrame const& rPageFrame,
                             const SwRect& aPaintRect,
                             const Color* _pPageBackgrdColor,
@@ -135,6 +136,12 @@ void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
     }
 
     pOutDev->Push( vcl::PushFlags::LINECOLOR );
+    if (pPrintData)
+    {
+        // hide drawings but not form controls (form controls are handled elsewhere)
+        SdrView &rSdrView = GetPageView()->GetView();
+        rSdrView.setHideDraw( !pPrintData->IsPrintGraphic() );
+    }
     basegfx::B2IRectangle const pageFrame = vcl::unotools::b2IRectangleFromRectangle(rPageFrame.getFrameArea().SVRect());
     GetPageView()->DrawLayer(_nLayerID, pOutDev, pRedirector, aPaintRect.SVRect(), &pageFrame);
     pOutDev->Pop();

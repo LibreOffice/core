@@ -419,7 +419,8 @@ public:
 
     void   PaintExtraData( const SwRect & rRect ) const; /// Page number etc.
     SwRect GetPaintSwRect();
-    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&, PaintFrameMode mode = PAINT_ALL ) const override;
+    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&, PaintFrameMode mode = PAINT_ALL,
+                        SwPrintData const*const pPrintData = nullptr ) const override;
 
     /**
      * Layout oriented cursor travelling:

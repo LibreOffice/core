@@ -27,7 +27,7 @@ void SwFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttr
     OSL_FAIL( "Format() of the base class called." );
 }
 
-void SwFrame::PaintSwFrame(vcl::RenderContext&, SwRect const&, PaintFrameMode) const
+void SwFrame::PaintSwFrame(vcl::RenderContext&, SwRect const&, PaintFrameMode, SwPrintData const*const) const
 {
     OSL_FAIL( "PaintSwFrame() of the base class called." );
 }
