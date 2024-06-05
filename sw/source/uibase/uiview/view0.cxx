@@ -551,7 +551,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     case SID_SPOTLIGHT_PARASTYLES:
         if (!pArgs || (pArgs && !pArgs->HasItem(FN_PARAM_1)))
         {
-            const SfxStringItem sDeckName(SID_SIDEBAR_DECK, "StyleListDeck");
+            const SfxStringItem sDeckName(SID_SIDEBAR_DECK, u"StyleListDeck"_ustr);
             GetDispatcher().ExecuteList(SID_SIDEBAR_DECK, SfxCallMode::SYNCHRON, { &sDeckName });
         }
         if (STATE_TOGGLE == eState)
@@ -562,7 +562,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     case SID_SPOTLIGHT_CHARSTYLES:
         if (!pArgs || (pArgs && !pArgs->HasItem(FN_PARAM_1)))
         {
-            const SfxStringItem sDeckName(SID_SIDEBAR_DECK, "StyleListDeck");
+            const SfxStringItem sDeckName(SID_SIDEBAR_DECK, u"StyleListDeck"_ustr);
             GetDispatcher().ExecuteList(SID_SIDEBAR_DECK, SfxCallMode::SYNCHRON, { &sDeckName });
         }
         if (STATE_TOGGLE == eState)

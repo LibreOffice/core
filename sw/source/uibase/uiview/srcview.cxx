@@ -96,7 +96,7 @@ SFX_IMPL_SUPERCLASS_INTERFACE(SwSrcView, SfxViewShell)
 
 void SwSrcView::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("source");
+    GetStaticInterface()->RegisterPopupMenu(u"source"_ustr);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS,
                                             SfxVisibilityFlags::Standard|SfxVisibilityFlags::Server,
@@ -226,7 +226,7 @@ void SwSrcView::SaveContentTo(SfxMedium& rMed)
 
 void SwSrcView::Init()
 {
-    SetName("Source");
+    SetName(u"Source"_ustr);
     SetWindow( m_aEditWin.get() );
     SwDocShell* pDocShell = GetDocShell();
     // If the doc is still loading, then the DocShell must fire up
@@ -274,7 +274,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             // search for an html filter for export
             SfxFilterContainer* pFilterCont = GetObjectShell()->GetFactory().GetFilterContainer();
             std::shared_ptr<const SfxFilter> pFilter =
-                pFilterCont->GetFilter4Extension( "html", SfxFilterFlags::EXPORT );
+                pFilterCont->GetFilter4Extension( u"html"_ustr, SfxFilterFlags::EXPORT );
             if ( pFilter )
             {
                 // filter found -> use its uiname and wildcard
@@ -286,8 +286,8 @@ void SwSrcView::Execute(SfxRequest& rReq)
             else
             {
                 // filter not found
-                OUString sHtml("HTML");
-                xFP->appendFilter( sHtml, "*.html;*.htm" );
+                OUString sHtml(u"HTML"_ustr);
+                xFP->appendFilter( sHtml, u"*.html;*.htm"_ustr );
                 xFP->setCurrentFilter( sHtml ) ;
             }
 
@@ -594,8 +594,8 @@ void SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
 
     if(bNotFoundMessage)
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/infonotfounddialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xInfoBox(xBuilder->weld_message_dialog("InfoNotFoundDialog"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, u"modules/swriter/ui/infonotfounddialog.ui"_ustr));
+        std::unique_ptr<weld::MessageDialog> xInfoBox(xBuilder->weld_message_dialog(u"InfoNotFoundDialog"_ustr));
         xInfoBox->run();
     }
     else if(!bRecursive)
@@ -604,14 +604,14 @@ void SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
 
         if (!bForward)
         {
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/querycontinueenddialog.ui"));
-            std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryContinueEndDialog"));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, u"modules/swriter/ui/querycontinueenddialog.ui"_ustr));
+            std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog(u"QueryContinueEndDialog"_ustr));
             nRet = xQueryBox->run();
         }
         else
         {
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/querycontinuebegindialog.ui"));
-            std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryContinueBeginDialog"));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, u"modules/swriter/ui/querycontinuebegindialog.ui"_ustr));
+            std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog(u"QueryContinueBeginDialog"_ustr));
             nRet = xQueryBox->run();
         }
 
@@ -687,7 +687,7 @@ sal_Int32 SwSrcView::PrintSource(
 
     // nLinepPage is not true, if lines have to be wrapped...
     const tools::Long nLinespPage = nLineHeight ? aPaperSz.Height() / nLineHeight : 1;
-    const tools::Long nCharWidth = pOutDev->GetTextWidth("X");
+    const tools::Long nCharWidth = pOutDev->GetTextWidth(u"X"_ustr);
     const sal_Int32 nCharspLine = nCharWidth ? static_cast<sal_Int32>(aPaperSz.Width() / nCharWidth) : 1;
     const sal_uInt32 nParas = pTextEngine->GetParagraphCount();
 

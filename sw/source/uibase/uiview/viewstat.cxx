@@ -339,7 +339,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     if ( isRecording || hasRecorded )
                     {
                         GetDocShell()->AppendInfoBarWhenReady(
-                            "hiddentrackchanges", SwResId(STR_HIDDEN_CHANGES),
+                            u"hiddentrackchanges"_ustr, SwResId(STR_HIDDEN_CHANGES),
                             SwResId( (isRecording && hasRecorded)
                                     ? STR_HIDDEN_CHANGES_DETAIL
                                     : isRecording

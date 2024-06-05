@@ -236,7 +236,7 @@ uno::Reference<frame::XLayoutManager> getLayoutManager(const SfxViewFrame& rView
     {
         try
         {
-            xLayoutManager.set(xPropSet->getPropertyValue("LayoutManager"), uno::UNO_QUERY);
+            xLayoutManager.set(xPropSet->getPropertyValue(u"LayoutManager"_ustr), uno::UNO_QUERY);
         }
         catch (const Exception& e)
         {
@@ -488,7 +488,7 @@ void SwView::SelectShell()
 
         // Show Mail Merge toolbar initially for documents with Database fields
         if (!m_bInitOnceCompleted && GetWrtShell().IsAnyDatabaseFieldInDoc() && !comphelper::IsFuzzing())
-            ShowUIElement("private:resource/toolbar/mailmerge");
+            ShowUIElement(u"private:resource/toolbar/mailmerge"_ustr);
 
         // Activate the toolbar to the new selection which also was active last time.
         // Before a flush () must be, but does not affect the UI according to MBA and
@@ -832,7 +832,7 @@ SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
     }
 
     m_pViewImpl.reset(new SwView_Impl(this));
-    SetName("View");
+    SetName(u"View"_ustr);
     SetWindow( m_pEditWin );
 
     m_aTimer.SetTimeout( 120 );
@@ -1078,7 +1078,7 @@ SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
     uno::Reference< frame::XFrame >  xFrame = rVFrame.GetFrame().GetFrameInterface();
 
     uno::Reference< frame::XFrame >  xBeamerFrame = xFrame->findFrame(
-            "_beamer", frame::FrameSearchFlag::CHILDREN);
+            u"_beamer"_ustr, frame::FrameSearchFlag::CHILDREN);
     if(xBeamerFrame.is())
     {
         SwDBData aData = m_pWrtShell->GetDBData();
@@ -1491,7 +1491,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
     if (bGotBrowseMode)
     {
         // delegate further
-        GetViewImpl()->GetUNOObject_Impl()->getViewSettings()->setPropertyValue("ShowOnlineLayout", uno::Any(bBrowseMode));
+        GetViewImpl()->GetUNOObject_Impl()->getViewSettings()->setPropertyValue(u"ShowOnlineLayout"_ustr, uno::Any(bBrowseMode));
     }
 
     SelectShell();
@@ -1627,41 +1627,41 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
     std::vector<beans::PropertyValue> aVector;
 
     sal_uInt16 nViewID( GetViewFrame().GetCurViewId());
-    aVector.push_back(comphelper::makePropertyValue("ViewId", "view" + OUString::number(nViewID)));
+    aVector.push_back(comphelper::makePropertyValue(u"ViewId"_ustr, "view" + OUString::number(nViewID)));
 
-    aVector.push_back(comphelper::makePropertyValue("ViewLeft", convertTwipToMm100 ( rRect.Left() )));
+    aVector.push_back(comphelper::makePropertyValue(u"ViewLeft"_ustr, convertTwipToMm100 ( rRect.Left() )));
 
-    aVector.push_back(comphelper::makePropertyValue("ViewTop", convertTwipToMm100 ( rRect.Top() )));
+    aVector.push_back(comphelper::makePropertyValue(u"ViewTop"_ustr, convertTwipToMm100 ( rRect.Top() )));
 
     auto visibleLeft = convertTwipToMm100 ( rVis.Left() );
-    aVector.push_back(comphelper::makePropertyValue("VisibleLeft", visibleLeft));
+    aVector.push_back(comphelper::makePropertyValue(u"VisibleLeft"_ustr, visibleLeft));
 
     auto visibleTop = convertTwipToMm100 ( rVis.Top() );
-    aVector.push_back(comphelper::makePropertyValue("VisibleTop", visibleTop));
+    aVector.push_back(comphelper::makePropertyValue(u"VisibleTop"_ustr, visibleTop));
 
     // We don't read VisibleRight and VisibleBottom anymore, but write them,
     // because older versions rely on their presence to restore position
 
     auto visibleRight = rVis.IsWidthEmpty() ? visibleLeft : convertTwipToMm100 ( rVis.Right() );
-    aVector.push_back(comphelper::makePropertyValue("VisibleRight", visibleRight));
+    aVector.push_back(comphelper::makePropertyValue(u"VisibleRight"_ustr, visibleRight));
 
     auto visibleBottom = rVis.IsHeightEmpty() ? visibleTop : convertTwipToMm100 ( rVis.Bottom() );
-    aVector.push_back(comphelper::makePropertyValue("VisibleBottom", visibleBottom));
+    aVector.push_back(comphelper::makePropertyValue(u"VisibleBottom"_ustr, visibleBottom));
 
     const sal_Int16 nZoomType = static_cast< sal_Int16 >(m_pWrtShell->GetViewOptions()->GetZoomType());
-    aVector.push_back(comphelper::makePropertyValue("ZoomType", nZoomType));
+    aVector.push_back(comphelper::makePropertyValue(u"ZoomType"_ustr, nZoomType));
 
     const sal_Int16 nViewLayoutColumns = static_cast< sal_Int16 >(m_pWrtShell->GetViewOptions()->GetViewLayoutColumns());
-    aVector.push_back(comphelper::makePropertyValue("ViewLayoutColumns", nViewLayoutColumns));
+    aVector.push_back(comphelper::makePropertyValue(u"ViewLayoutColumns"_ustr, nViewLayoutColumns));
 
-    aVector.push_back(comphelper::makePropertyValue("ViewLayoutBookMode", m_pWrtShell->GetViewOptions()->IsViewLayoutBookMode()));
+    aVector.push_back(comphelper::makePropertyValue(u"ViewLayoutBookMode"_ustr, m_pWrtShell->GetViewOptions()->IsViewLayoutBookMode()));
 
-    aVector.push_back(comphelper::makePropertyValue("ZoomFactor", static_cast < sal_Int16 > (m_pWrtShell->GetViewOptions()->GetZoom())));
+    aVector.push_back(comphelper::makePropertyValue(u"ZoomFactor"_ustr, static_cast < sal_Int16 > (m_pWrtShell->GetViewOptions()->GetZoom())));
 
-    aVector.push_back(comphelper::makePropertyValue("IsSelectedFrame", FrameTypeFlags::NONE != m_pWrtShell->GetSelFrameType()));
+    aVector.push_back(comphelper::makePropertyValue(u"IsSelectedFrame"_ustr, FrameTypeFlags::NONE != m_pWrtShell->GetSelFrameType()));
 
     aVector.push_back(
-        comphelper::makePropertyValue("KeepRatio", m_pWrtShell->GetViewOptions()->IsKeepRatio()));
+        comphelper::makePropertyValue(u"KeepRatio"_ustr, m_pWrtShell->GetViewOptions()->IsKeepRatio()));
 
     rSequence = comphelper::containerToSequence(aVector);
 
@@ -2003,9 +2003,9 @@ OUString SwView::GetDataSourceName() const
 {
     uno::Reference<lang::XMultiServiceFactory> xFactory(GetDocShell()->GetModel(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xSettings(
-        xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
-    OUString sDataSourceName = "";
-    xSettings->getPropertyValue("CurrentDatabaseDataSource") >>= sDataSourceName;
+        xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
+    OUString sDataSourceName = u""_ustr;
+    xSettings->getPropertyValue(u"CurrentDatabaseDataSource"_ustr) >>= sDataSourceName;
 
     return sDataSourceName;
 }

@@ -115,7 +115,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                 {
                     Reference< ui::dialogs::XExecutableDialog > xDialog(
                             xMCF->createInstanceWithContext(
-                                "com.sun.star.linguistic2.ChineseTranslationDialog", xContext),
+                                u"com.sun.star.linguistic2.ChineseTranslationDialog"_ustr, xContext),
                             UNO_QUERY);
                     Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
                     if( xInit.is() )
@@ -143,9 +143,9 @@ void SwView::ExecLingu(SfxRequest &rReq)
                             {
                                 try
                                 {
-                                    xProp->getPropertyValue( "IsDirectionToSimplified" ) >>= bToSimplified;
-                                    xProp->getPropertyValue( "IsUseCharacterVariants" ) >>= bUseVariants;
-                                    xProp->getPropertyValue( "IsTranslateCommonTerms" ) >>= bCommonTerms;
+                                    xProp->getPropertyValue( u"IsDirectionToSimplified"_ustr ) >>= bToSimplified;
+                                    xProp->getPropertyValue( u"IsUseCharacterVariants"_ustr ) >>= bUseVariants;
+                                    xProp->getPropertyValue( u"IsTranslateCommonTerms"_ustr ) >>= bCommonTerms;
                                 }
                                 catch (const Exception&)
                                 {
@@ -727,7 +727,7 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                 rtl::Reference<VCLXPopupMenu> xMenu;
 
                 OUString sMenuName = bUseGrammarContext ?
-                    OUString("private:resource/GrammarContextMenu") : OUString("private:resource/SpellContextMenu");
+                    u"private:resource/GrammarContextMenu"_ustr : u"private:resource/SpellContextMenu"_ustr;
                 rtl::Reference<VCLXPopupMenu> xMenuInterface = xPopup->CreateMenuInterface();
                 if (TryContextMenuInterception(xMenuInterface, sMenuName, xMenu, aEvent))
                 {
@@ -817,17 +817,17 @@ void SwView::ExecSmartTagPopup( const Point& rPt )
     m_pWrtShell->Push();
 
     css::uno::Sequence< css::uno::Any > aArgs{
-        css::uno::Any(comphelper::makePropertyValue( "Frame", GetDispatcher().GetFrame()->GetFrame().GetFrameInterface() )),
-        css::uno::Any(comphelper::makePropertyValue( "CommandURL", OUString( ".uno:OpenSmartTagMenuOnCursor" ) ))
+        css::uno::Any(comphelper::makePropertyValue( u"Frame"_ustr, GetDispatcher().GetFrame()->GetFrame().GetFrameInterface() )),
+        css::uno::Any(comphelper::makePropertyValue( u"CommandURL"_ustr, u".uno:OpenSmartTagMenuOnCursor"_ustr ))
     };
 
     css::uno::Reference< css::uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
     css::uno::Reference< css::frame::XPopupMenuController > xPopupController(
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-        "com.sun.star.comp.svx.SmartTagMenuController", aArgs, xContext ), css::uno::UNO_QUERY );
+        u"com.sun.star.comp.svx.SmartTagMenuController"_ustr, aArgs, xContext ), css::uno::UNO_QUERY );
 
     css::uno::Reference< css::awt::XPopupMenu > xPopupMenu( xContext->getServiceManager()->createInstanceWithContext(
-        "com.sun.star.awt.PopupMenu", xContext ), css::uno::UNO_QUERY );
+        u"com.sun.star.awt.PopupMenu"_ustr, xContext ), css::uno::UNO_QUERY );
 
     if ( xPopupController.is() && xPopupMenu.is() )
     {

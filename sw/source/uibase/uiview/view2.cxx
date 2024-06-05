@@ -191,11 +191,11 @@ public:
     SwNumberInputDlg(weld::Window* pParent, const OUString& rTitle,
         const OUString& rLabel1, const sal_Int64 nValue, const sal_Int64 min, const sal_Int64 max,
         OUString rLabel2 = OUString())
-        : SfxDialogController(pParent, "modules/swriter/ui/numberinput.ui", "NumberInputDialog")
-        , m_xLabel1(m_xBuilder->weld_label("label1"))
-        , m_xSpinButton(m_xBuilder->weld_spin_button("spinbutton"))
-        , m_xLabel2(m_xBuilder->weld_label("label2"))
-        , m_xOKButton(m_xBuilder->weld_button("ok"))
+        : SfxDialogController(pParent, u"modules/swriter/ui/numberinput.ui"_ustr, u"NumberInputDialog"_ustr)
+        , m_xLabel1(m_xBuilder->weld_label(u"label1"_ustr))
+        , m_xSpinButton(m_xBuilder->weld_spin_button(u"spinbutton"_ustr))
+        , m_xLabel2(m_xBuilder->weld_label(u"label2"_ustr))
+        , m_xOKButton(m_xBuilder->weld_button(u"ok"_ustr))
     {
         m_xDialog->set_title(rTitle);
         m_xLabel1->set_label(rLabel1);
@@ -1529,9 +1529,9 @@ void SwView::Execute(SfxRequest &rReq)
 
                     Sequence<PropertyValue> aProperties
                     {
-                        comphelper::makePropertyValue("DataSourceName", aData.sDataSource),
-                        comphelper::makePropertyValue("Command", aData.sCommand),
-                        comphelper::makePropertyValue("CommandType", aData.nCommandType)
+                        comphelper::makePropertyValue(u"DataSourceName"_ustr, aData.sDataSource),
+                        comphelper::makePropertyValue(u"Command"_ustr, aData.sCommand),
+                        comphelper::makePropertyValue(u"CommandType"_ustr, aData.nCommandType)
                     };
                     pDBManager->ExecuteFormLetter(rSh, aProperties);
                 }
@@ -2227,7 +2227,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
 
         case FN_STAT_ACCESSIBILITY_CHECK:
         {
-            const SfxStringItem sDeckName(SID_SIDEBAR_DECK, "A11yCheckDeck");
+            const SfxStringItem sDeckName(SID_SIDEBAR_DECK, u"A11yCheckDeck"_ustr);
             GetViewFrame().GetDispatcher()->ExecuteList(SID_SIDEBAR_DECK, SfxCallMode::RECORD,
                 { &sDeckName });
         }
@@ -2764,7 +2764,7 @@ void SwView::ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem )
 
     if ( !pItem )
     {
-        InsertDoc( nSlot, "", "" );
+        InsertDoc( nSlot, u""_ustr, u""_ustr );
     }
     else
     {
@@ -3006,8 +3006,8 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
             if ( lcl_NeedAdditionalDataSource( xDBContext ) )
             {
                 // no data sources are available - create a new one
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/datasourcesunavailabledialog.ui"));
-                std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("DataSourcesUnavailableDialog"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"modules/swriter/ui/datasourcesunavailabledialog.ui"_ustr));
+                std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog(u"DataSourcesUnavailableDialog"_ustr));
                 // no cancel allowed
                 if (RET_OK != xQuery->run())
                     return;
@@ -3052,8 +3052,8 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
             OUString sSource;
             if(!GetWrtShell().IsFieldDataSourceAvailable(sSource))
             {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/warndatasourcedialog.ui"));
-                std::unique_ptr<weld::MessageDialog> xWarning(xBuilder->weld_message_dialog("WarnDataSourceDialog"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"modules/swriter/ui/warndatasourcedialog.ui"_ustr));
+                std::unique_ptr<weld::MessageDialog> xWarning(xBuilder->weld_message_dialog(u"WarnDataSourceDialog"_ustr));
                 OUString sTmp(xWarning->get_primary_text());
                 xWarning->set_primary_text(sTmp.replaceFirst("%1", sSource));
                 if (RET_OK == xWarning->run())
@@ -3093,9 +3093,9 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
         {
             Sequence<PropertyValue> aProperties
             {
-                comphelper::makePropertyValue("DataSourceName", aData.sDataSource),
-                comphelper::makePropertyValue("Command", aData.sCommand),
-                comphelper::makePropertyValue("CommandType", aData.nCommandType),
+                comphelper::makePropertyValue(u"DataSourceName"_ustr, aData.sDataSource),
+                comphelper::makePropertyValue(u"Command"_ustr, aData.sCommand),
+                comphelper::makePropertyValue(u"CommandType"_ustr, aData.nCommandType),
             };
             pDBManager->ExecuteFormLetter(GetWrtShell(), aProperties);
         }

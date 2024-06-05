@@ -84,7 +84,7 @@ SFX_IMPL_INTERFACE(SwPagePreview, SfxViewShell)
 
 void SwPagePreview::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("preview");
+    GetStaticInterface()->RegisterPopupMenu(u"preview"_ustr);
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT,
                                             SfxVisibilityFlags::Standard|SfxVisibilityFlags::Client|SfxVisibilityFlags::FullScreen|SfxVisibilityFlags::ReadonlyDoc,
                                             ToolbarId::PView_Toolbox);
@@ -143,10 +143,10 @@ class SwPreviewZoomDlg : public weld::GenericDialogController
 
 public:
     SwPreviewZoomDlg(SwPagePreviewWin& rParent)
-        : GenericDialogController(rParent.GetFrameWeld(), "modules/swriter/ui/previewzoomdialog.ui", "PreviewZoomDialog")
+        : GenericDialogController(rParent.GetFrameWeld(), u"modules/swriter/ui/previewzoomdialog.ui"_ustr, u"PreviewZoomDialog"_ustr)
         , m_rParent(rParent)
-        , m_xRowEdit(m_xBuilder->weld_spin_button("rows"))
-        , m_xColEdit(m_xBuilder->weld_spin_button("cols"))
+        , m_xRowEdit(m_xBuilder->weld_spin_button(u"rows"_ustr))
+        , m_xColEdit(m_xBuilder->weld_spin_button(u"cols"_ustr))
     {
         m_xRowEdit->set_value(rParent.GetRow());
         m_xColEdit->set_value(rParent.GetCol());
@@ -1152,7 +1152,7 @@ SwPagePreview::SwPagePreview(SfxViewFrame& rViewFrame, SfxViewShell* pOldSh):
     mbResetFormDesignMode( false ),
     mbFormDesignModeToReset( false )
 {
-    SetName("PageView");
+    SetName(u"PageView"_ustr);
     SetWindow( m_pViewWin );
     CreateScrollbar( true );
     CreateScrollbar( false );

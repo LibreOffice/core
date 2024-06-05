@@ -215,8 +215,8 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             if(!bSilent && !bFromMerge &&
                     SW_MOD()->GetModuleConfig()->IsAskForMailMerge() && pSh->IsAnyDatabaseFieldInDoc())
             {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetEditWin().GetFrameWeld(), "modules/swriter/ui/printmergedialog.ui"));
-                std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("PrintMergeDialog"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetEditWin().GetFrameWeld(), u"modules/swriter/ui/printmergedialog.ui"_ustr));
+                std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog(u"PrintMergeDialog"_ustr));
                 short nRet = xBox->run();
                 if(RET_NO != nRet)
                 {

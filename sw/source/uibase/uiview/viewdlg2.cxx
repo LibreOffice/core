@@ -94,7 +94,7 @@ void SwView::ExecDlgExt(SfxRequest& rReq)
         }
         case SID_ADDITIONS_DIALOG:
         {
-            OUString sAdditionsTag = "";
+            OUString sAdditionsTag = u""_ustr;
 
             const SfxStringItem* pStringArg = rReq.GetArg<SfxStringItem>(FN_PARAM_ADDITIONS_TAG);
             if (pStringArg)
