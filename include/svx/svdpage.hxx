@@ -555,11 +555,13 @@ public:
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
-    virtual rtl::Reference<sdr::annotation::Annotation> createAnnotation() { assert(false); return nullptr; }
-    virtual void addAnnotation(rtl::Reference<sdr::annotation::Annotation> const& /*xAnnotation*/, int /*nIndex*/) { assert(false); }
-    virtual void removeAnnotation(rtl::Reference<sdr::annotation::Annotation> const& /*xAnnotation*/) { assert(false); }
+    virtual rtl::Reference<sdr::annotation::Annotation> createAnnotation();
+    virtual void addAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, int nIndex = -1);
+    virtual void addAnnotationNoNotify(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, int nIndex = -1);
+    virtual void removeAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation);
+    virtual void removeAnnotationNoNotify(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation);
 
-    std::vector<rtl::Reference<sdr::annotation::Annotation>> const& getAnnotations() const { return maAnnotations; }
+    std::vector<rtl::Reference<sdr::annotation::Annotation>> const& getAnnotations() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -365,8 +365,11 @@ public:
     bool IsPrecious() const { return mbIsPrecious; }
 
     rtl::Reference<sdr::annotation::Annotation> createAnnotation() override;
-    void addAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, int nIndex) override;
+    void addAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, int nIndex = -1) override;
+    void addAnnotationNoNotify(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, int nIndex = -1) override;
+
     void removeAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation) override;
+    void removeAnnotationNoNotify(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation) override;
 
     bool Equals(const SdPage&) const;
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;

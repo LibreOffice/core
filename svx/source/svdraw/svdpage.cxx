@@ -1875,5 +1875,35 @@ const SdrPageProperties* SdrPage::getCorrectSdrPageProperties() const
     }
 }
 
+rtl::Reference<sdr::annotation::Annotation> SdrPage::createAnnotation()
+{
+    assert(false);
+    return nullptr;
+}
+
+void SdrPage::addAnnotation(rtl::Reference<sdr::annotation::Annotation> const& /*xAnnotation*/, int /*nIndex*/)
+{
+    assert(false);
+}
+
+void SdrPage::addAnnotationNoNotify(rtl::Reference<sdr::annotation::Annotation> const& /*xAnnotation*/, int /*nIndex*/)
+{
+    assert(false);
+}
+
+void SdrPage::removeAnnotation(rtl::Reference<sdr::annotation::Annotation> const& /*xAnnotation*/)
+{
+    assert(false);
+}
+
+void SdrPage::removeAnnotationNoNotify(rtl::Reference<sdr::annotation::Annotation> const& /*xAnnotation*/)
+{
+    assert(false);
+}
+
+std::vector<rtl::Reference<sdr::annotation::Annotation>> const& SdrPage::getAnnotations() const
+{
+    return maAnnotations;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
