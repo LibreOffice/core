@@ -1939,7 +1939,6 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
 
     static constexpr OUString sBlank(u""_ustr);
     const sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
-    const css::uno::Sequence<css::uno::Reference<rdf::XURI>> aGraphNames = SwRDFHelper::getGraphNames(xModel, MetaNS);
 
     while (xParagraphs->hasMoreElements())
     {
@@ -1949,14 +1948,11 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
         try
         {
             const css::uno::Reference<css::rdf::XResource> xSubject(xParagraph);
-            const std::map<OUString, OUString> aStatements = SwRDFHelper::getStatements(xModel, aGraphNames, xSubject);
+            const OUString sFieldNames = lcl_getRDF(xModel, xSubject, ParagraphClassificationFieldNamesRDFName).second;
 
-            const auto it = aStatements.find(ParagraphClassificationFieldNamesRDFName);
-            const OUString sFieldNames = (it != aStatements.end() ? it->second : sBlank);
             std::vector<svx::ClassificationResult> aResults;
             if (!sFieldNames.isEmpty())
             {
-                assert(it != aStatements.end() && "can only be non-empty if it was valid");
                 // Order the fields
                 sal_Int32 nIndex = 0;
                 do
@@ -1965,10 +1961,9 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
                     if (sCurFieldName.isEmpty())
                         break;
 
-                    const auto it2 = aStatements.find(sCurFieldName);
-                    bool bStatementFound = it2 != aStatements.end();
-                    const OUString sName = bStatementFound ? it->first : sBlank;
-                    const OUString sValue = bStatementFound ? it->second : sBlank;
+                    const std::pair<OUString, OUString> fieldNameValue = lcl_getRDF(xModel, xSubject, sCurFieldName);
+                    const OUString sName = fieldNameValue.first;
+                    const OUString sValue = fieldNameValue.second;
 
                     if (aKeyCreator.isMarkingTextKey(sName))
                     {
@@ -1976,14 +1971,14 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
                     }
                     else if (aKeyCreator.isCategoryNameKey(sName))
                     {
-                        const auto it3 = aStatements.find(ParagraphClassificationAbbrRDFName);
-                        const OUString sAbbreviatedName = (it3 != aStatements.end() && !it3->second.isEmpty() ? it3->second : sValue);
+                        const std::pair<OUString, OUString> pairAbbr = lcl_getRDF(xModel, xSubject, ParagraphClassificationAbbrRDFName);
+                        const OUString sAbbreviatedName = (!pairAbbr.second.isEmpty() ? pairAbbr.second : sValue);
                         aResults.emplace_back(svx::ClassificationType::CATEGORY, sValue, sAbbreviatedName, sBlank);
                     }
                     else if (aKeyCreator.isCategoryIdentifierKey(sName))
                     {
-                        const auto it3 = aStatements.find(ParagraphClassificationAbbrRDFName);
-                        const OUString sAbbreviatedName = (it3 != aStatements.end() && !it3->second.isEmpty() ? it3->second : sValue);
+                        const std::pair<OUString, OUString> pairAbbr = lcl_getRDF(xModel, xSubject, ParagraphClassificationAbbrRDFName);
+                        const OUString sAbbreviatedName = (!pairAbbr.second.isEmpty() ? pairAbbr.second : sValue);
                         aResults.emplace_back(svx::ClassificationType::CATEGORY, sBlank, sAbbreviatedName, sValue);
                     }
                     else if (aKeyCreator.isMarkingKey(sName))
