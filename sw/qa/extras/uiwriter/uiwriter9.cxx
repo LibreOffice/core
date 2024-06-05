@@ -298,6 +298,35 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf161172)
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(para, u"NumberingLevel"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf144752)
+{
+    // Undoing/redoing a replacement must select the new text
+    createSwDoc();
+    SwXTextDocument* pDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    emulateTyping(*pDoc, u"Some Text");
+    CPPUNIT_ASSERT(!pWrtShell->HasSelection());
+    // Select "Text", and replace with "Word"
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect*/ true, 4, /*bBasicCall*/ false);
+    pWrtShell->Replace(u"Word"_ustr, false);
+    pWrtShell->EndOfSection();
+    CPPUNIT_ASSERT(!pWrtShell->HasSelection());
+
+    // Undo and check, that the "Text" is selected
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    // Without the fix, this would fail
+    CPPUNIT_ASSERT(pWrtShell->HasSelection());
+    CPPUNIT_ASSERT_EQUAL(u"Text"_ustr, pWrtShell->GetSelText());
+
+    // Redo and check, that the "Word" is selected
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    CPPUNIT_ASSERT(pWrtShell->HasSelection());
+    CPPUNIT_ASSERT_EQUAL(u"Word"_ustr, pWrtShell->GetSelText());
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
