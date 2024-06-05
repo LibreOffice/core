@@ -68,7 +68,7 @@
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <sectfrm.hxx>
-#include <rowfrm.hxx>
+#include <cellfrm.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <dview.hxx>
@@ -1446,17 +1446,17 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt, bool *pSelectFrameInste
             }
 
             // within table row, where image cropped by the fixed table row height,
-            // click position must be in the cell, where the image anchored as character
+            // click position must be in the cell frame, where the image anchored as character
             if ( bRet && pContact && pContact->ObjAnchoredAsChar() )
             {
                 if ( const SwTableBox *pBox = pContact->GetAnchorNode().GetTableBox() )
                 {
-                    SwIterator<SwRowFrame, SwFormat> aIter( *pBox->GetUpper()->GetFrameFormat() );
+                    SwIterator<SwCellFrame, SwFormat> aIter( *pBox->GetFrameFormat() );
                     bool bContainsClickPosition = false;
-                    for (SwRowFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+                    for (SwCellFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
                     {
                         const SwRect& rRect = pFrame->getFrameArea();
-                        // click inside the cell which contains the cropped image
+                        // click inside the cell frame which contains the cropped image
                         if ( rRect.Contains( rPt ) )
                         {
                             // click next to the right cell border
@@ -1468,17 +1468,13 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt, bool *pSelectFrameInste
                             bContainsClickPosition = true;
                             break;
                         }
-                        else if ( pSelectFrameInsteadOfCroppedImage && (
-                            // Click outside of the right border
-                            rRect.Contains( Point(rPt.X() - 2 * nHitTol, rPt.Y()) ) ||
-                            // or handle the right border of bottom cells covered by the cropped
-                            // image instead putting the cursor inside the cell (see tdf#160842).
-                            // Click inside the same table, or outside its right border
-                            ( pFrame->GetUpper() && pFrame->GetUpper()->getFrameArea().Contains(
+                        // or click on the right table border of the same table frame
+                        else if ( pSelectFrameInsteadOfCroppedImage &&
+                            ( pFrame->GetUpper() && pFrame->GetUpper()->GetUpper() &&
+                              pFrame->GetUpper()->GetUpper()->getFrameArea().Contains(
                                   Point(rPt.X() - 2 * nHitTol, rPt.Y()) ) &&
-                              // and the click inside is next to the right table border
-                              !rRect.Contains( Point(rPt.X() + 2 * nHitTol, rRect.Bottom()) )
-                            ) ) )
+                              !pFrame->GetUpper()->GetUpper()->getFrameArea().Contains(
+                                  Point(rPt.X() + 2 * nHitTol, rPt.Y()) ) ) )
                         {
                             *pSelectFrameInsteadOfCroppedImage = true;
                             bContainsClickPosition = true;
