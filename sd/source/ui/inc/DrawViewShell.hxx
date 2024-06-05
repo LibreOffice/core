@@ -57,7 +57,11 @@ class Ruler;
 class AnnotationManager;
 class ViewOverlayManager;
 
-#define CHECK_RANGE(nMin, nValue, nMax) ((nValue >= nMin) && (nValue <= nMax))
+template <typename MIN_T, typename T, typename MAX_T>
+constexpr bool CHECK_RANGE(MIN_T nMin, T nValue, MAX_T nMax)
+{
+    return nValue >= nMin && nValue <= nMax;
+}
 
 /** Base class of the stacked shells that provide graphical views to
     Draw and Impress documents and editing functionality.  In contrast
@@ -494,8 +498,8 @@ private:
     bool                                                  mbPastePossible;
     bool                                                  mbMouseButtonDown;
     bool                                                  mbMouseSelecting;
-    ::std::unique_ptr< AnnotationManager > mpAnnotationManager;
-    ::std::unique_ptr< ViewOverlayManager > mpViewOverlayManager;
+    std::unique_ptr<AnnotationManager> mpAnnotationManager;
+    std::unique_ptr<ViewOverlayManager> mpViewOverlayManager;
     std::vector<std::unique_ptr<SdrExternalToolEdit>> m_ExternalEdits;
     SdViewOptions maViewOptions;
 };
