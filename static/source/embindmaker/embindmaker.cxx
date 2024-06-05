@@ -128,7 +128,7 @@ getServiceConstructorName(unoidl::SingleInterfaceBasedServiceEntity::Constructor
     return constructor.defaultConstructor ? u"create"_ustr : constructor.name;
 }
 
-OUString jsName(OUString const& name) { return name.replace('.', '$'); }
+OUString jsName(OUString const& name) { return name.replace(' ', '_').replace('.', '$'); }
 
 OUString
 jsServiceConstructor(OUString const& service,
