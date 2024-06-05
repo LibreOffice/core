@@ -4667,6 +4667,7 @@ void SwTabFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
     const SwViewOption* pViewOption = gProp.pSGlobalShell->GetViewOptions();
     if (pViewOption->IsTable())
     {
+        // tdf#77388 first paint the cell content to avoid of removing own border
         SwLayoutFrame::PaintSwFrame( rRenderContext, rRect );
 
         // #i29550#
