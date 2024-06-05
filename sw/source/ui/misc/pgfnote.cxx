@@ -95,7 +95,7 @@ IMPL_LINK(SwFootNotePage, LineColorSelected_Impl, ColorListBox&, rColorBox, void
 }
 
 SwFootNotePage::SwFootNotePage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/footnoteareapage.ui", "FootnoteAreaPage", &rSet)
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/footnoteareapage.ui"_ustr, u"FootnoteAreaPage"_ustr, &rSet)
     , m_lMaxHeight(0)
     , m_xMaxHeightPageBtn(m_xBuilder->weld_radio_button("maxheightpage"))
     , m_xMaxHeightBtn(m_xBuilder->weld_radio_button("maxheight"))

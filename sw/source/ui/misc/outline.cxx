@@ -112,11 +112,11 @@ IMPL_LINK_NOARG(SwNumNamesDlg, DoubleClickHdl, weld::TreeView&, bool)
 
 SwNumNamesDlg::SwNumNamesDlg(weld::Window *pParent)
     : GenericDialogController(pParent,
-            "modules/swriter/ui/numberingnamedialog.ui",
-            "NumberingNameDialog")
-    , m_xFormEdit(m_xBuilder->weld_entry("entry"))
-    , m_xFormBox(m_xBuilder->weld_tree_view("form"))
-    , m_xOKBtn(m_xBuilder->weld_button("ok"))
+            u"modules/swriter/ui/numberingnamedialog.ui"_ustr,
+            u"NumberingNameDialog"_ustr)
+    , m_xFormEdit(m_xBuilder->weld_entry(u"entry"_ustr))
+    , m_xFormBox(m_xBuilder->weld_tree_view(u"form"_ustr))
+    , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
 {
     for (auto const& aID : OUTLINE_STYLE)
         m_xFormBox->append_text(SwResId(aID));
@@ -142,11 +142,11 @@ sal_uInt16 SwOutlineTabDialog::s_nNumLevel = 1;
 
 SwOutlineTabDialog::SwOutlineTabDialog(weld::Window* pParent, const SfxItemSet* pSwItemSet,
     SwWrtShell &rSh)
-    : SfxTabDialogController(pParent, "modules/swriter/ui/outlinenumbering.ui", "OutlineNumberingDialog", pSwItemSet)
+    : SfxTabDialogController(pParent, u"modules/swriter/ui/outlinenumbering.ui"_ustr, u"OutlineNumberingDialog"_ustr, pSwItemSet)
     , m_rWrtSh(rSh)
     , m_pChapterNumRules(SW_MOD()->GetChapterNumRules())
     , m_bModified(m_rWrtSh.IsModified())
-    , m_xMenuButton(m_xBuilder->weld_menu_button("format"))
+    , m_xMenuButton(m_xBuilder->weld_menu_button(u"format"_ustr))
 {
     m_xMenuButton->connect_toggled(LINK(this, SwOutlineTabDialog, FormHdl));
     m_xMenuButton->connect_selected(LINK(this, SwOutlineTabDialog, MenuSelectHdl));
@@ -161,8 +161,8 @@ SwOutlineTabDialog::SwOutlineTabDialog(weld::Window* pParent, const SfxItemSet* 
         SetActNumLevel(nTmp < 0 ? USHRT_MAX : (1 << nTmp));
     }
 
-    AddTabPage("position", &SwNumPositionTabPage::Create, nullptr);
-    AddTabPage("numbering", &SwOutlineSettingsTabPage::Create, nullptr);
+    AddTabPage(u"position"_ustr, &SwNumPositionTabPage::Create, nullptr);
+    AddTabPage(u"numbering"_ustr, &SwOutlineSettingsTabPage::Create, nullptr);
 
     OUString sHeadline;
     sal_uInt16 i;
@@ -389,22 +389,22 @@ short SwOutlineTabDialog::Ok()
 
 SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(weld::Container* pPage, weld::DialogController* pController,
     const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/outlinenumberingpage.ui", "OutlineNumberingPage", &rSet)
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/outlinenumberingpage.ui"_ustr, u"OutlineNumberingPage"_ustr, &rSet)
     , m_aNoFormatName(SwResId(SW_STR_NONE))
     , m_pSh(nullptr)
     , m_pNumRule(nullptr)
     , m_pCollNames(nullptr)
     , m_nActLevel(1)
-    , m_xLevelLB(m_xBuilder->weld_tree_view("level"))
-    , m_xCollBox(m_xBuilder->weld_combo_box("style"))
-    , m_xNumberBox(new SwNumberingTypeListBox(m_xBuilder->weld_combo_box("numbering")))
-    , m_xCharFormatLB(m_xBuilder->weld_combo_box("charstyle"))
-    , m_xAllLevelFT(m_xBuilder->weld_label("sublevelsft"))
-    , m_xAllLevelNF(m_xBuilder->weld_spin_button("sublevelsnf"))
-    , m_xPrefixED(m_xBuilder->weld_entry("prefix"))
-    , m_xSuffixED(m_xBuilder->weld_entry("suffix"))
-    , m_xStartEdit(m_xBuilder->weld_spin_button("startat"))
-    , m_xPreviewWIN(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWIN))
+    , m_xLevelLB(m_xBuilder->weld_tree_view(u"level"_ustr))
+    , m_xCollBox(m_xBuilder->weld_combo_box(u"style"_ustr))
+    , m_xNumberBox(new SwNumberingTypeListBox(m_xBuilder->weld_combo_box(u"numbering"_ustr)))
+    , m_xCharFormatLB(m_xBuilder->weld_combo_box(u"charstyle"_ustr))
+    , m_xAllLevelFT(m_xBuilder->weld_label(u"sublevelsft"_ustr))
+    , m_xAllLevelNF(m_xBuilder->weld_spin_button(u"sublevelsnf"_ustr))
+    , m_xPrefixED(m_xBuilder->weld_entry(u"prefix"_ustr))
+    , m_xSuffixED(m_xBuilder->weld_entry(u"suffix"_ustr))
+    , m_xStartEdit(m_xBuilder->weld_spin_button(u"startat"_ustr))
+    , m_xPreviewWIN(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aPreviewWIN))
 {
     SetExchangeSupport();
 

@@ -42,16 +42,16 @@
 
 SwGlossaryGroupDlg::SwGlossaryGroupDlg(weld::Window * pParent,
     std::vector<OUString> const& rPathArr, SwGlossaryHdl *pHdl)
-    : SfxDialogController(pParent, "modules/swriter/ui/editcategories.ui",
-                          "EditCategoriesDialog")
+    : SfxDialogController(pParent, u"modules/swriter/ui/editcategories.ui"_ustr,
+                          u"EditCategoriesDialog"_ustr)
     , m_pParent(pParent)
     , m_pGlosHdl(pHdl)
-    , m_xNameED(m_xBuilder->weld_entry("name"))
-    , m_xPathLB(m_xBuilder->weld_combo_box("pathlb"))
-    , m_xGroupTLB(m_xBuilder->weld_tree_view("group"))
-    , m_xNewPB(m_xBuilder->weld_button("new"))
-    , m_xDelPB(m_xBuilder->weld_button("delete"))
-    , m_xRenamePB(m_xBuilder->weld_button("rename"))
+    , m_xNameED(m_xBuilder->weld_entry(u"name"_ustr))
+    , m_xPathLB(m_xBuilder->weld_combo_box(u"pathlb"_ustr))
+    , m_xGroupTLB(m_xBuilder->weld_tree_view(u"group"_ustr))
+    , m_xNewPB(m_xBuilder->weld_button(u"new"_ustr))
+    , m_xDelPB(m_xBuilder->weld_button(u"delete"_ustr))
+    , m_xRenamePB(m_xBuilder->weld_button(u"rename"_ustr))
 {
     int nWidth = m_xGroupTLB->get_approximate_digit_width() * 34;
     m_xPathLB->set_size_request(nWidth, -1);

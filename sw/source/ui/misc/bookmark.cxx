@@ -312,7 +312,7 @@ bool SwInsertBookmarkDlg::ValidateBookmarks()
     if (HaveBookmarksChanged())
     {
         PopulateTable();
-        m_xEditBox->set_text("");
+        m_xEditBox->set_text(u""_ustr);
         return false;
     }
     return true;
@@ -363,21 +363,22 @@ void SwInsertBookmarkDlg::PopulateTable()
 
 SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS,
                                          OUString const* const pSelected)
-    : SfxDialogController(pParent, "modules/swriter/ui/insertbookmark.ui", "InsertBookmarkDialog")
+    : SfxDialogController(pParent, u"modules/swriter/ui/insertbookmark.ui"_ustr,
+                          u"InsertBookmarkDialog"_ustr)
     , m_rSh(rS)
     , m_nLastBookmarksCount(0)
     , m_bSorted(false)
-    , m_xEditBox(m_xBuilder->weld_entry("name"))
-    , m_xInsertBtn(m_xBuilder->weld_button("insert"))
-    , m_xDeleteBtn(m_xBuilder->weld_button("delete"))
-    , m_xGotoBtn(m_xBuilder->weld_button("goto"))
-    , m_xEditTextBtn(m_xBuilder->weld_button("edittext"))
-    , m_xRenameBtn(m_xBuilder->weld_button("rename"))
-    , m_xHideCB(m_xBuilder->weld_check_button("hide"))
-    , m_xConditionFT(m_xBuilder->weld_label("condlabel"))
-    , m_xConditionED(new ConditionEdit(m_xBuilder->weld_entry("withcond")))
-    , m_xBookmarksBox(new BookmarkTable(m_xBuilder->weld_tree_view("bookmarks")))
-    , m_xForbiddenChars(m_xBuilder->weld_label("lbForbiddenChars"))
+    , m_xEditBox(m_xBuilder->weld_entry(u"name"_ustr))
+    , m_xInsertBtn(m_xBuilder->weld_button(u"insert"_ustr))
+    , m_xDeleteBtn(m_xBuilder->weld_button(u"delete"_ustr))
+    , m_xGotoBtn(m_xBuilder->weld_button(u"goto"_ustr))
+    , m_xEditTextBtn(m_xBuilder->weld_button(u"edittext"_ustr))
+    , m_xRenameBtn(m_xBuilder->weld_button(u"rename"_ustr))
+    , m_xHideCB(m_xBuilder->weld_check_button(u"hide"_ustr))
+    , m_xConditionFT(m_xBuilder->weld_label(u"condlabel"_ustr))
+    , m_xConditionED(new ConditionEdit(m_xBuilder->weld_entry(u"withcond"_ustr)))
+    , m_xBookmarksBox(new BookmarkTable(m_xBuilder->weld_tree_view(u"bookmarks"_ustr)))
+    , m_xForbiddenChars(m_xBuilder->weld_label(u"lbForbiddenChars"_ustr))
 {
     m_xBookmarksBox->connect_changed(LINK(this, SwInsertBookmarkDlg, SelectionChangedHdl));
     m_xBookmarksBox->connect_row_activated(LINK(this, SwInsertBookmarkDlg, DoubleClickHdl));
@@ -423,7 +424,7 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS,
     m_xConditionFT->set_sensitive(false);
 
     // restore dialog size
-    SvtViewOptions aDlgOpt(EViewType::Dialog, "BookmarkDialog");
+    SvtViewOptions aDlgOpt(EViewType::Dialog, u"BookmarkDialog"_ustr);
     if (aDlgOpt.Exists())
         m_xDialog->set_window_state(aDlgOpt.GetWindowState());
 
@@ -443,7 +444,7 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS,
 SwInsertBookmarkDlg::~SwInsertBookmarkDlg()
 {
     // tdf#146261 - Remember size of bookmark dialog
-    SvtViewOptions aDlgOpt(EViewType::Dialog, "BookmarkDialog");
+    SvtViewOptions aDlgOpt(EViewType::Dialog, u"BookmarkDialog"_ustr);
     OUString sWindowState = m_xDialog->get_window_state(vcl::WindowDataMask::PosSize);
     aDlgOpt.SetWindowState(sWindowState);
 }

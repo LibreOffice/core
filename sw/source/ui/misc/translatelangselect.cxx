@@ -76,12 +76,12 @@ static const std::vector<SwLanguageListItem>& getLanguageVec()
 
 int SwTranslateLangSelectDlg::selectedLangIdx = -1;
 SwTranslateLangSelectDlg::SwTranslateLangSelectDlg(weld::Window* pParent, SwWrtShell& rSh)
-    : GenericDialogController(pParent, "modules/swriter/ui/translationdialog.ui",
-                              "LanguageSelectDialog")
+    : GenericDialogController(pParent, u"modules/swriter/ui/translationdialog.ui"_ustr,
+                              u"LanguageSelectDialog"_ustr)
     , m_rWrtSh(rSh)
-    , m_xLanguageListBox(m_xBuilder->weld_combo_box("combobox1"))
-    , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
-    , m_xBtnTranslate(m_xBuilder->weld_button("translate"))
+    , m_xLanguageListBox(m_xBuilder->weld_combo_box(u"combobox1"_ustr))
+    , m_xBtnCancel(m_xBuilder->weld_button(u"cancel"_ustr))
+    , m_xBtnTranslate(m_xBuilder->weld_button(u"translate"_ustr))
     , m_bTranslationStarted(false)
     , m_bCancelTranslation(false)
 {

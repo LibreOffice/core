@@ -145,23 +145,23 @@ sal_uInt16 SwTitlePageDlg::GetInsertPosition() const
 }
 
 SwTitlePageDlg::SwTitlePageDlg(weld::Window *pParent)
-    : SfxDialogController(pParent, "modules/swriter/ui/titlepage.ui", "DLG_TITLEPAGE")
+    : SfxDialogController(pParent, u"modules/swriter/ui/titlepage.ui"_ustr, u"DLG_TITLEPAGE"_ustr)
     , mpTitleDesc(nullptr)
     , mpIndexDesc(nullptr)
     , mpNormalDesc(nullptr)
-    , m_xUseExistingPagesRB(m_xBuilder->weld_radio_button("RB_USE_EXISTING_PAGES"))
-    , m_xInsertNewPagesRB(m_xBuilder->weld_radio_button("RB_INSERT_NEW_PAGES"))
-    , m_xPageCountNF(m_xBuilder->weld_spin_button("NF_PAGE_COUNT"))
-    , m_xDocumentStartRB(m_xBuilder->weld_radio_button("RB_DOCUMENT_START"))
-    , m_xPageStartRB(m_xBuilder->weld_radio_button("RB_PAGE_START"))
-    , m_xPageStartNF(m_xBuilder->weld_spin_button("NF_PAGE_START"))
-    , m_xRestartNumberingCB(m_xBuilder->weld_check_button("CB_RESTART_NUMBERING"))
-    , m_xRestartNumberingNF(m_xBuilder->weld_spin_button("NF_RESTART_NUMBERING"))
-    , m_xSetPageNumberCB(m_xBuilder->weld_check_button("CB_SET_PAGE_NUMBER"))
-    , m_xSetPageNumberNF(m_xBuilder->weld_spin_button("NF_SET_PAGE_NUMBER"))
-    , m_xPagePropertiesLB(m_xBuilder->weld_combo_box("LB_PAGE_PROPERTIES"))
-    , m_xPagePropertiesPB(m_xBuilder->weld_button("PB_PAGE_PROPERTIES"))
-    , m_xOkPB(m_xBuilder->weld_button("ok"))
+    , m_xUseExistingPagesRB(m_xBuilder->weld_radio_button(u"RB_USE_EXISTING_PAGES"_ustr))
+    , m_xInsertNewPagesRB(m_xBuilder->weld_radio_button(u"RB_INSERT_NEW_PAGES"_ustr))
+    , m_xPageCountNF(m_xBuilder->weld_spin_button(u"NF_PAGE_COUNT"_ustr))
+    , m_xDocumentStartRB(m_xBuilder->weld_radio_button(u"RB_DOCUMENT_START"_ustr))
+    , m_xPageStartRB(m_xBuilder->weld_radio_button(u"RB_PAGE_START"_ustr))
+    , m_xPageStartNF(m_xBuilder->weld_spin_button(u"NF_PAGE_START"_ustr))
+    , m_xRestartNumberingCB(m_xBuilder->weld_check_button(u"CB_RESTART_NUMBERING"_ustr))
+    , m_xRestartNumberingNF(m_xBuilder->weld_spin_button(u"NF_RESTART_NUMBERING"_ustr))
+    , m_xSetPageNumberCB(m_xBuilder->weld_check_button(u"CB_SET_PAGE_NUMBER"_ustr))
+    , m_xSetPageNumberNF(m_xBuilder->weld_spin_button(u"NF_SET_PAGE_NUMBER"_ustr))
+    , m_xPagePropertiesLB(m_xBuilder->weld_combo_box(u"LB_PAGE_PROPERTIES"_ustr))
+    , m_xPagePropertiesPB(m_xBuilder->weld_button(u"PB_PAGE_PROPERTIES"_ustr))
+    , m_xOkPB(m_xBuilder->weld_button(u"ok"_ustr))
 {
     SwView* pView = GetActiveView();
     if (!pView)
@@ -268,7 +268,7 @@ IMPL_LINK_NOARG(SwTitlePageDlg, EditHdl, weld::Button&, void)
         return;
     SwWrtShell& rWrtShell = pView->GetWrtShell();
     SwView& rView = rWrtShell.GetView();
-    rView.GetDocShell()->FormatPage(getDialog(), m_xPagePropertiesLB->get_active_text(), "page", rWrtShell);
+    rView.GetDocShell()->FormatPage(getDialog(), m_xPagePropertiesLB->get_active_text(), u"page"_ustr, rWrtShell);
     rView.InvalidateRulerPos();
 }
 

@@ -36,15 +36,15 @@
 #include <memory>
 
 SwFootNoteOptionDlg::SwFootNoteOptionDlg(weld::Window *pParent, SwWrtShell &rS)
-    : SfxTabDialogController(pParent, "modules/swriter/ui/footendnotedialog.ui", "FootEndnoteDialog")
+    : SfxTabDialogController(pParent, u"modules/swriter/ui/footendnotedialog.ui"_ustr, u"FootEndnoteDialog"_ustr)
     , m_rSh( rS )
 {
     RemoveResetButton();
 
     GetOKButton().connect_clicked(LINK(this, SwFootNoteOptionDlg, OkHdl));
 
-    AddTabPage("footnotes", SwFootNoteOptionPage::Create, nullptr);
-    AddTabPage("endnotes",  SwEndNoteOptionPage::Create, nullptr);
+    AddTabPage(u"footnotes"_ustr, SwFootNoteOptionPage::Create, nullptr);
+    AddTabPage(u"endnotes"_ustr,  SwEndNoteOptionPage::Create, nullptr);
 }
 
 void SwFootNoteOptionDlg::PageCreated(const OUString& /*rId*/, SfxTabPage &rPage)
@@ -67,28 +67,28 @@ IMPL_LINK(SwFootNoteOptionDlg, OkHdl, weld::Button&, rBtn, void)
 SwEndNoteOptionPage::SwEndNoteOptionPage(weld::Container* pPage, weld::DialogController* pController, bool bEN,
     const SfxItemSet &rSet)
     : SfxTabPage(pPage, pController,
-        bEN ? OUString("modules/swriter/ui/endnotepage.ui") : OUString("modules/swriter/ui/footnotepage.ui"),
-        bEN ? OUString("EndnotePage") : OUString("FootnotePage"),
+        bEN ? u"modules/swriter/ui/endnotepage.ui"_ustr : u"modules/swriter/ui/footnotepage.ui"_ustr,
+        bEN ? u"EndnotePage"_ustr : u"FootnotePage"_ustr,
         &rSet)
     , m_pSh(nullptr)
     , m_bPosDoc(false)
     , m_bEndNote(bEN)
-    , m_xNumViewBox(new SwNumberingTypeListBox(m_xBuilder->weld_combo_box("numberinglb")))
-    , m_xOffsetLbl(m_xBuilder->weld_label("offset"))
-    , m_xOffsetField(m_xBuilder->weld_spin_button("offsetnf"))
-    , m_xNumCountBox(m_xBuilder->weld_combo_box("countinglb"))
-    , m_xPrefixED(m_xBuilder->weld_entry("prefix"))
-    , m_xSuffixED(m_xBuilder->weld_entry("suffix"))
-    , m_xPosPageBox(m_xBuilder->weld_radio_button("pospagecb"))
-    , m_xPosChapterBox(m_xBuilder->weld_radio_button("posdoccb"))
-    , m_xStylesContainer(m_xBuilder->weld_widget("allstyles"))
-    , m_xParaTemplBox(m_xBuilder->weld_combo_box("parastylelb"))
-    , m_xPageTemplLbl(m_xBuilder->weld_label("pagestyleft"))
-    , m_xPageTemplBox(m_xBuilder->weld_combo_box("pagestylelb"))
-    , m_xFootnoteCharAnchorTemplBox(m_xBuilder->weld_combo_box("charanchorstylelb"))
-    , m_xFootnoteCharTextTemplBox(m_xBuilder->weld_combo_box("charstylelb"))
-    , m_xContEdit(m_xBuilder->weld_entry("conted"))
-    , m_xContFromEdit(m_xBuilder->weld_entry("contfromed"))
+    , m_xNumViewBox(new SwNumberingTypeListBox(m_xBuilder->weld_combo_box(u"numberinglb"_ustr)))
+    , m_xOffsetLbl(m_xBuilder->weld_label(u"offset"_ustr))
+    , m_xOffsetField(m_xBuilder->weld_spin_button(u"offsetnf"_ustr))
+    , m_xNumCountBox(m_xBuilder->weld_combo_box(u"countinglb"_ustr))
+    , m_xPrefixED(m_xBuilder->weld_entry(u"prefix"_ustr))
+    , m_xSuffixED(m_xBuilder->weld_entry(u"suffix"_ustr))
+    , m_xPosPageBox(m_xBuilder->weld_radio_button(u"pospagecb"_ustr))
+    , m_xPosChapterBox(m_xBuilder->weld_radio_button(u"posdoccb"_ustr))
+    , m_xStylesContainer(m_xBuilder->weld_widget(u"allstyles"_ustr))
+    , m_xParaTemplBox(m_xBuilder->weld_combo_box(u"parastylelb"_ustr))
+    , m_xPageTemplLbl(m_xBuilder->weld_label(u"pagestyleft"_ustr))
+    , m_xPageTemplBox(m_xBuilder->weld_combo_box(u"pagestylelb"_ustr))
+    , m_xFootnoteCharAnchorTemplBox(m_xBuilder->weld_combo_box(u"charanchorstylelb"_ustr))
+    , m_xFootnoteCharTextTemplBox(m_xBuilder->weld_combo_box(u"charstylelb"_ustr))
+    , m_xContEdit(m_xBuilder->weld_entry(u"conted"_ustr))
+    , m_xContFromEdit(m_xBuilder->weld_entry(u"contfromed"_ustr))
 {
     m_xNumViewBox->Reload(SwInsertNumTypes::Extended);
     if (!m_bEndNote)

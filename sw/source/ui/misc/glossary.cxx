@@ -139,13 +139,13 @@ IMPL_LINK(SwNewGlosNameDlg, TextFilterHdl, OUString&, rTest, bool)
 }
 
 SwNewGlosNameDlg::SwNewGlosNameDlg(SwGlossaryDlg* pParent, const OUString& rOldName, const OUString& rOldShort)
-    : GenericDialogController(pParent->getDialog(), "modules/swriter/ui/renameautotextdialog.ui", "RenameAutoTextDialog")
+    : GenericDialogController(pParent->getDialog(), u"modules/swriter/ui/renameautotextdialog.ui"_ustr, u"RenameAutoTextDialog"_ustr)
     , m_pParent(pParent)
-    , m_xNewName(m_xBuilder->weld_entry("newname"))
-    , m_xNewShort(m_xBuilder->weld_entry("newsc"))
-    , m_xOk(m_xBuilder->weld_button("ok"))
-    , m_xOldName(m_xBuilder->weld_entry("oldname"))
-    , m_xOldShort(m_xBuilder->weld_entry("oldsc"))
+    , m_xNewName(m_xBuilder->weld_entry(u"newname"_ustr))
+    , m_xNewShort(m_xBuilder->weld_entry(u"newsc"_ustr))
+    , m_xOk(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xOldName(m_xBuilder->weld_entry(u"oldname"_ustr))
+    , m_xOldShort(m_xBuilder->weld_entry(u"oldsc"_ustr))
 {
     m_xNewShort->connect_insert_text(LINK(this, SwNewGlosNameDlg, TextFilterHdl));
 
@@ -289,7 +289,7 @@ public:
 
 SwGlossaryDlg::SwGlossaryDlg(const SfxViewFrame& rViewFrame,
                              SwGlossaryHdl * pGlosHdl, SwWrtShell *pWrtShell)
-    : SfxDialogController(rViewFrame.GetFrameWeld(), "modules/swriter/ui/autotext.ui", "AutoTextDialog")
+    : SfxDialogController(rViewFrame.GetFrameWeld(), u"modules/swriter/ui/autotext.ui"_ustr, u"AutoTextDialog"_ustr)
     , m_sReadonlyPath(SwResId(STR_READONLY_PATH))
     , m_pGlossaryHdl(pGlosHdl)
     , m_bResume(false)
@@ -298,24 +298,24 @@ SwGlossaryDlg::SwGlossaryDlg(const SfxViewFrame& rViewFrame,
     , m_bIsOld(false)
     , m_bIsDocReadOnly(false)
     , m_pShell(pWrtShell)
-    , m_xInsertTipCB(m_xBuilder->weld_check_button("inserttip"))
-    , m_xNameED(m_xBuilder->weld_entry("name"))
-    , m_xShortNameLbl(m_xBuilder->weld_label("shortnameft"))
-    , m_xShortNameEdit(m_xBuilder->weld_entry("shortname"))
-    , m_xCategoryBox(m_xBuilder->weld_tree_view("category"))
-    , m_xFileRelCB(m_xBuilder->weld_check_button("relfile"))
-    , m_xNetRelCB(m_xBuilder->weld_check_button("relnet"))
-    , m_xInsertBtn(m_xBuilder->weld_button("ok"))
-    , m_xEditBtn(m_xBuilder->weld_menu_button("autotext"))
-    , m_xBibBtn(m_xBuilder->weld_button("categories"))
-    , m_xPathBtn(m_xBuilder->weld_button("path"))
+    , m_xInsertTipCB(m_xBuilder->weld_check_button(u"inserttip"_ustr))
+    , m_xNameED(m_xBuilder->weld_entry(u"name"_ustr))
+    , m_xShortNameLbl(m_xBuilder->weld_label(u"shortnameft"_ustr))
+    , m_xShortNameEdit(m_xBuilder->weld_entry(u"shortname"_ustr))
+    , m_xCategoryBox(m_xBuilder->weld_tree_view(u"category"_ustr))
+    , m_xFileRelCB(m_xBuilder->weld_check_button(u"relfile"_ustr))
+    , m_xNetRelCB(m_xBuilder->weld_check_button(u"relnet"_ustr))
+    , m_xInsertBtn(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xEditBtn(m_xBuilder->weld_menu_button(u"autotext"_ustr))
+    , m_xBibBtn(m_xBuilder->weld_button(u"categories"_ustr))
+    , m_xPathBtn(m_xBuilder->weld_button(u"path"_ustr))
 {
     m_xCategoryBox->set_size_request(m_xCategoryBox->get_approximate_digit_width() * 52,
                                      m_xCategoryBox->get_height_rows(12));
 
     Link<SwOneExampleFrame&,void> aLink(LINK(this, SwGlossaryDlg, PreviewLoadedHdl));
     m_xExampleFrame.reset(new SwOneExampleFrame(EX_SHOW_ONLINE_LAYOUT, &aLink));
-    m_xExampleFrameWin.reset(new weld::CustomWeld(*m_xBuilder, "example", *m_xExampleFrame));
+    m_xExampleFrameWin.reset(new weld::CustomWeld(*m_xBuilder, u"example"_ustr, *m_xExampleFrame));
     Size aSize = m_xExampleFrame->GetDrawingArea()->get_ref_device().LogicToPixel(
             Size(82, 124), MapMode(MapUnit::MapAppFont));
     m_xExampleFrame->set_size_request(aSize.Width(), aSize.Height());
@@ -409,7 +409,7 @@ IMPL_LINK(SwGlossaryDlg, GrpSelect, weld::TreeView&, rBox, void)
         ShowAutoText(::GetCurrGlosGroup(), m_xShortNameEdit->get_text());
     }
     else
-        ShowAutoText("", "");
+        ShowAutoText(u""_ustr, u""_ustr);
     // update controls
     NameModify(*m_xShortNameEdit);
     if (SfxRequest::HasMacroRecorder(m_pShell->GetView().GetViewFrame()))
@@ -523,17 +523,17 @@ IMPL_LINK_NOARG( SwGlossaryDlg, EnableHdl, weld::Toggleable&, void )
     const bool bHasEntry = !aEditText.isEmpty() && !m_xShortNameEdit->get_text().isEmpty();
     const bool bExists = nullptr != DoesBlockExist(aEditText, m_xShortNameEdit->get_text());
     const bool bIsGroup = bEntry && !m_xCategoryBox->get_iter_depth(*xEntry);
-    m_xEditBtn->set_item_visible("new", m_bSelection && bHasEntry && !bExists);
-    m_xEditBtn->set_item_visible("newtext", m_bSelection && bHasEntry && !bExists);
-    m_xEditBtn->set_item_visible("copy", bExists && !bIsGroup);
-    m_xEditBtn->set_item_visible("replace", m_bSelection && bExists && !bIsGroup && !m_bIsOld );
-    m_xEditBtn->set_item_visible("replacetext", m_bSelection && bExists && !bIsGroup && !m_bIsOld );
-    m_xEditBtn->set_item_visible("edit", bExists && !bIsGroup );
-    m_xEditBtn->set_item_visible("rename", bExists && !bIsGroup );
-    m_xEditBtn->set_item_visible("delete", bExists && !bIsGroup );
-    m_xEditBtn->set_item_visible("macro", bExists && !bIsGroup && !m_bIsOld &&
+    m_xEditBtn->set_item_visible(u"new"_ustr, m_bSelection && bHasEntry && !bExists);
+    m_xEditBtn->set_item_visible(u"newtext"_ustr, m_bSelection && bHasEntry && !bExists);
+    m_xEditBtn->set_item_visible(u"copy"_ustr, bExists && !bIsGroup);
+    m_xEditBtn->set_item_visible(u"replace"_ustr, m_bSelection && bExists && !bIsGroup && !m_bIsOld );
+    m_xEditBtn->set_item_visible(u"replacetext"_ustr, m_bSelection && bExists && !bIsGroup && !m_bIsOld );
+    m_xEditBtn->set_item_visible(u"edit"_ustr, bExists && !bIsGroup );
+    m_xEditBtn->set_item_visible(u"rename"_ustr, bExists && !bIsGroup );
+    m_xEditBtn->set_item_visible(u"delete"_ustr, bExists && !bIsGroup );
+    m_xEditBtn->set_item_visible(u"macro"_ustr, bExists && !bIsGroup && !m_bIsOld &&
                                     !m_pGlossaryHdl->IsReadOnly() );
-    m_xEditBtn->set_item_visible("import", bIsGroup && !m_bIsOld && !m_pGlossaryHdl->IsReadOnly() );
+    m_xEditBtn->set_item_visible(u"import"_ustr, bIsGroup && !m_bIsOld && !m_pGlossaryHdl->IsReadOnly() );
 }
 
 IMPL_LINK(SwGlossaryDlg, MenuHdl, const OUString&, rItemIdent, void)
@@ -736,7 +736,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl, weld::Button&, void)
                 Content aTestContent( sPath,
                             uno::Reference< XCommandEnvironment >(),
                             comphelper::getProcessComponentContext() );
-                Any aAny = aTestContent.getPropertyValue( "IsReadOnly" );
+                Any aAny = aTestContent.getPropertyValue( u"IsReadOnly"_ustr );
                 if(aAny.hasValue())
                 {
                     bIsWritable = !*o3tl::doAccess<bool>(aAny);

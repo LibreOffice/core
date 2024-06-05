@@ -23,12 +23,12 @@
 
 SwContentControlListItemDlg::SwContentControlListItemDlg(weld::Widget* pParent,
                                                          SwContentControlListItem& rItem)
-    : GenericDialogController(pParent, "modules/swriter/ui/contentcontrollistitemdlg.ui",
-                              "ContentControlListItemDialog")
+    : GenericDialogController(pParent, u"modules/swriter/ui/contentcontrollistitemdlg.ui"_ustr,
+                              u"ContentControlListItemDialog"_ustr)
     , m_rItem(rItem)
-    , m_xDisplayNameED(m_xBuilder->weld_entry("displayname"))
-    , m_xValueED(m_xBuilder->weld_entry("value"))
-    , m_xOk(m_xBuilder->weld_button("ok"))
+    , m_xDisplayNameED(m_xBuilder->weld_entry(u"displayname"_ustr))
+    , m_xValueED(m_xBuilder->weld_entry(u"value"_ustr))
+    , m_xOk(m_xBuilder->weld_button(u"ok"_ustr))
 {
     m_xOk->connect_clicked(LINK(this, SwContentControlListItemDlg, OkHdl));
     m_xDisplayNameED->set_text(rItem.m_aDisplayText);

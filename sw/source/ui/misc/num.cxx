@@ -46,7 +46,7 @@ static bool bLastRelative = false;
 //TODO, determine if SwNumPositionTabPage and SvxNumPositionTabPage can be
 //merged
 SwNumPositionTabPage::SwNumPositionTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/outlinepositionpage.ui", "OutlinePositionPage", &rSet)
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/outlinepositionpage.ui"_ustr, u"OutlinePositionPage"_ustr, &rSet)
     , m_pSaveNum(nullptr)
     , m_pWrtSh(nullptr)
     , m_pOutlineDlg(nullptr)
@@ -55,29 +55,29 @@ SwNumPositionTabPage::SwNumPositionTabPage(weld::Container* pPage, weld::DialogC
     , m_bPreset(false)
     , m_bInInintControl(false)
     , m_bLabelAlignmentPosAndSpaceModeActive(false)
-    , m_xLevelLB(m_xBuilder->weld_tree_view("levellb"))
-    , m_xPositionFrame(m_xBuilder->weld_widget("numberingframe"))
-    , m_xDistBorderFT(m_xBuilder->weld_label("indent"))
-    , m_xDistBorderMF(m_xBuilder->weld_metric_spin_button("indentmf", FieldUnit::CM))
-    , m_xRelativeCB(m_xBuilder->weld_check_button("relative"))
-    , m_xIndentFT(m_xBuilder->weld_label("numberingwidth"))
-    , m_xIndentMF(m_xBuilder->weld_metric_spin_button("numberingwidthmf", FieldUnit::CM))
-    , m_xDistNumFT(m_xBuilder->weld_label("numdist"))
-    , m_xDistNumMF(m_xBuilder->weld_metric_spin_button("numdistmf", FieldUnit::CM))
-    , m_xAlignFT(m_xBuilder->weld_label("numalign"))
-    , m_xAlignLB(m_xBuilder->weld_combo_box("numalignlb"))
-    , m_xLabelFollowedByFT(m_xBuilder->weld_label("numfollowedby"))
-    , m_xLabelFollowedByLB(m_xBuilder->weld_combo_box("numfollowedbylb"))
-    , m_xListtabFT(m_xBuilder->weld_label("at"))
-    , m_xListtabMF(m_xBuilder->weld_metric_spin_button("atmf", FieldUnit::CM))
-    , m_xAlign2FT(m_xBuilder->weld_label("num2align"))
-    , m_xAlign2LB(m_xBuilder->weld_combo_box("num2alignlb"))
-    , m_xAlignedAtFT(m_xBuilder->weld_label("alignedat"))
-    , m_xAlignedAtMF(m_xBuilder->weld_metric_spin_button("alignedatmf", FieldUnit::CM))
-    , m_xIndentAtFT(m_xBuilder->weld_label("indentat"))
-    , m_xIndentAtMF(m_xBuilder->weld_metric_spin_button("indentatmf", FieldUnit::CM))
-    , m_xStandardPB(m_xBuilder->weld_button("standard"))
-    , m_xPreviewWIN(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWIN))
+    , m_xLevelLB(m_xBuilder->weld_tree_view(u"levellb"_ustr))
+    , m_xPositionFrame(m_xBuilder->weld_widget(u"numberingframe"_ustr))
+    , m_xDistBorderFT(m_xBuilder->weld_label(u"indent"_ustr))
+    , m_xDistBorderMF(m_xBuilder->weld_metric_spin_button(u"indentmf"_ustr, FieldUnit::CM))
+    , m_xRelativeCB(m_xBuilder->weld_check_button(u"relative"_ustr))
+    , m_xIndentFT(m_xBuilder->weld_label(u"numberingwidth"_ustr))
+    , m_xIndentMF(m_xBuilder->weld_metric_spin_button(u"numberingwidthmf"_ustr, FieldUnit::CM))
+    , m_xDistNumFT(m_xBuilder->weld_label(u"numdist"_ustr))
+    , m_xDistNumMF(m_xBuilder->weld_metric_spin_button(u"numdistmf"_ustr, FieldUnit::CM))
+    , m_xAlignFT(m_xBuilder->weld_label(u"numalign"_ustr))
+    , m_xAlignLB(m_xBuilder->weld_combo_box(u"numalignlb"_ustr))
+    , m_xLabelFollowedByFT(m_xBuilder->weld_label(u"numfollowedby"_ustr))
+    , m_xLabelFollowedByLB(m_xBuilder->weld_combo_box(u"numfollowedbylb"_ustr))
+    , m_xListtabFT(m_xBuilder->weld_label(u"at"_ustr))
+    , m_xListtabMF(m_xBuilder->weld_metric_spin_button(u"atmf"_ustr, FieldUnit::CM))
+    , m_xAlign2FT(m_xBuilder->weld_label(u"num2align"_ustr))
+    , m_xAlign2LB(m_xBuilder->weld_combo_box(u"num2alignlb"_ustr))
+    , m_xAlignedAtFT(m_xBuilder->weld_label(u"alignedat"_ustr))
+    , m_xAlignedAtMF(m_xBuilder->weld_metric_spin_button(u"alignedatmf"_ustr, FieldUnit::CM))
+    , m_xIndentAtFT(m_xBuilder->weld_label(u"indentat"_ustr))
+    , m_xIndentAtMF(m_xBuilder->weld_metric_spin_button(u"indentatmf"_ustr, FieldUnit::CM))
+    , m_xStandardPB(m_xBuilder->weld_button(u"standard"_ustr))
+    , m_xPreviewWIN(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aPreviewWIN))
 {
     SetExchangeSupport();
 
@@ -862,20 +862,20 @@ void SwNumPositionTabPage::SetModified()
 
 SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(weld::Window* pParent,
                     const SfxItemSet& rSwItemSet, SwWrtShell & rSh)
-    : SfxTabDialogController(pParent, "modules/swriter/ui/bulletsandnumbering.ui", "BulletsAndNumberingDialog",
+    : SfxTabDialogController(pParent, u"modules/swriter/ui/bulletsandnumbering.ui"_ustr, u"BulletsAndNumberingDialog"_ustr,
         &rSwItemSet)
     , m_rWrtSh(rSh)
-    , m_xDummyCombo(m_xBuilder->weld_combo_box("dummycombo"))
+    , m_xDummyCombo(m_xBuilder->weld_combo_box(u"dummycombo"_ustr))
 {
     weld::Button* pButton = GetUserButton();
     pButton->connect_clicked(LINK(this, SwSvxNumBulletTabDialog, RemoveNumberingHdl));
     pButton->set_sensitive(m_rWrtSh.GetNumRuleAtCurrCursorPos() != nullptr);
-    AddTabPage("singlenum", RID_SVXPAGE_PICK_SINGLE_NUM );
-    AddTabPage("bullets", RID_SVXPAGE_PICK_BULLET );
-    AddTabPage("outlinenum", RID_SVXPAGE_PICK_NUM );
-    AddTabPage("graphics", RID_SVXPAGE_PICK_BMP );
-    AddTabPage("customize", RID_SVXPAGE_NUM_OPTIONS );
-    AddTabPage("position", RID_SVXPAGE_NUM_POSITION );
+    AddTabPage(u"singlenum"_ustr, RID_SVXPAGE_PICK_SINGLE_NUM );
+    AddTabPage(u"bullets"_ustr, RID_SVXPAGE_PICK_BULLET );
+    AddTabPage(u"outlinenum"_ustr, RID_SVXPAGE_PICK_NUM );
+    AddTabPage(u"graphics"_ustr, RID_SVXPAGE_PICK_BMP );
+    AddTabPage(u"customize"_ustr, RID_SVXPAGE_NUM_OPTIONS );
+    AddTabPage(u"position"_ustr, RID_SVXPAGE_NUM_POSITION );
 }
 
 SwSvxNumBulletTabDialog::~SwSvxNumBulletTabDialog()
