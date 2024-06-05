@@ -61,7 +61,7 @@ protected:
 
 }
 
-void createAnnotation(rtl::Reference<sdr::annotation::Annotation>& xAnnotation, SdPage* pPage )
+void createAnnotation(rtl::Reference<sdr::annotation::Annotation>& xAnnotation, SdPage* pPage)
 {
     xAnnotation.set(new Annotation(comphelper::getProcessComponentContext(), pPage));
     pPage->addAnnotation(xAnnotation, -1);

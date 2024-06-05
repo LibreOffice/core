@@ -93,8 +93,7 @@ bool SdPdfFilter::Import()
 
         for (auto const& rPDFAnnotation : rPDFGraphicResult.GetAnnotations())
         {
-            rtl::Reference<sdr::annotation::Annotation> xAnnotation;
-            pPage->createAnnotation(xAnnotation);
+            rtl::Reference<sdr::annotation::Annotation> xAnnotation = pPage->createAnnotation();
 
             xAnnotation->setAuthor(rPDFAnnotation.maAuthor);
 

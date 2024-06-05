@@ -380,8 +380,7 @@ void SdPage::lateInit(const SdPage& rSrcPage)
     // annotations
     for (auto const& rSourceAnnotation : rSrcPage.maAnnotations)
     {
-        rtl::Reference<sdr::annotation::Annotation> aNewAnnotation;
-        createAnnotation(aNewAnnotation);
+        rtl::Reference<sdr::annotation::Annotation> aNewAnnotation = createAnnotation();
         aNewAnnotation->setPosition(rSourceAnnotation->getPosition());
         aNewAnnotation->setSize(rSourceAnnotation->getSize());
         aNewAnnotation->setAuthor(rSourceAnnotation->getAuthor());
@@ -553,12 +552,24 @@ bool SdPage::Equals(const SdPage& rOtherPage) const
     return true;
  }
 
-void SdPage::createAnnotation(rtl::Reference<sdr::annotation::Annotation>& xAnnotation)
+rtl::Reference<sdr::annotation::Annotation> SdPage::createAnnotation()
 {
+    rtl::Reference<sdr::annotation::Annotation> xAnnotation;
     sd::createAnnotation(xAnnotation, this);
+    return xAnnotation;
 }
 
-void SdPage::addAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, int nIndex )
+void SdPage::addAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, int nIndex)
+{
+    addAnnotationNoNotify(xAnnotation, nIndex);
+
+    NotifyDocumentEvent(
+        static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()),
+        "OnAnnotationInserted",
+        Reference<XInterface>(static_cast<cppu::OWeakObject*>(xAnnotation.get()), UNO_QUERY));
+}
+
+void SdPage::addAnnotationNoNotify(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, int nIndex)
 {
     if ((nIndex == -1) || (nIndex > int(maAnnotations.size())))
     {
@@ -566,44 +577,49 @@ void SdPage::addAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xA
     }
     else
     {
-        maAnnotations.insert( maAnnotations.begin() + nIndex, xAnnotation );
+        maAnnotations.insert(maAnnotations.begin() + nIndex, xAnnotation);
     }
 
-    if( getSdrModelFromSdrPage().IsUndoEnabled() )
+    SdrModel& rModel = getSdrModelFromSdrPage();
+
+    if (rModel.IsUndoEnabled())
     {
         rtl::Reference<sdr::annotation::Annotation> xUnconstAnnotation(xAnnotation);
         std::unique_ptr<SdrUndoAction> pAction = CreateUndoInsertOrRemoveAnnotation(xUnconstAnnotation, true);
         if (pAction)
-            getSdrModelFromSdrPage().AddUndo( std::move(pAction) );
+            rModel.AddUndo(std::move(pAction));
     }
 
     SetChanged();
-    getSdrModelFromSdrPage().SetChanged();
-    NotifyDocumentEvent(
-        static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()),
-        "OnAnnotationInserted",
-        Reference<XInterface>(static_cast<cppu::OWeakObject*>(xAnnotation.get()), UNO_QUERY));
 }
 
 void SdPage::removeAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation)
 {
-    if( getSdrModelFromSdrPage().IsUndoEnabled() )
-    {
-        rtl::Reference<sdr::annotation::Annotation> xUnconstAnnotation(xAnnotation);
-        std::unique_ptr<SdrUndoAction> pAction = CreateUndoInsertOrRemoveAnnotation(xUnconstAnnotation, false);
-        if( pAction )
-            getSdrModelFromSdrPage().AddUndo( std::move(pAction) );
-    }
+    removeAnnotationNoNotify(xAnnotation);
 
-    sdr::annotation::AnnotationVector::iterator iterator = std::find(maAnnotations.begin(), maAnnotations.end(), xAnnotation);
-    if (iterator != maAnnotations.end())
-        maAnnotations.erase(iterator);
-
-    getSdrModelFromSdrPage().SetChanged();
     NotifyDocumentEvent(
         static_cast< SdDrawDocument& >( getSdrModelFromSdrPage() ),
         "OnAnnotationRemoved",
         Reference<XInterface>( static_cast<cppu::OWeakObject*>(xAnnotation.get()), UNO_QUERY ) );
+}
+
+void SdPage::removeAnnotationNoNotify(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation)
+{
+    SdrModel& rModel = getSdrModelFromSdrPage();
+
+    if (rModel.IsUndoEnabled())
+    {
+        rtl::Reference<sdr::annotation::Annotation> xUnconstAnnotation(xAnnotation);
+        std::unique_ptr<SdrUndoAction> pAction = CreateUndoInsertOrRemoveAnnotation(xUnconstAnnotation, false);
+        if (pAction)
+            rModel.AddUndo(std::move(pAction));
+    }
+
+    auto iterator = std::find(maAnnotations.begin(), maAnnotations.end(), xAnnotation);
+    if (iterator != maAnnotations.end())
+        maAnnotations.erase(iterator);
+
+    rModel.SetChanged();
 }
 
 void SdPage::getGraphicsForPrefetch(std::vector<Graphic*>& graphics) const
