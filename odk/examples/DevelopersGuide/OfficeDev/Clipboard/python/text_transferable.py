@@ -24,7 +24,7 @@ class TextTransferable(unohelper.Base, XTransferable):
 
     ''' XTransferable methods '''
     def getTransferData(self, flavor):
-        # str.casefold() allows reliable case-insensitive comparision
+        # str.casefold() allows reliable case-insensitive comparison
         if flavor.MimeType.casefold() != __class__.UNICODE_CONTENT_TYPE.casefold():
             raise UnsupportedFlavorException()
         return self.text
@@ -34,7 +34,7 @@ class TextTransferable(unohelper.Base, XTransferable):
         return [unicode_flavor]
 
     def isDataFlavorSupported(self, flavor):
-        # str.casefold() allows reliable case-insensitive comparision
+        # str.casefold() allows reliable case-insensitive comparison
         return flavor.MimeType.casefold() == __class__.UNICODE_CONTENT_TYPE.casefold()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
