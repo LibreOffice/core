@@ -87,4 +87,10 @@
     <string name="action_text_copied">テキストをクリップボードにコピーしました</string>
     <string name="about_notice">お知らせを表示</string>
     <string name="calc_optimal_length">最適な長さ</string>
+    <string name="action_about">このソフトウェアについて</string>
+    <string name="calc_adjust_width">幅の調整</string>
+    <string name="calc_adjust_height">高さの調整</string>
+    <string name="calc_adjust_length">長さの調整</string>
+    <string name="compress_photo_smallest_size">最小サイズ</string>
+    <string name="take_photo">写真を撮る</string>
 </resources>
