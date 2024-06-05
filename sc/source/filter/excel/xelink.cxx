@@ -1989,18 +1989,17 @@ std::optional<std::pair<sal_uInt16, sal_uInt16>> XclExpSupbookBuffer::InsertEuro
 {
     XclExpSupbookRef xSupbook;
     OUString aUrl( u"\001\010EUROTOOL.XLA"_ustr );
-    const auto& nSupbookId = GetSupbookUrl(xSupbook, aUrl);
-    sal_uInt16 nSupbook;
-    if( !nSupbookId )
+    auto nSupbookId = GetSupbookUrl(xSupbook, aUrl);
+    if (!nSupbookId)
     {
         xSupbook = new XclExpSupbook( GetRoot(), aUrl, XclSupbookType::Eurotool );
-        nSupbook = Append( xSupbook );
+        nSupbookId = Append(xSupbook);
     }
 
     auto nExtName = xSupbook->InsertEuroTool( rName );
     if( nExtName > 0)
     {
-        return std::make_pair(nSupbook, nExtName);
+        return std::make_pair(*nSupbookId, nExtName);
     }
     return {};
 }
@@ -2010,16 +2009,15 @@ std::optional<std::pair<sal_uInt16, sal_uInt16>> XclExpSupbookBuffer::InsertDde(
 {
     XclExpSupbookRef xSupbook;
     auto nSupbookDde = GetSupbookDde( xSupbook, rApplic, rTopic );
-    sal_uInt16 nSupbook;
-    if( !nSupbookDde )
+    if (!nSupbookDde)
     {
         xSupbook = new XclExpSupbook( GetRoot(), rApplic, rTopic );
-        nSupbook = Append(xSupbook);
+        nSupbookDde = Append(xSupbook);
     }
     auto nExtName = xSupbook->InsertDde( rItem );
     if (nExtName > 0)
     {
-        return std::make_pair(nSupbook, nExtName);
+        return std::make_pair(*nSupbookDde, nExtName);
     }
     return {};
 }
@@ -2028,17 +2026,17 @@ std::optional<std::pair<sal_uInt16, sal_uInt16>> XclExpSupbookBuffer::InsertExtN
         const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray )
 {
     XclExpSupbookRef xSupbook;
-    const auto& nSupbookId = GetSupbookUrl(xSupbook, rUrl);
-    sal_uInt16 nSupbook;
-    if (!nSupbookId) {
+    auto nSupbookId = GetSupbookUrl(xSupbook, rUrl);
+    if (!nSupbookId)
+    {
         xSupbook = new XclExpSupbook(GetRoot(), rUrl);
-        nSupbook = Append(xSupbook);
+        nSupbookId = Append(xSupbook);
     }
 
     auto nExtName = xSupbook->InsertExtName(rName, rArray);
     if (nExtName > 0)
     {
-        return std::make_pair(nSupbook, nExtName);
+        return std::make_pair(*nSupbookId, nExtName);
     }
     return {};
 }
@@ -2178,7 +2176,7 @@ std::optional<sal_uInt16> XclExpSupbookBuffer::GetSupbookUrl(
         rxSupbook = maSupbookList.GetRecord( nPos );
         if( rxSupbook->IsUrlLink( rUrl ) )
         {
-           return ulimit_cast< sal_uInt16 >( nPos );
+            return ulimit_cast< sal_uInt16 >( nPos );
         }
     }
     return {};
@@ -2465,43 +2463,35 @@ void XclExpLinkManagerImpl8::StoreCellRange( sal_uInt16 nFileId, const OUString&
 
 std::optional<std::pair<sal_uInt16, sal_uInt16>> XclExpLinkManagerImpl8::InsertAddIn( const OUString& rName )
 {
-    sal_uInt16 nSupbook(0);
-    if( maSBBuffer.InsertAddIn( rName ) )
-    {
-       return std::make_pair(InsertXti( XclExpXti( nSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) ), 0);
-    }
+    const auto& rResult = maSBBuffer.InsertAddIn(rName);
+    if (rResult)
+       return std::make_pair(InsertXti( XclExpXti( rResult->first, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) ), rResult->second);
     return {};
 }
 
 std::optional<std::pair<sal_uInt16, sal_uInt16>> XclExpLinkManagerImpl8::InsertEuroTool( const OUString& rName )
 {
-    sal_uInt16 nSupbook(0);
-    if( maSBBuffer.InsertEuroTool( rName ) )
-    {
-        return std::make_pair(InsertXti( XclExpXti( nSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) ), 0);
-    }
+    const auto& rResult = maSBBuffer.InsertEuroTool(rName);
+    if (rResult)
+        return std::make_pair(InsertXti( XclExpXti( rResult->first, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) ), rResult->second);
     return {};
 }
 
 std::optional<std::pair<sal_uInt16, sal_uInt16>> XclExpLinkManagerImpl8::InsertDde(
      const OUString& rApplic, const OUString& rTopic, const OUString& rItem )
 {
-    sal_uInt16 nSupbook(0);
-    if( maSBBuffer.InsertDde( rApplic, rTopic, rItem ) )
-    {
-       return std::make_pair(InsertXti( XclExpXti( nSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) ), 0);
-    }
+    const auto& rResult = maSBBuffer.InsertDde(rApplic, rTopic, rItem);
+    if (rResult)
+       return std::make_pair(InsertXti( XclExpXti( rResult->first, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) ), rResult->second);
     return {};
 }
 
 std::optional<std::pair<sal_uInt16, sal_uInt16>> XclExpLinkManagerImpl8::InsertExtName( const OUString& rUrl, const OUString& rName,
 const ScExternalRefCache::TokenArrayRef& rArray )
 {
-    sal_uInt16 nSupbook(0);
-    if( maSBBuffer.InsertExtName( rUrl, rName, rArray ) )
-    {
-        return std::make_pair(InsertXti( XclExpXti( nSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) ), 0);
-    }
+    const auto& rResult = maSBBuffer.InsertExtName(rUrl, rName, rArray);
+    if (rResult)
+        return std::make_pair(InsertXti( XclExpXti( rResult->first, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) ), rResult->second);
     return {};
 }
 
