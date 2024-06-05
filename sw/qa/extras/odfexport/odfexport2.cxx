@@ -1684,6 +1684,20 @@ CPPUNIT_TEST_FIXTURE(Test, testDeletedTableAutostylesExport)
     loadAndReload("deleted_table.fodt");
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf160877, "tdf160877.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    uno::Reference<text::XText> xHeaderTextPage1 = getProperty<uno::Reference<text::XText>>(
+        getStyles("PageStyles")->getByName("Standard"), "HeaderTextFirst");
+    CPPUNIT_ASSERT_EQUAL(OUString("Classification: General Business"), xHeaderTextPage1->getString());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: (Sign GB)Test
+    // - Actual  : Test
+    CPPUNIT_ASSERT_EQUAL(OUString("(Sign GB)Test"), getParagraph(1)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testMidnightRedlineDatetime)
 {
     // Given a document with a tracked change with a midnight datetime:
