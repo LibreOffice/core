@@ -97,6 +97,7 @@
 #include "rtfexport.hxx"
 #include <IDocumentDeviceAccess.hxx>
 #include <sfx2/printer.hxx>
+#include <fmtftntx.hxx>
 
 using namespace ::com::sun::star;
 using namespace sw::util;
@@ -1367,6 +1368,23 @@ void RtfAttributeOutput::SectionBreak(sal_uInt8 nC, bool /*bBreakAfter*/,
                 m_rExport.SectionProperties(*pSectionInfo);
             break;
     }
+
+    // Endnotes included in the section:
+    if (!pSectionInfo)
+    {
+        return;
+    }
+    const SwSectionFormat* pSectionFormat = pSectionInfo->pSectionFormat;
+    if (!pSectionFormat || pSectionFormat == reinterpret_cast<SwSectionFormat*>(sal_IntPtr(-1)))
+    {
+        // MSWordExportBase::WriteText() can set the section format to -1, ignore.
+        return;
+    }
+    if (!pSectionFormat->GetEndAtTextEnd().IsAtEnd())
+    {
+        return;
+    }
+    m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_ENDNHERE);
 }
 
 void RtfAttributeOutput::StartSection()

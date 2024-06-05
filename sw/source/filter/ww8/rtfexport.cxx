@@ -70,6 +70,9 @@
 #include <frmatr.hxx>
 #include <swtable.hxx>
 #include <IMark.hxx>
+#include <fmtftntx.hxx>
+#include <ftnidx.hxx>
+#include <txtftn.hxx>
 
 using namespace ::com::sun::star;
 
@@ -798,7 +801,8 @@ ErrCode RtfExport::ExportDocument_Impl()
     // enable it on a per-section basis. OTOH don't always enable it as it
     // breaks moving of drawings - so write it only in case there is really a
     // protected section in the document.
-    for (auto const& pSectionFormat : m_rDoc.GetSections())
+    SwSectionFormats& rSections = m_rDoc.GetSections();
+    for (auto const& pSectionFormat : rSections)
     {
         if (!pSectionFormat->IsInUndo() && pSectionFormat->GetProtect().IsContentProtected())
         {
@@ -968,8 +972,55 @@ ErrCode RtfExport::ExportDocument_Impl()
 
         const SwEndNoteInfo& rEndNoteInfo = m_rDoc.GetEndNoteInfo();
 
+        if (!rSections.empty())
+        {
+            SwSectionFormat* pFormat = rSections[0];
+            bool bEndnAtEnd = pFormat->GetEndAtTextEnd().IsAtEnd();
+            if (bEndnAtEnd)
+            {
+                // Endnotes at end of section.
+                Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_AENDNOTES);
+            }
+            else
+            {
+                // Endnotes at end of document.
+                Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_AENDDOC);
+            }
+        }
+
+        // Types of notes that are present in the document:
+        Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_FET);
+        SwFootnoteIdxs& rFootnotes = m_rDoc.GetFootnoteIdxs();
+        bool bHasFootnote = false;
+        bool bHasEndnote = false;
+        for (const auto& pFootnote : rFootnotes)
+        {
+            if (pFootnote->GetFootnote().IsEndNote())
+            {
+                bHasEndnote = true;
+            }
+            else
+            {
+                bHasFootnote = true;
+            }
+
+            if (bHasFootnote && bHasEndnote)
+            {
+                break;
+            }
+        }
+        if (bHasFootnote && bHasEndnote)
+        {
+            // Both footnotes and endnotes.
+            Strm().WriteOString("2");
+        }
+        else if (bHasEndnote)
+        {
+            // Endnotes only.
+            Strm().WriteOString("1");
+        }
+
         Strm()
-            .WriteOString(OOO_STRING_SVTOOLS_RTF_AENDDOC)
             .WriteOString(OOO_STRING_SVTOOLS_RTF_AFTNRSTCONT)
             .WriteOString(OOO_STRING_SVTOOLS_RTF_AFTNSTART);
         Strm().WriteNumberAsString(rEndNoteInfo.m_nFootnoteOffset + 1);

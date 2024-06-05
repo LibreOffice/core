@@ -39,6 +39,7 @@
 #include <frmmgr.hxx>
 #include <formatflysplit.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
+#include <fmtftntx.hxx>
 
 using namespace css;
 
@@ -171,6 +172,36 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158586_lostFrame)
     verify();
     saveAndReload(mpFilter);
     verify();
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testEndnotesAtSectEndRTF)
+{
+    // Given a document, endnotes at collected at section end:
+    createSwDoc();
+    {
+        SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+        pWrtShell->SplitNode();
+        pWrtShell->Up(/*bSelect=*/false);
+        pWrtShell->Insert("x");
+        pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+        SwSectionData aSection(SectionType::Content, pWrtShell->GetUniqueSectionName());
+        pWrtShell->StartAction();
+        SfxItemSetFixed<RES_FTN_AT_TXTEND, RES_FRAMEDIR> aSet(pWrtShell->GetAttrPool());
+        aSet.Put(SwFormatEndAtTextEnd(FTNEND_ATTXTEND));
+        pWrtShell->InsertSection(aSection, &aSet);
+        pWrtShell->EndAction();
+        pWrtShell->InsertFootnote(OUString(), /*bEndNote=*/true);
+    }
+
+    // When saving to DOC:
+    saveAndReload(mpFilter);
+
+    // Then make sure the endnote position is section end:
+    SwDoc* pDoc = getSwDoc();
+    SwSectionFormats& rSections = pDoc->GetSections();
+    SwSectionFormat* pFormat = rSections[0];
+    // Without the accompanying fix in place, this test would have failed, endnotes were at doc end.
+    CPPUNIT_ASSERT(pFormat->GetEndAtTextEnd().IsAtEnd());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf158983)
