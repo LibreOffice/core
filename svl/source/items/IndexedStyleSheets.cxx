@@ -69,14 +69,18 @@ IndexedStyleSheets::Reindex()
 }
 
 void
-IndexedStyleSheets::ReindexOnNameChange(const OUString& rOldName, const OUString& rNewName)
+IndexedStyleSheets::ReindexOnNameChange(const SfxStyleSheetBase& style, const OUString& rOldName, const OUString& rNewName)
 {
-    auto it = mPositionsByName.find(rOldName);
-    if (it != mPositionsByName.end())
+    std::pair<MapType::const_iterator, MapType::const_iterator> range = mPositionsByName.equal_range(rOldName);
+    for (MapType::const_iterator it = range.first; it != range.second; ++it)
     {
-        unsigned nPos = it->second;
-        mPositionsByName.erase(it);
-        mPositionsByName.insert(std::make_pair(rNewName, nPos));
+        if (mStyleSheets[it->second].get() == &style)
+        {
+            unsigned nPos = it->second;
+            mPositionsByName.erase(it);
+            mPositionsByName.insert(std::make_pair(rNewName, nPos));
+            break;
+        }
     }
 }
 
