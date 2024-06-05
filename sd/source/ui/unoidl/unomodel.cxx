@@ -3802,26 +3802,25 @@ rtl::Reference< SdXImpressDocument > SdXImpressDocument::GetModel( SdDrawDocumen
     return xRet;
 }
 
-void NotifyDocumentEvent( SdDrawDocument const & rDocument, const OUString& rEventName )
+void NotifyDocumentEvent(SdDrawDocument const & rDocument, const OUString& rEventName)
 {
-    rtl::Reference< SdXImpressDocument > xModel( SdXImpressDocument::GetModel( rDocument ) );
+    rtl::Reference<SdXImpressDocument> xModel(SdXImpressDocument::GetModel(rDocument));
 
-    if( xModel.is() )
+    if (xModel.is())
     {
-        uno::Reference< uno::XInterface > xSource( static_cast<uno::XWeak*>( xModel.get() ) );
-        css::document::EventObject aEvent( xSource, rEventName );
-        xModel->notifyEvent(aEvent );
+        uno::Reference<uno::XInterface> xSource(static_cast<uno::XWeak*>(xModel.get()));
+        NotifyDocumentEvent(rDocument, rEventName, xSource);
     }
 }
 
-void NotifyDocumentEvent( SdDrawDocument const & rDocument, const OUString& rEventName, const uno::Reference< uno::XInterface >& xSource )
+void NotifyDocumentEvent(SdDrawDocument const & rDocument, const OUString& rEventName, const uno::Reference<uno::XInterface>& xSource)
 {
-    rtl::Reference< SdXImpressDocument > xModel( SdXImpressDocument::GetModel( rDocument ) );
+    rtl::Reference<SdXImpressDocument> xModel(SdXImpressDocument::GetModel(rDocument));
 
-    if( xModel.is() )
+    if (xModel.is())
     {
-        css::document::EventObject aEvent( xSource, rEventName );
-        xModel->notifyEvent(aEvent );
+        css::document::EventObject aEvent(xSource, rEventName);
+        xModel->notifyEvent(aEvent);
     }
 }
 
