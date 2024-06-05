@@ -672,7 +672,10 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
             rPam.GetPoint()->Assign( m_nEndNd - m_nOffset, m_nEndCnt );
             pDoc->getIDocumentContentOperations().DeleteAndJoin(rPam);
         }
-        rPam.DeleteMark();
+        if (*rPam.GetMark() == *rPam.GetPoint())
+            rPam.DeleteMark();
+        else
+            rPam.Normalize(false);
         pNd = pDoc->GetNodes()[ m_nSttNd - m_nOffset ]->GetTextNode();
         OSL_ENSURE( pNd, "Dude, where's my TextNode?" );
     }
@@ -712,8 +715,6 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
             }
         }
     }
-
-    rPam.GetPoint()->Assign( m_nSttNd, m_nSttCnt );
 }
 
 void SwUndoReplace::Impl::RedoImpl(::sw::UndoRedoContext & rContext)
@@ -751,7 +752,10 @@ void SwUndoReplace::Impl::RedoImpl(::sw::UndoRedoContext & rContext)
     }
 
     rDoc.getIDocumentContentOperations().ReplaceRange( rPam, m_sIns, m_bRegExp );
-    rPam.DeleteMark();
+    if (*rPam.GetMark() == *rPam.GetPoint())
+        rPam.DeleteMark();
+    else
+        rPam.Normalize(false);
 }
 
 void SwUndoReplace::Impl::SetEnd(SwPaM const& rPam)
