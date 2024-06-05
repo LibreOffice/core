@@ -103,7 +103,7 @@ def read_clipboard(clipboard):
             "HumanPresentableName:", flavor.HumanPresentableName)
 
         # Select the flavor that supports utf-16
-        # str.casefold() allows reliable case-insensitive comparision
+        # str.casefold() allows reliable case-insensitive comparison
         if flavor.MimeType.casefold() == TextTransferable.UNICODE_CONTENT_TYPE.casefold():
             unicode_flavor = flavor
     print()
