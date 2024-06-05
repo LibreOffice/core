@@ -163,24 +163,24 @@ bool SfxStyleSheetBase::SetName(const OUString& rName, bool bReIndexNow)
     if(rName.isEmpty())
         return false;
 
-    if( aName == rName )
-        return true;
+    if( aName != rName )
+    {
+        OUString aOldName = aName;
+        SfxStyleSheetBase *pOther = m_pPool->Find( rName, nFamily ) ;
+        if ( pOther && pOther != this )
+            return false;
 
-    OUString aOldName = aName;
-    SfxStyleSheetBase *pOther = m_pPool->Find( rName, nFamily ) ;
-    if ( pOther && pOther != this )
-        return false;
+        if ( !aName.isEmpty() )
+            m_pPool->ChangeParent(aName, rName, nFamily, false);
 
-    if ( !aName.isEmpty() )
-        m_pPool->ChangeParent(aName, rName, nFamily, false);
+        if ( aFollow == aName )
+            aFollow = rName;
+        aName = rName;
+        if (bReIndexNow)
+            m_pPool->Reindex();
 
-    if ( aFollow == aName )
-        aFollow = rName;
-    aName = rName;
-    if (bReIndexNow)
-        m_pPool->ReindexOnNameChange(aOldName, rName);
-
-    m_pPool->Broadcast( SfxStyleSheetModifiedHint( aOldName, *this ) );
+        m_pPool->Broadcast( SfxStyleSheetModifiedHint( aOldName, *this ) );
+    }
     return true;
 }
 
@@ -913,12 +913,6 @@ void
 SfxStyleSheetBasePool::Reindex()
 {
     pImpl->mxIndexedStyleSheets->Reindex();
-}
-
-void
-SfxStyleSheetBasePool::ReindexOnNameChange(const OUString& rOldName, const OUString& rNewName)
-{
-    pImpl->mxIndexedStyleSheets->ReindexOnNameChange(rOldName, rNewName);
 }
 
 const svl::IndexedStyleSheets&
