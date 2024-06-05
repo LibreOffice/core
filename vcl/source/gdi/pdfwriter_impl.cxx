@@ -80,6 +80,7 @@
 #include <vcl/filter/pdfdocument.hxx>
 #include <vcl/filter/PngImageReader.hxx>
 #include <comphelper/hash.hxx>
+#include <vcl/pdf/PDFNote.hxx>
 
 #include <svdata.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
@@ -540,7 +541,6 @@ void appendDouble( double fValue, OStringBuffer& rBuffer, sal_Int32 nPrecision =
 
 void appendColor( const Color& rColor, OStringBuffer& rBuffer, bool bConvertToGrey )
 {
-
     if( rColor == COL_TRANSPARENT )
         return;
 
@@ -3918,7 +3918,7 @@ namespace
 
 void appendAnnotationRect(tools::Rectangle const & rRectangle, OStringBuffer & aLine)
 {
-    aLine.append("/Rect[");
+    aLine.append("/Rect [");
     appendFixedInt(rRectangle.Left(), aLine);
     aLine.append(' ');
     appendFixedInt(rRectangle.Top(), aLine);
@@ -3929,74 +3929,120 @@ void appendAnnotationRect(tools::Rectangle const & rRectangle, OStringBuffer & a
     aLine.append("] ");
 }
 
+void appendAnnotationColor(Color const& rColor, OStringBuffer & aLine)
+{
+    aLine.append("/C [");
+    appendColor(rColor, aLine, false);
+    aLine.append("] ");
+}
+
+void appendAnnotationInteriorColor(Color const& rColor, OStringBuffer & aLine)
+{
+    aLine.append("/IC [");
+    appendColor(rColor, aLine, false);
+    aLine.append("] ");
+}
+
+void appendPolygon(basegfx::B2DPolygon const& rPolygon, double fPageHeight, OStringBuffer & aLine)
+{
+    for (sal_uInt32 i = 0; i < rPolygon.count(); ++i)
+    {
+        appendDouble(convertMm100ToPoint(rPolygon.getB2DPoint(i).getX()), aLine, nLog10Divisor);
+        aLine.append(" ");
+        appendDouble(fPageHeight - convertMm100ToPoint(rPolygon.getB2DPoint(i).getY()), aLine, nLog10Divisor);
+        aLine.append(" ");
+    }
+}
+
+void appendVertices(basegfx::B2DPolygon const& rPolygon, double fPageHeight, OStringBuffer & aLine)
+{
+    aLine.append("/Vertices [");
+    appendPolygon(rPolygon, fPageHeight, aLine);
+    aLine.append("] ");
+
+}
+
+void appendAnnotationBorder(float fBorderWidth, OStringBuffer & aLine)
+{
+    aLine.append("/Border [0 0 ");
+    appendDouble(convertMm100ToPoint(fBorderWidth), aLine, nLog10Divisor);
+    aLine.append("] ");
+}
+
 } // end anonymous namespace
 
 void PDFWriterImpl::emitTextAnnotationLine(OStringBuffer & aLine, PDFNoteEntry const & rNote)
 {
     appendObjectID(rNote.m_nObject, aLine);
 
-    aLine.append("<</Type /Annot /Subtype ");
-    if (rNote.m_aContents.maPolygons.size() == 1)
+    double fPageHeight = m_aPages[rNote.m_nPage].getHeight();
+
+    aLine.append("<</Type /Annot ");
+
+    appendAnnotationRect(rNote.m_aRect, aLine);
+
+    aLine.append("/Subtype ");
+
+    if (rNote.m_aContents.meType == vcl::pdf::PDFAnnotationSubType::Polygon ||
+        rNote.m_aContents.meType == vcl::pdf::PDFAnnotationSubType::Polyline)
     {
         auto const& rPolygon = rNote.m_aContents.maPolygons[0];
-        aLine.append(rPolygon.isClosed() ? "/Polygon " : "/Polyline ");
-        aLine.append("/Vertices [");
-        for (sal_uInt32 i = 0; i < rPolygon.count(); ++i)
-        {
-            appendDouble(convertMm100ToPoint(rPolygon.getB2DPoint(i).getX()), aLine, nLog10Divisor);
-            aLine.append(" ");
-            appendDouble(m_aPages[rNote.m_nPage].getHeight()
-                             - convertMm100ToPoint(rPolygon.getB2DPoint(i).getY()),
-                         aLine, nLog10Divisor);
-            aLine.append(" ");
-        }
-        aLine.append("] ");
-        aLine.append("/C [");
-        appendColor(rNote.m_aContents.annotColor, aLine, false);
-        aLine.append("] ");
-        if (rPolygon.isClosed())
-        {
-            aLine.append("/IC [");
-            appendColor(rNote.m_aContents.interiorColor, aLine, false);
-            aLine.append("] ");
-        }
+        if (rNote.m_aContents.meType == vcl::pdf::PDFAnnotationSubType::Polygon)
+            aLine.append("/Polygon ");
+        else
+            aLine.append("/Polyline ");
+
+        appendVertices(rPolygon, fPageHeight, aLine);
+        appendAnnotationColor(rNote.m_aContents.maAnnotationColor, aLine);
+
+        if (rNote.m_aContents.meType == vcl::pdf::PDFAnnotationSubType::Polygon)
+            appendAnnotationInteriorColor(rNote.m_aContents.maInteriorColor, aLine);
+        appendAnnotationBorder(rNote.m_aContents.mfWidth, aLine);
     }
-    else if (rNote.m_aContents.maPolygons.size() > 1)
+    else if (rNote.m_aContents.meType == vcl::pdf::PDFAnnotationSubType::Square)
     {
-        aLine.append("/Ink /InkList [");
+        aLine.append("/Square ");
+        appendAnnotationColor(rNote.m_aContents.maAnnotationColor, aLine);
+        appendAnnotationInteriorColor(rNote.m_aContents.maInteriorColor, aLine);
+        appendAnnotationBorder(rNote.m_aContents.mfWidth, aLine);
+    }
+    else if (rNote.m_aContents.meType == vcl::pdf::PDFAnnotationSubType::Circle)
+    {
+        aLine.append("/Circle ");
+        appendAnnotationColor(rNote.m_aContents.maAnnotationColor, aLine);
+        appendAnnotationInteriorColor(rNote.m_aContents.maInteriorColor, aLine);
+        appendAnnotationBorder(rNote.m_aContents.mfWidth, aLine);
+    }
+    else if (rNote.m_aContents.meType == vcl::pdf::PDFAnnotationSubType::Ink)
+    {
+        aLine.append("/Ink ");
+
+        aLine.append("/InkList [");
         for (auto const& rPolygon : rNote.m_aContents.maPolygons)
         {
             aLine.append("[");
-            for (sal_uInt32 i = 0; i < rPolygon.count(); ++i)
-            {
-                appendDouble(convertMm100ToPoint(rPolygon.getB2DPoint(i).getX()), aLine,
-                             nLog10Divisor);
-                aLine.append(" ");
-                appendDouble(m_aPages[rNote.m_nPage].getHeight()
-                                 - convertMm100ToPoint(rPolygon.getB2DPoint(i).getY()),
-                             aLine, nLog10Divisor);
-                aLine.append(" ");
-            }
+            appendPolygon(rPolygon, fPageHeight, aLine);
             aLine.append("]");
-            aLine.append("/C [");
-            appendColor(rNote.m_aContents.annotColor, aLine, false);
-            aLine.append("] ");
         }
         aLine.append("] ");
-    }
-    else if (rNote.m_aContents.isFreeText)
-        aLine.append("/FreeText ");
-    else
-        aLine.append("/Text ");
 
-    aLine.append("/BS<</W 0>>");
+        appendAnnotationColor(rNote.m_aContents.maAnnotationColor, aLine);
+        appendAnnotationBorder(rNote.m_aContents.mfWidth, aLine);
+
+    }
+    else if (rNote.m_aContents.meType == vcl::pdf::PDFAnnotationSubType::FreeText)
+    {
+        aLine.append("/FreeText ");
+    }
+    else
+    {
+        aLine.append("/Text ");
+    }
 
     // i59651: key /F set bits Print to 1 rest to 0. We don't set NoZoom NoRotate to 1, since it's a 'should'
     // see PDF 8.4.2 and ISO 19005-1:2005 6.5.3
     if (m_bIsPDF_A1 || m_bIsPDF_A2 || m_bIsPDF_A3)
         aLine.append("/F 4 ");
-
-    appendAnnotationRect(rNote.m_aRect, aLine);
 
     aLine.append("/Popup ");
     appendObjectReference(rNote.m_aPopUpAnnotation.m_nObject, aLine);
@@ -4009,14 +4055,14 @@ void PDFWriterImpl::emitTextAnnotationLine(OStringBuffer & aLine, PDFNoteEntry c
 
     // contents of the note (type text string)
     aLine.append("/Contents ");
-    appendUnicodeTextStringEncrypt(rNote.m_aContents.Contents, rNote.m_nObject, aLine);
+    appendUnicodeTextStringEncrypt(rNote.m_aContents.maContents, rNote.m_nObject, aLine);
     aLine.append("\n");
 
     // optional title
-    if (!rNote.m_aContents.Title.isEmpty())
+    if (!rNote.m_aContents.maTitle.isEmpty())
     {
         aLine.append("/T ");
-        appendUnicodeTextStringEncrypt(rNote.m_aContents.Title, rNote.m_nObject, aLine);
+        appendUnicodeTextStringEncrypt(rNote.m_aContents.maTitle, rNote.m_nObject, aLine);
         aLine.append("\n");
     }
     aLine.append(">>\n");
@@ -10420,7 +10466,7 @@ void PDFWriterImpl::intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion 
     }
 }
 
-void PDFWriterImpl::createNote( const tools::Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr )
+void PDFWriterImpl::createNote( const tools::Rectangle& rRect, const pdf::PDFNote& rNote, sal_Int32 nPageNr )
 {
     if (nPageNr < 0)
         nPageNr = m_nCurrentPage;

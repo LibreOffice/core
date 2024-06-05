@@ -60,16 +60,7 @@ namespace vcl
 class PDFExtOutDevData;
 class PDFWriterImpl;
 
-struct PDFNote
-{
-    OUString          Title;          // optional title for the popup containing the note
-    OUString          Contents;       // contents of the note
-    css::util::DateTime maModificationDate;
-    bool isFreeText = false;
-    std::vector<basegfx::B2DPolygon> maPolygons;
-    Color annotColor;
-    Color interiorColor;
-};
+namespace pdf { struct PDFNote; }
 
 class VCL_DLLPUBLIC PDFOutputStream
 {
@@ -1058,7 +1049,7 @@ The following structure describes the permissions used in PDF security
     number of page the note is on (as returned by NewPage)
     or -1 in which case the current page is used
     */
-    void CreateNote( const tools::Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr );
+    void CreateNote( const tools::Rectangle& rRect, const vcl::pdf::PDFNote& rNote, sal_Int32 nPageNr );
 
     /** begin a new logical structure element
 

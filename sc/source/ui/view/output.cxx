@@ -35,6 +35,7 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/pdf/PDFNote.hxx>
 #include <svx/unoapi.hxx>
 #include <sal/log.hxx>
 #include <comphelper/lok.hxx>
@@ -2668,15 +2669,15 @@ void ScOutputData::AddPDFNotes()
                     {
                         tools::Rectangle aNoteRect( nMarkX, nPosY, nMarkX+nNoteWidth*nLayoutSign, nPosY+nNoteHeight );
 
-                        vcl::PDFNote aNote;
+                        vcl::pdf::PDFNote aNote;
 
                         // Note title is the cell address (as on printed note pages)
                         ScAddress aAddress( nMergeX, nMergeY, nTab );
-                        aNote.Title = aAddress.Format(ScRefFlags::VALID, mpDoc, mpDoc->GetAddressConvention());
+                        aNote.maTitle = aAddress.Format(ScRefFlags::VALID, mpDoc, mpDoc->GetAddressConvention());
 
                         // Content has to be a simple string without line breaks
                         OUString aContent = pNote->GetText();
-                        aNote.Contents = aContent.replaceAll("\n", " ");
+                        aNote.maContents = aContent.replaceAll("\n", " ");
 
                         pPDFData->CreateNote( aNoteRect, aNote );
                     }
