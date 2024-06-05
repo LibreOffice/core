@@ -267,7 +267,13 @@ bool SfxObjectShell::IsEnableSetModified() const
     // which the user didn't load or activate to modified.
     return pImpl->m_bEnableSetModified && !IsPreview()
         && eCreateMode != SfxObjectCreateMode::ORGANIZER
-        && eCreateMode != SfxObjectCreateMode::INTERNAL;
+        && eCreateMode != SfxObjectCreateMode::INTERNAL
+        // tdf#157931 form documents only in design mode
+        && ((pImpl->pBaseModel
+                && !pImpl->pBaseModel->impl_isDisposed()
+                && pImpl->pBaseModel->IsInitialized()
+                && pImpl->pBaseModel->getIdentifier() != "com.sun.star.sdb.FormDesign")
+            || !IsReadOnly());
 }
 
 
