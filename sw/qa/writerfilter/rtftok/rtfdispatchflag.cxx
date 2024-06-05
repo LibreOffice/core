@@ -13,6 +13,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 
 using namespace ::com::sun::star;
 
@@ -99,6 +100,28 @@ CPPUNIT_TEST_FIXTURE(Test, testTblOverlap)
     // Without the accompanying fix in place, this test would have failed, the tables were marked as
     // "can overlap".
     CPPUNIT_ASSERT(!bAllowOverlap);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testEndnoteAtSectionEndRTFImport)
+{
+    // Given a document with at-section-end endnotes enabled:
+    // When loading that document:
+    loadFromFile(u"endnote-at-section-end.rtf");
+
+    // Go to the second paragraph, which is inside Word's second section:
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    xParaEnum->nextElement();
+    uno::Reference<beans::XPropertySet> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xSection;
+    xPara->getPropertyValue("TextSection") >>= xSection;
+    bool bEndnoteIsCollectAtTextEnd = false;
+    xSection->getPropertyValue("EndnoteIsCollectAtTextEnd") >>= bEndnoteIsCollectAtTextEnd;
+    // Without the accompanying fix in place, this test would have failed, endnotes were always at
+    // document end.
+    CPPUNIT_ASSERT(bEndnoteIsCollectAtTextEnd);
 }
 }
 

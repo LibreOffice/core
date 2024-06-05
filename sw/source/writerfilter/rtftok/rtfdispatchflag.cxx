@@ -925,8 +925,13 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         break;
         case RTFKeyword::AENDDOC:
             // Noop, this is the default in Writer.
+            break;
         case RTFKeyword::AENDNOTES:
-            // Noop
+        {
+            auto pValue = new RTFValue(NS_ooxml::LN_Value_ST_EdnPos_sectEnd);
+            m_aSettingsTableSprms.set(NS_ooxml::LN_CT_EdnProps_pos, pValue);
+        }
+        break;
         case RTFKeyword::AFTNRSTCONT:
             // Noop, this is the default in Writer.
         case RTFKeyword::AFTNRESTART:
