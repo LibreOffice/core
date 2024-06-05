@@ -351,6 +351,9 @@ XMLImpHyperlinkContext_Impl::XMLImpHyperlinkContext_Impl(
         case XML_ELEMENT(TEXT, XML_VISITED_STYLE_NAME):
             mpHint->SetVisitedStyleName( sValue );
             break;
+        case XML_ELEMENT(XLINK, XML_TYPE):
+            // don't show warning for this
+            break;
         default:
             XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
