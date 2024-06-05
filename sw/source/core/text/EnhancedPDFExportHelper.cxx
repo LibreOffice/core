@@ -28,6 +28,7 @@
 #include <sot/exchange.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
+#include <vcl/pdf/PDFNote.hxx>
 #include <tools/multisel.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -2173,11 +2174,11 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                     const Color* pColor;
                     pNumFormatter->GetOutputString(aDateDiff.GetDate(), nFormat, sDate, &pColor);
 
-                    vcl::PDFNote aNote;
+                    vcl::pdf::PDFNote aNote;
                     // The title should consist of the author and the date:
-                    aNote.Title = pField->GetPar1() + ", " + sDate + ", " + (pField->GetResolved() ? SwResId(STR_RESOLVED) : "");
+                    aNote.maTitle = pField->GetPar1() + ", " + sDate + ", " + (pField->GetResolved() ? SwResId(STR_RESOLVED) : "");
                     // Guess what the contents contains...
-                    aNote.Contents = pField->GetText();
+                    aNote.maContents = pField->GetText();
 
                     // Link Export
                     tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, rNoteRect.SVRect()));

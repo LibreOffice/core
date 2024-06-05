@@ -55,6 +55,7 @@
 #include <comphelper/hash.hxx>
 #include <tools/stream.hxx>
 #include <vcl/BinaryDataContainer.hxx>
+#include <vcl/pdf/PDFNote.hxx>
 
 #include <vcl/filter/pdfobjectcontainer.hxx>
 #include <vcl/settings.hxx>
@@ -458,7 +459,7 @@ struct PDFPopupAnnotation : public PDFAnnotation
 
 struct PDFNoteEntry : public PDFAnnotation
 {
-    PDFNote m_aContents;
+    vcl::pdf::PDFNote m_aContents;
 
     PDFPopupAnnotation m_aPopUpAnnotation;
 

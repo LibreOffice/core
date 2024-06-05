@@ -34,6 +34,7 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/pdf/PDFNote.hxx>
 #include <svx/unoapi.hxx>
 #include <sal/log.hxx>
 #include <comphelper/lok.hxx>
@@ -2603,9 +2604,9 @@ void ScOutputData::AddPDFNotes()
                         OUString aContent = pNote->GetText();
                         aContent = aContent.replaceAll("\n", " ");
 
-                        vcl::PDFNote aNote;
-                        aNote.Title = aTitle;
-                        aNote.Contents = aContent;
+                        vcl::pdf::PDFNote aNote;
+                        aNote.maTitle = aTitle;
+                        aNote.maContents = aContent;
                         pPDFData->CreateNote( aNoteRect, aNote );
                     }
                 }

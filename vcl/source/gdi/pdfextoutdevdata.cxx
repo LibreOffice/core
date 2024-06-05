@@ -24,6 +24,7 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/pdf/PDFNote.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <sal/log.hxx>
@@ -88,12 +89,14 @@ struct CreateOutlineItem {
     sal_Int32 mnParent;
     sal_Int32 mnDestID;
 };
+
 struct CreateNote {
     MapMode maParaMapMode;
-    PDFNote maParaPDFNote;
+    vcl::pdf::PDFNote maParaPDFNote;
     tools::Rectangle maParaRect;
     sal_Int32 mnPage;
 };
+
 struct SetPageTransition {
     PDFWriter::PageTransition maParaPageTransition;
     sal_uInt32 mnMilliSec;
@@ -720,7 +723,7 @@ sal_Int32 PDFExtOutDevData::CreateOutlineItem( sal_Int32 nParent, const OUString
     mpGlobalSyncData->mActions.push_back( vcl::CreateOutlineItem{ rText, nParent, nDestID } );
     return mpGlobalSyncData->mCurId++;
 }
-void PDFExtOutDevData::CreateNote( const tools::Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr )
+void PDFExtOutDevData::CreateNote( const tools::Rectangle& rRect, const vcl::pdf::PDFNote& rNote, sal_Int32 nPageNr )
 {
     mpGlobalSyncData->mActions.push_back(
         vcl::CreateNote{ mrOutDev.GetMapMode(), rNote, rRect, nPageNr == -1 ? mnPage : nPageNr } );
