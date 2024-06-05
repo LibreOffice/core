@@ -777,7 +777,7 @@ void SAL_CALL SwXTextView::removeVetoableChangeListener(
 
 OUString SwXTextView::getImplementationName()
 {
-    return "SwXTextView";
+    return u"SwXTextView"_ustr;
 }
 
 sal_Bool SwXTextView::supportsService(const OUString& rServiceName)
@@ -787,7 +787,7 @@ sal_Bool SwXTextView::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXTextView::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.TextDocumentView", "com.sun.star.view.OfficeDocumentView" };
+    return { u"com.sun.star.text.TextDocumentView"_ustr, u"com.sun.star.view.OfficeDocumentView"_ustr };
 }
 
 SwXTextViewCursor::SwXTextViewCursor(SwView* pVw) :
@@ -866,7 +866,7 @@ void SwXTextViewCursor::collapseToStart()
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", getXWeak() );
+        throw  uno::RuntimeException(u"no text selection"_ustr, getXWeak() );
 
     SwWrtShell& rSh = m_pView->GetWrtShell();
     if(rSh.HasSelection())
@@ -888,7 +888,7 @@ void SwXTextViewCursor::collapseToEnd()
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", getXWeak() );
+        throw  uno::RuntimeException(u"no text selection"_ustr, getXWeak() );
 
     SwWrtShell& rSh = m_pView->GetWrtShell();
     if(rSh.HasSelection())
@@ -911,7 +911,7 @@ sal_Bool SwXTextViewCursor::isCollapsed()
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", getXWeak() );
+        throw  uno::RuntimeException(u"no text selection"_ustr, getXWeak() );
 
     const SwWrtShell& rSh = m_pView->GetWrtShell();
     bRet = !rSh.HasSelection();
@@ -928,7 +928,7 @@ sal_Bool SwXTextViewCursor::goLeft(sal_Int16 nCount, sal_Bool bExpand)
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", getXWeak() );
+        throw  uno::RuntimeException(u"no text selection"_ustr, getXWeak() );
 
     bRet = m_pView->GetWrtShell().Left( SwCursorSkipMode::Chars, bExpand, nCount, true );
 
@@ -943,7 +943,7 @@ sal_Bool SwXTextViewCursor::goRight(sal_Int16 nCount, sal_Bool bExpand)
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", getXWeak() );
+        throw  uno::RuntimeException(u"no text selection"_ustr, getXWeak() );
 
     bRet = m_pView->GetWrtShell().Right( SwCursorSkipMode::Chars, bExpand, nCount, true );
 
@@ -960,7 +960,7 @@ void SwXTextViewCursor::gotoRange(
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", getXWeak() );
+        throw  uno::RuntimeException(u"no text selection"_ustr, getXWeak() );
 
     SwUnoInternalPaM rDestPam(*m_pView->GetDocShell()->GetDoc());
     if (!::sw::XTextRangeToSwPaM(rDestPam, xRange))
@@ -1088,7 +1088,7 @@ void SwXTextViewCursor::gotoStart(sal_Bool bExpand)
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", getXWeak() );
+        throw  uno::RuntimeException(u"no text selection"_ustr, getXWeak() );
 
     m_pView->GetWrtShell().StartOfSection( bExpand );
 
@@ -1102,7 +1102,7 @@ void SwXTextViewCursor::gotoEnd(sal_Bool bExpand)
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", getXWeak() );
+        throw  uno::RuntimeException(u"no text selection"_ustr, getXWeak() );
 
     m_pView->GetWrtShell().EndOfSection( bExpand );
 
@@ -1259,7 +1259,7 @@ uno::Reference< text::XText >  SwXTextViewCursor::getText()
         throw uno::RuntimeException();
 
     if (!IsTextSelection( false ))
-        throw  uno::RuntimeException("no text selection", getXWeak() );
+        throw  uno::RuntimeException(u"no text selection"_ustr, getXWeak() );
 
     SwWrtShell& rSh = m_pView->GetWrtShell();
     SwPaM* pShellCursor = rSh.GetCursor();
@@ -1277,7 +1277,7 @@ uno::Reference< text::XTextRange > SwXTextViewCursor::getStart()
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", getXWeak() );
+        throw  uno::RuntimeException(u"no text selection"_ustr, getXWeak() );
 
     SwWrtShell& rSh = m_pView->GetWrtShell();
     SwPaM* pShellCursor = rSh.GetCursor();
@@ -1295,7 +1295,7 @@ uno::Reference< text::XTextRange > SwXTextViewCursor::getEnd()
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", getXWeak() );
+        throw  uno::RuntimeException(u"no text selection"_ustr, getXWeak() );
 
     SwWrtShell& rSh = m_pView->GetWrtShell();
     SwPaM* pShellCursor = rSh.GetCursor();
@@ -1348,7 +1348,7 @@ void SwXTextViewCursor::setString(const OUString& aString)
         return;
 
     if (!IsTextSelection( false ))
-        throw  uno::RuntimeException("no text selection", getXWeak() );
+        throw  uno::RuntimeException(u"no text selection"_ustr, getXWeak() );
 
     ShellMode eSelMode = m_pView->GetShellMode();
     switch(eSelMode)
@@ -1495,7 +1495,7 @@ sal_Bool SwXTextViewCursor::goDown(sal_Int16 nCount, sal_Bool bExpand)
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", getXWeak() );
+        throw  uno::RuntimeException(u"no text selection"_ustr, getXWeak() );
 
     bRet = m_pView->GetWrtShell().Down( bExpand, nCount, true );
 
@@ -1511,7 +1511,7 @@ sal_Bool SwXTextViewCursor::goUp(sal_Int16 nCount, sal_Bool bExpand)
         throw uno::RuntimeException();
 
     if (!IsTextSelection())
-        throw  uno::RuntimeException("no text selection", getXWeak() );
+        throw  uno::RuntimeException(u"no text selection"_ustr, getXWeak() );
 
     bRet = m_pView->GetWrtShell().Up( bExpand, nCount, true );
 
@@ -1526,7 +1526,7 @@ sal_Bool SwXTextViewCursor::isAtStartOfLine()
         throw uno::RuntimeException();
 
     if (!IsTextSelection( false ))
-        throw  uno::RuntimeException("no text selection", getXWeak() );
+        throw  uno::RuntimeException(u"no text selection"_ustr, getXWeak() );
 
     bRet = m_pView->GetWrtShell().IsAtLeftMargin();
 
@@ -1541,7 +1541,7 @@ sal_Bool SwXTextViewCursor::isAtEndOfLine()
         throw uno::RuntimeException();
 
     if (!IsTextSelection( false ))
-        throw  uno::RuntimeException("no text selection", getXWeak() );
+        throw  uno::RuntimeException(u"no text selection"_ustr, getXWeak() );
 
     bRet = m_pView->GetWrtShell().IsAtRightMargin();
 
@@ -1555,7 +1555,7 @@ void SwXTextViewCursor::gotoEndOfLine(sal_Bool bExpand)
         throw uno::RuntimeException();
 
     if (!IsTextSelection( false ))
-        throw  uno::RuntimeException("no text selection", getXWeak() );
+        throw  uno::RuntimeException(u"no text selection"_ustr, getXWeak() );
 
     m_pView->GetWrtShell().RightMargin(bExpand, true);
 
@@ -1568,7 +1568,7 @@ void SwXTextViewCursor::gotoStartOfLine(sal_Bool bExpand)
         throw uno::RuntimeException();
 
     if (!IsTextSelection( false ))
-        throw  uno::RuntimeException("no text selection", getXWeak() );
+        throw  uno::RuntimeException(u"no text selection"_ustr, getXWeak() );
 
     m_pView->GetWrtShell().LeftMargin(bExpand, true);
 
@@ -1576,7 +1576,7 @@ void SwXTextViewCursor::gotoStartOfLine(sal_Bool bExpand)
 
 OUString SwXTextViewCursor::getImplementationName()
 {
-    return "SwXTextViewCursor";
+    return u"SwXTextViewCursor"_ustr;
 }
 
 sal_Bool SwXTextViewCursor::supportsService(const OUString& rServiceName)
@@ -1586,13 +1586,13 @@ sal_Bool SwXTextViewCursor::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXTextViewCursor::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.TextViewCursor",
-             "com.sun.star.style.CharacterProperties",
-             "com.sun.star.style.CharacterPropertiesAsian",
-             "com.sun.star.style.CharacterPropertiesComplex",
-             "com.sun.star.style.ParagraphProperties",
-             "com.sun.star.style.ParagraphPropertiesAsian",
-             "com.sun.star.style.ParagraphPropertiesComplex" };
+    return { u"com.sun.star.text.TextViewCursor"_ustr,
+             u"com.sun.star.style.CharacterProperties"_ustr,
+             u"com.sun.star.style.CharacterPropertiesAsian"_ustr,
+             u"com.sun.star.style.CharacterPropertiesComplex"_ustr,
+             u"com.sun.star.style.ParagraphProperties"_ustr,
+             u"com.sun.star.style.ParagraphPropertiesAsian"_ustr,
+             u"com.sun.star.style.ParagraphPropertiesComplex"_ustr };
 }
 
 const SwDoc*        SwXTextViewCursor::GetDoc() const
@@ -1628,7 +1628,7 @@ SwXTextView::getTransferableForTextRange(uno::Reference<text::XTextRange> const&
     SwUnoInternalPaM aPam(*m_pView->GetDocShell()->GetDoc());
     if (!::sw::XTextRangeToSwPaM(aPam, xTextRange, ::sw::TextRangeMode::AllowNonTextNode))
     {
-        throw uno::RuntimeException("invalid text range");
+        throw uno::RuntimeException(u"invalid text range"_ustr);
     }
 
     //force immediate shell update

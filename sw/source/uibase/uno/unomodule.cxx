@@ -133,7 +133,7 @@ uno::Reference< frame::XDispatch > SAL_CALL SwUnoModule::queryDispatch(
 // XServiceInfo
 OUString SAL_CALL SwUnoModule::getImplementationName(  )
 {
-    return "com.sun.star.comp.Writer.WriterModule";
+    return u"com.sun.star.comp.Writer.WriterModule"_ustr;
 }
 
 sal_Bool SAL_CALL SwUnoModule::supportsService( const OUString& sServiceName )
@@ -143,7 +143,7 @@ sal_Bool SAL_CALL SwUnoModule::supportsService( const OUString& sServiceName )
 
 uno::Sequence< OUString > SAL_CALL SwUnoModule::getSupportedServiceNames(  )
 {
-    uno::Sequence<OUString> aSeq { "com.sun.star.text.ModuleDispatcher" };
+    uno::Sequence<OUString> aSeq { u"com.sun.star.text.ModuleDispatcher"_ustr };
     return aSeq;
 }
 

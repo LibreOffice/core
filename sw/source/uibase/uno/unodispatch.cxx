@@ -94,7 +94,7 @@ uno::Sequence<OUString> SAL_CALL SwXDispatchProviderInterceptor::getInterceptedU
 {
     uno::Sequence<OUString> aRet =
     {
-         OUString(".uno:DataSourceBrowser/*")
+         u".uno:DataSourceBrowser/*"_ustr
     };
 
     return aRet;

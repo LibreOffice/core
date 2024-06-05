@@ -55,13 +55,13 @@ void GetTextFormFields(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
     OUString aType;
     OUString aCommandPrefix;
     {
-        auto it = rArguments.find("type");
+        auto it = rArguments.find(u"type"_ustr);
         if (it != rArguments.end())
         {
             aType = it->second;
         }
 
-        it = rArguments.find("commandPrefix");
+        it = rArguments.find(u"commandPrefix"_ustr);
         if (it != rArguments.end())
         {
             aCommandPrefix = it->second;
@@ -110,13 +110,13 @@ void GetTextFormField(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
 {
     OUString aType;
     OUString aCommandPrefix;
-    auto it = rArguments.find("type");
+    auto it = rArguments.find(u"type"_ustr);
     if (it != rArguments.end())
     {
         aType = it->second;
     }
 
-    it = rArguments.find("commandPrefix");
+    it = rArguments.find(u"commandPrefix"_ustr);
     if (it != rArguments.end())
     {
         aCommandPrefix = it->second;
@@ -163,7 +163,7 @@ void GetDocumentProperties(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell
                            const std::map<OUString, OUString>& rArguments)
 {
     OUString aNamePrefix;
-    auto it = rArguments.find("namePrefix");
+    auto it = rArguments.find(u"namePrefix"_ustr);
     if (it != rArguments.end())
     {
         aNamePrefix = it->second;
@@ -208,7 +208,7 @@ void GetBookmarks(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
 {
     OUString aNamePrefix;
     {
-        auto it = rArguments.find("namePrefix");
+        auto it = rArguments.find(u"namePrefix"_ustr);
         if (it != rArguments.end())
         {
             aNamePrefix = it->second;
@@ -240,7 +240,7 @@ void GetBookmark(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
 {
     OUString aNamePrefix;
     {
-        auto it = rArguments.find("namePrefix");
+        auto it = rArguments.find(u"namePrefix"_ustr);
         if (it != rArguments.end())
         {
             aNamePrefix = it->second;
@@ -276,7 +276,7 @@ void GetFields(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
 {
     OUString aTypeName;
     {
-        auto it = rArguments.find("typeName");
+        auto it = rArguments.find(u"typeName"_ustr);
         if (it != rArguments.end())
         {
             aTypeName = it->second;
@@ -290,7 +290,7 @@ void GetFields(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
 
     OUString aNamePrefix;
     {
-        auto it = rArguments.find("namePrefix");
+        auto it = rArguments.find(u"namePrefix"_ustr);
         if (it != rArguments.end())
         {
             aNamePrefix = it->second;
@@ -337,7 +337,7 @@ void GetField(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
 {
     OUString aTypeName;
     {
-        auto it = rArguments.find("typeName");
+        auto it = rArguments.find(u"typeName"_ustr);
         if (it != rArguments.end())
         {
             aTypeName = it->second;
@@ -351,7 +351,7 @@ void GetField(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
 
     OUString aNamePrefix;
     {
-        auto it = rArguments.find("namePrefix");
+        auto it = rArguments.find(u"namePrefix"_ustr);
         if (it != rArguments.end())
         {
             aNamePrefix = it->second;
@@ -388,7 +388,7 @@ void GetSections(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
 {
     OUString aNamePrefix;
     {
-        auto it = rArguments.find("namePrefix");
+        auto it = rArguments.find(u"namePrefix"_ustr);
         if (it != rArguments.end())
         {
             aNamePrefix = it->second;

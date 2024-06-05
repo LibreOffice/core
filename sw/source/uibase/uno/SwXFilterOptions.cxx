@@ -113,13 +113,13 @@ void   SwXFilterOptions::setSourceDocument( const uno::Reference<XComponent >& x
 void SAL_CALL SwXFilterOptions::initialize(const uno::Sequence<uno::Any>& rArguments)
 {
     ::comphelper::NamedValueCollection aProperties(rArguments);
-    if (aProperties.has("ParentWindow"))
-        aProperties.get("ParentWindow") >>= m_xDialogParent;
+    if (aProperties.has(u"ParentWindow"_ustr))
+        aProperties.get(u"ParentWindow"_ustr) >>= m_xDialogParent;
 }
 
 OUString SwXFilterOptions::getImplementationName()
 {
-    return "com.sun.star.comp.Writer.FilterOptionsDialog";
+    return u"com.sun.star.comp.Writer.FilterOptionsDialog"_ustr;
 }
 
 sal_Bool SwXFilterOptions::supportsService( const OUString& rServiceName )
@@ -129,7 +129,7 @@ sal_Bool SwXFilterOptions::supportsService( const OUString& rServiceName )
 
 uno::Sequence< OUString > SwXFilterOptions::getSupportedServiceNames()
 {
-    return { "com.sun.star.ui.dialogs.FilterOptionsDialog" };
+    return { u"com.sun.star.ui.dialogs.FilterOptionsDialog"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

@@ -170,45 +170,45 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
 {
     static PropertyInfo const aWriterSettingsInfoMap[] =
     {
-        { OUString("ForbiddenCharacters"),        HANDLE_FORBIDDEN_CHARS,                 cppu::UnoType<css::i18n::XForbiddenCharacters>::get(),      0},
-        { OUString("LinkUpdateMode"),             HANDLE_LINK_UPDATE_MODE,                cppu::UnoType<sal_Int16>::get(),             0},
-        { OUString("FieldAutoUpdate"),            HANDLE_FIELD_AUTO_UPDATE,               cppu::UnoType<bool>::get(),           0},
-        { OUString("ChartAutoUpdate"),            HANDLE_CHART_AUTO_UPDATE,               cppu::UnoType<bool>::get(),           0},
-        { OUString("AddParaTableSpacing"),        HANDLE_ADD_PARA_TABLE_SPACING,          cppu::UnoType<bool>::get(),           0},
-        { OUString("AddParaTableSpacingAtStart"), HANDLE_ADD_PARA_TABLE_SPACING_AT_START, cppu::UnoType<bool>::get(),           0},
-        { OUString("AlignTabStopPosition"),       HANDLE_ALIGN_TAB_STOP_POSITION,         cppu::UnoType<bool>::get(),           0},
-        { OUString("PrinterName"),                HANDLE_PRINTER_NAME,                    cppu::UnoType<OUString>::get(),          0},
-        { OUString("PrinterSetup"),               HANDLE_PRINTER_SETUP,                   cppu::UnoType< cppu::UnoSequenceType<sal_Int8> >::get(),           0},
-        { OUString("PrinterPaperFromSetup"),      HANDLE_PRINTER_PAPER,                   cppu::UnoType<bool>::get(),           0},
-        { OUString("IsKernAsianPunctuation"),     HANDLE_IS_KERN_ASIAN_PUNCTUATION,       cppu::UnoType<bool>::get(),           0},
-        { OUString("CharacterCompressionType"),   HANDLE_CHARACTER_COMPRESSION_TYPE,      cppu::UnoType<sal_Int16>::get(),             0},
-        { OUString("ApplyUserData"),              HANDLE_APPLY_USER_DATA,                 cppu::UnoType<bool>::get(),           0 },
-        { OUString("SaveThumbnail"),              HANDLE_SAVE_THUMBNAIL,                  cppu::UnoType<bool>::get(),           0 },
-        { OUString("SaveGlobalDocumentLinks"),    HANDLE_SAVE_GLOBAL_DOCUMENT_LINKS,      cppu::UnoType<bool>::get(),           0},
-        { OUString("CurrentDatabaseDataSource"),  HANDLE_CURRENT_DATABASE_DATA_SOURCE,    cppu::UnoType<OUString>::get(),          0},
-        { OUString("CurrentDatabaseCommand"),     HANDLE_CURRENT_DATABASE_COMMAND,        cppu::UnoType<OUString>::get(),          0},
-        { OUString("CurrentDatabaseCommandType"), HANDLE_CURRENT_DATABASE_COMMAND_TYPE,   cppu::UnoType<sal_Int32>::get(),             0},
-        { OUString("EmbeddedDatabaseName"),       HANDLE_EMBEDDED_DATABASE_NAME,          cppu::UnoType<OUString>::get(),              0},
-        { OUString("SaveVersionOnClose"),         HANDLE_SAVE_VERSION_ON_CLOSE,           cppu::UnoType<bool>::get(),           0},
-        { OUString("UpdateFromTemplate"),         HANDLE_UPDATE_FROM_TEMPLATE,            cppu::UnoType<bool>::get(),           0},
+        { u"ForbiddenCharacters"_ustr,        HANDLE_FORBIDDEN_CHARS,                 cppu::UnoType<css::i18n::XForbiddenCharacters>::get(),      0},
+        { u"LinkUpdateMode"_ustr,             HANDLE_LINK_UPDATE_MODE,                cppu::UnoType<sal_Int16>::get(),             0},
+        { u"FieldAutoUpdate"_ustr,            HANDLE_FIELD_AUTO_UPDATE,               cppu::UnoType<bool>::get(),           0},
+        { u"ChartAutoUpdate"_ustr,            HANDLE_CHART_AUTO_UPDATE,               cppu::UnoType<bool>::get(),           0},
+        { u"AddParaTableSpacing"_ustr,        HANDLE_ADD_PARA_TABLE_SPACING,          cppu::UnoType<bool>::get(),           0},
+        { u"AddParaTableSpacingAtStart"_ustr, HANDLE_ADD_PARA_TABLE_SPACING_AT_START, cppu::UnoType<bool>::get(),           0},
+        { u"AlignTabStopPosition"_ustr,       HANDLE_ALIGN_TAB_STOP_POSITION,         cppu::UnoType<bool>::get(),           0},
+        { u"PrinterName"_ustr,                HANDLE_PRINTER_NAME,                    cppu::UnoType<OUString>::get(),          0},
+        { u"PrinterSetup"_ustr,               HANDLE_PRINTER_SETUP,                   cppu::UnoType< cppu::UnoSequenceType<sal_Int8> >::get(),           0},
+        { u"PrinterPaperFromSetup"_ustr,      HANDLE_PRINTER_PAPER,                   cppu::UnoType<bool>::get(),           0},
+        { u"IsKernAsianPunctuation"_ustr,     HANDLE_IS_KERN_ASIAN_PUNCTUATION,       cppu::UnoType<bool>::get(),           0},
+        { u"CharacterCompressionType"_ustr,   HANDLE_CHARACTER_COMPRESSION_TYPE,      cppu::UnoType<sal_Int16>::get(),             0},
+        { u"ApplyUserData"_ustr,              HANDLE_APPLY_USER_DATA,                 cppu::UnoType<bool>::get(),           0 },
+        { u"SaveThumbnail"_ustr,              HANDLE_SAVE_THUMBNAIL,                  cppu::UnoType<bool>::get(),           0 },
+        { u"SaveGlobalDocumentLinks"_ustr,    HANDLE_SAVE_GLOBAL_DOCUMENT_LINKS,      cppu::UnoType<bool>::get(),           0},
+        { u"CurrentDatabaseDataSource"_ustr,  HANDLE_CURRENT_DATABASE_DATA_SOURCE,    cppu::UnoType<OUString>::get(),          0},
+        { u"CurrentDatabaseCommand"_ustr,     HANDLE_CURRENT_DATABASE_COMMAND,        cppu::UnoType<OUString>::get(),          0},
+        { u"CurrentDatabaseCommandType"_ustr, HANDLE_CURRENT_DATABASE_COMMAND_TYPE,   cppu::UnoType<sal_Int32>::get(),             0},
+        { u"EmbeddedDatabaseName"_ustr,       HANDLE_EMBEDDED_DATABASE_NAME,          cppu::UnoType<OUString>::get(),              0},
+        { u"SaveVersionOnClose"_ustr,         HANDLE_SAVE_VERSION_ON_CLOSE,           cppu::UnoType<bool>::get(),           0},
+        { u"UpdateFromTemplate"_ustr,         HANDLE_UPDATE_FROM_TEMPLATE,            cppu::UnoType<bool>::get(),           0},
 
-        { OUString("PrinterIndependentLayout"),   HANDLE_PRINTER_INDEPENDENT_LAYOUT,      cppu::UnoType<sal_Int16>::get(),             0},
-        { OUString("IsLabelDocument"),            HANDLE_IS_LABEL_DOC,                    cppu::UnoType<bool>::get(),           0},
-        { OUString("AddFrameOffsets"),            HANDLE_IS_ADD_FLY_OFFSET,               cppu::UnoType<bool>::get(),           0},
-        { OUString("AddVerticalFrameOffsets"),    HANDLE_IS_ADD_VERTICAL_FLY_OFFSET,      cppu::UnoType<bool>::get(),           0},
-        { OUString("AddExternalLeading"),         HANDLE_IS_ADD_EXTERNAL_LEADING,         cppu::UnoType<bool>::get(),           0},
-        { OUString("UseOldNumbering"),            HANDLE_OLD_NUMBERING,                   cppu::UnoType<bool>::get(),           0},
-        { OUString("OutlineLevelYieldsNumbering"), HANDLE_OUTLINELEVEL_YIELDS_NUMBERING, cppu::UnoType<bool>::get(),           0},
+        { u"PrinterIndependentLayout"_ustr,   HANDLE_PRINTER_INDEPENDENT_LAYOUT,      cppu::UnoType<sal_Int16>::get(),             0},
+        { u"IsLabelDocument"_ustr,            HANDLE_IS_LABEL_DOC,                    cppu::UnoType<bool>::get(),           0},
+        { u"AddFrameOffsets"_ustr,            HANDLE_IS_ADD_FLY_OFFSET,               cppu::UnoType<bool>::get(),           0},
+        { u"AddVerticalFrameOffsets"_ustr,    HANDLE_IS_ADD_VERTICAL_FLY_OFFSET,      cppu::UnoType<bool>::get(),           0},
+        { u"AddExternalLeading"_ustr,         HANDLE_IS_ADD_EXTERNAL_LEADING,         cppu::UnoType<bool>::get(),           0},
+        { u"UseOldNumbering"_ustr,            HANDLE_OLD_NUMBERING,                   cppu::UnoType<bool>::get(),           0},
+        { u"OutlineLevelYieldsNumbering"_ustr, HANDLE_OUTLINELEVEL_YIELDS_NUMBERING, cppu::UnoType<bool>::get(),           0},
         /* Stampit It disable the print cancel button of the shown progress dialog. */
-        { OUString("AllowPrintJobCancel"),        HANDLE_ALLOW_PRINTJOB_CANCEL,           cppu::UnoType<bool>::get(),           0},
-        { OUString("UseFormerLineSpacing"),       HANDLE_USE_FORMER_LINE_SPACING,         cppu::UnoType<bool>::get(),           0},
-        { OUString("AddParaSpacingToTableCells"), HANDLE_ADD_PARA_SPACING_TO_TABLE_CELLS, cppu::UnoType<bool>::get(),           0},
-        { OUString("AddParaLineSpacingToTableCells"), HANDLE_ADD_PARA_LINE_SPACING_TO_TABLE_CELLS, cppu::UnoType<bool>::get(),           0},
-        { OUString("UseFormerObjectPositioning"), HANDLE_USE_FORMER_OBJECT_POSITIONING,   cppu::UnoType<bool>::get(),           0},
-        { OUString("UseFormerTextWrapping"),      HANDLE_USE_FORMER_TEXT_WRAPPING,        cppu::UnoType<bool>::get(),           0},
-        { OUString("RedlineProtectionKey"),       HANDLE_CHANGES_PASSWORD,                cppu::UnoType< cppu::UnoSequenceType<sal_Int8> >::get(),           0},
-        { OUString("ConsiderTextWrapOnObjPos"),   HANDLE_CONSIDER_WRAP_ON_OBJPOS,         cppu::UnoType<bool>::get(),           0},
-        { OUString("IgnoreFirstLineIndentInNumbering"),   HANDLE_IGNORE_FIRST_LINE_INDENT_IN_NUMBERING,         cppu::UnoType<bool>::get(),           0},
+        { u"AllowPrintJobCancel"_ustr,        HANDLE_ALLOW_PRINTJOB_CANCEL,           cppu::UnoType<bool>::get(),           0},
+        { u"UseFormerLineSpacing"_ustr,       HANDLE_USE_FORMER_LINE_SPACING,         cppu::UnoType<bool>::get(),           0},
+        { u"AddParaSpacingToTableCells"_ustr, HANDLE_ADD_PARA_SPACING_TO_TABLE_CELLS, cppu::UnoType<bool>::get(),           0},
+        { u"AddParaLineSpacingToTableCells"_ustr, HANDLE_ADD_PARA_LINE_SPACING_TO_TABLE_CELLS, cppu::UnoType<bool>::get(),           0},
+        { u"UseFormerObjectPositioning"_ustr, HANDLE_USE_FORMER_OBJECT_POSITIONING,   cppu::UnoType<bool>::get(),           0},
+        { u"UseFormerTextWrapping"_ustr,      HANDLE_USE_FORMER_TEXT_WRAPPING,        cppu::UnoType<bool>::get(),           0},
+        { u"RedlineProtectionKey"_ustr,       HANDLE_CHANGES_PASSWORD,                cppu::UnoType< cppu::UnoSequenceType<sal_Int8> >::get(),           0},
+        { u"ConsiderTextWrapOnObjPos"_ustr,   HANDLE_CONSIDER_WRAP_ON_OBJPOS,         cppu::UnoType<bool>::get(),           0},
+        { u"IgnoreFirstLineIndentInNumbering"_ustr,   HANDLE_IGNORE_FIRST_LINE_INDENT_IN_NUMBERING,         cppu::UnoType<bool>::get(),           0},
         { u"NoGapAfterNoteNumber"_ustr, HANDLE_NO_GAP_AFTER_NOTE_NUMBER, cppu::UnoType<bool>::get(),           0},
         { OUString("DoNotJustifyLinesWithManualBreak"),   HANDLE_DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK,         cppu::UnoType<bool>::get(),           0},
         { OUString("DoNotResetParaAttrsForNumFont"),   HANDLE_DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT,         cppu::UnoType<bool>::get(),           0},
@@ -812,13 +812,13 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             uno::Sequence< beans::PropertyValue > aInfo;
             if ( !( rValue >>= aInfo ) )
                 throw lang::IllegalArgumentException(
-                    "Value of type Sequence<PropertyValue> expected!",
+                    u"Value of type Sequence<PropertyValue> expected!"_ustr,
                     uno::Reference< uno::XInterface >(),
                     2 );
 
             if ( !mpDocSh->SetModifyPasswordInfo( aInfo ) )
                 throw beans::PropertyVetoException(
-                    "The hash is not allowed to be changed now!",
+                    u"The hash is not allowed to be changed now!"_ustr,
                     uno::Reference< uno::XInterface >() );
         }
         break;
@@ -1758,7 +1758,7 @@ void SwXDocumentSettings::_postGetValues ()
 // XServiceInfo
 OUString SAL_CALL SwXDocumentSettings::getImplementationName(  )
 {
-    return "SwXDocumentSettings";
+    return u"SwXDocumentSettings"_ustr;
 }
 
 sal_Bool SAL_CALL SwXDocumentSettings::supportsService( const OUString& ServiceName )
@@ -1768,7 +1768,7 @@ sal_Bool SAL_CALL SwXDocumentSettings::supportsService( const OUString& ServiceN
 
 Sequence< OUString > SAL_CALL SwXDocumentSettings::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.document.Settings", "com.sun.star.text.DocumentSettings", "com.sun.star.text.PrintSettings" };
+    return { u"com.sun.star.document.Settings"_ustr, u"com.sun.star.text.DocumentSettings"_ustr, u"com.sun.star.text.PrintSettings"_ustr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -139,11 +139,11 @@ static bool LoadFromURL_impl(
 {
     // try to open the document readonly and hidden
     Reference< frame::XModel > xTmpModel;
-    Sequence < PropertyValue > aArgs{ comphelper::makePropertyValue("Hidden", true) };
+    Sequence < PropertyValue > aArgs{ comphelper::makePropertyValue(u"Hidden"_ustr, true) };
     try
     {
         Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
-        xTmpModel.set( xDesktop->loadComponentFromURL( rURL, "_blank", 0, aArgs ), UNO_QUERY );
+        xTmpModel.set( xDesktop->loadComponentFromURL( rURL, u"_blank"_ustr, 0, aArgs ), UNO_QUERY );
     }
     catch (const Exception&)
     {
@@ -574,7 +574,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         if ( !bValid )
         {
             throw IllegalArgumentException(
-                "The current 'Selection' does not describe a valid array of bookmarks, relative to the current 'ResultSet'.",
+                u"The current 'Selection' does not describe a valid array of bookmarks, relative to the current 'ResultSet'."_ustr,
                 getXWeak(),
                 0
             );
@@ -601,7 +601,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         if (aCurDataSourceName.isEmpty() || aCurDataCommand.isEmpty() )
         {
             OSL_FAIL("PropertyValues missing or unset");
-            throw IllegalArgumentException("Either the ResultSet or DataSourceName and DataCommand must be set.", getXWeak(), 0 );
+            throw IllegalArgumentException(u"Either the ResultSet or DataSourceName and DataCommand must be set."_ustr, getXWeak(), 0 );
         }
 
         // build ResultSet from DataSourceName, DataCommand and DataCommandType
@@ -609,26 +609,26 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
         if (xMgr.is())
         {
-            Reference< XInterface > xInstance = xMgr->createInstance( "com.sun.star.sdb.RowSet" );
+            Reference< XInterface > xInstance = xMgr->createInstance( u"com.sun.star.sdb.RowSet"_ustr );
             aRowSetDisposeHelper.reset( xInstance, SharedComponent::TakeOwnership );
             Reference< XPropertySet > xRowSetPropSet( xInstance, UNO_QUERY );
             OSL_ENSURE( xRowSetPropSet.is(), "failed to get XPropertySet interface from RowSet" );
             if (xRowSetPropSet.is())
             {
                 if (xCurConnection.is())
-                    xRowSetPropSet->setPropertyValue( "ActiveConnection",  Any( xCurConnection ) );
-                xRowSetPropSet->setPropertyValue( "DataSourceName",    Any( aCurDataSourceName ) );
-                xRowSetPropSet->setPropertyValue( "Command",           Any( aCurDataCommand ) );
-                xRowSetPropSet->setPropertyValue( "CommandType",       Any( nCurDataCommandType ) );
-                xRowSetPropSet->setPropertyValue( "EscapeProcessing",  Any( bCurEscapeProcessing ) );
-                xRowSetPropSet->setPropertyValue( "ApplyFilter",       Any( true ) );
-                xRowSetPropSet->setPropertyValue( "Filter",            Any( aCurFilter ) );
+                    xRowSetPropSet->setPropertyValue( u"ActiveConnection"_ustr,  Any( xCurConnection ) );
+                xRowSetPropSet->setPropertyValue( u"DataSourceName"_ustr,    Any( aCurDataSourceName ) );
+                xRowSetPropSet->setPropertyValue( u"Command"_ustr,           Any( aCurDataCommand ) );
+                xRowSetPropSet->setPropertyValue( u"CommandType"_ustr,       Any( nCurDataCommandType ) );
+                xRowSetPropSet->setPropertyValue( u"EscapeProcessing"_ustr,  Any( bCurEscapeProcessing ) );
+                xRowSetPropSet->setPropertyValue( u"ApplyFilter"_ustr,       Any( true ) );
+                xRowSetPropSet->setPropertyValue( u"Filter"_ustr,            Any( aCurFilter ) );
 
                 Reference< sdbc::XRowSet > xRowSet( xInstance, UNO_QUERY );
                 if (xRowSet.is())
                     xRowSet->execute(); // build ResultSet from properties
                 if( !xCurConnection.is() )
-                    xCurConnection.set( xRowSetPropSet->getPropertyValue( "ActiveConnection" ), UNO_QUERY );
+                    xCurConnection.set( xRowSetPropSet->getPropertyValue( u"ActiveConnection"_ustr ), UNO_QUERY );
                 xCurResultSet = xRowSet;
                 OSL_ENSURE( xCurResultSet.is(), "failed to build ResultSet" );
             }
@@ -654,7 +654,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         case MailMergeType::MAIL    : nMergeType = DBMGR_MERGE_EMAIL; break;
         case MailMergeType::SHELL   : nMergeType = DBMGR_MERGE_SHELL; break;
         default:
-            throw IllegalArgumentException("Invalid value of property: OutputType", getXWeak(), 0 );
+            throw IllegalArgumentException(u"Invalid value of property: OutputType"_ustr, getXWeak(), 0 );
     }
 
     SwWrtShell &rSh = pView->GetWrtShell();
@@ -704,7 +704,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             else    // default empty document without URL
             {
                 if (aCurOutputURL.isEmpty())
-                    throw RuntimeException("OutputURL is not set and can not be obtained.", getXWeak() );
+                    throw RuntimeException(u"OutputURL is not set and can not be obtained."_ustr, getXWeak() );
             }
 
             aURLObj.SetSmartURL( aCurOutputURL );
@@ -731,7 +731,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             {
                 aMergeDesc.sDBcolumn = m_sAddressFromColumn;
                 if(m_sAddressFromColumn.isEmpty())
-                    throw RuntimeException("Mail address column not set.", getXWeak() );
+                    throw RuntimeException(u"Mail address column not set."_ustr, getXWeak() );
                 aMergeDesc.sSaveToFilter     = m_sAttachmentFilter;
                 aMergeDesc.sSubject          = m_sSubject;
                 aMergeDesc.sMailBody         = m_sMailBody;
@@ -749,7 +749,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
                         xInService,
                         m_sInServerPassword, m_sOutServerPassword );
                 if( !aMergeDesc.xSmtpServer.is() || !aMergeDesc.xSmtpServer->isConnected())
-                    throw RuntimeException("Failed to connect to mail server.", getXWeak() );
+                    throw RuntimeException(u"Failed to connect to mail server."_ustr, getXWeak() );
             }
         break;
     }
@@ -775,7 +775,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         }
     }
     if ( !bStoredAsTemporary )
-        throw RuntimeException("Failed to save temporary file.", getXWeak() );
+        throw RuntimeException(u"Failed to save temporary file."_ustr, getXWeak() );
 
     pMgr->SetMergeSilent( true );       // suppress dialogs, message boxes, etc.
     const SwXMailMerge *pOldSrc = pMgr->GetMailMergeEvtSrc();
@@ -796,7 +796,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     // (in case it wasn't a temporary model, it will be closed in the dtor, at the latest)
 
     if (!bSucc)
-        throw Exception("Mail merge failed. Sorry, no further information available.", getXWeak() );
+        throw Exception(u"Mail merge failed. Sorry, no further information available."_ustr, getXWeak() );
 
     //de-initialize services
     if(xInService.is() && xInService->isConnected())
@@ -1140,7 +1140,7 @@ void SAL_CALL SwXMailMerge::removeMailMergeEventListener(
 
 OUString SAL_CALL SwXMailMerge::getImplementationName()
 {
-    return "SwXMailMerge";
+    return u"SwXMailMerge"_ustr;
 }
 
 sal_Bool SAL_CALL SwXMailMerge::supportsService( const OUString& rServiceName )
@@ -1150,7 +1150,7 @@ sal_Bool SAL_CALL SwXMailMerge::supportsService( const OUString& rServiceName )
 
 uno::Sequence< OUString > SAL_CALL SwXMailMerge::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.MailMerge", "com.sun.star.sdb.DataAccessDescriptor" };
+    return { u"com.sun.star.text.MailMerge"_ustr, u"com.sun.star.sdb.DataAccessDescriptor"_ustr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

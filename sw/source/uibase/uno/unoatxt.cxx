@@ -148,7 +148,7 @@ uno::Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
     //check for non-ASCII characters
     if(aGroupName.isEmpty())
     {
-        throw lang::IllegalArgumentException("group name must not be empty", nullptr, 0);
+        throw lang::IllegalArgumentException(u"group name must not be empty"_ustr, nullptr, 0);
     }
     for(sal_Int32 nPos = 0; nPos < aGroupName.getLength(); nPos++)
     {
@@ -160,7 +160,7 @@ uno::Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
         {
             continue;
         }
-        throw lang::IllegalArgumentException("group name must contain a-z, A-z, '_', ' ' only", nullptr, 0);
+        throw lang::IllegalArgumentException(u"group name must contain a-z, A-z, '_', ' ' only"_ustr, nullptr, 0);
     }
     OUString sGroup(aGroupName);
     if (sGroup.indexOf(GLOS_DELIM)<0)
@@ -188,7 +188,7 @@ void SwXAutoTextContainer::removeByName(const OUString& aGroupName)
 
 OUString SwXAutoTextContainer::getImplementationName()
 {
-    return "SwXAutoTextContainer";
+    return u"SwXAutoTextContainer"_ustr;
 }
 
 sal_Bool SwXAutoTextContainer::supportsService(const OUString& rServiceName)
@@ -198,7 +198,7 @@ sal_Bool SwXAutoTextContainer::supportsService(const OUString& rServiceName)
 
 uno::Sequence< OUString > SwXAutoTextContainer::getSupportedServiceNames()
 {
-    return { "com.sun.star.text.AutoTextContainer" };
+    return { u"com.sun.star.text.AutoTextContainer"_ustr };
 }
 
 SwXAutoTextGroup::SwXAutoTextGroup(const OUString& rName,
@@ -383,7 +383,7 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
     {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
-               "Error Getting AutoText!",
+               u"Error Getting AutoText!"_ustr,
                getXWeak(),
                anyEx );
     }
@@ -626,7 +626,7 @@ void SwXAutoTextGroup::Invalidate()
 
 OUString SwXAutoTextGroup::getImplementationName()
 {
-    return "SwXAutoTextGroup";
+    return u"SwXAutoTextGroup"_ustr;
 }
 
 sal_Bool SwXAutoTextGroup::supportsService(const OUString& rServiceName)
@@ -636,7 +636,7 @@ sal_Bool SwXAutoTextGroup::supportsService(const OUString& rServiceName)
 
 uno::Sequence< OUString > SwXAutoTextGroup::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet { "com.sun.star.text.AutoTextGroup" };
+    uno::Sequence<OUString> aRet { u"com.sun.star.text.AutoTextGroup"_ustr };
     return aRet;
 }
 
@@ -868,7 +868,7 @@ void SwXAutoTextEntry::applyTo(const uno::Reference< text::XTextRange > & xTextR
 
 OUString SwXAutoTextEntry::getImplementationName()
 {
-    return "SwXAutoTextEntry";
+    return u"SwXAutoTextEntry"_ustr;
 }
 
 sal_Bool SwXAutoTextEntry::supportsService(const OUString& rServiceName)
@@ -878,7 +878,7 @@ sal_Bool SwXAutoTextEntry::supportsService(const OUString& rServiceName)
 
 uno::Sequence< OUString > SwXAutoTextEntry::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet { "com.sun.star.text.AutoTextEntry" };
+    uno::Sequence<OUString> aRet { u"com.sun.star.text.AutoTextEntry"_ustr };
     return aRet;
 }
 
@@ -907,7 +907,7 @@ SwAutoTextEventDescriptor::~SwAutoTextEventDescriptor()
 
 OUString SwAutoTextEventDescriptor::getImplementationName()
 {
-    return "SwAutoTextEventDescriptor";
+    return u"SwAutoTextEventDescriptor"_ustr;
 }
 
 void SwAutoTextEventDescriptor::replaceByName(

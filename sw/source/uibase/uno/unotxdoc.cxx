@@ -505,7 +505,7 @@ void SwXTextDocument::unlockControllers()
 {
     SolarMutexGuard aGuard;
     if(maActionArr.empty())
-        throw RuntimeException("Nothing to unlock");
+        throw RuntimeException(u"Nothing to unlock"_ustr);
 
     maActionArr.pop_front();
 }
@@ -585,7 +585,7 @@ void SwXTextDocument::close( sal_Bool bDeliverOwnership )
     if(m_pDocShell)
     {
         uno::Sequence< uno::Any > aArgs;
-        m_pDocShell->CallAutomationDocumentEventSinks( "Close", aArgs );
+        m_pDocShell->CallAutomationDocumentEventSinks( u"Close"_ustr, aArgs );
     }
     SolarMutexGuard aGuard;
     if (m_bObjectValid && m_pHiddenViewFrame)
@@ -714,7 +714,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     ThrowIfInvalid();
     auto* pSearch = dynamic_cast<SwXTextSearch*>(xDesc.get());
     if (!pSearch)
-        throw DisposedException("", getXWeak());
+        throw DisposedException(u""_ustr, getXWeak());
 
     Reference< XTextCursor >  xCursor;
     auto pUnoCursor(CreateCursorForSearch(xCursor));
@@ -896,7 +896,7 @@ Reference< XIndexAccess >
     Reference< XTextCursor >  xCursor;
     auto pResultCursor(FindAny(xDesc, xCursor, true, nResult, xTmp));
     if(!pResultCursor)
-        throw RuntimeException("No result cursor");
+        throw RuntimeException(u"No result cursor"_ustr);
     Reference< XIndexAccess >  xRet = SwXTextRanges::Create( nResult ? &(*pResultCursor) : nullptr );
     return xRet;
 }
@@ -909,7 +909,7 @@ Reference< XInterface >  SwXTextDocument::findFirst(const Reference< util::XSear
     Reference< XTextCursor >  xCursor;
     auto pResultCursor(FindAny(xDesc, xCursor, false, nResult, xTmp));
     if(!pResultCursor)
-        throw RuntimeException("No result cursor");
+        throw RuntimeException(u"No result cursor"_ustr);
     Reference< XInterface >  xRet;
     if(nResult)
     {
@@ -928,10 +928,10 @@ Reference< XInterface >  SwXTextDocument::findNext(const Reference< XInterface >
     sal_Int32 nResult = 0;
     Reference< XTextCursor >  xCursor;
     if(!xStartAt.is())
-        throw RuntimeException("xStartAt missing");
+        throw RuntimeException(u"xStartAt missing"_ustr);
     auto pResultCursor(FindAny(xDesc, xCursor, false, nResult, xStartAt));
     if(!pResultCursor)
-        throw RuntimeException("No result cursor");
+        throw RuntimeException(u"No result cursor"_ustr);
     Reference< XInterface >  xRet;
     if(nResult)
     {
@@ -957,23 +957,23 @@ Sequence< beans::PropertyValue > SwXTextDocument::getPagePrintSettings()
         aData = *pData;
     Any aVal;
     aVal <<= aData.GetRow();
-    pArray[0] = beans::PropertyValue("PageRows", -1, aVal, PropertyState_DIRECT_VALUE);
+    pArray[0] = beans::PropertyValue(u"PageRows"_ustr, -1, aVal, PropertyState_DIRECT_VALUE);
     aVal <<= aData.GetCol();
-    pArray[1] = beans::PropertyValue("PageColumns", -1, aVal, PropertyState_DIRECT_VALUE);
+    pArray[1] = beans::PropertyValue(u"PageColumns"_ustr, -1, aVal, PropertyState_DIRECT_VALUE);
     aVal <<= static_cast<sal_Int32>(convertTwipToMm100(aData.GetLeftSpace()));
-    pArray[2] = beans::PropertyValue("LeftMargin", -1, aVal, PropertyState_DIRECT_VALUE);
+    pArray[2] = beans::PropertyValue(u"LeftMargin"_ustr, -1, aVal, PropertyState_DIRECT_VALUE);
     aVal <<= static_cast<sal_Int32>(convertTwipToMm100(aData.GetRightSpace()));
-    pArray[3] = beans::PropertyValue("RightMargin", -1, aVal, PropertyState_DIRECT_VALUE);
+    pArray[3] = beans::PropertyValue(u"RightMargin"_ustr, -1, aVal, PropertyState_DIRECT_VALUE);
     aVal <<= static_cast<sal_Int32>(convertTwipToMm100(aData.GetTopSpace()));
-    pArray[4] = beans::PropertyValue("TopMargin", -1, aVal, PropertyState_DIRECT_VALUE);
+    pArray[4] = beans::PropertyValue(u"TopMargin"_ustr, -1, aVal, PropertyState_DIRECT_VALUE);
     aVal <<= static_cast<sal_Int32>(convertTwipToMm100(aData.GetBottomSpace()));
-    pArray[5] = beans::PropertyValue("BottomMargin", -1, aVal, PropertyState_DIRECT_VALUE);
+    pArray[5] = beans::PropertyValue(u"BottomMargin"_ustr, -1, aVal, PropertyState_DIRECT_VALUE);
     aVal <<= static_cast<sal_Int32>(convertTwipToMm100(aData.GetHorzSpace()));
-    pArray[6] = beans::PropertyValue("HoriMargin", -1, aVal, PropertyState_DIRECT_VALUE);
+    pArray[6] = beans::PropertyValue(u"HoriMargin"_ustr, -1, aVal, PropertyState_DIRECT_VALUE);
     aVal <<= static_cast<sal_Int32>(convertTwipToMm100(aData.GetVertSpace()));
-    pArray[7] = beans::PropertyValue("VertMargin", -1, aVal, PropertyState_DIRECT_VALUE);
+    pArray[7] = beans::PropertyValue(u"VertMargin"_ustr, -1, aVal, PropertyState_DIRECT_VALUE);
     aVal <<= aData.GetLandscape();
-    pArray[8] = beans::PropertyValue("IsLandscape", -1, aVal, PropertyState_DIRECT_VALUE);
+    pArray[8] = beans::PropertyValue(u"IsLandscape"_ustr, -1, aVal, PropertyState_DIRECT_VALUE);
 
     return aSeq;
 }
@@ -1040,13 +1040,13 @@ void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue 
         if( sName == "PageRows" )
         {
             if(!nVal || nVal > 0xff)
-                throw RuntimeException("Invalid value");
+                throw RuntimeException(u"Invalid value"_ustr);
             aData.SetRow(nVal);
         }
         else if(sName == "PageColumns")
         {
             if(!nVal  || nVal > 0xff)
-                throw RuntimeException("Invalid value");
+                throw RuntimeException(u"Invalid value"_ustr);
             aData.SetCol(nVal);
         }
         else if(sName == "LeftMargin")
@@ -1332,7 +1332,7 @@ public:
     virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 Index) override
     {
         if (Index != 0)
-            throw css::lang::IndexOutOfBoundsException("Writer documents have only one DrawPage!");
+            throw css::lang::IndexOutOfBoundsException(u"Writer documents have only one DrawPage!"_ustr);
         return css::uno::Any(m_xDoc->getDrawPage());
     }
 
@@ -1347,7 +1347,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "SwDrawPagesObj";
+        return u"SwDrawPagesObj"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override
@@ -1357,7 +1357,7 @@ public:
 
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
     {
-        return { "com.sun.star.drawing.DrawPages" };
+        return { u"com.sun.star.drawing.DrawPages"_ustr };
     }
 };
 
@@ -1819,7 +1819,7 @@ Sequence< OUString > SwXTextDocument::getAvailableServiceNames()
 
 OUString SwXTextDocument::getImplementationName()
 {
-    return "SwXTextDocument";
+    return u"SwXTextDocument"_ustr;
     /* // Matching the .component information:
        return dynamic_cast<SwGlobalDocShell*>( pDocShell ) != nullptr
            ? OUString("com.sun.star.comp.Writer.GlobalDocument")
@@ -1891,7 +1891,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         case  WID_DOC_PARA_COUNT     :
         case  WID_DOC_WORD_COUNT     :
             throw RuntimeException(
-                "bad WID",
+                u"bad WID"_ustr,
                 getXWeak());
         case  WID_DOC_WORD_SEPARATOR :
         {
@@ -2210,7 +2210,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
                That constant will be equivalent to 'ThisComponent' but for
                each application, so e.g. a 'ThisExcelDoc' and a 'ThisWordDoc'
                constant can co-exist, as required by VBA. */
-            aAny <<= OUString( "ThisWordDoc" );
+            aAny <<= u"ThisWordDoc"_ustr;
         }
         break;
         case WID_DOC_RUNTIME_UID:
@@ -2398,7 +2398,7 @@ static VclPtr< OutputDevice > lcl_GetOutputDevice( const SwPrintUIOptions &rPrin
 {
     VclPtr< OutputDevice > pOut;
 
-    uno::Any aAny( rPrintUIOptions.getValue( "RenderDevice" ));
+    uno::Any aAny( rPrintUIOptions.getValue( u"RenderDevice"_ustr ));
     uno::Reference< awt::XDevice >  xRenderDevice;
     aAny >>= xRenderDevice;
     if (xRenderDevice.is())
@@ -2873,9 +2873,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         }
 
         sal_Int32 nLen = 3;
-        aRenderer = { comphelper::makePropertyValue("PageSize", aPageSize),
-                      comphelper::makePropertyValue("PageIncludesNonprintableArea", true),
-                      comphelper::makePropertyValue("PagePos", aPagePos) };
+        aRenderer = { comphelper::makePropertyValue(u"PageSize"_ustr, aPageSize),
+                      comphelper::makePropertyValue(u"PageIncludesNonprintableArea"_ustr, true),
+                      comphelper::makePropertyValue(u"PagePos"_ustr, aPagePos) };
         if (aPreferredPageSize.Width && aPreferredPageSize.Height)
         {
             ++nLen;
@@ -3455,15 +3455,15 @@ void SwXTextDocument::getPostIts(tools::JsonWriter& rJsonWriter)
 
 void SwXTextDocument::executeFromFieldEvent(const StringMap& aArguments)
 {
-    auto aIter = aArguments.find("type");
+    auto aIter = aArguments.find(u"type"_ustr);
     if (aIter == aArguments.end() || aIter->second != "drop-down")
         return;
 
-    aIter = aArguments.find("cmd");
+    aIter = aArguments.find(u"cmd"_ustr);
     if (aIter == aArguments.end() || aIter->second != "selected")
         return;
 
-    aIter = aArguments.find("data");
+    aIter = aArguments.find(u"data"_ustr);
     if (aIter == aArguments.end())
         return;
 
@@ -3532,7 +3532,7 @@ inline constexpr OUString SELECTED_DATE_FORMAT = u"YYYY-MM-DD"_ustr;
 
 void SwXTextDocument::executeContentControlEvent(const StringMap& rArguments)
 {
-    auto it = rArguments.find("type");
+    auto it = rArguments.find(u"type"_ustr);
     if (it == rArguments.end())
     {
         return;
@@ -3563,7 +3563,7 @@ void SwXTextDocument::executeContentControlEvent(const StringMap& rArguments)
             return;
         }
 
-        it = rArguments.find("selected");
+        it = rArguments.find(u"selected"_ustr);
         if (it == rArguments.end())
         {
             return;
@@ -3575,7 +3575,7 @@ void SwXTextDocument::executeContentControlEvent(const StringMap& rArguments)
     }
     else if (it->second == "picture")
     {
-        it = rArguments.find("changed");
+        it = rArguments.find(u"changed"_ustr);
         if (it == rArguments.end())
         {
             return;
@@ -3619,7 +3619,7 @@ void SwXTextDocument::executeContentControlEvent(const StringMap& rArguments)
             return;
         }
 
-        it = rArguments.find("selected");
+        it = rArguments.find(u"selected"_ustr);
         if (it == rArguments.end())
         {
             return;
@@ -3789,7 +3789,7 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
         {
             { "NewTheme", uno::Any(sThemeName) }
         }));
-        comphelper::dispatchCommand(".uno:ChangeTheme", aPropertyValues);
+        comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, aPropertyValues);
     }
 }
 
@@ -3971,7 +3971,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
     const bool bComplex = 0 != (nScriptTypes & nComplex);
 
     if (nScriptTypes < nLatin || nScriptTypes > (nLatin | nAsian | nComplex))
-        throw IllegalArgumentException("nScriptTypes ranges from 1 to 7!", Reference< XInterface >(), 1);
+        throw IllegalArgumentException(u"nScriptTypes ranges from 1 to 7!"_ustr, Reference< XInterface >(), 1);
     if (!m_pDocShell)
         throw DisposedException();
     SwDoc& rDoc = GetDocOrThrow();
@@ -4168,8 +4168,8 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
 {
     Any aRet;
     if(!m_pxDoc)
-        throw RuntimeException("No document available");
-    OUString sSuffix("|");
+        throw RuntimeException(u"No document available"_ustr);
+    OUString sSuffix(u"|"_ustr);
     if(rName == m_sTables)
     {
         sSuffix += "table";
@@ -4271,7 +4271,7 @@ sal_Bool SwXLinkTargetSupplier::hasElements()
 
 OUString SwXLinkTargetSupplier::getImplementationName()
 {
-    return "SwXLinkTargetSupplier";
+    return u"SwXLinkTargetSupplier"_ustr;
 }
 
 sal_Bool SwXLinkTargetSupplier::supportsService(const OUString& rServiceName)
@@ -4281,7 +4281,7 @@ sal_Bool SwXLinkTargetSupplier::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXLinkTargetSupplier::getSupportedServiceNames()
 {
-    Sequence< OUString > aRet { "com.sun.star.document.LinkTargets" };
+    Sequence< OUString > aRet { u"com.sun.star.document.LinkTargets"_ustr };
     return aRet;
 }
 
@@ -4325,7 +4325,7 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
             {
                 sParam = sParam.copy(0, sParam.getLength() - sSuffix.getLength());
                 if(!m_pxDoc->GetDocShell())
-                    throw RuntimeException("No document shell available");
+                    throw RuntimeException(u"No document shell available"_ustr);
                 SwDoc* pDoc = m_pxDoc->GetDocShell()->GetDoc();
 
                 if (sSuffix == "|outline")
@@ -4371,7 +4371,7 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
                 aRet = m_xRealAccess->getByName(sParam.copy(0, sParam.getLength() - sSuffix.getLength()));
                 Reference< XInterface > xInt;
                 if(!(aRet >>= xInt))
-                    throw RuntimeException("Could not retrieve property");
+                    throw RuntimeException(u"Could not retrieve property"_ustr);
                 Reference< XPropertySet >  xProp(xInt, UNO_QUERY);
                 aRet <<= xProp;
                 bFound = true;
@@ -4389,7 +4389,7 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames()
     if(m_pxDoc)
     {
         if(!m_pxDoc->GetDocShell())
-            throw RuntimeException("No document shell available");
+            throw RuntimeException(u"No document shell available"_ustr);
         SwDoc* pDoc = m_pxDoc->GetDocShell()->GetDoc();
         if (m_sLinkSuffix == "|outline")
         {
@@ -4444,7 +4444,7 @@ sal_Bool SwXLinkNameAccessWrapper::hasByName(const OUString& rName)
             if(m_pxDoc)
             {
                 if(!m_pxDoc->GetDocShell())
-                    throw RuntimeException("No document shell available");
+                    throw RuntimeException(u"No document shell available"_ustr);
                 SwDoc* pDoc = m_pxDoc->GetDocShell()->GetDoc();
                 if (m_sLinkSuffix == "|outline")
                 {
@@ -4585,7 +4585,7 @@ Reference< XNameAccess >  SwXLinkNameAccessWrapper::getLinks()
 
 OUString SwXLinkNameAccessWrapper::getImplementationName()
 {
-    return "SwXLinkNameAccessWrapper";
+    return u"SwXLinkNameAccessWrapper"_ustr;
 }
 
 sal_Bool SwXLinkNameAccessWrapper::supportsService(const OUString& rServiceName)
@@ -4595,7 +4595,7 @@ sal_Bool SwXLinkNameAccessWrapper::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXLinkNameAccessWrapper::getSupportedServiceNames()
 {
-    Sequence< OUString > aRet { "com.sun.star.document.LinkTargets" };
+    Sequence< OUString > aRet { u"com.sun.star.document.LinkTargets"_ustr };
     return aRet;
 }
 
@@ -4661,7 +4661,7 @@ void SwXOutlineTarget::removeVetoableChangeListener(
 
 OUString SwXOutlineTarget::getImplementationName()
 {
-    return "SwXOutlineTarget";
+    return u"SwXOutlineTarget"_ustr;
 }
 
 sal_Bool SwXOutlineTarget::supportsService(const OUString& ServiceName)
@@ -4671,7 +4671,7 @@ sal_Bool SwXOutlineTarget::supportsService(const OUString& ServiceName)
 
 Sequence< OUString > SwXOutlineTarget::getSupportedServiceNames()
 {
-    Sequence<OUString> aRet { "com.sun.star.document.LinkTarget" };
+    Sequence<OUString> aRet { u"com.sun.star.document.LinkTarget"_ustr };
 
     return aRet;
 }
@@ -4728,7 +4728,7 @@ void SwXDrawingObjectTarget::removeVetoableChangeListener(
 
 OUString SwXDrawingObjectTarget::getImplementationName()
 {
-    return "SwXDrawingObjectTarget";
+    return u"SwXDrawingObjectTarget"_ustr;
 }
 
 sal_Bool SwXDrawingObjectTarget::supportsService(const OUString& ServiceName)
@@ -4738,7 +4738,7 @@ sal_Bool SwXDrawingObjectTarget::supportsService(const OUString& ServiceName)
 
 Sequence< OUString > SwXDrawingObjectTarget::getSupportedServiceNames()
 {
-    Sequence<OUString> aRet { "com.sun.star.document.LinkTarget" };
+    Sequence<OUString> aRet { u"com.sun.star.document.LinkTarget"_ustr };
 
     return aRet;
 }
