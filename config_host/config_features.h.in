@@ -137,6 +137,12 @@
  */
 #define HAVE_FEATURE_XMLHELP 0
 
+/* whether we include any local help
+ *
+ * Can be turned off with --without-help or --with-help=online
+ */
+#define HAVE_FEATURE_LOCAL_HELP 0
+
 /*
  * Whether oosplash calls pagein binaries to speed up library loading.
  * Probably not useful nowadays with SSD based systems.
