@@ -46,16 +46,9 @@ namespace sd
 {
 
 rtl::Reference<sdr::annotation::Annotation> createAnnotation(SdPage* pPage);
+rtl::Reference<sdr::annotation::Annotation> createAnnotationAndAddToPage(SdPage* pPage);
 
 std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation(rtl::Reference<sdr::annotation::Annotation>& xAnnotation, bool bInsert);
-
-struct SD_DLLPUBLIC CustomAnnotationMarker
-{
-    Color maLineColor;
-    Color maFillColor;
-    float mnLineWidth;
-    std::vector<basegfx::B2DPolygon> maPolygons;
-};
 
 class SAL_DLLPUBLIC_RTTI Annotation final : public sdr::annotation::Annotation
 {
@@ -90,25 +83,8 @@ public:
 
     void createChangeUndo();
 
-    void createCustomAnnotationMarker()
-    {
-        m_pCustomAnnotationMarker = std::make_unique<CustomAnnotationMarker>();
-    }
-
-    CustomAnnotationMarker& getCustomAnnotationMarker()
-    {
-        return *m_pCustomAnnotationMarker;
-    }
-
-    bool hasCustomAnnotationMarker() const
-    {
-        return bool(m_pCustomAnnotationMarker);
-    }
-
 private:
     void createChangeUndoImpl(std::unique_lock<std::mutex>& g);
-
-    std::unique_ptr<CustomAnnotationMarker> m_pCustomAnnotationMarker;
 };
 
 }

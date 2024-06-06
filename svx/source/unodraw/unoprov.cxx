@@ -822,6 +822,7 @@ const UHashMapImpl& GetUHashImpl()
             { "com.sun.star.drawing.AppletShape",          SdrObjKind::OLE2Applet },
             { "com.sun.star.drawing.CustomShape",          SdrObjKind::CustomShape },
             { "com.sun.star.drawing.MediaShape",           SdrObjKind::Media },
+            { "com.sun.star.drawing.AnnotationShape",      SdrObjKind::Annotation },
 
             { "com.sun.star.drawing.Shape3DSceneObject",   SdrObjKind::E3D_Scene },
             { "com.sun.star.drawing.Shape3DCubeObject",    SdrObjKind::E3D_Cube },

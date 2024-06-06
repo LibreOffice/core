@@ -3184,6 +3184,7 @@ constexpr OUString sUNO_service_drawing_PolyLineShape     = u"com.sun.star.drawi
 constexpr OUString sUNO_service_drawing_OpenBezierShape   = u"com.sun.star.drawing.OpenBezierShape"_ustr;
 constexpr OUString sUNO_service_drawing_ClosedBezierShape = u"com.sun.star.drawing.ClosedBezierShape"_ustr;
 constexpr OUString sUNO_service_drawing_TextShape         = u"com.sun.star.drawing.TextShape"_ustr;
+constexpr OUString sUNO_service_drawing_AnnotationShape   = u"com.sun.star.drawing.AnnotationShape"_ustr;
 constexpr OUString sUNO_service_drawing_GraphicObjectShape = u"com.sun.star.drawing.GraphicObjectShape"_ustr;
 constexpr OUString sUNO_service_drawing_OLE2Shape         = u"com.sun.star.drawing.OLE2Shape"_ustr;
 constexpr OUString sUNO_service_drawing_PageShape         = u"com.sun.star.drawing.PageShape"_ustr;
@@ -3441,6 +3442,29 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_ShadowProperties,
                             sUNO_service_drawing_RotationDescriptor };
                 return aSvxShape_TextServices;
+            }
+        case SdrObjKind::Annotation:
+            {
+                static const uno::Sequence<OUString> aSvxShape_AnnotationServices = {
+                            sUNO_service_drawing_AnnotationShape,
+
+                            sUNO_service_drawing_Shape,
+                            sUNO_service_drawing_FillProperties,
+                            sUNO_service_drawing_LineProperties,
+
+                            sUNO_service_drawing_Text,
+                            sUNO_service_drawing_TextProperties,
+                            sUNO_service_style_ParagraphProperties,
+                            sUNO_service_style_ParagraphPropertiesComplex,
+                            sUNO_service_style_ParagraphPropertiesAsian,
+                            sUNO_service_style_CharacterProperties,
+                            sUNO_service_style_CharacterPropertiesComplex,
+                            sUNO_service_style_CharacterPropertiesAsian,
+
+                            sUNO_service_drawing_ShadowProperties,
+                            sUNO_service_drawing_RotationDescriptor
+                };
+                return aSvxShape_AnnotationServices;
             }
 
         case SdrObjKind::Graphic:

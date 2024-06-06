@@ -766,6 +766,9 @@ rtl::Reference<SvxShape> SvxDrawPage::CreateShapeByTypeAndInventor( SdrObjKind n
                 case SdrObjKind::Table:
                     pRet = new SvxTableShape( pObj );
                     break;
+                case SdrObjKind::Annotation:
+                    pRet = new SvxShapeRect( pObj );
+                    break;
                 default: // unknown 2D-object on page
                     assert(false && "Not implemented Starone-Shape created");
                     pRet = new SvxShapeText( pObj );

@@ -1632,25 +1632,33 @@ static void ImplPDFExportComments( const uno::Reference< drawing::XDrawPage >& x
             aNote.maContents = xText->getString();
             aNote.maModificationDate = xAnnotation->getDateTime();
             auto* pAnnotation = dynamic_cast<sd::Annotation*>(xAnnotation.get());
-            if (pAnnotation && pAnnotation->isFreeText())
+
+            if (pAnnotation && pAnnotation->getCreationInfo().meType != sdr::annotation::AnnotationType::None)
             {
-                aNote.meType = vcl::pdf::PDFAnnotationSubType::FreeText;
-            }
-            if (pAnnotation && pAnnotation->hasCustomAnnotationMarker())
-            {
-                aNote.maPolygons = pAnnotation->getCustomAnnotationMarker().maPolygons;
-                aNote.maAnnotationColor = pAnnotation->getCustomAnnotationMarker().maLineColor;
-                aNote.maInteriorColor = pAnnotation->getCustomAnnotationMarker().maFillColor;
-                if (aNote.maPolygons.size() == 1)
+                sdr::annotation::CreationInfo const& rCreation = pAnnotation->getCreationInfo();
+                aNote.maPolygons = rCreation.maPolygons;
+                aNote.maAnnotationColor = rCreation.maColor;
+                aNote.maInteriorColor = rCreation.maFillColor;
+                aNote.mfWidth = rCreation.mnWidth;
+                switch (rCreation.meType)
                 {
-                    auto const& rPolygon = aNote.maPolygons[0];
-                    aNote.meType = rPolygon.isClosed()
-                        ? vcl::pdf::PDFAnnotationSubType::Polygon
-                        : vcl::pdf::PDFAnnotationSubType::Polyline;
-                }
-                else if (aNote.maPolygons.size() > 1)
-                {
-                    aNote.meType = vcl::pdf::PDFAnnotationSubType::Ink;
+                    case sdr::annotation::AnnotationType::Square:
+                        aNote.meType = vcl::pdf::PDFAnnotationSubType::Square; break;
+                    case sdr::annotation::AnnotationType::Circle:
+                        aNote.meType = vcl::pdf::PDFAnnotationSubType::Circle; break;
+                    case sdr::annotation::AnnotationType::Polygon:
+                        aNote.meType = vcl::pdf::PDFAnnotationSubType::Polygon; break;
+                    case sdr::annotation::AnnotationType::Ink:
+                        aNote.meType = vcl::pdf::PDFAnnotationSubType::Ink; break;
+                    case sdr::annotation::AnnotationType::Highlight:
+                        aNote.meType = vcl::pdf::PDFAnnotationSubType::Highlight; break;
+                    case sdr::annotation::AnnotationType::Line:
+                        aNote.meType = vcl::pdf::PDFAnnotationSubType::Line; break;
+                    case sdr::annotation::AnnotationType::FreeText:
+                        aNote.meType = vcl::pdf::PDFAnnotationSubType::FreeText; break;
+                    default:
+                        aNote.meType = vcl::pdf::PDFAnnotationSubType::Text;
+                        break;
                 }
             }
 

@@ -2529,7 +2529,9 @@ Reference< XAnnotation > SAL_CALL SdGenericDrawPage::createAndInsertAnnotation()
     if( !GetPage() )
         throw DisposedException();
 
-    return GetPage()->createAnnotation();
+    auto xAnnotation = GetPage()->createAnnotation();
+    GetPage()->addAnnotation(xAnnotation);
+    return xAnnotation;
 }
 
 void SAL_CALL SdGenericDrawPage::removeAnnotation(const Reference< XAnnotation > & annotation)

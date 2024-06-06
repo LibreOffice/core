@@ -61,9 +61,14 @@ protected:
 
 }
 
-rtl::Reference<sdr::annotation::Annotation> createAnnotation(SdPage* pPage )
+rtl::Reference<sdr::annotation::Annotation> createAnnotation(SdPage* pPage)
 {
-    rtl::Reference<Annotation> xAnnotation(new Annotation(comphelper::getProcessComponentContext(), pPage));
+    return rtl::Reference<Annotation>(new Annotation(comphelper::getProcessComponentContext(), pPage));
+}
+
+rtl::Reference<sdr::annotation::Annotation> createAnnotationAndAddToPage(SdPage* pPage)
+{
+    rtl::Reference<sdr::annotation::Annotation> xAnnotation = createAnnotation(pPage);
     pPage->addAnnotation(xAnnotation, -1);
     return xAnnotation;
 }
@@ -268,7 +273,7 @@ void UndoInsertOrRemoveAnnotation::Undo()
 
     if (mbInsert)
     {
-        pPage->removeAnnotation(mxAnnotation);
+        pPage->removeAnnotationNoNotify(mxAnnotation);
     }
     else
     {
@@ -286,12 +291,12 @@ void UndoInsertOrRemoveAnnotation::Redo()
 
     if (mbInsert)
     {
-        pPage->addAnnotation(mxAnnotation, mnIndex);
+        pPage->addAnnotationNoNotify(mxAnnotation, mnIndex);
         LOKCommentNotifyAll(sdr::annotation::CommentNotificationType::Add, *mxAnnotation);
     }
     else
     {
-        pPage->removeAnnotation(mxAnnotation);
+        pPage->removeAnnotationNoNotify(mxAnnotation);
     }
 }
 

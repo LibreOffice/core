@@ -53,6 +53,7 @@ enum class SdrObjKind : sal_uInt16
     CustomShape = 33, /// custom shape
     Media = 34, /// media shape
     Table = 35, /// table
+    Annotation = 36, /// annotation object
 
     OLE2Applet = 100,
     OLE2Plugin = 101,

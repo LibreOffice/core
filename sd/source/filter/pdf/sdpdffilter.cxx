@@ -83,8 +83,10 @@ bool SdPdfFilter::Import()
         // Make the page size match the rendered image.
         pPage->SetSize(aSizeHMM);
 
-        rtl::Reference<SdrGrafObj> pSdrGrafObj = new SdrGrafObj(
-            pPage->getSdrModelFromSdrPage(), rGraphic, tools::Rectangle(Point(), aSizeHMM));
+        SdrModel& rModel = pPage->getSdrModelFromSdrPage();
+
+        rtl::Reference<SdrGrafObj> pSdrGrafObj
+            = new SdrGrafObj(rModel, rGraphic, tools::Rectangle(Point(), aSizeHMM));
 
         pSdrGrafObj->SetResizeProtect(true);
         pSdrGrafObj->SetMoveProtect(true);
@@ -101,97 +103,118 @@ bool SdPdfFilter::Import()
             xText->setString(rPDFAnnotation.maText);
             // position is in mm not 100thmm
             geometry::RealPoint2D aUnoPosition(rPDFAnnotation.maRectangle.getMinX() / 100.0,
-                                               rPDFAnnotation.maRectangle.getMinY() / 100.00);
+                                               rPDFAnnotation.maRectangle.getMinY() / 100.0);
             geometry::RealSize2D aUnoSize(rPDFAnnotation.maRectangle.getWidth() / 100.0,
-                                          rPDFAnnotation.maRectangle.getHeight() / 100.00);
+                                          rPDFAnnotation.maRectangle.getHeight() / 100.0);
             xAnnotation->setPosition(aUnoPosition);
             xAnnotation->setSize(aUnoSize);
             xAnnotation->setDateTime(rPDFAnnotation.maDateTime);
 
             if (rPDFAnnotation.mpMarker)
             {
-                auto* pAnnotation = static_cast<sd::Annotation*>(xAnnotation.get());
-                pAnnotation->createCustomAnnotationMarker();
-                sd::CustomAnnotationMarker& rCustomAnnotationMarker
-                    = pAnnotation->getCustomAnnotationMarker();
-
-                rCustomAnnotationMarker.maLineColor = rPDFAnnotation.maColor;
+                sdr::annotation::CreationInfo aInfo;
+                aInfo.maRectangle = rPDFAnnotation.maRectangle;
 
                 if (rPDFAnnotation.meSubType == vcl::pdf::PDFAnnotationSubType::Polygon)
                 {
+                    aInfo.meType = sdr::annotation::AnnotationType::Polygon;
+
                     auto* pMarker = static_cast<vcl::pdf::PDFAnnotationMarkerPolygon*>(
                         rPDFAnnotation.mpMarker.get());
-                    rCustomAnnotationMarker.mnLineWidth = pMarker->mnWidth;
-                    rCustomAnnotationMarker.maFillColor = pMarker->maFillColor;
-                    rCustomAnnotationMarker.maPolygons.push_back(pMarker->maPolygon);
+
+                    aInfo.maPolygons.push_back(pMarker->maPolygon);
+                    aInfo.mnWidth = pMarker->mnWidth;
+                    aInfo.maColor = rPDFAnnotation.maColor;
+                    aInfo.mbColor = true;
+                    aInfo.maFillColor = pMarker->maFillColor;
+                    aInfo.mbFillColor = true;
                 }
                 else if (rPDFAnnotation.meSubType == vcl::pdf::PDFAnnotationSubType::Square)
                 {
+                    aInfo.meType = sdr::annotation::AnnotationType::Square;
+
                     auto* pMarker = static_cast<vcl::pdf::PDFAnnotationMarkerSquare*>(
                         rPDFAnnotation.mpMarker.get());
-                    basegfx::B2DPolygon aPoly
-                        = basegfx::utils::createPolygonFromRect(rPDFAnnotation.maRectangle);
-                    rCustomAnnotationMarker.mnLineWidth = pMarker->mnWidth;
-                    rCustomAnnotationMarker.maFillColor = pMarker->maFillColor;
-                    rCustomAnnotationMarker.maPolygons.push_back(aPoly);
+
+                    aInfo.mnWidth = pMarker->mnWidth;
+                    aInfo.maColor = rPDFAnnotation.maColor;
+                    aInfo.mbColor = true;
+                    aInfo.maFillColor = pMarker->maFillColor;
+                    aInfo.mbFillColor = true;
                 }
                 else if (rPDFAnnotation.meSubType == vcl::pdf::PDFAnnotationSubType::Circle)
                 {
+                    aInfo.meType = sdr::annotation::AnnotationType::Circle;
+
                     auto* pMarker = static_cast<vcl::pdf::PDFAnnotationMarkerCircle*>(
                         rPDFAnnotation.mpMarker.get());
 
-                    basegfx::B2DPoint rCenter = rPDFAnnotation.maRectangle.getCenter();
-                    double fRadiusX = rPDFAnnotation.maRectangle.getWidth() / 2;
-                    double fRadiusY = rPDFAnnotation.maRectangle.getHeight() / 2;
-
-                    basegfx::B2DPolygon aPoly
-                        = basegfx::utils::createPolygonFromEllipse(rCenter, fRadiusX, fRadiusY);
-                    rCustomAnnotationMarker.mnLineWidth = pMarker->mnWidth;
-                    rCustomAnnotationMarker.maFillColor = pMarker->maFillColor;
-                    rCustomAnnotationMarker.maPolygons.push_back(aPoly);
+                    aInfo.mnWidth = pMarker->mnWidth;
+                    aInfo.maColor = rPDFAnnotation.maColor;
+                    aInfo.mbColor = true;
+                    aInfo.maFillColor = pMarker->maFillColor;
+                    aInfo.mbFillColor = true;
                 }
                 else if (rPDFAnnotation.meSubType == vcl::pdf::PDFAnnotationSubType::Ink)
                 {
+                    aInfo.meType = sdr::annotation::AnnotationType::Ink;
+
                     auto* pMarker = static_cast<vcl::pdf::PDFAnnotationMarkerInk*>(
                         rPDFAnnotation.mpMarker.get());
-                    rCustomAnnotationMarker.maPolygons.insert(
-                        rCustomAnnotationMarker.maPolygons.end(), pMarker->maStrokes.begin(),
-                        pMarker->maStrokes.end());
-                    rCustomAnnotationMarker.mnLineWidth = pMarker->mnWidth;
-                    rCustomAnnotationMarker.maFillColor = pMarker->maFillColor;
+
+                    aInfo.maPolygons = pMarker->maStrokes;
+
+                    aInfo.mnWidth = pMarker->mnWidth;
+                    aInfo.maColor = rPDFAnnotation.maColor;
+                    aInfo.mbColor = true;
+                    aInfo.maFillColor = pMarker->maFillColor;
+                    aInfo.mbFillColor = true;
                 }
                 else if (rPDFAnnotation.meSubType == vcl::pdf::PDFAnnotationSubType::Highlight)
                 {
-                    if (!rCustomAnnotationMarker.maLineColor.IsTransparent())
-                        rCustomAnnotationMarker.maLineColor.SetAlpha(255 - 0x90);
+                    aInfo.meType = sdr::annotation::AnnotationType::Highlight;
+
                     auto* pMarker = static_cast<vcl::pdf::PDFAnnotationMarkerHighlight*>(
                         rPDFAnnotation.mpMarker.get());
-                    rCustomAnnotationMarker.maPolygons.insert(
-                        rCustomAnnotationMarker.maPolygons.end(), pMarker->maQuads.begin(),
-                        pMarker->maQuads.end());
-                    rCustomAnnotationMarker.mnLineWidth = 1;
-                    rCustomAnnotationMarker.maFillColor = rPDFAnnotation.maColor;
-                    if (!rCustomAnnotationMarker.maFillColor.IsTransparent())
-                        rCustomAnnotationMarker.maFillColor.SetAlpha(255 - 0x90);
+
+                    aInfo.maColor = rPDFAnnotation.maColor;
+                    aInfo.maColor.SetAlpha(0xFF - 0x90);
+                    aInfo.mbColor = true;
+
+                    aInfo.mnWidth = 1;
+
+                    aInfo.maFillColor = rPDFAnnotation.maColor;
+                    aInfo.maFillColor.SetAlpha(0xFF - 0x90);
+                    aInfo.mbFillColor = true;
+
+                    aInfo.maPolygons = pMarker->maQuads;
                 }
                 else if (rPDFAnnotation.meSubType == vcl::pdf::PDFAnnotationSubType::Line)
                 {
                     auto* pMarker = static_cast<vcl::pdf::PDFAnnotationMarkerLine*>(
                         rPDFAnnotation.mpMarker.get());
 
-                    basegfx::B2DPolygon aPoly;
-                    aPoly.append(pMarker->maLineStart);
-                    aPoly.append(pMarker->maLineEnd);
-                    rCustomAnnotationMarker.maPolygons.push_back(aPoly);
+                    aInfo.meType = sdr::annotation::AnnotationType::Line;
 
-                    rCustomAnnotationMarker.mnLineWidth = pMarker->mnWidth;
-                    rCustomAnnotationMarker.maFillColor = COL_TRANSPARENT;
+                    basegfx::B2DPolygon aPolygon;
+                    aPolygon.append(pMarker->maLineStart);
+                    aPolygon.append(pMarker->maLineEnd);
+                    aInfo.maPolygons.push_back(aPolygon);
+
+                    aInfo.mnWidth = pMarker->mnWidth;
+                    aInfo.maColor = rPDFAnnotation.maColor;
+                    aInfo.mbColor = true;
+                    aInfo.mbFillColor = false;
                 }
+                else if (rPDFAnnotation.meSubType == vcl::pdf::PDFAnnotationSubType::FreeText)
+                {
+                    aInfo.meType = sdr::annotation::AnnotationType::FreeText;
+                }
+
+                xAnnotation->setCreationInfo(aInfo);
             }
-            else if (rPDFAnnotation.meSubType == vcl::pdf::PDFAnnotationSubType::FreeText)
-            {
-                xAnnotation->setIsFreeText(true);
-            }
+
+            pPage->addAnnotation(xAnnotation, -1);
         }
     }
     mrDocument.setLock(bWasLocked);

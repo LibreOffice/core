@@ -25,13 +25,12 @@
 
 #include <comphelper/compbase.hxx>
 
-#include "annotationtag.hxx"
-
 namespace com::sun::star::drawing { class XDrawView; }
 namespace com::sun::star::office { class XAnnotationAccess; }
 namespace com::sun::star::office { class XAnnotation; }
 
 class SfxRequest;
+class SdrObject;
 class SdPage;
 class SdDrawDocument;
 struct ImplSVEvent;
@@ -42,6 +41,7 @@ namespace sd
 {
 class Annotation;
 class ViewShellBase;
+class View;
 
 namespace tools { class EventMultiplexerEvent; }
 
@@ -87,10 +87,6 @@ public:
     static Color GetColorLight(sal_uInt16 aAuthorIndex);
     static Color GetColor(sal_uInt16 aAuthorIndex);
 
-    // callbacks
-    void onTagSelected( AnnotationTag const & rTag );
-    void onTagDeselected( AnnotationTag const & rTag );
-
     void onSelectionChanged();
 
     void addListener();
@@ -102,8 +98,7 @@ public:
     DECL_LINK(UpdateTagsHdl, void *, void);
 
     void UpdateTags(bool bSynchron = false);
-    void CreateTags();
-    void DisposeTags();
+    void SyncAnnotationObjects();
 
     SdPage* GetNextPage( SdPage const * pPage, bool bForward );
 
@@ -113,11 +108,11 @@ public:
 
     void ShowAnnotations(bool bShow);
 
+    SdrObject* findAnnotationObjectMatching(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation);
+
 private:
     ViewShellBase& mrBase;
     SdDrawDocument* mpDoc;
-
-    std::vector< rtl::Reference< AnnotationTag > > maTagVector;
 
     css::uno::Reference< css::drawing::XDrawView > mxView;
     rtl::Reference<SdPage> mxCurrentPage;
@@ -125,7 +120,6 @@ private:
 
     bool mbShowAnnotations;
     ImplSVEvent * mnUpdateTagsEvent;
-    vcl::Font maFont;
 
     rtl::Reference<sdr::annotation::Annotation> GetAnnotationById(sal_uInt32 nAnnotationId);
 };

@@ -41,6 +41,34 @@ SVXCORE_DLLPUBLIC void LOKCommentNotify(CommentNotificationType nType,
                                         const SfxViewShell* pViewShell, Annotation& rAnnotation);
 SVXCORE_DLLPUBLIC void LOKCommentNotifyAll(CommentNotificationType nType, Annotation& rAnnotation);
 
+enum class AnnotationType
+{
+    None,
+    Square,
+    Polygon,
+    Circle,
+    Ink,
+    Highlight,
+    Line,
+    FreeText,
+};
+
+struct CreationInfo
+{
+    AnnotationType meType = AnnotationType::None;
+
+    std::vector<basegfx::B2DPolygon> maPolygons;
+    basegfx::B2DRectangle maRectangle;
+
+    float mnWidth = 0.0f;
+
+    bool mbFillColor = false;
+    Color maFillColor = COL_TRANSPARENT;
+
+    bool mbColor = false;
+    Color maColor = COL_TRANSPARENT;
+};
+
 struct SVXCORE_DLLPUBLIC AnnotationData
 {
     css::geometry::RealPoint2D m_Position;
@@ -73,7 +101,7 @@ protected:
     css::util::DateTime m_DateTime;
     rtl::Reference<sdr::annotation::TextApiObject> m_TextRange;
 
-    bool m_bIsFreeText = false;
+    CreationInfo maCreationInfo;
 
     std::unique_ptr<SdrUndoAction> createUndoAnnotation();
 
@@ -125,9 +153,8 @@ public:
 
     sal_uInt32 GetId() const { return m_nId; }
 
-    void setIsFreeText(bool value) { m_bIsFreeText = value; }
-
-    bool isFreeText() const { return m_bIsFreeText; }
+    CreationInfo const& getCreationInfo() { return maCreationInfo; }
+    void setCreationInfo(CreationInfo const& rCreationInfo) { maCreationInfo = rCreationInfo; }
 };
 
 typedef std::vector<rtl::Reference<Annotation>> AnnotationVector;
