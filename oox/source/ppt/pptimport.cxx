@@ -143,6 +143,28 @@ bool PowerPointImport::exportDocument() noexcept
     return false;
 }
 
+void PowerPointImport::getSchemeColorToken(sal_Int32& nToken) const
+{
+    if (mpActualSlidePersist)
+    {
+        bool bColorMapped = false;
+        oox::drawingml::ClrMapPtr pClrMapPtr(mpActualSlidePersist->getClrMap());
+        if (pClrMapPtr)
+            bColorMapped = pClrMapPtr->getColorMap(nToken);
+
+        if (!bColorMapped)    // try masterpage mapping
+        {
+            SlidePersistPtr pMasterPersist = mpActualSlidePersist->getMasterPersist();
+            if (pMasterPersist)
+            {
+                pClrMapPtr = pMasterPersist->getClrMap();
+                if (pClrMapPtr)
+                    pClrMapPtr->getColorMap(nToken);
+            }
+        }
+    }
+}
+
 ::Color PowerPointImport::getSchemeColor( sal_Int32 nToken ) const
 {
     ::Color nColor;
@@ -259,6 +281,7 @@ class PptGraphicHelper : public GraphicHelper
 public:
     explicit            PptGraphicHelper( const PowerPointImport& rFilter );
     virtual ::Color     getSchemeColor( sal_Int32 nToken ) const override;
+    virtual void        getSchemeColorToken( sal_Int32& nToken ) const override;
     virtual sal_Int32   getDefaultChartAreaFillStyle() const override;
 private:
     const PowerPointImport& mrFilter;
@@ -268,6 +291,11 @@ PptGraphicHelper::PptGraphicHelper( const PowerPointImport& rFilter ) :
     GraphicHelper( rFilter.getComponentContext(), rFilter.getTargetFrame(), rFilter.getStorage() ),
     mrFilter( rFilter )
 {
+}
+
+void PptGraphicHelper::getSchemeColorToken(sal_Int32& nToken) const
+{
+    return mrFilter.getSchemeColorToken(nToken);
 }
 
 ::Color PptGraphicHelper::getSchemeColor( sal_Int32 nToken ) const

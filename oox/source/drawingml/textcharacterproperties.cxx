@@ -29,6 +29,7 @@
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <oox/helper/helper.hxx>
 #include <oox/helper/propertyset.hxx>
+#include <oox/helper/graphichelper.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/token/properties.hxx>
@@ -137,6 +138,13 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
 
         // set theme color
         model::ComplexColor aComplexColor = aColor.getComplexColor();
+        sal_Int32 nToken = Color::getColorMapToken(aColor.getSchemeColorName());
+        if (nToken != -1)
+        {
+            rFilter.getGraphicHelper().getSchemeColorToken(nToken);
+            model::ThemeColorType eThemeColorType = schemeTokenToThemeColorType(nToken);
+            aComplexColor.setThemeColor(eThemeColorType);
+        }
         rPropMap.setProperty(PROP_CharComplexColor, model::color::createXComplexColor(aComplexColor));
         rPropMap.setProperty(PROP_CharContoured, bContoured);
 

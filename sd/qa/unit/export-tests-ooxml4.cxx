@@ -38,6 +38,29 @@ public:
     }
 };
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf160591)
+{
+    createSdImpressDoc("pptx/tdf160591.pptx");
+    save(u"Impress Office Open XML"_ustr);
+
+    // Char scheme color
+    xmlDocUniquePtr pXmlDoc1 = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc1,
+                "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr"_ostr,
+                "val"_ostr, u"lt2"_ustr);
+
+    // Master slide ColorMap
+    xmlDocUniquePtr pXmlDoc2 = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    assertXPath(pXmlDoc2, "/p:sldMaster/p:clrMap"_ostr, "bg1"_ostr, u"dk1"_ustr);
+    assertXPath(pXmlDoc2, "/p:sldMaster/p:clrMap"_ostr, "tx1"_ostr, u"lt1"_ustr);
+    assertXPath(pXmlDoc2, "/p:sldMaster/p:clrMap"_ostr, "bg2"_ostr, u"dk2"_ustr);
+    assertXPath(pXmlDoc2, "/p:sldMaster/p:clrMap"_ostr, "tx2"_ostr, u"lt2"_ustr);
+
+    // Master slide background
+    assertXPath(pXmlDoc2, "/p:sldMaster/p:cSld/p:bg/p:bgPr/a:solidFill/a:schemeClr"_ostr,
+                "val"_ostr, u"dk1"_ustr);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testSmartArtPreserve)
 {
     createSdImpressDoc("pptx/smartart-preserve.pptx");

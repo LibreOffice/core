@@ -19,6 +19,7 @@
 
 #include <comphelper/anytostring.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
@@ -287,6 +288,8 @@ void PresentationFragmentHandler::importMasterSlide(const Reference<frame::XMode
         pMasterPersistPtr->createBackground( rFilter );
         pMasterPersistPtr->createXShapes( rFilter );
 
+        saveColorMapToGrabBag(pMasterPersistPtr->getClrMap());
+
         uno::Reference< beans::XPropertySet > xSet(pMasterPersistPtr->getPage(), uno::UNO_QUERY_THROW);
         xSet->setPropertyValue(u"SlideLayout"_ustr, Any(pMasterPersistPtr->getLayoutFromValueToken()));
 
@@ -362,6 +365,59 @@ void PresentationFragmentHandler::saveThemeToGrabBag(const oox::drawingml::Theme
     catch (const uno::Exception&)
     {
         SAL_WARN("oox", "oox::ppt::PresentationFragmentHandler::saveThemeToGrabBag, Failed to save grab bag");
+    }
+}
+
+void PresentationFragmentHandler::saveColorMapToGrabBag(const oox::drawingml::ClrMapPtr& pClrMapPtr)
+{
+    if (!pClrMapPtr)
+        return;
+
+    try
+    {
+        uno::Reference<beans::XPropertySet> xDocProps(getFilter().getModel(), uno::UNO_QUERY);
+        if (xDocProps.is())
+        {
+            uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
+
+            static constexpr OUString aGrabBagPropName = u"InteropGrabBag"_ustr;
+            if (xPropsInfo.is() && xPropsInfo->hasPropertyByName(aGrabBagPropName))
+            {
+                static const constexpr std::array<sal_Int32, 12> constTokenArray
+                    = { XML_bg1,     XML_tx1,     XML_bg2,     XML_tx2,
+                        XML_accent1, XML_accent2, XML_accent3, XML_accent4,
+                        XML_accent5, XML_accent6, XML_hlink,   XML_folHlink };
+
+                comphelper::SequenceAsHashMap aClrMapHashMap;
+                comphelper::SequenceAsHashMap aGrabBag(
+                    xDocProps->getPropertyValue(aGrabBagPropName));
+
+                std::vector<beans::PropertyValue> aClrMapList;
+                size_t nColorMapSize = constTokenArray.size();
+                aClrMapList.reserve(nColorMapSize);
+                for (size_t i = 0; i < nColorMapSize; ++i)
+                {
+                    sal_Int32 nToken = constTokenArray[i];
+                    pClrMapPtr->getColorMap(nToken);
+                    aClrMapList.push_back(
+                        comphelper::makePropertyValue(OUString::number(i), nToken));
+                }
+
+                uno::Sequence<beans::PropertyValue> aClrMapPropValue{ comphelper::makePropertyValue(
+                    u"OOXColorMap"_ustr,
+                    uno::Any(comphelper::containerToSequence(aClrMapList))) };
+
+                aClrMapHashMap << aClrMapPropValue;
+                aGrabBag.update(aClrMapHashMap);
+
+                xDocProps->setPropertyValue(aGrabBagPropName,
+                                            uno::Any(aGrabBag.getAsConstPropertyValueList()));
+            }
+        }
+    }
+    catch (const uno::Exception&)
+    {
+        SAL_WARN("oox", "oox::ppt::PresentationFragmentHandler::saveColorMapToGrabBag, Failed to save grab bag");
     }
 }
 

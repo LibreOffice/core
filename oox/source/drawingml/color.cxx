@@ -455,6 +455,21 @@ void Color::clearTransformations()
     clearTransparence();
 }
 
+constexpr frozen::unordered_map<std::u16string_view, sal_Int32, 12> constColorMapTokenMap
+    = { { u"bg1", XML_bg1 },         { u"tx1", XML_tx1 },         { u"bg2", XML_bg2 },
+        { u"tx2", XML_tx2 },         { u"accent1", XML_accent1 }, { u"accent2", XML_accent2 },
+        { u"accent3", XML_accent3 }, { u"accent4", XML_accent4 }, { u"accent5", XML_accent5 },
+        { u"accent6", XML_accent6 }, { u"hlink", XML_hlink },     { u"folHlink", XML_folHlink } };
+
+sal_Int32 Color::getColorMapToken(std::u16string_view sName)
+{
+    auto aIterator = constColorMapTokenMap.find(sName);
+    if (aIterator == constColorMapTokenMap.end())
+        return XML_TOKEN_INVALID;
+    else
+        return aIterator->second;
+}
+
 OUString Color::getColorTransformationName( sal_Int32 nElement )
 {
     switch( nElement )

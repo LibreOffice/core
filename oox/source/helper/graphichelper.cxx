@@ -121,6 +121,8 @@ GraphicHelper::~GraphicHelper()
     return ContainerHelper::getMapElement( maSystemPalette, nToken, nDefaultRgb );
 }
 
+void GraphicHelper::getSchemeColorToken(sal_Int32& /*nToken*/) const {}
+
 ::Color GraphicHelper::getSchemeColor( sal_Int32 /*nToken*/ ) const
 {
     OSL_FAIL( "GraphicHelper::getSchemeColor - scheme colors not implemented" );
