@@ -118,4 +118,18 @@
     <string name="UNO_commands_string_type_hint">Math</string>
     <string name="alert_cancel">Diddymu</string>
     <string name="unable_to_save">Methu cadw i ffeil</string>
+    <string name="app_about_name"><b>Darllenydd LibreOffice \'Beta\'</b></string>
+    <string name="browser_app_name">Porwr LibreOffice</string>
+    <string name="menu_search">Chwilio</string>
+    <string name="search_not_found">Heb ganfod yr allweddair</string>
+    <string name="menu_preferences">Dewisiadau</string>
+    <string name="action_bold">Trwm</string>
+    <string name="action_underline">Tanlinellu</string>
+    <string name="action_italic">Italig</string>
+    <string name="action_strikeout">Taro Allan</string>
+    <string name="message_save_incomplete">Cadw yn anghyflawn. A fu newidiadau?</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard">Nid yw eich dyfais Android yn cefnogi sioe sleidiau svg o fewn ap. Rydym wedi copïo dolen y sioe sleidiau i\'r clipfwrdd. Pwyswch y botwm cartref, agor porwr gwe fodern, gludo i\'r bar cyfeiriad a mynd.</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">Iawn</string>
+    <string name="unable_to_go_further">Methu mynd ymhellach.</string>
+    <string name="directory_not_saved">Heb gadw\'r cyfeiriadur.</string>
 </resources>
