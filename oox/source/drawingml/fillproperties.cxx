@@ -441,6 +441,14 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                 else
                 {
                     aComplexColor = maFillColor.getComplexColor();
+                    OUString sColorName = getBestSolidColor().getSchemeColorName();
+                    sal_Int32 nToken = Color::getColorMapToken(sColorName);
+                    if (nToken != -1)
+                    {
+                        rGraphicHelper.getSchemeColorToken(nToken);
+                        model::ThemeColorType eThemeColorType = schemeTokenToThemeColorType(nToken);
+                        aComplexColor.setThemeColor(eThemeColorType);
+                    }
                 }
                 rPropMap.setProperty(PROP_FillComplexColor, model::color::createXComplexColor(aComplexColor));
 

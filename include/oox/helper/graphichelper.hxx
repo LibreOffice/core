@@ -77,6 +77,8 @@ public:
     ::Color            getSystemColor( sal_Int32 nToken, ::Color nDefaultRgb = API_RGB_TRANSPARENT ) const;
     /** Derived classes may implement to resolve a scheme color from the passed XML token identifier. */
     virtual ::Color    getSchemeColor( sal_Int32 nToken ) const;
+    /** Derived classes may implement to resolve a ColorMap token from the passed XML token identifier. */
+    virtual void       getSchemeColorToken(sal_Int32& nToken) const;
     /** Derived classes may implement to resolve a palette index to an RGB color. */
     virtual ::Color    getPaletteColor( sal_Int32 nPaletteIdx ) const;
 
