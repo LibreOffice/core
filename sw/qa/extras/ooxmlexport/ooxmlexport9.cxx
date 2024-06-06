@@ -1223,8 +1223,7 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXControlAlign)
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // First check box aligned as a floating object
-    uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xControlShape.is());
+    uno::Reference<drawing::XControlShape> xControlShape(getShape(2), uno::UNO_QUERY_THROW);
 
     // Check whether we have the right control
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
@@ -1245,7 +1244,7 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXControlAlign)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2341), xShape->getPosition().Y);
 
     // Second check box aligned inline / as character
-    xControlShape.set(getShape(2), uno::UNO_QUERY);
+    xControlShape.set(getShape(1), uno::UNO_QUERY_THROW);
 
     // Check whether we have the right control
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);

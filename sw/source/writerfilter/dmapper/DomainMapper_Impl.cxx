@@ -4831,6 +4831,12 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 if(aPropMargin)
                     xShapePropertySet->setPropertyValue(getPropertyName(PROP_BOTTOM_MARGIN),
                                                         aPropMargin->second);
+
+                sal_Int64 zOrder = SAL_MIN_INT64;
+                xShapePropertySet->setPropertyValue(u"ZOrder"_ustr,
+                    uno::Any(rZOrderHelper.findZOrder(zOrder, /*LastDuplicateWins*/true)));
+                rZOrderHelper.addItem(xShapePropertySet, zOrder);
+                checkZOrderStatus = true;
             }
             else
             {
