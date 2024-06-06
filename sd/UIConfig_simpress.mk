@@ -17,6 +17,7 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/simpress,\
 	sd/uiconfig/simpress/popupmenu/3dobject \
 	sd/uiconfig/simpress/popupmenu/3dscene2 \
 	sd/uiconfig/simpress/popupmenu/3dscene \
+	sd/uiconfig/simpress/popupmenu/annotation \
 	sd/uiconfig/simpress/popupmenu/bezier \
 	sd/uiconfig/simpress/popupmenu/connector \
 	sd/uiconfig/simpress/popupmenu/curve \

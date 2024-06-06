@@ -17,6 +17,7 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/sdraw,\
 	sd/uiconfig/sdraw/popupmenu/3dobject \
 	sd/uiconfig/sdraw/popupmenu/3dscene2 \
 	sd/uiconfig/sdraw/popupmenu/3dscene \
+	sd/uiconfig/sdraw/popupmenu/annotation \
 	sd/uiconfig/sdraw/popupmenu/bezier \
 	sd/uiconfig/sdraw/popupmenu/connector \
 	sd/uiconfig/sdraw/popupmenu/curve \

@@ -45,6 +45,7 @@
 #include <DrawDocShell.hxx>
 
 #include <svl/itemset.hxx>
+#include <svx/annotation/ObjectAnnotationData.hxx>
 
 using namespace ::sd;
 using namespace ::com::sun::star;
@@ -390,6 +391,7 @@ void SdPage::lateInit(const SdPage& rSrcPage)
         uno::Reference<css::text::XTextCopy> xRange (aNewAnnotation->getTextRange(), uno::UNO_QUERY);
         if(xSourceRange.is() && xRange.is())
             xRange->copyText(xSourceRange);
+        addAnnotation(aNewAnnotation, -1);
     }
 
     // fix user calls for duplicated slide
@@ -554,9 +556,7 @@ bool SdPage::Equals(const SdPage& rOtherPage) const
 
 rtl::Reference<sdr::annotation::Annotation> SdPage::createAnnotation()
 {
-    rtl::Reference<sdr::annotation::Annotation> xAnnotation;
-    sd::createAnnotation(xAnnotation, this);
-    return xAnnotation;
+    return sd::createAnnotation(this);
 }
 
 void SdPage::addAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, int nIndex)
@@ -613,6 +613,15 @@ void SdPage::removeAnnotationNoNotify(rtl::Reference<sdr::annotation::Annotation
         std::unique_ptr<SdrUndoAction> pAction = CreateUndoInsertOrRemoveAnnotation(xUnconstAnnotation, false);
         if (pAction)
             rModel.AddUndo(std::move(pAction));
+    }
+
+    for (size_t nObjectIndex = 0; nObjectIndex < GetObjCount(); ++nObjectIndex)
+    {
+        SdrObject* pObject = GetObj(nObjectIndex);
+        if (pObject->isAnnotationObject() && pObject->getAnnotationData()->mxAnnotation == xAnnotation)
+        {
+            RemoveObject(nObjectIndex);
+        }
     }
 
     auto iterator = std::find(maAnnotations.begin(), maAnnotations.end(), xAnnotation);
