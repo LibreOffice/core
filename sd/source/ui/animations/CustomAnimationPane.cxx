@@ -2189,8 +2189,13 @@ IMPL_LINK_NOARG(CustomAnimationPane, SelectionHandler, Timer*, void)
 IMPL_LINK_NOARG(CustomAnimationPane, UpdateAnimationLB, weld::ComboBox&, void)
 {
     //FIXME: first effect only? what if there is more?
-    CustomAnimationEffectPtr pEffect = maListSelection.front();
-    fillAnimationLB( pEffect->hasText() );
+    bool bHasText = false;
+    if (!maListSelection.empty())
+    {
+        CustomAnimationEffectPtr pEffect = maListSelection.front();
+        bHasText = pEffect && pEffect->hasText();
+    }
+    fillAnimationLB(bHasText);
 }
 
 IMPL_LINK_NOARG(CustomAnimationPane, DurationModifiedHdl, weld::MetricSpinButton&, void)
