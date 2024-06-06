@@ -274,7 +274,7 @@ OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEve
     OUString aHelpText;
     Help* pHelp = Application::GetHelp();
     if ( pHelp )
-        aHelpText = pHelp->GetHelpText(sHelpId, static_cast<weld::Widget*>(nullptr));
+        aHelpText = pHelp->GetHelpText(sHelpId);
     return aHelpText;
 }
 

@@ -580,83 +580,18 @@ static SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
     return pHelpWindow;
 }
 
-OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const vcl::Window* pWindow )
+OUString SfxHelp::GetHelpText(const OUString& aCommandURL)
 {
     OUString sModuleName = GetHelpModuleName_Impl(aCommandURL);
     auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommandURL, getCurrentModuleIdentifier_Impl());
     OUString sRealCommand = vcl::CommandInfoProvider::GetRealCommandForCommand(aProperties);
     OUString sHelpText = SfxHelp_Impl::GetHelpText( sRealCommand.isEmpty() ? aCommandURL : sRealCommand, sModuleName );
 
-    OUString aNewHelpId;
-
-    if (pWindow && sHelpText.isEmpty())
-    {
-        // no help text found -> try with parent help id.
-        vcl::Window* pParent = pWindow->GetParent();
-        while ( pParent )
-        {
-            aNewHelpId = pParent->GetHelpId();
-            sHelpText = SfxHelp_Impl::GetHelpText( aNewHelpId, sModuleName );
-            if (!sHelpText.isEmpty())
-                pParent = nullptr;
-            else
-                pParent = pParent->GetParent();
-        }
-
-        if (bIsDebug && sHelpText.isEmpty())
-            aNewHelpId.clear();
-    }
-
     // add some debug information?
     if ( bIsDebug )
     {
         sHelpText += "\n-------------\n" +
             sModuleName + ": " + aCommandURL;
-        if ( !aNewHelpId.isEmpty() )
-        {
-            sHelpText += " - " + aNewHelpId;
-        }
-    }
-
-    return sHelpText;
-}
-
-OUString SfxHelp::GetHelpText(const OUString& aCommandURL, const weld::Widget* pWidget)
-{
-    OUString sModuleName = GetHelpModuleName_Impl(aCommandURL);
-    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommandURL, getCurrentModuleIdentifier_Impl());
-    OUString sRealCommand = vcl::CommandInfoProvider::GetRealCommandForCommand(aProperties);
-    OUString sHelpText = SfxHelp_Impl::GetHelpText( sRealCommand.isEmpty() ? aCommandURL : sRealCommand, sModuleName );
-
-    OUString aNewHelpId;
-
-    if (pWidget && sHelpText.isEmpty())
-    {
-        // no help text found -> try with parent help id.
-        std::unique_ptr<weld::Widget> xParent(pWidget->weld_parent());
-        while (xParent)
-        {
-            aNewHelpId = xParent->get_help_id();
-            sHelpText = SfxHelp_Impl::GetHelpText( aNewHelpId, sModuleName );
-            if (!sHelpText.isEmpty())
-                xParent.reset();
-            else
-                xParent = xParent->weld_parent();
-        }
-
-        if (bIsDebug && sHelpText.isEmpty())
-            aNewHelpId.clear();
-    }
-
-    // add some debug information?
-    if ( bIsDebug )
-    {
-        sHelpText += "\n-------------\n" +
-            sModuleName + ": " + aCommandURL;
-        if ( !aNewHelpId.isEmpty() )
-        {
-            sHelpText += " - " + aNewHelpId;
-        }
     }
 
     return sHelpText;

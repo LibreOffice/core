@@ -1123,9 +1123,9 @@ OUString Menu::ImplGetHelpText( sal_uInt16 nItemId ) const
         if ( pHelp )
         {
             if (!pData->aCommandStr.isEmpty())
-                pData->aHelpText = pHelp->GetHelpText( pData->aCommandStr, static_cast<weld::Widget*>(nullptr) );
+                pData->aHelpText = pHelp->GetHelpText( pData->aCommandStr );
             if (pData->aHelpText.isEmpty() && !pData->aHelpId.isEmpty())
-                pData->aHelpText = pHelp->GetHelpText( pData->aHelpId, static_cast<weld::Widget*>(nullptr) );
+                pData->aHelpText = pHelp->GetHelpText( pData->aHelpId );
         }
     }
 

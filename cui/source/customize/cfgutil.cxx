@@ -251,7 +251,7 @@ OUString CuiConfigFunctionListBox::GetCommandHelpText()
     {
         if ( pData->nKind == SfxCfgKind::FUNCTION_SLOT )
         {
-            return Application::GetHelp()->GetHelpText(pData->sCommand, static_cast<weld::Widget*>(nullptr));
+            return Application::GetHelp()->GetHelpText(pData->sCommand);
         }
         else if ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT )
         {

@@ -3601,9 +3601,9 @@ const OUString& ToolBox::ImplGetHelpText( ToolBoxItemId nItemId ) const
         if ( pHelp )
         {
             if (DispatchableCommand(pItem->maCommandStr))
-                pItem->maHelpText = pHelp->GetHelpText( pItem->maCommandStr, this );
+                pItem->maHelpText = pHelp->GetHelpText( pItem->maCommandStr );
             if ( pItem->maHelpText.isEmpty() && !pItem->maHelpId.isEmpty() )
-                pItem->maHelpText = pHelp->GetHelpText( pItem->maHelpId, this );
+                pItem->maHelpText = pHelp->GetHelpText( pItem->maHelpId );
         }
     }
 

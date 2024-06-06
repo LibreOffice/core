@@ -1304,9 +1304,9 @@ const OUString& StatusBar::GetHelpText( sal_uInt16 nItemId ) const
         if ( pHelp )
         {
             if ( !pItem->maCommand.isEmpty() )
-                pItem->maHelpText = pHelp->GetHelpText( pItem->maCommand, this );
+                pItem->maHelpText = pHelp->GetHelpText( pItem->maCommand );
             if ( pItem->maHelpText.isEmpty() && !pItem->maHelpId.isEmpty() )
-                pItem->maHelpText = pHelp->GetHelpText( pItem->maHelpId, this );
+                pItem->maHelpText = pHelp->GetHelpText( pItem->maHelpId );
         }
     }
 

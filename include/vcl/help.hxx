@@ -65,10 +65,9 @@ public:
 
     virtual bool        Start(const OUString& rHelpId, weld::Widget* pWidget = nullptr);
     virtual void        SearchKeyword( const OUString& rKeyWord );
-    virtual OUString    GetHelpText(const OUString& aHelpURL, const weld::Widget* pWidget);
 
     virtual bool        Start(const OUString& rHelpId, const vcl::Window* pWindow);
-    virtual OUString    GetHelpText(const OUString& aHelpURL, const vcl::Window* pWindow);
+    virtual OUString    GetHelpText(const OUString& aHelpURL);
 
     static void         EnableContextHelp();
     static void         DisableContextHelp();

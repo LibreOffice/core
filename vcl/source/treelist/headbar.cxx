@@ -1240,7 +1240,7 @@ OUString HeaderBar::GetHelpText( sal_uInt16 nItemId ) const
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
-                pItem->maHelpText = pHelp->GetHelpText( OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
+                pItem->maHelpText = pHelp->GetHelpText( OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ) );
         }
 
         return pItem->maHelpText;

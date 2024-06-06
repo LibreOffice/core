@@ -2251,7 +2251,7 @@ OUString TabBar::GetHelpText(sal_uInt16 nPageId) const
         {
             Help* pHelp = Application::GetHelp();
             if (pHelp)
-                rItem.maHelpText = pHelp->GetHelpText(OStringToOUString(rItem.maHelpId, RTL_TEXTENCODING_UTF8), this);
+                rItem.maHelpText = pHelp->GetHelpText(OStringToOUString(rItem.maHelpId, RTL_TEXTENCODING_UTF8));
         }
 
         return rItem.maHelpText;

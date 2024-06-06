@@ -64,12 +64,7 @@ void Help::SearchKeyword( const OUString& )
 {
 }
 
-OUString Help::GetHelpText( const OUString&, const vcl::Window* )
-{
-    return OUString();
-}
-
-OUString Help::GetHelpText( const OUString&, const weld::Widget* )
+OUString Help::GetHelpText( const OUString& )
 {
     return OUString();
 }
