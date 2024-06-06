@@ -24,7 +24,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/core/attr/data/")
+        : SwModelTestBase(u"/sw/qa/core/attr/data/"_ustr)
     {
     }
 };
@@ -36,9 +36,9 @@ CPPUNIT_TEST_FIXTURE(Test, testSwAttrSet)
     SwDoc* pDoc = getSwDoc();
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Cut", {});
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     rtl::Reference<SwTransferable> xTransferable(new SwTransferable(*pWrtShell));
     SwModule* pMod = SW_MOD();
     SwTransferable* pOldTransferable = pMod->m_pXSelection;

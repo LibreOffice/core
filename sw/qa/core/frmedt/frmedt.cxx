@@ -35,7 +35,7 @@ class SwCoreFrmedtTest : public SwModelTestBase
 {
 public:
     SwCoreFrmedtTest()
-        : SwModelTestBase("/sw/qa/core/frmedt/data/")
+        : SwModelTestBase(u"/sw/qa/core/frmedt/data/"_ustr)
     {
     }
 };
@@ -48,7 +48,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testTextboxReanchor)
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     SdrPage* pDrawPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pDrawShape = pDrawPage->GetObj(1);
-    CPPUNIT_ASSERT_EQUAL(OUString("draw shape"), pDrawShape->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"draw shape"_ustr, pDrawShape->GetName());
 
     // Select the shape of the textbox.
     Point aPoint;
@@ -58,7 +58,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testTextboxReanchor)
     // Anchor the shape of the textbox into its own textframe.
     SdrObject* pTextFrameObj = pDrawPage->GetObj(2);
     SwFrameFormat* pTextFrameFormat = FindFrameFormat(pTextFrameObj);
-    CPPUNIT_ASSERT_EQUAL(OUString("Frame2"), pTextFrameFormat->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"Frame2"_ustr, pTextFrameFormat->GetName());
     SwFrameFormat* pDrawShapeFormat = FindFrameFormat(pDrawShape);
     SwNodeOffset nOldAnchor = pDrawShapeFormat->GetAnchor().GetAnchorNode()->GetIndex();
     pShell->FindAnchorPos(pTextFrameObj->GetLastBoundRect().Center(), true);
@@ -77,14 +77,16 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testVertPosFromBottomBoundingBox)
     createSwDoc();
     uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
-        xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
     xShape->setSize(awt::Size(10000, 10000));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    xShapeProps->setPropertyValue("AnchorType", uno::Any(text::TextContentAnchorType_AT_CHARACTER));
-    xShapeProps->setPropertyValue("VertOrient", uno::Any(text::VertOrientation::NONE));
-    xShapeProps->setPropertyValue("VertOrientRelation",
+    xShapeProps->setPropertyValue(u"AnchorType"_ustr,
+                                  uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+    xShapeProps->setPropertyValue(u"VertOrient"_ustr, uno::Any(text::VertOrientation::NONE));
+    xShapeProps->setPropertyValue(u"VertOrientRelation"_ustr,
                                   uno::Any(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
-    xShapeProps->setPropertyValue("VertOrientPosition", uno::Any(static_cast<sal_Int32>(-11000)));
+    xShapeProps->setPropertyValue(u"VertOrientPosition"_ustr,
+                                  uno::Any(static_cast<sal_Int32>(-11000)));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
@@ -182,11 +184,11 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testSplitFlyInsertCaption)
 
     // When trying to insert a caption below that table:
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->GotoTable("Table1");
+    pWrtShell->GotoTable(u"Table1"_ustr);
     InsCaptionOpt aOpt;
     SwView& rView = pWrtShell->GetView();
-    aOpt.SetCategory("Table");
-    aOpt.SetCaption("Numbers English-German");
+    aOpt.SetCategory(u"Table"_ustr);
+    aOpt.SetCaption(u"Numbers English-German"_ustr);
     // After, not before.
     aOpt.SetPos(1);
     // Without the accompanying fix in place, this call never finished, layout didn't handle content
@@ -215,9 +217,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testSplitFlyUnfloat)
     pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/1);
     pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
     pWrtShell->GoPrevCell();
-    pWrtShell->Insert("A1");
+    pWrtShell->Insert(u"A1"_ustr);
     pWrtShell->GoNextCell();
-    pWrtShell->Insert("A2");
+    pWrtShell->Insert(u"A2"_ustr);
     // Select cell:
     pWrtShell->SelAll();
     // Select table:

@@ -87,27 +87,27 @@ void ToxWhitespaceStripperTest::StrippingWhitespacesFromVariousStringsWorks()
 {
     {
         ToxWhitespaceStripper sut(u"abc\n");
-        CPPUNIT_ASSERT_EQUAL(OUString("abc"), sut.GetStrippedString());
+        CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, sut.GetStrippedString());
     }
     {
         ToxWhitespaceStripper sut(u"abc\n\n");
-        CPPUNIT_ASSERT_EQUAL(OUString("abc"), sut.GetStrippedString());
+        CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, sut.GetStrippedString());
     }
     {
         ToxWhitespaceStripper sut(u"abc\ndef");
-        CPPUNIT_ASSERT_EQUAL(OUString("abc def"), sut.GetStrippedString());
+        CPPUNIT_ASSERT_EQUAL(u"abc def"_ustr, sut.GetStrippedString());
     }
     {
         ToxWhitespaceStripper sut(u"  abc \ndef");
-        CPPUNIT_ASSERT_EQUAL(OUString(" abc def"), sut.GetStrippedString());
+        CPPUNIT_ASSERT_EQUAL(u" abc def"_ustr, sut.GetStrippedString());
     }
     {
         ToxWhitespaceStripper sut(u"  ");
-        CPPUNIT_ASSERT_EQUAL(OUString(""), sut.GetStrippedString());
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, sut.GetStrippedString());
     }
     {
         ToxWhitespaceStripper sut(u"d  ");
-        CPPUNIT_ASSERT_EQUAL(OUString("d"), sut.GetStrippedString());
+        CPPUNIT_ASSERT_EQUAL(u"d"_ustr, sut.GetStrippedString());
     }
 }
 

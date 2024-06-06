@@ -21,7 +21,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/core/edit/data/")
+        : SwModelTestBase(u"/sw/qa/core/edit/data/"_ustr)
     {
     }
 };

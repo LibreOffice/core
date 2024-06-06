@@ -34,16 +34,16 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityLinkClick)
     createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
-        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aFields = {
-        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
-        comphelper::makePropertyValue("Identifier", OUString("ARJ00")),
-        comphelper::makePropertyValue("Author", OUString("Ar, J")),
-        comphelper::makePropertyValue("Title", OUString("mytitle")),
-        comphelper::makePropertyValue("Year", OUString("2020")),
-        comphelper::makePropertyValue("URL", OUString("http://www.example.com/test.pdf")),
+        comphelper::makePropertyValue(u"BibiliographicType"_ustr, text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue(u"Identifier"_ustr, u"ARJ00"_ustr),
+        comphelper::makePropertyValue(u"Author"_ustr, u"Ar, J"_ustr),
+        comphelper::makePropertyValue(u"Title"_ustr, u"mytitle"_ustr),
+        comphelper::makePropertyValue(u"Year"_ustr, u"2020"_ustr),
+        comphelper::makePropertyValue(u"URL"_ustr, u"http://www.example.com/test.pdf"_ustr),
     };
-    xField->setPropertyValue("Fields", uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -51,7 +51,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityLinkClick)
     xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
     // Create a bibliography table.
     uno::Reference<text::XTextContent> xTable(
-        xFactory->createInstance("com.sun.star.text.Bibliography"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.Bibliography"_ustr), uno::UNO_QUERY);
     xCursor->gotoEnd(/*bExpand=*/false);
     xText->insertControlCharacter(xCursor, text::ControlCharacter::APPEND_PARAGRAPH,
                                   /*bAbsorb=*/false);
@@ -63,11 +63,11 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityLinkClick)
 
     // Paragraph index: Reference, table header, table row.
     // Portion index: ID, etc; then the URL.
-    auto aActual = getProperty<OUString>(getRun(getParagraph(3), 2), "HyperLinkURL");
+    auto aActual = getProperty<OUString>(getRun(getParagraph(3), 2), u"HyperLinkURL"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // An uncaught exception of type com.sun.star.container.NoSuchElementException
     // i.e. the URL was not clickable and the table row was a single text portion.
-    CPPUNIT_ASSERT_EQUAL(OUString("http://www.example.com/test.pdf"), aActual);
+    CPPUNIT_ASSERT_EQUAL(u"http://www.example.com/test.pdf"_ustr, aActual);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryURL)
@@ -76,15 +76,15 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryURL)
     createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
-        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aFields = {
-        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
-        comphelper::makePropertyValue("Identifier", OUString("AT")),
-        comphelper::makePropertyValue("Author", OUString("Author")),
-        comphelper::makePropertyValue("Title", OUString("Title")),
-        comphelper::makePropertyValue("URL", OUString("http://www.example.com/test.pdf#page=1")),
+        comphelper::makePropertyValue(u"BibiliographicType"_ustr, text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue(u"Identifier"_ustr, u"AT"_ustr),
+        comphelper::makePropertyValue(u"Author"_ustr, u"Author"_ustr),
+        comphelper::makePropertyValue(u"Title"_ustr, u"Title"_ustr),
+        comphelper::makePropertyValue(u"URL"_ustr, u"http://www.example.com/test.pdf#page=1"_ustr),
     };
-    xField->setPropertyValue("Fields", uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -92,7 +92,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryURL)
     xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
     // Create a bibliography table.
     uno::Reference<text::XTextContent> xTable(
-        xFactory->createInstance("com.sun.star.text.Bibliography"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.Bibliography"_ustr), uno::UNO_QUERY);
     xCursor->gotoEnd(/*bExpand=*/false);
     xText->insertControlCharacter(xCursor, text::ControlCharacter::APPEND_PARAGRAPH,
                                   /*bAbsorb=*/false);
@@ -105,12 +105,12 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryURL)
     // Then the page number from the source's URL should be stripped:
     // Paragraph index: Reference, table header, table row.
     // Portion index: ID, etc; then the URL.
-    auto aActual = getProperty<OUString>(getRun(getParagraph(3), 2), "HyperLinkURL");
+    auto aActual = getProperty<OUString>(getRun(getParagraph(3), 2), u"HyperLinkURL"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: http://www.example.com/test.pdf
     // - Actual  : http://www.example.com/test.pdf#page=1
     // i.e. the page number was still part of the bibliography table.
-    CPPUNIT_ASSERT_EQUAL(OUString("http://www.example.com/test.pdf"), aActual);
+    CPPUNIT_ASSERT_EQUAL(u"http://www.example.com/test.pdf"_ustr, aActual);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryClick)
@@ -122,15 +122,15 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryClick)
     // When inserting a biblio entry field with an URL:
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
-        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aFields = {
-        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
-        comphelper::makePropertyValue("Identifier", OUString("AT")),
-        comphelper::makePropertyValue("Author", OUString("Author")),
-        comphelper::makePropertyValue("Title", OUString("Title")),
-        comphelper::makePropertyValue("URL", OUString("http://www.example.com/test.pdf#page=1")),
+        comphelper::makePropertyValue(u"BibiliographicType"_ustr, text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue(u"Identifier"_ustr, u"AT"_ustr),
+        comphelper::makePropertyValue(u"Author"_ustr, u"Author"_ustr),
+        comphelper::makePropertyValue(u"Title"_ustr, u"Title"_ustr),
+        comphelper::makePropertyValue(u"URL"_ustr, u"http://www.example.com/test.pdf#page=1"_ustr),
     };
-    xField->setPropertyValue("Fields", uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -164,22 +164,22 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryRelClick)
     SwDoc* pDoc = getSwDoc();
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("FilterName", OUString("writer8")),
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"writer8"_ustr),
     };
     xStorable->storeAsURL(maTempFile.GetURL(), aArgs);
 
     // When inserting a biblio entry field with a relative URL:
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
-        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aFields = {
-        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
-        comphelper::makePropertyValue("Identifier", OUString("AT")),
-        comphelper::makePropertyValue("Author", OUString("Author")),
-        comphelper::makePropertyValue("Title", OUString("Title")),
-        comphelper::makePropertyValue("URL", OUString("test.pdf#page=1")),
+        comphelper::makePropertyValue(u"BibiliographicType"_ustr, text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue(u"Identifier"_ustr, u"AT"_ustr),
+        comphelper::makePropertyValue(u"Author"_ustr, u"Author"_ustr),
+        comphelper::makePropertyValue(u"Title"_ustr, u"Title"_ustr),
+        comphelper::makePropertyValue(u"URL"_ustr, u"test.pdf#page=1"_ustr),
     };
-    xField->setPropertyValue("Fields", uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -217,21 +217,23 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableURLDeduplication)
     for (const auto& rURL : aURLs)
     {
         uno::Reference<beans::XPropertySet> xField(
-            xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+            xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr),
+            uno::UNO_QUERY);
         uno::Sequence<beans::PropertyValue> aFields = {
-            comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
-            comphelper::makePropertyValue("Identifier", OUString("AT")),
-            comphelper::makePropertyValue("Author", OUString("Author")),
-            comphelper::makePropertyValue("Title", OUString("Title")),
-            comphelper::makePropertyValue("URL", OUString(rURL)),
+            comphelper::makePropertyValue(u"BibiliographicType"_ustr,
+                                          text::BibliographyDataType::WWW),
+            comphelper::makePropertyValue(u"Identifier"_ustr, u"AT"_ustr),
+            comphelper::makePropertyValue(u"Author"_ustr, u"Author"_ustr),
+            comphelper::makePropertyValue(u"Title"_ustr, u"Title"_ustr),
+            comphelper::makePropertyValue(u"URL"_ustr, OUString(rURL)),
         };
-        xField->setPropertyValue("Fields", uno::Any(aFields));
+        xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
         uno::Reference<text::XTextContent> xContent(xField, uno::UNO_QUERY);
         xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
     }
     // Create a bibliography table.
     uno::Reference<text::XTextContent> xTable(
-        xFactory->createInstance("com.sun.star.text.Bibliography"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.Bibliography"_ustr), uno::UNO_QUERY);
     xCursor->gotoEnd(/*bExpand=*/false);
     xText->insertControlCharacter(xCursor, text::ControlCharacter::APPEND_PARAGRAPH,
                                   /*bAbsorb=*/false);
@@ -242,13 +244,13 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableURLDeduplication)
     xTableIndex->update();
 
     // Then the first two fields should be merged to a single source, but not the third.
-    CPPUNIT_ASSERT_EQUAL(OUString("AT: Author, Title, , http://www.example.com/test.pdf"),
+    CPPUNIT_ASSERT_EQUAL(u"AT: Author, Title, , http://www.example.com/test.pdf"_ustr,
                          getParagraph(3)->getString());
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: AT: Author, Title, , http://www.example.com/test2.pdf
     // - Actual  : AT: Author, Title, , http://www.example.com/test.pdf
     // i.e. test.pdf was mentioned twice, without deduplication.
-    CPPUNIT_ASSERT_EQUAL(OUString("AT: Author, Title, , http://www.example.com/test2.pdf"),
+    CPPUNIT_ASSERT_EQUAL(u"AT: Author, Title, , http://www.example.com/test2.pdf"_ustr,
                          getParagraph(4)->getString());
 }
 }

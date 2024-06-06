@@ -20,7 +20,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/core/layout/data/")
+        : SwModelTestBase(u"/sw/qa/core/layout/data/"_ustr)
     {
     }
 };

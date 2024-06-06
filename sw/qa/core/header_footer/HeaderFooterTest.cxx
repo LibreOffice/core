@@ -43,7 +43,7 @@ public:
     void checkShapeInFirstPageHeader();
 
     HeaderFooterTest()
-        : SwModelTestBase("/sw/qa/core/header_footer/data/")
+        : SwModelTestBase(u"/sw/qa/core/header_footer/data/"_ustr)
     {
     }
 };
@@ -61,15 +61,15 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testStashedHeaderFooter)
     mxComponent.clear();
 
     // Source
-    SwPageDesc* pSourcePageDesc = pSourceDocument->MakePageDesc("SourceStyle");
+    SwPageDesc* pSourcePageDesc = pSourceDocument->MakePageDesc(u"SourceStyle"_ustr);
     pSourcePageDesc->ChgFirstShare(false);
     CPPUNIT_ASSERT(!pSourcePageDesc->IsFirstShared());
     pSourcePageDesc->StashFrameFormat(pSourcePageDesc->GetFirstMaster(), true, false, true);
-    pSourceDocument->ChgPageDesc("SourceStyle", *pSourcePageDesc);
+    pSourceDocument->ChgPageDesc(u"SourceStyle"_ustr, *pSourcePageDesc);
     CPPUNIT_ASSERT(pSourcePageDesc->HasStashedFormat(true, false, true));
 
     // Target
-    SwPageDesc* pTargetPageDesc = pTargetDocument->MakePageDesc("TargetStyle");
+    SwPageDesc* pTargetPageDesc = pTargetDocument->MakePageDesc(u"TargetStyle"_ustr);
 
     // Copy source to target
     pTargetDocument->CopyPageDesc(*pSourcePageDesc, *pTargetPageDesc);
@@ -109,7 +109,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testHeaderFooterWithSpecialFirstPage_OOXM
 {
     // Load, save in OOXML format and reload
     createSwDoc("tdf118393.odt");
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(7, getPages());
 
@@ -125,7 +125,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testHeaderFooterWithSpecialFirstPage_OOXM
         assertXPath(pXmlDoc, "/root/page[2]/footer"_ostr);
     }
     // All other pages should have header/footer
-    OUString sExpected("Seite * von *");
+    OUString sExpected(u"Seite * von *"_ustr);
     CPPUNIT_ASSERT_EQUAL(sExpected, parseDump("/root/page[2]/header/txt/text()"_ostr));
     CPPUNIT_ASSERT_EQUAL(sExpected, parseDump("/root/page[2]/footer/txt/text()"_ostr));
     CPPUNIT_ASSERT_EQUAL(sExpected, parseDump("/root/page[3]/header/txt/text()"_ostr));
@@ -146,7 +146,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testHeaderFooterWithSpecialFirstPage_ODF)
 {
     // Load, save in ODF format and reload
     createSwDoc("tdf118393.odt");
-    saveAndReload("writer8");
+    saveAndReload(u"writer8"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(7, getPages());
 
@@ -162,7 +162,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testHeaderFooterWithSpecialFirstPage_ODF)
     }
 
     // All other pages should have header/footer
-    OUString sExpected("Seite * von *");
+    OUString sExpected(u"Seite * von *"_ustr);
     CPPUNIT_ASSERT_EQUAL(sExpected, parseDump("/root/page[2]/header/txt/text()"_ostr));
     CPPUNIT_ASSERT_EQUAL(sExpected, parseDump("/root/page[2]/footer/txt/text()"_ostr));
     CPPUNIT_ASSERT_EQUAL(sExpected, parseDump("/root/page[3]/header/txt/text()"_ostr));
@@ -185,7 +185,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFloatingTableInHeader)
     // This was 0, floating table in header wasn't converted to a TextFrame.
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
 
     // This was 0, floating table in header wasn't converted to a TextFrame.
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
@@ -201,7 +201,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFdo64238_a)
     // 'Blank Odd Footer' with 'Non-Blank Even Footer' when 'Show Only Odd Footer' is marked in Word
     // In this case the imported footer in LO was supposed to be blank, but instead was the 'even' footer
     uno::Reference<text::XText> xFooterText = getProperty<uno::Reference<text::XText>>(
-        getStyles("PageStyles")->getByName("Standard"), "FooterText");
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"FooterText"_ustr);
     uno::Reference<text::XTextRange> xFooterParagraph = getParagraphOfText(1, xFooterText);
     uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xFooterParagraph, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
@@ -224,7 +224,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFdo64238_b)
     // 'Non-Blank Odd Footer' with 'Non-Blank Even Footer' when 'Show Only Odd Footer' is marked in Word
     // In this case the imported footer in LO was supposed to be just the odd footer, but instead was the 'odd' and 'even' footers concatenated
     uno::Reference<text::XText> xFooterText = getProperty<uno::Reference<text::XText>>(
-        getStyles("PageStyles")->getByName("Standard"), "FooterText");
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"FooterText"_ustr);
     uno::Reference<text::XTextRange> xFooterParagraph = getParagraphOfText(1, xFooterText);
     uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xFooterParagraph, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
@@ -243,19 +243,19 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstPageHeadersAndEmptyFooters)
 
     // Test case where headers and footers for first page are set, but footers are empty
     auto verify = [this]() {
-        CPPUNIT_ASSERT_EQUAL(OUString("This is the FIRST page header."),
+        CPPUNIT_ASSERT_EQUAL(u"This is the FIRST page header."_ustr,
                              parseDump("/root/page[1]/header/txt/text()"_ostr));
 
-        CPPUNIT_ASSERT_EQUAL(OUString("This is the header for the REST OF THE FILE."),
+        CPPUNIT_ASSERT_EQUAL(u"This is the header for the REST OF THE FILE."_ustr,
                              parseDump("/root/page[2]/header/txt/text()"_ostr));
 
-        CPPUNIT_ASSERT_EQUAL(OUString("This is the header for the REST OF THE FILE."),
+        CPPUNIT_ASSERT_EQUAL(u"This is the header for the REST OF THE FILE."_ustr,
                              parseDump("/root/page[3]/header/txt/text()"_ostr));
     };
 
     createSwDoc("fdo66145.docx");
     verify();
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
     verify();
 }
 
@@ -268,138 +268,126 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstHeaderFooterImport)
 
         // The document has 6 pages. Note that we don't test if 4 or just 2 page
         // styles are created, the point is that layout should be correct.
-        CPPUNIT_ASSERT_EQUAL(OUString("First page header"),
+        CPPUNIT_ASSERT_EQUAL(u"First page header"_ustr,
                              parseDump("/root/page[1]/header/txt/text()"_ostr));
-        CPPUNIT_ASSERT_EQUAL(OUString("First page footer"),
+        CPPUNIT_ASSERT_EQUAL(u"First page footer"_ustr,
                              parseDump("/root/page[1]/footer/txt/text()"_ostr));
-        CPPUNIT_ASSERT_EQUAL(OUString("Even page header"),
+        CPPUNIT_ASSERT_EQUAL(u"Even page header"_ustr,
                              parseDump("/root/page[2]/header/txt/text()"_ostr));
-        CPPUNIT_ASSERT_EQUAL(OUString("Even page footer"),
+        CPPUNIT_ASSERT_EQUAL(u"Even page footer"_ustr,
                              parseDump("/root/page[2]/footer/txt/text()"_ostr));
-        CPPUNIT_ASSERT_EQUAL(OUString("Odd page header"),
+        CPPUNIT_ASSERT_EQUAL(u"Odd page header"_ustr,
                              parseDump("/root/page[3]/header/txt/text()"_ostr));
-        CPPUNIT_ASSERT_EQUAL(OUString("Odd page footer"),
+        CPPUNIT_ASSERT_EQUAL(u"Odd page footer"_ustr,
                              parseDump("/root/page[3]/footer/txt/text()"_ostr));
-        CPPUNIT_ASSERT_EQUAL(OUString("First page header2"),
+        CPPUNIT_ASSERT_EQUAL(u"First page header2"_ustr,
                              parseDump("/root/page[4]/header/txt/text()"_ostr));
-        CPPUNIT_ASSERT_EQUAL(OUString("First page footer 2"),
+        CPPUNIT_ASSERT_EQUAL(u"First page footer 2"_ustr,
                              parseDump("/root/page[4]/footer/txt/text()"_ostr));
-        CPPUNIT_ASSERT_EQUAL(OUString("Odd page header 2"),
+        CPPUNIT_ASSERT_EQUAL(u"Odd page header 2"_ustr,
                              parseDump("/root/page[5]/header/txt/text()"_ostr));
-        CPPUNIT_ASSERT_EQUAL(OUString("Odd page footer 2"),
+        CPPUNIT_ASSERT_EQUAL(u"Odd page footer 2"_ustr,
                              parseDump("/root/page[5]/footer/txt/text()"_ostr));
-        CPPUNIT_ASSERT_EQUAL(OUString("Even page header 2"),
+        CPPUNIT_ASSERT_EQUAL(u"Even page header 2"_ustr,
                              parseDump("/root/page[6]/header/txt/text()"_ostr));
-        CPPUNIT_ASSERT_EQUAL(OUString("Even page footer 2"),
+        CPPUNIT_ASSERT_EQUAL(u"Even page footer 2"_ustr,
                              parseDump("/root/page[6]/footer/txt/text()"_ostr));
     };
 
     createSwDoc("first-header-footer.docx");
     verify();
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
     verify();
 }
 
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstHeaderFooterRoundTrip)
 {
     createSwDoc("first-header-footerB.odt");
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(6, getPages());
 
-    CPPUNIT_ASSERT_EQUAL(OUString("First page header"),
+    CPPUNIT_ASSERT_EQUAL(u"First page header"_ustr,
                          parseDump("/root/page[1]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("First page footer"),
+    CPPUNIT_ASSERT_EQUAL(u"First page footer"_ustr,
                          parseDump("/root/page[1]/footer/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Even page header"),
+    CPPUNIT_ASSERT_EQUAL(u"Even page header"_ustr,
                          parseDump("/root/page[2]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Even page footer"),
+    CPPUNIT_ASSERT_EQUAL(u"Even page footer"_ustr,
                          parseDump("/root/page[2]/footer/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Odd page header"),
+    CPPUNIT_ASSERT_EQUAL(u"Odd page header"_ustr,
                          parseDump("/root/page[3]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Odd page footer"),
+    CPPUNIT_ASSERT_EQUAL(u"Odd page footer"_ustr,
                          parseDump("/root/page[3]/footer/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("First page header2"),
+    CPPUNIT_ASSERT_EQUAL(u"First page header2"_ustr,
                          parseDump("/root/page[4]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("First page footer 2"),
+    CPPUNIT_ASSERT_EQUAL(u"First page footer 2"_ustr,
                          parseDump("/root/page[4]/footer/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Odd page header 2"),
+    CPPUNIT_ASSERT_EQUAL(u"Odd page header 2"_ustr,
                          parseDump("/root/page[5]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Odd page footer 2"),
+    CPPUNIT_ASSERT_EQUAL(u"Odd page footer 2"_ustr,
                          parseDump("/root/page[5]/footer/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Even page header 2"),
+    CPPUNIT_ASSERT_EQUAL(u"Even page header 2"_ustr,
                          parseDump("/root/page[6]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Even page footer 2"),
+    CPPUNIT_ASSERT_EQUAL(u"Even page footer 2"_ustr,
                          parseDump("/root/page[6]/footer/txt/text()"_ostr));
 }
 
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstHeaderFooter_ODF)
 {
     createSwDoc("first-header-footer.odt");
-    saveAndReload("writer8");
+    saveAndReload(u"writer8"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(6, getPages());
     // Test import and export of the header-first token.
 
     // The document has 6 pages, two page styles for the first and second half of pages.
-    CPPUNIT_ASSERT_EQUAL(OUString("First header"),
-                         parseDump("/root/page[1]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("First footer"),
-                         parseDump("/root/page[1]/footer/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Left header"),
-                         parseDump("/root/page[2]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Left footer"),
-                         parseDump("/root/page[2]/footer/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Right header"),
-                         parseDump("/root/page[3]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Right footer"),
-                         parseDump("/root/page[3]/footer/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("First header2"),
-                         parseDump("/root/page[4]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("First footer2"),
-                         parseDump("/root/page[4]/footer/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Right header2"),
-                         parseDump("/root/page[5]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Right footer2"),
-                         parseDump("/root/page[5]/footer/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Left header2"),
-                         parseDump("/root/page[6]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Left footer2"),
-                         parseDump("/root/page[6]/footer/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"First header"_ustr, parseDump("/root/page[1]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"First footer"_ustr, parseDump("/root/page[1]/footer/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Left header"_ustr, parseDump("/root/page[2]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Left footer"_ustr, parseDump("/root/page[2]/footer/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Right header"_ustr, parseDump("/root/page[3]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Right footer"_ustr, parseDump("/root/page[3]/footer/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"First header2"_ustr, parseDump("/root/page[4]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"First footer2"_ustr, parseDump("/root/page[4]/footer/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Right header2"_ustr, parseDump("/root/page[5]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Right footer2"_ustr, parseDump("/root/page[5]/footer/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Left header2"_ustr, parseDump("/root/page[6]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Left footer2"_ustr, parseDump("/root/page[6]/footer/txt/text()"_ostr));
 }
 
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstHeaderFooter_DOC)
 {
     createSwDoc("first-header-footer.doc");
-    saveAndReload("MS Word 97");
+    saveAndReload(u"MS Word 97"_ustr);
 
     // Test import and export of a section's headerf/footerf properties.
 
     // The document has 6 pages. Note that we don't test if 4 or just 2 page
     // styles are created, the point is that layout should be correct.
-    CPPUNIT_ASSERT_EQUAL(OUString("First page header"),
+    CPPUNIT_ASSERT_EQUAL(u"First page header"_ustr,
                          parseDump("/root/page[1]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("First page footer"),
+    CPPUNIT_ASSERT_EQUAL(u"First page footer"_ustr,
                          parseDump("/root/page[1]/footer/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Even page header"),
+    CPPUNIT_ASSERT_EQUAL(u"Even page header"_ustr,
                          parseDump("/root/page[2]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Even page footer"),
+    CPPUNIT_ASSERT_EQUAL(u"Even page footer"_ustr,
                          parseDump("/root/page[2]/footer/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Odd page header"),
+    CPPUNIT_ASSERT_EQUAL(u"Odd page header"_ustr,
                          parseDump("/root/page[3]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Odd page footer"),
+    CPPUNIT_ASSERT_EQUAL(u"Odd page footer"_ustr,
                          parseDump("/root/page[3]/footer/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("First page header2"),
+    CPPUNIT_ASSERT_EQUAL(u"First page header2"_ustr,
                          parseDump("/root/page[4]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("First page footer 2"),
+    CPPUNIT_ASSERT_EQUAL(u"First page footer 2"_ustr,
                          parseDump("/root/page[4]/footer/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Odd page header 2"),
+    CPPUNIT_ASSERT_EQUAL(u"Odd page header 2"_ustr,
                          parseDump("/root/page[5]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Odd page footer 2"),
+    CPPUNIT_ASSERT_EQUAL(u"Odd page footer 2"_ustr,
                          parseDump("/root/page[5]/footer/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Even page header 2"),
+    CPPUNIT_ASSERT_EQUAL(u"Even page header 2"_ustr,
                          parseDump("/root/page[6]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Even page footer 2"),
+    CPPUNIT_ASSERT_EQUAL(u"Even page footer 2"_ustr,
                          parseDump("/root/page[6]/footer/txt/text()"_ostr));
 }
 
@@ -414,21 +402,21 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFdo65655)
 
     auto verify = [this]() {
         uno::Reference<beans::XPropertySet> xPropertySet(
-            getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
         {
             bool bValue = false;
-            xPropertySet->getPropertyValue("HeaderIsShared") >>= bValue;
+            xPropertySet->getPropertyValue(u"HeaderIsShared"_ustr) >>= bValue;
             CPPUNIT_ASSERT_EQUAL(false, bValue);
         }
         {
             bool bValue = false;
-            xPropertySet->getPropertyValue("FooterIsShared") >>= bValue;
+            xPropertySet->getPropertyValue(u"FooterIsShared"_ustr) >>= bValue;
             CPPUNIT_ASSERT_EQUAL(false, bValue);
         }
     };
     createSwDoc("fdo65655.docx");
     verify();
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
     verify();
 }
 
@@ -441,7 +429,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testImageInHeader)
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
@@ -456,7 +444,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testImageInFooter)
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
@@ -465,15 +453,15 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testImageInFooter)
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testTdf112694)
 {
     auto verify = [this]() {
-        uno::Any aPageStyle = getStyles("PageStyles")->getByName("Standard");
+        uno::Any aPageStyle = getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr);
         // Header was on when header for file was for explicit first pages only
         // but <w:titlePg> was missing.
-        CPPUNIT_ASSERT(!getProperty<bool>(aPageStyle, "HeaderIsOn"));
+        CPPUNIT_ASSERT(!getProperty<bool>(aPageStyle, u"HeaderIsOn"_ustr));
     };
 
     createSwDoc("tdf112694.docx");
     verify();
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
     verify();
 }
 
@@ -481,22 +469,22 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testContSectBreakHeaderFooter)
 {
     auto verify = [this]() {
         // Load a document with a continuous section break on page 2.
-        CPPUNIT_ASSERT_EQUAL(OUString("First page header, section 1"),
+        CPPUNIT_ASSERT_EQUAL(u"First page header, section 1"_ustr,
                              parseDump("/root/page[1]/header/txt/text()"_ostr));
-        CPPUNIT_ASSERT_EQUAL(OUString("First page footer, section 1"),
+        CPPUNIT_ASSERT_EQUAL(u"First page footer, section 1"_ustr,
                              parseDump("/root/page[1]/footer/txt/text()"_ostr));
 
         // Make sure the header stays like this; if we naively just update the page style name of the
         // first para on page 2, then this would be 'Header, section 2', which is incorrect.
-        CPPUNIT_ASSERT_EQUAL(OUString("First page header, section 2"),
+        CPPUNIT_ASSERT_EQUAL(u"First page header, section 2"_ustr,
                              parseDump("/root/page[2]/header/txt/text()"_ostr));
-        CPPUNIT_ASSERT_EQUAL(OUString("First page footer, section 2"),
+        CPPUNIT_ASSERT_EQUAL(u"First page footer, section 2"_ustr,
                              parseDump("/root/page[2]/footer/txt/text()"_ostr));
 
         // This is inherited from page 2.
-        CPPUNIT_ASSERT_EQUAL(OUString("Header, section 2"),
+        CPPUNIT_ASSERT_EQUAL(u"Header, section 2"_ustr,
                              parseDump("/root/page[3]/header/txt/text()"_ostr));
-        CPPUNIT_ASSERT_EQUAL(OUString("Footer, section 3"),
+        CPPUNIT_ASSERT_EQUAL(u"Footer, section 3"_ustr,
                              parseDump("/root/page[3]/footer/txt/text()"_ostr));
 
         // Without the export fix in place, the import-export-import test would have failed with:
@@ -507,34 +495,34 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testContSectBreakHeaderFooter)
         // Additional problem: top margin on page 3 was wrong.
         if (isExported())
         {
-            xmlDocUniquePtr pXml = parseExport("word/document.xml");
+            xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
             // Without the accompanying fix in place, this test would have failed with:
             // - Expected: 2200
             // - Actual  : 2574
             // i.e. the top margin on page 3 was too large and now matches the value from the input
             // document.
-            assertXPath(pXml, "/w:document/w:body/w:sectPr/w:pgMar"_ostr, "top"_ostr, "2200");
+            assertXPath(pXml, "/w:document/w:body/w:sectPr/w:pgMar"_ostr, "top"_ostr, u"2200"_ustr);
         }
     };
 
     createSwDoc("cont-sect-break-header-footer.docx");
     verify();
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
     verify();
 }
 
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testTdf145998_firstHeader)
 {
     createSwDoc("tdf145998_firstHeader.odt");
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
 
     // Sanity check - always good to test when dealing with page styles and breaks.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Very first header"), parseDump("/root/page[1]/header/txt"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Very first header"_ustr, parseDump("/root/page[1]/header/txt"_ostr));
 
     // Page Style is already used in prior section - this can't be the first-header
-    CPPUNIT_ASSERT_EQUAL(OUString("Normal Header"), parseDump("/root/page[2]/header/txt"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Normal Header"_ustr, parseDump("/root/page[2]/header/txt"_ostr));
 }
 
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testEvenPageOddPageFooter_Import)
@@ -550,29 +538,29 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testEvenPageOddPageFooter_Import)
                                               uno::UNO_QUERY);
 
     // get LO page style for the first page (even page #2)
-    OUString pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
-    uno::Reference<container::XNameAccess> xPageStyles = getStyles("PageStyles");
+    OUString pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
+    uno::Reference<container::XNameAccess> xPageStyles = getStyles(u"PageStyles"_ustr);
     uno::Reference<style::XStyle> xPageStyle(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
 
     xCursor->jumpToFirstPage(); // Even/Left page #2
     uno::Reference<text::XText> xFooter
-        = getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextLeft");
-    CPPUNIT_ASSERT_EQUAL(OUString("even page"), xFooter->getString());
+        = getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterTextLeft"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"even page"_ustr, xFooter->getString());
 
     xCursor->jumpToNextPage();
-    pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
     xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
-    xFooter.set(getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextFirst"));
-    CPPUNIT_ASSERT_EQUAL(OUString("odd page - first footer"), xFooter->getString());
+    xFooter.set(getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterTextFirst"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"odd page - first footer"_ustr, xFooter->getString());
 
     xCursor->jumpToNextPage();
-    pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
     xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
-    xFooter.set(getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextLeft"));
-    CPPUNIT_ASSERT_EQUAL(OUString("even page"), xFooter->getString());
+    xFooter.set(getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterTextLeft"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"even page"_ustr, xFooter->getString());
 
     // The contents of paragraph 2 should be the page number (2) located on page 1.
-    getParagraph(2, "2");
+    getParagraph(2, u"2"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testEvenPageOddPageFooter_Roundtrip)
@@ -581,7 +569,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testEvenPageOddPageFooter_Roundtrip)
 
     // Load, save as OOXML and reload
     createSwDoc("tdf135216_evenOddFooter.odt");
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
 
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
@@ -590,46 +578,46 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testEvenPageOddPageFooter_Roundtrip)
                                               uno::UNO_QUERY);
 
     // get LO page style for the first page (even page #2)
-    OUString pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
-    uno::Reference<container::XNameAccess> xPageStyles = getStyles("PageStyles");
+    OUString pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
+    uno::Reference<container::XNameAccess> xPageStyles = getStyles(u"PageStyles"_ustr);
     uno::Reference<style::XStyle> xPageStyle(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
 
     xCursor->jumpToFirstPage(); // Even/Left page #2
     uno::Reference<text::XText> xFooter
-        = getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextLeft");
-    CPPUNIT_ASSERT_EQUAL(OUString("even page"), xFooter->getString());
+        = getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterTextLeft"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"even page"_ustr, xFooter->getString());
 
     xCursor->jumpToNextPage();
-    pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
     xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
-    xFooter.set(getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextFirst"));
-    CPPUNIT_ASSERT_EQUAL(OUString("odd page - first footer"), xFooter->getString());
+    xFooter.set(getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterTextFirst"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"odd page - first footer"_ustr, xFooter->getString());
 
     xCursor->jumpToNextPage();
-    pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
     xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
-    xFooter.set(getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextLeft"));
-    CPPUNIT_ASSERT_EQUAL(OUString("even page"), xFooter->getString());
+    xFooter.set(getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterTextLeft"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"even page"_ustr, xFooter->getString());
 
     // The contents of paragraph 2 should be the page number (2) located on page 1.
-    getParagraph(2, "2");
+    getParagraph(2, u"2"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testTdf69635)
 {
     createSwDoc("tdf69635.docx");
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
 
-    xmlDocUniquePtr pXmlHeader1 = parseExport("word/header1.xml");
+    xmlDocUniquePtr pXmlHeader1 = parseExport(u"word/header1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlHeader1);
 
-    xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
+    xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
     CPPUNIT_ASSERT(pXmlSettings);
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: "left"
     // - Actual  : "right"
-    assertXPathContent(pXmlHeader1, "/w:hdr/w:p/w:r/w:t"_ostr, "left");
+    assertXPathContent(pXmlHeader1, "/w:hdr/w:p/w:r/w:t"_ostr, u"left"_ustr);
 
     // Make sure "left" appears as a hidden header
     assertXPath(pXmlSettings, "/w:settings/w:evenAndOddHeaders"_ostr, 0);
@@ -638,25 +626,25 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testTdf69635)
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testTdf113849_evenAndOddHeaders)
 {
     createSwDoc("tdf113849_evenAndOddHeaders.odt");
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Header2 text", OUString("L. J. Kendall"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Header2 text", u"L. J. Kendall"_ustr,
                                  parseDump("/root/page[2]/header/txt"_ostr));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer2 text", OUString("*"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer2 text", u"*"_ustr,
                                  parseDump("/root/page[2]/footer/txt"_ostr));
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Header3 text", OUString("Shadow Hunt"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Header3 text", u"Shadow Hunt"_ustr,
                                  parseDump("/root/page[3]/header/txt"_ostr));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer3 text", OUString("*"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer3 text", u"*"_ustr,
                                  parseDump("/root/page[3]/footer/txt"_ostr));
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Header4 text", OUString("L. J. Kendall"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Header4 text", u"L. J. Kendall"_ustr,
                                  parseDump("/root/page[4]/header/txt"_ostr));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer4 text", OUString("*"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer4 text", u"*"_ustr,
                                  parseDump("/root/page[4]/footer/txt"_ostr));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer5 text", OUString(""),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer5 text", u""_ustr,
                                  parseDump("/root/page[5]/footer/txt"_ostr));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer6 text", OUString(""),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer6 text", u""_ustr,
                                  parseDump("/root/page[6]/footer/txt"_ostr));
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of pages", 6, getPages());
@@ -676,7 +664,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstPageFooterEnabled)
     };
     createSwDoc("TestFirstFooterDisabled.docx");
     verify();
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
     verify();
 }
 
@@ -684,82 +672,84 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testBnc519228OddBreaks)
 {
     auto verify = [this]() {
         // Check that all the normal styles are not set as right-only, those should be only those used after odd page breaks.
-        auto xStyles = getStyles("PageStyles");
+        auto xStyles = getStyles(u"PageStyles"_ustr);
         uno::Reference<beans::XPropertySet> xStyle;
         {
-            xStyle.set(xStyles->getByName("Standard"), uno::UNO_QUERY);
-            auto aPageLayout = xStyle->getPropertyValue("PageStyleLayout");
+            xStyle.set(xStyles->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+            auto aPageLayout = xStyle->getPropertyValue(u"PageStyleLayout"_ustr);
             CPPUNIT_ASSERT_EQUAL(uno::Any(style::PageStyleLayout_ALL), aPageLayout);
         }
         {
-            xStyle.set(xStyles->getByName("First Page"), uno::UNO_QUERY);
-            auto aPageLayout = xStyle->getPropertyValue("PageStyleLayout");
+            xStyle.set(xStyles->getByName(u"First Page"_ustr), uno::UNO_QUERY);
+            auto aPageLayout = xStyle->getPropertyValue(u"PageStyleLayout"_ustr);
             CPPUNIT_ASSERT_EQUAL(uno::Any(style::PageStyleLayout_ALL), aPageLayout);
         }
 
         uno::Reference<beans::XPropertySet> page1Style;
         {
             auto xPara = getParagraph(1);
-            CPPUNIT_ASSERT_EQUAL(OUString("This is the first page."), xPara->getString());
-            OUString page1StyleName = getProperty<OUString>(xPara, "PageDescName");
+            CPPUNIT_ASSERT_EQUAL(u"This is the first page."_ustr, xPara->getString());
+            OUString page1StyleName = getProperty<OUString>(xPara, u"PageDescName"_ustr);
             page1Style.set(xStyles->getByName(page1StyleName), uno::UNO_QUERY);
-            auto aPageLayout = page1Style->getPropertyValue("PageStyleLayout");
+            auto aPageLayout = page1Style->getPropertyValue(u"PageStyleLayout"_ustr);
             CPPUNIT_ASSERT_EQUAL(uno::Any(style::PageStyleLayout_RIGHT), aPageLayout);
 
-            auto xHeaderText = getProperty<uno::Reference<text::XText>>(page1Style, "HeaderText");
+            auto xHeaderText
+                = getProperty<uno::Reference<text::XText>>(page1Style, u"HeaderText"_ustr);
             auto xHeaderPara = getParagraphOfText(1, xHeaderText);
-            CPPUNIT_ASSERT_EQUAL(OUString("This is the header for odd pages"),
+            CPPUNIT_ASSERT_EQUAL(u"This is the header for odd pages"_ustr,
                                  xHeaderPara->getString());
         }
 
         // Page2 comes from follow of style for page 1 and should be a normal page. Also check the two page style have the same properties,
         // since page style for page1 was created from page style for page 2.
         {
-            auto aFollowStyleName = getProperty<OUString>(page1Style, "FollowStyle");
+            auto aFollowStyleName = getProperty<OUString>(page1Style, u"FollowStyle"_ustr);
 
             uno::Reference<beans::XPropertySet> page2Style;
             page2Style.set(xStyles->getByName(aFollowStyleName), uno::UNO_QUERY);
-            auto aPage2Layout = page2Style->getPropertyValue("PageStyleLayout");
+            auto aPage2Layout = page2Style->getPropertyValue(u"PageStyleLayout"_ustr);
             CPPUNIT_ASSERT_EQUAL(uno::Any(style::PageStyleLayout_ALL), aPage2Layout);
 
             auto xHeaderTextLeft
-                = getProperty<uno::Reference<text::XText>>(page2Style, "HeaderTextLeft");
+                = getProperty<uno::Reference<text::XText>>(page2Style, u"HeaderTextLeft"_ustr);
             auto xHeaderLeftPara = getParagraphOfText(1, xHeaderTextLeft);
-            CPPUNIT_ASSERT_EQUAL(OUString("This is the even header"), xHeaderLeftPara->getString());
+            CPPUNIT_ASSERT_EQUAL(u"This is the even header"_ustr, xHeaderLeftPara->getString());
 
             auto xHeaderTextRight
-                = getProperty<uno::Reference<text::XText>>(page2Style, "HeaderTextRight");
+                = getProperty<uno::Reference<text::XText>>(page2Style, u"HeaderTextRight"_ustr);
             auto xHeaderRightPara = getParagraphOfText(1, xHeaderTextRight);
-            CPPUNIT_ASSERT_EQUAL(OUString("This is the header for odd pages"),
+            CPPUNIT_ASSERT_EQUAL(u"This is the header for odd pages"_ustr,
                                  xHeaderRightPara->getString());
 
-            CPPUNIT_ASSERT_EQUAL(getProperty<sal_Int32>(page1Style, "TopMargin"),
-                                 getProperty<sal_Int32>(page2Style, "TopMargin"));
+            CPPUNIT_ASSERT_EQUAL(getProperty<sal_Int32>(page1Style, u"TopMargin"_ustr),
+                                 getProperty<sal_Int32>(page2Style, u"TopMargin"_ustr));
         }
 
         // Page 5
         {
             auto xPara = getParagraph(4);
             CPPUNIT_ASSERT_EQUAL(
-                OUString("Then an odd break after an odd page, should lead us to page #5."),
+                u"Then an odd break after an odd page, should lead us to page #5."_ustr,
                 xPara->getString());
 
-            OUString page5StyleName = getProperty<OUString>(xPara, "PageDescName");
+            OUString page5StyleName = getProperty<OUString>(xPara, u"PageDescName"_ustr);
             uno::Reference<beans::XPropertySet> page5Style(xStyles->getByName(page5StyleName),
                                                            uno::UNO_QUERY);
-            auto aPageLayout = page5Style->getPropertyValue("PageStyleLayout");
+            auto aPageLayout = page5Style->getPropertyValue(u"PageStyleLayout"_ustr);
             CPPUNIT_ASSERT_EQUAL(uno::Any(style::PageStyleLayout_RIGHT), aPageLayout);
 
-            auto xHeaderText = getProperty<uno::Reference<text::XText>>(page5Style, "HeaderText");
+            auto xHeaderText
+                = getProperty<uno::Reference<text::XText>>(page5Style, u"HeaderText"_ustr);
             auto xHeaderTextPara = getParagraphOfText(1, xHeaderText);
-            CPPUNIT_ASSERT_EQUAL(OUString("This is the header for odd pages"),
+            CPPUNIT_ASSERT_EQUAL(u"This is the header for odd pages"_ustr,
                                  xHeaderTextPara->getString());
         }
     };
 
     createSwDoc("bnc519228_odd-breaksB.docx");
     verify();
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
     verify();
 }
 
@@ -789,7 +779,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testBnc875718)
         OString aMessage("TextFrame " + OString::number(i) + "XText content is empty");
         if (aText.is())
         {
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), OUString("SwXHeadFootText"),
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), u"SwXHeadFootText"_ustr,
                                          aText->getImplementationName());
             nCheck++;
         }
@@ -800,7 +790,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testBnc875718)
     uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> aText = textDocument->getText();
     CPPUNIT_ASSERT(aText.is());
-    CPPUNIT_ASSERT_EQUAL(OUString("Text"), aText->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Text"_ustr, aText->getString());
 }
 
 // base class to supply a helper method for testHFLinkToPrev
@@ -817,7 +807,7 @@ protected:
 CPPUNIT_TEST_FIXTURE(TestHFBase, testHFLinkToPrev)
 {
     auto verify = [this]() {
-        uno::Reference<container::XNameAccess> xPageStyles = getStyles("PageStyles");
+        uno::Reference<container::XNameAccess> xPageStyles = getStyles(u"PageStyles"_ustr);
 
         // get a page cursor
         uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -828,80 +818,80 @@ CPPUNIT_TEST_FIXTURE(TestHFBase, testHFLinkToPrev)
 
         // get LO page style for page 1, corresponding to docx section 1 first page
         xCursor->jumpToFirstPage();
-        OUString pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+        OUString pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
         uno::Reference<style::XStyle> xPageStyle(xPageStyles->getByName(pageStyleName),
                                                  uno::UNO_QUERY);
         // check page 1 header & footer text
-        CPPUNIT_ASSERT_EQUAL(OUString("First page header for all sections"),
-                             getHFText(xPageStyle, "HeaderTextFirst"));
-        CPPUNIT_ASSERT_EQUAL(OUString("First page footer for section 1 only"),
-                             getHFText(xPageStyle, "FooterTextFirst"));
+        CPPUNIT_ASSERT_EQUAL(u"First page header for all sections"_ustr,
+                             getHFText(xPageStyle, u"HeaderTextFirst"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"First page footer for section 1 only"_ustr,
+                             getHFText(xPageStyle, u"FooterTextFirst"_ustr));
 
         // get LO page style for page 2, corresponding to docx section 1
         xCursor->jumpToPage(2);
-        pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+        pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
         xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
         // check header & footer text
-        CPPUNIT_ASSERT_EQUAL(OUString("Even page header for section 1 only"),
-                             getHFText(xPageStyle, "HeaderTextLeft"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Even page footer for all sections"),
-                             getHFText(xPageStyle, "FooterTextLeft"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Odd page header for all sections"),
-                             getHFText(xPageStyle, "HeaderText"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Odd page footer for section 1 only"),
-                             getHFText(xPageStyle, "FooterText"));
+        CPPUNIT_ASSERT_EQUAL(u"Even page header for section 1 only"_ustr,
+                             getHFText(xPageStyle, u"HeaderTextLeft"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Even page footer for all sections"_ustr,
+                             getHFText(xPageStyle, u"FooterTextLeft"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Odd page header for all sections"_ustr,
+                             getHFText(xPageStyle, u"HeaderText"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Odd page footer for section 1 only"_ustr,
+                             getHFText(xPageStyle, u"FooterText"_ustr));
 
         // get LO page style for page 4, corresponding to docx section 2 first page
         xCursor->jumpToPage(4);
-        pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+        pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
         xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
         // check header & footer text
-        CPPUNIT_ASSERT_EQUAL(OUString("First page header for all sections"),
-                             getHFText(xPageStyle, "HeaderTextFirst"));
-        CPPUNIT_ASSERT_EQUAL(OUString("First page footer for sections 2 and 3 only"),
-                             getHFText(xPageStyle, "FooterTextFirst"));
+        CPPUNIT_ASSERT_EQUAL(u"First page header for all sections"_ustr,
+                             getHFText(xPageStyle, u"HeaderTextFirst"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"First page footer for sections 2 and 3 only"_ustr,
+                             getHFText(xPageStyle, u"FooterTextFirst"_ustr));
 
         // get LO page style for page 5, corresponding to docx section 2
         xCursor->jumpToPage(5);
-        pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+        pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
         xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
         // check header & footer text
-        CPPUNIT_ASSERT_EQUAL(OUString("Even page header for sections 2 and 3 only"),
-                             getHFText(xPageStyle, "HeaderTextLeft"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Even page footer for all sections"),
-                             getHFText(xPageStyle, "FooterTextLeft"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Odd page header for all sections"),
-                             getHFText(xPageStyle, "HeaderText"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Odd page footer for sections 2 and 3 only"),
-                             getHFText(xPageStyle, "FooterText"));
+        CPPUNIT_ASSERT_EQUAL(u"Even page header for sections 2 and 3 only"_ustr,
+                             getHFText(xPageStyle, u"HeaderTextLeft"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Even page footer for all sections"_ustr,
+                             getHFText(xPageStyle, u"FooterTextLeft"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Odd page header for all sections"_ustr,
+                             getHFText(xPageStyle, u"HeaderText"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Odd page footer for sections 2 and 3 only"_ustr,
+                             getHFText(xPageStyle, u"FooterText"_ustr));
 
         // get LO page style for page 7, corresponding to docx section 3 first page
         xCursor->jumpToPage(7);
-        pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+        pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
         xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
         // check header & footer text
-        CPPUNIT_ASSERT_EQUAL(OUString("First page header for all sections"),
-                             getHFText(xPageStyle, "HeaderTextFirst"));
-        CPPUNIT_ASSERT_EQUAL(OUString("First page footer for sections 2 and 3 only"),
-                             getHFText(xPageStyle, "FooterTextFirst"));
+        CPPUNIT_ASSERT_EQUAL(u"First page header for all sections"_ustr,
+                             getHFText(xPageStyle, u"HeaderTextFirst"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"First page footer for sections 2 and 3 only"_ustr,
+                             getHFText(xPageStyle, u"FooterTextFirst"_ustr));
 
         // get LO page style for page 8, corresponding to docx section 3
         xCursor->jumpToPage(8);
-        pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+        pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
         xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
         // check header & footer text
-        CPPUNIT_ASSERT_EQUAL(OUString("Even page header for sections 2 and 3 only"),
-                             getHFText(xPageStyle, "HeaderTextLeft"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Even page footer for all sections"),
-                             getHFText(xPageStyle, "FooterTextLeft"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Odd page header for all sections"),
-                             getHFText(xPageStyle, "HeaderText"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Odd page footer for sections 2 and 3 only"),
-                             getHFText(xPageStyle, "FooterText"));
+        CPPUNIT_ASSERT_EQUAL(u"Even page header for sections 2 and 3 only"_ustr,
+                             getHFText(xPageStyle, u"HeaderTextLeft"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Even page footer for all sections"_ustr,
+                             getHFText(xPageStyle, u"FooterTextLeft"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Odd page header for all sections"_ustr,
+                             getHFText(xPageStyle, u"HeaderText"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Odd page footer for sections 2 and 3 only"_ustr,
+                             getHFText(xPageStyle, u"FooterText"_ustr));
     };
     createSwDoc("headerfooter-link-to-prev.docx");
     verify();
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
     verify();
 }
 
@@ -914,23 +904,23 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testN750935)
         // The problem was that the header and footer was not shared.
         // xray ThisComponent.StyleFamilies.PageStyles.Default.FooterIsShared
         uno::Reference<beans::XPropertySet> xPropertySet(
-            getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
         bool bValue = false;
-        xPropertySet->getPropertyValue("HeaderIsShared") >>= bValue;
+        xPropertySet->getPropertyValue(u"HeaderIsShared"_ustr) >>= bValue;
         CPPUNIT_ASSERT_EQUAL(true, bValue);
-        xPropertySet->getPropertyValue("FooterIsShared") >>= bValue;
+        xPropertySet->getPropertyValue(u"FooterIsShared"_ustr) >>= bValue;
         CPPUNIT_ASSERT_EQUAL(true, bValue);
     };
     createSwDoc("n750935.docx");
     verify();
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
     verify();
 }
 
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testOnlyLeftPageStyle)
 {
     createSwDoc("TestPageStyleOnlyLeft.docx");
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
     // There should be 2 pages - first page should be blank
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
@@ -938,7 +928,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testOnlyLeftPageStyle)
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testMsoPosition)
 {
     auto verifyFooter = [this]() {
-        xmlDocUniquePtr doc = parseExport("word/footer2.xml");
+        xmlDocUniquePtr doc = parseExport(u"word/footer2.xml"_ustr);
         // We write the frames out in different order than they were read, so check it's the correct
         // textbox first by checking width. These tests may need reordering if that gets fixed.
         OUString style1
@@ -963,7 +953,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testMsoPosition)
     };
 
     auto verifyHeader = [this]() {
-        xmlDocUniquePtr doc = parseExport("word/header2.xml");
+        xmlDocUniquePtr doc = parseExport(u"word/header2.xml"_ustr);
         OUString style1
             = getXPath(doc, "/w:hdr/w:p/w:r[2]/mc:AlternateContent/mc:Fallback/w:pict/v:rect"_ostr,
                        "style"_ostr);
@@ -985,7 +975,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testMsoPosition)
     };
 
     createSwDoc("bnc884615-mso-position.docx");
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
     verifyHeader();
     verifyFooter();
 }
@@ -999,41 +989,41 @@ void HeaderFooterTest::checkParagraph(sal_Int32 nNumber, OUString const& rParagr
     CPPUNIT_ASSERT_EQUAL(rParagraphString, xTextRange->getString());
 
     OUString pageStyle;
-    xPropertySet->getPropertyValue("PageStyleName") >>= pageStyle;
+    xPropertySet->getPropertyValue(u"PageStyleName"_ustr) >>= pageStyle;
     CPPUNIT_ASSERT_EQUAL(rConnectedPageStyle, pageStyle);
 }
 
 void HeaderFooterTest::checkFirstRestHeaderPageStyles()
 {
     // Page 1
-    checkParagraph(1, "P1", "Standard");
+    checkParagraph(1, u"P1"_ustr, u"Standard"_ustr);
 
     // Page 2
-    checkParagraph(2, "P2", "Standard");
+    checkParagraph(2, u"P2"_ustr, u"Standard"_ustr);
 
     // Page 3
-    checkParagraph(3, "P3", "Standard");
+    checkParagraph(3, u"P3"_ustr, u"Standard"_ustr);
 
     // Check Default Style
     {
         uno::Reference<beans::XPropertySet> xPageStyle(
-            getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
 
-        bool bHeader = getProperty<bool>(xPageStyle, "HeaderIsOn");
+        bool bHeader = getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr);
         CPPUNIT_ASSERT_EQUAL(true, bHeader);
 
-        bool bHeaderIsShared = getProperty<bool>(xPageStyle, "HeaderIsShared");
+        bool bHeaderIsShared = getProperty<bool>(xPageStyle, u"HeaderIsShared"_ustr);
         CPPUNIT_ASSERT_EQUAL(true, bHeaderIsShared);
 
-        bool bFirstIsShared = getProperty<bool>(xPageStyle, "FirstIsShared");
+        bool bFirstIsShared = getProperty<bool>(xPageStyle, u"FirstIsShared"_ustr);
         CPPUNIT_ASSERT_EQUAL(false, bFirstIsShared);
 
         auto xHeaderTextFirst
-            = getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderTextFirst");
-        CPPUNIT_ASSERT_EQUAL(OUString("FIRST"), xHeaderTextFirst->getString());
+            = getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderTextFirst"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"FIRST"_ustr, xHeaderTextFirst->getString());
 
-        auto xHeaderText = getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderText");
-        CPPUNIT_ASSERT_EQUAL(OUString("NON-FIRST"), xHeaderText->getString());
+        auto xHeaderText = getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderText"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"NON-FIRST"_ustr, xHeaderText->getString());
     }
 }
 
@@ -1052,38 +1042,38 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstRestHeaderPageStyles_OOXML)
 void HeaderFooterTest::checkLeftRightHeaderPageStyles()
 {
     // Page 1
-    checkParagraph(1, "P1", "Standard");
+    checkParagraph(1, u"P1"_ustr, u"Standard"_ustr);
 
     // Page 2
-    checkParagraph(2, "P2", "Standard");
+    checkParagraph(2, u"P2"_ustr, u"Standard"_ustr);
 
     // Page 3
-    checkParagraph(3, "P3", "Standard");
+    checkParagraph(3, u"P3"_ustr, u"Standard"_ustr);
 
     // Page 4
-    checkParagraph(4, "P4", "Standard");
+    checkParagraph(4, u"P4"_ustr, u"Standard"_ustr);
 
     // Check Default Style
     {
         uno::Reference<beans::XPropertySet> xPageStyle(
-            getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
 
-        bool bHeader = getProperty<bool>(xPageStyle, "HeaderIsOn");
+        bool bHeader = getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr);
         CPPUNIT_ASSERT_EQUAL(true, bHeader);
 
-        bool bHeaderIsShared = getProperty<bool>(xPageStyle, "HeaderIsShared");
+        bool bHeaderIsShared = getProperty<bool>(xPageStyle, u"HeaderIsShared"_ustr);
         CPPUNIT_ASSERT_EQUAL(false, bHeaderIsShared);
 
-        bool bFirstIsShared = getProperty<bool>(xPageStyle, "FirstIsShared");
+        bool bFirstIsShared = getProperty<bool>(xPageStyle, u"FirstIsShared"_ustr);
         CPPUNIT_ASSERT_EQUAL(true, bFirstIsShared);
 
         auto xHeaderTextLeft
-            = getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderTextLeft");
-        CPPUNIT_ASSERT_EQUAL(OUString("LEFT"), xHeaderTextLeft->getString());
+            = getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderTextLeft"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"LEFT"_ustr, xHeaderTextLeft->getString());
 
         auto xHeaderTextRight
-            = getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderTextRight");
-        CPPUNIT_ASSERT_EQUAL(OUString("RIGHT"), xHeaderTextRight->getString());
+            = getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderTextRight"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"RIGHT"_ustr, xHeaderTextRight->getString());
     }
 }
 
@@ -1102,56 +1092,62 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testLeftRightHeaderPageStyles_OOXML)
 void HeaderFooterTest::checkFirstLeftRightHeaderPageStyles()
 {
     // Page 1
-    checkParagraph(1, "Para 1", "Standard");
+    checkParagraph(1, u"Para 1"_ustr, u"Standard"_ustr);
 
     // Page 2
-    checkParagraph(2, "Para 2", "Standard");
+    checkParagraph(2, u"Para 2"_ustr, u"Standard"_ustr);
 
     // Page 3
-    checkParagraph(3, "Para 3", "Standard");
+    checkParagraph(3, u"Para 3"_ustr, u"Standard"_ustr);
 
     // Page 4
-    checkParagraph(4, "Para 4", "Standard");
+    checkParagraph(4, u"Para 4"_ustr, u"Standard"_ustr);
 
     // Page 5
-    checkParagraph(5, "Para 5", "Standard");
+    checkParagraph(5, u"Para 5"_ustr, u"Standard"_ustr);
 
     // Check Default Style
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
-                                                   uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
 
-    bool bHeader = getProperty<bool>(xPageStyle, "HeaderIsOn");
+    bool bHeader = getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr);
     CPPUNIT_ASSERT_EQUAL(true, bHeader);
 
-    bool bFooter = getProperty<bool>(xPageStyle, "FooterIsOn");
+    bool bFooter = getProperty<bool>(xPageStyle, u"FooterIsOn"_ustr);
     CPPUNIT_ASSERT_EQUAL(true, bFooter);
 
-    bool bHeaderIsShared = getProperty<bool>(xPageStyle, "HeaderIsShared");
+    bool bHeaderIsShared = getProperty<bool>(xPageStyle, u"HeaderIsShared"_ustr);
     CPPUNIT_ASSERT_EQUAL(false, bHeaderIsShared);
 
-    bool bFooterIsShared = getProperty<bool>(xPageStyle, "FooterIsShared");
+    bool bFooterIsShared = getProperty<bool>(xPageStyle, u"FooterIsShared"_ustr);
     CPPUNIT_ASSERT_EQUAL(false, bFooterIsShared);
 
-    bool bFirstIsShared = getProperty<bool>(xPageStyle, "FirstIsShared");
+    bool bFirstIsShared = getProperty<bool>(xPageStyle, u"FirstIsShared"_ustr);
     CPPUNIT_ASSERT_EQUAL(false, bFirstIsShared);
 
-    auto xHeaderTextFirst = getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderTextFirst");
-    CPPUNIT_ASSERT_EQUAL(OUString("FIRST HEADER"), xHeaderTextFirst->getString());
+    auto xHeaderTextFirst
+        = getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderTextFirst"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"FIRST HEADER"_ustr, xHeaderTextFirst->getString());
 
-    auto xHeaderTextLeft = getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderTextLeft");
-    CPPUNIT_ASSERT_EQUAL(OUString("LEFT HEADER"), xHeaderTextLeft->getString());
+    auto xHeaderTextLeft
+        = getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderTextLeft"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"LEFT HEADER"_ustr, xHeaderTextLeft->getString());
 
-    auto xHeaderTextRight = getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderText");
-    CPPUNIT_ASSERT_EQUAL(OUString("RIGHT HEADER"), xHeaderTextRight->getString());
+    auto xHeaderTextRight
+        = getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderText"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"RIGHT HEADER"_ustr, xHeaderTextRight->getString());
 
-    auto xFooterTextFirst = getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextFirst");
-    CPPUNIT_ASSERT_EQUAL(OUString("FIRST FOOTER"), xFooterTextFirst->getString());
+    auto xFooterTextFirst
+        = getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterTextFirst"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"FIRST FOOTER"_ustr, xFooterTextFirst->getString());
 
-    auto xFooterTextLeft = getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextLeft");
-    CPPUNIT_ASSERT_EQUAL(OUString("LEFT FOOTER"), xFooterTextLeft->getString());
+    auto xFooterTextLeft
+        = getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterTextLeft"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"LEFT FOOTER"_ustr, xFooterTextLeft->getString());
 
-    auto xFooterTextRight = getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterText");
-    CPPUNIT_ASSERT_EQUAL(OUString("RIGHT FOOTER"), xFooterTextRight->getString());
+    auto xFooterTextRight
+        = getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterText"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"RIGHT FOOTER"_ustr, xFooterTextRight->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstLeftRightHeaderPageStyles_ODF)
@@ -1170,141 +1166,146 @@ void HeaderFooterTest::checkDoubleFirstLeftRightHeaderPageStyles(
     OUString const& rCustomPageStyleName)
 {
     // Page 1
-    checkParagraph(1, "Para 1 - Default", "Standard");
+    checkParagraph(1, u"Para 1 - Default"_ustr, u"Standard"_ustr);
 
     // Page 2
-    checkParagraph(2, "Para 2 - Default", "Standard");
+    checkParagraph(2, u"Para 2 - Default"_ustr, u"Standard"_ustr);
 
     // Page 3
-    checkParagraph(3, "Para 3 - Default", "Standard");
+    checkParagraph(3, u"Para 3 - Default"_ustr, u"Standard"_ustr);
 
     // Page 4
-    checkParagraph(4, "Para 4 - Custom", rCustomPageStyleName);
+    checkParagraph(4, u"Para 4 - Custom"_ustr, rCustomPageStyleName);
 
     // Page 5
-    checkParagraph(5, "Para 5 - Custom", rCustomPageStyleName);
+    checkParagraph(5, u"Para 5 - Custom"_ustr, rCustomPageStyleName);
 
     // Page 6
-    checkParagraph(6, "Para 6 - Custom", rCustomPageStyleName);
+    checkParagraph(6, u"Para 6 - Custom"_ustr, rCustomPageStyleName);
 
     // Check Default Style
     {
         uno::Reference<beans::XPropertySet> xPageStyle(
-            getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
 
-        bool bHeader = getProperty<bool>(xPageStyle, "HeaderIsOn");
+        bool bHeader = getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr);
         CPPUNIT_ASSERT_EQUAL(true, bHeader);
 
-        bool bFooter = getProperty<bool>(xPageStyle, "FooterIsOn");
+        bool bFooter = getProperty<bool>(xPageStyle, u"FooterIsOn"_ustr);
         CPPUNIT_ASSERT_EQUAL(true, bFooter);
 
-        bool bHeaderIsShared = getProperty<bool>(xPageStyle, "HeaderIsShared");
+        bool bHeaderIsShared = getProperty<bool>(xPageStyle, u"HeaderIsShared"_ustr);
         CPPUNIT_ASSERT_EQUAL(false, bHeaderIsShared);
 
-        bool bFooterIsShared = getProperty<bool>(xPageStyle, "FooterIsShared");
+        bool bFooterIsShared = getProperty<bool>(xPageStyle, u"FooterIsShared"_ustr);
         CPPUNIT_ASSERT_EQUAL(false, bFooterIsShared);
 
-        bool bFirstIsShared = getProperty<bool>(xPageStyle, "FirstIsShared");
+        bool bFirstIsShared = getProperty<bool>(xPageStyle, u"FirstIsShared"_ustr);
         CPPUNIT_ASSERT_EQUAL(false, bFirstIsShared);
 
         auto xHeaderTextFirst
-            = getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderTextFirst");
-        CPPUNIT_ASSERT_EQUAL(OUString("FIRST HEADER"), xHeaderTextFirst->getString());
+            = getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderTextFirst"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"FIRST HEADER"_ustr, xHeaderTextFirst->getString());
 
         auto xHeaderTextLeft
-            = getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderTextLeft");
-        CPPUNIT_ASSERT_EQUAL(OUString("LEFT HEADER"), xHeaderTextLeft->getString());
+            = getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderTextLeft"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"LEFT HEADER"_ustr, xHeaderTextLeft->getString());
 
-        auto xHeaderTextRight = getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderText");
-        CPPUNIT_ASSERT_EQUAL(OUString("RIGHT HEADER"), xHeaderTextRight->getString());
+        auto xHeaderTextRight
+            = getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderText"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"RIGHT HEADER"_ustr, xHeaderTextRight->getString());
 
         auto xFooterTextFirst
-            = getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextFirst");
-        CPPUNIT_ASSERT_EQUAL(OUString("FIRST FOOTER"), xFooterTextFirst->getString());
+            = getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterTextFirst"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"FIRST FOOTER"_ustr, xFooterTextFirst->getString());
 
         auto xFooterTextLeft
-            = getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextLeft");
-        CPPUNIT_ASSERT_EQUAL(OUString("LEFT FOOTER"), xFooterTextLeft->getString());
+            = getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterTextLeft"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"LEFT FOOTER"_ustr, xFooterTextLeft->getString());
 
-        auto xFooterTextRight = getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterText");
-        CPPUNIT_ASSERT_EQUAL(OUString("RIGHT FOOTER"), xFooterTextRight->getString());
+        auto xFooterTextRight
+            = getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterText"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"RIGHT FOOTER"_ustr, xFooterTextRight->getString());
     }
 
     {
         uno::Reference<beans::XPropertySet> xPageStyle(
-            getStyles("PageStyles")->getByName(rCustomPageStyleName), uno::UNO_QUERY);
+            getStyles(u"PageStyles"_ustr)->getByName(rCustomPageStyleName), uno::UNO_QUERY);
 
-        bool bHeader = getProperty<bool>(xPageStyle, "HeaderIsOn");
+        bool bHeader = getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr);
         CPPUNIT_ASSERT_EQUAL(true, bHeader);
 
-        bool bFooter = getProperty<bool>(xPageStyle, "FooterIsOn");
+        bool bFooter = getProperty<bool>(xPageStyle, u"FooterIsOn"_ustr);
         CPPUNIT_ASSERT_EQUAL(true, bFooter);
 
-        bool bHeaderIsShared = getProperty<bool>(xPageStyle, "HeaderIsShared");
+        bool bHeaderIsShared = getProperty<bool>(xPageStyle, u"HeaderIsShared"_ustr);
         CPPUNIT_ASSERT_EQUAL(false, bHeaderIsShared);
 
-        bool bFooterIsShared = getProperty<bool>(xPageStyle, "FooterIsShared");
+        bool bFooterIsShared = getProperty<bool>(xPageStyle, u"FooterIsShared"_ustr);
         CPPUNIT_ASSERT_EQUAL(false, bFooterIsShared);
 
-        bool bFirstIsShared = getProperty<bool>(xPageStyle, "FirstIsShared");
+        bool bFirstIsShared = getProperty<bool>(xPageStyle, u"FirstIsShared"_ustr);
         CPPUNIT_ASSERT_EQUAL(false, bFirstIsShared);
 
         auto xHeaderTextFirst
-            = getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderTextFirst");
-        CPPUNIT_ASSERT_EQUAL(OUString("FIRST HEADER - CUSTOM"), xHeaderTextFirst->getString());
+            = getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderTextFirst"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"FIRST HEADER - CUSTOM"_ustr, xHeaderTextFirst->getString());
 
         auto xHeaderTextLeft
-            = getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderTextLeft");
-        CPPUNIT_ASSERT_EQUAL(OUString("LEFT HEADER - CUSTOM"), xHeaderTextLeft->getString());
+            = getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderTextLeft"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"LEFT HEADER - CUSTOM"_ustr, xHeaderTextLeft->getString());
 
-        auto xHeaderTextRight = getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderText");
-        CPPUNIT_ASSERT_EQUAL(OUString("RIGHT HEADER - CUSTOM"), xHeaderTextRight->getString());
+        auto xHeaderTextRight
+            = getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderText"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"RIGHT HEADER - CUSTOM"_ustr, xHeaderTextRight->getString());
 
         auto xFooterTextFirst
-            = getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextFirst");
-        CPPUNIT_ASSERT_EQUAL(OUString("FIRST FOOTER - CUSTOM"), xFooterTextFirst->getString());
+            = getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterTextFirst"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"FIRST FOOTER - CUSTOM"_ustr, xFooterTextFirst->getString());
 
         auto xFooterTextLeft
-            = getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextLeft");
-        CPPUNIT_ASSERT_EQUAL(OUString("LEFT FOOTER - CUSTOM"), xFooterTextLeft->getString());
+            = getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterTextLeft"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"LEFT FOOTER - CUSTOM"_ustr, xFooterTextLeft->getString());
 
-        auto xFooterTextRight = getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterText");
-        CPPUNIT_ASSERT_EQUAL(OUString("RIGHT FOOTER - CUSTOM"), xFooterTextRight->getString());
+        auto xFooterTextRight
+            = getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterText"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"RIGHT FOOTER - CUSTOM"_ustr, xFooterTextRight->getString());
     }
 }
 
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testDoubleFirstLeftRightHeaderPageStyles_ODF)
 {
     createSwDoc("DoubleFirstLeftRight.odt");
-    checkDoubleFirstLeftRightHeaderPageStyles("Custom Page Style");
+    checkDoubleFirstLeftRightHeaderPageStyles(u"Custom Page Style"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testDoubleFirstLeftRightHeaderPageStyles_OOXML)
 {
     createSwDoc("DoubleFirstLeftRight.docx");
-    checkDoubleFirstLeftRightHeaderPageStyles("Converted1");
+    checkDoubleFirstLeftRightHeaderPageStyles(u"Converted1"_ustr);
 }
 
 void HeaderFooterTest::checkShapeInFirstPageHeader()
 {
     // Check Default Style
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
-                                                   uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
 
-    bool bHeader = getProperty<bool>(xPageStyle, "HeaderIsOn");
+    bool bHeader = getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr);
     CPPUNIT_ASSERT_EQUAL(true, bHeader);
 
-    bool bFooter = getProperty<bool>(xPageStyle, "FooterIsOn");
+    bool bFooter = getProperty<bool>(xPageStyle, u"FooterIsOn"_ustr);
     CPPUNIT_ASSERT_EQUAL(false, bFooter);
 
-    bool bHeaderIsShared = getProperty<bool>(xPageStyle, "HeaderIsShared");
+    bool bHeaderIsShared = getProperty<bool>(xPageStyle, u"HeaderIsShared"_ustr);
     CPPUNIT_ASSERT_EQUAL(true, bHeaderIsShared);
 
-    bool bFirstIsShared = getProperty<bool>(xPageStyle, "FirstIsShared");
+    bool bFirstIsShared = getProperty<bool>(xPageStyle, u"FirstIsShared"_ustr);
     CPPUNIT_ASSERT_EQUAL(false, bFirstIsShared);
 
     // Check shape is anchored to paragraph belonging to XText from "HeaderTextFirst" property
-    auto xHeaderTextFirst = getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderTextFirst");
+    auto xHeaderTextFirst
+        = getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderTextFirst"_ustr);
     CPPUNIT_ASSERT(xHeaderTextFirst.is());
 
     uno::Reference<text::XTextContent> xShapeText(getShape(1), uno::UNO_QUERY);

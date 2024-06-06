@@ -36,31 +36,31 @@ void ToxMiscTest::testTdf73162()
     //first token
     SwFormToken token1 = formTokens.at(0);
     CPPUNIT_ASSERT_EQUAL(FormTokenType::TOKEN_LINK_START, token1.eTokenType);
-    CPPUNIT_ASSERT_EQUAL(OUString("<LS Index Link,65535,>"), token1.GetString());
+    CPPUNIT_ASSERT_EQUAL(u"<LS Index Link,65535,>"_ustr, token1.GetString());
     //second token
     SwFormToken token2 = formTokens.at(1);
     CPPUNIT_ASSERT_EQUAL(FormTokenType::TOKEN_ENTRY_NO, token2.eTokenType);
-    CPPUNIT_ASSERT_EQUAL(OUString("<E# ,65535,0,10>"), token2.GetString());
+    CPPUNIT_ASSERT_EQUAL(u"<E# ,65535,0,10>"_ustr, token2.GetString());
     //third token
     SwFormToken token3 = formTokens.at(2);
     CPPUNIT_ASSERT_EQUAL(FormTokenType::TOKEN_TEXT, token3.eTokenType);
-    CPPUNIT_ASSERT_EQUAL(OUString("<X ,65535,\001.\001>"), token3.GetString());
+    CPPUNIT_ASSERT_EQUAL(u"<X ,65535,\001.\001>"_ustr, token3.GetString());
     //fourth token
     SwFormToken token4 = formTokens.at(3);
     CPPUNIT_ASSERT_EQUAL(FormTokenType::TOKEN_ENTRY_TEXT, token4.eTokenType);
-    CPPUNIT_ASSERT_EQUAL(OUString("<ET ,65535,>"), token4.GetString());
+    CPPUNIT_ASSERT_EQUAL(u"<ET ,65535,>"_ustr, token4.GetString());
     //fifth token
     SwFormToken token5 = formTokens.at(4);
     CPPUNIT_ASSERT_EQUAL(FormTokenType::TOKEN_TAB_STOP, token5.eTokenType);
-    CPPUNIT_ASSERT_EQUAL(OUString("<T ,65535,0,5,.,1>"), token5.GetString());
+    CPPUNIT_ASSERT_EQUAL(u"<T ,65535,0,5,.,1>"_ustr, token5.GetString());
     //sixth token
     SwFormToken token6 = formTokens.at(5);
     CPPUNIT_ASSERT_EQUAL(FormTokenType::TOKEN_PAGE_NUMS, token6.eTokenType);
-    CPPUNIT_ASSERT_EQUAL(OUString("<# ,65535,>"), token6.GetString());
+    CPPUNIT_ASSERT_EQUAL(u"<# ,65535,>"_ustr, token6.GetString());
     //seventh token
     SwFormToken token7 = formTokens.at(6);
     CPPUNIT_ASSERT_EQUAL(FormTokenType::TOKEN_LINK_END, token7.eTokenType);
-    CPPUNIT_ASSERT_EQUAL(OUString("<LE ,65535,>"), token7.GetString());
+    CPPUNIT_ASSERT_EQUAL(u"<LE ,65535,>"_ustr, token7.GetString());
 }
 
 // Put the test suite in the registry

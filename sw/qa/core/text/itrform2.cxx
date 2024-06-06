@@ -28,7 +28,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/core/text/data/")
+        : SwModelTestBase(u"/sw/qa/core/text/data/"_ustr)
     {
     }
 };
@@ -142,7 +142,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlHeaderPDFExport)
     createSwDoc("content-control-header.docx");
 
     // When exporting to PDF:
-    save("writer_pdf_Export");
+    save(u"writer_pdf_Export"_ustr);
 
     // Then make sure all the expected text is there on page 2:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
@@ -206,7 +206,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCheckedCheckboxContentControlPDF)
     pWrtShell->GotoContentControl(rFormatContentControl);
 
     // When exporting to PDF:
-    save("writer_pdf_Export");
+    save(u"writer_pdf_Export"_ustr);
 
     // Then make sure that a checked checkbox form widget is emitted:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
@@ -222,7 +222,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCheckedCheckboxContentControlPDF)
     // - Actual  : Off
     // i.e. the /AP -> /N key of the checkbox widget annotation object didn't have a sub-key that
     // would match /V, leading to not showing the checked state.
-    CPPUNIT_ASSERT_EQUAL(OUString("Yes"), aActual);
+    CPPUNIT_ASSERT_EQUAL(u"Yes"_ustr, aActual);
 }
 }
 

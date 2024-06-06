@@ -71,21 +71,21 @@ void
 ToxTextGeneratorTest::EmptyStringIsReturnedForPageNumberPlaceholderOfZeroItems()
 {
     OUString actual = ToxTextGenerator::ConstructPageNumberPlaceholder(0);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), actual);
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, actual);
 }
 
 void
 ToxTextGeneratorTest::OneAtSignIsReturnedForPageNumberPlaceholderOfOneItem()
 {
     OUString actual = ToxTextGenerator::ConstructPageNumberPlaceholder(1);
-    CPPUNIT_ASSERT_EQUAL(OUString("@~"), actual);
+    CPPUNIT_ASSERT_EQUAL(u"@~"_ustr, actual);
 }
 
 void
 ToxTextGeneratorTest::TwoAtSignsAreReturnedForPageNumberPlaceholderOfOneItem()
 {
     OUString actual = ToxTextGenerator::ConstructPageNumberPlaceholder(2);
-    CPPUNIT_ASSERT_EQUAL(OUString("@, @~"), actual);
+    CPPUNIT_ASSERT_EQUAL(u"@, @~"_ustr, actual);
 }
 
 void
@@ -95,7 +95,7 @@ ToxTextGeneratorTest::EmptyStringIsReturnedAsNumStringIfNoTextMarkIsSet()
     sortTab.pTextMark = nullptr;
 
     OUString actual = ToxTextGenerator::GetNumStringOfFirstNode(sortTab, false, 0, nullptr);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), actual);
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, actual);
 }
 
 void
@@ -105,7 +105,7 @@ ToxTextGeneratorTest::EmptyStringIsReturnedAsNumStringIfToxSourcesIsEmpty()
     sortTab.pTextMark = reinterpret_cast<SwTextTOXMark*>(1);
 
     OUString actual = ToxTextGenerator::GetNumStringOfFirstNode(sortTab, false, 0, nullptr);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), actual);
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, actual);
 }
 
 namespace {
@@ -157,7 +157,7 @@ ToxTextGeneratorTest::ChapterNumberWithoutTextIsGeneratedForNoprepstTitle()
     SwFormToken token(TOKEN_CHAPTER_INFO);
     token.nChapterFormat = CF_NUM_NOPREPST_TITLE;
 
-    OUString expected("1");
+    OUString expected(u"1"_ustr);
     OUString actual = ttg.GenerateTextForChapterToken(token, nullptr, nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL(expected, actual);
 
@@ -183,7 +183,7 @@ ToxTextGeneratorTest::ChapterNumberWithTitleIsGeneratedForNumberNoPrepst()
     SwFormToken token(TOKEN_CHAPTER_INFO);
     token.nChapterFormat = CF_NUMBER_NOPREPST;
 
-    OUString expected("5 myTitle");
+    OUString expected(u"5 myTitle"_ustr);
     OUString actual = ttg.GenerateTextForChapterToken(token, nullptr, nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL(expected, actual);
 

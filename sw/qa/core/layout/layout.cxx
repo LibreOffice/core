@@ -44,7 +44,7 @@ class SwCoreLayoutTest : public SwModelTestBase
 {
 public:
     SwCoreLayoutTest()
-        : SwModelTestBase("/sw/qa/core/layout/data/")
+        : SwModelTestBase(u"/sw/qa/core/layout/data/"_ustr)
     {
     }
 };
@@ -104,7 +104,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBorderCollapseCompat)
     // - Actual  : 48
     // i.e. there was no single cell border with width=20, rather there were 48 border parts
     // (forming a dotted border), all with width=40.
-    assertXPath(pXmlDoc, "//polyline[@style='solid']"_ostr, "width"_ostr, "20");
+    assertXPath(pXmlDoc, "//polyline[@style='solid']"_ostr, "width"_ostr, u"20"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBtlrTableRowSpan)
@@ -122,7 +122,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBtlrTableRowSpan)
     // - Expected: USA
     // - Actual  : West
     // i.e. the "USA" text completely disappeared.
-    assertXPathContent(pXmlDoc, "//textarray[1]/text"_ostr, "USA");
+    assertXPathContent(pXmlDoc, "//textarray[1]/text"_ostr, u"USA"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTableFlyOverlapSpacing)
@@ -191,12 +191,18 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testAnchorPositionBasedOnParagraph)
     createSwDoc("tdf134783_testAnchorPositionBasedOnParagraph.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[1]/bounds"_ostr, "top"_ostr, "1671");
-    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[1]/bounds"_ostr, "bottom"_ostr, "1732");
-    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[2]/bounds"_ostr, "top"_ostr, "1947");
-    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[2]/bounds"_ostr, "bottom"_ostr, "2008");
-    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[3]/bounds"_ostr, "top"_ostr, "3783");
-    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[3]/bounds"_ostr, "bottom"_ostr, "3844");
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[1]/bounds"_ostr, "top"_ostr,
+                u"1671"_ustr);
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[1]/bounds"_ostr, "bottom"_ostr,
+                u"1732"_ustr);
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[2]/bounds"_ostr, "top"_ostr,
+                u"1947"_ustr);
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[2]/bounds"_ostr, "bottom"_ostr,
+                u"2008"_ustr);
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[3]/bounds"_ostr, "top"_ostr,
+                u"3783"_ustr);
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[3]/bounds"_ostr, "bottom"_ostr,
+                u"3844"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxStaysInsideShape)
@@ -209,8 +215,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxStaysInsideShape)
     // Without the fix in place, this test would have failed with
     // - Expected: 1932
     // - Actual  : 7476
-    assertXPath(pXmlDoc, "//anchored/fly/infos/bounds"_ostr, "top"_ostr, "1932");
-    assertXPath(pXmlDoc, "//anchored/fly/infos/bounds"_ostr, "bottom"_ostr, "7184");
+    assertXPath(pXmlDoc, "//anchored/fly/infos/bounds"_ostr, "top"_ostr, u"1932"_ustr);
+    assertXPath(pXmlDoc, "//anchored/fly/infos/bounds"_ostr, "bottom"_ostr, u"7184"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxNotModifiedOnOpen)
@@ -316,7 +322,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testKeepwithnextFullheight)
     // Make sure the document has 2 pages.
     assertXPath(pXmlDoc, "//page"_ostr, 2);
     // Heading stays on page 1 to avoid a layout loop.
-    assertXPathContent(pXmlDoc, "//page[1]/body/txt[2]"_ostr, "Heading");
+    assertXPathContent(pXmlDoc, "//page[1]/body/txt[2]"_ostr, u"Heading"_ustr);
     // Image stays on page 2.
     assertXPath(pXmlDoc, "//page[2]/body/txt/anchored/fly"_ostr, 1);
 }
@@ -327,15 +333,15 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMargin)
     // inside margins).
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    uno::Reference<beans::XPropertySet> xStandard(getStyles("PageStyles")->getByName("Standard"),
-                                                  uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStandard(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     SwFrame* pPage = pLayout->GetLower();
     tools::Long nOldLeft = pPage->getFramePrintArea().Left();
 
     // Set the gutter margin to 2cm.
     sal_Int32 nGutterMm100 = 2000;
-    xStandard->setPropertyValue("GutterMargin", uno::Any(nGutterMm100));
+    xStandard->setPropertyValue(u"GutterMargin"_ustr, uno::Any(nGutterMm100));
 
     // Verify that the new left edge is larger.
     tools::Long nNewLeft = pPage->getFramePrintArea().Left();
@@ -355,17 +361,17 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterTopMargin)
     SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xSettings(
-        xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
-    xSettings->setPropertyValue("GutterAtTop", uno::Any(true));
-    uno::Reference<beans::XPropertySet> xStandard(getStyles("PageStyles")->getByName("Standard"),
-                                                  uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
+    xSettings->setPropertyValue(u"GutterAtTop"_ustr, uno::Any(true));
+    uno::Reference<beans::XPropertySet> xStandard(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     SwFrame* pPage = pLayout->GetLower();
     tools::Long nOldTop = pPage->getFramePrintArea().Top();
 
     // Set the gutter margin to 2cm.
     sal_Int32 nGutterMm100 = 2000;
-    xStandard->setPropertyValue("GutterMargin", uno::Any(nGutterMm100));
+    xStandard->setPropertyValue(u"GutterMargin"_ustr, uno::Any(nGutterMm100));
 
     // Verify that the new top edge is larger.
     tools::Long nNewTop = pPage->getFramePrintArea().Top();
@@ -390,11 +396,11 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMirrorMargin)
     SwFrame* pPage2 = pPage->GetNext();
     tools::Long nOldRight = pPage2->getFramePrintArea().Right();
 
-    uno::Reference<beans::XPropertySet> xStandard(getStyles("PageStyles")->getByName("Standard"),
-                                                  uno::UNO_QUERY);
-    xStandard->setPropertyValue("PageStyleLayout", uno::Any(style::PageStyleLayout_MIRRORED));
+    uno::Reference<beans::XPropertySet> xStandard(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    xStandard->setPropertyValue(u"PageStyleLayout"_ustr, uno::Any(style::PageStyleLayout_MIRRORED));
     sal_Int32 nGutterMm100 = 2000;
-    xStandard->setPropertyValue("GutterMargin", uno::Any(nGutterMm100));
+    xStandard->setPropertyValue(u"GutterMargin"_ustr, uno::Any(nGutterMm100));
 
     tools::Long nNewLeft = pPage->getFramePrintArea().Left();
     tools::Long nGutterTwips = o3tl::toTwips(nGutterMm100, o3tl::Length::mm100);
@@ -412,16 +418,16 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testRtlGutterMargin)
     // Given a document with a right margin:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    uno::Reference<beans::XPropertySet> xStandard(getStyles("PageStyles")->getByName("Standard"),
-                                                  uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStandard(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     SwFrame* pPage = pLayout->GetLower();
     tools::Long nOldRight = pPage->getFramePrintArea().Right();
 
     // When setting enable RTL gutter mode and setting a gutter margin:
-    xStandard->setPropertyValue("RtlGutter", uno::Any(true));
+    xStandard->setPropertyValue(u"RtlGutter"_ustr, uno::Any(true));
     sal_Int32 nGutterMm100 = 2000;
-    xStandard->setPropertyValue("GutterMargin", uno::Any(nGutterMm100));
+    xStandard->setPropertyValue(u"GutterMargin"_ustr, uno::Any(nGutterMm100));
 
     // Then make sure the new right edge of the print area is decreased:
     tools::Long nNewRight = pPage->getFramePrintArea().Right();
@@ -442,16 +448,16 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMarginPageBorder)
     // Given a document with a non-0 gutter margin.
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    uno::Reference<beans::XPropertySet> xStandard(getStyles("PageStyles")->getByName("Standard"),
-                                                  uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStandard(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     sal_Int32 nGutterMm100 = 2000;
-    xStandard->setPropertyValue("GutterMargin", uno::Any(nGutterMm100));
+    xStandard->setPropertyValue(u"GutterMargin"_ustr, uno::Any(nGutterMm100));
 
     // When setting a left border.
     table::BorderLine2 aBorder;
     aBorder.LineWidth = 2;
     aBorder.OuterLineWidth = 2;
-    xStandard->setPropertyValue("LeftBorder", uno::Any(aBorder));
+    xStandard->setPropertyValue(u"LeftBorder"_ustr, uno::Any(aBorder));
 
     // Then make sure border is at the left edge of the text area.
     SwDocShell* pShell = pDoc->GetDocShell();
@@ -462,7 +468,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMarginPageBorder)
     // - Expected: 2565
     // - Actual  : 1425
     // Where 2565 is close to the left edge of the text area (2553).
-    assertXPath(pXmlDoc, "//polyline[@style='solid']/point[1]"_ostr, "x"_ostr, "2565");
+    assertXPath(pXmlDoc, "//polyline[@style='solid']/point[1]"_ostr, "x"_ostr, u"2565"_ustr);
 #endif
 }
 
@@ -868,18 +874,19 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testNegativePageBorder)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDocShell* pDocShell = pTextDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
-    pWrtShell->Insert("test");
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
-                                                   uno::UNO_QUERY);
-    xPageStyle->setPropertyValue("TopMargin", uno::Any(static_cast<sal_Int32>(501))); // 284 twips
+    pWrtShell->Insert(u"test"_ustr);
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    xPageStyle->setPropertyValue(u"TopMargin"_ustr,
+                                 uno::Any(static_cast<sal_Int32>(501))); // 284 twips
     table::BorderLine2 aBorder;
     aBorder.LineWidth = 159; // 90 twips
     aBorder.OuterLineWidth = 159;
-    xPageStyle->setPropertyValue("TopBorder", uno::Any(aBorder));
+    xPageStyle->setPropertyValue(u"TopBorder"_ustr, uno::Any(aBorder));
     sal_Int32 nTopBorderDistance = -646; // -366 twips
-    xPageStyle->setPropertyValue("TopBorderDistance", uno::Any(nTopBorderDistance));
+    xPageStyle->setPropertyValue(u"TopBorderDistance"_ustr, uno::Any(nTopBorderDistance));
     nTopBorderDistance = 0;
-    xPageStyle->getPropertyValue("TopBorderDistance") >>= nTopBorderDistance;
+    xPageStyle->getPropertyValue(u"TopBorderDistance"_ustr) >>= nTopBorderDistance;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-646), nTopBorderDistance);
 
     // When rendering that border:
@@ -894,8 +901,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testNegativePageBorder)
     // i.e. the negative border distance was rounded up to 0 in lcl_CalcBorderRect().
     // Ideally this would be 284 (top of first page) + 284 (top margin) + 366 (border distance) =
     // 934.
-    assertXPath(pXmlDoc, "//polyline[@style='solid']/point[1]"_ostr, "y"_ostr, "899");
-    assertXPath(pXmlDoc, "//polyline[@style='solid']/point[2]"_ostr, "y"_ostr, "899");
+    assertXPath(pXmlDoc, "//polyline[@style='solid']/point[1]"_ostr, "y"_ostr, u"899"_ustr);
+    assertXPath(pXmlDoc, "//polyline[@style='solid']/point[2]"_ostr, "y"_ostr, u"899"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testNegativePageBorderNoMargin)
@@ -910,16 +917,16 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testNegativePageBorderNoMargin)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDocShell* pDocShell = pTextDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
-    pWrtShell->Insert("test");
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
-                                                   uno::UNO_QUERY);
-    xPageStyle->setPropertyValue("TopMargin", uno::Any(static_cast<sal_Int32>(0))); // 0 twips
+    pWrtShell->Insert(u"test"_ustr);
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    xPageStyle->setPropertyValue(u"TopMargin"_ustr, uno::Any(static_cast<sal_Int32>(0))); // 0 twips
     table::BorderLine2 aBorder;
     aBorder.LineWidth = 159; // 90 twips
     aBorder.OuterLineWidth = 159;
-    xPageStyle->setPropertyValue("TopBorder", uno::Any(aBorder));
+    xPageStyle->setPropertyValue(u"TopBorder"_ustr, uno::Any(aBorder));
     sal_Int32 nTopBorderDistance = -1147; // -650 twips
-    xPageStyle->setPropertyValue("TopBorderDistance", uno::Any(nTopBorderDistance));
+    xPageStyle->setPropertyValue(u"TopBorderDistance"_ustr, uno::Any(nTopBorderDistance));
 
     // When rendering that border:
     std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
@@ -933,8 +940,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testNegativePageBorderNoMargin)
     // i.e. this failed differently: the lack of top margin caused a second problem.
     // Ideally this would be 284 (top of first page) + 650 (border distance) =
     // 934.
-    assertXPath(pXmlDoc, "//polyline[@style='solid']/point[1]"_ostr, "y"_ostr, "899");
-    assertXPath(pXmlDoc, "//polyline[@style='solid']/point[2]"_ostr, "y"_ostr, "899");
+    assertXPath(pXmlDoc, "//polyline[@style='solid']/point[1]"_ostr, "y"_ostr, u"899"_ustr);
+    assertXPath(pXmlDoc, "//polyline[@style='solid']/point[2]"_ostr, "y"_ostr, u"899"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testFollowTextFlowWrapInBackground)
@@ -988,7 +995,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testPageRemoveFlyTable)
     pWrtShell->Reformat();
 
     // Then make sure that the 2nd table below the bookmark has no unwanted top margin:
-    pWrtShell->GotoMark("test");
+    pWrtShell->GotoMark(u"test"_ustr);
     pWrtShell->Down(/*bSelect=*/false, /*nCount=*/1, /*bBasicCall=*/false);
     pWrtShell->Down(/*bSelect=*/false, /*nCount=*/1, /*bBasicCall=*/false);
     SwCursor* pCursor = pWrtShell->GetCursor();

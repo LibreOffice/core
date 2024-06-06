@@ -100,7 +100,7 @@ bool SwFiltersTest::filter(const OUString &rFilter, const OUString &rURL,
     if (rUserData == FILTER_TEXT_DLG)
     {
         pSrcMed->GetItemSet().Put(
-            SfxStringItem(SID_FILE_FILTEROPTIONS, "UTF8,LF,Liberation Mono,en-US"));
+            SfxStringItem(SID_FILE_FILTEROPTIONS, u"UTF8,LF,Liberation Mono,en-US"_ustr));
     }
 
     bool bLoaded = xDocShRef->DoLoad(pSrcMed);
@@ -132,54 +132,54 @@ bool SwFiltersTest::filter(const OUString &rFilter, const OUString &rURL,
 
 void SwFiltersTest::testCVEs()
 {
-    testDir("StarOffice XML (Writer)",
+    testDir(u"StarOffice XML (Writer)"_ustr,
             m_directories.getURLFromSrc(u"/sw/qa/core/data/xml/"),
             FILTER_XML,
             SfxFilterFlags::IMPORT | SfxFilterFlags::OWN | SfxFilterFlags::DEFAULT,
             isstorage, SOFFICE_FILEFORMAT_CURRENT);
 
-    testDir("writer8",
+    testDir(u"writer8"_ustr,
             m_directories.getURLFromSrc(u"/sw/qa/core/data/odt/"),
             FILTER_XML,
             SfxFilterFlags::IMPORT | SfxFilterFlags::OWN | SfxFilterFlags::DEFAULT,
             isstorage, SOFFICE_FILEFORMAT_CURRENT);
 
-    testDir("MS Word 97",
+    testDir(u"MS Word 97"_ustr,
             m_directories.getURLFromSrc(u"/sw/qa/core/data/ww8/"),
             FILTER_WW8);
 
-    testDir("MS WinWord 6.0",
+    testDir(u"MS WinWord 6.0"_ustr,
             m_directories.getURLFromSrc(u"/sw/qa/core/data/ww6/"),
             sWW6);
 
-    testDir("MS WinWord 5",
+    testDir(u"MS WinWord 5"_ustr,
             m_directories.getURLFromSrc(u"/sw/qa/core/data/ww5/"),
             sWW5);
 
-    testDir("Text (encoded)",
+    testDir(u"Text (encoded)"_ustr,
             m_directories.getURLFromSrc(u"/sw/qa/core/data/txt/"),
             FILTER_TEXT_DLG);
 
-    testDir("MS Word 2007 XML",
+    testDir(u"MS Word 2007 XML"_ustr,
             m_directories.getURLFromSrc(u"/sw/qa/core/data/ooxml/"),
             OUString(),
             SfxFilterFlags::STARONEFILTER);
 
-    testDir("Rich Text Format",
+    testDir(u"Rich Text Format"_ustr,
             m_directories.getURLFromSrc(u"/sw/qa/core/data/rtf/"),
             OUString(),
             SfxFilterFlags::STARONEFILTER);
 
-    testDir("HTML",
+    testDir(u"HTML"_ustr,
             m_directories.getURLFromSrc(u"/sw/qa/core/data/html/"),
             sHTML);
 
-    testDir("T602Document",
+    testDir(u"T602Document"_ustr,
             m_directories.getURLFromSrc(u"/sw/qa/core/data/602/"),
             OUString(),
             SfxFilterFlags::STARONEFILTER);
 
-    testDir("Rich Text Format",
+    testDir(u"Rich Text Format"_ustr,
             m_directories.getURLFromSrc(u"/sw/qa/core/exportdata/rtf/"),
             OUString(),
             SfxFilterFlags::STARONEFILTER,
@@ -187,7 +187,7 @@ void SwFiltersTest::testCVEs()
             0,
             /*bExport=*/true);
 
-    testDir("HTML",
+    testDir(u"HTML"_ustr,
             m_directories.getURLFromSrc(u"/sw/qa/core/exportdata/html/"),
             sHTML,
             SfxFilterFlags::NONE,
@@ -195,7 +195,7 @@ void SwFiltersTest::testCVEs()
             0,
             /*bExport=*/true);
 
-    testDir("MS Word 2007 XML",
+    testDir(u"MS Word 2007 XML"_ustr,
             m_directories.getURLFromSrc(u"/sw/qa/core/exportdata/ooxml/"),
             OUString(),
             SfxFilterFlags::STARONEFILTER,
@@ -212,7 +212,7 @@ void SwFiltersTest::setUp()
     //This is a bit of a fudge, we do this to ensure that SwGlobals::ensure,
     //which is a private symbol to us, gets called
     m_xWriterComponent =
-        getMultiServiceFactory()->createInstance("com.sun.star.comp.Writer.TextDocument");
+        getMultiServiceFactory()->createInstance(u"com.sun.star.comp.Writer.TextDocument"_ustr);
     CPPUNIT_ASSERT_MESSAGE("no writer component!", m_xWriterComponent.is());
 }
 

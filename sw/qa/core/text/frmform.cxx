@@ -27,7 +27,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/core/text/data/")
+        : SwModelTestBase(u"/sw/qa/core/text/data/"_ustr)
     {
     }
 };
@@ -91,10 +91,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableAvoidLastManipOfst)
     createSwDoc("floattable-avoid-last-manip-ofst.docx");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/false);
-    pWrtShell->Insert2("dt");
+    pWrtShell->Insert2(u"dt"_ustr);
 
     // When expanding dummy text on the last page:
-    dispatchCommand(mxComponent, ".uno:ExpandGlossary", {});
+    dispatchCommand(mxComponent, u".uno:ExpandGlossary"_ustr, {});
 
     // Then make sure the expanded text starts on page 5:
     SwDoc* pDoc = getSwDocShell()->GetDoc();

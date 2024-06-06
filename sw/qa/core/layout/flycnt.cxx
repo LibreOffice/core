@@ -40,7 +40,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/core/layout/data/")
+        : SwModelTestBase(u"/sw/qa/core/layout/data/"_ustr)
     {
     }
 
@@ -65,13 +65,13 @@ void Test::Create1x2SplitFly()
     pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/1);
     pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
     pWrtShell->GoPrevCell();
-    pWrtShell->Insert("A1");
+    pWrtShell->Insert(u"A1"_ustr);
     SwFormatFrameSize aRowSize(SwFrameSize::Minimum);
     // 4 cm, so 2 rows don't fit 1 page.
     aRowSize.SetHeight(2267);
     pWrtShell->SetRowHeight(aRowSize);
     pWrtShell->GoNextCell();
-    pWrtShell->Insert("A2");
+    pWrtShell->Insert(u"A2"_ustr);
     pWrtShell->SetRowHeight(aRowSize);
     // Select cell:
     pWrtShell->SelAll();
@@ -606,9 +606,9 @@ CPPUNIT_TEST_FIXTURE(Test, testCursorTraversal)
 
     // When going from A1 to A2:
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->GotoTable("Table1");
+    pWrtShell->GotoTable(u"Table1"_ustr);
     SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
-    CPPUNIT_ASSERT_EQUAL(OUString("A1"), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"A1"_ustr, pTextNode->GetText());
     pWrtShell->Down(/*bSelect=*/false);
 
     // Then make sure we get to A2 and don't stay in A1:
@@ -617,7 +617,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCursorTraversal)
     // - Expected: A2
     // - Actual  : A1
     // i.e. the cursor didn't get from A1 to A2.
-    CPPUNIT_ASSERT_EQUAL(OUString("A2"), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"A2"_ustr, pTextNode->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyRowDelete)
@@ -627,11 +627,11 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyRowDelete)
 
     // When deleting the row of A2:
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->GotoTable("Table1");
+    pWrtShell->GotoTable(u"Table1"_ustr);
     pWrtShell->Down(/*bSelect=*/false);
     SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     // We delete the right row:
-    CPPUNIT_ASSERT_EQUAL(OUString("A2"), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"A2"_ustr, pTextNode->GetText());
     pWrtShell->DeleteRow();
 
     // Then make sure we only have 1 page:
@@ -649,10 +649,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFly1stRowDelete)
 
     // When deleting the row of A1:
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->GotoTable("Table1");
+    pWrtShell->GotoTable(u"Table1"_ustr);
     SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     // We delete the right row:
-    CPPUNIT_ASSERT_EQUAL(OUString("A1"), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"A1"_ustr, pTextNode->GetText());
     pWrtShell->DeleteRow();
 
     // Then make sure we only have 1 page:
@@ -672,12 +672,12 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFly3rdRowDelete)
 
     // When deleting the row of A3:
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->GotoTable("Table1");
+    pWrtShell->GotoTable(u"Table1"_ustr);
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
     SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     // We delete the right row:
-    CPPUNIT_ASSERT_EQUAL(OUString("A3"), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"A3"_ustr, pTextNode->GetText());
     pWrtShell->DeleteRow();
 
     // Then make sure we only have 2 pages:
@@ -731,16 +731,16 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyThenTable)
     // Given a document with a 2 page floating table, followed by an other table:
     // Intentionally load the document as hidden to avoid layout during load (see TestTdf150616):
     uno::Sequence<beans::PropertyValue> aFilterOptions = {
-        comphelper::makePropertyValue("Hidden", true),
+        comphelper::makePropertyValue(u"Hidden"_ustr, true),
     };
     mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/core/layout/data/")
                                       + "floattable-then-table.docx",
-                                  "com.sun.star.text.TextDocument", aFilterOptions);
+                                  u"com.sun.star.text.TextDocument"_ustr, aFilterOptions);
 
     // When layout is calculated during PDF export:
     // Then make sure that finishes without errors:
     // This crashed, due to a stack overflow in layout code.
-    save("writer_pdf_Export");
+    save(u"writer_pdf_Export"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyInTextSection)
@@ -1024,7 +1024,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyFromAsCharAnchor)
     selectShape(1);
     // Without the accompanying fix in place, this test would have crashed, we tried to split a
     // frame+table inside a footnote.
-    dispatchCommand(mxComponent, ".uno:SetAnchorToPara", {});
+    dispatchCommand(mxComponent, u".uno:SetAnchorToPara"_ustr, {});
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNested)
@@ -1218,7 +1218,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWrapOnAllPages)
     // - Expected: He heard quiet steps behind him. That
     // - Actual  :
     // i.e. the first page had no anchor text, only the second.
-    CPPUNIT_ASSERT_EQUAL(OUString("He heard quiet steps behind him. That "), aAnchor1Text);
+    CPPUNIT_ASSERT_EQUAL(u"He heard quiet steps behind him. That "_ustr, aAnchor1Text);
     auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
     CPPUNIT_ASSERT(pPage2);
     auto pPage2Anchor = pPage2->FindLastBodyContent()->DynCastTextFrame();
@@ -1226,7 +1226,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWrapOnAllPages)
     OUString aAnchor2Text(
         pPage2Anchor->GetText().subView(static_cast<sal_Int32>(pPage2Anchor->GetOffset())));
     CPPUNIT_ASSERT(!pPage2Anchor->GetFollow());
-    CPPUNIT_ASSERT_EQUAL(OUString("didn't bode well."), aAnchor2Text);
+    CPPUNIT_ASSERT_EQUAL(u"didn't bode well."_ustr, aAnchor2Text);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyPerFrameWrapOnAllPages)
@@ -1259,7 +1259,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyPerFrameWrapOnAllPages)
     // - Expected: He heard quiet steps behind him. That
     // - Actual  :
     // i.e. the first page had no anchor text, only the second.
-    CPPUNIT_ASSERT_EQUAL(OUString("He heard quiet steps behind him. That "), aAnchor1Text);
+    CPPUNIT_ASSERT_EQUAL(u"He heard quiet steps behind him. That "_ustr, aAnchor1Text);
     auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
     CPPUNIT_ASSERT(pPage2);
     auto pPage2Anchor = pPage2->FindLastBodyContent()->DynCastTextFrame();
@@ -1267,7 +1267,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyPerFrameWrapOnAllPages)
     OUString aAnchor2Text(
         pPage2Anchor->GetText().subView(static_cast<sal_Int32>(pPage2Anchor->GetOffset())));
     CPPUNIT_ASSERT(!pPage2Anchor->GetFollow());
-    CPPUNIT_ASSERT_EQUAL(OUString("didn't bode well."), aAnchor2Text);
+    CPPUNIT_ASSERT_EQUAL(u"didn't bode well."_ustr, aAnchor2Text);
 }
 }
 

@@ -26,7 +26,7 @@ class SwCoreDrawTest : public SwModelTestBase
 {
 public:
     SwCoreDrawTest()
-        : SwModelTestBase("/sw/qa/core/draw/data/")
+        : SwModelTestBase(u"/sw/qa/core/draw/data/"_ustr)
     {
     }
 };
@@ -112,14 +112,14 @@ CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testTdf107727FrameBorder)
     createSwDoc("tdf107727_FrameBorder.odt");
 
     // Export to RTF and reload
-    saveAndReload("Rich Text Format");
+    saveAndReload(u"Rich Text Format"_ustr);
 
     // Get frame without border and inspect it.
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
                                                          uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFrame0(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    auto aBorder = getProperty<table::BorderLine2>(xFrame0, "LeftBorder");
+    auto aBorder = getProperty<table::BorderLine2>(xFrame0, u"LeftBorder"_ustr);
     // fo:border="none" is not available via API, and aBorder.LineWidth has wrong value (why?).
     sal_uInt32 nBorderWidth
         = aBorder.OuterLineWidth + aBorder.InnerLineWidth + aBorder.LineDistance;
@@ -128,7 +128,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testTdf107727FrameBorder)
 
     // Get frame with left border and inspect it.
     uno::Reference<beans::XPropertySet> xFrame1(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
-    aBorder = getProperty<table::BorderLine2>(xFrame1, "LeftBorder");
+    aBorder = getProperty<table::BorderLine2>(xFrame1, u"LeftBorder"_ustr);
     // Without patch it failed with Expected 127, Actual 26. Default border width was used.
     nBorderWidth = aBorder.OuterLineWidth + aBorder.InnerLineWidth + aBorder.LineDistance;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(127), nBorderWidth);

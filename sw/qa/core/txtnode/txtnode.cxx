@@ -47,7 +47,7 @@ class SwCoreTxtnodeTest : public SwModelTestBase
 {
 public:
     SwCoreTxtnodeTest()
-        : SwModelTestBase("/sw/qa/core/txtnode/data/")
+        : SwModelTestBase(u"/sw/qa/core/txtnode/data/"_ustr)
     {
     }
 };
@@ -64,12 +64,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testBtlrCellChinese)
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
-    assertXPath(pXmlDoc, "//font[1]"_ostr, "orientation"_ostr, "900");
+    assertXPath(pXmlDoc, "//font[1]"_ostr, "orientation"_ostr, u"900"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: false
     // - Actual  : true
     // i.e. the glyph was rotated further, so it was upside down.
-    assertXPath(pXmlDoc, "//font[1]"_ostr, "vertical"_ostr, "false");
+    assertXPath(pXmlDoc, "//font[1]"_ostr, "vertical"_ostr, u"false"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testSpecialInsertAfterMergedCells)
@@ -187,7 +187,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTitleFieldInvalidate)
     aCallback.m_nInvalidations = 0;
 
     // When typing to the document:
-    pWrtShell->Insert("x");
+    pWrtShell->Insert(u"x"_ustr);
     pWrtShell->GetSfxViewShell()->flushPendingLOKInvalidateTiles();
 
     // Then make sure that only the text frame at the cursor is invalidated:
@@ -236,7 +236,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testSplitNodeSuperscriptCopy)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->Insert("1st");
+    pWrtShell->Insert(u"1st"_ustr);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 2, /*bBasicCall=*/false);
     SfxItemSetFixed<RES_CHRATR_ESCAPEMENT, RES_CHRATR_ESCAPEMENT> aSet(pWrtShell->GetAttrPool());
     SvxEscapementItem aItem(SvxEscapement::Superscript, RES_CHRATR_ESCAPEMENT);
@@ -445,22 +445,22 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTdf157287)
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
     uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("30"), xField->getPresentation(false));
+    CPPUNIT_ASSERT_EQUAL(u"30"_ustr, xField->getPresentation(false));
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
                                                          uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTextTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
 
-    uno::Reference<text::XTextRange> xCellA1(xTextTable->getCellByName("B1"), uno::UNO_QUERY);
-    xCellA1->setString("100");
+    uno::Reference<text::XTextRange> xCellA1(xTextTable->getCellByName(u"B1"_ustr), uno::UNO_QUERY);
+    xCellA1->setString(u"100"_ustr);
 
-    dispatchCommand(mxComponent, ".uno:UpdateFields", {});
+    dispatchCommand(mxComponent, u".uno:UpdateFields"_ustr, {});
 
     // Without the fix in place, this test would have failed with
     // - Expected: 120
     // - Actual  :
-    CPPUNIT_ASSERT_EQUAL(OUString("120"), xField->getPresentation(false));
+    CPPUNIT_ASSERT_EQUAL(u"120"_ustr, xField->getPresentation(false));
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testFlySplitFootnote)
@@ -521,10 +521,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testSplitFlyAnchorSplit)
     CPPUNIT_ASSERT(pPage2->GetSortedObjs());
     // Anchor text is now just "A":
     auto pText1 = pPage2->FindFirstBodyContent()->DynCastTextFrame();
-    CPPUNIT_ASSERT_EQUAL(OUString("A"), pText1->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"A"_ustr, pText1->GetText());
     // New text frame is just "B":
     auto pText2 = pText1->GetNext()->DynCastTextFrame();
-    CPPUNIT_ASSERT_EQUAL(OUString("B"), pText2->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"B"_ustr, pText2->GetText());
 
     // Also test that the new follow anchor text frame still has a fly portion, otherwise the anchor
     // text and the floating table would overlap:
@@ -536,7 +536,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testSplitFlyAnchorSplit)
     // - Expected: PortionType::Fly
     // - Actual  : PortionType::Para
     // i.e. the fly portion was missing, text overlapped.
-    CPPUNIT_ASSERT_EQUAL(OUString("PortionType::Fly"), aPortionType);
+    CPPUNIT_ASSERT_EQUAL(u"PortionType::Fly"_ustr, aPortionType);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testPlainContentControlCopy)

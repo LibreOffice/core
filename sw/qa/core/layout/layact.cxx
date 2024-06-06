@@ -30,7 +30,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/core/layout/data/")
+        : SwModelTestBase(u"/sw/qa/core/layout/data/"_ustr)
     {
     }
 };
@@ -58,7 +58,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNextRowInvalidatePos)
     // When adding a new paragraph at the end of B1:
     // Go to the table: A1 cell.
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->GotoTable("Table1");
+    pWrtShell->GotoTable(u"Table1"_ustr);
     // Go to the column: B1 cell.
     pWrtShell->GoNextCell();
     // Go to the end of the B1 cell, on page 2.
@@ -80,10 +80,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157096)
     createSwDoc("tdf157096.docx");
 
     CPPUNIT_ASSERT_EQUAL(2, getPages());
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
     // Without the fix in place, it would have crashed here
-    dispatchCommand(mxComponent, ".uno:Delete", {});
+    dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }

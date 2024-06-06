@@ -54,7 +54,7 @@ class SwCoreTextTest : public SwModelTestBase
 {
 public:
     SwCoreTextTest()
-        : SwModelTestBase("/sw/qa/core/text/data/")
+        : SwModelTestBase(u"/sw/qa/core/text/data/"_ustr)
     {
     }
 };
@@ -87,10 +87,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testSemiTransparentText)
     uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xParagraph.is());
     sal_Int16 nTransparence = 50;
-    xParagraph->setPropertyValue("CharTransparence", uno::Any(nTransparence));
+    xParagraph->setPropertyValue(u"CharTransparence"_ustr, uno::Any(nTransparence));
     uno::Reference<text::XTextRange> xTextRange(xParagraph, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xTextRange.is());
-    xTextRange->setString("x");
+    xTextRange->setString(u"x"_ustr);
 
     // Render the document to a metafile.
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -113,7 +113,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testLastBibliographyPdfExport)
     createSwDoc("tdf158505.odt");
 
     // It should be possible to export to PDF:
-    save("writer_pdf_Export");
+    save(u"writer_pdf_Export"_ustr);
 
     // Without the accompanying fix, the export to PDF would get stuck in an infinite loop
     CPPUNIT_ASSERT(true);
@@ -124,16 +124,19 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf156146)
     createSwDoc("tdf156146.fodt");
 
     uno::Reference<container::XIndexAccess> const xLevels1(
-        getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules"));
+        getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1),
+                                                             u"NumberingRules"_ustr));
     ::comphelper::SequenceAsHashMap props1(xLevels1->getByIndex(0));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-700), props1["FirstLineIndent"].get<sal_Int32>());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1330), props1["IndentAt"].get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-700), props1[u"FirstLineIndent"_ustr].get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1330), props1[u"IndentAt"_ustr].get<sal_Int32>());
 
     // common style applies list-style-name and margin-left
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
-                         getProperty<sal_Int32>(getParagraph(1), "ParaFirstLineIndent"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), "ParaRightMargin"));
+                         getProperty<sal_Int32>(getParagraph(1), u"ParaFirstLineIndent"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                         getProperty<sal_Int32>(getParagraph(1), u"ParaLeftMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                         getProperty<sal_Int32>(getParagraph(1), u"ParaRightMargin"_ustr));
 
     SwTextFrame* const pFrame(dynamic_cast<SwTextFrame*>(
         static_cast<SwPageFrame*>(getSwDoc()->GetDocShell()->GetWrtShell()->GetLayout()->GetLower())
@@ -153,16 +156,19 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf159903)
     createSwDoc("Broken indent demo.odt");
 
     uno::Reference<container::XIndexAccess> const xLevels1(
-        getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules"));
+        getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1),
+                                                             u"NumberingRules"_ustr));
     ::comphelper::SequenceAsHashMap props1(xLevels1->getByIndex(0));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4001), props1["FirstLineIndent"].get<sal_Int32>());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4001), props1["IndentAt"].get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4001), props1[u"FirstLineIndent"_ustr].get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4001), props1[u"IndentAt"_ustr].get<sal_Int32>());
 
     // common style applies list-style-name, parent style margin-left
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
-                         getProperty<sal_Int32>(getParagraph(1), "ParaFirstLineIndent"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), "ParaRightMargin"));
+                         getProperty<sal_Int32>(getParagraph(1), u"ParaFirstLineIndent"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                         getProperty<sal_Int32>(getParagraph(1), u"ParaLeftMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                         getProperty<sal_Int32>(getParagraph(1), u"ParaRightMargin"_ustr));
 
     SwTextFrame* const pFrame(dynamic_cast<SwTextFrame*>(
         static_cast<SwPageFrame*>(getSwDoc()->GetDocShell()->GetWrtShell()->GetLayout()->GetLower())
@@ -179,7 +185,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf159903)
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf159336)
 {
     createSwDoc("tdf159336.odt");
-    save("writer_pdf_Export");
+    save(u"writer_pdf_Export"_ustr);
 
     vcl::filter::PDFDocument aDocument;
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
@@ -221,15 +227,15 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport)
     createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
-        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aFields = {
-        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
-        comphelper::makePropertyValue("Identifier", OUString("AT")),
-        comphelper::makePropertyValue("Author", OUString("Author")),
-        comphelper::makePropertyValue("Title", OUString("Title")),
-        comphelper::makePropertyValue("URL", OUString("http://www.example.com/test.pdf#page=1")),
+        comphelper::makePropertyValue(u"BibiliographicType"_ustr, text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue(u"Identifier"_ustr, u"AT"_ustr),
+        comphelper::makePropertyValue(u"Author"_ustr, u"Author"_ustr),
+        comphelper::makePropertyValue(u"Title"_ustr, u"Title"_ustr),
+        comphelper::makePropertyValue(u"URL"_ustr, u"http://www.example.com/test.pdf#page=1"_ustr),
     };
-    xField->setPropertyValue("Fields", uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -237,7 +243,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport)
     xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
 
     // When exporting to PDF:
-    save("writer_pdf_Export");
+    save(u"writer_pdf_Export"_ustr);
 
     // Then make sure the field links the source.
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
@@ -258,15 +264,15 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport2)
     createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
-        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aFields = {
-        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
-        comphelper::makePropertyValue("Identifier", OUString("AT")),
-        comphelper::makePropertyValue("Author", OUString("Author")),
-        comphelper::makePropertyValue("Title", OUString("Title")),
-        comphelper::makePropertyValue("URL", OUString("#page=1")),
+        comphelper::makePropertyValue(u"BibiliographicType"_ustr, text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue(u"Identifier"_ustr, u"AT"_ustr),
+        comphelper::makePropertyValue(u"Author"_ustr, u"Author"_ustr),
+        comphelper::makePropertyValue(u"Title"_ustr, u"Title"_ustr),
+        comphelper::makePropertyValue(u"URL"_ustr, u"#page=1"_ustr),
     };
-    xField->setPropertyValue("Fields", uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -274,7 +280,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport2)
     xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
 
     // When exporting to PDF:
-    save("writer_pdf_Export");
+    save(u"writer_pdf_Export"_ustr);
 
     // Then make sure the field links when the Target URL is set
     //  (this test is important, isn't the same as the one above)
@@ -294,15 +300,15 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport3)
     createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
-        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aFields = {
-        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
-        comphelper::makePropertyValue("Identifier", OUString("AT")),
-        comphelper::makePropertyValue("Author", OUString("Author")),
-        comphelper::makePropertyValue("Title", OUString("Title")),
-        comphelper::makePropertyValue("TargetURL", OUString("#page=1")),
+        comphelper::makePropertyValue(u"BibiliographicType"_ustr, text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue(u"Identifier"_ustr, u"AT"_ustr),
+        comphelper::makePropertyValue(u"Author"_ustr, u"Author"_ustr),
+        comphelper::makePropertyValue(u"Title"_ustr, u"Title"_ustr),
+        comphelper::makePropertyValue(u"TargetURL"_ustr, u"#page=1"_ustr),
     };
-    xField->setPropertyValue("Fields", uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -310,7 +316,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport3)
     xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
 
     // When exporting to PDF:
-    save("writer_pdf_Export");
+    save(u"writer_pdf_Export"_ustr);
 
     // Then make sure there are no links since UseTargetURL is not set
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
@@ -329,16 +335,16 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport4)
     createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
-        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aFields = {
-        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
-        comphelper::makePropertyValue("Identifier", OUString("AT")),
-        comphelper::makePropertyValue("Author", OUString("Author")),
-        comphelper::makePropertyValue("Title", OUString("Title")),
-        comphelper::makePropertyValue("TargetType", OUString("1")), // 1 == UseTargetURL
-        comphelper::makePropertyValue("TargetURL", OUString("#page=1")),
+        comphelper::makePropertyValue(u"BibiliographicType"_ustr, text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue(u"Identifier"_ustr, u"AT"_ustr),
+        comphelper::makePropertyValue(u"Author"_ustr, u"Author"_ustr),
+        comphelper::makePropertyValue(u"Title"_ustr, u"Title"_ustr),
+        comphelper::makePropertyValue(u"TargetType"_ustr, u"1"_ustr), // 1 == UseTargetURL
+        comphelper::makePropertyValue(u"TargetURL"_ustr, u"#page=1"_ustr),
     };
-    xField->setPropertyValue("Fields", uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -346,7 +352,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport4)
     xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
 
     // When exporting to PDF:
-    save("writer_pdf_Export");
+    save(u"writer_pdf_Export"_ustr);
 
     // Then make sure the field links when the Target URL is set
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
@@ -365,15 +371,15 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport5)
     createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
-        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aFields = {
-        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
-        comphelper::makePropertyValue("Identifier", OUString("AT")),
-        comphelper::makePropertyValue("Author", OUString("Author")),
-        comphelper::makePropertyValue("Title", OUString("Title")),
-        comphelper::makePropertyValue("TargetType", OUString("3")), // 3 == BibliographyTableRow
+        comphelper::makePropertyValue(u"BibiliographicType"_ustr, text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue(u"Identifier"_ustr, u"AT"_ustr),
+        comphelper::makePropertyValue(u"Author"_ustr, u"Author"_ustr),
+        comphelper::makePropertyValue(u"Title"_ustr, u"Title"_ustr),
+        comphelper::makePropertyValue(u"TargetType"_ustr, u"3"_ustr), // 3 == BibliographyTableRow
     };
-    xField->setPropertyValue("Fields", uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -381,7 +387,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport5)
     xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
     // Create a bibliography table.
     uno::Reference<text::XTextContent> xTable(
-        xFactory->createInstance("com.sun.star.text.Bibliography"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.Bibliography"_ustr), uno::UNO_QUERY);
     xCursor->gotoEnd(/*bExpand=*/false);
     xText->insertControlCharacter(xCursor, text::ControlCharacter::APPEND_PARAGRAPH,
                                   /*bAbsorb=*/false);
@@ -391,7 +397,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport5)
     xTableIndex->update();
 
     // When exporting to PDF:
-    save("writer_pdf_Export");
+    save(u"writer_pdf_Export"_ustr);
 
     // Then make sure the mark links to the table when table is present
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
@@ -412,15 +418,15 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport6)
 
     // Create a bibliography mark
     uno::Reference<beans::XPropertySet> xField(
-        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aFields = {
-        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
-        comphelper::makePropertyValue("Identifier", OUString("AT")),
-        comphelper::makePropertyValue("Author", OUString("AuthorName")),
-        comphelper::makePropertyValue("Title", OUString("Title")),
-        comphelper::makePropertyValue("TargetType", OUString("3")), // 3 == BibliographyTableRow
+        comphelper::makePropertyValue(u"BibiliographicType"_ustr, text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue(u"Identifier"_ustr, u"AT"_ustr),
+        comphelper::makePropertyValue(u"Author"_ustr, u"AuthorName"_ustr),
+        comphelper::makePropertyValue(u"Title"_ustr, u"Title"_ustr),
+        comphelper::makePropertyValue(u"TargetType"_ustr, u"3"_ustr), // 3 == BibliographyTableRow
     };
-    xField->setPropertyValue("Fields", uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -429,7 +435,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport6)
 
     // Create a bibliography table.
     uno::Reference<text::XTextContent> xTable(
-        xFactory->createInstance("com.sun.star.text.Bibliography"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.Bibliography"_ustr), uno::UNO_QUERY);
     xCursor->gotoEnd(/*bExpand=*/false);
     xText->insertControlCharacter(xCursor, text::ControlCharacter::APPEND_PARAGRAPH,
                                   /*bAbsorb=*/false);
@@ -438,54 +444,55 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport6)
     // Set formatting for AUTH_TYPE_WWW to include tab stop
     uno::Reference<beans::XPropertySet> xTableAsPropertySet(xTable, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexReplace> aAllPatterns(
-        xTableAsPropertySet->getPropertyValue("LevelFormat"), uno::UNO_QUERY);
+        xTableAsPropertySet->getPropertyValue(u"LevelFormat"_ustr), uno::UNO_QUERY);
 
-    uno::Sequence<uno::Sequence<beans::PropertyValue>> aFormattingPattern
-        = { {
-                comphelper::makePropertyValue("TokenType", OUString("TokenBibliographyDataField")),
-                comphelper::makePropertyValue("BibliographyDataField",
-                                              text::BibliographyDataField::AUTHOR),
-                comphelper::makePropertyValue("CharacterStyleName", OUString("")),
-            },
-            {
-                comphelper::makePropertyValue("TokenType", OUString("TokenTabStop")),
-                comphelper::makePropertyValue("TabStopRightAligned", true),
-                comphelper::makePropertyValue("CharacterStyleName", OUString("")),
-            },
-            {
-                comphelper::makePropertyValue("TokenType", OUString("TokenBibliographyDataField")),
-                comphelper::makePropertyValue("BibliographyDataField",
-                                              text::BibliographyDataField::TITLE),
-                comphelper::makePropertyValue("CharacterStyleName", OUString("")),
-            },
-            {
-                comphelper::makePropertyValue("TokenType", OUString("TokenTabStop")),
-                comphelper::makePropertyValue("TabStopRightAligned", false),
-                comphelper::makePropertyValue("TabStopFillCharacter", OUString(".")),
-                comphelper::makePropertyValue("CharacterStyleName", OUString("")),
-            },
-            {
-                comphelper::makePropertyValue("TokenType", OUString("TokenText")),
-                comphelper::makePropertyValue("Text", OUString("FixedText")),
-                comphelper::makePropertyValue("CharacterStyleName", OUString("")),
-            } };
+    uno::Sequence<uno::Sequence<beans::PropertyValue>> aFormattingPattern = {
+        {
+            comphelper::makePropertyValue(u"TokenType"_ustr, u"TokenBibliographyDataField"_ustr),
+            comphelper::makePropertyValue(u"BibliographyDataField"_ustr,
+                                          text::BibliographyDataField::AUTHOR),
+            comphelper::makePropertyValue(u"CharacterStyleName"_ustr, u""_ustr),
+        },
+        {
+            comphelper::makePropertyValue(u"TokenType"_ustr, u"TokenTabStop"_ustr),
+            comphelper::makePropertyValue(u"TabStopRightAligned"_ustr, true),
+            comphelper::makePropertyValue(u"CharacterStyleName"_ustr, u""_ustr),
+        },
+        {
+            comphelper::makePropertyValue(u"TokenType"_ustr, u"TokenBibliographyDataField"_ustr),
+            comphelper::makePropertyValue(u"BibliographyDataField"_ustr,
+                                          text::BibliographyDataField::TITLE),
+            comphelper::makePropertyValue(u"CharacterStyleName"_ustr, u""_ustr),
+        },
+        {
+            comphelper::makePropertyValue(u"TokenType"_ustr, u"TokenTabStop"_ustr),
+            comphelper::makePropertyValue(u"TabStopRightAligned"_ustr, false),
+            comphelper::makePropertyValue(u"TabStopFillCharacter"_ustr, u"."_ustr),
+            comphelper::makePropertyValue(u"CharacterStyleName"_ustr, u""_ustr),
+        },
+        {
+            comphelper::makePropertyValue(u"TokenType"_ustr, u"TokenText"_ustr),
+            comphelper::makePropertyValue(u"Text"_ustr, u"FixedText"_ustr),
+            comphelper::makePropertyValue(u"CharacterStyleName"_ustr, u""_ustr),
+        }
+    };
 
     aAllPatterns->replaceByIndex(AUTH_TYPE_WWW + 1, uno::Any(aFormattingPattern));
-    xTableAsPropertySet->setPropertyValue("LevelFormat", uno::Any(aAllPatterns));
+    xTableAsPropertySet->setPropertyValue(u"LevelFormat"_ustr, uno::Any(aAllPatterns));
 
     // Update the table
     uno::Reference<text::XDocumentIndex> xTableIndex(xTable, uno::UNO_QUERY);
     xTableIndex->update();
 
     // Assert the table updated correctly
-    OUString sExpectedPattern("AuthorName\tTitle\tFixedText");
+    OUString sExpectedPattern(u"AuthorName\tTitle\tFixedText"_ustr);
     OUString sDocumentText = xTextDocument->getText()->getString();
     sal_Int32 iTabPos = sDocumentText.indexOf(sExpectedPattern);
     CPPUNIT_ASSERT(iTabPos >= 0);
     CPPUNIT_ASSERT_EQUAL(iTabPos, sDocumentText.lastIndexOf(sExpectedPattern));
 
     // When exporting to PDF:
-    save("writer_pdf_Export");
+    save(u"writer_pdf_Export"_ustr);
 
     // Then make sure the mark links to the table even when format contains tab stop
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
@@ -619,10 +626,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testEmptyNumberingPageSplit)
     // When inserting an image that doesn't fit the body frame:
     // Then make sure that the layout update after insertion finishes:
     uno::Sequence<beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("FileName", createFileURL(u"image.png")),
+        comphelper::makePropertyValue(u"FileName"_ustr, createFileURL(u"image.png")),
     };
     // Without the accompanying fix in place, this never finished.
-    dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreak)
@@ -637,10 +644,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreak)
     xCursor->goLeft(/*nCount=*/1, /*bSelect=*/false);
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextContent> xLineBreak(
-        xFactory->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.LineBreak"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
     auto eClear = static_cast<sal_Int16>(SwLineBreakClear::ALL);
-    xLineBreakProps->setPropertyValue("Clear", uno::Any(eClear));
+    xLineBreakProps->setPropertyValue(u"Clear"_ustr, uno::Any(eClear));
     xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
 
     // When laying out that document:
@@ -652,7 +659,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreak)
     // - Actual  : 276
     // i.e. the line height wasn't the twips value of the 1.806 cm from the file, but was based on
     // the font size of the text, which is only correct for non-clearing breaks.
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]"_ostr, "height"_ostr, "1024");
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]"_ostr, "height"_ostr, u"1024"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakAtStart)
@@ -667,10 +674,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakAtStart)
     xCursor->goLeft(/*nCount=*/1, /*bSelect=*/false);
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextContent> xLineBreak(
-        xFactory->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.LineBreak"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
     auto eClear = static_cast<sal_Int16>(SwLineBreakClear::ALL);
-    xLineBreakProps->setPropertyValue("Clear", uno::Any(eClear));
+    xLineBreakProps->setPropertyValue(u"Clear"_ustr, uno::Any(eClear));
     xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
 
     // When laying out that document:
@@ -682,7 +689,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakAtStart)
     // - Actual  : 276
     // i.e. the line height was too small, but only in case the full line was a fly and a break
     // portion, without any real content.
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]"_ostr, "height"_ostr, "1024");
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]"_ostr, "height"_ostr, u"1024"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeft)
@@ -696,33 +703,33 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeft)
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
     {
         uno::Reference<drawing::XShape> xShape(
-            xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+            xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
         xShape->setSize(awt::Size(5000, 5000));
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-        xShapeProps->setPropertyValue("AnchorType",
+        xShapeProps->setPropertyValue(u"AnchorType"_ustr,
                                       uno::Any(text::TextContentAnchorType_AT_CHARACTER));
         uno::Reference<text::XTextContent> xShapeContent(xShape, uno::UNO_QUERY);
         xText->insertTextContent(xCursor, xShapeContent, /*bAbsorb=*/false);
     }
     {
         uno::Reference<drawing::XShape> xShape(
-            xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+            xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
         xShape->setSize(awt::Size(5000, 7500));
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-        xShapeProps->setPropertyValue("AnchorType",
+        xShapeProps->setPropertyValue(u"AnchorType"_ustr,
                                       uno::Any(text::TextContentAnchorType_AT_CHARACTER));
-        xShapeProps->setPropertyValue("HoriOrientPosition", uno::Any(sal_Int32(10000)));
+        xShapeProps->setPropertyValue(u"HoriOrientPosition"_ustr, uno::Any(sal_Int32(10000)));
         uno::Reference<text::XTextContent> xShapeContent2(xShape, uno::UNO_QUERY);
         xText->insertTextContent(xCursor, xShapeContent2, /*bAbsorb=*/false);
     }
     uno::Reference<text::XTextContent> xLineBreak(
-        xFactory->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.LineBreak"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
     auto eClear = static_cast<sal_Int16>(SwLineBreakClear::LEFT);
-    xLineBreakProps->setPropertyValue("Clear", uno::Any(eClear));
-    xText->insertString(xCursor, "foo", /*bAbsorb=*/false);
+    xLineBreakProps->setPropertyValue(u"Clear"_ustr, uno::Any(eClear));
+    xText->insertString(xCursor, u"foo"_ustr, /*bAbsorb=*/false);
     xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
-    xText->insertString(xCursor, "bar", /*bAbsorb=*/false);
+    xText->insertString(xCursor, u"bar"_ustr, /*bAbsorb=*/false);
 
     // When laying out that document:
     calcLayout();
@@ -734,7 +741,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeft)
     // - Expected: 2837
     // - Actual  : 4254
     // i.e. any non-none type was handled as type=all, and this was jumping below both shapes.
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]"_ostr, "height"_ostr, "2837");
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]"_ostr, "height"_ostr, u"2837"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeftRTL)
@@ -746,25 +753,25 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeftRTL)
     uno::Reference<text::XText> xText = xDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
     uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
-    xCursorProps->setPropertyValue("WritingMode", uno::Any(text::WritingMode2::RL_TB));
+    xCursorProps->setPropertyValue(u"WritingMode"_ustr, uno::Any(text::WritingMode2::RL_TB));
     {
         uno::Reference<drawing::XShape> xShape(
-            xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+            xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
         xShape->setSize(awt::Size(5000, 5000));
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-        xShapeProps->setPropertyValue("AnchorType",
+        xShapeProps->setPropertyValue(u"AnchorType"_ustr,
                                       uno::Any(text::TextContentAnchorType_AT_CHARACTER));
         uno::Reference<text::XTextContent> xShapeContent(xShape, uno::UNO_QUERY);
         xText->insertTextContent(xCursor, xShapeContent, /*bAbsorb=*/false);
     }
     uno::Reference<text::XTextContent> xLineBreak(
-        xFactory->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.LineBreak"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
     auto eClear = static_cast<sal_Int16>(SwLineBreakClear::RIGHT);
-    xLineBreakProps->setPropertyValue("Clear", uno::Any(eClear));
-    xText->insertString(xCursor, "foo", /*bAbsorb=*/false);
+    xLineBreakProps->setPropertyValue(u"Clear"_ustr, uno::Any(eClear));
+    xText->insertString(xCursor, u"foo"_ustr, /*bAbsorb=*/false);
     xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
-    xText->insertString(xCursor, "bar", /*bAbsorb=*/false);
+    xText->insertString(xCursor, u"bar"_ustr, /*bAbsorb=*/false);
 
     // When laying out that document:
     calcLayout();
@@ -775,7 +782,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeftRTL)
     // - Expected: 276
     // - Actual  : 2837
     // i.e. left/right was not ignored in the RTL case.
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]"_ostr, "height"_ostr, "276");
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]"_ostr, "height"_ostr, u"276"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakVertical)
@@ -786,27 +793,27 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakVertical)
     uno::Reference<text::XTextDocument> xDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-    uno::Reference<beans::XPropertySet> xStandard(getStyles("PageStyles")->getByName("Standard"),
-                                                  uno::UNO_QUERY);
-    xStandard->setPropertyValue("WritingMode", uno::Any(text::WritingMode2::TB_RL));
+    uno::Reference<beans::XPropertySet> xStandard(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    xStandard->setPropertyValue(u"WritingMode"_ustr, uno::Any(text::WritingMode2::TB_RL));
     {
         uno::Reference<drawing::XShape> xShape(
-            xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+            xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
         xShape->setSize(awt::Size(5000, 5000));
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-        xShapeProps->setPropertyValue("AnchorType",
+        xShapeProps->setPropertyValue(u"AnchorType"_ustr,
                                       uno::Any(text::TextContentAnchorType_AT_CHARACTER));
         uno::Reference<text::XTextContent> xShapeContent(xShape, uno::UNO_QUERY);
         xText->insertTextContent(xCursor, xShapeContent, /*bAbsorb=*/false);
     }
     uno::Reference<text::XTextContent> xLineBreak(
-        xFactory->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.LineBreak"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
     auto eClear = static_cast<sal_Int16>(SwLineBreakClear::ALL);
-    xLineBreakProps->setPropertyValue("Clear", uno::Any(eClear));
-    xText->insertString(xCursor, "foo", /*bAbsorb=*/false);
+    xLineBreakProps->setPropertyValue(u"Clear"_ustr, uno::Any(eClear));
+    xText->insertString(xCursor, u"foo"_ustr, /*bAbsorb=*/false);
     xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
-    xText->insertString(xCursor, "bar", /*bAbsorb=*/false);
+    xText->insertString(xCursor, u"bar"_ustr, /*bAbsorb=*/false);
 
     // When laying out that document:
     calcLayout();
@@ -819,7 +826,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakVertical)
     // i.e. the expected break height is the twips value of the 5cm rectangle size, it was much
     // more.
     assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]/SwBreakPortion"_ostr, "height"_ostr,
-                "2837");
+                u"2837"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakHeader)
@@ -835,7 +842,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakHeader)
     // - Expected: 276
     // - Actual  : 15398
     // i.e. the shape was in the background, but we failed to ignore it for the break portion.
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]"_ostr, "height"_ostr, "276");
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]"_ostr, "height"_ostr, u"276"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testAsCharImageDocModelFromViewPoint)
@@ -845,9 +852,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testAsCharImageDocModelFromViewPoint)
     SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTextGraphic(
-        xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
     // Only set the anchor type, the actual bitmap content is not interesting.
-    xTextGraphic->setPropertyValue("AnchorType",
+    xTextGraphic->setPropertyValue(u"AnchorType"_ustr,
                                    uno::Any(text::TextContentAnchorType_AS_CHARACTER));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xBodyText = xTextDocument->getText();
@@ -899,8 +906,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRedlineDelete)
         rMaster.SetFormatAttr(aSize);
         pWrtShell->ChgPageDesc(nCurIdx, aPageDesc);
     }
-    OUString aBefore("aaaaaaaaa aaaaaaaaaa aa aa aa ");
-    OUString aDelete("delete eeeeeeeeeee ee eeeeeeeeeee ee eeeeee");
+    OUString aBefore(u"aaaaaaaaa aaaaaaaaaa aa aa aa "_ustr);
+    OUString aDelete(u"delete eeeeeeeeeee ee eeeeeeeeeee ee eeeeee"_ustr);
     pWrtShell->Insert(aBefore + " " + aDelete
                       + " zz zzz zzzzzzzzz zzz zzzz zzzz zzzzzzzzz zzzzzz zzz zzzzzzzzzzz zzz");
     // Enable redlining.
@@ -938,7 +945,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf120715_CursorMoveWhenTypingSpaceAtCe
 
     //Press space and check if the cursor move right with the additional space.
     sal_Int32 nOldCursorPos = pWrtShell->GetCharRect().Left();
-    pWrtShell->Insert(" ");
+    pWrtShell->Insert(u" "_ustr);
     sal_Int32 nNewCursorPos = pWrtShell->GetCharRect().Left();
     CPPUNIT_ASSERT_GREATER(nOldCursorPos, nNewCursorPos);
 }
@@ -1010,7 +1017,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDF)
     sal_Int32 nPlaceHolderLen = SwResId(STR_CONTENT_CONTROL_PLACEHOLDER).getLength();
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, nPlaceHolderLen,
                      /*bBasicCall=*/false);
-    pWrtShell->Insert("mycontent");
+    pWrtShell->Insert(u"mycontent"_ustr);
     const SwPosition* pStart = pWrtShell->GetCursor()->Start();
     SwTextNode* pTextNode = pStart->GetNode().GetTextNode();
     sal_Int32 nIndex = pStart->GetContentIndex();
@@ -1020,10 +1027,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDF)
     const SwFormatContentControl& rFormatContentControl = pTextContentControl->GetContentControl();
     std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
     // Alias/title, to be mapped to PDF's description.
-    pContentControl->SetAlias("mydesc");
+    pContentControl->SetAlias(u"mydesc"_ustr);
 
     // When exporting to PDF:
-    save("writer_pdf_Export");
+    save(u"writer_pdf_Export"_ustr);
 
     // Then make sure that a fillable form widget is emitted:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
@@ -1037,7 +1044,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDF)
     CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Widget, pAnnotation->getSubType());
 
     // Also verify that the widget description is correct, it was empty:
-    CPPUNIT_ASSERT_EQUAL(OUString("mydesc"),
+    CPPUNIT_ASSERT_EQUAL(u"mydesc"_ustr,
                          pAnnotation->getFormFieldAlternateName(pPdfDocument.get()));
 }
 
@@ -1054,7 +1061,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPlaceholderPDF)
     pWrtShell->InsertContentControl(SwContentControlType::RICH_TEXT);
 
     // When exporting to PDF:
-    save("writer_pdf_Export");
+    save(u"writer_pdf_Export"_ustr);
 
     // Then make sure that a fillable form widget is emitted with the expected value:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
@@ -1082,7 +1089,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testCheckboxContentControlPDF)
     pWrtShell->InsertContentControl(SwContentControlType::CHECKBOX);
 
     // When exporting to PDF:
-    save("writer_pdf_Export");
+    save(u"writer_pdf_Export"_ustr);
 
     // Then make sure that a checkbox form widget is emitted:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
@@ -1112,7 +1119,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDropdownContentControlPDF)
     pWrtShell->InsertContentControl(SwContentControlType::DROP_DOWN_LIST);
 
     // When exporting to PDF:
-    save("writer_pdf_Export");
+    save(u"writer_pdf_Export"_ustr);
 
     // Then make sure that a dropdown form widget is emitted:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
@@ -1137,7 +1144,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDropdownContentControlPDF2)
 
     createSwDoc("tdf153040.docx");
 
-    save("writer_pdf_Export");
+    save(u"writer_pdf_Export"_ustr);
 
     // Make sure that a dropdown form widget is emitted:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
@@ -1150,7 +1157,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDropdownContentControlPDF2)
     CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFFormFieldType::ComboBox,
                          pAnnotation->getFormFieldType(pPdfDocument.get()));
     // Without tdf#153040's fix, this would have been the empty OUString()
-    CPPUNIT_ASSERT_EQUAL(OUString("Apfel"), pAnnotation->getFormFieldValue(pPdfDocument.get()));
+    CPPUNIT_ASSERT_EQUAL(u"Apfel"_ustr, pAnnotation->getFormFieldValue(pPdfDocument.get()));
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDateContentControlPDF)
@@ -1166,7 +1173,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDateContentControlPDF)
     pWrtShell->InsertContentControl(SwContentControlType::DATE);
 
     // When exporting to PDF:
-    save("writer_pdf_Export");
+    save(u"writer_pdf_Export"_ustr);
 
     // Then make sure that a date form widget is emitted:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
@@ -1183,7 +1190,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDateContentControlPDF)
                          pAnnotation->getFormFieldType(pPdfDocument.get()));
     OUString aAction = pAnnotation->getFormAdditionalActionJavaScript(
         pPdfDocument.get(), vcl::pdf::PDFAnnotAActionType::KeyStroke);
-    CPPUNIT_ASSERT_EQUAL(OUString("AFDate_KeystrokeEx(\"mm/dd/yy\");"), aAction);
+    CPPUNIT_ASSERT_EQUAL(u"AFDate_KeystrokeEx(\"mm/dd/yy\");"_ustr, aAction);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDFFont)
@@ -1203,7 +1210,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDFFont)
     pWrtShell->InsertContentControl(SwContentControlType::RICH_TEXT);
 
     // When exporting that document to PDF:
-    save("writer_pdf_Export");
+    save(u"writer_pdf_Export"_ustr);
 
     // Then make sure that the widget in the PDF result has that custom font size:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
@@ -1231,7 +1238,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testComboContentControlPDF)
     pWrtShell->InsertContentControl(SwContentControlType::COMBO_BOX);
 
     // When exporting to PDF:
-    save("writer_pdf_Export");
+    save(u"writer_pdf_Export"_ustr);
 
     // Then make sure that a combo box form widget is emitted:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
@@ -1265,7 +1272,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRichContentControlPDF)
     sal_Int32 nPlaceHolderLen = SwResId(STR_CONTENT_CONTROL_PLACEHOLDER).getLength();
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, nPlaceHolderLen,
                      /*bBasicCall=*/false);
-    pWrtShell->Insert("xxxyyy");
+    pWrtShell->Insert(u"xxxyyy"_ustr);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 3, /*bBasicCall=*/false);
     SfxItemSetFixed<RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT> aSet(pWrtShell->GetAttrPool());
     SvxWeightItem aItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT);
@@ -1273,7 +1280,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRichContentControlPDF)
     pWrtShell->SetAttrSet(aSet);
 
     // When exporting to PDF:
-    save("writer_pdf_Export");
+    save(u"writer_pdf_Export"_ustr);
 
     // Then make sure that a single fillable form widget is emitted:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
@@ -1295,7 +1302,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testPlaceholderFieldPDF)
     createSwDoc("placeholder.fodt");
 
     // When exporting to PDF (default setting is "create a PDF form"):
-    save("writer_pdf_Export");
+    save(u"writer_pdf_Export"_ustr);
 
     // Then make sure that a fillable form widget is emitted:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
@@ -1309,7 +1316,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testPlaceholderFieldPDF)
     CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Widget, pAnnotation->getSubType());
 
     // Also verify that the widget description is correct:
-    CPPUNIT_ASSERT_EQUAL(OUString("reference text"),
+    CPPUNIT_ASSERT_EQUAL(u"reference text"_ustr,
                          pAnnotation->getFormFieldAlternateName(pPdfDocument.get()));
 }
 
@@ -1330,7 +1337,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testNumberPortionFormat)
     // bookmark).
     assertXPath(pXmlDoc,
                 "//SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']/SwFont"_ostr,
-                "height"_ostr, "480");
+                "height"_ostr, u"480"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testNumberPortionNoformat)
@@ -1347,7 +1354,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testNumberPortionNoformat)
     // - Actual  : 00ff0000 (COL_LIGHTRED)
     // i.e. the run color affected the color of the number portion in Writer, but not in Word.
     CPPUNIT_ASSERT_EQUAL(
-        OUString("ffffffff"),
+        u"ffffffff"_ustr,
         getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwFieldPortion/SwFont"_ostr, "color"_ostr));
 }
 
@@ -1511,9 +1518,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf89288)
                 "//body/txt[3]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Kern']"_ostr,
                 2);
     assertXPath(pXmlDoc, "//body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "type"_ostr, "PortionType::Kern");
+                "type"_ostr, u"PortionType::Kern"_ustr);
     assertXPath(pXmlDoc, "//body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[4]"_ostr,
-                "type"_ostr, "PortionType::Kern");
+                "type"_ostr, u"PortionType::Kern"_ustr);
 
     assertXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion"_ostr, 5);
     assertXPath(pXmlDoc,
@@ -1523,9 +1530,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf89288)
                 "//body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Kern']"_ostr,
                 2);
     assertXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "type"_ostr, "PortionType::Kern");
+                "type"_ostr, u"PortionType::Kern"_ustr);
     assertXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[4]"_ostr,
-                "type"_ostr, "PortionType::Kern");
+                "type"_ostr, u"PortionType::Kern"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf139863)

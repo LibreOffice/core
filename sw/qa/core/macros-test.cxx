@@ -92,20 +92,20 @@ void SwMacrosTest::testVba()
 {
     TestMacroInfo testInfo[] = {
         {
-            OUString("testVBA.docm"),
-            OUString("vnd.sun.Star.script:Project.ThisDocument.testAll?language=Basic&location=document")
+            u"testVBA.docm"_ustr,
+            u"vnd.sun.Star.script:Project.ThisDocument.testAll?language=Basic&location=document"_ustr
         },
         {
-            OUString("testModernVBA.docm"),
-            OUString("vnd.sun.Star.script:Project.ThisDocument.testAll?language=Basic&location=document")
+            u"testModernVBA.docm"_ustr,
+            u"vnd.sun.Star.script:Project.ThisDocument.testAll?language=Basic&location=document"_ustr
         },
         {
-            OUString("testFind.docm"),
-            OUString("vnd.sun.Star.script:Project.Module1.testAll?language=Basic&location=document")
+            u"testFind.docm"_ustr,
+            u"vnd.sun.Star.script:Project.Module1.testAll?language=Basic&location=document"_ustr
         },
         {
-            OUString("testDocumentRange.docm"),
-            OUString("vnd.sun.Star.script:Project.Module1.testAll?language=Basic&location=document")
+            u"testDocumentRange.docm"_ustr,
+            u"vnd.sun.Star.script:Project.Module1.testAll?language=Basic&location=document"_ustr
         },
         /*{
             OUString("testSelectionFind.docm"),
@@ -131,8 +131,8 @@ void SwMacrosTest::testVba()
             OUString("vnd.sun.Star.script:Project.ThisDocument.TestAll?language=Basic&location=document")
         },*/
         {
-            OUString("testTables.docm"),
-            OUString("vnd.sun.Star.script:Project.ThisDocument.TestAll?language=Basic&location=document")
+            u"testTables.docm"_ustr,
+            u"vnd.sun.Star.script:Project.ThisDocument.TestAll?language=Basic&location=document"_ustr
         }
 
     };
@@ -144,7 +144,7 @@ void SwMacrosTest::testVba()
         uno::Any aRet = executeMacro(sMacroUrl);
         OUString aStringRes;
         CPPUNIT_ASSERT_MESSAGE(sFileName.toUtf8().getStr(), aRet >>= aStringRes);
-        CPPUNIT_ASSERT_EQUAL(OUString("OK"), aStringRes);
+        CPPUNIT_ASSERT_EQUAL(u"OK"_ustr, aStringRes);
     }
 }
 
@@ -152,8 +152,8 @@ void SwMacrosTest::testModernVBADelete()
 {
     TestMacroInfo testInfo =
         {
-            OUString("testModernVBADelete.docm"),
-            OUString("vnd.sun.Star.script:Project.ThisDocument.testAll?language=Basic&location=document")
+            u"testModernVBADelete.docm"_ustr,
+            u"vnd.sun.Star.script:Project.ThisDocument.testAll?language=Basic&location=document"_ustr
         };
 
     OUString sFileName("docm/" + testInfo.sFileBaseName);
@@ -169,7 +169,7 @@ void SwMacrosTest::testModernVBADelete()
 
     OUString aStringRes;
     CPPUNIT_ASSERT(aRet >>= aStringRes);
-    CPPUNIT_ASSERT_EQUAL(OUString("OK"), aStringRes);
+    CPPUNIT_ASSERT_EQUAL(u"OK"_ustr, aStringRes);
 }
 
 void SwMacrosTest::testBookmarkDeleteAndJoin()
@@ -181,9 +181,9 @@ void SwMacrosTest::testBookmarkDeleteAndJoin()
 
     IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
     rIDCO.AppendTextNode(*aPaM.GetPoint());
-    rIDCO.InsertString(aPaM, "A");
+    rIDCO.InsertString(aPaM, u"A"_ustr);
     rIDCO.AppendTextNode(*aPaM.GetPoint());
-    rIDCO.InsertString(aPaM, "A");
+    rIDCO.InsertString(aPaM, u"A"_ustr);
     rIDCO.AppendTextNode(*aPaM.GetPoint());
     aPaM.Move(fnMoveBackward, GoInNode);
     aPaM.Move(fnMoveBackward, GoInNode);
@@ -192,7 +192,7 @@ void SwMacrosTest::testBookmarkDeleteAndJoin()
     aPaM.Move(fnMoveForward, GoInDoc);
     IDocumentMarkAccess & rIDMA = *pDoc->getIDocumentMarkAccess();
     sw::mark::IMark *pMark =
-        rIDMA.makeMark(aPaM, "test", IDocumentMarkAccess::MarkType::BOOKMARK,
+        rIDMA.makeMark(aPaM, u"test"_ustr, IDocumentMarkAccess::MarkType::BOOKMARK,
             ::sw::mark::InsertMode::New);
     CPPUNIT_ASSERT(pMark);
     // select so pMark start position is on a node that is fully deleted
@@ -221,13 +221,13 @@ void SwMacrosTest::testBookmarkDeleteTdf90816()
 
     IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
     rIDCO.AppendTextNode(*aPaM.GetPoint());
-    rIDCO.InsertString(aPaM, "ABC");
+    rIDCO.InsertString(aPaM, u"ABC"_ustr);
     aPaM.Move(fnMoveBackward, GoInContent);
     aPaM.SetMark();
     aPaM.Move(fnMoveBackward, GoInContent);
     IDocumentMarkAccess & rIDMA = *pDoc->getIDocumentMarkAccess();
     sw::mark::IMark *pMark =
-        rIDMA.makeMark(aPaM, "test", IDocumentMarkAccess::MarkType::BOOKMARK,
+        rIDMA.makeMark(aPaM, u"test"_ustr, IDocumentMarkAccess::MarkType::BOOKMARK,
             ::sw::mark::InsertMode::New);
     CPPUNIT_ASSERT(pMark);
 
@@ -254,7 +254,7 @@ void SwMacrosTest::testControlShapeGrouping()
     CPPUNIT_ASSERT(xDP.is());
     uno::Reference<drawing::XShapes> const xDPShapes = xDP;
     CPPUNIT_ASSERT(xDPShapes.is());
-    uno::Reference<drawing::XShapes> const xShapes(getMultiServiceFactory()->createInstance("com.sun.star.drawing.ShapeCollection"),
+    uno::Reference<drawing::XShapes> const xShapes(getMultiServiceFactory()->createInstance(u"com.sun.star.drawing.ShapeCollection"_ustr),
                                                    UNO_QUERY);
     CPPUNIT_ASSERT(xShapes.is());
     uno::Reference<container::XIndexAccess> xShapesIC = xShapes;
@@ -271,28 +271,28 @@ void SwMacrosTest::testControlShapeGrouping()
     uno::Reference<container::XNameContainer> xFormNC(xForm, UNO_QUERY);
 
     uno::Reference<drawing::XControlShape> const xDateShape(
-        xFactory->createInstance("com.sun.star.drawing.ControlShape"),
+        xFactory->createInstance(u"com.sun.star.drawing.ControlShape"_ustr),
         UNO_QUERY);
     uno::Reference<awt::XControlModel> const xDateControlModel(
-        xFactory->createInstance("com.sun.star.form.component.DateField"),
+        xFactory->createInstance(u"com.sun.star.form.component.DateField"_ustr),
         UNO_QUERY);
     xDateShape->setControl(xDateControlModel);
     uno::Reference<beans::XPropertySet> xDateShapeProps(xDateShape, UNO_QUERY);
-    xDateShapeProps->setPropertyValue("AnchorType", Any(text::TextContentAnchorType_AT_PARAGRAPH));
+    xDateShapeProps->setPropertyValue(u"AnchorType"_ustr, Any(text::TextContentAnchorType_AT_PARAGRAPH));
 
     uno::Reference<drawing::XControlShape> const xTimeShape(
-        xFactory->createInstance("com.sun.star.drawing.ControlShape"),
+        xFactory->createInstance(u"com.sun.star.drawing.ControlShape"_ustr),
         UNO_QUERY);
     uno::Reference<awt::XControlModel> const xTimeControlModel(
-        xFactory->createInstance("com.sun.star.form.component.TimeField"),
+        xFactory->createInstance(u"com.sun.star.form.component.TimeField"_ustr),
         UNO_QUERY);
     xTimeShape->setControl(xTimeControlModel);
     uno::Reference<beans::XPropertySet> xTimeShapeProps(xTimeShape, UNO_QUERY);
-    xTimeShapeProps->setPropertyValue("AnchorType", Any(text::TextContentAnchorType_AT_PARAGRAPH));
+    xTimeShapeProps->setPropertyValue(u"AnchorType"_ustr, Any(text::TextContentAnchorType_AT_PARAGRAPH));
 
-    xFormNC->insertByName("aDateCntrl", Any(xDateControlModel));
+    xFormNC->insertByName(u"aDateCntrl"_ustr, Any(xDateControlModel));
     xDPShapes->add(xDateShape);
-    xFormNC->insertByName("aTimeCntrl", Any(xTimeControlModel));
+    xFormNC->insertByName(u"aTimeCntrl"_ustr, Any(xTimeControlModel));
     xDPShapes->add(xTimeShape);
 
     xShapes->add(xDateShape);
@@ -348,7 +348,7 @@ void SwMacrosTest::testTdf151846()
 
     // Without the fix in place, this test would have failed with
     // Property or method not found: createDiagramByDataSource.
-    executeMacro("vnd.sun.Star.script:Standard.Module1.Main?language=Basic&location=document");
+    executeMacro(u"vnd.sun.Star.script:Standard.Module1.Main?language=Basic&location=document"_ustr);
 
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xTEOSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xAccess(xTEOSupplier->getEmbeddedObjects());
@@ -371,18 +371,18 @@ void SwMacrosTest::testFdo55289()
     uno::Reference<drawing::XShapes> const xShapes = xDPS->getDrawPage();
     uno::Reference<beans::XPropertySet> const xShape(
         uno::Reference<lang::XMultiServiceFactory>(xModel, UNO_QUERY_THROW)->
-            createInstance("com.sun.star.drawing.GraphicObjectShape"),
+            createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr),
         UNO_QUERY);
-    xShape->setPropertyValue("AnchorType",
+    xShape->setPropertyValue(u"AnchorType"_ustr,
             Any(text::TextContentAnchorType_AT_PAGE));
     xShapes->add(uno::Reference<drawing::XShape>(xShape, UNO_QUERY));
-    xShape->setPropertyValue("AnchorType",
+    xShape->setPropertyValue(u"AnchorType"_ustr,
             Any(text::TextContentAnchorType_AT_CHARACTER));
-    xShape->setPropertyValue("AnchorType",
+    xShape->setPropertyValue(u"AnchorType"_ustr,
             Any(text::TextContentAnchorType_AS_CHARACTER));
-    xShape->setPropertyValue("AnchorType",
+    xShape->setPropertyValue(u"AnchorType"_ustr,
             Any(text::TextContentAnchorType_AT_CHARACTER));
-    xShape->setPropertyValue("AnchorType",
+    xShape->setPropertyValue(u"AnchorType"_ustr,
             Any(text::TextContentAnchorType_AS_CHARACTER));
     uno::Reference<text::XTextRange> const xEnd =
         uno::Reference<text::XTextDocument>(xModel, UNO_QUERY_THROW)->getText()->getEnd();
@@ -396,22 +396,22 @@ void SwMacrosTest::testFdo68983()
     loadFromFile(u"odt/fdo68983.odt");
     Reference< frame::XStorable > xDocStorable(mxComponent, UNO_QUERY_THROW);
 
-    saveAndReload("writer8");
+    saveAndReload(u"writer8"_ustr);
 
     // check that password-protected library survived store and re-load
     Reference<document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
     Reference<script::XStorageBasedLibraryContainer> xStorBasLib(xDocScr->getBasicLibraries());
     Reference<script::XLibraryContainer> xBasLib(xStorBasLib, UNO_QUERY_THROW);
     Reference<script::XLibraryContainerPassword> xBasLibPwd(xStorBasLib, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xBasLibPwd->isLibraryPasswordProtected("Library1"));
-    CPPUNIT_ASSERT(xBasLibPwd->verifyLibraryPassword("Library1", "foo"));
-    xBasLib->loadLibrary("Library1");
-    CPPUNIT_ASSERT(xBasLib->isLibraryLoaded("Library1"));
+    CPPUNIT_ASSERT(xBasLibPwd->isLibraryPasswordProtected(u"Library1"_ustr));
+    CPPUNIT_ASSERT(xBasLibPwd->verifyLibraryPassword(u"Library1"_ustr, u"foo"_ustr));
+    xBasLib->loadLibrary(u"Library1"_ustr);
+    CPPUNIT_ASSERT(xBasLib->isLibraryLoaded(u"Library1"_ustr));
 }
 
 void SwMacrosTest::testFdo87530()
 {
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
 
     {
         // insert initial password protected library
@@ -419,13 +419,13 @@ void SwMacrosTest::testFdo87530()
         Reference<script::XStorageBasedLibraryContainer> xStorBasLib(xDocScr->getBasicLibraries());
         Reference<script::XLibraryContainer> xBasLib(xStorBasLib, UNO_QUERY_THROW);
         Reference<script::XLibraryContainerPassword> xBasLibPwd(xStorBasLib, UNO_QUERY_THROW);
-        Reference<container::XNameContainer> xLibrary(xBasLib->createLibrary("BarLibrary"));
-        xLibrary->insertByName("BarModule",
-                uno::Any(OUString("Sub Main\nEnd Sub\n")));
-        xBasLibPwd->changeLibraryPassword("BarLibrary", "", "foo");
+        Reference<container::XNameContainer> xLibrary(xBasLib->createLibrary(u"BarLibrary"_ustr));
+        xLibrary->insertByName(u"BarModule"_ustr,
+                uno::Any(u"Sub Main\nEnd Sub\n"_ustr));
+        xBasLibPwd->changeLibraryPassword(u"BarLibrary"_ustr, u""_ustr, u"foo"_ustr);
     }
 
-    saveAndReload("writer8");
+    saveAndReload(u"writer8"_ustr);
 
     {
         // check that password-protected library survived store and re-load
@@ -433,35 +433,35 @@ void SwMacrosTest::testFdo87530()
         Reference<script::XStorageBasedLibraryContainer> xStorBasLib(xDocScr->getBasicLibraries());
         Reference<script::XLibraryContainer> xBasLib(xStorBasLib, UNO_QUERY_THROW);
         Reference<script::XLibraryContainerPassword> xBasLibPwd(xStorBasLib, UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xBasLibPwd->isLibraryPasswordProtected("BarLibrary"));
-        CPPUNIT_ASSERT(xBasLibPwd->verifyLibraryPassword("BarLibrary", "foo"));
-        xBasLib->loadLibrary("BarLibrary");
-        CPPUNIT_ASSERT(xBasLib->isLibraryLoaded("BarLibrary"));
-        Reference<container::XNameContainer> xLibrary(xBasLib->getByName("BarLibrary"), UNO_QUERY);
-        Any module(xLibrary->getByName("BarModule"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Sub Main\nEnd Sub\n"), module.get<OUString>());
+        CPPUNIT_ASSERT(xBasLibPwd->isLibraryPasswordProtected(u"BarLibrary"_ustr));
+        CPPUNIT_ASSERT(xBasLibPwd->verifyLibraryPassword(u"BarLibrary"_ustr, u"foo"_ustr));
+        xBasLib->loadLibrary(u"BarLibrary"_ustr);
+        CPPUNIT_ASSERT(xBasLib->isLibraryLoaded(u"BarLibrary"_ustr));
+        Reference<container::XNameContainer> xLibrary(xBasLib->getByName(u"BarLibrary"_ustr), UNO_QUERY);
+        Any module(xLibrary->getByName(u"BarModule"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Sub Main\nEnd Sub\n"_ustr, module.get<OUString>());
 
         // add a second module now - tdf#87530 happened here
-        Reference<container::XNameContainer> xFooLib(xBasLib->createLibrary("FooLibrary"));
-        xFooLib->insertByName("FooModule",
-                uno::Any(OUString("Sub Main\nEnd Sub\n")));
-        xBasLibPwd->changeLibraryPassword("FooLibrary", "", "foo");
+        Reference<container::XNameContainer> xFooLib(xBasLib->createLibrary(u"FooLibrary"_ustr));
+        xFooLib->insertByName(u"FooModule"_ustr,
+                uno::Any(u"Sub Main\nEnd Sub\n"_ustr));
+        xBasLibPwd->changeLibraryPassword(u"FooLibrary"_ustr, u""_ustr, u"foo"_ustr);
     }
 
-    saveAndReload("writer8");
+    saveAndReload(u"writer8"_ustr);
 
     // check that password-protected library survived store and re-load
     Reference<document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
     Reference<script::XStorageBasedLibraryContainer> xStorBasLib(xDocScr->getBasicLibraries());
     Reference<script::XLibraryContainer> xBasLib(xStorBasLib, UNO_QUERY_THROW);
     Reference<script::XLibraryContainerPassword> xBasLibPwd(xStorBasLib, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xBasLibPwd->isLibraryPasswordProtected("FooLibrary"));
-    CPPUNIT_ASSERT(xBasLibPwd->verifyLibraryPassword("FooLibrary", "foo"));
-    xBasLib->loadLibrary("FooLibrary");
-    CPPUNIT_ASSERT(xBasLib->isLibraryLoaded("FooLibrary"));
-    Reference<container::XNameContainer> xLibrary(xBasLib->getByName("FooLibrary"), UNO_QUERY);
-    Any module(xLibrary->getByName("FooModule"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Sub Main\nEnd Sub\n"), module.get<OUString>());
+    CPPUNIT_ASSERT(xBasLibPwd->isLibraryPasswordProtected(u"FooLibrary"_ustr));
+    CPPUNIT_ASSERT(xBasLibPwd->verifyLibraryPassword(u"FooLibrary"_ustr, u"foo"_ustr));
+    xBasLib->loadLibrary(u"FooLibrary"_ustr);
+    CPPUNIT_ASSERT(xBasLib->isLibraryLoaded(u"FooLibrary"_ustr));
+    Reference<container::XNameContainer> xLibrary(xBasLib->getByName(u"FooLibrary"_ustr), UNO_QUERY);
+    Any module(xLibrary->getByName(u"FooModule"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Sub Main\nEnd Sub\n"_ustr, module.get<OUString>());
 }
 
 
@@ -469,7 +469,7 @@ void SwMacrosTest::testFindReplace()
 {
     // we need a full document with view and layout etc. because ::GetNode()
     mxComponent =
-        loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+        loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
 
     SwXTextDocument *const pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -479,19 +479,19 @@ void SwMacrosTest::testFindReplace()
     auto pPaM(pDoc->CreateUnoCursor(SwPosition(aIdx)));
 
     IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
-    rIDCO.InsertString(*pPaM, "foo");
+    rIDCO.InsertString(*pPaM, u"foo"_ustr);
     rIDCO.AppendTextNode(*pPaM->GetPoint());
-    rIDCO.InsertString(*pPaM, "bar");
+    rIDCO.InsertString(*pPaM, u"bar"_ustr);
     rIDCO.AppendTextNode(*pPaM->GetPoint());
-    rIDCO.InsertString(*pPaM, "baz");
+    rIDCO.InsertString(*pPaM, u"baz"_ustr);
     pPaM->Move(fnMoveBackward, GoInDoc);
 
     bool bCancel(false);
     i18nutil::SearchOptions2 opts(
             css::util::SearchFlags::LEV_RELAXED,
-            "$",
-            "",
-            lang::Locale("en", "US", ""),
+            u"$"_ustr,
+            u""_ustr,
+            lang::Locale(u"en"_ustr, u"US"_ustr, u""_ustr),
             2,
             2,
             2,
@@ -517,21 +517,21 @@ void SwMacrosTest::testFindReplace()
     CPPUNIT_ASSERT(pPaM->GetPoint()->GetNode() != pPaM->GetMark()->GetNode());
     CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_NEWLINE)), pPaM->GetText());
 
-    rIDCO.ReplaceRange(*pPaM, " ", true);
+    rIDCO.ReplaceRange(*pPaM, u" "_ustr, true);
 
     pPaM->DeleteMark();
     pPaM->Move(fnMoveBackward, GoInDoc);
 
     // problem was that after the 2nd Find, the wrong newline was selected
-    CPPUNIT_ASSERT_EQUAL(OUString("foo bar"),
+    CPPUNIT_ASSERT_EQUAL(u"foo bar"_ustr,
             pPaM->Start()->GetNode().GetTextNode()->GetText());
     pPaM->Move(fnMoveForward, GoInNode);
-    CPPUNIT_ASSERT_EQUAL(OUString("baz"),
+    CPPUNIT_ASSERT_EQUAL(u"baz"_ustr,
             pPaM->End()->GetNode().GetTextNode()->GetText());
 }
 
 SwMacrosTest::SwMacrosTest()
-      : UnoApiTest("/sw/qa/core/data/")
+      : UnoApiTest(u"/sw/qa/core/data/"_ustr)
 {
 }
 

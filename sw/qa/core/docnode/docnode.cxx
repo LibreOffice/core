@@ -19,7 +19,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/core/docnode/data/")
+        : SwModelTestBase(u"/sw/qa/core/docnode/data/"_ustr)
     {
     }
 };
@@ -36,7 +36,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineEndsBeforeToC)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), rTable.size());
 
     // The redline contained the newline, too
-    CPPUNIT_ASSERT_EQUAL(OUString("<add-table-of-content>"), rTable[0]->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"<add-table-of-content>"_ustr, rTable[0]->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf150086)
@@ -48,7 +48,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150086)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(8), rTable.size());
 
     // This was "Conte" (stripped redline)
-    CPPUNIT_ASSERT_EQUAL(OUString("Content\n"), rTable[6]->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"Content\n"_ustr, rTable[6]->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf156267)
@@ -56,12 +56,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156267)
     createSwDoc("tdf156267.docx");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Copy", {});
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     // Without the fix in place, it would have crashed here
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }

@@ -29,7 +29,7 @@ class SwCoreThemeTest : public SwModelTestBase
 {
 public:
     SwCoreThemeTest()
-        : SwModelTestBase("/sw/qa/core/theme/data/")
+        : SwModelTestBase(u"/sw/qa/core/theme/data/"_ustr)
     {
     }
 };
@@ -40,8 +40,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeColorInHeading)
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
-    auto xComplexColor
-        = getProperty<uno::Reference<util::XComplexColor>>(getParagraph(1), "CharComplexColor");
+    auto xComplexColor = getProperty<uno::Reference<util::XComplexColor>>(getParagraph(1),
+                                                                          u"CharComplexColor"_ustr);
     auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
     CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
 }
@@ -52,8 +52,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeColorInHeadingODT)
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
-    auto xComplexColor
-        = getProperty<uno::Reference<util::XComplexColor>>(getParagraph(1), "CharComplexColor");
+    auto xComplexColor = getProperty<uno::Reference<util::XComplexColor>>(getParagraph(1),
+                                                                          u"CharComplexColor"_ustr);
     auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
     CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
 }

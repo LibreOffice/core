@@ -259,7 +259,7 @@ void SwDocTest::testDocStat()
     SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
 
-    OUString sText("Hello World");
+    OUString sText(u"Hello World"_ustr);
     m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sText);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Should still be non-updated 0 count", static_cast<sal_uLong>(0), m_pDoc->getIDocumentStatistics().GetDocStat().nChar);
@@ -298,17 +298,17 @@ static SwTextNode* getModelToViewTestDocument(SwDoc *pDoc)
     SwPaM aPaM(aIdx);
 
     SwFormatFootnote aFootnote;
-    aFootnote.SetNumStr("foo");
+    aFootnote.SetNumStr(u"foo"_ustr);
 
     pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
-    pDoc->getIDocumentContentOperations().InsertString(aPaM, "AAAAA BBBBB ");
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, u"AAAAA BBBBB "_ustr);
     SwTextNode* pTextNode = aPaM.GetPointNode().GetTextNode();
     sal_Int32 nPos = aPaM.GetPoint()->GetContentIndex();
     pTextNode->InsertItem(aFootnote, nPos, nPos);
-    pDoc->getIDocumentContentOperations().InsertString(aPaM, " CCCCC ");
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, u" CCCCC "_ustr);
     nPos = aPaM.GetPoint()->GetContentIndex();
     pTextNode->InsertItem(aFootnote, nPos, nPos);
-    pDoc->getIDocumentContentOperations().InsertString(aPaM, " DDDDD");
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, u" DDDDD"_ustr);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>((4*5) + 5 + 2), pTextNode->GetText().getLength());
 
     //set start of selection to first B
@@ -345,15 +345,15 @@ static SwTextNode* getModelToViewTestDocument2(SwDoc *pDoc)
     SwPaM aPaM(aIdx);
 
     pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
-    pDoc->getIDocumentContentOperations().InsertString(aPaM, "AAAAA");
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, u"AAAAA"_ustr);
     IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
     sw::mark::IFieldmark *pFieldmark =
-            pMarksAccess->makeNoTextFieldBookmark(aPaM, "test", ODF_FORMDROPDOWN);
+            pMarksAccess->makeNoTextFieldBookmark(aPaM, u"test"_ustr, ODF_FORMDROPDOWN);
     CPPUNIT_ASSERT(pFieldmark);
-    uno::Sequence< OUString > vListEntries { "BBBBB" };
+    uno::Sequence< OUString > vListEntries { u"BBBBB"_ustr };
     (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] <<= vListEntries;
     (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_RESULT] <<= sal_Int32(0);
-    pDoc->getIDocumentContentOperations().InsertString(aPaM, "CCCCC");
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, u"CCCCC"_ustr);
     SwTextNode* pTextNode = aPaM.GetPointNode().GetTextNode();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11),
             pTextNode->GetText().getLength());
@@ -379,7 +379,7 @@ void SwDocTest::testModelToViewHelperExpandFieldsExpandFootnote()
             ExpandMode::ExpandFields | ExpandMode::ExpandFootnote);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
-        OUString("AAAAA BBBBB foo CCCCC foo DDDDD"), sViewText);
+        u"AAAAA BBBBB foo CCCCC foo DDDDD"_ustr, sViewText);
 }
 
 void SwDocTest::testModelToViewHelperExpandFieldsExpandFootnoteReplaceMode()
@@ -409,7 +409,7 @@ void SwDocTest::testModelToViewHelperExpandFields()
     ModelToViewHelper aModelToViewHelper(*pTextNode, nullptr, ExpandMode::ExpandFields);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
-        OUString("AAAAA BBBBB  CCCCC  DDDDD"), sViewText);
+        u"AAAAA BBBBB  CCCCC  DDDDD"_ustr, sViewText);
 }
 
 void SwDocTest::testModelToViewHelperExpandFieldsReplaceMode()
@@ -419,7 +419,7 @@ void SwDocTest::testModelToViewHelperExpandFieldsReplaceMode()
     ModelToViewHelper aModelToViewHelper(*pTextNode, nullptr,
         ExpandMode::ExpandFields | ExpandMode::ReplaceMode);
     OUString sViewText = aModelToViewHelper.getViewText();
-    CPPUNIT_ASSERT_EQUAL(OUString("AAAAA BBBBB  CCCCC  DDDDD"),
+    CPPUNIT_ASSERT_EQUAL(u"AAAAA BBBBB  CCCCC  DDDDD"_ustr,
         sViewText);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
         aModelToViewHelper.getFootnotePositions().size());
@@ -456,7 +456,7 @@ void SwDocTest::testModelToViewHelperExpandFieldsHideInvisibleExpandFootnote()
     ModelToViewHelper aModelToViewHelper(*pTextNode, nullptr,
         ExpandMode::ExpandFields | ExpandMode::HideInvisible | ExpandMode::ExpandFootnote);
     OUString sViewText = aModelToViewHelper.getViewText();
-    CPPUNIT_ASSERT_EQUAL(OUString("AAAAA CCCCC foo DDDDD"), sViewText);
+    CPPUNIT_ASSERT_EQUAL(u"AAAAA CCCCC foo DDDDD"_ustr, sViewText);
 }
 
 void SwDocTest::testModelToViewHelperExpandFieldsHideInvisibleExpandFootnoteReplaceMode()
@@ -485,7 +485,7 @@ void SwDocTest::testModelToViewHelperExpandFieldsHideHideRedlinedExpandFootnote(
         ExpandMode::ExpandFields | ExpandMode::HideDeletions | ExpandMode::ExpandFootnote);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
-        OUString("AAAABB foo CCCCC foo DDDDD"), sViewText);
+        u"AAAABB foo CCCCC foo DDDDD"_ustr, sViewText);
 }
 
 void SwDocTest::testModelToViewHelperExpandFieldsHideHideRedlinedExpandFootnoteReplaceMode()
@@ -528,7 +528,7 @@ void SwDocTest::testModelToViewHelperExpandFieldsHideInvisibleHideRedlinedExpand
     ModelToViewHelper aModelToViewHelper(*pTextNode, nullptr,
         ExpandMode::ExpandFields | ExpandMode::HideInvisible | ExpandMode::HideDeletions | ExpandMode::ExpandFootnote);
     OUString sViewText = aModelToViewHelper.getViewText();
-    CPPUNIT_ASSERT_EQUAL(OUString("AAAACCCCC foo DDDDD"), sViewText);
+    CPPUNIT_ASSERT_EQUAL(u"AAAACCCCC foo DDDDD"_ustr, sViewText);
 }
 
 void SwDocTest::testModelToViewHelperExpandFieldsHideInvisibleHideRedlinedExpandFootnoteReplaceMode()
@@ -555,7 +555,7 @@ void SwDocTest::testModelToViewHelperExpandFieldsExpandFootnote2()
     ModelToViewHelper aModelToViewHelper(*pTextNode, nullptr,
         ExpandMode::ExpandFields | ExpandMode::ExpandFootnote);
     OUString sViewText = aModelToViewHelper.getViewText();
-    CPPUNIT_ASSERT_EQUAL(OUString("AAAAABBBBBCCCCC"), sViewText);
+    CPPUNIT_ASSERT_EQUAL(u"AAAAABBBBBCCCCC"_ustr, sViewText);
 }
 
 void SwDocTest::testModelToViewHelperExpandFieldsExpandFootnoteReplaceMode2()
@@ -591,19 +591,19 @@ void SwDocTest::testSwScanner()
     //fdo#40449 and fdo#39365
     {
         SwScanner aScanner(*pTextNode,
-            "Hello World",
+            u"Hello World"_ustr,
             nullptr, ModelToViewHelper(), i18n::WordType::DICTIONARY_WORD, 0,
             RTL_CONSTASCII_LENGTH("Hello World"));
 
         bool bFirstOk = aScanner.NextWord();
         CPPUNIT_ASSERT_MESSAGE("First Token", bFirstOk);
         const OUString &rHello = aScanner.GetWord();
-        CPPUNIT_ASSERT_EQUAL(OUString("Hello"), rHello);
+        CPPUNIT_ASSERT_EQUAL(u"Hello"_ustr, rHello);
 
         bool bSecondOk = aScanner.NextWord();
         CPPUNIT_ASSERT_MESSAGE("Second Token", bSecondOk);
         const OUString &rWorld = aScanner.GetWord();
-        CPPUNIT_ASSERT_EQUAL(OUString("World"), rWorld);
+        CPPUNIT_ASSERT_EQUAL(u"World"_ustr, rWorld);
     }
 
     //See https://www.libreoffice.org/bugzilla/show_bug.cgi?id=45271
@@ -697,11 +697,11 @@ void SwDocTest::testSwScanner()
         SwDocStat aDocStat;
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Apple");
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, u"Apple"_ustr);
         pTextNode = aPaM.GetPointNode().GetTextNode();
         sal_Int32 nPos = aPaM.GetPoint()->GetContentIndex();
         SwFormatFootnote aFootnote;
-        aFootnote.SetNumStr("banana");
+        aFootnote.SetNumStr(u"banana"_ustr);
         SwTextAttr* pTA = pTextNode->InsertItem(aFootnote, nPos, nPos);
         CPPUNIT_ASSERT(pTA);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6), pTextNode->Len()); //Apple + 0x02
@@ -711,7 +711,7 @@ void SwDocTest::testSwScanner()
 
         const sal_Int32 nNextPos = aPaM.GetPoint()->GetContentIndex();
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(nPos+1), nNextPos);
-        SwFormatRefMark aRef("refmark");
+        SwFormatRefMark aRef(u"refmark"_ustr);
         pTA = pTextNode->InsertItem(aRef, nNextPos, nNextPos);
         CPPUNIT_ASSERT(pTA);
 
@@ -722,15 +722,15 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("refmark anchor should not be counted", static_cast<sal_uLong>(11), aDocStat.nChar);
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Apple");
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, u"Apple"_ustr);
 
         DateTime aDate(DateTime::SYSTEM);
         SwPostItField aPostIt(
-            static_cast<SwPostItFieldType*>(m_pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Postit)), "An Author",
-            "Some Text", "Initials", "Name", aDate );
+            static_cast<SwPostItFieldType*>(m_pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Postit)), u"An Author"_ustr,
+            u"Some Text"_ustr, u"Initials"_ustr, u"Name"_ustr, aDate );
         m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, SwFormatField(aPostIt));
 
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Apple");
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, u"Apple"_ustr);
         pTextNode = aPaM.GetPointNode().GetTextNode();
         aDocStat.Reset();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
@@ -781,7 +781,7 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(1), aDocStat.nWord);
 
         OUString sLorem = pTextNode->GetText();
-        CPPUNIT_ASSERT_EQUAL(OUString("Lorem"), sLorem);
+        CPPUNIT_ASSERT_EQUAL(u"Lorem"_ustr, sLorem);
 
         const SwRedlineTable& rTable = m_pDoc->getIDocumentRedlineAccess().GetRedlineTable();
 
@@ -795,7 +795,7 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT(pTextNode);
 
         OUString sIpsum = pTextNode->GetText();
-        CPPUNIT_ASSERT_EQUAL(OUString(" ipsum"), sIpsum);
+        CPPUNIT_ASSERT_EQUAL(u" ipsum"_ustr, sIpsum);
 
         aDocStat.Reset();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len()); //word-counting the text should only count the non-deleted text, and this whole chunk should be ignored
@@ -807,7 +807,7 @@ void SwDocTest::testSwScanner()
         m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete|RedlineFlags::ShowInsert);
         aPaM.DeleteMark();
         aPaM.GetPoint()->nContent.Assign(aPaM.GetPointContentNode(), 0);
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "redline-new-text ");
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, u"redline-new-text "_ustr);
         aDocStat.Reset();
         pTextNode = aPaM.GetPointNode().GetTextNode();
         pTextNode->SetWordCountDirty(true);
@@ -825,7 +825,7 @@ void SwDocTest::testSwScanner()
     {
         SwDocStat aDocStat;
 
-        OUString sTemplate("ThisXis a test.");
+        OUString sTemplate(u"ThisXis a test."_ustr);
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', ' '));
@@ -935,12 +935,12 @@ void SwDocTest::testMergePortionsDeleteNotSorted()
 {
     SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
-    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "  AABBCC");
+    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, u"  AABBCC"_ustr);
 
-    SwCharFormat *const pCharFormat(m_pDoc->MakeCharFormat("foo", nullptr));
+    SwCharFormat *const pCharFormat(m_pDoc->MakeCharFormat(u"foo"_ustr, nullptr));
     SwFormatCharFormat const charFormat(pCharFormat);
 
-    SwFormatINetFormat const inetFormat("http://example.com", "");
+    SwFormatINetFormat const inetFormat(u"http://example.com"_ustr, u""_ustr);
 
     IDocumentContentOperations & rIDCO(m_pDoc->getIDocumentContentOperations());
     aPaM.SetMark();
@@ -967,14 +967,14 @@ void SwDocTest::testGraphicAnchorDeletion()
     SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
 
-    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Paragraph 1");
+    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, u"Paragraph 1"_ustr);
     m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
 
-    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "graphic anchor>><<graphic anchor");
+    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, u"graphic anchor>><<graphic anchor"_ustr);
     SwNodeIndex nPara2(aPaM.GetPoint()->GetNode());
     m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
 
-    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Paragraph 3");
+    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, u"Paragraph 3"_ustr);
 
     aPaM.GetPoint()->Assign(nPara2);
     aPaM.GetPoint()->SetContent(RTL_CONSTASCII_LENGTH("graphic anchor>>"));
@@ -1026,7 +1026,7 @@ void SwDocTest::testTableAutoFormats()
     CPPUNIT_ASSERT_EQUAL( size_t(1),  aTableAFT.size() );
 
     //create new style
-    SwTableAutoFormat aTableAF( "TestItemStyle" );
+    SwTableAutoFormat aTableAF( u"TestItemStyle"_ustr );
 
     //create new AutoFormat
     SwBoxAutoFormat aBoxAF;
@@ -1138,7 +1138,7 @@ void SwDocTest::testTableAutoFormats()
     SvxRotateModeItem aSvxRotateModeItem(SVX_ROTATE_MODE_CENTER, TypedWhichId<SvxRotateModeItem>(0));
     aBoxAF.SetRotateMode(aSvxRotateModeItem);
     //Set m_sNumFormatString
-    OUString aNFString = "UnitTestFormat";
+    OUString aNFString = u"UnitTestFormat"_ustr;
     aBoxAF.SetNumFormatString(aNFString);
     //Set m_eSysLanguage
     LanguageType aSLang( LANGUAGE_ENGLISH_INDIA );
@@ -1318,35 +1318,35 @@ void SwDocTest::testTransliterate()
     // just some simple test to see if it's totally broken
     SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
-    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "foobar");
+    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, u"foobar"_ustr);
     aPaM.SetMark();
     aPaM.GetPoint()->nContent = 0;
-    CPPUNIT_ASSERT_EQUAL(OUString("foobar"), aPaM.GetText());
+    CPPUNIT_ASSERT_EQUAL(u"foobar"_ustr, aPaM.GetText());
 
-    CPPUNIT_ASSERT_EQUAL(OUString("FOOBAR"),
+    CPPUNIT_ASSERT_EQUAL(u"FOOBAR"_ustr,
             translitTest(*m_pDoc, aPaM,
                 TransliterationFlags::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Foobar"),
+    CPPUNIT_ASSERT_EQUAL(u"Foobar"_ustr,
             translitTest(*m_pDoc, aPaM,
                 TransliterationFlags::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("fOOBAR"),
+    CPPUNIT_ASSERT_EQUAL(u"fOOBAR"_ustr,
             translitTest(*m_pDoc, aPaM,
                 TransliterationFlags::TOGGLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("foobar"),
+    CPPUNIT_ASSERT_EQUAL(u"foobar"_ustr,
             translitTest(*m_pDoc, aPaM,
                 TransliterationFlags::UPPERCASE_LOWERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Foobar"),
+    CPPUNIT_ASSERT_EQUAL(u"Foobar"_ustr,
             translitTest(*m_pDoc, aPaM,
                 TransliterationFlags::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Foobar"),
+    CPPUNIT_ASSERT_EQUAL(u"Foobar"_ustr,
             translitTest(*m_pDoc, aPaM,
                 TransliterationFlags::HIRAGANA_KATAKANA));
 
     m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
-    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "one (two) three");
+    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, u"one (two) three"_ustr);
     aPaM.SetMark();
     aPaM.GetMark()->nContent = 0;
-    CPPUNIT_ASSERT_EQUAL(OUString("One (Two) Three"),
+    CPPUNIT_ASSERT_EQUAL(u"One (Two) Three"_ustr,
             translitTest(*m_pDoc, aPaM,
                 TransliterationFlags::TITLE_CASE));
 }
@@ -1379,21 +1379,21 @@ void SwDocTest::testFormulas()
     const SwTable *pTable = m_pDoc->InsertTable(
         SwInsertTableOptions(SwInsertTableFlags::HeadlineNoBorder, 0), aPos, 1, 3, 0);
     SwTableNode* pTableNode = pTable->GetTableNode();
-    SwTableFormulaTest aFormula("<\x12-1,0>+<Table1.A1>", pTableNode);
+    SwTableFormulaTest aFormula(u"<\x12-1,0>+<Table1.A1>"_ustr, pTableNode);
 
     aFormula.PtrToBoxNm(pTable);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("<?>+<Table1.?>"), aFormula.GetFormula());
+    CPPUNIT_ASSERT_EQUAL(u"<?>+<Table1.?>"_ustr, aFormula.GetFormula());
 
     // tdf#61228: Evaluating non-defined function should return an error
     SwCalc aCalc(*m_pDoc);
-    SwSbxValue val = aCalc.Calculate("foobar()");
+    SwSbxValue val = aCalc.Calculate(u"foobar()"_ustr);
     CPPUNIT_ASSERT(aCalc.IsCalcError());
     CPPUNIT_ASSERT(val.IsVoidValue());
     CPPUNIT_ASSERT(val.IsDouble());
     CPPUNIT_ASSERT_EQUAL(DBL_MAX, val.GetDouble());
     // Evaluating non-defined variable should return 0 without an error
-    val = aCalc.Calculate("foobar");
+    val = aCalc.Calculate(u"foobar"_ustr);
     CPPUNIT_ASSERT(!aCalc.IsCalcError());
     CPPUNIT_ASSERT(val.IsVoidValue());
     CPPUNIT_ASSERT(val.IsLong());
@@ -1407,24 +1407,24 @@ void SwDocTest::testMarkMove()
     {
         SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
         SwPaM aPaM(aIdx);
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Paragraph 1");
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, u"Paragraph 1"_ustr);
         aPaM.SetMark();
         aPaM.GetMark()->nContent -= aPaM.GetMark()->GetContentIndex();
-        pMarksAccess->makeMark(aPaM, "Para1",
+        pMarksAccess->makeMark(aPaM, u"Para1"_ustr,
             IDocumentMarkAccess::MarkType::BOOKMARK, sw::mark::InsertMode::New);
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Paragraph 2");
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, u"Paragraph 2"_ustr);
         aPaM.SetMark();
         aPaM.GetMark()->nContent -= aPaM.GetMark()->GetContentIndex();
-        pMarksAccess->makeMark(aPaM, "Para2",
+        pMarksAccess->makeMark(aPaM, u"Para2"_ustr,
             IDocumentMarkAccess::MarkType::BOOKMARK, sw::mark::InsertMode::New);
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Paragraph 3");
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, u"Paragraph 3"_ustr);
         aPaM.SetMark();
         aPaM.GetMark()->nContent -= aPaM.GetMark()->GetContentIndex();
-        pMarksAccess->makeMark(aPaM, "Para3",
+        pMarksAccess->makeMark(aPaM, u"Para3"_ustr,
             IDocumentMarkAccess::MarkType::BOOKMARK, sw::mark::InsertMode::New);
     }
 
@@ -1434,9 +1434,9 @@ void SwDocTest::testMarkMove()
         SwTextNode& rParaNode2 = dynamic_cast<SwTextNode&>(aIdx.GetNode());
         rParaNode2.JoinNext();
     }
-    ::sw::mark::IMark* pBM1 = *pMarksAccess->findMark("Para1");
-    ::sw::mark::IMark* pBM2 = *pMarksAccess->findMark("Para2");
-    ::sw::mark::IMark* pBM3 = *pMarksAccess->findMark("Para3");
+    ::sw::mark::IMark* pBM1 = *pMarksAccess->findMark(u"Para1"_ustr);
+    ::sw::mark::IMark* pBM2 = *pMarksAccess->findMark(u"Para2"_ustr);
+    ::sw::mark::IMark* pBM3 = *pMarksAccess->findMark(u"Para3"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0) , pBM1->GetMarkStart().GetContentIndex());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11), pBM1->GetMarkEnd().GetContentIndex());
@@ -1471,9 +1471,9 @@ void SwDocTest::testMarkMove()
         aPaM.GetMark()->nContent += 6;
         m_pDoc->getIDocumentContentOperations().DeleteAndJoin(aPaM);
     }
-    pBM1 = *pMarksAccess->findMark("Para1");
-    pBM2 = *pMarksAccess->findMark("Para2");
-    pBM3 = *pMarksAccess->findMark("Para3");
+    pBM1 = *pMarksAccess->findMark(u"Para1"_ustr);
+    pBM2 = *pMarksAccess->findMark(u"Para2"_ustr);
+    pBM3 = *pMarksAccess->findMark(u"Para3"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pBM1->GetMarkStart().GetContentIndex());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pBM1->GetMarkEnd().GetContentIndex());
@@ -1507,9 +1507,9 @@ void SwDocTest::testMarkMove()
         aPos.nContent += 8;
         m_pDoc->getIDocumentContentOperations().SplitNode(aPos, false);
     }
-    pBM1 = *pMarksAccess->findMark("Para1");
-    pBM2 = *pMarksAccess->findMark("Para2");
-    pBM3 = *pMarksAccess->findMark("Para3");
+    pBM1 = *pMarksAccess->findMark(u"Para1"_ustr);
+    pBM2 = *pMarksAccess->findMark(u"Para2"_ustr);
+    pBM3 = *pMarksAccess->findMark(u"Para3"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pBM1->GetMarkStart().GetContentIndex());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pBM1->GetMarkEnd().GetContentIndex());
@@ -1815,7 +1815,7 @@ void SwDocTest::test64kPageDescs()
 
     const SwPageDesc &rDesc = m_pDoc->GetPageDesc( nPageDescCount );
     SwPageDesc &rZeroDesc = m_pDoc->GetPageDesc( 0 );
-    CPPUNIT_ASSERT_EQUAL( OUString("Page65535"), rDesc.GetName() );
+    CPPUNIT_ASSERT_EQUAL( u"Page65535"_ustr, rDesc.GetName() );
 
     SwPageDesc aDesc( rDesc );
     static constexpr OUString aChanged(u"Changed01"_ustr);
@@ -1882,27 +1882,27 @@ void SwDocTest::testTableCellComparison()
     CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellRanges(u"A2", u"Z2", u"A1", u"Z1", true) );
     CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellRanges(u"A6", u"Z2", u"A1", u"Z1", true) );
 
-    OUString rCell1("A1");
-    OUString rCell2("C5");
+    OUString rCell1(u"A1"_ustr);
+    OUString rCell2(u"C5"_ustr);
 
     sw_NormalizeRange(rCell1, rCell2);
-    CPPUNIT_ASSERT_EQUAL( OUString("A1"), rCell1 );
-    CPPUNIT_ASSERT_EQUAL( OUString("C5"), rCell2 );
+    CPPUNIT_ASSERT_EQUAL( u"A1"_ustr, rCell1 );
+    CPPUNIT_ASSERT_EQUAL( u"C5"_ustr, rCell2 );
 
     sw_NormalizeRange(rCell2, rCell1);
-    CPPUNIT_ASSERT_EQUAL( OUString("C5"), rCell1 );
-    CPPUNIT_ASSERT_EQUAL( OUString("A1"), rCell2 );
+    CPPUNIT_ASSERT_EQUAL( u"C5"_ustr, rCell1 );
+    CPPUNIT_ASSERT_EQUAL( u"A1"_ustr, rCell2 );
 
-    rCell1 = OUString("A5");
-    rCell2 = OUString("C1");
+    rCell1 = u"A5"_ustr;
+    rCell2 = u"C1"_ustr;
 
     sw_NormalizeRange(rCell1, rCell2);
-    CPPUNIT_ASSERT_EQUAL( OUString("A1"), rCell1 );
-    CPPUNIT_ASSERT_EQUAL( OUString("C5"), rCell2 );
+    CPPUNIT_ASSERT_EQUAL( u"A1"_ustr, rCell1 );
+    CPPUNIT_ASSERT_EQUAL( u"C5"_ustr, rCell2 );
 
     sw_NormalizeRange(rCell2, rCell1);
-    CPPUNIT_ASSERT_EQUAL( OUString("C5"), rCell1 );
-    CPPUNIT_ASSERT_EQUAL( OUString("A1"), rCell2 );
+    CPPUNIT_ASSERT_EQUAL( u"C5"_ustr, rCell1 );
+    CPPUNIT_ASSERT_EQUAL( u"A1"_ustr, rCell2 );
 
     CPPUNIT_ASSERT_EQUAL( OUString(), sw_GetCellName(-1, -1) );
 }

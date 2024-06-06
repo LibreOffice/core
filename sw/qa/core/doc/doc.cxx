@@ -47,7 +47,7 @@ class SwCoreDocTest : public SwModelTestBase
 {
 public:
     SwCoreDocTest()
-        : SwModelTestBase("/sw/qa/core/doc/data/")
+        : SwModelTestBase(u"/sw/qa/core/doc/data/"_ustr)
     {
     }
 };
@@ -112,7 +112,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testNumDownIndent)
     // - Expected: \tB
     // - Actual  : B
     // i.e. pressing <tab> at the start of the paragraph did not change the layout.
-    CPPUNIT_ASSERT_EQUAL(OUString("\tB"), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"\tB"_ustr, pTextNode->GetText());
     ErrorRegistry::Reset();
 }
 
@@ -136,7 +136,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBulletsOnSpaceOff)
     rEditWin.KeyInput(aKeyEvent3);
     SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("- a"), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"- a"_ustr, pTextNode->GetText());
     ErrorRegistry::Reset();
 }
 
@@ -161,7 +161,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBulletsOnSpace)
     SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
 
     // '- ' was converted into bullet
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"a"_ustr, pTextNode->GetText());
     ErrorRegistry::Reset();
 }
 
@@ -195,7 +195,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextBoxZOrder)
     const sw::SpzFrameFormat* pEllipse = rFormats[2];
     const SdrObject* pEllipseShape = pEllipse->FindRealSdrObject();
     // Make sure we test the right shape.
-    CPPUNIT_ASSERT_EQUAL(OUString("Shape3"), pEllipseShape->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"Shape3"_ustr, pEllipseShape->GetName());
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2
     // - Actual  : 1
@@ -216,8 +216,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextBoxMakeFlyFrame)
     rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
     pTransfer->Cut();
     TransferableDataHelper aHelper(pTransfer);
-    uno::Reference<lang::XComponent> xDoc2
-        = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument", {});
+    uno::Reference<lang::XComponent> xDoc2 = loadFromDesktop(
+        u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr, {});
     SwXTextDocument* pTextDoc2 = dynamic_cast<SwXTextDocument*>(xDoc2.get());
     SwDocShell* pDocShell2 = pTextDoc2->GetDocShell();
     SwWrtShell* pWrtShell2 = pDocShell2->GetWrtShell();
@@ -247,15 +247,15 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testIMEGrouping)
     // When pressing two keys via IME:
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
-    rEditWin.PostExtTextInputEvent(VclEventId::ExtTextInput, "a");
-    rEditWin.PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
-    rEditWin.PostExtTextInputEvent(VclEventId::ExtTextInput, "b");
-    rEditWin.PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
+    rEditWin.PostExtTextInputEvent(VclEventId::ExtTextInput, u"a"_ustr);
+    rEditWin.PostExtTextInputEvent(VclEventId::EndExtTextInput, u""_ustr);
+    rEditWin.PostExtTextInputEvent(VclEventId::ExtTextInput, u"b"_ustr);
+    rEditWin.PostExtTextInputEvent(VclEventId::EndExtTextInput, u""_ustr);
 
     // Then make sure that gets grouped together to a single undo action:
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
-    CPPUNIT_ASSERT_EQUAL(OUString("ab"), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"ab"_ustr, pTextNode->GetText());
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 2
@@ -273,17 +273,17 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testImageHyperlinkStyle)
     uno::Reference<text::XText> xText = xDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
     uno::Reference<text::XTextContent> xImage(
-        xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
     xText->insertTextContent(xCursor, xImage, /*bAbsorb=*/false);
     uno::Reference<beans::XPropertySet> xImageProps(xImage, uno::UNO_QUERY);
-    OUString aExpected = "http://www.example.com";
-    xImageProps->setPropertyValue("HyperLinkURL", uno::Any(aExpected));
+    OUString aExpected = u"http://www.example.com"_ustr;
+    xImageProps->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(aExpected));
 
     // When applying a frame style on it:
-    xImageProps->setPropertyValue("FrameStyleName", uno::Any(OUString("Frame")));
+    xImageProps->setPropertyValue(u"FrameStyleName"_ustr, uno::Any(u"Frame"_ustr));
 
     // Then make sure that the hyperlink is not lost:
-    auto aActual = getProperty<OUString>(xImageProps, "HyperLinkURL");
+    auto aActual = getProperty<OUString>(xImageProps, u"HyperLinkURL"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: http://www.example.com
     // - Actual  :
@@ -301,11 +301,11 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testContentControlDelete)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-    xText->insertString(xCursor, "test", /*bAbsorb=*/false);
+    xText->insertString(xCursor, u"test"_ustr, /*bAbsorb=*/false);
     xCursor->gotoStart(/*bExpand=*/false);
     xCursor->gotoEnd(/*bExpand=*/true);
     uno::Reference<text::XTextContent> xContentControl(
-        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+        xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When deleting the dummy character at the end of the content control:
@@ -320,7 +320,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testContentControlDelete)
     // - Expected: ^Atest^A
     // - Actual  : ^Atest
     // i.e. the end dummy character got deleted, but not the first one, which is inconsistent.
-    CPPUNIT_ASSERT_EQUAL(OUString("\x0001test\x0001"), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"\x0001test\x0001"_ustr, pTextNode->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCopyBookmarks)
@@ -371,25 +371,25 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testLinkedStyleDelete)
     createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xParaStyle(
-        xFactory->createInstance("com.sun.star.style.ParagraphStyle"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.style.ParagraphStyle"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xCharStyle(
-        xFactory->createInstance("com.sun.star.style.CharacterStyle"), uno::UNO_QUERY);
-    uno::Reference<container::XNameContainer> xParaStyles(getStyles("ParagraphStyles"),
+        xFactory->createInstance(u"com.sun.star.style.CharacterStyle"_ustr), uno::UNO_QUERY);
+    uno::Reference<container::XNameContainer> xParaStyles(getStyles(u"ParagraphStyles"_ustr),
                                                           uno::UNO_QUERY);
-    xParaStyles->insertByName("myparastyle", uno::Any(xParaStyle));
-    uno::Reference<container::XNameContainer> xCharStyles(getStyles("CharacterStyles"),
+    xParaStyles->insertByName(u"myparastyle"_ustr, uno::Any(xParaStyle));
+    uno::Reference<container::XNameContainer> xCharStyles(getStyles(u"CharacterStyles"_ustr),
                                                           uno::UNO_QUERY);
-    xCharStyles->insertByName("mycharstyle", uno::Any(xCharStyle));
-    xParaStyle->setPropertyValue("LinkStyle", uno::Any(OUString("mycharstyle")));
-    xCharStyle->setPropertyValue("LinkStyle", uno::Any(OUString("myparastyle")));
+    xCharStyles->insertByName(u"mycharstyle"_ustr, uno::Any(xCharStyle));
+    xParaStyle->setPropertyValue(u"LinkStyle"_ustr, uno::Any(u"mycharstyle"_ustr));
+    xCharStyle->setPropertyValue(u"LinkStyle"_ustr, uno::Any(u"myparastyle"_ustr));
 
     // When deleting the paragraph style (and only that):
-    xParaStyles->removeByName("myparastyle");
+    xParaStyles->removeByName(u"myparastyle"_ustr);
 
     // Then make sure we don't crash on save:
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("FilterName", OUString("writer8")),
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"writer8"_ustr),
     };
     xStorable->storeAsURL(maTempFile.GetURL(), aArgs);
 }
@@ -440,25 +440,25 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBookmarkDeleteListeners)
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
     {
-        xText->insertString(xCursor, "test", /*bAbsorb=*/false);
+        xText->insertString(xCursor, u"test"_ustr, /*bAbsorb=*/false);
         xCursor->gotoStart(/*bExpand=*/false);
         xCursor->gotoEnd(/*bExpand=*/true);
         uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
         uno::Reference<text::XTextContent> xBookmark(
-            xFactory->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY);
+            xFactory->createInstance(u"com.sun.star.text.Bookmark"_ustr), uno::UNO_QUERY);
         uno::Reference<container::XNamed> xBookmarkNamed(xBookmark, uno::UNO_QUERY);
-        xBookmarkNamed->setName("mybookmark");
+        xBookmarkNamed->setName(u"mybookmark"_ustr);
         xText->insertTextContent(xCursor, xBookmark, /*bAbsorb=*/true);
     }
     {
         xCursor->gotoEnd(/*bExpand=*/false);
-        xText->insertString(xCursor, "test2", /*bAbsorb=*/false);
+        xText->insertString(xCursor, u"test2"_ustr, /*bAbsorb=*/false);
         xCursor->goLeft(4, /*bExpand=*/true);
         uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
         uno::Reference<text::XTextContent> xBookmark(
-            xFactory->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY);
+            xFactory->createInstance(u"com.sun.star.text.Bookmark"_ustr), uno::UNO_QUERY);
         uno::Reference<container::XNamed> xBookmarkNamed(xBookmark, uno::UNO_QUERY);
-        xBookmarkNamed->setName("mybookmark2");
+        xBookmarkNamed->setName(u"mybookmark2"_ustr);
         xText->insertTextContent(xCursor, xBookmark, /*bAbsorb=*/true);
     }
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
@@ -471,7 +471,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBookmarkDeleteListeners)
     xController->addSelectionChangeListener(new SelectionChangeListener(xBookmarks));
 
     // Then make sure that deleting a bookmark doesn't crash:
-    uno::Reference<lang::XComponent> xBookmark(xBookmarks->getByName("mybookmark2"),
+    uno::Reference<lang::XComponent> xBookmark(xBookmarks->getByName(u"mybookmark2"_ustr),
                                                uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have crashed, an invalidated iterator
     // was used with erase().
@@ -546,7 +546,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testSplitExpandGlossary)
     pWrtShell->SttEndDoc(/*bStt=*/false);
 
     // When expanding 'dt' to an actual dummy text:
-    dispatchCommand(mxComponent, ".uno:ExpandGlossary", {});
+    dispatchCommand(mxComponent, u".uno:ExpandGlossary"_ustr, {});
 
     // Then make sure the 2 fly frames stay on the 2 pages:
     SwDoc* pDoc = getSwDoc();
@@ -580,9 +580,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testSplitFlyInsertUndo)
     pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/1);
     pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
     pWrtShell->GoPrevCell();
-    pWrtShell->Insert("A1");
+    pWrtShell->Insert(u"A1"_ustr);
     pWrtShell->GoNextCell();
-    pWrtShell->Insert("A2");
+    pWrtShell->Insert(u"A2"_ustr);
     // Select cell:
     pWrtShell->SelAll();
     // Select table:

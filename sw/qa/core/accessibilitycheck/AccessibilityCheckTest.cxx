@@ -22,7 +22,7 @@ class AccessibilityCheckTest : public SwModelTestBase
 {
 public:
     AccessibilityCheckTest()
-        : SwModelTestBase("/sw/qa/core/accessibilitycheck/data/")
+        : SwModelTestBase(u"/sw/qa/core/accessibilitycheck/data/"_ustr)
     {
     }
 };
@@ -325,10 +325,9 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testOnlineNodeSplitAppend)
     pWrtShell->SplitNode();
 
     // Check the result
-    CPPUNIT_ASSERT_EQUAL(OUString("He heard quiet steps behind him. "),
-                         getParagraph(1)->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString("That didn't bode well. Who could be following him this late at "
-                                  "night and in this deadbeat part of town?"),
+    CPPUNIT_ASSERT_EQUAL(u"He heard quiet steps behind him. "_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"That didn't bode well. Who could be following him this late at "
+                         "night and in this deadbeat part of town?"_ustr,
                          getParagraph(2)->getString());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2),
                          pDoc->getOnlineAccessibilityCheck()->getNumberOfAccessibilityIssues());
@@ -346,12 +345,10 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testOnlineNodeSplitAppend)
     pWrtShell->SplitNode();
 
     // Check the result
-    CPPUNIT_ASSERT_EQUAL(OUString("He heard quiet steps behind him. "),
-                         getParagraph(1)->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString("That didn't bode well. "), getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"He heard quiet steps behind him. "_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"That didn't bode well. "_ustr, getParagraph(2)->getString());
     CPPUNIT_ASSERT_EQUAL(
-        OUString(
-            "Who could be following him this late at night and in this deadbeat part of town?"),
+        u"Who could be following him this late at night and in this deadbeat part of town?"_ustr,
         getParagraph(3)->getString());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3),
                          pDoc->getOnlineAccessibilityCheck()->getNumberOfAccessibilityIssues());
@@ -365,11 +362,10 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testOnlineNodeSplitAppend)
     checkIssuePosition(aIssues[2], __LINE__, 0, 80, SwNodeOffset(11));
 
     // Undo second change
-    dispatchCommand(mxComponent, ".uno:Undo", {});
-    CPPUNIT_ASSERT_EQUAL(OUString("He heard quiet steps behind him. "),
-                         getParagraph(1)->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString("That didn't bode well. Who could be following him this late at "
-                                  "night and in this deadbeat part of town?"),
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"He heard quiet steps behind him. "_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"That didn't bode well. Who could be following him this late at "
+                         "night and in this deadbeat part of town?"_ustr,
                          getParagraph(2)->getString());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2),
                          pDoc->getOnlineAccessibilityCheck()->getNumberOfAccessibilityIssues());
@@ -381,12 +377,12 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testOnlineNodeSplitAppend)
     checkIssuePosition(aIssues[1], __LINE__, 0, 103, SwNodeOffset(10));
 
     // Undo first change
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2),
                          pDoc->getOnlineAccessibilityCheck()->getNumberOfAccessibilityIssues());
     CPPUNIT_ASSERT_EQUAL(
-        OUString("He heard quiet steps behind him. That didn't bode well. Who could be following "
-                 "him this late at night and in this deadbeat part of town?"),
+        u"He heard quiet steps behind him. That didn't bode well. Who could be following "
+        "him this late at night and in this deadbeat part of town?"_ustr,
         getParagraph(1)->getString());
     aIssues = scanAccessibilityIssuesOnNodes(pDoc);
     CPPUNIT_ASSERT_EQUAL(size_t(2), aIssues.size());
