@@ -76,6 +76,7 @@
 #include <tools/debug.hxx>
 #include <tools/json_writer.hxx>
 #include <boost/property_tree/ptree.hpp>
+#include <config_features.h>
 
 #include <cassert>
 #include <typeinfo>
@@ -3110,6 +3111,7 @@ const OUString& Window::GetHelpText() const
 
     if ( !mpWindowImpl->maHelpText.getLength() && bStrHelpId )
     {
+#if HAVE_FEATURE_LOCAL_HELP
         if ( !IsDialog() && (mpWindowImpl->mnType != WindowType::TABPAGE) && (mpWindowImpl->mnType != WindowType::FLOATINGWINDOW) )
         {
             Help* pHelp = Application::GetHelp();
@@ -3119,6 +3121,7 @@ const OUString& Window::GetHelpText() const
                 mpWindowImpl->mbHelpTextDynamic = false;
             }
         }
+#endif
     }
     else if( mpWindowImpl->mbHelpTextDynamic && bStrHelpId )
     {

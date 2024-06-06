@@ -5711,7 +5711,7 @@ dnl ===================================================================
 ENABLE_HTMLHELP=
 HELP_OMINDEX_PAGE=
 HELP_ONLINE=
-WITH_HELPPACKS=
+ENABLE_LOCALHELP=
 
 AC_MSG_CHECKING([which help to build])
 if test -n "$with_help" -a "$with_help" != "no"; then
@@ -5720,7 +5720,7 @@ if test -n "$with_help" -a "$with_help" != "no"; then
     case "$with_help" in
     "html")
         ENABLE_HTMLHELP=TRUE
-        WITH_HELPPACKS=TRUE
+        ENABLE_LOCALHELP=TRUE
         SCPDEFS="$SCPDEFS -DWITH_HELPPACKS"
         AC_MSG_RESULT([HTML (local)])
         ;;
@@ -5730,7 +5730,7 @@ if test -n "$with_help" -a "$with_help" != "no"; then
         AC_MSG_RESULT([HTML (online)])
         ;;
     yes)
-        WITH_HELPPACKS=TRUE
+        ENABLE_LOCALHELP=TRUE
         SCPDEFS="$SCPDEFS -DWITH_HELPPACKS"
         AC_MSG_RESULT([XML (local)])
         ;;
@@ -5787,7 +5787,7 @@ fi
 
 dnl Test whether to integrate helppacks into the product's installer
 AC_MSG_CHECKING([for helppack integration])
-if test -z "$WITH_HELPPACKS" -o "$with_helppack_integration" = no; then
+if test -z "$ENABLE_LOCALHELP" -o "$with_helppack_integration" = no; then
     AC_MSG_RESULT([no integration])
 else
     SCPDEFS="$SCPDEFS -DWITH_HELPPACK_INTEGRATION"
@@ -5797,7 +5797,9 @@ fi
 AC_SUBST([ENABLE_HTMLHELP])
 AC_SUBST([HELP_OMINDEX_PAGE])
 AC_SUBST([HELP_ONLINE])
-# WITH_HELPPACKS is used only in configure
+if test "$ENABLE_LOCALHELP" = "TRUE" ; then
+    AC_DEFINE(HAVE_FEATURE_LOCAL_HELP)
+fi
 
 dnl ===================================================================
 dnl Set up a different compiler to produce tools to run on the build
