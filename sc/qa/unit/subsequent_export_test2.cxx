@@ -1323,6 +1323,11 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf137543XLSX)
     assertXPathContent(
         pSheet, "/x:worksheet/x:sheetData/x:row/x:c/x:f"_ostr,
         u"_xlfn.LET(_xlpm.first,15,_xlpm.second,10,SUM(_xlpm.first,_xlpm.second))"_ustr);
+
+    // test with an unknown (for Calc) function inside the LET function
+    assertXPathContent(
+        pSheet, "/x:worksheet/x:sheetData/x:row[3]/x:c[5]/x:f"_ostr,
+        u"_xlfn.LET(_xlpm.first,B5:E15,_xlfn.chooserows(_xlpm.first, 1, 3, 5, 7, 9, 11))"_ustr);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

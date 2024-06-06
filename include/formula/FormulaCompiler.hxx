@@ -424,7 +424,10 @@ protected:
     {
         bool bInLambdaFunction = false;
         short nBracketPos = 0;
-    } mLambda;
+        short nParaPos = 0;
+        short nParaCount = 3; // minimum required parameter count: 3
+        std::unordered_set<OUString> aNameSet;
+    } m_aLambda;
 
 public:
     enum InitSymbols

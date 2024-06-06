@@ -331,6 +331,7 @@ private:
 
     bool   NextNewToken(bool bInArray);
     bool ToUpperAsciiOrI18nIsAscii( OUString& rUpper, const OUString& rOrg ) const;
+    short  GetPossibleParaCount( const std::u16string_view& rLambdaFormula ) const;
 
     virtual void SetError(FormulaError nError) override;
 
@@ -359,7 +360,7 @@ private:
     bool ParsePredetectedErrRefReference( const OUString& rName, const OUString* pErrRef );
     bool ParseMacro( const OUString& );
     bool ParseNamedRange( const OUString&, bool onlyCheck = false );
-    bool ParseLambdaFuncName( const OUString&, bool bLambdaFunction = false );
+    bool ParseLambdaFuncName( const OUString& );
     bool ParseExternalNamedRange( const OUString& rSymbol, bool& rbInvalidExternalNameRange );
     bool ParseDBRange( const OUString& );
     bool ParseColRowName( const OUString& );
