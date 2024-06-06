@@ -267,7 +267,7 @@ void SwNumFormatBase::SetFormatType(const SvNumFormatType nFormatType)
         }
         else if( nFormatType == SvNumFormatType::TEXT )
         {
-            pFormatter->GetOutputString( "\"ABC\"", nFormat, sValue, &pCol);
+            pFormatter->GetOutputString( u"\"ABC\""_ustr, nFormat, sValue, &pCol);
         }
 
         if (nFormat != nSysNumFormat       &&
@@ -329,7 +329,7 @@ void SwNumFormatBase::SetDefFormat(const sal_uInt32 nDefaultFormat)
 
     if (nType == SvNumFormatType::TEXT)
     {
-        pFormatter->GetOutputString("\"ABC\"", nDefaultFormat, sValue, &pCol);
+        pFormatter->GetOutputString(u"\"ABC\""_ustr, nDefaultFormat, sValue, &pCol);
     }
     else
     {

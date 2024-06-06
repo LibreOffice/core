@@ -182,14 +182,14 @@ void SwOneExampleFrame::CreateControl()
 
     uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
     uno::Sequence<beans::PropertyValue> args( comphelper::InitPropertySequence({
-            { "DocumentService", uno::Any(OUString("com.sun.star.text.TextDocument")) },
-            { "OpenFlags", uno::Any(OUString("-RB")) },
-            { "Referer", uno::Any(OUString("private:user")) },
+            { "DocumentService", uno::Any(u"com.sun.star.text.TextDocument"_ustr) },
+            { "OpenFlags", uno::Any(u"-RB"_ustr) },
+            { "Referer", uno::Any(u"private:user"_ustr) },
             { "ReadOnly", uno::Any(true) },
             { "Hidden", uno::Any(true) }
         }));
 
-    m_xModel.set(xDesktop->loadComponentFromURL(sTempURL, "_blank", 0, args), uno::UNO_QUERY);
+    m_xModel.set(xDesktop->loadComponentFromURL(sTempURL, u"_blank"_ustr, 0, args), uno::UNO_QUERY);
 
     m_aLoadedIdle.Start();
 }
@@ -222,7 +222,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
             try
             {
                 uno::Reference< frame::XLayoutManager > xLayoutManager;
-                uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
+                uno::Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
                 aValue >>= xLayoutManager;
                 if ( xLayoutManager.is() )
                     xLayoutManager->setVisible( false );
@@ -368,7 +368,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
 
         uno::Reference< style::XStyleFamiliesSupplier >  xSSupp( xDoc, uno::UNO_QUERY);
         uno::Reference< container::XNameAccess >  xStyles = xSSupp->getStyleFamilies();
-        uno::Any aPFamily = xStyles->getByName( "PageStyles" );
+        uno::Any aPFamily = xStyles->getByName( u"PageStyles"_ustr );
         uno::Reference< container::XNameContainer >  xPFamily;
 
         if( EX_SHOW_DEFAULT_PAGE != m_nStyleFlags
@@ -450,8 +450,8 @@ bool SwOneExampleFrame::CreatePopup(const Point& rPt)
     if (EX_SHOW_ONLINE_LAYOUT != m_nStyleFlags)
         return false;
 
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/previewmenu.ui"));
-    std::unique_ptr<weld::Menu> xPop(xBuilder->weld_menu("previewmenu"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, u"modules/swriter/ui/previewmenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xPop(xBuilder->weld_menu(u"previewmenu"_ustr));
 
     uno::Reference< view::XViewSettingsSupplier >  xSettings(m_xController, uno::UNO_QUERY);
     uno::Reference< beans::XPropertySet >  xViewProps = xSettings->getViewSettings();

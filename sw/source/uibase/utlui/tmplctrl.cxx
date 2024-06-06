@@ -88,8 +88,8 @@ void SwTemplateControl::Command( const CommandEvent& rCEvt )
             auto xIter = pPool->CreateIterator(SfxStyleFamily::Page);
             if (xIter->Count() > 1)
             {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/pagestylemenu.ui"));
-                std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu("menu"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, u"modules/swriter/ui/pagestylemenu.ui"_ustr));
+                std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu(u"menu"_ustr));
 
                 sal_uInt32 nCount = 0;
                 SfxStyleSheetBase* pStyle = xIter->First();

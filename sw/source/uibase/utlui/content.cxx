@@ -1105,7 +1105,7 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
     : m_xTreeView(std::move(xTreeView))
     , m_aDropTargetHelper(*this)
     , m_pDialog(pDialog)
-    , m_sSpace(OUString("                    "))
+    , m_sSpace(u"                    "_ustr)
     , m_aUpdTimer("SwContentTree m_aUpdTimer")
     , m_aOverlayObjectDelayTimer("SwContentTree m_aOverlayObjectDelayTimer")
     , m_sInvisible(SwResId(STR_INVISIBLE))
@@ -1600,16 +1600,16 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             m_xTreeView->set_cursor(0);
     }
 
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xTreeView.get(), "modules/swriter/ui/navigatorcontextmenu.ui"));
-    std::unique_ptr<weld::Menu> xPop = xBuilder->weld_menu("navmenu");
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xTreeView.get(), u"modules/swriter/ui/navigatorcontextmenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xPop = xBuilder->weld_menu(u"navmenu"_ustr);
 
     bool bOutline(false);
-    std::unique_ptr<weld::Menu> xSubPop1 = xBuilder->weld_menu("outlinelevel");
-    std::unique_ptr<weld::Menu> xSubPop2 = xBuilder->weld_menu("dragmodemenu");
-    std::unique_ptr<weld::Menu> xSubPop3 = xBuilder->weld_menu("displaymenu");
-    std::unique_ptr<weld::Menu> xSubPopOutlineTracking = xBuilder->weld_menu("outlinetracking");
+    std::unique_ptr<weld::Menu> xSubPop1 = xBuilder->weld_menu(u"outlinelevel"_ustr);
+    std::unique_ptr<weld::Menu> xSubPop2 = xBuilder->weld_menu(u"dragmodemenu"_ustr);
+    std::unique_ptr<weld::Menu> xSubPop3 = xBuilder->weld_menu(u"displaymenu"_ustr);
+    std::unique_ptr<weld::Menu> xSubPopOutlineTracking = xBuilder->weld_menu(u"outlinetracking"_ustr);
 
-    std::unique_ptr<weld::Menu> xSubPopOutlineContent = xBuilder->weld_menu("outlinecontent");
+    std::unique_ptr<weld::Menu> xSubPopOutlineContent = xBuilder->weld_menu(u"outlinecontent"_ustr);
 
     xSubPopOutlineContent->append(OUString::number(TOGGLE_OUTLINE_CONTENT_VISIBILITY),
                                   SwResId(STR_OUTLINE_CONTENT_VISIBILITY_TOGGLE));
@@ -1753,7 +1753,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             && nContentType != ContentTypeId::POSTIT && nContentType != ContentTypeId::UNKNOWN)
         {
             bRemoveSortEntry = false;
-            xPop->set_active("sort", pType->IsAlphabeticSort());
+            xPop->set_active(u"sort"_ustr, pType->IsAlphabeticSort());
         }
 
         OUString aIdent;
@@ -1950,8 +1950,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                             = static_cast<SwRegionContent*>(pCnt)->GetSectionFormat();
                     bool bHidden = pSectionFormat->GetSection()->IsHidden();
                     bRemoveSelectEntry = bHidden || !bVisible;
-                    xPop->set_active("protectsection", bProtected);
-                    xPop->set_active("hidesection", bHidden);
+                    xPop->set_active(u"protectsection"_ustr, bProtected);
+                    xPop->set_active(u"hidesection"_ustr, bHidden);
                 }
                 else
                     bRemoveEditEntry = false;
@@ -2015,39 +2015,39 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     }
 
     if (bRemoveDeleteChapterEntry)
-        xPop->remove("deletechapter");
+        xPop->remove(u"deletechapter"_ustr);
     if (bRemoveDeleteTableEntry)
-        xPop->remove("deletetable");
+        xPop->remove(u"deletetable"_ustr);
     if (bRemoveDeleteFrameEntry)
-        xPop->remove("deleteframe");
+        xPop->remove(u"deleteframe"_ustr);
     if (bRemoveDeleteImageEntry)
-        xPop->remove("deleteimage");
+        xPop->remove(u"deleteimage"_ustr);
     if (bRemoveDeleteOLEObjectEntry)
-        xPop->remove("deleteoleobject");
+        xPop->remove(u"deleteoleobject"_ustr);
     if (bRemoveDeleteBookmarkEntry)
-        xPop->remove("deletebookmark");
+        xPop->remove(u"deletebookmark"_ustr);
     if (bRemoveDeleteRegionEntry)
-        xPop->remove("deleteregion");
+        xPop->remove(u"deleteregion"_ustr);
     if (bRemoveDeleteHyperlinkEntry)
-        xPop->remove("deletehyperlink");
+        xPop->remove(u"deletehyperlink"_ustr);
     if (bRemoveDeleteReferenceEntry)
-        xPop->remove("deletereference");
+        xPop->remove(u"deletereference"_ustr);
     if (bRemoveDeleteIndexEntry)
-        xPop->remove("deleteindex");
+        xPop->remove(u"deleteindex"_ustr);
     if (bRemoveDeleteCommentEntry)
-        xPop->remove("deletecomment");
+        xPop->remove(u"deletecomment"_ustr);
     if (bRemoveDeleteDrawingObjectEntry)
-        xPop->remove("deletedrawingobject");
+        xPop->remove(u"deletedrawingobject"_ustr);
     if (bRemoveDeleteFieldEntry)
-        xPop->remove("deletefield");
+        xPop->remove(u"deletefield"_ustr);
     if (bRemoveDeleteAllFootnotesEntry)
-        xPop->remove("deleteallfootnotes");
+        xPop->remove(u"deleteallfootnotes"_ustr);
     if (bRemoveDeleteAllEndnotesEntry)
-        xPop->remove("deleteallendnotes");
+        xPop->remove(u"deleteallendnotes"_ustr);
     if (bRemoveDeleteFootnoteEntry)
-        xPop->remove("deletefootnote");
+        xPop->remove(u"deletefootnote"_ustr);
     if (bRemoveDeleteEndnoteEntry)
-        xPop->remove("deleteendnote");
+        xPop->remove(u"deleteendnote"_ustr);
 
     // bRemoveDeleteEntry is used in determining separator 2
     bool bRemoveDeleteEntry =
@@ -2086,10 +2086,10 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     if (bRemoveToggleExpandEntry &&
             bRemoveSendOutlineEntry)
-        xPop->remove("separator1");
+        xPop->remove(u"separator1"_ustr);
 
     if (bRemoveCopyEntry)
-        xPop->remove("copy");
+        xPop->remove(u"copy"_ustr);
 
     if (bRemoveGotoEntry &&
             bRemoveCopyEntry &&
@@ -2101,7 +2101,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             bRemoveReadonlyIndexEntry &&
             bRemoveUnprotectEntry &&
             bRemoveEditEntry)
-        xPop->remove("separator2");
+        xPop->remove(u"separator2"_ustr);
 
     if (!bOutline)
     {
@@ -2119,43 +2119,43 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     {
         xSubPopOutlineContent.reset();
         xPop->remove(OUString::number(5)); // outline folding menu
-        xPop->remove("separator3");
+        xPop->remove(u"separator3"_ustr);
     }
 
     if (bRemoveTableTracking)
-        xPop->remove("tabletracking");
+        xPop->remove(u"tabletracking"_ustr);
     if (bRemoveSectionTracking)
-        xPop->remove("sectiontracking");
+        xPop->remove(u"sectiontracking"_ustr);
     if (bRemoveFrameTracking)
-        xPop->remove("frametracking");
+        xPop->remove(u"frametracking"_ustr);
     if (bRemoveImageTracking)
-        xPop->remove("imagetracking");
+        xPop->remove(u"imagetracking"_ustr);
     if (bRemoveOLEobjectTracking)
-        xPop->remove("oleobjecttracking");
+        xPop->remove(u"oleobjecttracking"_ustr);
     if (bRemoveBookmarkTracking)
-        xPop->remove("bookmarktracking");
+        xPop->remove(u"bookmarktracking"_ustr);
     if (bRemoveHyperlinkTracking)
-        xPop->remove("hyperlinktracking");
+        xPop->remove(u"hyperlinktracking"_ustr);
     if (bRemoveReferenceTracking)
-        xPop->remove("referencetracking");
+        xPop->remove(u"referencetracking"_ustr);
     if (bRemoveIndexTracking)
-        xPop->remove("indextracking");
+        xPop->remove(u"indextracking"_ustr);
     if (bRemoveCommentTracking)
-        xPop->remove("commenttracking");
+        xPop->remove(u"commenttracking"_ustr);
     if (bRemoveDrawingObjectTracking)
-        xPop->remove("drawingobjecttracking");
+        xPop->remove(u"drawingobjecttracking"_ustr);
     if (bRemoveFieldTracking)
-        xPop->remove("fieldtracking");
+        xPop->remove(u"fieldtracking"_ustr);
     if (bRemoveFootnoteTracking)
-        xPop->remove("footnotetracking");
+        xPop->remove(u"footnotetracking"_ustr);
     if (bRemoveEndnoteTracking)
-        xPop->remove("endnotetracking");
+        xPop->remove(u"endnotetracking"_ustr);
     if (bRemoveSortEntry)
-        xPop->remove("sort");
+        xPop->remove(u"sort"_ustr);
     if (bRemoveProtectSection)
-        xPop->remove("protectsection");
+        xPop->remove(u"protectsection"_ustr);
     if (bRemoveHideSection)
-        xPop->remove("hidesection");
+        xPop->remove(u"hidesection"_ustr);
 
     bool bSetSensitiveCollapseAllCategories = false;
     if (!m_bIsRoot && xEntry)
@@ -2171,7 +2171,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             bEntry = m_xTreeView->iter_next_sibling(*xEntry);
         }
     }
-    xPop->set_sensitive("collapseallcategories", bSetSensitiveCollapseAllCategories);
+    xPop->set_sensitive(u"collapseallcategories"_ustr, bSetSensitiveCollapseAllCategories);
 
     OUString sCommand = xPop->popup_at_rect(m_xTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
     if (!sCommand.isEmpty())
@@ -3315,7 +3315,7 @@ void SwContentTree::ToggleToRoot()
     }
     m_pConfig->SetRootType( m_nRootType );
     weld::Toolbar* pBox = GetParentWindow()->m_xContent5ToolBox.get();
-    pBox->set_item_active("root", m_bIsRoot);
+    pBox->set_item_active(u"root"_ustr, m_bIsRoot);
 }
 
 bool SwContentTree::HasContentChanged()
@@ -3587,7 +3587,7 @@ void SwContentTree::FindActiveTypeAndRemoveUserData()
     // If clear is called by TimerUpdate:
     // Only for root can the validity of the UserData be guaranteed.
     m_xTreeView->all_foreach([this](weld::TreeIter& rEntry){
-        m_xTreeView->set_id(rEntry, "");
+        m_xTreeView->set_id(rEntry, u""_ustr);
         return false;
     });
 }
@@ -4793,7 +4793,7 @@ IMPL_LINK(SwContentTree, KeyInputHdl, const KeyEvent&, rEvent, bool)
                         && (pContentType->GetType() == ContentTypeId::FOOTNOTE
                             || pContentType->GetType() == ContentTypeId::ENDNOTE))
                 {
-                    ExecuteContextMenuAction("deleteallfootnotes");
+                    ExecuteContextMenuAction(u"deleteallfootnotes"_ustr);
                 }
             }
         }
@@ -5543,10 +5543,10 @@ void SwContentTree::Select()
         }
     }
 
-    pNavi->m_xContent6ToolBox->set_item_sensitive("chapterup",  bEnable);
-    pNavi->m_xContent6ToolBox->set_item_sensitive("chapterdown", bEnable);
-    pNavi->m_xContent6ToolBox->set_item_sensitive("promote", bEnable);
-    pNavi->m_xContent6ToolBox->set_item_sensitive("demote", bEnable);
+    pNavi->m_xContent6ToolBox->set_item_sensitive(u"chapterup"_ustr,  bEnable);
+    pNavi->m_xContent6ToolBox->set_item_sensitive(u"chapterdown"_ustr, bEnable);
+    pNavi->m_xContent6ToolBox->set_item_sensitive(u"promote"_ustr, bEnable);
+    pNavi->m_xContent6ToolBox->set_item_sensitive(u"demote"_ustr, bEnable);
 }
 
 void SwContentTree::SetRootType(ContentTypeId nType)
@@ -5974,10 +5974,10 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
             if ( !xDecks.is() )
                 break;
 
-            if (!xDecks->hasByName("NavigatorDeck"))
+            if (!xDecks->hasByName(u"NavigatorDeck"_ustr))
                 break;
 
-            Reference<ui::XDeck> xDeck ( xDecks->getByName("NavigatorDeck"), uno::UNO_QUERY);
+            Reference<ui::XDeck> xDeck ( xDecks->getByName(u"NavigatorDeck"_ustr), uno::UNO_QUERY);
             if ( !xDeck.is() )
                 break;
 
@@ -5985,9 +5985,9 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
             if ( !xPanels.is() )
                 break;
 
-            if (xPanels->hasByName("SwNavigatorPanel"))
+            if (xPanels->hasByName(u"SwNavigatorPanel"_ustr))
             {
-                Reference<ui::XPanel> xPanel ( xPanels->getByName("SwNavigatorPanel"), uno::UNO_QUERY);
+                Reference<ui::XPanel> xPanel ( xPanels->getByName(u"SwNavigatorPanel"_ustr), uno::UNO_QUERY);
                 if ( !xPanel.is() || !xPanel->getTitle().isEmpty() )
                     break;
 

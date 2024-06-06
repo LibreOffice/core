@@ -64,9 +64,9 @@ public:
 }
 
 SwGlossDecideDlg::SwGlossDecideDlg(weld::Window* pParent)
-    : GenericDialogController(pParent, "modules/swriter/ui/selectautotextdialog.ui", "SelectAutoTextDialog")
-    , m_xOk(m_xBuilder->weld_button("ok"))
-    , m_xListLB(m_xBuilder->weld_tree_view("treeview"))
+    : GenericDialogController(pParent, u"modules/swriter/ui/selectautotextdialog.ui"_ustr, u"SelectAutoTextDialog"_ustr)
+    , m_xOk(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xListLB(m_xBuilder->weld_tree_view(u"treeview"_ustr))
 {
     m_xListLB->set_size_request(m_xListLB->get_approximate_digit_width() * 32,
                                 m_xListLB->get_height_rows(8));

@@ -270,26 +270,26 @@ IMPL_LINK(SwGlobalTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     bool bPop = false;
     if (m_pActiveShell && !m_pActiveShell->GetView().GetDocShell()->IsReadOnly())
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xTreeView.get(), "modules/swriter/ui/mastercontextmenu.ui"));
-        std::unique_ptr<weld::Menu> xPopup = xBuilder->weld_menu("navmenu");
-        std::unique_ptr<weld::Menu> xSubPopup = xBuilder->weld_menu("insertmenu");
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xTreeView.get(), u"modules/swriter/ui/mastercontextmenu.ui"_ustr));
+        std::unique_ptr<weld::Menu> xPopup = xBuilder->weld_menu(u"navmenu"_ustr);
+        std::unique_ptr<weld::Menu> xSubPopup = xBuilder->weld_menu(u"insertmenu"_ustr);
 
         const MenuEnableFlags nEnableFlags = GetEnableFlags();
 
-        xPopup->set_sensitive("updatesel", bool(nEnableFlags & MenuEnableFlags::UpdateSel));
+        xPopup->set_sensitive(u"updatesel"_ustr, bool(nEnableFlags & MenuEnableFlags::UpdateSel));
 
-        xPopup->set_sensitive("editlink", bool(nEnableFlags & MenuEnableFlags::EditLink));
+        xPopup->set_sensitive(u"editlink"_ustr, bool(nEnableFlags & MenuEnableFlags::EditLink));
 
         //disabling if applicable
-        xSubPopup->set_sensitive("insertindex", bool(nEnableFlags & MenuEnableFlags::InsertIdx ));
-        xSubPopup->set_sensitive("insertfile", bool(nEnableFlags & MenuEnableFlags::InsertFile));
-        xSubPopup->set_sensitive("insertnewfile", bool(nEnableFlags & MenuEnableFlags::InsertFile));
-        xSubPopup->set_sensitive("inserttext", bool(nEnableFlags & MenuEnableFlags::InsertText));
+        xSubPopup->set_sensitive(u"insertindex"_ustr, bool(nEnableFlags & MenuEnableFlags::InsertIdx ));
+        xSubPopup->set_sensitive(u"insertfile"_ustr, bool(nEnableFlags & MenuEnableFlags::InsertFile));
+        xSubPopup->set_sensitive(u"insertnewfile"_ustr, bool(nEnableFlags & MenuEnableFlags::InsertFile));
+        xSubPopup->set_sensitive(u"inserttext"_ustr, bool(nEnableFlags & MenuEnableFlags::InsertText));
 
-        xPopup->set_sensitive("update", bool(nEnableFlags & MenuEnableFlags::Update));
-        xPopup->set_sensitive("insert", bool(nEnableFlags & MenuEnableFlags::InsertIdx));
-        xPopup->set_sensitive("editcontent", bool(nEnableFlags & MenuEnableFlags::Edit));
-        xPopup->set_sensitive("deleteentry", bool(nEnableFlags & MenuEnableFlags::Delete));
+        xPopup->set_sensitive(u"update"_ustr, bool(nEnableFlags & MenuEnableFlags::Update));
+        xPopup->set_sensitive(u"insert"_ustr, bool(nEnableFlags & MenuEnableFlags::InsertIdx));
+        xPopup->set_sensitive(u"editcontent"_ustr, bool(nEnableFlags & MenuEnableFlags::Edit));
+        xPopup->set_sensitive(u"deleteentry"_ustr, bool(nEnableFlags & MenuEnableFlags::Delete));
 
         OUString sCommand = xPopup->popup_at_rect(m_xTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
         if (!sCommand.isEmpty())
@@ -305,14 +305,14 @@ void SwGlobalTree::TbxMenuHdl(std::u16string_view rCommand, weld::Menu& rMenu)
     const MenuEnableFlags nEnableFlags = GetEnableFlags();
     if (rCommand == u"insert")
     {
-        rMenu.set_sensitive("insertindex", bool(nEnableFlags & MenuEnableFlags::InsertIdx));
-        rMenu.set_sensitive("insertfile", bool(nEnableFlags & MenuEnableFlags::InsertFile));
-        rMenu.set_sensitive("insertnewfile", bool(nEnableFlags & MenuEnableFlags::InsertFile));
-        rMenu.set_sensitive("inserttext", bool(nEnableFlags & MenuEnableFlags::InsertText));
+        rMenu.set_sensitive(u"insertindex"_ustr, bool(nEnableFlags & MenuEnableFlags::InsertIdx));
+        rMenu.set_sensitive(u"insertfile"_ustr, bool(nEnableFlags & MenuEnableFlags::InsertFile));
+        rMenu.set_sensitive(u"insertnewfile"_ustr, bool(nEnableFlags & MenuEnableFlags::InsertFile));
+        rMenu.set_sensitive(u"inserttext"_ustr, bool(nEnableFlags & MenuEnableFlags::InsertText));
     }
     else if (rCommand == u"update")
     {
-        rMenu.set_sensitive("updatesel", bool(nEnableFlags & MenuEnableFlags::UpdateSel));
+        rMenu.set_sensitive(u"updatesel"_ustr, bool(nEnableFlags & MenuEnableFlags::UpdateSel));
     }
 }
 
@@ -383,12 +383,12 @@ void SwGlobalTree::Select()
     SwNavigationPI* pNavi = GetParentWindow();
     bool bReadonly = !m_pActiveShell ||
                 m_pActiveShell->GetView().GetDocShell()->IsReadOnly();
-    pNavi->m_xGlobalToolBox->set_item_sensitive("edit",  nSelCount == 1 && !bReadonly);
-    pNavi->m_xGlobalToolBox->set_item_sensitive("insert",  nSelCount <= 1 && !bReadonly);
-    pNavi->m_xGlobalToolBox->set_item_sensitive("update",  m_xTreeView->n_children() > 0 && !bReadonly);
-    pNavi->m_xGlobalToolBox->set_item_sensitive("moveup",
+    pNavi->m_xGlobalToolBox->set_item_sensitive(u"edit"_ustr,  nSelCount == 1 && !bReadonly);
+    pNavi->m_xGlobalToolBox->set_item_sensitive(u"insert"_ustr,  nSelCount <= 1 && !bReadonly);
+    pNavi->m_xGlobalToolBox->set_item_sensitive(u"update"_ustr,  m_xTreeView->n_children() > 0 && !bReadonly);
+    pNavi->m_xGlobalToolBox->set_item_sensitive(u"moveup"_ustr,
                     nSelCount == 1 && nAbsPos && !bReadonly);
-    pNavi->m_xGlobalToolBox->set_item_sensitive("movedown",
+    pNavi->m_xGlobalToolBox->set_item_sensitive(u"movedown"_ustr,
                     nSelCount == 1 && nAbsPos < m_xTreeView->n_children() - 1 && !bReadonly);
 
 }
@@ -520,7 +520,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont, const OUString* 
     if ( !pFileName )
     {
         SwNavigationPI* pNavi = GetParentWindow();
-        m_pDocInserter.reset(new ::sfx2::DocumentInserter(pNavi->GetFrameWeld(), "swriter", sfx2::DocumentInserter::Mode::InsertMulti));
+        m_pDocInserter.reset(new ::sfx2::DocumentInserter(pNavi->GetFrameWeld(), u"swriter"_ustr, sfx2::DocumentInserter::Mode::InsertMulti));
         m_pDocInserter->StartExecuteModal( LINK( this, SwGlobalTree, DialogClosedHdl ) );
     }
     else if ( !pFileName->isEmpty() )
@@ -1015,7 +1015,7 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
     {
         SfxStringItem aURL(SID_FILE_NAME, sFileName);
         SfxBoolItem aReadOnly(SID_DOC_READONLY, false);
-        SfxStringItem aTargetFrameName( SID_TARGETNAME, "_blank" );
+        SfxStringItem aTargetFrameName( SID_TARGETNAME, u"_blank"_ustr );
         SfxStringItem aReferer(SID_REFERER, m_pActiveShell->GetView().GetDocShell()->GetTitle());
         m_pActiveShell->GetView().GetViewFrame().GetDispatcher()->
                 ExecuteList(SID_OPENDOC, SfxCallMode::ASYNCHRON,

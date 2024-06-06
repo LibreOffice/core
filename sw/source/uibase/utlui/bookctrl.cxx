@@ -79,8 +79,8 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
     if (!pViewFrm)
         return;
 
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/bookmarkmenu.ui"));
-    std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu("menu"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, u"modules/swriter/ui/bookmarkmenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu(u"menu"_ustr));
 
     IDocumentMarkAccess* const pMarkAccess = pWrtShell->getIDocumentMarkAccess();
     IDocumentMarkAccess::const_iterator_t ppBookmarkStart = pMarkAccess->getBookmarksBegin();
