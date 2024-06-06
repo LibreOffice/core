@@ -4984,7 +4984,7 @@ if test "$enable_split_debug" != no; then
     fi
     if test -n "$use_split_debug"; then
         if test "$_os" = "Emscripten"; then
-            TEST_CC_FLAG=-gseparate-dwarf
+            TEST_CC_FLAG=-gsplit-dwarf -gpubnames
         else
             TEST_CC_FLAG=-gsplit-dwarf
         fi
