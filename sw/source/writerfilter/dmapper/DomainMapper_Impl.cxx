@@ -4774,19 +4774,19 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             uno::Reference< text::XTextContent > xTxtContent( xShape, uno::UNO_QUERY_THROW );
             m_aAnchoredStack.push( AnchoredContext(xTxtContent) );
 
-            uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
+            uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY_THROW);
 #ifdef DBG_UTIL
-            TagLogger::getInstance().unoPropertySet(xProps);
+            TagLogger::getInstance().unoPropertySet(xShapePropertySet);
 #endif
             text::TextContentAnchorType nAnchorType(text::TextContentAnchorType_AT_PARAGRAPH);
-            xProps->getPropertyValue(getPropertyName( PROP_ANCHOR_TYPE )) >>= nAnchorType;
+            xShapePropertySet->getPropertyValue(getPropertyName(PROP_ANCHOR_TYPE)) >>= nAnchorType;
             bool checkZOrderStatus = false;
+            GraphicZOrderHelper& rZOrderHelper = m_rDMapper.graphicZOrderHelper();
             if (xSInfo->supportsService(u"com.sun.star.text.TextFrame"_ustr))
             {
                 SetIsTextFrameInserted(true);
                 // Extract the special "btLr text frame" mode, requested by oox, if needed.
                 // Extract vml ZOrder from FrameInteropGrabBag
-                uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 xShapePropertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= aGrabBag;
 
@@ -4794,7 +4794,6 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 {
                     if (rProp.Name == "VML-Z-ORDER")
                     {
-                        GraphicZOrderHelper& rZOrderHelper = m_rDMapper.graphicZOrderHelper();
                         sal_Int64 zOrder(0);
                         rProp.Value >>= zOrder;
                         GraphicZOrderHelper::adjustRelativeHeight(zOrder, /*IsZIndex=*/true,
@@ -4830,18 +4829,17 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 PropertyMapPtr paragraphContext = GetTopContextOfType( CONTEXT_PARAGRAPH );
                 std::optional<PropertyMap::Property> aPropMargin = paragraphContext->getProperty(PROP_PARA_BOTTOM_MARGIN);
                 if(aPropMargin)
-                    xProps->setPropertyValue( getPropertyName( PROP_BOTTOM_MARGIN ), aPropMargin->second );
+                    xShapePropertySet->setPropertyValue(getPropertyName(PROP_BOTTOM_MARGIN),
+                                                        aPropMargin->second);
             }
             else
             {
-                uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 xShapePropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
                 for (const auto& rProp : aGrabBag)
                 {
                     if (rProp.Name == "VML-Z-ORDER")
                     {
-                        GraphicZOrderHelper& rZOrderHelper = m_rDMapper.graphicZOrderHelper();
                         sal_Int64 zOrder(0);
                         rProp.Value >>= zOrder;
                         GraphicZOrderHelper::adjustRelativeHeight(zOrder, /*IsZIndex=*/true,
@@ -4879,9 +4877,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 }
             }
             if (!IsInHeaderFooter() && !checkZOrderStatus)
-                xProps->setPropertyValue(
-                        getPropertyName( PROP_OPAQUE ),
-                        uno::Any( true ) );
+                xShapePropertySet->setPropertyValue(getPropertyName(PROP_OPAQUE), uno::Any(true));
         }
         m_StreamStateStack.top().bParaChanged = true;
         getTableManager().setIsInShape(true);
