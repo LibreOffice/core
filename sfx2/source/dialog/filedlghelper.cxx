@@ -87,6 +87,8 @@
 #include <sfx2/sfxsids.hrc>
 #include "filtergrouping.hxx"
 #include "filedlgimpl.hxx"
+#include <fpicker/fpsofficeResMgr.hxx>
+#include <fpicker/strings.hrc>
 #include <sfx2/strings.hrc>
 #include <sal/log.hxx>
 #include <comphelper/sequence.hxx>
@@ -209,73 +211,68 @@ void FileDialogHelper_Impl::handleDirectoryChanged()
 
 OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEvent )
 {
-    //!!! todo: cache the help strings (here or TRA)
+    TranslateId aHelpId;
 
-    OUString sHelpId;
     // mapping from element id -> help id
     switch ( aEvent.ElementId )
     {
         case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION :
-            sHelpId = HID_FILESAVE_AUTOEXTENSION;
+            aHelpId = STR_FILESAVE_AUTOEXTENSION;
             break;
 
         case ExtendedFilePickerElementIds::CHECKBOX_PASSWORD :
-            sHelpId = HID_FILESAVE_SAVEWITHPASSWORD;
+            aHelpId = STR_FILESAVE_SAVEWITHPASSWORD;
             break;
 
         case ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS :
-            sHelpId = HID_FILESAVE_CUSTOMIZEFILTER;
+            aHelpId = STR_FILESAVE_CUSTOMIZEFILTER;
             break;
 
         case ExtendedFilePickerElementIds::CHECKBOX_READONLY :
-            sHelpId = HID_FILEOPEN_READONLY;
+            aHelpId = STR_FILEOPEN_READONLY;
             break;
 
         case ExtendedFilePickerElementIds::CHECKBOX_LINK :
-            sHelpId = HID_FILEDLG_LINK_CB;
+            aHelpId = STR_FILEDLG_LINK_CB;
             break;
 
         case ExtendedFilePickerElementIds::CHECKBOX_PREVIEW :
-            sHelpId = HID_FILEDLG_PREVIEW_CB;
+            aHelpId = STR_FILEDLG_PREVIEW_CB;
             break;
 
         case ExtendedFilePickerElementIds::PUSHBUTTON_PLAY :
-            sHelpId = HID_FILESAVE_DOPLAY;
+            aHelpId = STR_FILESAVE_DOPLAY;
             break;
 
         case ExtendedFilePickerElementIds::LISTBOX_VERSION_LABEL :
         case ExtendedFilePickerElementIds::LISTBOX_VERSION :
-            sHelpId = HID_FILEOPEN_VERSION;
+            aHelpId = STR_FILEOPEN_VERSION;
             break;
 
         case ExtendedFilePickerElementIds::LISTBOX_TEMPLATE_LABEL :
         case ExtendedFilePickerElementIds::LISTBOX_TEMPLATE :
-            sHelpId = HID_FILESAVE_TEMPLATE;
+            aHelpId = STR_FILESAVE_TEMPLATE;
             break;
 
         case ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE_LABEL :
         case ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE :
-            sHelpId = HID_FILEOPEN_IMAGE_TEMPLATE;
+            aHelpId = STR_FILEOPEN_IMAGE_TEMPLATE;
             break;
 
         case ExtendedFilePickerElementIds::LISTBOX_IMAGE_ANCHOR_LABEL :
         case ExtendedFilePickerElementIds::LISTBOX_IMAGE_ANCHOR :
-            sHelpId = HID_FILEOPEN_IMAGE_ANCHOR;
+            aHelpId = STR_FILEOPEN_IMAGE_ANCHOR;
             break;
 
         case ExtendedFilePickerElementIds::CHECKBOX_SELECTION :
-            sHelpId = HID_FILESAVE_SELECTION;
+            aHelpId = STR_FILESAVE_SELECTION;
             break;
 
         default:
             SAL_WARN( "sfx.dialog", "invalid element id" );
     }
 
-    OUString aHelpText;
-    Help* pHelp = Application::GetHelp();
-    if ( pHelp )
-        aHelpText = pHelp->GetHelpText(sHelpId);
-    return aHelpText;
+    return aHelpId ? FpsResId(aHelpId) : OUString();
 }
 
 void FileDialogHelper_Impl::handleControlStateChanged( const FilePickerEvent& aEvent )

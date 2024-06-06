@@ -38,5 +38,18 @@
 #define STR_FILEDLG_TYPE                            NC_("STR_FILEDLG_TYPE", "File ~type")
 #define STR_FILEDLG_SAVE                            NC_("STR_FILEDLG_SAVE", "Save")
 
+#define STR_FILESAVE_AUTOEXTENSION                  NC_("STR_FILESAVE_AUTOEXTENSION", "Automatically adds the file extension to the end of the file name that corresponds to the selected file type.")
+#define STR_FILESAVE_SAVEWITHPASSWORD               NC_("STR_FILESAVE_SAVEWITHPASSWORD", "Protects the file with a password that must be entered before a user can open the file.")
+#define STR_FILESAVE_CUSTOMIZEFILTER                NC_("STR_FILESAVE_CUSTOMIZEFILTER", "Allows you to set the spreadsheet saving options for some types of data files.")
+#define STR_FILEOPEN_READONLY                       NC_("STR_FILEOPEN_READONLY", "Opens the file in read-only mode.")
+#define STR_FILEDLG_LINK_CB                         NC_("STR_FILEDLG_LINK_CB", "Inserts the selected graphic file as a link.")
+#define STR_FILEDLG_PREVIEW_CB                      NC_("STR_FILEDLG_PREVIEW_CB", "Displays a preview of the selected graphic file.")
+#define STR_FILESAVE_DOPLAY                         NC_("STR_FILESAVE_DOPLAY", "Plays the selected sound file. Click again to stop playing the sound file.")
+#define STR_FILEOPEN_VERSION                        NC_("STR_FILEOPEN_VERSION", "If there are multiple versions of the selected file, select the version that you want to open.")
+#define STR_FILESAVE_TEMPLATE                       NC_("STR_FILESAVE_TEMPLATE", "Select the paragraph style or outline level that you want to use to separate the source document into sub-documents.")
+#define STR_FILEOPEN_IMAGE_TEMPLATE                 NC_("STR_FILEOPEN_IMAGE_TEMPLATE", "Select the frame style for the graphic.")
+#define STR_FILEOPEN_IMAGE_ANCHOR                   NC_("STR_FILEOPEN_IMAGE_ANCHOR", "Select the frame style for the graphic.")
+#define STR_FILESAVE_SELECTION                      NC_("STR_FILESAVE_SELECTION", "Exports only the selected graphic objects in %PRODUCTNAME Draw and Impress to another format. If this box is not checked, the entire document is exported.")
+
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
