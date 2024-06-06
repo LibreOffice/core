@@ -172,7 +172,7 @@ public:
 
     void          ClearAll();
     OUString      GetSelectedScriptURI() const;
-    OUString      GetHelpText( bool bConsiderParent = true );
+    OUString      GetCommandHelpText();
     OUString      GetCurCommand() const;
     OUString      GetCurLabel() const;
 

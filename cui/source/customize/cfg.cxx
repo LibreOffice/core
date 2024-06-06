@@ -1649,7 +1649,7 @@ IMPL_LINK_NOARG(SvxConfigPage, SelectFunctionHdl, weld::TreeView&, void)
 
         if (SfxHelp::IsHelpInstalled())
         {
-            m_xDescriptionField->set_text(m_xFunctions->GetHelpText(false));
+            m_xDescriptionField->set_text(m_xFunctions->GetCommandHelpText());
         }
         else
         {

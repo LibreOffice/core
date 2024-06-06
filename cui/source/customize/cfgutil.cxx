@@ -244,17 +244,14 @@ std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyles(const OUString& s
     return lStyles;
 }
 
-OUString CuiConfigFunctionListBox::GetHelpText( bool bConsiderParent )
+OUString CuiConfigFunctionListBox::GetCommandHelpText()
 {
     SfxGroupInfo_Impl *pData = weld::fromId<SfxGroupInfo_Impl*>(get_selected_id());
     if (pData)
     {
         if ( pData->nKind == SfxCfgKind::FUNCTION_SLOT )
         {
-            if (bConsiderParent)
-                return Application::GetHelp()->GetHelpText(pData->sCommand, m_xTreeView.get());
-            else
-                return Application::GetHelp()->GetHelpText(pData->sCommand, static_cast<weld::Widget*>(nullptr));
+            return Application::GetHelp()->GetHelpText(pData->sCommand, static_cast<weld::Widget*>(nullptr));
         }
         else if ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT )
         {
@@ -1241,7 +1238,7 @@ SvxScriptSelectorDialog::UpdateUI()
     OUString url = GetScriptURL();
     if ( !url.isEmpty() )
     {
-        OUString sMessage = m_xCommands->GetHelpText();
+        OUString sMessage = m_xCommands->GetCommandHelpText();
         m_xDescriptionText->set_text(sMessage.isEmpty() ? m_sDefaultDesc : sMessage);
         m_xOKButton->set_sensitive(true);
     }
