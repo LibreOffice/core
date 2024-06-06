@@ -8040,11 +8040,29 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 getPropertyName(PROP_REFERENCE_FIELD_SOURCE),
                                 uno::Any(sal_Int16(text::ReferenceFieldSource::STYLE)));
 
-                            uno::Any aStyleDisplayName;
-                            aStyleDisplayName <<= ConvertTOCStyleName(sFirstParam);
+                            OUString styleName(sFirstParam);
+                            if (styleName.isEmpty())
+                            {
+                                for (auto const& rSwitch : vSwitches)
+                                {
+                                    // undocumented Word feature: \1 = "Heading 1" etc.
+                                    if (rSwitch.getLength() == 2 && rSwitch[0] == '\\'
+                                        && '1' <= rSwitch[1] && rSwitch[1] <= '9')
+                                    {
+                                        styleName = OUString(rSwitch[1]);
+                                        break;
+                                    }
+                                }
+                            }
 
-                            xFieldProperties->setPropertyValue(
-                                getPropertyName(PROP_SOURCE_NAME), aStyleDisplayName);
+                            if (!styleName.isEmpty())
+                            {
+                                uno::Any aStyleDisplayName;
+                                aStyleDisplayName <<= ConvertTOCStyleName(styleName);
+
+                                xFieldProperties->setPropertyValue(
+                                    getPropertyName(PROP_SOURCE_NAME), aStyleDisplayName);
+                            }
 
                             sal_uInt16 nFlags = 0;
                             OUString sValue;
