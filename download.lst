@@ -317,10 +317,10 @@ IACCESSIBLE2_TARBALL := IAccessible2-1.3+git20231013.3d8c7f0.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-ICU_SHA256SUM := 86ce8e60681972e60e4dcb2490c697463fcec60dd400a5f9bffba26d0b52b8d0
-ICU_TARBALL := icu4c-74_1-src.tgz
-ICU_DATA_SHA256SUM := 67d5ab39c5187e1dd0fed60a3fe52794dce9784b4c045cb85e19f5d317fd783f
-ICU_DATA_TARBALL := icu4c-74_1-data.zip
+ICU_SHA256SUM := 68db082212a96d6f53e35d60f47d38b962e9f9d207a74cfac78029ae8ff5e08c
+ICU_TARBALL := icu4c-74_2-src.tgz
+ICU_DATA_SHA256SUM := c28c3ca5f4ba3384781797138a294ca360988d4322674ad4d51e52f5d9b0a2b6
+ICU_DATA_TARBALL := icu4c-74_2-data.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
