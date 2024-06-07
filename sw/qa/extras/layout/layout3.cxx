@@ -2612,6 +2612,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf161508)
     assertXPath(pExportDump, "//page[2]/body/tab"_ostr, 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestCrashHyphenation)
+{
+    //just care it doesn't crash/assert
+    createSwDoc("crashHyphen.fodt");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
