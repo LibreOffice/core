@@ -658,8 +658,8 @@ POSTGRESQL_TARBALL := postgresql-13.16.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-PYTHON_SHA256SUM := 6fb89a7124201c61125c0ab4cf7f6894df339a40c02833bfd28ab4d7691fafb4
-PYTHON_TARBALL := Python-3.8.20.tar.xz
+PYTHON_SHA256SUM := d4892cd1618f6458cb851208c030df1482779609d0f3939991bd38184f8c679e
+PYTHON_TARBALL := Python-3.9.19.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

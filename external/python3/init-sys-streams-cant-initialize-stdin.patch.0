@@ -1,6 +1,6 @@
 --- Python/pylifecycle.c	2024-03-27 14:34:43.905367358 +0000
 +++ Python/pylifecycle.c	2024-03-27 14:40:16.339134322 +0000
-@@ -1723,6 +1723,20 @@
+@@ -1789,6 +1789,20 @@
      if (!is_valid_fd(fd))
          Py_RETURN_NONE;
  
@@ -21,9 +21,9 @@
      /* stdin is always opened in buffered mode, first because it shouldn't
         make a difference in common use cases, second because TextIOWrapper
         depends on the presence of a read1() method which only exists on
-@@ -1854,19 +1868,6 @@
+@@ -1971,19 +1971,6 @@
      PyStatus res = _PyStatus_OK();
-     PyConfig *config = &interp->config;
+     const PyConfig *config = _PyInterpreterState_GetConfig(tstate->interp);
  
 -    /* Check that stdin is not a directory
 -       Using shell redirection, you can redirect stdin to a directory,

@@ -185,11 +185,12 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	LICENSE \
 	Lib/__future__.py \
 	Lib/__phello__.foo.py \
+	Lib/_aix_support.py \
 	Lib/_bootlocale.py \
+	Lib/_bootsubprocess.py \
 	Lib/_collections_abc.py \
 	Lib/_compat_pickle.py \
 	Lib/_compression.py \
-	Lib/_dummy_thread.py \
 	Lib/_markupbase.py \
 	Lib/_osx_support.py \
 	Lib/_py_abc.py \
@@ -235,7 +236,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/difflib.py \
 	Lib/dis.py \
 	Lib/doctest.py \
-	Lib/dummy_threading.py \
 	Lib/enum.py \
 	Lib/filecmp.py \
 	Lib/fileinput.py \
@@ -249,6 +249,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/getpass.py \
 	Lib/gettext.py \
 	Lib/glob.py \
+	Lib/graphlib.py \
 	Lib/gzip.py \
 	Lib/hashlib.py \
 	Lib/heapq.py \
@@ -381,6 +382,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/asyncio/streams.py \
 	Lib/asyncio/subprocess.py \
 	Lib/asyncio/tasks.py \
+	Lib/asyncio/threads.py \
 	Lib/asyncio/transports.py \
 	Lib/asyncio/trsock.py \
 	Lib/asyncio/unix_events.py \
@@ -615,7 +617,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/encodings/kz1048.py \
 	Lib/encodings/latin_1.py \
 	Lib/encodings/mac_arabic.py \
-	Lib/encodings/mac_centeuro.py \
 	Lib/encodings/mac_croatian.py \
 	Lib/encodings/mac_cyrillic.py \
 	Lib/encodings/mac_farsi.py \
@@ -670,6 +671,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/importlib/__init__.py \
 	Lib/importlib/_bootstrap.py \
 	Lib/importlib/_bootstrap_external.py \
+	Lib/importlib/_common.py \
 	Lib/importlib/abc.py \
 	Lib/importlib/machinery.py \
 	Lib/importlib/metadata.py \
@@ -824,6 +826,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/unittest,\
 	Lib/unittest/__init__.py \
 	Lib/unittest/__main__.py \
+	Lib/unittest/_log.py \
 	Lib/unittest/async_case.py \
 	Lib/unittest/case.py \
 	Lib/unittest/loader.py \
@@ -859,22 +862,22 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/xml/dom,\
+	Lib/xml/dom/NodeFilter.py \
 	Lib/xml/dom/__init__.py \
 	Lib/xml/dom/domreg.py \
 	Lib/xml/dom/expatbuilder.py \
 	Lib/xml/dom/minicompat.py \
 	Lib/xml/dom/minidom.py \
-	Lib/xml/dom/NodeFilter.py \
 	Lib/xml/dom/pulldom.py \
 	Lib/xml/dom/xmlbuilder.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/xml/etree,\
-	Lib/xml/etree/__init__.py \
-	Lib/xml/etree/cElementTree.py \
 	Lib/xml/etree/ElementInclude.py \
 	Lib/xml/etree/ElementPath.py \
 	Lib/xml/etree/ElementTree.py \
+	Lib/xml/etree/__init__.py \
+	Lib/xml/etree/cElementTree.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/xml/parsers,\
@@ -895,6 +898,13 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/xmlrpc/__init__.py \
 	Lib/xmlrpc/client.py \
 	Lib/xmlrpc/server.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/zoneinfo,\
+	Lib/zoneinfo/__init__.py \
+	Lib/zoneinfo/_common.py \
+	Lib/zoneinfo/_tzpath.py \
+	Lib/zoneinfo/_zoneinfo.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/site-packages,\
