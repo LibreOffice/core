@@ -308,7 +308,6 @@ void NotesPanelViewShell::Activate(bool bIsMDIActivate)
     }
 
     ViewShell::Activate(bIsMDIActivate);
-    SfxShell::BroadcastContextForActivation(true);
 
     if (bIsMDIActivate)
     {
