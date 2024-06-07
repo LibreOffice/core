@@ -44,6 +44,7 @@
 #include <futhes.hxx>
 #include <memory>
 #include <sdabstdlg.hxx>
+#include <sdmod.hxx>
 #include <sdpage.hxx>
 #include <sdresid.hxx>
 #include <sfx2/bindings.hxx>
@@ -568,6 +569,7 @@ void NotesPanelViewShell::GetState(SfxItemSet& rSet)
     {
         switch (nWhich)
         {
+            case FID_SEARCH_NOW:
             case SID_SEARCH_ITEM:
             case SID_SEARCH_OPTIONS:
                 // Call common (old) implementation in the document shell.
@@ -1331,15 +1333,49 @@ void NotesPanelViewShell::FuSupport(SfxRequest& rReq)
 
 void NotesPanelViewShell::Execute(SfxRequest& rReq)
 {
-    bool bForwardCall = true;
-
     switch (rReq.GetSlot())
     {
+        case FID_SEARCH_NOW:
+        {
+            const SfxItemSet* pReqArgs = rReq.GetArgs();
+
+            sd::View* pView = nullptr;
+            if (auto pMainViewSh = GetViewShellBase().GetMainViewShell())
+                pView = pMainViewSh->GetView();
+
+            if (pReqArgs)
+            {
+                if (pView)
+                {
+                    rtl::Reference<FuSearch>& xFuSearch
+                        = pView->getSearchContext().getFunctionSearch();
+
+                    if (!xFuSearch.is())
+                    {
+                        xFuSearch = rtl::Reference<FuSearch>(FuSearch::createPtr(
+                            this, this->GetActiveWindow(), pView, GetDoc(), rReq));
+
+                        pView->getSearchContext().setSearchFunction(xFuSearch);
+                    }
+
+                    if (xFuSearch.is())
+                    {
+                        const SvxSearchItem& rSearchItem = pReqArgs->Get(SID_SEARCH_ITEM);
+
+                        SD_MOD()->SetSearchItem(
+                            std::unique_ptr<SvxSearchItem>(rSearchItem.Clone()));
+                        xFuSearch->SearchAndReplace(&rSearchItem);
+                    }
+                }
+            }
+            rReq.Done();
+        }
+        break;
+
         case SID_SEARCH_ITEM:
             // Forward this request to the common (old) code of the
             // document shell.
             GetDocSh()->Execute(rReq);
-            bForwardCall = false;
             break;
 
         case SID_SPELL_DIALOG:
@@ -1355,16 +1391,12 @@ void NotesPanelViewShell::Execute(SfxRequest& rReq)
 
             pViewFrame->GetBindings().Invalidate(SID_SPELL_DIALOG);
             rReq.Done();
-            bForwardCall = false;
         }
         break;
 
         default:
             break;
     }
-
-    if (bForwardCall)
-        TextObjectBar::ExecuteImpl(this, mpView, rReq, nullptr);
 }
 
 void NotesPanelViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)

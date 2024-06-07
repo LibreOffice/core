@@ -492,9 +492,13 @@ interface NotesPanelView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    FID_SEARCH_NOW // ole : ?, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        GroupId = SfxGroupId::Document ;
+    ]
 }
-
-include "drtxtob.sdi"
 
 shell NotesPanelViewShell
 {
