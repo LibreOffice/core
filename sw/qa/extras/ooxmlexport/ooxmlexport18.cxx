@@ -1076,6 +1076,50 @@ DECLARE_OOXMLEXPORT_TEST(testTdf100037_inlineZOrder, "tdf100037_inlineZOrder.doc
     CPPUNIT_ASSERT_EQUAL(OUString("Frame1"), getProperty<OUString>(zOrder1, "LinkDisplayName"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf100037_inlineZOrder2, "tdf100037_inlineZOrder2.docx")
+{
+    // given a yellow floating textbox-with-image overlapped by a blue textbox-with-image,
+    // the inline image should take its zOrder from the textbox it is in.
+    if (isExported())
+        return; // we don't export images inside of draw textboxes I guess
+
+    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder2(getShape(3), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder3(getShape(4), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(zOrder2, "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty<sal_Int32>(zOrder3, "ZOrder")); // higher
+    // yellow textbox (Frame1) is the lowest
+    CPPUNIT_ASSERT_EQUAL(OUString("Frame1"), getProperty<OUString>(zOrder0, "LinkDisplayName"));
+    //CPPUNIT_ASSERT_EQUAL(OUString("Image1"), getProperty<OUString>(zOrder1, "Name"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Frame2"), getProperty<OUString>(zOrder2, "LinkDisplayName"));
+    // CPPUNIT_ASSERT_EQUAL(OUString("Image2"), getProperty<OUString>(zOrder3, "LinkDisplayName"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf100037_inlineZOrder3, "tdf100037_inlineZOrder3.docx")
+{
+    // given a yellow floating textbox-with-image that overlaps a blue textbox-with-image,
+    // the inline image should take its zOrder from the textbox it is in.
+    if (isExported())
+        return; // we don't export images inside of draw textboxes I guess
+
+    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder2(getShape(3), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder3(getShape(4), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(zOrder2, "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty<sal_Int32>(zOrder3, "ZOrder")); // higher
+    // blue textbox (Frame2) is the lowest
+    CPPUNIT_ASSERT_EQUAL(OUString("Frame2"), getProperty<OUString>(zOrder0, "LinkDisplayName"));
+    // CPPUNIT_ASSERT_EQUAL(OUString("Image2"), getProperty<OUString>(zOrder1, "LinkDisplayName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Frame1"), getProperty<OUString>(zOrder2, "LinkDisplayName"));
+    // CPPUNIT_ASSERT_EQUAL(OUString("Image1"), getProperty<OUString>(zOrder3, "LinkDisplayName"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf155903, "tdf155903.odt")
 {
     // Without the accompanying fix in place, this test would have crashed,

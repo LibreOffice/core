@@ -3469,9 +3469,9 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
             // gives a better ( visually ) result
             xOLE->setPropertyValue(getPropertyName( PROP_ANCHOR_TYPE ),  uno::Any( text::TextContentAnchorType_AS_CHARACTER ) );
         // remove ( if valid ) associated shape ( used for graphic replacement )
-        SAL_WARN_IF(m_aAnchoredStack.empty(), "writerfilter.dmapper", "no anchor stack");
-        if (!m_aAnchoredStack.empty())
-            m_aAnchoredStack.top( ).bToRemove = true;
+        SAL_WARN_IF(m_vAnchoredStack.empty(), "writerfilter.dmapper", "no anchor stack");
+        if (!m_vAnchoredStack.empty())
+            m_vAnchoredStack.back().bToRemove = true;
         RemoveLastParagraph();
         SAL_WARN_IF(m_aTextAppendStack.empty(), "writerfilter.dmapper", "no text stack");
         if (!m_aTextAppendStack.empty())
@@ -4737,14 +4737,14 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             // shapes for OLE objects.
             m_aTextAppendStack.push(TextAppendContext(uno::Reference<text::XTextAppend>(xShape, uno::UNO_QUERY), uno::Reference<text::XTextCursor>()));
             uno::Reference<text::XTextContent> xTxtContent(xShape, uno::UNO_QUERY);
-            m_aAnchoredStack.push(AnchoredContext(xTxtContent));
+            m_vAnchoredStack.push_back(AnchoredContext(xTxtContent));
         }
         else if (xSInfo->supportsService(u"com.sun.star.drawing.OLE2Shape"_ustr))
         {
             // OLE2Shape from oox should be converted to a TextEmbeddedObject for sw.
             m_aTextAppendStack.push(TextAppendContext(uno::Reference<text::XTextAppend>(xShape, uno::UNO_QUERY), uno::Reference<text::XTextCursor>()));
             uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY);
-            m_aAnchoredStack.push(AnchoredContext(xTextContent));
+            m_vAnchoredStack.push_back(AnchoredContext(xTextContent));
             uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
 
             rtl::Reference<SwXTextEmbeddedObject> xEmbedded = m_xTextDocument->createTextEmbeddedObject();
@@ -4752,7 +4752,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             xEmbedded->setPropertyValue(getPropertyName(PROP_EMBEDDED_OBJECT), xShapePropertySet->getPropertyValue(getPropertyName(PROP_EMBEDDED_OBJECT)));
             xEmbedded->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE), uno::Any(text::TextContentAnchorType_AS_CHARACTER));
             // So that the original bitmap-only shape will be replaced by the embedded object.
-            m_aAnchoredStack.top().bToRemove = true;
+            m_vAnchoredStack.back().bToRemove = true;
             m_aTextAppendStack.pop();
             appendTextContent(m_StreamStateStack.top().xEmbedded, uno::Sequence<beans::PropertyValue>());
         }
@@ -4772,7 +4772,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
 
             // Add the shape to the anchored objects stack
             uno::Reference< text::XTextContent > xTxtContent( xShape, uno::UNO_QUERY_THROW );
-            m_aAnchoredStack.push( AnchoredContext(xTxtContent) );
+            m_vAnchoredStack.push_back(AnchoredContext(xTxtContent));
 
             uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY_THROW);
 #ifdef DBG_UTIL
@@ -4832,7 +4832,29 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                     xShapePropertySet->setPropertyValue(getPropertyName(PROP_BOTTOM_MARGIN),
                                                         aPropMargin->second);
 
-                sal_Int64 zOrder = SAL_MIN_INT64;
+                sal_Int64 zOrder = SAL_MIN_INT64; // lowest in heaven-layer: AS_CHAR in body text
+                // AS_CHARs anchored inside a fly should be just above the fly's zOrder
+                if (m_vAnchoredStack.size() > 1)
+                {
+                    uno::Reference<beans::XPropertySet> xParentPropertySet(
+                        m_vAnchoredStack[m_vAnchoredStack.size() - 2].xTextContent,
+                        uno::UNO_QUERY_THROW);
+                    uno::Sequence<beans::PropertyValue> aGrabBag;
+                    xParentPropertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= aGrabBag;
+                    for (const auto& rProp : aGrabBag)
+                    {
+                        if (rProp.Name == "VML-Z-ORDER")
+                        {
+                            rProp.Value >>= zOrder;
+                            ++zOrder;
+                            GraphicZOrderHelper::adjustRelativeHeight(zOrder, /*IsZIndex=*/true,
+                                                                      zOrder < 0,
+                                                                      IsInHeaderFooter());
+                            xShapePropertySet->setPropertyValue(getPropertyName(PROP_OPAQUE),
+                                                                uno::Any(zOrder >= 0));
+                        }
+                    }
+                }
                 xShapePropertySet->setPropertyValue(u"ZOrder"_ustr,
                     uno::Any(rZOrderHelper.findZOrder(zOrder, /*LastDuplicateWins*/true)));
                 rZOrderHelper.addItem(xShapePropertySet, zOrder);
@@ -4933,19 +4955,19 @@ void DomainMapper_Impl::PopShapeContext()
         getTableManager().endLevel();
         popTableManager();
     }
-    if ( m_aAnchoredStack.empty() )
+    if (m_vAnchoredStack.empty())
         return;
 
     // For OLE object replacement shape, the text append context was already removed
     // or the OLE object couldn't be inserted.
-    if ( !m_aAnchoredStack.top().bToRemove )
+    if (!m_vAnchoredStack.back().bToRemove)
     {
         RemoveLastParagraph();
         if (!m_aTextAppendStack.empty())
             m_aTextAppendStack.pop();
     }
 
-    uno::Reference< text::XTextContent > xObj = m_aAnchoredStack.top( ).xTextContent;
+    uno::Reference<text::XTextContent> xObj = m_vAnchoredStack.back().xTextContent;
     try
     {
         appendTextContent( xObj, uno::Sequence< beans::PropertyValue >() );
@@ -4958,7 +4980,7 @@ void DomainMapper_Impl::PopShapeContext()
     const uno::Reference<drawing::XShape> xShape( xObj, uno::UNO_QUERY_THROW );
     // Remove the shape if required (most likely replacement shape for OLE object)
     // or anchored to a discarded header or footer
-    if ( m_xTextDocument && (m_aAnchoredStack.top().bToRemove || m_bDiscardHeaderFooter) )
+    if (m_xTextDocument && (m_vAnchoredStack.back().bToRemove || m_bDiscardHeaderFooter))
     {
         try
         {
@@ -4995,7 +5017,7 @@ void DomainMapper_Impl::PopShapeContext()
         }
     }
 
-    m_aAnchoredStack.pop();
+    m_vAnchoredStack.pop_back();
 }
 
 bool DomainMapper_Impl::IsSdtEndBefore()

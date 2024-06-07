@@ -555,7 +555,7 @@ private:
     css::uno::Reference<css::text::XText> m_xBodyText;
 
     std::stack<TextAppendContext>                                                   m_aTextAppendStack;
-    std::stack<AnchoredContext>                                                     m_aAnchoredStack;
+    std::vector<AnchoredContext> m_vAnchoredStack;
 public: // DomainMapper needs it
     std::stack<SubstreamContext> m_StreamStateStack;
 private:
@@ -906,7 +906,7 @@ public:
     bool        IsNumberingImport() const { return m_bInNumberingImport;}
     void        SetAnyTableImport( bool bSet ) { m_bInAnyTableImport = bSet;}
     bool        IsAnyTableImport()const { return m_bInAnyTableImport;}
-    bool        IsInShape()const { return m_aAnchoredStack.size() > 0;}
+    bool        IsInShape()const { return m_vAnchoredStack.size() > 0;}
 
     void PushShapeContext(const css::uno::Reference<css::drawing::XShape>& xShape);
     void PopShapeContext();
