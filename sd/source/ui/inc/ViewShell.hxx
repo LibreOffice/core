@@ -522,6 +522,7 @@ protected:
 
     virtual void Activate(bool IsMDIActivate) override;
     virtual void Deactivate(bool IsMDIActivate) override;
+    virtual void BroadcastContextForActivation (const bool bIsActivated) override;
 
     virtual void SetZoomFactor( const Fraction &rZoomX,
                                 const Fraction &rZoomY );

@@ -79,6 +79,10 @@ public:
     */
     void ActivateViewShell(ViewShell* pViewShell);
 
+    void RemoveOverridingMainShell();
+    void SetOverridingMainShell(std::shared_ptr<ViewShell> pViewShell);
+    std::shared_ptr<ViewShell> GetOverridingMainShell();
+
     /** Activate the given shell which is not a view shell.  For view shells
         use the ActivateViewShell() method.
     */

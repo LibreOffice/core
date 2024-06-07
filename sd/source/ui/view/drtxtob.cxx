@@ -55,6 +55,7 @@
 #include <DrawDocShell.hxx>
 #include <DrawViewShell.hxx>
 #include <OutlineViewShell.hxx>
+#include <NotesPanelViewShell.hxx>
 #include <Window.hxx>
 #include <OutlineView.hxx>
 #include <Outliner.hxx>
@@ -452,7 +453,9 @@ void TextObjectBar::GetAttrStateImpl(ViewShell* mpViewShell, ::sd::View* mpView,
     rSet.Put( aAttrSet, false ); // <- sal_False, so DontCare-Status gets acquired
 
     // these are disabled in outline-mode
-    if (!mpViewShell || dynamic_cast< const DrawViewShell *>( mpViewShell ) ==  nullptr)
+    if (!mpViewShell
+        || !(dynamic_cast<const DrawViewShell*>(mpViewShell)
+             || dynamic_cast<const NotesPanelViewShell*>(mpViewShell)))
     {
         rSet.DisableItem( SID_ATTR_PARA_ADJUST_LEFT );
         rSet.DisableItem( SID_ATTR_PARA_ADJUST_RIGHT );
