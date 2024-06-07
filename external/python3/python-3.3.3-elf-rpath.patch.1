@@ -5,10 +5,10 @@ set RPATH (only to be used on ELF platforms)
 diff -ru python3.orig/Makefile.pre.in python3/Makefile.pre.in
 --- python3.orig/Makefile.pre.in	2015-07-26 20:29:07.126194320 +0200
 +++ python3/Makefile.pre.in	2015-07-26 20:37:21.814227530 +0200
-@@ -566,7 +566,7 @@
+@@ -589,7 +589,7 @@
  
  # Build the interpreter
- $(BUILDPYTHON):	Programs/python.o $(LIBRARY) $(LDLIBRARY) $(PY3LIBRARY)
+ $(BUILDPYTHON):	Programs/python.o $(LIBRARY) $(LDLIBRARY) $(PY3LIBRARY) $(EXPORTSYMS)
 -	$(LINKCC) $(PY_CORE_LDFLAGS) $(LINKFORSHARED) -o $@ Programs/python.o $(BLDLIBRARY) $(LIBS) $(MODLIBS) $(SYSLIBS)
 +	$(LINKCC) $(PY_CORE_LDFLAGS) $(LINKFORSHARED) -o $@ Programs/python.o $(BLDLIBRARY) $(LIBS) $(MODLIBS) $(SYSLIBS) -Wl,-rpath,\$$ORIGIN
  

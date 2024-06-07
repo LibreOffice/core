@@ -1,0 +1,20 @@
+--- Include/cpython/unicodeobject.h	2024-06-10 10:53:20.049824821 +0200
++++ Include/cpython/unicodeobject.h	2024-06-10 10:54:50.776970835 +0200
+@@ -548,7 +548,7 @@
+    only allowed if u was set to NULL.
+ 
+    The buffer is copied into the new object. */
+-Py_DEPRECATED(3.3) PyAPI_FUNC(PyObject*) PyUnicode_FromUnicode(
++/*Py_DEPRECATED(3.3)*/ PyAPI_FUNC(PyObject*) PyUnicode_FromUnicode(
+     const Py_UNICODE *u,        /* Unicode buffer */
+     Py_ssize_t size             /* size of buffer */
+     );
+@@ -577,7 +577,7 @@
+    Py_UNICODE buffer.
+    If the wchar_t/Py_UNICODE representation is not yet available, this
+    function will calculate it. */
+-Py_DEPRECATED(3.3) PyAPI_FUNC(Py_UNICODE *) PyUnicode_AsUnicode(
++/*Py_DEPRECATED(3.3)*/ PyAPI_FUNC(Py_UNICODE *) PyUnicode_AsUnicode(
+     PyObject *unicode           /* Unicode object */
+     );
+ 
