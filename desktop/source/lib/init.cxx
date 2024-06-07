@@ -3635,7 +3635,6 @@ static void doc_iniUnoCommands ()
         u".uno:AlignLeft"_ustr,
         u".uno:AlignHorizontalCenter"_ustr,
         u".uno:AlignRight"_ustr,
-        u".uno:BackColor"_ustr,
         u".uno:BackgroundColor"_ustr,
         u".uno:TableCellBackgroundColor"_ustr,
         u".uno:Bold"_ustr,
