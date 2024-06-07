@@ -150,6 +150,7 @@ public:
 
     OUString GetText();
     void SetText(OUString const& rText);
+    rtl::Reference<sdr::annotation::TextApiObject> getTextApiObject() { return m_TextRange; }
 
     SdrModel* GetModel() const;
     SdrPage const* getPage() const { return mpPage; }
