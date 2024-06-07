@@ -84,6 +84,12 @@ $(eval $(call gb_Executable_add_ldflags,soffice_bin, \
 
 endif
 
+$(call gb_Executable_get_linktarget_target,soffice_bin): $(EMSCRIPTEN_EXTRA_SOFFICE_POST_JS)
+
+$(eval $(call gb_Executable_add_ldflags,soffice_bin, \
+    $(foreach i,$(EMSCRIPTEN_EXTRA_SOFFICE_POST_JS),--post-js $(i)) \
+))
+
 endif
 
 # vim: set ts=4 sw=4 et:
