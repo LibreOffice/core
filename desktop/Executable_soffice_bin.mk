@@ -71,24 +71,25 @@ $(eval $(call gb_Executable_add_ldflags,soffice_bin, \
 ))
 endif
 
-ifneq ($(ENABLE_DBGUTIL),)
-
 $(call gb_Executable_get_linktarget_target,soffice_bin): \
     $(gb_CustomTarget_workdir)/static/unoembind/bindings_uno.js \
-    $(SRCDIR)/unotest/source/embindtest/embindtest.js
+    $(EMSCRIPTEN_EXTRA_SOFFICE_POST_JS)
 
 $(eval $(call gb_Executable_add_ldflags,soffice_bin, \
     --post-js $(gb_CustomTarget_workdir)/static/unoembind/bindings_uno.js \
+    $(foreach i,$(EMSCRIPTEN_EXTRA_SOFFICE_POST_JS),--post-js $(i)) \
+))
+
+ifneq ($(ENABLE_DBGUTIL),)
+
+$(call gb_Executable_get_linktarget_target,soffice_bin): \
+    $(SRCDIR)/unotest/source/embindtest/embindtest.js
+
+$(eval $(call gb_Executable_add_ldflags,soffice_bin, \
     --post-js $(SRCDIR)/unotest/source/embindtest/embindtest.js \
 ))
 
 endif
-
-$(call gb_Executable_get_linktarget_target,soffice_bin): $(EMSCRIPTEN_EXTRA_SOFFICE_POST_JS)
-
-$(eval $(call gb_Executable_add_ldflags,soffice_bin, \
-    $(foreach i,$(EMSCRIPTEN_EXTRA_SOFFICE_POST_JS),--post-js $(i)) \
-))
 
 endif
 
