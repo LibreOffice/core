@@ -1431,6 +1431,7 @@ if test "$_os" = "Emscripten"; then
     BUILD_TYPE="$BUILD_TYPE EMSCRIPTEN"
 fi
 AC_SUBST(EMSDK_FILE_PACKAGER)
+AC_SUBST(EMSCRIPTEN_EXTRA_SOFFICE_POST_JS)
 
 ###############################################################################
 # Extensions switches --enable/--disable
