@@ -85,6 +85,7 @@ enum class ImpGetDescriptionOptions
 };
 
 class ImplMarkingOverlay;
+class MarkingSelectionOverlay;
 class MarkingSubSelectionOverlay;
 
 class SVXCORE_DLLPUBLIC SdrMarkView : public SdrSnapView
@@ -96,6 +97,7 @@ class SVXCORE_DLLPUBLIC SdrMarkView : public SdrSnapView
     std::unique_ptr<ImplMarkingOverlay> mpMarkPointsOverlay;
     std::unique_ptr<ImplMarkingOverlay> mpMarkGluePointsOverlay;
 
+    std::unique_ptr<MarkingSelectionOverlay> mpMarkingSelectionOverlay;
     std::unique_ptr<MarkingSubSelectionOverlay> mpMarkingSubSelectionOverlay;
 
 protected:

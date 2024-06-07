@@ -40,6 +40,7 @@
 #include <svx/scene3d.hxx>
 #include <svx/svdovirt.hxx>
 #include <sdr/overlay/overlayrollingrectangle.hxx>
+#include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
@@ -53,6 +54,7 @@
 #include <vcl/uitest/eventdescription.hxx>
 #include <vcl/window.hxx>
 #include <o3tl/string_view.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
@@ -133,6 +135,31 @@ void ImplMarkingOverlay::SetSecondPosition(const basegfx::B2DPoint& rNewPosition
         maSecondPosition = rNewPosition;
     }
 }
+
+class MarkingSelectionOverlay
+{
+    sdr::overlay::OverlayObjectList maObjects;
+public:
+    MarkingSelectionOverlay(const SdrPaintView& rView, basegfx::B2DRectangle const& rSelection)
+    {
+        if (comphelper::LibreOfficeKit::isActive())
+            return; // We do client-side object manipulation with the Kit API
+
+        for (sal_uInt32 a(0); a < rView.PaintWindowCount(); a++)
+        {
+            SdrPaintWindow* pPaintWindow = rView.GetPaintWindow(a);
+            const rtl::Reference<sdr::overlay::OverlayManager>& xTargetOverlay = pPaintWindow->GetOverlayManager();
+
+            if (xTargetOverlay.is())
+            {
+                basegfx::B2DPolyPolygon aPolyPoly(basegfx::utils::createPolygonFromRect(rSelection));
+                auto pNew = std::make_unique<sdr::overlay::OverlayPolyPolygon>(aPolyPoly, COL_GRAY, 0, COL_TRANSPARENT);
+                xTargetOverlay->add(*pNew);
+                maObjects.append(std::move(pNew));
+            }
+        }
+    }
+};
 
 class MarkingSubSelectionOverlay
 {
@@ -1254,6 +1281,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
     SdrObject* pSaveObj = nullptr;
 
     mpMarkingSubSelectionOverlay.reset();
+    mpMarkingSelectionOverlay.reset();
 
     if(pSaveOldFocusHdl
         && pSaveOldFocusHdl->GetObj()
@@ -1319,12 +1347,23 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
         }
     }
 
+    tools::Rectangle aRect(GetMarkedObjRect());
+
+    if (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == SdrObjKind::Annotation)
+    {
+        basegfx::B2DRectangle aB2DRect(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+        mpMarkingSelectionOverlay = std::make_unique<MarkingSelectionOverlay>(*this, aB2DRect);
+
+        return;
+
+    }
+
     SfxViewShell* pViewShell = GetSfxViewShell();
 
     // check if text edit or ole is active and handles need to be suppressed. This may be the case
     // when a single object is selected
     // Using a strict return statement is okay here; no handles means *no* handles.
-    if(mpMarkedObj)
+    if (mpMarkedObj)
     {
         // formerly #i33755#: If TextEdit is active the EditEngine will directly paint
         // to the window, so suppress Overlay and handles completely; a text frame for
@@ -1356,8 +1395,6 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
             mpMarkingSubSelectionOverlay = std::make_unique<MarkingSubSelectionOverlay>(*this, maSubSelectionList);
         }
     }
-
-    tools::Rectangle aRect(GetMarkedObjRect());
 
     if (bFrmHdl)
     {
