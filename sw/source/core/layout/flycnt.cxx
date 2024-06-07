@@ -1629,7 +1629,17 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
             {
                 // Make sure the candidate is not inside the same body frame, that would prevent
                 // inserting a new page.
-                if (pFlyAnchor->FindBodyFrame() == pLayLeaf->FindBodyFrame())
+                SwBodyFrame const* pAnchorBody(pFlyAnchor->FindBodyFrame());
+                while (!pAnchorBody->IsPageBodyFrame())
+                {
+                    pAnchorBody = pAnchorBody->GetUpper()->FindBodyFrame();
+                };
+                SwBodyFrame const* pLeafBody(pLayLeaf->FindBodyFrame());
+                while (!pLeafBody->IsPageBodyFrame())
+                {
+                    pLeafBody = pLeafBody->GetUpper()->FindBodyFrame();
+                };
+                if (pAnchorBody == pLeafBody)
                 {
                     bSameBody = true;
                 }
