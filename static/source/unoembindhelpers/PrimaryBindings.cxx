@@ -16,6 +16,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -26,6 +27,7 @@
 #include <sal/log.hxx>
 #include <sfx2/viewsh.hxx>
 #include <static/unoembindhelpers/PrimaryBindings.hxx>
+#include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/typedescription.hxx>
 #include <uno/data.h>
@@ -297,6 +299,24 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                         +[](std::u16string const& name) {
                             return css::uno::Type(css::uno::TypeClass_INTERFACE, OUString(name));
                         })
+        .function("getTypeClass", +[](css::uno::Type const& self) { return self.getTypeClass(); })
+        .function(
+            "getSequenceComponentType",
+            +[](css::uno::Type const& self) {
+                if (self.getTypeClass() != css::uno::TypeClass_SEQUENCE)
+                {
+                    throw std::invalid_argument("bad non-sequence type");
+                }
+                css::uno::TypeDescription desc;
+                self.getDescription(reinterpret_cast<typelib_TypeDescription**>(&desc));
+                if (!desc.is())
+                {
+                    throw std::invalid_argument("bad sequence type");
+                }
+                assert(desc.get()->eTypeClass == typelib_TypeClass_SEQUENCE);
+                return css::uno::Type(
+                    reinterpret_cast<typelib_IndirectTypeDescription const*>(desc.get())->pType);
+            })
         .function("toString", +[](css::uno::Type const& self) {
             auto const name = self.getTypeName();
             return std::u16string(name.getStr(), name.getLength());
@@ -305,6 +325,7 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
     // Any
     class_<Any>("uno_Any")
         .constructor(&constructAny)
+        .function("getType", &css::uno::Any::getValueType)
         .function("get", +[](css::uno::Any const& self) {
             switch (self.getValueType().getTypeClass())
             {
