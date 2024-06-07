@@ -2287,6 +2287,7 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
     OUString  aMsgStr;
     OUString  aResStr;
     double  nSolveResult;
+    double nOriginalValue = rDoc.GetValue(ScAddress(nDestCol, nDestRow, nDestTab));
 
     GetFrameWin()->EnterWait();
 
@@ -2327,8 +2328,15 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
                                               VclMessageType::Question, VclButtonsType::YesNo, aMsgStr));
     xBox->set_title(ScResId(STR_MSSG_DOSUBTOTALS_0));
     xBox->set_default_response(RET_NO);
-    if (xBox->run() == RET_YES)
+    int nResponse = xBox->run();
+    if (nResponse == RET_YES)
         EnterValue( nDestCol, nDestRow, nDestTab, nSolveResult );
+
+    // tdf#161338 If Goal Seek fails, restore the original value
+    // Note that ScDocument::Solver forcefully changes the variable cell to N/A error
+    // if the Goal Seek solver fails; so here we need to restore the value
+    if (!bExact && nResponse == RET_NO)
+        rDoc.SetValue(nDestCol, nDestRow, nDestTab, nOriginalValue);
 
     GetViewData().GetViewShell()->UpdateInputHandler( true );
 }
