@@ -18,6 +18,7 @@
 #include <sdpage.hxx>
 #include <DrawViewShell.hxx>
 #include <DrawDocShell.hxx>
+#include <ToolBarManager.hxx>
 #include <Window.hxx>
 #include <drawdoc.hxx>
 #include <sdmod.hxx>

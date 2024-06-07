@@ -17,12 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "NotesPanelViewShell.hxx"
 #include <ToolBarManager.hxx>
 
 #include <DrawViewShell.hxx>
 #include <EventMultiplexer.hxx>
 #include <ViewShellBase.hxx>
 #include <ViewShellManager.hxx>
+#include <framework/FrameworkHelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
@@ -157,6 +159,8 @@ public:
         const std::shared_ptr<ViewShell>& rpMainViewShell,
         const std::shared_ptr<ViewShellManager>& rpManager);
 
+    void SetActiveViewShell(std::shared_ptr<ViewShell>& rpMainViewShell);
+
 private:
     class ShellDescriptor
     {public:
@@ -178,6 +182,8 @@ private:
         things easier and does not waste too much memory.
     */
     GroupedShellList maCurrentList;
+
+    std::shared_ptr<ViewShell> pCurrentActiveShell;
 };
 
 /** This class concentrates the knowledge about when to show what tool bars
@@ -256,7 +262,7 @@ public:
     void ResetToolBars (ToolBarGroup eGroup);
     void ResetAllToolBars();
     void AddToolBar (ToolBarGroup eGroup, const OUString& rsToolBarName);
-    void AddToolBarShell (ToolBarGroup eGroup, ShellId nToolBarId);
+    void AddToolBarShell (ToolBarGroup eGroup, ShellId nToolBarId, bool bAddBar = true);
     void RemoveToolBar (ToolBarGroup eGroup, const OUString& rsToolBarName);
 
     /** Release all tool bar shells and the associated framework tool bars.
@@ -387,12 +393,13 @@ void ToolBarManager::AddToolBar (
 
 void ToolBarManager::AddToolBarShell (
     ToolBarGroup eGroup,
-    ShellId nToolBarId)
+    ShellId nToolBarId,
+    bool bAddBar)
 {
     if (mpImpl != nullptr)
     {
         UpdateLock aLock (shared_from_this());
-        mpImpl->AddToolBarShell(eGroup,nToolBarId);
+        mpImpl->AddToolBarShell(eGroup,nToolBarId,bAddBar);
     }
 }
 
@@ -621,13 +628,23 @@ void ToolBarManager::Implementation::RemoveToolBar (
 
 void ToolBarManager::Implementation::AddToolBarShell (
     ToolBarGroup eGroup,
-    ShellId nToolBarId)
+    ShellId nToolBarId,
+    bool bAddBar)
 {
     ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
     if (pMainViewShell != nullptr)
     {
         maToolBarShellList.AddShellId(eGroup,nToolBarId);
-        GetToolBarRules().SubShellAdded(eGroup, nToolBarId);
+        if (bAddBar)
+        {
+            GetToolBarRules().SubShellAdded(eGroup, nToolBarId);
+        }
+        else
+        {
+            mbPostUpdatePending = true;
+            if (mnLockCount == 0)
+                PostUpdate();
+        }
     }
 }
 
@@ -958,6 +975,11 @@ void ToolBarRules::MainViewShellChanged (ViewShell::ShellType nShellType)
                 ToolBarManager::msViewerToolBar);
             break;
 
+        case ::sd::ViewShell::ST_NOTESPANEL:
+            mpToolBarManager->AddToolBarShell(ToolBarManager::ToolBarGroup::Permanent,
+                                              ToolbarId::Draw_Text_Toolbox_Sd);
+            break;
+
         case ::sd::ViewShell::ST_DRAW:
             mpToolBarManager->AddToolBar(
                 ToolBarManager::ToolBarGroup::Permanent,
@@ -993,7 +1015,6 @@ void ToolBarRules::MainViewShellChanged (ViewShell::ShellType nShellType)
                 ToolBarManager::msSlideSorterObjectBar);
             break;
 
-        case ViewShell::ST_NOTESPANEL:
         case ViewShell::ST_NONE:
         case ViewShell::ST_PRESENTATION:
         case ViewShell::ST_SIDEBAR:
@@ -1344,6 +1365,9 @@ void ToolBarShellList::UpdateShells (
     if (rpMainViewShell == nullptr)
         return;
 
+    const std::shared_ptr<ViewShell>& pCurrentMainViewShell
+        = rpManager->GetOverridingMainShell() ? rpManager->GetOverridingMainShell() : rpMainViewShell;
+
     GroupedShellList aList;
 
     // Deactivate shells that are in maCurrentList, but not in
@@ -1354,7 +1378,7 @@ void ToolBarShellList::UpdateShells (
     for (const auto& rShell : aList)
     {
         SAL_INFO("sd.view", __func__ << ": deactivating tool bar shell " << static_cast<sal_uInt32>(rShell.mnId));
-        rpManager->DeactivateSubShell(*rpMainViewShell, rShell.mnId);
+        rpManager->DeactivateSubShell(*pCurrentMainViewShell, rShell.mnId);
     }
 
     // Activate shells that are in maNewList, but not in
@@ -1366,7 +1390,7 @@ void ToolBarShellList::UpdateShells (
     for (const auto& rShell : aList)
     {
         SAL_INFO("sd.view", __func__ << ": activating tool bar shell " << static_cast<sal_uInt32>(rShell.mnId));
-        rpManager->ActivateSubShell(*rpMainViewShell, rShell.mnId);
+        rpManager->ActivateSubShell(*pCurrentMainViewShell, rShell.mnId);
     }
 
     // The maNewList now reflects the current state and thus is made

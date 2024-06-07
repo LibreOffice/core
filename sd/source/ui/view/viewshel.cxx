@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <framework/FrameworkHelper.hxx>
+#include <framework/ViewShellWrapper.hxx>
 #include <memory>
 #include <ViewShell.hxx>
 #include <ViewShellImplementation.hxx>
@@ -58,6 +60,7 @@
 #include <SlideSorterViewShell.hxx>
 #include <ViewShellManager.hxx>
 #include <FormShellManager.hxx>
+#include <EventMultiplexer.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <svx/svdoutl.hxx>
@@ -89,6 +92,12 @@
 #include <strings.hxx>
 #include <sdmod.hxx>
 #include <AccessibleDocumentViewBase.hxx>
+
+#include <com/sun/star/drawing/framework/XControllerManager.hpp>
+#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
+#include <com/sun/star/drawing/framework/XConfiguration.hpp>
+#include <com/sun/star/drawing/framework/XView.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -390,6 +399,60 @@ void ViewShell::Deactivate(bool bIsMDIActivate)
         mpVerticalRuler->SetActive(false);
 
     SfxShell::Deactivate(bIsMDIActivate);
+}
+
+void ViewShell::BroadcastContextForActivation(const bool bIsActivated)
+{
+    auto getFrameworkResourceIdForShell = [&]() -> uno::Reference<drawing::framework::XResourceId> const
+    {
+        Reference<::css::drawing::framework::XControllerManager> xControllerManager(
+            GetViewShellBase().GetController(), UNO_QUERY);
+        if (!xControllerManager.is())
+            return {};
+
+        Reference<::css::drawing::framework::XConfigurationController> xConfigurationController(
+            xControllerManager->getConfigurationController(), UNO_QUERY);
+        if (!xConfigurationController.is())
+            return {};
+
+        Reference<::css::drawing::framework::XConfiguration> xConfiguration(
+            xConfigurationController->getCurrentConfiguration(), UNO_QUERY);
+        if (!xConfiguration.is())
+            return {};
+
+        auto aResIdsIndirect
+            = xConfiguration->getResources({}, "", drawing::framework::AnchorBindingMode_INDIRECT);
+
+        for (const uno::Reference<drawing::framework::XResourceId>& rResId : aResIdsIndirect)
+        {
+            auto pFrameworkHelper = framework::FrameworkHelper::Instance(GetViewShellBase());
+
+            uno::Reference<drawing::framework::XView> xView;
+            if (rResId->getResourceURL().match(framework::FrameworkHelper::msViewURLPrefix))
+            {
+                xView.set(xConfigurationController->getResource(rResId), UNO_QUERY);
+
+                if (xView.is())
+                {
+                    auto pViewShellWrapper
+                        = dynamic_cast<framework::ViewShellWrapper*>(xView.get());
+                    if (pViewShellWrapper->GetViewShell().get() == this)
+                    {
+                        return rResId;
+                    }
+                }
+            }
+        }
+        return {};
+    };
+
+    if (bIsActivated)
+    {
+        GetViewShellBase().GetEventMultiplexer()->MultiplexEvent(
+            EventMultiplexerEventId::FocusShifted, nullptr, getFrameworkResourceIdForShell());
+    }
+
+    SfxShell::BroadcastContextForActivation(bIsActivated);
 }
 
 void ViewShell::Shutdown()

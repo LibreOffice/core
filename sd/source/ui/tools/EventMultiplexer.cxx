@@ -132,7 +132,8 @@ private:
 
     void CallListeners (
         EventMultiplexerEventId eId,
-        void const * pUserData = nullptr);
+        void const * pUserData = nullptr,
+        const css::uno::Reference<css::uno::XInterface>& xUserData = {});
 
     DECL_LINK(SlideSorterSelectionChangeListener, LinkParamNone*, void);
 };
@@ -173,11 +174,10 @@ void EventMultiplexer::RemoveEventListener (
     mpImpl->RemoveEventListener(rCallback);
 }
 
-void EventMultiplexer::MultiplexEvent(
-    EventMultiplexerEventId eEventId,
-    void const * pUserData )
+void EventMultiplexer::MultiplexEvent(EventMultiplexerEventId eEventId, void const* pUserData,
+                                      const css::uno::Reference<css::uno::XInterface>& xUserData)
 {
-    EventMultiplexerEvent aEvent(eEventId, pUserData);
+    EventMultiplexerEvent aEvent(eEventId, pUserData, xUserData);
     mpImpl->CallListeners(aEvent);
 }
 
@@ -621,11 +621,11 @@ void EventMultiplexer::Implementation::Notify (
     }
 }
 
-void EventMultiplexer::Implementation::CallListeners (
-    EventMultiplexerEventId eId,
-    void const * pUserData)
+void EventMultiplexer::Implementation::CallListeners(
+    EventMultiplexerEventId eId, void const* pUserData,
+    const css::uno::Reference<css::uno::XInterface>& xUserData)
 {
-    EventMultiplexerEvent aEvent(eId, pUserData);
+    EventMultiplexerEvent aEvent(eId, pUserData, xUserData);
     CallListeners(aEvent);
 }
 
@@ -647,9 +647,11 @@ IMPL_LINK_NOARG(EventMultiplexer::Implementation, SlideSorterSelectionChangeList
 
 EventMultiplexerEvent::EventMultiplexerEvent (
     EventMultiplexerEventId eEventId,
-    const void* pUserData)
+    const void* pUserData,
+    const css::uno::Reference<css::uno::XInterface>& xUserData)
     : meEventId(eEventId),
-      mpUserData(pUserData)
+      mpUserData(pUserData),
+      mxUserData(xUserData)
 {
 }
 

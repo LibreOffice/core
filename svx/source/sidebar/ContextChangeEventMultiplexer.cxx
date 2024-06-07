@@ -26,7 +26,6 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/lokhelper.hxx>
-#include <sfx2/viewsh.hxx>
 
 using namespace css;
 using namespace css::uno;
