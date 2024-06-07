@@ -49,10 +49,12 @@
 #include <DrawViewShell.hxx>
 #include <OutlineView.hxx>
 #include <OutlineViewShell.hxx>
+#include <NotesPanelView.hxx>
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
 #include <drawview.hxx>
 #include <ViewShellBase.hxx>
+#include <ViewShellManager.hxx>
 #include <SpellDialogChildWindow.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <svx/svxids.hrc>
@@ -62,6 +64,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <VectorGraphicSearchContext.hxx>
 #include <fusearch.hxx>
+#include <sdpage.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -125,6 +128,30 @@ namespace
 sd::ViewShellBase* getViewShellBase()
 {
     return dynamic_cast<sd::ViewShellBase*>(SfxViewShell::Current());
+}
+
+OutlinerView* lclGetNotesPaneOutliner(const std::shared_ptr<sd::ViewShell>& pViewShell)
+{
+    if (!pViewShell)
+        return nullptr;
+
+    // request the notes pane
+    sd::ViewShellBase& rBase = pViewShell->GetViewShellBase();
+
+    sd::framework::FrameworkHelper::Instance(rBase)->RequestView(
+        sd::framework::FrameworkHelper::msNotesPanelViewURL,
+        sd::framework::FrameworkHelper::msBottomImpressPaneURL);
+
+    auto pInstance = sd::framework::FrameworkHelper::Instance(rBase);
+    pInstance->RequestSynchronousUpdate();
+
+    std::shared_ptr<sd::ViewShell> pNotesPaneShell(
+        pInstance->GetViewShell(sd::framework::FrameworkHelper::msBottomImpressPaneURL));
+
+    if (!pNotesPaneShell)
+        return nullptr;
+
+    return static_cast<sd::NotesPanelView*>(pNotesPaneShell->GetView())->GetOutlinerView();
 }
 
 } // end anonymous namespace
@@ -896,6 +923,14 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
                 if (mpSearchItem->GetCommand() != SvxSearchCmd::REPLACE_ALL)
                 {
                     nMatchCount = getOutlinerView()->StartSearchAndReplace(*mpSearchItem);
+                    if (nMatchCount && maCurrentPosition.meEditMode == EditMode::Page
+                        && maCurrentPosition.mePageKind == PageKind::Notes)
+                    {
+                        if(auto pNotesPaneOutliner = lclGetNotesPaneOutliner(pViewShell))
+                        {
+                            pNotesPaneOutliner->SetSelection(getOutlinerView()->GetSelection());
+                        }
+                    }
                 }
             }
 
@@ -917,14 +952,25 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
                     // necessary anymore.
                     DBG_ASSERT(GetEditEngine().HasView(&getOutlinerView()->GetEditView() ),
                         "SearchAndReplace without valid view!" );
-                    if ( ! GetEditEngine().HasView( &getOutlinerView()->GetEditView() ) )
+                    if ( ! GetEditEngine().HasView( &getOutlinerView()->GetEditView() )
+                         && maCurrentPosition.mePageKind != PageKind::Notes )
                     {
                         mpDrawDocument->GetDocSh()->SetWaitCursor( false );
                         return true;
                     }
 
                     if (meMode == SEARCH)
-                        getOutlinerView()->StartSearchAndReplace(*mpSearchItem);
+                    {
+                        auto nMatch = getOutlinerView()->StartSearchAndReplace(*mpSearchItem);
+                        if (nMatch && maCurrentPosition.meEditMode == EditMode::Page
+                            && maCurrentPosition.mePageKind == PageKind::Notes)
+                        {
+                            if(auto pNotesPaneOutliner = lclGetNotesPaneOutliner(pViewShell))
+                            {
+                                pNotesPaneOutliner->SetSelection(getOutlinerView()->GetSelection());
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -972,10 +1018,30 @@ void SdOutliner::DetectChange()
     std::shared_ptr<sd::DrawViewShell> pDrawViewShell (
         std::dynamic_pointer_cast<sd::DrawViewShell>(pViewShell));
 
+    std::shared_ptr<sd::ViewShell> pOverridingViewShell{};
+    if(sd::ViewShellBase* pBase = getViewShellBase())
+    {
+        if (const std::shared_ptr<sd::ViewShellManager>& pViewShellManager = pBase->GetViewShellManager())
+            pOverridingViewShell = pViewShellManager->GetOverridingMainShell();
+    }
+
+    bool bViewChanged = false;
+
+    if( pDrawViewShell )
+    {
+        if( !pOverridingViewShell )
+            bViewChanged = (aPosition.meEditMode != pDrawViewShell->GetEditMode() || aPosition.mePageKind != pDrawViewShell->GetPageKind());
+        else
+        {
+            auto pPage = pOverridingViewShell->getCurrentPage();
+            auto ePageKind = pPage ? pPage->GetPageKind() : PageKind::Standard;
+            auto eEditMode = EditMode::Page;
+            bViewChanged = (aPosition.meEditMode != eEditMode || aPosition.mePageKind != ePageKind);
+        }
+    }
+
     // Detect whether the view has been switched from the outside.
-    if (pDrawViewShell != nullptr
-        && (aPosition.meEditMode != pDrawViewShell->GetEditMode()
-            || aPosition.mePageKind != pDrawViewShell->GetPageKind()))
+    if( bViewChanged )
     {
         // Either the edit mode or the page kind has changed.
         SetStatusEventHdl(Link<EditStatus&,void>());
@@ -1527,12 +1593,20 @@ void SdOutliner::PrepareSearchAndReplace()
 
     EnterEditMode(false);
 
-    mpDrawDocument->GetDocSh()->SetWaitCursor( false );
-    // Start search at the right end of the current object's text
-    // depending on the search direction.
+    mpDrawDocument->GetDocSh()->SetWaitCursor(false);
+
     OutlinerView* pOutlinerView = getOutlinerView();
     if (pOutlinerView != nullptr)
+    {
         pOutlinerView->SetSelection (GetSearchStartPosition ());
+        if (lclIsValidTextObject(maCurrentPosition) && maCurrentPosition.mePageKind == PageKind::Notes)
+        {
+            if (auto pNotesPaneOutliner = lclGetNotesPaneOutliner(mpWeakViewShell.lock()))
+            {
+                pNotesPaneOutliner->SetSelection(getOutlinerView()->GetSelection());
+            }
+        }
+    }
 }
 
 void SdOutliner::SetViewMode (PageKind ePageKind)
@@ -1660,8 +1734,43 @@ void SdOutliner::EnterEditMode (bool bGrabFocus)
 
     // Turn on the edit mode for the text object.
     SetUpdateLayout(true);
-    mpView->SdrBeginTextEdit(mpSearchSpellTextObj, pPV, mpWindow, true, this,
-                            pOutlinerView, true, true, bGrabFocus);
+
+    if(maCurrentPosition.mePageKind == PageKind::Notes
+       && maCurrentPosition.meEditMode == EditMode::Page)
+    {
+        sd::ViewShellBase& rBase = pViewShell->GetViewShellBase();
+
+        sd::framework::FrameworkHelper::Instance(rBase)->RequestView(
+            sd::framework::FrameworkHelper::msNotesPanelViewURL,
+            sd::framework::FrameworkHelper::msBottomImpressPaneURL);
+
+        auto pInstance = sd::framework::FrameworkHelper::Instance(rBase);
+        pInstance->RequestSynchronousUpdate();
+
+        std::shared_ptr<sd::ViewShell> pNotesPaneShell(pInstance->GetViewShell(sd::framework::FrameworkHelper::msBottomImpressPaneURL));
+        if(pNotesPaneShell)
+        {
+            pNotesPaneShell->GetParentWindow()->GrabFocus();
+            pNotesPaneShell->GetContentWindow()->GrabFocus();
+        }
+    }
+    else
+    {
+        std::shared_ptr<sd::ViewShell> pOverridingViewShell{};
+        sd::ViewShellBase* pBase = getViewShellBase();
+        if (auto pViewShellManager = pBase->GetViewShellManager())
+            pOverridingViewShell = pViewShellManager->GetOverridingMainShell();
+
+        if (pOverridingViewShell)
+        {
+            getViewShellBase()->GetMainViewShell()->GetParentWindow()->GrabFocus();
+            getViewShellBase()->GetMainViewShell()->GetContentWindow()->GrabFocus();
+            bGrabFocus = true;
+        }
+
+        mpView->SdrBeginTextEdit(mpSearchSpellTextObj, pPV, mpWindow, true, this, pOutlinerView,
+                                 true, true, bGrabFocus);
+    }
 
     mbFoundObject = true;
 }
@@ -1733,8 +1842,25 @@ bool SdOutliner::HandleFailedSearch()
 SdrObject* SdOutliner::SetObject (
     const sd::outliner::IteratorPosition& rPosition)
 {
-    SetViewMode (rPosition.mePageKind);
-    SetPage (rPosition.meEditMode, static_cast<sal_uInt16>(rPosition.mnPageIndex));
+    if(rPosition.meEditMode == EditMode::Page && rPosition.mePageKind == PageKind::Notes)
+    {
+        std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
+        std::shared_ptr<sd::DrawViewShell> pDrawViewShell(
+            std::dynamic_pointer_cast<sd::DrawViewShell>(pViewShell));
+
+        if (pDrawViewShell->GetEditMode() != EditMode::Page
+            || pDrawViewShell->GetCurPagePos() != rPosition.mnPageIndex)
+            SetPage(EditMode::Page, static_cast<sal_uInt16>(rPosition.mnPageIndex));
+
+        mnText = rPosition.mnText;
+        return rPosition.mxObject.get().get();
+    }
+    else
+    {
+        SetViewMode(rPosition.mePageKind);
+        SetPage(rPosition.meEditMode, static_cast<sal_uInt16>(rPosition.mnPageIndex));
+    }
+
     mnText = rPosition.mnText;
     return rPosition.mxObject.get().get();
 }

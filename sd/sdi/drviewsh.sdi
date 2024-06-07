@@ -203,6 +203,12 @@ interface ImpressEditView : DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    FID_SEARCH_NOW
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        GroupId = SfxGroupId::Document ;
+    ]
 }
 
 shell DrawViewShell
