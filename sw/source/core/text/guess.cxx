@@ -474,6 +474,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     {
         m_nCutPos = m_nBreakStart = AdjustCutPos(m_nCutPos, m_nBreakPos, rInf);
         nPorLen = m_nBreakPos - rInf.GetIdx();
+        m_xHyphWord = nullptr;
     }
     else
     {
