@@ -193,13 +193,15 @@ protected:
     */
     void SetPage (sal_Int32 nPageIndex);
 
+    /// Iterator of all objects on the current page.
+    std::optional<SdrObjListIter> moObjectIterator;
+
+    /// Pointer to the page associated with the current page index. May be NULL.
+    SdPage* mpPage;
+
 private:
     /// Indicates whether a page changed occurred on switching to current page.
     bool mbPageChangeOccurred;
-    /// Pointer to the page associated with the current page index. May be NULL.
-    SdPage* mpPage;
-    /// Iterator of all objects on the current page.
-    std::optional<SdrObjListIter> moObjectIterator;
 
     // Don't use this operator.
     ViewIteratorImpl& operator= (const ViewIteratorImpl&) = delete;
