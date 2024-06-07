@@ -1666,6 +1666,15 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             PropertyIds eBorderId = PropertyIds::INVALID;
             PropertyIds eBorderComplexColorId = PropertyIds::INVALID;
             PropertyIds eBorderDistId = PropertyIds::INVALID;
+
+            const StyleSheetEntryPtr& pEntry = GetStyleSheetTable()->GetCurrentEntry();
+            if (pEntry && pEntry->m_nStyleTypeCode == STYLE_TYPE_TABLE)
+            {
+                // This would map para borders in table style to cell borders, avoid that till we
+                // have separate property names for these.
+                break;
+            }
+
             switch( nSprmId )
             {
             case NS_ooxml::LN_CT_PBdr_top:
