@@ -33,6 +33,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <comphelper/accessibletexthelper.hxx>
 #include <sal/log.hxx>
 #include <tools/gen.hxx>
 #include <svtools/colorcfg.hxx>
@@ -682,10 +683,22 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                         OUString valStr(pScDoc->GetString(aNewCell.Col(),aNewCell.Row(),aNewCell.Tab()));
                         if(m_strCurCellValue != valStr)
                         {
-                            AccessibleEventObject aEvent;
-                            aEvent.EventId = AccessibleEventId::VALUE_CHANGED;
-                            mpAccCell->CommitChange(aEvent);
-                            m_strCurCellValue=valStr;
+                            uno::Any aOldValue;
+                            uno::Any aNewValue;
+                            comphelper::OCommonAccessibleText::implInitTextChangedEvent(m_strCurCellValue, valStr, aOldValue, aNewValue);
+                            AccessibleEventObject aTextChangedEvent;
+                            aTextChangedEvent.EventId = AccessibleEventId::TEXT_CHANGED;
+                            aTextChangedEvent.OldValue = aOldValue;
+                            aTextChangedEvent.NewValue = aNewValue;
+                            mpAccCell->CommitChange(aTextChangedEvent);
+
+                            if (pScDoc->HasValueData(maActiveCell))
+                            {
+                                AccessibleEventObject aEvent;
+                                aEvent.EventId = AccessibleEventId::VALUE_CHANGED;
+                                mpAccCell->CommitChange(aEvent);
+                                m_strCurCellValue=valStr;
+                            }
                         }
                         OUString tabName;
                         pScDoc->GetName( maActiveCell.Tab(), tabName );
