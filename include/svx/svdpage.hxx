@@ -23,7 +23,6 @@
 #include <svl/stylesheetuser.hxx>
 #include <vcl/prntypes.hxx>
 #include <svl/itemset.hxx>
-#include <svx/annotation/Annotation.hxx>
 #include <svx/sdrpageuser.hxx>
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <svx/sdrmasterpagedescriptor.hxx>
@@ -41,6 +40,7 @@
 namespace model { class Theme; }
 namespace reportdesign { class OSection; }
 namespace sdr::contact { class ViewContact; }
+namespace sdr::annotation { class Annotation; }
 class SdrPage;
 class SdrModel;
 class SfxItemPool;
