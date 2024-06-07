@@ -1533,15 +1533,24 @@ void SdrObject::NbcShear(const Point& rRef, Degree100 /*nAngle*/, double tn, boo
     SetGlueReallyAbsolute(false);
 }
 
-void SdrObject::Move(const Size& rSiz)
+void SdrObject::Move(const Size& rSize)
 {
-    if (rSiz.Width()!=0 || rSiz.Height()!=0) {
-        tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
-        NbcMove(rSiz);
-        SetChanged();
-        BroadcastObjectChange();
-        SendUserCall(SdrUserCallType::MoveOnly,aBoundRect0);
+    if (rSize.Width() == 0 && rSize.Height() == 0)
+        return;
+
+    tools::Rectangle aBoundRect0;
+    if (m_pUserCall != nullptr)
+        aBoundRect0 = GetLastBoundRect();
+    NbcMove(rSize);
+    if (isAnnotationObject())
+    {
+        auto& rRect = GetCurrentBoundRect();
+        css::geometry::RealPoint2D aNewPosition(rRect.Left() / 100.0, rRect.Top() / 100.0);
+        getAnnotationData()->mxAnnotation->SetPosition(aNewPosition);
     }
+    SetChanged();
+    BroadcastObjectChange();
+    SendUserCall(SdrUserCallType::MoveOnly, aBoundRect0);
 }
 
 void SdrObject::NbcCrop(const basegfx::B2DPoint& /*aRef*/, double /*fxFact*/, double /*fyFact*/)
@@ -1562,11 +1571,23 @@ void SdrObject::Resize(const Point& rRef, const Fraction& xFact, const Fraction&
         mpImpl->meRelativeHeightRelation = text::RelOrientation::PAGE_FRAME;
         mpImpl->mnRelativeHeight.reset();
     }
-    tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
-    NbcResize(rRef,xFact,yFact);
+    tools::Rectangle aBoundRect0;
+
+    if (m_pUserCall != nullptr)
+        aBoundRect0 = GetLastBoundRect();
+
+    NbcResize(rRef, xFact, yFact);
+
+    if (isAnnotationObject())
+    {
+        auto& rRect = GetCurrentBoundRect();
+        css::geometry::RealSize2D aNewSize(rRect.GetWidth() / 100.0, rRect.GetHeight() / 100.0);
+        getAnnotationData()->mxAnnotation->SetSize(aNewSize);
+    }
+
     SetChanged();
     BroadcastObjectChange();
-    SendUserCall(SdrUserCallType::Resize,aBoundRect0);
+    SendUserCall(SdrUserCallType::Resize, aBoundRect0);
 }
 
 void SdrObject::Crop(const basegfx::B2DPoint& rRef, double fxFact, double fyFact)

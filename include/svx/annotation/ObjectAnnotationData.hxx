@@ -10,6 +10,7 @@
 #pragma once
 
 #include <svx/svxdllapi.h>
+#include <svx/annotation/Annotation.hxx>
 
 namespace sdr::annotation
 {

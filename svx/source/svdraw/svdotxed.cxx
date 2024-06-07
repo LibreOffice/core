@@ -29,7 +29,7 @@
 #include <editeng/eeitem.hxx>
 #include <svx/sdtfchim.hxx>
 #include <textchain.hxx>
-
+#include <svx/annotation/ObjectAnnotationData.hxx>
 
 bool SdrTextObj::HasTextEdit() const
 {
@@ -285,6 +285,13 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
             }
         } else { // If we are not doing in-chaining switching just set the ParaObject
             SetOutlinerParaObject(std::move(pNewText));
+        }
+
+        if (isAnnotationObject())
+        {
+            auto xTextAPI(getAnnotationData()->mxAnnotation->getTextApiObject());
+            std::optional<OutlinerParaObject> pAnnotationText = rOutl.CreateParaObject(0, rOutl.GetParagraphCount());
+            xTextAPI->SetText(*pAnnotationText);
         }
     }
 
