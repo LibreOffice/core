@@ -18,6 +18,7 @@
 #include <sdpage.hxx>
 #include <DrawViewShell.hxx>
 #include <DrawDocShell.hxx>
+#include <ToolBarManager.hxx>
 #include <Window.hxx>
 #include <drawdoc.hxx>
 #include <sdmod.hxx>
@@ -194,7 +195,12 @@ void NotesPanelView::onUpdateStyleSettings()
 void NotesPanelView::onResize()
 {
     ::sd::Window* pWin = mrNotesPanelViewShell.GetActiveWindow();
+    if (!pWin)
+        return;
+
     OutlinerView* pOutlinerView = GetOutlinerView();
+    if (!pOutlinerView)
+        return;
 
     Size aOutputSize = pWin->PixelToLogic(pWin->GetOutputSizePixel());
 

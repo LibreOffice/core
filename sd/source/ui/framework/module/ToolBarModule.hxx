@@ -20,18 +20,32 @@
 #pragma once
 
 #include <ToolBarManager.hxx>
+#include <tools/link.hxx>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
+#include <com/sun/star/ui/XContextChangeEventListener.hpp>
 #include <comphelper/compbase.hxx>
 #include <o3tl/deleter.hxx>
 #include <rtl/ref.hxx>
 #include <memory>
 
-namespace com::sun::star::drawing::framework { class XConfigurationController; }
-namespace com::sun::star::frame { class XController; }
+namespace com::sun::star::drawing::framework
+{
+class XConfigurationController;
+class XResourceId;
+}
+namespace com::sun::star::frame
+{
+class XController;
+}
 
 namespace sd {
 class DrawController;
 class ViewShellBase;
+}
+
+namespace sd::tools
+{
+class EventMultiplexerEvent;
 }
 
 namespace sd::framework {
@@ -73,9 +87,20 @@ private:
     ViewShellBase* mpBase;
     std::unique_ptr<ToolBarManager::UpdateLock, o3tl::default_delete<ToolBarManager::UpdateLock>> mpToolBarManagerLock;
     bool mbMainViewSwitchUpdatePending;
+    bool mbListeningEventMultiplexer = false;
+
+    /** Update toolbars via ToolbarManager
+
+        @param pViewShell may be nullptr
+    */
+    void UpdateToolbars(ViewShell* pViewShell);
 
     void HandleUpdateStart();
     void HandleUpdateEnd();
+    void HandlePaneViewShellFocused(
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId);
+
+    DECL_LINK(EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, void);
 };
 
 } // end of namespace sd::framework

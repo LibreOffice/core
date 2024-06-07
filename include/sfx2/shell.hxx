@@ -455,7 +455,7 @@ public:
             defined with an earlier call to SetContextName().
             When <FALSE/> then broadcast the 'default' context.
     */
-    void BroadcastContextForActivation (const bool bIsActivated);
+    virtual void BroadcastContextForActivation (const bool bIsActivated);
 
     /** Enabled or disable the context broadcaster.  Returns the old state.
     */
