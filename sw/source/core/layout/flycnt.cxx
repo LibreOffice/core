@@ -1662,7 +1662,13 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
             {
                 // The above conditions are not held, reject.
                 pOldLayLeaf = pLayLeaf;
-                pLayLeaf = pLayLeaf->GetNextLayoutLeaf();
+                do
+                {
+                    pLayLeaf = pLayLeaf->GetNextLayoutLeaf();
+                }
+                // skip deleted section frames - do not move into these
+                while (pLayLeaf && pLayLeaf->FindSctFrame()
+                    && !pLayLeaf->FindSctFrame()->GetSection());
 
                 if (pLayLeaf && pLayLeaf->IsInDocBody() && !bSameBody && !pLayLeaf->IsInFly() && pLayLeaf->IsInTab())
                 {
