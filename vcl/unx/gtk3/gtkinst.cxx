@@ -247,7 +247,7 @@ void GtkInstance::EnsureInit()
 #ifdef GTK_TOOLKIT_NAME
     pSVData->maAppData.mxToolkitName = OUString(GTK_TOOLKIT_NAME);
 #else
-    pSVData->maAppData.mxToolkitName = u"gtk3"_ustr;
+    pSVData->maAppData.mxToolkitName = OUString("gtk3");
 #endif
 
     bNeedsInit = false;
