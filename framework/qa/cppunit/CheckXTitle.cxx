@@ -40,13 +40,8 @@ CPPUNIT_TEST_FIXTURE(Test, checkDefaultTitle)
     // and asserts that the title doesn't change.
 
     // Load document
-    uno::Reference<lang::XMultiServiceFactory> xFactory(comphelper::getProcessServiceFactory());
-    uno::Reference<uno::XInterface> xInterface
-        = xFactory->createInstance("com.sun.star.frame.Desktop");
-    uno::Reference<frame::XComponentLoader> xComponentLoader(xInterface, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue("Hidden", false) };
-    mxComponent = xComponentLoader->loadComponentFromURL("private:factory/swriter", "_default", 0,
-                                                         aLoadArgs);
+    loadWithParams("private:factory/swriter", aLoadArgs);
 
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<frame::XController> xController(xModel->getCurrentController());
@@ -89,8 +84,7 @@ CPPUNIT_TEST_FIXTURE(Test, checkTitleSuggestedFileName)
     uno::Sequence<beans::PropertyValue> aArguments
         = { comphelper::makePropertyValue(u"SuggestedSaveAsName"_ustr, u"suggestedname.odt"_ustr),
             comphelper::makePropertyValue(u"Hidden"_ustr, false) };
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr, "com.sun.star.text.TextDocument",
-                                  aArguments);
+    loadWithParams("private:factory/swriter", aArguments);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<frame::XController> xController(xModel->getCurrentController());
     uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
@@ -106,13 +100,8 @@ CPPUNIT_TEST_FIXTURE(Test, setTitleAndCheck)
     // Set the frame title, then cycle through default and print preview. Close the window
     // and check for infinite recursion.
 
-    uno::Reference<lang::XMultiServiceFactory> xFactory(comphelper::getProcessServiceFactory());
-    uno::Reference<uno::XInterface> xInterface
-        = xFactory->createInstance("com.sun.star.frame.Desktop");
-    uno::Reference<frame::XComponentLoader> xComponentLoader(xInterface, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue("Hidden", false) };
-    mxComponent = xComponentLoader->loadComponentFromURL("private:factory/swriter", "_default", 0,
-                                                         aLoadArgs);
+    loadWithParams("private:factory/swriter", aLoadArgs);
 
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<frame::XController> xController(xModel->getCurrentController());
