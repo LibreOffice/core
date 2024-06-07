@@ -619,6 +619,7 @@ void SdPage::removeAnnotationNoNotify(rtl::Reference<sdr::annotation::Annotation
         SdrObject* pObject = GetObj(nObjectIndex);
         if (pObject->isAnnotationObject() && pObject->getAnnotationData()->mxAnnotation == xAnnotation)
         {
+            pObject->getAnnotationData()->mpAnnotationPopup->closePopup();
             RemoveObject(nObjectIndex);
         }
     }

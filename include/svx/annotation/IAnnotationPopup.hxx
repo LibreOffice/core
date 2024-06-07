@@ -10,25 +10,28 @@
 #pragma once
 
 #include <svx/svxdllapi.h>
+
 #include <svx/annotation/Annotation.hxx>
-#include <svx/annotation/IAnnotationPopup.hxx>
 
 namespace sdr::annotation
 {
-/** Contains the annotation data for a SdrObject */
-class ObjectAnnotationData
+class SVXCORE_DLLPUBLIC IAnnotationPopup
 {
-public:
-    bool mbIsAnnotation : 1 = false;
+protected:
     rtl::Reference<sdr::annotation::Annotation> mxAnnotation;
-    std::unique_ptr<sdr::annotation::IAnnotationPopup> mpAnnotationPopup;
 
-    void openPopup()
+public:
+    IAnnotationPopup(rtl::Reference<sdr::annotation::Annotation> const& pAnnotation)
+        : mxAnnotation(pAnnotation)
     {
-        if (mbIsAnnotation && mpAnnotationPopup)
-            mpAnnotationPopup->openPopup();
     }
+
+    virtual ~IAnnotationPopup() {}
+
+    virtual void openPopup() = 0;
+    virtual void closePopup() = 0;
 };
-}
+
+} // end sdr::annotation
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

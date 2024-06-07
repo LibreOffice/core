@@ -212,6 +212,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/animations/SlideTransitionPane \
 	sd/source/ui/animations/motionpathtag \
 	sd/source/ui/annotations/annotationmanager \
+	sd/source/ui/annotations/AnnotationPopup \
 	sd/source/ui/annotations/annotationwindow \
 	sd/source/ui/app/optsitem \
 	sd/source/ui/app/sddll \

@@ -63,6 +63,7 @@
 #include <strings.hrc>
 
 #include <Annotation.hxx>
+#include "AnnotationPopup.hxx"
 #include <DrawDocShell.hxx>
 #include <DrawViewShell.hxx>
 #include <sdresid.hxx>
@@ -951,11 +952,11 @@ SdrObject* AnnotationManagerImpl::findAnnotationObjectMatching(rtl::Reference<sd
 
 namespace
 {
-
 void applyAnnotationCommon(SdrObject& rObject, rtl::Reference<sdr::annotation::Annotation> const& xAnnotation)
 {
     rObject.setAsAnnotationObject(true);
     auto& xAnnotationData = rObject.getAnnotationData();
+    xAnnotationData->mpAnnotationPopup.reset(new AnnotationPopup(xAnnotation));
     xAnnotationData->mxAnnotation = xAnnotation;
     rObject.SetPrintable(false);
 }
