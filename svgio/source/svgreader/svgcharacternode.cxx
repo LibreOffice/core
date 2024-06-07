@@ -138,11 +138,11 @@ namespace svgio::svgreader
         {
             // prepare retval, index and length
             rtl::Reference<BasePrimitive2D> pRetval;
-            sal_uInt32 nLength(getText().getLength());
+            const sal_uInt32 nLength(getText().getLength());
 
             if(nLength)
             {
-                sal_uInt32 nIndex(0);
+                const sal_uInt32 nIndex(0);
 
                 // prepare FontAttribute
                 const drawinglayer::attribute::FontAttribute aFontAttribute(getFontAttribute(rSvgStyleAttributes));
@@ -154,9 +154,12 @@ namespace svgio::svgreader
                 // prepare locale
                 css::lang::Locale aLocale;
 
-                // prepare TextLayouterDevice
+                // prepare TextLayouterDevice; use a larger font size for more linear size
+                // calculations. Similar to nTextSizeFactor in sd/source/ui/view/sdview.cxx
+                // (ViewRedirector::createRedirectedPrimitive2DSequence).
+                const double sizeFactor = fFontHeight < 50000 ? 50000 / fFontHeight : 1.0;
                 TextLayouterDevice aTextLayouterDevice;
-                aTextLayouterDevice.setFontAttribute(aFontAttribute, fFontWidth, fFontHeight, aLocale);
+                aTextLayouterDevice.setFontAttribute(aFontAttribute, fFontWidth * sizeFactor, fFontHeight * sizeFactor, aLocale);
 
                 // prepare TextArray
                 ::std::vector< double > aTextArray(rSvgTextPosition.getX());
@@ -190,13 +193,13 @@ namespace svgio::svgreader
                         {
                             fComulativeDx += aDxArray[a];
                         }
-                        aTextArray.push_back(aExtendArray[a] + fStartX + fComulativeDx);
+                        aTextArray.push_back(aExtendArray[a] / sizeFactor + fStartX + fComulativeDx);
                     }
                 }
 
                 // get current TextPosition and TextWidth in units
                 basegfx::B2DPoint aPosition(rSvgTextPosition.getPosition());
-                double fTextWidth(aTextLayouterDevice.getTextWidth(getText(), nIndex, nLength));
+                double fTextWidth(aTextLayouterDevice.getTextWidth(getText(), nIndex, nLength) / sizeFactor);
 
                 // check for user-given TextLength
                 if(0.0 != rSvgTextPosition.getTextLength()
@@ -209,7 +212,10 @@ namespace svgio::svgreader
                         // spacing, need to create and expand TextArray
                         if(aTextArray.empty())
                         {
-                            aTextArray = aTextLayouterDevice.getTextArray(getText(), nIndex, nLength);
+                            auto aExtendArray(aTextLayouterDevice.getTextArray(getText(), nIndex, nLength));
+                            aTextArray.reserve(aExtendArray.size());
+                            for (auto n : aExtendArray)
+                                aTextArray.push_back(n / sizeFactor);
                         }
 
                         for(auto &a : aTextArray)
@@ -289,12 +295,12 @@ namespace svgio::svgreader
                     case DominantBaseline::Middle:
                     case DominantBaseline::Central:
                     {
-                        aPosition.setY(aPosition.getY() - aRange.getCenterY());
+                        aPosition.setY(aPosition.getY() - aRange.getCenterY() / sizeFactor);
                         break;
                     }
                     case DominantBaseline::Hanging:
                     {
-                        aPosition.setY(aPosition.getY() - aRange.getMinY());
+                        aPosition.setY(aPosition.getY() - aRange.getMinY() / sizeFactor);
                         break;
                     }
                     default: // DominantBaseline::Auto
@@ -312,12 +318,12 @@ namespace svgio::svgreader
                 {
                     case BaselineShift::Sub:
                     {
-                        aPosition.setY(aPosition.getY() + aTextLayouterDevice.getUnderlineOffset());
+                        aPosition.setY(aPosition.getY() + aTextLayouterDevice.getUnderlineOffset() / sizeFactor);
                         break;
                     }
                     case BaselineShift::Super:
                     {
-                        aPosition.setY(aPosition.getY() + aTextLayouterDevice.getOverlineOffset());
+                        aPosition.setY(aPosition.getY() + aTextLayouterDevice.getOverlineOffset() / sizeFactor);
                         break;
                     }
                     case BaselineShift::Percentage:
@@ -480,53 +486,80 @@ namespace svgio::svgreader
             }
         }
 
-        void SvgCharacterNode::whiteSpaceHandling()
+        SvgCharacterNode*
+        SvgCharacterNode::whiteSpaceHandling(SvgCharacterNode* pPreviousCharacterNode)
         {
             bool bIsDefault(XmlSpace::Default == getXmlSpace());
             // if xml:space="default" then remove all newline characters, otherwise convert them to space
             // convert tab to space too
-            maText = maTextBeforeSpaceHandling = maText.replaceAll(u"\n", bIsDefault ? u"" : u" ").replaceAll(u"\t", u" ");
+            maText = maText.replaceAll(u"\n", bIsDefault ? u"" : u" ").replaceAll(u"\t", u" ");
 
-            if(bIsDefault)
+            if (!bIsDefault)
             {
-                // strip of all leading and trailing spaces
-                // and consolidate contiguous space
-                maText = consolidateContiguousSpace(maText.trim());
-            }
-        }
-
-        SvgCharacterNode* SvgCharacterNode::addGap(SvgCharacterNode* pPreviousCharacterNode)
-        {
-            // maText may have lost all text. If that's the case, ignore as invalid character node
-            // Also ignore if maTextBeforeSpaceHandling just have spaces
-            if(!maText.isEmpty() && !o3tl::trim(maTextBeforeSpaceHandling).empty())
-            {
-                if(pPreviousCharacterNode)
+                if (maText.isEmpty())
                 {
-                    bool bAddGap(true);
-
-                    // Do not add a gap if last node doesn't end with a space and
-                    // current note doesn't start with a space
-                    const sal_uInt32 nLastLength(pPreviousCharacterNode->maTextBeforeSpaceHandling.getLength());
-                    if(pPreviousCharacterNode->maTextBeforeSpaceHandling[nLastLength - 1] != ' ' && maTextBeforeSpaceHandling[0] != ' ')
-                        bAddGap = false;
-
-                    // Do not add a gap if this node and last node are in different lines
-                    if(pPreviousCharacterNode->mpParentLine != mpParentLine)
-                        bAddGap = false;
-
-                    // add in-between whitespace (single space) to the beginning of the current character node
-                    if(bAddGap)
-                    {
-                        maText = " " + maText;
-                    }
+                    // Ignore this empty node for the purpose of whitespace handling
+                    return pPreviousCharacterNode;
                 }
 
-                // this becomes the previous character node
+                if (pPreviousCharacterNode && pPreviousCharacterNode->mbHadTrailingSpace)
+                {
+                    // pPreviousCharacterNode->mbHadTrailingSpace implies its xml:space="default".
+                    // Even if this xml:space="preserve" node is whitespace-only, the trailing space
+                    // of the previous node is significant - restore it
+                    pPreviousCharacterNode->maText += " ";
+                }
+
                 return this;
             }
 
-            return pPreviousCharacterNode;
+            bool bHadLeadingSpace = maText.startsWith(" ");
+            mbHadTrailingSpace = maText.endsWith(" "); // Only set for xml:space="default"
+
+            // strip of all leading and trailing spaces
+            // and consolidate contiguous space
+            maText = consolidateContiguousSpace(maText.trim());
+
+            if (pPreviousCharacterNode)
+            {
+                if (pPreviousCharacterNode->mbHadTrailingSpace)
+                {
+                    // pPreviousCharacterNode->mbHadTrailingSpace implies its xml:space="default".
+                    // The previous node already has a pending trailing space.
+                    if (maText.isEmpty())
+                    {
+                        // Leading spaces in this empty node are insignificant.
+                        // Ignore this empty node for the purpose of whitespace handling
+                        return pPreviousCharacterNode;
+                    }
+                    // The previous node's trailing space is significant - restore it. Note that
+                    // it is incorrect to insert a space in this node instead: the spaces in
+                    // different nodes may have different size
+                    pPreviousCharacterNode->maText += " ";
+                    return this;
+                }
+
+                if (bHadLeadingSpace)
+                {
+                    // This possibly whitespace-only xml:space="default" node goes after another
+                    // node either having xml:space="default", but without a trailing space; or
+                    // having xml:space="preserve" (in that case, it's irrelevant if that node had
+                    // any trailing spaces).
+                    if (!maText.isEmpty())
+                    {
+                        // The leading whitespace in this node is significant - restore it
+                        maText = " " + maText;
+                    }
+                    // The trailing whitespace in this node may or may not be
+                    // significant (it will be significant, if there will be more nodes). Keep it as
+                    // it is (even empty), but return this, to participate in whitespace handling
+                    return this;
+                }
+            }
+
+            // No previous node, or no leading/trailing space on the previous node's boundary: if
+            // this is whitespace-only, its whitespace is never significant
+            return maText.isEmpty() ? pPreviousCharacterNode : this;
         }
 
         void SvgCharacterNode::concatenate(std::u16string_view rText)

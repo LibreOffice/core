@@ -1222,6 +1222,33 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf160278)
     CPPUNIT_ASSERT_EQUAL(u"12test"_ustr, xText->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf161035)
+{
+    // Given a paragraph with a bookmark:
+    createSwDoc("tdf161035.fodt");
+    auto xModel = mxComponent.queryThrow<frame::XModel>();
+
+    // Create a text view cursor in the paragraph.
+    auto xController = xModel->getCurrentController().queryThrow<text::XTextViewCursorSupplier>();
+    auto xViewCursor = xController->getViewCursor();
+    CPPUNIT_ASSERT(xViewCursor);
+    auto xText = xViewCursor->getText();
+    CPPUNIT_ASSERT(xText);
+    // Create a text cursor from the text view cursor, and move it to the end of the paragraph
+    auto xTextCursor = xText->createTextCursorByRange(xViewCursor);
+    CPPUNIT_ASSERT(xTextCursor);
+    xTextCursor->gotoEnd(false);
+    // Get the first paragraph portion from the text cursor
+    auto xParaEnum = xTextCursor.queryThrow<container::XEnumerationAccess>()->createEnumeration();
+    CPPUNIT_ASSERT(xParaEnum);
+    auto xPara = xParaEnum->nextElement().queryThrow<container::XEnumerationAccess>();
+    // Try to enumerate text portions. Without the fix, it would fail an assertion in debug builds,
+    // and hang in release builds, because the paragraph portion started after the bookmark, and
+    // so the bookmark wasn't processed (expectedly):
+    auto xRunEnum = xPara->createEnumeration();
+    CPPUNIT_ASSERT(!xRunEnum->hasMoreElements()); // Empty enumeration for empty selection
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

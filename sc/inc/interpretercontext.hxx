@@ -18,7 +18,7 @@
 
 namespace formula
 {
-class FormulaToken;
+class FormulaTypedDoubleToken;
 }
 
 #define TOKEN_CACHE_SIZE 8
@@ -43,7 +43,7 @@ struct ScInterpreterContext
 {
     const ScDocument* mpDoc;
     size_t mnTokenCachePos;
-    std::vector<formula::FormulaToken*> maTokens;
+    std::vector<formula::FormulaTypedDoubleToken*> maTokens;
     std::vector<DelayedSetNumberFormat> maDelayedSetNumberFormat;
     std::unique_ptr<ScLookupCacheMap> mxScLookupCache; // cache for lookups like VLOOKUP and MATCH
     // Allocation cache for "aConditions" array in ScInterpreter::IterateParameterIfs()

@@ -1076,6 +1076,44 @@ bool SwFrame::IsCollapse() const
     return pTextFrame->GetText().isEmpty() && pTextNode && pTextNode->IsCollapse();
 }
 
+bool SwFrame::IsCollapseUpper() const
+{
+    const SwTextFrame* pTextFrame = DynCastTextFrame();
+    if (!pTextFrame)
+    {
+        return false;
+    }
+
+    const SwDoc& rDoc = pTextFrame->GetDoc();
+    const IDocumentSettingAccess& rIDSA = rDoc.getIDocumentSettingAccess();
+    if (!rIDSA.get(DocumentSettingId::TAB_OVER_SPACING) || rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN))
+    {
+        // Writer or Word Word <= 2010 style: upper margin is never ignored.
+        return false;
+    }
+
+    if (IsInFly())
+    {
+        // Not in a page's body.
+        return false;
+    }
+
+    // Word >= 2013 style: when we're at the top of the page's body, but not on the first page, then
+    // ignore the upper margin for paragraphs.
+    if (GetPrev() || !GetUpper() || !GetUpper()->IsBodyFrame())
+    {
+        return false;
+    }
+
+    const SwPageFrame* pPageFrame = FindPageFrame();
+    if (!pPageFrame || !pPageFrame->GetPrev())
+    {
+        return false;
+    }
+
+    return true;
+}
+
 void SwContentFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
 {
     if ( isFramePrintAreaValid() )

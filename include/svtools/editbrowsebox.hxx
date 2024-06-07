@@ -829,6 +829,8 @@ namespace svt
 
         void SetDate(const Date& rDate);
 
+        virtual void SetEditableReadOnly(bool bReadOnly) override;
+
         virtual void dispose() override;
     private:
         std::unique_ptr<weld::MenuButton> m_xMenuButton;

@@ -175,6 +175,7 @@ private:
         void adjustForHyperlinkInPDF(Point aURLStart, const OutputDevice* pDev);
     };
 
+    VclPtr<OutputDevice> mpOriginalTargetDevice; // 'unpatched' TargetDevice
     VclPtr<OutputDevice> mpDev;        // Device
     VclPtr<OutputDevice> mpRefDevice;  // printer if used for preview
     VclPtr<OutputDevice> pFmtDevice;   // reference for text formatting

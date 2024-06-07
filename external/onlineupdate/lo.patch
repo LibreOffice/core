@@ -372,7 +372,13 @@
        fi
      fi
    else
-@@ -270,7 +270,7 @@
+@@ -266,11 +266,12 @@
+   if check_for_add_if_not_update "$f"; then
+     make_add_if_not_instruction "$f" "$updatemanifestv3"
+   else
+-    make_add_instruction "$f" "$updatemanifestv3"
++    verbose_notice "     add \"$f\""
++    echo "add \"$f\"" >> "$updatemanifestv3"
    fi
  
  

@@ -66,7 +66,46 @@ namespace svgio::svgreader
 
 namespace
 {
-    svgio::svgreader::SvgCharacterNode* whiteSpaceHandling(svgio::svgreader::SvgNode const * pNode, svgio::svgreader::SvgTspanNode* pParentLine, svgio::svgreader::SvgCharacterNode* pLast)
+using CharacterNodeHandlerFunc
+    = svgio::svgreader::SvgCharacterNode*(svgio::svgreader::SvgCharacterNode* pCharNode,
+                                          svgio::svgreader::SvgTspanNode* pParentLine,
+                                          svgio::svgreader::SvgCharacterNode* pLast);
+    // clean whitespace in text span
+    svgio::svgreader::SvgCharacterNode* whiteSpaceHandling(svgio::svgreader::SvgCharacterNode* pCharNode,
+                                                           svgio::svgreader::SvgTspanNode* pParentLine,
+                                                           svgio::svgreader::SvgCharacterNode* pLast)
+    {
+        pCharNode->setParentLine(pParentLine);
+        return pCharNode->whiteSpaceHandling(pLast);
+    }
+
+    // set correct widths of text lines
+    svgio::svgreader::SvgCharacterNode* calcTextLineWidths(svgio::svgreader::SvgCharacterNode* pCharNode,
+                                                           svgio::svgreader::SvgTspanNode* pParentLine,
+                                                           svgio::svgreader::SvgCharacterNode* /*pLast*/)
+    {
+        if (const SvgStyleAttributes* pSvgStyleAttributes = pCharNode->getSvgStyleAttributes())
+        {
+            const drawinglayer::attribute::FontAttribute aFontAttribute(
+                svgio::svgreader::SvgCharacterNode::getFontAttribute(*pSvgStyleAttributes));
+
+            double fFontWidth(pSvgStyleAttributes->getFontSizeNumber().solve(*pCharNode));
+            double fFontHeight(fFontWidth);
+
+            css::lang::Locale aLocale;
+            drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
+            aTextLayouterDevice.setFontAttribute(aFontAttribute, fFontWidth, fFontHeight, aLocale);
+            double fTextWidth = aTextLayouterDevice.getTextWidth(pCharNode->getText(), 0.0,
+                                                                 pCharNode->getText().getLength());
+            pParentLine->concatenateTextLineWidth(fTextWidth);
+        }
+        return nullptr; // no pLast handling
+    }
+
+    svgio::svgreader::SvgCharacterNode* walkRecursive(svgio::svgreader::SvgNode const* pNode,
+                                                      svgio::svgreader::SvgTspanNode* pParentLine,
+                                                      svgio::svgreader::SvgCharacterNode* pLast,
+                                                      CharacterNodeHandlerFunc* pHandlerFunc)
     {
         if(pNode)
         {
@@ -83,34 +122,9 @@ namespace
                     {
                         case SVGToken::Character:
                         {
-                            // clean whitespace in text span
                             svgio::svgreader::SvgCharacterNode* pCharNode = static_cast< svgio::svgreader::SvgCharacterNode* >(pCandidate);
 
-                            pCharNode->setParentLine(pParentLine);
-
-                            pCharNode->whiteSpaceHandling();
-                            pLast = pCharNode->addGap(pLast);
-
-                            double fTextWidth(0.0);
-
-                            const SvgStyleAttributes* pSvgStyleAttributes = pCharNode->getSvgStyleAttributes();
-
-                            if(pSvgStyleAttributes)
-                            {
-                                const drawinglayer::attribute::FontAttribute aFontAttribute(
-                                        svgio::svgreader::SvgCharacterNode::getFontAttribute(*pSvgStyleAttributes));
-
-                                double fFontWidth(pSvgStyleAttributes->getFontSizeNumber().solve(*pCharNode));
-                                double fFontHeight(fFontWidth);
-
-                                css::lang::Locale aLocale;
-
-                                drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
-                                aTextLayouterDevice.setFontAttribute(aFontAttribute, fFontWidth, fFontHeight, aLocale);
-                                fTextWidth = aTextLayouterDevice.getTextWidth(pCharNode->getText(), 0.0, pCharNode->getText().getLength());
-                            }
-
-                            pParentLine->concatenateTextLineWidth(fTextWidth);
+                            pLast = pHandlerFunc(pCharNode, pParentLine, pLast);
                             break;
                         }
                         case SVGToken::Tspan:
@@ -121,15 +135,15 @@ namespace
                             if(!pTspanNode->getX().empty() || !pTspanNode->getY().empty())
                                 pParentLine = pTspanNode;
 
-                            // recursively clean whitespaces in subhierarchy
-                            pLast = whiteSpaceHandling(pCandidate, pParentLine, pLast);
+                            // recursively handle subhierarchy
+                            pLast = walkRecursive(pCandidate, pParentLine, pLast, pHandlerFunc);
                             break;
                         }
                         case SVGToken::TextPath:
                         case SVGToken::Tref:
                         {
-                            // recursively clean whitespaces in subhierarchy
-                            pLast = whiteSpaceHandling(pCandidate, pParentLine, pLast);
+                            // recursively handle subhierarchy
+                            pLast = walkRecursive(pCandidate, pParentLine, pLast, pHandlerFunc);
                             break;
                         }
                         default:
@@ -516,7 +530,12 @@ namespace
             if(pTextNode)
             {
                 // cleanup read strings
-                whiteSpaceHandling(pTextNode, static_cast< SvgTspanNode*>(pTextNode), nullptr);
+                // First pass: handle whitespace. This works in a way that handling a following
+                // node may append a space to a previous node; so correct line width calculation
+                // may only happen after this pass finishes
+                walkRecursive(pTextNode, static_cast<SvgTspanNode*>(pTextNode), nullptr, whiteSpaceHandling);
+                // Second pass: calculate line widths
+                walkRecursive(pTextNode, static_cast<SvgTspanNode*>(pTextNode), nullptr, calcTextLineWidths);
             }
         }
 

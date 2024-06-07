@@ -2174,7 +2174,7 @@ void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Colo
 
     preDraw();
     auto getBoundRect = [&layout]() {
-        tools::Rectangle rect;
+        basegfx::B2DRectangle rect;
         layout.GetBoundRect(rect);
         return rect;
     };

@@ -35,6 +35,7 @@
 #include <QtX11Support.hxx>
 #endif
 
+#include <QtCore/QLibraryInfo>
 #include <QtCore/QMimeData>
 #include <QtCore/QPoint>
 #include <QtCore/QSize>
@@ -1339,8 +1340,17 @@ void QtFrame::ResolveWindowHandle(SystemEnvData& rData) const
     if (!rData.pWidget)
         return;
     assert(rData.platform != SystemEnvData::Platform::Invalid);
-    if (rData.platform != SystemEnvData::Platform::Wayland)
+    // Calling QWidget::winId() implicitly enables native windows to be used instead
+    // of "alien widgets" that don't have a native widget asscoiated with them,
+    // s. https://doc.qt.io/qt-6/qwidget.html#native-widgets-vs-alien-widgets
+    // Avoid native widgets with Qt 5 on Wayland and with Qt 6 altogether as they
+    // cause unsresponsive UI, s. tdf#122293/QTBUG-75766 and tdf#160565
+    // (for qt5 xcb, they're needed for video playback)
+    if (rData.platform != SystemEnvData::Platform::Wayland
+        && QLibraryInfo::version().majorVersion() < 6)
+    {
         rData.SetWindowHandle(static_cast<QWidget*>(rData.pWidget)->winId());
+    }
 }
 
 bool QtFrame::GetUseReducedAnimation() const { return GetQtInstance()->GetUseReducedAnimation(); }

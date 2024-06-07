@@ -2306,6 +2306,8 @@ void SwFramePage::Init(const SfxItemSet& rSet)
 
     if (SfxItemState::SET == rSet.GetItemState(FN_KEEP_ASPECT_RATIO))
         m_xFixedRatioCB->set_active(rSet.Get(FN_KEEP_ASPECT_RATIO).GetValue());
+    // see tdf#132591 and tdf#151382 for some examples of FN_KEEP_ASPECT_RATIO cases
+    m_xFixedRatioCB->save_state();
 
     // columns
     SwFormatCol aCol( rSet.Get(RES_COL) );
@@ -2364,7 +2366,6 @@ void SwFramePage::Init(const SfxItemSet& rSet)
 
     if (rSize.GetWidthPercent() == SwFormatFrameSize::SYNCED || rSize.GetHeightPercent() == SwFormatFrameSize::SYNCED)
         m_xFixedRatioCB->set_active(true);
-    m_xFixedRatioCB->save_state();
     if (rSize.GetWidthPercent() && rSize.GetWidthPercent() != SwFormatFrameSize::SYNCED &&
         !m_xRelWidthCB->get_active())
     {

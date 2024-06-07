@@ -310,3 +310,17 @@ Anyway, our current "experimental" apps are not based on `NativeActivity`.
 They have normal Java code for the activity, and just call out to a single,
 app-specific native library (called `liblo-native-code.so`) to do all the
 heavy lifting.
+
+## Triple-T metadata for F-Droid
+
+The subdirectory `source/src/main/play` contains data in the Triple-T
+structure that F-Droid evaluates to extract metadata.
+
+More information:
+<https://f-droid.org/en/docs/All_About_Descriptions_Graphics_and_Screenshots/#triple-t-structure>
+
+As Android Viewer currently uses a non-default directory layout,
+this currently needs to be placed in a different subdirectory than
+the actual source code in order for F-Droid to find it, see the
+[related discussion](<https://gitlab.com/fdroid/fdroiddata/-/merge_requests/13643#note_1538888683>)
+for more details.

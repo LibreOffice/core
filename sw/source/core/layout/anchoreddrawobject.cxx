@@ -266,6 +266,8 @@ void SwAnchoredDrawObject::MakeObjPos()
 
     SwDrawContact* pDrawContact =
                         static_cast<SwDrawContact*>(::GetUserCall( GetDrawObj() ));
+    if (!pDrawContact)
+        return;
 
     // --> #i28749# - if anchored drawing object hasn't been yet
     // positioned, convert its positioning attributes, if its positioning
@@ -849,6 +851,8 @@ void SwAnchoredDrawObject::SetPositioningAttr()
 {
     SwDrawContact* pDrawContact =
                         static_cast<SwDrawContact*>(GetUserCall( GetDrawObj() ));
+    if (!pDrawContact)
+        return;
 
     SwFrameFormat* pObjFormat = GetFrameFormat();
     if ( !pDrawContact->ObjAnchoredAsChar() )

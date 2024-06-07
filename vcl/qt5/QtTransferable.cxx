@@ -13,6 +13,7 @@
 #include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
 #include <o3tl/string_view.hxx>
+#include <tools/debug.hxx>
 
 #include <QtWidgets/QApplication>
 
@@ -43,22 +44,14 @@ static bool lcl_textMimeInfo(std::u16string_view rMimeString, bool& bHaveNoChars
 
 QtTransferable::QtTransferable(const QMimeData* pMimeData)
     : m_pMimeData(pMimeData)
-    , m_bProvideUTF16FromOtherEncoding(false)
 {
     assert(pMimeData);
 }
 
 css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL QtTransferable::getTransferDataFlavors()
 {
-    // it's just filled once, ever, so just try to get it without locking first
-    if (m_aMimeTypeSeq.hasElements())
-        return m_aMimeTypeSeq;
-
-    // better safe then sorry; preventing broken usage
-    // DnD should not be shared and Clipboard access runs in the GUI thread
-    osl::MutexGuard aGuard(m_aMutex);
-    if (m_aMimeTypeSeq.hasElements())
-        return m_aMimeTypeSeq;
+    if (!m_pMimeData)
+        return css::uno::Sequence<css::datatransfer::DataFlavor>();
 
     QStringList aFormatList(m_pMimeData->formats());
     // we might add the UTF-16 mime text variant later
@@ -101,8 +94,10 @@ css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL QtTransferable::getTr
         nMimeTypeCount++;
     }
 
-    m_bProvideUTF16FromOtherEncoding = (bHaveNoCharset || bHaveUTF8) && !bHaveUTF16;
-    if (m_bProvideUTF16FromOtherEncoding)
+    // in case of text/plain data, but no UTF-16 encoded one,
+    // QtTransferable::getTransferData converts from existing encoding to UTF-16
+    const bool bProvideUTF16FromOtherEncoding = (bHaveNoCharset || bHaveUTF8) && !bHaveUTF16;
+    if (bProvideUTF16FromOtherEncoding)
     {
         aFlavor.MimeType = "text/plain;charset=utf-16";
         aFlavor.DataType = cppu::UnoType<OUString>::get();
@@ -113,8 +108,7 @@ css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL QtTransferable::getTr
 
     aMimeTypeSeq.realloc(nMimeTypeCount);
 
-    m_aMimeTypeSeq = aMimeTypeSeq;
-    return m_aMimeTypeSeq;
+    return aMimeTypeSeq;
 }
 
 sal_Bool SAL_CALL
@@ -135,25 +129,23 @@ css::uno::Any SAL_CALL QtTransferable::getTransferData(const css::datatransfer::
     if (rFlavor.MimeType == "text/plain;charset=utf-16")
     {
         OUString aString;
-        if (m_bProvideUTF16FromOtherEncoding)
-        {
-            if (m_pMimeData->hasFormat("text/plain;charset=utf-8"))
-            {
-                QByteArray aByteData(m_pMimeData->data(QStringLiteral("text/plain;charset=utf-8")));
-                aString = OUString::fromUtf8(reinterpret_cast<const char*>(aByteData.data()));
-            }
-            else
-            {
-                QByteArray aByteData(m_pMimeData->data(QStringLiteral("text/plain")));
-                aString = OUString(reinterpret_cast<const char*>(aByteData.data()),
-                                   aByteData.size(), osl_getThreadTextEncoding());
-            }
-        }
-        else
+        // use existing UTF-16 encoded text/plain or convert to UTF-16 as needed
+        if (m_pMimeData->hasFormat("text/plain;charset=utf-16"))
         {
             QByteArray aByteData(m_pMimeData->data(toQString(rFlavor.MimeType)));
             aString = OUString(reinterpret_cast<const sal_Unicode*>(aByteData.data()),
                                aByteData.size() / 2);
+        }
+        else if (m_pMimeData->hasFormat("text/plain;charset=utf-8"))
+        {
+            QByteArray aByteData(m_pMimeData->data(QStringLiteral("text/plain;charset=utf-8")));
+            aString = OUString::fromUtf8(reinterpret_cast<const char*>(aByteData.data()));
+        }
+        else
+        {
+            QByteArray aByteData(m_pMimeData->data(QStringLiteral("text/plain")));
+            aString = OUString(reinterpret_cast<const char*>(aByteData.data()), aByteData.size(),
+                               osl_getThreadTextEncoding());
         }
         aAny <<= aString;
     }
@@ -175,11 +167,22 @@ QtClipboardTransferable::QtClipboardTransferable(const QClipboard::Mode aMode,
 {
 }
 
-bool QtClipboardTransferable::hasInFlightChanged() const
+void QtClipboardTransferable::ensureConsistencyWithSystemClipboard()
 {
-    const bool bChanged(mimeData() != QApplication::clipboard()->mimeData(m_aMode));
-    SAL_WARN_IF(bChanged, "vcl.qt", "In flight clipboard change detected - broken clipboard read!");
-    return bChanged;
+    const QMimeData* pCurrentClipboardData = QApplication::clipboard()->mimeData(m_aMode);
+    if (mimeData() != pCurrentClipboardData)
+    {
+        SAL_WARN("vcl.qt", "In flight clipboard change detected - updating mime data with current "
+                           "clipboard contents.");
+        DBG_TESTSOLARMUTEX();
+        setMimeData(pCurrentClipboardData);
+    }
+}
+
+bool QtClipboardTransferable::hasMimeData(const QMimeData* pMimeData) const
+{
+    SolarMutexGuard aGuard;
+    return QtTransferable::mimeData() == pMimeData;
 }
 
 css::uno::Any SAL_CALL
@@ -189,8 +192,8 @@ QtClipboardTransferable::getTransferData(const css::datatransfer::DataFlavor& rF
     auto* pSalInst(GetQtInstance());
     SolarMutexGuard g;
     pSalInst->RunInMainThread([&, this]() {
-        if (!hasInFlightChanged())
-            aAny = QtTransferable::getTransferData(rFlavor);
+        ensureConsistencyWithSystemClipboard();
+        aAny = QtTransferable::getTransferData(rFlavor);
     });
     return aAny;
 }
@@ -202,8 +205,8 @@ css::uno::Sequence<css::datatransfer::DataFlavor>
     auto* pSalInst(GetQtInstance());
     SolarMutexGuard g;
     pSalInst->RunInMainThread([&, this]() {
-        if (!hasInFlightChanged())
-            aSeq = QtTransferable::getTransferDataFlavors();
+        ensureConsistencyWithSystemClipboard();
+        aSeq = QtTransferable::getTransferDataFlavors();
     });
     return aSeq;
 }
@@ -215,8 +218,8 @@ QtClipboardTransferable::isDataFlavorSupported(const css::datatransfer::DataFlav
     auto* pSalInst(GetQtInstance());
     SolarMutexGuard g;
     pSalInst->RunInMainThread([&, this]() {
-        if (!hasInFlightChanged())
-            bIsSupported = QtTransferable::isDataFlavorSupported(rFlavor);
+        ensureConsistencyWithSystemClipboard();
+        bIsSupported = QtTransferable::isDataFlavorSupported(rFlavor);
     });
     return bIsSupported;
 }

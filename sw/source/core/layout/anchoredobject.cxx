@@ -44,10 +44,13 @@ SwObjPositioningInProgress::SwObjPositioningInProgress( SdrObject& _rSdrObj ) :
     // --> #i52904#
     mbOldObjPositioningInProgress( false )
 {
-    mpAnchoredObj = ::GetUserCall( &_rSdrObj )->GetAnchoredObj( &_rSdrObj );
-    // --> #i52904#
-    mbOldObjPositioningInProgress = mpAnchoredObj->IsPositioningInProgress();
-    mpAnchoredObj->SetPositioningInProgress( true );
+    if (SwContact* pContact = ::GetUserCall( &_rSdrObj ))
+    {
+        mpAnchoredObj = pContact->GetAnchoredObj( &_rSdrObj );
+        // --> #i52904#
+        mbOldObjPositioningInProgress = mpAnchoredObj->IsPositioningInProgress();
+        mpAnchoredObj->SetPositioningInProgress( true );
+    }
 }
 SwObjPositioningInProgress::SwObjPositioningInProgress( SwAnchoredObject& _rAnchoredObj ) :
     mpAnchoredObj( &_rAnchoredObj ),

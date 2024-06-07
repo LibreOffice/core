@@ -48,7 +48,10 @@ using namespace ::com::sun::star::uno;
 
 +(id)descriptionAttributeForElement:(AquaA11yWrapper *)wrapper {
     if ( [ wrapper accessibleExtendedComponent ] ) {
-        return CreateNSString ( [ wrapper accessibleExtendedComponent ] -> getToolTipText() );
+        // Related tdf#158914: explicitly call autorelease selector
+        // CreateNSString() is not a getter. It expects the caller to
+        // release the returned string.
+        return [ CreateNSString ( [ wrapper accessibleExtendedComponent ] -> getToolTipText() ) autorelease ];
     } else {
         return nil;
     }

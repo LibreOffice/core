@@ -586,6 +586,12 @@ namespace svt
         m_xCalendar->set_date(rDate);
     }
 
+    void DateControl::SetEditableReadOnly(bool bReadOnly)
+    {
+        FormattedControlBase::SetEditableReadOnly(bReadOnly);
+        m_xMenuButton->set_sensitive(!bReadOnly);
+    }
+
     void DateControl::dispose()
     {
         m_xTodayBtn.reset();

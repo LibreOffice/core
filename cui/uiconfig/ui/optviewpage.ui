@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustment2">
@@ -27,7 +27,6 @@
       <object class="GtkGrid" id="grid2">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="hexpand">True</property>
         <property name="row-spacing">12</property>
         <child>
           <object class="GtkFrame" id="frame4">

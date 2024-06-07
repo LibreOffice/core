@@ -68,6 +68,9 @@ static void lcl_AdjustPositioningAttr( SwDrawFrameFormat* _pFrameFormat,
     const SwContact* pContact = GetUserCall( &_rSdrObj );
     OSL_ENSURE( pContact, "<lcl_AdjustPositioningAttr(..)> - missing contact object." );
 
+    if (!pContact)
+        return;
+
     // determine position of new group object relative to its anchor frame position
     SwTwips nHoriRelPos = 0;
     SwTwips nVertRelPos = 0;
@@ -195,6 +198,9 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
 
         // Revoke anchor attribute.
         SwDrawContact *pMyContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
+        if (!pMyContact)
+            return pNewContact;
+
         const SwFormatAnchor aAnch( pMyContact->GetFormat()->GetAnchor() );
 
         std::unique_ptr<SwUndoDrawGroup> pUndo;
@@ -215,6 +221,9 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
         {
             pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
             SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
+
+            if (!pContact)
+                continue;
 
             // #i53320#
 #if OSL_DEBUG_LEVEL > 0
@@ -351,6 +360,9 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                 if ( auto pObjGroup = dynamic_cast<SdrObjGroup*>(pObj) )
                 {
                     SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
+
+                    if (!pContact)
+                        continue;
 
                     std::shared_ptr<SwTextBoxNode> pTextBoxNode;
                     if (auto pGroupFormat = pContact->GetFormat())

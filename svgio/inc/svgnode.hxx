@@ -163,11 +163,8 @@ namespace svgio::svgreader
 
             /// InfoProvider support for %, em and ex values
             virtual basegfx::B2DRange getCurrentViewPort() const override;
-            virtual double getCurrentFontSizeInherited() const override;
-            virtual double getCurrentXHeightInherited() const override;
-
-            double getCurrentFontSize() const;
-            double getCurrentXHeight() const;
+            virtual double getCurrentFontSize() const override;
+            virtual double getCurrentXHeight() const override;
 
             /// Id access
             std::optional<OUString> const & getId() const { return mpId; }

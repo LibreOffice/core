@@ -18,7 +18,6 @@ void update_checker();
 class Updater
 {
 public:
-    static OUString getUpdateInfoLog();
     static OUString getPatchDirURL();
     static OUString getUpdateFileURL();
     static OUString getExecutableDirURL();
@@ -28,8 +27,6 @@ public:
     static OUString getUpdateChannel();
 
     static void log(const OUString& rMessage);
-    static void log(const OString& rMessage);
-    static void log(const char* pMessage);
 
     static void removeUpdateFiles();
 };

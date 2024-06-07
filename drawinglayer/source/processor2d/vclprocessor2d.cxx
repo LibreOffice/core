@@ -182,7 +182,8 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
             }
 
             // Don't draw fonts without height
-            if (aFont.GetFontHeight() <= 0)
+            Size aResultFontSize = aFont.GetFontSize();
+            if (aResultFontSize.Height() <= 0)
                 return;
 
             // set FillColor Attribute
@@ -408,7 +409,30 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
             else
             {
                 const basegfx::B2DPoint aPoint(aLocalTransform * basegfx::B2DPoint(0.0, 0.0));
-                aStartPoint = Point(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY()));
+                double aPointX = aPoint.getX(), aPointY = aPoint.getY();
+
+                // aFont has an integer size; we must scale a bit for precision
+                double nFontScalingFixY = aFontScaling.getY() / aResultFontSize.Height();
+                double nFontScalingFixX = aFontScaling.getX()
+                                          / (aResultFontSize.Width() ? aResultFontSize.Width()
+                                                                     : aResultFontSize.Height());
+
+                if (!rtl_math_approxEqual(nFontScalingFixY, 1.0)
+                    || !rtl_math_approxEqual(nFontScalingFixX, 1.0))
+                {
+                    MapMode aMapMode = mpOutputDevice->GetMapMode();
+                    aMapMode.SetScaleX(aMapMode.GetScaleX() * nFontScalingFixX);
+                    aMapMode.SetScaleY(aMapMode.GetScaleY() * nFontScalingFixY);
+
+                    mpOutputDevice->Push(vcl::PushFlags::MAPMODE);
+                    mpOutputDevice->SetRelativeMapMode(aMapMode);
+                    bChangeMapMode = true;
+
+                    aPointX /= nFontScalingFixX;
+                    aPointY /= nFontScalingFixY;
+                }
+
+                aStartPoint = Point(basegfx::fround(aPointX), basegfx::fround(aPointY));
             }
 
             // tdf#152990 set the font after the MapMode is (potentially) set so canvas uses the desired

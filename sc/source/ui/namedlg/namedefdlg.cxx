@@ -94,8 +94,8 @@ void ScNameDefDlg::CancelPushed()
         response(RET_CANCEL);
     else
     {
-        ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-        pViewSh->SwitchBetweenRefDialogs(this);
+        if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
+            pViewSh->SwitchBetweenRefDialogs(this);
     }
 }
 
@@ -254,8 +254,8 @@ void ScNameDefDlg::AddPushed()
             {
                 maName = aName;
                 maScope = aScope;
-                ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-                pViewSh->SwitchBetweenRefDialogs(this);
+                if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
+                    pViewSh->SwitchBetweenRefDialogs(this);
             }
         }
         else

@@ -9,7 +9,7 @@ dnl in order to create a configure script.
 # several non-alphanumeric characters, those are split off and used only for the
 # ABOUTBOXPRODUCTVERSIONSUFFIX in openoffice.lst. Why that is necessary, no idea.
 
-AC_INIT([LibreOffice],[24.2.3.2],[],[],[http://documentfoundation.org/])
+AC_INIT([LibreOffice],[24.2.4.2],[],[],[http://documentfoundation.org/])
 
 dnl libnumbertext needs autoconf 2.68, but that can pick up autoconf268 just fine if it is installed
 dnl whereas aclocal (as run by autogen.sh) insists on using autoconf and fails hard
@@ -519,7 +519,7 @@ AC_DEFINE_UNQUOTED(LIBO_VERSION_MINOR,$LIBO_VERSION_MINOR)
 AC_DEFINE_UNQUOTED(LIBO_VERSION_MICRO,$LIBO_VERSION_MICRO)
 AC_DEFINE_UNQUOTED(LIBO_VERSION_PATCH,$LIBO_VERSION_PATCH)
 
-git_date=`git log -1 --pretty=format:"%cd" --date=format:'%Y' 2>&/dev/null`
+git_date=`git log -1 --pretty=format:"%cd" --date=format:'%Y' 2>/dev/null`
 LIBO_THIS_YEAR=${git_date:-2024}
 AC_DEFINE_UNQUOTED(LIBO_THIS_YEAR,$LIBO_THIS_YEAR)
 

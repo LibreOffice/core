@@ -382,11 +382,13 @@ const SwFrameFormat* SwFEShell::IsFlyInFly()
             return nullptr;
         return pFly->GetFormat();
     }
-    else if ( rMrkList.GetMarkCount() != 1 ||
-         !GetUserCall(rMrkList.GetMark( 0 )->GetMarkedSdrObj()) )
+    else if ( rMrkList.GetMarkCount() != 1 )
         return nullptr;
 
     SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
+    SwContact* pContact = GetUserCall( pObj );
+    if (!pContact)
+        return nullptr;
 
     SwFrameFormat *pFormat = FindFrameFormat( pObj );
     if( pFormat && RndStdIds::FLY_AT_FLY == pFormat->GetAnchor().GetAnchorId() )
@@ -398,7 +400,7 @@ const SwFrameFormat* SwFEShell::IsFlyInFly()
         }
         else
         {
-            pFly = static_cast<SwDrawContact*>(GetUserCall(pObj))->GetAnchorFrame(pObj);
+            pFly = static_cast<SwDrawContact*>(pContact)->GetAnchorFrame(pObj);
         }
 
         OSL_ENSURE( pFly, "IsFlyInFly: Where's my anchor?" );
@@ -491,11 +493,12 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
 
     SdrObject* pObj = rMrkList.GetMark(0)->GetMarkedSdrObj();
 
-    if (!GetUserCall(pObj))
+    SwContact* pContact = ::GetUserCall( pObj );
+    if (!pContact)
         return aRet;
 
     // #i28701#
-    SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
+    SwAnchoredObject* pAnchoredObj = pContact->GetAnchoredObj( pObj );
     SwFrameFormat* pFormat = pAnchoredObj->GetFrameFormat();
     const RndStdIds nAnchorId = pFormat->GetAnchor().GetAnchorId();
 
@@ -890,6 +893,43 @@ const SwFrameFormat *SwFEShell::NewFlyFrame( const SfxItemSet& rSet, bool bAnchV
     return pRet;
 }
 
+namespace
+{
+/// If pCursor points to an as-char anchored graphic node, then set the node's anchor position on
+/// pAnchor and rPam.
+bool SetAnchorOnGrfNodeForAsChar(SwShellCursor *pCursor, SwFormatAnchor* pAnchor, std::optional<SwPaM>& rPam)
+{
+    const SwPosition* pPoint = pCursor->GetPoint();
+    if (pAnchor->GetAnchorId() != RndStdIds::FLY_AS_CHAR)
+    {
+        return false;
+    }
+
+    if (!pPoint->GetNode().IsGrfNode())
+    {
+        return false;
+    }
+
+    SwFrameFormat* pFrameFormat = pPoint->GetNode().GetFlyFormat();
+    if (!pFrameFormat)
+    {
+        return false;
+    }
+
+    const SwPosition* pContentAnchor = pFrameFormat->GetAnchor().GetContentAnchor();
+    if (!pContentAnchor)
+    {
+        return false;
+    }
+
+    SwPosition aPosition(*pContentAnchor);
+    ++aPosition.nContent;
+    pAnchor->SetAnchor(&aPosition);
+    rPam.emplace(aPosition);
+    return true;
+}
+}
+
 void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
                         const Graphic* pGraphic,
                         const SfxItemSet* pFlyAttrSet )
@@ -905,6 +945,7 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
             break;
 
         // Has the anchor not been set or been set incompletely?
+        std::optional<SwPaM> oPam;
         if( pFlyAttrSet )
         {
             if( const SwFormatAnchor* pItem = pFlyAttrSet->GetItemIfSet( RES_ANCHOR, false ) )
@@ -917,6 +958,13 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
                 case RndStdIds::FLY_AS_CHAR:
                     if( !pAnchor->GetAnchorNode() )
                     {
+                        if (SetAnchorOnGrfNodeForAsChar(pCursor, pAnchor, oPam))
+                        {
+                            // Don't anchor the image on the previous image, rather insert them next
+                            // to each other.
+                            break;
+                        }
+
                         pAnchor->SetAnchor( pCursor->GetPoint() );
                     }
                     break;
@@ -940,7 +988,7 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
             }
         }
         pFormat = GetDoc()->getIDocumentContentOperations().InsertGraphic(
-                                *pCursor, rGrfName,
+                                oPam.has_value() ? *oPam : *pCursor, rGrfName,
                                 rFltName, pGraphic,
                                 pFlyAttrSet,
                                 nullptr, nullptr );

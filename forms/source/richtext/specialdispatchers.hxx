@@ -80,7 +80,7 @@ namespace frm
 
     protected:
         // OParametrizedAttributeDispatcher
-        virtual const SfxPoolItem* convertDispatchArgsToItem(
+        virtual SfxPoolItemHolder convertDispatchArgsToItem(
             const css::uno::Sequence< css::beans::PropertyValue >& _rArguments ) override;
     };
 

@@ -38,9 +38,9 @@ public:
         return basegfx::B2DRange(0.0, 0.0, 0.0, 0.0);
     }
 
-    double getCurrentFontSizeInherited() const override { return 12.0; }
+    double getCurrentFontSize() const override { return 12.0; }
 
-    double getCurrentXHeightInherited() const override { return 5.0; }
+    double getCurrentXHeight() const override { return 5.0; }
 };
 
 void TestNumber::testSetting()

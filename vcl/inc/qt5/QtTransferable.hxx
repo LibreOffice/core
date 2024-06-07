@@ -34,13 +34,23 @@ class QtTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransfera
     QtTransferable(const QtTransferable&) = delete;
 
     const QMimeData* m_pMimeData;
-    osl::Mutex m_aMutex;
-    bool m_bProvideUTF16FromOtherEncoding;
-    css::uno::Sequence<css::datatransfer::DataFlavor> m_aMimeTypeSeq;
+
+protected:
+    /** Sets new mime data.
+     *  Since data flavors supported by this class depend on the mime data,
+     *  results from previous calls to the public methods of this
+     *  class are no longer valid after setting new mime data using this method.
+     *
+     *  Subclasses that set new mime data must ensure that no data race exists
+     *  on m_pMimeData.
+     *  (For the current only subclass doing so, QtClipboardTransferable, all access
+     *  to m_pMimeData happens with the SolarMutex held.)
+     */
+    void setMimeData(const QMimeData* pMimeData) { m_pMimeData = pMimeData; }
+    const QMimeData* mimeData() const { return m_pMimeData; }
 
 public:
     QtTransferable(const QMimeData* pMimeData);
-    const QMimeData* mimeData() const { return m_pMimeData; }
 
     css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
     sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
@@ -54,20 +64,23 @@ public:
  * the QClipboard's object thread, which is the QApplication's thread, so all of
  * the access has to go through RunInMainThread().
  *
- * If we detect a QMimeData change, we simply drop reporting any content. In theory
- * we can recover in the case where there hadn't been any calls of the XTransferable
- * interface, but currently we don't. But we ensure to never report mixed content,
- * so we'll just cease operation on QMimeData change.
+ * If we detect a QMimeData change, the mime data is updated with the new one from
+ * the system clipboard. Note however that this means that results of any previous
+ * calls of the XTransferable interface will be out of sync with the newly set mime
+ * data, so this scenario should generally be avoided.
  **/
 class QtClipboardTransferable final : public QtTransferable
 {
     // to detect in-flight QMimeData changes
     const QClipboard::Mode m_aMode;
 
-    bool hasInFlightChanged() const;
+    void ensureConsistencyWithSystemClipboard();
 
 public:
     explicit QtClipboardTransferable(const QClipboard::Mode aMode, const QMimeData* pMimeData);
+
+    // whether pMimeData are the current mime data
+    bool hasMimeData(const QMimeData* pMimeData) const;
 
     // these are the same then QtTransferable, except they go through RunInMainThread
     css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;

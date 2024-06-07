@@ -29,7 +29,9 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/configmgr.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <o3tl/runtimetooustring.hxx>
 #include <osl/file.hxx>
+#include <osl/thread.h>
 #include <rtl/process.h>
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
@@ -553,7 +555,7 @@ size_t WriteCallbackFile(void *ptr, size_t size,
 
 std::string download_content(const OString& rURL, bool bFile, OUString& rHash)
 {
-    Updater::log("Download: " + rURL);
+    Updater::log("Download: " + OStringToOUString(rURL, osl_getThreadTextEncoding()));
     std::unique_ptr<CURL, std::function<void(CURL *)>> curl(
         curl_easy_init(), [](CURL * p) { curl_easy_cleanup(p); });
 
@@ -729,7 +731,7 @@ void update_checker()
     OUString aDownloadCheckURL = aDownloadCheckBaseURL + "update/check/1/" + aProductName +
         "/" + aBuildID + "/" + aBuildTarget + "/" + aChannel;
     OString aURL = OUStringToOString(aDownloadCheckURL, RTL_TEXTENCODING_UTF8);
-    Updater::log("Update check: " + aURL);
+    Updater::log("Update check: " + OStringToOUString(aURL, osl_getThreadTextEncoding()));
 
     try
     {
@@ -779,36 +781,28 @@ void update_checker()
     catch (const invalid_update_info&)
     {
         SAL_WARN("desktop.updater", "invalid update information");
-        Updater::log(OString("warning: invalid update info"));
+        Updater::log("warning: invalid update info");
     }
     catch (const error_updater& e)
     {
         SAL_WARN("desktop.updater", "error during the update check: " << e.what());
-        Updater::log(OString("warning: error by the updater") + e.what());
+        Updater::log("warning: error by the updater" + o3tl::runtimeToOUString(e.what()));
     }
     catch (const invalid_size& e)
     {
         SAL_WARN("desktop.updater", e.what());
-        Updater::log(OString("warning: invalid size"));
+        Updater::log("warning: invalid size");
     }
     catch (const invalid_hash& e)
     {
         SAL_WARN("desktop.updater", e.what());
-        Updater::log(OString("warning: invalid hash"));
+        Updater::log("warning: invalid hash");
     }
     catch (...)
     {
         SAL_WARN("desktop.updater", "unknown error during the update check");
-        Updater::log(OString("warning: unknown exception"));
+        Updater::log("warning: unknown exception");
     }
-}
-
-OUString Updater::getUpdateInfoLog()
-{
-    OUString aUpdateInfoURL("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/updates/updating.log");
-    rtl::Bootstrap::expandMacros(aUpdateInfoURL);
-
-    return aUpdateInfoURL;
 }
 
 OUString Updater::getPatchDirURL()
@@ -843,28 +837,12 @@ OUString Updater::getExecutableDirURL()
 void Updater::log(const OUString& rMessage)
 {
     SAL_INFO("desktop.updater", rMessage);
-    OUString aUpdateLog = getUpdateInfoLog();
-    SvFileStream aLog(aUpdateLog, StreamMode::STD_READWRITE);
+    OUString dir("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/updates");
+    rtl::Bootstrap::expandMacros(dir);
+    osl::Directory::create(dir);
+    SvFileStream aLog(dir + "/updating.log", StreamMode::STD_READWRITE);
     aLog.Seek(aLog.Tell() + aLog.remainingSize()); // make sure we are at the end
     aLog.WriteLine(OUStringToOString(rMessage, RTL_TEXTENCODING_UTF8));
-}
-
-void Updater::log(const OString& rMessage)
-{
-    SAL_INFO("desktop.updater", rMessage);
-    OUString aUpdateLog = getUpdateInfoLog();
-    SvFileStream aLog(aUpdateLog, StreamMode::STD_READWRITE);
-    aLog.Seek(aLog.Tell() + aLog.remainingSize()); // make sure we are at the end
-    aLog.WriteLine(rMessage);
-}
-
-void Updater::log(const char* pMessage)
-{
-    SAL_INFO("desktop.updater", pMessage);
-    OUString aUpdateLog = getUpdateInfoLog();
-    SvFileStream aLog(aUpdateLog, StreamMode::STD_READWRITE);
-    aLog.Seek(aLog.Tell() + aLog.remainingSize()); // make sure we are at the end
-    aLog.WriteOString(pMessage);
 }
 
 OUString Updater::getBuildID()

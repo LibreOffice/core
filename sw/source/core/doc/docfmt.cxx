@@ -1040,14 +1040,12 @@ static bool lcl_SetTextFormatColl( SwNode* pNode, void* pArgs )
                 }
             }
 
+            std::optional<SwRegHistory> oRegH;
+            if (pPara->pHistory)
+                oRegH.emplace(&rTNd, rTNd, pPara->pHistory);
+
             if ( bChangeOfListStyleAtParagraph )
             {
-                std::unique_ptr< SwRegHistory > pRegH;
-                if ( pPara->pHistory )
-                {
-                    pRegH.reset(new SwRegHistory(&rTNd, rTNd, pPara->pHistory));
-                }
-
                 pCNd->ResetAttr( RES_PARATR_NUMRULE );
 
                 // reset all list attributes

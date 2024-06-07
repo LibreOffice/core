@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_version">संस्करण: %1$s&lt;br&gt;बिल्ड आइडी: &lt;a href=https://hub.libreoffice.org/git-core/%2$s&gt;%2$s&lt;/a&gt;</string>
+    <string name="app_credits">https://www.libreoffice.org</string>
+    <string name="app_vendor">यो संस्करण $VENDOR द्वारा प्रदान गरिएको हो।</string>
+    <string name="readonly_file">यो फाइल हेर्न-मात्र-मिल्ने छ।</string>
+    <string name="about_notice">सूचना देखाउनुहोस्</string>
+    <string name="new_textdocument">नयाँ पाठ कागजात</string>
+    <string name="new_presentation">नयाँ प्रस्तुति</string>
+    <string name="new_spreadsheet">नयाँ स्प्रेडसिट</string>
+    <string name="new_drawing">नयाँ ड्रइङ</string>
+    <string name="select_file_to_open">खोल्नको लागि फाइल रोज्नुहोस्</string>
+    <string name="file_icon_desc">फाइलआइकन</string>
+    <string name="title_recents">हालका फाइलहरू</string>
+    <string name="pref_category_general">सामान्य</string>
+    <string name="pref_experimental_editing">प्रयोगात्मक मोड</string>
+    <string name="app_name">लिब्रेअफिस भ्युअर</string>
+    <string name="app_name_settings">लिब्रेअफिस भ्युअर सेटिङ</string>
+    <string name="app_description">लिब्रेअफिस भ्युअर लिब्रेअफिसमा आधारित कागजात भ्युअर हो।</string>
+    <string name="default_document_name">शीर्षक नभएको</string>
+    <string name="about_license">इजाजतपत्र देखाउनुहोस्</string>
+    <string name="title_browser">सबै फाइलहरू</string>
+</resources>

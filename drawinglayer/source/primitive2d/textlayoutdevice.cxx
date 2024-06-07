@@ -22,6 +22,8 @@
 #include <algorithm>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
+
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <comphelper/processfactory.hxx>
@@ -162,56 +164,78 @@ TextLayouterDevice::TextLayouterDevice()
 
 TextLayouterDevice::~TextLayouterDevice() COVERITY_NOEXCEPT_FALSE { releaseGlobalVirtualDevice(); }
 
-void TextLayouterDevice::setFont(const vcl::Font& rFont) { mrDevice.SetFont(rFont); }
+void TextLayouterDevice::setFont(const vcl::Font& rFont)
+{
+    mrDevice.SetFont(rFont);
+    mnFontScalingFixX = 1.0;
+    mnFontScalingFixY = 1.0;
+}
 
 void TextLayouterDevice::setFontAttribute(const attribute::FontAttribute& rFontAttribute,
                                           double fFontScaleX, double fFontScaleY,
                                           const css::lang::Locale& rLocale)
 {
-    setFont(getVclFontFromFontAttribute(rFontAttribute, fFontScaleX, fFontScaleY, 0.0, rLocale));
+    vcl::Font aFont
+        = getVclFontFromFontAttribute(rFontAttribute, fFontScaleX, fFontScaleY, 0.0, rLocale);
+    setFont(aFont);
+    Size aFontSize = aFont.GetFontSize();
+    if (aFontSize.Height())
+    {
+        mnFontScalingFixY = fFontScaleY / aFontSize.Height();
+        // aFontSize.Width() is 0 for uninformly scaled fonts: see getVclFontFromFontAttribute
+        mnFontScalingFixX
+            = fFontScaleX / (aFontSize.Width() ? aFontSize.Width() : aFontSize.Height());
+    }
+    else
+    {
+        mnFontScalingFixX = mnFontScalingFixY = 1.0;
+    }
 }
 
 double TextLayouterDevice::getOverlineOffset() const
 {
     const ::FontMetric& rMetric = mrDevice.GetFontMetric();
     double fRet = (rMetric.GetInternalLeading() / 2.0) - rMetric.GetAscent();
-    return fRet;
+    return fRet * mnFontScalingFixY;
 }
 
 double TextLayouterDevice::getUnderlineOffset() const
 {
     const ::FontMetric& rMetric = mrDevice.GetFontMetric();
     double fRet = rMetric.GetDescent() / 2.0;
-    return fRet;
+    return fRet * mnFontScalingFixY;
 }
 
 double TextLayouterDevice::getStrikeoutOffset() const
 {
     const ::FontMetric& rMetric = mrDevice.GetFontMetric();
     double fRet = (rMetric.GetAscent() - rMetric.GetInternalLeading()) / 3.0;
-    return fRet;
+    return fRet * mnFontScalingFixY;
 }
 
 double TextLayouterDevice::getOverlineHeight() const
 {
     const ::FontMetric& rMetric = mrDevice.GetFontMetric();
     double fRet = rMetric.GetInternalLeading() / 2.5;
-    return fRet;
+    return fRet * mnFontScalingFixY;
 }
 
 double TextLayouterDevice::getUnderlineHeight() const
 {
     const ::FontMetric& rMetric = mrDevice.GetFontMetric();
     double fRet = rMetric.GetDescent() / 4.0;
-    return fRet;
+    return fRet * mnFontScalingFixY;
 }
 
-double TextLayouterDevice::getTextHeight() const { return mrDevice.GetTextHeight(); }
+double TextLayouterDevice::getTextHeight() const
+{
+    return mrDevice.GetTextHeight() * mnFontScalingFixY;
+}
 
 double TextLayouterDevice::getTextWidth(const OUString& rText, sal_uInt32 nIndex,
                                         sal_uInt32 nLength) const
 {
-    return mrDevice.GetTextWidth(rText, nIndex, nLength);
+    return mrDevice.GetTextWidth(rText, nIndex, nLength) * mnFontScalingFixX;
 }
 
 void TextLayouterDevice::getTextOutlines(basegfx::B2DPolyPolygonVector& rB2DPolyPolyVector,
@@ -245,6 +269,13 @@ void TextLayouterDevice::getTextOutlines(basegfx::B2DPolyPolygonVector& rB2DPoly
     {
         mrDevice.GetTextOutlines(rB2DPolyPolyVector, rText, nIndex, nIndex, nLength);
     }
+    if (!rtl_math_approxEqual(mnFontScalingFixY, 1.0)
+        || !rtl_math_approxEqual(mnFontScalingFixX, 1.0))
+    {
+        auto scale = basegfx::utils::createScaleB2DHomMatrix(mnFontScalingFixX, mnFontScalingFixY);
+        for (auto& poly : rB2DPolyPolyVector)
+            poly.transform(scale);
+    }
 }
 
 basegfx::B2DRange TextLayouterDevice::getTextBoundRect(const OUString& rText, sal_uInt32 nIndex,
@@ -260,15 +291,15 @@ basegfx::B2DRange TextLayouterDevice::getTextBoundRect(const OUString& rText, sa
 
     if (nTextLength)
     {
-        ::tools::Rectangle aRect;
-
+        basegfx::B2DRange aRect;
         mrDevice.GetTextBoundRect(aRect, rText, nIndex, nIndex, nLength);
-
-        // #i104432#, #i102556# take empty results into account
-        if (!aRect.IsEmpty())
+        if (!rtl_math_approxEqual(mnFontScalingFixY, 1.0)
+            || !rtl_math_approxEqual(mnFontScalingFixX, 1.0))
         {
-            return vcl::unotools::b2DRectangleFromRectangle(aRect);
+            aRect.transform(
+                basegfx::utils::createScaleB2DHomMatrix(mnFontScalingFixX, mnFontScalingFixY));
         }
+        return aRect;
     }
 
     return basegfx::B2DRange();
@@ -277,13 +308,13 @@ basegfx::B2DRange TextLayouterDevice::getTextBoundRect(const OUString& rText, sa
 double TextLayouterDevice::getFontAscent() const
 {
     const ::FontMetric& rMetric = mrDevice.GetFontMetric();
-    return rMetric.GetAscent();
+    return rMetric.GetAscent() * mnFontScalingFixY;
 }
 
 double TextLayouterDevice::getFontDescent() const
 {
     const ::FontMetric& rMetric = mrDevice.GetFontMetric();
-    return rMetric.GetDescent();
+    return rMetric.GetDescent() * mnFontScalingFixY;
 }
 
 void TextLayouterDevice::addTextRectActions(const ::tools::Rectangle& rRectangle,
@@ -311,7 +342,7 @@ std::vector<double> TextLayouterDevice::getTextArray(const OUString& rText, sal_
         mrDevice.GetTextArray(rText, &aArray, nIndex, nTextLength, bCaret);
         aRetval.reserve(aArray.size());
         for (size_t i = 0, nEnd = aArray.size(); i < nEnd; ++i)
-            aRetval.push_back(aArray[i]);
+            aRetval.push_back(aArray[i] * mnFontScalingFixX);
     }
 
     return aRetval;

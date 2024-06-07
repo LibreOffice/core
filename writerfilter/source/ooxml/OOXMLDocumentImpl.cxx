@@ -762,8 +762,9 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pS
                 {
                     importSubStreamRelations(pStream, OOXMLStream::CHARTS);
                 }
-                if(bHeaderFooterFound)
+                if (bHeaderFooterFound && !maSeenStreams.contains(customTarget))
                 {
+                    maSeenStreams.insert(customTarget);
                     try
                     {
                         OOXMLStream::Pointer_t Stream = OOXMLDocumentFactory::createStream(pStream, streamType);

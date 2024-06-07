@@ -256,6 +256,8 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
             return mbDoNotBreakWrappedTables;
         case DocumentSettingId::ALLOW_TEXT_AFTER_FLOATING_TABLE_BREAK:
             return mbAllowTextAfterFloatingTableBreak;
+        case DocumentSettingId::DO_NOT_MIRROR_RTL_DRAW_OBJS:
+            return mbDoNotMirrorRtlDrawObjs;
         case DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING:
             return mbJustifyLinesWithShrinking;
         case DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY: return mbNoNumberingShowFollowBy;
@@ -448,6 +450,10 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
 
         case DocumentSettingId::APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH:
             mbApplyTextAttrToEmptyLineAtEndOfParagraph = value;
+            break;
+
+        case DocumentSettingId::DO_NOT_MIRROR_RTL_DRAW_OBJS:
+            mbDoNotMirrorRtlDrawObjs = value;
             break;
 
         case DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES:
@@ -1097,12 +1103,16 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mnImagePreferredDPI"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::number(mnImagePreferredDPI).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbApplyTextAttrToEmptyLineAtEndOfParagraph"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(mbApplyTextAttrToEmptyLineAtEndOfParagraph).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbDoNotMirrorRtlDrawObjs"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::boolean(mbDoNotMirrorRtlDrawObjs).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterEndElement(pWriter);

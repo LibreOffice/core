@@ -1306,6 +1306,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bDoNotBreakWrappedTables = false;
     bool bAllowTextAfterFloatingTableBreak = false;
     bool bDropCapPunctuation = false;
+    bool bDoNotMirrorRtlDrawObjs = false;
 
     const PropertyValue* currentDatabaseDataSource = nullptr;
     const PropertyValue* currentDatabaseCommand = nullptr;
@@ -1417,6 +1418,10 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                 }
                 else if ( rValue.Name == "DropCapPunctuation" )
                     bDropCapPunctuation = true;
+                else if (rValue.Name == "DoNotMirrorRtlDrawObjs")
+                {
+                    rValue.Value >>= bDoNotMirrorRtlDrawObjs;
+                }
             }
             catch( Exception& )
             {
@@ -1587,6 +1592,11 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if (!bApplyTextAttrToEmptyLineAtEndOfParagraph)
     {
         xProps->setPropertyValue("ApplyTextAttrToEmptyLineAtEndOfParagraph", Any(false));
+    }
+
+    if (bDoNotMirrorRtlDrawObjs)
+    {
+        xProps->setPropertyValue("DoNotMirrorRtlDrawObjs", Any(true));
     }
 
     if (bDoNotBreakWrappedTables)

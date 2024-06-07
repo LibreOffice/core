@@ -1,216 +1,217 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkScrolledWindow" id="border">
     <property name="visible">True</property>
-    <property name="can_focus">True</property>
+    <property name="can-focus">True</property>
     <property name="hexpand">True</property>
-    <property name="hscrollbar_policy">never</property>
-    <property name="vscrollbar_policy">never</property>
-    <property name="shadow_type">in</property>
+    <property name="hscrollbar-policy">never</property>
+    <property name="vscrollbar-policy">never</property>
+    <property name="shadow-type">in</property>
     <child>
       <object class="GtkViewport">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="hexpand">True</property>
         <child>
-          <!-- n-columns=1 n-rows=1 -->
+          <!-- n-columns=1 n-rows=3 -->
           <object class="GtkGrid" id="grid">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
-            <property name="border_width">6</property>
-            <property name="row_spacing">6</property>
-            <property name="column_spacing">12</property>
+            <property name="border-width">6</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">12</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
+              <!-- n-columns=2 n-rows=1 -->
               <object class="GtkGrid" id="grid1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="column_spacing">12</property>
+                <property name="column-spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="number">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="condition">
-                    <property name="width_request">10</property>
+                    <property name="width-request">10</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="ellipsize">end</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
+              <!-- n-columns=3 n-rows=8 -->
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
-                <property name="column_homogeneous">True</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">12</property>
+                <property name="column-homogeneous">True</property>
                 <child>
                   <object class="GtkLabel" id="styleft">
-                    <property name="can_focus">False</property>
-                    <property name="no_show_all">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
                     <property name="label" translatable="yes" context="conditionalentry|styleft">Apply Style:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">style</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">style</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkComboBoxText" id="style">
-                    <property name="can_focus">False</property>
-                    <property name="no_show_all">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
                     <items>
                       <item translatable="yes" context="conditionalentry|style">New Style...</item>
                     </items>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="valueft">
-                    <property name="can_focus">False</property>
-                    <property name="no_show_all">True</property>
+                    <property name="width-request">100</property>
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
                     <property name="label" translatable="yes" context="conditionalentry|valueft">Enter a value:</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">3</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
                     <property name="width">3</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkEntry" id="edcolscalemin">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="no-show-all">True</property>
+                    <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
-                    <property name="activates_default">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">4</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">4</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkEntry" id="edcolscalemiddle">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="no-show-all">True</property>
+                    <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
-                    <property name="activates_default">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">4</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">4</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkEntry" id="edcolscalemax">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="no-show-all">True</property>
+                    <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
-                    <property name="activates_default">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">4</property>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">4</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkMenuButton" id="lbcolmin">
-                    <property name="can_focus">False</property>
-                    <property name="receives_default">False</property>
-                    <property name="no_show_all">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="receives-default">False</property>
+                    <property name="no-show-all">True</property>
                     <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="draw-indicator">True</property>
                     <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">5</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">5</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkMenuButton" id="lbcolmiddle">
-                    <property name="can_focus">False</property>
-                    <property name="receives_default">False</property>
-                    <property name="no_show_all">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="receives-default">False</property>
+                    <property name="no-show-all">True</property>
                     <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="draw-indicator">True</property>
                     <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">5</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">5</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkMenuButton" id="lbcolmax">
-                    <property name="can_focus">False</property>
-                    <property name="receives_default">False</property>
-                    <property name="no_show_all">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="receives-default">False</property>
+                    <property name="no-show-all">True</property>
                     <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="draw-indicator">True</property>
                     <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">5</property>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">5</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkButton" id="options">
                     <property name="label" translatable="yes" context="conditionalentry|options">More Options...</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="no_show_all">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="no-show-all">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">6</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">6</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkComboBoxText" id="colscalemin">
-                    <property name="can_focus">False</property>
-                    <property name="no_show_all">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
                     <items>
                       <item id="auto" translatable="yes" context="conditionalentry|colscalemin">Automatic</item>
                       <item id="min" translatable="yes" context="conditionalentry|colscalemin">Min</item>
@@ -222,14 +223,14 @@
                     </items>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkComboBoxText" id="colscalemiddle">
-                    <property name="can_focus">False</property>
-                    <property name="no_show_all">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
                     <items>
                       <item id="auto" translatable="yes" context="conditionalentry|colscalemiddle">Automatic</item>
                       <item id="min" translatable="yes" context="conditionalentry|colscalemiddle">Min</item>
@@ -241,14 +242,14 @@
                     </items>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkComboBoxText" id="colscalemax">
-                    <property name="can_focus">False</property>
-                    <property name="no_show_all">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
                     <items>
                       <item id="auto" translatable="yes" context="conditionalentry|colscalemax">Automatic</item>
                       <item id="min" translatable="yes" context="conditionalentry|colscalemax">Min</item>
@@ -260,96 +261,72 @@
                     </items>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <!-- n-columns=1 n-rows=1 -->
                   <object class="GtkGrid" id="iconparent">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
+                    <property name="can-focus">False</property>
                     <child>
                       <placeholder/>
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">7</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">7</property>
                     <property name="width">3</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="Label_minimum">
-                    <property name="can_focus">False</property>
-                    <property name="no_show_all">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
                     <property name="label" translatable="yes" context="conditionalentry|Label_minimum">Minimum</property>
-                    <property name="mnemonic_widget">colscalemin</property>
+                    <property name="mnemonic-widget">colscalemin</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="Label_maximum">
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="conditionalentry|Label_maximum">Maximum</property>
-                    <property name="mnemonic_widget">colscalemax</property>
+                    <property name="mnemonic-widget">colscalemax</property>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkScrolledWindow" id="previewwin">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="hscrollbar_policy">never</property>
-                    <property name="vscrollbar_policy">never</property>
-                    <property name="shadow_type">in</property>
+                    <property name="can-focus">True</property>
+                    <property name="no-show-all">True</property>
+                    <property name="hscrollbar-policy">never</property>
+                    <property name="vscrollbar-policy">never</property>
+                    <property name="shadow-type">in</property>
                     <child>
                       <object class="GtkViewport">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <child>
                           <object class="GtkDrawingArea" id="preview">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="tooltip_text" translatable="yes" context="conditionalentry|preview|tooltip_text">Example</property>
+                            <property name="can-focus">False</property>
+                            <property name="tooltip-text" translatable="yes" context="conditionalentry|preview|tooltip_text">Example</property>
                           </object>
                         </child>
                       </object>
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
@@ -363,21 +340,21 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
               </packing>
             </child>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
+              <!-- n-columns=3 n-rows=4 -->
               <object class="GtkGrid">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="column_spacing">12</property>
-                <property name="column_homogeneous">True</property>
+                <property name="can-focus">False</property>
+                <property name="column-spacing">12</property>
+                <property name="column-homogeneous">True</property>
                 <child>
                   <object class="GtkComboBoxText" id="typeis">
-                    <property name="can_focus">False</property>
-                    <property name="no_show_all">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
                     <items>
                       <item translatable="yes" context="conditionalentry|typeis">is equal to</item>
                       <item translatable="yes" context="conditionalentry|typeis">is less than</item>
@@ -406,13 +383,13 @@
                     </items>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkComboBoxText" id="datetype">
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <items>
                       <item translatable="yes" context="conditionalentry|datetype">Today</item>
                       <item translatable="yes" context="conditionalentry|datetype">Yesterday</item>
@@ -430,13 +407,13 @@
                     </items>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkComboBoxText" id="colorformat">
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <items>
                       <item translatable="yes" context="conditionalentry|colorformat">Color Scale (2 Entries)</item>
                       <item translatable="yes" context="conditionalentry|colorformat">Color Scale (3 Entries)</item>
@@ -445,27 +422,27 @@
                     </items>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkEntry" id="formula">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="truncate-multiline">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="no-show-all">True</property>
                     <property name="hexpand">True</property>
+                    <property name="truncate-multiline">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">3</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">3</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkComboBoxText" id="type">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <items>
                       <item translatable="yes" context="conditionalentry|type">All Cells</item>
                       <item translatable="yes" context="conditionalentry|type">Cell value</item>
@@ -474,54 +451,54 @@
                     </items>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                     <property name="height">4</property>
                   </packing>
                 </child>
                 <child>
-                  <!-- n-columns=1 n-rows=1 -->
+                  <!-- n-columns=2 n-rows=1 -->
                   <object class="GtkGrid">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="column_spacing">6</property>
+                    <property name="column-spacing">6</property>
                     <child>
                       <object class="GtkEntry" id="val1">
-                        <property name="can_focus">True</property>
-                        <property name="no_show_all">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="no-show-all">True</property>
                         <property name="hexpand">True</property>
+                        <property name="width-chars">5</property>
                         <property name="truncate-multiline">True</property>
-                        <property name="width_chars">5</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkEntry" id="val2">
-                        <property name="can_focus">True</property>
-                        <property name="no_show_all">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="no-show-all">True</property>
                         <property name="hexpand">True</property>
+                        <property name="width-chars">5</property>
                         <property name="truncate-multiline">True</property>
-                        <property name="width_chars">5</property>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkComboBoxText" id="iconsettype">
-                    <property name="can_focus">False</property>
-                    <property name="no_show_all">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
                     <items>
                       <item translatable="yes" context="conditionalentry|iconsettype">3 Arrows</item>
                       <item translatable="yes" context="conditionalentry|iconsettype">3 Gray Arrows</item>
@@ -548,8 +525,8 @@
                     </items>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
@@ -557,8 +534,8 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
           </object>

@@ -55,16 +55,22 @@
     NSMutableArray * actionNames = [ [ NSMutableArray alloc ] init ];
     if ( [ wrapper accessibleAction ] ) {
         for ( int cnt = 0; cnt < [ wrapper accessibleAction ] -> getAccessibleActionCount(); cnt++ ) {
-            [ actionNames addObject: [ AquaA11yActionWrapper nativeActionNameFor: CreateNSString ( [ wrapper accessibleAction ] -> getAccessibleActionDescription ( cnt ) ) ] ];
+            // Related tdf#158914: explicitly call autorelease selector
+            // CreateNSString() is not a getter. It expects the caller to
+            // release the returned string.
+            [ actionNames addObject: [ AquaA11yActionWrapper nativeActionNameFor: [ CreateNSString ( [ wrapper accessibleAction ] -> getAccessibleActionDescription ( cnt ) ) autorelease ] ] ];
         }
     }
-    return actionNames;
+    return [actionNames autorelease];
 }
 
 +(void)doAction:(NSString *)action ofElement:(AquaA11yWrapper *)wrapper {
     if ( [ wrapper accessibleAction ] ) {
         for ( int cnt = 0; cnt < [ wrapper accessibleAction ] -> getAccessibleActionCount(); cnt++ ) {
-            if ( [ action isEqualToString: [ AquaA11yActionWrapper nativeActionNameFor: CreateNSString ( [ wrapper accessibleAction ] -> getAccessibleActionDescription ( cnt ) ) ] ] ) {
+            // Related tdf#158914: explicitly call autorelease selector
+            // CreateNSString() is not a getter. It expects the caller to
+            // release the returned string.
+            if ( [ action isEqualToString: [ AquaA11yActionWrapper nativeActionNameFor: [ CreateNSString ( [ wrapper accessibleAction ] -> getAccessibleActionDescription ( cnt ) ) autorelease ] ] ] ) {
                 [ wrapper accessibleAction ] -> doAccessibleAction ( cnt );
                 break;
             }

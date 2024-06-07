@@ -153,6 +153,11 @@
         <node install:module="externallibnumbertextdata" oor:name="${SYSTEM_LIBNUMBERTEXT_DATA}" oor:op="fuse"/>
       </node>
     </node>
+    <node oor:name="Storage" oor:op="fuse" oor:mandatory="true">
+      <prop oor:name="WritePath">
+        <value>$(userpath)/store</value>
+      </prop>
+    </node>
     <node oor:name="Temp" oor:op="fuse" oor:mandatory="true">
       <prop oor:name="IsSinglePath" oor:finalized="true">
         <value>true</value>

@@ -446,22 +446,21 @@ static void lcl_MakeObjs(const sw::FrameFormats<sw::SpzFrameFormat*>& rSpzs, SwP
             if ( bSdrObj )
             {
                 // OD 23.06.2003 #108784# - consider 'virtual' drawing objects
-                SwDrawContact *pContact =
-                            static_cast<SwDrawContact*>(::GetUserCall(pSdrObj));
-                if ( auto pDrawVirtObj = dynamic_cast<SwDrawVirtObj *>( pSdrObj ) )
+                if (SwDrawContact *pContact =
+                            static_cast<SwDrawContact*>(::GetUserCall(pSdrObj)))
                 {
-                    if ( pContact )
+                    if ( auto pDrawVirtObj = dynamic_cast<SwDrawVirtObj *>( pSdrObj ) )
                     {
                         pDrawVirtObj->RemoveFromWriterLayout();
                         pDrawVirtObj->RemoveFromDrawingPage();
                         pPg->AppendDrawObj( *(pContact->GetAnchoredObj( pDrawVirtObj )) );
                     }
-                }
-                else
-                {
-                    if ( pContact->GetAnchorFrame() )
-                        pContact->DisconnectFromLayout( false );
-                    pPg->AppendDrawObj( *(pContact->GetAnchoredObj( pSdrObj )) );
+                    else
+                    {
+                        if ( pContact->GetAnchorFrame() )
+                            pContact->DisconnectFromLayout( false );
+                        pPg->AppendDrawObj( *(pContact->GetAnchoredObj( pSdrObj )) );
+                    }
                 }
             }
             else

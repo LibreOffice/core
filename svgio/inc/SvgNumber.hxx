@@ -37,10 +37,10 @@ class InfoProvider
 public:
     virtual ~InfoProvider() {}
     virtual basegfx::B2DRange getCurrentViewPort() const = 0;
-    /// return font size of node inherited from parents
-    virtual double getCurrentFontSizeInherited() const = 0;
-    /// return xheight of node inherited from parents
-    virtual double getCurrentXHeightInherited() const = 0;
+    /// return font size of node, either set here or inherited from parents
+    virtual double getCurrentFontSize() const = 0;
+    /// return xheight of node, either set here or inherited from parents
+    virtual double getCurrentXHeight() const = 0;
 };
 
 enum class SvgUnit

@@ -170,12 +170,16 @@ SwRect GetBoundRectOfAnchoredObj( const SdrObject* pObj )
 /// Returns the UserCall if applicable from the group object
 SwContact* GetUserCall( const SdrObject* pObj )
 {
-    SdrObject *pTmp;
-    while ( !pObj->GetUserCall() && nullptr != (pTmp = pObj->getParentSdrObjectFromSdrObject()) )
-        pObj = pTmp;
-    assert((!pObj->GetUserCall() || nullptr != dynamic_cast<const SwContact*>(pObj->GetUserCall())) &&
-            "<::GetUserCall(..)> - wrong type of found object user call." );
-    return static_cast<SwContact*>(pObj->GetUserCall());
+    for (; pObj; pObj = pObj->getParentSdrObjectFromSdrObject())
+    {
+        if (auto pUserCall = pObj->GetUserCall())
+        {
+            assert(dynamic_cast<SwContact*>(pUserCall)
+                   && "<::GetUserCall(..)> - wrong type of found object user call.");
+            return static_cast<SwContact*>(pUserCall);
+        }
+    }
+    return nullptr;
 }
 
 /// Returns true if the SrdObject is a Marquee-Object (scrolling text)

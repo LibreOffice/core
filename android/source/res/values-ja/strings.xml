@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_pwd_dialog_cancel">キャンセル</string>
+    <string name="create_file">新規ファイルを作成</string>
+    <string name="slide">スライド</string>
+    <string name="default_document_name">無題</string>
+    <string name="password">パスワード</string>
+    <string name="app_credits">https://ja.libreoffice.org</string>
+    <string name="action_paste">貼り付け</string>
+    <string name="action_pwd_dialog_OK">OK</string>
+    <string name="save_document">保存</string>
+    <string name="save_alert_dialog_title">閉じる前にドキュメントを保存しますか？</string>
+    <string name="font_color">フォントの色</string>
+    <string name="automatic">自動</string>
+    <string name="action_cut">切り取り</string>
+    <string name="page">ページ</string>
+    <string name="calc_insert_before">挿入</string>
+    <string name="action_print">印刷</string>
+    <string name="tabhost_paragraph">段落</string>
+    <string name="calc_delete">削除</string>
+    <string name="action_undo">元に戻す</string>
+    <string name="app_vendor">このリリースは$VENDORが提供しました。</string>
+    <string name="calc_optimal_length_confirm">OK</string>
+    <string name="pref_category_general">全般</string>
+    <string name="action_exportToPDF">PDFへのエクスポート</string>
+    <string name="action_rename_slide">スライド名の変更</string>
+    <string name="about_privacy_policy">プライバシーポリシー</string>
+    <string name="action_presentation">スライドショー</string>
+    <string name="action_copy">コピー</string>
+    <string name="tabhost_insert">挿入</string>
+    <string name="action_search">検索</string>
+    <string name="message_saved">保存完了</string>
+    <string name="error">エラー</string>
+    <string name="app_name_settings">LibreOffice Viewerの設定</string>
+    <string name="action_save">保存</string>
+    <string name="UNO_commands_string_hint">UNOコマンド</string>
+    <string name="alert_ok">OK</string>
+    <string name="action_settings">設定</string>
+    <string name="sheet">シート</string>
+    <string name="app_version">バージョン: %1$s&lt;br&gt;ビルドID: &lt;a href=https://hub.libreoffice.org/git-core/%2$s&gt;%2$s&lt;/a&gt;</string>
+    <string name="about_license">ライセンスを表示</string>
+    <string name="title_browser">すべてのファイル</string>
+    <string name="app_name">LibreOffice Viewer</string>
+    <string name="action_cancel">キャンセル</string>
+    <string name="search_find_next">次を検索</string>
+    <string name="search_find_previous">前を検索</string>
+    <string name="readonly_file">このファイルは読み取り専用です。</string>
+    <string name="alert_cancel">キャンセル</string>
+</resources>
