@@ -13,6 +13,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 
 #include <tools/UnitConversion.hxx>
 
@@ -160,6 +161,29 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158360)
 {
     // just test that doc with annotation in TOC doesn't crash/assert
     loadFromFile(u"tdf158360.docx");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTableStyleParaBorder)
+{
+    // Given a document with a table, table style defines 115 twips left cell margin and an empty
+    // paragraph border:
+    // When importing that file:
+    loadFromFile(u"table-style-para-border.docx");
+
+    // Then make sure the cell margin is not lost:
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<text::XTextTable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xCell(xPara->getCellByName("A1"), uno::UNO_QUERY);
+    sal_Int32 nLeftBorderDistance{};
+    xCell->getPropertyValue("LeftBorderDistance") >>= nLeftBorderDistance;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 203
+    // - Actual  : 0
+    // i.e. the 0 para border distance was applied on the cell instead.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(203), nLeftBorderDistance);
 }
 }
 
