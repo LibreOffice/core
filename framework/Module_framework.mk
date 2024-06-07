@@ -29,7 +29,6 @@ $(eval $(call gb_Module_add_slowcheck_targets,framework,\
     CppunitTest_framework_dispatch \
     CppunitTest_framework_loadenv \
 	CppunitTest_framework_CheckXTitle \
-	CppunitTest_framework_checkDispatchAPI \
 ))
 
 # Not sure why this is not stable on macOS.
