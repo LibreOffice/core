@@ -1920,6 +1920,7 @@ void DrawViewShell::GetState (SfxItemSet& rSet)
     {
         switch (nWhich)
         {
+            case FID_SEARCH_NOW:
             case SID_SEARCH_ITEM:
             case SID_SEARCH_OPTIONS:
                 // Forward this request to the common (old) code of the
@@ -1945,27 +1946,33 @@ void DrawViewShell::Execute (SfxRequest& rReq)
 
     switch (rReq.GetSlot())
     {
+        case FID_SEARCH_NOW:
+            // Forward this request to the common (old) code of the
+            // document shell.
+            GetDocSh()->Execute(rReq);
+            break;
+
         case SID_SEARCH_ITEM:
             // Forward this request to the common (old) code of the
             // document shell.
-            GetDocSh()->Execute (rReq);
-        break;
+            GetDocSh()->Execute(rReq);
+            break;
 
         case SID_SPELL_DIALOG:
         {
             SfxViewFrame* pViewFrame = GetViewFrame();
             if (rReq.GetArgs() != nullptr)
-                pViewFrame->SetChildWindow (SID_SPELL_DIALOG,
-                    static_cast<const SfxBoolItem&>(rReq.GetArgs()->
-                        Get(SID_SPELL_DIALOG)).GetValue());
+                pViewFrame->SetChildWindow(
+                    SID_SPELL_DIALOG,
+                    static_cast<const SfxBoolItem&>(rReq.GetArgs()->Get(SID_SPELL_DIALOG))
+                        .GetValue());
             else
                 pViewFrame->ToggleChildWindow(SID_SPELL_DIALOG);
 
             pViewFrame->GetBindings().Invalidate(SID_SPELL_DIALOG);
-            rReq.Ignore ();
+            rReq.Ignore();
         }
         break;
-
         default:
             SAL_WARN("sd", "DrawViewShell::Execute(): can not handle slot " << rReq.GetSlot());
             break;

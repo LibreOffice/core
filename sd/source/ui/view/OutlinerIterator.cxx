@@ -28,6 +28,8 @@
 #include <DrawViewShell.hxx>
 #include <sdpage.hxx>
 #include <utility>
+#include <ViewShellBase.hxx>
+#include <ViewShellManager.hxx>
 
 namespace sd::outliner {
 
@@ -149,6 +151,7 @@ Iterator OutlinerContainer::current()
 
 Iterator OutlinerContainer::CreateIterator (IteratorLocation aLocation)
 {
+    auto pFakeShell =            dynamic_cast<sd::ViewShellBase*>(SfxViewShell::Current())->GetViewShellManager()->GetOverridingMainShell();
     // Decide on certain features of the outliner which kind of iterator to
     // use.
     if (mpOutliner->mbRestrictSearchToSelection)
@@ -156,6 +159,7 @@ Iterator OutlinerContainer::CreateIterator (IteratorLocation aLocation)
         return CreateSelectionIterator (
             mpOutliner->maMarkListCopy,
             mpOutliner->mpDrawDocument,
+            pFakeShell ? pFakeShell :
             mpOutliner->mpWeakViewShell.lock(),
             mpOutliner->mbDirectionIsForward,
             aLocation);
@@ -163,6 +167,7 @@ Iterator OutlinerContainer::CreateIterator (IteratorLocation aLocation)
         // Search in the whole document.
         return CreateDocumentIterator (
             mpOutliner->mpDrawDocument,
+            pFakeShell ? pFakeShell :
             mpOutliner->mpWeakViewShell.lock(),
             mpOutliner->mbDirectionIsForward,
             aLocation);
@@ -258,7 +263,8 @@ Iterator OutlinerContainer::CreateDocumentIterator (
             }
             else
             {
-                ePageKind = PageKind::Standard;
+                auto pPage = rpViewShell->getCurrentPage();
+                ePageKind =  pPage ? pPage->GetPageKind() : PageKind::Standard;
                 eEditMode = EditMode::Page;
             }
             break;
@@ -609,9 +615,8 @@ void ViewIteratorImpl::GotoNextText()
 
 void ViewIteratorImpl::SetPage (sal_Int32 nPageIndex)
 {
-    mbPageChangeOccurred = (maPosition.mnPageIndex!=nPageIndex);
-    if (mbPageChangeOccurred)
-    {
+    // if (mbPageChangeOccurred)
+    // {
         maPosition.mnPageIndex = nPageIndex;
 
         sal_Int32 nPageCount;
@@ -639,7 +644,7 @@ void ViewIteratorImpl::SetPage (sal_Int32 nPageIndex)
         }
         else
             mpPage = nullptr;
-    }
+    // }
 
     // Set up object list iterator.
     if (mpPage != nullptr)
@@ -720,7 +725,72 @@ void DocumentIteratorImpl::GotoNextText()
     bool bSetToOnePastLastPage = false;
     bool bViewChanged = false;
 
-    ViewIteratorImpl::GotoNextText();
+    // ViewIteratorImpl::GotoNextText();
+
+    SdrTextObj* pTextObj = DynCastSdrTextObj( maPosition.mxObject.get().get() );
+    if( pTextObj )
+    {
+        if (mbDirectionIsForward)
+        {
+            ++maPosition.mnText;
+            if( maPosition.mnText < pTextObj->getTextCount() )
+                return;
+        }
+        else
+        {
+            --maPosition.mnText;
+            if( maPosition.mnText >= 0 )
+                return;
+       }
+    }
+
+    if (moObjectIterator && moObjectIterator->IsMore())
+        maPosition.mxObject = moObjectIterator->Next();
+    else
+        maPosition.mxObject = nullptr;
+
+    if (!maPosition.mxObject.get().is() )
+    {
+        if(maPosition.mePageKind == PageKind::Standard)
+        {
+            maPosition.mePageKind = PageKind::Notes;
+            if (mbDirectionIsForward)
+                SetPage (maPosition.mnPageIndex);
+            else
+                SetPage(maPosition.mnPageIndex);
+        }
+        else if (maPosition.mePageKind == PageKind::Notes)
+        {
+            maPosition.mePageKind = PageKind::Standard;
+            if (mbDirectionIsForward)
+                SetPage (maPosition.mnPageIndex+1);
+            else
+                SetPage(maPosition.mnPageIndex - 1);
+        }
+        else
+        {
+            if (mbDirectionIsForward)
+                SetPage (maPosition.mnPageIndex+1);
+            else
+                SetPage(maPosition.mnPageIndex - 1);
+        }
+
+        if (mpPage != nullptr)
+            moObjectIterator.emplace( mpPage, SdrIterMode::DeepNoGroups, !mbDirectionIsForward );
+        if (moObjectIterator && moObjectIterator->IsMore())
+            maPosition.mxObject = moObjectIterator->Next();
+        else
+            maPosition.mxObject = nullptr;
+    }
+
+    maPosition.mnText = 0;
+    if( !mbDirectionIsForward && maPosition.mxObject.get().is() )
+    {
+        pTextObj = DynCastSdrTextObj( maPosition.mxObject.get().get() );
+        if( pTextObj )
+            maPosition.mnText = pTextObj->getTextCount() - 1;
+    }
+
 
     if (mbDirectionIsForward)
     {
@@ -743,7 +813,7 @@ void DocumentIteratorImpl::GotoNextText()
                 {
                     maPosition.meEditMode = EditMode::Page;
                     if (maPosition.mePageKind == PageKind::Standard)
-                        maPosition.mePageKind = PageKind::Notes;
+                        maPosition.mePageKind = PageKind::Handout;
                     else if (maPosition.mePageKind == PageKind::Notes)
                         maPosition.mePageKind = PageKind::Handout;
                     SetPage (0);
