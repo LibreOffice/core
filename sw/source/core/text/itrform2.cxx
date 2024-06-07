@@ -177,7 +177,6 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
     // Can be seen in 8081.sdw, if you enter text in the first line
 
     TextFrameIndex const nSoftHyphPos = rInf.GetSoftHyphPos();
-    TextFrameIndex const nUnderScorePos = rInf.GetUnderScorePos();
 
     // Save flys and set to 0, or else segmentation fault
     // Not ClearFly(rInf) !
@@ -190,7 +189,6 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
     // Truncate()
     rInf.SetUnderflow(nullptr);
     rInf.SetSoftHyphPos( nSoftHyphPos );
-    rInf.SetUnderScorePos( nUnderScorePos );
     rInf.SetPaintOfst( GetLeftMargin() );
 
     // We look for the portion with the under-flow position

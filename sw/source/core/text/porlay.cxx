@@ -844,8 +844,7 @@ void SwLineLayout::ResetFlags()
 SwLineLayout::SwLineLayout()
     : m_pNext( nullptr ),
       m_nRealHeight( 0 ),
-      m_nTextHeight( 0 ),
-      m_bUnderscore( false )
+      m_nTextHeight( 0 )
 {
     ResetFlags();
     SetWhichPor( PortionType::Lay );

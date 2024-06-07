@@ -745,9 +745,12 @@ static void lcl_DrawLineForWrongListData(
 static void GetTextArray(const OutputDevice& rDevice, const OUString& rStr, KernArray& rDXAry,
                          sal_Int32 nIndex, sal_Int32 nLen,
                          std::optional<SwLinePortionLayoutContext> nLayoutContext,
+                         SwTwips* nMaxAscent = nullptr, SwTwips* nMaxDescent = nullptr,
                          bool bCaret = false,
                          const vcl::text::TextLayoutCache* layoutCache = nullptr)
 {
+    vcl::TextArrayMetrics stMetrics;
+
     if (nLayoutContext.has_value())
     {
         auto nStrEnd = nIndex + nLen;
@@ -757,14 +760,28 @@ static void GetTextArray(const OutputDevice& rDevice, const OUString& rStr, Kern
 
         const SalLayoutGlyphs* pLayoutCache = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(
             &rDevice, rStr, nContextBegin, nContextLen, nIndex, nIndex + nLen, 0, layoutCache);
-        rDevice.GetPartialTextArray(rStr, &rDXAry, nContextBegin, nContextLen, nIndex, nLen, bCaret,
-                                    layoutCache, pLayoutCache);
+        stMetrics = rDevice.GetPartialTextArray(rStr, &rDXAry, nContextBegin, nContextLen, nIndex,
+                                                nLen, bCaret, layoutCache, pLayoutCache);
     }
     else
     {
         const SalLayoutGlyphs* pLayoutCache = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(
             &rDevice, rStr, nIndex, nLen, 0, layoutCache);
-        rDevice.GetTextArray(rStr, &rDXAry, nIndex, nLen, bCaret, layoutCache, pLayoutCache);
+        stMetrics
+            = rDevice.GetTextArray(rStr, &rDXAry, nIndex, nLen, bCaret, layoutCache, pLayoutCache);
+    }
+
+    if (stMetrics.aBounds.has_value())
+    {
+        if (nMaxAscent)
+        {
+            *nMaxAscent = static_cast<SwTwips>(std::ceil(-stMetrics.aBounds->Top()));
+        }
+
+        if (nMaxDescent)
+        {
+            *nMaxDescent = static_cast<SwTwips>(std::ceil(stMetrics.aBounds->Bottom()));
+        }
     }
 }
 
@@ -772,16 +789,16 @@ static void GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo
                          KernArray& rDXAry, bool bCaret = false)
 {
     GetTextArray(rOutputDevice, rInf.GetText(), rDXAry, rInf.GetIdx().get(), rInf.GetLen().get(),
-                 rInf.GetLayoutContext(), bCaret, rInf.GetVclCache());
+                 rInf.GetLayoutContext(), nullptr, nullptr, bCaret, rInf.GetVclCache());
 }
 
 static void GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf,
-                         KernArray& rDXAry, sal_Int32 nLen, bool bCaret = false)
+                         KernArray& rDXAry, sal_Int32 nLen, SwTwips *nMaxAscent = nullptr, SwTwips *nMaxDescent = nullptr, bool bCaret = false)
 {
     // Substring is fine.
     assert(nLen <= rInf.GetLen().get());
     GetTextArray(rOutputDevice, rInf.GetText(), rDXAry, rInf.GetIdx().get(), nLen,
-                 rInf.GetLayoutContext(), bCaret, rInf.GetVclCache());
+                 rInf.GetLayoutContext(), nMaxAscent, nMaxDescent, bCaret, rInf.GetVclCache());
 }
 
 static void DrawTextArray(OutputDevice& rOutputDevice, const Point& rStartPt, const OUString& rStr,
@@ -1581,6 +1598,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
 {
     Size aTextSize;
+    SwTwips nMaxAscent = 0;
+    SwTwips nMaxDescent = 0;
     const TextFrameIndex nLn = (TextFrameIndex(COMPLETE_STRING) != rInf.GetLen())
         ? rInf.GetLen()
         : TextFrameIndex(rInf.GetText().getLength());
@@ -1631,7 +1650,8 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                                 GetFontLeading( rInf.GetShell(), rInf.GetOut() ) );
 
             KernArray aKernArray;
-            GetTextArray(*pOutDev, rInf, aKernArray, sal_Int32(nLn), bCaret);
+            GetTextArray(*pOutDev, rInf, aKernArray, sal_Int32(nLn), &nMaxAscent, &nMaxDescent,
+                         bCaret);
             if (pGrid->IsSnapToChars())
             {
                 sw::Justify::SnapToGrid(aKernArray, rInf.GetText(), sal_Int32(rInf.GetIdx()),
@@ -1674,7 +1694,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             rInf.GetOut().SetFont( *m_pScrFont );
 
         GetTextArray(*m_pPrinter, rInf.GetText(), aKernArray, sal_Int32(rInf.GetIdx()),
-                     sal_Int32(nLn), rInf.GetLayoutContext(), bCaret);
+                     sal_Int32(nLn), rInf.GetLayoutContext(), &nMaxAscent, &nMaxDescent, bCaret);
     }
     else
     {
@@ -1682,8 +1702,11 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             rInf.GetOut().SetFont( *m_pPrtFont );
         aTextSize.setHeight( rInf.GetOut().GetTextHeight() );
 
-        GetTextArray(rInf.GetOut(), rInf, aKernArray, nLn.get(), bCaret);
+        GetTextArray(rInf.GetOut(), rInf, aKernArray, nLn.get(), &nMaxAscent, &nMaxDescent, bCaret);
     }
+
+    rInf.SetExtraAscent(std::max(SwTwips{ 0 }, nMaxAscent));
+    rInf.SetExtraDescent(std::max(SwTwips{ 0 }, nMaxDescent));
 
     if (bCompress)
     {

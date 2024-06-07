@@ -160,6 +160,12 @@ class OutputDevice;
 
 namespace vcl {
     typedef OutputDevice RenderContext;
+
+    struct TextArrayMetrics
+    {
+        std::optional<tools::Rectangle> aBounds;
+        double nWidth = 0.0;
+    };
 }
 
 VCL_DLLPUBLIC void InvertFocusRect(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
@@ -1059,20 +1065,23 @@ public:
                                                sal_Int32 nLen,
                                                SalLayoutFlags flags = SalLayoutFlags::NONE,
                                                const SalLayoutGlyphs* pLayoutCache = nullptr);
-    double                      GetTextArray( const OUString& rStr, KernArray* pDXAry,
-                                              sal_Int32 nIndex = 0, sal_Int32 nLen = -1, bool bCaret = false,
-                                              vcl::text::TextLayoutCache const* = nullptr,
-                                              SalLayoutGlyphs const*const pLayoutCache = nullptr) const;
+    vcl::TextArrayMetrics GetTextArray(const OUString& rStr, KernArray* pDXAry,
+                                       sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
+                                       bool bCaret = false,
+                                       vcl::text::TextLayoutCache const* = nullptr,
+                                       SalLayoutGlyphs const* const pLayoutCache = nullptr) const;
 
     void DrawPartialTextArray(const Point& rStartPt, const OUString& rStr, KernArraySpan aKernArray,
                               std::span<const sal_Bool> pKashidaAry, sal_Int32 nIndex,
                               sal_Int32 nLen, sal_Int32 nPartIndex, sal_Int32 nPartLen,
                               SalLayoutFlags flags = SalLayoutFlags::NONE,
                               const SalLayoutGlyphs* pLayoutCache = nullptr);
-    double GetPartialTextArray(const OUString& rStr, KernArray* pDXAry, sal_Int32 nIndex,
-                               sal_Int32 nLen, sal_Int32 nPartIndex, sal_Int32 nPartLen,
-                               bool bCaret = false, const vcl::text::TextLayoutCache* = nullptr,
-                               const SalLayoutGlyphs* pLayoutCache = nullptr) const;
+    vcl::TextArrayMetrics GetPartialTextArray(const OUString& rStr, KernArray* pDXAry,
+                                              sal_Int32 nIndex, sal_Int32 nLen,
+                                              sal_Int32 nPartIndex, sal_Int32 nPartLen,
+                                              bool bCaret = false,
+                                              const vcl::text::TextLayoutCache* = nullptr,
+                                              const SalLayoutGlyphs* pLayoutCache = nullptr) const;
 
     SAL_DLLPRIVATE void         GetCaretPositions( const OUString&, KernArray& rCaretXArray,
                                               sal_Int32 nIndex, sal_Int32 nLen,

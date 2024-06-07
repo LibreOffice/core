@@ -86,7 +86,6 @@ using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-#define CHAR_UNDERSCORE u'_'
 #define CHAR_LEFT_ARROW u'\x25C0'
 #define CHAR_RIGHT_ARROW u'\x25B6'
 #define CHAR_TAB u'\x2192'
@@ -438,7 +437,8 @@ void SwTextSizeInfo::GetTextSize(const SwScriptInfo* pSI, const TextFrameIndex n
                                  const TextFrameIndex nLength,
                                  std::optional<SwLinePortionLayoutContext> nLayoutContext,
                                  const sal_uInt16 nComp, SwTwips& nMinSize,
-                                 tools::Long& nMaxSizeDiff,
+                                 tools::Long& nMaxSizeDiff, SwTwips& nExtraAscent,
+                                 SwTwips& nExtraDescent,
                                  vcl::text::TextLayoutCache const* const pCache) const
 {
     SwDrawTextInfo aDrawInf(m_pVsh, *m_pOut, pSI, *m_pText, nIndex, nLength, nLayoutContext, 0,
@@ -449,6 +449,8 @@ void SwTextSizeInfo::GetTextSize(const SwScriptInfo* pSI, const TextFrameIndex n
     aDrawInf.SetKanaComp( nComp );
     SwPosSize aSize( m_pFnt->GetTextSize_( aDrawInf ) );
     nMaxSizeDiff = aDrawInf.GetKanaDiff();
+    nExtraAscent = aDrawInf.GetExtraAscent();
+    nExtraDescent = aDrawInf.GetExtraDescent();
     nMinSize = aSize.Width();
 }
 
@@ -1624,6 +1626,8 @@ void SwTextFormatInfo::CtorInitTextFormatInfo( OutputDevice* pRenderContext, SwT
     m_nFirst = 0;
     m_nRealWidth = 0;
     m_nForcedLeftMargin = 0;
+    m_nExtraAscent = 0;
+    m_nExtraDescent = 0;
     m_pRest = nullptr;
     m_nLineHeight = 0;
     m_nLineNetHeight = 0;
@@ -1722,8 +1726,9 @@ void SwTextFormatInfo::Init()
     m_cTabDecimal = 0;
     m_nWidth = m_nRealWidth;
     m_nForcedLeftMargin = 0;
+    m_nExtraAscent = 0;
+    m_nExtraDescent = 0;
     m_nSoftHyphPos = TextFrameIndex(0);
-    m_nUnderScorePos = TextFrameIndex(COMPLETE_STRING);
     m_nLastBookmarkPos = TextFrameIndex(-1);
     m_cHookChar = 0;
     SetIdx(TextFrameIndex(0));
@@ -1756,7 +1761,6 @@ SwTextFormatInfo::SwTextFormatInfo( const SwTextFormatInfo& rInf,
     m_pLastTab(nullptr),
     m_nSoftHyphPos(TextFrameIndex(0)),
     m_nLineStart(rInf.GetIdx()),
-    m_nUnderScorePos(TextFrameIndex(COMPLETE_STRING)),
     m_nLeft(rInf.m_nLeft),
     m_nRight(rInf.m_nRight),
     m_nFirst(rInf.m_nLeft),
@@ -1765,6 +1769,8 @@ SwTextFormatInfo::SwTextFormatInfo( const SwTextFormatInfo& rInf,
     m_nLineHeight(0),
     m_nLineNetHeight(0),
     m_nForcedLeftMargin(0),
+    m_nExtraAscent(0),
+    m_nExtraDescent(0),
     m_bFull(false),
     m_bFootnoteDone(true),
     m_bErgoDone(true),
@@ -1874,11 +1880,6 @@ TextFrameIndex SwTextFormatInfo::ScanPortionEnd(TextFrameIndex const nStart,
         case CHAR_WJ :
             m_cHookChar = cPos;
             return i;
-
-        case CHAR_UNDERSCORE:
-            if (TextFrameIndex(COMPLETE_STRING) == m_nUnderScorePos)
-                m_nUnderScorePos = i;
-            break;
 
         default:
             if ( cTabDec )

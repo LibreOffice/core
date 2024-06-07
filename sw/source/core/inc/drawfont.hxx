@@ -60,6 +60,8 @@ class SW_DLLPUBLIC SwDrawTextInfo
     SwUnderlineFont* m_pUnderFnt = nullptr;
     TextFrameIndex* m_pHyphPos = nullptr;
     tools::Long m_nKanaDiff = 0;
+    SwTwips m_nExtraAscent = 0;
+    SwTwips m_nExtraDescent = 0;
     TextFrameIndex m_nIdx;
     TextFrameIndex m_nLen;
     TextFrameIndex m_nMeasureLen = TextFrameIndex{ COMPLETE_STRING };
@@ -105,6 +107,8 @@ class SW_DLLPUBLIC SwDrawTextInfo
     bool m_bNumberOfBlanks : 1 = false;
     bool m_bUppr : 1 = false;
     bool m_bDrawSp : 1 = false;
+    bool m_bExtraAscent : 1 = false;
+    bool m_bExtraDescent : 1 = false;
 #endif
 
 public:
@@ -269,6 +273,22 @@ public:
         OSL_ENSURE( m_bKana, "DrawTextInfo: Undefined kana difference" );
 #endif
         return m_nKanaDiff;
+    }
+
+    SwTwips GetExtraAscent() const
+    {
+#ifdef DBG_UTIL
+        OSL_ENSURE(m_bExtraAscent, "DrawTextInfo: Undefined extra ascent");
+#endif
+        return m_nExtraAscent;
+    }
+
+    SwTwips GetExtraDescent() const
+    {
+#ifdef DBG_UTIL
+        OSL_ENSURE(m_bExtraDescent, "DrawTextInfo: Undefined extra descent");
+#endif
+        return m_nExtraDescent;
     }
 
     sal_uInt16 GetWidth() const
@@ -487,6 +507,22 @@ public:
         m_nKanaDiff = nNew;
 #ifdef DBG_UTIL
         m_bKana = true;
+#endif
+    }
+
+    void SetExtraAscent(SwTwips nNew)
+    {
+        m_nExtraAscent = nNew;
+#ifdef DBG_UTIL
+        m_bExtraAscent = true;
+#endif
+    }
+
+    void SetExtraDescent(SwTwips nNew)
+    {
+        m_nExtraDescent = nNew;
+#ifdef DBG_UTIL
+        m_bExtraDescent = true;
 #endif
     }
 

@@ -650,7 +650,7 @@ double OutputDevice::GetTextWidthDouble(const OUString& rStr, sal_Int32 nIndex, 
                                         vcl::text::TextLayoutCache const* const pLayoutCache,
                                         SalLayoutGlyphs const* const pSalLayoutCache) const
 {
-    return GetTextArray(rStr, nullptr, nIndex, nLen, false, pLayoutCache, pSalLayoutCache);
+    return GetTextArray(rStr, nullptr, nIndex, nLen, false, pLayoutCache, pSalLayoutCache).nWidth;
 }
 
 tools::Long OutputDevice::GetTextHeight() const
@@ -781,27 +781,26 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
         mpAlphaVDev->DrawTextArray( rStartPt, rStr, pDXAry, pKashidaAry, nIndex, nLen, flags );
 }
 
-double OutputDevice::GetTextArray( const OUString& rStr, KernArray* pKernArray,
-                                 sal_Int32 nIndex, sal_Int32 nLen, bool bCaret,
-                                 vcl::text::TextLayoutCache const*const pLayoutCache,
-                                 SalLayoutGlyphs const*const pSalLayoutCache) const
+vcl::TextArrayMetrics
+OutputDevice::GetTextArray(const OUString& rStr, KernArray* pKernArray, sal_Int32 nIndex,
+                           sal_Int32 nLen, bool bCaret,
+                           vcl::text::TextLayoutCache const* const pLayoutCache,
+                           SalLayoutGlyphs const* const pSalLayoutCache) const
 {
     return GetPartialTextArray(rStr, pKernArray, nIndex, nLen, nIndex, nLen, bCaret, pLayoutCache,
                                pSalLayoutCache);
 }
 
-double OutputDevice::GetPartialTextArray(const OUString &rStr,
-                                         KernArray* pKernArray,
-                                         sal_Int32 nIndex,
-                                         sal_Int32 nLen,
-                                         sal_Int32 nPartIndex,
-                                         sal_Int32 nPartLen,
-                                         bool bCaret,
-                                         const vcl::text::TextLayoutCache* pLayoutCache,
-                                         const SalLayoutGlyphs* pSalLayoutCache) const
+vcl::TextArrayMetrics
+OutputDevice::GetPartialTextArray(const OUString& rStr, KernArray* pKernArray, sal_Int32 nIndex,
+                                  sal_Int32 nLen, sal_Int32 nPartIndex, sal_Int32 nPartLen,
+                                  bool bCaret, const vcl::text::TextLayoutCache* pLayoutCache,
+                                  const SalLayoutGlyphs* pSalLayoutCache) const
 {
-    if( nIndex >= rStr.getLength() )
-        return 0; // TODO: this looks like a buggy caller?
+    if (nIndex >= rStr.getLength())
+    {
+        return {}; // TODO: this looks like a buggy caller?
+    }
 
     if( nLen < 0 || nIndex + nLen >= rStr.getLength() )
     {
@@ -844,7 +843,8 @@ double OutputDevice::GetPartialTextArray(const OUString &rStr,
             pDXAry->resize(nPartLen);
             std::fill(pDXAry->begin(), pDXAry->end(), 0);
         }
-        return 0;
+
+        return {};
     }
 
     std::unique_ptr<std::vector<double>> xDXPixelArray;
@@ -902,7 +902,18 @@ double OutputDevice::GetPartialTextArray(const OUString &rStr,
             (*pDXAry)[i] = basegfx::fround((*pDXPixelArray)[i]);
     }
 
-    return ImplDevicePixelToLogicWidthDouble(nWidth);
+    vcl::TextArrayMetrics stReturnValue;
+
+    basegfx::B2DRectangle stRect;
+    if (pSalLayout->GetBoundRect(stRect))
+    {
+        auto stRect2 = SalLayout::BoundRect2Rectangle(stRect);
+        stReturnValue.aBounds = ImplDevicePixelToLogic(stRect2);
+    }
+
+    stReturnValue.nWidth = ImplDevicePixelToLogicWidthDouble(nWidth);
+
+    return stReturnValue;
 }
 
 void OutputDevice::GetCaretPositions( const OUString& rStr, KernArray& rCaretXArray,

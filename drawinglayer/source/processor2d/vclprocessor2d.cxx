@@ -337,7 +337,7 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                 tools::Long nWidthToFill = rTextCandidate.getWidthToFill();
 
                 tools::Long nWidth = basegfx::fround<tools::Long>(
-                    mpOutputDevice->GetTextArray(rTextCandidate.getText(), &aDXArray, 0, 1));
+                    mpOutputDevice->GetTextArray(rTextCandidate.getText(), &aDXArray, 0, 1).nWidth);
                 sal_Int32 nChars = 2;
                 if (nWidth)
                     nChars = nWidthToFill / nWidth;

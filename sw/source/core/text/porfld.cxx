@@ -337,10 +337,6 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
         }
         rInf.SetLen( nFullLen );
 
-        if (TextFrameIndex(COMPLETE_STRING) != rInf.GetUnderScorePos() &&
-             rInf.GetUnderScorePos() > rInf.GetIdx() )
-             rInf.SetUnderScorePos( rInf.GetIdx() );
-
         if( m_pFont )
             m_pFont->AllocFontCacheId( rInf.GetVsh(), m_pFont->GetActual() );
 

@@ -41,7 +41,6 @@ SwSaveClip::~SwSaveClip()
 }
 
 void SwSaveClip::ChgClip_( const SwRect &rRect, const SwTextFrame* pFrame,
-                           bool bEnlargeRect,
                            sal_Int32 nEnlargeTop,
                            sal_Int32 nEnlargeBottom )
 {
@@ -73,12 +72,6 @@ void SwSaveClip::ChgClip_( const SwRect &rRect, const SwTextFrame* pFrame,
     else
     {
         tools::Rectangle aRect( rRect.SVRect() );
-
-        // Having underscores in our line, we enlarged the repaint area
-        // (see frmform.cxx) because for some fonts it could be too small.
-        // Consequently, we have to enlarge the clipping rectangle as well.
-        if ( bEnlargeRect && ! bVertical )
-            aRect.AdjustBottom(40 );
 
         // enlarge clip for paragraph margins at small fixed line height
         if ( nEnlargeTop > 0 )

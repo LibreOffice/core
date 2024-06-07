@@ -83,6 +83,8 @@ private:
     std::unique_ptr<std::deque<sal_uInt16>> m_pKanaComp;  // Used for Kana compression
     SwTwips m_nRealHeight;             // The height resulting from line spacing and register
     SwTwips m_nTextHeight;             // The max height of all non-FlyCnt portions in this Line
+    SwTwips m_nExtraAscent = 0;
+    SwTwips m_nExtraDescent = 0;
     bool m_bFormatAdj : 1;
     bool m_bDummy     : 1;
     bool m_bEndHyph   : 1;
@@ -97,7 +99,6 @@ private:
     bool m_bRedlineEnd: 1; // Redlining for paragraph mark: tracked change at the end
     bool m_bForcedLeftMargin : 1; // Left adjustment moved by the Fly
     bool m_bHanging : 1; // Contains a hanging portion in the margin
-    bool m_bUnderscore : 1;
 
     enum RedlineType m_eRedlineEnd; // redline type of pilcrow and line break symbols
 
@@ -146,8 +147,6 @@ public:
     bool HasForcedLeftMargin() const { return m_bForcedLeftMargin; }
     void SetHanging( const bool bNew ) { m_bHanging = bNew; }
     bool IsHanging() const { return m_bHanging; }
-    void SetUnderscore( const bool bNew ) { m_bUnderscore = bNew; }
-    bool HasUnderscore() const { return m_bUnderscore; }
 
     // Respecting empty dummy lines
     void SetDummy( const bool bNew ) { m_bDummy = bNew; }
@@ -172,6 +171,12 @@ public:
     SwTwips GetRealHeight() const { return m_nRealHeight; }
 
     SwTwips GetTextHeight() const { return m_nTextHeight; }
+
+    void SetExtraAscent(SwTwips nNew) { m_nExtraAscent = nNew; }
+    SwTwips GetExtraAscent() const { return m_nExtraAscent; }
+
+    void SetExtraDescent(SwTwips nNew) { m_nExtraDescent = nNew; }
+    SwTwips GetExtraDescent() const { return m_nExtraDescent; }
 
     // Creates the glue chain for short lines
     SwMarginPortion *CalcLeftMargin();

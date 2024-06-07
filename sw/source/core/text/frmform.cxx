@@ -1465,13 +1465,20 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
             rRepaint.SetRightOfst( nRght );
 
         // Finally we enlarge the repaint rectangle if we found an underscore
-        // within our line. 40 Twips should be enough
-        const bool bHasUnderscore =
-                ( rLine.GetInfo().GetUnderScorePos() < nNewStart );
-        if ( bHasUnderscore || rLine.GetCurr()->HasUnderscore() )
-            rRepaint.Bottom( rRepaint.Bottom() + 40 );
+        // or another glyph extending beyond the line height within the line.
+        auto nBaseAscent = pNew->GetAscent();
+        auto nMaxExtraAscent
+            = std::max({ SwTwips{ 0 }, rLine.GetInfo().GetExtraAscent() - nBaseAscent,
+                         rLine.GetCurr()->GetExtraAscent() });
+        rRepaint.Top(rRepaint.Top() - nMaxExtraAscent);
+        const_cast<SwLineLayout*>(rLine.GetCurr())->SetExtraAscent(nMaxExtraAscent);
 
-        const_cast<SwLineLayout*>(rLine.GetCurr())->SetUnderscore( bHasUnderscore );
+        auto nBaseDescent = pNew->Height() - pNew->GetAscent();
+        auto nMaxExtraDescent
+            = std::max({ SwTwips{ 0 }, rLine.GetInfo().GetExtraDescent() - nBaseDescent,
+                         rLine.GetCurr()->GetExtraDescent() });
+        rRepaint.Bottom(rRepaint.Bottom() + nMaxExtraDescent);
+        const_cast<SwLineLayout*>(rLine.GetCurr())->SetExtraDescent(nMaxExtraDescent);
     }
 
     // Calculating the good ol' nDelta

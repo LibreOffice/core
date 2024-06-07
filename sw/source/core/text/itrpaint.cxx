@@ -222,7 +222,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             GetInfo().GetPos().Y() + nTmpHeight > rPaint.Top() + rPaint.Height() )
         {
             bClip = false;
-            rClip.ChgClip( rPaint, m_pFrame, m_pCurr->HasUnderscore() );
+            rClip.ChgClip(rPaint, m_pFrame, m_pCurr->GetExtraAscent(), m_pCurr->GetExtraDescent());
         }
 #if OSL_DEBUG_LEVEL > 1
         static bool bClipAlways = false;
@@ -255,7 +255,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         // tdf#117448 at small fixed line height, enlarge clipping area in table cells
         // to show previously clipped text content on the area of paragraph margins
         if ( rFrame.IsInTab() )
-            rClip.ChgClip( aLineRect, m_pFrame, false, rFrame.GetTopMargin(), rFrame.GetBottomMargin() );
+            rClip.ChgClip(aLineRect, m_pFrame, rFrame.GetTopMargin(), rFrame.GetBottomMargin());
         else
             rClip.ChgClip( aLineRect, m_pFrame );
         bClip = false;
@@ -377,7 +377,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             GetInfo().X() + pPor->Width() + ( pPor->Height() / 2 ) > nMaxRight )
         {
             bClip = false;
-            rClip.ChgClip( rPaint, m_pFrame, m_pCurr->HasUnderscore() );
+            rClip.ChgClip(rPaint, m_pFrame, m_pCurr->GetExtraAscent(), m_pCurr->GetExtraDescent());
         }
 
         // Portions, which lay "below" the text like post-its
