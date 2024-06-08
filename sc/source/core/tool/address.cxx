@@ -147,25 +147,25 @@ static sal_Int64 sal_Unicode_strtol ( const sal_Unicode*  p, const sal_Unicode**
     else if( *p == '+' )
         p++;
 
-    const sal_Int64 cutoff = is_neg ? -(std::numeric_limits<sal_Int64>::min() / 10)
-                                    : std::numeric_limits<sal_Int64>::max() / 10;
-    const sal_Int64 cutlim = is_neg ? -(std::numeric_limits<sal_Int64>::min() % 10)
-                                    : std::numeric_limits<sal_Int64>::max() % 10;
+    const sal_Int64 cutoff = is_neg ? std::numeric_limits<sal_Int64>::min() / 10
+                                    : -(std::numeric_limits<sal_Int64>::max() / 10);
+    const int cutlim = is_neg ? -(std::numeric_limits<sal_Int64>::min() % 10)
+                              : std::numeric_limits<sal_Int64>::max() % 10;
 
     while (rtl::isAsciiDigit( *p ))
     {
         int val = *p - '0';
-        if (accum > cutoff || (accum == cutoff && val > cutlim))
+        if (accum < cutoff || (accum == cutoff && val > cutlim))
         {
             *pEnd = nullptr;
             return 0;
         }
-        accum = accum * 10 + val;
+        accum = accum * 10 - val;
         p++;
     }
 
     *pEnd = p;
-    return is_neg ? -accum : accum;
+    return is_neg ? accum : -accum;
 }
 
 static const sal_Unicode* lcl_eatWhiteSpace( const sal_Unicode* p )
