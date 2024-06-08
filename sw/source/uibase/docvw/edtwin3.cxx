@@ -84,10 +84,14 @@ void FrameNotify( SwViewShell* pVwSh, FlyMode eMode )
 // Notify for page number update
 bool SwEditWin::RulerColumnDrag( const MouseEvent& rMEvt, bool bVerticalMode)
 {
+    // Especially on bigger zoom, changed mouse pointer didn't guarantee
+    // drag & drop any more because of too small hit area in pixel.
+    // Enlarge it 5 pixels to cover the whole hit area.
+    tools::Long nTol = 5L;
     SvxRuler& rRuler = bVerticalMode ?  m_rView.GetVRuler() : m_rView.GetHRuler();
-    return (!rRuler.StartDocDrag( rMEvt, RulerType::Border ) &&
-            !rRuler.StartDocDrag( rMEvt, RulerType::Margin1) &&
-            !rRuler.StartDocDrag( rMEvt, RulerType::Margin2));
+    return (!rRuler.StartDocDrag( rMEvt, RulerType::Border, nTol ) &&
+            !rRuler.StartDocDrag( rMEvt, RulerType::Margin1, nTol ) &&
+            !rRuler.StartDocDrag( rMEvt, RulerType::Margin2, nTol ));
 }
 
 // #i23726#

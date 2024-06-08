@@ -35,6 +35,7 @@
 #include <wrtsh.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
+#include <svx/svdview.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
@@ -71,7 +72,19 @@ using namespace ::com::sun::star;
 // also see swtable.cxx
 #define COLFUZZY 20L
 
-static bool IsSame( tools::Long nA, tools::Long nB ) { return  std::abs(nA-nB) <= COLFUZZY; }
+static bool IsSame( SwDoc & rDoc, tools::Long nA, tools::Long nB )
+{
+    const SwViewShell *pVSh = rDoc.getIDocumentLayoutAccess().GetCurrentViewShell();
+    if( !pVSh )
+        return std::abs(nA-nB) <= COLFUZZY;
+
+    SdrView* pDrawView = const_cast<SdrView*>(pVSh->GetDrawView());
+    const auto nOld = pDrawView->GetHitTolerancePixel();
+    pDrawView->SetHitTolerancePixel( COLFUZZY/4 );
+    bool bRet = std::abs(nA-nB) <= pDrawView->getHitTolLog();
+    pDrawView->SetHitTolerancePixel( nOld );
+    return bRet;
+}
 
 namespace {
 
@@ -1556,11 +1569,11 @@ size_t SwFEShell::GetCurTabColNum() const
 
         const tools::Long nRight = aTabCols.GetLeftMin() + aTabCols.GetRight();
 
-        if ( !::IsSame( nX, nRight ) )
+        if ( !::IsSame( *GetDoc(), nX, nRight ) )
         {
             nX = nRight - nX + aTabCols.GetLeft();
             for ( size_t i = 0; i < aTabCols.Count(); ++i )
-                if ( ::IsSame( nX, aTabCols[i] ) )
+                if ( ::IsSame( *GetDoc(), nX, aTabCols[i] ) )
                 {
                     nRet = i + 1;
                     break;
@@ -1574,10 +1587,10 @@ size_t SwFEShell::GetCurTabColNum() const
 
         const tools::Long nLeft = aTabCols.GetLeftMin();
 
-        if ( !::IsSame( nX, nLeft + aTabCols.GetLeft() ) )
+        if ( !::IsSame( *GetDoc(), nX, nLeft + aTabCols.GetLeft() ) )
         {
             for ( size_t i = 0; i < aTabCols.Count(); ++i )
-                if ( ::IsSame( nX, nLeft + aTabCols[i] ) )
+                if ( ::IsSame( *GetDoc(), nX, nLeft + aTabCols[i] ) )
                 {
                     nRet = i + 1;
                     break;
@@ -1611,7 +1624,7 @@ static const SwFrame *lcl_FindFrameInTab( const SwLayoutFrame *pLay, const Point
     return nullptr;
 }
 
-static const SwCellFrame *lcl_FindFrame( const SwLayoutFrame *pLay, const Point &rPt,
+static const SwCellFrame *lcl_FindFrame( SwDoc & rDoc, const SwLayoutFrame *pLay, const Point &rPt,
                               SwTwips nFuzzy, bool* pbRow, bool* pbCol )
 {
     // bMouseMoveRowCols :
@@ -1771,17 +1784,17 @@ static const SwCellFrame *lcl_FindFrame( const SwLayoutFrame *pLay, const Point 
                     const SwTwips nMouseTop = aRectFnSet.IsVert() ? rPt.X() : rPt.Y();
 
                     // Do not allow to drag upper table border:
-                    if ( !::IsSame( nTabTop, nMouseTop ) )
+                    if ( !::IsSame( rDoc, nTabTop, nMouseTop ) )
                     {
-                        if ( ::IsSame( pFrame->getFrameArea().Left(), rPt.X() ) ||
-                             ::IsSame( pFrame->getFrameArea().Right(),rPt.X() ) )
+                        if ( ::IsSame( rDoc, pFrame->getFrameArea().Left(), rPt.X() ) ||
+                             ::IsSame( rDoc, pFrame->getFrameArea().Right(),rPt.X() ) )
                         {
                             if ( pbRow ) *pbRow = false;
                             pRet = pFrame;
                             break;
                         }
-                        if ( ::IsSame( pFrame->getFrameArea().Top(), rPt.Y() ) ||
-                             ::IsSame( pFrame->getFrameArea().Bottom(),rPt.Y() ) )
+                        if ( ::IsSame( rDoc, pFrame->getFrameArea().Top(), rPt.Y() ) ||
+                             ::IsSame( rDoc, pFrame->getFrameArea().Bottom(),rPt.Y() ) )
                         {
                             if ( pbRow ) *pbRow = true;
                             pRet = pFrame;
@@ -1838,14 +1851,14 @@ const SwFrame* SwFEShell::GetBox( const Point &rPt, bool* pbRow, bool* pbCol ) c
                 SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
                 if ( auto pFlyFrame = pObj->DynCastFlyFrame() )
                 {
-                    pFrame = lcl_FindFrame( pFlyFrame, rPt, nFuzzy, pbRow, pbCol );
+                    pFrame = lcl_FindFrame( *GetDoc(), pFlyFrame, rPt, nFuzzy, pbRow, pbCol );
                 }
             }
         }
         const SwLayoutFrame *pLay = static_cast<const SwLayoutFrame*>(pPage->Lower());
         while ( pLay && !pFrame )
         {
-            pFrame = lcl_FindFrame( pLay, rPt, nFuzzy, pbRow, pbCol );
+            pFrame = lcl_FindFrame( *GetDoc(), pLay, rPt, nFuzzy, pbRow, pbCol );
             pLay = static_cast<const SwLayoutFrame*>(pLay->GetNext());
         }
     }
@@ -2274,10 +2287,10 @@ size_t SwFEShell::GetCurMouseTabColNum( const Point &rPt ) const
 
         const tools::Long nLeft = aTabCols.GetLeftMin();
 
-        if ( !::IsSame( nX, nLeft + aTabCols.GetLeft() ) )
+        if ( !::IsSame( *GetDoc(), nX, nLeft + aTabCols.GetLeft() ) )
         {
             for ( size_t i = 0; i < aTabCols.Count(); ++i )
-                if ( ::IsSame( nX, nLeft + aTabCols[i] ) )
+                if ( ::IsSame( *GetDoc(), nX, nLeft + aTabCols[i] ) )
                 {
                     nRet = i + 1;
                     break;
