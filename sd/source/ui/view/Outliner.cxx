@@ -1749,12 +1749,14 @@ void SdOutliner::EnterEditMode (bool bGrabFocus)
         pInstance->RequestSynchronousUpdate();
 
         std::shared_ptr<sd::ViewShell> pNotesPaneShell(pInstance->GetViewShell(sd::framework::FrameworkHelper::msBottomImpressPaneURL));
-
-        // likely only one or two of these is enough
-        pNotesPaneShell->GetParentWindow()->GrabFocus();
-        pNotesPaneShell->GetContentWindow()->Activate();
-        pNotesPaneShell->GetContentWindow()->GrabFocus();
-        pNotesPaneShell->GetContentWindow()->GetFocus();
+        if(pNotesPaneShell)
+        {
+            // likely only one or two of these is enough
+            pNotesPaneShell->GetParentWindow()->GrabFocus();
+            pNotesPaneShell->GetContentWindow()->Activate();
+            pNotesPaneShell->GetContentWindow()->GrabFocus();
+            pNotesPaneShell->GetContentWindow()->GetFocus();
+        }
     }
 
     mbFoundObject = true;
