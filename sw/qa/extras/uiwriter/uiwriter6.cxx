@@ -1489,6 +1489,140 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf44773)
     CPPUNIT_ASSERT_GREATER(tools::Long(750), pCellA1->getFrameArea().Height());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157833)
+{
+    // allow resizing table rows & columns using a minimal hit area
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // insert an empty paragraph
+    pWrtShell->SplitNode();
+
+    // create a table
+    SwInsertTableOptions TableOpt(SwInsertTableFlags::DefaultBorder, 0);
+    (void)&pWrtShell->InsertTable(TableOpt, 2, 1);
+
+    // the cursor is not inside the table
+    CPPUNIT_ASSERT(!pWrtShell->IsCursorInTable());
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTableNames = xTablesSupplier->getTextTables();
+    CPPUNIT_ASSERT(xTableNames->hasByName("Table1"));
+    uno::Reference<text::XTextTable> xTable1(xTableNames->getByName("Table1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable1->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable1->getColumns()->getCount());
+
+    Scheduler::ProcessEventsToIdle();
+
+    // set table row height by drag & drop
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+
+    SwFrame* pPage = pLayout->Lower();
+    SwFrame* pBody = pPage->GetLower();
+    SwFrame* pTable = pBody->GetLower()->GetNext();
+    SwFrame* pRow1 = pTable->GetLower();
+    CPPUNIT_ASSERT(pRow1->IsRowFrame());
+    SwFrame* pCellA1 = pRow1->GetLower();
+    const SwRect& rCellA1Rect = pCellA1->getFrameArea();
+    auto nRowHeight = rCellA1Rect.Height();
+    // select center of the bottom border of the first table cell
+    Point ptFrom(rCellA1Rect.Left() + rCellA1Rect.Width() / 2, rCellA1Rect.Top() + nRowHeight);
+    // double the row height
+    Point ptTo(rCellA1Rect.Left() + rCellA1Rect.Width() / 2, rCellA1Rect.Top() + 2 * nRowHeight);
+    vcl::Window& rEditWin = pDoc->GetDocShell()->GetView()->GetEditWin();
+    Point aFrom = rEditWin.LogicToPixel(ptFrom);
+    Point aArea(aFrom.X(), aFrom.Y() + 2);
+    MouseEvent aClickEvent(aArea, 1, MouseEventModifiers::SIMPLECLICK | MouseEventModifiers::SELECT,
+                           MOUSE_LEFT);
+    rEditWin.MouseButtonDown(aClickEvent);
+    Point aTo = rEditWin.LogicToPixel(ptTo);
+    MouseEvent aMoveEvent(aTo, 1, MouseEventModifiers::SIMPLECLICK | MouseEventModifiers::SELECT,
+                          MOUSE_LEFT);
+    TrackingEvent aTEvt(aMoveEvent, TrackingEventFlags::Repeat);
+    // drag & drop of cell border inside the document (and outside the table)
+    // still based on the ruler code, use that to simulate dragging
+    pDoc->GetDocShell()->GetView()->GetVRuler().Tracking(aTEvt);
+    TrackingEvent aTEvt2(aMoveEvent, TrackingEventFlags::End);
+    pDoc->GetDocShell()->GetView()->GetVRuler().Tracking(aTEvt2);
+    Scheduler::ProcessEventsToIdle();
+    rEditWin.CaptureMouse();
+    rEditWin.ReleaseMouse();
+
+    // this was 396 (not modified row height previously, when clicking only in a 2-pixel distance
+    // from the center of the border)
+    CPPUNIT_ASSERT_GREATER(tools::Long(750), pCellA1->getFrameArea().Height());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf155692)
+{
+    // allow resizing table rows & columns using a normal hit area
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // insert an empty paragraph
+    pWrtShell->SplitNode();
+
+    // create a table
+    SwInsertTableOptions TableOpt(SwInsertTableFlags::DefaultBorder, 0);
+    (void)&pWrtShell->InsertTable(TableOpt, 2, 1);
+
+    // the cursor is not inside the table
+    CPPUNIT_ASSERT(!pWrtShell->IsCursorInTable());
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTableNames = xTablesSupplier->getTextTables();
+    CPPUNIT_ASSERT(xTableNames->hasByName("Table1"));
+    uno::Reference<text::XTextTable> xTable1(xTableNames->getByName("Table1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable1->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable1->getColumns()->getCount());
+
+    Scheduler::ProcessEventsToIdle();
+
+    // set table row height by drag & drop
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+
+    SwFrame* pPage = pLayout->Lower();
+    SwFrame* pBody = pPage->GetLower();
+    SwFrame* pTable = pBody->GetLower()->GetNext();
+    SwFrame* pRow1 = pTable->GetLower();
+    CPPUNIT_ASSERT(pRow1->IsRowFrame());
+    SwFrame* pCellA1 = pRow1->GetLower();
+    const SwRect& rCellA1Rect = pCellA1->getFrameArea();
+    auto nRowHeight = rCellA1Rect.Height();
+    // select center of the bottom border of the first table cell
+    Point ptFrom(rCellA1Rect.Left() + rCellA1Rect.Width() / 2, rCellA1Rect.Top() + nRowHeight);
+    // double the row height
+    Point ptTo(rCellA1Rect.Left() + rCellA1Rect.Width() / 2, rCellA1Rect.Top() + 2 * nRowHeight);
+    vcl::Window& rEditWin = pDoc->GetDocShell()->GetView()->GetEditWin();
+    Point aFrom = rEditWin.LogicToPixel(ptFrom);
+    Point aArea(aFrom.X(), aFrom.Y() + 5);
+    MouseEvent aClickEvent(aArea, 1, MouseEventModifiers::SIMPLECLICK | MouseEventModifiers::SELECT,
+                           MOUSE_LEFT);
+    rEditWin.MouseButtonDown(aClickEvent);
+    Point aTo = rEditWin.LogicToPixel(ptTo);
+    MouseEvent aMoveEvent(aTo, 1, MouseEventModifiers::SIMPLECLICK | MouseEventModifiers::SELECT,
+                          MOUSE_LEFT);
+    TrackingEvent aTEvt(aMoveEvent, TrackingEventFlags::Repeat);
+    // drag & drop of cell border inside the document (and outside the table)
+    // still based on the ruler code, use that to simulate dragging
+    pDoc->GetDocShell()->GetView()->GetVRuler().Tracking(aTEvt);
+    TrackingEvent aTEvt2(aMoveEvent, TrackingEventFlags::End);
+    pDoc->GetDocShell()->GetView()->GetVRuler().Tracking(aTEvt2);
+    Scheduler::ProcessEventsToIdle();
+    rEditWin.CaptureMouse();
+    rEditWin.ReleaseMouse();
+
+    // this was 396 (not modified row height previously, when clicking only in a 5-pixel distance
+    // from the center of the border)
+    CPPUNIT_ASSERT_GREATER(tools::Long(750), pCellA1->getFrameArea().Height());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf160842)
 {
     createSwDoc("tdf160842.fodt");
