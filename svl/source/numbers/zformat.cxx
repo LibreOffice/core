@@ -4682,6 +4682,12 @@ bool SvNumberformat::ImpNumberFillWithThousands( const NativeNumberWrapper& rNat
             aGrouping.reset();
             [[fallthrough]];
         case NF_SYMBOLTYPE_STRING:
+            if ( rInfo.nTypeArray[j] == NF_SYMBOLTYPE_STRING && nDigCnt == 0 )
+            {
+                // tdf#159930 no integer in format ".###"
+                k = 0; // insert string at the beginning
+            }
+            [[fallthrough]];
         case NF_SYMBOLTYPE_CURRENCY:
         case NF_SYMBOLTYPE_PERCENT:
             if ( rInfo.nTypeArray[j] != NF_SYMBOLTYPE_DECSEP || bAddDecSep )

@@ -1823,6 +1823,11 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "Value= 12,345.00";
         checkPreviewString(aFormatter, sCode, 12345, LANGUAGE_ENGLISH_US, sExpected);
     }
+    {   // tdf#159930 no digit in integer part
+        sCode = "+.000;-.000";
+        sExpected = "+3.142"; // without the patch is would display "3+.142"
+        checkPreviewString(aFormatter, sCode, M_PI, LANGUAGE_ENGLISH_US, sExpected);
+    }
 }
 
 void Test::testNfEnglishKeywordsIntegrity()
