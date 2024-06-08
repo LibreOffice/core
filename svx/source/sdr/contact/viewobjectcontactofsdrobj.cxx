@@ -89,6 +89,9 @@ bool ViewObjectContactOfSdrObj::isPrimitiveVisible(const DisplayInfo& rDisplayIn
         return false;
     }
 
+    if (GetObjectContact().isOutputToPDFFile() && rObject.isAnnotationObject())
+        return false;
+
     // Test for Calc object hiding (for OLE and Graphic it's extra, see there)
     const SdrPageView* pSdrPageView = GetObjectContact().TryToGetSdrPageView();
 
