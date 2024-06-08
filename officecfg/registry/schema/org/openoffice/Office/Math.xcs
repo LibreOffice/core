@@ -390,6 +390,12 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="RightToLeft" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Enables right-to-left layout.</desc>
+        </info>
+        <value>false</value>
+      </prop>
       <prop oor:name="GreekCharStyle" oor:type="xs:short" oor:nillable="false">
         <info>
           <desc>Specifies the default layout for symbols from the 'Greek' symbol set.</desc>
