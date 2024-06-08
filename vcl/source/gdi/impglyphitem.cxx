@@ -377,7 +377,7 @@ const SalLayoutGlyphs* SalLayoutGlyphsCache::GetLayoutGlyphs(
             if (mLastSubstringKey.has_value() && !bAbortOnFontSubstitute)
             {
                 sal_Int32 pos = nIndex;
-                if (mLastSubstringKey->len < pos && text[pos - 1] == nbSpace)
+                if (mLastSubstringKey->len < pos && pos > 0 && text[pos - 1] == nbSpace)
                     --pos; // Writer skips a non-breaking space, so skip that character too.
                 if ((mLastSubstringKey->len == pos || mLastSubstringKey->index == nIndex)
                     && mLastSubstringKey
