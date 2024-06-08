@@ -685,7 +685,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                         {
                             uno::Any aOldValue;
                             uno::Any aNewValue;
-                            comphelper::OCommonAccessibleText::implInitTextChangedEvent(m_strCurCellValue, valStr, aOldValue, aNewValue);
+                            (void)comphelper::OCommonAccessibleText::implInitTextChangedEvent(m_strCurCellValue, valStr, aOldValue, aNewValue);
                             AccessibleEventObject aTextChangedEvent;
                             aTextChangedEvent.EventId = AccessibleEventId::TEXT_CHANGED;
                             aTextChangedEvent.OldValue = aOldValue;
