@@ -184,7 +184,7 @@
         <property name="label" translatable="yes" context="tabledesignpanel|menuformat">Format</property>
         <property name="use-underline">True</property>
         <child type="submenu">
-          <object class="GtkMenu">
+          <object class="GtkMenu" id="menu1">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <child>
