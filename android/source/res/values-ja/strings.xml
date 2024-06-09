@@ -93,4 +93,7 @@
     <string name="calc_adjust_length">長さの調整</string>
     <string name="compress_photo_smallest_size">最小サイズ</string>
     <string name="take_photo">写真を撮る</string>
+    <string name="compress_photo_medium_size">普通サイズ</string>
+    <string name="compress_photo_no_compress">圧縮しない</string>
+    <string name="compress_photo_title">写真を圧縮しますか？</string>
 </resources>
