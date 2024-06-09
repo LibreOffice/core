@@ -26,7 +26,7 @@ bool ScTypedStrData::LessCaseSensitive::operator() (const ScTypedStrData& left, 
 
     if (left.meStrType == Value)
     {
-        if (left.mfValue == right.mfValue)
+        if (left.mfRoundedValue == right.mfRoundedValue)
             return left.mbIsHiddenByFilter < right.mbIsHiddenByFilter;
         return left.mfValue < right.mfValue;
     }
@@ -50,7 +50,7 @@ bool ScTypedStrData::LessSortCaseSensitive::operator() (const ScTypedStrData& le
 
     if (left.meStrType == Value)
     {
-        if (left.mfValue == right.mfValue)
+        if (left.mfRoundedValue == right.mfRoundedValue)
             return left.mbIsHiddenByFilter < right.mbIsHiddenByFilter;
         return left.mfValue < right.mfValue;
     }
@@ -73,7 +73,7 @@ bool ScTypedStrData::LessCaseInsensitive::operator() (const ScTypedStrData& left
 
     if (left.meStrType == Value)
     {
-        if (left.mfValue == right.mfValue)
+        if (left.mfRoundedValue == right.mfRoundedValue)
             return left.mbIsHiddenByFilter < right.mbIsHiddenByFilter;
         return left.mfValue < right.mfValue;
     }
@@ -97,7 +97,7 @@ bool ScTypedStrData::LessSortCaseInsensitive::operator() (const ScTypedStrData& 
 
     if (left.meStrType == Value)
     {
-        if (left.mfValue == right.mfValue)
+        if (left.mfRoundedValue == right.mfRoundedValue)
             return left.mbIsHiddenByFilter < right.mbIsHiddenByFilter;
         return left.mfValue < right.mfValue;
     }
