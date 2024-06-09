@@ -223,7 +223,7 @@ void ScRawToken::SetOpCode( OpCode e )
             break;
         case ocLet:
             eType = svJump;
-            nJump[0] = SAL_MAX_UINT8;
+            nJump[ 0 ] = FORMULA_MAXPARAMS + 1;
             break;
         case ocMissing:
             eType = svMissing;

@@ -1955,7 +1955,7 @@ void FormulaCompiler::Factor()
                     pFacToken->GetJump()[ 0 ] = FORMULA_MAXJUMPCOUNT + 1;
                     break;
                 case ocLet:
-                    pFacToken->GetJump()[0] = SAL_MAX_UINT8 + 1;
+                    pFacToken->GetJump()[ 0 ] = FORMULA_MAXPARAMS + 1;
                     break;
                 case ocIfError:
                 case ocIfNA:
@@ -1990,7 +1990,7 @@ void FormulaCompiler::Factor()
                     nJumpMax = FORMULA_MAXJUMPCOUNT;
                     break;
                 case ocLet:
-                    nJumpMax = SAL_MAX_UINT8;
+                    nJumpMax = FORMULA_MAXPARAMS;
                     break;
                 case ocIfError:
                 case ocIfNA:
@@ -2007,7 +2007,7 @@ void FormulaCompiler::Factor()
                     assert(!"FormulaCompiler::Factor: someone forgot to add a jump max case");
             }
             short nJumpCount = 0;
-            while ( (nJumpCount < (SAL_MAX_UINT8 - 1)) && (eOp == ocSep)
+            while ( (nJumpCount < (FORMULA_MAXPARAMS - 1)) && (eOp == ocSep)
                     && (pArr->GetCodeError() == FormulaError::NONE || !mbStopOnError))
             {
                 if ( ++nJumpCount <= nJumpMax )
@@ -2037,7 +2037,7 @@ void FormulaCompiler::Factor()
                         bLimitOk = (nJumpCount < FORMULA_MAXJUMPCOUNT);
                         break;
                     case ocLet:
-                        bLimitOk = (nJumpCount < SAL_MAX_UINT8);
+                        bLimitOk = (nJumpCount < FORMULA_MAXPARAMS);
                         break;
                     case ocIfError:
                     case ocIfNA:

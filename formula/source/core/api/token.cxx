@@ -1584,13 +1584,13 @@ FormulaToken* FormulaTokenArray::AddOpCode( OpCode eOp )
         case ocChoose:
         case ocLet:
             {
-                short nJump[SAL_MAX_UINT8 + 1];
+                short nJump[FORMULA_MAXPARAMS + 1];
                 if ( eOp == ocIf )
                     nJump[ 0 ] = 3;
                 else if ( eOp == ocChoose )
                     nJump[ 0 ] = FORMULA_MAXJUMPCOUNT + 1;
                 else if ( eOp == ocLet )
-                    nJump[0] = SAL_MAX_UINT8 + 1;
+                    nJump[ 0 ] = FORMULA_MAXPARAMS + 1;
                 else
                     nJump[ 0 ] = 2;
                 pRet = new FormulaJumpToken( eOp, nJump );

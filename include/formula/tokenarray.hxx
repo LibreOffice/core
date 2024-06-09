@@ -579,7 +579,6 @@ public:
 
 private:
     SAL_DLLPRIVATE const FormulaToken* GetNonEndOfPathToken( short nIdx ) const;
-    SAL_DLLPRIVATE const FormulaToken* GetNonEndOfPathToken2( short nIdx ) const;
 };
 
 // For use in SAL_INFO, SAL_WARN etc

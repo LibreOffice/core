@@ -571,12 +571,12 @@ void ScParameterClassification::GenerateDocumentation()
                 switch ( eOp )
                 {
                     case ocIf:
+                    case ocLet:
                         aToken.SetByte(3);
                     break;
                     case ocIfError:
                     case ocIfNA:
                     case ocChoose:
-                    case ocLet:
                         aToken.SetByte(2);
                     break;
                     case ocPercentSign:
