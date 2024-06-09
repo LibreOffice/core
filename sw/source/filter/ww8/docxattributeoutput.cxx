@@ -6329,15 +6329,19 @@ void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
                 // The frame output is postponed to the end of the anchor paragraph
                 bool bDuplicate = false;
                 const OUString& rName = rFrame.GetFrameFormat().GetName();
-                unsigned nSize = m_aFramesOfParagraph.size() ? m_aFramesOfParagraph.top().size() : 0;
-                for( unsigned nIndex = 0; nIndex < nSize; ++nIndex )
+                if (m_aFramesOfParagraph.size() && !rName.isEmpty())
                 {
-                    const OUString& rNameExisting = m_aFramesOfParagraph.top()[nIndex].GetFrameFormat().GetName();
-
-                    if (!rName.isEmpty() && !rNameExisting.isEmpty())
+                    const unsigned nSize = m_aFramesOfParagraph.top().size();
+                    for (unsigned nIndex = 0; nIndex < nSize; ++nIndex)
                     {
+                        const OUString& rNameExisting
+                            = m_aFramesOfParagraph.top()[nIndex].GetFrameFormat().GetName();
+
                         if (rName == rNameExisting)
+                        {
                             bDuplicate = true;
+                            break;
+                        }
                     }
                 }
 
