@@ -8204,7 +8204,9 @@ void ScInterpreter::ScXLookup()
                                 ri = nX;
                                 rj = nY + j;
                             }
-                            if (prMat->IsStringOrEmpty(ri, rj))
+                            if (prMat->IsEmptyCell(ri, rj))
+                                pResMat->PutEmpty(i, j);
+                            else if (prMat->IsStringOrEmpty(ri, rj))
                                 pResMat->PutString(prMat->GetString(ri, rj), i, j);
                             else
                                 pResMat->PutDouble(prMat->GetDouble(ri, rj), i, j);
@@ -8382,7 +8384,9 @@ void ScInterpreter::ScFilter()
             {
                 if (aResValues[iC] > 0)
                 {
-                    if (pQueryMatrix->IsStringOrEmpty(iC, iR))
+                    if (pQueryMatrix->IsEmptyCell(iC, iR))
+                        pResMat->PutEmptyTrans(nResPos++);
+                    else if (pQueryMatrix->IsStringOrEmpty(iC, iR))
                         pResMat->PutStringTrans(pQueryMatrix->GetString(iC, iR), nResPos++);
                     else
                         pResMat->PutDoubleTrans(pQueryMatrix->GetDouble(iC, iR), nResPos++);
@@ -8399,7 +8403,9 @@ void ScInterpreter::ScFilter()
             {
                 if (aResValues[iR] > 0)
                 {
-                    if (pQueryMatrix->IsStringOrEmpty(iC, iR))
+                    if (pQueryMatrix->IsEmptyCell(iC, iR))
+                        pResMat->PutEmpty(nResPos++);
+                    else if (pQueryMatrix->IsStringOrEmpty(iC, iR))
                         pResMat->PutString(pQueryMatrix->GetString(iC, iR), nResPos++);
                     else
                         pResMat->PutDouble(pQueryMatrix->GetDouble(iC, iR), nResPos++);
@@ -8666,7 +8672,14 @@ void ScInterpreter::ScSortBy()
                 {
                     for (SCSIZE rj = 0; rj < nbyR; rj++)//row
                     {
-                        if (pMatSortBy->IsStringOrEmpty(ci, rj))
+                        if (pMatSortBy->IsEmptyCell(ci, rj))
+                        {
+                            if (aSortData.bByRow)
+                                pFullMatSortBy->PutEmpty(ci + nSortBy, rj);
+                            else
+                                pFullMatSortBy->PutEmpty(ci, rj + nSortBy);
+                        }
+                        else if (pMatSortBy->IsStringOrEmpty(ci, rj))
                         {
                             if (aSortData.bByRow)
                                 pFullMatSortBy->PutString(pMatSortBy->GetString(ci, rj), ci + nSortBy, rj);
@@ -8882,7 +8895,11 @@ void ScInterpreter::ScUnique()
         {
             for (SCSIZE col = 0; col < nsC; col++)
             {
-                if (!pMatSource->IsStringOrEmpty(col, aResPos[iPos].first))
+                if (pMatSource->IsEmptyCell(col, aResPos[iPos].first))
+                {
+                    pResMat->PutEmpty(col, iPos);
+                }
+                else if (!pMatSource->IsStringOrEmpty(col, aResPos[iPos].first))
                 {
                     pResMat->PutDouble(pMatSource->GetDouble(col, aResPos[iPos].first), col, iPos);
                 }
@@ -8896,7 +8913,11 @@ void ScInterpreter::ScUnique()
         {
             for (SCSIZE row = 0; row < nsR; row++)
             {
-                if (!pMatSource->IsStringOrEmpty(aResPos[iPos].first, row))
+                if (pMatSource->IsEmptyCell(aResPos[iPos].first, row))
+                {
+                    pResMat->PutEmpty(iPos, row);
+                }
+                else if (!pMatSource->IsStringOrEmpty(aResPos[iPos].first, row))
                 {
                     pResMat->PutDouble(pMatSource->GetDouble(aResPos[iPos].first, row), iPos, row);
                 }

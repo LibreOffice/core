@@ -269,6 +269,8 @@ public:
     void PutString(const svl::SharedString* pArray, size_t nLen, SCSIZE nC, SCSIZE nR);
 
     void PutEmpty(SCSIZE nC, SCSIZE nR);
+    void PutEmpty(SCSIZE nIndex);
+    void PutEmptyTrans(SCSIZE nIndex);
     void PutEmptyPath(SCSIZE nC, SCSIZE nR);
     void PutError( FormulaError nErrorCode, SCSIZE nC, SCSIZE nR );
     void PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR);
@@ -592,6 +594,20 @@ void ScMatrixImpl::PutEmpty(SCSIZE nC, SCSIZE nR)
     {
         OSL_FAIL("ScMatrixImpl::PutEmpty: dimension error");
     }
+}
+
+void ScMatrixImpl::PutEmpty(SCSIZE nIndex)
+{
+    SCSIZE nC, nR;
+    CalcPosition(nIndex, nC, nR);
+    PutEmpty(nC, nR);
+}
+
+void ScMatrixImpl::PutEmptyTrans(SCSIZE nIndex)
+{
+    SCSIZE nC, nR;
+    CalcTransPosition(nIndex, nC, nR);
+    PutEmpty(nC, nR);
 }
 
 void ScMatrixImpl::PutEmptyPath(SCSIZE nC, SCSIZE nR)
@@ -3240,6 +3256,16 @@ void ScMatrix::PutString(const svl::SharedString* pArray, size_t nLen, SCSIZE nC
 void ScMatrix::PutEmpty(SCSIZE nC, SCSIZE nR)
 {
     pImpl->PutEmpty(nC, nR);
+}
+
+void ScMatrix::PutEmpty(SCSIZE nIndex)
+{
+    pImpl->PutEmpty(nIndex);
+}
+
+void ScMatrix::PutEmptyTrans(SCSIZE nIndex)
+{
+    pImpl->PutEmptyTrans(nIndex);
 }
 
 void ScMatrix::PutEmptyPath(SCSIZE nC, SCSIZE nR)

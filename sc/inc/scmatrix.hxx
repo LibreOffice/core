@@ -262,6 +262,8 @@ public:
     void PutString( const svl::SharedString* pArray, size_t nLen, SCSIZE nC, SCSIZE nR) ;
 
     SC_DLLPUBLIC void PutEmpty( SCSIZE nC, SCSIZE nR);
+    void PutEmpty(SCSIZE nIndex);
+    void PutEmptyTrans( SCSIZE nIndex );
 
     /// Jump sal_False without path
     void PutEmptyPath( SCSIZE nC, SCSIZE nR) ;

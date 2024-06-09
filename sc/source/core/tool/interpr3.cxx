@@ -4300,7 +4300,14 @@ ScMatrixRef ScInterpreter::CreateSortedMatrix( const ScSortParam& rSortParam, co
             {
                 for (SCROW rj = rSourceRange.aStart.Row(); rj <= rSourceRange.aEnd.Row(); rj++)
                 {
-                    if (pMatSrc->IsStringOrEmpty(ci, rj))
+                    if (pMatSrc->IsEmptyCell(ci, rj))
+                    {
+                        if (rSortParam.bByRow)
+                            pResMat->PutEmpty(ci, aPosTable[rj]);
+                        else
+                            pResMat->PutEmpty(aPosTable[ci], rj);
+                    }
+                    else if (pMatSrc->IsStringOrEmpty(ci, rj))
                     {
                         if (rSortParam.bByRow)
                             pResMat->PutString(pMatSrc->GetString(ci, rj), ci, aPosTable[rj]);
