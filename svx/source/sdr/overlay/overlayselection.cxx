@@ -40,12 +40,19 @@ namespace sdr::overlay
         // combine ranges geometrically to a single, ORed polygon
         static basegfx::B2DPolyPolygon impCombineRangesToPolyPolygon(const std::vector< basegfx::B2DRange >& rRanges)
         {
+            // Determines the offset in twips
+            Size aSize(1, 1);
+            aSize = o3tl::convert(aSize, o3tl::Length::px, o3tl::Length::twip);
+            const sal_Int32 nOffset = aSize.getWidth();
+
             const sal_uInt32 nCount(rRanges.size());
             basegfx::B2DPolyPolygon aRetval;
 
             for(sal_uInt32 a(0); a < nCount; a++)
             {
-                const basegfx::B2DPolygon aDiscretePolygon(basegfx::utils::createPolygonFromRect(rRanges[a]));
+                basegfx::B2DRange aRange(rRanges[a]);
+                aRange.grow(nOffset);
+                const basegfx::B2DPolygon aDiscretePolygon(basegfx::utils::createPolygonFromRect(aRange));
 
                 if(0 == a)
                 {
@@ -60,23 +67,15 @@ namespace sdr::overlay
             return aRetval;
         }
 
-        // Creates an ORed polygon with all the ranges shrinked by 1px
-        // This is used to draw the internal white line in the selection
-        static basegfx::B2DPolyPolygon impCombineRangesToInternalPolyPolygon(const std::vector< basegfx::B2DRange >& rRanges)
+        // tdf#161204 Creates a poly-polygon using white hairline to provide contrast
+        static basegfx::B2DPolyPolygon impCombineRangesToContrastPolyPolygon(const std::vector< basegfx::B2DRange >& rRanges)
         {
-            // Determines the offset in twips
-            Size aSize(1, 1);
-            aSize = o3tl::convert(aSize, o3tl::Length::px, o3tl::Length::twip);
-            const sal_Int32 nShrink = aSize.getWidth();
-
             const sal_uInt32 nCount(rRanges.size());
             basegfx::B2DPolyPolygon aRetval;
 
             for(sal_uInt32 a(0); a < nCount; a++)
             {
-                basegfx::B2DRange aRange(rRanges[a]);
-                aRange.grow(-nShrink);
-                const basegfx::B2DPolygon aDiscretePolygon(basegfx::utils::createPolygonFromRect(aRange));
+                const basegfx::B2DPolygon aDiscretePolygon(basegfx::utils::createPolygonFromRect(rRanges[a]));
 
                 if(0 == a)
                 {
@@ -175,16 +174,16 @@ namespace sdr::overlay
                                 std::move(aPolyPolygon),
                                 aRGBColor));
 
-                        // Internal outline with white color to provide contrast
-                        basegfx::B2DPolyPolygon aInternalPolyPolygon(impCombineRangesToInternalPolyPolygon(getRanges()));
-                        const drawinglayer::primitive2d::Primitive2DReference aInternalSelectionOutline(
+                        // tdf#161204 Outline with white color to provide contrast
+                        basegfx::B2DPolyPolygon aContrastPolyPolygon(impCombineRangesToContrastPolyPolygon(getRanges()));
+                        const drawinglayer::primitive2d::Primitive2DReference aContrastSelectionOutline(
                             new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
-                                std::move(aInternalPolyPolygon),
+                                std::move(aContrastPolyPolygon),
                                 basegfx::BColor(1.0, 1.0, 1.0)));
 
                         // add both to result
                         aRetval = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparence, aSelectionOutline };
-                        aRetval.append(drawinglayer::primitive2d::Primitive2DContainer{aUnifiedTransparence, aInternalSelectionOutline});
+                        aRetval.append(drawinglayer::primitive2d::Primitive2DContainer{aUnifiedTransparence, aContrastSelectionOutline});
                     }
                     else
                     {
