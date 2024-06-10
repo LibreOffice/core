@@ -129,6 +129,11 @@
   <menu:menuitem menu:id=".uno:NextTrackedChange"/>
   <menu:menuitem menu:id=".uno:PreviousTrackedChange"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:ContentControlProperties"/>
+  <menu:menuitem menu:id=".uno:EditFootnote"/>
+  <menu:menuitem menu:id=".uno:IndexEntryDialog"/>
+  <menu:menuitem menu:id=".uno:AuthoritiesEntryDialog"/>
+  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:OpenHyperlinkOnCursor"/>
   <menu:menuitem menu:id=".uno:EditHyperlink"/>
   <menu:menuitem menu:id=".uno:CopyHyperlinkLocation"/>
