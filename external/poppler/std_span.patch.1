@@ -1,0 +1,26 @@
+replace C++20 std::span with o3tl::span
+
+--- poppler/poppler/Stream.h.orig	2025-01-09 11:50:21.095027459 +0100
++++ poppler/poppler/Stream.h	2025-01-09 11:53:05.933540760 +0100
+@@ -47,7 +47,8 @@
+ #include <atomic>
+ #include <cstdio>
+ #include <vector>
+-#include <span>
++#include <o3tl/span.hxx>
++namespace std { using o3tl::span; }
+ 
+ #include "poppler-config.h"
+ #include "poppler_private_export.h"
+--- poppler/poppler/UTF.h.orig2	2025-01-09 11:48:18.197644776 +0100
++++ poppler/poppler/UTF.h	2025-01-09 11:53:11.688558686 +0100
+@@ -23,7 +23,8 @@
+ #include <climits>
+ #include <string>
+ #include <vector>
+-#include <span>
++#include <o3tl/span.hxx>
++namespace std { using o3tl::span; }
+ 
+ #include "CharTypes.h"
+ #include "poppler_private_export.h"
