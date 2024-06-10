@@ -87,6 +87,7 @@ void VBATest::testMiscVBAFunctions()
         "Err.Raise.vb",
         "exp.vb",
         "fix.vb",
+        "gosub_goto.vb",
         "hex.vb",
         "hour.vb",
         "formatnumber.vb",
