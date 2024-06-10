@@ -111,23 +111,31 @@ using namespace framework;
 
 /** After the fact documentation - hopefully it is correct.
  *
+ * NOTE TO DEVELOPERS: instsetoo_native/ooenv sets the environment variable OOO_DISABLE_RECOVERY
+ * which means that your non-gdb execution of the compiled code will not display the recovery dialog
+ * and if officecfg::Office::Recovery::RecoveryList has some autosave files to recover,
+ * then autorecovery itself will not be started, and none of the code in this file will be executed.
+ * THEREFORE you probably want to COMMENT OUT that environment variable when working in this file.
+ *
  * AutoRecovery handles 3 types of recovery, as well as periodic document saving
- *   1) timed, ODF, temporary, recovery files created in the backup folder
- *      -can instead be used to actually save the documents periodically if settings request that.
+ *   1a) timed, automatic saving of the documents (aka UserAutoSave)
+ *   or more commonly:
+ *   1b) timed, ODF, temporary recovery files created in the backup folder (default setting)
  *      -temporary: deleted when the document itself is saved
  *      -handles the situation where LO immediately exits (power outage, program crash, pkill -9 soffice)
- *          -not restored immediately
+ *          -not restored immediately (user needs to restart LibreOffice)
  *          -no guarantee of availability of recovery file (since deleted on document save)
- *           or original document (perhaps /tmp, removeable, disconnected server).
- *          -therefore does not include unmodified files in RecoveryList (@since LO 24.2).
- *            -TODO: perhaps can be enhanced for users who always want sessions restored?
+ *           or original document (perhaps /tmp, removeable disk, disconnected server).
+ *          -TODO tdf#57414: if SessionSave not desired, don't recover unmodified files.
  *   2) emergency save-and-restart immediately triggers creation of temporary, ODF, recovery files
  *      -handles the situation where LO is partially functioning (pkill -6 soffice)
  *          -restore attempted immediately, so try to restore entire session - all open files
  *          -always create recovery file for every open document in emergency situation
  *      -works without requiring AutoRecovery to be enabled
- *   3) session save on exit desired by OS or user creates recovery files for every open document
- *      -triggered by some OS's shutdown/logout (no known way for user to initiate within LO)
+ *   3) session save on exit requested by OS or user
+ *      -triggered by OS's shutdown/logout
+ *          -appears to be purely theoretical: no known working OS at the moment.
+ *          -also no known way for user to initiate within LO (tdf#146769)
  *      -same as emergency save, except maybe more time critical - OS kill timeout
  *          -not restored until much later - the user has stopped doing computer work
  *          -always create recovery file for every open document: needed for /tmp, disconnected docs
@@ -617,8 +625,9 @@ private:
      *        EmergencySave and SessionSave are interested in all open documents (which may not
      *        even be available at next start - i.e. /tmp files might be lost after a reboot,
      *        or removable media / server access might not be connected).
-     *        On the other hand, timer-based autorecovery should not be interested in recovering
-     *        the session, but only modified documents that are recoverable
+     *        TODO: On the other hand, timer-based autorecovery in theory
+     *        would not be interested in recovering the session,
+     *        but only modified documents that are recoverable.
      *        (TODO: unless the user always wants to recover a session).
      */
     void implts_flushConfigItem(AutoRecovery::TDocumentInfo& rInfo, bool bRemoveIt = false,
@@ -2544,8 +2553,8 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
 
     } /* SAFE */
 
-    // Even if the document is modified, we don't know if we have anything to recover, so don't add.
-    implts_flushConfigItem(aInfo, /*bRemoveIt=*/false, /*bAllowAdd=*/false);
+    // Don't register new documents here. (They are registered elsewhere when saved or modifed...)
+    implts_flushConfigItem(aInfo, /*bRemoveIt=*/false, /*bAllowAdd=*/!aNew.OrgURL.isEmpty());
     implts_startModifyListeningOnDoc(aInfo);
 
     aCacheLock.unlock();
@@ -2720,8 +2729,7 @@ void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::fr
 
     } /* SAFE */
 
-    // no need to recover a saved document until modified and new recovery file is created
-    implts_flushConfigItem(aInfo, /*bRemoveIt=*/true);
+    implts_flushConfigItem(aInfo, /*bRemoveIt=*/false);
 
     aCacheLock.unlock();
 
@@ -3144,7 +3152,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     {
         try
         {
-            // skip recovery if it will be removed anyway.
+            // skip recovery if it was already saved in-place.
             if (!bRemoveIt)
                 xDocRecover->storeToRecoveryFile(rInfo.NewTempURL,
                                                  lNewArgs.getAsConstPropertyValueList());
@@ -3230,7 +3238,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     rInfo.NewTempURL.clear();
 
     // If it is modified, a recovery file has just been created, so add to RecoveryList.
-    implts_flushConfigItem(rInfo, bRemoveIt, /*bAllowAdd=*/bModified);
+    implts_flushConfigItem(rInfo, /*bRemoveIt=*/false, /*bAllowAdd=*/bModified);
 
     // We must know if the user modifies the document again ...
     implts_startModifyListeningOnDoc(rInfo);
