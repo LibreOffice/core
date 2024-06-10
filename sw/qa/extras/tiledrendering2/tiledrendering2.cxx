@@ -46,7 +46,7 @@ protected:
 };
 
 SwTiledRenderingTest::SwTiledRenderingTest()
-    : SwModelTestBase("/sw/qa/extras/tiledrendering2/data/")
+    : SwModelTestBase(u"/sw/qa/extras/tiledrendering2/data/"_ustr)
 {
 }
 
@@ -139,13 +139,13 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testStatusBarPageNumber)
     SfxLokHelper::setView(nView1);
     ViewCallback aView1;
     pWrtShell1->SttEndDoc(/*bStt=*/true);
-    pWrtShell1->Insert("start");
+    pWrtShell1->Insert(u"start"_ustr);
     pWrtShell1->GetView().SetVisArea(pPage1->getFrameArea().SVRect());
     SfxLokHelper::setView(nView2);
     ViewCallback aView2;
     SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell2->SttEndDoc(/*bStt=*/false);
-    pWrtShell2->Insert("end");
+    pWrtShell2->Insert(u"end"_ustr);
     pWrtShell2->GetView().SetVisArea(pPage2->getFrameArea().SVRect());
     {
         // Listen to StatePageNumber changes in view 2:

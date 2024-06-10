@@ -17,7 +17,8 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/extras/fodfexport/data/", "OpenDocument Text Flat XML")
+        : SwModelTestBase(u"/sw/qa/extras/fodfexport/data/"_ustr,
+                          u"OpenDocument Text Flat XML"_ustr)
     {
     }
 };
@@ -29,7 +30,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf113696)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    save("OpenDocument Text Flat XML");
+    save(u"OpenDocument Text Flat XML"_ustr);
     // Test that an image which is written in svm format (image/x-vclgraphic)
     // is accompanied by a png fallback graphic.
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
@@ -46,7 +47,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf113696WriterImage)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    save("OpenDocument Text Flat XML");
+    save(u"OpenDocument Text Flat XML"_ustr);
     // Same as testTdf113696, but with a writer image instead of a draw image
     // (they use different code paths).
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
@@ -68,7 +69,7 @@ DECLARE_FODFEXPORT_TEST(testSvgImageRoundtrip, "SvgImageTest.fodt")
     uno::Reference<beans::XPropertySet> XPropertySet(xShape, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(XPropertySet.is());
     uno::Reference<graphic::XGraphic> xGraphic;
-    XPropertySet->getPropertyValue("Graphic") >>= xGraphic;
+    XPropertySet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
     CPPUNIT_ASSERT(xGraphic.is());
     Graphic aGraphic(xGraphic);
 

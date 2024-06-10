@@ -34,7 +34,7 @@ namespace
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase("/sw/qa/extras/ww8import/data/", "MS Word 97")
+    Test() : SwModelTestBase(u"/sw/qa/extras/ww8import/data/"_ustr, u"MS Word 97"_ustr)
     {
     }
 };
@@ -55,7 +55,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBnc875715)
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
     // Was incorrectly set as -1270.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xSections->getByIndex(0), "SectionLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xSections->getByIndex(0), u"SectionLeftMargin"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFloatingTableSectionColumns)
@@ -71,14 +71,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124601)
     createSwDoc("tdf124601.doc");
     // Without the accompanying fix in place, this test would have failed, as the importer lost the
     // fLayoutInCell shape property for wrap-though shapes.
-    CPPUNIT_ASSERT(getProperty<bool>(getShapeByName(u"Grafik 18"), "IsFollowingTextFlow"));
-    CPPUNIT_ASSERT(getProperty<bool>(getShapeByName(u"Grafik 19"), "IsFollowingTextFlow"));
+    CPPUNIT_ASSERT(getProperty<bool>(getShapeByName(u"Grafik 18"), u"IsFollowingTextFlow"_ustr));
+    CPPUNIT_ASSERT(getProperty<bool>(getShapeByName(u"Grafik 19"), u"IsFollowingTextFlow"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testImageLazyRead)
 {
     createSwDoc("image-lazy-read.doc");
-    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), "Graphic");
+    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), u"Graphic"_ustr);
     Graphic aGraphic(xGraphic);
     // This failed, import loaded the graphic, it wasn't lazy-read.
     CPPUNIT_ASSERT(!aGraphic.isAvailable());
@@ -235,7 +235,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122425_1)
     }
 
     //tdf#139495: without the fix, a negative number was converted into a uInt16, overflowing to 115501
-    auto nDist = getProperty<sal_uInt32>(getStyles("PageStyles")->getByName("Standard"), "HeaderBodyDistance");
+    auto nDist = getProperty<sal_uInt32>(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"HeaderBodyDistance"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), nDist);
 }
 
@@ -256,7 +256,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf120761_zOrder)
     createSwDoc("tdf120761_zOrder.dot");
     //The blue shape was covering everything (highest zorder = 2) instead of the lowest(0)
     uno::Reference<drawing::XShape> xShape(getShapeByName(u"Picture 2"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), getProperty<sal_uInt32>(xShape, "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), getProperty<sal_uInt32>(xShape, u"ZOrder"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf142003)

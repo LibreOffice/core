@@ -40,7 +40,7 @@ namespace
 class HtmlImportTest : public SwModelTestBase
 {
     public:
-        HtmlImportTest() : SwModelTestBase("sw/qa/extras/htmlimport/data/", "HTML (StarWriter)") {}
+        HtmlImportTest() : SwModelTestBase(u"sw/qa/extras/htmlimport/data/"_ustr, u"HTML (StarWriter)"_ustr) {}
 };
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testPictureImport)
@@ -79,9 +79,9 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testInlinedImage)
 
     uno::Reference<drawing::XShape> xShape = getShape(1);
     uno::Reference<container::XNamed> const xNamed(xShape, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(OUString("Image1"), xNamed->getName());
+    CPPUNIT_ASSERT_EQUAL(u"Image1"_ustr, xNamed->getName());
 
-    uno::Reference<graphic::XGraphic> xGraphic = getProperty< uno::Reference<graphic::XGraphic> >(xShape, "Graphic");
+    uno::Reference<graphic::XGraphic> xGraphic = getProperty< uno::Reference<graphic::XGraphic> >(xShape, u"Graphic"_ustr);
     CPPUNIT_ASSERT(xGraphic.is());
     CPPUNIT_ASSERT(xGraphic->getType() != graphic::GraphicType::EMPTY);
 
@@ -118,10 +118,10 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testInlinedImagesPageAndParagraph)
     // get the pageStyle where the PageBackgroundFill is defined. Caution: for
     // HTML mode this is *not* called 'Default Style', but 'HTML'. Name is empty
     // due to being loaded embedded. BitmapMode is repeat.
-    uno::Reference<beans::XPropertySet> xPageProperties1(getStyles("PageStyles")->getByName("HTML"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xPageProperties1, "FillStyle"));
-    CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xPageProperties1, "FillBitmapName"));
-    CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_REPEAT, getProperty<drawing::BitmapMode>(xPageProperties1, "FillBitmapMode"));
+    uno::Reference<beans::XPropertySet> xPageProperties1(getStyles(u"PageStyles"_ustr)->getByName(u"HTML"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xPageProperties1, u"FillStyle"_ustr));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xPageProperties1, u"FillBitmapName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_REPEAT, getProperty<drawing::BitmapMode>(xPageProperties1, u"FillBitmapMode"_ustr));
 
     // we should have one paragraph
     const int nParagraphs = getParagraphs();
@@ -134,9 +134,9 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testInlinedImagesPageAndParagraph)
         uno::Reference< beans::XPropertySet > xParagraphProperties( xPara, uno::UNO_QUERY);
 
         // check for Bitmap FillStyle, name empty, repeat
-        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xParagraphProperties, "FillStyle"));
-        CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xParagraphProperties, "FillBitmapName"));
-        CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_REPEAT, getProperty<drawing::BitmapMode>(xParagraphProperties, "FillBitmapMode"));
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xParagraphProperties, u"FillStyle"_ustr));
+        CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xParagraphProperties, u"FillBitmapName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_REPEAT, getProperty<drawing::BitmapMode>(xParagraphProperties, u"FillBitmapMode"_ustr));
     }
 }
 
@@ -147,7 +147,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testListStyleType)
     uno::Reference< beans::XPropertySet > xParagraphProperties(getParagraph(4),
                                                                uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(
-        xParagraphProperties->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+        xParagraphProperties->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
@@ -167,7 +167,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testListStyleType)
     // check numbered list style - should be type lower-alpha here
     xParagraphProperties.set(getParagraph(14),
                              uno::UNO_QUERY);
-    xLevels.set(xParagraphProperties->getPropertyValue("NumberingRules"),
+    xLevels.set(xParagraphProperties->getPropertyValue(u"NumberingRules"_ustr),
                 uno::UNO_QUERY);
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
@@ -223,7 +223,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageWidthAuto)
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageLazyRead)
 {
     createSwWebDoc("image-lazy-read.html");
-    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), "Graphic");
+    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), u"Graphic"_ustr);
     Graphic aGraphic(xGraphic);
     // This failed, import loaded the graphic, it wasn't lazy-read.
     CPPUNIT_ASSERT(!aGraphic.isAvailable());
@@ -245,7 +245,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testChangedby)
     CPPUNIT_ASSERT(xDocProps.is());
 
     // the doc's property ModifiedBy is set correctly, ...
-    CPPUNIT_ASSERT_EQUAL(OUString("Blah"), xDocProps->getModifiedBy());
+    CPPUNIT_ASSERT_EQUAL(u"Blah"_ustr, xDocProps->getModifiedBy());
 
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
@@ -265,44 +265,44 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTableBorder1px)
 
     table::BorderLine2 aBorder;
 
-    uno::Reference<text::XTextRange> xCellA1(xTable->getCellByName("A1"), uno::UNO_QUERY);
-    aBorder = getProperty<table::BorderLine2>(xCellA1, "TopBorder");
+    uno::Reference<text::XTextRange> xCellA1(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
+    aBorder = getProperty<table::BorderLine2>(xCellA1, u"TopBorder"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Missing cell top border", aBorder.InnerLineWidth > 0);
-    aBorder = getProperty<table::BorderLine2>(xCellA1, "BottomBorder");
+    aBorder = getProperty<table::BorderLine2>(xCellA1, u"BottomBorder"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cell bottom border", sal_Int16(0), aBorder.InnerLineWidth);
-    aBorder = getProperty<table::BorderLine2>(xCellA1, "LeftBorder");
+    aBorder = getProperty<table::BorderLine2>(xCellA1, u"LeftBorder"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Missing cell left border", aBorder.InnerLineWidth > 0);
-    aBorder = getProperty<table::BorderLine2>(xCellA1, "RightBorder");
+    aBorder = getProperty<table::BorderLine2>(xCellA1, u"RightBorder"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Missing cell right border", aBorder.InnerLineWidth > 0);
 
-    uno::Reference<text::XTextRange> xCellB1(xTable->getCellByName("B1"), uno::UNO_QUERY);
-    aBorder = getProperty<table::BorderLine2>(xCellB1, "TopBorder");
+    uno::Reference<text::XTextRange> xCellB1(xTable->getCellByName(u"B1"_ustr), uno::UNO_QUERY);
+    aBorder = getProperty<table::BorderLine2>(xCellB1, u"TopBorder"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Missing cell top border", aBorder.InnerLineWidth > 0);
-    aBorder = getProperty<table::BorderLine2>(xCellB1, "BottomBorder");
+    aBorder = getProperty<table::BorderLine2>(xCellB1, u"BottomBorder"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cell bottom border", sal_Int16(0), aBorder.InnerLineWidth);
-    aBorder = getProperty<table::BorderLine2>(xCellB1, "LeftBorder");
+    aBorder = getProperty<table::BorderLine2>(xCellB1, u"LeftBorder"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cell left border", sal_Int16(0), aBorder.InnerLineWidth);
-    aBorder = getProperty<table::BorderLine2>(xCellB1, "RightBorder");
+    aBorder = getProperty<table::BorderLine2>(xCellB1, u"RightBorder"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Missing cell right border", aBorder.InnerLineWidth > 0);
 
-    uno::Reference<text::XTextRange> xCellA2(xTable->getCellByName("A2"), uno::UNO_QUERY);
-    aBorder = getProperty<table::BorderLine2>(xCellA2, "TopBorder");
+    uno::Reference<text::XTextRange> xCellA2(xTable->getCellByName(u"A2"_ustr), uno::UNO_QUERY);
+    aBorder = getProperty<table::BorderLine2>(xCellA2, u"TopBorder"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cell top border", sal_Int16(0), aBorder.InnerLineWidth);
-    aBorder = getProperty<table::BorderLine2>(xCellA2, "BottomBorder");
+    aBorder = getProperty<table::BorderLine2>(xCellA2, u"BottomBorder"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cell bottom border", sal_Int16(0), aBorder.InnerLineWidth);
-    aBorder = getProperty<table::BorderLine2>(xCellA2, "LeftBorder");
+    aBorder = getProperty<table::BorderLine2>(xCellA2, u"LeftBorder"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Missing cell left border", aBorder.InnerLineWidth > 0);
-    aBorder = getProperty<table::BorderLine2>(xCellA2,"RightBorder");
+    aBorder = getProperty<table::BorderLine2>(xCellA2,u"RightBorder"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Missing cell right border", aBorder.InnerLineWidth > 0);
 
-    uno::Reference<text::XTextRange> xCellB2(xTable->getCellByName("B2"), uno::UNO_QUERY);
-    aBorder = getProperty<table::BorderLine2>(xCellB2, "TopBorder");
+    uno::Reference<text::XTextRange> xCellB2(xTable->getCellByName(u"B2"_ustr), uno::UNO_QUERY);
+    aBorder = getProperty<table::BorderLine2>(xCellB2, u"TopBorder"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cell top border", sal_Int16(0), aBorder.InnerLineWidth);
-    aBorder = getProperty<table::BorderLine2>(xCellB2, "BottomBorder");
+    aBorder = getProperty<table::BorderLine2>(xCellB2, u"BottomBorder"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cell bottom border", sal_Int16(0), aBorder.InnerLineWidth);
-    aBorder = getProperty<table::BorderLine2>(xCellB2, "LeftBorder");
+    aBorder = getProperty<table::BorderLine2>(xCellB2, u"LeftBorder"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cell left border", sal_Int16(0), aBorder.InnerLineWidth);
-    aBorder = getProperty<table::BorderLine2>(xCellB2, "RightBorder");
+    aBorder = getProperty<table::BorderLine2>(xCellB2, u"RightBorder"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Missing cell right border", aBorder.InnerLineWidth > 0);
 }
 
@@ -312,13 +312,13 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testOutlineLevel)
     // This was 0, HTML imported into Writer lost the outline numbering for
     // Heading 1 styles.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
-                         getProperty<sal_Int32>(getParagraph(1), "OutlineLevel"));
+                         getProperty<sal_Int32>(getParagraph(1), u"OutlineLevel"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfBr)
 {
-    setImportFilterOptions("xhtmlns=reqif-xhtml");
-    setImportFilterName("HTML (StarWriter)");
+    setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
+    setImportFilterName(u"HTML (StarWriter)"_ustr);
     createSwDoc("reqif-br.xhtml");
     // <reqif-xhtml:br/> was not recognized as a line break from a ReqIf file.
     CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("aaa\nbbb"));
@@ -328,26 +328,26 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf80194_subscript)
 {
     createSwWebDoc("tdf80194_subscript.html");
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1), "CharEscapement"), 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1), u"CharEscapement"_ustr), 0);
     // Most recently, the default subscript was 33%, which is much too large for a subscript.
     // The original 8% (derived from a mathematical calculation) is much better in general,
     // and for HTML was a better match when testing with firefox.
     // DFLT_ESC_AUTO_SUB was tested, but HTML specs are pretty loose, and generally
     // it exceeds the font ascent - so the formula-based-escapement is not appropriate.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL( -8.f, getProperty<float>(getRun(xPara, 2, "p"), "CharEscapement"), 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( -8.f, getProperty<float>(getRun(xPara, 2, u"p"_ustr), u"CharEscapement"_ustr), 1);
 
     xPara.set(getParagraph(2));
-    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1), "CharEscapement"), 0);
-    uno::Reference<text::XTextRange> xRun (getRun(xPara, 2, "L"));
-    CPPUNIT_ASSERT_DOUBLES_EQUAL( 33.f, getProperty<float>(xRun, "CharEscapement"), 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1), u"CharEscapement"_ustr), 0);
+    uno::Reference<text::XTextRange> xRun (getRun(xPara, 2, u"L"_ustr));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 33.f, getProperty<float>(xRun, u"CharEscapement"_ustr), 1);
     // HTML (although unspecified) tends to use a fairly large font. Definitely more than DFLT_ESC_PROP.
-    CPPUNIT_ASSERT( 70 < getProperty<sal_Int8>(xRun, "CharEscapementHeight"));
+    CPPUNIT_ASSERT( 70 < getProperty<sal_Int8>(xRun, u"CharEscapementHeight"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfTable)
 {
-    setImportFilterOptions("xhtmlns=reqif-xhtml");
-    setImportFilterName("HTML (StarWriter)");
+    setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
+    setImportFilterName(u"HTML (StarWriter)"_ustr);
     createSwDoc("reqif-table.xhtml");
     // to see this: soffice --infilter="HTML (StarWriter):xhtmlns=reqif-xhtml" sw/qa/extras/htmlimport/data/reqif-table.xhtml
     // Load a table with xhtmlns=reqif-xhtml filter param.
@@ -356,16 +356,16 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfTable)
                                                     uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xTables->getCount());
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
-    auto aBorder = getProperty<table::BorderLine2>(xCell, "TopBorder");
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
+    auto aBorder = getProperty<table::BorderLine2>(xCell, u"TopBorder"_ustr);
     // This was 0, tables had no borders, even if the default autoformat has
     // borders and the markup allows no custom borders.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Top Border", static_cast<sal_uInt32>(18), aBorder.LineWidth);
-    aBorder = getProperty<table::BorderLine2>(xCell, "BottomBorder");
+    aBorder = getProperty<table::BorderLine2>(xCell, u"BottomBorder"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Bottom Border", static_cast<sal_uInt32>(18), aBorder.LineWidth);
-    aBorder = getProperty<table::BorderLine2>(xCell, "LeftBorder");
+    aBorder = getProperty<table::BorderLine2>(xCell, u"LeftBorder"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Left Border", static_cast<sal_uInt32>(18), aBorder.LineWidth);
-    aBorder = getProperty<table::BorderLine2>(xCell, "RightBorder");
+    aBorder = getProperty<table::BorderLine2>(xCell, u"RightBorder"_ustr);
     // This was 0. Single column tables had no right border.  tdf#115576
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Right Border", static_cast<sal_uInt32>(18), aBorder.LineWidth);
 }
@@ -433,32 +433,32 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf118579)
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfPageStyle)
 {
-    setImportFilterOptions("xhtmlns=reqif-xhtml");
-    setImportFilterName("HTML (StarWriter)");
+    setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
+    setImportFilterName(u"HTML (StarWriter)"_ustr);
     createSwDoc("reqif-page-style.xhtml");
     // Without the accompanying fix in place, this test would have failed with
     // 'Expected: Standard, Actual  : HTML'.
-    CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
-                         getProperty<OUString>(getParagraph(1), "PageStyleName"));
+    CPPUNIT_ASSERT_EQUAL(u"Standard"_ustr,
+                         getProperty<OUString>(getParagraph(1), u"PageStyleName"_ustr));
 }
 
 /// HTML import to the sw doc model tests.
 class SwHtmlOptionsImportTest : public SwModelTestBase
 {
     public:
-        SwHtmlOptionsImportTest() : SwModelTestBase("/sw/qa/extras/htmlimport/data/", "HTML (StarWriter)") {}
+        SwHtmlOptionsImportTest() : SwModelTestBase(u"/sw/qa/extras/htmlimport/data/"_ustr, u"HTML (StarWriter)"_ustr) {}
 };
 
 CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testAllowedRTFOLEMimeTypes)
 {
-    uno::Sequence<OUString> aTypes = { OUString("test/rtf") };
+    uno::Sequence<OUString> aTypes = { u"test/rtf"_ustr };
     uno::Sequence<beans::PropertyValue> aLoadProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-        comphelper::makePropertyValue("AllowedRTFOLEMimeTypes", aTypes),
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
+        comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
+        comphelper::makePropertyValue(u"AllowedRTFOLEMimeTypes"_ustr, aTypes),
     };
     OUString aURL = createFileURL(u"allowed-rtf-ole-mime-types.xhtml");
-    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", aLoadProperties);
+    mxComponent = loadFromDesktop(aURL, u"com.sun.star.text.TextDocument"_ustr, aLoadProperties);
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
                                                      uno::UNO_QUERY);
@@ -493,8 +493,8 @@ CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleImg)
 {
     // Given an XHTML with an <object> (containing GIF) and an inner <object> (containing PNG, to be
     // ignored):
-    setImportFilterOptions("xhtmlns=reqif-xhtml");
-    setImportFilterName("HTML (StarWriter)");
+    setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
+    setImportFilterName(u"HTML (StarWriter)"_ustr);
     createSwDoc("ole-img.xhtml");
 
     // Then make sure the result is a single Writer image:
@@ -512,8 +512,8 @@ CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleImgSvg)
 {
     // Given an XHTML with an <object> (containing SVG) and an inner <object> (containing PNG, to be
     // ignored):
-    setImportFilterOptions("xhtmlns=reqif-xhtml");
-    setImportFilterName("HTML (StarWriter)");
+    setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
+    setImportFilterName(u"HTML (StarWriter)"_ustr);
     createSwDoc("ole-img-svg.xhtml");
 
     // Then make sure the result is a single Writer image:
@@ -542,15 +542,15 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf154273)
     // Without the fix in place, this test would have failed with
     // - Expected: 'test'
     // - Actual  : &apos;test&apos;
-    CPPUNIT_ASSERT_EQUAL(OUString("'test' "), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"'test' "_ustr, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleData)
 {
     // Given an XHTML with an <object> (containing non-image, non-OLE2 data) and an inner <object>
     // (containing PNG):
-    setImportFilterOptions("xhtmlns=reqif-xhtml");
-    setImportFilterName("HTML (StarWriter)");
+    setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
+    setImportFilterName(u"HTML (StarWriter)"_ustr);
     createSwDoc("ole-data.xhtml");
 
     // Then make sure the result is a single clickable Writer image:
@@ -564,14 +564,14 @@ CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleData)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xObjects->getCount());
     uno::Reference<css::drawing::XShape> xShape = getShape(1);
     // And then the image was not clickable: this was empty.
-    CPPUNIT_ASSERT(getProperty<OUString>(xShape, "HyperLinkURL").endsWith("/data.ole"));
+    CPPUNIT_ASSERT(getProperty<OUString>(xShape, u"HyperLinkURL"_ustr).endsWith("/data.ole"));
 }
 
 CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleData2)
 {
     // Given an XHTML with 2 objects: the first has a link, the second does not have:
-    setImportFilterOptions("xhtmlns=reqif-xhtml");
-    setImportFilterName("HTML (StarWriter)");
+    setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
+    setImportFilterName(u"HTML (StarWriter)"_ustr);
     createSwDoc("ole-data2.xhtml");
 
     // Then make sure that the second image doesn't have a link set:
@@ -580,11 +580,11 @@ CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleData2)
                                                      uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xObjects->getCount());
     uno::Reference<css::drawing::XShape> xShape = getShape(1);
-    CPPUNIT_ASSERT(getProperty<OUString>(xShape, "HyperLinkURL").endsWith("/data.ole"));
+    CPPUNIT_ASSERT(getProperty<OUString>(xShape, u"HyperLinkURL"_ustr).endsWith("/data.ole"));
     xShape = getShape(2);
     // Without the accompanying fix in place, this test would have failed, the link from the 1st
     // image leaked to the 2nd image.
-    CPPUNIT_ASSERT(getProperty<OUString>(xShape, "HyperLinkURL").isEmpty());
+    CPPUNIT_ASSERT(getProperty<OUString>(xShape, u"HyperLinkURL"_ustr).isEmpty());
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testRGBAColor)
@@ -596,7 +596,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testRGBAColor)
 
     // Without the accompanying fix in place, this test would have failed, the background
     // color was not imported at all, when it was in hex RGBA format in HTML.
-    CPPUNIT_ASSERT_EQUAL(nBackColor, getProperty<Color>(xRun, "CharBackColor"));
+    CPPUNIT_ASSERT_EQUAL(nBackColor, getProperty<Color>(xRun, u"CharBackColor"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf154581)
@@ -606,9 +606,9 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf154581)
     // Without the fix in place, this test would have failed with
     // - Expected: 150
     // - Actual  : 100
-    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(getParagraph(1), 1), "CharWeight"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontUnderline::SINGLE), getProperty<sal_Int16>(getRun(getParagraph(2), 1), "CharUnderline"));
-    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC, getProperty<awt::FontSlant>(getRun(getParagraph(3), 1), "CharPosture"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(getParagraph(1), 1), u"CharWeight"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontUnderline::SINGLE), getProperty<sal_Int16>(getRun(getParagraph(2), 1), u"CharUnderline"_ustr));
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC, getProperty<awt::FontSlant>(getRun(getParagraph(3), 1), u"CharPosture"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf153341)
@@ -617,7 +617,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf153341)
 
     const uno::Reference<text::XTextRange> xPara1 = getParagraph(1);
     const uno::Reference<beans::XPropertySet> xRun1(getRun(xPara1,1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0x00, 0xFF, 0x00, 0x00), getProperty<Color>(xRun1, "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0x00, 0xFF, 0x00, 0x00), getProperty<Color>(xRun1, u"CharColor"_ustr));
 
     const uno::Reference<text::XTextRange> xPara2 = getParagraph(2);
     const uno::Reference<beans::XPropertySet> xRun2(getRun(xPara2,1), uno::UNO_QUERY);
@@ -625,11 +625,11 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf153341)
     // Without the fix in place, this test would have failed with
     // - Expected: rgba[ff00007f]
     // - Actual  : rgba[ff0000ff]
-    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0x80, 0xFF, 0x00, 0x00), getProperty<Color>(xRun2, "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0x80, 0xFF, 0x00, 0x00), getProperty<Color>(xRun2, u"CharColor"_ustr));
 
     const uno::Reference<text::XTextRange> xPara3 = getParagraph(3);
     const uno::Reference<beans::XPropertySet> xRun3(getRun(xPara3,1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xB3, 0xFF, 0x00, 0x00), getProperty<Color>(xRun3, "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xB3, 0xFF, 0x00, 0x00), getProperty<Color>(xRun3, u"CharColor"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf155011)

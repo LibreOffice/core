@@ -18,7 +18,7 @@ class XHtmlExportTest : public SwModelTestBase, public HtmlTestTools
 {
 public:
     XHtmlExportTest()
-        : SwModelTestBase("/sw/qa/extras/odfexport/data/", "XHTML Writer File")
+        : SwModelTestBase(u"/sw/qa/extras/odfexport/data/"_ustr, u"XHTML Writer File"_ustr)
     {
     }
 };
@@ -26,7 +26,7 @@ public:
 CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testImageEmbedding)
 {
     createSwDoc("image-mimetype.odt");
-    setFilterOptions("UTF8");
+    setFilterOptions(u"UTF8"_ustr);
     save(mpFilter);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
@@ -40,7 +40,7 @@ CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testImageEmbedding)
 CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf131812)
 {
     createSwDoc("tdf131812.odt");
-    setFilterOptions("UTF8");
+    setFilterOptions(u"UTF8"_ustr);
     save(mpFilter);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
@@ -55,7 +55,7 @@ CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf131812)
 CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf146264)
 {
     createSwDoc("tdf146264.odt");
-    setFilterOptions("UTF8");
+    setFilterOptions(u"UTF8"_ustr);
     save(mpFilter);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
@@ -74,7 +74,7 @@ CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf146264)
 CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf118637)
 {
     createSwDoc("tdf118637.odt");
-    setFilterOptions("UTF8");
+    setFilterOptions(u"UTF8"_ustr);
     save(mpFilter);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
@@ -87,7 +87,7 @@ CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf118637)
 CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf145361)
 {
     createSwDoc("tdf145361.odt");
-    setFilterOptions("UTF8");
+    setFilterOptions(u"UTF8"_ustr);
     save(mpFilter);
     // Without the fix in place, this test would have failed with
     // - SfxBaseModel::impl_store <file:///tmp/lu66091ameq.tmp> failed: 0xc10(Error Area:Io Class:Write Code:16)
@@ -102,7 +102,7 @@ CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf145361)
 CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf142483)
 {
     createSwDoc("tdf142483.odt");
-    setFilterOptions("UTF8");
+    setFilterOptions(u"UTF8"_ustr);
     save(mpFilter);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
@@ -141,7 +141,7 @@ CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf142483)
 CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf107696)
 {
     createSwDoc("tdf107696.odt");
-    setFilterOptions("UTF8");
+    setFilterOptions(u"UTF8"_ustr);
     save(mpFilter);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
@@ -171,7 +171,7 @@ CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf107696)
 CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf66305)
 {
     createSwDoc("tdf66305.odt");
-    setFilterOptions("UTF8");
+    setFilterOptions(u"UTF8"_ustr);
     save(mpFilter);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);

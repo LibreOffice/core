@@ -14,7 +14,8 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "MS Word 2007 XML Template")
+        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr,
+                          u"MS Word 2007 XML Template"_ustr)
     {
     }
 };
@@ -22,13 +23,13 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testSaveAsDotX)
 {
     loadAndReload("sample.dotx");
-    xmlDocUniquePtr pXmlDocCT = parseExport("[Content_Types].xml");
+    xmlDocUniquePtr pXmlDocCT = parseExport(u"[Content_Types].xml"_ustr);
 
     // Ensure that document has correct content type
-    assertXPath(pXmlDocCT,
-                "/ContentType:Types/ContentType:Override[@PartName='/word/document.xml']"_ostr,
-                "ContentType"_ostr,
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml");
+    assertXPath(
+        pXmlDocCT, "/ContentType:Types/ContentType:Override[@PartName='/word/document.xml']"_ostr,
+        "ContentType"_ostr,
+        u"application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml"_ustr);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

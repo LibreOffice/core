@@ -49,7 +49,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/extras/rtfexport/data/", "Rich Text Format")
+        : SwModelTestBase(u"/sw/qa/extras/rtfexport/data/"_ustr, u"Rich Text Format"_ustr)
     {
     }
 };
@@ -281,8 +281,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159824_axialGradient)
                                                          uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
-                         getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
-    awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
+                         getProperty<drawing::FillStyle>(xFrame, u"FillStyle"_ustr));
+    awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, u"FillGradient"_ustr);
 
     const Color aColA(0x127622); // green
     const Color aColB(0xffffff); // white

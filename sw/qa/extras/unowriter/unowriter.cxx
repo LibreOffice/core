@@ -76,7 +76,7 @@ public:
 void PasteListener::notifyPasteEvent(const uno::Sequence<beans::PropertyValue>& rEvent)
 {
     comphelper::SequenceAsHashMap aMap(rEvent);
-    auto it = aMap.find("TextRange");
+    auto it = aMap.find(u"TextRange"_ustr);
     if (it != aMap.end())
     {
         auto xTextRange = it->second.get<uno::Reference<text::XTextRange>>();
@@ -85,7 +85,7 @@ void PasteListener::notifyPasteEvent(const uno::Sequence<beans::PropertyValue>& 
         return;
     }
 
-    it = aMap.find("TextGraphicObject");
+    it = aMap.find(u"TextGraphicObject"_ustr);
     if (it != aMap.end())
     {
         auto xTextGraphicObject = it->second.get<uno::Reference<text::XTextContent>>();
@@ -106,7 +106,7 @@ class SwUnoWriter : public SwModelTestBase
 {
 public:
     SwUnoWriter()
-        : SwModelTestBase("/sw/qa/extras/unowriter/data/", "writer8")
+        : SwModelTestBase(u"/sw/qa/extras/unowriter/data/"_ustr, u"writer8"_ustr)
     {
     }
 };
@@ -119,22 +119,22 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testDefaultCharStyle)
 
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XSimpleText> xBodyText = xTextDocument->getText();
-    xBodyText->insertString(xBodyText->getStart(), "x", false);
+    xBodyText->insertString(xBodyText->getStart(), u"x"_ustr, false);
 
     uno::Reference<text::XTextCursor> xCursor(xBodyText->createTextCursor());
     xCursor->goLeft(1, true);
 
     uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
-    xCursorProps->setPropertyValue("CharStyleName", uno::Any(OUString("Emphasis")));
+    xCursorProps->setPropertyValue(u"CharStyleName"_ustr, uno::Any(u"Emphasis"_ustr));
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
-                         getProperty<awt::FontSlant>(xCursorProps, "CharPosture"));
+                         getProperty<awt::FontSlant>(xCursorProps, u"CharPosture"_ustr));
 
     // Now reset the char style and assert that the font slant is back to none.
     // This resulted in a lang.IllegalArgumentException, Standard was not
     // mapped to 'Default Style'.
-    xCursorProps->setPropertyValue("CharStyleName", uno::Any(OUString("Standard")));
+    xCursorProps->setPropertyValue(u"CharStyleName"_ustr, uno::Any(u"Standard"_ustr));
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
-                         getProperty<awt::FontSlant>(xCursorProps, "CharPosture"));
+                         getProperty<awt::FontSlant>(xCursorProps, u"CharPosture"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertStringExpandsHints)
@@ -145,16 +145,18 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertStringExpandsHints)
     uno::Reference<text::XTextCursor> const xCursor(xText->createTextCursor());
     uno::Reference<beans::XPropertySet> const xProps(xCursor, uno::UNO_QUERY);
 
-    xText->insertString(xCursor, "ab", false);
+    xText->insertString(xCursor, u"ab"_ustr, false);
     xCursor->gotoStart(false);
     xCursor->goRight(1, true);
-    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xProps, "CharPosture"));
-    xProps->setPropertyValue("CharPosture", uno::Any(awt::FontSlant_ITALIC));
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                         getProperty<awt::FontSlant>(xProps, u"CharPosture"_ustr));
+    xProps->setPropertyValue(u"CharPosture"_ustr, uno::Any(awt::FontSlant_ITALIC));
     xCursor->collapseToEnd();
-    xText->insertString(xCursor, "x", false);
+    xText->insertString(xCursor, u"x"_ustr, false);
     xCursor->goLeft(1, true);
-    CPPUNIT_ASSERT_EQUAL(OUString("x"), xCursor->getString());
-    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC, getProperty<awt::FontSlant>(xProps, "CharPosture"));
+    CPPUNIT_ASSERT_EQUAL(u"x"_ustr, xCursor->getString());
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
+                         getProperty<awt::FontSlant>(xProps, u"CharPosture"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertTextPortionNotExpandsHints)
@@ -166,16 +168,18 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertTextPortionNotExpandsHints)
     uno::Reference<text::XTextCursor> const xCursor(xText->createTextCursor());
     uno::Reference<beans::XPropertySet> const xProps(xCursor, uno::UNO_QUERY);
 
-    xText->insertString(xCursor, "ab", false);
+    xText->insertString(xCursor, u"ab"_ustr, false);
     xCursor->gotoStart(false);
     xCursor->goRight(1, true);
-    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xProps, "CharPosture"));
-    xProps->setPropertyValue("CharPosture", uno::Any(awt::FontSlant_ITALIC));
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                         getProperty<awt::FontSlant>(xProps, u"CharPosture"_ustr));
+    xProps->setPropertyValue(u"CharPosture"_ustr, uno::Any(awt::FontSlant_ITALIC));
     xCursor->collapseToEnd();
-    xTextA->insertTextPortion("x", uno::Sequence<beans::PropertyValue>(), xCursor);
+    xTextA->insertTextPortion(u"x"_ustr, uno::Sequence<beans::PropertyValue>(), xCursor);
     xCursor->goLeft(1, true);
-    CPPUNIT_ASSERT_EQUAL(OUString("x"), xCursor->getString());
-    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xProps, "CharPosture"));
+    CPPUNIT_ASSERT_EQUAL(u"x"_ustr, xCursor->getString());
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                         getProperty<awt::FontSlant>(xProps, u"CharPosture"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertTextContentExpandsHints)
@@ -187,18 +191,20 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertTextContentExpandsHints)
     uno::Reference<text::XTextCursor> const xCursor(xText->createTextCursor());
     uno::Reference<beans::XPropertySet> const xProps(xCursor, uno::UNO_QUERY);
 
-    xText->insertString(xCursor, "ab", false);
+    xText->insertString(xCursor, u"ab"_ustr, false);
     xCursor->gotoStart(false);
     xCursor->goRight(1, true);
-    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xProps, "CharPosture"));
-    xProps->setPropertyValue("CharPosture", uno::Any(awt::FontSlant_ITALIC));
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                         getProperty<awt::FontSlant>(xProps, u"CharPosture"_ustr));
+    xProps->setPropertyValue(u"CharPosture"_ustr, uno::Any(awt::FontSlant_ITALIC));
     xCursor->collapseToEnd();
     uno::Reference<text::XTextContent> const xContent(
-        xFactory->createInstance("com.sun.star.text.Footnote"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.Footnote"_ustr), uno::UNO_QUERY);
     xText->insertTextContent(xCursor, xContent, false);
     xCursor->goLeft(1, true);
-    CPPUNIT_ASSERT_EQUAL(OUString("1"), xCursor->getString());
-    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC, getProperty<awt::FontSlant>(xProps, "CharPosture"));
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, xCursor->getString());
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
+                         getProperty<awt::FontSlant>(xProps, u"CharPosture"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertTextContentWithPropertiesNotExpandsHints)
@@ -211,19 +217,21 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertTextContentWithPropertiesNotExpandsH
     uno::Reference<text::XTextCursor> const xCursor(xText->createTextCursor());
     uno::Reference<beans::XPropertySet> const xProps(xCursor, uno::UNO_QUERY);
 
-    xText->insertString(xCursor, "ab", false);
+    xText->insertString(xCursor, u"ab"_ustr, false);
     xCursor->gotoStart(false);
     xCursor->goRight(1, true);
-    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xProps, "CharPosture"));
-    xProps->setPropertyValue("CharPosture", uno::Any(awt::FontSlant_ITALIC));
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                         getProperty<awt::FontSlant>(xProps, u"CharPosture"_ustr));
+    xProps->setPropertyValue(u"CharPosture"_ustr, uno::Any(awt::FontSlant_ITALIC));
     xCursor->collapseToEnd();
     uno::Reference<text::XTextContent> const xContent(
-        xFactory->createInstance("com.sun.star.text.Footnote"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.Footnote"_ustr), uno::UNO_QUERY);
     xTextA->insertTextContentWithProperties(xContent, uno::Sequence<beans::PropertyValue>(),
                                             xCursor);
     xCursor->goLeft(1, true);
-    CPPUNIT_ASSERT_EQUAL(OUString("1"), xCursor->getString());
-    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xProps, "CharPosture"));
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, xCursor->getString());
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                         getProperty<awt::FontSlant>(xProps, u"CharPosture"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDescriptorURL)
@@ -233,11 +241,11 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDescriptorURL)
     // Create a graphic object, but don't insert it yet.
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTextGraphic(
-        xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
 
     // Set a URL on it.
-    xTextGraphic->setPropertyValue("GraphicURL", uno::Any(createFileURL(u"test.jpg")));
-    xTextGraphic->setPropertyValue("AnchorType",
+    xTextGraphic->setPropertyValue(u"GraphicURL"_ustr, uno::Any(createFileURL(u"test.jpg")));
+    xTextGraphic->setPropertyValue(u"AnchorType"_ustr,
                                    uno::Any(text::TextContentAnchorType_AT_CHARACTER));
 
     // Insert it.
@@ -248,7 +256,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDescriptorURL)
     xBodyText->insertTextContent(xCursor, xTextContent, false);
 
     // This failed, the graphic object had no graphic.
-    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), "Graphic");
+    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), u"Graphic"_ustr);
     CPPUNIT_ASSERT(xGraphic.is());
 }
 
@@ -259,14 +267,14 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDescriptorURLBitmap)
     // Load a bitmap into the bitmap table.
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameContainer> xBitmaps(
-        xFactory->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY);
-    xBitmaps->insertByName("test", uno::Any(createFileURL(u"test.jpg")));
+        xFactory->createInstance(u"com.sun.star.drawing.BitmapTable"_ustr), uno::UNO_QUERY);
+    xBitmaps->insertByName(u"test"_ustr, uno::Any(createFileURL(u"test.jpg")));
 
     // Create a graphic.
     uno::Reference<beans::XPropertySet> xTextGraphic(
-        xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
-    xTextGraphic->setPropertyValue("GraphicURL", xBitmaps->getByName("test"));
-    xTextGraphic->setPropertyValue("AnchorType",
+        xFactory->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
+    xTextGraphic->setPropertyValue(u"GraphicURL"_ustr, xBitmaps->getByName(u"test"_ustr));
+    xTextGraphic->setPropertyValue(u"AnchorType"_ustr,
                                    uno::Any(text::TextContentAnchorType_AT_CHARACTER));
 
     // Insert it.
@@ -278,7 +286,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDescriptorURLBitmap)
 
     // This failed: setting GraphicURL to the result of getByName() did not
     // work anymore.
-    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), "Graphic");
+    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), u"Graphic"_ustr);
     CPPUNIT_ASSERT(xGraphic.is());
 }
 
@@ -393,7 +401,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorCopyTableAtStart)
 
     uno::Reference<text::XTextContent> const xSection(xSections->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> const xAnchor(xSection->getAnchor());
-    CPPUNIT_ASSERT_EQUAL(OUString("foo" SAL_NEWLINE_STRING "bar"), xAnchor->getString());
+    CPPUNIT_ASSERT_EQUAL(u"foo" SAL_NEWLINE_STRING "bar"_ustr, xAnchor->getString());
 
     // copy the content of the section to a clipboard document
     uno::Reference<datatransfer::XTransferableSupplier> const xTS(
@@ -409,13 +417,13 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorCopyTableAtStart)
     CPPUNIT_ASSERT(xAnchor->getEnd().is());
 
     // replace section content
-    xAnchor->setString("quux");
+    xAnchor->setString(u"quux"_ustr);
 
     // table in section was deleted, but not section itself
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
-    CPPUNIT_ASSERT_EQUAL(OUString("\""
-                                  "quux" /*SAL_NEWLINE_STRING*/ "\""),
+    CPPUNIT_ASSERT_EQUAL(u"\""
+                         "quux" /*SAL_NEWLINE_STRING*/ "\""_ustr,
                          OUString("\"" + xAnchor->getString() + "\""));
 
     // now paste it
@@ -428,7 +436,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorCopyTableAtStart)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
     xCursor->gotoStart(true);
-    CPPUNIT_ASSERT_EQUAL(OUString("quux" SAL_NEWLINE_STRING "foo" SAL_NEWLINE_STRING "bar"),
+    CPPUNIT_ASSERT_EQUAL(u"quux" SAL_NEWLINE_STRING "foo" SAL_NEWLINE_STRING "bar"_ustr,
                          xCursor->getString());
 }
 
@@ -452,7 +460,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorCopyTableAtEnd)
 
     uno::Reference<text::XTextContent> const xSection(xSections->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> const xAnchor(xSection->getAnchor());
-    CPPUNIT_ASSERT_EQUAL(OUString("bar" SAL_NEWLINE_STRING "baz" SAL_NEWLINE_STRING),
+    CPPUNIT_ASSERT_EQUAL(u"bar" SAL_NEWLINE_STRING "baz" SAL_NEWLINE_STRING ""_ustr,
                          xAnchor->getString());
 
     // copy the content of the section to a clipboard document
@@ -469,13 +477,13 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorCopyTableAtEnd)
     CPPUNIT_ASSERT(xAnchor->getEnd().is());
 
     // replace section content
-    xAnchor->setString("quux");
+    xAnchor->setString(u"quux"_ustr);
 
     // table in section was deleted, but not section itself
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSections->getCount());
-    CPPUNIT_ASSERT_EQUAL(OUString("\""
-                                  "quux" /*SAL_NEWLINE_STRING*/ "\""),
+    CPPUNIT_ASSERT_EQUAL(u"\""
+                         "quux" /*SAL_NEWLINE_STRING*/ "\""_ustr,
                          OUString("\"" + xAnchor->getString() + "\""));
 
     // now paste it
@@ -490,8 +498,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorCopyTableAtEnd)
     // note: this selects the 2nd section because it calls StartOfSection()
     // not SttEndDoc() like it should?
     xCursor->gotoStart(true);
-    CPPUNIT_ASSERT_EQUAL(OUString(/*"quux" SAL_NEWLINE_STRING */
-                                  "foobar" SAL_NEWLINE_STRING "baz" SAL_NEWLINE_STRING),
+    CPPUNIT_ASSERT_EQUAL(u"foobar" SAL_NEWLINE_STRING "baz" SAL_NEWLINE_STRING ""_ustr,
                          xCursor->getString());
 }
 
@@ -515,7 +522,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorCopyTable)
 
     uno::Reference<text::XTextContent> const xSection(xSections->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> const xAnchor(xSection->getAnchor());
-    CPPUNIT_ASSERT_EQUAL(OUString("baz" SAL_NEWLINE_STRING), xAnchor->getString());
+    CPPUNIT_ASSERT_EQUAL(u"baz" SAL_NEWLINE_STRING ""_ustr, xAnchor->getString());
 
     // copy the content of the section to a clipboard document
     uno::Reference<datatransfer::XTransferableSupplier> const xTS(
@@ -531,13 +538,13 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorCopyTable)
     CPPUNIT_ASSERT(xAnchor->getEnd().is());
 
     // replace section content
-    xAnchor->setString("quux");
+    xAnchor->setString(u"quux"_ustr);
 
     // table in section was deleted, but not section itself
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
-    CPPUNIT_ASSERT_EQUAL(OUString("\""
-                                  "quux" /*SAL_NEWLINE_STRING*/ "\""),
+    CPPUNIT_ASSERT_EQUAL(u"\""
+                         "quux" /*SAL_NEWLINE_STRING*/ "\""_ustr,
                          OUString("\"" + xAnchor->getString() + "\""));
 
     // now paste it
@@ -550,9 +557,9 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorCopyTable)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
     xCursor->gotoStart(true);
-    CPPUNIT_ASSERT_EQUAL(
-        OUString("quux" SAL_NEWLINE_STRING "foo" SAL_NEWLINE_STRING "baz" SAL_NEWLINE_STRING),
-        xCursor->getString());
+    CPPUNIT_ASSERT_EQUAL(u"quux" SAL_NEWLINE_STRING "foo" SAL_NEWLINE_STRING
+                         "baz" SAL_NEWLINE_STRING ""_ustr,
+                         xCursor->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTextRangeInTable)
@@ -561,23 +568,24 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTextRangeInTable)
 
     uno::Reference<text::XBookmarksSupplier> const xBS(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> const xMarks(xBS->getBookmarks());
-    uno::Reference<text::XTextContent> const xMark(xMarks->getByName("Bookmark 1"), uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> const xMark(xMarks->getByName(u"Bookmark 1"_ustr),
+                                                   uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> const xAnchor(xMark->getAnchor(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> const xEnum(xAnchor->createEnumeration());
     uno::Reference<lang::XServiceInfo> const xPara(xEnum->nextElement(), uno::UNO_QUERY);
     // not the top-level table!
-    CPPUNIT_ASSERT(!xPara->supportsService("com.sun.star.text.TextTable"));
+    CPPUNIT_ASSERT(!xPara->supportsService(u"com.sun.star.text.TextTable"_ustr));
     CPPUNIT_ASSERT(!xEnum->hasMoreElements());
     uno::Reference<container::XEnumerationAccess> const xParaEA(xPara, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> const xPortions(xParaEA->createEnumeration());
     uno::Reference<beans::XPropertySet> const xP1(xPortions->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Bookmark"), getProperty<OUString>(xP1, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(u"Bookmark"_ustr, getProperty<OUString>(xP1, u"TextPortionType"_ustr));
     uno::Reference<beans::XPropertySet> const xP2(xPortions->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xP2, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(u"Text"_ustr, getProperty<OUString>(xP2, u"TextPortionType"_ustr));
     uno::Reference<text::XTextRange> const xP2R(xP2, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("foo"), xP2R->getString());
+    CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, xP2R->getString());
     uno::Reference<beans::XPropertySet> const xP3(xPortions->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Bookmark"), getProperty<OUString>(xP3, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(u"Bookmark"_ustr, getProperty<OUString>(xP3, u"TextPortionType"_ustr));
     CPPUNIT_ASSERT(!xPortions->hasMoreElements());
 }
 
@@ -589,10 +597,10 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testXURI)
     uno::Reference<rdf::XURI> xURIcreateKnown(
         rdf::URI::createKnown(xContext, rdf::URIs::ODF_PREFIX), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT(xURIcreateKnown.is());
-    CPPUNIT_ASSERT_EQUAL(OUString("http://docs.oasis-open.org/ns/office/1.2/meta/odf#"),
+    CPPUNIT_ASSERT_EQUAL(u"http://docs.oasis-open.org/ns/office/1.2/meta/odf#"_ustr,
                          xURIcreateKnown->getNamespace());
-    CPPUNIT_ASSERT_EQUAL(OUString("prefix"), xURIcreateKnown->getLocalName());
-    CPPUNIT_ASSERT_EQUAL(OUString("http://docs.oasis-open.org/ns/office/1.2/meta/odf#prefix"),
+    CPPUNIT_ASSERT_EQUAL(u"prefix"_ustr, xURIcreateKnown->getLocalName());
+    CPPUNIT_ASSERT_EQUAL(u"http://docs.oasis-open.org/ns/office/1.2/meta/odf#prefix"_ustr,
                          xURIcreateKnown->getStringValue());
 
     // createKnown() with invalid constant
@@ -602,49 +610,49 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testXURI)
 
     // create()
     uno::Reference<rdf::XURI> xURIcreate(
-        rdf::URI::create(xContext, "http://example.com/url#somedata"), uno::UNO_SET_THROW);
-    CPPUNIT_ASSERT_EQUAL(OUString("http://example.com/url#"), xURIcreate->getNamespace());
-    CPPUNIT_ASSERT_EQUAL(OUString("somedata"), xURIcreate->getLocalName());
-    CPPUNIT_ASSERT_EQUAL(OUString("http://example.com/url#somedata"), xURIcreate->getStringValue());
+        rdf::URI::create(xContext, u"http://example.com/url#somedata"_ustr), uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT_EQUAL(u"http://example.com/url#"_ustr, xURIcreate->getNamespace());
+    CPPUNIT_ASSERT_EQUAL(u"somedata"_ustr, xURIcreate->getLocalName());
+    CPPUNIT_ASSERT_EQUAL(u"http://example.com/url#somedata"_ustr, xURIcreate->getStringValue());
 
     // create() without local name split with "/"
-    uno::Reference<rdf::XURI> xURIcreate2(rdf::URI::create(xContext, "http://example.com/url"),
-                                          uno::UNO_SET_THROW);
-    CPPUNIT_ASSERT_EQUAL(OUString("http://example.com/"), xURIcreate2->getNamespace());
-    CPPUNIT_ASSERT_EQUAL(OUString("url"), xURIcreate2->getLocalName());
-    CPPUNIT_ASSERT_EQUAL(OUString("http://example.com/url"), xURIcreate2->getStringValue());
+    uno::Reference<rdf::XURI> xURIcreate2(
+        rdf::URI::create(xContext, u"http://example.com/url"_ustr), uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT_EQUAL(u"http://example.com/"_ustr, xURIcreate2->getNamespace());
+    CPPUNIT_ASSERT_EQUAL(u"url"_ustr, xURIcreate2->getLocalName());
+    CPPUNIT_ASSERT_EQUAL(u"http://example.com/url"_ustr, xURIcreate2->getStringValue());
 
     // create() without prefix
-    uno::Reference<rdf::XURI> xURIcreate3(rdf::URI::create(xContext, "#somedata"),
+    uno::Reference<rdf::XURI> xURIcreate3(rdf::URI::create(xContext, u"#somedata"_ustr),
                                           uno::UNO_SET_THROW);
-    CPPUNIT_ASSERT_EQUAL(OUString("#"), xURIcreate3->getNamespace());
-    CPPUNIT_ASSERT_EQUAL(OUString("somedata"), xURIcreate3->getLocalName());
-    CPPUNIT_ASSERT_EQUAL(OUString("#somedata"), xURIcreate3->getStringValue());
+    CPPUNIT_ASSERT_EQUAL(u"#"_ustr, xURIcreate3->getNamespace());
+    CPPUNIT_ASSERT_EQUAL(u"somedata"_ustr, xURIcreate3->getLocalName());
+    CPPUNIT_ASSERT_EQUAL(u"#somedata"_ustr, xURIcreate3->getStringValue());
 
     // create() with invalid URI
     CPPUNIT_ASSERT_THROW_MESSAGE("We expect an exception on invalid URI",
-                                 rdf::URI::create(xContext, "some junk and not URI"),
+                                 rdf::URI::create(xContext, u"some junk and not URI"_ustr),
                                  lang::IllegalArgumentException);
 
     // createNS()
     uno::Reference<rdf::XURI> xURIcreateNS(
-        rdf::URI::createNS(xContext, "http://example.com/url#", "somedata"), uno::UNO_SET_THROW);
-    CPPUNIT_ASSERT_EQUAL(OUString("http://example.com/url#"), xURIcreateNS->getNamespace());
-    CPPUNIT_ASSERT_EQUAL(OUString("somedata"), xURIcreateNS->getLocalName());
-    CPPUNIT_ASSERT_EQUAL(OUString("http://example.com/url#somedata"),
-                         xURIcreateNS->getStringValue());
+        rdf::URI::createNS(xContext, u"http://example.com/url#"_ustr, u"somedata"_ustr),
+        uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT_EQUAL(u"http://example.com/url#"_ustr, xURIcreateNS->getNamespace());
+    CPPUNIT_ASSERT_EQUAL(u"somedata"_ustr, xURIcreateNS->getLocalName());
+    CPPUNIT_ASSERT_EQUAL(u"http://example.com/url#somedata"_ustr, xURIcreateNS->getStringValue());
 
     // TODO: What's going on here? Is such usecase valid?
     uno::Reference<rdf::XURI> xURIcreateNS2(
-        rdf::URI::createNS(xContext, "http://example.com/url", "somedata"), uno::UNO_SET_THROW);
-    CPPUNIT_ASSERT_EQUAL(OUString("http://example.com/"), xURIcreateNS2->getNamespace());
-    CPPUNIT_ASSERT_EQUAL(OUString("urlsomedata"), xURIcreateNS2->getLocalName());
-    CPPUNIT_ASSERT_EQUAL(OUString("http://example.com/urlsomedata"),
-                         xURIcreateNS2->getStringValue());
+        rdf::URI::createNS(xContext, u"http://example.com/url"_ustr, u"somedata"_ustr),
+        uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT_EQUAL(u"http://example.com/"_ustr, xURIcreateNS2->getNamespace());
+    CPPUNIT_ASSERT_EQUAL(u"urlsomedata"_ustr, xURIcreateNS2->getLocalName());
+    CPPUNIT_ASSERT_EQUAL(u"http://example.com/urlsomedata"_ustr, xURIcreateNS2->getStringValue());
 
     // createNS() some invalid cases
     CPPUNIT_ASSERT_THROW_MESSAGE("We expect an exception on invalid URI",
-                                 rdf::URI::createNS(xContext, "bla", "bla"),
+                                 rdf::URI::createNS(xContext, u"bla"_ustr, u"bla"_ustr),
                                  lang::IllegalArgumentException);
 
     CPPUNIT_ASSERT_THROW_MESSAGE("We expect an exception on invalid URI",
@@ -659,21 +667,21 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSetPagePrintSettings)
 
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XSimpleText> xBodyText = xTextDocument->getText();
-    xBodyText->insertString(xBodyText->getStart(), "x", false);
+    xBodyText->insertString(xBodyText->getStart(), u"x"_ustr, false);
 
     uno::Reference<text::XPagePrintable> xPagePrintable(mxComponent, uno::UNO_QUERY);
 
     // set some stuff, try to get it back
     uno::Sequence<beans::PropertyValue> aProps{
-        comphelper::makePropertyValue("PageColumns", sal_Int16(2)),
-        comphelper::makePropertyValue("IsLandscape", true)
+        comphelper::makePropertyValue(u"PageColumns"_ustr, sal_Int16(2)),
+        comphelper::makePropertyValue(u"IsLandscape"_ustr, true)
     };
 
     xPagePrintable->setPagePrintSettings(aProps);
     const comphelper::SequenceAsHashMap aMap(xPagePrintable->getPagePrintSettings());
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), aMap.getValue("PageColumns").get<short>());
-    CPPUNIT_ASSERT_EQUAL(true, aMap.getValue("IsLandscape").get<bool>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), aMap.getValue(u"PageColumns"_ustr).get<short>());
+    CPPUNIT_ASSERT_EQUAL(true, aMap.getValue(u"IsLandscape"_ustr).get<bool>());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testDeleteFlyAtCharAtStart)
@@ -686,7 +694,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testDeleteFlyAtCharAtStart)
 
     // insert some text
     IDocumentContentOperations& rIDCO(pDoc->getIDocumentContentOperations());
-    rIDCO.InsertString(*pWrtShell->GetCursor(), "foo bar baz");
+    rIDCO.InsertString(*pWrtShell->GetCursor(), u"foo bar baz"_ustr);
 
     // insert fly anchored at start of body text
     pWrtShell->ClearMark();
@@ -711,7 +719,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testDeleteFlyAtCharAtStart)
     // delete 1st character
     uno::Reference<text::XTextCursor> const xCursor(xText->createTextCursor());
     xCursor->goRight(1, true);
-    xCursor->setString("");
+    xCursor->setString(u""_ustr);
 
     // there is exactly one fly
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
@@ -719,7 +727,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testDeleteFlyAtCharAtStart)
     // select entire body text
     xCursor->gotoStart(true);
     xCursor->gotoEnd(true);
-    xCursor->setString("");
+    xCursor->setString(u""_ustr);
 
     // there is no fly
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
@@ -735,7 +743,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSelectionInTableEnum)
     CPPUNIT_ASSERT(pWrtShell);
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->EndPara(/*bSelect=*/true);
-    CPPUNIT_ASSERT_EQUAL(OUString("A1"),
+    CPPUNIT_ASSERT_EQUAL(u"A1"_ustr,
                          pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
 
     // Access the selection.
@@ -777,10 +785,9 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSelectionInTableEnumEnd)
     CPPUNIT_ASSERT(xSelections.is());
     uno::Reference<text::XTextRange> xSelection(xSelections->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xSelection.is());
-    CPPUNIT_ASSERT_EQUAL(OUString("Before" SAL_NEWLINE_STRING "A1" SAL_NEWLINE_STRING
-                                  "B1" SAL_NEWLINE_STRING "C2" SAL_NEWLINE_STRING
-                                  "A2" SAL_NEWLINE_STRING "B2" SAL_NEWLINE_STRING
-                                  "C2" SAL_NEWLINE_STRING),
+    CPPUNIT_ASSERT_EQUAL(u"Before" SAL_NEWLINE_STRING "A1" SAL_NEWLINE_STRING
+                         "B1" SAL_NEWLINE_STRING "C2" SAL_NEWLINE_STRING "A2" SAL_NEWLINE_STRING
+                         "B2" SAL_NEWLINE_STRING "C2" SAL_NEWLINE_STRING ""_ustr,
                          xSelection->getString());
 
     // Enumerate paragraphs in the selection.
@@ -814,10 +821,10 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testRenderablePagePosition)
     uno::Reference<frame::XController> xController = xModel->getCurrentController();
 
     beans::PropertyValues aRenderOptions = {
-        comphelper::makePropertyValue("IsPrinter", true),
-        comphelper::makePropertyValue("RenderDevice", xDevice),
-        comphelper::makePropertyValue("View", xController),
-        comphelper::makePropertyValue("RenderToGraphic", true),
+        comphelper::makePropertyValue(u"IsPrinter"_ustr, true),
+        comphelper::makePropertyValue(u"RenderDevice"_ustr, xDevice),
+        comphelper::makePropertyValue(u"View"_ustr, xController),
+        comphelper::makePropertyValue(u"RenderToGraphic"_ustr, true),
     };
 
     sal_Int32 nPages = xRenderable->getRendererCount(aSelection, aRenderOptions);
@@ -828,14 +835,14 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testRenderablePagePosition)
         xRenderable->getRenderer(0, aSelection, aRenderOptions));
     // Without the accompanying fix in place, this test would have failed: i.e.
     // there was no PagePos key in this map.
-    awt::Point aPosition1 = aRenderer1["PagePos"].get<awt::Point>();
+    awt::Point aPosition1 = aRenderer1[u"PagePos"_ustr].get<awt::Point>();
     CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(0), aPosition1.X);
     CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(0), aPosition1.Y);
 
     // Make sure that the second page is below the first one.
     comphelper::SequenceAsHashMap aRenderer2(
         xRenderable->getRenderer(1, aSelection, aRenderOptions));
-    awt::Point aPosition2 = aRenderer2["PagePos"].get<awt::Point>();
+    awt::Point aPosition2 = aRenderer2[u"PagePos"_ustr].get<awt::Point>();
     CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(0), aPosition2.X);
     CPPUNIT_ASSERT_GREATER(aPosition1.Y, aPosition2.Y);
 }
@@ -847,7 +854,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testPasteListener)
     // Insert initial string.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XSimpleText> xBodyText = xTextDocument->getText();
-    xBodyText->insertString(xBodyText->getStart(), "ABCDEF", false);
+    xBodyText->insertString(xBodyText->getStart(), u"ABCDEF"_ustr, false);
 
     // Add paste listener.
     uno::Reference<text::XPasteBroadcaster> xBroadcaster(mxComponent, uno::UNO_QUERY);
@@ -869,20 +876,20 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testPasteListener)
     // Without working listener registration in place, this test would have
     // failed with 'Expected: DE; Actual:', i.e. the paste listener was not
     // invoked.
-    CPPUNIT_ASSERT_EQUAL(OUString("DE"), pListener->GetString());
+    CPPUNIT_ASSERT_EQUAL(u"DE"_ustr, pListener->GetString());
 
     // Make sure that paste did not overwrite anything.
-    CPPUNIT_ASSERT_EQUAL(OUString("ABCDEF"), xBodyText->getString());
+    CPPUNIT_ASSERT_EQUAL(u"ABCDEF"_ustr, xBodyText->getString());
 
     // Paste again, this time overwriting "BC".
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 2, /*bBasicCall=*/false);
     pListener->GetString().clear();
     SwTransferable::Paste(*pWrtShell, aHelper);
-    CPPUNIT_ASSERT_EQUAL(OUString("DE"), pListener->GetString());
+    CPPUNIT_ASSERT_EQUAL(u"DE"_ustr, pListener->GetString());
 
     // Make sure that paste overwrote "BC".
-    CPPUNIT_ASSERT_EQUAL(OUString("ADEDEF"), xBodyText->getString());
+    CPPUNIT_ASSERT_EQUAL(u"ADEDEF"_ustr, xBodyText->getString());
 
     // Test image paste.
     SwView& rView = pWrtShell->GetView();
@@ -930,18 +937,18 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testImageCommentAtChar)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pMarks->getAnnotationMarksCount());
 
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
-    CPPUNIT_ASSERT_EQUAL(OUString("Text"),
-                         getProperty<OUString>(getRun(xPara, 1), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(u"Text"_ustr,
+                         getProperty<OUString>(getRun(xPara, 1), u"TextPortionType"_ustr));
     // Without the accompanying fix in place, this test would have failed with 'Expected:
     // Annotation; Actual: Frame', i.e. the comment-start portion was after the commented image.
-    CPPUNIT_ASSERT_EQUAL(OUString("Annotation"),
-                         getProperty<OUString>(getRun(xPara, 2), "TextPortionType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Frame"),
-                         getProperty<OUString>(getRun(xPara, 3), "TextPortionType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("AnnotationEnd"),
-                         getProperty<OUString>(getRun(xPara, 4), "TextPortionType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Text"),
-                         getProperty<OUString>(getRun(xPara, 5), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(u"Annotation"_ustr,
+                         getProperty<OUString>(getRun(xPara, 2), u"TextPortionType"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Frame"_ustr,
+                         getProperty<OUString>(getRun(xPara, 3), u"TextPortionType"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"AnnotationEnd"_ustr,
+                         getProperty<OUString>(getRun(xPara, 4), u"TextPortionType"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Text"_ustr,
+                         getProperty<OUString>(getRun(xPara, 5), u"TextPortionType"_ustr));
 
     // Without the accompanying fix in place, this test would have failed with 'Expected:
     // 5892; Actual: 1738', i.e. the anchor pos was between the "aaa" and "bbb" portions, not at the
@@ -963,30 +970,30 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testChapterNumberingCharStyle)
 
     uno::Reference<lang::XMultiServiceFactory> xDoc(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xStyle(
-        xDoc->createInstance("com.sun.star.style.CharacterStyle"), uno::UNO_QUERY);
+        xDoc->createInstance(u"com.sun.star.style.CharacterStyle"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XNamed> xStyleN(xStyle, uno::UNO_QUERY);
-    xStyle->setPropertyValue("CharColor", uno::Any(COL_LIGHTRED));
+    xStyle->setPropertyValue(u"CharColor"_ustr, uno::Any(COL_LIGHTRED));
     uno::Reference<style::XStyleFamiliesSupplier> xSFS(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameContainer> xStyles(
-        xSFS->getStyleFamilies()->getByName("CharacterStyles"), uno::UNO_QUERY);
-    xStyles->insertByName("red", uno::Any(xStyle));
+        xSFS->getStyleFamilies()->getByName(u"CharacterStyles"_ustr), uno::UNO_QUERY);
+    xStyles->insertByName(u"red"_ustr, uno::Any(xStyle));
 
     uno::Reference<text::XChapterNumberingSupplier> xCNS(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexReplace> xOutline(xCNS->getChapterNumberingRules());
     {
         comphelper::SequenceAsHashMap hashMap(xOutline->getByIndex(0));
-        hashMap["CharStyleName"] <<= OUString("red");
+        hashMap[u"CharStyleName"_ustr] <<= u"red"_ustr;
         uno::Sequence<beans::PropertyValue> props;
         hashMap >> props;
         xOutline->replaceByIndex(0, uno::Any(props));
     }
     // now rename the style
-    xStyleN->setName("reddishred");
+    xStyleN->setName(u"reddishred"_ustr);
     {
         comphelper::SequenceAsHashMap hashMap(xOutline->getByIndex(0));
 
         // tdf#137810 this failed, was old value "red"
-        CPPUNIT_ASSERT_EQUAL(OUString("reddishred"), hashMap["CharStyleName"].get<OUString>());
+        CPPUNIT_ASSERT_EQUAL(u"reddishred"_ustr, hashMap[u"CharStyleName"_ustr].get<OUString>());
     }
 }
 
@@ -1004,19 +1011,19 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testViewCursorPageStyle)
 
     // Go to the first page, which has an explicit page style.
     xViewCursor->jumpToPage(1);
-    OUString aActualPageStyleName = getProperty<OUString>(xViewCursor, "PageStyleName");
-    CPPUNIT_ASSERT_EQUAL(OUString("First Page"), aActualPageStyleName);
+    OUString aActualPageStyleName = getProperty<OUString>(xViewCursor, u"PageStyleName"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"First Page"_ustr, aActualPageStyleName);
 
     // Go to the second page, which is still the first paragraph, but the page style is different,
     // as the explicit 'First Page' page style has a next style defined (Standard).
     xViewCursor->jumpToPage(2);
-    aActualPageStyleName = getProperty<OUString>(xViewCursor, "PageStyleName");
+    aActualPageStyleName = getProperty<OUString>(xViewCursor, u"PageStyleName"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: Standard
     // - Actual  : First Page
     // i.e. the cursor position was determined only based on the node index, ignoring the content
     // index.
-    CPPUNIT_ASSERT_EQUAL(OUString("Standard"), aActualPageStyleName);
+    CPPUNIT_ASSERT_EQUAL(u"Standard"_ustr, aActualPageStyleName);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testXTextCursor_setPropertyValues)
@@ -1028,18 +1035,18 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testXTextCursor_setPropertyValues)
 
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XSimpleText> xBodyText = xTextDocument->getText();
-    xBodyText->insertString(xBodyText->getStart(), "x", false);
+    xBodyText->insertString(xBodyText->getStart(), u"x"_ustr, false);
 
     uno::Reference<text::XTextCursor> xCursor(xBodyText->createTextCursor());
     xCursor->goLeft(1, true);
 
     uno::Reference<beans::XMultiPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
-    uno::Sequence<OUString> aPropNames = { "OneUnknownProperty", "CharStyleName" };
-    uno::Sequence<uno::Any> aPropValues = { uno::Any(), uno::Any(OUString("Emphasis")) };
+    uno::Sequence<OUString> aPropNames = { u"OneUnknownProperty"_ustr, u"CharStyleName"_ustr };
+    uno::Sequence<uno::Any> aPropValues = { uno::Any(), uno::Any(u"Emphasis"_ustr) };
     CPPUNIT_ASSERT_THROW(xCursorProps->setPropertyValues(aPropNames, aPropValues),
                          lang::WrappedTargetException);
-    CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"),
-                         getProperty<OUString>(xCursorProps, "CharStyleName"));
+    CPPUNIT_ASSERT_EQUAL(u"Emphasis"_ustr,
+                         getProperty<OUString>(xCursorProps, u"CharStyleName"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testShapeAllowOverlap)
@@ -1052,7 +1059,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testShapeAllowOverlap)
     awt::Point aPoint(1000, 1000);
     awt::Size aSize(10000, 10000);
     uno::Reference<drawing::XShape> xShape(
-        xDocument->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+        xDocument->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
     xShape->setPosition(aPoint);
     xShape->setSize(aSize);
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xDocument, uno::UNO_QUERY);
@@ -1060,12 +1067,12 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testShapeAllowOverlap)
 
     // The property is on by default, turn it off & verify.
     uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
-    xShapeProperties->setPropertyValue("AllowOverlap", uno::Any(false));
-    CPPUNIT_ASSERT(!getProperty<bool>(xShapeProperties, "AllowOverlap"));
+    xShapeProperties->setPropertyValue(u"AllowOverlap"_ustr, uno::Any(false));
+    CPPUNIT_ASSERT(!getProperty<bool>(xShapeProperties, u"AllowOverlap"_ustr));
 
     // Turn it back to on & verify.
-    xShapeProperties->setPropertyValue("AllowOverlap", uno::Any(true));
-    CPPUNIT_ASSERT(getProperty<bool>(xShapeProperties, "AllowOverlap"));
+    xShapeProperties->setPropertyValue(u"AllowOverlap"_ustr, uno::Any(true));
+    CPPUNIT_ASSERT(getProperty<bool>(xShapeProperties, u"AllowOverlap"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTextConvertToTableLineSpacing)
@@ -1078,11 +1085,11 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTextConvertToTableLineSpacing)
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<table::XCell> xCell = xTable->getCellByName("A1");
+    uno::Reference<table::XCell> xCell = xTable->getCellByName(u"A1"_ustr);
     uno::Reference<text::XText> xCellText(xCell, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xCellText);
     style::LineSpacing aLineSpacing
-        = getProperty<style::LineSpacing>(xParagraph, "ParaLineSpacing");
+        = getProperty<style::LineSpacing>(xParagraph, u"ParaLineSpacing"_ustr);
     // Make sure that we take the line spacing from the paragraph style, not from the table style.
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 388
@@ -1098,16 +1105,16 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testMultiSelect)
     createSwDoc();
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, css::uno::UNO_QUERY_THROW);
     auto xSimpleText = xTextDocument->getText();
-    xSimpleText->insertString(xSimpleText->getStart(), "Abc aBc abC", false);
+    xSimpleText->insertString(xSimpleText->getStart(), u"Abc aBc abC"_ustr, false);
 
     // Create a search descriptor and find all occurencies of search string
     css::uno::Reference<css::util::XSearchable> xSearchable(mxComponent, css::uno::UNO_QUERY_THROW);
     auto xSearchDescriptor = xSearchable->createSearchDescriptor();
-    xSearchDescriptor->setPropertyValue("SearchStyles", css::uno::Any(false));
-    xSearchDescriptor->setPropertyValue("SearchCaseSensitive", css::uno::Any(false));
-    xSearchDescriptor->setPropertyValue("SearchBackwards", css::uno::Any(true));
-    xSearchDescriptor->setPropertyValue("SearchRegularExpression", css::uno::Any(false));
-    xSearchDescriptor->setSearchString("abc");
+    xSearchDescriptor->setPropertyValue(u"SearchStyles"_ustr, css::uno::Any(false));
+    xSearchDescriptor->setPropertyValue(u"SearchCaseSensitive"_ustr, css::uno::Any(false));
+    xSearchDescriptor->setPropertyValue(u"SearchBackwards"_ustr, css::uno::Any(true));
+    xSearchDescriptor->setPropertyValue(u"SearchRegularExpression"_ustr, css::uno::Any(false));
+    xSearchDescriptor->setSearchString(u"abc"_ustr);
     auto xSearchResult = xSearchable->findAll(xSearchDescriptor);
 
     // Select them all
@@ -1122,11 +1129,11 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testMultiSelect)
     css::uno::Reference<css::text::XTextRange> xTextRange(xSelection->getByIndex(0),
                                                           css::uno::UNO_QUERY_THROW);
     // For #0, result was empty (cursor was put before the last occurrence without selection)
-    CPPUNIT_ASSERT_EQUAL(OUString("abC"), xTextRange->getString());
+    CPPUNIT_ASSERT_EQUAL(u"abC"_ustr, xTextRange->getString());
     xTextRange.set(xSelection->getByIndex(1), css::uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(OUString("aBc"), xTextRange->getString());
+    CPPUNIT_ASSERT_EQUAL(u"aBc"_ustr, xTextRange->getString());
     xTextRange.set(xSelection->getByIndex(2), css::uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(OUString("Abc"), xTextRange->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Abc"_ustr, xTextRange->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTransparentText)
@@ -1139,10 +1146,10 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTransparentText)
     // Set a custom transparency.
     uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
     sal_Int16 nExpected = 42;
-    xParagraph->setPropertyValue("CharTransparence", uno::Any(nExpected));
+    xParagraph->setPropertyValue(u"CharTransparence"_ustr, uno::Any(nExpected));
 
     // Get the transparency & verify.
-    CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int16>(xParagraph, "CharTransparence"));
+    CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int16>(xParagraph, u"CharTransparence"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf129839)
@@ -1154,7 +1161,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf129839)
     css::uno::Reference<css::lang::XMultiServiceFactory> xFac(xTextDocument,
                                                               css::uno::UNO_QUERY_THROW);
     css::uno::Reference<css::text::XTextTable> xTable(
-        xFac->createInstance("com.sun.star.text.TextTable"), css::uno::UNO_QUERY_THROW);
+        xFac->createInstance(u"com.sun.star.text.TextTable"_ustr), css::uno::UNO_QUERY_THROW);
     xTable->initialize(4, 4);
     auto xSimpleText = xTextDocument->getText();
     xSimpleText->insertTextContent(xSimpleText->createTextCursor(), xTable, true);
@@ -1163,7 +1170,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf129839)
     css::uno::Reference<css::beans::XPropertySet> xCellRange(
         xTableCellRange->getCellRangeByPosition(0, 0, 1, 1), css::uno::UNO_QUERY_THROW);
     // Test retrieval of VertOrient property - this crashed
-    css::uno::Any aOrient = xCellRange->getPropertyValue("VertOrient");
+    css::uno::Any aOrient = xCellRange->getPropertyValue(u"VertOrient"_ustr);
     CPPUNIT_ASSERT_EQUAL(css::uno::Any(css::text::VertOrientation::NONE), aOrient);
 }
 
@@ -1176,17 +1183,17 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf129841)
     css::uno::Reference<css::lang::XMultiServiceFactory> xFac(xTextDocument,
                                                               css::uno::UNO_QUERY_THROW);
     css::uno::Reference<css::text::XTextTable> xTable(
-        xFac->createInstance("com.sun.star.text.TextTable"), css::uno::UNO_QUERY_THROW);
+        xFac->createInstance(u"com.sun.star.text.TextTable"_ustr), css::uno::UNO_QUERY_THROW);
     xTable->initialize(4, 4);
     auto xSimpleText = xTextDocument->getText();
     xSimpleText->insertTextContent(xSimpleText->createTextCursor(), xTable, true);
     // Get SwXTextTableCursor
-    css::uno::Reference<css::beans::XPropertySet> xTableCursor(xTable->createCursorByCellName("A1"),
-                                                               css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::beans::XPropertySet> xTableCursor(
+        xTable->createCursorByCellName(u"A1"_ustr), css::uno::UNO_QUERY_THROW);
     css::uno::Reference<css::table::XCellRange> xTableCellRange(xTable, css::uno::UNO_QUERY_THROW);
     // Get SwXCellRange for the same cell
     css::uno::Reference<css::beans::XPropertySet> xCellRange(
-        xTableCellRange->getCellRangeByName("A1:A1"), css::uno::UNO_QUERY_THROW);
+        xTableCellRange->getCellRangeByName(u"A1:A1"_ustr), css::uno::UNO_QUERY_THROW);
     static constexpr OUString sBackColor = u"BackColor"_ustr;
     // Apply background color to table cursor, and read background color from cell range
     css::uno::Any aRefColor(COL_LIGHTRED);
@@ -1210,20 +1217,20 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf141525)
     // Insert "Line with Arrow/Circle" shape with CTRL key
     uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "KeyModifier", uno::Any(KEY_MOD1) } }));
-    dispatchCommand(mxComponent, ".uno:LineArrowCircle", aArgs);
+    dispatchCommand(mxComponent, u".uno:LineArrowCircle"_ustr, aArgs);
 
     // Asserts line shape has been inserted into the doc
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
-    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.LineShape"), getShape(1)->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.LineShape"_ustr, getShape(1)->getShapeType());
 
     // Asserts end of line has a circle
     // Without the test, "Line Starts with Arrow" is inserted
     // i.e. the circle is missing from the line end point
     // - Expected: "Circle"
     // - Actual: ""
-    CPPUNIT_ASSERT_EQUAL(OUString("Circle"), getProperty<OUString>(getShape(1), "LineEndName"));
+    CPPUNIT_ASSERT_EQUAL(u"Circle"_ustr, getProperty<OUString>(getShape(1), u"LineEndName"_ustr));
     // Asserts start of line has an arrow
-    CPPUNIT_ASSERT_EQUAL(OUString("Arrow"), getProperty<OUString>(getShape(1), "LineStartName"));
+    CPPUNIT_ASSERT_EQUAL(u"Arrow"_ustr, getProperty<OUString>(getShape(1), u"LineStartName"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf160278)

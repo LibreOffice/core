@@ -77,7 +77,7 @@ class SwUiWriterTest : public SwModelTestBase
 {
 public:
     SwUiWriterTest() :
-        SwModelTestBase("/sw/qa/extras/uiwriter/data/")
+        SwModelTestBase(u"/sw/qa/extras/uiwriter/data/"_ustr)
     {}
 
     std::unique_ptr<SwTextBlocks> readDOCXAutotext(
@@ -152,7 +152,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testReplaceForward)
 
     SwTextNode* pTextNode = aPaM.GetPointNode().GetTextNode();
     lcl_selectCharacters(aPaM, 5, 9);
-    pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, "toto", false);
+    pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, u"toto"_ustr, false);
 
     CPPUNIT_ASSERT_EQUAL(EXPECTED_REPLACE_CONTENT, pTextNode->GetText());
 
@@ -225,7 +225,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf149595)
     {
         pWrtShell->Down(false);
         pWrtShell->EndPara(/*bSelect=*/true);
-        dispatchCommand(mxComponent, ".uno:Cut", {});
+        dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
         // one shape is anchored in the middle, others at the start/end/at-para
         CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs() == nullptr);
@@ -233,7 +233,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf149595)
         CPPUNIT_ASSERT_EQUAL(size_t(3), pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetNext()->GetDrawObjs()->size());
 
         pWrtShell->Up(false);
-        dispatchCommand(mxComponent, ".uno:Paste", {});
+        dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
         CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs() != nullptr);
         CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs()->size());
@@ -249,13 +249,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf149595)
     }
 
     // now try the same with redlining enabled - should be the same result
-    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
-    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, {});
     {
         pWrtShell->Down(false);
         pWrtShell->SttPara(/*bSelect=*/false);
         pWrtShell->EndPara(/*bSelect=*/true);
-        dispatchCommand(mxComponent, ".uno:Cut", {});
+        dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
         CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs() == nullptr);
         CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetNext()->GetDrawObjs() != nullptr);
@@ -263,7 +263,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf149595)
         CPPUNIT_ASSERT_EQUAL(size_t(3), pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetNext()->GetDrawObjs()->size());
 
         pWrtShell->Up(false);
-        dispatchCommand(mxComponent, ".uno:Paste", {});
+        dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
         CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs() != nullptr);
         CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs()->size());
@@ -310,12 +310,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf149548)
         }
     }
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // this was a use-after-free on nodes deleted by Copy
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testPasteTableAtFlyAnchor)
@@ -343,14 +343,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testPasteTableAtFlyAnchor)
     // select table
     pWrtShell->SelAll();
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // move cursor back to body
     pWrtShell->ClearMark();
     pWrtShell->SttEndDoc(/*bStt=*/true);
     CPPUNIT_ASSERT(!pWrtShell->GetCurrFlyFrame());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     pWrtShell->SttEndDoc(/*bStt=*/true);
     CPPUNIT_ASSERT(pWrtShell->IsCursorInTable());
@@ -386,7 +386,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCopyPastePageBreak)
         CPPUNIT_ASSERT_EQUAL(tools::Long(5669), pWrtShell->GetLayout()->GetLower()->getFramePrintArea().Top());
 
         pWrtShell->SelAll();
-        dispatchCommand(mxComponent, ".uno:Copy", {});
+        dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
         mxComponent->dispose();
         mxComponent.clear();
@@ -397,17 +397,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCopyPastePageBreak)
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
-    CPPUNIT_ASSERT_EQUAL(OUString("WithMargin"), getProperty<OUString>(getParagraph(1), "PageDescName"));
-    CPPUNIT_ASSERT_EQUAL(OUString("TargetSection"), pWrtShell->GetCurrSection()->GetSectionName());
+    CPPUNIT_ASSERT_EQUAL(u"WithMargin"_ustr, getProperty<OUString>(getParagraph(1), u"PageDescName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"TargetSection"_ustr, pWrtShell->GetCurrSection()->GetSectionName());
     // page style WithMargin is used
     CPPUNIT_ASSERT_EQUAL(tools::Long(5669), pWrtShell->GetLayout()->GetLower()->getFramePrintArea().Top());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
-    CPPUNIT_ASSERT_EQUAL(OUString("WithMargin"), getProperty<OUString>(getParagraph(1), "PageDescName"));
+    CPPUNIT_ASSERT_EQUAL(u"WithMargin"_ustr, getProperty<OUString>(getParagraph(1), u"PageDescName"_ustr));
     CPPUNIT_ASSERT_EQUAL(size_t(2), pDoc->GetSections().size());
-    CPPUNIT_ASSERT_EQUAL(OUString("SourceSection"), pWrtShell->GetCurrSection()->GetSectionName());
+    CPPUNIT_ASSERT_EQUAL(u"SourceSection"_ustr, pWrtShell->GetCurrSection()->GetSectionName());
     // the problem was that there was a page break now
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // page style WithMargin is used
@@ -415,25 +415,25 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCopyPastePageBreak)
 
     pWrtShell->Undo();
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
-    CPPUNIT_ASSERT_EQUAL(OUString("WithMargin"), getProperty<OUString>(getParagraph(1), "PageDescName"));
-    CPPUNIT_ASSERT_EQUAL(OUString("TargetSection"), pWrtShell->GetCurrSection()->GetSectionName());
+    CPPUNIT_ASSERT_EQUAL(u"WithMargin"_ustr, getProperty<OUString>(getParagraph(1), u"PageDescName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"TargetSection"_ustr, pWrtShell->GetCurrSection()->GetSectionName());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // page style WithMargin is used
     CPPUNIT_ASSERT_EQUAL(tools::Long(5669), pWrtShell->GetLayout()->GetLower()->getFramePrintArea().Top());
 
     pWrtShell->Redo();
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
-    CPPUNIT_ASSERT_EQUAL(OUString("WithMargin"), getProperty<OUString>(getParagraph(1), "PageDescName"));
+    CPPUNIT_ASSERT_EQUAL(u"WithMargin"_ustr, getProperty<OUString>(getParagraph(1), u"PageDescName"_ustr));
     CPPUNIT_ASSERT_EQUAL(size_t(2), pDoc->GetSections().size());
-    CPPUNIT_ASSERT_EQUAL(OUString("SourceSection"), pWrtShell->GetCurrSection()->GetSectionName());
+    CPPUNIT_ASSERT_EQUAL(u"SourceSection"_ustr, pWrtShell->GetCurrSection()->GetSectionName());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // page style WithMargin is used
     CPPUNIT_ASSERT_EQUAL(tools::Long(5669), pWrtShell->GetLayout()->GetLower()->getFramePrintArea().Top());
 
     pWrtShell->Undo();
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
-    CPPUNIT_ASSERT_EQUAL(OUString("WithMargin"), getProperty<OUString>(getParagraph(1), "PageDescName"));
-    CPPUNIT_ASSERT_EQUAL(OUString("TargetSection"), pWrtShell->GetCurrSection()->GetSectionName());
+    CPPUNIT_ASSERT_EQUAL(u"WithMargin"_ustr, getProperty<OUString>(getParagraph(1), u"PageDescName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"TargetSection"_ustr, pWrtShell->GetCurrSection()->GetSectionName());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // page style WithMargin is used
     CPPUNIT_ASSERT_EQUAL(tools::Long(5669), pWrtShell->GetLayout()->GetLower()->getFramePrintArea().Top());
@@ -449,17 +449,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testBookmarkCopy)
     IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwCursor aPaM(SwPosition(aIdx), nullptr);
-    rIDCO.InsertString(aPaM, "foo");
+    rIDCO.InsertString(aPaM, u"foo"_ustr);
     rIDCO.SplitNode(*aPaM.GetPoint(), false);
-    rIDCO.InsertString(aPaM, "bar");
+    rIDCO.InsertString(aPaM, u"bar"_ustr);
     aPaM.SetMark();
     aPaM.MovePara(GoCurrPara, fnParaStart);
-    rIDMA.makeMark(aPaM, "Mark", IDocumentMarkAccess::MarkType::BOOKMARK,
+    rIDMA.makeMark(aPaM, u"Mark"_ustr, IDocumentMarkAccess::MarkType::BOOKMARK,
             ::sw::mark::InsertMode::New);
     aPaM.Exchange();
     aPaM.DeleteMark();
     rIDCO.SplitNode(*aPaM.GetPoint(), false);
-    rIDCO.InsertString(aPaM, "baz");
+    rIDCO.InsertString(aPaM, u"baz"_ustr);
 
     // copy range
     rIDCO.SplitNode(*aPaM.GetPoint(), false);
@@ -476,7 +476,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testBookmarkCopy)
     for (auto it(rIDMA.getBookmarksBegin()); it != rIDMA.getBookmarksEnd(); ++it)
     {
         OUString markText(SwPaM((*it)->GetMarkPos(), (*it)->GetOtherMarkPos()).GetText());
-        CPPUNIT_ASSERT_EQUAL(OUString("bar"), markText);
+        CPPUNIT_ASSERT_EQUAL(u"bar"_ustr, markText);
     }
 
     // copy 2nd time, such that bCanMoveBack is false in CopyImpl
@@ -492,55 +492,55 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testBookmarkCopy)
     for (auto it(rIDMA.getBookmarksBegin()); it != rIDMA.getBookmarksEnd(); ++it)
     {
         OUString markText(SwPaM((*it)->GetMarkPos(), (*it)->GetOtherMarkPos()).GetText());
-        CPPUNIT_ASSERT_EQUAL(OUString("bar"), markText);
+        CPPUNIT_ASSERT_EQUAL(u"bar"_ustr, markText);
     }
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFormulaNumberWithGroupSeparator)
 {
     createSwDoc("tdf125154.odt");
-    dispatchCommand(mxComponent, ".uno:UpdateAll", {});
+    dispatchCommand(mxComponent, u".uno:UpdateAll"_ustr, {});
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(true);
     SwField const* pField;
 
     pField = pWrtShell->GetCurField();
-    CPPUNIT_ASSERT_EQUAL(OUString("1000"), pField->GetFormula());
-    CPPUNIT_ASSERT_EQUAL(OUString("1.000"), pField->ExpandField(true, nullptr));
+    CPPUNIT_ASSERT_EQUAL(u"1000"_ustr, pField->GetFormula());
+    CPPUNIT_ASSERT_EQUAL(u"1.000"_ustr, pField->ExpandField(true, nullptr));
     pWrtShell->GoNextCell();
-    CPPUNIT_ASSERT_EQUAL(OUString("10000"), pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"10000"_ustr, pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
     pWrtShell->GoNextCell();
     pField = pWrtShell->GetCurField();
-    CPPUNIT_ASSERT_EQUAL(OUString("test"), pField->GetFormula());
-    CPPUNIT_ASSERT_EQUAL(OUString("1.000"), pField->ExpandField(true, nullptr));
+    CPPUNIT_ASSERT_EQUAL(u"test"_ustr, pField->GetFormula());
+    CPPUNIT_ASSERT_EQUAL(u"1.000"_ustr, pField->ExpandField(true, nullptr));
     pWrtShell->GoNextCell();
     // the problem was that this was 0
-    CPPUNIT_ASSERT_EQUAL(OUString("10000"), pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"10000"_ustr, pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
     pWrtShell->Down(false);
     pWrtShell->SttPara(false);
     pField = pWrtShell->GetCurField();
-    CPPUNIT_ASSERT_EQUAL(OUString("1000*10%"), pField->GetFormula());
-    CPPUNIT_ASSERT_EQUAL(OUString("100"), pField->ExpandField(true, nullptr));
+    CPPUNIT_ASSERT_EQUAL(u"1000*10%"_ustr, pField->GetFormula());
+    CPPUNIT_ASSERT_EQUAL(u"100"_ustr, pField->ExpandField(true, nullptr));
     pWrtShell->Down(false);
     pField = pWrtShell->GetCurField();
-    CPPUNIT_ASSERT_EQUAL(OUString("5.000*10%"), pField->GetFormula());
+    CPPUNIT_ASSERT_EQUAL(u"5.000*10%"_ustr, pField->GetFormula());
     // the problem was that this was 0
-    CPPUNIT_ASSERT_EQUAL(OUString("500"), pField->ExpandField(true, nullptr));
+    CPPUNIT_ASSERT_EQUAL(u"500"_ustr, pField->ExpandField(true, nullptr));
     pWrtShell->Down(false);
     pField = pWrtShell->GetCurField();
-    CPPUNIT_ASSERT_EQUAL(OUString("5.000*10%"), pField->GetFormula());
+    CPPUNIT_ASSERT_EQUAL(u"5.000*10%"_ustr, pField->GetFormula());
     // the problem was that this was
-    CPPUNIT_ASSERT_EQUAL(OUString("500"), pField->ExpandField(true, nullptr));
+    CPPUNIT_ASSERT_EQUAL(u"500"_ustr, pField->ExpandField(true, nullptr));
     pWrtShell->Down(false);
     pField = pWrtShell->GetCurField();
-    CPPUNIT_ASSERT_EQUAL(OUString("5000*10%"), pField->GetFormula());
-    CPPUNIT_ASSERT_EQUAL(OUString("500"), pField->ExpandField(true, nullptr));
+    CPPUNIT_ASSERT_EQUAL(u"5000*10%"_ustr, pField->GetFormula());
+    CPPUNIT_ASSERT_EQUAL(u"500"_ustr, pField->ExpandField(true, nullptr));
     pWrtShell->Down(false);
     CPPUNIT_ASSERT_EQUAL(u"-100,00 €"_ustr, pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
     pWrtShell->GoNextCell();
     // tdf#42518 the problem was that this was 1.900,00 €
-    CPPUNIT_ASSERT_EQUAL(OUString("** Expression is faulty **"), pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"** Expression is faulty **"_ustr, pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testInsertFileInInputFieldException)
@@ -552,7 +552,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testInsertFileInInputFieldException)
     uno::Reference<text::XTextCursor> const xCursor(xBody->createTextCursor());
     uno::Reference<document::XDocumentInsertable> const xInsertable(xCursor, uno::UNO_QUERY);
     uno::Reference<text::XTextContent> const xContent(
-        xFactory->createInstance("com.sun.star.text.textfield.Input"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.textfield.Input"_ustr), uno::UNO_QUERY);
     xBody->insertTextContent(xCursor, xContent, false);
     xCursor->goLeft(1, false);
     // try to insert some random file
@@ -580,78 +580,78 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf67238)
     //making the table protected
     pWrtShell->ProtectCells();
     //checking each cell's protection, it should be protected
-    CPPUNIT_ASSERT(((rTable.GetTableBox("A1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("A2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("A3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("B1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("B2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("B3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("C1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("C2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("C3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"A1"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"A2"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"A3"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"B1"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"B2"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"B3"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"C1"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"C2"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"C3"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
     //undo the changes, make cells [un]protected
     rUndoManager.Undo();
     //checking each cell's protection, it should be [un]protected
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("A1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("A2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("A3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("B1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("B2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("B3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("C1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("C2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("C3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"A1"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"A2"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"A3"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"B1"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"B2"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"B3"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"C1"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"C2"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"C3"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
     //redo the changes, make cells protected
     rUndoManager.Redo();
     //checking each cell's protection, it should be protected
-    CPPUNIT_ASSERT(((rTable.GetTableBox("A1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("A2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("A3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("B1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("B2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("B3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("C1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("C2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("C3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"A1"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"A2"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"A3"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"B1"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"B2"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"B3"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"C1"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"C2"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"C3"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
     //moving the cursor to the starting of the document
     pWrtShell->StartOfSection();
     //making the table [un]protected
     pWrtShell->SelTable();
     pWrtShell->UnProtectCells();
     //checking each cell's protection, it should be [un]protected
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("A1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("A2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("A3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("B1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("B2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("B3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("C1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("C2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("C3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"A1"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"A2"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"A3"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"B1"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"B2"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"B3"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"C1"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"C2"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"C3"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
     //undo the changes, make cells protected
     rUndoManager.Undo();
     //checking each cell's protection, it should be protected
-    CPPUNIT_ASSERT(((rTable.GetTableBox("A1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("A2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("A3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("B1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("B2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("B3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("C1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("C2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(((rTable.GetTableBox("C3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"A1"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"A2"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"A3"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"B1"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"B2"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"B3"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"C1"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"C2"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTable.GetTableBox(u"C3"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
     //redo the changes, make cells [un]protected
     rUndoManager.Redo();
     //checking each cell's protection, it should be [un]protected
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("A1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("A2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("A3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("B1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("B2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("B3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("C1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("C2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
-    CPPUNIT_ASSERT(!((rTable.GetTableBox("C3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"A1"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"A2"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"A3"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"B1"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"B2"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"B3"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"C1"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"C2"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTable.GetTableBox(u"C3"_ustr))->GetFrameFormat()->GetProtect()).IsContentProtected());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf155685)
@@ -681,8 +681,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf147220)
     pWrtShell->Insert(u"él"_ustr);
 
     // hide and enable
-    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
-    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, {});
     CPPUNIT_ASSERT(pDoc->getIDocumentRedlineAccess().IsRedlineOn());
     CPPUNIT_ASSERT(
         IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
@@ -716,9 +716,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf135978)
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
-    pWrtShell->Insert("foobar");
+    pWrtShell->Insert(u"foobar"_ustr);
     pWrtShell->SplitNode();
-    pWrtShell->Insert("bazquux");
+    pWrtShell->Insert(u"bazquux"_ustr);
 
     CPPUNIT_ASSERT(pWrtShell->IsEndOfDoc());
 
@@ -734,8 +734,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf135978)
     pWrtShell->SttEndDoc(/*bStt=*/false);
 
     // hide and enable
-    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
-    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, {});
 
     CPPUNIT_ASSERT(pDoc->getIDocumentRedlineAccess().IsRedlineOn());
     CPPUNIT_ASSERT(
@@ -804,11 +804,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testReplaceBackward)
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
 
-    pDoc->getIDocumentContentOperations().InsertString(aPaM, "toto titi tutu");
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, u"toto titi tutu"_ustr);
     SwTextNode* pTextNode = aPaM.GetPointNode().GetTextNode();
     lcl_selectCharacters(aPaM, 9, 5);
 
-    pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, "toto", false);
+    pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, u"toto"_ustr, false);
 
     CPPUNIT_ASSERT_EQUAL(EXPECTED_REPLACE_CONTENT, pTextNode->GetText());
 
@@ -829,14 +829,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo69893)
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     SwTextNode& rEnd = dynamic_cast<SwTextNode&>(pShellCursor->End()->GetNode());
     // Selection did not include the para after table, this was "B1".
-    CPPUNIT_ASSERT_EQUAL(OUString("Para after table."), rEnd.GetText());
+    CPPUNIT_ASSERT_EQUAL(u"Para after table."_ustr, rEnd.GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo70807)
 {
     createSwDoc("fdo70807.odt");
 
-    uno::Reference<container::XIndexAccess> xStylesIter(getStyles("PageStyles"), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xStylesIter(getStyles(u"PageStyles"_ustr), uno::UNO_QUERY);
 
     for (sal_Int32 i = 0; i < xStylesIter->getCount(); ++i)
     {
@@ -866,7 +866,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testImportRTF)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->Insert("foobar");
+    pWrtShell->Insert(u"foobar"_ustr);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 3, /*bBasicCall=*/false);
 
     // Insert the RTF at the cursor position.
@@ -878,8 +878,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testImportRTF)
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, aReader.Read(*pRTFReader).GetCode());
 
     SwNodeOffset nIndex = pWrtShell->GetCursor()->GetPointNode().GetIndex();
-    CPPUNIT_ASSERT_EQUAL(OUString("fooHello world!"), pDoc->GetNodes()[nIndex - 1]->GetTextNode()->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("bar"), pDoc->GetNodes()[nIndex]->GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"fooHello world!"_ustr, pDoc->GetNodes()[nIndex - 1]->GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"bar"_ustr, pDoc->GetNodes()[nIndex]->GetTextNode()->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testExportRTF)
@@ -888,7 +888,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testExportRTF)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->Insert("aaabbbccc");
+    pWrtShell->Insert(u"aaabbbccc"_ustr);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 3, /*bBasicCall=*/false);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 3, /*bBasicCall=*/false);
 
@@ -939,9 +939,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDOCXAutoTextMultiple)
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pGlossary->GetCount());
 
     // check names of entries, sorted order
-    CPPUNIT_ASSERT_EQUAL(OUString("Anothercomplex"), pGlossary->GetLongName(0));
-    CPPUNIT_ASSERT_EQUAL(OUString("Multiple"), pGlossary->GetLongName(1));
-    CPPUNIT_ASSERT_EQUAL(OUString("Second  Autotext"), pGlossary->GetLongName(2));
+    CPPUNIT_ASSERT_EQUAL(u"Anothercomplex"_ustr, pGlossary->GetLongName(0));
+    CPPUNIT_ASSERT_EQUAL(u"Multiple"_ustr, pGlossary->GetLongName(1));
+    CPPUNIT_ASSERT_EQUAL(u"Second  Autotext"_ustr, pGlossary->GetLongName(2));
 
     // check if previously loaded content is correct (eg. doesn't contain title)
     SwDoc* pDoc = pGlossary->GetDoc();
@@ -956,7 +956,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDOCXAutoTextMultiple)
     SwNode& rNode = aStart.GetNode();
     CPPUNIT_ASSERT(rNode.IsTextNode());
     SwTextNode& rTextNode = *rNode.GetTextNode();
-    CPPUNIT_ASSERT_EQUAL(OUString("Another "), rTextNode.GetText());
+    CPPUNIT_ASSERT_EQUAL(u"Another "_ustr, rTextNode.GetText());
 
     // Make sure that autotext does not set a custom page style, leading to an unexpected page break
     // on insertion.
@@ -967,7 +967,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDOCXAutoTextMultiple)
     // last line
     SwNodeIndex aLast(*aDocEnd.GetNode().EndOfSectionNode(), -1);
     SwNode& rLastNode = aLast.GetNode();
-    CPPUNIT_ASSERT_EQUAL(OUString("complex"), rLastNode.GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"complex"_ustr, rLastNode.GetTextNode()->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDOTMAutoText)
@@ -983,7 +983,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDOTMAutoText)
     SwNodeIndex aDocEnd(pDoc->GetNodes().GetEndOfContent());
     SwNodeIndex aStart(*aDocEnd.GetNode().StartOfSectionNode(), 1);
     SwNode& rNode = aStart.GetNode();
-    CPPUNIT_ASSERT_EQUAL(OUString("paragraph"), rNode.GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"paragraph"_ustr, rNode.GetTextNode()->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDOCXAutoTextGallery)
@@ -999,7 +999,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDOCXAutoTextGallery)
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pGlossary->GetCount());
 
     // check entry name (if not contains gallery type)
-    CPPUNIT_ASSERT_EQUAL(OUString("Multiple"), pGlossary->GetLongName(0));
+    CPPUNIT_ASSERT_EQUAL(u"Multiple"_ustr, pGlossary->GetLongName(0));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkDOCX)
@@ -1015,8 +1015,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkDOCX)
     CPPUNIT_ASSERT(pWatermark);
     CPPUNIT_ASSERT_EQUAL(static_cast<unsigned short>(SID_WATERMARK), pWatermark->Which());
 
-    CPPUNIT_ASSERT_EQUAL(OUString("CustomWatermark"), pWatermark->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString("DejaVu Sans Light"), pWatermark->GetFont());
+    CPPUNIT_ASSERT_EQUAL(u"CustomWatermark"_ustr, pWatermark->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"DejaVu Sans Light"_ustr, pWatermark->GetFont());
     CPPUNIT_ASSERT_EQUAL(sal_Int16(45), pWatermark->GetAngle());
     CPPUNIT_ASSERT_EQUAL(Color(0x548dd4), pWatermark->GetColor());
     CPPUNIT_ASSERT_EQUAL(sal_Int16(50), pWatermark->GetTransparency());
@@ -1068,8 +1068,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkPosition)
 
         // 3. Insert Watermark
         SfxWatermarkItem aWatermark;
-        aWatermark.SetText("Watermark");
-        aWatermark.SetFont("DejaVu Sans");
+        aWatermark.SetText(u"Watermark"_ustr);
+        aWatermark.SetFont(u"DejaVu Sans"_ustr);
 
         pEditShell->SetWatermark(aWatermark);
 
@@ -1094,8 +1094,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkPosition)
         CPPUNIT_ASSERT_MESSAGE(aMessage.str(), nPageHeight >= rRect.Bottom());
 
         // Check if Watermark is centered
-        CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, getProperty<sal_Int16>(xShape, "HoriOrient"));
-        CPPUNIT_ASSERT_EQUAL(text::VertOrientation::CENTER, getProperty<sal_Int16>(xShape, "VertOrient"));
+        CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, getProperty<sal_Int16>(xShape, u"HoriOrient"_ustr));
+        CPPUNIT_ASSERT_EQUAL(text::VertOrientation::CENTER, getProperty<sal_Int16>(xShape, u"VertOrient"_ustr));
     }
 }
 
@@ -1105,7 +1105,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo74981)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwInputField aField(static_cast<SwInputFieldType*>(pWrtShell->GetFieldType(0, SwFieldIds::Input)), "foo", "bar", 0, 0);
+    SwInputField aField(static_cast<SwInputFieldType*>(pWrtShell->GetFieldType(0, SwFieldIds::Input)), u"foo"_ustr, u"bar"_ustr, 0, 0);
     pWrtShell->InsertField2(aField);
 
     {
@@ -1137,10 +1137,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf98512)
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwInputFieldType *const pType(static_cast<SwInputFieldType*>(
                 pWrtShell->GetFieldType(0, SwFieldIds::Input)));
-    SwInputField aField1(pType, "foo", "bar", INP_TXT, 0);
+    SwInputField aField1(pType, u"foo"_ustr, u"bar"_ustr, INP_TXT, 0);
     pWrtShell->InsertField2(aField1);
     pWrtShell->SttEndDoc(/*bStt=*/true);
-    SwInputField aField2(pType, "baz", "quux", INP_TXT, 0);
+    SwInputField aField2(pType, u"baz"_ustr, u"quux"_ustr, INP_TXT, 0);
     pWrtShell->InsertField2(aField2);
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->SetMark();
@@ -1284,11 +1284,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testShapeTextboxAutosize)
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     // 0-1 is the first UI-visible shape+textbox.
     SdrObject* pFirst = pPage->GetObj(0);
-    CPPUNIT_ASSERT_EQUAL(OUString("1st"), pFirst->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"1st"_ustr, pFirst->GetName());
 
     // 2-3 is the second UI-visible shape+textbox.
     SdrObject* pSecond = pPage->GetObj(2);
-    CPPUNIT_ASSERT_EQUAL(OUString("2nd"), pSecond->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"2nd"_ustr, pSecond->GetName());
 
     // Shape -> textbox synchronization was missing, the second shape had the
     // same height as the first, even though the first contained 1 paragraph
@@ -1338,7 +1338,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCommentedWord)
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
     uno::Reference<text::XTextContent> xField(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("word"), xField->getAnchor()->getString());
+    CPPUNIT_ASSERT_EQUAL(u"word"_ustr, xField->getAnchor()->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTextFieldGetAnchorGetTextInFooter)
@@ -1351,7 +1351,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTextFieldGetAnchorGetTextInFooter)
     uno::Reference<text::XTextContent> xField(xFields->nextElement(), uno::UNO_QUERY);
 
     OUString value = xField->getAnchor()->getText()->getString();
-    CPPUNIT_ASSERT_EQUAL(OUString("userfield_in_footer"), value );
+    CPPUNIT_ASSERT_EQUAL(u"userfield_in_footer"_ustr, value );
 }
 
 // Tests that a blank document is still blank after conversion
@@ -1460,7 +1460,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo85554)
 
     // Add a second shape to the document.
     uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShape(xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
     xShape->setSize(awt::Size(10000, 10000));
     xShape->setPosition(awt::Point(1000, 1000));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
@@ -1468,7 +1468,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo85554)
     xDrawPage->add(xShape);
 
     // Save it and load it back.
-    saveAndReload("writer8");
+    saveAndReload(u"writer8"_ustr);
 
     // This was 1, we lost a shape on export.
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
@@ -1481,7 +1481,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testMergeDoc)
 
     auto xDoc2Component(loadFromDesktop(
             createFileURL(u"merge-change2.odt"),
-            "com.sun.star.text.TextDocument"));
+            u"com.sun.star.text.TextDocument"_ustr));
     auto pxDoc2Document(
             dynamic_cast<SwXTextDocument *>(xDoc2Component.get()));
     CPPUNIT_ASSERT(pxDoc2Document);
@@ -1496,13 +1496,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testMergeDoc)
         pEditShell->AcceptRedline(0);
 
     CPPUNIT_ASSERT_EQUAL(7, getParagraphs());
-    getParagraph(1, "Para One: Two Three Four Five");
-    getParagraph(2, "Para Two: One Three Four Five");
-    getParagraph(3, "Para Three: One Two Four Five");
-    getParagraph(4, "Para Four: One Two Three Four Five");
-    getParagraph(5, "Para Six: One Three Four Five");
-    getParagraph(6, "");
-    getParagraph(7, "");
+    getParagraph(1, u"Para One: Two Three Four Five"_ustr);
+    getParagraph(2, u"Para Two: One Three Four Five"_ustr);
+    getParagraph(3, u"Para Three: One Two Four Five"_ustr);
+    getParagraph(4, u"Para Four: One Two Three Four Five"_ustr);
+    getParagraph(5, u"Para Six: One Three Four Five"_ustr);
+    getParagraph(6, u""_ustr);
+    getParagraph(7, u""_ustr);
 
     xDoc2Component->dispose();
 }
@@ -1511,7 +1511,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCreatePortions)
 {
     createSwDoc("uno-cycle.odt");
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextContent> xText(xBookmarksSupplier->getBookmarks()->getByName("Mark"), uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xText(xBookmarksSupplier->getBookmarks()->getByName(u"Mark"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xTextCursor(xText->getAnchor(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xTextCursor.is());
 
@@ -1530,7 +1530,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testBookmarkUndo)
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     SwPaM aPaM( SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1) );
 
-    pMarkAccess->makeMark(aPaM, "Mark", IDocumentMarkAccess::MarkType::BOOKMARK,
+    pMarkAccess->makeMark(aPaM, u"Mark"_ustr, IDocumentMarkAccess::MarkType::BOOKMARK,
             ::sw::mark::InsertMode::New);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
     rUndoManager.Undo();
@@ -1538,20 +1538,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testBookmarkUndo)
     rUndoManager.Redo();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
 
-    IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark("Mark");
+    IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark(u"Mark"_ustr);
     CPPUNIT_ASSERT(ppBkmk != pMarkAccess->getAllMarksEnd());
 
-    pMarkAccess->renameMark(*ppBkmk, "Mark_");
-    CPPUNIT_ASSERT(bool(pMarkAccess->findMark("Mark") == pMarkAccess->getAllMarksEnd()));
-    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark_") != pMarkAccess->getAllMarksEnd());
+    pMarkAccess->renameMark(*ppBkmk, u"Mark_"_ustr);
+    CPPUNIT_ASSERT(bool(pMarkAccess->findMark(u"Mark"_ustr) == pMarkAccess->getAllMarksEnd()));
+    CPPUNIT_ASSERT(pMarkAccess->findMark(u"Mark_"_ustr) != pMarkAccess->getAllMarksEnd());
     rUndoManager.Undo();
-    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark") != pMarkAccess->getAllMarksEnd());
-    CPPUNIT_ASSERT(bool(pMarkAccess->findMark("Mark_") == pMarkAccess->getAllMarksEnd()));
+    CPPUNIT_ASSERT(pMarkAccess->findMark(u"Mark"_ustr) != pMarkAccess->getAllMarksEnd());
+    CPPUNIT_ASSERT(bool(pMarkAccess->findMark(u"Mark_"_ustr) == pMarkAccess->getAllMarksEnd()));
     rUndoManager.Redo();
-    CPPUNIT_ASSERT(bool(pMarkAccess->findMark("Mark") == pMarkAccess->getAllMarksEnd()));
-    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark_") != pMarkAccess->getAllMarksEnd());
+    CPPUNIT_ASSERT(bool(pMarkAccess->findMark(u"Mark"_ustr) == pMarkAccess->getAllMarksEnd()));
+    CPPUNIT_ASSERT(pMarkAccess->findMark(u"Mark_"_ustr) != pMarkAccess->getAllMarksEnd());
 
-    pMarkAccess->deleteMark(pMarkAccess->findMark("Mark_"), false);
+    pMarkAccess->deleteMark(pMarkAccess->findMark(u"Mark_"_ustr), false);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
     rUndoManager.Undo();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
@@ -1565,12 +1565,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf148389_Left)
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
-    pWrtShell->Insert("foo bar baz");
+    pWrtShell->Insert(u"foo bar baz"_ustr);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 3, /*bBasicCall=*/false);
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
 
-    auto pMark = pMarkAccess->makeMark(*pWrtShell->GetCursor(), "Mark",
+    auto pMark = pMarkAccess->makeMark(*pWrtShell->GetCursor(), u"Mark"_ustr,
         IDocumentMarkAccess::MarkType::BOOKMARK, ::sw::mark::InsertMode::New);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
@@ -1628,12 +1628,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf148389_Right)
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
-    pWrtShell->Insert("foo bar baz");
+    pWrtShell->Insert(u"foo bar baz"_ustr);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 3, /*bBasicCall=*/false);
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
 
-    auto pMark = pMarkAccess->makeMark(*pWrtShell->GetCursor(), "Mark",
+    auto pMark = pMarkAccess->makeMark(*pWrtShell->GetCursor(), u"Mark"_ustr,
         IDocumentMarkAccess::MarkType::BOOKMARK, ::sw::mark::InsertMode::New);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
@@ -1719,26 +1719,26 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo85876)
     SwDoc* const pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     lcl_setWeight(pWrtShell, WEIGHT_BOLD);
-    pWrtShell->Insert("test");
+    pWrtShell->Insert(u"test"_ustr);
     lcl_setWeight(pWrtShell, WEIGHT_NORMAL);
     pWrtShell->SplitNode();
     pWrtShell->SplitNode();
     pWrtShell->Up(false);
-    pWrtShell->Insert("test");
+    pWrtShell->Insert(u"test"_ustr);
     auto xText = getParagraph(1)->getText();
     CPPUNIT_ASSERT(xText.is());
     {
         auto xCursor(xText->createTextCursorByRange(getParagraph(1)));
         CPPUNIT_ASSERT(xCursor.is());
         xCursor->collapseToStart();
-        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xCursor, "CharWeight"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xCursor, u"CharWeight"_ustr));
     }
     {
         auto xCursor(xText->createTextCursorByRange(getParagraph(2)));
         CPPUNIT_ASSERT(xCursor.is());
         xCursor->collapseToStart();
         // this used to be BOLD too with fdo#85876
-        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xCursor, "CharWeight"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xCursor, u"CharWeight"_ustr));
     }
 }
 
@@ -1747,10 +1747,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCaretPositionMovingUp)
     createSwDoc();
     SwDoc* const pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->Insert("after");
+    pWrtShell->Insert(u"after"_ustr);
     pWrtShell->InsertLineBreak();
     pWrtShell->Up(false);
-    pWrtShell->Insert("before");
+    pWrtShell->Insert(u"before"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(OUString(u"beforeAfter" + OUStringChar(CH_TXTATR_NEWLINE)), getParagraph(1)->getString());
 }
@@ -1760,11 +1760,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf93441)
     createSwDoc();
     SwDoc* const pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->Insert("Hello");
+    pWrtShell->Insert(u"Hello"_ustr);
     pWrtShell->InsertLineBreak();
-    pWrtShell->Insert("Hello World");
+    pWrtShell->Insert(u"Hello World"_ustr);
     pWrtShell->Up(false);
-    pWrtShell->Insert(" World");
+    pWrtShell->Insert(u" World"_ustr);
 
     // Without the fix in place, this test would have failed with
     // - Expected: Hello World\nHello World
@@ -1777,15 +1777,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf81226)
     createSwDoc();
     SwDoc* const pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->Insert("before");
+    pWrtShell->Insert(u"before"_ustr);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
     pWrtShell->Down(false);
-    pWrtShell->Insert("after");
+    pWrtShell->Insert(u"after"_ustr);
 
     // Without the fix in place, this test would have failed with
     // - Expected: beforeafter
     // - Actual  : beafterfore
-    CPPUNIT_ASSERT_EQUAL(OUString("beforeafter"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"beforeafter"_ustr, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf137532)
@@ -1793,7 +1793,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf137532)
     createSwDoc();
     SwDoc* const pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->Insert("test");
+    pWrtShell->Insert(u"test"_ustr);
 
     //Select the word and change it to bold
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 4, /*bBasicCall=*/false);
@@ -1802,33 +1802,33 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf137532)
     // Select first character and replace it
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
-    pWrtShell->Insert("x");
+    pWrtShell->Insert(u"x"_ustr);
 
     auto xText = getParagraph(1)->getText();
     CPPUNIT_ASSERT(xText.is());
     auto xCursor(xText->createTextCursorByRange(getRun(getParagraph(1), 1)));
 
     CPPUNIT_ASSERT(xCursor.is());
-    CPPUNIT_ASSERT_EQUAL(OUString("xest"), xCursor->getString());
-    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xCursor, "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(u"xest"_ustr, xCursor->getString());
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xCursor, u"CharWeight"_ustr));
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     xCursor.set(xText->createTextCursorByRange(getRun(getParagraph(1), 1)));
     CPPUNIT_ASSERT(xCursor.is());
-    CPPUNIT_ASSERT_EQUAL(OUString("test"), xCursor->getString());
+    CPPUNIT_ASSERT_EQUAL(u"test"_ustr, xCursor->getString());
 
     // Without the fix in place, this test would have failed in
     // - Expected: 150
     // - Actual  : 100
-    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xCursor, "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xCursor, u"CharWeight"_ustr));
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     xCursor.set(xText->createTextCursorByRange(getRun(getParagraph(1), 1)));
     CPPUNIT_ASSERT(xCursor.is());
-    CPPUNIT_ASSERT_EQUAL(OUString("test"), xCursor->getString());
-    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xCursor, "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(u"test"_ustr, xCursor->getString());
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xCursor, u"CharWeight"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo87448)
@@ -1844,7 +1844,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo87448)
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
     uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
             { "OutputStream", uno::Any(xOutputStream) },
-            { "FilterName", uno::Any(OUString("SVM")) }
+            { "FilterName", uno::Any(u"SVM"_ustr) }
         }));
     xGraphicExporter->filter(aDescriptor);
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
@@ -1875,10 +1875,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTextCursorInvalidation)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPageStyle.is());
-    xPageStyle->setPropertyValue("HeaderIsOn", uno::Any(true));
-    uno::Reference<text::XText> xHeader(getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderText"));
+    xPageStyle->setPropertyValue(u"HeaderIsOn"_ustr, uno::Any(true));
+    uno::Reference<text::XText> xHeader(getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderText"_ustr));
     CPPUNIT_ASSERT(xHeader.is());
     // create cursor inside the header text
     uno::Reference<text::XTextCursor> xCursor(xHeader->createTextCursor());
@@ -1899,7 +1899,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf68183)
     SwDoc* pDoc = getSwDoc();
     SW_MOD()->GetModuleConfig()->SetStoreRsid(false);
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->Insert2("X");
+    pWrtShell->Insert2(u"X"_ustr);
 
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
@@ -1910,7 +1910,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf68183)
     SW_MOD()->GetModuleConfig()->SetStoreRsid(true);
 
     pWrtShell->DelToStartOfLine();
-    pWrtShell->Insert2("X");
+    pWrtShell->Insert2(u"X"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(true, pTextNode->GetSwAttrSet().HasItem(RES_PARATR_RSID));
 }
@@ -1932,7 +1932,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf63214)
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
-    pWrtShell->Insert("V");
+    pWrtShell->Insert(u"V"_ustr);
     {   //limiting the lifetime of SwPaM with a nested scope
         //the shell cursor are automatically adjusted when nodes are deleted, but the shell doesn't know about an SwPaM on the stack
         IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
@@ -1940,7 +1940,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf63214)
         aPaM.SetMark();
         aPaM.Move(fnMoveForward, GoInContent);
         //Inserting a crossRefBookmark
-        pMarkAccess->makeMark(aPaM, "Bookmark",
+        pMarkAccess->makeMark(aPaM, u"Bookmark"_ustr,
             IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK,
             ::sw::mark::InsertMode::New);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
@@ -1972,7 +1972,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf51741)
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     SwPaM aPaM( SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1) );
     //Modification 1
-    pMarkAccess->makeMark(aPaM, "Mark", IDocumentMarkAccess::MarkType::BOOKMARK,
+    pMarkAccess->makeMark(aPaM, u"Mark"_ustr, IDocumentMarkAccess::MarkType::BOOKMARK,
             ::sw::mark::InsertMode::New);
     CPPUNIT_ASSERT(pWrtShell->IsModified());
     pWrtShell->ResetModified();
@@ -1987,28 +1987,28 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf51741)
     CPPUNIT_ASSERT(pWrtShell->IsModified());
     pWrtShell->ResetModified();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
-    IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark("Mark");
+    IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark(u"Mark"_ustr);
     CPPUNIT_ASSERT(ppBkmk != pMarkAccess->getAllMarksEnd());
     //Modification 4
-    pMarkAccess->renameMark(*ppBkmk, "Mark_");
+    pMarkAccess->renameMark(*ppBkmk, u"Mark_"_ustr);
     CPPUNIT_ASSERT(pWrtShell->IsModified());
     pWrtShell->ResetModified();
-    CPPUNIT_ASSERT(bool(pMarkAccess->findMark("Mark") == pMarkAccess->getAllMarksEnd()));
-    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark_") != pMarkAccess->getAllMarksEnd());
+    CPPUNIT_ASSERT(bool(pMarkAccess->findMark(u"Mark"_ustr) == pMarkAccess->getAllMarksEnd()));
+    CPPUNIT_ASSERT(pMarkAccess->findMark(u"Mark_"_ustr) != pMarkAccess->getAllMarksEnd());
     //Modification 5
     rUndoManager.Undo();
     CPPUNIT_ASSERT(pWrtShell->IsModified());
     pWrtShell->ResetModified();
-    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark") != pMarkAccess->getAllMarksEnd());
-    CPPUNIT_ASSERT(bool(pMarkAccess->findMark("Mark_") == pMarkAccess->getAllMarksEnd()));
+    CPPUNIT_ASSERT(pMarkAccess->findMark(u"Mark"_ustr) != pMarkAccess->getAllMarksEnd());
+    CPPUNIT_ASSERT(bool(pMarkAccess->findMark(u"Mark_"_ustr) == pMarkAccess->getAllMarksEnd()));
     //Modification 6
     rUndoManager.Redo();
     CPPUNIT_ASSERT(pWrtShell->IsModified());
     pWrtShell->ResetModified();
-    CPPUNIT_ASSERT(bool(pMarkAccess->findMark("Mark") == pMarkAccess->getAllMarksEnd()));
-    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark_") != pMarkAccess->getAllMarksEnd());
+    CPPUNIT_ASSERT(bool(pMarkAccess->findMark(u"Mark"_ustr) == pMarkAccess->getAllMarksEnd()));
+    CPPUNIT_ASSERT(pMarkAccess->findMark(u"Mark_"_ustr) != pMarkAccess->getAllMarksEnd());
     //Modification 7
-    pMarkAccess->deleteMark(pMarkAccess->findMark("Mark_"), false);
+    pMarkAccess->deleteMark(pMarkAccess->findMark(u"Mark_"_ustr), false);
     CPPUNIT_ASSERT(pWrtShell->IsModified());
     pWrtShell->ResetModified();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
@@ -2026,7 +2026,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf51741)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDefaultsOfOutlineNumbering)
 {
-    uno::Reference<text::XDefaultNumberingProvider> xDefNum(m_xSFactory->createInstance("com.sun.star.text.DefaultNumberingProvider"), uno::UNO_QUERY);
+    uno::Reference<text::XDefaultNumberingProvider> xDefNum(m_xSFactory->createInstance(u"com.sun.star.text.DefaultNumberingProvider"_ustr), uno::UNO_QUERY);
     css::lang::Locale alocale;
     alocale.Language = "en";
     alocale.Country = "US";
@@ -2039,11 +2039,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDefaultsOfOutlineNumbering)
         {
             uno::Any aAny = rPropVal.Value;
             if(rPropVal.Name == "Prefix" || rPropVal.Name == "Suffix" || rPropVal.Name == "Transliteration")
-                CPPUNIT_ASSERT_EQUAL(OUString("string"), aAny.getValueTypeName());
+                CPPUNIT_ASSERT_EQUAL(u"string"_ustr, aAny.getValueTypeName());
             else if(rPropVal.Name == "NumberingType")
-                CPPUNIT_ASSERT_EQUAL(OUString("short"), aAny.getValueTypeName());
+                CPPUNIT_ASSERT_EQUAL(u"short"_ustr, aAny.getValueTypeName());
             else if(rPropVal.Name == "NatNum")
-                CPPUNIT_ASSERT_EQUAL(OUString("short"), aAny.getValueTypeName());
+                CPPUNIT_ASSERT_EQUAL(u"short"_ustr, aAny.getValueTypeName());
                 //It is expected to be long but right now its short !error!
             else
                 CPPUNIT_FAIL("Property Name not matched");
@@ -2062,9 +2062,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDeleteTableRedlines)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getColumns()->getCount());
     uno::Sequence<beans::PropertyValue> aDescriptor;
-    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTable.GetTableBox("A1"))), u"TableCellInsert", aDescriptor);
-    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTable.GetTableBox("B1"))), u"TableCellInsert", aDescriptor);
-    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTable.GetTableBox("C1"))), u"TableCellInsert", aDescriptor);
+    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTable.GetTableBox(u"A1"_ustr))), u"TableCellInsert", aDescriptor);
+    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTable.GetTableBox(u"B1"_ustr))), u"TableCellInsert", aDescriptor);
+    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTable.GetTableBox(u"C1"_ustr))), u"TableCellInsert", aDescriptor);
     IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
     SwExtraRedlineTable& rExtras = rIDRA.GetExtraRedlineTable();
     rExtras.DeleteAllTableRedlines(*pDoc, rTable, false, RedlineType::Any);
@@ -2077,16 +2077,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testXFlatParagraph)
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     //Inserting some text in the document
-    pWrtShell->Insert("This is sample text");
+    pWrtShell->Insert(u"This is sample text"_ustr);
     pWrtShell->SplitNode();
-    pWrtShell->Insert("This is another sample text");
+    pWrtShell->Insert(u"This is another sample text"_ustr);
     pWrtShell->SplitNode();
-    pWrtShell->Insert("This is yet another sample text");
+    pWrtShell->Insert(u"This is yet another sample text"_ustr);
     //retrieving the XFlatParagraphs
     uno::Reference<text::XFlatParagraphIteratorProvider> xFPIP(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XFlatParagraphIterator> xFPIterator(xFPIP->getFlatParagraphIterator(sal_Int32(text::TextMarkupType::SPELLCHECK), true));
     uno::Reference<text::XFlatParagraph> xFlatPara(xFPIterator->getFirstPara());
-    CPPUNIT_ASSERT_EQUAL(OUString("This is sample text"), xFlatPara->getText());
+    CPPUNIT_ASSERT_EQUAL(u"This is sample text"_ustr, xFlatPara->getText());
     //checking modified status
     CPPUNIT_ASSERT(!xFlatPara->isModified());
     //checking "checked" status, modifying it and asserting the changes
@@ -2095,9 +2095,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testXFlatParagraph)
     CPPUNIT_ASSERT(xFlatPara->isChecked(sal_Int32(text::TextMarkupType::SPELLCHECK)));
     //getting other XFlatParagraphs and asserting their contents
     uno::Reference<text::XFlatParagraph> xFlatPara2(xFPIterator->getParaAfter(xFlatPara));
-    CPPUNIT_ASSERT_EQUAL(OUString("This is another sample text"), xFlatPara2->getText());
+    CPPUNIT_ASSERT_EQUAL(u"This is another sample text"_ustr, xFlatPara2->getText());
     uno::Reference<text::XFlatParagraph> xFlatPara3(xFPIterator->getParaAfter(xFlatPara2));
-    CPPUNIT_ASSERT_EQUAL(OUString("This is yet another sample text"), xFlatPara3->getText());
+    CPPUNIT_ASSERT_EQUAL(u"This is yet another sample text"_ustr, xFlatPara3->getText());
     uno::Reference<text::XFlatParagraph> xFlatPara4(xFPIterator->getParaBefore(xFlatPara3));
     CPPUNIT_ASSERT_EQUAL(xFlatPara2->getText(), xFlatPara4->getText());
     //changing the attributes of last para
@@ -2110,17 +2110,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testXFlatParagraph)
     CPPUNIT_ASSERT(!aLangPortions.hasElements());
     //examining Language of text
     css::lang::Locale alocale = xFlatPara4->getLanguageOfText(sal_Int32(0), sal_Int32(4));
-    CPPUNIT_ASSERT_EQUAL(OUString("en"), alocale.Language);
-    CPPUNIT_ASSERT_EQUAL(OUString("US"), alocale.Country);
+    CPPUNIT_ASSERT_EQUAL(u"en"_ustr, alocale.Language);
+    CPPUNIT_ASSERT_EQUAL(u"US"_ustr, alocale.Country);
     //examining Primary Language of text
     css::lang::Locale aprimarylocale = xFlatPara4->getPrimaryLanguageOfText(sal_Int32(0), sal_Int32(20));
-    CPPUNIT_ASSERT_EQUAL(OUString("en"), aprimarylocale.Language);
-    CPPUNIT_ASSERT_EQUAL(OUString("US"), aprimarylocale.Country);
+    CPPUNIT_ASSERT_EQUAL(u"en"_ustr, aprimarylocale.Language);
+    CPPUNIT_ASSERT_EQUAL(u"US"_ustr, aprimarylocale.Country);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf81995)
 {
-    uno::Reference<text::XDefaultNumberingProvider> xDefNum(m_xSFactory->createInstance("com.sun.star.text.DefaultNumberingProvider"), uno::UNO_QUERY);
+    uno::Reference<text::XDefaultNumberingProvider> xDefNum(m_xSFactory->createInstance(u"com.sun.star.text.DefaultNumberingProvider"_ustr), uno::UNO_QUERY);
     css::lang::Locale alocale;
     alocale.Language = "en";
     alocale.Country = "US";
@@ -2138,11 +2138,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf81995)
             {
                 uno::Any aAny = rProp.Value;
                 if(rProp.Name == "Prefix" || rProp.Name == "Suffix" || rProp.Name == "BulletChar" || rProp.Name == "BulletFontName" || rProp.Name == "Transliteration")
-                    CPPUNIT_ASSERT_EQUAL(OUString("string"), aAny.getValueTypeName());
+                    CPPUNIT_ASSERT_EQUAL(u"string"_ustr, aAny.getValueTypeName());
                 else if(rProp.Name == "NumberingType" || rProp.Name == "ParentNumbering" || rProp.Name == "Adjust")
-                    CPPUNIT_ASSERT_EQUAL(OUString("short"), aAny.getValueTypeName());
+                    CPPUNIT_ASSERT_EQUAL(u"short"_ustr, aAny.getValueTypeName());
                 else if(rProp.Name == "LeftMargin" || rProp.Name == "SymbolTextDistance" || rProp.Name == "FirstLineOffset" || rProp.Name == "NatNum")
-                    CPPUNIT_ASSERT_EQUAL(OUString("long"), aAny.getValueTypeName());
+                    CPPUNIT_ASSERT_EQUAL(u"long"_ustr, aAny.getValueTypeName());
                 else
                     CPPUNIT_FAIL("Property Name not matched");
             }

@@ -56,7 +56,7 @@ class SwUiWriterTest9 : public SwModelTestBase
 {
 public:
     SwUiWriterTest9()
-        : SwModelTestBase("/sw/qa/extras/uiwriter/data/")
+        : SwModelTestBase(u"/sw/qa/extras/uiwriter/data/"_ustr)
     {
     }
 };
@@ -108,7 +108,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158785)
     CPPUNIT_ASSERT_EQUAL(IsAttrAtPos::InetAttr, aContentAtPos.eContentAtPos);
 
     // Remove the hyperlink
-    dispatchCommand(mxComponent, ".uno:RemoveHyperlink", {});
+    dispatchCommand(mxComponent, u".uno:RemoveHyperlink"_ustr, {});
 
     // The test: was the hyperlink actually removed?
     aContentAtPos = IsAttrAtPos::InetAttr;
@@ -217,8 +217,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159049)
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
     // Copy text
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // Deactivate text edit mode ...
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_ESCAPE);
@@ -232,7 +232,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159049)
     // Paste special as RTF
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } }));
-    dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aArgs);
+    dispatchCommand(mxComponent, u".uno:ClipboardFormatItems"_ustr, aArgs);
     // Without fix Actual was "Abreakhere", the line break \n was missing.
     CPPUNIT_ASSERT_EQUAL(u"Abreak\nhere"_ustr, getParagraph(1)->getString());
 }
@@ -248,7 +248,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf135083)
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         { { u"SelectedFormat"_ustr,
             uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } }));
-    dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aArgs);
+    dispatchCommand(mxComponent, u".uno:ClipboardFormatItems"_ustr, aArgs);
 
     auto xLastPara = getParagraph(3);
     CPPUNIT_ASSERT_EQUAL(u"dolor"_ustr, xLastPara->getString());
@@ -269,7 +269,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenSectionsAroundPageBreak)
 
     // Make sure that the page style is set correctly
     xCursor->jumpToFirstPage();
-    CPPUNIT_ASSERT_EQUAL(u"Landscape"_ustr, getProperty<OUString>(xCursor, "PageStyleName"));
+    CPPUNIT_ASSERT_EQUAL(u"Landscape"_ustr, getProperty<OUString>(xCursor, u"PageStyleName"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159565)
@@ -309,7 +309,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159816)
 
     // Add a bookmark at the very end
     IDocumentMarkAccess& rIDMA(*pDoc->getIDocumentMarkAccess());
-    rIDMA.makeMark(*pWrtShell->GetCursor(), "Mark", IDocumentMarkAccess::MarkType::BOOKMARK,
+    rIDMA.makeMark(*pWrtShell->GetCursor(), u"Mark"_ustr, IDocumentMarkAccess::MarkType::BOOKMARK,
                    sw::mark::InsertMode::New);
 
     // Get coordinates of the end point in the document
@@ -352,24 +352,24 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
 
     // Insert some text to work with
     uno::Sequence<beans::PropertyValue> aArgsInsert(
-        comphelper::InitPropertySequence({ { "Text", uno::Any(OUString("abcd")) } }));
-    dispatchCommand(mxComponent, ".uno:InsertText", aArgsInsert);
-    CPPUNIT_ASSERT_EQUAL(OUString("abcd"), pTextDoc->getText()->getString());
+        comphelper::InitPropertySequence({ { "Text", uno::Any(u"abcd"_ustr) } }));
+    dispatchCommand(mxComponent, u".uno:InsertText"_ustr, aArgsInsert);
+    CPPUNIT_ASSERT_EQUAL(u"abcd"_ustr, pTextDoc->getText()->getString());
 
     // Successfully enclose the text; afterwards the selection should exist with the new
     // enclosed text
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '(', 0);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(OUString("(abcd)"), pTextDoc->getText()->getString());
+    CPPUNIT_ASSERT_EQUAL(u"(abcd)"_ustr, pTextDoc->getText()->getString());
 
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '[', 0);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(OUString("[(abcd)]"), pTextDoc->getText()->getString());
+    CPPUNIT_ASSERT_EQUAL(u"[(abcd)]"_ustr, pTextDoc->getText()->getString());
 
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '{', 0);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(OUString("{[(abcd)]}"), pTextDoc->getText()->getString());
+    CPPUNIT_ASSERT_EQUAL(u"{[(abcd)]}"_ustr, pTextDoc->getText()->getString());
 
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '\'', 0);
     Scheduler::ProcessEventsToIdle();
@@ -388,24 +388,24 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
 
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '(', 0);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(OUString("("), pTextDoc->getText()->getString());
+    CPPUNIT_ASSERT_EQUAL(u"("_ustr, pTextDoc->getText()->getString());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '[', 0);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(OUString("["), pTextDoc->getText()->getString());
+    CPPUNIT_ASSERT_EQUAL(u"["_ustr, pTextDoc->getText()->getString());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '{', 0);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(OUString("{"), pTextDoc->getText()->getString());
+    CPPUNIT_ASSERT_EQUAL(u"{"_ustr, pTextDoc->getText()->getString());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '\'', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(sStartSingleQuote, pTextDoc->getText()->getString());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '\"', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(sStartDoubleQuote, pTextDoc->getText()->getString());
@@ -417,41 +417,41 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159054_disableOutlineNumbering)
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
-    const uno::Reference<text::XTextRange> xPara1 = getParagraph(1, "Heading A");
-    const uno::Reference<text::XTextRange> xPara2 = getParagraph(2, "Heading B");
-    const uno::Reference<text::XTextRange> xPara3 = getParagraph(3, "Heading C");
+    const uno::Reference<text::XTextRange> xPara1 = getParagraph(1, u"Heading A"_ustr);
+    const uno::Reference<text::XTextRange> xPara2 = getParagraph(2, u"Heading B"_ustr);
+    const uno::Reference<text::XTextRange> xPara3 = getParagraph(3, u"Heading C"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("A."), getProperty<OUString>(xPara1, "ListLabelString"));
-    CPPUNIT_ASSERT_EQUAL(OUString("B."), getProperty<OUString>(xPara2, "ListLabelString"));
-    CPPUNIT_ASSERT_EQUAL(OUString("C."), getProperty<OUString>(xPara3, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u"A."_ustr, getProperty<OUString>(xPara1, u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"B."_ustr, getProperty<OUString>(xPara2, u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"C."_ustr, getProperty<OUString>(xPara3, u"ListLabelString"_ustr));
 
     // select (at least parts) of the first two paragraphs
     pWrtShell->Down(/*bSelect=*/true, /*nCount=*/1, /*bBasicCall=*/true);
 
     // on the selection, simulate pressing the toolbar button to toggle OFF numbering
-    dispatchCommand(mxComponent, ".uno:DefaultNumbering", {});
+    dispatchCommand(mxComponent, u".uno:DefaultNumbering"_ustr, {});
 
     // the selected paragraphs should definitely have the list label removed
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara1, "ListLabelString"));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara2, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xPara1, u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xPara2, u"ListLabelString"_ustr));
     // the third paragraph must retain the existing numbering format
-    CPPUNIT_ASSERT_EQUAL(OUString("A."), getProperty<OUString>(xPara3, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u"A."_ustr, getProperty<OUString>(xPara3, u"ListLabelString"_ustr));
 
     // on the selection, simulate pressing the toolbar button to toggle ON numbering again
-    dispatchCommand(mxComponent, ".uno:DefaultNumbering", {});
+    dispatchCommand(mxComponent, u".uno:DefaultNumbering"_ustr, {});
 
     // the outline numbering format must be re-applied to the first two paragraphs
-    CPPUNIT_ASSERT_EQUAL(OUString("A."), getProperty<OUString>(xPara1, "ListLabelString"));
-    CPPUNIT_ASSERT_EQUAL(OUString("B."), getProperty<OUString>(xPara2, "ListLabelString"));
-    CPPUNIT_ASSERT_EQUAL(OUString("C."), getProperty<OUString>(xPara3, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u"A."_ustr, getProperty<OUString>(xPara1, u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"B."_ustr, getProperty<OUString>(xPara2, u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"C."_ustr, getProperty<OUString>(xPara3, u"ListLabelString"_ustr));
 
     // on the selection, simulate a right click - list - No list
-    dispatchCommand(mxComponent, ".uno:RemoveBullets", {});
+    dispatchCommand(mxComponent, u".uno:RemoveBullets"_ustr, {});
 
     // the selected paragraphs should definitely have the list label removed
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara1, "ListLabelString"));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara2, "ListLabelString"));
-    CPPUNIT_ASSERT_EQUAL(OUString("A."), getProperty<OUString>(xPara3, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xPara1, u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xPara2, u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"A."_ustr, getProperty<OUString>(xPara3, u"ListLabelString"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158375_dde_disable)
@@ -471,7 +471,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158375_dde_disable)
     SwDoc* pDoc = getSwDoc();
 
     // force the AppName to enable DDE, it is not there for test runs
-    Application::SetAppName("soffice");
+    Application::SetAppName(u"soffice"_ustr);
 
     // temp copy for the file that will be used as a reference for DDE link
     // this file includes a section named "Section1" with text inside
@@ -484,13 +484,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158375_dde_disable)
     // create a section with DDE link
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTextSectionProps(
-        xFactory->createInstance("com.sun.star.text.TextSection"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.TextSection"_ustr), uno::UNO_QUERY);
 
-    uno::Sequence<OUString> aNames{ "DDECommandFile", "DDECommandType", "DDECommandElement",
-                                    "IsAutomaticUpdate", "IsProtected" };
-    uno::Sequence<uno::Any> aValues{ uno::Any(OUString{ "soffice" }), uno::Any(maTempFile.GetURL()),
-                                     uno::Any(OUString{ "Section1" }), uno::Any(true),
-                                     uno::Any(true) };
+    uno::Sequence<OUString> aNames{ u"DDECommandFile"_ustr, u"DDECommandType"_ustr,
+                                    u"DDECommandElement"_ustr, u"IsAutomaticUpdate"_ustr,
+                                    u"IsProtected"_ustr };
+    uno::Sequence<uno::Any> aValues{ uno::Any(u"soffice"_ustr), uno::Any(maTempFile.GetURL()),
+                                     uno::Any(u"Section1"_ustr), uno::Any(true), uno::Any(true) };
     uno::Reference<beans::XMultiPropertySet> rMultiPropSet(xTextSectionProps, uno::UNO_QUERY);
     rMultiPropSet->setPropertyValues(aNames, aValues);
 
@@ -514,7 +514,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158375_dde_disable)
 
     // make sure there's no text in the section after UpdateAllLinks, since
     // DisableActiveContent disables DDE links.
-    CPPUNIT_ASSERT_EQUAL(OUString(""), xSection->getAnchor()->getString());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, xSection->getAnchor()->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158375_ole_object_disable)
@@ -575,7 +575,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf146190)
 
     // Then go to "Shape 1" drawing object using the GotoDrawingObject function:
     pWrtShell->GotoDrawingObject(u"Shape 1");
-    CPPUNIT_ASSERT_EQUAL(OUString("Shape 1"), rMrkList.GetMark(0)->GetMarkedSdrObj()->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"Shape 1"_ustr, rMrkList.GetMark(0)->GetMarkedSdrObj()->GetName());
 
     // Move to the next drawing object by Tab key press:
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
@@ -585,12 +585,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf146190)
     // - Expected: Shape 2
     // - Actual  : Shape 1
     // i.e. Tab did not move to the next drawing object
-    CPPUNIT_ASSERT_EQUAL(OUString("Shape 2"), rMrkList.GetMark(0)->GetMarkedSdrObj()->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"Shape 2"_ustr, rMrkList.GetMark(0)->GetMarkedSdrObj()->GetName());
 
     // Tab key press should now select 'Shape 1':
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(OUString("Shape 1"), rMrkList.GetMark(0)->GetMarkedSdrObj()->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"Shape 1"_ustr, rMrkList.GetMark(0)->GetMarkedSdrObj()->GetName());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf160898)

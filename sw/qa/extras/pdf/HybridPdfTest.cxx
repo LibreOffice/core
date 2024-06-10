@@ -17,7 +17,7 @@ class HybridPdfTest : public SwModelTestBase
 {
 public:
     HybridPdfTest()
-        : SwModelTestBase("/sw/qa/extras/pdf/data/")
+        : SwModelTestBase(u"/sw/qa/extras/pdf/data/"_ustr)
     {
     }
 
@@ -39,7 +39,7 @@ void HybridPdfTest::testNoHybridDataInPDF()
     CPPUNIT_ASSERT(mxComponent.is());
     uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
     // Draw document is expected in this case - default when importing PDF
-    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument"));
+    CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.drawing.DrawingDocument"_ustr));
 }
 
 void HybridPdfTest::testHybridWithAdditionalStreams()
@@ -52,7 +52,7 @@ void HybridPdfTest::testHybridWithAdditionalStreams()
 
     // We can access the document text in a single paragraph that spans multiple rows
     // This wouldn't be possible with a PDF, so the opened document has to be ODT
-    CPPUNIT_ASSERT_EQUAL(OUString("He heard quiet steps behind him. \nThat didn't bode well."),
+    CPPUNIT_ASSERT_EQUAL(u"He heard quiet steps behind him. \nThat didn't bode well."_ustr,
                          getParagraph(1)->getString());
 }
 
@@ -67,7 +67,7 @@ void HybridPdfTest::testHybridWithAdditionalStreamsAndAttachedFile()
 
     // We can access the document text in a single paragraph that spans multiple rows
     // This wouldn't be possible with a PDF, so the opened document has to be ODT
-    CPPUNIT_ASSERT_EQUAL(OUString("He heard quiet steps behind him. \nThat didn't bode well."),
+    CPPUNIT_ASSERT_EQUAL(u"He heard quiet steps behind him. \nThat didn't bode well."_ustr,
                          getParagraph(1)->getString());
 }
 

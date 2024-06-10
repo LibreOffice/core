@@ -23,7 +23,7 @@ class TxtImportTest : public SwModelTestBase
 {
 public:
     TxtImportTest()
-        : SwModelTestBase("/sw/qa/extras/txtimport/data/", "Text")
+        : SwModelTestBase(u"/sw/qa/extras/txtimport/data/"_ustr, u"Text"_ustr)
     {
     }
 
@@ -176,21 +176,21 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf115088)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->Insert("1");
+    pWrtShell->Insert(u"1"_ustr);
     pWrtShell->SplitNode();
-    pWrtShell->Insert("1");
+    pWrtShell->Insert(u"1"_ustr);
 
     pWrtShell->SelAll();
-    dispatchCommand(mxComponent, ".uno:Cut", {});
-    pWrtShell->Insert("test");
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
+    pWrtShell->Insert(u"test"_ustr);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
-    dispatchCommand(mxComponent, ".uno:PasteUnformatted", {});
+    dispatchCommand(mxComponent, u".uno:PasteUnformatted"_ustr, {});
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     OUString aActual = xTextDocument->getText()->getString().copy(0, 2);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1\n
     // - Actual  : 1t
-    CPPUNIT_ASSERT_EQUAL(OUString("1\n"), aActual.replaceAll("\r", "\n"));
+    CPPUNIT_ASSERT_EQUAL(u"1\n"_ustr, aActual.replaceAll("\r", "\n"));
 }
 
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf70423)
@@ -214,7 +214,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf70423)
     OUString aResStr = s.makeStringAndClear();
     pWrtShell->Insert(aResStr);
 
-    saveAndReload("Text"); //Reloading the file again
+    saveAndReload(u"Text"_ustr); //Reloading the file again
 
     // Without the fix, this test would have failed with:
     // - Expected: 1

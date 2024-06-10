@@ -33,7 +33,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text")
+        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, u"Office Open XML Text"_ustr)
     {
     }
 };
@@ -43,253 +43,276 @@ DECLARE_OOXMLEXPORT_TEST(testTdf158597, "tdf158597.docx")
     // test with 2 properties: font size, italic (toggle)
     {
         uno::Reference<text::XTextRange> xParagraph(getParagraph(1));
-        CPPUNIT_ASSERT_EQUAL(OUString("No style"), xParagraph->getString());
+        CPPUNIT_ASSERT_EQUAL(u"No style"_ustr, xParagraph->getString());
         uno::Reference<beans::XPropertySet> xProps(xParagraph, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("List Paragraph"),
-                             getProperty<OUString>(xProps, "ParaStyleName"));
+        CPPUNIT_ASSERT_EQUAL(u"List Paragraph"_ustr,
+                             getProperty<OUString>(xProps, u"ParaStyleName"_ustr));
         uno::Reference<text::XTextRange> xRun(getRun(xParagraph, 1));
-        CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xRun, "CharStyleName"));
-        CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(xRun, "CharHeight"));
-        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xRun, "CharPosture"));
-        CPPUNIT_ASSERT(!xProps->getPropertyValue("ListAutoFormat").hasValue());
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xRun, u"CharStyleName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(xRun, u"CharHeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xRun, u"CharPosture"_ustr));
+        CPPUNIT_ASSERT(!xProps->getPropertyValue(u"ListAutoFormat"_ustr).hasValue());
     }
     {
         uno::Reference<text::XTextRange> xParagraph(getParagraph(2));
-        CPPUNIT_ASSERT_EQUAL(OUString("Char style mark"), xParagraph->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Char style mark"_ustr, xParagraph->getString());
         uno::Reference<beans::XPropertySet> xProps(xParagraph, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("List Paragraph"),
-                             getProperty<OUString>(xProps, "ParaStyleName"));
+        CPPUNIT_ASSERT_EQUAL(u"List Paragraph"_ustr,
+                             getProperty<OUString>(xProps, u"ParaStyleName"_ustr));
         uno::Reference<text::XTextRange> xRun(getRun(xParagraph, 1));
-        CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xRun, "CharStyleName"));
-        CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(xRun, "CharHeight"));
-        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xRun, "CharPosture"));
-        comphelper::SequenceAsHashMap listAutoFormat(xProps->getPropertyValue("ListAutoFormat"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"), listAutoFormat["CharStyleName"].get<OUString>());
-        CPPUNIT_ASSERT(!listAutoFormat["CharHeight"].hasValue());
-        CPPUNIT_ASSERT(!listAutoFormat["CharPosture"].hasValue());
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xRun, u"CharStyleName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(xRun, u"CharHeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xRun, u"CharPosture"_ustr));
+        comphelper::SequenceAsHashMap listAutoFormat(
+            xProps->getPropertyValue(u"ListAutoFormat"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Emphasis"_ustr,
+                             listAutoFormat[u"CharStyleName"_ustr].get<OUString>());
+        CPPUNIT_ASSERT(!listAutoFormat[u"CharHeight"_ustr].hasValue());
+        CPPUNIT_ASSERT(!listAutoFormat[u"CharPosture"_ustr].hasValue());
     }
     {
         uno::Reference<text::XTextRange> xParagraph(getParagraph(3));
-        CPPUNIT_ASSERT_EQUAL(OUString("Char style mark and text"), xParagraph->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Char style mark and text"_ustr, xParagraph->getString());
         uno::Reference<beans::XPropertySet> xProps(xParagraph, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("List Paragraph"),
-                             getProperty<OUString>(xProps, "ParaStyleName"));
+        CPPUNIT_ASSERT_EQUAL(u"List Paragraph"_ustr,
+                             getProperty<OUString>(xProps, u"ParaStyleName"_ustr));
         uno::Reference<text::XTextRange> xRun(getRun(xParagraph, 1));
-        CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"), getProperty<OUString>(xRun, "CharStyleName"));
-        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, "CharHeight"));
+        CPPUNIT_ASSERT_EQUAL(u"Emphasis"_ustr, getProperty<OUString>(xRun, u"CharStyleName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, u"CharHeight"_ustr));
         CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
-                             getProperty<awt::FontSlant>(xRun, "CharPosture"));
-        comphelper::SequenceAsHashMap listAutoFormat(xProps->getPropertyValue("ListAutoFormat"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"), listAutoFormat["CharStyleName"].get<OUString>());
-        CPPUNIT_ASSERT(!listAutoFormat["CharHeight"].hasValue());
-        CPPUNIT_ASSERT(!listAutoFormat["CharPosture"].hasValue());
+                             getProperty<awt::FontSlant>(xRun, u"CharPosture"_ustr));
+        comphelper::SequenceAsHashMap listAutoFormat(
+            xProps->getPropertyValue(u"ListAutoFormat"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Emphasis"_ustr,
+                             listAutoFormat[u"CharStyleName"_ustr].get<OUString>());
+        CPPUNIT_ASSERT(!listAutoFormat[u"CharHeight"_ustr].hasValue());
+        CPPUNIT_ASSERT(!listAutoFormat[u"CharPosture"_ustr].hasValue());
     }
     {
         uno::Reference<text::XTextRange> xParagraph(getParagraph(4));
-        CPPUNIT_ASSERT_EQUAL(OUString("Char style text"), xParagraph->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Char style text"_ustr, xParagraph->getString());
         uno::Reference<beans::XPropertySet> xProps(xParagraph, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("List Paragraph"),
-                             getProperty<OUString>(xProps, "ParaStyleName"));
+        CPPUNIT_ASSERT_EQUAL(u"List Paragraph"_ustr,
+                             getProperty<OUString>(xProps, u"ParaStyleName"_ustr));
         uno::Reference<text::XTextRange> xRun(getRun(xParagraph, 1));
-        CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"), getProperty<OUString>(xRun, "CharStyleName"));
-        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, "CharHeight"));
+        CPPUNIT_ASSERT_EQUAL(u"Emphasis"_ustr, getProperty<OUString>(xRun, u"CharStyleName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, u"CharHeight"_ustr));
         CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
-                             getProperty<awt::FontSlant>(xRun, "CharPosture"));
-        CPPUNIT_ASSERT(!xProps->getPropertyValue("ListAutoFormat").hasValue());
+                             getProperty<awt::FontSlant>(xRun, u"CharPosture"_ustr));
+        CPPUNIT_ASSERT(!xProps->getPropertyValue(u"ListAutoFormat"_ustr).hasValue());
     }
 
     {
         uno::Reference<text::XTextRange> xParagraph(getParagraph(5));
-        CPPUNIT_ASSERT_EQUAL(OUString("Para style"), xParagraph->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Para style"_ustr, xParagraph->getString());
         uno::Reference<beans::XPropertySet> xProps(xParagraph, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("List Paragraph E"),
-                             getProperty<OUString>(xProps, "ParaStyleName"));
+        CPPUNIT_ASSERT_EQUAL(u"List Paragraph E"_ustr,
+                             getProperty<OUString>(xProps, u"ParaStyleName"_ustr));
         uno::Reference<text::XTextRange> xRun(getRun(xParagraph, 1));
-        CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xRun, "CharStyleName"));
-        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, "CharHeight"));
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xRun, u"CharStyleName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, u"CharHeight"_ustr));
         CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
-                             getProperty<awt::FontSlant>(xRun, "CharPosture"));
-        CPPUNIT_ASSERT(!xProps->getPropertyValue("ListAutoFormat").hasValue());
+                             getProperty<awt::FontSlant>(xRun, u"CharPosture"_ustr));
+        CPPUNIT_ASSERT(!xProps->getPropertyValue(u"ListAutoFormat"_ustr).hasValue());
     }
     {
         uno::Reference<text::XTextRange> xParagraph(getParagraph(6));
-        CPPUNIT_ASSERT_EQUAL(OUString("Para style + Char style mark"), xParagraph->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Para style + Char style mark"_ustr, xParagraph->getString());
         uno::Reference<beans::XPropertySet> xProps(xParagraph, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("List Paragraph E"),
-                             getProperty<OUString>(xProps, "ParaStyleName"));
+        CPPUNIT_ASSERT_EQUAL(u"List Paragraph E"_ustr,
+                             getProperty<OUString>(xProps, u"ParaStyleName"_ustr));
         uno::Reference<text::XTextRange> xRun(getRun(xParagraph, 1));
-        CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xRun, "CharStyleName"));
-        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, "CharHeight"));
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xRun, u"CharStyleName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, u"CharHeight"_ustr));
         CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
-                             getProperty<awt::FontSlant>(xRun, "CharPosture"));
-        comphelper::SequenceAsHashMap listAutoFormat(xProps->getPropertyValue("ListAutoFormat"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"), listAutoFormat["CharStyleName"].get<OUString>());
-        CPPUNIT_ASSERT(!listAutoFormat["CharHeight"].hasValue());
+                             getProperty<awt::FontSlant>(xRun, u"CharPosture"_ustr));
+        comphelper::SequenceAsHashMap listAutoFormat(
+            xProps->getPropertyValue(u"ListAutoFormat"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Emphasis"_ustr,
+                             listAutoFormat[u"CharStyleName"_ustr].get<OUString>());
+        CPPUNIT_ASSERT(!listAutoFormat[u"CharHeight"_ustr].hasValue());
         // bug was that here the toggle property was not overwritten
         CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
-                             listAutoFormat["CharPosture"].get<awt::FontSlant>());
+                             listAutoFormat[u"CharPosture"_ustr].get<awt::FontSlant>());
     }
     {
         uno::Reference<text::XTextRange> xParagraph(getParagraph(7));
-        CPPUNIT_ASSERT_EQUAL(OUString("Para style + Char style mark and text"),
+        CPPUNIT_ASSERT_EQUAL(u"Para style + Char style mark and text"_ustr,
                              xParagraph->getString());
         uno::Reference<beans::XPropertySet> xProps(xParagraph, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("List Paragraph E"),
-                             getProperty<OUString>(xProps, "ParaStyleName"));
+        CPPUNIT_ASSERT_EQUAL(u"List Paragraph E"_ustr,
+                             getProperty<OUString>(xProps, u"ParaStyleName"_ustr));
         uno::Reference<text::XTextRange> xRun(getRun(xParagraph, 1));
-        CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"), getProperty<OUString>(xRun, "CharStyleName"));
-        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, "CharHeight"));
-        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xRun, "CharPosture"));
-        comphelper::SequenceAsHashMap listAutoFormat(xProps->getPropertyValue("ListAutoFormat"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"), listAutoFormat["CharStyleName"].get<OUString>());
-        CPPUNIT_ASSERT(!listAutoFormat["CharHeight"].hasValue());
+        CPPUNIT_ASSERT_EQUAL(u"Emphasis"_ustr, getProperty<OUString>(xRun, u"CharStyleName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, u"CharHeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xRun, u"CharPosture"_ustr));
+        comphelper::SequenceAsHashMap listAutoFormat(
+            xProps->getPropertyValue(u"ListAutoFormat"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Emphasis"_ustr,
+                             listAutoFormat[u"CharStyleName"_ustr].get<OUString>());
+        CPPUNIT_ASSERT(!listAutoFormat[u"CharHeight"_ustr].hasValue());
         // bug was that here the toggle property was not overwritten
         CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
-                             listAutoFormat["CharPosture"].get<awt::FontSlant>());
+                             listAutoFormat[u"CharPosture"_ustr].get<awt::FontSlant>());
     }
     {
         uno::Reference<text::XTextRange> xParagraph(getParagraph(8));
-        CPPUNIT_ASSERT_EQUAL(OUString("Para style + Char style text"), xParagraph->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Para style + Char style text"_ustr, xParagraph->getString());
         uno::Reference<beans::XPropertySet> xProps(xParagraph, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("List Paragraph E"),
-                             getProperty<OUString>(xProps, "ParaStyleName"));
+        CPPUNIT_ASSERT_EQUAL(u"List Paragraph E"_ustr,
+                             getProperty<OUString>(xProps, u"ParaStyleName"_ustr));
         uno::Reference<text::XTextRange> xRun(getRun(xParagraph, 1));
-        CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"), getProperty<OUString>(xRun, "CharStyleName"));
-        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, "CharHeight"));
-        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xRun, "CharPosture"));
-        CPPUNIT_ASSERT(!xProps->getPropertyValue("ListAutoFormat").hasValue());
+        CPPUNIT_ASSERT_EQUAL(u"Emphasis"_ustr, getProperty<OUString>(xRun, u"CharStyleName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, u"CharHeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xRun, u"CharPosture"_ustr));
+        CPPUNIT_ASSERT(!xProps->getPropertyValue(u"ListAutoFormat"_ustr).hasValue());
     }
 
     {
         uno::Reference<text::XTextRange> xParagraph(getParagraph(9));
-        CPPUNIT_ASSERT_EQUAL(OUString("No style + direct mark"), xParagraph->getString());
+        CPPUNIT_ASSERT_EQUAL(u"No style + direct mark"_ustr, xParagraph->getString());
         uno::Reference<beans::XPropertySet> xProps(xParagraph, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("List Paragraph"),
-                             getProperty<OUString>(xProps, "ParaStyleName"));
+        CPPUNIT_ASSERT_EQUAL(u"List Paragraph"_ustr,
+                             getProperty<OUString>(xProps, u"ParaStyleName"_ustr));
         uno::Reference<text::XTextRange> xRun(getRun(xParagraph, 1));
-        CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xRun, "CharStyleName"));
-        CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(xRun, "CharHeight"));
-        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xRun, "CharPosture"));
-        comphelper::SequenceAsHashMap listAutoFormat(xProps->getPropertyValue("ListAutoFormat"));
-        CPPUNIT_ASSERT(!listAutoFormat["CharStyleName"].hasValue());
-        CPPUNIT_ASSERT_EQUAL(16.f, listAutoFormat["CharHeight"].get<float>());
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xRun, u"CharStyleName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(xRun, u"CharHeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xRun, u"CharPosture"_ustr));
+        comphelper::SequenceAsHashMap listAutoFormat(
+            xProps->getPropertyValue(u"ListAutoFormat"_ustr));
+        CPPUNIT_ASSERT(!listAutoFormat[u"CharStyleName"_ustr].hasValue());
+        CPPUNIT_ASSERT_EQUAL(16.f, listAutoFormat[u"CharHeight"_ustr].get<float>());
         CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
-                             listAutoFormat["CharPosture"].get<awt::FontSlant>());
+                             listAutoFormat[u"CharPosture"_ustr].get<awt::FontSlant>());
     }
     {
         uno::Reference<text::XTextRange> xParagraph(getParagraph(10));
-        CPPUNIT_ASSERT_EQUAL(OUString("Char style + direct mark"), xParagraph->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Char style + direct mark"_ustr, xParagraph->getString());
         uno::Reference<beans::XPropertySet> xProps(xParagraph, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("List Paragraph"),
-                             getProperty<OUString>(xProps, "ParaStyleName"));
+        CPPUNIT_ASSERT_EQUAL(u"List Paragraph"_ustr,
+                             getProperty<OUString>(xProps, u"ParaStyleName"_ustr));
         uno::Reference<text::XTextRange> xRun(getRun(xParagraph, 1));
-        CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xRun, "CharStyleName"));
-        CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(xRun, "CharHeight"));
-        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xRun, "CharPosture"));
-        comphelper::SequenceAsHashMap listAutoFormat(xProps->getPropertyValue("ListAutoFormat"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"), listAutoFormat["CharStyleName"].get<OUString>());
-        CPPUNIT_ASSERT_EQUAL(16.f, listAutoFormat["CharHeight"].get<float>());
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xRun, u"CharStyleName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(xRun, u"CharHeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xRun, u"CharPosture"_ustr));
+        comphelper::SequenceAsHashMap listAutoFormat(
+            xProps->getPropertyValue(u"ListAutoFormat"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Emphasis"_ustr,
+                             listAutoFormat[u"CharStyleName"_ustr].get<OUString>());
+        CPPUNIT_ASSERT_EQUAL(16.f, listAutoFormat[u"CharHeight"_ustr].get<float>());
         CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
-                             listAutoFormat["CharPosture"].get<awt::FontSlant>());
+                             listAutoFormat[u"CharPosture"_ustr].get<awt::FontSlant>());
     }
     {
         uno::Reference<text::XTextRange> xParagraph(getParagraph(11));
-        CPPUNIT_ASSERT_EQUAL(OUString("Char style + direct mark and text"),
-                             xParagraph->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Char style + direct mark and text"_ustr, xParagraph->getString());
         uno::Reference<beans::XPropertySet> xProps(xParagraph, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("List Paragraph"),
-                             getProperty<OUString>(xProps, "ParaStyleName"));
+        CPPUNIT_ASSERT_EQUAL(u"List Paragraph"_ustr,
+                             getProperty<OUString>(xProps, u"ParaStyleName"_ustr));
         uno::Reference<text::XTextRange> xRun(getRun(xParagraph, 1));
-        CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"), getProperty<OUString>(xRun, "CharStyleName"));
-        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, "CharHeight"));
+        CPPUNIT_ASSERT_EQUAL(u"Emphasis"_ustr, getProperty<OUString>(xRun, u"CharStyleName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, u"CharHeight"_ustr));
         CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
-                             getProperty<awt::FontSlant>(xRun, "CharPosture"));
-        comphelper::SequenceAsHashMap listAutoFormat(xProps->getPropertyValue("ListAutoFormat"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"), listAutoFormat["CharStyleName"].get<OUString>());
-        CPPUNIT_ASSERT_EQUAL(16.f, listAutoFormat["CharHeight"].get<float>());
+                             getProperty<awt::FontSlant>(xRun, u"CharPosture"_ustr));
+        comphelper::SequenceAsHashMap listAutoFormat(
+            xProps->getPropertyValue(u"ListAutoFormat"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Emphasis"_ustr,
+                             listAutoFormat[u"CharStyleName"_ustr].get<OUString>());
+        CPPUNIT_ASSERT_EQUAL(16.f, listAutoFormat[u"CharHeight"_ustr].get<float>());
         CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
-                             listAutoFormat["CharPosture"].get<awt::FontSlant>());
+                             listAutoFormat[u"CharPosture"_ustr].get<awt::FontSlant>());
     }
     {
         uno::Reference<text::XTextRange> xParagraph(getParagraph(12));
-        CPPUNIT_ASSERT_EQUAL(OUString("Char style + direct text"), xParagraph->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Char style + direct text"_ustr, xParagraph->getString());
         uno::Reference<beans::XPropertySet> xProps(xParagraph, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("List Paragraph"),
-                             getProperty<OUString>(xProps, "ParaStyleName"));
+        CPPUNIT_ASSERT_EQUAL(u"List Paragraph"_ustr,
+                             getProperty<OUString>(xProps, u"ParaStyleName"_ustr));
         uno::Reference<text::XTextRange> xRun(getRun(xParagraph, 1));
-        CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"), getProperty<OUString>(xRun, "CharStyleName"));
-        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, "CharHeight"));
+        CPPUNIT_ASSERT_EQUAL(u"Emphasis"_ustr, getProperty<OUString>(xRun, u"CharStyleName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, u"CharHeight"_ustr));
         CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
-                             getProperty<awt::FontSlant>(xRun, "CharPosture"));
-        CPPUNIT_ASSERT(!xProps->getPropertyValue("ListAutoFormat").hasValue());
+                             getProperty<awt::FontSlant>(xRun, u"CharPosture"_ustr));
+        CPPUNIT_ASSERT(!xProps->getPropertyValue(u"ListAutoFormat"_ustr).hasValue());
     }
 
     {
         uno::Reference<text::XTextRange> xParagraph(getParagraph(13));
-        CPPUNIT_ASSERT_EQUAL(OUString("Para style + direct mark"), xParagraph->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Para style + direct mark"_ustr, xParagraph->getString());
         uno::Reference<beans::XPropertySet> xProps(xParagraph, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("List Paragraph E"),
-                             getProperty<OUString>(xProps, "ParaStyleName"));
+        CPPUNIT_ASSERT_EQUAL(u"List Paragraph E"_ustr,
+                             getProperty<OUString>(xProps, u"ParaStyleName"_ustr));
         uno::Reference<text::XTextRange> xRun(getRun(xParagraph, 1));
-        CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xRun, "CharStyleName"));
-        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, "CharHeight"));
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xRun, u"CharStyleName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, u"CharHeight"_ustr));
         CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
-                             getProperty<awt::FontSlant>(xRun, "CharPosture"));
-        comphelper::SequenceAsHashMap listAutoFormat(xProps->getPropertyValue("ListAutoFormat"));
-        CPPUNIT_ASSERT(!listAutoFormat["CharStyleName"].hasValue());
-        CPPUNIT_ASSERT_EQUAL(16.f, listAutoFormat["CharHeight"].get<float>());
+                             getProperty<awt::FontSlant>(xRun, u"CharPosture"_ustr));
+        comphelper::SequenceAsHashMap listAutoFormat(
+            xProps->getPropertyValue(u"ListAutoFormat"_ustr));
+        CPPUNIT_ASSERT(!listAutoFormat[u"CharStyleName"_ustr].hasValue());
+        CPPUNIT_ASSERT_EQUAL(16.f, listAutoFormat[u"CharHeight"_ustr].get<float>());
         CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
-                             listAutoFormat["CharPosture"].get<awt::FontSlant>());
+                             listAutoFormat[u"CharPosture"_ustr].get<awt::FontSlant>());
     }
     {
         uno::Reference<text::XTextRange> xParagraph(getParagraph(14));
-        CPPUNIT_ASSERT_EQUAL(OUString("Para style + Char style + direct mark"),
+        CPPUNIT_ASSERT_EQUAL(u"Para style + Char style + direct mark"_ustr,
                              xParagraph->getString());
         uno::Reference<beans::XPropertySet> xProps(xParagraph, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("List Paragraph E"),
-                             getProperty<OUString>(xProps, "ParaStyleName"));
+        CPPUNIT_ASSERT_EQUAL(u"List Paragraph E"_ustr,
+                             getProperty<OUString>(xProps, u"ParaStyleName"_ustr));
         uno::Reference<text::XTextRange> xRun(getRun(xParagraph, 1));
-        CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xRun, "CharStyleName"));
-        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, "CharHeight"));
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xRun, u"CharStyleName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, u"CharHeight"_ustr));
         CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
-                             getProperty<awt::FontSlant>(xRun, "CharPosture"));
-        comphelper::SequenceAsHashMap listAutoFormat(xProps->getPropertyValue("ListAutoFormat"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"), listAutoFormat["CharStyleName"].get<OUString>());
-        CPPUNIT_ASSERT_EQUAL(16.f, listAutoFormat["CharHeight"].get<float>());
+                             getProperty<awt::FontSlant>(xRun, u"CharPosture"_ustr));
+        comphelper::SequenceAsHashMap listAutoFormat(
+            xProps->getPropertyValue(u"ListAutoFormat"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Emphasis"_ustr,
+                             listAutoFormat[u"CharStyleName"_ustr].get<OUString>());
+        CPPUNIT_ASSERT_EQUAL(16.f, listAutoFormat[u"CharHeight"_ustr].get<float>());
         CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
-                             listAutoFormat["CharPosture"].get<awt::FontSlant>());
+                             listAutoFormat[u"CharPosture"_ustr].get<awt::FontSlant>());
     }
     {
         uno::Reference<text::XTextRange> xParagraph(getParagraph(15));
-        CPPUNIT_ASSERT_EQUAL(OUString("Para style + Char style + direct mark and text"),
+        CPPUNIT_ASSERT_EQUAL(u"Para style + Char style + direct mark and text"_ustr,
                              xParagraph->getString());
         uno::Reference<beans::XPropertySet> xProps(xParagraph, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("List Paragraph E"),
-                             getProperty<OUString>(xProps, "ParaStyleName"));
+        CPPUNIT_ASSERT_EQUAL(u"List Paragraph E"_ustr,
+                             getProperty<OUString>(xProps, u"ParaStyleName"_ustr));
         uno::Reference<text::XTextRange> xRun(getRun(xParagraph, 1));
-        CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"), getProperty<OUString>(xRun, "CharStyleName"));
-        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, "CharHeight"));
+        CPPUNIT_ASSERT_EQUAL(u"Emphasis"_ustr, getProperty<OUString>(xRun, u"CharStyleName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, u"CharHeight"_ustr));
         CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
-                             getProperty<awt::FontSlant>(xRun, "CharPosture"));
-        comphelper::SequenceAsHashMap listAutoFormat(xProps->getPropertyValue("ListAutoFormat"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"), listAutoFormat["CharStyleName"].get<OUString>());
-        CPPUNIT_ASSERT_EQUAL(16.f, listAutoFormat["CharHeight"].get<float>());
+                             getProperty<awt::FontSlant>(xRun, u"CharPosture"_ustr));
+        comphelper::SequenceAsHashMap listAutoFormat(
+            xProps->getPropertyValue(u"ListAutoFormat"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Emphasis"_ustr,
+                             listAutoFormat[u"CharStyleName"_ustr].get<OUString>());
+        CPPUNIT_ASSERT_EQUAL(16.f, listAutoFormat[u"CharHeight"_ustr].get<float>());
         CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
-                             listAutoFormat["CharPosture"].get<awt::FontSlant>());
+                             listAutoFormat[u"CharPosture"_ustr].get<awt::FontSlant>());
     }
     {
         uno::Reference<text::XTextRange> xParagraph(getParagraph(16));
-        CPPUNIT_ASSERT_EQUAL(OUString("Para style + Char style + direct text"),
+        CPPUNIT_ASSERT_EQUAL(u"Para style + Char style + direct text"_ustr,
                              xParagraph->getString());
         uno::Reference<beans::XPropertySet> xProps(xParagraph, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("List Paragraph E"),
-                             getProperty<OUString>(xProps, "ParaStyleName"));
+        CPPUNIT_ASSERT_EQUAL(u"List Paragraph E"_ustr,
+                             getProperty<OUString>(xProps, u"ParaStyleName"_ustr));
         uno::Reference<text::XTextRange> xRun(getRun(xParagraph, 1));
-        CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"), getProperty<OUString>(xRun, "CharStyleName"));
-        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, "CharHeight"));
+        CPPUNIT_ASSERT_EQUAL(u"Emphasis"_ustr, getProperty<OUString>(xRun, u"CharStyleName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(xRun, u"CharHeight"_ustr));
         CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
-                             getProperty<awt::FontSlant>(xRun, "CharPosture"));
-        CPPUNIT_ASSERT(!xProps->getPropertyValue("ListAutoFormat").hasValue());
+                             getProperty<awt::FontSlant>(xRun, u"CharPosture"_ustr));
+        CPPUNIT_ASSERT(!xProps->getPropertyValue(u"ListAutoFormat"_ustr).hasValue());
     }
 }
 
@@ -319,7 +342,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160049_anchorMarginVML, "tdf160049_anchorMarginV
     // The image takes into account the margin, so it looks like it is in the middle of the doc,
     // which is "Paragraph text area"/PRINT_AREA/1, not "Entire paragraph area"/FRAME/0
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PRINT_AREA,
-                         getProperty<sal_Int16>(getShape(1), "HoriOrientRelation"));
+                         getProperty<sal_Int16>(getShape(1), u"HoriOrientRelation"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf160049_anchorMargin2, "tdf160049_anchorMargin2.docx")
@@ -329,7 +352,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160049_anchorMargin2, "tdf160049_anchorMargin2.d
     // The shape takes into account the margin, so it looks like it is in the middle of the doc,
     // which is "Paragraph text area"/PRINT_AREA/1, not "Entire paragraph area"/FRAME/0
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PRINT_AREA,
-                         getProperty<sal_Int16>(getShape(1), "HoriOrientRelation"));
+                         getProperty<sal_Int16>(getShape(1), u"HoriOrientRelation"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf160049_anchorMargin14, "tdf160049_anchorMargin14.docx")
@@ -344,23 +367,23 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160049_anchorMargin14, "tdf160049_anchorMargin14
     // which is "Paragraph text area"/PRINT_AREA/1, not "Entire paragraph area"/FRAME/0
     uno::Reference<drawing::XShape> xShape(getShapeByName(u"Picture 2"));
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PRINT_AREA,
-                         getProperty<sal_Int16>(xShape, "HoriOrientRelation"));
+                         getProperty<sal_Int16>(xShape, u"HoriOrientRelation"_ustr));
     // The shape takes into account the right margin, looking like it is in the middle of the doc,
     xShape.set(getShapeByName(u"Picture 3"));
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PRINT_AREA,
-                         getProperty<sal_Int16>(xShape, "HoriOrientRelation"));
+                         getProperty<sal_Int16>(xShape, u"HoriOrientRelation"_ustr));
     // The third shape takes "center" very seriously, and ignores the margins
     xShape.set(getShapeByName(u"Picture 4"));
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::FRAME,
-                         getProperty<sal_Int16>(xShape, "HoriOrientRelation"));
+                         getProperty<sal_Int16>(xShape, u"HoriOrientRelation"_ustr));
     // The fourth shape takes "left by 123", and ignores the margins, acting just like "margin"
     xShape.set(getShapeByName(u"Picture 5"));
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::FRAME,
-                         getProperty<sal_Int16>(xShape, "HoriOrientRelation"));
+                         getProperty<sal_Int16>(xShape, u"HoriOrientRelation"_ustr));
     // The fifth shape shows how "left" works with "margin", which apparently means page margin
     xShape.set(getShapeByName(u"Picture 6"));
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_PRINT_AREA,
-                         getProperty<sal_Int16>(xShape, "HoriOrientRelation"));
+                         getProperty<sal_Int16>(xShape, u"HoriOrientRelation"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf160049_anchorMargin15, "tdf160049_anchorMargin15.docx")
@@ -369,7 +392,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160049_anchorMargin15, "tdf160049_anchorMargin15
 
     // The image ignores the margin, so it is at the left for compat15 (but middle-ish for compat14)
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::FRAME,
-                         getProperty<sal_Int16>(getShape(1), "HoriOrientRelation"));
+                         getProperty<sal_Int16>(getShape(1), u"HoriOrientRelation"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCell, "tdf160077_layoutInCell.docx")
@@ -394,9 +417,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCell, "tdf160077_layoutInCell.doc
     // The effect is implemented by forcing "Entire paragraph area"/FRAME/0
     // instead of "Page text area"/PAGE_PRINT_AREA/8
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::FRAME,
-                         getProperty<sal_Int16>(getShape(1), "VertOrientRelation"));
+                         getProperty<sal_Int16>(getShape(1), u"VertOrientRelation"_ustr));
     // since layoutInCell had been turned off. If the implementation changes, check the layout.
-    CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), "IsFollowingTextFlow"));
+    CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellB, "tdf160077_layoutInCellB.docx")
@@ -418,7 +441,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellB, "tdf160077_layoutInCellB.d
 DECLARE_OOXMLEXPORT_TEST(testTdf153909_followTextFlow, "tdf153909_followTextFlow.docx")
 {
     // Although MSO's UI reports "layoutInCell" for the rectangle, it isn't specified or honored
-    CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), "IsFollowingTextFlow"));
+    CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr));
 
     // Given a table with a rectangle anchored in it (wrap-through) that appears above the table...
     xmlDocUniquePtr pDump = parseLayoutDump();
@@ -446,7 +469,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159207_footerFramePrBorder)
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
                                                          uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFrame0(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    auto aBorder = getProperty<table::BorderLine2>(xFrame0, "LeftBorder");
+    auto aBorder = getProperty<table::BorderLine2>(xFrame0, u"LeftBorder"_ustr);
     sal_uInt32 nBorderWidth
         = aBorder.OuterLineWidth + aBorder.InnerLineWidth + aBorder.LineDistance;
     // Without patch it failed with Expected 0, Actual 26
@@ -461,12 +484,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160814_commentOrder)
     loadAndSave("tdf160814_commentOrder.docx");
 
     // make sure the order of the comments is imported and exported correctly
-    xmlDocUniquePtr pXmlComments = parseExport("word/comments.xml");
+    xmlDocUniquePtr pXmlComments = parseExport(u"word/comments.xml"_ustr);
     // This really should be "1. First comment", the 1. being list numbering...
-    assertXPathContent(pXmlComments, "//w:comment[1]//w:t"_ostr, "First comment");
-    assertXPathContent(pXmlComments, "//w:comment[2]//w:t"_ostr, "1.1 first reply.");
-    assertXPathContent(pXmlComments, "//w:comment[4]//w:t"_ostr, "1.3");
-    assertXPathContent(pXmlComments, "//w:comment[6]//w:t"_ostr, "1.5");
+    assertXPathContent(pXmlComments, "//w:comment[1]//w:t"_ostr, u"First comment"_ustr);
+    assertXPathContent(pXmlComments, "//w:comment[2]//w:t"_ostr, u"1.1 first reply."_ustr);
+    assertXPathContent(pXmlComments, "//w:comment[4]//w:t"_ostr, u"1.3"_ustr);
+    assertXPathContent(pXmlComments, "//w:comment[6]//w:t"_ostr, u"1.5"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
@@ -477,10 +500,10 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
     pBatch->commit();
     loadAndSave("personalmetadata.docx");
 
-    xmlDocUniquePtr pAppDoc = parseExport("docProps/app.xml");
+    xmlDocUniquePtr pAppDoc = parseExport(u"docProps/app.xml"_ustr);
     assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:Template"_ostr, 0);
     assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:TotalTime"_ostr, 0);
-    xmlDocUniquePtr pCoreDoc = parseExport("docProps/core.xml");
+    xmlDocUniquePtr pCoreDoc = parseExport(u"docProps/core.xml"_ustr);
     assertXPath(pCoreDoc, "/cp:coreProperties/dcterms:created"_ostr, 0);
     assertXPath(pCoreDoc, "/cp:coreProperties/dcterms:modified"_ostr, 0);
     assertXPath(pCoreDoc, "/cp:coreProperties/dc:creator"_ostr, 0);
@@ -493,10 +516,10 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
     pBatch->commit();
     loadAndSave("personalmetadata.docx");
 
-    pAppDoc = parseExport("docProps/app.xml");
+    pAppDoc = parseExport(u"docProps/app.xml"_ustr);
     assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:Template"_ostr, 0);
     assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:TotalTime"_ostr, 0);
-    pCoreDoc = parseExport("docProps/core.xml");
+    pCoreDoc = parseExport(u"docProps/core.xml"_ustr);
     assertXPath(pCoreDoc, "/cp:coreProperties/dcterms:created"_ostr, 1);
     assertXPath(pCoreDoc, "/cp:coreProperties/dcterms:modified"_ostr, 1);
     assertXPath(pCoreDoc, "/cp:coreProperties/dc:creator"_ostr, 1);
@@ -508,37 +531,37 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
 DECLARE_OOXMLEXPORT_TEST(testTdf126533_noPageBitmap, "tdf126533_noPageBitmap.docx")
 {
     // given a document with a v:background bitmap, but no w:background fillcolor
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
-                                                   uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     // the image (or any fill for that matter) should be ignored.
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE,
-                         getProperty<drawing::FillStyle>(xPageStyle, "FillStyle"));
+                         getProperty<drawing::FillStyle>(xPageStyle, u"FillStyle"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf126533_pageGradient, "fill.docx")
 {
     // given a document with a gradient page background
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
-                                                   uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
-                         getProperty<drawing::FillStyle>(xPageStyle, "FillStyle"));
+                         getProperty<drawing::FillStyle>(xPageStyle, u"FillStyle"_ustr));
 
-    awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xPageStyle, "FillGradient");
+    awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xPageStyle, u"FillGradient"_ustr);
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_RECT, aGradient.Style);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf126533_pageBitmap, "tdf126533_pageBitmap.docx")
 {
     // given a document with a page background image
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
-                                                   uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP,
-                         getProperty<drawing::FillStyle>(xPageStyle, "FillStyle"));
+                         getProperty<drawing::FillStyle>(xPageStyle, u"FillStyle"_ustr));
 
     if (!isExported())
         return;
 
-    xmlDocUniquePtr pXmlDocRels = parseExport("word/_rels/document.xml.rels");
+    xmlDocUniquePtr pXmlDocRels = parseExport(u"word/_rels/document.xml.rels"_ustr);
     assertXPath(pXmlDocRels,
                 "/rels:Relationships/rels:Relationship[@Target='media/image1.jpeg']"_ostr, 1);
 }
@@ -561,15 +584,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154369, "tdf154369.docx")
     // - Expected result: A & B bullets display same green color #527d55 as the paragraph
     // - Actual result: A & B bullets display black color, while the paragraph is green color #527d55
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
-                "expand"_ostr, "A.");
+                "expand"_ostr, u"A."_ustr);
     assertXPath(pXmlDoc,
                 "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont"_ostr,
-                "color"_ostr, "00527d55");
+                "color"_ostr, u"00527d55"_ustr);
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
-                "expand"_ostr, "B.");
+                "expand"_ostr, u"B."_ustr);
     assertXPath(pXmlDoc,
                 "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont"_ostr,
-                "color"_ostr, "00527d55");
+                "color"_ostr, u"00527d55"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testScreenTip)

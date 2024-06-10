@@ -92,7 +92,7 @@ public:
         aTempDir.EnableKillingFile();
         const OUString aWorkDir = aTempDir.GetURL();
         const OUString aURI( createFileURL(OUString::createFromAscii(datasource)) );
-        const OUString aPrefix = column ? OUString::createFromAscii( column ) : "LOMM_";
+        const OUString aPrefix = column ? OUString::createFromAscii( column ) : u"LOMM_"_ustr;
         const OUString aDBName = registerDBsource( aURI, aWorkDir );
         initMailMergeJobAndArgs( filename, tablename, aDBName, aPrefix, aWorkDir, filter, selection, column != nullptr );
 
@@ -124,14 +124,14 @@ public:
     uno::Reference< sdbc::XRowSet > getXResultFromDataset( const char* tablename, const OUString &aDBName )
     {
         uno::Reference< sdbc::XRowSet > xCurResultSet;
-        uno::Reference< uno::XInterface > xInstance = getMultiServiceFactory()->createInstance( "com.sun.star.sdb.RowSet" );
+        uno::Reference< uno::XInterface > xInstance = getMultiServiceFactory()->createInstance( u"com.sun.star.sdb.RowSet"_ustr );
         uno::Reference< beans::XPropertySet > xRowSetPropSet( xInstance, uno::UNO_QUERY );
         assert( xRowSetPropSet.is() && "failed to get XPropertySet interface from RowSet" );
         if (xRowSetPropSet.is())
         {
-            xRowSetPropSet->setPropertyValue( "DataSourceName",    uno::Any( aDBName ) );
-            xRowSetPropSet->setPropertyValue( "Command",           uno::Any( OUString::createFromAscii(tablename) ) );
-            xRowSetPropSet->setPropertyValue( "CommandType",       uno::Any( sdb::CommandType::TABLE ) );
+            xRowSetPropSet->setPropertyValue( u"DataSourceName"_ustr,    uno::Any( aDBName ) );
+            xRowSetPropSet->setPropertyValue( u"Command"_ustr,           uno::Any( OUString::createFromAscii(tablename) ) );
+            xRowSetPropSet->setPropertyValue( u"CommandType"_ustr,       uno::Any( sdb::CommandType::TABLE ) );
 
             uno::Reference< sdbc::XRowSet > xRowSet( xInstance, uno::UNO_QUERY );
             if (xRowSet.is())
@@ -147,7 +147,7 @@ public:
                                   char const*const filter, int nDataSets,
                                   const bool bPrefixIsColumn )
     {
-        uno::Reference< task::XJob > xJob( getMultiServiceFactory()->createInstance( "com.sun.star.text.MailMerge" ), uno::UNO_QUERY_THROW );
+        uno::Reference< task::XJob > xJob( getMultiServiceFactory()->createInstance( u"com.sun.star.text.MailMerge"_ustr ), uno::UNO_QUERY_THROW );
         mxJob.set( xJob );
 
         mMMargs.reserve( 15 );
@@ -245,7 +245,7 @@ public:
         // Output name early, so in the case of a hang, the name of the hanging input file is visible.
         std::cout << filename << ",";
         mnStartTime = osl_getGlobalTimer();
-        mxComponent = loadFromDesktop(msMailMergeOutputURL + "/" + filename, "com.sun.star.text.TextDocument");
+        mxComponent = loadFromDesktop(msMailMergeOutputURL + "/" + filename, u"com.sun.star.text.TextDocument"_ustr);
         discardDumpedLayout();
         calcLayout();
     }
@@ -316,7 +316,7 @@ protected:
     DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, "writer8", MMTest2, 0, nullptr)
 
 MMTest2::MMTest2()
-    : SwModelTestBase("/sw/qa/extras/mailmerge/data/", "writer8")
+    : SwModelTestBase(u"/sw/qa/extras/mailmerge/data/"_ustr, u"writer8"_ustr)
     , mnCurOutputType(0)
     , maMMTest2Filename(nullptr)
 {
@@ -358,14 +358,14 @@ DECLARE_SHELL_MAILMERGE_TEST(testTd78611_shell, "tdf78611.odt", "10-testing-addr
     // All header paragraphs should have numbering.
 
     // check first page
-    CPPUNIT_ASSERT_EQUAL( OUString("1"), parseDump("/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
-    CPPUNIT_ASSERT_EQUAL( OUString("1.1"), parseDump("/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
-    CPPUNIT_ASSERT_EQUAL( OUString("1.2"), parseDump("/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
+    CPPUNIT_ASSERT_EQUAL( u"1"_ustr, parseDump("/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
+    CPPUNIT_ASSERT_EQUAL( u"1.1"_ustr, parseDump("/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
+    CPPUNIT_ASSERT_EQUAL( u"1.2"_ustr, parseDump("/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
 
     // check some other pages
-    CPPUNIT_ASSERT_EQUAL( OUString("1"), parseDump("/root/page[3]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
-    CPPUNIT_ASSERT_EQUAL( OUString("1.1"), parseDump("/root/page[5]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
-    CPPUNIT_ASSERT_EQUAL( OUString("1.2"), parseDump("/root/page[7]/body/txt[10]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
+    CPPUNIT_ASSERT_EQUAL( u"1"_ustr, parseDump("/root/page[3]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
+    CPPUNIT_ASSERT_EQUAL( u"1.1"_ustr, parseDump("/root/page[5]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
+    CPPUNIT_ASSERT_EQUAL( u"1.2"_ustr, parseDump("/root/page[7]/body/txt[10]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
 }
 
 
@@ -375,9 +375,9 @@ DECLARE_FILE_MAILMERGE_TEST(testTd78611_file, "tdf78611.odt", "10-testing-addres
     for (int doc = 0; doc < 10; ++doc)
     {
         loadMailMergeDocument( doc );
-        CPPUNIT_ASSERT_EQUAL( OUString("1"), parseDump("/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
-        CPPUNIT_ASSERT_EQUAL( OUString("1.1"), parseDump("/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
-        CPPUNIT_ASSERT_EQUAL( OUString("1.2"), parseDump("/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
+        CPPUNIT_ASSERT_EQUAL( u"1"_ustr, parseDump("/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
+        CPPUNIT_ASSERT_EQUAL( u"1.1"_ustr, parseDump("/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
+        CPPUNIT_ASSERT_EQUAL( u"1.2"_ustr, parseDump("/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
     }
 }
 
@@ -419,7 +419,7 @@ DECLARE_FILE_MAILMERGE_TEST(testTdf122156_file, "linked-with-condition.odt", "5-
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
         uno::Reference<beans::XPropertySet> xSect(xSections->getByIndex(0), uno::UNO_QUERY_THROW);
         // Record 2 has non-empty "Title" field => section is shown
-        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xSect, "IsVisible"));
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xSect, u"IsVisible"_ustr));
     }
     {
         loadMailMergeDocument(2);
@@ -430,7 +430,7 @@ DECLARE_FILE_MAILMERGE_TEST(testTdf122156_file, "linked-with-condition.odt", "5-
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
         uno::Reference<beans::XPropertySet> xSect(xSections->getByIndex(0), uno::UNO_QUERY_THROW);
         // Record 3 has non-empty "Title" field => section is shown
-        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xSect, "IsVisible"));
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xSect, u"IsVisible"_ustr));
     }
     {
         loadMailMergeDocument(3);
@@ -449,7 +449,7 @@ DECLARE_FILE_MAILMERGE_TEST(testTdf122156_file, "linked-with-condition.odt", "5-
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
         uno::Reference<beans::XPropertySet> xSect(xSections->getByIndex(0), uno::UNO_QUERY_THROW);
         // Record 5 has non-empty "Title" field => section is shown
-        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xSect, "IsVisible"));
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xSect, u"IsVisible"_ustr));
     }
 }
 
@@ -492,8 +492,8 @@ DECLARE_SHELL_MAILMERGE_TEST(exportDirectToPDF_shell, "linked-with-condition.odt
 
     const OUString sExportTo(msMailMergeOutputURL + "/ExportDirectToPDF.pdf");
     uno::Sequence <css::beans::PropertyValue> aArgs {
-        comphelper::makePropertyValue("SynchronMode", true),
-        comphelper::makePropertyValue("URL", sExportTo)
+        comphelper::makePropertyValue(u"SynchronMode"_ustr, true),
+        comphelper::makePropertyValue(u"URL"_ustr, sExportTo)
     };
 
     xDispatch->dispatch(aURL, aArgs);
@@ -563,11 +563,11 @@ DECLARE_FILE_MAILMERGE_TEST(testTdf81782_file, "tdf78611.odt", "10-testing-addre
         // check if properties were set
         uno::Sequence<OUString> aKeywords(xDocumentProperties->getKeywords());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aKeywords.getLength());
-        CPPUNIT_ASSERT_EQUAL(OUString("one two"), aKeywords[0]);
+        CPPUNIT_ASSERT_EQUAL(u"one two"_ustr, aKeywords[0]);
 
         // check title and subject
-        CPPUNIT_ASSERT_EQUAL(OUString("my title"), xDocumentProperties->getTitle());
-        CPPUNIT_ASSERT_EQUAL(OUString("my subject"), xDocumentProperties->getSubject());
+        CPPUNIT_ASSERT_EQUAL(u"my title"_ustr, xDocumentProperties->getTitle());
+        CPPUNIT_ASSERT_EQUAL(u"my subject"_ustr, xDocumentProperties->getSubject());
     }
 }
 
@@ -582,7 +582,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf81750_shell, "tdf81750.odt", "10-testing-add
     dumpMMLayout();
 
     // check several pages page
-    OUString aExpected("Text: Foo ");
+    OUString aExpected(u"Text: Foo "_ustr);
     CPPUNIT_ASSERT_EQUAL( aExpected, parseDump("/root/page[1]/body/txt[2]"_ostr, ""_ostr));
     CPPUNIT_ASSERT_EQUAL( aExpected, parseDump("/root/page[3]/body/txt[2]"_ostr, ""_ostr));
     CPPUNIT_ASSERT_EQUAL( aExpected, parseDump("/root/page[5]/body/txt[2]"_ostr, ""_ostr));
@@ -613,8 +613,8 @@ DECLARE_FILE_MAILMERGE_TEST(testTdf123057_file, "pagecounttest.ott", "db_pagecou
 
             // both sections visible, page num is 2
             CPPUNIT_ASSERT_EQUAL(2, getPages());
-            CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xSect0, "IsVisible"));
-            CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xSect1, "IsVisible"));
+            CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xSect0, u"IsVisible"_ustr));
+            CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xSect1, u"IsVisible"_ustr));
             break;
         case 1:
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
@@ -622,7 +622,7 @@ DECLARE_FILE_MAILMERGE_TEST(testTdf123057_file, "pagecounttest.ott", "db_pagecou
 
             // second section removed, page num is 1
             CPPUNIT_ASSERT_EQUAL(1, getPages());
-            CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xSect0, "IsVisible"));
+            CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xSect0, u"IsVisible"_ustr));
             break;
         case 2:
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
@@ -630,7 +630,7 @@ DECLARE_FILE_MAILMERGE_TEST(testTdf123057_file, "pagecounttest.ott", "db_pagecou
 
             // first section removed, page num is 1
             CPPUNIT_ASSERT_EQUAL(1, getPages());
-            CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xSect0, "IsVisible"));
+            CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xSect0, u"IsVisible"_ustr));
             break;
         case 3:
             CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSections->getCount());
@@ -657,7 +657,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf128148, "tdf128148.odt", "4_v01.ods", "Tabel
     uno::Reference<frame::XModel> xModel = mxSwTextDocument->GetDocShell()->GetBaseModel();
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
 
     // All odd pages have no header, all even pages should have header with text "Page 2 of 2"
     const SwRootFrame* pLayout = pDocMM->getIDocumentLayoutAccess().GetCurrentLayout();
@@ -681,7 +681,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf128148, "tdf128148.odt", "4_v01.ods", "Tabel
             uno::Reference<text::XText> xHeaderText;
             xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT) >>= xHeaderText;
             const OUString sHeaderText = xHeaderText->getString();
-            CPPUNIT_ASSERT_EQUAL(OUString("Page 2 of 2"), sHeaderText);
+            CPPUNIT_ASSERT_EQUAL(u"Page 2 of 2"_ustr, sHeaderText);
         }
 
         pPageFrm = static_cast<const SwPageFrame*>(pPageFrm->GetNext());
@@ -703,7 +703,7 @@ DECLARE_MAILMERGE_TEST(testGrabBag, "grabbagtest.docx", "onecell.xlsx", "Sheet1"
     uno::Reference<beans::XPropertySet> const xModel(
         mxComponent, uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;
-    pTextDoc->getPropertyValue("InteropGrabBag") >>= aInteropGrabBag;
+    pTextDoc->getPropertyValue(u"InteropGrabBag"_ustr) >>= aInteropGrabBag;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(12), aInteropGrabBag.getLength());
 
     // check table border - comes from table style "Tabellenraster"
@@ -717,12 +717,12 @@ DECLARE_MAILMERGE_TEST(testGrabBag, "grabbagtest.docx", "onecell.xlsx", "Sheet1"
                 table::BorderLine(util::Color(0), 0, 18, 0), true,
                 table::BorderLine(util::Color(0), 0, 0, 0), true,
                 sal_Int16(191), true),
-            getProperty<table::TableBorder>(xTableProps, "TableBorder"));
+            getProperty<table::TableBorder>(xTableProps, u"TableBorder"_ustr));
 
     // check font is Arial - comes from theme (wrong result was "" - nothing)
-    uno::Reference<text::XText> const xCell(xTable->getCellByName("A1"), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> const xCell(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> const xParaA1(getParagraphOrTable(1, xCell->getText()), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xParaA1, "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(u"Arial"_ustr, getProperty<OUString>(xParaA1, u"CharFontName"_ustr));
 }
 
 } // end of anonymous namespace

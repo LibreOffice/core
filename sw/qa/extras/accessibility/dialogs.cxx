@@ -109,8 +109,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestHyperlinkDialog)
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Hyperlink..."));
     CPPUNIT_ASSERT(dialogWaiter->waitEndDialog());
 
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString("<PARAGRAPH>https://libreoffice.org/</PARAGRAPH>"),
-                         collectText());
+    CPPUNIT_ASSERT_EQUAL(u"<PARAGRAPH>https://libreoffice.org/</PARAGRAPH>"_ustr, collectText());
 }
 
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestBookmarkDialog)
@@ -133,8 +132,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestBookmarkDialog)
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Bookmark..."));
     CPPUNIT_ASSERT(dialogWaiter->waitEndDialog());
 
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString("<PARAGRAPH>#Test Bookmark 1 Bookmark </PARAGRAPH>"),
-                         collectText());
+    CPPUNIT_ASSERT_EQUAL(u"<PARAGRAPH>#Test Bookmark 1 Bookmark </PARAGRAPH>"_ustr, collectText());
 }
 
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestSectionDialog)
@@ -152,7 +150,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestSectionDialog)
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Section..."));
     CPPUNIT_ASSERT(dialogWaiter->waitEndDialog());
 
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString("<PARAGRAPH/><PARAGRAPH/>"), collectText());
+    CPPUNIT_ASSERT_EQUAL(u"<PARAGRAPH/><PARAGRAPH/>"_ustr, collectText());
 }
 
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestFontworkDialog)
@@ -170,10 +168,9 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestFontworkDialog)
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Fontwork..."));
     CPPUNIT_ASSERT(dialogWaiter->waitEndDialog());
 
-    CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString("<PARAGRAPH/><SHAPE name=\"Fontwork 1\" description=\" \"><PARAGRAPH "
-                      "description=\"Paragraph: 0 Simple\">Simple</PARAGRAPH></SHAPE>"),
-        collectText());
+    CPPUNIT_ASSERT_EQUAL(u"<PARAGRAPH/><SHAPE name=\"Fontwork 1\" description=\" \"><PARAGRAPH "
+                         "description=\"Paragraph: 0 Simple\">Simple</PARAGRAPH></SHAPE>"_ustr,
+                         collectText());
 }
 
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestFrameDialog)
@@ -189,9 +186,8 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestFrameDialog)
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Frame", u"Frame..."));
     CPPUNIT_ASSERT(dialogWaiter->waitEndDialog());
 
-    CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString("<PARAGRAPH/><TEXT_FRAME name=\"Frame1\"><PARAGRAPH/></TEXT_FRAME>"),
-        collectText());
+    CPPUNIT_ASSERT_EQUAL(u"<PARAGRAPH/><TEXT_FRAME name=\"Frame1\"><PARAGRAPH/></TEXT_FRAME>"_ustr,
+                         collectText());
 }
 
 #endif //defined(MACOSX)

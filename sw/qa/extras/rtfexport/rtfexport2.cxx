@@ -40,7 +40,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/extras/rtfexport/data/", "Rich Text Format")
+        : SwModelTestBase(u"/sw/qa/extras/rtfexport/data/"_ustr, u"Rich Text Format"_ustr)
     {
     }
 };
@@ -64,10 +64,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo45553)
                 OUString aStr = xRange->getString();
                 if (aStr == "space-before")
                     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(120)),
-                                         getProperty<sal_Int32>(xRange, "ParaTopMargin"));
+                                         getProperty<sal_Int32>(xRange, u"ParaTopMargin"_ustr));
                 else if (aStr == "space-after")
                     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(240)),
-                                         getProperty<sal_Int32>(xRange, "ParaBottomMargin"));
+                                         getProperty<sal_Int32>(xRange, u"ParaBottomMargin"_ustr));
             }
         }
     };
@@ -156,10 +156,10 @@ CPPUNIT_TEST_FIXTURE(Test, testN750757)
                                                                       uno::UNO_QUERY);
         uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
 
-        CPPUNIT_ASSERT_EQUAL(false,
-                             getProperty<bool>(xParaEnum->nextElement(), "ParaContextMargin"));
-        CPPUNIT_ASSERT_EQUAL(true,
-                             getProperty<bool>(xParaEnum->nextElement(), "ParaContextMargin"));
+        CPPUNIT_ASSERT_EQUAL(
+            false, getProperty<bool>(xParaEnum->nextElement(), u"ParaContextMargin"_ustr));
+        CPPUNIT_ASSERT_EQUAL(
+            true, getProperty<bool>(xParaEnum->nextElement(), u"ParaContextMargin"_ustr));
     };
     createSwDoc("n750757.rtf");
     verify();
@@ -201,14 +201,15 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo43965)
                                                                        uno::UNO_QUERY);
         uno::Reference<container::XEnumeration> xRangeEnum = xRangeEnumAccess->createEnumeration();
         uno::Reference<beans::XPropertySet> xPropertySet(xRangeEnum->nextElement(), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(36), getProperty<sal_Int32>(xPropertySet, "CharEscapement"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(36),
+                             getProperty<sal_Int32>(xPropertySet, u"CharEscapement"_ustr));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(100),
-                             getProperty<sal_Int32>(xPropertySet, "CharEscapementHeight"));
+                             getProperty<sal_Int32>(xPropertySet, u"CharEscapementHeight"_ustr));
 
         // Second paragraph: Word vs Writer border default problem
         CPPUNIT_ASSERT_EQUAL(
             sal_uInt32(26),
-            getProperty<table::BorderLine2>(xParaEnum->nextElement(), "TopBorder").LineWidth);
+            getProperty<table::BorderLine2>(xParaEnum->nextElement(), u"TopBorder"_ustr).LineWidth);
 
         // Finally, make sure that we have two pages
         CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -227,8 +228,9 @@ CPPUNIT_TEST_FIXTURE(Test, testN751020)
                                                                       uno::UNO_QUERY);
         uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
         CPPUNIT_ASSERT(xParaEnum->hasMoreElements());
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(200)),
-                             getProperty<sal_Int32>(xParaEnum->nextElement(), "ParaBottomMargin"));
+        CPPUNIT_ASSERT_EQUAL(
+            sal_Int32(convertTwipToMm100(200)),
+            getProperty<sal_Int32>(xParaEnum->nextElement(), u"ParaBottomMargin"_ustr));
     };
     createSwDoc("n751020.rtf");
     verify();
@@ -277,7 +279,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo46955)
             while (xRangeEnum->hasMoreElements())
                 CPPUNIT_ASSERT_EQUAL(
                     style::CaseMap::UPPERCASE,
-                    getProperty<sal_Int16>(xRangeEnum->nextElement(), "CharCaseMap"));
+                    getProperty<sal_Int16>(xRangeEnum->nextElement(), u"CharCaseMap"_ustr));
         }
     };
     createSwDoc("fdo46955.rtf");
@@ -295,13 +297,13 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo81892)
                                                         uno::UNO_QUERY);
         uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER,
-                             getProperty<sal_Int16>(xTable, "HoriOrient"));
+                             getProperty<sal_Int16>(xTable, u"HoriOrient"_ustr));
 
         // fdo#81893: paragraph with \page was not centered
-        uno::Reference<text::XTextRange> xPara(getParagraph(2, "Performance"));
+        uno::Reference<text::XTextRange> xPara(getParagraph(2, u"Performance"_ustr));
         CPPUNIT_ASSERT_EQUAL(
             style::ParagraphAdjust_CENTER,
-            static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, "ParaAdjust")));
+            static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, u"ParaAdjust"_ustr)));
     };
     createSwDoc("fdo81892.rtf");
     verify();
@@ -313,7 +315,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo45394)
 {
     auto verify = [this]() {
         uno::Reference<text::XText> xHeaderText = getProperty<uno::Reference<text::XText>>(
-            getStyles("PageStyles")->getByName("Standard"), "HeaderText");
+            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"HeaderText"_ustr);
         OUString aActual = xHeaderText->getString();
         // Encoding in the header was wrong.
         CPPUNIT_ASSERT_EQUAL(u"\u041F\u041A \u0420\u0418\u041A"_ustr, aActual);
@@ -341,10 +343,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48104)
 CPPUNIT_TEST_FIXTURE(Test, testFdo47107)
 {
     auto verify = [this]() {
-        uno::Reference<container::XNameAccess> xNumberingStyles(getStyles("NumberingStyles"));
+        uno::Reference<container::XNameAccess> xNumberingStyles(getStyles(u"NumberingStyles"_ustr));
         // Make sure numbered and bullet legacy syntax is recognized, this used to throw a NoSuchElementException
-        xNumberingStyles->getByName("WWNum1");
-        xNumberingStyles->getByName("WWNum2");
+        xNumberingStyles->getByName(u"WWNum1"_ustr);
+        xNumberingStyles->getByName(u"WWNum2"_ustr);
     };
     createSwDoc("fdo47107.rtf");
     verify();
@@ -381,7 +383,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo39053)
         CPPUNIT_ASSERT_EQUAL(1, nShapes);
         int nAsCharacter = 0;
         for (int i = 0; i < nShapes; ++i)
-            if (getProperty<text::TextContentAnchorType>(getShape(i + 1), "AnchorType")
+            if (getProperty<text::TextContentAnchorType>(getShape(i + 1), u"AnchorType"_ustr)
                 == text::TextContentAnchorType_AS_CHARACTER)
                 nAsCharacter++;
         // The image in binary format was ignored.
@@ -428,13 +430,13 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48023)
 
     AllSettings aSavedSettings = Application::GetSettings();
     AllSettings aSettings(aSavedSettings);
-    aSettings.SetLanguageTag(LanguageTag("ru"));
+    aSettings.SetLanguageTag(LanguageTag(u"ru"_ustr));
     Application::SetSettings(aSettings);
     comphelper::ScopeGuard g([&aSavedSettings] { Application::SetSettings(aSavedSettings); });
 
     createSwDoc("fdo48023.rtf");
     verify();
-    saveAndReload("Rich Text Format");
+    saveAndReload(u"Rich Text Format"_ustr);
     verify();
 }
 
@@ -448,7 +450,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48876)
         CPPUNIT_ASSERT(xParaEnum->hasMoreElements());
         CPPUNIT_ASSERT_EQUAL(
             style::LineSpacingMode::MINIMUM,
-            getProperty<style::LineSpacing>(xParaEnum->nextElement(), "ParaLineSpacing").Mode);
+            getProperty<style::LineSpacing>(xParaEnum->nextElement(), u"ParaLineSpacing"_ustr)
+                .Mode);
     };
     createSwDoc("fdo48876.rtf");
     verify();
@@ -458,7 +461,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48876)
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo48193)
 {
-    auto verify = [this]() { CPPUNIT_ASSERT_EQUAL(OUString("foo1bar"), getBodyText()); };
+    auto verify = [this]() { CPPUNIT_ASSERT_EQUAL(u"foo1bar"_ustr, getBodyText()); };
     createSwDoc("fdo48193.rtf");
     verify();
     saveAndReload(mpFilter);
@@ -475,13 +478,13 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo44211)
 
     AllSettings aSavedSettings = Application::GetSettings();
     AllSettings aSettings(aSavedSettings);
-    aSettings.SetLanguageTag(LanguageTag("lt"));
+    aSettings.SetLanguageTag(LanguageTag(u"lt"_ustr));
     Application::SetSettings(aSettings);
     comphelper::ScopeGuard g([&aSavedSettings] { Application::SetSettings(aSavedSettings); });
 
     createSwDoc("fdo44211.rtf");
     verify();
-    saveAndReload("Rich Text Format");
+    saveAndReload(u"Rich Text Format"_ustr);
     verify();
 }
 
@@ -494,7 +497,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48037)
         aUSLocale.Language = "en";
         aFRLocale.Language = "fr";
         sal_Int32 nExpected = xNumberSupplier->getNumberFormats()->addNewConverted(
-            "d MMMM yyyy", aUSLocale, aFRLocale);
+            u"d MMMM yyyy"_ustr, aUSLocale, aFRLocale);
 
         uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XEnumerationAccess> xFieldsAccess(
@@ -502,7 +505,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48037)
         uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
         uno::Reference<beans::XPropertySet> xPropertySet(xFields->nextElement(), uno::UNO_QUERY);
         sal_Int32 nActual = 0;
-        xPropertySet->getPropertyValue("NumberFormat") >>= nActual;
+        xPropertySet->getPropertyValue(u"NumberFormat"_ustr) >>= nActual;
 
         CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
     };
@@ -516,7 +519,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo47764)
 {
     auto verify = [this]() {
         // \cbpat with zero argument should mean the auto (-1) color, not a default color (black)
-        CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(getParagraph(1), "ParaBackColor"));
+        CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(getParagraph(1), u"ParaBackColor"_ustr));
     };
     createSwDoc("fdo47764.rtf");
     verify();
@@ -556,15 +559,15 @@ CPPUNIT_TEST_FIXTURE(Test, testN757651)
 CPPUNIT_TEST_FIXTURE(Test, testFdo49501)
 {
     auto verify = [this]() {
-        uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"),
-                                                   uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xStyle(
+            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
 
-        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle, "IsLandscape"));
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle, u"IsLandscape"_ustr));
         sal_Int32 nExpected(convertTwipToMm100(567));
-        CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int32>(xStyle, "LeftMargin"));
-        CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int32>(xStyle, "RightMargin"));
-        CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int32>(xStyle, "TopMargin"));
-        CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int32>(xStyle, "BottomMargin"));
+        CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int32>(xStyle, u"LeftMargin"_ustr));
+        CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int32>(xStyle, u"RightMargin"_ustr));
+        CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int32>(xStyle, u"TopMargin"_ustr));
+        CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int32>(xStyle, u"BottomMargin"_ustr));
     };
     createSwDoc("fdo49501.rtf");
     verify();
@@ -575,7 +578,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo49501)
 CPPUNIT_TEST_FIXTURE(Test, testFdo49271)
 {
     auto verify = [this]() {
-        CPPUNIT_ASSERT_EQUAL(25.f, getProperty<float>(getParagraph(2), "CharHeight"));
+        CPPUNIT_ASSERT_EQUAL(25.f, getProperty<float>(getParagraph(2), u"CharHeight"_ustr));
     };
     createSwDoc("fdo49271.rtf");
     verify();
@@ -588,7 +591,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo50539)
     auto verify = [this]() {
         // \chcbpat with zero argument should mean the auto (-1) color, not a default color (black)
         CPPUNIT_ASSERT_EQUAL(COL_AUTO,
-                             getProperty<Color>(getRun(getParagraph(1), 1), "CharBackColor"));
+                             getProperty<Color>(getRun(getParagraph(1), 1), u"CharBackColor"_ustr));
     };
     createSwDoc("fdo50539.rtf");
     verify();
@@ -602,7 +605,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo50665)
         // Access the second run, which is a textfield
         uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 2), uno::UNO_QUERY);
         // This used to be the default, as character properties were ignored.
-        CPPUNIT_ASSERT_EQUAL(OUString("Book Antiqua"), getProperty<OUString>(xRun, "CharFontName"));
+        CPPUNIT_ASSERT_EQUAL(u"Book Antiqua"_ustr,
+                             getProperty<OUString>(xRun, u"CharFontName"_ustr));
     };
     createSwDoc("fdo50665.rtf");
     verify();
@@ -621,9 +625,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo49659)
 
         // The graphic was also empty
         uno::Reference<beans::XPropertySet> xGraphic
-            = getProperty<uno::Reference<beans::XPropertySet>>(getShape(1), "Graphic");
+            = getProperty<uno::Reference<beans::XPropertySet>>(getShape(1), u"Graphic"_ustr);
         CPPUNIT_ASSERT_EQUAL(graphic::GraphicType::PIXEL,
-                             getProperty<sal_Int8>(xGraphic, "GraphicType"));
+                             getProperty<sal_Int8>(xGraphic, u"GraphicType"_ustr));
     };
     createSwDoc("fdo49659.rtf");
     verify();
@@ -640,9 +644,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo46966)
          * xray ThisComponent.StyleFamilies.PageStyles.Default.TopMargin
          */
         uno::Reference<beans::XPropertySet> xPropertySet(
-            getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(720)),
-                             getProperty<sal_Int32>(xPropertySet, "TopMargin"));
+                             getProperty<sal_Int32>(xPropertySet, u"TopMargin"_ustr));
     };
     createSwDoc("fdo46966.rtf");
     verify();
@@ -657,7 +661,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo76633)
         CPPUNIT_ASSERT_EQUAL(1, getShapes());
         uno::Reference<lang::XServiceInfo> xShape(getShape(1), uno::UNO_QUERY);
         CPPUNIT_ASSERT(xShape.is());
-        CPPUNIT_ASSERT(xShape->supportsService("com.sun.star.text.TextGraphicObject"));
+        CPPUNIT_ASSERT(xShape->supportsService(u"com.sun.star.text.TextGraphicObject"_ustr));
     };
     createSwDoc("fdo76633.rtf");
     verify();
@@ -683,13 +687,13 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48033)
         uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
                                                         uno::UNO_QUERY);
         uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("B1"), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"B1"_ustr), uno::UNO_QUERY);
         uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell->getText(),
                                                                       uno::UNO_QUERY);
         uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
         uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("Frame"),
-                             getProperty<OUString>(getRun(xPara, 1), "TextPortionType"));
+        CPPUNIT_ASSERT_EQUAL(u"Frame"_ustr,
+                             getProperty<OUString>(getRun(xPara, 1), u"TextPortionType"_ustr));
     };
     createSwDoc("fdo48033.rtf");
     verify();
@@ -715,13 +719,13 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo53594)
         uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
                                                         uno::UNO_QUERY);
         uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("B1"), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"B1"_ustr), uno::UNO_QUERY);
         uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell->getText(),
                                                                       uno::UNO_QUERY);
         uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
         uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("Frame"),
-                             getProperty<OUString>(getRun(xPara, 1), "TextPortionType"));
+        CPPUNIT_ASSERT_EQUAL(u"Frame"_ustr,
+                             getProperty<OUString>(getRun(xPara, 1), u"TextPortionType"_ustr));
     };
     createSwDoc("fdo53594.rtf");
     verify();
@@ -732,8 +736,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo53594)
 CPPUNIT_TEST_FIXTURE(Test, testFdo36089)
 {
     auto verify = [this]() {
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(-50),
-                             getProperty<sal_Int16>(getRun(getParagraph(1), 2), "CharEscapement"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(-50), getProperty<sal_Int16>(getRun(getParagraph(1), 2),
+                                                                    u"CharEscapement"_ustr));
     };
     createSwDoc("fdo36089.rtf");
     verify();
@@ -831,7 +835,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo52475)
     auto verify = [this]() {
         // The problem was that \chcbpat0 resulted in no color, instead of COL_AUTO.
         CPPUNIT_ASSERT_EQUAL(COL_AUTO,
-                             getProperty<Color>(getRun(getParagraph(1), 3), "CharBackColor"));
+                             getProperty<Color>(getRun(getParagraph(1), 3), u"CharBackColor"_ustr));
     };
     createSwDoc("fdo52475.rtf");
     verify();
@@ -860,13 +864,14 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyPastePageStyle)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
-    paste(u"rtfexport/data/copypaste-pagestyle-paste.rtf", "com.sun.star.comp.Writer.RtfFilter",
-          xEnd);
+    paste(u"rtfexport/data/copypaste-pagestyle-paste.rtf",
+          u"com.sun.star.comp.Writer.RtfFilter"_ustr, xEnd);
 
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Standard"),
-                                                     uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(21001),
-                         getProperty<sal_Int32>(xPropertySet, "Width")); // Was letter, i.e. 21590
+    uno::Reference<beans::XPropertySet> xPropertySet(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(21001),
+        getProperty<sal_Int32>(xPropertySet, u"Width"_ustr)); // Was letter, i.e. 21590
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCopyPasteFootnote)
@@ -876,10 +881,10 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyPasteFootnote)
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
     uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
-    paste(u"rtfexport/data/copypaste-footnote-paste.rtf", "com.sun.star.comp.Writer.RtfFilter",
-          xTextRange);
+    paste(u"rtfexport/data/copypaste-footnote-paste.rtf",
+          u"com.sun.star.comp.Writer.RtfFilter"_ustr, xTextRange);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), xTextRange->getString());
+    CPPUNIT_ASSERT_EQUAL(u"bbb"_ustr, xTextRange->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo63428)
@@ -889,24 +894,24 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo63428)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
-    paste(u"rtfexport/data/fdo63428.rtf", "com.sun.star.comp.Writer.RtfFilter", xEnd);
+    paste(u"rtfexport/data/fdo63428.rtf", u"com.sun.star.comp.Writer.RtfFilter"_ustr, xEnd);
 
     // Additionally, commented range was imported as a normal comment.
-    CPPUNIT_ASSERT_EQUAL(OUString("Annotation"),
-                         getProperty<OUString>(getRun(getParagraph(1), 2), "TextPortionType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("AnnotationEnd"),
-                         getProperty<OUString>(getRun(getParagraph(1), 4), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(u"Annotation"_ustr, getProperty<OUString>(getRun(getParagraph(1), 2),
+                                                                   u"TextPortionType"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"AnnotationEnd"_ustr, getProperty<OUString>(getRun(getParagraph(1), 4),
+                                                                      u"TextPortionType"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo69384)
 {
     auto verify = [this]() {
         // Ensure non-default style is loaded
-        getStyles("ParagraphStyles")->getByName("Text body justified");
+        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Text body justified"_ustr);
         // Ensure default styles were modified, vs testFdo69384Inserted where it is not
         uno::Reference<beans::XPropertySet> xPropertySet(
-            getStyles("ParagraphStyles")->getByName("Text body"), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(68.f, getProperty<float>(xPropertySet, "CharHeight"));
+            getStyles(u"ParagraphStyles"_ustr)->getByName(u"Text body"_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(68.f, getProperty<float>(xPropertySet, u"CharHeight"_ustr));
     };
     createSwDoc("fdo69384-paste.rtf");
     verify();
@@ -920,13 +925,13 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo69384Inserted)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
-    paste(u"rtfexport/data/fdo69384-paste.rtf", "com.sun.star.comp.Writer.RtfFilter", xEnd);
+    paste(u"rtfexport/data/fdo69384-paste.rtf", u"com.sun.star.comp.Writer.RtfFilter"_ustr, xEnd);
 
     // During insert of the RTF document we do not change pre-existing styles
     // vs testFdo69384 where it is
     uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles("ParagraphStyles")->getByName("Text body"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(xPropertySet, "CharHeight"));
+        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Text body"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(xPropertySet, u"CharHeight"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo61193)
@@ -936,7 +941,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo61193)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
-    paste(u"rtfexport/data/fdo61193.rtf", "com.sun.star.comp.Writer.RtfFilter", xEnd);
+    paste(u"rtfexport/data/fdo61193.rtf", u"com.sun.star.comp.Writer.RtfFilter"_ustr, xEnd);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf108123)
@@ -947,7 +952,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108123)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
-    paste(u"rtfexport/data/tdf108123.rtf", "com.sun.star.comp.Writer.RtfFilter", xEnd);
+    paste(u"rtfexport/data/tdf108123.rtf", u"com.sun.star.comp.Writer.RtfFilter"_ustr, xEnd);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testShptxtPard)
@@ -955,7 +960,7 @@ CPPUNIT_TEST_FIXTURE(Test, testShptxtPard)
     auto verify = [this]() {
         // The problem was that \pard inside \shptxt caused loss of shape text
         uno::Reference<text::XText> xText(getShape(1), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("shape text"), xText->getString());
+        CPPUNIT_ASSERT_EQUAL(u"shape text"_ustr, xText->getString());
     };
     createSwDoc("shptxt-pard.rtf");
     verify();
@@ -970,16 +975,16 @@ CPPUNIT_TEST_FIXTURE(Test, testDoDhgt)
         CPPUNIT_ASSERT_EQUAL(3, nShapes);
         for (int i = 0; i < nShapes; ++i)
         {
-            Color nFillColor = getProperty<Color>(getShape(i + 1), "FillColor");
+            Color nFillColor = getProperty<Color>(getShape(i + 1), u"FillColor"_ustr);
             if (nFillColor == 0xc0504d) // red
                 CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
-                                     getProperty<sal_Int32>(getShape(i + 1), "ZOrder"));
+                                     getProperty<sal_Int32>(getShape(i + 1), u"ZOrder"_ustr));
             else if (nFillColor == 0x9bbb59) // green
                 CPPUNIT_ASSERT_EQUAL(sal_Int32(1),
-                                     getProperty<sal_Int32>(getShape(i + 1), "ZOrder"));
+                                     getProperty<sal_Int32>(getShape(i + 1), u"ZOrder"_ustr));
             else if (nFillColor == 0x4f81bd) // blue
                 CPPUNIT_ASSERT_EQUAL(sal_Int32(2),
-                                     getProperty<sal_Int32>(getShape(i + 1), "ZOrder"));
+                                     getProperty<sal_Int32>(getShape(i + 1), u"ZOrder"_ustr));
         }
     };
     createSwDoc("do-dhgt.rtf");
@@ -992,7 +997,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDplinehollow)
 {
     auto verify = [this]() {
         uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
-        table::BorderLine2 line(getProperty<table::BorderLine2>(xPropertySet, "TopBorder"));
+        table::BorderLine2 line(getProperty<table::BorderLine2>(xPropertySet, u"TopBorder"_ustr));
         CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::NONE, line.LineStyle);
     };
     createSwDoc("dplinehollow.rtf");
@@ -1007,7 +1012,8 @@ CPPUNIT_TEST_FIXTURE(Test, testLeftmarginDefault)
         // The default left/right margin was incorrect when the top margin was set to zero.
         CPPUNIT_ASSERT_EQUAL(
             sal_Int32(2540),
-            getProperty<sal_Int32>(getStyles("PageStyles")->getByName("Standard"), "LeftMargin"));
+            getProperty<sal_Int32>(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr),
+                                   u"LeftMargin"_ustr));
     };
     createSwDoc("leftmargin-default.rtf");
     verify();
@@ -1064,12 +1070,12 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo54473)
 {
     auto verify = [this]() {
         // The problem was that character styles were not imported due to a typo.
-        CPPUNIT_ASSERT_EQUAL(
-            OUString("Anot"),
-            getProperty<OUString>(getRun(getParagraph(1), 1, "Text "), "CharStyleName"));
-        CPPUNIT_ASSERT_EQUAL(
-            OUString("ForeignTxt"),
-            getProperty<OUString>(getRun(getParagraph(1), 3, "character "), "CharStyleName"));
+        CPPUNIT_ASSERT_EQUAL(u"Anot"_ustr,
+                             getProperty<OUString>(getRun(getParagraph(1), 1, u"Text "_ustr),
+                                                   u"CharStyleName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"ForeignTxt"_ustr,
+                             getProperty<OUString>(getRun(getParagraph(1), 3, u"character "_ustr),
+                                                   u"CharStyleName"_ustr));
     };
     createSwDoc("fdo54473.rtf");
     verify();
@@ -1093,7 +1099,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo57886)
 {
     auto verify = [this]() {
         // Was 'int from <?> to <?> <?>'.
-        CPPUNIT_ASSERT_EQUAL(OUString("int from {firstlower} to {firstupper} {firstbody}"),
+        CPPUNIT_ASSERT_EQUAL(u"int from {firstlower} to {firstupper} {firstbody}"_ustr,
                              getFormula(getRun(getParagraph(1), 1)));
     };
     createSwDoc("fdo57886.rtf");
@@ -1106,12 +1112,12 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo58076)
 {
     auto verify = [this]() {
         // An additional section was created, so the default page style didn't have the custom margins.
-        uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"),
-                                                   uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(2251), getProperty<sal_Int32>(xStyle, "LeftMargin"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1752), getProperty<sal_Int32>(xStyle, "RightMargin"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(635), getProperty<sal_Int32>(xStyle, "TopMargin"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(635), getProperty<sal_Int32>(xStyle, "BottomMargin"));
+        uno::Reference<beans::XPropertySet> xStyle(
+            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2251), getProperty<sal_Int32>(xStyle, u"LeftMargin"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1752), getProperty<sal_Int32>(xStyle, u"RightMargin"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(635), getProperty<sal_Int32>(xStyle, u"TopMargin"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(635), getProperty<sal_Int32>(xStyle, u"BottomMargin"_ustr));
     };
     createSwDoc("fdo58076.rtf");
     verify();
@@ -1173,10 +1179,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo44053)
         uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
         // The with of the table's A1 and A2 cell should equal.
         CPPUNIT_ASSERT_EQUAL(getProperty<uno::Sequence<text::TableColumnSeparator>>(
-                                 xTableRows->getByIndex(0), "TableColumnSeparators")[0]
+                                 xTableRows->getByIndex(0), u"TableColumnSeparators"_ustr)[0]
                                  .Position,
                              getProperty<uno::Sequence<text::TableColumnSeparator>>(
-                                 xTableRows->getByIndex(1), "TableColumnSeparators")[0]
+                                 xTableRows->getByIndex(1), u"TableColumnSeparators"_ustr)[0]
                                  .Position);
     };
     createSwDoc("fdo44053.rtf");
@@ -1201,7 +1207,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo58646line)
 {
     auto verify = [this]() {
         // \line symbol was ignored
-        getParagraph(1, "foo\nbar");
+        getParagraph(1, u"foo\nbar"_ustr);
     };
     createSwDoc("fdo58646line.rtf");
     verify();
@@ -1213,7 +1219,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo78502)
 {
     auto verify = [this]() {
         // ";" separators were inserted as text
-        getParagraph(1, "foo");
+        getParagraph(1, u"foo"_ustr);
     };
     createSwDoc("fdo78502.rtf");
     verify();
@@ -1252,11 +1258,11 @@ CPPUNIT_TEST_FIXTURE(Test, testHexCRLF)
 {
     auto verify = [this]() {
         // hex-escaped \r and \n should create a paragraph break
-        getParagraph(1, "foo");
-        getParagraph(2, "bar");
-        getParagraph(3, "baz");
-        getParagraph(4, "");
-        getParagraph(5, "quux");
+        getParagraph(1, u"foo"_ustr);
+        getParagraph(2, u"bar"_ustr);
+        getParagraph(3, u"baz"_ustr);
+        getParagraph(4, u""_ustr);
+        getParagraph(5, u"quux"_ustr);
     };
     createSwDoc("hexcrlf.rtf");
     verify();
@@ -1269,7 +1275,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo58076_2)
     auto verify = [this]() {
         // Position of the picture wasn't correct.
         CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(8345)),
-                             getProperty<sal_Int32>(getShape(1), "HoriOrientPosition"));
+                             getProperty<sal_Int32>(getShape(1), u"HoriOrientPosition"_ustr));
     };
     createSwDoc("fdo58076-2.rtf");
     verify();
@@ -1283,9 +1289,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo59638)
         // The problem was that w:lvlOverride inside w:num was ignores by dmapper.
 
         uno::Reference<beans::XPropertySet> xPropertySet(
-            getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
+            getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), uno::UNO_QUERY);
         uno::Reference<container::XIndexAccess> xLevels(
-            xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+            xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
         uno::Sequence<beans::PropertyValue> aProps;
         xLevels->getByIndex(0) >>= aProps; // 1st level
 
@@ -1311,17 +1317,17 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo60722)
     auto verify = [this]() {
         // The problem was that the larger shape was over the smaller one, and not the other way around.
         uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xShape, "ZOrder"));
-        CPPUNIT_ASSERT_EQUAL(OUString("larger"), getProperty<OUString>(xShape, "Description"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xShape, u"ZOrder"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"larger"_ustr, getProperty<OUString>(xShape, u"Description"_ustr));
 
         xShape.set(getShape(2), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(xShape, "ZOrder"));
-        CPPUNIT_ASSERT_EQUAL(OUString("smaller"), getProperty<OUString>(xShape, "Description"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(xShape, u"ZOrder"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"smaller"_ustr, getProperty<OUString>(xShape, u"Description"_ustr));
 
         // Color of the line was blue, and it had zero width.
         xShape.set(getShape(3), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt32(26), getProperty<sal_uInt32>(xShape, "LineWidth"));
-        CPPUNIT_ASSERT_EQUAL(COL_BLACK, getProperty<Color>(xShape, "LineColor"));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(26), getProperty<sal_uInt32>(xShape, u"LineWidth"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, getProperty<Color>(xShape, u"LineColor"_ustr));
     };
     createSwDoc("fdo60722.rtf");
     verify();
@@ -1335,16 +1341,16 @@ CPPUNIT_TEST_FIXTURE(Test, testDoDhgtOld)
         // The file contains 3 shapes which have the same dhgt (z-order).
         // Test that the order is 1) a 2) black rectangle 3) b, and not something else
         uno::Reference<text::XText> xShape(getShape(1), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xShape, "ZOrder"));
-        CPPUNIT_ASSERT_EQUAL(OUString("a"), xShape->getString());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xShape, u"ZOrder"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"a"_ustr, xShape->getString());
 
         xShape.set(getShape(2), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(xShape, "ZOrder"));
-        CPPUNIT_ASSERT_EQUAL(COL_BLACK, getProperty<Color>(xShape, "FillColor"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(xShape, u"ZOrder"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, getProperty<Color>(xShape, u"FillColor"_ustr));
 
         xShape.set(getShape(3), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(xShape, "ZOrder"));
-        CPPUNIT_ASSERT_EQUAL(OUString("b"), xShape->getString());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(xShape, u"ZOrder"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"b"_ustr, xShape->getString());
     };
     createSwDoc("do-dhgt-old.rtf");
     verify();
@@ -1357,9 +1363,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo61909)
     auto verify = [this]() {
         uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
         // Was the Writer default font.
-        CPPUNIT_ASSERT_EQUAL(OUString("Courier New"),
-                             getProperty<OUString>(xTextRange, "CharFontName"));
-        CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xTextRange, "CharBackColor"));
+        CPPUNIT_ASSERT_EQUAL(u"Courier New"_ustr,
+                             getProperty<OUString>(xTextRange, u"CharFontName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xTextRange, u"CharBackColor"_ustr));
     };
     createSwDoc("fdo61909.rtf");
     verify();
@@ -1374,13 +1380,13 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo62288)
         uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
                                                         uno::UNO_QUERY);
         uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("B1"), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"B1"_ustr), uno::UNO_QUERY);
         uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell->getText(),
                                                                       uno::UNO_QUERY);
         uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
         uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
         // Margins were inherited from the previous cell, even there was a \pard there.
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaLeftMargin"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaLeftMargin"_ustr));
     };
     createSwDoc("fdo62288.rtf");
     verify();
@@ -1395,8 +1401,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo37716)
         uno::Reference<container::XIndexAccess> xFrames(xTextFramesSupplier->getTextFrames(),
                                                         uno::UNO_QUERY);
         // \nowrap got ignored, so Surround was text::WrapTextMode_PARALLEL
-        CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_NONE,
-                             getProperty<text::WrapTextMode>(xFrames->getByIndex(0), "Surround"));
+        CPPUNIT_ASSERT_EQUAL(
+            text::WrapTextMode_NONE,
+            getProperty<text::WrapTextMode>(xFrames->getByIndex(0), u"Surround"_ustr));
     };
     createSwDoc("fdo37716.rtf");
     verify();

@@ -40,7 +40,7 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, u"Office Open XML Text"_ustr) {}
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf150197_predefinedNumbering)
@@ -49,15 +49,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150197_predefinedNumbering)
 
     // The exact numbering style doesn't matter - just any non-bullet pre-defined numbering style.
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Style", uno::Any(OUString("Numbering 123")) },
-        { "FamilyName", uno::Any(OUString("NumberingStyles")) },
+        { "Style", uno::Any(u"Numbering 123"_ustr) },
+        { "FamilyName", uno::Any(u"NumberingStyles"_ustr) },
     });
-    dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:StyleApply"_ustr, aPropertyValues);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(getParagraph(1), "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u"1."_ustr, getProperty<OUString>(getParagraph(1), u"ListLabelString"_ustr));
 
-    saveAndReload("Office Open XML Text");
-    CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(getParagraph(1), "ListLabelString"));
+    saveAndReload(u"Office Open XML Text"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"1."_ustr, getProperty<OUString>(getParagraph(1), u"ListLabelString"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testInlineSdtHeader)
@@ -80,7 +80,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148956_directEndFormatting, "tdf148956_directEnd
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     // pWrtShell->EndPara(/*bSelect=*/true);
-    dispatchCommand(mxComponent, ".uno:GotoEndOfPara", {});
+    dispatchCommand(mxComponent, u".uno:GotoEndOfPara"_ustr, {});
     if (!isExported())
     {
         CPPUNIT_ASSERT_MESSAGE(
@@ -95,9 +95,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148956_directEndFormatting, "tdf148956_directEnd
     }
 
     pWrtShell->SttPara(/*bSelect=*/true);
-    dispatchCommand(mxComponent, ".uno:ResetAttributes", {});
+    dispatchCommand(mxComponent, u".uno:ResetAttributes"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:GotoEndOfPara", {});
+    dispatchCommand(mxComponent, u".uno:GotoEndOfPara"_ustr, {});
 
     CPPUNIT_ASSERT_MESSAGE(
         "Direct formatting cleared",
@@ -110,7 +110,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf147646, "tdf147646_mergedCellNumbering.docx")
     //Without the fix in place, it would have failed with
     //- Expected: 2.
     //- Actual  : 4.
-    CPPUNIT_ASSERT_EQUAL(OUString("2."),parseDump("/root/page/body/tab/row[4]/cell/txt/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']"_ostr,"expand"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"2."_ustr,parseDump("/root/page/body/tab/row[4]/cell/txt/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']"_ostr,"expand"_ostr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153526_commentInNumbering, "tdf153526_commentInNumbering.docx")
@@ -133,7 +133,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153042_largeTab, "tdf153042_largeTab.docx")
 
     xmlDocUniquePtr pLayout = parseLayoutDump();
     // Ensure a large tabstop is used in the pseudo-numbering (numbering::NONE followed by tabstop)
-    assertXPath(pLayout, "//SwFixPortion"_ostr, "width"_ostr, "1701");
+    assertXPath(pLayout, "//SwFixPortion"_ostr, "width"_ostr, u"1701"_ustr);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153042_noTab, "tdf153042_noTab.docx")
@@ -149,21 +149,21 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153042_noTab, "tdf153042_noTab.docx")
 
     xmlDocUniquePtr pLayout = parseLayoutDump();
     // Ensure a miniscule tab is used in the pseudo-numbering (numbering::NONE followed by tabstop)
-    assertXPath(pLayout, "//SwFixPortion"_ostr, "width"_ostr, "10");
+    assertXPath(pLayout, "//SwFixPortion"_ostr, "width"_ostr, u"10"_ustr);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf154751_dualStrikethrough, "tdf154751_dualStrikethrough.docx")
 {
-    auto nStrike = getProperty<sal_Int16>(getRun(getParagraph(1), 1), "CharStrikeout");
+    auto nStrike = getProperty<sal_Int16>(getRun(getParagraph(1), 1), u"CharStrikeout"_ustr);
     CPPUNIT_ASSERT_EQUAL(awt::FontStrikeout::SINGLE, nStrike);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf154478)
 {
     loadAndSave("tdf154478.docx");
-    xmlDocUniquePtr pXmlDoc = parseExport("word/comments.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/comments.xml"_ustr);
 
-    OUString aValues[5] = { "Comment1 seen.", "Comment2 seen.", "Comment3 NOTseen.", "Comment4 NOTseen.", "Comment5 NOTseen." };
+    OUString aValues[5] = { u"Comment1 seen."_ustr, u"Comment2 seen."_ustr, u"Comment3 NOTseen."_ustr, u"Comment4 NOTseen."_ustr, u"Comment5 NOTseen."_ustr };
     for (size_t i = 1; i < 6; ++i)
     {
         OString sPath = "/w:comments/w:comment[" + OString::number(i) + "]/w:p/w:r/w:t";
@@ -178,7 +178,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153592_columnBreaks)
 {
     loadAndSave("tdf153592_columnBreaks.docx");
 
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // The two column breaks were lost on import. (I wouldn't complain if they were at 3,5)
     assertXPath(pXmlDoc, "//w:br"_ostr, 2);
 }
@@ -213,7 +213,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf105035_framePrB, "tdf105035_framePrB.docx")
     CPPUNIT_ASSERT_GREATER(n1stFlyBottom, n2ndFlyTop); //Top is greater than bottom
 
     // Impossible layout TODO: the textboxes are in the wrong order.
-    OUString sTextBox1("Preparation of Papers for IEEE TRANSACTIONS and JOURNALS (November 2012)");
+    OUString sTextBox1(u"Preparation of Papers for IEEE TRANSACTIONS and JOURNALS (November 2012)"_ustr);
     CPPUNIT_ASSERT_MESSAGE("DID YOU FIX ME? Wow - I didn't think this would be possible!",
         !getXPathContent(pLayout, "//page[1]//anchored/fly[1]/txt"_ostr).startsWith(sTextBox1));
 }
@@ -236,9 +236,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154129_framePr1, "tdf154129_framePr1.docx")
     {
         uno::Reference<drawing::XShape> xTextFrame = getShape(i);
         // The anchor is defined in the style, and only the first style was checked, not the parents
-        auto nAnchor = getProperty<sal_Int16>(xTextFrame, "HoriOrientRelation");
+        auto nAnchor = getProperty<sal_Int16>(xTextFrame, u"HoriOrientRelation"_ustr);
         CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, nAnchor);
-        nAnchor = getProperty<sal_Int16>(xTextFrame, "VertOrientRelation");
+        nAnchor = getProperty<sal_Int16>(xTextFrame, u"VertOrientRelation"_ustr);
         CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, nAnchor);
     }
 }
@@ -252,14 +252,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePr, "tdf154703_framePr.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePr2, "tdf154703_framePr2.rtf")
 {
     // framePr frames are always imported as fully transparent
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(getShape(1), "FillTransparence"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(getShape(1), u"FillTransparence"_ustr));
 
     // as opposed to testLibreOfficeHang (RTF != INVERT_BORDER_SPACING) do not duplicate left/right
     uno::Reference<text::XTextRange> xTextRange(getShape(1), uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextRange->getText();
-    CPPUNIT_ASSERT_EQUAL(OUString("framePr"), getParagraphOfText(1, xText)->getString());
-    sal_Int32 nFrame = getProperty<sal_Int32>(getShape(1), "LeftBorderDistance");
-    sal_Int32 nPara = getProperty<sal_Int32>(getParagraphOfText(1, xText), "LeftBorderDistance");
+    CPPUNIT_ASSERT_EQUAL(u"framePr"_ustr, getParagraphOfText(1, xText)->getString());
+    sal_Int32 nFrame = getProperty<sal_Int32>(getShape(1), u"LeftBorderDistance"_ustr);
+    sal_Int32 nPara = getProperty<sal_Int32>(getParagraphOfText(1, xText), u"LeftBorderDistance"_ustr);
     if (!isExported()) // RTF
         CPPUNIT_ASSERT_EQUAL(sal_Int32(529), nFrame + nPara);
     else // DOCX
@@ -269,18 +269,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePr2, "tdf154703_framePr2.rtf")
     {
         // Fill the frame with a red background. It should be transferred on export to the paragraph
         uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
-        xFrame->setPropertyValue("FillColor", uno::Any(COL_RED));
-        xFrame->setPropertyValue("FillTransparence", uno::Any(static_cast<sal_Int32>(0)));
+        xFrame->setPropertyValue(u"FillColor"_ustr, uno::Any(COL_RED));
+        xFrame->setPropertyValue(u"FillTransparence"_ustr, uno::Any(static_cast<sal_Int32>(0)));
 
         return;
     }
 
     // exported: framed paragraphs without a background should now have a red background
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "//w:body/w:p[1]/w:pPr/w:shd"_ostr, "fill"_ostr, "800000");
-    assertXPath(pXmlDoc, "//w:body/w:p[2]/w:pPr/w:shd"_ostr, "fill"_ostr, "548DD4"); // was blue already, no change
-    assertXPath(pXmlDoc, "//w:body/w:p[3]/w:pPr/w:shd"_ostr, "fill"_ostr, "800000");
-    assertXPath(pXmlDoc, "//w:body/w:p[3]/w:pPr/w:framePr"_ostr, "yAlign"_ostr, "center");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//w:body/w:p[1]/w:pPr/w:shd"_ostr, "fill"_ostr, u"800000"_ustr);
+    assertXPath(pXmlDoc, "//w:body/w:p[2]/w:pPr/w:shd"_ostr, "fill"_ostr, u"548DD4"_ustr); // was blue already, no change
+    assertXPath(pXmlDoc, "//w:body/w:p[3]/w:pPr/w:shd"_ostr, "fill"_ostr, u"800000"_ustr);
+    assertXPath(pXmlDoc, "//w:body/w:p[3]/w:pPr/w:framePr"_ostr, "yAlign"_ostr, u"center"_ustr);
     assertXPathNoAttribute(pXmlDoc, "//w:body/w:p[3]/w:pPr/w:framePr"_ostr, "y"_ostr);
 }
 
@@ -290,19 +290,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePrWrapSpacing, "tdf154703_framePrWra
     if (!isExported())
         return;
 
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // before the fix, this was half of the correct value.
-    assertXPath(pXmlDoc, "//w:body/w:p/w:pPr/w:framePr"_ostr, "hSpace"_ostr, "2552");
+    assertXPath(pXmlDoc, "//w:body/w:p/w:pPr/w:framePr"_ostr, "hSpace"_ostr, u"2552"_ustr);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePrTextDirection, "tdf154703_framePrTextDirection.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::WritingMode2::TB_RL), getProperty<sal_Int16>(getShape(1), "WritingMode"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::WritingMode2::TB_RL), getProperty<sal_Int16>(getShape(1), u"WritingMode"_ustr));
     if (!isExported())
         return;
 
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "//w:body/w:p/w:pPr/w:textDirection"_ostr, "val"_ostr, "tbRl");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//w:body/w:p/w:pPr/w:textDirection"_ostr, "val"_ostr, u"tbRl"_ustr);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak, "tdf153613_anchoredAfterPgBreak.docx")
@@ -334,7 +334,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak6, "tdf153613_anchore
     CPPUNIT_ASSERT_EQUAL(4, getParagraphs());
 
     xmlDocUniquePtr pLayout = parseLayoutDump();
-    CPPUNIT_ASSERT_EQUAL(OUString("y"), getXPathContent(pLayout, "//page[2]/body/txt[1]"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"y"_ustr, getXPathContent(pLayout, "//page[2]/body/txt[1]"_ostr));
     assertXPath(pLayout, "//page[1]//anchored"_ostr, 1); // DID YOU FIX ME? This should be page[2]
 }
 
@@ -353,7 +353,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153613_inlineAfterPgBreak2, "tdf153613_inlineAft
     CPPUNIT_ASSERT_EQUAL(4, getParagraphs());
 
     xmlDocUniquePtr pLayout = parseLayoutDump();
-    CPPUNIT_ASSERT_EQUAL(OUString("x"), getXPathContent(pLayout, "//page[1]/body/txt[2]"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"x"_ustr, getXPathContent(pLayout, "//page[1]/body/txt[2]"_ostr));
     assertXPath(pLayout, "//page[2]//anchored"_ostr, 1);
 }
 
@@ -375,144 +375,144 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153964_topMarginAfterBreak14, "tdf153964_topMarg
 {
     //The top margin should only apply once in a split paragraph.
     //In this compat14 (Windows 2010) version, it applies after the break if no prior visible run.
-    uno::Reference<beans::XPropertySet> xPara(getParagraph(2, "a w:br at the start of the document. Does it use 60 point top margin?"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(2, u"a w:br at the start of the document. Does it use 60 point top margin?"_ustr), uno::UNO_QUERY);
     //CPPUNIT_ASSERT_EQUAL(sal_Int32(2117), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
 
     xPara.set(getParagraph(3, u"60 pt spacing before"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2117), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
-    CPPUNIT_ASSERT_EQUAL(Color(0xfbe4d5), getProperty<Color>(xPara, "ParaBackColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2117), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Color(0xfbe4d5), getProperty<Color>(xPara, u"ParaBackColor"_ustr));
 
     // The top margin was applied to paragraph 3, so it shouldn't apply here
     xPara.set(getParagraph(4, u"column break1"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
-    CPPUNIT_ASSERT_EQUAL(Color(0xfbe4d5), getProperty<Color>(xPara, "ParaBackColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Color(0xfbe4d5), getProperty<Color>(xPara, u"ParaBackColor"_ustr));
 
     xPara.set(getParagraph(5, u"60 pt followed by page break"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2117), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
-    CPPUNIT_ASSERT_EQUAL(Color(0xdeeaf6), getProperty<Color>(xPara, "ParaBackColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2117), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Color(0xdeeaf6), getProperty<Color>(xPara, u"ParaBackColor"_ustr));
 
     // The top margin was applied to paragraph 5, so it shouldn't apply here
     xPara.set(getParagraph(6, u"page break1"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
-    CPPUNIT_ASSERT_EQUAL(Color(0xdeeaf6), getProperty<Color>(xPara, "ParaBackColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Color(0xdeeaf6), getProperty<Color>(xPara, u"ParaBackColor"_ustr));
 
     // The top margin was not applied yet, so with compat14 it should apply here.
     xPara.set(getParagraph(7, u"column break2"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2117), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
-    CPPUNIT_ASSERT_EQUAL(Color(0xe2efd9), getProperty<Color>(xPara, "ParaBackColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2117), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Color(0xe2efd9), getProperty<Color>(xPara, u"ParaBackColor"_ustr));
 
     // In an odd twist, the w:br was actually at the end of the previous w:p, so in that case
     // we ignore the top margin definition this time.
     xPara.set(getParagraph(9, u"page break2"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
 
     // The top margin was not applied before the column break, so with compat14 it should apply here
     xPara.set(getParagraph(10, u""_ustr), uno::UNO_QUERY); // after column break
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2117), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
-    CPPUNIT_ASSERT_EQUAL(Color(0xfff2cc), getProperty<Color>(xPara, "ParaBackColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2117), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Color(0xfff2cc), getProperty<Color>(xPara, u"ParaBackColor"_ustr));
 
     // In an odd twist, the w:br was actually at the end of the previous w:p, so in that case
     // we ignore the top margin definition this time.
     xPara.set(getParagraph(12, u""_ustr), uno::UNO_QUERY); // after page break
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153964_topMarginAfterBreak15, "tdf153964_topMarginAfterBreak15.docx")
 {
     //The top margin should only apply once (at most) in a split paragraph.
     //In this compat15 (Windows 2013) version, it never applies after the break.
-    uno::Reference<beans::XPropertySet> xPara(getParagraph(2, "a w:br at the start of the document. Does it use 60 point top margin?"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(2, u"a w:br at the start of the document. Does it use 60 point top margin?"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
 
     xPara.set(getParagraph(3, u"60 pt spacing before"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2117), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
-    CPPUNIT_ASSERT_EQUAL(Color(0xfbe4d5), getProperty<Color>(xPara, "ParaBackColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2117), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Color(0xfbe4d5), getProperty<Color>(xPara, u"ParaBackColor"_ustr));
 
     // The top margin was applied to paragraph 3, so it shouldn't apply here
     xPara.set(getParagraph(4, u"column break1"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
-    CPPUNIT_ASSERT_EQUAL(Color(0xfbe4d5), getProperty<Color>(xPara, "ParaBackColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Color(0xfbe4d5), getProperty<Color>(xPara, u"ParaBackColor"_ustr));
 
     xPara.set(getParagraph(5, u"60 pt followed by page break"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2117), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
-    CPPUNIT_ASSERT_EQUAL(Color(0xdeeaf6), getProperty<Color>(xPara, "ParaBackColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2117), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Color(0xdeeaf6), getProperty<Color>(xPara, u"ParaBackColor"_ustr));
 
     // The top margin was applied to paragraph 5, so it shouldn't apply here
     xPara.set(getParagraph(6, u"page break1"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
-    CPPUNIT_ASSERT_EQUAL(Color(0xdeeaf6), getProperty<Color>(xPara, "ParaBackColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Color(0xdeeaf6), getProperty<Color>(xPara, u"ParaBackColor"_ustr));
 
     // The top margin was not applied to paragraph 6, and with compat15 it shouldn't apply here.
     xPara.set(getParagraph(7, u"column break2"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
-    CPPUNIT_ASSERT_EQUAL(Color(0xe2efd9), getProperty<Color>(xPara, "ParaBackColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Color(0xe2efd9), getProperty<Color>(xPara, u"ParaBackColor"_ustr));
 
     // The top margin not was applied to paragraph 8, and with compat15 it shouldn't apply here.
     xPara.set(getParagraph(9, u"page break2"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
 
     // The top margin was not applied to paragraph 9, and with compat15 it shouldn't apply here.
     xPara.set(getParagraph(10, u""_ustr), uno::UNO_QUERY); // after column break
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
-    CPPUNIT_ASSERT_EQUAL(Color(0xfff2cc), getProperty<Color>(xPara, "ParaBackColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Color(0xfff2cc), getProperty<Color>(xPara, u"ParaBackColor"_ustr));
 
     // The top margin was not applied to paragraph 11, and with compat15 it shouldn't apply here.
     xPara.set(getParagraph(12, u""_ustr), uno::UNO_QUERY); // after page break
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153964_numberingAfterBreak14, "tdf153964_numberingAfterBreak14.docx")
 {
     //Numbering should only apply once in a split paragraph.
-    uno::Reference<beans::XPropertySet> xPara(getParagraph(2, "How numbering affected by a column break?"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(2, u"How numbering affected by a column break?"_ustr), uno::UNO_QUERY);
     //CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(xPara, "ListLabelString"));
-    xPara.set(getParagraph(3, "How is numbering affected by a page break?"), uno::UNO_QUERY);
+    xPara.set(getParagraph(3, u"How is numbering affected by a page break?"_ustr), uno::UNO_QUERY);
     //CPPUNIT_ASSERT_EQUAL(OUString("2."), getProperty<OUString>(xPara, "ListLabelString"));
-    xPara.set(getParagraph(4, "x"), uno::UNO_QUERY);
+    xPara.set(getParagraph(4, u"x"_ustr), uno::UNO_QUERY);
     //CPPUNIT_ASSERT_EQUAL(OUString("3."), getProperty<OUString>(xPara, "ListLabelString"));
-    xPara.set(getParagraph(5, "column break"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
-    xPara.set(getParagraph(6, "y"), uno::UNO_QUERY);
+    xPara.set(getParagraph(5, u"column break"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
+    xPara.set(getParagraph(6, u"y"_ustr), uno::UNO_QUERY);
     //CPPUNIT_ASSERT_EQUAL(OUString("3."), getProperty<OUString>(xPara, "ListLabelString"));
-    xPara.set(getParagraph(7, "page break"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+    xPara.set(getParagraph(7, u"page break"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153964_firstIndentAfterBreak14, "tdf153964_firstIndentAfterBreak14.docx")
 {
     //First line indents should only apply once in a split paragraph.
-    uno::Reference<beans::XPropertySet> xPara(getParagraph(2, "How is first line indent affected by a column break?"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xPara, "ParaFirstLineIndent"));
-    xPara.set(getParagraph(3, "How is first line indent affected by a page break?"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xPara, "ParaFirstLineIndent"));
-    xPara.set(getParagraph(4, "x"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xPara, "ParaFirstLineIndent"));
-    xPara.set(getParagraph(5, "column break"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaFirstLineIndent"));
-    xPara.set(getParagraph(6, "y"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xPara, "ParaFirstLineIndent"));
-    xPara.set(getParagraph(7, "page break"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaFirstLineIndent"));
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(2, u"How is first line indent affected by a column break?"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xPara, u"ParaFirstLineIndent"_ustr));
+    xPara.set(getParagraph(3, u"How is first line indent affected by a page break?"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xPara, u"ParaFirstLineIndent"_ustr));
+    xPara.set(getParagraph(4, u"x"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xPara, u"ParaFirstLineIndent"_ustr));
+    xPara.set(getParagraph(5, u"column break"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaFirstLineIndent"_ustr));
+    xPara.set(getParagraph(6, u"y"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xPara, u"ParaFirstLineIndent"_ustr));
+    xPara.set(getParagraph(7, u"page break"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaFirstLineIndent"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf148834_lineNumbering)
 {
     loadAndSave("tdf148834_lineNumbering.odt");
 
-    xmlDocUniquePtr pStylesXml = parseExport("word/styles.xml");
+    xmlDocUniquePtr pStylesXml = parseExport(u"word/styles.xml"_ustr);
     // user specified: do not include in line numbering
     assertXPath(pStylesXml, "//w:style[@w:styleId='Normal']/w:pPr/w:suppressLineNumbers"_ostr, 1);
     // even though it matches the parent style, these should always avoid showing line numbering
     assertXPath(pStylesXml, "//w:style[@w:styleId='Footer']/w:pPr/w:suppressLineNumbers"_ostr, 1);
     assertXPath(pStylesXml,
-                "//w:style[@w:styleId='0NUMBERED']/w:pPr/w:suppressLineNumbers"_ostr, "val"_ostr, "0");
+                "//w:style[@w:styleId='0NUMBERED']/w:pPr/w:suppressLineNumbers"_ostr, "val"_ostr, u"0"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf157598)
 {
     loadAndSave("tdf157598.docx");
 
-    xmlDocUniquePtr pStylesXml = parseExport("word/styles.xml");
+    xmlDocUniquePtr pStylesXml = parseExport(u"word/styles.xml"_ustr);
 
     // Without the fix in place, this test would have failed with
     // - Expected: 0
@@ -527,7 +527,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf76022_textboxWrap)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Did you make wrapping sane/interoperable?", 1, getPages());
 
     // When saving to DOCX, the table should obey the fly wrapping
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
 
     // The fly takes up the whole page, so the table needs to shift down to the next page.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -536,8 +536,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf76022_textboxWrap)
 DECLARE_OOXMLEXPORT_TEST(testTdf134114_allowOverlap, "tdf134114_allowOverlap.docx")
 {
     // CPPUNIT_ASSERT_EQUAL(1, getPages());
-    CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), "AllowOverlap"));
-    CPPUNIT_ASSERT(getProperty<bool>(getShape(2), "AllowOverlap"));
+    CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), u"AllowOverlap"_ustr));
+    CPPUNIT_ASSERT(getProperty<bool>(getShape(2), u"AllowOverlap"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf149551_mongolianVert)
@@ -550,17 +550,17 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149551_mongolianVert)
     // the frame in it had WritingMode = 2 = TB_RL.
     // It should be WritingMode = 3 = TB_LR in both cases.
     const sal_Int16 eExpected(text::WritingMode2::TB_LR);
-    CPPUNIT_ASSERT_EQUAL(eExpected, getProperty<sal_Int16>(getShape(1), "WritingMode"));
+    CPPUNIT_ASSERT_EQUAL(eExpected, getProperty<sal_Int16>(getShape(1), u"WritingMode"_ustr));
     uno::Reference<beans::XPropertySet> xShapeProps(getShape(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xFrameProps(xShapeProps->getPropertyValue("TextBoxContent"),
+    uno::Reference<beans::XPropertySet> xFrameProps(xShapeProps->getPropertyValue(u"TextBoxContent"_ustr),
                                                     uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(eExpected, getProperty<sal_Int16>(xFrameProps, "WritingMode"));
+    CPPUNIT_ASSERT_EQUAL(eExpected, getProperty<sal_Int16>(xFrameProps, u"WritingMode"_ustr));
 
     // Such shape must have vert="mongolianVert" again after saving.
     // Without fix the orientation was vert="vert".
-    save("Office Open XML Text");
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "//wps:bodyPr"_ostr, "vert"_ostr, "mongolianVert");
+    save(u"Office Open XML Text"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//wps:bodyPr"_ostr, "vert"_ostr, u"mongolianVert"_ustr);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf151912, "tdf151912.docx")
@@ -570,8 +570,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf151912, "tdf151912.docx")
     //tdf#151548 - ensure block SDT preserves id (instead of random re-assignment)
     if (!isExported())
         return;
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "//w:sdt//w:sdtPr/w:id"_ostr, "val"_ostr, "1802566103");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//w:sdt//w:sdtPr/w:id"_ostr, "val"_ostr, u"1802566103"_ustr);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf147724, "tdf147724.docx")
@@ -579,7 +579,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf147724, "tdf147724.docx")
     xmlDocUniquePtr pLayout = parseLayoutDump();
 
     // Ensure we load field value from external XML correctly (it was "HERUNTERLADEN")
-    assertXPathContent(pLayout, "/root/page[1]/body/txt[1]"_ostr, "Placeholder -> *ABC*");
+    assertXPathContent(pLayout, "/root/page[1]/body/txt[1]"_ostr, u"Placeholder -> *ABC*"_ustr);
 
     // This SDT has no storage id, it is not an error, but content can be taken from any suitable XML
     // There 2 variants possible, both are acceptable
@@ -595,9 +595,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf130782, "chart.docx")
     uno::Reference<container::XNamed> xObj(xAccess->getByIndex(0), uno::UNO_QUERY);
 
     // these properties were not imported
-    CPPUNIT_ASSERT_EQUAL(OUString("Diagramm 1"), xObj->getName());
-    CPPUNIT_ASSERT_EQUAL(OUString("uninspired default chart"), getProperty<OUString>(xObj, "Title"));
-    CPPUNIT_ASSERT_EQUAL(OUString("the description is here"), getProperty<OUString>(xObj, "Description"));
+    CPPUNIT_ASSERT_EQUAL(u"Diagramm 1"_ustr, xObj->getName());
+    CPPUNIT_ASSERT_EQUAL(u"uninspired default chart"_ustr, getProperty<OUString>(xObj, u"Title"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"the description is here"_ustr, getProperty<OUString>(xObj, u"Description"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testNumberPortionFormatFromODT)
@@ -607,16 +607,16 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberPortionFormatFromODT)
     createSwDoc("number-portion-format.odt");
 
     // When saving to DOCX:
-    save("Office Open XML Text");
+    save(u"Office Open XML Text"_ustr);
 
     // Then make sure that the paragraph marker's char format has that custom font size:
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0
     // - XPath '//w:pPr/w:rPr/w:sz' number of nodes is incorrect
     // i.e. <w:sz> was missing under <w:pPr>'s <w:rPr>.
-    assertXPath(pXmlDoc, "//w:pPr/w:rPr/w:sz"_ostr, "val"_ostr, "48");
+    assertXPath(pXmlDoc, "//w:pPr/w:rPr/w:sz"_ostr, "val"_ostr, u"48"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testParaStyleCharPosition)
@@ -625,16 +625,16 @@ CPPUNIT_TEST_FIXTURE(Test, testParaStyleCharPosition)
     createSwDoc("para-style-char-position.docx");
 
     // When saving it back to DOCX:
-    save("Office Open XML Text");
+    save(u"Office Open XML Text"_ustr);
 
     // Then make sure that is not turned into a normal subscript text:
-    xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0
     // - XPath '/w:styles/w:style[@w:styleId='Normal']/w:rPr/w:position' number of nodes is incorrect
     // i.e. we wrote <w:vertAlign w:val="subscript"> instead of <w:position>.
-    assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='Normal']/w:rPr/w:position"_ostr, "val"_ostr, "-1");
+    assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='Normal']/w:rPr/w:position"_ostr, "val"_ostr, u"-1"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf150966_regularInset)
@@ -649,8 +649,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150966_regularInset)
 
     // Without fix the insets were tIns="359280" and bIns="539640". The text area had 1080Emu height
     // and Word displays no text at all.
-    save("Office Open XML Text");
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    save(u"Office Open XML Text"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPathAttrs(pXmlDoc, "//wps:bodyPr"_ostr, { { "tIns", "179640" }, { "bIns", "360000" } });
 }
 
@@ -674,10 +674,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtDuplicatedId)
     createSwDoc("sdt-duplicated-id.docx");
 
     // When exporting that back to DOCX:
-    save("Office Open XML Text");
+    save(u"Office Open XML Text"_ustr);
 
     // Then make sure we write 2 <w:sdt> and no duplicates:
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2
     // - Actual  : 4
@@ -692,7 +692,7 @@ CPPUNIT_TEST_FIXTURE(Test, testImageCropping)
     // the image has no cropping after roundtrip, because it has been physically cropped
     // NB: this test should be fixed when the core feature to show image cropped when it
     // has the "GraphicCrop" is set is implemented
-    auto aGraphicCropStruct = getProperty<text::GraphicCrop>(getShape(1), "GraphicCrop");
+    auto aGraphicCropStruct = getProperty<text::GraphicCrop>(getShape(1), u"GraphicCrop"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aGraphicCropStruct.Left);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aGraphicCropStruct.Right);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aGraphicCropStruct.Top);
@@ -705,10 +705,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152200)
     createSwDoc("tdf152200-field+textbox.docx");
 
     // When exporting that back to DOCX:
-    save("Office Open XML Text");
+    save(u"Office Open XML Text"_ustr);
 
     // Then make sure that fldChar with type 'end' goes prior to the at-char anchored fly.
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     const int nRunsBeforeFldCharEnd = countXPathNodes(pXmlDoc, "//w:fldChar[@w:fldCharType='end']/preceding::w:r"_ostr);
     CPPUNIT_ASSERT(nRunsBeforeFldCharEnd);
     const int nRunsBeforeAlternateContent = countXPathNodes(pXmlDoc, "//mc:AlternateContent/preceding::w:r"_ostr);
@@ -754,23 +754,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152425)
     loadAndReload("tdf152425.docx");
 
     // Check that "List Number" and "List 5" styles don't get merged
-    const OUString Para3Style = getProperty<OUString>(getParagraph(3), "ParaStyleName");
-    CPPUNIT_ASSERT_EQUAL(OUString("Numbering 1"), Para3Style);
-    const OUString Para4Style = getProperty<OUString>(getParagraph(4), "ParaStyleName");
-    CPPUNIT_ASSERT_EQUAL(OUString("List 5 (WW)"), Para4Style);
+    const OUString Para3Style = getProperty<OUString>(getParagraph(3), u"ParaStyleName"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"Numbering 1"_ustr, Para3Style);
+    const OUString Para4Style = getProperty<OUString>(getParagraph(4), u"ParaStyleName"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"List 5 (WW)"_ustr, Para4Style);
     // Also check that "List 5" and "List Bullet 5" styles don't get merged
-    const OUString Para5Style = getProperty<OUString>(getParagraph(5), "ParaStyleName");
-    CPPUNIT_ASSERT_EQUAL(OUString("List 5"), Para5Style);
+    const OUString Para5Style = getProperty<OUString>(getParagraph(5), u"ParaStyleName"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"List 5"_ustr, Para5Style);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf153104)
 {
     loadAndReload("tdf153104.docx");
 
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     OUString numId = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:numPr/w:numId"_ostr, "val"_ostr);
 
-    xmlDocUniquePtr pXmlNum = parseExport("word/numbering.xml");
+    xmlDocUniquePtr pXmlNum = parseExport(u"word/numbering.xml"_ustr);
     OString numPath = "/w:numbering/w:num[@w:numId='"
                       + OUStringToOString(numId, RTL_TEXTENCODING_ASCII_US) + "']/";
 
@@ -781,8 +781,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153104)
     // - Expected: 1
     // - Actual  : 0
     // - In <>, XPath '/w:numbering/w:num[@w:numId='3']/w:lvlOverride[@w:ilvl='0']/w:startOverride' number of nodes is incorrect
-    assertXPath(pXmlNum, numPath + "w:lvlOverride[@w:ilvl='0']/w:startOverride", "val"_ostr, "10");
-    assertXPath(pXmlNum, numPath + "w:lvlOverride[@w:ilvl='1']/w:startOverride", "val"_ostr, "1");
+    assertXPath(pXmlNum, numPath + "w:lvlOverride[@w:ilvl='0']/w:startOverride", "val"_ostr, u"10"_ustr);
+    assertXPath(pXmlNum, numPath + "w:lvlOverride[@w:ilvl='1']/w:startOverride", "val"_ostr, u"1"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf153128)
@@ -806,7 +806,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingUnknownStyleInRedline)
     loadAndReload("UnknownStyleInRedline.docx");
     // Check that the original unknown style name "UnknownStyle" is roundtripped
     // (maybe this is wrong, because Word does not do this).
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc,
                 "/w:document/w:body/w:p/w:pPr/w:pPrChange/w:pPr/w:pStyle[@w:val='UnknownStyle']"_ostr);
 }
@@ -814,36 +814,36 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingUnknownStyleInRedline)
 CPPUNIT_TEST_FIXTURE(Test, testTdf148026)
 {
     loadAndReload("tdf148026.fodt");
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0
     // - In <>, XPath '//w:hyperlink' number of nodes is incorrect
     // i.e. a HYPERLINK field was exported instead of the hyperlink XML element.
-    assertXPath(pXmlDoc, "//w:hyperlink"_ostr, "tgtFrame"_ostr, "_self");
+    assertXPath(pXmlDoc, "//w:hyperlink"_ostr, "tgtFrame"_ostr, u"_self"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf153664)
 {
     loadAndReload("Table-of-Figures.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
+    xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
     CPPUNIT_ASSERT(pXmlStyles);
     // Without the fix this was styleId='FigureIndex1' and name was "Figure Index 1"
     // This led to style settings being reset when ToF was updated in Word
     // TOF's paragraph style should be exported as "Table of Figures" as that's the default Word style name
-    assertXPath(pXmlStyles, "/w:styles/w:style[12]"_ostr, "styleId"_ostr, "TableofFigures");
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableofFigures']/w:name"_ostr, "val"_ostr, "Table of Figures");
+    assertXPath(pXmlStyles, "/w:styles/w:style[12]"_ostr, "styleId"_ostr, u"TableofFigures"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableofFigures']/w:name"_ostr, "val"_ostr, u"Table of Figures"_ustr);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf124472_hyperlink, "tdf124472.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(OUString("https://www.libreoffice.org/"),
-                         getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
-    CPPUNIT_ASSERT_EQUAL(OUString("mailto:info@libreoffice.org"),
-                         getProperty<OUString>(getRun(getParagraph(2), 1), "HyperLinkURL"));
-    CPPUNIT_ASSERT_EQUAL(OUString(""),
-                         getProperty<OUString>(getRun(getParagraph(3), 1), "HyperLinkURL"));
+    CPPUNIT_ASSERT_EQUAL(u"https://www.libreoffice.org/"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(1), 1), u"HyperLinkURL"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"mailto:info@libreoffice.org"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(2), 1), u"HyperLinkURL"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr,
+                         getProperty<OUString>(getRun(getParagraph(3), 1), u"HyperLinkURL"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf135786, "tdf135786.docx")
@@ -864,8 +864,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf155736, "tdf155736_PageNumbers_footer.docx")
     //Without the fix in place, it would have failed with
     //- Expected: Page * of *
     //- Actual  : Page of
-    CPPUNIT_ASSERT_EQUAL(OUString("Page * of *"), parseDump("/root/page[1]/footer/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Page * of *"), parseDump("/root/page[2]/footer/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Page * of *"_ustr, parseDump("/root/page[1]/footer/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Page * of *"_ustr, parseDump("/root/page[2]/footer/txt/text()"_ostr));
 }
 
 // The following zOrder tests are checking the shapes "stacking height".
@@ -877,12 +877,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_duplicate, "tdf159158_zOrder_dupli
     // given a yellow star with relativeHeight 2, followed by an overlapping blue star also with 2
     uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
     // the zOrder of the stars should remain consistent between round-trips - last duplicate wins
     // and compatibility has nothing to do with this for relativeHeight (other tests are compat12).
-    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder0, "Name"));
-    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
+    CPPUNIT_ASSERT_EQUAL(u"5-Point Star Yellow"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"5-Point Star Blue"_ustr, getProperty<OUString>(zOrder1,u"Name"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_1and0equalA, "tdf159158_zOrder_1and0equalA.docx")
@@ -890,11 +890,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_1and0equalA, "tdf159158_zOrder_1an
     // given a yellow star with relativeHeight 1, followed by an overlapping blue star with 0
     uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
     // 0 is treated the same as 1 - the maximum value, so blue is duplicate - last duplicate wins
-    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder0, "Name"));
-    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
+    CPPUNIT_ASSERT_EQUAL(u"5-Point Star Yellow"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"5-Point Star Blue"_ustr, getProperty<OUString>(zOrder1,u"Name"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_1and0equalB, "tdf159158_zOrder_1and0equalB.docx")
@@ -903,11 +903,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_1and0equalB, "tdf159158_zOrder_1an
     // since they have the same zOrder value, last one wins, so same result as version A
     uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
     // 1 is treated the same as 0 - the maximum value, so blue is duplicate - last duplicate wins
-    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder0, "Name"));
-    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
+    CPPUNIT_ASSERT_EQUAL(u"5-Point Star Yellow"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"5-Point Star Blue"_ustr, getProperty<OUString>(zOrder1,u"Name"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_1and0max, "tdf159158_zOrder_1and0max.docx")
@@ -916,11 +916,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_1and0max, "tdf159158_zOrder_1and0m
     // followed by an overlapping blue star with 0.
     uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
     // 0 is treated the same as the maximum value, last duplicate wins, so blue is on top
-    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder0, "Name"));
-    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
+    CPPUNIT_ASSERT_EQUAL(u"5-Point Star Yellow"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"5-Point Star Blue"_ustr, getProperty<OUString>(zOrder1,u"Name"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_maxLessOne, "tdf159158_zOrder_maxLessOne.docx")
@@ -929,11 +929,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_maxLessOne, "tdf159158_zOrder_maxL
     // followed by a partially hidden blue star with lower relativeHeight 503316478 (1DFF FFFE)
     uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
     // since yellow is a higher value, it should be on top
-    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder0,"Name"));
-    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder1, "Name"));
+    CPPUNIT_ASSERT_EQUAL(u"5-Point Star Blue"_ustr, getProperty<OUString>(zOrder0,u"Name"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"5-Point Star Yellow"_ustr, getProperty<OUString>(zOrder1, u"Name"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_max, "tdf159158_zOrder_max.docx")
@@ -942,11 +942,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_max, "tdf159158_zOrder_max.docx")
     // followed by an overlapping blue star with maximum relativeHeight  503316479 (1DFF FFFF)
     uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
     // while yellow is a higher value, last duplicate wins, so lower value blue must be the maximum
-    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder0, "Name"));
-    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
+    CPPUNIT_ASSERT_EQUAL(u"5-Point Star Yellow"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"5-Point Star Blue"_ustr, getProperty<OUString>(zOrder1,u"Name"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_zIndexMax, "tdf159158_zOrder_zIndexMax.docx")
@@ -955,13 +955,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_zIndexMax, "tdf159158_zOrder_zInde
     // followed by overlapped blue star with a heaven z-index of MAX_SAL_INT32 - 1
     uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
     // there is no artificial maximum for z-index. All values are unique. Yellow is on top
     if (!isExported()) //somehow the name is lost on this export
-        CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder0, "Name"));
+        CPPUNIT_ASSERT_EQUAL(u"5-Point Star Blue"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
     if (!isExported()) //somehow the name is lost on this export
-        CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder1,"Name"));
+        CPPUNIT_ASSERT_EQUAL(u"5-Point Star Yellow"_ustr, getProperty<OUString>(zOrder1,u"Name"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_zIndexDuplicate_compat15, "tdf159158_zOrder_zIndexDuplicate_compat15.docx")
@@ -970,13 +970,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_zIndexDuplicate_compat15, "tdf1591
     // followed by overlapping blue star with the same heaven z-index (last duplicate wins)
     uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
     // should be the same as relativeHeight - last duplicate wins so blue is on top.
     if (!isExported()) //somehow the name is lost on this export
-        CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder0, "Name"));
+        CPPUNIT_ASSERT_EQUAL(u"5-Point Star Yellow"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
     if (!isExported()) //somehow the name is lost on this export
-        CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
+        CPPUNIT_ASSERT_EQUAL(u"5-Point Star Blue"_ustr, getProperty<OUString>(zOrder1,u"Name"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_zIndexWins, "tdf159158_zOrder_zIndexWins.docx")
@@ -988,18 +988,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_zIndexWins, "tdf159158_zOrder_zInd
     uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> zOrder2(getShape(3), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(zOrder2, "ZOrder")); // higher
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(zOrder2, u"ZOrder"_ustr)); // higher
     // I'm puzzled. Somehow 0 is larger than 0EFF FFFF, but not larger than 0F00 0000
     // and yet the maximum value was established earlier as 1DFF FFFF. Something doesn't line up.
     // Perhaps 0 and 1 don't mean maximum value at all, but something completely different?
     CPPUNIT_ASSERT_MESSAGE("DID YOU FIX ME? I really should be yellow, not blue",
-                            "5-Point Star Yellow" != getProperty<OUString>(zOrder0, "Name"));
+                            "5-Point Star Yellow" != getProperty<OUString>(zOrder0, u"Name"_ustr));
     // CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
     // If zOrder is defined by z-index, it seems that it goes above everything set by relativeHeight
     if (isExported()) // not named on import
-        CPPUNIT_ASSERT_EQUAL(OUString("Frame1"), getProperty<OUString>(zOrder2,"Name"));
+        CPPUNIT_ASSERT_EQUAL(u"Frame1"_ustr, getProperty<OUString>(zOrder2,u"Name"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_behindDocA, "tdf159158_zOrder_behindDocA.docx")
@@ -1008,12 +1008,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_behindDocA, "tdf159158_zOrder_behi
     // followed by an overlapping blue star with negative z-index -1644167168.
     uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
     // yellow is at the lowest hell-level possible for relativeHeight, so expected to be under blue
-    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder0, "Name"));
+    CPPUNIT_ASSERT_EQUAL(u"5-Point Star Yellow"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
     if (!isExported()) // the name is lost on export
-        CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
+        CPPUNIT_ASSERT_EQUAL(u"5-Point Star Blue"_ustr, getProperty<OUString>(zOrder1,u"Name"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_behindDocB, "tdf159158_zOrder_behindDocB.docx")
@@ -1022,14 +1022,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_behindDocB, "tdf159158_zOrder_behi
     // followed by an overlapping blue star with negative z-index -1644167168.
     uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
     // yellow is at the highest hell-level possible for relativeHeight,
     // so you will be forgiven for thinking yellow should be on the top.
     // Any z-index level ends up being above any relativeHeight, so blue should still be on top
-    CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Yellow"), getProperty<OUString>(zOrder0, "Name"));
+    CPPUNIT_ASSERT_EQUAL(u"5-Point Star Yellow"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
     if (!isExported()) // the name is lost on export
-        CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
+        CPPUNIT_ASSERT_EQUAL(u"5-Point Star Blue"_ustr, getProperty<OUString>(zOrder1,u"Name"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_headerBehind, "tdf159158_zOrder_headerBehind.odt")
@@ -1039,12 +1039,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_headerBehind, "tdf159158_zOrder_he
     // (note that in ODT format the star is on top, but for DOCX format it must be behind (hidden)
     uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
     // I don't know why the star is the lowest order in ODT import (maybe header weirdness),
     // but it certainly needs to be the lowest on docx round-trip (also for header weirdness)
-    CPPUNIT_ASSERT_EQUAL(OUString("StarInHeader"), getProperty<OUString>(zOrder0, "Name"));
-    CPPUNIT_ASSERT_EQUAL(OUString("RectangleInBody"), getProperty<OUString>(zOrder1,"Name"));
+    CPPUNIT_ASSERT_EQUAL(u"StarInHeader"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"RectangleInBody"_ustr, getProperty<OUString>(zOrder1,u"Name"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_headerBehind2, "tdf159158_zOrder_headerBehind2.docx")
@@ -1060,8 +1060,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_headerBehind2, "tdf159158_zOrder_h
     CPPUNIT_ASSERT_EQUAL(OUString("BodyBlueRectangle"),
                          getProperty<OUString>(zOrder1, "LinkDisplayName"));
     // The logo should not be opaque since it is in the header.
-    CPPUNIT_ASSERT(!getProperty<bool>(zOrder0, "Opaque")); // logo should be invisible
-    CPPUNIT_ASSERT(!getProperty<bool>(zOrder1, "Opaque"));
+    CPPUNIT_ASSERT(!getProperty<bool>(zOrder0, u"Opaque"_ustr)); // logo should be invisible
+    CPPUNIT_ASSERT(!getProperty<bool>(zOrder1, u"Opaque"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf100037_inlineZOrder, "tdf100037_inlineZOrder.docx")

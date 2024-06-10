@@ -23,7 +23,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text")
+        : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr, u"Office Open XML Text"_ustr)
     {
     }
 
@@ -42,7 +42,7 @@ public:
         uno::Reference<text::XTextRange> xText = getRun(xParagraph, 1);
 
         /* Get original link */
-        OUString sOriginalFileName = getProperty<OUString>(xText, "HyperLinkURL");
+        OUString sOriginalFileName = getProperty<OUString>(xText, u"HyperLinkURL"_ustr);
         INetURLObject aOriginalURL(sOriginalFileName);
         CPPUNIT_ASSERT(!aOriginalURL.HasError());
         OUString sFileName = aOriginalURL.GetLastName();
@@ -54,7 +54,7 @@ public:
         /* Create & apply new URL */
         OUString sOriginalFileInTempDir = sTempDir + sFileName;
         uno::Reference<beans::XPropertySet> xPropertySet(xText, css::uno::UNO_QUERY);
-        xPropertySet->setPropertyValue("HyperLinkURL", css::uno::Any(sOriginalFileInTempDir));
+        xPropertySet->setPropertyValue(u"HyperLinkURL"_ustr, css::uno::Any(sOriginalFileInTempDir));
     }
 };
 
@@ -66,7 +66,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeToRelativeImport)
     createSwDoc("relative-link.docx");
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
     uno::Reference<text::XTextRange> xText = getRun(xParagraph, 1);
-    OUString sTarget = getProperty<OUString>(xText, "HyperLinkURL");
+    OUString sTarget = getProperty<OUString>(xText, u"HyperLinkURL"_ustr);
     CPPUNIT_ASSERT(sTarget.startsWith("file:///"));
     CPPUNIT_ASSERT(sTarget.endsWith("relative.docx"));
 }
@@ -77,7 +77,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeToAbsoluteImport)
     createSwDoc("relative-link.docx");
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
     uno::Reference<text::XTextRange> xText = getRun(xParagraph, 1);
-    OUString sTarget = getProperty<OUString>(xText, "HyperLinkURL");
+    OUString sTarget = getProperty<OUString>(xText, u"HyperLinkURL"_ustr);
     CPPUNIT_ASSERT(sTarget.startsWith("file:///"));
     CPPUNIT_ASSERT(sTarget.endsWith("relative.docx"));
 }
@@ -89,8 +89,8 @@ CPPUNIT_TEST_FIXTURE(Test, testAbsoluteToAbsoluteImport)
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
     uno::Reference<text::XTextRange> xText = getRun(xParagraph, 1);
     // # should be encoded
-    CPPUNIT_ASSERT_EQUAL(OUString("file:///B:/Users/user/Desktop/a%23b/test.docx"),
-                         getProperty<OUString>(xText, "HyperLinkURL"));
+    CPPUNIT_ASSERT_EQUAL(u"file:///B:/Users/user/Desktop/a%23b/test.docx"_ustr,
+                         getProperty<OUString>(xText, u"HyperLinkURL"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testAbsoluteToRelativeImport)
@@ -100,8 +100,8 @@ CPPUNIT_TEST_FIXTURE(Test, testAbsoluteToRelativeImport)
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
     uno::Reference<text::XTextRange> xText = getRun(xParagraph, 1);
     // when target file (B:\\...) & document with link (temp dir) are placed on different partitions, absolute path will be loaded
-    CPPUNIT_ASSERT_EQUAL(OUString("file:///B:/Users/user/Desktop/a%23b/test.docx"),
-                         getProperty<OUString>(xText, "HyperLinkURL"));
+    CPPUNIT_ASSERT_EQUAL(u"file:///B:/Users/user/Desktop/a%23b/test.docx"_ustr,
+                         getProperty<OUString>(xText, u"HyperLinkURL"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf123627_import)
@@ -109,7 +109,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123627_import)
     SetAbsolute(USE_RELATIVE);
     createSwDoc("tdf123627.docx");
     uno::Reference<text::XTextRange> xText = getRun(getParagraph(1), 1);
-    OUString sTarget = getProperty<OUString>(xText, "HyperLinkURL");
+    OUString sTarget = getProperty<OUString>(xText, u"HyperLinkURL"_ustr);
     CPPUNIT_ASSERT(sTarget.startsWith("file:///"));
     CPPUNIT_ASSERT(sTarget.endsWith("New/test.docx"));
 }
@@ -122,10 +122,10 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeToRelativeExport)
     createSwDoc("relative-link.docx");
     UseTempDir();
     saveAndReload(mpFilter);
-    xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/_rels/document.xml.rels"_ustr);
 
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']"_ostr,
-                "Target"_ostr, "relative.docx");
+                "Target"_ostr, u"relative.docx"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testRelativeToAbsoluteExport)
@@ -134,7 +134,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeToAbsoluteExport)
     createSwDoc("relative-link.docx");
     // Don't modify link.
     saveAndReload(mpFilter);
-    xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/_rels/document.xml.rels"_ustr);
 
     OUString sTarget
         = getXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]"_ostr, "Target"_ostr);
@@ -148,10 +148,10 @@ CPPUNIT_TEST_FIXTURE(Test, testAbsoluteToRelativeExport)
     createSwDoc("absolute-link.docx");
     UseTempDir();
     saveAndReload(mpFilter);
-    xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/_rels/document.xml.rels"_ustr);
 
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]"_ostr, "Target"_ostr,
-                "test.docx");
+                u"test.docx"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testAbsoluteToAbsoluteExport)
@@ -160,7 +160,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAbsoluteToAbsoluteExport)
     createSwDoc("absolute-link.docx");
     // Don't modify link.
     saveAndReload(mpFilter);
-    xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/_rels/document.xml.rels"_ustr);
 
     OUString sTarget
         = getXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]"_ostr, "Target"_ostr);
@@ -174,10 +174,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123627_export)
     createSwDoc("tdf123627.docx");
     UseTempDir();
     saveAndReload(mpFilter);
-    xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/_rels/document.xml.rels"_ustr);
 
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']"_ostr,
-                "Target"_ostr, "test.docx");
+                "Target"_ostr, u"test.docx"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf126590_export)
@@ -186,10 +186,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126590_export)
     createSwDoc("tdf126590.docx");
     // Don't modify link.
     saveAndReload(mpFilter);
-    xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/_rels/document.xml.rels"_ustr);
     // in the original file: Target="file:///C:\TEMP\test.docx" => invalid file URI
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']"_ostr,
-                "Target"_ostr, "file:///C:/TEMP/test.docx");
+                "Target"_ostr, u"file:///C:/TEMP/test.docx"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf126768_export)
@@ -198,10 +198,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126768_export)
     createSwDoc("tdf126768.docx");
     // Don't modify link.
     saveAndReload(mpFilter);
-    xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/_rels/document.xml.rels"_ustr);
     // in the original file: "file:///C:\\TEMP\\test.docx" => invalid file URI
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']"_ostr,
-                "Target"_ostr, "file:///C:/TEMP/test.docx");
+                "Target"_ostr, u"file:///C:/TEMP/test.docx"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testNon_ascii_link_export)
@@ -210,7 +210,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNon_ascii_link_export)
     createSwDoc("non_ascii_link.docx");
     // Don't modify link.
     saveAndReload(mpFilter);
-    xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/_rels/document.xml.rels"_ustr);
 
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']"_ostr,
                 "Target"_ostr,

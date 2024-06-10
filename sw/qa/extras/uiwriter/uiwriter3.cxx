@@ -34,7 +34,7 @@ class SwUiWriterTest3 : public SwModelTestBase
 {
 public:
     SwUiWriterTest3()
-        : SwModelTestBase("/sw/qa/extras/uiwriter/data/")
+        : SwModelTestBase(u"/sw/qa/extras/uiwriter/data/"_ustr)
     {
     }
 };
@@ -53,9 +53,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf151974)
         assertXPathChildren(pLayout, sPath, 1);
     }
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Copy", {});
-    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:GoDown"_ustr, {});
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
@@ -65,7 +65,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf151974)
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
 
-    dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:ClipboardFormatItems"_ustr, aPropertyValues);
 
     CPPUNIT_ASSERT_EQUAL(int(16), getParagraphs());
 
@@ -91,15 +91,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf155685)
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     // Without the fix in place, this test would have crashed here
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -112,22 +112,22 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf157131)
     CPPUNIT_ASSERT_EQUAL(9, getShapes());
     CPPUNIT_ASSERT_EQUAL(6, getPages());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
-    dispatchCommand(mxComponent, ".uno:Paste", {});
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     CPPUNIT_ASSERT_GREATER(9, getShapes());
     CPPUNIT_ASSERT_GREATER(6, getPages());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     // Without the fix in place, this test would have crashed here
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(9, getShapes());
     CPPUNIT_ASSERT_EQUAL(6, getPages());
@@ -140,15 +140,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf145731)
     CPPUNIT_ASSERT_EQUAL(9, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     // Without the fix in place, this test would have crashed here
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(9, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -160,30 +160,30 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147199)
 
     CPPUNIT_ASSERT_EQUAL(7, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(7, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(14, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(7, getShapes());
 
     // Without the fix in place, this test would have crashed here
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(7, getShapes());
 }
@@ -194,14 +194,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139843)
 
     int nPages = getPages();
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     // Without the fix in place, this test would have crashed here
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(nPages, getPages());
 }
@@ -216,19 +216,19 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf143574)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xGroupShape->getCount());
 
     uno::Reference<beans::XPropertySet> xProperties(xGroupShape->getByIndex(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(false, xProperties->getPropertyValue("TextBox").get<bool>());
+    CPPUNIT_ASSERT_EQUAL(false, xProperties->getPropertyValue(u"TextBox"_ustr).get<bool>());
 
     selectShape(1);
-    dispatchCommand(mxComponent, ".uno:EnterGroup", {});
+    dispatchCommand(mxComponent, u".uno:EnterGroup"_ustr, {});
 
     // Select a shape in the group
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, this test would have crashed
-    dispatchCommand(mxComponent, ".uno:AddTextBox", {});
+    dispatchCommand(mxComponent, u".uno:AddTextBox"_ustr, {});
 
-    CPPUNIT_ASSERT_EQUAL(true, xProperties->getPropertyValue("TextBox").get<bool>());
+    CPPUNIT_ASSERT_EQUAL(true, xProperties->getPropertyValue(u"TextBox"_ustr).get<bool>());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf146848)
@@ -236,9 +236,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf146848)
     // Reuse existing document
     createSwDoc("tdf77014.odt");
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(
@@ -247,7 +247,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf146848)
     CPPUNIT_ASSERT(!xFields->hasMoreElements());
 
     // Without the fix in place, this test would have crashed here
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     xFields = xFieldsAccess->createEnumeration();
 
@@ -267,25 +267,25 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf149507)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     // Without the fix in place, this test would have crashed here
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -299,28 +299,28 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf114973)
     SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(true);
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
     // bug: cursor jumped into header
     CPPUNIT_ASSERT(!pWrtShell->IsInHeaderFooter());
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // check that hidden paragraphs at start and end are deleted
-    dispatchCommand(mxComponent, ".uno:Delete", {});
+    dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(int(1), getParagraphs());
     CPPUNIT_ASSERT_EQUAL(OUString(), getParagraph(1)->getString());
 
     // check that hidden paragraphs at start and end are copied
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(int(3), getParagraphs());
-    CPPUNIT_ASSERT_EQUAL(OUString("hidden first paragraph"), getParagraph(1)->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString("Press CTRL+A for dispatching .uno:SelectAll. You see that "
-                                  "nothing will be selected. The cursor jumps to the header"),
+    CPPUNIT_ASSERT_EQUAL(u"hidden first paragraph"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Press CTRL+A for dispatching .uno:SelectAll. You see that "
+                         "nothing will be selected. The cursor jumps to the header"_ustr,
                          getParagraph(2)->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString("hidden last paragraph"), getParagraph(3)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"hidden last paragraph"_ustr, getParagraph(3)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf145321)
@@ -330,15 +330,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf145321)
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(3, getPages());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     // Without the fix in place, this test would have crashed here
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(3, getPages());
@@ -361,85 +361,85 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testVariableFieldTableRowSplitHeader)
     assertXPath(
         pXmlDoc,
         "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-        "expand"_ostr, "0");
+        "expand"_ostr, u"0"_ustr);
     assertXPath(
         pXmlDoc,
         "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]"_ostr,
-        "expand"_ostr, "1");
+        "expand"_ostr, u"1"_ustr);
     assertXPath(
         pXmlDoc,
         "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]"_ostr,
-        "expand"_ostr, "1");
+        "expand"_ostr, u"1"_ustr);
     assertXPath(pXmlDoc,
                 "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-                "expand"_ostr, "0");
+                "expand"_ostr, u"0"_ustr);
     assertXPath(pXmlDoc,
                 "/root/page[1]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-                "expand"_ostr, "1");
+                "expand"_ostr, u"1"_ustr);
     // here the header had shown the wrong value
     assertXPath(
         pXmlDoc,
         "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-        "expand"_ostr, "1");
+        "expand"_ostr, u"1"_ustr);
     assertXPath(
         pXmlDoc,
         "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]"_ostr,
-        "expand"_ostr, "2");
+        "expand"_ostr, u"2"_ustr);
     assertXPath(
         pXmlDoc,
         "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]"_ostr,
-        "expand"_ostr, "2");
+        "expand"_ostr, u"2"_ustr);
     assertXPath(pXmlDoc,
                 "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-                "expand"_ostr, "1");
+                "expand"_ostr, u"1"_ustr);
     assertXPath(pXmlDoc,
                 "/root/page[2]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-                "expand"_ostr, "2");
+                "expand"_ostr, u"2"_ustr);
 
     assertXPath(
         pXmlDoc,
         "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-        "expand"_ostr, "2");
+        "expand"_ostr, u"2"_ustr);
     assertXPath(
         pXmlDoc,
         "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]"_ostr,
-        "expand"_ostr, "3");
+        "expand"_ostr, u"3"_ustr);
     assertXPath(
         pXmlDoc,
         "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]"_ostr,
-        "expand"_ostr, "3");
+        "expand"_ostr, u"3"_ustr);
     assertXPath(pXmlDoc,
                 "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-                "expand"_ostr, "2");
+                "expand"_ostr, u"2"_ustr);
     assertXPath(pXmlDoc,
                 "/root/page[3]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-                "expand"_ostr, "3");
+                "expand"_ostr, u"3"_ustr);
 
     assertXPath(
         pXmlDoc,
         "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-        "expand"_ostr, "3");
+        "expand"_ostr, u"3"_ustr);
     assertXPath(
         pXmlDoc,
         "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]"_ostr,
-        "expand"_ostr, "4");
+        "expand"_ostr, u"4"_ustr);
     assertXPath(
         pXmlDoc,
         "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]"_ostr,
-        "expand"_ostr, "4");
+        "expand"_ostr, u"4"_ustr);
     assertXPath(pXmlDoc,
                 "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-                "expand"_ostr, "3");
+                "expand"_ostr, u"3"_ustr);
     assertXPath(pXmlDoc,
                 "/root/page[4]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-                "expand"_ostr, "4");
+                "expand"_ostr, u"4"_ustr);
 
     assertXPath(pXmlDoc,
                 "/root/page[5]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-                "expand"_ostr, "4");
+                "expand"_ostr, u"4"_ustr);
     assertXPath(pXmlDoc,
                 "/root/page[5]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-                "expand"_ostr, "4");
+                "expand"_ostr, u"4"_ustr);
 
     discardDumpedLayout();
     // update and check again
@@ -455,85 +455,85 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testVariableFieldTableRowSplitHeader)
     assertXPath(
         pXmlDoc,
         "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-        "expand"_ostr, "0");
+        "expand"_ostr, u"0"_ustr);
     assertXPath(
         pXmlDoc,
         "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]"_ostr,
-        "expand"_ostr, "1");
+        "expand"_ostr, u"1"_ustr);
     assertXPath(
         pXmlDoc,
         "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]"_ostr,
-        "expand"_ostr, "1");
+        "expand"_ostr, u"1"_ustr);
     assertXPath(pXmlDoc,
                 "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-                "expand"_ostr, "0");
+                "expand"_ostr, u"0"_ustr);
     assertXPath(pXmlDoc,
                 "/root/page[1]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-                "expand"_ostr, "1");
+                "expand"_ostr, u"1"_ustr);
     // here the header had shown the wrong value
     assertXPath(
         pXmlDoc,
         "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-        "expand"_ostr, "1");
+        "expand"_ostr, u"1"_ustr);
     assertXPath(
         pXmlDoc,
         "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]"_ostr,
-        "expand"_ostr, "2");
+        "expand"_ostr, u"2"_ustr);
     assertXPath(
         pXmlDoc,
         "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]"_ostr,
-        "expand"_ostr, "2");
+        "expand"_ostr, u"2"_ustr);
     assertXPath(pXmlDoc,
                 "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-                "expand"_ostr, "1");
+                "expand"_ostr, u"1"_ustr);
     assertXPath(pXmlDoc,
                 "/root/page[2]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-                "expand"_ostr, "2");
+                "expand"_ostr, u"2"_ustr);
 
     assertXPath(
         pXmlDoc,
         "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-        "expand"_ostr, "2");
+        "expand"_ostr, u"2"_ustr);
     assertXPath(
         pXmlDoc,
         "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]"_ostr,
-        "expand"_ostr, "3");
+        "expand"_ostr, u"3"_ustr);
     assertXPath(
         pXmlDoc,
         "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]"_ostr,
-        "expand"_ostr, "3");
+        "expand"_ostr, u"3"_ustr);
     assertXPath(pXmlDoc,
                 "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-                "expand"_ostr, "2");
+                "expand"_ostr, u"2"_ustr);
     assertXPath(pXmlDoc,
                 "/root/page[3]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-                "expand"_ostr, "3");
+                "expand"_ostr, u"3"_ustr);
 
     assertXPath(
         pXmlDoc,
         "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-        "expand"_ostr, "3");
+        "expand"_ostr, u"3"_ustr);
     assertXPath(
         pXmlDoc,
         "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]"_ostr,
-        "expand"_ostr, "4");
+        "expand"_ostr, u"4"_ustr);
     assertXPath(
         pXmlDoc,
         "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[3]"_ostr,
-        "expand"_ostr, "4");
+        "expand"_ostr, u"4"_ustr);
     assertXPath(pXmlDoc,
                 "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-                "expand"_ostr, "3");
+                "expand"_ostr, u"3"_ustr);
     assertXPath(pXmlDoc,
                 "/root/page[4]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-                "expand"_ostr, "4");
+                "expand"_ostr, u"4"_ustr);
 
     assertXPath(pXmlDoc,
                 "/root/page[5]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-                "expand"_ostr, "4");
+                "expand"_ostr, u"4"_ustr);
     assertXPath(pXmlDoc,
                 "/root/page[5]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
-                "expand"_ostr, "4");
+                "expand"_ostr, u"4"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147126)
@@ -661,7 +661,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf148868)
 
     pWrtShell->EndPg(/*bSelect=*/false);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 5, /*bBasicCall=*/false);
-    pWrtShell->Insert("X");
+    pWrtShell->Insert(u"X"_ustr);
 
     // Without the fix in place, this test would have failed with
     // - Expected: 1
@@ -677,23 +677,23 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129382)
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     // without the fix, it crashes
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
 }
 
@@ -703,13 +703,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135662)
 
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     // Without the fix in place, this test would have failed with
     // - Expected: 2
@@ -723,22 +723,22 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134227)
 
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
     // Without the fix in place, it would have crashed here
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 }
 
@@ -775,11 +775,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf114773)
     // Without the fix in place, this test would have failed with
     // - Expected: 2  Heading Level 1   2-1
     // - Actual  : 2   Heading Level 1  2 -1
-    CPPUNIT_ASSERT_EQUAL(OUString("Full ToC\n"
-                                  "2  Heading Level 1\t2-1\n"
-                                  "2.1  Heading Level 2\t2-2\n"
-                                  "2.1.1  Heading Level 3\t2-2\n"
-                                  "2.1.1.1  Heading Level 4\t2-2"),
+    CPPUNIT_ASSERT_EQUAL(u"Full ToC\n"
+                         "2  Heading Level 1\t2-1\n"
+                         "2.1  Heading Level 2\t2-2\n"
+                         "2.1.1  Heading Level 3\t2-2\n"
+                         "2.1.1.1  Heading Level 4\t2-2"_ustr,
                          aIndexString);
 }
 
@@ -803,9 +803,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf104315)
     // Without the fix in place, this test would have failed with
     // - Expected: This is a headlinex  1
     // - Actual  : This is a headlinx   1
-    CPPUNIT_ASSERT_EQUAL(OUString("Table of contents\n"
-                                  "This is a headlinex\t1\n"
-                                  "This is another headlinex\t1"),
+    CPPUNIT_ASSERT_EQUAL(u"Table of contents\n"
+                         "This is a headlinex\t1\n"
+                         "This is another headlinex\t1"_ustr,
                          aIndexString);
 }
 
@@ -815,29 +815,29 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135412)
 
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("X"), xShape->getString());
+    CPPUNIT_ASSERT_EQUAL(u"X"_ustr, xShape->getString());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
     // Without the fix in place, the text in the shape wouldn't be pasted
     xShape.set(getShape(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("X"), xShape->getString());
+    CPPUNIT_ASSERT_EQUAL(u"X"_ustr, xShape->getString());
 
     //Without the fix in place, it would have crashed here
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
     xShape.set(getShape(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("X"), xShape->getString());
+    CPPUNIT_ASSERT_EQUAL(u"X"_ustr, xShape->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf138482)
@@ -846,13 +846,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf138482)
 
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
     // Without the fix in place, this test would have crashed here
-    dispatchCommand(mxComponent, ".uno:Delete", {});
+    dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 }
 
@@ -867,14 +867,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134965)
 
     for (sal_Int32 i = 0; i < 10; ++i)
     {
-        dispatchCommand(mxComponent, ".uno:SelectAll", {});
+        dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-        dispatchCommand(mxComponent, ".uno:Cut", {});
+        dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
 
         // Without the fix in place, this test would have crashed here
-        dispatchCommand(mxComponent, ".uno:Paste", {});
+        dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
     }
@@ -891,10 +891,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128375)
                                                              uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
-        dispatchCommand(mxComponent, ".uno:SelectAll", {});
+        dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
         // Without the fix in place, this test would have crashed cutting the second document
-        dispatchCommand(mxComponent, ".uno:Cut", {});
+        dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
     }
@@ -910,13 +910,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135061)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     for (sal_Int32 i = 0; i < 5; ++i)
     {
-        dispatchCommand(mxComponent, ".uno:Paste", {});
+        dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
     }
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xIndexAccess->getCount());
@@ -925,7 +925,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135061)
     for (sal_Int32 i = 0; i < 5; ++i)
     {
         // Without the fix in place, this test would have crashed here
-        dispatchCommand(mxComponent, ".uno:Undo", {});
+        dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     }
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
@@ -942,49 +942,49 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132911)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
     // Without the fix in place, it would have crashed here
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
     //tdf#135247: Without the fix in place, this would have crashed
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 }
@@ -1016,7 +1016,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf61154)
     // table of contents node shouldn't contain tracked deletion
     // This was "Text InsertedDeleted\t1"
     SwTextNode* pNext = static_cast<SwTextNode*>(SwNodes::GoNext(&aIdx));
-    CPPUNIT_ASSERT_EQUAL(OUString("Text Inserted\t1"), pNext->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"Text Inserted\t1"_ustr, pNext->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf124904)
@@ -1036,15 +1036,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf124904)
         IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     // remove the first word "Heading" (with change tracking) to update the referenced text
-    dispatchCommand(mxComponent, ".uno:DelToEndOfWord", {});
+    dispatchCommand(mxComponent, u".uno:DelToEndOfWord"_ustr, {});
 
     // This was "Reference to Heading of document file"
-    CPPUNIT_ASSERT_EQUAL(OUString("Reference to of example document "),
-                         getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Reference to of example document "_ustr, getParagraph(2)->getString());
 
     // don't hide the wholly deleted referenced text
-    dispatchCommand(mxComponent, ".uno:DelToEndOfLine", {});
-    CPPUNIT_ASSERT_EQUAL(OUString("Reference to Heading of example document file"),
+    dispatchCommand(mxComponent, u".uno:DelToEndOfLine"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"Reference to Heading of example document file"_ustr,
                          getParagraph(2)->getString());
 }
 
@@ -1066,7 +1065,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf100691)
     // table of contents node shouldn't contain invisible text
     // This was "Text Hidden\t1"
     SwTextNode* pNext = static_cast<SwTextNode*>(SwNodes::GoNext(&aIdx));
-    CPPUNIT_ASSERT_EQUAL(OUString("Text\t1"), pNext->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"Text\t1"_ustr, pNext->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134404)
@@ -1076,19 +1075,19 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134404)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    dispatchCommand(mxComponent, ".uno:GoToEndOfPage", {});
-    dispatchCommand(mxComponent, ".uno:InsertPagebreak", {});
+    dispatchCommand(mxComponent, u".uno:GoToEndOfPage"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:InsertPagebreak"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
-    dispatchCommand(mxComponent, ".uno:SwBackspace", {});
+    dispatchCommand(mxComponent, u".uno:SwBackspace"_ustr, {});
 
     // Without the fix in place, the image would have been deleted
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
@@ -1104,7 +1103,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf112342)
     xCur->gotoEnd(false);
     //And let's remove the last 2 chars (the last para with its char).
     xCur->goLeft(2, true);
-    xCur->setString("");
+    xCur->setString(u""_ustr);
 
     //If the second paragraph on the second page, this will be passed.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Page break does not match", 2, getPages());
@@ -1116,13 +1115,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132321)
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:GoToEndOfPage", {});
-    dispatchCommand(mxComponent, ".uno:SwBackspace", {});
+    dispatchCommand(mxComponent, u".uno:GoToEndOfPage"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SwBackspace"_ustr, {});
 
     // Without the fix in place, the button form would have also been deleted
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
@@ -1142,7 +1141,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135056)
 
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pWrtShell->GetTOXCount());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pWrtShell->GetTOXCount());
 }
@@ -1154,18 +1153,18 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132597)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // Paste special as RTF
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
 
-    dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:ClipboardFormatItems"_ustr, aPropertyValues);
 
     // Without the fix in place, this test would have crashed here
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -1175,18 +1174,18 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139737)
 {
     createSwDoc("tdf139737.fodt");
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // Paste special as RTF
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
 
-    dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:ClipboardFormatItems"_ustr, aPropertyValues);
 
     // Without the fix in place, this test would have crashed here
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf150845)
@@ -1197,7 +1196,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf150845)
     // Without the fix in place, this test would have crashed here
     uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "KeyModifier", uno::Any(KEY_MOD1) } }));
-    dispatchCommand(mxComponent, ".uno:Edit", aArgs);
+    dispatchCommand(mxComponent, u".uno:Edit"_ustr, aArgs);
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
@@ -1213,7 +1212,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147961)
                                                          uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
 
-    pWrtShell->Insert("++");
+    pWrtShell->Insert(u"++"_ustr);
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
@@ -1232,23 +1231,23 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147206)
 
     // insert empty paragraph and heading text
     pWrtShell->SplitNode();
-    pWrtShell->Insert("abc");
+    pWrtShell->Insert(u"abc"_ustr);
     pWrtShell->SplitNode();
 
     // set one to heading so there will be an entry in the tox
     pWrtShell->Up(false, 1);
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Style", uno::Any(OUString("Heading 1")) },
-        { "FamilyName", uno::Any(OUString("ParagraphStyles")) },
+        { "Style", uno::Any(u"Heading 1"_ustr) },
+        { "FamilyName", uno::Any(u"ParagraphStyles"_ustr) },
     });
-    dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:StyleApply"_ustr, aPropertyValues);
 
     pWrtShell->EndOfSection(false);
 
     // tdf#142423: Without the fix in place, this test would have failed with
     // - Expected: 18
     // - Actual  : 18.2
-    CPPUNIT_ASSERT_EQUAL(18.0f, getProperty<float>(getParagraph(2), "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(18.0f, getProperty<float>(getParagraph(2), u"CharHeight"_ustr));
 
     // insert table of contents
     SwTOXMgr mgr(pWrtShell);
@@ -1282,16 +1281,18 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147206)
 
     // check hyperlinking
     CPPUNIT_ASSERT_EQUAL(
-        headingLink, getProperty<OUString>(getRun(getParagraph(1), 1, "abc\t1"), "HyperLinkURL"));
+        headingLink,
+        getProperty<OUString>(getRun(getParagraph(1), 1, u"abc\t1"_ustr), u"HyperLinkURL"_ustr));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(getRun(getParagraph(2), 1, OUString()),
+                                                           u"HyperLinkURL"_ustr));
     CPPUNIT_ASSERT_EQUAL(
-        OUString(), getProperty<OUString>(getRun(getParagraph(2), 1, OUString()), "HyperLinkURL"));
+        OUString(), getProperty<OUString>(getRun(getParagraph(3), 1, u"Table of Contents"_ustr),
+                                          u"HyperLinkURL"_ustr));
     CPPUNIT_ASSERT_EQUAL(
-        OUString(),
-        getProperty<OUString>(getRun(getParagraph(3), 1, "Table of Contents"), "HyperLinkURL"));
-    CPPUNIT_ASSERT_EQUAL(
-        headingLink, getProperty<OUString>(getRun(getParagraph(4), 1, "abc\t1"), "HyperLinkURL"));
-    CPPUNIT_ASSERT_EQUAL(
-        OUString(), getProperty<OUString>(getRun(getParagraph(5), 1, OUString()), "HyperLinkURL"));
+        headingLink,
+        getProperty<OUString>(getRun(getParagraph(4), 1, u"abc\t1"_ustr), u"HyperLinkURL"_ustr));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(getRun(getParagraph(5), 1, OUString()),
+                                                           u"HyperLinkURL"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf144840)
@@ -1304,9 +1305,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf144840)
                                                          uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
 
@@ -1314,13 +1315,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf144840)
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
 
-    dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:ClipboardFormatItems"_ustr, aPropertyValues);
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
     uno::Reference<text::XTextTable> xTextTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
 
-    table::TableBorder2 tableBorder = getProperty<table::TableBorder2>(xTextTable, "TableBorder2");
+    table::TableBorder2 tableBorder
+        = getProperty<table::TableBorder2>(xTextTable, u"TableBorder2"_ustr);
 
     // Without the fix in place, this test would have failed with
     // - Expected: 4
@@ -1337,15 +1339,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf131963)
 
     CPPUNIT_ASSERT(11 == getPages() || 12 == getPages());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // Paste special as RTF
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
 
-    dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:ClipboardFormatItems"_ustr, aPropertyValues);
 
     // Without the fix in place, this test would have crashed here
 
@@ -1359,18 +1361,18 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132596)
 
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // Paste special as RTF
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
 
-    dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:ClipboardFormatItems"_ustr, aPropertyValues);
 
     // Without the fix in place, this test would have crashed here
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
@@ -1381,23 +1383,23 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126626)
 
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
     // without the fix, it crashes
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 }
 
@@ -1407,15 +1409,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133967)
 
     CPPUNIT_ASSERT_EQUAL(6, getPages());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
     for (sal_Int32 i = 0; i < 10; ++i)
     {
-        dispatchCommand(mxComponent, ".uno:Undo", {});
+        dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
-        dispatchCommand(mxComponent, ".uno:Redo", {});
+        dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
     }
 
     // Without the fix in place, this test would have failed with:
@@ -1430,15 +1432,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132187)
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:GoToEndOfDoc", {});
+    dispatchCommand(mxComponent, u".uno:GoToEndOfDoc"_ustr, {});
 
     for (sal_Int32 i = 0; i < 10; ++i)
     {
-        dispatchCommand(mxComponent, ".uno:Paste", {});
+        dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
     }
 
     //without the fix in place, this test would fail with:
@@ -1454,39 +1456,39 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130094)
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("First"), getParagraph(1)->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString("Second"), getParagraph(2)->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString("Third"), getParagraph(3)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"First"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Second"_ustr, getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Third"_ustr, getParagraph(3)->getString());
 
     // Select the first and second lines
     pWrtShell->Down(/*bSelect=*/true);
     pWrtShell->Down(/*bSelect=*/true);
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
-    CPPUNIT_ASSERT_EQUAL(OUString("First"), getParagraph(1)->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString("Second"), getParagraph(2)->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(3)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"First"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Second"_ustr, getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getParagraph(3)->getString());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
-    CPPUNIT_ASSERT_EQUAL(OUString("First"), getParagraph(1)->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString("Second"), getParagraph(2)->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString("Third"), getParagraph(3)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"First"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Second"_ustr, getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Third"_ustr, getParagraph(3)->getString());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
-    CPPUNIT_ASSERT_EQUAL(OUString("First"), getParagraph(1)->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString("Second"), getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"First"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Second"_ustr, getParagraph(2)->getString());
 
     // Without the fix in place, this test would have failed with
     // - Expected:
     // - Actual  : First
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(3)->getString());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getParagraph(3)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135733)
@@ -1511,25 +1513,25 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135733)
     pWrtShell->Down(/*bSelect=*/true);
     pWrtShell->Down(/*bSelect=*/true);
 
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
     pWrtShell->SttPg(/*bSelect=*/false);
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
     // the table is inserted before the first paragraph, which has a pagedesc
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
     // without the fix, it crashes
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -1540,20 +1542,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128739)
 {
     createSwDoc("tdf128739.docx");
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Fehler: Verweis nicht gefunden"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Fehler: Verweis nicht gefunden"_ustr, getParagraph(1)->getString());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getParagraph(1)->getString());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
-    CPPUNIT_ASSERT_EQUAL(OUString("Fehler: Verweis nicht gefunden"), getParagraph(1)->getString());
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"Fehler: Verweis nicht gefunden"_ustr, getParagraph(1)->getString());
 
     // without the fix, it crashes
-    dispatchCommand(mxComponent, ".uno:Undo", {});
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf124722)
@@ -1562,16 +1564,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf124722)
 
     CPPUNIT_ASSERT_EQUAL(22, getPages());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(22, getPages());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(43, getPages());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(22, getPages());
 }
 
@@ -1603,7 +1605,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
         CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
         pWrtShell->Push();
         OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
-        CPPUNIT_ASSERT_EQUAL(OUString("#1%19the%20tocmark%19C%7Ctoxmark"), url);
+        CPPUNIT_ASSERT_EQUAL(u"#1%19the%20tocmark%19C%7Ctoxmark"_ustr, url);
         rView.JumpToSwMark(url.subView(1)); // SfxApplication::OpenDocExec_Impl eats the "#"
         CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_INWORD) + "tocmark"),
                              pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
@@ -1618,9 +1620,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
         CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
         pWrtShell->Push();
         OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
-        CPPUNIT_ASSERT_EQUAL(OUString("#__RefHeading___Toc105_706348105"), url);
+        CPPUNIT_ASSERT_EQUAL(u"#__RefHeading___Toc105_706348105"_ustr, url);
         rView.JumpToSwMark(url.subView(1));
-        CPPUNIT_ASSERT_EQUAL(OUString("foo"),
+        CPPUNIT_ASSERT_EQUAL(u"foo"_ustr,
                              pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
         pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
     }
@@ -1638,7 +1640,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
         CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
         pWrtShell->Push();
         OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
-        CPPUNIT_ASSERT_EQUAL(OUString("#1%19the%20udmark%19UUser-Defined%7Ctoxmark"), url);
+        CPPUNIT_ASSERT_EQUAL(u"#1%19the%20udmark%19UUser-Defined%7Ctoxmark"_ustr, url);
         rView.JumpToSwMark(url.subView(1));
         CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_INWORD) + "udmark the first"),
                              pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
@@ -1653,7 +1655,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
         CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
         pWrtShell->Push();
         OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
-        CPPUNIT_ASSERT_EQUAL(OUString("#2%19the%20udmark%19UUser-Defined%7Ctoxmark"), url);
+        CPPUNIT_ASSERT_EQUAL(u"#2%19the%20udmark%19UUser-Defined%7Ctoxmark"_ustr, url);
         rView.JumpToSwMark(url.subView(1));
         CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_INWORD) + "udmark the 2nd"),
                              pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
@@ -1668,9 +1670,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
         CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
         pWrtShell->Push();
         OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
-        CPPUNIT_ASSERT_EQUAL(OUString("#__RefHeading___Toc105_706348105"), url);
+        CPPUNIT_ASSERT_EQUAL(u"#__RefHeading___Toc105_706348105"_ustr, url);
         rView.JumpToSwMark(url.subView(1));
-        CPPUNIT_ASSERT_EQUAL(OUString("foo"),
+        CPPUNIT_ASSERT_EQUAL(u"foo"_ustr,
                              pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
         pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
     }
@@ -1688,9 +1690,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
         CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
         pWrtShell->Push();
         OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
-        CPPUNIT_ASSERT_EQUAL(OUString("#1%19the%20udmark%19UNewUD!%7C%7Ctoxmark"), url);
+        CPPUNIT_ASSERT_EQUAL(u"#1%19the%20udmark%19UNewUD!%7C%7Ctoxmark"_ustr, url);
         rView.JumpToSwMark(url.subView(1));
-        CPPUNIT_ASSERT_EQUAL(OUString("the udmark"),
+        CPPUNIT_ASSERT_EQUAL(u"the udmark"_ustr,
                              pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
         pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
     }
@@ -1700,16 +1702,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf125261)
 {
     createSwDoc("tdf125261.odt");
 
-    CPPUNIT_ASSERT_EQUAL(OUString("https://www.example.com/"),
-                         getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
+    CPPUNIT_ASSERT_EQUAL(u"https://www.example.com/"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(1), 1), u"HyperLinkURL"_ustr));
     //apply autocorrect StartAutoCorrect
-    dispatchCommand(mxComponent, ".uno:AutoFormatApply", {});
-    CPPUNIT_ASSERT_EQUAL(OUString("https://www.example.com/"),
-                         getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
+    dispatchCommand(mxComponent, u".uno:AutoFormatApply"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"https://www.example.com/"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(1), 1), u"HyperLinkURL"_ustr));
     // without the fix, it hangs
-    dispatchCommand(mxComponent, ".uno:Undo", {});
-    CPPUNIT_ASSERT_EQUAL(OUString("https://www.example.com/"),
-                         getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"https://www.example.com/"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(1), 1), u"HyperLinkURL"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf141175)
@@ -1723,17 +1725,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf141175)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     //Use selectAll 3 times in a row
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
     //Without the fix in place, this test would have crashed here
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -1750,15 +1752,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133990)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     //Use selectAll 3 times in a row
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Delete", {});
+    dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
 
     //Without the fix in place, it would have crashed here
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
@@ -1774,31 +1776,31 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126504)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     //Use selectAll 2 times in a row
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:GoToEndOfPage", {});
+    dispatchCommand(mxComponent, u".uno:GoToEndOfPage"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     //Without the fix in place, it would have crashed here
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -1814,16 +1816,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133982)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 
     //Use selectAll 3 times in a row
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
     //Without the fix in place, it would have crashed here
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 }
 
@@ -1838,15 +1840,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134253)
     CPPUNIT_ASSERT_EQUAL(6, getPages());
 
     //Use selectAll 3 times in a row
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     //Without the fix in place, it would have crashed here
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(6, getPages());
@@ -1857,14 +1859,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testNotebookBar)
     createSwDoc();
 
     //tdf#154282: Without the fix in place, this test would have crashed
-    dispatchCommand(mxComponent, ".uno:ToolbarMode?Mode:string=notebookbar.ui", {});
-    dispatchCommand(mxComponent, ".uno:ToolbarMode?Mode:string=Single", {});
-    dispatchCommand(mxComponent, ".uno:ToolbarMode?Mode:string=Sidebar", {});
-    dispatchCommand(mxComponent, ".uno:ToolbarMode?Mode:string=notebookbar_compact.ui", {});
-    dispatchCommand(mxComponent, ".uno:ToolbarMode?Mode:string=notebookbar_groupedbar_compact.ui",
-                    {});
-    dispatchCommand(mxComponent, ".uno:ToolbarMode?Mode:string=notebookbar_single.ui", {});
-    dispatchCommand(mxComponent, ".uno:ToolbarMode?Mode:string=Default", {});
+    dispatchCommand(mxComponent, u".uno:ToolbarMode?Mode:string=notebookbar.ui"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:ToolbarMode?Mode:string=Single"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:ToolbarMode?Mode:string=Sidebar"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:ToolbarMode?Mode:string=notebookbar_compact.ui"_ustr, {});
+    dispatchCommand(mxComponent,
+                    u".uno:ToolbarMode?Mode:string=notebookbar_groupedbar_compact.ui"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:ToolbarMode?Mode:string=notebookbar_single.ui"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:ToolbarMode?Mode:string=Default"_ustr, {});
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, TestAsCharTextBox)
@@ -1933,20 +1935,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf155028)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(10), xGroupShape->getCount());
 
     selectShape(1);
-    dispatchCommand(mxComponent, ".uno:EnterGroup", {});
+    dispatchCommand(mxComponent, u".uno:EnterGroup"_ustr, {});
 
     // Select a shape in the group
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // Without the fix in place, this test would have crashed
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11), xGroupShape->getCount());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(10), xGroupShape->getCount());
 }
@@ -1956,7 +1958,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135581)
     createSwDoc("tdf135581.odt");
 
     selectShape(1);
-    dispatchCommand(mxComponent, ".uno:SetAnchorAtChar", {}); // this is "to char"
+    dispatchCommand(mxComponent, u".uno:SetAnchorAtChar"_ustr, {}); // this is "to char"
 
     // Without the fix, the image was moving when the anchor changed, letting text flow back.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -1974,7 +1976,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140975)
 
     // Set the Anchor of the shape to As_Char
     selectShape(1);
-    dispatchCommand(mxComponent, ".uno:SetAnchorToChar", {});
+    dispatchCommand(mxComponent, u".uno:SetAnchorToChar"_ustr, {});
 
     // Get the layout of the textbox
     auto pExportDump = parseLayoutDump();
@@ -2020,12 +2022,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf76636)
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
     Scheduler::ProcessEventsToIdle();
 
-    dispatchCommand(mxComponent, ".uno:MergeCells", {});
+    dispatchCommand(mxComponent, u".uno:MergeCells"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTextTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTextTable->getColumns()->getCount());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTextTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTextTable->getColumns()->getCount());
@@ -2055,12 +2057,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf76636_2)
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT | KEY_SHIFT);
     Scheduler::ProcessEventsToIdle();
 
-    dispatchCommand(mxComponent, ".uno:MergeCells", {});
+    dispatchCommand(mxComponent, u".uno:MergeCells"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTextTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xTextTable->getColumns()->getCount());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTextTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTextTable->getColumns()->getCount());
@@ -2077,20 +2079,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140828)
     uno::Reference<beans::XPropertySet> ShpProps(xShp, uno::UNO_QUERY_THROW);
     selectShape(1);
 
-    dispatchCommand(mxComponent, ".uno:SetAnchorAtChar", {});
+    dispatchCommand(mxComponent, u".uno:SetAnchorAtChar"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(
         text::TextContentAnchorType::TextContentAnchorType_AT_CHARACTER,
-        ShpProps->getPropertyValue("AnchorType").get<text::TextContentAnchorType>());
+        ShpProps->getPropertyValue(u"AnchorType"_ustr).get<text::TextContentAnchorType>());
 
     uno::Reference<text::XTextFrame> xTxBx(SwTextBoxHelper::getUnoTextFrame(xShp));
     CPPUNIT_ASSERT(xTxBx);
 
     uno::Reference<beans::XPropertySet> TxBxProps(xTxBx, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(OUString("top left image"), xTxBx->getText()->getString());
+    CPPUNIT_ASSERT_EQUAL(u"top left image"_ustr, xTxBx->getText()->getString());
 
     CPPUNIT_ASSERT_MESSAGE("Bad Relative Orientation and Position!",
-                           TxBxProps->getPropertyValue("HoriOrientRelation").get<sal_Int16>()
+                           TxBxProps->getPropertyValue(u"HoriOrientRelation"_ustr).get<sal_Int16>()
                                != text::RelOrientation::CHAR);
 }
 
@@ -2099,47 +2101,47 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132725)
     createSwDoc("tdf132725.odt");
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
-    CPPUNIT_ASSERT_EQUAL(OUString("AA"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"AA"_ustr, getParagraph(1)->getString());
 
-    dispatchCommand(mxComponent, ".uno:GoToEndOfPara", {});
+    dispatchCommand(mxComponent, u".uno:GoToEndOfPara"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:SwBackspace", {});
-    dispatchCommand(mxComponent, ".uno:SwBackspace", {});
-
-    // tdf#137587 fly is no longer deleted by backspace
-    CPPUNIT_ASSERT_EQUAL(1, getShapes());
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
-
-    dispatchCommand(mxComponent, ".uno:Undo", {});
-    dispatchCommand(mxComponent, ".uno:Undo", {});
-
-    CPPUNIT_ASSERT_EQUAL(1, getShapes());
-    CPPUNIT_ASSERT_EQUAL(OUString("AA"), getParagraph(1)->getString());
-
-    dispatchCommand(mxComponent, ".uno:Redo", {});
-    dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, u".uno:SwBackspace"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SwBackspace"_ustr, {});
 
     // tdf#137587 fly is no longer deleted by backspace
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getParagraph(1)->getString());
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(u"AA"_ustr, getParagraph(1)->getString());
+
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+
+    // tdf#137587 fly is no longer deleted by backspace
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getParagraph(1)->getString());
 
     //Without the fix in place, it would crash here
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
-    CPPUNIT_ASSERT_EQUAL(OUString("A"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"A"_ustr, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126340)
 {
     createSwDoc("tdf126340.odt");
 
-    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    dispatchCommand(mxComponent, u".uno:GoDown"_ustr, {});
     // without the fix, it crashes
-    dispatchCommand(mxComponent, ".uno:Delete", {});
-    CPPUNIT_ASSERT_EQUAL(OUString("foo"), getParagraph(1)->getString());
-    dispatchCommand(mxComponent, ".uno:Undo", {});
-    CPPUNIT_ASSERT_EQUAL(OUString("foo"), getParagraph(1)->getString());
+    dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, getParagraph(1)->getString());
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf124397)
@@ -2152,11 +2154,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf124397)
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Delete", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
     // Without the fix in place, it would crash here
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
 
@@ -2171,18 +2173,18 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf108124)
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 
     uno::Reference<drawing::XShape> xOldShape1(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xOldShape2(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 
@@ -2197,7 +2199,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf108124)
     CPPUNIT_ASSERT(xOldShape2.get() != xNewShape2.get());
 
     // Without the fix in place, this test would have crashed here
-    dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 }
@@ -2212,14 +2214,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134021)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(12, getPages());
 
-    dispatchCommand(mxComponent, ".uno:JumpToNextTable", {});
+    dispatchCommand(mxComponent, u".uno:JumpToNextTable"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:DeleteTable", {});
+    dispatchCommand(mxComponent, u".uno:DeleteTable"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     // Without the fix in place, it would have crashed here
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(12, getPages());
@@ -2235,14 +2237,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf136778)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    dispatchCommand(mxComponent, ".uno:JumpToNextTable", {});
+    dispatchCommand(mxComponent, u".uno:JumpToNextTable"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:DeleteTable", {});
+    dispatchCommand(mxComponent, u".uno:DeleteTable"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     // Without the fix in place, it would have crashed here
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -2258,7 +2260,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf123285)
                              ".  Here is a short sentence demonstrating this very peculiar bug"
                              ".  Here is a short sentence demonstrating this very peculiar bug."));
 
-    dispatchCommand(mxComponent, ".uno:GoToEndOfPage", {});
+    dispatchCommand(mxComponent, u".uno:GoToEndOfPage"_ustr, {});
 
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
@@ -2280,7 +2282,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130746)
                                                          uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
-    dispatchCommand(mxComponent, ".uno:JumpToNextTable", {});
+    dispatchCommand(mxComponent, u".uno:JumpToNextTable"_ustr, {});
 
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
@@ -2299,7 +2301,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130746)
 
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
@@ -2309,15 +2311,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129805)
 {
     createSwDoc("tdf129805.docx");
 
-    CPPUNIT_ASSERT_EQUAL(OUString("x"), getParagraph(1)->getString());
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    CPPUNIT_ASSERT_EQUAL(u"x"_ustr, getParagraph(1)->getString());
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
     // without the fix in place, it would crash here
-    dispatchCommand(mxComponent, ".uno:Cut", {});
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getParagraph(1)->getString());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
-    CPPUNIT_ASSERT_EQUAL(OUString("x"), getParagraph(1)->getString());
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"x"_ustr, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130685)
@@ -2325,25 +2327,25 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130685)
     createSwDoc("tdf130685.odt");
 
     CPPUNIT_ASSERT_EQUAL(2, getPages());
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     // Without fix in place, this test would have failed with:
     //- Expected: 2
     //- Actual  : 4
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
@@ -2353,11 +2355,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132944)
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Delete", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     // Without the fix in place, the document would have had 2 pages
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -2367,16 +2369,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf104649)
 {
     createSwDoc("tdf104649.docx");
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Test"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Test"_ustr, getParagraph(1)->getString());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Delete", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     // Without the fix in place, this test would have crashed here
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Test"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Test"_ustr, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf111969_lastHalfcharOfSelection)
@@ -2388,7 +2390,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf111969_lastHalfcharOfSelection)
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     // move the cursor after the "o" (this is better/safer than testing cursor at end of paragraph)
-    pWrtShell->Insert2("Hello!");
+    pWrtShell->Insert2(u"Hello!"_ustr);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     // get last pixel that will be part of the selection (current position 1pt wide).
     Point aLogicL(pWrtShell->GetCharRect().Center());
@@ -2424,15 +2426,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134931)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    dispatchCommand(mxComponent, u".uno:GoDown"_ustr, {});
 
     for (sal_Int32 i = 0; i < 10; ++i)
     {
-        dispatchCommand(mxComponent, ".uno:Paste", {});
+        dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
     }
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11), xIndexAccess->getCount());
@@ -2454,24 +2456,24 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130680)
                                                          uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(23), xIndexAccess->getCount());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
     rtl::Reference<SwDoc> xClpDoc(new SwDoc());
     xClpDoc->SetClipBoard(true);
 
     // without the fix, it crashes
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     xClpDoc.clear();
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(23), xIndexAccess->getCount());
 }
 
@@ -2481,24 +2483,24 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf150457)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     emulateTyping(*pTextDoc, u"a");
-    dispatchCommand(mxComponent, ".uno:InsertFootnote", {});
+    dispatchCommand(mxComponent, u".uno:InsertFootnote"_ustr, {});
     emulateTyping(*pTextDoc, u"abc");
 
     auto xFootnotes = pTextDoc->getFootnotes();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xFootnotes->getCount());
     auto xParagraph = uno::Reference<text::XTextRange>(xFootnotes->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("abc"), xParagraph->getString());
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, xParagraph->getString());
 
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_PAGEUP);
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     emulateTyping(*pTextDoc, u"d");
 
-    dispatchCommand(mxComponent, ".uno:InsertFootnote", {});
+    dispatchCommand(mxComponent, u".uno:InsertFootnote"_ustr, {});
     emulateTyping(*pTextDoc, u"def");
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xFootnotes->getCount());
     xParagraph = uno::Reference<text::XTextRange>(xFootnotes->getByIndex(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("def"), xParagraph->getString());
+    CPPUNIT_ASSERT_EQUAL(u"def"_ustr, xParagraph->getString());
 
     // This key sequence deletes a footnote and its number (without the fix applied)
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_UP);

@@ -45,16 +45,16 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase("/sw/qa/extras/ww8export/data/", "MS Word 97") {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ww8export/data/"_ustr, u"MS Word 97"_ustr) {}
 };
 
 DECLARE_WW8EXPORT_TEST(testTdf99120, "tdf99120.doc")
 {
-    CPPUNIT_ASSERT_EQUAL(OUString("Section 1, odd."),  parseDump("/root/page[1]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Section 1, even."),  parseDump("/root/page[2]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Section 1, odd."_ustr,  parseDump("/root/page[1]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Section 1, even."_ustr,  parseDump("/root/page[2]/header/txt/text()"_ostr));
     // This failed: the header was empty on the 3rd page, as the first page header was shown.
-    CPPUNIT_ASSERT_EQUAL(OUString("Section 2, odd."),  parseDump("/root/page[3]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Section 2, even."),  parseDump("/root/page[4]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Section 2, odd."_ustr,  parseDump("/root/page[3]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Section 2, even."_ustr,  parseDump("/root/page[4]/header/txt/text()"_ostr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf41542_borderlessPadding)
@@ -71,7 +71,7 @@ DECLARE_WW8EXPORT_TEST(testTdf60378_mergedBorders, "tdf60378_mergedBorders.doc")
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
 
     // The border width was zero
-    table::BorderLine2 aBorder = getProperty<table::BorderLine2>(xTable->getCellByName("B2"), "RightBorder");
+    table::BorderLine2 aBorder = getProperty<table::BorderLine2>(xTable->getCellByName(u"B2"_ustr), u"RightBorder"_ustr);
     CPPUNIT_ASSERT(aBorder.LineWidth > 0);
 }
 
@@ -82,7 +82,7 @@ DECLARE_WW8EXPORT_TEST(testTdf55528_relativeTableWidth, "tdf55528_relativeTableW
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Table relative width percent", sal_Int16(98), getProperty<sal_Int16>(xTable, "RelativeWidth"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Table relative width percent", sal_Int16(98), getProperty<sal_Int16>(xTable, u"RelativeWidth"_ustr));
  }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128700_relativeTableWidth)
@@ -94,12 +94,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128700_relativeTableWidth)
 
         // Since the table has been converted into a floating frame, the relative width either needed to be transferred
         // onto the frame, or else just thrown out. Otherwise it becomes relative to the size of the frame.
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Floated table can't use relative width", sal_Int16(0), getProperty<sal_Int16>(xTable, "RelativeWidth"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Floated table can't use relative width", sal_Int16(0), getProperty<sal_Int16>(xTable, u"RelativeWidth"_ustr));
     };
     // This also resulted in a layout loop when flys were allowed to split in footers.
     createSwDoc("tdf128700_relativeTableWidth.doc");
     verify();
-    saveAndReload("MS Word 97");
+    saveAndReload(u"MS Word 97"_ustr);
     verify();
 }
 
@@ -110,22 +110,22 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf116436_tableBackground)
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<table::XCell> xCell = xTable->getCellByName("A1");
-    CPPUNIT_ASSERT_EQUAL(Color(0xF8DF7C), getProperty<Color>(xCell, "BackColor"));
-    xCell.set(xTable->getCellByName("A6"));
-    CPPUNIT_ASSERT_EQUAL(Color(0x81D41A), getProperty<Color>(xCell, "BackColor"));
-    xCell.set(xTable->getCellByName("B6"));
-    CPPUNIT_ASSERT_EQUAL(Color(0xFFFBCC), getProperty<Color>(xCell, "BackColor"));
+    uno::Reference<table::XCell> xCell = xTable->getCellByName(u"A1"_ustr);
+    CPPUNIT_ASSERT_EQUAL(Color(0xF8DF7C), getProperty<Color>(xCell, u"BackColor"_ustr));
+    xCell.set(xTable->getCellByName(u"A6"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Color(0x81D41A), getProperty<Color>(xCell, u"BackColor"_ustr));
+    xCell.set(xTable->getCellByName(u"B6"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Color(0xFFFBCC), getProperty<Color>(xCell, u"BackColor"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf37153, "tdf37153_considerWrapOnObjPos.doc")
 {
-    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGH, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGH, getProperty<text::WrapTextMode>(getShape(1), u"Surround"_ustr));
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(text::VertOrientation::BOTTOM, getProperty<sal_Int16>(xTable->getCellByName("A1"), "VertOrient"));
+    CPPUNIT_ASSERT_EQUAL(text::VertOrientation::BOTTOM, getProperty<sal_Int16>(xTable->getCellByName(u"A1"_ustr), u"VertOrient"_ustr));
 
     //For MSO compatibility, the image should be at the top of the cell, not at the bottom - despite VertOrientation::BOTTOM
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -137,16 +137,16 @@ DECLARE_WW8EXPORT_TEST(testTdf37153, "tdf37153_considerWrapOnObjPos.doc")
 
 DECLARE_WW8EXPORT_TEST(testTdf49102_mergedCellNumbering, "tdf49102_mergedCellNumbering.doc")
 {
-    CPPUNIT_ASSERT_EQUAL( OUString("2."), parseDump("/root/page/body/tab/row[4]/cell/txt/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']"_ostr, "expand"_ostr) );
+    CPPUNIT_ASSERT_EQUAL( u"2."_ustr, parseDump("/root/page/body/tab/row[4]/cell/txt/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']"_ostr, "expand"_ostr) );
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf55427_footnote2endnote)
 {
     loadAndReload("tdf55427_footnote2endnote.odt");
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("ParagraphStyles")->getByName("Footnote"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote style is rose color", Color(0xFF007F), getProperty< Color >(xPageStyle, "CharColor"));
-    xPageStyle.set(getStyles("ParagraphStyles")->getByName("Endnote"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Endnote style is cyan3 color", Color(0x2BD0D2), getProperty< Color >(xPageStyle, "CharColor"));
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Footnote"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote style is rose color", Color(0xFF007F), getProperty< Color >(xPageStyle, u"CharColor"_ustr));
+    xPageStyle.set(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Endnote"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Endnote style is cyan3 color", Color(0x2BD0D2), getProperty< Color >(xPageStyle, u"CharColor"_ustr));
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -174,13 +174,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf55427_footnote2endnote)
 
         uno::Reference<text::XFootnote> xFootnote;
         xFootnotes->getByIndex(0) >>= xFootnote;
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original footnote's number", OUString("1"), xFootnote->getAnchor()->getString() );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote's number", OUString("i"), xEndnote->getAnchor()->getString() );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original footnote's number", u"1"_ustr, xFootnote->getAnchor()->getString() );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote's number", u"i"_ustr, xEndnote->getAnchor()->getString() );
 
         uno::Reference<text::XText> xFootnoteText;
         xFootnotes->getByIndex(0) >>= xFootnoteText;
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original footnote style", OUString("Footnote"), getProperty<OUString>(getParagraphOfText(1, xFootnoteText), "ParaStyleName") );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote style", OUString("Endnote"), getProperty<OUString>(getParagraphOfText(1, xEndnoteText), "ParaStyleName") );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original footnote style", u"Footnote"_ustr, getProperty<OUString>(getParagraphOfText(1, xFootnoteText), u"ParaStyleName"_ustr) );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote style", u"Endnote"_ustr, getProperty<OUString>(getParagraphOfText(1, xEndnoteText), u"ParaStyleName"_ustr) );
     }
     else
     {
@@ -188,42 +188,42 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf55427_footnote2endnote)
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "At-Document-End footnotes were converted into endnotes", sal_Int32(0), xFootnotes->getCount() );
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "At-Document-End footnotes became endnotes", sal_Int32(6), xEndnotes->getCount() );
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "converted footnote's number", OUString("i"), xEndnote->getAnchor()->getString() );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "converted footnote's number", u"i"_ustr, xEndnote->getAnchor()->getString() );
         xEndnotes->getByIndex(4) >>= xEndnote;
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote's new number", OUString("v"), xEndnote->getAnchor()->getString() );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote's new number", u"v"_ustr, xEndnote->getAnchor()->getString() );
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "retained footnote style", OUString("Footnote"), getProperty<OUString>(getParagraphOfText(1, xEndnoteText), "ParaStyleName") );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "retained footnote style", u"Footnote"_ustr, getProperty<OUString>(getParagraphOfText(1, xEndnoteText), u"ParaStyleName"_ustr) );
         xEndnotes->getByIndex(4) >>= xEndnoteText;
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote style", OUString("Endnote"), getProperty<OUString>(getParagraphOfText(1, xEndnoteText), "ParaStyleName") );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote style", u"Endnote"_ustr, getProperty<OUString>(getParagraphOfText(1, xEndnoteText), u"ParaStyleName"_ustr) );
     }
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf107931_KERN_DocEnabled_disabledDefStyle, "testTdf107931_KERN_DocEnabled_disabledDefStyle.doc")
 {
     // Paragraph 3: the default style has kerning disabled
-    CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(3), 1), "CharAutoKerning"));
+    CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(3), 1), u"CharAutoKerning"_ustr));
     // Paragraph 4: style with kerning disabled
-    CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(4), 1), "CharAutoKerning"));
+    CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(4), 1), u"CharAutoKerning"_ustr));
     // Paragraph 5: style with kerning enabled
-    CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(5), 1), "CharAutoKerning"));
+    CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(5), 1), u"CharAutoKerning"_ustr));
     // Paragraph 6: directly applied character properties: kerning disabled
-    CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(6), 1), "CharAutoKerning"));
+    CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(6), 1), u"CharAutoKerning"_ustr));
     // Paragraph 7: directly applied character properties: kerning enabled
-    CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(7), 1), "CharAutoKerning"));
+    CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(7), 1), u"CharAutoKerning"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf107931_KERN_enabledDefStyle, "testTdf107931_KERN_enabledDefStyle.doc")
 {
     // Paragraph 3: the default style has kerning enabled
-    CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(3), 1), "CharAutoKerning"));
+    CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(3), 1), u"CharAutoKerning"_ustr));
     // Paragraph 4: style with kerning disabled
-    CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(4), 1), "CharAutoKerning"));
+    CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(4), 1), u"CharAutoKerning"_ustr));
     // Paragraph 5: style with kerning enabled
-    CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(5), 1), "CharAutoKerning"));
+    CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(5), 1), u"CharAutoKerning"_ustr));
     // Paragraph 6: directly applied character properties: kerning disabled
-    CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(6), 1), "CharAutoKerning"));
+    CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(6), 1), u"CharAutoKerning"_ustr));
     // Paragraph 7: directly applied character properties: kerning enabled
-    CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(7), 1), "CharAutoKerning"));
+    CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(7), 1), u"CharAutoKerning"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf89377, "tdf89377_tableWithBreakBeforeParaStyle.doc")
@@ -293,13 +293,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf80635_pageRightRTL)
     auto verify = [this]() {
         // tdf#80635 - assert horizontal position of the table.
         uno::Reference<drawing::XShape> xFly = getShape(1);
-        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xFly, "HoriOrientRelation"));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Horizontal Orientation", text::HoriOrientation::RIGHT, getProperty<sal_Int16>(xFly, "HoriOrient"));
+        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xFly, u"HoriOrientRelation"_ustr));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Horizontal Orientation", text::HoriOrientation::RIGHT, getProperty<sal_Int16>(xFly, u"HoriOrient"_ustr));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("text probably does not wrap here", 1, getPages());
     };
     createSwDoc("tdf80635_pageRightRTL.doc");
     verify();
-    saveAndReload("MS Word 97");
+    saveAndReload(u"MS Word 97"_ustr);
     verify();
 }
 
@@ -308,11 +308,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf80635_marginRTL)
     auto verify = [this]() {
         // tdf#80635 - assert the horizontal orientation of the table.
         uno::Reference<drawing::XShape> xFly = getShape(1);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Horizontal Orientation", text::HoriOrientation::RIGHT, getProperty<sal_Int16>(xFly, "HoriOrient"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Horizontal Orientation", text::HoriOrientation::RIGHT, getProperty<sal_Int16>(xFly, u"HoriOrient"_ustr));
     };
     createSwDoc("tdf80635_marginRightRTL.doc");
     verify();
-    saveAndReload("MS Word 97");
+    saveAndReload(u"MS Word 97"_ustr);
     verify();
 }
 
@@ -323,13 +323,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf80635_marginLeft)
         uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
         uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Table Indent", tools::Long(0), getProperty<tools::Long>(xTable, "LeftMargin"), 100);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Table Indent", tools::Long(0), getProperty<tools::Long>(xTable, u"LeftMargin"_ustr), 100);
         uno::Reference<drawing::XShape> xFly = getShape(1);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(-2958), getProperty<sal_Int32>(xFly, "HoriOrientPosition"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-2958), getProperty<sal_Int32>(xFly, u"HoriOrientPosition"_ustr));
     };
     createSwDoc("tdf80635_marginLeft.doc");
     verify();
-    saveAndReload("MS Word 97");
+    saveAndReload(u"MS Word 97"_ustr);
     verify();
 }
 
@@ -338,23 +338,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf80635_pageLeft)
     auto verify = [this]() {
         // tdf#80635 - assert horizontal orient relation of the table.
         uno::Reference<drawing::XShape> xFly = getShape(1);
-        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xFly, "HoriOrientRelation"));
-        CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::NONE, getProperty<sal_Int16>(xFly, "HoriOrient"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(-189), getProperty<sal_Int32>(xFly, "HoriOrientPosition"));
+        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xFly, u"HoriOrientRelation"_ustr));
+        CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::NONE, getProperty<sal_Int16>(xFly, u"HoriOrient"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-189), getProperty<sal_Int32>(xFly, u"HoriOrientPosition"_ustr));
     };
     createSwDoc("tdf80635_pageLeft.doc");
     verify();
-    saveAndReload("MS Word 97");
+    saveAndReload(u"MS Word 97"_ustr);
     verify();
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf99197_defaultLTR, "tdf99197_defaultLTR.doc")
 {
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Default Paragraph style, LTR",
-        text::WritingMode2::LR_TB, getProperty<sal_Int16>(getParagraph(1), "WritingMode") );
+        text::WritingMode2::LR_TB, getProperty<sal_Int16>(getParagraph(1), u"WritingMode"_ustr) );
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "myDefaultStyle - no base style, LTR",
-        text::WritingMode2::LR_TB, getProperty<sal_Int16>(getParagraph(2), "WritingMode") );
+        text::WritingMode2::LR_TB, getProperty<sal_Int16>(getParagraph(2), u"WritingMode"_ustr) );
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf107773)
@@ -383,7 +383,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf107773)
     };
     createSwDoc("tdf107773.doc");
     verify();
-    saveAndReload("MS Word 97");
+    saveAndReload(u"MS Word 97"_ustr);
     verify();
 }
 
@@ -393,49 +393,49 @@ DECLARE_WW8EXPORT_TEST(testTdf112074_RTLtableJustification, "tdf112074_RTLtableJ
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Right To Left writing mode", text::WritingMode2::RL_TB, getProperty<sal_Int16>(xTable, "WritingMode"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Horizontal Orientation", text::HoriOrientation::LEFT_AND_WIDTH, getProperty<sal_Int16>(xTable, "HoriOrient"));
-    CPPUNIT_ASSERT_MESSAGE("Table Indent", getProperty<tools::Long>(xTable, "LeftMargin") > 3000);
-    CPPUNIT_ASSERT_MESSAGE("Table Indent is 3750", getProperty<tools::Long>(xTable, "LeftMargin") < 4000 );
-    CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_RIGHT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraphOrTable(2), "ParaAdjust")) );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Right To Left writing mode", text::WritingMode2::RL_TB, getProperty<sal_Int16>(xTable, u"WritingMode"_ustr));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Horizontal Orientation", text::HoriOrientation::LEFT_AND_WIDTH, getProperty<sal_Int16>(xTable, u"HoriOrient"_ustr));
+    CPPUNIT_ASSERT_MESSAGE("Table Indent", getProperty<tools::Long>(xTable, u"LeftMargin"_ustr) > 3000);
+    CPPUNIT_ASSERT_MESSAGE("Table Indent is 3750", getProperty<tools::Long>(xTable, u"LeftMargin"_ustr) < 4000 );
+    CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_RIGHT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraphOrTable(2), u"ParaAdjust"_ustr)) );
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf98620_rtlJustify, "tdf98620_rtlJustify.doc")
 {
-    CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_RIGHT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), "ParaAdjust")) );
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Right To Left style", text::WritingMode2::RL_TB, getProperty<sal_Int16>(getParagraph(1), "WritingMode"));
+    CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_RIGHT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), u"ParaAdjust"_ustr)) );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Right To Left style", text::WritingMode2::RL_TB, getProperty<sal_Int16>(getParagraph(1), u"WritingMode"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf121110_absJustify, "tdf121110_absJustify.doc")
 {
-    CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_RIGHT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), "ParaAdjust")) );
-    CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_LEFT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(3), "ParaAdjust")) );
+    CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_RIGHT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), u"ParaAdjust"_ustr)) );
+    CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_LEFT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(3), u"ParaAdjust"_ustr)) );
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf106174_rtlParaAlign)
 {
     loadAndReload("tdf106174_rtlParaAlign.docx");
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER), getProperty<sal_Int16>(getParagraph(1), "ParaAdjust"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER), getProperty<sal_Int16>(getParagraph(2), "ParaAdjust"));
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("ParagraphStyles")->getByName("Another paragraph aligned to right"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(xPropertySet, "ParaAdjust"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(3), "ParaAdjust"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(4), "ParaAdjust"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(5), "ParaAdjust"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),  getProperty<sal_Int16>(getParagraph(6), "ParaAdjust"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(7), "ParaAdjust"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(8), "ParaAdjust"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),  getProperty<sal_Int16>(getParagraph(9), "ParaAdjust"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),  getProperty<sal_Int16>(getParagraph(10), "ParaAdjust"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(11), "ParaAdjust"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),  getProperty<sal_Int16>(getParagraph(12), "ParaAdjust"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),  getProperty<sal_Int16>(getParagraph(13), "ParaAdjust"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(14), "ParaAdjust"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER), getProperty<sal_Int16>(getParagraph(1), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER), getProperty<sal_Int16>(getParagraph(2), u"ParaAdjust"_ustr));
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Another paragraph aligned to right"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(xPropertySet, u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(3), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(4), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(5), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),  getProperty<sal_Int16>(getParagraph(6), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(7), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(8), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),  getProperty<sal_Int16>(getParagraph(9), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),  getProperty<sal_Int16>(getParagraph(10), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(11), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),  getProperty<sal_Int16>(getParagraph(12), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),  getProperty<sal_Int16>(getParagraph(13), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(14), u"ParaAdjust"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf119232_startEvenPage, "tdf119232_startEvenPage.doc")
 {
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), getProperty<sal_Int16>(getParagraph(1), "PageNumberOffset"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), getProperty<sal_Int16>(getParagraph(1), u"PageNumberOffset"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf104805, "tdf104805.doc")
@@ -444,7 +444,7 @@ DECLARE_WW8EXPORT_TEST(testTdf104805, "tdf104805.doc")
     // rendered as ".1" instead of "1.".
     // Unittest modified due to Prefix/Suffix support obsolete
     uno::Reference<beans::XPropertySet> xPara(getParagraph(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(xPara, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u"1."_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf104334, "tdf104334.doc")
@@ -452,7 +452,7 @@ DECLARE_WW8EXPORT_TEST(testTdf104334, "tdf104334.doc")
     // This failed with a container::NoSuchElementException: STYLEREF was
     // mapped to SwChapterField, and the field result was "This is a Heading 1"
     // instead of just "1".
-    CPPUNIT_ASSERT_EQUAL(OUString("1"), getRun(getParagraph(2), 4)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, getRun(getParagraph(2), 4)->getString());
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf108072, "tdf108072.doc")
@@ -464,7 +464,7 @@ DECLARE_WW8EXPORT_TEST(testTdf108072, "tdf108072.doc")
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTableRows = xTable->getRows();
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTableRows->getByIndex(0), "IsSplitAllowed"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTableRows->getByIndex(0), u"IsSplitAllowed"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf123321, "shapes-line-ellipse.doc")
@@ -576,12 +576,12 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXCheckbox)
     // Check whether we have the right control
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
     uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService( "com.sun.star.form.component.CheckBox")));
-    CPPUNIT_ASSERT_EQUAL(OUString("Floating Checkbox"), getProperty<OUString>(xPropertySet, "Label"));
+    CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService( u"com.sun.star.form.component.CheckBox"_ustr)));
+    CPPUNIT_ASSERT_EQUAL(u"Floating Checkbox"_ustr, getProperty<OUString>(xPropertySet, u"Label"_ustr));
 
     // Check anchor type
     uno::Reference<beans::XPropertySet> xPropertySet2(xControlShape, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,"AnchorType"));
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,u"AnchorType"_ustr));
 
     // Second check box anchored inline / as character
     if(!isExported())
@@ -592,45 +592,45 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXCheckbox)
     // Check whether we have the right control
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
     xServiceInfo.set(xPropertySet, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService("com.sun.star.form.component.CheckBox")));
-    CPPUNIT_ASSERT_EQUAL(OUString("Inline Checkbox"), getProperty<OUString>(xPropertySet, "Label"));
+    CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService(u"com.sun.star.form.component.CheckBox"_ustr)));
+    CPPUNIT_ASSERT_EQUAL(u"Inline Checkbox"_ustr, getProperty<OUString>(xPropertySet, u"Label"_ustr));
 
     // Check anchor type
     xPropertySet2.set(xControlShape, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,"AnchorType"));
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,u"AnchorType"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST( testTdf115896_layoutInCell, "tdf115896_layoutInCell.doc" )
 {
     // Check anchor type - was anchored to page because of unknown version of Word
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet,"AnchorType"));
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet,u"AnchorType"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf67207_MERGEFIELD, "mailmerge.doc")
 {
-    uno::Reference<beans::XPropertySet> xTextField = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 2), "TextField");
+    uno::Reference<beans::XPropertySet> xTextField = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 2), u"TextField"_ustr);
     CPPUNIT_ASSERT(xTextField.is());
     uno::Reference<lang::XServiceInfo> xServiceInfo(xTextField, uno::UNO_QUERY_THROW);
     uno::Reference<text::XDependentTextField> xDependent(xTextField, uno::UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextField.Database"));
+    CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.TextField.Database"_ustr));
     OUString sValue;
-    xTextField->getPropertyValue("Content") >>= sValue;
+    xTextField->getPropertyValue(u"Content"_ustr) >>= sValue;
     CPPUNIT_ASSERT_EQUAL(u"«Name»"_ustr, sValue);
 
     uno::Reference<beans::XPropertySet> xFiledMaster = xDependent->getTextFieldMaster();
     uno::Reference<lang::XServiceInfo> xFiledMasterServiceInfo(xFiledMaster, uno::UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT(xFiledMasterServiceInfo->supportsService("com.sun.star.text.fieldmaster.Database"));
+    CPPUNIT_ASSERT(xFiledMasterServiceInfo->supportsService(u"com.sun.star.text.fieldmaster.Database"_ustr));
 
     // Defined properties: DataBaseName, Name, DataTableName, DataColumnName, DependentTextFields, DataCommandType, InstanceName, DataBaseURL
-    CPPUNIT_ASSERT(xFiledMaster->getPropertyValue("Name") >>= sValue);
-    CPPUNIT_ASSERT_EQUAL(OUString("Name"), sValue);
-    CPPUNIT_ASSERT(xFiledMaster->getPropertyValue("DataColumnName") >>= sValue);
-    CPPUNIT_ASSERT_EQUAL(OUString("Name"), sValue);
-    CPPUNIT_ASSERT(xFiledMaster->getPropertyValue("InstanceName") >>= sValue);
-    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.text.fieldmaster.DataBase.Name"), sValue);
+    CPPUNIT_ASSERT(xFiledMaster->getPropertyValue(u"Name"_ustr) >>= sValue);
+    CPPUNIT_ASSERT_EQUAL(u"Name"_ustr, sValue);
+    CPPUNIT_ASSERT(xFiledMaster->getPropertyValue(u"DataColumnName"_ustr) >>= sValue);
+    CPPUNIT_ASSERT_EQUAL(u"Name"_ustr, sValue);
+    CPPUNIT_ASSERT(xFiledMaster->getPropertyValue(u"InstanceName"_ustr) >>= sValue);
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.text.fieldmaster.DataBase.Name"_ustr, sValue);
 }
 
 DECLARE_OOXMLEXPORT_TEST( testTableCrossReference, "table_cross_reference.odt" )
@@ -646,31 +646,31 @@ DECLARE_OOXMLEXPORT_TEST( testTableCrossReference, "table_cross_reference.odt" )
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), xBookmarksByIdx->getCount());
     uno::Reference<container::XNameAccess> xBookmarksByName = xBookmarksSupplier->getBookmarks();
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table0_full"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table0_label_and_number"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table0_caption_only"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table0_number_only"));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Table0_full"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Table0_label_and_number"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Table0_caption_only"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Table0_number_only"_ustr));
 
     // Check bookmark text ranges
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table0_full"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Table0_full"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("Table 1: Table caption"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Table 1: Table caption"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table0_label_and_number"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Table0_label_and_number"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("Table 1"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Table 1"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table0_caption_only"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Table0_caption_only"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("Table caption"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Table caption"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table0_number_only"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Table0_number_only"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("1"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"1"_ustr, xRange->getString());
     }
 
     // Check reference fields
@@ -689,98 +689,98 @@ DECLARE_OOXMLEXPORT_TEST( testTableCrossReference, "table_cross_reference.odt" )
             // Full reference to table caption
             case 0:
             {
-                CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextField.GetReference"));
+                CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.TextField.GetReference"_ustr));
                 OUString sValue;
                 sal_Int16 nValue;
-                xPropertySet->getPropertyValue("CurrentPresentation") >>= sValue;
-                CPPUNIT_ASSERT_EQUAL(OUString("Table 1: Table caption"), sValue);
-                xPropertySet->getPropertyValue("SourceName") >>= sValue;
-                CPPUNIT_ASSERT_EQUAL(OUString("Ref_Table0_full"), sValue);
-                xPropertySet->getPropertyValue("SequenceNumber") >>= nValue;
+                xPropertySet->getPropertyValue(u"CurrentPresentation"_ustr) >>= sValue;
+                CPPUNIT_ASSERT_EQUAL(u"Table 1: Table caption"_ustr, sValue);
+                xPropertySet->getPropertyValue(u"SourceName"_ustr) >>= sValue;
+                CPPUNIT_ASSERT_EQUAL(u"Ref_Table0_full"_ustr, sValue);
+                xPropertySet->getPropertyValue(u"SequenceNumber"_ustr) >>= nValue;
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nValue);
                 break;
             }
             // Reference to table number
             case 1:
             {
-                CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextField.GetReference"));
+                CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.TextField.GetReference"_ustr));
                 OUString sValue;
                 sal_Int16 nValue;
-                xPropertySet->getPropertyValue("CurrentPresentation") >>= sValue;
-                CPPUNIT_ASSERT_EQUAL(OUString("1"), sValue);
-                xPropertySet->getPropertyValue("SourceName") >>= sValue;
-                CPPUNIT_ASSERT_EQUAL(OUString("Ref_Table0_number_only"), sValue);
-                xPropertySet->getPropertyValue("SequenceNumber") >>= nValue;
+                xPropertySet->getPropertyValue(u"CurrentPresentation"_ustr) >>= sValue;
+                CPPUNIT_ASSERT_EQUAL(u"1"_ustr, sValue);
+                xPropertySet->getPropertyValue(u"SourceName"_ustr) >>= sValue;
+                CPPUNIT_ASSERT_EQUAL(u"Ref_Table0_number_only"_ustr, sValue);
+                xPropertySet->getPropertyValue(u"SequenceNumber"_ustr) >>= nValue;
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nValue);
                 break;
             }
             // Reference to caption only
             case 2:
             {
-                CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextField.GetReference"));
+                CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.TextField.GetReference"_ustr));
                 OUString sValue;
                 sal_Int16 nValue;
-                xPropertySet->getPropertyValue("CurrentPresentation") >>= sValue;
-                CPPUNIT_ASSERT_EQUAL(OUString("Table caption"), sValue);
-                xPropertySet->getPropertyValue("SourceName") >>= sValue;
-                CPPUNIT_ASSERT_EQUAL(OUString("Ref_Table0_caption_only"), sValue);
-                xPropertySet->getPropertyValue("SequenceNumber") >>= nValue;
+                xPropertySet->getPropertyValue(u"CurrentPresentation"_ustr) >>= sValue;
+                CPPUNIT_ASSERT_EQUAL(u"Table caption"_ustr, sValue);
+                xPropertySet->getPropertyValue(u"SourceName"_ustr) >>= sValue;
+                CPPUNIT_ASSERT_EQUAL(u"Ref_Table0_caption_only"_ustr, sValue);
+                xPropertySet->getPropertyValue(u"SequenceNumber"_ustr) >>= nValue;
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nValue);
                 break;
             }
             // Reference to category and number
             case 3:
             {
-                CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextField.GetReference"));
+                CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.TextField.GetReference"_ustr));
                 OUString sValue;
                 sal_Int16 nValue;
-                xPropertySet->getPropertyValue("CurrentPresentation") >>= sValue;
-                CPPUNIT_ASSERT_EQUAL(OUString("Table 1"), sValue);
-                xPropertySet->getPropertyValue("SourceName") >>= sValue;
-                CPPUNIT_ASSERT_EQUAL(OUString("Ref_Table0_label_and_number"), sValue);
-                xPropertySet->getPropertyValue("SequenceNumber") >>= nValue;
+                xPropertySet->getPropertyValue(u"CurrentPresentation"_ustr) >>= sValue;
+                CPPUNIT_ASSERT_EQUAL(u"Table 1"_ustr, sValue);
+                xPropertySet->getPropertyValue(u"SourceName"_ustr) >>= sValue;
+                CPPUNIT_ASSERT_EQUAL(u"Ref_Table0_label_and_number"_ustr, sValue);
+                xPropertySet->getPropertyValue(u"SequenceNumber"_ustr) >>= nValue;
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nValue);
                 break;
             }
             // Reference to page of the table
             case 4:
             {
-                CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextField.GetReference"));
+                CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.TextField.GetReference"_ustr));
                 OUString sValue;
                 sal_Int16 nValue;
-                xPropertySet->getPropertyValue("CurrentPresentation") >>= sValue;
-                CPPUNIT_ASSERT_EQUAL(OUString("1"), sValue);
-                xPropertySet->getPropertyValue("SourceName") >>= sValue;
-                CPPUNIT_ASSERT_EQUAL(OUString("Ref_Table0_full"), sValue);
-                xPropertySet->getPropertyValue("SequenceNumber") >>= nValue;
+                xPropertySet->getPropertyValue(u"CurrentPresentation"_ustr) >>= sValue;
+                CPPUNIT_ASSERT_EQUAL(u"1"_ustr, sValue);
+                xPropertySet->getPropertyValue(u"SourceName"_ustr) >>= sValue;
+                CPPUNIT_ASSERT_EQUAL(u"Ref_Table0_full"_ustr, sValue);
+                xPropertySet->getPropertyValue(u"SequenceNumber"_ustr) >>= nValue;
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nValue);
                 break;
             }
             // Page style reference / exported as simple page reference
             case 5:
             {
-                CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextField.GetReference"));
+                CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.TextField.GetReference"_ustr));
                 OUString sValue;
                 sal_Int16 nValue;
-                xPropertySet->getPropertyValue("CurrentPresentation") >>= sValue;
-                CPPUNIT_ASSERT_EQUAL(OUString("1"), sValue);
-                xPropertySet->getPropertyValue("SourceName") >>= sValue;
-                CPPUNIT_ASSERT_EQUAL(OUString("Ref_Table0_full"), sValue);
-                xPropertySet->getPropertyValue("SequenceNumber") >>= nValue;
+                xPropertySet->getPropertyValue(u"CurrentPresentation"_ustr) >>= sValue;
+                CPPUNIT_ASSERT_EQUAL(u"1"_ustr, sValue);
+                xPropertySet->getPropertyValue(u"SourceName"_ustr) >>= sValue;
+                CPPUNIT_ASSERT_EQUAL(u"Ref_Table0_full"_ustr, sValue);
+                xPropertySet->getPropertyValue(u"SequenceNumber"_ustr) >>= nValue;
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nValue);
                 break;
             }
             // Above / below reference
             case 6:
             {
-                CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextField.GetReference"));
+                CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.TextField.GetReference"_ustr));
                 OUString sValue;
                 sal_Int16 nValue;
-                xPropertySet->getPropertyValue("CurrentPresentation") >>= sValue;
-                CPPUNIT_ASSERT_EQUAL(OUString("above"), sValue);
-                xPropertySet->getPropertyValue("SourceName") >>= sValue;
-                CPPUNIT_ASSERT_EQUAL(OUString("Ref_Table0_full"), sValue);
-                xPropertySet->getPropertyValue("SequenceNumber") >>= nValue;
+                xPropertySet->getPropertyValue(u"CurrentPresentation"_ustr) >>= sValue;
+                CPPUNIT_ASSERT_EQUAL(u"above"_ustr, sValue);
+                xPropertySet->getPropertyValue(u"SourceName"_ustr) >>= sValue;
+                CPPUNIT_ASSERT_EQUAL(u"Ref_Table0_full"_ustr, sValue);
+                xPropertySet->getPropertyValue(u"SequenceNumber"_ustr) >>= nValue;
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nValue);
                 break;
             }
@@ -806,107 +806,107 @@ CPPUNIT_TEST_FIXTURE(Test, testTableCrossReferenceCustomFormat)
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(16), xBookmarksByIdx->getCount());
     uno::Reference<container::XNameAccess> xBookmarksByName = xBookmarksSupplier->getBookmarks();
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table0_full"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table0_label_and_number"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table0_caption_only"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table0_number_only"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table1_full"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table1_label_and_number"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table1_caption_only"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table1_number_only"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table2_full"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table2_label_and_number"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table2_caption_only"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table2_number_only"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table3_full"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table3_label_and_number"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table3_caption_only"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Table3_number_only"));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Table0_full"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Table0_label_and_number"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Table0_caption_only"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Table0_number_only"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Table1_full"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Table1_label_and_number"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Table1_caption_only"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Table1_number_only"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Table2_full"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Table2_label_and_number"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Table2_caption_only"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Table2_number_only"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Table3_full"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Table3_label_and_number"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Table3_caption_only"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Table3_number_only"_ustr));
 
     // Check bookmark text ranges
     // First table's caption
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table0_full"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Table0_full"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("1. Table: Table caption"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"1. Table: Table caption"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table0_label_and_number"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Table0_label_and_number"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("1. Table"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"1. Table"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table0_caption_only"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Table0_caption_only"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("Table caption"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Table caption"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table0_number_only"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Table0_number_only"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("1"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"1"_ustr, xRange->getString());
     }
     // Second table's caption
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table1_full"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Table1_full"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("2. TableTable caption"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"2. TableTable caption"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table1_label_and_number"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Table1_label_and_number"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("2. Table"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"2. Table"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table1_caption_only"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Table1_caption_only"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("Table caption"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Table caption"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table1_number_only"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Table1_number_only"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("2"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"2"_ustr, xRange->getString());
     }
     // Third table's caption
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table2_full"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Table2_full"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("3) Table Table caption"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"3) Table Table caption"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table2_label_and_number"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Table2_label_and_number"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("3) Table"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"3) Table"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table2_caption_only"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Table2_caption_only"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("Table caption"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Table caption"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table2_number_only"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Table2_number_only"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("3"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"3"_ustr, xRange->getString());
     }
     // Fourth table's caption
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table3_full"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Table3_full"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("Table 4- Table caption"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Table 4- Table caption"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table3_label_and_number"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Table3_label_and_number"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("Table 4"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Table 4"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table3_caption_only"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Table3_caption_only"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("Table caption"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Table caption"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Table3_number_only"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Table3_number_only"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("4"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"4"_ustr, xRange->getString());
     }
 }
 
@@ -923,104 +923,104 @@ DECLARE_OOXMLEXPORT_TEST( testObjectCrossReference, "object_cross_reference.odt"
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(15), xBookmarksByIdx->getCount());
     uno::Reference<container::XNameAccess> xBookmarksByName = xBookmarksSupplier->getBookmarks();
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Drawing0_full"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Drawing0_label_and_number"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Drawing0_caption_only"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Drawing0_number_only"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Drawing1_full"));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Drawing0_full"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Drawing0_label_and_number"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Drawing0_caption_only"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Drawing0_number_only"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Drawing1_full"_ustr));
 
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Illustration0_full"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Illustration0_label_and_number"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Illustration0_caption_only"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Illustration0_number_only"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Illustration1_caption_only"));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Illustration0_full"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Illustration0_label_and_number"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Illustration0_caption_only"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Illustration0_number_only"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Illustration1_caption_only"_ustr));
 
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Text0_full"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Text0_label_and_number"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Text0_caption_only"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Text0_number_only"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Ref_Text1_label_and_number"));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Text0_full"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Text0_label_and_number"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Text0_caption_only"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Text0_number_only"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Ref_Text1_label_and_number"_ustr));
 
     // Check bookmark text ranges
     // Cross references to shapes
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Drawing0_full"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Drawing0_full"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("Drawing 1: A rectangle"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Drawing 1: A rectangle"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Drawing0_label_and_number"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Drawing0_label_and_number"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("Drawing 1"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Drawing 1"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Drawing0_caption_only"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Drawing0_caption_only"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("A rectangle"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"A rectangle"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Drawing0_number_only"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Drawing0_number_only"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("1"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"1"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Drawing1_full"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Drawing1_full"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("Drawing 2: a circle"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Drawing 2: a circle"_ustr, xRange->getString());
     }
 
     // Cross references to pictures
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Illustration0_full"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Illustration0_full"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("Illustration 1: A picture"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Illustration 1: A picture"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Illustration0_label_and_number"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Illustration0_label_and_number"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("Illustration 1"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Illustration 1"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Illustration0_caption_only"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Illustration0_caption_only"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("A picture"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"A picture"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Illustration0_number_only"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Illustration0_number_only"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("1"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"1"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Illustration1_caption_only"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Illustration1_caption_only"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("another image"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"another image"_ustr, xRange->getString());
     }
 
     // Cross references to text frames
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Text0_full"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Text0_full"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("Text 1: A frame"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Text 1: A frame"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Text0_label_and_number"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Text0_label_and_number"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("Text 1"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Text 1"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Text0_caption_only"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Text0_caption_only"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("A frame"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"A frame"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Text0_number_only"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Text0_number_only"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("1"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"1"_ustr, xRange->getString());
     }
     {
-        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName("Ref_Text1_label_and_number"), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xContent(xBookmarksByName->getByName(u"Ref_Text1_label_and_number"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString("Text 2"), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Text 2"_ustr, xRange->getString());
     }
 }
 
@@ -1054,7 +1054,7 @@ DECLARE_WW8EXPORT_TEST(testTdf112118_DOC, "tdf112118.doc")
             }
         }
     };
-    auto xStyles = getStyles("PageStyles");
+    auto xStyles = getStyles(u"PageStyles"_ustr);
 
     for (const auto& style : styleParams)
     {
@@ -1123,10 +1123,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf118133)
 DECLARE_WW8EXPORT_TEST(testTdf118412, "tdf118412.doc")
 {
     /* Check that the first page's bottom margin is 1.251cm (not 2.540cm) */
-    OUString sPageStyleName = getProperty<OUString>(getParagraph(1), "PageStyleName");
+    OUString sPageStyleName = getProperty<OUString>(getParagraph(1), u"PageStyleName"_ustr);
     uno::Reference<style::XStyle> xPageStyle(
-        getStyles("PageStyles")->getByName(sPageStyleName), uno::UNO_QUERY);
-    sal_Int32 nBottomMargin = getProperty<sal_Int32>(xPageStyle, "BottomMargin");
+        getStyles(u"PageStyles"_ustr)->getByName(sPageStyleName), uno::UNO_QUERY);
+    sal_Int32 nBottomMargin = getProperty<sal_Int32>(xPageStyle, u"BottomMargin"_ustr);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1251), nBottomMargin);
 }
 
@@ -1138,15 +1138,15 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlExport)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-    xText->insertString(xCursor, "test", /*bAbsorb=*/false);
+    xText->insertString(xCursor, u"test"_ustr, /*bAbsorb=*/false);
     xCursor->gotoStart(/*bExpand=*/false);
     xCursor->gotoEnd(/*bExpand=*/true);
     uno::Reference<text::XTextContent> xContentControl(
-        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+        xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When saving that document to DOC and loading it back:
-    saveAndReload("MS Word 97");
+    saveAndReload(u"MS Word 97"_ustr);
 
     // Then make sure the dummy character at the end is filtered out:
     OUString aBodyText = getBodyText();
@@ -1155,7 +1155,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlExport)
     // - Actual  : test<space>
     // i.e. the CH_TXTATR_BREAKWORD at the end was written, then the import replaced that with a
     // space.
-    CPPUNIT_ASSERT_EQUAL(OUString("test"), aBodyText);
+    CPPUNIT_ASSERT_EQUAL(u"test"_ustr, aBodyText);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

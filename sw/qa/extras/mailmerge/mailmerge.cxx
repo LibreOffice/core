@@ -85,7 +85,7 @@ public:
         aTempDir.EnableKillingFile();
         const OUString aWorkDir = aTempDir.GetURL();
         const OUString aURI( createFileURL(OUString::createFromAscii(datasource) ) );
-        const OUString aPrefix = column ? OUString::createFromAscii( column ) : "LOMM_";
+        const OUString aPrefix = column ? OUString::createFromAscii( column ) : u"LOMM_"_ustr;
         const OUString aDBName = registerDBsource( aURI, aWorkDir );
         initMailMergeJobAndArgs( filename, tablename, aDBName, aPrefix, aWorkDir, filter, selection, column != nullptr );
 
@@ -117,14 +117,14 @@ public:
     uno::Reference< sdbc::XRowSet > getXResultFromDataset( const char* tablename, const OUString &aDBName )
     {
         uno::Reference< sdbc::XRowSet > xCurResultSet;
-        uno::Reference< uno::XInterface > xInstance = getMultiServiceFactory()->createInstance( "com.sun.star.sdb.RowSet" );
+        uno::Reference< uno::XInterface > xInstance = getMultiServiceFactory()->createInstance( u"com.sun.star.sdb.RowSet"_ustr );
         uno::Reference< beans::XPropertySet > xRowSetPropSet( xInstance, uno::UNO_QUERY );
         assert( xRowSetPropSet.is() && "failed to get XPropertySet interface from RowSet" );
         if (xRowSetPropSet.is())
         {
-            xRowSetPropSet->setPropertyValue( "DataSourceName",    uno::Any( aDBName ) );
-            xRowSetPropSet->setPropertyValue( "Command",           uno::Any( OUString::createFromAscii(tablename) ) );
-            xRowSetPropSet->setPropertyValue( "CommandType",       uno::Any( sdb::CommandType::TABLE ) );
+            xRowSetPropSet->setPropertyValue( u"DataSourceName"_ustr,    uno::Any( aDBName ) );
+            xRowSetPropSet->setPropertyValue( u"Command"_ustr,           uno::Any( OUString::createFromAscii(tablename) ) );
+            xRowSetPropSet->setPropertyValue( u"CommandType"_ustr,       uno::Any( sdb::CommandType::TABLE ) );
 
             uno::Reference< sdbc::XRowSet > xRowSet( xInstance, uno::UNO_QUERY );
             if (xRowSet.is())
@@ -140,7 +140,7 @@ public:
                                   char const*const filter, int nDataSets,
                                   const bool bPrefixIsColumn )
     {
-        uno::Reference< task::XJob > xJob( getMultiServiceFactory()->createInstance( "com.sun.star.text.MailMerge" ), uno::UNO_QUERY_THROW );
+        uno::Reference< task::XJob > xJob( getMultiServiceFactory()->createInstance( u"com.sun.star.text.MailMerge"_ustr ), uno::UNO_QUERY_THROW );
         mxJob.set( xJob );
 
         mMMargs.reserve( 15 );
@@ -252,7 +252,7 @@ public:
         // Output name early, so in the case of a hang, the name of the hanging input file is visible.
         std::cout << filename << ",";
         mnStartTime = osl_getGlobalTimer();
-        mxComponent = loadFromDesktop(msMailMergeOutputURL + "/" + filename, "com.sun.star.text.TextDocument");
+        mxComponent = loadFromDesktop(msMailMergeOutputURL + "/" + filename, u"com.sun.star.text.TextDocument"_ustr);
         discardDumpedLayout();
         calcLayout();
     }
@@ -355,7 +355,7 @@ int MMTest::documentStartPageNumber( int document ) const
 }
 
 MMTest::MMTest()
-    : SwModelTestBase("/sw/qa/extras/mailmerge/data/", "writer8")
+    : SwModelTestBase(u"/sw/qa/extras/mailmerge/data/"_ustr, u"writer8"_ustr)
     , mnCurOutputType(0)
     , maMMtestFilename(nullptr)
 {
@@ -397,22 +397,22 @@ DECLARE_FILE_MAILMERGE_TEST(testMissingDefaultLineColor, "missing-default-line-c
     // (see XMLGraphicsDefaultStyle::SetDefaults()).
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(5), uno::UNO_QUERY);
     // Lines do not have a line color.
-    CPPUNIT_ASSERT( !xPropertySet->getPropertySetInfo()->hasPropertyByName( "LineColor" ));
+    CPPUNIT_ASSERT( !xPropertySet->getPropertySetInfo()->hasPropertyByName( u"LineColor"_ustr ));
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     uno::Reference< lang::XMultiServiceFactory > xFact( mxComponent, uno::UNO_QUERY );
-    uno::Reference< beans::XPropertySet > xDefaults( xFact->createInstance( "com.sun.star.drawing.Defaults" ), uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xDefaults( xFact->createInstance( u"com.sun.star.drawing.Defaults"_ustr ), uno::UNO_QUERY );
     CPPUNIT_ASSERT( xDefaults.is());
     uno::Reference< beans::XPropertySetInfo > xInfo( xDefaults->getPropertySetInfo());
-    CPPUNIT_ASSERT( xInfo->hasPropertyByName( "LineColor" ));
+    CPPUNIT_ASSERT( xInfo->hasPropertyByName( u"LineColor"_ustr ));
     Color lineColor;
-    xDefaults->getPropertyValue( "LineColor" ) >>= lineColor;
+    xDefaults->getPropertyValue( u"LineColor"_ustr ) >>= lineColor;
     // And the default value is black (wasn't copied properly by mailmerge).
     CPPUNIT_ASSERT_EQUAL( COL_BLACK, lineColor );
     // And check that the resulting file has the proper default.
-    xmlDocUniquePtr pXmlDoc = parseMailMergeExport( "styles.xml" );
-    CPPUNIT_ASSERT_EQUAL( OUString( "graphic" ), getXPath(pXmlDoc, "/office:document-styles/office:styles/style:default-style[1]"_ostr, "family"_ostr));
-    CPPUNIT_ASSERT_EQUAL( OUString( "#000000" ), getXPath(pXmlDoc, "/office:document-styles/office:styles/style:default-style[1]/style:graphic-properties"_ostr, "stroke-color"_ostr));
+    xmlDocUniquePtr pXmlDoc = parseMailMergeExport( u"styles.xml"_ustr );
+    CPPUNIT_ASSERT_EQUAL( u"graphic"_ustr, getXPath(pXmlDoc, "/office:document-styles/office:styles/style:default-style[1]"_ostr, "family"_ostr));
+    CPPUNIT_ASSERT_EQUAL( u"#000000"_ustr, getXPath(pXmlDoc, "/office:document-styles/office:styles/style:default-style[1]/style:graphic-properties"_ostr, "stroke-color"_ostr));
 }
 
 DECLARE_FILE_MAILMERGE_TEST(testSimpleMailMerge, "simple-mail-merge.odt", "10-testing-addresses.ods", "testing-addresses")
@@ -424,9 +424,9 @@ DECLARE_FILE_MAILMERGE_TEST(testSimpleMailMerge, "simple-mail-merge.odt", "10-te
     {
         loadMailMergeDocument( doc );
         CPPUNIT_ASSERT_EQUAL( 1, getPages());
-        CPPUNIT_ASSERT_EQUAL( OUString( "Fixed text." ), getRun( getParagraph( 1 ), 1 )->getString());
+        CPPUNIT_ASSERT_EQUAL( u"Fixed text."_ustr, getRun( getParagraph( 1 ), 1 )->getString());
         CPPUNIT_ASSERT_EQUAL( OUString( "lastname" + OUString::number( doc + 1 )), getRun( getParagraph( 2 ), 1 )->getString());
-        CPPUNIT_ASSERT_EQUAL( OUString( "Another fixed text." ), getRun( getParagraph( 3 ), 1 )->getString());
+        CPPUNIT_ASSERT_EQUAL( u"Another fixed text."_ustr, getRun( getParagraph( 3 ), 1 )->getString());
     }
 }
 
@@ -438,9 +438,9 @@ DECLARE_FILE_MAILMERGE_TEST(testWriterDataSource, "writer-mail-merge.odt", "10-t
     {
         loadMailMergeDocument(doc);
         CPPUNIT_ASSERT_EQUAL(1, getPages());
-        CPPUNIT_ASSERT_EQUAL(OUString("Fixed text."), getRun(getParagraph(1), 1)->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Fixed text."_ustr, getRun(getParagraph(1), 1)->getString());
         CPPUNIT_ASSERT_EQUAL(OUString("lastname" + OUString::number(doc + 1)), getRun(getParagraph(2), 1)->getString());
-        CPPUNIT_ASSERT_EQUAL(OUString("Another fixed text."), getRun(getParagraph(3), 1)->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Another fixed text."_ustr, getRun(getParagraph(3), 1)->getString());
     }
 }
 
@@ -454,9 +454,9 @@ DECLARE_FILE_MAILMERGE_TEST(testWriterMergedDataSource, "writer-merged-mail-merg
     {
         loadMailMergeDocument(doc);
         CPPUNIT_ASSERT_EQUAL(1, getPages());
-        CPPUNIT_ASSERT_EQUAL(OUString("Fixed text."), getRun(getParagraph(1), 1)->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Fixed text."_ustr, getRun(getParagraph(1), 1)->getString());
         CPPUNIT_ASSERT_EQUAL(OUString("lastname" + OUString::number(doc + 1)), getRun(getParagraph(2), 1)->getString());
-        CPPUNIT_ASSERT_EQUAL(OUString("Another fixed text."), getRun(getParagraph(3), 1)->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Another fixed text."_ustr, getRun(getParagraph(3), 1)->getString());
     }
 }
 
@@ -471,17 +471,17 @@ DECLARE_FILE_MAILMERGE_TEST(test2Pages, "simple-mail-merge-2pages.odt", "10-test
         OUString lastname = "lastname" + OUString::number( doc + 1 );
         OUString firstname = "firstname" + OUString::number( doc + 1 );
         CPPUNIT_ASSERT_EQUAL( 2, getPages());
-        CPPUNIT_ASSERT_EQUAL( OUString( "Fixed text." ), getRun( getParagraph( 1 ), 1 )->getString());
+        CPPUNIT_ASSERT_EQUAL( u"Fixed text."_ustr, getRun( getParagraph( 1 ), 1 )->getString());
         CPPUNIT_ASSERT_EQUAL( lastname, getRun( getParagraph( 2 ), 1 )->getString());
-        CPPUNIT_ASSERT_EQUAL( OUString( "Another fixed text." ), getRun( getParagraph( 3 ), 1 )->getString());
+        CPPUNIT_ASSERT_EQUAL( u"Another fixed text."_ustr, getRun( getParagraph( 3 ), 1 )->getString());
         CPPUNIT_ASSERT_EQUAL( OUString(), getRun( getParagraph( 4 ), 1 )->getString()); // empty para at the end of page 1
-        CPPUNIT_ASSERT_EQUAL( OUString( "Second page." ), getRun( getParagraph( 5 ), 1 )->getString());
+        CPPUNIT_ASSERT_EQUAL( u"Second page."_ustr, getRun( getParagraph( 5 ), 1 )->getString());
         CPPUNIT_ASSERT_EQUAL( firstname, getRun( getParagraph( 6 ), 1 )->getString());
         // Also verify the layout.
         CPPUNIT_ASSERT_EQUAL( lastname, parseDump("/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
-        CPPUNIT_ASSERT_EQUAL( OUString( "Fixed text." ), parseDump("/root/page[1]/body/txt[1]"_ostr, ""_ostr));
+        CPPUNIT_ASSERT_EQUAL( u"Fixed text."_ustr, parseDump("/root/page[1]/body/txt[1]"_ostr, ""_ostr));
         CPPUNIT_ASSERT_EQUAL( OUString(), parseDump("/root/page[1]/body/txt[4]"_ostr, ""_ostr));
-        CPPUNIT_ASSERT_EQUAL( OUString( "Second page." ), parseDump("/root/page[2]/body/txt[1]"_ostr, ""_ostr));
+        CPPUNIT_ASSERT_EQUAL( u"Second page."_ustr, parseDump("/root/page[2]/body/txt[1]"_ostr, ""_ostr));
         CPPUNIT_ASSERT_EQUAL( firstname, parseDump("/root/page[2]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
     }
 }
@@ -523,9 +523,9 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf89214, "tdf89214.odt", "10-testing-addresses
 
     uno::Reference<text::XTextRange> xParagraph(getParagraphOrTable(3, mxSwTextDocument->getText()), uno::UNO_QUERY);
     // Make sure that we assert the right paragraph.
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), xParagraph->getString());
+    CPPUNIT_ASSERT_EQUAL(u"a"_ustr, xParagraph->getString());
     // This paragraph had a bullet numbering, make sure that the list id is not empty.
-    CPPUNIT_ASSERT(!getProperty<OUString>(xParagraph, "ListId").isEmpty());
+    CPPUNIT_ASSERT(!getProperty<OUString>(xParagraph, u"ListId"_ustr).isEmpty());
 }
 
 DECLARE_SHELL_MAILMERGE_TEST(testTdf90230, "empty.odt", "10-testing-addresses.ods", "testing-addresses")
@@ -602,7 +602,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testBookmarkCondition, "bookmarkcondition.fodt", "b
     assertXPath(pLayout, "/root/page[3]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In Barcelona war es schön."_ustr);
     assertXPath(pLayout, "/root/page[3]/body/txt[5]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"Mein Urlaub war schön . "_ustr);
     assertXPath(pLayout, "/root/page[5]/body/section"_ostr, 1);
-    assertXPath(pLayout, "/root/page[5]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, "In Paris war es erlebnisreich.");
+    assertXPath(pLayout, "/root/page[5]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In Paris war es erlebnisreich."_ustr);
     assertXPath(pLayout, "/root/page[5]/body/txt[5]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"Mein Urlaub war erlebnisreich . "_ustr);
     assertXPath(pLayout, "/root/page[7]/body/section"_ostr, 3);
     assertXPath(pLayout, "/root/page[7]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In den Bergen war es anstrengend."_ustr);
@@ -674,9 +674,9 @@ DECLARE_FILE_MAILMERGE_TEST_COLUMN(testDirMailMerge, "simple-mail-merge.odt", "1
                           + " firstname" + OUString::number( doc ) + ".odt";
         loadMailMergeDocument( filename );
         CPPUNIT_ASSERT_EQUAL( 1, getPages());
-        CPPUNIT_ASSERT_EQUAL( OUString( "Fixed text." ), getRun( getParagraph( 1 ), 1 )->getString());
+        CPPUNIT_ASSERT_EQUAL( u"Fixed text."_ustr, getRun( getParagraph( 1 ), 1 )->getString());
         CPPUNIT_ASSERT_EQUAL( OUString( "lastname" + OUString::number( doc )), getRun( getParagraph( 2 ), 1 )->getString());
-        CPPUNIT_ASSERT_EQUAL( OUString( "Another fixed text." ), getRun( getParagraph( 3 ), 1 )->getString());
+        CPPUNIT_ASSERT_EQUAL( u"Another fixed text."_ustr, getRun( getParagraph( 3 ), 1 )->getString());
     }
 }
 
@@ -895,28 +895,28 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf118845, "tdf118845.fodt", "4_v01.ods", "Tabe
 
     uno::Reference<text::XTextRange> xParagraph(getParagraphOrTable(1, mxSwTextDocument->getText()),
                                                 uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Dear Mrs. Mustermann1,"), xParagraph->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Dear Mrs. Mustermann1,"_ustr, xParagraph->getString());
 
     xParagraph.set(getParagraphOrTable(2, mxSwTextDocument->getText()), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), xParagraph->getString());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, xParagraph->getString());
 
     xParagraph.set(getParagraphOrTable(3, mxSwTextDocument->getText()), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Dear Mr. Mustermann2,"), xParagraph->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Dear Mr. Mustermann2,"_ustr, xParagraph->getString());
 
     xParagraph.set(getParagraphOrTable(4, mxSwTextDocument->getText()), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), xParagraph->getString());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, xParagraph->getString());
 
     xParagraph.set(getParagraphOrTable(5, mxSwTextDocument->getText()), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Dear Mrs. Mustermann3,"), xParagraph->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Dear Mrs. Mustermann3,"_ustr, xParagraph->getString());
 
     xParagraph.set(getParagraphOrTable(6, mxSwTextDocument->getText()), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), xParagraph->getString());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, xParagraph->getString());
 
     xParagraph.set(getParagraphOrTable(7, mxSwTextDocument->getText()), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Dear Mr. Mustermann4,"), xParagraph->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Dear Mr. Mustermann4,"_ustr, xParagraph->getString());
 
     xParagraph.set(getParagraphOrTable(8, mxSwTextDocument->getText()), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), xParagraph->getString());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, xParagraph->getString());
 }
 
 DECLARE_SHELL_MAILMERGE_TEST(testTdf62364, "tdf62364.odt", "10-testing-addresses.ods", "testing-addresses")

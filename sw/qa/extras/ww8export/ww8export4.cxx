@@ -44,7 +44,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/extras/ww8export/data/", "MS Word 97")
+        : SwModelTestBase(u"/sw/qa/extras/ww8export/data/"_ustr, u"MS Word 97"_ustr)
     {
     }
 };
@@ -53,7 +53,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf77964)
 {
     loadAndReload("tdf77964.doc");
     // both images were loading as AT_PARA instead of AS_CHAR. Image2 visually had text wrapping.
-    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, getProperty<text::TextContentAnchorType>(getShapeByName(u"Image2"), "AnchorType"));
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, getProperty<text::TextContentAnchorType>(getShapeByName(u"Image2"), u"AnchorType"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf72511_editengLRSpace, "tdf72511_editengLRSpace.doc")
@@ -85,22 +85,22 @@ DECLARE_WW8EXPORT_TEST(testTdf160049_anchorMargin, "tdf160049_anchorMargin.doc")
     // The image takes into account the margin, so it looks like it is in the middle of the doc,
     // which is "Paragraph text area"/PRINT_AREA/1, not "Entire paragraph area"/FRAME/0
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PRINT_AREA,
-                         getProperty<sal_Int16>(getShape(1), "HoriOrientRelation"));
+                         getProperty<sal_Int16>(getShape(1), u"HoriOrientRelation"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf150197_anlv2ListFormat, "tdf150197_anlv2ListFormat.doc")
 {
-    CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(getParagraph(2), "ListLabelString"));
-    CPPUNIT_ASSERT_EQUAL(OUString("2."), getProperty<OUString>(getParagraph(3), "ListLabelString"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Did you fix me? I should be 2.1", OUString("4.1"),
-                                 getProperty<OUString>(getParagraph(4), "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u"1."_ustr, getProperty<OUString>(getParagraph(2), u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"2."_ustr, getProperty<OUString>(getParagraph(3), u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Did you fix me? I should be 2.1", u"4.1"_ustr,
+                                 getProperty<OUString>(getParagraph(4), u"ListLabelString"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf117994_CRnumformatting, "tdf117994_CRnumformatting.doc")
 {
-    CPPUNIT_ASSERT_EQUAL(OUString("1."), parseDump("//body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']"_ostr, "expand"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"1."_ustr, parseDump("//body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']"_ostr, "expand"_ostr));
     //Without this fix in place, it would become 200 (and non-bold).
-    CPPUNIT_ASSERT_EQUAL(OUString("160"), parseDump("//body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']/SwFont"_ostr, "height"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"160"_ustr, parseDump("//body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']/SwFont"_ostr, "height"_ostr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf151548_formFieldMacros, "tdf151548_formFieldMacros.doc")
@@ -120,7 +120,7 @@ DECLARE_WW8EXPORT_TEST(testTdf141649_conditionalText, "tdf141649_conditionalText
     // In MS Word, the IF field is editable and requires manual update, so the most correct
     // result is "manual refresh with F9" inside a text field,
     // but for our purposes, a single instance of "trueResult" is appropriate.
-    getParagraph(1, "trueResult");
+    getParagraph(1, u"trueResult"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEndnotesAtSectEndDOC)
@@ -156,9 +156,9 @@ CPPUNIT_TEST_FIXTURE(Test, testEndnotesAtSectEndDOC)
 DECLARE_WW8EXPORT_TEST(testTdf90408, "tdf90408.doc")
 {
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 1), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("checkbox is 16pt", 16.f, getProperty<float>(xRun, "CharHeight"));
-    xRun.set(getRun(getParagraph(1), 2, "unchecked"), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("text is 12pt", 12.f, getProperty<float>(xRun, "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("checkbox is 16pt", 16.f, getProperty<float>(xRun, u"CharHeight"_ustr));
+    xRun.set(getRun(getParagraph(1), 2, u"unchecked"_ustr), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("text is 12pt", 12.f, getProperty<float>(xRun, u"CharHeight"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf90408B, "tdf90408B.doc")
@@ -166,16 +166,16 @@ DECLARE_WW8EXPORT_TEST(testTdf90408B, "tdf90408B.doc")
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
 
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
     uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
 
     uno::Reference<beans::XPropertySet> xRun(getRun(xPara, 1), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("checkbox is 28pt", 28.f, getProperty<float>(xRun, "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("checkbox is 28pt", 28.f, getProperty<float>(xRun, u"CharHeight"_ustr));
     xRun.set(getRun(xPara, 2, u" Κατάψυξη,  "_ustr), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("text is 10pt", 10.f, getProperty<float>(xRun, "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("text is 10pt", 10.f, getProperty<float>(xRun, u"CharHeight"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf155465_paraAdjustDistribute, "tdf155465_paraAdjustDistribute.doc")
@@ -183,16 +183,16 @@ DECLARE_WW8EXPORT_TEST(testTdf155465_paraAdjustDistribute, "tdf155465_paraAdjust
     // Without the accompanying fix in place, this test would have failed with
     // 'Expected: 2; Actual  : 0', i.e. the first paragraph's ParaAdjust was left, not block.
     const style::ParagraphAdjust eBlock = style::ParagraphAdjust_BLOCK;
-    auto nAdjust = getProperty<sal_Int16>(getParagraph(1), "ParaAdjust");
+    auto nAdjust = getProperty<sal_Int16>(getParagraph(1), u"ParaAdjust"_ustr);
     CPPUNIT_ASSERT_EQUAL(eBlock, static_cast<style::ParagraphAdjust>(nAdjust));
 
-    nAdjust = getProperty<sal_Int16>(getParagraph(1), "ParaLastLineAdjust");
+    nAdjust = getProperty<sal_Int16>(getParagraph(1), u"ParaLastLineAdjust"_ustr);
     CPPUNIT_ASSERT_EQUAL(eBlock, static_cast<style::ParagraphAdjust>(nAdjust));
 
-    nAdjust = getProperty<sal_Int16>(getParagraph(2), "ParaAdjust");
+    nAdjust = getProperty<sal_Int16>(getParagraph(2), u"ParaAdjust"_ustr);
     CPPUNIT_ASSERT_EQUAL(eBlock, static_cast<style::ParagraphAdjust>(nAdjust));
 
-    nAdjust = getProperty<sal_Int16>(getParagraph(2), "ParaLastLineAdjust");
+    nAdjust = getProperty<sal_Int16>(getParagraph(2), u"ParaLastLineAdjust"_ustr);
     CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_LEFT, static_cast<style::ParagraphAdjust>(nAdjust));
 }
 
@@ -207,7 +207,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDontBreakWrappedTables)
     }
 
     // When saving to doc:
-    saveAndReload("MS Word 97");
+    saveAndReload(u"MS Word 97"_ustr);
 
     // Then make sure the compat flag is serialized:
     SwDoc* pDoc = getSwDoc();
@@ -225,7 +225,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableOverlapNeverDOCExport)
         createSwDoc();
         SwDoc* pDoc = getSwDoc();
         SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-        pWrtShell->Insert2("before table");
+        pWrtShell->Insert2(u"before table"_ustr);
         // Insert a table:
         SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
         pWrtShell->InsertTable(aTableOptions, /*nRows=*/1, /*nCols=*/1);
@@ -252,7 +252,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableOverlapNeverDOCExport)
     }
 
     // When saving to DOC:
-    saveAndReload("MS Word 97");
+    saveAndReload(u"MS Word 97"_ustr);
 
     // Then make sure that the overlap=never markup is written:
     SwDoc* pDoc = getSwDoc();
@@ -286,14 +286,14 @@ DECLARE_WW8EXPORT_TEST(testInlinePageBreakFirstLine, "inlinePageBreakFirstLine.d
     }
 
     CPPUNIT_ASSERT_EQUAL(size_t(3), aTextNodes.size());
-    CPPUNIT_ASSERT_EQUAL(OUString("First line"), aTextNodes[0]->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"First line"_ustr, aTextNodes[0]->GetText());
     CPPUNIT_ASSERT(IsFirstLine(aTextNodes[0]));
     // Here exists an inline pagebreak (a pagebreak without a paragraph before it)
     // This text node is not indented because it is not the first line of the paragraph
-    CPPUNIT_ASSERT_EQUAL(OUString("Should not be indented"), aTextNodes[1]->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"Should not be indented"_ustr, aTextNodes[1]->GetText());
     CPPUNIT_ASSERT(!IsFirstLine(aTextNodes[1]));
     // Here is the actual second paragraph
-    CPPUNIT_ASSERT_EQUAL(OUString("Should be indented"), aTextNodes[2]->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"Should be indented"_ustr, aTextNodes[2]->GetText());
     CPPUNIT_ASSERT(IsFirstLine(aTextNodes[2]));
 }
 
@@ -302,17 +302,17 @@ CPPUNIT_TEST_FIXTURE(Test, testLegalNumbering)
     auto verify = [this]() {
         // Second level's numbering should use Arabic numbers for first level reference
         auto xPara = getParagraph(1);
-        CPPUNIT_ASSERT_EQUAL(OUString("CH I"), getProperty<OUString>(xPara, "ListLabelString"));
+        CPPUNIT_ASSERT_EQUAL(u"CH I"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
         xPara = getParagraph(2);
         // Without the accompanying fix in place, this test would have failed with:
         // - Expected: Sect 1.01
         // - Actual  : Sect I.01
         // i.e. fLegal was ignored on import/export.
-        CPPUNIT_ASSERT_EQUAL(OUString("Sect 1.01"), getProperty<OUString>(xPara, "ListLabelString"));
+        CPPUNIT_ASSERT_EQUAL(u"Sect 1.01"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
         xPara = getParagraph(3);
-        CPPUNIT_ASSERT_EQUAL(OUString("CH II"), getProperty<OUString>(xPara, "ListLabelString"));
+        CPPUNIT_ASSERT_EQUAL(u"CH II"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
         xPara = getParagraph(4);
-        CPPUNIT_ASSERT_EQUAL(OUString("Sect 2.01"), getProperty<OUString>(xPara, "ListLabelString"));
+        CPPUNIT_ASSERT_EQUAL(u"Sect 2.01"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
     };
 
     createSwDoc("listWithLgl.doc");
@@ -362,11 +362,11 @@ DECLARE_WW8EXPORT_TEST(testNonInlinePageBreakFirstLine, "nonInlinePageBreakFirst
     }
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), aTextNodes.size());
-    CPPUNIT_ASSERT_EQUAL(OUString("First line"), aTextNodes[0]->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"First line"_ustr, aTextNodes[0]->GetText());
     CPPUNIT_ASSERT(IsFirstLine(aTextNodes[0]));
     // Here exists a pagebreak after a paragraph
     // This text node is indented because it is the first line of a paragraph
-    CPPUNIT_ASSERT_EQUAL(OUString("Should be indented"), aTextNodes[1]->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"Should be indented"_ustr, aTextNodes[1]->GetText());
     CPPUNIT_ASSERT(IsFirstLine(aTextNodes[1]));
 }
 

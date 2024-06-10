@@ -64,7 +64,7 @@ class SwUiWriterTest4 : public SwModelTestBase
 {
 public:
     SwUiWriterTest4()
-        : SwModelTestBase("/sw/qa/extras/uiwriter/data/")
+        : SwModelTestBase(u"/sw/qa/extras/uiwriter/data/"_ustr)
     {
     }
 
@@ -88,7 +88,7 @@ void SwUiWriterTest4::mergeDocs(const char* aDestDoc, const char* aInsertDoc)
         const OUString insertFileid = createFileURL(OUString::createFromAscii(aInsertDoc));
         uno::Sequence<beans::PropertyValue> aPropertyValues(
             comphelper::InitPropertySequence({ { "Name", uno::Any(insertFileid) } }));
-        dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
+        dispatchCommand(mxComponent, u".uno:InsertDoc"_ustr, aPropertyValues);
     }
 }
 
@@ -136,16 +136,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf146449)
 
     CPPUNIT_ASSERT(pShell->SelectObj(Point(), 0, pObject));
 
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     uno::Reference<beans::XPropertySet> xShapeProps(xTextBox, uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xFrameProps(xShapeProps->getPropertyValue("TextBoxContent"),
-                                                    uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrameProps(
+        xShapeProps->getPropertyValue(u"TextBoxContent"_ustr), uno::UNO_QUERY);
 
     const auto& nShapeZOrder = pObject->GetOrdNum();
-    const auto& nFrameZOrder = xFrameProps->getPropertyValue("ZOrder");
+    const auto& nFrameZOrder = xFrameProps->getPropertyValue(u"ZOrder"_ustr);
 
     CPPUNIT_ASSERT_MESSAGE("Wrong Zorder!", nShapeZOrder < nFrameZOrder.get<sal_uInt32>());
 }
@@ -158,7 +158,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf49033)
 
     // Insert the test text at the end of the document.
     pWrtShell->SttEndDoc(/*bStt=*/false);
-    pWrtShell->Insert("Mary Jones met joe Smith. Time Passed.");
+    pWrtShell->Insert(u"Mary Jones met joe Smith. Time Passed."_ustr);
     pWrtShell->StartOfSection();
     SwShellCursor* pCursor = pWrtShell->getShellCursor(false);
 
@@ -172,13 +172,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf49033)
 
     CPPUNIT_ASSERT_EQUAL(false, pCursor->HasMark());
     CPPUNIT_ASSERT_EQUAL(false, pWrtShell->IsSelection());
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
 
     /* Move cursor between the 'h' and the '.' after 'Smith', nothing should change */
@@ -187,13 +187,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf49033)
 
     CPPUNIT_ASSERT_EQUAL(false, pCursor->HasMark());
     CPPUNIT_ASSERT_EQUAL(false, pWrtShell->IsSelection());
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
 
     /* Move cursor between the 'm' and the 'e' in 'met' */
@@ -202,17 +202,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf49033)
 
     CPPUNIT_ASSERT_EQUAL(false, pCursor->HasMark());
     CPPUNIT_ASSERT_EQUAL(false, pWrtShell->IsSelection());
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary jones met joe smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary jones met joe smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
 
     /* Undo the sentence case change to reset for the following tests */
     pDoc->GetIDocumentUndoRedo().Undo();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones Met joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones Met joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones MET joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones MET joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
 
     /* -- Test behavior when there is a selection that does not cross a word boundary -- */
@@ -223,14 +223,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf49033)
 
     OUString currentSelectedText;
     pWrtShell->GetSelectedText(currentSelectedText);
-    CPPUNIT_ASSERT_EQUAL(OUString("met"), currentSelectedText);
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones Met joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"met"_ustr, currentSelectedText);
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones Met joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones Met joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones Met joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones MET joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones MET joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
 
     /* -- Test behavior when there is a selection that does not begin at a word boundary: "et" -- */
@@ -240,18 +240,18 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf49033)
     for (int i = 0; i < 2; i++)
         pCursor->Move(fnMoveForward);
     pWrtShell->GetSelectedText(currentSelectedText);
-    CPPUNIT_ASSERT_EQUAL(OUString("et"), currentSelectedText);
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones mEt joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"et"_ustr, currentSelectedText);
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones mEt joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
     pDoc->GetIDocumentUndoRedo().Undo();
-    CPPUNIT_ASSERT_EQUAL(OUString("et"), currentSelectedText);
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones mEt joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"et"_ustr, currentSelectedText);
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones mEt joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
     pDoc->GetIDocumentUndoRedo().Undo();
-    CPPUNIT_ASSERT_EQUAL(OUString("et"), currentSelectedText);
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones mET joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"et"_ustr, currentSelectedText);
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones mET joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
 
     /* -- Test behavior when there is a selection that crosses a word boundary -- */
@@ -262,14 +262,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf49033)
         pCursor->Move(fnMoveForward);
 
     pWrtShell->GetSelectedText(currentSelectedText);
-    CPPUNIT_ASSERT_EQUAL(OUString("nes met joe Sm"), currentSelectedText);
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary JoNes met joe smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"nes met joe Sm"_ustr, currentSelectedText);
+    CPPUNIT_ASSERT_EQUAL(u"Mary JoNes met joe smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary JoNes Met Joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary JoNes Met Joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary JoNES MET JOE SMith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary JoNES MET JOE SMith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
 
     /* Reset the 's' to upper-case for the next test */
@@ -286,19 +286,19 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf49033)
     for (int i = 0; i < 22; i++)
         pCursor->Move(fnMoveForward);
     pWrtShell->GetSelectedText(currentSelectedText);
-    CPPUNIT_ASSERT_EQUAL(OUString("joe Smith. Time Passed"), currentSelectedText);
+    CPPUNIT_ASSERT_EQUAL(u"joe Smith. Time Passed"_ustr, currentSelectedText);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met Joe smith. Time passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met Joe smith. Time passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
 
     /* Undo the sentence case change to reset for the following tests */
     pDoc->GetIDocumentUndoRedo().Undo();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met Joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met Joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met JOE SMITH. TIME PASSED."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met JOE SMITH. TIME PASSED."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe smith. time passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe smith. time passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
 
     /* Undo the previous changes to reset for the following tests */
@@ -313,14 +313,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf49033)
     for (int i = 0; i < 10; i++)
         pCursor->Move(fnMoveForward);
     pWrtShell->GetSelectedText(currentSelectedText);
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones"), currentSelectedText);
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary jones met joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones"_ustr, currentSelectedText);
+    CPPUNIT_ASSERT_EQUAL(u"Mary jones met joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"Mary Jones met joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("MARY JONES met joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"MARY JONES met joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("mary jones met joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(u"mary jones met joe Smith. Time Passed."_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
 }
 
@@ -334,12 +334,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf147196)
     // Insert the test text at the end of the document.
     pWrtShell->SttEndDoc(/*bStt=*/false);
     pWrtShell->Insert(
-        "2.2 Publication of information - CAA\nSection 4.2 of a CA\'s Certificate Policy and/or "
+        u"2.2 Publication of information - CAA\nSection 4.2 of a CA\'s Certificate Policy and/or "
         "Certification Practice Statement SHALL state the CA\'s policy or practice on processing "
         "CAA Records for Fully Qualified Domain Names; that policy shall be consistent with these "
         "Requirements. \n\nIt shall clearly specify the set of Issuer Domain Names that the CA "
         "recognises in CAA \"issue\" or \"issuewild\" records as permitting it to issue. The CA "
-        "SHALL log all actions taken, if any, consistent with its processing practice.");
+        "SHALL log all actions taken, if any, consistent with its processing practice."_ustr);
 
     pWrtShell->StartOfSection();
     SwShellCursor* pCursor = pWrtShell->getShellCursor(false);
@@ -349,13 +349,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf147196)
         pCursor->Move(fnMoveForward);
     }
     CPPUNIT_ASSERT_EQUAL(
-        OUString("2.2 Publication Of Information - Caa\nSection 4.2 Of A Ca\'s Certificate Policy "
-                 "And/Or Certification Practice Statement Shall State The Ca\'s Policy Or Practice "
-                 "On Processing Caa Records For Fully Qualified Domain Names; That Policy Shall Be "
-                 "Consistent With These Requirements. \n\nIt Shall Clearly Specify The Set Of "
-                 "Issuer Domain Names That The Ca Recognises In Caa \"Issue\" Or \"Issuewild\" "
-                 "Records As Permitting It To Issue. The Ca Shall Log All Actions Taken, If Any, "
-                 "Consistent With Its Processing Practice."),
+        u"2.2 Publication Of Information - Caa\nSection 4.2 Of A Ca\'s Certificate Policy "
+        "And/Or Certification Practice Statement Shall State The Ca\'s Policy Or Practice "
+        "On Processing Caa Records For Fully Qualified Domain Names; That Policy Shall Be "
+        "Consistent With These Requirements. \n\nIt Shall Clearly Specify The Set Of "
+        "Issuer Domain Names That The Ca Recognises In Caa \"Issue\" Or \"Issuewild\" "
+        "Records As Permitting It To Issue. The Ca Shall Log All Actions Taken, If Any, "
+        "Consistent With Its Processing Practice."_ustr,
         lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
 }
 
@@ -367,7 +367,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf148148)
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     pWrtShell->SttEndDoc(/*bStt=*/false);
-    pWrtShell->Insert("   text");
+    pWrtShell->Insert(u"   text"_ustr);
 
     /* Test what happens when node contains text but selection does not contain any text */
     pWrtShell->StartOfSection();
@@ -377,11 +377,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf148148)
     {
         pCursor->Move(fnMoveForward);
     }
-    CPPUNIT_ASSERT_EQUAL(OUString("   text"), lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("   text"), lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("   text"),
+    CPPUNIT_ASSERT_EQUAL(u"   text"_ustr, lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"   text"_ustr, lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"   text"_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("   text"),
+    CPPUNIT_ASSERT_EQUAL(u"   text"_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
 
     /* Test what happens when node contains text but selection does not contain any text */
@@ -389,7 +389,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf148148)
     pDoc = getSwDoc();
     pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/false);
-    pWrtShell->Insert("text   ");
+    pWrtShell->Insert(u"text   "_ustr);
 
     pWrtShell->StartOfSection();
     pCursor = pWrtShell->getShellCursor(false);
@@ -403,11 +403,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf148148)
         pCursor->Move(fnMoveForward);
     }
 
-    CPPUNIT_ASSERT_EQUAL(OUString("text   "), lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("text   "), lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("text   "),
+    CPPUNIT_ASSERT_EQUAL(u"text   "_ustr, lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"text   "_ustr, lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"text   "_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("text   "),
+    CPPUNIT_ASSERT_EQUAL(u"text   "_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
 
     /* Test what happens when node contains only non-word text but selection does not contain any text */
@@ -415,7 +415,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf148148)
     pDoc = getSwDoc();
     pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/false);
-    pWrtShell->Insert("-1   ");
+    pWrtShell->Insert(u"-1   "_ustr);
 
     pWrtShell->StartOfSection();
     pCursor = pWrtShell->getShellCursor(false);
@@ -429,18 +429,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf148148)
         pCursor->Move(fnMoveForward);
     }
 
-    CPPUNIT_ASSERT_EQUAL(OUString("-1   "), lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("-1   "), lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("-1   "),
-                         lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("-1   "),
-                         lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"-1   "_ustr, lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"-1   "_ustr, lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"-1   "_ustr, lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"-1   "_ustr, lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
 
     createSwDoc();
     pDoc = getSwDoc();
     pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/false);
-    pWrtShell->Insert("   -1");
+    pWrtShell->Insert(u"   -1"_ustr);
 
     pWrtShell->StartOfSection();
     pCursor = pWrtShell->getShellCursor(false);
@@ -450,19 +448,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf148148)
         pCursor->Move(fnMoveForward);
     }
 
-    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("   -1"),
-                         lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("   -1"),
-                         lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"   -1"_ustr, lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"   -1"_ustr, lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"   -1"_ustr, lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"   -1"_ustr, lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
 
     /* Test what happens when node and selection contains only non-word text */
     createSwDoc();
     pDoc = getSwDoc();
     pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/false);
-    pWrtShell->Insert("   -1");
+    pWrtShell->Insert(u"   -1"_ustr);
 
     pWrtShell->StartOfSection();
     pCursor = pWrtShell->getShellCursor(false);
@@ -472,12 +468,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf148148)
         pCursor->Move(fnMoveForward);
     }
 
-    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("   -1"),
-                         lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("   -1"),
-                         lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"   -1"_ustr, lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"   -1"_ustr, lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(u"   -1"_ustr, lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(u"   -1"_ustr, lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96943)
@@ -492,7 +486,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96943)
 
     // Insert a new character at the end of the document.
     pWrtShell->SttEndDoc(/*bStt=*/false);
-    pWrtShell->Insert("d");
+    pWrtShell->Insert(u"d"_ustr);
 
     // This was 2, a new page was created for the new layout line.
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -551,8 +545,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96479)
         SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
         SwPaM aPaM(aIdx);
         IDocumentMarkAccess& rIDMA = *pDoc->getIDocumentMarkAccess();
-        sw::mark::IMark* pMark = rIDMA.makeMark(
-            aPaM, "original", IDocumentMarkAccess::MarkType::BOOKMARK, ::sw::mark::InsertMode::New);
+        sw::mark::IMark* pMark
+            = rIDMA.makeMark(aPaM, u"original"_ustr, IDocumentMarkAccess::MarkType::BOOKMARK,
+                             ::sw::mark::InsertMode::New);
         CPPUNIT_ASSERT(!pMark->IsExpanded());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getBookmarksCount());
 
@@ -562,7 +557,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96479)
 
         // Create cursor from bookmark
         uno::Reference<text::XTextContent> xTextContent(
-            xBookmarksSupplier->getBookmarks()->getByName("original"), uno::UNO_QUERY);
+            xBookmarksSupplier->getBookmarks()->getByName(u"original"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xTextContent->getAnchor();
         uno::Reference<text::XTextCursor> xCursor
             = xRange->getText()->createTextCursorByRange(xRange);
@@ -574,12 +569,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96479)
 
         // Insert replacement bookmark
         uno::Reference<text::XTextContent> xBookmarkNew(
-            xFactory->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY);
+            xFactory->createInstance(u"com.sun.star.text.Bookmark"_ustr), uno::UNO_QUERY);
         uno::Reference<container::XNamed> xBookmarkName(xBookmarkNew, uno::UNO_QUERY);
-        xBookmarkName->setName("replacement");
+        xBookmarkName->setName(u"replacement"_ustr);
         CPPUNIT_ASSERT(xCursor->isCollapsed());
         // Force bookmark expansion
-        xCursor->getText()->insertString(xCursor, ".", true);
+        xCursor->getText()->insertString(xCursor, u"."_ustr, true);
         xCursor->getText()->insertTextContent(xCursor, xBookmarkNew, true);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getBookmarksCount());
         auto mark = *(rIDMA.getBookmarksBegin());
@@ -587,14 +582,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96479)
 
         // Create and insert input textfield with some content
         uno::Reference<text::XTextField> xTextField(
-            xFactory->createInstance("com.sun.star.text.TextField.Input"), uno::UNO_QUERY);
+            xFactory->createInstance(u"com.sun.star.text.TextField.Input"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextCursor> xCursorNew(
             xBookmarkNew->getAnchor()->getText()->createTextCursorByRange(
                 xBookmarkNew->getAnchor()));
         CPPUNIT_ASSERT(!xCursorNew->isCollapsed());
         xCursorNew->getText()->insertTextContent(xCursorNew, xTextField, true);
         xBookmarkNew = uno::Reference<text::XTextContent>(
-            xBookmarksSupplier->getBookmarks()->getByName("replacement"), uno::UNO_QUERY);
+            xBookmarksSupplier->getBookmarks()->getByName(u"replacement"_ustr), uno::UNO_QUERY);
         xCursorNew = xBookmarkNew->getAnchor()->getText()->createTextCursorByRange(
             xBookmarkNew->getAnchor());
         CPPUNIT_ASSERT(!xCursorNew->isCollapsed());
@@ -612,17 +607,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96479)
         // Actually not needed, but the bug symptom of a missing bookmark
         // occurred because a broken bookmark was saved and loading silently
         // dropped the broken bookmark!
-        saveAndReload("writer8");
+        saveAndReload(u"writer8"_ustr);
         pDoc = getSwDoc();
 
         // Lookup "replacement" bookmark
         IDocumentMarkAccess& rIDMA = *pDoc->getIDocumentMarkAccess();
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getBookmarksCount());
         uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
-        CPPUNIT_ASSERT(xBookmarksSupplier->getBookmarks()->hasByName("replacement"));
+        CPPUNIT_ASSERT(xBookmarksSupplier->getBookmarks()->hasByName(u"replacement"_ustr));
 
         uno::Reference<text::XTextContent> xTextContent(
-            xBookmarksSupplier->getBookmarks()->getByName("replacement"), uno::UNO_QUERY);
+            xBookmarksSupplier->getBookmarks()->getByName(u"replacement"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xTextContent->getAnchor();
         uno::Reference<text::XTextCursor> xCursor
             = xRange->getText()->createTextCursorByRange(xRange);
@@ -659,10 +654,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testBookmarkCollapsed)
     CPPUNIT_ASSERT(pDoc);
 
     // save original document
-    save("writer8");
+    save(u"writer8"_ustr);
 
     // load only content.xml from the resaved document
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
     constexpr OString aPath("/office:document-content/office:body/office:text/text:p"_ostr);
 
@@ -697,7 +692,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkText)
         {
             SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
             SwPaM aPaM(aIdx);
-            pDoc->getIDocumentContentOperations().InsertString(aPaM, "abcdef");
+            pDoc->getIDocumentContentOperations().InsertString(aPaM, u"abcdef"_ustr);
         }
 
         // mark "abc" with "testBookmark" bookmark
@@ -707,9 +702,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkText)
 
             lcl_selectCharacters(aPaM, 0, 3);
             IDocumentMarkAccess& rIDMA = *pDoc->getIDocumentMarkAccess();
-            sw::mark::IMark* pMark
-                = rIDMA.makeMark(aPaM, "testBookmark", IDocumentMarkAccess::MarkType::BOOKMARK,
-                                 ::sw::mark::InsertMode::New);
+            sw::mark::IMark* pMark = rIDMA.makeMark(aPaM, u"testBookmark"_ustr,
+                                                    IDocumentMarkAccess::MarkType::BOOKMARK,
+                                                    ::sw::mark::InsertMode::New);
 
             // verify
             CPPUNIT_ASSERT(pMark->IsExpanded());
@@ -731,10 +726,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkText)
     }
 
     // save document
-    save("writer8");
+    save(u"writer8"_ustr);
 
     // load only content.xml from the resaved document
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
     // Bookmark without text becomes collapsed
     assertXPath(pXmlDoc, "//office:body/office:text/text:p/text:bookmark"_ostr, 1);
@@ -775,7 +770,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkTextAndAddNew)
         {
             SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
             SwPaM aPaM(aIdx);
-            pDoc->getIDocumentContentOperations().InsertString(aPaM, "abcdef");
+            pDoc->getIDocumentContentOperations().InsertString(aPaM, u"abcdef"_ustr);
         }
 
         // mark "abc" with "testBookmark" bookmark
@@ -785,9 +780,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkTextAndAddNew)
 
             lcl_selectCharacters(aPaM, 0, 3);
             IDocumentMarkAccess& rIDMA = *pDoc->getIDocumentMarkAccess();
-            sw::mark::IMark* pMark
-                = rIDMA.makeMark(aPaM, "testBookmark", IDocumentMarkAccess::MarkType::BOOKMARK,
-                                 ::sw::mark::InsertMode::New);
+            sw::mark::IMark* pMark = rIDMA.makeMark(aPaM, u"testBookmark"_ustr,
+                                                    IDocumentMarkAccess::MarkType::BOOKMARK,
+                                                    ::sw::mark::InsertMode::New);
 
             // verify
             CPPUNIT_ASSERT(pMark->IsExpanded());
@@ -815,12 +810,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkTextAndAddNew)
 
             // Create cursor from bookmark
             uno::Reference<text::XTextContent> xTextContent(
-                xBookmarksSupplier->getBookmarks()->getByName("testBookmark"), uno::UNO_QUERY);
+                xBookmarksSupplier->getBookmarks()->getByName(u"testBookmark"_ustr),
+                uno::UNO_QUERY);
             uno::Reference<text::XTextRange> xRange = xTextContent->getAnchor();
-            CPPUNIT_ASSERT_EQUAL(OUString(""), xRange->getString());
+            CPPUNIT_ASSERT_EQUAL(u""_ustr, xRange->getString());
 
             // write "abc"
-            xRange->setString("abc");
+            xRange->setString(u"abc"_ustr);
 
             // verify: bookmark is still exist
             IDocumentMarkAccess& rIDMA = *pDoc->getIDocumentMarkAccess();
@@ -829,10 +825,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkTextAndAddNew)
     }
 
     // save document
-    save("writer8");
+    save(u"writer8"_ustr);
 
     // load only content.xml from the resaved document
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
     constexpr OString aPath("/office:document-content/office:body/office:text/text:p"_ostr);
 
@@ -881,12 +877,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkTextAndAddNewAfterReload
 
         // Create cursor from bookmark
         uno::Reference<text::XTextContent> xTextContent(
-            xBookmarksSupplier->getBookmarks()->getByName("test"), uno::UNO_QUERY);
+            xBookmarksSupplier->getBookmarks()->getByName(u"test"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xRange = xTextContent->getAnchor();
-        CPPUNIT_ASSERT_EQUAL(OUString(""), xRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, xRange->getString());
 
         // write "abc"
-        xRange->setString("abc");
+        xRange->setString(u"abc"_ustr);
 
         // verify: bookmark is still exist
         IDocumentMarkAccess& rIDMA = *pDoc->getIDocumentMarkAccess();
@@ -894,10 +890,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkTextAndAddNewAfterReload
     }
 
     // save original document
-    save("writer8");
+    save(u"writer8"_ustr);
 
     // load only content.xml from the resaved document
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     constexpr OString aPath("/office:document-content/office:body/office:text/text:p"_ostr);
 
     const int pos1 = getXPathPosition(pXmlDoc, aPath, "bookmark");
@@ -975,15 +971,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testClassificationPaste)
 
     // Classified source, not classified destination.
     uno::Sequence<beans::PropertyValue> aInternalOnly
-        = comphelper::InitPropertySequence({ { "Name", uno::Any(OUString("Internal Only")) } });
-    dispatchCommand(xSourceComponent, ".uno:ClassificationApply", aInternalOnly);
+        = comphelper::InitPropertySequence({ { "Name", uno::Any(u"Internal Only"_ustr) } });
+    dispatchCommand(xSourceComponent, u".uno:ClassificationApply"_ustr, aInternalOnly);
     CPPUNIT_ASSERT_EQUAL(int(SfxClassificationCheckPasteResult::TargetDocNotClassified),
                          checkShells(pSourceShell, pDestinationShell));
 
     // Classified source and classified destination -- internal only has a higher level than confidential.
     uno::Sequence<beans::PropertyValue> aConfidential
-        = comphelper::InitPropertySequence({ { "Name", uno::Any(OUString("Confidential")) } });
-    dispatchCommand(mxComponent, ".uno:ClassificationApply", aConfidential);
+        = comphelper::InitPropertySequence({ { "Name", uno::Any(u"Confidential"_ustr) } });
+    dispatchCommand(mxComponent, u".uno:ClassificationApply"_ustr, aConfidential);
     CPPUNIT_ASSERT_EQUAL(int(SfxClassificationCheckPasteResult::DocClassificationTooLow),
                          checkShells(pSourceShell, pDestinationShell));
 
@@ -998,15 +994,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testSmallCaps)
     SwDoc* pDoc = getSwDoc();
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
-    pWrtShell->Insert("text");
+    pWrtShell->Insert(u"text"_ustr);
     pWrtShell->SelAll();
 
     // Dispatch the command to make them formatted small capitals.
-    dispatchCommand(mxComponent, ".uno:SmallCaps", {});
+    dispatchCommand(mxComponent, u".uno:SmallCaps"_ustr, {});
 
     // This was css::style::CaseMap::NONE as the shell didn't handle the command.
     CPPUNIT_ASSERT_EQUAL(css::style::CaseMap::SMALLCAPS,
-                         getProperty<sal_Int16>(getRun(getParagraph(1), 1), "CharCaseMap"));
+                         getProperty<sal_Int16>(getRun(getParagraph(1), 1), u"CharCaseMap"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf98987)
@@ -1015,13 +1011,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf98987)
     calcLayout();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[2]/SdrObject"_ostr,
-                "name"_ostr, "Rectangle 1");
+                "name"_ostr, u"Rectangle 1"_ustr);
     sal_Int32 nRectangle1
         = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[2]/bounds"_ostr,
                    "top"_ostr)
               .toInt32();
     assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/SdrObject"_ostr,
-                "name"_ostr, "Rectangle 2");
+                "name"_ostr, u"Rectangle 2"_ustr);
     sal_Int32 nRectangle2
         = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/bounds"_ostr,
                    "top"_ostr)
@@ -1029,7 +1025,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf98987)
     CPPUNIT_ASSERT_GREATER(nRectangle1, nRectangle2);
 
     assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[3]/SdrObject"_ostr,
-                "name"_ostr, "Rectangle 3");
+                "name"_ostr, u"Rectangle 3"_ustr);
     sal_Int32 nRectangle3
         = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[3]/bounds"_ostr,
                    "top"_ostr)
@@ -1052,7 +1048,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf99004)
     sal_Int32 nTextBox1Bottom = nTextbox1Top + nTextBox1Height;
 
     assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/SdrObject"_ostr,
-                "name"_ostr, "Rectangle 2");
+                "name"_ostr, u"Rectangle 2"_ustr);
     sal_Int32 nRectangle2Top
         = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/bounds"_ostr,
                    "top"_ostr)
@@ -1083,7 +1079,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf84695)
 
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
     // This was empty, Enter did not start the fly frame edit mode.
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), xShape->getString());
+    CPPUNIT_ASSERT_EQUAL(u"a"_ustr, xShape->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf84695NormalChar)
@@ -1107,7 +1103,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf84695NormalChar)
 
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
     // This was empty, pressing a normal character did not start the fly frame edit mode.
-    CPPUNIT_ASSERT_EQUAL(OUString("a"), xShape->getString());
+    CPPUNIT_ASSERT_EQUAL(u"a"_ustr, xShape->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf84695Tab)
@@ -1146,7 +1142,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableStyleUndo)
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
 
     sal_Int32 nStyleCount = pDoc->GetTableStyles().size();
-    SwTableAutoFormat* pStyle = pDoc->MakeTableStyle("Test Style");
+    SwTableAutoFormat* pStyle = pDoc->MakeTableStyle(u"Test Style"_ustr);
     SvxBrushItem aBackground(COL_LIGHTMAGENTA, RES_BACKGROUND);
     pStyle->GetBoxFormat(0).SetBackground(aBackground);
 
@@ -1160,7 +1156,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableStyleUndo)
     CPPUNIT_ASSERT(pStyle);
     CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetBackground() == aBackground));
 
-    pDoc->DelTableStyle("Test Style");
+    pDoc->DelTableStyle(u"Test Style"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(pDoc->GetTableStyles().size()), nStyleCount);
     rUndoManager.Undo();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(pDoc->GetTableStyles().size()), nStyleCount + 1);
@@ -1178,11 +1174,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableStyleUndo)
     CPPUNIT_ASSERT(pStyle);
     CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetBackground() == aBackground));
 
-    SwTableAutoFormat aNewStyle("Test Style2");
+    SwTableAutoFormat aNewStyle(u"Test Style2"_ustr);
     SvxBrushItem aBackground2(COL_LIGHTGREEN, RES_BACKGROUND);
     aNewStyle.GetBoxFormat(0).SetBackground(aBackground2);
 
-    pDoc->ChgTableStyle("Test Style", aNewStyle);
+    pDoc->ChgTableStyle(u"Test Style"_ustr, aNewStyle);
     pStyle = pDoc->GetTableStyles().FindAutoFormat(u"Test Style");
     CPPUNIT_ASSERT(pStyle);
     CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetBackground() == aBackground2));
@@ -1205,17 +1201,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineCopyPaste)
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
 
-    pDoc->getIDocumentContentOperations().InsertString(aPaM, "abzdezgh");
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, u"abzdezgh"_ustr);
     SwTextNode* pTextNode = aPaM.GetPointNode().GetTextNode();
 
     // Turn on track changes, make changes, turn off track changes
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("RecordChanges", uno::Any(true));
+    xPropertySet->setPropertyValue(u"RecordChanges"_ustr, uno::Any(true));
     lcl_selectCharacters(aPaM, 2, 3);
-    pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, "c", false);
+    pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, u"c"_ustr, false);
     lcl_selectCharacters(aPaM, 6, 7);
-    pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, "f", false);
-    xPropertySet->setPropertyValue("RecordChanges", uno::Any(false));
+    pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, u"f"_ustr, false);
+    xPropertySet->setPropertyValue(u"RecordChanges"_ustr, uno::Any(false));
 
     // Create the clipboard document.
     SwDoc aClipboard;
@@ -1228,7 +1224,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineCopyPaste)
     pWrtShell->Paste(aClipboard);
 
     // With the bug this is "abzcdefgh", ie. contains the first deleted piece, too
-    CPPUNIT_ASSERT_EQUAL(OUString("abcdefgh"), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"abcdefgh"_ustr, pTextNode->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf135260)
@@ -1237,11 +1233,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf135260)
     SwDoc* pDoc = getSwDoc();
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
-    pWrtShell->Insert("test");
+    pWrtShell->Insert(u"test"_ustr);
 
     // Turn on track changes
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("RecordChanges", uno::Any(true));
+    xPropertySet->setPropertyValue(u"RecordChanges"_ustr, uno::Any(true));
 
     for (int i = 0; i < 4; i++)
     {
@@ -1257,7 +1253,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf135260)
     // Without the fix in place, this test would have failed with
     // - Expected:
     // - Actual  : tes
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineParam)
@@ -1267,15 +1263,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineParam)
     SwDoc* pDoc = getSwDoc();
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
-    pWrtShell->Insert("middle");
+    pWrtShell->Insert(u"middle"_ustr);
 
     // Turn on track changes, and add changes to the start and end of the document.
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("RecordChanges", uno::Any(true));
+    xPropertySet->setPropertyValue(u"RecordChanges"_ustr, uno::Any(true));
     pWrtShell->StartOfSection();
-    pWrtShell->Insert("aaa");
+    pWrtShell->Insert(u"aaa"_ustr);
     pWrtShell->EndOfSection();
-    pWrtShell->Insert("zzz");
+    pWrtShell->Insert(u"zzz"_ustr);
 
     const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), rTable.size());
@@ -1284,30 +1280,30 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineParam)
     pWrtShell->StartOfSection();
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         { { "NextTrackedChange", uno::Any(o3tl::narrowing<sal_uInt16>(rTable[0]->GetId())) } }));
-    dispatchCommand(mxComponent, ".uno:NextTrackedChange", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:NextTrackedChange"_ustr, aPropertyValues);
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     // This failed: the parameter wasn't handled so the next change (zzz) was
     // selected, not the first one (aaa).
-    CPPUNIT_ASSERT_EQUAL(OUString("aaa"), pShellCursor->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"aaa"_ustr, pShellCursor->GetText());
 
     // Select the second redline.
     pWrtShell->StartOfSection();
     aPropertyValues = comphelper::InitPropertySequence(
         { { "NextTrackedChange", uno::Any(o3tl::narrowing<sal_uInt16>(rTable[1]->GetId())) } });
-    dispatchCommand(mxComponent, ".uno:NextTrackedChange", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:NextTrackedChange"_ustr, aPropertyValues);
     pShellCursor = pWrtShell->getShellCursor(false);
-    CPPUNIT_ASSERT_EQUAL(OUString("zzz"), pShellCursor->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"zzz"_ustr, pShellCursor->GetText());
 
     // Move the cursor to the start again, and reject the second change.
     pWrtShell->StartOfSection();
     aPropertyValues = comphelper::InitPropertySequence(
         { { "RejectTrackedChange", uno::Any(o3tl::narrowing<sal_uInt16>(rTable[1]->GetId())) } });
-    dispatchCommand(mxComponent, ".uno:RejectTrackedChange", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:RejectTrackedChange"_ustr, aPropertyValues);
     pShellCursor = pWrtShell->getShellCursor(false);
 
     // This was 'middlezzz', the uno command rejected the redline under the
     // cursor, instead of the requested one.
-    CPPUNIT_ASSERT_EQUAL(OUString("aaamiddle"),
+    CPPUNIT_ASSERT_EQUAL(u"aaamiddle"_ustr,
                          pShellCursor->GetPoint()->GetNode().GetTextNode()->GetText());
 }
 
@@ -1320,7 +1316,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineViewAuthor)
     SwDoc* pDoc = getSwDoc();
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
-    pWrtShell->Insert("middle");
+    pWrtShell->Insert(u"middle"_ustr);
     SwView* pView = pDocShell->GetView();
     constexpr OUString aAuthor(u"A U. Thor"_ustr);
     pView->SetRedlineAuthor(aAuthor);
@@ -1328,9 +1324,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineViewAuthor)
 
     // Turn on track changes, and add changes to the start of the document.
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("RecordChanges", uno::Any(true));
+    xPropertySet->setPropertyValue(u"RecordChanges"_ustr, uno::Any(true));
     pWrtShell->StartOfSection();
-    pWrtShell->Insert("aaa");
+    pWrtShell->Insert(u"aaa"_ustr);
 
     // Now assert that SwView::SetRedlineAuthor() had an effect.
     const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
@@ -1340,17 +1336,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineViewAuthor)
     CPPUNIT_ASSERT_EQUAL(aAuthor, pRedline->GetAuthorString());
 
     // Insert a comment and assert that SwView::SetRedlineAuthor() affects this as well.
-    dispatchCommand(mxComponent, ".uno:.uno:InsertAnnotation", {});
+    dispatchCommand(mxComponent, u".uno:.uno:InsertAnnotation"_ustr, {});
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(
         xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
     uno::Reference<beans::XPropertySet> xField(xFields->nextElement(), uno::UNO_QUERY);
     // This was 'Unknown Author' instead of 'A U. Thor'.
-    CPPUNIT_ASSERT_EQUAL(aAuthor, xField->getPropertyValue("Author").get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(aAuthor, xField->getPropertyValue(u"Author"_ustr).get<OUString>());
 
     //Reset the redline author after using it, otherwise, it might interfere with other unittests
-    pView->SetRedlineAuthor("Unknown Author");
+    pView->SetRedlineAuthor(u"Unknown Author"_ustr);
     pDocShell->SetView(pView);
 }
 
@@ -1359,19 +1355,19 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf91292)
     createSwDoc("tdf91292_paraBackground.docx");
     uno::Reference<beans::XPropertySet> xPropertySet(getParagraph(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Solid background color", drawing::FillStyle_SOLID,
-                                 getProperty<drawing::FillStyle>(xPropertySet, "FillStyle"));
+                                 getProperty<drawing::FillStyle>(xPropertySet, u"FillStyle"_ustr));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Background Color", Color(0x5C2D91),
-                                 getProperty<Color>(xPropertySet, "FillColor"));
+                                 getProperty<Color>(xPropertySet, u"FillColor"_ustr));
 
     // remove background color
-    xPropertySet->setPropertyValue("FillStyle", uno::Any(drawing::FillStyle_NONE));
+    xPropertySet->setPropertyValue(u"FillStyle"_ustr, uno::Any(drawing::FillStyle_NONE));
 
     // Save it and load it back.
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
 
     xPropertySet.set(getParagraph(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("No background color", drawing::FillStyle_NONE,
-                                 getProperty<drawing::FillStyle>(xPropertySet, "FillStyle"));
+                                 getProperty<drawing::FillStyle>(xPropertySet, u"FillStyle"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf78727)
@@ -1393,22 +1389,22 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineTimestamp)
     SwDoc* pDoc = getSwDoc();
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
-    pWrtShell->Insert("middle");
+    pWrtShell->Insert(u"middle"_ustr);
 
     // Turn on track changes, and add changes to the start and to the end of
     // the document.
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("RecordChanges", uno::Any(true));
+    xPropertySet->setPropertyValue(u"RecordChanges"_ustr, uno::Any(true));
     pWrtShell->StartOfSection();
-    pWrtShell->Insert("aaa");
+    pWrtShell->Insert(u"aaa"_ustr);
     osl::Thread::wait(std::chrono::seconds(1));
     pWrtShell->EndOfSection();
-    pWrtShell->Insert("zzz");
+    pWrtShell->Insert(u"zzz"_ustr);
 
     // Inserting additional characters at the start changed the table size to
     // 3, i.e. the first and the second "aaa" wasn't combined.
     pWrtShell->StartOfSection();
-    pWrtShell->Insert("aaa");
+    pWrtShell->Insert(u"aaa"_ustr);
 
     // Now assert that at least one of the seconds are not 0.
     const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
@@ -1437,7 +1433,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testCursorWindows)
     pDocShell->GetViewShell()->GetViewFrame().GetDispatcher()->Execute(
         SID_NEWWINDOW, SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
     SwWrtShell* pWrtShell2 = pDocShell->GetWrtShell();
-    OUString aText("foo");
+    OUString aText(u"foo"_ustr);
     pWrtShell2->Insert(aText);
 
     // Assert that only the cursor of the actual window move, not other cursors.
@@ -1455,7 +1451,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testLandscape)
     SwDoc* pDoc = getSwDoc();
     uno::Sequence<beans::PropertyValue> aPropertyValues(
         comphelper::InitPropertySequence({ { "AttributePage.Landscape", uno::Any(true) } }));
-    dispatchCommand(mxComponent, ".uno:AttributePage", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:AttributePage"_ustr, aPropertyValues);
 
     // Assert that the document model was modified.
     SwDocShell* pDocShell = pDoc->GetDocShell();
@@ -1482,7 +1478,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf95699)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
     ::sw::mark::IFieldmark* pFieldMark
         = pMarkAccess->getFieldmarkAfter(SwPosition(aClipboard.GetNodes().GetEndOfExtras()), false);
-    CPPUNIT_ASSERT_EQUAL(OUString("vnd.oasis.opendocument.field.FORMCHECKBOX"),
+    CPPUNIT_ASSERT_EQUAL(u"vnd.oasis.opendocument.field.FORMCHECKBOX"_ustr,
                          pFieldMark->GetFieldname());
 }
 
@@ -1669,7 +1665,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableRemoveHasTextChangesOnly)
     CPPUNIT_ASSERT(pWrtShell);
 
     // disable Record Changes
-    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, {});
     CPPUNIT_ASSERT_MESSAGE("redlining should be off",
                            !pDoc->getIDocumentRedlineAccess().IsRedlineOn());
 
@@ -1706,7 +1702,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableRemoveHasTextChangesOnly)
 
     // Move the cursor after the redline, and insert some text without change tracking
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
-    pWrtShell->Insert("X");
+    pWrtShell->Insert(u"X"_ustr);
 
     // Accepting again: 4 rows (extra text keeps the deleted row)
     rIDRA.AcceptAllRedline(/*bAccept=*/true);
@@ -1720,11 +1716,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableRemoveHasTextChangesOnly)
     // removing of HasTextChangeOnly SwTabLine property at accepting deletions previously
 
     // disable Record Changes
-    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, {});
     CPPUNIT_ASSERT_MESSAGE("redlining should be on",
                            pDoc->getIDocumentRedlineAccess().IsRedlineOn());
 
-    dispatchCommand(mxComponent, ".uno:SwBackSpace", {});
+    dispatchCommand(mxComponent, u".uno:SwBackSpace"_ustr, {});
     rIDRA.AcceptAllRedline(/*bAccept=*/true);
     Scheduler::ProcessEventsToIdle();
     discardDumpedLayout();
@@ -1742,7 +1738,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableRemoveHasTextChangesOnly2)
     CPPUNIT_ASSERT(pWrtShell);
 
     // disable Record Changes
-    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, {});
     CPPUNIT_ASSERT_MESSAGE("redlining should be off",
                            !pDoc->getIDocumentRedlineAccess().IsRedlineOn());
 
@@ -1762,7 +1758,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableRemoveHasTextChangesOnly2)
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     Scheduler::ProcessEventsToIdle();
-    dispatchCommand(mxComponent, ".uno:AcceptTrackedChange", {});
+    dispatchCommand(mxComponent, u".uno:AcceptTrackedChange"_ustr, {});
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // Accepting tracked insertion results still 4 rows, but less redlines
@@ -1777,8 +1773,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableRemoveHasTextChangesOnly2)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(14), pEditShell->GetRedlineCount());
 
     // To check Undo of HasTextChangesOnly reject the same row results 3 rows
-    dispatchCommand(mxComponent, ".uno:Escape", {});
-    dispatchCommand(mxComponent, ".uno:RejectTrackedChange", {});
+    dispatchCommand(mxComponent, u".uno:Escape"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:RejectTrackedChange"_ustr, {});
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // This was 4 (lost HasTextChangesOnly)
@@ -1810,9 +1806,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf147182_AcceptAllChangesInTableSelec
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row"_ostr, 4);
 
     // Select the first table to get a table selection
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:AcceptTrackedChange", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:AcceptTrackedChange"_ustr, {});
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // Accepting tracked changes in the selected table results 3 rows
@@ -1828,10 +1824,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf147182_AcceptAllChangesInTableSelec
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(14), pEditShell->GetRedlineCount());
 
     // To check Undo of HasTextChangesOnly reject the same row results 3 rows
-    dispatchCommand(mxComponent, ".uno:Escape", {});
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:RejectTrackedChange", {});
+    dispatchCommand(mxComponent, u".uno:Escape"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:RejectTrackedChange"_ustr, {});
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // This was 4 (only text changes of the first selected cell were rejected)
@@ -1856,24 +1852,24 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf66405)
     uno::Reference<beans::XPropertySet> xFormula;
     xEmbeddedObjects->getByName(xEmbeddedObjects->getElementNames()[0]) >>= xFormula;
     uno::Reference<beans::XPropertySet> xComponent;
-    xFormula->getPropertyValue("Component") >>= xComponent;
+    xFormula->getPropertyValue(u"Component"_ustr) >>= xComponent;
 
     // Test embedded object's margins
     sal_Int32 nLeftMargin, nRightMargin, nTopMargin, nBottomMargin;
-    xFormula->getPropertyValue("LeftMargin") >>= nLeftMargin;
-    xFormula->getPropertyValue("RightMargin") >>= nRightMargin;
-    xFormula->getPropertyValue("TopMargin") >>= nTopMargin;
-    xFormula->getPropertyValue("BottomMargin") >>= nBottomMargin;
+    xFormula->getPropertyValue(u"LeftMargin"_ustr) >>= nLeftMargin;
+    xFormula->getPropertyValue(u"RightMargin"_ustr) >>= nRightMargin;
+    xFormula->getPropertyValue(u"TopMargin"_ustr) >>= nTopMargin;
+    xFormula->getPropertyValue(u"BottomMargin"_ustr) >>= nBottomMargin;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nLeftMargin);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nRightMargin);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nTopMargin);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nBottomMargin);
 
     // Test embedded object component's margins
-    xComponent->getPropertyValue("LeftMargin") >>= nLeftMargin;
-    xComponent->getPropertyValue("RightMargin") >>= nRightMargin;
-    xComponent->getPropertyValue("TopMargin") >>= nTopMargin;
-    xComponent->getPropertyValue("BottomMargin") >>= nBottomMargin;
+    xComponent->getPropertyValue(u"LeftMargin"_ustr) >>= nLeftMargin;
+    xComponent->getPropertyValue(u"RightMargin"_ustr) >>= nRightMargin;
+    xComponent->getPropertyValue(u"TopMargin"_ustr) >>= nTopMargin;
+    xComponent->getPropertyValue(u"BottomMargin"_ustr) >>= nBottomMargin;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nLeftMargin);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nRightMargin);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nTopMargin);
@@ -2001,7 +1997,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf105417)
     CPPUNIT_ASSERT(xHyphenator.is());
     // If there are no English hyphenation rules installed, we can't test
     // hyphenation.
-    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
         return;
 
     uno::Reference<linguistic2::XLinguProperties> xLinguProperties(LinguMgr::GetLinguPropertySet());
@@ -2265,12 +2261,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testCreateDocxAnnotation)
     constexpr OUString aSomeText(u"some text"_ustr);
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
         { "Text", uno::Any(aSomeText) },
-        { "Author", uno::Any(OUString("me")) },
+        { "Author", uno::Any(u"me"_ustr) },
     });
-    dispatchCommand(mxComponent, ".uno:InsertAnnotation", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aPropertyValues);
 
     // Save it as DOCX & load it again
-    saveAndReload("Office Open XML Text");
+    saveAndReload(u"Office Open XML Text"_ustr);
 
     // get the annotation
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
@@ -2280,7 +2276,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testCreateDocxAnnotation)
     uno::Reference<beans::XPropertySet> xField(xFields->nextElement(), uno::UNO_QUERY);
 
     // this was empty instead of "some text"
-    CPPUNIT_ASSERT_EQUAL(aSomeText, xField->getPropertyValue("Content").get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(aSomeText, xField->getPropertyValue(u"Content"_ustr).get<OUString>());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf107976)
@@ -2317,9 +2313,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf112025)
 
     CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
 
-    uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"),
-                                               uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle, "IsLandscape"));
+    uno::Reference<beans::XPropertySet> xStyle(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle, u"IsLandscape"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf72942)
@@ -2328,26 +2324,25 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf72942)
 
     // check styles of paragraphs added from [fdo72942.docx]
     const uno::Reference<text::XTextRange> xRun1 = getRun(getParagraph(1), 1);
-    CPPUNIT_ASSERT_EQUAL(OUString("Default English (Liberation serif) text with "),
-                         xRun1->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString("Liberation Serif"),
-                         getProperty<OUString>(xRun1, "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(u"Default English (Liberation serif) text with "_ustr, xRun1->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Liberation Serif"_ustr,
+                         getProperty<OUString>(xRun1, u"CharFontName"_ustr));
 
     const uno::Reference<text::XTextRange> xRun2 = getRun(getParagraph(2), 1);
-    CPPUNIT_ASSERT_EQUAL(OUString("Header 1 English text (Liberation sans) with "),
-                         xRun2->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString("Liberation Sans"), getProperty<OUString>(xRun2, "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(u"Header 1 English text (Liberation sans) with "_ustr, xRun2->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Liberation Sans"_ustr,
+                         getProperty<OUString>(xRun2, u"CharFontName"_ustr));
 
     // check styles of paragraphs added from [fdo72942-insert.docx]
     const uno::Reference<text::XTextRange> xRun3 = getRun(getParagraph(4), 1);
-    CPPUNIT_ASSERT_EQUAL(OUString("Default German text (Calibri) with "), xRun3->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString("Liberation Serif"),
-                         getProperty<OUString>(xRun3, "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(u"Default German text (Calibri) with "_ustr, xRun3->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Liberation Serif"_ustr,
+                         getProperty<OUString>(xRun3, u"CharFontName"_ustr));
 
     const uno::Reference<text::XTextRange> xRun4 = getRun(getParagraph(5), 1);
-    CPPUNIT_ASSERT_EQUAL(OUString("Header 1 German text (Calibri Light) with "),
-                         xRun4->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString("Liberation Sans"), getProperty<OUString>(xRun4, "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(u"Header 1 German text (Calibri Light) with "_ustr, xRun4->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Liberation Sans"_ustr,
+                         getProperty<OUString>(xRun4, u"CharFontName"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf114306)
@@ -2379,11 +2374,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf113877)
 {
     mergeDocs("tdf113877_insert_numbered_list.odt", "tdf113877_insert_numbered_list.odt");
 
-    const OUString listId1 = getProperty<OUString>(getParagraph(1), "ListId");
-    const OUString listId4 = getProperty<OUString>(getParagraph(4), "ListId");
-    const OUString listId5 = getProperty<OUString>(getParagraph(5), "ListId");
-    const OUString listId6 = getProperty<OUString>(getParagraph(6), "ListId");
-    const OUString listId7 = getProperty<OUString>(getParagraph(7), "ListId");
+    const OUString listId1 = getProperty<OUString>(getParagraph(1), u"ListId"_ustr);
+    const OUString listId4 = getProperty<OUString>(getParagraph(4), u"ListId"_ustr);
+    const OUString listId5 = getProperty<OUString>(getParagraph(5), u"ListId"_ustr);
+    const OUString listId6 = getProperty<OUString>(getParagraph(6), u"ListId"_ustr);
+    const OUString listId7 = getProperty<OUString>(getParagraph(7), u"ListId"_ustr);
 
     // the initial list with 4 list items
     CPPUNIT_ASSERT_EQUAL(listId1, listId4);
@@ -2399,11 +2394,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf113877NoMerge)
 {
     mergeDocs("tdf113877_insert_numbered_list.odt", "tdf113877_insert_numbered_list_abcd.odt");
 
-    const OUString listId1 = getProperty<OUString>(getParagraph(1), "ListId");
-    const OUString listId4 = getProperty<OUString>(getParagraph(4), "ListId");
-    const OUString listId5 = getProperty<OUString>(getParagraph(5), "ListId");
-    const OUString listId6 = getProperty<OUString>(getParagraph(6), "ListId");
-    const OUString listId7 = getProperty<OUString>(getParagraph(7), "ListId");
+    const OUString listId1 = getProperty<OUString>(getParagraph(1), u"ListId"_ustr);
+    const OUString listId4 = getProperty<OUString>(getParagraph(4), u"ListId"_ustr);
+    const OUString listId5 = getProperty<OUString>(getParagraph(5), u"ListId"_ustr);
+    const OUString listId6 = getProperty<OUString>(getParagraph(6), u"ListId"_ustr);
+    const OUString listId7 = getProperty<OUString>(getParagraph(7), u"ListId"_ustr);
 
     // the initial list with 4 list items
     CPPUNIT_ASSERT_EQUAL(listId1, listId4);
@@ -2425,9 +2420,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf113877_default_style)
 {
     mergeDocs(nullptr, "tdf113877_insert_numbered_list_abcd.odt");
 
-    const OUString listId1 = getProperty<OUString>(getParagraph(1), "ListId");
-    const OUString listId2 = getProperty<OUString>(getParagraph(2), "ListId");
-    const OUString listId3 = getProperty<OUString>(getParagraph(3), "ListId");
+    const OUString listId1 = getProperty<OUString>(getParagraph(1), u"ListId"_ustr);
+    const OUString listId2 = getProperty<OUString>(getParagraph(2), u"ListId"_ustr);
+    const OUString listId3 = getProperty<OUString>(getParagraph(3), u"ListId"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(listId1, listId2);
     CPPUNIT_ASSERT_EQUAL(listId1, listId3);
@@ -2444,9 +2439,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf113877_Standard_style)
 {
     mergeDocs("tdf113877_blank_ownStandard.odt", "tdf113877_insert_numbered_list_abcd.odt");
 
-    const OUString listId1 = getProperty<OUString>(getParagraph(1), "ListId");
-    const OUString listId2 = getProperty<OUString>(getParagraph(2), "ListId");
-    const OUString listId3 = getProperty<OUString>(getParagraph(3), "ListId");
+    const OUString listId1 = getProperty<OUString>(getParagraph(1), u"ListId"_ustr);
+    const OUString listId2 = getProperty<OUString>(getParagraph(2), u"ListId"_ustr);
+    const OUString listId3 = getProperty<OUString>(getParagraph(3), u"ListId"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(listId1, listId2);
     CPPUNIT_ASSERT_EQUAL(listId1, listId3);
@@ -2456,9 +2451,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf113877_blank_bold_on)
 {
     mergeDocs("tdf113877_blank_bold_on.odt", "tdf113877_insert_numbered_list_abcd.odt");
 
-    const OUString listId1 = getProperty<OUString>(getParagraph(1), "ListId");
-    const OUString listId2 = getProperty<OUString>(getParagraph(2), "ListId");
-    const OUString listId3 = getProperty<OUString>(getParagraph(3), "ListId");
+    const OUString listId1 = getProperty<OUString>(getParagraph(1), u"ListId"_ustr);
+    const OUString listId2 = getProperty<OUString>(getParagraph(2), u"ListId"_ustr);
+    const OUString listId3 = getProperty<OUString>(getParagraph(3), u"ListId"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(listId1, listId2);
     CPPUNIT_ASSERT_EQUAL(listId1, listId3);
@@ -2479,30 +2474,30 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf107975)
     uno::Reference<drawing::XShape> xShape(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
 
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,
-                         getProperty<text::TextContentAnchorType>(xShape, "AnchorType"));
+                         getProperty<text::TextContentAnchorType>(xShape, u"AnchorType"_ustr));
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     //Position the mouse cursor (caret) after "ABC" below the blue image
-    dispatchCommand(mxComponent, ".uno:GoRight", {});
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:GoRight"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     // without the fix, it crashes
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
-    CPPUNIT_ASSERT_EQUAL(OUString("ABC"), getParagraph(1)->getString());
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, getParagraph(1)->getString());
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
-    dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
-    dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
     //try again with anchor at start of doc which is another special case
@@ -2512,17 +2507,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf107975)
     xShapeContent->attach(xStart);
 
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,
-                         getProperty<text::TextContentAnchorType>(xShape, "AnchorType"));
+                         getProperty<text::TextContentAnchorType>(xShape, u"AnchorType"_ustr));
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     //Position the mouse cursor (caret) after "ABC" below the blue image
-    dispatchCommand(mxComponent, ".uno:GoRight", {});
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:GoRight"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
 // Fails quite a lot on multiple Jenkins slaves, but entirely reliably,
 // with:
@@ -2551,9 +2546,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf113877_blank_bold_off)
 {
     mergeDocs("tdf113877_blank_bold_off.odt", "tdf113877_insert_numbered_list_abcd.odt");
 
-    const OUString listId1 = getProperty<OUString>(getParagraph(1), "ListId");
-    const OUString listId2 = getProperty<OUString>(getParagraph(2), "ListId");
-    const OUString listId3 = getProperty<OUString>(getParagraph(3), "ListId");
+    const OUString listId1 = getProperty<OUString>(getParagraph(1), u"ListId"_ustr);
+    const OUString listId2 = getProperty<OUString>(getParagraph(2), u"ListId"_ustr);
+    const OUString listId3 = getProperty<OUString>(getParagraph(3), u"ListId"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(listId1, listId2);
     CPPUNIT_ASSERT_EQUAL(listId1, listId3);
@@ -2585,9 +2580,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf143320)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("x"));
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // Create a new document
     createSwDoc();
@@ -2595,18 +2590,18 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf143320)
     pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("x"));
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getParagraph(1)->getString());
 
     // Without the fix in place, this test would have crashed here
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("x"));

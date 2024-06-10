@@ -66,7 +66,7 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase("/sw/qa/extras/ww8export/data/", "MS Word 97") {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/ww8export/data/"_ustr, u"MS Word 97"_ustr) {}
 };
 
 DECLARE_WW8EXPORT_TEST(testN757910, "n757910.doc")
@@ -76,12 +76,12 @@ DECLARE_WW8EXPORT_TEST(testN757910, "n757910.doc")
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
     sal_Int32 nValue = 0;
-    xPropertySet->getPropertyValue("LeftBorderDistance") >>= nValue;
+    xPropertySet->getPropertyValue(u"LeftBorderDistance"_ustr) >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(280), nValue);
 
     // The border width was zero
     table::BorderLine2 aBorder;
-    xPropertySet->getPropertyValue("LeftBorder") >>= aBorder;
+    xPropertySet->getPropertyValue(u"LeftBorder"_ustr) >>= aBorder;
     CPPUNIT_ASSERT(aBorder.LineWidth > 0);
 }
 
@@ -91,7 +91,7 @@ DECLARE_WW8EXPORT_TEST(testN760294, "n760294.doc")
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
     table::TableBorder aTableBorder;
-    xTable->getPropertyValue("TableBorder") >>= aTableBorder;
+    xTable->getPropertyValue(u"TableBorder"_ustr) >>= aTableBorder;
     CPPUNIT_ASSERT_EQUAL(aTableBorder.TopLine.InnerLineWidth, aTableBorder.TopLine.OuterLineWidth);
     CPPUNIT_ASSERT_EQUAL(aTableBorder.TopLine.InnerLineWidth, aTableBorder.TopLine.LineDistance);
 }
@@ -121,15 +121,15 @@ xray para2.PageStyleName
     uno::Reference<uno::XInterface> paragraph2(paraEnum->nextElement(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> text1(paragraph1, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> text2(paragraph2, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL( OUString( "one" ), text1->getString());
-    CPPUNIT_ASSERT_EQUAL( OUString( "two" ), text2->getString());
+    CPPUNIT_ASSERT_EQUAL( u"one"_ustr, text1->getString());
+    CPPUNIT_ASSERT_EQUAL( u"two"_ustr, text2->getString());
     uno::Reference<beans::XPropertySet> paragraphProperties1(paragraph1, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> paragraphProperties2(paragraph2, uno::UNO_QUERY);
     OUString pageStyle1, pageStyle2;
-    paragraphProperties1->getPropertyValue( "PageStyleName" ) >>= pageStyle1;
-    paragraphProperties2->getPropertyValue( "PageStyleName" ) >>= pageStyle2;
-    CPPUNIT_ASSERT_EQUAL( OUString( "Convert 1" ), pageStyle1 );
-    CPPUNIT_ASSERT_EQUAL( OUString( "Convert 2" ), pageStyle2 );
+    paragraphProperties1->getPropertyValue( u"PageStyleName"_ustr ) >>= pageStyle1;
+    paragraphProperties2->getPropertyValue( u"PageStyleName"_ustr ) >>= pageStyle2;
+    CPPUNIT_ASSERT_EQUAL( u"Convert 1"_ustr, pageStyle1 );
+    CPPUNIT_ASSERT_EQUAL( u"Convert 2"_ustr, pageStyle2 );
 
 }
 
@@ -158,16 +158,16 @@ xray para2.PageStyleName
     uno::Reference<uno::XInterface> paragraph2(paraEnum->nextElement(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> text1(paragraph1, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> text2(paragraph2, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL( OUString( "text1" ), text1->getString());
-    CPPUNIT_ASSERT_EQUAL( OUString( "text2" ), text2->getString());
+    CPPUNIT_ASSERT_EQUAL( u"text1"_ustr, text1->getString());
+    CPPUNIT_ASSERT_EQUAL( u"text2"_ustr, text2->getString());
     uno::Reference<beans::XPropertySet> paragraphProperties1(paragraph1, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> paragraphProperties2(paragraph2, uno::UNO_QUERY);
     OUString pageStyle1, pageStyle2;
-    paragraphProperties1->getPropertyValue( "PageStyleName" ) >>= pageStyle1;
-    paragraphProperties2->getPropertyValue( "PageStyleName" ) >>= pageStyle2;
+    paragraphProperties1->getPropertyValue( u"PageStyleName"_ustr ) >>= pageStyle1;
+    paragraphProperties2->getPropertyValue( u"PageStyleName"_ustr ) >>= pageStyle2;
     // "Standard" is the style for the first page (2nd is "Convert 1").
-    CPPUNIT_ASSERT_EQUAL( OUString( "Standard" ), pageStyle1 );
-    CPPUNIT_ASSERT_EQUAL( OUString( "Standard" ), pageStyle2 );
+    CPPUNIT_ASSERT_EQUAL( u"Standard"_ustr, pageStyle1 );
+    CPPUNIT_ASSERT_EQUAL( u"Standard"_ustr, pageStyle2 );
 }
 
 DECLARE_WW8EXPORT_TEST(testN757118, "n757118.doc")
@@ -183,10 +183,10 @@ xray ThisComponent.DrawPage.getByIndex(0).BoundRect
     uno::Reference<beans::XPropertySet> ruleProperties3(rule3, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> ruleProperties4(rule4, uno::UNO_QUERY);
     awt::Rectangle boundRect1, boundRect2, boundRect3, boundRect4;
-    ruleProperties1->getPropertyValue( "BoundRect" ) >>= boundRect1;
-    ruleProperties2->getPropertyValue( "BoundRect" ) >>= boundRect2;
-    ruleProperties3->getPropertyValue( "BoundRect" ) >>= boundRect3;
-    ruleProperties4->getPropertyValue( "BoundRect" ) >>= boundRect4;
+    ruleProperties1->getPropertyValue( u"BoundRect"_ustr ) >>= boundRect1;
+    ruleProperties2->getPropertyValue( u"BoundRect"_ustr ) >>= boundRect2;
+    ruleProperties3->getPropertyValue( u"BoundRect"_ustr ) >>= boundRect3;
+    ruleProperties4->getPropertyValue( u"BoundRect"_ustr ) >>= boundRect4;
     // compare, allow for < 5 differences because of rounding errors
     CPPUNIT_ASSERT( abs( boundRect1.Width - boundRect3.Width ) < 5 );
     CPPUNIT_ASSERT( abs( boundRect2.Width - boundRect4.Width ) < 5 );
@@ -245,23 +245,23 @@ DECLARE_WW8EXPORT_TEST(testN816603, "n816603.doc")
 DECLARE_WW8EXPORT_TEST(testPageBorder, "page-border.doc")
 {
     // Page border was missing (LineWidth was 0), due to wrong interpretation of pgbApplyTo.
-    table::BorderLine2 aBorder = getProperty<table::BorderLine2>(getStyles("PageStyles")->getByName("Standard"), "TopBorder");
+    table::BorderLine2 aBorder = getProperty<table::BorderLine2>(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"TopBorder"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(convertTwipToMm100(6 * 20)), aBorder.LineWidth);
 }
 
 DECLARE_WW8EXPORT_TEST(testN823651, "n823651.doc")
 {
     // Character height was 10pt instead of 7.5pt in the header.
-    uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
-    uno::Reference<text::XText> xText = getProperty< uno::Reference<text::XTextRange> >(xStyle, "HeaderTextFirst")->getText();
-    CPPUNIT_ASSERT_EQUAL(7.5f, getProperty<float>(getParagraphOfText(1, xText), "CharHeight"));
+    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = getProperty< uno::Reference<text::XTextRange> >(xStyle, u"HeaderTextFirst"_ustr)->getText();
+    CPPUNIT_ASSERT_EQUAL(7.5f, getProperty<float>(getParagraphOfText(1, xText), u"CharHeight"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testFdo36868, "fdo36868.doc")
 {
     OUString aText = parseDump("/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']"_ostr, "expand"_ostr);
     // This was 1.1.
-    CPPUNIT_ASSERT_EQUAL(OUString("2.1"), aText);
+    CPPUNIT_ASSERT_EQUAL(u"2.1"_ustr, aText);
 }
 
 DECLARE_WW8EXPORT_TEST(testListNolevel, "list-nolevel.doc")
@@ -269,7 +269,7 @@ DECLARE_WW8EXPORT_TEST(testListNolevel, "list-nolevel.doc")
     // Similar to fdo#36868, numbering portions had wrong values.
     OUString aText = parseDump("/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']"_ostr, "expand"_ostr);
     // PortionType::Number was completely missing.
-    CPPUNIT_ASSERT_EQUAL(OUString("1."), aText);
+    CPPUNIT_ASSERT_EQUAL(u"1."_ustr, aText);
 }
 
 DECLARE_WW8EXPORT_TEST(testHeaderApoTable, "ooo92948-1.doc")
@@ -287,25 +287,25 @@ DECLARE_WW8EXPORT_TEST(testHeaderApoTable, "ooo92948-1.doc")
 //    uno::Reference<beans::XPropertySet> xFrame(getParagraphAnchoredObject(1, xPara));
 
     uno::Reference<text::XTextContent> xTable(getParagraphOrTable(1, xFrame));
-    getCell(xTable, "A1", "Aan" SAL_NEWLINE_STRING "Recipient" SAL_NEWLINE_STRING "Recipient" SAL_NEWLINE_STRING);
-    getCell(xTable, "A2", "Kopie aan" SAL_NEWLINE_STRING);
-    getCell(xTable, "A3", "Datum" SAL_NEWLINE_STRING "31 juli 2008");
-    getCell(xTable, "A4", "Locatie" SAL_NEWLINE_STRING "Locationr");
-    getCell(xTable, "A5", "Van" SAL_NEWLINE_STRING "Sender  ");
-    getCell(xTable, "A6", "Directie" SAL_NEWLINE_STRING "Department");
-    getCell(xTable, "A7", "Telefoon" SAL_NEWLINE_STRING "Phone");
+    getCell(xTable, u"A1"_ustr, u"Aan" SAL_NEWLINE_STRING "Recipient" SAL_NEWLINE_STRING "Recipient" SAL_NEWLINE_STRING ""_ustr);
+    getCell(xTable, u"A2"_ustr, u"Kopie aan" SAL_NEWLINE_STRING ""_ustr);
+    getCell(xTable, u"A3"_ustr, u"Datum" SAL_NEWLINE_STRING "31 juli 2008"_ustr);
+    getCell(xTable, u"A4"_ustr, u"Locatie" SAL_NEWLINE_STRING "Locationr"_ustr);
+    getCell(xTable, u"A5"_ustr, u"Van" SAL_NEWLINE_STRING "Sender  "_ustr);
+    getCell(xTable, u"A6"_ustr, u"Directie" SAL_NEWLINE_STRING "Department"_ustr);
+    getCell(xTable, u"A7"_ustr, u"Telefoon" SAL_NEWLINE_STRING "Phone"_ustr);
 }
 
 DECLARE_WW8EXPORT_TEST(testBnc821208, "bnc821208.doc")
 {
     // WW8Num1z0 earned a Symbol font, turning numbers into rectangles.
-    uno::Reference<beans::XPropertyState> xPropertyState(getStyles("CharacterStyles")->getByName("WW8Num1z0"), uno::UNO_QUERY);
-    beans::PropertyState ePropertyState = xPropertyState->getPropertyState("CharFontName");
+    uno::Reference<beans::XPropertyState> xPropertyState(getStyles(u"CharacterStyles"_ustr)->getByName(u"WW8Num1z0"_ustr), uno::UNO_QUERY);
+    beans::PropertyState ePropertyState = xPropertyState->getPropertyState(u"CharFontName"_ustr);
     // This was beans::PropertyState_DIRECT_VALUE.
     CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE, ePropertyState);
 
     // Background of the numbering itself should have been the default, was yellow (0xffff00).
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xPropertyState, "CharBackColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xPropertyState, u"CharBackColor"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testCp1000044, "cp1000044.doc")
@@ -319,7 +319,7 @@ DECLARE_WW8EXPORT_TEST(testCp1000044, "cp1000044.doc")
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     CPPUNIT_ASSERT_EQUAL( true, pDoc->getIDocumentSettingAccess().get( DocumentSettingId::PROTECT_FORM ) );
 
-    uno::Sequence<beans::PropertyValue> aGrabBag = getProperty< uno::Sequence<beans::PropertyValue> >(mxComponent, "InteropGrabBag");
+    uno::Sequence<beans::PropertyValue> aGrabBag = getProperty< uno::Sequence<beans::PropertyValue> >(mxComponent, u"InteropGrabBag"_ustr);
     sal_Int32 nPasswordHash = 0;
     for ( sal_Int32 i = 0; i < aGrabBag.getLength(); ++i )
     {
@@ -349,41 +349,41 @@ DECLARE_WW8EXPORT_TEST(testBorderColours, "bordercolours.doc")
     uno::Reference<container::XNameAccess> bookmarks =
         bookmarksSupplier->getBookmarks();
     uno::Reference<text::XTextContent> bookmark(
-        bookmarks->getByName("ParagraphBorder"), uno::UNO_QUERY);
+        bookmarks->getByName(u"ParagraphBorder"_ustr), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> anchor(bookmark->getAnchor());
     table::BorderLine2 border;
-    border = getProperty<table::BorderLine2>(anchor, "TopBorder");
+    border = getProperty<table::BorderLine2>(anchor, u"TopBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedTop, border);
-    border = getProperty<table::BorderLine2>(anchor, "LeftBorder");
+    border = getProperty<table::BorderLine2>(anchor, u"LeftBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedLeft, border);
-    border = getProperty<table::BorderLine2>(anchor, "RightBorder");
+    border = getProperty<table::BorderLine2>(anchor, u"RightBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedRight, border);
-    border = getProperty<table::BorderLine2>(anchor, "BottomBorder");
+    border = getProperty<table::BorderLine2>(anchor, u"BottomBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedBottom, border);
 
     // Page border
-    OUString pageStyleName = getProperty<OUString>(anchor, "PageStyleName");
+    OUString pageStyleName = getProperty<OUString>(anchor, u"PageStyleName"_ustr);
     uno::Reference<style::XStyle> pageStyle(
-        getStyles("PageStyles")->getByName(pageStyleName), uno::UNO_QUERY);
-    border = getProperty<table::BorderLine2>(pageStyle, "TopBorder");
+        getStyles(u"PageStyles"_ustr)->getByName(pageStyleName), uno::UNO_QUERY);
+    border = getProperty<table::BorderLine2>(pageStyle, u"TopBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedTop, border);
-    border = getProperty<table::BorderLine2>(pageStyle, "LeftBorder");
+    border = getProperty<table::BorderLine2>(pageStyle, u"LeftBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedLeft, border);
-    border = getProperty<table::BorderLine2>(pageStyle, "RightBorder");
+    border = getProperty<table::BorderLine2>(pageStyle, u"RightBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedRight, border);
-    border = getProperty<table::BorderLine2>(pageStyle, "BottomBorder");
+    border = getProperty<table::BorderLine2>(pageStyle, u"BottomBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedBottom, border);
 
     // Character border
-    bookmark.set(bookmarks->getByName("CharBorder"), uno::UNO_QUERY);
+    bookmark.set(bookmarks->getByName(u"CharBorder"_ustr), uno::UNO_QUERY);
     anchor = bookmark->getAnchor();
-    border = getProperty<table::BorderLine2>(anchor, "CharTopBorder");
+    border = getProperty<table::BorderLine2>(anchor, u"CharTopBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedTop, border);
-    border = getProperty<table::BorderLine2>(anchor, "CharLeftBorder");
+    border = getProperty<table::BorderLine2>(anchor, u"CharLeftBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedTop, border);
-    border = getProperty<table::BorderLine2>(anchor, "CharRightBorder");
+    border = getProperty<table::BorderLine2>(anchor, u"CharRightBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedTop, border);
-    border = getProperty<table::BorderLine2>(anchor, "CharBottomBorder");
+    border = getProperty<table::BorderLine2>(anchor, u"CharBottomBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedTop, border);
 
     // Table border
@@ -392,9 +392,9 @@ DECLARE_WW8EXPORT_TEST(testBorderColours, "bordercolours.doc")
     uno::Reference<container::XNameAccess> tables =
         tablesSupplier->getTextTables();
     uno::Reference<text::XTextTable> table(
-        tables->getByName("Table1"), uno::UNO_QUERY);
+        tables->getByName(u"Table1"_ustr), uno::UNO_QUERY);
     table::TableBorder2 tableBorder = getProperty<table::TableBorder2>(
-        table, "TableBorder2");
+        table, u"TableBorder2"_ustr);
     CPPUNIT_ASSERT_EQUAL(expectedTop.Color, tableBorder.TopLine.Color);
     CPPUNIT_ASSERT_EQUAL(expectedLeft.Color, tableBorder.LeftLine.Color);
     CPPUNIT_ASSERT_EQUAL(expectedRight.Color, tableBorder.RightLine.Color);
@@ -402,30 +402,30 @@ DECLARE_WW8EXPORT_TEST(testBorderColours, "bordercolours.doc")
 
     // Table cells
     uno::Reference<table::XCell> cell =
-        table->getCellByName("A2");
-    border = getProperty<table::BorderLine2>(cell, "TopBorder");
+        table->getCellByName(u"A2"_ustr);
+    border = getProperty<table::BorderLine2>(cell, u"TopBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedTop, border);
-    border = getProperty<table::BorderLine2>(cell, "LeftBorder");
+    border = getProperty<table::BorderLine2>(cell, u"LeftBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedLeft, border);
-    border = getProperty<table::BorderLine2>(cell, "BottomBorder");
+    border = getProperty<table::BorderLine2>(cell, u"BottomBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedBottom, border);
 
-    cell = table->getCellByName("B2");
-    border = getProperty<table::BorderLine2>(cell, "TopBorder");
+    cell = table->getCellByName(u"B2"_ustr);
+    border = getProperty<table::BorderLine2>(cell, u"TopBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedDoubleGreen, border);
-    border = getProperty<table::BorderLine2>(cell, "LeftBorder");
+    border = getProperty<table::BorderLine2>(cell, u"LeftBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedRight, border);
-    border = getProperty<table::BorderLine2>(cell, "BottomBorder");
+    border = getProperty<table::BorderLine2>(cell, u"BottomBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedDoubleGreen, border);
 
-    cell = table->getCellByName("C2");
-    border = getProperty<table::BorderLine2>(cell, "TopBorder");
+    cell = table->getCellByName(u"C2"_ustr);
+    border = getProperty<table::BorderLine2>(cell, u"TopBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedDoubleGreen, border);
-    border = getProperty<table::BorderLine2>(cell, "LeftBorder");
+    border = getProperty<table::BorderLine2>(cell, u"LeftBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedDashedRed, border);
-    border = getProperty<table::BorderLine2>(cell, "RightBorder");
+    border = getProperty<table::BorderLine2>(cell, u"RightBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedRight, border);
-    border = getProperty<table::BorderLine2>(cell, "BottomBorder");
+    border = getProperty<table::BorderLine2>(cell, u"BottomBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedDoubleGreen, border);
 
     // Picture border
@@ -449,7 +449,7 @@ DECLARE_WW8EXPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.doc")
     uno::Reference<drawing::XShape> image = getShape(1);
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> graphic;
-    imageProperties->getPropertyValue( "Graphic" ) >>= graphic;
+    imageProperties->getPropertyValue( u"Graphic"_ustr ) >>= graphic;
     Graphic vclGraphic(graphic);
     BitmapEx bitmap(vclGraphic.GetBitmapEx());
     CPPUNIT_ASSERT_EQUAL( tools::Long(58), bitmap.GetSizePixel().Width());
@@ -465,12 +465,12 @@ DECLARE_WW8EXPORT_TEST(testTdf95321, "tdf95321.doc")
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Second Column"), uno::Reference<text::XTextRange>(xTable->getCellByName("B1"), uno::UNO_QUERY_THROW)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Second Column"_ustr, uno::Reference<text::XTextRange>(xTable->getCellByName(u"B1"_ustr), uno::UNO_QUERY_THROW)->getString());
 }
 
 DECLARE_WW8EXPORT_TEST(testFdo77844, "fdo77844.doc")
 {
-    uno::Reference<container::XNameAccess> pageStyles = getStyles("PageStyles");
+    uno::Reference<container::XNameAccess> pageStyles = getStyles(u"PageStyles"_ustr);
 
     // get a page cursor
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -481,26 +481,26 @@ DECLARE_WW8EXPORT_TEST(testFdo77844, "fdo77844.doc")
 
     // check that the first page has no header
     xCursor->jumpToFirstPage();
-    OUString pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    OUString pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
     uno::Reference<style::XStyle> pageStyle(
         pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
-    bool headerIsOn = getProperty<bool>(pageStyle, "HeaderIsOn");
+    bool headerIsOn = getProperty<bool>(pageStyle, u"HeaderIsOn"_ustr);
     CPPUNIT_ASSERT(!headerIsOn);
 
     // check that the second page has a header
     xCursor->jumpToPage(2);
-    pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
     pageStyle.set(
         pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
-    headerIsOn = getProperty<bool>(pageStyle, "HeaderIsOn");
+    headerIsOn = getProperty<bool>(pageStyle, u"HeaderIsOn"_ustr);
     CPPUNIT_ASSERT(headerIsOn);
 
     // check that the third page has a header
     xCursor->jumpToPage(3);
-    pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    pageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
     pageStyle.set(
         pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
-    headerIsOn = getProperty<bool>(pageStyle, "HeaderIsOn");
+    headerIsOn = getProperty<bool>(pageStyle, u"HeaderIsOn"_ustr);
     CPPUNIT_ASSERT(headerIsOn);
 
     // check that the fourth page has no header
@@ -519,7 +519,7 @@ DECLARE_WW8EXPORT_TEST(testFdp80333, "fdo80333.doc")
 {
     // Despite there is no character border, border shadow was imported
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
-    const table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xRun, "CharShadowFormat");
+    const table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xRun, u"CharShadowFormat"_ustr);
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
 }
 
@@ -530,12 +530,12 @@ DECLARE_WW8EXPORT_TEST(testFdo81102, "fdo81102.doc")
         mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> start =
         textDocument->getText()->getStart();
-    OUString pageStyleName = getProperty<OUString>(start, "PageStyleName");
+    OUString pageStyleName = getProperty<OUString>(start, u"PageStyleName"_ustr);
     uno::Reference<style::XStyle> pageStyle(
-        getStyles("PageStyles")->getByName(pageStyleName), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getByName(pageStyleName), uno::UNO_QUERY);
 
     // check that left and right pages do not share the same header
-    bool headerIsShared = getProperty<bool>(pageStyle, "HeaderIsShared");
+    bool headerIsShared = getProperty<bool>(pageStyle, u"HeaderIsShared"_ustr);
     CPPUNIT_ASSERT(!headerIsShared);
 }
 
@@ -545,18 +545,18 @@ DECLARE_WW8EXPORT_TEST(testBnc787942, "bnc787942.doc")
     // this is on page 1 in Word
     parseDump("/root/page[1]/body/txt[4]/anchored"_ostr);
 
-    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_PARALLEL, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
-    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(getShape(1), "HoriOrientRelation"));
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_PARALLEL, getProperty<text::WrapTextMode>(getShape(1), u"Surround"_ustr));
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(getShape(1), u"HoriOrientRelation"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf133504_wrapNotBeside, "tdf133504_wrapNotBeside.doc")
 {
-    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_NONE, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_NONE, getProperty<text::WrapTextMode>(getShape(1), u"Surround"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf36711_inlineFrames, "tdf36711_inlineFrames.doc")
 {
-    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(getShape(1), "VertOrientRelation"));
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(getShape(1), u"VertOrientRelation"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testLayoutHanging, "fdo68967.doc")
@@ -569,7 +569,7 @@ DECLARE_WW8EXPORT_TEST(testfdo68963, "fdo68963.doc")
 {
     // The problem was that the text was not displayed.
     CPPUNIT_ASSERT ( !parseDump("/root/page/body/tab/row[2]/cell[1]/txt/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr).isEmpty() );
-    CPPUNIT_ASSERT_EQUAL( OUString("Topic 1"), parseDump("/root/page/body/tab/row[2]/cell[1]/txt/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr) );
+    CPPUNIT_ASSERT_EQUAL( u"Topic 1"_ustr, parseDump("/root/page/body/tab/row[2]/cell[1]/txt/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr) );
     // all crossreference bookmarks should have a target.  Shouldn't be any "Reference source not found" in the xml
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), parseDump("/root/page/body/txt[24]/SwParaPortion/SwLineLayout/SwFieldPortion[2]"_ostr,"expand"_ostr).indexOf("Reference source not found"));
 }
@@ -577,11 +577,11 @@ DECLARE_WW8EXPORT_TEST(testfdo68963, "fdo68963.doc")
 
 DECLARE_WW8EXPORT_TEST(testTdf99100, "tdf99100.doc")
 {
-    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Standard"), "HeaderText");
-    auto xField = getProperty< uno::Reference<lang::XServiceInfo> >(getRun(getParagraphOfText(1, xHeaderText), 2), "TextField");
+    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"HeaderText"_ustr);
+    auto xField = getProperty< uno::Reference<lang::XServiceInfo> >(getRun(getParagraphOfText(1, xHeaderText), 2), u"TextField"_ustr);
     // This failed: the second text portion wasn't a field.
     CPPUNIT_ASSERT(xField.is());
-    CPPUNIT_ASSERT(xField->supportsService("com.sun.star.text.textfield.Chapter"));
+    CPPUNIT_ASSERT(xField->supportsService(u"com.sun.star.text.textfield.Chapter"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf74328, "tdf74328.doc")
@@ -592,7 +592,7 @@ reading page numbers at sections > 255, in this case 256
     uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextCursor> xTextCursor = textDocument->getText()->createTextCursor( );
     uno::Reference<beans::XPropertySet> xProps(xTextCursor, uno::UNO_QUERY);
-    uno::Any aOffset = xProps->getPropertyValue("PageNumberOffset");
+    uno::Any aOffset = xProps->getPropertyValue(u"PageNumberOffset"_ustr);
     sal_Int16 nOffset = 0;
     aOffset >>= nOffset;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(256), nOffset);
@@ -609,11 +609,11 @@ DECLARE_WW8EXPORT_TEST(testTdf95576, "tdf95576.doc")
         // get the numbering rules effective at this paragraph
         uno::Reference<container::XIndexReplace> xNumRules =
             getProperty< uno::Reference<container::XIndexReplace> >(
-                xPara, "NumberingRules");
+                xPara, u"NumberingRules"_ustr);
 
         // get the numbering level of this paragraph, and the properties
         // associated with that numbering level
-        int numLevel = getProperty<sal_Int32>(xPara, "NumberingLevel");
+        int numLevel = getProperty<sal_Int32>(xPara, u"NumberingLevel"_ustr);
         uno::Sequence< beans::PropertyValue > aPropertyValues;
         xNumRules->getByIndex(numLevel) >>= aPropertyValues;
 
@@ -641,19 +641,19 @@ DECLARE_WW8EXPORT_TEST(testTdf95576, "tdf95576.doc")
 DECLARE_WW8EXPORT_TEST(testTdf59896, "tdf59896.doc")
 {
     // This was awt::FontWeight::NORMAL, i.e. the first run wasn't bold, when it should be bold
-    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(getParagraph(1), 1), "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(getParagraph(1), 1), u"CharWeight"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf102334, "tdf102334.doc")
 {
     // This was false, i.e. the first run wasn't hidden, when it should have been
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getRun(getParagraph(7), 1), "CharHidden"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getRun(getParagraph(7), 1), u"CharHidden"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf128605, "tdf128605.doc")
 {
-    OUString aPara1PageStyleName = getProperty<OUString>(getParagraph(1), "PageStyleName");
-    OUString aPara2PageStyleName = getProperty<OUString>(getParagraph(2), "PageStyleName");
+    OUString aPara1PageStyleName = getProperty<OUString>(getParagraph(1), u"PageStyleName"_ustr);
+    OUString aPara2PageStyleName = getProperty<OUString>(getParagraph(2), u"PageStyleName"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: Standard
     // - Actual  : Convert 1
@@ -692,12 +692,12 @@ DECLARE_WW8EXPORT_TEST(testTdf106291, "tdf106291.doc")
 DECLARE_WW8EXPORT_TEST(testTransparentText, "transparent-text.doc")
 {
     uno::Reference<text::XText> xHeaderText = getProperty<uno::Reference<text::XText>>(
-        getStyles("PageStyles")->getByName("Standard"), "HeaderText");
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"HeaderText"_ustr);
     uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(3, xHeaderText);
     // Without the accompanying fix in place, this test would have failed: transparency was set to
     // 100%, so the text was not readable.
     sal_Int32 nExpected(COL_BLACK);
-    sal_Int32 nActual(getProperty<sal_Int16>(xParagraph, "CharTransparence"));
+    sal_Int32 nActual(getProperty<sal_Int16>(xParagraph, u"CharTransparence"_ustr));
     CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
 }
 
@@ -749,7 +749,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf112346)
     };
     createSwDoc("tdf112346.doc");
     verify();
-    saveAndReload("MS Word 97");
+    saveAndReload(u"MS Word 97"_ustr);
     verify();
 }
 
@@ -793,8 +793,8 @@ DECLARE_WW8EXPORT_TEST(testTdf130262, "tdf130262.doc")
 
 DECLARE_WW8EXPORT_TEST(testTdf38778, "tdf38778_properties_in_run_for_field.doc")
 {
-    CPPUNIT_ASSERT_EQUAL(10.0f, getProperty<float>(getRun(getParagraph(1), 1), "CharHeight"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Courier New"), getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(10.0f, getProperty<float>(getRun(getParagraph(1), 1), u"CharHeight"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Courier New"_ustr, getProperty<OUString>(getRun(getParagraph(1), 1), u"CharFontName"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testN325936, "n325936.doc")
@@ -806,13 +806,13 @@ DECLARE_WW8EXPORT_TEST(testN325936, "n325936.doc")
      * xray ThisComponent.DrawPage(0).BackColorTransparency
      */
 
-    CPPUNIT_ASSERT_EQUAL(Color(0x000064), getProperty< Color >(getShape(1), "BackColorTransparency"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x000064), getProperty< Color >(getShape(1), u"BackColorTransparency"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTscp, "tscp.doc")
 {
     uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
-    uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, "urn:bails");
+    uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, u"urn:bails"_ustr);
     uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(mxComponent, uno::UNO_QUERY);
     uno::Sequence< uno::Reference<rdf::XURI> > aGraphNames = xDocumentMetadataAccess->getMetadataGraphsWithType(xType);
     // This failed, no graphs had the urn:bails type.
@@ -856,8 +856,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo45724)
     // The text and background color of the control shape was not correct.
     uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<form::validation::XValidatableFormComponent> xComponent(xControlShape->getControl(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<Color>(xComponent, "BackgroundColor"));
-    CPPUNIT_ASSERT_EQUAL(OUString("xxx"), xComponent->getCurrentValue().get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<Color>(xComponent, u"BackgroundColor"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"xxx"_ustr, xComponent->getCurrentValue().get<OUString>());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf136620)
@@ -894,7 +894,7 @@ DECLARE_WW8EXPORT_TEST(testZoom, "zoom.doc")
     uno::Reference<view::XViewSettingsSupplier> xViewSettingsSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xViewSettingsSupplier->getViewSettings());
     sal_Int16 nValue = 0;
-    xPropertySet->getPropertyValue("ZoomValue") >>= nValue;
+    xPropertySet->getPropertyValue(u"ZoomValue"_ustr) >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(42), nValue);
 }
 
@@ -904,22 +904,22 @@ DECLARE_WW8EXPORT_TEST(testZoomType, "zoomtype.doc")
     uno::Reference<view::XViewSettingsSupplier> xViewSettingsSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xViewSettingsSupplier->getViewSettings());
     sal_Int16 nValue = 0;
-    xPropertySet->getPropertyValue("ZoomType") >>= nValue;
+    xPropertySet->getPropertyValue(u"ZoomType"_ustr) >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(view::DocumentZoomType::PAGE_WIDTH), nValue);
 }
 
 DECLARE_WW8EXPORT_TEST(test56513, "fdo56513.doc")
 {
-    CPPUNIT_ASSERT_EQUAL(OUString("This is the header of the first section"),  parseDump("/root/page[1]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("This is the first page header of the second section"),   parseDump("/root/page[2]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("This is the non-first-page header of the second section"),  parseDump("/root/page[3]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"This is the header of the first section"_ustr,  parseDump("/root/page[1]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"This is the first page header of the second section"_ustr,   parseDump("/root/page[2]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"This is the non-first-page header of the second section"_ustr,  parseDump("/root/page[3]/header/txt/text()"_ostr));
 }
 
 DECLARE_WW8EXPORT_TEST(testNewPageStylesTable, "new-page-styles.doc")
 {
-    CPPUNIT_ASSERT_EQUAL(OUString("Sigma Space Performance Goals and Results (Page 1)*"),  parseDump("/root/page[1]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Sigma Space Performance Assessment (Page 2)****"),   parseDump("/root/page[2]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(OUString("Sigma Space Performance Goals: Next Year (Page 3)*******"),  parseDump("/root/page[3]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Sigma Space Performance Goals and Results (Page 1)*"_ustr,  parseDump("/root/page[1]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Sigma Space Performance Assessment (Page 2)****"_ustr,   parseDump("/root/page[2]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Sigma Space Performance Goals: Next Year (Page 3)*******"_ustr,  parseDump("/root/page[3]/header/txt/text()"_ostr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo42144)
@@ -927,8 +927,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo42144)
     loadAndReload("fdo42144.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Footer wasn't disabled -- instead empty footer was exported.
-    uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xStyle, "FooterIsOn"));
+    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xStyle, u"FooterIsOn"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCharacterBorder)
@@ -940,19 +940,19 @@ CPPUNIT_TEST_FIXTURE(Test, testCharacterBorder)
     // the same border
     // Border
     {
-        const table::BorderLine2 aTopBorder = getProperty<table::BorderLine2>(xRun,"CharTopBorder");
+        const table::BorderLine2 aTopBorder = getProperty<table::BorderLine2>(xRun,u"CharTopBorder"_ustr);
         CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0xFF3333,0,318,0,0,318), aTopBorder);
-        CPPUNIT_ASSERT_BORDER_EQUAL(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharLeftBorder"));
-        CPPUNIT_ASSERT_BORDER_EQUAL(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharBottomBorder"));
-        CPPUNIT_ASSERT_BORDER_EQUAL(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharRightBorder"));
+        CPPUNIT_ASSERT_BORDER_EQUAL(aTopBorder, getProperty<table::BorderLine2>(xRun,u"CharLeftBorder"_ustr));
+        CPPUNIT_ASSERT_BORDER_EQUAL(aTopBorder, getProperty<table::BorderLine2>(xRun,u"CharBottomBorder"_ustr));
+        CPPUNIT_ASSERT_BORDER_EQUAL(aTopBorder, getProperty<table::BorderLine2>(xRun,u"CharRightBorder"_ustr));
     }
 
     // Padding (dptSpace) it is constant 0
     {
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun,"CharTopBorderDistance"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun,"CharLeftBorderDistance"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun,"CharBottomBorderDistance"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun,"CharRightBorderDistance"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun,u"CharTopBorderDistance"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun,u"CharLeftBorderDistance"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun,u"CharBottomBorderDistance"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun,u"CharRightBorderDistance"_ustr));
     }
 
     // Shadow (fShadow)
@@ -962,7 +962,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCharacterBorder)
        location: any -> bottom-right
        width: any -> border width */
     {
-        const table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xRun, "CharShadowFormat");
+        const table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xRun, u"CharShadowFormat"_ustr);
         CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(ColorTransparency, aShadow.Color));
         CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(318), aShadow.ShadowWidth);
@@ -975,7 +975,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf41542_imagePadding)
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // borderlessImage - image WITHOUT BORDERS : simulate padding with -crop
-    text::GraphicCrop crop = getProperty<text::GraphicCrop>(getShape(2), "GraphicCrop");
+    text::GraphicCrop crop = getProperty<text::GraphicCrop>(getShape(2), u"GraphicCrop"_ustr);
     CPPUNIT_ASSERT( crop.Left != 0 );
     CPPUNIT_ASSERT( crop.Right != 0 );
     CPPUNIT_ASSERT_EQUAL( crop.Left, crop.Top );
@@ -983,7 +983,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf41542_imagePadding)
     CPPUNIT_ASSERT_EQUAL( crop.Left, crop.Right );
 
     // borderedImage - image WITH BORDERS : simulate padding with -crop
-    crop = getProperty<text::GraphicCrop>(getShape(3), "GraphicCrop");
+    crop = getProperty<text::GraphicCrop>(getShape(3), u"GraphicCrop"_ustr);
     CPPUNIT_ASSERT( crop.Left != 0 );
     CPPUNIT_ASSERT( crop.Right != 0 );
     CPPUNIT_ASSERT_EQUAL( crop.Left, crop.Top );
@@ -996,7 +996,7 @@ DECLARE_WW8EXPORT_TEST(testFdo77454, "fdo77454.doc")
     {
         // check negative crops round-trip  (with border/padding of 1)
         text::GraphicCrop const crop =
-            getProperty<text::GraphicCrop>(getShape(1), "GraphicCrop");
+            getProperty<text::GraphicCrop>(getShape(1), u"GraphicCrop"_ustr);
         CPPUNIT_ASSERT(abs(sal_Int32( -439) - crop.Left)   <= 2);
         CPPUNIT_ASSERT(abs(sal_Int32(-7040) - crop.Right)  <= 2);
         CPPUNIT_ASSERT(abs(sal_Int32( -220) - crop.Top)    <= 2);
@@ -1006,7 +1006,7 @@ DECLARE_WW8EXPORT_TEST(testFdo77454, "fdo77454.doc")
     {
         // check positive crops round-trip (with padding of 1)
         text::GraphicCrop const crop =
-            getProperty<text::GraphicCrop>(getShape(2), "GraphicCrop");
+            getProperty<text::GraphicCrop>(getShape(2), u"GraphicCrop"_ustr);
         CPPUNIT_ASSERT(abs(sal_Int32( 326) - crop.Left)   <= 3);
         CPPUNIT_ASSERT(abs(sal_Int32(1208) - crop.Right)  <= 3);
         CPPUNIT_ASSERT(abs(sal_Int32(1635) - crop.Top)    <= 3);
@@ -1025,17 +1025,17 @@ DECLARE_WW8EXPORT_TEST(testFdo59530, "fdo59530.doc")
     uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
     xRunEnum->nextElement();
     uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Annotation"), getProperty<OUString>(xPropertySet, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(u"Annotation"_ustr, getProperty<OUString>(xPropertySet, u"TextPortionType"_ustr));
     xRunEnum->nextElement();
     xPropertySet.set(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("AnnotationEnd"), getProperty<OUString>(xPropertySet, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(u"AnnotationEnd"_ustr, getProperty<OUString>(xPropertySet, u"TextPortionType"_ustr));
 
     // Test initials.
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
     xPropertySet.set(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("M"), getProperty<OUString>(xPropertySet, "Initials"));
+    CPPUNIT_ASSERT_EQUAL(u"M"_ustr, getProperty<OUString>(xPropertySet, u"Initials"_ustr));
 
     // Test commented text range which spans over more text nodes
     // Comment starts in the second paragraph
@@ -1043,22 +1043,22 @@ DECLARE_WW8EXPORT_TEST(testFdo59530, "fdo59530.doc")
     xRunEnum = xRunEnumAccess->createEnumeration();
     xRunEnum->nextElement();
     xPropertySet.set(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Annotation"), getProperty<OUString>(xPropertySet, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(u"Annotation"_ustr, getProperty<OUString>(xPropertySet, u"TextPortionType"_ustr));
     // Comment ends in the third paragraph
     xRunEnumAccess.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     xRunEnum = xRunEnumAccess->createEnumeration();
     xRunEnum->nextElement();
     xPropertySet.set(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("AnnotationEnd"), getProperty<OUString>(xPropertySet, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(u"AnnotationEnd"_ustr, getProperty<OUString>(xPropertySet, u"TextPortionType"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testCommentsNested, "comments-nested.doc")
 {
-    uno::Reference<beans::XPropertySet> xOuter = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 2), "TextField");
-    CPPUNIT_ASSERT_EQUAL(OUString("Outer"), getProperty<OUString>(xOuter, "Content"));
+    uno::Reference<beans::XPropertySet> xOuter = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 2), u"TextField"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"Outer"_ustr, getProperty<OUString>(xOuter, u"Content"_ustr));
 
-    uno::Reference<beans::XPropertySet> xInner = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 4), "TextField");
-    CPPUNIT_ASSERT_EQUAL(OUString("Inner"), getProperty<OUString>(xInner, "Content"));
+    uno::Reference<beans::XPropertySet> xInner = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 4), u"TextField"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"Inner"_ustr, getProperty<OUString>(xInner, u"Content"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testBorderColoursExport)
@@ -1086,41 +1086,41 @@ CPPUNIT_TEST_FIXTURE(Test, testBorderColoursExport)
     uno::Reference<container::XNameAccess> bookmarks =
         bookmarksSupplier->getBookmarks();
     uno::Reference<text::XTextContent> bookmark(
-        bookmarks->getByName("ParagraphBorder"), uno::UNO_QUERY);
+        bookmarks->getByName(u"ParagraphBorder"_ustr), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> anchor(bookmark->getAnchor());
     table::BorderLine2 border;
-    border = getProperty<table::BorderLine2>(anchor, "TopBorder");
+    border = getProperty<table::BorderLine2>(anchor, u"TopBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedTop, border);
-    border = getProperty<table::BorderLine2>(anchor, "LeftBorder");
+    border = getProperty<table::BorderLine2>(anchor, u"LeftBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedLeft, border);
-    border = getProperty<table::BorderLine2>(anchor, "RightBorder");
+    border = getProperty<table::BorderLine2>(anchor, u"RightBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedRight, border);
-    border = getProperty<table::BorderLine2>(anchor, "BottomBorder");
+    border = getProperty<table::BorderLine2>(anchor, u"BottomBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedBottom, border);
 
     // Page border
-    OUString pageStyleName = getProperty<OUString>(anchor, "PageStyleName");
+    OUString pageStyleName = getProperty<OUString>(anchor, u"PageStyleName"_ustr);
     uno::Reference<style::XStyle> pageStyle(
-        getStyles("PageStyles")->getByName(pageStyleName), uno::UNO_QUERY);
-    border = getProperty<table::BorderLine2>(pageStyle, "TopBorder");
+        getStyles(u"PageStyles"_ustr)->getByName(pageStyleName), uno::UNO_QUERY);
+    border = getProperty<table::BorderLine2>(pageStyle, u"TopBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedTop, border);
-    border = getProperty<table::BorderLine2>(pageStyle, "LeftBorder");
+    border = getProperty<table::BorderLine2>(pageStyle, u"LeftBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedLeft, border);
-    border = getProperty<table::BorderLine2>(pageStyle, "RightBorder");
+    border = getProperty<table::BorderLine2>(pageStyle, u"RightBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedRight, border);
-    border = getProperty<table::BorderLine2>(pageStyle, "BottomBorder");
+    border = getProperty<table::BorderLine2>(pageStyle, u"BottomBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedBottom, border);
 
     // Character border
-    bookmark.set(bookmarks->getByName("CharBorder"), uno::UNO_QUERY);
+    bookmark.set(bookmarks->getByName(u"CharBorder"_ustr), uno::UNO_QUERY);
     anchor = bookmark->getAnchor();
-    border = getProperty<table::BorderLine2>(anchor, "CharTopBorder");
+    border = getProperty<table::BorderLine2>(anchor, u"CharTopBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedTop, border);
-    border = getProperty<table::BorderLine2>(anchor, "CharLeftBorder");
+    border = getProperty<table::BorderLine2>(anchor, u"CharLeftBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedTop, border);
-    border = getProperty<table::BorderLine2>(anchor, "CharRightBorder");
+    border = getProperty<table::BorderLine2>(anchor, u"CharRightBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedTop, border);
-    border = getProperty<table::BorderLine2>(anchor, "CharBottomBorder");
+    border = getProperty<table::BorderLine2>(anchor, u"CharBottomBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedTop, border);
 
     // Table border
@@ -1129,9 +1129,9 @@ CPPUNIT_TEST_FIXTURE(Test, testBorderColoursExport)
     uno::Reference<container::XNameAccess> tables =
         tablesSupplier->getTextTables();
     uno::Reference<text::XTextTable> table(
-        tables->getByName("Table1"), uno::UNO_QUERY);
+        tables->getByName(u"Table1"_ustr), uno::UNO_QUERY);
     table::TableBorder2 tableBorder = getProperty<table::TableBorder2>(
-        table, "TableBorder2");
+        table, u"TableBorder2"_ustr);
     CPPUNIT_ASSERT_EQUAL(expectedTop.Color, tableBorder.TopLine.Color);
     CPPUNIT_ASSERT_EQUAL(expectedLeft.Color, tableBorder.LeftLine.Color);
     CPPUNIT_ASSERT_EQUAL(expectedRight.Color, tableBorder.RightLine.Color);
@@ -1143,10 +1143,10 @@ CPPUNIT_TEST_FIXTURE(Test, testBorderColoursExport)
 
     // Table cells
     uno::Reference<table::XCell> cell =
-        table->getCellByName("A2");
-    border = getProperty<table::BorderLine2>(cell, "TopBorder");
+        table->getCellByName(u"A2"_ustr);
+    border = getProperty<table::BorderLine2>(cell, u"TopBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedTop, border);
-    border = getProperty<table::BorderLine2>(cell, "LeftBorder");
+    border = getProperty<table::BorderLine2>(cell, u"LeftBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedLeft, border);
 #if 0
     // #if'd out because the "fine dashed" border line style for table borders
@@ -1155,22 +1155,22 @@ CPPUNIT_TEST_FIXTURE(Test, testBorderColoursExport)
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedBottom, border);
 #endif
 
-    cell = table->getCellByName("B2");
-    border = getProperty<table::BorderLine2>(cell, "TopBorder");
+    cell = table->getCellByName(u"B2"_ustr);
+    border = getProperty<table::BorderLine2>(cell, u"TopBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedDoubleGreen, border);
-    border = getProperty<table::BorderLine2>(cell, "LeftBorder");
+    border = getProperty<table::BorderLine2>(cell, u"LeftBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedRight, border);
-    border = getProperty<table::BorderLine2>(cell, "BottomBorder");
+    border = getProperty<table::BorderLine2>(cell, u"BottomBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedDoubleGreen, border);
 
-    cell = table->getCellByName("C2");
-    border = getProperty<table::BorderLine2>(cell, "TopBorder");
+    cell = table->getCellByName(u"C2"_ustr);
+    border = getProperty<table::BorderLine2>(cell, u"TopBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedDoubleGreen, border);
-    border = getProperty<table::BorderLine2>(cell, "LeftBorder");
+    border = getProperty<table::BorderLine2>(cell, u"LeftBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedDashedRed, border);
-    border = getProperty<table::BorderLine2>(cell, "RightBorder");
+    border = getProperty<table::BorderLine2>(cell, u"RightBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedRight, border);
-    border = getProperty<table::BorderLine2>(cell, "BottomBorder");
+    border = getProperty<table::BorderLine2>(cell, u"BottomBorder"_ustr);
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedDoubleGreen, border);
 
     // Picture border
@@ -1200,7 +1200,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineExport1)
     while (xRunEnum->hasMoreElements())
     {
         uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(false, hasProperty(xRun, "RedlineType"));
+        CPPUNIT_ASSERT_EQUAL(false, hasProperty(xRun, u"RedlineType"_ustr));
     }
 }
 
@@ -1209,7 +1209,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineExport2)
     loadAndReload("redline-export-2.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     //there must be redline information on the first portion of the third paragraph before and after reloading
-    CPPUNIT_ASSERT_EQUAL(true, hasProperty(getRun(getParagraph(3), 1), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(true, hasProperty(getRun(getParagraph(3), 1), u"RedlineType"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testRedlineExport3)
@@ -1217,10 +1217,10 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineExport3)
     loadAndReload("redline-export-3.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     //there must be redline information just on the para-break boundary between para one and two
-    CPPUNIT_ASSERT_EQUAL(false, hasProperty(getRun(getParagraph(1), 1), "RedlineType"));
-    CPPUNIT_ASSERT_EQUAL(true, hasProperty(getRun(getParagraph(1), 2), "RedlineType"));
-    CPPUNIT_ASSERT_EQUAL(true, hasProperty(getRun(getParagraph(2), 1), "RedlineType"));
-    CPPUNIT_ASSERT_EQUAL(false, hasProperty(getRun(getParagraph(2), 2), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(false, hasProperty(getRun(getParagraph(1), 1), u"RedlineType"_ustr));
+    CPPUNIT_ASSERT_EQUAL(true, hasProperty(getRun(getParagraph(1), 2), u"RedlineType"_ustr));
+    CPPUNIT_ASSERT_EQUAL(true, hasProperty(getRun(getParagraph(2), 1), u"RedlineType"_ustr));
+    CPPUNIT_ASSERT_EQUAL(false, hasProperty(getRun(getParagraph(2), 2), u"RedlineType"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCellBgColor)
@@ -1230,16 +1230,16 @@ CPPUNIT_TEST_FIXTURE(Test, testCellBgColor)
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(Color(0xCC0000), getProperty<Color>(xTable->getCellByName("A1"), "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xCC0000), getProperty<Color>(xTable->getCellByName(u"A1"_ustr), u"BackColor"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testBnc636128, "bnc636128.doc")
 {
     // Import / export of FFData.cch was missing.
-    uno::Reference<text::XFormField> xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(1), 2), "Bookmark");
+    uno::Reference<text::XFormField> xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(1), 2), u"Bookmark"_ustr);
     uno::Reference<container::XNameContainer> xParameters = xFormField->getParameters();
     // This resulted in a container.NoSuchElementException.
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), xParameters->getByName("MaxLength").get<sal_uInt16>());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), xParameters->getByName(u"MaxLength"_ustr).get<sal_uInt16>());
 }
 
 
@@ -1276,9 +1276,9 @@ DECLARE_WW8EXPORT_TEST(testTdf118564, "tdf118564.doc")
 DECLARE_WW8EXPORT_TEST(testTdf92281, "tdf92281.doc")
 {
         uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontName"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontNameAsian"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontNameComplex"));
+        CPPUNIT_ASSERT_EQUAL(u"Wingdings"_ustr, getProperty<OUString>(xRun, u"CharFontName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Wingdings"_ustr, getProperty<OUString>(xRun, u"CharFontNameAsian"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Wingdings"_ustr, getProperty<OUString>(xRun, u"CharFontNameComplex"_ustr));
 
         uno::Reference<text::XText> xXText = getParagraph(1)->getText();
         uno::Reference<text::XTextCursor> xCursor = xXText->createTextCursor();
@@ -1286,9 +1286,9 @@ DECLARE_WW8EXPORT_TEST(testTdf92281, "tdf92281.doc")
         xCursor->goRight( 5 , false );
         uno::Reference< beans::XPropertySet > xPropSet(xCursor, uno::UNO_QUERY);
         static constexpr OUStringLiteral aFontname = u"\u65B0\u7D30\u660E\u9AD4;PMingLiU";
-        CPPUNIT_ASSERT_EQUAL(OUString("Calibri"), getProperty<OUString>(xPropSet, "CharFontName"));
-        CPPUNIT_ASSERT_EQUAL(OUString(aFontname), getProperty<OUString>(xPropSet, "CharFontNameAsian"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Times New Roman"), getProperty<OUString>(xPropSet, "CharFontNameComplex"));
+        CPPUNIT_ASSERT_EQUAL(u"Calibri"_ustr, getProperty<OUString>(xPropSet, u"CharFontName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(OUString(aFontname), getProperty<OUString>(xPropSet, u"CharFontNameAsian"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Times New Roman"_ustr, getProperty<OUString>(xPropSet, u"CharFontNameComplex"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testCommentedTable, "commented-table.doc")
@@ -1300,7 +1300,7 @@ DECLARE_WW8EXPORT_TEST(testCommentedTable, "commented-table.doc")
     uno::Reference<text::XTextContent> xField(xFields->nextElement(), uno::UNO_QUERY);
     // After first import, there was an off-by-one during import, so this was "efore.\nA1\nB1\nAfte". (Notice the additional "e" prefix.)
     // After export and import, things got worse, this was "\nA1\nB1\nAfte".
-    CPPUNIT_ASSERT_EQUAL(OUString("fore." SAL_NEWLINE_STRING "A1" SAL_NEWLINE_STRING "B1" SAL_NEWLINE_STRING "Afte"), xField->getAnchor()->getString());
+    CPPUNIT_ASSERT_EQUAL(u"fore." SAL_NEWLINE_STRING "A1" SAL_NEWLINE_STRING "B1" SAL_NEWLINE_STRING "Afte"_ustr, xField->getAnchor()->getString());
 }
 
 DECLARE_WW8EXPORT_TEST(testTextVerticalAdjustment, "tdf36117_verticalAdjustment.doc")
@@ -1357,26 +1357,26 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentExport)
     };
 
     const TextPortionInfo aTextPortions[] = {
-        {OUString("Annotation"), OUString("Comment on [A...A]"), 0},
-        {OUString("Text"), OUString("[A xx "), 0},
-        {OUString("Annotation"), OUString("Comment on [B...B]"), 1},
-        {OUString("Text"), OUString("[B x "), 0},
-        {OUString("Annotation"), OUString("Comment on [C..C]"), 2},
-        {OUString("Text"), OUString("[C x B]"), 0},
-        {OUString("AnnotationEnd"), OUString(), 1},
-        {OUString("Text"), OUString(" x C]"), 0},
-        {OUString("AnnotationEnd"), OUString(), 2},
-        {OUString("Text"), OUString(" xx A]"), 0},
-        {OUString("AnnotationEnd"), OUString(), 0},
-        {OUString("Text"), OUString(" Comment on a point"), 0},
-        {OUString("Annotation"), OUString("Comment on point"), 3},
-        {OUString("Text"), OUString("x "), 0},
-        {OUString("Annotation"), OUString("Comment on AA...BB"), 4},
-        {OUString("Annotation"), OUString("Comment on AAAAAA"), 5},
-        {OUString("Text"), OUString("AAAAAA"), 0},
-        {OUString("AnnotationEnd"), OUString(), 5},
-        {OUString("Text"), OUString(" BBBBBB"), 0},
-        {OUString("AnnotationEnd"), OUString(), 4}
+        {u"Annotation"_ustr, u"Comment on [A...A]"_ustr, 0},
+        {u"Text"_ustr, u"[A xx "_ustr, 0},
+        {u"Annotation"_ustr, u"Comment on [B...B]"_ustr, 1},
+        {u"Text"_ustr, u"[B x "_ustr, 0},
+        {u"Annotation"_ustr, u"Comment on [C..C]"_ustr, 2},
+        {u"Text"_ustr, u"[C x B]"_ustr, 0},
+        {u"AnnotationEnd"_ustr, OUString(), 1},
+        {u"Text"_ustr, u" x C]"_ustr, 0},
+        {u"AnnotationEnd"_ustr, OUString(), 2},
+        {u"Text"_ustr, u" xx A]"_ustr, 0},
+        {u"AnnotationEnd"_ustr, OUString(), 0},
+        {u"Text"_ustr, u" Comment on a point"_ustr, 0},
+        {u"Annotation"_ustr, u"Comment on point"_ustr, 3},
+        {u"Text"_ustr, u"x "_ustr, 0},
+        {u"Annotation"_ustr, u"Comment on AA...BB"_ustr, 4},
+        {u"Annotation"_ustr, u"Comment on AAAAAA"_ustr, 5},
+        {u"Text"_ustr, u"AAAAAA"_ustr, 0},
+        {u"AnnotationEnd"_ustr, OUString(), 5},
+        {u"Text"_ustr, u" BBBBBB"_ustr, 0},
+        {u"AnnotationEnd"_ustr, OUString(), 4}
     };
 
     OUString sNames[6];
@@ -1390,7 +1390,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentExport)
         OUString sKind = aTextPortions[i].sKind;
         uno::Reference<text::XTextRange> xRun = getRun(xPara, i + 1);
         uno::Reference<beans::XPropertySet> xPropertySet(xRun, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(sKind, getProperty<OUString>(xPropertySet, "TextPortionType"));
+        CPPUNIT_ASSERT_EQUAL(sKind, getProperty<OUString>(xPropertySet, u"TextPortionType"_ustr));
 
         if (sKind == "Text")
         {
@@ -1400,14 +1400,14 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentExport)
         else if (sKind == "Annotation")
         {
             // Check if the comment text is correct and save the name of the comment
-            uno::Reference<beans::XPropertySet> xComment = getProperty< uno::Reference<beans::XPropertySet> >(xRun, "TextField");
-            CPPUNIT_ASSERT_EQUAL(aTextPortions[i].sText, getProperty<OUString>(xComment, "Content"));
-            sNames[aTextPortions[i].nAnnotationID] = getProperty<OUString>(xComment, "Name");
+            uno::Reference<beans::XPropertySet> xComment = getProperty< uno::Reference<beans::XPropertySet> >(xRun, u"TextField"_ustr);
+            CPPUNIT_ASSERT_EQUAL(aTextPortions[i].sText, getProperty<OUString>(xComment, u"Content"_ustr));
+            sNames[aTextPortions[i].nAnnotationID] = getProperty<OUString>(xComment, u"Name"_ustr);
         }
         else // if (sKind == OUString("AnnotationEnd"))
         {
             // Check if the correct Annotation ends here (by Name)
-            uno::Reference<container::XNamed> xBookmark(getProperty< uno::Reference<beans::XPropertySet> >(xRun, "Bookmark"), uno::UNO_QUERY);
+            uno::Reference<container::XNamed> xBookmark(getProperty< uno::Reference<beans::XPropertySet> >(xRun, u"Bookmark"_ustr), uno::UNO_QUERY);
             CPPUNIT_ASSERT_EQUAL(sNames[aTextPortions[i].nAnnotationID], xBookmark->getName());
         }
     }
@@ -1417,9 +1417,9 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentExport)
     auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
     uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
-    uno::Reference<text::XText> xText = getProperty<uno::Reference<text::XText>>(xField, "TextRange");
+    uno::Reference<text::XText> xText = getProperty<uno::Reference<text::XText>>(xField, u"TextRange"_ustr);
     uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText);
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<Color>(getRun(xParagraph, 1), "CharBackColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<Color>(getRun(xParagraph, 1), u"CharBackColor"_ustr));
 }
 
 #if HAVE_MORE_FONTS
@@ -1428,8 +1428,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTableKeep)
     loadAndReload("tdf91083.odt");
     CPPUNIT_ASSERT_EQUAL(7, getPages());
     //emulate table "keep with next" -do not split table
-    CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[3]/body/tab[1]/row[2]/cell[1]/txt[1]"_ostr) );
-    CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[6]/body/tab[1]/row[2]/cell[1]/txt[1]"_ostr) );
+    CPPUNIT_ASSERT_EQUAL( u"Row 1"_ustr, parseDump("/root/page[3]/body/tab[1]/row[2]/cell[1]/txt[1]"_ostr) );
+    CPPUNIT_ASSERT_EQUAL( u"Row 1"_ustr, parseDump("/root/page[6]/body/tab[1]/row[2]/cell[1]/txt[1]"_ostr) );
 }
 #endif
 
@@ -1438,11 +1438,11 @@ CPPUNIT_TEST_FIXTURE(Test, tesTdf91083_tableKeep2)
     loadAndReload("tdf91083_tableKeep2.odt");
     //emulate table "keep with next" - split large row in order to keep with previous paragraph
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table doesn't split, so it starts on page 2",
-                                 OUString("0"), parseDump("count(//page[1]//tab)"_ostr) );
+                                 u"0"_ustr, parseDump("count(//page[1]//tab)"_ostr) );
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Page 2 starts with a paragraph/title, not a table",
-                                 OUString("KeepWithNext"), parseDump("//page[2]/body/txt[1]"_ostr) );
+                                 u"KeepWithNext"_ustr, parseDump("//page[2]/body/txt[1]"_ostr) );
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table sticks with previous paragraph, so it starts on page 2",
-                                 OUString("1"), parseDump("count(//page[2]//tab)"_ostr) );
+                                 u"1"_ustr, parseDump("count(//page[2]//tab)"_ostr) );
     CPPUNIT_ASSERT_MESSAGE("Row itself splits, not the table at a row boundary",
                                  "Cell 2" != parseDump("//page[3]//tab//row[2]/cell[1]/txt[1]"_ostr) );
 }
@@ -1453,9 +1453,9 @@ CPPUNIT_TEST_FIXTURE(Test, tesTdf91083_tableKeep3)
     CPPUNIT_ASSERT_EQUAL(3, getPages());
     //emulate table "keep with next" - split single row table in order to keep with previous paragraph
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table doesn't split, so it starts on page 2",
-                                 OUString("0"), parseDump("count(//page[1]//tab)"_ostr) );
+                                 u"0"_ustr, parseDump("count(//page[1]//tab)"_ostr) );
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table sticks with previous paragraph, so it starts on page 2",
-                                 OUString("1"), parseDump("count(//page[2]//tab)"_ostr) );
+                                 u"1"_ustr, parseDump("count(//page[2]//tab)"_ostr) );
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf76349_textboxMargins, "tdf76349_textboxMargins.doc")
@@ -1464,7 +1464,7 @@ DECLARE_WW8EXPORT_TEST(testTdf76349_textboxMargins, "tdf76349_textboxMargins.doc
     CPPUNIT_ASSERT( 0 < parseDump("/root/page/body/txt/anchored/fly/infos/prtBounds"_ostr, "left"_ostr).toInt32() );
 
     uno::Reference<drawing::XShape> xShape = getShape(1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Textbox background color", Color(0xD8, 0xD8, 0xD8), getProperty<Color>(xShape, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Textbox background color", Color(0xD8, 0xD8, 0xD8), getProperty<Color>(xShape, u"BackColor"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testMoveRange)
@@ -1495,7 +1495,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94386)
         SfxRequest aRequest(FN_ENVELOP, SfxCallMode::SYNCHRON, aSet);
         SW_MOD()->ExecOther(aRequest);
     }
-    saveAndReload("MS Word 97");
+    saveAndReload(u"MS Word 97"_ustr);
 
     // check that the first and next page use different page styles
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -1505,18 +1505,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94386)
         xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
 
     xCursor->jumpToFirstPage();
-    OUString firstPageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    OUString firstPageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
     xCursor->jumpToLastPage();
-    OUString lastPageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    OUString lastPageStyleName = getProperty<OUString>(xCursor, u"PageStyleName"_ustr);
     CPPUNIT_ASSERT(firstPageStyleName != lastPageStyleName);
 
-    uno::Reference<beans::XPropertySet> xFirstPropertySet(getStyles("PageStyles")->getByName(firstPageStyleName), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFirstPropertySet(getStyles(u"PageStyles"_ustr)->getByName(firstPageStyleName), uno::UNO_QUERY);
     awt::Size fSize;
-    xFirstPropertySet->getPropertyValue("Size") >>= fSize;
+    xFirstPropertySet->getPropertyValue(u"Size"_ustr) >>= fSize;
 
-    uno::Reference<beans::XPropertySet> xNextPropertySet(getStyles("PageStyles")->getByName(lastPageStyleName), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xNextPropertySet(getStyles(u"PageStyles"_ustr)->getByName(lastPageStyleName), uno::UNO_QUERY);
     awt::Size lSize;
-    xNextPropertySet->getPropertyValue("Size") >>= lSize;
+    xNextPropertySet->getPropertyValue(u"Size"_ustr) >>= lSize;
 
     CPPUNIT_ASSERT((fSize.Width != lSize.Width));
     CPPUNIT_ASSERT((fSize.Height != lSize.Height));
@@ -1530,9 +1530,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf99474)
     auto xPara = getParagraph(3);
     uno::Reference<container::XIndexReplace> xNumRules =
         getProperty< uno::Reference<container::XIndexReplace> >(
-            xPara, "NumberingRules");
+            xPara, u"NumberingRules"_ustr);
 
-    int numLevel = getProperty<sal_Int32>(xPara, "NumberingLevel");
+    int numLevel = getProperty<sal_Int32>(xPara, u"NumberingLevel"_ustr);
     uno::Sequence< beans::PropertyValue > aPropertyValues;
     xNumRules->getByIndex(numLevel) >>= aPropertyValues;
     OUString charStyleName;
@@ -1546,9 +1546,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf99474)
     }
     CPPUNIT_ASSERT(charStyleName.getLength());
     uno::Reference<beans::XPropertySet> xStyle(
-        getStyles("CharacterStyles")->getByName(charStyleName),
+        getStyles(u"CharacterStyles"_ustr)->getByName(charStyleName),
         uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xStyle, "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xStyle, u"CharColor"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testContinuousSectionsNoPageBreak, "continuous-sections.doc")

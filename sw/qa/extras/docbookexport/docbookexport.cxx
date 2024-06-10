@@ -15,7 +15,7 @@ class DocbookExportTest : public SwModelTestBase
 {
 public:
     DocbookExportTest() :
-        SwModelTestBase("/sw/qa/extras/docbookexport/data/", "DocBook File")
+        SwModelTestBase(u"/sw/qa/extras/docbookexport/data/"_ustr, u"DocBook File"_ustr)
     {}
 };
 
@@ -26,7 +26,7 @@ CPPUNIT_TEST_FIXTURE(DocbookExportTest, testsimple)
     xmlDocUniquePtr pDoc = parseXml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPathContent(pDoc, "/article/para"_ostr, "aaaa");
+    assertXPathContent(pDoc, "/article/para"_ostr, u"aaaa"_ustr);
 }
 
 /* the test actually should crash with this file */

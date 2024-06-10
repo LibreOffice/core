@@ -44,7 +44,7 @@ namespace
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase("/sw/qa/extras/odfexport/data/", "writer8") {}
+    Test() : SwModelTestBase(u"/sw/qa/extras/odfexport/data/"_ustr, u"writer8"_ustr) {}
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testEmbeddedFontProps)
@@ -54,16 +54,16 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedFontProps)
 #if !defined(MACOSX)
     // Test that font style/weight of embedded fonts is exposed.
     // Test file is a normal ODT, except EmbedFonts is set to true in settings.xml.
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     // These failed, the attributes were missing.
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[1]"_ostr, "font-style"_ostr, "normal");
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[1]"_ostr, "font-weight"_ostr, "normal");
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[2]"_ostr, "font-style"_ostr, "normal");
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[2]"_ostr, "font-weight"_ostr, "bold");
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[3]"_ostr, "font-style"_ostr, "italic");
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[3]"_ostr, "font-weight"_ostr, "normal");
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[4]"_ostr, "font-style"_ostr, "italic");
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[4]"_ostr, "font-weight"_ostr, "bold");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[1]"_ostr, "font-style"_ostr, u"normal"_ustr);
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[1]"_ostr, "font-weight"_ostr, u"normal"_ustr);
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[2]"_ostr, "font-style"_ostr, u"normal"_ustr);
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[2]"_ostr, "font-weight"_ostr, u"bold"_ustr);
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[3]"_ostr, "font-style"_ostr, u"italic"_ustr);
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[3]"_ostr, "font-weight"_ostr, u"normal"_ustr);
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[4]"_ostr, "font-style"_ostr, u"italic"_ustr);
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[4]"_ostr, "font-weight"_ostr, u"bold"_ustr);
 #endif
 }
 
@@ -83,7 +83,7 @@ DECLARE_ODFEXPORT_TEST(testTdf100492, "tdf100492.odt")
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
     uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
             { "OutputStream", uno::Any(xOutputStream) },
-            { "FilterName", uno::Any(OUString("SVG")) }
+            { "FilterName", uno::Any(u"SVG"_ustr) }
         }));
     xGraphicExporter->filter(aDescriptor);
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
@@ -103,17 +103,17 @@ DECLARE_ODFEXPORT_TEST(testTdf100492, "tdf100492.odt")
 DECLARE_ODFEXPORT_TEST(testTdf77961, "tdf77961.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference<container::XNameAccess> xStyles(getStyles("PageStyles"));
-    uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName("Standard"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL( false , getProperty<bool>(xStyle, "GridDisplay"));
-    CPPUNIT_ASSERT_EQUAL( false , getProperty<bool>(xStyle, "GridPrint"));
+    uno::Reference<container::XNameAccess> xStyles(getStyles(u"PageStyles"_ustr));
+    uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( false , getProperty<bool>(xStyle, u"GridDisplay"_ustr));
+    CPPUNIT_ASSERT_EQUAL( false , getProperty<bool>(xStyle, u"GridPrint"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf106733)
 {
     loadAndReload("tdf106733.fodt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
     OUString autostyle = getXPath(pXmlDoc, "//office:body/office:text/text:p[2]/text:span"_ostr,
                                   "style-name"_ostr);
@@ -123,20 +123,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf106733)
     assertXPath(
         pXmlDoc,
         autostyle_span_xpath + "/style:text-properties",
-        "hyphenate"_ostr, "false");
+        "hyphenate"_ostr, u"false"_ustr);
 
     // keep fo:hyphenate="false" in character style
-    xmlDocUniquePtr pXmlDoc2 = parseExport("styles.xml");
+    xmlDocUniquePtr pXmlDoc2 = parseExport(u"styles.xml"_ustr);
     assertXPath(
         pXmlDoc2,
         "//style:style[@style:name='Strong_20_Emphasis']/style:text-properties"_ostr,
-        "hyphenate"_ostr, "false");
+        "hyphenate"_ostr, u"false"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page)
 {
     uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
-    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
         return;
 
     // fo:hyphenation-keep="page" defined in direct paragraph formatting
@@ -148,7 +148,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page)
 CPPUNIT_TEST_FIXTURE(Test, testTdf132599_auto)
 {
     uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
-    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
         return;
 
     // fo:hyphenation-keep="auto" defined in direct paragraph formatting
@@ -160,7 +160,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_auto)
 CPPUNIT_TEST_FIXTURE(Test, testTdf132599_spread)
 {
     uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
-    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
         return;
 
     // fo:hyphenation-keep="page" loext:hyphenation-keep-type="spread"
@@ -172,7 +172,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_spread)
 CPPUNIT_TEST_FIXTURE(Test, testTdf132599_spread_left_page)
 {
     uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
-    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
         return;
 
     // fo:hyphenation-keep="page" loext:hyphenation-keep-type="spread"
@@ -185,7 +185,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_spread_left_page)
 CPPUNIT_TEST_FIXTURE(Test, testTdf132599_column)
 {
     uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
-    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
         return;
 
     // last line of the left column is shifted, according to
@@ -198,7 +198,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_column)
 CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_not_last_column)
 {
     uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
-    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
         return;
 
     // last line of the not last column is not shifted, according to
@@ -211,7 +211,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_not_last_column)
 CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_last_column)
 {
     uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
-    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
         return;
 
     // last line of the last column is shifted, according to
@@ -224,7 +224,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_last_column)
 CPPUNIT_TEST_FIXTURE(Test, testTdf132599_always)
 {
     uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
-    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
         return;
 
     // last full line of the paragraph column is not hyphenated
@@ -232,7 +232,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_always)
     loadAndReload("tdf132599_always.fodt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, "//style:style[@style:family='paragraph']/style:paragraph-properties[@loext:hyphenation-keep-type='always']"_ostr, 1);
 }
 
@@ -299,7 +299,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_auto_in_text_body_style)
 CPPUNIT_TEST_FIXTURE(Test, testTdf158885_compound_remain)
 {
     loadAndReload("tdf158885_compound-remain.fodt");
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
     assertXPath(pXmlDoc, "//style:style[@style:family='paragraph']/style:text-properties[@loext:hyphenation-compound-remain-char-count='3']"_ostr, 1);
 }
@@ -309,11 +309,11 @@ DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     // Test loext:reference-language attribute of reference fields
     // (used from LibreOffice 6.1, and proposed for next ODF)
-    OUString const aFieldTexts[] = { "A 2", "Az Isten", "Az 50-esek",
-        "A 2018-asok", "Az egyebek", "A fejezetek",
-        u"Az „Őseinket...”"_ustr, "a 2",
-        "Az v", "az 1", "Az e)", "az 1",
-        "Az (5)", "az 1", "A 2", "az 1" };
+    OUString const aFieldTexts[] = { u"A 2"_ustr, u"Az Isten"_ustr, u"Az 50-esek"_ustr,
+        u"A 2018-asok"_ustr, u"Az egyebek"_ustr, u"A fejezetek"_ustr,
+        u"Az „Őseinket...”"_ustr, u"a 2"_ustr,
+        u"Az v"_ustr, u"az 1"_ustr, u"Az e)"_ustr, u"az 1"_ustr,
+        u"Az (5)"_ustr, u"az 1"_ustr, u"A 2"_ustr, u"az 1"_ustr };
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     // update "A (4)" to "Az (5)"
     uno::Reference<util::XRefreshable>(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY_THROW)->refresh();
@@ -321,16 +321,16 @@ DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
 
-    uno::Any aHu(OUString("Hu"));
-    uno::Any ahu(OUString("hu"));
+    uno::Any aHu(u"Hu"_ustr);
+    uno::Any ahu(u"hu"_ustr);
     for (auto const& sFieldText : aFieldTexts)
     {
         uno::Any aField = xFields->nextElement();
         uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
-        if (xServiceInfo->supportsService("com.sun.star.text.textfield.GetReference"))
+        if (xServiceInfo->supportsService(u"com.sun.star.text.textfield.GetReference"_ustr))
         {
             uno::Reference<beans::XPropertySet> xPropertySet(aField, uno::UNO_QUERY);
-            uno::Any aLang = xPropertySet->getPropertyValue("ReferenceFieldLanguage");
+            uno::Any aLang = xPropertySet->getPropertyValue(u"ReferenceFieldLanguage"_ustr);
             CPPUNIT_ASSERT_EQUAL(true, aLang == aHu || aLang == ahu);
             uno::Reference<text::XTextContent> xField(aField, uno::UNO_QUERY);
             CPPUNIT_ASSERT_EQUAL(sFieldText, xField->getAnchor()->getString());
@@ -342,7 +342,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRubyPosition)
 {
     loadAndReload("ruby-position.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
     assertXPath(pXmlDoc, "//style:style[@style:family='ruby']/style:ruby-properties[@loext:ruby-position='inter-character']"_ostr, 1);
     assertXPath(pXmlDoc, "//style:style[@style:family='ruby']/style:ruby-properties[@style:ruby-position='below']"_ostr, 1);
@@ -356,9 +356,9 @@ DECLARE_ODFEXPORT_TEST(testAllowOverlap, "allow-overlap.odt")
     // Without the accompanying fix in place, this test would have failed with:
     // - Expression: !getProperty<bool>(xShape, "AllowOverlap")
     // i.e. the custom AllowOverlap=false shape property was lost on import/export.
-    CPPUNIT_ASSERT(!getProperty<bool>(xShape, "AllowOverlap"));
+    CPPUNIT_ASSERT(!getProperty<bool>(xShape, u"AllowOverlap"_ustr));
     xShape = getShape(2);
-    CPPUNIT_ASSERT(!getProperty<bool>(xShape, "AllowOverlap"));
+    CPPUNIT_ASSERT(!getProperty<bool>(xShape, u"AllowOverlap"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSignatureLineProperties)
@@ -367,24 +367,24 @@ CPPUNIT_TEST_FIXTURE(Test, testSignatureLineProperties)
     uno::Reference<drawing::XShape> xShape = getShape(1);
     CPPUNIT_ASSERT(xShape.is());
 
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xShape, "IsSignatureLine"));
-    CPPUNIT_ASSERT_EQUAL(OUString("{3C24159B-3B98-4F60-AB52-00E7721758E9}"),
-                         getProperty<OUString>(xShape, "SignatureLineId"));
-    CPPUNIT_ASSERT_EQUAL(OUString("John Doe"),
-                         getProperty<OUString>(xShape, "SignatureLineSuggestedSignerName"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Farmer"),
-                         getProperty<OUString>(xShape, "SignatureLineSuggestedSignerTitle"));
-    CPPUNIT_ASSERT_EQUAL(OUString("john@farmers.org"),
-                         getProperty<OUString>(xShape, "SignatureLineSuggestedSignerEmail"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Please farm here."),
-                         getProperty<OUString>(xShape, "SignatureLineSigningInstructions"));
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xShape, "SignatureLineCanAddComment"));
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xShape, "SignatureLineShowSignDate"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xShape, u"IsSignatureLine"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"{3C24159B-3B98-4F60-AB52-00E7721758E9}"_ustr,
+                         getProperty<OUString>(xShape, u"SignatureLineId"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"John Doe"_ustr,
+                         getProperty<OUString>(xShape, u"SignatureLineSuggestedSignerName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Farmer"_ustr,
+                         getProperty<OUString>(xShape, u"SignatureLineSuggestedSignerTitle"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"john@farmers.org"_ustr,
+                         getProperty<OUString>(xShape, u"SignatureLineSuggestedSignerEmail"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Please farm here."_ustr,
+                         getProperty<OUString>(xShape, u"SignatureLineSigningInstructions"_ustr));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xShape, u"SignatureLineCanAddComment"_ustr));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xShape, u"SignatureLineShowSignDate"_ustr));
 
     // tdf#130917 This needs to be always set when importing a doc, ooxml export expects it.
     uno::Reference<graphic::XGraphic> xUnsignedGraphic;
     uno::Reference<beans::XPropertySet> xProps(xShape, uno::UNO_QUERY);
-    xProps->getPropertyValue("SignatureLineUnsignedImage") >>= xUnsignedGraphic;
+    xProps->getPropertyValue(u"SignatureLineUnsignedImage"_ustr) >>= xUnsignedGraphic;
     CPPUNIT_ASSERT_EQUAL(true, xUnsignedGraphic.is());
 }
 
@@ -395,9 +395,9 @@ DECLARE_ODFEXPORT_TEST(testQrCodeGenProperties, "qrcode-properties.odt")
     uno::Reference<drawing::XShape> xShape = getShape(1);
     CPPUNIT_ASSERT(xShape.is());
 
-    css::drawing::BarCode aBarCode = getProperty<css::drawing::BarCode>(xShape, "BarCodeProperties");
+    css::drawing::BarCode aBarCode = getProperty<css::drawing::BarCode>(xShape, u"BarCodeProperties"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("www.libreoffice.org"),
+    CPPUNIT_ASSERT_EQUAL(u"www.libreoffice.org"_ustr,
                          aBarCode.Payload);
     CPPUNIT_ASSERT_EQUAL(css::drawing::BarCodeErrorCorrection::LOW,
                          aBarCode.ErrorCorrection);
@@ -414,16 +414,16 @@ DECLARE_ODFEXPORT_TEST(testChapterNumberingNewLine, "chapter-number-new-line.odt
 
     //This failed Actual Value was LISTTAB instead of NEWLINE
     CPPUNIT_ASSERT_EQUAL(
-        sal_Int16(SvxNumberFormat::NEWLINE), hashMap["LabelFollowedBy"].get<sal_Int16>());
+        sal_Int16(SvxNumberFormat::NEWLINE), hashMap[u"LabelFollowedBy"_ustr].get<sal_Int16>());
 }
 
 DECLARE_ODFEXPORT_TEST(testSpellOutNumberingTypes, "spellout-numberingtypes.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // ordinal indicator, ordinal and cardinal number numbering styles (from LibreOffice 6.1)
-    OUString const aFieldTexts[] = { "1st", "Erste", "Eins",  "1.", "Premier", "Un", u"1ᵉʳ"_ustr, "First", "One" };
+    OUString const aFieldTexts[] = { u"1st"_ustr, u"Erste"_ustr, u"Eins"_ustr,  u"1."_ustr, u"Premier"_ustr, u"Un"_ustr, u"1ᵉʳ"_ustr, u"First"_ustr, u"One"_ustr };
     // fallback for old platforms without std::codecvt and std::regex supports
-    OUString const aFieldTextFallbacks[] = { "Ordinal-number 1", "Ordinal 1", "1" };
+    OUString const aFieldTextFallbacks[] = { u"Ordinal-number 1"_ustr, u"Ordinal 1"_ustr, u"1"_ustr };
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     // update text field content
     uno::Reference<util::XRefreshable>(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY_THROW)->refresh();
@@ -435,7 +435,7 @@ DECLARE_ODFEXPORT_TEST(testSpellOutNumberingTypes, "spellout-numberingtypes.odt"
     {
         uno::Any aField = xFields->nextElement();
         uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
-        if (xServiceInfo->supportsService("com.sun.star.text.textfield.PageNumber"))
+        if (xServiceInfo->supportsService(u"com.sun.star.text.textfield.PageNumber"_ustr))
         {
             uno::Reference<text::XTextContent> xField(aField, uno::UNO_QUERY);
             CPPUNIT_ASSERT_EQUAL(true, aFieldTexts[i].equals(xField->getAnchor()->getString()) ||
@@ -461,17 +461,17 @@ DECLARE_ODFEXPORT_TEST(tdf101856_overlapped, "tdf101856_overlapped.odt")
 
     // check: we have 2 bookmarks
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xBookmarksByIdx->getCount());
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("BookmarkNonHidden"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("BookmarkHidden"));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"BookmarkNonHidden"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"BookmarkHidden"_ustr));
 
     // <text:bookmark-start text:name="BookmarkNonHidden"/>
-    uno::Reference<beans::XPropertySet> xBookmark1(xBookmarksByName->getByName("BookmarkNonHidden"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xBookmark1, UNO_NAME_BOOKMARK_CONDITION));
+    uno::Reference<beans::XPropertySet> xBookmark1(xBookmarksByName->getByName(u"BookmarkNonHidden"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xBookmark1, UNO_NAME_BOOKMARK_CONDITION));
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xBookmark1, UNO_NAME_BOOKMARK_HIDDEN));
 
     // <text:bookmark-start text:name="BookmarkHidden"/>
-    uno::Reference<beans::XPropertySet> xBookmark2(xBookmarksByName->getByName("BookmarkHidden"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xBookmark2, UNO_NAME_BOOKMARK_CONDITION));
+    uno::Reference<beans::XPropertySet> xBookmark2(xBookmarksByName->getByName(u"BookmarkHidden"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xBookmark2, UNO_NAME_BOOKMARK_CONDITION));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xBookmark2, UNO_NAME_BOOKMARK_HIDDEN));
 }
 
@@ -486,25 +486,25 @@ DECLARE_ODFEXPORT_TEST(tdf101856, "tdf101856.odt")
 
     // check: we have 2 bookmarks
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), xBookmarksByIdx->getCount());
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("BookmarkVisible"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("BookmarkHidden"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("BookmarkVisibleWithCondition"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("BookmarkNotHiddenWithCondition"));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName("BookmarkHiddenWithCondition"));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"BookmarkVisible"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"BookmarkHidden"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"BookmarkVisibleWithCondition"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"BookmarkNotHiddenWithCondition"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"BookmarkHiddenWithCondition"_ustr));
 
     // <text:bookmark-start text:name="BookmarkVisible"/>
-    uno::Reference<beans::XPropertySet> xBookmark1(xBookmarksByName->getByName("BookmarkVisible"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xBookmark1, UNO_NAME_BOOKMARK_CONDITION));
+    uno::Reference<beans::XPropertySet> xBookmark1(xBookmarksByName->getByName(u"BookmarkVisible"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xBookmark1, UNO_NAME_BOOKMARK_CONDITION));
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xBookmark1, UNO_NAME_BOOKMARK_HIDDEN));
 
     // <text:bookmark-start text:name="BookmarkHidden" loext:condition="" loext:hidden="true"/>
-    uno::Reference<beans::XPropertySet> xBookmark2(xBookmarksByName->getByName("BookmarkHidden"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xBookmark2, UNO_NAME_BOOKMARK_CONDITION));
+    uno::Reference<beans::XPropertySet> xBookmark2(xBookmarksByName->getByName(u"BookmarkHidden"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xBookmark2, UNO_NAME_BOOKMARK_CONDITION));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xBookmark2, UNO_NAME_BOOKMARK_HIDDEN));
 
     // <text:bookmark-start text:name="BookmarkVisibleWithCondition" loext:condition="0==1" loext:hidden="true"/>
-    uno::Reference<beans::XPropertySet> xBookmark3(xBookmarksByName->getByName("BookmarkVisibleWithCondition"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("0==1"), getProperty<OUString>(xBookmark3, UNO_NAME_BOOKMARK_CONDITION));
+    uno::Reference<beans::XPropertySet> xBookmark3(xBookmarksByName->getByName(u"BookmarkVisibleWithCondition"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"0==1"_ustr, getProperty<OUString>(xBookmark3, UNO_NAME_BOOKMARK_CONDITION));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xBookmark3, UNO_NAME_BOOKMARK_HIDDEN));
 
     // <text:bookmark-start text:name="BookmarkNotHiddenWithCondition" loext:condition="1==1" loext:hidden="false"/>
@@ -517,8 +517,8 @@ DECLARE_ODFEXPORT_TEST(tdf101856, "tdf101856.odt")
 //    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xBookmark4, UNO_NAME_BOOKMARK_HIDDEN));
 
     // <text:bookmark-start text:name="BookmarkHiddenWithCondition" loext:condition="1==1" loext:hidden="true"/>
-    uno::Reference<beans::XPropertySet> xBookmark5(xBookmarksByName->getByName("BookmarkHiddenWithCondition"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("1==1"), getProperty<OUString>(xBookmark5, UNO_NAME_BOOKMARK_CONDITION));
+    uno::Reference<beans::XPropertySet> xBookmark5(xBookmarksByName->getByName(u"BookmarkHiddenWithCondition"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"1==1"_ustr, getProperty<OUString>(xBookmark5, UNO_NAME_BOOKMARK_CONDITION));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xBookmark5, UNO_NAME_BOOKMARK_HIDDEN));
 }
 
@@ -530,7 +530,7 @@ DECLARE_ODFEXPORT_TEST(tdf118502, "tdf118502.odt")
     // Make sure the replacement graphic is still there
     // (was gone because the original graphic was not recognized during load)
     auto xReplacementGraphic
-        = getProperty<uno::Reference<graphic::XGraphic>>(xShape, "ReplacementGraphic");
+        = getProperty<uno::Reference<graphic::XGraphic>>(xShape, u"ReplacementGraphic"_ustr);
     CPPUNIT_ASSERT(xReplacementGraphic.is());
 }
 
@@ -538,13 +538,13 @@ CPPUNIT_TEST_FIXTURE(Test, tdf99631)
 {
     loadAndReload("tdf99631.docx");
     // check import of VisualArea settings of the embedded XLSX OLE objects
-    xmlDocUniquePtr pXmlDoc = parseExport("Object 1/settings.xml");
-    assertXPathContent(pXmlDoc, "//config:config-item[@config:name='VisibleAreaWidth']"_ostr, "4516");
-    assertXPathContent(pXmlDoc, "//config:config-item[@config:name='VisibleAreaHeight']"_ostr, "903");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"Object 1/settings.xml"_ustr);
+    assertXPathContent(pXmlDoc, "//config:config-item[@config:name='VisibleAreaWidth']"_ostr, u"4516"_ustr);
+    assertXPathContent(pXmlDoc, "//config:config-item[@config:name='VisibleAreaHeight']"_ostr, u"903"_ustr);
 
-    xmlDocUniquePtr pXmlDoc2 = parseExport("Object 2/settings.xml");
-    assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaWidth']"_ostr, "4516");
-    assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaHeight']"_ostr, "1355");
+    xmlDocUniquePtr pXmlDoc2 = parseExport(u"Object 2/settings.xml"_ustr);
+    assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaWidth']"_ostr, u"4516"_ustr);
+    assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaHeight']"_ostr, u"1355"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, tdf145871)
@@ -558,7 +558,7 @@ CPPUNIT_TEST_FIXTURE(Test, tdf145871)
     // Without the fix in place, this test would have failed with
     // - Expected: 3150
     // - Actual  : 5851
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(3150) , getProperty<sal_Int64>(xTableRows->getByIndex(0), "Height"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(3150) , getProperty<sal_Int64>(xTableRows->getByIndex(0), u"Height"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, tdf128504)
@@ -566,26 +566,26 @@ CPPUNIT_TEST_FIXTURE(Test, tdf128504)
     loadAndReload("tdf128504.docx");
     uno::Reference<text::XTextRange> xPara = getParagraph(6);
     uno::Reference<beans::XPropertySet> xRun(getRun(xPara,1), uno::UNO_QUERY);
-    OUString unVisitedStyleName = getProperty<OUString>(xRun, "UnvisitedCharStyleName");
+    OUString unVisitedStyleName = getProperty<OUString>(xRun, u"UnvisitedCharStyleName"_ustr);
     CPPUNIT_ASSERT(!unVisitedStyleName.equalsIgnoreAsciiCase("Internet Link"));
-    OUString visitedStyleName = getProperty<OUString>(xRun, "VisitedCharStyleName");
+    OUString visitedStyleName = getProperty<OUString>(xRun, u"VisitedCharStyleName"_ustr);
     CPPUNIT_ASSERT(!visitedStyleName.equalsIgnoreAsciiCase("Visited Internet Link"));
 }
 
 DECLARE_ODFEXPORT_TEST(tdf121658, "tdf121658.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference<container::XNameAccess> xParaStyles(getStyles("ParagraphStyles"));
+    uno::Reference<container::XNameAccess> xParaStyles(getStyles(u"ParagraphStyles"_ustr));
     uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getByName(
-            "Standard"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle1, "ParaHyphenationNoCaps"));
+            u"Standard"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle1, u"ParaHyphenationNoCaps"_ustr));
 }
 
 DECLARE_ODFEXPORT_TEST(tdf149248, "tdf149248.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getParagraph(2), "ParaHyphenationNoLastWord"));
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getParagraph(4), "ParaHyphenationNoLastWord"));
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getParagraph(2), u"ParaHyphenationNoLastWord"_ustr));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getParagraph(4), u"ParaHyphenationNoLastWord"_ustr));
 }
 
 DECLARE_ODFEXPORT_TEST(testThemeCrash, "tdf156905.odt")
@@ -603,85 +603,85 @@ DECLARE_ODFEXPORT_TEST(testTdf150394, "tdf150394.odt")
 DECLARE_ODFEXPORT_TEST(tdf149324, "tdf149324.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), getProperty<sal_uInt16>(getParagraph(2), "ParaHyphenationMinWordLength"));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(7), getProperty<sal_uInt16>(getParagraph(4), "ParaHyphenationMinWordLength"));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), getProperty<sal_uInt16>(getParagraph(2), u"ParaHyphenationMinWordLength"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(7), getProperty<sal_uInt16>(getParagraph(4), u"ParaHyphenationMinWordLength"_ustr));
 }
 
 DECLARE_ODFEXPORT_TEST(tdf149420, "tdf149420.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), getProperty<sal_uInt16>(getParagraph(2), "ParaHyphenationZone"));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(567), getProperty<sal_uInt16>(getParagraph(4), "ParaHyphenationZone"));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), getProperty<sal_uInt16>(getParagraph(2), u"ParaHyphenationZone"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(567), getProperty<sal_uInt16>(getParagraph(4), u"ParaHyphenationZone"_ustr));
 }
 
 DECLARE_ODFEXPORT_TEST(testArabicZeroNumbering, "arabic-zero-numbering.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     auto xNumberingRules
-        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules");
+        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), u"NumberingRules"_ustr);
     comphelper::SequenceAsHashMap aMap(xNumberingRules->getByIndex(0));
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 64
     // - Actual  : 4
     // i.e. numbering type was ARABIC, not ARABIC_ZERO.
     CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(style::NumberingType::ARABIC_ZERO),
-                         aMap["NumberingType"].get<sal_uInt16>());
+                         aMap[u"NumberingType"_ustr].get<sal_uInt16>());
 }
 
 DECLARE_ODFEXPORT_TEST(testArabicZero3Numbering, "arabic-zero3-numbering.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     auto xNumberingRules
-        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules");
+        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), u"NumberingRules"_ustr);
     comphelper::SequenceAsHashMap aMap(xNumberingRules->getByIndex(0));
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 65
     // - Actual  : 4
     // i.e. numbering type was ARABIC, not ARABIC_ZERO3.
     CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(style::NumberingType::ARABIC_ZERO3),
-                         aMap["NumberingType"].get<sal_uInt16>());
+                         aMap[u"NumberingType"_ustr].get<sal_uInt16>());
 }
 
 DECLARE_ODFEXPORT_TEST(testArabicZero4Numbering, "arabic-zero4-numbering.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     auto xNumberingRules
-        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules");
+        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), u"NumberingRules"_ustr);
     comphelper::SequenceAsHashMap aMap(xNumberingRules->getByIndex(0));
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 66
     // - Actual  : 4
     // i.e. numbering type was ARABIC, not ARABIC_ZERO4.
     CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(style::NumberingType::ARABIC_ZERO4),
-                         aMap["NumberingType"].get<sal_uInt16>());
+                         aMap[u"NumberingType"_ustr].get<sal_uInt16>());
 }
 
 DECLARE_ODFEXPORT_TEST(testArabicZero5Numbering, "arabic-zero5-numbering.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     auto xNumberingRules
-        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules");
+        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), u"NumberingRules"_ustr);
     comphelper::SequenceAsHashMap aMap(xNumberingRules->getByIndex(0));
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 67
     // - Actual  : 4
     // i.e. numbering type was ARABIC, not ARABIC_ZERO5.
     CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(style::NumberingType::ARABIC_ZERO5),
-                         aMap["NumberingType"].get<sal_uInt16>());
+                         aMap[u"NumberingType"_ustr].get<sal_uInt16>());
 }
 
 DECLARE_ODFEXPORT_TEST(testRovasNumbering, "rovas-numbering.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     auto xNumberingRules
-        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules");
+        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), u"NumberingRules"_ustr);
     comphelper::SequenceAsHashMap aMap(xNumberingRules->getByIndex(0));
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 68
     // - Actual  : 4
     // i.e. numbering type was ARABIC, not SZEKELY_ROVAS.
     CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(style::NumberingType::SZEKELY_ROVAS),
-                         aMap["NumberingType"].get<sal_uInt16>());
+                         aMap[u"NumberingType"_ustr].get<sal_uInt16>());
 }
 
 DECLARE_ODFEXPORT_TEST(testPageContentTop, "page-content-top.odt")
@@ -690,7 +690,7 @@ DECLARE_ODFEXPORT_TEST(testPageContentTop, "page-content-top.odt")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
     sal_Int16 nExpected = text::RelOrientation::PAGE_PRINT_AREA_TOP;
-    CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int16>(xShape, "VertOrientRelation"));
+    CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int16>(xShape, u"VertOrientRelation"_ustr));
 }
 
 DECLARE_ODFEXPORT_TEST(testPageContentBottom, "page-content-bottom.odt")
@@ -699,7 +699,7 @@ DECLARE_ODFEXPORT_TEST(testPageContentBottom, "page-content-bottom.odt")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
     sal_Int16 nExpected = text::RelOrientation::PAGE_PRINT_AREA_BOTTOM;
-    CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int16>(xShape, "VertOrientRelation"));
+    CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int16>(xShape, u"VertOrientRelation"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, tdf124470)
@@ -711,7 +711,7 @@ CPPUNIT_TEST_FIXTURE(Test, tdf124470)
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
     assertXPath(pXmlDoc, "/office:document-content/office:font-face-decls/style:style"_ostr, 0);
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:family='table']"_ostr, 1);
@@ -726,7 +726,7 @@ CPPUNIT_TEST_FIXTURE(Test, tdf135942)
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
 
     assertXPath(pXmlDoc, "/office:document-styles/office:automatic-styles/style:style[@style:family='table']"_ostr, 2);
 }
@@ -740,7 +740,7 @@ CPPUNIT_TEST_FIXTURE(Test, tdf150927)
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
 
     assertXPath(pXmlDoc, "/office:document-styles/office:automatic-styles/style:style[@style:family='table']"_ostr, 2);
 }
@@ -754,7 +754,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
     pBatch->commit();
 
     loadAndReload("personalmetadata.odt");
-    xmlDocUniquePtr pXmlDoc = parseExport("meta.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"meta.xml"_ustr);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:initial-creator"_ostr, 1);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:creation-date"_ostr, 1);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:date"_ostr, 1);
@@ -764,7 +764,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration"_ostr, 0);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-cycles"_ostr, 0);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:template"_ostr, 0);
-    pXmlDoc = parseExport("settings.xml");
+    pXmlDoc = parseExport(u"settings.xml"_ustr);
     assertXPath(
         pXmlDoc,
         "/office:document-settings/office:settings/config:config-item-set[2]/config:config-item[@config:name='PrinterName']"_ostr,
@@ -779,7 +779,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
     pBatch->commit();
 
     loadAndReload("personalmetadata.odt");
-    pXmlDoc = parseExport("meta.xml");
+    pXmlDoc = parseExport(u"meta.xml"_ustr);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:initial-creator"_ostr, 0);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:creation-date"_ostr, 0);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:date"_ostr, 0);
@@ -789,7 +789,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration"_ostr, 0);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-cycles"_ostr, 0);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:template"_ostr, 0);
-    pXmlDoc = parseExport("settings.xml");
+    pXmlDoc = parseExport(u"settings.xml"_ustr);
     assertXPath(
         pXmlDoc,
         "/office:document-settings/office:settings/config:config-item-set[2]/config:config-item[@config:name='PrinterName']"_ostr,
@@ -809,7 +809,7 @@ CPPUNIT_TEST_FIXTURE(Test, tdf151100)
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
 
     assertXPath(pXmlDoc, "/office:document-styles/office:automatic-styles/style:style[@style:family='table']"_ostr, 1);
 }
@@ -818,9 +818,9 @@ DECLARE_ODFEXPORT_TEST(testGutterLeft, "gutter-left.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xPageStyle;
-    getStyles("PageStyles")->getByName("Standard") >>= xPageStyle;
+    getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr) >>= xPageStyle;
     sal_Int32 nGutterMargin{};
-    xPageStyle->getPropertyValue("GutterMargin") >>= nGutterMargin;
+    xPageStyle->getPropertyValue(u"GutterMargin"_ustr) >>= nGutterMargin;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1270
     // - Actual  : 0
@@ -838,7 +838,7 @@ DECLARE_ODFEXPORT_TEST(testTdf52065_centerTabs, "testTdf52065_centerTabs.odt")
     CPPUNIT_ASSERT_EQUAL(u"Pečiatka zamestnávateľa"_ustr, parseDump("//body/txt[4]/SwParaPortion/SwLineLayout/child::*[4]"_ostr, "portion"_ostr));
 
     // tdf#149547: __XXX___invalid CharacterStyles should not be imported/exported
-    CPPUNIT_ASSERT(!getStyles("CharacterStyles")->hasByName("__XXX___invalid"));
+    CPPUNIT_ASSERT(!getStyles(u"CharacterStyles"_ustr)->hasByName(u"__XXX___invalid"_ustr));
 }
 
 DECLARE_ODFEXPORT_TEST(testTdf104254_noHeaderWrapping, "tdf104254_noHeaderWrapping.odt")
@@ -857,10 +857,10 @@ DECLARE_ODFEXPORT_TEST(testTdf131025_noZerosInTable, "tdf131025_noZerosInTable.o
 {
     uno::Reference<text::XTextTablesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xTables = xSupplier->getTextTables();
-    uno::Reference<text::XTextTable> xTable(xTables->getByName("Table1"), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByName(u"Table1"_ustr), uno::UNO_QUERY);
 
-    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("C3"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("5 gp"), xCell->getString());
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"C3"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"5 gp"_ustr, xCell->getString());
 }
 
 DECLARE_ODFEXPORT_TEST(testTdf153090, "Custom-Style-TOC.docx")
@@ -868,10 +868,10 @@ DECLARE_ODFEXPORT_TEST(testTdf153090, "Custom-Style-TOC.docx")
     uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexes(xIndexSupplier->getDocumentIndexes());
     uno::Reference<text::XDocumentIndex> xTOC(xIndexes->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("_CustomImageCaption"), getProperty<OUString>(xTOC, "CreateFromParagraphStyle"));
+    CPPUNIT_ASSERT_EQUAL(u"_CustomImageCaption"_ustr, getProperty<OUString>(xTOC, u"CreateFromParagraphStyle"_ustr));
     // tdf#153659 this was imported as "table of figures" instead of "Figure Index 1"
     // thus custom settings were not retained after ToF update
-    CPPUNIT_ASSERT_EQUAL(OUString("Figure Index 1"), getProperty<OUString>(getParagraph(1), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(u"Figure Index 1"_ustr, getProperty<OUString>(getParagraph(1), u"ParaStyleName"_ustr));
 
     xTOC->update();
     OUString const tocContent(xTOC->getAnchor()->getString());
@@ -898,20 +898,20 @@ DECLARE_ODFEXPORT_TEST(testTdf143793_noBodyWrapping, "tdf143793_noBodyWrapping.o
 CPPUNIT_TEST_FIXTURE(Test, testTdf137199)
 {
     loadAndReload("tdf137199.docx");
-    CPPUNIT_ASSERT_EQUAL(OUString(">1<"), getProperty<OUString>(getParagraph(1), "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u">1<"_ustr, getProperty<OUString>(getParagraph(1), u"ListLabelString"_ustr));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("1)"), getProperty<OUString>(getParagraph(2), "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u"1)"_ustr, getProperty<OUString>(getParagraph(2), u"ListLabelString"_ustr));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("HELLO1WORLD!"), getProperty<OUString>(getParagraph(3), "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u"HELLO1WORLD!"_ustr, getProperty<OUString>(getParagraph(3), u"ListLabelString"_ustr));
 
-    CPPUNIT_ASSERT_EQUAL(OUString("HELLO2WORLD!"), getProperty<OUString>(getParagraph(4), "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u"HELLO2WORLD!"_ustr, getProperty<OUString>(getParagraph(4), u"ListLabelString"_ustr));
 }
 
 DECLARE_ODFEXPORT_TEST(testTdf143605, "tdf143605.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // With numbering type "none" there should be just prefix & suffix
-    CPPUNIT_ASSERT_EQUAL(OUString("."), getProperty<OUString>(getParagraph(1), "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u"."_ustr, getProperty<OUString>(getParagraph(1), u"ListLabelString"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf57317_autoListName)
@@ -921,19 +921,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf57317_autoListName)
     //uno::Any aNumStyle = getStyles("NumberingStyles")->getByName("L1");
     //CPPUNIT_ASSERT(aNumStyle.hasValue());
     uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString(">1<"), getProperty<OUString>(xPara, "ListLabelString"));
-    CPPUNIT_ASSERT_EQUAL(OUString("L1"), getProperty<OUString>(xPara, "NumberingStyleName"));
+    CPPUNIT_ASSERT_EQUAL(u">1<"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"L1"_ustr, getProperty<OUString>(xPara, u"NumberingStyleName"_ustr));
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:DefaultBullet", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:DefaultBullet"_ustr, {});
 
     // This was failing with a duplicate auto numbering style name of L1 instead of a unique name,
     // thus it was showing the same info as before the bullet modification.
-    saveAndReload("writer8");
+    saveAndReload(u"writer8"_ustr);
     xPara.set(getParagraph(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
 
-    uno::Reference<container::XIndexAccess> xLevels(xPara->getPropertyValue("NumberingRules"),
+    uno::Reference<container::XIndexAccess> xLevels(xPara->getPropertyValue(u"NumberingRules"_ustr),
                                                     uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps;
@@ -949,33 +949,33 @@ CPPUNIT_TEST_FIXTURE(Test, testListFormatDocx)
 {
     loadAndReload("listformat.docx");
     // Ensure in resulting ODT we also have not just prefix/suffix, but custom delimiters
-    CPPUNIT_ASSERT_EQUAL(OUString(">1<"), getProperty<OUString>(getParagraph(1), "ListLabelString"));
-    CPPUNIT_ASSERT_EQUAL(OUString(">>1/1<<"), getProperty<OUString>(getParagraph(2), "ListLabelString"));
-    CPPUNIT_ASSERT_EQUAL(OUString(">>1/1/1<<"), getProperty<OUString>(getParagraph(3), "ListLabelString"));
-    CPPUNIT_ASSERT_EQUAL(OUString(">>1/1/2<<"), getProperty<OUString>(getParagraph(4), "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u">1<"_ustr, getProperty<OUString>(getParagraph(1), u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u">>1/1<<"_ustr, getProperty<OUString>(getParagraph(2), u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u">>1/1/1<<"_ustr, getProperty<OUString>(getParagraph(3), u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u">>1/1/2<<"_ustr, getProperty<OUString>(getParagraph(4), u"ListLabelString"_ustr));
 
     // Check also that in numbering styles we have num-list-format defined
-    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
     assertXPath(pXmlDoc, "/office:document-styles/office:styles/text:list-style[@style:name='WWNum1']/"
-        "text:list-level-style-number[@text:level='1']"_ostr, "num-list-format"_ostr, ">%1%<");
+        "text:list-level-style-number[@text:level='1']"_ostr, "num-list-format"_ostr, u">%1%<"_ustr);
     assertXPath(pXmlDoc, "/office:document-styles/office:styles/text:list-style[@style:name='WWNum1']/"
-        "text:list-level-style-number[@text:level='2']"_ostr, "num-list-format"_ostr, ">>%1%/%2%<<");
+        "text:list-level-style-number[@text:level='2']"_ostr, "num-list-format"_ostr, u">>%1%/%2%<<"_ustr);
     assertXPath(pXmlDoc, "/office:document-styles/office:styles/text:list-style[@style:name='WWNum1']/"
-        "text:list-level-style-number[@text:level='3']"_ostr, "num-list-format"_ostr, ">>%1%/%2%/%3%<<");
+        "text:list-level-style-number[@text:level='3']"_ostr, "num-list-format"_ostr, u">>%1%/%2%/%3%<<"_ustr);
 
     // But for compatibility there are still prefix/suffix
     assertXPath(pXmlDoc, "/office:document-styles/office:styles/text:list-style[@style:name='WWNum1']/"
-        "text:list-level-style-number[@text:level='1']"_ostr, "num-prefix"_ostr, ">");
+        "text:list-level-style-number[@text:level='1']"_ostr, "num-prefix"_ostr, u">"_ustr);
     assertXPath(pXmlDoc, "/office:document-styles/office:styles/text:list-style[@style:name='WWNum1']/"
-        "text:list-level-style-number[@text:level='1']"_ostr, "num-suffix"_ostr, "<");
+        "text:list-level-style-number[@text:level='1']"_ostr, "num-suffix"_ostr, u"<"_ustr);
     assertXPath(pXmlDoc, "/office:document-styles/office:styles/text:list-style[@style:name='WWNum1']/"
-        "text:list-level-style-number[@text:level='2']"_ostr, "num-prefix"_ostr, ">>");
+        "text:list-level-style-number[@text:level='2']"_ostr, "num-prefix"_ostr, u">>"_ustr);
     assertXPath(pXmlDoc, "/office:document-styles/office:styles/text:list-style[@style:name='WWNum1']/"
-        "text:list-level-style-number[@text:level='2']"_ostr, "num-suffix"_ostr, "<<");
+        "text:list-level-style-number[@text:level='2']"_ostr, "num-suffix"_ostr, u"<<"_ustr);
     assertXPath(pXmlDoc, "/office:document-styles/office:styles/text:list-style[@style:name='WWNum1']/"
-        "text:list-level-style-number[@text:level='3']"_ostr, "num-prefix"_ostr, ">>");
+        "text:list-level-style-number[@text:level='3']"_ostr, "num-prefix"_ostr, u">>"_ustr);
     assertXPath(pXmlDoc, "/office:document-styles/office:styles/text:list-style[@style:name='WWNum1']/"
-        "text:list-level-style-number[@text:level='3']"_ostr, "num-suffix"_ostr, "<<");
+        "text:list-level-style-number[@text:level='3']"_ostr, "num-suffix"_ostr, u"<<"_ustr);
 }
 
 DECLARE_ODFEXPORT_TEST(testShapeWithHyperlink, "shape-with-hyperlink.odt")
@@ -984,10 +984,10 @@ DECLARE_ODFEXPORT_TEST(testShapeWithHyperlink, "shape-with-hyperlink.odt")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (isExported())
     {
-        xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+        xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
         // Check how conversion from prefix/suffix to list format did work
         assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p/draw:a"_ostr,
-                    "href"_ostr, "http://shape.com/");
+                    "href"_ostr, u"http://shape.com/"_ustr);
     }
 }
 
@@ -996,54 +996,54 @@ DECLARE_ODFEXPORT_TEST(testShapesHyperlink, "shapes-hyperlink.odt")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(5, getShapes());
     uno::Reference<beans::XPropertySet> const xPropSet1(getShape(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("http://libreoffice.org/"), getProperty<OUString>(xPropSet1, "Hyperlink"));
+    CPPUNIT_ASSERT_EQUAL(u"http://libreoffice.org/"_ustr, getProperty<OUString>(xPropSet1, u"Hyperlink"_ustr));
 
     uno::Reference<beans::XPropertySet> const xPropSet2(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("http://libreoffice2.org/"), getProperty<OUString>(xPropSet2, "Hyperlink"));
+    CPPUNIT_ASSERT_EQUAL(u"http://libreoffice2.org/"_ustr, getProperty<OUString>(xPropSet2, u"Hyperlink"_ustr));
 
     uno::Reference<beans::XPropertySet> const xPropSet3(getShape(3), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("http://libreoffice3.org/"), getProperty<OUString>(xPropSet3, "Hyperlink"));
+    CPPUNIT_ASSERT_EQUAL(u"http://libreoffice3.org/"_ustr, getProperty<OUString>(xPropSet3, u"Hyperlink"_ustr));
 
     uno::Reference<beans::XPropertySet> const xPropSet4(getShape(4), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("http://libreoffice4.org/"), getProperty<OUString>(xPropSet4, "Hyperlink"));
+    CPPUNIT_ASSERT_EQUAL(u"http://libreoffice4.org/"_ustr, getProperty<OUString>(xPropSet4, u"Hyperlink"_ustr));
 
     uno::Reference<beans::XPropertySet> const xPropSet5(getShape(5), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("http://libreoffice5.org/"), getProperty<OUString>(xPropSet5, "Hyperlink"));
+    CPPUNIT_ASSERT_EQUAL(u"http://libreoffice5.org/"_ustr, getProperty<OUString>(xPropSet5, u"Hyperlink"_ustr));
 }
 
 DECLARE_ODFEXPORT_TEST(testListFormatOdt, "listformat.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Ensure in resulting ODT we also have not just prefix/suffix, but custom delimiters
-    CPPUNIT_ASSERT_EQUAL(OUString(">1<"), getProperty<OUString>(getParagraph(1), "ListLabelString"));
-    CPPUNIT_ASSERT_EQUAL(OUString(">>1.1<<"), getProperty<OUString>(getParagraph(2), "ListLabelString"));
-    CPPUNIT_ASSERT_EQUAL(OUString(">>1.1.1<<"), getProperty<OUString>(getParagraph(3), "ListLabelString"));
-    CPPUNIT_ASSERT_EQUAL(OUString(">>1.1.2<<"), getProperty<OUString>(getParagraph(4), "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u">1<"_ustr, getProperty<OUString>(getParagraph(1), u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u">>1.1<<"_ustr, getProperty<OUString>(getParagraph(2), u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u">>1.1.1<<"_ustr, getProperty<OUString>(getParagraph(3), u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u">>1.1.2<<"_ustr, getProperty<OUString>(getParagraph(4), u"ListLabelString"_ustr));
 
     if (isExported())
     {
-        xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+        xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
         // Check how conversion from prefix/suffix to list format did work
         assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='1']"_ostr, "num-list-format"_ostr, ">%1%<");
+            "text:list-level-style-number[@text:level='1']"_ostr, "num-list-format"_ostr, u">%1%<"_ustr);
         assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='2']"_ostr, "num-list-format"_ostr, ">>%1%.%2%<<");
+            "text:list-level-style-number[@text:level='2']"_ostr, "num-list-format"_ostr, u">>%1%.%2%<<"_ustr);
         assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='3']"_ostr, "num-list-format"_ostr, ">>%1%.%2%.%3%<<");
+            "text:list-level-style-number[@text:level='3']"_ostr, "num-list-format"_ostr, u">>%1%.%2%.%3%<<"_ustr);
 
         // But for compatibility there are still prefix/suffix as they were before
         assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='1']"_ostr, "num-prefix"_ostr, ">");
+            "text:list-level-style-number[@text:level='1']"_ostr, "num-prefix"_ostr, u">"_ustr);
         assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='1']"_ostr, "num-suffix"_ostr, "<");
+            "text:list-level-style-number[@text:level='1']"_ostr, "num-suffix"_ostr, u"<"_ustr);
         assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='2']"_ostr, "num-prefix"_ostr, ">>");
+            "text:list-level-style-number[@text:level='2']"_ostr, "num-prefix"_ostr, u">>"_ustr);
         assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='2']"_ostr, "num-suffix"_ostr, "<<");
+            "text:list-level-style-number[@text:level='2']"_ostr, "num-suffix"_ostr, u"<<"_ustr);
         assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='3']"_ostr, "num-prefix"_ostr, ">>");
+            "text:list-level-style-number[@text:level='3']"_ostr, "num-prefix"_ostr, u">>"_ustr);
         assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='3']"_ostr, "num-suffix"_ostr, "<<");
+            "text:list-level-style-number[@text:level='3']"_ostr, "num-suffix"_ostr, u"<<"_ustr);
     }
 }
 
@@ -1054,25 +1054,25 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleLink)
     createSwDoc("style-link.fodt");
 
     // Then make sure the char style links the para one:
-    uno::Any aCharStyle = getStyles("CharacterStyles")->getByName("List Paragraph Char");
+    uno::Any aCharStyle = getStyles(u"CharacterStyles"_ustr)->getByName(u"List Paragraph Char"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: List Paragraph
     // - Actual  :
     // i.e. the linked style was lost on import.
-    CPPUNIT_ASSERT_EQUAL(OUString("List Paragraph"), getProperty<OUString>(aCharStyle, "LinkStyle"));
-    uno::Any aParaStyle = getStyles("ParagraphStyles")->getByName("List Paragraph");
+    CPPUNIT_ASSERT_EQUAL(u"List Paragraph"_ustr, getProperty<OUString>(aCharStyle, u"LinkStyle"_ustr));
+    uno::Any aParaStyle = getStyles(u"ParagraphStyles"_ustr)->getByName(u"List Paragraph"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: List Paragraph Char
     // - Actual  :
     // i.e. the linked style was lost on import.
-    CPPUNIT_ASSERT_EQUAL(OUString("List Paragraph Char"), getProperty<OUString>(aParaStyle, "LinkStyle"));
+    CPPUNIT_ASSERT_EQUAL(u"List Paragraph Char"_ustr, getProperty<OUString>(aParaStyle, u"LinkStyle"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, tdf120972)
 {
     loadAndReload("table_number_format_3.docx");
 
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     OUString cDecimal(SvtSysLocale().GetLocaleData().getNumDecimalSep()[0]);
     assertXPath(
         pXmlDoc,
@@ -1087,54 +1087,54 @@ CPPUNIT_TEST_FIXTURE(Test, tdf120972)
 DECLARE_ODFEXPORT_TEST(testTdf114287, "tdf114287.odt")
 {
     uno::Reference<container::XIndexAccess> const xLevels1(
-        getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(2), "NumberingRules"));
+        getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(2), u"NumberingRules"_ustr));
     uno::Reference<container::XNamed> const xNum1(xLevels1, uno::UNO_QUERY);
     ::comphelper::SequenceAsHashMap props1(xLevels1->getByIndex(0));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-700), props1["FirstLineIndent"].get<sal_Int32>());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1330), props1["IndentAt"].get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-700), props1[u"FirstLineIndent"_ustr].get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1330), props1[u"IndentAt"_ustr].get<sal_Int32>());
 
     // 1: automatic style applies list-style-name and margin-left
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1000), getProperty<sal_Int32>(getParagraph(2), "ParaFirstLineIndent"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5001), getProperty<sal_Int32>(getParagraph(2), "ParaLeftMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(2), "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1000), getProperty<sal_Int32>(getParagraph(2), u"ParaFirstLineIndent"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5001), getProperty<sal_Int32>(getParagraph(2), u"ParaLeftMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(2), u"ParaRightMargin"_ustr));
 
     // list is continued
     uno::Reference<container::XNamed> const xNum2(
-        getProperty<uno::Reference<container::XNamed>>(getParagraph(9), "NumberingRules"));
+        getProperty<uno::Reference<container::XNamed>>(getParagraph(9), u"NumberingRules"_ustr));
     CPPUNIT_ASSERT_EQUAL(xNum1->getName(), xNum2->getName());
 
     // 2: style applies list-style-name and margin-left, list applies list-style-name
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1000), getProperty<sal_Int32>(getParagraph(9), "ParaFirstLineIndent"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5001), getProperty<sal_Int32>(getParagraph(9), "ParaLeftMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(9), "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1000), getProperty<sal_Int32>(getParagraph(9), u"ParaFirstLineIndent"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5001), getProperty<sal_Int32>(getParagraph(9), u"ParaLeftMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(9), u"ParaRightMargin"_ustr));
 
     // list is continued
     uno::Reference<container::XNamed> const xNum3(
-        getProperty<uno::Reference<container::XNamed>>(getParagraph(16), "NumberingRules"));
+        getProperty<uno::Reference<container::XNamed>>(getParagraph(16), u"NumberingRules"_ustr));
     CPPUNIT_ASSERT_EQUAL(xNum1->getName(), xNum3->getName());
 
     // 3: style applies margin-left, automatic style applies list-style-name
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1000), getProperty<sal_Int32>(getParagraph(16), "ParaFirstLineIndent"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5001), getProperty<sal_Int32>(getParagraph(16), "ParaLeftMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(16), "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1000), getProperty<sal_Int32>(getParagraph(16), u"ParaFirstLineIndent"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5001), getProperty<sal_Int32>(getParagraph(16), u"ParaLeftMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(16), u"ParaRightMargin"_ustr));
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/prtBounds"_ostr, "left"_ostr, "2268");
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/prtBounds"_ostr, "right"_ostr, "11339");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/prtBounds"_ostr, "left"_ostr, u"2268"_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/prtBounds"_ostr, "right"_ostr, u"11339"_ustr);
     // the list style name of the list is the same as the list style name of the
     // paragraph, but in any case the margins of the paragraph take precedence
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/prtBounds"_ostr, "left"_ostr, "2268");
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/prtBounds"_ostr, "right"_ostr, "11339");
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/infos/prtBounds"_ostr, "left"_ostr, "357");
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/infos/prtBounds"_ostr, "right"_ostr, "11339");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/prtBounds"_ostr, "left"_ostr, u"2268"_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/prtBounds"_ostr, "right"_ostr, u"11339"_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/infos/prtBounds"_ostr, "left"_ostr, u"357"_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/infos/prtBounds"_ostr, "right"_ostr, u"11339"_ustr);
 }
 
 DECLARE_ODFEXPORT_TEST(testSectionColumnSeparator, "section-columns-separator.fodt")
 {
     // tdf#150235: due to wrong types used in column export, 'style:height' and 'style:style'
     // attributes were exported incorrectly for 'style:column-sep' element
-    auto xSection = getProperty<uno::Reference<uno::XInterface>>(getParagraph(1), "TextSection");
-    auto xColumns = getProperty<uno::Reference<text::XTextColumns>>(xSection, "TextColumns");
+    auto xSection = getProperty<uno::Reference<uno::XInterface>>(getParagraph(1), u"TextSection"_ustr);
+    auto xColumns = getProperty<uno::Reference<text::XTextColumns>>(xSection, u"TextColumns"_ustr);
     CPPUNIT_ASSERT(xColumns);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xColumns->getColumnCount());
 
@@ -1142,88 +1142,88 @@ DECLARE_ODFEXPORT_TEST(testSectionColumnSeparator, "section-columns-separator.fo
     // - Expected: 50
     // - Actual  : 100
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(50),
-                         getProperty<sal_Int32>(xColumns, "SeparatorLineRelativeHeight"));
+                         getProperty<sal_Int32>(xColumns, u"SeparatorLineRelativeHeight"_ustr));
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2
     // - Actual  : 0
     CPPUNIT_ASSERT_EQUAL(css::text::ColumnSeparatorStyle::DOTTED,
-                         getProperty<sal_Int16>(xColumns, "SeparatorLineStyle"));
+                         getProperty<sal_Int16>(xColumns, u"SeparatorLineStyle"_ustr));
 
     // Check the rest of the properties, too
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xColumns, "IsAutomatic"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(600), getProperty<sal_Int32>(xColumns, "AutomaticDistance"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(9), getProperty<sal_Int32>(xColumns, "SeparatorLineWidth"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xColumns, u"IsAutomatic"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(600), getProperty<sal_Int32>(xColumns, u"AutomaticDistance"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(9), getProperty<sal_Int32>(xColumns, u"SeparatorLineWidth"_ustr));
     CPPUNIT_ASSERT_EQUAL(Color(0x99, 0xAA, 0xBB),
-                         getProperty<Color>(xColumns, "SeparatorLineColor"));
+                         getProperty<Color>(xColumns, u"SeparatorLineColor"_ustr));
     CPPUNIT_ASSERT_EQUAL(
         css::style::VerticalAlignment_BOTTOM,
-        getProperty<css::style::VerticalAlignment>(xColumns, "SeparatorLineVerticalAlignment"));
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xColumns, "SeparatorLineIsOn"));
+        getProperty<css::style::VerticalAlignment>(xColumns, u"SeparatorLineVerticalAlignment"_ustr));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xColumns, u"SeparatorLineIsOn"_ustr));
 }
 
 DECLARE_ODFEXPORT_TEST(testTdf78510, "WordTest_edit.odt")
 {
     uno::Reference<container::XIndexAccess> const xLevels1(
-        getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules"));
+        getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), u"NumberingRules"_ustr));
     ::comphelper::SequenceAsHashMap props1(xLevels1->getByIndex(0));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1000), props1["FirstLineIndent"].get<sal_Int32>());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), props1["IndentAt"].get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1000), props1[u"FirstLineIndent"_ustr].get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), props1[u"IndentAt"_ustr].get<sal_Int32>());
 
     // 1: inherited from paragraph style and overridden by list
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), "ParaFirstLineIndent"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), u"ParaFirstLineIndent"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(1), u"ParaLeftMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), u"ParaRightMargin"_ustr));
     // 2: as 1 + paragraph sets firstline
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(getParagraph(2), "ParaFirstLineIndent"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(2), "ParaLeftMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(2), "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(getParagraph(2), u"ParaFirstLineIndent"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(2), u"ParaLeftMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(2), u"ParaRightMargin"_ustr));
     // 3: as 1 + paragraph sets textleft
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(3), "ParaFirstLineIndent"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3000), getProperty<sal_Int32>(getParagraph(3), "ParaLeftMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(3), "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(3), u"ParaFirstLineIndent"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3000), getProperty<sal_Int32>(getParagraph(3), u"ParaLeftMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(3), u"ParaRightMargin"_ustr));
     // 4: as 1 + paragraph sets firstline, textleft
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-2000), getProperty<sal_Int32>(getParagraph(4), "ParaFirstLineIndent"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3000), getProperty<sal_Int32>(getParagraph(4), "ParaLeftMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(4), "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-2000), getProperty<sal_Int32>(getParagraph(4), u"ParaFirstLineIndent"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3000), getProperty<sal_Int32>(getParagraph(4), u"ParaLeftMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(4), u"ParaRightMargin"_ustr));
     // 5: as 1 + paragraph sets firstline
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-2000), getProperty<sal_Int32>(getParagraph(5), "ParaFirstLineIndent"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(5), "ParaLeftMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(5), "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-2000), getProperty<sal_Int32>(getParagraph(5), u"ParaFirstLineIndent"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(5), u"ParaLeftMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(5), u"ParaRightMargin"_ustr));
     // 6: as 1
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(6), "ParaFirstLineIndent"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(6), "ParaLeftMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(6), "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(6), u"ParaFirstLineIndent"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(6), u"ParaLeftMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(6), u"ParaRightMargin"_ustr));
 
     uno::Reference<container::XIndexAccess> const xLevels8(
-        getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(8), "NumberingRules"));
+        getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(8), u"NumberingRules"_ustr));
     ::comphelper::SequenceAsHashMap props8(xLevels8->getByIndex(0));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), props8["FirstLineIndent"].get<sal_Int32>());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), props8["IndentAt"].get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), props8[u"FirstLineIndent"_ustr].get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), props8[u"IndentAt"_ustr].get<sal_Int32>());
 
     // 8: inherited from paragraph style and overridden by list
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(8), "ParaFirstLineIndent"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(8), "ParaLeftMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(8), "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(8), u"ParaFirstLineIndent"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(8), u"ParaLeftMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(8), u"ParaRightMargin"_ustr));
     // 9: as 8 + paragraph sets firstline
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(getParagraph(9), "ParaFirstLineIndent"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(9), "ParaLeftMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(9), "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(getParagraph(9), u"ParaFirstLineIndent"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(9), u"ParaLeftMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(9), u"ParaRightMargin"_ustr));
     // 10: as 8 + paragraph sets textleft
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(10), "ParaFirstLineIndent"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3000), getProperty<sal_Int32>(getParagraph(10), "ParaLeftMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(10), "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(10), u"ParaFirstLineIndent"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3000), getProperty<sal_Int32>(getParagraph(10), u"ParaLeftMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(10), u"ParaRightMargin"_ustr));
     // 11: as 8 + paragraph sets firstline, textleft
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-2000), getProperty<sal_Int32>(getParagraph(11), "ParaFirstLineIndent"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3000), getProperty<sal_Int32>(getParagraph(11), "ParaLeftMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(11), "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-2000), getProperty<sal_Int32>(getParagraph(11), u"ParaFirstLineIndent"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3000), getProperty<sal_Int32>(getParagraph(11), u"ParaLeftMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(11), u"ParaRightMargin"_ustr));
     // 12: as 8 + paragraph sets firstline
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-2000), getProperty<sal_Int32>(getParagraph(12), "ParaFirstLineIndent"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(12), "ParaLeftMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(12), "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-2000), getProperty<sal_Int32>(getParagraph(12), u"ParaFirstLineIndent"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(12), u"ParaLeftMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(12), u"ParaRightMargin"_ustr));
     // 13: as 8
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(13), "ParaFirstLineIndent"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(13), "ParaLeftMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(13), "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(13), u"ParaFirstLineIndent"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(13), u"ParaLeftMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(13), u"ParaRightMargin"_ustr));
 
     // unfortunately it appears that the portions don't have a position
     // so it's not possible to check the first-line-offset that's applied
@@ -1231,31 +1231,31 @@ DECLARE_ODFEXPORT_TEST(testTdf78510, "WordTest_edit.odt")
     // painting)
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/infos/prtBounds"_ostr, "left"_ostr, "567");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/infos/prtBounds"_ostr, "right"_ostr, "9359");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/prtBounds"_ostr, "left"_ostr, "1134");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/prtBounds"_ostr, "right"_ostr, "9359");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/infos/prtBounds"_ostr, "left"_ostr, "1134");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/infos/prtBounds"_ostr, "right"_ostr, "9359");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/infos/prtBounds"_ostr, "left"_ostr, "567");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/infos/prtBounds"_ostr, "right"_ostr, "9359");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/infos/prtBounds"_ostr, "left"_ostr, "0");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/infos/prtBounds"_ostr, "right"_ostr, "9359");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/infos/prtBounds"_ostr, "left"_ostr, "567");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/infos/prtBounds"_ostr, "right"_ostr, "9359");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/infos/prtBounds"_ostr, "left"_ostr, u"567"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/prtBounds"_ostr, "left"_ostr, u"1134"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/infos/prtBounds"_ostr, "left"_ostr, u"1134"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/infos/prtBounds"_ostr, "left"_ostr, u"567"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/infos/prtBounds"_ostr, "left"_ostr, u"0"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/infos/prtBounds"_ostr, "left"_ostr, u"567"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
 
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/infos/prtBounds"_ostr, "left"_ostr, "567");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/infos/prtBounds"_ostr, "right"_ostr, "9359");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/prtBounds"_ostr, "left"_ostr, "567");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/prtBounds"_ostr, "right"_ostr, "9359");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/infos/prtBounds"_ostr, "left"_ostr, "1701");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/infos/prtBounds"_ostr, "right"_ostr, "9359");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/infos/prtBounds"_ostr, "left"_ostr, "567");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/infos/prtBounds"_ostr, "right"_ostr, "9359");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[12]/infos/prtBounds"_ostr, "left"_ostr, "-567");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[12]/infos/prtBounds"_ostr, "right"_ostr, "9359");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/infos/prtBounds"_ostr, "left"_ostr, "567");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/infos/prtBounds"_ostr, "right"_ostr, "9359");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/infos/prtBounds"_ostr, "left"_ostr, u"567"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/prtBounds"_ostr, "left"_ostr, u"567"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/infos/prtBounds"_ostr, "left"_ostr, u"1701"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/infos/prtBounds"_ostr, "left"_ostr, u"567"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[12]/infos/prtBounds"_ostr, "left"_ostr, u"-567"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[12]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/infos/prtBounds"_ostr, "left"_ostr, u"567"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
     }
 
     // now check the positions where text is actually painted -
@@ -1272,54 +1272,54 @@ DECLARE_ODFEXPORT_TEST(testTdf78510, "WordTest_edit.odt")
         // 1: inherited from paragraph style and overridden by list
         // bullet char is extra
 
-        assertXPath(pXmlDoc, "//textarray[1]"_ostr, "x"_ostr, "2306");
+        assertXPath(pXmlDoc, "//textarray[1]"_ostr, "x"_ostr, u"2306"_ustr);
         // text is after a tab from list - haven't checked if that is correct?
-        assertXPath(pXmlDoc, "//textarray[2]"_ostr, "x"_ostr, "2873");
+        assertXPath(pXmlDoc, "//textarray[2]"_ostr, "x"_ostr, u"2873"_ustr);
         // second line
-        assertXPath(pXmlDoc, "//textarray[3]"_ostr, "x"_ostr, "2873");
+        assertXPath(pXmlDoc, "//textarray[3]"_ostr, "x"_ostr, u"2873"_ustr);
         // 2: as 1 + paragraph sets firstline
-        assertXPath(pXmlDoc, "//textarray[4]"_ostr, "x"_ostr, "3440");
-        assertXPath(pXmlDoc, "//textarray[5]"_ostr, "x"_ostr, "3593");
-        assertXPath(pXmlDoc, "//textarray[6]"_ostr, "x"_ostr, "2873");
+        assertXPath(pXmlDoc, "//textarray[4]"_ostr, "x"_ostr, u"3440"_ustr);
+        assertXPath(pXmlDoc, "//textarray[5]"_ostr, "x"_ostr, u"3593"_ustr);
+        assertXPath(pXmlDoc, "//textarray[6]"_ostr, "x"_ostr, u"2873"_ustr);
         // 3: as 1 + paragraph sets textleft
-        assertXPath(pXmlDoc, "//textarray[7]"_ostr, "x"_ostr, "2873");
-        assertXPath(pXmlDoc, "//textarray[8]"_ostr, "x"_ostr, "3440");
-        assertXPath(pXmlDoc, "//textarray[9]"_ostr, "x"_ostr, "3440");
+        assertXPath(pXmlDoc, "//textarray[7]"_ostr, "x"_ostr, u"2873"_ustr);
+        assertXPath(pXmlDoc, "//textarray[8]"_ostr, "x"_ostr, u"3440"_ustr);
+        assertXPath(pXmlDoc, "//textarray[9]"_ostr, "x"_ostr, u"3440"_ustr);
         // 4: as 1 + paragraph sets firstline, textleft
-        assertXPath(pXmlDoc, "//textarray[10]"_ostr, "x"_ostr, "2306");
-        assertXPath(pXmlDoc, "//textarray[11]"_ostr, "x"_ostr, "3440");
-        assertXPath(pXmlDoc, "//textarray[12]"_ostr, "x"_ostr, "3440");
+        assertXPath(pXmlDoc, "//textarray[10]"_ostr, "x"_ostr, u"2306"_ustr);
+        assertXPath(pXmlDoc, "//textarray[11]"_ostr, "x"_ostr, u"3440"_ustr);
+        assertXPath(pXmlDoc, "//textarray[12]"_ostr, "x"_ostr, u"3440"_ustr);
         // 5: as 1 + paragraph sets firstline
-        assertXPath(pXmlDoc, "//textarray[13]"_ostr, "x"_ostr, "1739");
-        assertXPath(pXmlDoc, "//textarray[14]"_ostr, "x"_ostr, "2873");
-        assertXPath(pXmlDoc, "//textarray[15]"_ostr, "x"_ostr, "2873");
+        assertXPath(pXmlDoc, "//textarray[13]"_ostr, "x"_ostr, u"1739"_ustr);
+        assertXPath(pXmlDoc, "//textarray[14]"_ostr, "x"_ostr, u"2873"_ustr);
+        assertXPath(pXmlDoc, "//textarray[15]"_ostr, "x"_ostr, u"2873"_ustr);
         // 6: as 1
-        assertXPath(pXmlDoc, "//textarray[16]"_ostr, "x"_ostr, "2306");
-        assertXPath(pXmlDoc, "//textarray[17]"_ostr, "x"_ostr, "2873");
+        assertXPath(pXmlDoc, "//textarray[16]"_ostr, "x"_ostr, u"2306"_ustr);
+        assertXPath(pXmlDoc, "//textarray[17]"_ostr, "x"_ostr, u"2873"_ustr);
 
         // 8: inherited from paragraph style and overridden by list
-        assertXPath(pXmlDoc, "//textarray[18]"_ostr, "x"_ostr, "2873");
-        assertXPath(pXmlDoc, "//textarray[19]"_ostr, "x"_ostr, "3746");
-        assertXPath(pXmlDoc, "//textarray[20]"_ostr, "x"_ostr, "2306");
+        assertXPath(pXmlDoc, "//textarray[18]"_ostr, "x"_ostr, u"2873"_ustr);
+        assertXPath(pXmlDoc, "//textarray[19]"_ostr, "x"_ostr, u"3746"_ustr);
+        assertXPath(pXmlDoc, "//textarray[20]"_ostr, "x"_ostr, u"2306"_ustr);
         // 9: as 8 + paragraph sets firstline
-        assertXPath(pXmlDoc, "//textarray[21]"_ostr, "x"_ostr, "3440");
-        assertXPath(pXmlDoc, "//textarray[22]"_ostr, "x"_ostr, "3746");
-        assertXPath(pXmlDoc, "//textarray[23]"_ostr, "x"_ostr, "2306");
+        assertXPath(pXmlDoc, "//textarray[21]"_ostr, "x"_ostr, u"3440"_ustr);
+        assertXPath(pXmlDoc, "//textarray[22]"_ostr, "x"_ostr, u"3746"_ustr);
+        assertXPath(pXmlDoc, "//textarray[23]"_ostr, "x"_ostr, u"2306"_ustr);
         // 10: as 8 + paragraph sets textleft
-        assertXPath(pXmlDoc, "//textarray[24]"_ostr, "x"_ostr, "4007");
-        assertXPath(pXmlDoc, "//textarray[25]"_ostr, "x"_ostr, "4880");
-        assertXPath(pXmlDoc, "//textarray[26]"_ostr, "x"_ostr, "3440");
+        assertXPath(pXmlDoc, "//textarray[24]"_ostr, "x"_ostr, u"4007"_ustr);
+        assertXPath(pXmlDoc, "//textarray[25]"_ostr, "x"_ostr, u"4880"_ustr);
+        assertXPath(pXmlDoc, "//textarray[26]"_ostr, "x"_ostr, u"3440"_ustr);
         // 11: as 8 + paragraph sets firstline, textleft
-        assertXPath(pXmlDoc, "//textarray[27]"_ostr, "x"_ostr, "2306");
-        assertXPath(pXmlDoc, "//textarray[28]"_ostr, "x"_ostr, "3440");
-        assertXPath(pXmlDoc, "//textarray[29]"_ostr, "x"_ostr, "3440");
+        assertXPath(pXmlDoc, "//textarray[27]"_ostr, "x"_ostr, u"2306"_ustr);
+        assertXPath(pXmlDoc, "//textarray[28]"_ostr, "x"_ostr, u"3440"_ustr);
+        assertXPath(pXmlDoc, "//textarray[29]"_ostr, "x"_ostr, u"3440"_ustr);
         // 12: as 8 + paragraph sets firstline
-        assertXPath(pXmlDoc, "//textarray[30]"_ostr, "x"_ostr, "1172");
-        assertXPath(pXmlDoc, "//textarray[31]"_ostr, "x"_ostr, "1739");
-        assertXPath(pXmlDoc, "//textarray[32]"_ostr, "x"_ostr, "2306");
+        assertXPath(pXmlDoc, "//textarray[30]"_ostr, "x"_ostr, u"1172"_ustr);
+        assertXPath(pXmlDoc, "//textarray[31]"_ostr, "x"_ostr, u"1739"_ustr);
+        assertXPath(pXmlDoc, "//textarray[32]"_ostr, "x"_ostr, u"2306"_ustr);
         // 13: as 8
-        assertXPath(pXmlDoc, "//textarray[33]"_ostr, "x"_ostr, "2873");
-        assertXPath(pXmlDoc, "//textarray[34]"_ostr, "x"_ostr, "3746");
+        assertXPath(pXmlDoc, "//textarray[33]"_ostr, "x"_ostr, u"2873"_ustr);
+        assertXPath(pXmlDoc, "//textarray[34]"_ostr, "x"_ostr, u"3746"_ustr);
     }
 #endif
 }
@@ -1328,14 +1328,14 @@ CPPUNIT_TEST_FIXTURE(Test, testParagraphMarkerMarkupRoundtrip)
 {
     loadAndReload("ParagraphMarkerMarkup.fodt");
     // Test that the markup stays at save-and-reload
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     OUString autostyle
         = getXPath(pXmlDoc, "//office:body/office:text/text:p"_ostr, "marker-style-name"_ostr);
     OString style_text_properties
         = "/office:document-content/office:automatic-styles/style:style[@style:name='"
           + autostyle.toUtf8() + "']/style:text-properties";
-    assertXPath(pXmlDoc, style_text_properties, "font-size"_ostr, "9pt");
-    assertXPath(pXmlDoc, style_text_properties, "color"_ostr, "#ff0000");
+    assertXPath(pXmlDoc, style_text_properties, "font-size"_ostr, u"9pt"_ustr);
+    assertXPath(pXmlDoc, style_text_properties, "color"_ostr, u"#ff0000"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCommentStyles)
@@ -1343,28 +1343,28 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentStyles)
     createSwDoc();
 
     auto xFactory(mxComponent.queryThrow<lang::XMultiServiceFactory>());
-    auto xComment(xFactory->createInstance("com.sun.star.text.textfield.Annotation").queryThrow<text::XTextContent>());
-    auto xCommentText(getProperty<uno::Reference<text::XTextRange>>(xComment, "TextRange"));
-    xCommentText->setString("Hello World");
-    xCommentText.queryThrow<beans::XPropertySet>()->setPropertyValue("ParaStyleName", uno::Any(OUString("Heading")));
+    auto xComment(xFactory->createInstance(u"com.sun.star.text.textfield.Annotation"_ustr).queryThrow<text::XTextContent>());
+    auto xCommentText(getProperty<uno::Reference<text::XTextRange>>(xComment, u"TextRange"_ustr));
+    xCommentText->setString(u"Hello World"_ustr);
+    xCommentText.queryThrow<beans::XPropertySet>()->setPropertyValue(u"ParaStyleName"_ustr, uno::Any(u"Heading"_ustr));
 
     xComment->attach(getParagraph(1)->getEnd());
 
-    saveAndReload("writer8");
+    saveAndReload(u"writer8"_ustr);
 
     auto xFields(mxComponent.queryThrow<text::XTextFieldsSupplier>()->getTextFields()->createEnumeration());
     xComment.set(xFields->nextElement().queryThrow<text::XTextContent>());
-    CPPUNIT_ASSERT(xComment.queryThrow<lang::XServiceInfo>()->supportsService("com.sun.star.text.textfield.Annotation"));
+    CPPUNIT_ASSERT(xComment.queryThrow<lang::XServiceInfo>()->supportsService(u"com.sun.star.text.textfield.Annotation"_ustr));
 
-    xCommentText.set(getProperty<uno::Reference<text::XTextRange>>(xComment, "TextRange"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Heading"), getProperty<OUString>(xCommentText, "ParaStyleName"));
+    xCommentText.set(getProperty<uno::Reference<text::XTextRange>>(xComment, u"TextRange"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Heading"_ustr, getProperty<OUString>(xCommentText, u"ParaStyleName"_ustr));
 
     auto xStyleFamilies(mxComponent.queryThrow<style::XStyleFamiliesSupplier>()->getStyleFamilies());
-    auto xParaStyles(xStyleFamilies->getByName("ParagraphStyles"));
-    auto xStyle(xParaStyles.queryThrow<container::XNameAccess>()->getByName("Heading"));
-    CPPUNIT_ASSERT_EQUAL(getProperty<float>(xStyle, "CharHeight"), getProperty<float>(xCommentText, "CharHeight"));
+    auto xParaStyles(xStyleFamilies->getByName(u"ParagraphStyles"_ustr));
+    auto xStyle(xParaStyles.queryThrow<container::XNameAccess>()->getByName(u"Heading"_ustr));
+    CPPUNIT_ASSERT_EQUAL(getProperty<float>(xStyle, u"CharHeight"_ustr), getProperty<float>(xCommentText, u"CharHeight"_ustr));
     CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE,
-                         xCommentText.queryThrow<beans::XPropertyState>()->getPropertyState("CharHeight"));
+                         xCommentText.queryThrow<beans::XPropertyState>()->getPropertyState(u"CharHeight"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf150408_IsLegal)
@@ -1373,20 +1373,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150408_IsLegal)
 
     // Second level's numbering should use Arabic numbers for first level reference
     auto xPara = getParagraph(1);
-    CPPUNIT_ASSERT_EQUAL(OUString("CH I"), getProperty<OUString>(xPara, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u"CH I"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
     xPara = getParagraph(2);
-    CPPUNIT_ASSERT_EQUAL(OUString("Sect 1.01"), getProperty<OUString>(xPara, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u"Sect 1.01"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
     xPara = getParagraph(3);
-    CPPUNIT_ASSERT_EQUAL(OUString("CH II"), getProperty<OUString>(xPara, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u"CH II"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
     xPara = getParagraph(4);
-    CPPUNIT_ASSERT_EQUAL(OUString("Sect 2.01"), getProperty<OUString>(xPara, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u"Sect 2.01"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
 
     // Test that the markup stays at save-and-reload
-    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
     assertXPath(
         pXmlDoc,
         "/office:document-styles/office:styles/text:outline-style/text:outline-level-style[2]"_ostr,
-        "is-legal"_ostr, "true");
+        "is-legal"_ostr, u"true"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
@@ -1417,10 +1417,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
     // 2. Make sure that exported document has NoGapAfterNoteNumber option set,
     // and has correct layout
     {
-        xmlDocUniquePtr pXmlDoc = parseExport("settings.xml");
+        xmlDocUniquePtr pXmlDoc = parseExport(u"settings.xml"_ustr);
         assertXPathContent(
             pXmlDoc,
-            "//config:config-item[@config:name='NoGapAfterNoteNumber']"_ostr, "true");
+            "//config:config-item[@config:name='NoGapAfterNoteNumber']"_ostr, u"true"_ustr);
 
         uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xSettings(
@@ -1498,63 +1498,63 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159438)
 
     {
         auto run = getRun(xPara, 1);
-        CPPUNIT_ASSERT_EQUAL(u"Bookmark"_ustr, getProperty<OUString>(run, "TextPortionType"));
-        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(run, "IsStart"));
-        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(run, "IsCollapsed"));
-        auto named = getProperty<uno::Reference<container::XNamed>>(run, "Bookmark");
+        CPPUNIT_ASSERT_EQUAL(u"Bookmark"_ustr, getProperty<OUString>(run, u"TextPortionType"_ustr));
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(run, u"IsStart"_ustr));
+        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(run, u"IsCollapsed"_ustr));
+        auto named = getProperty<uno::Reference<container::XNamed>>(run, u"Bookmark"_ustr);
         CPPUNIT_ASSERT_EQUAL(u"bookmark1"_ustr, named->getName());
     }
 
     {
         auto run = getRun(xPara, 2);
-        CPPUNIT_ASSERT_EQUAL(u"Text"_ustr, getProperty<OUString>(run, "TextPortionType"));
+        CPPUNIT_ASSERT_EQUAL(u"Text"_ustr, getProperty<OUString>(run, u"TextPortionType"_ustr));
         CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, run->getString());
     }
 
     {
         auto run = getRun(xPara, 3);
-        CPPUNIT_ASSERT_EQUAL(u"Bookmark"_ustr, getProperty<OUString>(run, "TextPortionType"));
-        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(run, "IsStart"));
-        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(run, "IsCollapsed"));
-        auto named = getProperty<uno::Reference<container::XNamed>>(run, "Bookmark");
+        CPPUNIT_ASSERT_EQUAL(u"Bookmark"_ustr, getProperty<OUString>(run, u"TextPortionType"_ustr));
+        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(run, u"IsStart"_ustr));
+        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(run, u"IsCollapsed"_ustr));
+        auto named = getProperty<uno::Reference<container::XNamed>>(run, u"Bookmark"_ustr);
         CPPUNIT_ASSERT_EQUAL(u"bookmark1"_ustr, named->getName());
     }
 
     {
         auto run = getRun(xPara, 4);
-        CPPUNIT_ASSERT_EQUAL(u"Bookmark"_ustr, getProperty<OUString>(run, "TextPortionType"));
-        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(run, "IsStart"));
-        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(run, "IsCollapsed"));
-        auto named = getProperty<uno::Reference<container::XNamed>>(run, "Bookmark");
+        CPPUNIT_ASSERT_EQUAL(u"Bookmark"_ustr, getProperty<OUString>(run, u"TextPortionType"_ustr));
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(run, u"IsStart"_ustr));
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(run, u"IsCollapsed"_ustr));
+        auto named = getProperty<uno::Reference<container::XNamed>>(run, u"Bookmark"_ustr);
         CPPUNIT_ASSERT_EQUAL(u"bookmark2"_ustr, named->getName());
     }
 
     {
         auto run = getRun(xPara, 5);
-        CPPUNIT_ASSERT_EQUAL(u"Bookmark"_ustr, getProperty<OUString>(run, "TextPortionType"));
-        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(run, "IsStart"));
-        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(run, "IsCollapsed"));
-        auto named = getProperty<uno::Reference<container::XNamed>>(run, "Bookmark");
+        CPPUNIT_ASSERT_EQUAL(u"Bookmark"_ustr, getProperty<OUString>(run, u"TextPortionType"_ustr));
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(run, u"IsStart"_ustr));
+        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(run, u"IsCollapsed"_ustr));
+        auto named = getProperty<uno::Reference<container::XNamed>>(run, u"Bookmark"_ustr);
         CPPUNIT_ASSERT_EQUAL(u"bookmark3"_ustr, named->getName());
     }
 
     {
         auto run = getRun(xPara, 6);
-        CPPUNIT_ASSERT_EQUAL(u"Text"_ustr, getProperty<OUString>(run, "TextPortionType"));
+        CPPUNIT_ASSERT_EQUAL(u"Text"_ustr, getProperty<OUString>(run, u"TextPortionType"_ustr));
         CPPUNIT_ASSERT_EQUAL(u"bar"_ustr, run->getString());
     }
 
     {
         auto run = getRun(xPara, 7);
-        CPPUNIT_ASSERT_EQUAL(u"Bookmark"_ustr, getProperty<OUString>(run, "TextPortionType"));
-        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(run, "IsStart"));
-        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(run, "IsCollapsed"));
-        auto named = getProperty<uno::Reference<container::XNamed>>(run, "Bookmark");
+        CPPUNIT_ASSERT_EQUAL(u"Bookmark"_ustr, getProperty<OUString>(run, u"TextPortionType"_ustr));
+        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(run, u"IsStart"_ustr));
+        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(run, u"IsCollapsed"_ustr));
+        auto named = getProperty<uno::Reference<container::XNamed>>(run, u"Bookmark"_ustr);
         CPPUNIT_ASSERT_EQUAL(u"bookmark3"_ustr, named->getName());
     }
 
     // Test that the markup stays at save-and-reload
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
     assertXPathNodeName(pXmlDoc, "//office:body/office:text/text:p/*[1]"_ostr,
                         "bookmark-start"_ostr);
@@ -1604,7 +1604,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160700)
     // i.e., the bookmark wasn't imported, and the field had no proper source
     CPPUNIT_ASSERT_EQUAL(u"1"_ustr, xTextField->getPresentation(false));
 
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     // Check that we export the bookmark in the empty paragraph as a single text:bookmark
     // element. Another valid markup is text:bookmark-start followed by text:bookmark-end
     // (in that order). The problem was, that text:bookmark-end was before text:bookmark-start.
@@ -1625,7 +1625,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160253_ordinary_numbering)
                          getProperty<OUString>(getParagraph(4), u"ListLabelString"_ustr));
 
     // Make sure that we emit an identifier for the first list, and refer to it in the continuation
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     // This failed before the fix, because 'xml:id' attribute wasn't emitted
     OUString firstListId
         = getXPath(pXmlDoc, "//office:body/office:text/text:list[1]"_ostr, "id"_ostr);
@@ -1658,7 +1658,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableInFrameAnchoredToPage)
     // it must not assert on export because of missing format for an exported table
     loadAndReload("table_in_frame_to_page.fodt");
 
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     auto AutoStyleUsedIn = [this, &pXmlDoc](const OString& path, const OString& attr) -> OString
     {
         const OUString styleName = getXPath(pXmlDoc, path, attr);
@@ -1692,7 +1692,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMidnightRedlineDatetime)
     // because "2001-01-01T00:00:00" became "2001-01-01" on roundtrip.
     loadAndReload("midnight_redline.fodt");
 
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPathContent(pXmlDoc,
                        "//office:body/office:text/text:tracked-changes/text:changed-region/"
                        "text:deletion/office:change-info/dc:date"_ostr,

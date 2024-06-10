@@ -19,7 +19,7 @@ class SearchResultLocatorTest : public SwModelTestBase
 {
 public:
     SearchResultLocatorTest()
-        : SwModelTestBase("/sw/qa/extras/indexing/data/")
+        : SwModelTestBase(u"/sw/qa/extras/indexing/data/"_ustr)
     {
     }
 

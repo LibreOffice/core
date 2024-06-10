@@ -23,7 +23,7 @@ class TxtExportTest : public SwModelTestBase
 {
 public:
     TxtExportTest()
-        : SwModelTestBase("/sw/qa/extras/txtexport/data/", "Text")
+        : SwModelTestBase(u"/sw/qa/extras/txtexport/data/"_ustr, u"Text"_ustr)
     {
     }
 
@@ -122,15 +122,15 @@ CPPUNIT_TEST_FIXTURE(TxtExportTest, testClearingBreakExport)
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextContent> xLineBreak(
-        xMSF->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
+        xMSF->createInstance(u"com.sun.star.text.LineBreak"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
     auto eClear = static_cast<sal_Int16>(SwLineBreakClear::ALL);
-    xLineBreakProps->setPropertyValue("Clear", uno::Any(eClear));
+    xLineBreakProps->setPropertyValue(u"Clear"_ustr, uno::Any(eClear));
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-    xText->insertString(xCursor, "foo", /*bAbsorb=*/false);
+    xText->insertString(xCursor, u"foo"_ustr, /*bAbsorb=*/false);
     xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
-    xText->insertString(xCursor, "bar", /*bAbsorb=*/false);
+    xText->insertString(xCursor, u"bar"_ustr, /*bAbsorb=*/false);
 
     // When exporting to plain text:
     save(mpFilter);

@@ -24,15 +24,15 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestBasicStructure)
 
     dumpA11YTree(xContext);
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString("<PARAGRAPH>String1</PARAGRAPH><PARAGRAPH/><PARAGRAPH/><PARAGRAPH/>"
-                      "<TABLE name=\"Table1-1\" description=\"Table1 on page 1\">"
-                      "<TABLE_CELL name=\"A1\" description=\"A1\">"
-                      "<PARAGRAPH>String2</PARAGRAPH>"
-                      "</TABLE_CELL>"
-                      "</TABLE>"
-                      "<PARAGRAPH/>"
-                      "<TEXT_FRAME name=\"Frame1\"><PARAGRAPH>Frame1</PARAGRAPH></TEXT_FRAME>"
-                      "<TEXT_FRAME name=\"Frame2\"><PARAGRAPH>Frame2</PARAGRAPH></TEXT_FRAME>"),
+        u"<PARAGRAPH>String1</PARAGRAPH><PARAGRAPH/><PARAGRAPH/><PARAGRAPH/>"
+        "<TABLE name=\"Table1-1\" description=\"Table1 on page 1\">"
+        "<TABLE_CELL name=\"A1\" description=\"A1\">"
+        "<PARAGRAPH>String2</PARAGRAPH>"
+        "</TABLE_CELL>"
+        "</TABLE>"
+        "<PARAGRAPH/>"
+        "<TEXT_FRAME name=\"Frame1\"><PARAGRAPH>Frame1</PARAGRAPH></TEXT_FRAME>"
+        "<TEXT_FRAME name=\"Frame2\"><PARAGRAPH>Frame2</PARAGRAPH></TEXT_FRAME>"_ustr,
         collectText(xContext));
 }
 
@@ -49,7 +49,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestTypeSimple)
     documentPostKeyEvent(LOK_KEYEVENT_KEYINPUT, 'o', 0);
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString("<PARAGRAPH>hello</PARAGRAPH>"), collectText(xContext));
+    CPPUNIT_ASSERT_EQUAL(u"<PARAGRAPH>hello</PARAGRAPH>"_ustr, collectText(xContext));
 }
 
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestTypeMultiPara)
@@ -66,7 +66,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestTypeMultiPara)
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString("<PARAGRAPH>A</PARAGRAPH><PARAGRAPH>B</PARAGRAPH><PARAGRAPH>C</PARAGRAPH>"),
+        u"<PARAGRAPH>A</PARAGRAPH><PARAGRAPH>B</PARAGRAPH><PARAGRAPH>C</PARAGRAPH>"_ustr,
         collectText(xContext));
 }
 
@@ -74,7 +74,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestMenuInsertPageNumber)
 {
     load(u"private:factory/swriter"_ustr);
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Field", u"Page Number"));
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString("<PARAGRAPH>1</PARAGRAPH>"), collectText());
+    CPPUNIT_ASSERT_EQUAL(u"<PARAGRAPH>1</PARAGRAPH>"_ustr, collectText());
 }
 
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestMenuInsertPageBreak)
@@ -87,8 +87,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestMenuInsertPageBreak)
     documentPostKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN);
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Field", u"Page Number"));
 
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString("<PARAGRAPH>1</PARAGRAPH><PARAGRAPH>2</PARAGRAPH>"),
-                         collectText());
+    CPPUNIT_ASSERT_EQUAL(u"<PARAGRAPH>1</PARAGRAPH><PARAGRAPH>2</PARAGRAPH>"_ustr, collectText());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
