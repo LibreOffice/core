@@ -75,3 +75,14 @@ remove C++20 starts_with
              const Object fontObj = fontDict->getVal(i);
              if (fontObj.isDict() && fontObj.dictIs("Font")) {
                  const Object fontBaseFontObj = fontObj.dictLookup("BaseFont");
+--- poppler/poppler/PSOutputDev.cc.orig	2025-01-09 12:21:50.100540341 +0100
++++ poppler/poppler/PSOutputDev.cc	2025-01-09 12:21:52.004545519 +0100
+@@ -7482,7 +7482,7 @@
+     //   for the keyword, which was emitted by the caller)
+     // - lines that start with a left paren are treated as <text>
+     //   instead of <textline>, so we escape a leading paren
+-    if (s.starts_with(unicodeByteOrderMark)) {
++    if (GooString::startsWith(s, unicodeByteOrderMark)) {
+         i = 3;
+         step = 2;
+     } else {
