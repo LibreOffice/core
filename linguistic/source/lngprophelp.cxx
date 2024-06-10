@@ -632,6 +632,13 @@ void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
             pnResVal = &nResHyphTextHyphenZone;
         else if ( rVal.Name == UPN_HYPH_NO_CAPS )
             pbResVal = &bResNoHyphenateCaps;
+        else if (rVal.Name == UPN_HYPH_NO_LAST_WORD ||
+                 rVal.Name == UPN_HYPH_KEEP ||
+                 rVal.Name == UPN_HYPH_KEEP_TYPE)
+        {
+            // skip these known ones without warnings
+            continue;
+        }
 
         SAL_WARN_IF( !(pnResVal || pbResVal), "linguistic", "unknown property '" << rVal.Name << "'");
 
