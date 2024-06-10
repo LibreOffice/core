@@ -3,11 +3,8 @@
  * found in the LICENSE file.
  */
 
-#ifndef SKIA_COMPILER_H
-#define SKIA_COMPILER_H
+#pragma once
 
 #include <include/core/SkTypes.h>
 
 SK_API const char* skia_compiler_name();
-
-#endif
