@@ -41,10 +41,13 @@ using namespace css;
 
 namespace com::sun::star::uno { class XComponentContext; }
 
-namespace sd {
+namespace sd
+{
 
-namespace {
+namespace
+{
 
+/** Undo/redo insertion or removal of an annotation to/from the document */
 class UndoInsertOrRemoveAnnotation : public SdrUndoAction
 {
 public:
@@ -61,11 +64,13 @@ protected:
 
 }
 
+/** Creates an annotation */
 rtl::Reference<sdr::annotation::Annotation> createAnnotation(SdPage* pPage)
 {
     return rtl::Reference<Annotation>(new Annotation(comphelper::getProcessComponentContext(), pPage));
 }
 
+/** Creates an annotation and adds it to the page */
 rtl::Reference<sdr::annotation::Annotation> createAnnotationAndAddToPage(SdPage* pPage)
 {
     rtl::Reference<sdr::annotation::Annotation> xAnnotation = createAnnotation(pPage);

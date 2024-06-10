@@ -31,6 +31,7 @@ namespace sdr::annotation
 {
 class Annotation;
 
+/** Type of the annotation / comment change. */
 enum class CommentNotificationType
 {
     Add,
@@ -38,10 +39,14 @@ enum class CommentNotificationType
     Remove
 };
 
+/** LOKit notify for a view */
 SVXCORE_DLLPUBLIC void LOKCommentNotify(CommentNotificationType nType,
                                         const SfxViewShell* pViewShell, Annotation& rAnnotation);
+
+/** LOKit notify for all views */
 SVXCORE_DLLPUBLIC void LOKCommentNotifyAll(CommentNotificationType nType, Annotation& rAnnotation);
 
+/** Type of the annotation (that is supported) */
 enum class AnnotationType
 {
     None,
@@ -54,6 +59,7 @@ enum class AnnotationType
     FreeText,
 };
 
+/** Annotation data that is used at annotation creation */
 struct CreationInfo
 {
     AnnotationType meType = AnnotationType::None;
@@ -70,6 +76,7 @@ struct CreationInfo
     Color maColor = COL_TRANSPARENT;
 };
 
+/** Data of an annotation */
 struct SVXCORE_DLLPUBLIC AnnotationData
 {
     css::geometry::RealPoint2D m_Position;
@@ -83,6 +90,11 @@ struct SVXCORE_DLLPUBLIC AnnotationData
     void set(Annotation& rAnnotation);
 };
 
+/** Annotation object, responsible for handling of the annotation.
+ *
+ * Implements the XAnnotation UNO API, handles undo/redo and notifications ()
+ *
+ **/
 class SVXCORE_DLLPUBLIC Annotation
     : protected ::cppu::BaseMutex,
       public ::cppu::WeakComponentImplHelper<css::office::XAnnotation>,
@@ -123,6 +135,7 @@ public:
         ::cppu::WeakComponentImplHelper<css::office::XAnnotation>::release();
     }
 
+    // Changes without triggering notification broadcast
     css::geometry::RealPoint2D GetPosition() const { return m_Position; }
     void SetPosition(const css::geometry::RealPoint2D& rValue) { m_Position = rValue; }
 
@@ -156,12 +169,14 @@ public:
     SdrPage const* getPage() const { return mpPage; }
     SdrPage* getPage() { return mpPage; }
 
+    // Unique ID of the annotation
     sal_uInt32 GetId() const { return m_nId; }
 
     CreationInfo const& getCreationInfo() { return maCreationInfo; }
     void setCreationInfo(CreationInfo const& rCreationInfo) { maCreationInfo = rCreationInfo; }
 };
 
+/** Vector of annotations */
 typedef std::vector<rtl::Reference<Annotation>> AnnotationVector;
 
 } // namespace sdr::annotation

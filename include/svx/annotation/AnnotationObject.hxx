@@ -16,12 +16,14 @@
 
 namespace sdr::annotation
 {
+/** Annotation data that contains the annotation unique ID and author's ID */
 struct SVXCORE_DLLPUBLIC AnnotationViewData
 {
     sal_Int32 nIndex = -1;
     sal_uInt16 nAuthorIndex = 0;
 };
 
+/** Annotation (sdr) object, which represents an annotation inside the document */
 class SVXCORE_DLLPUBLIC AnnotationObject final : public SdrRectObj
 {
 private:

@@ -58,6 +58,7 @@ OString lcl_LOKGetCommentPayload(CommentNotificationType nType, Annotation& rAnn
     return aJsonWriter.finishAndGetAsOString();
 }
 
+/** Undo/redo a modification of an annotation - change of annotation data */
 class UndoAnnotation : public SdrUndoAction
 {
 public:
