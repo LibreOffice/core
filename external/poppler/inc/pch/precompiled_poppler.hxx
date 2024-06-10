@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2023-06-18 21:15:26 using:
+ Generated on 2024-06-10 17:25:06 using:
  ./bin/update_pch external/poppler poppler --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -43,6 +43,7 @@
 #include <cctype>
 #include <cerrno>
 #include <cfloat>
+#include <charconv>
 #include <climits>
 #include <clocale>
 #include <cmath>
@@ -55,6 +56,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
+#include <functional>
 #include <gbase64.h>
 #include <gbasename.h>
 #include <gdir.h>
@@ -67,11 +69,13 @@
 #include <iostream>
 #include <limits>
 #include <memory>
+#include <optional>
 #include <poppler-config.h>
 #include <random>
 #include <regex>
 #include <set>
 #include <sstream>
+#include <unordered_set>
 #include <vector>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
@@ -100,6 +104,17 @@
 #include <poppler/GfxState_helpers.h>
 #include <splash/Splash.h>
 #include <splash/SplashBitmap.h>
+#include <splash/SplashErrorCodes.h>
+#include <splash/SplashFont.h>
+#include <splash/SplashFontEngine.h>
+#include <splash/SplashFontFile.h>
+#include <splash/SplashFontFileID.h>
+#include <splash/SplashGlyphBitmap.h>
+#include <splash/SplashMath.h>
+#include <splash/SplashPath.h>
+#include <splash/SplashPattern.h>
+#include <splash/SplashScreen.h>
+#include <splash/SplashState.h>
 #include <splash/SplashTypes.h>
 #include <sys/stat.h>
 #endif // PCH_LEVEL >= 3
