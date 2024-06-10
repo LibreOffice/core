@@ -35,6 +35,7 @@ namespace o3tl {
 template<typename T>
 class span {
 public:
+    using element_type = T;
     using value_type = T;
     using pointer = value_type *;
     using const_pointer = value_type const *;
@@ -61,7 +62,7 @@ public:
 
     template<typename T2>
     constexpr span(const std::vector<T2>& vec)
-        : data_(vec.data()), size_(vec.size()) {}
+        : data_(const_cast<T*>(vec.data())), size_(vec.size()) {}
 
     /** for assigning from span<T> to span<const T> */
     constexpr span (const span<typename std::remove_const<T>::type>& other) noexcept

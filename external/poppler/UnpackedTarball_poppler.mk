@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 	external/poppler/gcc7-GfxFont.patch.1 \
 	external/poppler/std_charconv.patch.1 \
 	external/poppler/std_string.patch.1 \
+	external/poppler/std_span.patch.1 \
 	external/poppler/poppler-config.patch.1 \
 ))
 
