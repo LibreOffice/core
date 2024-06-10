@@ -83,6 +83,22 @@ sal_Int32 IndexedStyleSheets::GetNumberOfStyleSheets() const
 }
 
 void
+IndexedStyleSheets::ReindexOnNameChange(const SfxStyleSheetBase& style, const OUString& rOldName, const OUString& rNewName)
+{
+    std::pair<MapType::const_iterator, MapType::const_iterator> range = mPositionsByName.equal_range(rOldName);
+    for (MapType::const_iterator it = range.first; it != range.second; ++it)
+    {
+        if (mStyleSheets[it->second].get() == &style)
+        {
+            unsigned nPos = it->second;
+            mPositionsByName.erase(it);
+            mPositionsByName.insert(std::make_pair(rNewName, nPos));
+            break;
+        }
+    }
+}
+
+void
 IndexedStyleSheets::AddStyleSheet(const rtl::Reference< SfxStyleSheetBase >& style)
 {
     if (!HasStyleSheet(style)) {
