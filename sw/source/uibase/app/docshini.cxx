@@ -584,7 +584,7 @@ bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
 
     do {        // middle check loop
         ErrCodeMsg nErr = ERR_SWG_READ_ERROR;
-        OUString aStreamName = "styles.xml";
+        OUString aStreamName = u"styles.xml"_ustr;
         uno::Reference < container::XNameAccess > xAccess = rMedium.GetStorage();
         if ( xAccess->hasByName( aStreamName ) && rMedium.GetStorage()->isStreamElement( aStreamName ) )
         {

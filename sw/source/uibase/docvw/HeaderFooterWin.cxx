@@ -227,9 +227,9 @@ void SwHeaderFooterDashedLine::SetOffset(Point aOffset, tools::Long nXLineStart,
 }
 
 SwHeaderFooterWin::SwHeaderFooterWin(SwEditWin* pEditWin, const SwFrame *pFrame, bool bHeader ) :
-    InterimItemWindow(pEditWin, "modules/swriter/ui/hfmenubutton.ui", "HFMenuButton"),
-    m_xMenuButton(m_xBuilder->weld_menu_button("menubutton")),
-    m_xPushButton(m_xBuilder->weld_button("button")),
+    InterimItemWindow(pEditWin, u"modules/swriter/ui/hfmenubutton.ui"_ustr, u"HFMenuButton"_ustr),
+    m_xMenuButton(m_xBuilder->weld_menu_button(u"menubutton"_ustr)),
+    m_xPushButton(m_xBuilder->weld_button(u"button"_ustr)),
     m_pEditWin(pEditWin),
     m_pFrame(pFrame),
     m_bIsHeader( bHeader ),
@@ -247,13 +247,13 @@ SwHeaderFooterWin::SwHeaderFooterWin(SwEditWin* pEditWin, const SwFrame *pFrame,
     // Rewrite the menu entries' text
     if (m_bIsHeader)
     {
-        m_xMenuButton->set_item_label("edit", SwResId(STR_FORMAT_HEADER));
-        m_xMenuButton->set_item_label("delete", SwResId(STR_DELETE_HEADER));
+        m_xMenuButton->set_item_label(u"edit"_ustr, SwResId(STR_FORMAT_HEADER));
+        m_xMenuButton->set_item_label(u"delete"_ustr, SwResId(STR_DELETE_HEADER));
     }
     else
     {
-        m_xMenuButton->set_item_label("edit", SwResId(STR_FORMAT_FOOTER));
-        m_xMenuButton->set_item_label("delete", SwResId(STR_DELETE_FOOTER));
+        m_xMenuButton->set_item_label(u"edit"_ustr, SwResId(STR_FORMAT_FOOTER));
+        m_xMenuButton->set_item_label(u"delete"_ustr, SwResId(STR_DELETE_FOOTER));
     }
 
     m_aFadeTimer.SetTimeout(50);
@@ -483,7 +483,7 @@ void SwHeaderFooterWin::ExecuteCommand(std::u16string_view rIdent)
     const OUString& rStyleName = pPageFrame->GetPageDesc()->GetName();
     if (rIdent == u"edit")
     {
-        OUString sPageId = m_bIsHeader ? OUString("header") : OUString("footer");
+        OUString sPageId = m_bIsHeader ? u"header"_ustr : u"footer"_ustr;
         rView.GetDocShell()->FormatPage(rView.GetFrameWeld(), rStyleName, sPageId, rSh);
     }
     else if (rIdent == u"borderback")

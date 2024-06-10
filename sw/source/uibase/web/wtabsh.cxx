@@ -33,7 +33,7 @@ SFX_IMPL_INTERFACE(SwWebTableShell, SwTableShell)
 
 void SwWebTableShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("table");
+    GetStaticInterface()->RegisterPopupMenu(u"table"_ustr);
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Table_Toolbox);
 }
 
@@ -42,7 +42,7 @@ SwWebTableShell::SwWebTableShell(SwView &_rView) :
     SwTableShell(_rView)
 {
     GetShell().UpdateTable();
-    SetName("Table");
+    SetName(u"Table"_ustr);
 }
 
 SwWebTableShell::~SwWebTableShell()

@@ -44,8 +44,8 @@ private:
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 public:
     CurrentEdit(vcl::Window* pParent)
-        : InterimItemWindow(pParent, "modules/swriter/ui/editbox.ui", "EditBox")
-        , m_xWidget(m_xBuilder->weld_entry("entry"))
+        : InterimItemWindow(pParent, u"modules/swriter/ui/editbox.ui"_ustr, u"EditBox"_ustr)
+        , m_xWidget(m_xBuilder->weld_entry(u"entry"_ustr))
     {
         InitControlBase(m_xWidget.get());
 
@@ -114,7 +114,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "lo.writer.MMCurrentEntryController";
+        return u"lo.writer.MMCurrentEntryController"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override
@@ -124,7 +124,7 @@ public:
 
     virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return { "com.sun.star.frame.ToolbarController" };
+        return { u"com.sun.star.frame.ToolbarController"_ustr };
     }
 
     // XComponent
@@ -145,8 +145,8 @@ private:
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 public:
     ExcludeCheckBox(vcl::Window* pParent)
-        : InterimItemWindow(pParent, "modules/swriter/ui/checkbox.ui", "CheckBox")
-        , m_xWidget(m_xBuilder->weld_check_button("checkbutton"))
+        : InterimItemWindow(pParent, u"modules/swriter/ui/checkbox.ui"_ustr, u"CheckBox"_ustr)
+        , m_xWidget(m_xBuilder->weld_check_button(u"checkbutton"_ustr))
     {
         InitControlBase(m_xWidget.get());
 
@@ -206,7 +206,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
     {
-        return "lo.writer.MMExcludeEntryController";
+        return u"lo.writer.MMExcludeEntryController"_ustr;
     }
 
     virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override
@@ -216,7 +216,7 @@ public:
 
     virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return { "com.sun.star.frame.ToolbarController" };
+        return { u"com.sun.star.frame.ToolbarController"_ustr };
     }
 
     // XComponent
@@ -266,7 +266,7 @@ IMPL_LINK(MMCurrentEntryController, CurrentEditUpdatedHdl, weld::Entry&, rEdit, 
     {
         xConfigItem->MoveResultSet(nEntry);
         // notify about the change
-        dispatchCommand(".uno:MailMergeCurrentEntry", uno::Sequence<beans::PropertyValue>());
+        dispatchCommand(u".uno:MailMergeCurrentEntry"_ustr, uno::Sequence<beans::PropertyValue>());
     }
     return true;
 };
@@ -283,7 +283,7 @@ void MMCurrentEntryController::statusChanged(const frame::FeatureStateEvent& rEv
     if (!xConfigItem || !rEvent.IsEnabled)
     {
         m_xCurrentEdit->set_sensitive(false);
-        m_xCurrentEdit->set_text("");
+        m_xCurrentEdit->set_text(u""_ustr);
     }
     else
     {

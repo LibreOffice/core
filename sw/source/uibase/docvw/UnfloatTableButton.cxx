@@ -46,9 +46,9 @@
 #define BUTTON_WIDTH 12
 
 UnfloatTableButton::UnfloatTableButton(SwEditWin* pEditWin, const SwFrame* pFrame)
-    : SwFrameMenuButtonBase(pEditWin, pFrame, "modules/swriter/ui/unfloatbutton.ui",
-                            "UnfloatButton")
-    , m_xPushButton(m_xBuilder->weld_button("button"))
+    : SwFrameMenuButtonBase(pEditWin, pFrame, u"modules/swriter/ui/unfloatbutton.ui"_ustr,
+                            u"UnfloatButton"_ustr)
+    , m_xPushButton(m_xBuilder->weld_button(u"button"_ustr))
     , m_sLabel(SwResId(STR_UNFLOAT_TABLE))
 {
     m_xPushButton->set_accessible_name(m_sLabel);
@@ -137,7 +137,7 @@ IMPL_LINK_NOARG(UnfloatTableButton, ClickHdl, weld::Button&, void)
     if (const SfxGrabBagItem* pGrabBagItem = pTableFormat->GetAttrSet().GetItem(RES_FRMATR_GRABBAG))
     {
         SfxGrabBagItem aGrabBagItem(*pGrabBagItem); // Editable copy
-        if (aGrabBagItem.GetGrabBag().erase("TablePosition"))
+        if (aGrabBagItem.GetGrabBag().erase(u"TablePosition"_ustr))
         {
             css::uno::Any aVal;
             aGrabBagItem.QueryValue(aVal);

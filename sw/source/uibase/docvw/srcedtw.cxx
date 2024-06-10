@@ -252,7 +252,7 @@ SwSrcEditWindow::SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView )
         std::unique_lock g(mutex_);
         m_xNotifier = n;
     }
-    n->addPropertiesChangeListener({ "FontHeight", "FontName" }, m_xListener);
+    n->addPropertiesChangeListener({ u"FontHeight"_ustr, u"FontName"_ustr }, m_xListener);
 }
 
 SwSrcEditWindow::~SwSrcEditWindow()

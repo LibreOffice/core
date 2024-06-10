@@ -20,11 +20,11 @@
 #include <dbui.hxx>
 
 SaveMonitor::SaveMonitor(weld::Window *pParent)
-    : GenericDialogController(pParent, "modules/swriter/ui/savemonitordialog.ui",
-        "SaveMonitorDialog")
-    , m_xDocName(m_xBuilder->weld_label("docname"))
-    , m_xPrinter(m_xBuilder->weld_label("printer"))
-    , m_xPrintInfo(m_xBuilder->weld_label("printinfo"))
+    : GenericDialogController(pParent, u"modules/swriter/ui/savemonitordialog.ui"_ustr,
+        u"SaveMonitorDialog"_ustr)
+    , m_xDocName(m_xBuilder->weld_label(u"docname"_ustr))
+    , m_xPrinter(m_xBuilder->weld_label(u"printer"_ustr))
+    , m_xPrintInfo(m_xBuilder->weld_label(u"printinfo"_ustr))
 {
 }
 
@@ -33,10 +33,10 @@ SaveMonitor::~SaveMonitor()
 }
 
 PrintMonitor::PrintMonitor(weld::Window *pParent)
-    : GenericDialogController(pParent, "modules/swriter/ui/printmonitordialog.ui",
-        "PrintMonitorDialog")
-    , m_xPrinter(m_xBuilder->weld_label("printer"))
-    , m_xPrintInfo(m_xBuilder->weld_label("printinfo"))
+    : GenericDialogController(pParent, u"modules/swriter/ui/printmonitordialog.ui"_ustr,
+        u"PrintMonitorDialog"_ustr)
+    , m_xPrinter(m_xBuilder->weld_label(u"printer"_ustr))
+    , m_xPrintInfo(m_xBuilder->weld_label(u"printinfo"_ustr))
 {
 }
 
@@ -46,14 +46,14 @@ PrintMonitor::~PrintMonitor()
 
 // Progress Indicator for Creation of personalized Mail Merge documents:
 CreateMonitor::CreateMonitor(weld::Window *pParent)
-    : GenericDialogController(pParent, "modules/swriter/ui/mmcreatingdialog.ui",
-        "MMCreatingDialog")
+    : GenericDialogController(pParent, u"modules/swriter/ui/mmcreatingdialog.ui"_ustr,
+        u"MMCreatingDialog"_ustr)
     , m_nTotalCount(0)
     , m_nCurrentPosition(0)
-    , m_xCounting(m_xBuilder->weld_label("progress"))
+    , m_xCounting(m_xBuilder->weld_label(u"progress"_ustr))
 {
     m_sCountingPattern = m_xCounting->get_label();
-    m_xCounting->set_label("...");
+    m_xCounting->set_label(u"..."_ustr);
 }
 
 CreateMonitor::~CreateMonitor()

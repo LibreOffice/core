@@ -34,7 +34,7 @@ SFX_IMPL_INTERFACE(SwWebGrfShell, SwGrfShell)
 
 void SwWebGrfShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("graphic");
+    GetStaticInterface()->RegisterPopupMenu(u"graphic"_ustr);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Webgraphic_Toolbox);
 }
@@ -44,7 +44,7 @@ SwWebGrfShell::SwWebGrfShell(SwView &_rView) :
     SwGrfShell(_rView)
 
 {
-    SetName("Graphic");
+    SetName(u"Graphic"_ustr);
 }
 
 SwWebGrfShell::~SwWebGrfShell()

@@ -309,7 +309,7 @@ SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
     if(!rURL.isEmpty())
     {
         SfxStringItem aURL(SID_FILE_NAME, rURL);
-        SfxStringItem aTargetFrameName( SID_TARGETNAME, "_blank" );
+        SfxStringItem aTargetFrameName( SID_TARGETNAME, u"_blank"_ustr );
         SfxBoolItem aHidden( SID_HIDDEN, true );
         SfxStringItem aReferer(SID_REFERER, pView->GetDocShell()->GetTitle());
         const SfxPoolItemHolder aResult(
@@ -411,7 +411,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
                 using namespace org::freedesktop::PackageKit;
                 using namespace svtools;
                 css::uno::Reference< XSyncDbusSessionHelper > xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
-                const css::uno::Sequence< OUString > vPackages{ "libreoffice-base" };
+                const css::uno::Sequence< OUString > vPackages{ u"libreoffice-base"_ustr };
                 xSyncDbusSessionHelper->InstallPackageNames(vPackages, OUString());
                 SolarMutexGuard aGuard;
                 (void)executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, RESTART_REASON_MAILMERGE_INSTALL);
@@ -484,7 +484,7 @@ void SwMailMergeWizardExecutor::ExecutionFinished()
             pDbManager->CommitLastRegistrations();
 
         // Show the toolbar
-        m_pView->ShowUIElement("private:resource/toolbar/mailmerge");
+        m_pView->ShowUIElement(u"private:resource/toolbar/mailmerge"_ustr);
 
         // Update Mail Merge controls
         const sal_uInt16 slotIds[] = { FN_MAILMERGE_FIRST_ENTRY,
@@ -907,7 +907,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                         bUpdateFields = false;
                     if(bUpdateFields)
                     {
-                        comphelper::dispatchCommand(".uno:UpdateInputFields", {});
+                        comphelper::dispatchCommand(u".uno:UpdateInputFields"_ustr, {});
 
                         // Are database fields contained?
                         // Get all used databases for the first time

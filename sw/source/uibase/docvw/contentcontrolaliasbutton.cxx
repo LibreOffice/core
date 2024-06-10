@@ -32,9 +32,10 @@
 
 SwContentControlAliasButton::SwContentControlAliasButton(SwEditWin* pEditWin,
                                                          SwContentControl* pContentControl)
-    : SwFrameMenuButtonBase(pEditWin, nullptr, "modules/swriter/ui/contentcontrolaliasbutton.ui",
-                            "ContentControlAliasButton")
-    , m_xPushButton(m_xBuilder->weld_button("button"))
+    : SwFrameMenuButtonBase(pEditWin, nullptr,
+                            u"modules/swriter/ui/contentcontrolaliasbutton.ui"_ustr,
+                            u"ContentControlAliasButton"_ustr)
+    , m_xPushButton(m_xBuilder->weld_button(u"button"_ustr))
     , m_sLabel(pContentControl->GetAlias())
 {
     m_xPushButton->set_accessible_name(m_sLabel);

@@ -358,15 +358,15 @@ bool SwWrtShell::GetURLFromButton( OUString& rURL, OUString& rDescr ) const
                 uno::Any aTmp;
 
                 uno::Reference< beans::XPropertySetInfo >   xInfo = xPropSet->getPropertySetInfo();
-                if(xInfo->hasPropertyByName( "ButtonType" ))
+                if(xInfo->hasPropertyByName( u"ButtonType"_ustr ))
                 {
-                    aTmp = xPropSet->getPropertyValue( "ButtonType" );
+                    aTmp = xPropSet->getPropertyValue( u"ButtonType"_ustr );
                     form::FormButtonType eTmpButtonType;
                     aTmp >>= eTmpButtonType;
                     if( form::FormButtonType_URL == eTmpButtonType)
                     {
                         // Label
-                        aTmp = xPropSet->getPropertyValue( "Label" );
+                        aTmp = xPropSet->getPropertyValue( u"Label"_ustr );
                         OUString uTmp;
                         if( (aTmp >>= uTmp) && !uTmp.isEmpty())
                         {
@@ -374,7 +374,7 @@ bool SwWrtShell::GetURLFromButton( OUString& rURL, OUString& rDescr ) const
                         }
 
                         // util::URL
-                        aTmp = xPropSet->getPropertyValue( "TargetURL" );
+                        aTmp = xPropSet->getPropertyValue( u"TargetURL"_ustr );
                         if( (aTmp >>= uTmp) && !uTmp.isEmpty())
                         {
                             rURL = uTmp;

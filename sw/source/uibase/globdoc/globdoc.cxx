@@ -29,7 +29,7 @@
 // Description: Register all filters
 
 
-SFX_IMPL_OBJECTFACTORY( SwGlobalDocShell, SvGlobalName(SO3_SWGLOB_CLASSID), "swriter/GlobalDocument" )
+SFX_IMPL_OBJECTFACTORY( SwGlobalDocShell, SvGlobalName(SO3_SWGLOB_CLASSID), u"swriter/GlobalDocument"_ustr )
 
 SwGlobalDocShell::SwGlobalDocShell(SfxObjectCreateMode eMode ) :
         SwDocShell(eMode)

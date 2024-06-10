@@ -135,7 +135,7 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     m_pDragDrop( nullptr ),
     m_pXSelection( nullptr )
 {
-    SetName( "StarWriter" );
+    SetName( u"StarWriter"_ustr );
     SvxErrorHandler::ensure();
     m_pErrorHandler.reset( new SfxErrorHandler( RID_SW_ERRHDL,
                                      ErrCodeArea::Sw,
@@ -202,7 +202,7 @@ uno::Reference< linguistic2::XLanguageGuessing > const & SwModule::GetLanguageGu
 SwModule::~SwModule()
 {
     css::uno::Sequence< css::uno::Any > aArgs;
-    CallAutomationApplicationEventSinks( "Quit", aArgs );
+    CallAutomationApplicationEventSinks( u"Quit"_ustr, aArgs );
     m_pErrorHandler.reset();
     EndListening( *SfxGetpApp() );
 }

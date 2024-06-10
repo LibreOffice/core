@@ -25,10 +25,10 @@ InsCaptionOpt::InsCaptionOpt(const SwCapObjType eType, const SvGlobalName* pOleI
     m_bUseCaption(false),
     m_eObjType(eType),
     m_nNumType(SVX_NUM_ARABIC),
-    m_sNumberSeparator(". "),
+    m_sNumberSeparator(u". "_ustr),
     m_nPos(1),
     m_nLevel(0),
-    m_sSeparator( OUString(": ") ),
+    m_sSeparator( u": "_ustr ),
     m_bIgnoreSeqOpts(false),
     m_bCopyAttributes(false)
 {

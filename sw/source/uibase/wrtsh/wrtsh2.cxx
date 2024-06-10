@@ -600,7 +600,7 @@ static void LoadURL(SwView& rView, const OUString& rURL, LoadUrlFlags nFilter,
     SfxBoolItem aBrowse( SID_BROWSE, true );
 
     if ((nFilter & LoadUrlFlags::NewView) && !comphelper::LibreOfficeKit::isActive())
-        aTargetFrameName.SetValue( "_blank" );
+        aTargetFrameName.SetValue( u"_blank"_ustr );
 
     rViewFrame.GetDispatcher()->ExecuteList(SID_OPENDOC,
             SfxCallMode::ASYNCHRON|SfxCallMode::RECORD,
@@ -703,58 +703,58 @@ void SwWrtShell::NavigatorPaste(const NaviContentBookmark& rBkmk)
     vcl::Window* pWin = GetWin();
 
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(
-        pWin->GetFrameWeld(), "modules/swriter/ui/navigatordraginsertmenu.ui"));
-    std::unique_ptr<weld::Menu> xPop = xBuilder->weld_menu("insertmenu");
+        pWin->GetFrameWeld(), u"modules/swriter/ui/navigatordraginsertmenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xPop = xBuilder->weld_menu(u"insertmenu"_ustr);
 
-    xPop->append("hyperlink", SwResId(STR_HYPERLINK));
-    xPop->append("sectionlink", SwResId(STR_SECTIONLINK));
-    xPop->append("sectioncopy", SwResId(STR_SECTIONCOPY));
-    xPop->append("refpage", SwResId(FMT_REF_PAGE));
-    xPop->append("refchapter", SwResId(FMT_REF_CHAPTER));
-    xPop->append("refcontent", SwResId(FMT_REF_TEXT));
-    xPop->append("refupdown", SwResId(FMT_REF_UPDOWN));
-    xPop->append("refpagepgdsc", SwResId(FMT_REF_PAGE_PGDSC));
-    xPop->append("refnumberentry", SwResId(FMT_REF_NUMBER));
-    xPop->append("refnumbernocontext", SwResId(FMT_REF_NUMBER_NO_CONTEXT));
-    xPop->append("refnumberfullcontext", SwResId(FMT_REF_NUMBER_FULL_CONTEXT));
-    xPop->append("refonlynumber", SwResId(FMT_REF_ONLYNUMBER));
-    xPop->append("refonlycaption", SwResId(FMT_REF_ONLYCAPTION));
-    xPop->append("refonlyseqnoentry", SwResId(FMT_REF_ONLYSEQNO));
+    xPop->append(u"hyperlink"_ustr, SwResId(STR_HYPERLINK));
+    xPop->append(u"sectionlink"_ustr, SwResId(STR_SECTIONLINK));
+    xPop->append(u"sectioncopy"_ustr, SwResId(STR_SECTIONCOPY));
+    xPop->append(u"refpage"_ustr, SwResId(FMT_REF_PAGE));
+    xPop->append(u"refchapter"_ustr, SwResId(FMT_REF_CHAPTER));
+    xPop->append(u"refcontent"_ustr, SwResId(FMT_REF_TEXT));
+    xPop->append(u"refupdown"_ustr, SwResId(FMT_REF_UPDOWN));
+    xPop->append(u"refpagepgdsc"_ustr, SwResId(FMT_REF_PAGE_PGDSC));
+    xPop->append(u"refnumberentry"_ustr, SwResId(FMT_REF_NUMBER));
+    xPop->append(u"refnumbernocontext"_ustr, SwResId(FMT_REF_NUMBER_NO_CONTEXT));
+    xPop->append(u"refnumberfullcontext"_ustr, SwResId(FMT_REF_NUMBER_FULL_CONTEXT));
+    xPop->append(u"refonlynumber"_ustr, SwResId(FMT_REF_ONLYNUMBER));
+    xPop->append(u"refonlycaption"_ustr, SwResId(FMT_REF_ONLYCAPTION));
+    xPop->append(u"refonlyseqnoentry"_ustr, SwResId(FMT_REF_ONLYSEQNO));
 
     if (!officecfg::Office::Common::View::Menu::DontHideDisabledEntry::get()
             || Application::GetSettings().GetStyleSettings().GetHideDisabledMenuItems())
     {
-        xPop->set_visible("hyperlink", bSensitiveHyperlinkEntry);
-        xPop->set_visible("sectionlink", bSensitiveSectionLinkEntry);
-        xPop->set_visible("sectioncopy", bSensitiveSectionCopyEntry);
-        xPop->set_visible("refpage", bSensitiveRefPageEntry);
-        xPop->set_visible("refchapter", bSensitiveRefChapterEntry);
-        xPop->set_visible("refcontent", bSensitiveRefContentEntry);
-        xPop->set_visible("refupdown", bSensitiveRefUpDownEntry);
-        xPop->set_visible("refpagepgdsc", bSensitiveRefPagePgDscEntry);
-        xPop->set_visible("refnumberentry", bSensitiveRefNumberEntry);
-        xPop->set_visible("refnumbernocontext", bSensitiveRefNumberNoContextEntry);
-        xPop->set_visible("refnumberfullcontext", bSensitiveRefNumberFullContextEntry);
-        xPop->set_visible("refonlynumber", bSensitiveRefOnlyNumberEntry);
-        xPop->set_visible("refonlycaption", bSensitiveRefOnlyCaptionEntry);
-        xPop->set_visible("refonlyseqnoentry", bSensitiveRefOnlySeqNoEntry);
+        xPop->set_visible(u"hyperlink"_ustr, bSensitiveHyperlinkEntry);
+        xPop->set_visible(u"sectionlink"_ustr, bSensitiveSectionLinkEntry);
+        xPop->set_visible(u"sectioncopy"_ustr, bSensitiveSectionCopyEntry);
+        xPop->set_visible(u"refpage"_ustr, bSensitiveRefPageEntry);
+        xPop->set_visible(u"refchapter"_ustr, bSensitiveRefChapterEntry);
+        xPop->set_visible(u"refcontent"_ustr, bSensitiveRefContentEntry);
+        xPop->set_visible(u"refupdown"_ustr, bSensitiveRefUpDownEntry);
+        xPop->set_visible(u"refpagepgdsc"_ustr, bSensitiveRefPagePgDscEntry);
+        xPop->set_visible(u"refnumberentry"_ustr, bSensitiveRefNumberEntry);
+        xPop->set_visible(u"refnumbernocontext"_ustr, bSensitiveRefNumberNoContextEntry);
+        xPop->set_visible(u"refnumberfullcontext"_ustr, bSensitiveRefNumberFullContextEntry);
+        xPop->set_visible(u"refonlynumber"_ustr, bSensitiveRefOnlyNumberEntry);
+        xPop->set_visible(u"refonlycaption"_ustr, bSensitiveRefOnlyCaptionEntry);
+        xPop->set_visible(u"refonlyseqnoentry"_ustr, bSensitiveRefOnlySeqNoEntry);
     }
     else
     {
-        xPop->set_sensitive("hyperlink", bSensitiveHyperlinkEntry);
-        xPop->set_sensitive("sectionlink", bSensitiveSectionLinkEntry);
-        xPop->set_sensitive("sectioncopy", bSensitiveSectionCopyEntry);
-        xPop->set_sensitive("refpage", bSensitiveRefPageEntry);
-        xPop->set_sensitive("refchapter", bSensitiveRefChapterEntry);
-        xPop->set_sensitive("refcontent", bSensitiveRefContentEntry);
-        xPop->set_sensitive("refupdown", bSensitiveRefUpDownEntry);
-        xPop->set_sensitive("refpagepgdsc", bSensitiveRefPagePgDscEntry);
-        xPop->set_sensitive("refnumberentry", bSensitiveRefNumberEntry);
-        xPop->set_sensitive("refnumbernocontext", bSensitiveRefNumberNoContextEntry);
-        xPop->set_sensitive("refnumberfullcontext", bSensitiveRefNumberFullContextEntry);
-        xPop->set_sensitive("refonlynumber", bSensitiveRefOnlyNumberEntry);
-        xPop->set_sensitive("refonlycaption", bSensitiveRefOnlyCaptionEntry);
-        xPop->set_sensitive("refonlyseqnoentry", bSensitiveRefOnlySeqNoEntry);
+        xPop->set_sensitive(u"hyperlink"_ustr, bSensitiveHyperlinkEntry);
+        xPop->set_sensitive(u"sectionlink"_ustr, bSensitiveSectionLinkEntry);
+        xPop->set_sensitive(u"sectioncopy"_ustr, bSensitiveSectionCopyEntry);
+        xPop->set_sensitive(u"refpage"_ustr, bSensitiveRefPageEntry);
+        xPop->set_sensitive(u"refchapter"_ustr, bSensitiveRefChapterEntry);
+        xPop->set_sensitive(u"refcontent"_ustr, bSensitiveRefContentEntry);
+        xPop->set_sensitive(u"refupdown"_ustr, bSensitiveRefUpDownEntry);
+        xPop->set_sensitive(u"refpagepgdsc"_ustr, bSensitiveRefPagePgDscEntry);
+        xPop->set_sensitive(u"refnumberentry"_ustr, bSensitiveRefNumberEntry);
+        xPop->set_sensitive(u"refnumbernocontext"_ustr, bSensitiveRefNumberNoContextEntry);
+        xPop->set_sensitive(u"refnumberfullcontext"_ustr, bSensitiveRefNumberFullContextEntry);
+        xPop->set_sensitive(u"refonlynumber"_ustr, bSensitiveRefOnlyNumberEntry);
+        xPop->set_sensitive(u"refonlycaption"_ustr, bSensitiveRefOnlyCaptionEntry);
+        xPop->set_sensitive(u"refonlyseqnoentry"_ustr, bSensitiveRefOnlySeqNoEntry);
     }
 
     tools::Rectangle aRect(pWin->LogicToPixel(GetCursorDocPos()), Size(1, 1));

@@ -26,9 +26,10 @@
 
 SwOutlineContentVisibilityWin::SwOutlineContentVisibilityWin(SwEditWin* pEditWin,
                                                              const SwFrame* pFrame)
-    : InterimItemWindow(pEditWin, "modules/swriter/ui/outlinebutton.ui", "OutlineButton")
-    , m_xShowBtn(m_xBuilder->weld_button("show"))
-    , m_xHideBtn(m_xBuilder->weld_button("hide"))
+    : InterimItemWindow(pEditWin, u"modules/swriter/ui/outlinebutton.ui"_ustr,
+                        u"OutlineButton"_ustr)
+    , m_xShowBtn(m_xBuilder->weld_button(u"show"_ustr))
+    , m_xHideBtn(m_xBuilder->weld_button(u"hide"_ustr))
     , m_pEditWin(pEditWin)
     , m_pFrame(pFrame)
     , m_nDelayAppearing(0)

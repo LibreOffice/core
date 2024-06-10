@@ -131,7 +131,7 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames() const
 }
 
 SwContentViewConfig::SwContentViewConfig(bool bIsWeb, SwMasterUsrPref& rPar) :
-    ConfigItem(bIsWeb ? OUString("Office.WriterWeb/Content") :  OUString("Office.Writer/Content")),
+    ConfigItem(bIsWeb ? u"Office.WriterWeb/Content"_ustr :  u"Office.Writer/Content"_ustr),
     m_rParent(rPar),
     m_bWeb(bIsWeb)
 {
@@ -289,7 +289,7 @@ Sequence<OUString> SwLayoutViewConfig::GetPropertyNames() const
 }
 
 SwLayoutViewConfig::SwLayoutViewConfig(bool bIsWeb, SwMasterUsrPref& rPar) :
-    ConfigItem(bIsWeb ? OUString("Office.WriterWeb/Layout") :  OUString("Office.Writer/Layout"),
+    ConfigItem(bIsWeb ? u"Office.WriterWeb/Layout"_ustr :  u"Office.Writer/Layout"_ustr,
         ConfigItemMode::ReleaseTree),
     m_rParent(rPar),
     m_bWeb(bIsWeb)
@@ -425,7 +425,7 @@ Sequence<OUString> SwGridConfig::GetPropertyNames()
 }
 
 SwGridConfig::SwGridConfig(bool bIsWeb, SwMasterUsrPref& rPar) :
-    ConfigItem(bIsWeb ? OUString("Office.WriterWeb/Grid") :  OUString("Office.Writer/Grid"),
+    ConfigItem(bIsWeb ? u"Office.WriterWeb/Grid"_ustr :  u"Office.Writer/Grid"_ustr,
         ConfigItemMode::ReleaseTree),
     m_rParent(rPar)
 {
@@ -510,7 +510,7 @@ Sequence<OUString> SwCursorConfig::GetPropertyNames()
 }
 
 SwCursorConfig::SwCursorConfig(SwMasterUsrPref& rPar) :
-    ConfigItem("Office.Writer/Cursor", ConfigItemMode::ReleaseTree),
+    ConfigItem(u"Office.Writer/Cursor"_ustr, ConfigItemMode::ReleaseTree),
     m_rParent(rPar)
 {
 }
@@ -584,7 +584,7 @@ Sequence<OUString> SwFmtAidsAutoComplConfig::GetPropertyNames()
 }
 
 SwFmtAidsAutoComplConfig::SwFmtAidsAutoComplConfig(SwMasterUsrPref& rPar)
-    : ConfigItem("Office.Writer/FmtAidsAutocomplete", ConfigItemMode::ReleaseTree)
+    : ConfigItem(u"Office.Writer/FmtAidsAutocomplete"_ustr, ConfigItemMode::ReleaseTree)
     , m_rParent(rPar)
 {
 }
@@ -640,7 +640,7 @@ void SwFmtAidsAutoComplConfig::Load()
 void SwFmtAidsAutoComplConfig::Notify(const css::uno::Sequence<OUString>&) {}
 
 SwWebColorConfig::SwWebColorConfig(SwMasterUsrPref& rPar) :
-    ConfigItem("Office.WriterWeb/Background", ConfigItemMode::ReleaseTree),
+    ConfigItem(u"Office.WriterWeb/Background"_ustr, ConfigItemMode::ReleaseTree),
     m_rParent(rPar),
     m_aPropNames(1)
 {

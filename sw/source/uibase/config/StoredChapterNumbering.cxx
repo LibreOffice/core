@@ -128,7 +128,7 @@ public:
         OUString dummy; // pass in empty HeadingStyleName - can't import anyway
         uno::Sequence<beans::PropertyValue> const ret(
             SwXNumberingRules::GetPropertiesForNumFormat(
-                *pNumFormat, *pCharStyleName, &dummy, ""));
+                *pNumFormat, *pCharStyleName, &dummy, u""_ustr));
         return uno::Any(ret);
     }
 
@@ -140,7 +140,7 @@ public:
             throw lang::IndexOutOfBoundsException();
         uno::Sequence<beans::PropertyValue> props;
         if (!(rElement >>= props))
-            throw lang::IllegalArgumentException("invalid type",
+            throw lang::IllegalArgumentException(u"invalid type"_ustr,
                     getXWeak(), 1);
 
         SolarMutexGuard g;
@@ -166,7 +166,7 @@ public:
             uno::Reference<uno::XComponentContext> const& xContext,
             OUString const& rFileName,
             uno::Reference<xml::sax::XDocumentHandler> const& xHandler)
-        : SvXMLExport(xContext, "sw::StoredChapterNumberingExport", rFileName,
+        : SvXMLExport(xContext, u"sw::StoredChapterNumberingExport"_ustr, rFileName,
             util::MeasureUnit::CM, xHandler)
     {
         GetNamespaceMap_().Add(GetXMLToken(XML_NP_OFFICE),
@@ -367,7 +367,7 @@ public:
     StoredChapterNumberingImport(
             uno::Reference<uno::XComponentContext> const& xContext,
             SwChapterNumRules & rNumRules)
-        : SvXMLImport(xContext, "sw::StoredChapterNumberingImport", SvXMLImportFlags::ALL)
+        : SvXMLImport(xContext, u"sw::StoredChapterNumberingImport"_ustr, SvXMLImportFlags::ALL)
         , m_rNumRules(rNumRules)
     {
     }
@@ -442,7 +442,7 @@ void ImportStoredChapterNumberingRules(SwChapterNumRules & rRules,
 
     rtl::Reference<StoredChapterNumberingImport> const xImport(new StoredChapterNumberingImport(xContext, rRules));
 
-    xml::sax::InputSource const source(xInStream, "", "", rFileName);
+    xml::sax::InputSource const source(xInStream, u""_ustr, u""_ustr, rFileName);
 
     try
     {

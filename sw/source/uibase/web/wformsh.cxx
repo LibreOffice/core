@@ -32,7 +32,7 @@ SFX_IMPL_SUPERCLASS_INTERFACE(SwWebDrawFormShell, SwDrawFormShell)
 
 void SwWebDrawFormShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("form");
+    GetStaticInterface()->RegisterPopupMenu(u"form"_ustr);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Text_Toolbox_Sw);
 }

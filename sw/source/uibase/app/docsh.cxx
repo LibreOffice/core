@@ -118,7 +118,7 @@ void SwDocShell::InitInterface_Impl()
 }
 
 
-SFX_IMPL_OBJECTFACTORY(SwDocShell, SvGlobalName(SO3_SW_CLASSID), "swriter"  )
+SFX_IMPL_OBJECTFACTORY(SwDocShell, SvGlobalName(SO3_SW_CLASSID), u"swriter"_ustr  )
 
 bool SwDocShell::InsertGeneratedStream(SfxMedium & rMedium,
         uno::Reference<text::XTextRange> const& xInsertPosition)
@@ -616,7 +616,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
             OSL_ENSURE( !xStg->GetError(), "No storage available for storing VBA macros!" );
             if ( !xStg->GetError() )
             {
-                nVBWarning = SaveOrDelMSVBAStorage( static_cast<SfxObjectShell&>(*this), *xStg, bSave, "Macros" );
+                nVBWarning = SaveOrDelMSVBAStorage( static_cast<SfxObjectShell&>(*this), *xStg, bSave, u"Macros"_ustr );
                 xStg->Commit();
                 m_xDoc->SetContainsMSVBasic( true );
             }
@@ -718,7 +718,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
                 // TODO/MBA: testing
                 uno::Reference < beans::XPropertySet > xSet( rMedium.GetStorage(), uno::UNO_QUERY );
                 if ( xSet.is() )
-                    xSet->setPropertyValue("MediaType", uno::Any( SotExchange::GetFormatMimeType( nSaveClipId ) ) );
+                    xSet->setPropertyValue(u"MediaType"_ustr, uno::Any( SotExchange::GetFormatMimeType( nSaveClipId ) ) );
             }
             catch (const uno::Exception&)
             {

@@ -67,8 +67,8 @@ SwSyncChildWin::SwSyncChildWin(vcl::Window* _pParent,
 SwSyncBtnDlg::SwSyncBtnDlg(SfxBindings* pBindings,
                            SfxChildWindow* pChild,
                            weld::Window *pParent)
-    : SfxModelessDialogController(pBindings, pChild, pParent, "modules/swriter/ui/floatingsync.ui", "FloatingSync")
-    , m_xSyncBtn(m_xBuilder->weld_button("sync"))
+    : SfxModelessDialogController(pBindings, pChild, pParent, u"modules/swriter/ui/floatingsync.ui"_ustr, u"FloatingSync"_ustr)
+    , m_xSyncBtn(m_xBuilder->weld_button(u"sync"_ustr))
 {
     m_xSyncBtn->connect_clicked(LINK(this, SwSyncBtnDlg, BtnHdl));
 }

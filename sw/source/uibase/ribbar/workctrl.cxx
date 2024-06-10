@@ -349,8 +349,8 @@ public:
 }
 
 SwZoomBox_Impl::SwZoomBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)
-    : InterimItemWindow(pParent, "modules/swriter/ui/zoombox.ui", "ZoomBox")
-    , m_xWidget(m_xBuilder->weld_combo_box("zoom"))
+    : InterimItemWindow(pParent, u"modules/swriter/ui/zoombox.ui"_ustr, u"ZoomBox"_ustr)
+    , m_xWidget(m_xBuilder->weld_combo_box(u"zoom"_ustr))
     , m_nSlotId(nSlot)
     , m_bRelease(true)
 {
@@ -550,8 +550,8 @@ IMPL_LINK(SwJumpToSpecificBox_Impl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 }
 
 SwJumpToSpecificBox_Impl::SwJumpToSpecificBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)
-    : InterimItemWindow(pParent, "modules/swriter/ui/jumpposbox.ui", "JumpPosBox")
-    , m_xWidget(m_xBuilder->weld_entry("jumppos"))
+    : InterimItemWindow(pParent, u"modules/swriter/ui/jumpposbox.ui"_ustr, u"JumpPosBox"_ustr)
+    , m_xWidget(m_xBuilder->weld_entry(u"jumppos"_ustr))
     , m_nSlotId(nSlot)
 {
     InitControlBase(m_xWidget.get());
@@ -613,8 +613,8 @@ NavElementBox_Base::NavElementBox_Base(std::unique_ptr<weld::ComboBox> xComboBox
 
 NavElementBox_Impl::NavElementBox_Impl(vcl::Window* pParent,
                                        const uno::Reference<frame::XFrame>& xFrame)
-    : InterimItemWindow(pParent, "modules/swriter/ui/combobox.ui", "ComboBox")
-    ,NavElementBox_Base(m_xBuilder->weld_combo_box("combobox"), xFrame)
+    : InterimItemWindow(pParent, u"modules/swriter/ui/combobox.ui"_ustr, u"ComboBox"_ustr)
+    ,NavElementBox_Base(m_xBuilder->weld_combo_box(u"combobox"_ustr), xFrame)
 {
     SetSizePixel(m_xContainer->get_preferred_size());
 }
@@ -689,12 +689,12 @@ sal_Bool SAL_CALL NavElementToolBoxControl::supportsService( const OUString& Ser
 
 OUString SAL_CALL NavElementToolBoxControl::getImplementationName()
 {
-    return "lo.writer.NavElementToolBoxController";
+    return u"lo.writer.NavElementToolBoxController"_ustr;
 }
 
 uno::Sequence< OUString > SAL_CALL NavElementToolBoxControl::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 // XComponent
@@ -760,7 +760,7 @@ uno::Reference< awt::XWindow > SAL_CALL NavElementToolBoxControl::createItemWind
     {
         SolarMutexGuard aSolarMutexGuard;
 
-        std::unique_ptr<weld::ComboBox> xWidget(m_pBuilder->weld_combo_box("NavElementWidget"));
+        std::unique_ptr<weld::ComboBox> xWidget(m_pBuilder->weld_combo_box(u"NavElementWidget"_ustr));
 
         xItemWindow = css::uno::Reference<css::awt::XWindow>(new weld::TransportAsXWindow(xWidget.get()));
 
@@ -820,18 +820,18 @@ private:
 PrevNextScrollToolboxController::PrevNextScrollToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext, Type eType )
     : PrevNextScrollToolboxController_Base( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
-            (eType == PREVIOUS) ? OUString( ".uno:ScrollToPrevious" ): OUString( ".uno:ScrollToNext" ) ),
+            (eType == PREVIOUS) ? u".uno:ScrollToPrevious"_ustr: u".uno:ScrollToNext"_ustr ),
       meType( eType )
 {
-    addStatusListener(".uno:NavElement");
+    addStatusListener(u".uno:NavElement"_ustr);
 }
 
 // XServiceInfo
 OUString SAL_CALL PrevNextScrollToolboxController::getImplementationName()
 {
     return meType == PrevNextScrollToolboxController::PREVIOUS?
-        OUString( "lo.writer.PreviousScrollToolboxController" ) :
-        OUString( "lo.writer.NextScrollToolboxController" );
+        u"lo.writer.PreviousScrollToolboxController"_ustr :
+        u"lo.writer.NextScrollToolboxController"_ustr;
 }
 
 sal_Bool SAL_CALL PrevNextScrollToolboxController::supportsService( const OUString& ServiceName )
@@ -841,7 +841,7 @@ sal_Bool SAL_CALL PrevNextScrollToolboxController::supportsService( const OUStri
 
 css::uno::Sequence< OUString > SAL_CALL PrevNextScrollToolboxController::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ToolbarController" };
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 // XComponent

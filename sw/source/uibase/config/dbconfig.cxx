@@ -28,18 +28,18 @@ using namespace com::sun::star::uno;
 const Sequence<OUString>& SwDBConfig::GetPropertyNames()
 {
     static Sequence<OUString> aNames {
-        "AddressBook/DataSourceName",        //  0
-        "AddressBook/Command",               //  1
-        "AddressBook/CommandType",           //  2
-        "Bibliography/CurrentDataSource/DataSourceName",    //  4
-        "Bibliography/CurrentDataSource/Command",           //  5
-        "Bibliography/CurrentDataSource/CommandType"        //  6
+        u"AddressBook/DataSourceName"_ustr,        //  0
+        u"AddressBook/Command"_ustr,               //  1
+        u"AddressBook/CommandType"_ustr,           //  2
+        u"Bibliography/CurrentDataSource/DataSourceName"_ustr,    //  4
+        u"Bibliography/CurrentDataSource/Command"_ustr,           //  5
+        u"Bibliography/CurrentDataSource/CommandType"_ustr        //  6
     };
     return aNames;
 }
 
 SwDBConfig::SwDBConfig() :
-    ConfigItem("Office.DataAccess", ConfigItemMode::ReleaseTree)
+    ConfigItem(u"Office.DataAccess"_ustr, ConfigItemMode::ReleaseTree)
 {
 };
 

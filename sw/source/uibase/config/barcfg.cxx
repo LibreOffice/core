@@ -32,7 +32,7 @@ using namespace com::sun::star::uno;
 #define SEL_TYPE_GRAPHIC        4
 
 SwToolbarConfigItem::SwToolbarConfigItem( bool bWeb ) :
-    ConfigItem(bWeb ? OUString("Office.WriterWeb/ObjectBar") : OUString("Office.Writer/ObjectBar"),
+    ConfigItem(bWeb ? u"Office.WriterWeb/ObjectBar"_ustr : u"Office.Writer/ObjectBar"_ustr,
         ConfigItemMode::ReleaseTree)
 {
     for(int i = 0; i <= SEL_TYPE_GRAPHIC; ++i)

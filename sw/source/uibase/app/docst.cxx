@@ -119,7 +119,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
     {
         // determine current template to every family
         OUString aName;
-        SwTableAutoFormat aTableAutoFormat("dummy"); // needed to check if can take a table auto format at current cursor position
+        SwTableAutoFormat aTableAutoFormat(u"dummy"_ustr); // needed to check if can take a table auto format at current cursor position
         switch (nWhich)
         {
             case SID_STYLE_APPLY:
@@ -362,7 +362,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         uno::Reference< beans::XPropertySet > xInfo;
                         xStyles->getByName( pNameItem->GetValue() ) >>= xInfo;
                         OUString aUIName;
-                        xInfo->getPropertyValue("DisplayName") >>= aUIName;
+                        xInfo->getPropertyValue(u"DisplayName"_ustr) >>= aUIName;
                         if ( !aUIName.isEmpty() )
                             rReq.AppendItem( SfxStringItem( SID_STYLE_APPLY, aUIName ) );
                     }
@@ -514,7 +514,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 {
                     case SID_STYLE_EDIT:
                     case SID_STYLE_FONT:
-                        Edit(rReq.GetFrameWeld(), aParam, {}, nFamily, nMask, false, (nSlot == SID_STYLE_FONT) ? "font" : OUString(), pActShell);
+                        Edit(rReq.GetFrameWeld(), aParam, {}, nFamily, nMask, false, (nSlot == SID_STYLE_FONT) ? u"font"_ustr : OUString(), pActShell);
                         break;
                     case SID_STYLE_DELETE:
                         Delete(aParam, nFamily);
@@ -654,7 +654,7 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
             if (const SfxGrabBagItem* pGrabBagItem = aTmpSet.GetItemIfSet(SID_ATTR_CHAR_GRABBAG))
             {
                 bool bGutterAtTop{};
-                auto it = pGrabBagItem->GetGrabBag().find("GutterAtTop");
+                auto it = pGrabBagItem->GetGrabBag().find(u"GutterAtTop"_ustr);
                 if (it != pGrabBagItem->GetGrabBag().end())
                 {
                     it->second >>= bGutterAtTop;
@@ -731,20 +731,20 @@ void syncEndnoteOrientation(const uno::Reference< style::XStyleFamiliesSupplier 
     if (!xStyleFamilies.is())
         return;
 
-    uno::Reference<container::XNameAccess> xPageStyles(xStyleFamilies->getByName("PageStyles"),
+    uno::Reference<container::XNameAccess> xPageStyles(xStyleFamilies->getByName(u"PageStyles"_ustr),
                                                        uno::UNO_QUERY);
 
     if (!xPageStyles.is())
         return;
 
-    uno::Reference<css::style::XStyle> xEndnotePageStyle(xPageStyles->getByName("Endnote"),
+    uno::Reference<css::style::XStyle> xEndnotePageStyle(xPageStyles->getByName(u"Endnote"_ustr),
                                                   uno::UNO_QUERY);
 
     if (!xEndnotePageStyle.is())
         return;
 
     // Language-independent name of the "Default Style" is "Standard"
-    uno::Reference<css::style::XStyle> xDefaultPageStyle(xPageStyles->getByName("Standard"),
+    uno::Reference<css::style::XStyle> xDefaultPageStyle(xPageStyles->getByName(u"Standard"_ustr),
                                                   uno::UNO_QUERY);
     if (!xDefaultPageStyle.is())
         return;
@@ -752,8 +752,8 @@ void syncEndnoteOrientation(const uno::Reference< style::XStyleFamiliesSupplier 
     if (xEndnotePageStyle->isUserDefined() || !xEndnotePageStyle->isInUse())
         return;
 
-    uno::Reference<beans::XPropertySet> xEndnotePagePropSet(xPageStyles->getByName("Endnote"), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xDefaultPagePropSet(xPageStyles->getByName("Standard"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xEndnotePagePropSet(xPageStyles->getByName(u"Endnote"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xDefaultPagePropSet(xPageStyles->getByName(u"Standard"_ustr), uno::UNO_QUERY);
 
     if (!xEndnotePagePropSet.is() || !xDefaultPagePropSet.is())
     {
@@ -762,19 +762,19 @@ void syncEndnoteOrientation(const uno::Reference< style::XStyleFamiliesSupplier 
     }
 
     auto const bIsDefLandScape = *o3tl::doAccess<bool>(
-        xDefaultPagePropSet->getPropertyValue("IsLandscape"));
+        xDefaultPagePropSet->getPropertyValue(u"IsLandscape"_ustr));
     auto const bIsEndLandScape = *o3tl::doAccess<bool>(
-        xEndnotePagePropSet->getPropertyValue("IsLandscape"));
+        xEndnotePagePropSet->getPropertyValue(u"IsLandscape"_ustr));
 
     if (bIsDefLandScape == bIsEndLandScape)
         return;
 
-    auto const nWidth = xEndnotePagePropSet->getPropertyValue("Width");
-    auto const nHeight = xEndnotePagePropSet->getPropertyValue("Height");
+    auto const nWidth = xEndnotePagePropSet->getPropertyValue(u"Width"_ustr);
+    auto const nHeight = xEndnotePagePropSet->getPropertyValue(u"Height"_ustr);
 
-    xEndnotePagePropSet->setPropertyValue("IsLandscape", css::uno::toAny(bIsDefLandScape));
-    xEndnotePagePropSet->setPropertyValue("Width", nHeight);
-    xEndnotePagePropSet->setPropertyValue("Height", nWidth);
+    xEndnotePagePropSet->setPropertyValue(u"IsLandscape"_ustr, css::uno::toAny(bIsDefLandScape));
+    xEndnotePagePropSet->setPropertyValue(u"Width"_ustr, nHeight);
+    xEndnotePagePropSet->setPropertyValue(u"Height"_ustr, nWidth);
 }
 }
 
@@ -950,7 +950,7 @@ void SwDocShell::Edit(
         }
         bool bGutterAtTop
             = GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::GUTTER_AT_TOP);
-        oGrabBag->GetGrabBag()["GutterAtTop"] <<= bGutterAtTop;
+        oGrabBag->GetGrabBag()[u"GutterAtTop"_ustr] <<= bGutterAtTop;
         rSet.Put(*oGrabBag);
     }
 

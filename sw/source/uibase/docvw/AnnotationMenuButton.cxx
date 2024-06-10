@@ -69,29 +69,29 @@ IMPL_LINK_NOARG(SwAnnotationWin, ToggleHdl, weld::Toggleable&, void)
     bool bReadOnly = IsReadOnly();
     if (bReadOnly)
     {
-        mxMenuButton->set_item_visible("reply", false);
-        mxMenuButton->set_item_visible("sep1", false); // Separator after reply button.
-        mxMenuButton->set_item_visible("resolve", false);
-        mxMenuButton->set_item_visible("unresolve", false);
-        mxMenuButton->set_item_visible("resolvethread", false);
-        mxMenuButton->set_item_visible("unresolvethread", false);
-        mxMenuButton->set_item_visible("delete", false );
+        mxMenuButton->set_item_visible(u"reply"_ustr, false);
+        mxMenuButton->set_item_visible(u"sep1"_ustr, false); // Separator after reply button.
+        mxMenuButton->set_item_visible(u"resolve"_ustr, false);
+        mxMenuButton->set_item_visible(u"unresolve"_ustr, false);
+        mxMenuButton->set_item_visible(u"resolvethread"_ustr, false);
+        mxMenuButton->set_item_visible(u"unresolvethread"_ustr, false);
+        mxMenuButton->set_item_visible(u"delete"_ustr, false );
     }
     else
     {
-        mxMenuButton->set_item_visible("reply", !IsReadOnlyOrProtected());
-        mxMenuButton->set_item_visible("sep1", !IsReadOnlyOrProtected());
-        mxMenuButton->set_item_visible("resolve", !IsResolved());
-        mxMenuButton->set_item_visible("unresolve", IsResolved());
-        mxMenuButton->set_item_visible("resolvethread", !IsThreadResolved());
-        mxMenuButton->set_item_visible("unresolvethread", IsThreadResolved());
-        mxMenuButton->set_item_visible("delete", !IsReadOnlyOrProtected());
+        mxMenuButton->set_item_visible(u"reply"_ustr, !IsReadOnlyOrProtected());
+        mxMenuButton->set_item_visible(u"sep1"_ustr, !IsReadOnlyOrProtected());
+        mxMenuButton->set_item_visible(u"resolve"_ustr, !IsResolved());
+        mxMenuButton->set_item_visible(u"unresolve"_ustr, IsResolved());
+        mxMenuButton->set_item_visible(u"resolvethread"_ustr, !IsThreadResolved());
+        mxMenuButton->set_item_visible(u"unresolvethread"_ustr, IsThreadResolved());
+        mxMenuButton->set_item_visible(u"delete"_ustr, !IsReadOnlyOrProtected());
     }
 
-    mxMenuButton->set_item_visible("deletethread", !bReadOnly);
-    mxMenuButton->set_item_visible("deleteby", !bReadOnly);
-    mxMenuButton->set_item_visible("deleteall", !bReadOnly);
-    mxMenuButton->set_item_visible("formatall", !bReadOnly);
+    mxMenuButton->set_item_visible(u"deletethread"_ustr, !bReadOnly);
+    mxMenuButton->set_item_visible(u"deleteby"_ustr, !bReadOnly);
+    mxMenuButton->set_item_visible(u"deleteall"_ustr, !bReadOnly);
+    mxMenuButton->set_item_visible(u"formatall"_ustr, !bReadOnly);
 }
 
 IMPL_LINK(SwAnnotationWin, KeyInputHdl, const KeyEvent&, rKeyEvt, bool)

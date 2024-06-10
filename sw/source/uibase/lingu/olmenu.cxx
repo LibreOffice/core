@@ -199,7 +199,7 @@ SwSpellPopup::SwSpellPopup(
         SwWrtShell* pWrtSh,
         uno::Reference< linguistic2::XSpellAlternatives > xAlt,
         const OUString &rParaText)
-    : m_aBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/swriter/ui/spellmenu.ui", "")
+    : m_aBuilder(nullptr, AllSettings::GetUIRootDir(), u"modules/swriter/ui/spellmenu.ui"_ustr, u""_ustr)
     , m_xPopupMenu(m_aBuilder.get_menu(u"menu"))
     , m_nIgnoreWordId(m_xPopupMenu->GetItemId(u"ignoreall"))
     , m_nAddMenuId(m_xPopupMenu->GetItemId(u"addmenu"))
@@ -275,12 +275,12 @@ SwSpellPopup::SwSpellPopup(
     OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
 
     {
-        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:SpellingAndGrammarDialog", aModuleName);
+        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(u".uno:SpellingAndGrammarDialog"_ustr, aModuleName);
         m_xPopupMenu->SetItemText(m_nSpellDialogId,
             vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties));
     }
     {
-        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:AutoCorrectDlg", aModuleName);
+        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(u".uno:AutoCorrectDlg"_ustr, aModuleName);
         m_xPopupMenu->SetItemText(m_nCorrectDialogId,
             vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties));
     }
@@ -376,7 +376,7 @@ SwSpellPopup::SwSpellPopup(
         aKeyboardLang = SvtLanguageTable::GetLanguageString( nLang );
 
     // get the language that is in use
-    OUString aCurrentLang("*");
+    OUString aCurrentLang(u"*"_ustr);
     nLang = SwLangHelper::GetCurrentLanguage( *pWrtSh );
     if (nLang != LANGUAGE_DONTKNOW)
         aCurrentLang = SvtLanguageTable::GetLanguageString( nLang );
@@ -397,7 +397,7 @@ SwSpellPopup::SwSpellPopup(
 
     if (bUseImagesInMenus)
         m_xPopupMenu->SetItemImage(m_nSpellDialogId,
-            vcl::CommandInfoProvider::GetImageForCommand(".uno:SpellingAndGrammarDialog", xFrame));
+            vcl::CommandInfoProvider::GetImageForCommand(u".uno:SpellingAndGrammarDialog"_ustr, xFrame));
 
     checkRedline();
     m_xPopupMenu->RemoveDisabledEntries( true );
@@ -411,7 +411,7 @@ SwSpellPopup::SwSpellPopup(
     sal_Int32 nErrorInResult,
     const uno::Sequence< OUString > &rSuggestions,
     const OUString &rParaText )
-    : m_aBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/swriter/ui/spellmenu.ui", "")
+    : m_aBuilder(nullptr, AllSettings::GetUIRootDir(), u"modules/swriter/ui/spellmenu.ui"_ustr, u""_ustr)
     , m_xPopupMenu(m_aBuilder.get_menu(u"menu"))
     , m_nIgnoreWordId(m_xPopupMenu->GetItemId(u"ignoreall"))
     , m_nAddMenuId(m_xPopupMenu->GetItemId(u"addmenu"))
@@ -492,7 +492,7 @@ SwSpellPopup::SwSpellPopup(
     OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
 
     OUString aIgnoreSelection( SwResId( STR_IGNORE_SELECTION ) );
-    auto aCommandProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:SpellingAndGrammarDialog", aModuleName);
+    auto aCommandProperties = vcl::CommandInfoProvider::GetCommandProperties(u".uno:SpellingAndGrammarDialog"_ustr, aModuleName);
     m_xPopupMenu->SetItemText(m_nSpellDialogId,
         vcl::CommandInfoProvider::GetPopupLabelForCommand(aCommandProperties));
     sal_uInt16 nItemPos = m_xPopupMenu->GetItemPos(m_nIgnoreWordId);
@@ -533,7 +533,7 @@ SwSpellPopup::SwSpellPopup(
         aKeyboardLang = SvtLanguageTable::GetLanguageString( nLang );
 
     // get the language that is in use
-    OUString aCurrentLang("*");
+    OUString aCurrentLang(u"*"_ustr);
     nLang = SwLangHelper::GetCurrentLanguage( *pWrtSh );
     if (nLang != LANGUAGE_DONTKNOW)
         aCurrentLang = SvtLanguageTable::GetLanguageString( nLang );
@@ -554,7 +554,7 @@ SwSpellPopup::SwSpellPopup(
 
     if (bUseImagesInMenus)
         m_xPopupMenu->SetItemImage(m_nSpellDialogId,
-            vcl::CommandInfoProvider::GetImageForCommand(".uno:SpellingAndGrammarDialog", xFrame));
+            vcl::CommandInfoProvider::GetImageForCommand(u".uno:SpellingAndGrammarDialog"_ustr, xFrame));
 
     checkRedline();
     m_xPopupMenu->RemoveDisabledEntries(true);
@@ -572,21 +572,21 @@ void SwSpellPopup::InitItemCommands(const css::uno::Sequence< OUString >& aSugge
         return;
 
     // None is added only for LOK, it means there is no need to execute anything
-    m_xPopupMenu->SetItemCommand(MN_SHORT_COMMENT, ".uno:None");
-    m_xPopupMenu->SetItemCommand(m_nSpellDialogId, ".uno:SpellingAndGrammarDialog");
+    m_xPopupMenu->SetItemCommand(MN_SHORT_COMMENT, u".uno:None"_ustr);
+    m_xPopupMenu->SetItemCommand(m_nSpellDialogId, u".uno:SpellingAndGrammarDialog"_ustr);
     if(m_bGrammarResults)
-        m_xPopupMenu->SetItemCommand(m_nIgnoreWordId, ".uno:SpellCheckIgnoreAll?Type:string=Grammar");
+        m_xPopupMenu->SetItemCommand(m_nIgnoreWordId, u".uno:SpellCheckIgnoreAll?Type:string=Grammar"_ustr);
     else
-        m_xPopupMenu->SetItemCommand(m_nIgnoreWordId, ".uno:SpellCheckIgnoreAll?Type:string=Spelling");
+        m_xPopupMenu->SetItemCommand(m_nIgnoreWordId, u".uno:SpellCheckIgnoreAll?Type:string=Spelling"_ustr);
     if(m_bGrammarResults)
-        m_xPopupMenu->SetItemCommand(MN_IGNORE_SELECTION, ".uno:SpellCheckIgnore?Type:string=Grammar");
+        m_xPopupMenu->SetItemCommand(MN_IGNORE_SELECTION, u".uno:SpellCheckIgnore?Type:string=Grammar"_ustr);
     else
-        m_xPopupMenu->SetItemCommand(MN_IGNORE_SELECTION, ".uno:SpellCheckIgnore?Type:string=Spelling");
+        m_xPopupMenu->SetItemCommand(MN_IGNORE_SELECTION, u".uno:SpellCheckIgnore?Type:string=Spelling"_ustr);
 
     for(int i = 0; i < aSuggestions.getLength(); ++i)
     {
         sal_uInt16 nItemId = MN_SUGGESTION_START + i;
-        OUString sCommandString = ".uno:SpellCheckApplySuggestion?ApplyRule:string=";
+        OUString sCommandString = u".uno:SpellCheckApplySuggestion?ApplyRule:string="_ustr;
         if(m_bGrammarResults)
             sCommandString += "Grammar_";
         else if (m_xSpellAlt.is())
@@ -596,7 +596,7 @@ void SwSpellPopup::InitItemCommands(const css::uno::Sequence< OUString >& aSugge
     }
 
     PopupMenu *pMenu = m_xPopupMenu->GetPopupMenu(m_nLangSelectionMenuId);
-    m_xPopupMenu->SetItemCommand(m_nLangSelectionMenuId, ".uno:SetSelectionLanguageMenu");
+    m_xPopupMenu->SetItemCommand(m_nLangSelectionMenuId, u".uno:SetSelectionLanguageMenu"_ustr);
     if(pMenu)
     {
         for (const auto& item : m_aLangTable_Text)
@@ -605,13 +605,13 @@ void SwSpellPopup::InitItemCommands(const css::uno::Sequence< OUString >& aSugge
             pMenu->SetItemCommand(item.first, sCommandString);
         }
 
-        pMenu->SetItemCommand(MN_SET_SELECTION_NONE, ".uno:LanguageStatus?Language:string=Current_LANGUAGE_NONE");
-        pMenu->SetItemCommand(MN_SET_SELECTION_RESET, ".uno:LanguageStatus?Language:string=Current_RESET_LANGUAGES");
-        pMenu->SetItemCommand(MN_SET_SELECTION_MORE, ".uno:FontDialog?Page:string=font");
+        pMenu->SetItemCommand(MN_SET_SELECTION_NONE, u".uno:LanguageStatus?Language:string=Current_LANGUAGE_NONE"_ustr);
+        pMenu->SetItemCommand(MN_SET_SELECTION_RESET, u".uno:LanguageStatus?Language:string=Current_RESET_LANGUAGES"_ustr);
+        pMenu->SetItemCommand(MN_SET_SELECTION_MORE, u".uno:FontDialog?Page:string=font"_ustr);
     }
 
     pMenu = m_xPopupMenu->GetPopupMenu(m_nLangParaMenuId);
-    m_xPopupMenu->SetItemCommand(m_nLangParaMenuId, ".uno:SetParagraphLanguageMenu");
+    m_xPopupMenu->SetItemCommand(m_nLangParaMenuId, u".uno:SetParagraphLanguageMenu"_ustr);
     if(pMenu)
     {
         for (const auto& item : m_aLangTable_Paragraph)
@@ -620,9 +620,9 @@ void SwSpellPopup::InitItemCommands(const css::uno::Sequence< OUString >& aSugge
             pMenu->SetItemCommand(item.first, sCommandString);
         }
 
-        pMenu->SetItemCommand(MN_SET_PARA_NONE, ".uno:LanguageStatus?Language:string=Paragraph_LANGUAGE_NONE");
-        pMenu->SetItemCommand(MN_SET_PARA_RESET, ".uno:LanguageStatus?Language:string=Paragraph_RESET_LANGUAGES");
-        pMenu->SetItemCommand(MN_SET_PARA_MORE, ".uno:FontDialogForParagraph");
+        pMenu->SetItemCommand(MN_SET_PARA_NONE, u".uno:LanguageStatus?Language:string=Paragraph_LANGUAGE_NONE"_ustr);
+        pMenu->SetItemCommand(MN_SET_PARA_RESET, u".uno:LanguageStatus?Language:string=Paragraph_RESET_LANGUAGES"_ustr);
+        pMenu->SetItemCommand(MN_SET_PARA_MORE, u".uno:FontDialogForParagraph"_ustr);
     }
 }
 
@@ -680,7 +680,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
 
     if (MN_SUGGESTION_START <= nId && nId <= MN_SUGGESTION_END)
     {
-        OUString sApplyRule("");
+        OUString sApplyRule(u""_ustr);
         if(m_bGrammarResults)
             sApplyRule += "Grammar_";
         else if (m_xSpellAlt.is())
@@ -761,12 +761,12 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     }
     else if (nId == MN_IGNORE_SELECTION)
     {
-        SfxStringItem aIgnoreString(FN_PARAM_1, m_bGrammarResults ? OUString("Grammar") : OUString("Spelling"));
+        SfxStringItem aIgnoreString(FN_PARAM_1, m_bGrammarResults ? u"Grammar"_ustr : u"Spelling"_ustr);
         m_pSh->GetView().GetViewFrame().GetDispatcher()->ExecuteList(SID_SPELLCHECK_IGNORE, SfxCallMode::SYNCHRON, { &aIgnoreString });
     }
     else if (nId == m_nIgnoreWordId)
     {
-        SfxStringItem aIgnoreString(FN_PARAM_1, m_bGrammarResults ? OUString("Grammar") : OUString("Spelling"));
+        SfxStringItem aIgnoreString(FN_PARAM_1, m_bGrammarResults ? u"Grammar"_ustr : u"Spelling"_ustr);
         m_pSh->GetView().GetViewFrame().GetDispatcher()->ExecuteList(SID_SPELLCHECK_IGNORE_ALL, SfxCallMode::SYNCHRON, { &aIgnoreString });
     }
     else if ((MN_DICTIONARIES_START <= nId && nId <= MN_DICTIONARIES_END) || nId == m_nAddId)
@@ -817,7 +817,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             const SolarMutexGuard guard;
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_pSh->GetView().GetFrameWeld(),
                                                       VclMessageType::Warning, VclButtonsType::Ok, msg));
-            xBox->set_title("Explanations");
+            xBox->set_title(u"Explanations"_ustr);
             xBox->run();
         }
     }
@@ -845,17 +845,17 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         }
         else if (nId == MN_SET_SELECTION_NONE)
         {
-            SfxStringItem aLangString(SID_LANGUAGE_STATUS, "Current_LANGUAGE_NONE");
+            SfxStringItem aLangString(SID_LANGUAGE_STATUS, u"Current_LANGUAGE_NONE"_ustr);
             m_pSh->GetView().GetViewFrame().GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON, { &aLangString });
         }
         else if (nId == MN_SET_SELECTION_RESET)
         {
-            SfxStringItem aLangString(SID_LANGUAGE_STATUS, "Current_RESET_LANGUAGES");
+            SfxStringItem aLangString(SID_LANGUAGE_STATUS, u"Current_RESET_LANGUAGES"_ustr);
             m_pSh->GetView().GetViewFrame().GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON, { &aLangString });
         }
         else if (nId == MN_SET_SELECTION_MORE)
         {
-            SfxStringItem aDlgString(FN_PARAM_1, "font");
+            SfxStringItem aDlgString(FN_PARAM_1, u"font"_ustr);
             m_pSh->GetView().GetViewFrame().GetDispatcher()->ExecuteList(SID_CHAR_DLG, SfxCallMode::SYNCHRON, { &aDlgString });
         }
         else if (MN_SET_LANGUAGE_PARAGRAPH_START <= nId && nId <= MN_SET_LANGUAGE_PARAGRAPH_END)
@@ -865,12 +865,12 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         }
         else if (nId == MN_SET_PARA_NONE)
         {
-            SfxStringItem aLangString(SID_LANGUAGE_STATUS, "Paragraph_LANGUAGE_NONE");
+            SfxStringItem aLangString(SID_LANGUAGE_STATUS, u"Paragraph_LANGUAGE_NONE"_ustr);
             m_pSh->GetView().GetViewFrame().GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON, { &aLangString });
         }
         else if (nId == MN_SET_PARA_RESET)
         {
-            SfxStringItem aLangString(SID_LANGUAGE_STATUS, "Paragraph_RESET_LANGUAGES");
+            SfxStringItem aLangString(SID_LANGUAGE_STATUS, u"Paragraph_RESET_LANGUAGES"_ustr);
             m_pSh->GetView().GetViewFrame().GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON, { &aLangString });
         }
         else if (nId == MN_SET_PARA_MORE)

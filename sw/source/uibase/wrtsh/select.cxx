@@ -717,10 +717,10 @@ void SwWrtShell::SetInsMode( bool bOn )
 {
     const bool bDoAsk = officecfg::Office::Common::Misc::QuerySetInsMode::get();
     if (!bOn && bDoAsk) {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetView().GetFrameWeld(), "cui/ui/querysetinsmodedialog.ui"));
-        std::unique_ptr<weld::Dialog> xQuery(xBuilder->weld_dialog("SetInsModeDialog"));
-        std::unique_ptr<weld::Image> xImage(xBuilder->weld_image("imSetInsMode"));
-        std::unique_ptr<weld::CheckButton> xCheckBox(xBuilder->weld_check_button("cbDontShowAgain"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetView().GetFrameWeld(), u"cui/ui/querysetinsmodedialog.ui"_ustr));
+        std::unique_ptr<weld::Dialog> xQuery(xBuilder->weld_dialog(u"SetInsModeDialog"_ustr));
+        std::unique_ptr<weld::Image> xImage(xBuilder->weld_image(u"imSetInsMode"_ustr));
+        std::unique_ptr<weld::CheckButton> xCheckBox(xBuilder->weld_check_button(u"cbDontShowAgain"_ustr));
 
         xImage->set_from_icon_name(RID_BMP_QUERYINSMODE);
 

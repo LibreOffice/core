@@ -244,7 +244,7 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
         int x, y, width, height;
         mxMenuButton->get_extents_relative_to(*m_xContainer, x, y, width, height);
         Point aPos(rPt + PixelToLogic(Point(x, y)));
-        pDev->DrawText(aPos, "...");
+        pDev->DrawText(aPos, u"..."_ustr);
     }
 
     pDev->Pop();
@@ -302,7 +302,7 @@ void SwAnnotationWin::ShowAnchorOnly(const Point &aPoint)
 void SwAnnotationWin::InitControls()
 {
     // window controls for author and date
-    mxMetadataAuthor = m_xBuilder->weld_label("author");
+    mxMetadataAuthor = m_xBuilder->weld_label(u"author"_ustr);
     mxMetadataAuthor->set_accessible_name( SwResId( STR_ACCESS_ANNOTATION_AUTHOR_NAME ) );
     mxMetadataAuthor->set_direction(AllSettings::GetLayoutRTL());
 
@@ -313,7 +313,7 @@ void SwAnnotationWin::InitControls()
     // with variable meta size height
     mxMetadataAuthor->set_font(maLabelFont);
 
-    mxMetadataDate = m_xBuilder->weld_label("date");
+    mxMetadataDate = m_xBuilder->weld_label(u"date"_ustr);
     mxMetadataDate->set_accessible_name( SwResId( STR_ACCESS_ANNOTATION_DATE_NAME ) );
     mxMetadataDate->set_direction(AllSettings::GetLayoutRTL());
     mxMetadataDate->connect_mouse_move(LINK(this, SwAnnotationWin, MouseMoveHdl));
@@ -322,7 +322,7 @@ void SwAnnotationWin::InitControls()
     // with variable meta size height
     mxMetadataDate->set_font(maLabelFont);
 
-    mxMetadataResolved = m_xBuilder->weld_label("resolved");
+    mxMetadataResolved = m_xBuilder->weld_label(u"resolved"_ustr);
     mxMetadataResolved->set_accessible_name( SwResId( STR_ACCESS_ANNOTATION_RESOLVED_NAME ) );
     mxMetadataResolved->set_direction(AllSettings::GetLayoutRTL());
     mxMetadataResolved->connect_mouse_move(LINK(this, SwAnnotationWin, MouseMoveHdl));
@@ -342,14 +342,14 @@ void SwAnnotationWin::InitControls()
     mpOutliner->InsertView(mpOutlinerView.get());
 
     //create Scrollbars
-    mxVScrollbar = m_xBuilder->weld_scrolled_window("scrolledwindow", true);
+    mxVScrollbar = m_xBuilder->weld_scrolled_window(u"scrolledwindow"_ustr, true);
 
-    mxMenuButton = m_xBuilder->weld_menu_button("menubutton");
+    mxMenuButton = m_xBuilder->weld_menu_button(u"menubutton"_ustr);
     mxMenuButton->set_size_request(METABUTTON_WIDTH, METABUTTON_HEIGHT);
 
     // actual window which holds the user text
     mxSidebarTextControl.reset(new SidebarTextControl(*this, mrView, mrMgr));
-    mxSidebarTextControlWin.reset(new weld::CustomWeld(*m_xBuilder, "editview", *mxSidebarTextControl));
+    mxSidebarTextControlWin.reset(new weld::CustomWeld(*m_xBuilder, u"editview"_ustr, *mxSidebarTextControl));
     mxSidebarTextControl->SetPointer(PointerStyle::Text);
 
     Rescale();
@@ -390,11 +390,11 @@ void SwAnnotationWin::InitControls()
     CheckMetaText();
 
     // expand %1 "Author"
-    OUString aText = mxMenuButton->get_item_label("deleteby");
+    OUString aText = mxMenuButton->get_item_label(u"deleteby"_ustr);
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1, GetAuthor());
     aText = aRewriter.Apply(aText);
-    mxMenuButton->set_item_label("deleteby", aText);
+    mxMenuButton->set_item_label(u"deleteby"_ustr, aText);
 
     mxMenuButton->set_accessible_name(SwResId(STR_ACCESS_ANNOTATION_BUTTON_NAME));
     mxMenuButton->set_accessible_description(SwResId(STR_ACCESS_ANNOTATION_BUTTON_DESC));
@@ -945,7 +945,7 @@ void SwAnnotationWin::ShowNote()
     if (mpTextRangeOverlay && !mpTextRangeOverlay->isVisible())
         mpTextRangeOverlay->setVisible(true);
 
-    collectUIInformation("SHOW",get_id());
+    collectUIInformation(u"SHOW"_ustr,get_id());
 }
 
 void SwAnnotationWin::HideNote()
@@ -963,7 +963,7 @@ void SwAnnotationWin::HideNote()
         mpShadow->setVisible(false);
     if (mpTextRangeOverlay && mpTextRangeOverlay->isVisible())
         mpTextRangeOverlay->setVisible(false);
-    collectUIInformation("HIDE",get_id());
+    collectUIInformation(u"HIDE"_ustr,get_id());
 }
 
 void SwAnnotationWin::ActivatePostIt()
@@ -1388,7 +1388,7 @@ void SwAnnotationWin::SwitchToFieldPos()
     if (aCount)
         mrView.GetDocShell()->GetWrtShell()->SwCursorShell::Right(aCount, SwCursorSkipMode::Chars);
     GrabFocusToDocument();
-    collectUIInformation("LEAVE",get_id());
+    collectUIInformation(u"LEAVE"_ustr,get_id());
 }
 
 void SwAnnotationWin::SetChangeTracking( const SwPostItHelper::SwLayoutStatus aLayoutStatus,

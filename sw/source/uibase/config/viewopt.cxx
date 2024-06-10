@@ -234,8 +234,8 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, bool b
 }
 
 SwViewOption::SwViewOption() :
-    m_sThemeName( "Default" ),
-    m_sSymbolFont( "symbol" ),
+    m_sThemeName( u"Default"_ustr ),
+    m_sSymbolFont( u"symbol"_ustr ),
     m_aRetouchColor( COL_TRANSPARENT ),
     mnViewLayoutColumns( 0 ),
     m_nPagePreviewRow( 1 ),
@@ -593,7 +593,7 @@ bool SwViewOption::IsAppearanceFlag(ViewOptFlags nFlag) const
 namespace{
 rtl::Reference<comphelper::ConfigurationListener> const & getWCOptionListener()
 {
-    static rtl::Reference<comphelper::ConfigurationListener> xListener(new comphelper::ConfigurationListener("/org.openoffice.Office.Writer/Cursor/Option"));
+    static rtl::Reference<comphelper::ConfigurationListener> xListener(new comphelper::ConfigurationListener(u"/org.openoffice.Office.Writer/Cursor/Option"_ustr));
     return xListener;
 }
 }
@@ -602,7 +602,7 @@ bool SwViewOption::IsIgnoreProtectedArea()
 {
     if (comphelper::IsFuzzing())
         return false;
-    static comphelper::ConfigurationListenerProperty<bool> gIgnoreProtectedArea(getWCOptionListener(), "IgnoreProtectedArea");
+    static comphelper::ConfigurationListenerProperty<bool> gIgnoreProtectedArea(getWCOptionListener(), u"IgnoreProtectedArea"_ustr);
     return gIgnoreProtectedArea.get();
 }
 

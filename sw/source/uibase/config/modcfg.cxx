@@ -217,20 +217,20 @@ const Sequence<OUString>& SwRevisionConfig::GetPropertyNames()
 {
     static Sequence<OUString> const aNames
     {
-            "TextDisplay/Insert/Attribute",             // 0
-            "TextDisplay/Insert/Color",                 // 1
-            "TextDisplay/Delete/Attribute",             // 2
-            "TextDisplay/Delete/Color",                 // 3
-            "TextDisplay/ChangedAttribute/Attribute",   // 4
-            "TextDisplay/ChangedAttribute/Color",       // 5
-            "LinesChanged/Mark",                        // 6
-            "LinesChanged/Color"                        // 7
+            u"TextDisplay/Insert/Attribute"_ustr,             // 0
+            u"TextDisplay/Insert/Color"_ustr,                 // 1
+            u"TextDisplay/Delete/Attribute"_ustr,             // 2
+            u"TextDisplay/Delete/Color"_ustr,                 // 3
+            u"TextDisplay/ChangedAttribute/Attribute"_ustr,   // 4
+            u"TextDisplay/ChangedAttribute/Color"_ustr,       // 5
+            u"LinesChanged/Mark"_ustr,                        // 6
+            u"LinesChanged/Color"_ustr                        // 7
     };
     return aNames;
 }
 
 SwRevisionConfig::SwRevisionConfig()
-    : ConfigItem("Office.Writer/Revision", ConfigItemMode::ReleaseTree)
+    : ConfigItem(u"Office.Writer/Revision"_ustr, ConfigItemMode::ReleaseTree)
     , m_nMarkAlign(0)
 {
     m_aInsertAttr.m_nItemId = SID_ATTR_CHAR_UNDERLINE;
@@ -461,107 +461,107 @@ const Sequence<OUString>& SwInsertConfig::GetPropertyNames() const
 {
     static Sequence<OUString> aNames
     {
-            "Table/Header",                                                 // 0
-            "Table/RepeatHeader",                                           // 1
-            "Table/Border",                                                 // 2
-            "Table/Split",                                                  // 3 from here not in writer/web
-            "Caption/Automatic",                                            // 4
-            "Caption/CaptionOrderNumberingFirst",                           // 5
-            "Caption/WriterObject/Table/Enable",                            // 6
-            "Caption/WriterObject/Table/Settings/Category",                 // 7
-            "Caption/WriterObject/Table/Settings/Numbering",                // 8
-            "Caption/WriterObject/Table/Settings/NumberingSeparator",       // 9
-            "Caption/WriterObject/Table/Settings/CaptionText",              //10
-            "Caption/WriterObject/Table/Settings/Delimiter",                //11
-            "Caption/WriterObject/Table/Settings/Level",                    //12
-            "Caption/WriterObject/Table/Settings/Position",                 //13
-            "Caption/WriterObject/Table/Settings/CharacterStyle",           //14
-            "Caption/WriterObject/Frame/Enable",                            //15
-            "Caption/WriterObject/Frame/Settings/Category",                 //16
-            "Caption/WriterObject/Frame/Settings/Numbering",                //17
-            "Caption/WriterObject/Frame/Settings/NumberingSeparator",       //18
-            "Caption/WriterObject/Frame/Settings/CaptionText",              //19
-            "Caption/WriterObject/Frame/Settings/Delimiter",                //20
-            "Caption/WriterObject/Frame/Settings/Level",                    //21
-            "Caption/WriterObject/Frame/Settings/Position",                 //22
-            "Caption/WriterObject/Frame/Settings/CharacterStyle",           //23
-            "Caption/WriterObject/Graphic/Enable",                          //24
-            "Caption/WriterObject/Graphic/Settings/Category",               //25
-            "Caption/WriterObject/Graphic/Settings/Numbering",              //26
-            "Caption/WriterObject/Graphic/Settings/NumberingSeparator",     //27
-            "Caption/WriterObject/Graphic/Settings/CaptionText",            //28
-            "Caption/WriterObject/Graphic/Settings/Delimiter",              //29
-            "Caption/WriterObject/Graphic/Settings/Level",                  //30
-            "Caption/WriterObject/Graphic/Settings/Position",               //31
-            "Caption/WriterObject/Graphic/Settings/CharacterStyle",         //32
-            "Caption/WriterObject/Graphic/Settings/ApplyAttributes",        //33
-            "Caption/OfficeObject/Calc/Enable",                             //34
-            "Caption/OfficeObject/Calc/Settings/Category",                  //35
-            "Caption/OfficeObject/Calc/Settings/Numbering",                 //36
-            "Caption/OfficeObject/Calc/Settings/NumberingSeparator",        //37
-            "Caption/OfficeObject/Calc/Settings/CaptionText",               //38
-            "Caption/OfficeObject/Calc/Settings/Delimiter",                 //39
-            "Caption/OfficeObject/Calc/Settings/Level",                     //40
-            "Caption/OfficeObject/Calc/Settings/Position",                  //41
-            "Caption/OfficeObject/Calc/Settings/CharacterStyle",            //42
-            "Caption/OfficeObject/Calc/Settings/ApplyAttributes",           //43
-            "Caption/OfficeObject/Impress/Enable",                          //44
-            "Caption/OfficeObject/Impress/Settings/Category",               //45
-            "Caption/OfficeObject/Impress/Settings/Numbering",              //46
-            "Caption/OfficeObject/Impress/Settings/NumberingSeparator",     //47
-            "Caption/OfficeObject/Impress/Settings/CaptionText",            //48
-            "Caption/OfficeObject/Impress/Settings/Delimiter",              //49
-            "Caption/OfficeObject/Impress/Settings/Level",                  //50
-            "Caption/OfficeObject/Impress/Settings/Position",               //51
-            "Caption/OfficeObject/Impress/Settings/CharacterStyle",         //52
-            "Caption/OfficeObject/Impress/Settings/ApplyAttributes",        //53
-            "Caption/OfficeObject/Chart/Enable",                            //54
-            "Caption/OfficeObject/Chart/Settings/Category",                 //55
-            "Caption/OfficeObject/Chart/Settings/Numbering",                //56
-            "Caption/OfficeObject/Chart/Settings/NumberingSeparator",       //57
-            "Caption/OfficeObject/Chart/Settings/CaptionText",              //58
-            "Caption/OfficeObject/Chart/Settings/Delimiter",                //59
-            "Caption/OfficeObject/Chart/Settings/Level",                    //60
-            "Caption/OfficeObject/Chart/Settings/Position",                 //61
-            "Caption/OfficeObject/Chart/Settings/CharacterStyle",           //62
-            "Caption/OfficeObject/Chart/Settings/ApplyAttributes",          //63
-            "Caption/OfficeObject/Formula/Enable",                          //64
-            "Caption/OfficeObject/Formula/Settings/Category",               //65
-            "Caption/OfficeObject/Formula/Settings/Numbering",              //66
-            "Caption/OfficeObject/Formula/Settings/NumberingSeparator",     //67
-            "Caption/OfficeObject/Formula/Settings/CaptionText",            //68
-            "Caption/OfficeObject/Formula/Settings/Delimiter",              //69
-            "Caption/OfficeObject/Formula/Settings/Level",                  //70
-            "Caption/OfficeObject/Formula/Settings/Position",               //71
-            "Caption/OfficeObject/Formula/Settings/CharacterStyle",         //72
-            "Caption/OfficeObject/Formula/Settings/ApplyAttributes",        //73
-            "Caption/OfficeObject/Draw/Enable",                             //74
-            "Caption/OfficeObject/Draw/Settings/Category",                  //75
-            "Caption/OfficeObject/Draw/Settings/Numbering",                 //76
-            "Caption/OfficeObject/Draw/Settings/NumberingSeparator",        //77
-            "Caption/OfficeObject/Draw/Settings/CaptionText",               //78
-            "Caption/OfficeObject/Draw/Settings/Delimiter",                 //79
-            "Caption/OfficeObject/Draw/Settings/Level",                     //80
-            "Caption/OfficeObject/Draw/Settings/Position",                  //81
-            "Caption/OfficeObject/Draw/Settings/CharacterStyle",            //82
-            "Caption/OfficeObject/Draw/Settings/ApplyAttributes",           //83
-            "Caption/OfficeObject/OLEMisc/Enable",                          //84
-            "Caption/OfficeObject/OLEMisc/Settings/Category",               //85
-            "Caption/OfficeObject/OLEMisc/Settings/Numbering",              //86
-            "Caption/OfficeObject/OLEMisc/Settings/NumberingSeparator",     //87
-            "Caption/OfficeObject/OLEMisc/Settings/CaptionText",            //88
-            "Caption/OfficeObject/OLEMisc/Settings/Delimiter",              //89
-            "Caption/OfficeObject/OLEMisc/Settings/Level",                  //90
-            "Caption/OfficeObject/OLEMisc/Settings/Position",               //91
-            "Caption/OfficeObject/OLEMisc/Settings/CharacterStyle",         //92
-            "Caption/OfficeObject/OLEMisc/Settings/ApplyAttributes"         //93
+            u"Table/Header"_ustr,                                                 // 0
+            u"Table/RepeatHeader"_ustr,                                           // 1
+            u"Table/Border"_ustr,                                                 // 2
+            u"Table/Split"_ustr,                                                  // 3 from here not in writer/web
+            u"Caption/Automatic"_ustr,                                            // 4
+            u"Caption/CaptionOrderNumberingFirst"_ustr,                           // 5
+            u"Caption/WriterObject/Table/Enable"_ustr,                            // 6
+            u"Caption/WriterObject/Table/Settings/Category"_ustr,                 // 7
+            u"Caption/WriterObject/Table/Settings/Numbering"_ustr,                // 8
+            u"Caption/WriterObject/Table/Settings/NumberingSeparator"_ustr,       // 9
+            u"Caption/WriterObject/Table/Settings/CaptionText"_ustr,              //10
+            u"Caption/WriterObject/Table/Settings/Delimiter"_ustr,                //11
+            u"Caption/WriterObject/Table/Settings/Level"_ustr,                    //12
+            u"Caption/WriterObject/Table/Settings/Position"_ustr,                 //13
+            u"Caption/WriterObject/Table/Settings/CharacterStyle"_ustr,           //14
+            u"Caption/WriterObject/Frame/Enable"_ustr,                            //15
+            u"Caption/WriterObject/Frame/Settings/Category"_ustr,                 //16
+            u"Caption/WriterObject/Frame/Settings/Numbering"_ustr,                //17
+            u"Caption/WriterObject/Frame/Settings/NumberingSeparator"_ustr,       //18
+            u"Caption/WriterObject/Frame/Settings/CaptionText"_ustr,              //19
+            u"Caption/WriterObject/Frame/Settings/Delimiter"_ustr,                //20
+            u"Caption/WriterObject/Frame/Settings/Level"_ustr,                    //21
+            u"Caption/WriterObject/Frame/Settings/Position"_ustr,                 //22
+            u"Caption/WriterObject/Frame/Settings/CharacterStyle"_ustr,           //23
+            u"Caption/WriterObject/Graphic/Enable"_ustr,                          //24
+            u"Caption/WriterObject/Graphic/Settings/Category"_ustr,               //25
+            u"Caption/WriterObject/Graphic/Settings/Numbering"_ustr,              //26
+            u"Caption/WriterObject/Graphic/Settings/NumberingSeparator"_ustr,     //27
+            u"Caption/WriterObject/Graphic/Settings/CaptionText"_ustr,            //28
+            u"Caption/WriterObject/Graphic/Settings/Delimiter"_ustr,              //29
+            u"Caption/WriterObject/Graphic/Settings/Level"_ustr,                  //30
+            u"Caption/WriterObject/Graphic/Settings/Position"_ustr,               //31
+            u"Caption/WriterObject/Graphic/Settings/CharacterStyle"_ustr,         //32
+            u"Caption/WriterObject/Graphic/Settings/ApplyAttributes"_ustr,        //33
+            u"Caption/OfficeObject/Calc/Enable"_ustr,                             //34
+            u"Caption/OfficeObject/Calc/Settings/Category"_ustr,                  //35
+            u"Caption/OfficeObject/Calc/Settings/Numbering"_ustr,                 //36
+            u"Caption/OfficeObject/Calc/Settings/NumberingSeparator"_ustr,        //37
+            u"Caption/OfficeObject/Calc/Settings/CaptionText"_ustr,               //38
+            u"Caption/OfficeObject/Calc/Settings/Delimiter"_ustr,                 //39
+            u"Caption/OfficeObject/Calc/Settings/Level"_ustr,                     //40
+            u"Caption/OfficeObject/Calc/Settings/Position"_ustr,                  //41
+            u"Caption/OfficeObject/Calc/Settings/CharacterStyle"_ustr,            //42
+            u"Caption/OfficeObject/Calc/Settings/ApplyAttributes"_ustr,           //43
+            u"Caption/OfficeObject/Impress/Enable"_ustr,                          //44
+            u"Caption/OfficeObject/Impress/Settings/Category"_ustr,               //45
+            u"Caption/OfficeObject/Impress/Settings/Numbering"_ustr,              //46
+            u"Caption/OfficeObject/Impress/Settings/NumberingSeparator"_ustr,     //47
+            u"Caption/OfficeObject/Impress/Settings/CaptionText"_ustr,            //48
+            u"Caption/OfficeObject/Impress/Settings/Delimiter"_ustr,              //49
+            u"Caption/OfficeObject/Impress/Settings/Level"_ustr,                  //50
+            u"Caption/OfficeObject/Impress/Settings/Position"_ustr,               //51
+            u"Caption/OfficeObject/Impress/Settings/CharacterStyle"_ustr,         //52
+            u"Caption/OfficeObject/Impress/Settings/ApplyAttributes"_ustr,        //53
+            u"Caption/OfficeObject/Chart/Enable"_ustr,                            //54
+            u"Caption/OfficeObject/Chart/Settings/Category"_ustr,                 //55
+            u"Caption/OfficeObject/Chart/Settings/Numbering"_ustr,                //56
+            u"Caption/OfficeObject/Chart/Settings/NumberingSeparator"_ustr,       //57
+            u"Caption/OfficeObject/Chart/Settings/CaptionText"_ustr,              //58
+            u"Caption/OfficeObject/Chart/Settings/Delimiter"_ustr,                //59
+            u"Caption/OfficeObject/Chart/Settings/Level"_ustr,                    //60
+            u"Caption/OfficeObject/Chart/Settings/Position"_ustr,                 //61
+            u"Caption/OfficeObject/Chart/Settings/CharacterStyle"_ustr,           //62
+            u"Caption/OfficeObject/Chart/Settings/ApplyAttributes"_ustr,          //63
+            u"Caption/OfficeObject/Formula/Enable"_ustr,                          //64
+            u"Caption/OfficeObject/Formula/Settings/Category"_ustr,               //65
+            u"Caption/OfficeObject/Formula/Settings/Numbering"_ustr,              //66
+            u"Caption/OfficeObject/Formula/Settings/NumberingSeparator"_ustr,     //67
+            u"Caption/OfficeObject/Formula/Settings/CaptionText"_ustr,            //68
+            u"Caption/OfficeObject/Formula/Settings/Delimiter"_ustr,              //69
+            u"Caption/OfficeObject/Formula/Settings/Level"_ustr,                  //70
+            u"Caption/OfficeObject/Formula/Settings/Position"_ustr,               //71
+            u"Caption/OfficeObject/Formula/Settings/CharacterStyle"_ustr,         //72
+            u"Caption/OfficeObject/Formula/Settings/ApplyAttributes"_ustr,        //73
+            u"Caption/OfficeObject/Draw/Enable"_ustr,                             //74
+            u"Caption/OfficeObject/Draw/Settings/Category"_ustr,                  //75
+            u"Caption/OfficeObject/Draw/Settings/Numbering"_ustr,                 //76
+            u"Caption/OfficeObject/Draw/Settings/NumberingSeparator"_ustr,        //77
+            u"Caption/OfficeObject/Draw/Settings/CaptionText"_ustr,               //78
+            u"Caption/OfficeObject/Draw/Settings/Delimiter"_ustr,                 //79
+            u"Caption/OfficeObject/Draw/Settings/Level"_ustr,                     //80
+            u"Caption/OfficeObject/Draw/Settings/Position"_ustr,                  //81
+            u"Caption/OfficeObject/Draw/Settings/CharacterStyle"_ustr,            //82
+            u"Caption/OfficeObject/Draw/Settings/ApplyAttributes"_ustr,           //83
+            u"Caption/OfficeObject/OLEMisc/Enable"_ustr,                          //84
+            u"Caption/OfficeObject/OLEMisc/Settings/Category"_ustr,               //85
+            u"Caption/OfficeObject/OLEMisc/Settings/Numbering"_ustr,              //86
+            u"Caption/OfficeObject/OLEMisc/Settings/NumberingSeparator"_ustr,     //87
+            u"Caption/OfficeObject/OLEMisc/Settings/CaptionText"_ustr,            //88
+            u"Caption/OfficeObject/OLEMisc/Settings/Delimiter"_ustr,              //89
+            u"Caption/OfficeObject/OLEMisc/Settings/Level"_ustr,                  //90
+            u"Caption/OfficeObject/OLEMisc/Settings/Position"_ustr,               //91
+            u"Caption/OfficeObject/OLEMisc/Settings/CharacterStyle"_ustr,         //92
+            u"Caption/OfficeObject/OLEMisc/Settings/ApplyAttributes"_ustr         //93
     };
     static Sequence<OUString> const aWebNames(aNames.getArray(), INS_PROP_TABLE_BORDER + 1);
     return m_bIsWeb ? aWebNames : aNames;
 }
 
 SwInsertConfig::SwInsertConfig(bool bWeb) :
-    ConfigItem(bWeb ? OUString("Office.WriterWeb/Insert") : OUString("Office.Writer/Insert"),
+    ConfigItem(bWeb ? u"Office.WriterWeb/Insert"_ustr : u"Office.Writer/Insert"_ustr,
         ConfigItemMode::ReleaseTree),
     m_bInsWithCaption( false ),
     m_bCaptionOrderNumberingFirst( false ),
@@ -1069,21 +1069,21 @@ const Sequence<OUString>& SwTableConfig::GetPropertyNames()
 {
     static Sequence<OUString> const aNames
     {
-        "Shift/Row",                    //  0
-        "Shift/Column",                 //  1
-        "Insert/Row",                   //  2
-        "Insert/Column",                //  3
-        "Change/Effect",                //  4
-        "Input/NumberRecognition",      //  5
-        "Input/NumberFormatRecognition",//  6
-        "Input/Alignment",              //  7
-        "Input/SplitVerticalByDefault"  //  8
+        u"Shift/Row"_ustr,                    //  0
+        u"Shift/Column"_ustr,                 //  1
+        u"Insert/Row"_ustr,                   //  2
+        u"Insert/Column"_ustr,                //  3
+        u"Change/Effect"_ustr,                //  4
+        u"Input/NumberRecognition"_ustr,      //  5
+        u"Input/NumberFormatRecognition"_ustr,//  6
+        u"Input/Alignment"_ustr,              //  7
+        u"Input/SplitVerticalByDefault"_ustr  //  8
     };
     return aNames;
 }
 
 SwTableConfig::SwTableConfig(bool bWeb)
-    : ConfigItem(bWeb ? OUString("Office.WriterWeb/Table") : OUString("Office.Writer/Table"),
+    : ConfigItem(bWeb ? u"Office.WriterWeb/Table"_ustr : u"Office.Writer/Table"_ustr,
         ConfigItemMode::ReleaseTree)
     , m_nTableHMove(0)
     , m_nTableVMove(0)
@@ -1156,7 +1156,7 @@ void SwTableConfig::Load()
 }
 
 SwMiscConfig::SwMiscConfig() :
-    ConfigItem("Office.Writer", ConfigItemMode::ReleaseTree),
+    ConfigItem(u"Office.Writer"_ustr, ConfigItemMode::ReleaseTree),
     m_bDefaultFontsInCurrDocOnly(false),
     m_bShowIndexPreview(false),
     m_bGrfToGalleryAsLnk(true),
@@ -1177,19 +1177,19 @@ const Sequence<OUString>& SwMiscConfig::GetPropertyNames()
 {
     static Sequence<OUString> const aNames
     {
-            "Statistics/WordNumber/Delimiter",          // 0
-            "DefaultFont/Document",                     // 1
-            "Index/ShowPreview",                        // 2
-            "Misc/GraphicToGalleryAsLink",              // 3
-            "Numbering/Graphic/KeepRatio",              // 4
-            "FormLetter/MailingOutput/Format",          // 5
-            "FormLetter/FileOutput/FileName/FromDatabaseField",  // 6
-            "FormLetter/FileOutput/Path",               // 7
-            "FormLetter/FileOutput/FileName/FromManualSetting",   // 8
-            "FormLetter/FileOutput/FileName/Generation",//9
-            "FormLetter/PrintOutput/AskForMerge",        //10
-            "FormLetter/FileOutput/FilePassword/FromDatabaseField",  // 11
-            "FormLetter/FileOutput/FilePassword/Generation" //12
+            u"Statistics/WordNumber/Delimiter"_ustr,          // 0
+            u"DefaultFont/Document"_ustr,                     // 1
+            u"Index/ShowPreview"_ustr,                        // 2
+            u"Misc/GraphicToGalleryAsLink"_ustr,              // 3
+            u"Numbering/Graphic/KeepRatio"_ustr,              // 4
+            u"FormLetter/MailingOutput/Format"_ustr,          // 5
+            u"FormLetter/FileOutput/FileName/FromDatabaseField"_ustr,  // 6
+            u"FormLetter/FileOutput/Path"_ustr,               // 7
+            u"FormLetter/FileOutput/FileName/FromManualSetting"_ustr,   // 8
+            u"FormLetter/FileOutput/FileName/Generation"_ustr,//9
+            u"FormLetter/PrintOutput/AskForMerge"_ustr,        //10
+            u"FormLetter/FileOutput/FilePassword/FromDatabaseField"_ustr,  // 11
+            u"FormLetter/FileOutput/FilePassword/Generation"_ustr //12
     };
     return aNames;
 }
@@ -1264,17 +1264,17 @@ const Sequence<OUString>& SwCompareConfig::GetPropertyNames()
 {
     static Sequence<OUString> const aNames
     {
-            "Mode",                         // 0
-            "UseRSID",                      // 1
-            "IgnorePieces",             // 2
-            "IgnoreLength", // 3
-            "StoreRSID" // 4
+            u"Mode"_ustr,                         // 0
+            u"UseRSID"_ustr,                      // 1
+            u"IgnorePieces"_ustr,             // 2
+            u"IgnoreLength"_ustr, // 3
+            u"StoreRSID"_ustr // 4
     };
     return aNames;
 }
 
 SwCompareConfig::SwCompareConfig() :
-    ConfigItem("Office.Writer/Comparison", ConfigItemMode::ReleaseTree)
+    ConfigItem(u"Office.Writer/Comparison"_ustr, ConfigItemMode::ReleaseTree)
     ,m_bStoreRsid(true)
 {
     m_eCmpMode = SwCompareMode::Auto;

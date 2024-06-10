@@ -42,8 +42,8 @@ private:
     DECL_LINK(ActivateHdl, weld::Entry&, bool);
 public:
     InputEdit(vcl::Window* pParent)
-        : InterimItemWindow(pParent, "modules/swriter/ui/inputeditbox.ui", "InputEditBox")
-        , m_xWidget(m_xBuilder->weld_entry("entry"))
+        : InterimItemWindow(pParent, u"modules/swriter/ui/inputeditbox.ui"_ustr, u"InputEditBox"_ustr)
+        , m_xWidget(m_xBuilder->weld_entry(u"entry"_ustr))
     {
         InitControlBase(m_xWidget.get());
 
@@ -113,8 +113,8 @@ private:
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 public:
     PosEdit(vcl::Window* pParent)
-        : InterimItemWindow(pParent, "modules/swriter/ui/poseditbox.ui", "PosEditBox")
-        , m_xWidget(m_xBuilder->weld_entry("entry"))
+        : InterimItemWindow(pParent, u"modules/swriter/ui/poseditbox.ui"_ustr, u"PosEditBox"_ustr)
+        , m_xWidget(m_xBuilder->weld_entry(u"entry"_ustr))
     {
         InitControlBase(m_xWidget.get());
 

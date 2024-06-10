@@ -567,7 +567,7 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
                 {
                     try
                     {
-                        xSet->setPropertyValue("Formula", uno::Any( aMathData ) );
+                        xSet->setPropertyValue(u"Formula"_ustr, uno::Any( aMathData ) );
                         bActivate = false;
                     }
                     catch (const uno::Exception&)
@@ -627,12 +627,12 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
             svt::EmbeddedObjectRef::TryRunningState( xEmbeddedObj );
             uno::Reference< beans::XPropertySet > xProps( xEmbeddedObj->getComponent(), uno::UNO_QUERY );
             if ( xProps.is() &&
-                 ( xProps->getPropertyValue("DisableDataTableDialog") >>= bDisableDataTableDialog ) &&
+                 ( xProps->getPropertyValue(u"DisableDataTableDialog"_ustr) >>= bDisableDataTableDialog ) &&
                  bDisableDataTableDialog )
             {
-                xProps->setPropertyValue("DisableDataTableDialog",
+                xProps->setPropertyValue(u"DisableDataTableDialog"_ustr,
                     uno::Any( false ) );
-                xProps->setPropertyValue("DisableComplexChartTypes",
+                xProps->setPropertyValue(u"DisableComplexChartTypes"_ustr,
                     uno::Any( false ) );
                 uno::Reference< util::XModifiable > xModifiable( xProps, uno::UNO_QUERY );
                 if ( xModifiable.is() )
@@ -691,7 +691,7 @@ void SwWrtShell::LaunchOLEObj(sal_Int32 nVerb)
     if (xOLEInit.is())
     {
         uno::Sequence<beans::PropertyValue> aArguments
-            = { comphelper::makePropertyValue("ReadOnly", pCli->IsProtected()) };
+            = { comphelper::makePropertyValue(u"ReadOnly"_ustr, pCli->IsProtected()) };
         xOLEInit->initialize({ uno::Any(aArguments) });
     }
 
@@ -983,7 +983,7 @@ void SwWrtShell::InsertPageBreak(const OUString *pPageDesc, const ::std::optiona
             SetAttrItem( SvxFormatBreakItem(SvxBreak::PageBefore, RES_BREAK) );
         EndUndo(SwUndoId::UI_INSERT_PAGE_BREAK);
     }
-    collectUIInformation("BREAK_PAGE", "parameter");
+    collectUIInformation(u"BREAK_PAGE"_ustr, u"parameter"_ustr);
 }
 
 // Insert enclosing characters
@@ -1566,7 +1566,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                     aFormat.SetBulletChar( numfunc::GetBulletChar(static_cast<sal_uInt8>(nLevel)));
                     aFormat.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                     // #i93908# clear suffix for bullet lists
-                    aFormat.SetListFormat("", "", nLevel);
+                    aFormat.SetListFormat(u""_ustr, u""_ustr, nLevel);
                 }
                 aNumRule.Set(o3tl::narrowing<sal_uInt16>(nLevel), aFormat);
             }
@@ -1624,7 +1624,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                 aFormat.SetBulletChar( numfunc::GetBulletChar(nLvl) );
                 aFormat.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                 // #i93908# clear suffix for bullet lists
-                aFormat.SetListFormat("", "", nLvl);
+                aFormat.SetListFormat(u""_ustr, u""_ustr, nLvl);
             }
 
             // #i95907#
@@ -2675,9 +2675,9 @@ void SwWrtShell::InfoReadOnlyDialog(bool bAsync) const
     {
         std::unique_ptr<weld::Builder>
                 xBuilder(Application::CreateBuilder(GetView().GetFrameWeld(),
-                                                    "modules/swriter/ui/inforeadonlydialog.ui"));
+                                                    u"modules/swriter/ui/inforeadonlydialog.ui"_ustr));
         std::unique_ptr<weld::MessageDialog>
-                xInfo(xBuilder->weld_message_dialog("InfoReadonlyDialog"));
+                xInfo(xBuilder->weld_message_dialog(u"InfoReadonlyDialog"_ustr));
         if (GetViewOptions()->IsShowOutlineContentVisibilityButton() &&
                 HasFoldedOutlineContentSelected())
         {
@@ -2691,9 +2691,9 @@ void SwWrtShell::InfoReadOnlyDialog(bool bAsync) const
 bool SwWrtShell::WarnHiddenSectionDialog() const
 {
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(
-        GetView().GetFrameWeld(), "modules/swriter/ui/warnhiddensectiondialog.ui"));
+        GetView().GetFrameWeld(), u"modules/swriter/ui/warnhiddensectiondialog.ui"_ustr));
     std::unique_ptr<weld::MessageDialog> xQuery(
-        xBuilder->weld_message_dialog("WarnHiddenSectionDialog"));
+        xBuilder->weld_message_dialog(u"WarnHiddenSectionDialog"_ustr));
     if (GetViewOptions()->IsShowOutlineContentVisibilityButton()
         && HasFoldedOutlineContentSelected())
     {

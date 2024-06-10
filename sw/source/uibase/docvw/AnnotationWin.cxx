@@ -92,7 +92,7 @@ SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
                                   SwPostItMgr& aMgr,
                                   SwSidebarItem& rSidebarItem,
                                   SwFormatField* aField )
-    : InterimItemWindow(&rEditWin, "modules/swriter/ui/annotation.ui", "Annotation")
+    : InterimItemWindow(&rEditWin, u"modules/swriter/ui/annotation.ui"_ustr, u"Annotation"_ustr)
     , mrMgr(aMgr)
     , mrView(rEditWin.GetView())
     , mnDeleteEventId(nullptr)
@@ -237,7 +237,7 @@ void SwAnnotationWin::SetResolved(bool resolved)
         mbResolvedStateUpdated = true;
     UpdateData();
     Invalidate();
-    collectUIInformation("SETRESOLVED",get_id());
+    collectUIInformation(u"SETRESOLVED"_ustr,get_id());
 }
 
 void SwAnnotationWin::ToggleResolved()
@@ -343,7 +343,7 @@ void SwAnnotationWin::UpdateData()
 
 void SwAnnotationWin::Delete()
 {
-    collectUIInformation("DELETE",get_id());
+    collectUIInformation(u"DELETE"_ustr,get_id());
     SwWrtShell* pWrtShell = mrView.GetWrtShellPtr();
     if (!(pWrtShell && pWrtShell->GotoField(*mpFormatField)))
         return;
@@ -423,8 +423,8 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject const & rText)
     if (rText.GetTextObject().HasText(0))
         GetOutlinerView()->GetEditView().InsertText(rText.GetTextObject());
     else
-        GetOutlinerView()->InsertText("...");
-    GetOutlinerView()->InsertText("\"\n");
+        GetOutlinerView()->InsertText(u"..."_ustr);
+    GetOutlinerView()->InsertText(u"\"\n"_ustr);
 
     GetOutlinerView()->SetSelection(ESelection(0,0,EE_PARA_ALL,EE_TEXTPOS_ALL));
     SfxItemSet aAnswerSet( mrView.GetDocShell()->GetPool() );

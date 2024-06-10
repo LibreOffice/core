@@ -43,7 +43,7 @@ void SwWebDocShell::InitInterface_Impl()
 }
 
 
-SFX_IMPL_OBJECTFACTORY(SwWebDocShell, SvGlobalName(SO3_SWWEB_CLASSID), "swriter/web" )
+SFX_IMPL_OBJECTFACTORY(SwWebDocShell, SvGlobalName(SO3_SWWEB_CLASSID), u"swriter/web"_ustr )
 
 SwWebDocShell::SwWebDocShell()
     : SwDocShell(SfxObjectCreateMode::STANDARD)

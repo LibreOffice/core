@@ -103,12 +103,12 @@ SwDLL::SwDLL()
     SwModule* pModule = pUniqueModule.get();
     SfxApplication::SetModule(SfxToolsModule::Writer, std::move(pUniqueModule));
 
-    pWDocFact->SetDocumentServiceName("com.sun.star.text.WebDocument");
+    pWDocFact->SetDocumentServiceName(u"com.sun.star.text.WebDocument"_ustr);
 
     if (!xOpt || xOpt->IsWriter())
     {
-        pGlobDocFact->SetDocumentServiceName("com.sun.star.text.GlobalDocument");
-        pDocFact->SetDocumentServiceName("com.sun.star.text.TextDocument");
+        pGlobDocFact->SetDocumentServiceName(u"com.sun.star.text.GlobalDocument"_ustr);
+        pDocFact->SetDocumentServiceName(u"com.sun.star.text.TextDocument"_ustr);
     }
 
     // register 3D-object-Factory

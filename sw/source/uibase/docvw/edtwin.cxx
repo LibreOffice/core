@@ -5481,7 +5481,7 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
     m_nKS_NUMINDENTINC_Count(0),
     m_pFrameControlsManager(new SwFrameControlsManager(this))
 {
-    set_id("writer_edit");
+    set_id(u"writer_edit"_ustr);
     SetHelpId(HID_EDIT_WIN);
     EnableChildTransparentMode();
     SetDialogControlFlags( DialogControlFlags::Return | DialogControlFlags::WantFocus );
@@ -5720,7 +5720,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         aEvent.ExecutePosition.Y = aPixPos.Y();
                         rtl::Reference<VCLXPopupMenu> xMenu;
                         rtl::Reference<VCLXPopupMenu> xMenuInterface = aROPopup.CreateMenuInterface();
-                        if (GetView().TryContextMenuInterception(xMenuInterface, "private:resource/ReadonlyContextMenu", xMenu, aEvent))
+                        if (GetView().TryContextMenuInterception(xMenuInterface, u"private:resource/ReadonlyContextMenu"_ustr, xMenu, aEvent))
                         {
                             if (xMenu.is())
                             {

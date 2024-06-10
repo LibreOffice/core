@@ -30,7 +30,7 @@ SFX_IMPL_INTERFACE(SwWebOleShell, SwOleShell)
 
 void SwWebOleShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("oleobject");
+    GetStaticInterface()->RegisterPopupMenu(u"oleobject"_ustr);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Webole_Toolbox);
 }
@@ -38,7 +38,7 @@ void SwWebOleShell::InitInterface_Impl()
 SwWebOleShell::SwWebOleShell(SwView &_rView) :
     SwOleShell(_rView)
 {
-    SetName("Object");
+    SetName(u"Object"_ustr);
 }
 
 SwWebOleShell::~SwWebOleShell()

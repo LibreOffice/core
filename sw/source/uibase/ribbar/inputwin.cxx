@@ -322,8 +322,8 @@ IMPL_LINK_NOARG(SwInputWindow, DropdownClickHdl, ToolBox *, void)
     EndSelection(); // reset back CurItemId !
     if (nCurID == FN_FORMULA_CALC)
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/inputwinmenu.ui"));
-        std::unique_ptr<weld::Menu> xPopMenu(xBuilder->weld_menu("menu"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, u"modules/swriter/ui/inputwinmenu.ui"_ustr));
+        std::unique_ptr<weld::Menu> xPopMenu(xBuilder->weld_menu(u"menu"_ustr));
         tools::Rectangle aRect(GetItemRect(FN_FORMULA_CALC));
         weld::Window* pParent = weld::GetPopupParent(*this, aRect);
         MenuHdl(xPopMenu->popup_at_rect(pParent, aRect));

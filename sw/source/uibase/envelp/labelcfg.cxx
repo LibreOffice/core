@@ -69,9 +69,9 @@ static Sequence<OUString> lcl_CreatePropertyNames(const OUString& rPrefix)
 }
 
 SwLabelConfig::SwLabelConfig() :
-    ConfigItem("Office.Labels/Manufacturer")
+    ConfigItem(u"Office.Labels/Manufacturer"_ustr)
 {
-    OUString uri("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/labels/labels.xml");
+    OUString uri(u"$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/labels/labels.xml"_ustr);
     rtl::Bootstrap::expandMacros(uri);
     xmlreader::XmlReader reader(uri);
     int nsId;
@@ -210,7 +210,7 @@ static Sequence<PropertyValue> lcl_CreateProperties(
     const OUString* pNames = rPropNames.getConstArray();
     Sequence<PropertyValue> aRet(rPropNames.getLength());
     PropertyValue* pValues = aRet.getArray();
-    OUString sColon(";");
+    OUString sColon(u";"_ustr);
 
     for(sal_Int32 nProp = 0; nProp < rPropNames.getLength(); nProp++)
     {
@@ -283,7 +283,7 @@ void SwLabelConfig::SaveLabel( const OUString& rManufacturer,
         // type does not yet exist, add to config
         const Sequence<OUString> aLabels = GetNodeNames( rManufacturer );
         sal_Int32 nIndex = aLabels.getLength();
-        OUString sPrefix( "Label" );
+        OUString sPrefix( u"Label"_ustr );
         sFoundNode = sPrefix + OUString::number( nIndex );
         while ( comphelper::findValue(aLabels, sFoundNode) != -1 )
         {

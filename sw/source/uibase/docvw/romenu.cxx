@@ -73,7 +73,7 @@ void SwReadOnlyPopup::Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher con
 #define MN_READONLY_BACKGROUNDTOGALLERY 2000
 
 SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
-    : m_aBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/swriter/ui/readonlymenu.ui", "")
+    : m_aBuilder(nullptr, AllSettings::GetUIRootDir(), u"modules/swriter/ui/readonlymenu.ui"_ustr, u""_ustr)
     , m_xMenu(m_aBuilder.get_menu(u"menu"))
     , m_nReadonlyOpenurl(m_xMenu->GetItemId(u"openurl"))
     , m_nReadonlyOpendoc(m_xMenu->GetItemId(u"opendoc"))

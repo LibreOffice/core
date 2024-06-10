@@ -35,7 +35,7 @@ SFX_IMPL_INTERFACE(SwWebTextShell, SwBaseShell)
 
 void SwWebTextShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu("text");
+    GetStaticInterface()->RegisterPopupMenu(u"text"_ustr);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Text_Toolbox_Sw);
 

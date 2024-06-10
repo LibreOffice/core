@@ -142,7 +142,7 @@ bool PSCSDFPropsQuickHelp(const HelpEvent &rEvt, SwWrtShell& rSh)
             {
                 // check if in CS formatting highlighted area
                 OUString sCharStyle;
-                xRange->getPropertyValue("CharStyleName") >>= sCharStyle;
+                xRange->getPropertyValue(u"CharStyleName"_ustr) >>= sCharStyle;
                 if (!sCharStyle.isEmpty())
                     sText = SwStyleNameMapper::GetUIName(sCharStyle, SwGetPoolIdFromName::ChrFmt);
             }
@@ -217,7 +217,7 @@ bool PSCSDFPropsQuickHelp(const HelpEvent &rEvt, SwWrtShell& rSh)
                 if (aFrameAreaRect.Contains(aPt))
                 {
                     OUString sParaStyle;
-                    xRange->getPropertyValue("ParaStyleName") >>= sParaStyle;
+                    xRange->getPropertyValue(u"ParaStyleName"_ustr) >>= sParaStyle;
                     sText = SwStyleNameMapper::GetUIName(sParaStyle, SwGetPoolIdFromName::TxtColl);
                     // check for paragraph direct formatting
                     if (SwDoc::HasParagraphDirectFormatting(aPos))

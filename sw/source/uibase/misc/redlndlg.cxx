@@ -81,8 +81,8 @@ bool SwRedlineAcceptChild::ReInitDlg(SwDocShell *pDocSh)
 SwModelessRedlineAcceptDlg::SwModelessRedlineAcceptDlg(
     SfxBindings* _pBindings, SwChildWinWrapper* pChild, weld::Window *pParent)
     : SfxModelessDialogController(_pBindings, pChild, pParent,
-        "svx/ui/acceptrejectchangesdialog.ui", "AcceptRejectChangesDialog")
-    , m_xContentArea(m_xBuilder->weld_container("container"))
+        u"svx/ui/acceptrejectchangesdialog.ui"_ustr, u"AcceptRejectChangesDialog"_ustr)
+    , m_xContentArea(m_xBuilder->weld_container(u"container"_ustr))
     , m_pChildWin(pChild)
 {
     m_xImplDlg.reset(new SwRedlineAcceptDlg(m_xDialog, m_xBuilder.get(), m_xContentArea.get()));
@@ -159,8 +159,8 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(std::shared_ptr<weld::Window> xParent, we
     , m_bInhibitActivate(false)
     , m_bHasTrackedColumn(false)
     , m_xTabPagesCTRL(new SvxAcceptChgCtr(pContentArea))
-    , m_xPopup(pBuilder->weld_menu("writermenu"))
-    , m_xSortMenu(pBuilder->weld_menu("writersortmenu"))
+    , m_xPopup(pBuilder->weld_menu(u"writermenu"_ustr))
+    , m_xSortMenu(pBuilder->weld_menu(u"writersortmenu"_ustr))
 {
     m_pTPView = m_xTabPagesCTRL->GetViewPage();
 
@@ -1321,10 +1321,10 @@ IMPL_LINK(SwRedlineAcceptDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
         }
     }
 
-    m_xPopup->set_sensitive("writeredit", bEntry && pRed &&
+    m_xPopup->set_sensitive(u"writeredit"_ustr, bEntry && pRed &&
                                           !rTreeView.get_iter_depth(*xEntry) &&
                                           rTreeView.count_selected_rows() == 1);
-    m_xPopup->set_sensitive("writersort", rTreeView.n_children() != 0);
+    m_xPopup->set_sensitive(u"writersort"_ustr, rTreeView.n_children() != 0);
     int nColumn = rTreeView.get_sort_column();
     if (nColumn == -1)
         nColumn = 4;
@@ -1530,8 +1530,8 @@ void SwRedlineAcceptDlg::FillInfo(OUString &rExtraData) const
 }
 
 SwRedlineAcceptPanel::SwRedlineAcceptPanel(weld::Widget* pParent)
-    : PanelLayout(pParent, "ManageChangesPanel", "modules/swriter/ui/managechangessidebar.ui")
-    , mxContentArea(m_xBuilder->weld_container("content_area"))
+    : PanelLayout(pParent, u"ManageChangesPanel"_ustr, u"modules/swriter/ui/managechangessidebar.ui"_ustr)
+    , mxContentArea(m_xBuilder->weld_container(u"content_area"_ustr))
 {
     mpImplDlg.reset(new SwRedlineAcceptDlg(nullptr, m_xBuilder.get(), mxContentArea.get()));
 

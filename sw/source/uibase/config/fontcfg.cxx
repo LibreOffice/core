@@ -40,42 +40,42 @@ static LanguageType lcl_LanguageOfType(sal_Int16 nType, LanguageType eWestern, L
 Sequence<OUString> const & SwStdFontConfig::GetPropertyNames()
 {
     static Sequence<OUString> aNames {
-        "DefaultFont/Standard",    // 0
-        "DefaultFont/Heading",     // 1
-        "DefaultFont/List",        // 2
-        "DefaultFont/Caption",     // 3
-        "DefaultFont/Index",       // 4
-        "DefaultFontCJK/Standard", // 5
-        "DefaultFontCJK/Heading",  // 6
-        "DefaultFontCJK/List",     // 7
-        "DefaultFontCJK/Caption",  // 8
-        "DefaultFontCJK/Index",    // 9
-        "DefaultFontCTL/Standard", // 10
-        "DefaultFontCTL/Heading",  // 11
-        "DefaultFontCTL/List",     // 12
-        "DefaultFontCTL/Caption",  // 13
-        "DefaultFontCTL/Index",    // 14
-        "DefaultFont/StandardHeight",    // 15
-        "DefaultFont/HeadingHeight",     // 16
-        "DefaultFont/ListHeight",        // 17
-        "DefaultFont/CaptionHeight",     // 18
-        "DefaultFont/IndexHeight",       // 19
-        "DefaultFontCJK/StandardHeight", // 20
-        "DefaultFontCJK/HeadingHeight",  // 21
-        "DefaultFontCJK/ListHeight",     // 22
-        "DefaultFontCJK/CaptionHeight",  // 23
-        "DefaultFontCJK/IndexHeight",    // 24
-        "DefaultFontCTL/StandardHeight", // 25
-        "DefaultFontCTL/HeadingHeight",  // 26
-        "DefaultFontCTL/ListHeight",     // 27
-        "DefaultFontCTL/CaptionHeight",  // 28
-        "DefaultFontCTL/IndexHeight"     // 29
+        u"DefaultFont/Standard"_ustr,    // 0
+        u"DefaultFont/Heading"_ustr,     // 1
+        u"DefaultFont/List"_ustr,        // 2
+        u"DefaultFont/Caption"_ustr,     // 3
+        u"DefaultFont/Index"_ustr,       // 4
+        u"DefaultFontCJK/Standard"_ustr, // 5
+        u"DefaultFontCJK/Heading"_ustr,  // 6
+        u"DefaultFontCJK/List"_ustr,     // 7
+        u"DefaultFontCJK/Caption"_ustr,  // 8
+        u"DefaultFontCJK/Index"_ustr,    // 9
+        u"DefaultFontCTL/Standard"_ustr, // 10
+        u"DefaultFontCTL/Heading"_ustr,  // 11
+        u"DefaultFontCTL/List"_ustr,     // 12
+        u"DefaultFontCTL/Caption"_ustr,  // 13
+        u"DefaultFontCTL/Index"_ustr,    // 14
+        u"DefaultFont/StandardHeight"_ustr,    // 15
+        u"DefaultFont/HeadingHeight"_ustr,     // 16
+        u"DefaultFont/ListHeight"_ustr,        // 17
+        u"DefaultFont/CaptionHeight"_ustr,     // 18
+        u"DefaultFont/IndexHeight"_ustr,       // 19
+        u"DefaultFontCJK/StandardHeight"_ustr, // 20
+        u"DefaultFontCJK/HeadingHeight"_ustr,  // 21
+        u"DefaultFontCJK/ListHeight"_ustr,     // 22
+        u"DefaultFontCJK/CaptionHeight"_ustr,  // 23
+        u"DefaultFontCJK/IndexHeight"_ustr,    // 24
+        u"DefaultFontCTL/StandardHeight"_ustr, // 25
+        u"DefaultFontCTL/HeadingHeight"_ustr,  // 26
+        u"DefaultFontCTL/ListHeight"_ustr,     // 27
+        u"DefaultFontCTL/CaptionHeight"_ustr,  // 28
+        u"DefaultFontCTL/IndexHeight"_ustr     // 29
     };
     return aNames;
 }
 
 SwStdFontConfig::SwStdFontConfig() :
-    utl::ConfigItem("Office.Writer")
+    utl::ConfigItem(u"Office.Writer"_ustr)
 {
     SvtLinguOptions aLinguOpt;
 

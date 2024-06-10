@@ -57,7 +57,7 @@ Sequence<OUString> SwPrintOptions::GetPropertyNames() const
 }
 
 SwPrintOptions::SwPrintOptions(bool bWeb) :
-    ConfigItem(bWeb ? OUString("Office.WriterWeb/Print") : OUString("Office.Writer/Print"),
+    ConfigItem(bWeb ? u"Office.WriterWeb/Print"_ustr : u"Office.Writer/Print"_ustr,
         ConfigItemMode::ReleaseTree),
     m_bIsWeb(bWeb)
 {

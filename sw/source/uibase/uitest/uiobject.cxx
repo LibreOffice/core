@@ -40,28 +40,28 @@ StringMap SwEditWinUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
 
-    aMap["SelectedText"] = mxEditWin->GetView().GetSelectionText();
+    aMap[u"SelectedText"_ustr] = mxEditWin->GetView().GetSelectionText();
 
     sal_uInt16 nPageNum = 0;
     sal_uInt16 nVirtPageNum = 0;
     SwWrtShell& rWrtShell = getWrtShell(mxEditWin);
     rWrtShell.GetPageNum(nPageNum, nVirtPageNum);
-    aMap["CurrentPage"] = OUString::number(nPageNum);
+    aMap[u"CurrentPage"_ustr] = OUString::number(nPageNum);
     rWrtShell.GetPageNum(nPageNum, nVirtPageNum, false);
-    aMap["TopVisiblePage"] = OUString::number(nPageNum);
-    aMap["Zoom"] = OUString::number(rWrtShell.GetViewOptions()->GetZoom());
+    aMap[u"TopVisiblePage"_ustr] = OUString::number(nPageNum);
+    aMap[u"Zoom"_ustr] = OUString::number(rWrtShell.GetViewOptions()->GetZoom());
 
     sal_uInt16 nPages = rWrtShell.GetPageCnt();
-    aMap["Pages"] = OUString::number(nPages);
+    aMap[u"Pages"_ustr] = OUString::number(nPages);
 
-    aMap["StartWord"] = OUString::boolean(rWrtShell.IsStartWord());
-    aMap["EndWord"] = OUString::boolean(rWrtShell.IsEndWord());
-    aMap["StartSentence"] = OUString::boolean(rWrtShell.IsStartSentence());
-    aMap["EndSentence"] = OUString::boolean(rWrtShell.IsEndSentence());
-    aMap["StartPara"] = OUString::boolean(rWrtShell.IsSttPara());
-    aMap["EndPara"] = OUString::boolean(rWrtShell.IsEndPara());
-    aMap["StartDoc"] = OUString::boolean(rWrtShell.IsStartOfDoc());
-    aMap["EndDoc"] = OUString::boolean(rWrtShell.IsEndOfDoc());
+    aMap[u"StartWord"_ustr] = OUString::boolean(rWrtShell.IsStartWord());
+    aMap[u"EndWord"_ustr] = OUString::boolean(rWrtShell.IsEndWord());
+    aMap[u"StartSentence"_ustr] = OUString::boolean(rWrtShell.IsStartSentence());
+    aMap[u"EndSentence"_ustr] = OUString::boolean(rWrtShell.IsEndSentence());
+    aMap[u"StartPara"_ustr] = OUString::boolean(rWrtShell.IsSttPara());
+    aMap[u"EndPara"_ustr] = OUString::boolean(rWrtShell.IsEndPara());
+    aMap[u"StartDoc"_ustr] = OUString::boolean(rWrtShell.IsStartOfDoc());
+    aMap[u"EndDoc"_ustr] = OUString::boolean(rWrtShell.IsEndOfDoc());
 
     return aMap;
 }
@@ -71,9 +71,9 @@ void SwEditWinUIObject::execute(const OUString& rAction,
 {
     if (rAction == "SET")
     {
-        if (rParameters.find("ZOOM") != rParameters.end())
+        if (rParameters.find(u"ZOOM"_ustr) != rParameters.end())
         {
-            auto itr = rParameters.find("ZOOM");
+            auto itr = rParameters.find(u"ZOOM"_ustr);
             OUString aVal = itr->second;
             sal_Int32 nVal = aVal.toInt32();
             mxEditWin->GetView().SetZoom(SvxZoomType::PERCENT, nVal);
@@ -81,9 +81,9 @@ void SwEditWinUIObject::execute(const OUString& rAction,
     }
     else if (rAction == "GOTO")
     {
-        if (rParameters.find("PAGE") != rParameters.end())
+        if (rParameters.find(u"PAGE"_ustr) != rParameters.end())
         {
-            auto itr = rParameters.find("PAGE");
+            auto itr = rParameters.find(u"PAGE"_ustr);
             OUString aVal = itr->second;
             sal_Int32 nVal = aVal.toInt32();
             getWrtShell(mxEditWin).GotoPage(nVal, false);
@@ -91,13 +91,13 @@ void SwEditWinUIObject::execute(const OUString& rAction,
     }
     else if (rAction == "SELECT")
     {
-        if (rParameters.find("START_POS") != rParameters.end())
+        if (rParameters.find(u"START_POS"_ustr) != rParameters.end())
         {
-            auto itr = rParameters.find("START_POS");
+            auto itr = rParameters.find(u"START_POS"_ustr);
             OUString aStartPos = itr->second;
             TextFrameIndex const nStartPos(aStartPos.toInt32());
 
-            itr = rParameters.find("END_POS");
+            itr = rParameters.find(u"END_POS"_ustr);
             assert(itr != rParameters.end());
             OUString aEndPos = itr->second;
             TextFrameIndex const nEndPos(aEndPos.toInt32());
@@ -127,9 +127,9 @@ void SwEditWinUIObject::execute(const OUString& rAction,
         assert(pViewFrm && "SwEditWinUIObject::execute: no viewframe");
         pViewFrm->ShowChildWindow(SID_SIDEBAR);
 
-        if (rParameters.find("PANEL") != rParameters.end())
+        if (rParameters.find(u"PANEL"_ustr) != rParameters.end())
         {
-            auto itr = rParameters.find("PANEL");
+            auto itr = rParameters.find(u"PANEL"_ustr);
             OUString aVal = itr->second;
             ::sfx2::sidebar::Sidebar::ShowPanel(aVal, pViewFrm->GetFrame().GetFrameInterface());
         }
@@ -140,7 +140,7 @@ void SwEditWinUIObject::execute(const OUString& rAction,
 
 OUString SwEditWinUIObject::get_name() const
 {
-    return "SwEditWinUIObject";
+    return u"SwEditWinUIObject"_ustr;
 }
 
 std::unique_ptr<UIObject> SwEditWinUIObject::create(vcl::Window* pWindow)
@@ -159,13 +159,13 @@ CommentUIObject::CommentUIObject(const VclPtr<sw::annotation::SwAnnotationWin>& 
 StringMap CommentUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
-    aMap["Author"] = mxCommentUIObject->GetAuthor();
-    aMap["ReadOnly"] = OUString::boolean(mxCommentUIObject->IsReadOnly());
-    aMap["Resolved"] = OUString::boolean(mxCommentUIObject->IsResolved());
-    aMap["Visible"] = OUString::boolean(mxCommentUIObject->IsVisible());
+    aMap[u"Author"_ustr] = mxCommentUIObject->GetAuthor();
+    aMap[u"ReadOnly"_ustr] = OUString::boolean(mxCommentUIObject->IsReadOnly());
+    aMap[u"Resolved"_ustr] = OUString::boolean(mxCommentUIObject->IsResolved());
+    aMap[u"Visible"_ustr] = OUString::boolean(mxCommentUIObject->IsVisible());
 
-    aMap["Text"] = mxCommentUIObject->GetOutliner()->GetEditEngine().GetText();
-    aMap["SelectedText"] = mxCommentUIObject->GetOutlinerView()->GetEditView().GetSelected();
+    aMap[u"Text"_ustr] = mxCommentUIObject->GetOutliner()->GetEditEngine().GetText();
+    aMap[u"SelectedText"_ustr] = mxCommentUIObject->GetOutlinerView()->GetEditView().GetSelected();
     return aMap;
 }
 
@@ -174,11 +174,11 @@ void CommentUIObject::execute(const OUString& rAction,
 {
     if (rAction == "SELECT")
     {
-        if (rParameters.find("FROM") != rParameters.end() &&
-                    rParameters.find("TO") != rParameters.end())
+        if (rParameters.find(u"FROM"_ustr) != rParameters.end() &&
+                    rParameters.find(u"TO"_ustr) != rParameters.end())
         {
-                tools::Long nMin = rParameters.find("FROM")->second.toInt32();
-                tools::Long nMax = rParameters.find("TO")->second.toInt32();
+                tools::Long nMin = rParameters.find(u"FROM"_ustr)->second.toInt32();
+                tools::Long nMax = rParameters.find(u"TO"_ustr)->second.toInt32();
                 ESelection aNewSelection( 0 , nMin, mxCommentUIObject->GetOutliner()->GetParagraphCount()-1, nMax );
                 mxCommentUIObject->GetOutlinerView()->SetSelection( aNewSelection );
         }
@@ -216,7 +216,7 @@ std::unique_ptr<UIObject> CommentUIObject::create(vcl::Window* pWindow)
 
 OUString CommentUIObject::get_name() const
 {
-    return "CommentUIObject";
+    return u"CommentUIObject"_ustr;
 }
 
 PageBreakUIObject::PageBreakUIObject(const VclPtr<SwBreakDashedLine>& xPageBreakUIObject):
@@ -243,7 +243,7 @@ std::unique_ptr<UIObject> PageBreakUIObject::create(vcl::Window* pWindow)
 
 OUString PageBreakUIObject::get_name() const
 {
-    return "PageBreakUIObject";
+    return u"PageBreakUIObject"_ustr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

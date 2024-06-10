@@ -792,7 +792,7 @@ bool SwTransferable::WriteObject( SvStream& rOStream,
     case SWTRANSFER_OBJECTTYPE_HTML:
     {
         // LOK is interested in getting images embedded for copy/paste support.
-        GetHTMLWriter( comphelper::LibreOfficeKit::isActive() ? OUString("EmbedImages;NoPrettyPrint") : OUString(), OUString(), xWrt );
+        GetHTMLWriter( comphelper::LibreOfficeKit::isActive() ? u"EmbedImages;NoPrettyPrint"_ustr : OUString(), OUString(), xWrt );
         break;
     }
 
@@ -846,7 +846,7 @@ int SwTransferable::Cut()
     int nRet = Copy( true );
     if( nRet )
         DeleteSelection();
-    collectUIInformation("CUT", "parameter");
+    collectUIInformation(u"CUT"_ustr, u"parameter"_ustr);
     return nRet;
 }
 
@@ -1207,7 +1207,7 @@ int SwTransferable::Copy( bool bIsCut )
     }
 
     if( !bIsCut ){
-        collectUIInformation("COPY", "parameter");
+        collectUIInformation(u"COPY"_ustr, u"parameter"_ustr);
     }
 
     return nRet;
@@ -1611,7 +1611,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
             bool bShifted = lcl_getLevel(aExpand, aExpand.indexOf("<thead")) == nTableLevel + 1;
             // calculate count of selected rows or columns
             sal_Int32 nSelectedRowsOrCols = 0;
-            const OUString sSearchRowOrCol = bRowMode ? OUString("</tr>") : OUString("<col ");
+            const OUString sSearchRowOrCol = bRowMode ? u"</tr>"_ustr : u"<col "_ustr;
             while((nIdx = aExpand.indexOf(sSearchRowOrCol, nIdx)) > -1)
             {
                 // skip rows/columns of nested tables, based on HTML indentation
@@ -1690,7 +1690,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
     // while not in sot/ code.
     SwTransferable::SelectPasteFormat(rData, nAction, nFormat);
 
-    collectUIInformation("PASTE", "parameter");
+    collectUIInformation(u"PASTE"_ustr, u"parameter"_ustr);
 
     return EXCHG_INOUT_ACTION_NONE != nAction &&
             SwTransferable::PasteData( rData, rSh, nAction, nActionFlags, nFormat,
@@ -2355,7 +2355,7 @@ bool SwTransferable::PasteOLE( const TransferableDataHelper& rData, SwWrtShell& 
 
                         embed::InsertedObjectInfo aInfo = xClipboardCreator->createInstanceInitFromClipboard(
                                                             xTmpStor,
-                                                            "DummyName",
+                                                            u"DummyName"_ustr,
                                                             uno::Sequence< beans::PropertyValue >() );
 
                         // TODO/LATER: in future InsertedObjectInfo will be used to get container related information
@@ -2374,7 +2374,7 @@ bool SwTransferable::PasteOLE( const TransferableDataHelper& rData, SwWrtShell& 
                 {
                     // Copied from sd::View::DropInsertFileHdl
                     uno::Sequence< beans::PropertyValue > aMedium{ comphelper::makePropertyValue(
-                        "URL", sFile) };
+                        u"URL"_ustr, sFile) };
                     SwDocShell* pDocSh = rSh.GetDoc()->GetDocShell();
                     xObj = pDocSh->GetEmbeddedObjectContainer().InsertEmbeddedObject(aMedium, aName);
                 }
@@ -2626,7 +2626,7 @@ bool SwTransferable::PasteDDE( const TransferableDataHelper& rData,
         bool bRet = rData.GetGraphic( nFormat, aGrf );
         if( bRet )
         {
-            OUString sLnkTyp("DDE");
+            OUString sLnkTyp(u"DDE"_ustr);
             if ( bReReadGrf )
                 rWrtShell.ReRead( aCmd, sLnkTyp, &aGrf );
             else
@@ -3115,7 +3115,7 @@ bool SwTransferable::PasteFileName( const TransferableDataHelper& rData,
             aMediaURL.SetSmartURL( sFile );
             const OUString aMediaURLStr( aMediaURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
-            if( ::avmedia::MediaWindow::isMediaURL( aMediaURLStr, ""/*TODO?*/ ) )
+            if( ::avmedia::MediaWindow::isMediaURL( aMediaURLStr, u""_ustr/*TODO?*/ ) )
             {
                 const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, aMediaURLStr );
                 rSh.GetView().GetViewFrame().GetDispatcher()->ExecuteList(

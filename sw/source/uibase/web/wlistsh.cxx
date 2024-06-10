@@ -39,7 +39,7 @@ void SwWebListShell::InitInterface_Impl()
 SwWebListShell::SwWebListShell(SwView &_rView) :
     SwListShell(_rView)
 {
-    SetName("List");
+    SetName(u"List"_ustr);
 }
 
 SwWebListShell::~SwWebListShell()

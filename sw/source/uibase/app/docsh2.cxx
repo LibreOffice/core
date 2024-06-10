@@ -144,7 +144,7 @@ std::shared_ptr<SfxDocumentInfoDialog> SwDocShell::CreateDocumentInfoDialog(weld
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             xDlg->AddFontTabPage();
-            xDlg->AddTabPage("writerstats", SwResId(STR_DOC_STAT), pFact->GetTabPageCreatorFunc(RID_SW_TP_DOC_STAT));
+            xDlg->AddTabPage(u"writerstats"_ustr, SwResId(STR_DOC_STAT), pFact->GetTabPageCreatorFunc(RID_SW_TP_DOC_STAT));
         }
     }
     return xDlg;
@@ -252,7 +252,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
             case SfxEventHintId::OpenDoc:
             {
                 uno::Sequence< css::uno::Any > aArgs;
-                SW_MOD()->CallAutomationApplicationEventSinks( "DocumentChange", aArgs );
+                SW_MOD()->CallAutomationApplicationEventSinks( u"DocumentChange"_ustr, aArgs );
                 break;
             }
             default:
@@ -266,7 +266,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     uno::Any aDocument;
                     aDocument <<= mxAutomationDocumentObject;
                     uno::Sequence< uno::Any > aArgs{ aDocument };
-                    SW_MOD()->CallAutomationApplicationEventSinks( "NewDocument", aArgs );
+                    SW_MOD()->CallAutomationApplicationEventSinks( u"NewDocument"_ustr, aArgs );
                 }
                 break;
             case SfxEventHintId::OpenDoc:
@@ -274,7 +274,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     uno::Any aDocument;
                     aDocument <<= mxAutomationDocumentObject;
                     uno::Sequence< uno::Any > aArgs{ aDocument };
-                    SW_MOD()->CallAutomationApplicationEventSinks( "DocumentOpen", aArgs );
+                    SW_MOD()->CallAutomationApplicationEventSinks( u"DocumentOpen"_ustr, aArgs );
                 }
                 break;
             default:
@@ -365,7 +365,7 @@ bool SwDocShell::PrepareClose( bool bUI )
                                        uno::Any(false)
         };
 
-        SW_MOD()->CallAutomationApplicationEventSinks( "DocumentBeforeClose", aArgs );
+        SW_MOD()->CallAutomationApplicationEventSinks( u"DocumentBeforeClose"_ustr, aArgs );
 
         // If the Cancel argument was set to True by an event handler, return false.
         bool bCancel(false);
@@ -579,7 +579,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         bool bWeb = dynamic_cast< SwWebDocShell *>( this ) !=  nullptr;
                         std::shared_ptr<const SfxFilter> pOwnFlt =
                                 SwDocShell::Factory().GetFilterContainer()->
-                                GetFilter4FilterName("writer8");
+                                GetFilter4FilterName(u"writer8"_ustr);
 
                         // make sure the default file format is also available
                         if(bWeb)
@@ -659,8 +659,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         std::shared_ptr<const SfxFilter> pFlt = GetMedium()->GetFilter();
                         if(!pFlt || pFlt->GetUserData() != pHtmlFlt->GetUserData())
                         {
-                            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(rViewFrame.GetFrameWeld(), "modules/swriter/ui/saveashtmldialog.ui"));
-                            std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("SaveAsHTMLDialog"));
+                            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(rViewFrame.GetFrameWeld(), u"modules/swriter/ui/saveashtmldialog.ui"_ustr));
+                            std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog(u"SaveAsHTMLDialog"_ustr));
                             if (RET_YES == xQuery->run())
                                 bLocalHasName = false;
                             else
@@ -786,9 +786,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                 pStrm->ReadBytes( aSeq.getArray(), aSeq.getLength() );
 
                                 uno::Sequence< beans::PropertyValue > aArgs{
-                                    comphelper::makePropertyValue("RtfOutline", aSeq)
+                                    comphelper::makePropertyValue(u"RtfOutline"_ustr, aSeq)
                                 };
-                                xHelper->executeDispatch( xProv, "SendOutlineToImpress", OUString(), 0, aArgs );
+                                xHelper->executeDispatch( xProv, u"SendOutlineToImpress"_ustr, OUString(), 0, aArgs );
                             }
                             else
                                 ErrorHandler::HandleError( eErr );
@@ -844,9 +844,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         pStrm->ReadBytes( aSeq.getArray(), aSeq.getLength() );
 
                         uno::Sequence< beans::PropertyValue > aArgs{
-                            comphelper::makePropertyValue("RtfOutline", aSeq)
+                            comphelper::makePropertyValue(u"RtfOutline"_ustr, aSeq)
                         };
-                        xHelper->executeDispatch( xProv, "SendOutlineToImpress", OUString(), 0, aArgs );
+                        xHelper->executeDispatch( xProv, u"SendOutlineToImpress"_ustr, OUString(), 0, aArgs );
                     }
                     else
                     {
@@ -989,7 +989,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     {
                         // for Global-documents we now only offer the current one.
                         pFlt = SwGlobalDocShell::Factory().GetFilterContainer()->
-                                    GetFilter4Extension( "odm"  );
+                                    GetFilter4Extension( u"odm"_ustr  );
                         pStrId = STR_LOAD_GLOBAL_DOC;
                     }
 
@@ -1190,8 +1190,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
             if (SfxDispatcher* pDispatch = pViewShell->GetDispatcher())
             {
-                SfxStringItem aApp(SID_DOC_SERVICE, "com.sun.star.text.TextDocument");
-                SfxStringItem aTarget(SID_TARGETNAME, "_blank");
+                SfxStringItem aApp(SID_DOC_SERVICE, u"com.sun.star.text.TextDocument"_ustr);
+                SfxStringItem aTarget(SID_TARGETNAME, u"_blank"_ustr);
                 pDispatch->ExecuteList(SID_OPENDOC, SfxCallMode::API|SfxCallMode::SYNCHRON, { &aApp, &aTarget });
             }
         }
@@ -1286,7 +1286,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             SfxBindings& rBindings( pViewShell->GetViewFrame().GetBindings() );
 
             if ( SfxNotebookBar::IsActive() )
-                sfx2::SfxNotebookBar::ExecMethod( rBindings, pFile ? pFile->GetValue() : "" );
+                sfx2::SfxNotebookBar::ExecMethod( rBindings, pFile ? pFile->GetValue() : u""_ustr );
             else
             {
                 sfx2::SfxNotebookBar::CloseMethod( rBindings );
@@ -1629,7 +1629,7 @@ ErrCodeMsg SwDocShell::LoadStylesFromFile(const OUString& rURL, SwgReaderOption&
             try
             {
                 uno::Reference< beans::XPropertySet > xProps( xStorage, uno::UNO_QUERY_THROW );
-                xProps->getPropertyValue( "MediaType" );
+                xProps->getPropertyValue( u"MediaType"_ustr );
                 bImport = true;
             }
             catch (const uno::Exception&)

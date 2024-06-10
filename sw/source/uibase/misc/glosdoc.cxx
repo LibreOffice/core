@@ -90,7 +90,7 @@ OUString lcl_CheckFileName( const OUString& rNewFilePath,
 // supplies the default group's name
 OUString SwGlossaries::GetDefName()
 {
-    return "standard";
+    return u"standard"_ustr;
 
 }
 
@@ -417,7 +417,7 @@ void SwGlossaries::ShowError()
 
 OUString SwGlossaries::GetExtension()
 {
-    return ".bau";
+    return u".bau"_ustr;
 }
 
 void SwGlossaries::RemoveFileFromList( const OUString& rGroup )

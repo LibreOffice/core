@@ -334,7 +334,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
                             MASTER_LABEL;
                         aSect.SetLinkFileName(sLinkName);
                         aSect.SetProtectFlag(true);
-                        pSh->Insert(".");   // Dummytext to allocate the Section
+                        pSh->Insert(u"."_ustr);   // Dummytext to allocate the Section
                         pSh->StartOfSection();
                         pSh->EndOfSection(true); // Select everything in the frame
                         pSh->InsertSection(aSect);
@@ -372,7 +372,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
             pSh->GotoFly(pFirstFlyFormat->GetName(), FLYCNTTYPE_ALL, false);
 
         if (pSh->IsAnyDatabaseFieldInDoc())
-            pSh->GetView().ShowUIElement("private:resource/toolbar/mailmerge");
+            pSh->GetView().ShowUIElement(u"private:resource/toolbar/mailmerge"_ustr);
 
         pSh->EndAllAction();
         pSh->DoUndo();

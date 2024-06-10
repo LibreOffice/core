@@ -64,7 +64,7 @@ SwBreakDashedLine::SwBreakDashedLine(SwEditWin* pEditWin, const SwFrame *pFrame)
     , m_pEditWin(pEditWin)
     , m_pFrame(pFrame)
 {
-    set_id("PageBreak"); // for uitest
+    set_id(u"PageBreak"_ustr); // for uitest
 }
 
 SwPageBreakWin& SwBreakDashedLine::GetOrCreateWin()
@@ -123,8 +123,8 @@ bool SwBreakDashedLine::Contains(const Point &rDocPt) const
 }
 
 SwPageBreakWin::SwPageBreakWin(SwBreakDashedLine* pLine, SwEditWin* pEditWin, const SwFrame *pFrame) :
-    InterimItemWindow(pEditWin, "modules/swriter/ui/pbmenubutton.ui", "PBMenuButton"),
-    m_xMenuButton(m_xBuilder->weld_menu_button("menubutton")),
+    InterimItemWindow(pEditWin, u"modules/swriter/ui/pbmenubutton.ui"_ustr, u"PBMenuButton"_ustr),
+    m_xMenuButton(m_xBuilder->weld_menu_button(u"menubutton"_ustr)),
     m_pLine(pLine),
     m_pEditWin(pEditWin),
     m_pFrame(pFrame),
@@ -312,7 +312,7 @@ void SwBreakDashedLine::execute(std::u16string_view rIdent)
 
             rSh.SetSelection( SwPaM(rNd) );
 
-            SfxStringItem aItem(m_pEditWin->GetView().GetPool().GetWhichIDFromSlotID(FN_FORMAT_TABLE_DLG), "textflow");
+            SfxStringItem aItem(m_pEditWin->GetView().GetPool().GetWhichIDFromSlotID(FN_FORMAT_TABLE_DLG), u"textflow"_ustr);
             m_pEditWin->GetView().GetViewFrame().GetDispatcher()->ExecuteList(
                     FN_FORMAT_TABLE_DLG,
                     SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
@@ -324,7 +324,7 @@ void SwBreakDashedLine::execute(std::u16string_view rIdent)
         {
             SwPaM aPaM( rNd );
             SwPaMItem aPaMItem( m_pEditWin->GetView().GetPool( ).GetWhichIDFromSlotID( FN_PARAM_PAM ), &aPaM );
-            SfxStringItem aItem( SID_PARA_DLG, "textflow" );
+            SfxStringItem aItem( SID_PARA_DLG, u"textflow"_ustr );
             m_pEditWin->GetView().GetViewFrame().GetDispatcher()->ExecuteList(
                     SID_PARA_DLG,
                     SfxCallMode::SYNCHRON | SfxCallMode::RECORD,

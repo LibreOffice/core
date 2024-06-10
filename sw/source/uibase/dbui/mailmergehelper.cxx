@@ -126,7 +126,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
                     new SwConnectionContext(
                         rConfigItem.GetInServerName(),
                         rConfigItem.GetInServerPort(),
-                        "Insecure");
+                        u"Insecure"_ustr);
             xInMailService->connect(xConnectionContext, xAuthenticator);
             rxInMailService = xInMailService;
         }
@@ -153,7 +153,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
                 new SwConnectionContext(
                     rConfigItem.GetMailServer(),
                     rConfigItem.GetMailPort(),
-                    rConfigItem.IsSecureConnection() ? OUString("Ssl") : OUString("Insecure") );
+                    rConfigItem.IsSecureConnection() ? u"Ssl"_ustr : u"Insecure"_ustr );
         xSmtpServer->connect(xConnectionContext, xAuthenticator);
         rxInMailService = xSmtpServer;
     }

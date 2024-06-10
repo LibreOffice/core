@@ -184,7 +184,7 @@ public:
 };
 
 SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
-    ConfigItem("Office.Writer/MailMergeWizard", ConfigItemMode::NONE),
+    ConfigItem(u"Office.Writer/MailMergeWizard"_ustr, ConfigItemMode::NONE),
         m_nResultSetCursorPos(-1),
         m_nCurrentAddressBlock(0),
         m_bIsAddressBlock(true),
@@ -420,46 +420,46 @@ static void lcl_ConvertFromNumbers(OUString& rBlock, const std::vector<std::pair
 const Sequence<OUString>& SwMailMergeConfigItem_Impl::GetPropertyNames()
 {
     static Sequence<OUString> aNames {
-        "OutputToLetter",            // 0
-        "IncludeCountry",            // 1
-        "ExcludeCountry",            // 2
-        "AddressBlockSettings",      // 3
-        "IsAddressBlock",            // 4
-        "IsGreetingLine",            // 5
-        "IsIndividualGreetingLine",  // 6
-        "FemaleGreetingLines",       // 7
-        "MaleGreetingLines",         // 8
-        "NeutralGreetingLines",      // 9
-        "CurrentFemaleGreeting",     // 10
-        "CurrentMaleGreeting",       // 11
-        "CurrentNeutralGreeting",    // 12
-        "FemaleGenderValue",         // 13
-        "MailDisplayName",           // 14
-        "MailAddress",               // 15
-        "IsMailReplyTo",             // 16
-        "MailReplyTo",               // 17
-        "MailServer",                // 18
-        "MailPort",                  // 19
-        "IsSecureConnection",        // 20
-        "IsAuthentication",          // 21
-        "MailUserName",              // 22
-        "MailPassword",              // 23
-        "DataSource/DataSourceName", // 24
-        "DataSource/DataTableName",  // 25
-        "DataSource/DataCommandType",// 26
-        "Filter",                    // 27
-        "SavedDocuments",            // 28
-        "EMailSupported",            // 29
-        "IsEMailGreetingLine",               //30
-        "IsEMailIndividualGreetingLine",     //31
-        "IsSMPTAfterPOP",                    //32
-        "InServerName",                      //33
-        "InServerPort",                      //34
-        "InServerIsPOP",                     //35
-        "InServerUserName",                  //36
-        "InServerPassword",                  //37
-        "IsHideEmptyParagraphs",             //38
-        "CurrentAddressBlock"                //39
+        u"OutputToLetter"_ustr,            // 0
+        u"IncludeCountry"_ustr,            // 1
+        u"ExcludeCountry"_ustr,            // 2
+        u"AddressBlockSettings"_ustr,      // 3
+        u"IsAddressBlock"_ustr,            // 4
+        u"IsGreetingLine"_ustr,            // 5
+        u"IsIndividualGreetingLine"_ustr,  // 6
+        u"FemaleGreetingLines"_ustr,       // 7
+        u"MaleGreetingLines"_ustr,         // 8
+        u"NeutralGreetingLines"_ustr,      // 9
+        u"CurrentFemaleGreeting"_ustr,     // 10
+        u"CurrentMaleGreeting"_ustr,       // 11
+        u"CurrentNeutralGreeting"_ustr,    // 12
+        u"FemaleGenderValue"_ustr,         // 13
+        u"MailDisplayName"_ustr,           // 14
+        u"MailAddress"_ustr,               // 15
+        u"IsMailReplyTo"_ustr,             // 16
+        u"MailReplyTo"_ustr,               // 17
+        u"MailServer"_ustr,                // 18
+        u"MailPort"_ustr,                  // 19
+        u"IsSecureConnection"_ustr,        // 20
+        u"IsAuthentication"_ustr,          // 21
+        u"MailUserName"_ustr,              // 22
+        u"MailPassword"_ustr,              // 23
+        u"DataSource/DataSourceName"_ustr, // 24
+        u"DataSource/DataTableName"_ustr,  // 25
+        u"DataSource/DataCommandType"_ustr,// 26
+        u"Filter"_ustr,                    // 27
+        u"SavedDocuments"_ustr,            // 28
+        u"EMailSupported"_ustr,            // 29
+        u"IsEMailGreetingLine"_ustr,               //30
+        u"IsEMailIndividualGreetingLine"_ustr,     //31
+        u"IsSMPTAfterPOP"_ustr,                    //32
+        u"InServerName"_ustr,                      //33
+        u"InServerPort"_ustr,                      //34
+        u"InServerIsPOP"_ustr,                     //35
+        u"InServerUserName"_ustr,                  //36
+        u"InServerPassword"_ustr,                  //37
+        u"IsHideEmptyParagraphs"_ustr,             //38
+        u"CurrentAddressBlock"_ustr                //39
     };
     return aNames;
 }
@@ -557,7 +557,7 @@ void  SwMailMergeConfigItem_Impl::ImplCommit()
             OUString sNewNode = !rAssignment.sConfigNodeName.isEmpty() ?
                         rAssignment.sConfigNodeName :
                         lcl_CreateNodeName(aAssignments);
-            OUString sSlash = "/";
+            OUString sSlash = u"/"_ustr;
             OUString sNodePath = cAddressDataAssignments + sSlash + sNewNode + sSlash;
             //only one new entry is written
             Sequence< PropertyValue > aNewValues
@@ -853,17 +853,17 @@ Reference< XResultSet> const & SwMailMergeConfigItem::GetResultSet() const
         {
             Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
 
-            Reference<XRowSet> xRowSet( xMgr->createInstance("com.sun.star.sdb.RowSet"), UNO_QUERY );
+            Reference<XRowSet> xRowSet( xMgr->createInstance(u"com.sun.star.sdb.RowSet"_ustr), UNO_QUERY );
             Reference<XPropertySet> xRowProperties(xRowSet, UNO_QUERY);
-            xRowProperties->setPropertyValue("DataSourceName", Any(m_pImpl->m_aDBData.sDataSource));
-            xRowProperties->setPropertyValue("Command", Any(m_pImpl->m_aDBData.sCommand));
-            xRowProperties->setPropertyValue("CommandType", Any(m_pImpl->m_aDBData.nCommandType));
-            xRowProperties->setPropertyValue("FetchSize", Any(sal_Int32(10)));
-            xRowProperties->setPropertyValue("ActiveConnection", Any(m_pImpl->m_xConnection.getTyped()));
+            xRowProperties->setPropertyValue(u"DataSourceName"_ustr, Any(m_pImpl->m_aDBData.sDataSource));
+            xRowProperties->setPropertyValue(u"Command"_ustr, Any(m_pImpl->m_aDBData.sCommand));
+            xRowProperties->setPropertyValue(u"CommandType"_ustr, Any(m_pImpl->m_aDBData.nCommandType));
+            xRowProperties->setPropertyValue(u"FetchSize"_ustr, Any(sal_Int32(10)));
+            xRowProperties->setPropertyValue(u"ActiveConnection"_ustr, Any(m_pImpl->m_xConnection.getTyped()));
             try
             {
-                xRowProperties->setPropertyValue("ApplyFilter", Any(!m_pImpl->m_sFilter.isEmpty()));
-                xRowProperties->setPropertyValue("Filter", Any(m_pImpl->m_sFilter));
+                xRowProperties->setPropertyValue(u"ApplyFilter"_ustr, Any(!m_pImpl->m_sFilter.isEmpty()));
+                xRowProperties->setPropertyValue(u"Filter"_ustr, Any(m_pImpl->m_sFilter));
             }
             catch (const Exception&)
             {
@@ -909,8 +909,8 @@ void  SwMailMergeConfigItem::SetFilter(OUString const & rFilter)
 
     try
     {
-        xRowProperties->setPropertyValue("ApplyFilter", Any(!m_pImpl->m_sFilter.isEmpty()));
-        xRowProperties->setPropertyValue("Filter", Any(m_pImpl->m_sFilter));
+        xRowProperties->setPropertyValue(u"ApplyFilter"_ustr, Any(!m_pImpl->m_sFilter.isEmpty()));
+        xRowProperties->setPropertyValue(u"Filter"_ustr, Any(m_pImpl->m_sFilter));
         uno::Reference<XRowSet> xRowSet( m_pImpl->m_xResultSet, UNO_QUERY_THROW );
         xRowSet->execute();
     }

@@ -32,23 +32,23 @@ static bool isLOKMobilePhone()
 }
 
 SwWatermarkDialog::SwWatermarkDialog(weld::Window* pParent, SfxBindings& rBindings)
-    : SfxDialogController(pParent, "modules/swriter/ui/watermarkdialog.ui", "WatermarkDialog")
+    : SfxDialogController(pParent, u"modules/swriter/ui/watermarkdialog.ui"_ustr, u"WatermarkDialog"_ustr)
     , m_rBindings(rBindings)
-    , m_xTextInput(m_xBuilder->weld_entry("TextInput"))
-    , m_xOKButton(m_xBuilder->weld_button("ok"))
-    , m_xFont(m_xBuilder->weld_combo_box("FontBox"))
-    , m_xAngle(m_xBuilder->weld_metric_spin_button("Angle", FieldUnit::DEGREE))
-    , m_xTransparency(m_xBuilder->weld_metric_spin_button("Transparency", FieldUnit::PERCENT))
-    , m_xColor(new ColorListBox(m_xBuilder->weld_menu_button("Color"), [this]{ return m_xDialog.get(); }))
+    , m_xTextInput(m_xBuilder->weld_entry(u"TextInput"_ustr))
+    , m_xOKButton(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xFont(m_xBuilder->weld_combo_box(u"FontBox"_ustr))
+    , m_xAngle(m_xBuilder->weld_metric_spin_button(u"Angle"_ustr, FieldUnit::DEGREE))
+    , m_xTransparency(m_xBuilder->weld_metric_spin_button(u"Transparency"_ustr, FieldUnit::PERCENT))
+    , m_xColor(new ColorListBox(m_xBuilder->weld_menu_button(u"Color"_ustr), [this]{ return m_xDialog.get(); }))
 {
     InitFields();
 
     if (isLOKMobilePhone())
     {
-        m_xBuilder->weld_label("ColorLabel")->hide();
+        m_xBuilder->weld_label(u"ColorLabel"_ustr)->hide();
         m_xColor->hide();
-        m_xBuilder->weld_button("cancel")->hide();
-        m_xBuilder->weld_button("help")->hide();
+        m_xBuilder->weld_button(u"cancel"_ustr)->hide();
+        m_xBuilder->weld_button(u"help"_ustr)->hide();
     }
 }
 
@@ -117,7 +117,7 @@ IMPL_LINK_NOARG(SwWatermarkDialog, OKButtonHdl, weld::Button&, void)
         { "Transparency", css::uno::Any( static_cast<sal_Int16>( m_xTransparency->get_value(FieldUnit::PERCENT) ) ) },
         { "Color", css::uno::Any( static_cast<sal_uInt32>( m_xColor->GetSelectEntryColor().GetRGBColor() ) ) }
     } ) );
-    comphelper::dispatchCommand( ".uno:Watermark", aPropertyValues );
+    comphelper::dispatchCommand( u".uno:Watermark"_ustr, aPropertyValues );
 
     m_xDialog->response(RET_OK);
 }

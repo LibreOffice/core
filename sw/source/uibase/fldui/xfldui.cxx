@@ -123,7 +123,7 @@ bool SwFieldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTableQry
             Any aCol = xCols->getByName(rFieldName);
             Reference <XPropertySet> xCol;
             aCol >>= xCol;
-            Any aType = xCol->getPropertyValue("Type");
+            Any aType = xCol->getPropertyValue(u"Type"_ustr);
             sal_Int32 eDataType = 0;
             aType >>= eDataType;
             switch(eDataType)
