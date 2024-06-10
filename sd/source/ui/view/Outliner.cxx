@@ -999,14 +999,17 @@ void SdOutliner::DetectChange()
         pFakeShell = pViewShellManager->GetOverridingMainShell();
     auto bViewChanged = false;
 
-    if( !pFakeShell && pDrawViewShell )
-        bViewChanged = (aPosition.meEditMode != pDrawViewShell->GetEditMode() || aPosition.mePageKind != pDrawViewShell->GetPageKind());
-    else if (pFakeShell)
+    if( pDrawViewShell )
     {
-        auto pPage = pFakeShell->getCurrentPage();
-        auto ePageKind = pPage ? pPage->GetPageKind() : PageKind::Standard;
-        auto eEditMode = EditMode::Page;
-        bViewChanged = (aPosition.meEditMode != eEditMode || aPosition.mePageKind != ePageKind);
+        if( !pFakeShell )
+            bViewChanged = (aPosition.meEditMode != pDrawViewShell->GetEditMode() || aPosition.mePageKind != pDrawViewShell->GetPageKind());
+        else
+        {
+            auto pPage = pFakeShell->getCurrentPage();
+            auto ePageKind = pPage ? pPage->GetPageKind() : PageKind::Standard;
+            auto eEditMode = EditMode::Page;
+            bViewChanged = (aPosition.meEditMode != eEditMode || aPosition.mePageKind != ePageKind);
+        }
     }
 
     // Detect whether the view has been switched from the outside.
