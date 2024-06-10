@@ -697,8 +697,9 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                                 AccessibleEventObject aEvent;
                                 aEvent.EventId = AccessibleEventId::VALUE_CHANGED;
                                 mpAccCell->CommitChange(aEvent);
-                                m_strCurCellValue=valStr;
                             }
+
+                            m_strCurCellValue = valStr;
                         }
                         OUString tabName;
                         pScDoc->GetName( maActiveCell.Tab(), tabName );
