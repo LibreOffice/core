@@ -86,7 +86,7 @@ SdrGraphicLink::SdrGraphicLink(SdrGrafObj& rObj)
 
     if( pLinkManager && rValue.hasValue() )
     {
-        sfx2::LinkManager::GetDisplayNames( this, nullptr, &rGrafObj.aFileName, nullptr, &rGrafObj.aFilterName );
+        sfx2::LinkManager::GetDisplayNames( this, nullptr, &rGrafObj.m_aFileName, nullptr, &rGrafObj.m_aFilterName );
 
         Graphic aGraphic;
         if (pLinkManager->GetGraphicFromAny(rMimeType, rValue, aGraphic, nullptr))
@@ -106,7 +106,7 @@ void SdrGraphicLink::Closed()
 {
     // close connection; set pLink of the object to NULL, as link instance is just about getting destructed.
     rGrafObj.ForceSwapIn();
-    rGrafObj.pGraphicLink=nullptr;
+    rGrafObj.m_pGraphicLink=nullptr;
     rGrafObj.ReleaseGraphicLink();
     SvBaseLink::Closed();
 }
@@ -181,8 +181,8 @@ void SdrGrafObj::onGraphicChanged()
 SdrGrafObj::SdrGrafObj(SdrModel& rSdrModel)
 :   SdrRectObj(rSdrModel)
     ,mpGraphicObject(new GraphicObject)
-    ,pGraphicLink(nullptr)
-    ,bMirrored(false)
+    ,m_pGraphicLink(nullptr)
+    ,m_bMirrored(false)
     ,mbIsSignatureLine(false)
     ,mbIsSignatureLineShowSignDate(true)
     ,mbIsSignatureLineCanAddComment(false)
@@ -205,7 +205,7 @@ SdrGrafObj::SdrGrafObj(SdrModel& rSdrModel)
 SdrGrafObj::SdrGrafObj(SdrModel& rSdrModel, SdrGrafObj const & rSource)
 :   SdrRectObj(rSdrModel, rSource)
     ,mpGraphicObject(new GraphicObject)
-    ,pGraphicLink(nullptr)
+    ,m_pGraphicLink(nullptr)
 {
     onGraphicChanged();
 
@@ -220,8 +220,8 @@ SdrGrafObj::SdrGrafObj(SdrModel& rSdrModel, SdrGrafObj const & rSource)
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = false;
 
-    aFileName = rSource.aFileName;
-    bMirrored = rSource.bMirrored;
+    m_aFileName = rSource.m_aFileName;
+    m_bMirrored = rSource.m_bMirrored;
 
     mbIsSignatureLine = rSource.mbIsSignatureLine;
     maSignatureLineId = rSource.maSignatureLineId;
@@ -250,7 +250,7 @@ SdrGrafObj::SdrGrafObj(SdrModel& rSdrModel, SdrGrafObj const & rSource)
 
     if( rSource.IsLinkedGraphic() )
     {
-        SetGraphicLink( aFileName );
+        SetGraphicLink( m_aFileName );
     }
 
     ImpSetAttrToGrafInfo();
@@ -262,8 +262,8 @@ SdrGrafObj::SdrGrafObj(
     const tools::Rectangle& rRect)
 :   SdrRectObj(rSdrModel, rRect)
     ,mpGraphicObject(new GraphicObject(rGraphic))
-    ,pGraphicLink(nullptr)
-    ,bMirrored(false)
+    ,m_pGraphicLink(nullptr)
+    ,m_bMirrored(false)
     ,mbIsSignatureLine(false)
     ,mbIsSignatureLineShowSignDate(true)
     ,mbIsSignatureLineCanAddComment(false)
@@ -288,8 +288,8 @@ SdrGrafObj::SdrGrafObj(
     const Graphic& rGraphic)
 :   SdrRectObj(rSdrModel)
     ,mpGraphicObject(new GraphicObject(rGraphic))
-    ,pGraphicLink(nullptr)
-    ,bMirrored(false)
+    ,m_pGraphicLink(nullptr)
+    ,m_bMirrored(false)
     ,mbIsSignatureLine(false)
     ,mbIsSignatureLineShowSignDate(true)
     ,mbIsSignatureLineCanAddComment(false)
@@ -364,8 +364,8 @@ void SdrGrafObj::SetGraphic( const Graphic& rGraphic )
     if (!rGraphic.getOriginURL().isEmpty())
     {
         ImpDeregisterLink();
-        aFileName = rGraphic.getOriginURL();
-        aFilterName = "";
+        m_aFileName = rGraphic.getOriginURL();
+        m_aFilterName = "";
     }
     NbcSetGraphic(rGraphic);
     if (!rGraphic.getOriginURL().isEmpty())
@@ -417,11 +417,11 @@ GraphicAttr SdrGrafObj::GetGraphicAttr( SdrGrafObjTransformsAttrs nTransformFlag
 
         // Actually transform the graphic only in this case.
         // Cropping always happens, though.
-        aActAttr = aGrafInfo;
+        aActAttr = m_aGrafInfo;
 
         if( bMirror )
         {
-            sal_uInt16      nMirrorCase = ( maGeo.m_nRotationAngle == 18000_deg100 ) ? ( bMirrored ? 3 : 4 ) : ( bMirrored ? 2 : 1 );
+            sal_uInt16      nMirrorCase = ( maGeo.m_nRotationAngle == 18000_deg100 ) ? ( m_bMirrored ? 3 : 4 ) : ( m_bMirrored ? 2 : 1 );
             bool bHMirr = nMirrorCase == 2 || nMirrorCase == 4;
             bool bVMirr = nMirrorCase == 3 || nMirrorCase == 4;
 
@@ -481,12 +481,12 @@ Size SdrGrafObj::getOriginalSize() const
     else
         aSize = OutputDevice::LogicToLogic(aSize, GetGrafPrefMapMode(), MapMode(getSdrModelFromSdrObject().GetScaleUnit()));
 
-    if (aGrafInfo.IsCropped())
+    if (m_aGrafInfo.IsCropped())
     {
-        const tools::Long aCroppedWidth(aSize.getWidth() - aGrafInfo.GetLeftCrop()
-                                        - aGrafInfo.GetRightCrop());
-        const tools::Long aCroppedHeight(aSize.getHeight() - aGrafInfo.GetTopCrop()
-                                         - aGrafInfo.GetBottomCrop());
+        const tools::Long aCroppedWidth(aSize.getWidth() - m_aGrafInfo.GetLeftCrop()
+                                        - m_aGrafInfo.GetRightCrop());
+        const tools::Long aCroppedHeight(aSize.getHeight() - m_aGrafInfo.GetTopCrop()
+                                         - m_aGrafInfo.GetBottomCrop());
 
         aSize = Size(aCroppedWidth, aCroppedHeight);
     }
@@ -497,10 +497,10 @@ Size SdrGrafObj::getOriginalSize() const
 // TODO Remove
 void SdrGrafObj::ForceSwapIn() const
 {
-    if (pGraphicLink && (mpGraphicObject->GetType() == GraphicType::NONE  ||
+    if (m_pGraphicLink && (mpGraphicObject->GetType() == GraphicType::NONE  ||
                          mpGraphicObject->GetType() == GraphicType::Default) )
     {
-        pGraphicLink->Update();
+        m_pGraphicLink->Update();
     }
 }
 
@@ -508,14 +508,14 @@ void SdrGrafObj::ImpRegisterLink()
 {
     sfx2::LinkManager* pLinkManager(getSdrModelFromSdrObject().GetLinkManager());
 
-    if( pLinkManager != nullptr && pGraphicLink == nullptr )
+    if( pLinkManager != nullptr && m_pGraphicLink == nullptr )
     {
-        if (!aFileName.isEmpty())
+        if (!m_aFileName.isEmpty())
         {
-            pGraphicLink = new SdrGraphicLink( *this );
+            m_pGraphicLink = new SdrGraphicLink( *this );
             pLinkManager->InsertFileLink(
-                *pGraphicLink, sfx2::SvBaseLinkObjectType::ClientGraphic, aFileName, (aFilterName.isEmpty() ? nullptr : &aFilterName));
-            pGraphicLink->Connect();
+                *m_pGraphicLink, sfx2::SvBaseLinkObjectType::ClientGraphic, m_aFileName, (m_aFilterName.isEmpty() ? nullptr : &m_aFilterName));
+            m_pGraphicLink->Connect();
         }
     }
 }
@@ -524,11 +524,11 @@ void SdrGrafObj::ImpDeregisterLink()
 {
     sfx2::LinkManager* pLinkManager(getSdrModelFromSdrObject().GetLinkManager());
 
-    if( pLinkManager != nullptr && pGraphicLink!=nullptr)
+    if( pLinkManager != nullptr && m_pGraphicLink!=nullptr)
     {
         // When using Remove, the *pGraphicLink is implicitly deleted
-        pLinkManager->Remove( pGraphicLink );
-        pGraphicLink=nullptr;
+        pLinkManager->Remove( m_pGraphicLink );
+        m_pGraphicLink=nullptr;
     }
 }
 
@@ -542,8 +542,8 @@ void SdrGrafObj::SetGraphicLink(const OUString& rFileName)
 void SdrGrafObj::ReleaseGraphicLink()
 {
     ImpDeregisterLink();
-    aFileName.clear();
-    aFilterName.clear();
+    m_aFileName.clear();
+    m_aFilterName.clear();
 
     auto aGraphic = mpGraphicObject->GetGraphic();
     aGraphic.setOriginURL(u""_ustr);
@@ -784,13 +784,13 @@ void SdrGrafObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     bool bMirrY = yFact.GetNumerator() < 0;
 
     if( bMirrX != bMirrY )
-        bMirrored = !bMirrored;
+        m_bMirrored = !m_bMirrored;
 }
 
 void SdrGrafObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
     SdrRectObj::NbcMirror(rRef1,rRef2);
-    bMirrored = !bMirrored;
+    m_bMirrored = !m_bMirrored;
 }
 
 std::unique_ptr<SdrObjGeoData> SdrGrafObj::NewGeoData() const
@@ -802,14 +802,14 @@ void SdrGrafObj::SaveGeoData(SdrObjGeoData& rGeo) const
 {
     SdrRectObj::SaveGeoData(rGeo);
     SdrGrafObjGeoData& rGGeo=static_cast<SdrGrafObjGeoData&>(rGeo);
-    rGGeo.bMirrored=bMirrored;
+    rGGeo.bMirrored=m_bMirrored;
 }
 
 void SdrGrafObj::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
     SdrRectObj::RestoreGeoData(rGeo);
     const SdrGrafObjGeoData& rGGeo=static_cast<const SdrGrafObjGeoData&>(rGeo);
-    bMirrored=rGGeo.bMirrored;
+    m_bMirrored=rGGeo.bMirrored;
 }
 
 void SdrGrafObj::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
@@ -823,14 +823,14 @@ void SdrGrafObj::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
         if( mpGraphicObject->IsAnimated())
             mpGraphicObject->StopAnimation();
 
-        if( pGraphicLink != nullptr )
+        if( m_pGraphicLink != nullptr )
             ImpDeregisterLink();
     }
 
     // call parent
     SdrRectObj::handlePageChange(pOldPage, pNewPage);
 
-    if (!aFileName.isEmpty() && bInsert)
+    if (!m_aFileName.isEmpty() && bInsert)
     {
         ImpRegisterLink();
     }
@@ -1024,7 +1024,7 @@ void SdrGrafObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 void SdrGrafObj::SetMirrored( bool _bMirrored )
 {
-    bMirrored = _bMirrored;
+    m_bMirrored = _bMirrored;
 }
 
 void SdrGrafObj::ImpSetAttrToGrafInfo()
@@ -1033,16 +1033,16 @@ void SdrGrafObj::ImpSetAttrToGrafInfo()
     const sal_uInt16 nTrans = rSet.Get( SDRATTR_GRAFTRANSPARENCE ).GetValue();
     const SdrGrafCropItem&  rCrop = rSet.Get( SDRATTR_GRAFCROP );
 
-    aGrafInfo.SetLuminance( rSet.Get( SDRATTR_GRAFLUMINANCE ).GetValue() );
-    aGrafInfo.SetContrast( rSet.Get( SDRATTR_GRAFCONTRAST ).GetValue() );
-    aGrafInfo.SetChannelR( rSet.Get( SDRATTR_GRAFRED ).GetValue() );
-    aGrafInfo.SetChannelG( rSet.Get( SDRATTR_GRAFGREEN ).GetValue() );
-    aGrafInfo.SetChannelB( rSet.Get( SDRATTR_GRAFBLUE ).GetValue() );
-    aGrafInfo.SetGamma( rSet.Get( SDRATTR_GRAFGAMMA ).GetValue() * 0.01 );
-    aGrafInfo.SetAlpha(255 - basegfx::fround<sal_uInt8>(nTrans * 2.55));
-    aGrafInfo.SetInvert( rSet.Get( SDRATTR_GRAFINVERT ).GetValue() );
-    aGrafInfo.SetDrawMode( rSet.Get( SDRATTR_GRAFMODE ).GetValue() );
-    aGrafInfo.SetCrop( rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom() );
+    m_aGrafInfo.SetLuminance( rSet.Get( SDRATTR_GRAFLUMINANCE ).GetValue() );
+    m_aGrafInfo.SetContrast( rSet.Get( SDRATTR_GRAFCONTRAST ).GetValue() );
+    m_aGrafInfo.SetChannelR( rSet.Get( SDRATTR_GRAFRED ).GetValue() );
+    m_aGrafInfo.SetChannelG( rSet.Get( SDRATTR_GRAFGREEN ).GetValue() );
+    m_aGrafInfo.SetChannelB( rSet.Get( SDRATTR_GRAFBLUE ).GetValue() );
+    m_aGrafInfo.SetGamma( rSet.Get( SDRATTR_GRAFGAMMA ).GetValue() * 0.01 );
+    m_aGrafInfo.SetAlpha(255 - basegfx::fround<sal_uInt8>(nTrans * 2.55));
+    m_aGrafInfo.SetInvert( rSet.Get( SDRATTR_GRAFINVERT ).GetValue() );
+    m_aGrafInfo.SetDrawMode( rSet.Get( SDRATTR_GRAFMODE ).GetValue() );
+    m_aGrafInfo.SetCrop( rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom() );
 
     SetXPolyDirty();
     SetBoundAndSnapRectsDirty();
@@ -1128,9 +1128,9 @@ uno::Reference<io::XInputStream> SdrGrafObj::getInputStream() const
         }
     }
 
-    if (!xStream.is() && !aFileName.isEmpty())
+    if (!xStream.is() && !m_aFileName.isEmpty())
     {
-        SvFileStream* pStream = new SvFileStream( aFileName, StreamMode::READ );
+        SvFileStream* pStream = new SvFileStream( m_aFileName, StreamMode::READ );
         xStream.set( new utl::OInputStreamWrapper( pStream ) );
     }
 

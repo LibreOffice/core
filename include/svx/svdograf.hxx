@@ -79,14 +79,14 @@ private:
     SAL_DLLPRIVATE virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
 
     SAL_DLLPRIVATE void ImpSetAttrToGrafInfo(); // Copy values from the pool
-    GraphicAttr aGrafInfo;
+    GraphicAttr m_aGrafInfo;
 
-    OUString aFileName; // If it's a Link, the filename can be found in here
-    OUString aFilterName;
+    OUString m_aFileName; // If it's a Link, the filename can be found in here
+    OUString m_aFilterName;
     std::unique_ptr<GraphicObject> mpGraphicObject; // In order to speed up output of bitmaps, especially rotated ones
     std::unique_ptr<GraphicObject> mpReplacementGraphicObject;
-    SdrGraphicLink* pGraphicLink; // And here a pointer for linked graphics
-    bool bMirrored:1; // True: the graphic is horizontal, which means it's mirrored along the y-axis
+    SdrGraphicLink* m_pGraphicLink; // And here a pointer for linked graphics
+    bool m_bMirrored:1; // True: the graphic is horizontal, which means it's mirrored along the y-axis
 
     // Flag for allowing text animation. Default is true.
     bool mbGrafAnimationAllowed:1;
@@ -157,7 +157,7 @@ public:
     void                    ReleaseGraphicLink();
     bool IsLinkedGraphic() const;
 
-    const OUString& GetFileName() const { return aFileName;}
+    const OUString& GetFileName() const { return m_aFileName;}
 
     void                    StartAnimation();
 
@@ -192,7 +192,7 @@ public:
 
    SAL_DLLPRIVATE  virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    bool IsMirrored() const { return bMirrored;}
+    bool IsMirrored() const { return m_bMirrored;}
     SAL_DLLPRIVATE void SetMirrored( bool _bMirrored );
 
     virtual bool shouldKeepAspectRatio() const override { return true; }
