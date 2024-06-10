@@ -2843,6 +2843,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf161368)
     assertXPath(pExportDump, "//page[1]/body/txt[3]/SwParaPortion/SwLineLayout"_ostr, 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestCrashHyphenation)
+{
+    //just care it doesn't crash/assert
+    createSwDoc("crashHyphen.fodt");
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
