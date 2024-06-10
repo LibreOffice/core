@@ -105,7 +105,7 @@ void SAL_CALL ToolBarModule::notifyConfigurationChange (
 
     // since EventMultiplexer isn't available when the ToolBarModule is
     // initialized, subscribing the event listener hacked here.
-    if (!mbListeningEventMultiplexer)
+    if (!mbListeningEventMultiplexer && mpBase)
     {
         mpBase->GetEventMultiplexer()->AddEventListener(
             LINK(this, ToolBarModule, EventMultiplexerListener));
@@ -145,21 +145,23 @@ void SAL_CALL ToolBarModule::notifyConfigurationChange (
 
 void ToolBarModule::HandlePaneViewShellFocused(const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId)
 {
+    if(!mpBase)
+        return;
+
     std::shared_ptr<FrameworkHelper> pFrameworkHelper (FrameworkHelper::Instance(*mpBase));
     std::shared_ptr<ViewShell> pViewShell = pFrameworkHelper->GetViewShell(pFrameworkHelper->GetView(rxResourceId));
 
+
+    if(mpBase->GetMainViewShell() == pViewShell)
+    {
+        mpBase->GetViewShellManager()->RemoveOverridingMainShell();
+        return;
+    }
+
     switch(pViewShell->GetShellType())
     {
-        // TODO: refactor this bit into something that doesn't hardcode on the viewshell types.
-        // i remember having some trivial ideas on this -> check notes.
-        case sd::ViewShell::ST_IMPRESS:
-        case sd::ViewShell::ST_DRAW:
-        case sd::ViewShell::ST_OUTLINE:
-            // mainviewshells.
-            mpBase->GetViewShellManager()->RemoveOverridingMainShell();
-            break;
+        // shells that override mainviewshell functionality when used in a pane
         case ViewShell::ST_NOTESPANEL:
-            // shells that override mainviewshell functionality.
             mpBase->GetViewShellManager()->SetOverridingMainShell(pViewShell);
             UpdateToolbars(pViewShell.get());
             break;
@@ -213,7 +215,13 @@ void ToolBarModule::UpdateToolbars(ViewShell* pViewShell)
     // no longer visible.  This is done before the old view shell is
     // destroyed in order to avoid unnecessary updates of those tool
     // bars.
+    if (!mpBase)
+        return;
+
     std::shared_ptr<ToolBarManager> pToolBarManager (mpBase->GetToolBarManager());
+
+    if(!pToolBarManager)
+        return;
 
     if (pViewShell)
     {

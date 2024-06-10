@@ -151,7 +151,11 @@ Iterator OutlinerContainer::current()
 
 Iterator OutlinerContainer::CreateIterator (IteratorLocation aLocation)
 {
-    auto pFakeShell =            dynamic_cast<sd::ViewShellBase*>(SfxViewShell::Current())->GetViewShellManager()->GetOverridingMainShell();
+    std::shared_ptr<sd::ViewShell> pOverridingShell{};
+    if (auto pBase = dynamic_cast<sd::ViewShellBase*>(SfxViewShell::Current()))
+        if (auto pViewShellManager = pBase->GetViewShellManager())
+            pOverridingShell = pViewShellManager->GetOverridingMainShell();
+
     // Decide on certain features of the outliner which kind of iterator to
     // use.
     if (mpOutliner->mbRestrictSearchToSelection)
@@ -159,7 +163,7 @@ Iterator OutlinerContainer::CreateIterator (IteratorLocation aLocation)
         return CreateSelectionIterator (
             mpOutliner->maMarkListCopy,
             mpOutliner->mpDrawDocument,
-            pFakeShell ? pFakeShell :
+            pOverridingShell ? pOverridingShell :
             mpOutliner->mpWeakViewShell.lock(),
             mpOutliner->mbDirectionIsForward,
             aLocation);
@@ -167,7 +171,7 @@ Iterator OutlinerContainer::CreateIterator (IteratorLocation aLocation)
         // Search in the whole document.
         return CreateDocumentIterator (
             mpOutliner->mpDrawDocument,
-            pFakeShell ? pFakeShell :
+            pOverridingShell ? pOverridingShell :
             mpOutliner->mpWeakViewShell.lock(),
             mpOutliner->mbDirectionIsForward,
             aLocation);
@@ -516,7 +520,6 @@ ViewIteratorImpl::ViewIteratorImpl (
     const std::weak_ptr<ViewShell>& rpViewShellWeak,
     bool bDirectionIsForward)
     : IteratorImplBase (pDocument, rpViewShellWeak, bDirectionIsForward),
-      mbPageChangeOccurred(false),
       mpPage(nullptr)
 {
     SetPage (nPageIndex);
@@ -530,7 +533,6 @@ ViewIteratorImpl::ViewIteratorImpl (
     PageKind ePageKind,
     EditMode eEditMode)
     : IteratorImplBase (pDocument, rpViewShellWeak, bDirectionIsForward, ePageKind, eEditMode),
-      mbPageChangeOccurred(false),
       mpPage(nullptr)
 {
     SetPage (nPageIndex);
@@ -615,36 +617,33 @@ void ViewIteratorImpl::GotoNextText()
 
 void ViewIteratorImpl::SetPage (sal_Int32 nPageIndex)
 {
-    // if (mbPageChangeOccurred)
-    // {
-        maPosition.mnPageIndex = nPageIndex;
+    maPosition.mnPageIndex = nPageIndex;
 
-        sal_Int32 nPageCount;
+    sal_Int32 nPageCount;
+    if (maPosition.meEditMode == EditMode::Page)
+        nPageCount = mpDocument->GetSdPageCount(maPosition.mePageKind);
+    else
+        nPageCount = mpDocument->GetMasterSdPageCount(
+            maPosition.mePageKind);
+
+    // Get page pointer.  Here we have three cases: regular pages,
+    // master pages and invalid page indices.  The later ones are not
+    // errors but the effect of the iterator advancing to the next page
+    // and going past the last one.  This dropping of the rim at the far
+    // side is detected here and has to be reacted to by the caller.
+    if (nPageIndex>=0 && nPageIndex < nPageCount)
+    {
         if (maPosition.meEditMode == EditMode::Page)
-            nPageCount = mpDocument->GetSdPageCount(maPosition.mePageKind);
-        else
-            nPageCount = mpDocument->GetMasterSdPageCount(
+            mpPage = mpDocument->GetSdPage (
+                static_cast<sal_uInt16>(nPageIndex),
                 maPosition.mePageKind);
-
-        // Get page pointer.  Here we have three cases: regular pages,
-        // master pages and invalid page indices.  The later ones are not
-        // errors but the effect of the iterator advancing to the next page
-        // and going past the last one.  This dropping of the rim at the far
-        // side is detected here and has to be reacted to by the caller.
-        if (nPageIndex>=0 && nPageIndex < nPageCount)
-        {
-            if (maPosition.meEditMode == EditMode::Page)
-                mpPage = mpDocument->GetSdPage (
-                    static_cast<sal_uInt16>(nPageIndex),
-                    maPosition.mePageKind);
-            else
-                mpPage = mpDocument->GetMasterSdPage (
-                    static_cast<sal_uInt16>(nPageIndex),
-                    maPosition.mePageKind);
-        }
         else
-            mpPage = nullptr;
-    // }
+            mpPage = mpDocument->GetMasterSdPage (
+                static_cast<sal_uInt16>(nPageIndex),
+                maPosition.mePageKind);
+    }
+    else
+        mpPage = nullptr;
 
     // Set up object list iterator.
     if (mpPage != nullptr)

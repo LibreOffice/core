@@ -906,7 +906,6 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
                             pOutl->SetSelection(getOutlinerView()->GetSelection());
                         }
                     }
-                    // notes->outliner
                 }
             }
 
@@ -922,6 +921,8 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
                     // Remember the current position as the last one with a
                     // text object.
                     maLastValidPosition = maCurrentPosition;
+
+                    // there's a possible crasher here due to replace not working.
 
                     // Now that the mbEndOfSearch flag guards this block the
                     // following assertion and return should not be
@@ -993,20 +994,26 @@ void SdOutliner::DetectChange()
     std::shared_ptr<sd::DrawViewShell> pDrawViewShell (
         std::dynamic_pointer_cast<sd::DrawViewShell>(pViewShell));
 
-    std::shared_ptr<sd::ViewShell> pFakeShell{};
-    sd::ViewShellBase* pBase = getViewShellBase();
-    if(auto pViewShellManager = pBase->GetViewShellManager())
-        pFakeShell = pViewShellManager->GetOverridingMainShell();
-    auto bViewChanged = false;
-
-    if( !pFakeShell && pDrawViewShell )
-        bViewChanged = (aPosition.meEditMode != pDrawViewShell->GetEditMode() || aPosition.mePageKind != pDrawViewShell->GetPageKind());
-    else if (pFakeShell)
+    std::shared_ptr<sd::ViewShell> pOverridingViewShell{};
+    if(sd::ViewShellBase* pBase = getViewShellBase())
     {
-        auto pPage = pFakeShell->getCurrentPage();
-        auto ePageKind = pPage ? pPage->GetPageKind() : PageKind::Standard;
-        auto eEditMode = EditMode::Page;
-        bViewChanged = (aPosition.meEditMode != eEditMode || aPosition.mePageKind != ePageKind);
+        if (const std::shared_ptr<sd::ViewShellManager>& pViewShellManager = pBase->GetViewShellManager())
+            pOverridingViewShell = pViewShellManager->GetOverridingMainShell();
+    }
+
+    bool bViewChanged = false;
+
+    if( pDrawViewShell )
+    {
+        if( !pOverridingViewShell )
+            bViewChanged = (aPosition.meEditMode != pDrawViewShell->GetEditMode() || aPosition.mePageKind != pDrawViewShell->GetPageKind());
+        else
+        {
+            auto pPage = pOverridingViewShell->getCurrentPage();
+            auto ePageKind = pPage ? pPage->GetPageKind() : PageKind::Standard;
+            auto eEditMode = EditMode::Page;
+            bViewChanged = (aPosition.meEditMode != eEditMode || aPosition.mePageKind != ePageKind);
+        }
     }
 
     // Detect whether the view has been switched from the outside.
@@ -1229,6 +1236,9 @@ OutlinerView* SdOutliner::lclGetNotesPaneOutliner()
         pInstance->RequestSynchronousUpdate();
 
         std::shared_ptr<sd::ViewShell> pNotesPaneShell(pInstance->GetViewShell(sd::framework::FrameworkHelper::msBottomImpressPaneURL));
+
+        if(!pNotesPaneShell)
+            return nullptr;
 
         return static_cast<sd::NotesPanelView*>(pNotesPaneShell->GetView())->GetOutlinerView();
 }

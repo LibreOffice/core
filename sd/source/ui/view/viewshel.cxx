@@ -452,7 +452,8 @@ void ViewShell::BroadcastContextForActivation(const bool bIsActivated)
             EventMultiplexerEventId::FocusShifted, nullptr, getFrameworkResourceIdForShell());
     }
 
-    SfxShell::BroadcastContextForActivation(bIsActivated);
+    if(GetDispatcher())
+        SfxShell::BroadcastContextForActivation(bIsActivated);
 }
 
 void ViewShell::Shutdown()

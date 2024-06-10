@@ -816,10 +816,8 @@ void ViewShellManager::Implementation::UpdateShellStack()
     mpTopShell = mrBase.GetSubShell(0);
     if (mpTopShell!=nullptr && pUndoManager!=nullptr && mpTopShell->GetUndoManager()==nullptr)
         mpTopShell->SetUndoManager(pUndoManager);
-    // Make the new top-most ViewShell BroadcastContextForActivation... (need a
-    // way to make-sure this is a viewshell ;-) )
 
-
+    // Only broadcast context for activation on the top-most ViewShell
     if (mpTopViewShell && bTopViewShellChanged)
         mpTopViewShell->BroadcastContextForActivation(true);
 

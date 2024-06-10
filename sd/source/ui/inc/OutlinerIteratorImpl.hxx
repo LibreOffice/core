@@ -200,9 +200,6 @@ protected:
     SdPage* mpPage;
 
 private:
-    /// Indicates whether a page changed occurred on switching to current page.
-    bool mbPageChangeOccurred;
-
     // Don't use this operator.
     ViewIteratorImpl& operator= (const ViewIteratorImpl&) = delete;
 };
