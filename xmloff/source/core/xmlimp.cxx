@@ -1303,19 +1303,38 @@ uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicByURL(OUString const &
 {
     uno::Reference<graphic::XGraphic> xGraphic;
 
-    if (mxGraphicStorageHandler.is())
+    try
     {
-        if (IsPackageURL(rURL))
+        if (mxGraphicStorageHandler.is())
         {
-            xGraphic = mxGraphicStorageHandler->loadGraphic(rURL);
+            if (IsPackageURL(rURL))
+            {
+                xGraphic = mxGraphicStorageHandler->loadGraphic(rURL);
+            }
+            else
+            {
+                OUString const& rAbsoluteURL = GetAbsoluteReference(rURL);
+                GraphicExternalLink aExternalLink(rAbsoluteURL);
+                Graphic aGraphic(aExternalLink);
+                xGraphic = aGraphic.GetXGraphic();
+            }
         }
-        else
+    }
+    catch (...)
+    {
+        bool bRepairPackage = false;
+        if (auto const xStorProps{ GetSourceStorage().query<beans::XPropertySet>() })
         {
-            OUString const & rAbsoluteURL = GetAbsoluteReference(rURL);
-            GraphicExternalLink aExternalLink(rAbsoluteURL);
-            Graphic aGraphic(aExternalLink);
-            xGraphic = aGraphic.GetXGraphic();
+            try
+            {
+                xStorProps->getPropertyValue(u"RepairPackage"_ustr) >>= bRepairPackage;
+            }
+            catch (uno::Exception&)
+            {
+            }
         }
+        if (!bRepairPackage)
+            throw;
     }
 
     return xGraphic;
