@@ -56,6 +56,54 @@ public:
     }
 };
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf159897Broken_link)
+{
+    createSwDoc("tdf159897_broken_link.docx");
+
+    for (size_t i = 1; i < 10; ++i)
+    {
+        auto xPara(getParagraph(i));
+        auto xRun = getRun(xPara, 0);
+        OUString sURL = getProperty<OUString>(xRun, "HyperLinkURL");
+        CPPUNIT_ASSERT_EQUAL(OUString("https://libreoffice.org/"), sURL);
+
+        OUString sText;
+        switch (i)
+        {
+            case 1:
+                sText = "Zeroth link";
+                break;
+            case 2:
+                sText = "First \"link\"";
+                break;
+            case 3:
+                sText = "Second \" link \"";
+                break;
+            case 4:
+                sText = "Third \"\"\"link\"\"\"";
+                break;
+            case 5:
+                sText = "\"Fourth\" link";
+                break;
+            case 6:
+                sText = "Fifth \"5\" link";
+                break;
+            case 7:
+                sText = "Sixth \"6\" link";
+                break;
+            case 8:
+                sText = "Seventh \"link\"";
+                break;
+            case 9:
+                sText = "\"Eighth\" link";
+                break;
+        }
+
+        OUString sScreenTip = getProperty<OUString>(xRun, "HyperLinkName");
+        CPPUNIT_ASSERT_EQUAL(sText, sScreenTip);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf143476LockedCanvas_twoShapes)
 {
     // Given a lockedCanvas in a docx document with compatibility to Word version 12 (2007).

@@ -6122,6 +6122,7 @@ void FieldContext::AppendCommand(std::u16string_view rPart)
     ::std::vector<OUString> aResult;
     sal_Int32 nIndex = 0;
     bool bInString = false;
+    bool bScreenTip = false;
     OUString sPart;
     while (nIndex != -1)
     {
@@ -6131,16 +6132,50 @@ void FieldContext::AppendCommand(std::u16string_view rPart)
         if (sToken.isEmpty())
             continue;
 
-        if (sToken[0] == '"')
+        if (bScreenTip)
         {
-            bInStringNext = true;
-            sToken = sToken.copy(1);
+            bool bRemoveQuotation = true;
+            bInStringNext = (nIndex != -1) ? true : false;
+
+            if (sToken[0] == '"' && !bInString)
+                sToken = sToken.copy(1);
+
+            if (!sToken.isEmpty())
+            {
+                if (sToken[0] == '\\')
+                {
+                    bRemoveQuotation = false;
+                    OUStringBuffer sBuffer;
+                    for (sal_Int32 i = 0; i < sToken.getLength(); ++i)
+                    {
+                        if (sToken[i] != '\\')
+                        {
+                            sBuffer.append(sToken[i]);
+                        }
+                    }
+                    sToken = sBuffer.makeStringAndClear();
+                }
+            }
+
+            if (!bInStringNext && bRemoveQuotation)
+                sToken = sToken.copy(0, sToken.getLength() - 1);
         }
-        if (sToken.endsWith("\""))
+        else
         {
-            bInStringNext = false;
-            sToken = sToken.copy(0, sToken.getLength() - 1);
+            if (sToken[0] == '"')
+            {
+                bInStringNext = true;
+                sToken = sToken.copy(1);
+            }
+            if (sToken.endsWith("\""))
+            {
+                bInStringNext = false;
+                sToken = sToken.copy(0, sToken.getLength() - 1);
+            }
         }
+
+        if (sToken == "\\o")
+            bScreenTip = true;
 
         if (bInString)
         {
@@ -7939,7 +7974,7 @@ void DomainMapper_Impl::CloseFieldCommand()
 
                     if (!sTarget.isEmpty())
                         pContext->SetHyperlinkTarget(sTarget);
-                    else if (!sName.isEmpty())
+                    if (!sName.isEmpty())
                         pContext->SetHyperlinkName(sName);
                 }
                 break;
@@ -8852,7 +8887,7 @@ void DomainMapper_Impl::PopFieldContext()
 
                                 if (!pContext->GetHyperlinkTarget().isEmpty())
                                     xCrsrProperties->setPropertyValue(u"HyperLinkTarget"_ustr, uno::Any(pContext->GetHyperlinkTarget()));
-                                else if (!pContext->GetHyperlinkName().isEmpty())
+                                if (!pContext->GetHyperlinkName().isEmpty())
                                     xCrsrProperties->setPropertyValue(u"HyperLinkName"_ustr, uno::Any(pContext->GetHyperlinkName()));
 
                                 if (IsInTOC())
