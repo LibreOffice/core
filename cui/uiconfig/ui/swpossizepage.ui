@@ -92,7 +92,7 @@
                         <property name="can-focus">False</property>
                         <property name="halign">start</property>
                         <property name="valign">center</property>
-                        <property name="pixbuf">res/unlocked.png</property>
+                        <property name="icon-name">res/unlocked.png</property>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
