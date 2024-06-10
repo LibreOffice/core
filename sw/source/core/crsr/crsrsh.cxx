@@ -78,6 +78,7 @@
 #include <hints.hxx>
 #include <tools/json_writer.hxx>
 #include <redline.hxx>
+#include <boost/property_tree/ptree.hpp>
 
 using namespace com::sun::star;
 using namespace util;
@@ -1789,6 +1790,21 @@ void SwCursorShell::VisPortChgd( const SwRect & rRect )
 
     if( m_bSVCursorVis && bVis ) // show SV cursor again
         m_pVisibleCursor->Show();
+
+    if( comphelper::LibreOfficeKit::isActive() && !rRect.Overlaps( m_aCharRect ))
+    {
+        boost::property_tree::ptree aParams;
+        tools::Rectangle aRect(rRect.TopLeft(), Size(1, 1));
+
+        aParams.put("rectangle", aRect.toString());
+        aParams.put("scroll", true);
+        aParams.put("hyperlink", "");
+
+        SfxLokHelper::notifyOtherView(GetSfxViewShell(),
+                                      GetSfxViewShell(),
+                                      LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR,
+                                      aParams);
+    }
 
     if( m_nCursorMove )
         m_bInCMvVisportChgd = true;
