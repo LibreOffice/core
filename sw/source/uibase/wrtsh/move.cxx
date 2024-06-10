@@ -27,6 +27,7 @@
 #include <drawdoc.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
+#include <comphelper/lok.hxx>
 
 /**
    Always:
@@ -454,7 +455,13 @@ bool SwWrtShell::PushCursor(SwTwips lOffset, bool bSelect)
     {
         Point aPt( aOldRect.Center() );
 
-        if( !IsCursorVisible() )
+        if (SfxViewShell* pKitView = comphelper::LibreOfficeKit::isActive() ? GetSfxViewShell() : nullptr)
+        {
+            SwRect aLOKVis(pKitView->getLOKVisibleArea());
+            if (!aLOKVis.Overlaps(aOldRect))
+                aPt.setY( aLOKVis.Top() + aLOKVis.Height() / 2 );
+        }
+        else if( !IsCursorVisible() )
             // set CursorPos to top-/bottom left pos. So the pagescroll is not
             // be dependent on the current cursor, but on the visarea.
             aPt.setY( aTmpArea.Top() + aTmpArea.Height() / 2 );
