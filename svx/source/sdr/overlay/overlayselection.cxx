@@ -60,7 +60,7 @@ namespace sdr::overlay
             return aRetval;
         }
 
-        // Creates an ORed polygon with all the ranges shriked by 1px
+        // Creates an ORed polygon with all the ranges shrinked by 1px
         // This is used to draw the internal white line in the selection
         static basegfx::B2DPolyPolygon impCombineRangesToInternalPolyPolygon(const std::vector< basegfx::B2DRange >& rRanges)
         {
