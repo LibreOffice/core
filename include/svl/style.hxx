@@ -275,6 +275,7 @@ public:
     virtual SfxStyleSheetBase*  Find( const OUString&, SfxStyleFamily eFam, SfxStyleSearchBits n=SfxStyleSearchBits::All );
 
     void                        Reindex();
+    void                        ReindexOnNameChange(const SfxStyleSheetBase& style, const OUString& rOldName, const OUString& rNewName);
     /** Add a style sheet.
      * Not an actual public function. Do not call it from non-subclasses.
      */

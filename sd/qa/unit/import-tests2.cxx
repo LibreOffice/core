@@ -58,6 +58,9 @@
 #include <sfx2/linkmgr.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/dibtools.hxx>
+#include <sdresid.hxx>
+#include <stlpool.hxx>
+#include <strings.hrc>
 
 using namespace ::com::sun::star;
 
@@ -1980,6 +1983,26 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testMasterSlides)
     uno::Reference<drawing::XDrawPages> xMasterPages(xMasterPagesSupplier->getMasterPages());
     CPPUNIT_ASSERT(xMasterPages.is());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(7), xMasterPages->getCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf161430)
+{
+    // Without the bug fix this opens with the classic solid 'blue' background used in "Outline 1"
+    // as seen in slide 3
+    createSdImpressDoc("odp/tdf161430.odp");
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    SdStyleSheetPool* const pPool(pDoc->GetSdStyleSheetPool());
+
+    OUString aStyleName(SdResId(STR_PSEUDOSHEET_OUTLINE) + " 1");
+    SfxStyleSheetBase* pStyleSheet = pPool->Find(aStyleName, SfxStyleFamily::Pseudo);
+    CPPUNIT_ASSERT(pStyleSheet);
+
+    const XFillStyleItem& rFillStyle = pStyleSheet->GetItemSet().Get(XATTR_FILLSTYLE);
+    drawing::FillStyle eXFS = rFillStyle.GetValue();
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, eXFS);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
