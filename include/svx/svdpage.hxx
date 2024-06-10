@@ -555,6 +555,7 @@ public:
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
+    // Annotations
     virtual rtl::Reference<sdr::annotation::Annotation> createAnnotation();
     virtual void addAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, int nIndex = -1);
     virtual void addAnnotationNoNotify(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, int nIndex = -1);
