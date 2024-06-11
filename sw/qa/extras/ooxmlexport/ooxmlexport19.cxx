@@ -1220,6 +1220,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148952_2010)
     CPPUNIT_ASSERT_EQUAL(OUString("Black"), title);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf153196, "A019_min.docx")
+{
+    uno::Reference<beans::XPropertySet> xPageStyle;
+    getStyles("PageStyles")->getByName("Converted1") >>= xPageStyle;
+    sal_Int32 nLeftMargin{};
+    xPageStyle->getPropertyValue("LeftMargin") >>= nLeftMargin;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4265
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4265), nLeftMargin);
+    sal_Int32 nRightMargin{};
+    xPageStyle->getPropertyValue("RightMargin") >>= nRightMargin;
+    // - Expected: 0
+    // - Actual  : 4265
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nRightMargin);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
