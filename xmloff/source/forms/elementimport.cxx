@@ -567,6 +567,15 @@ namespace xmloff
                             OUStringToOString(m_sServiceName, RTL_TEXTENCODING_ASCII_US) +
                             ")!").getStr());
             xReturn.set(xPure, UNO_QUERY);
+            if (auto const props = Reference<css::beans::XPropertySet>(xPure, css::uno::UNO_QUERY))
+            {
+                try {
+                    props->setPropertyValue(
+                        "Referer", css::uno::Any(m_rFormImport.getGlobalContext().GetBaseURL()));
+                } catch (css::uno::Exception &) {
+                    TOOLS_INFO_EXCEPTION("xmloff.forms", "setPropertyValue Referer failed");
+                }
+            }
         }
         else
             OSL_FAIL("OElementImport::createElement: no service name to create an element!");
