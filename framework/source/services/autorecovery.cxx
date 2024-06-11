@@ -2452,7 +2452,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     if (pIt != m_lDocCache.end())
     {
         // Normally nothing must be done for this "late" notification.
-        // But may be the modified state was changed inbetween.
+        // But may be the modified state was changed in between.
         // Check it...
         implts_updateModifiedState(xDocument);
         return;
