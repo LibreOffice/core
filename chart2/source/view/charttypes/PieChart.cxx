@@ -195,6 +195,7 @@ PieChart::PieChart( const rtl::Reference<ChartType>& xChartTypeModel
         , m_bUseRings(false)
         , m_bSizeExcludesLabelsAndExplodedSegments(bExcludingPositioning)
         , m_eSubType(PieChartSubType_NONE)
+        , m_nCompositeSize(2)
         , m_fMaxOffset(std::numeric_limits<double>::quiet_NaN())
 {
     PlotterBase::m_pPosHelper = &m_aPosHelper;
@@ -222,6 +223,14 @@ PieChart::PieChart( const rtl::Reference<ChartType>& xChartTypeModel
     try
     {
         xChartTypeModel->getFastPropertyValue(PROP_PIECHARTTYPE_SUBTYPE) >>= m_eSubType; //  "SubType"
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
+    }
+    try
+    {
+        xChartTypeModel->getFastPropertyValue(PROP_PIECHARTTYPE_COMPOSITESIZE) >>= m_nCompositeSize; //  "CompositeSize"
     }
     catch( const uno::Exception& )
     {
@@ -963,7 +972,7 @@ void PieChart::createShapes()
 
         PieDataSrcBase *pDataSrc = nullptr;
         PieDataSrc normalPieSrc;
-        OfPieDataSrc ofPieSrc;
+        OfPieDataSrc ofPieSrc(m_nCompositeSize);
 
         // Default to regular pie if too few points for of-pie
         ::css::chart2::PieChartSubType eSubType =
@@ -2218,26 +2227,29 @@ sal_Int32 OfPieDataSrc::getNPoints(const VDataSeries* pSeries,
             enum SubPieType eType) const
 {
     if (eType == SubPieType::LEFT) {
-        return pSeries->getTotalPointCount() - 2;
+        return pSeries->getTotalPointCount() - m_nCompositeSize + 1;
     } else {
         assert(eType == SubPieType::RIGHT);
-        return 3;
+        return m_nCompositeSize;
     }
 }
 
 double OfPieDataSrc::getData(const VDataSeries* pSeries, sal_Int32 nPtIdx,
             enum SubPieType eType) const
 {
-    const sal_Int32 n = pSeries->getTotalPointCount() - 3;
+    const sal_Int32 n = pSeries->getTotalPointCount() - m_nCompositeSize;
     if (eType == SubPieType::LEFT) {
         // nPtIdx should be in [0, n]
         if (nPtIdx < n) {
             return fabs(pSeries->getYValue( nPtIdx ));
         } else {
+            // composite wedge
             assert(nPtIdx == n);
-            return fabs(pSeries->getYValue(n)) +
-                fabs(pSeries->getYValue(n+1)) +
-                fabs(pSeries->getYValue(n+2));
+            double total = 0;
+            for (sal_Int32 i = n; i < n + m_nCompositeSize; ++i) {
+                total += pSeries->getYValue(i);
+            }
+            return total;
         }
     } else {
         assert(eType == SubPieType::RIGHT);
@@ -2250,7 +2262,7 @@ uno::Reference< beans::XPropertySet > OfPieDataSrc::getProps(
             enum SubPieType eType) const
 {
     const sal_Int32 nPts = pSeries->getTotalPointCount();
-    const sal_Int32 n = nPts - 3;
+    const sal_Int32 n = nPts - m_nCompositeSize;
     if (eType == SubPieType::LEFT) {
         // nPtIdx should be in [0, n]
         if (nPtIdx < n) {

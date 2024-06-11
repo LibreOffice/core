@@ -162,6 +162,7 @@
 #define STR_HISTOGRAM                               NC_("STR_HISTOGRAM", "Histogram Chart")
 #define STR_TYPE_AREA                               NC_("STR_TYPE_AREA", "Area")
 #define STR_TYPE_PIE                                NC_("STR_TYPE_PIE", "Pie")
+#define STR_TYPE_OFPIE                              NC_("STR_TYPE_PIE", "Of-Pie")
 #define STR_PIE_EXPLODED                            NC_("STR_PIE_EXPLODED", "Exploded Pie Chart")
 #define STR_BAR_OF_PIE                              NC_("STR_BAR_OF_PIE", "Bar-of-pie Chart")
 #define STR_PIE_OF_PIE                              NC_("STR_PIE_OF_PIE", "Pie-of-pie Chart")

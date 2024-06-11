@@ -209,6 +209,38 @@ public:
     virtual bool shouldShow_3DLookControl() const override;
 };
 
+class OfPieChartDialogController final : public ChartTypeDialogController
+{
+public:
+    OfPieChartDialogController();
+    virtual ~OfPieChartDialogController() override;
+
+    virtual OUString getName() override;
+    virtual OUString getImage() override;
+    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
+    virtual void fillSubTypeList(ValueSet& rSubTypeList,
+                                 const ChartTypeParameter& rParameter) override;
+    virtual void adjustParameterToSubType(ChartTypeParameter& rParameter) override;
+
+    virtual bool shouldShow_3DLookControl() const override;
+
+    virtual void showExtraControls(weld::Builder* pBuilder) override;
+    virtual void hideExtraControls() const override;
+    virtual void fillExtraControls(
+        const rtl::Reference<::chart::ChartModel>& xChartModel,
+        const css::uno::Reference<css::beans::XPropertySet>& xTemplateProps) const override;
+
+    virtual void setTemplateProperties(
+        const css::uno::Reference<css::beans::XPropertySet>& xTemplateProps) const override;
+
+private:
+    DECL_LINK(ChangeCompositeSizeHdl, weld::SpinButton&, void);
+
+private:
+    std::unique_ptr<weld::Label> m_xFT_CompositeSize;
+    std::unique_ptr<weld::SpinButton> m_xMF_CompositeSize;
+};
+
 class LineChartDialogController final : public ChartTypeDialogController
 {
 public:

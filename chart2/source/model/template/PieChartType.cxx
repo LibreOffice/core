@@ -47,6 +47,7 @@ namespace
             ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, ::chart::PROP_PIECHARTTYPE_USE_RINGS, false );
             ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aOutMap, ::chart::PROP_PIECHARTTYPE_3DRELATIVEHEIGHT, 100 );
             ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, ::chart::PROP_PIECHARTTYPE_SUBTYPE, chart2::PieChartSubType_NONE );
+            ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aOutMap, ::chart::PROP_PIECHARTTYPE_COMPOSITESIZE, 2 );
             return aOutMap;
         }();
     return aStaticDefaults;
@@ -70,7 +71,11 @@ namespace
                 { u"SubPieType"_ustr,
                   ::chart::PROP_PIECHARTTYPE_SUBTYPE,
                   cppu::UnoType<chart2::PieChartSubType>::get(),
-                  beans::PropertyAttribute::MAYBEDEFAULT }
+                  beans::PropertyAttribute::MAYBEDEFAULT },
+                { u"CompositeSize"_ustr,
+                  ::chart::PROP_PIECHARTTYPE_COMPOSITESIZE,
+                  cppu::UnoType<sal_Int32>::get(),
+                  beans::PropertyAttribute::MAYBEVOID }
             };
             std::sort( aProperties.begin(), aProperties.end(),
                          ::chart::PropertyNameLess() );

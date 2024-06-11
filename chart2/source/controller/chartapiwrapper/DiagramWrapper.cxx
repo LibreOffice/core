@@ -104,6 +104,7 @@ enum
 
     PROP_DIAGRAM_STARTING_ANGLE,
     PROP_DIAGRAM_OF_PIE_TYPE,
+    PROP_DIAGRAM_COMPOSITE_SIZE,
 
     PROP_DIAGRAM_RIGHT_ANGLED_AXES,
     PROP_DIAGRAM_PERSPECTIVE,
@@ -233,6 +234,11 @@ void lcl_AddPropertiesToVector(
     rOutProperties.emplace_back( "SubPieType",
                   PROP_DIAGRAM_OF_PIE_TYPE,
                   cppu::UnoType<chart2::PieChartSubType>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( "CompositeSize",
+                  PROP_DIAGRAM_COMPOSITE_SIZE,
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 

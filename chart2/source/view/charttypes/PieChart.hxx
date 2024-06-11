@@ -101,6 +101,10 @@ public:
 class OfPieDataSrc : public PieDataSrcBase
 {
 public:
+    OfPieDataSrc(sal_Int32 nCompositeSize):
+        m_nCompositeSize(nCompositeSize)
+    {}
+
     // Minimum sensible number of data points
     static constexpr sal_Int32 minPoints = 4;
 
@@ -113,6 +117,8 @@ public:
     virtual uno::Reference< beans::XPropertySet > getProps(
             const VDataSeries* pSeries, sal_Int32 nPtIdx,
             enum SubPieType eType) const;
+private:
+    sal_Int32 m_nCompositeSize;
 };
 
 //=======================
@@ -256,6 +262,7 @@ private: //member
     bool                  m_bUseRings;
     bool                  m_bSizeExcludesLabelsAndExplodedSegments;
     ::css::chart2::PieChartSubType m_eSubType;
+    sal_Int32             m_nCompositeSize;
 
     struct PieLabelInfo
     {

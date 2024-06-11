@@ -443,6 +443,51 @@
                         <property name="top-attach">4</property>
                       </packing>
                     </child>
+                    <child>
+                      <!-- n-columns=2 n-rows=1 -->
+                      <object class="GtkGrid" id="grid10">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="column-spacing">6</property>
+                        <child>
+                          <object class="GtkLabel" id="compositesizeft">
+                            <property name="can-focus">False</property>
+                            <property name="no-show-all">True</property>
+                            <property name="label" translatable="yes" context="tp_ChartType|compositesizeft">_Size of composite wedge</property>
+                            <property name="use-underline">True</property>
+                            <property name="mnemonic-widget">compositesize</property>
+                            <property name="ellipsize">end</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="compositesize">
+                            <property name="can-focus">True</property>
+                            <property name="no-show-all">True</property>
+                            <property name="activates-default">True</property>
+                            <property name="truncate-multiline">True</property>
+                            <property name="adjustment">adjustment1</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="compositesize-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tp_ChartType|extended_tip|compositesize">Set the number of entries in an of-pie chart composite wedge.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">4</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>

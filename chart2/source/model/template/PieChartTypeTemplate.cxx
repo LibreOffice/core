@@ -55,7 +55,8 @@ enum
     PROP_PIE_TEMPLATE_OFFSET_MODE,
     PROP_PIE_TEMPLATE_DIMENSION,
     PROP_PIE_TEMPLATE_USE_RINGS,
-    PROP_PIE_TEMPLATE_SUB_PIE_TYPE
+    PROP_PIE_TEMPLATE_SUB_PIE_TYPE,
+    PROP_PIE_TEMPLATE_COMPOSITE_SIZE
 };
 
 ::chart::tPropertyValueMap& StaticPieChartTypeTemplateDefaults()
@@ -68,6 +69,7 @@ enum
             ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aOutMap, PROP_PIE_TEMPLATE_DIMENSION, 2 );
             ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_PIE_TEMPLATE_USE_RINGS, false );
             ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_PIE_TEMPLATE_SUB_PIE_TYPE, chart2::PieChartSubType_NONE );
+            ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aOutMap, PROP_PIE_TEMPLATE_COMPOSITE_SIZE, 2 );
             return aOutMap;
         }();
     return aStaticDefaults;
@@ -103,6 +105,11 @@ enum
                   PROP_PIE_TEMPLATE_SUB_PIE_TYPE,
                   cppu::UnoType<chart2::PieChartSubType>::get(),
                   beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT },
+                { u"CompositeSize"_ustr,
+                  PROP_PIE_TEMPLATE_COMPOSITE_SIZE,
+                  cppu::UnoType<sal_Int32>::get(),
+                  beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT }
             };
 
@@ -133,6 +140,7 @@ PieChartTypeTemplate::PieChartTypeTemplate(
     chart2::PieChartOffsetMode eMode,
     bool bRings,
     chart2::PieChartSubType eSubType,
+    sal_Int32 nCompositeSize,
     sal_Int32 nDim         /* = 2 */    ) :
         ChartTypeTemplate( xContext, rServiceName )
 {
@@ -140,6 +148,7 @@ PieChartTypeTemplate::PieChartTypeTemplate(
     setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_DIMENSION,      uno::Any( nDim ));
     setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_USE_RINGS,      uno::Any( bRings ));
     setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_SUB_PIE_TYPE,   uno::Any( eSubType ));
+    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_COMPOSITE_SIZE, uno::Any( nCompositeSize ));
 }
 
 PieChartTypeTemplate::~PieChartTypeTemplate()
@@ -265,6 +274,8 @@ void PieChartTypeTemplate::createChartTypes(
             PROP_PIECHARTTYPE_USE_RINGS, getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS )); // "UseRings"
         xCT->setFastPropertyValue(
             PROP_PIECHARTTYPE_SUBTYPE, getFastPropertyValue( PROP_PIE_TEMPLATE_SUB_PIE_TYPE )); // "SubType"
+        xCT->setFastPropertyValue(
+            PROP_PIECHARTTYPE_COMPOSITESIZE, getFastPropertyValue( PROP_PIE_TEMPLATE_COMPOSITE_SIZE )); // "CompositeSize"
         rCoordSys[0]->setChartTypes( std::vector{xCT} );
 
         if( !aSeriesSeq.empty() )

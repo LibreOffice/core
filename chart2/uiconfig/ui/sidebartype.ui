@@ -244,6 +244,34 @@
           </packing>
         </child>
         <child>
+          <object class="GtkLabel" id="compositesizeft">
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="halign">start</property>
+            <property name="label" translatable="yes" context="sidebartype|compositesizeft">_Number of lines</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">compositesize</property>
+            <property name="ellipsize">end</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">8</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="compositesize">
+            <property name="can-focus">True</property>
+            <property name="no-show-all">True</property>
+            <property name="activates-default">True</property>
+            <property name="truncate-multiline">True</property>
+            <property name="adjustment">adjustment1</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">8</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkComboBox" id="cmb_chartType">
             <property name="visible">True</property>
             <property name="can-focus">False</property>

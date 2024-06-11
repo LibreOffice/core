@@ -76,7 +76,11 @@ ChartTypeTabPage::ChartTypeTabPage(weld::Container* pPage, weld::DialogControlle
 
     m_xSubTypeList->SetStyle(m_xSubTypeList->GetStyle() |
         WB_ITEMBORDER | WB_DOUBLEBORDER | WB_NAMEFIELD | WB_FLATVALUESET | WB_3DLOOK );
-    m_xSubTypeList->SetColCount(6);
+    // Set number of columns in chart type selector.
+    // TODO: Ideally this would not be hard-coded, but determined
+    // programmatically based on the maximum number of chart types across all
+    // controllers.
+    m_xSubTypeList->SetColCount(4);
     m_xSubTypeList->SetLineCount(1);
 
     bool bEnableComplexChartTypes = true;
@@ -97,6 +101,7 @@ ChartTypeTabPage::ChartTypeTabPage(weld::Container* pPage, weld::DialogControlle
     m_aChartTypeDialogControllerList.push_back(std::make_unique<BarChartDialogController>());
     m_aChartTypeDialogControllerList.push_back(std::make_unique<HistogramChartDialogController>());
     m_aChartTypeDialogControllerList.push_back(std::make_unique<PieChartDialogController>());
+    m_aChartTypeDialogControllerList.push_back(std::make_unique<OfPieChartDialogController>());
     m_aChartTypeDialogControllerList.push_back(std::make_unique<AreaChartDialogController>());
     m_aChartTypeDialogControllerList.push_back(std::make_unique<LineChartDialogController>());
     if (bEnableComplexChartTypes)

@@ -25,6 +25,7 @@
 #include <bitmaps.hlst>
 #include <ChartModelHelper.hxx>
 #include <DataSeries.hxx>
+#include <DataSeriesHelper.hxx>
 #include <Diagram.hxx>
 #include <ControllerLockGuard.hxx>
 #include <AxisHelper.hxx>
@@ -592,6 +593,10 @@ void HistogramChartDialogController::adjustParameterToSubType(ChartTypeParameter
     }
 }
 
+//=========
+// PieChartDialogController
+//=========
+
 PieChartDialogController::PieChartDialogController()
 {
 }
@@ -617,8 +622,6 @@ const tTemplateServiceChartTypeParameterMap& PieChartDialogController::getTempla
     {"com.sun.star.chart2.template.PieAllExploded" ,         ChartTypeParameter(2,false,false)},
     {"com.sun.star.chart2.template.Donut" ,                  ChartTypeParameter(3,false,false)},
     {"com.sun.star.chart2.template.DonutAllExploded" ,       ChartTypeParameter(4,false,false)},
-    {"com.sun.star.chart2.template.BarOfPie" ,               ChartTypeParameter(5,false,false)},
-    {"com.sun.star.chart2.template.PieOfPie" ,               ChartTypeParameter(6,false,false)},
     {"com.sun.star.chart2.template.ThreeDPie" ,              ChartTypeParameter(1,false,true)},
     {"com.sun.star.chart2.template.ThreeDPieAllExploded" ,   ChartTypeParameter(2,false,true)},
     {"com.sun.star.chart2.template.ThreeDDonut" ,            ChartTypeParameter(3,false,true)},
@@ -642,15 +645,11 @@ void PieChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const Ch
         rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_CIRCLES_2D_EXPLODED));
         rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_DONUT_2D));
         rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_DONUT_2D_EXPLODED));
-        rSubTypeList.InsertItem(5, Image(StockImage::Yes, BMP_BAR_OF_PIE));
-        rSubTypeList.InsertItem(6, Image(StockImage::Yes, BMP_PIE_OF_PIE));
     }
     rSubTypeList.SetItemText( 1, SchResId( STR_NORMAL         ) );
     rSubTypeList.SetItemText( 2, SchResId( STR_PIE_EXPLODED   ) );
     rSubTypeList.SetItemText( 3, SchResId( STR_DONUT          ) );
     rSubTypeList.SetItemText( 4, SchResId( STR_DONUT_EXPLODED ) );
-    rSubTypeList.SetItemText( 5, SchResId( STR_BAR_OF_PIE ) );
-    rSubTypeList.SetItemText( 6, SchResId( STR_PIE_OF_PIE ) );
 }
 
 bool PieChartDialogController::shouldShow_3DLookControl() const
@@ -663,6 +662,158 @@ void PieChartDialogController::adjustParameterToSubType( ChartTypeParameter& rPa
     if(rParameter.eStackMode==GlobalStackMode_STACK_Z)
         rParameter.eStackMode = GlobalStackMode_NONE;
 }
+
+//=========
+// OfPieChartDialogController
+//=========
+
+OfPieChartDialogController::OfPieChartDialogController()
+{
+}
+
+OfPieChartDialogController::~OfPieChartDialogController()
+{
+}
+
+OUString OfPieChartDialogController::getName()
+{
+    return SchResId(STR_TYPE_OFPIE);
+}
+
+OUString OfPieChartDialogController::getImage()
+{
+    return BMP_TYPE_OFPIE;
+}
+
+const tTemplateServiceChartTypeParameterMap& OfPieChartDialogController::getTemplateMap() const
+{
+    static tTemplateServiceChartTypeParameterMap s_aTemplateMap{
+    {"com.sun.star.chart2.template.BarOfPie" ,               ChartTypeParameter(1,false,false)},
+    {"com.sun.star.chart2.template.PieOfPie" ,               ChartTypeParameter(2,false,false)}};
+    return s_aTemplateMap;
+}
+void OfPieChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
+{
+    rSubTypeList.Clear();
+
+    rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_BAR_OF_PIE));
+    rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_PIE_OF_PIE));
+    rSubTypeList.SetItemText( 1, SchResId( STR_BAR_OF_PIE ) );
+    rSubTypeList.SetItemText( 2, SchResId( STR_PIE_OF_PIE ) );
+}
+
+bool OfPieChartDialogController::shouldShow_3DLookControl() const
+{
+    // Maybe a TODO?
+    return false;
+}
+
+void OfPieChartDialogController::adjustParameterToSubType( ChartTypeParameter& rParameter )
+{
+    if(rParameter.eStackMode==GlobalStackMode_STACK_Z)
+        rParameter.eStackMode = GlobalStackMode_NONE;
+}
+
+void OfPieChartDialogController::showExtraControls(weld::Builder* pBuilder)
+{
+    if (!m_xFT_CompositeSize)
+    {
+        m_xFT_CompositeSize = pBuilder->weld_label(u"compositesizeft"_ustr);
+        assert(m_xFT_CompositeSize);
+    }
+    if (!m_xMF_CompositeSize)
+    {
+        m_xMF_CompositeSize = pBuilder->weld_spin_button(u"compositesize"_ustr);
+        assert(m_xMF_CompositeSize);
+
+        m_xMF_CompositeSize->set_increments(1, 10);
+        m_xMF_CompositeSize->set_range(2, 100);
+
+        m_xMF_CompositeSize->connect_value_changed( LINK( this,
+                    OfPieChartDialogController, ChangeCompositeSizeHdl ) );
+        m_xMF_CompositeSize->set_sensitive(true);
+    }
+
+    m_xFT_CompositeSize->show();
+    m_xMF_CompositeSize->show();
+}
+
+void OfPieChartDialogController::hideExtraControls() const
+{
+    if (m_xFT_CompositeSize)
+        m_xFT_CompositeSize->hide();
+    if (m_xMF_CompositeSize)
+        m_xMF_CompositeSize->hide();
+}
+
+void OfPieChartDialogController::fillExtraControls(
+                  const rtl::Reference<::chart::ChartModel>& xChartModel
+                , const uno::Reference< beans::XPropertySet >& xTemplateProps ) const
+{
+    if (!m_xMF_CompositeSize)
+        return;
+
+    rtl::Reference< Diagram > xDiagram = xChartModel->getFirstChartDiagram();
+    if(!xDiagram.is())
+        return;
+
+    sal_Int32 nCompositeSize = 2;
+
+    if(xTemplateProps.is())
+    {
+        try
+        {
+            xTemplateProps->getPropertyValue( u"CompositeSize"_ustr ) >>= nCompositeSize;
+        }
+        catch( const uno::Exception & )
+        {
+            DBG_UNHANDLED_EXCEPTION("chart2");
+        }
+    }
+    if( nCompositeSize < 2 )
+        nCompositeSize = 2;
+    m_xMF_CompositeSize->set_value(nCompositeSize);
+
+    // Limit based on number of entries in the series
+    const std::vector< rtl::Reference< DataSeries > > dataSeriesVec =
+        ChartModelHelper::getDataSeries( xChartModel);
+    if (!dataSeriesVec.empty()) {
+        const rtl::Reference<DataSeries> ds = dataSeriesVec[0];
+        const DataSeries::tDataSequenceContainer data = ds->getDataSequences2();
+        const std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aValuesSeries(
+            DataSeriesHelper::getAllDataSequencesByRole( data , u"values"_ustr ) );
+
+        assert(!aValuesSeries.empty());
+
+        const uno::Reference< chart2::data::XDataSequence > xSeq( aValuesSeries.front()->getValues() );
+
+        // Allow all but one entry to be aggregated in the composite wedge
+        sal_Int32 nMaxCompositeSize = xSeq->getData().getLength() - 1;
+
+        if( nMaxCompositeSize < 2 )
+            nMaxCompositeSize = 2;
+        m_xMF_CompositeSize->set_max(nMaxCompositeSize);
+    }
+}
+
+void OfPieChartDialogController::setTemplateProperties( const uno::Reference< beans::XPropertySet >& xTemplateProps ) const
+{
+    if( xTemplateProps.is())
+    {
+        sal_Int32 nCompositeSize = m_xMF_CompositeSize->get_value();
+        xTemplateProps->setPropertyValue( u"CompositeSize"_ustr , uno::Any(nCompositeSize) );
+    }
+}
+
+IMPL_LINK_NOARG(OfPieChartDialogController, ChangeCompositeSizeHdl, weld::SpinButton&, void)
+{
+    if( m_pChangeListener )
+        m_pChangeListener->stateChanged();
+}
+
+//=========
+// LineChartDialogController
+//=========
 
 LineChartDialogController::LineChartDialogController()
 {
