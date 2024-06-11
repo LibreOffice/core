@@ -1404,6 +1404,7 @@ CPPUNIT_TEST_FIXTURE(Test, testForcepoint108)
 {
     //load would assert because it fails to load entirely, like testMathMalformedXml
     mxComponent = mxDesktop->loadComponentFromURL(createFileURL(u"forcepoint108.fodt"), u"_default"_ustr, 0, {});
+    CPPUNIT_ASSERT(!mxComponent.is());
 }
 
 #ifdef _WIN32
