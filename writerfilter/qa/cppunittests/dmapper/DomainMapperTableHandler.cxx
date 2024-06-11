@@ -229,6 +229,30 @@ CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableHeaderBodyOverlap)
     // Fly bottom was 3063, body text top was 7148.
     CPPUNIT_ASSERT_LESS(nBodyTextTop, nFlyBottom);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTableStyleParaBorderSpacing)
+{
+    // Given a document with a table style, table style defines top and bottom border for
+    // paragraphs:
+    // When loading that document:
+    loadFromFile(u"table-style-para-border-spacing.docx");
+
+    // Then make sure the in-table paragraph gets its top border:
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xText->createEnumeration();
+    uno::Reference<text::XTextTable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xCell(xPara->getCellByName("A1"), uno::UNO_QUERY);
+    xParaEnum = xCell->createEnumeration();
+    uno::Reference<beans::XPropertySet> xParaProps(xParaEnum->nextElement(), uno::UNO_QUERY);
+    sal_Int32 nTopBorderDistance{};
+    xParaProps->getPropertyValue("TopBorderDistance") >>= nTopBorderDistance;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 35
+    // - Actual  : 0
+    // i.e. the top and bottom border and its 1pt spacing was not set on the in-table paragraph.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(35), nTopBorderDistance);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
