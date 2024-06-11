@@ -1215,6 +1215,7 @@ if test -z "$using_x11" -o -z "$using_freetype_fontconfig"; then
 fi
 
 # Set defaults, if not set by platform
+test "${test_cpdb+set}" = set || test_cpdb="$using_x11"
 test "${test_cups+set}" = set || test_cups="$using_x11"
 test "${test_dbus+set}" = set || test_dbus="$using_x11"
 test "${test_gen+set}" = set || test_gen="$using_x11"
@@ -1246,6 +1247,7 @@ test "$using_freetype_fontconfig" = yes && test_cairo=yes
 # Keep in sync with the above $using_x11 depending test default list
 disable_x11_tests()
 {
+    test_cpdb=no
     test_cups=no
     test_dbus=no
     test_gen=no
@@ -1898,6 +1900,11 @@ AC_ARG_ENABLE(ld,
          If <linker> contains any ':', the part before the first ':' is used as the value of
          -fuse-ld, while the part after the first ':' is used as the value of --ld-path (which is
          needed for Clang 12).]),
+,)
+
+AC_ARG_ENABLE(cpdb,
+    AS_HELP_STRING([--enable-cpdb],
+        [Build CPDB (Common Print Dialog Backends) support.]),
 ,)
 
 libo_FUZZ_ARG_ENABLE(cups,
@@ -6289,6 +6296,26 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_PAGEIN)
+
+
+AC_MSG_CHECKING([whether to enable CPDB support])
+ENABLE_CPDB=""
+CPDB_CFLAGS=""
+CPDB_LIBS=""
+if test "$test_cpdb" = yes -a "x$enable_cpdb" = "xyes"; then
+    ENABLE_CPDB="TRUE"
+    AC_MSG_RESULT([yes])
+    PKG_CHECK_MODULES(CPDB, cpdb-frontend)
+    CPDB_CFLAGS=$(printf '%s' "$CPDB_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+    FilterLibs "${CPDB_LIBS}"
+    CPDB_LIBS="${filteredlibs}"
+    AC_DEFINE([ENABLE_CPDB],[1])
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_CPDB)
+AC_SUBST(CPDB_LIBS)
+AC_SUBST(CPDB_CFLAGS)
 
 dnl ===================================================================
 dnl check for cups support
@@ -15560,6 +15587,7 @@ AC_CONFIG_HEADERS([config_host/config_buildconfig.h])
 AC_CONFIG_HEADERS([config_host/config_buildid.h])
 AC_CONFIG_HEADERS([config_host/config_box2d.h])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
+AC_CONFIG_HEADERS([config_host/config_cpdb.h])
 AC_CONFIG_HEADERS([config_host/config_crypto.h])
 AC_CONFIG_HEADERS([config_host/config_dconf.h])
 AC_CONFIG_HEADERS([config_host/config_eot.h])

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_cpdb.h>
+
 #include <unx/cpdmgr.hxx>
 #include <unx/cupsmgr.hxx>
 #include <unx/gendata.hxx>
@@ -81,7 +83,9 @@ PrinterInfoManager& PrinterInfoManager::get()
     if (pPIM)
         return *pPIM;
 
+#if ENABLE_CPDB
     pPIM = CPDManager::tryLoadCPD();
+#endif
     if (!pPIM)
         pPIM = CUPSManager::tryLoadCUPS();
     if (!pPIM)

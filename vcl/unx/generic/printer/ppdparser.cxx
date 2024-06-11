@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <config_cpdb.h>
 
 #include <stdlib.h>
 
@@ -569,7 +570,7 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
 #endif
         } else if ( rMgr.getType() == PrinterInfoManager::Type::CPD )
         {
-#if ENABLE_DBUS && ENABLE_GIO
+#if ENABLE_CPDB
             pNewParser = const_cast<PPDParser*>(static_cast<CPDManager&>(rMgr).createCPDParser( aFile ));
 #endif
         }

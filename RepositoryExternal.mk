@@ -2569,6 +2569,28 @@ gb_LinkTarget__use_avahi :=
 
 endif # ENABLE_AVAHI
 
+ifeq ($(ENABLE_CPDB),TRUE)
+
+define gb_LinkTarget__use_cpdb
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(CPDB_CFLAGS) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(CPDB_LIBS) \
+)
+
+endef
+
+else # ENABLE_CPDB
+
+define gb_LinkTarget__use_cpdb
+
+endef
+
+endif # ENABLE_CPDB
+
 ifeq ($(ENABLE_CUPS),TRUE)
 
 define gb_LinkTarget__use_cups

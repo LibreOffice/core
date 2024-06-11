@@ -578,7 +578,9 @@ ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/desktopdetect/desktopdetector \
     vcl/unx/generic/window/sessioninhibitor \
-    vcl/unx/generic/printer/cpdmgr \
+    $(if $(ENABLE_CPDB), \
+        vcl/unx/generic/printer/cpdmgr \
+    ) \
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
@@ -644,6 +646,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 $(eval $(call gb_Library_use_externals,vcl,\
     $(if $(USE_HEADLESS_CODE), \
         cairo \
+        $(if $(ENABLE_CPDB),cpdb) \
         $(if $(ENABLE_CUPS),cups) \
         fontconfig \
         freetype \
