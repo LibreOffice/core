@@ -205,6 +205,7 @@ namespace com::sun::star::uno {
 #define BASEPROPERTY_HIGHLIGHT_COLOR                169
 #define BASEPROPERTY_HIGHLIGHT_TEXT_COLOR           170
 #define BASEPROPERTY_TYPEDITEMLIST                  171 // AnySequence
+#define BASEPROPERTY_REFERER                        172
 
 
 // These properties are not bound, they are always extracted from the BASEPROPERTY_FONTDESCRIPTOR property
