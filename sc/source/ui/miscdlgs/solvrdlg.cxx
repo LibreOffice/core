@@ -95,7 +95,21 @@ void ScSolverDlg::Init()
 
     OUString aStr(theFormulaCell.Format(ScRefFlags::ADDR_ABS, nullptr, pDoc->GetAddressConvention()));
 
-    m_xEdFormulaCell->SetText( aStr );
+    // If Goal Seek settings are stored in the document, restore them
+    ScGoalSeekSettings aSettings = pDoc->GetGoalSeekSettings();
+    if (aSettings.bDefined)
+    {
+        OUString sFormulaString(aSettings.aFormulaCell.Format(ScRefFlags::ADDR_ABS, nullptr, pDoc->GetAddressConvention()));
+        OUString sVariableString(aSettings.aVariableCell.Format(ScRefFlags::ADDR_ABS, nullptr, pDoc->GetAddressConvention()));
+        m_xEdFormulaCell->SetText(sFormulaString);
+        m_xEdVariableCell->SetText(sVariableString);
+        m_xEdTargetVal->set_text(aSettings.sTargetValue);
+    }
+    else
+    {
+        m_xEdFormulaCell->SetText( aStr );
+    }
+
     m_xEdFormulaCell->GrabFocus();
     m_pEdActive = m_xEdFormulaCell.get();
 }
@@ -200,6 +214,14 @@ IMPL_LINK(ScSolverDlg, BtnHdl, weld::Button&, rBtn, void)
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
         ScRefFlags  nRes1 = theFormulaCell .Parse( m_xEdFormulaCell->GetText(),  *pDoc, eConv );
         ScRefFlags  nRes2 = theVariableCell.Parse( m_xEdVariableCell->GetText(), *pDoc, eConv );
+
+        // Remember Goal Seek settings for the next time the dialog opens
+        ScGoalSeekSettings aSettings;
+        aSettings.bDefined = true;
+        aSettings.aFormulaCell = theFormulaCell;
+        aSettings.aVariableCell = theVariableCell;
+        aSettings.sTargetValue = theTargetValStr;
+        pDoc->SetGoalSeekSettings(aSettings);
 
         if ( (nRes1 & ScRefFlags::VALID) == ScRefFlags::VALID )
         {
