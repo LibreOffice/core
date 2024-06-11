@@ -71,6 +71,14 @@ $(eval $(call gb_CppunitTest_use_uiconfigs,sw_odfexport2, \
 
 $(eval $(call gb_CppunitTest_use_more_fonts,sw_odfexport2))
 
+ifneq ($(filter DICTIONARIES,$(BUILD_TYPE)),)
+$(eval $(call gb_CppunitTest_use_packages,sw_odfexport2,\
+	$(call gb_Dictionary_get_packagename,dict-de) \
+	$(call gb_Dictionary_get_packagename,dict-en) \
+	$(call gb_Dictionary_get_packagename,dict-hu) \
+))
+endif
+
 $(eval $(call gb_CppunitTest_add_arguments,sw_odfexport2, \
     -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
 ))
