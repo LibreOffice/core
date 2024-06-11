@@ -96,6 +96,14 @@ $(call gb_CppunitTest_get_target,sw_uiwriter$(1)) : $(call gb_Library_get_target
 
 $(eval $(call gb_CppunitTest_use_more_fonts,sw_uiwriter$(1)))
 
+$(eval $(call gb_CppunitTest_use_packages,sw_uiwriter$(1),\
+	$(if $(filter DICTIONARIES,$(BUILD_TYPE)),
+		$(call gb_Dictionary_get_packagename,dict-de) \
+		$(call gb_Dictionary_get_packagename,dict-en) \
+		$(call gb_Dictionary_get_packagename,dict-hu) \
+	) \
+))
+
 $(eval $(call gb_CppunitTest_add_arguments,sw_uiwriter$(1), \
     -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
 ))

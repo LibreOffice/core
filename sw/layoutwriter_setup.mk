@@ -89,6 +89,14 @@ $(eval $(call gb_CppunitTest_set_non_application_font_use,sw_layoutwriter$(1),ab
 
 $(eval $(call gb_CppunitTest_use_more_fonts,sw_layoutwriter$(1)))
 
+$(eval $(call gb_CppunitTest_use_packages,sw_layoutwriter$(1),\
+	$(if $(filter DICTIONARIES,$(BUILD_TYPE)),
+		$(call gb_Dictionary_get_packagename,dict-de) \
+		$(call gb_Dictionary_get_packagename,dict-en) \
+		$(call gb_Dictionary_get_packagename,dict-hu) \
+	) \
+))
+
 endef
 
 # vim: set noet sw=4 ts=4:
