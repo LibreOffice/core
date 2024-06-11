@@ -229,14 +229,18 @@ namespace sfx2
             // check whether the document is signed with trusted certificate
             if ( nMacroExecutionMode != MacroExecMode::FROM_LIST )
             {
+                SignatureState nSignatureState = m_xData->m_rDocumentAccess.getScriptingSignatureState();
+
                 // the trusted macro check will also retrieve the signature state ( small optimization )
                 const SvtSecurityOptions aSecOption;
                 const bool bAllowUIToAddAuthor = nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN
                                                  && (nMacroExecutionMode == MacroExecMode::ALWAYS_EXECUTE
-                                                     || !aSecOption.IsReadOnly(SvtSecurityOptions::EOption::MacroTrustedAuthors));
+                                                     || !aSecOption.IsReadOnly(SvtSecurityOptions::EOption::MacroTrustedAuthors))
+                                                 && (nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_WARN
+                                                     || nSignatureState == SignatureState::OK);
+
                 const bool bHasTrustedMacroSignature = m_xData->m_rDocumentAccess.hasTrustedScriptingSignature(bAllowUIToAddAuthor);
 
-                SignatureState nSignatureState = m_xData->m_rDocumentAccess.getScriptingSignatureState();
                 if ( nSignatureState == SignatureState::BROKEN )
                 {
                     if (!bAllowUIToAddAuthor)
