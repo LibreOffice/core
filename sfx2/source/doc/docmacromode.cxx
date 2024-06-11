@@ -72,10 +72,13 @@ namespace sfx2
     {
         IMacroDocumentAccess&       m_rDocumentAccess;
         bool m_bHasUnsignedContentError;
+        /// Is true when macros was disabled due to invalid signatures (when macro security is high)
+        bool m_bHasInvalidSignaturesError;
 
         explicit DocumentMacroMode_Data( IMacroDocumentAccess& rDocumentAccess )
             :m_rDocumentAccess( rDocumentAccess )
             ,m_bHasUnsignedContentError( false )
+            ,m_bHasInvalidSignaturesError( false )
         {
         }
     };
@@ -212,13 +215,26 @@ namespace sfx2
                 // confirmation when macros are unsigned or untrusted. FROM_LIST_AND_SIGNED_NO_WARN
                 // should not ask any confirmations. FROM_LIST_AND_SIGNED_WARN should only allow
                 // trusted signed macros at this point; so it may only ask for confirmation to add
-                // certificates to trusted, and shouldn't show UI when trusted list is read-only.
+                // certificates to trusted, and shouldn't show UI when trusted list is read-only
+                // or the macro signature can't be validated.
                 const bool bAllowUI
                     = nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN
                       && eAutoConfirm == eNoAutoConfirm
                       && (nMacroExecutionMode == MacroExecMode::ALWAYS_EXECUTE
                           || !SvtSecurityOptions::IsReadOnly(
-                              SvtSecurityOptions::EOption::MacroTrustedAuthors));
+                              SvtSecurityOptions::EOption::MacroTrustedAuthors))
+                      && (nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_WARN
+                          || nSignatureState == SignatureState::OK);
+
+                if (nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN
+                    && nSignatureState != SignatureState::NOSIGNATURES
+                    && nSignatureState != SignatureState::OK)
+                {
+                    // set the flag so that we can show the appropriate error & buttons
+                    // for invalid signatures in the infobar for high macro security.
+                    m_xData->m_bHasInvalidSignaturesError = true;
+                }
+
                 const bool bHasTrustedMacroSignature = m_xData->m_rDocumentAccess.hasTrustedScriptingSignature(bAllowUI ? rxInteraction : nullptr);
 
                 if (bHasTrustedMacroSignature)
@@ -407,6 +423,10 @@ namespace sfx2
         return m_xData->m_bHasUnsignedContentError;
     }
 
+    bool DocumentMacroMode::hasInvalidSignaturesError() const
+    {
+        return m_xData->m_bHasInvalidSignaturesError;
+    }
 
     bool DocumentMacroMode::storageHasMacros( const Reference< XStorage >& rxStorage )
     {

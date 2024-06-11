@@ -67,6 +67,7 @@ class SFX2_DLLPUBLIC SfxViewFrame final : public SfxShell, public SfxListener
     DECL_DLLPRIVATE_LINK(MacroButtonHandler, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(SecurityButtonHandler, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(EventButtonHandler, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(ViewSignaturesButtonHandler, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(SwitchReadOnlyHandler, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(SignDocumentHandler, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(HiddenTrackChangesHandler, weld::Button&, void);

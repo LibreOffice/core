@@ -36,6 +36,7 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/task/PasswordContainer.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -1349,6 +1350,8 @@ void SfxViewFrame::AppendContainsMacrosInfobar()
         aResId = STR_MACROS_DISABLED;
     else if (pObjImpl->aMacroMode.hasUnsignedContentError())
         aResId = STR_MACROS_DISABLED_CONTENT_UNSIGNED;
+    else if(pObjImpl->aMacroMode.hasInvalidSignaturesError())
+        aResId = STR_MACROS_DISABLED_SIGNATURE_INVALID;
     // The idea here is to always present an infobar is there was some
     // macro/script related potential hazard disabled in the source document
     auto pInfoBar = AppendInfoBar(u"macro"_ustr, SfxResId(STR_MACROS_DISABLED_TITLE),
@@ -1418,6 +1421,13 @@ void SfxViewFrame::AppendContainsMacrosInfobar()
         weld::Button& rEventButton = pInfoBar->addButton();
         rEventButton.set_label(SfxResId(STR_EVENTS));
         rEventButton.connect_clicked(LINK(this, SfxViewFrame, EventButtonHandler));
+    }
+
+    if (pObjImpl->aMacroMode.hasInvalidSignaturesError())
+    {
+        weld::Button& rSignaturesButton = pInfoBar->addButton();
+        rSignaturesButton.set_label(SfxResId(STR_SIGNATURE_SHOW));
+        rSignaturesButton.connect_clicked(LINK(this, SfxViewFrame, ViewSignaturesButtonHandler));
     }
 }
 
@@ -1918,6 +1928,37 @@ IMPL_LINK_NOARG(SfxViewFrame, EventButtonHandler, weld::Button&, void)
     SfxUnoFrameItem aDocFrame(SID_FILLFRAME, GetFrame().GetFrameInterface());
     GetDispatcher()->ExecuteList(SID_CONFIGEVENT, SfxCallMode::ASYNCHRON,
                                  {}, { &aDocFrame });
+}
+
+IMPL_LINK_NOARG(SfxViewFrame, ViewSignaturesButtonHandler, weld::Button&, void)
+{
+    SfxObjectShell* pDoc = GetObjectShell();
+    if (!pDoc)
+        return;
+
+    SfxMedium* pMedium = pDoc->GetMedium();
+    if (!pMedium)
+        return;
+
+    OUString maODFVersion{};
+    try
+    {
+        uno::Reference<beans::XPropertySet> xPropSet(pDoc->GetStorage(), uno::UNO_QUERY_THROW);
+        xPropSet->getPropertyValue(u"Version"_ustr) >>= maODFVersion;
+    }
+    catch (uno::Exception&)
+    {
+    }
+
+    uno::Reference<security::XDocumentDigitalSignatures> xDigitalSignatures(
+        security::DocumentDigitalSignatures::createWithVersion(
+            comphelper::getProcessComponentContext(), maODFVersion));
+
+    if (!xDigitalSignatures.is())
+        return;
+
+    if (auto xScriptingStorage = pMedium->GetScriptingStorageToSign_Impl())
+        xDigitalSignatures->showScriptingContentSignatures(xScriptingStorage, {});
 }
 
 IMPL_LINK_NOARG(SfxViewFrame, RefreshMasterPasswordHdl, weld::Button&, void)
