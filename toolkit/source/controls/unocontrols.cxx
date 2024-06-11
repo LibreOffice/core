@@ -40,6 +40,7 @@
 #include <toolkit/helper/servicenames.hxx>
 #include <tools/urlobj.hxx>
 #include <toolkit/helper/macros.hxx>
+#include <unotools/securityoptions.hxx>
 
 // for introspection
 #include <toolkit/awt/vclxwindows.hxx>
@@ -86,11 +87,11 @@ ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow( uno::Reference< graphic:
     else // linked
         xOutGraphicObj = nullptr; // release the GraphicObject
 
-    return ImageHelper::getGraphicFromURL_nothrow( _rURL );
+    return ImageHelper::getGraphicFromURL_nothrow( _rURL, "" );
 }
 
 css::uno::Reference< css::graphic::XGraphic >
-ImageHelper::getGraphicFromURL_nothrow( const OUString& _rURL )
+ImageHelper::getGraphicFromURL_nothrow( const OUString& _rURL, OUString const & referer )
 {
     uno::Reference< graphic::XGraphic > xGraphic;
     if ( _rURL.isEmpty() || SvtSecurityOptions().isUntrustedReferer(referer) || INetURLObject(_rURL).IsExoticProtocol())
@@ -647,7 +648,11 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
                 mbAdjustingGraphic = true;
                 OUString sImageURL;
                 OSL_VERIFY( rValue >>= sImageURL );
-                setDependentFastPropertyValue( BASEPROPERTY_GRAPHIC, uno::makeAny( ImageHelper::getGraphicFromURL_nothrow( sImageURL ) ) );
+                css::uno::Any any;
+                getFastPropertyValue(any, BASEPROPERTY_REFERER);
+                OUString referer;
+                any >>= referer;
+                setDependentFastPropertyValue( BASEPROPERTY_GRAPHIC, uno::makeAny( ImageHelper::getGraphicFromURL_nothrow( sImageURL, referer ) ) );
                 mbAdjustingGraphic = false;
             }
             break;

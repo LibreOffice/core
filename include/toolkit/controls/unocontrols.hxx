@@ -71,7 +71,7 @@ public:
     // appropriately ( e.g. NULL if non GraphicObject scheme ) or a valid
     // object if the rURL points to a valid object
     static css::uno::Reference< css::graphic::XGraphic > getGraphicAndGraphicObjectFromURL_nothrow( css::uno::Reference< css::graphic::XGraphicObject >& xOutGraphicObject, const OUString& _rURL );
-    static css::uno::Reference< css::graphic::XGraphic > getGraphicFromURL_nothrow( const OUString& _rURL );
+    static css::uno::Reference< css::graphic::XGraphic > getGraphicFromURL_nothrow( const OUString& _rURL, OUString const & referer );
 
 };
 

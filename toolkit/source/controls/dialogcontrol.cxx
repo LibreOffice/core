@@ -424,7 +424,7 @@ void UnoDialogControl::PrepareWindowDescriptor( css::awt::WindowDescriptor& rDes
             absoluteUrl = getPhysicalLocation( ImplGetPropertyValue( PROPERTY_DIALOGSOURCEURL ),
                                  uno::makeAny( aImageURL ) );
 
-        xGraphic = ImageHelper::getGraphicFromURL_nothrow( absoluteUrl );
+        xGraphic = ImageHelper::getGraphicFromURL_nothrow( absoluteUrl, "" );
         ImplSetPropertyValue( PROPERTY_GRAPHIC, uno::makeAny( xGraphic ), true );
     }
 }
@@ -648,7 +648,7 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
                     absoluteUrl = getPhysicalLocation( ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DIALOGSOURCEURL )),
                                          uno::makeAny(aImageURL));
 
-                xGraphic = ImageHelper::getGraphicFromURL_nothrow( absoluteUrl );
+                xGraphic = ImageHelper::getGraphicFromURL_nothrow( absoluteUrl, "" );
             }
             ImplSetPropertyValue(  GetPropertyName( BASEPROPERTY_GRAPHIC), uno::makeAny( xGraphic ), true );
             break;

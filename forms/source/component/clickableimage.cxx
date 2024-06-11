@@ -45,6 +45,7 @@
 #include <comphelper/listenernotification.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svtools/imageresourceaccess.hxx>
+#include <unotools/securityoptions.hxx>
 #define LOCAL_URL_PREFIX    '#'
 
 
@@ -786,8 +787,12 @@ namespace frm
             m_bDownloading = true;
             m_bProdStarted = false;
 
-            // Kick off download (caution: can be synchronous).
-            m_pMedium->Download(LINK(this, OClickableImageBaseModel, DownloadDoneLink));
+            OUString referer;
+            getPropertyValue("Referer") >>= referer;
+            if (!SvtSecurityOptions().isUntrustedReferer(referer)) {
+                // Kick off download (caution: can be synchronous).
+                m_pMedium->Download(LINK(this, OClickableImageBaseModel, DownloadDoneLink));
+            }
         }
         else
         {
