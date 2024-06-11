@@ -289,6 +289,7 @@
 #define STR_MACROS_DISABLED_TITLE               NC_("STR_MACROS_DISABLED_TITLE", "Macros disabled")
 #define STR_CONTAINS_MACROS                     NC_("STR_CONTAINS_MACROS", "Macros in this document are disabled due to the Macro Security settings.")
 #define STR_MACROS_DISABLED                     NC_("STR_MACROS_DISABLED", "Macros are disabled due to the Macro Security settings.")
+#define STR_MACROS_DISABLED_SIGNATURE_INVALID   NC_("STR_MACROS_DISABLED_SIGNATURE_INVALID", "Macros are signed, but at least one signature has problems.")
 #define STR_MACROS_DISABLED_CONTENT_UNSIGNED    NC_("STR_MACROS_DISABLED_CONTENT_UNSIGNED", "Macros are signed, but the document (containing document events) is not signed.")
 #define STR_MACROS                              NC_("STR_MACROS", "Show Macros")
 #define STR_SECURITY_OPTIONS                    NC_("STR_MACROS", "Show Security Options")

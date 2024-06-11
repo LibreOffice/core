@@ -265,6 +265,7 @@ namespace sfx2
         bool    hasMacroLibrary() const;
 
         bool hasUnsignedContentError() const;
+        bool hasInvalidSignaturesError() const;
 
         /** determines whether the given document storage has sub storages containing scripts
             or macros.
