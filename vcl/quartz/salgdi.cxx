@@ -217,7 +217,24 @@ static bool AddTempDevFont(const OUString& rFontFileURL)
 
     CFErrorRef error;
     bool success = CTFontManagerRegisterFontsForURL(rFontURL, kCTFontManagerScopeProcess, &error);
-    if (!success)
+    if (success)
+    {
+        // tdf155212 clear the cached system font list after loading a font
+        // If the system font is not cached in SalData, loading embedded
+        // fonts will be extremely slow and will trigger each frame and each
+        // of its internal subframes to reload the system font list when
+        // loading documents with embedded fonts.
+        // So instead, reenable caching of the system font list in SalData
+        // by reverting commit 3b6e9582ce43242a2304047561116bb26808408b.
+        // Then, to prevent tdf#72456 from reoccurring, clear the cached
+        // system font list after a font has been loaded or unloaded.
+        // This should cause the first frame's request to reload the cached
+        // system font list and all subsequent frames will avoid doing
+        // duplicate font reloads.
+        SalData* pSalData = GetSalData();
+        pSalData->mpFontList.reset();
+    }
+    else
     {
         CFRelease(error);
     }
@@ -272,8 +289,20 @@ void AquaSalGraphics::GetDevFontList(vcl::font::PhysicalFontCollection* pFontCol
 
     AddLocalTempFontDirs();
 
+    // The idea is to cache the list of system fonts once it has been generated.
+    // SalData seems to be a good place for this caching. However we have to
+    // carefully make the access to the font list thread-safe. If we register
+    // a font-change event handler to update the font list in case fonts have
+    // changed on the system we have to lock access to the list. The right
+    // way to do that is the solar mutex since GetDevFontList is protected
+    // through it as should be all event handlers
+
+    // Related tdf#155212: the system font list needs to be cached but that
+    // should not cause tdf#72456 to reoccur now that the cached system font
+    // is cleared immediately after a font has been loaded
     SalData* pSalData = GetSalData();
-    pSalData->mpFontList = GetCoretextFontList();
+    if( !pSalData->mpFontList )
+        pSalData->mpFontList = GetCoretextFontList();
 
     // Copy all PhysicalFontFace objects contained in the SystemFontList
     pSalData->mpFontList->AnnounceFonts( *pFontCollection );
