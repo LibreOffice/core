@@ -2113,6 +2113,18 @@ lcl_ApplyCellProperties(
             {
                 static const std::initializer_list<std::u16string_view> vDenylist = {
                     u"LeftMargin",
+                    u"ParaTopBorder",
+                    u"ParaTopBorderDistance",
+                    u"ParaTopBorderComplexColor",
+                    u"ParaLeftBorder",
+                    u"ParaLeftBorderDistance",
+                    u"ParaLeftBorderComplexColor",
+                    u"ParaBottomBorder",
+                    u"ParaBottomBorderDistance",
+                    u"ParaBottomBorderComplexColor",
+                    u"ParaRightBorder",
+                    u"ParaRightBorderDistance",
+                    u"ParaRightBorderComplexColor",
                 };
                 if (std::find(vDenylist.begin(), vDenylist.end(), rName) == vDenylist.end())
                 {
@@ -2250,6 +2262,18 @@ SwXText::convertToTable(
                     u"RightBorder",
                     u"TopBorder",
                     u"VerticalBorder",
+                    u"ParaTopBorder",
+                    u"ParaTopBorderDistance",
+                    u"ParaTopBorderComplexColor",
+                    u"ParaLeftBorder",
+                    u"ParaLeftBorderDistance",
+                    u"ParaLeftBorderComplexColor",
+                    u"ParaBottomBorder",
+                    u"ParaBottomBorderDistance",
+                    u"ParaBottomBorderComplexColor",
+                    u"ParaRightBorder",
+                    u"ParaRightBorderDistance",
+                    u"ParaRightBorderComplexColor",
                 };
                 if (std::find(vDenylist.begin(), vDenylist.end(), rTableProperty.Name) == vDenylist.end())
                 {

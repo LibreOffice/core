@@ -1656,34 +1656,65 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             PropertyIds eBorderDistId = PropertyIds::INVALID;
 
             const StyleSheetEntryPtr& pEntry = GetStyleSheetTable()->GetCurrentEntry();
-            if (pEntry && pEntry->m_nStyleTypeCode == STYLE_TYPE_TABLE)
-            {
-                // This would map para borders in table style to cell borders, avoid that till we
-                // have separate property names for these.
-                break;
-            }
+            bool bInTableStyle = pEntry && pEntry->m_nStyleTypeCode == STYLE_TYPE_TABLE;
 
             switch( nSprmId )
             {
             case NS_ooxml::LN_CT_PBdr_top:
-                eBorderId = PROP_TOP_BORDER;
-                eBorderComplexColorId = PROP_BORDER_TOP_COMPLEX_COLOR;
-                eBorderDistId = PROP_TOP_BORDER_DISTANCE;
+                if (bInTableStyle)
+                {
+                    eBorderId = PROP_PARA_TOP_BORDER;
+                    eBorderComplexColorId = PROP_PARA_BORDER_TOP_COMPLEX_COLOR;
+                    eBorderDistId = PROP_PARA_TOP_BORDER_DISTANCE;
+                }
+                else
+                {
+                    eBorderId = PROP_TOP_BORDER;
+                    eBorderComplexColorId = PROP_BORDER_TOP_COMPLEX_COLOR;
+                    eBorderDistId = PROP_TOP_BORDER_DISTANCE;
+                }
                 break;
             case NS_ooxml::LN_CT_PBdr_left:
-                eBorderId = PROP_LEFT_BORDER;
-                eBorderComplexColorId = PROP_BORDER_LEFT_COMPLEX_COLOR;
-                eBorderDistId = PROP_LEFT_BORDER_DISTANCE;
+                if (bInTableStyle)
+                {
+                    eBorderId = PROP_PARA_LEFT_BORDER;
+                    eBorderComplexColorId = PROP_PARA_BORDER_LEFT_COMPLEX_COLOR;
+                    eBorderDistId = PROP_PARA_LEFT_BORDER_DISTANCE;
+                }
+                else
+                {
+                    eBorderId = PROP_LEFT_BORDER;
+                    eBorderComplexColorId = PROP_BORDER_LEFT_COMPLEX_COLOR;
+                    eBorderDistId = PROP_LEFT_BORDER_DISTANCE;
+                }
                 break;
             case NS_ooxml::LN_CT_PBdr_bottom:
-                eBorderId = PROP_BOTTOM_BORDER;
-                eBorderComplexColorId = PROP_BORDER_BOTTOM_COMPLEX_COLOR;
-                eBorderDistId = PROP_BOTTOM_BORDER_DISTANCE;
+                if (bInTableStyle)
+                {
+                    eBorderId = PROP_PARA_BOTTOM_BORDER;
+                    eBorderComplexColorId = PROP_PARA_BORDER_BOTTOM_COMPLEX_COLOR;
+                    eBorderDistId = PROP_PARA_BOTTOM_BORDER_DISTANCE;
+                }
+                else
+                {
+                    eBorderId = PROP_BOTTOM_BORDER;
+                    eBorderComplexColorId = PROP_BORDER_BOTTOM_COMPLEX_COLOR;
+                    eBorderDistId = PROP_BOTTOM_BORDER_DISTANCE;
+                }
                 break;
             case NS_ooxml::LN_CT_PBdr_right:
-                eBorderId = PROP_RIGHT_BORDER;
-                eBorderComplexColorId = PROP_BORDER_RIGHT_COMPLEX_COLOR;
-                eBorderDistId = PROP_RIGHT_BORDER_DISTANCE;
+                if (bInTableStyle)
+                {
+                    eBorderId = PROP_PARA_RIGHT_BORDER;
+                    eBorderComplexColorId = PROP_PARA_BORDER_RIGHT_COMPLEX_COLOR;
+                    eBorderDistId = PROP_PARA_RIGHT_BORDER_DISTANCE;
+                }
+                else
+                {
+                    eBorderId = PROP_RIGHT_BORDER;
+                    eBorderComplexColorId = PROP_BORDER_RIGHT_COMPLEX_COLOR;
+                    eBorderDistId = PROP_RIGHT_BORDER_DISTANCE;
+                }
                 break;
             case NS_ooxml::LN_CT_PBdr_between:
                 if (m_pImpl->handlePreviousParagraphBorderInBetween())

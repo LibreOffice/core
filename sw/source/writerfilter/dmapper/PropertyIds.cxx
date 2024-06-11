@@ -18,16 +18,13 @@
  */
 #include <rtl/ustring.hxx>
 #include "PropertyIds.hxx"
-#include <frozen/bits/defines.h>
-#include <frozen/bits/elsa_std.h>
-#include <frozen/unordered_map.h>
+#include <unordered_map>
 
 namespace writerfilter::dmapper{
 
-namespace
+OUString getPropertyName( PropertyIds eId )
 {
-    constexpr auto constPropertyMap = frozen::make_unordered_map<PropertyIds, std::u16string_view>(
-    {
+    static const std::unordered_map<PropertyIds, std::u16string_view> constPropertyMap {
         { PROP_CHAR_WEIGHT, u"CharWeight"},
         { PROP_CHAR_POSTURE, u"CharPosture"},
         { PROP_CHAR_STRIKEOUT, u"CharStrikeout"},
@@ -108,6 +105,18 @@ namespace
         { PROP_PARA_IS_HANGING_PUNCTUATION, u"ParaIsHangingPunctuation"},
         { PROP_PARA_LINE_SPACING, u"ParaLineSpacing"},
         { PROP_PARA_TAB_STOPS, u"ParaTabStops"},
+        { PROP_PARA_TOP_BORDER, u"ParaTopBorder"},
+        { PROP_PARA_TOP_BORDER_DISTANCE, u"ParaTopBorderDistance"},
+        { PROP_PARA_BORDER_TOP_COMPLEX_COLOR, u"ParaTopBorderComplexColor"},
+        { PROP_PARA_LEFT_BORDER, u"ParaLeftBorder"},
+        { PROP_PARA_LEFT_BORDER_DISTANCE, u"ParaLeftBorderDistance"},
+        { PROP_PARA_BORDER_LEFT_COMPLEX_COLOR, u"ParaLeftBorderComplexColor"},
+        { PROP_PARA_BOTTOM_BORDER, u"ParaBottomBorder"},
+        { PROP_PARA_BOTTOM_BORDER_DISTANCE, u"ParaBottomBorderDistance"},
+        { PROP_PARA_BORDER_BOTTOM_COMPLEX_COLOR, u"ParaBottomBorderComplexColor"},
+        { PROP_PARA_RIGHT_BORDER, u"ParaRightBorder"},
+        { PROP_PARA_RIGHT_BORDER_DISTANCE, u"ParaRightBorderDistance"},
+        { PROP_PARA_BORDER_RIGHT_COMPLEX_COLOR, u"ParaRightBorderComplexColor"},
         { PROP_PARA_WIDOWS, u"ParaWidows"},
         { PROP_PARA_ORPHANS, u"ParaOrphans"},
         { PROP_PARA_LINE_NUMBER_START_VALUE, u"ParaLineNumberStartValue"},
@@ -386,11 +395,7 @@ namespace
         { PROP_PARA_CONNECT_BORDERS, u"ParaIsConnectBorder"},
         { PROP_DECORATIVE, u"Decorative"},
         { PROP_PAPER_TRAY, u"PrinterPaperTray"},
-    });
-} // end anonymous ns
-
-OUString getPropertyName( PropertyIds eId )
-{
+    };
     auto iterator = constPropertyMap.find(eId);
     if (iterator != constPropertyMap.end())
         return OUString(iterator->second);
