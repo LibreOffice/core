@@ -40,15 +40,15 @@ public:
 
 
 RowSetClones::RowSetClones()
-    : UnoApiTest(u""_ustr)
+    : UnoApiTest(u"/dbaccess/qa/extras/testdocuments/"_ustr)
 {
 }
 
 void RowSetClones::test()
 {
-    const OUString sFilePath(m_directories.getURLFromWorkdir(u"CppunitTest/RowSetClones.odb"));
+    createTempCopy(u"RowSetClones.odb");
+    mxComponent = loadFromDesktop(maTempFile.GetURL());
 
-    mxComponent = loadFromDesktop(sFilePath);
     uno::Reference< XOfficeDatabaseDocument > xDocument(mxComponent, UNO_QUERY_THROW);
 
     uno::Reference< XDataSource > xDataSource = xDocument->getDataSource();

@@ -100,10 +100,4 @@ $(eval $(call gb_CppunitTest_use_components,dbaccess_dialog_save,\
 
 $(eval $(call gb_CppunitTest_use_configuration,dbaccess_dialog_save))
 
-$(call gb_CppunitTest_get_target,dbaccess_dialog_save) : $(WORKDIR)/CppunitTest/testDialogSave.odb
-$(WORKDIR)/CppunitTest/testDialogSave.odb : $(SRCDIR)/dbaccess/qa/extras/testdocuments/testDialogSave.odb
-	mkdir -p $(dir $@)
-	cp -P -f "$<" "$@"
-.PHONY: $(WORKDIR)/CppunitTest/testDialogSave.odb
-
 # vim: set noet sw=4 ts=4:

@@ -104,10 +104,4 @@ $(eval $(call gb_CppunitTest_use_uiconfigs,dbaccess_empty_stdlib_save, \
     dbaccess \
 ))
 
-$(call gb_CppunitTest_get_target,dbaccess_empty_stdlib_save) : $(WORKDIR)/CppunitTest/testEmptyStdlibSave.odb
-$(WORKDIR)/CppunitTest/testEmptyStdlibSave.odb : $(SRCDIR)/dbaccess/qa/extras/testdocuments/testDialogSave.odb
-	mkdir -p $(dir $@)
-	cp -P -f "$<" "$@"
-.PHONY: $(WORKDIR)/CppunitTest/testEmptyStdlibSave.odb
-
 # vim: set noet sw=4 ts=4:
