@@ -301,14 +301,14 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
         return bFull;
     }
 
-    SwTextGuess aGuess;
-    bool bFull = !aGuess.Guess( *this, rInf, Height() );
+    std::unique_ptr<SwTextGuess> pGuess(new SwTextGuess());
+    bool bFull = !pGuess->Guess( *this, rInf, Height() );
 
     // tdf#158776 for the last full text portion, call Guess() again to allow more text in the
     // adjusted line by shrinking spaces using the know space count from the first Guess() call
     const SvxAdjust& rAdjust = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust().GetAdjust();
     if ( bFull && rAdjust == SvxAdjust::Block &&
-         aGuess.BreakPos() != TextFrameIndex(COMPLETE_STRING) &&
+         pGuess->BreakPos() != TextFrameIndex(COMPLETE_STRING) &&
          rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
                     DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING) &&
          // tdf#158436 avoid shrinking at underflow, e.g. no-break space after a
@@ -316,7 +316,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
          !rInf.IsUnderflow() )
     {
         sal_Int32 nSpacesInLine(0);
-        for (sal_Int32 i = sal_Int32(rInf.GetLineStart()); i < sal_Int32(aGuess.BreakPos()); ++i)
+        for (sal_Int32 i = sal_Int32(rInf.GetLineStart()); i < sal_Int32(pGuess->BreakPos()); ++i)
         {
             sal_Unicode cChar = rInf.GetText()[i];
             if ( cChar == CH_BLANK )
@@ -329,16 +329,19 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
         // TODO: handle the case, if the line contains extra amount of spaces
         if (
              // no automatic hyphenation
-             !aGuess.HyphWord().is() &&
+             !pGuess->HyphWord().is() &&
              // no hyphenation at soft hyphen
-             aGuess.BreakPos() < TextFrameIndex(rInf.GetText().getLength()) &&
-             rInf.GetText()[sal_Int32(aGuess.BreakPos())] != CHAR_SOFTHYPHEN )
+             pGuess->BreakPos() < TextFrameIndex(rInf.GetText().getLength()) &&
+             rInf.GetText()[sal_Int32(pGuess->BreakPos())] != CHAR_SOFTHYPHEN )
         {
             ++nSpacesInLine;
         }
 
         if ( nSpacesInLine > 0 )
-            bFull = !aGuess.Guess( *this, rInf, Height(), nSpacesInLine );
+        {
+            pGuess.reset(new SwTextGuess());
+            bFull = !pGuess->Guess( *this, rInf, Height(), nSpacesInLine );
+        }
     }
 
     // these are the possible cases:
@@ -357,8 +360,8 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
     // case A: line not yet full
     if ( !bFull )
     {
-        Width( aGuess.BreakWidth() );
-        ExtraBlankWidth(aGuess.ExtraBlankWidth());
+        Width( pGuess->BreakWidth() );
+        ExtraBlankWidth(pGuess->ExtraBlankWidth());
         // Caution!
         if( !InExpGrp() || InFieldGrp() )
             SetLen( rInf.GetLen() );
@@ -374,22 +377,22 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
             new SwKernPortion( *this, nKern );
     }
     // special case: hanging portion
-    else if( aGuess.GetHangingPortion() )
+    else if( pGuess->GetHangingPortion() )
     {
-        Width( aGuess.BreakWidth() );
-        SetLen( aGuess.BreakPos() - rInf.GetIdx() );
-        aGuess.GetHangingPortion()->SetAscent( GetAscent() );
-        Insert( aGuess.ReleaseHangingPortion() );
+        Width( pGuess->BreakWidth() );
+        SetLen( pGuess->BreakPos() - rInf.GetIdx() );
+        pGuess->GetHangingPortion()->SetAscent( GetAscent() );
+        Insert( pGuess->ReleaseHangingPortion() );
     }
     // breakPos >= index
-    else if (aGuess.BreakPos() >= rInf.GetIdx() && aGuess.BreakPos() != TextFrameIndex(COMPLETE_STRING))
+    else if (pGuess->BreakPos() >= rInf.GetIdx() && pGuess->BreakPos() != TextFrameIndex(COMPLETE_STRING))
     {
         // case B1
-        if( aGuess.HyphWord().is() && aGuess.BreakPos() > rInf.GetLineStart()
-            && ( aGuess.BreakPos() > rInf.GetIdx() ||
+        if( pGuess->HyphWord().is() && pGuess->BreakPos() > rInf.GetLineStart()
+            && ( pGuess->BreakPos() > rInf.GetIdx() ||
                ( rInf.GetLast() && ! rInf.GetLast()->IsFlyPortion() ) ) )
         {
-            CreateHyphen( rInf, aGuess );
+            CreateHyphen( rInf, *pGuess );
             if ( rInf.GetFly() )
                 rInf.GetRoot()->SetMidHyph( true );
             else
@@ -410,14 +413,14 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                     rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_COMPAT) &&
                     rInf.GetLast()->InTabGrp() &&
                     rInf.GetLineStart() + rInf.GetLast()->GetLen() < rInf.GetIdx() &&
-                    aGuess.BreakPos() == rInf.GetIdx()  &&
+                    pGuess->BreakPos() == rInf.GetIdx()  &&
                     CH_BLANK != rInf.GetChar( rInf.GetIdx() ) &&
                     CH_FULL_BLANK != rInf.GetChar( rInf.GetIdx() ) &&
                     CH_SIX_PER_EM != rInf.GetChar( rInf.GetIdx() ) ) )
             BreakUnderflow( rInf );
         // case B2
         else if( rInf.GetIdx() > rInf.GetLineStart() ||
-                 aGuess.BreakPos() > rInf.GetIdx() ||
+                 pGuess->BreakPos() > rInf.GetIdx() ||
                  // this is weird: during formatting the follow of a field
                  // the values rInf.GetIdx and rInf.GetLineStart are replaced
                  // IsFakeLineStart indicates GetIdx > GetLineStart
@@ -431,36 +434,36 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                           ! rInf.GetLast()->IsErgoSumPortion() &&
                           lcl_HasContent(*static_cast<SwFieldPortion*>(rInf.GetLast()),rInf ) ) ) ) )
         {
-            Width( aGuess.BreakWidth() );
+            Width( pGuess->BreakWidth() );
 
-            SetLen( aGuess.BreakPos() - rInf.GetIdx() );
+            SetLen( pGuess->BreakPos() - rInf.GetIdx() );
 
-            OSL_ENSURE( aGuess.BreakStart() >= aGuess.FieldDiff(),
+            OSL_ENSURE( pGuess->BreakStart() >= pGuess->FieldDiff(),
                     "Trouble with expanded field portions during line break" );
-            TextFrameIndex const nRealStart = aGuess.BreakStart() - aGuess.FieldDiff();
-            if( aGuess.BreakPos() < nRealStart && !InExpGrp() )
+            TextFrameIndex const nRealStart = pGuess->BreakStart() - pGuess->FieldDiff();
+            if( pGuess->BreakPos() < nRealStart && !InExpGrp() )
             {
                 SwHolePortion *pNew = new SwHolePortion( *this );
-                pNew->SetLen( nRealStart - aGuess.BreakPos() );
+                pNew->SetLen( nRealStart - pGuess->BreakPos() );
                 pNew->Width(0);
-                pNew->ExtraBlankWidth( aGuess.ExtraBlankWidth() );
+                pNew->ExtraBlankWidth( pGuess->ExtraBlankWidth() );
                 Insert( pNew );
 
                 // UAX #14 Unicode Line Breaking Algorithm Non-tailorable Line breaking rule LB6:
                 // https://www.unicode.org/reports/tr14/#LB6 Do not break before hard line breaks
-                if (auto ch = rInf.GetChar(aGuess.BreakStart()); !ch || ch == CH_BREAK)
+                if (auto ch = rInf.GetChar(pGuess->BreakStart()); !ch || ch == CH_BREAK)
                     bFull = false; // Keep following SwBreakPortion / para break in the same line
             }
         }
         else    // case C2, last exit
-            BreakCut( rInf, aGuess );
+            BreakCut( rInf, *pGuess );
     }
     // breakPos < index or no breakpos at all
     else
     {
         bool bFirstPor = rInf.GetLineStart() == rInf.GetIdx();
-        if (aGuess.BreakPos() != TextFrameIndex(COMPLETE_STRING) &&
-            aGuess.BreakPos() != rInf.GetLineStart() &&
+        if (pGuess->BreakPos() != TextFrameIndex(COMPLETE_STRING) &&
+            pGuess->BreakPos() != rInf.GetLineStart() &&
             ( !bFirstPor || rInf.GetFly() || rInf.GetLast()->IsFlyPortion() ||
               rInf.IsFirstMulti() ) &&
             ( !rInf.GetLast()->IsBlankPortion() ||
@@ -470,7 +473,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
         }
         else
              // case C2, last exit
-            BreakCut(rInf, aGuess);
+            BreakCut(rInf, *pGuess);
     }
 
     return bFull;
