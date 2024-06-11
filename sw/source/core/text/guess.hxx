@@ -59,7 +59,9 @@ public:
     TextFrameIndex FieldDiff() const {return m_nFieldDiff; }
     const css::uno::Reference< css::linguistic2::XHyphenatedWord >& HyphWord() const
         { return m_xHyphWord; }
+private:
+    bool maybeAdjustPositionsForBlockAdjust(sal_uInt16& rMaxSizeDiff, const SwTextFormatInfo& rInf,
+                                            const SwScriptInfo& rSI, sal_uInt16 maxComp);
 };
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
