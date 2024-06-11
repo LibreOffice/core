@@ -9302,6 +9302,17 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
 
         m_pageMargins.nLeft += sal::static_int_cast<sal_uInt16>(rLRSpace.GetLeft());
         m_pageMargins.nRight += sal::static_int_cast<sal_uInt16>(rLRSpace.GetRight());
+        // if page layout is 'left' then left/right margin need to be exchanged
+        // as it is exported as mirrored layout starting with even page
+        const WW8_SepInfo *pSectionInfo = m_rExport.Sections().CurrentSectionInfo();
+        if (pSectionInfo->pPageDesc &&
+            m_rExport.isMirroredMargin() &&
+            ((pSectionInfo->pPageDesc->ReadUseOn() & UseOnPage::All) == UseOnPage::Left))
+        {
+            sal_uInt16 nLeft = m_pageMargins.nLeft;
+            m_pageMargins.nLeft = m_pageMargins.nRight;
+            m_pageMargins.nRight = nLeft;
+        }
         sal_uInt16 nGutter = rLRSpace.GetGutterMargin();
 
         AddToAttrList( m_pSectionSpacingAttrList,

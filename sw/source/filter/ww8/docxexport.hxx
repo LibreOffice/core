@@ -282,9 +282,6 @@ private:
     /// Writes word/vbaProject.bin.
     void WriteVBA();
 
-    /// return true if Page Layout is set as Mirrored
-    bool isMirroredMargin();
-
 public:
     /// All xml namespaces to be used at the top of any text .xml file (main doc, headers, footers,...)
     rtl::Reference<sax_fastparser::FastAttributeList> MainXmlNamespaces();
@@ -321,6 +318,9 @@ public:
 
     // needed in docxsdrexport.cxx and docxattributeoutput.cxx
     sal_Int32 getWordCompatibilityModeFromGrabBag() const;
+
+    /// return true if Page Layout is set as Mirrored
+    bool isMirroredMargin();
 
 private:
     DocxExport( const DocxExport& ) = delete;

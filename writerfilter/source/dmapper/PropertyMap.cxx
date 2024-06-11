@@ -1513,14 +1513,23 @@ void SectionPropertyMap::CreateEvenOddPageStyleCopy(DomainMapper_Impl& rDM_Impl,
         "HeaderText", "HeaderTextLeft", "HeaderTextFirst",
         "FooterText", "FooterTextLeft", "FooterTextFirst" };
 
+    bool isMirrorMargins = PageBreakType::Even == eBreakType && rDM_Impl.GetSettingsTable()->GetMirrorMarginSettings();
     for (const auto& rProperty : propertyList)
     {
         if ((rProperty.Attributes & beans::PropertyAttribute::READONLY) == 0)
         {
             if (staticDenylist.find(rProperty.Name) == staticDenylist.end())
             {
+                OUString sSetName = rProperty.Name;
+                if (isMirrorMargins)
+                {
+                    if (rProperty.Name == u"LeftMargin"_ustr)
+                        sSetName = u"RightMargin"_ustr;
+                    else if (rProperty.Name == u"RightMargin"_ustr)
+                        sSetName = u"LeftMargin"_ustr;
+                }
                 evenOddStyle->setPropertyValue(
-                    rProperty.Name,
+                    sSetName,
                     pageProperties->getPropertyValue(rProperty.Name));
             }
         }
