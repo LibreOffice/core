@@ -647,27 +647,25 @@ void WMFWriter::WMFRecord_PolyLine(const tools::Polygon & rPoly)
 
 void WMFWriter::WMFRecord_PolyPolygon(const tools::PolyPolygon & rPolyPoly)
 {
-    const tools::Polygon * pPoly;
-    sal_uInt16 nCount,nSize,i,j;
+    sal_uInt16 nCount,nSize;
 
     nCount=rPolyPoly.Count();
     tools::PolyPolygon aSimplePolyPoly( rPolyPoly );
-    for ( i = 0; i < nCount; i++ )
+    for ( auto& rSimplePolyPolyItm : aSimplePolyPoly )
     {
-        if ( aSimplePolyPoly[ i ].HasFlags() )
+        if ( rSimplePolyPolyItm.HasFlags() )
         {
             tools::Polygon aSimplePoly;
-            aSimplePolyPoly[ i ].AdaptiveSubdivide( aSimplePoly );
-            aSimplePolyPoly[ i ] = std::move(aSimplePoly);
+            rSimplePolyPolyItm.AdaptiveSubdivide( aSimplePoly );
+            rSimplePolyPolyItm = std::move(aSimplePoly);
         }
     }
     WriteRecordHeader(0,W_META_POLYPOLYGON);
     pWMF->WriteUInt16( nCount );
-    for (i=0; i<nCount; i++) pWMF->WriteUInt16( aSimplePolyPoly.GetObject(i).GetSize() );
-    for (i=0; i<nCount; i++) {
-        pPoly=&(aSimplePolyPoly.GetObject(i));
-        nSize=pPoly->GetSize();
-        for (j=0; j<nSize; j++) WritePointXY(pPoly->GetPoint(j));
+    for ( auto const& aPoly : aSimplePolyPoly ) pWMF->WriteUInt16( aPoly.GetSize() );
+    for ( auto const& aPoly : aSimplePolyPoly ) {
+        nSize = aPoly.GetSize();
+        for ( sal_uInt16 j = 0; j < nSize; j++ ) WritePointXY( aPoly.GetPoint( j ) );
     }
     UpdateRecordHeader();
 }

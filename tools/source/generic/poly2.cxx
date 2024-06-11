@@ -495,6 +495,26 @@ PolyPolygon::PolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
 }
 
+PolyPolygon::iterator PolyPolygon::begin()
+{
+    return mpImplPolyPolygon->begin();
+}
+
+PolyPolygon::iterator PolyPolygon::end()
+{
+    return mpImplPolyPolygon->end();
+}
+
+PolyPolygon::const_iterator PolyPolygon::begin() const
+{
+    return mpImplPolyPolygon->begin();
+}
+
+PolyPolygon::const_iterator PolyPolygon::end() const
+{
+    return mpImplPolyPolygon->end();
+}
+
 } /* namespace tools */
 
 ImplPolyPolygon::ImplPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)

@@ -1882,9 +1882,9 @@ tools::PolyPolygon& SVGActionWriter::ImplMap( const tools::PolyPolygon& rPolyPol
 
     rDstPolyPoly = tools::PolyPolygon();
 
-    for( sal_uInt16 i = 0, nCount = rPolyPoly.Count(); i < nCount; ++i )
+    for( auto const& poly : rPolyPoly )
     {
-        rDstPolyPoly.Insert( ImplMap( rPolyPoly[ i ], aPoly ) );
+        rDstPolyPoly.Insert( ImplMap( poly, aPoly ) );
     }
 
     return rDstPolyPoly;
@@ -1898,9 +1898,10 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
     static constexpr OUString   aComma( u","_ustr );
     Point                      aPolyPoint;
 
-    for( tools::Long i = 0, nCount = rPolyPoly.Count(); i < nCount; i++ )
+
+    for( auto rPolyIter = rPolyPoly.begin(); rPolyIter != rPolyPoly.end(); ++rPolyIter )
     {
-        const tools::Polygon&  rPoly = rPolyPoly[ static_cast<sal_uInt16>(i) ];
+        auto const& rPoly = *rPolyIter;
         sal_uInt16 n = 1, nSize = rPoly.GetSize();
 
         if( nSize > 1 )
@@ -1950,10 +1951,10 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
                 }
             }
 
-            if(bClose)
+            if( bClose )
                 aPathData.append(" Z");
 
-            if( i < ( nCount - 1 ) )
+            if( rPolyIter != rPolyPoly.end() )
                 aPathData.append(aBlank);
         }
     }

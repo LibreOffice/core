@@ -305,9 +305,8 @@ void SvxBoundArgs::Calc( const tools::PolyPolygon& rPoly )
 {
     sal_uInt16 nCount;
     nAct = 0;
-    for( sal_uInt16 i = 0; i < rPoly.Count(); ++i )
+    for( auto const& rPol : rPoly )
     {
-        const tools::Polygon& rPol = rPoly[ i ];
         nCount = rPol.GetSize();
         if( nCount )
         {

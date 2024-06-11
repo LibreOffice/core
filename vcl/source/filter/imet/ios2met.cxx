@@ -552,8 +552,8 @@ void OS2METReader::DrawPolyPolygon( const tools::PolyPolygon& rPolyPolygon )
         pVirDev->SetLineColor( COL_TRANSPARENT );
         pVirDev->DrawPolyPolygon( rPolyPolygon );
         pVirDev->Pop();
-        for ( sal_uInt16 i = 0; i < rPolyPolygon.Count(); i++ )
-            pVirDev->DrawPolyLine( rPolyPolygon.GetObject( i ), aLineInfo );
+        for ( auto const& rPoly : rPolyPolygon )
+            pVirDev->DrawPolyLine( rPoly, aLineInfo );
     }
     else
         pVirDev->DrawPolyPolygon( rPolyPolygon );

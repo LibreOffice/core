@@ -597,11 +597,10 @@ namespace sw
                 // for reducing to a single polygon will just need more power and
                 // cannot create more correct results.
                 sal_uInt32 nPointCount(0);
-                sal_uInt16 a;
 
-                for(a = 0; a < rPolyPoly.Count(); a++)
+                for( auto const& rPoly : rPolyPoly )
                 {
-                    nPointCount += static_cast<sal_uInt32>(rPolyPoly[a].GetSize());
+                    nPointCount += static_cast<sal_uInt32>(rPoly.GetSize());
                 }
 
                 if(nPointCount > 0x0000ffff)
@@ -613,10 +612,8 @@ namespace sw
                 tools::Polygon aRetval(o3tl::narrowing<sal_uInt16>(nPointCount));
                 sal_uInt32 nAppendIndex(0);
 
-                for(a = 0; a < rPolyPoly.Count(); a++)
+                for( auto const& rCandidate : rPolyPoly )
                 {
-                    const tools::Polygon& rCandidate = rPolyPoly[a];
-
                     for(sal_uInt16 b(0); nAppendIndex <= nPointCount && b < rCandidate.GetSize(); b++)
                     {
                         aRetval[o3tl::narrowing<sal_uInt16>(nAppendIndex++)] = rCandidate[b];

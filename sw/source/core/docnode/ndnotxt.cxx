@@ -126,11 +126,9 @@ const tools::PolyPolygon *SwNoTextNode::HasContour() const
             OutputDevice* pOutDev =
                 (bPixelGrf || m_bPixelContour) ? Application::GetDefaultDevice()
                                              : nullptr;
-            sal_uInt16 nPolyCount = m_pContour->Count();
-            for( sal_uInt16 j=0; j<nPolyCount; j++ )
-            {
-                tools::Polygon& rPoly = (*m_pContour)[j];
 
+            for ( auto& rPoly : *m_pContour )
+            {
                 sal_uInt16 nCount = rPoly.GetSize();
                 for( sal_uInt16 i=0 ; i<nCount; i++ )
                 {
@@ -192,11 +190,8 @@ bool SwNoTextNode::GetContourAPI( tools::PolyPolygon &rContour ) const
         if( aGrfMap.GetMapUnit() != MapUnit::MapPixel &&
             aGrfMap != aContourMap )
         {
-            sal_uInt16 nPolyCount = rContour.Count();
-            for( sal_uInt16 j=0; j<nPolyCount; j++ )
+            for( auto& rPoly : rContour )
             {
-                tools::Polygon& rPoly = rContour[j];
-
                 sal_uInt16 nCount = rPoly.GetSize();
                 for( sal_uInt16 i=0 ; i<nCount; i++ )
                 {

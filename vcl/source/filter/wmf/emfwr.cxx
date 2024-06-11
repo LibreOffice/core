@@ -698,13 +698,11 @@ void EMFWriter::ImplWritePolyPolygonRecord( const tools::PolyPolygon& rPolyPoly 
                 ImplWriteRect( rPolyPoly.GetBoundRect() );
                 m_rStm.WriteUInt32( nPolyCount ).WriteUInt32( nTotalPoints );
 
-                for( i = 0; i < nPolyCount; i++ )
-                    m_rStm.WriteUInt32( rPolyPoly[ i ].GetSize() );
+                for( auto const& rPoly : rPolyPoly )
+                    m_rStm.WriteUInt32( rPoly.GetSize() );
 
-                for( i = 0; i < nPolyCount; i++ )
+                for( auto const& rPoly : rPolyPoly )
                 {
-                    const tools::Polygon& rPoly = rPolyPoly[ i ];
-
                     for( n = 0; n < rPoly.GetSize(); n++ )
                         ImplWritePoint( rPoly[ n ] );
                 }
@@ -723,11 +721,10 @@ void EMFWriter::ImplWritePath( const tools::PolyPolygon& rPolyPoly, bool bClosed
     ImplBeginRecord( WIN_EMR_BEGINPATH );
     ImplEndRecord();
 
-    sal_uInt16 i, n, o, nPolyCount = rPolyPoly.Count();
-    for ( i = 0; i < nPolyCount; i++ )
+    sal_uInt16 n, o;
+    for ( auto const& rPoly : rPolyPoly )
     {
         n = 0;
-        const tools::Polygon& rPoly = rPolyPoly[ i ];
         while ( n < rPoly.GetSize() )
         {
             if( n == 0 )

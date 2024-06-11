@@ -57,6 +57,9 @@ struct ImplPolyPolygon
 {
     std::vector<tools::Polygon> mvPolyAry;
 
+    typedef std::vector<tools::Polygon>::iterator iterator;
+    typedef std::vector<tools::Polygon>::const_iterator const_iterator;
+
     ImplPolyPolygon( sal_uInt16 nInitSize )
     {
        if ( !nInitSize )
@@ -78,6 +81,12 @@ struct ImplPolyPolygon
     {
         return mvPolyAry == other.mvPolyAry;
     }
+
+    iterator begin() { return mvPolyAry.begin(); }
+    iterator end() { return mvPolyAry.end(); }
+
+    const_iterator begin() const { return mvPolyAry.begin(); }
+    const_iterator end() const { return mvPolyAry.end(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

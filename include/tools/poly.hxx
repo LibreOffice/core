@@ -197,6 +197,10 @@ private:
     TOOLS_DLLPRIVATE void  ImplDoOperation( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rResult, PolyClipOp nOperation ) const;
 
 public:
+
+    typedef std::vector<tools::Polygon>::iterator iterator;
+    typedef std::vector<tools::Polygon>::const_iterator const_iterator;
+
                         explicit PolyPolygon( sal_uInt16 nInitSize = 16 );
                         explicit PolyPolygon( const tools::Polygon& rPoly );
                         explicit PolyPolygon( const tools::Rectangle& );
@@ -264,6 +268,13 @@ public:
     // constructor to convert from ::basegfx::B2DPolyPolygon
      // #i76339# made explicit
      explicit PolyPolygon(const ::basegfx::B2DPolyPolygon& rPolyPolygon);
+
+
+    iterator begin();
+    iterator end();
+
+    const_iterator begin() const;
+    const_iterator end() const;
 };
 
 template< typename charT, typename traits >
