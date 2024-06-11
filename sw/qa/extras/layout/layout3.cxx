@@ -2849,6 +2849,16 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestCrashHyphenation)
     createSwDoc("crashHyphen.fodt");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf161508)
+{
+    // This document must not hang on load.
+    createSwDoc("tdf161508.fodt");
+    auto pExportDump = parseLayoutDump();
+    // The table must move completely to the second page
+    assertXPath(pExportDump, "//page[1]/body/tab"_ostr, 0);
+    assertXPath(pExportDump, "//page[2]/body/tab"_ostr, 1);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
