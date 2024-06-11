@@ -87,7 +87,7 @@ namespace basegfx
 namespace sdr { class ObjectUser; }
 namespace sdr::properties { class BaseProperties; }
 namespace sdr::contact { class ViewContact; }
-namespace sdr::annotation { class ObjectAnnotationData; }
+
 namespace com::sun::star::drawing { class XShape; }
 namespace svx::diagram { class IDiagramHelper; }
 
@@ -358,11 +358,6 @@ public:
     virtual OUString GetDescription() const;
     virtual void SetDecorative(bool isDecorative);
     virtual bool IsDecorative() const;
-
-    // Object representing an annotation
-    bool isAnnotationObject() const;
-    void setAsAnnotationObject(bool bSetAnnotation);
-    std::unique_ptr<sdr::annotation::ObjectAnnotationData>& getAnnotationData();
 
     // for group objects
     bool IsGroupObject() const;
@@ -899,8 +894,6 @@ protected:
     bool                        mbLineIsOutsideGeometry : 1;
     // #i25616#
     bool                        mbSupportTextIndentingOnLineWidthChange : 1;
-
-    std::unique_ptr<sdr::annotation::ObjectAnnotationData> mpAnnotationData;
 
     virtual ~SdrObject() override;
 
