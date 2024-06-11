@@ -252,13 +252,17 @@ namespace sfx2
                 // confirmation when macros are unsigned or untrusted. FROM_LIST_AND_SIGNED_NO_WARN
                 // should not ask any confirmations. FROM_LIST_AND_SIGNED_WARN should only allow
                 // trusted signed macros at this point; so it may only ask for confirmation to add
-                // certificates to trusted, and shouldn't show UI when trusted list is read-only.
+                // certificates to trusted, and shouldn't show UI when trusted list is read-only
+                // or the macro signature can't be validated.
                 const bool bAllowUI
                     = nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN
                       && eAutoConfirm == eNoAutoConfirm
                       && (nMacroExecutionMode == MacroExecMode::ALWAYS_EXECUTE
                           || !SvtSecurityOptions::IsReadOnly(
-                              SvtSecurityOptions::EOption::MacroTrustedAuthors));
+                              SvtSecurityOptions::EOption::MacroTrustedAuthors))
+                      && (nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_WARN
+                          || nSignatureState == SignatureState::OK);
+
                 const bool bHasTrustedMacroSignature = m_xData->m_rDocumentAccess.hasTrustedScriptingSignature(bAllowUI ? rxInteraction : nullptr);
 
                 if (bHasTrustedMacroSignature)
