@@ -2536,6 +2536,16 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf160958_orphans)
     assertXPath(pExportDump, "//page[2]/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf161508)
+{
+    // This document must not hang on load.
+    createSwDoc("tdf161508.fodt");
+    auto pExportDump = parseLayoutDump();
+    // The table must move completely to the second page
+    assertXPath(pExportDump, "//page[1]/body/tab"_ostr, 0);
+    assertXPath(pExportDump, "//page[2]/body/tab"_ostr, 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
