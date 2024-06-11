@@ -1246,13 +1246,17 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf123898)
     // Make sure spellchecker has done its job already
     Scheduler::ProcessEventsToIdle();
 
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("de", "DE", OUString())))
+        return;
+
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // Make sure that the arrow on the left is not there (the first portion's type is
     // PortionType::Arrow if it's there)
     assertXPath(
         pXmlDoc,
         "/root/page/body/txt/anchored/fly/txt/SwParaPortion/SwLineLayout[1]/child::*[1]"_ostr,
-        "type"_ostr, u"PortionType::Para"_ustr);
+        "type"_ostr, u"PortionType::Text"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf123651)

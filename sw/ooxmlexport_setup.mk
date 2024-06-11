@@ -86,6 +86,14 @@ $(call gb_CppunitTest_get_target,sw_ooxmlexport$(1)) : $(call gb_Library_get_tar
 
 $(eval $(call gb_CppunitTest_use_more_fonts,sw_ooxmlexport$(1)))
 
+$(eval $(call gb_CppunitTest_use_packages,sw_ooxmlexport$(1),\
+	$(if $(filter DICTIONARIES,$(BUILD_TYPE)),
+		$(call gb_Dictionary_get_packagename,dict-de) \
+		$(call gb_Dictionary_get_packagename,dict-en) \
+		$(call gb_Dictionary_get_packagename,dict-hu) \
+	) \
+))
+
 ifeq ($(OS),WNT)
 # gpgme-w32spawn.exe is needed in workdir/LinkTarget/Executable
 $(eval $(call gb_CppunitTest_use_packages,sw_ooxmlexport$(1),\
