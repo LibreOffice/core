@@ -33,6 +33,7 @@
 #include <toolkit/controls/unocontrols.hxx>
 #include <helper/property.hxx>
 #include <toolkit/helper/macros.hxx>
+#include <unotools/securityoptions.hxx>
 
 // for introspection
 #include <awt/vclxwindows.hxx>
@@ -61,14 +62,14 @@ uno::Reference< graphic::XGraphic >
 ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow( uno::Reference< graphic::XGraphicObject >& xOutGraphicObj, const OUString& _rURL )
 {
     xOutGraphicObj = nullptr;
-    return ImageHelper::getGraphicFromURL_nothrow( _rURL );
+    return ImageHelper::getGraphicFromURL_nothrow( _rURL, "" );
 }
 
 css::uno::Reference< css::graphic::XGraphic >
-ImageHelper::getGraphicFromURL_nothrow( const OUString& _rURL )
+ImageHelper::getGraphicFromURL_nothrow( const OUString& _rURL, OUString const & referer )
 {
     uno::Reference< graphic::XGraphic > xGraphic;
-    if ( _rURL.isEmpty() )
+    if ( _rURL.isEmpty() || SvtSecurityOptions::isUntrustedReferer(referer) )
         return xGraphic;
 
     try
@@ -605,7 +606,11 @@ void GraphicControlModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std
                 mbAdjustingGraphic = true;
                 OUString sImageURL;
                 OSL_VERIFY( rValue >>= sImageURL );
-                setDependentFastPropertyValue( rGuard, BASEPROPERTY_GRAPHIC, uno::Any( ImageHelper::getGraphicFromURL_nothrow( sImageURL ) ) );
+                css::uno::Any any;
+                getFastPropertyValue(rGuard, any, BASEPROPERTY_REFERER);
+                OUString referer;
+                any >>= referer;
+                setDependentFastPropertyValue( rGuard, BASEPROPERTY_GRAPHIC, uno::Any( ImageHelper::getGraphicFromURL_nothrow( sImageURL, referer ) ) );
                 mbAdjustingGraphic = false;
             }
             break;

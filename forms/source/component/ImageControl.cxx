@@ -51,6 +51,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <unotools/securityoptions.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svl/urihelper.hxx>
@@ -398,6 +399,12 @@ void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
 
 bool OImageControlModel::impl_updateStreamForURL_lck( const OUString& _rURL, ValueChangeInstigator _eInstigator )
 {
+    OUString referer;
+    getPropertyValue("Referer") >>= referer;
+    if (SvtSecurityOptions::isUntrustedReferer(referer)) {
+        return false;
+    }
+
     // create a stream for the image specified by the URL
     Reference< XInputStream > xImageStream;
 
