@@ -641,60 +641,91 @@ Module.addOnPostRun(function() {
         //TODO: verify css.uno.RuntimeException's Message startsWith('test')
         decrementExceptionRefcount(e);
     }
-    const obj = {
-        implRefcount: 0,
-        implTypes: new Module.uno_Sequence_type([
-            Module.uno_Type.Interface('com.sun.star.lang.XTypeProvider'),
-            Module.uno_Type.Interface('com.sun.star.task.XJob'),
-            Module.uno_Type.Interface('com.sun.star.task.XJobExecutor')]),
-        implImplementationId: new Module.uno_Sequence_byte([]),
-        queryInterface(type) {
-            if (type == 'com.sun.star.uno.XInterface') {
-                return new Module.uno_Any(
-                    type, css.uno.XInterface.reference(this.implXTypeProvider));
-            } else if (type == 'com.sun.star.lang.XTypeProvider') {
-                return new Module.uno_Any(
-                    type, css.lang.XTypeProvider.reference(this.implXTypeProvider));
-            } else if (type == 'com.sun.star.task.XJob') {
-                return new Module.uno_Any(type, css.task.XJob.reference(this.implXJob));
-            } else if (type == 'com.sun.star.task.XJobExecutor') {
-                return new Module.uno_Any(
-                    type, css.task.XJobExecutor.reference(this.implXJobExecutor));
-            } else {
-                return new Module.uno_Any(Module.uno_Type.Void(), undefined);
+    const unoObject = function(interfaces, obj) {
+        interfaces = ['com.sun.star.lang.XTypeProvider'].concat(interfaces);
+        obj.impl_refcount = 0;
+        obj.impl_types = new Module.uno_Sequence_type(
+            interfaces.length, Module.uno_Sequence.FromSize);
+        for (let i = 0; i !== interfaces.length; ++i) {
+            obj.impl_types.set(i, Module.uno_Type.Interface(interfaces[i]));
+        }
+        obj.impl_implementationId = new Module.uno_Sequence_byte([]);
+        obj.queryInterface = function(type) {
+            for (const i in obj._types) {
+                if (i === type.toString()) {
+                    return new Module.uno_Any(
+                        type,
+                        Module['uno_Type_' + i.replace(/\./g, '$')].reference(
+                            obj._impl[obj._types[i]]));
+                }
             }
-        },
-        acquire() { ++this.implRefcount; },
-        release() {
-            if (--this.implRefcount === 0) {
-                this.implXTypeProvider.delete();
-                this.implXJob.delete();
-                this.implXJobExecutor.delete();
-                this.implTypes.delete();
-                this.implImplementationId.delete();
-            }
-        },
-        getTypes() { return this.implTypes; },
-        getImplementationId() { return this.implImplementationId; },
-        execute(args) {
-            if (args.size() !== 1 || args.get(0).Name !== 'name') {
-                Module.throwUnoException(
-                    Module.uno_Type.Exception('com.sun.star.lang.IllegalArgumentException'),
-                    {Message: 'bad args', Context: null, ArgumentPosition: 0});
-            }
-            console.log('Hello ' + args.get(0).Value.get());
             return new Module.uno_Any(Module.uno_Type.Void(), undefined);
-        },
-        trigger(event) { console.log('Ola ' + event); }
+        };
+        obj.acquire = function() { ++obj.impl_refcount; };
+        obj.release = function() {
+            if (--obj.impl_refcount === 0) {
+                for (const i in obj._impl) {
+                    i.delete();
+                }
+                obj.impl_types.delete();
+                obj.impl_implementationId.delete();
+            }
+        };
+        obj.getTypes = function() { return obj.impl_types; };
+        obj.getImplementationId = function() { return obj.impl_implementationId; };
+        obj._impl = {};
+        interfaces.forEach((i) => {
+            obj._impl[i] = Module['uno_Type_' + i.replace(/\./g, '$')].implement(obj);
+        });
+        obj._types = {};
+        const walk = function(td, impl) {
+            const name = td.getName();
+            if (!Object.hasOwn(obj._types, name)) {
+                if (td.getTypeClass() != css.uno.TypeClass.INTERFACE) {
+                    throw new Error('not a UNO interface type: ' + name);
+                }
+                obj._types[name] = impl;
+                const bases = css.reflection.XInterfaceTypeDescription2.query(td).getBaseTypes();
+                for (let i = 0; i !== bases.size(); ++i) {
+                    walk(bases.get(i), impl)
+                }
+                bases.delete();
+            }
+        };
+        const tdmAny = Module.getUnoComponentContext().getValueByName(
+            '/singletons/com.sun.star.reflection.theTypeDescriptionManager');
+        const tdm = css.container.XHierarchicalNameAccess.query(tdmAny.get());
+        interfaces.forEach((i) => {
+            const td = tdm.getByHierarchicalName(i);
+            walk(css.reflection.XTypeDescription.query(td.get()), i);
+            td.delete();
+        })
+        tdmAny.delete();
+        obj._types['com.sun.star.uno.XInterface'] = 'com.sun.star.lang.XTypeProvider';
+        obj.acquire();
+        return obj;
     };
-    obj.implXTypeProvider = css.lang.XTypeProvider.implement(obj);
-    obj.implXJob = css.task.XJob.implement(obj);
-    obj.implXJobExecutor = css.task.XJobExecutor.implement(obj);
-    obj.acquire();
-    test.passJob(css.task.XJob.reference(obj.implXJob));
-    test.passJobExecutor(css.task.XJobExecutor.reference(obj.implXJobExecutor));
-    test.passInterface(css.uno.XInterface.reference(obj.implXTypeProvider));
+    const obj = unoObject(
+        ['com.sun.star.task.XJob', 'com.sun.star.task.XJobExecutor'],
+        {
+            execute(args) {
+                if (args.size() !== 1 || args.get(0).Name !== 'name') {
+                    Module.throwUnoException(
+                        Module.uno_Type.Exception('com.sun.star.lang.IllegalArgumentException'),
+                        {Message: 'bad args', Context: null, ArgumentPosition: 0});
+                }
+                console.log('Hello ' + args.get(0).Value.get());
+                return new Module.uno_Any(Module.uno_Type.Void(), undefined);
+            },
+            trigger(event) { console.log('Ola ' + event); }
+        });
+    test.passJob(css.task.XJob.reference(obj._impl['com.sun.star.task.XJob']));
+    test.passJobExecutor(
+        css.task.XJobExecutor.reference(obj._impl['com.sun.star.task.XJobExecutor']));
+    test.passInterface(css.uno.XInterface.reference(obj._impl['com.sun.star.lang.XTypeProvider']));
     obj.release();
+    test.StringAttribute = 'hä';
+    console.assert(test.StringAttribute === 'hä');
 
     const args = new Module.uno_Sequence_any(
         [new Module.uno_Any(Module.uno_Type.Interface('com.sun.star.uno.XInterface'), test)]);
