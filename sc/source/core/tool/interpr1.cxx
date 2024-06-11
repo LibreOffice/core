@@ -9025,25 +9025,45 @@ void ScInterpreter::ScLet()
         // replace names with result tokens
         replaceNamesToResult(nResultIndexes, pValueTokens);
 
-        // calculate the inner results
-        ScCompiler aComp(mrDoc, aPos, *pValueTokens, mrDoc.GetGrammar(), false, false, &mrContext);
-        aComp.CompileTokenArray();
-        ScInterpreter aInt(mrDoc.GetFormulaCell(aPos), mrDoc, mrContext, aPos, *pValueTokens);
-        sfx2::LinkManager aNewLinkMgr(mrDoc.GetDocumentShell());
-        aInt.SetLinkManager(&aNewLinkMgr);
-        formula::StackVar aIntType = aInt.Interpret();
-
-        if (aIntType == formula::svMatrixCell)
+        // calculate the inner results unless we already have a push result token
+        if (pValueTokens->GetLen() == 1 && pValueTokens->GetArray()[0]->GetOpCode() == ocPush)
         {
-            ScConstMatrixRef xMat(aInt.GetResultToken()->GetMatrix());
-            if (!nResultIndexes.insert(std::make_pair(aStrName, new ScMatrixToken(xMat->Clone()))).second)
+            if (!nResultIndexes.insert(std::make_pair(aStrName, pValueTokens->GetArray()[0]->Clone())).second)
+            {
                 PushIllegalParameter();
+                aCode.Jump(pJump[nOrgJumpCount], pJump[nOrgJumpCount]);
+                return;
+            }
         }
         else
         {
-            FormulaConstTokenRef xTok(aInt.GetResultToken());
-            if (!nResultIndexes.insert(std::make_pair(aStrName, xTok->Clone())).second)
-                PushIllegalParameter();
+            ScCompiler aComp(mrDoc, aPos, *pValueTokens, mrDoc.GetGrammar(), false, false, &mrContext);
+            aComp.CompileTokenArray();
+            ScInterpreter aInt(mrDoc.GetFormulaCell(aPos), mrDoc, mrContext, aPos, *pValueTokens);
+            sfx2::LinkManager aNewLinkMgr(mrDoc.GetDocumentShell());
+            aInt.SetLinkManager(&aNewLinkMgr);
+            formula::StackVar aIntType = aInt.Interpret();
+
+            if (aIntType == formula::svMatrixCell)
+            {
+                ScConstMatrixRef xMat(aInt.GetResultToken()->GetMatrix());
+                if (!nResultIndexes.insert(std::make_pair(aStrName, new ScMatrixToken(xMat->Clone()))).second)
+                {
+                    PushIllegalParameter();
+                    aCode.Jump(pJump[nOrgJumpCount], pJump[nOrgJumpCount]);
+                    return;
+                }
+            }
+            else
+            {
+                FormulaConstTokenRef xTok(aInt.GetResultToken());
+                if (!nResultIndexes.insert(std::make_pair(aStrName, xTok->Clone())).second)
+                {
+                    PushIllegalParameter();
+                    aCode.Jump(pJump[nOrgJumpCount], pJump[nOrgJumpCount]);
+                    return;
+                }
+            }
         }
         pValueTokens->Clear();
     }
