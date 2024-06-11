@@ -274,6 +274,8 @@ static ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
         DECL_PROP_3     ( "InactiveSelectionBackgroundColor", INACTIVE_SEL_BACKGROUND_COLOR, sal_Int32, BOUND, MAYBEDEFAULT, MAYBEVOID ),
         DECL_PROP_3     ( "ActiveSelectionTextColor",         ACTIVE_SEL_TEXT_COLOR,         sal_Int32, BOUND, MAYBEDEFAULT, MAYBEVOID ),
         DECL_PROP_3     ( "InactiveSelectionTextColor",       INACTIVE_SEL_TEXT_COLOR,       sal_Int32, BOUND, MAYBEDEFAULT, MAYBEVOID ),
+
+        DECL_PROP_2("Referer", REFERER, OUString, BOUND, MAYBEVOID),
     };
     rElementCount = SAL_N_ELEMENTS(aImplPropertyInfos);
     return aImplPropertyInfos;

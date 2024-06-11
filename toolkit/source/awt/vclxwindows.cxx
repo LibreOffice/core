@@ -210,6 +210,7 @@ namespace toolkit
 
 void VCLXGraphicControl::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
+    PushPropertyIds(rIds, BASEPROPERTY_REFERER, 0);
     VCLXWindow::ImplGetPropertyIds( rIds );
 }
 

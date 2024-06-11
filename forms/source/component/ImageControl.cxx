@@ -55,6 +55,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <unotools/securityoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svl/urihelper.hxx>
 
