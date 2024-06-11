@@ -208,6 +208,7 @@ namespace uno {
 #define BASEPROPERTY_ACTIVE_SEL_TEXT_COLOR          167
 #define BASEPROPERTY_INACTIVE_SEL_TEXT_COLOR        168
 #define BASEPROPERTY_TYPEDITEMLIST                  169 // AnySequence
+#define BASEPROPERTY_REFERER                        172
 
 
 // These properties are not bound, they are always extracted from the BASEPROPERTY_FONTDESCRIPTOR property
