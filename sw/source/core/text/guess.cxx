@@ -72,17 +72,17 @@ bool hasBlanksInLine(const SwTextFormatInfo& rInf, TextFrameIndex end)
     return false;
 }
 
+}
+
 // Called for the last text run in a line; if it is block-adjusted, or center / right-adjusted
 // with Word compatibility option set, and it has trailing spaces, then the function sets the
 // values, and returns 'false' value that SwTextGuess::Guess should return, to create a
 // trailing SwHolePortion.
-bool maybeAdjustPositionsForBlockAdjust(TextFrameIndex& rCutPos, TextFrameIndex& rBreakPos,
-                                        TextFrameIndex& rBreakStart, SwTwips& rBreakWidth,
-                                        SwTwips& rExtraBlankWidth, tools::Long& rMaxSizeDiff,
-                                        SwTwips& rExtraAscent, SwTwips& rExtraDescent,
-                                        const SwTextFormatInfo& rInf, const SwScriptInfo& rSI,
-                                        sal_uInt16 maxComp,
-                                        std::optional<SwLinePortionLayoutContext> nLayoutContext)
+bool SwTextGuess::maybeAdjustPositionsForBlockAdjust(tools::Long& rMaxSizeDiff,
+                                                     SwTwips& rExtraAscent, SwTwips& rExtraDescent,
+                                                     const SwTextFormatInfo& rInf, const SwScriptInfo& rSI,
+                                                     sal_uInt16 maxComp,
+                                                     std::optional<SwLinePortionLayoutContext> nLayoutContext)
 {
     const auto& adjObj = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust();
     const SvxAdjust& adjust = adjObj.GetAdjust();
@@ -101,7 +101,7 @@ bool maybeAdjustPositionsForBlockAdjust(TextFrameIndex& rCutPos, TextFrameIndex&
         if (rInf.GetTextFrame()->IsRightToLeft())
             return true;
     }
-    if (auto ch = rInf.GetChar(rCutPos); !ch) // end of paragraph - last line
+    if (auto ch = rInf.GetChar(m_nCutPos); !ch) // end of paragraph - last line
     {
         if (adjust == SvxAdjust::Block)
         {
@@ -126,7 +126,7 @@ bool maybeAdjustPositionsForBlockAdjust(TextFrameIndex& rCutPos, TextFrameIndex&
     // tdf#57187: block-adjusted line shorter than full width, terminated by manual
     // line break, must not use trailing spaces for adjustment
     TextFrameIndex breakPos;
-    TextFrameIndex newCutPos = AdjustCutPos(rCutPos, breakPos, rInf);
+    TextFrameIndex newCutPos = AdjustCutPos(m_nCutPos, breakPos, rInf);
 
     if (auto ch = rInf.GetChar(newCutPos); ch && ch != CH_BREAK)
         return true; // next is neither line break nor paragraph end
@@ -138,19 +138,19 @@ bool maybeAdjustPositionsForBlockAdjust(TextFrameIndex& rCutPos, TextFrameIndex&
 
     // Some trailing spaces actually found, and in case of block adjustment, the text portion
     // itself has spaces to be able to block-adjust, or single word is allowed to adjust
-    rBreakStart = rCutPos = newCutPos;
-    rBreakPos = breakPos;
+    m_nBreakStart = m_nCutPos = newCutPos;
+    m_nBreakPos = breakPos;
+    // throw away old m_xHyphWord because the current break pos is now between words
+    m_xHyphWord = nullptr;
 
     rInf.GetTextSize(&rSI, rInf.GetIdx(), breakPos - rInf.GetIdx(), nLayoutContext, maxComp,
-                     rBreakWidth, rMaxSizeDiff, rExtraAscent, rExtraDescent,
+                     m_nBreakWidth, rMaxSizeDiff, rExtraAscent, rExtraDescent,
                      rInf.GetCachedVclData().get());
-    rInf.GetTextSize(&rSI, breakPos, rBreakStart - breakPos, nLayoutContext, maxComp,
-                     rExtraBlankWidth, rMaxSizeDiff, rExtraAscent, rExtraDescent,
+    rInf.GetTextSize(&rSI, breakPos, m_nBreakStart - breakPos, nLayoutContext, maxComp,
+                     m_nExtraBlankWidth, rMaxSizeDiff, rExtraAscent, rExtraDescent,
                      rInf.GetCachedVclData().get());
 
     return false; // require SwHolePortion creation
-}
-
 }
 
 // provides information for line break calculation
@@ -262,8 +262,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
             m_nCutPos = rInf.GetIdx() + nMaxLen;
             bool bRet = rPor.InFieldGrp()
                         || maybeAdjustPositionsForBlockAdjust(
-                            m_nCutPos, m_nBreakPos, m_nBreakStart, m_nBreakWidth,
-                            m_nExtraBlankWidth, nMaxSizeDiff, nExtraAscent, nExtraDescent, rInf,
+                            nMaxSizeDiff, nExtraAscent, nExtraDescent, rInf,
                             rSI, nMaxComp, rInf.GetLayoutContext());
             if( nItalic &&
                 (m_nCutPos >= TextFrameIndex(rInf.GetText().getLength()) ||
@@ -449,8 +448,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         {
             bool bRet = rPor.InFieldGrp()
                         || maybeAdjustPositionsForBlockAdjust(
-                            m_nCutPos, m_nBreakPos, m_nBreakStart, m_nBreakWidth,
-                            m_nExtraBlankWidth, nMaxSizeDiff, nExtraAscent, nExtraDescent, rInf,
+                            nMaxSizeDiff, nExtraAscent, nExtraDescent, rInf,
                             rSI, nMaxComp, rInf.GetLayoutContext());
 
             if (nItalic && (m_nBreakPos + TextFrameIndex(1)) >= TextFrameIndex(rInf.GetText().getLength()))
@@ -485,6 +483,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     {
         m_nCutPos = m_nBreakStart = AdjustCutPos(m_nCutPos, m_nBreakPos, rInf);
         nPorLen = m_nBreakPos - rInf.GetIdx();
+        // throw away old m_xHyphWord when m_nBreakStart changes
         m_xHyphWord = nullptr;
     }
     else
