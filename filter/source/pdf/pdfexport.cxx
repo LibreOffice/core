@@ -515,7 +515,11 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                         utl::ConfigManager::getProductName() +
                         " " +
                         utl::ConfigManager::getAboutBoxProductVersion() +
-                        " (" + arch + ") / LibreOffice Community";
+                        " (" + arch + ")"
+#if HAVE_FEATURE_COMMUNITY_FLAVOR
+                        " / LibreOffice Community"
+#endif
+                        ;
             }
 
             aContext.DocumentInfo.Creator = aCreator;
