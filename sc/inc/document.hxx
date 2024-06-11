@@ -319,6 +319,15 @@ enum ScMutationGuardFlags
     CORE = 0x0001, /// Core calc data structures should not be mutated
 };
 
+// Stores settings used in the Goal Seek
+struct ScGoalSeekSettings
+{
+    bool bDefined = false;
+    ScAddress aFormulaCell;
+    ScAddress aVariableCell;
+    OUString sTargetValue;
+};
+
 typedef std::unique_ptr<ScTable, o3tl::default_delete<ScTable>> ScTableUniquePtr;
 
 class ScDocument
@@ -453,6 +462,9 @@ private:
 
     css::uno::Reference< css::script::vba::XVBAEventProcessor >
                         mxVbaEvents;
+
+    // Stores Goal Seek settings
+    ScGoalSeekSettings maGoalSeekSettings;
 public:
     /// list of ScInterpreterTableOpParams currently in use
     std::vector<ScInterpreterTableOpParams*> m_TableOpList;
@@ -1967,9 +1979,12 @@ public:
     void            GetSearchAndReplaceStart( const SvxSearchItem& rSearchItem,
                                               SCCOL& rCol, SCROW& rRow );
 
-    bool            Solver( SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
-                            SCCOL nVCol, SCROW nVRow, SCTAB nVTab,
-                            const OUString& sValStr, double& nX);
+    // Goal Seek solver
+    bool               Solver( SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
+                               SCCOL nVCol, SCROW nVRow, SCTAB nVTab,
+                               const OUString& sValStr, double& nX);
+    ScGoalSeekSettings GetGoalSeekSettings() { return maGoalSeekSettings; }
+    void               SetGoalSeekSettings(ScGoalSeekSettings aNewSettings) { maGoalSeekSettings = aNewSettings; }
 
     SC_DLLPUBLIC void           ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMarkData& rMark,
                                                        ScEditDataArray* pDataArray = nullptr, bool* pIsChanged = nullptr );
