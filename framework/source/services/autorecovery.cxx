@@ -2553,7 +2553,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
 
     } /* SAFE */
 
-    // Don't register new documents here. (They are registered elsewhere when saved or modifed...)
+    // Don't register new documents here. (They are registered elsewhere when saved or modified...)
     implts_flushConfigItem(aInfo, /*bRemoveIt=*/false, /*bAllowAdd=*/!aNew.OrgURL.isEmpty());
     implts_startModifyListeningOnDoc(aInfo);
 
