@@ -4002,7 +4002,7 @@ void WW8RStyle::PostProcessStyles()
      change their location if there's a special indentation for the first line,
      By avoiding making use of each styles margins during reading of their
      tabstops we don't get problems with doubly adjusting tabstops that
-     are inheritied.
+     are inherited.
     */
     for (i=0; i < m_cstd; ++i)
     {
