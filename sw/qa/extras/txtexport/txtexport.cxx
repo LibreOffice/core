@@ -82,28 +82,28 @@ DECLARE_TXTEXPORT_TEST(testTdf120574_utf8bom, "UTF8BOMCRLF.txt")
 {
     std::vector<char> aMemStream = readMemoryStream<char>();
     OString aData(std::string_view(aMemStream.data(), aMemStream.size()));
-    CPPUNIT_ASSERT_EQUAL(u8"\uFEFFフー\r\nバー\r\n"_ostr, aData);
+    CPPUNIT_ASSERT_EQUAL(u8"\uFEFFAB\r\nCD\r\n"_ostr, aData);
 }
 
 DECLARE_TXTEXPORT_TEST(testTdf120574_utf16lebom, "UTF16LEBOMCRLF.txt")
 {
     std::vector<sal_Unicode> aMemStream = readMemoryStream<sal_Unicode>();
     OUString aData(aMemStream.data(), aMemStream.size());
-    CPPUNIT_ASSERT_EQUAL(u"\uFEFFフー\r\nバー\r\n"_ustr, aData);
+    CPPUNIT_ASSERT_EQUAL(u"\uFEFFAB\r\nCD\r\n"_ustr, aData);
 }
 
 DECLARE_TXTEXPORT_TEST(testTdf142669_utf8, "UTF8CRLF.txt")
 {
     std::vector<char> aMemStream = readMemoryStream<char>();
     OString aData(std::string_view(aMemStream.data(), aMemStream.size()));
-    CPPUNIT_ASSERT_EQUAL(u8"フー\r\nバー\r\n"_ostr, aData);
+    CPPUNIT_ASSERT_EQUAL(u8"AB\r\nCD\r\n"_ostr, aData);
 }
 
 DECLARE_TXTEXPORT_TEST(testTdf142669_utf16le, "UTF16LECRLF.txt")
 {
     std::vector<sal_Unicode> aMemStream = readMemoryStream<sal_Unicode>();
     OUString aData(aMemStream.data(), aMemStream.size());
-    CPPUNIT_ASSERT_EQUAL(u"フー\r\nバー\r\n"_ustr, aData);
+    CPPUNIT_ASSERT_EQUAL(u"AB\r\nCD\r\n"_ustr, aData);
 }
 
 CPPUNIT_TEST_FIXTURE(TxtExportTest, testClearingBreakExport)
