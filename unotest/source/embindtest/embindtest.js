@@ -658,11 +658,9 @@ Module.addOnPostRun(function() {
             },
             trigger(event) { console.log('Ola ' + event); }
         });
-    test.passJob(css.task.XJob.reference(obj._impl['com.sun.star.task.XJob']));
-    test.passJobExecutor(
-        css.task.XJobExecutor.reference(obj._impl['com.sun.star.task.XJobExecutor']));
-    test.passInterface(css.uno.XInterface.reference(obj._impl['com.sun.star.lang.XTypeProvider']));
-    obj.release();
+    test.passJob(css.task.XJob.query(obj));
+    test.passJobExecutor(css.task.XJobExecutor.query(obj));
+    test.passInterface(obj);
     test.StringAttribute = 'hä';
     console.assert(test.StringAttribute === 'hä');
 
