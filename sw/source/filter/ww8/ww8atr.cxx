@@ -5907,7 +5907,7 @@ void AttributeOutputBase::OutputStyleItemSet( const SfxItemSet& rSet, bool bTest
         // mainly to do with ::OutputItem and it's use of FormatFillGradient/FormatFillStyle
         // overloads -> XFillStyleItem *needs* to be known before XFillGradientItem
         // since it is locally 'remembered' in the processor (see m_oFillStyle).
-        // This implicitely relies on a scpecific order of the Items: even with the situation
+        // This implicitly relies on a scpecific order of the Items: even with the situation
         // that WhichIDs are sorted and thus was the output of SfxItemIter before this
         // change, this is a risky assumtion - the WhichIDs and thus the order of the
         // Items are not neccesarily fix (and were not designed to have a specific
