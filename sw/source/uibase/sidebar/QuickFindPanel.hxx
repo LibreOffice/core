@@ -36,6 +36,8 @@ private:
     DECL_LINK(SearchFindsListSelectionChangedHandler, weld::TreeView&, void);
     DECL_LINK(SearchFindEntryChangedHandler, weld::Entry&, void);
     DECL_LINK(SearchFindsListRowActivatedHandler, weld::TreeView&, bool);
+    DECL_LINK(MousePressHandler, const MouseEvent&, bool);
+
     void FillSearchFindsList();
 };
 }
