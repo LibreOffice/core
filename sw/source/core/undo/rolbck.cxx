@@ -831,7 +831,7 @@ SwHistorySetAttrSet::SwHistorySetAttrSet(
     // The problem with that is that this implies that the two iterators will advance
     // on the same WhichIDs step by step. Even after copying and with the former
     // organization of the Items in ItemSet as fixed array of pointers that is a
-    // 'wild' assumtion, besides that deleting Items while a iterator is used is
+    // 'wild' assumption, besides that deleting Items while a iterator is used is
     // bad in general, too.
     // I re-designed this to iterate over the source ItemSet (rSet) and add Items
     // as needed to the target ItemSet m_OldSet. This is tricky since some NonShareable
