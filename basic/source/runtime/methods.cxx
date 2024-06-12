@@ -111,6 +111,12 @@ using namespace com::sun::star::uno;
 
 static sal_Int32 GetDayDiff(const Date& rDate) { return rDate - Date(1899'12'30); }
 
+static sal_Int32 nanoSecToMilliSec(sal_Int64 nNanoSeconds)
+{
+    // Rounding nanoseconds to milliseconds precision to avoid comparision inaccuracies
+    return o3tl::convert(nNanoSeconds, 1, tools::Time::nanoPerMilli);
+}
+
 #if HAVE_FEATURE_SCRIPTING
 
 static void FilterWhiteSpace( OUString& rStr )
@@ -1667,14 +1673,15 @@ css::util::Time SbxDateToUNOTime( const SbxValue* const pVal )
     aUnoTime.Hours       = implGetHour      ( aDate );
     aUnoTime.Minutes     = implGetMinute    ( aDate );
     aUnoTime.Seconds     = implGetSecond    ( aDate );
-    aUnoTime.NanoSeconds = 0;
+    aUnoTime.NanoSeconds = implGetNanoSecond( aDate );
 
     return aUnoTime;
 }
 
 void SbxDateFromUNOTime( SbxValue *pVal, const css::util::Time& aUnoTime)
 {
-    pVal->PutDate( implTimeSerial(aUnoTime.Hours, aUnoTime.Minutes, aUnoTime.Seconds) );
+    pVal->PutDate(implTimeSerial(aUnoTime.Hours, aUnoTime.Minutes, aUnoTime.Seconds,
+                                 nanoSecToMilliSec(aUnoTime.NanoSeconds)));
 }
 
 // Function to convert date to UNO time (com.sun.star.util.Time)
@@ -1715,7 +1722,7 @@ css::util::DateTime SbxDateToUNODateTime( const SbxValue* const pVal )
     aUnoDT.Hours       = implGetHour      ( aDate );
     aUnoDT.Minutes     = implGetMinute    ( aDate );
     aUnoDT.Seconds     = implGetSecond    ( aDate );
-    aUnoDT.NanoSeconds = 0;
+    aUnoDT.NanoSeconds = implGetNanoSecond( aDate );
 
     return aUnoDT;
 }
@@ -1723,9 +1730,8 @@ css::util::DateTime SbxDateToUNODateTime( const SbxValue* const pVal )
 void SbxDateFromUNODateTime( SbxValue *pVal, const css::util::DateTime& aUnoDT)
 {
     double dDate(0.0);
-    if( implDateTimeSerial( aUnoDT.Year, aUnoDT.Month, aUnoDT.Day,
-                            aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds,
-                            dDate ) )
+    if (implDateTimeSerial(aUnoDT.Year, aUnoDT.Month, aUnoDT.Day, aUnoDT.Hours, aUnoDT.Minutes,
+                           aUnoDT.Seconds, nanoSecToMilliSec(aUnoDT.NanoSeconds), dDate))
     {
         pVal->PutDate( dDate );
     }
@@ -1905,7 +1911,7 @@ void SbRtl_TimeSerial(StarBASIC *, SbxArray & rPar, bool)
         return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
 
-    rPar.Get(0)->PutDate(implTimeSerial(nHour, nMinute, nSecond)); // JSM
+    rPar.Get(0)->PutDate(implTimeSerial(nHour, nMinute, nSecond, 0)); // JSM
 }
 
 void SbRtl_DateValue(StarBASIC *, SbxArray & rPar, bool)
@@ -2038,11 +2044,10 @@ void SbRtl_Year(StarBASIC *, SbxArray & rPar, bool)
 
 sal_Int16 implGetHour( double dDate )
 {
-    double nFrac = dDate - floor( dDate );
-    nFrac *= 86400.0;
-    sal_Int32 nSeconds = static_cast<sal_Int32>(nFrac + 0.5);
-    sal_Int16 nHour = static_cast<sal_Int16>(nSeconds / 3600);
-    return nHour;
+    double nFrac = (dDate - floor(dDate)) * ::tools::Time::milliSecPerDay;
+    sal_uInt64 nMilliSeconds = static_cast<sal_uInt64>(nFrac + 0.5);
+    return static_cast<sal_Int16>((nMilliSeconds / ::tools::Time::milliSecPerHour)
+                                  % ::tools::Time::hourPerDay);
 }
 
 void SbRtl_Hour(StarBASIC *, SbxArray & rPar, bool)
@@ -2088,16 +2093,19 @@ void SbRtl_Month(StarBASIC *, SbxArray & rPar, bool)
 
 sal_Int16 implGetSecond( double dDate )
 {
-    double nFrac = dDate - floor( dDate );
-    nFrac *= 86400.0;
-    sal_Int32 nSeconds = static_cast<sal_Int32>(nFrac + 0.5);
-    sal_Int16 nTemp = static_cast<sal_Int16>(nSeconds / 3600);
-    nSeconds -= nTemp * 3600;
-    nTemp = static_cast<sal_Int16>(nSeconds / 60);
-    nSeconds -= nTemp * 60;
+    double nFrac = (dDate - floor(dDate)) * ::tools::Time::milliSecPerDay;
+    sal_uInt64 nMilliSeconds = static_cast<sal_uInt64>(nFrac + 0.5);
+    return static_cast<sal_Int16>((nMilliSeconds / ::tools::Time::milliSecPerSec)
+                                  % ::tools::Time::secondPerMinute);
+}
 
-    sal_Int16 nRet = static_cast<sal_Int16>(nSeconds);
-    return nRet;
+sal_Int32 implGetNanoSecond(double dDate)
+{
+    double nFrac = (dDate - floor(dDate)) * ::tools::Time::milliSecPerDay;
+    sal_uInt64 nMilliSeconds = static_cast<sal_uInt64>(nFrac + 0.5);
+    nMilliSeconds %= ::tools::Time::milliSecPerSec;
+
+    return static_cast<sal_Int32>(nMilliSeconds * ::tools::Time ::nanoPerMilli);
 }
 
 void SbRtl_Second(StarBASIC *, SbxArray & rPar, bool)
@@ -2116,15 +2124,11 @@ void SbRtl_Second(StarBASIC *, SbxArray & rPar, bool)
 
 double Now_Impl()
 {
-    DateTime aDateTime( DateTime::SYSTEM );
-    double aSerial = static_cast<double>(GetDayDiff( aDateTime ));
-    tools::Long nSeconds = aDateTime.GetHour();
-    nSeconds *= 3600;
-    nSeconds += aDateTime.GetMin() * 60;
-    nSeconds += aDateTime.GetSec();
-    double nDays = static_cast<double>(nSeconds) / (24.0*3600.0);
-    aSerial += nDays;
-    return aSerial;
+    // tdf#161469 - align implementation with the now function in calc, i.e., include subseconds
+    DateTime aActTime(DateTime::SYSTEM);
+    return static_cast<double>(GetDayDiff(aActTime))
+           + implTimeSerial(aActTime.GetHour(), aActTime.GetMin(), aActTime.GetSec(),
+                            nanoSecToMilliSec(aActTime.GetNanoSec()));
 }
 
 // Date Now()
@@ -4644,35 +4648,30 @@ bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,
     return true;
 }
 
-double implTimeSerial( sal_Int16 nHours, sal_Int16 nMinutes, sal_Int16 nSeconds )
+double implTimeSerial(sal_Int16 nHours, sal_Int16 nMinutes, sal_Int16 nSeconds,
+                      sal_Int32 nMilliSeconds)
 {
-    return
-        static_cast<double>( nHours * ::tools::Time::secondPerHour +
-                             nMinutes * ::tools::Time::secondPerMinute +
-                             nSeconds)
-        /
-        static_cast<double>( ::tools::Time::secondPerDay );
+    return (nHours * ::tools::Time::milliSecPerHour + nMinutes * ::tools::Time::milliSecPerMinute
+            + nSeconds * ::tools::Time::milliSecPerSec + nMilliSeconds)
+           / static_cast<double>(::tools::Time::milliSecPerDay);
 }
 
-bool implDateTimeSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,
-                         sal_Int16 nHour, sal_Int16 nMinute, sal_Int16 nSecond,
-                         double& rdRet )
+bool implDateTimeSerial(sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, sal_Int16 nHour,
+                        sal_Int16 nMinute, sal_Int16 nSecond, sal_Int32 nMilliSecond, double& rdRet)
 {
     double dDate;
     if(!implDateSerial(nYear, nMonth, nDay, false/*bUseTwoDigitYear*/, SbDateCorrection::None, dDate))
         return false;
-    rdRet += dDate + implTimeSerial(nHour, nMinute, nSecond);
+    rdRet += dDate + implTimeSerial(nHour, nMinute, nSecond, nMilliSecond);
     return true;
 }
 
 sal_Int16 implGetMinute( double dDate )
 {
-    double nFrac = dDate - floor( dDate );
-    nFrac *= 86400.0;
-    sal_Int32 nSeconds = static_cast<sal_Int32>(nFrac + 0.5);
-    sal_Int16 nTemp = static_cast<sal_Int16>(nSeconds % 3600);
-    sal_Int16 nMin = nTemp / 60;
-    return nMin;
+    double nFrac = (dDate - floor(dDate)) * ::tools::Time::milliSecPerDay;
+    sal_uInt64 nMilliSeconds = static_cast<sal_uInt64>(nFrac + 0.5);
+    return static_cast<sal_Int16>((nMilliSeconds / ::tools::Time::milliSecPerMinute)
+                                  % ::tools::Time::minutePerHour);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

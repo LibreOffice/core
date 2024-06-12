@@ -53,6 +53,7 @@ public:
     static const sal_Int64 hourPerDay = 24;
     static const sal_Int64 minutePerHour = 60;
     static const sal_Int64 secondPerMinute = 60;
+
     static const sal_Int64 nanoSecPerSec = 1000000000;
     static const sal_Int64 nanoSecPerMinute = nanoSecPerSec * secondPerMinute;
     static const sal_Int64 nanoSecPerHour = nanoSecPerSec * secondPerMinute * minutePerHour;
@@ -63,6 +64,12 @@ public:
     static const sal_Int64 nanoPerMicro  = 1000;
     static const sal_Int64 nanoPerMilli  = 1000000;
     static const sal_Int64 nanoPerCenti  = 10000000;
+
+    static const sal_Int64 milliSecPerSec = 1000;
+    static const sal_Int64 milliSecPerMinute = milliSecPerSec * secondPerMinute;
+    static const sal_Int64 milliSecPerHour = milliSecPerMinute * minutePerHour;
+    static const sal_Int64 milliSecPerDay = milliSecPerHour * hourPerDay;
+
 
                     explicit Time( TimeInitEmpty )
                         { nTime = 0; }
