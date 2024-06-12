@@ -1,0 +1,17 @@
+--- configure.ac	2024-06-12 16:35:18.736933604 +0200
++++ configure.ac	2024-06-12 16:57:39.544214075 +0200
+@@ -249,7 +249,13 @@
+ fi
+ 
+ if $have_icu; then
+-	CXXFLAGS="$CXXFLAGS `$PKG_CONFIG --variable=CXXFLAGS icu-uc`"
++	is_icu75=false
++	PKG_CHECK_MODULES(ICU, icu-uc >= 75.1, is_icu75=true, :)
++	if $is_icu75; then
++		CXXFLAGS="$CXXFLAGS `$PKG_CONFIG --variable=CXXFLAGS -std=c++17 icu-uc`"
++	else
++		CXXFLAGS="$CXXFLAGS `$PKG_CONFIG --variable=CXXFLAGS icu-uc`"
++	fi
+ 	AC_DEFINE(HAVE_ICU, 1, [Have ICU library])
+ 	if test "x$with_icu" = "xbuiltin"; then
+ 		AC_DEFINE(HAVE_ICU_BUILTIN, 1, [Use hb-icu Unicode callbacks])

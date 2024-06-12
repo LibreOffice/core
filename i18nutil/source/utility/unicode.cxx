@@ -1025,6 +1025,11 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
             sRet = "unr-Nagm"_ostr;
             break;
 #endif
+#if (U_ICU_VERSION_MAJOR_NUM >= 75)
+        case USCRIPT_ARABIC_NASTALIQ:
+            sRet = "fa-Aran"_ostr;
+            break;
+#endif
     }
     return sRet;
 }

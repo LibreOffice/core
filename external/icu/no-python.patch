@@ -1,7 +1,7 @@
 --- source/configure.ac
 +++ source/configure.ac
-@@ -202,7 +202,7 @@
- m4_ifndef([AX_CHECK_COMPILE_FLAG], [AC_MSG_ERROR(['autoconf-archive' is missing])])
+@@ -213,7 +213,7 @@
+ #AC_CHECK_PROG(STRIP, strip, strip, true)
  
  # TODO(ICU-20301): Remove fallback to Python 2.
 -AC_CHECK_PROGS(PYTHON, python3 "py -3" python "py")
