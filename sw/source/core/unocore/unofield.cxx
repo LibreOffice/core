@@ -2030,7 +2030,7 @@ void SAL_CALL SwXTextField::attach(
                 SwPaM aPam( rTextNode, pTextField->GetStart() );
                 aPam.SetMark();
                 aPam.Move();
-                pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
+                pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam, SwDeleteFlags::DontCompressRedlines);
             }
             // keep inserted annotation
             {

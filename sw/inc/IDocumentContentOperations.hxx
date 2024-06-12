@@ -85,10 +85,11 @@ enum class SwDeleteFlags
 {
     Default = 0,
     ArtificialSelection = (1<<0), ///< keyboard delete, artificial selection, avoid deleting flys
+    DontCompressRedlines = (1<<1) ///< dont call compress redlines while we are loading document
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SwDeleteFlags> : is_typed_flags<SwDeleteFlags, 0x01> {};
+    template<> struct typed_flags<SwDeleteFlags> : is_typed_flags<SwDeleteFlags, 0x03> {};
 }
 
 /** Text operation/manipulation interface

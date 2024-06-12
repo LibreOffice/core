@@ -4409,7 +4409,8 @@ bool DocumentContentOperationsManager::DeleteAndJoinImpl(SwPaM & rPam, SwDeleteF
     }
 
     if (!m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline()
-        && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())
+        && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty()
+        && !(flags & SwDeleteFlags::DontCompressRedlines))
     {
         m_rDoc.getIDocumentRedlineAccess().CompressRedlines();
     }
