@@ -85,7 +85,7 @@ enum class SwDeleteFlags
 {
     Default = 0,
     ArtificialSelection = (1<<0), ///< keyboard delete, artificial selection, avoid deleting flys
-    DontCompressRedlines = (1<<1) ///< dont call compress redlines while we are loading document
+    DontCompressRedlines = (1<<1) ///< don't call compress redlines while we are loading document
 };
 namespace o3tl
 {
