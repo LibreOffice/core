@@ -1552,7 +1552,7 @@ void SfxItemSet::MergeItem_Impl(sal_uInt16 nWhich, const SfxPoolItem *pFnd2, boo
     }
     else if (IsInvalidItem(pFnd2))
     {
-        // 2nd Item is invaid (dontcare)
+        // 2nd Item is invalid (dontcare)
         if (!bIgnoreDefaults || *pFnd1 != GetPool()->GetUserOrPoolDefaultItem(nWhich))
         {
             // Decision table: set, dontcare, doesn't matter, sal_False
