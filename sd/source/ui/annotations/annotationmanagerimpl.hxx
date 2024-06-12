@@ -108,8 +108,6 @@ public:
 
     void ShowAnnotations(bool bShow);
 
-    SdrObject* findAnnotationObjectMatching(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation);
-
 private:
     ViewShellBase& mrBase;
     SdDrawDocument* mpDoc;
