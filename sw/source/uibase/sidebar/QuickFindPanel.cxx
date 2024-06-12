@@ -21,6 +21,8 @@
 #include <edtwin.hxx>
 #include <fmtanchr.hxx>
 #include <cntfrm.hxx>
+#include <strings.hrc>
+#include <vcl/event.hxx>
 
 const int MinimumPanelWidth = 250;
 
@@ -60,7 +62,6 @@ QuickFindPanel::QuickFindPanel(weld::Widget* pParent)
     , m_xSearchFindsList(m_xBuilder->weld_tree_view(u"searchfinds"_ustr))
     , m_nRowHeight(m_xSearchFindsList->get_height_rows(4))
     , m_pWrtShell(::GetActiveWrtShell())
-
 {
     m_xContainer->set_size_request(MinimumPanelWidth, -1);
     m_xSearchFindsList->set_size_request(1, m_nRowHeight);
@@ -75,12 +76,23 @@ QuickFindPanel::QuickFindPanel(weld::Widget* pParent)
         LINK(this, QuickFindPanel, SearchFindsListSelectionChangedHandler));
     m_xSearchFindsList->connect_row_activated(
         LINK(this, QuickFindPanel, SearchFindsListRowActivatedHandler));
+    m_xSearchFindsList->connect_mouse_press(LINK(this, QuickFindPanel, MousePressHandler));
 }
 
 QuickFindPanel::~QuickFindPanel()
 {
     m_xSearchFindEntry.reset();
     m_xSearchFindsList.reset();
+}
+
+IMPL_LINK(QuickFindPanel, MousePressHandler, const MouseEvent&, rMEvt, bool)
+{
+    if (std::unique_ptr<weld::TreeIter> xEntry(m_xSearchFindsList->make_iterator());
+        m_xSearchFindsList->get_dest_row_at_pos(rMEvt.GetPosPixel(), xEntry.get(), false, false))
+    {
+        return m_xSearchFindsList->get_id(*xEntry)[0] == '-';
+    }
+    return false;
 }
 
 IMPL_LINK_NOARG(QuickFindPanel, SearchFindEntryActivateHandler, weld::Entry&, bool)
@@ -100,19 +112,55 @@ IMPL_LINK(QuickFindPanel, SearchFindsListRender, weld::TreeView::render_args, aP
     vcl::RenderContext& rRenderContext = std::get<0>(aPayload);
     const ::tools::Rectangle& rRect = std::get<1>(aPayload);
     const OUString& rId = std::get<3>(aPayload);
-    int nIndex = m_xSearchFindsList->find_id(rId);
-    OUString aEntry(m_xSearchFindsList->get_text(nIndex));
-    DrawTextFlags const nTextStyle = DrawTextFlags::Left | DrawTextFlags::VCenter
-                                     | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak;
+
     tools::Rectangle aRect(
         rRect.TopLeft(),
         Size(rRenderContext.GetOutputSize().Width() - rRect.Left(), rRect.GetHeight()));
-    rRenderContext.DrawText(aRect, aEntry, nTextStyle);
+
+    int nIndex = m_xSearchFindsList->find_id(rId);
+    OUString aEntry(m_xSearchFindsList->get_text(nIndex));
+
+    const bool bPageEntry = rId[0] == '-';
+    if (!bPageEntry)
+    {
+        rRenderContext.DrawText(aRect, aEntry,
+                                DrawTextFlags::VCenter | DrawTextFlags::MultiLine
+                                    | DrawTextFlags::WordBreak);
+    }
+    else
+    {
+        aEntry = aEntry.copy(1); // remove '-'
+        tools::Long aTextWidth = rRenderContext.GetTextWidth(aEntry);
+        tools::Long aTextHeight = rRenderContext.GetTextHeight();
+
+        rRenderContext.Push();
+        rRenderContext.SetLineColor(COL_BLACK);
+        rRenderContext.DrawLine(
+            aRect.LeftCenter(),
+            Point(aRect.Center().AdjustX(-(aTextWidth / 2)) - 4, aRect.Center().getY()));
+        rRenderContext.DrawText(Point(aRect.Center().AdjustX(-(aTextWidth / 2)),
+                                      aRect.Center().AdjustY(-(aTextHeight / 2) - 1)),
+                                aEntry);
+        rRenderContext.DrawLine(
+            Point(aRect.Center().AdjustX(aTextWidth / 2) + 5, aRect.Center().getY()),
+            aRect.RightCenter());
+        rRenderContext.Pop();
+    }
 }
 
 IMPL_LINK_NOARG(QuickFindPanel, SearchFindsListSelectionChangedHandler, weld::TreeView&, void)
 {
-    std::unique_ptr<SwPaM>& rxPaM = m_vPaMs[m_xSearchFindsList->get_cursor_index()];
+    std::unique_ptr<weld::TreeIter> xEntry(m_xSearchFindsList->make_iterator());
+    if (!m_xSearchFindsList->get_cursor(xEntry.get()))
+        return;
+
+    OUString sId = m_xSearchFindsList->get_id(*xEntry);
+
+    // check for page number entry
+    if (sId[0] == '-')
+        return;
+
+    std::unique_ptr<SwPaM>& rxPaM = m_vPaMs[sId.toInt64()];
 
     m_pWrtShell->StartAction();
     bool bFound = false;
@@ -144,6 +192,14 @@ IMPL_LINK_NOARG(QuickFindPanel, SearchFindsListSelectionChangedHandler, weld::Tr
 
 IMPL_LINK_NOARG(QuickFindPanel, SearchFindsListRowActivatedHandler, weld::TreeView&, bool)
 {
+    std::unique_ptr<weld::TreeIter> xEntry(m_xSearchFindsList->make_iterator());
+    if (!m_xSearchFindsList->get_cursor(xEntry.get()))
+        return false;
+
+    // check for page number entry
+    if (m_xSearchFindsList->get_id(*xEntry)[0] == '-')
+        return false;
+
     m_pWrtShell->GetView().GetEditWin().GrabFocus();
     return true;
 }
@@ -216,7 +272,7 @@ void QuickFindPanel::FillSearchFindsList()
         });
 
     // fill list
-    for (int i = 0; std::unique_ptr<SwPaM> & xPaM : m_vPaMs)
+    for (sal_uInt16 nPage = 0, i = 0; std::unique_ptr<SwPaM> & xPaM : m_vPaMs)
     {
         SwPosition* pMarkPosition = xPaM->GetMark();
         SwPosition* pPointPosition = xPaM->GetPoint();
@@ -280,6 +336,14 @@ void QuickFindPanel::FillSearchFindsList()
                 if (nEndIndex >= sNodeText.getLength())
                     nEndIndex = sNodeText.getLength() - 1;
             }
+        }
+
+        // tdf#161291 indicate page of search finds
+        if (xPaM->GetPageNum() != nPage)
+        {
+            nPage = xPaM->GetPageNum();
+            OUString sPageEntry(u"-"_ustr + SwResId(ST_PGE) + u" "_ustr + OUString::number(nPage));
+            m_xSearchFindsList->append(sPageEntry, sPageEntry);
         }
 
         auto nCount = nMarkIndex - nStartIndex;
