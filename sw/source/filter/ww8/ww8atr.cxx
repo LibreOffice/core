@@ -5909,7 +5909,7 @@ void AttributeOutputBase::OutputStyleItemSet( const SfxItemSet& rSet, bool bTest
         // since it is locally 'remembered' in the processor (see m_oFillStyle).
         // This implicitly relies on a specific order of the Items: even with the situation
         // that WhichIDs are sorted and thus was the output of SfxItemIter before this
-        // change, this is a risky assumtion - the WhichIDs and thus the order of the
+        // change, this is a risky assumption - the WhichIDs and thus the order of the
         // Items are not necessarily fixed (and were not designed to have a specific
         // 'order' to be made use of, it's coincidence).
         // Thus in the long run OutputItem itself might have to becorrected to work without
