@@ -48,12 +48,14 @@
 #include <uno/current_context.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/window.hxx>
 #include <sal/log.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <svtools/miscopt.hxx>
@@ -796,7 +798,7 @@ IMPL_LINK_NOARG( MenuBarManager, AsyncSettingsHdl, Timer*, void)
 IMPL_LINK( MenuBarManager, Select, Menu *, pMenu, bool )
 {
     URL                     aTargetURL;
-    Sequence<PropertyValue> aArgs;
+    std::vector<beans::PropertyValue> aArgs;
     Reference< XDispatch >  xDispatch;
 
     {
@@ -816,8 +818,17 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu, bool )
                 if ( pMenu->GetUserValue( nCurItemId ) )
                 {
                     // addon menu item selected
-                    aArgs = { comphelper::makePropertyValue(u"Referer"_ustr, u"private:user"_ustr) };
+                    aArgs.push_back(
+                        comphelper::makePropertyValue(u"Referer"_ustr, u"private:user"_ustr));
                 }
+
+                // pass along if SHIFT/CTRL/ALT/CMD keys are pressed down
+                const VclPtr<vcl::Window> pWindow
+                    = VCLUnoHelper::GetWindow(m_xFrame->getContainerWindow());
+                const sal_Int16 nKeys
+                    = pWindow ? pWindow->GetPointerState().mnState & KEY_MODIFIERS_MASK : 0;
+                if (nKeys)
+                    aArgs.push_back(comphelper::makePropertyValue(u"KeyModifier"_ustr, nKeys));
 
                 xDispatch = pMenuItemHandler->xMenuItemDispatch;
             }
@@ -829,7 +840,7 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu, bool )
     if (xDispatch.is())
     {
         SolarMutexReleaser aReleaser;
-        xDispatch->dispatch( aTargetURL, aArgs );
+        xDispatch->dispatch(aTargetURL, comphelper::containerToSequence(aArgs));
     }
 
     if ( !m_bHasMenuBar )
