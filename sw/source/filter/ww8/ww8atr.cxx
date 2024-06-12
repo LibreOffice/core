@@ -870,7 +870,7 @@ bool WW8Export::DisallowInheritingOutlineNumbering(const SwFormat &rFormat)
     bool bRet( false );
 
     //If there is no numbering on this fmt, but its parent was outline
-    //numbered, then in writer this is no inheritied, but in word it would
+    //numbered, then in writer this is not inherited, but in word it would
     //be, so we must export "no numbering" and "body level" to make word
     //behave like writer (see #i25755)
     if (SfxItemState::SET != rFormat.GetItemState(RES_PARATR_NUMRULE, false))
