@@ -614,6 +614,197 @@ CPPUNIT_TEST_FIXTURE(Test, testEmptyObjectRange)
     loadAndSave("cloud.docx");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf161509)
+{
+    loadAndReload("special_styles.docx");
+    xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlStyles);
+
+    // Check the mapping of standard style names to their IDs
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Normal']/w:name"_ostr, "val"_ostr,
+                u"Normal"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading1']/w:name"_ostr, "val"_ostr,
+                u"heading 1"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading2']/w:name"_ostr, "val"_ostr,
+                u"heading 2"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading3']/w:name"_ostr, "val"_ostr,
+                u"heading 3"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading4']/w:name"_ostr, "val"_ostr,
+                u"heading 4"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading5']/w:name"_ostr, "val"_ostr,
+                u"heading 5"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading6']/w:name"_ostr, "val"_ostr,
+                u"heading 6"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading7']/w:name"_ostr, "val"_ostr,
+                u"heading 7"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading8']/w:name"_ostr, "val"_ostr,
+                u"heading 8"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading9']/w:name"_ostr, "val"_ostr,
+                u"heading 9"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index1']/w:name"_ostr, "val"_ostr,
+                u"index 1"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index2']/w:name"_ostr, "val"_ostr,
+                u"index 2"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index3']/w:name"_ostr, "val"_ostr,
+                u"index 3"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index4']/w:name"_ostr, "val"_ostr,
+                u"index 4"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index5']/w:name"_ostr, "val"_ostr,
+                u"index 5"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index6']/w:name"_ostr, "val"_ostr,
+                u"index 6"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index7']/w:name"_ostr, "val"_ostr,
+                u"index 7"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index8']/w:name"_ostr, "val"_ostr,
+                u"index 8"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index9']/w:name"_ostr, "val"_ostr,
+                u"index 9"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC1']/w:name"_ostr, "val"_ostr,
+                u"toc 1"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC2']/w:name"_ostr, "val"_ostr,
+                u"toc 2"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC3']/w:name"_ostr, "val"_ostr,
+                u"toc 3"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC4']/w:name"_ostr, "val"_ostr,
+                u"toc 4"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC5']/w:name"_ostr, "val"_ostr,
+                u"toc 5"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC6']/w:name"_ostr, "val"_ostr,
+                u"toc 6"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC7']/w:name"_ostr, "val"_ostr,
+                u"toc 7"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC8']/w:name"_ostr, "val"_ostr,
+                u"toc 8"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC9']/w:name"_ostr, "val"_ostr,
+                u"toc 9"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='NormalIndent']/w:name"_ostr, "val"_ostr,
+                u"Normal Indent"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='FootnoteText']/w:name"_ostr, "val"_ostr,
+                u"footnote text"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='CommentText']/w:name"_ostr, "val"_ostr,
+                u"annotation text"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Header']/w:name"_ostr, "val"_ostr,
+                u"header"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Footer']/w:name"_ostr, "val"_ostr,
+                u"footer"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='IndexHeading']/w:name"_ostr, "val"_ostr,
+                u"index heading"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Caption']/w:name"_ostr, "val"_ostr,
+                u"caption"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableofFigures']/w:name"_ostr,
+                "val"_ostr, u"table of figures"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='EnvelopeAddress']/w:name"_ostr,
+                "val"_ostr, u"envelope address"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='EnvelopeReturn']/w:name"_ostr,
+                "val"_ostr, u"envelope return"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='FootnoteReference']/w:name"_ostr,
+                "val"_ostr, u"footnote reference"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='CommentReference']/w:name"_ostr,
+                "val"_ostr, u"annotation reference"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='LineNumber']/w:name"_ostr, "val"_ostr,
+                u"line number"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='PageNumber']/w:name"_ostr, "val"_ostr,
+                u"page number"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='EndnoteReference']/w:name"_ostr,
+                "val"_ostr, u"endnote reference"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='EndnoteText']/w:name"_ostr, "val"_ostr,
+                u"endnote text"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableofAuthorities']/w:name"_ostr,
+                "val"_ostr, u"table of authorities"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='MacroText']/w:name"_ostr, "val"_ostr,
+                u"macro"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOCHeading']/w:name"_ostr, "val"_ostr,
+                u"TOC Heading"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='List']/w:name"_ostr, "val"_ostr,
+                u"List"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListBullet']/w:name"_ostr, "val"_ostr,
+                u"List Bullet"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListNumber']/w:name"_ostr, "val"_ostr,
+                u"List Number"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='List2']/w:name"_ostr, "val"_ostr,
+                u"List 2"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='List3']/w:name"_ostr, "val"_ostr,
+                u"List 3"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='List4']/w:name"_ostr, "val"_ostr,
+                u"List 4"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='List5']/w:name"_ostr, "val"_ostr,
+                u"List 5"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListBullet2']/w:name"_ostr, "val"_ostr,
+                u"List Bullet 2"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListBullet3']/w:name"_ostr, "val"_ostr,
+                u"List Bullet 3"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListBullet4']/w:name"_ostr, "val"_ostr,
+                u"List Bullet 4"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListBullet5']/w:name"_ostr, "val"_ostr,
+                u"List Bullet 5"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListNumber2']/w:name"_ostr, "val"_ostr,
+                u"List Number 2"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListNumber3']/w:name"_ostr, "val"_ostr,
+                u"List Number 3"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListNumber4']/w:name"_ostr, "val"_ostr,
+                u"List Number 4"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListNumber5']/w:name"_ostr, "val"_ostr,
+                u"List Number 5"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Title']/w:name"_ostr, "val"_ostr,
+                u"Title"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Closing']/w:name"_ostr, "val"_ostr,
+                u"Closing"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Signature']/w:name"_ostr, "val"_ostr,
+                u"Signature"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='DefaultParagraphFont']/w:name"_ostr,
+                "val"_ostr, u"Default Paragraph Font"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyText']/w:name"_ostr, "val"_ostr,
+                u"Body Text"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyTextIndent']/w:name"_ostr,
+                "val"_ostr, u"Body Text Indent"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListContinue']/w:name"_ostr, "val"_ostr,
+                u"List Continue"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListContinue2']/w:name"_ostr, "val"_ostr,
+                u"List Continue 2"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListContinue3']/w:name"_ostr, "val"_ostr,
+                u"List Continue 3"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListContinue4']/w:name"_ostr, "val"_ostr,
+                u"List Continue 4"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListContinue5']/w:name"_ostr, "val"_ostr,
+                u"List Continue 5"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='MessageHeader']/w:name"_ostr, "val"_ostr,
+                u"Message Header"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Subtitle']/w:name"_ostr, "val"_ostr,
+                u"Subtitle"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Salutation']/w:name"_ostr, "val"_ostr,
+                u"Salutation"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Date']/w:name"_ostr, "val"_ostr,
+                u"Date"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyTextFirstIndent']/w:name"_ostr,
+                "val"_ostr, u"Body Text First Indent"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyTextFirstIndent2']/w:name"_ostr,
+                "val"_ostr, u"Body Text First Indent 2"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='NoteHeading']/w:name"_ostr, "val"_ostr,
+                u"Note Heading"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyText2']/w:name"_ostr, "val"_ostr,
+                u"Body Text 2"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyText3']/w:name"_ostr, "val"_ostr,
+                u"Body Text 3"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyTextIndent2']/w:name"_ostr,
+                "val"_ostr, u"Body Text Indent 2"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyTextIndent3']/w:name"_ostr,
+                "val"_ostr, u"Body Text Indent 3"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BlockText']/w:name"_ostr, "val"_ostr,
+                u"Block Text"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Hyperlink']/w:name"_ostr, "val"_ostr,
+                u"Hyperlink"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='FollowedHyperlink']/w:name"_ostr,
+                "val"_ostr, u"FollowedHyperlink"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Strong']/w:name"_ostr, "val"_ostr,
+                u"Strong"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Emphasis']/w:name"_ostr, "val"_ostr,
+                u"Emphasis"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='DocumentMap']/w:name"_ostr, "val"_ostr,
+                u"Document Map"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='PlainText']/w:name"_ostr, "val"_ostr,
+                u"Plain Text"_ustr);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

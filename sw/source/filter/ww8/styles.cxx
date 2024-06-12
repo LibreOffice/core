@@ -27,54 +27,55 @@ namespace
     const char **GetStiNames() noexcept
     {
         // Matches enum ww::sti in sw/source/filter/inc/wwstyles.hxx
+        // tdf#161509: The case of the names must match Word-generated document's w:latentStyles
         static const char *stiName[] =
         {
             "Normal",                   // stiNormal
-            "Heading 1",                // stiLev1
-            "Heading 2",                // stiLev2
-            "Heading 3",                // stiLev3
-            "Heading 4",                // stiLev4
-            "Heading 5",                // stiLev5
-            "Heading 6",                // stiLev6
-            "Heading 7",                // stiLev7
-            "Heading 8",                // stiLev8
-            "Heading 9",                // stiLev9
-            "Index 1",                  // stiIndex1
-            "Index 2",                  // stiIndex2
-            "Index 3",                  // stiIndex3
-            "Index 4",                  // stiIndex4
-            "Index 5",                  // stiIndex5
-            "Index 6",                  // stiIndex6
-            "Index 7",                  // stiIndex7
-            "Index 8",                  // stiIndex8
-            "Index 9",                  // stiIndex9
-            "TOC 1",                    // stiToc1
-            "TOC 2",                    // stiToc2
-            "TOC 3",                    // stiToc3
-            "TOC 4",                    // stiToc4
-            "TOC 5",                    // stiToc5
-            "TOC 6",                    // stiToc6
-            "TOC 7",                    // stiToc7
-            "TOC 8",                    // stiToc8
-            "TOC 9",                    // stiToc9
+            "heading 1",                // stiLev1
+            "heading 2",                // stiLev2
+            "heading 3",                // stiLev3
+            "heading 4",                // stiLev4
+            "heading 5",                // stiLev5
+            "heading 6",                // stiLev6
+            "heading 7",                // stiLev7
+            "heading 8",                // stiLev8
+            "heading 9",                // stiLev9
+            "index 1",                  // stiIndex1
+            "index 2",                  // stiIndex2
+            "index 3",                  // stiIndex3
+            "index 4",                  // stiIndex4
+            "index 5",                  // stiIndex5
+            "index 6",                  // stiIndex6
+            "index 7",                  // stiIndex7
+            "index 8",                  // stiIndex8
+            "index 9",                  // stiIndex9
+            "toc 1",                    // stiToc1
+            "toc 2",                    // stiToc2
+            "toc 3",                    // stiToc3
+            "toc 4",                    // stiToc4
+            "toc 5",                    // stiToc5
+            "toc 6",                    // stiToc6
+            "toc 7",                    // stiToc7
+            "toc 8",                    // stiToc8
+            "toc 9",                    // stiToc9
             "Normal Indent",            // stiNormIndent
-            "Footnote Text",            // stiFootnoteText
-            "Annotation Text",          // stiAtnText
-            "Header",                   // stiHeader
-            "Footer",                   // stiFooter
-            "Index Heading",            // stiIndexHeading
-            "Caption",                  // stiCaption
-            "Table of Figures",         // stiToCaption
-            "Envelope Address",         // stiEnvAddr
-            "Envelope Return",          // stiEnvRet
-            "Footnote Reference",       // stiFootnoteRef
-            "Annotation Reference",     // stiAtnRef
-            "Line Number",              // stiLnn
-            "Page Number",              // stiPgn
-            "Endnote Reference",        // stiEdnRef
-            "Endnote Text",             // stiEdnText
-            "Table of Authorities",     // stiToa
-            "Macro Text",               // stiMacro
+            "footnote text",            // stiFootnoteText
+            "annotation text",          // stiAtnText
+            "header",                   // stiHeader
+            "footer",                   // stiFooter
+            "index heading",            // stiIndexHeading
+            "caption",                  // stiCaption
+            "table of figures",         // stiToCaption
+            "envelope address",         // stiEnvAddr
+            "envelope return",          // stiEnvRet
+            "footnote reference",       // stiFootnoteRef
+            "annotation reference",     // stiAtnRef
+            "line number",              // stiLnn
+            "page number",              // stiPgn
+            "endnote reference",        // stiEdnRef
+            "endnote text",             // stiEdnText
+            "table of authorities",     // stiToa
+            "macro",                    // stiMacro
             "TOC Heading",              // stiToaHeading - tdf143726
             "List",                     // stiList
             "List Bullet",              // stiListBullet

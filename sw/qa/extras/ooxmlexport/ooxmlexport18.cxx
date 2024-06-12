@@ -831,9 +831,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153664)
     CPPUNIT_ASSERT(pXmlStyles);
     // Without the fix this was styleId='FigureIndex1' and name was "Figure Index 1"
     // This led to style settings being reset when ToF was updated in Word
-    // TOF's paragraph style should be exported as "Table of Figures" as that's the default Word style name
+    // TOF's paragraph style should be exported as "table of figures" as that's the default Word style name
     assertXPath(pXmlStyles, "/w:styles/w:style[12]"_ostr, "styleId"_ostr, u"TableofFigures"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableofFigures']/w:name"_ostr, "val"_ostr, u"Table of Figures"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableofFigures']/w:name"_ostr, "val"_ostr, u"table of figures"_ustr);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf124472_hyperlink, "tdf124472.docx")
