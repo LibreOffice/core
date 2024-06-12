@@ -74,7 +74,6 @@ Module.unoObject = function(interfaces, obj) {
         td.delete();
     })
     tdmAny.delete();
-    obj._types['com.sun.star.uno.XInterface'] = 'com.sun.star.lang.XTypeProvider';
     obj.acquire();
     return obj;
 };
