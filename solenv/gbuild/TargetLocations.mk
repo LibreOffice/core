@@ -33,7 +33,8 @@ gb_UnoApi_get_target_for_build = $(INSTROOT_FOR_BUILD)/$(if $(filter udkapi,$(1)
 
 # workdir target patterns
 
-gb_AutoInstall_get_target = $(WORKDIR)/AutoInstall/$(1)
+gb_AutoInstall_get_target = $(error please use plain gb_AutoInstall_targetdir instead)
+gb_AutoInstall_targetdir := $(WORKDIR)/AutoInstall
 gb_AllLangHelp_get_target = $(WORKDIR)/AllLangHelp/$(1)
 gb_AllLangHelp_get_helpfiles_target = $(WORKDIR)/AllLangHelp/$(1).helpfiles
 gb_AllLangPackage_get_target = $(WORKDIR)/AllLangPackage/$(1)

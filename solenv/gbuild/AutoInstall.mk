@@ -9,14 +9,12 @@
 
 # AutoInstall class
 
-$(dir $(call gb_AutoInstall_get_target,%)).dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(call gb_AutoInstall_get_target,%) : $(GBUILDDIR)/AutoInstall.mk \
-		$(SRCDIR)/Repository.mk $(SRCDIR)/RepositoryExternal.mk \
-		$(BUILDDIR)/config_host.mk \
-		$(GBUILDDIR)/gen-autoinstall.py \
-		$(call gb_ExternalExecutable_get_dependencies,python)
+$(gb_AutoInstall_targetdir)/% : $(GBUILDDIR)/AutoInstall.mk \
+        $(SRCDIR)/Repository.mk $(SRCDIR)/RepositoryExternal.mk \
+        $(BUILDDIR)/config_host.mk \
+        $(GBUILDDIR)/gen-autoinstall.py \
+        $(call gb_ExternalExecutable_get_dependencies,python) \
+        | $(gb_AutoInstall_targetdir)/.dir
 	$(call gb_Output_announce,$*,$(true),AIN,3)
 	$(call gb_Trace_StartRange,$*,AIN)
 	SDKLIBFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),\
@@ -47,29 +45,26 @@ $(call gb_AutoInstall_get_target,%) : $(GBUILDDIR)/AutoInstall.mk \
 
 $(call gb_AutoInstall_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),AIL,3)
-	rm -f $(call gb_AutoInstall_get_target,$*)
+	rm -f $(gb_AutoInstall_targetdir)/$*
 
 define gb_AutoInstall_AutoInstall
-$(call gb_AutoInstall_get_target,all) :| $(dir $(call gb_AutoInstall_get_target,all)).dir
-
-$$(eval $$(call gb_Module_register_target,$(call gb_AutoInstall_get_target,all),$(call gb_AutoInstall_get_clean_target,all)))
-$(call gb_Helper_make_userfriendly_targets,all,AutoInstall)
+$$(eval $$(call gb_Module_register_target,$(gb_AutoInstall_targetdir)/all,$(call gb_AutoInstall_get_clean_target,all)))
+$(call gb_Helper_make_userfriendly_targets,all,AutoInstall,$(gb_AutoInstall_targetdir)/all)
 
 endef
 
 # gb_AutoInstall_add_module module lib_template exe_template jar_template package_template componentcondition
 define gb_AutoInstall_add_module
-$(call gb_AutoInstall_get_target,all) : $(call gb_AutoInstall_get_target,$(1))
+$(gb_AutoInstall_targetdir)/all : $(gb_AutoInstall_targetdir)/$(1)
 $(call gb_AutoInstall_get_clean_target,all) : $(call gb_AutoInstall_get_clean_target,$(1))
-$(call gb_Helper_make_userfriendly_targets,$(1),AutoInstall)
+$(call gb_Helper_make_userfriendly_targets,$(1),AutoInstall,$(gb_AutoInstall_targetdir)/$(1))
 
-$(call gb_AutoInstall_get_target,$(1)) : $(gb_Module_CURRENTMAKEFILE)
-$(call gb_AutoInstall_get_target,$(1)) :| $(dir $(call gb_AutoInstall_get_target,$(1))).dir
-$(call gb_AutoInstall_get_target,$(1)) : SCP2LIBTEMPLATE := $(2)
-$(call gb_AutoInstall_get_target,$(1)) : SCP2EXETEMPLATE := $(3)
-$(call gb_AutoInstall_get_target,$(1)) : SCP2JARTEMPLATE := $(4)
-$(call gb_AutoInstall_get_target,$(1)) : SCP2PKGTEMPLATE := $(5)
-$(call gb_AutoInstall_get_target,$(1)) : SCP2COMPONENTCONDITION := $(6)
+$(gb_AutoInstall_targetdir)/$(1) : $(gb_Module_CURRENTMAKEFILE)
+$(gb_AutoInstall_targetdir)/$(1) : SCP2LIBTEMPLATE := $(2)
+$(gb_AutoInstall_targetdir)/$(1) : SCP2EXETEMPLATE := $(3)
+$(gb_AutoInstall_targetdir)/$(1) : SCP2JARTEMPLATE := $(4)
+$(gb_AutoInstall_targetdir)/$(1) : SCP2PKGTEMPLATE := $(5)
+$(gb_AutoInstall_targetdir)/$(1) : SCP2COMPONENTCONDITION := $(6)
 
 endef
 

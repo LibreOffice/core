@@ -1477,7 +1477,7 @@ $(foreach theme,$(WITH_THEMES), \
     $(eval gb_emscripten_fs_image_files += $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/images_$(theme).zip))
 
 ifeq ($(WITH_FONTS),TRUE)
-gb_emscripten_fs_image_autoinstall += $(call gb_AutoInstall_get_target,ooo_fonts)
+gb_emscripten_fs_image_autoinstall += $(gb_AutoInstall_targetdir)/ooo_fonts
 endif
 
 gb_emscripten_fs_image_filelists += $(call gb_Package_get_target,liblangtag_data)
