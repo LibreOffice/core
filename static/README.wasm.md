@@ -210,8 +210,8 @@ improvement! ;)
 Some usage examples through javascript of the current implementation:
 ```js
 // inserts a string at the start of the Writer document.
-const uno = init_unoembind_uno(Module);
-const css = uno.com.sun.star;
+Module.initUno();
+const css = Module.uno.com.sun.star;
 const xModel = Module.getCurrentModelFromViewSh();
 const xTextDocument = css.text.XTextDocument.query(xModel);
 const xText = xTextDocument.getText();
@@ -221,8 +221,8 @@ xTextCursor.setString("string here!");
 
 ```js
 // changes each paragraph of the Writer document to a random color.
-const uno = init_unoembind_uno(Module);
-const css = uno.com.sun.star;
+Module.initUno();
+const css = Module.uno.com.sun.star;
 const xModel = Module.getCurrentModelFromViewSh();
 const xTextDocument = css.text.XTextDocument.query(xModel);
 const xText = xTextDocument.getText();
