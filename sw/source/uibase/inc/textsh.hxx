@@ -75,8 +75,8 @@ public:
     void    ExecParaAttr(SfxRequest &);
     void    ExecParaAttrArgs(SfxRequest &);
     void    ExecDB(SfxRequest const &);
-    void    ExecTransliteration(SfxRequest const &);
-    void    ExecRotateTransliteration(SfxRequest const &);
+    void    ExecTransliteration(SfxRequest &);
+    void    ExecRotateTransliteration(SfxRequest &);
 
     void    GetAttrState(SfxItemSet &);
 
