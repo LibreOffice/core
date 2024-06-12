@@ -172,14 +172,15 @@ void SwTextFrameInfo::GetSpaces(
             // in the selection
             if( aLine.GetNext() )
             {
-                nPos = aLine.GetTextEnd();
+                TextFrameIndex const nEndPos{aLine.GetTextEnd()};
 
-                if( nPos < aLine.GetEnd() )
+                // if only whitespace in line, nEndPos < nPos !
+                if (nPos < nEndPos && nEndPos < aLine.GetEnd())
                 {
                     TextFrameIndex const nOff( !bWithLineBreak && CH_BREAK ==
                         aLine.GetInfo().GetChar(aLine.GetEnd() - TextFrameIndex(1))
                                 ? 1 : 0 );
-                    AddRange( rRanges, nPos, aLine.GetEnd() - nPos - nOff );
+                    AddRange(rRanges, nEndPos, aLine.GetEnd() - nEndPos - nOff);
                 }
             }
         }
