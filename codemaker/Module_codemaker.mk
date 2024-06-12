@@ -17,6 +17,7 @@ $(eval $(call gb_Module_add_targets,codemaker,\
     StaticLibrary_codemaker_java \
     Executable_javamaker \
     Executable_cppumaker \
+    Executable_netmaker \
 ))
 endif
 

@@ -92,6 +92,7 @@ $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
 	$(if $(filter MSC,$(COM)),$(if $(filter-out AARCH64_TRUE,$(CPUNAME)_$(CROSS_COMPILING)),climaker)) \
 	cppumaker \
 	javamaker \
+	netmaker \
     $(call gb_CondExeSp2bv,sp2bv) \
 	$(if $(filter ODK,$(BUILD_TYPE)),unoapploader) \
 	unoidl-read \

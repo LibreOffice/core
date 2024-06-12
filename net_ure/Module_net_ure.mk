@@ -10,7 +10,11 @@ $(eval $(call gb_Module_Module,net_ure))
 
 ifeq ($(ENABLE_DOTNET),TRUE)
 $(eval $(call gb_Module_add_targets,net_ure,\
+	CustomTarget_net_uretypes \
+	CustomTarget_net_oootypes \
 	DotnetLibrary_net_basetypes \
+	DotnetLibrary_net_uretypes \
+	DotnetLibrary_net_oootypes \
 ))
 endif
 

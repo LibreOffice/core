@@ -5,7 +5,8 @@ Generators for language-binding--specific representations of UNOIDL entities:
 - `cppumaker` generates header (`.hdl` and `.hpp`) files for the C++ UNO language
   binding
 - `javamaker` generates class files for the JVM language binding
-- the codemaker for .NET is in module `cli_ure`
+- `netmaker` generates C# code files for the .NET language binding
+- `climaker` (the old codemaker for .NET Framework) is in module `cli_ure`
 
 Some of the code is re-used by the skeletonmakers in module `unodevtools`.
 

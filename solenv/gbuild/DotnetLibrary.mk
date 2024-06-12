@@ -33,6 +33,11 @@ $(strip $(subst ",\",$(1)))
 
 endef
 
+define gb_DotnetLibrary__ensure_absolute
+$(if $(filter $(SRCDIR)%,$(1)),$(1),$(SRCDIR)/$(1))
+
+endef
+
 ####### Build and Clean Targets #########
 
 .PHONY : $(call gb_DotnetLibrary_get_clean_target,%)
@@ -58,7 +63,8 @@ $(call gb_DotnetLibrary_get_target,%) :
 		dotnet build $$P $(DOTNET_BUILD_FLAGS) \
 			-o $(call gb_DotnetLibrary_get_workdir,$*) \
 			> $@.log 2>&1 || \
-			(cat $@.log \
+			(echo \
+				&& cat $@.log \
 				&& echo \
 				&& echo "A library failed to build. To retry the build, use:" \
 				&& echo "    make DotnetLibrary_$*" \
@@ -128,41 +134,63 @@ $(call gb_DotnetLibrary_get_target,$(1)) : DOTNET_ITEM_ELEMENTS += $(strip $(cal
 endef
 
 # Add one source file to the project file
-# This add it to the project, and makes it a build dependency
+# This adds it to the project, and makes it a build dependency
 # so the library is rebuilt if the source changes
 # call gb_DotnetLibrary_add_source,target,source
 define gb_DotnetLibrary_add_source
-$(call gb_DotnetLibrary_get_target,$(1)) : $(SRCDIR)/$(strip $(2))
-$(call gb_DotnetLibrary_add_items,$(1),<Compile Include="$(SRCDIR)/$(strip $(2))"/>)
+$(call gb_DotnetLibrary_get_target,$(1)) : $(call gb_DotnetLibrary__ensure_absolute,$(strip $(2)))
+$(call gb_DotnetLibrary_add_items,$(1),<Compile Include="$(call gb_DotnetLibrary__ensure_absolute,$(strip $(2)))"/>)
 
 endef
 
 # Add source files to the project file
+# This adds them to the project, and makes it them build dependency
+# so the library is rebuilt if the sources change
 # call gb_DotnetLibrary_add_sources,target,sources
 define gb_DotnetLibrary_add_sources
 $(foreach source,$(2),$(call gb_DotnetLibrary_add_source,$(1),$(source)))
 
 endef
 
+# Add one generated source file to the project file,
+# This is not marked as makefile build dependency,
+# so the library is NOT rebuilt if this source changes
+# Useful for things like source globs supported by .net projects
+# call gb_DotnetLibrary_add_generated_source,target,source
+define gb_DotnetLibrary_add_generated_source
+$(call gb_DotnetLibrary_add_items,$(1),<Compile Include="$(call gb_DotnetLibrary__ensure_absolute,$(strip $(2)))"/>)
+
+endef
+
+# Add generated source files to the project file,
+# These are not marked as makefile build dependencies,
+# so the library is NOT rebuilt if these sources change
+# Useful for things like source globs supported by .net projects
+# call gb_DotnetLibrary_add_generated_sources,target,sources
+define gb_DotnetLibrary_add_generated_sources
+$(foreach source,$(2),$(call gb_DotnetLibrary_add_generated_source,$(1),$(source)))
+
+endef
+
 # Link to a DotnetLibrary_CsLibrary target
-# call gb_DotnetLibrary_link_cs_project,target,project
-define gb_DotnetLibrary_link_cs_project
+# call gb_DotnetLibrary_link_cs_library,target,library
+define gb_DotnetLibrary_link_cs_library
 $(call gb_DotnetLibrary_get_target,$(1)) : $(call gb_DotnetLibrary_get_target,$(strip $(2)))
 $(call gb_DotnetLibrary_add_items,$(1),<ProjectReference Include="$(call gb_DotnetLibrary_get_workdir,$(strip $(2)))/$(strip $(2)).csproj"/>)
 
 endef
 
 # Link to a DotnetLibrary_FsLibrary target
-# call gb_DotnetLibrary_link_fs_project,target,project
-define gb_DotnetLibrary_link_fs_project
+# call gb_DotnetLibrary_link_fs_library,target,library
+define gb_DotnetLibrary_link_fs_library
 $(call gb_DotnetLibrary_get_target,$(1)) : $(call gb_DotnetLibrary_get_target,$(strip $(2)))
 $(call gb_DotnetLibrary_add_items,$(1),<ProjectReference Include="$(call gb_DotnetLibrary_get_workdir,$(strip $(2)))/$(strip $(2)).fsproj"/>)
 
 endef
 
 # Link to a DotnetLibrary_VbLibrary target
-# call gb_DotnetLibrary_link_vb_project,target,project
-define gb_DotnetLibrary_link_vb_project
+# call gb_DotnetLibrary_link_vb_library,target,library
+define gb_DotnetLibrary_link_vb_library
 $(call gb_DotnetLibrary_get_target,$(1)) : $(call gb_DotnetLibrary_get_target,$(strip $(2)))
 $(call gb_DotnetLibrary_add_items,$(1),<ProjectReference Include="$(call gb_DotnetLibrary_get_workdir,$(strip $(2)))/$(strip $(2)).vbproj"/>)
 
