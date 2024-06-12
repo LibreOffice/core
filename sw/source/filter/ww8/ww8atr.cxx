@@ -5913,7 +5913,7 @@ void AttributeOutputBase::OutputStyleItemSet( const SfxItemSet& rSet, bool bTest
         // Items are not neccesarily fix (and were not designed to have a specific
         // 'order' to be made use of, it's coincidence).
         // Thus in the long run OutputItem itself might have to becorrected to work without
-        // that assumtion: hand a access method to it (callback/ItemSet) so that it might
+        // that assumption: hand a access method to it (callback/ItemSet) so that it might
         // ask e.g. for current FillStyle when FillGradient is processed.
         // I will now loop and remember XATTR_FILLSTYLE and XATTR_FILLGRADIENT when set,
         // executing when *both* are set and in the needed order.
