@@ -102,7 +102,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::office;
 
-namespace sd {
+namespace sd
+{
 
 SfxItemPool* GetAnnotationPool()
 {
@@ -169,6 +170,24 @@ OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotatio
     }
     return sRet;
 }
+
+namespace
+{
+
+SdrObject* findAnnotationObjectMatching(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation)
+{
+    SdrPage const* pPage = xAnnotation->getPage();
+
+    for (size_t i = 0; i < pPage->GetObjCount(); ++i)
+    {
+        SdrObject* pObject = pPage->GetObj(i);
+        if (pObject->isAnnotationObject() && pObject->getAnnotationData()->mxAnnotation == xAnnotation)
+            return pObject;
+    }
+    return nullptr;
+}
+
+} // end anonymous ns
 
 AnnotationManagerImpl::AnnotationManagerImpl( ViewShellBase& rViewShellBase )
 : mrBase( rViewShellBase )
@@ -428,11 +447,16 @@ void AnnotationManagerImpl::ExecuteEditAnnotation(SfxRequest const & rReq)
         auto pSdAnnotation = static_cast<sd::Annotation*>(xAnnotation.get());
         pSdAnnotation->createChangeUndo();
 
-        if (nPositionX >= 0 && nPositionY >= 0)
+        SdrObject* pObject = findAnnotationObjectMatching(xAnnotation);
+        if (pObject && nPositionX >= 0 && nPositionY >= 0)
         {
-            double fX = convertTwipToMm100(nPositionX) / 100.0;
-            double fY = convertTwipToMm100(nPositionY) / 100.0;
-            xAnnotation->setPosition({fX, fY});
+            double fX = convertTwipToMm100(nPositionX);
+            double fY = convertTwipToMm100(nPositionY);
+
+            double deltaX = fX - (pSdAnnotation->getPosition().X * 100.0);
+            double deltaY = fY - (pSdAnnotation->getPosition().Y * 100.0);
+
+            pObject->Move({::tools::Long(deltaX), ::tools::Long(deltaY)});
         }
 
         if (!sText.isEmpty())
@@ -939,19 +963,9 @@ IMPL_LINK_NOARG(AnnotationManagerImpl, UpdateTagsHdl, void*, void)
     invalidateSlots();
 }
 
-SdrObject* AnnotationManagerImpl::findAnnotationObjectMatching(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation)
-{
-    for (size_t i = 0; i < mxCurrentPage->GetObjCount(); ++i)
-    {
-        SdrObject* pObject = mxCurrentPage->GetObj(i);
-        if (pObject->isAnnotationObject() && pObject->getAnnotationData()->mxAnnotation == xAnnotation)
-            return pObject;
-    }
-    return nullptr;
-}
-
 namespace
 {
+
 void applyAnnotationCommon(SdrObject& rObject, rtl::Reference<sdr::annotation::Annotation> const& xAnnotation)
 {
     rObject.setAsAnnotationObject(true);

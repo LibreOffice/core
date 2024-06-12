@@ -990,8 +990,8 @@ void SdrObject::RecalcBoundRect()
     if ((getSdrModelFromSdrObject().isLocked()) || comphelper::IsFuzzing())
         return;
 
-    auto const& rRectangle = getOutRectangle();
 
+    auto const& rRectangle = getOutRectangle();
     // central new method which will calculate the BoundRect using primitive geometry
     if (!rRectangle.IsEmpty())
         return;
@@ -1544,8 +1544,10 @@ void SdrObject::Move(const Size& rSize)
     NbcMove(rSize);
     if (isAnnotationObject())
     {
-        auto& rRect = GetCurrentBoundRect();
-        css::geometry::RealPoint2D aNewPosition(rRect.Left() / 100.0, rRect.Top() / 100.0);
+        css::geometry::RealPoint2D aNewPosition(
+            GetLogicRect().Left() / 100.0,
+            GetLogicRect().Top() / 100.0);
+
         getAnnotationData()->mxAnnotation->SetPosition(aNewPosition);
     }
     SetChanged();

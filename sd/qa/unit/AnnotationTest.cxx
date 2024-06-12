@@ -18,6 +18,7 @@
 #include <vcl/scheduler.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/annotation/Annotation.hxx>
+#include <svx/annotation/ObjectAnnotationData.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdview.hxx>
 
@@ -191,6 +192,55 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationInsertUndoRedo)
     CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->getAnnotations().size());
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(nID + 0), pPage->getAnnotations().at(0)->GetId());
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(nID + 1), pPage->getAnnotations().at(1)->GetId());
+}
+
+CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationUpdate)
+{
+    createSdDrawDoc();
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+
+    SdPage* pPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
+
+    uno::Sequence<beans::PropertyValue> aArgs;
+
+    aArgs = comphelper::InitPropertySequence({
+        { "Text", uno::Any(u"Comment"_ustr) },
+    });
+    dispatchCommand(mxComponent, ".uno:InsertAnnotation", aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
+    SdrObject* pObject = pPage->GetObj(0);
+    CPPUNIT_ASSERT_EQUAL(SdrObjKind::Annotation, pObject->GetObjIdentifier());
+
+    auto& pAnnotationData = pObject->getAnnotationData();
+    CPPUNIT_ASSERT(pAnnotationData);
+    sal_Int32 nID = pAnnotationData->mxAnnotation->GetId();
+
+    CPPUNIT_ASSERT_EQUAL(tools::Long(0), pObject->GetLogicRect().Left());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(0), pObject->GetLogicRect().Top());
+
+    pObject->Move({ 200, 200 });
+
+    CPPUNIT_ASSERT_EQUAL(tools::Long(200), pObject->GetLogicRect().Left());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(200), pObject->GetLogicRect().Top());
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0, pAnnotationData->mxAnnotation->getPosition().X, 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0, pAnnotationData->mxAnnotation->getPosition().Y, 1E-4);
+
+    aArgs = comphelper::InitPropertySequence({ { "Id", uno::Any(OUString::number(nID)) },
+                                               { "PositionX", uno::Any(sal_Int32(1440)) },
+                                               { "PositionY", uno::Any(sal_Int32(14400)) } });
+
+    dispatchCommand(mxComponent, ".uno:EditAnnotation", aArgs);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(25.4, pAnnotationData->mxAnnotation->getPosition().X, 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(254.0, pAnnotationData->mxAnnotation->getPosition().Y, 1E-4);
+
+    CPPUNIT_ASSERT_EQUAL(tools::Long(2540), pObject->GetLogicRect().Left());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(25400), pObject->GetLogicRect().Top());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
