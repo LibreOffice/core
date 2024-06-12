@@ -314,6 +314,57 @@ const ApiPaperSize& PaperSizeConv::getApiSizeForMSPaperSizeIndex( sal_Int32 nMSO
 
 OUString CreateDOCXStyleId(std::u16string_view const aName)
 {
+    // tdf#161509: some special style names have standard style IDs that don't match case
+    static constexpr std::pair<std::u16string_view, OUString> specialCases[] = {
+        { u"heading 1", u"Heading1"_ustr },
+        { u"heading 2", u"Heading2"_ustr },
+        { u"heading 3", u"Heading3"_ustr },
+        { u"heading 4", u"Heading4"_ustr },
+        { u"heading 5", u"Heading5"_ustr },
+        { u"heading 6", u"Heading6"_ustr },
+        { u"heading 7", u"Heading7"_ustr },
+        { u"heading 8", u"Heading8"_ustr },
+        { u"heading 9", u"Heading9"_ustr },
+        { u"index 1", u"Index1"_ustr },
+        { u"index 2", u"Index2"_ustr },
+        { u"index 3", u"Index3"_ustr },
+        { u"index 4", u"Index4"_ustr },
+        { u"index 5", u"Index5"_ustr },
+        { u"index 6", u"Index6"_ustr },
+        { u"index 7", u"Index7"_ustr },
+        { u"index 8", u"Index8"_ustr },
+        { u"index 9", u"Index9"_ustr },
+        { u"toc 1", u"TOC1"_ustr },
+        { u"toc 2", u"TOC2"_ustr },
+        { u"toc 3", u"TOC3"_ustr },
+        { u"toc 4", u"TOC4"_ustr },
+        { u"toc 5", u"TOC5"_ustr },
+        { u"toc 6", u"TOC6"_ustr },
+        { u"toc 7", u"TOC7"_ustr },
+        { u"toc 8", u"TOC8"_ustr },
+        { u"toc 9", u"TOC9"_ustr },
+        { u"footnote text", u"FootnoteText"_ustr },
+        { u"annotation text", u"CommentText"_ustr },
+        { u"header", u"Header"_ustr },
+        { u"footer", u"Footer"_ustr },
+        { u"index heading", u"IndexHeading"_ustr },
+        { u"caption", u"Caption"_ustr },
+        { u"table of figures", u"TableofFigures"_ustr },
+        { u"envelope address", u"EnvelopeAddress"_ustr },
+        { u"envelope return", u"EnvelopeReturn"_ustr },
+        { u"footnote reference", u"FootnoteReference"_ustr },
+        { u"annotation reference", u"CommentReference"_ustr },
+        { u"line number", u"LineNumber"_ustr },
+        { u"page number", u"PageNumber"_ustr },
+        { u"endnote reference", u"EndnoteReference"_ustr },
+        { u"endnote text", u"EndnoteText"_ustr },
+        { u"table of authorities", u"TableofAuthorities"_ustr },
+        { u"macro", u"MacroText"_ustr },
+    };
+    for (const auto& [stiName, id] : specialCases)
+        if (aName == stiName)
+            return id;
+
     OUStringBuffer aStyleIdBuf(aName.size());
     for (size_t i = 0; i < aName.size(); ++i)
     {

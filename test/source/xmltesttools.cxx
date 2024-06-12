@@ -90,16 +90,16 @@ OUString XmlTestTools::getXPath(const xmlDocUniquePtr& pXmlDoc, const OString& r
 {
     CPPUNIT_ASSERT(pXmlDoc);
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
-    CPPUNIT_ASSERT(pXmlObj);
+    OString docAndXPath = OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath;
+    CPPUNIT_ASSERT_MESSAGE(docAndXPath.getStr(), pXmlObj);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-    CPPUNIT_ASSERT(pXmlNodes);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
+    CPPUNIT_ASSERT_MESSAGE(OString(docAndXPath + "' not found").getStr(), pXmlNodes);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(docAndXPath + "' number of nodes is incorrect").getStr(),
                                  1, xmlXPathNodeSetGetLength(pXmlNodes));
     CPPUNIT_ASSERT(!rAttribute.isEmpty());
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
     xmlChar * prop = xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr()));
-    OString sAttAbsent = OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath
-                         + "' no attribute '" + rAttribute + "' exist";
+    OString sAttAbsent = docAndXPath + "' no attribute '" + rAttribute + "' exist";
     CPPUNIT_ASSERT_MESSAGE(sAttAbsent.getStr(), prop);
     OUString s(convert(prop));
     xmlFree(prop);
