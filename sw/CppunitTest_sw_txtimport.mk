@@ -62,7 +62,12 @@ $(eval $(call gb_CppunitTest_use_rdb,sw_txtimport,services))
 $(eval $(call gb_CppunitTest_use_configuration,sw_txtimport))
 
 ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
-$(eval $(call gb_CppunitTest_set_non_application_font_use,sw_txtimport,abort))
+# Note: This test intentionally sets non-application font use to 'deny',
+# rather than 'abort'. This temporarily works around an issue causing
+# these tests to fail on fontconfig systems with CJK fonts installed.
+#
+# See tdf#161533
+$(eval $(call gb_CppunitTest_set_non_application_font_use,sw_txtimport,deny))
 endif
 
 # vim: set noet sw=4 ts=4:
