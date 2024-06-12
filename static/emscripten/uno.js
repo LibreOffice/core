@@ -23,12 +23,12 @@ Module.unoObject = function(interfaces, obj) {
     }
     obj.impl_implementationId = new Module.uno_Sequence_byte([]);
     obj.queryInterface = function(type) {
-        for (const i in obj._types) {
+        for (const i in obj.impl_typemap) {
             if (i === type.toString()) {
                 return new Module.uno_Any(
                     type,
                     Module['uno_Type_' + i.replace(/\./g, '$')].reference(
-                        obj._impl[obj._types[i]]));
+                        obj.impl_interfaces[obj.impl_typemap[i]]));
             }
         }
         return new Module.uno_Any(Module.uno_Type.Void(), undefined);
@@ -36,7 +36,7 @@ Module.unoObject = function(interfaces, obj) {
     obj.acquire = function() { ++obj.impl_refcount; };
     obj.release = function() {
         if (--obj.impl_refcount === 0) {
-            for (const i in obj._impl) {
+            for (const i in obj.impl_interfaces) {
                 i.delete();
             }
             obj.impl_types.delete();
@@ -45,18 +45,18 @@ Module.unoObject = function(interfaces, obj) {
     };
     obj.getTypes = function() { return obj.impl_types; };
     obj.getImplementationId = function() { return obj.impl_implementationId; };
-    obj._impl = {};
+    obj.impl_interfaces = {};
     interfaces.forEach((i) => {
-        obj._impl[i] = Module['uno_Type_' + i.replace(/\./g, '$')].implement(obj);
+        obj.impl_interfaces[i] = Module['uno_Type_' + i.replace(/\./g, '$')].implement(obj);
     });
-    obj._types = {};
+    obj.impl_typemap = {};
     const walk = function(td, impl) {
         const name = td.getName();
-        if (!Object.hasOwn(obj._types, name)) {
+        if (!Object.hasOwn(obj.impl_typemap, name)) {
             if (td.getTypeClass() != Module.uno.com.sun.star.uno.TypeClass.INTERFACE) {
                 throw new Error('not a UNO interface type: ' + name);
             }
-            obj._types[name] = impl;
+            obj.impl_typemap[name] = impl;
             const bases = Module.uno.com.sun.star.reflection.XInterfaceTypeDescription2.query(td)
                   .getBaseTypes();
             for (let i = 0; i !== bases.size(); ++i) {
@@ -74,8 +74,8 @@ Module.unoObject = function(interfaces, obj) {
         td.delete();
     })
     tdmAny.delete();
-    obj.acquire();
-    return obj;
+    return Module.uno.com.sun.star.uno.XInterface.reference(
+        obj.impl_interfaces[obj.impl_typemap['com.sun.star.uno.XInterface']]);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
