@@ -9,6 +9,7 @@
 
 $(eval $(call gb_Module_Module,cli_ure))
 
+ifeq ($(ENABLE_CLI),TRUE)
 ifeq ($(COM),MSC)
 ifneq ($(CPUNAME)_$(CROSS_COMPILING),AARCH64_TRUE)
 $(eval $(call gb_Module_add_targets,cli_ure,\
@@ -22,6 +23,7 @@ $(eval $(call gb_Module_add_targets,cli_ure,\
 	Library_cli_uno \
 	Package_cli_basetypes_copy \
 ))
+endif
 endif
 endif
 

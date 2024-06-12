@@ -89,7 +89,9 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
-	$(if $(filter MSC,$(COM)),$(if $(filter-out AARCH64_TRUE,$(CPUNAME)_$(CROSS_COMPILING)),climaker)) \
+	$(if $(ENABLE_CLI),\
+		$(if $(filter MSC,$(COM)),$(if $(filter-out AARCH64_TRUE,$(CPUNAME)_$(CROSS_COMPILING)),climaker)) \
+	) \
 	cppumaker \
 	javamaker \
 	netmaker \
@@ -591,14 +593,16 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	swqahelper \
 	wpftqahelper \
 	precompiled_system \
-	$(if $(filter MSC,$(COM)),cli_cppuhelper) \
+	$(if $(ENABLE_CLI),$(if $(filter MSC,$(COM)),cli_cppuhelper)) \
 	$(if $(filter $(OS),ANDROID),lo-bootstrap) \
 	$(if $(filter $(OS),MACOSX),OOoSpotlightImporter) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
 	affine_uno_uno \
-	$(if $(filter MSC,$(COM)),$(if $(filter-out AARCH64_TRUE,$(CPUNAME)_$(CROSS_COMPILING)),cli_uno)) \
+	$(if $(ENABLE_CLI),\
+		$(if $(filter MSC,$(COM)),$(if $(filter-out AARCH64_TRUE,$(CPUNAME)_$(CROSS_COMPILING)),cli_uno)) \
+	) \
 	i18nlangtag \
 	$(if $(ENABLE_JAVA), \
 		java_uno \
@@ -862,7 +866,7 @@ endif
 # Other packages could be potentially autoinstalled.
 $(eval $(call gb_Helper_register_packages, \
 	test_unittest \
-	cli_basetypes_copy \
+	$(if $(ENABLE_CLI),cli_basetypes_copy) \
 	extras_wordbook \
 	instsetoo_native_setup \
 	$(if $(ENABLE_OOENV),instsetoo_native_ooenv) \
@@ -905,7 +909,9 @@ $(eval $(call gb_Helper_register_packages_for_install,postgresqlsdbc,\
 $(eval $(call gb_Helper_register_packages_for_install,sdk,\
 	odk_share_readme \
 	odk_share_readme_generated \
-	$(if $(filter WNT,$(OS)),$(if $(filter-out AARCH64_TRUE,$(CPUNAME)_$(CROSS_COMPILING)),odk_cli)) \
+	$(if $(ENABLE_CLI),\
+		$(if $(filter WNT,$(OS)),$(if $(filter-out AARCH64_TRUE,$(CPUNAME)_$(CROSS_COMPILING)),odk_cli)) \
+	) \
 	odk_config \
 	$(if $(filter WNT,$(OS)),odk_config_win) \
 	odk_docs \

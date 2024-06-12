@@ -2165,6 +2165,11 @@ AC_ARG_ENABLE(customtarget-components,
     AS_HELP_STRING([--enable-customtarget-components],
         [Generates the static UNO object constructor mapping from the build.]))
 
+AC_ARG_ENABLE(cli,
+    AS_HELP_STRING([--disable-cli],
+        [Disable the generation of old CLI bindings.]),
+,enable_cli=yes)
+
 AC_ARG_ENABLE(dotnet,
     AS_HELP_STRING([--enable-dotnet],
         [Enables or disables .NET 8.0 support and bindings generation.]))
@@ -7127,83 +7132,92 @@ if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$WSL_ONLY_AS_HELPER
         AC_MSG_ERROR([Some (all?) Windows Installer tools in the Windows SDK are missing, please install.])
     fi
 
-    dnl Check csc.exe
-    AC_MSG_CHECKING([for csc.exe])
-    find_csc
-    PathFormat "$csctest"
-    csctest_unix="$formatted_path_unix"
-    if test -f "$csctest_unix/csc.exe"; then
-        CSC_PATH="$csctest"
-    fi
-    if test ! -f "$csctest_unix/csc.exe"; then
-        AC_MSG_ERROR([csc.exe not found as $CSC_PATH/csc.exe])
-    else
-        AC_MSG_RESULT([$CSC_PATH/csc.exe])
-    fi
-
-    CSC_PATH=`win_short_path_for_make "$CSC_PATH"`
-
-    dnl Check al.exe
-    AC_MSG_CHECKING([for al.exe])
-    if test -n "$winsdkbinsubdir" \
-        -a -f "$winsdktest_unix/Bin/$winsdkbinsubdir/$WIN_BUILD_ARCH/al.exe"
-    then
-        AL_PATH="$winsdktest/Bin/$winsdkbinsubdir/$WIN_BUILD_ARCH"
-    elif test -f "$winsdktest_unix/Bin/$WIN_BUILD_ARCH/al.exe"; then
-        AL_PATH="$winsdktest/Bin/$WIN_BUILD_ARCH"
-    elif test -f "$winsdktest_unix/Bin/al.exe"; then
-        AL_PATH="$winsdktest/Bin"
-    fi
-
-    if test -z "$AL_PATH"; then
-        find_al
-        PathFormat "$altest"
-        altest_unix="$formatted_path_unix"
-        if test -f "$altest_unix/bin/al.exe"; then
-            AL_PATH="$altest/bin"
-        elif test -f "$altest_unix/al.exe"; then
-            AL_PATH="$altest"
-        fi
-    fi
-    PathFormat "$AL_PATH"
-    if test ! -f "$formatted_path_unix/al.exe"; then
-        AC_MSG_ERROR([al.exe not found as $AL_PATH/al.exe])
-    else
-        AC_MSG_RESULT([$AL_PATH/al.exe])
-    fi
-
-    AL_PATH=`win_short_path_for_make "$AL_PATH"`
-
-    dnl Check mscoree.lib / .NET Framework dir
-    AC_MSG_CHECKING(.NET Framework)
-    find_dotnetsdk
-    PathFormat "$frametest"
-    frametest="$formatted_path_unix"
-    if test -f "$frametest/Lib/um/$WIN_BUILD_ARCH/mscoree.lib"; then
-        DOTNET_FRAMEWORK_HOME="$frametest"
-    else
-        if test -f "$winsdktest_unix/lib/mscoree.lib" -o -f "$winsdktest_unix/lib/$winsdklibsubdir/um/$WIN_BUILD_ARCH/mscoree.lib"; then
-            DOTNET_FRAMEWORK_HOME="$winsdktest"
-        fi
-    fi
-    PathFormat "$DOTNET_FRAMEWORK_HOME"
-    if test ! -f "$formatted_path_unix/lib/mscoree.lib" -a ! -f "$formatted_path_unix/lib/$winsdklibsubdir/um/$WIN_BUILD_ARCH/mscoree.lib" -a ! -f "$formatted_path_unix/Lib/um/$WIN_BUILD_ARCH/mscoree.lib"; then
-        AC_MSG_ERROR([mscoree.lib not found])
-    fi
-    AC_MSG_RESULT([found: $DOTNET_FRAMEWORK_HOME])
-
     PathFormat "$MIDL_PATH"
     MIDL_PATH="$formatted_path"
 
-    PathFormat "$AL_PATH"
-    AL_PATH="$formatted_path"
+    if test "$enable_cli" = yes; then
+        dnl Check csc.exe
+        AC_MSG_CHECKING([for csc.exe])
+        find_csc
+        PathFormat "$csctest"
+        csctest_unix="$formatted_path_unix"
+        if test -f "$csctest_unix/csc.exe"; then
+            CSC_PATH="$csctest"
+        fi
+        if test ! -f "$csctest_unix/csc.exe"; then
+            AC_MSG_ERROR([csc.exe not found as $CSC_PATH/csc.exe])
+        else
+            AC_MSG_RESULT([$CSC_PATH/csc.exe])
+        fi
+    
+        CSC_PATH=`win_short_path_for_make "$CSC_PATH"`
+    
+        dnl Check al.exe
+        AC_MSG_CHECKING([for al.exe])
+        if test -n "$winsdkbinsubdir" \
+            -a -f "$winsdktest_unix/Bin/$winsdkbinsubdir/$WIN_BUILD_ARCH/al.exe"
+        then
+            AL_PATH="$winsdktest/Bin/$winsdkbinsubdir/$WIN_BUILD_ARCH"
+        elif test -f "$winsdktest_unix/Bin/$WIN_BUILD_ARCH/al.exe"; then
+            AL_PATH="$winsdktest/Bin/$WIN_BUILD_ARCH"
+        elif test -f "$winsdktest_unix/Bin/al.exe"; then
+            AL_PATH="$winsdktest/Bin"
+        fi
+    
+        if test -z "$AL_PATH"; then
+            find_al
+            PathFormat "$altest"
+            altest_unix="$formatted_path_unix"
+            if test -f "$altest_unix/bin/al.exe"; then
+                AL_PATH="$altest/bin"
+            elif test -f "$altest_unix/al.exe"; then
+                AL_PATH="$altest"
+            fi
+        fi
+        PathFormat "$AL_PATH"
+        if test ! -f "$formatted_path_unix/al.exe"; then
+            AC_MSG_ERROR([al.exe not found as $AL_PATH/al.exe])
+        else
+            AC_MSG_RESULT([$AL_PATH/al.exe])
+        fi
+    
+        AL_PATH=`win_short_path_for_make "$AL_PATH"`
+    
+        dnl Check mscoree.lib / .NET Framework dir
+        AC_MSG_CHECKING(.NET Framework)
+        find_dotnetsdk
+        PathFormat "$frametest"
+        frametest="$formatted_path_unix"
+        if test -f "$frametest/Lib/um/$WIN_BUILD_ARCH/mscoree.lib"; then
+            DOTNET_FRAMEWORK_HOME="$frametest"
+        else
+            if test -f "$winsdktest_unix/lib/mscoree.lib" -o -f "$winsdktest_unix/lib/$winsdklibsubdir/um/$WIN_BUILD_ARCH/mscoree.lib"; then
+                DOTNET_FRAMEWORK_HOME="$winsdktest"
+            fi
+        fi
+        PathFormat "$DOTNET_FRAMEWORK_HOME"
+        if test ! -f "$formatted_path_unix/lib/mscoree.lib" -a ! -f "$formatted_path_unix/lib/$winsdklibsubdir/um/$WIN_BUILD_ARCH/mscoree.lib" -a ! -f "$formatted_path_unix/Lib/um/$WIN_BUILD_ARCH/mscoree.lib"; then
+            AC_MSG_ERROR([mscoree.lib not found])
+        fi
+        AC_MSG_RESULT([found: $DOTNET_FRAMEWORK_HOME])
+    
+        PathFormat "$AL_PATH"
+        AL_PATH="$formatted_path"
+    
+        PathFormat "$DOTNET_FRAMEWORK_HOME"
+        DOTNET_FRAMEWORK_HOME="$formatted_path"
+    
+        PathFormat "$CSC_PATH"
+        CSC_PATH="$formatted_path"
 
-    PathFormat "$DOTNET_FRAMEWORK_HOME"
-    DOTNET_FRAMEWORK_HOME="$formatted_path"
-
-    PathFormat "$CSC_PATH"
-    CSC_PATH="$formatted_path"
+        ENABLE_CLI="TRUE"
+    else
+        ENABLE_CLI=""
+    fi
+else
+    ENABLE_CLI=""
 fi
+AC_SUBST(ENABLE_CLI)
 
 dnl ===================================================================
 dnl Testing for C++ compiler and version...
