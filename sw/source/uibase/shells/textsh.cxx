@@ -831,7 +831,7 @@ void  SwTextShell::ExecDelete(SfxRequest &rReq)
     rReq.Done();
 }
 
-void SwTextShell::ExecTransliteration( SfxRequest const & rReq )
+void SwTextShell::ExecTransliteration( SfxRequest& rReq )
 {
     using namespace ::com::sun::star::i18n;
     TransliterationFlags nMode = TransliterationFlags::NONE;
@@ -873,10 +873,13 @@ void SwTextShell::ExecTransliteration( SfxRequest const & rReq )
     }
 
     if( nMode != TransliterationFlags::NONE )
+    {
         GetShell().TransliterateText( nMode );
+        rReq.Done();
+    }
 }
 
-void SwTextShell::ExecRotateTransliteration( SfxRequest const & rReq )
+void SwTextShell::ExecRotateTransliteration( SfxRequest& rReq )
 {
     if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE )
     {
@@ -892,13 +895,17 @@ void SwTextShell::ExecRotateTransliteration( SfxRequest const & rReq )
                     transFlags = m_aRotateCase.getNextMode();
             }
             rSh.TransliterateText(transFlags);
+            rReq.Done();
         }
         else
         {
             if (bSentenceCase)
                 transFlags = m_aRotateCase.getNextMode();
             if ((rSh.IsEndWrd() || rSh.IsStartWord() || rSh.IsInWord()) && rSh.SelWrd(nullptr, i18n::WordType::WORD_COUNT))
+            {
                 rSh.TransliterateText(transFlags);
+                rReq.Done();
+            }
         }
     }
 }
