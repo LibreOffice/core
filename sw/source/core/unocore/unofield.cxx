@@ -2939,6 +2939,48 @@ void SAL_CALL SwXTextFieldTypes::removeRefreshListener(
     m_pImpl->m_RefreshListeners.removeInterface(aGuard, xListener);
 }
 
+// This is specifically for looking up annotations, so we only need to search a couple of places
+css::uno::Any SAL_CALL SwXTextFieldTypes::getByUniqueID(const OUString& ID)
+{
+    SolarMutexGuard aGuard;
+    uno::Any aRet;
+    auto& rDoc = GetDoc();
+
+    const SwFieldTypes* pFieldTypes = rDoc.getIDocumentFieldsAccess().GetFieldTypes();
+    auto fieldTypeIt = std::find_if(pFieldTypes->begin(), pFieldTypes->end(),
+                           [](const std::unique_ptr<SwFieldType>& pType) {
+                               return pType->Which() == SwFieldIds::Postit;
+                            });
+    const SwFieldType & rCurType = **fieldTypeIt;
+    std::vector<SwFormatField*> vFormatFields;
+    rCurType.GatherFields(vFormatFields);
+    for (const SwFormatField* pFormatField : vFormatFields)
+    {
+        const SwPostItField* pField = static_cast<const SwPostItField*>(pFormatField->GetField());
+        if (pField->GetName() == ID)
+        {
+            aRet <<= uno::Reference<beans::XPropertySet>(SwXTextField::CreateXTextField(&rDoc, pFormatField));
+            return aRet;
+        }
+    }
+
+    IDocumentMarkAccess& rMarksAccess(*rDoc.getIDocumentMarkAccess());
+    auto it = rMarksAccess.findMark(ID);
+    if (it != rMarksAccess.getAllMarksEnd())
+    {
+        aRet <<= uno::Reference<beans::XPropertySet>(SwXFieldmark::CreateXFieldmark(rDoc, *it));
+        if (aRet.hasValue())
+            return aRet;
+    }
+
+    return aRet;
+}
+
+void SAL_CALL SwXTextFieldTypes::removeByUniqueID(const OUString& /*ID*/)
+{
+    throw uno::RuntimeException("unsupported");
+}
+
 class SwXFieldEnumeration::Impl
     : public SvtListener
 {

@@ -23,6 +23,7 @@
 #include <memory>
 
 #include <com/sun/star/util/XRefreshable.hpp>
+#include <com/sun/star/container/XUniqueIDAccess.hpp>
 
 #include "unocoll.hxx"
 
@@ -68,6 +69,7 @@ typedef ::cppu::WeakImplHelper
 <   css::container::XEnumerationAccess
 ,   css::lang::XServiceInfo
 ,   css::util::XRefreshable
+,   css::container::XUniqueIDAccess
 > SwXTextFieldTypes_Base;
 
 class SwXTextFieldTypes final
@@ -111,6 +113,9 @@ public:
             const css::uno::Reference<
                 css::util::XRefreshListener>& xListener) override;
 
+    // container::XUniqueIDAccess
+    virtual css::uno::Any SAL_CALL getByUniqueID( const OUString& ID ) override;
+    virtual void SAL_CALL removeByUniqueID( const OUString& ID ) override;
 };
 
 #endif

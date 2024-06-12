@@ -61,6 +61,7 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/container/XUniqueIDAccess.hpp>
 
 #include <sax/tools/converter.hxx>
 
@@ -3256,24 +3257,9 @@ void XMLAnnotationImportContext::endFastElement(sal_Int32 /*nElement*/)
             Reference<XTextFieldsSupplier> xTextFieldsSupplier(GetImport().GetModel(), UNO_QUERY);
             if (!xTextFieldsSupplier)
                 return;
-            uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
-            uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
-            while (xFields->hasMoreElements())
-            {
-                uno::Reference<beans::XPropertySet> xCurrField(xFields->nextElement(), uno::UNO_QUERY);
-                uno::Reference<beans::XPropertySetInfo> const xInfo(
-                        xCurrField->getPropertySetInfo());
-                if (xInfo->hasPropertyByName(sAPI_name))
-                {
-                    OUString aFieldName;
-                    xCurrField->getPropertyValue(sAPI_name) >>= aFieldName;
-                    if (aFieldName == aName)
-                    {
-                        xPrevField.set( xCurrField, uno::UNO_QUERY );
-                        break;
-                    }
-                }
-            }
+            uno::Reference<container::XUniqueIDAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields(), UNO_QUERY_THROW);
+            uno::Any aAny = xFieldsAccess->getByUniqueID(aName);
+            aAny >>= xPrevField;
         }
         if ( xPrevField.is() )
         {
