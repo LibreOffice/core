@@ -23,8 +23,12 @@
 #include <cntfrm.hxx>
 #include <strings.hrc>
 #include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/sysdata.hxx>
 
-const int MinimumPanelWidth = 250;
+const int MinimumContainerWidth = 250;
+const int Rounding = 6;
+const int CharactersBeforeAndAfter = 40;
 
 namespace
 {
@@ -60,11 +64,10 @@ QuickFindPanel::QuickFindPanel(weld::Widget* pParent)
     : PanelLayout(pParent, u"QuickFindPanel"_ustr, u"modules/swriter/ui/sidebarquickfind.ui"_ustr)
     , m_xSearchFindEntry(m_xBuilder->weld_entry(u"Find"_ustr))
     , m_xSearchFindsList(m_xBuilder->weld_tree_view(u"searchfinds"_ustr))
-    , m_nRowHeight(m_xSearchFindsList->get_height_rows(4))
     , m_pWrtShell(::GetActiveWrtShell())
 {
-    m_xContainer->set_size_request(MinimumPanelWidth, -1);
-    m_xSearchFindsList->set_size_request(1, m_nRowHeight);
+    m_xContainer->set_size_request(MinimumContainerWidth, 1);
+
     m_xSearchFindEntry->connect_activate(
         LINK(this, QuickFindPanel, SearchFindEntryActivateHandler));
     m_xSearchFindEntry->connect_changed(LINK(this, QuickFindPanel, SearchFindEntryChangedHandler));
@@ -101,10 +104,55 @@ IMPL_LINK_NOARG(QuickFindPanel, SearchFindEntryActivateHandler, weld::Entry&, bo
     return true;
 }
 
-IMPL_LINK_NOARG(QuickFindPanel, SearchFindsListCustomGetSizeHandler, weld::TreeView::get_size_args,
-                Size)
+IMPL_LINK(QuickFindPanel, SearchFindsListCustomGetSizeHandler, weld::TreeView::get_size_args,
+          aPayload, Size)
 {
-    return Size(1, m_nRowHeight);
+    vcl::RenderContext& rRenderContext = std::get<0>(aPayload);
+    const OUString& rId = std::get<1>(aPayload);
+
+    const bool bPageEntry = rId[0] == '-';
+
+    OUString aEntry(rId);
+    if (!bPageEntry)
+    {
+        int nIndex = m_xSearchFindsList->find_id(rId);
+        aEntry = m_xSearchFindsList->get_text(nIndex);
+    }
+
+    // To not have top and bottom clipping when the sidebar width is made smaller by the user
+    // calculate the text rectangle using the mimimum width the rectangle can become.
+    int x, y, width, height;
+    m_xSearchFindsList->get_extents_relative_to(*m_xContainer, x, y, width, height);
+
+    const int leftTextMargin = 6;
+    const int rightTextMargin = 6 + 3;
+    tools::Long nScrollBarThickness
+        = Application::GetSettings().GetStyleSettings().GetScrollBarSize();
+
+    tools::Rectangle aInRect(Point(), Size(MinimumContainerWidth - (x * 2) - leftTextMargin
+                                               - nScrollBarThickness - rightTextMargin,
+                                           1));
+
+    tools::Rectangle aRect;
+    if (!bPageEntry)
+    {
+        aRect = rRenderContext.GetTextRect(aInRect, aEntry,
+                                           DrawTextFlags::VCenter | DrawTextFlags::MultiLine
+                                               | DrawTextFlags::WordBreak);
+    }
+    else
+    {
+        aRect = rRenderContext.GetTextRect(aInRect, aEntry,
+                                           DrawTextFlags::Center | DrawTextFlags::VCenter);
+    }
+
+    if (!bPageEntry)
+    {
+        aRect.AdjustTop(-3);
+        aRect.AdjustBottom(+3);
+    }
+
+    return Size(1, aRect.GetHeight());
 }
 
 IMPL_LINK(QuickFindPanel, SearchFindsListRender, weld::TreeView::render_args, aPayload, void)
@@ -113,16 +161,46 @@ IMPL_LINK(QuickFindPanel, SearchFindsListRender, weld::TreeView::render_args, aP
     const ::tools::Rectangle& rRect = std::get<1>(aPayload);
     const OUString& rId = std::get<3>(aPayload);
 
-    tools::Rectangle aRect(
-        rRect.TopLeft(),
-        Size(rRenderContext.GetOutputSize().Width() - rRect.Left(), rRect.GetHeight()));
-
-    int nIndex = m_xSearchFindsList->find_id(rId);
-    OUString aEntry(m_xSearchFindsList->get_text(nIndex));
-
     const bool bPageEntry = rId[0] == '-';
+
+    OUString aEntry(rId);
+
     if (!bPageEntry)
     {
+        int nIndex = m_xSearchFindsList->find_id(rId);
+        aEntry = m_xSearchFindsList->get_text(nIndex);
+    }
+
+    if (!bPageEntry)
+    {
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        rRenderContext.SetFillColor(rStyleSettings.GetDialogColor());
+        rRenderContext.SetTextColor(rStyleSettings.GetDialogTextColor());
+    }
+
+    tools::Rectangle aRect(rRect.TopLeft(),
+                           Size(rRenderContext.GetOutputSize().Width(), rRect.GetHeight()));
+
+    if (!bPageEntry)
+    {
+        aRect.AdjustTop(+3);
+        aRect.AdjustBottom(-3);
+    }
+
+    // adjust for scrollbar when not using gtk
+    if (m_pWrtShell->GetWin()->GetSystemData()->toolkit != SystemEnvData::Toolkit::Gtk)
+    {
+        tools::Long nScrollBarThickness
+            = Application::GetSettings().GetStyleSettings().GetScrollBarSize();
+        aRect.AdjustRight(-nScrollBarThickness);
+    }
+
+    if (!bPageEntry)
+    {
+        aRect.AdjustRight(-3);
+        rRenderContext.DrawRect(aRect, Rounding, Rounding);
+
+        aRect.AdjustLeft(+6);
         rRenderContext.DrawText(aRect, aEntry,
                                 DrawTextFlags::VCenter | DrawTextFlags::MultiLine
                                     | DrawTextFlags::WordBreak);
@@ -285,7 +363,7 @@ void QuickFindPanel::FillSearchFindsList()
         auto nPointIndex = pPointPosition->GetContentIndex();
 
         // determine the text node text subview start index for the list entry text
-        auto nStartIndex = nMarkIndex - 50;
+        auto nStartIndex = nMarkIndex - CharactersBeforeAndAfter;
         if (nStartIndex < 0)
         {
             nStartIndex = 0;
@@ -306,11 +384,11 @@ void QuickFindPanel::FillSearchFindsList()
                     ch = sNodeText[++nStartIndex];
             }
             if (nStartIndex == nMarkIndex) // no white space found
-                nStartIndex = nMarkIndex - 50;
+                nStartIndex = nMarkIndex - CharactersBeforeAndAfter;
         }
 
         // determine the text node text subview end index for the list entry text
-        auto nEndIndex = nPointIndex + 50;
+        auto nEndIndex = nPointIndex + CharactersBeforeAndAfter;
         if (nEndIndex >= sNodeText.getLength())
         {
             nEndIndex = sNodeText.getLength() - 1;
@@ -332,7 +410,7 @@ void QuickFindPanel::FillSearchFindsList()
             }
             if (nEndIndex == nPointIndex) // no white space found
             {
-                nEndIndex = nPointIndex + 50;
+                nEndIndex = nPointIndex + CharactersBeforeAndAfter;
                 if (nEndIndex >= sNodeText.getLength())
                     nEndIndex = sNodeText.getLength() - 1;
             }

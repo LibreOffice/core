@@ -26,7 +26,6 @@ private:
     std::unique_ptr<weld::Entry> m_xSearchFindEntry;
     std::unique_ptr<weld::TreeView> m_xSearchFindsList;
     std::vector<std::unique_ptr<SwPaM>> m_vPaMs;
-    int m_nRowHeight;
 
     SwWrtShell* m_pWrtShell;
 
