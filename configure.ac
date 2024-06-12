@@ -3587,8 +3587,8 @@ if test "$ENABLE_DOTNET" = TRUE; then
     AC_PATH_PROG(DOTNET, dotnet)
     if test "$DOTNET" != ""; then
         AC_MSG_CHECKING([whether .NET SDK is installed])
-        DOTNET_SDK_VERION=`dotnet --list-sdks`
-        if test "$DOTNET_SDK_VERION" != ""; then
+        DOTNET_SDK_VERSION=`dotnet --list-sdks`
+        if test "$DOTNET_SDK_VERSION" != ""; then
             AC_MSG_RESULT([yes])
             AC_DEFINE(HAVE_FEATURE_DOTNET)
         else
