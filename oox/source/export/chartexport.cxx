@@ -4102,6 +4102,40 @@ void ChartExport::exportDataLabels(
     xPropSet->getPropertyValue(u"ShowCustomLeaderLines"_ustr) >>= bShowLeaderLines;
     pFS->singleElement(FSNS(XML_c, XML_showLeaderLines), XML_val, ToPsz10(bShowLeaderLines));
 
+    // LeaderLine color, and width
+    util::Color aLineColor = -1;
+    xPropSet->getPropertyValue(u"LineColor"_ustr) >>= aLineColor;
+    // Line width
+    sal_Int32 nLineWidth = -1;
+    xPropSet->getPropertyValue(u"LineWidth"_ustr) >>= nLineWidth;
+
+    if (aLineColor > 0 || nLineWidth > 0)
+    {
+        pFS->startElement(FSNS(XML_c, XML_leaderLines));
+        pFS->startElement(FSNS(XML_c, XML_spPr));
+
+        if (nLineWidth > 0)
+            pFS->startElement(FSNS(XML_a, XML_ln), XML_w,
+                              OString::number(convertHmmToEmu(nLineWidth)));
+        else
+            pFS->startElement(FSNS(XML_a, XML_ln));
+
+        if (aLineColor != -1)
+        {
+            pFS->startElement(FSNS(XML_a, XML_solidFill));
+
+            OString aStr = I32SHEX(aLineColor);
+            pFS->singleElement(FSNS(XML_a, XML_srgbClr), XML_val, aStr);
+
+            pFS->endElement(FSNS(XML_a, XML_solidFill));
+        }
+
+        pFS->endElement(FSNS(XML_a, XML_ln));
+        pFS->endElement(FSNS(XML_c, XML_spPr));
+        pFS->endElement(FSNS(XML_c, XML_leaderLines));
+    }
+
+
     // Export leader line
     if( eChartType != chart::TYPEID_PIE )
     {

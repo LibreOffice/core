@@ -27,7 +27,8 @@
 #include <ChartType.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesProperties.hxx>
-
+#include "../../model/main/DataPointProperties.hxx"
+#include <LinePropertiesHelper.hxx>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart2/XColorScheme.hpp>
 
@@ -686,14 +687,21 @@ void PieChart::createTextLabelShape(
                     drawing::PointSequenceSequence aPoints{ { {nX1, nY1}, {nX2, nY2} } };
 
                     VLineProperties aVLineProperties;
-                    if (aPieLabelInfo.xTextShape.is())
-                    {
-                        sal_Int32 nColor = 0;
-                        aPieLabelInfo.xTextShape->SvxShape::getPropertyValue(u"CharColor"_ustr) >>= nColor;
-                        //automatic font color does not work for lines -> fallback to black
-                        if (nColor != -1)
-                            aVLineProperties.Color <<= nColor;
-                    }
+
+                    sal_Int32 nColor = 0;
+                    nColor = rSeries.getModel()
+                                 ->getFastPropertyValue(
+                                     DataPointProperties::PROP_DATAPOINT_BORDER_COLOR)
+                                 .get<sal_Int32>();
+                    if (nColor != -1)
+                        aVLineProperties.Color <<= nColor;
+                    sal_Int32 nWidth = 0;
+                    nWidth = rSeries.getModel()
+                                 ->getFastPropertyValue(LinePropertiesHelper::PROP_LINE_WIDTH)
+                                 .get<sal_Int32>();
+                    if (nWidth != -1)
+                        aVLineProperties.Width <<= nWidth;
+
                     ShapeFactory::createLine2D(xTextTarget, aPoints, &aVLineProperties);
                 }
             }

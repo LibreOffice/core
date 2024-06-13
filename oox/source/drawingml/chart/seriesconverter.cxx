@@ -212,6 +212,28 @@ void importBorderProperties( PropertySet& rPropSet, Shape& rShape, const Graphic
     rPropSet.setProperty(PROP_LabelBorderColor, uno::Any(nColor));
 }
 
+void lcl_ImportLeaderLineProperties(PropertySet& rPropSet, Shape& rShape,
+                                    const GraphicHelper& rGraphicHelper)
+{
+    LineProperties& rLP = rShape.getLineProperties();
+    // no fill has the same effect as no line so skip it
+    if (rLP.maLineFill.moFillType.has_value() && rLP.maLineFill.moFillType.value() == XML_noFill)
+        return;
+
+    if (rLP.moLineWidth.has_value())
+    {
+        sal_Int32 nWidth = convertEmuToHmm(rLP.moLineWidth.value());
+        rPropSet.setProperty(PROP_LineWidth, uno::Any(nWidth));
+    }
+
+    if (rLP.maLineFill.moFillType.has_value() && rLP.maLineFill.moFillType.value() == XML_solidFill)
+    {
+        const Color& aColor = rLP.maLineFill.maFillColor;
+        ::Color nColor = aColor.getColor(rGraphicHelper);
+        rPropSet.setProperty(PROP_LineColor, uno::Any(nColor));
+    }
+}
+
 void importFillProperties( PropertySet& rPropSet, Shape& rShape, const GraphicHelper& rGraphicHelper, ModelObjectHelper& rModelObjHelper )
 {
     FillProperties& rFP = rShape.getFillProperties();
@@ -466,6 +488,13 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
     // import leaderline of data labels
     if( !mrModel.mbShowLeaderLines )
         aPropSet.setProperty( PROP_ShowCustomLeaderLines, false );
+
+    if (mrModel.mxLeaderLines)
+    {
+        // Import leaderline properties (SolidFill color, and width)
+        lcl_ImportLeaderLineProperties(aPropSet, *mrModel.mxLeaderLines,
+                                       getFilter().getGraphicHelper());
+    }
 
     // data point label settings
     for (auto const& pointLabel : mrModel.maPointLabels)
