@@ -1122,6 +1122,16 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
         const uno::Reference<text::XTextRange> & xTextRange,
         ::sw::TextRangeMode const eMode)
 {
+    SwXTextRange* pRange = dynamic_cast<SwXTextRange*>(xTextRange.get());
+    if(pRange && &pRange->GetDoc() == &rToFill.GetDoc())
+    {
+        return pRange->GetPositions(rToFill, eMode);
+    }
+    if (SwXParagraph* pPara = dynamic_cast<SwXParagraph*>(xTextRange.get()))
+    {
+        return pPara->SelectPaM(rToFill);
+    }
+
     bool bRet = false;
 
     SwXHeadFootText* pHeadText
@@ -1153,43 +1163,31 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
         pCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get());
     }
 
-    SwXTextRange* pRange = dynamic_cast<SwXTextRange*>(xTextRange.get());
-    if(pRange && &pRange->GetDoc() == &rToFill.GetDoc())
+    SwDoc* pDoc = nullptr;
+    const SwPaM* pUnoCursor = nullptr;
+    if (pCursor)
     {
-        bRet = pRange->GetPositions(rToFill, eMode);
+        pDoc = pCursor->GetDoc();
+        pUnoCursor = pCursor->GetPaM();
     }
-    else if (SwXParagraph* pPara = dynamic_cast<SwXParagraph*>(xTextRange.get()))
+    else if (SwXTextPortion* pPortion = dynamic_cast<SwXTextPortion*>(xTextRange.get()))
     {
-        bRet = pPara->SelectPaM(rToFill);
+        pDoc = &pPortion->GetCursor().GetDoc();
+        pUnoCursor = &pPortion->GetCursor();
     }
-    else
+    if (pUnoCursor && pDoc == &rToFill.GetDoc())
     {
-        SwDoc* pDoc = nullptr;
-        const SwPaM* pUnoCursor = nullptr;
-        if (pCursor)
+        OSL_ENSURE(!pUnoCursor->IsMultiSelection(),
+                "what to do about rings?");
+        bRet = true;
+        *rToFill.GetPoint() = *pUnoCursor->GetPoint();
+        if (pUnoCursor->HasMark())
         {
-            pDoc = pCursor->GetDoc();
-            pUnoCursor = pCursor->GetPaM();
+            rToFill.SetMark();
+            *rToFill.GetMark() = *pUnoCursor->GetMark();
         }
-        else if (SwXTextPortion* pPortion = dynamic_cast<SwXTextPortion*>(xTextRange.get()))
-        {
-            pDoc = &pPortion->GetCursor().GetDoc();
-            pUnoCursor = &pPortion->GetCursor();
-        }
-        if (pUnoCursor && pDoc == &rToFill.GetDoc())
-        {
-            OSL_ENSURE(!pUnoCursor->IsMultiSelection(),
-                    "what to do about rings?");
-            bRet = true;
-            *rToFill.GetPoint() = *pUnoCursor->GetPoint();
-            if (pUnoCursor->HasMark())
-            {
-                rToFill.SetMark();
-                *rToFill.GetMark() = *pUnoCursor->GetMark();
-            }
-            else
-                rToFill.DeleteMark();
-        }
+        else
+            rToFill.DeleteMark();
     }
     return bRet;
 }

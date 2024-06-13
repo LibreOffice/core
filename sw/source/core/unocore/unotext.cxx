@@ -970,10 +970,12 @@ SwXText::Impl::ComparePositions(
     {
         throw lang::IllegalArgumentException();
     }
+#ifdef DBG_UTIL
     if (!CheckForOwnMember(aPam1) || !CheckForOwnMember(aPam2))
     {
         throw lang::IllegalArgumentException();
     }
+#endif
 
     sal_Int16 nCompare = 0;
     SwPosition const*const pStart1 = aPam1.Start();
