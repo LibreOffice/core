@@ -379,6 +379,7 @@ protected:
     ::tools::Rectangle        MapRectangle( const css::awt::Rectangle& );
 
     bool ContainsOtherShapeThanPlaceholders();
+    static OUString GetInitials(std::u16string_view sName);
 
 public:
     PPTWriterBase();

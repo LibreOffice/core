@@ -1024,39 +1024,6 @@ bool PPTWriter::ImplCreateMainNotes()
     return true;
 }
 
-static OUString getInitials( const OUString& rName )
-{
-    OUStringBuffer sInitials;
-
-    const sal_Unicode * pStr = rName.getStr();
-    sal_Int32 nLength = rName.getLength();
-
-    while( nLength )
-    {
-        // skip whitespace
-        while( nLength && (*pStr <= ' ') )
-        {
-            nLength--; pStr++;
-        }
-
-        // take letter
-        if( nLength )
-        {
-            sInitials.append( *pStr );
-            nLength--; pStr++;
-        }
-
-        // skip letters until whitespace
-        while( nLength && (*pStr > ' ') )
-        {
-            nLength--; pStr++;
-        }
-    }
-
-    return sInitials.makeStringAndClear();
-}
-
-
 void PPTWriter::ImplExportComments( const uno::Reference< drawing::XDrawPage >& xPage, SvMemoryStream& rBinaryTagData10Atom )
 {
     try
@@ -1087,7 +1054,7 @@ void PPTWriter::ImplExportComments( const uno::Reference< drawing::XDrawPage >& 
                             : xAnnotation->getAuthor() );
                 uno::Reference< text::XText > xText( xAnnotation->getTextRange() );
                 OUString sText( xText->getString() );
-                OUString sInitials( getInitials( sAuthor ) );
+                OUString sInitials( GetInitials( sAuthor ) );
                 util::DateTime aEmptyDateTime;
                 util::DateTime aDateTime(bRemoveCommentAuthorDates ? aEmptyDateTime
                                                                    : xAnnotation->getDateTime());

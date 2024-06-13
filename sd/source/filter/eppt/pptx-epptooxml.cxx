@@ -1017,26 +1017,6 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
     }
 }
 
-static OUString lcl_GetInitials(std::u16string_view sName)
-{
-    OUStringBuffer sRet;
-
-    if (!sName.empty())
-    {
-        sRet.append(sName[0]);
-        size_t nStart = 0, nOffset;
-
-        while ((nOffset = sName.find(' ', nStart)) != std::u16string_view::npos)
-        {
-            if (nOffset + 1 < sName.size())
-                sRet.append(sName[ nOffset + 1 ]);
-            nStart = nOffset + 1;
-        }
-    }
-
-    return sRet.makeStringAndClear();
-}
-
 void PowerPointExport::WriteAuthors()
 {
     if (maAuthors.empty())
@@ -1056,7 +1036,7 @@ void PowerPointExport::WriteAuthors()
         pFS->singleElementNS(XML_p, XML_cmAuthor,
                              XML_id, OString::number(i.second.nId),
                              XML_name, i.first,
-                             XML_initials, lcl_GetInitials(i.first),
+                             XML_initials, GetInitials(i.first),
                              XML_lastIdx, OString::number(i.second.nLastIndex),
                              XML_clrIdx, OString::number(i.second.nId));
     }
