@@ -1454,18 +1454,16 @@ void SwTextNode::Update(
     SwContentNodeTmp aTmpIdxReg;
     if (!(eMode & UpdateMode::Negative) && !(eMode & UpdateMode::Delete))
     {
-        std::vector<SwRangeRedline*> vMyRedlines;
+        o3tl::sorted_vector<SwRangeRedline*> vMyRedlines;
         // walk the list of SwContentIndex attached to me and see if any of them are redlines
         const SwContentIndex* pContentNodeIndex = GetFirstIndex();
         while (pContentNodeIndex)
         {
             SwRangeRedline* pRedl = pContentNodeIndex->GetRedline();
-            if (pRedl)
-                vMyRedlines.push_back(pRedl);
+            if (pRedl && (pRedl->HasMark() || this == &pRedl->GetPoint()->GetNode()))
+                vMyRedlines.insert(pRedl);
             pContentNodeIndex = pContentNodeIndex->GetNext();
         }
-        std::sort(vMyRedlines.begin(), vMyRedlines.end());
-        vMyRedlines.erase( std::unique( vMyRedlines.begin(), vMyRedlines.end() ), vMyRedlines.end() );
         for (SwRangeRedline* pRedl : vMyRedlines)
         {
             if ( pRedl->HasMark() )
@@ -1510,6 +1508,12 @@ void SwTextNode::Update(
                 next = pIndex->GetNext();
                 const sw::mark::IMark* pMark = pIndex->GetMark();
                 if (!pMark)
+                    continue;
+                // filter out ones that cannot match to reduce the max size of aSeenMarks
+                const SwPosition* pMarkPos1 = &pMark->GetMarkPos();
+                const SwPosition* pMarkPos2 = pMark->IsExpanded() ? &pMark->GetOtherMarkPos() : nullptr;
+                if (pMarkPos1->nContent.GetIndex() != rPos.GetIndex()
+                    && (pMarkPos2 == nullptr || pMarkPos2->nContent.GetIndex() != rPos.GetIndex()))
                     continue;
                 // Only handle bookmarks once, if they start and end at this node as well.
                 if (!aSeenMarks.insert(pMark).second)
