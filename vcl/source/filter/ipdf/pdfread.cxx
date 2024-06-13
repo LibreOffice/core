@@ -182,7 +182,8 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                 || eSubtype == vcl::pdf::PDFAnnotationSubType::Square
                 || eSubtype == vcl::pdf::PDFAnnotationSubType::Ink
                 || eSubtype == vcl::pdf::PDFAnnotationSubType::Highlight
-                || eSubtype == vcl::pdf::PDFAnnotationSubType::Line)
+                || eSubtype == vcl::pdf::PDFAnnotationSubType::Line
+                || eSubtype == vcl::pdf::PDFAnnotationSubType::Stamp)
             {
                 OUString sAuthor = pAnnotation->getString(vcl::pdf::constDictionaryKeyTitle);
                 OUString sText = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
@@ -329,6 +330,24 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                 {
                     auto pMarker = std::make_shared<vcl::pdf::PDFAnnotationMarkerFreeText>();
                     rPDFGraphicAnnotation.mpMarker = pMarker;
+                }
+                else if (eSubtype == vcl::pdf::PDFAnnotationSubType::Stamp)
+                {
+                    auto pMarker = std::make_shared<vcl::pdf::PDFAnnotationMarkerStamp>();
+                    rPDFGraphicAnnotation.mpMarker = pMarker;
+
+                    auto nObjects = pAnnotation->getObjectCount();
+
+                    for (int nIndex = 0; nIndex < nObjects; nIndex++)
+                    {
+                        auto pPageObject = pAnnotation->getObject(nIndex);
+                        if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Image)
+                        {
+                            std::unique_ptr<vcl::pdf::PDFiumBitmap> pBitmap
+                                = pPageObject->getImageBitmap();
+                            pMarker->maBitmapEx = pBitmap->createBitmapFromBuffer();
+                        }
+                    }
                 }
             }
         }

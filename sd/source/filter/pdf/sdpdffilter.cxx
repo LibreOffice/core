@@ -210,6 +210,14 @@ bool SdPdfFilter::Import()
                 {
                     aInfo.meType = sdr::annotation::AnnotationType::FreeText;
                 }
+                else if (rPDFAnnotation.meSubType == vcl::pdf::PDFAnnotationSubType::Stamp)
+                {
+                    auto* pMarker = static_cast<vcl::pdf::PDFAnnotationMarkerStamp*>(
+                        rPDFAnnotation.mpMarker.get());
+
+                    aInfo.meType = sdr::annotation::AnnotationType::Stamp;
+                    aInfo.maBitmapEx = pMarker->maBitmapEx;
+                }
 
                 xAnnotation->setCreationInfo(aInfo);
             }
