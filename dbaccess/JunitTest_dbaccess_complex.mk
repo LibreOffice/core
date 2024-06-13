@@ -33,7 +33,6 @@ $(eval $(call gb_JunitTest_add_sourcefiles,dbaccess_complex,\
     dbaccess/qa/complex/dbaccess/CRMBasedTestCase \
     dbaccess/qa/complex/dbaccess/CopyTableInterActionHandler \
     dbaccess/qa/complex/dbaccess/CopyTableWizard \
-    dbaccess/qa/complex/dbaccess/DataSource \
     dbaccess/qa/complex/dbaccess/DatabaseApplication \
     dbaccess/qa/complex/dbaccess/DatabaseDocument \
     dbaccess/qa/complex/dbaccess/FileHelper \
