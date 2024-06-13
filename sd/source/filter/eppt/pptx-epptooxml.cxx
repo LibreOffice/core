@@ -34,6 +34,7 @@
 #include <sal/log.hxx>
 #include <tools/UnitConversion.hxx>
 #include <tools/datetime.hxx>
+#include <unotools/securityoptions.hxx>
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -342,6 +343,7 @@ ShapeExport& PowerPointShapeExport::WriteUnknownShape(const Reference< XShape >&
 
 PowerPointExport::PowerPointExport(const Reference< XComponentContext >& rContext, const uno::Sequence<uno::Any>& rArguments)
     : XmlFilterBase(rContext)
+    , mpAuthorIDs( new SvtSecurityMapPersonalInfo )
     , mnLayoutFileIdMax(1)
     , mnSlideIdMax(1 << 8)
     , mnSlideMasterIdMax(1U << 31)
@@ -1166,6 +1168,12 @@ bool PowerPointExport::WriteComments(sal_uInt32 nPageNum)
 
         if (xAnnotationEnumeration->hasMoreElements())
         {
+            bool bRemoveCommentAuthorDates
+                = SvtSecurityOptions::IsOptionSet(
+                      SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo)
+                  && !SvtSecurityOptions::IsOptionSet(
+                         SvtSecurityOptions::EOption::DocWarnKeepNoteAuthorDateInfo);
+
             FSHelperPtr pFS = openFragmentStreamWithSerializer(
                               "ppt/comments/comment" + OUString::number(nPageNum + 1) + ".xml",
                               u"application/vnd.openxmlformats-officedocument.presentationml.comments+xml"_ustr);
@@ -1180,16 +1188,30 @@ bool PowerPointExport::WriteComments(sal_uInt32 nPageNum)
                 RealPoint2D aRealPoint2D(xAnnotation->getPosition());
                 Reference< XText > xText(xAnnotation->getTextRange());
                 sal_Int32 nLastIndex;
-                sal_Int32 nId = GetAuthorIdAndLastIndex(xAnnotation->getAuthor(), nLastIndex);
+                OUString sAuthor(bRemoveCommentAuthorDates
+                                     ? "Author"
+                                           + OUString::number(GetInfoID(xAnnotation->getAuthor()))
+                                     : xAnnotation->getAuthor());
+                sal_Int32 nId = GetAuthorIdAndLastIndex(sAuthor, nLastIndex);
                 char cDateTime[sizeof("-32768-65535-65535T65535:65535:65535.4294967295")];
                     // reserve enough space for hypothetical max length
 
                 snprintf(cDateTime, sizeof cDateTime, "%02" SAL_PRIdINT32 "-%02" SAL_PRIuUINT32 "-%02" SAL_PRIuUINT32 "T%02" SAL_PRIuUINT32 ":%02" SAL_PRIuUINT32 ":%02" SAL_PRIuUINT32 ".%09" SAL_PRIuUINT32, sal_Int32(aDateTime.Year), sal_uInt32(aDateTime.Month), sal_uInt32(aDateTime.Day), sal_uInt32(aDateTime.Hours), sal_uInt32(aDateTime.Minutes), sal_uInt32(aDateTime.Seconds), aDateTime.NanoSeconds);
 
-                pFS->startElementNS(XML_p, XML_cm,
-                                    XML_authorId, OString::number(nId),
-                                    XML_dt, cDateTime,
-                                    XML_idx, OString::number(nLastIndex));
+                util::DateTime aEmptyDate;
+                if (bRemoveCommentAuthorDates || aDateTime == aEmptyDate)
+                {
+                    pFS->startElementNS(XML_p, XML_cm,
+                                        XML_authorId, OString::number(nId),
+                                        XML_idx, OString::number(nLastIndex));
+                }
+                else
+                {
+                    pFS->startElementNS(XML_p, XML_cm,
+                                        XML_authorId, OString::number(nId),
+                                        XML_dt, cDateTime,
+                                        XML_idx, OString::number(nLastIndex));
+                }
 
                 pFS->singleElementNS(XML_p, XML_pos,
                                      XML_x, OString::number(std::round(convertMm100ToMasterUnit(aRealPoint2D.X * 100))),

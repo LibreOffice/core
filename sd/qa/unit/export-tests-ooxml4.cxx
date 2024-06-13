@@ -14,6 +14,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/numitem.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <svx/xlineit0.hxx>
 #include <svx/xlndsit.hxx>
@@ -1093,6 +1094,40 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf102261_testParaTabStopDefaultDis
             sal_Int32{ 2540 },
             xPropSet->getPropertyValue(u"ParaTabStopDefaultDistance"_ustr).get<sal_Int32>());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testNotesAuthorDate)
+{
+    createSdImpressDoc("pptx/pres-with-notes.pptx");
+
+    auto pBatch(comphelper::ConfigurationChanges::create());
+    // 1. Remove all personal info, but keep note info
+    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(true, pBatch);
+    officecfg::Office::Common::Security::Scripting::KeepNoteAuthorDateInfoOnSaving::set(true,
+                                                                                        pBatch);
+    pBatch->commit();
+
+    saveAndReload(u"Impress Office Open XML"_ustr);
+
+    xmlDocUniquePtr pXml = parseExport(u"ppt/commentAuthors.xml"_ustr);
+    assertXPath(pXml, "/p:cmAuthorLst/p:cmAuthor[@id=0]"_ostr, "name"_ostr, "Hans Wurst");
+    assertXPath(pXml, "/p:cmAuthorLst/p:cmAuthor[@id=1]"_ostr, "name"_ostr, "Max Muster");
+
+    pXml = parseExport(u"ppt/comments/comment1.xml"_ustr);
+    assertXPath(pXml, "/p:cmLst/p:cm"_ostr, "dt"_ostr, "2024-06-13T12:03:08.000000000");
+
+    // 2. Remove all personal info
+    officecfg::Office::Common::Security::Scripting::KeepNoteAuthorDateInfoOnSaving::set(false,
+                                                                                        pBatch);
+    pBatch->commit();
+    saveAndReload(u"Impress Office Open XML"_ustr);
+
+    pXml = parseExport(u"ppt/commentAuthors.xml"_ustr);
+    assertXPath(pXml, "/p:cmAuthorLst/p:cmAuthor[@id=0]"_ostr, "name"_ostr, "Author1");
+    assertXPath(pXml, "/p:cmAuthorLst/p:cmAuthor[@id=1]"_ostr, "name"_ostr, "Author2");
+
+    pXml = parseExport(u"ppt/comments/comment1.xml"_ustr);
+    assertXPathNoAttribute(pXml, "/p:cmLst/p:cm"_ostr, "dt"_ostr);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTableCellVerticalPropertyRoundtrip)
