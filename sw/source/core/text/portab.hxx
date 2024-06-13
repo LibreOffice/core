@@ -27,7 +27,7 @@ class SwTabPortion : public SwFixPortion
     const bool m_bAutoTabStop;
 
     // Format() branches either into PreFormat() or PostFormat()
-    bool PreFormat( SwTextFormatInfo &rInf );
+    bool PreFormat(SwTextFormatInfo &rInf, SwTabPortion const*);
 public:
     SwTabPortion(const SwTwips nTabPos, const sal_Unicode cFill, const bool bAutoTab = true);
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
