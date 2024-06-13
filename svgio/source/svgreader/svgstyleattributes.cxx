@@ -1326,6 +1326,10 @@ namespace svgio::svgreader
                     {
                         mbContextFill = true;
                     }
+                    else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"context-stroke"))
+                    {
+                        mbContextStroke = true;
+                    }
                     else if(readSvgPaint(aContent, aSvgPaint, aURL, aOpacity))
                     {
                         setFill(aSvgPaint);
@@ -1374,6 +1378,10 @@ namespace svgio::svgreader
                     if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"context-stroke"))
                     {
                         mbContextStroke = true;
+                    }
+                    else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"context-fill"))
+                    {
+                        mbContextFill = true;
                     }
                     else if(readSvgPaint(aContent, aSvgPaint, aURL, aOpacity))
                     {
@@ -2124,6 +2132,10 @@ namespace svgio::svgreader
             {
                 return getContextFill();
             }
+            else if (mbContextStroke)
+            {
+                return getContextStroke();
+            }
             else if (maNodeFillURL.isEmpty())
             {
                 const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
@@ -2168,6 +2180,10 @@ namespace svgio::svgreader
                 {
                     return &maStroke.getBColor();
                 }
+            }
+            else if (mbContextFill)
+            {
+                return getContextFill();
             }
             else if (mbContextStroke)
             {
