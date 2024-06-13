@@ -79,6 +79,7 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <unotools/weakref.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <vcl/threadex.hxx>
@@ -311,7 +312,7 @@ private:
      *  This owner is used as source for all broadcasted events.
      *  Further we hold it weak, because we don't wish to be disposed() .-)
      */
-    void impl_setPropertyChangeBroadcaster(const css::uno::Reference< css::uno::XInterface >& xBroadcaster);
+    void impl_setPropertyChangeBroadcaster(XFrameImpl& rBroadcaster);
 
     /** add a new property info to the set of supported ones.
      *
@@ -423,7 +424,7 @@ private:
     comphelper::OMultiTypeInterfaceContainerHelperVar3<css::beans::XVetoableChangeListener, OUString> m_lVetoChangeListener;
 
     // hold it weak ... otherwise this helper has to be "killed" explicitly .-)
-    css::uno::WeakReference< css::uno::XInterface > m_xBroadcaster;
+    unotools::WeakReference< XFrameImpl > m_xBroadcaster;
 
     FrameContainer                                                          m_aChildFrameContainer;   /// array of child frames
     /**
@@ -515,7 +516,7 @@ void XFrameImpl::initListeners()
     m_xLayoutManager = css::frame::LayoutManager::create(m_xContext);
 
     // set information about all supported properties
-    impl_setPropertyChangeBroadcaster(static_cast< css::frame::XFrame* >(this));
+    impl_setPropertyChangeBroadcaster(*this);
     impl_addPropertyInfo(
         css::beans::Property(
             FRAME_PROPNAME_ASCII_DISPATCHRECORDERSUPPLIER,
@@ -1890,7 +1891,7 @@ void SAL_CALL XFrameImpl::setPropertyValue(const OUString& sProperty,
     aEvent.PropertyHandle = aPropInfo.Handle;
     aEvent.OldValue       = aCurrentValue;
     aEvent.NewValue       = aValue;
-    aEvent.Source.set(m_xBroadcaster.get(), css::uno::UNO_QUERY);
+    aEvent.Source = m_xBroadcaster;
 
     if (impl_existsVeto(aEvent))
         throw css::beans::PropertyVetoException();
@@ -2835,10 +2836,10 @@ css::uno::Any XFrameImpl::impl_getPropertyValue(sal_Int32 nHandle)
     return aValue;
 }
 
-void XFrameImpl::impl_setPropertyChangeBroadcaster(const css::uno::Reference< css::uno::XInterface >& xBroadcaster)
+void XFrameImpl::impl_setPropertyChangeBroadcaster(XFrameImpl& xBroadcaster)
 {
     SolarMutexGuard g;
-    m_xBroadcaster = xBroadcaster;
+    m_xBroadcaster = &xBroadcaster;
 }
 
 void XFrameImpl::impl_addPropertyInfo(const css::beans::Property& aProperty)
