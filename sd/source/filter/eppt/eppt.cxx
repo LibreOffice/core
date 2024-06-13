@@ -42,6 +42,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <comphelper/sequence.hxx>
 #include <tools/zcodec.hxx>
+#include <unotools/securityoptions.hxx>
 #include <filter/msfilter/classids.hxx>
 #include <filter/msfilter/msoleexp.hxx>
 #include <filter/msfilter/msdffimp.hxx>
@@ -82,6 +83,7 @@ PPTWriter::PPTWriter( rtl::Reference<SotStorage> xSvStorage,
     mpVBA                   ( pVBA ),
     mnExEmbed               ( 0 ),
     mpExEmbed               ( new SvMemoryStream ),
+    mpAuthorIDs             ( new SvtSecurityMapPersonalInfo ),
     mnPagesWritten          ( 0 ),
     mnTxId                  ( 0x7a2f64 ),
     mnDiaMode               ( 0 ),
@@ -148,8 +150,6 @@ void PPTWriter::exportPPTPost( )
 
     mbStatus = true;
 };
-
-static void ImplExportComments( const uno::Reference< drawing::XDrawPage >& xPage, SvMemoryStream& rBinaryTagData10Atom );
 
 void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_uInt16 nMode,
                                 bool bHasBackground, Reference< XPropertySet > const & aXBackgroundPropSet )
@@ -1056,12 +1056,19 @@ static OUString getInitials( const OUString& rName )
     return sInitials.makeStringAndClear();
 }
 
-void ImplExportComments( const uno::Reference< drawing::XDrawPage >& xPage, SvMemoryStream& rBinaryTagData10Atom )
+
+void PPTWriter::ImplExportComments( const uno::Reference< drawing::XDrawPage >& xPage, SvMemoryStream& rBinaryTagData10Atom )
 {
     try
     {
         uno::Reference< office::XAnnotationAccess > xAnnotationAccess( xPage, uno::UNO_QUERY_THROW );
         uno::Reference< office::XAnnotationEnumeration > xAnnotationEnumeration( xAnnotationAccess->createAnnotationEnumeration() );
+
+        bool bRemoveCommentAuthorDates
+            = SvtSecurityOptions::IsOptionSet(
+                  SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo)
+              && !SvtSecurityOptions::IsOptionSet(
+                     SvtSecurityOptions::EOption::DocWarnKeepNoteAuthorDateInfo);
 
         sal_Int32 nIndex = 1;
 
@@ -1075,11 +1082,15 @@ void ImplExportComments( const uno::Reference< drawing::XDrawPage >& xPage, SvMe
                 Point aPoint(o3tl::convert(aRealPoint2D.X, o3tl::Length::mm, o3tl::Length::master),
                              o3tl::convert(aRealPoint2D.Y, o3tl::Length::mm, o3tl::Length::master));
 
-                OUString sAuthor( xAnnotation->getAuthor() );
+                OUString sAuthor( bRemoveCommentAuthorDates
+                            ? "Author" + OUString::number(mpAuthorIDs->GetInfoID(xAnnotation->getAuthor() ))
+                            : xAnnotation->getAuthor() );
                 uno::Reference< text::XText > xText( xAnnotation->getTextRange() );
                 OUString sText( xText->getString() );
                 OUString sInitials( getInitials( sAuthor ) );
-                util::DateTime aDateTime( xAnnotation->getDateTime() );
+                util::DateTime aEmptyDateTime;
+                util::DateTime aDateTime(bRemoveCommentAuthorDates ? aEmptyDateTime
+                                                                   : xAnnotation->getDateTime());
                 if ( !sAuthor.isEmpty() )
                     PPTWriter::WriteCString( rBinaryTagData10Atom, sAuthor );
                 if ( !sText.isEmpty() )
