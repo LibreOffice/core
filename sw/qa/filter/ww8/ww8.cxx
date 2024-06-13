@@ -49,7 +49,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/filter/ww8/data/")
+        : SwModelTestBase(u"/sw/qa/filter/ww8/data/"_ustr)
     {
     }
 };
@@ -62,18 +62,19 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorderDocImport)
 
     // Then make sure we map that to a negative border distance (move border from the edge of body
     // frame towards the center of the page, not towards the edge of the page):
-    uno::Reference<container::XNameAccess> xStyleFamily = getStyles("PageStyles");
-    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName("Standard"), uno::UNO_QUERY);
-    auto nTopMargin = xStyle->getPropertyValue("TopMargin").get<sal_Int32>();
+    uno::Reference<container::XNameAccess> xStyleFamily = getStyles(u"PageStyles"_ustr);
+    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName(u"Standard"_ustr),
+                                               uno::UNO_QUERY);
+    auto nTopMargin = xStyle->getPropertyValue(u"TopMargin"_ustr).get<sal_Int32>();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 501
     // - Actual  : 342
     // i.e. the border properties influenced the margin, which was 284 twips in the sprmSDyaTop
     // SPRM.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(501), nTopMargin);
-    auto aTopBorder = xStyle->getPropertyValue("TopBorder").get<table::BorderLine2>();
+    auto aTopBorder = xStyle->getPropertyValue(u"TopBorder"_ustr).get<table::BorderLine2>();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(159), aTopBorder.LineWidth);
-    auto nTopBorderDistance = xStyle->getPropertyValue("TopBorderDistance").get<sal_Int32>();
+    auto nTopBorderDistance = xStyle->getPropertyValue(u"TopBorderDistance"_ustr).get<sal_Int32>();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-646), nTopBorderDistance);
 }
 
@@ -85,20 +86,20 @@ CPPUNIT_TEST_FIXTURE(Test, testPlainTextContentControlExport)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-    xText->insertString(xCursor, "test", /*bAbsorb=*/false);
+    xText->insertString(xCursor, u"test"_ustr, /*bAbsorb=*/false);
     xCursor->gotoStart(/*bExpand=*/false);
     xCursor->gotoEnd(/*bExpand=*/true);
     uno::Reference<text::XTextContent> xContentControl(
-        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+        xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue("PlainText", uno::Any(true));
+    xContentControlProps->setPropertyValue(u"PlainText"_ustr, uno::Any(true));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to DOCX:
-    save("Office Open XML Text");
+    save(u"Office Open XML Text"_ustr);
 
     // Then make sure the expected markup is used:
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0
@@ -116,10 +117,10 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxComboBoxContentControlExport)
     pWrtShell->InsertContentControl(SwContentControlType::COMBO_BOX);
 
     // When exporting to DOCX:
-    save("Office Open XML Text");
+    save(u"Office Open XML Text"_ustr);
 
     // Then make sure the expected markup is used:
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0
@@ -136,26 +137,27 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxHyperlinkShape)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-    xText->insertString(xCursor, "beforeafter", /*bAbsorb=*/false);
+    xText->insertString(xCursor, u"beforeafter"_ustr, /*bAbsorb=*/false);
     xCursor->gotoStart(/*bExpand=*/false);
     xCursor->goRight(/*nCount=*/6, /*bExpand=*/true);
     uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
-    xCursorProps->setPropertyValue("HyperLinkURL", uno::Any(OUString("http://www.example.com/")));
+    xCursorProps->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(u"http://www.example.com/"_ustr));
     xCursor->gotoStart(/*bExpand=*/false);
     xCursor->goRight(/*nCount=*/6, /*bExpand=*/false);
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
-        xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
     xShape->setSize(awt::Size(5000, 5000));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    xShapeProps->setPropertyValue("AnchorType", uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+    xShapeProps->setPropertyValue(u"AnchorType"_ustr,
+                                  uno::Any(text::TextContentAnchorType_AT_CHARACTER));
     uno::Reference<text::XTextContent> xShapeContent(xShape, uno::UNO_QUERY);
     xText->insertTextContent(xCursor, xShapeContent, /*bAbsorb=*/false);
-    xShapeProps->setPropertyValue("TextBox", uno::Any(true));
+    xShapeProps->setPropertyValue(u"TextBox"_ustr, uno::Any(true));
 
     // When saving this document to DOCX, then make sure we don't crash on export (due to an
     // assertion failure for not-well-formed XML output):
-    save("Office Open XML Text");
+    save(u"Office Open XML Text"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDocxContentControlDropdownEmptyDisplayText)
@@ -168,10 +170,10 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxContentControlDropdownEmptyDisplayText)
     pWrtShell->InsertContentControl(SwContentControlType::DROP_DOWN_LIST);
 
     // When saving to DOCX:
-    save("Office Open XML Text");
+    save(u"Office Open XML Text"_ustr);
 
     // Then make sure that no display text attribute is written:
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//w:sdt/w:sdtPr/w:dropDownList/w:listItem' unexpected 'displayText' attribute
     // i.e. we wrote an empty attribute instead of omitting it.
@@ -182,7 +184,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxContentControlDropdownEmptyDisplayText)
 CPPUNIT_TEST_FIXTURE(Test, testDocxSymbolFontExport)
 {
     // Create document with symbol character and font Wingdings
-    mxComponent = loadFromDesktop("private:factory/swriter");
+    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -191,20 +193,20 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxSymbolFontExport)
 
     uno::Reference<text::XTextRange> xRange = xCursor;
     uno::Reference<beans::XPropertySet> xTextProps(xRange, uno::UNO_QUERY);
-    xTextProps->setPropertyValue("CharFontName", uno::Any(OUString("Wingdings")));
-    xTextProps->setPropertyValue("CharFontNameAsian", uno::Any(OUString("Wingdings")));
-    xTextProps->setPropertyValue("CharFontNameComplex", uno::Any(OUString("Wingdings")));
-    xTextProps->setPropertyValue("CharFontCharSet", uno::Any(awt::CharSet::SYMBOL));
+    xTextProps->setPropertyValue(u"CharFontName"_ustr, uno::Any(u"Wingdings"_ustr));
+    xTextProps->setPropertyValue(u"CharFontNameAsian"_ustr, uno::Any(u"Wingdings"_ustr));
+    xTextProps->setPropertyValue(u"CharFontNameComplex"_ustr, uno::Any(u"Wingdings"_ustr));
+    xTextProps->setPropertyValue(u"CharFontCharSet"_ustr, uno::Any(awt::CharSet::SYMBOL));
 
     // When exporting to DOCX:
-    save("Office Open XML Text");
+    save(u"Office Open XML Text"_ustr);
 
     // Then make sure the expected markup is used:
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDoc, "//w:p/w:r/w:sym"_ostr, 1);
-    assertXPath(pXmlDoc, "//w:p/w:r/w:sym[1]"_ostr, "font"_ostr, "Wingdings");
-    assertXPath(pXmlDoc, "//w:p/w:r/w:sym[1]"_ostr, "char"_ostr, "f0e0");
+    assertXPath(pXmlDoc, "//w:p/w:r/w:sym[1]"_ostr, "font"_ostr, u"Wingdings"_ustr);
+    assertXPath(pXmlDoc, "//w:p/w:r/w:sym[1]"_ostr, "char"_ostr, u"f0e0"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDocxFloatingTableExport)
@@ -232,10 +234,10 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxFloatingTableExport)
     pWrtShell->EndAllAction();
 
     // When saving to docx:
-    save("Office Open XML Text");
+    save(u"Office Open XML Text"_ustr);
 
     // Then make sure we write a floating table, not a textframe containing a table:
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//w:tbl/w:tblPr/w:tblpPr' number of nodes is incorrect
     // i.e. no floating table was exported.
@@ -267,26 +269,28 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapThroughLayoutInCell)
     createSwDoc();
     uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
-        xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
     xShape->setSize(awt::Size(10000, 10000));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    xShapeProps->setPropertyValue("AnchorType", uno::Any(text::TextContentAnchorType_AT_CHARACTER));
-    xShapeProps->setPropertyValue("Surround", uno::Any(text::WrapTextMode_THROUGH));
-    xShapeProps->setPropertyValue("HoriOrientRelation", uno::Any(text::RelOrientation::FRAME));
+    xShapeProps->setPropertyValue(u"AnchorType"_ustr,
+                                  uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+    xShapeProps->setPropertyValue(u"Surround"_ustr, uno::Any(text::WrapTextMode_THROUGH));
+    xShapeProps->setPropertyValue(u"HoriOrientRelation"_ustr,
+                                  uno::Any(text::RelOrientation::FRAME));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
     // When saving to docx:
-    save("Office Open XML Text");
+    save(u"Office Open XML Text"_ustr);
 
     // Then make sure that layoutInCell is undoing the effect of the import-time tweak:
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0
     // - attribute 'layoutInCell' of '//wp:anchor' incorrect value.
     // i.e. layoutInCell was disabled, leading to bad layout in Word.
-    assertXPath(pXmlDoc, "//wp:anchor"_ostr, "layoutInCell"_ostr, "1");
+    assertXPath(pXmlDoc, "//wp:anchor"_ostr, "layoutInCell"_ostr, u"1"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, test3Endnotes)
@@ -327,10 +331,10 @@ CPPUNIT_TEST_FIXTURE(Test, testDoNotBreakWrappedTables)
     rIDSA.set(DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES, true);
 
     // When saving to docx:
-    save("Office Open XML Text");
+    save(u"Office Open XML Text"_ustr);
 
     // Then make sure the compat flag is serialized:
-    xmlDocUniquePtr pXmlDoc = parseExport("word/settings.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0
@@ -348,10 +352,10 @@ CPPUNIT_TEST_FIXTURE(Test, testAllowTextAfterFloatingTableBreak)
     rIDSA.set(DocumentSettingId::ALLOW_TEXT_AFTER_FLOATING_TABLE_BREAK, true);
 
     // When saving to docx:
-    save("Office Open XML Text");
+    save(u"Office Open XML Text"_ustr);
 
     // Then make sure the compat flag is serialized:
-    xmlDocUniquePtr pXmlDoc = parseExport("word/settings.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0
@@ -360,7 +364,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAllowTextAfterFloatingTableBreak)
     assertXPath(
         pXmlDoc,
         "/w:settings/w:compat/w:compatSetting[@w:name='allowTextAfterFloatingTableBreak']"_ostr,
-        "val"_ostr, "1");
+        "val"_ostr, u"1"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDOCfDontBreakWrappedTables)
@@ -451,7 +455,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableOverlapNeverDOCXExport)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->Insert2("before table");
+    pWrtShell->Insert2(u"before table"_ustr);
     // Insert a table:
     SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
     pWrtShell->InsertTable(aTableOptions, /*nRows=*/1, /*nCols=*/1);
@@ -477,16 +481,16 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableOverlapNeverDOCXExport)
     pWrtShell->EndAllAction();
 
     // When saving to DOCX:
-    save("Office Open XML Text");
+    save(u"Office Open XML Text"_ustr);
 
     // Then make sure that the overlap=never markup is written:
-    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0
     // - XPath '//w:tblPr/w:tblOverlap' number of nodes is incorrect
     // i.e. <w:tblOverlap> was not written.
-    assertXPath(pXmlDoc, "//w:tblPr/w:tblOverlap"_ostr, "val"_ostr, "never");
+    assertXPath(pXmlDoc, "//w:tblPr/w:tblOverlap"_ostr, "val"_ostr, u"never"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFloattableOverlapNeverDOCImport)

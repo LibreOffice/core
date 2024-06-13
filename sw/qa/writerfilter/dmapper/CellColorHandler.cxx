@@ -36,7 +36,7 @@ CPPUNIT_TEST_FIXTURE(Test, test129205)
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
     uno::Reference<beans::XPropertySet> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
     drawing::FillStyle eFillStyle = drawing::FillStyle::FillStyle_NONE;
-    xPara->getPropertyValue("FillStyle") >>= eFillStyle;
+    xPara->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: drawing::FillStyle_NONE
     // - Actual  : FillStyle_SOLID

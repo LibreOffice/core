@@ -38,7 +38,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDoNotMirrorRtlDrawObjs)
     // Then make sure the shape is on the right margin:
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     css::uno::Reference<qa::XDumper> xDumper(xModel->getCurrentController(), uno::UNO_QUERY);
-    OString aDump = xDumper->dump("layout").toUtf8();
+    OString aDump = xDumper->dump(u"layout"_ustr).toUtf8();
     auto pCharBuffer = reinterpret_cast<const xmlChar*>(aDump.getStr());
     xmlDocUniquePtr pXmlDoc(xmlParseDoc(pCharBuffer));
     sal_Int32 nBodyRight = getXPath(pXmlDoc, "//body/infos/bounds"_ostr, "right"_ostr).toInt32();

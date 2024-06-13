@@ -47,7 +47,7 @@ class SwUibaseShellsTest : public SwModelTestBase
 {
 public:
     SwUibaseShellsTest()
-        : SwModelTestBase("/sw/qa/uibase/shells/data/")
+        : SwModelTestBase(u"/sw/qa/uibase/shells/data/"_ustr)
     {
     }
 };
@@ -129,7 +129,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testOleSavePreviewUpdate)
     createSwDoc("ole-save-preview-update.odt");
 
     // Explicitly update OLE previews, etc.
-    dispatchCommand(mxComponent, ".uno:UpdateAll", {});
+    dispatchCommand(mxComponent, u".uno:UpdateAll"_ustr, {});
 
     // Save the document and see if we get the previews.
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -140,8 +140,8 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testOleSavePreviewUpdate)
 
     // Without the accompanying fix in place, this test would have failed, because the object
     // replacements were not generated, even after UpdateAll.
-    CPPUNIT_ASSERT(xNameAccess->hasByName("ObjectReplacements/Object 1"));
-    CPPUNIT_ASSERT(xNameAccess->hasByName("ObjectReplacements/Object 2"));
+    CPPUNIT_ASSERT(xNameAccess->hasByName(u"ObjectReplacements/Object 1"_ustr));
+    CPPUNIT_ASSERT(xNameAccess->hasByName(u"ObjectReplacements/Object 2"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testOlePreviewUpdate)
@@ -150,7 +150,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testOlePreviewUpdate)
     createSwDoc("ole-preview-update.odt");
 
     // When updating "all" (including OLE previews):
-    dispatchCommand(mxComponent, ".uno:UpdateAll", {});
+    dispatchCommand(mxComponent, u".uno:UpdateAll"_ustr, {});
 
     // Then make sure the preview is no longer a 0-sized stream:
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -159,7 +159,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testOlePreviewUpdate)
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
     uno::Reference<io::XInputStream> xInputStream(
-        xNameAccess->getByName("ObjectReplacements/Object 1"), uno::UNO_QUERY);
+        xNameAccess->getByName(u"ObjectReplacements/Object 1"_ustr), uno::UNO_QUERY);
     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
     // Without the accompanying fix in place, this test would have failed, the stream was still
     // empty.
@@ -173,15 +173,15 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testBibliographyUrlContextMenu)
     SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
-        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aFields = {
-        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
-        comphelper::makePropertyValue("Identifier", OUString("AT")),
-        comphelper::makePropertyValue("Author", OUString("Author")),
-        comphelper::makePropertyValue("Title", OUString("Title")),
-        comphelper::makePropertyValue("URL", OUString("http://www.example.com/test.pdf#page=1")),
+        comphelper::makePropertyValue(u"BibiliographicType"_ustr, text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue(u"Identifier"_ustr, u"AT"_ustr),
+        comphelper::makePropertyValue(u"Author"_ustr, u"Author"_ustr),
+        comphelper::makePropertyValue(u"Title"_ustr, u"Title"_ustr),
+        comphelper::makePropertyValue(u"URL"_ustr, u"http://www.example.com/test.pdf#page=1"_ustr),
     };
-    xField->setPropertyValue("Fields", uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -221,39 +221,39 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testProtectedFieldsCopyHyperlinkLocatio
     createSwDoc("protectedLinkCopy.fodt");
 
     // Copy generic hyperlink
-    dispatchCommand(mxComponent, ".uno:CopyHyperlinkLocation", {});
-    dispatchCommand(mxComponent, ".uno:GoDown", {});
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:CopyHyperlinkLocation"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:GoDown"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
     // Assert generic hyperlink was correctly copied and pasted
-    CPPUNIT_ASSERT_EQUAL(OUString("http://reset.url/1"), getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"http://reset.url/1"_ustr, getParagraph(2)->getString());
 
-    dispatchCommand(mxComponent, ".uno:GoDown", {});
-    dispatchCommand(mxComponent, ".uno:GoLeft", {});
+    dispatchCommand(mxComponent, u".uno:GoDown"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:GoLeft"_ustr, {});
     // Copy bibliography mark hyperlink
-    dispatchCommand(mxComponent, ".uno:CopyHyperlinkLocation", {});
-    dispatchCommand(mxComponent, ".uno:GoDown", {});
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:CopyHyperlinkLocation"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:GoDown"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
     // Assert bibliography mark hyperlink was correctly copied and pasted
-    CPPUNIT_ASSERT_EQUAL(OUString("https://test.url/1"), getParagraph(4)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"https://test.url/1"_ustr, getParagraph(4)->getString());
 
-    dispatchCommand(mxComponent, ".uno:GoDown", {});
-    dispatchCommand(mxComponent, ".uno:GoLeft", {});
+    dispatchCommand(mxComponent, u".uno:GoDown"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:GoLeft"_ustr, {});
     // Copy generic hyperlink
-    dispatchCommand(mxComponent, ".uno:CopyHyperlinkLocation", {});
-    dispatchCommand(mxComponent, ".uno:GoDown", {});
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:CopyHyperlinkLocation"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:GoDown"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
     // Assert generic hyperlink was correctly copied and pasted
-    CPPUNIT_ASSERT_EQUAL(OUString("http://reset.url/2"), getParagraph(6)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"http://reset.url/2"_ustr, getParagraph(6)->getString());
 
-    dispatchCommand(mxComponent, ".uno:GoDown", {});
-    dispatchCommand(mxComponent, ".uno:GoDown", {});
-    dispatchCommand(mxComponent, ".uno:GoLeft", {});
+    dispatchCommand(mxComponent, u".uno:GoDown"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:GoDown"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:GoLeft"_ustr, {});
     // Copy bibliography table hyperlink
-    dispatchCommand(mxComponent, ".uno:CopyHyperlinkLocation", {});
-    dispatchCommand(mxComponent, ".uno:GoDown", {});
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, u".uno:CopyHyperlinkLocation"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:GoDown"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
     // Assert bibliography table entry hyperlink was correctly copied and pasted
-    CPPUNIT_ASSERT_EQUAL(OUString("https://test.url/1"), getParagraph(9)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"https://test.url/1"_ustr, getParagraph(9)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testBibliographyLocalCopyContextMenu)
@@ -263,16 +263,16 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testBibliographyLocalCopyContextMenu)
     SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
-        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aFields = {
-        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
-        comphelper::makePropertyValue("Identifier", OUString("AT")),
-        comphelper::makePropertyValue("Author", OUString("Author")),
-        comphelper::makePropertyValue("Title", OUString("Title")),
-        comphelper::makePropertyValue("URL", OUString("http://www.example.com/test.pdf#page=1")),
-        comphelper::makePropertyValue("LocalURL", OUString("file:///home/me/test.pdf")),
+        comphelper::makePropertyValue(u"BibiliographicType"_ustr, text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue(u"Identifier"_ustr, u"AT"_ustr),
+        comphelper::makePropertyValue(u"Author"_ustr, u"Author"_ustr),
+        comphelper::makePropertyValue(u"Title"_ustr, u"Title"_ustr),
+        comphelper::makePropertyValue(u"URL"_ustr, u"http://www.example.com/test.pdf#page=1"_ustr),
+        comphelper::makePropertyValue(u"LocalURL"_ustr, u"file:///home/me/test.pdf"_ustr),
     };
-    xField->setPropertyValue("Fields", uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -304,18 +304,18 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testContentControlPageBreak)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-    xText->insertString(xCursor, "test", /*bAbsorb=*/false);
+    xText->insertString(xCursor, u"test"_ustr, /*bAbsorb=*/false);
     xCursor->gotoStart(/*bExpand=*/false);
     xCursor->gotoEnd(/*bExpand=*/true);
     uno::Reference<text::XTextContent> xContentControl(
-        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+        xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
 
     // When trying to insert a page break:
-    dispatchCommand(mxComponent, ".uno:InsertPagebreak", {});
+    dispatchCommand(mxComponent, u".uno:InsertPagebreak"_ustr, {});
 
     // Then make sure that the document still has a single page:
     // Without the accompanying fix in place, this test would have failed with:
@@ -333,13 +333,13 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertTextFormField)
     SwDoc* pDoc = getSwDoc();
 
     // When inserting an ODF_UNHANDLED fieldmark:
-    OUString aExpectedCommand("ADDIN ZOTERO_BIBL foo bar");
+    OUString aExpectedCommand(u"ADDIN ZOTERO_BIBL foo bar"_ustr);
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("FieldType", uno::Any(ODF_UNHANDLED)),
-        comphelper::makePropertyValue("FieldCommand", uno::Any(aExpectedCommand)),
-        comphelper::makePropertyValue("FieldResult", uno::Any(OUString("<p>aaa</p><p>bbb</p>"))),
+        comphelper::makePropertyValue(u"FieldType"_ustr, uno::Any(ODF_UNHANDLED)),
+        comphelper::makePropertyValue(u"FieldCommand"_ustr, uno::Any(aExpectedCommand)),
+        comphelper::makePropertyValue(u"FieldResult"_ustr, uno::Any(u"<p>aaa</p><p>bbb</p>"_ustr)),
     };
-    dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+    dispatchCommand(mxComponent, u".uno:TextFormField"_ustr, aArgs);
 
     // Then make sure that it's type/name is correct:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -367,7 +367,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertTextFormField)
     aPam.GetPoint()->SetContent(aPam.GetPoint()->GetContentIndex() - 1);
     CPPUNIT_ASSERT(aPam.HasMark());
     OUString aActualResult = aPam.GetText();
-    CPPUNIT_ASSERT_EQUAL(OUString("aaa\nbbb"), aActualResult);
+    CPPUNIT_ASSERT_EQUAL(u"aaa\nbbb"_ustr, aActualResult);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateFieldmarks)
@@ -376,44 +376,44 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateFieldmarks)
     createSwDoc();
     {
         uno::Sequence<css::beans::PropertyValue> aArgs = {
-            comphelper::makePropertyValue("FieldType", uno::Any(ODF_UNHANDLED)),
-            comphelper::makePropertyValue("FieldCommand",
-                                          uno::Any(OUString("ADDIN ZOTERO_ITEM old command 1"))),
-            comphelper::makePropertyValue("FieldResult", uno::Any(OUString("old result 1"))),
+            comphelper::makePropertyValue(u"FieldType"_ustr, uno::Any(ODF_UNHANDLED)),
+            comphelper::makePropertyValue(u"FieldCommand"_ustr,
+                                          uno::Any(u"ADDIN ZOTERO_ITEM old command 1"_ustr)),
+            comphelper::makePropertyValue(u"FieldResult"_ustr, uno::Any(u"old result 1"_ustr)),
         };
-        dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+        dispatchCommand(mxComponent, u".uno:TextFormField"_ustr, aArgs);
     }
     {
         uno::Sequence<css::beans::PropertyValue> aArgs = {
-            comphelper::makePropertyValue("FieldType", uno::Any(ODF_UNHANDLED)),
-            comphelper::makePropertyValue("FieldCommand",
-                                          uno::Any(OUString("ADDIN ZOTERO_ITEM old command 2"))),
-            comphelper::makePropertyValue("FieldResult", uno::Any(OUString("old result 2"))),
+            comphelper::makePropertyValue(u"FieldType"_ustr, uno::Any(ODF_UNHANDLED)),
+            comphelper::makePropertyValue(u"FieldCommand"_ustr,
+                                          uno::Any(u"ADDIN ZOTERO_ITEM old command 2"_ustr)),
+            comphelper::makePropertyValue(u"FieldResult"_ustr, uno::Any(u"old result 2"_ustr)),
         };
-        dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+        dispatchCommand(mxComponent, u".uno:TextFormField"_ustr, aArgs);
     }
 
     // When updating those fieldmarks:
     uno::Sequence<css::beans::PropertyValue> aField1{
-        comphelper::makePropertyValue("FieldType", uno::Any(ODF_UNHANDLED)),
-        comphelper::makePropertyValue("FieldCommand",
-                                      uno::Any(OUString("ADDIN ZOTERO_ITEM new command 1"))),
-        comphelper::makePropertyValue("FieldResult", uno::Any(OUString("new result 1"))),
+        comphelper::makePropertyValue(u"FieldType"_ustr, uno::Any(ODF_UNHANDLED)),
+        comphelper::makePropertyValue(u"FieldCommand"_ustr,
+                                      uno::Any(u"ADDIN ZOTERO_ITEM new command 1"_ustr)),
+        comphelper::makePropertyValue(u"FieldResult"_ustr, uno::Any(u"new result 1"_ustr)),
     };
     uno::Sequence<css::beans::PropertyValue> aField2{
-        comphelper::makePropertyValue("FieldType", uno::Any(ODF_UNHANDLED)),
-        comphelper::makePropertyValue("FieldCommand",
-                                      uno::Any(OUString("ADDIN ZOTERO_ITEM new command 2"))),
-        comphelper::makePropertyValue("FieldResult", uno::Any(OUString("new result 2"))),
+        comphelper::makePropertyValue(u"FieldType"_ustr, uno::Any(ODF_UNHANDLED)),
+        comphelper::makePropertyValue(u"FieldCommand"_ustr,
+                                      uno::Any(u"ADDIN ZOTERO_ITEM new command 2"_ustr)),
+        comphelper::makePropertyValue(u"FieldResult"_ustr, uno::Any(u"new result 2"_ustr)),
     };
     uno::Sequence<uno::Sequence<css::beans::PropertyValue>> aFields = { aField1, aField2 };
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("FieldType", uno::Any(ODF_UNHANDLED)),
-        comphelper::makePropertyValue("FieldCommandPrefix",
-                                      uno::Any(OUString("ADDIN ZOTERO_ITEM"))),
-        comphelper::makePropertyValue("Fields", uno::Any(aFields)),
+        comphelper::makePropertyValue(u"FieldType"_ustr, uno::Any(ODF_UNHANDLED)),
+        comphelper::makePropertyValue(u"FieldCommandPrefix"_ustr,
+                                      uno::Any(u"ADDIN ZOTERO_ITEM"_ustr)),
+        comphelper::makePropertyValue(u"Fields"_ustr, uno::Any(aFields)),
     };
-    dispatchCommand(mxComponent, ".uno:TextFormFields", aArgs);
+    dispatchCommand(mxComponent, u".uno:TextFormFields"_ustr, aArgs);
 
     // Then make sure that the document text contains the new field results:
     SwDoc* pDoc = getSwDoc();
@@ -428,7 +428,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateFieldmarks)
     // - Expected: new result 1new result 2
     // - Actual  : old result 1old result 2
     // i.e. the fieldmarks were not updated.
-    CPPUNIT_ASSERT_EQUAL(OUString("new result 1new result 2"), aActual);
+    CPPUNIT_ASSERT_EQUAL(u"new result 1new result 2"_ustr, aActual);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertBookmark)
@@ -438,12 +438,12 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertBookmark)
     SwDoc* pDoc = getSwDoc();
 
     // When inserting a bookmark with text:
-    OUString aExpectedBookmarkName("ZOTERO_BREF_GiQ7DAWQYWLy");
+    OUString aExpectedBookmarkName(u"ZOTERO_BREF_GiQ7DAWQYWLy"_ustr);
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("Bookmark", uno::Any(aExpectedBookmarkName)),
-        comphelper::makePropertyValue("BookmarkText", uno::Any(OUString("<p>aaa</p><p>bbb</p>"))),
+        comphelper::makePropertyValue(u"Bookmark"_ustr, uno::Any(aExpectedBookmarkName)),
+        comphelper::makePropertyValue(u"BookmarkText"_ustr, uno::Any(u"<p>aaa</p><p>bbb</p>"_ustr)),
     };
-    dispatchCommand(mxComponent, ".uno:InsertBookmark", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertBookmark"_ustr, aArgs);
 
     // Then make sure that we create a bookmark that covers that text:
     IDocumentMarkAccess& rIDMA = *pDoc->getIDocumentMarkAccess();
@@ -458,7 +458,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertBookmark)
         // - Expected: aaa\nbbb
         // - Actual  :
         // i.e. no text was inserted, the bookmark was collapsed.
-        CPPUNIT_ASSERT_EQUAL(OUString("aaa\nbbb"), aActualResult);
+        CPPUNIT_ASSERT_EQUAL(u"aaa\nbbb"_ustr, aActualResult);
     }
 }
 
@@ -470,15 +470,15 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testGotoMark)
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->SplitNode();
     pWrtShell->SttEndDoc(/*bStt=*/false);
-    pWrtShell->SetBookmark(vcl::KeyCode(), "mybookmark");
+    pWrtShell->SetBookmark(vcl::KeyCode(), u"mybookmark"_ustr);
     SwNodeOffset nExpected = pWrtShell->GetCursor()->GetPointNode().GetIndex();
 
     // When jumping to that mark from the doc start:
     pWrtShell->SttEndDoc(/*bStt=*/true);
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("GotoMark", uno::Any(OUString("mybookmark"))),
+        comphelper::makePropertyValue(u"GotoMark"_ustr, uno::Any(u"mybookmark"_ustr)),
     };
-    dispatchCommand(mxComponent, ".uno:GotoMark", aArgs);
+    dispatchCommand(mxComponent, u".uno:GotoMark"_ustr, aArgs);
 
     // Then make sure that the final cursor position is at the bookmark:
     SwNodeOffset nActual = pWrtShell->GetCursor()->GetPointNode().GetIndex();
@@ -495,14 +495,14 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmarks)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->Insert("ABCDE");
+    pWrtShell->Insert(u"ABCDE"_ustr);
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
-    pWrtShell->SetBookmark(vcl::KeyCode(), "ZOTERO_BREF_GiQ7DAWQYWLy");
+    pWrtShell->SetBookmark(vcl::KeyCode(), u"ZOTERO_BREF_GiQ7DAWQYWLy"_ustr);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
-    pWrtShell->SetBookmark(vcl::KeyCode(), "ZOTERO_BREF_PRxDGUb4SWXF");
+    pWrtShell->SetBookmark(vcl::KeyCode(), u"ZOTERO_BREF_PRxDGUb4SWXF"_ustr);
 
     // When updating the content of bookmarks:
     pWrtShell->SttEndDoc(/*bStt=*/true);
@@ -540,7 +540,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmarks)
 }
 )json"_ostr);
     uno::Sequence<beans::PropertyValue> aArgs = comphelper::containerToSequence(aArgsVec);
-    dispatchCommand(mxComponent, ".uno:UpdateBookmarks", aArgs);
+    dispatchCommand(mxComponent, u".uno:UpdateBookmarks"_ustr, aArgs);
 
     // Then make sure that the only paragraph is updated correctly:
     SwCursor* pCursor = pWrtShell->GetCursor();
@@ -549,11 +549,11 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmarks)
     // - Expected: Anew result 1Cnew result 2E
     // - Actual  : ABCDE
     // i.e. the content was not updated.
-    CPPUNIT_ASSERT_EQUAL(OUString("Anew result 1Cnew result 2E"), aActual);
+    CPPUNIT_ASSERT_EQUAL(u"Anew result 1Cnew result 2E"_ustr, aActual);
 
     // Without the accompanying fix in place, this test would have failed, ZOTERO_BREF_GiQ7DAWQYWLy
     // was not renamed to ZOTERO_BREF_new1.
-    auto it = pDoc->getIDocumentMarkAccess()->findMark("ZOTERO_BREF_new1");
+    auto it = pDoc->getIDocumentMarkAccess()->findMark(u"ZOTERO_BREF_new1"_ustr);
     CPPUNIT_ASSERT(it != pDoc->getIDocumentMarkAccess()->getAllMarksEnd());
 }
 
@@ -562,11 +562,11 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertFieldmarkReadonly)
     // Given a document with a fieldmark, the cursor inside the fieldmark:
     createSwDoc();
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("FieldType", uno::Any(ODF_UNHANDLED)),
-        comphelper::makePropertyValue("FieldCommand", uno::Any(OUString("my command"))),
-        comphelper::makePropertyValue("FieldResult", uno::Any(OUString("my result"))),
+        comphelper::makePropertyValue(u"FieldType"_ustr, uno::Any(ODF_UNHANDLED)),
+        comphelper::makePropertyValue(u"FieldCommand"_ustr, uno::Any(u"my command"_ustr)),
+        comphelper::makePropertyValue(u"FieldResult"_ustr, uno::Any(u"my result"_ustr)),
     };
-    dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+    dispatchCommand(mxComponent, u".uno:TextFormField"_ustr, aArgs);
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwCursor* pCursor = pWrtShell->GetCursor();
@@ -575,7 +575,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertFieldmarkReadonly)
 
     // When trying to insert an inner fieldmark:
     // Without the accompanying fix in place, this test would have crashed.
-    dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+    dispatchCommand(mxComponent, u".uno:TextFormField"_ustr, aArgs);
 
     // Then make sure the read-only content refuses to accept that inner fieldmark, so we still have
     // just one:
@@ -594,22 +594,22 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmarks)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
-        comphelper::makePropertyValue("Name", uno::Any(OUString("some other old refmark"))),
-        comphelper::makePropertyValue("Content", uno::Any(OUString("some other old content"))),
+        comphelper::makePropertyValue(u"TypeName"_ustr, uno::Any(u"SetRef"_ustr)),
+        comphelper::makePropertyValue(u"Name"_ustr, uno::Any(u"some other old refmark"_ustr)),
+        comphelper::makePropertyValue(u"Content"_ustr, uno::Any(u"some other old content"_ustr)),
     };
-    dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertField"_ustr, aArgs);
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/false);
     pWrtShell->SplitNode();
     pWrtShell->SttEndDoc(/*bStt=*/false);
     aArgs = {
-        comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
-        comphelper::makePropertyValue(
-            "Name", uno::Any(OUString("ZOTERO_ITEM CSL_CITATION {} old refmark"))),
-        comphelper::makePropertyValue("Content", uno::Any(OUString("old content"))),
+        comphelper::makePropertyValue(u"TypeName"_ustr, uno::Any(u"SetRef"_ustr)),
+        comphelper::makePropertyValue(u"Name"_ustr,
+                                      uno::Any(u"ZOTERO_ITEM CSL_CITATION {} old refmark"_ustr)),
+        comphelper::makePropertyValue(u"Content"_ustr, uno::Any(u"old content"_ustr)),
     };
-    dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertField"_ustr, aArgs);
 
     // When updating that refmark:
     std::vector<beans::PropertyValue> aArgsVec = comphelper::JsonToPropertyValues(R"json(
@@ -640,7 +640,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmarks)
 }
 )json"_ostr);
     aArgs = comphelper::containerToSequence(aArgsVec);
-    dispatchCommand(mxComponent, ".uno:UpdateFields", aArgs);
+    dispatchCommand(mxComponent, u".uno:UpdateFields"_ustr, aArgs);
 
     // Then make sure that the document text features the new content:
     SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
@@ -648,7 +648,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmarks)
     // - Expected: new content
     // - Actual  : old content
     // i.e. the doc content was not updated.
-    CPPUNIT_ASSERT_EQUAL(OUString("new content"), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"new content"_ustr, pTextNode->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateFieldmark)
@@ -656,12 +656,12 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateFieldmark)
     // Given a document with a fieldmark:
     createSwDoc();
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("FieldType", uno::Any(ODF_UNHANDLED)),
-        comphelper::makePropertyValue("FieldCommand",
-                                      uno::Any(OUString("ADDIN ZOTERO_ITEM old command 1"))),
-        comphelper::makePropertyValue("FieldResult", uno::Any(OUString("old result 1"))),
+        comphelper::makePropertyValue(u"FieldType"_ustr, uno::Any(ODF_UNHANDLED)),
+        comphelper::makePropertyValue(u"FieldCommand"_ustr,
+                                      uno::Any(u"ADDIN ZOTERO_ITEM old command 1"_ustr)),
+        comphelper::makePropertyValue(u"FieldResult"_ustr, uno::Any(u"old result 1"_ustr)),
     };
-    dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+    dispatchCommand(mxComponent, u".uno:TextFormField"_ustr, aArgs);
 
     // When updating that fieldmark to have new field command & result:
     SwDoc* pDoc = getSwDoc();
@@ -698,7 +698,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateFieldmark)
 }
 )json"_ostr);
     aArgs = comphelper::containerToSequence(aArgsVec);
-    dispatchCommand(mxComponent, ".uno:UpdateTextFormField", aArgs);
+    dispatchCommand(mxComponent, u".uno:UpdateTextFormField"_ustr, aArgs);
 
     // Then make sure that the document text is updated accordingly:
     SwCursor* pCursor = pWrtShell->GetCursor();
@@ -710,7 +710,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateFieldmark)
     // - Expected: new result 1
     // - Actual  : old result 1
     // i.e. the document text was not updated.
-    CPPUNIT_ASSERT_EQUAL(OUString("new result 1"), aActual);
+    CPPUNIT_ASSERT_EQUAL(u"new result 1"_ustr, aActual);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateSections)
@@ -718,11 +718,11 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateSections)
     // Given a document with a section:
     createSwDoc();
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("RegionName",
-                                      uno::Any(OUString("ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RNDold"))),
-        comphelper::makePropertyValue("Content", uno::Any(OUString("old content"))),
+        comphelper::makePropertyValue(u"RegionName"_ustr,
+                                      uno::Any(u"ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RNDold"_ustr)),
+        comphelper::makePropertyValue(u"Content"_ustr, uno::Any(u"old content"_ustr)),
     };
-    dispatchCommand(mxComponent, ".uno:InsertSection", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertSection"_ustr, aArgs);
 
     // When updating that section:
     std::vector<beans::PropertyValue> aArgsVec = comphelper::JsonToPropertyValues(R"json(
@@ -749,7 +749,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateSections)
 }
 )json"_ostr);
     aArgs = comphelper::containerToSequence(aArgsVec);
-    dispatchCommand(mxComponent, ".uno:UpdateSections", aArgs);
+    dispatchCommand(mxComponent, u".uno:UpdateSections"_ustr, aArgs);
 
     // Then make sure that the section is updated:
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
@@ -761,7 +761,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateSections)
     // - Expected: new content
     // - Actual  : old content
     // i.e. the content wasn't updated.
-    CPPUNIT_ASSERT_EQUAL(OUString("new content"), aActualResult);
+    CPPUNIT_ASSERT_EQUAL(u"new content"_ustr, aActualResult);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDeleteFieldmarks)
@@ -770,29 +770,29 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDeleteFieldmarks)
     createSwDoc();
     {
         uno::Sequence<css::beans::PropertyValue> aArgs = {
-            comphelper::makePropertyValue("FieldType", uno::Any(ODF_UNHANDLED)),
-            comphelper::makePropertyValue("FieldCommand",
-                                          uno::Any(OUString("ADDIN ZOTERO_ITEM old command 1"))),
-            comphelper::makePropertyValue("FieldResult", uno::Any(OUString("result 1"))),
+            comphelper::makePropertyValue(u"FieldType"_ustr, uno::Any(ODF_UNHANDLED)),
+            comphelper::makePropertyValue(u"FieldCommand"_ustr,
+                                          uno::Any(u"ADDIN ZOTERO_ITEM old command 1"_ustr)),
+            comphelper::makePropertyValue(u"FieldResult"_ustr, uno::Any(u"result 1"_ustr)),
         };
-        dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+        dispatchCommand(mxComponent, u".uno:TextFormField"_ustr, aArgs);
     }
     {
         uno::Sequence<css::beans::PropertyValue> aArgs = {
-            comphelper::makePropertyValue("FieldType", uno::Any(ODF_UNHANDLED)),
-            comphelper::makePropertyValue("FieldCommand",
-                                          uno::Any(OUString("ADDIN ZOTERO_ITEM old command 2"))),
-            comphelper::makePropertyValue("FieldResult", uno::Any(OUString("result 2"))),
+            comphelper::makePropertyValue(u"FieldType"_ustr, uno::Any(ODF_UNHANDLED)),
+            comphelper::makePropertyValue(u"FieldCommand"_ustr,
+                                          uno::Any(u"ADDIN ZOTERO_ITEM old command 2"_ustr)),
+            comphelper::makePropertyValue(u"FieldResult"_ustr, uno::Any(u"result 2"_ustr)),
         };
-        dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+        dispatchCommand(mxComponent, u".uno:TextFormField"_ustr, aArgs);
     }
 
     // When deleting those fieldmarks:
     uno::Sequence<css::beans::PropertyValue> aArgs
-        = { comphelper::makePropertyValue("FieldType", uno::Any(ODF_UNHANDLED)),
-            comphelper::makePropertyValue("FieldCommandPrefix",
-                                          uno::Any(OUString("ADDIN ZOTERO_ITEM"))) };
-    dispatchCommand(mxComponent, ".uno:DeleteTextFormFields", aArgs);
+        = { comphelper::makePropertyValue(u"FieldType"_ustr, uno::Any(ODF_UNHANDLED)),
+            comphelper::makePropertyValue(u"FieldCommandPrefix"_ustr,
+                                          uno::Any(u"ADDIN ZOTERO_ITEM"_ustr)) };
+    dispatchCommand(mxComponent, u".uno:DeleteTextFormFields"_ustr, aArgs);
 
     // Then make sure that the document doesn't contain fields anymore:
     SwDoc* pDoc = getSwDoc();
@@ -806,7 +806,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDeleteFieldmarks)
     pWrtShell->SttEndDoc(/*bStt=*/true);
     SwCursor* pCursor = pWrtShell->GetCursor();
     OUString aActual = pCursor->Start()->GetNode().GetTextNode()->GetText();
-    CPPUNIT_ASSERT_EQUAL(OUString("result 1result 2"), aActual);
+    CPPUNIT_ASSERT_EQUAL(u"result 1result 2"_ustr, aActual);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmark)
@@ -815,11 +815,11 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmark)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->Insert("ABCD");
+    pWrtShell->Insert(u"ABCD"_ustr);
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 2, /*bBasicCall=*/false);
-    pWrtShell->SetBookmark(vcl::KeyCode(), "ZOTERO_BREF_old");
+    pWrtShell->SetBookmark(vcl::KeyCode(), u"ZOTERO_BREF_old"_ustr);
 
     // When updating the content of the bookmark under the cursor:
     pWrtShell->SttEndDoc(/*bStt=*/true);
@@ -846,7 +846,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmark)
 }
 )json"_ostr);
     uno::Sequence<beans::PropertyValue> aArgs = comphelper::containerToSequence(aArgsVec);
-    dispatchCommand(mxComponent, ".uno:UpdateBookmark", aArgs);
+    dispatchCommand(mxComponent, u".uno:UpdateBookmark"_ustr, aArgs);
 
     // Then make sure that the only paragraph is updated correctly:
     SwCursor* pCursor = pWrtShell->GetCursor();
@@ -855,8 +855,8 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmark)
     // - Expected: Anew resultD
     // - Actual  : ABCD
     // i.e. it was not possible to update just the bookmark under cursor.
-    CPPUNIT_ASSERT_EQUAL(OUString("Anew resultD"), aActual);
-    auto it = pDoc->getIDocumentMarkAccess()->findMark("ZOTERO_BREF_new");
+    CPPUNIT_ASSERT_EQUAL(u"Anew resultD"_ustr, aActual);
+    auto it = pDoc->getIDocumentMarkAccess()->findMark(u"ZOTERO_BREF_new"_ustr);
     CPPUNIT_ASSERT(it != pDoc->getIDocumentMarkAccess()->getAllMarksEnd());
 }
 
@@ -866,12 +866,12 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmark)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
-        comphelper::makePropertyValue(
-            "Name", uno::Any(OUString("ZOTERO_ITEM CSL_CITATION {} old refmark"))),
-        comphelper::makePropertyValue("Content", uno::Any(OUString("old content"))),
+        comphelper::makePropertyValue(u"TypeName"_ustr, uno::Any(u"SetRef"_ustr)),
+        comphelper::makePropertyValue(u"Name"_ustr,
+                                      uno::Any(u"ZOTERO_ITEM CSL_CITATION {} old refmark"_ustr)),
+        comphelper::makePropertyValue(u"Content"_ustr, uno::Any(u"old content"_ustr)),
     };
-    dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertField"_ustr, aArgs);
 
     // When updating that refmark:
     std::vector<beans::PropertyValue> aArgsVec = comphelper::JsonToPropertyValues(R"json(
@@ -900,7 +900,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmark)
 }
 )json"_ostr);
     aArgs = comphelper::containerToSequence(aArgsVec);
-    dispatchCommand(mxComponent, ".uno:UpdateField", aArgs);
+    dispatchCommand(mxComponent, u".uno:UpdateField"_ustr, aArgs);
 
     // Then make sure that the document text features the new content:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -909,7 +909,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmark)
     // - Expected: new content
     // - Actual  : old content
     // i.e. the content was not updated.
-    CPPUNIT_ASSERT_EQUAL(OUString("new content"), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"new content"_ustr, pTextNode->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDeleteBookmarks)
@@ -918,14 +918,14 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDeleteBookmarks)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->Insert("ABCDE");
+    pWrtShell->Insert(u"ABCDE"_ustr);
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
-    pWrtShell->SetBookmark(vcl::KeyCode(), "ZOTERO_BREF_GiQ7DAWQYWLy");
+    pWrtShell->SetBookmark(vcl::KeyCode(), u"ZOTERO_BREF_GiQ7DAWQYWLy"_ustr);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
-    pWrtShell->SetBookmark(vcl::KeyCode(), "other");
+    pWrtShell->SetBookmark(vcl::KeyCode(), u"other"_ustr);
 
     // When deleting 1 matching bookmark:
     pWrtShell->SttEndDoc(/*bStt=*/true);
@@ -938,14 +938,14 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDeleteBookmarks)
 }
 )json"_ostr);
     uno::Sequence<beans::PropertyValue> aArgs = comphelper::containerToSequence(aArgsVec);
-    dispatchCommand(mxComponent, ".uno:DeleteBookmarks", aArgs);
+    dispatchCommand(mxComponent, u".uno:DeleteBookmarks"_ustr, aArgs);
 
     // Then make sure that only the other bookmark is kept:
-    auto it = pDoc->getIDocumentMarkAccess()->findMark("ZOTERO_BREF_GiQ7DAWQYWLy");
+    auto it = pDoc->getIDocumentMarkAccess()->findMark(u"ZOTERO_BREF_GiQ7DAWQYWLy"_ustr);
     // Without the accompanying fix in place, this test would have failed, the matching bookmark was
     // not removed.
     CPPUNIT_ASSERT(bool(it == pDoc->getIDocumentMarkAccess()->getAllMarksEnd()));
-    it = pDoc->getIDocumentMarkAccess()->findMark("other");
+    it = pDoc->getIDocumentMarkAccess()->findMark(u"other"_ustr);
     CPPUNIT_ASSERT(it != pDoc->getIDocumentMarkAccess()->getAllMarksEnd());
 }
 
@@ -954,12 +954,12 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDeleteFields)
     // Given a document with a refmark:
     createSwDoc();
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
-        comphelper::makePropertyValue(
-            "Name", uno::Any(OUString("ZOTERO_ITEM CSL_CITATION {} RNDpyJknp173F"))),
-        comphelper::makePropertyValue("Content", uno::Any(OUString("aaa<b>bbb</b>ccc"))),
+        comphelper::makePropertyValue(u"TypeName"_ustr, uno::Any(u"SetRef"_ustr)),
+        comphelper::makePropertyValue(u"Name"_ustr,
+                                      uno::Any(u"ZOTERO_ITEM CSL_CITATION {} RNDpyJknp173F"_ustr)),
+        comphelper::makePropertyValue(u"Content"_ustr, uno::Any(u"aaa<b>bbb</b>ccc"_ustr)),
     };
-    dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertField"_ustr, aArgs);
 
     // When deleting the refmarks:
     std::vector<beans::PropertyValue> aArgsVec = comphelper::JsonToPropertyValues(R"json(
@@ -975,7 +975,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDeleteFields)
 }
 )json"_ostr);
     aArgs = comphelper::containerToSequence(aArgsVec);
-    dispatchCommand(mxComponent, ".uno:DeleteFields", aArgs);
+    dispatchCommand(mxComponent, u".uno:DeleteFields"_ustr, aArgs);
 
     // Then make sure that no refmark is kept:
     SwDoc* pDoc = getSwDoc();
@@ -994,13 +994,13 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertTextFormFieldFootnote)
 
     // When inserting an ODF_UNHANDLED fieldmark inside a footnote:
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("FieldType", uno::Any(ODF_UNHANDLED)),
-        comphelper::makePropertyValue("FieldCommand",
-                                      uno::Any(OUString("ADDIN ZOTERO_BIBL foo bar"))),
-        comphelper::makePropertyValue("FieldResult", uno::Any(OUString("result"))),
-        comphelper::makePropertyValue("Wrapper", uno::Any(OUString("Footnote"))),
+        comphelper::makePropertyValue(u"FieldType"_ustr, uno::Any(ODF_UNHANDLED)),
+        comphelper::makePropertyValue(u"FieldCommand"_ustr,
+                                      uno::Any(u"ADDIN ZOTERO_BIBL foo bar"_ustr)),
+        comphelper::makePropertyValue(u"FieldResult"_ustr, uno::Any(u"result"_ustr)),
+        comphelper::makePropertyValue(u"Wrapper"_ustr, uno::Any(u"Footnote"_ustr)),
     };
-    dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+    dispatchCommand(mxComponent, u".uno:TextFormField"_ustr, aArgs);
 
     // Then make sure that the footnote is created:
     SwFootnoteIdxs& rFootnotes = pDoc->GetFootnoteIdxs();
@@ -1019,13 +1019,13 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertTextFormFieldEndnote)
 
     // When inserting an ODF_UNHANDLED fieldmark inside an endnote:
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("FieldType", uno::Any(ODF_UNHANDLED)),
-        comphelper::makePropertyValue("FieldCommand",
-                                      uno::Any(OUString("ADDIN ZOTERO_BIBL foo bar"))),
-        comphelper::makePropertyValue("FieldResult", uno::Any(OUString("result"))),
-        comphelper::makePropertyValue("Wrapper", uno::Any(OUString("Endnote"))),
+        comphelper::makePropertyValue(u"FieldType"_ustr, uno::Any(ODF_UNHANDLED)),
+        comphelper::makePropertyValue(u"FieldCommand"_ustr,
+                                      uno::Any(u"ADDIN ZOTERO_BIBL foo bar"_ustr)),
+        comphelper::makePropertyValue(u"FieldResult"_ustr, uno::Any(u"result"_ustr)),
+        comphelper::makePropertyValue(u"Wrapper"_ustr, uno::Any(u"Endnote"_ustr)),
     };
-    dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+    dispatchCommand(mxComponent, u".uno:TextFormField"_ustr, aArgs);
 
     // Then make sure that the endnote is created:
     SwFootnoteIdxs& rFootnotes = pDoc->GetFootnoteIdxs();
@@ -1048,7 +1048,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertTextFormFieldEndnote)
         = { CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDSEP, CH_TXT_ATR_FIELDEND, 0 };
     aActual = comphelper::string::removeAny(aActual, aForbidden);
     // Then this was empty: the fieldmark was inserted before the note anchor, not in the note body.
-    CPPUNIT_ASSERT_EQUAL(OUString("result"), aActual);
+    CPPUNIT_ASSERT_EQUAL(u"result"_ustr, aActual);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateSelectedField)
@@ -1062,7 +1062,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateSelectedField)
     SwPaM* pCursor = pShell->GetCursor();
 
     // Insert a time field and select it:
-    dispatchCommand(mxComponent, ".uno:InsertTimeFieldVar", {});
+    dispatchCommand(mxComponent, u".uno:InsertTimeFieldVar"_ustr, {});
 
     pCursor->SetMark();
     pCursor->Move(fnMoveBackward);
@@ -1074,7 +1074,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateSelectedField)
     osl::Thread::wait(std::chrono::seconds(1));
 
     // Update the field at cursor:
-    dispatchCommand(mxComponent, ".uno:UpdateSelectedField", {});
+    dispatchCommand(mxComponent, u".uno:UpdateSelectedField"_ustr, {});
     pWrtShell->GetSelectedText(aTimeFieldAfter);
 
     // Check that the selected field has changed:

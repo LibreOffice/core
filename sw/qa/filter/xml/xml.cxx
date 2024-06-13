@@ -28,7 +28,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/filter/xml/data/", "writer8")
+        : SwModelTestBase(u"/sw/qa/filter/xml/data/"_ustr, u"writer8"_ustr)
     {
     }
 };
@@ -42,7 +42,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCoveredCellBackground)
     SwDoc* pDoc = getSwDoc();
     const SwTableFormat* pTableFormat = (*pDoc->GetTableFrameFormats())[0];
     SwTable* pTable = SwTable::FindTable(pTableFormat);
-    SwTableBox* pBox = const_cast<SwTableBox*>(pTable->GetTableBox("A5"));
+    SwTableBox* pBox = const_cast<SwTableBox*>(pTable->GetTableBox(u"A5"_ustr));
     SwFrameFormat* pCellFormat = pBox->GetFrameFormat();
     const SvxBrushItem& rBackground = pCellFormat->GetAttrSet().GetBackground();
 

@@ -23,7 +23,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/uibase/shells/data/")
+        : SwModelTestBase(u"/sw/qa/uibase/shells/data/"_ustr)
     {
     }
 };
@@ -36,12 +36,12 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertRefmarkFootnote)
 
     // When inserting a refmark inside a footnote:
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
-        comphelper::makePropertyValue("Name", uno::Any(OUString("myref"))),
-        comphelper::makePropertyValue("Content", uno::Any(OUString("content"))),
-        comphelper::makePropertyValue("Wrapper", uno::Any(OUString("Footnote"))),
+        comphelper::makePropertyValue(u"TypeName"_ustr, uno::Any(u"SetRef"_ustr)),
+        comphelper::makePropertyValue(u"Name"_ustr, uno::Any(u"myref"_ustr)),
+        comphelper::makePropertyValue(u"Content"_ustr, uno::Any(u"content"_ustr)),
+        comphelper::makePropertyValue(u"Wrapper"_ustr, uno::Any(u"Footnote"_ustr)),
     };
-    dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertField"_ustr, aArgs);
 
     // Then make sure that the note body contains the refmark:
     SwDoc* pDoc = getSwDoc();
@@ -55,7 +55,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertRefmarkFootnote)
     const SwFormatFootnote& rFormatNote = pNote->GetFootnote();
     CPPUNIT_ASSERT(!rFormatNote.IsEndNote());
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    CPPUNIT_ASSERT_EQUAL(OUString("content"), rFormatNote.GetFootnoteText(*pWrtShell->GetLayout()));
+    CPPUNIT_ASSERT_EQUAL(u"content"_ustr, rFormatNote.GetFootnoteText(*pWrtShell->GetLayout()));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testInsertRefmarkEndnote)
@@ -65,12 +65,12 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertRefmarkEndnote)
 
     // When inserting a refmark inside an endnote:
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
-        comphelper::makePropertyValue("Name", uno::Any(OUString("myref"))),
-        comphelper::makePropertyValue("Content", uno::Any(OUString("content"))),
-        comphelper::makePropertyValue("Wrapper", uno::Any(OUString("Endnote"))),
+        comphelper::makePropertyValue(u"TypeName"_ustr, uno::Any(u"SetRef"_ustr)),
+        comphelper::makePropertyValue(u"Name"_ustr, uno::Any(u"myref"_ustr)),
+        comphelper::makePropertyValue(u"Content"_ustr, uno::Any(u"content"_ustr)),
+        comphelper::makePropertyValue(u"Wrapper"_ustr, uno::Any(u"Endnote"_ustr)),
     };
-    dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertField"_ustr, aArgs);
 
     // Then make sure that the note body contains the refmark:
     SwDoc* pDoc = getSwDoc();
@@ -84,7 +84,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertRefmarkEndnote)
     const SwFormatFootnote& rNote = pNote->GetFootnote();
     CPPUNIT_ASSERT(rNote.IsEndNote());
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    CPPUNIT_ASSERT_EQUAL(OUString("content"), rNote.GetFootnoteText(*pWrtShell->GetLayout()));
+    CPPUNIT_ASSERT_EQUAL(u"content"_ustr, rNote.GetFootnoteText(*pWrtShell->GetLayout()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

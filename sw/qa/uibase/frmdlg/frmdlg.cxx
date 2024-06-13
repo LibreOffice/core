@@ -23,7 +23,7 @@ class SwUibaseFrmdlgTest : public SwModelTestBase
 {
 public:
     SwUibaseFrmdlgTest()
-        : SwModelTestBase("/sw/qa/uibase/frmdlg/data/")
+        : SwModelTestBase(u"/sw/qa/uibase/frmdlg/data/"_ustr)
     {
     }
 };
@@ -39,25 +39,26 @@ CPPUNIT_TEST_FIXTURE(SwUibaseFrmdlgTest, testWrappedMathObject)
     // - Actual  : 1 (AS_CHARACTER)
     // i.e. the object lost its wrapping, leading to an incorrect position.
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,
-                         getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
+                         getProperty<text::TextContentAnchorType>(getShape(1), u"AnchorType"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseFrmdlgTest, testAnchorTypeFromStyle)
 {
     // Given a document with aGraphics style with anchor type set to as-character:
     createSwDoc();
-    uno::Reference<beans::XPropertySet> xGraphics(getStyles("FrameStyles")->getByName("Graphics"),
-                                                  uno::UNO_QUERY);
-    xGraphics->setPropertyValue("AnchorType", uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+    uno::Reference<beans::XPropertySet> xGraphics(
+        getStyles(u"FrameStyles"_ustr)->getByName(u"Graphics"_ustr), uno::UNO_QUERY);
+    xGraphics->setPropertyValue(u"AnchorType"_ustr,
+                                uno::Any(text::TextContentAnchorType_AS_CHARACTER));
 
     // When inserting an image:
     uno::Sequence<beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("FileName", createFileURL(u"image.png")),
+        comphelper::makePropertyValue(u"FileName"_ustr, createFileURL(u"image.png")),
     };
-    dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
 
     // Then make sure the image's anchor type is as-char:
-    auto eActual = getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType");
+    auto eActual = getProperty<text::TextContentAnchorType>(getShape(1), u"AnchorType"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1 (AS_CHARACTER)
     // - Actual  : 4 (AT_CHARACTER)
@@ -82,11 +83,11 @@ CPPUNIT_TEST_FIXTURE(SwUibaseFrmdlgTest, testInsertFrameWidth)
         pWrtShell->SetTableAttr(aSet);
     }
     pWrtShell->GoPrevCell();
-    pWrtShell->Insert("A1");
+    pWrtShell->Insert(u"A1"_ustr);
     SwFormatFrameSize aRowSize(SwFrameSize::Minimum);
     pWrtShell->SetRowHeight(aRowSize);
     pWrtShell->GoNextCell();
-    pWrtShell->Insert("A2");
+    pWrtShell->Insert(u"A2"_ustr);
     pWrtShell->SetRowHeight(aRowSize);
     // Select cell:
     pWrtShell->SelAll();

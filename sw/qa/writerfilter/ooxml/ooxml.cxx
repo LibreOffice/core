@@ -57,9 +57,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableLeak)
     uno::Reference<lang::XServiceInfo> xTable(xParaEnum->nextElement(), uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed, the document started with
     // a paragraph instead of a table.
-    CPPUNIT_ASSERT(xTable->supportsService("com.sun.star.text.TextTable"));
+    CPPUNIT_ASSERT(xTable->supportsService(u"com.sun.star.text.TextTable"_ustr));
     uno::Reference<lang::XServiceInfo> xParagraph(xParaEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xParagraph->supportsService("com.sun.star.text.Paragraph"));
+    CPPUNIT_ASSERT(xParagraph->supportsService(u"com.sun.star.text.Paragraph"_ustr));
     CPPUNIT_ASSERT(!xParaEnum->hasMoreElements());
 }
 

@@ -43,7 +43,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPicwPich)
     uno::Reference<drawing::XDrawPage> xDrawPage = xTextDocument->getDrawPage();
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> xGraphic;
-    xShape->getPropertyValue("Graphic") >>= xGraphic;
+    xShape->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
     Graphic aGraphic(xGraphic);
     Size aPrefSize = aGraphic.GetPrefSize();
     // Without the accompanying fix in place, this test would have failed with:
@@ -62,7 +62,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCharHiddenInTable)
     uno::Reference<text::XTextTablesSupplier> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextDocument->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xCell(xTable->getCellByName("B1"),
+    uno::Reference<container::XEnumerationAccess> xCell(xTable->getCellByName(u"B1"_ustr),
                                                         uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphs = xCell->createEnumeration();
     uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
@@ -70,7 +70,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCharHiddenInTable)
     uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
     uno::Reference<beans::XPropertySet> xPortion(xPortions->nextElement(), uno::UNO_QUERY);
     bool bCharHidden{};
-    xPortion->getPropertyValue("CharHidden") >>= bCharHidden;
+    xPortion->getPropertyValue(u"CharHidden"_ustr) >>= bCharHidden;
     // Without the accompanying fix in place, this test would have failed, the newline was not
     // hidden.
     CPPUNIT_ASSERT(bCharHidden);
@@ -104,7 +104,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOldParaNumLeftMargin)
     xParagraphs->nextElement();
     uno::Reference<beans::XPropertySet> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
     sal_Int32 nParaLeftMargin{};
-    xParagraph->getPropertyValue("ParaLeftMargin") >>= nParaLeftMargin;
+    xParagraph->getPropertyValue(u"ParaLeftMargin"_ustr) >>= nParaLeftMargin;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2101
     // - Actual  : 0

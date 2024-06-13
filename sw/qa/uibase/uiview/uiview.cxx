@@ -34,7 +34,7 @@ class SwUibaseUiviewTest : public SwModelTestBase
 {
 public:
     SwUibaseUiviewTest()
-        : SwModelTestBase("/sw/qa/uibase/uiview/data/")
+        : SwModelTestBase(u"/sw/qa/uibase/uiview/data/"_ustr)
     {
     }
 };
@@ -63,20 +63,22 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testUpdateAllObjectReplacements)
 
     // Load the copy
     uno::Reference<uno::XInterface> xInterface
-        = xFactory->createInstance("com.sun.star.frame.Desktop");
+        = xFactory->createInstance(u"com.sun.star.frame.Desktop"_ustr);
     uno::Reference<frame::XComponentLoader> xComponentLoader(xInterface, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue("Hidden", true) };
-    mxComponent
-        = xComponentLoader->loadComponentFromURL(maTempFile.GetURL(), "_default", 0, aLoadArgs);
+    uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue(u"Hidden"_ustr,
+                                                                                 true) };
+    mxComponent = xComponentLoader->loadComponentFromURL(maTempFile.GetURL(), u"_default"_ustr, 0,
+                                                         aLoadArgs);
 
     // Perform the .uno:UpdateAll call and save
-    xInterface = xFactory->createInstance("com.sun.star.frame.DispatchHelper");
+    xInterface = xFactory->createInstance(u"com.sun.star.frame.DispatchHelper"_ustr);
     uno::Reference<frame::XDispatchHelper> xDispatchHelper(xInterface, uno::UNO_QUERY);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<frame::XDispatchProvider> xDispatchProvider(
         xModel->getCurrentController()->getFrame(), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aNoArgs;
-    xDispatchHelper->executeDispatch(xDispatchProvider, ".uno:UpdateAll", OUString(), 0, aNoArgs);
+    xDispatchHelper->executeDispatch(xDispatchProvider, u".uno:UpdateAll"_ustr, OUString(), 0,
+                                     aNoArgs);
     uno::Reference<frame::XStorable2> xStorable(mxComponent, uno::UNO_QUERY);
     xStorable->storeSelf(aNoArgs);
 
@@ -85,8 +87,8 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testUpdateAllObjectReplacements)
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(xFactory),
                                                       maTempFile.GetURL());
 
-    CPPUNIT_ASSERT(xNameAccess->hasByName("ObjectReplacements/Components"));
-    CPPUNIT_ASSERT(xNameAccess->hasByName("ObjectReplacements/Components_1"));
+    CPPUNIT_ASSERT(xNameAccess->hasByName(u"ObjectReplacements/Components"_ustr));
+    CPPUNIT_ASSERT(xNameAccess->hasByName(u"ObjectReplacements/Components_1"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testUpdateReplacementNosetting)
@@ -94,11 +96,11 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testUpdateReplacementNosetting)
     // Load a copy of the document in hidden mode.
     OUString aSourceURL = createFileURL(u"update-replacement-nosetting.odt");
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, osl::File::copy(aSourceURL, maTempFile.GetURL()));
-    mxComponent = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument",
-                                  { comphelper::makePropertyValue("Hidden", true) });
+    mxComponent = loadFromDesktop(maTempFile.GetURL(), u"com.sun.star.text.TextDocument"_ustr,
+                                  { comphelper::makePropertyValue(u"Hidden"_ustr, true) });
 
     // Update "everything" (including object replacements) and save it.
-    dispatchCommand(mxComponent, ".uno:UpdateAll", {});
+    dispatchCommand(mxComponent, u".uno:UpdateAll"_ustr, {});
     uno::Reference<frame::XStorable2> xStorable(mxComponent, uno::UNO_QUERY);
     xStorable->storeSelf({});
 
@@ -109,7 +111,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testUpdateReplacementNosetting)
 
     // Without the accompanying fix in place, this test would have failed, because the embedded
     // object replacement image was not generated.
-    CPPUNIT_ASSERT(xNameAccess->hasByName("ObjectReplacements/Components"));
+    CPPUNIT_ASSERT(xNameAccess->hasByName(u"ObjectReplacements/Components"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testKeepRatio)
@@ -134,9 +136,10 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testKeepRatio)
     CPPUNIT_ASSERT(pViewOption->IsKeepRatio());
 
     // Then export as well:
-    save("writer8");
-    xmlDocUniquePtr pXmlDoc = parseExport("settings.xml");
-    assertXPathContent(pXmlDoc, "//config:config-item[@config:name='KeepRatio']"_ostr, "true");
+    save(u"writer8"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"settings.xml"_ustr);
+    assertXPathContent(pXmlDoc, "//config:config-item[@config:name='KeepRatio']"_ostr,
+                       u"true"_ustr);
 }
 
 namespace
@@ -243,10 +246,10 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testSwitchBetweenImages)
     for (int i = 0; i < 2; ++i)
     {
         uno::Reference<beans::XPropertySet> xTextGraphic(
-            xMSF->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
-        xTextGraphic->setPropertyValue("AnchorType",
+            xMSF->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
+        xTextGraphic->setPropertyValue(u"AnchorType"_ustr,
                                        uno::Any(text::TextContentAnchorType_AS_CHARACTER));
-        xTextGraphic->setPropertyValue("Size", uno::Any(awt::Size(5000, 5000)));
+        xTextGraphic->setPropertyValue(u"Size"_ustr, uno::Any(awt::Size(5000, 5000)));
         uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
         xText->insertTextContent(xCursor, xTextContent, false);
     }

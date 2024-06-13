@@ -30,7 +30,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/uibase/shells/data/")
+        : SwModelTestBase(u"/sw/qa/uibase/shells/data/"_ustr)
     {
     }
 };
@@ -41,11 +41,11 @@ CPPUNIT_TEST_FIXTURE(Test, testDeleteSections)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("RegionName",
-                                      uno::Any(OUString("ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RND"))),
-        comphelper::makePropertyValue("Content", uno::Any(OUString("old content"))),
+        comphelper::makePropertyValue(u"RegionName"_ustr,
+                                      uno::Any(u"ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RND"_ustr)),
+        comphelper::makePropertyValue(u"Content"_ustr, uno::Any(u"old content"_ustr)),
     };
-    dispatchCommand(mxComponent, ".uno:InsertSection", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertSection"_ustr, aArgs);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDoc->GetSections().size());
 
     // When deleting sections:
@@ -58,7 +58,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDeleteSections)
 }
 )json"_ostr);
     aArgs = comphelper::containerToSequence(aArgsVec);
-    dispatchCommand(mxComponent, ".uno:DeleteSections", aArgs);
+    dispatchCommand(mxComponent, u".uno:DeleteSections"_ustr, aArgs);
 
     // Then make sure that the section is deleted:
     // Without the accompanying fix in place, this test would have failed with:

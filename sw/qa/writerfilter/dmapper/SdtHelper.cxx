@@ -43,46 +43,46 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunRichText)
     uno::Reference<container::XEnumeration> xPortionEnum = xPara->createEnumeration();
     uno::Reference<beans::XPropertySet> xPortion(xPortionEnum->nextElement(), uno::UNO_QUERY);
     OUString aTextPortionType;
-    xPortion->getPropertyValue("TextPortionType") >>= aTextPortionType;
+    xPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aTextPortionType;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: ContentControl
     // - Actual  : TextField
     // i.e. the SDT was imported as a text field, and the whole SDT had 12pt font size.
-    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aTextPortionType);
+    CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aTextPortionType);
     uno::Reference<text::XTextContent> xContentControl;
-    xPortion->getPropertyValue("ContentControl") >>= xContentControl;
+    xPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
     uno::Reference<text::XTextRange> xContentControlRange(xContentControl, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xContentControlRange->getText();
     uno::Reference<container::XEnumerationAccess> xContentEnumAccess(xText, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xContentEnum = xContentEnumAccess->createEnumeration();
     uno::Reference<beans::XPropertySet> xContent(xContentEnum->nextElement(), uno::UNO_QUERY);
     float fCharheight{};
-    xContent->getPropertyValue("CharHeight") >>= fCharheight;
+    xContent->getPropertyValue(u"CharHeight"_ustr) >>= fCharheight;
     CPPUNIT_ASSERT_EQUAL(12.f, fCharheight);
     xContent.set(xContentEnum->nextElement(), uno::UNO_QUERY);
-    xContent->getPropertyValue("CharHeight") >>= fCharheight;
+    xContent->getPropertyValue(u"CharHeight"_ustr) >>= fCharheight;
     CPPUNIT_ASSERT_EQUAL(24.f, fCharheight);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     OUString aAlias;
-    xContentControlProps->getPropertyValue("Alias") >>= aAlias;
+    xContentControlProps->getPropertyValue(u"Alias"_ustr) >>= aAlias;
     // This was empty.
-    CPPUNIT_ASSERT_EQUAL(OUString("myalias"), aAlias);
+    CPPUNIT_ASSERT_EQUAL(u"myalias"_ustr, aAlias);
     OUString aTag;
-    xContentControlProps->getPropertyValue("Tag") >>= aTag;
+    xContentControlProps->getPropertyValue(u"Tag"_ustr) >>= aTag;
     // This was empty.
-    CPPUNIT_ASSERT_EQUAL(OUString("mytag"), aTag);
+    CPPUNIT_ASSERT_EQUAL(u"mytag"_ustr, aTag);
     sal_Int32 nId = 0;
-    xContentControlProps->getPropertyValue("Id") >>= nId;
+    xContentControlProps->getPropertyValue(u"Id"_ustr) >>= nId;
     // This was 0.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2147483647), nId);
     sal_uInt32 nTabIndex = 0;
-    xContentControlProps->getPropertyValue("TabIndex") >>= nTabIndex;
+    xContentControlProps->getPropertyValue(u"TabIndex"_ustr) >>= nTabIndex;
     // This was 0
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(4294967295), nTabIndex);
     OUString aLock;
-    xContentControlProps->getPropertyValue("Lock") >>= aLock;
+    xContentControlProps->getPropertyValue(u"Lock"_ustr) >>= aLock;
     // This was empty.
-    CPPUNIT_ASSERT_EQUAL(OUString("contentLocked"), aLock);
+    CPPUNIT_ASSERT_EQUAL(u"contentLocked"_ustr, aLock);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtRunPlainText)
@@ -99,16 +99,16 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunPlainText)
     uno::Reference<container::XEnumeration> xPortionEnum = xPara->createEnumeration();
     uno::Reference<beans::XPropertySet> xPortion(xPortionEnum->nextElement(), uno::UNO_QUERY);
     OUString aTextPortionType;
-    xPortion->getPropertyValue("TextPortionType") >>= aTextPortionType;
+    xPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aTextPortionType;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: ContentControl
     // - Actual  : TextField
     // i.e. the SDT was imported as a text field, not as a content control.
-    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aTextPortionType);
+    CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aTextPortionType);
     uno::Reference<beans::XPropertySet> xContentControl;
-    xPortion->getPropertyValue("ContentControl") >>= xContentControl;
+    xPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
     bool bPlainText{};
-    xContentControl->getPropertyValue("PlainText") >>= bPlainText;
+    xContentControl->getPropertyValue(u"PlainText"_ustr) >>= bPlainText;
     CPPUNIT_ASSERT(bPlainText);
 }
 
@@ -126,26 +126,26 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunCheckbox)
     uno::Reference<container::XEnumeration> xPortionEnum = xPara->createEnumeration();
     uno::Reference<beans::XPropertySet> xPortion(xPortionEnum->nextElement(), uno::UNO_QUERY);
     OUString aTextPortionType;
-    xPortion->getPropertyValue("TextPortionType") >>= aTextPortionType;
+    xPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aTextPortionType;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: ContentControl
     // - Actual  : Text
     // i.e. the SDT was imported as plain text, making it hard to fill in checkboxes.
-    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aTextPortionType);
+    CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aTextPortionType);
     uno::Reference<text::XTextContent> xContentControl;
-    xPortion->getPropertyValue("ContentControl") >>= xContentControl;
+    xPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     bool bCheckbox{};
-    xContentControlProps->getPropertyValue("Checkbox") >>= bCheckbox;
+    xContentControlProps->getPropertyValue(u"Checkbox"_ustr) >>= bCheckbox;
     CPPUNIT_ASSERT(bCheckbox);
     bool bChecked{};
-    xContentControlProps->getPropertyValue("Checked") >>= bChecked;
+    xContentControlProps->getPropertyValue(u"Checked"_ustr) >>= bChecked;
     CPPUNIT_ASSERT(bChecked);
     OUString aCheckedState;
-    xContentControlProps->getPropertyValue("CheckedState") >>= aCheckedState;
+    xContentControlProps->getPropertyValue(u"CheckedState"_ustr) >>= aCheckedState;
     CPPUNIT_ASSERT_EQUAL(u"☒"_ustr, aCheckedState);
     OUString aUncheckedState;
-    xContentControlProps->getPropertyValue("UncheckedState") >>= aUncheckedState;
+    xContentControlProps->getPropertyValue(u"UncheckedState"_ustr) >>= aUncheckedState;
     CPPUNIT_ASSERT_EQUAL(u"☐"_ustr, aUncheckedState);
     uno::Reference<text::XTextRange> xContentControlRange(xContentControl, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xContentControlRange->getText();
@@ -170,34 +170,34 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunDropdown)
     uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
     uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
     OUString aPortionType;
-    xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+    xTextPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
     // Without the accompanying fix in place, this failed with:
     // - Expected: ContentControl
     // - Actual  : TextField
     // i.e. the SDT was imported as a dropdown field, which does not support display-text + value
     // pairs.
-    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+    CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aPortionType);
     uno::Reference<text::XTextContent> xContentControl;
-    xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+    xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValues> aListItems;
-    xContentControlProps->getPropertyValue("ListItems") >>= aListItems;
+    xContentControlProps->getPropertyValue(u"ListItems"_ustr) >>= aListItems;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aListItems.getLength());
     comphelper::SequenceAsHashMap aMap0(aListItems[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("red"), aMap0["DisplayText"].get<OUString>());
-    CPPUNIT_ASSERT_EQUAL(OUString("R"), aMap0["Value"].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"red"_ustr, aMap0[u"DisplayText"_ustr].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"R"_ustr, aMap0[u"Value"_ustr].get<OUString>());
     comphelper::SequenceAsHashMap aMap1(aListItems[1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("green"), aMap1["DisplayText"].get<OUString>());
-    CPPUNIT_ASSERT_EQUAL(OUString("G"), aMap1["Value"].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"green"_ustr, aMap1[u"DisplayText"_ustr].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"G"_ustr, aMap1[u"Value"_ustr].get<OUString>());
     comphelper::SequenceAsHashMap aMap2(aListItems[2]);
-    CPPUNIT_ASSERT_EQUAL(OUString("blue"), aMap2["DisplayText"].get<OUString>());
-    CPPUNIT_ASSERT_EQUAL(OUString("B"), aMap2["Value"].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"blue"_ustr, aMap2[u"DisplayText"_ustr].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"B"_ustr, aMap2[u"Value"_ustr].get<OUString>());
     uno::Reference<text::XTextRange> xContentControlRange(xContentControl, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xContentControlRange->getText();
     uno::Reference<container::XEnumerationAccess> xContentEnumAccess(xText, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xContentEnum = xContentEnumAccess->createEnumeration();
     uno::Reference<text::XTextRange> xContent(xContentEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("choose a color"), xContent->getString());
+    CPPUNIT_ASSERT_EQUAL(u"choose a color"_ustr, xContent->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtRunComboBox)
@@ -215,13 +215,13 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunComboBox)
     uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
     uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
     OUString aPortionType;
-    xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
-    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+    xTextPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
+    CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aPortionType);
     uno::Reference<text::XTextContent> xContentControl;
-    xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+    xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     bool bComboBox{};
-    xContentControlProps->getPropertyValue("ComboBox") >>= bComboBox;
+    xContentControlProps->getPropertyValue(u"ComboBox"_ustr) >>= bComboBox;
     // Without the accompanying fix in place, this failed as the content control was a drop-down,
     // not a combo box.
     CPPUNIT_ASSERT(bComboBox);
@@ -242,18 +242,18 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunPicture)
     uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
     uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
     OUString aPortionType;
-    xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+    xTextPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
     // Without the accompanying fix in place, this failed with:
     // - Expected: ContentControl
     // - Actual  : Frame
     // i.e. the SDT was imported as a plain image, not as a clickable placeholder in a content
     // control.
-    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+    CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aPortionType);
     uno::Reference<text::XTextContent> xContentControl;
-    xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+    xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     bool bPicture{};
-    xContentControlProps->getPropertyValue("Picture") >>= bPicture;
+    xContentControlProps->getPropertyValue(u"Picture"_ustr) >>= bPicture;
     CPPUNIT_ASSERT(bPicture);
 }
 }

@@ -35,7 +35,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureInTextframe)
     uno::Reference<drawing::XDrawPage> xDrawPage = xTextDocument->getDrawPage();
     uno::Reference<beans::XPropertySet> xInnerShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
     text::TextContentAnchorType eAnchorType = text::TextContentAnchorType_AT_PARAGRAPH;
-    xInnerShape->getPropertyValue("AnchorType") >>= eAnchorType;
+    xInnerShape->getPropertyValue(u"AnchorType"_ustr) >>= eAnchorType;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 4
@@ -55,7 +55,7 @@ CPPUNIT_TEST_FIXTURE(Test, testWatermark)
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPagesSupplier->getDrawPage();
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     drawing::ColorMode eMode{};
-    xShape->getPropertyValue("GraphicColorMode") >>= eMode;
+    xShape->getPropertyValue(u"GraphicColorMode"_ustr) >>= eMode;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 3
     // - Actual  : 0

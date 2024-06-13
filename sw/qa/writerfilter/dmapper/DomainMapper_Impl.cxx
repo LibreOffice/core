@@ -56,7 +56,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPageBreakFooterTable)
         xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     }
     style::BreakType eType = style::BreakType_NONE;
-    xPara->getPropertyValue("BreakType") >>= eType;
+    xPara->getPropertyValue(u"BreakType"_ustr) >>= eType;
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 4
@@ -77,21 +77,21 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberingRestartStyleParent)
     uno::Reference<beans::XPropertySet> xPara;
     static constexpr OUString aProp(u"ListLabelString"_ustr);
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("A."), xPara->getPropertyValue(aProp).get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"A."_ustr, xPara->getPropertyValue(aProp).get<OUString>());
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("1."), xPara->getPropertyValue(aProp).get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"1."_ustr, xPara->getPropertyValue(aProp).get<OUString>());
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("2."), xPara->getPropertyValue(aProp).get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"2."_ustr, xPara->getPropertyValue(aProp).get<OUString>());
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("B."), xPara->getPropertyValue(aProp).get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"B."_ustr, xPara->getPropertyValue(aProp).get<OUString>());
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1.
     // - Actual  : 3.
     // i.e. the numbering was not restarted after B.
-    CPPUNIT_ASSERT_EQUAL(OUString("1."), xPara->getPropertyValue(aProp).get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"1."_ustr, xPara->getPropertyValue(aProp).get<OUString>());
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("2."), xPara->getPropertyValue(aProp).get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"2."_ustr, xPara->getPropertyValue(aProp).get<OUString>());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFrameDirection)
@@ -105,11 +105,11 @@ CPPUNIT_TEST_FIXTURE(Test, testFrameDirection)
     uno::Reference<beans::XPropertySet> xFrame2(xDrawPage->getByIndex(2), uno::UNO_QUERY);
     // Without the accompanying fix in place, all of the following values would be text::WritingMode2::CONTEXT
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::CONTEXT,
-                         xFrame0->getPropertyValue("WritingMode").get<sal_Int16>());
+                         xFrame0->getPropertyValue(u"WritingMode"_ustr).get<sal_Int16>());
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::BT_LR,
-                         xFrame1->getPropertyValue("WritingMode").get<sal_Int16>());
+                         xFrame1->getPropertyValue(u"WritingMode"_ustr).get<sal_Int16>());
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL,
-                         xFrame2->getPropertyValue("WritingMode").get<sal_Int16>());
+                         xFrame2->getPropertyValue(u"WritingMode"_ustr).get<sal_Int16>());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testAltChunk)
@@ -123,25 +123,25 @@ CPPUNIT_TEST_FIXTURE(Test, testAltChunk)
     uno::Reference<beans::XPropertySet> xParaProps;
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     xParaProps.set(xPara, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("outer, before sect break"), xPara->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
-                         xParaProps->getPropertyValue("PageStyleName").get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"outer, before sect break"_ustr, xPara->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Standard"_ustr,
+                         xParaProps->getPropertyValue(u"PageStyleName"_ustr).get<OUString>());
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     xParaProps.set(xPara, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("outer, after sect break"), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL(u"outer, after sect break"_ustr, xPara->getString());
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: Converted1
     // - Actual  : Standard
     // i.e. the page break between the first and the second paragraph was missing.
-    CPPUNIT_ASSERT_EQUAL(OUString("Converted1"),
-                         xParaProps->getPropertyValue("PageStyleName").get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"Converted1"_ustr,
+                         xParaProps->getPropertyValue(u"PageStyleName"_ustr).get<OUString>());
 
     // Without the accompanying fix in place, this test would have failed with a
     // container.NoSuchElementException, as the document had only 2 paragraphs, all the "inner"
     // content was lost.
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("inner doc, first para"), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL(u"inner doc, first para"_ustr, xPara->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFieldIfInsideIf)
@@ -154,22 +154,22 @@ CPPUNIT_TEST_FIXTURE(Test, testFieldIfInsideIf)
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
 
     // Get the result of the topmost field.
-    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2
     // - Actual  : 0** Expression is faulty **2
     // i.e. some of the inner fields escaped outside the outer field.
-    CPPUNIT_ASSERT_EQUAL(OUString("2"), xCell->getString());
+    CPPUNIT_ASSERT_EQUAL(u"2"_ustr, xCell->getString());
 
     // Test the second cell: it contains "IF ", not the usual " IF ".
-    xCell.set(xTable->getCellByName("A2"), uno::UNO_QUERY);
+    xCell.set(xTable->getCellByName(u"A2"_ustr), uno::UNO_QUERY);
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 25
     // - Actual  : 025
     // i.e. some of the inner fields escaped outside the outer field.
-    CPPUNIT_ASSERT_EQUAL(OUString("25"), xCell->getString());
+    CPPUNIT_ASSERT_EQUAL(u"25"_ustr, xCell->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCreateDatePreserve)
@@ -189,7 +189,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCreateDatePreserve)
     // - Expected: 7/7/2020 10:11:00 AM
     // - Actual  : 07/07/2020
     // i.e. the formatting of the create date field was lost.
-    CPPUNIT_ASSERT_EQUAL(OUString("7/7/2020 10:11:00 AM"), xPortion->getString());
+    CPPUNIT_ASSERT_EQUAL(u"7/7/2020 10:11:00 AM"_ustr, xPortion->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testChartZOrder)
@@ -203,7 +203,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChartZOrder)
     uno::Reference<lang::XServiceInfo> xChart(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed, as the chart was on top
     // of the shape.
-    CPPUNIT_ASSERT(xChart->supportsService("com.sun.star.text.TextEmbeddedObject"));
+    CPPUNIT_ASSERT(xChart->supportsService(u"com.sun.star.text.TextEmbeddedObject"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPTab)
@@ -216,22 +216,25 @@ CPPUNIT_TEST_FIXTURE(Test, testPTab)
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"),
-                                                        uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName("Standard"), uno::UNO_QUERY);
-    auto xFooter = xStyle->getPropertyValue("FooterText").get<uno::Reference<text::XTextRange>>();
+    uno::Reference<container::XNameAccess> xStyleFamily(
+        xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName(u"Standard"_ustr),
+                                               uno::UNO_QUERY);
+    auto xFooter
+        = xStyle->getPropertyValue(u"FooterText"_ustr).get<uno::Reference<text::XTextRange>>();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: <space><newline>1\n
     // - Actual:   <space><tab>1\n
     // i.e. the layout height of the footer text was incorrect, the page number field was not
     // visually inside the background shape.
-    CPPUNIT_ASSERT_EQUAL(OUString(" \n1" SAL_NEWLINE_STRING), xFooter->getString());
+    CPPUNIT_ASSERT_EQUAL(u" \n1" SAL_NEWLINE_STRING ""_ustr, xFooter->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPasteOle)
 {
     // Given an empty document:
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    mxComponent
+        = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
 
     // When pasting RTF into that document:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -252,7 +255,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteOle)
     xParaEnum->nextElement();
     CPPUNIT_ASSERT(xParaEnum->hasMoreElements());
     uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("hello"), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL(u"hello"_ustr, xPara->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
@@ -275,13 +278,13 @@ CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
     // i.e. the first para was just a fly + text portion, the clearing break was lost.
     uno::Reference<beans::XPropertySet> xPortion(xPortions->nextElement(), uno::UNO_QUERY);
     OUString aPortionType;
-    xPortion->getPropertyValue("TextPortionType") >>= aPortionType;
-    CPPUNIT_ASSERT_EQUAL(OUString("LineBreak"), aPortionType);
+    xPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
+    CPPUNIT_ASSERT_EQUAL(u"LineBreak"_ustr, aPortionType);
     uno::Reference<text::XTextContent> xLineBreak;
-    xPortion->getPropertyValue("LineBreak") >>= xLineBreak;
+    xPortion->getPropertyValue(u"LineBreak"_ustr) >>= xLineBreak;
     sal_Int16 eClear{};
     uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
-    xLineBreakProps->getPropertyValue("Clear") >>= eClear;
+    xLineBreakProps->getPropertyValue(u"Clear"_ustr) >>= eClear;
     // SwLineBreakClear::ALL
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(3), eClear);
 }
@@ -302,7 +305,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlDateDataBinding)
     // - Expected: 4/26/2012
     // - Actual  : 4/26/2022
     // i.e. the date was from document.xml, which is considered outdated.
-    CPPUNIT_ASSERT_EQUAL(OUString("4/26/2012"), xParagraph->getString());
+    CPPUNIT_ASSERT_EQUAL(u"4/26/2012"_ustr, xParagraph->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testContentControlDataBindingColor)
@@ -320,7 +323,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlDataBindingColor)
     xCursor->goLeft(/*nCount=*/1, /*bExpand=*/false);
     uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
     Color nColor;
-    CPPUNIT_ASSERT(xCursorProps->getPropertyValue("CharColor") >>= nColor);
+    CPPUNIT_ASSERT(xCursorProps->getPropertyValue(u"CharColor"_ustr) >>= nColor);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: rgba[ffffff00]
     // - Actual  : rgba[ff0000ff]
@@ -389,27 +392,27 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlinedShapeThenSdt)
     // - Actual  : ContentControl
     // i.e. the content control started at para start.
     CPPUNIT_ASSERT_EQUAL(u"Text"_ustr,
-                         xPortion->getPropertyValue("TextPortionType").get<OUString>());
+                         xPortion->getPropertyValue(u"TextPortionType"_ustr).get<OUString>());
     xPortion.set(xPortionEnum->nextElement(), uno::UNO_QUERY);
     // Redline start+end pair, containing a pair of text portions with an anchored object in the
     // middle.
     CPPUNIT_ASSERT_EQUAL(u"Redline"_ustr,
-                         xPortion->getPropertyValue("TextPortionType").get<OUString>());
+                         xPortion->getPropertyValue(u"TextPortionType"_ustr).get<OUString>());
     xPortion.set(xPortionEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Text"_ustr,
-                         xPortion->getPropertyValue("TextPortionType").get<OUString>());
+                         xPortion->getPropertyValue(u"TextPortionType"_ustr).get<OUString>());
     xPortion.set(xPortionEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Frame"_ustr,
-                         xPortion->getPropertyValue("TextPortionType").get<OUString>());
+                         xPortion->getPropertyValue(u"TextPortionType"_ustr).get<OUString>());
     xPortion.set(xPortionEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Text"_ustr,
-                         xPortion->getPropertyValue("TextPortionType").get<OUString>());
+                         xPortion->getPropertyValue(u"TextPortionType"_ustr).get<OUString>());
     xPortion.set(xPortionEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Redline"_ustr,
-                         xPortion->getPropertyValue("TextPortionType").get<OUString>());
+                         xPortion->getPropertyValue(u"TextPortionType"_ustr).get<OUString>());
     xPortion.set(xPortionEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr,
-                         xPortion->getPropertyValue("TextPortionType").get<OUString>());
+                         xPortion->getPropertyValue(u"TextPortionType"_ustr).get<OUString>());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testClearingBreakSectEnd)

@@ -41,9 +41,9 @@ CPPUNIT_TEST_FIXTURE(Test, test1cellInsidevRightborder)
     uno::Reference<text::XTextTablesSupplier> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextDocument->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xCell(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
     table::BorderLine2 aBorder;
-    xCell->getPropertyValue("RightBorder") >>= aBorder;
+    xCell->getPropertyValue(u"RightBorder"_ustr) >>= aBorder;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 0
     // - Actual  : 18
@@ -76,7 +76,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableBreakBefore)
     xParagraphs->nextElement();
     uno::Reference<beans::XPropertySet> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
     style::BreakType eBreakType{};
-    xParagraph->getPropertyValue("BreakType") >>= eBreakType;
+    xParagraph->getPropertyValue(u"BreakType"_ustr) >>= eBreakType;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 4 (style::BreakType_PAGE_BEFORE)
     // - Actual  : 0 (style::BreakType_NONE)
@@ -131,7 +131,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableHiddenAnchor)
 
     // Then make sure the anchor (and thus the table) is visible:
     bool bCharHidden{};
-    CPPUNIT_ASSERT(xAnchor->getPropertyValue("CharHidden") >>= bCharHidden);
+    CPPUNIT_ASSERT(xAnchor->getPropertyValue(u"CharHidden"_ustr) >>= bCharHidden);
     // Without the accompanying fix in place, this test would have failed, the paragraph + table was
     // hidden.
     CPPUNIT_ASSERT(!bCharHidden);
@@ -152,13 +152,13 @@ CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableNested)
     uno::Reference<beans::XPropertySet> xFrame1;
     xFrames->getByIndex(0) >>= xFrame1;
     bool bIsSplitAllowed = false;
-    xFrame1->getPropertyValue("IsSplitAllowed") >>= bIsSplitAllowed;
+    xFrame1->getPropertyValue(u"IsSplitAllowed"_ustr) >>= bIsSplitAllowed;
     CPPUNIT_ASSERT(bIsSplitAllowed);
     // Inner frame:
     uno::Reference<beans::XPropertySet> xFrame2;
     xFrames->getByIndex(1) >>= xFrame2;
     bIsSplitAllowed = false;
-    xFrame2->getPropertyValue("IsSplitAllowed") >>= bIsSplitAllowed;
+    xFrame2->getPropertyValue(u"IsSplitAllowed"_ustr) >>= bIsSplitAllowed;
     // Without the accompanying fix in place, this test would have failed, the inner frame could not
     // split.
     CPPUNIT_ASSERT(bIsSplitAllowed);
@@ -209,7 +209,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableHeaderBodyOverlap)
     // Then make sure the fly bottom is less than the top of the body text:
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     css::uno::Reference<qa::XDumper> xDumper(xModel->getCurrentController(), uno::UNO_QUERY);
-    OString aDump = xDumper->dump("layout").toUtf8();
+    OString aDump = xDumper->dump(u"layout"_ustr).toUtf8();
     auto pCharBuffer = reinterpret_cast<const xmlChar*>(aDump.getStr());
     xmlDocUniquePtr pXmlDoc(xmlParseDoc(pCharBuffer));
     sal_Int32 nFlyBottom = getXPath(pXmlDoc, "//fly/infos/bounds"_ostr, "bottom"_ostr).toInt32();
@@ -220,7 +220,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableHeaderBodyOverlap)
     // Without the accompanying fix in place, this test would have failed, the first line was not a
     // fly portion but it was actual text, above the floating table.
     assertXPath(pXmlDoc, "//page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]/child::*"_ostr,
-                "type"_ostr, "PortionType::Fly");
+                "type"_ostr, u"PortionType::Fly"_ustr);
     sal_Int32 nBodyFlyPortionHeight
         = getXPath(pXmlDoc, "//page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
                    "height"_ostr)

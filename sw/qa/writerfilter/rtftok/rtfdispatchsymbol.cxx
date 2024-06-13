@@ -58,7 +58,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCenterAfterPage)
     xParagraphs->nextElement();
     uno::Reference<beans::XPropertySet> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
     sal_Int16 eActual{};
-    CPPUNIT_ASSERT(xParagraph->getPropertyValue("ParaAdjust") >>= eActual);
+    CPPUNIT_ASSERT(xParagraph->getPropertyValue(u"ParaAdjust"_ustr) >>= eActual);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 3 (CENTER)
     // - Actual  : 0 (LEFT)
@@ -75,7 +75,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableThenSectBreak)
     // Then make sure that the floating table is on the first page:
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     css::uno::Reference<qa::XDumper> xDumper(xModel->getCurrentController(), uno::UNO_QUERY);
-    OString aDump = xDumper->dump("layout").toUtf8();
+    OString aDump = xDumper->dump(u"layout"_ustr).toUtf8();
     auto pCharBuffer = reinterpret_cast<const xmlChar*>(aDump.getStr());
     xmlDocUniquePtr pXmlDoc(xmlParseDoc(pCharBuffer));
     // Without the accompanying fix in place, this test would have failed with:

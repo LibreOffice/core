@@ -49,14 +49,15 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertLineBreak)
 
     // Then make sure it's not just a plain linebreak:
     uno::Reference<css::text::XTextRange> xTextPortion = getRun(getParagraph(1), 1);
-    auto aPortionType = getProperty<OUString>(xTextPortion, "TextPortionType");
+    auto aPortionType = getProperty<OUString>(xTextPortion, u"TextPortionType"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: LineBreak
     // - Actual  : Text
     // i.e. the line break lost its "clear" property.
-    CPPUNIT_ASSERT_EQUAL(OUString("LineBreak"), aPortionType);
-    auto xLineBreak = getProperty<uno::Reference<text::XTextContent>>(xTextPortion, "LineBreak");
-    auto eClear = getProperty<sal_Int16>(xLineBreak, "Clear");
+    CPPUNIT_ASSERT_EQUAL(u"LineBreak"_ustr, aPortionType);
+    auto xLineBreak
+        = getProperty<uno::Reference<text::XTextContent>>(xTextPortion, u"LineBreak"_ustr);
+    auto eClear = getProperty<sal_Int16>(xLineBreak, u"Clear"_ustr);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(SwLineBreakClear::ALL), eClear);
 }
 
@@ -69,13 +70,13 @@ CPPUNIT_TEST_FIXTURE(Test, testGotoContentControl)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-    xText->insertString(xCursor, "test", /*bAbsorb=*/false);
+    xText->insertString(xCursor, u"test"_ustr, /*bAbsorb=*/false);
     xCursor->gotoStart(/*bExpand=*/false);
     xCursor->gotoEnd(/*bExpand=*/true);
     uno::Reference<text::XTextContent> xContentControl(
-        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+        xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue("ShowingPlaceHolder", uno::Any(true));
+    xContentControlProps->setPropertyValue(u"ShowingPlaceHolder"_ustr, uno::Any(true));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When going to that content control in placeholder mode:
@@ -107,7 +108,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTickCheckboxContentControl)
     // The default Liberation Serif doesn't have a checkmark glyph, avoid font fallback.
     SwView& rView = pWrtShell->GetView();
     SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END> aSet(rView.GetPool());
-    SvxFontItem aFont(FAMILY_DONTKNOW, "DejaVu Sans", OUString(), PITCH_DONTKNOW,
+    SvxFontItem aFont(FAMILY_DONTKNOW, u"DejaVu Sans"_ustr, OUString(), PITCH_DONTKNOW,
                       RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT);
     aSet.Put(aFont);
     pWrtShell->SetAttrSet(aSet);
@@ -120,12 +121,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTickCheckboxContentControl)
     xCursor->gotoStart(/*bExpand=*/false);
     xCursor->gotoEnd(/*bExpand=*/true);
     uno::Reference<text::XTextContent> xContentControl(
-        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+        xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue("Checkbox", uno::Any(true));
-    xContentControlProps->setPropertyValue("Checked", uno::Any(true));
-    xContentControlProps->setPropertyValue("CheckedState", uno::Any(u"☒"_ustr));
-    xContentControlProps->setPropertyValue("UncheckedState", uno::Any(u"☐"_ustr));
+    xContentControlProps->setPropertyValue(u"Checkbox"_ustr, uno::Any(true));
+    xContentControlProps->setPropertyValue(u"Checked"_ustr, uno::Any(true));
+    xContentControlProps->setPropertyValue(u"CheckedState"_ustr, uno::Any(u"☒"_ustr));
+    xContentControlProps->setPropertyValue(u"UncheckedState"_ustr, uno::Any(u"☐"_ustr));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When clicking on that content control:
@@ -173,7 +174,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertCheckboxContentControl)
     // The default Liberation Serif doesn't have a checkmark glyph, avoid font fallback.
     SwView& rView = pWrtShell->GetView();
     SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END> aSet(rView.GetPool());
-    SvxFontItem aFont(FAMILY_DONTKNOW, "DejaVu Sans", OUString(), PITCH_DONTKNOW,
+    SvxFontItem aFont(FAMILY_DONTKNOW, u"DejaVu Sans"_ustr, OUString(), PITCH_DONTKNOW,
                       RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT);
     aSet.Put(aFont);
     pWrtShell->SetAttrSet(aSet);
@@ -201,28 +202,28 @@ CPPUNIT_TEST_FIXTURE(Test, testSelectDropdownContentControl)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-    xText->insertString(xCursor, "choose an item", /*bAbsorb=*/false);
+    xText->insertString(xCursor, u"choose an item"_ustr, /*bAbsorb=*/false);
     xCursor->gotoStart(/*bExpand=*/false);
     xCursor->gotoEnd(/*bExpand=*/true);
     uno::Reference<text::XTextContent> xContentControl(
-        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+        xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     {
         uno::Sequence<beans::PropertyValues> aListItems = {
             {
-                comphelper::makePropertyValue("DisplayText", uno::Any(OUString("red"))),
-                comphelper::makePropertyValue("Value", uno::Any(OUString("R"))),
+                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u"red"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u"R"_ustr)),
             },
             {
-                comphelper::makePropertyValue("DisplayText", uno::Any(OUString("green"))),
-                comphelper::makePropertyValue("Value", uno::Any(OUString("G"))),
+                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u"green"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u"G"_ustr)),
             },
             {
-                comphelper::makePropertyValue("DisplayText", uno::Any(OUString("blue"))),
-                comphelper::makePropertyValue("Value", uno::Any(OUString("B"))),
+                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u"blue"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u"B"_ustr)),
             },
         };
-        xContentControlProps->setPropertyValue("ListItems", uno::Any(aListItems));
+        xContentControlProps->setPropertyValue(u"ListItems"_ustr, uno::Any(aListItems));
     }
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
@@ -241,7 +242,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSelectDropdownContentControl)
     // - Expected: red
     // - Actual  : choose an item
     // i.e. the document text was unchanged instead of display text of the first list item.
-    CPPUNIT_ASSERT_EQUAL(OUString("red"), pTextNode->GetExpandText(pWrtShell->GetLayout()));
+    CPPUNIT_ASSERT_EQUAL(u"red"_ustr, pTextNode->GetExpandText(pWrtShell->GetLayout()));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testInsertDropdownContentControl)
@@ -278,18 +279,18 @@ CPPUNIT_TEST_FIXTURE(Test, testReplacePictureContentControl)
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
     uno::Reference<beans::XPropertySet> xTextGraphic(
-        xMSF->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
-    xTextGraphic->setPropertyValue("AnchorType",
+        xMSF->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
+    xTextGraphic->setPropertyValue(u"AnchorType"_ustr,
                                    uno::Any(text::TextContentAnchorType_AS_CHARACTER));
     uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
     xText->insertTextContent(xCursor, xTextContent, false);
     xCursor->gotoStart(/*bExpand=*/false);
     xCursor->gotoEnd(/*bExpand=*/true);
     uno::Reference<text::XTextContent> xContentControl(
-        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+        xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue("ShowingPlaceHolder", uno::Any(true));
-    xContentControlProps->setPropertyValue("Picture", uno::Any(true));
+    xContentControlProps->setPropertyValue(u"ShowingPlaceHolder"_ustr, uno::Any(true));
+    xContentControlProps->setPropertyValue(u"Picture"_ustr, uno::Any(true));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When clicking on that content control:
@@ -346,15 +347,15 @@ CPPUNIT_TEST_FIXTURE(Test, testSelectDateContentControl)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-    xText->insertString(xCursor, "test", /*bAbsorb=*/false);
+    xText->insertString(xCursor, u"test"_ustr, /*bAbsorb=*/false);
     xCursor->gotoStart(/*bExpand=*/false);
     xCursor->gotoEnd(/*bExpand=*/true);
     uno::Reference<text::XTextContent> xContentControl(
-        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+        xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue("Date", uno::Any(true));
-    xContentControlProps->setPropertyValue("DateFormat", uno::Any(OUString("YYYY-MM-DD")));
-    xContentControlProps->setPropertyValue("DateLanguage", uno::Any(OUString("en-US")));
+    xContentControlProps->setPropertyValue(u"Date"_ustr, uno::Any(true));
+    xContentControlProps->setPropertyValue(u"DateFormat"_ustr, uno::Any(u"YYYY-MM-DD"_ustr));
+    xContentControlProps->setPropertyValue(u"DateLanguage"_ustr, uno::Any(u"en-US"_ustr));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When clicking on that content control:
@@ -372,8 +373,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSelectDateContentControl)
     // - Expected: 2022-05-24
     // - Actual  : test
     // i.e. the content control was not updated.
-    CPPUNIT_ASSERT_EQUAL(OUString("2022-05-24"), pTextNode->GetExpandText(pWrtShell->GetLayout()));
-    CPPUNIT_ASSERT_EQUAL(OUString("2022-05-24T00:00:00Z"),
+    CPPUNIT_ASSERT_EQUAL(u"2022-05-24"_ustr, pTextNode->GetExpandText(pWrtShell->GetLayout()));
+    CPPUNIT_ASSERT_EQUAL(u"2022-05-24T00:00:00Z"_ustr,
                          rFormatContentControl.GetContentControl()->GetCurrentDate());
 }
 
@@ -423,7 +424,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertPlainTextContentControl)
     CPPUNIT_ASSERT(pContentControl->GetShowingPlaceHolder());
     pWrtShell->GotoContentControl(rFormatContentControl);
     CPPUNIT_ASSERT(pContentControl->GetShowingPlaceHolder());
-    pWrtShell->Insert("Foo");
+    pWrtShell->Insert(u"Foo"_ustr);
     // No longer showing placeholder text, as it has been changed
     CPPUNIT_ASSERT(!pContentControl->GetShowingPlaceHolder());
 }
@@ -435,7 +436,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertComboBoxContentControl)
     SwDoc* pDoc = getSwDoc();
 
     // When inserting a combo box content control:
-    dispatchCommand(mxComponent, ".uno:InsertComboBoxContentControl", {});
+    dispatchCommand(mxComponent, u".uno:InsertComboBoxContentControl"_ustr, {});
 
     // Then make sure that the matching text attribute is added to the document model:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();

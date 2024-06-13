@@ -38,9 +38,9 @@ CPPUNIT_TEST_FIXTURE(Test, testDoNotBreakWrappedTables)
     // Then make sure that the matching compat flag is set:
     uno::Reference<lang::XMultiServiceFactory> xDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xSettings(
-        xDocument->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+        xDocument->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
     bool bDoNotBreakWrappedTables{};
-    xSettings->getPropertyValue("DoNotBreakWrappedTables") >>= bDoNotBreakWrappedTables;
+    xSettings->getPropertyValue(u"DoNotBreakWrappedTables"_ustr) >>= bDoNotBreakWrappedTables;
     // Without the accompanying fix in place, this test would have failed, the compat flag was not
     // set.
     CPPUNIT_ASSERT(bDoNotBreakWrappedTables);
@@ -55,9 +55,9 @@ CPPUNIT_TEST_FIXTURE(Test, testAllowTextAfterFloatingTableBreak)
     // Then make sure that the matching compat flag is set:
     uno::Reference<lang::XMultiServiceFactory> xDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xSettings(
-        xDocument->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+        xDocument->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
     bool bAllowTextAfterFloatingTableBreak{};
-    xSettings->getPropertyValue("AllowTextAfterFloatingTableBreak")
+    xSettings->getPropertyValue(u"AllowTextAfterFloatingTableBreak"_ustr)
         >>= bAllowTextAfterFloatingTableBreak;
     // Without the accompanying fix in place, this test would have failed, the compat flag was not
     // set.
@@ -73,7 +73,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAddVerticalFrameOffsetsRTF)
     // Then make sure the floating and the inline tables don't overlap:
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     css::uno::Reference<qa::XDumper> xDumper(xModel->getCurrentController(), uno::UNO_QUERY);
-    OString aDump = xDumper->dump("layout").toUtf8();
+    OString aDump = xDumper->dump(u"layout"_ustr).toUtf8();
     auto pCharBuffer = reinterpret_cast<const xmlChar*>(aDump.getStr());
     xmlDocUniquePtr pXmlDoc(xmlParseDoc(pCharBuffer));
     sal_Int32 nFlyBottom = getXPath(pXmlDoc, "//fly/infos/bounds"_ostr, "bottom"_ostr).toInt32();

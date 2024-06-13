@@ -37,30 +37,30 @@ CPPUNIT_TEST_FIXTURE(Test, testBiblioPageNumberUpdate)
     SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
-        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+        xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aFields = {
-        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
-        comphelper::makePropertyValue("Identifier", OUString("AT")),
-        comphelper::makePropertyValue("Author", OUString("Author")),
-        comphelper::makePropertyValue("Title", OUString("Title")),
-        comphelper::makePropertyValue("URL", OUString("http://www.example.com/test.pdf#page=1")),
+        comphelper::makePropertyValue(u"BibiliographicType"_ustr, text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue(u"Identifier"_ustr, u"AT"_ustr),
+        comphelper::makePropertyValue(u"Author"_ustr, u"Author"_ustr),
+        comphelper::makePropertyValue(u"Title"_ustr, u"Title"_ustr),
+        comphelper::makePropertyValue(u"URL"_ustr, u"http://www.example.com/test.pdf#page=1"_ustr),
     };
-    xField->setPropertyValue("Fields", uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
     uno::Reference<text::XTextContent> xContent(xField, uno::UNO_QUERY);
     xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
-    xField.set(xFactory->createInstance("com.sun.star.text.TextField.Bibliography"),
+    xField.set(xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr),
                uno::UNO_QUERY);
     aFields = {
-        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
-        comphelper::makePropertyValue("Identifier", OUString("AT")),
-        comphelper::makePropertyValue("Author", OUString("Author")),
-        comphelper::makePropertyValue("Title", OUString("Title")),
-        comphelper::makePropertyValue("URL", OUString("http://www.example.com/test.pdf#page=2")),
+        comphelper::makePropertyValue(u"BibiliographicType"_ustr, text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue(u"Identifier"_ustr, u"AT"_ustr),
+        comphelper::makePropertyValue(u"Author"_ustr, u"Author"_ustr),
+        comphelper::makePropertyValue(u"Title"_ustr, u"Title"_ustr),
+        comphelper::makePropertyValue(u"URL"_ustr, u"http://www.example.com/test.pdf#page=2"_ustr),
     };
-    xField->setPropertyValue("Fields", uno::Any(aFields));
+    xField->setPropertyValue(u"Fields"_ustr, uno::Any(aFields));
     xContent.set(xField, uno::UNO_QUERY);
     xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
 
@@ -74,7 +74,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBiblioPageNumberUpdate)
     aCoreFields[AUTH_FIELD_IDENTIFIER] = "AT";
     aCoreFields[AUTH_FIELD_AUTHOR] = "Author";
     aCoreFields[AUTH_FIELD_TITLE] = "Title";
-    OUString aNewUrl = "http://www.example.com/test.pdf#page=42";
+    OUString aNewUrl = u"http://www.example.com/test.pdf#page=42"_ustr;
     aCoreFields[AUTH_FIELD_URL] = aNewUrl;
     OUStringBuffer aFieldBuffer;
     for (const auto& rField : aCoreFields)
@@ -102,12 +102,12 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertRefmark)
 
     // When inserting a refmark with text:
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
-        comphelper::makePropertyValue(
-            "Name", uno::Any(OUString("ZOTERO_ITEM CSL_CITATION {} RNDpyJknp173F"))),
-        comphelper::makePropertyValue("Content", uno::Any(OUString("aaa<b>bbb</b>ccc"))),
+        comphelper::makePropertyValue(u"TypeName"_ustr, uno::Any(u"SetRef"_ustr)),
+        comphelper::makePropertyValue(u"Name"_ustr,
+                                      uno::Any(u"ZOTERO_ITEM CSL_CITATION {} RNDpyJknp173F"_ustr)),
+        comphelper::makePropertyValue(u"Content"_ustr, uno::Any(u"aaa<b>bbb</b>ccc"_ustr)),
     };
-    dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertField"_ustr, aArgs);
 
     // Then make sure that we create a refmark that covers that text:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -118,7 +118,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertRefmark)
     // - Actual  : 0
     // i.e. no refmark was created, only the hard to read Type=12 created a refmark.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aAttrs.size());
-    CPPUNIT_ASSERT_EQUAL(OUString("aaabbbccc"), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"aaabbbccc"_ustr, pTextNode->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf68364InsertConditionalFieldWithTwoDots)
@@ -130,15 +130,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf68364InsertConditionalFieldWithTwoDots)
 
     // Insert a conditional field containing exactly two dots for its condition
     SwFieldMgr aFieldMgr(pWrtShell);
-    SwInsertField_Data aFieldData(SwFieldTypesEnum::ConditionalText, 0, "true", "19.12.2023", 0);
+    SwInsertField_Data aFieldData(SwFieldTypesEnum::ConditionalText, 0, u"true"_ustr,
+                                  u"19.12.2023"_ustr, 0);
     CPPUNIT_ASSERT(aFieldMgr.InsertField(aFieldData));
     pWrtShell->SttEndDoc(true);
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 19.12.2023
     // - Actual  :
-    CPPUNIT_ASSERT_EQUAL(OUString("19.12.2023"),
-                         pWrtShell->GetCurField()->ExpandField(true, nullptr));
+    CPPUNIT_ASSERT_EQUAL(u"19.12.2023"_ustr, pWrtShell->GetCurField()->ExpandField(true, nullptr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testInsertRefmarkSelection)
@@ -147,12 +147,13 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertRefmarkSelection)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->Insert2("myword");
+    pWrtShell->Insert2(u"myword"_ustr);
     pWrtShell->SelAll();
 
     // When inserting a refmark:
     SwFieldMgr aMgr(pWrtShell);
-    SwInsertField_Data aData(SwFieldTypesEnum::SetRef, /*nSubType=*/0, "myname", "myword",
+    SwInsertField_Data aData(SwFieldTypesEnum::SetRef, /*nSubType=*/0, u"myname"_ustr,
+                             u"myword"_ustr,
                              /*nFormatId=*/0);
     aMgr.InsertField(aData);
 
@@ -162,7 +163,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertRefmarkSelection)
     // - Expected: myword
     // - Actual  : mywordmyword
     // i.e. the content of the selection was duplicated.
-    CPPUNIT_ASSERT_EQUAL(OUString("myword"), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"myword"_ustr, pTextNode->GetText());
 }
 }
 

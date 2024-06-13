@@ -42,28 +42,28 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTable)
     // i.e. the table was not floating / was not in a fly frame.
     uno::Reference<beans::XPropertySet> xFrame(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     bool bIsSplitAllowed{};
-    xFrame->getPropertyValue("IsSplitAllowed") >>= bIsSplitAllowed;
+    xFrame->getPropertyValue(u"IsSplitAllowed"_ustr) >>= bIsSplitAllowed;
     CPPUNIT_ASSERT(bIsSplitAllowed);
     sal_Int16 nVertOrientRelation{};
-    xFrame->getPropertyValue("VertOrientRelation") >>= nVertOrientRelation;
+    xFrame->getPropertyValue(u"VertOrientRelation"_ustr) >>= nVertOrientRelation;
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, nVertOrientRelation);
     sal_Int16 nHoriOrientRelation{};
-    xFrame->getPropertyValue("HoriOrientRelation") >>= nHoriOrientRelation;
+    xFrame->getPropertyValue(u"HoriOrientRelation"_ustr) >>= nHoriOrientRelation;
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, nHoriOrientRelation);
     sal_Int32 nVertOrientPosition{};
-    xFrame->getPropertyValue("VertOrientPosition") >>= nVertOrientPosition;
+    xFrame->getPropertyValue(u"VertOrientPosition"_ustr) >>= nVertOrientPosition;
     sal_Int32 nExpected = o3tl::convert(10, o3tl::Length::twip, o3tl::Length::mm100);
     CPPUNIT_ASSERT_EQUAL(nExpected, nVertOrientPosition);
     sal_Int32 nHoriOrientPosition{};
-    xFrame->getPropertyValue("HoriOrientPosition") >>= nHoriOrientPosition;
+    xFrame->getPropertyValue(u"HoriOrientPosition"_ustr) >>= nHoriOrientPosition;
     nExpected = o3tl::convert(20, o3tl::Length::twip, o3tl::Length::mm100);
     CPPUNIT_ASSERT_EQUAL(nExpected, nHoriOrientPosition);
     sal_Int32 nLeftMargin{};
-    xFrame->getPropertyValue("LeftMargin") >>= nLeftMargin;
+    xFrame->getPropertyValue(u"LeftMargin"_ustr) >>= nLeftMargin;
     nExpected = o3tl::convert(30, o3tl::Length::twip, o3tl::Length::mm100);
     CPPUNIT_ASSERT_EQUAL(nExpected, nLeftMargin);
     sal_Int32 nRightMargin{};
-    xFrame->getPropertyValue("RightMargin") >>= nRightMargin;
+    xFrame->getPropertyValue(u"RightMargin"_ustr) >>= nRightMargin;
     nExpected = o3tl::convert(40, o3tl::Length::twip, o3tl::Length::mm100);
     CPPUNIT_ASSERT_EQUAL(nExpected, nRightMargin);
 }
@@ -77,9 +77,9 @@ CPPUNIT_TEST_FIXTURE(Test, testDoNotBreakWrappedTables)
     // Then make sure that the matching compat flag is set:
     uno::Reference<lang::XMultiServiceFactory> xDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xSettings(
-        xDocument->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+        xDocument->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
     bool bDoNotBreakWrappedTables{};
-    xSettings->getPropertyValue("DoNotBreakWrappedTables") >>= bDoNotBreakWrappedTables;
+    xSettings->getPropertyValue(u"DoNotBreakWrappedTables"_ustr) >>= bDoNotBreakWrappedTables;
     // Without the accompanying fix in place, this test would have failed, the compat flag was not
     // set.
     CPPUNIT_ASSERT(bDoNotBreakWrappedTables);
@@ -96,7 +96,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTblOverlap)
     uno::Reference<container::XIndexAccess> xFrames(xTextDocument->getTextFrames(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFrame(xFrames->getByIndex(1), uno::UNO_QUERY);
     bool bAllowOverlap{};
-    CPPUNIT_ASSERT(xFrame->getPropertyValue("AllowOverlap") >>= bAllowOverlap);
+    CPPUNIT_ASSERT(xFrame->getPropertyValue(u"AllowOverlap"_ustr) >>= bAllowOverlap);
     // Without the accompanying fix in place, this test would have failed, the tables were marked as
     // "can overlap".
     CPPUNIT_ASSERT(!bAllowOverlap);

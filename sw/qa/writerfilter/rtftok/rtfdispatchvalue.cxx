@@ -38,16 +38,16 @@ CPPUNIT_TEST_FIXTURE(Test, testFollowStyle)
     uno::Reference<container::XNameAccess> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<container::XNameAccess> xStyleFamily(
-        xStyleFamilies->getByName("ParagraphStyles"), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName("Heading 1"),
+        xStyleFamilies->getByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName(u"Heading 1"_ustr),
                                                uno::UNO_QUERY);
     OUString aFollowStyle;
-    xStyle->getPropertyValue("FollowStyle") >>= aFollowStyle;
+    xStyle->getPropertyValue(u"FollowStyle"_ustr) >>= aFollowStyle;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: Standard
     // - Actual  : Heading 1
     // i.e. \snext was ignored.
-    CPPUNIT_ASSERT_EQUAL(OUString("Standard"), aFollowStyle);
+    CPPUNIT_ASSERT_EQUAL(u"Standard"_ustr, aFollowStyle);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
@@ -61,14 +61,15 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"),
-                                                        uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName("Standard"), uno::UNO_QUERY);
-    auto nTopMargin = xStyle->getPropertyValue("TopMargin").get<sal_Int32>();
+    uno::Reference<container::XNameAccess> xStyleFamily(
+        xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName(u"Standard"_ustr),
+                                               uno::UNO_QUERY);
+    auto nTopMargin = xStyle->getPropertyValue(u"TopMargin"_ustr).get<sal_Int32>();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(501), nTopMargin);
-    auto aTopBorder = xStyle->getPropertyValue("TopBorder").get<table::BorderLine2>();
+    auto aTopBorder = xStyle->getPropertyValue(u"TopBorder"_ustr).get<table::BorderLine2>();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(159), aTopBorder.LineWidth);
-    auto nTopBorderDistance = xStyle->getPropertyValue("TopBorderDistance").get<sal_Int32>();
+    auto nTopBorderDistance = xStyle->getPropertyValue(u"TopBorderDistance"_ustr).get<sal_Int32>();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: -646
     // - Actual  : 342

@@ -21,7 +21,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/uibase/dialog/data/")
+        : SwModelTestBase(u"/sw/qa/uibase/dialog/data/"_ustr)
     {
     }
 };
@@ -36,10 +36,10 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertSection)
     // When inserting a section with text:
     uno::Sequence<css::beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(
-            "RegionName", uno::Any(OUString("ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RNDRfiit6mXBc"))),
-        comphelper::makePropertyValue("Content", uno::Any(OUString("<p>aaa</p><p>bbb</p>"))),
+            u"RegionName"_ustr, uno::Any(u"ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RNDRfiit6mXBc"_ustr)),
+        comphelper::makePropertyValue(u"Content"_ustr, uno::Any(u"<p>aaa</p><p>bbb</p>"_ustr)),
     };
-    dispatchCommand(mxComponent, ".uno:InsertSection", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertSection"_ustr, aArgs);
 
     // Then make sure that we created a section that covers that text:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -51,7 +51,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertSection)
     // - Expected: aaa\nbbb
     // - Actual  :
     // i.e. the value of the Content parameter was ignored.
-    CPPUNIT_ASSERT_EQUAL(OUString("aaa\nbbb"), aActualResult);
+    CPPUNIT_ASSERT_EQUAL(u"aaa\nbbb"_ustr, aActualResult);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

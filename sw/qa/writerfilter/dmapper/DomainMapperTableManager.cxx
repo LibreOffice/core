@@ -37,7 +37,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTblOverlap)
     uno::Reference<container::XIndexAccess> xFrames(xTextDocument->getTextFrames(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFrame(xFrames->getByIndex(1), uno::UNO_QUERY);
     bool bAllowOverlap{};
-    CPPUNIT_ASSERT(xFrame->getPropertyValue("AllowOverlap") >>= bAllowOverlap);
+    CPPUNIT_ASSERT(xFrame->getPropertyValue(u"AllowOverlap"_ustr) >>= bAllowOverlap);
     // Without the accompanying fix in place, this test would have failed, the tables were marked as
     // "can overlap".
     CPPUNIT_ASSERT(!bAllowOverlap);

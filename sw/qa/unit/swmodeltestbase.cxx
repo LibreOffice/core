@@ -47,9 +47,10 @@ void SwModelTestBase::paste(std::u16string_view aFilename, OUString aInstance,
         m_directories.getURLFromSrc(u"/sw/qa/extras/") + aFilename, StreamMode::STD_READ);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, pStream->GetError());
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
-    uno::Sequence aDescriptor{ comphelper::makePropertyValue("InputStream", xStream),
-                               comphelper::makePropertyValue("InsertMode", true),
-                               comphelper::makePropertyValue("TextInsertModeRange", xTextRange) };
+    uno::Sequence aDescriptor{ comphelper::makePropertyValue(u"InputStream"_ustr, xStream),
+                               comphelper::makePropertyValue(u"InsertMode"_ustr, true),
+                               comphelper::makePropertyValue(u"TextInsertModeRange"_ustr,
+                                                             xTextRange) };
     CPPUNIT_ASSERT(xFilter->filter(aDescriptor));
 }
 
@@ -221,7 +222,7 @@ xml::AttributeData SwModelTestBase::getUserDefineAttribute(const uno::Any& obj,
                                                            const OUString& rValue) const
 {
     uno::Reference<container::XNameContainer> attrsCnt(
-        getProperty<uno::Any>(obj, "UserDefinedAttributes"), uno::UNO_QUERY_THROW);
+        getProperty<uno::Any>(obj, u"UserDefinedAttributes"_ustr), uno::UNO_QUERY_THROW);
 
     xml::AttributeData aValue;
     attrsCnt->getByName(name) >>= aValue;
@@ -290,13 +291,13 @@ sal_Int16 SwModelTestBase::getNumberingTypeOfParagraph(int nPara)
     uno::Reference<text::XTextRange> xPara(getParagraph(nPara));
     uno::Reference<beans::XPropertySet> properties(xPara, uno::UNO_QUERY);
     bool isNumber = false;
-    properties->getPropertyValue("NumberingIsNumber") >>= isNumber;
+    properties->getPropertyValue(u"NumberingIsNumber"_ustr) >>= isNumber;
     if (isNumber)
     {
         uno::Reference<container::XIndexAccess> xLevels(
-            properties->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+            properties->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
         sal_Int16 nNumberingLevel = -1;
-        properties->getPropertyValue("NumberingLevel") >>= nNumberingLevel;
+        properties->getPropertyValue(u"NumberingLevel"_ustr) >>= nNumberingLevel;
         if (nNumberingLevel >= 0 && nNumberingLevel < xLevels->getCount())
         {
             uno::Sequence<beans::PropertyValue> aPropertyValue;
@@ -330,7 +331,7 @@ SwModelTestBase::getParagraphAnchoredObject(int const index,
 {
     uno::Reference<container::XContentEnumerationAccess> xContentEnumAccess(xPara, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xContentEnum
-        = xContentEnumAccess->createContentEnumeration("com.sun.star.text.TextContent");
+        = xContentEnumAccess->createContentEnumeration(u"com.sun.star.text.TextContent"_ustr);
     for (int i = 1; i < index; ++i)
     {
         xContentEnum->nextElement();
@@ -357,10 +358,10 @@ OUString SwModelTestBase::getFormula(uno::Reference<text::XTextRange> const& xRu
 {
     uno::Reference<container::XContentEnumerationAccess> xContentEnumAccess(xRun, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xContentEnum
-        = xContentEnumAccess->createContentEnumeration("");
+        = xContentEnumAccess->createContentEnumeration(u""_ustr);
     uno::Reference<beans::XPropertySet> xFormula(xContentEnum->nextElement(), uno::UNO_QUERY);
     return getProperty<OUString>(
-        getProperty<uno::Reference<beans::XPropertySet>>(xFormula, "Model"), "Formula");
+        getProperty<uno::Reference<beans::XPropertySet>>(xFormula, u"Model"_ustr), u"Formula"_ustr);
 }
 
 uno::Reference<table::XCell>
@@ -496,34 +497,34 @@ int SwModelTestBase::getShapes() const
 void SwModelTestBase::createSwDoc(const char* pName, const char* pPassword)
 {
     if (!pName)
-        loadURL("private:factory/swriter");
+        loadURL(u"private:factory/swriter"_ustr);
     else
         loadURL(createFileURL(OUString::createFromAscii(pName)), pPassword);
 
     uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextDocument"));
+    CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.TextDocument"_ustr));
 }
 
 void SwModelTestBase::createSwWebDoc(const char* pName)
 {
     if (!pName)
-        loadURL("private:factory/swriter/web");
+        loadURL(u"private:factory/swriter/web"_ustr);
     else
         loadURL(createFileURL(OUString::createFromAscii(pName)));
 
     uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.WebDocument"));
+    CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.WebDocument"_ustr));
 }
 
 void SwModelTestBase::createSwGlobalDoc(const char* pName)
 {
     if (!pName)
-        loadURL("private:factory/swriter/GlobalDocument");
+        loadURL(u"private:factory/swriter/GlobalDocument"_ustr);
     else
         loadURL(createFileURL(OUString::createFromAscii(pName)));
 
     uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.GlobalDocument"));
+    CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.GlobalDocument"_ustr));
 }
 
 SwDoc* SwModelTestBase::getSwDoc() { return getSwDocShell()->GetDoc(); }

@@ -62,10 +62,11 @@ CPPUNIT_TEST_FIXTURE(Test, testFollowPageTopMargin)
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"),
-                                                        uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName("Standard"), uno::UNO_QUERY);
-    auto nTopMargin = xStyle->getPropertyValue("TopMargin").get<sal_Int32>();
+    uno::Reference<container::XNameAccess> xStyleFamily(
+        xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName(u"Standard"_ustr),
+                                               uno::UNO_QUERY);
+    auto nTopMargin = xStyle->getPropertyValue(u"TopMargin"_ustr).get<sal_Int32>();
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 250
@@ -101,14 +102,15 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"),
-                                                        uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName("Standard"), uno::UNO_QUERY);
-    auto nTopMargin = xStyle->getPropertyValue("TopMargin").get<sal_Int32>();
+    uno::Reference<container::XNameAccess> xStyleFamily(
+        xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName(u"Standard"_ustr),
+                                               uno::UNO_QUERY);
+    auto nTopMargin = xStyle->getPropertyValue(u"TopMargin"_ustr).get<sal_Int32>();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(501), nTopMargin);
-    auto aTopBorder = xStyle->getPropertyValue("TopBorder").get<table::BorderLine2>();
+    auto aTopBorder = xStyle->getPropertyValue(u"TopBorder"_ustr).get<table::BorderLine2>();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(159), aTopBorder.LineWidth);
-    auto nTopBorderDistance = xStyle->getPropertyValue("TopBorderDistance").get<sal_Int32>();
+    auto nTopBorderDistance = xStyle->getPropertyValue(u"TopBorderDistance"_ustr).get<sal_Int32>();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: -646
     // - Actual  : 0
@@ -127,14 +129,15 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorderNoMargin)
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"),
-                                                        uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName("Standard"), uno::UNO_QUERY);
-    auto nTopMargin = xStyle->getPropertyValue("TopMargin").get<sal_Int32>();
+    uno::Reference<container::XNameAccess> xStyleFamily(
+        xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName(u"Standard"_ustr),
+                                               uno::UNO_QUERY);
+    auto nTopMargin = xStyle->getPropertyValue(u"TopMargin"_ustr).get<sal_Int32>();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nTopMargin);
-    auto aTopBorder = xStyle->getPropertyValue("TopBorder").get<table::BorderLine2>();
+    auto aTopBorder = xStyle->getPropertyValue(u"TopBorder"_ustr).get<table::BorderLine2>();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(159), aTopBorder.LineWidth);
-    auto nTopBorderDistance = xStyle->getPropertyValue("TopBorderDistance").get<sal_Int32>();
+    auto nTopBorderDistance = xStyle->getPropertyValue(u"TopBorderDistance"_ustr).get<sal_Int32>();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: -1147
     // - Actual  : 0
@@ -145,35 +148,38 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorderNoMargin)
 CPPUNIT_TEST_FIXTURE(Test, testPasteHeaderDisable)
 {
     // Given an empty document with a turned on header:
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    mxComponent
+        = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies
         = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"),
-                                                        uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName("Standard"), uno::UNO_QUERY);
-    xStyle->setPropertyValue("HeaderIsOn", uno::Any(true));
+    uno::Reference<container::XNameAccess> xStyleFamily(
+        xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName(u"Standard"_ustr),
+                                               uno::UNO_QUERY);
+    xStyle->setPropertyValue(u"HeaderIsOn"_ustr, uno::Any(true));
 
     // When pasting RTF content:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xBodyEnd = xText->getEnd();
     uno::Reference<document::XFilter> xFilter(
-        m_xSFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"), uno::UNO_QUERY);
+        m_xSFactory->createInstance(u"com.sun.star.comp.Writer.RtfFilter"_ustr), uno::UNO_QUERY);
     uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY);
     xImporter->setTargetDocument(mxComponent);
     std::unique_ptr<SvStream> pStream(new SvMemoryStream);
     pStream->WriteOString("{\\rtf1 paste}");
     pStream->Seek(0);
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
-    uno::Sequence aDescriptor{ comphelper::makePropertyValue("InputStream", xStream),
-                               comphelper::makePropertyValue("InsertMode", true),
-                               comphelper::makePropertyValue("TextInsertModeRange", xBodyEnd) };
+    uno::Sequence aDescriptor{ comphelper::makePropertyValue(u"InputStream"_ustr, xStream),
+                               comphelper::makePropertyValue(u"InsertMode"_ustr, true),
+                               comphelper::makePropertyValue(u"TextInsertModeRange"_ustr,
+                                                             xBodyEnd) };
     CPPUNIT_ASSERT(xFilter->filter(aDescriptor));
 
     // Then make sure the header stays on:
-    CPPUNIT_ASSERT(xStyle->getPropertyValue("HeaderIsOn").get<bool>());
+    CPPUNIT_ASSERT(xStyle->getPropertyValue(u"HeaderIsOn"_ustr).get<bool>());
 }
 }
 

@@ -39,7 +39,7 @@ class SwUibaseUnoTest : public SwModelTestBase
 {
 public:
     SwUibaseUnoTest()
-        : SwModelTestBase("/sw/qa/uibase/uno/data/")
+        : SwModelTestBase(u"/sw/qa/uibase/uno/data/"_ustr)
     {
     }
 };
@@ -68,7 +68,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testCondFieldCachedValue)
     // - Expected: 1
     // - Actual  :
     // i.e. the conditional field lost its cached content.
-    getParagraph(2, "1");
+    getParagraph(2, u"1"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testCreateTextRangeByPixelPosition)
@@ -78,7 +78,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testCreateTextRangeByPixelPosition)
     SwDoc* pDoc = getSwDoc();
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
-    pWrtShell->Insert2("AZ");
+    pWrtShell->Insert2(u"AZ"_ustr);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     Point aLogic = pWrtShell->GetCharRect().Center();
     SwView* pView = pDocShell->GetView();
@@ -113,11 +113,11 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testCreateTextRangeByPixelPositionGraphic)
     createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTextGraphic(
-        xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
-    xTextGraphic->setPropertyValue("AnchorType",
+        xFactory->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
+    xTextGraphic->setPropertyValue(u"AnchorType"_ustr,
                                    uno::Any(text::TextContentAnchorType_AS_CHARACTER));
-    xTextGraphic->setPropertyValue("Width", uno::Any(static_cast<sal_Int32>(10000)));
-    xTextGraphic->setPropertyValue("Height", uno::Any(static_cast<sal_Int32>(10000)));
+    xTextGraphic->setPropertyValue(u"Width"_ustr, uno::Any(static_cast<sal_Int32>(10000)));
+    xTextGraphic->setPropertyValue(u"Height"_ustr, uno::Any(static_cast<sal_Int32>(10000)));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xBodyText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor(xBodyText->createTextCursor());
@@ -164,11 +164,12 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testCreateTextRangeByPixelPositionAtPageGr
     createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTextGraphic(
-        xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
-    xTextGraphic->setPropertyValue("AnchorType", uno::Any(text::TextContentAnchorType_AT_PAGE));
-    xTextGraphic->setPropertyValue("AnchorPageNo", uno::Any(static_cast<sal_Int16>(1)));
-    xTextGraphic->setPropertyValue("Width", uno::Any(static_cast<sal_Int32>(10000)));
-    xTextGraphic->setPropertyValue("Height", uno::Any(static_cast<sal_Int32>(10000)));
+        xFactory->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
+    xTextGraphic->setPropertyValue(u"AnchorType"_ustr,
+                                   uno::Any(text::TextContentAnchorType_AT_PAGE));
+    xTextGraphic->setPropertyValue(u"AnchorPageNo"_ustr, uno::Any(static_cast<sal_Int16>(1)));
+    xTextGraphic->setPropertyValue(u"Width"_ustr, uno::Any(static_cast<sal_Int32>(10000)));
+    xTextGraphic->setPropertyValue(u"Height"_ustr, uno::Any(static_cast<sal_Int32>(10000)));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xBodyText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor(xBodyText->createTextCursor());
@@ -208,22 +209,22 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetTextFormFields)
     for (int i = 0; i < 2; ++i)
     {
         uno::Sequence<css::beans::PropertyValue> aArgs = {
-            comphelper::makePropertyValue("FieldType", uno::Any(ODF_UNHANDLED)),
-            comphelper::makePropertyValue("FieldCommand",
-                                          uno::Any(OUString("ADDIN ZOTERO_ITEM foo bar"))),
-            comphelper::makePropertyValue("FieldResult", uno::Any(OUString("result"))),
+            comphelper::makePropertyValue(u"FieldType"_ustr, uno::Any(ODF_UNHANDLED)),
+            comphelper::makePropertyValue(u"FieldCommand"_ustr,
+                                          uno::Any(u"ADDIN ZOTERO_ITEM foo bar"_ustr)),
+            comphelper::makePropertyValue(u"FieldResult"_ustr, uno::Any(u"result"_ustr)),
         };
-        dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+        dispatchCommand(mxComponent, u".uno:TextFormField"_ustr, aArgs);
     }
     {
         uno::Sequence<css::beans::PropertyValue> aArgs = {
-            comphelper::makePropertyValue("FieldType", uno::Any(ODF_UNHANDLED)),
-            comphelper::makePropertyValue("FieldCommand",
-                                          uno::Any(OUString("ADDIN ZOTERO_BIBL foo bar"))),
-            comphelper::makePropertyValue("FieldResult",
-                                          uno::Any(OUString("<p>aaa</p><p>bbb</p>"))),
+            comphelper::makePropertyValue(u"FieldType"_ustr, uno::Any(ODF_UNHANDLED)),
+            comphelper::makePropertyValue(u"FieldCommand"_ustr,
+                                          uno::Any(u"ADDIN ZOTERO_BIBL foo bar"_ustr)),
+            comphelper::makePropertyValue(u"FieldResult"_ustr,
+                                          uno::Any(u"<p>aaa</p><p>bbb</p>"_ustr)),
         };
-        dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+        dispatchCommand(mxComponent, u".uno:TextFormField"_ustr, aArgs);
     }
 
     // When getting the zotero items:
@@ -254,11 +255,11 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetDocumentProperties)
                                                                uno::UNO_QUERY);
     uno::Reference<document::XDocumentProperties> xDP = xDPS->getDocumentProperties();
     uno::Reference<beans::XPropertyContainer> xUDP = xDP->getUserDefinedProperties();
-    xUDP->addProperty("ZOTERO_PREF_1", beans::PropertyAttribute::REMOVABLE,
-                      uno::Any(OUString("foo")));
-    xUDP->addProperty("ZOTERO_PREF_2", beans::PropertyAttribute::REMOVABLE,
-                      uno::Any(OUString("bar")));
-    xUDP->addProperty("OTHER", beans::PropertyAttribute::REMOVABLE, uno::Any(OUString("baz")));
+    xUDP->addProperty(u"ZOTERO_PREF_1"_ustr, beans::PropertyAttribute::REMOVABLE,
+                      uno::Any(u"foo"_ustr));
+    xUDP->addProperty(u"ZOTERO_PREF_2"_ustr, beans::PropertyAttribute::REMOVABLE,
+                      uno::Any(u"bar"_ustr));
+    xUDP->addProperty(u"OTHER"_ustr, beans::PropertyAttribute::REMOVABLE, uno::Any(u"baz"_ustr));
 
     // When getting the zotero properties:
     tools::JsonWriter aJsonWriter;
@@ -284,21 +285,21 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetBookmarks)
     createSwDoc();
     {
         uno::Sequence<css::beans::PropertyValue> aArgs = {
-            comphelper::makePropertyValue("Bookmark", uno::Any(OUString("ZOTERO_BREF_1"))),
+            comphelper::makePropertyValue(u"Bookmark"_ustr, uno::Any(u"ZOTERO_BREF_1"_ustr)),
         };
-        dispatchCommand(mxComponent, ".uno:InsertBookmark", aArgs);
+        dispatchCommand(mxComponent, u".uno:InsertBookmark"_ustr, aArgs);
     }
     {
         uno::Sequence<css::beans::PropertyValue> aArgs = {
-            comphelper::makePropertyValue("Bookmark", uno::Any(OUString("ZOTERO_BREF_2"))),
+            comphelper::makePropertyValue(u"Bookmark"_ustr, uno::Any(u"ZOTERO_BREF_2"_ustr)),
         };
-        dispatchCommand(mxComponent, ".uno:InsertBookmark", aArgs);
+        dispatchCommand(mxComponent, u".uno:InsertBookmark"_ustr, aArgs);
     }
     {
         uno::Sequence<css::beans::PropertyValue> aArgs = {
-            comphelper::makePropertyValue("Bookmark", uno::Any(OUString("ZOTERO_BIBL"))),
+            comphelper::makePropertyValue(u"Bookmark"_ustr, uno::Any(u"ZOTERO_BIBL"_ustr)),
         };
-        dispatchCommand(mxComponent, ".uno:InsertBookmark", aArgs);
+        dispatchCommand(mxComponent, u".uno:InsertBookmark"_ustr, aArgs);
     }
 
     // When getting the reference bookmarks:
@@ -324,15 +325,15 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetFields)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    OUString aName("ZOTERO_ITEM CSL_CITATION {} ");
+    OUString aName(u"ZOTERO_ITEM CSL_CITATION {} "_ustr);
     for (int i = 0; i < 5; ++i)
     {
         uno::Sequence<css::beans::PropertyValue> aArgs = {
-            comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
-            comphelper::makePropertyValue("Name", uno::Any(aName + OUString::number(i + 1))),
-            comphelper::makePropertyValue("Content", uno::Any(OUString("mycontent"))),
+            comphelper::makePropertyValue(u"TypeName"_ustr, uno::Any(u"SetRef"_ustr)),
+            comphelper::makePropertyValue(u"Name"_ustr, uno::Any(aName + OUString::number(i + 1))),
+            comphelper::makePropertyValue(u"Content"_ustr, uno::Any(u"mycontent"_ustr)),
         };
-        dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
+        dispatchCommand(mxComponent, u".uno:InsertField"_ustr, aArgs);
         pWrtShell->SttEndDoc(/*bStt=*/false);
         pWrtShell->SplitNode();
         pWrtShell->SttEndDoc(/*bStt=*/false);
@@ -380,12 +381,12 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetTextFormField)
     // Given a document with a fieldmark:
     createSwDoc();
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("FieldType", uno::Any(ODF_UNHANDLED)),
-        comphelper::makePropertyValue("FieldCommand",
-                                      uno::Any(OUString("ADDIN ZOTERO_ITEM foo bar"))),
-        comphelper::makePropertyValue("FieldResult", uno::Any(OUString("result"))),
+        comphelper::makePropertyValue(u"FieldType"_ustr, uno::Any(ODF_UNHANDLED)),
+        comphelper::makePropertyValue(u"FieldCommand"_ustr,
+                                      uno::Any(u"ADDIN ZOTERO_ITEM foo bar"_ustr)),
+        comphelper::makePropertyValue(u"FieldResult"_ustr, uno::Any(u"result"_ustr)),
     };
-    dispatchCommand(mxComponent, ".uno:TextFormField", aArgs);
+    dispatchCommand(mxComponent, u".uno:TextFormField"_ustr, aArgs);
 
     // When stepping into the fieldmark with the cursor and getting the command value for
     // uno:TextFormField:
@@ -420,10 +421,10 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetSections)
     createSwDoc();
     uno::Sequence<css::beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(
-            "RegionName", uno::Any(OUString("ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RNDRfiit6mXBc"))),
-        comphelper::makePropertyValue("Content", uno::Any(OUString("<p>aaa</p><p>bbb</p>"))),
+            u"RegionName"_ustr, uno::Any(u"ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RNDRfiit6mXBc"_ustr)),
+        comphelper::makePropertyValue(u"Content"_ustr, uno::Any(u"<p>aaa</p><p>bbb</p>"_ustr)),
     };
-    dispatchCommand(mxComponent, ".uno:InsertSection", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertSection"_ustr, aArgs);
 
     // When asking for a list of section names:
     tools::JsonWriter aJsonWriter;
@@ -447,10 +448,10 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetBookmark)
     // Given a document with a bookmark:
     createSwDoc();
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("Bookmark", uno::Any(OUString("ZOTERO_BREF_1"))),
-        comphelper::makePropertyValue("BookmarkText", uno::Any(OUString("<p>aaa</p><p>bbb</p>"))),
+        comphelper::makePropertyValue(u"Bookmark"_ustr, uno::Any(u"ZOTERO_BREF_1"_ustr)),
+        comphelper::makePropertyValue(u"BookmarkText"_ustr, uno::Any(u"<p>aaa</p><p>bbb</p>"_ustr)),
     };
-    dispatchCommand(mxComponent, ".uno:InsertBookmark", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertBookmark"_ustr, aArgs);
 
     // When stepping into the bookmark with the cursor and getting the command value for
     // .uno:Bookmark:
@@ -480,12 +481,12 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetField)
     // Given a document with a refmark:
     createSwDoc();
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
-        comphelper::makePropertyValue("Name",
-                                      uno::Any(OUString("ZOTERO_ITEM CSL_CITATION {} refmark"))),
-        comphelper::makePropertyValue("Content", uno::Any(OUString("content"))),
+        comphelper::makePropertyValue(u"TypeName"_ustr, uno::Any(u"SetRef"_ustr)),
+        comphelper::makePropertyValue(u"Name"_ustr,
+                                      uno::Any(u"ZOTERO_ITEM CSL_CITATION {} refmark"_ustr)),
+        comphelper::makePropertyValue(u"Content"_ustr, uno::Any(u"content"_ustr)),
     };
-    dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertField"_ustr, aArgs);
 
     // When in the refmark with the cursor and getting the command value for .uno:Field:
     SwDoc* pDoc = getSwDoc();
@@ -518,19 +519,19 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testDoNotBreakWrappedTables)
     // When checking the state of the DoNotBreakWrappedTables compat flag:
     uno::Reference<lang::XMultiServiceFactory> xDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xSettings(
-        xDocument->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+        xDocument->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
     bool bDoNotBreakWrappedTables{};
     // Without the accompanying fix in place, this test would have failed with:
     // An uncaught exception of type com.sun.star.beans.UnknownPropertyException
     // i.e. the compat flag was not recognized.
-    xSettings->getPropertyValue("DoNotBreakWrappedTables") >>= bDoNotBreakWrappedTables;
+    xSettings->getPropertyValue(u"DoNotBreakWrappedTables"_ustr) >>= bDoNotBreakWrappedTables;
     // Then make sure it's false by default:
     CPPUNIT_ASSERT(!bDoNotBreakWrappedTables);
 
     // And when setting DoNotBreakWrappedTables=true:
-    xSettings->setPropertyValue("DoNotBreakWrappedTables", uno::Any(true));
+    xSettings->setPropertyValue(u"DoNotBreakWrappedTables"_ustr, uno::Any(true));
     // Then make sure it gets enabled:
-    xSettings->getPropertyValue("DoNotBreakWrappedTables") >>= bDoNotBreakWrappedTables;
+    xSettings->getPropertyValue(u"DoNotBreakWrappedTables"_ustr) >>= bDoNotBreakWrappedTables;
     CPPUNIT_ASSERT(bDoNotBreakWrappedTables);
 }
 
@@ -542,20 +543,20 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testAllowTextAfterFloatingTableBreak)
     // When checking the state of the AllowTextAfterFloatingTableBreak compat flag:
     uno::Reference<lang::XMultiServiceFactory> xDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xSettings(
-        xDocument->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+        xDocument->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
     bool bAllowTextAfterFloatingTableBreak{};
     // Without the accompanying fix in place, this test would have failed with:
     // An uncaught exception of type com.sun.star.beans.UnknownPropertyException
     // i.e. the compat flag was not recognized.
-    xSettings->getPropertyValue("AllowTextAfterFloatingTableBreak")
+    xSettings->getPropertyValue(u"AllowTextAfterFloatingTableBreak"_ustr)
         >>= bAllowTextAfterFloatingTableBreak;
     // Then make sure it's false by default:
     CPPUNIT_ASSERT(!bAllowTextAfterFloatingTableBreak);
 
     // And when setting AllowTextAfterFloatingTableBreak=true:
-    xSettings->setPropertyValue("AllowTextAfterFloatingTableBreak", uno::Any(true));
+    xSettings->setPropertyValue(u"AllowTextAfterFloatingTableBreak"_ustr, uno::Any(true));
     // Then make sure it gets enabled:
-    xSettings->getPropertyValue("AllowTextAfterFloatingTableBreak")
+    xSettings->getPropertyValue(u"AllowTextAfterFloatingTableBreak"_ustr)
         >>= bAllowTextAfterFloatingTableBreak;
     CPPUNIT_ASSERT(bAllowTextAfterFloatingTableBreak);
 }
@@ -568,19 +569,19 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testDoNotMirrorRtlDrawObjs)
     // When checking the state of the DoNotMirrorRtlDrawObjs compat flag:
     uno::Reference<lang::XMultiServiceFactory> xDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xSettings(
-        xDocument->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+        xDocument->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
     bool bDoNotMirrorRtlDrawObjs{};
     // Without the accompanying fix in place, this test would have failed with:
     // An uncaught exception of type com.sun.star.beans.UnknownPropertyException
     // i.e. the compat flag was not recognized.
-    xSettings->getPropertyValue("DoNotMirrorRtlDrawObjs") >>= bDoNotMirrorRtlDrawObjs;
+    xSettings->getPropertyValue(u"DoNotMirrorRtlDrawObjs"_ustr) >>= bDoNotMirrorRtlDrawObjs;
     // Then make sure it's false by default:
     CPPUNIT_ASSERT(!bDoNotMirrorRtlDrawObjs);
 
     // And when setting DoNotMirrorRtlDrawObjs=true:
-    xSettings->setPropertyValue("DoNotMirrorRtlDrawObjs", uno::Any(true));
+    xSettings->setPropertyValue(u"DoNotMirrorRtlDrawObjs"_ustr, uno::Any(true));
     // Then make sure it gets enabled:
-    xSettings->getPropertyValue("DoNotMirrorRtlDrawObjs") >>= bDoNotMirrorRtlDrawObjs;
+    xSettings->getPropertyValue(u"DoNotMirrorRtlDrawObjs"_ustr) >>= bDoNotMirrorRtlDrawObjs;
     CPPUNIT_ASSERT(bDoNotMirrorRtlDrawObjs);
 }
 

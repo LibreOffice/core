@@ -45,7 +45,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLargeParaTopMargin)
 
     // Then assert its top margin.
     sal_Int32 nParaTopMargin{};
-    xPara->getPropertyValue("ParaTopMargin") >>= nParaTopMargin;
+    xPara->getPropertyValue(u"ParaTopMargin"_ustr) >>= nParaTopMargin;
     // <w:spacing w:before="37050"/> in the document.
     sal_Int32 nExpected = convertTwipToMm100(37050);
     // Without the accompanying fix in place, this test would have failed with:
@@ -71,7 +71,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunInPara)
     // - Expected: first-second
     // - Actual  : second
     // i.e. the block-SDT-only string was lost.
-    CPPUNIT_ASSERT_EQUAL(OUString("first-second"), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL(u"first-second"_ustr, xPara->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtDropdownNoDisplayText)
@@ -89,13 +89,13 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtDropdownNoDisplayText)
     uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
     uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
     OUString aPortionType;
-    xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
-    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+    xTextPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
+    CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aPortionType);
     uno::Reference<text::XTextContent> xContentControl;
-    xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+    xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValues> aListItems;
-    xContentControlProps->getPropertyValue("ListItems") >>= aListItems;
+    xContentControlProps->getPropertyValue(u"ListItems"_ustr) >>= aListItems;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0
@@ -135,20 +135,20 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtBlockText)
     uno::Reference<container::XEnumeration> xPortionEnum = xPara->createEnumeration();
     uno::Reference<beans::XPropertySet> xPortion(xPortionEnum->nextElement(), uno::UNO_QUERY);
     OUString aTextPortionType;
-    xPortion->getPropertyValue("TextPortionType") >>= aTextPortionType;
+    xPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aTextPortionType;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: ContentControl
     // - Actual  : TextField
     // i.e. the SDT was imported as a text field, not as a content control.
-    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aTextPortionType);
+    CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aTextPortionType);
 
     // Make sure the properties are imported
     uno::Reference<text::XTextContent> xContentControl;
-    xPortion->getPropertyValue("ContentControl") >>= xContentControl;
+    xPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     OUString aAlias;
-    xContentControlProps->getPropertyValue("Alias") >>= aAlias;
-    CPPUNIT_ASSERT_EQUAL(OUString("myalias"), aAlias);
+    xContentControlProps->getPropertyValue(u"Alias"_ustr) >>= aAlias;
+    CPPUNIT_ASSERT_EQUAL(u"myalias"_ustr, aAlias);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo78333)

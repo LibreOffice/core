@@ -39,7 +39,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSemiTransparentText)
     xPortionEnum->nextElement();
     uno::Reference<beans::XPropertySet> xPortion(xPortionEnum->nextElement(), uno::UNO_QUERY);
     sal_Int16 nCharTransparence = 0;
-    xPortion->getPropertyValue("CharTransparence") >>= nCharTransparence;
+    xPortion->getPropertyValue(u"CharTransparence"_ustr) >>= nCharTransparence;
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 74
@@ -61,7 +61,7 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeColorTransparency)
     uno::Reference<container::XEnumeration> xPortionEnum = xPara->createEnumeration();
     sal_Int16 nCharTransparence = 0;
     uno::Reference<beans::XPropertySet> xPortion(xPortionEnum->nextElement(), uno::UNO_QUERY);
-    xPortion->getPropertyValue("CharTransparence") >>= nCharTransparence;
+    xPortion->getPropertyValue(u"CharTransparence"_ustr) >>= nCharTransparence;
     // Without the fix this test would have failed with: Expected 74, Actual 0
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(74), nCharTransparence);
 }

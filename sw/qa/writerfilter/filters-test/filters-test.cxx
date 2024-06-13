@@ -38,7 +38,7 @@ void RtfTest::setUp()
 {
     test::BootstrapFixture::setUp();
 
-    m_xFilter.set(m_xSFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"),
+    m_xFilter.set(m_xSFactory->createInstance(u"com.sun.star.comp.Writer.RtfFilter"_ustr),
                   uno::UNO_QUERY_THROW);
 }
 
@@ -46,7 +46,7 @@ bool RtfTest::load(const OUString&, const OUString& rURL, const OUString&, SfxFi
                    SotClipboardFormatId, unsigned int)
 {
     uno::Sequence<beans::PropertyValue> aDescriptor = { beans::PropertyValue(
-        "URL", sal_Int32(0), uno::Any(rURL), beans::PropertyState_DIRECT_VALUE) };
+        u"URL"_ustr, sal_Int32(0), uno::Any(rURL), beans::PropertyState_DIRECT_VALUE) };
     try
     {
         return m_xFilter->filter(aDescriptor);

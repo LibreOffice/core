@@ -35,16 +35,16 @@ CPPUNIT_TEST_FIXTURE(Test, testLeftMarginDedup)
     uno::Reference<container::XEnumeration> xParagraphs = xText->createEnumeration();
     uno::Reference<beans::XPropertySet> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
     sal_Int32 nLeftMargin = 0;
-    xParagraph->getPropertyValue("ParaLeftMargin") >>= nLeftMargin;
+    xParagraph->getPropertyValue(u"ParaLeftMargin"_ustr) >>= nLeftMargin;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), nLeftMargin);
 
     uno::Reference<beans::XPropertyState> xParagraphState(xParagraph, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE,
-                         xParagraphState->getPropertyState("ParaLeftMargin"));
+                         xParagraphState->getPropertyState(u"ParaLeftMargin"_ustr));
 
     xParagraph.set(xParagraphs->nextElement(), uno::UNO_QUERY);
     nLeftMargin = 0;
-    xParagraph->getPropertyValue("ParaLeftMargin") >>= nLeftMargin;
+    xParagraph->getPropertyValue(u"ParaLeftMargin"_ustr) >>= nLeftMargin;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), nLeftMargin);
 
     xParagraphState.set(xParagraph, uno::UNO_QUERY);
@@ -54,7 +54,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLeftMarginDedup)
     // i.e. the left margin was not a direct formatting, which means left margin from the numbering
     // was used instead.
     CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE,
-                         xParagraphState->getPropertyState("ParaLeftMargin"));
+                         xParagraphState->getPropertyState(u"ParaLeftMargin"_ustr));
 }
 }
 
