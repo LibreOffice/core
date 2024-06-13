@@ -70,7 +70,8 @@ public:
     void        waitUntilDone(const std::shared_ptr<ThreadTaskTag>&, bool bJoin = true);
 
     /// join all threads if there are no tasks presently.
-    void        joinThreadsIfIdle();
+    /// return false if !isIdle()
+    bool        joinThreadsIfIdle();
 
     /// return true if there are no queued or worked-on tasks
     bool        isIdle() const { return maTasks.empty() && mnBusyWorkers == 0; };
