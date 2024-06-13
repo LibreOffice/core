@@ -73,4 +73,18 @@
     <string name="readonly_file">Iste file es solo lectura</string>
     <string name="about_notice">Monstrar le aviso</string>
     <string name="alert_cancel">Cancellar</string>
+    <string name="action_back">Previe</string>
+    <string name="select_insert_options">Seliger optiones de insertion:</string>
+    <string name="select_delete_options">Seliger optiones de deletion:</string>
+    <string name="action_rename_worksheet">Renominar le folio de calculo</string>
+    <string name="action_delete_worksheet">Deler le folio</string>
+    <string name="action_delete_slide">Deler le diapositiva</string>
+    <string name="sheet">Folio</string>
+    <string name="slide">Diapositiva</string>
+    <string name="action_rename_slide">Renominar le diapositiva</string>
+    <string name="tabhost_character">Character</string>
+    <string name="tabhost_paragraph">Paragrapho</string>
+    <string name="current_uno_command">Commando UNO actual</string>
+    <string name="insert_table">Inserer un tabella</string>
+    <string name="UNO_commands_string_hint">Commando UNO</string>
 </resources>
