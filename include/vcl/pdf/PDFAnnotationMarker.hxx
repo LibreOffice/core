@@ -37,6 +37,8 @@ struct VCL_DLLPUBLIC PDFAnnotationMarkerStamp : public PDFAnnotationMarker
 /** Free text annotation marker - showing text of the annotation in the document */
 struct VCL_DLLPUBLIC PDFAnnotationMarkerFreeText : public PDFAnnotationMarker
 {
+    OUString maDefaultStyle;
+    OUString maRichContent;
 };
 
 struct VCL_DLLPUBLIC PDFAnnotationMarkerCircle : public PDFAnnotationMarker

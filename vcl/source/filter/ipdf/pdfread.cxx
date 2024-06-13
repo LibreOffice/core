@@ -329,6 +329,16 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                 {
                     auto pMarker = std::make_shared<vcl::pdf::PDFAnnotationMarkerFreeText>();
                     rPDFGraphicAnnotation.mpMarker = pMarker;
+                    if (pAnnotation->hasKey(vcl::pdf::constDictionaryKey_DefaultStyle))
+                    {
+                        pMarker->maDefaultStyle
+                            = pAnnotation->getString(vcl::pdf::constDictionaryKey_DefaultStyle);
+                    }
+                    if (pAnnotation->hasKey(vcl::pdf::constDictionaryKey_RichContent))
+                    {
+                        pMarker->maRichContent
+                            = pAnnotation->getString(vcl::pdf::constDictionaryKey_RichContent);
+                    }
                 }
                 else if (eSubtype == vcl::pdf::PDFAnnotationSubType::Stamp)
                 {
