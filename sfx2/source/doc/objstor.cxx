@@ -3051,8 +3051,11 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     if (const SfxUnoAnyItem *pItem = pRetrMedium->GetItemSet().GetItemIfSet(SID_INTERACTIONHANDLER, false))
     {
         aOriginalInteract = pItem->GetValue();
+#ifndef NDEBUG
         // The original pRetrMedium and potential replacement pMediumTmp have the same interaction handler at this point
-        assert(pMediumTmp->GetItemSet().GetItemIfSet(SID_INTERACTIONHANDLER, false)->GetValue() == aOriginalInteract);
+        const SfxUnoAnyItem *pMediumItem = pMediumTmp->GetItemSet().GetItemIfSet(SID_INTERACTIONHANDLER, false);
+        assert(pMediumItem && pMediumItem->GetValue() == aOriginalInteract);
+#endif
     }
 
     // an interaction handler here can acquire only in case of GUI Saving
