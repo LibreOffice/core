@@ -27,9 +27,10 @@
 
 // include all others
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/weakref.hxx>
+#include <unotools/weakref.hxx>
 
 namespace framework{
+class StatusIndicatorFactory;
 
 /**
     @short          implement a status indicator object
@@ -61,7 +62,7 @@ class StatusIndicator final : public  ::cppu::WeakImplHelper< css::task::XStatus
                     will be owned by him. If the frame will be closed
                     he close our factory too ...
          */
-        css::uno::WeakReference< css::task::XStatusIndicatorFactory > m_xFactory;
+        unotools::WeakReference< StatusIndicatorFactory > m_xFactory;
 
         sal_Int32 m_nRange;
         // We want the callback percentages to increase monotonically

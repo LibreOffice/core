@@ -41,12 +41,9 @@ void SAL_CALL StatusIndicator::start(const OUString& sText, sal_Int32 nRange)
         comphelper::LibreOfficeKit::statusIndicatorStart(sText);
     }
 #if !defined(IOS) && !defined(ANDROID)
-    css::uno::Reference<css::task::XStatusIndicatorFactory> xFactory(m_xFactory);
+    rtl::Reference<StatusIndicatorFactory> xFactory(m_xFactory);
     if (xFactory.is())
-    {
-        StatusIndicatorFactory* pFactory = static_cast<StatusIndicatorFactory*>(xFactory.get());
-        pFactory->start(this, sText, nRange);
-    }
+        xFactory->start(this, sText, nRange);
 #else
     (void)sText;
 #endif
@@ -59,12 +56,9 @@ void SAL_CALL StatusIndicator::end()
         comphelper::LibreOfficeKit::statusIndicatorFinish();
     }
 #if !defined(IOS) && !defined(ANDROID)
-    css::uno::Reference<css::task::XStatusIndicatorFactory> xFactory(m_xFactory);
+    rtl::Reference<StatusIndicatorFactory> xFactory(m_xFactory);
     if (xFactory.is())
-    {
-        StatusIndicatorFactory* pFactory = static_cast<StatusIndicatorFactory*>(xFactory.get());
-        pFactory->end(this);
-    }
+        xFactory->end(this);
 #endif
 }
 
@@ -73,12 +67,9 @@ void SAL_CALL StatusIndicator::reset()
     if (comphelper::LibreOfficeKit::isActive())
         return;
 #if !defined(IOS) && !defined(ANDROID)
-    css::uno::Reference<css::task::XStatusIndicatorFactory> xFactory(m_xFactory);
+    rtl::Reference<StatusIndicatorFactory> xFactory(m_xFactory);
     if (xFactory.is())
-    {
-        StatusIndicatorFactory* pFactory = static_cast<StatusIndicatorFactory*>(xFactory.get());
-        pFactory->reset(this);
-    }
+        xFactory->reset(this);
 #endif
 }
 
@@ -87,12 +78,9 @@ void SAL_CALL StatusIndicator::setText(const OUString& sText)
     if (comphelper::LibreOfficeKit::isActive())
         return;
 #if !defined(IOS) && !defined(ANDROID)
-    css::uno::Reference<css::task::XStatusIndicatorFactory> xFactory(m_xFactory);
+    rtl::Reference<StatusIndicatorFactory> xFactory(m_xFactory);
     if (xFactory.is())
-    {
-        StatusIndicatorFactory* pFactory = static_cast<StatusIndicatorFactory*>(xFactory.get());
-        pFactory->setText(this, sText);
-    }
+        xFactory->setText(this, sText);
 #else
     (void)sText;
 #endif
@@ -114,12 +102,9 @@ void SAL_CALL StatusIndicator::setValue(sal_Int32 nValue)
         return;
     }
 #if !defined(IOS) && !defined(ANDROID)
-    css::uno::Reference<css::task::XStatusIndicatorFactory> xFactory(m_xFactory);
+    rtl::Reference<StatusIndicatorFactory> xFactory(m_xFactory);
     if (xFactory.is())
-    {
-        StatusIndicatorFactory* pFactory = static_cast<StatusIndicatorFactory*>(xFactory.get());
-        pFactory->setValue(this, nValue);
-    }
+        xFactory->setValue(this, nValue);
 #endif
 }
 
