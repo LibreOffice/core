@@ -3064,7 +3064,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
         rFont.SetKerning( rFont.GetKerning() | FontKerning::Asian );
 
     // tdf#160401/#i78474# small caps do not exist in CTL fonts, so turn that off here where we know the script type
-    if (nScriptTypeI18N == i18n::ScriptType::COMPLEX && rFont.IsCapital())
+    if (rFont.IsCapital() && nScriptTypeI18N == i18n::ScriptType::COMPLEX)
         rFont.SetCaseMap(SvxCaseMap::NotMapped);
 
     if (maStatus.DoNotUseColors())
