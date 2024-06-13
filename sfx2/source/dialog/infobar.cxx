@@ -42,8 +42,6 @@ namespace
 void GetInfoBarColors(InfobarType ibType, BColor& rBackgroundColor, BColor& rForegroundColor,
                       BColor& rMessageColor)
 {
-    rMessageColor = basegfx::BColor(0.0, 0.0, 0.0);
-
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
     switch (ibType)
@@ -51,18 +49,22 @@ void GetInfoBarColors(InfobarType ibType, BColor& rBackgroundColor, BColor& rFor
         case InfobarType::INFO: // blue; #004785/0,71,133; #BDE5F8/189,229,248
             rBackgroundColor = basegfx::BColor(0.741, 0.898, 0.973);
             rForegroundColor = basegfx::BColor(0.0, 0.278, 0.522);
+            rMessageColor = basegfx::BColor(0.0, 0.278, 0.522);
             break;
         case InfobarType::SUCCESS: // green; #32550C/50,85,12; #DFF2BF/223,242,191
             rBackgroundColor = basegfx::BColor(0.874, 0.949, 0.749);
             rForegroundColor = basegfx::BColor(0.196, 0.333, 0.047);
+            rMessageColor = basegfx::BColor(0.196, 0.333, 0.047);
             break;
         case InfobarType::WARNING: // orange; #704300/112,67,0; #FEEFB3/254,239,179
             rBackgroundColor = rSettings.GetWarningColor().getBColor();
             rForegroundColor = rSettings.GetWarningTextColor().getBColor();
+            rMessageColor = rSettings.GetWarningTextColor().getBColor();
             break;
         case InfobarType::DANGER: // red; #7A0006/122,0,6; #FFBABA/255,186,186
             rBackgroundColor = rSettings.GetErrorColor().getBColor();
             rForegroundColor = rSettings.GetErrorTextColor().getBColor();
+            rMessageColor = rSettings.GetErrorTextColor().getBColor();
             break;
     }
 
