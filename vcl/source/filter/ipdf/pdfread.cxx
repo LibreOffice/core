@@ -324,6 +324,11 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                         pMarker->mnWidth = convertPointToMm100(fWidth);
                     }
                 }
+                else if (eSubtype == vcl::pdf::PDFAnnotationSubType::FreeText)
+                {
+                    auto pMarker = std::make_shared<vcl::pdf::PDFAnnotationMarkerFreeText>();
+                    rPDFGraphicAnnotation.mpMarker = pMarker;
+                }
             }
         }
     }
