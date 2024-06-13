@@ -42,6 +42,7 @@
 #include <editeng/twolinesitem.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/boxitem.hxx>
+#include <editeng/nhypitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <viewopt.hxx>
 #include <charfmt.hxx>
@@ -629,8 +630,16 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
                                           CharFormat::GetItem( *pTopAt, RES_CHRATR_HIDDEN ) :
                                           m_pDefaultArray[ nStackPos ];
 
+            const sal_uInt16 nStackPos2 = StackPos[ RES_CHRATR_NOHYPHEN ];
+            const SwTextAttr* pTopAt2 = GetTop(nStackPos2);
+
+            const SfxPoolItem* pTmpItem2 = pTopAt2 ?
+                                          CharFormat::GetItem( *pTopAt2, RES_CHRATR_NOHYPHEN ) :
+                                          m_pDefaultArray[ nStackPos2 ];
+
             if ((m_pShell && !m_pShell->GetWin()) ||
-                (pTmpItem && !pTmpItem->StaticWhichCast(RES_CHRATR_HIDDEN).GetValue()) )
+                (pTmpItem && !pTmpItem->StaticWhichCast(RES_CHRATR_HIDDEN).GetValue()) ||
+                (pTmpItem2 && !pTmpItem2->StaticWhichCast(RES_CHRATR_NOHYPHEN).GetValue()) )
             {
                 rFnt.SetUnderline( rItem.StaticWhichCast(RES_CHRATR_UNDERLINE).GetLineStyle() );
                 rFnt.SetUnderColor( rItem.StaticWhichCast(RES_CHRATR_UNDERLINE).GetColor() );
@@ -684,6 +693,19 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             break;
         case RES_CHRATR_HIGHLIGHT :
             rFnt.SetHighlightColor( rItem.StaticWhichCast(RES_CHRATR_HIGHLIGHT).GetColor() );
+            break;
+        case RES_CHRATR_NOHYPHEN :
+            if ( m_pShell && m_pShell->GetWin() &&
+                            m_pShell->GetViewOptions()->IsShowHiddenChar() )
+            {
+                if ( rItem.StaticWhichCast(RES_CHRATR_NOHYPHEN).GetValue() )
+                {
+                    rFnt.SetUnderline( LINESTYLE_DOTTED );
+                    rFnt.SetUnderColor( COL_LIGHTGRAY );
+                }
+                else
+                    ActivateTop( rFnt, RES_CHRATR_UNDERLINE );
+            }
             break;
         case RES_CHRATR_CJK_FONT :
         {

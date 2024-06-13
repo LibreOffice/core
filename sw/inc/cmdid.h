@@ -526,7 +526,8 @@ class SwUINumRuleItem;
 // Region: Extras
 #define FN_LINE_NUMBERING_DLG       (FN_EXTRA + 2 )   /* */
 #define FN_HYPHENATE_OPT_DLG        (FN_EXTRA + 5 )   /* */
-#define FN_ADD_UNKNOWN              (FN_EXTRA + 6 )   /* learn words */
+#define FN_NO_BREAK                 (FN_EXTRA + 6 )   /* do not hyphenate */
+#define FN_ADD_UNKNOWN              (FN_EXTRA + 7 )   /* learn words */
 #define FN_NUMBERING_OUTLINE_DLG    (FN_EXTRA + 12)   /* */
 #define FN_SORTING_DLG              (FN_EXTRA + 14)   /* */
 #define FN_CALCULATE                (FN_EXTRA + 15)   /* */

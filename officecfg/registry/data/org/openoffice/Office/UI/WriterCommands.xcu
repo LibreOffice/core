@@ -3039,6 +3039,14 @@
           <value>9</value>
         </prop>
       </node>
+      <node oor:name=".uno:NoBreak" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">No Break</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>8</value>
+        </prop>
+      </node>
       <node oor:name=".uno:VScroll" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Vertical Scroll Bar</value>

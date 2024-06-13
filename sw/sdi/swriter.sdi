@@ -2415,6 +2415,23 @@ SfxVoidItem Hyphenate FN_HYPHENATE_OPT_DLG
     GroupId = SfxGroupId::Options;
 ]
 
+SfxVoidItem NoBreak FN_NO_BREAK
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
+
 SfxVoidItem IncrementIndentValue FN_INC_INDENT_OFFSET
 ()
 [

@@ -697,6 +697,48 @@ bool SwTextFrame::LeftMargin(SwPaM *pPam) const
     return true;
 }
 
+bool SwTextFrame::IsInHyphenatedWord(SwPaM *pPam, bool bSelection) const
+{
+    assert(GetMergedPara() || &pPam->GetPointNode() == static_cast<SwContentNode const*>(GetDep()));
+
+    SwTextFrame *pFrame = GetAdjFrameAtPos( const_cast<SwTextFrame*>(this), *pPam->GetPoint(),
+                                     SwTextCursor::IsRightMargin() );
+    pFrame->GetFormatted();
+    if (!IsEmpty())
+    {
+        SwTextSizeInfo aInf( pFrame );
+        SwTextCursor  aLine( pFrame, &aInf );
+        TextFrameIndex const nCursorPos(MapModelToViewPos(*pPam->GetPoint()));
+        aLine.CharCursorToLine(nCursorPos);
+        if ( aLine.GetCurr()->IsEndHyph() )
+        {
+           TextFrameIndex nPos(aLine.GetStart() + aLine.GetCurr()->GetLen());
+           while( nPos > nCursorPos && ' ' != aInf.GetText()[sal_Int32(nPos) - 1] )
+               --nPos;
+           if ( nPos == nCursorPos && ( bSelection ||
+                // without selection, the cursor must be inside the word, not before that
+                // to apply the character formatting, as usual
+                ( nPos > aLine.GetStart() && ' ' != aInf.GetText()[sal_Int32(nPos) - 1] ) ) )
+                return true;
+        }
+        // the hyphenated word starts in the previous line
+        if ( aLine.GetStart() > TextFrameIndex(0) )
+        {
+            TextFrameIndex nPos(aLine.GetStart());
+            aLine.CharCursorToLine(nPos - TextFrameIndex(1));
+            if ( aLine.GetCurr()->IsEndHyph() )
+            {
+                while( nPos < nCursorPos && ' ' != aInf.GetText()[sal_Int32(nPos)] )
+                    ++nPos;
+                if ( nPos == nCursorPos &&
+                     ( bSelection || ' ' != aInf.GetText()[sal_Int32(nPos)] ) )
+                     return true;
+            }
+        }
+    }
+    return false;
+}
+
 /*
  * To the line end: That's the position before the last char of the line.
  * Exception: In the last line, it should be able to place the cursor after

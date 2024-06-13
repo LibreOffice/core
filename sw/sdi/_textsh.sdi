@@ -1412,6 +1412,12 @@ interface BaseText
         StateMethod = GetTextCtrlState;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+    FN_NO_BREAK // status(final|play)
+    [
+        ExecMethod = ExecCharAttr;
+        StateMethod = GetAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
     SID_ATTR_CHAR_RELIEF
     [
         ExecMethod = ExecTextCtrl ;
