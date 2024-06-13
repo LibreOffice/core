@@ -400,6 +400,12 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
 
     bool bHasBlankPortion = false;
     bool bHasOnlyBlankPortions = true;
+    bool bHasTabPortions = false;
+    bool bHasNonBlankPortions = false;
+    SwTwips nTabPortionAscent = 0;
+    SwTwips nTabPortionHeight = 0;
+    SwTwips nSpacePortionAscent = 0;
+    SwTwips nSpacePortionHeight = 0;
     bool bHasFlyPortion = false;
 
     if( mpNextPortion )
@@ -452,15 +458,40 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                 AddPrtWidth( pPos->Width() );
 
                 // #i3952#
-                if (bIgnoreBlanksAndTabsForLineHeightCalculation && !rInf.GetLineStart())
+                if (bIgnoreBlanksAndTabsForLineHeightCalculation)
                 {
+                    bHasTabPortions |= pPos->InTabGrp();
+                    bool isSpacePortion = false;
                     if ( pPos->InTabGrp() || pPos->IsHolePortion() ||
                             ( pPos->IsTextPortion() &&
-                              lcl_HasOnlyBlanks( rInf.GetText(), nPorSttIdx, nPorSttIdx + pPos->GetLen() ) ) )
+                              (isSpacePortion = lcl_HasOnlyBlanks( rInf.GetText(), nPorSttIdx, nPorSttIdx + pPos->GetLen() ) ) ) )
                     {
                         pLast = pPos;
+                        if (pPos->InTabGrp())
+                        {
+                            if (nTabPortionAscent < pPos->GetAscent())
+                            {
+                                nTabPortionAscent = pPos->GetAscent();
+                            }
+                            if (nTabPortionHeight < pPos->Height())
+                            {
+                                nTabPortionHeight = pPos->Height();
+                            }
+                        }
+                        else if (isSpacePortion)
+                        {
+                            if (nSpacePortionAscent < pPos->GetAscent())
+                            {
+                                nSpacePortionAscent = pPos->GetAscent();
+                            }
+                            if (nSpacePortionHeight < pPos->Height())
+                            {
+                                nSpacePortionHeight = pPos->Height();
+                            }
+                            bHasBlankPortion = true;
+                        }
+                        bTmpDummy &= !pPos->InTabGrp();
                         pPos = pPos->GetNextPortion();
-                        bHasBlankPortion = true;
                         continue;
                     }
                 }
@@ -479,6 +510,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                 }
 
                 bHasOnlyBlankPortions = false;
+                bHasNonBlankPortions = true;
 
                 // We had an attribute change: Sum up/build maxima of length and mass
 
@@ -661,7 +693,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
 
     if (!rInf.IsNewLine()
         && TextFrameIndex(rInf.GetText().getLength()) <= rInf.GetIdx()
-        && bHasOnlyBlankPortions
+        && !bHasNonBlankPortions
         && rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
             DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH))
     {
@@ -670,6 +702,23 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
         rLine.SeekAndChg(rInf);
         SetAscent(rInf.GetAscent());
         Height(rInf.GetTextHeight());
+    }
+    else if (bIgnoreBlanksAndTabsForLineHeightCalculation && !bHasNonBlankPortions &&
+        (bHasTabPortions || (bHasBlankPortion && (nSpacePortionAscent > 0 || nSpacePortionHeight > 0))))
+    {
+        //Word increases line height if _only_ spaces and|or tabstops are in a line
+        if (bHasTabPortions)
+        {
+            mnAscent = nTabPortionAscent;
+            Height(nTabPortionHeight, true);
+        }
+        else if (bHasBlankPortion)
+        {
+            if(  mnAscent < nSpacePortionAscent )
+                mnAscent = nSpacePortionAscent;
+            if (Height() < nSpacePortionHeight)
+                Height(nSpacePortionHeight, true);
+        }
     }
     // #i3952# Whitespace does not increase line height
     else if (bHasBlankPortion && bHasOnlyBlankPortions)

@@ -891,7 +891,7 @@ void SwTextFormatter::CalcAscent( SwTextFormatInfo &rInf, SwLinePortion *pPor )
         {
             pPor->SetHangingBaseline( rInf.GetHangingBaseline() );
             pPor->SetAscent( rInf.GetAscent()  );
-            pPor->Height( rInf.GetTextHeight() );
+            pPor->Height(rInf.GetTextHeight());
             bCalc = true;
         }
         else
