@@ -24,6 +24,7 @@
 #include "escherex.hxx"
 #include <sal/types.h>
 #include <sot/storage.hxx>
+#include <unotools/securityoptions.hxx>
 #include "pptexsoundcollection.hxx"
 
 #include "text.hxx"
@@ -138,6 +139,7 @@ class PPTWriter final : public PPTWriterBase, public PPTExBulletProvider
         SvMemoryStream*     mpVBA;
         sal_uInt32          mnExEmbed;
         std::unique_ptr<SvMemoryStream> mpExEmbed;
+        std::unique_ptr<SvtSecurityMapPersonalInfo> mpAuthorIDs; // map authors to remove personal info
 
         sal_uInt32          mnPagesWritten;
         sal_uInt32          mnTxId;             // Identifier determined by the HOST (PP) ????
@@ -211,6 +213,8 @@ class PPTWriter final : public PPTWriterBase, public PPTExBulletProvider
 
         bool                ImplCloseDocument();        // we write the font, hyper and sound list
 
+        void                ImplExportComments(const css::uno::Reference<css::drawing::XDrawPage>& xPage,
+                                               SvMemoryStream& rBinaryTagData10Atom);
         virtual void        ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterID, sal_uInt16 nMode,
                                             bool bHasBackground, css::uno::Reference< css::beans::XPropertySet > const & aXBackgroundPropSet ) override;
         virtual void        ImplWriteNotes( sal_uInt32 nPageNum ) override;
