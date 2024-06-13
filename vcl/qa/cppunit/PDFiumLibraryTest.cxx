@@ -28,33 +28,14 @@
 
 class PDFiumLibraryTest : public test::BootstrapFixtureBase
 {
+protected:
     OUString getFullUrl(std::u16string_view sFileName)
     {
         return m_directories.getURLFromSrc(u"/vcl/qa/cppunit/data/") + sFileName;
     }
-
-    void testDocument();
-    void testPages();
-    void testPageObjects();
-    void testAnnotationsMadeInEvince();
-    void testAnnotationsMadeInAcrobat();
-    void testAnnotationsDifferentTypes();
-    void testTools();
-    void testFormFields();
-
-    CPPUNIT_TEST_SUITE(PDFiumLibraryTest);
-    CPPUNIT_TEST(testDocument);
-    CPPUNIT_TEST(testPages);
-    CPPUNIT_TEST(testPageObjects);
-    CPPUNIT_TEST(testAnnotationsMadeInEvince);
-    CPPUNIT_TEST(testAnnotationsMadeInAcrobat);
-    CPPUNIT_TEST(testAnnotationsDifferentTypes);
-    CPPUNIT_TEST(testTools);
-    CPPUNIT_TEST(testFormFields);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void PDFiumLibraryTest::testDocument()
+CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testDocument)
 {
     OUString aURL = getFullUrl(u"Pangram.pdf");
     SvFileStream aStream(aURL, StreamMode::READ);
@@ -81,7 +62,7 @@ void PDFiumLibraryTest::testDocument()
     CPPUNIT_ASSERT_EQUAL(792.0, aSize.getHeight());
 }
 
-void PDFiumLibraryTest::testPages()
+CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testPages)
 {
     OUString aURL = getFullUrl(u"Pangram.pdf");
     SvFileStream aStream(aURL, StreamMode::READ);
@@ -106,7 +87,7 @@ void PDFiumLibraryTest::testPages()
     CPPUNIT_ASSERT(pPage);
 }
 
-void PDFiumLibraryTest::testPageObjects()
+CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testPageObjects)
 {
     OUString aURL = getFullUrl(u"Pangram.pdf");
     SvFileStream aStream(aURL, StreamMode::READ);
@@ -159,7 +140,7 @@ void PDFiumLibraryTest::testPageObjects()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(732.54, pPageObject->getBounds().getMaxY(), 1E-2);
 }
 
-void PDFiumLibraryTest::testAnnotationsMadeInEvince()
+CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testAnnotationsMadeInEvince)
 {
     OUString aURL = getFullUrl(u"PangramWithAnnotations.pdf");
     SvFileStream aStream(aURL, StreamMode::READ);
@@ -215,7 +196,7 @@ void PDFiumLibraryTest::testAnnotationsMadeInEvince()
     }
 }
 
-void PDFiumLibraryTest::testAnnotationsMadeInAcrobat()
+CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testAnnotationsMadeInAcrobat)
 {
     OUString aURL = getFullUrl(u"PangramAcrobatAnnotations.pdf");
     SvFileStream aStream(aURL, StreamMode::READ);
@@ -292,7 +273,7 @@ void PDFiumLibraryTest::testAnnotationsMadeInAcrobat()
     }
 }
 
-void PDFiumLibraryTest::testFormFields()
+CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testFormFields)
 {
     // Given a document with a form field that looks like plain text:
     OUString aURL = getFullUrl(u"form-fields.pdf");
@@ -327,7 +308,7 @@ void PDFiumLibraryTest::testFormFields()
     CPPUNIT_ASSERT_GREATER(static_cast<size_t>(1), aColors.size());
 }
 
-void PDFiumLibraryTest::testAnnotationsDifferentTypes()
+CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testAnnotationsDifferentTypes)
 {
     OUString aURL = getFullUrl(u"PangramWithMultipleTypeOfAnnotations.pdf");
     SvFileStream aStream(aURL, StreamMode::READ);
@@ -431,7 +412,7 @@ void PDFiumLibraryTest::testAnnotationsDifferentTypes()
     }
 }
 
-void PDFiumLibraryTest::testTools()
+CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testTools)
 {
     OUString sConverted = vcl::pdf::convertPdfDateToISO8601(u"D:20200612201322+02'00");
 
@@ -446,8 +427,6 @@ void PDFiumLibraryTest::testTools()
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), aDateTime.NanoSeconds);
     CPPUNIT_ASSERT_EQUAL(false, bool(aDateTime.IsUTC));
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(PDFiumLibraryTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
