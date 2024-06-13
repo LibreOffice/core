@@ -140,9 +140,6 @@ void SdTPAction::SetView( const ::sd::View* pSdView )
         SfxViewFrame* pFrame = pDocSh->GetViewShell()->GetViewFrame();
         m_xLbTree->SetViewFrame( pFrame );
         m_xLbTreeDocument->SetViewFrame( pFrame );
-
-        pColList = pDocSh->GetItem( SID_COLOR_TABLE )->GetColorList();
-        DBG_ASSERT( pColList.is(), "No color table available!" );
     }
     else
     {
