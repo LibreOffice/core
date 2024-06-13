@@ -59,6 +59,10 @@ exact modules that depend on Java are listed.
 
 The baseline for Java is Java Development Kit (JDK) Version 17 or later.
 
+The baseline for Python is version 3.11. It follows the version available
+in SUSE Linux Enterprise Desktop and the Maintenance Support version of
+Red Hat Enterprise Linux.
+
 If you want to use Clang with the LibreOffice compiler plugins, the minimal
 version of Clang is 12.0.1. Since Xcode doesn't provide the compiler plugin
 headers, you have to compile your own Clang to use them on macOS.
