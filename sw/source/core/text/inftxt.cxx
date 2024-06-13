@@ -1942,6 +1942,12 @@ SwTwips SwTextFormatInfo::GetLineWidth()
         if (pLastTab->GetWhichPor() == PortionType::TabLeft)
             nLineWidth = nTextFrameWidth - pLastTab->GetTabPos();
     }
+    else if (GetLast() == pLastTab)
+    {   // tdf#158658 Put content after tab into margin like Word.
+        // FIXME using Width() is entirely arbitrary here, Word adds even more
+        // width but not infinitely much.
+        nLineWidth = std::max<SwTwips>(Width(), nLineWidth);
+    }
     return nLineWidth;
 }
 

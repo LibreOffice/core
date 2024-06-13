@@ -397,16 +397,60 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf120287b)
     assertXPath(
         pXmlDoc,
         "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::TabRight']"_ostr,
-        "width"_ostr, "18");
+        "width"_ostr, "1");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf120287c)
 {
     createSwDoc("tdf120287c.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    // This was 2, the second line was not broken into a 2nd and a 3rd one,
-    // rendering text outside the paragraph frame.
-    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, 3);
+    // This was 3, the second line was broken into a 2nd and a 3rd one,
+    // not rendering text outside the paragraph frame like Word 2013 does.
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, 2);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158658a)
+{
+    createSwDoc("tdf158658a.rtf");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Word 2013 puts all tabs into one line, the last 8 of them are off the page
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(
+        pXmlDoc,
+        "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::TabCenter']"_ostr,
+        1);
+    assertXPath(
+        pXmlDoc,
+        "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::TabRight']"_ostr,
+        1);
+    assertXPath(
+        pXmlDoc,
+        "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::TabLeft']"_ostr,
+        9);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158658b)
+{
+    createSwDoc("tdf158658b.rtf");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Word 2013 puts all tabs and the field following into one line
+    // but also puts the field off the page, while in Writer it's
+    // aligned to the right margin; should be good enough for now...
+    assertXPath(pXmlDoc, "/root/page[1]/footer/txt[1]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(
+        pXmlDoc,
+        "/root/page[1]/footer/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::TabCenter']"_ostr,
+        1);
+    assertXPath(
+        pXmlDoc,
+        "/root/page[1]/footer/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::TabRight']"_ostr,
+        1);
+    assertXPath(
+        pXmlDoc,
+        "/root/page[1]/footer/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::TabLeft']"_ostr,
+        0);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf155177)

@@ -2386,12 +2386,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf118672)
         return;
 
     // This ended as "fol*1 2 3 4 5 6 7 8 9", i.e. "10con-" was moved to the next line.
+    // Bizarrely, Word lets the text run into the right margin (loaded from .rtf)
     assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
                 "portion"_ostr,
+
                 "He heard quiet steps behind him. That didn't bode well. Who could be fol*1 2 "
-                "3 4 5 6 7 8 9 10con");
-    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[2]"_ostr,
-                "portion"_ostr, "setetur");
+                "3 4 5 6 7 8 9 10consetetur");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150200)
