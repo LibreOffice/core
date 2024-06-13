@@ -475,6 +475,37 @@ CPPUNIT_TEST_FIXTURE(Test, testDoNotMirrorRtlDrawObjsLayout)
     // i.e. the graphic was on the left margin, not on the right margin.
     CPPUNIT_ASSERT_GREATER(nBodyRight, aAnchoredCenter.getX());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testDoNotCaptureDrawObjsOnPageDrawWrapNone)
+{
+    // Given a document with a draw object on page 2, wrap type is set to none (not through):
+    createSwDoc("do-not-capture-draw-objs-on-page-draw-wrap-none.docx");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure the draw object is captured on page 2:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage1);
+    auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage2);
+    CPPUNIT_ASSERT(pPage2->GetSortedObjs());
+    const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPage2Objs.size());
+    SwAnchoredObject* pDrawObj = rPage2Objs[0];
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(RES_DRAWFRMFMT),
+                         pDrawObj->GetFrameFormat()->Which());
+    SwTwips nDrawObjTop = pDrawObj->GetObjRect().Top();
+    SwTwips nPage2Top = pPage2->getFrameArea().Top();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 17383
+    // - Actual  : 13518
+    // i.e. the draw object was way above the page 2 rectangle, instead of inside it (apart from
+    // some <1px difference).
+    CPPUNIT_ASSERT_GREATER(nPage2Top - MINFLY, nDrawObjTop);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
