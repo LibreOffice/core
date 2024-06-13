@@ -37,6 +37,7 @@
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/cmapitem.hxx>
+#include <editeng/nhypitem.hxx>
 #include <osl/diagnose.h>
 #include <paratr.hxx>
 
@@ -190,6 +191,13 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
         case FN_REMOVE_DIRECT_CHAR_FORMATS:
             if( !rSh.HasReadonlySel() && rSh.IsEndPara())
                 rSh.DontExpandFormat();
+        break;
+        case FN_NO_BREAK:
+        {
+            bool bNoHyphen = aSet.Get(RES_CHRATR_NOHYPHEN).GetValue();
+            SvxNoHyphenItem aNoHyphen( !bNoHyphen, RES_CHRATR_NOHYPHEN );
+            rSh.SetAttrItem( aNoHyphen );
+        }
         break;
         default:
             OSL_FAIL("wrong  dispatcher");
@@ -827,7 +835,25 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                 nSlot = 0;
             }
             break;
+            case FN_NO_BREAK:
+            {
+                SfxItemSetFixed<RES_CHRATR_NOHYPHEN, RES_CHRATR_NOHYPHEN> aSet(GetPool());
+                rSh.GetCurAttr(aSet);
+                const SfxPoolItem& rItem = aSet.Get(RES_CHRATR_NOHYPHEN);
 
+                SwWrtShell& rWrtSh = GetShell();
+                // add "No Break" menu item to the context menu, if the word
+                // has "no break" setting, or it is hyphenated
+                if ( static_cast<const SvxNoHyphenItem&>(rItem).GetValue() || ( rWrtSh.GetCursor()
+                        && rWrtSh.GetCursor()->IsInHyphenatedWord(*rWrtSh.GetLayout()) ) )
+                {
+                    rSet.Put(rItem);
+                }
+                else
+                    rSet.DisableItem(nSlot);
+                nSlot = 0;
+            }
+            break;
             default:
             // Do nothing
             nSlot = 0;

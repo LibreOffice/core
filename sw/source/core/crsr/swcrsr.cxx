@@ -2368,6 +2368,21 @@ void SwCursor::RestoreSavePos()
     GetPoint()->SetContent( nIdx );
 }
 
+bool SwCursor::IsInHyphenatedWord(SwRootFrame const& rLayout) const
+{
+    bool bRet = false;
+    Point aPt;
+    std::pair<Point, bool> const tmp(aPt, true);
+    SwContentFrame const*const pFrame = GetPointContentNode()->getLayoutFrame(
+        &rLayout, GetPoint(), &tmp);
+    if( pFrame && pFrame->IsTextFrame() )
+    {
+        SwPaM aPam( *GetPoint(), *GetMark() );
+        bRet = static_cast<SwTextFrame const*>(pFrame)->IsInHyphenatedWord( &aPam, HasMark() );
+    }
+    return bRet;
+}
+
 SwTableCursor::SwTableCursor( const SwPosition &rPos )
     : SwCursor( rPos, nullptr )
 {
