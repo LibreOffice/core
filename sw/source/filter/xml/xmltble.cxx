@@ -289,7 +289,9 @@ public:
             continue;
 
         // found!
-        auto const oName(m_rFormatMap.find(pTestFormat)->second);
+        auto const oNameIt(m_rFormatMap.find(pTestFormat));
+        assert(oNameIt != m_rFormatMap.end());
+        auto const oName(oNameIt->second);
         assert(oName);
         m_rFormatMap.try_emplace(&rFrameFormat, oName);
         return {};
@@ -480,7 +482,9 @@ static OUString lcl_xmltble_appendBoxPrefix(std::u16string_view rNamePrefix,
             continue;
 
         // found!
-        auto const oName(m_rFormatMap.find(pTestFormat)->second);
+        auto const oNameIt(m_rFormatMap.find(pTestFormat));
+        assert(oNameIt != m_rFormatMap.end());
+        auto const oName(oNameIt->second);
         assert(oName);
         m_rFormatMap.try_emplace(&rFrameFormat, oName);
         return {};
