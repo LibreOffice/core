@@ -412,6 +412,64 @@ CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testAnnotationsDifferentTypes)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testAnnotationsFreeText)
+{
+    OUString aURL = getFullUrl(u"Annotations_Adobe_FreeText.pdf");
+    SvFileStream aStream(aURL, StreamMode::READ);
+
+    std::vector<vcl::PDFGraphicResult> aResults;
+    CPPUNIT_ASSERT_EQUAL(size_t(1), vcl::ImportPDFUnloaded(aURL, aResults));
+
+    vcl::PDFGraphicResult& rResult = aResults[0];
+
+    Graphic aGraphic = rResult.GetGraphic();
+    aGraphic.makeAvailable();
+
+    OUString aDefaultStyle;
+    OUString aRichContent;
+
+    {
+        auto pVectorGraphicData = aGraphic.getVectorGraphicData();
+        CPPUNIT_ASSERT(pVectorGraphicData);
+        CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, pVectorGraphicData->getType());
+
+        auto& rDataContainer = pVectorGraphicData->getBinaryDataContainer();
+
+        auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+        auto pDocument
+            = pPdfium->openDocument(rDataContainer.getData(), rDataContainer.getSize(), OString());
+        CPPUNIT_ASSERT(pDocument);
+
+        CPPUNIT_ASSERT_EQUAL(1, pDocument->getPageCount());
+
+        auto pPage = pDocument->openPage(0);
+        CPPUNIT_ASSERT(pPage);
+
+        CPPUNIT_ASSERT_EQUAL(1, pPage->getAnnotationCount());
+
+        auto pAnnotation = pPage->getAnnotation(0);
+        CPPUNIT_ASSERT(pAnnotation);
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::FreeText, pAnnotation->getSubType());
+
+        aDefaultStyle = pAnnotation->getString(vcl::pdf::constDictionaryKey_DefaultStyle);
+        CPPUNIT_ASSERT_EQUAL(false, aDefaultStyle.isEmpty());
+
+        aRichContent = pAnnotation->getString(vcl::pdf::constDictionaryKey_RichContent);
+        CPPUNIT_ASSERT_EQUAL(false, aRichContent.isEmpty());
+    }
+
+    auto const& rAnnotations = rResult.GetAnnotations();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rAnnotations.size());
+
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::FreeText, rAnnotations[0].meSubType);
+
+    auto* pMarker
+        = static_cast<vcl::pdf::PDFAnnotationMarkerFreeText*>(rAnnotations[0].mpMarker.get());
+
+    CPPUNIT_ASSERT_EQUAL(aDefaultStyle, pMarker->maDefaultStyle);
+    CPPUNIT_ASSERT_EQUAL(aRichContent, pMarker->maRichContent);
+}
+
 CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testTools)
 {
     OUString sConverted = vcl::pdf::convertPdfDateToISO8601(u"D:20200612201322+02'00");

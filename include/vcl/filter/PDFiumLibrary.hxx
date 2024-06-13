@@ -46,6 +46,8 @@ inline constexpr OString constDictionaryKeyContents = "Contents"_ostr;
 inline constexpr OString constDictionaryKeyPopup = "Popup"_ostr;
 inline constexpr OString constDictionaryKeyModificationDate = "M"_ostr;
 inline constexpr OString constDictionaryKeyInteriorColor = "IC"_ostr;
+inline constexpr OString constDictionaryKey_DefaultStyle = "DS"_ostr;
+inline constexpr OString constDictionaryKey_RichContent = "RC"_ostr;
 
 class PDFiumBitmap;
 class PDFiumDocument;
