@@ -4052,8 +4052,20 @@ void ChartExport::exportDataLabels(
         pFS->startElement(FSNS(XML_c, XML_dLbl));
         pFS->singleElement(FSNS(XML_c, XML_idx), XML_val, OString::number(nIdx));
 
+        // As far as i know there can be issues with the Positions,
+        // if a piechart label use AVOID_OVERLAP placement (== BestFit)
+        // because LO and MS may calculate the bestFit positions differently.
+        bool bWritePosition = true;
+        if (eChartType == chart::TYPEID_PIE)
+        {
+            sal_Int32 nLabelPlacement = aParam.meDefault;
+            xLabelPropSet->getPropertyValue(u"LabelPlacement"_ustr) >>= nLabelPlacement;
+            if (nLabelPlacement == css::chart::DataLabelPlacement::AVOID_OVERLAP)
+                bWritePosition = false;
+        }
+
         // export custom position of data label
-        if( eChartType != chart::TYPEID_PIE )
+        if (bWritePosition)
         {
             chart2::RelativePosition aCustomLabelPosition;
             if( xLabelPropSet->getPropertyValue(u"CustomLabelPosition"_ustr) >>= aCustomLabelPosition )
