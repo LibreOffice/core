@@ -2967,7 +2967,7 @@ void ScTable::GetAutoFormatData(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol,
 void ScTable::SetError( SCCOL nCol, SCROW nRow, FormulaError nError)
 {
     if (ValidColRow(nCol, nRow))
-        aCol[nCol].SetError( nRow, nError );
+        CreateColumnIfNotExists(nCol).SetError(nRow, nError);
 }
 
 void ScTable::UpdateInsertTabAbs(SCTAB nTable)
