@@ -43,6 +43,7 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <iostream>
 #include <string_view>
 
 using namespace psp;
@@ -516,7 +517,9 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
                     // remove temporary PPD file
                     if (!getenv("SAL_CUPS_PPD_RETAIN_TMP"))
-                        unlink( aPPDFile.getStr() );
+                        unlink(aPPDFile.getStr());
+                    else
+                        std::cout << "Saved PPD file as: " << aPPDFile << std::endl;
                 }
                 else
                     SAL_INFO("vcl.unx.print", "cupsGetPPD failed, falling back to generic driver");
