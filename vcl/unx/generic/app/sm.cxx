@@ -511,7 +511,9 @@ void SessionManagerClient::open(SalSession * pSession)
                 SAL_INFO("vcl.sm.debug", "  SmcOpenConnection failed: " << aErrBuf);
             else
                 SAL_INFO("vcl.sm.debug", "  SmcOpenConnection succeeded, client ID is " << pClientID );
-            m_aClientID = OString(pClientID);
+
+            if (pClientID)
+                m_aClientID = OString(pClientID);
             free( pClientID );
             pClientID = nullptr;
         }
