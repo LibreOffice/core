@@ -228,7 +228,9 @@ void DocumentLinksAdministrationManager::UpdateLinks()
         rEmbeddedObjectContainer.setUserAllowsLinkUpdate(true);
 
         weld::Window* pDlgParent = GetFrameWeld(m_rDoc.GetDocShell());
-        GetLinkManager().UpdateAllLinks(bAskUpdate, false, pDlgParent);
+        SfxMedium * medium = m_rDoc.GetDocShell()->GetMedium();
+        GetLinkManager().UpdateAllLinks(
+            bAskUpdate, false, pDlgParent, medium == nullptr ? OUString() : medium->GetName());
     }
     else
     {

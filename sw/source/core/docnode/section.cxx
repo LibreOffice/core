@@ -1247,7 +1247,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
                 if ( pSrcDoc != pDoc &&
                      rSection.IsProtectFlag() )
                 {
-                    pSrcDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks( false, false, nullptr );
+                    pSrcDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks( false, false, nullptr, "" );
                 }
 
                 if( oCpyRg )

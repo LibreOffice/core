@@ -25,6 +25,7 @@
 #include <hintids.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <svl/languageoptions.hxx>
+#include <sfx2/docfile.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <svx/imapdlg.hxx>
@@ -972,7 +973,12 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 if( !rSh.GetLinkManager().GetLinks().empty() )
                 {
                     rSh.StartAllAction();
-                    rSh.GetLinkManager().UpdateAllLinks( false, true, nullptr );
+                    SfxMedium * medium = nullptr;
+                    if (auto const sh = rSh.GetDoc()->GetDocShell()) {
+                        medium = sh->GetMedium();
+                    }
+                    rSh.GetLinkManager().UpdateAllLinks(
+                        false, true, nullptr, medium == nullptr ? OUString() : medium->GetName() );
                     rSh.EndAllAction();
                 }
                 SfxDispatcher &rDis = *rTempView.GetViewFrame().GetDispatcher();
@@ -1489,7 +1495,12 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 {
                     rSh.EnterStdMode();
                     rSh.StartAllAction();
-                    rSh.GetLinkManager().UpdateAllLinks( false, false, nullptr );
+                    SfxMedium * medium = nullptr;
+                    if (auto const sh = rSh.GetDoc()->GetDocShell()) {
+                        medium = sh->GetMedium();
+                    }
+                    rSh.GetLinkManager().UpdateAllLinks(
+                        false, false, nullptr, medium == nullptr ? OUString() : medium->GetName() );
                     rSh.EndAllAction();
                 }
             }

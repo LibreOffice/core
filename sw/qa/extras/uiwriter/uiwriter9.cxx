@@ -505,7 +505,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158375_dde_disable)
     CPPUNIT_ASSERT_EQUAL(
         size_t(1), pDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks().size());
 
-    pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, false, nullptr);
+    pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, false, nullptr,
+                                                                            "");
 
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(),

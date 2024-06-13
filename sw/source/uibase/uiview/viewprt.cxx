@@ -20,6 +20,7 @@
 #include <libxml/xmlwriter.h>
 #include <cmdid.h>
 #include <officecfg/Office/Common.hxx>
+#include <sfx2/docfile.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/svapp.hxx>
@@ -248,7 +249,12 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             //#i61455# if master documents are printed silently without loaded links then update the links now
             if( bSilent && pSh->IsGlobalDoc() && !pSh->IsGlblDocSaveLinks() )
             {
-                pSh->GetLinkManager().UpdateAllLinks( false, false, nullptr );
+                SfxMedium * medium = nullptr;
+                if (auto const sh = pSh->GetDoc()->GetDocShell()) {
+                    medium = sh->GetMedium();
+                }
+                pSh->GetLinkManager().UpdateAllLinks(
+                    false, false, nullptr, medium == nullptr ? OUString() : medium->GetName() );
             }
             SfxRequest aReq( rReq );
             SfxBoolItem aBool(SID_SELECTION, bPrintSelection);

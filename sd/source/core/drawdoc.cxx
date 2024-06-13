@@ -840,7 +840,7 @@ void SdDrawDocument::UpdateAllLinks()
         rEmbeddedObjectContainer.setUserAllowsLinkUpdate(true);
     }
 
-    m_pLinkManager->UpdateAllLinks(true, false, nullptr);  // query box: update all links?
+    m_pLinkManager->UpdateAllLinks(true, false, nullptr, "");  // query box: update all links?
 
     if (s_pDocLockedInsertingLinks == this)
         s_pDocLockedInsertingLinks = nullptr;  // unlock inserting links

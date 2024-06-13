@@ -130,7 +130,8 @@ public:
 
     void        UpdateAllLinks(bool bAskUpdate,
                                bool bUpdateGrfLinks,
-                               weld::Window* pParentWin);
+                               weld::Window* pParentWin,
+                               OUString const & referer);
 
     // Call for list of links (eg for link-dialog)
     const       SvBaseLinks& GetLinks() const { return aLinkTbl; }

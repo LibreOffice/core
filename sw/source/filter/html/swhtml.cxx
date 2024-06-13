@@ -493,7 +493,10 @@ SwHTMLParser::~SwHTMLParser()
         sal_uInt16 nLinkMode = m_xDoc->getIDocumentSettingAccess().getLinkUpdateMode( true );
         if( nLinkMode != NEVER && bAsync &&
             SfxObjectCreateMode::INTERNAL!=m_xDoc->GetDocShell()->GetCreateMode() )
-            m_xDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks( nLinkMode == MANUAL, false, nullptr );
+        {
+            SfxMedium * medium = m_xDoc->GetDocShell()->GetMedium();
+            m_xDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks( nLinkMode == MANUAL, false, nullptr, medium == nullptr ? OUString() : medium->GetName() );
+        }
 
         if ( m_xDoc->GetDocShell()->IsLoading() )
         {

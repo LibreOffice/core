@@ -2749,7 +2749,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf128106)
     // no way to set SwDocShell::m_nUpdateDocMode away from NO_UPDATE ?
     // pMasterDoc->getIDocumentLinksAdministration().UpdateLinks();
     pMasterDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, false,
-                                                                                  nullptr);
+                                                                                  nullptr, "");
     // note: this has called SwGetRefFieldType::UpdateGetReferences()
     SwFieldType const* const pType(
         pMasterDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetRef));
@@ -2804,7 +2804,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf103612)
         size_t(1),
         pGlobalDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks().size());
     pGlobalDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, false,
-                                                                                  nullptr);
+                                                                                  nullptr, "");
 
     xmlDocUniquePtr pLayout = parseLayoutDump();
 

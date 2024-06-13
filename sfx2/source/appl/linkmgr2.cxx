@@ -281,11 +281,13 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
 void LinkManager::UpdateAllLinks(
     bool bAskUpdate,
     bool bUpdateGrfLinks,
-    weld::Window* pParentWin )
+    weld::Window* pParentWin,
+    OUString const & referer )
 {
     // when active content is disabled don't bother updating all links
     // also (when bAskUpdate == true) don't show the pop up.
-    if(officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
+    if(officecfg::Office::Common::Security::Scripting::DisableActiveContent::get()
+       || SvtSecurityOptions::isUntrustedReferer(referer))
         return;
 
     // First make a copy of the array in order to update links

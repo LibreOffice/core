@@ -112,7 +112,7 @@ bool SwFEShell::FinishOLEObj()                      // Server is terminated
         // if we have more than one link let's update them too
         sfx2::LinkManager& rLinkManager = GetDoc()->getIDocumentLinksAdministration().GetLinkManager();
         if (rLinkManager.GetLinks().size() > 1)
-            rLinkManager.UpdateAllLinks(false, false, nullptr);
+            rLinkManager.UpdateAllLinks(false, false, nullptr, "");
 
         // return back original value of the "update of the link preview" flag
         rEmbeddedObjectContainer.setUserAllowsLinkUpdate(aUserAllowsLinkUpdate);
