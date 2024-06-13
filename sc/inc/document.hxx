@@ -1982,7 +1982,7 @@ public:
     // Goal Seek solver
     bool               Solver( SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
                                SCCOL nVCol, SCROW nVRow, SCTAB nVTab,
-                               const OUString& sValStr, double& nX);
+                               const OUString& sValStr, double& nX, bool setNA = true);
     ScGoalSeekSettings GetGoalSeekSettings() { return maGoalSeekSettings; }
     void               SetGoalSeekSettings(ScGoalSeekSettings aNewSettings) { maGoalSeekSettings = aNewSettings; }
 

@@ -2287,8 +2287,6 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
     OUString  aMsgStr;
     OUString  aResStr;
     double  nSolveResult;
-    double nOriginalValue = rDoc.GetValue(ScAddress(nDestCol, nDestRow, nDestTab));
-
     GetFrameWin()->EnterWait();
 
     bool    bExact =
@@ -2298,7 +2296,8 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
                     rParam.aRefFormulaCell.Tab(),
                     nDestCol, nDestRow, nDestTab,
                     aTargetValStr,
-                    nSolveResult );
+                    nSolveResult,
+                    false); // Do not set #NA! on error
 
     GetFrameWin()->LeaveWait();
 
@@ -2331,12 +2330,6 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
     int nResponse = xBox->run();
     if (nResponse == RET_YES)
         EnterValue( nDestCol, nDestRow, nDestTab, nSolveResult );
-
-    // tdf#161338 If Goal Seek fails, restore the original value
-    // Note that ScDocument::Solver forcefully changes the variable cell to N/A error
-    // if the Goal Seek solver fails; so here we need to restore the value
-    if (!bExact && nResponse == RET_NO)
-        rDoc.SetValue(nDestCol, nDestRow, nDestTab, nOriginalValue);
 
     GetViewData().GetViewShell()->UpdateInputHandler( true );
 }
