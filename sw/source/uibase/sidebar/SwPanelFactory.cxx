@@ -206,7 +206,8 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     }
     else if (rsResourceURL.endsWith("/QuickFindPanel"))
     {
-        std::unique_ptr<PanelLayout> xPanel = sw::sidebar::QuickFindPanel::Create(pParent);
+        std::unique_ptr<PanelLayout> xPanel
+            = sw::sidebar::QuickFindPanel::Create(pParent, xFrame);
         xElement = sfx2::sidebar::SidebarPanelBase::Create(rsResourceURL, xFrame, std::move(xPanel),
                                                            ui::LayoutSize(-1, -1, -1));
     }

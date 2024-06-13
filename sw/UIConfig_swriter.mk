@@ -292,6 +292,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/sidebartableedit \
 	sw/uiconfig/swriter/ui/sidebartheme \
 	sw/uiconfig/swriter/ui/sidebarquickfind \
+        sw/uiconfig/swriter/ui/sidebarquickfindoptionsdialog \
 	sw/uiconfig/swriter/ui/sortdialog \
 	sw/uiconfig/swriter/ui/spellmenu \
 	sw/uiconfig/swriter/ui/splittable \

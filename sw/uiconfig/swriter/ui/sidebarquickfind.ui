@@ -2,11 +2,9 @@
 <!-- Generated with glade 3.40.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkTreeStore" id="liststore1">
+  <object class="GtkListStore" id="liststore">
     <columns>
-      <!-- column-name text1 -->
-      <column type="gchararray"/>
-      <!-- column-name text2 -->
+      <!-- column-name text -->
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
@@ -18,22 +16,89 @@
     <property name="can-focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
-    <property name="row-spacing">6</property>
-    <property name="column-spacing">6</property>
     <property name="row-homogeneous">True</property>
     <property name="column-homogeneous">True</property>
     <child>
-      <object class="GtkBox">
+      <object class="GtkBox" id="box">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
         <property name="border-width">6</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
+        <property name="spacing">6</property>
         <child>
-          <object class="GtkEntry" id="Find">
+          <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="placeholder-text" translatable="yes" context="sidebarquickfind|find">Find</property>
+            <property name="can-focus">False</property>
+            <property name="spacing">2</property>
+            <child>
+              <object class="GtkEntry" id="Find">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="truncate-multiline">True</property>
+                <property name="placeholder-text" translatable="yes" context="sidebarquickfind|find">Find</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolbar" id="searchoptionstoolbar">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="toolbar-style">icons</property>
+                <property name="show-arrow">False</property>
+                <child>
+                  <object class="GtkToolButton" id="searchoptions">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="tooltip-text" translatable="yes" context="quickfindpanel|moresearchoptions|tooltip_text">Search Options</property>
+                    <property name="icon-name">sw/res/sr20006.png</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="searchoptions-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="quickfindpanel|moresearchoptions|accessible_name">More Search Options</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="quickfindpanel|extended_tip|moresearchoptions">Click here to open a dialog to set more search options.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolbar" id="findandreplacetoolbar">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="toolbar-style">icons</property>
+                <property name="show-arrow">False</property>
+                <child>
+                  <object class="GtkToolButton" id=".uno:SearchDialog">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -47,19 +112,18 @@
             <property name="can-focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
+            <property name="vscrollbar-policy">always</property>
             <property name="shadow-type">in</property>
             <child>
               <object class="GtkTreeView" id="searchfinds">
-                <property name="width-request">-1</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="border-width">0</property>
-                <property name="model">liststore1</property>
+                <property name="model">liststore</property>
                 <property name="headers-visible">False</property>
-                <property name="enable-search">False</property>
-                <property name="search-column">1</property>
+                <property name="headers-clickable">False</property>
+                <property name="search-column">0</property>
                 <property name="show-expanders">False</property>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection"/>
@@ -70,20 +134,36 @@
                 <child>
                   <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                     <child>
-                      <object class="GtkCellRendererText" id="cellrenderertext"/>
+                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
                       <attributes>
                         <attribute name="text">0</attribute>
                       </attributes>
                     </child>
                   </object>
                 </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="searchfinds-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="sidebarquickfind|extended_tip|searchfinds">Lists the positions in the document that the searched term is found.</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
+            <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="numberofsearchfinds">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
           </packing>
         </child>
       </object>

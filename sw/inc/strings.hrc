@@ -1396,7 +1396,7 @@
 #define STR_NUM_OUTLINE                         NC_("STR_NUM_OUTLINE", "Outline ")
 #define STR_EDIT_FOOTNOTE                       NC_("STR_EDIT_FOOTNOTE", "Edit Footnote/Endnote")
 #define STR_NB_REPLACED                         NC_("STR_NB_REPLACED", "Search key replaced XX times.")
-#define STR_SEARCH_KEY_FOUND_TIMES              NC_("STR_SEARCH_KEY_FOUND_TIMES", "Search key found %1 times.")
+#define STR_SEARCH_KEY_FOUND_TIMES              NNC_("STR_SEARCH_KEY_FOUND_TIMES", "One match found.", "%1 matches found.")
 #define STR_SRCVIEW_ROW                         NC_("STR_SRCVIEW_ROW", "Row ")
 #define STR_SRCVIEW_COL                         NC_("STR_SRCVIEW_COL", "Column ")
 #define STR_SAVEAS_SRC                          NC_("STR_SAVEAS_SRC", "~Export source...")

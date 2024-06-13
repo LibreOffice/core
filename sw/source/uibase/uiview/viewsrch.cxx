@@ -278,7 +278,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                         lcl_emitSearchResultCallbacks(s_pSrchItem, m_pWrtShell.get(), /* bHighlightAll = */ true);
                     if (!bQuiet)
                     {
-                        OUString sText(SwResId(STR_SEARCH_KEY_FOUND_TIMES));
+                        OUString sText(SwResId(STR_SEARCH_KEY_FOUND_TIMES, nFound));
                         sText = sText.replaceFirst("%1", OUString::number(nFound));
                         SvxSearchDialogWrapper::SetSearchLabel(sText);
                     }

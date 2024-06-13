@@ -12,8 +12,6 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <svl/srchitem.hxx>
 #include <view.hxx>
-#include <comphelper/dispatchcommand.hxx>
-#include <comphelper/propertysequence.hxx>
 #include <swmodule.hxx>
 #include <pam.hxx>
 #include <node.hxx>
@@ -25,9 +23,8 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
+#include <swwait.hxx>
 
-const int MinimumContainerWidth = 250;
-const int Rounding = 6;
 const int CharactersBeforeAndAfter = 40;
 
 namespace
@@ -52,25 +49,85 @@ void getAnchorPos(SwPosition& rPos)
 
 namespace sw::sidebar
 {
-std::unique_ptr<PanelLayout> QuickFindPanel::Create(weld::Widget* pParent)
+QuickFindPanel::SearchOptionsDialog::SearchOptionsDialog(weld::Window* pParent)
+    : GenericDialogController(pParent, u"modules/swriter/ui/sidebarquickfindoptionsdialog.ui"_ustr,
+                              u"SearchOptionsDialog"_ustr)
+    , m_xMatchCaseCheckButton(m_xBuilder->weld_check_button(u"matchcase"_ustr))
+    , m_xWholeWordsOnlyCheckButton(m_xBuilder->weld_check_button(u"wholewordsonly"_ustr))
+    , m_xSimilarityCheckButton(m_xBuilder->weld_check_button(u"similarity"_ustr))
+    , m_xSimilaritySettingsDialogButton(m_xBuilder->weld_button(u"similaritysettingsdialog"_ustr))
 {
-    if (pParent == nullptr)
-        throw css::lang::IllegalArgumentException(
-            u"no parent Window given to QuickFindPanel::Create"_ustr, nullptr, 0);
-    return std::make_unique<QuickFindPanel>(pParent);
+    m_xSimilarityCheckButton->connect_toggled(
+        LINK(this, SearchOptionsDialog, SimilarityCheckButtonToggledHandler));
+    m_xSimilaritySettingsDialogButton->connect_clicked(
+        LINK(this, SearchOptionsDialog, SimilaritySettingsDialogButtonClickedHandler));
 }
 
-QuickFindPanel::QuickFindPanel(weld::Widget* pParent)
+short QuickFindPanel::SearchOptionsDialog::executeSubDialog(VclAbstractDialog* dialog)
+{
+    assert(!m_executingSubDialog);
+    comphelper::ScopeGuard g([this] { m_executingSubDialog = false; });
+    m_executingSubDialog = true;
+    return dialog->Execute();
+}
+
+IMPL_LINK_NOARG(QuickFindPanel::SearchOptionsDialog, SimilarityCheckButtonToggledHandler,
+                weld::Toggleable&, void)
+{
+    m_xSimilaritySettingsDialogButton->set_sensitive(m_xSimilarityCheckButton->get_active());
+}
+
+IMPL_LINK_NOARG(QuickFindPanel::SearchOptionsDialog, SimilaritySettingsDialogButtonClickedHandler,
+                weld::Button&, void)
+{
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    ScopedVclPtr<AbstractSvxSearchSimilarityDialog> pDlg(pFact->CreateSvxSearchSimilarityDialog(
+        m_xDialog.get(), m_bIsLEVRelaxed, m_nLEVOther, m_nLEVShorter, m_nLEVLonger));
+
+    if (executeSubDialog(pDlg.get()) == RET_OK)
+    {
+        m_bIsLEVRelaxed = pDlg->IsRelaxed();
+        m_nLEVOther = pDlg->GetOther();
+        m_nLEVShorter = pDlg->GetShorter();
+        m_nLEVLonger = pDlg->GetLonger();
+    }
+}
+
+std::unique_ptr<PanelLayout>
+QuickFindPanel::Create(weld::Widget* pParent,
+                       const css::uno::Reference<css::frame::XFrame>& rxFrame)
+{
+    if (pParent == nullptr)
+        throw lang::IllegalArgumentException("no parent Window given to QuickFindPanel::Create",
+                                             nullptr, 0);
+    if (!rxFrame.is())
+        throw lang::IllegalArgumentException("no XFrame given to QuickFindPanel::Create", nullptr,
+                                             0);
+    return std::make_unique<QuickFindPanel>(pParent, rxFrame);
+}
+
+QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame::XFrame>& rxFrame)
     : PanelLayout(pParent, u"QuickFindPanel"_ustr, u"modules/swriter/ui/sidebarquickfind.ui"_ustr)
     , m_xSearchFindEntry(m_xBuilder->weld_entry(u"Find"_ustr))
+    , m_xSearchOptionsToolbar(m_xBuilder->weld_toolbar(u"searchoptionstoolbar"_ustr))
+    , m_xFindAndReplaceToolbar(m_xBuilder->weld_toolbar(u"findandreplacetoolbar"_ustr))
+    , m_xFindAndReplaceToolbarDispatch(
+          new ToolbarUnoDispatcher(*m_xFindAndReplaceToolbar, *m_xBuilder, rxFrame))
     , m_xSearchFindsList(m_xBuilder->weld_tree_view(u"searchfinds"_ustr))
+    , m_xSearchFindFoundTimesLabel(m_xBuilder->weld_label("numberofsearchfinds"))
     , m_pWrtShell(::GetActiveWrtShell())
 {
-    m_xContainer->set_size_request(MinimumContainerWidth, 1);
+    m_nMinimumPanelWidth
+        = m_xBuilder->weld_widget(u"box"_ustr)->get_preferred_size().getWidth() + (6 * 2) + 6;
+    m_xContainer->set_size_request(m_nMinimumPanelWidth, 1);
 
     m_xSearchFindEntry->connect_activate(
         LINK(this, QuickFindPanel, SearchFindEntryActivateHandler));
     m_xSearchFindEntry->connect_changed(LINK(this, QuickFindPanel, SearchFindEntryChangedHandler));
+
+    m_xSearchOptionsToolbar->connect_clicked(
+        LINK(this, QuickFindPanel, SearchOptionsToolbarClickedHandler));
+
     m_xSearchFindsList->connect_custom_get_size(
         LINK(this, QuickFindPanel, SearchFindsListCustomGetSizeHandler));
     m_xSearchFindsList->connect_custom_render(LINK(this, QuickFindPanel, SearchFindsListRender));
@@ -79,7 +136,40 @@ QuickFindPanel::QuickFindPanel(weld::Widget* pParent)
         LINK(this, QuickFindPanel, SearchFindsListSelectionChangedHandler));
     m_xSearchFindsList->connect_row_activated(
         LINK(this, QuickFindPanel, SearchFindsListRowActivatedHandler));
-    m_xSearchFindsList->connect_mouse_press(LINK(this, QuickFindPanel, MousePressHandler));
+    m_xSearchFindsList->connect_mouse_press(
+        LINK(this, QuickFindPanel, SearchFindsListMousePressHandler));
+}
+
+IMPL_LINK_NOARG(QuickFindPanel, SearchOptionsToolbarClickedHandler, const OUString&, void)
+{
+    SearchOptionsDialog aDlg(GetFrameWeld());
+
+    aDlg.m_xMatchCaseCheckButton->set_active(m_bMatchCase);
+    aDlg.m_xWholeWordsOnlyCheckButton->set_active(m_bWholeWordsOnly);
+    aDlg.m_xSimilarityCheckButton->set_active(m_bSimilarity);
+    aDlg.m_xSimilaritySettingsDialogButton->set_sensitive(m_bSimilarity);
+    if (m_bSimilarity)
+    {
+        aDlg.m_bIsLEVRelaxed = m_bIsLEVRelaxed;
+        aDlg.m_nLEVOther = m_nLEVOther;
+        aDlg.m_nLEVShorter = m_nLEVShorter;
+        aDlg.m_nLEVLonger = m_nLEVLonger;
+    }
+
+    if (aDlg.run() == RET_OK)
+    {
+        m_bMatchCase = aDlg.m_xMatchCaseCheckButton->get_active();
+        m_bWholeWordsOnly = aDlg.m_xWholeWordsOnlyCheckButton->get_active();
+        m_bSimilarity = aDlg.m_xSimilarityCheckButton->get_active();
+        if (m_bSimilarity)
+        {
+            m_bIsLEVRelaxed = aDlg.m_bIsLEVRelaxed;
+            m_nLEVOther = aDlg.m_nLEVOther;
+            m_nLEVShorter = aDlg.m_nLEVShorter;
+            m_nLEVLonger = aDlg.m_nLEVLonger;
+        }
+        FillSearchFindsList();
+    }
 }
 
 QuickFindPanel::~QuickFindPanel()
@@ -88,7 +178,20 @@ QuickFindPanel::~QuickFindPanel()
     m_xSearchFindsList.reset();
 }
 
-IMPL_LINK(QuickFindPanel, MousePressHandler, const MouseEvent&, rMEvt, bool)
+IMPL_LINK_NOARG(QuickFindPanel, SearchFindEntryChangedHandler, weld::Entry&, void)
+{
+    m_xSearchFindEntry->set_message_type(weld::EntryMessageType::Normal);
+    m_xSearchFindsList->clear();
+    m_xSearchFindFoundTimesLabel->set_label(OUString());
+}
+
+IMPL_LINK_NOARG(QuickFindPanel, SearchFindEntryActivateHandler, weld::Entry&, bool)
+{
+    FillSearchFindsList();
+    return true;
+}
+
+IMPL_LINK(QuickFindPanel, SearchFindsListMousePressHandler, const MouseEvent&, rMEvt, bool)
 {
     if (std::unique_ptr<weld::TreeIter> xEntry(m_xSearchFindsList->make_iterator());
         m_xSearchFindsList->get_dest_row_at_pos(rMEvt.GetPosPixel(), xEntry.get(), false, false))
@@ -96,12 +199,6 @@ IMPL_LINK(QuickFindPanel, MousePressHandler, const MouseEvent&, rMEvt, bool)
         return m_xSearchFindsList->get_id(*xEntry)[0] == '-';
     }
     return false;
-}
-
-IMPL_LINK_NOARG(QuickFindPanel, SearchFindEntryActivateHandler, weld::Entry&, bool)
-{
-    FillSearchFindsList();
-    return true;
 }
 
 IMPL_LINK(QuickFindPanel, SearchFindsListCustomGetSizeHandler, weld::TreeView::get_size_args,
@@ -129,7 +226,7 @@ IMPL_LINK(QuickFindPanel, SearchFindsListCustomGetSizeHandler, weld::TreeView::g
     tools::Long nScrollBarThickness
         = Application::GetSettings().GetStyleSettings().GetScrollBarSize();
 
-    tools::Rectangle aInRect(Point(), Size(MinimumContainerWidth - (x * 2) - leftTextMargin
+    tools::Rectangle aInRect(Point(), Size(m_nMinimumPanelWidth - (x * 2) - leftTextMargin
                                                - nScrollBarThickness - rightTextMargin,
                                            1));
 
@@ -198,7 +295,7 @@ IMPL_LINK(QuickFindPanel, SearchFindsListRender, weld::TreeView::render_args, aP
     if (!bPageEntry)
     {
         aRect.AdjustRight(-3);
-        rRenderContext.DrawRect(aRect, Rounding, Rounding);
+        rRenderContext.DrawRect(aRect, 6, 6);
 
         aRect.AdjustLeft(+6);
         rRenderContext.DrawText(aRect, aEntry,
@@ -282,161 +379,201 @@ IMPL_LINK_NOARG(QuickFindPanel, SearchFindsListRowActivatedHandler, weld::TreeVi
     return true;
 }
 
-IMPL_LINK_NOARG(QuickFindPanel, SearchFindEntryChangedHandler, weld::Entry&, void)
-{
-    m_xSearchFindsList->clear();
-}
-
 void QuickFindPanel::FillSearchFindsList()
 {
     m_vPaMs.clear();
     m_xSearchFindsList->clear();
-    const OUString& sText = m_xSearchFindEntry->get_text();
-    css::uno::Sequence<css::beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
-        { "SearchItem.SearchString", css::uno::Any(sText) },
-        { "SearchItem.Backward", css::uno::Any(false) },
-        { "SearchItem.Command", css::uno::Any(sal_uInt16(SvxSearchCmd::FIND_ALL)) },
-    }));
+    m_xSearchFindFoundTimesLabel->set_label(OUString());
 
-    comphelper::dispatchCommand(u".uno:ExecuteSearch"_ustr, aPropertyValues);
-
-    if (!m_pWrtShell->HasMark())
+    const OUString& rsFindEntry = m_xSearchFindEntry->get_text();
+    if (rsFindEntry.isEmpty())
         return;
 
-    for (SwPaM& rPaM : m_pWrtShell->GetCursor()->GetRingContainer())
+    SwWait aWait(*m_pWrtShell->GetDoc()->GetDocShell(), true);
+
+    m_pWrtShell->AssureStdMode();
+
+    i18nutil::SearchOptions2 aSearchOptions;
+    aSearchOptions.Locale = GetAppLanguageTag().getLocale();
+    aSearchOptions.searchString = rsFindEntry;
+    aSearchOptions.replaceString.clear();
+    if (m_bWholeWordsOnly)
+        aSearchOptions.searchFlag |= css::util::SearchFlags::NORM_WORD_ONLY;
+    if (m_bSimilarity)
     {
-        SwPosition* pMarkPosition = rPaM.GetMark();
-        SwPosition* pPointPosition = rPaM.GetPoint();
-        std::unique_ptr<SwPaM> xPaM(std::make_unique<SwPaM>(*pMarkPosition, *pPointPosition));
-        m_vPaMs.push_back(std::move(xPaM));
+        aSearchOptions.AlgorithmType2 = css::util::SearchAlgorithms2::APPROXIMATE;
+        if (m_bIsLEVRelaxed)
+            aSearchOptions.searchFlag |= css::util::SearchFlags::LEV_RELAXED;
+        aSearchOptions.changedChars = m_nLEVOther;
+        aSearchOptions.insertedChars = m_nLEVShorter;
+        aSearchOptions.deletedChars = m_nLEVLonger;
+    }
+    else
+        aSearchOptions.AlgorithmType2 = css::util::SearchAlgorithms2::ABSOLUTE;
+    TransliterationFlags nTransliterationFlags = TransliterationFlags::IGNORE_WIDTH;
+    if (!m_bMatchCase)
+        nTransliterationFlags |= TransliterationFlags::IGNORE_CASE;
+    aSearchOptions.transliterateFlags = nTransliterationFlags;
+
+    m_pWrtShell->SttSelect();
+    /*sal_Int32 nFound =*/m_pWrtShell->SearchPattern(
+        aSearchOptions, false, SwDocPositions::Start, SwDocPositions::End,
+        FindRanges::InBody | FindRanges::InSelAll, false);
+    m_pWrtShell->EndSelect();
+
+    if (m_pWrtShell->HasMark())
+    {
+        for (SwPaM& rPaM : m_pWrtShell->GetCursor()->GetRingContainer())
+        {
+            SwPosition* pMarkPosition = rPaM.GetMark();
+            SwPosition* pPointPosition = rPaM.GetPoint();
+            std::unique_ptr<SwPaM> xPaM(std::make_unique<SwPaM>(*pMarkPosition, *pPointPosition));
+            m_vPaMs.push_back(std::move(xPaM));
+        }
+
+        // tdf#160538 sort finds in frames and footnotes in the order they occur in the document
+        const SwNodeOffset nEndOfInsertsIndex
+            = m_pWrtShell->GetNodes().GetEndOfInserts().GetIndex();
+        const SwNodeOffset nEndOfExtrasIndex = m_pWrtShell->GetNodes().GetEndOfExtras().GetIndex();
+        std::stable_sort(m_vPaMs.begin(), m_vPaMs.end(),
+                         [&nEndOfInsertsIndex, &nEndOfExtrasIndex,
+                          this](const std::unique_ptr<SwPaM>& a, const std::unique_ptr<SwPaM>& b) {
+                             SwPosition aPos(*a->Start());
+                             SwPosition bPos(*b->Start());
+                             // use page number for footnotes and endnotes
+                             if (aPos.GetNodeIndex() >= nEndOfInsertsIndex
+                                 && bPos.GetNodeIndex() < nEndOfInsertsIndex)
+                                 return b->GetPageNum() >= a->GetPageNum();
+                             // use anchor position for finds that are located in flys
+                             if (nEndOfExtrasIndex >= aPos.GetNodeIndex())
+                                 getAnchorPos(aPos);
+                             if (nEndOfExtrasIndex >= bPos.GetNodeIndex())
+                                 getAnchorPos(bPos);
+                             if (aPos == bPos)
+                             {
+                                 // probably in same or nested fly frame
+                                 // sort using layout position
+                                 SwRect aCharRect, bCharRect;
+                                 if (SwContentFrame* pFrame
+                                     = a->GetMarkContentNode()->GetTextNode()->getLayoutFrame(
+                                         m_pWrtShell->GetLayout()))
+                                 {
+                                     pFrame->GetCharRect(aCharRect, *a->GetMark());
+                                 }
+                                 if (SwContentFrame* pFrame
+                                     = b->GetMarkContentNode()->GetTextNode()->getLayoutFrame(
+                                         m_pWrtShell->GetLayout()))
+                                 {
+                                     pFrame->GetCharRect(bCharRect, *b->GetMark());
+                                 }
+                                 return aCharRect.Top() < bCharRect.Top();
+                             }
+                             return aPos < bPos;
+                         });
+
+        // fill list
+        for (sal_uInt16 nPage = 0, i = 0; std::unique_ptr<SwPaM> & xPaM : m_vPaMs)
+        {
+            SwPosition* pMarkPosition = xPaM->GetMark();
+            SwPosition* pPointPosition = xPaM->GetPoint();
+
+            const SwContentNode* pContentNode = pMarkPosition->GetContentNode();
+            const SwTextNode* pTextNode = pContentNode->GetTextNode();
+            const OUString& sNodeText = pTextNode->GetText();
+
+            auto nMarkIndex = pMarkPosition->GetContentIndex();
+            auto nPointIndex = pPointPosition->GetContentIndex();
+
+            // determine the text node text subview start index for the list entry text
+            auto nStartIndex = nMarkIndex - CharactersBeforeAndAfter;
+            if (nStartIndex < 0)
+            {
+                nStartIndex = 0;
+            }
+            else
+            {
+                // tdf#160539 format search finds results also to word boundaries
+                sal_Unicode ch;
+                do
+                {
+                    ch = sNodeText[nStartIndex];
+                } while (++nStartIndex < nMarkIndex && ch != ' ' && ch != '\t');
+                if (nStartIndex < nMarkIndex)
+                {
+                    // move past neighboring space and tab characters
+                    ch = sNodeText[nStartIndex];
+                    while (nStartIndex < nMarkIndex && (ch == ' ' || ch == '\t'))
+                        ch = sNodeText[++nStartIndex];
+                }
+                if (nStartIndex == nMarkIndex) // no white space found
+                    nStartIndex = nMarkIndex - CharactersBeforeAndAfter;
+            }
+
+            // determine the text node text subview end index for the list entry text
+            auto nEndIndex = nPointIndex + CharactersBeforeAndAfter;
+            if (nEndIndex >= sNodeText.getLength())
+            {
+                nEndIndex = sNodeText.getLength() - 1;
+            }
+            else
+            {
+                // tdf#160539 format search finds results also to word boundaries
+                sal_Unicode ch;
+                do
+                {
+                    ch = sNodeText[nEndIndex];
+                } while (--nEndIndex > nPointIndex && ch != ' ' && ch != '\t');
+                if (nEndIndex > nPointIndex)
+                {
+                    // move past neighboring space and tab characters
+                    ch = sNodeText[nEndIndex];
+                    while (nEndIndex > nPointIndex && (ch == ' ' || ch == '\t'))
+                        ch = sNodeText[--nEndIndex];
+                }
+                if (nEndIndex == nPointIndex) // no white space found
+                {
+                    nEndIndex = nPointIndex + CharactersBeforeAndAfter;
+                    if (nEndIndex >= sNodeText.getLength())
+                        nEndIndex = sNodeText.getLength() - 1;
+                }
+            }
+
+            // tdf#161291 indicate page of search finds
+            if (xPaM->GetPageNum() != nPage)
+            {
+                nPage = xPaM->GetPageNum();
+                OUString sPageEntry(u"-"_ustr + SwResId(ST_PGE) + u" "_ustr
+                                    + OUString::number(nPage));
+                m_xSearchFindsList->append(sPageEntry, sPageEntry);
+            }
+
+            auto nCount = nMarkIndex - nStartIndex;
+            OUString sTextBeforeFind = OUString::Concat(sNodeText.subView(nStartIndex, nCount));
+            auto nCount1 = nPointIndex - nMarkIndex;
+            OUString sFind = OUString::Concat(sNodeText.subView(nMarkIndex, nCount1));
+            auto nCount2 = nEndIndex - nPointIndex + 1;
+            OUString sTextAfterFind = OUString::Concat(sNodeText.subView(nPointIndex, nCount2));
+            OUString sStr = sTextBeforeFind + "[" + sFind + "]" + sTextAfterFind;
+
+            OUString sId = OUString::number(i++);
+            m_xSearchFindsList->append(sId, sStr);
+        }
     }
 
-    // tdf#160538 sort finds in frames and footnotes in the order they occur in the document
-    const SwNodeOffset nEndOfInsertsIndex = m_pWrtShell->GetNodes().GetEndOfInserts().GetIndex();
-    const SwNodeOffset nEndOfExtrasIndex = m_pWrtShell->GetNodes().GetEndOfExtras().GetIndex();
-    std::stable_sort(
-        m_vPaMs.begin(), m_vPaMs.end(),
-        [&nEndOfInsertsIndex, &nEndOfExtrasIndex, this](const std::unique_ptr<SwPaM>& a,
-                                                        const std::unique_ptr<SwPaM>& b) {
-            SwPosition aPos(*a->Start());
-            SwPosition bPos(*b->Start());
-            // use page number for footnotes and endnotes
-            if (aPos.GetNodeIndex() >= nEndOfInsertsIndex
-                && bPos.GetNodeIndex() < nEndOfInsertsIndex)
-                return b->GetPageNum() >= a->GetPageNum();
-            // use anchor position for finds that are located in flys
-            if (nEndOfExtrasIndex >= aPos.GetNodeIndex())
-                getAnchorPos(aPos);
-            if (nEndOfExtrasIndex >= bPos.GetNodeIndex())
-                getAnchorPos(bPos);
-            if (aPos == bPos)
-            {
-                // probably in same or nested fly frame
-                // sort using layout position
-                SwRect aCharRect, bCharRect;
-                if (SwContentFrame* pFrame = a->GetMarkContentNode()->GetTextNode()->getLayoutFrame(
-                        m_pWrtShell->GetLayout()))
-                {
-                    pFrame->GetCharRect(aCharRect, *a->GetMark());
-                }
-                if (SwContentFrame* pFrame = b->GetMarkContentNode()->GetTextNode()->getLayoutFrame(
-                        m_pWrtShell->GetLayout()))
-                {
-                    pFrame->GetCharRect(bCharRect, *b->GetMark());
-                }
-                return aCharRect.Top() < bCharRect.Top();
-            }
-            return aPos < bPos;
-        });
+    // Any finds?
+    auto nSearchFindFoundTimes = m_vPaMs.size();
 
-    // fill list
-    for (sal_uInt16 nPage = 0, i = 0; std::unique_ptr<SwPaM> & xPaM : m_vPaMs)
-    {
-        SwPosition* pMarkPosition = xPaM->GetMark();
-        SwPosition* pPointPosition = xPaM->GetPoint();
+    // set the search term entry background
+    m_xSearchFindEntry->set_message_type(nSearchFindFoundTimes ? weld::EntryMessageType::Normal
+                                                               : weld::EntryMessageType::Error);
+    // make the search finds list focusable or not
+    m_xSearchFindsList->set_sensitive(bool(nSearchFindFoundTimes));
 
-        const SwContentNode* pContentNode = pMarkPosition->GetContentNode();
-        const SwTextNode* pTextNode = pContentNode->GetTextNode();
-        const OUString& sNodeText = pTextNode->GetText();
-
-        auto nMarkIndex = pMarkPosition->GetContentIndex();
-        auto nPointIndex = pPointPosition->GetContentIndex();
-
-        // determine the text node text subview start index for the list entry text
-        auto nStartIndex = nMarkIndex - CharactersBeforeAndAfter;
-        if (nStartIndex < 0)
-        {
-            nStartIndex = 0;
-        }
-        else
-        {
-            // tdf#160539 format search finds results also to word boundaries
-            sal_Unicode ch;
-            do
-            {
-                ch = sNodeText[nStartIndex];
-            } while (++nStartIndex < nMarkIndex && ch != ' ' && ch != '\t');
-            if (nStartIndex < nMarkIndex)
-            {
-                // move past neighboring space and tab characters
-                ch = sNodeText[nStartIndex];
-                while (nStartIndex < nMarkIndex && (ch == ' ' || ch == '\t'))
-                    ch = sNodeText[++nStartIndex];
-            }
-            if (nStartIndex == nMarkIndex) // no white space found
-                nStartIndex = nMarkIndex - CharactersBeforeAndAfter;
-        }
-
-        // determine the text node text subview end index for the list entry text
-        auto nEndIndex = nPointIndex + CharactersBeforeAndAfter;
-        if (nEndIndex >= sNodeText.getLength())
-        {
-            nEndIndex = sNodeText.getLength() - 1;
-        }
-        else
-        {
-            // tdf#160539 format search finds results also to word boundaries
-            sal_Unicode ch;
-            do
-            {
-                ch = sNodeText[nEndIndex];
-            } while (--nEndIndex > nPointIndex && ch != ' ' && ch != '\t');
-            if (nEndIndex > nPointIndex)
-            {
-                // move past neighboring space and tab characters
-                ch = sNodeText[nEndIndex];
-                while (nEndIndex > nPointIndex && (ch == ' ' || ch == '\t'))
-                    ch = sNodeText[--nEndIndex];
-            }
-            if (nEndIndex == nPointIndex) // no white space found
-            {
-                nEndIndex = nPointIndex + CharactersBeforeAndAfter;
-                if (nEndIndex >= sNodeText.getLength())
-                    nEndIndex = sNodeText.getLength() - 1;
-            }
-        }
-
-        // tdf#161291 indicate page of search finds
-        if (xPaM->GetPageNum() != nPage)
-        {
-            nPage = xPaM->GetPageNum();
-            OUString sPageEntry(u"-"_ustr + SwResId(ST_PGE) + u" "_ustr + OUString::number(nPage));
-            m_xSearchFindsList->append(sPageEntry, sPageEntry);
-        }
-
-        auto nCount = nMarkIndex - nStartIndex;
-        OUString sTextBeforeFind = OUString::Concat(sNodeText.subView(nStartIndex, nCount));
-        auto nCount1 = nPointIndex - nMarkIndex;
-        OUString sFind = OUString::Concat(sNodeText.subView(nMarkIndex, nCount1));
-        auto nCount2 = nEndIndex - nPointIndex + 1;
-        OUString sTextAfterFind = OUString::Concat(sNodeText.subView(nPointIndex, nCount2));
-        OUString sStr = sTextBeforeFind + "[" + sFind + "]" + sTextAfterFind;
-
-        OUString sId = OUString::number(i++);
-        m_xSearchFindsList->append(sId, sStr);
-    }
+    // set the search term found label number of times found
+    OUString sText(SwResId(STR_SEARCH_KEY_FOUND_TIMES, nSearchFindFoundTimes));
+    sText = sText.replaceFirst("%1", OUString::number(nSearchFindFoundTimes));
+    m_xSearchFindFoundTimesLabel->set_label(sText);
 }
 }
-
 // end of namespace ::sw::sidebar
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
