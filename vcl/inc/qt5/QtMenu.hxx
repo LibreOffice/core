@@ -113,6 +113,7 @@ private slots:
     static void slotMenuAboutToHide(QtMenuItem* pQItem);
     void slotCloseDocument();
     void slotMenuBarButtonClicked(QAbstractButton*);
+    void slotShortcutF10();
 };
 
 class QtMenuItem : public SalMenuItem

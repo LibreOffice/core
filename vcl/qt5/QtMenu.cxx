@@ -457,6 +457,11 @@ void QtMenu::SetFrame(const SalFrame* pFrame)
     mpQMenuBar = new QMenuBar();
     pMainWindow->setMenuBar(mpQMenuBar);
 
+    // open menu bar on F10, as is common in KF 6 and other toolkits:
+    // https://wordsmith.social/felix-ernst/f10-for-accessibility-in-kf6
+    QShortcut* pQShortcut = new QShortcut(QKeySequence(Qt::Key_F10), mpQMenuBar->window());
+    connect(pQShortcut, &QShortcut::activated, this, &QtMenu::slotShortcutF10);
+
     QWidget* pWidget = mpQMenuBar->cornerWidget(Qt::TopRightCorner);
     if (pWidget)
     {
@@ -695,6 +700,15 @@ void QtMenu::slotMenuBarButtonClicked(QAbstractButton* pButton)
         SolarMutexGuard aGuard;
         pVclMenuBar->HandleMenuButtonEvent(m_pButtonGroup->id(pButton));
     }
+}
+
+void QtMenu::slotShortcutF10()
+{
+    SolarMutexGuard aGuard;
+
+    // focus menu bar and select first item
+    if (mpQMenuBar && !mpQMenuBar->actions().empty())
+        mpQMenuBar->setActiveAction(mpQMenuBar->actions().at(0));
 }
 
 QPushButton* QtMenu::ImplAddMenuBarButton(const QIcon& rIcon, const QString& rToolTip, int nId)
