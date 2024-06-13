@@ -208,8 +208,10 @@ SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
         SwFormatAnchor aAnch( pFormat->GetAnchor() );
         if (pAnchor && (RndStdIds::FLY_AT_FLY == pAnchor->GetAnchorId()))
         {
-            SwPosition aPos( *rAnchPos.GetNode().FindFlyStartNode() );
-            aAnch.SetAnchor( &aPos );
+            const SwNode* pFlyStartNode = rAnchPos.GetNode().FindFlyStartNode();
+            assert(pFlyStartNode);
+            SwPosition aPos(*pFlyStartNode);
+            aAnch.SetAnchor(&aPos);
             eAnchorId = RndStdIds::FLY_AT_FLY;
         }
         else
