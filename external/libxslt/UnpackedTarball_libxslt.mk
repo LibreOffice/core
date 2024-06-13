@@ -19,7 +19,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,libxslt,\
 	$(if $(gb_Module_CURRENTMODULE_SYMBOLS_ENABLED),\
 		external/libxslt/libxslt-msvc-sym.patch.2, \
  		external/libxslt/libxslt-msvc.patch.2) \
-	external/libxslt/libxslt-1.1.26-memdump.patch \
 	external/libxslt/rpath.patch.0 \
 ))
 
