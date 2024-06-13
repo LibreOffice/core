@@ -1981,10 +1981,58 @@ void SwTextFrame::FormatImpl(vcl::RenderContext* pRenderContext, SwParaPortion *
     }
 }
 
+namespace
+{
+class SwTextFrameFormatScopeGuard
+{
+private:
+    VclPtr<OutputDevice> m_pOut = nullptr;
+    VclPtr<OutputDevice> m_pRef = nullptr;
+
+public:
+    SwTextFrameFormatScopeGuard(OutputDevice* pOut, SwTextFrame* pFrame)
+        : m_pOut(pOut)
+    {
+        auto pVsh = pFrame->getRootFrame()->GetCurrShell();
+        if (pVsh)
+        {
+            m_pRef = &pVsh->GetRefDev();
+        }
+
+        if (m_pOut)
+        {
+            m_pOut->Push(vcl::PushFlags::ALL);
+        }
+
+        if (m_pRef)
+        {
+            m_pRef->Push(vcl::PushFlags::ALL);
+        }
+    }
+
+    ~SwTextFrameFormatScopeGuard()
+    {
+        if (m_pRef)
+        {
+            m_pRef->Pop();
+        }
+
+        if (m_pOut)
+        {
+            m_pOut->Pop();
+        }
+    }
+};
+}
+
 // We calculate the text frame's size and send a notification.
 // Shrink() or Grow() to adjust the frame's size to the changed required space.
 void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs * )
 {
+    // tdf#92091: SwTextFrame::Format is re-entrant, but may change VCL global state.
+    // The previous state is saved here and restored after returning.
+    SwTextFrameFormatScopeGuard stSg{ pRenderContext, this };
+
     SwRectFnSet aRectFnSet(this);
 
     CalcAdditionalFirstLineOffset();
