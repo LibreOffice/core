@@ -156,7 +156,7 @@ gb_Library_set_componentfile =
 gb_Library_add_componentimpl =
 
 #$(call gb_Library_get_exports_target,%):
-$(WORKDIR)/LinkTarget/Library/%.exports:
+$(gb_Library_DLLDIR)/%.exports:
 	@true
 
 define gb_LinkTarget__use_custom_headers

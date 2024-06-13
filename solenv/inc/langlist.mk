@@ -169,7 +169,7 @@ gb_HELP_LANGS += \
 		$(if \
 			$(and \
 				$(wildcard $(SRCDIR)/helpcontent2/source/auxiliary/$(lang)),\
-				$(wildcard $(SRCDIR)/translations/source/$(lang)/helpcontent2)),\
+				$(wildcard $(gb_POLOCATION)/$(lang)/helpcontent2)),\
 			$(lang)))
 
 # Langs that need special handling for registry files. This is done by

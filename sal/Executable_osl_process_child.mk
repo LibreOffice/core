@@ -29,14 +29,14 @@ sal_BATCH_FILE := batch.sh
 endif
 
 $(call gb_Executable_get_target,osl_process_child) : \
-	$(WORKDIR)/LinkTarget/Executable/$(sal_BATCH_FILE)
+	$(gb_Executable_BINDIR)/$(sal_BATCH_FILE)
 
-$(WORKDIR)/LinkTarget/Executable/$(sal_BATCH_FILE) : \
+$(gb_Executable_BINDIR)/$(sal_BATCH_FILE) : \
 		$(SRCDIR)/sal/qa/osl/process/$(sal_BATCH_FILE)
 	mkdir -p $(dir $@) && \
 	$(call gb_Deliver_deliver,$<,$@)
 
 $(call gb_Executable_get_clean_target,osl_process_child) :
-	rm -f $(WORKDIR)/LinkTarget/Executable/$(sal_BATCH_FILE)
+	rm -f $(gb_Executable_BINDIR)/$(sal_BATCH_FILE)
 
 # vim: set noet sw=4 ts=4:

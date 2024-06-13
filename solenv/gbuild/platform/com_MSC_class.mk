@@ -237,11 +237,11 @@ gb_LinkTarget_get_manifestfile = \
  $(WORKDIR)/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).manifest
 
 gb_LinkTarget_get_linksearchpath_for_layer = \
-	-LIBPATH:$(WORKDIR)/LinkTarget/StaticLibrary \
+	-LIBPATH:$(gb_StaticLibrary_WORKDIR) \
 	-LIBPATH:$(INSTDIR)/$(SDKDIRNAME)/lib \
 	$(if $(filter OXT,$(1)),\
 		-LIBPATH:$(WORKDIR)/LinkTarget/ExtensionLibrary, \
-		-LIBPATH:$(WORKDIR)/LinkTarget/Library)
+		-LIBPATH:$(gb_Library_DLLDIR))
 
 # avoid fatal error LNK1170 for Library_merged
 define gb_LinkTarget_MergedResponseFile
@@ -607,8 +607,7 @@ $(eval $(call gb_Helper_make_dep_targets,\
 ))
 
 ifeq ($(gb_FULLDEPS),$(true))
-# FIXME this is used before TargetLocations is read?
-gb_WinResTarget__command_target = $(WORKDIR_FOR_BUILD)/LinkTarget/Executable/makedepend.exe
+gb_WinResTarget__command_target := $(gb_Executable_BINDIR_FOR_BUILD)/makedepend.exe
 define gb_WinResTarget__command_dep
 $(call gb_Output_announce,RC:$(2),$(true),DEP,1)
 	$(call gb_Trace_StartRange,RC:$(2),DEP)

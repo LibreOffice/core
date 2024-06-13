@@ -42,7 +42,7 @@ define gb_CliLibrary__command
 		-out:$(1) \
 		$(if $(call gb_target_symbols_enabled,$(1)),\
 			-debug:pdbonly \
-			-pdb:$(call gb_LinkTarget__get_pdb_filename,$(WORKDIR)/LinkTarget/Library/$(notdir $(1)))) \
+			-pdb:$(call gb_LinkTarget__get_pdb_filename,$(gb_Library_DLLDIR)/$(notdir $(1)))) \
 		-keyfile:$(CLI_KEYFILE) \
 		-reference:System.dll \
 		$(foreach assembly,$(CLI_ASSEMBLIES),-reference:$(assembly)) \

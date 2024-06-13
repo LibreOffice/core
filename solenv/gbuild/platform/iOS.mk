@@ -183,7 +183,7 @@ endef
 
 gb_Library__set_soversion_script_platform =
 
-gb_Library_get_sdk_link_dir = $(WORKDIR)/LinkTarget/Library
+gb_Library_get_sdk_link_dir := $(gb_Library_DLLDIR)
 
 # Executable class
 

@@ -56,7 +56,7 @@ create-partial-info: BUILDID := $(shell git -C $(SRCDIR) log -1 --format=%H$(if 
 create-partial-info: MAR_NAME_PREFIX = $(PRODUCTNAME)_$(VERSION_FULL)_$(PLATFORM)_$(BUILDID)
 create-partial-info: ONLINEUPDATE_MAR_OLDMSI = $(MSIDIR)$(PRODUCTNAME)_$(OLD_VER)_Win_$(subst AARCH64,aarch64,$(subst X86_64,x86-64,$(ARCH))).msi
 create-partial-info: ONLINEUPDATE_MAR_NEWMSI = $(MSIDIR)$(PRODUCTNAME)_$(VERSION)_Win_$(subst AARCH64,aarch64,$(subst X86_64,x86-64,$(ARCH))).msi
-create-partial-info: export MBSDIFF := $(WORKDIR)/LinkTarget/Executable/mbsdiff
+create-partial-info: export MBSDIFF := $(gb_Executable_BINDIR)/mbsdiff
 create-partial-info: export MAR := $(INSTDIR)/program/mar
 
 create-partial-info: create-partial-info-AARCH64 create-partial-info-X86_64 create-partial-info-x86

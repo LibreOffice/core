@@ -33,14 +33,14 @@ else
 		$(call gb_Executable_get_command,uno) \
 		-s com.sun.star.test.bridge.BridgeTest \
 		-- com.sun.star.test.bridge.CppTestObject \
-		-env:LO_BUILD_LIB_DIR=$(call gb_Helper_make_url,$(gb_Library_WORKDIR_FOR_BUILD)) \
+		-env:LO_BUILD_LIB_DIR=$(call gb_Helper_make_url,$(gb_Library_DLLDIR_FOR_BUILD)) \
 		-env:URE_MORE_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_target,uno_services)) \
 		-env:URE_MORE_TYPES=$(call gb_Helper_make_url,$(WORKDIR)/UnoApiTarget/bridgetest.rdb) \
 		$(if $(ENABLE_JAVA), && \
 			$(call gb_Executable_get_command,uno) \
 			-s com.sun.star.test.bridge.BridgeTest \
 			-- com.sun.star.test.bridge.JavaTestObject noCurrentContext \
-			-env:LO_BUILD_LIB_DIR=$(call gb_Helper_make_url,$(gb_Library_WORKDIR_FOR_BUILD)) \
+			-env:LO_BUILD_LIB_DIR=$(call gb_Helper_make_url,$(gb_Library_DLLDIR_FOR_BUILD)) \
 			-env:URE_MORE_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_target,uno_services)) \
 			-env:URE_MORE_TYPES=$(call gb_Helper_make_url,$(WORKDIR)/UnoApiTarget/bridgetest.rdb)))
 endif

@@ -9622,9 +9622,9 @@ else
     BUILD_TYPE="$BUILD_TYPE ZLIB"
     ZLIB_CFLAGS="-I${WORKDIR}/UnpackedTarball/zlib"
     if test "$COM" = "MSC"; then
-        ZLIB_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/zlib.lib"
+        ZLIB_LIBS='$(gb_StaticLibrary_WORKDIR)/zlib.lib'
     else
-        ZLIB_LIBS="-L${WORKDIR}/LinkTarget/StaticLibrary -lzlib"
+        ZLIB_LIBS='-L$(gb_StaticLibrary_WORKDIR) -lzlib'
     fi
 fi
 AC_SUBST(ZLIB_CFLAGS)
@@ -9869,7 +9869,7 @@ dnl Check for DLP libs
 dnl ===================================================================
 REVENGE_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/librevenge/inc"
 AS_IF([test "$COM" = "MSC"],
-      [librevenge_libdir="${WORKDIR}/LinkTarget/Library"],
+      [librevenge_libdir='$(gb_Library_DLLDIR)'],
       [librevenge_libdir="${WORKDIR}/UnpackedTarball/librevenge/src/lib/.libs"]
 )
 REVENGE_LIBS_internal="-L${librevenge_libdir} -lrevenge-0.0"
@@ -9881,7 +9881,7 @@ libo_CHECK_SYSTEM_MODULE([libepubgen],[EPUBGEN],[libepubgen-0.1])
 
 WPD_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/libwpd/inc"
 AS_IF([test "$COM" = "MSC"],
-      [libwpd_libdir="${WORKDIR}/LinkTarget/Library"],
+      [libwpd_libdir='$(gb_Library_DLLDIR)'],
       [libwpd_libdir="${WORKDIR}/UnpackedTarball/libwpd/src/lib/.libs"]
 )
 WPD_LIBS_internal="-L${libwpd_libdir} -lwpd-0.10"
@@ -10463,7 +10463,7 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
         AC_MSG_RESULT([internal])
         SYSTEM_MARIADB_CONNECTOR_C=
         MARIADB_CFLAGS="-I${WORKDIR}/UnpackedTarball/mariadb-connector-c/include"
-        MARIADB_LIBS="-L${WORKDIR}/LinkTarget/StaticLibrary -lmariadb-connector-c"
+        MARIADB_LIBS='-L$(gb_StaticLibrary_WORKDIR) -lmariadb-connector-c'
         BUILD_TYPE="$BUILD_TYPE MARIADB_CONNECTOR_C"
     fi
 
@@ -11210,11 +11210,11 @@ GRAPHITE_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/graphite/include -DGRAPHI
 HARFBUZZ_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/harfbuzz/src"
 case "$_os" in
     Linux)
-        GRAPHITE_LIBS_internal="${WORKDIR}/LinkTarget/StaticLibrary/libgraphite.a"
+        GRAPHITE_LIBS_internal='$(gb_StaticLibrary_WORKDIR)/libgraphite.a'
         HARFBUZZ_LIBS_internal="${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz.a"
         ;;
     *)
-        GRAPHITE_LIBS_internal="-L${WORKDIR}/LinkTarget/StaticLibrary -lgraphite"
+        GRAPHITE_LIBS_internal='-L$(gb_StaticLibrary_WORKDIR) -lgraphite'
         HARFBUZZ_LIBS_internal="-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz"
         ;;
 esac
@@ -11222,7 +11222,7 @@ libo_CHECK_SYSTEM_MODULE([graphite],[GRAPHITE],[graphite2 >= 0.9.3])
 libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= $harfbuzz_required_version])
 
 if test "$COM" = "MSC"; then # override the above
-    GRAPHITE_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/graphite.lib"
+    GRAPHITE_LIBS='$(gb_StaticLibrary_WORKDIR)/graphite.lib'
     HARFBUZZ_LIBS="${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz.lib"
 fi
 
@@ -11496,7 +11496,7 @@ else
     SYSTEM_HUNSPELL=
     HUNSPELL_CFLAGS="-I${WORKDIR}/UnpackedTarball/hunspell/src/hunspell"
     if test "$COM" = "MSC"; then
-        HUNSPELL_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/hunspell.lib"
+        HUNSPELL_LIBS='$(gb_StaticLibrary_WORKDIR)/hunspell.lib'
     else
         HUNSPELL_LIBS="-L${WORKDIR}/UnpackedTarball/hunspell/src/hunspell/.libs -lhunspell-1.7"
     fi
@@ -11670,7 +11670,7 @@ else
     SYSTEM_HYPH=
     BUILD_TYPE="$BUILD_TYPE HYPHEN"
     if test "$COM" = "MSC"; then
-        HYPHEN_LIB="${WORKDIR}/LinkTarget/StaticLibrary/hyphen.lib"
+        HYPHEN_LIB='$(gb_StaticLibrary_WORKDIR)/hyphen.lib'
     else
         HYPHEN_LIB="-L${WORKDIR}/UnpackedTarball/hyphen/.libs -lhyphen"
     fi
@@ -11709,7 +11709,7 @@ else
     SYSTEM_MYTHES=
     BUILD_TYPE="$BUILD_TYPE MYTHES"
     if test "$COM" = "MSC"; then
-        MYTHES_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/mythes.lib"
+        MYTHES_LIBS='$(gb_StaticLibrary_WORKDIR)/mythes.lib'
     else
         MYTHES_LIBS="-L${WORKDIR}/UnpackedTarball/mythes/.libs -lmythes-1.2"
     fi
@@ -14188,7 +14188,7 @@ dnl Test whether to build libpng or rely on the system version
 dnl ===================================================================
 
 LIBPNG_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/libpng"
-LIBPNG_LIBS_internal="-L${WORKDIR}/LinkTarget/StaticLibrary -llibpng"
+LIBPNG_LIBS_internal='-L$(gb_StaticLibrary_WORKDIR) -llibpng'
 libo_CHECK_SYSTEM_MODULE([libpng],[LIBPNG],[libpng])
 
 dnl ===================================================================

@@ -858,7 +858,7 @@ $(WORKDIR)/LinkTarget/%/.dir :
 # written in gb_LinkTarget__command_dynamiclink.
 # Put this pattern rule here so it overrides the one below.
 # (this is rather ugly: because of % the functions cannot be used)
-$(WORKDIR)/LinkTarget/Library/%.exports :
+$(gb_Library_DLLDIR)/%.exports :
 	$(if $(wildcard $@),,mkdir -p $(dir $@) && touch $@)
 
 # This recipe actually also builds the dep-target as a side-effect, which
