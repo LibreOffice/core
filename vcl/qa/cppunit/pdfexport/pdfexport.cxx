@@ -1258,6 +1258,38 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf150846)
     CPPUNIT_ASSERT_EQUAL(u"hello"_ustr, aActualText);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf160401)
+{
+    aMediaDescriptor[u"FilterName"_ustr] <<= u"impress_pdf_Export"_ustr;
+    saveAsPDF(u"tdf160401.pptx");
+
+    // Parse the export result with pdfium.
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pPdfTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pPdfTextPage);
+
+    int nChars = pPdfTextPage->countChars();
+
+    CPPUNIT_ASSERT_EQUAL(16, nChars);
+
+    std::vector<sal_uInt32> aChars(nChars);
+    for (int i = 0; i < nChars; i++)
+        aChars[i] = pPdfTextPage->getUnicode(i);
+    OUString aActualText(aChars.data(), aChars.size());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: אאא בבב
+    // אאא בבב
+    // - Actual  : אאא בבב
+    // בבב אאא
+    CPPUNIT_ASSERT_EQUAL(u"אאא בבב\r\nאאא בבב"_ustr, aActualText);
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf103492)
 {
     // Import the bugdoc and export as PDF.
