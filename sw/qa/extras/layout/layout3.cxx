@@ -2925,6 +2925,54 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf161508)
     assertXPath(pExportDump, "//page[2]/body/tab"_ostr, 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf92091)
+{
+    // This test verifies that RTL text following an LTR footnote is measured correctly
+    createSwDoc("tdf92091.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    sal_Int32 nLayoutWidth
+        = getXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout"_ostr,
+                   "width"_ostr)
+              .toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(3210), nLayoutWidth);
+
+    sal_Int32 nPor1Width
+        = getXPath(pXmlDoc,
+                   "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
+                   "width"_ostr)
+              .toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(55), nPor1Width);
+
+    sal_Int32 nPor2Width
+        = getXPath(pXmlDoc,
+                   "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
+                   "width"_ostr)
+              .toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(75), nPor2Width);
+
+    sal_Int32 nPor3Width
+        = getXPath(pXmlDoc,
+                   "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
+                   "width"_ostr)
+              .toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(2870), nPor3Width);
+
+    sal_Int32 nPor4Width
+        = getXPath(pXmlDoc,
+                   "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]"_ostr,
+                   "width"_ostr)
+              .toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(75), nPor4Width);
+
+    sal_Int32 nPor5Width
+        = getXPath(pXmlDoc,
+                   "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
+                   "width"_ostr)
+              .toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(110), nPor5Width);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
