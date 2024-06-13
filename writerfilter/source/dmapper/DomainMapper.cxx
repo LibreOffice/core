@@ -145,6 +145,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
         m_pImpl->SetDocumentSettingsProperty("NoNumberingShowFollowBy", uno::Any(true));
         //paint backgound frames after header/footer when anchored in body
         m_pImpl->SetDocumentSettingsProperty("PaintHellOverHeaderFooter",uno::Any(true));
+        m_pImpl->SetDocumentSettingsProperty(u"IgnoreTabsAndBlanksForLineCalculation"_ustr,uno::Any(true));
     }
 
     // Initialize RDF metadata, to be able to add statements during the import.
