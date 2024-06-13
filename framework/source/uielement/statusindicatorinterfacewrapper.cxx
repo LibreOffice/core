@@ -28,7 +28,7 @@ namespace framework
 {
 
 StatusIndicatorInterfaceWrapper::StatusIndicatorInterfaceWrapper(
-    const css::uno::Reference< css::lang::XComponent >& rStatusIndicatorImpl ) :
+    const rtl::Reference< ProgressBarWrapper >& rStatusIndicatorImpl ) :
     m_xStatusIndicatorImpl( rStatusIndicatorImpl )
 {
 }
@@ -39,61 +39,41 @@ StatusIndicatorInterfaceWrapper::~StatusIndicatorInterfaceWrapper()
 
 void SAL_CALL StatusIndicatorInterfaceWrapper::start(
     const OUString& sText,
-    sal_Int32              nRange )
+    sal_Int32 nRange )
 {
-    Reference< XComponent > xComp( m_xStatusIndicatorImpl );
-    if ( xComp.is() )
-    {
-        ProgressBarWrapper* pProgressBar = static_cast<ProgressBarWrapper*>(xComp.get());
-        if ( pProgressBar )
-            pProgressBar->start( sText, nRange );
-    }
+    rtl::Reference< ProgressBarWrapper > xProgressBar( m_xStatusIndicatorImpl );
+    if ( xProgressBar.is() )
+        xProgressBar->start( sText, nRange );
 }
 
 void SAL_CALL StatusIndicatorInterfaceWrapper::end()
 {
-    Reference< XComponent > xComp( m_xStatusIndicatorImpl );
-    if ( xComp.is() )
-    {
-        ProgressBarWrapper* pProgressBar = static_cast<ProgressBarWrapper*>(xComp.get());
-        if ( pProgressBar )
-            pProgressBar->end();
-    }
+    rtl::Reference< ProgressBarWrapper > xProgressBar( m_xStatusIndicatorImpl );
+    if ( xProgressBar.is() )
+        xProgressBar->end();
 }
 
 void SAL_CALL StatusIndicatorInterfaceWrapper::reset()
 {
-    Reference< XComponent > xComp( m_xStatusIndicatorImpl );
-    if ( xComp.is() )
-    {
-        ProgressBarWrapper* pProgressBar = static_cast<ProgressBarWrapper*>(xComp.get());
-        if ( pProgressBar )
-            pProgressBar->reset();
-    }
+    rtl::Reference< ProgressBarWrapper > xProgressBar( m_xStatusIndicatorImpl );
+    if ( xProgressBar.is() )
+        xProgressBar->reset();
 }
 
 void SAL_CALL StatusIndicatorInterfaceWrapper::setText(
     const OUString& sText )
 {
-    Reference< XComponent > xComp( m_xStatusIndicatorImpl );
-    if ( xComp.is() )
-    {
-        ProgressBarWrapper* pProgressBar = static_cast<ProgressBarWrapper*>(xComp.get());
-        if ( pProgressBar )
-            pProgressBar->setText( sText );
-    }
+    rtl::Reference< ProgressBarWrapper > xProgressBar( m_xStatusIndicatorImpl );
+    if ( xProgressBar.is() )
+        xProgressBar->setText( sText );
 }
 
 void SAL_CALL StatusIndicatorInterfaceWrapper::setValue(
     sal_Int32 nValue )
 {
-    Reference< XComponent > xComp( m_xStatusIndicatorImpl );
-    if ( xComp.is() )
-    {
-        ProgressBarWrapper* pProgressBar = static_cast<ProgressBarWrapper*>(xComp.get());
-        if ( pProgressBar )
-            pProgressBar->setValue( nValue );
-    }
+    rtl::Reference< ProgressBarWrapper > xProgressBar( m_xStatusIndicatorImpl );
+    if ( xProgressBar.is() )
+        xProgressBar->setValue( nValue );
 }
 
 } // namespace framework

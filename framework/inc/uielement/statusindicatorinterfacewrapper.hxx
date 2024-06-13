@@ -23,16 +23,18 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/weakref.hxx>
+#include <unotools/weakref.hxx>
 
 namespace framework
 {
+class ProgressBarWrapper;
 
 class StatusIndicatorInterfaceWrapper final : public ::cppu::WeakImplHelper< css::task::XStatusIndicator>
 {
     public:
-        StatusIndicatorInterfaceWrapper( const css::uno::Reference< css::lang::XComponent >& rStatusIndicatorImpl );
+        StatusIndicatorInterfaceWrapper( const rtl::Reference< ProgressBarWrapper >& rStatusIndicatorImpl );
         virtual ~StatusIndicatorInterfaceWrapper() override;
 
         //  XStatusIndicator
@@ -45,7 +47,7 @@ class StatusIndicatorInterfaceWrapper final : public ::cppu::WeakImplHelper< css
         virtual void SAL_CALL setValue(       sal_Int32        nValue ) override;
 
     private:
-        css::uno::WeakReference< css::lang::XComponent > m_xStatusIndicatorImpl;
+        unotools::WeakReference< ProgressBarWrapper > m_xStatusIndicatorImpl;
 };
 
 }

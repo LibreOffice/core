@@ -291,17 +291,14 @@ uno::Reference< uno::XInterface > SAL_CALL ProgressBarWrapper::getRealInterface(
         return uno::Reference< uno::XInterface >();
     else
     {
-        uno::Reference< uno::XInterface > xComp( m_xProgressBarIfacWrapper );
-        if ( !xComp.is() )
+        rtl::Reference< StatusIndicatorInterfaceWrapper > pWrapper( m_xProgressBarIfacWrapper );
+        if ( !pWrapper.is() )
         {
-            rtl::Reference<StatusIndicatorInterfaceWrapper> pWrapper =
-                new StatusIndicatorInterfaceWrapper( uno::Reference< lang::XComponent >(this) );
-            xComp.set(static_cast< cppu::OWeakObject* >( pWrapper.get() ),
-                        uno::UNO_QUERY );
-            m_xProgressBarIfacWrapper = xComp;
+            pWrapper = new StatusIndicatorInterfaceWrapper( this );
+            m_xProgressBarIfacWrapper = pWrapper.get();
         }
 
-        return xComp;
+        return static_cast<cppu::OWeakObject*>(pWrapper.get());
     }
 }
 

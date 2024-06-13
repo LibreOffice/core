@@ -23,9 +23,10 @@
 
 #include <com/sun/star/awt/XWindow.hpp>
 
-#include <cppuhelper/weakref.hxx>
+#include <unotools/weakref.hxx>
 
 namespace framework{
+class StatusIndicatorInterfaceWrapper;
 
 class ProgressBarWrapper final : public UIElementWrapperBase
 {
@@ -70,7 +71,7 @@ class ProgressBarWrapper final : public UIElementWrapperBase
 
     private:
         css::uno::Reference< css::awt::XWindow >         m_xStatusBar;    // Reference to our status bar XWindow
-        css::uno::WeakReference< css::uno::XInterface >  m_xProgressBarIfacWrapper;
+        unotools::WeakReference< StatusIndicatorInterfaceWrapper >  m_xProgressBarIfacWrapper;
         bool                                             m_bOwnsInstance; // Indicator that we are owner of the XWindow
         sal_Int32                                        m_nRange;
         sal_Int32                                        m_nValue;
