@@ -478,9 +478,6 @@ excludelist:
     sc/source/ui/inc/anyrefdg.hxx:
     # base struct has to be a complete type
     - sfx2/basedlgs.hxx
-    sc/source/ui/inc/anyrefdg.hxx:
-    # base struct has to be a complete type
-    - sfx2/basedlgs.hxx
     sc/source/ui/inc/colorformat.hxx:
     # Needed for VclPtr type
     - svx/colorbox.hxx
