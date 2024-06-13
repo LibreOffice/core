@@ -50,7 +50,6 @@ class SdTPAction final : public SfxTabPage
 private:
     const ::sd::View*       mpView;
     SdDrawDocument*         mpDoc;
-    XColorListRef           pColList;
 
     bool                    bTreeUpdated;
     std::vector<css::presentation::ClickAction> maCurrentActions;
