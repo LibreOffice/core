@@ -549,6 +549,33 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testLeaderLines)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf161607PieChartLeaderLinesColorWidth)
+{
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
+    loadFromFile(u"xlsx/tdf161607PieChartLeaderLinesColorWidth.xlsx");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // test LeaderLines width
+    OUString aWidth = getXPath(
+        pXmlDoc,
+        "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart/c:ser/c:dLbls/c:leaderLines/c:spPr/"
+        "a:ln"_ostr,
+        "w"_ostr);
+    sal_Int32 nWidth = aWidth.toInt32();
+    CPPUNIT_ASSERT_LESSEQUAL(static_cast<sal_Int32>(100), std::abs(nWidth - 88900));
+
+    // test LeaderLines Color
+    assertXPath(
+        pXmlDoc,
+        "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart/c:ser/c:dLbls/c:leaderLines/c:spPr/"
+        "a:ln/a:solidFill/a:srgbClr"_ostr,
+        "val"_ostr, u"7030a0"_ustr);
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testNumberFormatExportPPTX)
 {
     loadFromFile(u"pptx/tdf115859.pptx");
