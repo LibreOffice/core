@@ -3441,7 +3441,8 @@ static void lo_stopURP(LibreOfficeKit* /* pThis */,
 static int lo_joinThreads(LibreOfficeKit* /* pThis */)
 {
     comphelper::ThreadPool &pool = comphelper::ThreadPool::getSharedOptimalPool();
-    pool.joinThreadsIfIdle();
+    if (!pool.joinThreadsIfIdle())
+        return 0;
 
     // Grammar checker thread
     css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv =
